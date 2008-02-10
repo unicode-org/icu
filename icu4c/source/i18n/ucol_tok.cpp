@@ -1435,6 +1435,9 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
                     // keep the flags around so that we know about before
                     sourceToken->flags = src->parsedToken.flags;
                     uhash_put(src->tailored, sourceToken, sourceToken, status);
+                    if(U_FAILURE(*status)) {
+                        return 0;
+                    }
                 } else {
                     /* we could have fished out a reset here */
                     if(sourceToken->strength != UCOL_TOK_RESET && lastToken != sourceToken) {

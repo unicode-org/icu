@@ -1051,208 +1051,217 @@ typedef struct {
 static indirectBoundaries ucolIndirectBoundaries[15];
 static UBool indirectBoundariesSet = FALSE;
 static void setIndirectBoundaries(uint32_t indexR, uint32_t *start, uint32_t *end) {
-
-  /* Set values for the top - TODO: once we have values for all the indirects, we are going */
-  /* to initalize here. */
-  ucolIndirectBoundaries[indexR].startCE = start[0];
-  ucolIndirectBoundaries[indexR].startContCE = start[1];
-  if(end) {
-    ucolIndirectBoundaries[indexR].limitCE = end[0];
-    ucolIndirectBoundaries[indexR].limitContCE = end[1];
-  } else {
-    ucolIndirectBoundaries[indexR].limitCE = 0;
-    ucolIndirectBoundaries[indexR].limitContCE = 0;
-  }
+    /* Set values for the top - TODO: once we have values for all the indirects, we are going */
+    /* to initalize here. */
+    ucolIndirectBoundaries[indexR].startCE = start[0];
+    ucolIndirectBoundaries[indexR].startContCE = start[1];
+    if(end) {
+        ucolIndirectBoundaries[indexR].limitCE = end[0];
+        ucolIndirectBoundaries[indexR].limitContCE = end[1];
+    } else {
+        ucolIndirectBoundaries[indexR].limitCE = 0;
+        ucolIndirectBoundaries[indexR].limitContCE = 0;
+    }
 }
 
 static void testCEs(UCollator *coll, UErrorCode *status) {
+    const UChar *rules = NULL, *current = NULL;
+    int32_t ruleLen = 0;
 
-  const UChar *rules = NULL, *current = NULL;
-  int32_t ruleLen = 0;
+    uint32_t strength = 0;
+    uint32_t maxStrength = UCOL_IDENTICAL;
+    uint32_t baseCE, baseContCE, nextCE, nextContCE, currCE, currContCE;
+    uint32_t lastCE;
+    uint32_t lastContCE;
 
-  uint32_t strength = 0;
-  uint32_t maxStrength = UCOL_IDENTICAL;
-  uint32_t baseCE, baseContCE, nextCE, nextContCE, currCE, currContCE;
-  uint32_t lastCE;
-  uint32_t lastContCE;
+    int32_t result = 0;
+    uint32_t chOffset = 0; uint32_t chLen = 0;
+    uint32_t exOffset = 0; uint32_t exLen = 0;
+    uint32_t prefixOffset = 0; uint32_t prefixLen = 0;
+    uint32_t oldOffset = 0;
 
-  int32_t result = 0;
-  uint32_t chOffset = 0; uint32_t chLen = 0;
-  uint32_t exOffset = 0; uint32_t exLen = 0;
-  uint32_t prefixOffset = 0; uint32_t prefixLen = 0;
-  uint32_t oldOffset = 0;
+    /* uint32_t rExpsLen = 0; */
+    /* uint32_t firstLen = 0; */
+    uint16_t specs = 0;
+    UBool varT = FALSE; UBool top_ = TRUE;
+    UBool startOfRules = TRUE;
+    UBool before = FALSE;
+    UColTokenParser src;
+    UColOptionSet opts;
+    UParseError parseError;
+    UChar *rulesCopy = NULL;
+    collIterate c;
+    UCAConstants *consts = NULL;
+    uint32_t UCOL_RESET_TOP_VALUE, /*UCOL_RESET_TOP_CONT, */
+        UCOL_NEXT_TOP_VALUE, UCOL_NEXT_TOP_CONT;
+    UCollator *UCA = ucol_open("root", status);
 
-  /* uint32_t rExpsLen = 0; */
-  /* uint32_t firstLen = 0; */
-  uint16_t specs = 0;
-  UBool varT = FALSE; UBool top_ = TRUE;
-  UBool startOfRules = TRUE;
-  UBool before = FALSE;
-  UColTokenParser src;
-  UColOptionSet opts;
-  UParseError parseError;
-  UChar *rulesCopy = NULL;
-  collIterate c;
-  UCollator *UCA = ucol_open("root", status);
-  UCAConstants *consts = (UCAConstants *)((uint8_t *)UCA->image + UCA->image->UCAConsts);
-  uint32_t UCOL_RESET_TOP_VALUE = consts->UCA_LAST_NON_VARIABLE[0], /*UCOL_RESET_TOP_CONT = consts->UCA_LAST_NON_VARIABLE[1], */
-           UCOL_NEXT_TOP_VALUE = consts->UCA_FIRST_IMPLICIT[0], UCOL_NEXT_TOP_CONT = consts->UCA_FIRST_IMPLICIT[1];
-
-  baseCE=baseContCE=nextCE=nextContCE=currCE=currContCE=lastCE=lastContCE = UCOL_NOT_FOUND;
-
-  src.opts = &opts;
-
-  rules = ucol_getRules(coll, &ruleLen);
-
-  src.invUCA = ucol_initInverseUCA(status);
-
-  if(indirectBoundariesSet == FALSE) {
-    /* UCOL_RESET_TOP_VALUE */
-    setIndirectBoundaries(0, consts->UCA_LAST_NON_VARIABLE, consts->UCA_FIRST_IMPLICIT);
-    /* UCOL_FIRST_PRIMARY_IGNORABLE */
-    setIndirectBoundaries(1, consts->UCA_FIRST_PRIMARY_IGNORABLE, 0);
-    /* UCOL_LAST_PRIMARY_IGNORABLE */
-    setIndirectBoundaries(2, consts->UCA_LAST_PRIMARY_IGNORABLE, 0);
-    /* UCOL_FIRST_SECONDARY_IGNORABLE */
-    setIndirectBoundaries(3, consts->UCA_FIRST_SECONDARY_IGNORABLE, 0);
-    /* UCOL_LAST_SECONDARY_IGNORABLE */
-    setIndirectBoundaries(4, consts->UCA_LAST_SECONDARY_IGNORABLE, 0);
-    /* UCOL_FIRST_TERTIARY_IGNORABLE */
-    setIndirectBoundaries(5, consts->UCA_FIRST_TERTIARY_IGNORABLE, 0);
-    /* UCOL_LAST_TERTIARY_IGNORABLE */
-    setIndirectBoundaries(6, consts->UCA_LAST_TERTIARY_IGNORABLE, 0);
-    /* UCOL_FIRST_VARIABLE */
-    setIndirectBoundaries(7, consts->UCA_FIRST_VARIABLE, 0);
-    /* UCOL_LAST_VARIABLE */
-    setIndirectBoundaries(8, consts->UCA_LAST_VARIABLE, 0);
-    /* UCOL_FIRST_NON_VARIABLE */
-    setIndirectBoundaries(9, consts->UCA_FIRST_NON_VARIABLE, 0);
-    /* UCOL_LAST_NON_VARIABLE */
-    setIndirectBoundaries(10, consts->UCA_LAST_NON_VARIABLE, consts->UCA_FIRST_IMPLICIT);
-    /* UCOL_FIRST_IMPLICIT */
-    setIndirectBoundaries(11, consts->UCA_FIRST_IMPLICIT, 0);
-    /* UCOL_LAST_IMPLICIT */
-    setIndirectBoundaries(12, consts->UCA_LAST_IMPLICIT, consts->UCA_FIRST_TRAILING);
-    /* UCOL_FIRST_TRAILING */
-    setIndirectBoundaries(13, consts->UCA_FIRST_TRAILING, 0);
-    /* UCOL_LAST_TRAILING */
-    setIndirectBoundaries(14, consts->UCA_LAST_TRAILING, 0);
-    ucolIndirectBoundaries[14].limitCE = (consts->UCA_PRIMARY_SPECIAL_MIN<<24);
-    indirectBoundariesSet = TRUE;
-  }
-
-
-  if(U_SUCCESS(*status) && ruleLen > 0) {
-    rulesCopy = (UChar *)malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
-    uprv_memcpy(rulesCopy, rules, ruleLen*sizeof(UChar));
-    src.current = src.source = rulesCopy;
-    src.end = rulesCopy+ruleLen;
-    src.extraCurrent = src.end;
-    src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
-
-    while ((current = ucol_tok_parseNextToken(&src, startOfRules, &parseError,status)) != NULL) {
-      strength = src.parsedToken.strength;
-      chOffset = src.parsedToken.charsOffset;
-      chLen = src.parsedToken.charsLen;
-      exOffset = src.parsedToken.extensionOffset;
-      exLen = src.parsedToken.extensionLen;
-      prefixOffset = src.parsedToken.prefixOffset;
-      prefixLen = src.parsedToken.prefixLen;
-      specs = src.parsedToken.flags;
-
-      startOfRules = FALSE;
-      varT = (UBool)((specs & UCOL_TOK_VARIABLE_TOP) != 0);
-      top_ = (UBool)((specs & UCOL_TOK_TOP) != 0);
-
-      uprv_init_collIterate(coll, rulesCopy+chOffset, chLen, &c);
-
-      currCE = ucol_getNextCE(coll, &c, status);
-      if(currCE == 0 && UCOL_ISTHAIPREVOWEL(*(rulesCopy+chOffset))) {
-        log_verbose("Thai prevowel detected. Will pick next CE\n");
-        currCE = ucol_getNextCE(coll, &c, status);
-      }
-
-      currContCE = ucol_getNextCE(coll, &c, status);
-      if(!isContinuation(currContCE)) {
-        currContCE = 0;
-      }
-
-      /* we need to repack CEs here */
-
-      if(strength == UCOL_TOK_RESET) {
-        before = (UBool)((specs & UCOL_TOK_BEFORE) != 0);
-        if(top_ == TRUE) {
-          int32_t index = src.parsedToken.indirectIndex;
-
-          nextCE = baseCE = currCE = ucolIndirectBoundaries[index].startCE;
-          nextContCE = baseContCE = currContCE = ucolIndirectBoundaries[index].startContCE;
-        } else {
-          nextCE = baseCE = currCE;
-          nextContCE = baseContCE = currContCE;
-        }
-        maxStrength = UCOL_IDENTICAL;
-      } else {
-        if(strength < maxStrength) {
-          maxStrength = strength;
-          if(baseCE == UCOL_RESET_TOP_VALUE) {
-              log_verbose("Resetting to [top]\n");
-              nextCE = UCOL_NEXT_TOP_VALUE;
-              nextContCE = UCOL_NEXT_TOP_CONT;
-          } else {
-            result = ucol_inv_getNextCE(&src, baseCE & 0xFFFFFF3F, baseContCE, &nextCE, &nextContCE, maxStrength);
-          }
-          if(result < 0) {
-            if(ucol_isTailored(coll, *(rulesCopy+oldOffset), status)) {
-              log_verbose("Reset is tailored codepoint %04X, don't know how to continue, taking next test\n", *(rulesCopy+oldOffset));
-              return;
-            } else {
-              log_err("couldn't find the CE\n");
-              return;
-            }
-          }
-        }
-
-        currCE &= 0xFFFFFF3F;
-        currContCE &= 0xFFFFFFBF;
-
-        if(maxStrength == UCOL_IDENTICAL) {
-          if(baseCE != currCE || baseContCE != currContCE) {
-            log_err("current CE  (initial strength UCOL_EQUAL)\n");
-          }
-        } else {
-          if(strength == UCOL_IDENTICAL) {
-            if(lastCE != currCE || lastContCE != currContCE) {
-              log_err("current CE  (initial strength UCOL_EQUAL)\n");
-            }
-          } else {
-            if(compareCEs(currCE, currContCE, nextCE, nextContCE) > 0) {
-            /*if(currCE > nextCE || (currCE == nextCE && currContCE >= nextContCE)) {*/
-              log_err("current CE is not less than base CE\n");
-            }
-            if(!before) {
-              if(compareCEs(currCE, currContCE, lastCE, lastContCE) < 0) {
-              /*if(currCE < lastCE || (currCE == lastCE && currContCE <= lastContCE)) {*/
-                log_err("sequence of generated CEs is broken\n");
-              }
-            } else {
-              before = FALSE;
-              if(compareCEs(currCE, currContCE, lastCE, lastContCE) > 0) {
-              /*if(currCE < lastCE || (currCE == lastCE && currContCE <= lastContCE)) {*/
-                log_err("sequence of generated CEs is broken\n");
-              }
-            }
-          }
-        }
-
-      }
-
-      oldOffset = chOffset;
-      lastCE = currCE & 0xFFFFFF3F;
-      lastContCE = currContCE & 0xFFFFFFBF;
+    if (U_FAILURE(*status)) {
+        log_err("Could not open root collator %s\n", u_errorName(*status));
+        return;
     }
-    free(rulesCopy);
-  }
-  ucol_close(UCA);
+
+    consts = (UCAConstants *)((uint8_t *)UCA->image + UCA->image->UCAConsts);
+    UCOL_RESET_TOP_VALUE = consts->UCA_LAST_NON_VARIABLE[0];
+    /*UCOL_RESET_TOP_CONT = consts->UCA_LAST_NON_VARIABLE[1]; */
+    UCOL_NEXT_TOP_VALUE = consts->UCA_FIRST_IMPLICIT[0];
+    UCOL_NEXT_TOP_CONT = consts->UCA_FIRST_IMPLICIT[1];
+
+    baseCE=baseContCE=nextCE=nextContCE=currCE=currContCE=lastCE=lastContCE = UCOL_NOT_FOUND;
+
+    src.opts = &opts;
+
+    rules = ucol_getRules(coll, &ruleLen);
+
+    src.invUCA = ucol_initInverseUCA(status);
+
+    if(indirectBoundariesSet == FALSE) {
+        /* UCOL_RESET_TOP_VALUE */
+        setIndirectBoundaries(0, consts->UCA_LAST_NON_VARIABLE, consts->UCA_FIRST_IMPLICIT);
+        /* UCOL_FIRST_PRIMARY_IGNORABLE */
+        setIndirectBoundaries(1, consts->UCA_FIRST_PRIMARY_IGNORABLE, 0);
+        /* UCOL_LAST_PRIMARY_IGNORABLE */
+        setIndirectBoundaries(2, consts->UCA_LAST_PRIMARY_IGNORABLE, 0);
+        /* UCOL_FIRST_SECONDARY_IGNORABLE */
+        setIndirectBoundaries(3, consts->UCA_FIRST_SECONDARY_IGNORABLE, 0);
+        /* UCOL_LAST_SECONDARY_IGNORABLE */
+        setIndirectBoundaries(4, consts->UCA_LAST_SECONDARY_IGNORABLE, 0);
+        /* UCOL_FIRST_TERTIARY_IGNORABLE */
+        setIndirectBoundaries(5, consts->UCA_FIRST_TERTIARY_IGNORABLE, 0);
+        /* UCOL_LAST_TERTIARY_IGNORABLE */
+        setIndirectBoundaries(6, consts->UCA_LAST_TERTIARY_IGNORABLE, 0);
+        /* UCOL_FIRST_VARIABLE */
+        setIndirectBoundaries(7, consts->UCA_FIRST_VARIABLE, 0);
+        /* UCOL_LAST_VARIABLE */
+        setIndirectBoundaries(8, consts->UCA_LAST_VARIABLE, 0);
+        /* UCOL_FIRST_NON_VARIABLE */
+        setIndirectBoundaries(9, consts->UCA_FIRST_NON_VARIABLE, 0);
+        /* UCOL_LAST_NON_VARIABLE */
+        setIndirectBoundaries(10, consts->UCA_LAST_NON_VARIABLE, consts->UCA_FIRST_IMPLICIT);
+        /* UCOL_FIRST_IMPLICIT */
+        setIndirectBoundaries(11, consts->UCA_FIRST_IMPLICIT, 0);
+        /* UCOL_LAST_IMPLICIT */
+        setIndirectBoundaries(12, consts->UCA_LAST_IMPLICIT, consts->UCA_FIRST_TRAILING);
+        /* UCOL_FIRST_TRAILING */
+        setIndirectBoundaries(13, consts->UCA_FIRST_TRAILING, 0);
+        /* UCOL_LAST_TRAILING */
+        setIndirectBoundaries(14, consts->UCA_LAST_TRAILING, 0);
+        ucolIndirectBoundaries[14].limitCE = (consts->UCA_PRIMARY_SPECIAL_MIN<<24);
+        indirectBoundariesSet = TRUE;
+    }
+
+
+    if(U_SUCCESS(*status) && ruleLen > 0) {
+        rulesCopy = (UChar *)malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
+        uprv_memcpy(rulesCopy, rules, ruleLen*sizeof(UChar));
+        src.current = src.source = rulesCopy;
+        src.end = rulesCopy+ruleLen;
+        src.extraCurrent = src.end;
+        src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
+
+        while ((current = ucol_tok_parseNextToken(&src, startOfRules, &parseError,status)) != NULL) {
+            strength = src.parsedToken.strength;
+            chOffset = src.parsedToken.charsOffset;
+            chLen = src.parsedToken.charsLen;
+            exOffset = src.parsedToken.extensionOffset;
+            exLen = src.parsedToken.extensionLen;
+            prefixOffset = src.parsedToken.prefixOffset;
+            prefixLen = src.parsedToken.prefixLen;
+            specs = src.parsedToken.flags;
+
+            startOfRules = FALSE;
+            varT = (UBool)((specs & UCOL_TOK_VARIABLE_TOP) != 0);
+            top_ = (UBool)((specs & UCOL_TOK_TOP) != 0);
+
+            uprv_init_collIterate(coll, rulesCopy+chOffset, chLen, &c);
+
+            currCE = ucol_getNextCE(coll, &c, status);
+            if(currCE == 0 && UCOL_ISTHAIPREVOWEL(*(rulesCopy+chOffset))) {
+                log_verbose("Thai prevowel detected. Will pick next CE\n");
+                currCE = ucol_getNextCE(coll, &c, status);
+            }
+
+            currContCE = ucol_getNextCE(coll, &c, status);
+            if(!isContinuation(currContCE)) {
+                currContCE = 0;
+            }
+
+            /* we need to repack CEs here */
+
+            if(strength == UCOL_TOK_RESET) {
+                before = (UBool)((specs & UCOL_TOK_BEFORE) != 0);
+                if(top_ == TRUE) {
+                    int32_t index = src.parsedToken.indirectIndex;
+
+                    nextCE = baseCE = currCE = ucolIndirectBoundaries[index].startCE;
+                    nextContCE = baseContCE = currContCE = ucolIndirectBoundaries[index].startContCE;
+                } else {
+                    nextCE = baseCE = currCE;
+                    nextContCE = baseContCE = currContCE;
+                }
+                maxStrength = UCOL_IDENTICAL;
+            } else {
+                if(strength < maxStrength) {
+                    maxStrength = strength;
+                    if(baseCE == UCOL_RESET_TOP_VALUE) {
+                        log_verbose("Resetting to [top]\n");
+                        nextCE = UCOL_NEXT_TOP_VALUE;
+                        nextContCE = UCOL_NEXT_TOP_CONT;
+                    } else {
+                        result = ucol_inv_getNextCE(&src, baseCE & 0xFFFFFF3F, baseContCE, &nextCE, &nextContCE, maxStrength);
+                    }
+                    if(result < 0) {
+                        if(ucol_isTailored(coll, *(rulesCopy+oldOffset), status)) {
+                            log_verbose("Reset is tailored codepoint %04X, don't know how to continue, taking next test\n", *(rulesCopy+oldOffset));
+                            return;
+                        } else {
+                            log_err("couldn't find the CE\n");
+                            return;
+                        }
+                    }
+                }
+
+                currCE &= 0xFFFFFF3F;
+                currContCE &= 0xFFFFFFBF;
+
+                if(maxStrength == UCOL_IDENTICAL) {
+                    if(baseCE != currCE || baseContCE != currContCE) {
+                        log_err("current CE  (initial strength UCOL_EQUAL)\n");
+                    }
+                } else {
+                    if(strength == UCOL_IDENTICAL) {
+                        if(lastCE != currCE || lastContCE != currContCE) {
+                            log_err("current CE  (initial strength UCOL_EQUAL)\n");
+                        }
+                    } else {
+                        if(compareCEs(currCE, currContCE, nextCE, nextContCE) > 0) {
+                            /*if(currCE > nextCE || (currCE == nextCE && currContCE >= nextContCE)) {*/
+                            log_err("current CE is not less than base CE\n");
+                        }
+                        if(!before) {
+                            if(compareCEs(currCE, currContCE, lastCE, lastContCE) < 0) {
+                                /*if(currCE < lastCE || (currCE == lastCE && currContCE <= lastContCE)) {*/
+                                log_err("sequence of generated CEs is broken\n");
+                            }
+                        } else {
+                            before = FALSE;
+                            if(compareCEs(currCE, currContCE, lastCE, lastContCE) > 0) {
+                                /*if(currCE < lastCE || (currCE == lastCE && currContCE <= lastContCE)) {*/
+                                log_err("sequence of generated CEs is broken\n");
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            oldOffset = chOffset;
+            lastCE = currCE & 0xFFFFFF3F;
+            lastContCE = currContCE & 0xFFFFFFBF;
+        }
+        free(rulesCopy);
+    }
+    ucol_close(UCA);
 }
 
 #if 0
@@ -1608,6 +1617,10 @@ static void TestComposeDecompose(void) {
         return;
     }
     charsToTestSize = uset_size(charsToTest);
+    if (charsToTestSize <= 0) {
+        log_err("Set was zero. Missing data?\n");
+        return;
+    }
     t = malloc(charsToTestSize * sizeof(tester *));
     t[0] = (tester *)malloc(sizeof(tester));
     log_verbose("Testing UCA extensively for %d characters\n", charsToTestSize);

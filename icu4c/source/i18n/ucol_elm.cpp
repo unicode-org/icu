@@ -159,6 +159,9 @@ uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollat
     uhash_setValueDeleter(t->prefixLookup, uhash_freeBlock);
 
     t->contractions = uprv_cnttab_open(t->mapping, status);
+    if (U_FAILURE(*status)) {
+        goto cleanup;
+    }
 
     /* copy UCA's maxexpansion and merge as we go along */
     if (UCA != NULL) {
@@ -213,8 +216,9 @@ uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollat
     return t;
 
 allocation_failure:
-    uprv_uca_closeTempTable(t);
     *status = U_MEMORY_ALLOCATION_ERROR;
+cleanup:
+    uprv_uca_closeTempTable(t);
     return NULL;
 }
 

@@ -1,7 +1,7 @@
 /*
 ********************************************************************************
 *
-*   Copyright (C) 1996-2007, International Business Machines
+*   Copyright (C) 1996-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ********************************************************************************
@@ -89,7 +89,8 @@ int ERR_MSG =1; /* error messages will be displayed by default*/
 int QUICK = 1;  /* Skip some of the slower tests? */
 int WARN_ON_MISSING_DATA = 0; /* Reduce data errs to warnings? */
 UTraceLevel ICU_TRACE = UTRACE_OFF;  /* ICU tracing level */
-size_t MAX_MEMORY_ALLOCATION = (size_t)-1; /* Maximum library memory allocation allowed. */
+size_t MINIMUM_MEMORY_SIZE_FAILURE = (size_t)-1; /* Minimum library memory allocation window that will fail. */
+size_t MAXIMUM_MEMORY_SIZE_FAILURE = (size_t)-1; /* Maximum library memory allocation window that will fail. */
 int32_t ALLOCATION_COUNT = 0;
 /*-------------------------------------------*/
 
@@ -557,7 +558,7 @@ static void *U_CALLCONV ctest_libMalloc(const void *context, size_t size) {
     /*if (VERBOSITY) {
         printf("Allocated %ld\n", (long)size);
     }*/
-    if (size >= MAX_MEMORY_ALLOCATION) {
+    if (MINIMUM_MEMORY_SIZE_FAILURE <= size && size <= MAXIMUM_MEMORY_SIZE_FAILURE) {
         return NULL;
     }
     umtx_atomic_inc(&ALLOCATION_COUNT);
@@ -567,7 +568,7 @@ static void *U_CALLCONV ctest_libRealloc(const void *context, void *mem, size_t 
     /*if (VERBOSITY) {
         printf("Reallocated %ld\n", (long)size);
     }*/
-    if (size >= MAX_MEMORY_ALLOCATION) {
+    if (MINIMUM_MEMORY_SIZE_FAILURE <= size && size <= MAXIMUM_MEMORY_SIZE_FAILURE) {
         /*free(mem);*/ /* Realloc doesn't free on failure. */
         return NULL;
     }
@@ -628,15 +629,25 @@ initArgs( int argc, const char* const argv[])
             if (i+1 < argc) {
                 char *endPtr = NULL;
                 i++;
-                MAX_MEMORY_ALLOCATION = (size_t)strtol(argv[i], &endPtr, 10);
+                MINIMUM_MEMORY_SIZE_FAILURE = (size_t)strtol(argv[i], &endPtr, 10);
                 if (endPtr == argv[i]) {
                     printf("Can't parse %s\n", argv[i]);
-                    help( argv[0] );
+                    help(argv[0]);
                     return 0;
+                }
+                if (*endPtr == '-') {
+                    char *maxPtr = endPtr+1;
+                    endPtr = NULL;
+                    MAXIMUM_MEMORY_SIZE_FAILURE = (size_t)strtol(maxPtr, &endPtr, 10);
+                    if (endPtr == argv[i]) {
+                        printf("Can't parse %s\n", argv[i]);
+                        help(argv[0]);
+                        return 0;
+                    }
                 }
             }
             /* Use the default value */
-            u_setMemoryFunctions(&MAX_MEMORY_ALLOCATION, ctest_libMalloc, ctest_libRealloc, ctest_libFree, &errorCode);
+            u_setMemoryFunctions(NULL, ctest_libMalloc, ctest_libRealloc, ctest_libFree, &errorCode);
             if (U_FAILURE(errorCode)) {
                 printf("u_setMemoryFunctions returned %s\n", u_errorName(errorCode));
                 return 0;
@@ -764,8 +775,8 @@ runTestRequest(const TestNode* root,
 static void help ( const char *argv0 )
 {
     printf("Usage: %s [ -l ] [ -v ] [ -verbose] [-a] [ -all] [-n] [ -no_err_msg]\n"
-           "                [ -h ] [-t_info | -t_error | -t_warn | -t_oc | -t_verbose]"
-           " [ /path/to/test ]\n",
+           "    [ -h ] [-t_info | -t_error | -t_warn | -t_oc | -t_verbose] [-m n[-q] ]\n"
+           "    [ /path/to/test ]\n",
             argv0);
     printf("    -l  To get a list of test names\n");
     printf("    -e  to do exhaustive testing\n");
@@ -777,10 +788,10 @@ static void help ( const char *argv0 )
            "        user has reduced/changed the common set of ICU data \n");
     printf("    -t_info | -t_error | -t_warn | -t_oc | -t_verbose  Enable ICU tracing\n");
     printf("    -no_err_msg (same as -n) \n");
-    printf("    -m n Maximum size of library allocation allowed.\n");
-    printf("      The default is the maximum value of size_t\n");
-    printf("    -r  repeat tests after calling u_cleanup \n");
-    printf("    -[/subtest]  To run a subtest \n");
+    printf("    -m n[-q] Min-Max memory size that will cause an allocation failure.\n");
+    printf("        The default is the maximum value of size_t. Max is optional.\n");
+    printf("    -r  Repeat tests after calling u_cleanup \n");
+    printf("    [/subtest]  To run a subtest \n");
     printf("    eg: to run just the utility tests type: cintltest /tsutil) \n");
 }
 

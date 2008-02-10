@@ -274,6 +274,8 @@ ucol_openRules( const UChar        *rules,
         return 0;
     }
 
+    UCollator *result = NULL;
+    UCATableHeader *table = NULL;
     UCollator *UCA = ucol_initUCA(status);
 
     if(U_FAILURE(*status)){
@@ -294,11 +296,8 @@ ucol_openRules( const UChar        *rules,
             fprintf(stderr, "invalid rule just before offset %i\n", src.current-src.source);
         }
 #endif
-        ucol_tok_closeTokenList(&src);
-        return NULL;
+        goto cleanup;
     }
-    UCollator *result = NULL;
-    UCATableHeader *table = NULL;
 
     if(src.resultLen > 0 || src.removeSet != NULL) { /* we have a set of rules, let's make something of it */
         /* also, if we wanted to remove some contractions, we should make a tailoring */
@@ -313,10 +312,8 @@ ucol_openRules( const UChar        *rules,
             // set UCA version
             uprv_memcpy(table->UCAVersion, UCA->image->UCAVersion, sizeof(UVersionInfo));
             result = ucol_initCollator(table, 0, UCA, status);
-            // Check for null result
-            if (result == NULL) {
-            	*status = U_MEMORY_ALLOCATION_ERROR;
-            	return NULL;
+            if (U_FAILURE(*status)) {
+                goto cleanup;
             }
             result->hasRealData = TRUE;
             result->freeImageOnClose = TRUE;
@@ -326,9 +323,8 @@ ucol_openRules( const UChar        *rules,
         // We will init the collator from UCA
         result = ucol_initCollator(UCA->image, 0, UCA, status);
         // Check for null result
-        if (result == NULL) {
-        	*status = U_MEMORY_ALLOCATION_ERROR;
-        	return NULL;
+        if (U_FAILURE(*status)) {
+            goto cleanup;
         }
         // And set only the options
         UColOptionSet *opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));

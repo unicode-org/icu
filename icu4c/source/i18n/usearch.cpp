@@ -2616,14 +2616,13 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
         result->ownCollator           = FALSE;
         result->search->matchedLength = 0;
         result->search->matchedIndex  = USEARCH_DONE;
+        result->utilIter              = NULL;
         result->textIter              = ucol_openElements(collator, text, 
                                                           textlength, status);
         if (U_FAILURE(*status)) {
             usearch_close(result);
             return NULL;
         }
-
-        result->utilIter              = NULL;
 
         result->search->isOverlap          = FALSE;
         result->search->isCanonicalMatch   = FALSE;
