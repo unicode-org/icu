@@ -176,6 +176,17 @@ static UBool gDefaultConverterContainsOption;
 
 static const char DATA_TYPE[] = "cnv";
 
+static void
+ucnv_flushAvailableConverterCache() {
+    if (gAvailableConverters) {
+        umtx_lock(&cnvCacheMutex);
+        gAvailableConverterCount = 0;
+        uprv_free((char **)gAvailableConverters);
+        gAvailableConverters = NULL;
+        umtx_unlock(&cnvCacheMutex);
+    }
+}
+
 /* ucnv_cleanup - delete all storage held by the converter cache, except any  */
 /*                in use by open converters.                                  */
 /*                Not thread safe.                                            */
@@ -947,17 +958,6 @@ ucnv_createConverterFromSharedData(UConverter *myUConverter,
     }
 
     return myUConverter;
-}
-
-static void
-ucnv_flushAvailableConverterCache() {
-    if (gAvailableConverters) {
-        umtx_lock(&cnvCacheMutex);
-        gAvailableConverterCount = 0;
-        uprv_free((char **)gAvailableConverters);
-        gAvailableConverters = NULL;
-        umtx_unlock(&cnvCacheMutex);
-    }
 }
 
 /*Frees all shared immutable objects that aren't referred to (reference count = 0)
