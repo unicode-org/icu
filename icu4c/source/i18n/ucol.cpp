@@ -7230,7 +7230,7 @@ inline void UCOL_INIT_CEBUF(ucol_CEBuf *b) {
 }
 
 static
-void ucol_CEBuf_Expand(ucol_CEBuf *b, collIterate *ci) {
+void ucol_CEBuf_Expand(ucol_CEBuf *b, collIterate *ci, UErrorCode *status) {
     uint32_t  oldSize;
     uint32_t  newSize;
     uint32_t  *newBuf;
@@ -7239,7 +7239,10 @@ void ucol_CEBuf_Expand(ucol_CEBuf *b, collIterate *ci) {
     oldSize = b->pos - b->buf;
     newSize = oldSize * 2;
     newBuf = (uint32_t *)uprv_malloc(newSize * sizeof(uint32_t));
-    if(newBuf != NULL) {
+    if(newBuf == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+    }
+    else {
         uprv_memcpy(newBuf, b->buf, oldSize * sizeof(uint32_t));
         if (b->buf != b->localArray) {
             uprv_free(b->buf);
@@ -7251,11 +7254,13 @@ void ucol_CEBuf_Expand(ucol_CEBuf *b, collIterate *ci) {
 }
 
 static
-inline void UCOL_CEBUF_PUT(ucol_CEBuf *b, uint32_t ce, collIterate *ci) {
+inline void UCOL_CEBUF_PUT(ucol_CEBuf *b, uint32_t ce, collIterate *ci, UErrorCode *status) {
     if (b->pos == b->endp) {
-        ucol_CEBuf_Expand(b, ci);
+        ucol_CEBuf_Expand(b, ci, status);
     }
-    *(b)->pos++ = ce;
+    if (U_SUCCESS(*status)) {
+        *(b)->pos++ = ce;
+    }
 }
 
 /* This is a trick string compare function that goes in and uses sortkeys to compare */
@@ -7400,7 +7405,7 @@ ucol_strcollRegular( collIterate *sColl, collIterate *tColl,
                 // We get the next CE
                 sOrder = ucol_IGetNextCE(coll, sColl, status);
                 // Stuff it in the buffer
-                UCOL_CEBUF_PUT(&sCEs, sOrder, sColl);
+                UCOL_CEBUF_PUT(&sCEs, sOrder, sColl, status);
                 // And keep just the primary part.
                 sOrder &= UCOL_PRIMARYMASK;
             } while(sOrder == 0);
@@ -7408,7 +7413,7 @@ ucol_strcollRegular( collIterate *sColl, collIterate *tColl,
             // see the comments on the above block
             do {
                 tOrder = ucol_IGetNextCE(coll, tColl, status);
-                UCOL_CEBUF_PUT(&tCEs, tOrder, tColl);
+                UCOL_CEBUF_PUT(&tCEs, tOrder, tColl, status);
                 tOrder &= UCOL_PRIMARYMASK;
             } while(tOrder == 0);
 
@@ -7439,7 +7444,7 @@ ucol_strcollRegular( collIterate *sColl, collIterate *tColl,
             for(;;) {
                 sOrder = ucol_IGetNextCE(coll, sColl, status);
                 if(sOrder == UCOL_NO_MORE_CES) {
-                    UCOL_CEBUF_PUT(&sCEs, sOrder, sColl);
+                    UCOL_CEBUF_PUT(&sCEs, sOrder, sColl, status);
                     break;
                 } else if(sOrder == 0 || (sInShifted && (sOrder & UCOL_PRIMARYMASK) == 0)) {
                     /* UCA amendment - ignore ignorables that follow shifted code points */
@@ -7448,32 +7453,32 @@ ucol_strcollRegular( collIterate *sColl, collIterate *tColl,
                     if((sOrder & UCOL_PRIMARYMASK) > 0) { /* There is primary value */
                         if(sInShifted) {
                             sOrder = (sOrder & UCOL_PRIMARYMASK) | 0xC0; /* preserve interesting continuation */
-                            UCOL_CEBUF_PUT(&sCEs, sOrder, sColl);
+                            UCOL_CEBUF_PUT(&sCEs, sOrder, sColl, status);
                             continue;
                         } else {
-                            UCOL_CEBUF_PUT(&sCEs, sOrder, sColl);
+                            UCOL_CEBUF_PUT(&sCEs, sOrder, sColl, status);
                             break;
                         }
                     } else { /* Just lower level values */
                         if(sInShifted) {
                             continue;
                         } else {
-                            UCOL_CEBUF_PUT(&sCEs, sOrder, sColl);
+                            UCOL_CEBUF_PUT(&sCEs, sOrder, sColl, status);
                             continue;
                         }
                     }
                 } else { /* regular */
                     if((sOrder & UCOL_PRIMARYMASK) > LVT) {
-                        UCOL_CEBUF_PUT(&sCEs, sOrder, sColl);
+                        UCOL_CEBUF_PUT(&sCEs, sOrder, sColl, status);
                         break;
                     } else {
                         if((sOrder & UCOL_PRIMARYMASK) > 0) {
                             sInShifted = TRUE;
                             sOrder &= UCOL_PRIMARYMASK;
-                            UCOL_CEBUF_PUT(&sCEs, sOrder, sColl);
+                            UCOL_CEBUF_PUT(&sCEs, sOrder, sColl, status);
                             continue;
                         } else {
-                            UCOL_CEBUF_PUT(&sCEs, sOrder, sColl);
+                            UCOL_CEBUF_PUT(&sCEs, sOrder, sColl, status);
                             sInShifted = FALSE;
                             continue;
                         }
@@ -7486,7 +7491,7 @@ ucol_strcollRegular( collIterate *sColl, collIterate *tColl,
             for(;;) {
                 tOrder = ucol_IGetNextCE(coll, tColl, status);
                 if(tOrder == UCOL_NO_MORE_CES) {
-                    UCOL_CEBUF_PUT(&tCEs, tOrder, tColl);
+                    UCOL_CEBUF_PUT(&tCEs, tOrder, tColl, status);
                     break;
                 } else if(tOrder == 0 || (tInShifted && (tOrder & UCOL_PRIMARYMASK) == 0)) {
                     /* UCA amendment - ignore ignorables that follow shifted code points */
@@ -7495,32 +7500,32 @@ ucol_strcollRegular( collIterate *sColl, collIterate *tColl,
                     if((tOrder & UCOL_PRIMARYMASK) > 0) { /* There is primary value */
                         if(tInShifted) {
                             tOrder = (tOrder & UCOL_PRIMARYMASK) | 0xC0; /* preserve interesting continuation */
-                            UCOL_CEBUF_PUT(&tCEs, tOrder, tColl);
+                            UCOL_CEBUF_PUT(&tCEs, tOrder, tColl, status);
                             continue;
                         } else {
-                            UCOL_CEBUF_PUT(&tCEs, tOrder, tColl);
+                            UCOL_CEBUF_PUT(&tCEs, tOrder, tColl, status);
                             break;
                         }
                     } else { /* Just lower level values */
                         if(tInShifted) {
                             continue;
                         } else {
-                            UCOL_CEBUF_PUT(&tCEs, tOrder, tColl);
+                            UCOL_CEBUF_PUT(&tCEs, tOrder, tColl, status);
                             continue;
                         }
                     }
                 } else { /* regular */
                     if((tOrder & UCOL_PRIMARYMASK) > LVT) {
-                        UCOL_CEBUF_PUT(&tCEs, tOrder, tColl);
+                        UCOL_CEBUF_PUT(&tCEs, tOrder, tColl, status);
                         break;
                     } else {
                         if((tOrder & UCOL_PRIMARYMASK) > 0) {
                             tInShifted = TRUE;
                             tOrder &= UCOL_PRIMARYMASK;
-                            UCOL_CEBUF_PUT(&tCEs, tOrder, tColl);
+                            UCOL_CEBUF_PUT(&tCEs, tOrder, tColl, status);
                             continue;
                         } else {
-                            UCOL_CEBUF_PUT(&tCEs, tOrder, tColl);
+                            UCOL_CEBUF_PUT(&tCEs, tOrder, tColl, status);
                             tInShifted = FALSE;
                             continue;
                         }
