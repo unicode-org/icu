@@ -113,9 +113,9 @@ public final class CharsetProviderICU extends CharsetProvider{
                     ret = canonicalName;
                 }else if((canonicalName = UConverterAlias.getCanonicalName(enc, "IANA"))!=null){
                     ret = canonicalName;
-                }else if((canonicalName = UConverterAlias.getCanonicalName(enc, ""))!=null){
+                }/*else if((canonicalName = UConverterAlias.getCanonicalName(enc, ""))!=null){
                     ret = canonicalName;
-                }else if((canonicalName = UConverterAlias.getAlias(enc, 0))!=null){
+                }*/else if((canonicalName = UConverterAlias.getAlias(enc, 0))!=null){
                     /* we have some aliases in the form x-blah .. match those first */
                     ret = canonicalName;
                 }else if(enc.indexOf("x-")==0){
@@ -124,7 +124,13 @@ public final class CharsetProviderICU extends CharsetProvider{
                     char temp[ UCNV_MAX_CONVERTER_NAME_LENGTH] = {0};
                     strcpy(temp, encName+2);
                     */
-                    ret = enc.substring(2);
+                    // Remove the 'x-' and get the ICU canonical name
+                    if ((canonicalName = UConverterAlias.getAlias(enc.substring(2), 0))!=null) {
+                        ret = canonicalName;
+                    } else {
+                        ret = "";
+                    }
+                    
                 }else{
                     /* unsupported encoding */
                    ret = "";
