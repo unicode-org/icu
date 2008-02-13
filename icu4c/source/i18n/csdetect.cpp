@@ -129,6 +129,7 @@ void CharsetDetector::setRecognizers(UErrorCode &status)
 
         if (recognizers == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
+            return;
         } else {
             for (r = 0; r < rCount; r += 1) {
                 recognizers[r] = tempArray[r];

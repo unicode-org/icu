@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and         *
+* Copyright (C) 2007-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -293,6 +293,7 @@ RuleBasedTimeZone::complete(UErrorCode& status) {
             }
             Transition *final1 = (Transition*)uprv_malloc(sizeof(Transition));
             if (final1 == NULL) {
+                uprv_free(final0);
                 status = U_MEMORY_ALLOCATION_ERROR;
                 goto cleanup;
             }

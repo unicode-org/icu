@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -255,7 +255,10 @@ main(int argc, char* argv[]) {
             char *end;
 
             uprv_strcpy(pathBuf, path);
-            end = uprv_strchr(pathBuf, 0);
+            end = uprv_strrchr(pathBuf, 0);
+            if (end == NULL) {
+                end = pathBuf+strlen(pathBuf);
+            }
             if(*(end-1)!=U_FILE_SEP_CHAR) {
                 *(end++)=U_FILE_SEP_CHAR;
             }
@@ -559,14 +562,27 @@ addTaggedAlias(uint16_t tag, const char *alias, uint16_t converter) {
 static void
 addOfficialTaggedStandards(char *line, int32_t lineLen) {
     char *atag;
-    char *tag = strchr(line, '{') + 1;
+    char *endTagExp;
+    char *tag;
     static const char WHITESPACE[] = " \t";
 
     if (tagCount > UCNV_NUM_RESERVED_TAGS) {
         fprintf(stderr, "error(line %d): official tags already added\n", lineNum);
         exit(U_BUFFER_OVERFLOW_ERROR);
     }
-    strchr(tag, '}')[0] = 0;
+    tag = strchr(line, '{');
+    if (tag == NULL) {
+        /* Why were we called? */
+        fprintf(stderr, "error(line %d): Missing start of tag group\n", lineNum);
+        exit(U_PARSE_ERROR);
+    }
+    tag++;
+    endTagExp = strchr(tag, '}');
+    if (endTagExp == NULL) {
+        fprintf(stderr, "error(line %d): Missing end of tag group\n", lineNum);
+        exit(U_PARSE_ERROR);
+    }
+    endTagExp[0] = 0;
 
     tag = strtok(tag, WHITESPACE);
     while (tag != NULL) {

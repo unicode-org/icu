@@ -252,7 +252,7 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
         /* test for NULL */
         if (r->expansions == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
+            goto cleanup;
         }
         r->expansions->position = t->expansions->position;
         r->expansions->size = t->expansions->size;
@@ -261,7 +261,7 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
             /* test for NULL */
             if (r->expansions->CEs == NULL) {
                 *status = U_MEMORY_ALLOCATION_ERROR;
-                return NULL;
+                goto cleanup;
             }
             uprv_memcpy(r->expansions->CEs, t->expansions->CEs, sizeof(uint32_t)*t->expansions->position);
         } else {
@@ -273,8 +273,8 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
         r->contractions = uprv_cnttab_clone(t->contractions, status);
         // Check for cloning failure.
         if (r->contractions == NULL) {
-        	*status = U_MEMORY_ALLOCATION_ERROR;
-        	return NULL;
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            goto cleanup;
         }
         r->contractions->mapping = r->mapping;
     }
@@ -284,7 +284,7 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
         /* test for NULL */
         if (r->maxExpansions == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
+            goto cleanup;
         }
         r->maxExpansions->size = t->maxExpansions->size;
         r->maxExpansions->position = t->maxExpansions->position;
@@ -293,7 +293,7 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
             /* test for NULL */
             if (r->maxExpansions->endExpansionCE == NULL) {
                 *status = U_MEMORY_ALLOCATION_ERROR;
-                return NULL;
+                goto cleanup;
             }
             uprv_memset(r->maxExpansions->endExpansionCE, 0xDB, sizeof(uint32_t)*t->maxExpansions->size);
             uprv_memcpy(r->maxExpansions->endExpansionCE, t->maxExpansions->endExpansionCE, t->maxExpansions->position*sizeof(uint32_t));
@@ -305,7 +305,7 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
             /* test for NULL */
             if (r->maxExpansions->expansionCESize == NULL) {
                 *status = U_MEMORY_ALLOCATION_ERROR;
-                return NULL;
+                goto cleanup;
             }
             uprv_memset(r->maxExpansions->expansionCESize, 0xDB, sizeof(uint8_t)*t->maxExpansions->size);
             uprv_memcpy(r->maxExpansions->expansionCESize, t->maxExpansions->expansionCESize, t->maxExpansions->position*sizeof(uint8_t));
@@ -319,7 +319,7 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
         /* test for NULL */
         if (r->maxJamoExpansions == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
+            goto cleanup;
         }
         r->maxJamoExpansions->size = t->maxJamoExpansions->size;
         r->maxJamoExpansions->position = t->maxJamoExpansions->position;
@@ -331,14 +331,14 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
             /* test for NULL */
             if (r->maxJamoExpansions->endExpansionCE == NULL) {
                 *status = U_MEMORY_ALLOCATION_ERROR;
-                return NULL;
+                goto cleanup;
             }
             uprv_memcpy(r->maxJamoExpansions->endExpansionCE, t->maxJamoExpansions->endExpansionCE, t->maxJamoExpansions->position*sizeof(uint32_t));
             r->maxJamoExpansions->isV = (UBool *)uprv_malloc(sizeof(UBool)*t->maxJamoExpansions->size);
             /* test for NULL */
             if (r->maxJamoExpansions->isV == NULL) {
                 *status = U_MEMORY_ALLOCATION_ERROR;
-                return NULL;
+                goto cleanup;
             }
             uprv_memcpy(r->maxJamoExpansions->isV, t->maxJamoExpansions->isV, t->maxJamoExpansions->position*sizeof(UBool));
         } else {
@@ -352,7 +352,7 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
         /* test for NULL */
         if (r->unsafeCP == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
+            goto cleanup;
         }
         uprv_memcpy(r->unsafeCP, t->unsafeCP, UCOL_UNSAFECP_TABLE_SIZE);
     }
@@ -362,7 +362,7 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
         /* test for NULL */
         if (r->contrEndCP == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
+            goto cleanup;
         }
         uprv_memcpy(r->contrEndCP, t->contrEndCP, UCOL_UNSAFECP_TABLE_SIZE);
     }
@@ -372,6 +372,9 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
     r->options = t->options;
 
     return r;
+cleanup:
+    uprv_uca_closeTempTable(t);
+    return NULL;
 }
 
 
@@ -481,30 +484,30 @@ static int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
     uint32_t *start = pendexpansionce;
     uint32_t *limit = pendexpansionce + pos;
 
-    /* using binary search to determine if last expansion element is 
+    /* using binary search to determine if last expansion element is
     already in the array */
-    uint32_t *mid;                                                        
+    uint32_t *mid;
     int       result = -1;
-    while (start < limit - 1) {                                                
-        mid = start + ((limit - start) >> 1);                                    
-        if (endexpansion <= *mid) {                                                   
-            limit = mid;                                                           
-        }                                                                        
-        else {                                                                   
-            start = mid;                                                           
-        }                                                                        
-    } 
+    while (start < limit - 1) {
+        mid = start + ((limit - start) >> 1);
+        if (endexpansion <= *mid) {
+            limit = mid;
+        }
+        else {
+            start = mid;
+        }
+    }
 
-    if (*start == endexpansion) {                                                     
-        result = start - pendexpansionce;  
-    }                                                                          
-    else                                                                       
-        if (*limit == endexpansion) {                                                     
-            result = limit - pendexpansionce;      
-        }                                            
+    if (*start == endexpansion) {
+        result = start - pendexpansionce;
+    }
+    else
+        if (*limit == endexpansion) {
+            result = limit - pendexpansionce;
+        }
 
         if (result > -1) {
-            /* found the ce in expansion, we'll just modify the size if it is 
+            /* found the ce in expansion, we'll just modify the size if it is
             smaller */
             uint8_t *currentsize = pexpansionsize + result;
             if (*currentsize < expansionsize) {
@@ -512,7 +515,7 @@ static int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
             }
         }
         else {
-            /* we'll need to squeeze the value into the array. 
+            /* we'll need to squeeze the value into the array.
             initial implementation. */
             /* shifting the subarray down by 1 */
             int      shiftsize     = (pendexpansionce + pos) - start;

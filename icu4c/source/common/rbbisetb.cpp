@@ -633,15 +633,14 @@ RangeDescriptor::~RangeDescriptor() {
 void RangeDescriptor::split(UChar32 where, UErrorCode &status) {
     U_ASSERT(where>fStartChar && where<=fEndChar);
     RangeDescriptor *nr = new RangeDescriptor(*this, status);
-    if (U_FAILURE(status)) {
-        return;
-    }
-    /* test for NULL */
     if(nr == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-
+    if (U_FAILURE(status)) {
+        delete nr;
+        return;
+    }
     //  RangeDescriptor copy constructor copies all fields.
     //  Only need to update those that are different after the split.
     nr->fStartChar = where;

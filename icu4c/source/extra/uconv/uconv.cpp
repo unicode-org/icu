@@ -1,6 +1,6 @@
 /*****************************************************************************
 *
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************/
@@ -259,7 +259,7 @@ static int printConverters(const char *pname, const char *lookfor,
             }
             if (U_FAILURE(err)) {
                 u_wmsg(stderr, "cantGetTag", u_wmsg_errorName(err));
-                return -1;
+                goto error_cleanup;
             }
         }
         if (canon) {
@@ -291,7 +291,7 @@ static int printConverters(const char *pname, const char *lookfor,
             putchar('\t');
             u_wmsg(stderr, "cantGetAliases", str.getTerminatedBuffer(),
                 u_wmsg_errorName(err));
-            return -1;
+            goto error_cleanup;
         } else {
             uint16_t a, s, t;
 
@@ -305,7 +305,7 @@ static int printConverters(const char *pname, const char *lookfor,
                     putchar('\t');
                     u_wmsg(stderr, "cantGetAliases", str.getTerminatedBuffer(),
                         u_wmsg_errorName(err));
-                    return -1;
+                    goto error_cleanup;
                 }
 
                 /* Print the current alias so that it looks right. */
@@ -363,6 +363,9 @@ static int printConverters(const char *pname, const char *lookfor,
     /* Success. */
 
     return 0;
+error_cleanup:
+    uprv_free(stds);
+    return -1;
 }
 
 /* Print all available transliterators. If canon is non zero, print

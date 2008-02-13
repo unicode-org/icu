@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2006-2007, International Business Machines Corporation        *
+ * Copyright (C) 2006-2008, International Business Machines Corporation        *
  * and others. All Rights Reserved.                                            *
  *******************************************************************************
  */
@@ -806,6 +806,7 @@ compactOneNode(const TernaryNode *node, UBool parentEndsWord, UStack &nodes, UEr
                 new BuildCompactTrieHorizontalNode(parentEndsWord, nodes, status);
         if (hResult == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
         }
         if (U_SUCCESS(status)) {
             walkHorizontal(node, hResult, nodes, status);

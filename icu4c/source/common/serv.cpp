@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2001-2007, International Business Machines Corporation.       *
+* Copyright (C) 2001-2008, International Business Machines Corporation.       *
 * All Rights Reserved.                                                        *
 *******************************************************************************
 */
@@ -450,6 +450,9 @@ ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUSer
 
         if (serviceCache == NULL) {
             ncthis->serviceCache = new Hashtable(status);
+            if (ncthis->serviceCache == NULL) {
+                return NULL;
+            }
             if (U_FAILURE(status)) {
                 delete serviceCache;
                 return NULL;

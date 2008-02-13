@@ -572,6 +572,7 @@ utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status) {
         ut = (UText *)uprv_malloc(spaceRequired);
         if (ut == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
         } else {
             *ut = emptyText;
             ut->flags |= UTEXT_HEAP_ALLOCATED;
