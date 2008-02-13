@@ -1043,7 +1043,6 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
     const char *tool_id = "genrb-" GENRB_VERSION "-icu-" U_ICU_VERSION;
     const char *tool_name = "genrb";
 
-    char* pid = NULL;
     char* temp = NULL;
     char* lang = NULL;
     const char* pos = NULL;
@@ -1245,24 +1244,12 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
     ucnv_close(conv);
 
 cleanup_bundle_write_xml:
-    if(originalFileName!= NULL) {
-        uprv_free(originalFileName);
-        originalFileName = NULL;
-    }
-    if(lang != NULL) {
-        uprv_free(lang);
-        lang = NULL;
-    }
-    if(pid != NULL) {
-        uprv_free(pid);
-        pid = NULL;
-    }
+    uprv_free(originalFileName);
+    uprv_free(lang);
     if(xmlfileName != NULL) {
         uprv_free(xmlfileName);
-        pid = NULL;
     }
     if(outputFileName != NULL){
         uprv_free(outputFileName);
-        pid = NULL;
     }
 }
