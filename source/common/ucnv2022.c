@@ -2856,7 +2856,7 @@ getTrail:
                     if(cs0 > 0) {
                         uint32_t value;
                         int32_t len2;
-                        if(cs0 > CNS_11643_0) {
+                        if(cs0 >= CNS_11643_0) {
                             len2 = MBCS_FROM_UCHAR32_ISO2022(
                                         converterData->myConverterArray[CNS_11643],
                                         sourceChar,
@@ -3118,7 +3118,7 @@ escape:
 getTrailByte:
                         trailByte = *mySource++;
                         tempState = (StateEnum)pToU2022State->cs[pToU2022State->g];
-                        if(tempState > CNS_11643_0) {
+                        if(tempState >= CNS_11643_0) {
                             cnv = myData->myConverterArray[CNS_11643];
                             tempBuf[0] = (char) (0x80+(tempState-CNS_11643_0));
                             tempBuf[1] = (char) (mySourceChar);

@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2000-2007, International Business Machines
+*   Copyright (C) 2000-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnvhz.c
@@ -145,10 +145,12 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     UConverterDataHZ* myData=(UConverterDataHZ*)(args->converter->extraInfo);
     tempBuf[0]=0; 
     tempBuf[1]=0;
-    if ((args->converter == NULL) || (args->targetLimit < args->target) || (mySourceLimit < args->source)){
+
+    /* Calling code already handles this situation. */
+    /*if ((args->converter == NULL) || (args->targetLimit < args->target) || (mySourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
-    }
+    }*/
     
     while(mySource< mySourceLimit){
         
@@ -278,10 +280,11 @@ UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
     int len =0;
     const char* escSeq=NULL;
     
-    if ((args->converter == NULL) || (args->targetLimit < myTarget) || (args->sourceLimit < args->source)){
+    /* Calling code already handles this situation. */
+    /*if ((args->converter == NULL) || (args->targetLimit < myTarget) || (args->sourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
-    }
+    }*/
     if(args->converter->fromUChar32!=0 && myTargetIndex < targetLength) {
         goto getTrail;
     }

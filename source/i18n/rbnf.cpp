@@ -1306,11 +1306,10 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
     // because we have to know the names and locations of all the rule
     // sets before we can actually set everything up
     if(!numRuleSets) {
-      status = U_ILLEGAL_ARGUMENT_ERROR;
-      return;
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
     }
     UnicodeString* ruleSetDescriptions = new UnicodeString[numRuleSets];
-    /* test for NULL */
     if (ruleSetDescriptions == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -1322,20 +1321,18 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
         for (int32_t p = description.indexOf(gSemiPercent); p != -1; p = description.indexOf(gSemiPercent, start)) {
             ruleSetDescriptions[curRuleSet].setTo(description, start, p + 1 - start);
             ruleSets[curRuleSet] = new NFRuleSet(ruleSetDescriptions, curRuleSet, status);
-            /* test for NULL */
             if (ruleSets[curRuleSet] == 0) {
                 status = U_MEMORY_ALLOCATION_ERROR;
-                return;
+                goto cleanup;
             }
             ++curRuleSet;
             start = p + 1;
         }
         ruleSetDescriptions[curRuleSet].setTo(description, start, description.length() - start);
         ruleSets[curRuleSet] = new NFRuleSet(ruleSetDescriptions, curRuleSet, status);
-        /* test for NULL */
         if (ruleSets[curRuleSet] == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
-            return;
+            goto cleanup;
         }
     }
 
@@ -1358,8 +1355,6 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
             ruleSets[i]->parseRules(ruleSetDescriptions[i], this, status);
         }
     }
-
-    delete[] ruleSetDescriptions;
 
     // Now that the rules are initialized, the 'real' default rule
     // set can be adjusted by the localization data.
@@ -1384,6 +1379,9 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
     } else {
         defaultRuleSet = getDefaultRuleSet();
     }
+
+cleanup:
+    delete[] ruleSetDescriptions;
 }
 
 void

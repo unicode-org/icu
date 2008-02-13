@@ -1141,6 +1141,7 @@ static UColToken *ucol_tok_initAReset(UColTokenParser *src, UChar *expand, uint3
         // this is a syntax error
         *status = U_INVALID_FORMAT_ERROR;
         syntaxError(src->source,src->parsedToken.charsOffset-1,src->parsedToken.charsOffset+src->parsedToken.charsLen,parseError);
+        uprv_free(sourceToken);
         return 0;
     } else {
         sourceToken->prefix = 0;

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2004-2007, International Business Machines
+*   Copyright (C) 2004-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  regex.cpp
@@ -194,10 +194,6 @@ uregex_clone(const URegularExpression *source, UErrorCode *status)  {
     clone->fMatcher = source->fPat->matcher(*status);
     if (U_FAILURE(*status)) {
         delete clone;
-        return NULL;
-    }
-    if (clone == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
 

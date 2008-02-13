@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and         *
+* Copyright (C) 2007-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -1336,6 +1336,10 @@ VTimeZone::parse(UErrorCode& status) {
     if (U_FAILURE(status)) {
         goto cleanupParse;
     }
+    if (rules == NULL || dates == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        goto cleanupParse;
+    }
 
     for (n = 0; n < vtzlines->size(); n++) {
         UnicodeString *line = (UnicodeString*)vtzlines->elementAt(n);
@@ -1530,9 +1534,17 @@ VTimeZone::parse(UErrorCode& status) {
     getDefaultTZName(tzid, FALSE, tzname);
     initialRule = new InitialTimeZoneRule(tzname,
         initialRawOffset, initialDSTSavings);
+    if (initialRule == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        goto cleanupParse;
+    }
 
     // Finally, create the RuleBasedTimeZone
     rbtz = new RuleBasedTimeZone(tzid, initialRule);
+    if (rbtz == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        goto cleanupParse;
+    }
     while (!rules->isEmpty()) {
         TimeZoneRule *tzr = (TimeZoneRule*)rules->orphanElementAt(0);
         rbtz->addTransitionRule(tzr, status);
