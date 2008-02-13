@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2007, International Business Machines
+ *   Copyright (C) 2003-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -204,9 +204,9 @@ initCache(UErrorCode *status) {
                 newCache = NULL;
             }
             umtx_unlock(&usprepMutex);
-            if(newCache != NULL) {
-                uhash_close(newCache);
-            }
+        }
+        if(newCache != NULL) {
+            uhash_close(newCache);
         }
     }
 }
