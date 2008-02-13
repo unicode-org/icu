@@ -93,23 +93,22 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
 
     // Constants for ThaiBreakIterator
     // How many words in a row are "good enough"?
-    private final byte THAI_LOOKAHEAD = 3;
+    private static final byte THAI_LOOKAHEAD = 3;
     // Will not combine a non-word with a preceding dictionary word longer than this
-    private final byte THAI_ROOT_COMBINE_THRESHOLD = 3;	
+    private static final byte THAI_ROOT_COMBINE_THRESHOLD = 3;	
     // Will not combine a non-word that shares at least this much prefix with a
     // dictionary word with a preceding word
-    private final byte THAI_PREFIX_COMBINE_THRESHOLD = 3;
+    private static final byte THAI_PREFIX_COMBINE_THRESHOLD = 3;
     // Ellision character
-    private final char THAI_PAIYANNOI = 0x0E2F;
+    private static final char THAI_PAIYANNOI = 0x0E2F;
     // Repeat character
-    private final char THAI_MAIYAMOK = 0x0E46;
+    private static final char THAI_MAIYAMOK = 0x0E46;
     // Minimum word size
-    private final byte THAI_MIN_WORD = 2;
+    private static final byte THAI_MIN_WORD = 2;
     // Minimum number of characters for two words
     //private final int THAI_MIN_WORD_SPAN = THAI_MIN_WORD * 2;
 
-    public ThaiBreakIterator(InputStream ruleStream, InputStream dictionaryStream) throws IOException {
-        super(ruleStream);
+    static {
         // Initialize UnicodeSets
         fThaiWordSet = new UnicodeSet();
         fMarkSet = new UnicodeSet();
@@ -141,7 +140,10 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
         fEndWordSet.freeze();
         fBeginWordSet.freeze();
         fSuffixSet.freeze();
+    }
 
+    public ThaiBreakIterator(InputStream ruleStream, InputStream dictionaryStream) throws IOException {
+        super(ruleStream);
         // Initialize diciontary
         fDictionary = new BreakCTDictionary(dictionaryStream);
     }
