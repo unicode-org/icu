@@ -255,10 +255,7 @@ main(int argc, char* argv[]) {
             char *end;
 
             uprv_strcpy(pathBuf, path);
-            end = uprv_strrchr(pathBuf, 0);
-            if (end == NULL) {
-                end = pathBuf+strlen(pathBuf);
-            }
+            end = uprv_strchr(pathBuf, 0);
             if(*(end-1)!=U_FILE_SEP_CHAR) {
                 *(end++)=U_FILE_SEP_CHAR;
             }
