@@ -894,12 +894,12 @@ DateTimePatternGenerator::isAvailableFormatSet(const UnicodeString &key) const {
 void
 DateTimePatternGenerator::copyHashtable(Hashtable *other) {
 
-    if (fAvailableFormatKeyHash !=NULL) {
-        delete fAvailableFormatKeyHash;
-    }
     if (other == NULL) {
-        fAvailableFormatKeyHash = NULL;
         return;
+    }
+    if (fAvailableFormatKeyHash != NULL) {
+        delete fAvailableFormatKeyHash;
+        fAvailableFormatKeyHash = NULL;
     }
     initHashtable(fStatus);
     if(U_FAILURE(fStatus)){

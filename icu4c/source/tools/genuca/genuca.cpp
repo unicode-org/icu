@@ -587,12 +587,7 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
         *(endCodePoint) = 0;
     }
 
-    if(element != NULL) {
-        memset(element, 0, sizeof(*element));
-    } else {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    }
+    memset(element, 0, sizeof(*element));
 
     element->cPoints = element->uchars;
 

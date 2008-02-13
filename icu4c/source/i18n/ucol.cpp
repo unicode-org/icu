@@ -522,8 +522,8 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
         stackBufferChars = (char *)uprv_malloc(bufferSizeNeeded);
         // Null pointer check.
         if (stackBufferChars == NULL) {
-        	*status = U_MEMORY_ALLOCATION_ERROR;
-        	return NULL;
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
         }
         colAllocated = TRUE;
         if (U_SUCCESS(*status)) {
@@ -540,8 +540,8 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
         image = (uint8_t *)uprv_malloc(imageSize);
         // Null pointer check
         if (image == NULL) {
-        	*status = U_MEMORY_ALLOCATION_ERROR;
-        	return NULL;
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
         }
         ucol_cloneBinary(coll, image, imageSize, status);
         imageAllocated = TRUE;
@@ -1663,8 +1663,8 @@ void collPrevIterNormalize(collIterate *data)
             data->writableBuffer = (UChar *)uprv_malloc((normLen + 1) *
                                                         sizeof(UChar));
             if(data->writableBuffer == NULL) { // something is wrong here, return
-            	data->writableBufSize = 0;     // Reset writableBufSize
-            	return;
+                data->writableBufSize = 0;     // Reset writableBufSize
+                return;
             }
             data->flags |= UCOL_ITER_ALLOCATED;
             /* to handle the zero termination */
@@ -2150,7 +2150,7 @@ inline void normalizeNextContraction(collIterate *data)
           data->writableBufSize = size;
           data->flags |= UCOL_ITER_ALLOCATED;
         } else {
-        	return; // Avoid writing past bound of buffer->writableBuffer.
+            return; // Avoid writing past bound of buffer->writableBuffer.
         }
     }
 
@@ -2243,7 +2243,7 @@ inline UChar getNextNormalizedChar(collIterate *data)
                                             *(data->fcdPosition)) + 1;
                 // Check if data->pos received a null pointer
                 if (data->pos == NULL) {
-                	return (UChar)-1; // Return to indicate error.
+                    return (UChar)-1; // Return to indicate error.
                 }
                 return *(data->fcdPosition ++);
             }
@@ -2292,7 +2292,7 @@ inline UChar getNextNormalizedChar(collIterate *data)
                                         data->pos - 1, length);
             // Check if data->pos received a null pointer
             if (data->pos == NULL) {
-            	return (UChar)-1; // Return to indicate error.
+                return (UChar)-1; // Return to indicate error.
             }
             return *(data->pos ++);
         }
@@ -2306,7 +2306,7 @@ inline UChar getNextNormalizedChar(collIterate *data)
         data->pos = insertBufferEnd(data, pEndWritableBuffer, ch) + 1;
         // Check if data->pos received a null pointer
         if (data->pos == NULL) {
-        	return (UChar)-1; // Return to indicate error.
+            return (UChar)-1; // Return to indicate error.
         }
     }
 
@@ -2352,8 +2352,8 @@ inline void setDiscontiguosAttribute(collIterate *source, UChar *buffer,
         source->writableBuffer =
                      (UChar *)uprv_malloc((length + 1) * sizeof(UChar));
         if(source->writableBuffer == NULL) {
-        	source->writableBufSize = 0; // Reset size
-        	return;
+            source->writableBufSize = 0; // Reset size
+            return;
         }
         source->writableBufSize = length;
     }
@@ -2552,8 +2552,6 @@ inline UChar * insertBufferFront(collIterate *data, UChar *pNull, UChar ch)
 static
 inline void normalizePrevContraction(collIterate *data, UErrorCode *status)
 {
-    UChar      *buffer     = data->writableBuffer;
-    uint32_t    buffersize = data->writableBufSize;
     uint32_t    nulltermsize;
     UErrorCode  localstatus = U_ZERO_ERROR;
     UChar      *pEnd       = data->pos + 1;         /* End normalize + 1 */
@@ -2566,12 +2564,12 @@ inline void normalizePrevContraction(collIterate *data, UErrorCode *status)
         normalization buffer not used yet, we'll pull down the next
         character into the end of the buffer
         */
-        *(buffer + (buffersize - 1)) = *(data->pos + 1);
-        nulltermsize                  = buffersize - 1;
+        *(data->writableBuffer + (data->writableBufSize - 1)) = *(data->pos + 1);
+        nulltermsize                  = data->writableBufSize - 1;
     }
     else {
-        nulltermsize = buffersize;
-        UChar *temp = buffer + (nulltermsize - 1);
+        nulltermsize = data->writableBufSize;
+        UChar *temp = data->writableBuffer + (nulltermsize - 1);
         while (*(temp --) != 0) {
             nulltermsize --;
         }
@@ -2585,19 +2583,19 @@ inline void normalizePrevContraction(collIterate *data, UErrorCode *status)
         pStart = data->fcdPosition + 1;
     }
 
-    normLen = unorm_normalize(pStart, pEnd - pStart, UNORM_NFD, 0, buffer, 0,
+    normLen = unorm_normalize(pStart, pEnd - pStart, UNORM_NFD, 0, data->writableBuffer, 0,
                               &localstatus);
 
     if (nulltermsize <= normLen) {
-        uint32_t  size = buffersize - nulltermsize + normLen + 1;
+        uint32_t  size = data->writableBufSize - nulltermsize + normLen + 1;
         UChar    *temp = (UChar *)uprv_malloc(size * sizeof(UChar));
         if (temp == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
         nulltermsize   = normLen + 1;
-        uprv_memcpy(temp + normLen, buffer,
-                    sizeof(UChar) * (buffersize - nulltermsize));
+        uprv_memcpy(temp + normLen, data->writableBuffer,
+                    sizeof(UChar) * (data->writableBufSize - nulltermsize));
         freeHeapWritableBuffer(data);
         data->writableBuffer = temp;
         data->writableBufSize = size;
@@ -2607,7 +2605,7 @@ inline void normalizePrevContraction(collIterate *data, UErrorCode *status)
     this puts the null termination infront of the normalized string instead
     of the end
     */
-    pStartNorm   = buffer + (nulltermsize - normLen);
+    pStartNorm   = data->writableBuffer + (nulltermsize - normLen);
     *(pStartNorm - 1) = 0;
     unorm_normalize(pStart, pEnd - pStart, UNORM_NFD, 0, pStartNorm, normLen,
                     status);
@@ -3061,8 +3059,8 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
                                 numTempBuf = (uint8_t *)uprv_malloc(sizeof(uint8_t) * numTempBufSize);
                                 // Null pointer check
                                 if (numTempBuf == NULL) {
-                                	*status = U_MEMORY_ALLOCATION_ERROR;
-                                	return 0;
+                                    *status = U_MEMORY_ALLOCATION_ERROR;
+                                    return 0;
                                 }
                                 uprv_memcpy(numTempBuf, stackNumTempBuf, UCOL_MAX_BUFFER);
                             } else {
@@ -3714,8 +3712,8 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                                 numTempBuf = (uint8_t *)uprv_malloc(sizeof(uint8_t) * numTempBufSize);
                                 // Null pointer check
                                 if (numTempBuf == NULL) {
-                                	*status = U_MEMORY_ALLOCATION_ERROR;
-                                	return 0;
+                                    *status = U_MEMORY_ALLOCATION_ERROR;
+                                    return 0;
                                 }
                                 uprv_memcpy(numTempBuf, stackNumTempBuf, UCOL_MAX_BUFFER);
                             }else {
@@ -4363,15 +4361,17 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
                 } else {
                     fSecs[fSecsLen++] = secondary;
                     if(fSecsLen == fSecsMaxLen) {
+                        uint8_t *fSecsTemp;
                         if(fSecs == fSecsBuff) {
-                            fSecs = (uint8_t *)uprv_malloc(2*fSecsLen);
+                            fSecsTemp = (uint8_t *)uprv_malloc(2*fSecsLen);
                         } else {
-                            fSecs = (uint8_t *)uprv_realloc(fSecs, 2*fSecsLen);
+                            fSecsTemp = (uint8_t *)uprv_realloc(fSecs, 2*fSecsLen);
                         }
-                        if(fSecs == NULL) {
+                        if(fSecsTemp == NULL) {
                             status = U_MEMORY_ALLOCATION_ERROR;
-                            return -1;
+                            return 0;
                         }
+                        fSecs = fSecsTemp;
                         fSecsMaxLen *= 2;
                     }
                     if(notIsContinuation) {
@@ -4579,7 +4579,7 @@ ucol_calcSortKey(const    UCollator    *coll,
     uint8_t *primaries = *result, *secondaries = second, *tertiaries = tert, *cases = caseB, *quads = quad;
 
     if(U_FAILURE(*status)) {
-      return 0;
+        return 0;
     }
 
     if(primaries == NULL && allocateSKBuffer == TRUE) {
@@ -4671,11 +4671,11 @@ ucol_calcSortKey(const    UCollator    *coll,
     }
 
     if(resultLength == 0 || primaries == NULL) {
-      int32_t keyLen = ucol_getSortKeySize(coll, &s, sortKeySize, strength, len);
-      if(normSource != normBuffer) {
-          uprv_free(normSource);
-      }
-      return keyLen;
+        int32_t keyLen = ucol_getSortKeySize(coll, &s, sortKeySize, strength, len);
+        if(normSource != normBuffer) {
+            uprv_free(normSource);
+        }
+        return keyLen;
     }
     uint8_t *primarySafeEnd = primaries + resultLength - 1;
     if(strength > UCOL_PRIMARY) {
@@ -5157,6 +5157,20 @@ ucol_calcSortKey(const    UCollator    *coll,
         *(primaries++) = '\0';
     }
 
+    if(allocateSKBuffer == TRUE) {
+        *result = (uint8_t*)uprv_malloc(sortKeySize);
+        /* test for NULL */
+        if (*result == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            goto cleanup;
+        }
+        uprv_memcpy(*result, primStart, sortKeySize);
+        if(primStart != prim) {
+            uprv_free(primStart);
+        }
+    }
+
+cleanup:
     if(terStart != tert) {
         uprv_free(terStart);
         uprv_free(secStart);
@@ -5168,19 +5182,9 @@ ucol_calcSortKey(const    UCollator    *coll,
         uprv_free(normSource);
     }
 
-    if(allocateSKBuffer == TRUE) {
-        *result = (uint8_t*)uprv_malloc(sortKeySize);
-        /* test for NULL */
-        if (*result == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            return sortKeySize;
-        }
-        uprv_memcpy(*result, primStart, sortKeySize);
-        if(primStart != prim) {
-            uprv_free(primStart);
-        }
+    if (U_FAILURE(*status) && *status != U_BUFFER_OVERFLOW_ERROR) {
+        return 0;
     }
-
     return sortKeySize;
 }
 
@@ -6572,8 +6576,8 @@ ucol_setUpLatinOne(UCollator *coll, UErrorCode *status) {
     UCollationElements *it = ucol_openElements(coll, &ch, 1, status);
     // Check for null pointer 
     if (it == NULL) {
-    	*status = U_MEMORY_ALLOCATION_ERROR;
-    	return FALSE;
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return FALSE;
     }
     uprv_memset(coll->latinOneCEs, 0, sizeof(uint32_t)*coll->latinOneTableLen*3);
 
