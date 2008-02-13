@@ -829,7 +829,7 @@ u_printf_scidbl_handler(const u_printf_stream_handler  *handler,
         format = u_locbund_getNumberFormat(formatBundle, UNUM_DECIMAL);
         /* Check for null pointer */
         if (format == NULL) {
-        	return -1;
+            return 0;
         }
         maxSigDecimalDigits = unum_getAttribute(format, UNUM_MAX_SIGNIFICANT_DIGITS);
         significantDigits = scidbl_info.fPrecision;
@@ -1498,69 +1498,69 @@ u_printf_parse(const u_printf_stream_handler *streamHandler,
         if (handlerNum < UPRINTF_NUM_FMT_HANDLERS) {
             /* query the info function for argument information */
             argType = g_u_printf_infos[ handlerNum ].info;
-            
+
             /* goto the correct argument on arg_list if position is specified */
             if (spec.fArgPos > 0) {
-            	/* offset position by 1 */
-            	spec.fArgPos--;
-            	switch(argType) {
-	            case ufmt_count:
-	                /* set the spec's width to the # of chars written */
-	                info->fWidth = *written;
-	                /* fall through to set the pointer */
-	            case ufmt_string:
-	            case ufmt_ustring:
-	            case ufmt_pointer:
-	                args.ptrValue = arglist[spec.fArgPos].ptrValue;
-	                break;
-	            case ufmt_char:
-	            case ufmt_uchar:
-	            case ufmt_int:
-	                args.int64Value = arglist[spec.fArgPos].int64Value;
-	                break;
-	            case ufmt_float:
-	                args.floatValue = arglist[spec.fArgPos].floatValue;
-	                break;
-	            case ufmt_double:
-	                args.doubleValue = arglist[spec.fArgPos].doubleValue;
-	                break;
-	            default:
-	                /* else args is ignored */
-	                args.ptrValue = NULL;
-	                break;
-	            }
+                /* offset position by 1 */
+                spec.fArgPos--;
+                switch(argType) {
+                case ufmt_count:
+                    /* set the spec's width to the # of chars written */
+                    info->fWidth = *written;
+                    /* fall through to set the pointer */
+                case ufmt_string:
+                case ufmt_ustring:
+                case ufmt_pointer:
+                    args.ptrValue = arglist[spec.fArgPos].ptrValue;
+                    break;
+                case ufmt_char:
+                case ufmt_uchar:
+                case ufmt_int:
+                    args.int64Value = arglist[spec.fArgPos].int64Value;
+                    break;
+                case ufmt_float:
+                    args.floatValue = arglist[spec.fArgPos].floatValue;
+                    break;
+                case ufmt_double:
+                    args.doubleValue = arglist[spec.fArgPos].doubleValue;
+                    break;
+                default:
+                    /* else args is ignored */
+                    args.ptrValue = NULL;
+                    break;
+                }
             } else { /* no positional argument specified */
-	            switch(argType) {
-	            case ufmt_count:
-	                /* set the spec's width to the # of chars written */
-	                info->fWidth = *written;
-	                /* fall through to set the pointer */
-	            case ufmt_string:
-	            case ufmt_ustring:
-	            case ufmt_pointer:
-	                args.ptrValue = va_arg(ap, void*);
-	                break;
-	            case ufmt_char:
-	            case ufmt_uchar:
-	            case ufmt_int:
-	                if (info->fIsLongLong) {
-	                    args.int64Value = va_arg(ap, int64_t);
-	                }
-	                else {
-	                    args.int64Value = va_arg(ap, int32_t);
-	                }
-	                break;
-	            case ufmt_float:
-	                args.floatValue = (float) va_arg(ap, double);
-	                break;
-	            case ufmt_double:
-	                args.doubleValue = va_arg(ap, double);
-	                break;
-	            default:
-	                /* else args is ignored */
-	                args.ptrValue = NULL;
-	                break;
-	            }
+                switch(argType) {
+                case ufmt_count:
+                    /* set the spec's width to the # of chars written */
+                    info->fWidth = *written;
+                    /* fall through to set the pointer */
+                case ufmt_string:
+                case ufmt_ustring:
+                case ufmt_pointer:
+                    args.ptrValue = va_arg(ap, void*);
+                    break;
+                case ufmt_char:
+                case ufmt_uchar:
+                case ufmt_int:
+                    if (info->fIsLongLong) {
+                        args.int64Value = va_arg(ap, int64_t);
+                    }
+                    else {
+                        args.int64Value = va_arg(ap, int32_t);
+                    }
+                    break;
+                case ufmt_float:
+                    args.floatValue = (float) va_arg(ap, double);
+                    break;
+                case ufmt_double:
+                    args.doubleValue = va_arg(ap, double);
+                    break;
+                default:
+                    /* else args is ignored */
+                    args.ptrValue = NULL;
+                    break;
+                }
             }
 
             /* call the handler function */
