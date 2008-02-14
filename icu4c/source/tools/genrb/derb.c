@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -545,6 +545,7 @@ static void printOutAlias(FILE *out,  UConverter *converter, UResourceBundle *pa
     } else {
         reportError(pname, status, "getting binary value");
     }
+    uprv_free(string);
 }
 
 static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *resource, int32_t indent, const char *pname, UErrorCode *status)
@@ -560,7 +561,7 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
         {
             int32_t len=0;
             const UChar* thestr = ures_getString(resource, &len, status);
-                        UChar *string = quotedString(thestr);
+            UChar *string = quotedString(thestr);
 
             /* TODO: String truncation */
             if(trunc && len > truncsize) {
