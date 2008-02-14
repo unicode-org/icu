@@ -462,18 +462,17 @@ printComments(UnicodeString *Accumulator, struct UString *src, const char *resNa
 
 #if UCONFIG_NO_REGULAR_EXPRESSIONS==0 /* donot compile when no RegularExpressions are available */
 
-    int32_t capacity = src->fLength;
+    if(status==NULL || U_FAILURE(*status)){
+        return;
+    }
+
+    int32_t capacity = src->fLength + 1;
     char* buf = NULL;
     int32_t bufLen = 0;
     UChar* desc  = (UChar*) uprv_malloc(U_SIZEOF_UCHAR * capacity);
     UChar* trans = (UChar*) uprv_malloc(U_SIZEOF_UCHAR * capacity);
 
     int32_t descLen = 0, transLen=0;
-    if(status==NULL || U_FAILURE(*status)){
-        uprv_free(desc);
-        uprv_free(trans);
-        return;
-    }
     if(desc==NULL || trans==NULL){
         *status = U_MEMORY_ALLOCATION_ERROR;
         uprv_free(desc);
@@ -510,6 +509,9 @@ printComments(UnicodeString *Accumulator, struct UString *src, const char *resNa
         write_tabs(Accumulator);
         print(Accumulator, desc, descLen, "<!--", "-->", status);
     }
+
+    uprv_free(desc);
+    uprv_free(trans);
 #else
 
     fprintf(stderr, "Warning: Could not output comments to XLIFF file. ICU has been built without RegularExpression support.\n");
