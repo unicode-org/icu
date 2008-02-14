@@ -302,28 +302,39 @@ DateTimePatternGenerator::addICUPatterns(const Locale& locale, UErrorCode& statu
     UnicodeString dfPattern;
     UnicodeString conflictingString;
     UDateTimePatternConflict conflictingStatus;
-    SimpleDateFormat* df;
-    
+    DateFormat* df;
+
+    if (U_FAILURE(status)) {
+        return;
+    }
+
     // Load with ICU patterns
     for (int32_t i=DateFormat::kFull; i<=DateFormat::kShort; i++) {
-        if ((df = (SimpleDateFormat*)DateFormat::createDateInstance((DateFormat::EStyle)i, locale))!= NULL) {
-            conflictingStatus = addPattern(df->toPattern(dfPattern), FALSE, conflictingString, status);
-            delete df;
-            if (U_FAILURE(status)) {
-                return;
-            }
+        DateFormat::EStyle style = (DateFormat::EStyle)i;
+        df = DateFormat::createDateInstance(style, locale);
+        if (df != NULL && df->getDynamicClassID() == SimpleDateFormat::getStaticClassID()) {
+            SimpleDateFormat* sdf = (SimpleDateFormat*)df;
+            conflictingStatus = addPattern(sdf->toPattern(dfPattern), FALSE, conflictingString, status);
+        }
+        // TODO Maybe we should return an error when the date format isn't simple.
+        delete df;
+        if (U_FAILURE(status)) {
+            return;
         }
 
-        if ((df = (SimpleDateFormat*)DateFormat::createTimeInstance((DateFormat::EStyle)i, locale)) != NULL) {
-            conflictingStatus = addPattern(df->toPattern(dfPattern), FALSE, conflictingString, status);
-            delete df;
-            if (U_FAILURE(status)) {
-                return;
-            }
+        df = DateFormat::createTimeInstance(style, locale);
+        if (df != NULL && df->getDynamicClassID() == SimpleDateFormat::getStaticClassID()) {
+            SimpleDateFormat* sdf = (SimpleDateFormat*)df;
+            conflictingStatus = addPattern(sdf->toPattern(dfPattern), FALSE, conflictingString, status);
             // HACK for hh:ss
             if ( i==DateFormat::kMedium ) {
                 hackPattern = dfPattern;
             }
+        }
+        // TODO Maybe we should return an error when the date format isn't simple.
+        delete df;
+        if (U_FAILURE(status)) {
+            return;
         }
     }
 }
