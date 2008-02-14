@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -521,11 +521,18 @@ processCombining() {
 
         /* store the combining data for this lead code point in the combiningTable */
         while(j<count && i==triples[j].leadIndex) {
+            Norm *normPtr;
             finalIndex=combiningIndexes[triples[j].trailIndex];
             combined=triples[j++].combined;
+            normPtr = getNorm(combined);
+
+            if (normPtr == NULL) {
+                fprintf(stderr, "error: processCombining did not get expected result. combined=%d\n", combined);
+                exit(U_INTERNAL_PROGRAM_ERROR);
+            }
 
             /* is combined a starter? (i.e., cc==0 && combines forward) */
-            combinesFwd=(uint16_t)((getNorm(combined)->combiningFlags&1)<<13);
+            combinesFwd=(uint16_t)((normPtr->combiningFlags&1)<<13);
 
             *p++=finalIndex;
             if(combined<=0x1fff) {
