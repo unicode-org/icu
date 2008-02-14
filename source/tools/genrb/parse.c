@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2007, International Business Machines
+*   Copyright (C) 1998-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -827,7 +827,7 @@ parseCollationElements(char *tag, uint32_t startline, UBool newCollation, UError
 
             if (token != TOK_STRING)
             {
-                table_close(result, status);
+                res_close(result, status);
                 *status = U_INVALID_FORMAT_ERROR;
 
                 if (token == TOK_EOF)
@@ -846,7 +846,7 @@ parseCollationElements(char *tag, uint32_t startline, UBool newCollation, UError
 
             if (U_FAILURE(*status))
             {
-                table_close(result, status);
+                res_close(result, status);
                 return NULL;
             }
 
@@ -856,7 +856,7 @@ parseCollationElements(char *tag, uint32_t startline, UBool newCollation, UError
 
                 if (U_FAILURE(*status))
                 {
-                    table_close(result, status);
+                    res_close(result, status);
                     return NULL;
                 }
 
@@ -887,10 +887,12 @@ parseCollationElements(char *tag, uint32_t startline, UBool newCollation, UError
 
                         table_add(result, member, line, status);
                     } else {
+                        res_close(result, status);
                         *status = U_INVALID_FORMAT_ERROR;
                         return NULL;
                     }
                 } else {
+                    res_close(result, status);
                     *status = U_INVALID_FORMAT_ERROR;
                     return NULL;
                 }
@@ -902,7 +904,7 @@ parseCollationElements(char *tag, uint32_t startline, UBool newCollation, UError
 
             if (U_FAILURE(*status))
             {
-                table_close(result, status);
+                res_close(result, status);
                 return NULL;
             }
         }
@@ -1068,7 +1070,7 @@ parseArray(char *tag, uint32_t startline, const struct UString *comment, UErrorC
 
         if (token == TOK_EOF)
         {
-            array_close(result, status);
+            res_close(result, status);
             *status = U_INVALID_FORMAT_ERROR;
             error(startline, "unterminated array");
             return NULL;
@@ -1087,7 +1089,7 @@ parseArray(char *tag, uint32_t startline, const struct UString *comment, UErrorC
 
         if (member == NULL || U_FAILURE(*status))
         {
-            array_close(result, status);
+            res_close(result, status);
             return NULL;
         }
 
@@ -1095,7 +1097,7 @@ parseArray(char *tag, uint32_t startline, const struct UString *comment, UErrorC
 
         if (U_FAILURE(*status))
         {
-            array_close(result, status);
+            res_close(result, status);
             return NULL;
         }
 
@@ -1109,7 +1111,7 @@ parseArray(char *tag, uint32_t startline, const struct UString *comment, UErrorC
 
         if (U_FAILURE(*status))
         {
-            array_close(result, status);
+            res_close(result, status);
             return NULL;
         }
         readToken = TRUE;
@@ -1164,7 +1166,7 @@ parseIntVector(char *tag, uint32_t startline, const struct UString *comment, UEr
 
         if (U_FAILURE(*status))
         {
-            intvector_close(result, status);
+            res_close(result, status);
             return NULL;
         }
         /* Commented by Jing/GCL */
@@ -1194,7 +1196,7 @@ parseIntVector(char *tag, uint32_t startline, const struct UString *comment, UEr
 
         if (U_FAILURE(*status))
         {
-            intvector_close(result, status);
+            res_close(result, status);
             return NULL;
         }
 
@@ -1917,7 +1919,7 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, UErrorCode *st
     if (U_FAILURE(*status))
     {
         bundle_close(bundle, status);
-        array_close(dependencyArray, status);
+        res_close(dependencyArray, status);
         return NULL;
     }
 
