@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and         *
+* Copyright (C) 2007-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -230,7 +230,8 @@ BasicTimeZone::getSimpleRulesNear(UDate date, InitialTimeZoneRule*& initial,
                 initialDst = ar1->getDSTSavings();
             }
         }
-    } else {
+    }
+    else {
         // Try the previous one
         avail = getPreviousTransition(date, TRUE, tr);
         if (avail) {
@@ -241,12 +242,6 @@ BasicTimeZone::getSimpleRulesNear(UDate date, InitialTimeZoneRule*& initial,
             // No transitions in the past.  Just use the current offsets
             getOffset(date, FALSE, initialRaw, initialDst, status);
             if (U_FAILURE(status)) {
-                if (ar1 != NULL) {
-                    delete ar1;
-                }
-                if (ar2 != NULL) {
-                    delete ar2;
-                }
                 return;
             }
         }
