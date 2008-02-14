@@ -979,8 +979,17 @@ uregex_appendReplacement(URegularExpression    *regexp,
 int32_t RegexCImpl::appendTail(URegularExpression    *regexp,
                   UChar                **destBuf,
                   int32_t               *destCapacity,
-                  UErrorCode            *status)  {
+                  UErrorCode            *status)
+{
 
+    if (destCapacity == NULL || destBuf == NULL || 
+        *destBuf == NULL && *destCapacity > 0 ||
+        *destCapacity < 0)
+    {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    
     // If we come in with a buffer overflow error, don't suppress the operation.
     //  A series of appendReplacements, appendTail need to correctly preflight
     //  the buffer size when an overflow happens somewhere in the middle.
@@ -993,13 +1002,6 @@ int32_t RegexCImpl::appendTail(URegularExpression    *regexp,
     if (validateRE(regexp, status) == FALSE) {
         return 0;
     }
-    if (destCapacity == NULL || destBuf == NULL || 
-        *destBuf == NULL && *destCapacity > 0 ||
-        *destCapacity < 0) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-    
     RegexMatcher *m = regexp->fMatcher;
 
     int32_t  srcIdx;
