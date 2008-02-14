@@ -573,7 +573,7 @@ ufile_getch(UFILE *f, UChar *ch)
         *ch = *(f->str.fPos)++;
         isValidChar = TRUE;
     }
-    else if (f) {
+    else {
         /* otherwise, fill the buffer and return the next character */
         if(f->str.fPos >= f->str.fLimit) {
             ufile_fill_uchar_buffer(f);
