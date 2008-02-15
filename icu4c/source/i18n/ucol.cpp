@@ -1224,50 +1224,41 @@ ucol_initUCA(UErrorCode *status) {
     UMTX_CHECK(NULL, (_staticUCA == NULL), needsInit);
 
     if(needsInit) {
-        UCollator *newUCA = NULL;
-        UDataMemory *result = udata_openChoice(NULL, UCA_DATA_TYPE, UCA_DATA_NAME, isAcceptableUCA, NULL, status);
-
-        if(U_FAILURE(*status)) {
-            if (result) {
-                udata_close(result);
-            }
-            uprv_free(newUCA);
-        }
-
         // init FCD data
         if (fcdTrieIndex == NULL) {
+            // The result is constant, until the library is reloaded.
             fcdTrieIndex = unorm_getFCDTrie(status);
             ucln_i18n_registerCleanup(UCLN_I18N_UCOL, ucol_cleanup);
         }
 
-        if(result != NULL) { /* It looks like sometimes we can fail to find the data file */
-            newUCA = ucol_initCollator((const UCATableHeader *)udata_getMemory(result), newUCA, newUCA, status);
+        UDataMemory *result = udata_openChoice(NULL, UCA_DATA_TYPE, UCA_DATA_NAME, isAcceptableUCA, NULL, status);
+
+        if(U_SUCCESS(*status)){
+            UCollator *newUCA = ucol_initCollator((const UCATableHeader *)udata_getMemory(result), NULL, NULL, status);
             if(U_SUCCESS(*status)){
                 umtx_lock(NULL);
                 if(_staticUCA == NULL) {
                     _staticUCA = newUCA;
+                    newUCA = NULL;
                     UCA_DATA_MEM = result;
                     result = NULL;
-                    newUCA = NULL;
                 }
                 umtx_unlock(NULL);
 
+                ucln_i18n_registerCleanup(UCLN_I18N_UCOL, ucol_cleanup);
                 if(newUCA != NULL) {
+                    ucol_close(newUCA);
                     udata_close(result);
-                    uprv_free(newUCA);
-                }
-                else {
-                    ucln_i18n_registerCleanup(UCLN_I18N_UCOL, ucol_cleanup);
                 }
                 // Initalize variables for implicit generation
-                //const UCAConstants *UCAconsts = (UCAConstants *)((uint8_t *)_staticUCA->image + _staticUCA->image->UCAConsts);
                 uprv_uca_initImplicitConstants(status);
-                //_staticUCA->mapping.getFoldingOffset = _getFoldingOffset;
             }else{
+                ucol_close(newUCA);
                 udata_close(result);
-                uprv_free(newUCA);
-                _staticUCA= NULL;
             }
+        }
+        else {
+            udata_close(result);
         }
     }
     return _staticUCA;
