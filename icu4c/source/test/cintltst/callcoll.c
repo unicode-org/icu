@@ -684,12 +684,11 @@ void genericRulesStarter(const char *rules, const char * const s[], uint32_t siz
 static void TestTertiary()
 {
     int32_t len,i;
-    UChar *rules;
     UCollator *myCollation;
     UErrorCode status=U_ZERO_ERROR;
-    const char* str="& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";
+    static const char str[]="& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";
+    UChar rules[sizeof(str)];
     len = strlen(str);
-    rules=(UChar*)malloc(sizeof(UChar*) * (len+1));
     u_uastrcpy(rules, str);
 
     myCollation=ucol_openRules(rules, len, UCOL_OFF, UCOL_DEFAULT_STRENGTH, NULL, &status);
@@ -703,7 +702,6 @@ static void TestTertiary()
     {
         doTest(myCollation, testSourceCases[i], testTargetCases[i], results[i]);
     }
-    free(rules);
     ucol_close(myCollation);
     myCollation = 0;
 }
@@ -711,12 +709,11 @@ static void TestTertiary()
 static void TestPrimary( )
 {
     int32_t len,i;
-    UChar *rules;
     UCollator *myCollation;
     UErrorCode status=U_ZERO_ERROR;
-    const char* str="& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";   
+    static const char str[]="& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";   
+    UChar rules[sizeof(str)];
     len = strlen(str);
-    rules=(UChar*)malloc(sizeof(UChar*) * (len+1));
     u_uastrcpy(rules, str);
 
     myCollation=ucol_openRules(rules, len, UCOL_OFF, UCOL_DEFAULT_STRENGTH,NULL, &status);
@@ -731,7 +728,6 @@ static void TestPrimary( )
         
         doTest(myCollation, testSourceCases[i], testTargetCases[i], results[i]);
     }
-    free(rules);
     ucol_close(myCollation);
     myCollation = 0;
 }
@@ -740,12 +736,11 @@ static void TestSecondary()
 {
     int32_t i;
     int32_t len;
-    UChar *rules;
     UCollator *myCollation;
     UErrorCode status=U_ZERO_ERROR;
-    const char* str="& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";
+    static const char str[]="& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";
+    UChar rules[sizeof(str)];
     len = strlen(str);
-    rules=(UChar*)malloc(sizeof(UChar*) * (len+1));
     u_uastrcpy(rules, str);
 
     myCollation=ucol_openRules(rules, len, UCOL_OFF, UCOL_DEFAULT_STRENGTH,NULL, &status);
@@ -758,7 +753,6 @@ static void TestSecondary()
     {
         doTest(myCollation, testSourceCases[i], testTargetCases[i], results[i]);
     }
-    free(rules);
     ucol_close(myCollation);
     myCollation = 0;
 }
@@ -767,12 +761,11 @@ static void TestIdentical()
 {
     int32_t i;
     int32_t len;
-    UChar *rules = 0;
     UCollator *myCollation;
     UErrorCode status=U_ZERO_ERROR;
-    const char* str="& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";
+    static const char str[]="& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";
+    UChar rules[sizeof(str)];
     len = strlen(str);
-    rules=(UChar*)malloc(sizeof(UChar*) * (len+1));
     u_uastrcpy(rules, str);
 
     myCollation=ucol_openRules(rules, len, UCOL_OFF, UCOL_IDENTICAL, NULL,&status);
@@ -784,7 +777,6 @@ static void TestIdentical()
     {
         doTest(myCollation, testSourceCases[i], testTargetCases[i], results[i]);
     }
-    free(rules);
     ucol_close(myCollation);
     myCollation = 0;
 }
@@ -793,12 +785,11 @@ static void TestExtra()
 {
     int32_t i, j;
     int32_t len;
-    UChar *rules;
     UCollator *myCollation;
     UErrorCode status = U_ZERO_ERROR;
-    const char* str="& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";
+    static const char str[]="& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";
+    UChar rules[sizeof(str)];
     len = strlen(str);
-    rules=(UChar*)malloc(sizeof(UChar*) * (len+1));
     u_uastrcpy(rules, str);
 
     myCollation=ucol_openRules(rules, len, UCOL_OFF, UCOL_DEFAULT_STRENGTH,NULL, &status);
@@ -815,7 +806,6 @@ static void TestExtra()
             doTest(myCollation, testCases[i], testCases[j], UCOL_LESS);
         }
     }
-    free(rules);
     ucol_close(myCollation);
     myCollation = 0;
 }
@@ -976,9 +966,9 @@ static void TestJB1401(void)
 */
 static void TestVariableTop(void)
 {
-    const char       *str          = "&z = [variable top]";
+    static const char       str[]          = "&z = [variable top]";
           int         len          = strlen(str);
-          UChar      *rules;
+          UChar      rules[sizeof(str)];
           UCollator  *myCollation;
           UCollator  *enCollation;
           UErrorCode  status       = U_ZERO_ERROR;
@@ -987,7 +977,6 @@ static void TestVariableTop(void)
           uint8_t     result[20];
           uint8_t     expected[20];
 
-    rules = (UChar*)malloc(sizeof(UChar*) * (len + 1));
     u_uastrcpy(rules, str);
 
     enCollation = ucol_open("en_US", &status);
@@ -1039,7 +1028,6 @@ static void TestVariableTop(void)
         ch ++;
     }
   
-    free(rules);
     ucol_close(enCollation);
     ucol_close(myCollation);
     enCollation = NULL;
@@ -1053,11 +1041,11 @@ static void TestVariableTop(void)
   */
 static void TestSurrogates(void)
 {
-    const char       *str          = 
+    static const char       str[]          = 
                               "&z<'\\uD800\\uDC00'<'\\uD800\\uDC0A\\u0308'<A";
           int         len          = strlen(str);
           int         rlen         = 0;
-          UChar      *rules;
+          UChar      rules[sizeof(str)];
           UCollator  *myCollation;
           UCollator  *enCollation;
           UErrorCode  status       = U_ZERO_ERROR;
@@ -1070,7 +1058,6 @@ static void TestSurrogates(void)
           int enlen, mylen;
           
     /* tests for open rules with surrogate rules */
-    rules = (UChar*)malloc(sizeof(UChar*) * (len + 1));
     rlen = u_unescape(str, rules, len);
     
     enCollation = ucol_open("en_US", &status);
@@ -1115,7 +1102,6 @@ static void TestSurrogates(void)
         log_verbose("Failed : non-tailored supplementary characters should have the same value\n");
     }
 
-    free(rules);
     ucol_close(enCollation);
     ucol_close(myCollation);
     enCollation = NULL;
