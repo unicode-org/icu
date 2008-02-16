@@ -1503,6 +1503,8 @@ private:
                               UnicodeString& rebuiltPat,
                               UErrorCode& ec);
 
+    static const UnicodeSet* getInclusions(int32_t src, UErrorCode &status);
+
     /**
      * A filter that returns TRUE if the given code point should be
      * included in the UnicodeSet being constructed.

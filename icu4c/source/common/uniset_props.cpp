@@ -136,7 +136,14 @@ U_CDECL_END
 
 U_NAMESPACE_BEGIN
 
-static const UnicodeSet* getInclusions(int32_t src, UErrorCode &status) {
+/*
+Reduce excessive reallocation, and make it easier to detect initialization
+problems.
+Usually you don't see smaller sets than this for Unicode 5.0.
+*/
+#define DEFAULT_INCLUSION_CAPACITY 3072
+
+const UnicodeSet* UnicodeSet::getInclusions(int32_t src, UErrorCode &status) {
     UBool needInit;
     UMTX_CHECK(NULL, (INCLUSIONS[src] == NULL), needInit);
     if (needInit) {
@@ -146,9 +153,10 @@ static const UnicodeSet* getInclusions(int32_t src, UErrorCode &status) {
             _set_add,
             _set_addRange,
             _set_addString,
-            NULL // don't need remove()
+            NULL, // don't need remove()
+            NULL // don't need removeRange()
         };
-
+        incl->ensureCapacity(DEFAULT_INCLUSION_CAPACITY, status);
         if (incl != NULL) {
             switch(src) {
             case UPROPS_SRC_CHAR:
@@ -894,7 +902,7 @@ void UnicodeSet::applyFilter(UnicodeSet::Filter filter,
     clear();
 
     UChar32 startHasProperty = -1;
-    int limitRange = inclusions->getRangeCount();
+    int32_t limitRange = inclusions->getRangeCount();
 
     for (int j=0; j<limitRange; ++j) {
         // get current range
@@ -1322,7 +1330,8 @@ UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
                 _set_add,
                 _set_addRange,
                 _set_addString,
-                NULL // don't need remove()
+                NULL, // don't need remove()
+                NULL // don't need removeRange()
             };
 
             // start with input set to guarantee inclusion
