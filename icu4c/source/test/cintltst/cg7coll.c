@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -188,9 +188,9 @@ static void TestDemo1()
 {
     UCollator *myCollation;
     int32_t j, n;
-    const char *rules = "& Z < p, P";
+    static const char rules[] = "& Z < p, P";
     int32_t len=(int32_t)strlen(rules);
-    UChar *temp = (UChar*)malloc(sizeof(UChar) * (len+1));
+    UChar temp[sizeof(rules)];
     UErrorCode status = U_ZERO_ERROR;
     u_uastrcpy(temp, rules);
 
@@ -213,16 +213,15 @@ static void TestDemo1()
     }
 
     ucol_close(myCollation); 
-    free(temp);
 }
 
 static void TestDemo2()
 {
     UCollator *myCollation;
     int32_t j, n;
-    const char *rules = "& C < ch , cH, Ch, CH";
+    static const char rules[] = "& C < ch , cH, Ch, CH";
     int32_t len=(int32_t)strlen(rules);
-    UChar *temp = (UChar*)malloc(sizeof(UChar) * (len+1));
+    UChar temp[sizeof(rules)];
     UErrorCode status = U_ZERO_ERROR;
     u_uastrcpy(temp, rules);
 
@@ -243,16 +242,15 @@ static void TestDemo2()
         }
     }
     ucol_close(myCollation); 
-    free(temp);  
 }
 
 static void TestDemo3()
 {
     UCollator *myCollation;
     int32_t j, n;
-    const char *rules = "& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'";
+    static const char rules[] = "& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'";
     int32_t len=(int32_t)strlen(rules);
-    UChar *temp = (UChar*)malloc(sizeof(UChar) * (len+1));
+    UChar temp[sizeof(rules)];
     UErrorCode status = U_ZERO_ERROR;
     u_uastrcpy(temp, rules);
 
@@ -274,16 +272,15 @@ static void TestDemo3()
         }
     }
     ucol_close(myCollation); 
-    free(temp);   
 }
 
 static void TestDemo4()
 {
     UCollator *myCollation;
     int32_t j, n;
-    const char *rules = " & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' ";
+    static const char rules[] = " & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' ";
     int32_t len=(int32_t)strlen(rules);
-    UChar *temp = (UChar*)malloc(sizeof(UChar) * (len+1));
+    UChar temp[sizeof(rules)];
     UErrorCode status = U_ZERO_ERROR;
     u_uastrcpy(temp, rules);
 
@@ -304,7 +301,6 @@ static void TestDemo4()
         }
     }
     ucol_close(myCollation); 
-    free(temp);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
