@@ -505,21 +505,21 @@ ucbuf_open(const char* fileName,const char** cp,UBool showWarning, UBool buffere
         buf->buffer=(UChar*) uprv_malloc(U_SIZEOF_UCHAR * buf->bufCapacity );
         if (buf->buffer == NULL) {
             *error = U_MEMORY_ALLOCATION_ERROR;
-            ucnv_close(buf->conv);
-            uprv_free(buf);
-            T_FileStream_close(in);
+            ucbuf_close(buf);
             return NULL;
         }
         buf->currentPos=buf->buffer;
         buf->bufLimit=buf->buffer;
         if(U_FAILURE(*error)){
             fprintf(stderr, "Could not open codepage [%s]: %s\n", *cp, u_errorName(*error));
-            ucnv_close(buf->conv);
-            uprv_free(buf);
-            T_FileStream_close(in);
+            ucbuf_close(buf);
             return NULL;
         }
-        buf=ucbuf_fillucbuf(buf,error);
+        ucbuf_fillucbuf(buf,error);
+        if(U_FAILURE(*error)){
+            ucbuf_close(buf);
+            return NULL;
+        }
         return buf;
     }
     *error =U_FILE_ACCESS_ERROR;
