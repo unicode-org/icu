@@ -460,19 +460,18 @@ static int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
     if (maxexpansion->position + 1 == maxexpansion->size) {
         uint32_t *neweece = (uint32_t *)uprv_realloc(maxexpansion->endExpansionCE, 
             2 * maxexpansion->size * sizeof(uint32_t));
-        uint8_t  *neweces = (uint8_t *)uprv_realloc(maxexpansion->expansionCESize, 
-            2 * maxexpansion->size * sizeof(uint8_t));
-        if (neweece == NULL || neweces == NULL) {
-#ifdef UCOL_DEBUG
-            fprintf(stderr, "out of memory for maxExpansions\n");
-#endif
+        if (neweece == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
-            // Free memory in allocation error to avoid leak.
-            uprv_free(neweece); 
-            uprv_free(neweces);
-            return -1;
+            return 0;
         }
         maxexpansion->endExpansionCE  = neweece;
+
+        uint8_t  *neweces = (uint8_t *)uprv_realloc(maxexpansion->expansionCESize, 
+            2 * maxexpansion->size * sizeof(uint8_t));
+        if (neweces == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return 0;
+        }
         maxexpansion->expansionCESize = neweces;
         maxexpansion->size *= 2;
     }
@@ -501,54 +500,46 @@ static int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
     if (*start == endexpansion) {
         result = start - pendexpansionce;
     }
-    else
-        if (*limit == endexpansion) {
-            result = limit - pendexpansionce;
-        }
+    else if (*limit == endexpansion) {
+        result = limit - pendexpansionce;
+    }
 
-        if (result > -1) {
-            /* found the ce in expansion, we'll just modify the size if it is
-            smaller */
-            uint8_t *currentsize = pexpansionsize + result;
-            if (*currentsize < expansionsize) {
-                *currentsize = expansionsize;
-            }
+    if (result > -1) {
+        /* found the ce in expansion, we'll just modify the size if it is
+        smaller */
+        uint8_t *currentsize = pexpansionsize + result;
+        if (*currentsize < expansionsize) {
+            *currentsize = expansionsize;
+        }
+    }
+    else {
+        /* we'll need to squeeze the value into the array.
+        initial implementation. */
+        /* shifting the subarray down by 1 */
+        int      shiftsize     = (pendexpansionce + pos) - start;
+        uint32_t *shiftpos     = start + 1;
+        uint8_t  *sizeshiftpos = pexpansionsize + (shiftpos - pendexpansionce);
+
+        /* okay need to rearrange the array into sorted order */
+        if (shiftsize == 0 /*|| *(pendexpansionce + pos) < endexpansion*/) { /* the commented part is actually both redundant and dangerous */
+            *(pendexpansionce + pos + 1) = endexpansion;
+            *(pexpansionsize + pos + 1)  = expansionsize;
         }
         else {
-            /* we'll need to squeeze the value into the array.
-            initial implementation. */
-            /* shifting the subarray down by 1 */
-            int      shiftsize     = (pendexpansionce + pos) - start;
-            uint32_t *shiftpos     = start + 1;
-            uint8_t  *sizeshiftpos = pexpansionsize + (shiftpos - pendexpansionce);
-
-            /* okay need to rearrange the array into sorted order */
-            if (shiftsize == 0 /*|| *(pendexpansionce + pos) < endexpansion*/) { /* the commented part is actually both redundant and dangerous */
-                *(pendexpansionce + pos + 1) = endexpansion;
-                *(pexpansionsize + pos + 1)  = expansionsize;
-            }
-            else {
-                uprv_memmove(shiftpos + 1, shiftpos, shiftsize * sizeof(int32_t));
-                uprv_memmove(sizeshiftpos + 1, sizeshiftpos, 
-                    shiftsize * sizeof(uint8_t));
-                *shiftpos     = endexpansion;
-                *sizeshiftpos = expansionsize;
-            }
-            maxexpansion->position ++;
+            uprv_memmove(shiftpos + 1, shiftpos, shiftsize * sizeof(int32_t));
+            uprv_memmove(sizeshiftpos + 1, sizeshiftpos, 
+                shiftsize * sizeof(uint8_t));
+            *shiftpos     = endexpansion;
+            *sizeshiftpos = expansionsize;
+        }
+        maxexpansion->position ++;
 
 #ifdef UCOL_DEBUG
-            int   temp;
-            UBool found = FALSE;
-            for (temp = 0; temp < maxexpansion->position; temp ++) {
-                if (pendexpansionce[temp] >= pendexpansionce[temp + 1]) {
-                    fprintf(stderr, "expansions %d\n", temp);
-                }
-                if (pendexpansionce[temp] == endexpansion) {
-                    found =TRUE;
-                    if (pexpansionsize[temp] < expansionsize) {
-                        fprintf(stderr, "expansions size %d\n", temp);
-                    }
-                }
+        int   temp;
+        UBool found = FALSE;
+        for (temp = 0; temp < maxexpansion->position; temp ++) {
+            if (pendexpansionce[temp] >= pendexpansionce[temp + 1]) {
+                fprintf(stderr, "expansions %d\n", temp);
             }
             if (pendexpansionce[temp] == endexpansion) {
                 found =TRUE;
@@ -556,12 +547,19 @@ static int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
                     fprintf(stderr, "expansions size %d\n", temp);
                 }
             }
-            if (!found)
-                fprintf(stderr, "expansion not found %d\n", temp);
-#endif
         }
+        if (pendexpansionce[temp] == endexpansion) {
+            found =TRUE;
+            if (pexpansionsize[temp] < expansionsize) {
+                fprintf(stderr, "expansions size %d\n", temp);
+            }
+        }
+        if (!found)
+            fprintf(stderr, "expansion not found %d\n", temp);
+#endif
+    }
 
-        return maxexpansion->position;
+    return maxexpansion->position;
 }
 
 /**
@@ -1146,43 +1144,45 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
             && (element->CEs[1] & (~(0xFF << 24 | UCOL_CONTINUATION_MARKER))) == 0 // that has only primaries in continuation,
             && (((element->CEs[0]>>8) & 0xFF) == UCOL_BYTE_COMMON) // a common secondary
             && ((element->CEs[0] & 0xFF) == UCOL_BYTE_COMMON) // and a common tertiary
-            ) {
+            )
+        {
 #ifdef UCOL_DEBUG
-                fprintf(stdout, "Long primary %04X\n", element->cPoints[0]);
+            fprintf(stdout, "Long primary %04X\n", element->cPoints[0]);
 #endif
-                element->mapCE = UCOL_SPECIAL_FLAG | (LONG_PRIMARY_TAG<<24) // a long primary special
-                    | ((element->CEs[0]>>8) & 0xFFFF00) // first and second byte of primary
-                    | ((element->CEs[1]>>24) & 0xFF);   // third byte of primary
-            } else {
-                expansion = (uint32_t)(UCOL_SPECIAL_FLAG | (EXPANSION_TAG<<UCOL_TAG_SHIFT) 
-                    | ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(headersize>>2))<<4)
-                    & 0xFFFFF0);
+            element->mapCE = UCOL_SPECIAL_FLAG | (LONG_PRIMARY_TAG<<24) // a long primary special
+                | ((element->CEs[0]>>8) & 0xFFFF00) // first and second byte of primary
+                | ((element->CEs[1]>>24) & 0xFF);   // third byte of primary
+        }
+        else {
+            expansion = (uint32_t)(UCOL_SPECIAL_FLAG | (EXPANSION_TAG<<UCOL_TAG_SHIFT) 
+                | ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(headersize>>2))<<4)
+                & 0xFFFFF0);
 
-                for(i = 1; i<element->noOfCEs; i++) {
-                    uprv_uca_addExpansion(expansions, element->CEs[i], status);
-                }
-                if(element->noOfCEs <= 0xF) {
-                    expansion |= element->noOfCEs;
-                } else {
-                    uprv_uca_addExpansion(expansions, 0, status);
-                }
-                element->mapCE = expansion;
-                uprv_uca_setMaxExpansion(element->CEs[element->noOfCEs - 1],
-                    (uint8_t)element->noOfCEs,
-                    t->maxExpansions,
-                    status);
-                if(UCOL_ISJAMO(element->cPoints[0])) {
-                    t->image->jamoSpecial = TRUE;
-                    uprv_uca_setMaxJamoExpansion(element->cPoints[0],
-                        element->CEs[element->noOfCEs - 1],
-                        (uint8_t)element->noOfCEs,
-                        t->maxJamoExpansions,
-                        status);
-                    if (U_FAILURE(*status)) {
-                        return 0;
-                    }
-                }
+            for(i = 1; i<element->noOfCEs; i++) {
+                uprv_uca_addExpansion(expansions, element->CEs[i], status);
             }
+            if(element->noOfCEs <= 0xF) {
+                expansion |= element->noOfCEs;
+            } else {
+                uprv_uca_addExpansion(expansions, 0, status);
+            }
+            element->mapCE = expansion;
+            uprv_uca_setMaxExpansion(element->CEs[element->noOfCEs - 1],
+                (uint8_t)element->noOfCEs,
+                t->maxExpansions,
+                status);
+            if(UCOL_ISJAMO(element->cPoints[0])) {
+                t->image->jamoSpecial = TRUE;
+                uprv_uca_setMaxJamoExpansion(element->cPoints[0],
+                    element->CEs[element->noOfCEs - 1],
+                    (uint8_t)element->noOfCEs,
+                    t->maxJamoExpansions,
+                    status);
+            }
+            if (U_FAILURE(*status)) {
+                return 0;
+            }
+        }
     }
 
     // We treat digits differently - they are "uber special" and should be
