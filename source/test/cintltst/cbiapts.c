@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -598,7 +598,7 @@ static void TestBreakIteratorRuleError() {
         ubrk_close(bi);
     } else {
         if (parseErr.line != 3 || parseErr.offset != 8) {
-            log_err("FAIL: incorrect error position reported. Got line %d, char %d, expected line 3, char 7",
+            log_err("FAIL: incorrect error position reported. Got line %d, char %d, expected line 3, char 7\n",
                 parseErr.line, parseErr.offset);
         }
     }

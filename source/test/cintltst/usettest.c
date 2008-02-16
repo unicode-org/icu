@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2007, International Business Machines
+* Copyright (c) 2002-2008, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -548,7 +548,7 @@ static void TestFreezable() {
     idSet=openIDSet();
 
     if (idSet == NULL) {
-        log_err("openIDSet() returned NULL");
+        log_err("openIDSet() returned NULL\n");
         uset_close(idSet);
         return;
     }
@@ -556,7 +556,7 @@ static void TestFreezable() {
     frozen=uset_clone(idSet);
 
     if (frozen == NULL) {
-        log_err("uset_Clone() returned NULL");
+        log_err("uset_Clone() returned NULL\n");
         return;
     }
 
@@ -598,7 +598,7 @@ static void TestSpan() {
     USet *idSet=openIDSet();
 
     if (idSet == NULL) {
-        log_err("openIDSet() returned NULL");
+        log_err("openIDSet() returned NULL\n");
         return;
     }
 

@@ -4023,7 +4023,8 @@ uint8_t *reallocateBuffer(uint8_t **secondaries, uint8_t *secStart, uint8_t *sec
         newStart=(uint8_t*)uprv_realloc(secStart, newSize);
         if(newStart==NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
+            /* Since we're reallocating, return original reference so we don't loose it. */
+            return secStart;
         }
     }
     *secondaries=newStart+offset;
