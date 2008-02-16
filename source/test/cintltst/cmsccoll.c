@@ -4847,6 +4847,10 @@ TestVI5913(void)
 
     /* Test Vietnamese sort. */
     coll = ucol_open("vi", &status);
+    if(U_FAILURE(status)) {
+        log_err("Couldn't open collator %d\n", &status);
+        return;
+    }
     log_verbose("\n\nVI collation:");
     if ( !ucol_equal(coll, tData[0], u_strlen(tData[0]), tData[2], u_strlen(tData[2])) ) {
         log_err("\\u1EAC not equals to \\u1EA0+\\u0302\n");

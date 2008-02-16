@@ -812,7 +812,6 @@ static void TestExtra()
 
 static void TestJB581(void)
 {
-    UChar       dispName    [100]; 
     int32_t     bufferLen   = 0;
     UChar       source      [100];
     UChar       target      [100];
@@ -831,9 +830,7 @@ static void TestJB581(void)
 
     myCollator = ucol_open("en_US", &status);
     if (U_FAILURE(status)){
-        bufferLen = uloc_getDisplayName("en_US", 0, dispName, 100, &status);
-        /*Report the error with display name... */
-        log_err("ERROR: Failed to create the collator for : \"%s\"\n", dispName);
+        log_err("ERROR: Failed to create the collator : %s\n", u_errorName(status));
         return;
     }
     result = ucol_strcoll(myCollator, source, -1, target, -1);
@@ -876,11 +873,7 @@ static void TestJB1401(void)
     
     myCollator = ucol_open("en_US", &status);
     if (U_FAILURE(status)){
-        int32_t     bufferLen   = 0;
-        UChar       dispName    [100]; 
-        bufferLen = uloc_getDisplayName("en_US", 0, dispName, 100, &status);
-        /*Report the error with display name... */
-        log_err("ERROR: Failed to create the collator for : \"%s\"\n", dispName);
+        log_err("ERROR: Failed to create the collator : %s\n", u_errorName(status));
         return;
     }
     ucol_setAttribute(myCollator, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
