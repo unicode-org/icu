@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -827,8 +827,8 @@ findSetMatch( UScriptCode *scriptCodes, int32_t scriptsLen,
         u_charsToUChars(pattern, uPattern, patternLen);
         scripts[i] = uset_openPattern(uPattern, patternLen, &status);
         if(U_FAILURE(status)){
-            log_err("Could not create set for patter %s. Error: %s\n", pattern, u_errorName(status));
-            break;
+            log_err("Could not create set for pattern %s. Error: %s\n", pattern, u_errorName(status));
+            return;
         }
         pattern[2] = 0; 
     }
