@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2001-2007 International Business Machines 
+ * Copyright (c) 2001-2008 International Business Machines 
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  * File usrchtst.c
@@ -646,16 +646,16 @@ static void TestBreakIterator(void) {
         search   = &(BREAKITERATOREXACT[count + 1]);
         breaker  = getBreakIterator(search->breaker);
         usearch_setBreakIterator(strsrch, breaker, &status);
-        if (U_FAILURE(status) || 
-            usearch_getBreakIterator(strsrch) != breaker) {
+        if (U_FAILURE(status) || usearch_getBreakIterator(strsrch) != breaker) {
             log_err("Error setting break iterator\n");
             usearch_close(strsrch);
             goto ENDTESTBREAKITERATOR;
         }
         usearch_reset(strsrch);
         if (!assertEqualWithUStringSearch(strsrch, *search)) {
-             log_err("Error at test number %d\n", count);
-             goto ENDTESTBREAKITERATOR;
+            log_err("Error at test number %d\n", count);
+            usearch_close(strsrch);
+            goto ENDTESTBREAKITERATOR;
         }
         usearch_close(strsrch);
         count += 2;
@@ -1657,20 +1657,19 @@ static void TestBreakIteratorCanonical(void) {
         strsrch = usearch_openFromCollator(pattern, -1, text, -1, collator, 
                                            breaker, &status);
         if(status == U_FILE_ACCESS_ERROR) {
-          log_data_err("Is your data around?\n");
-          return;
+            log_data_err("Is your data around?\n");
+            goto ENDTESTBREAKITERATOR;
         } else if(U_FAILURE(status)) {
-          log_err("Error opening searcher\n");
-          return;
+            log_err("Error opening searcher\n");
+            goto ENDTESTBREAKITERATOR;
         }
         usearch_setAttribute(strsrch, USEARCH_CANONICAL_MATCH, USEARCH_ON, 
                              &status);
         if (U_FAILURE(status) || 
             usearch_getBreakIterator(strsrch) != breaker) {
             log_err("Error setting break iterator\n");
-            if (strsrch != NULL) {
-                usearch_close(strsrch);
-            }
+            usearch_close(strsrch);
+            goto ENDTESTBREAKITERATOR;
         }
         if (!assertEqualWithUStringSearch(strsrch, *search)) {
             ucol_setStrength(collator, UCOL_TERTIARY);
@@ -1680,8 +1679,7 @@ static void TestBreakIteratorCanonical(void) {
         search   = &(BREAKITERATOREXACT[count + 1]);
         breaker  = getBreakIterator(search->breaker);
         usearch_setBreakIterator(strsrch, breaker, &status);
-        if (U_FAILURE(status) || 
-            usearch_getBreakIterator(strsrch) != breaker) {
+        if (U_FAILURE(status) || usearch_getBreakIterator(strsrch) != breaker) {
             log_err("Error setting break iterator\n");
             usearch_close(strsrch);
             goto ENDTESTBREAKITERATOR;
@@ -1690,8 +1688,9 @@ static void TestBreakIteratorCanonical(void) {
         usearch_setAttribute(strsrch, USEARCH_CANONICAL_MATCH, USEARCH_ON, 
                              &status);
         if (!assertEqualWithUStringSearch(strsrch, *search)) {
-             log_err("Error at test number %d\n", count);
-             goto ENDTESTBREAKITERATOR;
+            log_err("Error at test number %d\n", count);
+            usearch_close(strsrch);
+            goto ENDTESTBREAKITERATOR;
         }
         usearch_close(strsrch);
         count += 2;
