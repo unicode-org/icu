@@ -1446,8 +1446,14 @@ UnicodeSet& UnicodeSet::compact() {
     if (len < capacity) {
         // Make the capacity equal to len or 1.
         // We don't want to realloc of 0 size.
-        capacity = len + (len == 0);
-        list = (UChar32*) uprv_realloc(list, sizeof(UChar32) * capacity);
+        int32_t newCapacity = len + (len == 0);
+        UChar32* temp = (UChar32*) uprv_realloc(list, sizeof(UChar32) * newCapacity);
+        if (temp) {
+            list = temp;
+            capacity = newCapacity;
+        }
+        // else what the heck happened?! We allocated less memory!
+        // Oh well. We'll keep our original array.
     }
     return *this;
 }
