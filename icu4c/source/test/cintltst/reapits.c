@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2004-2007, International Business Machines Corporation and
+ * Copyright (c) 2004-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -112,7 +112,10 @@ static void TestRegexCAPI(void) {
     /* Mimimalist open/close */
     u_uastrncpy(pat, "abc*", sizeof(pat)/2);
     re = uregex_open(pat, -1, 0, 0, &status);
-    TEST_ASSERT_SUCCESS(status);
+    if (U_FAILURE(status)) {
+         log_err("Failed to open regular expression, line %d, error is \"%s\"\n", __LINE__, u_errorName(status));
+         return;
+    }
     uregex_close(re);
 
     /* Open with all flag values set */

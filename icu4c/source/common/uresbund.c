@@ -453,11 +453,11 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
     UBool hasChopped = TRUE;
     char name[96];
 
+    initCache(status);
+
     if(U_FAILURE(*status)) {
         return NULL;
     }
-
-    initCache(status);
 
     uprv_strcpy(name, localeID);
 
