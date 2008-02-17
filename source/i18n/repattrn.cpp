@@ -268,6 +268,7 @@ RegexPattern::compile(const UnicodeString &regex,
     }
     if (U_FAILURE(This->fDeferredStatus)) {
         status = This->fDeferredStatus;
+        delete This;
         return NULL;
     }
     This->fFlags = flags;
