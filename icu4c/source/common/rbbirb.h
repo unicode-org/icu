@@ -1,7 +1,7 @@
 //
 //  rbbirb.h
 //
-//  Copyright (C) 2002-2005, International Business Machines Corporation and others.
+//  Copyright (C) 2002-2008, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains declarations for several classes from the
@@ -107,7 +107,7 @@ public:
     //   public ICU API for creating RBBIs uses this function to do the actual work.
     //
     static BreakIterator * createRuleBasedBreakIterator( const UnicodeString    &rules,
-                                    UParseError      &parseError,
+                                    UParseError      *parseError,
                                     UErrorCode       &status);
 
 public:
@@ -116,7 +116,7 @@ public:
     //  are NOT intended to be accessed by anything outside of the
     //  rule builder implementation.
     RBBIRuleBuilder(const UnicodeString  &rules,
-                    UParseError          &parseErr,
+                    UParseError          *parseErr,
                     UErrorCode           &status
         );
 

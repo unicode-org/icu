@@ -99,7 +99,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator( const UnicodeString  &rules,
     init();
     if (U_FAILURE(status)) {return;}
     RuleBasedBreakIterator *bi = (RuleBasedBreakIterator *)
-        RBBIRuleBuilder::createRuleBasedBreakIterator(rules, parseError, status);
+        RBBIRuleBuilder::createRuleBasedBreakIterator(rules, &parseError, status);
     // Note:  This is a bit awkward.  The RBBI ruleBuilder has a factory method that
     //        creates and returns a complete RBBI.  From here, in a constructor, we
     //        can't just return the object created by the builder factory, hence

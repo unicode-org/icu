@@ -43,12 +43,12 @@ U_NAMESPACE_BEGIN
 //
 //----------------------------------------------------------------------------------------
 RBBIRuleBuilder::RBBIRuleBuilder(const UnicodeString   &rules,
-                                       UParseError     &parseErr,
+                                       UParseError     *parseErr,
                                        UErrorCode      &status)
  : fRules(rules)
 {
     fStatus = &status; // status is checked below
-    fParseError = &parseErr;
+    fParseError = parseErr;
     fDebugEnv   = NULL;
 #ifdef RBBI_DEBUG
     fDebugEnv   = getenv("U_RBBIDEBUG");
@@ -72,6 +72,9 @@ RBBIRuleBuilder::RBBIRuleBuilder(const UnicodeString   &rules,
     fRuleStatusVals     = NULL;
     fScanner            = NULL;
     fSetBuilder         = NULL;
+    if (parseErr) {
+        uprv_memset(parseErr, 0, sizeof(UParseError));
+    }
 
     if (U_FAILURE(status)) {
         return;
@@ -226,7 +229,7 @@ RBBIDataHeader *RBBIRuleBuilder::flattenData() {
 //----------------------------------------------------------------------------------------
 BreakIterator *
 RBBIRuleBuilder::createRuleBasedBreakIterator( const UnicodeString    &rules,
-                                    UParseError      &parseError,
+                                    UParseError      *parseError,
                                     UErrorCode       &status)
 {
     // status checked below
@@ -236,10 +239,10 @@ RBBIRuleBuilder::createRuleBasedBreakIterator( const UnicodeString    &rules,
     // and list of all Unicode Sets referenced by the rules.
     //
     RBBIRuleBuilder  builder(rules, parseError, status);
-    builder.fScanner->parse();
     if (U_FAILURE(status)) { // status checked here bcos build below doesn't
         return NULL;
     }
+    builder.fScanner->parse();
 
     //
     // UnicodeSet processing.
