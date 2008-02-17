@@ -1,8 +1,8 @@
 /*
-*****************************************************************************************
-*   Copyright (C) 1996-2007, International Business Machines
+********************************************************************************
+*   Copyright (C) 1996-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
-*****************************************************************************************
+********************************************************************************
 */
 
 #include "unicode/utypes.h"
@@ -21,12 +21,12 @@
 
 U_NAMESPACE_USE
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //
 //    ubrk_open      Create a canned type of break iterator based on type (word, line, etc.)
 //                   and locale.
 //
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 U_CAPI UBreakIterator* U_EXPORT2
 ubrk_open(UBreakIteratorType type,
       const char *locale,
@@ -84,12 +84,12 @@ ubrk_open(UBreakIteratorType type,
 
 
 
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //
 //   ubrk_openRules      open a break iterator from a set of break rules.
 //                       Invokes the rule builder.
 //
-//----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 U_CAPI UBreakIterator* U_EXPORT2
 ubrk_openRules(  const UChar        *rules,
                        int32_t       rulesLength,
@@ -104,7 +104,7 @@ ubrk_openRules(  const UChar        *rules,
 
     BreakIterator *result = 0;
     UnicodeString ruleString(rules, rulesLength);
-    result = RBBIRuleBuilder::createRuleBasedBreakIterator(ruleString, *parseErr, *status);
+    result = RBBIRuleBuilder::createRuleBasedBreakIterator(ruleString, parseErr, *status);
     if(U_FAILURE(*status)) {
         return 0;
     }
