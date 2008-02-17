@@ -141,19 +141,34 @@ DateTimePatternGenerator::createInstance(UErrorCode& status) {
 
 DateTimePatternGenerator* U_EXPORT2
 DateTimePatternGenerator::createInstance(const Locale& locale, UErrorCode& status) {
-    return new DateTimePatternGenerator(locale, status);
+    DateTimePatternGenerator *result = new DateTimePatternGenerator(locale, status);
+    if (result == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
+    if (U_FAILURE(status)) {
+        delete result;
+        result = NULL;
+    }
+    return result;
 }
 
 DateTimePatternGenerator*  U_EXPORT2
 DateTimePatternGenerator::createEmptyInstance(UErrorCode& status) {
-    return new DateTimePatternGenerator(status);
+    DateTimePatternGenerator *result = new DateTimePatternGenerator(status);
+    if (result == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
+    if (U_FAILURE(status)) {
+        delete result;
+        result = NULL;
+    }
+    return result;
 }
 
-DateTimePatternGenerator::DateTimePatternGenerator(UErrorCode &status) : UObject()
+DateTimePatternGenerator::DateTimePatternGenerator(UErrorCode &status) : 
+    skipMatcher(NULL),
+    fAvailableFormatKeyHash(NULL)
 {
-    fStatus = U_ZERO_ERROR;
-    skipMatcher = NULL;
-    fAvailableFormatKeyHash=NULL;
     chineseMonthHack = FALSE;
     fp = new FormatParser();
     dtMatcher = new DateTimeMatcher();
@@ -164,7 +179,9 @@ DateTimePatternGenerator::DateTimePatternGenerator(UErrorCode &status) : UObject
     }
 }
 
-DateTimePatternGenerator::DateTimePatternGenerator(const Locale& locale, UErrorCode &status) : UObject()
+DateTimePatternGenerator::DateTimePatternGenerator(const Locale& locale, UErrorCode &status) :
+    skipMatcher(NULL),
+    fAvailableFormatKeyHash(NULL)
 {
     fp = new FormatParser();
     dtMatcher = new DateTimeMatcher();
@@ -174,15 +191,15 @@ DateTimePatternGenerator::DateTimePatternGenerator(const Locale& locale, UErrorC
         status = U_MEMORY_ALLOCATION_ERROR;
     }
     else {
-        initData(locale);
-        status = getStatus();
+        initData(locale, status);
     }
 }
 
-DateTimePatternGenerator::DateTimePatternGenerator(const DateTimePatternGenerator& other) : UObject() {
-    fStatus = U_ZERO_ERROR;
-    skipMatcher = NULL;
-    fAvailableFormatKeyHash=NULL;
+DateTimePatternGenerator::DateTimePatternGenerator(const DateTimePatternGenerator& other) : 
+    UObject(),
+    skipMatcher(NULL),
+    fAvailableFormatKeyHash(NULL)
+{
     fp = new FormatParser();
     dtMatcher = new DateTimeMatcher(); 
     distanceInfo = new DistanceInfo();
@@ -192,7 +209,6 @@ DateTimePatternGenerator::DateTimePatternGenerator(const DateTimePatternGenerato
 
 DateTimePatternGenerator&
 DateTimePatternGenerator::operator=(const DateTimePatternGenerator& other) {
-    fStatus = U_ZERO_ERROR;
     pLocale = other.pLocale;
     *fp = *(other.fp);
     dtMatcher->copyFrom(other.dtMatcher->skeleton);
@@ -217,8 +233,9 @@ DateTimePatternGenerator::operator=(const DateTimePatternGenerator& other) {
         appendItemFormats[i].getTerminatedBuffer();
         appendItemNames[i].getTerminatedBuffer();
     }
-    patternMap->copyFrom(*other.patternMap, fStatus);
-    copyHashtable(other.fAvailableFormatKeyHash);
+    UErrorCode status = U_ZERO_ERROR;
+    patternMap->copyFrom(*other.patternMap, status);
+    copyHashtable(other.fAvailableFormatKeyHash, status);
     return *this;
 }
 
@@ -252,7 +269,6 @@ DateTimePatternGenerator::operator!=(const DateTimePatternGenerator& other) cons
 DateTimePatternGenerator::~DateTimePatternGenerator() {
     if (fAvailableFormatKeyHash!=NULL) {
         delete fAvailableFormatKeyHash;
-        fAvailableFormatKeyHash=NULL;
     }
     
     if (fp != NULL) delete fp; 
@@ -263,7 +279,7 @@ DateTimePatternGenerator::~DateTimePatternGenerator() {
 }
 
 void
-DateTimePatternGenerator::initData(const Locale& locale) {
+DateTimePatternGenerator::initData(const Locale& locale, UErrorCode &status) {
     const char *baseLangName = locale.getBaseName();
     chineseMonthHack = FALSE;
     for (int32_t i=0; i<3; i++) {
@@ -272,27 +288,27 @@ DateTimePatternGenerator::initData(const Locale& locale) {
         }
     }
     
-    fStatus = U_ZERO_ERROR;
     skipMatcher = NULL;
     fAvailableFormatKeyHash=NULL;
     addCanonicalItems();
-    addICUPatterns(locale, fStatus);
-    if (U_FAILURE(fStatus)) {
+    addICUPatterns(locale, status);
+    if (U_FAILURE(status)) {
         return;
     }
     addCLDRData(locale);
-    setDateTimeFromCalendar(locale, fStatus);
-    setDecimalSymbols(locale, fStatus);
+    setDateTimeFromCalendar(locale, status);
+    setDecimalSymbols(locale, status);
 } // DateTimePatternGenerator::initData
 
 UnicodeString
-DateTimePatternGenerator::getSkeleton(const UnicodeString& pattern, UErrorCode& status) {
+DateTimePatternGenerator::getSkeleton(const UnicodeString& pattern, UErrorCode&
+/*status*/) {
     dtMatcher->set(pattern, fp);
     return dtMatcher->getSkeletonPtr()->getSkeleton();
 }
 
 UnicodeString
-DateTimePatternGenerator::getBaseSkeleton(const UnicodeString& pattern, UErrorCode& status) {
+DateTimePatternGenerator::getBaseSkeleton(const UnicodeString& pattern, UErrorCode& /*status*/) {
     dtMatcher->set(pattern, fp);
     return dtMatcher->getSkeletonPtr()->getBaseSkeleton();
 }
@@ -619,7 +635,7 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UErro
 UnicodeString
 DateTimePatternGenerator::replaceFieldTypes(const UnicodeString& pattern, 
                                             const UnicodeString& skeleton, 
-                                            UErrorCode& status) {
+                                            UErrorCode& /*status*/) {
     dtMatcher->set(skeleton, fp);
     UnicodeString result = adjustFieldTypes(pattern, FALSE);
     return result;
@@ -903,7 +919,7 @@ DateTimePatternGenerator::isAvailableFormatSet(const UnicodeString &key) const {
 }
 
 void
-DateTimePatternGenerator::copyHashtable(Hashtable *other) {
+DateTimePatternGenerator::copyHashtable(Hashtable *other, UErrorCode &status) {
 
     if (other == NULL) {
         return;
@@ -912,8 +928,8 @@ DateTimePatternGenerator::copyHashtable(Hashtable *other) {
         delete fAvailableFormatKeyHash;
         fAvailableFormatKeyHash = NULL;
     }
-    initHashtable(fStatus);
-    if(U_FAILURE(fStatus)){
+    initHashtable(status);
+    if(U_FAILURE(status)){
         return;
     }
     int32_t pos = -1;
@@ -922,8 +938,8 @@ DateTimePatternGenerator::copyHashtable(Hashtable *other) {
     while((elem = other->nextElement(pos))!= NULL){
         const UHashTok otherKeyTok = elem->key;
         UnicodeString* otherKey = (UnicodeString*)otherKeyTok.pointer;
-        fAvailableFormatKeyHash->puti(*otherKey, 1, fStatus);
-        if(U_FAILURE(fStatus)){
+        fAvailableFormatKeyHash->puti(*otherKey, 1, status);
+        if(U_FAILURE(status)){
             return;
         }
     }
