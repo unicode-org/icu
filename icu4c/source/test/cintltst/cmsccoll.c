@@ -2190,7 +2190,7 @@ static void TestIncrementalNormalize(void) {
         0x300 is combining grave accent, cc=230
     */
 
-    int          maxSLen   = 2000;
+#define MAXSLEN 2000
     /*int          maxSLen   = 64000;*/
     int          sLen;
     int          i;
@@ -2208,11 +2208,8 @@ static void TestIncrementalNormalize(void) {
     {
         /* Test 1.  Run very long unnormalized strings, to force overflow of*/
         /*          most buffers along the way.*/
-        UChar            *strA;
-        UChar            *strB;
-
-        strA = malloc((maxSLen+1) * sizeof(UChar));
-        strB = malloc((maxSLen+1) * sizeof(UChar));
+        UChar            strA[MAXSLEN+1];
+        UChar            strB[MAXSLEN+1];
 
         coll = ucol_open("en_US", &status);
         if(status == U_FILE_ACCESS_ERROR) {
@@ -2224,8 +2221,8 @@ static void TestIncrementalNormalize(void) {
         }
         ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
 
-        /*for (sLen = 257; sLen<maxSLen; sLen++) {*/
-        /*for (sLen = 4; sLen<maxSLen; sLen++) {*/
+        /*for (sLen = 257; sLen<MAXSLEN; sLen++) {*/
+        /*for (sLen = 4; sLen<MAXSLEN; sLen++) {*/
         /*for (sLen = 1000; sLen<1001; sLen++) {*/
         for (sLen = 500; sLen<501; sLen++) {
         /*for (sLen = 40000; sLen<65000; sLen+=1000) {*/
@@ -2243,8 +2240,6 @@ static void TestIncrementalNormalize(void) {
             ucol_setStrength(coll, UCOL_IDENTICAL);   /* Do again with the slow, general impl.*/
             doTest(coll, strA, strB, UCOL_EQUAL);
         }
-        free(strA);
-        free(strB);
     }
 
     QUICK = myQ;
