@@ -1025,6 +1025,10 @@ void UnicodeSet::_add(const UnicodeString& s) {
     }
     UErrorCode ec = U_ZERO_ERROR;
     strings->sortedInsert(t, compareUnicodeString, ec);
+    if (U_FAILURE(ec)) {
+        setToBogus();
+        delete t;
+    }
 }
 
 /**
