@@ -1619,7 +1619,7 @@ static void TestCEValidity()
     /* tailored locales */
     char        locale[][11] = {"fr_FR", "ko_KR", "sh_YU", "th_TH", "zh_CN", "zh__PINYIN"};
     const char *loc;
-    FileStream *file = getFractionalUCA();
+    FileStream *file = NULL;
     char        line[1024];
     UChar       codepoints[10];
     int         count = 0;
@@ -1630,6 +1630,7 @@ static void TestCEValidity()
         return;
     }
     log_verbose("Testing UCA elements\n");
+    file = getFractionalUCA();
     if (file == NULL) {
         log_err("Fractional UCA data can not be opened\n");
         return;
@@ -1815,7 +1816,7 @@ static void TestSortKeyValidity(void)
     UCollator  *coll        = ucol_open("en_US", &status);
     /* tailored locales */
     char        locale[][6] = {"fr_FR", "ko_KR", "sh_YU", "th_TH", "zh_CN"};
-    FileStream *file = getFractionalUCA();
+    FileStream *file = NULL;
     char        line[1024];
     UChar       codepoints[10];
     int         count = 0;
@@ -1825,6 +1826,7 @@ static void TestSortKeyValidity(void)
         return;
     }
     log_verbose("Testing UCA elements\n");
+    file = getFractionalUCA();
     if (file == NULL) {
         log_err("Fractional UCA data can not be opened\n");
         return;
