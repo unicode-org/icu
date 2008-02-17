@@ -385,11 +385,10 @@ private:
     DateTimeMatcher *skipMatcher;
     Hashtable *fAvailableFormatKeyHash;
     UnicodeString hackPattern;
-    UErrorCode fStatus;
     UnicodeString emptyString;
     UBool chineseMonthHack;
 
-    void initData(const Locale &locale);
+    void initData(const Locale &locale, UErrorCode &status);
     void addCanonicalItems();
     void addICUPatterns(const Locale& locale, UErrorCode& status);
     void hackTimes(const UnicodeString& hackPattern, UErrorCode& status);
@@ -408,9 +407,8 @@ private:
     int32_t getTopBitNumber(int32_t foundMask);
     void setAvailableFormat(const UnicodeString &key, UErrorCode& status);
     UBool isAvailableFormatSet(const UnicodeString &key) const;
-    void copyHashtable(Hashtable *other);
+    void copyHashtable(Hashtable *other, UErrorCode &status);
     UBool isCanonicalItem(const UnicodeString& item) const;
-    UErrorCode getStatus() const {  return fStatus; } ;
 } ;// end class DateTimePatternGenerator
 
 U_NAMESPACE_END
