@@ -142,50 +142,52 @@ void uprv_appendByteToHexString(char *dst, uint8_t val) {
 
 /* this function makes a string with representation of a sortkey */
 static char* U_EXPORT2 sortKeyToString(const UCollator *coll, const uint8_t *sortkey, char *buffer, uint32_t *len) {
-  int32_t strength = UCOL_PRIMARY;
-  uint32_t res_size = 0;
-  UBool doneCase = FALSE;
+    int32_t strength = UCOL_PRIMARY;
+    uint32_t res_size = 0;
+    UBool doneCase = FALSE;
 
-  char *current = buffer;
-  const uint8_t *currentSk = sortkey;
+    char *current = buffer;
+    const uint8_t *currentSk = sortkey;
 
-  uprv_strcpy(current, "[");
+    uprv_strcpy(current, "[");
 
-  while(strength <= UCOL_QUATERNARY && strength <= coll->strength) {
-    if(strength > UCOL_PRIMARY) {
-      uprv_strcat(current, " . ");
-    }
-    while(*currentSk != 0x01 && *currentSk != 0x00) { /* print a level */
-      uprv_appendByteToHexString(current, *currentSk++);
-      uprv_strcat(current, " ");
-    }
-    if(coll->caseLevel == UCOL_ON && strength == UCOL_SECONDARY && doneCase == FALSE) {
-        doneCase = TRUE;
-    } else if(coll->caseLevel == UCOL_OFF || doneCase == TRUE || strength != UCOL_SECONDARY) {
-      strength ++;
-    }
-    uprv_appendByteToHexString(current, *currentSk++); /* This should print '01' */
-    if(strength == UCOL_QUATERNARY && coll->alternateHandling == UCOL_NON_IGNORABLE) {
-      break;
-    }
-  }
-
-  if(coll->strength == UCOL_IDENTICAL) {
-    uprv_strcat(current, " . ");
-    while(*currentSk != 0) {
-      uprv_appendByteToHexString(current, *currentSk++);
-      uprv_strcat(current, " ");
+    while(strength <= UCOL_QUATERNARY && strength <= coll->strength) {
+        if(strength > UCOL_PRIMARY) {
+            uprv_strcat(current, " . ");
+        }
+        while(*currentSk != 0x01 && *currentSk != 0x00) { /* print a level */
+            uprv_appendByteToHexString(current, *currentSk++);
+            uprv_strcat(current, " ");
+        }
+        if(coll->caseLevel == UCOL_ON && strength == UCOL_SECONDARY && doneCase == FALSE) {
+            doneCase = TRUE;
+        } else if(coll->caseLevel == UCOL_OFF || doneCase == TRUE || strength != UCOL_SECONDARY) {
+            strength ++;
+        }
+        if (*currentSk) {
+            uprv_appendByteToHexString(current, *currentSk++); /* This should print '01' */
+        }
+        if(strength == UCOL_QUATERNARY && coll->alternateHandling == UCOL_NON_IGNORABLE) {
+            break;
+        }
     }
 
-    uprv_appendByteToHexString(current, *currentSk++);
-  }
-  uprv_strcat(current, "]");
+    if(coll->strength == UCOL_IDENTICAL) {
+        uprv_strcat(current, " . ");
+        while(*currentSk != 0) {
+            uprv_appendByteToHexString(current, *currentSk++);
+            uprv_strcat(current, " ");
+        }
 
-  if(res_size > *len) {
-    return NULL;
-  }
+        uprv_appendByteToHexString(current, *currentSk++);
+    }
+    uprv_strcat(current, "]");
 
-  return buffer;
+    if(res_size > *len) {
+        return NULL;
+    }
+
+    return buffer;
 }
 
 void addAllCollTest(TestNode** root)
