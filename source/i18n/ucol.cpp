@@ -4190,7 +4190,14 @@ ucol_getSortKey(const    UCollator    *coll,
         /*ucol_calcSortKeySimpleTertiary(...);*/
 
         keySize = coll->sortKeyGen(coll, source, sourceLength, &result, resultLength, FALSE, &status);
-        //((UCollator *)coll)->errorCode = status; /*semantically const */
+        if (U_FAILURE(status) && status != U_BUFFER_OVERFLOW_ERROR && result && resultLength > 0) {
+            // That's not good. Something unusual happened.
+            // We don't know how much we initialized before we failed.
+            // NULL terminate for safety.
+            // We have no way say that we have generated a partial sort key.
+            result[0] = 0;
+            keySize = 0;
+        }
     }
     UTRACE_DATA2(UTRACE_VERBOSE, "Sort Key = %vb", result, keySize);
     UTRACE_EXIT_STATUS(status);
@@ -5174,9 +5181,6 @@ cleanup:
         uprv_free(normSource);
     }
 
-    if (U_FAILURE(*status) && *status != U_BUFFER_OVERFLOW_ERROR) {
-        return 0;
-    }
     return sortKeySize;
 }
 
@@ -6731,26 +6735,28 @@ void ucol_updateInternalState(UCollator *coll, UErrorCode *status) {
         coll->tertiaryBottomCount = (uint8_t)(tertiaryTotal - coll->tertiaryTopCount);
 
         if(coll->caseLevel == UCOL_OFF && coll->strength == UCOL_TERTIARY
-            && coll->frenchCollation == UCOL_OFF && coll->alternateHandling == UCOL_NON_IGNORABLE) {
-                coll->sortKeyGen = ucol_calcSortKeySimpleTertiary;
+            && coll->frenchCollation == UCOL_OFF && coll->alternateHandling == UCOL_NON_IGNORABLE)
+        {
+            coll->sortKeyGen = ucol_calcSortKeySimpleTertiary;
         } else {
             coll->sortKeyGen = ucol_calcSortKey;
         }
         if(coll->caseLevel == UCOL_OFF && coll->strength <= UCOL_TERTIARY && coll->numericCollation == UCOL_OFF
-            && coll->alternateHandling == UCOL_NON_IGNORABLE && !coll->latinOneFailed) {
-                if(coll->latinOneCEs == NULL || coll->latinOneRegenTable) {
-                    if(ucol_setUpLatinOne(coll, status)) { // if we succeed in building latin1 table, we'll use it
-                        //fprintf(stderr, "F");
-                        coll->latinOneUse = TRUE;
-                    } else {
-                        coll->latinOneUse = FALSE;
-                    }
-                    if(*status == U_UNSUPPORTED_ERROR) {
-                        *status = U_ZERO_ERROR;
-                    }
-                } else { // latin1Table exists and it doesn't need to be regenerated, just use it
+            && coll->alternateHandling == UCOL_NON_IGNORABLE && !coll->latinOneFailed)
+        {
+            if(coll->latinOneCEs == NULL || coll->latinOneRegenTable) {
+                if(ucol_setUpLatinOne(coll, status)) { // if we succeed in building latin1 table, we'll use it
+                    //fprintf(stderr, "F");
                     coll->latinOneUse = TRUE;
+                } else {
+                    coll->latinOneUse = FALSE;
                 }
+                if(*status == U_UNSUPPORTED_ERROR) {
+                    *status = U_ZERO_ERROR;
+                }
+            } else { // latin1Table exists and it doesn't need to be regenerated, just use it
+                coll->latinOneUse = TRUE;
+            }
         } else {
             coll->latinOneUse = FALSE;
         }
