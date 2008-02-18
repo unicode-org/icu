@@ -4190,14 +4190,14 @@ ucol_getSortKey(const    UCollator    *coll,
         /*ucol_calcSortKeySimpleTertiary(...);*/
 
         keySize = coll->sortKeyGen(coll, source, sourceLength, &result, resultLength, FALSE, &status);
-        if (U_FAILURE(status) && status != U_BUFFER_OVERFLOW_ERROR && result && resultLength > 0) {
+        //if (U_FAILURE(status) && status != U_BUFFER_OVERFLOW_ERROR && result && resultLength > 0) {
             // That's not good. Something unusual happened.
             // We don't know how much we initialized before we failed.
             // NULL terminate for safety.
             // We have no way say that we have generated a partial sort key.
-            result[0] = 0;
-            keySize = 0;
-        }
+            //result[0] = 0;
+            //keySize = 0;
+        //}
     }
     UTRACE_DATA2(UTRACE_VERBOSE, "Sort Key = %vb", result, keySize);
     UTRACE_EXIT_STATUS(status);
