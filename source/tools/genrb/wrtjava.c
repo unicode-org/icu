@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2006, International Business Machines
+*   Copyright (C) 2000-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -11,7 +11,8 @@
 * Modification History:
 *
 *   Date        Name        Description
-*   01/11/02    Ram        Creation.
+*   01/11/02    Ram         Creation.
+*   02/12/08    Spieth      Fix errant 'new Object[][]{' insertion
 *******************************************************************************
 */
 
@@ -761,6 +762,8 @@ bundle_write_java(struct SRBRoot *bundle, const char *outputDir,const char* outp
     char constructor[1000] = { 0 };
     UBool j1 =FALSE;
     outDir = outputDir;
+
+    start = TRUE;                        /* Reset the start indictor*/
 
     bName = (bundleName==NULL) ? "LocaleElements" : bundleName;
     pName = (packageName==NULL)? "com.ibm.icu.impl.data" : packageName;
