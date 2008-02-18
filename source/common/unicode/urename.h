@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2002-2007, International Business Machines
+*   Copyright (C) 2002-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
@@ -375,7 +375,6 @@
 #define ubidi_getClassCallback ubidi_getClassCallback_3_9
 #define ubidi_getCustomizedClass ubidi_getCustomizedClass_3_9
 #define ubidi_getDirection ubidi_getDirection_3_9
-#define ubidi_getDummy ubidi_getDummy_3_9
 #define ubidi_getJoiningGroup ubidi_getJoiningGroup_3_9
 #define ubidi_getJoiningType ubidi_getJoiningType_3_9
 #define ubidi_getLength ubidi_getLength_3_9
@@ -449,6 +448,7 @@
 #define ucal_get ucal_get_3_9
 #define ucal_getAttribute ucal_getAttribute_3_9
 #define ucal_getAvailable ucal_getAvailable_3_9
+#define ucal_getCanonicalTimeZoneID ucal_getCanonicalTimeZoneID_3_9
 #define ucal_getDSTSavings ucal_getDSTSavings_3_9
 #define ucal_getDefaultTimeZone ucal_getDefaultTimeZone_3_9
 #define ucal_getGregorianChange ucal_getGregorianChange_3_9
@@ -478,7 +478,6 @@
 #define ucase_close ucase_close_3_9
 #define ucase_fold ucase_fold_3_9
 #define ucase_getCaseLocale ucase_getCaseLocale_3_9
-#define ucase_getDummy ucase_getDummy_3_9
 #define ucase_getSingleton ucase_getSingleton_3_9
 #define ucase_getType ucase_getType_3_9
 #define ucase_getTypeOrIgnorable ucase_getTypeOrIgnorable_3_9
@@ -515,8 +514,8 @@
 #define ucln_registerCleanup ucln_registerCleanup_3_9
 #define ucnv_MBCSFromUChar32 ucnv_MBCSFromUChar32_3_9
 #define ucnv_MBCSFromUnicodeWithOffsets ucnv_MBCSFromUnicodeWithOffsets_3_9
+#define ucnv_MBCSGetFilteredUnicodeSetForUnicode ucnv_MBCSGetFilteredUnicodeSetForUnicode_3_9
 #define ucnv_MBCSGetType ucnv_MBCSGetType_3_9
-#define ucnv_MBCSGetUnicodeSetForBytes ucnv_MBCSGetUnicodeSetForBytes_3_9
 #define ucnv_MBCSGetUnicodeSetForUnicode ucnv_MBCSGetUnicodeSetForUnicode_3_9
 #define ucnv_MBCSIsLeadByte ucnv_MBCSIsLeadByte_3_9
 #define ucnv_MBCSSimpleGetNextUChar ucnv_MBCSSimpleGetNextUChar_3_9
@@ -623,7 +622,6 @@
 #define ucol_cloneRuleData ucol_cloneRuleData_3_9
 #define ucol_close ucol_close_3_9
 #define ucol_closeElements ucol_closeElements_3_9
-#define ucol_collatorToIdentifier ucol_collatorToIdentifier_3_9
 #define ucol_countAvailable ucol_countAvailable_3_9
 #define ucol_createElements ucol_createElements_3_9
 #define ucol_doCE ucol_doCE_3_9
@@ -634,7 +632,6 @@
 #define ucol_getAttributeOrDefault ucol_getAttributeOrDefault_3_9
 #define ucol_getAvailable ucol_getAvailable_3_9
 #define ucol_getBound ucol_getBound_3_9
-#define ucol_getCEGenerator ucol_getCEGenerator_3_9
 #define ucol_getCEStrengthDifference ucol_getCEStrengthDifference_3_9
 #define ucol_getContractions ucol_getContractions_3_9
 #define ucol_getContractionsAndExpansions ucol_getContractionsAndExpansions_3_9
@@ -647,13 +644,11 @@
 #define ucol_getLocaleByType ucol_getLocaleByType_3_9
 #define ucol_getMaxExpansion ucol_getMaxExpansion_3_9
 #define ucol_getNextCE ucol_getNextCE_3_9
-#define ucol_getNextGenerated ucol_getNextGenerated_3_9
 #define ucol_getOffset ucol_getOffset_3_9
 #define ucol_getPrevCE ucol_getPrevCE_3_9
 #define ucol_getRules ucol_getRules_3_9
 #define ucol_getRulesEx ucol_getRulesEx_3_9
 #define ucol_getShortDefinitionString ucol_getShortDefinitionString_3_9
-#define ucol_getSimpleCEGenerator ucol_getSimpleCEGenerator_3_9
 #define ucol_getSortKey ucol_getSortKey_3_9
 #define ucol_getSortKeySize ucol_getSortKeySize_3_9
 #define ucol_getSortKeyWithAllocation ucol_getSortKeyWithAllocation_3_9
@@ -665,12 +660,10 @@
 #define ucol_getVersion ucol_getVersion_3_9
 #define ucol_greater ucol_greater_3_9
 #define ucol_greaterOrEqual ucol_greaterOrEqual_3_9
-#define ucol_identifierToShortString ucol_identifierToShortString_3_9
 #define ucol_initBuffers ucol_initBuffers_3_9
 #define ucol_initCollator ucol_initCollator_3_9
 #define ucol_initInverseUCA ucol_initInverseUCA_3_9
 #define ucol_initUCA ucol_initUCA_3_9
-#define ucol_inv_getGapPositions ucol_inv_getGapPositions_3_9
 #define ucol_inv_getNextCE ucol_inv_getNextCE_3_9
 #define ucol_inv_getPrevCE ucol_inv_getPrevCE_3_9
 #define ucol_isTailored ucol_isTailored_3_9
@@ -684,7 +677,6 @@
 #define ucol_openAvailableLocales ucol_openAvailableLocales_3_9
 #define ucol_openBinary ucol_openBinary_3_9
 #define ucol_openElements ucol_openElements_3_9
-#define ucol_openFromIdentifier ucol_openFromIdentifier_3_9
 #define ucol_openFromShortString ucol_openFromShortString_3_9
 #define ucol_openRules ucol_openRules_3_9
 #define ucol_open_internal ucol_open_internal_3_9
@@ -704,7 +696,6 @@
 #define ucol_setStrength ucol_setStrength_3_9
 #define ucol_setText ucol_setText_3_9
 #define ucol_setVariableTop ucol_setVariableTop_3_9
-#define ucol_shortStringToIdentifier ucol_shortStringToIdentifier_3_9
 #define ucol_strcoll ucol_strcoll_3_9
 #define ucol_strcollIter ucol_strcollIter_3_9
 #define ucol_swap ucol_swap_3_9
@@ -1053,8 +1044,8 @@
 #define uprv_malloc uprv_malloc_3_9
 #define uprv_mapFile uprv_mapFile_3_9
 #define uprv_max uprv_max_3_9
-#define uprv_maximumPtr uprv_maximumPtr_3_9
 #define uprv_maxMantissa uprv_maxMantissa_3_9
+#define uprv_maximumPtr uprv_maximumPtr_3_9
 #define uprv_min uprv_min_3_9
 #define uprv_modf uprv_modf_3_9
 #define uprv_openRuleWhiteSpaceSet uprv_openRuleWhiteSpaceSet_3_9
@@ -1077,7 +1068,6 @@
 #define uprv_uca_addAnElement uprv_uca_addAnElement_3_9
 #define uprv_uca_assembleTable uprv_uca_assembleTable_3_9
 #define uprv_uca_canonicalClosure uprv_uca_canonicalClosure_3_9
-#define uprv_uca_cloneTempTable uprv_uca_cloneTempTable_3_9
 #define uprv_uca_closeTempTable uprv_uca_closeTempTable_3_9
 #define uprv_uca_getCodePointFromRaw uprv_uca_getCodePointFromRaw_3_9
 #define uprv_uca_getImplicitFromRaw uprv_uca_getImplicitFromRaw_3_9
@@ -1110,11 +1100,9 @@
 #define uregex_setText uregex_setText_3_9
 #define uregex_split uregex_split_3_9
 #define uregex_start uregex_start_3_9
-#define ures_clone ures_clone_3_9
 #define ures_close ures_close_3_9
 #define ures_copyResb ures_copyResb_3_9
 #define ures_countArrayItems ures_countArrayItems_3_9
-#define ures_equal ures_equal_3_9
 #define ures_findResource ures_findResource_3_9
 #define ures_findSubResource ures_findSubResource_3_9
 #define ures_getBinary ures_getBinary_3_9
@@ -1131,7 +1119,6 @@
 #define ures_getName ures_getName_3_9
 #define ures_getNextResource ures_getNextResource_3_9
 #define ures_getNextString ures_getNextString_3_9
-#define ures_getParentBundle ures_getParentBundle_3_9
 #define ures_getSize ures_getSize_3_9
 #define ures_getString ures_getString_3_9
 #define ures_getStringByIndex ures_getStringByIndex_3_9
@@ -1341,6 +1328,7 @@
 #define AbsoluteValueSubstitution AbsoluteValueSubstitution_3_9
 #define AlternateSubstitutionSubtable AlternateSubstitutionSubtable_3_9
 #define AnchorTable AnchorTable_3_9
+#define AndConstraint AndConstraint_3_9
 #define AnnualTimeZoneRule AnnualTimeZoneRule_3_9
 #define AnyTransliterator AnyTransliterator_3_9
 #define ArabicOpenTypeLayoutEngine ArabicOpenTypeLayoutEngine_3_9
@@ -1370,6 +1358,7 @@
 #define ChainingContextualSubstitutionSubtable ChainingContextualSubstitutionSubtable_3_9
 #define CharSubstitutionFilter CharSubstitutionFilter_3_9
 #define CharacterIterator CharacterIterator_3_9
+#define CharacterNode CharacterNode_3_9
 #define CharsetDetector CharsetDetector_3_9
 #define CharsetMatch CharsetMatch_3_9
 #define CharsetRecog_2022 CharsetRecog_2022_3_9
@@ -1422,6 +1411,7 @@
 #define CharsetRecog_windows_1251 CharsetRecog_windows_1251_3_9
 #define CharsetRecog_windows_1256 CharsetRecog_windows_1256_3_9
 #define CharsetRecognizer CharsetRecognizer_3_9
+#define ChineseCalendar ChineseCalendar_3_9
 #define ChoiceFormat ChoiceFormat_3_9
 #define ClassDefFormat1Table ClassDefFormat1Table_3_9
 #define ClassDefFormat2Table ClassDefFormat2Table_3_9
@@ -1474,6 +1464,7 @@
 #define Format1AnchorTable Format1AnchorTable_3_9
 #define Format2AnchorTable Format2AnchorTable_3_9
 #define Format3AnchorTable Format3AnchorTable_3_9
+#define FormatNameEnumeration FormatNameEnumeration_3_9
 #define FormatParser FormatParser_3_9
 #define Formattable Formattable_3_9
 #define ForwardCharacterIterator ForwardCharacterIterator_3_9
@@ -1588,6 +1579,7 @@
 #define OlsonTimeZone OlsonTimeZone_3_9
 #define OpenTypeLayoutEngine OpenTypeLayoutEngine_3_9
 #define OpenTypeUtilities OpenTypeUtilities_3_9
+#define OrConstraint OrConstraint_3_9
 #define PairPositioningFormat1Subtable PairPositioningFormat1Subtable_3_9
 #define PairPositioningFormat2Subtable PairPositioningFormat2Subtable_3_9
 #define PairPositioningSubtable PairPositioningSubtable_3_9
@@ -1597,6 +1589,9 @@
 #define PatternMap PatternMap_3_9
 #define PatternMapIterator PatternMapIterator_3_9
 #define PersianCalendar PersianCalendar_3_9
+#define PluralFormat PluralFormat_3_9
+#define PluralKeywordEnumeration PluralKeywordEnumeration_3_9
+#define PluralRules PluralRules_3_9
 #define PropertyAliases PropertyAliases_3_9
 #define PtnElem PtnElem_3_9
 #define PtnSkeleton PtnSkeleton_3_9
@@ -1626,9 +1621,12 @@
 #define RuleBasedNumberFormat RuleBasedNumberFormat_3_9
 #define RuleBasedTimeZone RuleBasedTimeZone_3_9
 #define RuleBasedTransliterator RuleBasedTransliterator_3_9
+#define RuleChain RuleChain_3_9
 #define RuleCharacterIterator RuleCharacterIterator_3_9
 #define RuleHalf RuleHalf_3_9
+#define RuleParser RuleParser_3_9
 #define RunArray RunArray_3_9
+#define SafeZoneStringFormatPtr SafeZoneStringFormatPtr_3_9
 #define SameValueSubstitution SameValueSubstitution_3_9
 #define ScriptListTable ScriptListTable_3_9
 #define ScriptRunIterator ScriptRunIterator_3_9
@@ -1668,6 +1666,8 @@
 #define TZEnumeration TZEnumeration_3_9
 #define TaiwanCalendar TaiwanCalendar_3_9
 #define TernaryNode TernaryNode_3_9
+#define TextTrieMap TextTrieMap_3_9
+#define TextTrieMapSearchResultHandler TextTrieMapSearchResultHandler_3_9
 #define ThaiBreakEngine ThaiBreakEngine_3_9
 #define ThaiLayoutEngine ThaiLayoutEngine_3_9
 #define ThaiShaping ThaiShaping_3_9
@@ -1676,7 +1676,6 @@
 #define TibetanReordering TibetanReordering_3_9
 #define TimeArrayTimeZoneRule TimeArrayTimeZoneRule_3_9
 #define TimeZone TimeZone_3_9
-#define TimeZoneKeysEnumeration TimeZoneKeysEnumeration_3_9
 #define TimeZoneRule TimeZoneRule_3_9
 #define TimeZoneTransition TimeZoneTransition_3_9
 #define TitlecaseTransliterator TitlecaseTransliterator_3_9
@@ -1717,6 +1716,13 @@
 #define VTimeZone VTimeZone_3_9
 #define ValueRecord ValueRecord_3_9
 #define ValueRuns ValueRuns_3_9
+#define ZSFCache ZSFCache_3_9
+#define ZSFCacheEntry ZSFCacheEntry_3_9
+#define ZoneMeta ZoneMeta_3_9
+#define ZoneStringFormat ZoneStringFormat_3_9
+#define ZoneStringInfo ZoneStringInfo_3_9
+#define ZoneStringSearchResultHandler ZoneStringSearchResultHandler_3_9
+#define ZoneStrings ZoneStrings_3_9
 #define locale_set_default_internal locale_set_default_internal_3_9
 #define util64_fromDouble util64_fromDouble_3_9
 #define util64_pow util64_pow_3_9
