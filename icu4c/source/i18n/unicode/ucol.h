@@ -678,7 +678,7 @@ ucol_normalizeShortDefinitionString(const char *source,
                                     int32_t capacity,
                                     UParseError *parseError,
                                     UErrorCode *status);
-        
+
 
 /**
  * Get a sort key for a string from a UCollator.
@@ -688,7 +688,9 @@ ucol_normalizeShortDefinitionString(const char *source,
  * @param sourceLength The length of source, or -1 if null-terminated.
  * @param result A pointer to a buffer to receive the attribute.
  * @param resultLength The maximum size of result.
- * @return The size needed to fully store the sort key..
+ * @return The size needed to fully store the sort key.
+ *      If there was an internal error generating the sort key,
+ *      a negative value is returned.
  * @see ucol_keyHashCode
  * @stable ICU 2.0
  */
