@@ -61,7 +61,7 @@ static void TestCalendar()
     UCalendar *caldef = 0, *caldef2 = 0, *calfr = 0, *calit = 0;
     UEnumeration* uenum = NULL;
     int32_t count, count2, i,j;
-    UChar *tzID = 0;
+    UChar tzID[4];
     UChar *tzdname = 0;
     UErrorCode status = U_ZERO_ERROR;
     UDate now;
@@ -215,7 +215,6 @@ static void TestCalendar()
     /*Testing the  ucal_open() function*/
     status = U_ZERO_ERROR;
     log_verbose("\nTesting the ucal_open()\n");
-    tzID=(UChar*)malloc(sizeof(UChar) * 4);
     u_uastrcpy(tzID, "PST");
     caldef=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
     if(U_FAILURE(status)){
@@ -393,7 +392,6 @@ static void TestCalendar()
     ucal_close(calit);
     /*closing the UDateFormat used */
     udat_close(datdef);
-    free(tzID);
     free(result);
     free(tzdname);
 }
@@ -404,7 +402,7 @@ static void TestCalendar()
 static void TestGetSetDateAPI()
 {
     UCalendar *caldef = 0, *caldef2 = 0;
-    UChar *tzID =0;
+    UChar tzID[4];
     UDate d1;
     int32_t hour;
     int32_t zoneOffset;
@@ -414,7 +412,6 @@ static void TestGetSetDateAPI()
     UChar temp[30];
 
     log_verbose("\nOpening the calendars()\n");
-    tzID=(UChar*)malloc(sizeof(UChar) * 4);
     u_strcpy(tzID, fgGMTID);
     /*open the calendars used */
     caldef=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
@@ -588,8 +585,6 @@ static void TestGetSetDateAPI()
     ucal_close(caldef);
     ucal_close(caldef2);
     udat_close(datdef);
-    free(tzID);
-
 }
 
 /*----------------------------------------------------------- */
@@ -599,12 +594,11 @@ static void TestGetSetDateAPI()
 static void TestFieldGetSet()
 {
     UCalendar *cal = 0;
-    UChar *tzID = 0;
+    UChar tzID[4];
     UDateFormat *datdef = 0;
     UDate d1;
     UErrorCode status=U_ZERO_ERROR;
     log_verbose("\nFetching pointer to UCalendar using the ucal_open()\n");
-    tzID=(UChar*)malloc(sizeof(UChar) * 4);
     u_strcpy(tzID, fgGMTID);
     /*open the calendar used */
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
@@ -730,8 +724,6 @@ static void TestFieldGetSet()
 
     ucal_close(cal);
     udat_close(datdef);
-    free(tzID);
-    
 }
  
 
@@ -744,7 +736,7 @@ static void TestAddRollExtensive()
 {
     UCalendar *cal = 0;
     int32_t i,limit;
-    UChar* tzID = 0;
+    UChar tzID[4];
     UCalendarDateFields e;
     int32_t y,m,d,hr,min,sec,ms;
     int32_t maxlimit = 40;
@@ -753,7 +745,6 @@ static void TestAddRollExtensive()
    
     log_verbose("Testing add and roll extensively\n");
     
-    tzID=(UChar*)malloc(sizeof(UChar) * 4);
     u_uastrcpy(tzID, "PST");
     /*open the calendar used */
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_GREGORIAN, &status);;
@@ -900,7 +891,6 @@ static void TestAddRollExtensive()
     }
 
     ucal_close(cal);
-    free(tzID);
 }
 
 /*------------------------------------------------------ */
@@ -909,11 +899,10 @@ static void TestGetLimits()
 {
     UCalendar *cal = 0;
     int32_t min, max, gr_min, le_max, ac_min, ac_max, val;
-    UChar* tzID = 0;
+    UChar tzID[4];
     UErrorCode status = U_ZERO_ERROR;
     
     
-    tzID=(UChar*)malloc(sizeof(UChar) * 4);
     u_uastrcpy(tzID, "PST");
     /*open the calendar used */
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_GREGORIAN, &status);;
@@ -992,7 +981,6 @@ static void TestGetLimits()
 
 
     ucal_close(cal);
-    free(tzID);
 }
 
 
@@ -1011,9 +999,8 @@ static void TestDOWProgression()
     UDate date1;
     int32_t delta=24;
     UErrorCode status = U_ZERO_ERROR;
-    UChar* tzID = 0;
+    UChar tzID[4];
     char tempMsgBuf[256];
-    tzID=(UChar*)malloc(sizeof(UChar) * 4);
     u_strcpy(tzID, fgGMTID);
     /*open the calendar used */
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);;
@@ -1060,8 +1047,6 @@ static void TestDOWProgression()
     
     ucal_close(cal);
     udat_close(datfor);
-    free(tzID);
-    
 }
  
 /* ------------------------------------- */
@@ -1087,10 +1072,9 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
     double temp;
     UDateFormat *datfor = 0;
     UErrorCode status = U_ZERO_ERROR;
-    UChar* tzID = 0;
+    UChar tzID[4];
     char tempMsgBuf[256];
 
-    tzID=(UChar*)malloc(sizeof(UChar) * 4);
     u_strcpy(tzID, fgGMTID);
     gmtcal=ucal_open(tzID, 3, "en_US", UCAL_TRADITIONAL, &status);;
     if (U_FAILURE(status)) {
@@ -1158,7 +1142,6 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
     ucal_close(gmtcal);
     ucal_close(cal);
     udat_close(datfor);
-    free(tzID);
 }
  
 /* ------------------------------------- */
