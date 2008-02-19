@@ -48,6 +48,7 @@ struct UResourceDataEntry {
     char *fPath; /* path to bundle - used for distinguishing between resources with the same name */
     UResourceDataEntry *fParent; /*next resource in fallback chain*/
     ResourceData fData; /* data for low level access */
+    char fNameBuffer[3]; /* A small buffer of free space for fName. The free space is due to struct padding. */
     uint32_t fCountExisting; /* how much is this resource used */
     UErrorCode fBogus;
     /* int32_t fHashKey;*/ /* for faster access in the hashtable */

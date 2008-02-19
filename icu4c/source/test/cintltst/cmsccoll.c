@@ -1295,149 +1295,153 @@ static const char* rulesToTest[] = {
 
 
 static void TestCollations(void) {
-  int32_t noOfLoc = uloc_countAvailable();
-  int32_t i = 0, j = 0;
+    int32_t noOfLoc = uloc_countAvailable();
+    int32_t i = 0, j = 0;
 
-  UErrorCode status = U_ZERO_ERROR;
-  char cName[256];
-  UChar name[256];
-  int32_t nameSize;
+    UErrorCode status = U_ZERO_ERROR;
+    char cName[256];
+    UChar name[256];
+    int32_t nameSize;
 
 
-  const char *locName = NULL;
-  UCollator *coll = NULL;
-  UCollator *UCA = ucol_open("", &status);
-  UColAttributeValue oldStrength = ucol_getAttribute(UCA, UCOL_STRENGTH, &status);
-  ucol_setAttribute(UCA, UCOL_STRENGTH, UCOL_QUATERNARY, &status);
-
-  for(i = 0; i<noOfLoc; i++) {
-    status = U_ZERO_ERROR;
-    locName = uloc_getAvailable(i);
-    if(uprv_strcmp("ja", locName) == 0) {
-      log_verbose("Don't know how to test prefixes\n");
-      continue;
+    const char *locName = NULL;
+    UCollator *coll = NULL;
+    UCollator *UCA = ucol_open("", &status);
+    UColAttributeValue oldStrength = ucol_getAttribute(UCA, UCOL_STRENGTH, &status);
+    if (U_FAILURE(status)) {
+        log_err("Could not open UCA collator %s\n", u_errorName(status));
+        return;
     }
-    if(hasCollationElements(locName)) {
-        nameSize = uloc_getDisplayName(locName, NULL, name, 256, &status);
-        for(j = 0; j<nameSize; j++) {
-          cName[j] = (char)name[j];
+    ucol_setAttribute(UCA, UCOL_STRENGTH, UCOL_QUATERNARY, &status);
+
+    for(i = 0; i<noOfLoc; i++) {
+        status = U_ZERO_ERROR;
+        locName = uloc_getAvailable(i);
+        if(uprv_strcmp("ja", locName) == 0) {
+            log_verbose("Don't know how to test prefixes\n");
+            continue;
         }
-        cName[nameSize] = 0;
-        log_verbose("\nTesting locale %s (%s)\n", locName, cName);
-        coll = ucol_open(locName, &status);
-        if(U_SUCCESS(status)) {
-          testAgainstUCA(coll, UCA, "UCA", FALSE, &status);
-          ucol_close(coll);
-        } else {
-          log_err("Couldn't instantiate collator for locale %s, error: %s\n", locName, u_errorName(status));
-          status = U_ZERO_ERROR;
+        if(hasCollationElements(locName)) {
+            nameSize = uloc_getDisplayName(locName, NULL, name, 256, &status);
+            for(j = 0; j<nameSize; j++) {
+                cName[j] = (char)name[j];
+            }
+            cName[nameSize] = 0;
+            log_verbose("\nTesting locale %s (%s)\n", locName, cName);
+            coll = ucol_open(locName, &status);
+            if(U_SUCCESS(status)) {
+                testAgainstUCA(coll, UCA, "UCA", FALSE, &status);
+                ucol_close(coll);
+            } else {
+                log_err("Couldn't instantiate collator for locale %s, error: %s\n", locName, u_errorName(status));
+                status = U_ZERO_ERROR;
+            }
         }
     }
-  }
-  ucol_setAttribute(UCA, UCOL_STRENGTH, oldStrength, &status);
-  ucol_close(UCA);
+    ucol_setAttribute(UCA, UCOL_STRENGTH, oldStrength, &status);
+    ucol_close(UCA);
 }
 
 static void RamsRulesTest(void) {
-  UErrorCode status = U_ZERO_ERROR;
-  int32_t i = 0;
-  UCollator *coll = NULL;
-  UChar rule[2048];
-  uint32_t ruleLen;
-  int32_t noOfLoc = uloc_countAvailable();
-  const char *locName = NULL;
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t i = 0;
+    UCollator *coll = NULL;
+    UChar rule[2048];
+    uint32_t ruleLen;
+    int32_t noOfLoc = uloc_countAvailable();
+    const char *locName = NULL;
 
-  log_verbose("RamsRulesTest\n");
+    log_verbose("RamsRulesTest\n");
 
-  for(i = 0; i<noOfLoc; i++) {
-    status = U_ZERO_ERROR;
-    locName = uloc_getAvailable(i);
-    if(hasCollationElements(locName)) {
-      if (uprv_strcmp("ja", locName)==0) {
-        log_verbose("Don't know how to test Japanese because of prefixes\n");
-        continue;
-      }
-      if (uprv_strcmp("de__PHONEBOOK", locName)==0) {
-        log_verbose("Don't know how to test Phonebook because the reset is on an expanding character\n");
-        continue;
-      }
-      if (uprv_strcmp("km", locName)==0 ||
-          uprv_strcmp("km_KH", locName)==0 ||
-          uprv_strcmp("zh", locName)==0 ||
-          uprv_strcmp("zh_Hant", locName)==0 ) {
-          continue;  /* TODO: enable these locale tests after trac#6040 is fixed. */
-      }
-      log_verbose("Testing locale %s\n", locName);
-      coll = ucol_open(locName, &status);
-      if(U_SUCCESS(status)) {
-        if(coll->image->jamoSpecial == TRUE) {
-          log_err("%s has special JAMOs\n", locName);
+    for(i = 0; i<noOfLoc; i++) {
+        status = U_ZERO_ERROR;
+        locName = uloc_getAvailable(i);
+        if(hasCollationElements(locName)) {
+            if (uprv_strcmp("ja", locName)==0) {
+                log_verbose("Don't know how to test Japanese because of prefixes\n");
+                continue;
+            }
+            if (uprv_strcmp("de__PHONEBOOK", locName)==0) {
+                log_verbose("Don't know how to test Phonebook because the reset is on an expanding character\n");
+                continue;
+            }
+            if (uprv_strcmp("km", locName)==0 ||
+                uprv_strcmp("km_KH", locName)==0 ||
+                uprv_strcmp("zh", locName)==0 ||
+                uprv_strcmp("zh_Hant", locName)==0 ) {
+                    continue;  /* TODO: enable these locale tests after trac#6040 is fixed. */
+            }
+            log_verbose("Testing locale %s\n", locName);
+            coll = ucol_open(locName, &status);
+            if(U_SUCCESS(status)) {
+                if(coll->image->jamoSpecial == TRUE) {
+                    log_err("%s has special JAMOs\n", locName);
+                }
+                ucol_setAttribute(coll, UCOL_CASE_FIRST, UCOL_OFF, &status);
+                testCollator(coll, &status);
+                testCEs(coll, &status);
+                ucol_close(coll);
+            }
         }
-        ucol_setAttribute(coll, UCOL_CASE_FIRST, UCOL_OFF, &status);
-        testCollator(coll, &status);
-        testCEs(coll, &status);
-        ucol_close(coll);
-      }
     }
-  }
 
-  for(i = 0; i<sizeof(rulesToTest)/sizeof(rulesToTest[0]); i++) {
-    log_verbose("Testing rule: %s\n", rulesToTest[i]);
-    ruleLen = u_unescape(rulesToTest[i], rule, 2048);
-    coll = ucol_openRules(rule, ruleLen, UCOL_OFF, UCOL_TERTIARY, NULL,&status);
-    if(U_SUCCESS(status)) {
-      testCollator(coll, &status);
-      testCEs(coll, &status);
-      ucol_close(coll);
+    for(i = 0; i<sizeof(rulesToTest)/sizeof(rulesToTest[0]); i++) {
+        log_verbose("Testing rule: %s\n", rulesToTest[i]);
+        ruleLen = u_unescape(rulesToTest[i], rule, 2048);
+        coll = ucol_openRules(rule, ruleLen, UCOL_OFF, UCOL_TERTIARY, NULL,&status);
+        if(U_SUCCESS(status)) {
+            testCollator(coll, &status);
+            testCEs(coll, &status);
+            ucol_close(coll);
+        }
     }
-  }
 
 }
 
 static void IsTailoredTest(void) {
-  UErrorCode status = U_ZERO_ERROR;
-  uint32_t i = 0;
-  UCollator *coll = NULL;
-  UChar rule[2048];
-  UChar tailored[2048];
-  UChar notTailored[2048];
-  uint32_t ruleLen, tailoredLen, notTailoredLen;
+    UErrorCode status = U_ZERO_ERROR;
+    uint32_t i = 0;
+    UCollator *coll = NULL;
+    UChar rule[2048];
+    UChar tailored[2048];
+    UChar notTailored[2048];
+    uint32_t ruleLen, tailoredLen, notTailoredLen;
 
-  log_verbose("IsTailoredTest\n");
+    log_verbose("IsTailoredTest\n");
 
-  u_uastrcpy(rule, "&Z < A, B, C;c < d");
-  ruleLen = u_strlen(rule);
+    u_uastrcpy(rule, "&Z < A, B, C;c < d");
+    ruleLen = u_strlen(rule);
 
-  u_uastrcpy(tailored, "ABCcd");
-  tailoredLen = u_strlen(tailored);
+    u_uastrcpy(tailored, "ABCcd");
+    tailoredLen = u_strlen(tailored);
 
-  u_uastrcpy(notTailored, "ZabD");
-  notTailoredLen = u_strlen(notTailored);
+    u_uastrcpy(notTailored, "ZabD");
+    notTailoredLen = u_strlen(notTailored);
 
-  coll = ucol_openRules(rule, ruleLen, UCOL_OFF, UCOL_TERTIARY, NULL,&status);
-  if(U_SUCCESS(status)) {
-    for(i = 0; i<tailoredLen; i++) {
-      if(!ucol_isTailored(coll, tailored[i], &status)) {
-        log_err("%i: %04X should be tailored - it is reported as not\n", i, tailored[i]);
-      }
+    coll = ucol_openRules(rule, ruleLen, UCOL_OFF, UCOL_TERTIARY, NULL,&status);
+    if(U_SUCCESS(status)) {
+        for(i = 0; i<tailoredLen; i++) {
+            if(!ucol_isTailored(coll, tailored[i], &status)) {
+                log_err("%i: %04X should be tailored - it is reported as not\n", i, tailored[i]);
+            }
+        }
+        for(i = 0; i<notTailoredLen; i++) {
+            if(ucol_isTailored(coll, notTailored[i], &status)) {
+                log_err("%i: %04X should not be tailored - it is reported as it is\n", i, notTailored[i]);
+            }
+        }
+        ucol_close(coll);
     }
-    for(i = 0; i<notTailoredLen; i++) {
-      if(ucol_isTailored(coll, notTailored[i], &status)) {
-        log_err("%i: %04X should not be tailored - it is reported as it is\n", i, notTailored[i]);
-      }
+    else {
+        log_err("Can't tailor rules");
+    }
+    /* Code coverage */
+    status = U_ZERO_ERROR;
+    coll = ucol_open("ja", &status);
+    if(!ucol_isTailored(coll, 0x4E9C, &status)) {
+        log_err("0x4E9C should be tailored - it is reported as not\n");
     }
     ucol_close(coll);
-  }
-  else {
-    log_err("Can't tailor rules");
-  }
-  /* Code coverage */
-  status = U_ZERO_ERROR;
-  coll = ucol_open("ja", &status);
-  if(!ucol_isTailored(coll, 0x4E9C, &status)) {
-    log_err("0x4E9C should be tailored - it is reported as not\n");
-  }
-  ucol_close(coll);
 }
 
 
@@ -1462,29 +1466,29 @@ const static char chTest[][20] = {
 };
 
 static void TestChMove(void) {
-  UChar t1[256] = {0};
-  UChar t2[256] = {0};
+    UChar t1[256] = {0};
+    UChar t2[256] = {0};
 
-  uint32_t i = 0, j = 0;
-  uint32_t size = 0;
-  UErrorCode status = U_ZERO_ERROR;
+    uint32_t i = 0, j = 0;
+    uint32_t size = 0;
+    UErrorCode status = U_ZERO_ERROR;
 
-  UCollator *coll = ucol_open("cs", &status);
+    UCollator *coll = ucol_open("cs", &status);
 
-  if(U_SUCCESS(status)) {
-    size = sizeof(chTest)/sizeof(chTest[0]);
-    for(i = 0; i < size-1; i++) {
-      for(j = i+1; j < size; j++) {
-        u_unescape(chTest[i], t1, 256);
-        u_unescape(chTest[j], t2, 256);
-        doTest(coll, t1, t2, UCOL_LESS);
-      }
+    if(U_SUCCESS(status)) {
+        size = sizeof(chTest)/sizeof(chTest[0]);
+        for(i = 0; i < size-1; i++) {
+            for(j = i+1; j < size; j++) {
+                u_unescape(chTest[i], t1, 256);
+                u_unescape(chTest[j], t2, 256);
+                doTest(coll, t1, t2, UCOL_LESS);
+            }
+        }
     }
-  }
-  else {
-    log_err("Can't open collator");
-  }
-  ucol_close(coll);
+    else {
+        log_err("Can't open collator");
+    }
+    ucol_close(coll);
 }
 
 
