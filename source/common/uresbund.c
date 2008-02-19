@@ -255,7 +255,7 @@ static void setEntryName(UResourceDataEntry *res, char *name, UErrorCode *status
 static UResourceDataEntry *init_entry(const char *localeID, const char *path, UErrorCode *status) {
     UResourceDataEntry *r = NULL;
     UResourceDataEntry find;
-    int32_t hashValue;
+    /*int32_t hashValue;*/
     char name[96];
     const char *myPath = NULL;
     char aliasName[100] = { 0 };
@@ -277,7 +277,7 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
     }
 
     if(path != NULL) { /* if we actually have path, we'll use it */
-      myPath = path;
+        myPath = path;
     }
 
     find.fName = name;
@@ -285,7 +285,7 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
 
     /* calculate the hash value of the entry */
     hashkey.pointer = (void *)&find;
-    hashValue = hashEntry(hashkey);
+    /*hashValue = hashEntry(hashkey);*/
 
     /* check to see if we already have this entry */
     r = (UResourceDataEntry *)uhash_get(cache, &find);
@@ -301,31 +301,30 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
         UBool result = FALSE;
 
         r = (UResourceDataEntry *) uprv_malloc(sizeof(UResourceDataEntry));
-
         if(r == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             return NULL;
         }
+
+        uprv_memset(r, 0, sizeof(UResourceDataEntry));
         r->fCountExisting = 1;
+        /*r->fHashKey = hashValue;*/
 
-        r->fName = NULL;
         setEntryName(r, name, status);
+        if (U_FAILURE(*status)) {
+            uprv_free(r);
+            return NULL;
+        }
 
-        r->fPath = NULL;
-        if(myPath != NULL && !U_FAILURE(*status)) {
-            r->fPath = (char *)uprv_malloc(sizeof(char)*uprv_strlen(myPath)+1);
+        if(myPath != NULL) {
+            r->fPath = (char *)uprv_strdup(myPath);
             if(r->fPath == NULL) {
                 *status = U_MEMORY_ALLOCATION_ERROR;
-            } else {
-                uprv_strcpy(r->fPath, myPath);
+                uprv_free(r);
+                return NULL;
             }
         }
 
-        r->fHashKey = hashValue;
-        r->fParent = NULL;
-        uprv_memset(&r->fData, 0, sizeof(ResourceData));
-        r->fBogus = U_ZERO_ERROR;
-        
         /* this is the actual loading - returns bool true/false */
         result = res_load(&(r->fData), r->fPath, r->fName, status);
 

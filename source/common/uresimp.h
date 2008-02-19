@@ -46,12 +46,11 @@ typedef struct UResourceDataEntry UResourceDataEntry;
 struct UResourceDataEntry {
     char *fName; /* name of the locale for bundle - still to decide whether it is original or fallback */
     char *fPath; /* path to bundle - used for distinguishing between resources with the same name */
-    uint32_t fCountExisting; /* how much is this resource used */
-    ResourceData fData; /* data for low level access */
     UResourceDataEntry *fParent; /*next resource in fallback chain*/
-/*    UResEntryType fStatus;*/
+    ResourceData fData; /* data for low level access */
+    uint32_t fCountExisting; /* how much is this resource used */
     UErrorCode fBogus;
-    int32_t fHashKey; /* for faster access in the hashtable */
+    /* int32_t fHashKey;*/ /* for faster access in the hashtable */
 };
 
 #define RES_BUFSIZE 64
