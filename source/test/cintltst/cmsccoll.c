@@ -3838,6 +3838,10 @@ static void TestHebrewUCA(void) {
   int32_t sizeUTF16[3];
 
   UCollator *coll = ucol_open("", &status);
+  if (U_FAILURE(status)) {
+      log_err("Could not open UCA collation %s\n", u_errorName(status));
+      return;
+  }
   /*ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);*/
 
   for(i = 0; i < sizeof(first)/sizeof(first[0]); i++) {

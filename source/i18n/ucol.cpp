@@ -4558,6 +4558,8 @@ inline uint8_t *packFrench(uint8_t *primaries, uint8_t *primEnd, uint8_t *second
     return primaries;
 }
 
+#define DEFAULT_ERROR_SIZE_FOR_CALCSORTKEY -1
+
 /* This is the sortkey work horse function */
 U_CFUNC int32_t U_CALLCONV
 ucol_calcSortKey(const    UCollator    *coll,
@@ -4956,11 +4958,8 @@ ucol_calcSortKey(const    UCollator    *coll,
                             primarySafeEnd--;
                         }
                     } else {
-                        IInit_collIterate(coll, (UChar *)source, len, &s);
-                        if(source == normSource) {
-                            s.flags &= ~UCOL_ITER_NORM;
-                        }
-                        sortKeySize = ucol_getSortKeySize(coll, &s, sortKeySize, strength, len);
+                        /* We ran out of memory!? We can't recover. */
+                        sortKeySize = DEFAULT_ERROR_SIZE_FOR_CALCSORTKEY;
                         finished = TRUE;
                         break;
                     }
@@ -4978,23 +4977,19 @@ ucol_calcSortKey(const    UCollator    *coll,
                 frenchEndOffset = frenchEndPtr - secStart;
             }
             secStart = reallocateBuffer(&secondaries, secStart, second, &secSize, 2*secSize, status);
+            terStart = reallocateBuffer(&tertiaries, terStart, tert, &terSize, 2*terSize, status);
+            caseStart = reallocateBuffer(&cases, caseStart, caseB, &caseSize, 2*caseSize, status);
+            quadStart = reallocateBuffer(&quads, quadStart, quad, &quadSize, 2*quadSize, status);
+            if(U_FAILURE(*status)) {
+                /* We ran out of memory!? We can't recover. */
+                sortKeySize = DEFAULT_ERROR_SIZE_FOR_CALCSORTKEY;
+                break;
+            }
             if (frenchStartPtr != NULL) {
                 frenchStartPtr = secStart + frenchStartOffset;
                 frenchEndPtr = secStart + frenchEndOffset;
             }
-
-            terStart = reallocateBuffer(&tertiaries, terStart, tert, &terSize, 2*terSize, status);
-            caseStart = reallocateBuffer(&cases, caseStart, caseB, &caseSize, 2*caseSize, status);
-            quadStart = reallocateBuffer(&quads, quadStart, quad, &quadSize, 2*quadSize, status);
             minBufferSize *= 2;
-            if(U_FAILURE(*status)) { // if we cannot reallocate buffers, we can at least give the sortkey size
-                IInit_collIterate(coll, (UChar *)source, len, &s);
-                if(source == normSource) {
-                    s.flags &= ~UCOL_ITER_NORM;
-                }
-                sortKeySize = ucol_getSortKeySize(coll, &s, sortKeySize, strength, len);
-                break;
-            }
         }
     }
 
@@ -5028,6 +5023,11 @@ ucol_calcSortKey(const    UCollator    *coll,
                             uprv_memcpy(primaries, secStart, secsize);
                             primaries += secsize;
                         }
+                        else {
+                            /* We ran out of memory!? We can't recover. */
+                            sortKeySize = DEFAULT_ERROR_SIZE_FOR_CALCSORTKEY;
+                            goto cleanup;
+                        }
                     } else {
                         *status = U_BUFFER_OVERFLOW_ERROR;
                     }
@@ -5042,6 +5042,11 @@ ucol_calcSortKey(const    UCollator    *coll,
                         primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, 2*sortKeySize, status);
                         if(U_SUCCESS(*status)) {
                             primaries = packFrench(primaries, primStart+resultLength, secondaries, &secsize, frenchStartPtr, frenchEndPtr);
+                        }
+                        else {
+                            /* We ran out of memory!? We can't recover. */
+                            sortKeySize = DEFAULT_ERROR_SIZE_FOR_CALCSORTKEY;
+                            goto cleanup;
                         }
                     } else {
                         *status = U_BUFFER_OVERFLOW_ERROR;
@@ -5064,6 +5069,11 @@ ucol_calcSortKey(const    UCollator    *coll,
                         *result = primStart;
                         *(primaries++) = UCOL_LEVELTERMINATOR;
                         uprv_memcpy(primaries, caseStart, casesize);
+                    }
+                    else {
+                        /* We ran out of memory!? We can't recover. */
+                        sortKeySize = DEFAULT_ERROR_SIZE_FOR_CALCSORTKEY;
+                        goto cleanup;
                     }
                 } else {
                     *status = U_BUFFER_OVERFLOW_ERROR;
@@ -5101,6 +5111,11 @@ ucol_calcSortKey(const    UCollator    *coll,
                         *(primaries++) = UCOL_LEVELTERMINATOR;
                         uprv_memcpy(primaries, terStart, tersize);
                     }
+                    else {
+                        /* We ran out of memory!? We can't recover. */
+                        sortKeySize = DEFAULT_ERROR_SIZE_FOR_CALCSORTKEY;
+                        goto cleanup;
+                    }
                 } else {
                     *status = U_BUFFER_OVERFLOW_ERROR;
                 }
@@ -5128,6 +5143,11 @@ ucol_calcSortKey(const    UCollator    *coll,
                             *(primaries++) = UCOL_LEVELTERMINATOR;
                             uprv_memcpy(primaries, quadStart, quadsize);
                         }
+                        else {
+                            /* We ran out of memory!? We can't recover. */
+                            sortKeySize = DEFAULT_ERROR_SIZE_FOR_CALCSORTKEY;
+                            goto cleanup;
+                        }
                     } else {
                         *status = U_BUFFER_OVERFLOW_ERROR;
                     }
@@ -5146,6 +5166,11 @@ ucol_calcSortKey(const    UCollator    *coll,
                             *result = primStart;
                             *(primaries++) = UCOL_LEVELTERMINATOR;
                             u_writeIdenticalLevelRun(s.string, len, primaries);
+                        }
+                        else {
+                            /* We ran out of memory!? We can't recover. */
+                            sortKeySize = DEFAULT_ERROR_SIZE_FOR_CALCSORTKEY;
+                            goto cleanup;
                         }
                     } else {
                         *status = U_BUFFER_OVERFLOW_ERROR;
@@ -5170,6 +5195,10 @@ ucol_calcSortKey(const    UCollator    *coll,
     }
 
 cleanup:
+    if (allocateSKBuffer == FALSE && resultLength > 0 && U_FAILURE(*status) && *status != U_BUFFER_OVERFLOW_ERROR) {
+        /* NULL terminate for safety */
+        **result = 0;
+    }
     if(terStart != tert) {
         uprv_free(terStart);
         uprv_free(secStart);
@@ -5436,11 +5465,8 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
                         *result = primStart;
                         primarySafeEnd = primStart + resultLength - 2;
                     } else {
-                        IInit_collIterate(coll, (UChar *)source, len, &s);
-                        if(source == normSource) {
-                            s.flags &= ~UCOL_ITER_NORM;
-                        }
-                        sortKeySize = ucol_getSortKeySize(coll, &s, sortKeySize, coll->strength, len);
+                        /* We ran out of memory!? We can't recover. */
+                        sortKeySize = DEFAULT_ERROR_SIZE_FOR_CALCSORTKEY;
                         finished = TRUE;
                         break;
                     }
@@ -5455,11 +5481,8 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
             terStart = reallocateBuffer(&tertiaries, terStart, tert, &terSize, 2*terSize, status);
             minBufferSize *= 2;
             if(U_FAILURE(*status)) { // if we cannot reallocate buffers, we can at least give the sortkey size
-                IInit_collIterate(coll, (UChar *)source, len, &s);
-                if(source == normSource) {
-                    s.flags &= ~UCOL_ITER_NORM;
-                }
-                sortKeySize = ucol_getSortKeySize(coll, &s, sortKeySize, coll->strength, len);
+                /* We ran out of memory!? We can't recover. */
+                sortKeySize = DEFAULT_ERROR_SIZE_FOR_CALCSORTKEY;
                 break;
             }
         }
@@ -5488,6 +5511,11 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
                     *(primaries++) = UCOL_LEVELTERMINATOR;
                     *result = primStart;
                     uprv_memcpy(primaries, secStart, secsize);
+                }
+                else {
+                    /* We ran out of memory!? We can't recover. */
+                    sortKeySize = DEFAULT_ERROR_SIZE_FOR_CALCSORTKEY;
+                    goto cleanup;
                 }
             } else {
                 *status = U_BUFFER_OVERFLOW_ERROR;
@@ -5523,6 +5551,11 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
                     *(primaries++) = UCOL_LEVELTERMINATOR;
                     uprv_memcpy(primaries, terStart, tersize);
                 }
+                else {
+                    /* We ran out of memory!? We can't recover. */
+                    sortKeySize = DEFAULT_ERROR_SIZE_FOR_CALCSORTKEY;
+                    goto cleanup;
+                }
             } else {
                 *status = U_MEMORY_ALLOCATION_ERROR;
             }
@@ -5531,6 +5564,24 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
         *(primaries++) = '\0';
     }
 
+    if(allocateSKBuffer == TRUE) {
+        *result = (uint8_t*)uprv_malloc(sortKeySize);
+        /* test for NULL */
+        if (*result == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            goto cleanup;
+        }
+        uprv_memcpy(*result, primStart, sortKeySize);
+        if(primStart != prim) {
+            uprv_free(primStart);
+        }
+    }
+
+cleanup:
+    if (allocateSKBuffer == FALSE && resultLength > 0 && U_FAILURE(*status) && *status != U_BUFFER_OVERFLOW_ERROR) {
+        /* NULL terminate for safety */
+        **result = 0;
+    }
     if(terStart != tert) {
         uprv_free(terStart);
         uprv_free(secStart);
@@ -5538,19 +5589,6 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 
     if(normSource != normBuffer) {
         uprv_free(normSource);
-    }
-
-    if(allocateSKBuffer == TRUE) {
-        *result = (uint8_t*)uprv_malloc(sortKeySize);
-        /* test for NULL */
-        if (*result == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            return sortKeySize;
-        }
-        uprv_memcpy(*result, primStart, sortKeySize);
-        if(primStart != prim) {
-            uprv_free(primStart);
-        }
     }
 
     return sortKeySize;
@@ -6571,8 +6609,7 @@ ucol_setUpLatinOne(UCollator *coll, UErrorCode *status) {
     UChar ch = 0;
     UCollationElements *it = ucol_openElements(coll, &ch, 1, status);
     // Check for null pointer 
-    if (it == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
+    if (U_FAILURE(*status)) {
         return FALSE;
     }
     uprv_memset(coll->latinOneCEs, 0, sizeof(uint32_t)*coll->latinOneTableLen*3);
