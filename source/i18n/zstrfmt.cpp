@@ -650,8 +650,7 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
                                 ZoneStringInfo *zsinfo = new ZoneStringInfo(preferredIdForLocale, strings_mz[typeidx], (TimeZoneTranslationType)type);
                                 fZoneStringsTrie.put(strings_mz[typeidx], zsinfo, status);
                                 if (U_FAILURE(status)) {
-                                    delete zsinfo;
-                                    delete strings_mz;
+                                    delete []strings_mz;
                                     goto error_cleanup;
                                 }
                             }
@@ -664,7 +663,6 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
 
                     fMzidToStrings.put(mzid, tmp_mzStrings, status);
                     if (U_FAILURE(status)) {
-                        delete tmp_mzStrings;
                         goto error_cleanup;
                     }
 
@@ -1560,6 +1558,11 @@ ZSFCache::get(const Locale &locale, UErrorCode &status) {
     if (entry == NULL) {
         ZoneStringFormat *zsf = new ZoneStringFormat(locale, status);
         if (U_FAILURE(status)) {
+            delete zsf;
+            return NULL;
+        }
+        if (zsf == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
             return NULL;
         }
         // Now add the new entry
