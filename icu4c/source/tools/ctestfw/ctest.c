@@ -573,12 +573,15 @@ static void *U_CALLCONV ctest_libRealloc(const void *context, void *mem, size_t 
         return NULL;
     }
     if (mem == NULL) {
+        /* New allocation. */
         umtx_atomic_inc(&ALLOCATION_COUNT);
     }
     return realloc(mem, size);
 }
 static void U_CALLCONV ctest_libFree(const void *context, void *mem) {
-    umtx_atomic_dec(&ALLOCATION_COUNT);
+    if (mem != NULL) {
+        umtx_atomic_dec(&ALLOCATION_COUNT);
+    }
     free(mem);
 }
 
