@@ -3927,179 +3927,183 @@ static void TestSettings(void) {
 }
 
 static int32_t TestEqualsForCollator(const char* locName, UCollator *source, UCollator *target) {
-  UErrorCode status = U_ZERO_ERROR;
-  int32_t errorNo = 0;
-  /*const UChar *sourceRules = NULL;*/
-  /*int32_t sourceRulesLen = 0;*/
-  UColAttributeValue french = UCOL_OFF;
-  int32_t cloneSize = 0;
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t errorNo = 0;
+    /*const UChar *sourceRules = NULL;*/
+    /*int32_t sourceRulesLen = 0;*/
+    UColAttributeValue french = UCOL_OFF;
+    int32_t cloneSize = 0;
 
-  if(!ucol_equals(source, target)) {
-    log_err("Same collators, different address not equal\n");
-    errorNo++;
-  }
-  ucol_close(target);
-  if(uprv_strcmp(ucol_getLocale(source, ULOC_REQUESTED_LOCALE, &status), ucol_getLocale(source, ULOC_ACTUAL_LOCALE, &status)) == 0) {
-    /* currently, safeClone is implemented through getRules/openRules
-     * so it is the same as the test below - I will comment that test out.
-     */
-    /* real thing */
-    target = ucol_safeClone(source, NULL, &cloneSize, &status);
-    if(U_FAILURE(status)) {
-      log_err("Error creating clone\n");
-      errorNo++;
-      return errorNo;
-    }
     if(!ucol_equals(source, target)) {
-      log_err("Collator different from it's clone\n");
-      errorNo++;
-    }
-    french = ucol_getAttribute(source, UCOL_FRENCH_COLLATION, &status);
-    if(french == UCOL_ON) {
-      ucol_setAttribute(target, UCOL_FRENCH_COLLATION, UCOL_OFF, &status);
-    } else {
-      ucol_setAttribute(target, UCOL_FRENCH_COLLATION, UCOL_ON, &status);
-    }
-    if(U_FAILURE(status)) {
-      log_err("Error setting attributes\n");
-      errorNo++;
-      return errorNo;
-    }
-    if(ucol_equals(source, target)) {
-      log_err("Collators same even when options changed\n");
-      errorNo++;
+        log_err("Same collators, different address not equal\n");
+        errorNo++;
     }
     ucol_close(target);
-    /* commented out since safeClone uses exactly the same technique */
-    /*
-    sourceRules = ucol_getRules(source, &sourceRulesLen);
-    target = ucol_openRules(sourceRules, sourceRulesLen, UCOL_DEFAULT, UCOL_DEFAULT, &parseError, &status);
-    if(U_FAILURE(status)) {
-      log_err("Error instantiating target from rules\n");
-      errorNo++;
-      return errorNo;
+    if(uprv_strcmp(ucol_getLocale(source, ULOC_REQUESTED_LOCALE, &status), ucol_getLocale(source, ULOC_ACTUAL_LOCALE, &status)) == 0) {
+        /* currently, safeClone is implemented through getRules/openRules
+        * so it is the same as the test below - I will comment that test out.
+        */
+        /* real thing */
+        target = ucol_safeClone(source, NULL, &cloneSize, &status);
+        if(U_FAILURE(status)) {
+            log_err("Error creating clone\n");
+            errorNo++;
+            return errorNo;
+        }
+        if(!ucol_equals(source, target)) {
+            log_err("Collator different from it's clone\n");
+            errorNo++;
+        }
+        french = ucol_getAttribute(source, UCOL_FRENCH_COLLATION, &status);
+        if(french == UCOL_ON) {
+            ucol_setAttribute(target, UCOL_FRENCH_COLLATION, UCOL_OFF, &status);
+        } else {
+            ucol_setAttribute(target, UCOL_FRENCH_COLLATION, UCOL_ON, &status);
+        }
+        if(U_FAILURE(status)) {
+            log_err("Error setting attributes\n");
+            errorNo++;
+            return errorNo;
+        }
+        if(ucol_equals(source, target)) {
+            log_err("Collators same even when options changed\n");
+            errorNo++;
+        }
+        ucol_close(target);
+        /* commented out since safeClone uses exactly the same technique */
+        /*
+        sourceRules = ucol_getRules(source, &sourceRulesLen);
+        target = ucol_openRules(sourceRules, sourceRulesLen, UCOL_DEFAULT, UCOL_DEFAULT, &parseError, &status);
+        if(U_FAILURE(status)) {
+        log_err("Error instantiating target from rules\n");
+        errorNo++;
+        return errorNo;
+        }
+        if(!ucol_equals(source, target)) {
+        log_err("Collator different from collator that was created from the same rules\n");
+        errorNo++;
+        }
+        ucol_close(target);
+        */
     }
-    if(!ucol_equals(source, target)) {
-      log_err("Collator different from collator that was created from the same rules\n");
-      errorNo++;
-    }
-    ucol_close(target);
-    */
-  }
-  return errorNo;
+    return errorNo;
 }
 
 
 static void TestEquals(void) {
-  /* ucol_equals is not currently a public API. There is a chance that it will become
-   * something like this, but currently it is only used by RuleBasedCollator::operator==
-   */
-  /* test whether the two collators instantiated from the same locale are equal */
-  UErrorCode status = U_ZERO_ERROR;
-  UParseError parseError;
-  int32_t noOfLoc = uloc_countAvailable();
-  const char *locName = NULL;
-  UCollator *source = NULL, *target = NULL;
-  int32_t i = 0;
+    /* ucol_equals is not currently a public API. There is a chance that it will become
+    * something like this, but currently it is only used by RuleBasedCollator::operator==
+    */
+    /* test whether the two collators instantiated from the same locale are equal */
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError parseError;
+    int32_t noOfLoc = uloc_countAvailable();
+    const char *locName = NULL;
+    UCollator *source = NULL, *target = NULL;
+    int32_t i = 0;
 
-  const char* rules[] = {
-    "&l < lj <<< Lj <<< LJ",
-      "&n < nj <<< Nj <<< NJ",
-      "&ae <<< \\u00e4",
-      "&AE <<< \\u00c4"
-  };
-  /*
-  const char* badRules[] = {
+    const char* rules[] = {
+        "&l < lj <<< Lj <<< LJ",
+        "&n < nj <<< Nj <<< NJ",
+        "&ae <<< \\u00e4",
+        "&AE <<< \\u00c4"
+    };
+    /*
+    const char* badRules[] = {
     "&l <<< Lj",
-      "&n < nj <<< nJ <<< NJ",
-      "&a <<< \\u00e4",
-      "&AE <<< \\u00c4 <<< x"
-  };
-  */
+    "&n < nj <<< nJ <<< NJ",
+    "&a <<< \\u00e4",
+    "&AE <<< \\u00c4 <<< x"
+    };
+    */
 
-  UChar sourceRules[1024], targetRules[1024];
-  int32_t sourceRulesSize = 0, targetRulesSize = 0;
-  int32_t rulesSize = sizeof(rules)/sizeof(rules[0]);
+    UChar sourceRules[1024], targetRules[1024];
+    int32_t sourceRulesSize = 0, targetRulesSize = 0;
+    int32_t rulesSize = sizeof(rules)/sizeof(rules[0]);
 
-  for(i = 0; i < rulesSize; i++) {
-    sourceRulesSize += u_unescape(rules[i], sourceRules+sourceRulesSize, 1024 - sourceRulesSize);
-    targetRulesSize += u_unescape(rules[rulesSize-i-1], targetRules+targetRulesSize, 1024 - targetRulesSize);
-  }
+    for(i = 0; i < rulesSize; i++) {
+        sourceRulesSize += u_unescape(rules[i], sourceRules+sourceRulesSize, 1024 - sourceRulesSize);
+        targetRulesSize += u_unescape(rules[rulesSize-i-1], targetRules+targetRulesSize, 1024 - targetRulesSize);
+    }
 
-  source = ucol_openRules(sourceRules, sourceRulesSize, UCOL_DEFAULT, UCOL_DEFAULT, &parseError, &status);
-  if(status == U_FILE_ACCESS_ERROR) {
-    log_data_err("Is your data around?\n");
-    return;
-  } else if(U_FAILURE(status)) {
-    log_err("Error opening collator\n");
-    return;
-  }
-  target = ucol_openRules(targetRules, targetRulesSize, UCOL_DEFAULT, UCOL_DEFAULT, &parseError, &status);
-  if(!ucol_equals(source, target)) {
-    log_err("Equivalent collators not equal!\n");
-  }
-  ucol_close(source);
-  ucol_close(target);
+    source = ucol_openRules(sourceRules, sourceRulesSize, UCOL_DEFAULT, UCOL_DEFAULT, &parseError, &status);
+    if(status == U_FILE_ACCESS_ERROR) {
+        log_data_err("Is your data around?\n");
+        return;
+    } else if(U_FAILURE(status)) {
+        log_err("Error opening collator\n");
+        return;
+    }
+    target = ucol_openRules(targetRules, targetRulesSize, UCOL_DEFAULT, UCOL_DEFAULT, &parseError, &status);
+    if(!ucol_equals(source, target)) {
+        log_err("Equivalent collators not equal!\n");
+    }
+    ucol_close(source);
+    ucol_close(target);
 
-  source = ucol_open("root", &status);
-  target = ucol_open("root", &status);
-  log_verbose("Testing root\n");
-  if(!ucol_equals(source, source)) {
-    log_err("Same collator not equal\n");
-  }
-  if(TestEqualsForCollator(locName, source, target)) {
-    log_err("Errors for root\n", locName);
-  }
-  ucol_close(source);
+    source = ucol_open("root", &status);
+    target = ucol_open("root", &status);
+    log_verbose("Testing root\n");
+    if(!ucol_equals(source, source)) {
+        log_err("Same collator not equal\n");
+    }
+    if(TestEqualsForCollator(locName, source, target)) {
+        log_err("Errors for root\n", locName);
+    }
+    ucol_close(source);
 
-  for(i = 0; i<noOfLoc; i++) {
-    status = U_ZERO_ERROR;
-    locName = uloc_getAvailable(i);
-    /*if(hasCollationElements(locName)) {*/
-      log_verbose("Testing equality for locale %s\n", locName);
-      source = ucol_open(locName, &status);
-      target = ucol_open(locName, &status);
-      if(TestEqualsForCollator(locName, source, target)) {
-        log_err("Errors for locale %s\n", locName);
-      }
-      ucol_close(source);
-    /*}*/
-  }
+    for(i = 0; i<noOfLoc; i++) {
+        status = U_ZERO_ERROR;
+        locName = uloc_getAvailable(i);
+        /*if(hasCollationElements(locName)) {*/
+        log_verbose("Testing equality for locale %s\n", locName);
+        source = ucol_open(locName, &status);
+        target = ucol_open(locName, &status);
+        if (U_FAILURE(status)) {
+            log_err("Error opening collator for locale %s  %s\n", locName, u_errorName(status));
+            continue;
+        }
+        if(TestEqualsForCollator(locName, source, target)) {
+            log_err("Errors for locale %s\n", locName);
+        }
+        ucol_close(source);
+        /*}*/
+    }
 }
 
 static void TestJ2726(void) {
-  UChar a[2] = { 0x61, 0x00 }; /*"a"*/
-  UChar aSpace[3] = { 0x61, 0x20, 0x00 }; /*"a "*/
-  UChar spaceA[3] = { 0x20, 0x61, 0x00 }; /*" a"*/
-  UErrorCode status = U_ZERO_ERROR;
-  UCollator *coll = ucol_open("en", &status);
-  ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED, &status);
-  ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_PRIMARY, &status);
-  doTest(coll, a, aSpace, UCOL_EQUAL);
-  doTest(coll, aSpace, a, UCOL_EQUAL);
-  doTest(coll, a, spaceA, UCOL_EQUAL);
-  doTest(coll, spaceA, a, UCOL_EQUAL);
-  doTest(coll, spaceA, aSpace, UCOL_EQUAL);
-  doTest(coll, aSpace, spaceA, UCOL_EQUAL);
-  ucol_close(coll);
+    UChar a[2] = { 0x61, 0x00 }; /*"a"*/
+    UChar aSpace[3] = { 0x61, 0x20, 0x00 }; /*"a "*/
+    UChar spaceA[3] = { 0x20, 0x61, 0x00 }; /*" a"*/
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator *coll = ucol_open("en", &status);
+    ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED, &status);
+    ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_PRIMARY, &status);
+    doTest(coll, a, aSpace, UCOL_EQUAL);
+    doTest(coll, aSpace, a, UCOL_EQUAL);
+    doTest(coll, a, spaceA, UCOL_EQUAL);
+    doTest(coll, spaceA, a, UCOL_EQUAL);
+    doTest(coll, spaceA, aSpace, UCOL_EQUAL);
+    doTest(coll, aSpace, spaceA, UCOL_EQUAL);
+    ucol_close(coll);
 }
 
 static void NullRule(void) {
-  UChar r[3] = {0};
-  UErrorCode status = U_ZERO_ERROR;
-  UCollator *coll = ucol_openRules(r, 1, UCOL_DEFAULT, UCOL_DEFAULT, NULL, &status);
-  if(U_SUCCESS(status)) {
-    log_err("This should have been an error!\n");
-    ucol_close(coll);
-  } else {
-    status = U_ZERO_ERROR;
-  }
-  coll = ucol_openRules(r, 0, UCOL_DEFAULT, UCOL_DEFAULT, NULL, &status);
-  if(U_FAILURE(status)) {
-    log_err("Empty rules should have produced a valid collator\n");
-  } else {
-    ucol_close(coll);
-  }
+    UChar r[3] = {0};
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator *coll = ucol_openRules(r, 1, UCOL_DEFAULT, UCOL_DEFAULT, NULL, &status);
+    if(U_SUCCESS(status)) {
+        log_err("This should have been an error!\n");
+        ucol_close(coll);
+    } else {
+        status = U_ZERO_ERROR;
+    }
+    coll = ucol_openRules(r, 0, UCOL_DEFAULT, UCOL_DEFAULT, NULL, &status);
+    if(U_FAILURE(status)) {
+        log_err("Empty rules should have produced a valid collator\n");
+    } else {
+        ucol_close(coll);
+    }
 }
 
 /**
