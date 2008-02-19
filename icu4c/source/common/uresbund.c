@@ -144,7 +144,7 @@ free_entry(UResourceDataEntry *entry) {
     if(entry->fBogus == U_ZERO_ERROR) {
         res_unload(&(entry->fData));
     }
-    if(entry->fName != NULL) {
+    if(entry->fName != NULL && entry->fName != entry->fNameBuffer) {
         uprv_free(entry->fName);
     }
     if(entry->fPath != NULL) {
@@ -237,10 +237,16 @@ static void initCache(UErrorCode *status) {
 /** INTERNAL: sets the name (locale) of the resource bundle to given name */
 
 static void setEntryName(UResourceDataEntry *res, char *name, UErrorCode *status) {
-    if(res->fName != NULL) {
+    int32_t len = uprv_strlen(name);
+    if(res->fName != NULL && res->fName != res->fNameBuffer) {
         uprv_free(res->fName);
     }
-    res->fName = (char *)uprv_malloc(sizeof(char)*uprv_strlen(name)+1);
+    if (len < (int32_t)sizeof(res->fNameBuffer)) {
+        res->fName = res->fNameBuffer;
+    }
+    else {
+        res->fName = (char *)uprv_malloc(len+1);
+    }
     if(res->fName == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
     } else {
@@ -367,12 +373,7 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
             } else {
                 /* somebody have already inserted it while we were working, discard newly opened data */
                 /* Also, we could get here IF we opened an alias */
-                uprv_free(r->fName);
-                if(r->fPath != NULL) {
-                    uprv_free(r->fPath);
-                }
-                res_unload(&(r->fData));
-                uprv_free(r);
+                free_entry(r);
                 r = oldR;
                 r->fCountExisting++;
             }
