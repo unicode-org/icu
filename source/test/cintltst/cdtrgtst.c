@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -202,12 +202,11 @@ void Test4059917()
     UDateFormat* def;
     UChar *myDate;
     UErrorCode status = U_ZERO_ERROR;
-    UChar *pattern;
+    UChar pattern[11];
     UChar tzID[4];
 
     log_verbose("Testing apply pattern and to pattern regressively\n");
     u_uastrcpy(tzID, "PST");
-    pattern=(UChar*)malloc(sizeof(UChar) * 11);
     u_uastrcpy(pattern, "yyyy/MM/dd");
     log_verbose("%s\n", austrdup(pattern) );
     def = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL,tzID,-1,pattern, u_strlen(pattern),&status);
@@ -232,9 +231,7 @@ void Test4059917()
     u_uastrcpy(myDate, "19700112");
     aux917( def, myDate );
     udat_close(def);    
-    free(pattern);
     free(myDate);
-    
 }
 
 void aux917( UDateFormat *fmt, UChar* str) 

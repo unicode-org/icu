@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -775,6 +775,7 @@ static void TestSignificantDigits()
     fmt=unum_open(UNUM_IGNORE, temp, -1, NULL, NULL,&status);
     if (U_FAILURE(status)) {
         log_err("got unexpected error for unum_open: '%s'\n", u_errorName(status));
+        return;
     }
     unum_setAttribute(fmt, UNUM_SIGNIFICANT_DIGITS_USED, TRUE);
     unum_setAttribute(fmt, UNUM_MAX_SIGNIFICANT_DIGITS, 6);
@@ -1224,25 +1225,25 @@ static void TestRBNFFormat() {
     u_uastrcpy(pat, "#,##0.0#;(#,##0.0#)");
     formats[0] = unum_open(UNUM_PATTERN_DECIMAL, pat, -1, "en_US", &perr, &status);
     if (U_FAILURE(status)) {
-        log_err("unable to open decimal pattern");
+        log_err("unable to open decimal pattern\n");
     }
 
     status = U_ZERO_ERROR;
     formats[1] = unum_open(UNUM_SPELLOUT, NULL, 0, "en_US", &perr, &status);
     if (U_FAILURE(status)) {
-        log_err("unable to open spellout");
+        log_err("unable to open spellout\n");
     }
 
     status = U_ZERO_ERROR;
     formats[2] = unum_open(UNUM_ORDINAL, NULL, 0, "en_US", &perr, &status);
     if (U_FAILURE(status)) {
-        log_err("unable to open ordinal");
+        log_err("unable to open ordinal\n");
     }
 
     status = U_ZERO_ERROR;
     formats[3] = unum_open(UNUM_DURATION, NULL, 0, "en_US", &perr, &status);
     if (U_FAILURE(status)) {
-        log_err("unable to open duration");
+        log_err("unable to open duration\n");
     }
 
     status = U_ZERO_ERROR;
@@ -1285,7 +1286,11 @@ static void TestRBNFFormat() {
     u_strcat(pat, tempUChars);
     formats[4] = unum_open(UNUM_PATTERN_RULEBASED, pat, -1, "en_US", &perr, &status);
     if (U_FAILURE(status)) {
-        log_err("unable to open rulebased pattern");
+        log_err("unable to open rulebased pattern\n");
+    }
+    if (U_FAILURE(status)) {
+        log_err("Something failed with %s\n", u_errorName(status));
+        return;
     }
 
     for (i = 0; i < COUNT; ++i) {
