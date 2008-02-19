@@ -953,7 +953,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
     resB->fIsTopLevel = FALSE;
     resB->fIndex = -1;
     resB->fKey = key; 
-    resB->fParentRes = parent;
+    /*resB->fParentRes = parent;*/
     resB->fTopLevelData = parent->fTopLevelData;
     if(parent->fResPath && parent != resB) {
         ures_appendResPath(resB, parent->fResPath, parent->fResPathLen);
@@ -1994,7 +1994,7 @@ ures_openDirect(const char* path, const char* localeID, UErrorCode* status) {
     r->fSize = res_countArrayItems(&(r->fResData), r->fRes);
     r->fResPath = NULL;
     r->fResPathLen = 0;
-    r->fParentRes = NULL;
+    /*r->fParentRes = NULL;*/
     r->fTopLevelData = r->fData;
 
     return r;
@@ -2060,7 +2060,7 @@ ures_getVersionNumber(const UResourceBundle*   resourceBundle)
         ((UResourceBundle *)resourceBundle)->fVersion = (char *)uprv_malloc(1 + len); 
         /* Check for null pointer. */
         if (((UResourceBundle *)resourceBundle)->fVersion == NULL) {
-        	return NULL;
+            return NULL;
         }
        
         if(minor_len > 0) {
