@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -131,6 +131,7 @@ static void MessageFormatTest( void )
         }
         if(U_FAILURE(status)){
             log_err("ERROR: failure in message format on testcase %d:  %s\n", i, myErrorName(status) );
+            continue;
         }
         if(u_strcmp(result, testResultStrings[i])==0){
             log_verbose("PASS: MessagFormat successful on testcase : %d\n", i);
@@ -287,7 +288,7 @@ static void TestSampleMessageFormat(void)
     if(U_FAILURE(status)){
         log_err("Error: failure in message format on test#1: %s\n", myErrorName(status));
     }
-    if(u_strcmp(result, expected)==0)
+    else if(u_strcmp(result, expected)==0)
         log_verbose("PASS: MessagFormat successful on test#1\n");
     else{
         log_err("FAIL: Error in MessageFormat on test#1 \n GOT: %s EXPECTED: %s\n", 
@@ -318,7 +319,7 @@ static void TestSampleMessageFormat(void)
     if(U_FAILURE(status)){
         log_err("Error: failure in message format on test#2 : %s\n", myErrorName(status));
     }
-    if(u_strcmp(result, expected)==0)
+    else if(u_strcmp(result, expected)==0)
         log_verbose("PASS: MessagFormat successful on test#2\n");
     else{
         log_err("FAIL: Error in MessageFormat on test#2\n GOT: %s EXPECTED: %s\n", 
@@ -343,7 +344,7 @@ static void TestSampleMessageFormat(void)
     if(U_FAILURE(status)){
         log_err("Error: failure in message format on test#3 : %s\n", myErrorName(status));
     }
-    if(u_strcmp(result, expected)==0)
+    else if(u_strcmp(result, expected)==0)
         log_verbose("PASS: MessagFormat successful on test#3\n");
     else{
         log_err("FAIL: Error in MessageFormat on test#3\n GOT: %s EXPECTED %s\n", austrdup(result), 
@@ -360,7 +361,7 @@ static void TestSampleMessageFormat(void)
 static void TestNewFormatAndParseAPI(void)
 {
 
-    UChar *result, *tzID, *str;
+    UChar *result, tzID[4], str[25];
     UChar pattern[100];
     UChar expected[100];
     int32_t resultLengthOut, resultlength;
@@ -378,9 +379,7 @@ static void TestNewFormatAndParseAPI(void)
 
     log_verbose("Testing format and parse with parse error\n");
 
-    str=(UChar*)malloc(sizeof(UChar) * 25);
     u_uastrcpy(str, "disturbance in force");
-    tzID=(UChar*)malloc(sizeof(UChar) * 4);
     u_uastrcpy(tzID, "PST");
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
     if(U_FAILURE(status)){
@@ -455,8 +454,6 @@ static void TestNewFormatAndParseAPI(void)
     ucal_close(cal);
 
     free(result);
-    free(str);
-    free(tzID);
 
     ctest_resetTimeZone();
 }
@@ -513,7 +510,7 @@ static void TestSampleFormatAndParseWithError(void)
     if(U_FAILURE(status)){
         log_err("ERROR: failure in message format test#4: %s\n", myErrorName(status));
     }
-    if(u_strcmp(result, expected)==0)
+    else if(u_strcmp(result, expected)==0)
         log_verbose("PASS: MessagFormat successful on test#4\n");
     else{
         log_err("FAIL: Error in MessageFormat on test#4\n GOT: %s EXPECTED: %s\n", austrdup(result),
@@ -528,7 +525,7 @@ static void TestSampleFormatAndParseWithError(void)
     if(U_FAILURE(status)){
         log_err("ERROR: error in parsing: test#5: %s\n", myErrorName(status));
     }
-    if(value!=7 && u_strcmp(str,ret)!=0)
+    else if(value!=7 && u_strcmp(str,ret)!=0)
         log_err("FAIL: Error in parseMessage on test#5 \n");
     else
         log_verbose("PASS: parseMessage successful on test#5\n");
@@ -606,7 +603,7 @@ static void TestSampleFormatAndParse(void)
     if(U_FAILURE(status)){
         log_err("ERROR: failure in message format test#4: %s\n", myErrorName(status));
     }
-    if(u_strcmp(result, expected)==0)
+    else if(u_strcmp(result, expected)==0)
         log_verbose("PASS: MessagFormat successful on test#4\n");
     else{
         log_err("FAIL: Error in MessageFormat on test#4\n GOT: %s EXPECTED: %s\n", austrdup(result),
@@ -621,7 +618,7 @@ static void TestSampleFormatAndParse(void)
     if(U_FAILURE(status)){
         log_err("ERROR: error in parsing: test#5: %s\n", myErrorName(status));
     }
-    if(value!=7 && u_strcmp(str,ret)!=0)
+    else if(value!=7 && u_strcmp(str,ret)!=0)
         log_err("FAIL: Error in parseMessage on test#5 \n");
     else
         log_verbose("PASS: parseMessage successful on test#5\n");
@@ -756,7 +753,7 @@ static void TestParseMessage(void)
     if(U_FAILURE(status)){
         log_err("ERROR: failure in parse Message on test#9: %s\n", myErrorName(status));
     }
-    if(value==500.00  && u_strcmp(str,res)==0)
+    else if(value==500.00  && u_strcmp(str,res)==0)
         log_verbose("PASS: parseMessage successful on test#9\n");
     else
         log_err("FAIL: Error in parseMessage on test#9 \n");
@@ -773,7 +770,7 @@ static void TestParseMessage(void)
     if(U_FAILURE(status)){
         log_err("ERROR: failure in parse Message on test#10: %s\n", myErrorName(status));
     }
-    if(value==123.00 && u_strcmp(str,res)==0)
+    else if(value==123.00 && u_strcmp(str,res)==0)
         log_verbose("PASS: parseMessage successful on test#10\n");
     else
         log_err("FAIL: Error in parseMessage on test#10 \n");
@@ -827,7 +824,7 @@ static void TestMessageFormatWithValist( void )
         if(U_FAILURE(status)){
             log_err("ERROR: failure in message format on testcase %d:  %s\n", i, myErrorName(status) );
         }
-        if(u_strcmp(result, testResultStrings[i])==0){
+        else if(u_strcmp(result, testResultStrings[i])==0){
             log_verbose("PASS: MessagFormat successful on testcase : %d\n", i);
         }
         else{
@@ -887,7 +884,7 @@ static void TestParseMessageWithValist(void)
     if(U_FAILURE(status)){
         log_err("ERROR: failure in parse Message on test#10: %s\n", myErrorName(status));
     }
-    if(value==123.00 && u_strcmp(str,res)==0)
+    else if(value==123.00 && u_strcmp(str,res)==0)
         log_verbose("PASS: parseMessage successful on test#10\n");
     else
         log_err("FAIL: Error in parseMessage on test#10 \n");    
