@@ -62,21 +62,20 @@ struct UResourceBundle {
     const char *fKey; /*tag*/
     UResourceDataEntry *fData; /*for low-level access*/
     char *fVersion;
+    UResourceDataEntry *fTopLevelData; /* for getting the valid locale */
     char *fResPath; /* full path to the resource: "zh_TW/CollationElements/Sequence" */
+    ResourceData fResData;
     char fResBuf[RES_BUFSIZE];
     int32_t fResPathLen;
+    Resource fRes;
     UBool fHasFallback;
     UBool fIsTopLevel;
     uint32_t fMagic1;   /* For determining if it's a stack object */
     uint32_t fMagic2;   /* For determining if it's a stack object */
     int32_t fIndex;
     int32_t fSize;
-    ResourceData fResData;
-    Resource fRes;
 
-    UResourceDataEntry *fTopLevelData; /* for getting the valid locale */
-    const UResourceBundle *fParentRes; /* needed to get the actual locale for a child resource */
-
+    /*const UResourceBundle *fParentRes;*/ /* needed to get the actual locale for a child resource */
 };
 
 U_CAPI void U_EXPORT2 ures_initStackObject(UResourceBundle* resB);
