@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*   file name:  cbiditst.cpp
@@ -1758,6 +1758,10 @@ testMultipleParagraphs(void) {
     ubidi_orderParagraphsLTR(pBidi, TRUE);
     ubidi_setPara(pBidi, src, srcSize, UBIDI_RTL, NULL, &errorCode);
     gotLevels=ubidi_getLevels(pBidi, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        log_err("Can't get levels. %s\n", u_errorName(errorCode));
+        return;
+    }
     for (i=0; i<srcSize; i++) {
         if (gotLevels[i]!=levels2[i]) {
             log_err("Checking leading numerics: for char %d(%04x), level=%d, expected=%d\n",
@@ -3553,7 +3557,9 @@ testStreaming(void) {
 
                 len = chunk < srcLen ? chunk : srcLen;
                 ubidi_setPara(pBiDi, pSrc, len, level, NULL, &rc);
-                assertSuccessful("ubidi_setPara", &rc);
+                if (!assertSuccessful("ubidi_setPara", &rc)) {
+                    break;
+                }
 
                 processedLen = ubidi_getProcessedLength(pBiDi);
                 if (processedLen == 0) {
