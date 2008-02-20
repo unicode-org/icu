@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2002-2007, International Business Machines Corporation and
+ * Copyright (c) 2002-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -66,7 +66,9 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
         case 6: name = "PerlTests";
             if (exec) PerlTests();
             break;
-
+        case 7: name = "Callbacks";
+          if (exec) Callbacks();
+          break;
 
         default: name = "";
             break; //needed to end loop
@@ -836,6 +838,90 @@ void RegexTest::API_Match() {
         RegexMatcher m3(".", ucharString, 0, status);  //  Should not compile
     }
 #endif
+
+    //
+    //  Time Outs.  
+    //       Note:  These tests will need to be changed when the regexp engine is
+    //              able to detect and cut short the exponential time behavior on
+    //              this type of match.
+    //
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        //    Enough 'a's in the string to cause the match to time out.
+        //       (Each on additonal 'a' doubles the time)
+        UnicodeString testString("aaaaaaaaaaaaaaaaaaaaa");
+        RegexMatcher matcher("(a+)+b", testString, 0, status);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(matcher.getTimeLimit() == 0);
+        matcher.setTimeLimit(100, status);
+        REGEX_ASSERT(matcher.getTimeLimit() == 100);
+        REGEX_ASSERT(matcher.lookingAt(status) == FALSE);
+        REGEX_ASSERT(status == U_REGEX_TIME_OUT);
+    }
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        //   Few enough 'a's to slip in under the time limit.
+        UnicodeString testString("aaaaaaaaaaaaaaaaaa");
+        RegexMatcher matcher("(a+)+b", testString, 0, status);
+        REGEX_CHECK_STATUS;
+        matcher.setTimeLimit(100, status);
+        REGEX_ASSERT(matcher.lookingAt(status) == FALSE);
+        REGEX_CHECK_STATUS;
+    }
+    
+    //
+    //  Stack Limits
+    //
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        UnicodeString testString(1000000, 0x41, 1000000);  // Length 1,000,000, filled with 'A'
+        
+        // Adding the capturing parentheses to the pattern "(A)+A$" inhibits optimizations
+        //   of the '+', and makes the stack frames larger.
+        RegexMatcher matcher("(A)+A$", testString, 0, status);
+        
+        // With the default stack, this match should fail to run
+        REGEX_ASSERT(matcher.lookingAt(status) == FALSE);
+        REGEX_ASSERT(status == U_REGEX_STACK_OVERFLOW);
+        
+        // With unlimited stack, it should run
+        status = U_ZERO_ERROR;
+        matcher.setStackLimit(0, status);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(matcher.lookingAt(status) == TRUE);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(matcher.getStackLimit() == 0);
+
+        // With a limited stack, it the match should fail
+        status = U_ZERO_ERROR;
+        matcher.setStackLimit(10000, status);
+        REGEX_ASSERT(matcher.lookingAt(status) == FALSE);
+        REGEX_ASSERT(status == U_REGEX_STACK_OVERFLOW);
+        REGEX_ASSERT(matcher.getStackLimit() == 10000);
+    }
+        
+        // A pattern that doesn't save state should work with
+        //   a minimal sized stack
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        UnicodeString testString = "abc";
+        RegexMatcher matcher("abc", testString, 0, status);
+        REGEX_CHECK_STATUS;
+        matcher.setStackLimit(30, status);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(matcher.matches(status) == TRUE);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(matcher.getStackLimit() == 30);
+        
+        // Negative stack sizes should fail
+        status = U_ZERO_ERROR;
+        matcher.setStackLimit(1000, status);
+        REGEX_CHECK_STATUS;
+        matcher.setStackLimit(-1, status);
+        REGEX_ASSERT(status == U_ILLEGAL_ARGUMENT_ERROR);
+        REGEX_ASSERT(matcher.getStackLimit() == 1000);
+    }
+    
 
 }
 
@@ -2299,6 +2385,98 @@ void RegexTest::PerlTests() {
 }
 
 
+//
+//   Callbacks()    Test the callback function.
+//                  When set, callbacks occur periodically during matching operations,
+//                  giving the application code the ability to abort the operation
+//                  before it's normal completion.
+//
+
+struct callBackContext {
+    RegexTest        *test;
+    int32_t          maxCalls;
+    int32_t          numCalls;
+    int32_t          lastSteps;
+    void reset(int32_t max) {maxCalls=max; numCalls=0; lastSteps=0;};
+};
+
+U_CDECL_BEGIN
+static UBool U_CALLCONV
+testCallBackFn(const void *context, int32_t steps) {
+    callBackContext  *info = (callBackContext *)context;
+    if (info->lastSteps+1 != steps) {
+        info->test->errln("incorrect steps in callback.  Expected %d, got %d\n", info->lastSteps+1, steps);
+    }
+    info->lastSteps = steps;
+    info->numCalls++;
+    return (info->numCalls < info->maxCalls);
+}
+U_CDECL_END
+
+void RegexTest::Callbacks() {
+   {
+        // Getter returns NULLs if no callback has been set
+        
+        //   The variables that the getter will fill in.
+        //   Init to non-null values so that the action of the getter can be seen.
+        const void          *returnedContext = &returnedContext;
+        URegexMatchCallback returnedFn = &testCallBackFn;
+        
+        UErrorCode status = U_ZERO_ERROR;
+        RegexMatcher matcher("x", 0, status);
+        REGEX_CHECK_STATUS;
+        matcher.getMatchCallback(returnedFn, returnedContext, status);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(returnedFn == NULL);
+        REGEX_ASSERT(returnedContext == NULL);
+    }
+    
+   {
+        // Set and Get work
+        callBackContext cbInfo = {this, 0, 0, 0};
+        const void          *returnedContext;
+        URegexMatchCallback returnedFn;
+        UErrorCode status = U_ZERO_ERROR;
+        RegexMatcher matcher("((.)+\\2)+x", 0, status);  // A pattern that can run long.
+        REGEX_CHECK_STATUS;
+        matcher.setMatchCallback(testCallBackFn, &cbInfo, status);
+        REGEX_CHECK_STATUS;
+        matcher.getMatchCallback(returnedFn, returnedContext, status);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(returnedFn == &testCallBackFn);
+        REGEX_ASSERT(returnedContext == &cbInfo);
+        
+        // A short-running match shouldn't invoke the callback
+        status = U_ZERO_ERROR;
+        cbInfo.reset(1);
+        UnicodeString s = "xxx";
+        matcher.reset(s);
+        REGEX_ASSERT(matcher.matches(status));
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(cbInfo.numCalls == 0);
+        
+        // A medium-length match that runs long enough to invoke the
+        //   callback, but not so long that the callback aborts it.
+        status = U_ZERO_ERROR;
+        cbInfo.reset(4);
+        s = "aaaaaaaaaaaaaaaaaaab";
+        matcher.reset(s);
+        REGEX_ASSERT(matcher.matches(status)==FALSE);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(cbInfo.numCalls > 0);
+        
+        // A longer running match that the callback function will abort.
+        status = U_ZERO_ERROR;
+        cbInfo.reset(4);
+        s = "aaaaaaaaaaaaaaaaaaaaaaab";
+        matcher.reset(s);
+        REGEX_ASSERT(matcher.matches(status)==FALSE);
+        REGEX_ASSERT(status == U_REGEX_STOPPED_BY_CALLER);
+        REGEX_ASSERT(cbInfo.numCalls == 4);
+    }
+ 
+
+}
 
 #endif  /* !UCONFIG_NO_REGULAR_EXPRESSIONS  */
 
