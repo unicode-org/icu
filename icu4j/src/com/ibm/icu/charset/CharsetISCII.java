@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
+ * Copyright (C) 2008, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -288,14 +288,30 @@ class CharsetISCII extends CharsetICU {
         /* 0xf9: 0xff: 0x96e */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
         /* 0xfa: 0xff: 0x96f */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
         /* 0x00: 0x80: 0x970 */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO,
-        /* 0x00: 0x00: 0x9yz */ MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO,
+        
+        /*
+         * The length of the array is 128 to provide values for 0x900..0x97f.
+         * The last 15 entries for 0x971..0x97f of the table are all zero
+         * because no Indic script uses such Unicode code points.
+         */
+        
+        /* 0x00: 0x00: 0x971 */ MaskEnum.ZERO,
+        /* 0x00: 0x00: 0x972 */ MaskEnum.ZERO,
+        /* 0x00: 0x00: 0x973 */ MaskEnum.ZERO,
+        /* 0x00: 0x00: 0x974 */ MaskEnum.ZERO,
+        /* 0x00: 0x00: 0x975 */ MaskEnum.ZERO,
+        /* 0x00: 0x00: 0x976 */ MaskEnum.ZERO,
+        /* 0x00: 0x00: 0x977 */ MaskEnum.ZERO,
+        /* 0x00: 0x00: 0x978 */ MaskEnum.ZERO,
+        /* 0x00: 0x00: 0x979 */ MaskEnum.ZERO,
+        /* 0x00: 0x00: 0x97A */ MaskEnum.ZERO,
+        /* 0x00: 0x00: 0x97B */ MaskEnum.ZERO,
+        /* 0x00: 0x00: 0x97C */ MaskEnum.ZERO,
+        /* 0x00: 0x00: 0x97D */ MaskEnum.ZERO,
+        /* 0x00: 0x00: 0x97E */ MaskEnum.ZERO,
+        /* 0x00: 0x00: 0x97F */ MaskEnum.ZERO,
     };
     
-    /*
-     * The length of the array is 128 to provide values for 0x900..0x97f.
-     * The last 15 entries for 0x971..0x97f of the table are all zero
-     * because no Indic script uses such Unicode code points.
-     */
     private static final char fromUnicodeTable[] = {
       0x00a0, /* 0x0900 */ 
       0x00a1, /* 0x0901 */
