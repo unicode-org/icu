@@ -100,7 +100,31 @@ void addURegexTest(TestNode** root)
     addTest(root, &TestBug4315,   "regex/TestBug4315");
 }
 
+/*
+ * Call back function and context struct used for testing
+ *    regular expression user callbacks.  This test is mostly the same as
+ *   the corresponding C++ test in intltest. 
+ */
+typedef struct callBackContext {
+    int32_t          maxCalls;
+    int32_t          numCalls;
+    int32_t          lastSteps;
+} callBackContext;
 
+static UBool U_EXPORT2 U_CALLCONV
+TestCallbackFn(const void *context, int32_t steps) {
+  callBackContext  *info = (callBackContext *)context;
+  if (info->lastSteps+1 != steps) {
+      log_err("incorrect steps in callback.  Expected %d, got %d\n", info->lastSteps+1, steps);
+  }
+  info->lastSteps = steps;
+  info->numCalls++;
+  return (info->numCalls < info->maxCalls);
+}
+
+/*
+ *   Regular Expression C API Tests
+ */
 static void TestRegexCAPI(void) {
     UErrorCode           status = U_ZERO_ERROR;
     URegularExpression  *re;
@@ -1144,7 +1168,71 @@ static void TestRegexCAPI(void) {
         uregex_close(re);
     }
 
+    /*
+     * set/getTimeLimit
+     */
+     TEST_SETUP("abc$", "abcdef", 0);
+     TEST_ASSERT(uregex_getTimeLimit(re, &status) == 0);
+     uregex_setTimeLimit(re, 1000, &status);
+     TEST_ASSERT(uregex_getTimeLimit(re, &status) == 1000);
+     TEST_ASSERT_SUCCESS(status);
+     uregex_setTimeLimit(re, -1, &status);
+     TEST_ASSERT(status == U_ILLEGAL_ARGUMENT_ERROR);
+     status = U_ZERO_ERROR;
+     TEST_ASSERT(uregex_getTimeLimit(re, &status) == 1000);
+     TEST_TEARDOWN;
+
+     /*
+      * set/get Stack Limit
+      */
+     TEST_SETUP("abc$", "abcdef", 0);
+     TEST_ASSERT(uregex_getStackLimit(re, &status) == 8000000);
+     uregex_setStackLimit(re, 40000, &status);
+     TEST_ASSERT(uregex_getStackLimit(re, &status) == 40000);
+     TEST_ASSERT_SUCCESS(status);
+     uregex_setStackLimit(re, -1, &status);
+     TEST_ASSERT(status == U_ILLEGAL_ARGUMENT_ERROR);
+     status = U_ZERO_ERROR;
+     TEST_ASSERT(uregex_getStackLimit(re, &status) == 40000);
+     TEST_TEARDOWN;
+     
+     
+     /*
+      * Get/Set callback functions
+      *     This test is copied from intltest regex/Callbacks
+      *     The pattern and test data will run long enough to cause the callback
+      *       to be invoked.  The nested '+' operators give exponential time
+      *       behavior with increasing string length.
+      */
+     TEST_SETUP("((.)+\\2)+x", "aaaaaaaaaaaaaaaaaaab", 0)
+     callBackContext cbInfo = {4, 0, 0};
+     const void     *pContext   = &cbInfo;
+     URegexMatchCallback    returnedFn = &TestCallbackFn;
+     
+     /*  Getting the callback fn when it hasn't been set must return NULL  */
+     uregex_getMatchCallback(re, &returnedFn, &pContext, &status);
+     TEST_ASSERT_SUCCESS(status);
+     TEST_ASSERT(returnedFn == NULL);
+     TEST_ASSERT(pContext == NULL);
+     
+     /* Set thecallback and do a match.                                   */
+     /* The callback function should record that it has been called.      */
+     uregex_setMatchCallback(re, &TestCallbackFn, &cbInfo, &status);
+     TEST_ASSERT_SUCCESS(status);
+     TEST_ASSERT(cbInfo.numCalls == 0);
+     TEST_ASSERT(uregex_matches(re, -1, &status) == FALSE);
+     TEST_ASSERT_SUCCESS(status);
+     TEST_ASSERT(cbInfo.numCalls > 0);
+     
+     /* Getting the callback should return the values that were set above.  */
+     uregex_getMatchCallback(re, &returnedFn, &pContext, &status);
+     TEST_ASSERT(returnedFn == &TestCallbackFn);
+     TEST_ASSERT(pContext == &cbInfo);
+
+     TEST_TEARDOWN;
 }
+
+
 
 static void TestBug4315(void) {
     UErrorCode      theICUError = U_ZERO_ERROR;

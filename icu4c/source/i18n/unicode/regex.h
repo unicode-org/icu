@@ -1003,6 +1003,102 @@ public:
         int32_t          destCapacity,
         UErrorCode       &status);
 
+  /**
+    *   Set a processing time limit for match operations with this Matcher.
+    *  
+    *   Some patterns, when matching certain strings, can run in exponential time.
+    *   For practical purposes, the match operation may appear to be in an
+    *   infinite loop.
+    *   When a limit is set a match operation will fail with an error if the
+    *   limit is exceeded.
+    *   <p>
+    *   The units of the limit are steps of the match engine.
+    *   Correspondence with actual processor time will depend on the speed
+    *   of the processor and the details of the specific pattern, but will
+    *   typically be on the order of milliseconds.
+    *   <p>
+    *   By default, the matching time is not limited.
+    *   <p>
+    *
+    *   @param   limit       The limit value, or 0 for no limit.
+    *   @param   status      A reference to a UErrorCode to receive any errors.
+    *   @draft ICU 4.0
+    */
+    virtual void setTimeLimit(int32_t limit, UErrorCode &status);
+
+  /**
+    * Get the time limit, if any, for match operations made with this Matcher.
+    *
+    *   @return the maximum allowed time for a match, in units of processing steps.
+    *   @draft ICU 4.0
+    */
+    virtual int32_t getTimeLimit() const;
+
+  /**
+    *  Set the amount of heap storage avaliable for use by the match backtracking stack.
+    *  The matcher is also reset, discarding any results from previous matches.
+    *  <p>
+    *  ICU uses a backtracking regular expression engine, with the backtrack stack
+    *  maintained on the heap.  This function sets the limit to the amount of memory
+    *  that can be used  for this purpose.  A backtracking stack overflow will
+    *  result in an error from the match operation that caused it.
+    *  <p>
+    *  A limit is desirable because a malicious or poorly designed pattern can use
+    *  excessive memory, potentially crashing the process.  A limit is enabled
+    *  by default.
+    *  <p>
+    *  @param limit  The maximum size, in bytes, of the matching backtrack stack.
+    *                A value of zero means no limit.
+    *                The limit must be greater or equal to zero.
+    *
+    *  @param status   A reference to a UErrorCode to receive any errors.
+    *
+    *  @draft ICU 4.0
+    */
+    virtual void setStackLimit(int32_t  limit, UErrorCode &status);
+    
+  /**
+    *  Get the size of the heap storage available for use by the back tracking stack.
+    *
+    *  @return  the maximum backtracking stack size, in bytes, or zero if the
+    *           stack size is unlimited.
+    *  @draft ICU 4.0
+    */
+    virtual int32_t  getStackLimit() const;
+
+
+  /**
+    * Set a callback function for use with this Matcher.
+    * During matching operations the function will be called periodically,
+    * giving the application the opportunity to terminate a long-running
+    * match.
+    *
+    *    @param   callback    A pointer to the user-supplied callback function.
+    *    @param   context     User context pointer.  The value supplied at the
+    *                         time the callback function is set will be saved
+    *                         and passed to the callback each time that it is called.
+    *    @param   status      A reference to a UErrorCode to receive any errors.
+    *  @draft ICU 4.0
+    */
+    virtual void setMatchCallback(URegexMatchCallback      callback,
+                                  const void              *context,
+                                  UErrorCode              &status);
+
+
+
+  /**
+    *  Get the callback function for this URegularExpression.
+    *
+    *    @param   callback    Out paramater, receives a pointer to the user-supplied 
+    *                         callback function.
+    *    @param   context     Out parameter, receives the user context pointer that
+    *                         was set when uregex_setMatchCallback() was called.
+    *    @param   status      A reference to a UErrorCode to receive any errors.
+    *    @draft ICU 4.0
+    */
+    virtual void getMatchCallback(URegexMatchCallback     &callback,
+                                  const void              *&context,
+                                  UErrorCode              &status);
 
 
    /**
@@ -1030,10 +1126,13 @@ public:
 private:
     // Constructors and other object boilerplate are private.
     // Instances of RegexMatcher can not be assigned, copied, cloned, etc.
-    RegexMatcher(); // default constructor not implemented
+    RegexMatcher();                  // default constructor not implemented
     RegexMatcher(const RegexPattern *pat);
     RegexMatcher(const RegexMatcher &other);
     RegexMatcher &operator =(const RegexMatcher &rhs);
+    void init(UErrorCode &status);                      // Common initialization
+    void init2(const UnicodeString &s, UErrorCode &e);  // Common initialization, part 2.
+
     friend class RegexPattern;
     friend class RegexCImpl;
 public:
@@ -1050,8 +1149,8 @@ private:
     UBool                isWordBoundary(int32_t pos);         // perform Perl-like  \b test
     UBool                isUWordBoundary(int32_t pos);        // perform RBBI based \b test
     REStackFrame        *resetStack();
-    inline REStackFrame *StateSave(REStackFrame *fp, int32_t savePatIdx,
-                                   int32_t frameSize, UErrorCode &status);
+    inline REStackFrame *StateSave(REStackFrame *fp, int32_t savePatIdx, UErrorCode &status);
+    void                 IncrementTime(UErrorCode &status);
 
 
     const RegexPattern  *fPattern;
@@ -1059,6 +1158,7 @@ private:
                                            //   should delete it when through.
 
     const UnicodeString *fInput;           // The text being matched. Is never NULL.
+    int32_t              fFrameSize;       // The size of a frame in the backtrack stack.
     
     int32_t              fRegionStart;     // Start of the input region, default = 0.
     int32_t              fRegionLimit;     // End of input region, default to input.length.
@@ -1101,9 +1201,25 @@ private:
     int32_t             *fData;            // Data area for use by the compiled pattern.
     int32_t             fSmallData[8];     //   Use this for data if it's enough.
 
+    int32_t             fTimeLimit;        // Max time (in arbitrary steps) to let the
+                                           //   match engine run.  Zero for unlimited.
+    
+    int32_t             fTime;             // Match time, accumulates while matching.
+    int32_t             fTickCounter;      // Low bits counter for time.  Counts down StateSaves.
+                                           //   Kept separately from fTime to keep as much
+                                           //   code as possible out of the inline
+                                           //   StateSave function.
+
+    int32_t             fStackLimit;       // Maximum memory size to use for the backtrack
+                                           //   stack, in bytes.  Zero for unlimited.
+
+    URegexMatchCallback fCallbackFn;       // Pointer to match progress callback funct.
+                                           //   NULL if there is no callback.
+    const void         *fCallbackContext;  // User Context ptr for callback function.
+
     UBool               fTraceDebug;       // Set true for debug tracing of match engine.
 
-    UErrorCode          fDeferredStatus;   // Save error state if that cannot be immediately
+    UErrorCode          fDeferredStatus;   // Save error state that cannot be immediately
                                            //   reported, or that permanently disables this matcher.
 
     RuleBasedBreakIterator  *fWordBreakItr;
