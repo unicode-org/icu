@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2007, International Business Machines
+*   Copyright (C) 1997-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -156,7 +156,10 @@ _uRegexErrorName[U_REGEX_ERROR_LIMIT - U_REGEX_ERROR_START] = {
     "U_REGEX_SET_CONTAINS_STRING",
     "U_REGEX_OCTAL_TOO_BIG",
     "U_REGEX_MISSING_CLOSE_BRACKET",
-    "U_REGEX_INVALID_RANGE"
+    "U_REGEX_INVALID_RANGE",
+    "U_REGEX_STACK_OVERFLOW",
+    "U_REGEX_TIME_OUT",
+    "U_REGEX_STOPPED_BY_CALLER"
 };
 
 static const char * const

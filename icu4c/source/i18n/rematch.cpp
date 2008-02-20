@@ -1,6 +1,6 @@
 /*
 **************************************************************************
-*   Copyright (C) 2002-2007 International Business Machines Corporation  *
+*   Copyright (C) 2002-2008 International Business Machines Corporation  *
 *   and others. All rights reserved.                                     *
 **************************************************************************
 */
@@ -30,87 +30,66 @@
 
 U_NAMESPACE_BEGIN
 
+// Default limit for the size of the back track stack, to avoid system
+//    failures causedby heap exhaustion.  Units are in 32 bit words, not bytes.
+// This value puts ICU's limits higher than most other regexp implementations,
+//    which use recursion rather than the heap, and take more storage per
+//    backtrack point.
+//
+static const int32_t DEFAULT_BACKTRACK_STACK_CAPACITY = 8000000;
+
+// Time limit counter constant.
+//   Time limits for expression evaluation are in terms of quanta of work by
+//   the engine, each of which is 10,000 state saves.
+//   This constant determines that state saves per tick number.
+static const int32_t TIMER_INITIAL_VALUE = 10000;
+
 //-----------------------------------------------------------------------------
 //
 //   Constructor and Destructor
 //
 //-----------------------------------------------------------------------------
 RegexMatcher::RegexMatcher(const RegexPattern *pat)  { 
-    fPattern           = pat;
-    fPatternOwned      = NULL;
-    fInput             = NULL;
-    fTraceDebug        = FALSE;
-    fDeferredStatus    = U_ZERO_ERROR;
-    fStack             = new UVector32(fDeferredStatus); 
-    fData              = fSmallData;
-    fWordBreakItr      = NULL;
-    fTransparentBounds = FALSE;
-    fAnchoringBounds   = TRUE;
+    fDeferredStatus = U_ZERO_ERROR;
+    init(fDeferredStatus);
+    if (U_FAILURE(fDeferredStatus)) {
+        return;
+    }
     if (pat==NULL) {
         fDeferredStatus = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-    if (pat->fDataSize > (int32_t)(sizeof(fSmallData)/sizeof(int32_t))) {
-        fData = (int32_t *)uprv_malloc(pat->fDataSize * sizeof(int32_t)); 
-    }
-    if (fStack == NULL || fData == NULL) {
-        fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
-    }
-
-    reset(RegexStaticSets::gStaticSets->fEmptyString);
+    fPattern = pat;
+    init2(RegexStaticSets::gStaticSets->fEmptyString, fDeferredStatus);
 }
 
 
 
 RegexMatcher::RegexMatcher(const UnicodeString &regexp, const UnicodeString &input,
                            uint32_t flags, UErrorCode &status) {
-    UParseError    pe;
-    fPatternOwned      = RegexPattern::compile(regexp, flags, pe, status);
-    fPattern           = fPatternOwned;
-    fTraceDebug        = FALSE;
-    fDeferredStatus    = U_ZERO_ERROR;
-    fStack             = new UVector32(status); 
-    fData              = fSmallData;
-    fWordBreakItr      = NULL;
-    fTransparentBounds = FALSE;
-    fAnchoringBounds   = TRUE;
+    init(status);
     if (U_FAILURE(status)) {
         return;
     }
-    if (fPattern->fDataSize > (int32_t)(sizeof(fSmallData)/sizeof(int32_t))) {
-        fData = (int32_t *)uprv_malloc(fPattern->fDataSize * sizeof(int32_t)); 
-    }
-    if (fStack == NULL || fData == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-    }
-    reset(input);
+    UParseError    pe;
+    fPatternOwned      = RegexPattern::compile(regexp, flags, pe, status);
+    fPattern           = fPatternOwned;
+    init2(input, status);
 }
 
 
 RegexMatcher::RegexMatcher(const UnicodeString &regexp, 
                            uint32_t flags, UErrorCode &status) {
-    UParseError    pe;
-    fTraceDebug        = FALSE;
-    fDeferredStatus    = U_ZERO_ERROR;
-    fStack             = new UVector32(status); 
-    fData              = fSmallData;
-    fPatternOwned      = RegexPattern::compile(regexp, flags, pe, status);
-    fPattern           = fPatternOwned;
-    fWordBreakItr      = NULL;
-    fTransparentBounds = FALSE;
-    fAnchoringBounds   = TRUE;
+    init(status);
     if (U_FAILURE(status)) {
         return;
     }
-
-    if (fPattern->fDataSize > (int32_t)(sizeof(fSmallData)/sizeof(int32_t))) {
-        fData = (int32_t *)uprv_malloc(fPattern->fDataSize * sizeof(int32_t)); 
-    }
-    if (fStack == NULL || fData == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-    }
-    reset(RegexStaticSets::gStaticSets->fEmptyString);
+    UParseError    pe;
+    fPatternOwned      = RegexPattern::compile(regexp, flags, pe, status);
+    fPattern           = fPatternOwned;
+    init2(RegexStaticSets::gStaticSets->fEmptyString, status);
 }
+
 
 
 
@@ -130,6 +109,79 @@ RegexMatcher::~RegexMatcher() {
     #endif
 }
 
+//
+//   init()   common initialization for use by all constructors.
+//            Initialize all fields, get the object into a consistent state.
+//            This must be done even when the initial status shows an error,
+//            so that the object is initialized sufficiently well for the destructor
+//            to run safely.
+//
+void RegexMatcher::init(UErrorCode &status) {
+    fPattern           = NULL;
+    fPatternOwned      = NULL;
+    fInput             = NULL;
+    fFrameSize         = 0;
+    fRegionStart       = 0;
+    fRegionLimit       = 0;
+    fAnchorStart       = 0;
+    fAnchorLimit       = 0;
+    fLookStart         = 0;
+    fLookLimit         = 0;
+    fActiveStart       = 0;
+    fActiveLimit       = 0;
+    fTransparentBounds = FALSE;
+    fAnchoringBounds   = TRUE;
+    fMatch             = FALSE;
+    fMatchStart        = 0;
+    fMatchEnd          = 0;
+    fLastMatchEnd      = -1;
+    fAppendPosition    = 0;
+    fHitEnd            = FALSE;
+    fRequireEnd        = FALSE;
+    fStack             = NULL;
+    fFrame             = NULL;
+    fTimeLimit         = 0;
+    fTime              = 0;
+    fTickCounter       = 0;
+    fStackLimit        = DEFAULT_BACKTRACK_STACK_CAPACITY;
+    fCallbackFn        = NULL;
+    fCallbackContext   = NULL;
+    fTraceDebug        = FALSE;
+    fDeferredStatus    = status;
+    fData              = fSmallData;
+    fWordBreakItr      = NULL;
+    
+    fStack             = new UVector32(status);
+    if (U_FAILURE(status)) {
+        fDeferredStatus = status;
+    }
+}
+
+//
+//  init2()   Common initialization for use by RegexMatcher constructors, part 2.
+//            This handles the common setup to be done after the Pattern is available.
+//
+void RegexMatcher::init2(const UnicodeString &input, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        fDeferredStatus = status;
+        return;
+    }
+
+    if (fPattern->fDataSize > (int32_t)(sizeof(fSmallData)/sizeof(int32_t))) {
+        fData = (int32_t *)uprv_malloc(fPattern->fDataSize * sizeof(int32_t)); 
+        if (fData == NULL) {
+            status = fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+    }
+
+    reset(input);
+    setStackLimit(DEFAULT_BACKTRACK_STACK_CAPACITY, status);
+    if (U_FAILURE(status)) {
+        fDeferredStatus = status;
+        return;
+    }
+}
 
 
 static const UChar BACKSLASH  = 0x5c;
@@ -856,6 +908,8 @@ void RegexMatcher::resetPreserveRegion() {
     fMatch          = FALSE;
     fHitEnd         = FALSE;
     fRequireEnd     = FALSE;
+    fTime           = 0;
+    fTickCounter    = TIMER_INITIAL_VALUE;
     resetStack();
 }
 
@@ -1067,6 +1121,118 @@ RegexMatcher &RegexMatcher::useTransparentBounds(UBool b) {
     return *this;
 }
 
+//--------------------------------------------------------------------------------
+//
+//     setTimeLimit
+//
+//--------------------------------------------------------------------------------
+void RegexMatcher::setTimeLimit(int32_t limit, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    if (U_FAILURE(fDeferredStatus)) {
+        status = fDeferredStatus;
+        return;
+    }
+    if (limit < 0) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    fTimeLimit = limit;
+}
+
+
+//--------------------------------------------------------------------------------
+//
+//     getTimeLimit
+//
+//--------------------------------------------------------------------------------
+int32_t RegexMatcher::getTimeLimit() const {
+    return fTimeLimit;
+}
+
+
+//--------------------------------------------------------------------------------
+//
+//     setStackLimit
+//
+//--------------------------------------------------------------------------------
+void RegexMatcher::setStackLimit(int32_t limit, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    if (U_FAILURE(fDeferredStatus)) {
+        status = fDeferredStatus;
+        return;
+    }
+    if (limit < 0) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    
+    // Reset the matcher.  This is needed here in case there is a current match
+    //    whose final stack frame (containing the match results, pointed to by fFrame) 
+    //    would be lost by resizing to a smaller stack size.
+    reset();
+    
+    if (limit == 0) {
+        // Unlimited stack expansion
+        fStack->setMaxCapacity(0);
+    } else {
+        // Change the units of the limit  from bytes to ints, and bump the size up
+        //   to be big enough to hold at least one stack frame for the pattern, 
+        //   if it isn't there already.
+        int32_t adjustedLimit = limit / sizeof(int32_t);
+        if (adjustedLimit < fPattern->fFrameSize) {
+            adjustedLimit = fPattern->fFrameSize;
+        }
+        fStack->setMaxCapacity(adjustedLimit);
+    }
+    fStackLimit = limit;
+}
+
+
+//--------------------------------------------------------------------------------
+//
+//     getStackLimit
+//
+//--------------------------------------------------------------------------------
+int32_t RegexMatcher::getStackLimit() const {
+    return fStackLimit;
+}
+
+
+//--------------------------------------------------------------------------------
+//
+//     setMatchCallback
+//
+//--------------------------------------------------------------------------------
+void RegexMatcher::setMatchCallback(URegexMatchCallback      callback,
+                                    const void              *context,
+                                    UErrorCode              &status) {
+     if (U_FAILURE(status)) {
+         return;
+     }
+     fCallbackFn = callback;
+     fCallbackContext = context;
+}
+
+
+//--------------------------------------------------------------------------------
+//
+//     getMatchCallback
+//
+//--------------------------------------------------------------------------------
+void RegexMatcher::getMatchCallback(URegexMatchCallback     &callback,
+                                  const void              *&context,
+                                  UErrorCode              &status) {
+    if (U_FAILURE(status)) {
+       return;
+    }
+    callback = fCallbackFn;
+    context  = fCallbackContext;
+}
+
 
 //================================================================================
 //
@@ -1189,6 +1355,31 @@ UBool RegexMatcher::isUWordBoundary(int32_t pos) {
 
 //--------------------------------------------------------------------------------
 //
+//   IncrementTime     This function is called once each TIMER_INITIAL_VALUE state
+//                     saves. Increment the "time" counter, and call the
+//                     user callback function if there is one installed.
+//
+//                     If the match operation needs to be aborted, either for a time-out
+//                     or because the user callback asked for it, just set an error status.
+//                     The engine will pick that up and stop in its outer loop.
+//
+//--------------------------------------------------------------------------------
+void RegexMatcher::IncrementTime(UErrorCode &status) {
+    fTickCounter = TIMER_INITIAL_VALUE;
+    fTime++;
+    if (fCallbackFn != NULL) {
+        if ((*fCallbackFn)(fCallbackContext, fTime) == FALSE) {
+            status = U_REGEX_STOPPED_BY_CALLER;
+            return;
+        }
+    }
+    if (fTimeLimit > 0 && fTime >= fTimeLimit) {
+        status = U_REGEX_TIME_OUT;
+    }
+}
+
+//--------------------------------------------------------------------------------
+//
 //   StateSave
 //       Make a new stack frame, initialized as a copy of the current stack frame.
 //       Set the pattern index in the original stack frame from the operand value
@@ -1196,13 +1387,33 @@ UBool RegexMatcher::isUWordBoundary(int32_t pos) {
 //       the newly created stack frame
 //
 //       Note that reserveBlock() may grow the stack, resulting in the
-//       whole thing being relocated in memory.  
+//       whole thing being relocated in memory.
+//
+//    Parameters:
+//       fp           The top frame pointer when called.  At return, a new 
+//                    fame will be present
+//       savePatIdx   An index into the compiled pattern.  Goes into the original
+//                    (not new) frame.  If execution ever back-tracks out of the
+//                    new frame, this will be where we continue from in the pattern.
+//    Return
+//                    The new frame pointer.
 //
 //--------------------------------------------------------------------------------
-inline REStackFrame *RegexMatcher::StateSave(REStackFrame *fp, int32_t savePatIdx, int32_t frameSize, UErrorCode &status) {
+inline REStackFrame *RegexMatcher::StateSave(REStackFrame *fp, int32_t savePatIdx, UErrorCode &status) {
     // push storage for a new frame. 
-    int32_t *newFP = fStack->reserveBlock(frameSize, status);
-    fp = (REStackFrame *)(newFP - frameSize);  // in case of realloc of stack.
+    int32_t *newFP = fStack->reserveBlock(fFrameSize, status);
+    if (newFP == NULL) {
+        // Failure on attempted stack expansion.
+        //   Stack function set some other error code, change it to a more
+        //   specific one for regular expressions.
+        status = U_REGEX_STACK_OVERFLOW;
+        // We need to return a writable stack frame, so just return the
+        //    previous frame.  The match operation will stop quickly
+        //    becuase of the error status, after which the frame will never
+        //    be looked at again.
+        return fp;
+    }
+    fp = (REStackFrame *)(newFP - fFrameSize);  // in case of realloc of stack.
     
     // New stack frame = copy of old top frame.
     int32_t *source = (int32_t *)fp;
@@ -1214,6 +1425,10 @@ inline REStackFrame *RegexMatcher::StateSave(REStackFrame *fp, int32_t savePatId
         }
     }
     
+    fTickCounter--;
+    if (fTickCounter <= 0) {
+       IncrementTime(status);    // Re-initializes fTickCounter
+    }
     fp->fPatIdx = savePatIdx;
     return (REStackFrame *)newFP;
 }
@@ -1262,7 +1477,6 @@ void RegexMatcher::MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status) {
     }
 
     //  Cache frequently referenced items from the compiled pattern
-    //  in local variables.
     //
     int32_t             *pat           = fPattern->fCompiledPat->getBuffer();
 
@@ -1271,8 +1485,8 @@ void RegexMatcher::MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status) {
 
     const UChar         *inputBuf      = fInput->getBuffer();
 
+    fFrameSize = fPattern->fFrameSize;
     REStackFrame        *fp            = resetStack();
-    int32_t              frameSize     = fPattern->fFrameSize;
 
     fp->fPatIdx   = 0;
     fp->fInputIdx = startIdx;
@@ -1316,7 +1530,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status) {
             // Force a backtrack.  In some circumstances, the pattern compiler
             //   will notice that the pattern can't possibly match anything, and will
             //   emit one of these at that point.
-            fp = (REStackFrame *)fStack->popFrame(frameSize);
+            fp = (REStackFrame *)fStack->popFrame(fFrameSize);
             break;
 
 
@@ -1330,7 +1544,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status) {
             } else {
                 fHitEnd = TRUE;
             }
-            fp = (REStackFrame *)fStack->popFrame(frameSize);
+            fp = (REStackFrame *)fStack->popFrame(fFrameSize);
             break;
 
 
@@ -1352,7 +1566,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status) {
                 if (fp->fInputIdx + stringLen > fActiveLimit) {
                     // No match.  String is longer than the remaining input text.
                     fHitEnd = TRUE;          //   TODO:  See ticket 6074
-                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                     break;
                 }
 
@@ -1370,7 +1584,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status) {
                         }
                     } else {
                         // Match failed.
-                        fp = (REStackFrame *)fStack->popFrame(frameSize);
+                        fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                         break;
                     }
                 }
@@ -1380,7 +1594,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status) {
 
 
         case URX_STATE_SAVE:
-            fp = StateSave(fp, opValue, frameSize, status);
+            fp = StateSave(fp, opValue, status);
             break;
 
 
@@ -1389,7 +1603,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status) {
             //   when we reach the end of the pattern.
             if (toEnd && fp->fInputIdx != fActiveLimit) {
                 // The pattern matched, but not to the end of input.  Try some more.
-                fp = (REStackFrame *)fStack->popFrame(frameSize);
+                fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                 break;
             }
             isMatch = TRUE;
@@ -1401,26 +1615,26 @@ void RegexMatcher::MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status) {
             //             opValue+2 - the start of a capture group whose end
             //                          has not yet been reached (and might not ever be).
         case URX_START_CAPTURE:
-            U_ASSERT(opValue >= 0 && opValue < frameSize-3);
+            U_ASSERT(opValue >= 0 && opValue < fFrameSize-3);
             fp->fExtra[opValue+2] = fp->fInputIdx;
             break;
 
 
         case URX_END_CAPTURE:
-            U_ASSERT(opValue >= 0 && opValue < frameSize-3);
+            U_ASSERT(opValue >= 0 && opValue < fFrameSize-3);
             U_ASSERT(fp->fExtra[opValue+2] >= 0);            // Start pos for this group must be set.
             fp->fExtra[opValue]   = fp->fExtra[opValue+2];   // Tentative start becomes real.
             fp->fExtra[opValue+1] = fp->fInputIdx;           // End position
             U_ASSERT(fp->fExtra[opValue] <= fp->fExtra[opValue+1]);
             break;
 
-            
+
         case URX_DOLLAR:                   //  $, test for End of line
                                            //     or for position before new line at end of input
             if (fp->fInputIdx < fAnchorLimit-2) {
                 // We are no where near the end of input.  Fail.
                 //   This is the common case.  Keep it first.
-                fp = (REStackFrame *)fStack->popFrame(frameSize);
+                fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                 break;
             }
             if (fp->fInputIdx >= fAnchorLimit) {
@@ -1451,7 +1665,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status) {
                     break;                         // At CR/LF at end of input.  Success
             }
 
-            fp = (REStackFrame *)fStack->popFrame(frameSize);
+            fp = (REStackFrame *)fStack->popFrame(fFrameSize);
 
             break;
 
@@ -1475,7 +1689,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status) {
             }
 
             // Not at end of input.  Back-track out.
-            fp = (REStackFrame *)fStack->popFrame(frameSize);
+            fp = (REStackFrame *)fStack->popFrame(fFrameSize);
             break;
 
 
@@ -1499,7 +1713,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status) {
                      }
                  }
                  // not at a new line.  Fail.
-                 fp = (REStackFrame *)fStack->popFrame(frameSize);
+                 fp = (REStackFrame *)fStack->popFrame(fFrameSize);
              }
              break;
 
@@ -1515,7 +1729,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status) {
                  // If we are not positioned just before a new-line, the test fails; backtrack out.
                  // It makes no difference where the new-line is within the input.
                  if (inputBuf[fp->fInputIdx] != 0x0a) {
-                     fp = (REStackFrame *)fStack->popFrame(frameSize);
+                     fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                  }
              }
              break;
@@ -1523,7 +1737,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status) {
 
        case URX_CARET:                    //  ^, test for start of line
             if (fp->fInputIdx != fAnchorStart) {
-                fp = (REStackFrame *)fStack->popFrame(frameSize);
+                fp = (REStackFrame *)fStack->popFrame(fFrameSize);
             }
             break;
 
@@ -1544,7 +1758,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status) {
                    break;
                }
                // Not at the start of a line.  Fail.
-               fp = (REStackFrame *)fStack->popFrame(frameSize);
+               fp = (REStackFrame *)fStack->popFrame(fFrameSize);
            }
            break;
 
@@ -1561,7 +1775,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status) {
                UChar  c = inputBuf[fp->fInputIdx - 1]; 
                if (c != 0x0a) {
                    // Not at the start of a line.  Back-track out.
-                   fp = (REStackFrame *)fStack->popFrame(frameSize);
+                   fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                }
            }
            break;
@@ -1571,7 +1785,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status) {
                 UBool success = isWordBoundary(fp->fInputIdx);
                 success ^= (opValue != 0);     // flip sense for \B
                 if (!success) {
-                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                 }
             }
             break;
@@ -1582,7 +1796,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status) {
                 UBool success = isUWordBoundary(fp->fInputIdx);
                 success ^= (opValue != 0);     // flip sense for \B
                 if (!success) {
-                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                 }
             }
             break;
@@ -1592,7 +1806,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status) {
             {
                 if (fp->fInputIdx >= fActiveLimit) {
                     fHitEnd = TRUE;
-                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                     break;
                 }
 
@@ -1603,7 +1817,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status) {
                 if (success) {
                     fp->fInputIdx = fInput->moveIndex32(fp->fInputIdx, 1);
                 } else {
-                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                 }
             }
             break;
@@ -1611,7 +1825,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status) {
 
         case URX_BACKSLASH_G:          // Test for position at end of previous match
             if (!((fMatch && fp->fInputIdx==fMatchEnd) || fMatch==FALSE && fp->fInputIdx==fActiveStart)) {
-                fp = (REStackFrame *)fStack->popFrame(frameSize);
+                fp = (REStackFrame *)fStack->popFrame(fFrameSize);
             }
             break;
 
@@ -1625,7 +1839,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UBool toEnd, UErrorCode &status) {
                 // Fail if at end of input
                 if (fp->fInputIdx >= fActiveLimit) {
                     fHitEnd = TRUE;
-                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                     break;
                 }
 
@@ -1703,7 +1917,7 @@ GC_Done:
 
         case URX_BACKSLASH_Z:          // Test for end of Input
             if (fp->fInputIdx < fAnchorLimit) {
-                fp = (REStackFrame *)fStack->popFrame(frameSize);
+                fp = (REStackFrame *)fStack->popFrame(fFrameSize);
             } else {
                 fHitEnd = TRUE;
                 fRequireEnd = TRUE;
@@ -1721,7 +1935,7 @@ GC_Done:
                 //    1:   success if input char is not in set.
                 if (fp->fInputIdx >= fActiveLimit) {
                     fHitEnd = TRUE;
-                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                     break;
                 }
 
@@ -1742,7 +1956,7 @@ GC_Done:
                     }
                 }
                 if (!success) {
-                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                 }
             }
             break;
@@ -1754,7 +1968,7 @@ GC_Done:
                 //    the predefined sets (Word Characters, for example)
                 if (fp->fInputIdx >= fActiveLimit) {
                     fHitEnd = TRUE;
-                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                     break;
                 }
 
@@ -1773,7 +1987,7 @@ GC_Done:
                     }
                 }
 
-                fp = (REStackFrame *)fStack->popFrame(frameSize);
+                fp = (REStackFrame *)fStack->popFrame(fFrameSize);
             }
             break;
             
@@ -1781,7 +1995,7 @@ GC_Done:
         case URX_SETREF:
             if (fp->fInputIdx >= fActiveLimit) {
                 fHitEnd = TRUE;
-                fp = (REStackFrame *)fStack->popFrame(frameSize);
+                fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                 break;
             }
             // There is input left.  Pick up one char and test it for set membership.
@@ -1801,7 +2015,7 @@ GC_Done:
                 }
             }
             // the character wasn't in the set. Back track out.
-            fp = (REStackFrame *)fStack->popFrame(frameSize);
+            fp = (REStackFrame *)fStack->popFrame(fFrameSize);
             break;
 
 
@@ -1811,7 +2025,7 @@ GC_Done:
                 if (fp->fInputIdx >= fActiveLimit) {
                     // At end of input.  Match failed.  Backtrack out.
                     fHitEnd = TRUE;
-                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                     break;
                 }
                 // There is input left.  Advance over one char, unless we've hit end-of-line
@@ -1820,7 +2034,7 @@ GC_Done:
                 if (((c & 0x7f) <= 0x29) &&     // First quickly bypass as many chars as possible
                     ((c<=0x0d && c>=0x0a) || c==0x85 ||c==0x2028 || c==0x2029)) {
                     // End of line in normal mode.   . does not match.
-                        fp = (REStackFrame *)fStack->popFrame(frameSize);
+                        fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                     break;
                 }
             }
@@ -1833,7 +2047,7 @@ GC_Done:
                 if (fp->fInputIdx >= fActiveLimit) {
                     // At end of input.  Match failed.  Backtrack out.
                     fHitEnd = TRUE;
-                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                     break;
                 }
                 // There is input left.  Advance over one char, except if we are
@@ -1858,7 +2072,7 @@ GC_Done:
                 if (fp->fInputIdx >= fActiveLimit) {
                     // At end of input.  Match failed.  Backtrack out.
                     fHitEnd = TRUE;
-                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                     break;
                 }
                 // There is input left.  Advance over one char, unless we've hit end-of-line
@@ -1866,7 +2080,7 @@ GC_Done:
                 U16_NEXT(inputBuf, fp->fInputIdx, fActiveLimit, c);
                 if (c == 0x0a) {
                     // End of line in normal mode.   '.' does not match the \n
-                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                 }
             }
             break;
@@ -1882,8 +2096,8 @@ GC_Done:
 
         case URX_JMP_SAV:
             U_ASSERT(opValue < fPattern->fCompiledPat->size());
-            fp = StateSave(fp, fp->fPatIdx, frameSize, status);  // State save to loc following current
-            fp->fPatIdx = opValue;                               // Then JMP.
+            fp = StateSave(fp, fp->fPatIdx, status);       // State save to loc following current
+            fp->fPatIdx = opValue;                         // Then JMP.
             break;
 
         case URX_JMP_SAV_X:
@@ -1896,12 +2110,12 @@ GC_Done:
                 int32_t  stoOp = pat[opValue-1];
                 U_ASSERT(URX_TYPE(stoOp) == URX_STO_INP_LOC);
                 int32_t  frameLoc = URX_VAL(stoOp);
-                U_ASSERT(frameLoc >= 0 && frameLoc < frameSize);
+                U_ASSERT(frameLoc >= 0 && frameLoc < fFrameSize);
                 int32_t prevInputIdx = fp->fExtra[frameLoc];
                 U_ASSERT(prevInputIdx <= fp->fInputIdx);
                 if (prevInputIdx < fp->fInputIdx) {
                     // The match did make progress.  Repeat the loop.
-                    fp = StateSave(fp, fp->fPatIdx, frameSize, status);  // State save to loc following current
+                    fp = StateSave(fp, fp->fPatIdx, status);  // State save to loc following current
                     fp->fPatIdx = opValue;
                     fp->fExtra[frameLoc] = fp->fInputIdx;
                 } 
@@ -1912,7 +2126,7 @@ GC_Done:
 
         case URX_CTR_INIT:
             {
-                U_ASSERT(opValue >= 0 && opValue < frameSize-2);
+                U_ASSERT(opValue >= 0 && opValue < fFrameSize-2);
                 fp->fExtra[opValue] = 0;       //  Set the loop counter variable to zero
 
                 // Pick up the three extra operands that CTR_INIT has, and
@@ -1927,10 +2141,10 @@ GC_Done:
                 U_ASSERT(loopLoc>fp->fPatIdx);
 
                 if (minCount == 0) {
-                    fp = StateSave(fp, loopLoc+1, frameSize, status);
+                    fp = StateSave(fp, loopLoc+1, status);
                 }
                 if (maxCount == 0) {
-                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                 }
             }
             break;
@@ -1953,7 +2167,7 @@ GC_Done:
                     break;
                 }
                 if (*pCounter >= minCount) {
-                    fp = StateSave(fp, fp->fPatIdx, frameSize, status);
+                    fp = StateSave(fp, fp->fPatIdx, status);
                 }
                 fp->fPatIdx = opValue + 4;    // Loop back.
             }
@@ -1962,7 +2176,7 @@ GC_Done:
         case URX_CTR_INIT_NG:
             {
                 // Initialize a non-greedy loop
-                U_ASSERT(opValue >= 0 && opValue < frameSize-2);
+                U_ASSERT(opValue >= 0 && opValue < fFrameSize-2);
                 fp->fExtra[opValue] = 0;       //  Set the loop counter variable to zero
 
                 // Pick up the three extra operands that CTR_INIT has, and
@@ -1978,7 +2192,7 @@ GC_Done:
 
                 if (minCount == 0) {
                     if (maxCount != 0) {
-                        fp = StateSave(fp, fp->fPatIdx, frameSize, status);
+                        fp = StateSave(fp, fp->fPatIdx, status);
                     }
                     fp->fPatIdx = loopLoc+1;   // Continue with stuff after repeated block
                 } 
@@ -2017,7 +2231,7 @@ GC_Done:
                     //   Fall into the following pattern, but first do
                     //   a state save to the top of the loop, so that a failure
                     //   in the following pattern will try another iteration of the loop.
-                    fp = StateSave(fp, opValue + 4, frameSize, status);
+                    fp = StateSave(fp, opValue + 4, status);
                 }
             }
             break;
@@ -2032,12 +2246,12 @@ GC_Done:
                 U_ASSERT(opValue >= 0 && opValue < fPattern->fDataSize);
                 int32_t newStackSize = fData[opValue];
                 U_ASSERT(newStackSize <= fStack->size());
-                int32_t *newFP = fStack->getBuffer() + newStackSize - frameSize;
+                int32_t *newFP = fStack->getBuffer() + newStackSize - fFrameSize;
                 if (newFP == (int32_t *)fp) {
                     break;
                 }
                 int32_t i;
-                for (i=0; i<frameSize; i++) {
+                for (i=0; i<fFrameSize; i++) {
                     newFP[i] = ((int32_t *)fp)[i];
                 }
                 fp = (REStackFrame *)newFP;
@@ -2048,14 +2262,14 @@ GC_Done:
         case URX_BACKREF:
         case URX_BACKREF_I:
             {
-                U_ASSERT(opValue < frameSize);
+                U_ASSERT(opValue < fFrameSize);
                 int32_t groupStartIdx = fp->fExtra[opValue];
                 int32_t groupEndIdx   = fp->fExtra[opValue+1];
                 U_ASSERT(groupStartIdx <= groupEndIdx);
                 int32_t len = groupEndIdx-groupStartIdx;
                 if (groupStartIdx < 0) {
                     // This capture group has not participated in the match thus far,
-                    fp = (REStackFrame *)fStack->popFrame(frameSize);   // FAIL, no match.
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);   // FAIL, no match.
                 }
 
                 if (len == 0) {
@@ -2085,14 +2299,14 @@ GC_Done:
                 if (haveMatch) {
                     fp->fInputIdx += len;     // Match.  Advance current input position.
                 } else {
-                    fp = (REStackFrame *)fStack->popFrame(frameSize);   // FAIL, no match.
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);   // FAIL, no match.
                 }
             }
             break;
 
         case URX_STO_INP_LOC:
             {
-                U_ASSERT(opValue >= 0 && opValue < frameSize);
+                U_ASSERT(opValue >= 0 && opValue < fFrameSize);
                 fp->fExtra[opValue] = fp->fInputIdx;
             }
             break;
@@ -2102,13 +2316,13 @@ GC_Done:
                 int32_t instrOperandLoc = fp->fPatIdx;
                 fp->fPatIdx += 1;
                 int32_t dataLoc  = URX_VAL(pat[instrOperandLoc]);
-                U_ASSERT(dataLoc >= 0 && dataLoc < frameSize);
+                U_ASSERT(dataLoc >= 0 && dataLoc < fFrameSize);
                 int32_t savedInputIdx = fp->fExtra[dataLoc];
                 U_ASSERT(savedInputIdx <= fp->fInputIdx);
                 if (savedInputIdx < fp->fInputIdx) {
                     fp->fPatIdx = opValue;                               // JMP
                 } else {
-                     fp = (REStackFrame *)fStack->popFrame(frameSize);   // FAIL, no progress in loop.
+                     fp = (REStackFrame *)fStack->popFrame(fFrameSize);   // FAIL, no progress in loop.
                 }
             }
             break;
@@ -2137,9 +2351,9 @@ GC_Done:
                     // Copy the current top frame back to the new (cut back) top frame.
                     //   This makes the capture groups from within the look-ahead
                     //   expression available.
-                    int32_t *newFP = fStack->getBuffer() + newStackSize - frameSize;
+                    int32_t *newFP = fStack->getBuffer() + newStackSize - fFrameSize;
                     int32_t i;
-                    for (i=0; i<frameSize; i++) {
+                    for (i=0; i<fFrameSize; i++) {
                         newFP[i] = ((int32_t *)fp)[i];
                     }
                     fp = (REStackFrame *)newFP;
@@ -2164,7 +2378,7 @@ GC_Done:
             } else {
                 fHitEnd = TRUE;
             }
-            fp = (REStackFrame *)fStack->popFrame(frameSize);
+            fp = (REStackFrame *)fStack->popFrame(fFrameSize);
             break;
 
         case URX_STRING_I:
@@ -2195,7 +2409,7 @@ GC_Done:
                     fHitEnd = TRUE;    // See ticket 6074
                 }
                 // No match.  Back up matching to a saved state
-                fp = (REStackFrame *)fStack->popFrame(frameSize);
+                fp = (REStackFrame *)fStack->popFrame(fFrameSize);
             }
             break;
 
@@ -2249,7 +2463,7 @@ GC_Done:
                     // We have tried all potential match starting points without
                     //  getting a match.  Backtrack out, and out of the
                     //   Look Behind altogether.
-                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                     int32_t restoreInputLen = fData[opValue+3];
                     U_ASSERT(restoreInputLen >= fActiveLimit);
                     U_ASSERT(restoreInputLen <= fInput->length());
@@ -2259,7 +2473,7 @@ GC_Done:
 
                 //    Save state to this URX_LB_CONT op, so failure to match will repeat the loop.
                 //      (successful match will fall off the end of the loop.)
-                fp = StateSave(fp, fp->fPatIdx-3, frameSize, status);
+                fp = StateSave(fp, fp->fPatIdx-3, status);
                 fp->fInputIdx =  *lbStartIdx;
             }
             break;
@@ -2274,7 +2488,7 @@ GC_Done:
                     //  FAIL out of here, which will take us back to the LB_CONT, which
                     //     will retry the match starting at another position or fail
                     //     the look-behind altogether, whichever is appropriate.
-                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                     break;
                 }
 
@@ -2333,7 +2547,7 @@ GC_Done:
 
                 //    Save state to this URX_LB_CONT op, so failure to match will repeat the loop.
                 //      (successful match will cause a FAIL out of the loop altogether.)
-                fp = StateSave(fp, fp->fPatIdx-4, frameSize, status);
+                fp = StateSave(fp, fp->fPatIdx-4, status);
                 fp->fInputIdx =  *lbStartIdx;
             }
             break;
@@ -2348,7 +2562,7 @@ GC_Done:
                     //  FAIL out of here, which will take us back to the LB_CONT, which
                     //     will retry the match starting at another position or succeed
                     //     the look-behind altogether, whichever is appropriate.
-                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                     break;
                 }
 
@@ -2372,7 +2586,7 @@ GC_Done:
                 
                 //  FAIL, which will take control back to someplace 
                 //  prior to entering the look-behind test.
-                fp = (REStackFrame *)fStack->popFrame(frameSize);
+                fp = (REStackFrame *)fStack->popFrame(fFrameSize);
             }
             break;
 
@@ -2423,14 +2637,14 @@ GC_Done:
                 int32_t loopcOp = pat[fp->fPatIdx];
                 U_ASSERT(URX_TYPE(loopcOp) == URX_LOOP_C);
                 int32_t stackLoc = URX_VAL(loopcOp);
-                U_ASSERT(stackLoc >= 0 && stackLoc < frameSize);
+                U_ASSERT(stackLoc >= 0 && stackLoc < fFrameSize);
                 fp->fExtra[stackLoc] = fp->fInputIdx;
                 fp->fInputIdx = ix;
 
                 // Save State to the URX_LOOP_C op that follows this one,
                 //   so that match failures in the following code will return to there.
                 //   Then bump the pattern idx so the LOOP_C is skipped on the way out of here.
-                fp = StateSave(fp, fp->fPatIdx, frameSize, status);
+                fp = StateSave(fp, fp->fPatIdx, status);
                 fp->fPatIdx++;
             }
             break;
@@ -2486,14 +2700,14 @@ GC_Done:
                 int32_t loopcOp = pat[fp->fPatIdx];
                 U_ASSERT(URX_TYPE(loopcOp) == URX_LOOP_C);
                 int32_t stackLoc = URX_VAL(loopcOp);
-                U_ASSERT(stackLoc >= 0 && stackLoc < frameSize);
+                U_ASSERT(stackLoc >= 0 && stackLoc < fFrameSize);
                 fp->fExtra[stackLoc] = fp->fInputIdx;
                 fp->fInputIdx = ix;
 
                 // Save State to the URX_LOOP_C op that follows this one,
                 //   so that match failures in the following code will return to there.
                 //   Then bump the pattern idx so the LOOP_C is skipped on the way out of here.
-                fp = StateSave(fp, fp->fPatIdx, frameSize, status);
+                fp = StateSave(fp, fp->fPatIdx, status);
                 fp->fPatIdx++;
             }
             break;
@@ -2501,7 +2715,7 @@ GC_Done:
 
         case URX_LOOP_C:
             {
-                U_ASSERT(opValue>=0 && opValue<frameSize);
+                U_ASSERT(opValue>=0 && opValue<fFrameSize);
                 int32_t   terminalIdx =  fp->fExtra[opValue];
                 U_ASSERT(terminalIdx <= fp->fInputIdx);
                 if (terminalIdx == fp->fInputIdx) {
@@ -2528,7 +2742,7 @@ GC_Done:
                 }
 
 
-                fp = StateSave(fp, fp->fPatIdx-1, frameSize, status);
+                fp = StateSave(fp, fp->fPatIdx-1, status);
             }
             break;
 
@@ -2541,6 +2755,7 @@ GC_Done:
         }
 
         if (U_FAILURE(status)) {
+            isMatch = FALSE;
             break;
         }
     }

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -61,6 +61,8 @@ private:
     int32_t   count;
 
     int32_t   capacity;
+    
+    int32_t   maxCapacity;   // Limit beyond which capacity is not permitted to grow.
 
     int32_t*  elements;
 
@@ -162,6 +164,14 @@ public:
     int32_t *getBuffer() const;
 
     /**
+     * Set the maximum allowed buffer capacity for this vector/stack.
+     * Default with no limit set is unlimited, go until malloc() fails.
+     * A Limit of zero means unlimited capacity.
+     * Units are vector elements (32 bits each), not bytes.
+     */
+    void setMaxCapacity(int32_t limit);
+
+    /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      */
     static UClassID U_EXPORT2 getStaticClassID();
@@ -221,7 +231,9 @@ inline void UVector32::addElement(int32_t elem, UErrorCode &status) {
 }
 
 inline int32_t *UVector32::reserveBlock(int32_t size, UErrorCode &status) {
-    ensureCapacity(count+size, status);
+    if (ensureCapacity(count+size, status) == FALSE) {
+        return NULL;
+    }
     int32_t  *rp = elements+count;
     count += size;
     return rp;
