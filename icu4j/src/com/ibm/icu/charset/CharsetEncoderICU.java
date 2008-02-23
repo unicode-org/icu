@@ -43,7 +43,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
     boolean useFallback;
     
     /* maximum number of indexed UChars */
-    protected static final int EXT_MAX_UCHARS = 19;
+    static final int EXT_MAX_UCHARS = 19;
     
     /* store previous UChars/chars to continue partial matches */
     int preFromUFirstCP; /* >=0: partial match */
