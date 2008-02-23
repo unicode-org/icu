@@ -4558,7 +4558,7 @@ inline uint8_t *packFrench(uint8_t *primaries, uint8_t *primEnd, uint8_t *second
     return primaries;
 }
 
-#define DEFAULT_ERROR_SIZE_FOR_CALCSORTKEY -1
+#define DEFAULT_ERROR_SIZE_FOR_CALCSORTKEY 0
 
 /* This is the sortkey work horse function */
 U_CFUNC int32_t U_CALLCONV
