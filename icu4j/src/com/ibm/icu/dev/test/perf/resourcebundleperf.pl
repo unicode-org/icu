@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #/**
 # *******************************************************************************
-# * Copyright (C) 2006-2007, International Business Machines Corporation and    *
+# * Copyright (C) 2006-2008, International Business Machines Corporation and    *
 # * others. All Rights Reserved.                                                *
 # *******************************************************************************
 # */
@@ -18,20 +18,20 @@ my $TESTCLASS = "com.ibm.icu.dev.test.perf.ResourceBundlePerf";
 mkdir "results_ICU4J";
 
 my $options = {
-	       "title"=>"ResourceBundle performance test",
-	       "headers"=>"Java ICU",
-	       "operationIs"=>"various",
-	       "timePerOperationIs"=>"Time per each fetch",
-	       "passes"=>"1",
-	       "time"=>"1",
-	       "outputType"=>"HTML",
-	       "dataDir"=>$TEST_DATA,
-	       "outputDir"=>"results_ICU4J"
-	      };
+         "title"=>"ResourceBundle performance test",
+         "headers"=>"Java ICU",
+         "operationIs"=>"various",
+         "timePerOperationIs"=>"Time per each fetch",
+         "passes"=>"1",
+         "time"=>"1",
+         "outputType"=>"HTML",
+         "dataDir"=>$TEST_DATA,
+         "outputDir"=>"results_ICU4J"
+        };
 
 # programs
 
-my $cmd = "java -classpath classes $TESTCLASS";
+my $cmd = 'java -Xmx16m -classpath "classes" '.$TESTCLASS;
 
 my $dataFiles = "";
 
