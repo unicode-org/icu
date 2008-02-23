@@ -690,7 +690,7 @@ ucol_normalizeShortDefinitionString(const char *source,
  * @param resultLength The maximum size of result.
  * @return The size needed to fully store the sort key.
  *      If there was an internal error generating the sort key,
- *      a negative value is returned.
+ *      a zero value is returned.
  * @see ucol_keyHashCode
  * @stable ICU 2.0
  */
