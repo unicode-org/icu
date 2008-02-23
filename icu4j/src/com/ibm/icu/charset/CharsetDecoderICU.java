@@ -115,7 +115,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * @stable ICU 3.6
      */
     protected final void implOnMalformedInput(CodingErrorAction newAction) {
-        // dont run infinitely
+        // don't run infinitely
         if (malformedInputCalled)
             return;
         
