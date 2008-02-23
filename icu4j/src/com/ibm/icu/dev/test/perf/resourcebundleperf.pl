@@ -31,7 +31,7 @@ my $options = {
 
 # programs
 
-my $cmd = 'java -Xmx16m -classpath "classes" '.$TESTCLASS;
+my $cmd = 'java -classpath "classes" '.$TESTCLASS;
 
 my $dataFiles = "";
 
