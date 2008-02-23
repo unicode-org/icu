@@ -1,7 +1,7 @@
 //##header J2SE15
 /**
  *******************************************************************************
- * Copyright (C) 2004-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -17,11 +17,11 @@ import com.ibm.icu.util.UResourceTypeMismatchException;
 
 //#if defined(FOUNDATION10) || defined(J2SE13) || defined(ECLIPSE_FRAGMENT)
 //#else
-import java.nio.ByteBuffer; 
-//#endif 
+import java.nio.ByteBuffer;
+//#endif
 
 class ICUResourceBundleImpl {
-    
+
     static final class ResourceArray extends ICUResourceBundle {
         protected String[] handleGetStringArray() {
             String[] strings = new String[size];
@@ -48,6 +48,12 @@ class ICUResourceBundleImpl {
         }
 
         protected UResourceBundle handleGet(int index, HashMap table, UResourceBundle requested) {
+            Integer lookupKey = Integer.valueOf(index);
+            UResourceBundle res = null;//(UResourceBundle)lookup.get(lookupKey);
+            if (res != null) {
+                return res;
+            }
+
             if (index > size) {
                 throw new IndexOutOfBoundsException();
             }
@@ -55,7 +61,10 @@ class ICUResourceBundleImpl {
             int itemOffset = offset + getIntOffset(index + 1);
             long itemResource = (UNSIGNED_INT_MASK) & ICUResourceBundle.getInt(rawData,itemOffset);
             String path = (isTopLevel == true) ? Integer.toString(index) : resPath + "/" + index;
-            return createBundleObject(null, itemResource, path, table, requested, this);
+
+            res = createBundleObject(null, itemResource, path, table, requested, this);
+            lookup.put(lookupKey, res);
+            return res;
         }
         private int countItems() {
             int offset = RES_GET_OFFSET(resource);
@@ -74,7 +83,7 @@ class ICUResourceBundleImpl {
         private byte[] value;
         public ByteBuffer getBinary() {
             return ByteBuffer.wrap(value);
-        }      
+        }
         public byte [] getBinary(byte []ba) {
             return value;
         }
@@ -83,7 +92,7 @@ class ICUResourceBundleImpl {
             int length = ICUResourceBundle.getInt(rawData,offset);
             int byteOffset = offset + getIntOffset(1);
             byte[] dst = new byte[length];
-            if (ASSERT) Assert.assrt("byteOffset+length < rawData.length", byteOffset+length < rawData.length);
+            //if (ASSERT) Assert.assrt("byteOffset+length < rawData.length", byteOffset+length < rawData.length);
             System.arraycopy(rawData, byteOffset, dst, 0, length);
             return dst;
         }
@@ -93,7 +102,7 @@ class ICUResourceBundleImpl {
             this.key = key;
             this.resPath = resPath;
             value = getValue();
-            
+
         }
     }
     static final class ResourceInt extends ICUResourceBundle {
@@ -108,10 +117,10 @@ class ICUResourceBundleImpl {
             assign(this, bundle);
             this.key = key;
             this.resource = resource;
-            this.resPath = resPath;   
+            this.resPath = resPath;
         }
     }
-    
+
     static final class ResourceString extends ICUResourceBundle {
         private String value;
         public String getString() {
@@ -125,7 +134,7 @@ class ICUResourceBundleImpl {
             this.resPath = resPath;
         }
     }
-    
+
     static final class ResourceIntVector extends ICUResourceBundle {
         private int[] value;
         public int[] getIntVector() {
@@ -136,10 +145,10 @@ class ICUResourceBundleImpl {
             int length = ICUResourceBundle.getInt(rawData,offset);
             int intOffset = offset + getIntOffset(1);
             int[] val = new int[length];
-            int byteLength = getIntOffset(length);
-            
-            if (ASSERT) Assert.assrt("(intOffset+byteLength)<rawData.length", (intOffset+byteLength)<rawData.length);
-            
+            //int byteLength = getIntOffset(length);
+
+            //if (ASSERT) Assert.assrt("(intOffset+byteLength)<rawData.length", (intOffset+byteLength)<rawData.length);
+
             for(int i=0; i<length;i++){
                 val[i]=ICUResourceBundle.getInt(rawData, intOffset+getIntOffset(i));
             }
@@ -154,16 +163,21 @@ class ICUResourceBundleImpl {
             value = getValue();
         }
     }
-    
+
     static final class ResourceTable extends ICUResourceBundle {
 
         protected UResourceBundle handleGet(String key, HashMap table, UResourceBundle requested) {
+            UResourceBundle res = null;//(UResourceBundle)lookup.get(key);
+            if (res != null) {
+                return res;
+            }
+
             if(size<=0){
                 return null;
             }
             int offset = RES_GET_OFFSET(resource);
             // offset+0 contains number of entries
-            // offset+1 contains the keyOffset  
+            // offset+1 contains the keyOffset
             int currentOffset = (offset) + getCharOffset(1);
             //int keyOffset = rawData.getChar(currentOffset);
             /* do a binary search for the key */
@@ -178,30 +192,39 @@ class ICUResourceBundleImpl {
                     + getIntOffset(foundOffset);
             long resource = (UNSIGNED_INT_MASK) & ICUResourceBundle.getInt(rawData, currentOffset);
             String path = (isTopLevel == true) ? key : resPath + "/" + key;
-            return createBundleObject(key, resource, path, table, requested, this);
+
+            res = createBundleObject(key, resource, path, table, requested, this);
+            lookup.put(key, res);
+            return res;
         }
 
-        public String getKey(int currentOffset, int index) {
-            int charOffset = currentOffset + getCharOffset(index);
-            int keyOffset = getChar(rawData,charOffset);
-            return RES_GET_KEY(rawData, keyOffset).toString();
+        public int getOffset(int currentOffset, int index) {
+            return getChar(rawData, currentOffset + getCharOffset(index));
         }
         protected UResourceBundle handleGet(int index, HashMap table, UResourceBundle requested) {
+            Integer lookupKey = Integer.valueOf(index);
+            UResourceBundle res = null;//(UResourceBundle)lookup.get(lookupKey);
+            if (res != null) {
+                return res;
+            }
+
             if (index > size) {
                 throw new IndexOutOfBoundsException();
             }
             int offset = RES_GET_OFFSET(resource);
             // offset+0 contains number of entries
-            // offset+1 contains the keyOffset  
+            // offset+1 contains the keyOffset
             int currentOffset = (offset) + getCharOffset(1);
-            String itemKey = getKey(currentOffset, index);
+            int betterOffset = getOffset(currentOffset, index);
+            String itemKey = RES_GET_KEY(rawData, betterOffset).toString();
             currentOffset += getCharOffset(size + (~size & 1))
                     + getIntOffset(index);
             long resource = (UNSIGNED_INT_MASK) & ICUResourceBundle.getInt(rawData,currentOffset);
-            String path = (isTopLevel == true)
-                    ? Integer.toString(index)
-                    : resPath + "/" + index;
-            return createBundleObject(itemKey, resource, path, table, requested, this);
+            String path = (isTopLevel == true) ? Integer.toString(index) : resPath + "/" + index;
+
+            res = createBundleObject(itemKey, resource, path, table, requested, this);
+            lookup.put(lookupKey, res);
+            return res;
         }
         private int countItems() {
             int offset = RES_GET_OFFSET(resource);
@@ -222,7 +245,7 @@ class ICUResourceBundleImpl {
             this.loader = loader;
             initialize(null, "", rootResource, null, isTopLevel);
         }
-        void initialize(String key, String resPath, long resource, 
+        void initialize(String key, String resPath, long resource,
                 ICUResourceBundle bundle, boolean isTopLevel){
             if(bundle!=null){
                 assign(this, bundle);
@@ -233,7 +256,7 @@ class ICUResourceBundleImpl {
             this.size = countItems();
             this.resPath = resPath;
         }
-        ResourceTable(String key, String resPath, long resource, 
+        ResourceTable(String key, String resPath, long resource,
                 ICUResourceBundle bundle, boolean isTopLevel) {
             initialize(key, resPath, resource, bundle, isTopLevel);
         }
@@ -241,9 +264,14 @@ class ICUResourceBundleImpl {
     static final class ResourceTable32 extends ICUResourceBundle{
 
         protected UResourceBundle handleGet(String key, HashMap table, UResourceBundle requested) {
+            UResourceBundle res = null;//(UResourceBundle)lookup.get(key);
+            if (res != null) {
+                return res;
+            }
+
             int offset = RES_GET_OFFSET(resource);
             // offset+0 contains number of entries
-            // offset+1 contains the keyOffset  
+            // offset+1 contains the keyOffset
             int currentOffset = (offset) + getIntOffset(1);
             //int keyOffset = rawData.getChar(currentOffset);
             /* do a binary search for the key */
@@ -257,15 +285,22 @@ class ICUResourceBundleImpl {
             currentOffset += getIntOffset(size) + getIntOffset(foundOffset);
             long resource = (UNSIGNED_INT_MASK) & ICUResourceBundle.getInt(rawData,currentOffset);
             String path = (isTopLevel == true) ? key : resPath + "/" + key;
-            return createBundleObject(key, resource, path, table, requested, this);
+
+            res = createBundleObject(key, resource, path, table, requested, this);
+            lookup.put(key, res);
+            return res;
         }
 
-        public String getKey(int currentOffset, int index) {
-            int charOffset = currentOffset + getIntOffset(index);
-            int keyOffset = ICUResourceBundle.getInt(rawData,charOffset);
-            return RES_GET_KEY(rawData, keyOffset).toString();
+        public int getOffset(int currentOffset, int index) {
+            return ICUResourceBundle.getInt(rawData, currentOffset + getIntOffset(index));
         }
         protected UResourceBundle handleGet(int index, HashMap table, UResourceBundle requested) {
+            Integer lookupKey = Integer.valueOf(index);
+            UResourceBundle res = null;//(UResourceBundle)lookup.get(lookupKey);
+            if (res != null) {
+                return res;
+            }
+
             if(size<=0){
                 return null;
             }
@@ -274,16 +309,18 @@ class ICUResourceBundleImpl {
             }
             int offset = RES_GET_OFFSET(resource);
             // offset+0 contains number of entries
-            // offset+1 contains the keyOffset  
+            // offset+1 contains the keyOffset
             int currentOffset = (offset) + getIntOffset(1)
                     + getIntOffset(index);
-            String itemKey = getKey(currentOffset, 0);
+            int betterOffset = getOffset(currentOffset, 0);
+            String itemKey = RES_GET_KEY(rawData, betterOffset).toString();
             currentOffset += getIntOffset(size);
             long resource = (UNSIGNED_INT_MASK) & ICUResourceBundle.getInt(rawData,currentOffset);
-            String path = (isTopLevel == true)
-                    ? Integer.toString(index)
-                    : resPath + "/" + index;
-            return createBundleObject(itemKey, resource, path, table, requested, this);
+            String path = (isTopLevel == true) ? Integer.toString(index) : resPath + "/" + index;
+
+            res = createBundleObject(itemKey, resource, path, table, requested, this);
+            lookup.put(lookupKey, res);
+            return res;
         }
         private int countItems() {
             int offset = RES_GET_OFFSET(resource);
@@ -304,7 +341,7 @@ class ICUResourceBundleImpl {
             this.loader = loader;
             initialize(null, "", rootResource, null, isTopLevel);
         }
-        void initialize(String key, String resPath, long resource, 
+        void initialize(String key, String resPath, long resource,
                 ICUResourceBundle bundle, boolean isTopLevel){
             if(bundle!=null){
                 assign(this, bundle);
@@ -314,9 +351,9 @@ class ICUResourceBundleImpl {
             this.isTopLevel = isTopLevel;
             this.size = countItems();
             this.resPath = resPath;
-            
+
         }
-        ResourceTable32(String key, String resPath, long resource, 
+        ResourceTable32(String key, String resPath, long resource,
                 ICUResourceBundle bundle, boolean isTopLevel) {
             initialize(key, resPath, resource, bundle, isTopLevel);
         }

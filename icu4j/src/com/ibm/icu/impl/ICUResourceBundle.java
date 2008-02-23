@@ -1,6 +1,6 @@
 /*
  * *****************************************************************************
- * Copyright (C) 2005-2007, International Business Machines Corporation and * others.
+ * Copyright (C) 2005-2008, International Business Machines Corporation and * others.
  * All Rights Reserved. *
  * *****************************************************************************
  */
@@ -8,9 +8,9 @@
 package com.ibm.icu.impl;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.net.URL;
 import java.util.ArrayList;
@@ -55,19 +55,19 @@ public  class ICUResourceBundle extends UResourceBundle {
      * @draft ICU 3.0
      */
     public static final String ICU_COLLATION_BASE_NAME = ICU_BASE_NAME + "/coll";
-    
+
     /**
      * The base name of rbbi data to be used with getData API
      * @draft ICU 3.6
      */
     public static final String ICU_BRKITR_NAME = "/brkitr";
-    
+
     /**
      * The base name of rbbi data to be used with getBundleInstance API
      * @draft ICU 3.6
      */
     public static final String ICU_BRKITR_BASE_NAME = ICU_BASE_NAME + ICU_BRKITR_NAME;
-    
+
     /**
      * The base name of rbnf data to be used with getBundleInstance API
      * @draft ICU 3.0
@@ -79,14 +79,14 @@ public  class ICUResourceBundle extends UResourceBundle {
      * @draft ICU 3.0
      */
     public static final String ICU_TRANSLIT_BASE_NAME = ICU_BASE_NAME + "/translit";
-    
+
     /**
      * The actual path of the resource
      */
     protected String resPath;
-    
+
     protected static final long UNSIGNED_INT_MASK = 0xffffffffL;
-    
+
     /**
      * The class loader constant to be used with getBundleInstance API
      * @draft ICU 3.0
@@ -106,16 +106,21 @@ public  class ICUResourceBundle extends UResourceBundle {
      */
     protected static final String INSTALLED_LOCALES = "InstalledLocales";
 
-     public static final int FROM_FALLBACK = 1, FROM_ROOT = 2, FROM_DEFAULT = 3, FROM_LOCALE = 4;
+    public static final int FROM_FALLBACK = 1, FROM_ROOT = 2, FROM_DEFAULT = 3, FROM_LOCALE = 4;
 
     private int loadingStatus = -1;
+
+    /**
+     * Hash map for storing previously found UResourceBundles
+     */
+    protected Map lookup = new HashMap();
 
     public void setLoadingStatus(int newStatus) {
         loadingStatus = newStatus;
     }
     /**
-     * Returns the loading status of a particular resource. 
-     * 
+     * Returns the loading status of a particular resource.
+     *
      * @return FROM_FALLBACK if the resource is fetched from fallback bundle
      *         FROM_ROOT if the resource is fetched from root bundle.
      *         FROM_DEFAULT if the resource is fetched from the default locale.
@@ -124,21 +129,18 @@ public  class ICUResourceBundle extends UResourceBundle {
         return loadingStatus;
     }
 
-    public static void setLoadingStatus(UResourceBundle b, String requestedLocale){
-        ICUResourceBundle bundle = (ICUResourceBundle) b;
-        String locale = bundle.getLocaleID(); 
-        if(locale.equals("root")){
-            bundle.setLoadingStatus(FROM_ROOT);
-            return;
+    public void setLoadingStatus(String requestedLocale){
+        String locale = getLocaleID();
+        if(locale.equals("root")) {
+            setLoadingStatus(FROM_ROOT);
+        } else if(locale.equals(requestedLocale)) {
+            setLoadingStatus(FROM_LOCALE);
+        } else {
+            setLoadingStatus(FROM_FALLBACK);
         }
-        if(locale.equals(requestedLocale)){
-            bundle.setLoadingStatus(FROM_LOCALE);
-        }else{
-            bundle.setLoadingStatus(FROM_FALLBACK);
-        }
-     } 
-   
-    
+     }
+
+
     /**
      * Returns the respath of this bundle
      * @return
@@ -219,7 +221,7 @@ public  class ICUResourceBundle extends UResourceBundle {
             try {
                 ICUResourceBundle irb = (ICUResourceBundle)r.get(resName);
                 /* UResourceBundle urb = */irb.get(kwVal);
-                fullBase = irb.getULocale(); 
+                fullBase = irb.getULocale();
                 // If the get() completed, we have the full base locale
                 // If we fell back to an ancestor of the old 'default',
                 // we need to re calculate the "default" keyword.
@@ -250,10 +252,10 @@ public  class ICUResourceBundle extends UResourceBundle {
                 try {
                     ICUResourceBundle irb = (ICUResourceBundle)r.get(resName);
                     UResourceBundle urb = irb.get(kwVal);
-                    
+
                     // if we didn't fail before this..
                     fullBase = r.getULocale();
-                    
+
                     // If the fetched item (urb) is in a different locale than our outer locale (r/fullBase)
                     // then we are in a 'fallback' situation. treat as a missing resource situation.
                     if(!fullBase.toString().equals(urb.getLocale().toString())) {
@@ -337,7 +339,7 @@ public  class ICUResourceBundle extends UResourceBundle {
      *      result = ((ICUResourceBundle) bundle).getWithFallback("collations/default");
      *  }
      * </code>
-     * 
+     *
      * @param path
      *            The path to the required resource key
      * @return resource represented by the key
@@ -368,7 +370,7 @@ public  class ICUResourceBundle extends UResourceBundle {
     /**
      * Return a set of the locale names supported by a collection of resource
      * bundles.
-     * 
+     *
      * @param bundlePrefix the prefix of the resource bundles to use.
      */
     public static Set getAvailableLocaleNameSet(String bundlePrefix) {
@@ -386,7 +388,7 @@ public  class ICUResourceBundle extends UResourceBundle {
     /**
      * Return a set of all the locale names supported by a collection of
      * resource bundles.
-     * 
+     *
      * @param bundlePrefix the prefix of the resource bundles to use.
      */
     public static Set getFullLocaleNameSet(String bundlePrefix) {
@@ -456,12 +458,12 @@ public  class ICUResourceBundle extends UResourceBundle {
         }
         return (Locale[]) list.toArray(new Locale[list.size()]);
     }
- 
+
     /**
      * Returns the locale of this resource bundle. This method can be used after
      * a call to getBundle() to determine whether the resource bundle returned
      * really corresponds to the requested locale or is a fallback.
-     * 
+     *
      * @return the locale of this resource bundle
      */
     public Locale getLocale() {
@@ -487,7 +489,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         // to update this list,
         // and it's embedded in our binary resources.
         ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.instantiateBundle(baseName, ICU_RESOURCE_INDEX, root, true);
-        
+
         bundle = (ICUResourceBundle)bundle.get(INSTALLED_LOCALES);
         int length = bundle.getSize();
         int i = 0;
@@ -699,7 +701,7 @@ public  class ICUResourceBundle extends UResourceBundle {
 
         }
         if(sub != null){
-            setLoadingStatus(sub, ((ICUResourceBundle)requested).getLocaleID());
+            sub.setLoadingStatus(((ICUResourceBundle)requested).getLocaleID());
         }
         return sub;
     }
@@ -714,7 +716,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         return false;
     }
     // This method is for super class's instantiateBundle method
-    public static UResourceBundle getBundleInstance(String baseName, String localeID, 
+    public static UResourceBundle getBundleInstance(String baseName, String localeID,
                                                     ClassLoader root, boolean disableFallback){
         UResourceBundle b = instantiateBundle(baseName, localeID, root, disableFallback);
         if(b==null){
@@ -723,7 +725,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         return b;
     }
     //  recursively build bundle .. over-ride super class method.
-    protected synchronized static UResourceBundle instantiateBundle(String baseName, String localeID, 
+    protected synchronized static UResourceBundle instantiateBundle(String baseName, String localeID,
                                                                     ClassLoader root, boolean disableFallback){
         ULocale defaultLocale = ULocale.getDefault();
         String localeName = localeID;
@@ -732,24 +734,24 @@ public  class ICUResourceBundle extends UResourceBundle {
         }
         String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);
         ICUResourceBundle b = (ICUResourceBundle)loadFromCache(root, fullName, defaultLocale);
-        
+
         // here we assume that java type resource bundle organization
-        // is required then the base name contains '.' else 
+        // is required then the base name contains '.' else
         // the resource organization is of ICU type
         // so clients can instantiate resources of the type
-        // com.mycompany.data.MyLocaleElements_en.res and 
+        // com.mycompany.data.MyLocaleElements_en.res and
         // com.mycompany.data.MyLocaleElements.res
         //
         final String rootLocale = (baseName.indexOf('.')==-1) ? "root" : "";
         final String defaultID = ULocale.getDefault().toString();
-        
+
         if(localeName.equals("")){
-            localeName = rootLocale;   
+            localeName = rootLocale;
         }
         if(DEBUG) System.out.println("Creating "+fullName+ " currently b is "+b);
         if (b == null) {
             b = ICUResourceBundle.createBundle(baseName, localeName, root);
-            
+
             if(DEBUG)System.out.println("The bundle created is: "+b+" and disableFallback="+disableFallback+" and bundle.getNoFallback="+(b!=null && b.getNoFallback()));
             if(disableFallback || (b!=null && b.getNoFallback())){
                 addToCache(root, fullName, defaultLocale, b);
@@ -773,7 +775,7 @@ public  class ICUResourceBundle extends UResourceBundle {
                             b.setLoadingStatus(ICUResourceBundle.FROM_DEFAULT);
                         }
                     }else if(rootLocale.length()!=0){
-                        b = ICUResourceBundle.createBundle(baseName, rootLocale, root); 
+                        b = ICUResourceBundle.createBundle(baseName, rootLocale, root);
                         if(b!=null){
                             b.setLoadingStatus(ICUResourceBundle.FROM_ROOT);
                         }
@@ -783,19 +785,19 @@ public  class ICUResourceBundle extends UResourceBundle {
                 UResourceBundle parent = null;
                 localeName = b.getLocaleID();
                 int i = localeName.lastIndexOf('_');
-                
+
                 addToCache(root, fullName, defaultLocale, b);
-                
+
                 if (i != -1) {
                     parent = instantiateBundle(baseName, localeName.substring(0, i), root, disableFallback);
                 }else if(!localeName.equals(rootLocale)){
-                    parent = instantiateBundle(baseName, rootLocale, root, true);   
+                    parent = instantiateBundle(baseName, rootLocale, root, true);
                 }
-                
+
                 if(!b.equals(parent)){
                     b.setParent(parent);
                 }
-            }      
+            }
         }
         return b;
     }
@@ -815,7 +817,7 @@ public  class ICUResourceBundle extends UResourceBundle {
                                 + key, this.getClass().getName(), key);
             }
         }
-        ICUResourceBundle.setLoadingStatus(obj, ((ICUResourceBundle)requested).getLocaleID());
+        ((ICUResourceBundle)obj).setLoadingStatus(((ICUResourceBundle)requested).getLocaleID());
         return obj;
     }
     //protected byte[] version;
@@ -828,10 +830,10 @@ public  class ICUResourceBundle extends UResourceBundle {
     protected ULocale ulocale;
     protected ClassLoader loader;
 
-    protected static final boolean ASSERT = false;
-    
+    //protected static final boolean ASSERT = false;
+
     /**
-     * 
+     *
      * @param baseName
      * @param localeID
      * @param root
@@ -877,16 +879,16 @@ public  class ICUResourceBundle extends UResourceBundle {
     }
 
     private static ICUResourceBundle getBundle(ICUResourceBundleReader reader, String baseName, String localeID, ClassLoader loader) {
-     
+
         long rootResource = (UNSIGNED_INT_MASK) & reader.getRootResource();
-     
+
         int type = RES_GET_TYPE(rootResource);
         if (type == TABLE) {
             ICUResourceBundleImpl.ResourceTable table = new ICUResourceBundleImpl.ResourceTable(reader, baseName, localeID, loader);
             if(table.getSize()>=1){ // ticket#5683 ICU4J 3.6 data for zh_xx contains an entry other than %%ALIAS
                 UResourceBundle b = table.handleGet(0, null, table);
                 String itemKey = b.getKey();
-                
+
                 // %%ALIAS is such a hack!
                 if (itemKey.equals("%%ALIAS")) {
                     String locale = b.getString();
@@ -908,16 +910,16 @@ public  class ICUResourceBundle extends UResourceBundle {
     }
     // private constructor for inner classes
     protected ICUResourceBundle(){}
-    
+
     public static final int RES_GET_TYPE(long res) {
         return (int) ((res) >> 28L);
     }
     protected static final int RES_GET_OFFSET(long res) {
-        return (int) ((res & 0x0fffffff) * 4);
+        return (int) ((res & 0x0fffffff) << 2); // * 4
     }
     /* get signed and unsigned integer values directly from the Resource handle */
     protected static final int RES_GET_INT(long res) {
-        return (((int) ((res) << 4L)) >> 4L);
+        return (((int) ((res) << 4)) >> 4);
     }
     static final long RES_GET_UINT(long res) {
         long t = ((res) & 0x0fffffffL);
@@ -925,7 +927,7 @@ public  class ICUResourceBundle extends UResourceBundle {
     }
     static final StringBuffer RES_GET_KEY(byte[] rawData,
             int keyOffset) {
-        char ch = 0xFFFF; //sentinel
+        char ch;
         StringBuffer key = new StringBuffer();
         while ((ch = (char) rawData[keyOffset]) != 0) {
             key.append(ch);
@@ -934,13 +936,13 @@ public  class ICUResourceBundle extends UResourceBundle {
         return key;
     }
     protected static final int getIntOffset(int offset) {
-        return (offset * 4);
+        return (offset << 2); // * 4
     }
     static final int getCharOffset(int offset) {
-        return (offset * 2);
+        return (offset << 1); // * 2
     }
     protected final ICUResourceBundle createBundleObject(String key,
-            long resource, String resPath, HashMap table, 
+            long resource, String resPath, HashMap table,
             UResourceBundle requested, ICUResourceBundle bundle) {
         //if (resource != RES_BOGUS) {
         switch (RES_GET_TYPE(resource)) {
@@ -974,7 +976,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         //}
         //return null;
     }
-    
+
     static final void assign(ICUResourceBundle b1, ICUResourceBundle b2){
         b1.rawData = b2.rawData;
         b1.rootResource = b2.rootResource;
@@ -985,55 +987,77 @@ public  class ICUResourceBundle extends UResourceBundle {
         b1.loader = b2.loader;
         b1.parent = b2.parent;
     }
-    
+
     int findKey(int size, int currentOffset, ICUResourceBundle res, String target) {
-        int mid = 0, start = 0, limit = size, rc;
+        int mid = 0, start = 0, limit = size;
         int lastMid = -1;
+
+        int targetLength = target.length();
+        char targetChar;
+        char actualChar;
+        int offset;
+
         //int myCharOffset = 0, keyOffset = 0;
-        for (;;) {
-            mid = ((start + limit) / 2);
+        outer: for (;;) {
+            mid = ((start + limit) >> 1); // compute average
             if (lastMid == mid) { /* Have we moved? */
                 break; /* We haven't moved, and it wasn't found. */
             }
             lastMid = mid;
-            String comp = res.getKey(currentOffset, mid);
-            rc = target.compareTo(comp);
-            if (rc < 0) {
-                limit = mid;
-            } else if (rc > 0) {
-                start = mid;
-            } else {
-                return mid;
+
+            offset = res.getOffset(currentOffset, mid);
+
+            // compare a segment of rawData with targetArray
+            for (int i=0; i<targetLength; i++) {
+                targetChar = target.charAt(i);
+                actualChar = (char)rawData[offset];
+                if (actualChar == 0 || targetChar > actualChar ) {
+                    // target > data
+                    start = mid;
+                    continue outer;
+                }
+                if (targetChar < actualChar) {
+                    // target < data
+                    limit = mid;
+                    continue outer;
+                }
+                // target == data so far...
+                offset++;
             }
+            actualChar = (char)rawData[offset];
+            if (actualChar != 0) {
+                // target < data
+                limit = mid;
+                continue outer;
+            }
+            // target == data, we're sure now
+            return mid;
         }
         return -1;
     }
-    
-    public String getKey(int currentOfset, int index){
-        return null;
+
+    public int getOffset(int currentOfset, int index){
+        return -1;
     }
 
-    private static char makeChar(byte b1, byte b0) {
-        return (char)((b1 << 8) | (b0 & 0xff));
+    private static final char makeChar(byte[] data, int offset) {
+        return (char)((data[offset++] << 8) | (data[offset] & 0xff));
     }
     static char getChar(byte[]data, int offset){
-        return makeChar(data[offset], data[offset+1]);
+        return makeChar(data, offset);
     }
-    private static int makeInt(byte b3, byte b2, byte b1, byte b0) {
-        return (int)((((b3 & 0xff) << 24) |
-                  ((b2 & 0xff) << 16) |
-                  ((b1 & 0xff) <<  8) |
-                  ((b0 & 0xff) <<  0)));
+    private static final int makeInt(byte[] data, int offset) {
+        // | is left-associative
+        return (int) ((data[offset++] << 24) | ((data[offset++] & 0xff) << 16) | ((data[offset++] & 0xff) << 8) | ((data[offset] & 0xff)));
     }
-    
+
     protected static int getInt(byte[] data, int offset){
-        if (ASSERT) Assert.assrt("offset < data.length", offset < data.length);
-        return makeInt(data[offset], data[offset+1], 
-                       data[offset+2], data[offset+3]);
+        //if (ASSERT) Assert.assrt("offset < data.length", offset < data.length);
+        return makeInt(data, offset);
     }
- 
+
     String getStringValue(long resource) {
-        if (resource == 0) { 
+        if (resource == 0) {
             /*
              * The data structure is documented as supporting resource==0 for empty strings.
              * Return a fixed pointer in such a case.
@@ -1047,7 +1071,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         int length = getInt(rawData,offset);
         int stringOffset = offset + getIntOffset(1);
         char[] dst = new char[length];
-        if (ASSERT) Assert.assrt("(stringOffset+getCharOffset(length)) < rawData.length", (stringOffset+getCharOffset(length)) < rawData.length);
+        //if (ASSERT) Assert.assrt("(stringOffset+getCharOffset(length)) < rawData.length", (stringOffset+getCharOffset(length)) < rawData.length);
         for(int i=0; i<length; i++){
             dst[i]=getChar(rawData, stringOffset+getCharOffset(i));
         }
@@ -1058,7 +1082,7 @@ public  class ICUResourceBundle extends UResourceBundle {
     private static final String ICUDATA = "ICUDATA";
     private static final char HYPHEN = '-';
     private static final String LOCALE = "LOCALE";
-    
+
     protected static final int getIndex(String s) {
         if (s.length() >= 1) {
             return Integer.valueOf(s).intValue();
@@ -1066,7 +1090,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         return -1;
     }
     private ICUResourceBundle findResource(String key, long resource,
-                                            HashMap table, 
+                                            HashMap table,
                                             UResourceBundle requested) {
         ClassLoader loaderToUse = loader;
         String locale = null, keyPath = null;
@@ -1094,7 +1118,7 @@ public  class ICUResourceBundle extends UResourceBundle {
                 bundleName = ICU_BASE_NAME;
                 loaderToUse = ICU_DATA_CLASS_LOADER;
             }else if(bundleName.indexOf(ICUDATA)>-1){
-                int idx = bundleName.indexOf(HYPHEN); 
+                int idx = bundleName.indexOf(HYPHEN);
                 if(idx>-1){
                     bundleName = ICU_BASE_NAME+RES_PATH_SEP_STR+bundleName.substring(idx+1,bundleName.length());
                     loaderToUse = ICU_DATA_CLASS_LOADER;
@@ -1125,7 +1149,7 @@ public  class ICUResourceBundle extends UResourceBundle {
             if (locale == null) {
                 // {dlf} must use requestor's class loader to get resources from same jar
                 bundle = (ICUResourceBundle) getBundleInstance(bundleName, "",
-                         loaderToUse, false); 
+                         loaderToUse, false);
             } else {
                 bundle = (ICUResourceBundle) getBundleInstance(bundleName, locale,
                          loaderToUse, false);
