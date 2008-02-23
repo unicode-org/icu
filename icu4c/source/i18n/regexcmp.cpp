@@ -173,8 +173,7 @@ void    RegexCompile::compile(
             if (tableEl->fCharClass >= 128 && tableEl->fCharClass < 240 &&   // Table specs a char class &&
                 fC.fQuoted == FALSE &&                                       //   char is not escaped &&
                 fC.fChar != (UChar32)-1) {                                   //   char is not EOF
-                UnicodeSet *uniset = RegexStaticSets::gStaticSets->fRuleSets[tableEl->fCharClass-128];
-                if (uniset->contains(fC.fChar)) {
+                if (RegexStaticSets::gStaticSets->fRuleSets[tableEl->fCharClass-128].contains(fC.fChar)) {
                     // Table row specified a character class, or set of characters,
                     //   and the current char matches it.
                     break;
@@ -309,8 +308,8 @@ void    RegexCompile::compile(
     fRXPat->fSets8 = new Regex8BitSet[numSets];
     // Null pointer check.
     if (fRXPat->fSets8 == NULL) {
-    	e = *fStatus = U_MEMORY_ALLOCATION_ERROR;
-    	return;
+        e = *fStatus = U_MEMORY_ALLOCATION_ERROR;
+        return;
     }
     int32_t i;
     for (i=0; i<numSets; i++) {

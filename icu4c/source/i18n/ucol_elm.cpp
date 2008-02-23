@@ -148,13 +148,12 @@ uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollat
         UCOL_SPECIAL_FLAG | (initTag<<24),
         UCOL_SPECIAL_FLAG | (supplementaryInitTag << 24),
         TRUE); // Do your own mallocs for the structure, array and have linear Latin 1
-    if (t->mapping == NULL) {
+    if (U_FAILURE(*status)) {
         goto allocation_failure;
     }
     t->prefixLookup = uhash_open(prefixLookupHash, prefixLookupComp, NULL, status);
-    // Check for allocation error.
-    if (t->prefixLookup == NULL) {
-    	goto allocation_failure;
+    if (U_FAILURE(*status)) {
+        goto allocation_failure;
     }
     uhash_setValueDeleter(t->prefixLookup, uhash_freeBlock);
 
@@ -1919,9 +1918,8 @@ uprv_uca_canonicalClosure(tempUCATable *t,
     UCollator *tempColl = NULL;
     tempUCATable *tempTable = uprv_uca_cloneTempTable(t, status);
     // Check for null pointer
-    if (tempTable == NULL) {
-    	*status = U_MEMORY_ALLOCATION_ERROR;
-    	return 0;
+    if (U_FAILURE(*status)) {
+        return 0;
     }
 
     UCATableHeader *tempData = uprv_uca_assembleTable(tempTable, status);
@@ -1946,9 +1944,8 @@ uprv_uca_canonicalClosure(tempUCATable *t,
     /* produce canonical closure */
     UCollationElements* colEl = ucol_openElements(tempColl, NULL, 0, status);
     // Check for null pointer
-    if (colEl == NULL) {
-    	*status = U_MEMORY_ALLOCATION_ERROR;
-    	return 0;
+    if (U_FAILURE(*status)) {
+        return 0;
     }
     context.t = t;
     context.tempColl = tempColl;

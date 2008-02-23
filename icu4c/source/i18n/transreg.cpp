@@ -610,62 +610,70 @@ Transliterator* TransliteratorRegistry::reget(const UnicodeString& ID,
 }
 
 void TransliteratorRegistry::put(Transliterator* adoptedProto,
-                                 UBool visible) {
+                                 UBool visible,
+                                 UErrorCode& ec)
+{
     Entry *entry = new Entry();
-    // Null pointer check
-    if (entry != NULL) {
-	    entry->adoptPrototype(adoptedProto);
-	    registerEntry(adoptedProto->getID(), entry, visible);
+    if (entry == NULL) {
+        ec = U_MEMORY_ALLOCATION_ERROR;
+        return;
     }
+    entry->adoptPrototype(adoptedProto);
+    registerEntry(adoptedProto->getID(), entry, visible);
 }
 
 void TransliteratorRegistry::put(const UnicodeString& ID,
                                  Transliterator::Factory factory,
                                  Transliterator::Token context,
-                                 UBool visible) {
+                                 UBool visible,
+                                 UErrorCode& ec) {
     Entry *entry = new Entry();
-    // Null pointer check
-    if (entry != NULL) {
-	    entry->setFactory(factory, context);
-	    registerEntry(ID, entry, visible);
+    if (entry == NULL) {
+        ec = U_MEMORY_ALLOCATION_ERROR;
+        return;
     }
+    entry->setFactory(factory, context);
+    registerEntry(ID, entry, visible);
 }
 
 void TransliteratorRegistry::put(const UnicodeString& ID,
                                  const UnicodeString& resourceName,
                                  UTransDirection dir,
                                  UBool readonlyResourceAlias,
-                                 UBool visible) {
+                                 UBool visible,
+                                 UErrorCode& ec) {
     Entry *entry = new Entry();
-    // Null pointer check
-    if (entry != NULL) {
-	    entry->entryType = (dir == UTRANS_FORWARD) ? Entry::RULES_FORWARD
-	        : Entry::RULES_REVERSE;
-	    if (readonlyResourceAlias) {
-	        entry->stringArg.setTo(TRUE, resourceName.getBuffer(), -1);
-	    }
-	    else {
-	        entry->stringArg = resourceName;
-	    }
-	    registerEntry(ID, entry, visible);
+    if (entry == NULL) {
+        ec = U_MEMORY_ALLOCATION_ERROR;
+        return;
     }
+    entry->entryType = (dir == UTRANS_FORWARD) ? Entry::RULES_FORWARD
+        : Entry::RULES_REVERSE;
+    if (readonlyResourceAlias) {
+        entry->stringArg.setTo(TRUE, resourceName.getBuffer(), -1);
+    }
+    else {
+        entry->stringArg = resourceName;
+    }
+    registerEntry(ID, entry, visible);
 }
 
 void TransliteratorRegistry::put(const UnicodeString& ID,
                                  const UnicodeString& alias,
                                  UBool readonlyAliasAlias,
-                                 UBool visible) {
+                                 UBool visible,
+                                 UErrorCode& ec) {
     Entry *entry = new Entry();
     // Null pointer check
     if (entry != NULL) {
-	    entry->entryType = Entry::ALIAS;
-	    if (readonlyAliasAlias) {
-	        entry->stringArg.setTo(TRUE, alias.getBuffer(), -1);
-	    }
-	    else {
-	        entry->stringArg = alias;
-	    }
-	    registerEntry(ID, entry, visible);
+        entry->entryType = Entry::ALIAS;
+        if (readonlyAliasAlias) {
+            entry->stringArg.setTo(TRUE, alias.getBuffer(), -1);
+        }
+        else {
+            entry->stringArg = alias;
+        }
+        registerEntry(ID, entry, visible);
     }
 }
 

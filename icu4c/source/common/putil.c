@@ -614,12 +614,12 @@ extern U_IMPORT char *U_TZNAME[];
 #if !UCONFIG_NO_FILE_IO && (defined(U_DARWIN) || defined(U_LINUX) || defined(U_BSD))
 /* These platforms are likely to use Olson timezone IDs. */
 #define CHECK_LOCALTIME_LINK 1
-#if defined(U_LINUX)
-#define TZDEFAULT       "/etc/localtime"
-#define TZZONEINFO      "/usr/share/zoneinfo/"
-#else
+#if defined(U_DARWIN)
 #include <tzfile.h>
 #define TZZONEINFO      (TZDIR "/")
+#else
+#define TZDEFAULT       "/etc/localtime"
+#define TZZONEINFO      "/usr/share/zoneinfo/"
 #endif
 static char gTimeZoneBuffer[PATH_MAX];
 static char *gTimeZoneBufferPtr = NULL;
@@ -891,7 +891,7 @@ u_setDataDirectory(const char *directory) {
         newDataDir = (char *)uprv_malloc(length + 2);
         /* Exit out if newDataDir could not be created. */
         if (newDataDir == NULL) {
-        	return;
+            return;
         }
         uprv_strcpy(newDataDir, directory);
 
@@ -1196,7 +1196,7 @@ The leftmost codepage (.xxx) wins.
         correctedPOSIXLocale = uprv_malloc(uprv_strlen(posixID)+1);
         /* Exit on memory allocation error. */
         if (correctedPOSIXLocale == NULL) {
-        	return NULL;
+            return NULL;
         }
         uprv_strncpy(correctedPOSIXLocale, posixID, p-posixID);
         correctedPOSIXLocale[p-posixID] = 0;
@@ -1213,7 +1213,7 @@ The leftmost codepage (.xxx) wins.
             correctedPOSIXLocale = uprv_malloc(uprv_strlen(posixID)+1);
             /* Exit on memory allocation error. */
             if (correctedPOSIXLocale == NULL) {
-            	return NULL;
+                return NULL;
             }
             uprv_strncpy(correctedPOSIXLocale, posixID, p-posixID);
             correctedPOSIXLocale[p-posixID] = 0;
@@ -1260,7 +1260,7 @@ The leftmost codepage (.xxx) wins.
         correctedPOSIXLocale = (char *)uprv_malloc(uprv_strlen(posixID) + 1);
         /* Exit on memory allocation error. */
         if (correctedPOSIXLocale == NULL) {
-        	return NULL;
+            return NULL;
         }
         posixID = uprv_strcpy(correctedPOSIXLocale, posixID);
     }

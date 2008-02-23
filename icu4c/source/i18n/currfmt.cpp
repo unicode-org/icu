@@ -18,19 +18,19 @@
 U_NAMESPACE_BEGIN
 
 CurrencyFormat::CurrencyFormat(const Locale& locale, UErrorCode& ec) :
-    fmt(NULL) {
+    fmt(NULL)
+{
     fmt = NumberFormat::createCurrencyInstance(locale, ec);
 }
 
 CurrencyFormat::CurrencyFormat(const CurrencyFormat& other) :
-    MeasureFormat(other), fmt(NULL) {
+    MeasureFormat(other), fmt(NULL)
+{
     fmt = (NumberFormat*) other.fmt->clone();
 }
 
 CurrencyFormat::~CurrencyFormat() {
-	if (fmt != NULL) {
-		delete fmt;
-	}
+    delete fmt;
 }
 
 UBool CurrencyFormat::operator==(const Format& other) const {
@@ -51,22 +51,16 @@ Format* CurrencyFormat::clone() const {
 UnicodeString& CurrencyFormat::format(const Formattable& obj,
                                       UnicodeString& appendTo,
                                       FieldPosition& pos,
-                                      UErrorCode& ec) const {
-	if (fmt != NULL) {
-		return fmt->format(obj, appendTo, pos, ec);
-	} 
-	// Set error code; fmt should never be NULL
-	// this is the case due to failure in construction process
-	ec = U_MEMORY_ALLOCATION_ERROR;
-	return appendTo;
+                                      UErrorCode& ec) const
+{
+    return fmt->format(obj, appendTo, pos, ec);
 }
 
 void CurrencyFormat::parseObject(const UnicodeString& source,
                                  Formattable& result,
-                                 ParsePosition& pos) const {
-	if (fmt != NULL) {
-		fmt->parseCurrency(source, result, pos);
-	}
+                                 ParsePosition& pos) const
+{
+    fmt->parseCurrency(source, result, pos);
 }
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CurrencyFormat)

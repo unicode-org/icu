@@ -61,10 +61,6 @@ UMatchDegree Quantifier::matches(const Replaceable& text,
                                  int32_t& offset,
                                  int32_t limit,
                                  UBool incremental) {
-	// Exit out if matcher is NULL.
-	if (matcher == NULL) {
-		return U_MISMATCH;
-	}
     int32_t start = offset;
     uint32_t count = 0;
     while (count < maxCount) {
@@ -98,10 +94,6 @@ UMatchDegree Quantifier::matches(const Replaceable& text,
  */
 UnicodeString& Quantifier::toPattern(UnicodeString& result,
                                      UBool escapeUnprintable) const {
-    // If matcher is NULL, return result unchanged.
-	if (matcher == NULL) {
-    	return result;
-    }
 	result.truncate(0);
     matcher->toMatcher()->toPattern(result, escapeUnprintable);
     if (minCount == 0) {
@@ -128,14 +120,14 @@ UnicodeString& Quantifier::toPattern(UnicodeString& result,
  * Implement UnicodeMatcher
  */
 UBool Quantifier::matchesIndexValue(uint8_t v) const {
-    return (minCount == 0) || (matcher != NULL && matcher->toMatcher()->matchesIndexValue(v));
+    return (minCount == 0) || matcher->toMatcher()->matchesIndexValue(v);
 }
 
 /**
  * Implement UnicodeMatcher
  */
 void Quantifier::addMatchSetTo(UnicodeSet& toUnionTo) const {
-    if (matcher != NULL && maxCount > 0) {
+    if (maxCount > 0) {
         matcher->toMatcher()->addMatchSetTo(toUnionTo);
     }
 }
@@ -144,9 +136,7 @@ void Quantifier::addMatchSetTo(UnicodeSet& toUnionTo) const {
  * Implement UnicodeFunctor
  */
 void Quantifier::setData(const TransliterationRuleData* d) {
-	if (matcher != NULL) {
 		matcher->setData(d);
-	}
 }
 
 U_NAMESPACE_END

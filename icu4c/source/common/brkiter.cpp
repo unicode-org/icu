@@ -334,11 +334,11 @@ hasService(void)
 URegistryKey U_EXPORT2
 BreakIterator::registerInstance(BreakIterator* toAdopt, const Locale& locale, UBreakIteratorType kind, UErrorCode& status)
 {
-	ICULocaleService *service = getService();
-	if (service == NULL) {
-		status = U_MEMORY_ALLOCATION_ERROR;
-		return NULL;
-	}
+    ICULocaleService *service = getService();
+    if (service == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
     return service->registerInstance(toAdopt, locale, kind, status);
 }
 
@@ -363,7 +363,7 @@ BreakIterator::getAvailableLocales(void)
 {
     ICULocaleService *service = getService();
     if (service == NULL) {
-    	return NULL;
+        return NULL;
     }
     return service->getAvailableLocales();
 }

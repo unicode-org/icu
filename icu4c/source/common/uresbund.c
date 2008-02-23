@@ -624,31 +624,34 @@ U_CFUNC void ures_setResPath(UResourceBundle *resB, const char* toAdd) {
   uprv_strcpy(resB->fResPath, toAdd);
 }
 */
-static void ures_appendResPath(UResourceBundle *resB, const char* toAdd, int32_t lenToAdd) {
-  int32_t resPathLenOrig = resB->fResPathLen;
-  if(resB->fResPath == NULL) {
-    resB->fResPath = resB->fResBuf;
-    *(resB->fResPath) = 0;
-    resB->fResPathLen = 0;
-  } 
-  resB->fResPathLen += lenToAdd;
-  if(RES_BUFSIZE <= resB->fResPathLen+1) {
-    if(resB->fResPath == resB->fResBuf) {
-      resB->fResPath = (char *)uprv_malloc((resB->fResPathLen+1)*sizeof(char));
-      /* Check that memory was allocated correctly. */
-      if (resB->fResPath == NULL) {
-    	  return;
-      }
-      uprv_strcpy(resB->fResPath, resB->fResBuf);
-    } else {
-      resB->fResPath = (char *)uprv_realloc(resB->fResPath, (resB->fResPathLen+1)*sizeof(char));
-      /* Check that memory was reallocated correctly. */
-      if (resB->fResPath == NULL) {
-  	    return;
-      }
+static void ures_appendResPath(UResourceBundle *resB, const char* toAdd, int32_t lenToAdd, UErrorCode *status) {
+    int32_t resPathLenOrig = resB->fResPathLen;
+    if(resB->fResPath == NULL) {
+        resB->fResPath = resB->fResBuf;
+        *(resB->fResPath) = 0;
+        resB->fResPathLen = 0;
+    } 
+    resB->fResPathLen += lenToAdd;
+    if(RES_BUFSIZE <= resB->fResPathLen+1) {
+        if(resB->fResPath == resB->fResBuf) {
+            resB->fResPath = (char *)uprv_malloc((resB->fResPathLen+1)*sizeof(char));
+            /* Check that memory was allocated correctly. */
+            if (resB->fResPath == NULL) {
+                *status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
+            uprv_strcpy(resB->fResPath, resB->fResBuf);
+        } else {
+            char *temp = (char *)uprv_realloc(resB->fResPath, (resB->fResPathLen+1)*sizeof(char));
+            /* Check that memory was reallocated correctly. */
+            if (temp == NULL) {
+                *status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
+            resB->fResPath = temp;
+        }
     }
-  }
-  uprv_strcpy(resB->fResPath + resPathLenOrig, toAdd);
+    uprv_strcpy(resB->fResPath + resPathLenOrig, toAdd);
 }
 
 static void ures_freeResPath(UResourceBundle *resB) {
@@ -956,19 +959,19 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
     /*resB->fParentRes = parent;*/
     resB->fTopLevelData = parent->fTopLevelData;
     if(parent->fResPath && parent != resB) {
-        ures_appendResPath(resB, parent->fResPath, parent->fResPathLen);
+        ures_appendResPath(resB, parent->fResPath, parent->fResPathLen, status);
     }
     if(key != NULL) {
-        ures_appendResPath(resB, key, (int32_t)uprv_strlen(key));
+        ures_appendResPath(resB, key, (int32_t)uprv_strlen(key), status);
         if(resB->fResPath[resB->fResPathLen-1] != RES_PATH_SEPARATOR) {
-            ures_appendResPath(resB, RES_PATH_SEPARATOR_S, 1);
+            ures_appendResPath(resB, RES_PATH_SEPARATOR_S, 1, status);
         }
     } else if(index >= 0) {
         char buf[256];
         int32_t len = T_CString_integerToString(buf, index, 10);
-        ures_appendResPath(resB, buf, len);
+        ures_appendResPath(resB, buf, len, status);
         if(resB->fResPath[resB->fResPathLen-1] != RES_PATH_SEPARATOR) {
-            ures_appendResPath(resB, RES_PATH_SEPARATOR_S, 1);
+            ures_appendResPath(resB, RES_PATH_SEPARATOR_S, 1, status);
         }
     }
     /* Make sure that Purify doesn't complain about uninitialized memory copies. */
@@ -1007,11 +1010,11 @@ UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle *origin
         r->fResPath = NULL;
         r->fResPathLen = 0;
         if(original->fResPath) {
-          ures_appendResPath(r, original->fResPath, original->fResPathLen);
+            ures_appendResPath(r, original->fResPath, original->fResPathLen, status);
         }
         ures_setIsStackObject(r, isStackObject);
         if(r->fData != NULL) {
-          entryIncrease(r->fData);
+            entryIncrease(r->fData);
         }
     }
     return r;

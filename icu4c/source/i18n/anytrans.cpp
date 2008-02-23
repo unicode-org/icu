@@ -183,9 +183,8 @@ AnyTransliterator::AnyTransliterator(const UnicodeString& id,
     targetScript(theTargetScript) 
 {
     cache = uhash_open(uhash_hashLong, uhash_compareLong, NULL, &ec);
-    if (cache == NULL) {
-    	ec = U_MEMORY_ALLOCATION_ERROR;
-    	return;
+    if (U_FAILURE(ec)) {
+        return;
     }
     uhash_setValueDeleter(cache, _deleteTransliterator);
 
@@ -210,9 +209,8 @@ AnyTransliterator::AnyTransliterator(const AnyTransliterator& o) :
     // Don't copy the cache contents
     UErrorCode ec = U_ZERO_ERROR;
     cache = uhash_open(uhash_hashLong, uhash_compareLong, NULL, &ec);
-    if (cache == NULL) {
-    	ec = U_MEMORY_ALLOCATION_ERROR;
-    	return;
+    if (U_FAILURE(ec)) {
+        return;
     }
     uhash_setValueDeleter(cache, _deleteTransliterator);
 }

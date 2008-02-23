@@ -1819,10 +1819,10 @@ int32_t DecimalFormat::compareComplexAffix(const UnicodeString& affixPat,
                     const char* loc = getLocaleID(ULOC_VALID_LOCALE, ec);
                     if (U_FAILURE(ec) || loc == NULL || *loc == 0) {
                         // applyPattern has been called; use the symbols
-                    	if (fSymbols == NULL) {
-                    		ec = U_MEMORY_ALLOCATION_ERROR;
-                    		return 0;
-                    	}
+                        if (fSymbols == NULL) {
+                            ec = U_MEMORY_ALLOCATION_ERROR;
+                            return 0;
+                        }
                         loc = fSymbols->getLocale().getName();
                         ec = U_ZERO_ERROR;
                     }
@@ -2137,9 +2137,9 @@ void DecimalFormat::setRoundingIncrement(double newValue) {
             fRoundingIncrement = new DigitList();
         }
         if (fRoundingIncrement != NULL) {
-	        fRoundingIncrement->set((int32_t)newValue);
-	        fRoundingDouble = newValue;
-	        return;
+            fRoundingIncrement->set((int32_t)newValue);
+            fRoundingDouble = newValue;
+            return;
         }
     } 
     // These statements are executed if newValue is less than 0.0
@@ -3726,11 +3726,11 @@ void DecimalFormat::setCurrency(const UChar* theCurrency) {
 
 void DecimalFormat::getEffectiveCurrency(UChar* result, UErrorCode& ec) const {
     if (fSymbols == NULL) {
-    	ec = U_MEMORY_ALLOCATION_ERROR;
-    	return;
+        ec = U_MEMORY_ALLOCATION_ERROR;
+        return;
     }
     ec = U_ZERO_ERROR;
-	const UChar* c = getCurrency();
+    const UChar* c = getCurrency();
     if (*c == 0) {
         const UnicodeString &intl =
             fSymbols->getConstSymbol(DecimalFormatSymbols::kIntlCurrencySymbol);
