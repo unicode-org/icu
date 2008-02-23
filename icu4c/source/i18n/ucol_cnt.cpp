@@ -379,10 +379,8 @@ uprv_cnttab_insertContraction(CntTable *table, uint32_t element, UChar codePoint
 
     if((element == 0xFFFFFF) || (tbl = table->elements[element]) == NULL) {
         tbl = addATableElement(table, &element, status);
-        // Check for null pointer
-        if (tbl == NULL) {
-        	*status = U_MEMORY_ALLOCATION_ERROR;
-        	return 0;
+        if (U_FAILURE(*status)) {
+            return 0;
         }
     }
 
@@ -424,10 +422,8 @@ uprv_cnttab_addContraction(CntTable *table, uint32_t element, UChar codePoint, u
 
     if((element == 0xFFFFFF) || (tbl = table->elements[element]) == NULL) {
         tbl = addATableElement(table, &element, status);
-        // Check for null pointer
-        if (tbl == NULL) {
-        	*status = U_MEMORY_ALLOCATION_ERROR;
-        	return 0;
+        if (U_FAILURE(*status)) {
+            return 0;
         }
     } 
 
@@ -454,10 +450,8 @@ uprv_cnttab_setContraction(CntTable *table, uint32_t element, uint32_t offset, U
 
     if((element == 0xFFFFFF) || (tbl = table->elements[element]) == NULL) {
         tbl = addATableElement(table, &element, status);
-        // Check for null pointer
-        if (tbl == NULL) {
-        	*status = U_MEMORY_ALLOCATION_ERROR;
-        	return 0;
+        if (U_FAILURE(*status)) {
+            return 0;
         }
         
     }

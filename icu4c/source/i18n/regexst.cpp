@@ -153,10 +153,6 @@ fRuleDigitsAlias(NULL)
     for (i=0; i<URX_LAST_SET; i++) {
         fPropSets[i] = NULL;
     }
-    for (i=0; i<(int32_t)(sizeof(fRuleSets)/sizeof(fRuleSets[0])); i++) {
-        fRuleSets[i] = NULL;
-    }
-
     // Then init the sets to their correct values.
     fPropSets[URX_ISWORD_SET]  = new UnicodeSet(UnicodeString(TRUE, gIsWordPattern, -1),     *status);
     fPropSets[URX_ISSPACE_SET] = new UnicodeSet(UnicodeString(TRUE, gIsSpacePattern, -1),    *status);
@@ -212,32 +208,20 @@ fRuleDigitsAlias(NULL)
     }
 
     // Sets used while parsing rules, but not referenced from the parse state table
-    fRuleSets[kRuleSet_rule_char-128]   = new UnicodeSet(UnicodeString(TRUE, gRuleSet_rule_char_pattern, -1),   *status);
-    fRuleSets[kRuleSet_digit_char-128]  = new UnicodeSet(UnicodeString(TRUE, gRuleSet_digit_char_pattern, -1),  *status);
-    //Check for null pointers
-    if (fRuleSets[kRuleSet_rule_char-128] == NULL ||
-    		fRuleSets[kRuleSet_digit_char-128] == NULL) {
-    	goto ExitConstrDeleteAll;
-    }
-    fRuleDigitsAlias = fRuleSets[kRuleSet_digit_char-128];
+    fRuleSets[kRuleSet_rule_char-128]   = UnicodeSet(UnicodeString(TRUE, gRuleSet_rule_char_pattern, -1),   *status);
+    fRuleSets[kRuleSet_digit_char-128]  = UnicodeSet(UnicodeString(TRUE, gRuleSet_digit_char_pattern, -1),  *status);
+    fRuleDigitsAlias = &fRuleSets[kRuleSet_digit_char-128];
     for (i=0; i<(int32_t)(sizeof(fRuleSets)/sizeof(fRuleSets[0])); i++) {
-        if (fRuleSets[i]) {
-            fRuleSets[i]->compact();
-        }
+        fRuleSets[i].compact();
     }
     return; // If we reached this point, everything is fine so just exit
-    
+
 ExitConstrDeleteAll: // Remove fPropSets and fRuleSets and return error
     for (i=0; i<URX_LAST_SET; i++) {
         delete fPropSets[i];
         fPropSets[i] = NULL;
     }
-    for (i=0; i<(int32_t)(sizeof(fRuleSets)/sizeof(fRuleSets[0])); i++) {
-        delete fRuleSets[i];
-        fRuleSets[i] = NULL;
-    }
-    
-    *status = U_MEMORY_ALLOCATION_ERROR;    	
+    *status = U_MEMORY_ALLOCATION_ERROR;
 }
 
 
@@ -247,10 +231,6 @@ RegexStaticSets::~RegexStaticSets() {
     for (i=0; i<URX_LAST_SET; i++) {
         delete fPropSets[i];
         fPropSets[i] = NULL;
-    }
-    for (i=0; i<(int32_t)(sizeof(fRuleSets)/sizeof(fRuleSets[0])); i++) {
-        delete fRuleSets[i];
-        fRuleSets[i] = NULL;
     }
     fRuleDigitsAlias = NULL;
 }

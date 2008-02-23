@@ -173,10 +173,6 @@ TransliterationRule::TransliterationRule(TransliterationRule& other) :
     segmentsCount = 0;
     if (other.segmentsCount > 0) {
         segments = (UnicodeFunctor **)uprv_malloc(other.segmentsCount * sizeof(UnicodeFunctor *));
-        // Null pointer check
-        if (segments == NULL) {
-        	return;
-        }
         uprv_memcpy(segments, other.segments, other.segmentsCount*sizeof(segments[0]));
     }
 
@@ -353,10 +349,6 @@ static inline int32_t posAfter(const Replaceable& str, int32_t pos) {
 UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
                                                   UTransPosition& pos,
                                                   UBool incremental) const {
-	// This occurs if there was a memory allocation error for output.
-	if (output == NULL) {
-		return U_MISMATCH;
-	}
     // Matching and replacing are done in one method because the
     // replacement operation needs information obtained during the
     // match.  Another way to do this is to have the match method
@@ -473,10 +465,6 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
  */
 UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
                                            UBool escapeUnprintable) const {
-	// This occurs if there was a memory allocation error for output.
-	if (output == NULL) {
-		return rule;
-	}
 
     // Accumulate special characters (and non-specials following them)
     // into quoteBuf.  Append quoteBuf, within single quotes, when
@@ -526,10 +514,6 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
 }
 
 void TransliterationRule::setData(const TransliterationRuleData* d) {
-	// This occurs if there was a memory allocation error for output.
-	if (output == NULL) {
-		return;
-	}
     data = d;
     if (anteContext != NULL) anteContext->setData(d);
     if (postContext != NULL) postContext->setData(d);
@@ -562,10 +546,6 @@ void TransliterationRule::addSourceSetTo(UnicodeSet& toUnionTo) const {
  * into the given set.
  */
 void TransliterationRule::addTargetSetTo(UnicodeSet& toUnionTo) const {
-	// This occurs if there was a memory allocation error for output.
-	if (output == NULL) {
-		return;
-	}
     output->toReplacer()->addReplacementSetTo(toUnionTo);
 }
 

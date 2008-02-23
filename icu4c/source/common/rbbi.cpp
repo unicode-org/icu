@@ -323,12 +323,10 @@ void RuleBasedBreakIterator::setText(UText *ut, UErrorCode &status) {
     if (fDCharIter == NULL) {
         static const UChar c = 0;
         fDCharIter = new UCharCharacterIterator(&c, 0);
-    }
-    
-    // Check for Null pointer
-    if (fDCharIter == NULL) {
-    	status = U_MEMORY_ALLOCATION_ERROR;
-    	return;
+        if (fDCharIter == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
     }
 
     if (fCharIter!=fSCharIter && fCharIter!=fDCharIter) {

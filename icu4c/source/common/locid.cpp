@@ -394,7 +394,7 @@ Locale::Locale( const   char * newLanguage,
             togo_heap = (char *)uprv_malloc(sizeof(char)*(size+1));
             // If togo_heap could not be created, initialize with default settings.
             if (togo_heap == NULL) {
-            	init(NULL, FALSE);
+                init(NULL, FALSE);
             }
             togo = togo_heap;
         }
@@ -485,7 +485,7 @@ Locale &Locale::operator=(const Locale &other)
     if(other.fullName != other.fullNameBuffer) {
         fullName = (char *)uprv_malloc(sizeof(char)*(uprv_strlen(other.fullName)+1));
         if (fullName == NULL) {
-        	return *this;
+            return *this;
         }
     }
     /* Copy the full name */
@@ -1326,7 +1326,7 @@ Locale::getBaseName() const
         if(baseNameSize >= ULOC_FULLNAME_CAPACITY) {
             ((Locale *)this)->baseName = (char *)uprv_malloc(sizeof(char) * baseNameSize + 1);
             if (baseName == NULL) {
-            	return baseName;
+                return baseName;
             }
             uloc_getBaseName(fullName, baseName, baseNameSize+1, &status);
         }

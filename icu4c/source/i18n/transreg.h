@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2006, International Business Machines
+*   Copyright (c) 2001-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -202,7 +202,8 @@ class TransliteratorRegistry : public UMemory {
      * underlying static locale resource store is masked.
      */
     void put(Transliterator* adoptedProto,
-             UBool visible);
+             UBool visible,
+             UErrorCode& ec);
 
     /**
      * Register an ID and a factory function pointer.  This adds an
@@ -212,7 +213,8 @@ class TransliteratorRegistry : public UMemory {
     void put(const UnicodeString& ID,
              Transliterator::Factory factory,
              Transliterator::Token context,
-             UBool visible);
+             UBool visible,
+             UErrorCode& ec);
 
     /**
      * Register an ID and a resource name.  This adds an entry to the
@@ -223,7 +225,8 @@ class TransliteratorRegistry : public UMemory {
              const UnicodeString& resourceName,
              UTransDirection dir,
              UBool readonlyResourceAlias,
-             UBool visible);
+             UBool visible,
+             UErrorCode& ec);
 
     /**
      * Register an ID and an alias ID.  This adds an entry to the
@@ -233,7 +236,8 @@ class TransliteratorRegistry : public UMemory {
     void put(const UnicodeString& ID,
              const UnicodeString& alias,
              UBool readonlyAliasAlias,
-             UBool visible);
+             UBool visible,
+             UErrorCode& ec);
 
     /**
      * Unregister an ID.  This removes an entry from the dynamic store

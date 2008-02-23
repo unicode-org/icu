@@ -94,7 +94,7 @@ IslamicCalendar::IslamicCalendar(const Locale& aLocale, UErrorCode& success, ECi
 :   Calendar(TimeZone::createDefault(), aLocale, success),
 civil(beCivil)
 {
-	setTimeInMillis(getNow(), success); // Call this again now that the vtable is set up properly.
+    setTimeInMillis(getNow(), success); // Call this again now that the vtable is set up properly.
 }
 
 IslamicCalendar::IslamicCalendar(const IslamicCalendar& other) : Calendar(other), civil(other.civil) {
@@ -234,7 +234,7 @@ int32_t IslamicCalendar::trueMonthStart(int32_t month) const
         // moonAge will fail due to memory allocation error
         double age = moonAge(origin, status);
         if (U_FAILURE(status)) {
-        	goto trueMonthStartEnd;
+            goto trueMonthStartEnd;
         }
 
         if (age >= 0) {
@@ -243,7 +243,7 @@ int32_t IslamicCalendar::trueMonthStart(int32_t month) const
                 origin -= kOneDay;
                 age = moonAge(origin, status);
                 if (U_FAILURE(status)) {
-               	    goto trueMonthStartEnd;
+                    goto trueMonthStartEnd;
                 }
             } while (age >= 0);
         }
@@ -253,7 +253,7 @@ int32_t IslamicCalendar::trueMonthStart(int32_t month) const
                 origin += kOneDay;
                 age = moonAge(origin, status);
                 if (U_FAILURE(status)) {
-               	    goto trueMonthStartEnd;
+                    goto trueMonthStartEnd;
                 }
             } while (age < 0);
         }
@@ -283,10 +283,9 @@ double IslamicCalendar::moonAge(UDate time, UErrorCode &status)
     umtx_lock(&astroLock);
     if(gIslamicCalendarAstro == NULL) {
         gIslamicCalendarAstro = new CalendarAstronomer();
-        // Memory allocation error
         if (gIslamicCalendarAstro == NULL) {
-        	status = U_MEMORY_ALLOCATION_ERROR;
-        	return age;
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return age;
         }
         ucln_i18n_registerCleanup(UCLN_I18N_ISLAMIC_CALENDAR, calendar_islamic_cleanup);
     }

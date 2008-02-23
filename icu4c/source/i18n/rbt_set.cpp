@@ -163,13 +163,13 @@ U_NAMESPACE_BEGIN
 TransliterationRuleSet::TransliterationRuleSet(UErrorCode& status) : UMemory() {
     ruleVector = new UVector(&_deleteRule, NULL, status);
     if (U_FAILURE(status)) {
-    	return;
+        return;
     }
-    rules = NULL;
-    maxContextLength = 0;
     if (ruleVector == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
     }
+    rules = NULL;
+    maxContextLength = 0;
 }
 
 /**
@@ -188,15 +188,15 @@ TransliterationRuleSet::TransliterationRuleSet(const TransliterationRuleSet& oth
     if (other.ruleVector != 0 && ruleVector != 0 && U_SUCCESS(status)) {
         len = other.ruleVector->size();
         for (i=0; i<len && U_SUCCESS(status); ++i) {
-        	TransliterationRule *tempTranslitRule = new TransliterationRule(*(TransliterationRule*)other.ruleVector->elementAt(i));
-        	// Null pointer test
-        	if (tempTranslitRule == NULL) {
-        		status = U_MEMORY_ALLOCATION_ERROR;
-        		break;
-        	}
+            TransliterationRule *tempTranslitRule = new TransliterationRule(*(TransliterationRule*)other.ruleVector->elementAt(i));
+            // Null pointer test
+            if (tempTranslitRule == NULL) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                break;
+            }
             ruleVector->addElement(tempTranslitRule, status);
             if (U_FAILURE(status)) {
-            	break;
+                break;
             }
         }
     }

@@ -151,14 +151,14 @@ RBBINode *RBBINode::cloneTree() {
         n = new RBBINode(*this);
         // Check for null pointer.
         if (n != NULL) {
-	        if (fLeftChild != NULL) {
-	            n->fLeftChild          = fLeftChild->cloneTree();
-	            n->fLeftChild->fParent = n;
-	        }
-	        if (fRightChild != NULL) {
-	            n->fRightChild          = fRightChild->cloneTree();
-	            n->fRightChild->fParent = n;
-	        }
+            if (fLeftChild != NULL) {
+                n->fLeftChild          = fLeftChild->cloneTree();
+                n->fLeftChild->fParent = n;
+            }
+            if (fRightChild != NULL) {
+                n->fRightChild          = fRightChild->cloneTree();
+                n->fRightChild->fParent = n;
+            }
         }
     }
     return n;
