@@ -292,9 +292,8 @@ RBBIRuleBuilder::createRuleBasedBreakIterator( const UnicodeString    &rules,
     //      in the run-time format.
     //
     RBBIDataHeader *data = builder.flattenData(); // returns NULL if error
-    if (data == NULL) {
-    	status = U_MEMORY_ALLOCATION_ERROR;
-    	return NULL;
+    if (U_FAILURE(*builder.fStatus)) {
+        return NULL;
     }
 
 

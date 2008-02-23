@@ -104,10 +104,8 @@ ucol_open_internal(const char *loc,
     if(*status == U_MISSING_RESOURCE_ERROR) { /* We didn't find the tailoring data, we fallback to the UCA */
         *status = U_USING_DEFAULT_WARNING;
         result = ucol_initCollator(UCA->image, result, UCA, status);
-        // Check for null result
-        if (result == NULL) {
-        	*status = U_MEMORY_ALLOCATION_ERROR;
-        	goto clean;
+        if (U_FAILURE(*status)) {
+            goto clean;
         }
         // if we use UCA, real locale is root
         ures_close(b);

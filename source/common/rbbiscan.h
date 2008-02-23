@@ -137,7 +137,7 @@ private:
                                                      //   The key is the string used for creating
                                                      //   the set.
 
-    UnicodeSet                    *fRuleSets[10];    // Unicode Sets that are needed during
+    UnicodeSet                     fRuleSets[10];    // Unicode Sets that are needed during
                                                      //  the scanning of RBBI rules.  The
                                                      //  indicies for these are assigned by the
                                                      //  perl script that builds the state tables.

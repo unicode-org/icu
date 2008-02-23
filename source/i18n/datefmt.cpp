@@ -346,10 +346,10 @@ DateFormat::adoptCalendar(Calendar* newCalendar)
 void
 DateFormat::setCalendar(const Calendar& newCalendar)
 {
-	Calendar* newCalClone = newCalendar.clone();
-	if (newCalClone != NULL) {
-		adoptCalendar(newCalClone);
-	}
+    Calendar* newCalClone = newCalendar.clone();
+    if (newCalClone != NULL) {
+        adoptCalendar(newCalClone);
+    }
 }
 
 //----------------------------------------------------------------------
@@ -374,10 +374,10 @@ DateFormat::adoptNumberFormat(NumberFormat* newNumberFormat)
 void
 DateFormat::setNumberFormat(const NumberFormat& newNumberFormat)
 {
-	NumberFormat* newNumFmtClone = (NumberFormat*)newNumberFormat.clone();
-	if (newNumFmtClone != NULL) {
-		adoptNumberFormat(newNumFmtClone);
-	}
+    NumberFormat* newNumFmtClone = (NumberFormat*)newNumberFormat.clone();
+    if (newNumFmtClone != NULL) {
+        adoptNumberFormat(newNumFmtClone);
+    }
 }
 
 //----------------------------------------------------------------------
@@ -393,18 +393,18 @@ DateFormat::getNumberFormat() const
 void
 DateFormat::adoptTimeZone(TimeZone* zone)
 {
-	if (fCalendar != NULL) {
-		fCalendar->adoptTimeZone(zone);
-	}
+    if (fCalendar != NULL) {
+        fCalendar->adoptTimeZone(zone);
+    }
 }
 //----------------------------------------------------------------------
 
 void
 DateFormat::setTimeZone(const TimeZone& zone)
 {
-	if (fCalendar != NULL) {
-		fCalendar->setTimeZone(zone);
-	}
+    if (fCalendar != NULL) {
+        fCalendar->setTimeZone(zone);
+    }
 }
 
 //----------------------------------------------------------------------
@@ -412,12 +412,12 @@ DateFormat::setTimeZone(const TimeZone& zone)
 const TimeZone&
 DateFormat::getTimeZone() const
 {
-	if (fCalendar != NULL) {
-		return fCalendar->getTimeZone();
-	}
-	// If calendar doesn't exists, create default timezone.
-	// fCalendar is rarely null
-	return *(TimeZone::createDefault());
+    if (fCalendar != NULL) {
+        return fCalendar->getTimeZone();
+    }
+    // If calendar doesn't exists, create default timezone.
+    // fCalendar is rarely null
+    return *(TimeZone::createDefault());
 }
 
 //----------------------------------------------------------------------
@@ -425,9 +425,9 @@ DateFormat::getTimeZone() const
 void
 DateFormat::setLenient(UBool lenient)
 {
-	if (fCalendar != NULL) {
-		fCalendar->setLenient(lenient);
-	}
+    if (fCalendar != NULL) {
+        fCalendar->setLenient(lenient);
+    }
 }
 
 //----------------------------------------------------------------------
@@ -435,11 +435,11 @@ DateFormat::setLenient(UBool lenient)
 UBool
 DateFormat::isLenient() const
 {
-	if (fCalendar != NULL) {
-		return fCalendar->isLenient();
-	}
-	// fCalendar is rarely null
-	return FALSE;
+    if (fCalendar != NULL) {
+        return fCalendar->isLenient();
+    }
+    // fCalendar is rarely null
+    return FALSE;
 }
 
 U_NAMESPACE_END

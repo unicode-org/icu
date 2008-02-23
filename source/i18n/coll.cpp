@@ -707,7 +707,7 @@ public:
     {
         CollationLocaleListEnumeration *result = new CollationLocaleListEnumeration();
         if (result) {
-        	result->index = index;
+            result->index = index;
         }
         return result;
     }

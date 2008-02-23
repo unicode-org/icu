@@ -71,7 +71,8 @@ static inline UBool instanceOfMeasure(const UObject* a) {
 static inline Formattable* createArrayCopy(const Formattable* array, int32_t count) {
     Formattable *result = new Formattable[count];
     if (result != NULL) {
-    	for (int32_t i=0; i<count; ++i) result[i] = array[i]; // Don't memcpy!
+        for (int32_t i=0; i<count; ++i)
+            result[i] = array[i]; // Don't memcpy!
     }
     return result;
 }
@@ -274,11 +275,11 @@ Formattable::operator==(const Formattable& that) const
         }
         break;
     case kObject:
-    	if (fValue.fObject == NULL || that.fValue.fObject == NULL) {
-    		equal = FALSE;
-    	} else {
-    		equal = objectEquals(fValue.fObject, that.fValue.fObject);
-    	}
+        if (fValue.fObject == NULL || that.fValue.fObject == NULL) {
+            equal = FALSE;
+        } else {
+            equal = objectEquals(fValue.fObject, that.fValue.fObject);
+        }
         break;
     }
 
@@ -370,10 +371,10 @@ Formattable::getLong(UErrorCode& status) const
             return (int32_t)fValue.fDouble; // loses fraction
         }
     case Formattable::kObject:
-    	if (fValue.fObject == NULL) {
-    		status = U_MEMORY_ALLOCATION_ERROR;
-    		return 0;
-    	}
+        if (fValue.fObject == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return 0;
+        }
         // TODO Later replace this with instanceof call
         if (instanceOfMeasure(fValue.fObject)) {
             return ((const Measure*) fValue.fObject)->
@@ -408,10 +409,10 @@ Formattable::getInt64(UErrorCode& status) const
             return (int64_t)fValue.fDouble;
         }
     case Formattable::kObject:
-    	if (fValue.fObject == NULL) {
-    		status = U_MEMORY_ALLOCATION_ERROR;
-    		return 0;
-    	}
+        if (fValue.fObject == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return 0;
+        }
         // TODO Later replace this with instanceof call
         if (instanceOfMeasure(fValue.fObject)) {
             return ((const Measure*) fValue.fObject)->
@@ -438,10 +439,10 @@ Formattable::getDouble(UErrorCode& status) const
     case Formattable::kDouble:
         return fValue.fDouble;
     case Formattable::kObject:
-    	if (fValue.fObject == NULL) {
-    		status = U_MEMORY_ALLOCATION_ERROR;
-    		return 0;
-    	}
+        if (fValue.fObject == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return 0;
+        }
         // TODO Later replace this with instanceof call
         if (instanceOfMeasure(fValue.fObject)) {
             return ((const Measure*) fValue.fObject)->
@@ -564,9 +565,9 @@ Formattable::getString(UnicodeString& result, UErrorCode& status) const
         result.setToBogus();
     } else {
         if (fValue.fString == NULL) {
-        	setError(status, U_MEMORY_ALLOCATION_ERROR);
+            setError(status, U_MEMORY_ALLOCATION_ERROR);
         } else {
-        	result = *fValue.fString;
+            result = *fValue.fString;
         }
     }
     return result;
@@ -581,8 +582,8 @@ Formattable::getString(UErrorCode& status) const
         return *getBogus();
     }
     if (fValue.fString == NULL) {
-    	setError(status, U_MEMORY_ALLOCATION_ERROR);
-    	return *getBogus();
+        setError(status, U_MEMORY_ALLOCATION_ERROR);
+        return *getBogus();
     }
     return *fValue.fString;
 }

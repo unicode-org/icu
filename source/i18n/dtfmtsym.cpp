@@ -280,26 +280,26 @@ DateFormatSymbols::createZoneStrings(const UnicodeString *const * otherStrings)
 
     fZoneStrings = (UnicodeString **)uprv_malloc(fZoneStringsRowCount * sizeof(UnicodeString *));
     if (fZoneStrings != NULL) {
-	    for (row=0; row<fZoneStringsRowCount; ++row)
-	    {
-	        fZoneStrings[row] = newUnicodeStringArray(fZoneStringsColCount);
-	        if (fZoneStrings[row] == NULL) {
-	        	failed = TRUE;
-	        	break;
-	        }
-	        for (col=0; col<fZoneStringsColCount; ++col) {
-	            // fastCopyFrom() - see assignArray comments
-	            fZoneStrings[row][col].fastCopyFrom(otherStrings[row][col]);
-	        }
-	    }
+        for (row=0; row<fZoneStringsRowCount; ++row)
+        {
+            fZoneStrings[row] = newUnicodeStringArray(fZoneStringsColCount);
+            if (fZoneStrings[row] == NULL) {
+                failed = TRUE;
+                break;
+            }
+            for (col=0; col<fZoneStringsColCount; ++col) {
+                // fastCopyFrom() - see assignArray comments
+                fZoneStrings[row][col].fastCopyFrom(otherStrings[row][col]);
+            }
+        }
     }
     // If memory allocation failed, roll back and delete fZoneStrings
     if (failed) {
-    	for (int i = row; i >= 0; i--) {
-    		delete[] fZoneStrings[i];
-    	}
-    	uprv_free(fZoneStrings);
-    	fZoneStrings = NULL;
+        for (int i = row; i >= 0; i--) {
+            delete[] fZoneStrings[i];
+        }
+        uprv_free(fZoneStrings);
+        fZoneStrings = NULL;
     }
 }
 

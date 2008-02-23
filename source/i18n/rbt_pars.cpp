@@ -531,7 +531,7 @@ int32_t RuleHalf::parseSection(const UnicodeString& rule, int32_t pos, int32_t l
                     new StringMatcher(buf, bufSegStart, buf.length(),
                                       segmentNumber, *parser.curData);
                 if (m == NULL) {
-                	return syntaxError(U_MEMORY_ALLOCATION_ERROR, rule, start, status);
+                    return syntaxError(U_MEMORY_ALLOCATION_ERROR, rule, start, status);
                 }
                 
                 // Record and associate object and segment number
@@ -572,7 +572,7 @@ int32_t RuleHalf::parseSection(const UnicodeString& rule, int32_t pos, int32_t l
                 FunctionReplacer *r =
                     new FunctionReplacer(t, new StringReplacer(output, parser.curData));
                 if (r == NULL) {
-                	return syntaxError(U_MEMORY_ALLOCATION_ERROR, rule, start, status);
+                    return syntaxError(U_MEMORY_ALLOCATION_ERROR, rule, start, status);
                 }
                 
                 // Replace the buffer contents with a stand-in
@@ -666,7 +666,7 @@ int32_t RuleHalf::parseSection(const UnicodeString& rule, int32_t pos, int32_t l
                 UnicodeFunctor *m =
                     new StringMatcher(buf, qstart, qlimit, 0, *parser.curData);
                 if (m == NULL) {
-                	return syntaxError(U_MEMORY_ALLOCATION_ERROR, rule, start, status);
+                    return syntaxError(U_MEMORY_ALLOCATION_ERROR, rule, start, status);
                 }
                 int32_t min = 0;
                 int32_t max = Quantifier::MAX;
@@ -683,7 +683,7 @@ int32_t RuleHalf::parseSection(const UnicodeString& rule, int32_t pos, int32_t l
                 }
                 m = new Quantifier(m, min, max);
                 if (m == NULL) {
-                	return syntaxError(U_MEMORY_ALLOCATION_ERROR, rule, start, status);
+                    return syntaxError(U_MEMORY_ALLOCATION_ERROR, rule, start, status);
                 }
                 buf.truncate(qstart);
                 buf.append(parser.generateStandInFor(m, status));
@@ -1017,12 +1017,12 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
             pos = p;
         } else {
             if (parsingIDs) {
-            	tempstr = new UnicodeString(idBlockResult);
-            	// NULL pointer check
-            	if (tempstr == NULL) {
-            		status = U_MEMORY_ALLOCATION_ERROR;
-            		return;
-            	}
+                tempstr = new UnicodeString(idBlockResult);
+                // NULL pointer check
+                if (tempstr == NULL) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                    return;
+                }
                 if (direction == UTRANS_FORWARD)
                     idBlockVector.addElement(tempstr, status);
                 else
@@ -1032,8 +1032,8 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
                 curData = new TransliterationRuleData(status);
                 // NULL pointer check
                 if (curData == NULL) {
-                	status = U_MEMORY_ALLOCATION_ERROR;
-                	return;
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                    return;
                 }
                 parseData->data = curData;
 
@@ -1058,12 +1058,12 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
     }
 
     if (parsingIDs && idBlockResult.length() > 0) {
-    	tempstr = new UnicodeString(idBlockResult);
-    	// NULL pointer check
-    	if (tempstr == NULL) {
-    		status = U_MEMORY_ALLOCATION_ERROR;
-    		return;
-    	}
+        tempstr = new UnicodeString(idBlockResult);
+        // NULL pointer check
+        if (tempstr == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
         if (direction == UTRANS_FORWARD)
             idBlockVector.addElement(tempstr, status);
         else
@@ -1088,8 +1088,8 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
                 data->variables = (UnicodeFunctor**)uprv_malloc(data->variablesLength * sizeof(UnicodeFunctor*));
                 // NULL pointer check
                 if (data->variables == NULL) {
-                	status = U_MEMORY_ALLOCATION_ERROR;
-                	return;
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                    return;
                 }
                 data->variablesAreOwned = (i == 0);
             }
@@ -1103,12 +1103,11 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
             int32_t pos = -1;
             const UHashElement* he = variableNames.nextElement(pos);
             while (he != NULL) {
-            	UnicodeString* tempus = (UnicodeString*)(((UnicodeString*)(he->value.pointer))->clone());
-            	// Null pointer check
-            	if (tempus == NULL) {
-            		status = U_MEMORY_ALLOCATION_ERROR;
-            		return;
-            	}
+                UnicodeString* tempus = (UnicodeString*)(((UnicodeString*)(he->value.pointer))->clone());
+                if (tempus == NULL) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                    return;
+                }
                 data->variableNames.put(*((UnicodeString*)(he->key.pointer)),
                     tempus, status);
                 he = variableNames.nextElement(pos);
@@ -1343,7 +1342,7 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
         UnicodeString* value = new UnicodeString(right->text);
         // NULL pointer check
         if (value == NULL) {
-        	return syntaxError(U_MEMORY_ALLOCATION_ERROR, rule, start, status);
+            return syntaxError(U_MEMORY_ALLOCATION_ERROR, rule, start, status);
         }
         variableNames.put(undefinedVariableName, value, status);
         ++variableLimit;
@@ -1431,7 +1430,7 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
         segmentsArray = (UnicodeFunctor **)uprv_malloc(segmentObjects.size() * sizeof(UnicodeFunctor *));
         // Null pointer check
         if (segmentsArray == NULL) {
-        	return syntaxError(U_MEMORY_ALLOCATION_ERROR, rule, start, status);
+            return syntaxError(U_MEMORY_ALLOCATION_ERROR, rule, start, status);
         }
         segmentObjects.toArray((void**) segmentsArray);
     }
@@ -1445,8 +1444,8 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
             status);
     //Null pointer check
     if (temptr == NULL) {
-    	uprv_free(segmentsArray);
-    	return syntaxError(U_MEMORY_ALLOCATION_ERROR, rule, start, status);
+        uprv_free(segmentsArray);
+        return syntaxError(U_MEMORY_ALLOCATION_ERROR, rule, start, status);
     }
 
     curData->ruleSet.addRule(temptr, status);
@@ -1503,8 +1502,8 @@ UChar TransliteratorParser::parseSet(const UnicodeString& rule,
     UnicodeSet* set = new UnicodeSet(rule, pos, USET_IGNORE_SPACE, parseData, status);
     // Null pointer check
     if (set == NULL) {
-    	status = U_MEMORY_ALLOCATION_ERROR;
-    	return (UChar)0x0000; // Return empty character with error.
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return (UChar)0x0000; // Return empty character with error.
     }
     set->compact();
     return generateStandInFor(set, status);
@@ -1587,12 +1586,12 @@ void TransliteratorParser::setSegmentObject(int32_t seg, StringMatcher* adopted,
  */
 UChar TransliteratorParser::getDotStandIn(UErrorCode& status) {
     if (dotStandIn == (UChar) -1) {
-    	UnicodeSet* tempus = new UnicodeSet(DOT_SET, status);
-    	// Null pointer check.
-    	if (tempus == NULL) {
-    		status = U_MEMORY_ALLOCATION_ERROR;
-    		return (UChar)0x0000;
-    	}
+        UnicodeSet* tempus = new UnicodeSet(DOT_SET, status);
+        // Null pointer check.
+        if (tempus == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return (UChar)0x0000;
+        }
         dotStandIn = generateStandInFor(tempus, status);
     }
     return dotStandIn;
