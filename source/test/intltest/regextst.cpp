@@ -2420,7 +2420,7 @@ void RegexTest::Callbacks() {
         //   The variables that the getter will fill in.
         //   Init to non-null values so that the action of the getter can be seen.
         const void          *returnedContext = &returnedContext;
-        URegexMatchCallback returnedFn = &testCallBackFn;
+        URegexMatchCallback *returnedFn = &testCallBackFn;
         
         UErrorCode status = U_ZERO_ERROR;
         RegexMatcher matcher("x", 0, status);
@@ -2435,7 +2435,7 @@ void RegexTest::Callbacks() {
         // Set and Get work
         callBackContext cbInfo = {this, 0, 0, 0};
         const void          *returnedContext;
-        URegexMatchCallback returnedFn;
+        URegexMatchCallback *returnedFn;
         UErrorCode status = U_ZERO_ERROR;
         RegexMatcher matcher("((.)+\\2)+x", 0, status);  // A pattern that can run long.
         REGEX_CHECK_STATUS;
@@ -2443,7 +2443,7 @@ void RegexTest::Callbacks() {
         REGEX_CHECK_STATUS;
         matcher.getMatchCallback(returnedFn, returnedContext, status);
         REGEX_CHECK_STATUS;
-        REGEX_ASSERT(returnedFn == &testCallBackFn);
+        REGEX_ASSERT(returnedFn == testCallBackFn);
         REGEX_ASSERT(returnedContext == &cbInfo);
         
         // A short-running match shouldn't invoke the callback
