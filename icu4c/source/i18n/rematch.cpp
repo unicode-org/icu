@@ -1207,7 +1207,7 @@ int32_t RegexMatcher::getStackLimit() const {
 //     setMatchCallback
 //
 //--------------------------------------------------------------------------------
-void RegexMatcher::setMatchCallback(URegexMatchCallback      callback,
+void RegexMatcher::setMatchCallback(URegexMatchCallback     *callback,
                                     const void              *context,
                                     UErrorCode              &status) {
      if (U_FAILURE(status)) {
@@ -1223,7 +1223,7 @@ void RegexMatcher::setMatchCallback(URegexMatchCallback      callback,
 //     getMatchCallback
 //
 //--------------------------------------------------------------------------------
-void RegexMatcher::getMatchCallback(URegexMatchCallback     &callback,
+void RegexMatcher::getMatchCallback(URegexMatchCallback   *&callback,
                                   const void              *&context,
                                   UErrorCode              &status) {
     if (U_FAILURE(status)) {

@@ -844,140 +844,142 @@ uregex_split(   URegularExpression      *regexp,
 
 
 
-  /**
-    *   Set a processing time limit for match operations with this URegularExpression.
-    *
-    *   Some patterns, when matching certain strings, can run in exponential time.
-    *   For practical purposes, the match operation may appear to be in an
-    *   infinite loop.
-    *   When a limit is set a match operation will fail with an error if the
-    *   limit is exceeded.
-    *   <p>
-    *   The units of the limit are steps of the match engine.
-    *   Correspondence with actual processor time will depend on the speed
-    *   of the processor and the details of the specific pattern, but will
-    *   typically be on the order of milliseconds.
-    *   <p>
-    *   By default, the matching time is not limited.
-    *   <p>
-    *
-    *   @param   regexp      The compiled regular expression.
-    *   @param   limit       The limit value, or 0 for no limit.
-    *   @param   status      A reference to a UErrorCode to receive any errors.
-    *   @draft ICU 4.0
-    */
+/**
+ * Set a processing time limit for match operations with this URegularExpression.
+ *
+ * Some patterns, when matching certain strings, can run in exponential time.
+ * For practical purposes, the match operation may appear to be in an
+ * infinite loop.
+ * When a limit is set a match operation will fail with an error if the
+ * limit is exceeded.
+ * <p>
+ * The units of the limit are steps of the match engine.
+ * Correspondence with actual processor time will depend on the speed
+ * of the processor and the details of the specific pattern, but will
+ * typically be on the order of milliseconds.
+ * <p>
+ * By default, the matching time is not limited.
+ * <p>
+ *
+ * @param   regexp      The compiled regular expression.
+ * @param   limit       The limit value, or 0 for no limit.
+ * @param   status      A reference to a UErrorCode to receive any errors.
+ * @draft ICU 4.0
+ */
 U_DRAFT void U_EXPORT2
 uregex_setTimeLimit(URegularExpression      *regexp,
                     int32_t                  limit,
                     UErrorCode              *status);
 
-  /**
-    * Get the time limit for for matches with this URegularExpression.
-    * A return value of zero indicates that there is no limit.
-    *
-    *   @param   regexp      The compiled regular expression.
-    *   @param   status      A reference to a UErrorCode to receive any errors.
-    *   @return the maximum allowed time for a match, in units of processing steps.
-    * @draft ICU 4.0
-    */
+/**
+ * Get the time limit for for matches with this URegularExpression.
+ * A return value of zero indicates that there is no limit.
+ *
+ * @param   regexp      The compiled regular expression.
+ * @param   status      A reference to a UErrorCode to receive any errors.
+ * @return the maximum allowed time for a match, in units of processing steps.
+ * @draft ICU 4.0
+ */
 U_DRAFT int32_t U_EXPORT2
 uregex_getTimeLimit(const URegularExpression      *regexp,
                           UErrorCode              *status);
-    
-  /**
-    *  Set the amount of heap storage avaliable for use by the match backtracking stack.
-    *  <p>
-    *  ICU uses a backtracking regular expression engine, with the backtrack stack
-    *  maintained on the heap.  This function sets the limit to the amount of memory
-    *  that can be used  for this purpose.  A backtracking stack overflow will
-    *  result in an error from the match operation that caused it.
-    *  <p>
-    *  A limit is desirable because a malicious or poorly designed pattern can use
-    *  excessive memory, potentially crashing the process.  A limit is enabled
-    *  by default.
-    *  <p>
-    *   @param   regexp      The compiled regular expression.
-    *   @param   limit       The maximum size, in bytes, of the matching backtrack stack.
-    *                        A value of -1 means no limit.
-    *                        The limit must be greater than zero, or -1.
-    *   @param   status      A reference to a UErrorCode to receive any errors.
-    *
-    *  @draft ICU 4.0
-    */
+
+/**
+ * Set the amount of heap storage avaliable for use by the match backtracking stack.
+ * <p>
+ * ICU uses a backtracking regular expression engine, with the backtrack stack
+ * maintained on the heap.  This function sets the limit to the amount of memory
+ * that can be used  for this purpose.  A backtracking stack overflow will
+ * result in an error from the match operation that caused it.
+ * <p>
+ * A limit is desirable because a malicious or poorly designed pattern can use
+ * excessive memory, potentially crashing the process.  A limit is enabled
+ * by default.
+ * <p>
+ * @param   regexp      The compiled regular expression.
+ * @param   limit       The maximum size, in bytes, of the matching backtrack stack.
+ *                      A value of -1 means no limit.
+ *                      The limit must be greater than zero, or -1.
+ * @param   status      A reference to a UErrorCode to receive any errors.
+ *
+ * @draft ICU 4.0
+ */
 U_DRAFT void U_EXPORT2
 uregex_setStackLimit(URegularExpression      *regexp,
                      int32_t                  limit,
                      UErrorCode              *status);
-    
-  /**
-    *  Get the size of the heap storage available for use by the back tracking stack.
-    *
-    *  @return  the maximum backtracking stack size, in bytes, or zero if the
-    *           stack size is unlimited.
-    *  @draft ICU 4.0
-    */
+
+/**
+ * Get the size of the heap storage available for use by the back tracking stack.
+ *
+ * @return  the maximum backtracking stack size, in bytes, or zero if the
+ *          stack size is unlimited.
+ * @draft ICU 4.0
+ */
 U_DRAFT int32_t U_EXPORT2
 uregex_getStackLimit(const URegularExpression      *regexp,
                            UErrorCode              *status);
 
 
 /**
-  *  Function pointer for a regular expression matching callback function.
-  *  When set, a callback function will be called periodically during matching
-  *  operations.  If the call back function returns FALSE, the matching
-  *  operation will be terminated early.
-  *
-  *  Note:  the callback function must not call other functions on this
-  *         URegularExpression.
-  *
-  *  @param context  context pointer.  The callback function will be invoked
-  *                  with the context specified at the time that
-  *                  uregex_setMatchCallback() is called.
-  *  @param steps    the accumulated processing time, in match steps, 
-  *                  for this matching operation.
-  *  @return         TRUE to continue the matching operation.
-  *                  FALSE to terminate the matching operation.
-  *  @draft ICU 4.0
-  */
-typedef UBool (U_EXPORT2 *URegexMatchCallback) (
+ * Function pointer for a regular expression matching callback function.
+ * When set, a callback function will be called periodically during matching
+ * operations.  If the call back function returns FALSE, the matching
+ * operation will be terminated early.
+ *
+ * Note:  the callback function must not call other functions on this
+ *        URegularExpression.
+ *
+ * @param context  context pointer.  The callback function will be invoked
+ *                 with the context specified at the time that
+ *                 uregex_setMatchCallback() is called.
+ * @param steps    the accumulated processing time, in match steps, 
+ *                 for this matching operation.
+ * @return         TRUE to continue the matching operation.
+ *                 FALSE to terminate the matching operation.
+ * @draft ICU 4.0
+ */
+U_CDECL_BEGIN
+typedef UBool U_CALLCONV URegexMatchCallback (
                    const void *context,
                    int32_t     steps);
+U_CDECL_END
 
 /**
-  * Set a callback function for this URegularExpression.
-  * During matching operations the function will be called periodically,
-  * giving the application the opportunity to terminate a long-running
-  * match.
-  *
-  *    @param   regexp      The compiled regular expression.
-  *    @param   callback    A pointer to the user-supplied callback function.
-  *    @param   context     User context pointer.  The value supplied at the
-  *                         time the callback function is set will be saved
-  *                         and passed to the callback each time that it is called.
-  *    @param   status      A reference to a UErrorCode to receive any errors.
-  *  @draft ICU 4.0
-  */
+ * Set a callback function for this URegularExpression.
+ * During matching operations the function will be called periodically,
+ * giving the application the opportunity to terminate a long-running
+ * match.
+ *
+ * @param   regexp      The compiled regular expression.
+ * @param   callback    A pointer to the user-supplied callback function.
+ * @param   context     User context pointer.  The value supplied at the
+ *                      time the callback function is set will be saved
+ *                      and passed to the callback each time that it is called.
+ * @param   status      A reference to a UErrorCode to receive any errors.
+ * @draft ICU 4.0
+ */
 U_DRAFT void U_EXPORT2
 uregex_setMatchCallback(URegularExpression      *regexp,
-                        URegexMatchCallback      callback,
+                        URegexMatchCallback     *callback,
                         const void              *context,
                         UErrorCode              *status);
 
 
 /**
-  *  Get the callback function for this URegularExpression.
-  *
-  *    @param   regexp      The compiled regular expression.
-  *    @param   callback    Out paramater, receives a pointer to the user-supplied 
-  *                         callback function.
-  *    @param   context     Out parameter, receives the user context pointer that
-  *                         was set when uregex_setMatchCallback() was called.
-  *    @param   status      A reference to a UErrorCode to receive any errors.
-  *    @draft ICU 4.0
-  */
+ *  Get the callback function for this URegularExpression.
+ *
+ * @param   regexp      The compiled regular expression.
+ * @param   callback    Out paramater, receives a pointer to the user-supplied 
+ *                      callback function.
+ * @param   context     Out parameter, receives the user context pointer that
+ *                      was set when uregex_setMatchCallback() was called.
+ * @param   status      A reference to a UErrorCode to receive any errors.
+ * @draft ICU 4.0
+ */
 U_DRAFT void U_EXPORT2
 uregex_getMatchCallback(const URegularExpression    *regexp,
-                        URegexMatchCallback         *callback,
+                        URegexMatchCallback        **callback,
                         const void                 **context,
                         UErrorCode                  *status);
 
