@@ -1080,7 +1080,7 @@ public:
     *    @param   status      A reference to a UErrorCode to receive any errors.
     *  @draft ICU 4.0
     */
-    virtual void setMatchCallback(URegexMatchCallback      callback,
+    virtual void setMatchCallback(URegexMatchCallback     *callback,
                                   const void              *context,
                                   UErrorCode              &status);
 
@@ -1096,7 +1096,7 @@ public:
     *    @param   status      A reference to a UErrorCode to receive any errors.
     *    @draft ICU 4.0
     */
-    virtual void getMatchCallback(URegexMatchCallback     &callback,
+    virtual void getMatchCallback(URegexMatchCallback     *&callback,
                                   const void              *&context,
                                   UErrorCode              &status);
 
@@ -1213,7 +1213,7 @@ private:
     int32_t             fStackLimit;       // Maximum memory size to use for the backtrack
                                            //   stack, in bytes.  Zero for unlimited.
 
-    URegexMatchCallback fCallbackFn;       // Pointer to match progress callback funct.
+    URegexMatchCallback *fCallbackFn;       // Pointer to match progress callback funct.
                                            //   NULL if there is no callback.
     const void         *fCallbackContext;  // User Context ptr for callback function.
 
