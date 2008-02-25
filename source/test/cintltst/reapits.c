@@ -1207,7 +1207,7 @@ static void TestRegexCAPI(void) {
      TEST_SETUP("((.)+\\2)+x", "aaaaaaaaaaaaaaaaaaab", 0)
      callBackContext cbInfo = {4, 0, 0};
      const void     *pContext   = &cbInfo;
-     URegexMatchCallback    returnedFn = &TestCallbackFn;
+     URegexMatchCallback    *returnedFn = &TestCallbackFn;
      
      /*  Getting the callback fn when it hasn't been set must return NULL  */
      uregex_getMatchCallback(re, &returnedFn, &pContext, &status);
