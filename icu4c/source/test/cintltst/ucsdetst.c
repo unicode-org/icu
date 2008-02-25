@@ -364,14 +364,14 @@ static void TestChaining(void) {
 static void TestBufferOverflow(void) {
     UErrorCode status = U_ZERO_ERROR;
     static const char *testStrings[] = {
-        "\x80 This is English \x1b", /* A partial ISO-2022 shift state at the end */
-        "\x80 This is English \x1b\x24", /* A partial ISO-2022 shift state at the end */
-        "\x80 This is English \x1b\x24\x28", /* A partial ISO-2022 shift state at the end */
-        "\x80 This is English \x1b\x24\x28\x44", /* A complete ISO-2022 shift state at the end with a bad one at the start */
+        "\x80\x20\x54\x68\x69\x73\x20\x69\x73\x20\x45\x6E\x67\x6C\x69\x73\x68\x20\x1b", /* A partial ISO-2022 shift state at the end */
+        "\x80\x20\x54\x68\x69\x73\x20\x69\x73\x20\x45\x6E\x67\x6C\x69\x73\x68\x20\x1b\x24", /* A partial ISO-2022 shift state at the end */
+        "\x80\x20\x54\x68\x69\x73\x20\x69\x73\x20\x45\x6E\x67\x6C\x69\x73\x68\x20\x1b\x24\x28", /* A partial ISO-2022 shift state at the end */
+        "\x80\x20\x54\x68\x69\x73\x20\x69\x73\x20\x45\x6E\x67\x6C\x69\x73\x68\x20\x1b\x24\x28\x44", /* A complete ISO-2022 shift state at the end with a bad one at the start */
         "\x1b\x24\x28\x44", /* A complete ISO-2022 shift state at the end */
         "\xa1", /* Could be a single byte shift-jis at the end */
-        "th\xa1", /* Could be a single byte shift-jis at the end */
-        "the\xa1" /* Could be a single byte shift-jis at the end, but now we have English creeping in. */
+        "\x74\x68\xa1", /* Could be a single byte shift-jis at the end */
+        "\x74\x68\x65\xa1" /* Could be a single byte shift-jis at the end, but now we have English creeping in. */
     };
     static const char *testResults[] = {
         "windows-1252",
