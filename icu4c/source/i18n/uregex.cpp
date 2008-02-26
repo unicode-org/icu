@@ -701,7 +701,7 @@ uregex_getStackLimit(const  URegularExpression   *regexp,
 //------------------------------------------------------------------------------
 U_CAPI void U_EXPORT2
 uregex_setMatchCallback(URegularExpression      *regexp,
-                        URegexMatchCallback      callback,
+                        URegexMatchCallback     *callback,
                         const void              *context,
                         UErrorCode              *status) {
     if (validateRE(regexp, status)) {
@@ -717,7 +717,7 @@ uregex_setMatchCallback(URegularExpression      *regexp,
 //------------------------------------------------------------------------------
 U_CAPI void U_EXPORT2 
 uregex_getMatchCallback(const URegularExpression    *regexp,
-                        URegexMatchCallback         *callback,
+                        URegexMatchCallback        **callback,
                         const void                 **context,
                         UErrorCode                  *status) {
      if (validateRE(regexp, status)) {
