@@ -130,6 +130,16 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
     }
     
     /**
+     * Sets the callback decoder method to be used if an illegal sequence is encountered.
+     * 
+     * @param newCallback CharsetCallback.Decoder
+     * @exception IllegalArgumentException
+     * @draft ICU 4.0
+     */
+    public final void onMalformedInput(CharsetCallback.Decoder newCallback) {
+        onMalformedInput = newCallback;
+    }
+    /**
      * Sets the action to be taken if an illegal sequence is encountered
      * 
      * @param newAction action to be taken
@@ -149,6 +159,17 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
         }
         
         onUnmappableCharacter = getCallback(newAction);
+    }
+    
+    /**
+     * Sets the callback decoder method to be used if an illegal sequence is encountered.
+     * 
+     * @param newCallback CharsetCallback.Decoder
+     * @exception IllegalArgumentException
+     * @draft ICU 4.0
+     */
+    public final void onUnmappableCharacter(CharsetCallback.Decoder newCallback) {
+        onUnmappableCharacter = newCallback;
     }
     private static CharsetCallback.Decoder getCallback(CodingErrorAction action){
         if(action==CodingErrorAction.REPLACE){
