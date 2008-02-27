@@ -3541,7 +3541,7 @@ class CharsetMBCS extends CharsetICU {
             } else {
                 mbcsIndex = null;
             } */
-            mbcsIndex = sharedData.mbcs.extIndexes;
+            mbcsIndex = null;
             if ((options&UConverterConstants.OPTION_SWAP_LFNL) != 0) {
                 bytes = ByteBuffer.wrap(sharedData.mbcs.swapLFNLFromUnicodeBytes);
             } else {
@@ -3776,6 +3776,9 @@ class CharsetMBCS extends CharsetICU {
                             value = 0;
                             length = 0;
                             break;
+                        }
+                        if (!doLoop) {
+                            break; // get out of outer while loop.
                         }
                         /* output the value */
                     } else {
