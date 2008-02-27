@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -18,7 +18,9 @@ import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
 import java.util.Iterator;
 
+import com.ibm.icu.charset.CharsetCallback;
 import com.ibm.icu.charset.CharsetEncoderICU;
+import com.ibm.icu.charset.CharsetDecoderICU;
 import com.ibm.icu.charset.CharsetProviderICU;
 import com.ibm.icu.dev.test.ModuleTest;
 import com.ibm.icu.dev.test.TestDataModule.DataMap;
@@ -55,6 +57,10 @@ public class TestConversion extends ModuleTest {
         String map;
         String mapnot;
         int which;
+        
+        // CharsetCallback encoder and decoder
+        CharsetCallback.Decoder cbDecoder = null;
+        CharsetCallback.Encoder cbEncoder = null;
         
         String caseNrAsString() {
             return "[" + caseNr + "]";
@@ -164,7 +170,8 @@ public class TestConversion extends ModuleTest {
                 cc.cbErrorAction = CodingErrorAction.REPORT;
                 break;
             case '&':
-                cc.cbErrorAction = CodingErrorAction.REPORT;
+                cc.cbErrorAction = CodingErrorAction.REPLACE;
+                cc.cbEncoder = CharsetCallback.FROM_U_CALLBACK_ESCAPE;
                 break;
             default:
                 cc.cbErrorAction = null;
@@ -218,8 +225,13 @@ public class TestConversion extends ModuleTest {
         
         // set the callback for the encoder 
         if (cc.cbErrorAction != null) {
-            encoder.onUnmappableCharacter(cc.cbErrorAction);
-            encoder.onMalformedInput(cc.cbErrorAction);
+            if (cc.cbEncoder != null) {
+                ((CharsetEncoderICU)encoder).onMalformedInput(cc.cbEncoder);
+                ((CharsetEncoderICU)encoder).onUnmappableInput(cc.cbEncoder);
+            } else {
+                encoder.onUnmappableCharacter(cc.cbErrorAction);
+                encoder.onMalformedInput(cc.cbErrorAction);
+            }
 
             // if action has an option, put in the option for the case
             if (cc.option.equals("i")) {
@@ -455,6 +467,7 @@ public class TestConversion extends ModuleTest {
                 break;
             case '&': // CALLBACK_ESCAPE
                 cc.cbErrorAction = CodingErrorAction.REPORT;
+                cc.cbDecoder = CharsetCallback.TO_U_CALLBACK_ESCAPE;
                 break;
             default:
                 cc.cbErrorAction = null;
@@ -499,8 +512,13 @@ public class TestConversion extends ModuleTest {
 
         // set the callback for the decoder
         if (cc.cbErrorAction != null) {
-            decoder.onMalformedInput(cc.cbErrorAction);
-            decoder.onUnmappableCharacter(cc.cbErrorAction);
+            if (cc.cbDecoder != null) {
+                ((CharsetDecoderICU)decoder).onMalformedInput(cc.cbDecoder);
+                ((CharsetDecoderICU)decoder).onUnmappableCharacter(cc.cbDecoder);
+            } else {
+                decoder.onMalformedInput(cc.cbErrorAction);
+                decoder.onUnmappableCharacter(cc.cbErrorAction);
+            }
 
             // set the options (if any: SKIP_STOP_ON_ILLEGAL) for callback
             if (cc.option.equals("i")) {
