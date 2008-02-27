@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2006, International Business Machines
+*   Copyright (C) 1998-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -68,9 +68,11 @@ ustr_initChars(struct UString *s, const char* source, int32_t length, UErrorCode
 void
 ustr_deinit(struct UString *s)
 {
-    uprv_free(s->fChars);
-    s->fChars = 0;
-    s->fLength = s->fCapacity = 0;
+    if (s) {
+        uprv_free(s->fChars);
+        s->fChars = 0;
+        s->fLength = s->fCapacity = 0;
+    }
 }
 
 void

@@ -132,6 +132,18 @@ initLookahead(UCHARBUF *buf, UErrorCode *status)
     *status = U_ZERO_ERROR;
 }
 
+static void
+cleanupLookahead()
+{
+    uint32_t i;
+    for (i = 0; i < MAX_LOOKAHEAD; i++)
+    {
+        ustr_deinit(&lookahead[i].value);
+        ustr_deinit(&lookahead[i].comment);
+    }
+
+}
+
 static enum ETokenType
 getToken(struct UString **tokenValue, struct UString* comment, uint32_t *linenumber, UErrorCode *status)
 {
@@ -221,7 +233,7 @@ expect(enum ETokenType expectedToken, struct UString **tokenValue, struct UStrin
         *status = U_INVALID_FORMAT_ERROR;
         error(line, "expecting %s, got %s", tokenNames[expectedToken], tokenNames[token]);
     }
-    else /* "else" is added by Jing/GCL */
+    else
     {
         *status = U_ZERO_ERROR;
     }
@@ -566,13 +578,13 @@ parseString(char *tag, uint32_t startline, const struct UString* comment, UError
 
         result = string_open(bundle, tag, tokenValue->fChars, tokenValue->fLength, comment, status);
         if(U_SUCCESS(*status) && result) {
-          expect(TOK_CLOSE_BRACE, NULL, NULL, NULL, status);
+            expect(TOK_CLOSE_BRACE, NULL, NULL, NULL, status);
 
-          if (U_FAILURE(*status))
-          {
-              string_close(result, status);
-              return NULL;
-          }
+            if (U_FAILURE(*status))
+            {
+                res_close(result);
+                return NULL;
+            }
         }
     }
 
@@ -602,7 +614,7 @@ parseAlias(char *tag, uint32_t startline, const struct UString *comment, UErrorC
 
         if (U_FAILURE(*status))
         {
-            alias_close(result, status);
+            res_close(result);
             return NULL;
         }
     }
@@ -636,7 +648,7 @@ addCollation(struct SResource  *result, uint32_t startline, UErrorCode *status)
 
         if (token != TOK_STRING)
         {
-            table_close(result, status);
+            res_close(result);
             *status = U_INVALID_FORMAT_ERROR;
 
             if (token == TOK_EOF)
@@ -655,7 +667,7 @@ addCollation(struct SResource  *result, uint32_t startline, UErrorCode *status)
 
         if (U_FAILURE(*status))
         {
-            table_close(result, status);
+            res_close(result);
             return NULL;
         }
 
@@ -663,7 +675,7 @@ addCollation(struct SResource  *result, uint32_t startline, UErrorCode *status)
 
         if (U_FAILURE(*status))
         {
-            table_close(result, status);
+            res_close(result);
             return NULL;
         }
 
@@ -780,7 +792,7 @@ addCollation(struct SResource  *result, uint32_t startline, UErrorCode *status)
 
         if (U_FAILURE(*status))
         {
-            table_close(result, status);
+            res_close(result);
             return NULL;
         }
     }
@@ -827,7 +839,7 @@ parseCollationElements(char *tag, uint32_t startline, UBool newCollation, UError
 
             if (token != TOK_STRING)
             {
-                res_close(result, status);
+                res_close(result);
                 *status = U_INVALID_FORMAT_ERROR;
 
                 if (token == TOK_EOF)
@@ -846,7 +858,7 @@ parseCollationElements(char *tag, uint32_t startline, UBool newCollation, UError
 
             if (U_FAILURE(*status))
             {
-                res_close(result, status);
+                res_close(result);
                 return NULL;
             }
 
@@ -856,7 +868,7 @@ parseCollationElements(char *tag, uint32_t startline, UBool newCollation, UError
 
                 if (U_FAILURE(*status))
                 {
-                    res_close(result, status);
+                    res_close(result);
                     return NULL;
                 }
 
@@ -881,18 +893,18 @@ parseCollationElements(char *tag, uint32_t startline, UBool newCollation, UError
 
                         if (U_FAILURE(*status))
                         {
-                            table_close(result, status);
+                            res_close(result);
                             return NULL;
                         }
 
                         table_add(result, member, line, status);
                     } else {
-                        res_close(result, status);
+                        res_close(result);
                         *status = U_INVALID_FORMAT_ERROR;
                         return NULL;
                     }
                 } else {
-                    res_close(result, status);
+                    res_close(result);
                     *status = U_INVALID_FORMAT_ERROR;
                     return NULL;
                 }
@@ -904,7 +916,7 @@ parseCollationElements(char *tag, uint32_t startline, UBool newCollation, UError
 
             if (U_FAILURE(*status))
             {
-                res_close(result, status);
+                res_close(result);
                 return NULL;
             }
         }
@@ -943,7 +955,7 @@ realParseTable(struct SResource *table, char *tag, uint32_t startline, UErrorCod
 
         if (token != TOK_STRING)
         {
-            table_close(table, status);
+            res_close(table);
             *status = U_INVALID_FORMAT_ERROR;
 
             if (token == TOK_EOF)
@@ -963,14 +975,14 @@ realParseTable(struct SResource *table, char *tag, uint32_t startline, UErrorCod
         } else {
             *status = U_INVALID_FORMAT_ERROR;
             error(line, "invariant characters required for table keys");
-            table_close(table, status);
+            res_close(table);
             return NULL;
         }
 
         if (U_FAILURE(*status))
         {
             error(line, "parse error. Stopped parsing with %s", u_errorName(*status));
-            table_close(table, status);
+            res_close(table);
             return NULL;
         }
 
@@ -979,7 +991,7 @@ realParseTable(struct SResource *table, char *tag, uint32_t startline, UErrorCod
         if (member == NULL || U_FAILURE(*status))
         {
             error(line, "parse error. Stopped parsing with %s", u_errorName(*status));
-            table_close(table, status);
+            res_close(table);
             return NULL;
         }
 
@@ -988,10 +1000,11 @@ realParseTable(struct SResource *table, char *tag, uint32_t startline, UErrorCod
         if (U_FAILURE(*status))
         {
             error(line, "parse error. Stopped parsing with %s", u_errorName(*status));
-            table_close(table, status);
+            res_close(table);
             return NULL;
         }
         readToken = TRUE;
+        ustr_deinit(&comment);
     }
 
     /* not reached */
@@ -1070,7 +1083,7 @@ parseArray(char *tag, uint32_t startline, const struct UString *comment, UErrorC
 
         if (token == TOK_EOF)
         {
-            res_close(result, status);
+            res_close(result);
             *status = U_INVALID_FORMAT_ERROR;
             error(startline, "unterminated array");
             return NULL;
@@ -1089,7 +1102,7 @@ parseArray(char *tag, uint32_t startline, const struct UString *comment, UErrorC
 
         if (member == NULL || U_FAILURE(*status))
         {
-            res_close(result, status);
+            res_close(result);
             return NULL;
         }
 
@@ -1097,7 +1110,7 @@ parseArray(char *tag, uint32_t startline, const struct UString *comment, UErrorC
 
         if (U_FAILURE(*status))
         {
-            res_close(result, status);
+            res_close(result);
             return NULL;
         }
 
@@ -1111,12 +1124,13 @@ parseArray(char *tag, uint32_t startline, const struct UString *comment, UErrorC
 
         if (U_FAILURE(*status))
         {
-            res_close(result, status);
+            res_close(result);
             return NULL;
         }
         readToken = TRUE;
     }
 
+    ustr_deinit(&memberComments);
     return result;
 }
 
@@ -1128,7 +1142,6 @@ parseIntVector(char *tag, uint32_t startline, const struct UString *comment, UEr
     char              *string;
     int32_t            value;
     UBool              readToken = FALSE;
-    /* added by Jing/GCL */
     char              *stopstring;
     uint32_t           len;
     struct UString     memberComments;
@@ -1159,6 +1172,7 @@ parseIntVector(char *tag, uint32_t startline, const struct UString *comment, UEr
             if (!readToken) {
                 warning(startline, "Encountered empty int vector");
             }
+            ustr_deinit(&memberComments);
             return result;
         }
 
@@ -1166,18 +1180,11 @@ parseIntVector(char *tag, uint32_t startline, const struct UString *comment, UEr
 
         if (U_FAILURE(*status))
         {
-            res_close(result, status);
+            res_close(result);
             return NULL;
         }
-        /* Commented by Jing/GCL */
-        /*value = uprv_strtol(string, NULL, 10);
-        intvector_add(result, value, status);
 
-          uprv_free(string);
-
-        token = peekToken(0, NULL, NULL, status);*/
-
-        /* The following is added by Jing/GCL to handle illegal char in the Intvector */
+        /* For handling illegal char in the Intvector */
         value = uprv_strtoul(string, &stopstring, 0);/* make intvector support decimal,hexdigit,octal digit ranging from -2^31-2^32-1*/
         len=(uint32_t)(stopstring-string);
 
@@ -1192,11 +1199,10 @@ parseIntVector(char *tag, uint32_t startline, const struct UString *comment, UEr
             uprv_free(string);
             *status=U_INVALID_CHAR_FOUND;
         }
-        /* The above is added by Jing/GCL */
 
         if (U_FAILURE(*status))
         {
-            res_close(result, status);
+            res_close(result);
             return NULL;
         }
 
@@ -1226,7 +1232,6 @@ parseBinary(char *tag, uint32_t startline, const struct UString *comment, UError
     uint32_t          count;
     uint32_t          i;
     uint32_t          line;
-    /* added by Jing/GCL */
     char             *stopstring;
     uint32_t          len;
 
@@ -1305,7 +1310,6 @@ parseInteger(char *tag, uint32_t startline, const struct UString *comment, UErro
     struct SResource *result = NULL;
     int32_t           value;
     char             *string;
-    /* added by Jing/GCL */
     char             *stopstring;
     uint32_t          len;
 
@@ -1333,12 +1337,8 @@ parseInteger(char *tag, uint32_t startline, const struct UString *comment, UErro
         warning(startline, "Encountered empty integer. Default value is 0.");
     }
 
-    /* commented by Jing/GCL */
-    /* value  = uprv_strtol(string, NULL, 10);*/
-    /* result = int_open(bundle, tag, value, status);*/
-    /* The following is added by Jing/GCL*/
-    /* to make integer support hexdecimal, octal digit and decimal*/
-    /* to handle illegal char in the integer*/
+    /* Allow integer support for hexdecimal, octal digit and decimal*/
+    /* and handle illegal char in the integer*/
     value = uprv_strtoul(string, &stopstring, 0);
     len=(uint32_t)(stopstring-string);
     if(len==uprv_strlen(string))
@@ -1757,10 +1757,7 @@ parseResource(char *tag, const struct UString *comment, UErrorCode *status)
         { :/}       => array
         { string ,  => string array
 
-        commented by Jing/GCL
         { string {  => table
-
-        added by Jing/GCL
 
         { string :/{    => table
         { string }      => string
@@ -1773,8 +1770,6 @@ parseResource(char *tag, const struct UString *comment, UErrorCode *status)
             return NULL;
         }
 
-        /* Commented by Jing/GCL */
-        /* if (token == TOK_OPEN_BRACE || token == TOK_COLON )*/
         if (token == TOK_OPEN_BRACE || token == TOK_COLON ||token ==TOK_CLOSE_BRACE )
         {
             resType = RT_ARRAY;
@@ -1793,7 +1788,6 @@ parseResource(char *tag, const struct UString *comment, UErrorCode *status)
             case TOK_COMMA:         resType = RT_ARRAY;  break;
             case TOK_OPEN_BRACE:    resType = RT_TABLE;  break;
             case TOK_CLOSE_BRACE:   resType = RT_STRING; break;
-                /* added by Jing/GCL to make table work when :table is omitted */
             case TOK_COLON:         resType = RT_TABLE;  break;
             default:
                 *status = U_INVALID_FORMAT_ERROR;
@@ -1836,7 +1830,6 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, UErrorCode *st
     struct UString    *tokenValue;
     struct UString    comment;
     uint32_t           line;
-    /* added by Jing/GCL */
     enum EResourceType bundleType;
     enum ETokenType    token;
 
@@ -1859,8 +1852,6 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, UErrorCode *st
 
 
     bundle_setlocale(bundle, tokenValue->fChars, status);
-    /* Commented by Jing/GCL */
-    /* expect(TOK_OPEN_BRACE, NULL, &line, status); */
     /* The following code is to make Empty bundle work no matter with :table specifer or not */
     token = getToken(NULL, NULL, &line, status);
     if(token==TOK_COLON) {
@@ -1893,7 +1884,6 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, UErrorCode *st
             error(line, "parse error, did not find open-brace '{' or colon ':', stopped with %s", u_errorName(*status));
         }
     }
-    /* The above is added by Jing/GCL */
 
     if (U_FAILURE(*status))
     {
@@ -1919,7 +1909,7 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, UErrorCode *st
     if (U_FAILURE(*status))
     {
         bundle_close(bundle, status);
-        res_close(dependencyArray, status);
+        res_close(dependencyArray);
         return NULL;
     }
 
@@ -1932,5 +1922,8 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, UErrorCode *st
         }
     }
 
+    cleanupLookahead();
+    ustr_deinit(&comment);
     return bundle;
 }
+

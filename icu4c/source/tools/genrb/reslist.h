@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2007, International Business Machines
+*   Copyright (C) 2000-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -82,7 +82,6 @@ struct SResTable {
 };
 
 struct SResource* table_open(struct SRBRoot *bundle, char *tag, const struct UString* comment, UErrorCode *status);
-void table_close(struct SResource *table, UErrorCode *status);
 void table_add(struct SResource *table, struct SResource *res, int linenumber, UErrorCode *status);
 
 struct SResArray {
@@ -93,7 +92,6 @@ struct SResArray {
 };
 
 struct SResource* array_open(struct SRBRoot *bundle, const char *tag, const struct UString* comment, UErrorCode *status);
-void array_close(struct SResource *array, UErrorCode *status);
 void array_add(struct SResource *array, struct SResource *res, UErrorCode *status);
 
 struct SResString {
@@ -102,10 +100,8 @@ struct SResString {
 };
 
 struct SResource *string_open(struct SRBRoot *bundle, char *tag, const UChar *value, int32_t len, const struct UString* comment, UErrorCode *status);
-void string_close(struct SResource *string, UErrorCode *status);
 
 struct SResource *alias_open(struct SRBRoot *bundle, char *tag, UChar *value, int32_t len, const struct UString* comment, UErrorCode *status);
-void alias_close(struct SResource *string, UErrorCode *status);
 
 struct SResIntVector {
     uint32_t fCount;
@@ -113,7 +109,6 @@ struct SResIntVector {
 };
 
 struct SResource* intvector_open(struct SRBRoot *bundle, char *tag,  const struct UString* comment, UErrorCode *status);
-void intvector_close(struct SResource *intvector, UErrorCode *status);
 void intvector_add(struct SResource *intvector, int32_t value, UErrorCode *status);
 
 struct SResInt {
@@ -121,7 +116,6 @@ struct SResInt {
 };
 
 struct SResource *int_open(struct SRBRoot *bundle, char *tag, int32_t value, const struct UString* comment, UErrorCode *status);
-void int_close(struct SResource *intres, UErrorCode *status);
 
 struct SResBinary {
     uint32_t fLength;
@@ -130,7 +124,6 @@ struct SResBinary {
 };
 
 struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t length, uint8_t *data, const char* fileName, const struct UString* comment, UErrorCode *status);
-void bin_close(struct SResource *binres, UErrorCode *status);
 
 /* Resource place holder */
 
@@ -140,7 +133,7 @@ struct SResource {
     uint32_t fSize; /* Size in bytes outside the header part */
     int      line;  /* used internally to report duplicate keys in tables */
     struct SResource *fNext; /*This is for internal chaining while building*/
-    struct UString *fComment;
+    struct UString fComment;
     union {
         struct SResTable fTable;
         struct SResArray fArray;
@@ -151,7 +144,7 @@ struct SResource {
     } u;
 };
 
-void res_close(struct SResource *res, UErrorCode *status);
+void res_close(struct SResource *res);
 void setIncludeCopyright(UBool val);
 UBool getIncludeCopyright(void);
 
