@@ -407,11 +407,13 @@ printNoteElements(UnicodeString *Accumulator, struct UString *src, UErrorCode *s
 
     count = getCount(src->fChars,src->fLength, UPC_NOTE, status);
     if(U_FAILURE(*status)){
+        uprv_free(note);
         return;
     }
     for(i=0; i < count; i++){
         noteLen =  getAt(src->fChars,src->fLength, &note, capacity, i, UPC_NOTE, status);
         if(U_FAILURE(*status)){
+            uprv_free(note);
             return;
         }
         if(noteLen > 0){
