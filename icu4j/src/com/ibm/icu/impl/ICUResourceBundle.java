@@ -110,11 +110,6 @@ public  class ICUResourceBundle extends UResourceBundle {
 
     private int loadingStatus = -1;
 
-    /**
-     * Hash map for storing previously found UResourceBundles
-     */
-    protected Map lookup = new HashMap();
-
     public void setLoadingStatus(int newStatus) {
         loadingStatus = newStatus;
     }
