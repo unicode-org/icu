@@ -828,7 +828,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
             newTarget.position(errBuffLen); /* set the position at the end of the error buffer */
             encoder.errorBufferLength = 0;
 
-            cr = encoder.encode(source, target, null, false);
+            cr = encoder.encode(source, newTarget, null, false);
 
             encoder.errorBuffer = newTarget.array();
             encoder.errorBufferLength = newTarget.position();
