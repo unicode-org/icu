@@ -1705,6 +1705,11 @@ class CharsetISO2022 extends CharsetICU {
             super(cs);
         }
         
+        protected void implReset() {
+            super.implReset();
+            myConverterData.toU2022State.reset();
+        }
+        
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
             CoderResult err = CoderResult.UNDERFLOW;
             char mySourceChar = 0x0000;
@@ -1997,6 +2002,11 @@ class CharsetISO2022 extends CharsetICU {
     private class CharsetEncoderISO2022JP extends CharsetEncoderICU {
         public CharsetEncoderISO2022JP(CharsetICU cs) {
             super(cs, fromUSubstitution);
+        }
+        
+        protected void implReset() {
+            super.implReset();
+            myConverterData.fromU2022State.reset();
         }
         /* Map Unicode to 00..7F according to JIS X 0201. Return U+FFFE if unmappable. */
         private int jisx201FromU(int value) {
@@ -2451,10 +2461,6 @@ class CharsetISO2022 extends CharsetICU {
             }
             return err;
         }
-        
-        protected void implReset() {
-            super.implReset();
-        }
     }
     /****************************ISO-2022-CN************************************/
     /*
@@ -2556,6 +2562,12 @@ class CharsetISO2022 extends CharsetICU {
         public CharsetEncoderISO2022CN(CharsetICU cs) {
             super(cs, fromUSubstitution);
         }
+        
+        protected void implReset() {
+            super.implReset();
+            myConverterData.fromU2022State.reset();
+        }
+        
         /* This overrides the cbFromUWriteSub method in CharsetEncoderICU */
         CoderResult cbFromUWriteSub (CharsetEncoderICU encoder, 
             CharBuffer source, ByteBuffer target, IntBuffer offsets){
@@ -2901,6 +2913,11 @@ class CharsetISO2022 extends CharsetICU {
             super(cs, fromUSubstitution);
         }
         
+        protected void implReset() {
+            super.implReset();
+            myConverterData.fromU2022State.reset();
+        }
+        
         /* This overrides the cbFromUWriteSub method in CharsetEncoderICU */
         CoderResult cbFromUWriteSub (CharsetEncoderICU encoder, 
             CharBuffer source, ByteBuffer target, IntBuffer offsets){
@@ -3217,7 +3234,6 @@ class CharsetISO2022 extends CharsetICU {
             myConverterData.currentEncoder.fromUnicodeStatus = 1; /* prevLength */
         }
     }
-
 }
 
 
