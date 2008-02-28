@@ -336,7 +336,7 @@ public class CharsetCallback {
             /* reset the error */
             cr = CoderResult.UNDERFLOW;
             
-            cr = encoder.cbFromUWriteUChars(encoder, source, target, offsets);
+            cr = encoder.cbFromUWriteUChars(encoder, CharBuffer.wrap(valueString, 0, valueStringLength), target, offsets);
             return cr;
         }
     };
