@@ -248,12 +248,14 @@ class CharsetISO2022 extends CharsetICU {
     }
     /* This gets the valid index of the end of buffer when decoding. */
     private static int getEndOfBuffer_2022(ByteBuffer source, boolean flush) {
-        int sourceIndex = source.position();
         byte mySource = 0;
-        mySource = source.get();
+        mySource = source.get(source.position());
         
         while (source.hasRemaining() && mySource != ESC_2022) {
             mySource = source.get();
+            if (mySource == ESC_2022) {
+                break;
+            }
             ++sourceIndex;
         }
         return sourceIndex;
@@ -1817,6 +1819,7 @@ class CharsetISO2022 extends CharsetICU {
             int argSource;
             int argTarget;
             boolean gotoEscape = false;
+            int oldSourceLimit;
             
             /* remember the original start of the input for offsets */
             sourceStart = argSource = source.position();
@@ -1851,8 +1854,10 @@ class CharsetISO2022 extends CharsetICU {
                          * is not copied.
                          */
                         argTarget = target.position();
+                        oldSourceLimit = source.limit(); // save the old source limit change to new one
+                        source.limit(sourceLimit);
                         err = myConverterData.currentDecoder.cnvMBCSToUnicodeWithOffsets(source, target, offsets, flush);
-                        
+                        source.limit(oldSourceLimit); // restore source limit;
                         if (offsets != null && sourceStart != argSource) {
                             /* update offsets to base them on the actual start of the input */
                             int delta = argSource - sourceStart;
