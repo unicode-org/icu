@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation
+ * Copyright (c) 1997-2008, International Business Machines Corporation
  * and others. All Rights Reserved.
  ********************************************************************/
  
@@ -811,6 +811,8 @@ void CalendarRegressionTest::test4096231()
 
     Calendar *cal2 = new GregorianCalendar(*GMT,status);
     Calendar *cal3 = new GregorianCalendar(*PST,status);
+    cal2->set(UCAL_MILLISECOND, 0);
+    cal3->set(UCAL_MILLISECOND, 0);
 
     cal2->set(cal1->get(UCAL_YEAR,status),
              cal1->get(UCAL_MONTH,status),
