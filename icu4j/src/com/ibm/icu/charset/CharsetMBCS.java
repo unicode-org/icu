@@ -1666,7 +1666,6 @@ class CharsetMBCS extends CharsetICU {
             int entry;
             char c;
             short action;
-            short sourceByte;
             
             if (this.preToULength > 0) {
                 /*
@@ -1733,16 +1732,14 @@ class CharsetMBCS extends CharsetICU {
                     /* optimized loop for 1/2-byte input and BMP output */
                     if (offsets == null) {
                         do {
-                            sourceByte = source.get(source.position());
-                            entry = stateTable[state][sourceByte];
+                            entry = stateTable[state][(short)source.get(source.position()) & UConverterConstants.UNSIGNED_BYTE_MASK];
                             if (MBCS_ENTRY_IS_TRANSITION(entry)) {
                                 state = (short)(UConverterConstants.UNSIGNED_BYTE_MASK&MBCS_ENTRY_TRANSITION_STATE(entry));
                                 offset = MBCS_ENTRY_TRANSITION_OFFSET(entry);
                                 
                                 source.get();
-                                sourceByte = source.get(source.position());
                                 if (source.hasRemaining() &&
-                                        MBCS_ENTRY_IS_FINAL(entry=stateTable[state][sourceByte]) &&
+                                        MBCS_ENTRY_IS_FINAL(entry=stateTable[state][(short)source.get(source.position()) & UConverterConstants.UNSIGNED_BYTE_MASK]) &&
                                         MBCS_ENTRY_FINAL_ACTION(entry) == MBCS_STATE_VALID_16 &&
                                         (c = unicodeCodeUnits[offset+MBCS_ENTRY_FINAL_VALUE_16(entry)]) < 0xfffe) {
                                     source.get();
@@ -1769,18 +1766,66 @@ class CharsetMBCS extends CharsetICU {
                         } while (source.hasRemaining() && target.hasRemaining());
                     } else { /* offsets != null */
                         do {
-                            sourceByte = source.get(source.position());
-                            entry = stateTable[state][sourceByte];
+                            entry = stateTable[state][(short)source.get(source.position()) & UConverterConstants.UNSIGNED_BYTE_MASK];
                             if (MBCS_ENTRY_IS_TRANSITION(entry)) {
                                 state = (short)(UConverterConstants.UNSIGNED_BYTE_MASK&MBCS_ENTRY_TRANSITION_STATE(entry));
-                                offset = MBCS_ENTRY_TRANSITION_STATE(entry);
+                                offset = MBCS_ENTRY_TRANSITION_OFFSET(entry);
+                                
+                                source.get();
+                                if (source.hasRemaining() &&
+                                        MBCS_ENTRY_IS_FINAL(entry=stateTable[state][(short)source.get(source.position()) & UConverterConstants.UNSIGNED_BYTE_MASK]) &&
+                                        MBCS_ENTRY_FINAL_ACTION(entry) == MBCS_STATE_VALID_16 &&
+                                        (c = unicodeCodeUnits[offset+MBCS_ENTRY_FINAL_VALUE_16(entry)]) < 0xfffe) {
+                                    source.get();
+                                    target.put(c);
+                                    if (offsets != null) {
+                                        offsets.put(sourceIndex);
+                                        sourceIndex = (nextSourceIndex + 2);
+                                    }
+                                    state = (short)(UConverterConstants.UNSIGNED_BYTE_MASK&MBCS_ENTRY_FINAL_STATE(entry)); /* typically 0 */
+                                    offset = 0;
+                                } else {
+                                    /* set the state and leave the optimized loop */
+                                    ++nextSourceIndex;
+                                    bytes[0] = source.get(source.position()-1);
+                                    byteIndex = 1;
+                                    break;
+                                }
+                            } else {
+                                if (MBCS_ENTRY_FINAL_IS_VALID_DIRECT_16(entry)) {
+                                    /* output BMP code point */
+                                    source.get();
+                                    target.put((char)MBCS_ENTRY_FINAL_VALUE_16(entry));
+                                    if (offsets != null) {
+                                        offsets.put(sourceIndex);
+                                        sourceIndex = ++nextSourceIndex;
+                                    }
+                                    state = (short)(UConverterConstants.UNSIGNED_BYTE_MASK&MBCS_ENTRY_FINAL_STATE(entry)); /* typically 0 */
+                                } else {
+                                    /* leave the optimized loop */
+                                    break;
+                                }
                             }
-                            
                         } while (source.hasRemaining() && target.hasRemaining());
                     }
+                    
+                    /* these tests and break statements could be put inside the loop
+                     * if C had "break outerLoop" like Java
+                     */
+                    if (!source.hasRemaining()) {
+                        break;
+                    }
+                    if (!target.hasRemaining()) {
+                        /* target is full */
+                        cr[0] = CoderResult.OVERFLOW;
+                        break;
+                    }
+                    
+                    ++nextSourceIndex;
+                    bytes[byteIndex++] = source.get();
                 } else { /* byteIndex>0 */
                     ++nextSourceIndex;
-                    entry = stateTable[state][bytes[byteIndex++]=source.get()];
+                    entry = stateTable[state][(short)(bytes[byteIndex++]=source.get()) & UConverterConstants.UNSIGNED_BYTE_MASK];
                 }
                 
                 if (MBCS_ENTRY_IS_TRANSITION(entry)) {
@@ -3491,7 +3536,6 @@ class CharsetMBCS extends CharsetICU {
             CoderResult[] cr = { CoderResult.UNDERFLOW };
             
             char[] table;
-            ByteBuffer mbcsIndex;
             int p;
             ByteBuffer bytes;
             short outputType;
@@ -3530,10 +3574,10 @@ class CharsetMBCS extends CharsetICU {
                     cr[0] = cnvMBCSSingleFromUnicodeWithOffsets(source, target, offsets, flush);
                 }
                 return cr[0];
-            } else if (outputType == MBCS_OUTPUT_2 /*&& mbcs.sharedData.mbcs.utf8Friendly*/) {
+            }/* else if (outputType == MBCS_OUTPUT_2 && mbcs.sharedData.mbcs.utf8Friendly) {
                 cr[0] = cnvMBCSDoubleFromUnicodeWithOffsets(source, target, offsets, flush);
                 return cr[0];
-            }
+            }*/
             
             table = sharedData.mbcs.fromUnicodeTable;
             /* if (mbcs.sharedData.mbcs.utf8Friendly) {
@@ -3541,7 +3585,7 @@ class CharsetMBCS extends CharsetICU {
             } else {
                 mbcsIndex = null;
             } */
-            mbcsIndex = null;
+            
             if ((options&UConverterConstants.OPTION_SWAP_LFNL) != 0) {
                 bytes = ByteBuffer.wrap(sharedData.mbcs.swapLFNLFromUnicodeBytes);
             } else {
@@ -3590,7 +3634,10 @@ class CharsetMBCS extends CharsetICU {
                     if (!gotoGetTrail) {
                         x.c = source.get();
                         ++x.nextSourceIndex;
-                        if (x.c <= 0x7f /*&& IS_ASCII_ROUNDTRIP(c, asciiRoundtrips)*/) {
+                        /* This is commented out because of the fact that IS_ASCII_ROUNDTRIP is not
+                         * being used in ICU4J.
+                         */
+                        /*if (x.c <= 0x7f && IS_ASCII_ROUNDTRIP(c, asciiRoundtrips)) {
                             target.put((byte)x.c);
                             if (offsets != null) {
                                 offsets.put(x.sourceIndex);
@@ -3600,376 +3647,207 @@ class CharsetMBCS extends CharsetICU {
                             targetCapacity--;
                             x.c = 0;
                             continue;
+                        }*/
+                    }
+                  /* Code to use utf8friendly code was removed since it is not needed in Java. */
+                    /* This also tests if the codepage maps single surrogates.
+                     * If it does, then surrogates are not paired but mapped separately.
+                     * Note that in this case unmatched surrogates are not detected.
+                     */
+                    if (gotoGetTrail || (UTF16.isSurrogate((char)x.c) && (unicodeMask&UConverterConstants.HAS_SURROGATES) == 0)) {
+                        if (gotoGetTrail || (UTF16.isLeadSurrogate((char)x.c))) {
+// getTrail label
+                            gotoGetTrail = false; // reset gotoGetTrail flag
+                            
+                            x.sourceArrayIndex = source.position();
+                            
+                            doLoop = getTrail(source, target, unicodeMask, x, flush, cr);
+                            if (x.doread && doLoop) {
+                                continue;
+                            } else if (!x.doread && !doLoop) {
+                                break;
+                            } else if (!doLoop) {
+                                break;
+                            }
+                        } else {
+                            /* this is an unmatched trail code unit (2nd surrogate) */
+                            /* callback(illegal) */
+                            cr[0] = CoderResult.malformedForLength(1);
+                            break;
                         }
                     }
-                    if (!gotoGetTrail && (x.c <= 0xd7ff && mbcsIndex != null)) {
-                        value = mbcsIndex.get(x.c>>6);
-                        /* get the bytes and the length for the output (copied from below and adapted for utfFriendly data) */
-                        /* There are only roundtrips (!=0) and no-mapping (==0) entries. */
-                        switch (outputType) {
-                        case MBCS_OUTPUT_2:
-                            value = bytes.getChar(((int)value + (x.c&0x3f)) * 2); // change bytes to uint_16 *
-                            if (value <= 0xff) {
-                                if (value == 0) {
-                                    doLoop = unassigned(source, target, offsets, x, flush, cr);
-                                    if (doLoop) {
-                                        continue;
-                                    } else {
-                                        break;
-                                    }
-                                } else {
-                                    length = 1;
-                                }
-                            } else {
-                                length = 2;
-                            }
-                            break;
-                        case MBCS_OUTPUT_2_SISO:
-                            /* 1/2-byte stateful with Shift-In/Shift-Out */
-                            /*
-                             * Save the old state in the converter object
-                             * right here, then change the local prevLength state variable if necessary.
-                             * Then, if this character turns out to be unassigned or a fallback that
-                             * is not taken, the callback code must not save the new state in the converter
-                             * because the new state is for a character that is not output.
-                             * However, the callback must still restore the state from the converter
-                             * in case the callback function changed it for its output.
-                             */
-                            fromUnicodeStatus = x.prevLength; /* save the old state */
-                            value = bytes.getChar(((int)value + (x.c&0x3f)) * 2); // change bytes to uint_16 *
-                            if (value <= 0xff) {
-                                if (value == 0) {
-                                    doLoop = unassigned(source, target, offsets, x, flush, cr);
-                                    if (doLoop) {
-                                        continue;
-                                    } else {
-                                        break;
-                                    }
-                                } else if (x.prevLength <= 1) {
-                                    length = 1;
-                                } else {
-                                    /* change from double-byte mode to single-byte */
-                                    value |= UConverterConstants.UNSIGNED_INT_MASK&(UConverterConstants.SI<<8);
-                                    length = 2;
-                                    x.prevLength = 2;
-                                }
-                            } else {
-                                if (x.prevLength == 2) {
-                                    length = 2;
-                                } else {
-                                    /* change from single-byte mode to double-byte */
-                                    value |= UConverterConstants.UNSIGNED_INT_MASK&(UConverterConstants.SO<<16);
-                                    length = 3;
-                                    x.prevLength = 2;
-                                }
-                            }
-                            break;
-                        case MBCS_OUTPUT_DBCS_ONLY:
-                            /* table with single-byte results, but only DBCS mappings used */
-                            value = bytes.getChar(((int)value + (x.c&0x3f)) * 2); // change bytes to uint_16 *
-                            if (value <= 0xff) {
-                                /* no mappig or SBCS result, not taken for DBCS-only */
-                                doLoop = unassigned(source, target, offsets, x, flush, cr);
-                                if (doLoop) {
-                                    continue;
-                                } else {
-                                    break;
-                                }
-                            } else {
-                                length = 2;
-                            }
-                            break;
-                        case MBCS_OUTPUT_3:
-                            p = ((int)value + (x.c&0x3f)) * 3;
-                            value = UConverterConstants.UNSIGNED_INT_MASK&((int)bytes.get(p)<<16 | (int)bytes.get(p+1)<<8 | bytes.get(p+2)); 
-                            if (value <= 0xff) {
-                                if (value == 0) {
-                                    doLoop = unassigned(source, target, offsets, x, flush, cr);
-                                    if (doLoop) {
-                                        continue;
-                                    } else {
-                                        break;
-                                    }
-                                } else {
-                                    length = 1;
-                                }
-                            } else if (value <= 0xffff) {
-                                length = 2;
-                            } else {
-                                length = 3;
-                            }
-                            break;
-                        case MBCS_OUTPUT_4:
-                            value = UConverterConstants.UNSIGNED_INT_MASK&(bytes.getInt(((int)value + (x.c&0x3f)) * 4)); // change bytes to uint_32 *
-                            if (value <= 0xff) {
-                                if (value == 0) {
-                                    doLoop = unassigned(source, target, offsets, x, flush, cr);
-                                    if (doLoop) {
-                                        continue;
-                                    } else {
-                                        break;
-                                    }
-                                } else {
-                                    length = 1;
-                                }
-                            } else if (value <= 0xffff) {
-                                length = 2;
-                            } else if (value <= 0xffffff) {
-                                length = 3;
-                            } else {
-                                length = 4;
-                            }
-                            break;
-                        case MBCS_OUTPUT_3_EUC:
-                            value = bytes.getChar(((int)value + (x.c&0x3f)) * 2);
-                            /* EUC 16-bit fixed-length representation */
-                            if (value <= 0xff) {
-                                if (value == 0) {
-                                    doLoop = unassigned(source, target, offsets, x, flush, cr);
-                                    if (doLoop) {
-                                        continue;
-                                    } else {
-                                        break;
-                                    }
-                                } else {
-                                    length = 1;
-                                }
-                            } else if ((value&0x8000) == 0) {
-                                value |= 0x8e8000;
-                                length = 3;
-                            } else if ((value&0x80) == 0) {
-                                value |= 0x8f0080;
-                                length = 3;
-                            } else {
-                                length = 2;
-                            }
-                            break;
-                        case MBCS_OUTPUT_4_EUC:
-                            p = ((int)value + (x.c&0x3f)) * 3;
-                            value = UConverterConstants.UNSIGNED_INT_MASK&(((int)bytes.get(p)<<16)|((int)bytes.get(p+1)<<8)|bytes.get(p+2));
-                            /* EUC 16-bit fixed-length representation applied to the first two bytes */
-                            if (value <= 0xff) {
-                                if (value == 0) {
-                                    doLoop = unassigned(source, target, offsets, x, flush, cr);
-                                    if (doLoop) {
-                                        continue;
-                                    } else {
-                                        break;
-                                    }
-                                } else {
-                                    length = 1;
-                                }
-                            } else if (value <= 0xffff) {
-                                length = 2;
-                            } else if ((value & 0x800000) == 0) {
-                                value |= 0x08e800000;
-                                length = 4;
-                            } else if ((value & 0x8000) == 0) {
-                                value |= 0x08f008000;
-                                length = 4;
-                            } else {
-                                length = 3;
-                            }
-                            break;
-                        default:
-                            /* must not occur */
-                            value = 0;
-                            length = 0;
-                            break;
+                    
+                    /* convert the Unicode point in c into codepage bytes */
+                    /*
+                     * The basic lookup is a triple-stage compact array (trie) lookup.
+                     * 
+                     * Single-byte codepages are handled with a different data structure
+                     * by _MBCSSingle... functions.
+                     * 
+                     * The result consists of a 32-bit value from stage 2 and
+                     * a pointer to as many bytes as are stored per character.
+                     * The pointer points to the character's bytes in stage 3.
+                     * Bits 15..0 of the stage 2 entry contain the stage 3 index
+                     * for that pointer, while bits 31..16 are flags for which of
+                     * the 16 characters in the block are roundtrip-assigned.
+                     * 
+                     * For 2-byte and 4 byte codepages, the bytes are stored as uint16_t
+                     * respectively as uint32_t, in the platform encoding.
+                     * For 3-byte codepages, the bytes are always stored in big-endian order.
+                     * 
+                     * For EUC encodings that use only either 0x8e or 0x8f as the first
+                     * byte of their longest byte sequences, the first two bytes in 
+                     * this third stage indicate with their 7th bits whether these bytes
+                     * are to be writeen directly or actually need to be preceeded by
+                     * one of the two Single-Shift codes. With this, the third stage
+                     * stores one byte fewer per character than the actual maximum length of
+                     * EUC byte sequences.
+                     * 
+                     * Other than that, leading zero bytes are removed and the other
+                     * bytes output. A single zero byte may be ouput if the "assigned"
+                     * bit in stage 2 was on.
+                     * The data structure does not support zero byte output as a fallback,
+                     * and also does not allow output of leading zeros.
+                     */
+                    stage2Entry = MBCS_STAGE_2_FROM_U(table, x.c);
+                    
+                    /* get the bytes and the length for the output */
+                    switch (outputType) {
+                    case MBCS_OUTPUT_2:
+                        value = MBCS_VALUE_2_FROM_STAGE_2(bytes.array(), stage2Entry, x.c);
+                        if (value <= 0xff) {
+                            length = 1;
+                        } else {
+                            length = 2;
                         }
-                        if (!doLoop) {
-                            break; // get out of outer while loop.
-                        }
-                        /* output the value */
-                    } else {
-                        /* This also tests if the codepage maps single surrogates.
-                         * If it does, then surrogates are not paired but mapped separately.
-                         * Note that in this case unmatched surrogates are not detected.
-                         */
-                        if (gotoGetTrail || (UTF16.isSurrogate((char)x.c) && (unicodeMask&UConverterConstants.HAS_SURROGATES) == 0)) {
-                            if (gotoGetTrail || (UTF16.isLeadSurrogate((char)x.c))) {
-// getTrail label
-                                gotoGetTrail = false; // reset gotoGetTrail flag
-                                
-                                doLoop = getTrail(source, target, unicodeMask, x, flush, cr);
-                                if (x.doread && doLoop) {
-                                    continue;
-                                } else if (!x.doread & !doLoop) {
-                                    break;
-                                }
-                            } else {
-                                /* this is an unmatched trail code unit (2nd surrogate) */
-                                /* callback(illegal) */
-                                cr[0] = CoderResult.malformedForLength(1);
-                                break;
-                            }
-                        }
-                        
-                        /* convert the Unicode point in c into codepage bytes */
+                        break;
+                    case MBCS_OUTPUT_2_SISO:
+                        /* 1/2-byte stateful with Shift-In/Shift-Out */
                         /*
-                         * The basic lookup is a triple-stage compact array (trie) lookup.
-                         * 
-                         * Single-byte codepages are handled with a different data structure
-                         * by _MBCSSingle... functions.
-                         * 
-                         * The result consists of a 32-bit value from stage 2 and
-                         * a pointer to as many bytes as are stored per character.
-                         * The pointer points to the character's bytes in stage 3.
-                         * Bits 15..0 of the stage 2 entry contain the stage 3 index
-                         * for that pointer, while bits 31..16 are flags for which of
-                         * the 16 characters in the block are roundtrip-assigned.
-                         * 
-                         * For 2-byte and 4 byte codepages, the bytes are stored as uint16_t
-                         * respectively as uint32_t, in the platform encoding.
-                         * For 3-byte codepages, the bytes are always stored in big-endian order.
-                         * 
-                         * For EUC encodings that use only either 0x8e or 0x8f as the first
-                         * byte of their longest byte sequences, the first two bytes in 
-                         * this third stage indicate with their 7th bits whether these bytes
-                         * are to be writeen directly or actually need to be preceeded by
-                         * one of the two Single-Shift codes. With this, the third stage
-                         * stores one byte fewer per character than the actual maximum length of
-                         * EUC byte sequences.
-                         * 
-                         * Other than that, leading zero bytes are removed and the other
-                         * bytes output. A single zero byte may be ouput if the "assigned"
-                         * bit in stage 2 was on.
-                         * The data structure does not support zero byte output as a fallback,
-                         * and also does not allow output of leading zeros.
+                         * Save the old state in the converter object
+                         * right here, then change the local pervLength state variable if necessary.
+                         * Then, if this character turns out to be unassigned or a fallback that
+                         * is not taken, the callback code must not save the new state in the converter
+                         * because the new state is for a character that is not output.
+                         * However, the callback must still restore the state from the converter
+                         * in case the callback function changed it for its output.
                          */
-                        stage2Entry = MBCS_STAGE_2_FROM_U(table, x.c);
-                        
-                        /* get the bytes and the length for the output */
-                        switch (outputType) {
-                        case MBCS_OUTPUT_2:
-                            value = MBCS_VALUE_2_FROM_STAGE_2(bytes.array(), stage2Entry, x.c);
-                            if (value <= 0xff) {
-                                length = 1;
-                            } else {
-                                length = 2;
-                            }
-                            break;
-                        case MBCS_OUTPUT_2_SISO:
-                            /* 1/2-byte stateful with Shift-In/Shift-Out */
-                            /*
-                             * Save the old state in the converter object
-                             * right here, then change the local pervLength state variable if necessary.
-                             * Then, if this character turns out to be unassigned or a fallback that
-                             * is not taken, the callback code must not save the new state in the converter
-                             * because the new state is for a character that is not output.
-                             * However, the callback must still restore the state from the converter
-                             * in case the callback function changed it for its output.
-                             */
-                            fromUnicodeStatus = x.prevLength; /* save the old state */
-                            value = MBCS_VALUE_2_FROM_STAGE_2(bytes.array(), stage2Entry, x.c);
-                            if (value <= 0xff) {
-                                if (value == 0 && MBCS_FROM_U_IS_ROUNDTRIP(stage2Entry, x.c)) {
-                                    /* no mapping, leave value == 0 */
-                                    length = 0;
-                                } else if (x.prevLength <= 1) {
-                                    length = 1;
-                                } else {
-                                    /* change from double-byte mode to single-byte */
-                                    value |= UConverterConstants.UNSIGNED_INT_MASK & (UConverterConstants.SI<<8);
-                                    length = 2;
-                                    x.prevLength = 1;
-                                }
-                            } else {
-                                if (x.prevLength == 2) {
-                                    length = 2;
-                                } else {
-                                    length = 2;
-                                }
-                            }
-                            break;
-                        case MBCS_OUTPUT_DBCS_ONLY:
-                            /* table with single-byte results, but only DBCS mappings used */
-                            value = MBCS_VALUE_2_FROM_STAGE_2(bytes.array(), stage2Entry, x.c);
-                            if (value <= 0xff) {
-                                /* no mapping or SBCS result, not taken for DBCS-only */
-                                value = stage2Entry = 0; /* stage2Entry=0 to reset roundtrip flags */
+                        fromUnicodeStatus = x.prevLength; /* save the old state */
+                        value = MBCS_VALUE_2_FROM_STAGE_2(bytes.array(), stage2Entry, x.c);
+                        if (value <= 0xff) {
+                            if (value == 0 && MBCS_FROM_U_IS_ROUNDTRIP(stage2Entry, x.c)) {
+                                /* no mapping, leave value == 0 */
                                 length = 0;
-                            } else {
-                                length = 2;
-                            }
-                            break;
-                        case MBCS_OUTPUT_3:
-                            p = MBCS_POINTER_3_FROM_STAGE_2(bytes.array(), stage2Entry, x.c);
-                            value = UConverterConstants.UNSIGNED_INT_MASK&((int)bytes.get(p)<<16 | (int)bytes.get(p+1)<<8 | bytes.get(p+2));
-                            if (value <= 0xff) {
+                            } else if (x.prevLength <= 1) {
                                 length = 1;
-                            } else if (value <= 0xffff) {
+                            } else {
+                                /* change from double-byte mode to single-byte */
+                                value |= UConverterConstants.UNSIGNED_INT_MASK & (UConverterConstants.SI<<8);
+                                length = 2;
+                                x.prevLength = 1;
+                            }
+                        } else {
+                            if (x.prevLength == 2) {
                                 length = 2;
                             } else {
+                                /* change from single-byte mode to double-byte */
+                                value |= UConverterConstants.UNSIGNED_INT_MASK & (UConverterConstants.SO<<16);
                                 length = 3;
+                                x.prevLength = 2;
                             }
-                            break;
-                        case MBCS_OUTPUT_4:
-                            value = MBCS_VALUE_4_FROM_STAGE_2(bytes.array(), stage2Entry, x.c);
-                            if (value <= 0xff) {
-                                length = 1;
-                            } else if (value <= 0xffff) {
-                                length = 2;
-                            } else if (value <= 0xffffff) {
-                                length = 3;
-                            } else {
-                                length = 4;
-                            }
-                            break;
-                        case MBCS_OUTPUT_3_EUC:
-                            value = MBCS_VALUE_2_FROM_STAGE_2(bytes.array(), stage2Entry, x.c);
-                            /* EUC 16-bit fixed-length representation */
-                            if (value <= 0xff) {
-                                length = 1;
-                            } else if ((value&0x8000) == 0) {
-                                value |= 0x8e8000;
-                                length = 3;
-                            } else if ((value&0x80) == 0) {
-                                value |= 0x8f0080;
-                                length = 3;
-                            } else {
-                                length = 2;
-                            }
-                            break;
-                        case MBCS_OUTPUT_4_EUC:
-                            p = MBCS_POINTER_3_FROM_STAGE_2(bytes.array(), stage2Entry, x.c);
-                            value = UConverterConstants.UNSIGNED_INT_MASK&((int)bytes.get(p)<<16 | (int)bytes.get(p+1)<<8 | bytes.get(p+2));
-                            /* EUC 16-bit fixed-length representation applied to the first two bytes */
-                            if (value <= 0xff) {
-                                length = 1;
-                            } else if (value <= 0xffff) {
-                                length = 2;
-                            } else if ((value&0x800000) == 0) {
-                                value |= 0x08e800000;
-                                length = 4;
-                            } else if ((value&0x8000) == 0) {
-                                value |= 0x08f008000;
-                                length = 4;
-                            } else {
-                                length = 3;
-                            }
-                            break;
-                        default :
-                            /* must not occur */
-                            value = stage2Entry = 0;
-                            length = 0;
-                            break;
                         }
-                        /* is this code point assigned, or do we use fallbacks? */
-                        if (!(MBCS_FROM_U_IS_ROUNDTRIP(stage2Entry, x.c)) || 
-                                (CharsetEncoderICU.isFromUUseFallback(useFallback, x.c) && value != 0)) {
-                            /*
-                             * We allow a 0 byte output if the "assigned" bit is set for this entry.
-                             * There is no way with this data structure for fallback output
-                             * to be a zero byte.
-                             */
+                        break;
+                    case MBCS_OUTPUT_DBCS_ONLY:
+                        /* table with single-byte results, but only DBCS mappings used */
+                        value = MBCS_VALUE_2_FROM_STAGE_2(bytes.array(), stage2Entry, x.c);
+                        if (value <= 0xff) {
+                            /* no mapping or SBCS result, not taken for DBCS-only */
+                            value = stage2Entry = 0; /* stage2Entry=0 to reset roundtrip flags */
+                            length = 0;
+                        } else {
+                            length = 2;
+                        }
+                        break;
+                    case MBCS_OUTPUT_3:
+                        p = MBCS_POINTER_3_FROM_STAGE_2(bytes.array(), stage2Entry, x.c);
+                        value = UConverterConstants.UNSIGNED_INT_MASK&((int)bytes.get(p)<<16 | (int)bytes.get(p+1)<<8 | bytes.get(p+2));
+                        if (value <= 0xff) {
+                            length = 1;
+                        } else if (value <= 0xffff) {
+                            length = 2;
+                        } else {
+                            length = 3;
+                        }
+                        break;
+                    case MBCS_OUTPUT_4:
+                        value = MBCS_VALUE_4_FROM_STAGE_2(bytes.array(), stage2Entry, x.c);
+                        if (value <= 0xff) {
+                            length = 1;
+                        } else if (value <= 0xffff) {
+                            length = 2;
+                        } else if (value <= 0xffffff) {
+                            length = 3;
+                        } else {
+                            length = 4;
+                        }
+                        break;
+                    case MBCS_OUTPUT_3_EUC:
+                        value = MBCS_VALUE_2_FROM_STAGE_2(bytes.array(), stage2Entry, x.c);
+                        /* EUC 16-bit fixed-length representation */
+                        if (value <= 0xff) {
+                            length = 1;
+                        } else if ((value&0x8000) == 0) {
+                            value |= 0x8e8000;
+                            length = 3;
+                        } else if ((value&0x80) == 0) {
+                            value |= 0x8f0080;
+                            length = 3;
+                        } else {
+                            length = 2;
+                        }
+                        break;
+                    case MBCS_OUTPUT_4_EUC:
+                        p = MBCS_POINTER_3_FROM_STAGE_2(bytes.array(), stage2Entry, x.c);
+                        value = UConverterConstants.UNSIGNED_INT_MASK&((int)bytes.get(p)<<16 | (int)bytes.get(p+1)<<8 | bytes.get(p+2));
+                        /* EUC 16-bit fixed-length representation applied to the first two bytes */
+                        if (value <= 0xff) {
+                            length = 1;
+                        } else if (value <= 0xffff) {
+                            length = 2;
+                        } else if ((value&0x800000) == 0) {
+                            value |= 0x08e800000;
+                            length = 4;
+                        } else if ((value&0x8000) == 0) {
+                            value |= 0x08f008000;
+                            length = 4;
+                        } else {
+                            length = 3;
+                        }
+                        break;
+                    default :
+                        /* must not occur */
+                        value = stage2Entry = 0;
+                        length = 0;
+                        break;
+                    }
+                    /* is this code point assigned, or do we use fallbacks? */
+                    if (!(MBCS_FROM_U_IS_ROUNDTRIP(stage2Entry, x.c)) || 
+                            (CharsetEncoderICU.isFromUUseFallback(useFallback, x.c) && value != 0)) {
+                        /*
+                         * We allow a 0 byte output if the "assigned" bit is set for this entry.
+                         * There is no way with this data structure for fallback output
+                         * to be a zero byte.
+                         */
 // unassigned label 
-                            doLoop = unassigned(source, target, offsets, x, flush, cr);
-                            if (doLoop) {
-                                continue;
-                            } else {
-                                break;
+                        int currentSourcePos = source.position();
+                        doLoop = unassigned(source, target, offsets, x, flush, cr);
+                        if (doLoop) {
+                            continue;
+                        } else {
+                            if (source.position() < currentSourcePos) {
+                                source.position(currentSourcePos);
                             }
+                            break;
                         }
                     }
                     
