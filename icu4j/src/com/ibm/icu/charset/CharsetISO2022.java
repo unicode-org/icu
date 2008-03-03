@@ -248,15 +248,16 @@ class CharsetISO2022 extends CharsetICU {
     }
     /* This gets the valid index of the end of buffer when decoding. */
     private static int getEndOfBuffer_2022(ByteBuffer source, boolean flush) {
+        int sourceIndex = source.position();
         byte mySource = 0;
-        mySource = source.get(source.position());
+        mySource = source.get(sourceIndex);
         
         while (source.hasRemaining() && mySource != ESC_2022) {
             mySource = source.get();
             if (mySource == ESC_2022) {
                 break;
             }
-            ++sourceIndex;
+            sourceIndex++;
         }
         return sourceIndex;
     }
