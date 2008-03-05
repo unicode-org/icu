@@ -130,16 +130,6 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
     }
     
     /**
-     * Sets the callback decoder method to be used if an illegal sequence is encountered.
-     * 
-     * @param newCallback CharsetCallback.Decoder
-     * @exception IllegalArgumentException
-     * @draft ICU 4.0
-     */
-    public final void onMalformedInput(CharsetCallback.Decoder newCallback) {
-        onMalformedInput = newCallback;
-    }
-    /**
      * Sets the action to be taken if an illegal sequence is encountered
      * 
      * @param newAction action to be taken
@@ -162,15 +152,28 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
     }
     
     /**
-     * Sets the callback decoder method to be used if an illegal sequence is encountered.
-     * 
-     * @param newCallback CharsetCallback.Decoder
-     * @exception IllegalArgumentException
-     * @draft ICU 4.0
+     * Sets the callback encoder method and context to be used if an illegal sequence is encounterd.
+     * You would normally call this twice to set both the malform and unmappable error. In this case,
+     * newContext should remain the same since using a different newContext each time will negate the last
+     * one used.
+     * @param err CoderResult
+     * @param newCallback CharsetCallback.Encoder
+     * @param newContext Object
      */
-    public final void onUnmappableCharacter(CharsetCallback.Decoder newCallback) {
-        onUnmappableCharacter = newCallback;
+    public final void setToUCallback(CoderResult err, CharsetCallback.Decoder newCallback, Object newContext) {
+        if (err.isMalformed()) {
+            onMalformedInput = newCallback;
+        } else if (err.isUnmappable()) {
+            onUnmappableCharacter = newCallback;
+        } else {
+            /* Error: Only malformed and unmappable are handled. */
+        }
+        
+        if (toUContext == null || !toUContext.equals(newContext)) {
+            toUContext = newContext;
+        }
     }
+    
     private static CharsetCallback.Decoder getCallback(CodingErrorAction action){
         if(action==CodingErrorAction.REPLACE){
             return CharsetCallback.TO_U_CALLBACK_SUBSTITUTE;

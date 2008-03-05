@@ -320,7 +320,7 @@ public class CharsetCallback {
                     valueString[valueStringLength++] = UNICODE_RIGHT_CURLY_CODEPOINT;   /* adding } */
                 } else if (((String)context).equals(ESCAPE_CSS2)) {
                     valueString[valueStringLength++] = UNICODE_RS_CODEPOINT;    /* adding \ */
-                    valueStringLength += itou(valueString, valueStringLength, (int)buffer[i++] & UConverterConstants.UNSIGNED_SHORT_MASK, 16, 0);
+                    valueStringLength += itou(valueString, valueStringLength, cp, 16, 0);
                     /* Always add space character, because the next character might be whitespace,
                        which would erroneously be considered the termination of the escape sequence. */
                     valueString[valueStringLength++] = UNICODE_SPACE_CODEPOINT;
