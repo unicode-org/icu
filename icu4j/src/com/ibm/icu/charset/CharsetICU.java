@@ -133,15 +133,15 @@ public abstract class CharsetICU extends Charset{
         algorithmicCharsets.put("ISCII,version=8",       "com.ibm.icu.charset.CharsetISCII" );
         algorithmicCharsets.put("IMAP-mailbox-name",     "com.ibm.icu.charset.CharsetUTF7" );
         algorithmicCharsets.put("HZ",                    "com.ibm.icu.charset.CharsetHZ" );
-        //algorithmicCharsets.put("ISO_2022,locale=ja,version=0",               "com.ibm.icu.charset.CharsetISO2022" );
-        //algorithmicCharsets.put("ISO_2022,locale=ja,version=1",               "com.ibm.icu.charset.CharsetISO2022" );
-        //algorithmicCharsets.put("ISO_2022,locale=ja,version=2",               "com.ibm.icu.charset.CharsetISO2022" );
-        //algorithmicCharsets.put("ISO_2022,locale=ja,version=3",               "com.ibm.icu.charset.CharsetISO2022" );
-        //algorithmicCharsets.put("ISO_2022,locale=ja,version=4",               "com.ibm.icu.charset.CharsetISO2022" );
-        //algorithmicCharsets.put("ISO_2022,locale=zh,version=0",               "com.ibm.icu.charset.CharsetISO2022" );
-        //algorithmicCharsets.put("ISO_2022,locale=zh,version=1",               "com.ibm.icu.charset.CharsetISO2022" );
-        //algorithmicCharsets.put("ISO_2022,locale=ko,version=0",               "com.ibm.icu.charset.CharsetISO2022" );
-        //algorithmicCharsets.put("ISO_2022,locale=ko,version=1",               "com.ibm.icu.charset.CharsetISO2022" );
+        algorithmicCharsets.put("ISO_2022,locale=ja,version=0",               "com.ibm.icu.charset.CharsetISO2022" );
+        algorithmicCharsets.put("ISO_2022,locale=ja,version=1",               "com.ibm.icu.charset.CharsetISO2022" );
+        algorithmicCharsets.put("ISO_2022,locale=ja,version=2",               "com.ibm.icu.charset.CharsetISO2022" );
+        algorithmicCharsets.put("ISO_2022,locale=ja,version=3",               "com.ibm.icu.charset.CharsetISO2022" );
+        algorithmicCharsets.put("ISO_2022,locale=ja,version=4",               "com.ibm.icu.charset.CharsetISO2022" );
+        algorithmicCharsets.put("ISO_2022,locale=zh,version=0",               "com.ibm.icu.charset.CharsetISO2022" );
+        algorithmicCharsets.put("ISO_2022,locale=zh,version=1",               "com.ibm.icu.charset.CharsetISO2022" );
+        algorithmicCharsets.put("ISO_2022,locale=ko,version=0",               "com.ibm.icu.charset.CharsetISO2022" );
+        algorithmicCharsets.put("ISO_2022,locale=ko,version=1",               "com.ibm.icu.charset.CharsetISO2022" );
         }
 
     /*public*/ static final Charset getCharset(String icuCanonicalName, String javaCanonicalName, String[] aliases){

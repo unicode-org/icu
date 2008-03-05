@@ -2951,6 +2951,7 @@ class CharsetMBCS extends CharsetICU {
             int stage2Entry;
             int value;
             int length;
+            int p;
 
             /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
             if (c <= 0xffff || ((sharedData.mbcs.unicodeMask & UConverterConstants.HAS_SUPPLEMENTARY) != 0)) {
@@ -2990,17 +2991,20 @@ class CharsetMBCS extends CharsetICU {
                     // length=2;
                     // }
                     // break;
-                    // case MBCS_OUTPUT_3:
-                    // p=MBCS_POINTER_3_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes, stage2Entry, c);
-                    // value=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
-                    // if(value<=0xff) {
-                    // length=1;
-                    // } else if(value<=0xffff) {
-                    // length=2;
-                    // } else {
-                    // length=3;
-                    // }
-                    // break;
+                    case MBCS_OUTPUT_3:
+                        byte[] bytes = sharedData.mbcs.fromUnicodeBytes;
+                        p = CharsetMBCS.MBCS_POINTER_3_FROM_STAGE_2(bytes, stage2Entry, c);
+                        value = ((bytes[p] & UConverterConstants.UNSIGNED_BYTE_MASK)<<16) |
+                            ((bytes[p+1] & UConverterConstants.UNSIGNED_BYTE_MASK)<<8) |
+                            (bytes[p+2] & UConverterConstants.UNSIGNED_BYTE_MASK);
+                        if (value <= 0xff) {
+                            length = 1;
+                        } else if (value <= 0xffff) {
+                            length = 2;
+                        } else {
+                            length = 3;
+                        }
+                        break;
                     // case MBCS_OUTPUT_4:
                     // value=MBCS_VALUE_4_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes, stage2Entry, c);
                     // if(value<=0xff) {
@@ -3542,7 +3546,7 @@ class CharsetMBCS extends CharsetICU {
             
             SideEffects x = new SideEffects(0, 0, 0, 0, 0, 0);
             
-            int targetCapacity = target.limit();
+            int targetCapacity = target.limit() - target.position();
             
             int stage2Entry = 0;
             //int asciiRoundtrips;
@@ -3899,14 +3903,15 @@ class CharsetMBCS extends CharsetICU {
                          */
                         /* we know that 1<=targetCapacity<length<=4 */
                         length -= targetCapacity;
+                        int i = 0; // index for errorBuffer
                         switch (length) {
                             /* each branch falls through to the next one */
                         case 3:
-                            errorBuffer[0] = (byte)(value>>16);
+                            errorBuffer[i++] = (byte)(value>>16);
                         case 2:
-                            errorBuffer[1] = (byte)(value>>8);
+                            errorBuffer[i++] = (byte)(value>>8);
                         case 1:
-                            errorBuffer[2] = (byte)value;
+                            errorBuffer[i++] = (byte)value;
                         default :
                             /* will never occur */
                             break;

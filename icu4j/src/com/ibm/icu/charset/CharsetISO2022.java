@@ -117,6 +117,9 @@ class CharsetISO2022 extends CharsetICU {
         } else {
             throw new UnsupportedCharsetException(icuCanonicalName);
         }
+        
+        myConverterData.currentEncoder = (CharsetEncoderMBCS)myConverterData.currentConverter.newEncoder();
+        myConverterData.currentDecoder = (CharsetDecoderMBCS)myConverterData.currentConverter.newDecoder();
     }
     
     private void ISO2022InitJP(int version) {
@@ -141,6 +144,9 @@ class CharsetISO2022 extends CharsetICU {
             myConverterData.myConverterArray[KSC5601] = ((CharsetMBCS)CharsetICU.forNameICU("ksc_5601")).sharedData;
         }
         myConverterData.name = "ISO_2022,locale=ja,version=" + version;
+        
+        // create a generic CharsetMBCS object
+        myConverterData.currentConverter = (CharsetMBCS)CharsetICU.forNameICU("icu-internal-25546");
     }
     
     private void ISO2022InitCN(int version) {
@@ -162,6 +168,9 @@ class CharsetISO2022 extends CharsetICU {
             myConverterData.version = 0;
             myConverterData.name = "ISO_2022,locale=ja,version=0";
         }
+        
+     // create a generic CharsetMBCS object
+        myConverterData.currentConverter = (CharsetMBCS)CharsetICU.forNameICU("icu-internal-25546");
     }
     
     private void ISO2022InitKR(int version) {
@@ -173,6 +182,7 @@ class CharsetISO2022 extends CharsetICU {
         
         if (version == 1) {
             myConverterData.currentConverter = (CharsetMBCS)CharsetICU.forNameICU("icu-internal-25546");
+            myConverterData.currentConverter.subChar1 = fromUSubstitutionChar[0][0];
             myConverterData.name = "ISO_2022,locale=ko,version=1";
         } else {
             myConverterData.currentConverter = (CharsetMBCS)CharsetICU.forNameICU("ibm-949");
@@ -543,253 +553,6 @@ class CharsetISO2022 extends CharsetICU {
 
         /* return result */
         pMatchValue[0] = CharsetMBCS.TO_U_MASK_ROUNDTRIP(matchValue);
-        return matchLength;
-    }
-    /*
-     * This is another simple conversion function for internal use by other
-     * conversion implementations.
-     * It does not use the converter state nor call callbacks.
-     * It does not handle the EBCDIC swaplfnl option (set in UConverter).
-     * It handles conversion extensions but not GB 1830.
-     * 
-     * It converts a single Unicode code point into code page bytes, encoded 
-     * as one 32-bit value. The function returns the number of bytes in *pValue:
-     * 1..4 the number of bytes in *pValue
-     * 0    unassigned (*pValue undefined)
-     * -1   illegal (currently not used, *pValue undefined)
-     * *pValue will contain the resulting bytes with the last byte in bits 7..0,
-     * the second to last byte in bits 15..8, etc.
-     * Currently the function assumes but does not check that 0<=c<=0x10ffff.
-     */
-    static int MBCSFromUChar32_ISO2022(UConverterSharedData sharedData, int c, int[] value, boolean useFallback,
-            int outputType) { // Output Type from MBCS, e.g. CharsetMBCS.MBCS_OUTPUT_2
-        ByteBuffer cx;
-        char[] table;
-        int stage2Entry;
-        int myValue;
-        int length;
-        int p;
-        
-        /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
-        if (c<0x10000 || (sharedData.mbcs.unicodeMask& UConverterConstants.HAS_SUPPLEMENTARY) != 0) {
-            table = sharedData.mbcs.fromUnicodeTable;
-            stage2Entry = CharsetMBCS.MBCS_STAGE_2_FROM_U(table, c);
-            
-            /* get the bytes and the length for the output */
-            if (outputType == CharsetMBCS.MBCS_OUTPUT_2) {
-
-                myValue = CharsetMBCS.MBCS_VALUE_2_FROM_STAGE_2(sharedData.mbcs.fromUnicodeBytes, stage2Entry, c);
-                if (myValue <= 0xff) {
-                    length = 1;
-                } else {
-                    length = 2;
-                }
-            } else { /* outputType == MBCS_OUTPUT_3 */
-                byte[] bytes = sharedData.mbcs.fromUnicodeBytes;
-                p = CharsetMBCS.MBCS_POINTER_3_FROM_STAGE_2(bytes, stage2Entry, c);
-                myValue = ((bytes[p] & UConverterConstants.UNSIGNED_BYTE_MASK)<<16) |
-                    ((bytes[p+1] & UConverterConstants.UNSIGNED_BYTE_MASK)<<8) |
-                    (bytes[p+2] & UConverterConstants.UNSIGNED_BYTE_MASK);
-                if (myValue <= 0xff) {
-                    length = 1;
-                } else if (myValue <= 0xffff) {
-                    length = 2;
-                } else {
-                    length = 3;
-                }
-            }
-            /* is this code point assigned, or do we use fallbacks? */
-            if ((stage2Entry&(1<<(16+(c&0xf)))) != 0) {
-                /* assigned */
-                value[0] = myValue;
-                return length;
-            } else if (CharsetEncoderICU.isFromUUseFallback(useFallback, c) && myValue != 0) {
-                /*
-                 * We allow a 0 byte output if the "assigned" bit is set for this entry.
-                 * There is no way with this data structure for fallback output
-                 * to be a zero byte.
-                 */
-                value[0] = myValue;
-                return -length;
-            }
-            
-        }
-        
-        cx = sharedData.mbcs.extIndexes;
-        if (cx != null) {
-            return extSimpleMatchFromU(cx, c, value, useFallback);
-        }
-        return 0;
-    }
-    /*
-     * Used by ISO 2022 implementation
-     * @return number of bytes in pValue; negative number if fallback; 0 for no mapping
-     */
-    private static int extSimpleMatchFromU(ByteBuffer cx, int c, int[] pValue, boolean useFallback) {
-        int match;
-        int[] value = new int[1];
-        
-        /*try to match */
-        match = extMatchFromU(cx, c, null, null, value, useFallback, true);
-        if (match >= 2) {
-            int length;
-            boolean isRoundtrip;
-            isRoundtrip = CharsetMBCS.FROM_U_IS_ROUNDTRIP(value[0]);
-            length = CharsetMBCS.FROM_U_GET_LENGTH(value[0]);
-            value[0] = CharsetMBCS.FROM_U_GET_DATA(value[0]);
-            
-            if (length <= CharsetMBCS.EXT_FROM_U_MAX_DIRECT_LENGTH) {
-                pValue[0] = value[0];
-                return isRoundtrip ? length : -length;
-            }
-        }
-        
-        /*
-         * return no match because
-         * - match>1 && resultLength>4: result too long for simple conversion
-         * - match==1: no match found, <subchar1> preferred
-         * - match==0: no match found in the first place
-         * - match<0: partial match, not supported for simple conversion (and flush==true)
-         */
-        return 0;
-    }
-    
-    private static int extMatchFromU(ByteBuffer cx, int firstCP, char[] pre, char[] src, int[] pMatchValue, boolean useFallback, boolean flush) {
-        CharBuffer stage12, stage3;
-        IntBuffer stage3b;
-        
-        CharBuffer fromUTableUChars, fromUSectionUChars;
-        IntBuffer fromUTableValues, fromUSectionValues;
-        
-        int value, matchValue;
-        int i, j, index, length, matchLength;
-        char c;
-        
-        if (cx == null) {
-            return 0; /* no extension data, no match */
-        }
-        
-        /* trie lookup of firstCP */
-        index = firstCP>>10; /* stage 1 index */
-        if (index>=cx.getInt(CharsetMBCS.EXT_FROM_U_STAGE_1_LENGTH*4)) { // need to find the correct int in the bytebuffer
-            return 0; /* the first code point is outside the trie */
-        }
-        
-        stage12 = (CharBuffer)CharsetMBCS.ARRAY(cx, CharsetMBCS.EXT_FROM_U_STAGE_12_INDEX, char.class);
-        stage3 = (CharBuffer)CharsetMBCS.ARRAY(cx, CharsetMBCS.EXT_FROM_U_STAGE_3_INDEX, char.class);
-        index = CharsetMBCS.FROM_U(stage12, stage3, index, firstCP);
-        
-        stage3b = (IntBuffer)CharsetMBCS.ARRAY(cx, CharsetMBCS.EXT_FROM_U_STAGE_3B_INDEX, int.class);
-        value = stage3b.get(index);
-        if (value == 0) {
-            return 0;
-        }
-        
-        /*
-         * Tests for (value&EXT_FROM_U_RESERVED_MASK) == 0:
-         * Do not interpret values with reserved bits used, for forward compatibility,
-         * and do not even remember intermediate results with reserved bits used.
-         */
-        
-        if (CharsetMBCS.TO_U_IS_PARTIAL(value)) {
-            /* partial match, enter the loop below */
-            index = CharsetMBCS.FROM_U_GET_PARTIAL_INDEX(value);
-            
-            /* initialize */
-            fromUTableUChars = (CharBuffer)CharsetMBCS.ARRAY(cx, CharsetMBCS.EXT_FROM_U_UCHARS_INDEX, char.class);
-            fromUTableValues = (IntBuffer)CharsetMBCS.ARRAY(cx, CharsetMBCS.EXT_FROM_U_VALUES_INDEX, int.class);
-            
-            matchValue = 0;
-            i = j = matchLength = 0;
-            
-            /* we must not remember fallback matches when not using fallbacks */
-            
-            /*match inputs until there is a full match or the input is consumed */
-            for(;;) {
-                /* go to the next section */
-                int oldpos = fromUTableUChars.position();
-                fromUSectionUChars = ((CharBuffer)fromUTableUChars.position(index)).slice();
-                fromUTableUChars.position(oldpos);
-                oldpos = fromUTableValues.position();
-                fromUSectionValues = ((IntBuffer)fromUTableValues.position(index)).slice();
-                fromUTableValues.position(oldpos);
-                
-                /*read first pair of the section */
-                length = fromUSectionUChars.get();
-                value = fromUSectionValues.get();
-                if (value != 0 &&
-                        (CharsetMBCS.FROM_U_IS_ROUNDTRIP(value) || CharsetEncoderICU.isFromUUseFallback(useFallback, firstCP)) &&
-                        (value&CharsetMBCS.FROM_U_RESERVED_MASK) == 0) {
-                    /* remember longest match so far */
-                    matchValue = value;
-                    matchLength = 2 + i + j;
-                }
-                
-                /* match pre[] then src[] */
-                if (pre != null && i < pre.length) {
-                    c = pre[i++];
-                } else if (src != null && j < src.length) {
-                    c = src[j++];
-                } else {
-                    /* all input consumed, partial match */
-                    if (flush || (length=(i+j))> CharsetMBCS.MAX_UCHARS) {
-                        /*
-                         * end of the entire input stream, stop with the longest match so far
-                         * or: partial match must not be longer than MAX_UCHARS
-                         * because it must fit into state buffers
-                         */
-                        break;
-                    } else {
-                        /* continue with more input next time */
-                        return -(2+length);
-                    }
-                }
-                
-                /* search for the current UChar */
-                index = CharsetMBCS.findFromU(fromUSectionUChars, length, c);
-                if (index < 0) {
-                    /* no match here, stop with the longest match so far */
-                    break;
-                } else {
-                    value = fromUSectionValues.get(index);
-                    if (CharsetMBCS.FROM_U_IS_PARTIAL(value)) {
-                        /* partial match, continue */
-                        index = CharsetMBCS.FROM_U_GET_PARTIAL_INDEX(value);
-                    } else {
-                        if ((CharsetMBCS.FROM_U_IS_ROUNDTRIP(value) || CharsetEncoderICU.isFromUUseFallback(useFallback, firstCP)) &&
-                                (value&CharsetMBCS.FROM_U_RESERVED_MASK) == 0 ) {
-                            /* full match, stop with result */
-                            matchValue = value;
-                            matchLength = 2 + i + j;
-                        } else {
-                            /* full match on fallback not taken, stop with the longest match so far */
-                        }
-                        break;
-                    }
-                }
-            }
-            
-            if (matchLength == 0) {
-                /* no match at all */
-                return 0;
-            }
-        } else { /* result from firstCP trie lookup */
-            if ((CharsetMBCS.FROM_U_IS_ROUNDTRIP(value) || CharsetEncoderICU.isFromUUseFallback(useFallback, firstCP)) &&
-                    (value&CharsetMBCS.FROM_U_RESERVED_MASK) == 0) {
-                /* full match, stop with result */
-                matchValue = value;
-                matchLength = 2;
-            } else {
-                /* fallback not taken */
-                return 0;
-            }
-        }
-        
-        /* return result */
-        if (matchValue == CharsetMBCS.FROM_U_SUBCHAR1) {
-            return 1; /* assert matchLength == 2 */
-        }
-        pMatchValue[0] = matchValue;
         return matchLength;
     }
     /*
@@ -1525,7 +1288,6 @@ class CharsetISO2022 extends CharsetICU {
                         }
                     } else {
                         /* Call the callback function */
-                        //TODO: may need to reset source position, target position 
                         err = toUnicodeCallback(this, mySourceChar, targetUniChar);
                         break;
                     }
@@ -1710,6 +1472,7 @@ class CharsetISO2022 extends CharsetICU {
         
         protected void implReset() {
             super.implReset();
+            setInitialStateToUnicodeKR();
             myConverterData.toU2022State.reset();
         }
         
@@ -2003,11 +1766,11 @@ class CharsetISO2022 extends CharsetICU {
         0x212C   /* U+FF9F */
     };
     
-    protected byte []fromUSubstitution = new byte[]{(byte)0x1A};
+    protected byte [][]fromUSubstitutionChar = new byte[][]{ { (byte)0x1A }, { (byte)0x2F, (byte)0x7E} };
     /****************************ISO-2022-JP************************************/
     private class CharsetEncoderISO2022JP extends CharsetEncoderICU {
         public CharsetEncoderISO2022JP(CharsetICU cs) {
-            super(cs, fromUSubstitution);
+            super(cs, fromUSubstitutionChar[0]);
         }
         
         protected void implReset() {
@@ -2283,7 +2046,10 @@ class CharsetISO2022 extends CharsetICU {
                             break;
                         case JISX208:
                             /* G0 DBCS from JIS table */
-                            len2 = MBCSFromUChar32_ISO2022(myConverterData.myConverterArray[cs0], sourceChar, value, usingFallback, CharsetMBCS.MBCS_OUTPUT_2);
+                            myConverterData.currentConverter.sharedData = myConverterData.myConverterArray[cs0];
+                            myConverterData.currentConverter.sharedData.mbcs.outputType = CharsetMBCS.MBCS_OUTPUT_2;
+                            len2 = myConverterData.currentEncoder.fromUChar32(sourceChar, value, usingFallback);
+                            //len2 = MBCSFromUChar32_ISO2022(myConverterData.myConverterArray[cs0], sourceChar, value, usingFallback, CharsetMBCS.MBCS_OUTPUT_2);
                             if (len2 == 2 || (len2 == -2 && len == 0)) { /* only accept DBCS: abs(len) == 2 */
                                 value[0] = _2022FromSJIS(value[0]);
                                 if (value[0] != 0) {
@@ -2297,7 +2063,7 @@ class CharsetISO2022 extends CharsetICU {
                                 targetValue = hwkana_fb[sourceChar - HWKANA_START];
                                 len = -2;
                                 cs = cs0;
-                                g = 2;
+                                g = 0;
                                 usingFallback = false;
                             }
                             break;
@@ -2314,7 +2080,10 @@ class CharsetISO2022 extends CharsetICU {
                             break;
                         default :
                             /* G0 DBCS */
-                            len2 = MBCSFromUChar32_ISO2022(myConverterData.myConverterArray[cs0], sourceChar, value, usingFallback, CharsetMBCS.MBCS_OUTPUT_2);
+                            myConverterData.currentConverter.sharedData = myConverterData.myConverterArray[cs0];
+                            myConverterData.currentConverter.sharedData.mbcs.outputType = CharsetMBCS.MBCS_OUTPUT_2;
+                            len2 = myConverterData.currentEncoder.fromUChar32(sourceChar, value, usingFallback);
+                            //len2 = MBCSFromUChar32_ISO2022(myConverterData.myConverterArray[cs0], sourceChar, value, usingFallback, CharsetMBCS.MBCS_OUTPUT_2);
                             if (len2 == 2 || (len2 == -2 && len == 0)) { /* only accept DBCS: abs(len)==2 */
                                 if (cs0 == KSC5601) {
                                     /*
@@ -2434,7 +2203,7 @@ class CharsetISO2022 extends CharsetICU {
              */
             if (!err.isError() &&
                     (myConverterData.fromU2022State.g != 0 || myConverterData.fromU2022State.cs[0] != ASCII) &&
-                    flush && !source.hasRemaining() && fromUChar32 == 0) {
+                    flush && !source.hasRemaining() && target.hasRemaining() && fromUChar32 == 0) {
                 int sourceIndex;
                 
                 outLen = 0;
@@ -2566,7 +2335,7 @@ class CharsetISO2022 extends CharsetICU {
     
     private class CharsetEncoderISO2022CN extends CharsetEncoderICU {
         public CharsetEncoderISO2022CN(CharsetICU cs) {
-            super(cs, fromUSubstitution);
+            super(cs, fromUSubstitutionChar[0]);
         }
         
         protected void implReset() {
@@ -2754,8 +2523,11 @@ class CharsetISO2022 extends CharsetICU {
                                 int[] value = new int[1];
                                 int len2;
                                 if (cs0 > CNS_11643_0) {
-                                    len2 = MBCSFromUChar32_ISO2022(myConverterData.myConverterArray[CNS_11643],
-                                            sourceChar, value, usingFallback, CharsetMBCS.MBCS_OUTPUT_3);
+                                    myConverterData.currentConverter.sharedData = myConverterData.myConverterArray[CNS_11643];
+                                    myConverterData.currentConverter.sharedData.mbcs.outputType = CharsetMBCS.MBCS_OUTPUT_3;
+                                    len2 = myConverterData.currentEncoder.fromUChar32(sourceChar, value, usingFallback);
+                                    //len2 = MBCSFromUChar32_ISO2022(myConverterData.myConverterArray[CNS_11643],
+                                    //        sourceChar, value, usingFallback, CharsetMBCS.MBCS_OUTPUT_3);
                                     if (len2 == 3 || (len2 == -3 && len == 0)) {
                                         targetValue = value[0];
                                         cs = (byte)(CNS_11643_0 + (value[0] >> 16) - 0x80);
@@ -2778,8 +2550,11 @@ class CharsetISO2022 extends CharsetICU {
                                     }
                                 } else {
                                     /* GB2312_1 or ISO-IR-165 */
-                                    len2 = MBCSFromUChar32_ISO2022(myConverterData.myConverterArray[cs0],
-                                            sourceChar, value, usingFallback, CharsetMBCS.MBCS_OUTPUT_2);
+                                    myConverterData.currentConverter.sharedData = myConverterData.myConverterArray[cs0];
+                                    myConverterData.currentConverter.sharedData.mbcs.outputType = CharsetMBCS.MBCS_OUTPUT_2;
+                                    len2 = myConverterData.currentEncoder.fromUChar32(sourceChar, value, usingFallback);
+                                    //len2 = MBCSFromUChar32_ISO2022(myConverterData.myConverterArray[cs0],
+                                    //        sourceChar, value, usingFallback, CharsetMBCS.MBCS_OUTPUT_2);
                                     if (len2 == 2 || (len2 == -2 && len == 0)) {
                                         targetValue = value[0];
                                         len = len2;
@@ -2881,7 +2656,7 @@ class CharsetISO2022 extends CharsetICU {
              *   not in ASCII mode
              *   end of input and no truncated input
              */
-            if (!err.isError() && myConverterData.fromU2022State.g != 0 && flush && !source.hasRemaining() && fromUChar32 == 0) {
+            if (!err.isError() && myConverterData.fromU2022State.g != 0 && flush && !source.hasRemaining() && target.hasRemaining() && fromUChar32 == 0) {
                 int sourceIndex;
                 
                 /* we are switching to ASCII */
@@ -2916,12 +2691,13 @@ class CharsetISO2022 extends CharsetICU {
      */
     private class CharsetEncoderISO2022KR extends CharsetEncoderICU {
         public CharsetEncoderISO2022KR(CharsetICU cs) {
-            super(cs, fromUSubstitution);
+            super(cs, fromUSubstitutionChar[myConverterData.version]);
         }
         
         protected void implReset() {
             super.implReset();
             myConverterData.fromU2022State.reset();
+            setInitialStateFromUnicodeKR(this);
         }
         
         /* This overrides the cbFromUWriteSub method in CharsetEncoderICU */
@@ -2959,7 +2735,7 @@ class CharsetISO2022 extends CharsetICU {
                 
                 /* set our substitution string into the subconverter */
                 myConverterData.currentEncoder.replaceWith(subchar);
-                
+                myConverterData.currentConverter.subChar1 = fromUSubstitutionChar[0][0];
                 /* let the subconverter write the subchar, set/retrieve fromUChar32 state */
                 myConverterData.currentEncoder.fromUChar32 = encoder.fromUChar32;
                 err = myConverterData.currentEncoder.cbFromUWriteSub(myConverterData.currentEncoder, source, target, offsets);
@@ -3037,8 +2813,9 @@ class CharsetISO2022 extends CharsetICU {
                             fromUChar32 = sourceChar;
                             break;
                         }
-                    
-                        length = MBCSFromUChar32_ISO2022(myConverterData.currentConverter.sharedData, sourceChar, targetByteUnit, usingFallback, CharsetMBCS.MBCS_OUTPUT_2); 
+                        myConverterData.currentConverter.sharedData.mbcs.outputType = CharsetMBCS.MBCS_OUTPUT_2;
+                        length = myConverterData.currentEncoder.fromUChar32(sourceChar, targetByteUnit, usingFallback);
+                        //length = MBCSFromUChar32_ISO2022(myConverterData.currentConverter.sharedData, sourceChar, targetByteUnit, usingFallback, CharsetMBCS.MBCS_OUTPUT_2); 
                         if (length < 0) {
                             length = -length; /* fallback */
                         }
@@ -3085,7 +2862,7 @@ class CharsetISO2022 extends CharsetICU {
                                         offsets.put(source.position()-1);
                                     }
                                 } else {
-                                    errorBuffer[errorBufferLength++] = (byte)(UConverterConstants.UNSIGNED_BYTE_MASK & ((targetByteUnit[0]>>8) - 0x80));
+                                    errorBuffer[errorBufferLength++] = (byte)(UConverterConstants.UNSIGNED_BYTE_MASK & (targetByteUnit[0] - 0x80));
                                     err = CoderResult.OVERFLOW;
                                 }
                                 
@@ -3141,7 +2918,8 @@ class CharsetISO2022 extends CharsetICU {
                         break;
                     }
                 } else {
-                    return CoderResult.OVERFLOW;
+                    err = CoderResult.OVERFLOW;
+                    break;
                 }
             }
             /*
@@ -3154,7 +2932,7 @@ class CharsetISO2022 extends CharsetICU {
              *  not in ASCII mode
              *  end of  input and no truncated input
              */
-            if (!err.isError() && isTargetByteDBCS && flush && !source.hasRemaining() && fromUChar32 == 0) {
+            if (!err.isError() && isTargetByteDBCS && flush && !source.hasRemaining() && target.hasRemaining() && fromUChar32 == 0) {
                 int sourceIndex;
                 
                 /* we are switching to ASCII */
@@ -3236,6 +3014,7 @@ class CharsetISO2022 extends CharsetICU {
             cnv.errorBuffer[3] = 0x43;
         }
         if (myConverterData.version == 1) {
+            ((CharsetMBCS)myConverterData.currentEncoder.charset()).subChar1 = 0x1A;
             myConverterData.currentEncoder.fromUChar32 = 0;
             myConverterData.currentEncoder.fromUnicodeStatus = 1; /* prevLength */
         }

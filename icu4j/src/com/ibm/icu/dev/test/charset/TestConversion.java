@@ -116,7 +116,7 @@ public class TestConversion extends ModuleTest {
     
     // fromUnicode test worker functions --------------------------------------- 
     private void TestFromUnicode(DataMap testcase, int caseNr) {
-
+        
         ConversionCase cc = new ConversionCase();
         
         try {
@@ -226,8 +226,8 @@ public class TestConversion extends ModuleTest {
         // set the callback for the encoder 
         if (cc.cbErrorAction != null) {
             if (cc.cbEncoder != null) {
-                ((CharsetEncoderICU)encoder).onMalformedInput(cc.cbEncoder);
-                ((CharsetEncoderICU)encoder).onUnmappableInput(cc.cbEncoder);
+                ((CharsetEncoderICU)encoder).setFromUCallback(CoderResult.malformedForLength(1), cc.cbEncoder, cc.option);
+                ((CharsetEncoderICU)encoder).setFromUCallback(CoderResult.unmappableForLength(1), cc.cbEncoder, cc.option);
             } else {
                 encoder.onUnmappableCharacter(cc.cbErrorAction);
                 encoder.onMalformedInput(cc.cbErrorAction);
@@ -300,7 +300,7 @@ public class TestConversion extends ModuleTest {
             try {
                 out = encoder.encode(CharBuffer.wrap(cc.unicode.toCharArray()));
                 out.position(out.limit());
-                if (out.limit() != out.capacity()) {
+                if (out.limit() != out.capacity() || cc.finalFlush) {
                     int pos = out.position();
                     byte[] temp = out.array();
                     out = ByteBuffer.allocate(temp.length * 4);
@@ -359,10 +359,14 @@ public class TestConversion extends ModuleTest {
             cr = encoder.encode(source, target, currentSourceLimit == sourceLen);
             
             if (cr.isUnderflow()) {
+                if (target.position() == cc.bytes.limit()) {
+                    break;
+                }
                 if (currentSourceLimit == sourceLen) {
                     // Do a final flush for cleanup, then break out
                     // Encode loop, exits with cr==underflow in normal operation.
-                    target.limit(targetLen);
+                    //target.limit(targetLen);
+                    target.limit(cc.bytes.limit());
                     cr = encoder.flush(target);
                     if (cr.isUnderflow()) {
                         // good
@@ -404,7 +408,7 @@ public class TestConversion extends ModuleTest {
     private void TestToUnicode(DataMap testcase, int caseNr) {
         // create Conversion case to store the test case data
         ConversionCase cc = new ConversionCase();
-
+        
         try {
             // retrieve test case data
             cc.caseNr = caseNr;
@@ -513,8 +517,8 @@ public class TestConversion extends ModuleTest {
         // set the callback for the decoder
         if (cc.cbErrorAction != null) {
             if (cc.cbDecoder != null) {
-                ((CharsetDecoderICU)decoder).onMalformedInput(cc.cbDecoder);
-                ((CharsetDecoderICU)decoder).onUnmappableCharacter(cc.cbDecoder);
+                ((CharsetDecoderICU)decoder).setToUCallback(CoderResult.malformedForLength(1), cc.cbDecoder, cc.option);
+                ((CharsetDecoderICU)decoder).setToUCallback(CoderResult.unmappableForLength(1), cc.cbDecoder, cc.option);
             } else {
                 decoder.onMalformedInput(cc.cbErrorAction);
                 decoder.onUnmappableCharacter(cc.cbErrorAction);
