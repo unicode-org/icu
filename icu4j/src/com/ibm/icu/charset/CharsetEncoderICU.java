@@ -154,18 +154,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
     protected void implOnMalformedInput(CodingErrorAction newAction) {
         onMalformedInput = getCallback(newAction);
     }
-
-    /**
-     * Sets the callback encoder method to be used if an illegal sequence is encountered.
-     * 
-     * @param newCallback CharsetCallback.Encoder
-     * @exception IllegalArgumentException
-     * @draft ICU 4.0
-     */
-    public final void onMalformedInput(CharsetCallback.Encoder newCallback) {
-        onMalformedInput = newCallback;
-    }
-
+    
     /**
      * Sets the action to be taken if an illegal sequence is encountered
      * 
@@ -177,18 +166,41 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
     protected void implOnUnmappableCharacter(CodingErrorAction newAction) {
         onUnmappableInput = getCallback(newAction);
     }
+    
+    /**
+     * Sets the callback encoder method and context to be used if an illegal sequence is encounterd.
+     * You would normally call this twice to set both the malform and unmappable error. In this case,
+     * newContext should remain the same since using a different newContext each time will negate the last
+     * one used.
+     * @param err CoderResult
+     * @param newCallback CharsetCallback.Encoder
+     * @param newContext Object
+     */
+    public final void setFromUCallback(CoderResult err, CharsetCallback.Encoder newCallback, Object newContext) {
+        if (err.isMalformed()) {
+            onMalformedInput = newCallback;
+        } else if (err.isUnmappable()) {
+            onUnmappableInput = newCallback;
+        } else {
+            /* Error: Only malformed and unmappable are handled. */
+        }
+        
+        if (fromUContext == null || !fromUContext.equals(newContext)) {
+            fromUContext = newContext;
+        }
+    }
 
     /**
-     * Sets the callback encoder method to be used if an illegal sequence is encountered.
+     * Sets fromUContext used in escape callbacks.
      * 
      * @param newCallback CharsetCallback.Encoder
      * @exception IllegalArgumentException
      * @draft ICU 4.0
      */
-    public final void onUnmappableInput(CharsetCallback.Encoder newCallback) {
-        onUnmappableInput = newCallback;
+    public final void setFromUContext(Object newContext) {
+        fromUContext = newContext;
     }
-
+    
     private static CharsetCallback.Encoder getCallback(CodingErrorAction action) {
         if (action == CodingErrorAction.REPLACE) {
             return CharsetCallback.FROM_U_CALLBACK_SUBSTITUTE;
@@ -590,7 +602,10 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
 
                 /* callback handling */
                 {
+                    int codePoint;
+                    
                     /* get and write the code point */
+                    codePoint = fromUChar32;
                     errorInputLength = UTF16.append(invalidUCharBuffer, 0,
                             fromUChar32);
                     invalidUCharLength = errorInputLength;
@@ -601,7 +616,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
                     /* call the callback function */
                     cr = fromCharErrorBehaviour.call(this, fromUContext,
                             source, target, offsets, invalidUCharBuffer,
-                            invalidUCharLength, fromUChar32, cr);
+                            invalidUCharLength, codePoint, cr);
                 }
 
                 /*
@@ -820,7 +835,6 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
             /* Overflowed target. Now, we'll write into the charErrorBuffer.
              * It's a fixed size. If we overflow it...Hm 
              */
-            cr = CoderResult.UNDERFLOW;
 
             /* start the new target at the first free slot in the error buffer */
             int errBuffLen = encoder.errorBufferLength;
@@ -828,7 +842,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
             newTarget.position(errBuffLen); /* set the position at the end of the error buffer */
             encoder.errorBufferLength = 0;
 
-            cr = encoder.encode(source, newTarget, null, false);
+            encoder.encode(source, newTarget, null, false);
 
             encoder.errorBuffer = newTarget.array();
             encoder.errorBufferLength = newTarget.position();
