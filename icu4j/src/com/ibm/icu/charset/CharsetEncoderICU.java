@@ -254,7 +254,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * @stable ICU 3.6
      */
     protected CoderResult encodeLoop(CharBuffer in, ByteBuffer out) {
-        if (!in.hasRemaining()) {
+        if (!in.hasRemaining() && this.errorBufferLength == 0) { // make sure the errorBuffer is empty
             // The Java framework should have already substituted what was left.
             fromUChar32 = 0;
             //fromUnicodeReset();
