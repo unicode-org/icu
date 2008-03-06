@@ -2,7 +2,7 @@
 .\"
 .\" icu-config.1: manual page for the icu-config utility
 .\"
-.\" Copyright (C) 2002-2004 IBM, Inc. and others.
+.\" Copyright (C) 2002-2008 IBM, Inc. and others.
 .\"
 .\" Based on  Yves Arrouye's pkgdata page <yves@arrouye.net>
 .\" Modified by Steven R. Loomis <srl@jtcsv.com>.
@@ -56,7 +56,7 @@
 .BI "\-\-icudata"
 ]
 [
-.BI "\-\-icudata\-installdir"
+.BI "\-\-icudata\-install\-dir"
 ]
 [
 .BI "\-\-icudata\-mode"
@@ -202,9 +202,9 @@ be displayed.
 Print a help and usage message.
 .TP
 .BI "\-\-icudata"
-Print the \fIshortname\fP of the ICU data file. This does not include any suffix such as .dat, .dll, .so, .lib, .a, etc nor does it include prefixes such as 'lib'.  It may be in the form \fBlibicudt21b\fP 
+Print the \fIshortname\fP of the ICU data file. This does not include any suffix such as .dat, .dll, .so, .lib, .a, etc nor does it include prefixes such as 'lib'.  It may be in the form \fBicudt21b\fP
 .TP
-.BI "\-\-icudata\-installdir"
+.BI "\-\-icudata\-install\-dir"
 Print the directory where ICU packaged data should 
 be installed.   Can use as pkgdata(1)'s --install option.
 .TP
