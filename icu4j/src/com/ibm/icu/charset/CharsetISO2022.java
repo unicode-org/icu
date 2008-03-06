@@ -2203,7 +2203,7 @@ class CharsetISO2022 extends CharsetICU {
              */
             if (!err.isError() &&
                     (myConverterData.fromU2022State.g != 0 || myConverterData.fromU2022State.cs[0] != ASCII) &&
-                    flush && !source.hasRemaining() && target.hasRemaining() && fromUChar32 == 0) {
+                    flush && !source.hasRemaining() && fromUChar32 == 0) {
                 int sourceIndex;
                 
                 outLen = 0;
@@ -2656,7 +2656,7 @@ class CharsetISO2022 extends CharsetICU {
              *   not in ASCII mode
              *   end of input and no truncated input
              */
-            if (!err.isError() && myConverterData.fromU2022State.g != 0 && flush && !source.hasRemaining() && target.hasRemaining() && fromUChar32 == 0) {
+            if (!err.isError() && myConverterData.fromU2022State.g != 0 && flush && !source.hasRemaining() && fromUChar32 == 0) {
                 int sourceIndex;
                 
                 /* we are switching to ASCII */
@@ -2932,7 +2932,7 @@ class CharsetISO2022 extends CharsetICU {
              *  not in ASCII mode
              *  end of  input and no truncated input
              */
-            if (!err.isError() && isTargetByteDBCS && flush && !source.hasRemaining() && target.hasRemaining() && fromUChar32 == 0) {
+            if (!err.isError() && isTargetByteDBCS && flush && !source.hasRemaining() && fromUChar32 == 0) {
                 int sourceIndex;
                 
                 /* we are switching to ASCII */

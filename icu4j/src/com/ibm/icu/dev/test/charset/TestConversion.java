@@ -359,14 +359,15 @@ public class TestConversion extends ModuleTest {
             cr = encoder.encode(source, target, currentSourceLimit == sourceLen);
             
             if (cr.isUnderflow()) {
-                if (target.position() == cc.bytes.limit()) {
-                    break;
-                }
                 if (currentSourceLimit == sourceLen) {
+                    if (target.position() == cc.bytes.limit()) {
+                        // target contains the correct number of bytes
+                        break;
+                    }
                     // Do a final flush for cleanup, then break out
                     // Encode loop, exits with cr==underflow in normal operation.
                     //target.limit(targetLen);
-                    target.limit(cc.bytes.limit());
+                    target.limit(targetLen);
                     cr = encoder.flush(target);
                     if (cr.isUnderflow()) {
                         // good
