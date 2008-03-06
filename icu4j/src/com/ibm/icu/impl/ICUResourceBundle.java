@@ -1,7 +1,7 @@
 /*
  * *****************************************************************************
- * Copyright (C) 2005-2008, International Business Machines Corporation and * others.
- * All Rights Reserved. *
+ * Copyright (C) 2005-2008, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
  * *****************************************************************************
  */
 
@@ -881,7 +881,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         if (type == TABLE) {
             ICUResourceBundleImpl.ResourceTable table = new ICUResourceBundleImpl.ResourceTable(reader, baseName, localeID, loader);
             if(table.getSize()>=1){ // ticket#5683 ICU4J 3.6 data for zh_xx contains an entry other than %%ALIAS
-                UResourceBundle b = table.handleGet(0, null, table);
+                UResourceBundle b = table.handleGetImpl(0, null, table, null); // handleGet will cache the bundle with no parent set
                 String itemKey = b.getKey();
 
                 // %%ALIAS is such a hack!
@@ -938,7 +938,10 @@ public  class ICUResourceBundle extends UResourceBundle {
     }
     protected final ICUResourceBundle createBundleObject(String key,
             long resource, String resPath, HashMap table,
-            UResourceBundle requested, ICUResourceBundle bundle) {
+            UResourceBundle requested, ICUResourceBundle bundle, boolean[] isAlias) {
+        if (isAlias != null) {
+            isAlias[0] = false;
+        }
         //if (resource != RES_BOGUS) {
         switch (RES_GET_TYPE(resource)) {
             case STRING : {
@@ -948,6 +951,9 @@ public  class ICUResourceBundle extends UResourceBundle {
                 return new ICUResourceBundleImpl.ResourceBinary(key, resPath, resource, this);
             }
             case ALIAS : {
+                if (isAlias != null) {
+                    isAlias[0] = true;
+                }
                 return findResource(key, resource, table, requested);
             }
             case INT : {
@@ -1172,5 +1178,63 @@ public  class ICUResourceBundle extends UResourceBundle {
             throw new MissingResourceException(localeID, baseName, key);
         }
         return sub;
+    }
+
+    // Resource bundle lookup cache, which may be used by subclasses
+    // which have nested resources
+    protected ICUCache lookup;
+    private static final int MAX_INITIAL_LOOKUP_SIZE = 64;
+
+    protected void createLookupCache() {
+        lookup = new SimpleCache(ICUCache.WEAK, Math.max(size*2, MAX_INITIAL_LOOKUP_SIZE));
+    }
+
+    protected UResourceBundle handleGet(String resKey, HashMap table, UResourceBundle requested) {
+        UResourceBundle res = null;
+        if (lookup != null) {
+            res = (UResourceBundle)lookup.get(resKey);
+        }
+        if (res == null) {
+            int[] index = new int[1];
+            boolean[] alias = new boolean[1];
+            res = handleGetImpl(resKey, table, requested, index, alias);
+            if (res != null && lookup != null && !alias[0]) {
+                // We do not want to cache a result from alias entry
+                lookup.put(resKey, res);
+                lookup.put(Utility.integerValueOf(index[0]), res);
+            }
+        }
+        return res;
+    }
+
+    protected UResourceBundle handleGet(int index, HashMap table, UResourceBundle requested) {
+        UResourceBundle res = null;
+        Integer indexKey = null;
+        if (lookup != null) {
+            indexKey = Utility.integerValueOf(index);
+            res = (UResourceBundle)lookup.get(indexKey);
+        }
+        if (res == null) {
+            boolean[] alias = new boolean[1];
+            res = handleGetImpl(index, table, requested, alias);
+            if (res != null && lookup != null && !alias[0]) {
+                // We do not want to cache a result from alias entry
+                lookup.put(res.getKey(), res);
+                lookup.put(indexKey, res);
+            }
+        }
+        return res;
+    }
+
+    // Subclass which supports key based resource access to implement this method
+    protected UResourceBundle handleGetImpl(String resKey, HashMap table, UResourceBundle requested,
+            int[] index, boolean[] isAlias) {
+        return null;
+    }
+
+    // Subclass which supports index based resource access to implement this method
+    protected UResourceBundle handleGetImpl(int index, HashMap table, UResourceBundle requested,
+            boolean[] isAlias) {
+        return null;
     }
 }

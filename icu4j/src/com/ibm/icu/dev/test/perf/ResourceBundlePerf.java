@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2006-2007, International Business Machines
+* Copyright (c) 2006-2008, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -262,18 +262,30 @@ public class ResourceBundlePerf extends PerfTest {
             }
         }
     }
-    
+
+    class GetBinaryJava extends PerfTest.Function {
+        String key;
+        int expected_len;
+        GetBinaryJava(String key, int expected_len) {
+            this.key = key;
+            this.expected_len = expected_len;
+        }
+        public void call() {
+            ByteBuffer got = ByteBuffer.wrap((byte[])javaRes.getObject(key));
+            if(got.remaining() != expected_len) throw new Error("not the expected len");
+            for(int i=0; i< got.remaining(); i++){
+              byte b = got.get();
+              if (i != b) throw new Error("not equal");
+            }
+        }
+    }
+
     PerfTest.Function TestGetBinaryTestICU(){
         return new GetBinaryIcu("binarytest", 15);
     }
     
     PerfTest.Function TestGetBinaryTestJava(){
-        return new PerfTest.Function(){
-            public void call(){
-                byte[] t = (byte[]) javaRes.getObject("binarytest");
-                if (t.length!=15 ) throw new Error("not equal");
-            }
-        };
+        return new GetBinaryJava("binarytest", 15);
     }
     
     PerfTest.Function TestGetEmptyBinaryICU(){
@@ -281,12 +293,7 @@ public class ResourceBundlePerf extends PerfTest {
     }
     
     PerfTest.Function TestGetEmptyBinaryJava(){
-        return new PerfTest.Function(){
-            public void call(){
-                byte[] t = (byte[]) javaRes.getObject("emptybin");
-                if (t.length!=0 ) throw new Error("not equal");
-            }
-        };
+        return new GetBinaryJava("emptybin", 0);
     }
 
     class GetMenuJava extends PerfTest.Function {
