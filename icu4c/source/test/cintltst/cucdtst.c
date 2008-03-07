@@ -2729,7 +2729,7 @@ TestPropertyNames(void) {
                         sawValue = TRUE;
 
                         /* test reverse mapping */
-                        rev = u_getPropertyValueEnum(p, vname);
+                        rev = u_getPropertyValueEnum(propEnum, vname);
                         if (rev != v) {
                             log_err("Value round-trip failure (%s): %d -> %s -> %d\n",
                                     pname, v, vname, rev);
