@@ -44,28 +44,28 @@ PluralFormat::PluralFormat(const PluralRules& rules, UErrorCode& status) {
     init(&rules, Locale::getDefault(), status);
 }
 
-PluralFormat::PluralFormat(const Locale& locale, const PluralRules& rules, UErrorCode& status) {
-    init(&rules, locale, status);
+PluralFormat::PluralFormat(const Locale& loc, const PluralRules& rules, UErrorCode& status) {
+    init(&rules, loc, status);
 }
 
-PluralFormat::PluralFormat(const UnicodeString& pattern, UErrorCode& status) {
+PluralFormat::PluralFormat(const UnicodeString& pat, UErrorCode& status) {
     init(NULL, Locale::getDefault(), status);
-    applyPattern(pattern, status);
+    applyPattern(pat, status);
 }
 
-PluralFormat::PluralFormat(const Locale& locale, const UnicodeString& pattern, UErrorCode& status) {
-    init(NULL, locale, status);
-    applyPattern(pattern, status);
+PluralFormat::PluralFormat(const Locale& loc, const UnicodeString& pat, UErrorCode& status) {
+    init(NULL, loc, status);
+    applyPattern(pat, status);
 }
 
-PluralFormat::PluralFormat(const PluralRules& rules, const UnicodeString& pattern, UErrorCode& status) {
-    init(&rules, locale, status);
-    applyPattern(pattern, status);
+PluralFormat::PluralFormat(const PluralRules& rules, const UnicodeString& pat, UErrorCode& status) {
+    init(&rules, Locale::getDefault(), status);
+    applyPattern(pat, status);
 }
 
-PluralFormat::PluralFormat(const Locale& locale, const PluralRules& rules, const UnicodeString& pattern, UErrorCode& status) {
-    init(&rules, locale, status);
-    applyPattern(pattern, status);
+PluralFormat::PluralFormat(const Locale& loc, const PluralRules& rules, const UnicodeString& pat, UErrorCode& status) {
+    init(&rules, loc, status);
+    applyPattern(pat, status);
 }
 
 PluralFormat::PluralFormat(const PluralFormat& other) : Format(other) {
@@ -323,7 +323,7 @@ PluralFormat::checkSufficientDefinition() {
 }
 
 void
-PluralFormat::setLocale(const Locale& locale, UErrorCode& status) {
+PluralFormat::setLocale(const Locale& loc, UErrorCode& status) {
     if (pluralRules!=NULL) {
         delete pluralRules;
         pluralRules=NULL;
@@ -337,7 +337,7 @@ PluralFormat::setLocale(const Locale& locale, UErrorCode& status) {
         numberFormat = NULL;
         replacedNumberFormat=NULL;
     }
-    init(NULL, locale, status);
+    init(NULL, loc, status);
 }
 
 void

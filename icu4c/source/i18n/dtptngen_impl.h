@@ -194,7 +194,6 @@ public:
     PatternMap();
     virtual  ~PatternMap();
     void  add(const UnicodeString& basePattern, const PtnSkeleton& skeleton, const UnicodeString& value, UErrorCode& status);
-    UErrorCode status;
     const UnicodeString* getPatternFromBasePattern(UnicodeString& basePattern);
     const UnicodeString* getPatternFromSkeleton(PtnSkeleton& skeleton);
     void copyFrom(const PatternMap& other, UErrorCode& status);

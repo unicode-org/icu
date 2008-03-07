@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -464,7 +464,7 @@ static void U_CALLCONV
 lineFn(void *context,
        char *fields[][2], int32_t fieldCount,
        UErrorCode *pErrorCode) {
-    Options *options=(Options *)context;
+    Options *storeOptions=(Options *)context;
     char *names[3];
     int16_t lengths[3]={ 0, 0, 0 };
     static uint32_t prevCode=0;
@@ -477,7 +477,7 @@ lineFn(void *context,
     code=uprv_strtoul(fields[0][0], NULL, 16);
 
     /* get the character name */
-    if(options->storeNames) {
+    if(storeOptions->storeNames) {
         names[0]=fields[1][0];
         lengths[0]=getName(names+0, fields[1][1]);
         if(names[0][0]=='<') {
@@ -488,7 +488,7 @@ lineFn(void *context,
 
     /* store 1.0 names */
     /* get the second character name, the one from Unicode 1.0 */
-    if(options->store10Names) {
+    if(storeOptions->store10Names) {
         names[1]=fields[10][0];
         lengths[1]=getName(names+1, fields[10][1]);
         if(names[1][0]=='<') {
@@ -498,7 +498,7 @@ lineFn(void *context,
     }
 
     /* get the ISO 10646 comment */
-    if(options->storeISOComments) {
+    if(storeOptions->storeISOComments) {
         names[2]=fields[11][0];
         lengths[2]=getName(names+2, fields[11][1]);
     }
@@ -536,8 +536,8 @@ lineFn(void *context,
      *
      * addLine() will ignore empty trailing names
      */
-    if(options->storeNames) {
-        /* store names and comments as parsed according to options */
+    if(storeOptions->storeNames) {
+        /* store names and comments as parsed according to storeOptions */
         addLine(code, names, lengths, 3);
     } else {
         /* store only ISO 10646 comments */
@@ -546,11 +546,11 @@ lineFn(void *context,
 }
 
 static void
-parseDB(const char *filename, Options *options) {
+parseDB(const char *filename, Options *storeOptions) {
     char *fields[15][2];
     UErrorCode errorCode=U_ZERO_ERROR;
 
-    u_parseDelimitedFile(filename, ';', fields, 15, lineFn, options, &errorCode);
+    u_parseDelimitedFile(filename, ';', fields, 15, lineFn, storeOptions, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gennames parse error: %s\n", u_errorName(errorCode));
         exit(errorCode);
@@ -917,7 +917,7 @@ compareWords(const void *context, const void *word1, const void *word2) {
 /* generate output data ----------------------------------------------------- */
 
 static void
-generateData(const char *dataDir, Options *options) {
+generateData(const char *dataDir, Options *storeOptions) {
     UNewDataMemory *pData;
     UErrorCode errorCode=U_ZERO_ERROR;
     uint16_t groupWords[3];
@@ -927,7 +927,7 @@ generateData(const char *dataDir, Options *options) {
     int16_t token;
 
     pData=udata_create(dataDir,
-                       DATA_TYPE, options->storeNames ? DATA_NAME : ISO_DATA_NAME,
+                       DATA_TYPE, storeOptions->storeNames ? DATA_NAME : ISO_DATA_NAME,
                        &dataInfo,
                        haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
@@ -1003,7 +1003,7 @@ generateData(const char *dataDir, Options *options) {
     groupStringOffset=groupsOffset+2+6*lineCount;
     algNamesOffset=(groupStringOffset+(groupTop-groupBottom)+3)&~3;
 
-    offset=generateAlgorithmicData(NULL, options);
+    offset=generateAlgorithmicData(NULL, storeOptions);
     size=algNamesOffset+offset;
 
     if(!beQuiet) {
@@ -1050,7 +1050,7 @@ generateData(const char *dataDir, Options *options) {
     /* 4-align the algorithmic names data */
     udata_writePadding(pData, algNamesOffset-(groupStringOffset+(groupTop-groupBottom)));
 
-    generateAlgorithmicData(pData, options);
+    generateAlgorithmicData(pData, storeOptions);
 
     /* finish up */
     dataLength=udata_finish(pData, &errorCode);
@@ -1074,7 +1074,7 @@ typedef struct AlgorithmicRange {
 } AlgorithmicRange;
 
 static uint32_t
-generateAlgorithmicData(UNewDataMemory *pData, Options *options) {
+generateAlgorithmicData(UNewDataMemory *pData, Options *storeOptions) {
     static char prefix[] = "CJK UNIFIED IDEOGRAPH-";
 #   define PREFIX_LENGTH 23
 #   define PREFIX_LENGTH_4 24
@@ -1133,7 +1133,7 @@ generateAlgorithmicData(UNewDataMemory *pData, Options *options) {
     }
 
     /* number of ranges of algorithmic names */
-    if(!options->storeNames) {
+    if(!storeOptions->storeNames) {
         countAlgRanges=0;
     } else if(ucdVersion>=UNI_3_1) {
         /* Unicode 3.1 and up has 4 ranges including CJK Extension B */
