@@ -558,7 +558,6 @@ void TestMessageFormat::testMsgFormatPlural(/* char* par */)
         logln(UnicodeString("The results of argumentName and argumentIndex are not the same."));
     }
     err = U_ZERO_ERROR;
-    int32_t fmtsCnt=0;
   
     delete mfNum;
     delete mfAlpha;

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and
+* Copyright (C) 2007-2008, International Business Machines Corporation and
 * others. All Rights Reserved.
 ********************************************************************************
 
@@ -208,7 +208,6 @@ UBool testEquality(PluralRules *test) {
     UBool ret=TRUE;
     for (int32_t i=0; i<MAX_EQ_ROW; ++i) {
         PluralRules* rules[MAX_EQ_COL];
-        UnicodeString result[MAX_EQ_COL];
         
         for (int32_t j=0; j<MAX_EQ_COL; ++j) {
             rules[j]=NULL;

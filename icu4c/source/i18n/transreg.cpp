@@ -662,7 +662,7 @@ void TransliteratorRegistry::put(const UnicodeString& ID,
                                  const UnicodeString& alias,
                                  UBool readonlyAliasAlias,
                                  UBool visible,
-                                 UErrorCode& ec) {
+                                 UErrorCode& /*ec*/) {
     Entry *entry = new Entry();
     // Null pointer check
     if (entry != NULL) {

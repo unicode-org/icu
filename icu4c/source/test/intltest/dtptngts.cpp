@@ -398,7 +398,6 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
          pattern = UnicodeString("hmv");
          UnicodeString expR = UnicodeString("h:m a v");
          Locale loc("en");
-         UDate testDate1= LocaleTest::date(99, 0, 13, 23, 58, 59);
          DateTimePatternGenerator *patGen=DateTimePatternGenerator::createInstance(loc, status);
          if(U_FAILURE(status)) {
              dataerrln("ERROR: Could not create DateTimePatternGenerator");
