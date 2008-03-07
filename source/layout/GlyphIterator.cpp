@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
  *
  */
 
@@ -409,7 +409,7 @@ le_bool GlyphIterator::hasFeatureTag(le_bool matchGroup) const
     LEErrorCode success = LE_NO_ERROR;
     FeatureMask fm = glyphStorage.getAuxData(position, success);
 
-    return ((fm & featureMask) == featureMask) && (!matchGroup || (fm & LE_GLYPH_GROUP_MASK) == glyphGroup);
+    return ((fm & featureMask) == featureMask) && (!matchGroup || (le_int32)(fm & LE_GLYPH_GROUP_MASK) == glyphGroup);
 }
 
 le_bool GlyphIterator::findFeatureTag()

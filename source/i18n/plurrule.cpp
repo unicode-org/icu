@@ -833,13 +833,13 @@ RuleChain::getKeywords(int32_t capacityOfKeywords, UnicodeString* keywords, int3
 }
 
 UBool
-RuleChain::isKeyword(const UnicodeString& keyword) const {
-    if ( this->keyword == keyword ) {
+RuleChain::isKeyword(const UnicodeString& keywordParam) const {
+    if ( keyword == keywordParam ) {
         return TRUE;
     }
 
     if ( next != NULL ) {
-        return next->isKeyword(keyword);
+        return next->isKeyword(keywordParam);
     }
     else {
         return FALSE;

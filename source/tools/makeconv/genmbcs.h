@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2007, International Business Machines
+*   Copyright (C) 2000-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -110,7 +110,7 @@ typedef struct MBCSData MBCSData;
  * Assume maxCharLength>1.
  */
 U_CFUNC const MBCSData *
-MBCSGetDummy();
+MBCSGetDummy(void);
 
 /* Test if a 1:1 mapping fits into the MBCS base table's fromUnicode structure. */
 U_CFUNC UBool

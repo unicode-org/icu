@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -1723,7 +1723,8 @@ BasicNormalizerTest::TestSkippable() {
         _set_add,
         _set_addRange,
         _set_addString,
-        NULL // don't need remove()
+        NULL, // don't need remove()
+        NULL
     };
     unorm_addPropertyStarts(&sa, &status);
     if(U_FAILURE(status)) {

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2007, International Business Machines
+*   Copyright (C) 2001-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -66,7 +66,8 @@ NameUnicodeTransliterator::NameUnicodeTransliterator(UnicodeFilter* adoptedFilte
         _set_add,
         NULL, // Don't need _set_addRange
         NULL, // Don't need _set_addString
-        NULL // Don't need remove()
+        NULL, // Don't need remove()
+        NULL
     };
     uprv_getCharNameCharacters(&sa);
 }
