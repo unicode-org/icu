@@ -36,8 +36,8 @@ PluralFormat::PluralFormat(UErrorCode& status) {
     init(NULL, Locale::getDefault(), status);
 }
 
-PluralFormat::PluralFormat(const Locale& locale, UErrorCode& status) {
-    init(NULL, locale, status);
+PluralFormat::PluralFormat(const Locale& loc, UErrorCode& status) {
+    init(NULL, loc, status);
 }
 
 PluralFormat::PluralFormat(const PluralRules& rules, UErrorCode& status) {
