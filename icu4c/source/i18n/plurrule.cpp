@@ -24,6 +24,7 @@
 #include "putilimp.h"
 #include "ucln_in.h"
 #include "ustrfmt.h"
+#include "locutil.h"
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -202,7 +203,8 @@ PluralRules::forLocale(const Locale& locale, UErrorCode& status) {
         delete newRules;
         return NULL;
     }
-    UnicodeString localeName(locale.getName());
+    UnicodeString localeName;
+    LocaleUtility::initNameFromLocale(locale, localeName);
     {
         Mutex lock;
         locRules = (RuleChain *) (newRules->fLocaleStringsHash->get(localeName));
