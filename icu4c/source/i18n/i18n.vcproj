@@ -1063,10 +1063,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\msgfmt_impl.h"
-				>
-			</File>
-			<File
 				RelativePath=".\msgfmt.cpp"
 				>
 			</File>
@@ -1091,6 +1087,10 @@
 						Outputs="..\..\include\unicode\$(InputFileName)"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\msgfmt_impl.h"
+				>
 			</File>
 			<File
 				RelativePath=".\nfrlist.h"
@@ -1163,33 +1163,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\unicode\plurfmt.h"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
-						Outputs="..\..\include\unicode\$(InputFileName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
-						Outputs="..\..\include\unicode\$(InputFileName)"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\plurfmt.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\unicode\plurrule.h"
+				RelativePath=".\unicode\plurfmt.h"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1213,6 +1191,28 @@
 			<File
 				RelativePath=".\plurrule.cpp"
 				>
+			</File>
+			<File
+				RelativePath=".\unicode\plurrule.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\rbnf.cpp"

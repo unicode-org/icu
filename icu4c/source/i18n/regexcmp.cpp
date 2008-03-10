@@ -82,6 +82,10 @@ static const UChar      chDash      = 0x2d;      // '-'
 RegexCompile::~RegexCompile() {
 }
 
+static inline void addCategory(UnicodeSet *set, int32_t value, UErrorCode& ec) {
+    set->addAll(UnicodeSet().applyIntPropertyValue(UCHAR_GENERAL_CATEGORY_MASK, value, ec));
+}
+
 //------------------------------------------------------------------------------
 //
 //  Compile regex pattern.   The state machine for rexexp pattern parsing is here.
@@ -1488,15 +1492,18 @@ UBool RegexCompile::doParseActions(int32_t action)
     case doSetBackslash_d:
         {
             UnicodeSet *set = (UnicodeSet *)fSetStack.peek();
-            UnicodeSet digits(UnicodeString("\\p{Nd}"), *fStatus);    // TODO - make a static set,
-            set->addAll(digits);                                      //        ticket 6058.
+            // TODO - make a static set, ticket 6058.
+            addCategory(set, U_GC_ND_MASK, *fStatus);
             break;
         }
 
     case doSetBackslash_D:
         {
             UnicodeSet *set = (UnicodeSet *)fSetStack.peek();
-            UnicodeSet digits(UnicodeString("\\P{Nd}"), *fStatus);    // TODO - make a static set,
+            UnicodeSet digits;
+            // TODO - make a static set, ticket 6058.
+            digits.applyIntPropertyValue(UCHAR_GENERAL_CATEGORY_MASK, U_GC_ND_MASK, *fStatus);
+            digits.complement();
             set->addAll(digits);
             break;
         }
@@ -3935,14 +3942,19 @@ UnicodeSet *RegexCompile::scanPosixProp() {
     return uset;
 }
 
+static inline void addIdentifierIgnorable(UnicodeSet *set, UErrorCode& ec) {
+    set->add(0, 8).add(0x0e, 0x1b).add(0x7f, 0x9f);
+    addCategory(set, U_GC_CF_MASK, ec);
+}
+
 //
 //  Create a Unicode Set from a Unicode Property expression.
 //     This is common code underlying both \p{...} ane [:...:] expressions.
 //     Includes trying the Java "properties" that aren't supported as
 //     normal ICU UnicodeSet properties 
 //
-static const UChar posSetPrefix[] = {0x5b, 0x5c, 0x70, 0x7b, 00}; // "[\p{"
-static const UChar negSetPrefix[] = {0x5b, 0x5c, 0x50, 0x7b, 00}; // "[\P{"
+static const UChar posSetPrefix[] = {0x5b, 0x5c, 0x70, 0x7b, 0}; // "[\p{"
+static const UChar negSetPrefix[] = {0x5b, 0x5c, 0x50, 0x7b, 0}; // "[\P{"
 UnicodeSet *RegexCompile::createSetForProperty(const UnicodeString &propName, UBool negated) {
     UnicodeString   setExpr;
     UnicodeSet      *set;
@@ -3989,15 +4001,15 @@ UnicodeSet *RegexCompile::createSetForProperty(const UnicodeString &propName, UB
     //          (ICU 4.0?)
     //
     UnicodeString mPropName = propName;
-    if (mPropName.caseCompare(UnicodeString("InGreek", -1, UnicodeString::kInvariant), 0) == 0) {
-        mPropName = UnicodeString("InGreek and Coptic", -1 ,UnicodeString::kInvariant);
+    if (mPropName.caseCompare(UNICODE_STRING_SIMPLE("InGreek"), 0) == 0) {
+        mPropName = UNICODE_STRING_SIMPLE("InGreek and Coptic");
     }
-    if (mPropName.caseCompare(UnicodeString("InCombining Marks for Symbols", -1, UnicodeString::kInvariant), 0) == 0 ||
-        mPropName.caseCompare(UnicodeString("InCombiningMarksforSymbols", -1, UnicodeString::kInvariant), 0) == 0) {
-        mPropName = UnicodeString("InCombining Diacritical Marks for Symbols", -1 ,UnicodeString::kInvariant);
+    if (mPropName.caseCompare(UNICODE_STRING_SIMPLE("InCombining Marks for Symbols"), 0) == 0 ||
+        mPropName.caseCompare(UNICODE_STRING_SIMPLE("InCombiningMarksforSymbols"), 0) == 0) {
+        mPropName = UNICODE_STRING_SIMPLE("InCombining Diacritical Marks for Symbols");
     }
-    else if (mPropName.compare(UnicodeString("all", -1, UnicodeString::kInvariant)) == 0) {
-        mPropName = UnicodeString("javaValidCodePoint", -1 ,UnicodeString::kInvariant);
+    else if (mPropName.compare(UNICODE_STRING_SIMPLE("all")) == 0) {
+        mPropName = UNICODE_STRING_SIMPLE("javaValidCodePoint");
     }
     
     //    See if the property looks like a Java "InBlockName", which
@@ -4019,60 +4031,108 @@ UnicodeSet *RegexCompile::createSetForProperty(const UnicodeString &propName, UB
         delete set;
         set = NULL;
     }
-    
-    //
-    //  Try the various Java specific properties.
-    //   These all begin with "java"
-    //   TODO:  Redo to remove dependency on code page conversion of (char *) strings.
-    //
-    #define IDENTIFIER_IGNORABLE "[\\u0000-\\u0008\\u000e-\\u001b\\u007f-\\u009f\\p{Cf}]"
-    static const char * const javaProps[][2] = {
-        {"javaDefined",                "\\P{Cn}"},
-        {"javaDigit",                  "\\p{Nd}"},
-        {"javaIdentifierIgnorable",    IDENTIFIER_IGNORABLE},
-        {"javaISOControl",             "[\\u0000-\\u001f\\u007f-\\u009f]"},
-        {"javaJavaIdentifierPart",     "[[\\p{L}\\p{Sc}\\p{Pc}\\p{Nd}\\p{Nl}\\p{Mc}\\p{Mn}]" IDENTIFIER_IGNORABLE "]"},
-        {"javaJavaIdentifierStart",    "[\\p{L}\\p{Nl}\\p{Sc}\\p{Pc}]"},
-        {"javaLetter",                 "\\p{L}"},
-        {"javaLetterOrDigit",          "[\\p{L}\\p{Nd}]"},
-        {"javaLowerCase",              "\\p{Ll}"},
-        {"javaMirrored",               "\\p{Bidi_Mirrored}"},
-        {"javaSpaceChar",              "\\p{Z}"},
-        {"javaSupplementaryCodePoint", "[\\U00010000-\\U0010ffff]"},
-        {"javaTitleCase",              "\\p{Lt}"},
-        {"javaUnicodeIdentifierStart", "[\\p{L}\\p{Nl}]"},
-        {"javaUnicodeIdentifierPart",  "[[\\p{L}\\p{Pc}\\p{Nd}\\p{Nl}\\p{Mc}\\p{Mn}]" IDENTIFIER_IGNORABLE "]"},
-        {"javaUpperCase",              "[\\p{Lu}]"},
-        {"javaValidCodePoint",         "[\\u0000-\\U0010ffff]"},
-        {"javaWhitespace",             "[[\\p{Z}-[\\u00a0\\u2007\\u202f]]\\u0009-\\u000d\\u001c-\\u001f]"},
-        {"all",                        "[\\u0000-\\U0010ffff]"},
-        {NULL,                         NULL}
-    };
-    
 
-    UnicodeString Java("java", -1, UnicodeString::kInvariant);
-    if (propName.startsWith(Java) ||
-        propName.compare(UnicodeString("all", -1, UnicodeString::kInvariant)) == 0) {
-        int i;
-        setExpr.remove();
-        for (i=0; javaProps[i][0] != NULL; i++) {
-            if (mPropName.compare(UnicodeString(javaProps[i][0], -1, UnicodeString::kInvariant))==0) {
-                setExpr = UnicodeString(javaProps[i][1]);  // Default code page conversion here.
-                break;                                        //   Somewhat Inefficient.
-            }
+    if (propName.startsWith(UNICODE_STRING_SIMPLE("java")) ||
+        propName.compare(UNICODE_STRING_SIMPLE("all")) == 0)
+    {
+        UErrorCode localStatus = U_ZERO_ERROR;
+        //setExpr.remove();
+        set = new UnicodeSet();
+        //
+        //  Try the various Java specific properties.
+        //   These all begin with "java"
+        //
+        if (mPropName.compare(UNICODE_STRING_SIMPLE("javaDefined")) == 0) {
+            addCategory(set, U_GC_CN_MASK, localStatus);
+            set->complement();
         }
-        if (setExpr.length()>0) {
+        else if (mPropName.compare(UNICODE_STRING_SIMPLE("javaDigit")) == 0) {
+            addCategory(set, U_GC_ND_MASK, localStatus);
+        }
+        else if (mPropName.compare(UNICODE_STRING_SIMPLE("javaIdentifierIgnorable")) == 0) {
+            addIdentifierIgnorable(set, localStatus);
+        }
+        else if (mPropName.compare(UNICODE_STRING_SIMPLE("javaISOControl")) == 0) {
+            set->add(0, 0x1F).add(0x7F, 0x9F);
+        }
+        else if (mPropName.compare(UNICODE_STRING_SIMPLE("javaJavaIdentifierPart")) == 0) {
+            addCategory(set, U_GC_L_MASK, localStatus);
+            addCategory(set, U_GC_SC_MASK, localStatus);
+            addCategory(set, U_GC_PC_MASK, localStatus);
+            addCategory(set, U_GC_ND_MASK, localStatus);
+            addCategory(set, U_GC_NL_MASK, localStatus);
+            addCategory(set, U_GC_MC_MASK, localStatus);
+            addCategory(set, U_GC_MN_MASK, localStatus);
+            addIdentifierIgnorable(set, localStatus);
+        }
+        else if (mPropName.compare(UNICODE_STRING_SIMPLE("javaJavaIdentifierStart")) == 0) {
+            addCategory(set, U_GC_L_MASK, localStatus);
+            addCategory(set, U_GC_NL_MASK, localStatus);
+            addCategory(set, U_GC_SC_MASK, localStatus);
+            addCategory(set, U_GC_PC_MASK, localStatus);
+        }
+        else if (mPropName.compare(UNICODE_STRING_SIMPLE("javaLetter")) == 0) {
+            addCategory(set, U_GC_L_MASK, localStatus);
+        }
+        else if (mPropName.compare(UNICODE_STRING_SIMPLE("javaLetterOrDigit")) == 0) {
+            addCategory(set, U_GC_L_MASK, localStatus);
+            addCategory(set, U_GC_ND_MASK, localStatus);
+        }
+        else if (mPropName.compare(UNICODE_STRING_SIMPLE("javaLowerCase")) == 0) {
+            addCategory(set, U_GC_LL_MASK, localStatus);
+        }
+        else if (mPropName.compare(UNICODE_STRING_SIMPLE("javaMirrored")) == 0) {
+            set->applyIntPropertyValue(UCHAR_BIDI_MIRRORED, 1, localStatus);
+        }
+        else if (mPropName.compare(UNICODE_STRING_SIMPLE("javaSpaceChar")) == 0) {
+            addCategory(set, U_GC_Z_MASK, localStatus);
+        }
+        else if (mPropName.compare(UNICODE_STRING_SIMPLE("javaSupplementaryCodePoint")) == 0) {
+            set->add(0x10000, UnicodeSet::MAX_VALUE);
+        }
+        else if (mPropName.compare(UNICODE_STRING_SIMPLE("javaTitleCase")) == 0) {
+            addCategory(set, U_GC_LT_MASK, localStatus);
+        }
+        else if (mPropName.compare(UNICODE_STRING_SIMPLE("javaUnicodeIdentifierStart")) == 0) {
+            addCategory(set, U_GC_L_MASK, localStatus);
+            addCategory(set, U_GC_NL_MASK, localStatus);
+        }
+        else if (mPropName.compare(UNICODE_STRING_SIMPLE("javaUnicodeIdentifierPart")) == 0) {
+            addCategory(set, U_GC_L_MASK, localStatus);
+            addCategory(set, U_GC_PC_MASK, localStatus);
+            addCategory(set, U_GC_ND_MASK, localStatus);
+            addCategory(set, U_GC_NL_MASK, localStatus);
+            addCategory(set, U_GC_MC_MASK, localStatus);
+            addCategory(set, U_GC_MN_MASK, localStatus);
+            addIdentifierIgnorable(set, localStatus);
+        }
+        else if (mPropName.compare(UNICODE_STRING_SIMPLE("javaUpperCase")) == 0) {
+            addCategory(set, U_GC_LU_MASK, localStatus);
+        }
+        else if (mPropName.compare(UNICODE_STRING_SIMPLE("javaValidCodePoint")) == 0) {
+            set->add(0, UnicodeSet::MAX_VALUE);
+        }
+        else if (mPropName.compare(UNICODE_STRING_SIMPLE("javaWhitespace")) == 0) {
+            addCategory(set, U_GC_Z_MASK, localStatus);
+            set->removeAll(UnicodeSet().add(0xa0).add(0x2007).add(0x202f));
+            set->add(9, 0x0d).add(0x1c, 0x1f);
+        }
+        else if (mPropName.compare(UNICODE_STRING_SIMPLE("all")) == 0) {
+            set->add(0, UnicodeSet::MAX_VALUE);
+        }
+
+        if (U_SUCCESS(localStatus) && !set->isEmpty()) {
             *fStatus = U_ZERO_ERROR;
-            set = new UnicodeSet(setExpr, usetFlags, NULL, *fStatus);
-            if (U_SUCCESS(*fStatus)) {
-                if (negated) {
-                    set->complement();
-                }
-                return set;
+            if (usetFlags & USET_CASE_INSENSITIVE) {
+                set->closeOver(USET_CASE_INSENSITIVE);
             }
-            delete set;
-            set = NULL;
+            if (negated) {
+                set->complement();
+            }
+            return set;
         }
+        delete set;
+        set = NULL;
     }
     error(*fStatus);
     return NULL; 
