@@ -640,7 +640,7 @@ public final class ZoneMeta {
      * set to fields[3].
      * @return Returns true when the given custom id is valid.
      */
-    private static boolean parseCustomID(String id, int[] fields) {
+    static boolean parseCustomID(String id, int[] fields) {
         NumberFormat numberFormat = null;
         String idUppercase = id.toUpperCase();
 
@@ -788,7 +788,7 @@ public final class ZoneMeta {
     /*
      * Returns the normalized custom TimeZone ID
      */
-    private static String formatCustomID(int hour, int min, int sec, boolean negative) {
+    static String formatCustomID(int hour, int min, int sec, boolean negative) {
         // Create normalized time zone ID - GMT[+|-]hhmm[ss]
         StringBuffer zid = new StringBuffer(kCUSTOM_TZ_PREFIX);
         if (hour != 0 || min != 0) {

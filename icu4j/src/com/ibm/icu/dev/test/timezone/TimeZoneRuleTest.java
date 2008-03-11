@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -208,7 +208,7 @@ public class TimeZoneRuleTest extends TestFmwk {
      */
     public void TestHistoricalRuleBasedTimeZone() {
         // Compare to America/New_York with equivalent RBTZ
-        TimeZone ny = TimeZone.getTimeZone("America/New_York");
+        TimeZone ny = TimeZone.getTimeZone("America/New_York", TimeZone.TIMEZONE_ICU);
 
         //RBTZ
         InitialTimeZoneRule ir = new InitialTimeZoneRule("EST", -5*HOUR, 0);
@@ -321,7 +321,7 @@ public class TimeZoneRuleTest extends TestFmwk {
     public void TestOlsonTransition() {
         String[] zids = getTestZIDs();
         for (int i = 0; i < zids.length; i++) {
-            TimeZone tz = TimeZone.getTimeZone(zids[i]);
+            TimeZone tz = TimeZone.getTimeZone(zids[i], TimeZone.TIMEZONE_ICU);
             if (tz == null) {
                 break;
             }
@@ -350,7 +350,7 @@ public class TimeZoneRuleTest extends TestFmwk {
 
         String[] zids = getTestZIDs();
         for (int i = 0; i < zids.length; i++) {
-            TimeZone tz = TimeZone.getTimeZone(zids[i]);
+            TimeZone tz = TimeZone.getTimeZone(zids[i], TimeZone.TIMEZONE_ICU);
             if (tz == null) {
                 break;
             }
@@ -385,9 +385,9 @@ public class TimeZoneRuleTest extends TestFmwk {
     public void TestHasEquivalentTransitions() {
         // America/New_York and America/Indiana/Indianapolis are equivalent
         // since 2006
-        TimeZone newyork = TimeZone.getTimeZone("America/New_York");
-        TimeZone indianapolis = TimeZone.getTimeZone("America/Indiana/Indianapolis");
-        TimeZone gmt_5 = TimeZone.getTimeZone("Etc/GMT+5");
+        TimeZone newyork = TimeZone.getTimeZone("America/New_York", TimeZone.TIMEZONE_ICU);
+        TimeZone indianapolis = TimeZone.getTimeZone("America/Indiana/Indianapolis", TimeZone.TIMEZONE_ICU);
+        TimeZone gmt_5 = TimeZone.getTimeZone("Etc/GMT+5", TimeZone.TIMEZONE_ICU);
 
         long jan1_1971 = getUTCMillis(1971, Calendar.JANUARY, 1);
         long jan1_2005 = getUTCMillis(2005, Calendar.JANUARY, 1);
@@ -420,7 +420,7 @@ public class TimeZoneRuleTest extends TestFmwk {
 
         // America/New_York and America/Los_Angeles has same DST start rules, but
         // raw offsets are different
-        TimeZone losangeles = TimeZone.getTimeZone("America/Los_Angeles");
+        TimeZone losangeles = TimeZone.getTimeZone("America/Los_Angeles", TimeZone.TIMEZONE_ICU);
         if (((BasicTimeZone)newyork).hasEquivalentTransitions(losangeles, jan1_2006, jan1_2011)) {
             errln("FAIL: New_York is not equivalent to Los Angeles, but returned true");
         }
@@ -436,7 +436,7 @@ public class TimeZoneRuleTest extends TestFmwk {
 
         String[] tzids = getTestZIDs();
         for (int i = 0; i < tzids.length; i++) {
-            BasicTimeZone olsontz = (BasicTimeZone)TimeZone.getTimeZone(tzids[i]);
+            BasicTimeZone olsontz = (BasicTimeZone)TimeZone.getTimeZone(tzids[i], TimeZone.TIMEZONE_ICU);
             VTimeZone vtz_org = VTimeZone.create(tzids[i]);
             vtz_org.setTZURL("http://source.icu-project.org/timezone");
             vtz_org.setLastModified(new Date());
@@ -510,7 +510,7 @@ public class TimeZoneRuleTest extends TestFmwk {
         for (int n = 0; n < startTimes.length; n++) {
             long startTime = startTimes[n];
             for (int i = 0; i < tzids.length; i++) {
-                BasicTimeZone olsontz = (BasicTimeZone)TimeZone.getTimeZone(tzids[i]);
+                BasicTimeZone olsontz = (BasicTimeZone)TimeZone.getTimeZone(tzids[i], TimeZone.TIMEZONE_ICU);
                 VTimeZone vtz_org = VTimeZone.create(tzids[i]);
                 VTimeZone vtz_new = null;
                 try {
@@ -690,7 +690,7 @@ public class TimeZoneRuleTest extends TestFmwk {
         for (int n = 0; n < testTimes.length; n++) {
             long time = testTimes[n];
             for (int i = 0; i < tzids.length; i++) {
-                BasicTimeZone tz = (BasicTimeZone)TimeZone.getTimeZone(tzids[i]);
+                BasicTimeZone tz = (BasicTimeZone)TimeZone.getTimeZone(tzids[i], TimeZone.TIMEZONE_ICU);
                 TimeZoneRule[] rules = tz.getSimpleTimeZoneRulesNear(time);
                 if (rules == null) {
                     errln("FAIL: Failed to extract simple rules for " + tzids[i] + " at " + time);
@@ -1107,7 +1107,7 @@ public class TimeZoneRuleTest extends TestFmwk {
      */
     public void TestVTimeZoneCoverage() {
         final String TZID = "Europe/Moscow";
-        BasicTimeZone otz = (BasicTimeZone)TimeZone.getTimeZone(TZID);
+        BasicTimeZone otz = (BasicTimeZone)TimeZone.getTimeZone(TZID, TimeZone.TIMEZONE_ICU);
         VTimeZone vtz = VTimeZone.create(TZID);
 
         // getOffset(era, year, month, day, dayOfWeek, milliseconds)

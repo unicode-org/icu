@@ -227,6 +227,7 @@ icu4j/ee.foundation.jar -text svneol=unset#application/java-archive
 icu4j/license.html svneol=native#text/html
 icu4j/preprocessor.txt -text
 icu4j/readme.html svneol=native#text/html
+icu4j/src/com/ibm/icu/ICUConfig.properties -text
 icu4j/src/com/ibm/icu/charset/CharsetISO2022.java -text
 icu4j/src/com/ibm/icu/charset/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict -text svneol=native#application/octet-stream
