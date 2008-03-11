@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2003-2007, International Business Machines
+ * Copyright (c) 2003-2008, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Alan Liu
@@ -15,18 +15,13 @@ import java.util.Date;
 
 /**
  * <code>TimeZoneAdapter</code> wraps a com.ibm.icu.util.TimeZone
- * subclass that is NOT a JDKTimeZone, that is, that does not itself
- * wrap a java.util.TimeZone.  It inherits from java.util.TimeZone.
+ * subclass and inherits from java.util.TimeZone.
  * Without this class, we would need to 'port' java.util.Date to
  * com.ibm.icu.util as well, so that Date could interoperate properly
  * with the com.ibm.icu.util TimeZone and Calendar classes.  With this
  * class, we can use java.util.Date together with com.ibm.icu.util
  * classes.
  *
- * The complement of this is JDKTimeZone, which makes a
- * java.util.TimeZone look like a com.ibm.icu.util.TimeZone.
- *
- * @see com.ibm.icu.impl.JDKTimeZone
  * @see com.ibm.icu.util.TimeZone#setDefault
  * @author Alan Liu
  * @since ICU 2.8

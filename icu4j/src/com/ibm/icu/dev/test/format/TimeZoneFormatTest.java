@@ -11,7 +11,6 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
 
-import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.BasicTimeZone;
@@ -209,6 +208,9 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             };
         }
 
+        SimpleDateFormat sdfGMT = new SimpleDateFormat(BASEPATTERN);
+        sdfGMT.setTimeZone(TimeZone.getTimeZone("Etc/GMT"));
+
         long testCounts = 0;
         long[] testTimes = new long[4];
         boolean[] expectedRoundTrip = new boolean[4];
@@ -227,7 +229,8 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                         // Skip aliases
                         continue;
                     }
-                    BasicTimeZone tz = (BasicTimeZone)TimeZone.getTimeZone(ids[zidx]);
+                    BasicTimeZone btz = (BasicTimeZone)TimeZone.getTimeZone(ids[zidx], TimeZone.TIMEZONE_ICU);
+                    TimeZone tz = TimeZone.getTimeZone(ids[zidx]);
                     sdf.setTimeZone(tz);
 
                     long t = START_TIME;
@@ -277,6 +280,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                                         .append(", locale=").append(LOCALES[locidx])
                                         .append(", pattern=").append(PATTERNS[patidx])
                                         .append(", text=").append(text)
+                                        .append(", gmt=").append(sdfGMT.format(new Date(testTimes[testidx])))
                                         .append(", time=").append(testTimes[testidx])
                                         .append(", restime=").append(restime)
                                         .append(", diff=").append(restime - testTimes[testidx]);
@@ -291,7 +295,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                             }
                             times[patidx] += System.currentTimeMillis() - timer;
                         }
-                        tzt = tz.getNextTransition(t, false);
+                        tzt = btz.getNextTransition(t, false);
                         if (tzt == null) {
                             break;
                         }

@@ -1,14 +1,14 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 1997-2007, International Business Machines Corporation and    *
+* Copyright (C) 1997-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
 */
 -->
 
-<project name="ICU4J" default="core" basedir=".">
+<project name="icu4j" default="core" basedir=".">
 
   <!-- ### Begin Clover 1.2 setup ### -->
   <typedef resource="clovertypes" onerror="ignore" />
@@ -450,6 +450,7 @@
     <copy todir="${build.dir}/com/ibm/icu/impl/data">
       <fileset dir="${src.dir}/com/ibm/icu/impl/data" includes="*.icu,*.spp,*.brk" excludes="Transliterator_Han_Latin_*.txt" />
     </copy>
+    <copy file="${src.dir}/com/ibm/icu/ICUConfig.properties" todir="${build.dir}/com/ibm/icu"/>
   </target>
 
   <target name="testdata" depends="initBase">
@@ -514,7 +515,8 @@
           depends="core,indices,charsetsJar"
           description="build 'icu4j.jar' jar file">
     <jar jarfile="${jar.file}" compress="true">
-      <fileset dir="${basedir}" includes="license.html, unicode-license.txt" />
+      <fileset dir="${basedir}" includes="license.html,unicode-license.txt" />
+      <fileset dir="${src.dir}" includes="com/ibm/icu/ICUConfig.properties" />
       <fileset dir="${build.dir}" includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*" excludes="META-INF/services/**/*,com/ibm/icu/charset/**/*,${icu4j.data.path}/*.cnv,${icu4j.data.path}/cnvalias.icu" />
       <manifest>
         <attribute name="Built-By" value="${corp}" />
@@ -743,9 +745,24 @@
       <fileset dir="${build.dir}/com/ibm/icu/charset" />
     </delete>
   </target>
+
   <target name="check" depends="tests, jar, deleteCore" description="run standard icu4j test suite">
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
       <jvmarg line="${test.jvm.args}"/>
+      <arg value="-n" />
+      <classpath>
+        <pathelement path="${java.class.path}/" />
+        <pathelement location="${jar.file}" />
+        <pathelement location="${charsets.jar.file}" />
+        <pathelement location="clover.jar" />
+        <pathelement path="${build.dir}" />
+      </classpath>
+    </java>
+  </target>
+
+  <target name="jdktzCheck" depends="tests, jar, deleteCore" description="run icu4j test suite with JDK timezone">
+    <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
+      <jvmarg line="${test.jvm.args} -Dcom.ibm.icu.util.TimeZone.DefaultTimeZoneType=JDK"/>
       <arg value="-n" />
       <classpath>
         <pathelement path="${java.class.path}/" />

@@ -1658,6 +1658,13 @@ public class SimpleDateFormat extends DateFormat {
                         // No good way to resolve ambiguous time at transition,
                         // but following code work in most case.
                         tz.getOffset(localMillis, true, offsets);
+
+                        if (tztype == TZTYPE_STD && offsets[1] != 0 || tztype == TZTYPE_DST && offsets[1] == 0) {
+                            // Roll back one day and try it again.
+                            // Note: This code assumes 1. timezone transition only happens once within 24 hours at max
+                            // 2. the difference of local offsets at the transition is less than 24 hours.
+                            tz.getOffset(localMillis - (24*60*60*1000), true, offsets);
+                        }
                     }
 
                     // Now, compare the results with parsed type, either standard or daylight saving time

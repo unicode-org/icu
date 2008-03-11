@@ -230,68 +230,6 @@ public class TimeZoneTest extends TestFmwk
         }
     }
 
-    static final String formatOffset(int offset) {
-        char sign = '+';
-        if (offset < 0) {
-            sign = '-';
-            offset = -offset;
-        }
-        int s = offset % 60;
-        offset /= 60;
-        int m = offset % 60;
-        int h = offset / 60;
-
-        StringBuffer buf = new StringBuffer();
-        buf.append(sign);
-        if (h < 10) {
-            buf.append('0');
-        }
-        buf.append(h);
-        buf.append(':');
-        if (m < 10) {
-            buf.append('0');
-        }
-        buf.append(m);
-        buf.append(':');
-        if (s < 10) {
-            buf.append('0');
-        }
-        buf.append(s);
-
-        return buf.toString();
-    }
-
-    static final String formatTZID(int offset) {
-        char sign = '+';
-        if (offset < 0) {
-            sign = '-';
-            offset = -offset;
-        }
-        int s = offset % 60;
-        offset /= 60;
-        int m = offset % 60;
-        int h = offset / 60;
-
-        StringBuffer buf = new StringBuffer("GMT");
-        buf.append(sign);
-        if (h < 10) {
-            buf.append('0');
-        }
-        buf.append(h);
-        if (m < 10) {
-            buf.append('0');
-        }
-        buf.append(m);
-        if (s != 0) {
-            if (s < 10) {
-                buf.append('0');
-            }
-            buf.append(s);
-        }
-
-        return buf.toString();
-    }
-
     /**
      * As part of the VM fix (see CCC approved RFE 4028006, bug
      * 4044013), TimeZone.getTimeZone() has been modified to recognize
@@ -301,59 +239,51 @@ public class TimeZoneTest extends TestFmwk
      * Bug 4044013
      */
     public void TestCustomParse() {
-        Object[] DATA = {
-            // ID        Expected offset in seconds
-            "GMT",       null, //Isn't custom. [returns normal GMT]
-            "GMT-YOUR.AD.HERE", null,
-            "GMT0",      null,
-            "GMT+0",     new Integer(0),
-            "GMT+1",     new Integer(1*60*60),
-            "GMT-0030",  new Integer(-30*60),
-            "GMT+15:99", null,
-            "GMT+",      null,
-            "GMT-",      null,
-            "GMT+0:",    null,
-            "GMT-:",     null,
-            "GMT+0010",  new Integer(10*60), // Interpret this as 00:10
-            "GMT-10",    new Integer(-10*60*60),
-            "GMT+30",    null,
-            "GMT-3:30",  new Integer(-(3*60+30)*60),
-            "GMT-230",   new Integer(-(2*60+30)*60),
-            "GMT+05:13:05",     new Integer((5*60+13)*60+5),
-            "GMT-71023",        new Integer(-((7*60+10)*60+23)),
-            "GMT+01:23:45:67",  null,
-            "GMT+01:234",       null,
-            "GMT-2:31:123",     null,
-            "GMT+3:75",         null,
-            "GMT-01010101",     null
+        String[] DATA = {
+            // ID               offset(sec)     output ID
+            "GMT",              "0",            "GMT",      // system ID
+            "GMT-YOUR.AD.HERE", "0",            "GMT",
+            "GMT0",             "0",            "GMT0",     // system ID
+            "GMT+0",            "0",            "GMT+0",    // system ID
+            "GMT+1",            "3600",         "GMT+0100",
+            "GMT-0030",         "-1800",        "GMT-0030",
+            "GMT+15:99",        "0",            "GMT",
+            "GMT+",             "0",            "GMT",
+            "GMT-",             "0",            "GMT",
+            "GMT+0:",           "0",            "GMT",
+            "GMT-:",            "0",            "GMT",
+            "GMT+0010",         "600",          "GMT+0010",
+            "GMT-10",           "-36000",       "GMT-1000",
+            "GMT+30",           "0",            "GMT",
+            "GMT-3:30",         "-12600",       "GMT-0330",
+            "GMT-230",          "-9000",        "GMT-0230",
+            "GMT+05:13:05",     "18785",        "GMT+051305",
+            "GMT-71023",        "-25823",       "GMT-071023",
+            "GMT+01:23:45:67",  "0",            "GMT",
+            "GMT+01:234",       "0",            "GMT",
+            "GMT-2:31:123",     "0",            "GMT",
+            "GMT+3:75",         "0",            "GMT",
+            "GMT-01010101",     "0",            "GMT",
         };
-        for (int i=0; i<DATA.length; i+=2) {
-            String id = (String)DATA[i];
-            Integer exp = (Integer)DATA[i+1];
+        for (int i = 0; i < DATA.length; i += 3) {
+            String id = DATA[i];
+            int offset = Integer.parseInt(DATA[i+1]);
+            String expId = DATA[i+2];
+
             TimeZone zone = TimeZone.getTimeZone(id);
-            if (zone instanceof OlsonTimeZone) {
-                logln(id + " -> Olson time zone");
+            String gotID = zone.getID();
+            int gotOffset = zone.getRawOffset()/1000;
+
+            logln(id + " -> " + gotID + " " + gotOffset);
+
+            if (offset != gotOffset) {
+                errln("FAIL: Unexpected offset for " + id + " - returned:" + gotOffset + " expected:" + offset);
             }
-            else {
-                int ioffset = zone.getRawOffset()/1000;
-                String offset = formatOffset(ioffset);
-                String expectedID = formatTZID(ioffset);
-                logln(id + " -> " + zone.getID() + " " + offset);
-                String gotID = zone.getID();
-                if (exp == null && !gotID.equals("GMT")) {
-                    errln("Expected parse failure for " + id +
-                          ", got offset of " + offset +
-                          ", id " + zone.getID());
-                }
-                // JDK 1.3 creates custom zones with the ID "Custom"
-                // JDK 1.4 creates custom zones with IDs of the form "GMT+02:00"
-                // ICU creates custom zones with IDs of the form "GMT+0200"
-                else if (exp != null && (ioffset != exp.intValue() || !(gotID.equals(expectedID)))) {
-                    errln("Expected offset of " + formatOffset(exp.intValue()) +
-                          ", id " + expectedID +
-                          ", for " + id +
-                          ", got offset of " + offset +
-                          ", id " + zone.getID());
+            if (!expId.equals(gotID)) {
+                if (TimeZone.getDefaultTimeZoneType() != TimeZone.TIMEZONE_ICU) {
+                    logln("ID for " + id + " - returned:" + gotID + " expected:" + expId);
+                } else {
+                    errln("FAIL: Unexpected ID for " + id + " - returned:" + gotID + " expected:" + expId);
                 }
             }
         }

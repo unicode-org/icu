@@ -1,7 +1,7 @@
 //##header J2SE15
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.JavaTimeZone;
 import com.ibm.icu.impl.OlsonTimeZone;
 import com.ibm.icu.impl.TimeZoneAdapter;
 import com.ibm.icu.math.BigDecimal;
@@ -509,7 +510,43 @@ public class SerializableTest extends TestFmwk.TestGroup
             return bSame;
         }
     }
-    
+
+    private static class JavaTimeZoneHandler implements Handler {
+        String[] ZONES = { "GMT", "America/New_York", "GMT+05:45" };
+
+        public Object[] getTestObjects() {
+            JavaTimeZone zones[] = new JavaTimeZone[ZONES.length];
+            for(int z = 0; z < ZONES.length; z += 1) {
+                zones[z] = new JavaTimeZone(ZONES[z]);
+            }
+            return zones;
+        }
+        
+        public boolean hasSameBehavior(Object a, Object b)
+        {
+            TimeZone zone_a = (TimeZone) a;
+            TimeZone zone_b = (TimeZone) b;
+
+            if (!(zone_a.getID().equals(zone_b.getID()))) {
+                return false;
+            }
+
+            int a_offsets[] = {0, 0};
+            int b_offsets[] = {0, 0};
+
+            boolean bSame = true;
+            for (int i = 0; i < sampleTimes.length; i++) {
+                zone_a.getOffset(sampleTimes[i], false, a_offsets);
+                zone_b.getOffset(sampleTimes[i], false, b_offsets);
+                if (a_offsets[0] != b_offsets[0] || a_offsets[1] != b_offsets[1]) {
+                    bSame = false;
+                    break;
+                }
+            }
+            return bSame;
+        }
+    }
+
     private static class BigDecimalHandler implements Handler
     {
         String values[] = {
@@ -592,6 +629,7 @@ public class SerializableTest extends TestFmwk.TestGroup
         map.put("com.ibm.icu.util.TimeArrayTimeZoneRule", new TimeArrayTimeZoneRuleHandler());
         map.put("com.ibm.icu.util.ULocale", new ULocaleHandler());
         map.put("com.ibm.icu.util.Currency", new CurrencyHandler());
+        map.put("com.ibm.icu.impl.JavaTimeZone", new JavaTimeZoneHandler());
         map.put("com.ibm.icu.impl.OlsonTimeZone", new OlsonTimeZoneHandler());
         map.put("com.ibm.icu.impl.TimeZoneAdapter", new TimeZoneAdapterHandler());
         map.put("com.ibm.icu.math.BigDecimal", new BigDecimalHandler());
