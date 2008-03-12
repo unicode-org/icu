@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
  *
  */
 
@@ -10,6 +10,8 @@
 #include "ThaiLayoutEngine.h"
 #include "ScriptAndLanguageTags.h"
 #include "LEGlyphStorage.h"
+
+#include "KernTable.h"
 
 #include "ThaiShaping.h"
 
@@ -92,6 +94,30 @@ le_int32 ThaiLayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 offse
 
     glyphStorage.adoptGlyphCount(glyphCount);
     return glyphCount;
+}
+
+// This is the same as LayoutEngline::adjustGlyphPositions() except that it doesn't call adjustMarkGlyphs
+void ThaiLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool  /*reverse*/,
+                                        LEGlyphStorage &glyphStorage, LEErrorCode &success)
+{
+    if (LE_FAILURE(success)) {
+        return;
+    }
+
+    if (chars == NULL || offset < 0 || count < 0) {
+        success = LE_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    if (fTypoFlags & 0x1) { /* kerning enabled */
+      static const le_uint32 kernTableTag = LE_KERN_TABLE_TAG;
+
+      KernTable kt(fFontInstance, getFontTable(kernTableTag));
+      kt.process(glyphStorage);
+    }
+
+    // default is no adjustments
+    return;
 }
 
 U_NAMESPACE_END
