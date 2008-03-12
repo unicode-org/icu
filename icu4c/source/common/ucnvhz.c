@@ -59,6 +59,7 @@ typedef struct{
     UBool isEscapeAppended;
     UBool isStateDBCS;
     UBool isTargetUCharDBCS;
+    UBool isEmptySegment;
 }UConverterDataHZ;
 
 
@@ -98,6 +99,7 @@ _HZReset(UConverter *cnv, UConverterResetChoice choice){
         cnv->mode=0;
         if(cnv->extraInfo != NULL){
             ((UConverterDataHZ*)cnv->extraInfo)->isStateDBCS = FALSE;
+            ((UConverterDataHZ*)cnv->extraInfo)->isEmptySegment = FALSE;
         }
     }
     if(choice!=UCNV_RESET_TO_UNICODE) {
@@ -130,6 +132,10 @@ _HZReset(UConverter *cnv, UConverterResetChoice choice){
 *   from-GB code '~}' ($7E7D) is outside the defined GB range.)
 *
 *   Source: RFC 1842
+*
+*   Note that the formal syntax in RFC 1842 is invalid. I assume that the
+*   intended definition of single-byte-segment is as follows (pedberg):
+*   single-byte-segment = single-byte-seq 1*single-byte-char
 */
 
 
@@ -170,12 +176,23 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                         args->offsets[myTarget - args->target]=(int32_t)(mySource - args->source - 2);
                     }
                     *(myTarget++)=(UChar)mySourceChar;
+                    myData->isEmptySegment = FALSE;
                     continue;
                 case UCNV_OPEN_BRACE:
-                    myData->isStateDBCS = TRUE;
-                    continue;
                 case UCNV_CLOSE_BRACE:
-                    myData->isStateDBCS = FALSE;
+                    myData->isStateDBCS = (mySourceChar == UCNV_OPEN_BRACE);
+                    if (myData->isEmptySegment) {
+                        myData->isEmptySegment = FALSE; /* we are handling it, reset to avoid future spurious errors */
+                        *err = U_ILLEGAL_ESCAPE_SEQUENCE;
+                        args->converter->toUCallbackReason = UCNV_IRREGULAR;
+                        args->converter->toUBytes[0] = UCNV_TILDE;
+                        args->converter->toUBytes[1] = mySourceChar;
+                        args->converter->toULength = 2;
+                        args->target = myTarget;
+                        args->source = mySource;
+                        return;
+                    }
+                    myData->isEmptySegment = TRUE;
                     continue;
                 default:
                      /* if the first byte is equal to TILDE and the trail byte
@@ -183,6 +200,7 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                      */
                     mySourceChar = 0x7e00 | mySourceChar;
                     targetUniChar = 0xffff;
+                    myData->isEmptySegment = FALSE; /* different error here, reset this to avoid spurious future error */
                     break;
                 }
             } else if(myData->isStateDBCS) {
@@ -193,6 +211,7 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                     } else {
                         /* add another bit to distinguish a 0 byte from not having seen a lead byte */
                         args->converter->toUnicodeStatus = (uint32_t) (mySourceChar | 0x100);
+                        myData->isEmptySegment = FALSE; /* the segment has something, either valid or will produce a different error, so reset this */
                     }
                     continue;
                 }
@@ -220,8 +239,10 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                     continue;
                 } else if(mySourceChar <= 0x7f) {
                     targetUniChar = (UChar)mySourceChar;  /* ASCII */
+                    myData->isEmptySegment = FALSE; /* the segment has something valid */
                 } else {
                     targetUniChar = 0xffff;
+                    myData->isEmptySegment = FALSE; /* different error here, reset this to avoid spurious future error */
                 }
             }
             if(targetUniChar < 0xfffe){

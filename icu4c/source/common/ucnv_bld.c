@@ -948,6 +948,7 @@ ucnv_createConverterFromSharedData(UConverter *myUConverter,
     myUConverter->subCharLen = mySharedConverterData->staticData->subCharLen;
     myUConverter->subChars = (uint8_t *)myUConverter->subUChars;
     uprv_memcpy(myUConverter->subChars, mySharedConverterData->staticData->subChar, myUConverter->subCharLen);
+    myUConverter->toUCallbackReason = UCNV_ILLEGAL; /* default reason to invoke (*fromCharErrorBehaviour) */
 
     if(mySharedConverterData->impl->open != NULL) {
         mySharedConverterData->impl->open(myUConverter, realName, locale, options, err);
