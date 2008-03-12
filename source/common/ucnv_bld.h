@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2006,2008 International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -226,6 +226,9 @@ struct UConverter {
     char preToU[UCNV_EXT_MAX_BYTES];
     int8_t preFromULength, preToULength;    /* negative: replay */
     int8_t preToUFirstLength;               /* length of first character */
+
+    /* new fields for ICU 4.0 */
+    UConverterCallbackReason toUCallbackReason; /* (*fromCharErrorBehaviour) reason, set when error is detected */
 };
 
 U_CDECL_END /* end of UConverter */

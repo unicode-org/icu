@@ -1529,11 +1529,14 @@ _toUnicodeWithCallback(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
             cnv->toULength=0;
 
             /* call the callback function */
+            if(cnv->toUCallbackReason==UCNV_ILLEGAL && *err==U_INVALID_CHAR_FOUND) {
+                cnv->toUCallbackReason = UCNV_UNASSIGNED;
+            }
             cnv->fromCharErrorBehaviour(cnv->toUContext, pArgs,
                 cnv->invalidCharBuffer, errorInputLength,
-                (*err==U_INVALID_CHAR_FOUND || *err==U_UNSUPPORTED_ESCAPE_SEQUENCE) ?
-                    UCNV_UNASSIGNED : UCNV_ILLEGAL,
+                cnv->toUCallbackReason,
                 err);
+            cnv->toUCallbackReason = UCNV_ILLEGAL; /* reset to default value */
 
             /*
              * loop back to the offset handling
