@@ -54,13 +54,6 @@ U_NAMESPACE_USE
 
 #define ZERO_CC_LIMIT_            0xC0
 
-// static UCA. There is only one. Collators don't use it.
-// It is referenced only in ucol_initUCA and ucol_cleanup
-static UCollator* _staticUCA = NULL;
-// static pointer to udata memory. Inited in ucol_initUCA
-// used for cleanup in ucol_cleanup
-static UDataMemory* UCA_DATA_MEM = NULL;
-
 // this is static pointer to the normalizer fcdTrieIndex
 // it is always the same between calls to u_cleanup
 // and therefore writing to it is not synchronized.
@@ -77,34 +70,11 @@ static const int32_t maxImplicitPrimary = 0xE4;
 
 U_CDECL_BEGIN
 static UBool U_CALLCONV
-isAcceptableUCA(void * /*context*/,
-             const char * /*type*/, const char * /*name*/,
-             const UDataInfo *pInfo){
-  /* context, type & name are intentionally not used */
-    if( pInfo->size>=20 &&
-        pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
-        pInfo->charsetFamily==U_CHARSET_FAMILY &&
-        pInfo->dataFormat[0]==UCA_DATA_FORMAT_0 &&   /* dataFormat="UCol" */
-        pInfo->dataFormat[1]==UCA_DATA_FORMAT_1 &&
-        pInfo->dataFormat[2]==UCA_DATA_FORMAT_2 &&
-        pInfo->dataFormat[3]==UCA_DATA_FORMAT_3 &&
-        pInfo->formatVersion[0]==UCA_FORMAT_VERSION_0 &&
-        pInfo->formatVersion[1]>=UCA_FORMAT_VERSION_1// &&
-        //pInfo->formatVersion[1]==UCA_FORMAT_VERSION_1 &&
-        //pInfo->formatVersion[2]==UCA_FORMAT_VERSION_2 && // Too harsh
-        //pInfo->formatVersion[3]==UCA_FORMAT_VERSION_3 && // Too harsh
-        ) {
-        UVersionInfo UCDVersion;
-        u_getUnicodeVersion(UCDVersion);
-        return (UBool)(pInfo->dataVersion[0]==UCDVersion[0]
-            && pInfo->dataVersion[1]==UCDVersion[1]);
-            //&& pInfo->dataVersion[2]==ucaDataInfo.dataVersion[2]
-            //&& pInfo->dataVersion[3]==ucaDataInfo.dataVersion[3]);
-    } else {
-        return FALSE;
-    }
+ucol_cleanup(void)
+{
+    fcdTrieIndex = NULL;
+    return TRUE;
 }
-
 
 static int32_t U_CALLCONV
 _getFoldingOffset(uint32_t data) {
@@ -114,8 +84,9 @@ _getFoldingOffset(uint32_t data) {
 U_CDECL_END
 
 static
-inline void  IInit_collIterate(const UCollator *collator, const UChar *sourceString,
-                              int32_t sourceLen, collIterate *s) {
+inline void IInit_collIterate(const UCollator *collator, const UChar *sourceString,
+                              int32_t sourceLen, collIterate *s)
+{
     (s)->string = (s)->pos = (UChar *)(sourceString);
     (s)->origFlags = 0;
     (s)->flags = 0;
@@ -774,6 +745,13 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, con
         result->freeOnClose = FALSE;
     }
 
+    // init FCD data
+    if (fcdTrieIndex == NULL) {
+        // The result is constant, until the library is reloaded.
+        fcdTrieIndex = unorm_getFCDTrie(status);
+        ucln_i18n_registerCleanup(UCLN_I18N_UCOL, ucol_cleanup);
+    }
+
     result->image = image;
     result->mapping.getFoldingOffset = _getFoldingOffset;
     const uint8_t *mapping = (uint8_t*)result->image+result->image->mappingPosition;
@@ -1195,73 +1173,6 @@ uprv_uca_initImplicitConstants(UErrorCode *status) {
     // 13 is the largest 4-byte gap we can use without getting 2 four-byte forms.
     //initImplicitConstants(minPrimary, maxPrimary, 0x04, 0xFE, 1, 1, status);
     initImplicitConstants(minImplicitPrimary, maxImplicitPrimary, 0x04, 0xFE, 1, 1, status);
-}
-
-U_CDECL_BEGIN
-static UBool U_CALLCONV
-ucol_cleanup(void)
-{
-    if (UCA_DATA_MEM) {
-        udata_close(UCA_DATA_MEM);
-        UCA_DATA_MEM = NULL;
-    }
-    if (_staticUCA) {
-        ucol_close(_staticUCA);
-        _staticUCA = NULL;
-    }
-    fcdTrieIndex = NULL;
-    return TRUE;
-}
-U_CDECL_END
-
-/* do not close UCA returned by ucol_initUCA! */
-UCollator *
-ucol_initUCA(UErrorCode *status) {
-    if(U_FAILURE(*status)) {
-        return NULL;
-    }
-    UBool needsInit;
-    UMTX_CHECK(NULL, (_staticUCA == NULL), needsInit);
-
-    if(needsInit) {
-        // init FCD data
-        if (fcdTrieIndex == NULL) {
-            // The result is constant, until the library is reloaded.
-            fcdTrieIndex = unorm_getFCDTrie(status);
-            ucln_i18n_registerCleanup(UCLN_I18N_UCOL, ucol_cleanup);
-        }
-
-        UDataMemory *result = udata_openChoice(NULL, UCA_DATA_TYPE, UCA_DATA_NAME, isAcceptableUCA, NULL, status);
-
-        if(U_SUCCESS(*status)){
-            UCollator *newUCA = ucol_initCollator((const UCATableHeader *)udata_getMemory(result), NULL, NULL, status);
-            if(U_SUCCESS(*status)){
-                umtx_lock(NULL);
-                if(_staticUCA == NULL) {
-                    _staticUCA = newUCA;
-                    newUCA = NULL;
-                    UCA_DATA_MEM = result;
-                    result = NULL;
-                }
-                umtx_unlock(NULL);
-
-                ucln_i18n_registerCleanup(UCLN_I18N_UCOL, ucol_cleanup);
-                if(newUCA != NULL) {
-                    ucol_close(newUCA);
-                    udata_close(result);
-                }
-                // Initalize variables for implicit generation
-                uprv_uca_initImplicitConstants(status);
-            }else{
-                ucol_close(newUCA);
-                udata_close(result);
-            }
-        }
-        else {
-            udata_close(result);
-        }
-    }
-    return _staticUCA;
 }
 
 
@@ -8513,13 +8424,6 @@ ucol_getUCAVersion(const UCollator* coll, UVersionInfo info) {
     if(coll && coll->UCA) {
         uprv_memcpy(info, coll->UCA->image->UCAVersion, sizeof(UVersionInfo));
     }
-}
-
-U_CAPI void U_EXPORT2
-ucol_forgetUCA(void)
-{
-    _staticUCA = NULL;
-    UCA_DATA_MEM = NULL;
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
