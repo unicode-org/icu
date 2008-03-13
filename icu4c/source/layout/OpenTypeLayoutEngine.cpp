@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
  *
  */
 
@@ -10,6 +10,7 @@
 #include "LELanguages.h"
 
 #include "LayoutEngine.h"
+#include "CanonShaping.h"
 #include "OpenTypeLayoutEngine.h"
 #include "ScriptAndLanguageTags.h"
 #include "CharSubstitutionFilter.h"
@@ -58,7 +59,7 @@ static const FeatureMap featureMap[] =
     {ccmpFeatureTag, ccmpFeatureMask},
     {ligaFeatureTag, ligaFeatureMask},
     {cligFeatureTag, cligFeatureMask}, 
-	{kernFeatureTag, kernFeatureMask},
+    {kernFeatureTag, kernFeatureMask},
     {paltFeatureTag, paltFeatureMask},
     {markFeatureTag, markFeatureMask},
     {mkmkFeatureTag, mkmkFeatureMask}
@@ -108,7 +109,7 @@ void OpenTypeLayoutEngine::reset()
 }
 
 OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
-					   le_int32 typoFlags)
+                       le_int32 typoFlags)
     : LayoutEngine(fontInstance, scriptCode, languageCode, typoFlags), fFeatureOrder(FALSE),
       fGSUBTable(NULL), fGDEFTable(NULL), fGPOSTable(NULL), fSubstitutionFilter(NULL)
 {
@@ -160,20 +161,38 @@ le_int32 OpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[], le_i
         return 0;
     }
 
-    le_int32 outCharCount = LayoutEngine::characterProcessing(chars, offset, count, max, rightToLeft, outChars, glyphStorage, success);
+    // This is the cheapest way to get mark reordering only for Hebrew.
+    // We could just do the mark reordering for all scripts, but most
+    // of them probably don't need it... Another option would be to
+    // add a HebrewOpenTypeLayoutEngine subclass, but the only thing it
+    // would need to do is mark reordering, so that seems like overkill.
+    if (fScriptCode == hebrScriptCode) {
+        outChars = LE_NEW_ARRAY(LEUnicode, count);
 
+        if (outChars == NULL) {
+            success = LE_MEMORY_ALLOCATION_ERROR;
+            return 0;
+        }
+
+        if (LE_FAILURE(success)) {
+            LE_DELETE_ARRAY(outChars);
+            return 0;
+        }
+
+        CanonShaping::reorderMarks(&chars[offset], count, rightToLeft, outChars, glyphStorage);
+    }
     if (LE_FAILURE(success)) {
         return 0;
     }
 
-    glyphStorage.allocateGlyphArray(outCharCount, rightToLeft, success);
+    glyphStorage.allocateGlyphArray(count, rightToLeft, success);
     glyphStorage.allocateAuxData(success);
 
-    for (le_int32 i = 0; i < outCharCount; i += 1) {
+    for (le_int32 i = 0; i < count; i += 1) {
         glyphStorage.setAuxData(i, fFeatureMask, success);
     }
 
-    return outCharCount;
+    return count;
 }
 
 // Input: characters, tags
