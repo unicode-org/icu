@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  Copyright (c) 1999-2007 International Business Machines
+  Copyright (c) 1999-2008 International Business Machines
   Corporation and others. All rights reserved.
 -->
 
@@ -82,5 +82,10 @@
 
   <test-case id="Hangul" script="hang">
     <test-text>마만만</test-text>
+  </test-case>
+
+  <test-case id="Hebrew Mark Test" script="hebr">
+    <test-font name="SBL_Hbrw.ttf"/>
+    <test-text>מָשְׁכֵנִיאַחֲרֶיךָנָּרוּצָההֱבִיאַנִיהַמֶּלֶךְחֲדָרָיונָגִילָהוְנִשְׂמְחָהבָּךְנַזְכִּירָהדֹדֶיךָמִיַּיִןמֵישָׁרִיםאֲהֵבוּךָ</test-text>
   </test-case>
 </layout-tests>
