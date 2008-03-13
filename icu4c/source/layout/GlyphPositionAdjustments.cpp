@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
  *
  */
 
@@ -141,7 +141,12 @@ void GlyphPositionAdjustments::applyCursiveAdjustments(LEGlyphStorage &glyphStor
                 lastExitGlyphID = glyphID;
             } else {
                 if (baselineIsLogicalEnd(i) && firstExitPoint >= 0 && lastExitPoint >= 0) {
-                    le_int32 limit = lastExitPoint + dir;
+                    le_int32 limit = lastExitPoint /*+ dir*/;
+                    LEPoint dummyAnchor;
+
+                    if (getEntryPoint(i, dummyAnchor) != NULL) {
+                        limit += dir;
+                    }
 
                     for (le_int32 j = firstExitPoint; j != limit; j += dir) {
                         if (isCursiveGlyph(j)) {
