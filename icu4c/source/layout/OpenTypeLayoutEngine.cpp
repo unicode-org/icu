@@ -34,6 +34,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(OpenTypeLayoutEngine)
 #define kernFeatureTag LE_KERN_FEATURE_TAG
 #define markFeatureTag LE_MARK_FEATURE_TAG
 #define mkmkFeatureTag LE_MKMK_FEATURE_TAG
+#define loclFeatureTag LE_LOCL_FEATURE_TAG
 
 // 'dlig' not used at the moment
 #define dligFeatureTag 0x646C6967
@@ -48,8 +49,9 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(OpenTypeLayoutEngine)
 #define paltFeatureMask 0x08000000UL
 #define markFeatureMask 0x04000000UL
 #define mkmkFeatureMask 0x02000000UL
+#define loclFeatureMask 0x01000000UL
 
-#define minimalFeatures     (ccmpFeatureMask | markFeatureMask | mkmkFeatureMask)
+#define minimalFeatures     (ccmpFeatureMask | markFeatureMask | mkmkFeatureMask | loclFeatureMask)
 #define ligaFeatures        (ligaFeatureMask | cligFeatureMask | minimalFeatures)
 #define kernFeatures        (kernFeatureMask | paltFeatureMask | minimalFeatures)
 #define kernAndLigaFeatures (ligaFeatures    | kernFeatures)
@@ -62,7 +64,8 @@ static const FeatureMap featureMap[] =
     {kernFeatureTag, kernFeatureMask},
     {paltFeatureTag, paltFeatureMask},
     {markFeatureTag, markFeatureMask},
-    {mkmkFeatureTag, mkmkFeatureMask}
+    {mkmkFeatureTag, mkmkFeatureMask},
+    {loclFeatureTag, loclFeatureMask}
 };
 
 static const le_int32 featureMapCount = LE_ARRAY_SIZE(featureMap);
