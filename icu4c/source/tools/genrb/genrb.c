@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2007, International Business Machines
+*   Copyright (C) 1998-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -47,7 +47,7 @@ enum
     ICUDATADIR,
     WRITE_JAVA,
     COPYRIGHT,
-    PACKAGE_NAME,
+    // PACKAGE_NAME, // This option is deprecated and should not be used ever.
     BUNDLE_NAME,
     WRITE_XLIFF,
     STRICT,
@@ -69,7 +69,7 @@ UOption options[]={
                       UOPTION_ICUDATADIR,
                       UOPTION_WRITE_JAVA,
                       UOPTION_COPYRIGHT,
-                      UOPTION_PACKAGE_NAME,
+                      //UOPTION_PACKAGE_NAME,  // This option is deprecated and should not be used ever.
                       UOPTION_BUNDLE_NAME,
                       UOPTION_DEF( "write-xliff", 'x', UOPT_OPTIONAL_ARG),
                       UOPTION_DEF( "strict",    'k', UOPT_NO_ARG), /* 14 */
@@ -142,9 +142,10 @@ main(int argc,
                 u_getDataDirectory(), u_getDataDirectory(), u_getDataDirectory());
         fprintf(stderr,
                 "\t-j or --write-java       write a Java ListResourceBundle for ICU4J, followed by optional encoding\n"
-                "\t                         defaults to ASCII and \\uXXXX format.\n"
-                "\t-p or --package-name     For ICU4J: package name for writing the ListResourceBundle for ICU4J,\n"
-                "\t                         defaults to com.ibm.icu.impl.data\n");
+                "\t                         defaults to ASCII and \\uXXXX format.\n");
+                // This option is deprecated and should not be used ever.
+                //"\t-p or --package-name     For ICU4J: package name for writing the ListResourceBundle for ICU4J,\n"
+                //"\t                         defaults to com.ibm.icu.impl.data\n");
         fprintf(stderr,
                 "\t-b or --bundle-name      bundle name for writing the ListResourceBundle for ICU4J,\n"
                 "\t                         defaults to LocaleElements\n"
@@ -185,7 +186,8 @@ main(int argc,
     if(options[DESTDIR].doesOccur) {
         outputDir = options[DESTDIR].value;
     }
-    if(options[PACKAGE_NAME].doesOccur) {
+    // This option is deprecated and should never be used.
+    /*if(options[PACKAGE_NAME].doesOccur) {
         gPackageName = options[PACKAGE_NAME].value;
         if(!strcmp(gPackageName, "ICUDATA"))
         {
@@ -195,7 +197,7 @@ main(int argc,
         {
             gPackageName = NULL;
         }
-    }
+    }*/
 
     if(options[ENCODING].doesOccur) {
         encoding = options[ENCODING].value;
