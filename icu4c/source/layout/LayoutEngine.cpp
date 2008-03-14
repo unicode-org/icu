@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
  *
  */
 
@@ -136,7 +136,7 @@ static const le_int32 canonFeatureMapCount = LE_ARRAY_SIZE(canonFeatureMap);
 
 LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, le_int32 typoFlags)
   : fGlyphStorage(NULL), fFontInstance(fontInstance), fScriptCode(scriptCode), fLanguageCode(languageCode),
-    fTypoFlags(typoFlags), fFilterZeroWidth(FALSE)
+    fTypoFlags(typoFlags), fFilterZeroWidth(TRUE)
 {
     fGlyphStorage = new LEGlyphStorage();
 }
