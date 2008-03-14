@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2006, International Business Machines
+*   Copyright (C) 1997-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -22,8 +22,6 @@
 #include "cstring.h"
 
 static const char kLocaleScript[] = "LocaleScript";
-static const char kHyphen = '-';
-static const char kUnderscore = '_';
 
 /* TODO: this is a bad API should be deprecated */
 U_CAPI int32_t  U_EXPORT2
@@ -44,7 +42,7 @@ uscript_getCode(const char* nameOrAbbrOrLocale,
         return numFilled;
     }
 
-    if(uprv_strchr(nameOrAbbrOrLocale, kHyphen)==NULL && uprv_strchr(nameOrAbbrOrLocale, kUnderscore)==NULL ){
+    if(uprv_strchr(nameOrAbbrOrLocale, '-')==NULL && uprv_strchr(nameOrAbbrOrLocale, '_')==NULL ){
         /* try long and abbreviated script names first */
         code = (UScriptCode) u_getPropertyValueEnum(UCHAR_SCRIPT, nameOrAbbrOrLocale);
         
