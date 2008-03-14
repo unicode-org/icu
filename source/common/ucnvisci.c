@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2000-2007, International Business Machines
+*   Copyright (C) 2000-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnvisci.c
@@ -1004,7 +1004,7 @@ getTrail:
     args->target = (char*)target;
 }
 
-static const int32_t lookupTable[][2]={
+static const uint16_t lookupTable[][2]={
     { ZERO,       ZERO     },     /*DEFALT*/
     { ZERO,       ZERO     },     /*ROMAN*/
     { DEVANAGARI, DEV_MASK },
@@ -1120,7 +1120,7 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                     data->currentDeltaToUnicode =
                         (uint16_t)(lookupTable[sourceChar & 0x0F][0] * DELTA);
                     data->currentMaskToUnicode =
-                        (MaskEnum)lookupTable[sourceChar & 0x0F][1] ;
+                        (MaskEnum)lookupTable[sourceChar & 0x0F][1];
                 }
                 else if(sourceChar==DEF){
                     /* switch back to default */
