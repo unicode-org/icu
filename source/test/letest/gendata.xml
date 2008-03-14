@@ -88,4 +88,14 @@
     <test-font name="SBL_Hbrw.ttf"/>
     <test-text>מָשְׁכֵנִיאַחֲרֶיךָנָּרוּצָההֱבִיאַנִיהַמֶּלֶךְחֲדָרָיונָגִילָהוְנִשְׂמְחָהבָּךְנַזְכִּירָהדֹדֶיךָמִיַּיִןמֵישָׁרִיםאֲהֵבוּךָ</test-text>
   </test-case>
+
+  <test-case id="Not Language Specific" script="latn">
+    <test-font name="fp9r8a.otf"/>
+    <test-text>Ţhiş iş a ţeşţ.</test-text>
+  </test-case>
+
+  <test-case id="Romaanian Language Specific" script="latn" lang="ROM">
+    <test-font name="fp9r8a.otf"/>
+    <test-text>Ţhiş iş a ţeşţ.</test-text>
+  </test-case>
 </layout-tests>

@@ -1,11 +1,11 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2007. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2008. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * Generated on: 09/03/2007 08:58:56 AM HST
+ * Generated on: 03/13/2008 05:37:32 PM HST
  */
 
 #include "LETypes.h"
@@ -163,7 +163,49 @@ const LETag OpenTypeLayoutEngine::languageTags[] = {
     urdLanguageTag, /* 'URD' (Urdu) */
     zhpLanguageTag, /* 'ZHP' (Chinese (Phonetic)) */
     zhsLanguageTag, /* 'ZHS' (Chinese (Simplified)) */
-    zhtLanguageTag  /* 'ZHT' (Chinese (Traditional)) */
+    zhtLanguageTag, /* 'ZHT' (Chinese (Traditional)) */
+    afkLanguageTag, /* 'AFK' (Afrikaans) */
+    belLanguageTag, /* 'BEL' (Belarussian) */
+    bgrLanguageTag, /* 'BGR' (Bulgarian) */
+    catLanguageTag, /* 'CAT' (Catalan) */
+    cheLanguageTag, /* 'CHE' (Chechen) */
+    copLanguageTag, /* 'COP' (Coptic) */
+    csyLanguageTag, /* 'CSY' (Czech) */
+    danLanguageTag, /* 'DAN' (Danish) */
+    deuLanguageTag, /* 'DEU' (German) */
+    dznLanguageTag, /* 'DZN' (Dzongkha) */
+    ellLanguageTag, /* 'ELL' (Greek) */
+    engLanguageTag, /* 'ENG' (English) */
+    espLanguageTag, /* 'ESP' (Spanish) */
+    etiLanguageTag, /* 'ETI' (Estonian) */
+    euqLanguageTag, /* 'EUQ' (Basque) */
+    finLanguageTag, /* 'FIN' (Finnish) */
+    fraLanguageTag, /* 'FRA' (French) */
+    gaeLanguageTag, /* 'GAE' (Gaelic) */
+    hauLanguageTag, /* 'HAU' (Hausa) */
+    hrvLanguageTag, /* 'HRV' (Croation) */
+    hunLanguageTag, /* 'HUN' (Hungarian) */
+    hyeLanguageTag, /* 'HYE' (Armenian) */
+    indLanguageTag, /* 'IND' (Indonesian) */
+    itaLanguageTag, /* 'ITA' (Italian) */
+    khmLanguageTag, /* 'KHM' (Khmer) */
+    mngLanguageTag, /* 'MNG' (Mongolian) */
+    mtsLanguageTag, /* 'MTS' (Maltese) */
+    nepLanguageTag, /* 'NEP' (Nepali) */
+    nldLanguageTag, /* 'NLD' (Dutch) */
+    pasLanguageTag, /* 'PAS' (Pashto) */
+    plkLanguageTag, /* 'PLK' (Polish) */
+    ptgLanguageTag, /* 'PTG' (Portuguese) */
+    romLanguageTag, /* 'ROM' (Romanian) */
+    rusLanguageTag, /* 'RUS' (Russian) */
+    skyLanguageTag, /* 'SKY' (Slovak) */
+    slvLanguageTag, /* 'SLV' (Slovenian) */
+    sqiLanguageTag, /* 'SQI' (Albanian) */
+    srbLanguageTag, /* 'SRB' (Serbian) */
+    sveLanguageTag, /* 'SVE' (Swedish) */
+    tibLanguageTag, /* 'TIB' (Tibetan) */
+    trkLanguageTag, /* 'TRK' (Turkish) */
+    welLanguageTag  /* 'WEL' (Welsh) */
 };
 
 U_NAMESPACE_END

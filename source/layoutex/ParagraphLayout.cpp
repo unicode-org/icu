@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2002-2007, International Business Machines
+ *   Copyright (C) 2002-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -755,30 +755,71 @@ struct LanguageMap
 
 static const LanguageMap languageMap[] =
 {
+    {"afr", afkLanguageCode}, // Afrikaans
     {"ara", araLanguageCode}, // Arabic
     {"asm", asmLanguageCode}, // Assamese
+    {"bel", belLanguageCode}, // Belarussian
     {"ben", benLanguageCode}, // Bengali
+    {"bod", tibLanguageCode}, // Tibetan
+    {"bul", bgrLanguageCode}, // Bulgarian
+    {"cat", catLanguageCode}, // Catalan
+    {"ces", csyLanguageCode}, // Czech
+    {"che", cheLanguageCode}, // Chechen
+    {"cop", copLanguageCode}, // Coptic
+    {"cym", welLanguageCode}, // Welsh
+    {"dan", danLanguageCode}, // Danish
+    {"deu", deuLanguageCode}, // German
+    {"dzo", dznLanguageCode}, // Dzongkha
+    {"ell", ellLanguageCode}, // Greek
+    {"eng", engLanguageCode}, // English
+    {"est", etiLanguageCode}, // Estonian
+    {"eus", euqLanguageCode}, // Basque
     {"fas", farLanguageCode}, // Farsi
+    {"fin", finLanguageCode}, // Finnish
+    {"fra", fraLanguageCode}, // French
+    {"gle", gaeLanguageCode}, // Irish Gaelic
     {"guj", gujLanguageCode}, // Gujarati
+    {"hau", hauLanguageCode}, // Hausa
     {"heb", iwrLanguageCode}, // Hebrew
     {"hin", hinLanguageCode}, // Hindi
+    {"hrv", hrvLanguageCode}, // Croatian
+    {"hun", hunLanguageCode}, // Hungarian
+    {"hye", hyeLanguageCode}, // Armenian
+    {"ind", indLanguageCode}, // Indonesian
+    {"ita", itaLanguageCode}, // Italian
     {"jpn", janLanguageCode}, // Japanese
     {"kan", kanLanguageCode}, // Kannada
     {"kas", kshLanguageCode}, // Kashmiri
+    {"khm", khmLanguageCode}, // Khmer
     {"kok", kokLanguageCode}, // Konkani
     {"kor", korLanguageCode}, // Korean
 //  {"mal_XXX", malLanguageCode}, // Malayalam - Traditional
     {"mal", mlrLanguageCode}, // Malayalam - Reformed
     {"mar", marLanguageCode}, // Marathi
+    {"mlt", mtsLanguageCode}, // Maltese
     {"mni", mniLanguageCode}, // Manipuri
+    {"mon", mngLanguageCode}, // Mongolian
+    {"nep", nepLanguageCode}, // Nepali
     {"ori", oriLanguageCode}, // Oriya
+    {"pol", plkLanguageCode}, // Polish
+    {"por", ptgLanguageCode}, // Portuguese
+    {"pus", pasLanguageCode}, // Pashto
+    {"ron", romLanguageCode}, // Romanian
+    {"rus", rusLanguageCode}, // Russian
     {"san", sanLanguageCode}, // Sanskrit
-    {"snd", sndLanguageCode}, // Sindhi
     {"sin", snhLanguageCode}, // Sinhalese
+    {"slk", skyLanguageCode}, // Slovak
+    {"snd", sndLanguageCode}, // Sindhi
+    {"slv", slvLanguageCode}, // Slovenian
+    {"spa", espLanguageCode}, // Spanish
+    {"sqi", sqiLanguageCode}, // Albanian
+    {"srp", srbLanguageCode}, // Serbian
+    {"swe", sveLanguageCode}, // Swedish
     {"syr", syrLanguageCode}, // Syriac
     {"tam", tamLanguageCode}, // Tamil
     {"tel", telLanguageCode}, // Telugu
     {"tha", thaLanguageCode}, // Thai
+    {"tur", trkLanguageCode}, // Turkish
     {"urd", urdLanguageCode}, // Urdu
     {"yid", jiiLanguageCode}, // Yiddish
 //  {"zhp", zhpLanguageCode}, // Chinese - Phonetic
