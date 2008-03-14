@@ -1,11 +1,11 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2007. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2008. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * Generated on: 09/03/2007 08:58:56 AM HST
+ * Generated on: 03/13/2008 05:37:32 PM HST
  */
 
 #ifndef __SCRIPTANDLANGUAGES_H
@@ -170,6 +170,48 @@ const LETag urdLanguageTag = 0x55524420; /* 'URD' (Urdu) */
 const LETag zhpLanguageTag = 0x5A485020; /* 'ZHP' (Chinese (Phonetic)) */
 const LETag zhsLanguageTag = 0x5A485320; /* 'ZHS' (Chinese (Simplified)) */
 const LETag zhtLanguageTag = 0x5A485420; /* 'ZHT' (Chinese (Traditional)) */
+const LETag afkLanguageTag = 0x41464B20; /* 'AFK' (Afrikaans) */
+const LETag belLanguageTag = 0x42454C20; /* 'BEL' (Belarussian) */
+const LETag bgrLanguageTag = 0x42475220; /* 'BGR' (Bulgarian) */
+const LETag catLanguageTag = 0x43415420; /* 'CAT' (Catalan) */
+const LETag cheLanguageTag = 0x43484520; /* 'CHE' (Chechen) */
+const LETag copLanguageTag = 0x434F5020; /* 'COP' (Coptic) */
+const LETag csyLanguageTag = 0x43535920; /* 'CSY' (Czech) */
+const LETag danLanguageTag = 0x44414E20; /* 'DAN' (Danish) */
+const LETag deuLanguageTag = 0x44455520; /* 'DEU' (German) */
+const LETag dznLanguageTag = 0x445A4E20; /* 'DZN' (Dzongkha) */
+const LETag ellLanguageTag = 0x454C4C20; /* 'ELL' (Greek) */
+const LETag engLanguageTag = 0x454E4720; /* 'ENG' (English) */
+const LETag espLanguageTag = 0x45535020; /* 'ESP' (Spanish) */
+const LETag etiLanguageTag = 0x45544920; /* 'ETI' (Estonian) */
+const LETag euqLanguageTag = 0x45555120; /* 'EUQ' (Basque) */
+const LETag finLanguageTag = 0x46494E20; /* 'FIN' (Finnish) */
+const LETag fraLanguageTag = 0x46524120; /* 'FRA' (French) */
+const LETag gaeLanguageTag = 0x47414520; /* 'GAE' (Gaelic) */
+const LETag hauLanguageTag = 0x48415520; /* 'HAU' (Hausa) */
+const LETag hrvLanguageTag = 0x48525620; /* 'HRV' (Croation) */
+const LETag hunLanguageTag = 0x48554E20; /* 'HUN' (Hungarian) */
+const LETag hyeLanguageTag = 0x48594520; /* 'HYE' (Armenian) */
+const LETag indLanguageTag = 0x494E4420; /* 'IND' (Indonesian) */
+const LETag itaLanguageTag = 0x49544120; /* 'ITA' (Italian) */
+const LETag khmLanguageTag = 0x4B484D20; /* 'KHM' (Khmer) */
+const LETag mngLanguageTag = 0x4D4E4720; /* 'MNG' (Mongolian) */
+const LETag mtsLanguageTag = 0x4D545320; /* 'MTS' (Maltese) */
+const LETag nepLanguageTag = 0x4E455020; /* 'NEP' (Nepali) */
+const LETag nldLanguageTag = 0x4E4C4420; /* 'NLD' (Dutch) */
+const LETag pasLanguageTag = 0x50415320; /* 'PAS' (Pashto) */
+const LETag plkLanguageTag = 0x504C4B20; /* 'PLK' (Polish) */
+const LETag ptgLanguageTag = 0x50544720; /* 'PTG' (Portuguese) */
+const LETag romLanguageTag = 0x524F4D20; /* 'ROM' (Romanian) */
+const LETag rusLanguageTag = 0x52555320; /* 'RUS' (Russian) */
+const LETag skyLanguageTag = 0x534B5920; /* 'SKY' (Slovak) */
+const LETag slvLanguageTag = 0x534C5620; /* 'SLV' (Slovenian) */
+const LETag sqiLanguageTag = 0x53514920; /* 'SQI' (Albanian) */
+const LETag srbLanguageTag = 0x53524220; /* 'SRB' (Serbian) */
+const LETag sveLanguageTag = 0x53564520; /* 'SVE' (Swedish) */
+const LETag tibLanguageTag = 0x54494220; /* 'TIB' (Tibetan) */
+const LETag trkLanguageTag = 0x54524B20; /* 'TRK' (Turkish) */
+const LETag welLanguageTag = 0x57454C20; /* 'WEL' (Welsh) */
 
 
 U_NAMESPACE_END
