@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1998-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1998-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -85,7 +85,55 @@ public class LanguageData extends TagValueData
         new Record("URD", "Urdu"),
         new Record("ZHP", "Chinese (Phonetic)"),
         new Record("ZHS", "Chinese (Simplified)"),
-        new Record("ZHT", "Chinese (Traditional)")
+        new Record("ZHT", "Chinese (Traditional)"),
+        
+        // languages added on 03/13/2008
+        // TODO: need to deal with the fact that
+        // these codes should be @draft, and the above
+        // codes should be @final.
+        new Record("AFK", "Afrikaans"),
+        new Record("BEL", "Belarussian"),
+        new Record("BGR", "Bulgarian"),
+        new Record("CAT", "Catalan"),
+        new Record("CHE", "Chechen"),
+        new Record("COP", "Coptic"),
+        new Record("CSY", "Czech"),
+        new Record("DAN", "Danish"),
+        new Record("DEU", "German"),
+        new Record("DZN", "Dzongkha"),
+        new Record("ELL", "Greek"),
+        new Record("ENG", "English"),
+        new Record("ESP", "Spanish"),
+        new Record("ETI", "Estonian"),
+        new Record("EUQ", "Basque"),
+        new Record("FIN", "Finnish"),
+      //new Record("FLE", "Flemish"), // Flemish has the same ISO 639-2 code as Dutch (NLD)
+        new Record("FRA", "French"),
+        new Record("GAE", "Gaelic"),
+        new Record("HAU", "Hausa"),
+        new Record("HRV", "Croation"),
+        new Record("HUN", "Hungarian"),
+        new Record("HYE", "Armenian"),
+        new Record("IND", "Indonesian"),
+        new Record("ITA", "Italian"),
+        new Record("KHM", "Khmer"),
+        new Record("MNG", "Mongolian"),
+        new Record("MTS", "Maltese"),
+        new Record("NEP", "Nepali"),
+        new Record("NLD", "Dutch"),
+        new Record("PAS", "Pashto"),
+        new Record("PLK", "Polish"),
+        new Record("PTG", "Portuguese"),
+        new Record("ROM", "Romanian"),
+        new Record("RUS", "Russian"),
+        new Record("SKY", "Slovak"),
+        new Record("SLV", "Slovenian"),
+        new Record("SQI", "Albanian"),
+        new Record("SRB", "Serbian"),
+        new Record("SVE", "Swedish"),
+        new Record("TIB", "Tibetan"),
+        new Record("TRK", "Turkish"),
+        new Record("WEL", "Welsh")
     };
     
     private int minLanguage = 0;
