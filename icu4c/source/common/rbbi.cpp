@@ -41,9 +41,11 @@ static UBool fTrace = FALSE;
 
 U_NAMESPACE_BEGIN
 
+// The state number of the starting state
+#define START_STATE 1
 
-static const int16_t START_STATE = 1;     // The state number of the starting state
-static const int16_t STOP_STATE  = 0;     // The state-transition value indicating "stop"
+// The state-transition value indicating "stop"
+#define STOP_STATE  0
 
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RuleBasedBreakIterator)

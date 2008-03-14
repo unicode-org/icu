@@ -467,6 +467,14 @@ ucase_totitle(const UCaseProps *csp, UChar32 c) {
     return c;
 }
 
+static const UChar iDot[2] = { 0x69, 0x307 };
+static const UChar jDot[2] = { 0x6a, 0x307 };
+static const UChar iOgonekDot[3] = { 0x12f, 0x307 };
+static const UChar iDotGrave[3] = { 0x69, 0x307, 0x300 };
+static const UChar iDotAcute[3] = { 0x69, 0x307, 0x301 };
+static const UChar iDotTilde[3] = { 0x69, 0x307, 0x303 };
+
+
 U_CFUNC void U_EXPORT2
 ucase_addCaseClosure(const UCaseProps *csp, UChar32 c, const USetAdder *sa) {
     uint16_t props;
@@ -478,8 +486,6 @@ ucase_addCaseClosure(const UCaseProps *csp, UChar32 c, const USetAdder *sa) {
      * and case folding option make the related characters behave specially.
      * This code matches their closure behavior to their case folding behavior.
      */
-    static const UChar
-        iDot[2]=        { 0x69, 0x307 };
 
     switch(c) {
     case 0x49:
@@ -1044,15 +1050,8 @@ U_CAPI int32_t U_EXPORT2
 ucase_toFullLower(const UCaseProps *csp, UChar32 c,
                   UCaseContextIterator *iter, void *context,
                   const UChar **pString,
-                  const char *locale, int32_t *locCache) {
-    static const UChar
-        iDot[2]=        { 0x69, 0x307 },
-        jDot[2]=        { 0x6a, 0x307 },
-        iOgonekDot[3]= { 0x12f, 0x307 },
-        iDotGrave[3]=   { 0x69, 0x307, 0x300 },
-        iDotAcute[3]=   { 0x69, 0x307, 0x301 },
-        iDotTilde[3]=   { 0x69, 0x307, 0x303 };
-
+                  const char *locale, int32_t *locCache)
+{
     UChar32 result;
     uint16_t props;
 
@@ -1412,10 +1411,8 @@ ucase_fold(const UCaseProps *csp, UChar32 c, uint32_t options) {
 U_CAPI int32_t U_EXPORT2
 ucase_toFullFolding(const UCaseProps *csp, UChar32 c,
                     const UChar **pString,
-                    uint32_t options) {
-    static const UChar
-        iDot[2]=        { 0x69, 0x307 };
-
+                    uint32_t options)
+{
     UChar32 result;
     uint16_t props;
 
