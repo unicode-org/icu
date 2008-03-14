@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2006 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
  *
  */
 
@@ -335,6 +335,7 @@ public:
 
 enum
 {
+    C_MALAYALAM_VOWEL_SIGN_U = 0x0D41,
     C_DOTTED_CIRCLE = 0x25CC
 };
 
@@ -467,8 +468,18 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
             break;
 
         case CC_NUKTA:
-        case CC_VIRAMA:
             output.writeChar(C_DOTTED_CIRCLE, prev, tagArray1);
+            output.writeChar(chars[prev], prev, tagArray1);
+            break;
+
+        case CC_VIRAMA:
+            // A lone virama is illegal unless it follows a
+            // MALAYALAM_VOWEL_SIGN_U. Such a usage is called
+            // "samvruthokaram".
+            if (chars[prev - 1] != C_MALAYALAM_VOWEL_SIGN_U) {
+                output.writeChar(C_DOTTED_CIRCLE, prev, tagArray1);
+            }
+
             output.writeChar(chars[prev], prev, tagArray1);
             break;
 
