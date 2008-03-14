@@ -98,4 +98,9 @@
     <test-font name="fp9r8a.otf"/>
     <test-text>Ţhiş iş a ţeşţ.</test-text>
   </test-case>
+
+  <test-case id="Nafees Nastaleeq Cursive Positioning Test" script="arab">
+    <test-font name="Nafees Nastaleeq v1.01.ttf"/>
+    <test-text>فتح بینچ خلیج شیخ پہنچ</test-text>
+  </test-case>
 </layout-tests>
