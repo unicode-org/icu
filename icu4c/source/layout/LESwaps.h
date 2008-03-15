@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
  *
  */
 
@@ -23,15 +23,7 @@ U_NAMESPACE_BEGIN
  *
  * @stable ICU 2.8
  */
-#if defined(U_IS_BIG_ENDIAN)
-    #if U_IS_BIG_ENDIAN
-        #define SWAPW(value) (value)
-    #else
-        #define SWAPW(value) LESwaps::swapWord(value)
-    #endif
-#else
-    #define SWAPW(value) (LESwaps::isBigEndian() ? (value) : LESwaps::swapWord(value))
-#endif
+#define SWAPW(value) LESwaps::swapWord((const le_uint16 &) (value))
 
 /**
  * A convenience macro which invokes the swapLong member function
@@ -39,21 +31,11 @@ U_NAMESPACE_BEGIN
  *
  * @stable ICU 2.8
  */
-#if defined(U_IS_BIG_ENDIAN)
-    #if U_IS_BIG_ENDIAN
-        #define SWAPL(value) (value)
-    #else
-        #define SWAPL(value) LESwaps::swapLong(value)
-    #endif
-#else
-    #define SWAPL(value) (LESwaps::isBigEndian() ? (value) : LESwaps::swapLong(value))
-#endif
+#define SWAPL(value) LESwaps::swapLong((const le_uint32 &) (value))
 
 /**
  * This class is used to access data which stored in big endian order
- * regardless of the conventions of the platform. It has been designed
- * to automatically detect the endian-ness of the platform, so that a
- * compilation flag is not needed.
+ * regardless of the conventions of the platform.
  *
  * All methods are static and inline in an attempt to induce the compiler
  * to do most of the calculations at compile time.
@@ -62,26 +44,6 @@ U_NAMESPACE_BEGIN
  */
 class U_LAYOUT_API LESwaps /* not : public UObject because all methods are static */ {
 public:
-
-#if !defined(U_IS_BIG_ENDIAN)
-    /**
-     * This method detects the endian-ness of the platform by
-     * casting a pointer to a word to a pointer to a byte. On
-     * big endian platforms the FF will be in the byte with the
-     * lowest address. On little endian platforms, the FF will
-     * be in the byte with the highest address.
-     *
-     * @return TRUE if the platform is big endian
-     *
-     * @stable ICU 2.8
-     */
-    static le_uint8 isBigEndian()
-    {
-        const le_uint16 word = 0xFF00;
-
-        return *((le_uint8 *) &word);
-    };
-#endif
 
     /**
      * This method does the byte swap required on little endian platforms
@@ -93,9 +55,11 @@ public:
      *
      * @stable ICU 2.8
      */
-    static le_uint16 swapWord(le_uint16 value)
+    static le_uint16 swapWord(const le_uint16 &value)
     {
-        return (((le_uint8) (value >> 8)) | (value << 8));
+        const le_uint8 *p = (const le_uint8 *) &value;
+
+        return ((p[0] << 8) + p[1]);
     };
 
     /**
@@ -108,9 +72,11 @@ public:
      *
      * @stable ICU 2.8
      */
-    static le_uint32 swapLong(le_uint32 value)
+    static le_uint32 swapLong(const le_uint32 &value)
     {
-        return swapWord((le_uint16) (value >> 16)) | (swapWord((le_uint16) value) << 16);
+        const le_uint8 *p = (const le_uint8 *) &value;
+
+        return ((p[0] << 24) + (p[1] << 16) + (p[2] << 8) + p[3]);
     };
 
 private:
