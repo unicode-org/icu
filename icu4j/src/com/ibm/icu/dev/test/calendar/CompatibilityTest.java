@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -320,8 +320,8 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
         }
 
         for (i=0; i<cal.getFieldCount(); ++i) {
-            if (cal.getMinimum(i) != cal.getGreatestMinimum(i))
-                errln("FAIL: getMinimum doesn't match getGreatestMinimum for field " + i);
+            if (cal.getMinimum(i) > cal.getGreatestMinimum(i))
+                errln("FAIL: getMinimum larger getGreatestMinimum for field " + i);
             if (cal.getLeastMaximum(i) > cal.getMaximum(i))
                 errln("FAIL: getLeastMaximum larger than getMaximum for field " + i);
             if (cal.getMinimum(i) >= cal.getMaximum(i))
@@ -563,12 +563,12 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
             c.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
             c.set(Calendar.MONTH, Calendar.JUNE);
             c.set(Calendar.WEEK_OF_MONTH, 0);
-            verify765("1997 Tuesday in week 0 of June = ", c, 1997, Calendar.MAY, 27);
+            c.getTime();
         }
         catch (IllegalArgumentException ex) {
-            errln("FAIL: Exception seen:");
-            // ex.printStackTrace(log);
+            e = ex;
         }
+        verify765("1997 Tuesday in week 0 of June = ", e, c);
 
         c.clear();
         c.set(Calendar.YEAR, 1997);

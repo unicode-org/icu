@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005, International Business Machines Corporation and         *
+ * Copyright (C) 2005-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -108,15 +108,15 @@ public class CopticTest extends CalendarTest
             new TestCase(2402708.5,  1,  1582,    8,  10,  TUE,    0,  0,  0), // Gregorian: 17/04/1866
             new TestCase(2402971.5,  1,  1583,    4,  28,  SAT,    0,  0,  0), // Gregorian: 05/01/1867
             new TestCase(2403344.5,  1,  1584,    5,   5,  MON,    0,  0,  0), // Gregorian: 13/01/1868
-            new TestCase(1721059.5,  0,  -284,    5,   7,  SAT,    0,  0,  0), // Gregorian: 01/01/0000
-            new TestCase(1721425.5,  0,  -283,    5,   8,  MON,    0,  0,  0), // Gregorian: 01/01/0001
-            new TestCase(1824663.5,  0,    -1,   13,   6,  WED,    0,  0,  0), // Gregorian: 29/08/0283
-            new TestCase(1824664.5,  1,     0,    1,   1,  THU,    0,  0,  0), // Gregorian: 30/08/0283
+            new TestCase(1721059.5,  0,   285,    5,   7,  SAT,    0,  0,  0), // Gregorian: 01/01/0000
+            new TestCase(1721425.5,  0,   284,    5,   8,  MON,    0,  0,  0), // Gregorian: 01/01/0001
+            new TestCase(1824663.5,  0,     2,   13,   6,  WED,    0,  0,  0), // Gregorian: 29/08/0283
+            new TestCase(1824664.5,  0,     1,    1,   1,  THU,    0,  0,  0), // Gregorian: 30/08/0283
             new TestCase(1825029.5,  1,     1,    1,   1,  FRI,    0,  0,  0), // Gregorian: 29/08/0284
             new TestCase(1825394.5,  1,     2,    1,   1,  SAT,    0,  0,  0), // Gregorian: 29/08/0285
             new TestCase(1825759.5,  1,     3,    1,   1,  SUN,    0,  0,  0), // Gregorian: 29/08/0286
             new TestCase(1826125.5,  1,     4,    1,   1,  TUE,    0,  0,  0), // Gregorian: 30/08/0287
-            new TestCase(1825028.5,  1,     0,   13,   5,  THU,    0,  0,  0), // Gregorian: 28/08/0284
+            new TestCase(1825028.5,  0,     1,   13,   5,  THU,    0,  0,  0), // Gregorian: 28/08/0284
             new TestCase(1825393.5,  1,     1,   13,   5,  FRI,    0,  0,  0), // Gregorian: 28/08/0285
             new TestCase(1825758.5,  1,     2,   13,   5,  SAT,    0,  0,  0), // Gregorian: 28/08/0286
             new TestCase(1826123.5,  1,     3,   13,   5,  SUN,    0,  0,  0), // Gregorian: 28/08/0287
@@ -165,9 +165,15 @@ public class CopticTest extends CalendarTest
     // basic check to see that we print out eras ok
     // eventually should modify to use locale strings and formatter appropriate to coptic calendar
     public void TestEraStart() {
-        CopticCalendar cal = new CopticCalendar(0, 0, 1);
         SimpleDateFormat fmt = new SimpleDateFormat("EEE MMM dd, yyyy GG");
-        assertEquals("Coptic Date", "Thu Jan 01, 0000 AD", fmt.format(cal));
+
+        CopticCalendar cal = new CopticCalendar(1, 0, 1);
+        assertEquals("Coptic Date", "Fri Jan 01, 0001 AD", fmt.format(cal));
+        assertEquals("Gregorian Date", "Fri Aug 29, 0284 AD", fmt.format(cal.getTime()));
+
+        cal.set(Calendar.ERA, 0);
+        cal.set(Calendar.YEAR, 1);
+        assertEquals("Coptic Date", "Thu Jan 01, 0001 BC", fmt.format(cal));
         assertEquals("Gregorian Date", "Thu Aug 30, 0283 AD", fmt.format(cal.getTime()));
     }
 
@@ -194,9 +200,7 @@ public class CopticTest extends CalendarTest
         Calendar cal = Calendar.getInstance();
         cal.set(2007, Calendar.JANUARY, 1);
         CopticCalendar coptic = new CopticCalendar();
-        if (!skipIfBeforeICU(3,9,1)) {
-            doLimitsTest(coptic, null, cal.getTime());
-        }
+        doLimitsTest(coptic, null, cal.getTime());
         doTheoreticalLimitsTest(coptic, true);
     }
 

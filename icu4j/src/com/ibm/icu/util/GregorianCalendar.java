@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1996-2007, International Business Machines
+ * Copyright (C) 1996-2008, International Business Machines
  * Corporation and others.  All Rights Reserved.
  */
 
@@ -260,7 +260,7 @@ public class GregorianCalendar extends Calendar {
         {        1,        1, 5828963, 5838270 }, // YEAR
         {        0,        0,      11,      11 }, // MONTH
         {        1,        1,      52,      53 }, // WEEK_OF_YEAR
-        {        0,        0,       4,       6 }, // WEEK_OF_MONTH
+        {/*                                  */}, // WEEK_OF_MONTH
         {        1,        1,      28,      31 }, // DAY_OF_MONTH
         {        1,        1,     365,     366 }, // DAY_OF_YEAR
         {/*                                  */}, // DAY_OF_WEEK

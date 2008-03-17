@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -274,19 +274,19 @@ public class CalendarTest extends TestFmwk {
 
                 if (minActual < minLow || minActual > minHigh) {
                     errln("Fail: " + ymdToString(cal) +
-                          " Range for min of " + FIELD_NAME[f] +
-                          "=" + minLow + ".." + minHigh +
+                          " Range for min of " + FIELD_NAME[f] + "(" + f +
+                          ")=" + minLow + ".." + minHigh +
                           ", actual_min=" + minActual);
                 }
                 if (maxActual < maxLow || maxActual > maxHigh) {
                     errln("Fail: " + ymdToString(cal) +
-                          " Range for max of " + FIELD_NAME[f] +
-                          "=" + maxLow + ".." + maxHigh +
+                          " Range for max of " + FIELD_NAME[f] + "(" + f +
+                          ")=" + maxLow + ".." + maxHigh +
                           ", actual_max=" + maxActual);
                 }
                 if (v < minActual || v > maxActual) {
                     errln("Fail: " + ymdToString(cal) +
-                          " " + FIELD_NAME[f] + "=" + v +
+                          " " + FIELD_NAME[f] + "(" + f + ")=" + v +
                           ", actual range=" + minActual + ".." + maxActual +
                           ", allowed=(" + minLow + ".." + minHigh + ")..(" +
                           maxLow + ".." + maxHigh + ")");
@@ -339,7 +339,7 @@ public class CalendarTest extends TestFmwk {
      * doLimitsTest with default test duration
      */
     public void doLimitsTest(Calendar cal, int[] fieldsToTest, Date startDate) {
-        int testTime = getInclusion() <= 5 ? -3 : -60; // in seconds
+        int testTime = getInclusion() <= 5 ? -3 : -120; // in seconds
         doLimitsTest(cal, fieldsToTest, startDate, testTime);
     }
     
@@ -363,6 +363,7 @@ public class CalendarTest extends TestFmwk {
         int lmaxDOWIM = cal.getLeastMaximum(Calendar.DAY_OF_WEEK_IN_MONTH);
         int maxWOM = cal.getMaximum(Calendar.WEEK_OF_MONTH);
         int lmaxWOM = cal.getLeastMaximum(Calendar.WEEK_OF_MONTH);
+        int minDaysInFirstWeek = cal.getMinimalDaysInFirstWeek();
 
         // Day of year
         int expected;
@@ -398,11 +399,11 @@ public class CalendarTest extends TestFmwk {
         }
 
         // Week of month
-        expected = (maxDOM + nDOW - 2)/nDOW + 1;
+        expected = (maxDOM + (nDOW - 1) + (nDOW - minDaysInFirstWeek)) / nDOW;
         if (maxWOM != expected) {
             errln("FAIL: Maximum value of WEEK_OF_MONTH is incorrect: " + maxWOM + "/expected: " + expected);
         }
-        expected = lmaxDOM/nDOW;
+        expected = (lmaxDOM + (nDOW - minDaysInFirstWeek)) / nDOW;
         if (lmaxWOM != expected) {
             errln("FAIL: Least maximum value of WEEK_OF_MONTH is incorrect: " + lmaxWOM + "/expected: " + expected);
         }
@@ -425,11 +426,11 @@ public class CalendarTest extends TestFmwk {
             return "" + cal.get(Calendar.EXTENDED_YEAR) + "/" +
                 (cal.get(Calendar.MONTH)+1) +
                 (cal.get(ChineseCalendar.IS_LEAP_MONTH)==1?"(leap)":"") + "/" +
-                cal.get(Calendar.DATE) + " (" + day + ")";
+                cal.get(Calendar.DATE) + " (" + day + ", time=" + cal.getTimeInMillis() + ")";
         }
         return ymdToString(cal.get(Calendar.EXTENDED_YEAR),
                             cal.get(MONTH), cal.get(DATE)) +
-                            " (" + day + ")";
+                            " (" + day + ", time=" + cal.getTimeInMillis() + ")";
     }
 
     static double getJulianDay(Calendar cal) {

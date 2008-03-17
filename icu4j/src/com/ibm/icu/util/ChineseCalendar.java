@@ -354,10 +354,10 @@ public class ChineseCalendar extends Calendar {
         // Minimum  Greatest    Least  Maximum
         //           Minimum  Maximum
         {        1,        1,   83333,   83333 }, // ERA
-        {        1,        1,      70,      70 }, // YEAR
+        {        1,        1,      60,      60 }, // YEAR
         {        0,        0,      11,      11 }, // MONTH
         {        1,        1,      50,      55 }, // WEEK_OF_YEAR
-        {        1,        1,       4,       6 }, // WEEK_OF_MONTH
+        {/*                                  */}, // WEEK_OF_MONTH
         {        1,        1,      29,      30 }, // DAY_OF_MONTH
         {        1,        1,     353,     385 }, // DAY_OF_YEAR
         {/*                                  */}, // DAY_OF_WEEK
@@ -370,7 +370,7 @@ public class ChineseCalendar extends Calendar {
         {/*                                  */}, // MILLISECOND
         {/*                                  */}, // ZONE_OFFSET
         {/*                                  */}, // DST_OFFSET
-        { -5000001, -5000001, 5000001, 5000001 }, // YEAR_WOY
+        { -5000000, -5000000, 5000000, 5000000 }, // YEAR_WOY
         {/*                                  */}, // DOW_LOCAL
         { -5000000, -5000000, 5000000, 5000000 }, // EXTENDED_YEAR
         {/*                                  */}, // JULIAN_DAY
