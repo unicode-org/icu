@@ -368,20 +368,22 @@ void SimpleDateFormat::construct(EStyle timeStyle,
         // instead of Formattable::setString()'s unaware, safe, deep string clone
         // see Jitterbug 2296
         resStr = ures_getStringByIndex(dateTimePatterns, (int32_t)timeStyle, &resStrLen, &status);
-        UnicodeString *tempus = new UnicodeString(TRUE, resStr, resStrLen);
+        UnicodeString *tempus1 = new UnicodeString(TRUE, resStr, resStrLen);
         // NULL pointer check
-        if (tempus == NULL) {
-        	status = U_MEMORY_ALLOCATION_ERROR;
-        	return;
+        if (tempus1 == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
         }
-        timeDateArray[0].adoptString(tempus);
+        timeDateArray[0].adoptString(tempus1);
+        
         resStr = ures_getStringByIndex(dateTimePatterns, (int32_t)dateStyle, &resStrLen, &status);
+        UnicodeString *tempus2 = new UnicodeString(TRUE, resStr, resStrLen);
         // Null pointer check
-        if (tempus == NULL) {
-        	status = U_MEMORY_ALLOCATION_ERROR;
-        	return;
+        if (tempus2 == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
         }
-        timeDateArray[1].adoptString(new UnicodeString(TRUE, resStr, resStrLen));
+        timeDateArray[1].adoptString(tempus2);
 
         resStr = ures_getStringByIndex(dateTimePatterns, (int32_t)kDateTime, &resStrLen, &status);
         MessageFormat::format(UnicodeString(TRUE, resStr, resStrLen), timeDateArray, 2, fPattern, status);
