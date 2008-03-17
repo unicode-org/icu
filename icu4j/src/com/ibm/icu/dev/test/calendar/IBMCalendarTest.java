@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2007, International Business Machines Corporation and
+ * Copyright (C) 2000-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -296,9 +296,7 @@ public class IBMCalendarTest extends CalendarTest {
         Calendar cal = Calendar.getInstance();
         cal.set(2007, Calendar.JANUARY, 1);
         BuddhistCalendar buddhist = new BuddhistCalendar();
-        if (!skipIfBeforeICU(3,9,1)) {
-            doLimitsTest(buddhist, null, cal.getTime());
-        }
+        doLimitsTest(buddhist, null, cal.getTime());
         doTheoreticalLimitsTest(buddhist, false);
     }
 
@@ -325,9 +323,7 @@ public class IBMCalendarTest extends CalendarTest {
         Calendar cal = Calendar.getInstance();
         cal.set(2007, Calendar.JANUARY, 1);
         TaiwanCalendar taiwan = new TaiwanCalendar();
-        if (!skipIfBeforeICU(3,9,1)) {
-            doLimitsTest(taiwan, null, cal.getTime());
-        }
+        doLimitsTest(taiwan, null, cal.getTime());
         doTheoreticalLimitsTest(taiwan, false);
     }
 

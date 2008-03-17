@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -21,10 +21,10 @@ class CECalendar extends Calendar {
         // Minimum  Greatest    Least  Maximum
         //           Minimum  Maximum
         {        0,        0,       1,       1 }, // ERA
-        {        1,        1, 5828963, 5838270 }, // YEAR
+        {        1,        1, 5000000, 5000000 }, // YEAR
         {        0,        0,      12,      12 }, // MONTH
         {        1,        1,      52,      53 }, // WEEK_OF_YEAR
-        {        0,        0,       0,       6 }, // WEEK_OF_MONTH
+        {/*                                  */}, // WEEK_OF_MONTH
         {        1,        1,       5,      30 }, // DAY_OF_MONTH
         {        1,        1,     365,     366 }, // DAY_OF_YEAR
         {/*                                  */}, // DAY_OF_WEEK
@@ -37,12 +37,13 @@ class CECalendar extends Calendar {
         {/*                                  */}, // MILLISECOND
         {/*                                  */}, // ZONE_OFFSET
         {/*                                  */}, // DST_OFFSET
-        { -5838270, -5838270, 5828964, 5838271 }, // YEAR_WOY
+        { -5000000, -5000000, 5000000, 5000000 }, // YEAR_WOY
         {/*                                  */}, // DOW_LOCAL
-        { -5838269, -5838269, 5828963, 5838270}, // EXTENDED_YEAR
+        { -5000000, -5000000, 5000000, 5000000 }, // EXTENDED_YEAR
         {/*                                  */}, // JULIAN_DAY
         {/*                                  */}, // MILLISECONDS_IN_DAY
     };
+
 
     /* ceToJD() doesn't use this data */
     /*private static final int[][] ceMONTH_COUNT = {
@@ -77,7 +78,10 @@ class CECalendar extends Calendar {
      * @deprecated This API is ICU internal only.
      */
     protected int jdEpochOffset  = -1;
-    
+
+    // CE eras - keep them private for now
+    private static final int CE_BC = 0;
+    private static final int CE_AD = 1;
 
     protected int handleGetLimit(int field, int limitType) {
         return LIMITS[field][limitType];
@@ -215,13 +219,19 @@ class CECalendar extends Calendar {
      * @internal
      */
     protected int handleGetExtendedYear() {
-        int year;
+        int eyear;
         if (newerField(EXTENDED_YEAR, YEAR) == EXTENDED_YEAR) {
-            year = internalGet(EXTENDED_YEAR, 1); // Default to year 1
+            eyear = internalGet(EXTENDED_YEAR, 1); // Default to year 1
         } else {
-            year = internalGet(YEAR, 1); // Default to year 1
+            // The year defaults to the epoch start, the era to AD
+            int era = internalGet(ERA, CE_AD);
+            if (era == CE_BC) {
+                eyear = 1 - internalGet(YEAR, 1); // Convert to extended year
+            } else {
+                eyear = internalGet(YEAR, 1); // Default to year 1
+            }
         }
-        return year;
+        return eyear;
     }
 
     /**
@@ -234,10 +244,9 @@ class CECalendar extends Calendar {
         int _day   = date[2].intValue();
         int ceyear = 0;
 
-        // Do we want to use EthiopicCalendar.AA, .AM here?
-        int era = GregorianCalendar.AD;
-        if (_year < 0) { // dlf: this is what the test says to do
-            era   = GregorianCalendar.BC;
+        int era = CE_AD;
+        if (_year <= 0) {
+            era   = CE_BC;
             ceyear = 1 - _year;
         } else {
             ceyear = _year;
@@ -246,9 +255,9 @@ class CECalendar extends Calendar {
         internalSet(MONTH, _month);
         internalSet(DAY_OF_MONTH, _day);
         internalSet(DAY_OF_YEAR, (30 * _month) + _day);
-        internalSet(EXTENDED_YEAR, ceyear);
+        internalSet(EXTENDED_YEAR, _year);
         internalSet(ERA, era);
-        internalSet(YEAR, _year);
+        internalSet(YEAR, ceyear);
     }
 
     /**

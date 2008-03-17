@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -598,19 +598,6 @@ public class JapaneseCalendar extends GregorianCalendar {
     static public final int HEISEI = CURRENT_ERA;
 
     /**
-     * Partial limits table for limits that differ from GregorianCalendar's.
-     * The YEAR max limits are filled in the first time they are needed.
-     */
-    private static int LIMITS[][] = {
-        // Minimum  Greatest        Least      Maximum
-        //           Minimum      Maximum
-        {        0,        0, CURRENT_ERA, CURRENT_ERA }, // ERA
-        {        1,        1,           0,           0 }, // YEAR
-    };
-
-    private static boolean YEAR_LIMIT_KNOWN = false;
-
-    /**
      * Override GregorianCalendar.  We should really handle YEAR_WOY and
      * EXTENDED_YEAR here too to implement the 1..5000000 range, but it's
      * not critical.
@@ -619,26 +606,22 @@ public class JapaneseCalendar extends GregorianCalendar {
     protected int handleGetLimit(int field, int limitType) {
         switch (field) {
         case ERA:
-            return LIMITS[field][limitType];
-        case YEAR:
-            if (!YEAR_LIMIT_KNOWN) {
-                int min = ERAS[3] - ERAS[0];
-                int max = min;
-                for (int i=6; i<ERAS.length; i+=3) {
-                    int d = ERAS[i] - ERAS[i-3];
-                    if (d < min) {
-                        min = d;
-                    }
-                    if (d > max) {
-                        max = d;
-                    }
-                }
-                LIMITS[field][LEAST_MAXIMUM] = ++min; // 1-based
-                LIMITS[field][MAXIMUM] = ++max; // 1-based
-
-                YEAR_LIMIT_KNOWN=true;
+            if (limitType == MINIMUM || limitType == GREATEST_MINIMUM) {
+                return 1;
             }
-            return LIMITS[field][limitType];
+            return CURRENT_ERA;
+        case YEAR:
+        {
+            switch (limitType) {
+            case MINIMUM:
+            case GREATEST_MINIMUM:
+                return 1;
+            case LEAST_MAXIMUM:
+                return 1;
+            case MAXIMUM:
+                return super.handleGetLimit(field, MAXIMUM) - ERAS[CURRENT_ERA*3];
+            }
+        }
         default:
             return super.handleGetLimit(field, limitType);
         }
@@ -651,5 +634,32 @@ public class JapaneseCalendar extends GregorianCalendar {
      */
     public String getType() {
         return "japanese";
+    }
+
+    /**
+     * {@inheritDoc}
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
+    public int getActualMaximum(int field) {
+        if (field == YEAR) {
+            int era = get(Calendar.ERA);
+            if (era == CURRENT_ERA) {
+                // TODO: Investigate what value should be used here - revisit after 4.0.
+                return handleGetLimit(YEAR, MAXIMUM);
+            } else {
+                int nextEraYear = ERAS[(era+1)*3];
+                int nextEraMonth = ERAS[(era+1)*3 + 1];
+                int nextEraDate = ERAS[(era+1)*3 + 2];
+
+                int maxYear = nextEraYear - ERAS[era*3] + 1; // 1-base
+                if (nextEraMonth == 1 && nextEraDate == 1) {
+                    // Substract 1, because the next era starts at Jan 1
+                    maxYear--;
+                }
+                return maxYear;
+            }
+        }
+        return super.getActualMaximum(field);
     }
 }

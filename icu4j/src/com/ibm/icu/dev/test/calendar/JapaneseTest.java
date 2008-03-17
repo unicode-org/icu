@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -323,7 +323,16 @@ public class JapaneseTest extends CalendarTest {
             ex.printStackTrace();
         }
     }
-    
-    
+
+    /**
+     * Test limits of the Japanese calendar
+     */
+    public void TestLimits() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(1988, Calendar.DECEMBER, 1);
+        JapaneseCalendar jcal = new JapaneseCalendar();
+        doLimitsTest(jcal, null, cal.getTime());
+        doTheoreticalLimitsTest(jcal, true);
+    }
 }
 
