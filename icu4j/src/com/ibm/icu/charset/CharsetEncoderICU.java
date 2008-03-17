@@ -191,9 +191,9 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
     }
 
     /**
-     * Sets fromUContext used in escape callbacks.
+     * Sets fromUContext used in callbacks.
      * 
-     * @param newCallback CharsetCallback.Encoder
+     * @param newContext Object
      * @exception IllegalArgumentException
      * @draft ICU 4.0
      */
