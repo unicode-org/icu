@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -192,7 +192,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
     }
 }
 
-static const UVersionInfo ICU_39 = {3,9,2,0};
+static const UVersionInfo ICU_39 = {3,9,3,0};
 /**
  * Make sure every system transliterator can be instantiated.
  * 
