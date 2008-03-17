@@ -26,6 +26,7 @@ public class CharsetHZ extends CharsetICU {
     private static final byte[] fromUSubstitution = new byte[] { (byte) 0x1A };
 
     private CharsetMBCS gbCharset;
+    private boolean isEmptySegment;
 
     public CharsetHZ(String icuCanonicalName, String canonicalName, String[] aliases) {
         super(icuCanonicalName, canonicalName, aliases);
@@ -34,6 +35,8 @@ public class CharsetHZ extends CharsetICU {
         maxBytesPerChar = 4;
         minBytesPerChar = 1;
         maxCharsPerByte = 1;
+        
+        isEmptySegment = false;
     }
 
     class CharsetDecoderHZ extends CharsetDecoderICU {
@@ -50,6 +53,7 @@ public class CharsetHZ extends CharsetICU {
             gbDecoder.implReset();
 
             isStateDBCS = false;
+            isEmptySegment = false;
         }
 
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
@@ -83,10 +87,16 @@ public class CharsetHZ extends CharsetICU {
                             target.put((char) mySourceChar);
                             continue;
                         case UCNV_OPEN_BRACE:
-                            isStateDBCS = true;
-                            continue;
                         case UCNV_CLOSE_BRACE:
-                            isStateDBCS = false;
+                            isStateDBCS = (mySourceChar == UCNV_OPEN_BRACE);
+                            if (isEmptySegment) {
+                                isEmptySegment = false; /* we are handling it, reset to avoid future spurious errors */
+                                this.toUBytesArray[0] = UCNV_TILDE;
+                                this.toUBytesArray[1] = (byte)mySourceChar;
+                                this.toULength = 2;
+                                return CoderResult.malformedForLength(1);
+                            }
+                            isEmptySegment = true;
                             continue;
                         default:
                             /*
@@ -95,6 +105,7 @@ public class CharsetHZ extends CharsetICU {
                              */
                             mySourceChar |= 0x7e00;
                             targetUniChar = 0xffff;
+                            isEmptySegment = false; /* different error here, reset this to avoid spurious future error */ 
                             break;
                         }
                     } else if (isStateDBCS) {
@@ -107,6 +118,7 @@ public class CharsetHZ extends CharsetICU {
                                  * add another bit to distinguish a 0 byte from not having seen a lead byte
                                  */
                                 toUnicodeStatus = mySourceChar | 0x100;
+                                isEmptySegment = false; /* the segment has something, either valid or will produce a different error, so reset this */ 
                             }
                             continue;
                         } else {
@@ -131,8 +143,10 @@ public class CharsetHZ extends CharsetICU {
                             continue;
                         } else if (mySourceChar <= 0x7f) {
                             targetUniChar = mySourceChar; /* ASCII */
+                            isEmptySegment = false; /* the segment has something valid */
                         } else {
                             targetUniChar = 0xffff;
+                            isEmptySegment = false; /* different error here, reset this to avoid spurious future error */
                         }
                     }
 

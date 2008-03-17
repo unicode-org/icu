@@ -646,6 +646,7 @@ class CharsetISO2022 extends CharsetICU {
         int version;
         String name;
         String locale;
+        boolean isEmptySegment;
         
         UConverterDataISO2022() {
             myConverterArray = new UConverterSharedData[UCNV_2022_MAX_CONVERTERS];
@@ -656,6 +657,13 @@ class CharsetISO2022 extends CharsetICU {
             currentType = 0;
             key = 0;
             version = 0;
+            isEmptySegment = false;
+        }
+        
+        void reset() {
+            toU2022State.reset();
+            fromU2022State.reset();
+            isEmptySegment = false;
         }
     }
     
@@ -1047,7 +1055,7 @@ class CharsetISO2022 extends CharsetICU {
         
         protected void implReset() {
             super.implReset();
-            myConverterData.toU2022State.reset();
+            myConverterData.reset();
         }
         /* 
          * Map 00..7F to Unicode according to JIS X 0201. 
@@ -1127,19 +1135,13 @@ class CharsetISO2022 extends CharsetICU {
             while (source.hasRemaining() || gotoEscape || gotoGetTrail) {
                 // This code is here for the goto escape label call above.
                 if (gotoEscape) {
-                    gotoEscape = false;
-                    
-                    err = changeState_2022(this, source, variant);
-                    if (err.isError()) {
-                        return err;
-                    }
-                    continue;
+                    mySourceCharTemp = ESC_2022;
                 }
                 
                 targetUniChar = UConverterConstants.missingCharMarker;
                 
-                if (gotoGetTrail || target.hasRemaining()) {
-                    if (!gotoGetTrail) {
+                if (gotoEscape || gotoGetTrail || target.hasRemaining()) {
+                    if (!gotoEscape && !gotoGetTrail) {
                         mySourceChar = UConverterConstants.UNSIGNED_BYTE_MASK & source.get();
                         mySourceCharTemp = mySourceChar;
                     }
@@ -1151,6 +1153,7 @@ class CharsetISO2022 extends CharsetICU {
                             continue;
                         } else {
                             /* only JIS7 uses SI/SO, not ISO-2022-JP-x */
+                            myConverterData.isEmptySegment = false;
                             break;
                         }
                         
@@ -1162,16 +1165,40 @@ class CharsetISO2022 extends CharsetICU {
                             continue; 
                         } else {
                             /* only JIS7 uses SI/SO, not ISO-2022-JP-x */
+                            myConverterData.isEmptySegment = false; /* reset this, we have a different error */
                             break;
                         }
                         
                     case ESC_2022:
-                        source.position(source.position() - 1);
+                        if (!gotoEscape) {
+                            source.position(source.position() - 1);
+                        } else {
+                            gotoEscape = false;
+                        }
 // escape:
-                        err = changeState_2022(this, source, variant);
-                        if (err.isError()) {
+                        {
+                            int mySourceBefore = source.position();
+                            int toULengthBefore = this.toULength;
+                            
+                            err = changeState_2022(this, source, variant);
+
+                            /* If in ISO-2022-JP only and we successully completed an escape sequence, but previous segment was empty, create an error */
+                            if(myConverterData.version == 0 && myConverterData.key == 0 && !err.isError() && myConverterData.isEmptySegment) {
+                                err = CoderResult.malformedForLength(source.position() - mySourceBefore);
+                                this.toULength = toULengthBefore + (source.position() - mySourceBefore);
+                            }
+                        }
+
+                        /* invalid or illegal escape sequence */
+                        if(err.isError()){
+                            myConverterData.isEmptySegment = false; /* Reset to avoid future spurious errors */
                             return err;
                         }
+                        /* If we successfully completed an escape sequence, we begin a new segment, empty so far */
+                        if(myConverterData.key == 0) {
+                            myConverterData.isEmptySegment = true;
+                        }
+
                         continue;
                     /* ISO-2022-JP does not use single-byte (C1) SS2 and SS3 */
                     case CR:
@@ -1186,6 +1213,7 @@ class CharsetISO2022 extends CharsetICU {
                         /* falls through */
                     default :
                         /* convert one or two bytes */
+                        myConverterData.isEmptySegment = false;
                         cs = myConverterData.toU2022State.cs[myConverterData.toU2022State.g];
                         csTemp = cs;
                         if (gotoGetTrail) {
@@ -1309,7 +1337,7 @@ class CharsetISO2022 extends CharsetICU {
         
         protected void implReset() {
             super.implReset();
-            myConverterData.toU2022State.reset();
+            myConverterData.reset();
         }
         
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
@@ -1350,14 +1378,23 @@ class CharsetISO2022 extends CharsetICU {
                     switch (mySourceCharTemp) {
                     case UConverterConstants.SI:
                         myConverterData.toU2022State.g = 0;
+                        if (myConverterData.isEmptySegment) {
+                            myConverterData.isEmptySegment = false; /* we are handling it, reset to avoid future spurious errors */
+                            err = CoderResult.malformedForLength(1);
+                            this.toUBytesArray[0] = (byte)mySourceChar;
+                            this.toULength = 1;
+                            return err;
+                        }
                         continue;
                         
                     case UConverterConstants.SO:
                         if (myConverterData.toU2022State.cs[1] != 0) {
                             myConverterData.toU2022State.g = 1;
+                            myConverterData.isEmptySegment = true;  /* Begin a new segment, empty so far */
                             continue;
                         } else {
                             /* illegal to have SO before a matching designator */
+                            myConverterData.isEmptySegment = false; /* Handling a different error, reset this to avoid future spurious errs */
                             break;
                         }
                         
@@ -1367,11 +1404,22 @@ class CharsetISO2022 extends CharsetICU {
                         }
 // escape label
                         gotoEscape = false;
-                        
-                        err = changeState_2022(this, source, ISO_2022_CN);
-                        
+                        {
+                            int mySourceBefore = source.position();
+                            int toULengthBefore = this.toULength;
+
+                            err = changeState_2022(this, source, ISO_2022_CN);
+
+                            /* After SO there must be at least one character before a designator (designator error handled separately) */
+                            if(myConverterData.key == 0 && !err.isError() && myConverterData.isEmptySegment) {
+                                err = CoderResult.malformedForLength(source.position() - mySourceBefore);
+                                this.toULength = toULengthBefore + (source.position() - mySourceBefore);
+                            }
+                        }
+
                         /* invalid or illegal escape sequence */
-                        if (err.isError()) {
+                        if(err.isError()){
+                            myConverterData.isEmptySegment = false; /* Reset to avoid future spurious errors */
                             return err;
                         }
                         continue;
@@ -1384,6 +1432,7 @@ class CharsetISO2022 extends CharsetICU {
                         /* falls through */
                     default:
                         /* converter one or two bytes */
+                        myConverterData.isEmptySegment = false;
                         if (myConverterData.toU2022State.g != 0 || gotoGetTrailByte) {
                             if (source.hasRemaining() || gotoGetTrailByte) {
                                 UConverterSharedData cnv;
@@ -1473,7 +1522,7 @@ class CharsetISO2022 extends CharsetICU {
         protected void implReset() {
             super.implReset();
             setInitialStateToUnicodeKR();
-            myConverterData.toU2022State.reset();
+            myConverterData.reset();
         }
         
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
@@ -1510,10 +1559,18 @@ class CharsetISO2022 extends CharsetICU {
                     
                     if (!gotoGetTrailByte && !gotoEscape && mySourceChar == UConverterConstants.SI) {
                         myConverterData.toU2022State.g = 0;
+                        if (myConverterData.isEmptySegment) {
+                            myConverterData.isEmptySegment = false; /* we are handling it, reset to avoid future spurious errors */
+                            err = CoderResult.malformedForLength(1);
+                            this.toUBytesArray[0] = (byte)mySourceChar;
+                            this.toULength = 1;
+                            return err;
+                        }
                         /* consume the source */
                         continue;
                     } else if (!gotoGetTrailByte && !gotoEscape && mySourceChar == UConverterConstants.SO) {
                         myConverterData.toU2022State.g = 1;
+                        myConverterData.isEmptySegment = true;
                         /* consume the source */
                         continue;
                     } else if (!gotoGetTrailByte && (gotoEscape || mySourceChar == ESC_2022)) {
@@ -1522,13 +1579,14 @@ class CharsetISO2022 extends CharsetICU {
                         }
 // escape label
                         gotoEscape = false; // reset gotoEscape flag
-                        
+                        myConverterData.isEmptySegment = false; /* Any invalid ESC sequences will be detected separately, so just reset this */ 
                         err = changeState_2022(this, source, ISO_2022_KR);
                         if (err.isError()) {
                             return err;
                         }
                         continue;
                     }
+                    myConverterData.isEmptySegment = false; /* Any invalid char errors will be detected separately, so just reset this */
                     if (myConverterData.toU2022State.g == 1 || gotoGetTrailByte) {
                         if (source.hasRemaining() || gotoGetTrailByte) {
 // getTrailByte label
@@ -1775,7 +1833,7 @@ class CharsetISO2022 extends CharsetICU {
         
         protected void implReset() {
             super.implReset();
-            myConverterData.fromU2022State.reset();
+            myConverterData.reset();
         }
         /* Map Unicode to 00..7F according to JIS X 0201. Return U+FFFE if unmappable. */
         private int jisx201FromU(int value) {
@@ -2340,7 +2398,7 @@ class CharsetISO2022 extends CharsetICU {
         
         protected void implReset() {
             super.implReset();
-            myConverterData.fromU2022State.reset();
+            myConverterData.reset();
         }
         
         /* This overrides the cbFromUWriteSub method in CharsetEncoderICU */
@@ -2696,7 +2754,7 @@ class CharsetISO2022 extends CharsetICU {
         
         protected void implReset() {
             super.implReset();
-            myConverterData.fromU2022State.reset();
+            myConverterData.reset();
             setInitialStateFromUnicodeKR(this);
         }
         
