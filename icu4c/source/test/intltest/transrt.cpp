@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2000-2007, International Business Machines
+*   Copyright (C) 2000-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -83,7 +83,7 @@ TransliteratorRoundTripTest::runIndexedTest(int32_t index, UBool exec,
 // Time bomb - allows temporary behavior that expires at a given
 //             release
 //--------------------------------------------------------------------
-static const UVersionInfo ICU_39 = {3,9,2,0};
+static const UVersionInfo ICU_39 = {3,9,3,0};
 
 
 //--------------------------------------------------------------------
