@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2006, International Business Machines
+ *   Copyright (C) 1999-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -41,6 +41,17 @@ char *getCString(const UnicodeString *uString)
     cString[cLength] = '\0';
 
     return cString;
+}
+
+char *getCString(const LEUnicode16 *uChars)
+{
+    if (uChars == NULL) {
+        return NULL;
+    }
+
+    const UnicodeString ustring(uChars);
+
+    return getCString(&ustring);
 }
 
 char *getUTF8String(const UnicodeString *uString)

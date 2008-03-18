@@ -385,26 +385,27 @@ static void checkFontVersion(PortableFontInstance *fontInstance, const char *tes
     if (fontChecksum != testChecksum) {
         const char *fontVersionString = fontInstance->getNameString(NAME_VERSION_STRING,
             PLATFORM_MACINTOSH, MACINTOSH_ROMAN, MACINTOSH_ENGLISH);
+        const LEUnicode *uFontVersionString = NULL;
 
             // The standard recommends that the Macintosh Roman/English name string be present, but
             // if it's not, try the Microsoft Unicode/English string.
             if (fontVersionString == NULL) {
-                const LEUnicode16 *uversion = fontInstance->getUnicodeNameString(NAME_VERSION_STRING, PLATFORM_MICROSOFT, MICROSOFT_UNICODE_BMP, MICROSOFT_ENGLISH);
-
-                if (uversion != NULL) {
-                    const UnicodeString usversion((const UChar *)uversion);
-
-                    fontVersionString = getCString(&usversion);
-                    fontInstance->deleteNameString(uversion);
-                }
+                uFontVersionString = fontInstance->getUnicodeNameString(NAME_VERSION_STRING,
+                    PLATFORM_MICROSOFT, MICROSOFT_UNICODE_BMP, MICROSOFT_ENGLISH);
             }
 
         log_info("Test %s: this may not be the same font used to generate the test data.\n", testID);
-        log_info("Your font's version string is \"%s\"\n", fontVersionString);
+
+        if (uFontVersionString != NULL) {
+            log_info("Your font's version string is \"%S\"\n", uFontVersionString);
+            fontInstance->deleteNameString(uFontVersionString);
+        } else {
+            log_info("Your font's version string is \"%s\"\n", fontVersionString);
+            fontInstance->deleteNameString(fontVersionString);
+        }
+
         log_info("The expected version string is \"%s\"\n", testVersionString);
         log_info("If you see errors, they may be due to the version of the font you're using.\n");
-
-        fontInstance->deleteNameString(fontVersionString);
     }
 }
 
