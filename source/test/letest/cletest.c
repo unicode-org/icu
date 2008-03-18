@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2007, International Business Machines
+ *   Copyright (C) 1999-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -340,13 +340,25 @@ static void checkFontVersion(le_font *font, const char *testVersionString,
     if (fontChecksum != testChecksum) {
         const char *fontVersionString = le_getNameString(font, NAME_VERSION_STRING,
             PLATFORM_MACINTOSH, MACINTOSH_ROMAN, MACINTOSH_ENGLISH);
+        const LEUnicode16 *uFontVersionString = NULL;
+
+        if (fontVersionString == NULL) {
+            uFontVersionString = le_getUnicodeNameString(font, NAME_VERSION_STRING,
+                PLATFORM_MICROSOFT, MICROSOFT_UNICODE_BMP, MICROSOFT_ENGLISH);
+        }
 
         log_info("Test %s: this may not be the same font used to generate the test data.\n", testID);
-        log_info("Your font's version string is \"%s\"\n", fontVersionString);
+
+        if (uFontVersionString != NULL) {
+            log_info("Your font's version string is \"%S\"\n", uFontVersionString);
+            le_deleteUnicodeNameString(font, uFontVersionString);
+        } else {
+            log_info("Your font's version string is \"%s\"\n", fontVersionString);
+            le_deleteNameString(font, fontVersionString);
+        }
+
         log_info("The expected version string is \"%s\"\n", testVersionString);
         log_info("If you see errors, they may be due to the version of the font you're using.\n");
-
-        le_deleteNameString(font, fontVersionString);
     }
 }
 
