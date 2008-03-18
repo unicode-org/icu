@@ -108,4 +108,9 @@
     <test-font name="lohit_ml.ttf"/>
     <test-text>ണു്</test-text>
   </test-case>
+
+  <test-case id="Broken Font Test" script="hani" lang="ZHT">
+    <test-font name="BMIN00M.TTF"/>
+    <test-text>中華人民共和國 臺灣</test-text>
+  </test-case>
 </layout-tests>
