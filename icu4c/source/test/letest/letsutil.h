@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2006, International Business Machines
+ *   Copyright (C) 1999-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -28,6 +28,7 @@
 #include "letest.h"
 
 char *getCString(const UnicodeString *uString);
+char *getCString(const LEUnicode16 *uChars);
 char *getUTF8String(const UnicodeString *uString);
 void freeCString(char *cString);
 le_bool getRTL(const UnicodeString &text);
