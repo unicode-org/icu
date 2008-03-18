@@ -1,6 +1,6 @@
 /***************************************************************************
 *
-*   Copyright (C) 1998-2007, International Business Machines
+*   Copyright (C) 1998-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ************************************************************************/
@@ -381,6 +381,17 @@ enum MacintoshEncodingID
 enum MacintoshLanguageID
 {
     MACINTOSH_ENGLISH = 0
+};
+
+enum MicrosoftEncodingID
+{
+    MICROSOFT_UNICODE_BMP  =  1,
+    MICROSOFT_UNICODE_FULL = 10
+};
+
+enum MicrosoftLanguageID
+{
+    MICROSOFT_ENGLISH = 0x409
 };
 
 enum NameID

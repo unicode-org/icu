@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2007, International Business Machines
+ *   Copyright (C) 1999-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -385,6 +385,19 @@ static void checkFontVersion(PortableFontInstance *fontInstance, const char *tes
     if (fontChecksum != testChecksum) {
         const char *fontVersionString = fontInstance->getNameString(NAME_VERSION_STRING,
             PLATFORM_MACINTOSH, MACINTOSH_ROMAN, MACINTOSH_ENGLISH);
+
+            // The standard recommends that the Macintosh Roman/English name string be present, but
+            // if it's not, try the Microsoft Unicode/English string.
+            if (fontVersionString == NULL) {
+                const LEUnicode16 *uversion = fontInstance->getUnicodeNameString(NAME_VERSION_STRING, PLATFORM_MICROSOFT, MICROSOFT_UNICODE_BMP, MICROSOFT_ENGLISH);
+
+                if (uversion != NULL) {
+                    const UnicodeString usversion((const UChar *)uversion);
+
+                    fontVersionString = getCString(&usversion);
+                    fontInstance->deleteNameString(uversion);
+                }
+            }
 
         log_info("Test %s: this may not be the same font used to generate the test data.\n", testID);
         log_info("Your font's version string is \"%s\"\n", fontVersionString);

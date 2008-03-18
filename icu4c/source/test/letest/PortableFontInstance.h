@@ -2,7 +2,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2007, International Business Machines
+ *   Copyright (C) 1999-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -75,7 +75,11 @@ public:
 
     virtual const char *getNameString(le_uint16 nameID, le_uint16 platform, le_uint16 encoding, le_uint16 language) const;
 
+    virtual const LEUnicode16 *getUnicodeNameString(le_uint16 nameID, le_uint16 platform, le_uint16 encoding, le_uint16 language) const;
+
     virtual void deleteNameString(const char *name) const;
+
+    virtual void deleteNameString(const LEUnicode16 *name) const;
 
     virtual le_int32 getUnitsPerEM() const;
 
