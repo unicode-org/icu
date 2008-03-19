@@ -1,0 +1,47 @@
+//#
+//#*******************************************************************************
+//#* Copyright (C) 1997-2007, International Business Machines Corporation and    *
+//#* others. All Rights Reserved.                                                *
+//#*******************************************************************************
+//#* This is the ant build file for ICU4J.  See readme.html for more information.
+//#*
+// policies needed to run tests
+grant // codebase "file:${user.dir}/icu4jtests.jar"
+{
+    // temporary for debugging
+    // permission java.lang.RuntimePermission "getProtectionDomain";
+
+    // ibm 141 on ibm xp can't use reflection
+    permission java.lang.RuntimePermission "accessDeclaredMembers";
+
+    // needed for Locale.setDefault, only used in tests and demos
+    permission java.util.PropertyPermission "user.language", "write";
+
+    // needed for TestUtils
+    permission java.util.PropertyPermission "ICUDataPath", "read";
+    permission java.util.PropertyPermission "user.dir", "read";
+    permission java.util.PropertyPermission "GENERATE_TEST_DATA", "read";
+
+    // time zone tests
+    permission java.util.PropertyPermission "user.timezone", "read";
+
+    //for charsets
+    permission java.lang.RuntimePermission "charsetProvider", "read";
+
+};
+
+// there must be a way for code in one jar file to call code in another jar
+// file and give the called code permission to read the calling code's
+// jar.  they're in different protection domains despite being on the
+// same classpath and being loaded by the same class loader, so the class
+// loader doesn't disambiguate which protection domain we're using. it's
+// not easy to figure out the security docs, sigh.
+//
+// this is so ICUData (in icu4j.jar), called from test code (in icu4jtests.jar)
+// can read test resource files (in icu4jtests.jar"
+//
+grant codebase "file:${user.dir}/icu4j.jar"
+{
+    permission java.io.FilePermission "${/}${user.dir}${/}icu4jtests.jar", "read";
+    permission java.io.FilePermission "${/}${user.dir}${/}icu4j-charsets.jar", "read";
+};
