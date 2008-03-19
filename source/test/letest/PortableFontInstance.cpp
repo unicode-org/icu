@@ -121,7 +121,7 @@ PortableFontInstance::PortableFontInstance(const char *fileName, float pointSize
 
     fUnitsPerEM   = SWAPW(headTable->unitsPerEm);
     fFontChecksum = SWAPL(headTable->checksumAdjustment);
-    deleteTable(headTable);
+    freeFontTable(headTable);
 
     //nameTable = (NAMETable *) readFontTable(nameTag);
 
@@ -137,7 +137,7 @@ PortableFontInstance::PortableFontInstance(const char *fileName, float pointSize
     //    goto error_exit;
     //}
 
-    //deleteTable(nameTable);
+    //freeFontTable(nameTable);
 
     hheaTable = (HHEATable *) readFontTable(hheaTag);
 
@@ -152,7 +152,7 @@ PortableFontInstance::PortableFontInstance(const char *fileName, float pointSize
 
     fNumLongHorMetrics = SWAPW(hheaTable->numOfLongHorMetrics);
 
-    deleteTable((void *) hheaTable);
+    freeFontTable((void *) hheaTable);
 
     fCMAPMapper = findUnicodeMapper();
 
@@ -174,18 +174,13 @@ PortableFontInstance::~PortableFontInstance()
     if (fFile != NULL) {
         fclose(fFile);
 
-        deleteTable(fHMTXTable);
-        deleteTable(fNAMETable);
+        freeFontTable(fHMTXTable);
+        freeFontTable(fNAMETable);
 
         delete fCMAPMapper;
 
         DELETE_ARRAY(fDirectory);
     }
-}
-
-void PortableFontInstance::deleteTable(const void *table) const
-{
-    DELETE_ARRAY(table);
 }
 
 const DirectoryEntry *PortableFontInstance::findTable(LETag tag) const
@@ -350,7 +345,7 @@ void PortableFontInstance::getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) co
 
         if (maxpTable != NULL) {
             realThis->fNumGlyphs = SWAPW(maxpTable->numGlyphs);
-            deleteTable(maxpTable);
+            freeFontTable(maxpTable);
         }
 
         realThis->fHMTXTable = (const HMTXTable *) readFontTable(hmtxTag);
