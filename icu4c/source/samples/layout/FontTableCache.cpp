@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2003, International Business Machines
+ *   Copyright (C) 2003 - 2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -37,7 +37,7 @@ FontTableCache::FontTableCache()
 FontTableCache::~FontTableCache()
 {
     for (int i = fTableCacheCurr - 1; i >= 0; i -= 1) {
-        LE_DELETE_ARRAY(fTableCache[i].table);
+        freeFontTable(fTableCache[i].table);
 
         fTableCache[i].tag   = 0;
         fTableCache[i].table = NULL;
@@ -47,6 +47,11 @@ FontTableCache::~FontTableCache()
 
     LE_DELETE_ARRAY(fTableCache);
     fTableCache = NULL;
+}
+
+void FontTableCache::freeFontTable(const void *table) const
+{
+    LE_DELETE_ARRAY(table);
 }
 
 const void *FontTableCache::find(LETag tableTag) const

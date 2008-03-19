@@ -58,7 +58,6 @@ private:
 
     const DirectoryEntry *findTable(LETag tag) const;
     const void *readTable(LETag tag, le_uint32 *length) const;
-    void deleteTable(const void *table) const;
     void getMetrics();
 
     CMAPMapper *findUnicodeMapper();

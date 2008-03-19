@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2006, International Business Machines
+ *   Copyright (C) 1999-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -250,15 +250,39 @@ GDIFontInstance::GDIFontInstance(GDISurface *surface, const char *faceName, le_i
 
     UINT ret = GetOutlineTextMetrics(hdc, sizeof otm, &otm);
 
-    if (ret == 0) {
-        status = LE_MISSING_FONT_TABLE_ERROR;
-        goto restore;
-    }
+    if (ret != 0) {
+        fUnitsPerEM = otm.otmEMSquare;
+        fAscent  = otm.otmTextMetrics.tmAscent;
+        fDescent = otm.otmTextMetrics.tmDescent;
+        fLeading = otm.otmTextMetrics.tmExternalLeading;
+    } else {
+        const HEADTable *headTable = NULL;
+        const HHEATable *hheaTable = NULL;
 
-    fUnitsPerEM = otm.otmEMSquare;
-    fAscent  = otm.otmTextMetrics.tmAscent;
-    fDescent = otm.otmTextMetrics.tmDescent;
-    fLeading = otm.otmTextMetrics.tmExternalLeading;
+        // read unitsPerEm from 'head' table
+        headTable = (const HEADTable *) readFontTable(LE_HEAD_TABLE_TAG);
+
+        if (headTable == NULL) {
+            status = LE_MISSING_FONT_TABLE_ERROR;
+            goto restore;
+        }
+
+        fUnitsPerEM   = SWAPW(headTable->unitsPerEm);
+        freeFontTable((const void *)headTable);
+
+        hheaTable = (HHEATable *) readFontTable(LE_HHEA_TABLE_TAG);
+
+        if (hheaTable == NULL) {
+            status = LE_MISSING_FONT_TABLE_ERROR;
+            goto restore;
+        }
+
+        fAscent  = (le_int32) yUnitsToPoints((float) SWAPW(hheaTable->ascent));
+        fDescent = (le_int32) yUnitsToPoints((float) SWAPW(hheaTable->descent));
+        fLeading = (le_int32) yUnitsToPoints((float) SWAPW(hheaTable->lineGap));
+
+        freeFontTable((const void *) hheaTable);
+    }
 
     status = initMapper();
 
