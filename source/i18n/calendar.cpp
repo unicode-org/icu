@@ -38,6 +38,8 @@
 #include "persncal.h"
 #include "indiancal.h"
 #include "chnsecal.h"
+#include "coptccal.h"
+#include "ethpccal.h"
 #include "unicode/calendar.h"
 #include "cpputils.h"
 #include "servloc.h"
@@ -144,6 +146,8 @@ static const char * const gCalendarKeywords[] = {
         "hebrew",
         "chinese",
         "indian",
+        "coptic",
+        "ethiopic",
         NULL
 };
 
@@ -202,6 +206,10 @@ static Calendar *createStandardCalendar(char *calType, const Locale &canLoc, UEr
         return new ChineseCalendar(canLoc, status);
     } else if(!uprv_strcmp(calType, "indian")) {
         return new IndianCalendar(canLoc, status);
+    } else if(!uprv_strcmp(calType, "coptic")) {
+        return new CopticCalendar(canLoc, status);
+    } else if(!uprv_strcmp(calType, "ethiopic")) {
+        return new EthiopicCalendar(canLoc, status);
     } else { 
         status = U_UNSUPPORTED_ERROR;
         return NULL;
