@@ -141,21 +141,26 @@ public class CopticTest extends CalendarTest
 
     // basic sanity check that the conversion algorithm round-trips
     public void TestCopticToJD() {
+        CopticCalendar cal = new CopticCalendar();
+        cal.clear();
         for (int y = -2; y < 3; ++y) {
             for (int m = 0; m < 12; ++m) { // don't understand rules for 13th month
                 for (int d = 1; d < 25; d += 3) { // play it safe on days per month
                     int jd = CopticCalendar.copticToJD(y, m, d);
-                    Integer[] res = CopticCalendar.getDateFromJD(jd);
-                    if (!(y == res[0].intValue() &&
-                          m == res[1].intValue() &&
-                          d == res[2].intValue())) {
+                    cal.set(Calendar.JULIAN_DAY, jd);
+                    int eyear = cal.get(Calendar.EXTENDED_YEAR);
+                    int month = cal.get(Calendar.MONTH);
+                    int day = cal.get(Calendar.DAY_OF_MONTH);
+                    if (!(y == eyear &&
+                          m == month &&
+                          d == day)) {
                         errln("y: " + y +
                               " m: " + m + 
                               " d: " + d + 
                               " --> jd: " + jd +
-                              " --> y: " + res[0].intValue() +
-                              " m: " + res[1].intValue() +
-                              " d: " + res[2].intValue());
+                              " --> y: " + eyear +
+                              " m: " + month +
+                              " d: " + day);
                     }
                 }
             }

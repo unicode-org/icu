@@ -137,18 +137,18 @@ public class EthiopicTest extends CalendarTest
             /* Skip these tests until JD bug fixed in the Gregorian calendar:
              * http://www.jtcsv.com/cgibin/icu-bugs/incoming?id=4406;page=2;user=guest
              */
-            new TestCase(1721059.5,  0,     9,    5,   7,  SAT,   0,  0,  0), // Gregorian: 01/01/0000
-            new TestCase(1721425.5,  0,     8,    5,   8,  MON,   0,  0,  0), // Gregorian: 01/01/0001
-            new TestCase(1723854.5,  0,     2,   13,   6,  MON,   0,  0,  0), // Gregorian: 27/08/0007
+            new TestCase(1721059.5,  0,  5492,    5,   7,  SAT,   0,  0,  0), // Gregorian: 01/01/0000
+            new TestCase(1721425.5,  0,  5493,    5,   8,  MON,   0,  0,  0), // Gregorian: 01/01/0001
+            new TestCase(1723854.5,  0,  5499,   13,   6,  MON,   0,  0,  0), // Gregorian: 27/08/0007
 
-            new TestCase(1723855.5,  0,     1,    1,   1,  TUE,   0,  0,  0), // Gregorian: 28/08/0007
+            new TestCase(1723855.5,  0,  5500,    1,   1,  TUE,   0,  0,  0), // Gregorian: 28/08/0007
             new TestCase(1724220.5,  1,     1,    1,   1,  WED,   0,  0,  0), // Gregorian: 27/08/0008
             new TestCase(1724585.5,  1,     2,    1,   1,  THU,   0,  0,  0), // Gregorian: 27/08/0009
             new TestCase(1724950.5,  1,     3,    1,   1,  FRI,   0,  0,  0), // Gregorian: 27/08/0010
 
             // new TestCase(1724536.5,  1,     4,    1,   1,  SUN,   0,  0,  0), // Gregorian: 28/08/0011
             new TestCase(1725316.5,  1,     4,    1,   1,  SUN,   0,  0,  0), // Gregorian: 28/08/0011 - dlf
-            new TestCase(1724219.5,  0,     1,   13,   5,  TUE,   0,  0,  0), // Gregorian: 26/08/0008
+            new TestCase(1724219.5,  0,  5500,   13,   5,  TUE,   0,  0,  0), // Gregorian: 26/08/0008
             new TestCase(1724584.5,  1,     1,   13,   5,  WED,   0,  0,  0), // Gregorian: 26/08/0009
             new TestCase(1724949.5,  1,     2,   13,   5,  THU,   0,  0,  0), // Gregorian: 26/08/0010
             new TestCase(1725314.5,  1,     3,   13,   5,  FRI,   0,  0,  0), // Gregorian: 26/08/0011
@@ -177,9 +177,10 @@ public class EthiopicTest extends CalendarTest
         SimpleDateFormat fmt = new SimpleDateFormat("EEE MMM dd, yyyy GG");
         EthiopicCalendar cal = new EthiopicCalendar(1, 0, 1);
         assertEquals("Ethiopic Date", "Wed Jan 01, 0001 AD", fmt.format(cal));
+
         cal.set(Calendar.ERA, 0);
-        cal.set(Calendar.YEAR, 1);
-        assertEquals("Ethiopic Date", "Tue Jan 01, 0001 BC", fmt.format(cal));
+        cal.set(Calendar.YEAR, 5500);
+        assertEquals("Ethiopic Date", "Tue Jan 01, 5500 BC", fmt.format(cal));
 
         // The gregorian calendar gets off by two days when
         // the date gets low, unless the gregorian changeover is set to 
@@ -211,10 +212,12 @@ public class EthiopicTest extends CalendarTest
     
     public void TestJD(){
         int jd = EthiopicCalendar.EthiopicToJD(1567,8,9);
-        Integer[] l = EthiopicCalendar.getDateFromJD(jd);
-        if (l[0].intValue() == 1567 &&
-            l[1].intValue() == 8 &&
-            l[2].intValue() == 9){
+        EthiopicCalendar cal = new EthiopicCalendar();
+        cal.clear();
+        cal.set(Calendar.JULIAN_DAY, jd);
+        if (cal.get(Calendar.EXTENDED_YEAR) == 1567 &&
+            cal.get(Calendar.MONTH) == 8 &&
+            cal.get(Calendar.DAY_OF_MONTH) == 9){
             logln("EthiopicCalendar.getDateFromJD tested");
         } else {
             errln("EthiopicCalendar.getDateFromJD failed");

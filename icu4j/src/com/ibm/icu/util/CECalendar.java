@@ -12,8 +12,9 @@ import java.util.Locale;
 /**
  * Base class for EthiopicCalendar and CopticCalendar.
  * @internal
+ * @deprecated This API is ICU internal only.
  */
-class CECalendar extends Calendar {
+abstract class CECalendar extends Calendar {
     // jdk1.4.2 serialver
     private static final long serialVersionUID = -999547623066414271L;
 
@@ -44,49 +45,6 @@ class CECalendar extends Calendar {
         {/*                                  */}, // MILLISECONDS_IN_DAY
     };
 
-
-    /* ceToJD() doesn't use this data */
-    /*private static final int[][] ceMONTH_COUNT = {
-        //len len2 st  st2
-        {30, 30,   0,   0}, // Meskerem
-        {30, 30,  30,  30}, // Tekemt 
-        {30, 30,  60,  60}, // Hedar 
-        {30, 30,  90,  90}, // Tahsas 
-        {30, 30, 120, 120}, // Ter 
-        {30, 30, 150, 150}, // Yekatit
-        {30, 30, 180, 180}, // Megabit
-        {30, 30, 210, 210}, // Miazia
-        {30, 30, 240, 244}, // Genbot
-        {30, 30, 270, 270}, // Sene 
-        {30, 30, 300, 300}, // Hamle 
-        {30, 30, 330, 330}, // Nehasse 
-        { 5,  6, 360, 360}  // Pwagme
-        // len  length of month
-        // len2 length of month in a leap year
-        // st   days in year before start of month
-        // st2  days in year before month in leap year
-    };*/
-    
-    // The Coptic and Ethiopic calendars differ only in their epochs.
-    // We handle this by setting the jdOffset to the difference between
-    // the Julian and Coptic or Ethiopic epoch.
-    // This value is set in the class initialization phase of the two
-    // subclasses, CopticCalendar and EthiopicCalendar
-    /**
-     * The difference between the Julian and Coptic epoch.
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    protected int jdEpochOffset  = -1;
-
-    // CE eras - keep them private for now
-    private static final int CE_BC = 0;
-    private static final int CE_AD = 1;
-
-    protected int handleGetLimit(int field, int limitType) {
-        return LIMITS[field][limitType];
-    }
-    
     //-------------------------------------------------------------------------
     // Constructors...
     //-------------------------------------------------------------------------
@@ -200,68 +158,44 @@ class CECalendar extends Calendar {
         super(TimeZone.getDefault(), ULocale.getDefault());
         this.set(year, month, date, hour, minute, second);
     }
-    
-    
+
     //-------------------------------------------------------------------------
-    // Calendar system Converstion methods...
+    // Calendar framework
     //-------------------------------------------------------------------------
 
     /**
-     * @internal
+     * The Coptic and Ethiopic calendars differ only in their epochs.
+     * This method must be implemented by CECalendar subclasses to
+     * return the date offset from Julian.
+     */
+    abstract protected int getJDEpochOffset();
+
+    /**
+     * Return JD of start of given month/extended year
      */
     protected int handleComputeMonthStart(int eyear,
                                           int emonth,
                                           boolean useMonth) {
-        return ceToJD(eyear, emonth, 0, jdEpochOffset);
+        return ceToJD(eyear, emonth, 0, getJDEpochOffset());
     }
 
     /**
-     * @internal
+     * Calculate the limit for a specified type of limit and field
      */
-    protected int handleGetExtendedYear() {
-        int eyear;
-        if (newerField(EXTENDED_YEAR, YEAR) == EXTENDED_YEAR) {
-            eyear = internalGet(EXTENDED_YEAR, 1); // Default to year 1
-        } else {
-            // The year defaults to the epoch start, the era to AD
-            int era = internalGet(ERA, CE_AD);
-            if (era == CE_BC) {
-                eyear = 1 - internalGet(YEAR, 1); // Convert to extended year
-            } else {
-                eyear = internalGet(YEAR, 1); // Default to year 1
-            }
-        }
-        return eyear;
+    protected int handleGetLimit(int field, int limitType) {
+        return LIMITS[field][limitType];
     }
 
-    /**
-     * @internal
-     */
-    protected void handleComputeFields(int julianDay) {
-        Integer[] date = getDateFromJD(julianDay, jdEpochOffset);
-        int _year  = date[0].intValue();
-        int _month = date[1].intValue();
-        int _day   = date[2].intValue();
-        int ceyear = 0;
-
-        int era = CE_AD;
-        if (_year <= 0) {
-            era   = CE_BC;
-            ceyear = 1 - _year;
-        } else {
-            ceyear = _year;
-        }
-
-        internalSet(MONTH, _month);
-        internalSet(DAY_OF_MONTH, _day);
-        internalSet(DAY_OF_YEAR, (30 * _month) + _day);
-        internalSet(EXTENDED_YEAR, _year);
-        internalSet(ERA, era);
-        internalSet(YEAR, ceyear);
-    }
+    //-------------------------------------------------------------------------
+    // Calendar framework
+    //-------------------------------------------------------------------------
 
     /**
-     * @internal
+     * Convert an Coptic/Ethiopic year, month and day to a Julian day
+     * @param year the extended year
+     * @param month the month
+     * @param day the day
+     * @return Julian day
      */
     public static int ceToJD(long year, int month, int date, int jdEpochOffset) {
 
@@ -272,7 +206,7 @@ class CECalendar extends Calendar {
         return (int) (
             (jdEpochOffset+365)     // difference from Julian epoch to 1,1,1
             + 365 * (year - 1)      // number of days from years
-            + quotient(year, 4)     // extra day of leap year
+            + floorDivide(year, 4)  // extra day of leap year
             + 30 * (month + 1)      // number of days from months
             + date                  // number of days for present month
             - 31                    // slack?
@@ -280,36 +214,22 @@ class CECalendar extends Calendar {
     }
 
     /**
-     * @internal
-     * @provisional This API might change or be removed in a future release.
+     * Convert a Julian day to an Coptic/Ethiopic year, month and day
      */
-    public static Integer[] getDateFromJD(int julianDay, int jdEpochOffset) {
-        // 1461 is the number of days in 4 years
-        long r4 = mod(julianDay - jdEpochOffset, 1461); // number of days within a 4 year period
-        long  n = mod(r4, 365) + 365 * quotient(r4, 1460);  // days in present year
+    public static void jdToCE(int julianDay, int jdEpochOffset, int[] fields) {
+        int c4; // number of 4 year cycle (1461 days)
+        int[] r4 = new int[1]; // remainder of 4 year cycle, always positive
 
-        long aprime = 4   // number of years in the leap year cycle
-            * quotient(julianDay - jdEpochOffset, 1461)  // number of 4 year periods between epochs?
-            + quotient(r4, 365)   // number of regular years?
-            - quotient(r4, 1460)  // number of 4 year periods?
-            - 1;
+        c4 = floorDivide(julianDay - jdEpochOffset, 1461, r4);
 
-        int _year   = (int) (aprime + 1);
-        int _month  = (int) (quotient(n, 30));
-        int _day    = mod(n, 30) + 1;
+        // exteded year
+        fields[0] = 4 * c4 + (r4[0]/365 - r4[0]/1460); // 4 * <number of 4year cycle> + <years within the last cycle>
 
-        return new Integer[]{ new Integer(_year), new Integer(_month), new Integer(_day) };
-    }
- 
-    /**
-     * These utility functions can be replaced by equivalent 
-     * functions from ICU if available.
-     */
-    static int mod(long i, int j) {
-        return (int) (i - (long) j * quotient(i, j));
-    }
-    
-    static int quotient(long i, int j) {
-        return (int) Math.floor((double) i / j);
+        int doy = (r4[0] == 1460) ? 365 : (r4[0] % 365); // days in present year
+
+        // month
+        fields[1] = doy / 30; // 30 -> Coptic/Ethiopic month length up to 12th month
+        // day
+        fields[2] = (doy % 30) + 1; // 1-based days in a month
     }
 }
