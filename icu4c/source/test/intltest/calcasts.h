@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2003-2007, International Business Machines Corporation 
+ * Copyright (c) 2003-2008, International Business Machines Corporation 
  * and others. All Rights Reserved.
  ********************************************************************
  * Calendar Case Test is a type of CalendarTest which compares the 
@@ -57,6 +57,8 @@ class CalendarCaseTest: public CalendarTest {
   void IslamicCivil();
   void Hebrew();
   void Indian();
+  void Coptic();
+  void Ethiopic();
 };
 
 #endif
