@@ -583,6 +583,14 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\cecal.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\cecal.h"
+				>
+			</File>
+			<File
 				RelativePath=".\chnsecal.cpp"
 				>
 			</File>
@@ -615,6 +623,14 @@
 						Outputs="..\..\include\unicode\$(InputFileName)"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\coptccal.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\coptccal.h"
+				>
 			</File>
 			<File
 				RelativePath=".\curramt.cpp"
@@ -843,6 +859,14 @@
 						Outputs="..\..\include\unicode\$(InputFileName)"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\ethpccal.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ethpccal.h"
+				>
 			</File>
 			<File
 				RelativePath=".\unicode\fieldpos.h"

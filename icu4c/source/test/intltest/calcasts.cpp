@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2003-2007, International Business Machines Corporation 
+ * Copyright (c) 2003-2008, International Business Machines Corporation 
  * and others. All Rights Reserved.
  ********************************************************************
  * Calendar Case Test is a type of CalendarTest which compares the 
@@ -15,6 +15,8 @@
 
 #include "hebrwcal.h" // for Eras
 #include "indiancal.h"
+#include "coptccal.h"
+#include "ethpccal.h"
 #include "unicode/datefmt.h"
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break
@@ -27,6 +29,8 @@ void CalendarCaseTest::runIndexedTest( int32_t index, UBool exec, const char* &n
     CASE(0,IslamicCivil);
     CASE(1,Hebrew);
     CASE(2,Indian);
+    CASE(3,Coptic);
+    CASE(4,Ethiopic);
     default: name = ""; break;
     }
 }
@@ -381,5 +385,96 @@ void CalendarCaseTest::Indian() {
 
     delete c;
 }
+
+void CalendarCaseTest::Coptic() {
+    static const TestCase tests[] = {
+        //      JD Era  Year  Month  Day WkDay  Hour Min Sec
+        {2401442.5,  1,  1579,    2,  20,  WED,    0,  0,  0}, // Gregorian: 20/10/1862
+        {2402422.5,  1,  1581,   10,  29,  WED,    0,  0,  0}, // Gregorian: 05/07/1865
+        {2402630.5,  1,  1582,    5,  22,  MON,    0,  0,  0}, // Gregorian: 29/01/1866
+        {2402708.5,  1,  1582,    8,  10,  TUE,    0,  0,  0}, // Gregorian: 17/04/1866
+        {2402971.5,  1,  1583,    4,  28,  SAT,    0,  0,  0}, // Gregorian: 05/01/1867
+        {2403344.5,  1,  1584,    5,   5,  MON,    0,  0,  0}, // Gregorian: 13/01/1868
+        {1721059.5,  0,   285,    5,   7,  SAT,    0,  0,  0}, // Gregorian: 01/01/0000
+        {1721425.5,  0,   284,    5,   8,  MON,    0,  0,  0}, // Gregorian: 01/01/0001
+        {1824663.5,  0,     2,   13,   6,  WED,    0,  0,  0}, // Gregorian: 29/08/0283
+        {1824664.5,  0,     1,    1,   1,  THU,    0,  0,  0}, // Gregorian: 30/08/0283
+        {1825029.5,  1,     1,    1,   1,  FRI,    0,  0,  0}, // Gregorian: 29/08/0284
+        {1825394.5,  1,     2,    1,   1,  SAT,    0,  0,  0}, // Gregorian: 29/08/0285
+        {1825759.5,  1,     3,    1,   1,  SUN,    0,  0,  0}, // Gregorian: 29/08/0286
+        {1826125.5,  1,     4,    1,   1,  TUE,    0,  0,  0}, // Gregorian: 30/08/0287
+        {1825028.5,  0,     1,   13,   5,  THU,    0,  0,  0}, // Gregorian: 28/08/0284
+        {1825393.5,  1,     1,   13,   5,  FRI,    0,  0,  0}, // Gregorian: 28/08/0285
+        {1825758.5,  1,     2,   13,   5,  SAT,    0,  0,  0}, // Gregorian: 28/08/0286
+        {1826123.5,  1,     3,   13,   5,  SUN,    0,  0,  0}, // Gregorian: 28/08/0287
+        {1826124.5,  1,     3,   13,   6,  MON,    0,  0,  0}, // Gregorian: 29/08/0287
+          // above is first coptic leap year
+        {1826489.5,  1,     4,   13,   5,  TUE,    0,  0,  0}, // Gregorian: 28/08/0288
+        {2299158.5,  1,  1299,    2,   6,  WED,    0,  0,  0}, // Gregorian: 13/10/1582
+        {2299159.5,  1,  1299,    2,   7,  THU,    0,  0,  0}, // Gregorian: 14/10/1582
+        {2299160.5,  1,  1299,    2,   8,  FRI,    0,  0,  0}, // Gregorian: 15/10/1582
+        {2299161.5,  1,  1299,    2,   9,  SAT,    0,  0,  0}, // Gregorian: 16/10/1582
+
+        {2415020.5,  1,  1616,    4,  23,  MON,    0,  0,  0}, // Gregorian: 01/01/1900
+        {2453371.5,  1,  1721,    4,  23,  SAT,    0,  0,  0}, // Gregorian: 01/01/2005
+        {2555528.5,  1,  2000,   13,   5,  FRI,    0,  0,  0}, // Gregorian: 12/09/2284
+        {       -1, -1,    -1,   -1,  -1,   -1,   -1, -1, -1}
+    };
+
+    UErrorCode status = U_ZERO_ERROR;
+    Calendar *c = Calendar::createInstance("cop_EG@calendar=coptic", status);
+    c->setLenient(TRUE);
+    doTestCases(tests, c);
+
+    delete c;
+}
+
+void CalendarCaseTest::Ethiopic() {
+    static const TestCase tests[] = {
+        //      JD Era  Year  Month  Day WkDay  Hour Min Sec
+        {2401442.5,  1,  1855,    2,  20,  WED,    0,  0,  0}, // Gregorian: 29/10/1862
+        {2402422.5,  1,  1857,   10,  29,  WED,    0,  0,  0}, // Gregorian: 05/07/1865
+        {2402630.5,  1,  1858,    5,  22,  MON,    0,  0,  0}, // Gregorian: 29/01/1866
+        {2402708.5,  1,  1858,    8,  10,  TUE,    0,  0,  0}, // Gregorian: 17/04/1866
+        {2402971.5,  1,  1859,    4,  28,  SAT,    0,  0,  0}, // Gregorian: 05/01/1867
+        {2403344.5,  1,  1860,    5,   5,  MON,    0,  0,  0}, // Gregorian: 13/01/1868
+        {1721059.5,  0,  5492,    5,   7,  SAT,    0,  0,  0}, // Gregorian: 01/01/0000
+        {1721425.5,  0,  5493,    5,   8,  MON,    0,  0,  0}, // Gregorian: 01/01/0001
+        {1723854.5,  0,  5499,   13,   6,  MON,    0,  0,  0}, // Gregorian: 27/08/0007
+
+        {1723855.5,  0,  5500,    1,   1,  TUE,    0,  0,  0}, // Gregorian: 28/08/0007
+        {1724220.5,  1,     1,    1,   1,  WED,    0,  0,  0}, // Gregorian: 27/08/0008
+        {1724585.5,  1,     2,    1,   1,  THU,    0,  0,  0}, // Gregorian: 27/08/0009
+        {1724950.5,  1,     3,    1,   1,  FRI,    0,  0,  0}, // Gregorian: 27/08/0010
+
+        //{1724536.5,  1,     4,    1,   1,  SUN,    0,  0,  0}, // Gregorian: 28/08/0011
+        {1725316.5,  1,     4,    1,   1,  SUN,    0,  0,  0}, // Gregorian: 28/08/0011 - dlf
+        {1724219.5,  0,  5500,   13,   5,  TUE,    0,  0,  0}, // Gregorian: 26/08/0008
+        {1724584.5,  1,     1,   13,   5,  WED,    0,  0,  0}, // Gregorian: 26/08/0009
+        {1724949.5,  1,     2,   13,   5,  THU,    0,  0,  0}, // Gregorian: 26/08/0010
+        {1725314.5,  1,     3,   13,   5,  FRI,    0,  0,  0}, // Gregorian: 26/08/0011
+        {1725315.5,  1,     3,   13,   6,  SAT,    0,  0,  0}, // Gregorian: 27/08/0011 - first ethiopic leap year
+        //{1725560.5,  1,     4,   13,   5,  SUN,    0,  0,  0}, // Gregorian: 26/08/0012 - dlf
+        {1725680.5,  1,     4,   13,   5,  SUN,    0,  0,  0}, // Gregorian: 26/08/0012
+        {2299158.5,  1,  1575,    2,   6,  WED,    0,  0,  0}, // Gregorian: 13/10/1582  
+        {2299159.5,  1,  1575,    2,   7,  THU,    0,  0,  0}, // Gregorian: 14/10/1582  Julian 04/10/1582
+
+        {2299160.5,  1,  1575,    2,   8,  FRI,    0,  0,  0}, // Gregorian: 15/10/1582
+        {2299161.5,  1,  1575,    2,   9,  SAT,    0,  0,  0}, // Gregorian: 16/10/1582
+
+        {2415020.5,  1,  1892,    4,  23,  MON,    0,  0,  0}, // Gregorian: 01/01/1900
+        {2453371.5,  1,  1997,    4,  23,  SAT,    0,  0,  0}, // Gregorian: 01/01/2005
+        {2454719.5,  1,  2000,   13,   5,  WED,    0,  0,  0}, // Gregorian: 10/09/2008
+        {       -1, -1,    -1,   -1,  -1,   -1,   -1, -1, -1}
+    };
+
+    UErrorCode status = U_ZERO_ERROR;
+    Calendar *c = Calendar::createInstance("am_ET@calendar=ethiopic", status);
+    c->setLenient(TRUE);
+    doTestCases(tests, c);
+
+    delete c;
+}
+
 
 #endif
