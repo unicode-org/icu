@@ -148,6 +148,7 @@ static const char * const gCalendarKeywords[] = {
         "indian",
         "coptic",
         "ethiopic",
+        "ethiopic-amete-alem",
         NULL
 };
 
@@ -209,7 +210,9 @@ static Calendar *createStandardCalendar(char *calType, const Locale &canLoc, UEr
     } else if(!uprv_strcmp(calType, "coptic")) {
         return new CopticCalendar(canLoc, status);
     } else if(!uprv_strcmp(calType, "ethiopic")) {
-        return new EthiopicCalendar(canLoc, status);
+        return new EthiopicCalendar(canLoc, status, EthiopicCalendar::AMETE_MIHRET_ERA);
+    } else if(!uprv_strcmp(calType, "ethiopic-amete-alem")) {
+        return new EthiopicCalendar(canLoc, status, EthiopicCalendar::AMETE_ALEM_ERA);
     } else { 
         status = U_UNSUPPORTED_ERROR;
         return NULL;
