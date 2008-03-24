@@ -25,6 +25,15 @@ class EthiopicCalendar : public CECalendar {
 
 public:
     /**
+     * Calendar type - use Amete Alem era for all the time or not
+     * @internal 
+     */
+    enum EEraType {
+        AMETE_MIHRET_ERA,
+        AMETE_ALEM_ERA
+    };
+
+    /**
      * Useful constants for EthiopicCalendar.
      * @internal
      */
@@ -107,9 +116,11 @@ public:
      * @param aLocale  The given locale.
      * @param success  Indicates the status of EthiopicCalendar object construction.
      *                 Returns U_ZERO_ERROR if constructed successfully.
+     * @param type     Whether this Ethiopic calendar use Amete Mihrret (default) or
+     *                 only use Amete Alem for all the time.
      * @internal
      */
-    EthiopicCalendar(const Locale& aLocale, UErrorCode& success);
+    EthiopicCalendar(const Locale& aLocale, UErrorCode& success, EEraType type = AMETE_MIHRET_ERA);
 
     /**
      * Copy Constructor
@@ -225,15 +236,15 @@ private:
     static void initializeSystemDefaultCentury(void);
 
     /**
-     * When isAmeteAlem is true, then this calendar use only AMETE_ALEM
+     * When eraType is AMETE_ALEM_ERA, then this calendar use only AMETE_ALEM
      * for the era. Otherwise (default), this calendar uses both AMETE_ALEM
      * and AMETE_MIHRET.
      *
-     * EXTENDED_YEAR     isAmeteAlem(false)   isAmeteAlem(true)
+     * EXTENDED_YEAR        AMETE_ALEM_ERA     AMETE_MIHRET_ERA
      *             0       Amete Alem 5500      Amete Alem 5500
      *             1        Amete Mihret 1      Amete Alem 5501
      */
-    UBool isAmeteAlem;
+    EEraType eraType;
 
 public:
     /**

@@ -430,7 +430,7 @@ void CalendarCaseTest::Coptic() {
 }
 
 void CalendarCaseTest::Ethiopic() {
-    static const TestCase tests[] = {
+    static TestCase tests[] = {
         //      JD Era  Year  Month  Day WkDay  Hour Min Sec
         {2401442.5,  1,  1855,    2,  20,  WED,    0,  0,  0}, // Gregorian: 29/10/1862
         {2402422.5,  1,  1857,   10,  29,  WED,    0,  0,  0}, // Gregorian: 05/07/1865
@@ -470,6 +470,21 @@ void CalendarCaseTest::Ethiopic() {
 
     UErrorCode status = U_ZERO_ERROR;
     Calendar *c = Calendar::createInstance("am_ET@calendar=ethiopic", status);
+    c->setLenient(TRUE);
+    doTestCases(tests, c);
+
+    delete c;
+
+    // Testing Amete Alem mode
+    int32_t i;
+    TestCase *tcase = tests;
+    for (i = 0; tcase[i].era >= 0; i++) {
+        if (tcase[i].era == 1) {
+            tcase[i].era = 0; // Change to Amete Alem era
+            tcase[i].year += 5500; // Amete Mihret 1 = Amete Alem 5501
+        }
+    }
+    c = Calendar::createInstance("am_ET@calendar=ethiopic-amete-alem", status);
     c->setLenient(TRUE);
     doTestCases(tests, c);
 
