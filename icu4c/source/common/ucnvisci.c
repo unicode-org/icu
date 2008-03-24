@@ -290,7 +290,7 @@ static const uint8_t validityTable[128] = {
 /*0xcc : 0xfe: 0x92e  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xcd : 0xff: 0x92f  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xcf : 0xff: 0x930  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
-/*0xd0 : 0x87: 0x931  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xd0 : 0x87: 0x931  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + MLM_MASK + TML_MASK ,
 /*0xd1 : 0xff: 0x932  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xd2 : 0xb7: 0x933  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + ZERO     + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xd3 : 0x83: 0x934  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + MLM_MASK + TML_MASK ,
@@ -921,8 +921,8 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
 
                 /* is the code point valid in current script? */
                 if((validityTable[(uint8_t)sourceChar] & converterData->currentMaskFromUnicode)==0){
-                    /* Vocallic RR is assigne in ISCII Telugu and Unicode */
-                    if(converterData->currentDeltaFromUnicode!=(TELUGU_DELTA) && sourceChar!=VOCALLIC_RR){
+                    /* Vocallic RR is assigned in ISCII Telugu and Unicode */
+                    if(converterData->currentDeltaFromUnicode!=(TELUGU_DELTA) || sourceChar!=VOCALLIC_RR){
                         targetByteUnit=missingCharMarker;
                     }
                 }
@@ -1049,7 +1049,7 @@ static const uint16_t lookupTable[][2]={
     if(sourceChar> ASCII_END &&                                                          \
             (validityTable[(uint8_t)targetUniChar] & data->currentMaskToUnicode)==0){    \
         /* Vocallic RR is assigne in ISCII Telugu and Unicode */                         \
-        if(data->currentDeltaToUnicode!=(TELUGU_DELTA) &&                                \
+        if(data->currentDeltaToUnicode!=(TELUGU_DELTA) ||                                \
                     targetUniChar!=VOCALLIC_RR){                                         \
             targetUniChar=missingCharMarker;                                             \
         }                                                                                \
