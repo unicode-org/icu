@@ -224,7 +224,7 @@ class CharsetISCII extends CharsetICU {
         /* 0xcc: 0xfe: 0x92e */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.ZERO,
         /* 0xcd: 0xff: 0x92f */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
         /* 0xcf: 0xff: 0x930 */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
-        /* 0xd0: 0x87: 0x931 */ MaskEnum.DEV_MASK + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
+        /* 0xd0: 0x87: 0x931 */ MaskEnum.DEV_MASK + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
         /* 0xd1: 0xff: 0x932 */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
         /* 0xd2: 0xb7: 0x933 */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.ZERO + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
         /* 0xd3: 0x83: 0x934 */ MaskEnum.DEV_MASK + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
@@ -1057,8 +1057,7 @@ class CharsetISCII extends CharsetICU {
             if (sourceChar > ASCII_END &&
                     (validityTable[(short)targetUniChar & UConverterConstants.UNSIGNED_BYTE_MASK] & data.currentMaskToUnicode) == 0) {
                 /* Vocallic RR is assigne in ISCII Telugu and Unicode */
-                if (data.currentDeltaToUnicode != (TELUGU_DELTA) &&
-                        targetUniChar != VOCALLIC_RR) {
+                if (data.currentDeltaToUnicode != (TELUGU_DELTA) || targetUniChar != VOCALLIC_RR) {
                     targetUniChar = UConverterConstants.missingCharMarker;
                 }
             }
@@ -1182,7 +1181,7 @@ class CharsetISCII extends CharsetICU {
                         /* is the code point valid in current script? */
                         if ((validityTable[(short)sourceChar & UConverterConstants.UNSIGNED_BYTE_MASK] & converterData.currentMaskFromUnicode) == 0) {
                             /* Vocallic RR is assigned in ISCII Telugu and Unicode */
-                            if (converterData.currentDeltaFromUnicode != (TELUGU_DELTA) && sourceChar != VOCALLIC_RR) {
+                            if (converterData.currentDeltaFromUnicode != (TELUGU_DELTA) || sourceChar != VOCALLIC_RR) {
                                 targetByteUnit = UConverterConstants.missingCharMarker;
                             }
                         }
