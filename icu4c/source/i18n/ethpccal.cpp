@@ -26,15 +26,17 @@ static const int32_t AMETE_MIHRET_DELTA = 5500; // 5501 - 1 (Amete Alem 5501 = A
 // Constructors...
 //-------------------------------------------------------------------------
 
-EthiopicCalendar::EthiopicCalendar(const Locale& aLocale, UErrorCode& success)
+EthiopicCalendar::EthiopicCalendar(const Locale& aLocale,
+                                   UErrorCode& success,
+                                   EEraType type /*= AMETE_MIHRET_ERA*/)
 :   CECalendar(aLocale, success),
-    isAmeteAlem(FALSE)
+    eraType(type)
 {
 }
 
 EthiopicCalendar::EthiopicCalendar(const EthiopicCalendar& other)
 :   CECalendar(other),
-    isAmeteAlem(other.isAmeteAlem)
+    eraType(other.eraType)
 {
 }
 
@@ -52,7 +54,7 @@ const char *
 EthiopicCalendar::getType() const
 {
     if (isAmeteAlemEra()) {
-        return "ethiopic_aa";
+        return "ethiopic-amete-alem";
     }
     return "ethiopic";
 }
@@ -60,13 +62,13 @@ EthiopicCalendar::getType() const
 void
 EthiopicCalendar::setAmeteAlemEra(UBool onOff)
 {
-    isAmeteAlem = onOff;
+    eraType = onOff ? AMETE_ALEM_ERA : AMETE_MIHRET_ERA;
 }
     
 UBool
 EthiopicCalendar::isAmeteAlemEra() const
 {
-    return isAmeteAlem;
+    return (eraType == AMETE_ALEM_ERA);
 }
 
 //-------------------------------------------------------------------------
