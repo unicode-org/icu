@@ -1646,10 +1646,11 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
     private static final int ISLAMIC_CIVIL = 8;
     private static final int JAPANESE = 9;
     private static final int TAIWAN = 10;
+    private static final int ETHIOPIC_AMETE_ALEM = 11;
 
     private static final String[] calTypes = {
         "buddhist", "chinese", "coptic", "ethiopic", "gregorian", "hebrew", 
-        "indian", "islamic", "islamic-civil", "japanese", "taiwan"
+        "indian", "islamic", "islamic-civil", "japanese", "taiwan", "ethiopic-amete-alem"
     };
 
     private static int getCalendarType(ULocale l) {
@@ -1763,6 +1764,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
             return new CopticCalendar(zone, locale);
         case ETHIOPIC:
             return new EthiopicCalendar(zone, locale);
+        case ETHIOPIC_AMETE_ALEM:
+            EthiopicCalendar ethiopicAA = new EthiopicCalendar(zone, locale);
+            ethiopicAA.setAmeteAlemEra(true);
+            return ethiopicAA;
         case GREGORIAN:
             return new GregorianCalendar(zone, locale);
         case HEBREW:
