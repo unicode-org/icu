@@ -197,7 +197,7 @@ abstract class CECalendar extends Calendar {
      * @param day the day
      * @return Julian day
      */
-    public static int ceToJD(long year, int month, int date, int jdEpochOffset) {
+    public static int ceToJD(long year, int month, int day, int jdEpochOffset) {
 
         // Julian<->Ethiopic algorithms from:
         // "Calendars in Ethiopia", Berhanu Beyene, Manfred Kudlek, International Conference
@@ -208,7 +208,7 @@ abstract class CECalendar extends Calendar {
             + 365 * (year - 1)      // number of days from years
             + floorDivide(year, 4)  // extra day of leap year
             + 30 * (month + 1)      // number of days from months
-            + date                  // number of days for present month
+            + day                   // number of days for present month
             - 31                    // slack?
             );
     }
