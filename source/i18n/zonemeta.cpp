@@ -324,7 +324,6 @@ ZoneMeta::createCanonicalMap(void) {
     numZones = tzenum->count(status);
     if (U_SUCCESS(status)) {
         int32_t i;
-        UnicodeString derefZone;
         for (i = 0; i < numZones; i++) {
             const UnicodeString *zone = tzenum->snext(status);
             if (U_FAILURE(status)) {
@@ -337,15 +336,19 @@ ZoneMeta::createCanonicalMap(void) {
                 // Already included in CLDR data
                 continue;
             }
-            // Check if this is a canonical (dereferenced) zone in the tzdata
-            TimeZone::dereferOlsonLink(*zone, derefZone);
-            if (derefZone.length() == 0) {
-                // Unknown?
-                continue;
-            } else if (derefZone != *zone) {
-                // This is a link in the tzdata.
-                // Check if the canonical zone is already in the canonical map.
-                entry = (CanonicalMapEntry*)canonicalMap->get(derefZone);
+            // Not in CLDR data, but it could be new one whose alias is available
+            // in CLDR.
+            int32_t nTzdataEquivalent = TimeZone::countEquivalentIDs(*zone);
+            int32_t j;
+            for (j = 0; j < nTzdataEquivalent; j++) {
+                UnicodeString alias = TimeZone::getEquivalentID(*zone, j);
+                if (alias == *zone) {
+                    continue;
+                }
+                entry = (CanonicalMapEntry*)canonicalMap->get(alias);
+                if (entry != NULL) {
+                    break;
+                }
             }
             // Create a new map entry
             CanonicalMapEntry* newEntry = (CanonicalMapEntry*)uprv_malloc(sizeof(CanonicalMapEntry));
@@ -356,6 +359,12 @@ ZoneMeta::createCanonicalMap(void) {
             }
             if (entry == NULL) {
                 // Set dereferenced zone ID as the canonical ID
+                UnicodeString derefZone;
+                TimeZone::dereferOlsonLink(*zone, derefZone);
+                if (derefZone.length() == 0) {
+                    // It should never happen.. but just in case
+                    derefZone = *zone;
+                }
                 idLen = derefZone.length() + 1;
                 newEntry->id = (UChar*)uprv_malloc(idLen * sizeof(UChar));
                 if (newEntry->id == NULL) {
