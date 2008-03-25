@@ -1053,10 +1053,10 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Initialize format symbols for the locale and calendar type
      * @param desiredLocale The locale whose symbols are desired.
      * @param calData       The calendar resource data
-     * @stable ICU 3.0
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
-    //FIXME: This protected method must not be a stable API, because
-    // CalendarData is a non API class   
+    // This API was accidentally marked as @stable ICU 3.0 formerly.
     protected void initializeData(ULocale desiredLocale, CalendarData calData)
     {
         // FIXME: cache only ResourceBundle. Hence every time, will do
@@ -1550,11 +1550,15 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * (just before the class name) and "Symbols" appended to the end.
      * For example, the bundle corresponding to "com.ibm.icu.util.HebrewCalendar"
      * is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
-     * @stable ICU 2.0
+     * <p>
+     * <b>Note:</b>Because of the structural changes in the ICU locale bundle,
+     * this API no longer works as described.  This method always returns null.
+     * @deprecated ICU 4.0
      */
+    // This API was formerly @stable ICU 2.0
     static public ResourceBundle getDateFormatBundle(Class calendarClass, Locale locale)
         throws MissingResourceException {
-        return getDateFormatBundle(calendarClass, ULocale.forLocale(locale));
+        return null;
     }
         
     /**
@@ -1566,57 +1570,45 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * (just before the class name) and "Symbols" appended to the end.
      * For example, the bundle corresponding to "com.ibm.icu.util.HebrewCalendar"
      * is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
-     * @stable ICU 3.2
+     * <p>
+     * <b>Note:</b>Because of the structural changes in the ICU locale bundle,
+     * this API no longer works as described.  This method always returns null.
+     * @deprecated ICU 4.0
      */
+    // This API was formerly @stable ICU 3.2
     static public ResourceBundle getDateFormatBundle(Class calendarClass, ULocale locale)
         throws MissingResourceException {
-        
-        // Find the calendar's class name, which we're going to use to construct the
-        // resource bundle name.
-        String fullName = calendarClass.getName();
-        int lastDot = fullName.lastIndexOf('.');
-        String className = fullName.substring(lastDot+1);
-
-        String bundleName = className + "Symbols";
-
-        UResourceBundle result = null;
-        try {
-            result = UResourceBundle.getBundleInstance(bundleName, locale);
-        }
-        catch (MissingResourceException e) {
-            ///CLOVER:OFF
-            // coverage requires test without data, so skip
-            //if (!(cal instanceof GregorianCalendar)) {
-            if (!(GregorianCalendar.class.isAssignableFrom(calendarClass))) {
-                // Ok for symbols to be missing for a Gregorian calendar, but
-                // not for any other type.
-                throw e;
-            }
-            ///CLOVER:ON
-        }
-        return result;
+        return null;
     }
 
     /**
      * Variant of getDateFormatBundle(java.lang.Class, java.util.Locale) that takes
      * a Calendar instance instead of a Calendar class.
+     * <p>
+     * <b>Note:</b>Because of the structural changes in the ICU locale bundle,
+     * this API no longer works as described.  This method always returns null.
      * @see #getDateFormatBundle(java.lang.Class, java.util.Locale)
-     * @stable ICU 2.2
+     * @deprecated ICU 4.0
      */
+    // This API was formerly @stable ICU 2.2
     public static ResourceBundle getDateFormatBundle(Calendar cal, Locale locale)
         throws MissingResourceException {
-        return getDateFormatBundle(cal.getClass(), ULocale.forLocale(locale));
+        return null;
     }
     
     /**
      * Variant of getDateFormatBundle(java.lang.Class, java.util.Locale) that takes
      * a Calendar instance instead of a Calendar class.
+     * <p>
+     * <b>Note:</b>Because of the structural changes in the ICU locale bundle,
+     * this API no longer works as described.  This method always returns null.
      * @see #getDateFormatBundle(java.lang.Class, java.util.Locale)
-     * @stable ICU 3.2
+     * @deprecated ICU 4.0
      */
+    // This API was formerly @stable ICU 3.2
     public static ResourceBundle getDateFormatBundle(Calendar cal, ULocale locale)
         throws MissingResourceException {
-        return getDateFormatBundle(cal.getClass(), locale);
+        return null;
     }
 
     // Return the calendar type string for the given locale
