@@ -262,21 +262,28 @@ public final class ZoneMeta {
                         // Already included in CLDR data
                         continue;
                     }
-                    // Check if this is a canonical zone in the tzdata
-                    UResourceBundle res = getZoneByName(top, ids[i]);
-                    if (res.getSize() == 1) {
-                        // This is an alias in the tzdata
-                        // Check if the canonical zone is already in the canonical map
-                        int deref = res.getInt();
-                        String[] tmpinfo = (String[])m.get(ids[deref]);
-                        if (tmpinfo != null) {
-                            m.put(ids[i], tmpinfo);
-                        } else {
-                            m.put(ids[i], new String[] {ids[deref], null});
+                    // Not in CLDR data, but it could be new one whose alias is
+                    // available in CLDR
+                    String[] tmpinfo = null;
+                    int nTzdataEquivalent = TimeZone.countEquivalentIDs(ids[i]);
+                    for (int j = 0; j < nTzdataEquivalent; j++) {
+                        String alias = TimeZone.getEquivalentID(ids[i], j);
+                        if (alias.equals(ids[i])) {
+                            continue;
                         }
+                        tmpinfo = (String[])m.get(alias);
+                        if (tmpinfo != null) {
+                            break;
+                        }
+                    }
+                    if (tmpinfo == null) {
+                        // Set dereferenced zone ID as the canonical ID
+                        UResourceBundle res = getZoneByName(top, ids[i]);
+                        String derefID = (res.getSize() == 1) ? ids[res.getInt()] : ids[i];
+                        m.put(ids[i], new String[] {derefID, null});
                     } else {
-                        // This is a canonical zone
-                        m.put(ids[i], new String[] {ids[i], null});
+                        // Use the canonical ID in the existing entry
+                        m.put(ids[i], tmpinfo);
                     }
                 }
             } catch (MissingResourceException ex) {
