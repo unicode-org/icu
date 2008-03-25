@@ -137,9 +137,12 @@ public final class EthiopicCalendar extends CECalendar
     private static final int AMETE_ALEM = 0;
     private static final int AMETE_MIHRET = 1;
 
-    // Era mode.  When isAmeteAlem is true,
+    // Era mode.  When eraType is AMETE_ALEM_ERA,
     // Amete Mihret won't be used for the ERA field.
-    private boolean isAmeteAlem = false;
+    private static final int AMETE_MIHRET_ERA = 0;
+    private static final int AMETE_ALEM_ERA = 1;
+
+    private int eraType = AMETE_MIHRET_ERA;
 
     /**
      * Constructs a default <code>EthiopicCalendar</code> using the current time
@@ -258,7 +261,7 @@ public final class EthiopicCalendar extends CECalendar
      */
     public String getType() {
         if (isAmeteAlemEra()) {
-            return "ethiopic_aa";
+            return "ethiopic-amete-alem";
         }
         return "ethiopic";
     }
@@ -270,7 +273,7 @@ public final class EthiopicCalendar extends CECalendar
      * @stable ICU 3.4
      */
     public void setAmeteAlemEra(boolean onOff) {
-        isAmeteAlem = onOff;
+        eraType = onOff ? AMETE_ALEM_ERA : AMETE_MIHRET_ERA;
     }
     
     /**
@@ -280,7 +283,7 @@ public final class EthiopicCalendar extends CECalendar
      * @stable ICU 3.4
      */
     public boolean isAmeteAlemEra() {
-        return isAmeteAlem;
+        return (eraType == AMETE_ALEM_ERA);
     }
 
     /**
