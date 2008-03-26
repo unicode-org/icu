@@ -39,6 +39,8 @@ static Hashtable *gPluralRuleLocaleHash=NULL;
 
 U_NAMESPACE_BEGIN
 
+#define ARRAY_SIZE(array) (int32_t)(sizeof array  / sizeof array[0])
+
 // TODO: Plural rule data - will move to ResourceBundle.
 #define NUMBER_PLURAL_RULES 13
 static const UChar uCharPluralRules[NUMBER_PLURAL_RULES][128] = {
@@ -429,9 +431,7 @@ PluralRules::getNumberValue(const UnicodeString& token) const {
     int32_t i;
     char digits[128];
 
-    for (i=0; i<token.length() && i<127; ++i) {
-      digits[i]=(char)token.charAt(i);
-    }
+    i = token.extract(0, token.length(), digits, ARRAY_SIZE(digits), US_INV);
     digits[i]='\0';
 
     return((int32_t)atoi(digits));
