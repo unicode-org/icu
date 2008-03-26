@@ -243,7 +243,7 @@ void IntlTestSimpleDateFormatAPI::testAPI(/*char *par*/)
     ParsePosition pp(0);
     object.applyPattern("YYYY'W'wwe");
     UDate udDate = object.parse("2007W014", pp);
-    if ((long)udDate == 0) {
+    if ((double)udDate == 0.0) {
         errln("ERROR: Parsing failed using 'Y' and 'e'");
     }
 }
