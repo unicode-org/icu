@@ -30,8 +30,8 @@ my $p1;
 my $p2;
 
 if ($OnWindows) {
-	$p1 = $ICUPathPrevious."utfperf/Release/utfperf.exe -e gb18030"; # Previous
-    $p2 = $ICUPathLatest."utfperf/Release/utfperf.exe -e gb18030"; # Latest
+	$p1 = $ICUPathPrevious."utfperf/Release/utfperf/utfperf.exe -e gb18030"; # Previous
+    $p2 = $ICUPathLatest."utfperf/Release/utfperf/utfperf.exe -e gb18030"; # Latest
 } else {
 	$p1 = $ICUPathPrevious."utfperf/utfperf -e gb18030"; # Previous
 	$p2 = $ICUPathLatest."utfperf/utfperf -e gb18030"; # Latest
