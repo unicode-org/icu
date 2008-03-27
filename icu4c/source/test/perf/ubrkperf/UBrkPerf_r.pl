@@ -1,26 +1,27 @@
-#!/usr/bin/perl
+#!perl
 #  ********************************************************************
-#  * Copyright (c) 2002-2007, International Business Machines
+#  * Copyright (c) 2002-2008, International Business Machines
 #  * Corporation and others. All Rights Reserved.
 #  ********************************************************************
 
-use strict;
+#use strict;
 
-#Assume we are running outside of the icu source
-use lib './icu-3.0/icu/source/test/perf/perldriver';
+require "../perldriver/Common.pl";
+
+use lib '../perldriver';
 
 use PerfFramework;
 
 my $options = {
-	       "title"=>"BreakIterator performance regression (ICU 2.8 and 3.0)",
-	       "headers"=>"ICU28 ICU30",
+	       "title"=>"BreakIterator performance regression: ICU (".$ICUPreviousVersion." and ".$ICULatestVersion.")",
+           "headers"=>"ICU".$ICUPreviousVersion." ICU".$ICULatestVersion,
 	       "operationIs"=>"code point",
 	       "eventIs"=>"break",
 	       "passes"=>"10",
 	       "time"=>"5",
 	       #"outputType"=>"HTML",
-	       "dataDir"=>"c:/src/perf/data",
-	       "outputDir"=>"results_ICU4C"
+	       "dataDir"=>$CollationDataPath,
+	       "outputDir"=>"../results"
 	      };
 
 # programs
@@ -38,8 +39,16 @@ if(@_ >= 0) {
   $m = $m1;
 }
 
-my $p1 = "icu-2.8/icu/bin/ubrkperf28.exe";
-my $p2 = "icu-3.0/icu/bin/ubrkperf30.exe";
+my $p1; # Previous
+my $p2; # Latest
+
+if ($OnWindows) {
+	$p1 = $ICUPathPrevious."/ubrkperf/Release/ubrkperf.exe";
+    $p2 = $ICUPathLatest."/ubrkperf/Release/ubrkperf.exe";
+} else {
+	$p1 = $ICUPathPrevious."/ubrkperf/ubrkperf";
+	$p2 = $ICUPathLatest."/ubrkperf/ubrkperf";
+}
 
 my $dataFiles = {
 "en", [		  
@@ -55,7 +64,7 @@ my $dataFiles = {
        "TestNames_Thai.txt",
        "Testnames_Russian.txt",
 ],
-#"th", ["TestNames_Thai.txt", "th18057.txt"]
+"th", ["TestNames_Thai.txt", "th18057.txt"]
 };
 
 

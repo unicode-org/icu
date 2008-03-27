@@ -1,31 +1,38 @@
-#!/usr/bin/perl -w
+#!perl
 #  ********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2002-2003, International Business Machines Corporation and
+#  * Copyright (c) 2002-2008, International Business Machines Corporation and
 #  * others. All Rights Reserved.
 #  ********************************************************************
 
-use strict;
+#use strict;
+
+require "../perldriver/Common.pl";
 
 use lib '../perldriver';
 
 use PerfFramework;
 
+# This test only works on Windows.
+if (!$OnWindows) {
+	print "This test only works on Windows.\n";
+    exit(1);
+}
 
 my $options = {
-	       "title"=>"Conversion Performance: ICU 2.6 vs. Windows2000 IMultiLanguage Interface",
-	       "headers"=>"Windows2000(IMultiLanguage2) ICU",
+	       "title"=>"Conversion Performance: ICU".$ICULatestVersion." vs. WindowsXP IMultiLanguage Interface",
+	       "headers"=>"WindowsXP(IMultiLanguage2) ICU".$ICULatestVersion,
 	       "operationIs"=>"code point",
 	       "passes"=>"10",
 	       "time"=>"5",
 	       #"outputType"=>"HTML",
-	       "dataDir"=>"c:/src/perf/data",
+	       "dataDir"=>"Not Using Data Files",
 	       "outputDir"=>"../results"
 	      };
 
 # programs
 # tests will be done for all the programs. Results will be stored and connected
-my $p = "release/convperf.exe";
+my $p = $ICUPathLatest."/convperf/Release/convperf.exe";
 
 my $tests = { 
 	     "UTF-8 From Unicode",          ["$p TestWinIML2_UTF8_FromUnicode"  ,    "$p TestICU_UTF8_FromUnicode" ],

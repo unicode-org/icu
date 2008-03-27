@@ -1,31 +1,39 @@
-#!/usr/bin/perl -w
+#!perl
 #  ********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2005, International Business Machines Corporation and
+#  * Copyright (c) 2005-2008, International Business Machines Corporation and
 #  * others. All Rights Reserved.
 #  ********************************************************************
 
-use strict;
+#use strict;
+
+require "../perldriver/Common.pl";
 
 use lib '../perldriver';
 
 use PerfFramework;
 
 
+
 my $options = {
-	       "title"=>"Uset performance: ICU",
-	       "headers"=>"ICU",
+	       "title"=>"Uset performance: ICU ".$ICULatestVersion,
+	       "headers"=>"ICU".$ICULatestVersion,
 	       "operationIs"=>"unicode string",
 	       "passes"=>"1",
 	       "time"=>"2",
 	       #"outputType"=>"HTML",
-	       "dataDir"=>"../data",
-	       "outputDir"=>"../results"
+	       "dataDir"=>"Not Using Data Files",
+           "outputDir"=>"../results"
 	      };
 
 # programs
 # tests will be done for all the programs. Results will be stored and connected
-my $p = "debug/usetperf.exe ";
+my $p;
+if ($OnWindows) {
+	$p = $ICUPathLatest."/usetperf/Release/usetperf.exe";
+} else {
+	$p = $ICUPathLatest."/usetperf/usetperf";
+} 
 
 my $tests = { 
 	     "titlecase_letter/add",  ["$p titlecase_letter_add"],

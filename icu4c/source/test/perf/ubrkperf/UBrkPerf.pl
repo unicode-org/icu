@@ -1,26 +1,28 @@
-#!/usr/bin/perl
+#!perl
 #  ********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2002, International Business Machines Corporation and
+#  * Copyright (c) 2002-2008, International Business Machines Corporation and
 #  * others. All Rights Reserved.
 #  ********************************************************************
 
-use strict;
+#use strict;
+
+require "../perldriver/Common.pl";
 
 use lib '../perldriver';
 
 use PerfFramework;
 
 my $options = {
-	       "title"=>"BreakIterator performance regression (ICU 2.0, 2.2 and 2.4)",
-	       "headers"=>"ICU20 ICU22 ICU24",
+	       "title"=>"BreakIterator performance regression (ICU ".$ICUPrevious2Version.", ".$ICUPreviousVersion." and ".$ICULatestVersion.")",
+	       "headers"=>"ICU".$ICUPrevious2Version." ICU".$ICUPreviousVersion." ICU".$ICULatestVersion,
 	       "operationIs"=>"code point",
 	       "eventIs"=>"break",
 	       "passes"=>"10",
 	       "time"=>"5",
 	       #"outputType"=>"HTML",
-	       "dataDir"=>"c:/src/perf/data",
-	       "outputDir"=>"../results"
+	       "dataDir"=>$CollationDataPath,
+           "outputDir"=>"../results"
 	      };
 
 # programs
@@ -38,14 +40,24 @@ if(@_ >= 0) {
   $m = $m1;
 }
 
-my $p1 = "ubrkperf20.exe";
-my $p2 = "ubrkperf22.exe";
-my $p3 = "ubrkperf24.exe";
+my $p1; # Before Previous
+my $p2; # Previous
+my $p3; # Latest
+
+if ($OnWindows) {
+	$p1 = $ICUPathPrevious2."/ubrkperf/Release/ubrkperf.exe";
+	$p2 = $ICUPathPrevious."/ubrkperf/Release/ubrkperf.exe";
+	$p3 = $ICUPathLatest."/ubrkperf/Release/ubrkperf.exe";
+} else {
+	$p1 = $ICUPathPrevious2."/ubrkperf/ubrkperf";
+	$p2 = $ICUPathPrevious."/ubrkperf/ubrkperf";
+	$p3 = $ICUPathLatest."/ubrkperf/ubrkperf";
+}
 
 my $dataFiles = {
 "en", ["thesis.txt", 
-       #"2drvb10.txt", 
-       #"ulyss10.txt",  
+       "2drvb10.txt", 
+       "ulyss10.txt",  
        "nvsbl10.txt", 
        "vfear11a.txt", 		  
        "TestNames_Asian.txt",
@@ -60,7 +72,7 @@ my $dataFiles = {
        "TestNames_Thai.txt",
        "Testnames_Russian.txt",
 ],
-#"th", ["TestNames_Thai.txt", "th18057.txt"]
+"th", ["TestNames_Thai.txt", "th18057.txt"]
 };
 
 

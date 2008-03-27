@@ -1,33 +1,41 @@
-#!/usr/bin/perl
+#!perl
 #  ********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2002-2007, International Business Machines
+#  * Copyright (c) 2002-2008, International Business Machines
 #  * Corporation and others. All Rights Reserved.
 #  ********************************************************************
 
-use strict;
+#use strict;
 
-#Assume we are running outside of the icu source
-use lib './icu-3.0/icu/source/test/perf/perldriver';
+require "../perldriver/Common.pl";
+
+use lib '../perldriver';
 
 use PerfFramework;
 
 my $options = {
-	       "title"=>"Character property performance regression (ICU 2.8 and 3.0)",
-	       "headers"=>"ICU28 ICU30",
+	       "title"=>"Character property performance regression: ICU (".$ICUPreviousVersion." and ".$ICULatestVersion.")",
+           "headers"=>"ICU".$ICUPreviousVersion." ICU".$ICULatestVersion,
 	       "operationIs"=>"code point",
 	       "timePerOperationIs"=>"Time per code point",
 	       "passes"=>"10",
 	       "time"=>"5",
 	       #"outputType"=>"HTML",
-	       "dataDir"=>"c:/src/perf/data",
-	       "outputDir"=>"results_ICU4C"
+	       "dataDir"=>"Not Using Data Files",
+	       "outputDir"=>"../results"
 	      };
 
 # programs
 
-my $p1 = "icu-2.8/icu/bin/charperf28.exe";
-my $p2 = "icu-3.0/icu/bin/charperf30.exe";
+my $p1; # Previous
+my $p2; # Latest
+if ($OnWindows) {
+	$p1 = $ICUPathPrevious."/charperf/Release/charperf.exe";
+	$p2 = $ICUPathLatest."/charperf/Release/charperf.exe";
+} else {
+	$p1 = $ICUPathPrevious."/charperf/charperf";
+    $p2 = $ICUPathLatest."/charperf/charperf";
+}
 
 my $dataFiles = "";
 
