@@ -1,12 +1,16 @@
-#!/usr/bin/perl -w
+#!perl
 #  ********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2005-2007, International Business Machines Corporation and
+#  * Copyright (c) 2005-2008, International Business Machines Corporation and
 #  * others. All Rights Reserved.
 #  ********************************************************************
 
-use strict;
+#use strict;
+
+require "../perldriver/Common.pl";
+
 use lib '../perldriver';
+
 use PerfFramework;
 
 my $options = {
@@ -16,13 +20,18 @@ my $options = {
 	       "passes"=>"3",
 	       "time"=>"2",
 	       #"outputType"=>"HTML",
-	       "dataDir"=>"/temp/udhr",
-	       "outputDir"=>"../results"
+	       "dataDir"=>$UDHRDataPath,
+           "outputDir"=>"../results"
 	      };
 
 # programs
 # tests will be done for all the programs. Results will be stored and connected
-my $p =   "Release/unisetperf.exe -e UTF-8";
+my $p;
+if ($OnWindows) {
+	$p = $ICUPathLatest."/unisetperf/Release/unisetperf.exe";
+} else {
+	$p = $ICUPathLatest."/unisetperf/unisetperf";
+}
 my $pc =  "$p Contains";
 my $p16 = "$p SpanUTF16";
 my $p8 =  "$p SpanUTF8";
@@ -40,12 +49,13 @@ my $dataFiles = {
 		 "",
 		 [
 		  "udhr_eng.txt",
-          "udhr_deu.txt",
+          "udhr_deu_1996.txt",
           "udhr_fra.txt",
           "udhr_rus.txt",
           "udhr_tha.txt",
           "udhr_jpn.txt",
-          "udhr_cmn.txt",
+          "udhr_cmn_hans.txt",
+          "udhr_cmn_hant.txt",
           "udhr_jpn.html"
 		 ]
 		};
@@ -59,7 +69,7 @@ $options = {
 	       "passes"=>"3",
 	       "time"=>"2",
 	       #"outputType"=>"HTML",
-	       "dataDir"=>"/temp/udhr",
+	       "dataDir"=>$UDHRDataPath,
 	       "outputDir"=>"../results"
 	      };
 

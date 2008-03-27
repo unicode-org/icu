@@ -1,32 +1,41 @@
 #!/usr/bin/perl
 #  ********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2002-2007, International Business Machines
+#  * Copyright (c) 2002-2008, International Business Machines
 #  * Corporation and others. All Rights Reserved.
 #  ********************************************************************
 
-use strict;
+#use strict;
 
-#Assume we are running outside of the ICU source
-use lib './ICU-3.0/ICU/source/test/perf/perldriver';
+use lib '../perldriver';
+
+require "../perldriver/Common.pl";
 
 use PerfFramework;
 
 my $options = {
-	       "title"=>"Unicode String performance regression (ICU 2.8 and 3.0)",
-	       "headers"=>"ICU28 ICU30",
+	       "title"=>"Unicode String performance regression: ICU (".$ICUPreviousVersion." and ".$ICULatestVersion.")",
+           "headers"=>"ICU".$ICUPreviousVersion." ICU".$ICULatestVersion,
 	       "operationIs"=>"Unicode String",
 	       "passes"=>"10",
 	       "time"=>"5",
 	       #"outputType"=>"HTML",
-	       "dataDir"=>"c:/src/perf/data",
-	       "outputDir"=>"results_ICU4C"
+	       "dataDir"=>$CollationDataPath,
+           "outputDir"=>"../results"
 	      };
 
 # programs
 
-my $p1 = "icu-2.8/icu/bin/stringperf28.exe -b -u";
-my $p2 = "icu-3.0/icu/bin/stringperf30.exe -b -u";
+my $p1; # Previous
+my $p2; # Latest
+
+if ($OnWindows) {
+	$p1 = $ICUPathPrevious."/ustrperf/Release/ustrperf.exe -b -u"; # Previous
+    $p2 = $ICUPathLatest."/ustrperf/Release/ustrperf.exe -b -u"; # Latest
+} else {
+	$p1 = $ICUPathPrevious."/ustrperf/ustrperf -b -u"; # Previous
+    $p2 = $ICUPathLatest."/ustrperf/ustrperf -b -u"; # Latest
+}
 
 my $dataFiles = {
 		 "",
@@ -42,9 +51,9 @@ my $dataFiles = {
 		  "TestNames_SerbianSR.txt",
 		  "TestNames_Thai.txt",
 		  "Testnames_Russian.txt",
-#		  "th18057.txt",
-#		  "thesis.txt",
-#		  "vfear11a.txt",
+		  "th18057.txt",
+		  "thesis.txt",
+		  "vfear11a.txt",
 		 ]
 		};
 
