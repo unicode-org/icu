@@ -5,7 +5,7 @@
 #  * others. All Rights Reserved.
 #  ********************************************************************
 
-use strict;
+#use strict;
 
 require "../perldriver/Common.pl";
 
