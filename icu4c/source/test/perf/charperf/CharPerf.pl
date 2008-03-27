@@ -1,33 +1,40 @@
-#!/usr/bin/perl -w
+#!perl
 #  ********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2002, International Business Machines Corporation and
+#  * Copyright (c) 2002-2008, International Business Machines Corporation and
 #  * others. All Rights Reserved.
 #  ********************************************************************
 
 
-use strict;
+#use strict;
+
+require "../perldriver/Common.pl";
 
 use lib '../perldriver';
 
 use PerfFramework;
 
 my $options = {
-	       "title"=>"Character property performance: ICU vs. STDLib",
-	       "headers"=>"StdLib ICU",
+	       "title"=>"Character property performance: ICU".$ICULatestVersion." vs. STDLib",
+	       "headers"=>"StdLib ICU".$ICULatestVersion,
 	       "operationIs"=>"code point",
 	       "timePerOperationIs"=>"Time per code point",
 	       "passes"=>"10",
 	       "time"=>"5",
 	       #"outputType"=>"HTML",
-	       "dataDir"=>"c:/src/perf/data",
-	       "outputDir"=>"../results"
+	       "dataDir"=>"Not Using Data Files",
+           "outputDir"=>"../results"
 	      };
 
 
 # programs
 # tests will be done for all the programs. Results will be stored and connected
-my $p = "charperf.exe";
+my $p;
+if ($OnWindows) {
+    $p = $ICUPathLatest."/charperf/Release/charperf.exe";
+} else {
+	$p = $ICUPathLatest."/charperf/charperf";
+}
 
 my $tests = { 
 "isAlpha",        ["$p TestStdLibIsAlpha"        , "$p TestIsAlpha"        ],

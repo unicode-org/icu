@@ -1,33 +1,40 @@
-#!/usr/bin/perl -w
+#!perl
 #  ********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2003-2004, International Business Machines Corporation and
+#  * Copyright (c) 2003-2008, International Business Machines Corporation and
 #  * others. All Rights Reserved.
 #  ********************************************************************
 
 
-use strict;
+#use strict;
+
+require "../perldriver/Common.pl";
 
 use lib '../perldriver';
 
 use PerfFramework;
 
 my $options = {
-	       "title"=>"Unicode String performance: ICU vs. STDLib",
-	       "headers"=>"StdLib ICU",
+	       "title"=>"Unicode String performance: ICU ".$ICULatestVersion." vs. STDLib",
+	       "headers"=>"StdLib ICU".$ICULatestVersion,
 	       "operationIs"=>"Unicode String",
 	       "timePerOperationIs"=>"Time per Unicode String",
 	       "passes"=>"5",
 	       "time"=>"2",
 	       #"outputType"=>"HTML",
-	       "dataDir"=>"c:/src/perf/data",
-	       "outputDir"=>"../results"
+	       "dataDir"=>$CollationDataPath,
+           "outputDir"=>"../results"
 	      };
 
 
 # programs
 # tests will be done for all the programs. Results will be stored and connected
-my $p = "stringperf.exe -l -u";
+my $p;
+if ($OnWindows) {
+	$p = $ICUPathLatest."/ustrperf/Release/ustrperf.exe -l -u";
+} else {
+	$p = $ICUPathLatest."/ustrperf/ustrperf -l -u";
+}
 
 my $tests = { 
 "Object Construction(empty string)",      ["$p TestStdLibCtor"         , "$p TestCtor"         ],

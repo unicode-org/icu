@@ -1,7 +1,7 @@
 #!/usr/local/bin/perl
 #  ***********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2002-2004, International Business Machines Corporation
+#  * Copyright (c) 2002-2008, International Business Machines Corporation
 #  * and others. All Rights Reserved.
 #  ***********************************************************************
 
@@ -306,7 +306,7 @@ sub callProg {
         }
 
         else {
-            die "Can't parse: $_";
+            # die "Can't parse: $_";
         }
     }
 
