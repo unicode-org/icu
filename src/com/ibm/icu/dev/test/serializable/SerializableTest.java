@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -292,21 +292,25 @@ public class SerializableTest extends TestFmwk.TestGroup
         public Object[] getTestObjects()
         {
             TimeZoneAdapter timeZones[] = new TimeZoneAdapter[zoneIDs.length];
-            
+
             for (int i = 0; i < zoneIDs.length; i += 1) {
                 timeZones[i] = new TimeZoneAdapter(TimeZone.getTimeZone(zoneIDs[i]));
             }
-            
+
             return timeZones;
-                
+
         }
         
         public boolean hasSameBehavior(Object a, Object b)
         {
             TimeZoneAdapter tza_a = (TimeZoneAdapter) a;
             TimeZoneAdapter tza_b = (TimeZoneAdapter) b;
-            
-            return tza_a.hasSameRules(tza_b);
+
+            if (!tza_a.getID().equals(tza_b.getID())
+                || tza_a.getRawOffset() != tza_b.getRawOffset()) {
+                return false;
+            }
+            return true;
         }
     }
     
