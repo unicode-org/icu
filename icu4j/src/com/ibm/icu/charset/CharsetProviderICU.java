@@ -109,16 +109,16 @@ public final class CharsetProviderICU extends CharsetProvider{
         String ret = null;
         try{
             if(enc!=null){
-                if((canonicalName = UConverterAlias.getCanonicalName(enc, "MIME"))!=null){
-                    ret = canonicalName;
-                }else if((canonicalName = UConverterAlias.getCanonicalName(enc, "IANA"))!=null){
-                    ret = canonicalName;
-                }/*else if((canonicalName = UConverterAlias.getCanonicalName(enc, ""))!=null){
-                    ret = canonicalName;
-                }*/else if((canonicalName = UConverterAlias.getAlias(enc, 0))!=null){
+                if((canonicalName = UConverterAlias.getAlias(enc, 0))!=null){
                     /* we have some aliases in the form x-blah .. match those first */
                     ret = canonicalName;
-                }else if(enc.indexOf("x-")==0){
+                } else if((canonicalName = UConverterAlias.getCanonicalName(enc, "MIME"))!=null){
+                    ret = canonicalName;
+                } else if((canonicalName = UConverterAlias.getCanonicalName(enc, "IANA"))!=null){
+                    ret = canonicalName;
+                } /*else if((canonicalName = UConverterAlias.getCanonicalName(enc, ""))!=null){
+                    ret = canonicalName;
+                }*/else if(enc.indexOf("x-")==0){
                     /* TODO: Match with getJavaCanonicalName method */
                     /*
                     char temp[ UCNV_MAX_CONVERTER_NAME_LENGTH] = {0};
