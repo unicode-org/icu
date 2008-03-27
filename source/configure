@@ -8396,7 +8396,7 @@ then
     CXXFLAGS="$CXXFLAGS \$(THREADSCXXFLAGS)"
 fi
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ac_config_files="$ac_config_files icudefs.mk Makefile data/icupkg.inc config/Makefile.inc data/Makefile stubdata/Makefile common/Makefile i18n/Makefile layout/Makefile layoutex/Makefile io/Makefile extra/Makefile extra/uconv/Makefile extra/scrptrun/Makefile tools/Makefile tools/ctestfw/Makefile tools/toolutil/Makefile tools/makeconv/Makefile tools/genrb/Makefile tools/genuca/Makefile tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/genctd/Makefile tools/gennames/Makefile tools/gentest/Makefile tools/gennorm/Makefile tools/genprops/Makefile tools/gencase/Makefile tools/genbidi/Makefile tools/genpname/Makefile tools/genbrk/Makefile tools/gensprep/Makefile tools/icupkg/Makefile tools/icuswap/Makefile tools/pkgdata/Makefile tools/tzcode/Makefile test/Makefile test/compat/Makefile test/testdata/Makefile test/testdata/pkgdata.inc test/hdrtst/Makefile test/intltest/Makefile test/cintltst/Makefile test/iotest/Makefile test/letest/Makefile samples/Makefile samples/date/Makefile samples/cal/Makefile samples/layout/Makefile common/unicode/platform.h"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ac_config_files="$ac_config_files icudefs.mk Makefile data/icupkg.inc config/Makefile.inc data/Makefile stubdata/Makefile common/Makefile i18n/Makefile layout/Makefile layoutex/Makefile io/Makefile extra/Makefile extra/uconv/Makefile extra/scrptrun/Makefile tools/Makefile tools/ctestfw/Makefile tools/toolutil/Makefile tools/makeconv/Makefile tools/genrb/Makefile tools/genuca/Makefile tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/genctd/Makefile tools/gennames/Makefile tools/gentest/Makefile tools/gennorm/Makefile tools/genprops/Makefile tools/gencase/Makefile tools/genbidi/Makefile tools/genpname/Makefile tools/genbrk/Makefile tools/gensprep/Makefile tools/icupkg/Makefile tools/icuswap/Makefile tools/pkgdata/Makefile tools/tzcode/Makefile test/Makefile test/compat/Makefile test/testdata/Makefile test/testdata/pkgdata.inc test/hdrtst/Makefile test/intltest/Makefile test/cintltst/Makefile test/iotest/Makefile test/letest/Makefile test/perf/Makefile test/perf/collationperf/Makefile test/perf/ubrkperf/Makefile test/perf/charperf/Makefile test/perf/convperf/Makefile test/perf/normperf/Makefile test/perf/unisetperf/Makefile test/perf/usetperf/Makefile test/perf/ustrperf/Makefile test/perf/utfperf/Makefile samples/Makefile samples/date/Makefile samples/cal/Makefile samples/layout/Makefile common/unicode/platform.h"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -8968,6 +8968,16 @@ do
   "test/cintltst/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/cintltst/Makefile" ;;
   "test/iotest/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/iotest/Makefile" ;;
   "test/letest/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/letest/Makefile" ;;
+  "test/perf/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/perf/Makefile" ;;
+  "test/perf/collationperf/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/perf/collationperf/Makefile" ;;
+  "test/perf/ubrkperf/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/perf/ubrkperf/Makefile" ;;
+  "test/perf/charperf/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/perf/charperf/Makefile" ;;
+  "test/perf/convperf/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/perf/convperf/Makefile" ;;
+  "test/perf/normperf/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/perf/normperf/Makefile" ;;
+  "test/perf/unisetperf/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/perf/unisetperf/Makefile" ;;
+  "test/perf/usetperf/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/perf/usetperf/Makefile" ;;
+  "test/perf/ustrperf/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/perf/ustrperf/Makefile" ;;
+  "test/perf/utfperf/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/perf/utfperf/Makefile" ;;
   "samples/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/Makefile" ;;
   "samples/date/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/date/Makefile" ;;
   "samples/cal/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/cal/Makefile" ;;
