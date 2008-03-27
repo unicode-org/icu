@@ -1,4 +1,4 @@
-#!perl
+#!/usr/bin/perl
 #  ********************************************************************
 #  * COPYRIGHT:
 #  * Copyright (c) 2008, International Business Machines Corporation and
@@ -22,7 +22,7 @@ $CollationDataPath = $PerformanceDataPath."/collation";    # Collation Performan
 $ConversionDataPath = $PerformanceDataPath."/conversion";  # Conversion Performance Data Path
 $UDHRDataPath = $PerformanceDataPath."/udhr";              # UDHR Performance Data Path
 
-$ICUPathLatest = $ICULatest."/antbuild/test/perf";
+$ICUPathLatest = $ICULatest."/source/test/perf";
 $ICUPathPrevious = $ICUPrevious."/source/test/perf";
 $ICUPathPrevious2 = $ICUPrevious."/source/test/perf";
 
