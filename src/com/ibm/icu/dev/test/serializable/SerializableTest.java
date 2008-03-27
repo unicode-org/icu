@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -204,7 +204,22 @@ public class SerializableTest extends TestFmwk.TestGroup
             "Europe/Amsterdam", "Europe/Athens", "Europe/Berlin", "Europe/London", "Europe/Malta", "Europe/Moscow",
             "Europe/Paris", "Europe/Rome"
         };
-        
+
+        long sampleTimes[] = {
+            1136073600000L, // 20060101T000000Z
+            1138752000000L, // 20060201T000000Z
+            1141171200000L, // 20060301T000000Z
+            1143849600000L, // 20060401T000000Z
+            1146441600000L, // 20060501T000000Z
+            1149120000000L, // 20060601T000000Z
+            1151712000000L, // 20060701T000000Z
+            1154390400000L, // 20060801T000000Z
+            1157068800000L, // 20060901T000000Z
+            1159660800000L, // 20061001T000000Z
+            1162339200000L, // 20061101T000000Z
+            1164931200000L, // 20061201T000000Z
+        };
+
         public Object[] getTestObjects()
         {
             OlsonTimeZone timeZones[] = new OlsonTimeZone[zoneIDs.length];
@@ -221,14 +236,19 @@ public class SerializableTest extends TestFmwk.TestGroup
         {
             OlsonTimeZone otz_a = (OlsonTimeZone) a;
             OlsonTimeZone otz_b = (OlsonTimeZone) b;
-            long now = System.currentTimeMillis();
             int a_offsets[] = {0, 0};
             int b_offsets[] = {0, 0};
-            
-            otz_a.getOffset(now, false, a_offsets);
-            otz_b.getOffset(now, false, b_offsets);
-            
-            return a_offsets[0] == b_offsets[0] && a_offsets[1] == b_offsets[1];
+
+            boolean bSame = true;
+            for (int i = 0; i < sampleTimes.length; i++) {
+                otz_a.getOffset(sampleTimes[i], false, a_offsets);
+                otz_b.getOffset(sampleTimes[i], false, b_offsets);
+                if (a_offsets[0] != b_offsets[0] || a_offsets[1] != b_offsets[1]) {
+                    bSame = false;
+                    break;
+                }
+            }
+            return bSame;
         }
     }
     
@@ -297,8 +317,12 @@ public class SerializableTest extends TestFmwk.TestGroup
         {
             TimeZoneAdapter tza_a = (TimeZoneAdapter) a;
             TimeZoneAdapter tza_b = (TimeZoneAdapter) b;
-            
-            return tza_a.hasSameRules(tza_b);
+
+            if (!tza_a.getID().equals(tza_b.getID())
+                || tza_a.getRawOffset() != tza_b.getRawOffset()) {
+                return false;
+            }
+            return true;
         }
     }
     

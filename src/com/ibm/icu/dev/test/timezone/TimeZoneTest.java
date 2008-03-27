@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -113,7 +113,7 @@ public class TimeZoneTest extends TestFmwk
             new ZoneDescriptor("EST", -300, false),// updated Aug 2003 aliu
             new ZoneDescriptor("PRT", -240, false),
             new ZoneDescriptor("CNT", -210, true),
-            new ZoneDescriptor("AGT", -180, false),
+            new ZoneDescriptor("AGT", -180, true), // updated by tzdata 2007k
             new ZoneDescriptor("BET", -180, true),
             // new ZoneDescriptor("CAT", -60, false), // Wrong:
             // As of bug 4130885, fix CAT (Central Africa)

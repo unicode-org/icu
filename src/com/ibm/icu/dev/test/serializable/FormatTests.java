@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -22,6 +22,7 @@ import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -191,8 +192,18 @@ public class FormatTests
             DateFormat dfa = (DateFormat) a;
             DateFormat dfb = (DateFormat) b;
             Date date = new Date(System.currentTimeMillis());
-            
-           return dfa.format(date).equals(dfb.format(date));
+
+            // To absorb potential time zone rule differences...
+            TimeZone tza = dfa.getTimeZone();
+            TimeZone tzb = dfb.getTimeZone();
+            String tzid = tza.getID();
+            if (!tzid.equals(tzb.getID())) {
+                return false;
+            }
+            TimeZone tz = TimeZone.getTimeZone(tzid);
+            dfa.setTimeZone(tz);
+            dfb.setTimeZone(tz);
+            return dfa.format(date).equals(dfb.format(date));
         }
         
     }
