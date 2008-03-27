@@ -72,6 +72,7 @@ icu4c/source/test/intltest/dadrfmt.cpp -text
 icu4c/source/test/intltest/dadrfmt.h -text
 icu4c/source/test/intltest/fldset.cpp -text
 icu4c/source/test/intltest/fldset.h -text
+icu4c/source/test/perf/Makefile.in -text
 icu4c/source/test/perf/convperf/Makefile.in -text
 icu4c/source/test/testdata/TestFont1.otf -text
 icu4c/source/test/testdata/icu26_testtypes.res -text
