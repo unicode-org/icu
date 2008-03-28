@@ -267,7 +267,7 @@
     </javac>
   </target>
 
-  <target name="doMangle">
+  <target name="doMangle" unless="dontMangle">
     <echo message="Running source code preprocessor for [${target.defs}]"/>
     <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
       <arg value="-d${target.defs}" />
