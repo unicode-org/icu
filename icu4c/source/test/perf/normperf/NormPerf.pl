@@ -25,13 +25,7 @@ my $options = {
 
 # programs
 # tests will be done for all the programs. Results will be stored and connected
-my $p;
-
-if ($OnWindows) {
-	$p = $ICUPathLatest."/normperf/normperf -b -u";
-} else {
-	$p = $ICUPathLatest."/normperf/Release/normperf.exe -b -u";
-}
+my $p = $ICUPathLatest."/normperf/Release/normperf.exe -b -u";
 
 my $tests = { 
 	     "NFC_NFD_Text",  ["$p TestWin_NFC_NFD_Text"  ,  "$p TestICU_NFC_NFD_Text" ],
