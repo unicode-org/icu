@@ -31,9 +31,9 @@ my $options = {
 # tests will be done for all the programs. Results will be stored and connected
 my $p;
 if ($OnWindows) {
-	$p = $ICUPathLatest."/ustrperf/Release/ustrperf.exe -l -u";
+	$p = $ICUPathLatest."/ustrperf/Release/stringperf.exe -l -u";
 } else {
-	$p = $ICUPathLatest."/ustrperf/ustrperf -l -u";
+	$p = $ICUPathLatest."/ustrperf/stringperf -l -u";
 }
 
 my $tests = { 
