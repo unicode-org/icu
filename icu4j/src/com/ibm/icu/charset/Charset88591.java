@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2006-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2006-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -14,6 +14,8 @@ import java.nio.CharBuffer;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
+
+import com.ibm.icu.text.UnicodeSet;
 
 class Charset88591 extends CharsetASCII {
     public Charset88591(String icuCanonicalName, String javaCanonicalName, String[] aliases) {
@@ -107,5 +109,8 @@ class Charset88591 extends CharsetASCII {
     public CharsetEncoder newEncoder() {
         return new CharsetEncoder88591(this);
     }
-
+    
+    void getUnicodeSetImpl( UnicodeSet setFillIn, int which){
+        setFillIn.add(0,0xff);
+     }
 }

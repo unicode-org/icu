@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2006-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2006-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -17,6 +17,7 @@ import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 
 /**
  * @author Niti Hantaweepant
@@ -683,5 +684,10 @@ class CharsetUTF8 extends CharsetICU {
 
     public CharsetEncoder newEncoder() {
         return new CharsetEncoderUTF8(this);
+    }
+    
+    
+    void getUnicodeSetImpl( UnicodeSet setFillIn, int which){
+        getNonSurrogateUnicodeSet(setFillIn);
     }
 }

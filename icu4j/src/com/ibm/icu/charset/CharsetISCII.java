@@ -14,6 +14,7 @@ import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 
 /**
  * @author Michael Ow
@@ -221,7 +222,7 @@ class CharsetISCII extends CharsetICU {
         /* 0xc9: 0xfe: 0x92b */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.ZERO,
         /* 0xca: 0xfe: 0x92c */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.ZERO,
         /* 0xcb: 0xfe: 0x92d */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.ZERO,
-        /* 0xcc: 0xfe: 0x92e */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.ZERO,
+        /* 0xcc: 0xfe: 0x92e */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
         /* 0xcd: 0xff: 0x92f */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
         /* 0xcf: 0xff: 0x930 */ MaskEnum.DEV_MASK + MaskEnum.PNJ_MASK + MaskEnum.GJR_MASK + MaskEnum.ORI_MASK + MaskEnum.BNG_MASK + MaskEnum.KND_MASK + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
         /* 0xd0: 0x87: 0x931 */ MaskEnum.DEV_MASK + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.ZERO + MaskEnum.MLM_MASK + MaskEnum.TML_MASK,
@@ -1269,5 +1270,26 @@ class CharsetISCII extends CharsetICU {
     
     public CharsetEncoder newEncoder() {
         return new CharsetEncoderISCII(this);
+    }
+    
+    void getUnicodeSetImpl( UnicodeSet setFillIn, int which){
+        int idx,script;
+        char mask;
+        
+        setFillIn.add(0,ASCII_END );
+        for(script = UniLang.DEVALANGARI ; script<= UniLang.MALAYALAM ;script++){
+            mask = (char)lookupInitialData[script].maskEnum;
+            for(idx=0; idx < UniLang.DELTA ; idx++){
+                // Special check for telugu character
+                if((validityTable[idx] & mask)!=0 || (script == UniLang.TELUGU && idx==0x31)){ 
+                   setFillIn.add(idx+(script*UniLang.DELTA)+INDIC_BLOCK_BEGIN );
+                }
+            }
+        }
+        setFillIn.add(DANDA);
+        setFillIn.add(DOUBLE_DANDA);
+        setFillIn.add(ZWNJ);
+        setFillIn.add(ZWJ);
+             
     }
 }

@@ -21,10 +21,12 @@ import java.util.Iterator;
 import com.ibm.icu.charset.CharsetCallback;
 import com.ibm.icu.charset.CharsetEncoderICU;
 import com.ibm.icu.charset.CharsetDecoderICU;
+import com.ibm.icu.charset.CharsetICU;
 import com.ibm.icu.charset.CharsetProviderICU;
 import com.ibm.icu.dev.test.ModuleTest;
 import com.ibm.icu.dev.test.TestDataModule.DataMap;
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.text.UnicodeSet;
 
 /**
  * This maps to convtest.c which tests the test file for data-driven conversion tests. 
@@ -828,6 +830,7 @@ public class TestConversion extends ModuleTest {
         return checkResultsToUnicode(cc, cc.unicode, cc.toUnicodeResult);
     }
 
+    
     private void TestGetUnicodeSet(DataMap testcase) {
         /*
          * charset - will be opened, and ucnv_getUnicodeSet() called on it //
@@ -836,19 +839,93 @@ public class TestConversion extends ModuleTest {
          * returned set // which - numeric UConverterUnicodeSet value Headers {
          * "charset", "map", "mapnot", "which" }
          */
+       
+        
+  // retrieve test case data
         ConversionCase cc = new ConversionCase();
-        // retrieve test case data
+        CharsetProviderICU provider = new CharsetProviderICU();
+        CharsetICU charset  ;
+       
+             
+        UnicodeSet mapset = new UnicodeSet();
+        UnicodeSet mapnotset = new UnicodeSet();
+        UnicodeSet unicodeset = new UnicodeSet();
+        String ellipsis = "0x2e";
         cc.charset = ((ICUResourceBundle) testcase.getObject("charset"))
                 .getString();
         cc.map = ((ICUResourceBundle) testcase.getObject("map")).getString();
         cc.mapnot = ((ICUResourceBundle) testcase.getObject("mapnot"))
                 .getString();
-        cc.which = ((ICUResourceBundle) testcase.getObject("which")).getUInt();
-
-        // create charset and encoder for each test case
-        logln("TestGetUnicodeSet not supported at this time");
-
+        
+     
+        int which = 1; // only checking for ROUNDTRIP_SET
+       try{
+           // if cc.charset starts with '*', obtain it from com/ibm/icu/dev/data/testdata
+           charset = (cc.charset != null && cc.charset.length() > 0 && cc.charset.charAt(0) == '*')
+                   ? (CharsetICU) provider.charsetForName(cc.charset.substring(1), "../dev/data/testdata")
+                   : (CharsetICU) provider.charsetForName(cc.charset);
+           
+                  
+           
+                  
+           //checking for converter that are not supported at this point        
+           try{
+               if(charset.name()=="BOCU-1" ||charset.name()== "SCSU"|| charset.name()=="lmbcs1" || charset.name()== "lmbcs2" 
+           
+               || charset.name()== "lmbcs3" || charset.name()== "lmbcs4" || charset.name()=="lmbcs5" || charset.name()=="lmbcs6" ||
+               charset.name()== "lmbcs8" || charset.name()=="lmbcs11" || charset.name()=="lmbcs16" || charset.name()=="lmbcs17" || charset.name()=="lmbcs18"
+                  || charset.name()=="lmbcs19"){
+               logln("Converter not supported at this point :" +charset.displayName());
+               }
+               
+           }catch(Exception e){
+               return;
+           }
+           mapset.clear();
+           mapnotset.clear();
+                   
+           mapset.applyPattern(cc.map.toString(),false);
+           mapnotset.applyPattern(cc.mapnot,false);
+           charset.getUnicodeSet(unicodeset, which);
+           UnicodeSet diffset = new UnicodeSet();
+                     
+           //are there items that must be in unicodeset but are not?
+          
+           (diffset = mapset).removeAll(unicodeset);
+           
+           if(!diffset.isEmpty()){
+               StringBuffer s = new StringBuffer(diffset.toPattern(true));
+               if(s.length()>100){
+                   s.replace(0, 0x7fffffff, ellipsis);
+               }
+               logln("error in missing items - conversion/getUnicodeSet test case "+cc.charset);
+               logln(s.toString());
+           }
+           
+          //are the items that must not be in unicodeset but are?
+           
+           
+           (diffset=mapnotset).retainAll(unicodeset);
+           
+           if(!diffset.isEmpty()){
+               StringBuffer s = new StringBuffer(diffset.toPattern(true));
+               if(s.length()>100){
+                   s.replace(0, 0x7fffffff, ellipsis);
+               }
+               logln("contains unexpected items - conversion/getUnicodeSet test case "+cc.charset);
+               logln(s.toString());
+           }
+         
+         } catch (Exception e) {
+             logln("getUnicodeSet returned an error code");
+             logln("ErrorCode expected is: " + cc.outErrorCode);
+             logln("Error Result is: " + e.toString());
+             return;
+       } 
+      
     }
+
+    
 
     /**
      * This follows ucnv.c method ucnv_detectUnicodeSignature() to detect the
