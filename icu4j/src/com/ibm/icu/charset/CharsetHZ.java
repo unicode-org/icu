@@ -14,6 +14,7 @@ import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 
 public class CharsetHZ extends CharsetICU {
 
@@ -341,5 +342,11 @@ public class CharsetHZ extends CharsetICU {
 
     public CharsetEncoder newEncoder() {
         return new CharsetEncoderHZ(this);
+    }
+    
+    void getUnicodeSetImpl( UnicodeSet setFillIn, int which){
+        setFillIn.add(0,0x7f);
+       // CharsetMBCS mbcshz = (CharsetMBCS)CharsetICU.forNameICU("icu-internal-25546");
+        gbCharset.MBCSGetFilteredUnicodeSetForUnicode(gbCharset.sharedData, setFillIn, which, CharsetMBCS.UCNV_SET_FILTER_HZ);
     }
 }

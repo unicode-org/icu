@@ -14,6 +14,7 @@ import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 
 /**
  * @author Niti Hantaweepant
@@ -279,5 +280,9 @@ class CharsetUTF16 extends CharsetICU {
 
     public CharsetEncoder newEncoder() {
         return new CharsetEncoderUTF16(this);
+    }
+    
+    void getUnicodeSetImpl( UnicodeSet setFillIn, int which){
+        getNonSurrogateUnicodeSet(setFillIn);            
     }
 }

@@ -6,6 +6,8 @@
  */
 package com.ibm.icu.charset;
 
+import com.ibm.icu.text.UnicodeSet;
+
 /**
  * The purpose of this class is to set isCESU8 to true in the super class, and to allow the Charset framework to open
  * the variant UTF-8 converter without extra setup work. CESU-8 encodes/decodes supplementary characters as 6 bytes
@@ -14,5 +16,11 @@ package com.ibm.icu.charset;
 class CharsetCESU8 extends CharsetUTF8 {
     public CharsetCESU8(String icuCanonicalName, String javaCanonicalName, String[] aliases) {
         super(icuCanonicalName, javaCanonicalName, aliases);
+    }
+    
+    
+    void getUnicodeSetImpl( UnicodeSet setFillIn, int which){
+        getCompleteUnicodeSet(setFillIn);
+            
     }
 }

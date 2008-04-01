@@ -26,12 +26,25 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.InvalidFormatException;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.charset.UConverterConstants;
 
 class CharsetMBCS extends CharsetICU {
 
     private byte[] fromUSubstitution = null;
     UConverterSharedData sharedData = null;
     private static final int MAX_VERSION_LENGTH = 4;
+    
+ // these variables are used in getUnicodeSet() and may be changed in future
+    // typedef enum UConverterSetFilter {
+      static final int UCNV_SET_FILTER_NONE = 1;
+      static final int UCNV_SET_FILTER_DBCS_ONLY = 2;
+      static final int UCNV_SET_FILTER_2022_CN = 3;
+      static final int UCNV_SET_FILTER_SJIS= 4 ;
+      static final int UCNV_SET_FILTER_GR94DBCS = 5;
+      static final int UCNV_SET_FILTER_HZ = 6;
+      static final int UCNV_SET_FILTER_COUNT = 7;
+   //  } UConverterSetFilter;
 
     /**
      * Fallbacks to Unicode are stored outside the normal state table and code point structures in a vector of items of
@@ -4780,6 +4793,356 @@ class CharsetMBCS extends CharsetICU {
 
     public CharsetEncoder newEncoder() {
         return new CharsetEncoderMBCS(this);
+    }
+    
+    void MBCSGetFilteredUnicodeSetForUnicode(UConverterSharedData data, UnicodeSet setFillIn, int which, int filter){
+        UConverterMBCSTable mbcsTable;
+        char[] table;
+        char st1,maxStage1, st2;
+        int st3;
+        int c ;
+        
+        mbcsTable = data.mbcs;
+        table = mbcsTable.fromUnicodeTable; 
+        if((mbcsTable.unicodeMask & UConverterConstants.HAS_SUPPLEMENTARY)!=0){
+            maxStage1 = 0x440;
+        }
+        else{
+            maxStage1 = 0x40;
+        }
+        c=0; /* keep track of current code point while enumerating */
+        
+        if(mbcsTable.outputType==MBCS_OUTPUT_1){
+            char stage2, stage3;
+            char minValue;
+            CharBuffer results;
+            results = ByteBuffer.wrap(mbcsTable.fromUnicodeBytes).asCharBuffer();
+                                   
+            if(which==ROUNDTRIP_SET) {
+                /* use only roundtrips */
+                minValue=0xf00;
+            } else {
+                /* use all roundtrip and fallback results */
+                minValue=0x800;
+            }
+            for(st1=0;st1<maxStage1;++st1){
+                st2 = table[st1];
+                if(st2>maxStage1){
+                    stage2 = st2;
+                    for(st2=0; st2<64; ++st2){
+                        st3 = table[stage2 + st2];
+                        if(st3!=0){
+                            /*read the stage 3 block */
+                            stage3 = (char)st3;
+                            do {
+                                if(results.get(stage3++)>=minValue){
+                                     setFillIn.add(c);
+                                }
+                               
+                            }while((++c&0xf) !=0);
+                          } else {
+                            c+= 16; /*empty stage 2 block */
+                        }
+                    }
+                } else {
+                    c+=1024; /* empty stage 2 block */
+                }
+            }
+        } else {
+            int stage2,stage3;
+            byte[] bytes;
+            int st3Multiplier;
+            int value;
+            boolean useFallBack;
+            bytes = mbcsTable.fromUnicodeBytes;
+            useFallBack = (which == ROUNDTRIP_AND_FALLBACK_SET);
+            switch(mbcsTable.outputType) {
+            case MBCS_OUTPUT_3:
+            case MBCS_OUTPUT_4_EUC:
+                st3Multiplier = 3;
+                break;
+            case MBCS_OUTPUT_4:
+                st3Multiplier =4;
+                break;
+            default:
+                st3Multiplier =2;
+                break;
+            }
+            //ByteBuffer buffer = (ByteBuffer)charTobyte(table);
+            
+            for(st1=0;st1<maxStage1;++st1){
+                st2 = table[st1]; 
+                if(st2>(maxStage1>>1)){
+                    stage2 =  st2 ;
+                    for(st2=0;st2<128;++st2){
+                        /*read the stage 3 block */
+                        st3 = table[stage2*2 + st2]<<16;
+                        st3+=table[stage2*2 + ++st2];
+                        if(st3!=0){
+                        //if((st3=table[stage2+st2])!=0){
+                            stage3 = st3Multiplier*16*(int)(st3&UConverterConstants.UNSIGNED_SHORT_MASK);
+                            
+                            /* get the roundtrip flags for the stage 3 block */
+                            st3>>=16;
+                            st3 &= UConverterConstants.UNSIGNED_SHORT_MASK;
+                            switch(filter) {
+                            case UCNV_SET_FILTER_NONE:
+                                do {
+                                    
+                                   if((st3&1)!=0){
+                                        setFillIn.add(c);
+                                        stage3+=st3Multiplier;
+                                   }else if (useFallBack) {
+                                        
+                                        char b =0;
+                                        switch(st3Multiplier) {
+                                        case 4 :
+                                           
+                                            b|= ByteBuffer.wrap(bytes).getChar(stage3++);
+                                           
+                                        case 3 :
+                                            
+                                            b|= ByteBuffer.wrap(bytes).getChar(stage3++);
+                                           
+                                        case 2 :
+                                           
+                                            b|= ByteBuffer.wrap(bytes).getChar(stage3) | ByteBuffer.wrap(bytes).getChar(stage3+1);
+                                            stage3+=2;
+                                        default:
+                                            break;
+                                        }
+                                        if(b!=0) {
+                                            setFillIn.add(c);
+                                        }
+                                    }
+                                    st3>>=1;
+                                }while((++c&0xf)!=0);
+                                break;
+                            case UCNV_SET_FILTER_DBCS_ONLY:
+                                /* Ignore single bytes results (<0x100). */
+                                do {
+                                    if(((st3&1) != 0 || useFallBack) && (UConverterConstants.UNSIGNED_SHORT_MASK & (ByteBuffer.wrap(bytes).getChar(stage3))) >= 0x100){
+                                        setFillIn.add(c);
+                                    }
+                                    st3>>=1;
+                                    stage3+=2;
+                                }while((++c&0xf) != 0);
+                               break;
+                            case UCNV_SET_FILTER_2022_CN :
+                                /* only add code points that map to CNS 11643 planes 1&2 for non-EXT ISO-2202-CN. */
+                                do {
+                                    if(((st3&1) != 0 || useFallBack) && ((value= (UConverterConstants.UNSIGNED_BYTE_MASK & (ByteBuffer.wrap(bytes).get(stage3))))==0x81
+                                            || value==0x82) ){
+                                        setFillIn.add(c);
+                                    }
+                                    st3>>=1;
+                                    stage3+=3;
+                                }while((++c&0xf)!=0);
+                                break;
+                            case UCNV_SET_FILTER_SJIS:
+                                /* only add code points that map tp Shift-JIS codes corrosponding to JIS X 0280. */
+                                do{
+                                    
+                                    if(((st3&1) != 0 || useFallBack) && (value=(UConverterConstants.UNSIGNED_SHORT_MASK & (ByteBuffer.wrap(bytes).getChar(stage3))))>=0x8140 && value<=0xeffc){
+                                        setFillIn.add(c);
+                                    }
+                                    st3>>=1;
+                                    stage3+=2;
+                                }while((++c&0xf)!=0);
+                                break;
+                            case UCNV_SET_FILTER_GR94DBCS:
+                                /* only add code points that maps to ISO 2022 GR 94 DBCS codes*/
+                                do {
+                                    if(((st3&1) != 0 || useFallBack) && (UConverterConstants.UNSIGNED_SHORT_MASK & ((value=(UConverterConstants.UNSIGNED_SHORT_MASK & (ByteBuffer.wrap(bytes).getChar(stage3))))- 0xa1a1))<=(0xfefe - 0xa1a1) && 
+                                            ( UConverterConstants.UNSIGNED_BYTE_MASK & (value - 0xa1)) <= (0xfe - 0xa1)){
+                                        setFillIn.add(c);
+                                    }
+                                    st3>>=1;
+                                    stage3+=2;
+                                }while((++c&0xf)!=0);
+                                break;
+                            case UCNV_SET_FILTER_HZ:
+                                /*Only add code points that are suitable for HZ DBCS*/
+                                do {
+                                    if( ((st3&1) != 0 || useFallBack) && (UConverterConstants.UNSIGNED_SHORT_MASK & ((value=(UConverterConstants.UNSIGNED_SHORT_MASK & (ByteBuffer.wrap(bytes).getChar(stage3))))-0xa1a1))<=(0xfdfe - 0xa1a1) &&
+                                            (UConverterConstants.UNSIGNED_BYTE_MASK & (value - 0xa1)) <= (0xfe - 0xa1)){
+                                        setFillIn.add(c);
+                                    }
+                                    st3>>=1;
+                                    stage3+=2;
+                                }while((++c&0xf) != 0);
+                                break;
+                            default:
+                                return;
+                            }
+                        } else {
+                            c+=16; /* empty stage 3 block */
+                        }
+                    }
+                } else {
+                    c+=1024; /*empty stage2 block */
+                }
+            }
+        }
+        extGetUnicodeSet(setFillIn, which, filter, data);
+    }
+   
+    static void extGetUnicodeSetString(ByteBuffer cx,UnicodeSet setFillIn, boolean useFallback, 
+            int minLength, int c, char s[],int length,int sectionIndex){
+        CharBuffer fromUSectionUChar;
+        IntBuffer fromUSectionValues;
+        fromUSectionUChar = (CharBuffer)ARRAY(cx, EXT_FROM_U_UCHARS_INDEX,char.class );
+        fromUSectionValues = (IntBuffer)ARRAY(cx, EXT_FROM_U_VALUES_INDEX,int.class );
+        int fromUSectionUCharIndex = fromUSectionUChar.position()+sectionIndex;
+        int fromUSectionValuesIndex = fromUSectionValues.position()+sectionIndex;
+        int value, i, count;
+        
+        /* read first pair of the section */
+       count = fromUSectionUChar.get(fromUSectionUCharIndex++);
+       value = UConverterConstants.UNSIGNED_SHORT_MASK & fromUSectionValues.get(fromUSectionValuesIndex++);
+       
+       if(value!=0 && (FROM_U_IS_ROUNDTRIP(value) || useFallback) && FROM_U_GET_LENGTH(value)>=minLength) {
+           if(c>=0){
+               setFillIn.add(c);
+           } else {
+               for(int j=0;j<length;j++){
+                   setFillIn.add(s[j]);
+               }
+             
+             }
+       }
+       
+       for(i=0; i<count; ++i){
+           s[length] = fromUSectionUChar.get(fromUSectionUCharIndex + i);
+           value = fromUSectionValues.get(fromUSectionValuesIndex + i);
+           
+           if(value==0) {
+               /* no mapping, do nothing */
+           } else if (FROM_U_IS_PARTIAL(value)) {
+               extGetUnicodeSetString( cx, setFillIn, useFallback, minLength, (char)UConverterConstants.U_SENTINEL, s, length+1,
+                       FROM_U_GET_PARTIAL_INDEX(value));
+           } else if ((useFallback ? (value&FROM_U_RESERVED_MASK)==0:((value&(FROM_U_ROUNDTRIP_FLAG|FROM_U_RESERVED_MASK))==FROM_U_ROUNDTRIP_FLAG)) 
+                   && FROM_U_GET_LENGTH(value)>=minLength) {
+               for(int j=0; j<(length+1);j++){
+                   setFillIn.add(s[j]);
+               }
+             
+           }
+       }
+        
+    }
+    
+    
+    static void extGetUnicodeSet(UnicodeSet setFillIn, int which, int filter, UConverterSharedData Data){
+        int st1, stage1Length, st2, st3, minLength;
+        int ps2, ps3;
+        
+        CharBuffer stage12, stage3;
+        int value, length;
+        IntBuffer stage3b;
+        boolean useFallback;
+        char s[] = new char[MAX_UCHARS];
+        int c;
+        ByteBuffer cx = Data.mbcs.extIndexes;
+        if(cx == null){
+            return;
+        }
+        stage12 = (CharBuffer)ARRAY(cx, EXT_FROM_U_STAGE_12_INDEX,char.class );
+        stage3 = (CharBuffer)ARRAY(cx, EXT_FROM_U_STAGE_3_INDEX,char.class );
+        stage3b = (IntBuffer)ARRAY(cx, EXT_FROM_U_STAGE_3B_INDEX,int.class );
+        
+        stage1Length = cx.asIntBuffer().get(EXT_FROM_U_STAGE_1_LENGTH);
+        useFallback =(boolean)(which==ROUNDTRIP_AND_FALLBACK_SET);
+        
+        c = 0;
+        if(filter == UCNV_SET_FILTER_2022_CN) {
+            minLength = 3;
+        } else if (Data.mbcs.outputType == MBCS_OUTPUT_DBCS_ONLY || filter != UCNV_SET_FILTER_NONE) {
+            /* DBCS-only, ignore single-byte results */
+            minLength = 2;
+        } else {
+            minLength = 1;
+        }
+        
+        for(st1=0; st1< stage1Length; ++st1){
+            st2 = stage12.get(st1);
+            if(st2>stage1Length) {
+                ps2 = st2;
+                for(st2=0;st2<64;++st2){
+                    
+                    if((st3=((int) stage12.get(ps2+st2))<<STAGE_2_LEFT_SHIFT)!= 0){
+                        ps3 = st3;
+                        do {
+                            value = stage3b.get((int)(UConverterConstants.UNSIGNED_SHORT_MASK&stage3.get(ps3++)));
+                            if(value==0){
+                                /* no mapping do nothing */
+                            }else if (FROM_U_IS_PARTIAL(value)){
+                                length = 0;
+                                UTF16.append(s, length, c);
+                                extGetUnicodeSetString(cx,setFillIn,useFallback,minLength,c,s,length,(int)FROM_U_GET_PARTIAL_INDEX(value));
+                            } else if ((useFallback ?  (value&FROM_U_RESERVED_MASK)==0 
+                                        :((value&(FROM_U_ROUNDTRIP_FLAG|FROM_U_RESERVED_MASK))== 
+                                        FROM_U_ROUNDTRIP_FLAG)) && FROM_U_GET_LENGTH(value)>=minLength){
+                                            switch(filter) {
+                                            case UCNV_SET_FILTER_2022_CN:
+                                                if(!(FROM_U_GET_LENGTH(value)==3 && FROM_U_GET_DATA(value)<=0x82ffff)){
+                                                    continue;
+                                                }
+                                                break;
+                                            case UCNV_SET_FILTER_SJIS:
+                                                if(!(FROM_U_GET_LENGTH(value)==2 && (value=FROM_U_GET_DATA(value))>=0x8140 && value<=0xeffc)){
+                                                    continue;
+                                                }
+                                                break;
+                                            case UCNV_SET_FILTER_GR94DBCS:
+                                                if(!(FROM_U_GET_LENGTH(value)==2 && (UConverterConstants.UNSIGNED_SHORT_MASK & ((value=FROM_U_GET_DATA(value)) - 0xa1a1))<=(0xfefe - 0xa1a1) 
+                                                        && (UConverterConstants.UNSIGNED_BYTE_MASK & (value - 0xa1))<= (0xfe - 0xa1))){
+                                                    
+                                                    continue;
+                                                }
+                                                break;
+                                            case UCNV_SET_FILTER_HZ:
+                                                if(!(FROM_U_GET_LENGTH(value)==2 && (UConverterConstants.UNSIGNED_SHORT_MASK & ((value=FROM_U_GET_DATA(value)) - 0xa1a1))<=(0xfdfe - 0xa1a1) 
+                                                        && (UConverterConstants.UNSIGNED_BYTE_MASK & (value - 0xa1))<= (0xfe - 0xa1))){
+                                                    continue;
+                                                }
+                                                break;
+                                            default:
+                                                /*
+                                                 * UCNV_SET_FILTER_NONE,
+                                                 * or UCNV_SET_FILTER_DBCS_ONLY which is handled via minLength
+                                                 */
+                                                break;
+                                            }
+                                            setFillIn.add(c);
+                                          
+                                        }
+                        }while((++c&0xf) != 0);
+                      
+                    } else {
+                        c+=16;   /* emplty stage3 block */
+                    }
+                }
+            } else {
+                c+=1024;  /* empty stage 2 block*/
+            }
+        }
+    }
+    
+    void MBCSGetUnicodeSetForUnicode(UConverterSharedData data, UnicodeSet setFillIn, int which){
+        MBCSGetFilteredUnicodeSetForUnicode(data, setFillIn, which, this.sharedData.mbcs.outputType==MBCS_OUTPUT_DBCS_ONLY ?
+                UCNV_SET_FILTER_DBCS_ONLY :
+                    UCNV_SET_FILTER_NONE );
+    }
+    
+    void getUnicodeSetImpl( UnicodeSet setFillIn, int which){
+        if((options & MBCS_OPTION_GB18030)!=0){
+            setFillIn.add(0, 0xd7ff);
+            setFillIn.add(0xe000, 0x10ffff);
+        }
+        else {
+            this.MBCSGetUnicodeSetForUnicode(sharedData, setFillIn, which);
+        }
     }
 
 }

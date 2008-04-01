@@ -13,6 +13,8 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 
+import com.ibm.icu.text.UnicodeSet;
+
 /**
  * @author Michael Ow
  *
@@ -746,5 +748,9 @@ class CharsetUTF7 extends CharsetICU {
     
     public CharsetEncoder newEncoder() {
         return new CharsetEncoderUTF7(this);
+    }
+    
+    void getUnicodeSetImpl( UnicodeSet setFillIn, int which){
+        getCompleteUnicodeSet(setFillIn);
     }
 }

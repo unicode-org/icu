@@ -17,6 +17,7 @@ import java.util.Arrays;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.charset.CharsetMBCS.MBCSToUFallback;
 import com.ibm.icu.charset.CharsetMBCS.UConverterMBCSTable;
 import com.ibm.icu.charset.CharsetMBCS;
@@ -3076,6 +3077,98 @@ class CharsetISO2022 extends CharsetICU {
             myConverterData.currentEncoder.fromUChar32 = 0;
             myConverterData.currentEncoder.fromUnicodeStatus = 1; /* prevLength */
         }
+    }
+    
+    void getUnicodeSetImpl(UnicodeSet setFillIn, int which) {
+        int i;
+        /*open a set and initialize it with code points that are algorithmically round-tripped */
+        
+        switch(variant){
+        case ISO_2022_JP:
+           /*include JIS X 0201 which is hardcoded */
+            setFillIn.add(0xa5);
+            setFillIn.add(0x203e);
+            if((jpCharsetMasks[myConverterData.version]&CSM(ISO8859_1))!=0){
+                /*include Latin-1 some variants of JP */
+                setFillIn.add(0, 0xff);
+            
+            }
+            else {
+                /* include ASCII for JP */
+                setFillIn.add(0, 0x7f);
+             }
+            if(myConverterData.version==3 || myConverterData.version==4 ||which == ROUNDTRIP_AND_FALLBACK_SET){
+            /*
+             * Do not test(jpCharsetMasks[myConverterData.version]&CSM(HWKANA_7BIT))!=0 because the bit
+             * is on for all JP versions although version 3 & 4 (JIS7 and JIS8) use half-width Katakana.
+             * This is because all ISO_2022_JP variant are lenient in that they accept (in toUnicode) half-width
+             * Katakana via ESC.
+             * However, we only emit (fromUnicode) half-width Katakana according to the
+             * definition of each variant.
+             *
+             * When including fallbacks,
+             * we need to include half-width Katakana Unicode code points for all JP variants because
+             * JIS X 0208 has hardcoded fallbacks for them (which map to full-width Katakana).
+             */
+            /* include half-width Katakana for JP */
+                setFillIn.add(HWKANA_START, HWKANA_END);
+             }
+            break;
+        case ISO_2022_CN:
+            /* Include ASCII for CN */
+            setFillIn.add(0, 0x7f);
+            break;
+        case ISO_2022_KR:
+            /* there is only one converter for KR */
+          myConverterData.currentConverter.getUnicodeSetImpl(setFillIn, which);
+          break;
+        default:
+            break;
+        }
+        
+        //TODO Replaced by ucnv_MBCSGetFilteredUnicodeSetForUnicode() until
+        for(i=0; i<UCNV_2022_MAX_CONVERTERS;i++){
+            int filter;
+            if(myConverterData.myConverterArray[i]!=null){
+                if(variant==ISO_2022_CN && myConverterData.version==0 && i==CNS_11643){
+                    /*
+                     * 
+                     * version -specific for CN:
+                     * CN version 0 does not map CNS planes 3..7 although
+                     * they are all available in the CNS conversion table;
+                     * CN version 1 (-EXT) does map them all.
+                     * The two versions create different Unicode sets.
+                     */
+                    filter=CharsetMBCS.UCNV_SET_FILTER_2022_CN;
+                } else if(variant==ISO_2022_JP && i == JISX208){
+                    /* 
+                     * Only add code points that map to Shift-JIS codes
+                     * corrosponding to JIS X 208
+                     */
+                    filter=CharsetMBCS.UCNV_SET_FILTER_SJIS;
+                } else if(i==KSC5601){
+                    /*
+                     * Some of the KSC 5601 tables (Convrtrs.txt has this aliases on multiple tables)
+                     * are broader than GR94.
+                     */
+                    filter=CharsetMBCS.UCNV_SET_FILTER_GR94DBCS;
+                } else {
+                    filter=CharsetMBCS.UCNV_SET_FILTER_NONE;
+                }
+                
+                myConverterData.currentConverter.MBCSGetFilteredUnicodeSetForUnicode(myConverterData.myConverterArray[i],setFillIn, which, filter);
+           }
+        }
+        /*
+         * ISO Converter must not convert SO/SI/ESC despite what sub-converters do by themselves
+         * Remove these characters from the set.
+         */
+        setFillIn.remove(0x0e);
+        setFillIn.remove(0x0f);
+        setFillIn.remove(0x1b);
+        
+        /* ISO 2022 converter do not convert C! controls either */
+        setFillIn.remove(0x80, 0x9f);
     }
 }
 
