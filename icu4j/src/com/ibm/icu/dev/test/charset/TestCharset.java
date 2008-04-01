@@ -1578,8 +1578,7 @@ public class TestCharset extends TestFmwk {
         logln("Total Number of chasets = " + map.size());
     }
     /* ticket 5580 */
-    /* This test fails on JDK < Sun 1.5
-    /*public void TestJavaCanonicalNameOnAvailableCharsets() {
+    public void TestJavaCanonicalNameOnAvailableCharsets() {
         CharsetProviderICU provider = new CharsetProviderICU();
         Iterator allCharsets = provider.charsets();
         String errorMessage = null;
@@ -1600,7 +1599,7 @@ public class TestCharset extends TestFmwk {
         if (errorMessage != null) {
             errln(errorMessage);
         }
-    }*/
+    }
     
     public void TestWindows936(){
         CharsetProviderICU icu = new CharsetProviderICU();
