@@ -226,6 +226,7 @@ PluralRules::forLocale(const Locale& locale, UErrorCode& status) {
         }
     }
     if (locRules==NULL) {
+        delete newRules; // Remove newRules to avoid memory leak since it is not needed anymore.
         return createRules(PLURAL_DEFAULT_RULE, status);
     }
 
