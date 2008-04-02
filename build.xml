@@ -1,7 +1,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 1997-2007, International Business Machines Corporation and    *
+* Copyright (C) 1997-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -1713,12 +1713,18 @@
     <!-- license -->
     <copy file="license.html"
           todir="${eclipse.projects.dir}/plugins/com.ibm.icu/about_files" />
+    <copy file="license.html"
+          todir="${eclipse.projects.dir}/plugins/com.ibm.icu/src/about_files" />
     <!-- ucd terms -->
     <copy file="src/com/ibm/icu/dev/data/unicode/ucdterms.txt"
           todir="${eclipse.projects.dir}/plugins/com.ibm.icu/about_files" />
+    <copy file="src/com/ibm/icu/dev/data/unicode/ucdterms.txt"
+          todir="${eclipse.projects.dir}/plugins/com.ibm.icu/src/about_files" />
     <!-- about -->
     <copy file="${eclipse.dir}/misc/about_icu.html"
           tofile="${eclipse.projects.dir}/plugins/com.ibm.icu/about.html" />
+    <copy file="${eclipse.dir}/misc/about_icu.html"
+          tofile="${eclipse.projects.dir}/plugins/com.ibm.icu/src/about.html" />
 
     <!-- FEATURE FILES -->
     <copy todir="${eclipse.projects.dir}/features/com.ibm.icu">
@@ -1729,9 +1735,6 @@
         <filter token="DATA_VERSION_NUMBER" value="${icu4j.data.version.number}" />
       </filterset>
     </copy>
-    <!-- common eclipse about file -->
-    <copy file="${eclipse.dir}/misc/about.html"
-          todir="${eclipse.projects.dir}/features/com.ibm.icu/sourceTemplatePlugin" />
   </target>
 
   <!-- ensure eclipse wrapper code builds with foundation1.0/java1.3 -->
@@ -1781,9 +1784,13 @@
     <!-- license -->
     <copy file="license.html"
           todir="${eclipse.projects.dir}/plugins/com.ibm.icu.base/about_files" />
+    <copy file="license.html"
+          todir="${eclipse.projects.dir}/plugins/com.ibm.icu.base/src/about_files" />
     <!-- about -->
     <copy file="${eclipse.dir}/misc/about_icu.html"
           tofile="${eclipse.projects.dir}/plugins/com.ibm.icu.base/about.html" />
+    <copy file="${eclipse.dir}/misc/about_icu.html"
+          tofile="${eclipse.projects.dir}/plugins/com.ibm.icu.base/src/about.html" />
 
     <!-- FEATURE FILES -->
     <!-- project files -->
@@ -1796,9 +1803,6 @@
         <filter token="DATA_VERSION_NUMBER" value="${icu4j.data.version.number}" />
       </filterset>
     </copy>
-    <!-- common eclipse about file -->
-    <copy file="${eclipse.dir}/misc/about.html"
-          todir="${eclipse.projects.dir}/features/com.ibm.icu.base/sourceTemplatePlugin" />
   </target>
 
   <target name="eclipseTests"
@@ -1981,9 +1985,18 @@
     <!-- license -->
     <copy file="license.html"
           todir="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4/about_files" />
+    <copy file="license.html"
+          todir="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4/src/about_files" />
     <!-- ucd terms -->
     <copy file="src/com/ibm/icu/dev/data/unicode/ucdterms.txt"
           todir="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4/about_files" />
+    <copy file="src/com/ibm/icu/dev/data/unicode/ucdterms.txt"
+          todir="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4/src/about_files" />
+    <!-- about -->
+    <copy file="${eclipse.dir}/misc/about_icu.html"
+          tofile="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4/about.html" />
+    <copy file="${eclipse.dir}/misc/about_icu.html"
+          tofile="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4/src/about.html" />
 
     <!-- FEATURE FILES -->
     <!-- project files -->
@@ -1996,9 +2009,6 @@
         <filter token="DATA_VERSION_NUMBER" value="${icu4j.data.version.number}" />
       </filterset>
     </copy>
-    <!-- common eclipse about -->
-    <copy file="${eclipse.dir}/misc/about.html"
-        todir="${eclipse.projects.dir}/features/com.ibm.icu.jse4/sourceTemplatePlugin" />
   </target>
 
   <target name="eclipseZipTestSrc" depends="eclipseMangle" description="build zip of test sources for debugging">
