@@ -1713,18 +1713,12 @@
     <!-- license -->
     <copy file="license.html"
           todir="${eclipse.projects.dir}/plugins/com.ibm.icu/about_files" />
-    <copy file="license.html"
-          todir="${eclipse.projects.dir}/plugins/com.ibm.icu/src/about_files" />
     <!-- ucd terms -->
     <copy file="src/com/ibm/icu/dev/data/unicode/ucdterms.txt"
           todir="${eclipse.projects.dir}/plugins/com.ibm.icu/about_files" />
-    <copy file="src/com/ibm/icu/dev/data/unicode/ucdterms.txt"
-          todir="${eclipse.projects.dir}/plugins/com.ibm.icu/src/about_files" />
     <!-- about -->
     <copy file="${eclipse.dir}/misc/about_icu.html"
           tofile="${eclipse.projects.dir}/plugins/com.ibm.icu/about.html" />
-    <copy file="${eclipse.dir}/misc/about_icu.html"
-          tofile="${eclipse.projects.dir}/plugins/com.ibm.icu/src/about.html" />
 
     <!-- FEATURE FILES -->
     <copy todir="${eclipse.projects.dir}/features/com.ibm.icu">
@@ -1784,13 +1778,9 @@
     <!-- license -->
     <copy file="license.html"
           todir="${eclipse.projects.dir}/plugins/com.ibm.icu.base/about_files" />
-    <copy file="license.html"
-          todir="${eclipse.projects.dir}/plugins/com.ibm.icu.base/src/about_files" />
     <!-- about -->
     <copy file="${eclipse.dir}/misc/about_icu.html"
           tofile="${eclipse.projects.dir}/plugins/com.ibm.icu.base/about.html" />
-    <copy file="${eclipse.dir}/misc/about_icu.html"
-          tofile="${eclipse.projects.dir}/plugins/com.ibm.icu.base/src/about.html" />
 
     <!-- FEATURE FILES -->
     <!-- project files -->
@@ -1985,18 +1975,12 @@
     <!-- license -->
     <copy file="license.html"
           todir="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4/about_files" />
-    <copy file="license.html"
-          todir="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4/src/about_files" />
     <!-- ucd terms -->
     <copy file="src/com/ibm/icu/dev/data/unicode/ucdterms.txt"
           todir="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4/about_files" />
-    <copy file="src/com/ibm/icu/dev/data/unicode/ucdterms.txt"
-          todir="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4/src/about_files" />
     <!-- about -->
     <copy file="${eclipse.dir}/misc/about_icu.html"
           tofile="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4/about.html" />
-    <copy file="${eclipse.dir}/misc/about_icu.html"
-          tofile="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4/src/about.html" />
 
     <!-- FEATURE FILES -->
     <!-- project files -->
