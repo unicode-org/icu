@@ -249,19 +249,12 @@ icu4j/src/com/ibm/icu/dev/demo/translit/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.base/.project -text
 icu4j/src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.base/build.properties -text
 icu4j/src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.base/feature.xml -text
-icu4j/src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.base/sourceTemplatePlugin/build.properties -text
-icu4j/src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.base/sourceTemplatePlugin/plugin.properties -text
 icu4j/src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.jse4/.project -text
 icu4j/src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.jse4/build.properties -text
 icu4j/src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.jse4/feature.xml -text
-icu4j/src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.jse4/sourceTemplatePlugin/build.properties -text
-icu4j/src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.jse4/sourceTemplatePlugin/plugin.properties -text
 icu4j/src/com/ibm/icu/dev/eclipse/features/com.ibm.icu/.project -text
 icu4j/src/com/ibm/icu/dev/eclipse/features/com.ibm.icu/build.properties -text
 icu4j/src/com/ibm/icu/dev/eclipse/features/com.ibm.icu/feature.xml -text
-icu4j/src/com/ibm/icu/dev/eclipse/features/com.ibm.icu/sourceTemplatePlugin/build.properties -text
-icu4j/src/com/ibm/icu/dev/eclipse/features/com.ibm.icu/sourceTemplatePlugin/plugin.properties -text
-icu4j/src/com/ibm/icu/dev/eclipse/misc/about.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/eclipse/misc/about_icu.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/eclipse/pdebuild/allElements.xml -text
 icu4j/src/com/ibm/icu/dev/eclipse/pdebuild/build.properties -text
@@ -313,7 +306,6 @@ icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.jse4/.settings/org.eclipse
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.jse4/META-INF/MANIFEST.MF -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.jse4/build.properties -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.jse4/fragment-icu-jse4.properties -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.jse4/plugin.properties -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.tests/.classpath -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.tests/.project -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.tests/.settings/org.eclipse.jdt.core.prefs -text

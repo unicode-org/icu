@@ -27,6 +27,7 @@
          id="com.ibm.icu.source"
          download-size="0"
          install-size="0"
-         version="@BUILD_VERSION@"/>
+         version="@BUILD_VERSION@"
+         unpack="false"/>
 
 </feature>
