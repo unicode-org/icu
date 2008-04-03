@@ -1,7 +1,7 @@
 //##header J2SE15
 /*****************************************************************************************
  *
- * Copyright (C) 1996-2007, International Business Machines
+ * Copyright (C) 1996-2008, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **/
 
@@ -1107,7 +1107,7 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10)
 //#else
     /**
      * BigDecimal numbers get their fractions truncated by NumberFormat.
@@ -1845,7 +1845,7 @@ class MyNumberFormatTest extends NumberFormat {
     public Number parse(String text, ParsePosition parsePosition) {
         return new Integer(0);
     }
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10)
 //#else
     public StringBuffer format(java.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
         return new StringBuffer("");

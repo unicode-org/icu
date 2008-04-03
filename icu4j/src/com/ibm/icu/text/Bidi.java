@@ -1,7 +1,7 @@
 //##header J2SE15
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2007, International Business Machines
+*   Copyright (C) 2001-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -29,6 +29,7 @@ package com.ibm.icu.text;
 //#if defined(FOUNDATION10)
 //#else
 import java.awt.font.TextAttribute;
+import java.text.AttributedCharacterIterator;
 //#endif
 //#if defined(FOUNDATION10) || defined(J2SE13)
 //#else
@@ -36,7 +37,6 @@ import java.awt.font.NumericShaper;
 //#endif
 import java.io.IOException;
 import java.lang.reflect.Array;
-import java.text.AttributedCharacterIterator;
 import java.util.MissingResourceException;
 import java.util.Arrays;
 

@@ -1,27 +1,30 @@
 //##header J2SE15
 /*
-*   Copyright (C) 1996-2007, International Business Machines
+*   Copyright (C) 1996-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
 package com.ibm.icu.text;
 
-//import com.ibm.icu.impl.ICULocaleData;
-import java.io.InvalidObjectException;
 import java.text.FieldPosition;
-import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.MissingResourceException;
+
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
+import java.io.InvalidObjectException;
+import java.text.Format;
+import java.util.HashMap;
+import java.util.Map;
+import com.ibm.icu.util.GregorianCalendar;
+//#endif
 
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.RelativeDateFormat;
 import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 

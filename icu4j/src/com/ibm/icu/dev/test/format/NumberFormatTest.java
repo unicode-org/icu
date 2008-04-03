@@ -874,7 +874,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         expect2(df, 2.0, "2.00 *&' Rs. '&*");
         expect2(df, -1.0, "-1.00 *&' Re. '&*");
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10)
 //##        com.ibm.icu.math.BigDecimal r = df.getRoundingIncrement();
 //#else
         java.math.BigDecimal r = df.getRoundingIncrement();
@@ -1319,7 +1319,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     void checkRounding(DecimalFormat nf, BigDecimal base, int iterations, BigDecimal increment) {
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10)
 //##        nf.setRoundingIncrement(increment);
 //#else
         nf.setRoundingIncrement(increment.toBigDecimal());
@@ -1370,7 +1370,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     static BigDecimal toBigDecimal(Number number) {
         return number instanceof BigDecimal ? (BigDecimal) number
             : number instanceof BigInteger ? new BigDecimal((BigInteger)number)
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10)
 //#else
             : number instanceof java.math.BigDecimal ? new BigDecimal((java.math.BigDecimal)number)
 //#endif
@@ -1801,7 +1801,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         expect2(df, BigDecimal.valueOf(Long.MAX_VALUE), BigDecimal.valueOf(Long.MAX_VALUE).negate().toString());
         expect2(df, BigDecimal.valueOf(Long.MIN_VALUE), BigDecimal.valueOf(Long.MIN_VALUE).negate().toString());
         
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10)
 //#else
         expect2(df, java.math.BigDecimal.valueOf(Long.MAX_VALUE), java.math.BigDecimal.valueOf(Long.MAX_VALUE).negate().toString());
         expect2(df, java.math.BigDecimal.valueOf(Long.MIN_VALUE), java.math.BigDecimal.valueOf(Long.MIN_VALUE).negate().toString());

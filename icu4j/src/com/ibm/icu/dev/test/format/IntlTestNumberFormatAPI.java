@@ -1,7 +1,7 @@
 //##header J2SE15
 /*****************************************************************************************
  *
- *   Copyright (C) 1996-2007, International Business Machines
+ *   Copyright (C) 1996-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **/
 /** 
@@ -219,7 +219,7 @@ public class IntlTestNumberFormatAPI extends com.ibm.icu.dev.test.TestFmwk
             public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {return null;}
             public StringBuffer format(long number, StringBuffer toAppendTo, FieldPosition pos) {return null;}
             public StringBuffer format(BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {return null;}
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10)
 //#else
             public StringBuffer format(java.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {return null;}
 //#endif

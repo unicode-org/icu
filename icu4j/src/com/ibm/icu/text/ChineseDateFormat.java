@@ -1,6 +1,6 @@
 //##header J2SE15
 /*********************************************************************
- * Copyright (C) 2000-2007, International Business Machines Corporation and
+ * Copyright (C) 2000-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  *********************************************************************
  */
@@ -8,10 +8,13 @@ package com.ibm.icu.text;
 import com.ibm.icu.util.*;
 import com.ibm.icu.impl.Utility;
 
-import java.io.InvalidObjectException;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Locale;
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
+import java.io.InvalidObjectException;
+//#endif
 
 /**
  * A concrete {@link DateFormat} for {@link com.ibm.icu.util.ChineseCalendar}.

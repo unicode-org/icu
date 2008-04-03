@@ -228,7 +228,7 @@ final class DigitList {
         return stringRep.toString();
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10)
 //#else
     /**
      * Return a <code>BigDecimal</code> representing the value stored in this
@@ -724,7 +724,7 @@ final class DigitList {
         round(fixedPoint ? (maximumDigits + decimalAt) : maximumDigits == 0 ? -1 : maximumDigits);
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10)
 //#else
     /**
      * Set the digit list to a representation of the given BigDecimal value.

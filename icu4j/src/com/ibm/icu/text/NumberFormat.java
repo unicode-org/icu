@@ -1,7 +1,7 @@
 //##header J2SE15
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -14,13 +14,16 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.text.FieldPosition;
-import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Set;
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
+import java.text.Format;
+//#endif
 
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.util.Currency;
@@ -192,7 +195,7 @@ public abstract class NumberFormat extends UFormat {
             return format(((Long)number).longValue(), toAppendTo, pos);
         } else if (number instanceof BigInteger) {
             return format((BigInteger) number, toAppendTo, pos);
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10)
 //#else
         } else if (number instanceof java.math.BigDecimal) {
             return format((java.math.BigDecimal) number, toAppendTo, pos);
@@ -249,7 +252,7 @@ public abstract class NumberFormat extends UFormat {
                       new FieldPosition(0)).toString();
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10)
 //#else
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
@@ -309,7 +312,7 @@ public abstract class NumberFormat extends UFormat {
     public abstract StringBuffer format(BigInteger number,
                                         StringBuffer toAppendTo,
                                         FieldPosition pos); 
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10)
 //#else
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>

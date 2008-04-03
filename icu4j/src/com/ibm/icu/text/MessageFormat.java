@@ -1,7 +1,7 @@
 //##header J2SE15
 /*
 **********************************************************************
-* Copyright (c) 2004-2007, International Business Machines
+* Copyright (c) 2004-2008, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -14,21 +14,24 @@ package com.ibm.icu.text;
 import java.io.IOException;
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
-import java.text.AttributedCharacterIterator;
-import java.text.AttributedString;
 import java.text.CharacterIterator;
 import java.text.ChoiceFormat;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.HashMap;
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
+import java.util.ArrayList;
+//#endif
 
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.UnicodeSet;
@@ -1637,7 +1640,10 @@ public class MessageFormat extends UFormat {
         // note: this implementation assumes a fast substring & index.
         // if this is not true, would be better to append chars one by one.
         int lastOffset = 0;
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
         int last = result.length();
+//#endif
         for (int i = 0; i <= maxOffset; ++i) {
             result.append(pattern.substring(lastOffset, offsets[i]));
             lastOffset = offsets[i];

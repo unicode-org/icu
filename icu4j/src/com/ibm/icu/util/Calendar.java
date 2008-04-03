@@ -4203,7 +4203,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      */
     private final void computeWeekFields() {
         int eyear = fields[EXTENDED_YEAR];
-        int year = fields[YEAR];
         int dayOfWeek = fields[DAY_OF_WEEK];
         int dayOfYear = fields[DAY_OF_YEAR];
 
