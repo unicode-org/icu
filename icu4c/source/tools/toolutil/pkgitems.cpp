@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2007, International Business Machines
+*   Copyright (C) 2003-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -215,6 +215,7 @@ ures_enumDependencies(const UDataSwapper *ds,
                 break;
             }
             useResSuffix = FALSE;
+            break;
         } else {
             // we ignore all other strings
             break;
