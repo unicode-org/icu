@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2007, International Business Machines
+*   Copyright (C) 2001-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -403,6 +403,7 @@ public final class ArabicShaping {
         0x0, 0x2, 0x4, 0x6, 0x8, 0xA, 0xC, 0xE 
     };
 
+/*
     private static final char convertLamAlef[] =  {
         '\u0622', // FEF5 
         '\u0622', // FEF6
@@ -413,6 +414,7 @@ public final class ArabicShaping {
         '\u0627', // FEFB
         '\u0627'  // FEFC 
     };
+*/
 
     private static final char convertNormalizedLamAlef[] = {
         '\u0622', // 065C

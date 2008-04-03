@@ -12,17 +12,20 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.ref.WeakReference;
-import java.text.AttributedCharacterIterator;
-import java.text.AttributedString;
 import java.text.FieldPosition;
-import java.text.Format;
 import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
+import java.text.Format;
+import java.util.LinkedList;
+//#endif
 
 import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.DateNumberFormat;
@@ -1328,7 +1331,7 @@ public class SimpleDateFormat extends DateFormat {
 
     private boolean isDefaultGMTFormat() {
         // GMT pattern
-        if (!formatData.DEFAULT_GMT_PATTERN.equals(formatData.getGmtFormat())) {
+        if (!DateFormatSymbols.DEFAULT_GMT_PATTERN.equals(formatData.getGmtFormat())) {
             return false;
         }
         // GMT offset hour patters

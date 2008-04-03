@@ -147,7 +147,9 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+/*
     private static final int SHORT_GENERIC = 2;
+*/
 
     /**
      * @internal

@@ -9,15 +9,23 @@ package com.ibm.icu.text;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.math.BigInteger;
-import java.text.AttributedCharacterIterator;
-import java.text.AttributedString;
 import java.text.ChoiceFormat;
 import java.text.FieldPosition;
-import java.text.Format;
 import java.text.ParsePosition;
 import java.util.ArrayList;
+
+//#if defined(FOUNDATION10)
+//#else
+import java.io.ObjectOutputStream;
+//#endif
+
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
+import java.text.Format;
+//#endif
 
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.lang.UCharacter;
@@ -976,7 +984,7 @@ public class DecimalFormat extends NumberFormat {
         }
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10)
 //#else
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
@@ -1136,6 +1144,8 @@ public class DecimalFormat extends NumberFormat {
                 fieldPosition.setBeginIndex(-1);
             }
 
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
             // [Spark/CDL]
             // the begin index of integer part
             // the end index of integer part
@@ -1143,6 +1153,7 @@ public class DecimalFormat extends NumberFormat {
             int intBegin = result.length();
             int intEnd = -1;
             int fracBegin = -1;
+//#endif
 
             int minFracDig = 0;
             if (useSigDig) {
@@ -1313,7 +1324,10 @@ public class DecimalFormat extends NumberFormat {
                 }
 //#endif
             }
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
             int expBegin = result.length();
+//#endif
             digitList.set(exponent);
             {
                 int expDig = minExponentDigits;
@@ -1337,8 +1351,11 @@ public class DecimalFormat extends NumberFormat {
         }
         else
         {
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
             // [Spark/CDL] Record the integer start index.
             int intBegin = result.length();
+//#endif
             // Record field information for caller.
             if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
                 fieldPosition.setBeginIndex(result.length());
@@ -1448,8 +1465,11 @@ public class DecimalFormat extends NumberFormat {
                 fieldPosition.setBeginIndex(result.length());
             }
 
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
             // [Spark/CDL] Record the begin index of fraction part.
             int fracBegin = result.length();
+//#endif
 
             count = useSigDig ? Integer.MAX_VALUE : getMaximumFractionDigits();
             if (useSigDig && (sigCount == maxSigDig ||
@@ -1827,7 +1847,6 @@ public class DecimalFormat extends NumberFormat {
             boolean strictFail = false; // did we exit with a strict parse failure?
             boolean leadingZero = false; // did we see a leading zero?
             int lastGroup = -1; // where did we last see a grouping separator?
-            int prevGroup = -1; // where did we see the grouping separator before that?
             int gs2 = groupingSize2 == 0 ? groupingSize : groupingSize2;
             
             // equivalent grouping and decimal support
@@ -1880,7 +1899,6 @@ public class DecimalFormat extends NumberFormat {
                             strictFail = true;
                             break;
                         }
-                        prevGroup = lastGroup;
                         lastGroup = backup;
                     }
                     backup = -1; // Do this BEFORE continue statement below!!!
@@ -1927,7 +1945,6 @@ public class DecimalFormat extends NumberFormat {
                                 strictFail = true;
                                 break;
                             }
-                            prevGroup = lastGroup;
                             lastGroup = backup;
                         }
                     }
@@ -2607,7 +2624,7 @@ public class DecimalFormat extends NumberFormat {
      * @see #setRoundingMode
      * @stable ICU 2.0
      */
-//#if defined(FOUNDATION10) || defined(J2SE13) || defined(ECLIPSE_FRAGMENT)
+//#if defined(FOUNDATION10) || defined(ECLIPSE_FRAGMENT)
 //##    public BigDecimal getRoundingIncrement() {
 //##        if (roundingIncrementICU == null) return null;
 //##        return new BigDecimal(roundingIncrementICU.toString());
@@ -2619,7 +2636,7 @@ public class DecimalFormat extends NumberFormat {
     }
 //#endif
     
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10)
 //#else
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
@@ -4482,7 +4499,7 @@ public class DecimalFormat extends NumberFormat {
         return parseBigDecimal;
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10)
 //#else
     private void writeObject(ObjectOutputStream stream) throws IOException {
 // Doug, do we need this anymore?
@@ -4547,7 +4564,7 @@ public class DecimalFormat extends NumberFormat {
         serialVersionOnStream = currentSerialVersion;
         digitList = new DigitList();
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10)
 //#else
         if (roundingIncrement != null) {
             setInternalRoundingIncrement(new BigDecimal(roundingIncrement));
@@ -4559,7 +4576,7 @@ public class DecimalFormat extends NumberFormat {
 
     private void setInternalRoundingIncrement(BigDecimal value) {
         roundingIncrementICU = value;
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10)
 //#else
         roundingIncrement = value == null ? null : value.toBigDecimal();
 //#endif
@@ -4778,7 +4795,7 @@ public class DecimalFormat extends NumberFormat {
      */
     private boolean exponentSignAlwaysShown = false;
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10)
 //#else
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
@@ -5008,14 +5025,18 @@ public class DecimalFormat extends NumberFormat {
      */
     static final int MAX_SCIENTIFIC_INTEGER_DIGITS = 8;
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10)
 //##    // we're not compatible with other versions, since we have no java.math.BigDecimal field
 //##    private static final long serialVersionUID = 2;
 //#else
     // Proclaim JDK 1.1 serial compatibility.
     private static final long serialVersionUID = 864413376551465018L;
 //#endif
+
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     private ArrayList attributes = new ArrayList();
+//#endif
 }
 
 //eof

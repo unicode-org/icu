@@ -1,14 +1,13 @@
 //##header J2SE15
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 
 package com.ibm.icu.text;
 
-//import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UCharacterProperty;
@@ -25,8 +24,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
-
-//import java.util.ResourceBundle;
 
 
 /**
@@ -1083,7 +1080,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         return format(new com.ibm.icu.math.BigDecimal(number), toAppendTo, pos);
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10)
 //#else
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>

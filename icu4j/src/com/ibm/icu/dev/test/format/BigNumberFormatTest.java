@@ -1,7 +1,7 @@
 //##header J2SE15
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -417,7 +417,7 @@ public class BigNumberFormatTest extends TestFmwk {
             }
         }
     }
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10)
 //#else
     public void TestBigDecimalRounding() {
         // jb 3657
