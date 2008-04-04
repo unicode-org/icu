@@ -172,7 +172,7 @@ public class CharsetCallback {
         }
     };
     /**
-     * Skip callback
+     * Write substitute callback
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
@@ -195,7 +195,7 @@ public class CharsetCallback {
     private static final char[] kSubstituteChar1 = new char[]{0x1A};
     private static final char[] kSubstituteChar = new char[] {0xFFFD};
     /**
-     * Skip callback
+     * Write substitute callback
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
@@ -214,7 +214,7 @@ public class CharsetCallback {
         }
     };
     /**
-     * Skip callback
+     * Stop callback
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
@@ -226,7 +226,7 @@ public class CharsetCallback {
         }
     };
     /**
-     * Skip callback
+     * Stop callback
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
