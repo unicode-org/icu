@@ -1,8 +1,8 @@
-# SentenceBreakProperty-5.0.0.txt
-# Date: 2006-03-09, 23:14:25 GMT [MD]
+# SentenceBreakProperty-5.1.0.txt
+# Date: 2008-03-20, 17:55:34 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2006 Unicode, Inc.
+# Copyright (c) 1991-2008 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see UCD.html
 
@@ -17,13 +17,280 @@
 
 # ================================================
 
-000A          ; Sep
-000D          ; Sep
+000D          ; CR
+
+# Total code points: 1
+
+# ================================================
+
+000A          ; LF
+
+# Total code points: 1
+
+# ================================================
+
+0300..036F    ; Extend
+0483..0487    ; Extend
+0488..0489    ; Extend
+0591..05BD    ; Extend
+05BF          ; Extend
+05C1..05C2    ; Extend
+05C4..05C5    ; Extend
+05C7          ; Extend
+0610..061A    ; Extend
+064B..065E    ; Extend
+0670          ; Extend
+06D6..06DC    ; Extend
+06DE          ; Extend
+06DF..06E4    ; Extend
+06E7..06E8    ; Extend
+06EA..06ED    ; Extend
+0711          ; Extend
+0730..074A    ; Extend
+07A6..07B0    ; Extend
+07EB..07F3    ; Extend
+0901..0902    ; Extend
+0903          ; Extend
+093C          ; Extend
+093E..0940    ; Extend
+0941..0948    ; Extend
+0949..094C    ; Extend
+094D          ; Extend
+0951..0954    ; Extend
+0962..0963    ; Extend
+0981          ; Extend
+0982..0983    ; Extend
+09BC          ; Extend
+09BE..09C0    ; Extend
+09C1..09C4    ; Extend
+09C7..09C8    ; Extend
+09CB..09CC    ; Extend
+09CD          ; Extend
+09D7          ; Extend
+09E2..09E3    ; Extend
+0A01..0A02    ; Extend
+0A03          ; Extend
+0A3C          ; Extend
+0A3E..0A40    ; Extend
+0A41..0A42    ; Extend
+0A47..0A48    ; Extend
+0A4B..0A4D    ; Extend
+0A51          ; Extend
+0A70..0A71    ; Extend
+0A75          ; Extend
+0A81..0A82    ; Extend
+0A83          ; Extend
+0ABC          ; Extend
+0ABE..0AC0    ; Extend
+0AC1..0AC5    ; Extend
+0AC7..0AC8    ; Extend
+0AC9          ; Extend
+0ACB..0ACC    ; Extend
+0ACD          ; Extend
+0AE2..0AE3    ; Extend
+0B01          ; Extend
+0B02..0B03    ; Extend
+0B3C          ; Extend
+0B3E          ; Extend
+0B3F          ; Extend
+0B40          ; Extend
+0B41..0B44    ; Extend
+0B47..0B48    ; Extend
+0B4B..0B4C    ; Extend
+0B4D          ; Extend
+0B56          ; Extend
+0B57          ; Extend
+0B62..0B63    ; Extend
+0B82          ; Extend
+0BBE..0BBF    ; Extend
+0BC0          ; Extend
+0BC1..0BC2    ; Extend
+0BC6..0BC8    ; Extend
+0BCA..0BCC    ; Extend
+0BCD          ; Extend
+0BD7          ; Extend
+0C01..0C03    ; Extend
+0C3E..0C40    ; Extend
+0C41..0C44    ; Extend
+0C46..0C48    ; Extend
+0C4A..0C4D    ; Extend
+0C55..0C56    ; Extend
+0C62..0C63    ; Extend
+0C82..0C83    ; Extend
+0CBC          ; Extend
+0CBE          ; Extend
+0CBF          ; Extend
+0CC0..0CC4    ; Extend
+0CC6          ; Extend
+0CC7..0CC8    ; Extend
+0CCA..0CCB    ; Extend
+0CCC..0CCD    ; Extend
+0CD5..0CD6    ; Extend
+0CE2..0CE3    ; Extend
+0D02..0D03    ; Extend
+0D3E..0D40    ; Extend
+0D41..0D44    ; Extend
+0D46..0D48    ; Extend
+0D4A..0D4C    ; Extend
+0D4D          ; Extend
+0D57          ; Extend
+0D62..0D63    ; Extend
+0D82..0D83    ; Extend
+0DCA          ; Extend
+0DCF..0DD1    ; Extend
+0DD2..0DD4    ; Extend
+0DD6          ; Extend
+0DD8..0DDF    ; Extend
+0DF2..0DF3    ; Extend
+0E31          ; Extend
+0E34..0E3A    ; Extend
+0E47..0E4E    ; Extend
+0EB1          ; Extend
+0EB4..0EB9    ; Extend
+0EBB..0EBC    ; Extend
+0EC8..0ECD    ; Extend
+0F18..0F19    ; Extend
+0F35          ; Extend
+0F37          ; Extend
+0F39          ; Extend
+0F3E..0F3F    ; Extend
+0F71..0F7E    ; Extend
+0F7F          ; Extend
+0F80..0F84    ; Extend
+0F86..0F87    ; Extend
+0F90..0F97    ; Extend
+0F99..0FBC    ; Extend
+0FC6          ; Extend
+102B..102C    ; Extend
+102D..1030    ; Extend
+1031          ; Extend
+1032..1037    ; Extend
+1038          ; Extend
+1039..103A    ; Extend
+103B..103C    ; Extend
+103D..103E    ; Extend
+1056..1057    ; Extend
+1058..1059    ; Extend
+105E..1060    ; Extend
+1062..1064    ; Extend
+1067..106D    ; Extend
+1071..1074    ; Extend
+1082          ; Extend
+1083..1084    ; Extend
+1085..1086    ; Extend
+1087..108C    ; Extend
+108D          ; Extend
+108F          ; Extend
+135F          ; Extend
+1712..1714    ; Extend
+1732..1734    ; Extend
+1752..1753    ; Extend
+1772..1773    ; Extend
+17B6          ; Extend
+17B7..17BD    ; Extend
+17BE..17C5    ; Extend
+17C6          ; Extend
+17C7..17C8    ; Extend
+17C9..17D3    ; Extend
+17DD          ; Extend
+180B..180D    ; Extend
+18A9          ; Extend
+1920..1922    ; Extend
+1923..1926    ; Extend
+1927..1928    ; Extend
+1929..192B    ; Extend
+1930..1931    ; Extend
+1932          ; Extend
+1933..1938    ; Extend
+1939..193B    ; Extend
+19B0..19C0    ; Extend
+19C8..19C9    ; Extend
+1A17..1A18    ; Extend
+1A19..1A1B    ; Extend
+1B00..1B03    ; Extend
+1B04          ; Extend
+1B34          ; Extend
+1B35          ; Extend
+1B36..1B3A    ; Extend
+1B3B          ; Extend
+1B3C          ; Extend
+1B3D..1B41    ; Extend
+1B42          ; Extend
+1B43..1B44    ; Extend
+1B6B..1B73    ; Extend
+1B80..1B81    ; Extend
+1B82          ; Extend
+1BA1          ; Extend
+1BA2..1BA5    ; Extend
+1BA6..1BA7    ; Extend
+1BA8..1BA9    ; Extend
+1BAA          ; Extend
+1C24..1C2B    ; Extend
+1C2C..1C33    ; Extend
+1C34..1C35    ; Extend
+1C36..1C37    ; Extend
+1DC0..1DE6    ; Extend
+1DFE..1DFF    ; Extend
+200C..200D    ; Extend
+20D0..20DC    ; Extend
+20DD..20E0    ; Extend
+20E1          ; Extend
+20E2..20E4    ; Extend
+20E5..20F0    ; Extend
+2DE0..2DFF    ; Extend
+302A..302F    ; Extend
+3099..309A    ; Extend
+A66F          ; Extend
+A670..A672    ; Extend
+A67C..A67D    ; Extend
+A802          ; Extend
+A806          ; Extend
+A80B          ; Extend
+A823..A824    ; Extend
+A825..A826    ; Extend
+A827          ; Extend
+A880..A881    ; Extend
+A8B4..A8C3    ; Extend
+A8C4          ; Extend
+A926..A92D    ; Extend
+A947..A951    ; Extend
+A952..A953    ; Extend
+AA29..AA2E    ; Extend
+AA2F..AA30    ; Extend
+AA31..AA32    ; Extend
+AA33..AA34    ; Extend
+AA35..AA36    ; Extend
+AA43          ; Extend
+AA4C          ; Extend
+AA4D          ; Extend
+FB1E          ; Extend
+FE00..FE0F    ; Extend
+FE20..FE26    ; Extend
+FF9E..FF9F    ; Extend
+101FD         ; Extend
+10A01..10A03  ; Extend
+10A05..10A06  ; Extend
+10A0C..10A0F  ; Extend
+10A38..10A3A  ; Extend
+10A3F         ; Extend
+1D165..1D166  ; Extend
+1D167..1D169  ; Extend
+1D16D..1D172  ; Extend
+1D17B..1D182  ; Extend
+1D185..1D18B  ; Extend
+1D1AA..1D1AD  ; Extend
+1D242..1D244  ; Extend
+E0100..E01EF  ; Extend
+
+# Total code points: 1285
+
+# ================================================
+
 0085          ; Sep
 2028          ; Sep
 2029          ; Sep
 
-# Total code points: 5
+# Total code points: 3
 
 # ================================================
 
@@ -35,7 +302,7 @@
 200B          ; Format
 200E..200F    ; Format
 202A..202E    ; Format
-2060..2063    ; Format
+2060..2064    ; Format
 206A..206F    ; Format
 FEFF          ; Format
 FFF9..FFFB    ; Format
@@ -43,13 +310,14 @@ FFF9..FFFB    ; Format
 E0001         ; Format
 E0020..E007F  ; Format
 
-# Total code points: 136
+# Total code points: 137
 
 # ================================================
 
 0009          ; Sp
 000B..000C    ; Sp
 0020          ; Sp
+00A0          ; Sp
 1680          ; Sp
 180E          ; Sp
 2000..200A    ; Sp
@@ -57,7 +325,7 @@ E0020..E007F  ; Format
 205F          ; Sp
 3000          ; Sp
 
-# Total code points: 20
+# Total code points: 21
 
 # ================================================
 
@@ -212,6 +480,9 @@ E0020..E007F  ; Format
 02B0..02B8    ; Lower
 02C0..02C1    ; Lower
 02E0..02E4    ; Lower
+0371          ; Lower
+0373          ; Lower
+0377          ; Lower
 037A          ; Lower
 037B..037D    ; Lower
 0390          ; Lower
@@ -319,6 +590,14 @@ E0020..E007F  ; Format
 050F          ; Lower
 0511          ; Lower
 0513          ; Lower
+0515          ; Lower
+0517          ; Lower
+0519          ; Lower
+051B          ; Lower
+051D          ; Lower
+051F          ; Lower
+0521          ; Lower
+0523          ; Lower
 0561..0587    ; Lower
 1D00..1D2B    ; Lower
 1D2C..1D61    ; Lower
@@ -400,7 +679,8 @@ E0020..E007F  ; Format
 1E8F          ; Lower
 1E91          ; Lower
 1E93          ; Lower
-1E95..1E9B    ; Lower
+1E95..1E9D    ; Lower
+1E9F          ; Lower
 1EA1          ; Lower
 1EA3          ; Lower
 1EA5          ; Lower
@@ -446,7 +726,9 @@ E0020..E007F  ; Format
 1EF5          ; Lower
 1EF7          ; Lower
 1EF9          ; Lower
-1F00..1F07    ; Lower
+1EFB          ; Lower
+1EFD          ; Lower
+1EFF..1F07    ; Lower
 1F10..1F15    ; Lower
 1F20..1F27    ; Lower
 1F30..1F37    ; Lower
@@ -488,8 +770,10 @@ E0020..E007F  ; Format
 2C68          ; Lower
 2C6A          ; Lower
 2C6C          ; Lower
-2C74          ; Lower
-2C76..2C77    ; Lower
+2C71          ; Lower
+2C73..2C74    ; Lower
+2C76..2C7C    ; Lower
+2C7D          ; Lower
 2C81          ; Lower
 2C83          ; Lower
 2C85          ; Lower
@@ -541,6 +825,88 @@ E0020..E007F  ; Format
 2CE1          ; Lower
 2CE3..2CE4    ; Lower
 2D00..2D25    ; Lower
+A641          ; Lower
+A643          ; Lower
+A645          ; Lower
+A647          ; Lower
+A649          ; Lower
+A64B          ; Lower
+A64D          ; Lower
+A64F          ; Lower
+A651          ; Lower
+A653          ; Lower
+A655          ; Lower
+A657          ; Lower
+A659          ; Lower
+A65B          ; Lower
+A65D          ; Lower
+A65F          ; Lower
+A663          ; Lower
+A665          ; Lower
+A667          ; Lower
+A669          ; Lower
+A66B          ; Lower
+A66D          ; Lower
+A681          ; Lower
+A683          ; Lower
+A685          ; Lower
+A687          ; Lower
+A689          ; Lower
+A68B          ; Lower
+A68D          ; Lower
+A68F          ; Lower
+A691          ; Lower
+A693          ; Lower
+A695          ; Lower
+A697          ; Lower
+A723          ; Lower
+A725          ; Lower
+A727          ; Lower
+A729          ; Lower
+A72B          ; Lower
+A72D          ; Lower
+A72F..A731    ; Lower
+A733          ; Lower
+A735          ; Lower
+A737          ; Lower
+A739          ; Lower
+A73B          ; Lower
+A73D          ; Lower
+A73F          ; Lower
+A741          ; Lower
+A743          ; Lower
+A745          ; Lower
+A747          ; Lower
+A749          ; Lower
+A74B          ; Lower
+A74D          ; Lower
+A74F          ; Lower
+A751          ; Lower
+A753          ; Lower
+A755          ; Lower
+A757          ; Lower
+A759          ; Lower
+A75B          ; Lower
+A75D          ; Lower
+A75F          ; Lower
+A761          ; Lower
+A763          ; Lower
+A765          ; Lower
+A767          ; Lower
+A769          ; Lower
+A76B          ; Lower
+A76D          ; Lower
+A76F          ; Lower
+A770          ; Lower
+A771..A778    ; Lower
+A77A          ; Lower
+A77C          ; Lower
+A77F          ; Lower
+A781          ; Lower
+A783          ; Lower
+A785          ; Lower
+A787          ; Lower
+A78C          ; Lower
 FB00..FB06    ; Lower
 FB13..FB17    ; Lower
 FF41..FF5A    ; Lower
@@ -574,7 +940,7 @@ FF41..FF5A    ; Lower
 1D7C4..1D7C9  ; Lower
 1D7CB         ; Lower
 
-# Total code points: 1790
+# Total code points: 1906
 
 # ================================================
 
@@ -722,12 +1088,16 @@ FF41..FF5A    ; Lower
 024A          ; Upper
 024C          ; Upper
 024E          ; Upper
+0370          ; Upper
+0372          ; Upper
+0376          ; Upper
 0386          ; Upper
 0388..038A    ; Upper
 038C          ; Upper
 038E..038F    ; Upper
 0391..03A1    ; Upper
 03A3..03AB    ; Upper
+03CF          ; Upper
 03D2..03D4    ; Upper
 03D8          ; Upper
 03DA          ; Upper
@@ -830,6 +1200,14 @@ FF41..FF5A    ; Lower
 050E          ; Upper
 0510          ; Upper
 0512          ; Upper
+0514          ; Upper
+0516          ; Upper
+0518          ; Upper
+051A          ; Upper
+051C          ; Upper
+051E          ; Upper
+0520          ; Upper
+0522          ; Upper
 0531..0556    ; Upper
 10A0..10C5    ; Upper
 1E00          ; Upper
@@ -907,6 +1285,7 @@ FF41..FF5A    ; Lower
 1E90          ; Upper
 1E92          ; Upper
 1E94          ; Upper
+1E9E          ; Upper
 1EA0          ; Upper
 1EA2          ; Upper
 1EA4          ; Upper
@@ -952,6 +1331,9 @@ FF41..FF5A    ; Lower
 1EF4          ; Upper
 1EF6          ; Upper
 1EF8          ; Upper
+1EFA          ; Upper
+1EFC          ; Upper
+1EFE          ; Upper
 1F08..1F0F    ; Upper
 1F18..1F1D    ; Upper
 1F28..1F2F    ; Upper
@@ -992,6 +1374,8 @@ FF41..FF5A    ; Lower
 2C67          ; Upper
 2C69          ; Upper
 2C6B          ; Upper
+2C6D..2C6F    ; Upper
+2C72          ; Upper
 2C75          ; Upper
 2C80          ; Upper
 2C82          ; Upper
@@ -1043,6 +1427,86 @@ FF41..FF5A    ; Lower
 2CDE          ; Upper
 2CE0          ; Upper
 2CE2          ; Upper
+A640          ; Upper
+A642          ; Upper
+A644          ; Upper
+A646          ; Upper
+A648          ; Upper
+A64A          ; Upper
+A64C          ; Upper
+A64E          ; Upper
+A650          ; Upper
+A652          ; Upper
+A654          ; Upper
+A656          ; Upper
+A658          ; Upper
+A65A          ; Upper
+A65C          ; Upper
+A65E          ; Upper
+A662          ; Upper
+A664          ; Upper
+A666          ; Upper
+A668          ; Upper
+A66A          ; Upper
+A66C          ; Upper
+A680          ; Upper
+A682          ; Upper
+A684          ; Upper
+A686          ; Upper
+A688          ; Upper
+A68A          ; Upper
+A68C          ; Upper
+A68E          ; Upper
+A690          ; Upper
+A692          ; Upper
+A694          ; Upper
+A696          ; Upper
+A722          ; Upper
+A724          ; Upper
+A726          ; Upper
+A728          ; Upper
+A72A          ; Upper
+A72C          ; Upper
+A72E          ; Upper
+A732          ; Upper
+A734          ; Upper
+A736          ; Upper
+A738          ; Upper
+A73A          ; Upper
+A73C          ; Upper
+A73E          ; Upper
+A740          ; Upper
+A742          ; Upper
+A744          ; Upper
+A746          ; Upper
+A748          ; Upper
+A74A          ; Upper
+A74C          ; Upper
+A74E          ; Upper
+A750          ; Upper
+A752          ; Upper
+A754          ; Upper
+A756          ; Upper
+A758          ; Upper
+A75A          ; Upper
+A75C          ; Upper
+A75E          ; Upper
+A760          ; Upper
+A762          ; Upper
+A764          ; Upper
+A766          ; Upper
+A768          ; Upper
+A76A          ; Upper
+A76C          ; Upper
+A76E          ; Upper
+A779          ; Upper
+A77B          ; Upper
+A77D..A77E    ; Upper
+A780          ; Upper
+A782          ; Upper
+A784          ; Upper
+A786          ; Upper
+A78B          ; Upper
 FF21..FF3A    ; Upper
 10400..10427  ; Upper
 1D400..1D419  ; Upper
@@ -1077,22 +1541,23 @@ FF21..FF3A    ; Upper
 1D790..1D7A8  ; Upper
 1D7CA         ; Upper
 
-# Total code points: 1393
+# Total code points: 1494
 
 # ================================================
 
-00A0          ; OLetter
 01BB          ; OLetter
 01C0..01C3    ; OLetter
 0294          ; OLetter
 02B9..02BF    ; OLetter
 02C6..02D1    ; OLetter
+02EC          ; OLetter
 02EE          ; OLetter
+0374          ; OLetter
 0559          ; OLetter
 05D0..05EA    ; OLetter
 05F0..05F2    ; OLetter
 05F3          ; OLetter
-0621..063A    ; OLetter
+0621..063F    ; OLetter
 0640          ; OLetter
 0641..064A    ; OLetter
 066E..066F    ; OLetter
@@ -1104,21 +1569,18 @@ FF21..FF3A    ; Upper
 06FF          ; OLetter
 0710          ; OLetter
 0712..072F    ; OLetter
-074D..076D    ; OLetter
-0780..07A5    ; OLetter
+074D..07A5    ; OLetter
 07B1          ; OLetter
 07CA..07EA    ; OLetter
 07F4..07F5    ; OLetter
 07FA          ; OLetter
-0903          ; OLetter
 0904..0939    ; OLetter
 093D          ; OLetter
-093E..0940    ; OLetter
-0949..094C    ; OLetter
 0950          ; OLetter
 0958..0961    ; OLetter
+0971          ; OLetter
+0972          ; OLetter
 097B..097F    ; OLetter
-0982..0983    ; OLetter
 0985..098C    ; OLetter
 098F..0990    ; OLetter
 0993..09A8    ; OLetter
@@ -1126,14 +1588,10 @@ FF21..FF3A    ; Upper
 09B2          ; OLetter
 09B6..09B9    ; OLetter
 09BD          ; OLetter
-09BF..09C0    ; OLetter
-09C7..09C8    ; OLetter
-09CB..09CC    ; OLetter
 09CE          ; OLetter
 09DC..09DD    ; OLetter
 09DF..09E1    ; OLetter
 09F0..09F1    ; OLetter
-0A03          ; OLetter
 0A05..0A0A    ; OLetter
 0A0F..0A10    ; OLetter
 0A13..0A28    ; OLetter
@@ -1141,11 +1599,9 @@ FF21..FF3A    ; Upper
 0A32..0A33    ; OLetter
 0A35..0A36    ; OLetter
 0A38..0A39    ; OLetter
-0A3E..0A40    ; OLetter
 0A59..0A5C    ; OLetter
 0A5E          ; OLetter
 0A72..0A74    ; OLetter
-0A83          ; OLetter
 0A85..0A8D    ; OLetter
 0A8F..0A91    ; OLetter
 0A93..0AA8    ; OLetter
@@ -1153,12 +1609,8 @@ FF21..FF3A    ; Upper
 0AB2..0AB3    ; OLetter
 0AB5..0AB9    ; OLetter
 0ABD          ; OLetter
-0ABE..0AC0    ; OLetter
-0AC9          ; OLetter
-0ACB..0ACC    ; OLetter
 0AD0          ; OLetter
 0AE0..0AE1    ; OLetter
-0B02..0B03    ; OLetter
 0B05..0B0C    ; OLetter
 0B0F..0B10    ; OLetter
 0B13..0B28    ; OLetter
@@ -1166,9 +1618,6 @@ FF21..FF3A    ; Upper
 0B32..0B33    ; OLetter
 0B35..0B39    ; OLetter
 0B3D          ; OLetter
-0B40          ; OLetter
-0B47..0B48    ; OLetter
-0B4B..0B4C    ; OLetter
 0B5C..0B5D    ; OLetter
 0B5F..0B61    ; OLetter
 0B71          ; OLetter
@@ -1182,50 +1631,35 @@ FF21..FF3A    ; Upper
 0BA3..0BA4    ; OLetter
 0BA8..0BAA    ; OLetter
 0BAE..0BB9    ; OLetter
-0BBF          ; OLetter
-0BC1..0BC2    ; OLetter
-0BC6..0BC8    ; OLetter
-0BCA..0BCC    ; OLetter
-0C01..0C03    ; OLetter
+0BD0          ; OLetter
 0C05..0C0C    ; OLetter
 0C0E..0C10    ; OLetter
 0C12..0C28    ; OLetter
 0C2A..0C33    ; OLetter
 0C35..0C39    ; OLetter
-0C41..0C44    ; OLetter
+0C3D          ; OLetter
+0C58..0C59    ; OLetter
 0C60..0C61    ; OLetter
-0C82..0C83    ; OLetter
 0C85..0C8C    ; OLetter
 0C8E..0C90    ; OLetter
 0C92..0CA8    ; OLetter
 0CAA..0CB3    ; OLetter
 0CB5..0CB9    ; OLetter
 0CBD          ; OLetter
-0CBE          ; OLetter
-0CC0..0CC1    ; OLetter
-0CC3..0CC4    ; OLetter
-0CC7..0CC8    ; OLetter
-0CCA..0CCB    ; OLetter
 0CDE          ; OLetter
 0CE0..0CE1    ; OLetter
-0D02..0D03    ; OLetter
 0D05..0D0C    ; OLetter
 0D0E..0D10    ; OLetter
 0D12..0D28    ; OLetter
 0D2A..0D39    ; OLetter
-0D3F..0D40    ; OLetter
-0D46..0D48    ; OLetter
-0D4A..0D4C    ; OLetter
+0D3D          ; OLetter
 0D60..0D61    ; OLetter
-0D82..0D83    ; OLetter
+0D7A..0D7F    ; OLetter
 0D85..0D96    ; OLetter
 0D9A..0DB1    ; OLetter
 0DB3..0DBB    ; OLetter
 0DBD          ; OLetter
 0DC0..0DC6    ; OLetter
-0DD0..0DD1    ; OLetter
-0DD8..0DDE    ; OLetter
-0DF2..0DF3    ; OLetter
 0E01..0E30    ; OLetter
 0E32..0E33    ; OLetter
 0E40..0E45    ; OLetter
@@ -1249,17 +1683,17 @@ FF21..FF3A    ; Upper
 0EDC..0EDD    ; OLetter
 0F00          ; OLetter
 0F40..0F47    ; OLetter
-0F49..0F6A    ; OLetter
-0F7F          ; OLetter
+0F49..0F6C    ; OLetter
 0F88..0F8B    ; OLetter
-1000..1021    ; OLetter
-1023..1027    ; OLetter
-1029..102A    ; OLetter
-102C          ; OLetter
-1031          ; OLetter
-1038          ; OLetter
+1000..102A    ; OLetter
+103F          ; OLetter
 1050..1055    ; OLetter
-1056..1057    ; OLetter
+105A..105D    ; OLetter
+1061          ; OLetter
+1065..1066    ; OLetter
+106E..1070    ; OLetter
+1075..1081    ; OLetter
+108E          ; OLetter
 10D0..10FA    ; OLetter
 10FC          ; OLetter
 1100..1159    ; OLetter
@@ -1295,37 +1729,30 @@ FF21..FF3A    ; Upper
 1760..176C    ; OLetter
 176E..1770    ; OLetter
 1780..17B3    ; OLetter
-17B6          ; OLetter
-17BE..17C5    ; OLetter
-17C7..17C8    ; OLetter
 17D7          ; OLetter
 17DC          ; OLetter
 1820..1842    ; OLetter
 1843          ; OLetter
 1844..1877    ; OLetter
 1880..18A8    ; OLetter
+18AA          ; OLetter
 1900..191C    ; OLetter
-1923..1926    ; OLetter
-1929..192B    ; OLetter
-1930..1931    ; OLetter
-1933..1938    ; OLetter
 1950..196D    ; OLetter
 1970..1974    ; OLetter
 1980..19A9    ; OLetter
-19B0..19C0    ; OLetter
 19C1..19C7    ; OLetter
-19C8..19C9    ; OLetter
 1A00..1A16    ; OLetter
-1A19..1A1B    ; OLetter
-1B04          ; OLetter
 1B05..1B33    ; OLetter
-1B35          ; OLetter
-1B3B          ; OLetter
-1B3D..1B41    ; OLetter
-1B43          ; OLetter
 1B45..1B4B    ; OLetter
+1B83..1BA0    ; OLetter
+1BAE..1BAF    ; OLetter
+1C00..1C23    ; OLetter
+1C4D..1C4F    ; OLetter
+1C5A..1C77    ; OLetter
+1C78..1C7D    ; OLetter
 2135..2138    ; OLetter
 2180..2182    ; OLetter
+2185..2188    ; OLetter
 2D30..2D65    ; OLetter
 2D6F          ; OLetter
 2D80..2D96    ; OLetter
@@ -1337,6 +1764,7 @@ FF21..FF3A    ; Upper
 2DC8..2DCE    ; OLetter
 2DD0..2DD6    ; OLetter
 2DD8..2DDE    ; OLetter
+2E2F          ; OLetter
 3005          ; OLetter
 3006          ; OLetter
 3007          ; OLetter
@@ -1351,23 +1779,34 @@ FF21..FF3A    ; Upper
 30A1..30FA    ; OLetter
 30FC..30FE    ; OLetter
 30FF          ; OLetter
-3105..312C    ; OLetter
+3105..312D    ; OLetter
 3131..318E    ; OLetter
 31A0..31B7    ; OLetter
 31F0..31FF    ; OLetter
 3400..4DB5    ; OLetter
-4E00..9FBB    ; OLetter
+4E00..9FC3    ; OLetter
 A000..A014    ; OLetter
 A015          ; OLetter
 A016..A48C    ; OLetter
-A717..A71A    ; OLetter
-A800..A801    ; OLetter
+A500..A60B    ; OLetter
+A60C          ; OLetter
+A610..A61F    ; OLetter
+A62A..A62B    ; OLetter
+A66E          ; OLetter
+A67F          ; OLetter
+A717..A71F    ; OLetter
+A788          ; OLetter
+A7FB..A801    ; OLetter
 A803..A805    ; OLetter
 A807..A80A    ; OLetter
 A80C..A822    ; OLetter
-A823..A824    ; OLetter
-A827          ; OLetter
 A840..A873    ; OLetter
+A882..A8B3    ; OLetter
+A90A..A925    ; OLetter
+A930..A946    ; OLetter
+AA00..AA28    ; OLetter
+AA40..AA42    ; OLetter
+AA44..AA4B    ; OLetter
 AC00..D7A3    ; OLetter
 F900..FA2D    ; OLetter
 FA30..FA6A    ; OLetter
@@ -1389,7 +1828,6 @@ FE76..FEFC    ; OLetter
 FF66..FF6F    ; OLetter
 FF70          ; OLetter
 FF71..FF9D    ; OLetter
-FF9E..FF9F    ; OLetter
 FFA0..FFBE    ; OLetter
 FFC2..FFC7    ; OLetter
 FFCA..FFCF    ; OLetter
@@ -1403,6 +1841,8 @@ FFDA..FFDC    ; OLetter
 10050..1005D  ; OLetter
 10080..100FA  ; OLetter
 10140..10174  ; OLetter
+10280..1029C  ; OLetter
+102A0..102D0  ; OLetter
 10300..1031E  ; OLetter
 10330..10340  ; OLetter
 10341         ; OLetter
@@ -1420,6 +1860,7 @@ FFDA..FFDC    ; OLetter
 1083C         ; OLetter
 1083F         ; OLetter
 10900..10915  ; OLetter
+10920..10939  ; OLetter
 10A00         ; OLetter
 10A10..10A13  ; OLetter
 10A15..10A17  ; OLetter
@@ -1429,7 +1870,7 @@ FFDA..FFDC    ; OLetter
 20000..2A6D6  ; OLetter
 2F800..2FA1D  ; OLetter
 
-# Total code points: 89727
+# Total code points: 90320
 
 # ================================================
 
@@ -1451,21 +1892,32 @@ FFDA..FFDC    ; OLetter
 0ED0..0ED9    ; Numeric
 0F20..0F29    ; Numeric
 1040..1049    ; Numeric
+1090..1099    ; Numeric
 17E0..17E9    ; Numeric
 1810..1819    ; Numeric
 1946..194F    ; Numeric
 19D0..19D9    ; Numeric
 1B50..1B59    ; Numeric
+1BB0..1BB9    ; Numeric
+1C40..1C49    ; Numeric
+1C50..1C59    ; Numeric
+A620..A629    ; Numeric
+A8D0..A8D9    ; Numeric
+A900..A909    ; Numeric
+AA50..AA59    ; Numeric
 104A0..104A9  ; Numeric
 1D7CE..1D7FF  ; Numeric
 
-# Total code points: 282
+# Total code points: 362
 
 # ================================================
 
 002E          ; ATerm
+2024          ; ATerm
+FE52          ; ATerm
+FF0E          ; ATerm
 
-# Total code points: 1
+# Total code points: 4
 
 # ================================================
 
@@ -1488,18 +1940,23 @@ FFDA..FFDC    ; OLetter
 1944..1945    ; STerm
 1B5A..1B5B    ; STerm
 1B5E..1B5F    ; STerm
+1C3B..1C3C    ; STerm
+1C7E..1C7F    ; STerm
 203C..203D    ; STerm
 2047..2049    ; STerm
+2E2E          ; STerm
 3002          ; STerm
+A60E..A60F    ; STerm
 A876..A877    ; STerm
-FE52          ; STerm
+A8CE..A8CF    ; STerm
+A92F          ; STerm
+AA5D..AA5F    ; STerm
 FE56..FE57    ; STerm
 FF01          ; STerm
-FF0E          ; STerm
 FF1F          ; STerm
 FF61          ; STerm
 
-# Total code points: 42
+# Total code points: 53
 
 # ================================================
 
@@ -1559,6 +2016,10 @@ FF61          ; STerm
 27E9          ; Close
 27EA          ; Close
 27EB          ; Close
+27EC          ; Close
+27ED          ; Close
+27EE          ; Close
+27EF          ; Close
 2983          ; Close
 2984          ; Close
 2985          ; Close
@@ -1600,6 +2061,16 @@ FF61          ; STerm
 2E0D          ; Close
 2E1C          ; Close
 2E1D          ; Close
+2E20          ; Close
+2E21          ; Close
+2E22          ; Close
+2E23          ; Close
+2E24          ; Close
+2E25          ; Close
+2E26          ; Close
+2E27          ; Close
+2E28          ; Close
+2E29          ; Close
 3008          ; Close
 3009          ; Close
 300A          ; Close
@@ -1659,6 +2130,32 @@ FF60          ; Close
 FF62          ; Close
 FF63          ; Close
 
-# Total code points: 163
+# Total code points: 177
+
+# ================================================
+
+002C          ; SContinue
+002D          ; SContinue
+003A          ; SContinue
+055D          ; SContinue
+060C..060D    ; SContinue
+07F8          ; SContinue
+1802          ; SContinue
+1808          ; SContinue
+2013..2014    ; SContinue
+3001          ; SContinue
+FE10..FE11    ; SContinue
+FE13          ; SContinue
+FE31..FE32    ; SContinue
+FE50..FE51    ; SContinue
+FE55          ; SContinue
+FE58          ; SContinue
+FE63          ; SContinue
+FF0C          ; SContinue
+FF0D          ; SContinue
+FF1A          ; SContinue
+FF64          ; SContinue
+
+# Total code points: 26
 
 # EOF

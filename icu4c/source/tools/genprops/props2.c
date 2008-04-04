@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2006, International Business Machines
+*   Copyright (C) 2002-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -118,9 +118,9 @@ parseSingleEnumFile(char *filename, char *basename, const char *suffix,
                     const SingleEnum *sen,
                     UErrorCode *pErrorCode);
 
-static const SingleEnum scriptSingleEnum={
-    "Scripts", "script",
-    UCHAR_SCRIPT,
+static const SingleEnum scriptSingleEnum={ 
+    "Scripts", "script", 
+    UCHAR_SCRIPT, 
     0, 0, UPROPS_SCRIPT_MASK
 };
 
@@ -151,7 +151,7 @@ static const SingleEnum sentenceBreakSingleEnum={
 static const SingleEnum lineBreakSingleEnum={
     "LineBreak", "line break",
     UCHAR_LINE_BREAK,
-    0, UPROPS_LB_SHIFT, UPROPS_LB_MASK
+    UPROPS_LB_VWORD, UPROPS_LB_SHIFT, UPROPS_LB_MASK
 };
 
 static const SingleEnum eawSingleEnum={
@@ -267,12 +267,12 @@ propListNames[]={
     { "Logical_Order_Exception",            1, UPROPS_LOGICAL_ORDER_EXCEPTION },
 
     /* new properties in Unicode 4.0.1 */
-    { "STerm",                              2, UPROPS_V2_S_TERM },
-    { "Variation_Selector",                 2, UPROPS_V2_VARIATION_SELECTOR },
+    { "STerm",                              1, UPROPS_S_TERM },
+    { "Variation_Selector",                 1, UPROPS_VARIATION_SELECTOR },
 
     /* new properties in Unicode 4.1 */
-    { "Pattern_Syntax",                     2, UPROPS_V2_PATTERN_SYNTAX },
-    { "Pattern_White_Space",                2, UPROPS_V2_PATTERN_WHITE_SPACE }
+    { "Pattern_Syntax",                     1, UPROPS_PATTERN_SYNTAX },
+    { "Pattern_White_Space",                1, UPROPS_PATTERN_WHITE_SPACE }
 };
 
 static const Binaries
@@ -574,6 +574,18 @@ numericLineFn(void *context,
     }
     ++limit;
 
+    /*
+     * Ignore the
+     * # @missing: 0000..10FFFF; NaN
+     * line from Unicode 5.1's DerivedNumericValues.txt:
+     * The following code cannot parse "NaN", and we don't want to overwrite
+     * the numeric values for all characters after reading most
+     * from UnicodeData.txt already.
+     */
+    if(start==0 && limit==0x110000) {
+        return;
+    }
+
     /* check if the numeric value is a fraction (this code does not handle any) */
     isFraction=FALSE;
     s=uprv_strchr(fields[1][0], '.');
@@ -719,11 +731,11 @@ writeAdditionalData(FILE *f, uint8_t *p, int32_t capacity, int32_t indexes[UPROP
             indexes[UPROPS_ADDITIONAL_VECTORS_INDEX]+pvCount;
 
         indexes[UPROPS_MAX_VALUES_INDEX]=
-            (((int32_t)U_LB_COUNT-1)<<UPROPS_LB_SHIFT)|
             (((int32_t)U_EA_COUNT-1)<<UPROPS_EA_SHIFT)|
             (((int32_t)UBLOCK_COUNT-1)<<UPROPS_BLOCK_SHIFT)|
-            ((int32_t)USCRIPT_CODE_LIMIT-1);
+            (((int32_t)USCRIPT_CODE_LIMIT-1)&UPROPS_SCRIPT_MASK);
         indexes[UPROPS_MAX_VALUES_2_INDEX]=
+            (((int32_t)U_LB_COUNT-1)<<UPROPS_LB_SHIFT)|
             (((int32_t)U_SB_COUNT-1)<<UPROPS_SB_SHIFT)|
             (((int32_t)U_WB_COUNT-1)<<UPROPS_WB_SHIFT)|
             (((int32_t)U_GCB_COUNT-1)<<UPROPS_GCB_SHIFT)|

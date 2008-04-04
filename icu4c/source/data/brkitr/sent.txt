@@ -1,42 +1,37 @@
 #
-#   Copyright (C) 2002-2006, International Business Machines Corporation and others.
+#   Copyright (C) 2002-2008, International Business Machines Corporation and others.
 #       All Rights Reserved.
 #
 #   file:  sent.txt
 #
 #   ICU Sentence Break Rules
 #      See Unicode Standard Annex #29.
-#      These rules are based on SA 29 version 5.0.0
-#      Includes post 5.0 changes to treat Japanese half width voicing marks
-#        as Grapheme Extend.
+#      These rules are based on SA 29 version 5.1.0
 #
 
-
-$VoiceMarks   = [\uff9e\uff9f];
 
 #
 # Character categories as defined in TR 29
 #
+$CR        = [\p{Sentence_Break = CR}];
+$LF        = [\p{Sentence_Break = LF}];
+$Extend    = [\p{Sentence_Break = Extend}];
 $Sep       = [\p{Sentence_Break = Sep}];
 $Format    = [\p{Sentence_Break = Format}];
 $Sp        = [\p{Sentence_Break = Sp}];
 $Lower     = [\p{Sentence_Break = Lower}];
 $Upper     = [\p{Sentence_Break = Upper}];
-$OLetter   = [\p{Sentence_Break = OLetter}-$VoiceMarks];
+$OLetter   = [\p{Sentence_Break = OLetter}];
 $Numeric   = [\p{Sentence_Break = Numeric}];
 $ATerm     = [\p{Sentence_Break = ATerm}];
+$SContinue = [\p{Sentence_Break = SContinue}];
 $STerm     = [\p{Sentence_Break = STerm}];
 $Close     = [\p{Sentence_Break = Close}];
 
 #
 # Define extended forms of the character classes,
-#   incorporate grapheme cluster + format chars.
+#   incorporate trailing Extend or Format chars.
 #   Rules 4 and 5.  
-
-
-$CR         = \u000d;
-$LF         = \u000a;
-$Extend     = [[:Grapheme_Extend = TRUE:]$VoiceMarks];
 
 $SpEx       = $Sp      ($Extend | $Format)*;
 $LowerEx    = $Lower   ($Extend | $Format)*;
@@ -44,6 +39,7 @@ $UpperEx    = $Upper   ($Extend | $Format)*;
 $OLetterEx  = $OLetter ($Extend | $Format)*;
 $NumericEx  = $Numeric ($Extend | $Format)*;
 $ATermEx    = $ATerm   ($Extend | $Format)*;
+$SContinueEx= $SContinue ($Extend | $Format)*;
 $STermEx    = $STerm   ($Extend | $Format)*;
 $CloseEx    = $Close   ($Extend | $Format)*;
 
@@ -61,7 +57,7 @@ $CR $LF;
 # Rule 4 - Break after $Sep.
 # Rule 5 - Ignore $Format and $Extend
 #
-[^$Sep]? ($Extend | $Format)*;
+[^$Sep $CR $LF]? ($Extend | $Format)*;
 
 
 # Rule 6
@@ -71,19 +67,18 @@ $ATermEx $NumericEx;
 $UpperEx $ATermEx $UpperEx;
 
 #Rule 8
-#  Note:  follows errata for Unicode 5.0 boundary rules.
-$NotLettersEx = [^$OLetter $Upper $Lower $Sep $ATerm $STerm] ($Extend | $Format)*;
+$NotLettersEx = [^$OLetter $Upper $Lower $Sep $CR $LF $ATerm $STerm] ($Extend | $Format)*;
 $ATermEx $CloseEx* $SpEx* $NotLettersEx* $Lower;
 
 # Rule 8a
-($STermEx | $ATermEx) $CloseEx* $SpEx* ($STermEx | $ATermEx);
+($STermEx | $ATermEx) $CloseEx* $SpEx* ($SContinueEx | $STermEx | $ATermEx);
 
 #Rule 9, 10, 11
-($STermEx | $ATermEx) $CloseEx* $SpEx* $Sep?;
+($STermEx | $ATermEx) $CloseEx* $SpEx* ($Sep | $CR | $LF)?;
 
 #Rule 12
-[[^$STerm $ATerm $Close $Sp $Sep $Format $Extend]{bof}] ($Extend | $Format | $Close | $Sp)* .;
-[[^$STerm $ATerm $Close $Sp $Sep $Format $Extend]{bof}] ($Extend | $Format | $Close | $Sp)* ([$Sep{eof}] | $CR $LF){100};
+[[^$STerm $ATerm $Close $Sp $Sep $LF $CR $Format $Extend]{bof}] ($Extend | $Format | $Close | $Sp)* .;
+[[^$STerm $ATerm $Close $Sp $Sep $LF $CR $Format $Extend]{bof}] ($Extend | $Format | $Close | $Sp)* ([$Sep $LF $CR {eof}] | $CR $LF){100};
 
 ## -------------------------------------------------
 
@@ -103,7 +98,7 @@ $CloseEx_R    = ($Extend | $Format)* $Close;
 #            builder.  Needs more investigation.
 #
 
-[{bof}] (.? | $LF $CR) [^$Sep]* [$Sep {eof}] ($SpEx_R* $CloseEx_R* ($STermEx_R | $ATermEx_R))*;
+[{bof}] (.? | $LF $CR) [^$Sep $CR $LF]* [$Sep $CR $LF {eof}] ($SpEx_R* $CloseEx_R* ($STermEx_R | $ATermEx_R))*;
 #.*;
 
 # Explanation for this rule:
