@@ -841,7 +841,7 @@ public class TestConversion extends ModuleTest {
          */
        
         
-  // retrieve test case data
+        // retrieve test case data
         ConversionCase cc = new ConversionCase();
         CharsetProviderICU provider = new CharsetProviderICU();
         CharsetICU charset  ;
@@ -859,23 +859,20 @@ public class TestConversion extends ModuleTest {
         
      
         int which = 1; // only checking for ROUNDTRIP_SET
-       try{
+        try{
            // if cc.charset starts with '*', obtain it from com/ibm/icu/dev/data/testdata
            charset = (cc.charset != null && cc.charset.length() > 0 && cc.charset.charAt(0) == '*')
                    ? (CharsetICU) provider.charsetForName(cc.charset.substring(1), "../dev/data/testdata")
                    : (CharsetICU) provider.charsetForName(cc.charset);
            
-                  
-           
-                  
            //checking for converter that are not supported at this point        
            try{
-               if(charset.name()=="BOCU-1" ||charset.name()== "SCSU"|| charset.name()=="lmbcs1" || charset.name()== "lmbcs2" 
-           
-               || charset.name()== "lmbcs3" || charset.name()== "lmbcs4" || charset.name()=="lmbcs5" || charset.name()=="lmbcs6" ||
-               charset.name()== "lmbcs8" || charset.name()=="lmbcs11" || charset.name()=="lmbcs16" || charset.name()=="lmbcs17" || charset.name()=="lmbcs18"
-                  || charset.name()=="lmbcs19"){
-               logln("Converter not supported at this point :" +charset.displayName());
+               if(charset.name()=="BOCU-1" ||charset.name()== "SCSU"|| charset.name()=="lmbcs1" || charset.name()== "lmbcs2" ||
+                      charset.name()== "lmbcs3" || charset.name()== "lmbcs4" || charset.name()=="lmbcs5" || charset.name()=="lmbcs6" ||
+                      charset.name()== "lmbcs8" || charset.name()=="lmbcs11" || charset.name()=="lmbcs16" || charset.name()=="lmbcs17" || 
+                      charset.name()=="lmbcs18"|| charset.name()=="lmbcs19"){
+                   
+                   logln("Converter not supported at this point :" +charset.displayName());
                }
                
            }catch(Exception e){
@@ -904,7 +901,6 @@ public class TestConversion extends ModuleTest {
            
           //are the items that must not be in unicodeset but are?
            
-           
            (diffset=mapnotset).retainAll(unicodeset);
            
            if(!diffset.isEmpty()){
@@ -915,17 +911,13 @@ public class TestConversion extends ModuleTest {
                logln("contains unexpected items - conversion/getUnicodeSet test case "+cc.charset);
                logln(s.toString());
            }
-         
          } catch (Exception e) {
              logln("getUnicodeSet returned an error code");
              logln("ErrorCode expected is: " + cc.outErrorCode);
              logln("Error Result is: " + e.toString());
              return;
-       } 
-      
+         }
     }
-
-    
 
     /**
      * This follows ucnv.c method ucnv_detectUnicodeSignature() to detect the

@@ -4921,7 +4921,8 @@ class CharsetMBCS extends CharsetICU {
                             case UCNV_SET_FILTER_DBCS_ONLY:
                                 /* Ignore single bytes results (<0x100). */
                                 do {
-                                    if(((st3&1) != 0 || useFallBack) && (UConverterConstants.UNSIGNED_SHORT_MASK & (ByteBuffer.wrap(bytes).getChar(stage3))) >= 0x100){
+                                    if(((st3&1) != 0 || useFallBack) && 
+                                            (UConverterConstants.UNSIGNED_SHORT_MASK & (ByteBuffer.wrap(bytes).getChar(stage3))) >= 0x100){
                                         setFillIn.add(c);
                                     }
                                     st3>>=1;
@@ -4931,8 +4932,8 @@ class CharsetMBCS extends CharsetICU {
                             case UCNV_SET_FILTER_2022_CN :
                                 /* only add code points that map to CNS 11643 planes 1&2 for non-EXT ISO-2202-CN. */
                                 do {
-                                    if(((st3&1) != 0 || useFallBack) && ((value= (UConverterConstants.UNSIGNED_BYTE_MASK & (ByteBuffer.wrap(bytes).get(stage3))))==0x81
-                                            || value==0x82) ){
+                                    if(((st3&1) != 0 || useFallBack) && 
+                                            ((value= (UConverterConstants.UNSIGNED_BYTE_MASK & (ByteBuffer.wrap(bytes).get(stage3))))==0x81 || value==0x82) ){
                                         setFillIn.add(c);
                                     }
                                     st3>>=1;
@@ -4953,8 +4954,9 @@ class CharsetMBCS extends CharsetICU {
                             case UCNV_SET_FILTER_GR94DBCS:
                                 /* only add code points that maps to ISO 2022 GR 94 DBCS codes*/
                                 do {
-                                    if(((st3&1) != 0 || useFallBack) && (UConverterConstants.UNSIGNED_SHORT_MASK & ((value=(UConverterConstants.UNSIGNED_SHORT_MASK & (ByteBuffer.wrap(bytes).getChar(stage3))))- 0xa1a1))<=(0xfefe - 0xa1a1) && 
-                                            ( UConverterConstants.UNSIGNED_BYTE_MASK & (value - 0xa1)) <= (0xfe - 0xa1)){
+                                    if(((st3&1) != 0 || useFallBack) && 
+                                            (UConverterConstants.UNSIGNED_SHORT_MASK & ((value=(UConverterConstants.UNSIGNED_SHORT_MASK & (ByteBuffer.wrap(bytes).getChar(stage3))))- 0xa1a1))<=(0xfefe - 0xa1a1) && 
+                                            (UConverterConstants.UNSIGNED_BYTE_MASK & (value - 0xa1)) <= (0xfe - 0xa1)){
                                         setFillIn.add(c);
                                     }
                                     st3>>=1;
@@ -4964,7 +4966,8 @@ class CharsetMBCS extends CharsetICU {
                             case UCNV_SET_FILTER_HZ:
                                 /*Only add code points that are suitable for HZ DBCS*/
                                 do {
-                                    if( ((st3&1) != 0 || useFallBack) && (UConverterConstants.UNSIGNED_SHORT_MASK & ((value=(UConverterConstants.UNSIGNED_SHORT_MASK & (ByteBuffer.wrap(bytes).getChar(stage3))))-0xa1a1))<=(0xfdfe - 0xa1a1) &&
+                                    if( ((st3&1) != 0 || useFallBack) && 
+                                            (UConverterConstants.UNSIGNED_SHORT_MASK & ((value=(UConverterConstants.UNSIGNED_SHORT_MASK & (ByteBuffer.wrap(bytes).getChar(stage3))))-0xa1a1))<=(0xfdfe - 0xa1a1) &&
                                             (UConverterConstants.UNSIGNED_BYTE_MASK & (value - 0xa1)) <= (0xfe - 0xa1)){
                                         setFillIn.add(c);
                                     }
@@ -5080,43 +5083,43 @@ class CharsetMBCS extends CharsetICU {
                                 length = 0;
                                 UTF16.append(s, length, c);
                                 extGetUnicodeSetString(cx,setFillIn,useFallback,minLength,c,s,length,(int)FROM_U_GET_PARTIAL_INDEX(value));
-                            } else if ((useFallback ?  (value&FROM_U_RESERVED_MASK)==0 
-                                        :((value&(FROM_U_ROUNDTRIP_FLAG|FROM_U_RESERVED_MASK))== 
-                                        FROM_U_ROUNDTRIP_FLAG)) && FROM_U_GET_LENGTH(value)>=minLength){
-                                            switch(filter) {
-                                            case UCNV_SET_FILTER_2022_CN:
-                                                if(!(FROM_U_GET_LENGTH(value)==3 && FROM_U_GET_DATA(value)<=0x82ffff)){
-                                                    continue;
-                                                }
-                                                break;
-                                            case UCNV_SET_FILTER_SJIS:
-                                                if(!(FROM_U_GET_LENGTH(value)==2 && (value=FROM_U_GET_DATA(value))>=0x8140 && value<=0xeffc)){
-                                                    continue;
-                                                }
-                                                break;
-                                            case UCNV_SET_FILTER_GR94DBCS:
-                                                if(!(FROM_U_GET_LENGTH(value)==2 && (UConverterConstants.UNSIGNED_SHORT_MASK & ((value=FROM_U_GET_DATA(value)) - 0xa1a1))<=(0xfefe - 0xa1a1) 
-                                                        && (UConverterConstants.UNSIGNED_BYTE_MASK & (value - 0xa1))<= (0xfe - 0xa1))){
-                                                    
-                                                    continue;
-                                                }
-                                                break;
-                                            case UCNV_SET_FILTER_HZ:
-                                                if(!(FROM_U_GET_LENGTH(value)==2 && (UConverterConstants.UNSIGNED_SHORT_MASK & ((value=FROM_U_GET_DATA(value)) - 0xa1a1))<=(0xfdfe - 0xa1a1) 
-                                                        && (UConverterConstants.UNSIGNED_BYTE_MASK & (value - 0xa1))<= (0xfe - 0xa1))){
-                                                    continue;
-                                                }
-                                                break;
-                                            default:
-                                                /*
-                                                 * UCNV_SET_FILTER_NONE,
-                                                 * or UCNV_SET_FILTER_DBCS_ONLY which is handled via minLength
-                                                 */
-                                                break;
-                                            }
-                                            setFillIn.add(c);
-                                          
-                                        }
+                            } else if ((useFallback ?  (value&FROM_U_RESERVED_MASK)==0 :((value&(FROM_U_ROUNDTRIP_FLAG|FROM_U_RESERVED_MASK))== FROM_U_ROUNDTRIP_FLAG)) && 
+                                    FROM_U_GET_LENGTH(value)>=minLength){
+                                
+                                switch(filter) {
+                                case UCNV_SET_FILTER_2022_CN:
+                                    if(!(FROM_U_GET_LENGTH(value)==3 && FROM_U_GET_DATA(value)<=0x82ffff)){
+                                        continue;
+                                    }
+                                    break;
+                                case UCNV_SET_FILTER_SJIS:
+                                    if(!(FROM_U_GET_LENGTH(value)==2 && (value=FROM_U_GET_DATA(value))>=0x8140 && value<=0xeffc)){
+                                        continue;
+                                    }
+                                    break;
+                                case UCNV_SET_FILTER_GR94DBCS:
+                                    if(!(FROM_U_GET_LENGTH(value)==2 && (UConverterConstants.UNSIGNED_SHORT_MASK & ((value=FROM_U_GET_DATA(value)) - 0xa1a1))<=(0xfefe - 0xa1a1) 
+                                            && (UConverterConstants.UNSIGNED_BYTE_MASK & (value - 0xa1))<= (0xfe - 0xa1))){
+                                        
+                                        continue;
+                                    }
+                                    break;
+                                case UCNV_SET_FILTER_HZ:
+                                    if(!(FROM_U_GET_LENGTH(value)==2 && (UConverterConstants.UNSIGNED_SHORT_MASK & ((value=FROM_U_GET_DATA(value)) - 0xa1a1))<=(0xfdfe - 0xa1a1) 
+                                            && (UConverterConstants.UNSIGNED_BYTE_MASK & (value - 0xa1))<= (0xfe - 0xa1))){
+                                        continue;
+                                    }
+                                    break;
+                                default:
+                                    /*
+                                     * UCNV_SET_FILTER_NONE,
+                                     * or UCNV_SET_FILTER_DBCS_ONLY which is handled via minLength
+                                     */
+                                    break;
+                                }
+                                setFillIn.add(c);
+                              
+                            }
                         }while((++c&0xf) != 0);
                       
                     } else {
@@ -5130,9 +5133,8 @@ class CharsetMBCS extends CharsetICU {
     }
     
     void MBCSGetUnicodeSetForUnicode(UConverterSharedData data, UnicodeSet setFillIn, int which){
-        MBCSGetFilteredUnicodeSetForUnicode(data, setFillIn, which, this.sharedData.mbcs.outputType==MBCS_OUTPUT_DBCS_ONLY ?
-                UCNV_SET_FILTER_DBCS_ONLY :
-                    UCNV_SET_FILTER_NONE );
+        MBCSGetFilteredUnicodeSetForUnicode(data, setFillIn, which, 
+                this.sharedData.mbcs.outputType==MBCS_OUTPUT_DBCS_ONLY ? UCNV_SET_FILTER_DBCS_ONLY : UCNV_SET_FILTER_NONE );
     }
     
     void getUnicodeSetImpl( UnicodeSet setFillIn, int which){
