@@ -13,6 +13,7 @@
 *   Date        Name        Description
 *   01/11/02    Ram         Creation.
 *   02/12/08    Spieth      Fix errant 'new Object[][]{' insertion
+*   02/19/08    Spieth      Removed ICUListResourceBundle dependancy
 *******************************************************************************
 */
 
@@ -62,11 +63,10 @@ static const char* openBrace="{\n";
 static const char* closeClass="    };\n"
                               "}\n";
 
-static const char* javaClass =  "import java.util.ListResourceBundle;\n"
-                                "import com.ibm.icu.impl.ICUListResourceBundle;\n\n"
+static const char* javaClass =  "import java.util.ListResourceBundle;\n\n"
                                 "public class ";
 
-static const char* javaClass1=  " extends ICUListResourceBundle {\n\n"
+static const char* javaClass1=  " extends ListResourceBundle {\n\n"
                                 "    /**\n"
                                 "     * Overrides ListResourceBundle \n"
                                 "     */\n"
@@ -74,7 +74,7 @@ static const char* javaClass1=  " extends ICUListResourceBundle {\n\n"
                                 "          return  contents;\n"
                                 "    }\n"
                                 "    private static Object[][] contents = {\n";
-static const char* javaClassICU= " extends ICUListResourceBundle {\n\n"
+static const char* javaClassICU= " extends ListResourceBundle {\n\n"
                                  "    public %s  () {\n"
                                  "          super.contents = data;\n"
                                  "    }\n"
@@ -304,98 +304,19 @@ str_write_java( uint16_t* src, int32_t srcLen, UBool printEndLine, UErrorCode *s
     uprv_free(buf);
 }
 
-static void
-write_utf8_file(struct SResource *res, const char *file, UErrorCode *status){
-        char fileName[1024] ={0};
-        FileStream* datFile = NULL;
-        const char* type = "new ICUListResourceBundle.ResourceString(";
-        char* dest  = (char*) uprv_malloc( 8 * res->u.fString.fLength);
-        int32_t len = 0;
-        if(outDir){
-            uprv_strcat(fileName,outDir);
-            if(outDir[uprv_strlen(outDir)-1]!=U_FILE_SEP_CHAR){
-                uprv_strcat(fileName,U_FILE_SEP_STRING);
-            }
-        }
-        uprv_strcat(fileName,file);/* UCARULES.utf8 UTF-8 file */
-
-        write_tabs(out);
-
-        T_FileStream_write(out, type, (int32_t)uprv_strlen(type));
-        T_FileStream_write(out, "\"", 1);
-        T_FileStream_write(out, file, (int32_t)uprv_strlen(file));
-        T_FileStream_write(out, "\")\n", 3);
-        datFile=T_FileStream_open(fileName,"w");
-
-        if(!dest){
-            *status=U_MEMORY_ALLOCATION_ERROR;
-        }
-
-        u_strToUTF8(dest,8*res->u.fString.fLength,&len,res->u.fString.fChars,res->u.fString.fLength,status);
-        if(U_FAILURE(*status)){
-            T_FileStream_close(datFile);
-            uprv_free(dest);
-            return;
-        }
-        T_FileStream_write(datFile,dest,len);
-        T_FileStream_close(datFile);
-        uprv_free(dest);
-}
-#define MAX_SEQUENCE_LENGTH 30000
 /* Writing Functions */
 static void
 string_write_java(struct SResource *res,UErrorCode *status) {
-    if(res->fKey > 0 && uprv_strcmp(srBundle->fKeys+res->fKey,"%%UCARULES")==0 ){
 
-        const char* file = "UCARules.utf8";
-        write_utf8_file(res, file, status);
-    }else if(res->fKey > 0 && uprv_strcmp(srBundle->fKeys+res->fKey,"Sequence")==0
-             && res->fType == RES_STRING
-             && res->u.fString.fLength > MAX_SEQUENCE_LENGTH){
-        char file[1024] = {0};
-        uprv_strcpy(file, "CollationSequence_");
-        uprv_strcat(file, srBundle->fLocale);
-        uprv_strcat(file, ".utf8");
-        write_utf8_file(res, file, status);
-
-    }else{
-        str_write_java(res->u.fString.fChars,res->u.fString.fLength,TRUE,status);
-
-        if(res->fKey > 0 && uprv_strcmp(srBundle->fKeys+res->fKey,"Rule")==0){
-            UChar* buf = (UChar*) uprv_malloc(sizeof(UChar)*res->u.fString.fLength);
-            uprv_memcpy(buf,res->u.fString.fChars,res->u.fString.fLength);
-            uprv_free(buf);
-        }
+    str_write_java(res->u.fString.fChars,res->u.fString.fLength,TRUE,status);
+    
+	if(res->fKey > 0 && uprv_strcmp(srBundle->fKeys+res->fKey,"Rule")==0)
+	{
+        UChar* buf = (UChar*) uprv_malloc(sizeof(UChar)*res->u.fString.fLength);
+        uprv_memcpy(buf,res->u.fString.fChars,res->u.fString.fLength);
+        uprv_free(buf);
     }
 
-}
-
-static void
-alias_write_java(struct SResource *res,UErrorCode *status) {
-    static const char str[] = "new ICUListResourceBundle.Alias(";
-    write_tabs(out);
-    T_FileStream_write(out,str,(int32_t)uprv_strlen(str));
-
-    /*str_write_java(res->u.fString.fChars,res->u.fString.fLength,FALSE,status);*/
-    /*if(*res->u.fString.fChars == RES_PATH_SEPARATOR) {*/
-        /* there is a path included
-        locale = u_strchr(res->u.fString.fChars +1, RES_PATH_SEPARATOR);
-        *locale = 0;
-        locale++;
-
-        T_FileStream_write(out,"\"/",2);
-        T_FileStream_write(out,apName,(int32_t)uprv_strlen(apName));
-        T_FileStream_write(out,"/",1);
-        T_FileStream_write(out,abName,(int32_t)uprv_strlen(abName));
-        T_FileStream_write(out,"/\"+",3);
-        str_write_java(locale,res->u.fString.fLength-(locale-res->u.fString.fChars),FALSE,status);
-    } else {
-        str_write_java(res->u.fString.fChars,res->u.fString.fLength,FALSE,status);
-    }*/
-
-    str_write_java(res->u.fString.fChars,res->u.fString.fLength,FALSE,status);
-
-    T_FileStream_write(out,"),\n",3);
 }
 
 static void
@@ -465,8 +386,8 @@ array_write_java( struct SResource *res, UErrorCode *status) {
 static void
 intvector_write_java( struct SResource *res, UErrorCode *status) {
     uint32_t i = 0;
-    const char* intArr = "new Integer[] {\n";
-    const char* intC   = "new Integer(";
+    const char* intArr = "new int[] {\n";
+    // const char* intC   = "new Integer(";
     const char* stringArr = "new String[]{\n";
     char buf[100];
     int len =0;
@@ -489,11 +410,12 @@ intvector_write_java( struct SResource *res, UErrorCode *status) {
         tabCount++;
         for(i = 0; i<res->u.fIntVector.fCount; i++) {
             write_tabs(out);
-            T_FileStream_write(out, intC, (int32_t)uprv_strlen(intC));
+            // T_FileStream_write(out, intC, (int32_t)uprv_strlen(intC));
             len=itostr(buf,res->u.fIntVector.fArray[i],10,0);
             T_FileStream_write(out,buf,len);
-            T_FileStream_write(out,"),",2);
-            T_FileStream_write(out,"\n",1);
+            // T_FileStream_write(out,"),",2);
+            // T_FileStream_write(out,"\n",1);
+            T_FileStream_write(out,",\n",2);
         }
     }
     tabCount--;
@@ -518,127 +440,68 @@ int_write_java(struct SResource *res,UErrorCode *status) {
 }
 
 static void
-bin_write_java( struct SResource *res, UErrorCode *status) {
-    const char* type = "new ICUListResourceBundle.CompressedBinary(";
-    const char* ext;
+bytes_write_java( struct SResource *res, UErrorCode *status) {
+	const char* type  = "new byte[] {";
+	const char* byteDecl = "%i, ";
+    char byteBuffer[100] = { 0 };
+	uint8_t*  byteArray = NULL;
+    int byteIterator = 0;
+	
     int32_t srcLen=res->u.fBinaryValue.fLength;
+	
+    if(srcLen>0 )
+	{
+        byteArray = res->u.fBinaryValue.fData;
 
-    if(srcLen>0 ){
-        uint16_t* target=NULL;
-        uint16_t* saveTarget = NULL;
-        int32_t tgtLen = 0;
+        write_tabs(out);
+        T_FileStream_write(out, type, (int32_t)uprv_strlen(type));
+        T_FileStream_write(out, "\n", 1);
+        tabCount++;
 
-        if(res->fKey > 0 && (uprv_strcmp(srBundle->fKeys+res->fKey,"%%CollationBin")==0 || uprv_strcmp(srBundle->fKeys+res->fKey,"BreakDictionaryData")==0)){
-            char fileName[1024] ={0};
-            char fn[1024] =  {0};
-            FileStream* datFile = NULL;
-            if(uprv_strcmp(srBundle->fKeys+res->fKey,"BreakDictionaryData")==0){
-                uprv_strcat(fileName,"BreakDictionaryData");
-                ext = ".brk";
-            }else{
-                uprv_strcat(fileName,"CollationElements");
-                ext=".col";
-            }
-            if(uprv_strcmp(srBundle->fLocale,"root")!=0){
-                uprv_strcat(fileName,"_");
-                uprv_strcat(fileName,srBundle->fLocale);
-                if(NUMBER > ZERO){
-                    uprv_strcat(fileName, "_");
-                    uprv_strcat(fileName, &NUMBER);
-                }
-                NUMBER++;
-            }
+		for (;byteIterator<srcLen;byteIterator++)
+		{
+            if (byteIterator%16 == 0)
+			{
+			    write_tabs(out);
+			}
 
-            uprv_strcat(fileName,ext);
-            if(outDir ){
-                uprv_strcat(fn,outDir);
-                if(outDir[uprv_strlen(outDir)-1]!=U_FILE_SEP_CHAR){
-                    uprv_strcat(fn,U_FILE_SEP_STRING);
-                }
-            }
-            uprv_strcat(fn,fileName);
-            type = "new ICUListResourceBundle.ResourceBinary(";
-            write_tabs(out);
-            T_FileStream_write(out, type, (int32_t)uprv_strlen(type));
-            T_FileStream_write(out, "\"", 1);
-            T_FileStream_write(out, fileName, (int32_t)uprv_strlen(fileName));
-            T_FileStream_write(out, "\"),\n", 4);
+			if (byteArray[byteIterator] < 128)
+			{
+                sprintf(byteBuffer, byteDecl, byteArray[byteIterator]);
+			}
+			else
+			{
+                sprintf(byteBuffer, byteDecl, (byteArray[byteIterator]-256));
+			}
 
-            datFile=T_FileStream_open(fn,"w");
-            T_FileStream_write(datFile, res->u.fBinaryValue.fData, res->u.fBinaryValue.fLength);
-            T_FileStream_close(datFile);
+            T_FileStream_write(out, byteBuffer, (int32_t)uprv_strlen(byteBuffer));
 
-        }else{
+			if (byteIterator%16 == 15)
+			{
+                T_FileStream_write(out, "\n", 1);
+			}
 
-            srcLen = res->u.fBinaryValue.fLength;
-            tgtLen = srcLen * 2;
-            target = (uint16_t*)malloc(sizeof(uint16_t) * tgtLen);
-            saveTarget  = target;
-            if(target){
-                tgtLen = byteArrayToRLEString(res->u.fBinaryValue.fData,
-                                              srcLen,target, tgtLen,status);
-                if(U_FAILURE(*status)){
-                     printf("Could not encode got error : %s \n", u_errorName(*status));
-                     return;
-                }
-#if DEBUG
-                /***************** Test Roundtripping *********************/
-                {
-                    int32_t myTargetLen = rleStringToByteArray(target,tgtLen,NULL,0,status);
-                    uint8_t* myTarget = (uint8_t*) malloc(sizeof(uint8_t) * myTargetLen);
+		}
 
-                    /* test for NULL */
-                    if(myTarget == NULL) {
-                        *status = U_MEMORY_ALLOCATION_ERROR;
-                        return;
-                    }
-
-                    int i=0;
-                    int32_t retVal=0;
-
-                    *status = U_ZERO_ERROR;
-                    retVal=rleStringToByteArray(target,tgtLen,myTarget,myTargetLen,status);
-                    if(U_SUCCESS(*status)){
-
-                        for(i=0; i< srcLen;i++){
-                            if(res->u.fBinaryValue.fData[i]!= myTarget[i]){
-                                printf("the encoded string cannot be decoded Expected : 0x%02X Got : %: 0x%02X at %i\n",res->u.fBinaryValue.fData[i],myTarget[i], i);
-                            }
-                        }
-                    }else{
-                        printf("Could not decode got error : %s \n", u_errorName(*status));
-                    }
-                    free(myTarget);
-
-                }
-#endif
-
-            }else{
-                *status = U_MEMORY_ALLOCATION_ERROR;
-                return;
-            }
-
-            write_tabs(out);
-            T_FileStream_write(out, type, (int32_t)uprv_strlen(type));
+        if (((byteIterator-1)%16) != 15)
+		{
             T_FileStream_write(out, "\n", 1);
-            tabCount++;
-            write_tabs(out);
-            str_write_java(target, tgtLen,FALSE, status);
-            tabCount--;
-            T_FileStream_write(out, "),\n", 3);
+	    }
 
-            free(target);
+		tabCount--;
+        write_tabs(out);
+		T_FileStream_write(out, "},\n", 3);
 
-        }
-
-   }else{
+	}
+	else
+    {
+		/* Empty array */
         write_tabs(out);
         T_FileStream_write(out,type,(int32_t)uprv_strlen(type));
-        T_FileStream_write(out,"null),\n",7);
-   }
+		T_FileStream_write(out,"},\n",3);
+    }
 
 }
-
 
 static UBool start = TRUE;
 
@@ -724,13 +587,14 @@ res_write_java(struct SResource *res,UErrorCode *status) {
              string_write_java    (res, status);
              return;
         case URES_ALIAS:
-             alias_write_java     (res, status);
-             return;
+             printf("Encountered unsupported resource type of alias\n", res->fType);
+             *status = U_UNSUPPORTED_ERROR;
+			 return;
         case URES_INT_VECTOR:
              intvector_write_java (res, status);
              return;
         case URES_BINARY:
-             bin_write_java       (res, status);
+             bytes_write_java     (res, status);
              return;
         case URES_INT:
              int_write_java       (res, status);
@@ -742,7 +606,6 @@ res_write_java(struct SResource *res,UErrorCode *status) {
         case URES_TABLE32:
              table_write_java     (res, status);
              return;
-
         default:
             break;
         }
