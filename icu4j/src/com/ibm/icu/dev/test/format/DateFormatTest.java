@@ -2228,7 +2228,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 xcal.set(Calendar.HOUR_OF_DAY, 25);
                 fmt.format(xcal, xbuf, fpos);
                 Date d2 = fmt.parse(xbuf.toString());
-                logln("ok again");
+                logln("ok again - d2=" + d2);
             }
             catch (ParseException e) {
                 errln("whoops");
@@ -2240,7 +2240,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             DateFormat fmt = new SimpleDateFormat("MM/dd/yy z");
             try {
                 d = fmt.parse("07/10/53 GMT+10:00");
-                logln("ok");
+                logln("ok : d = " + d);
             }
             catch (ParseException e) {
                 errln("Parse of 07/10/53 GMT+10:00 for pattern MM/dd/yy z");
@@ -2486,18 +2486,24 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 errln("FAIL: constructs DateFormatSymbols with calendar and locale failed");
             
             uloc = ULocale.getDefault();
+            // These APIs are obsolete and return null
             ResourceBundle resb = DateFormatSymbols.getDateFormatBundle(cal, loc);
             ResourceBundle resb2 = DateFormatSymbols.getDateFormatBundle(cal, uloc);
             ResourceBundle resb3 = DateFormatSymbols.getDateFormatBundle(cal.getClass(), loc);
             ResourceBundle resb4 = DateFormatSymbols.getDateFormatBundle(cal.getClass(), uloc);
-            
-            /* (ToDo) Not sure how to construct resourceBundle for this test
-                So comment out the verifying code. 
-            if (!resb.equals(resb2) || 
-                !resb.equals(resb3) ||
-                !resb.equals(resb4) )
-                errln("FAIL: getDateFormatBundle failed!");            
-            */
+
+            if (resb != null) {
+                logln("resb is not null");
+            }
+            if (resb2 != null) {
+                logln("resb2 is not null");
+            }
+            if (resb3 != null) {
+                logln("resb3 is not null");
+            }
+            if (resb4 != null) {
+                logln("resb4 is not null");
+            }
         }
 
         {
@@ -3177,6 +3183,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         Calendar cal = Calendar.getInstance();
         try {
             acit = df.formatToCharacterIterator(cal);
+            if (acit == null) {
+                errln("FAIL: null AttributedCharacterIterator returned by formatToCharacterIterator(Calendar)");
+            }
         } catch (IllegalArgumentException iae) {
             errln("FAIL: Calendar must be accepted by formatToCharacterIterator");
         }
@@ -3184,6 +3193,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         Date d = cal.getTime();
         try {
             acit = df.formatToCharacterIterator(d);
+            if (acit == null) {
+                errln("FAIL: null AttributedCharacterIterator returned by formatToCharacterIterator(Date)");
+            }
         } catch (IllegalArgumentException iae) {
             errln("FAIL: Date must be accepted by formatToCharacterIterator");
         }
@@ -3191,6 +3203,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         Number num = new Long(d.getTime());
         try {
             acit = df.formatToCharacterIterator(num);
+            if (acit == null) {
+                errln("FAIL: null AttributedCharacterIterator returned by formatToCharacterIterator(Number)");
+            }
         } catch (IllegalArgumentException iae) {
             errln("FAIL: Number must be accepted by formatToCharacterIterator");
         }
@@ -3199,6 +3214,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         String str = df.format(d);
         try {
             acit = df.formatToCharacterIterator(str);
+            if (acit == null) {
+                errln("FAIL: null AttributedCharacterIterator returned by formatToCharacterIterator(String)");
+            }
         } catch (IllegalArgumentException iae) {
             logln("IllegalArgumentException is thrown by formatToCharacterIterator");
             isException = true;

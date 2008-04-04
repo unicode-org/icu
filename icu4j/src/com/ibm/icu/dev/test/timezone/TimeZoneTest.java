@@ -21,7 +21,6 @@ import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.OlsonTimeZone;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;

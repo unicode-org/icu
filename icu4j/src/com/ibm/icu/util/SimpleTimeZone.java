@@ -1,5 +1,5 @@
  /*
-*   Copyright (C) 1996-2007, International Business Machines
+*   Copyright (C) 1996-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -920,37 +920,37 @@ public class SimpleTimeZone extends BasicTimeZone {
     /**
      * Internal construction method.
      */
-    private void construct(int raw,
-                           int startMonth,
-                           int startDay,
-                           int startDayOfWeek,
-                           int startTime,
-                           int startTimeMode,
-                           int endMonth,
-                           int endDay,
-                           int endDayOfWeek,
-                           int endTime,
-                           int endTimeMode,
-                           int dst) {
-        this.raw            = raw;
-        this.startMonth     = startMonth;
-        this.startDay       = startDay;
-        this.startDayOfWeek = startDayOfWeek;
-        this.startTime      = startTime;
-        this.startTimeMode  = startTimeMode;
-        this.endMonth       = endMonth;
-        this.endDay         = endDay;
-        this.endDayOfWeek   = endDayOfWeek;
-        this.endTime        = endTime;
-        this.endTimeMode    = endTimeMode;
-        this.dst            = dst;
-        this.startYear      = 0;
-        this.startMode      = DOM_MODE;
-        this.endMode        = DOM_MODE;
+    private void construct(int _raw,
+                           int _startMonth,
+                           int _startDay,
+                           int _startDayOfWeek,
+                           int _startTime,
+                           int _startTimeMode,
+                           int _endMonth,
+                           int _endDay,
+                           int _endDayOfWeek,
+                           int _endTime,
+                           int _endTimeMode,
+                           int _dst) {
+        raw            = _raw;
+        startMonth     = _startMonth;
+        startDay       = _startDay;
+        startDayOfWeek = _startDayOfWeek;
+        startTime      = _startTime;
+        startTimeMode  = _startTimeMode;
+        endMonth       = _endMonth;
+        endDay         = _endDay;
+        endDayOfWeek   = _endDayOfWeek;
+        endTime        = _endTime;
+        endTimeMode    = _endTimeMode;
+        dst            = _dst;
+        startYear      = 0;
+        startMode      = DOM_MODE;
+        endMode        = DOM_MODE;
 
         decodeRules();
 
-        if (dst <= 0) {
+        if (_dst <= 0) {
             throw new IllegalArgumentException();
         }
     }

@@ -362,10 +362,10 @@ class CharsetUTF8 extends CharsetICU {
             if (source.hasArray() && target.hasArray()) {
                 /* source and target are backed by arrays, so use the arrays for optimal performance */
                 char[] sourceArray = source.array();
-                int sourceIndex = source.arrayOffset() + source.position();
+                int srcIdx = source.arrayOffset() + source.position();
                 int sourceLimit = source.arrayOffset() + source.limit();
                 byte[] targetArray = target.array();
-                int targetIndex = target.arrayOffset() + target.position();
+                int tgtIdx = target.arrayOffset() + target.position();
                 int targetLimit = target.arrayOffset() + target.limit();
 
                 int char32;
@@ -375,88 +375,88 @@ class CharsetUTF8 extends CharsetICU {
                 if (fromUChar32 != 0) {
                     /* 4 bytes to encode from char32 and a following char in source */
 
-                    this.sourceIndex = sourceIndex;
-                    this.targetIndex = targetIndex;
+                    sourceIndex = srcIdx;
+                    targetIndex = tgtIdx;
                     cr = encodeFourBytes(sourceArray, targetArray, sourceLimit, targetLimit,
                             fromUChar32);
-                    sourceIndex = this.sourceIndex;
-                    targetIndex = this.targetIndex;
+                    srcIdx = sourceIndex;
+                    tgtIdx = targetIndex;
                     if (cr != null) {
-                        source.position(sourceIndex - source.arrayOffset());
-                        target.position(targetIndex - target.arrayOffset());
+                        source.position(srcIdx - source.arrayOffset());
+                        target.position(tgtIdx - target.arrayOffset());
                         return cr;
                     }
                 }
 
                 while (true) {
-                    if (sourceIndex >= sourceLimit) {
+                    if (srcIdx >= sourceLimit) {
                         /* nothing left to read */
                         cr = CoderResult.UNDERFLOW;
                         break;
                     }
-                    if (targetIndex >= targetLimit) {
+                    if (tgtIdx >= targetLimit) {
                         /* no space left to write */
                         cr = CoderResult.OVERFLOW;
                         break;
                     }
 
                     /* reach the next char into char32 */
-                    char32 = sourceArray[sourceIndex++];
+                    char32 = sourceArray[srcIdx++];
 
                     if (char32 <= 0x7f) {
                         /* 1 byte to encode from char32 */
 
-                        targetArray[targetIndex++] = encodeHeadOf1(char32);
+                        targetArray[tgtIdx++] = encodeHeadOf1(char32);
 
                     } else if (char32 <= 0x7ff) {
                         /* 2 bytes to encode from char32 */
 
-                        targetArray[targetIndex++] = encodeHeadOf2(char32);
+                        targetArray[tgtIdx++] = encodeHeadOf2(char32);
 
-                        if (targetIndex >= targetLimit) {
+                        if (tgtIdx >= targetLimit) {
                             errorBuffer[errorBufferLength++] = encodeLastTail(char32);
                             cr = CoderResult.OVERFLOW;
                             break;
                         }
-                        targetArray[targetIndex++] = encodeLastTail(char32);
+                        targetArray[tgtIdx++] = encodeLastTail(char32);
 
                     } else if (!UTF16.isSurrogate((char) char32) || isCESU8) {
                         /* 3 bytes to encode from char32 */
 
-                        targetArray[targetIndex++] = encodeHeadOf3(char32);
+                        targetArray[tgtIdx++] = encodeHeadOf3(char32);
 
-                        if (targetIndex >= targetLimit) {
+                        if (tgtIdx >= targetLimit) {
                             errorBuffer[errorBufferLength++] = encodeSecondToLastTail(char32);
                             errorBuffer[errorBufferLength++] = encodeLastTail(char32);
                             cr = CoderResult.OVERFLOW;
                             break;
                         }
-                        targetArray[targetIndex++] = encodeSecondToLastTail(char32);
+                        targetArray[tgtIdx++] = encodeSecondToLastTail(char32);
 
-                        if (targetIndex >= targetLimit) {
+                        if (tgtIdx >= targetLimit) {
                             errorBuffer[errorBufferLength++] = encodeLastTail(char32);
                             cr = CoderResult.OVERFLOW;
                             break;
                         }
-                        targetArray[targetIndex++] = encodeLastTail(char32);
+                        targetArray[tgtIdx++] = encodeLastTail(char32);
 
                     } else {
                         /* 4 bytes to encode from char32 and a following char in source */
 
-                        this.sourceIndex = sourceIndex;
-                        this.targetIndex = targetIndex;
+                        sourceIndex = srcIdx;
+                        targetIndex = tgtIdx;
                         cr = encodeFourBytes(sourceArray, targetArray, sourceLimit, targetLimit,
                                 char32);
-                        sourceIndex = this.sourceIndex;
-                        targetIndex = this.targetIndex;
+                        srcIdx = sourceIndex;
+                        tgtIdx = targetIndex;
                         if (cr != null)
                             break;
                     }
                 }
 
                 /* set the new source and target positions and return the CoderResult stored in cr */
-                source.position(sourceIndex - source.arrayOffset());
-                target.position(targetIndex - target.arrayOffset());
+                source.position(srcIdx - source.arrayOffset());
+                target.position(tgtIdx - target.arrayOffset());
                 return cr;
 
             } else {

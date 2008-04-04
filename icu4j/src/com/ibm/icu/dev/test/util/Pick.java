@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -70,8 +70,8 @@ abstract public class Pick {
        return visit(visitor);
     }
 
-    public Pick name(String name) {
-        this.name = name;
+    public Pick name(String nameStr) {
+        name = nameStr;
         return this;
     }
     
@@ -146,8 +146,8 @@ abstract public class Pick {
             addInternal(new Pick[] {item}); // we don't care about perf
             return this; // for chaining
         }
-        public Sequence and2 (Pick[] items) {
-            addInternal(items);
+        public Sequence and2 (Pick[] itemArray) {
+            addInternal(itemArray);
             return this; // for chaining
         }
         protected void addTo(Target target) {
@@ -180,11 +180,11 @@ abstract public class Pick {
         }
     }
     
-    String checkName(String name, Set alreadySeen) {
-        if (name == null) return "";
-        if (alreadySeen.contains(name)) return name;
-        alreadySeen.add(name);
-        return "{" + name + "=}";
+    String checkName(String nameStr, Set alreadySeen) {
+        if (nameStr == null) return "";
+        if (alreadySeen.contains(nameStr)) return nameStr;
+        alreadySeen.add(nameStr);
+        return "{" + nameStr + "=}";
     }
 
     public static class Alternation extends ListPick {

@@ -29,13 +29,14 @@ class CharsetISO2022 extends CharsetICU {
     private int variant;           // one of enum {ISO_2022_JP, ISO_2022_KR, or ISO_2022_CN}
     
     private static final byte[] SHIFT_IN_STR    = { 0x0f };
-    private static final byte[] SHIFT_OUT_STR   = { 0x0e };
-    
+//    private static final byte[] SHIFT_OUT_STR   = { 0x0e };
+
     private static final byte CR    = 0x0D;
     private static final byte LF    = 0x0A;
+/*
     private static final byte H_TAB = 0x09;
     private static final byte SPACE = 0x20;
-    
+*/
     private static final char HWKANA_START  = 0xff61;
     private static final char HWKANA_END    = 0xff9f;
     
@@ -47,8 +48,10 @@ class CharsetISO2022 extends CharsetICU {
      * Do not encode C1 control codes with native bytes 80..9F
      * as bytes 00..1F (C0 control codes).
      */
+/*
     private static final char GR94_START    = 0xa1;
     private static final char GR94_END      = 0xfe;
+*/
     private static final char GR96_START    = 0xa0;
     private static final char GR96_END      = 0xff;
     
@@ -598,7 +601,8 @@ class CharsetISO2022 extends CharsetICU {
         (short)(CSM(ASCII)|CSM(JISX201)|CSM(JISX208)|CSM(HWKANA_7BIT)|CSM(JISX212)|CSM(GB2312)|CSM(KSC5601)|CSM(ISO8859_1)|CSM(ISO8859_7)),
         (short)(CSM(ASCII)|CSM(JISX201)|CSM(JISX208)|CSM(HWKANA_7BIT)|CSM(JISX212)|CSM(GB2312)|CSM(KSC5601)|CSM(ISO8859_1)|CSM(ISO8859_7))
     };
-    
+
+/*
     // typedef enum {
         private static final byte ASCII1 = 0;
         private static final byte LATIN1 = 1;
@@ -607,7 +611,8 @@ class CharsetISO2022 extends CharsetICU {
         private static final byte MBCS   = 4;
         private static final byte HWKANA = 5;
     // } Cnv2002Type;
-    
+*/
+
     private class ISO2022State {
         private byte []cs;  /* Charset number for SI (G0)/SO (G1)/SS2 (G2)/SS3 (G3) */
         private byte g;     /* 0..3 for G0..G3 (SI/SO/SS2/SS3) */
@@ -632,7 +637,7 @@ class CharsetISO2022 extends CharsetICU {
         }
     }
     
-    private static final byte UCNV_OPTIONS_VERSION_MASK = 0xf;
+//    private static final byte UCNV_OPTIONS_VERSION_MASK = 0xf;
     private static final byte UCNV_2022_MAX_CONVERTERS  = 10;
     
     private class UConverterDataISO2022 {

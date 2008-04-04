@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -366,7 +366,7 @@ public final class CanonicalIterator {
      * (with canonical rearrangment!)
      * If so, take the remainder, and return the equivalents
      */
-    private Set extract(int comp, String segment, int segmentPos, StringBuffer buffer) {
+    private Set extract(int comp, String segment, int segmentPos, StringBuffer buf) {
         if (PROGRESS) System.out.println(" extract: " + Utility.hex(UTF16.valueOf(comp))
             + ", " + Utility.hex(segment.substring(segmentPos)));
 
@@ -380,14 +380,14 @@ public final class CanonicalIterator {
         int decompCp = UTF16.charAt(decomp,0);
         decompPos += UTF16.getCharCount(decompCp); // adjust position to skip first char
         //int decompClass = getClass(decompCp);
-        buffer.setLength(0); // initialize working buffer, shared among callees
+        buf.setLength(0); // initialize working buffer, shared among callees
 
         for (int i = segmentPos; i < segment.length(); i += UTF16.getCharCount(cp)) {
             cp = UTF16.charAt(segment, i);
             if (cp == decompCp) { // if equal, eat another cp from decomp
                 if (PROGRESS) System.out.println("  matches: " + Utility.hex(UTF16.valueOf(cp)));
                 if (decompPos == decomp.length()) { // done, have all decomp characters!
-                    buffer.append(segment.substring(i + UTF16.getCharCount(cp))); // add remaining segment chars
+                    buf.append(segment.substring(i + UTF16.getCharCount(cp))); // add remaining segment chars
                     ok = true;
                     break;
                 }
@@ -397,7 +397,7 @@ public final class CanonicalIterator {
             } else {
                 if (PROGRESS) System.out.println("  buffer: " + Utility.hex(UTF16.valueOf(cp)));
                 // brute force approach
-                UTF16.append(buffer, cp);
+                UTF16.append(buf, cp);
                 /* TODO: optimize
                 // since we know that the classes are monotonically increasing, after zero
                 // e.g. 0 5 7 9 0 3
@@ -413,8 +413,8 @@ public final class CanonicalIterator {
         }
         if (!ok) return null; // we failed, characters left over
         if (PROGRESS) System.out.println("Matches");
-        if (buffer.length() == 0) return SET_WITH_NULL_STRING; // succeed, but no remainder
-        String remainder = buffer.toString();
+        if (buf.length() == 0) return SET_WITH_NULL_STRING; // succeed, but no remainder
+        String remainder = buf.toString();
 
         // brute force approach
         // to check to make sure result is canonically equivalent

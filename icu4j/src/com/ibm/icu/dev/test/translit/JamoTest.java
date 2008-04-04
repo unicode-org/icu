@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -14,8 +14,6 @@ import java.util.*;
  * @summary Test the Latin-Jamo transliterator
  */
 public class JamoTest extends TransliteratorTest {
-
-    private static final char SEP = '-';
 
     public static void main(String[] args) throws Exception {
         new JamoTest().run(args);

@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2004-2006, International Business Machines Corporation and        *
+* Copyright (C) 2004-2008, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -27,22 +27,22 @@ public class ResourceBundleWrapper extends UResourceBundle {
     private String localeID = null;
     private String baseName = null;
     private Vector keys=null;
-    private int loadingStatus = -1;    
+//    private int loadingStatus = -1;    
     
     private ResourceBundleWrapper(ResourceBundle bundle){
         this.bundle=bundle;
     }
 
     protected void setLoadingStatus(int newStatus){
-        loadingStatus = newStatus;
+//        loadingStatus = newStatus;
     }
     
-    protected Object handleGetObject(String key){
+    protected Object handleGetObject(String aKey){
         ResourceBundleWrapper current = this;
         Object obj = null;
         while(current!=null){
             try{
-                obj = current.bundle.getObject(key);
+                obj = current.bundle.getObject(aKey);
                 break;
             }catch(MissingResourceException ex){
                 current = (ResourceBundleWrapper)current.getParent();
@@ -51,9 +51,9 @@ public class ResourceBundleWrapper extends UResourceBundle {
         if (obj == null){
             throw new MissingResourceException("Can't find resource for bundle "
                                                +baseName
-                                               +", key "+key,
+                                               +", key "+aKey,
                                                this.getClass().getName(),
-                                               key);
+                                               aKey);
         }
         return obj;
     }

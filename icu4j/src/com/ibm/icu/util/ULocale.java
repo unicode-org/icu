@@ -2653,7 +2653,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 2.8 (retain)
      * @provisional This API might change or be removed in a future release.
      */
-    public static Type ACTUAL_LOCALE = new Type(0);
+    public static Type ACTUAL_LOCALE = new Type();
 
     /** 
      * Selector for <tt>getLocale()</tt> indicating the most specific
@@ -2669,7 +2669,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 2.8 (retain)
      * @provisional This API might change or be removed in a future release.
      */ 
-    public static Type VALID_LOCALE = new Type(1);
+    public static Type VALID_LOCALE = new Type();
 
     /**
      * Opaque selector enum for <tt>getLocale()</tt>.
@@ -2680,8 +2680,7 @@ public final class ULocale implements Serializable {
      * @provisional This API might change or be removed in a future release.
      */
     public static final class Type {
-        private int localeType;
-        private Type(int type) { localeType = type; }
+        private Type() {}
     }
 
   /**

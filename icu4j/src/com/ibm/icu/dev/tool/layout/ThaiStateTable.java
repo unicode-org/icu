@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1998-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1998-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -90,7 +90,7 @@ public class ThaiStateTable
         
         for (int c = 0; c < ThaiCharacterClasses.cCount; c += 1) {
             char pairAction = ThaiCharacterClasses.getPairAction(prevClass, c);
-            int nextState = 0;
+            int nextSt = 0;
             
             switch (pairAction) {
             case 'G':
@@ -123,10 +123,10 @@ public class ThaiStateTable
             }
             
             if (c != prevClass && isLegalHere(state, pairAction) && composesWithAnything(c)) {
-                nextState = addState(c, prevClass);
+                nextSt = addState(c, prevClass);
             }
             
-            stateRow[c] = new ThaiStateTransition(nextState, pairAction);
+            stateRow[c] = new ThaiStateTransition(nextSt, pairAction);
         }
         
         return state;

@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and   *
+* Copyright (C) 2007-2008, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -79,9 +79,9 @@ public class YMDDateFormatter implements DateFormatter {
   /**
    * Returns a version of this formatter customized to the provided locale.
    */
-  public DateFormatter withLocale(String localeName) {
-    if (!localeName.equals(this.localeName)) {
-      return new YMDDateFormatter(requestedFields, localeName, timeZone);
+  public DateFormatter withLocale(String locName) {
+    if (!locName.equals(localeName)) {
+      return new YMDDateFormatter(requestedFields, locName, timeZone);
     }
     return this;
   }
@@ -89,9 +89,9 @@ public class YMDDateFormatter implements DateFormatter {
   /**
    * Returns a version of this formatter customized to the provided time zone.
    */
-  public DateFormatter withTimeZone(TimeZone timeZone) {
-    if (!timeZone.equals(this.timeZone)) {
-      return new YMDDateFormatter(requestedFields, localeName, timeZone);
+  public DateFormatter withTimeZone(TimeZone tz) {
+    if (!tz.equals(timeZone)) {
+      return new YMDDateFormatter(requestedFields, localeName, tz);
     }
     return this;
   }

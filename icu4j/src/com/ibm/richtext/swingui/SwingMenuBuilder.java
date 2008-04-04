@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2008.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -210,11 +210,11 @@ public final class SwingMenuBuilder extends MenuBuilder {
         // variable not used final MTextPanel textPanel = fTextPanel;
             
         return new DialogFactory() {
-            public Window createDialog(MTextPanel fTextPanel) {
+            public Window createDialog(MTextPanel fTxtPanel) {
                 return new JNumberDialog(dialogParent,
                                          dialogTitle,
                                          dialogMessage,
-                                         fTextPanel,
+                                         fTxtPanel,
                                          key,
                                          character,
                                          1);

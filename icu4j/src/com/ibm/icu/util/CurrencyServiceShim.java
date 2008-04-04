@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -62,7 +62,7 @@ final class CurrencyServiceShim extends Currency.ServiceShim {
             super("Currency");
 
             class CurrencyFactory extends ICUResourceBundleFactory {
-                protected Object handleCreate(ULocale loc, int kind, ICUService service) {
+                protected Object handleCreate(ULocale loc, int kind, ICUService srvc) {
                     return Currency.createCurrency(loc);
                 }
             }

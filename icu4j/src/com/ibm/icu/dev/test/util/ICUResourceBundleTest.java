@@ -1,7 +1,7 @@
 //##header J2SE15
 /**
  *******************************************************************************
- * Copyright (C) 2001-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -997,7 +997,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             protected UResourceBundle getParent() {return null;}
             protected void setLoadingStatus(int newStatus) {}
             public Enumeration getKeys() {return null;}
-            protected Object handleGetObject(String key) {return null;}
+            protected Object handleGetObject(String aKey) {return null;}
         }
         Stub stub = new Stub();
         

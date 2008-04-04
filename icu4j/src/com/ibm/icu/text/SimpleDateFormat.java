@@ -692,11 +692,11 @@ public class SimpleDateFormat extends DateFormat {
      * @param beginOffset the offset of the output string at the start of
      * this field; used to set pos when appropriate
      * @param pos receives the position of a field, when appropriate
-     * @param formatData the symbols for this formatter
+     * @param fmtData the symbols for this formatter
      * @stable ICU 2.0
      */
     protected String subFormat(char ch, int count, int beginOffset,
-                               FieldPosition pos, DateFormatSymbols formatData,
+                               FieldPosition pos, DateFormatSymbols fmtData,
                                Calendar cal)
         throws IllegalArgumentException
     {

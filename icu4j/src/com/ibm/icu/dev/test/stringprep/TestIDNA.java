@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -747,6 +747,7 @@ public class TestIDNA extends TestFmwk {
                 String ascii = IDNA.convertToASCII(in[i],IDNA.DEFAULT).toString();
                 try{
                     String unicode = IDNA.convertToUnicode(ascii,IDNA.DEFAULT).toString();
+                    logln("result " + unicode);
                 }catch(StringPrepParseException ex){
                     errln("Unexpected exception for convertToUnicode: " + ex.getMessage());
                 }

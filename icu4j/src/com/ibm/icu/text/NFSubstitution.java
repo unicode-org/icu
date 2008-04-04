@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -271,18 +271,18 @@ abstract class NFSubstitution {
      * toInsertInto.
      * @param number The number being formatted.
      * @param toInsertInto The string we insert the result into
-     * @param pos The position in toInsertInto where the owning rule's
+     * @param position The position in toInsertInto where the owning rule's
      * rule text begins (this value is added to this substitution's
      * position to determine exactly where to insert the new text)
      */
-    public void doSubstitution(long number, StringBuffer toInsertInto, int pos) {
+    public void doSubstitution(long number, StringBuffer toInsertInto, int position) {
         if (ruleSet != null) {
             // perform a transformation on the number that is dependent
             // on the type of substitution this is, then just call its
             // rule set's format() method to format the result
             long numberToFormat = transformNumber(number);
 
-            ruleSet.format(numberToFormat, toInsertInto, pos + this.pos);
+            ruleSet.format(numberToFormat, toInsertInto, position + pos);
         } else {
             // or perform the transformation on the number (preserving
             // the result's fractional part if the formatter it set
@@ -293,7 +293,7 @@ abstract class NFSubstitution {
                 numberToFormat = Math.floor(numberToFormat);
             }
 
-            toInsertInto.insert(pos + this.pos, numberFormat.format(numberToFormat));
+            toInsertInto.insert(position + pos, numberFormat.format(numberToFormat));
         }
     }
 
@@ -303,11 +303,11 @@ abstract class NFSubstitution {
      * toInsertInto.
      * @param number The number being formatted.
      * @param toInsertInto The string we insert the result into
-     * @param pos The position in toInsertInto where the owning rule's
+     * @param position The position in toInsertInto where the owning rule's
      * rule text begins (this value is added to this substitution's
      * position to determine exactly where to insert the new text)
      */
-    public void doSubstitution(double number, StringBuffer toInsertInto, int pos) {
+    public void doSubstitution(double number, StringBuffer toInsertInto, int position) {
         // perform a transformation on the number being formatted that
         // is dependent on the type of substitution this is
         double numberToFormat = transformNumber(number);
@@ -315,16 +315,16 @@ abstract class NFSubstitution {
         // if the result is an integer, from here on out we work in integer
         // space (saving time and memory and preserving accuracy)
         if (numberToFormat == Math.floor(numberToFormat) && ruleSet != null) {
-            ruleSet.format((long)numberToFormat, toInsertInto, pos + this.pos);
+            ruleSet.format((long)numberToFormat, toInsertInto, position + pos);
 
             // if the result isn't an integer, then call either our rule set's
             // format() method or our DecimalFormat's format() method to
             // format the result
         } else {
             if (ruleSet != null) {
-                ruleSet.format(numberToFormat, toInsertInto, pos + this.pos);
+                ruleSet.format(numberToFormat, toInsertInto, position + pos);
             } else {
-                toInsertInto.insert(pos + this.pos, numberFormat.format(numberToFormat));
+                toInsertInto.insert(position + this.pos, numberFormat.format(numberToFormat));
             }
         }
     }
@@ -874,20 +874,20 @@ class ModulusSubstitution extends NFSubstitution {
      * @param number The number being formatted
      * @toInsertInto The string to insert the result of this substitution
      * into
-     * @param pos The position of the rule text in toInsertInto
+     * @param position The position of the rule text in toInsertInto
      */
-    public void doSubstitution(long number, StringBuffer toInsertInto, int pos) {
+    public void doSubstitution(long number, StringBuffer toInsertInto, int position) {
         // if this isn't a >>> substitution, just use the inherited version
         // of this function (which uses either a rule set or a DecimalFormat
         // to format its substitution value)
         if (ruleToUse == null) {
-            super.doSubstitution(number, toInsertInto, pos);
+            super.doSubstitution(number, toInsertInto, position);
 
         // a >>> substitution goes straight to a particular rule to
         // format the substitution value
         } else {
             long numberToFormat = transformNumber(number);
-            ruleToUse.doFormat(numberToFormat, toInsertInto, pos + this.pos);
+            ruleToUse.doFormat(numberToFormat, toInsertInto, position + pos);
         }
     }
 
@@ -897,21 +897,21 @@ class ModulusSubstitution extends NFSubstitution {
      * @param number The number being formatted
      * @toInsertInto The string to insert the result of this substitution
      * into
-     * @param pos The position of the rule text in toInsertInto
+     * @param position The position of the rule text in toInsertInto
      */
-    public void doSubstitution(double number, StringBuffer toInsertInto, int pos) {
+    public void doSubstitution(double number, StringBuffer toInsertInto, int position) {
         // if this isn't a >>> substitution, just use the inherited version
         // of this function (which uses either a rule set or a DecimalFormat
         // to format its substitution value)
         if (ruleToUse == null) {
-            super.doSubstitution(number, toInsertInto, pos);
+            super.doSubstitution(number, toInsertInto, position);
 
         // a >>> substitution goes straight to a particular rule to
         // format the substitution value
         } else {
             double numberToFormat = transformNumber(number);
 
-            ruleToUse.doFormat(numberToFormat, toInsertInto, pos + this.pos);
+            ruleToUse.doFormat(numberToFormat, toInsertInto, position + pos);
         }
     }
 
@@ -1180,14 +1180,14 @@ class FractionalPartSubstitution extends NFSubstitution {
      * @param number The number being formatted
      * @param toInsertInto The string to insert the result of formatting
      * the substitution into
-     * @param pos The position of the owning rule's rule text in
+     * @param position The position of the owning rule's rule text in
      * toInsertInto
      */
-    public void doSubstitution(double number, StringBuffer toInsertInto, int pos) {
+    public void doSubstitution(double number, StringBuffer toInsertInto, int position) {
         // if we're not in "byDigits" mode, just use the inherited
         // doSubstitution() routine
         if (!byDigits) {
-            super.doSubstitution(number, toInsertInto, pos);
+            super.doSubstitution(number, toInsertInto, position);
 
         // if we're in "byDigits" mode, transform the value into an integer
         // by moving the decimal point eight places to the right and
@@ -1227,19 +1227,19 @@ class FractionalPartSubstitution extends NFSubstitution {
         boolean pad = false;
         while (dl.count > Math.max(0, dl.decimalAt)) {
         if (pad && useSpaces) {
-            toInsertInto.insert(pos + this.pos, ' ');
+            toInsertInto.insert(position + pos, ' ');
         } else {
             pad = true;
         }
-        ruleSet.format(dl.digits[--dl.count] - '0', toInsertInto, pos + this.pos);
+        ruleSet.format(dl.digits[--dl.count] - '0', toInsertInto, position + pos);
         }
         while (dl.decimalAt < 0) {
         if (pad && useSpaces) {
-            toInsertInto.insert(pos + this.pos, ' ');
+            toInsertInto.insert(position + pos, ' ');
         } else {
             pad = true;
         }
-        ruleSet.format(0, toInsertInto, pos + this.pos);
+        ruleSet.format(0, toInsertInto, position + pos);
         ++dl.decimalAt;
         }
     }
@@ -1547,11 +1547,11 @@ class NumeratorSubstitution extends NFSubstitution {
      * toInsertInto.
      * @param number The number being formatted.
      * @param toInsertInto The string we insert the result into
-     * @param pos The position in toInsertInto where the owning rule's
+     * @param position The position in toInsertInto where the owning rule's
      * rule text begins (this value is added to this substitution's
      * position to determine exactly where to insert the new text)
      */
-    public void doSubstitution(double number, StringBuffer toInsertInto, int pos) {
+    public void doSubstitution(double number, StringBuffer toInsertInto, int position) {
         // perform a transformation on the number being formatted that
         // is dependent on the type of substitution this is
         //String s = toInsertInto.toString();
@@ -1562,25 +1562,25 @@ class NumeratorSubstitution extends NFSubstitution {
             long nf = (long)numberToFormat;
             int len = toInsertInto.length();
             while ((nf *= 10) < denominator) {
-                toInsertInto.insert(pos + this.pos, ' ');
-                ruleSet.format(0, toInsertInto, pos + this.pos);
+                toInsertInto.insert(position + pos, ' ');
+                ruleSet.format(0, toInsertInto, position + pos);
             }
-            pos += toInsertInto.length() - len;
+            position += toInsertInto.length() - len;
         }
 
         // if the result is an integer, from here on out we work in integer
         // space (saving time and memory and preserving accuracy)
         if (numberToFormat == Math.floor(numberToFormat) && ruleSet != null) {
-            ruleSet.format((long)numberToFormat, toInsertInto, pos + this.pos);
+            ruleSet.format((long)numberToFormat, toInsertInto, position + pos);
 
             // if the result isn't an integer, then call either our rule set's
             // format() method or our DecimalFormat's format() method to
             // format the result
         } else {
             if (ruleSet != null) {
-                ruleSet.format(numberToFormat, toInsertInto, pos + this.pos);
+                ruleSet.format(numberToFormat, toInsertInto, position + pos);
             } else {
-                toInsertInto.insert(pos + this.pos, numberFormat.format(numberToFormat));
+                toInsertInto.insert(position + pos, numberFormat.format(numberToFormat));
             }
         }
     }
@@ -1758,13 +1758,13 @@ class NullSubstitution extends NFSubstitution {
     /**
      * Does nothing.
      */
-    public void doSubstitution(long number, StringBuffer toInsertInto, int pos) {
+    public void doSubstitution(long number, StringBuffer toInsertInto, int position) {
     }
 
     /**
      * Does nothing.
      */
-    public void doSubstitution(double number, StringBuffer toInsertInto, int pos) {
+    public void doSubstitution(double number, StringBuffer toInsertInto, int position) {
     }
 
     /**

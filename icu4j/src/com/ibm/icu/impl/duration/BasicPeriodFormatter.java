@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and   *
+* Copyright (C) 2007-2008, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -38,10 +38,10 @@ class BasicPeriodFormatter implements PeriodFormatter {
     return format(period.timeLimit, period.inFuture, period.counts);
   }
 
-  public PeriodFormatter withLocale(String localeName) {
-    if (!this.localeName.equals(localeName)) {
-      PeriodFormatterData newData = factory.getData(localeName);
-      return new BasicPeriodFormatter(factory, localeName, newData, 
+  public PeriodFormatter withLocale(String locName) {
+    if (!this.localeName.equals(locName)) {
+      PeriodFormatterData newData = factory.getData(locName);
+      return new BasicPeriodFormatter(factory, locName, newData, 
                                       customs);
     }
     return this;

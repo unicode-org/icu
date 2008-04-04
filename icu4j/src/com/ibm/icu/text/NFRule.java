@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -11,7 +11,7 @@ import com.ibm.icu.impl.UCharacterProperty;
 import java.text.*;
 
 /**
- * A class represnting a single rule in a RuleBasedNumberFormat.  A rule
+ * A class representing a single rule in a RuleBasedNumberFormat.  A rule
  * inserts its text into the result string and then passes control to its
  * substitutions, which do the same thing.
  */
@@ -919,7 +919,7 @@ final class NFRule {
      * @param text The string being parsed
      * @param startPos The position in "text" where we should start looking
      * for "delimiter".
-     * @param baseValue A partial parse result (often the rule's base value),
+     * @param baseVal A partial parse result (often the rule's base value),
      * which is combined with the result from matching the substitution
      * @param delimiter The string to search "text" for.
      * @param pp Ignored and presumed to be 0 on entry.  If there's a match,
@@ -937,7 +937,7 @@ final class NFRule {
      * this will be an instance of Long; otherwise, it's an instance of
      * Double.
      */
-    private Number matchToDelimiter(String text, int startPos, double baseValue,
+    private Number matchToDelimiter(String text, int startPos, double baseVal,
                                     String delimiter, ParsePosition pp, NFSubstitution sub, double upperBound) {
         // if "delimiter" contains real (i.e., non-ignorable) text, search
         // it for "delimiter" beginning at "start".  If that succeeds, then
@@ -960,7 +960,7 @@ final class NFRule {
             while (dPos >= 0) {
                 String subText = text.substring(0, dPos);
                 if (subText.length() > 0) {
-                    tempResult = sub.doParse(subText, tempPP, baseValue, upperBound,
+                    tempResult = sub.doParse(subText, tempPP, baseVal, upperBound,
                                              formatter.lenientParseEnabled());
 
                     // if the substitution could match all the text up to
@@ -1006,7 +1006,7 @@ final class NFRule {
             Number tempResult;
 
             // try to match the whole string against the substitution
-            tempResult = sub.doParse(text, tempPP, baseValue, upperBound,
+            tempResult = sub.doParse(text, tempPP, baseVal, upperBound,
                                      formatter.lenientParseEnabled());
             if (tempPP.getIndex() != 0 || sub.isNullSubstitution()) {
                 // if there's a successful match (or it's a null

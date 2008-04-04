@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -318,8 +318,8 @@ public class ICUService extends ICUNotifier {
          * otherwise returns null.  (This default implementation has
          * no localized id information.)
          */
-        public String getDisplayName(String id, ULocale locale) {
-            return (visible && this.id.equals(id)) ? id : null;
+        public String getDisplayName(String identifier, ULocale locale) {
+            return (visible && id.equals(identifier)) ? identifier : null;
         }
 
         /**

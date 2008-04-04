@@ -910,9 +910,9 @@ public class RuleBasedNumberFormat extends NumberFormat {
         return null;
     }
 
-    private String[] getNameListForLocale(ULocale locale) {
-        if (locale != null && ruleSetDisplayNames != null) {
-            String[] localeNames = { locale.getBaseName(), ULocale.getDefault().getBaseName() };
+    private String[] getNameListForLocale(ULocale loc) {
+        if (loc != null && ruleSetDisplayNames != null) {
+            String[] localeNames = { loc.getBaseName(), ULocale.getDefault().getBaseName() };
             for (int i = 0; i < localeNames.length; ++i) {
                 String lname = localeNames[i];
                 while (lname.length() > 0) {
@@ -937,8 +937,8 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @see #getRuleSetNames
      * @stable ICU 3.2
      */
-    public String[] getRuleSetDisplayNames(ULocale locale) {
-        String[] names = getNameListForLocale(locale);
+    public String[] getRuleSetDisplayNames(ULocale loc) {
+        String[] names = getNameListForLocale(loc);
         if (names != null) {
             return (String[])names.clone();
         }
@@ -968,11 +968,11 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @throws IllegalArgumentException if ruleSetName is not a valid rule set name for this format
      * @stable ICU 3.2
      */
-    public String getRuleSetDisplayName(String ruleSetName, ULocale locale) {
+    public String getRuleSetDisplayName(String ruleSetName, ULocale loc) {
         String[] rsnames = publicRuleSetNames;
         for (int ix = 0; ix < rsnames.length; ++ix) {
             if (rsnames[ix].equals(ruleSetName)) {
-                String[] names = getNameListForLocale(locale);
+                String[] names = getNameListForLocale(loc);
                 if (names != null) {
                     return names[ix];
                 }
@@ -1524,14 +1524,14 @@ public class RuleBasedNumberFormat extends NumberFormat {
             Map m = new HashMap();
             for (int i = 1; i < localizations.length; ++i) {
                 String[] data = localizations[i];
-                String locale = data[0];
+                String loc = data[0];
                 String[] names = new String[data.length-1];
                 if (names.length != publicRuleSetNames.length) {
                     throw new IllegalArgumentException("public name length: " + publicRuleSetNames.length +
                                                        " != localized names[" + i + "] length: " + names.length);
                 }
                 System.arraycopy(data, 1, names, 0, names.length);
-                m.put(locale, names);
+                m.put(loc, names);
             }
 
             if (!m.isEmpty()) {

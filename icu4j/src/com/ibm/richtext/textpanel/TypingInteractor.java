@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2007.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2008.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -48,7 +48,7 @@ final class TypingInteractor extends Behavior {
     private static final char LINE_FEED = '\n';
 //    private static final char PARAGRAPH_SEP = '\u2029';
     
-    private TextComponent fTextComponent;
+//    private TextComponent fTextComponent;
     private TextSelection fSelection;
     private AttributeMap fTypingStyle;
     private MConstText fText;
@@ -97,7 +97,7 @@ final class TypingInteractor extends Behavior {
                             SimpleCommandLog commandLog,
                             PanelEventBroadcaster listener) {
                             
-        fTextComponent = textComponent;
+//        fTextComponent = textComponent;
         fText = textComponent.getText();
         fSelection = selection;
         fTypingStyle = typingStyle;

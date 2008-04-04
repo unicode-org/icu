@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -147,11 +147,11 @@ public class SimpleDateRule implements DateRule
             c.setTime(start);
 
             int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
+            int mon = c.get(Calendar.MONTH);
 
             // If the rule is earlier in the year than the start date
             // we have to go to the next year.
-            if (month > this.month) {
+            if (mon > this.month) {
                 year++;
             }
 
@@ -160,7 +160,7 @@ public class SimpleDateRule implements DateRule
 
             // If the rule is in the same month as the start date, it's possible
             // to get a result that's before the start.  If so, go to next year.
-            if (month == this.month && result.before(start)) {
+            if (mon == this.month && result.before(start)) {
                 result = computeInYear(year+1, c);
             }
 

@@ -75,7 +75,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
             super("BreakIterator");
 
             class RBBreakIteratorFactory extends ICUResourceBundleFactory {
-                protected Object handleCreate(ULocale loc, int kind, ICUService service) {
+                protected Object handleCreate(ULocale loc, int kind, ICUService srvc) {
                     return createBreakInstance(loc, kind);
                 }
             }

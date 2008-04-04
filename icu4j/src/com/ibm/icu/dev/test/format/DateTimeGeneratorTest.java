@@ -292,15 +292,16 @@ public class DateTimeGeneratorTest extends TestFmwk {
         final ULocale locale = ULocale.FRANCE;
         
         // set up the generator
-        DateTimePatternGenerator generator
+        DateTimePatternGenerator dtpgen
           = DateTimePatternGenerator.getInstance(locale);
         
         // get a pattern for an abbreviated month and day
-        final String pattern = generator.getBestPattern("MMMd");
+        final String pattern = dtpgen.getBestPattern("MMMd");
         SimpleDateFormat formatter = new SimpleDateFormat(pattern, locale);
         
         // use it to format (or parse)
         String formatted = formatter.format(new Date());
+        logln("formatted=" + formatted);
         // for French, the result is "13 sept."
     }
     
@@ -331,13 +332,13 @@ public class DateTimeGeneratorTest extends TestFmwk {
                 }
             }
             logln(locales[i].toString());
-            DateTimePatternGenerator generator
+            DateTimePatternGenerator dtpgen
             = DateTimePatternGenerator.getInstance(locales[i]);
 
             for (int style1 = DateFormat.FULL; style1 <= DateFormat.SHORT; ++style1) {
                 final SimpleDateFormat oldFormat = (SimpleDateFormat) DateFormat.getTimeInstance(style1, locales[i]);
                 String pattern = oldFormat.toPattern();
-                String newPattern = generator.replaceFieldTypes(pattern, "VVVV"); // replaceZoneString(pattern, "VVVV");
+                String newPattern = dtpgen.replaceFieldTypes(pattern, "VVVV"); // replaceZoneString(pattern, "VVVV");
                 if (newPattern.equals(pattern)) {
                     continue;
                 }
@@ -365,6 +366,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
             boolean works = false;
             try {
                 VariableField vf = new VariableField(String.valueOf(c), true);
+                logln("VariableField " + vf.toString());
                 works = true;
             } catch (Exception e) {}
             if (works != valid.contains(c)) {

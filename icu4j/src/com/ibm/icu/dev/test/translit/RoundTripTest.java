@@ -1044,10 +1044,10 @@ public class RoundTripTest extends TestFmwk {
         static final UnicodeSet okAnyway = new UnicodeSet("[^[:Letter:]]");
         static final UnicodeSet neverOk = new UnicodeSet("[:Other:]");
 
-        public void test(String sourceRange, String targetRange,
-          String roundtripExclusions, RoundTripTest log, Legal legalSource)
+        public void test(String srcRange, String trgtRange,
+          String rdtripExclusions, RoundTripTest logger, Legal legalSrc)
           throws java.io.IOException {
-            test(sourceRange, targetRange, sourceRange, roundtripExclusions, log, legalSource);
+            test(srcRange, trgtRange, srcRange, rdtripExclusions, logger, legalSrc);
         }
 
         /**
@@ -1056,34 +1056,34 @@ public class RoundTripTest extends TestFmwk {
          * that everything in targetRange maps to backtoSourceRange
          * that everything roundtrips from target -> source -> target, except roundtripExceptions
          */
-        public void test(String sourceRange, String targetRange, String backtoSourceRange,
-          String roundtripExclusions, RoundTripTest log, Legal legalSource)
+        public void test(String srcRange, String trgtRange, String backtoSourceRange,
+          String rdtripExclusions, RoundTripTest logger, Legal legalSrc)
           throws java.io.IOException {
 
-            this.legalSource = legalSource;
-            this.sourceRange = new UnicodeSet(sourceRange);
-            this.sourceRange.removeAll(neverOk);
+            legalSource = legalSrc;
+            sourceRange = new UnicodeSet(srcRange);
+            sourceRange.removeAll(neverOk);
 
-            this.targetRange = new UnicodeSet(targetRange);
-            this.targetRange.removeAll(neverOk);
+            targetRange = new UnicodeSet(trgtRange);
+            targetRange.removeAll(neverOk);
 
-            this.toSource = new UnicodeSet(backtoSourceRange);
-            this.toSource.addAll(okAnyway);
+            toSource = new UnicodeSet(backtoSourceRange);
+            toSource.addAll(okAnyway);
 
-            this.toTarget = new UnicodeSet(targetRange);
-            this.toTarget.addAll(okAnyway);
+            toTarget = new UnicodeSet(trgtRange);
+            toTarget.addAll(okAnyway);
 
-            if (roundtripExclusions != null && roundtripExclusions.length() > 0) {
-                this.roundtripExclusions = new UnicodeSet(roundtripExclusions);
+            if (rdtripExclusions != null && rdtripExclusions.length() > 0) {
+                roundtripExclusions = new UnicodeSet(rdtripExclusions);
             }else{
-                this.roundtripExclusions = new UnicodeSet(); // empty
+                roundtripExclusions = new UnicodeSet(); // empty
             }
 
-            this.log = log;
+            log = logger;
 
-            log.logln(Utility.escape("Source:  " + this.sourceRange));
-            log.logln(Utility.escape("Target:  " + this.targetRange));
-            log.logln(Utility.escape("Exclude: " + this.roundtripExclusions));
+            log.logln(Utility.escape("Source:  " + sourceRange));
+            log.logln(Utility.escape("Target:  " + targetRange));
+            log.logln(Utility.escape("Exclude: " + roundtripExclusions));
             if (log.isQuick()) log.logln("Abbreviated Test");
 
             badCharacters = new UnicodeSet("[:other:]");
@@ -1122,21 +1122,21 @@ public class RoundTripTest extends TestFmwk {
         try {
             String logFileName = "test_" + transliteratorID.replace('/', '_') + ".html";
             File lf = new File(logFileName);
-            log.logln("Creating log file " + lf.getAbsoluteFile());
+            logger.logln("Creating log file " + lf.getAbsoluteFile());
             FileOutputStream fos = new FileOutputStream(lf);
             fos.write(bast.toByteArray());
             fos.close();
-            log.errln(transliteratorID + " errors: "
+            logger.errln(transliteratorID + " errors: "
                   + errorCount + (errorCount > errorLimit ? " (at least!)" : "")
                   + ", see " + lf.getAbsoluteFile());
         }
         catch (SecurityException e) {
-            log.errln(transliteratorID + " errors: "
+            logger.errln(transliteratorID + " errors: "
                   + errorCount + (errorCount > errorLimit ? " (at least!)" : "")
                   + ", no log provided due to protected test domain");
         }
             } else {
-                log.logln(transliteratorID + " ok");
+                logger.logln(transliteratorID + " ok");
 //                  new File(logFileName).delete();
             }
         }

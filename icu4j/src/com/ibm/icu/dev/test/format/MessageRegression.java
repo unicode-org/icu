@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2005-2007, International Business Machines
+* Copyright (c) 2005-2008, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -69,8 +69,8 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
         try {
             //Apply pattern with param and print the result
             messageFormatter.applyPattern(pattern[1]);
-            Object[] params = {new String("BUG"), new Date()};
-            String tempBuffer = messageFormatter.format(params);
+            Object[] paramArray = {new String("BUG"), new Date()};
+            String tempBuffer = messageFormatter.format(paramArray);
             if (!tempBuffer.equals("Message with param:BUG"))
                 errln("MessageFormat with one param test failed.");
             logln("Formatted with one extra param : " + tempBuffer);
@@ -82,7 +82,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
                 errln("MessageFormat with no param test failed.");
             logln("Formatted with no params : " + tempBuffer);
 
-             tempBuffer = messageFormatter.format(params);
+             tempBuffer = messageFormatter.format(paramArray);
              if (!tempBuffer.equals("Message without param"))
                 errln("Formatted with arguments > subsitution failed. result = " + tempBuffer.toString());
              logln("Formatted with extra params : " + tempBuffer);
@@ -122,17 +122,17 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
         try {
             logln("Apply with pattern : " + pattern1);
             messageFormatter.applyPattern(pattern1);
-            Object[] params = {new Integer(7)};
-            String tempBuffer = messageFormatter.format(params);
+            Object[] paramArray = {new Integer(7)};
+            String tempBuffer = messageFormatter.format(paramArray);
             if (!tempBuffer.equals("Impossible {1} has occurred -- status code is 7 and message is {2}."))
                 errln("Tests arguments < substitution failed");
             logln("Formatted with 7 : " + tempBuffer);
             ParsePosition status = new ParsePosition(0);
             Object[] objs = messageFormatter.parse(tempBuffer, status);
-            if (objs[params.length] != null)
+            if (objs[paramArray.length] != null)
                 errln("Parse failed with more than expected arguments");
             for (int i = 0; i < objs.length; i++) {
-                if (objs[i] != null && !objs[i].toString().equals(params[i].toString())) {
+                if (objs[i] != null && !objs[i].toString().equals(paramArray[i].toString())) {
                     errln("Parse failed on object " + objs[i] + " at index : " + i);
                 }
             }
@@ -142,7 +142,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
             logln("Formatted with null : " + tempBuffer);
             logln("Apply with pattern : " + pattern2);
             messageFormatter.applyPattern(pattern2);
-            tempBuffer = messageFormatter.format(params);
+            tempBuffer = messageFormatter.format(paramArray);
             if (!tempBuffer.equals("Double ' Quotes 7 test and quoted {1} test plus other {2} stuff."))
                 errln("quote format test (w/ params) failed.");
             logln("Formatted with params : " + tempBuffer);
@@ -646,9 +646,9 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
         try {
             logln("Apply with pattern : " + pattern1);
             messageFormatter.applyPattern(pattern1);
-            HashMap params = new HashMap();
-            params.put("arg0", new Integer(7));
-            String tempBuffer = messageFormatter.format(params);
+            HashMap paramsMap = new HashMap();
+            paramsMap.put("arg0", new Integer(7));
+            String tempBuffer = messageFormatter.format(paramsMap);
             if (!tempBuffer.equals("Impossible {arg1} has occurred -- status code is 7 and message is {arg2}."))
                 errln("Tests arguments < substitution failed");
             logln("Formatted with 7 : " + tempBuffer);
@@ -659,7 +659,7 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
             for (Iterator keyIter = objs.keySet().iterator();
                  keyIter.hasNext();) {
                 String key = (String) keyIter.next();
-                if (objs.get(key) != null && !objs.get(key).toString().equals(params.get(key).toString())) {
+                if (objs.get(key) != null && !objs.get(key).toString().equals(paramsMap.get(key).toString())) {
                     errln("Parse failed on object " + objs.get(key) + " with argument name : " + key );
                 }
             }
@@ -669,9 +669,9 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
             logln("Formatted with null : " + tempBuffer);
             logln("Apply with pattern : " + pattern2);
             messageFormatter.applyPattern(pattern2);
-            params.clear();
-            params.put("ARG_ZERO", new Integer(7));
-            tempBuffer = messageFormatter.format(params);
+            paramsMap.clear();
+            paramsMap.put("ARG_ZERO", new Integer(7));
+            tempBuffer = messageFormatter.format(paramsMap);
             if (!tempBuffer.equals("Double ' Quotes 7 test and quoted {ARG_ONE} test plus other {ARG_TWO} stuff."))
                 errln("quote format test (w/ params) failed.");
             logln("Formatted with params : " + tempBuffer);
@@ -697,6 +697,8 @@ public class MessageRegression extends com.ibm.icu.dev.test.TestFmwk {
         pos.setErrorIndex(4);
         if (pos.getErrorIndex() != 4)
             errln("setErrorIndex failed, got " + pos.getErrorIndex() + " instead of 4");
+        if (objs != null)
+            errln("unparsable string, should return null");
     }{ // Taken from Test4111739().
         MessageFormat format1 = null;
         MessageFormat format2 = null;

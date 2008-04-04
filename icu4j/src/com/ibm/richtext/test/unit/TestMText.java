@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2008.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -265,7 +265,7 @@ public class TestMText extends TestFmwk {
         Random rand = new Random(RAND_SEED);
         final int stopAt = 4;
 
-        for (int testIteration=0; testIteration < STYLE_TEST_ITERATIONS + 1; testIteration++) {
+        for (int testItr=0; testItr < STYLE_TEST_ITERATIONS + 1; testItr++) {
 
             System.arraycopy(styles, 0, oldStyles, 0, styles.length);
 
@@ -274,15 +274,15 @@ public class TestMText extends TestFmwk {
             int oldTs = text.getTimeStamp();
 
             // hack way to do an invariant check before starting...
-            if (testIteration != 0) {
+            if (testItr != 0) {
                 // modify styles
                 text.resetDamagedRange();
                 startingAt = randInt(rand, styles.length+1);
                 endingAt = randInt(rand, startingAt, styles.length+1);
                 StyleModifier modifier = modifiers[randInt(rand, modifiers.length)];
 
-                if (testIteration == stopAt) {
-                    testIteration = stopAt;
+                if (testItr == stopAt) {
+                    testItr = stopAt;
                 }
                 text.modifyCharacterStyles(startingAt, endingAt, modifier);
 
@@ -339,7 +339,7 @@ public class TestMText extends TestFmwk {
             }
             if (damageStart != text.damagedRangeStart() ||
                             damageLimit != text.damagedRangeLimit()) {
-                logln("Test iteration: " + testIteration);
+                logln("Test iteration: " + testItr);
                 logln("startingAt: " + startingAt + ";  endingAt: " + endingAt);
                 logln("damageStart: " + damageStart + ";  damageLimit: " + damageLimit);
                 logln("text.rangeStart: " + text.damagedRangeStart() +

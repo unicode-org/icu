@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -110,5 +110,8 @@ public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk 
 
         // coverage
         NumberFormat f6 = NumberFormat.getNumberInstance(fu_FU);
+        if (f6 == null) {
+            errln("getNumberInstance(fu_FU) returned null");
+        }
     }
 }

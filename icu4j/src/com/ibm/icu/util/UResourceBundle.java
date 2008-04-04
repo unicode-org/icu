@@ -662,26 +662,26 @@ public abstract class UResourceBundle extends ResourceBundle{
     /**
      * Returns a resource in a given resource that has a given key.
      *
-     * @param key               a key associated with the wanted resource
-     * @return                  a resource bundle object representing rhe resource
+     * @param aKey               a key associated with the wanted resource
+     * @return                  a resource bundle object representing the resource
      * @throws MissingResourceException
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.
      */
-    public UResourceBundle get(String key) {
-        UResourceBundle obj = handleGet(key, null, this);
+    public UResourceBundle get(String aKey) {
+        UResourceBundle obj = handleGet(aKey, null, this);
         if (obj == null) {
             UResourceBundle res = this;
             while ((res = res.getParent()) != null && obj == null) {
                 //call the get method to recursively fetch the resource
-                obj = res.handleGet(key, null, this);
+                obj = res.handleGet(aKey, null, this);
             }
             if (obj == null) {
                 String fullName = ICUResourceBundleReader.getFullName(
                         getBaseName(), getLocaleID());
                 throw new MissingResourceException(
                         "Can't find resource for bundle " + fullName + ", key "
-                                + key, this.getClass().getName(), key);
+                                + aKey, this.getClass().getName(), aKey);
             }
         }
         ((ICUResourceBundle)obj).setLoadingStatus(getLocaleID());
@@ -924,7 +924,7 @@ public abstract class UResourceBundle extends ResourceBundle{
     /**
      * Actual worker method for fetching a resource based on the given key.
      * Sub classes must override this method if they support resources with keys.
-     * @param key the key string of the resource to be fetched
+     * @param aKey the key string of the resource to be fetched
      * @param table hastable object to hold references of resources already seen
      * @param requested the original resource bundle object on which the get method was invoked.
      *                  The requested bundle and the bundle on which this method is invoked
@@ -933,7 +933,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.
      */
-    protected UResourceBundle handleGet(String key, HashMap table, UResourceBundle requested) {
+    protected UResourceBundle handleGet(String aKey, HashMap table, UResourceBundle requested) {
         return null;
     }
 
@@ -973,13 +973,13 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @provisional This API might change or be removed in a future release.
      */
     protected Enumeration handleGetKeys(){
-        Vector keys = new Vector();
+        Vector resKeys = new Vector();
         UResourceBundle item = null;
         for (int i = 0; i < size; i++) {
             item = get(i);
-            keys.add(item.getKey());
+            resKeys.add(item.getKey());
         }
-        return keys.elements();
+        return resKeys.elements();
     }
 
     /**
@@ -990,8 +990,8 @@ public abstract class UResourceBundle extends ResourceBundle{
     // this method is declared in ResourceBundle class
     // so cannot change the signature
     // Override this method
-    protected Object handleGetObject(String key) {
-        return handleGetObjectImpl(key, this);
+    protected Object handleGetObject(String aKey) {
+        return handleGetObjectImpl(aKey, this);
     }
 
     /**
@@ -1003,29 +1003,29 @@ public abstract class UResourceBundle extends ResourceBundle{
     // loads an ICUResourceBundle, calls ResourceBundle.getObject method
     // with a key that does not exist in the bundle then the lookup is
     // done twice before throwing a MissingResourceExpection.
-    private Object handleGetObjectImpl(String key, UResourceBundle requested) {
-        Object obj = resolveObject(key, requested);
+    private Object handleGetObjectImpl(String aKey, UResourceBundle requested) {
+        Object obj = resolveObject(aKey, requested);
         if (obj == null) {
-            UResourceBundle parent = getParent();
-            if (parent != null) {
-                obj = parent.handleGetObjectImpl(key, requested);
+            UResourceBundle parentBundle = getParent();
+            if (parentBundle != null) {
+                obj = parentBundle.handleGetObjectImpl(aKey, requested);
             }
             if (obj == null)
                 throw new MissingResourceException(
                     "Can't find resource for bundle "
-                    + this.getClass().getName() + ", key " + key,
-                    this.getClass().getName(), key);
+                    + this.getClass().getName() + ", key " + aKey,
+                    this.getClass().getName(), aKey);
         }
         return obj;
     }
 
     // Routine for figuring out the type of object to be returned
     // string or string array
-    private Object resolveObject(String key, UResourceBundle requested) {
+    private Object resolveObject(String aKey, UResourceBundle requested) {
         if (getType() == STRING) {
             return getString();
         }
-        UResourceBundle obj = handleGet(key, null, requested);
+        UResourceBundle obj = handleGet(aKey, null, requested);
         if (obj != null) {
             if (obj.getType() == STRING) {
                 return obj.getString();

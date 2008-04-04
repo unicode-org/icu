@@ -3,7 +3,7 @@
 //#else
 /*
 **********************************************************************
-* Copyright (c) 2002-2007, International Business Machines
+* Copyright (c) 2002-2008, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Mark Davis
@@ -92,68 +92,61 @@ public class TestCLDRVsICU extends TestFmwk {
         CLDR_DIRECTORY = getEnvironmentString("CLDR_DIRECTORY", "C:\\Unicode-CVS2\\cldr\\");
         System.out.println();
     }
-    
-    /**
-	 * 
-	 */
-	private static Matcher getEnvironmentRegex(String key, String defaultValue) {
-        return Pattern.compile(getEnvironmentString(key, defaultValue)).matcher("");
-	}
 
-	/**
-	 * 
-	 */
-	private static String getEnvironmentString(String key, String defaultValue) {
-		String temp = System.getProperty(key);
+    private static Matcher getEnvironmentRegex(String key, String defaultValue) {
+        return Pattern.compile(getEnvironmentString(key, defaultValue)).matcher("");
+    }
+
+    private static String getEnvironmentString(String key, String defaultValue) {
+        String temp = System.getProperty(key);
         if (temp == null) temp = defaultValue;
         else System.out.print("-D" + key + "=\"" + temp + "\" ");
-		return temp;
-	}
+        return temp;
+    }
 
-	public static void main(String[] args) throws Exception {
-
-    	new TestCLDRVsICU().run(args);
+    public static void main(String[] args) throws Exception {
+        new TestCLDRVsICU().run(args);
     }
 
      Set allLocales = new TreeSet();
-    
+
     public void TestFiles() throws SAXException, IOException {
-     	// only get ICU's locales
+        // only get ICU's locales
         Set s = new TreeSet();
         addLocales(NumberFormat.getAvailableULocales(), s);
         addLocales(DateFormat.getAvailableULocales(), s);
         addLocales(Collator.getAvailableULocales(), s);
-        
+
         // filter, to make tracking down bugs easier
-        
+
         for (Iterator it = s.iterator(); it.hasNext();) {
-        	String locale = (String)it.next();
-        	if (!LOCALE_MATCH.reset(locale).matches()) continue;
+            String locale = (String)it.next();
+            if (!LOCALE_MATCH.reset(locale).matches()) continue;
             _test(locale);
         }
     }
     
     public void addLocales(ULocale[] list, Collection s) {
-    	for (int i = 0; i < list.length; ++i) {
-    		allLocales.add(list[i].toString());
-    		s.add(list[i].getLanguage());
-    	}
+        for (int i = 0; i < list.length; ++i) {
+            allLocales.add(list[i].toString());
+            s.add(list[i].getLanguage());
+        }
     }
-    
+
     public String getLanguage(ULocale uLocale) {
-    	String result = uLocale.getLanguage();
-    	String script = uLocale.getScript();
-    	if (script.length() != 0) result += "_" + script;
-    	return result;
+        String result = uLocale.getLanguage();
+        String script = uLocale.getScript();
+        if (script.length() != 0) result += "_" + script;
+        return result;
     }
 
     public void _test(String localeName) throws SAXException, IOException {
         //uLocale = new ULocale(localeName);
         //oLocale = uLocale.toLocale();
 
-			File f = new File(CLDR_DIRECTORY + "common\\test\\"+ localeName + ".xml");
-			logln("Testing " + f.getCanonicalPath());
-			SAX.parse(f, DEFAULT_HANDLER);
+        File f = new File(CLDR_DIRECTORY + "common\\test\\"+ localeName + ".xml");
+        logln("Testing " + f.getCanonicalPath());
+        SAX.parse(f, DEFAULT_HANDLER);
     }
 
     static Transliterator toUnicode = Transliterator.getInstance("any-hex");
@@ -179,7 +172,7 @@ public class TestCLDRVsICU extends TestFmwk {
             if ("true".equals(settings.get("draft"))) {
                 return; // skip draft
             }
-        	ULocale ul = new ULocale("xx");
+            ULocale ul = new ULocale("xx");
             try {
                 for (int i = 0; i < currentLocales.size(); ++i) {
                     ul = (ULocale)currentLocales.get(i);
@@ -191,8 +184,8 @@ public class TestCLDRVsICU extends TestFmwk {
                     }
                 }
             } catch (Exception e) {
-            	StringWriter sw = new StringWriter();
-            	PrintWriter pw = new PrintWriter(sw);
+                StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw);
                 e.printStackTrace(pw);
                 pw.flush();
                 errln("Exception: Locale: " + ul + ",\tValue: <" + value + ">\r\n" + sw.toString());
@@ -226,8 +219,8 @@ public class TestCLDRVsICU extends TestFmwk {
             for (int i = 0; i < currentLocaleString.length; ++i) {
                 if (currentLocaleString[i].length() == 0) continue;
                 if (allLocales.contains("")) {
-                	logln("Skipping locale, not in ICU4J: " + currentLocaleString[i]);
-                	continue;
+                    logln("Skipping locale, not in ICU4J: " + currentLocaleString[i]);
+                    continue;
                 }
                 currentLocales.add(new ULocale(currentLocaleString[i]));
             }
@@ -251,9 +244,9 @@ public class TestCLDRVsICU extends TestFmwk {
         RegisteredHandlers.put(name, handler);
     }
     Map RegisteredHandlers = new HashMap();
-    
+
     class NullHandler extends Handler {
-		void handleResult(ULocale currentLocale, String value) throws Exception {}        
+        void handleResult(ULocale currentLocale, String value) throws Exception {}        
     }
 
     // ============ Statics for Date/Number Support ============
@@ -273,48 +266,48 @@ public class TestCLDRVsICU extends TestFmwk {
     static UnicodeSet controlsAndSpace = new UnicodeSet("[:cc:]");
     
     static String remove(String in, UnicodeSet toRemove) {
-    	int cp;
-    	StringBuffer result = new StringBuffer();
-    	for (int i = 0; i < in.length(); i += UTF16.getCharCount(cp)) {
-    		cp = UTF16.charAt(in, i);
-    		if (!toRemove.contains(cp)) UTF16.append(result, cp);
-    	}
-    	return result.toString();
+        int cp;
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < in.length(); i += UTF16.getCharCount(cp)) {
+            cp = UTF16.charAt(in, i);
+            if (!toRemove.contains(cp)) UTF16.append(result, cp);
+        }
+        return result.toString();
     }
 
     {
-		addHandler("collation", new Handler() {
-			public void handleResult(ULocale currentLocale, String value) {
-				Collator col = Collator.getInstance(currentLocale);
-				String lastLine = "";
-				int count = 0;
-				for (int pos = 0; pos < value.length();) {
-					int nextPos = value.indexOf('\n', pos);
-					if (nextPos < 0)
-						nextPos = value.length();
-					String line = value.substring(pos, nextPos);
-					line = remove(line, controlsAndSpace); // HACK for SAX
-					if (line.trim().length() != 0) { // HACK for SAX
-						int comp = col.compare(lastLine, line);
-						if (comp > 0) {
-							failures++;
-							errln("\tLine " + (count + 1) + "\tFailure: "
-									+ showString(lastLine) + " should be leq "
-									+ showString(line));
-						} else if (DEBUG) {
-							logln("OK: " + line);
-						}
-						lastLine = line;
-					}
-					pos = nextPos + 1;
-					count++;
-				}
-			}
-		});
-        
+        addHandler("collation", new Handler() {
+            public void handleResult(ULocale currentLocale, String value) {
+                Collator col = Collator.getInstance(currentLocale);
+                String lastLine = "";
+                int count = 0;
+                for (int pos = 0; pos < value.length();) {
+                    int nextPos = value.indexOf('\n', pos);
+                    if (nextPos < 0)
+                        nextPos = value.length();
+                    String line = value.substring(pos, nextPos);
+                    line = remove(line, controlsAndSpace); // HACK for SAX
+                    if (line.trim().length() != 0) { // HACK for SAX
+                        int comp = col.compare(lastLine, line);
+                        if (comp > 0) {
+                            failures++;
+                            errln("\tLine " + (count + 1) + "\tFailure: "
+                                    + showString(lastLine) + " should be leq "
+                                    + showString(line));
+                        } else if (DEBUG) {
+                            logln("OK: " + line);
+                        }
+                        lastLine = line;
+                    }
+                    pos = nextPos + 1;
+                    count++;
+                }
+            }
+        });
+
         // ============ Handler for Numbers ============ 
-		addHandler("number", new Handler() {
-			public void handleResult(ULocale locale, String result) {
+        addHandler("number", new Handler() {
+            public void handleResult(ULocale locale, String result) {
                 NumberFormat nf = null;
                 double v = Double.NaN;
                 for (Iterator it = settings.keySet().iterator(); it.hasNext();) {
@@ -335,15 +328,15 @@ public class TestCLDRVsICU extends TestFmwk {
                     case 3: nf = NumberFormat.getPercentInstance(locale); break;
                     case 4: nf = NumberFormat.getScientificInstance(locale); break;
                     default: nf = NumberFormat.getCurrencyInstance(locale); 
-                    	nf.setCurrency(Currency.getInstance(attributeValue)); break;
+                        nf.setCurrency(Currency.getInstance(attributeValue)); break;
                     }
                     String temp = nf.format(v).trim();
                     result = result.trim(); // HACK because of SAX
                     if (!temp.equals(result)) {
                         errln("Number: Locale: " + locale
-                        		+ ", \tType: " + attributeValue
+                                + ", \tType: " + attributeValue
                                 + ", \tDraft: " + settings.get("draft")
-                        		+ ", \tCLDR: <" + result + ">, ICU: <" + temp + ">");
+                                + ", \tCLDR: <" + result + ">, ICU: <" + temp + ">");
                     }
 
                 }
@@ -378,35 +371,32 @@ public class TestCLDRVsICU extends TestFmwk {
                 result = result.trim(); // HACK because of SAX
                 if (!temp.equals(result)) {
                     errln("DateTime: Locale: " + locale 
-                    		+ ", \tDate: " + DateFormatNames[dateFormat]
+                            + ", \tDate: " + DateFormatNames[dateFormat]
                             + ", \tTime: " + DateFormatNames[timeFormat]
                             + ", \tDraft: " + settings.get("draft")
-                    		+ ", \tCLDR: <" + result + ">, ICU: <" + temp + ">");
+                            + ", \tCLDR: <" + result + ">, ICU: <" + temp + ">");
                 }
             }
 
-			/**
-			 * 
-			 */
-			private SimpleDateFormat getDateFormat(ULocale locale, int dateFormat, int timeFormat) {
+            private SimpleDateFormat getDateFormat(ULocale locale, int dateFormat, int timeFormat) {
                 if (DEBUG) logln("Getting date/time format for " + locale);
                 if (DEBUG && "ar_EG".equals(locale.toString())) {
-                	System.out.println("debug here");
+                    System.out.println("debug here");
                 }
-				DateFormat dt;
-				if (dateFormat == 0) {
-					dt = DateFormat.getTimeInstance(DateFormatValues[timeFormat], locale);
-					if (DEBUG) System.out.print("getTimeInstance");
-				} else if (timeFormat == 0) {
-					dt = DateFormat.getDateInstance(DateFormatValues[dateFormat], locale);
-					if (DEBUG) System.out.print("getDateInstance");
-				} else {
-                	dt = DateFormat.getDateTimeInstance(DateFormatValues[dateFormat], DateFormatValues[timeFormat], locale);
-                	if (DEBUG) System.out.print("getDateTimeInstance");
-				}
-				if (DEBUG) System.out.println("\tinput:\t" + dateFormat + ", " + timeFormat + " => " + ((SimpleDateFormat)dt).toPattern());
-				return (SimpleDateFormat)dt;
-			}
+                DateFormat dt;
+                if (dateFormat == 0) {
+                    dt = DateFormat.getTimeInstance(DateFormatValues[timeFormat], locale);
+                    if (DEBUG) System.out.print("getTimeInstance");
+                } else if (timeFormat == 0) {
+                    dt = DateFormat.getDateInstance(DateFormatValues[dateFormat], locale);
+                    if (DEBUG) System.out.print("getDateInstance");
+                } else {
+                    dt = DateFormat.getDateTimeInstance(DateFormatValues[dateFormat], DateFormatValues[timeFormat], locale);
+                    if (DEBUG) System.out.print("getDateTimeInstance");
+                }
+                if (DEBUG) System.out.println("\tinput:\t" + dateFormat + ", " + timeFormat + " => " + ((SimpleDateFormat)dt).toPattern());
+                return (SimpleDateFormat)dt;
+            }
         });
 
         // ============ Handler for Zones ============
@@ -423,11 +413,11 @@ public class TestCLDRVsICU extends TestFmwk {
                     if (attributeName.equals("date")) {
                         date = attributeValue;
                     } else if (attributeName.equals("field")) {
-                    	pattern = attributeValue;
+                        pattern = attributeValue;
                     } else if (attributeName.equals("zone")) {
-                    	zone = attributeValue;
+                        zone = attributeValue;
                     } else if (attributeName.equals("parse")) {
-                    	parse = attributeValue;
+                        parse = attributeValue;
                     }
                 }
                 if (!ZONE_MATCH.reset(zone).matches()) return;
@@ -440,12 +430,13 @@ public class TestCLDRVsICU extends TestFmwk {
                 if (!temp.equals(result)) {
                     temp = field.format(dateValue).trim(); // call again for debugging
                     errln("Zone Format: Locale: " + locale 
-                    		+ ", \tZone: " + zone
-                    		+ ", \tDate: " + date
-							+ ", \tField: " + pattern
+                            + ", \tZone: " + zone
+                            + ", \tDate: " + date
+                            + ", \tField: " + pattern
+                            + ", \tParse: " + parse
                             + ", \tDraft: " + settings.get("draft")
-                    		+ ", \tCLDR: <" + result
-							+ ">, \tICU: <" + temp + ">");
+                            + ", \tCLDR: <" + result
+                            + ">, \tICU: <" + temp + ">");
                 }
             }
         });
