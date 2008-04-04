@@ -387,7 +387,7 @@ static void
 intvector_write_java( struct SResource *res, UErrorCode *status) {
     uint32_t i = 0;
     const char* intArr = "new int[] {\n";
-    // const char* intC   = "new Integer(";
+    /* const char* intC   = "new Integer(";   */
     const char* stringArr = "new String[]{\n";
     char buf[100];
     int len =0;
@@ -410,11 +410,11 @@ intvector_write_java( struct SResource *res, UErrorCode *status) {
         tabCount++;
         for(i = 0; i<res->u.fIntVector.fCount; i++) {
             write_tabs(out);
-            // T_FileStream_write(out, intC, (int32_t)uprv_strlen(intC));
+            /* T_FileStream_write(out, intC, (int32_t)uprv_strlen(intC)); */
             len=itostr(buf,res->u.fIntVector.fArray[i],10,0);
             T_FileStream_write(out,buf,len);
-            // T_FileStream_write(out,"),",2);
-            // T_FileStream_write(out,"\n",1);
+            /* T_FileStream_write(out,"),",2);  */
+            /* T_FileStream_write(out,"\n",1);  */
             T_FileStream_write(out,",\n",2);
         }
     }
