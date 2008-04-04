@@ -397,7 +397,7 @@ public class SimpleDateFormat extends DateFormat {
      * @param formatConfig the format configuration
      * @return A SimpleDateFormat instance
      * @internal ICU 3.8
-     * @deprecated This API is for internal ICU use only
+     * @deprecated This API is ICU internal only.
      */
     public static SimpleDateFormat getInstance(Calendar.FormatConfiguration formatConfig) {
         return new SimpleDateFormat(formatConfig.getPatternString(),

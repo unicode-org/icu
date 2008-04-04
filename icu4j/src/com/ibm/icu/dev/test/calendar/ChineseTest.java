@@ -675,7 +675,8 @@ public class ChineseTest extends CalendarTest {
 
         cc.add(Calendar.DATE, 1);
  
-        Date target = new Date(105, Calendar.FEBRUARY, 28);
+        Calendar cal = new GregorianCalendar(2005, Calendar.FEBRUARY, 28);
+        Date target = cal.getTime();
         Date result = cc.getTime();
 
         assertEquals("chinese and gregorian date should match", target, result);

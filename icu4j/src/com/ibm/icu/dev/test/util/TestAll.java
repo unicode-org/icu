@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -20,9 +20,6 @@ public class TestAll extends TestGroup {
         super(
               new String[] {
             "VersionInfoTest",
-            // "ICUListResourceBundleTest",
-            // these tests fail since there is no ICULocaleData.jar to support it
-            // ICUResoureBundleTest supercedes the ICUListResourceBundleTest
             "ICUResourceBundleTest",
             "CompactArrayTest",
             "StringTokenizerTest",

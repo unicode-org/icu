@@ -856,7 +856,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * storing the data (can be in a different resource bundle).
      * Resolved internally before delivering the actual resource through the API.
      * @internal ICU 3.8
-     * @deprecated This API is for internal ICU use only
+     * @deprecated This API is ICU internal only.
      */
     protected static final int ALIAS = 3;
 
@@ -865,7 +865,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * Alternative resource type constant for tables of key-value pairs.
      * Never returned by getType().
      * @internal ICU 3.8
-     * @deprecated This API is for internal ICU use only
+     * @deprecated This API is ICU internal only.
      */
     protected static final int TABLE32 = 4;
 
@@ -1045,7 +1045,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * This method is for setting the loading status of the resource.
      * The status is analogous to the warning status in ICU4C.
      * @internal ICU 3.8
-     * @deprecated This API is for internal ICU use only
+     * @deprecated This API is ICU internal only.
      */
     protected abstract void setLoadingStatus(int newStatus);
 }
