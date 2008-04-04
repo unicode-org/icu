@@ -574,7 +574,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         // should not get an exception
         rb = (UResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_RBNF_BASE_NAME,"fr_BE");
         String str = rb.getString("SpelloutRules");
-        if(str !=null || str.length()>0){
+        if(str !=null && str.length()>0){
             logln("Alias mechanism works");
         }else{
             errln("Alias mechanism failed for fr_BE SpelloutRules");

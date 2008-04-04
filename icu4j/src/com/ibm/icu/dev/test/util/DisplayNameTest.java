@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -18,8 +18,9 @@ import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUResourceBundle;
-//import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
@@ -45,8 +46,15 @@ public class DisplayNameTest extends TestFmwk {
     static final Object[] currencyFormats = {new Integer(Currency.SYMBOL_NAME), new Integer(Currency.LONG_NAME)};
     static final Object[] NO_CONTEXT = {null};
     
-    static final Date JAN1 = new Date(2004-1900,0,1);
-    static final Date JULY1 = new Date(2004-1900,6,1);
+    static final Date JAN1;
+    static final Date JULY1;
+
+    static {
+        Calendar cal = new GregorianCalendar(2004, Calendar.JANUARY, 1);
+        JAN1 = cal.getTime();
+        cal.set(Calendar.MONTH, Calendar.JULY);
+        JULY1 = cal.getTime();
+    }
 
     String[] countries = addUnknown(ULocale.getISOCountries(),2);
     String[] languages = addUnknown(ULocale.getISOLanguages(),2);

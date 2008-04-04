@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -652,7 +652,7 @@ public final class Normalizer implements Cloneable {
      * Unicode Normalization Forms</a>.
      * <p>
      * @see #setOption
-     * @deprecated ICU 2.8. This option is no longer supported. TODO: check with Ram
+     * @deprecated ICU 2.8. This option is no longer supported.
      */
     public static final int IGNORE_HANGUL = 0x0001;
           

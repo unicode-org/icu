@@ -604,8 +604,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      *            in internal order, supply a LinkedHashSet. If null, a
      *            collection is allocated.
      * @return the collection with added elements.
-     * @deprecated
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public Collection getRedundants(Collection output) {
         synchronized (this) { // synchronized since a getter must be thread-safe
@@ -818,8 +818,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * 
      * @param skeleton
      * @return true or not
-     * @deprecated
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static boolean isSingleField(String skeleton) {
         char first = skeleton.charAt(0);
@@ -917,8 +917,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * date format fields. For example, "VVVV" is valid while "V4" is not, nor
      * is "44".
      * 
-     * @deprecated
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static class VariableField {
         private final String string;
@@ -935,9 +935,9 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
          * Create a variable field
          * @param string
          * @param strict TODO
-         * @deprecated
-         * @internal
          * @throws IllegalArgumentException if the variable field is not valid.
+         * @internal
+         * @deprecated This API is ICU internal only.
          */
         public VariableField(String string, boolean strict) {
             canonicalIndex = DateTimePatternGenerator.getCanonicalIndex(string, strict);
@@ -967,8 +967,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
 
         /**
          * Get the string represented by this variable.
-         * @deprecated
          * @internal
+         * @deprecated This API is ICU internal only.
          */
         public String toString() {
             return string;
@@ -998,8 +998,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         return false;
     }
      *  </pre>
-     * @deprecated
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     static public class FormatParser {
         private transient PatternTokenizer tokenizer = new PatternTokenizer()
@@ -1011,8 +1011,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         
         /**
          * Construct an empty date format parser, to which strings and variables can be added with set(...).
-         * @deprecated
          * @internal
+         * @deprecated This API is ICU internal only.
          */
         public FormatParser() {
         }
@@ -1021,8 +1021,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
          * Parses the string into a list of items.
          * @param string
          * @return this, for chaining
-         * @deprecated
          * @internal
+         * @deprecated This API is ICU internal only.
          */
         final public FormatParser set(String string) {
             return set(string, false);
@@ -1033,8 +1033,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
          * @param string
          * @param strict If true, then only allows exactly those lengths specified by CLDR for variables. For example, "hh:mm aa" would throw an exception.
          * @return this, for chaining
-         * @deprecated
          * @internal
+         * @deprecated This API is ICU internal only.
          */
         public FormatParser set(String string, boolean strict) {
             items.clear();
@@ -1092,8 +1092,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
 //        /**
 //         * Produce a string which concatenates all the variables. That is, it is the logically the same as the input with all literals removed.
 //         * @return a string which is a concatenation of all the variable fields
-//         * @deprecated
 //         * @internal
+//         * @deprecated This API is ICU internal only.
 //         */
 //        public String getVariableFieldString() {
 //            List list = getVariableFields(null);
@@ -1114,8 +1114,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
          * </pre>
          * The list is modifiable, so you can add any strings or variables to it, or remove any items.
          * @return modifiable list of items.
-         * @deprecated
          * @internal
+         * @deprecated This API is ICU internal only.
          */
         public List getItems() {
             return items;
@@ -1123,8 +1123,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         
         /** Provide display form of formatted input. Each literal string is quoted if necessary.. That is, if the input was "hh':'mm", the result would be "hh:mm", since the ":" doesn't need quoting. See quoteLiteral().
          * @return printable output string
-         * @deprecated
          * @internal
+         * @deprecated This API is ICU internal only.
          */
         public String toString() {
             return toString(0, items.size());
@@ -1135,8 +1135,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
          * @param start item to start from
          * @param limit last item +1
          * @return printable output string
-         * @deprecated
          * @internal
+         * @deprecated This API is ICU internal only.
          */
         public String toString(int start, int limit) {
             StringBuffer result = new StringBuffer();
@@ -1155,8 +1155,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         /**
          * Returns true if it has a mixture of date and time variable fields: that is, at least one date variable and at least one time variable.
          * @return true or false
-         * @deprecated
          * @internal
+         * @deprecated This API is ICU internal only.
          */
         public boolean hasDateAndTimeFields() {
             int foundMask = 0;
@@ -1177,8 +1177,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
 //         * @param value
 //         * @param result
 //         * @return list
-//         * @deprecated
 //         * @internal
+//         * @deprecated This API is ICU internal only.
 //         */
 //        public List getAutoPatterns(String value, List result) {
 //            if (result == null) result = new ArrayList();
@@ -1269,8 +1269,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
          *  Each literal string is quoted as needed. That is, the ' quote marks will only be added if needed. The exact pattern of quoting is not guaranteed, thus " de la " could be quoted as " 'de la' " or as " 'de' 'la' ".
          * @param string
          * @return string with quoted literals
-         * @deprecated
          * @internal
+         * @deprecated This API is ICU internal only.
          */
         public Object quoteLiteral(String string) {
             return tokenizer.quoteLiteral(string);
@@ -1466,8 +1466,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * internal routine
      * @param pattern
      * @return field value
-     * @deprecated
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public String getFields(String pattern) {
         fp.set(pattern);

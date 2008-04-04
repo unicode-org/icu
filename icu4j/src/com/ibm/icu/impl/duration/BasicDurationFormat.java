@@ -1,7 +1,7 @@
 //##header J2SE15
 /*
  *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -15,8 +15,6 @@ import com.ibm.icu.util.ULocale;
 
 /**
  * @author srl
- * @internal
- * @deprecated this API is for ICU internal use only
  */
 public class BasicDurationFormat extends DurationFormat {
     

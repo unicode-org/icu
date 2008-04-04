@@ -10,21 +10,24 @@
 */
 package com.ibm.icu.dev.test.util;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.TreeMap;
+
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.NumberFormat;
-import com.ibm.icu.text.NumberFormat.*;
 import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.text.NumberFormat.SimpleNumberFormatFactory;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ULocale;
-import java.lang.reflect.*;
-import java.util.Locale;
-import java.util.Iterator;
-import java.util.Hashtable;
-import java.util.TreeMap;
 
 public class ULocaleTest extends TestFmwk {
 
@@ -1321,19 +1324,19 @@ public class ULocaleTest extends TestFmwk {
             if((paramEnd != -1) && (paramEnd < itemEnd)) {
                 /* semicolon (;) is closer than end (,) */
                 int t = paramEnd + 1;
-                while(Character.isSpace(acceptLanguageList.charAt(t))) {
+                while(UCharacter.isWhitespace(acceptLanguageList.charAt(t))) {
                     t++;
                 }
                 if(acceptLanguageList.charAt(t)=='q') {
                     t++;
                 }
-                while(Character.isSpace(acceptLanguageList.charAt(t))) {
+                while(UCharacter.isWhitespace(acceptLanguageList.charAt(t))) {
                     t++;
                 }
                 if(acceptLanguageList.charAt(t)=='=') {
                     t++;
                 }
-                while(Character.isSpace(acceptLanguageList.charAt(t))) {
+                while(UCharacter.isWhitespace(acceptLanguageList.charAt(t))) {
                     t++;
                 }
                 try {

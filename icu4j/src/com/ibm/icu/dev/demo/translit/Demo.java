@@ -1163,7 +1163,7 @@ public class Demo extends Frame {
             swapSelectionItem.setEnabled(false);
         }
         System.out.println("Set transliterator: " + translit.getID()
-            + (inv == null ? " and " + inv.getID() : ""));
+            + (inv != null ? " and " + inv.getID() : ""));
     }
     
     void addHistory(Transliterator trans) {

@@ -1,4 +1,4 @@
-#Wed Aug 22 13:05:31 EDT 2007
+#Fri Apr 04 13:44:49 EDT 2008
 eclipse.preferences.version=1
 instance/org.eclipse.core.net/org.eclipse.core.net.hasMigrated=true
 org.eclipse.jdt.core.codeComplete.argumentPrefixes=
@@ -11,7 +11,7 @@ org.eclipse.jdt.core.codeComplete.staticFieldPrefixes=
 org.eclipse.jdt.core.codeComplete.staticFieldSuffixes=
 org.eclipse.jdt.core.compiler.problem.annotationSuperInterface=warning
 org.eclipse.jdt.core.compiler.problem.autoboxing=ignore
-org.eclipse.jdt.core.compiler.problem.deprecation=warning
+org.eclipse.jdt.core.compiler.problem.deprecation=ignore
 org.eclipse.jdt.core.compiler.problem.deprecationInDeprecatedCode=disabled
 org.eclipse.jdt.core.compiler.problem.deprecationWhenOverridingDeprecatedMethod=disabled
 org.eclipse.jdt.core.compiler.problem.discouragedReference=warning
@@ -33,11 +33,13 @@ org.eclipse.jdt.core.compiler.problem.missingSerialVersion=warning
 org.eclipse.jdt.core.compiler.problem.noEffectAssignment=warning
 org.eclipse.jdt.core.compiler.problem.noImplicitStringConversion=warning
 org.eclipse.jdt.core.compiler.problem.nonExternalizedStringLiteral=ignore
-org.eclipse.jdt.core.compiler.problem.nullReference=ignore
+org.eclipse.jdt.core.compiler.problem.nullReference=warning
 org.eclipse.jdt.core.compiler.problem.overridingPackageDefaultMethod=warning
 org.eclipse.jdt.core.compiler.problem.parameterAssignment=ignore
 org.eclipse.jdt.core.compiler.problem.possibleAccidentalBooleanAssignment=warning
+org.eclipse.jdt.core.compiler.problem.potentialNullReference=ignore
 org.eclipse.jdt.core.compiler.problem.rawTypeReference=ignore
+org.eclipse.jdt.core.compiler.problem.redundantNullCheck=ignore
 org.eclipse.jdt.core.compiler.problem.specialParameterHidingField=disabled
 org.eclipse.jdt.core.compiler.problem.staticAccessReceiver=warning
 org.eclipse.jdt.core.compiler.problem.suppressWarnings=enabled

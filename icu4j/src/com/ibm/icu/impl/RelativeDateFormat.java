@@ -24,8 +24,6 @@ import com.ibm.icu.util.UResourceBundleIterator;
 
 /**
  * @author srl
- * @internal
- * @deprecated ICU Internal Use Only
  */
 public class RelativeDateFormat extends DateFormat {
 
@@ -205,7 +203,6 @@ public class RelativeDateFormat extends DateFormat {
      * @param locale Locale of the calendar
      * @param status Error code
      * @return the newly constructed fCalendar
-     * @draft ICU 3.8
      */
     private Calendar initializeCalendar(TimeZone zone, ULocale locale) {
         if (calendar == null) {
