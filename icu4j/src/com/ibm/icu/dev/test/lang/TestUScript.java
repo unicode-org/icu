@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2007, International Business Machines Corporation and    *
+* Copyright (C) 1996-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -361,12 +361,16 @@ public class TestUScript extends TestFmwk {
          */
         String[] expectedLong = new String[]{
             "Balinese", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp", 
-            "Geok", "Hans", "Hant", "Hmng", "Hung", "Inds", "Java", "Kali", "Latf", "Latg", 
-            "Lepc", "Lina", "Mand", "Maya", "Mero", "Nko", "Orkh", "Perm", "Phags_Pa", "Phoenician", 
-            "Plrd", "Roro", "Sara", "Syre", "Syrj", "Syrn", "Teng", "Vaii", "Visp", "Cuneiform", 
+            "Geok", "Hans", "Hant", "Hmng", "Hung", "Inds", "Java", "Kayah_Li", "Latf", "Latg", 
+            "Lepcha", "Lina", "Mand", "Maya", "Mero", "Nko", "Orkh", "Perm", "Phags_Pa", "Phoenician", 
+            "Plrd", "Roro", "Sara", "Syre", "Syrj", "Syrn", "Teng", "Vai", "Visp", "Cuneiform", 
             "Zxxx", "Unknown",
-            "Cari", "Jpan", "Lana", "Lyci", "Lydi", "Olck", "Rjng", "Saur", "Sgnw", "Sund",
+            "Carian", "Jpan", "Lana", "Lycian", "Lydian", "Ol_Chiki", "Rejang", "Saurashtra", "Sgnw", "Sundanese",
             "Moon", "Mtei",
+
+            // ICU 4.0
+            "Armi", "Avst", "Cakm", "Kore", "Kthi", "Mani", "Phli", "Phlp", "Phlv", "Prti",
+            "Samr", "Tavt", "Zmth", "Zsym",
         };
         String[] expectedShort = new String[]{
             "Bali", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp", 
@@ -375,7 +379,11 @@ public class TestUScript extends TestFmwk {
             "Plrd", "Roro", "Sara", "Syre", "Syrj", "Syrn", "Teng", "Vaii", "Visp", "Xsux", 
             "Zxxx", "Zzzz",
             "Cari", "Jpan", "Lana", "Lyci", "Lydi", "Olck", "Rjng", "Saur", "Sgnw", "Sund",
-            "Moon", "Mtei",
+            "Moon", "Mtei", 
+
+            // ICU 4.0
+            "Armi", "Avst", "Cakm", "Kore", "Kthi", "Mani", "Phli", "Phlp", "Phlv", "Prti",
+            "Samr", "Tavt", "Zmth", "Zsym",
         };
         int j = 0;
         int i = 0;

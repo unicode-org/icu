@@ -9,7 +9,7 @@ package com.ibm.icu.dev.test.rbbi;
 //Regression testing of RuleBasedBreakIterator
 //
 //  TODO:  These tests should be mostly retired.
-//          Much of the test data that was originaly here was removed when the RBBI rules
+//          Much of the test data that was originally here was removed when the RBBI rules
 //            were updated to match the Unicode boundary TRs, and the data was found to be invalid.
 //          Much of the remaining data has been moved into the rbbitst.txt test data file,
 //            which is common between ICU4C and ICU4J.  The remaining test data should also be moved,

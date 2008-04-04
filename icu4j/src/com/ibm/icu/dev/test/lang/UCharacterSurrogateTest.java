@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2004-2005, International Business Machines Corporation and         *
+ * Copyright (C) 2004-2008, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -22,11 +22,15 @@ public final class UCharacterSurrogateTest extends TestFmwk {
     }
 
     public void TestUnicodeBlockForName() {
-        String[] names = {"Optical Character Recognition",
-                "CJK Unified Ideographs Extension A", "Supplemental Arrows-B",
-                "Supplementary Private Use Area-B",
-                "supplementary_Private_Use_Area-b",
-                "supplementary_PRIVATE_Use_Area_b"};
+      String[] names = {"Latin-1 Supplement", 
+                        "Optical Character Recognition",
+                        "CJK Unified Ideographs Extension A", 
+                        "Supplemental Arrows-B",
+                        "Supplemental arrows b", 
+                        "supp-lement-al arrowsb",
+                        "Supplementary Private Use Area-B",
+                        "supplementary_Private_Use_Area-b",
+                        "supplementary_PRIVATE_Use_Area_b"};
         for (int i = 0; i < names.length; ++i) {
             try {
                 UCharacter.UnicodeBlock b = UCharacter.UnicodeBlock
@@ -416,4 +420,3 @@ public final class UCharacterSurrogateTest extends TestFmwk {
         test.test(s, 2, 1, 2, 1, 3, true);
     }
 }
-

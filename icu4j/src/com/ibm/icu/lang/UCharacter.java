@@ -854,11 +854,113 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @provisional This API might change or be removed in a future release.
          */
         public static final int COUNTING_ROD_NUMERALS_ID = 154; /*[1D360]*/
-        
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int SUNDANESE_ID = 155; /* [1B80] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int LEPCHA_ID = 156; /* [1C00] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int OL_CHIKI_ID = 157; /* [1C50] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int CYRILLIC_EXTENDED_A_ID = 158; /* [2DE0] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int VAI_ID = 159; /* [A500] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int CYRILLIC_EXTENDED_B_ID = 160; /* [A640] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int SAURASHTRA_ID = 161; /* [A880] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int KAYAH_LI_ID = 162; /* [A900] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int REJANG_ID = 163; /* [A930] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int CHAM_ID = 164; /* [AA00] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int ANCIENT_SYMBOLS_ID = 165; /* [10190] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int PHAISTOS_DISC_ID = 166; /* [101D0] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int LYCIAN_ID = 167; /* [10280] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int CARIAN_ID = 168; /* [102A0] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int LYDIAN_ID = 169; /* [10920] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int MAHJONG_TILES_ID = 170; /* [1F000] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final int DOMINO_TILES_ID = 171; /* [1F030] */
+
         /** 
          * @stable ICU 2.4 
          */
-        public static final int COUNT = 155;
+        public static final int COUNT = 172;
 
         // blocks objects ---------------------------------------------------
         
@@ -1674,7 +1776,108 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @provisional This API might change or be removed in a future release.
          */
         public static final UnicodeBlock COUNTING_ROD_NUMERALS = new UnicodeBlock("COUNTING_ROD_NUMERALS", COUNTING_ROD_NUMERALS_ID); /*[1D360]*/
-        
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock SUNDANESE = new UnicodeBlock("SUNDANESE", SUNDANESE_ID); /* [1B80] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock LEPCHA = new UnicodeBlock("LEPCHA", LEPCHA_ID); /* [1C00] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock OL_CHIKI = new UnicodeBlock("OL_CHIKI", OL_CHIKI_ID); /* [1C50] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock CYRILLIC_EXTENDED_A = new UnicodeBlock("CYRILLIC_EXTENDED_A", CYRILLIC_EXTENDED_A_ID); /* [2DE0] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock VAI = new UnicodeBlock("VAI", VAI_ID); /* [A500] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock CYRILLIC_EXTENDED_B = new UnicodeBlock("CYRILLIC_EXTENDED_B", CYRILLIC_EXTENDED_B_ID); /* [A640] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock SAURASHTRA = new UnicodeBlock("SAURASHTRA", SAURASHTRA_ID); /* [A880] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock KAYAH_LI = new UnicodeBlock("KAYAH_LI", KAYAH_LI_ID); /* [A900] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock REJANG = new UnicodeBlock("REJANG", REJANG_ID); /* [A930] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock CHAM = new UnicodeBlock("CHAM", CHAM_ID); /* [AA00] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock ANCIENT_SYMBOLS = new UnicodeBlock("ANCIENT_SYMBOLS", ANCIENT_SYMBOLS_ID); /* [10190] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock PHAISTOS_DISC = new UnicodeBlock("PHAISTOS_DISC", PHAISTOS_DISC_ID); /* [101D0] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock LYCIAN = new UnicodeBlock("LYCIAN", LYCIAN_ID); /* [10280] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock CARIAN = new UnicodeBlock("CARIAN", CARIAN_ID); /* [102A0] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock LYDIAN = new UnicodeBlock("LYDIAN", LYDIAN_ID); /* [10920] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock MAHJONG_TILES = new UnicodeBlock("MAHJONG_TILES", MAHJONG_TILES_ID); /* [1F000] */
+
+        /**
+         * @draft ICU 4.0
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final UnicodeBlock DOMINO_TILES = new UnicodeBlock("DOMINO_TILES", DOMINO_TILES_ID); /* [1F030] */
         /** 
          * @stable ICU 2.4 
          */
@@ -1752,13 +1955,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 for (int i = 0; i < BLOCKS_.length; ++i) {
                     UnicodeBlock b = BLOCKS_[i];
                     String name = getPropertyValueName(UProperty.BLOCK, b.getID(), UProperty.NameChoice.LONG);
-                    m.put(name.toUpperCase(), b);
-            m.put(name.replace('_',' ').toUpperCase(), b);
-                    m.put(b.toString().toUpperCase(), b);
+                    name = name.toUpperCase().replace(" ", "").replace("_", "").replace("-", "");
+                    m.put(name, b);
                 }
                 mref = new SoftReference(m);
             }
-            UnicodeBlock b = (UnicodeBlock)m.get(blockName.toUpperCase());
+            UnicodeBlock b = (UnicodeBlock)m.get(blockName.toUpperCase().replace(" ", "").replace("_", "").replace("-", ""));
             if (b == null) {
                 throw new IllegalArgumentException();
             }
@@ -1875,7 +2077,26 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             PHOENICIAN,
             CUNEIFORM,
             CUNEIFORM_NUMBERS_AND_PUNCTUATION,
-            COUNTING_ROD_NUMERALS
+            COUNTING_ROD_NUMERALS,
+
+            /* New blocks in Unicode 5.8 */
+            SUNDANESE,
+            LEPCHA,
+            OL_CHIKI,
+            CYRILLIC_EXTENDED_A,
+            VAI,
+            CYRILLIC_EXTENDED_B,
+            SAURASHTRA,
+            KAYAH_LI,
+            REJANG,
+            CHAM,
+            ANCIENT_SYMBOLS,
+            PHAISTOS_DISC,
+            LYCIAN,
+            CARIAN,
+            LYDIAN,
+            MAHJONG_TILES,
+            DOMINO_TILES,
         };
 
         static {
@@ -2285,11 +2506,15 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /**
          * @stable ICU 2.6 
          */
-        public static final int ZHAIN =53;   
+        public static final int ZHAIN = 53;   
         /**
-         * @stable ICU 2.4
+         * @stable ICU 4.0 
          */
-        public static final int COUNT = 54;
+        public static final int BURUSHASKI_YEH_BARREE = 54;   
+        /**
+         * @stable ICU 4.0
+         */
+        public static final int COUNT = 55;
     }
 
     /**
@@ -2339,9 +2564,17 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          */
         public static final int V = 9;
         /**
+         * @stable ICU 4.0
+         */
+        public static final int SPACING_MARK = 10;
+        /**
+         * @stable ICU 4.0
+         */
+        public static final int PREPEND = 11;
+        /**
          * @stable ICU 3.4
          */
-        public static final int COUNT = 10;
+        public static final int COUNT = 12;
     }
 
     /**
@@ -2383,9 +2616,29 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          */
         public static final int EXTENDNUMLET = 7;
         /**
-         * @stable ICU 3.8
+         * @stable ICU 4.0
          */
-        public static final int COUNT = 8;
+        public static final int CR = 8;
+        /**
+         * @stable ICU 4.0
+         */
+        public static final int EXTEND = 9;
+        /**
+         * @stable ICU 4.0
+         */
+        public static final int LF = 10;
+        /**
+         * @stable ICU 4.0
+         */
+        public static final int MIDNUMLEFT = 11;
+        /**
+         * @stable ICU 4.0
+         */
+        public static final int NEWLINE = 12;
+        /**
+         * @stable ICU 4.0
+         */
+        public static final int COUNT = 13;
     }
 
     /**
@@ -2439,9 +2692,25 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          */
         public static final int UPPER = 10;
         /**
-         * @stable ICU 3.8
+         * @stable ICU 4.0
          */
-        public static final int COUNT = 11;
+        public static final int CR = 11;
+        /**
+         * @stable ICU 4.0
+         */
+        public static final int EXTEND = 12;
+        /**
+         * @stable ICU 4.0
+         */
+        public static final int LF = 13;
+        /**
+         * @stable ICU 4.0
+         */
+        public static final int SCONTINUE = 14;
+        /**
+         * @stable ICU 4.0
+         */
+        public static final int COUNT = 15;
     }
 
     /**
@@ -5014,7 +5283,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             case UProperty.JOINING_TYPE:
                 return gBdp.getJoiningType(ch);
             case UProperty.LINE_BREAK:
-                return (int)(PROPERTY_.getAdditional(ch, 0)& LINE_BREAK_MASK_)>>LINE_BREAK_SHIFT_;
+                return (int)(PROPERTY_.getAdditional(ch, LB_VWORD)& LB_MASK)>>LB_SHIFT;
             case UProperty.NUMERIC_TYPE:
                 type=getNumericType(PROPERTY_.getProperty(ch));
                 if(type>NumericType.NUMERIC) {
@@ -5196,7 +5465,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             case UProperty.GENERAL_CATEGORY:
                 return UCharacterCategory.CHAR_CATEGORY_COUNT - 1;
             case UProperty.LINE_BREAK:
-                return (PROPERTY_.getMaxValues(0) & LINE_BREAK_MASK_) >> LINE_BREAK_SHIFT_;
+                return (PROPERTY_.getMaxValues(LB_VWORD) & LB_MASK) >> LB_SHIFT;
             case UProperty.NUMERIC_TYPE:
                 return NumericType.COUNT - 1;
             case UProperty.SCRIPT:
@@ -6148,17 +6417,21 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /*
      * Properties in vector word 2
      * Bits
-     * 31..24   More binary properties (see UCharacterProperty)
-     * 23..19   reserved
-     * 18..14   Sentence Break
-     * 13..10   Word Break
+     * 31..26   reserved
+     * 25..20   Line Break
+     * 19..15   Sentence Break
+     * 14..10   Word Break
      *  9.. 5   Grapheme Cluster Break
      *  4.. 0   Decomposition Type
      */
-    private static final int SB_MASK          = 0x0007c000;
-    private static final int SB_SHIFT         = 14;
+    private static final int LB_MASK          = 0x03f00000;
+    private static final int LB_SHIFT         = 20;
+    private static final int LB_VWORD         = 2;
 
-    private static final int WB_MASK          = 0x00003c00;
+    private static final int SB_MASK          = 0x000f8000;
+    private static final int SB_SHIFT         = 15;
+
+    private static final int WB_MASK          = 0x00007c00;
     private static final int WB_SHIFT         = 10;
 
     private static final int GCB_MASK         = 0x000003e0;
@@ -6173,48 +6446,38 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /*
      * Properties in vector word 0
      * Bits
-     * 31..24   DerivedAge version major/minor one nibble each (see UCharacterProperty)
-     * 23..18   Line Break
-     * 17..15   East Asian Width
-     * 14.. 7   UBlockCode
-     *  6.. 0   UScriptCode
+     * 31..24   DerivedAge version major/minor one nibble each
+     * 23..20   reserved
+     * 19..17   East Asian Width
+     * 16.. 8   UBlockCode
+     *  7.. 0   UScriptCode
      */
 
     /**
      * Integer properties mask and shift values for East Asian cell width.
      * Equivalent to icu4c UPROPS_EA_MASK 
      */    
-    private static final int EAST_ASIAN_MASK_ = 0x00038000;
+    private static final int EAST_ASIAN_MASK_ = 0x000e0000;
     /**
      * Integer properties mask and shift values for East Asian cell width.
      * Equivalent to icu4c UPROPS_EA_SHIFT 
      */    
-    private static final int EAST_ASIAN_SHIFT_ = 15;
-    /**
-     * Integer properties mask and shift values for line breaks.
-     * Equivalent to icu4c UPROPS_LB_MASK 
-     */    
-    private static final int LINE_BREAK_MASK_ = 0x00FC0000;
-    /**
-     * Integer properties mask and shift values for line breaks.
-     * Equivalent to icu4c UPROPS_LB_SHIFT 
-     */    
-    private static final int LINE_BREAK_SHIFT_ = 18;
+    private static final int EAST_ASIAN_SHIFT_ = 17;
     /**
      * Integer properties mask and shift values for blocks.
      * Equivalent to icu4c UPROPS_BLOCK_MASK 
      */    
-    private static final int BLOCK_MASK_ = 0x00007f80;
+    private static final int BLOCK_MASK_ = 0x0001ff00;
     /**
      * Integer properties mask and shift values for blocks.
      * Equivalent to icu4c UPROPS_BLOCK_SHIFT 
      */    
-    private static final int BLOCK_SHIFT_ = 7;
+    private static final int BLOCK_SHIFT_ = 8;
     /**
      * Integer properties mask and shift values for scripts.
      * Equivalent to icu4c UPROPS_SHIFT_MASK
      */    
-    private static final int SCRIPT_MASK_ = 0x0000007f;
+    private static final int SCRIPT_MASK_ = 0x000000ff;
                            
     // private constructor -----------------------------------------------
     ///CLOVER:OFF  

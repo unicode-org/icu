@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2007, International Business Machines Corporation and    *
+* Copyright (C) 1996-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -44,7 +44,7 @@ public final class UCharacterTest extends TestFmwk
     /**
     * ICU4J data version number
     */
-    private final VersionInfo VERSION_ = VersionInfo.getInstance("5.0.0.0");
+    private final VersionInfo VERSION_ = VersionInfo.getInstance("5.1.0.0");
 
     // constructor ===================================================
 
@@ -1616,14 +1616,16 @@ public final class UCharacterTest extends TestFmwk
             { 0x1801, UProperty.DEFAULT_IGNORABLE_CODE_POINT, 0 },
 
             { 0x0341, UProperty.DEPRECATED, 1 },
-            { 0xe0041, UProperty.DEPRECATED, 0 },
+            { 0xe0041, UProperty.DEPRECATED, 1 },       /* Changed from Unicode 5 to 5.1 */
 
             { 0x00a0, UProperty.GRAPHEME_BASE, 1 },
             { 0x0a4d, UProperty.GRAPHEME_BASE, 0 },
-            { 0xff9f, UProperty.GRAPHEME_BASE, 1 },      /* changed from Unicode 3.2 to 4 */
+            { 0xff9d, UProperty.GRAPHEME_BASE, 1 },
+            { 0xff9f, UProperty.GRAPHEME_BASE, 0 },      /* changed from Unicode 3.2 to 4  and again 5 to 5.1 */
 
             { 0x0300, UProperty.GRAPHEME_EXTEND, 1 },
-            { 0xff9f, UProperty.GRAPHEME_EXTEND, 0 },   /* changed from Unicode 3.2 to 4 */
+            { 0xff9d, UProperty.GRAPHEME_EXTEND, 0 }, 
+            { 0xff9f, UProperty.GRAPHEME_EXTEND, 1 },   /* changed from Unicode 3.2 to 4 and again 5 to 5.1 */
             { 0x0603, UProperty.GRAPHEME_EXTEND, 0 },
 
             { 0x0a4d, UProperty.GRAPHEME_LINK, 1 },
@@ -1671,7 +1673,7 @@ public final class UCharacterTest extends TestFmwk
             { 0x10909, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x10fe4, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
 
-            { 0x0606, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
+            { 0x0605, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
             { 0x061c, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
             { 0x063f, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
             { 0x070e, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },

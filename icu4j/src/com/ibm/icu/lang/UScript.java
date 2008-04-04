@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2001-2007 International Business Machines Corporation and     *
+* Copyright (C) 2001-2008 International Business Machines Corporation and     *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -690,10 +690,107 @@ public final class UScript {
     public static final int MEITEI_MAYEK                  = 115;/* Mtei */
     
     /**
+     * ISO 15924 script code
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int IMPERIAL_ARAMAIC              = 116;/* Armi */
+
+    /**
+     * ISO 15924 script code
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int AVESTAN                       = 117;/* Avst */
+
+    /**
+     * ISO 15924 script code
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int CHAKMA                        = 118;/* Cakm */
+
+    /**
+     * ISO 15924 script code
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int KOREAN                        = 119;/* Kore */
+
+    /**
+     * ISO 15924 script code
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int KAITHI                        = 120;/* Kthi */
+
+    /**
+     * ISO 15924 script code
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int MANICHAEAN                    = 121;/* Mani */
+
+    /**
+     * ISO 15924 script code
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int INSCRIPTIONAL_PAHLAVI         = 122;/* Phli */
+
+    /**
+     * ISO 15924 script code
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int PSALTER_PAHLAVI               = 123;/* Phlp */
+
+    /**
+     * ISO 15924 script code
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int BOOK_PAHLAVI                  = 124;/* Phlv */
+
+    /**
+     * ISO 15924 script code
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int INSCRIPTIONAL_PARTHIAN        = 125;/* Prti */
+
+    /**
+     * ISO 15924 script code
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int SAMARITAN                     = 126;/* Samr */
+
+    /**
+     * ISO 15924 script code
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int TAI_VIET                      = 127;/* Tavt */
+
+    /**
+     * ISO 15924 script code
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int MATHEMATICAL_NOTATION         = 128;/* Zmth */
+
+    /**
+     * ISO 15924 script code
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int SYMBOLS                       = 129;/* Zsym */
+    /**
      * Limit
      * @stable ICU 2.4
      */
-    public static final int CODE_LIMIT   = 116;
+    public static final int CODE_LIMIT   = 130;
 
     private static final int SCRIPT_MASK   = 0x0000007f;
     private static final UCharacterProperty prop= UCharacterProperty.getInstance();
@@ -851,4 +948,3 @@ public final class UScript {
     private UScript(){}
     ///CLOVER:ON
 }
-

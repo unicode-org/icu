@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -154,6 +154,8 @@ public class RBBIAPITest extends com.ibm.icu.dev.test.TestFmwk {
     
     /**
       * Testing the methods first(), next(), next(int) and following() of RuleBasedBreakIterator
+      *   TODO:  Most of this test should be retired, rule behavior is much better covered by
+      *          TestExtended, which is also easier to understand and maintain.
       **/
     public void TestFirstNextFollowing() {
         int p, q;
@@ -187,7 +189,7 @@ public class RBBIAPITest extends com.ibm.icu.dev.test.TestFmwk {
             errln("ERROR: next()/following() at last position returned #"
                     + p + " and " + q + " instead of" + testString.length() + "\n"); 
         RuleBasedBreakIterator charIter1 = (RuleBasedBreakIterator) BreakIterator.getCharacterInstance(Locale.getDefault()); 
-        testString = "Write hindi here. \u092d\u093e\u0930\u0301 \u0938\u0941\u0902\u0926\u0930 \u0939\u094c\u0964"; 
+        testString = "Write hindi here. "; 
         logln("testing char iter - string:- \"" + testString + "\"");
         charIter1.setText(testString);
         p = charIter1.first();
@@ -207,18 +209,6 @@ public class RBBIAPITest extends com.ibm.icu.dev.test.TestFmwk {
         p = q;
         q = charIter1.next(6);
         doTest(testString, p, q, 17, " here.");
-        // hindi starts here
-        p = q;
-        q = charIter1.next(4);
-        doTest(testString, p, q, 22, " \u092d\u093e\u0930\u0301");   // Nonsense, but compatible between old and new rules.
-        p = q;
-        q = charIter1.next(2);
-        doTest(testString, p, q, 26, " \u0938\u0941\u0902");
-
-        q = charIter1.following(24);
-        doTest(testString, 24, q, 26, "\u0941\u0902");
-        q = charIter1.following(20);
-        doTest(testString, 20, q, 22, "\u0930\u0301");
         p = charIter1.following(charIter1.last());
         q = charIter1.next(charIter1.last());
         if (p != BreakIterator.DONE || q != BreakIterator.DONE)
@@ -325,31 +315,6 @@ public class RBBIAPITest extends com.ibm.icu.dev.test.TestFmwk {
         p = wordIter1.preceding(wordIter1.first());
         if (p != BreakIterator.DONE)
             errln("ERROR: preceding()  at starting position returned #" + p + " instead of 0");
-        testString = "Write hindi here. \u092d\u093e\u0930\u0924 \u0938\u0941\u0902\u0926\u0930 \u0939\u0301\u0964"; 
-        logln("testing character iteration for string \" " + testString + "\" \n");
-        RuleBasedBreakIterator charIter1 = (RuleBasedBreakIterator) BreakIterator.getCharacterInstance(Locale.getDefault());
-        charIter1.setText(testString);
-        p = charIter1.last();
-        if (p != testString.length())
-            errln("ERROR: first() returned" + p + "instead of" + testString.length());
-        q = charIter1.previous();
-        doTest(testString, p, q, 31, "\u0964");
-        p = q;
-        q = charIter1.previous();
-        doTest(testString, p, q, 29, "\u0939\u0301");
-        q = charIter1.preceding(26);
-        doTest(testString, 26, q, 23, "\u0938\u0941\u0902");
-        q = charIter1.preceding(16);
-        doTest(testString, 16, q, 15, "e");
-        p = q;
-        q = charIter1.previous();
-        doTest(testString, p, q, 14, "r");
-        charIter1.first();
-        p = charIter1.previous();
-        q = charIter1.preceding(charIter1.first());
-        if (p != BreakIterator.DONE || q != BreakIterator.DONE)
-            errln("ERROR: previous()/preceding() at starting position returned #"
-                    + p + " and " + q + " instead of 0\n"); 
         testString = "Hello! how are you? I'am fine. Thankyou. How are you doing? This  costs $20,00,000."; 
         logln("testing sentence iter - String:- \"" + testString + "\"");
         RuleBasedBreakIterator sentIter1 = (RuleBasedBreakIterator) BreakIterator.getSentenceInstance(Locale.getDefault()); 
