@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2007, International Business Machines Corporation and    *
+* Copyright (C) 1996-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -15,7 +15,9 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.RuleBasedBreakIterator;
+import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.impl.UCaseProps;
 import com.ibm.icu.impl.Utility;
 import java.util.Locale;
 import java.io.BufferedReader;
@@ -287,6 +289,22 @@ public final class UCharacterCaseTest extends TestFmwk
                   "\", got \"" + UCharacter.toLowerCase(GREEK_LOCALE_,
                                         SHARED_UPPERCASE_GREEK_) + "\".");
         }
+    }
+
+    public void TestTitleRegression() throws java.io.IOException {
+        UCaseProps props = new UCaseProps();
+        int type = props.getTypeOrIgnorable('\'');
+        assertEquals("Case Ignorable check", -1, type); // should be case-ignorable (-1)
+        UnicodeSet allCaseIgnorables = new UnicodeSet();
+        for (int cp = 0; cp <= 0x10FFFF; ++cp) {
+            if (props.getTypeOrIgnorable(cp) < 0) {
+                allCaseIgnorables.add(cp);
+            }
+        }
+        logln(allCaseIgnorables.toString());
+        assertEquals("Titlecase check",
+                "The Quick Brown Fox Can't Jump Over The Lazy Dogs.",
+                UCharacter.toTitleCase(ULocale.ENGLISH, "THE QUICK BROWN FOX CAN'T JUMP OVER THE LAZY DOGS.", null));
     }
 
     public void TestTitle()
@@ -912,5 +930,3 @@ public final class UCharacterCaseTest extends TestFmwk
         return result;
     }
 }
-
-

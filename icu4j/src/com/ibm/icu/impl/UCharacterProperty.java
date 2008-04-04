@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2007, International Business Machines Corporation and    *
+* Copyright (C) 1996-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -318,15 +318,15 @@ public final class UCharacterProperty
        new BinaryProperties(  1,                (  1 << XID_CONTINUE_PROPERTY_) ),
        new BinaryProperties(  1,                (  1 << XID_START_PROPERTY_) ),
        new BinaryProperties( SRC_CASE,   0 ),                                       /* UCHAR_CASE_SENSITIVE */
-       new BinaryProperties(  2,                (  1 << V2_S_TERM_PROPERTY_) ),
-       new BinaryProperties(  2,                (  1 << V2_VARIATION_SELECTOR_PROPERTY_) ),
+       new BinaryProperties(  1,                (  1 << S_TERM_PROPERTY_) ),
+       new BinaryProperties(  1,                (  1 << VARIATION_SELECTOR_PROPERTY_) ),
        new BinaryProperties( SRC_NORM,   0 ),                                       /* UCHAR_NFD_INERT */
        new BinaryProperties( SRC_NORM,   0 ),                                       /* UCHAR_NFKD_INERT */
        new BinaryProperties( SRC_NORM,   0 ),                                       /* UCHAR_NFC_INERT */
        new BinaryProperties( SRC_NORM,   0 ),                                       /* UCHAR_NFKC_INERT */
        new BinaryProperties( SRC_NORM,   0 ),                                       /* UCHAR_SEGMENT_STARTER */
-       new BinaryProperties(  2,                (  1 << V2_PATTERN_SYNTAX) ),
-       new BinaryProperties(  2,                (  1 << V2_PATTERN_WHITE_SPACE) ),
+       new BinaryProperties(  1,                (  1 << PATTERN_SYNTAX) ),
+       new BinaryProperties(  1,                (  1 << PATTERN_WHITE_SPACE) ),
        new BinaryProperties( SRC_CHAR_AND_PROPSVEC,  0 ),                           /* UCHAR_POSIX_ALNUM */
        new BinaryProperties( SRC_CHAR,  0 ),                                        /* UCHAR_POSIX_BLANK */
        new BinaryProperties( SRC_CHAR,  0 ),                                        /* UCHAR_POSIX_GRAPH */
@@ -798,38 +798,36 @@ public final class UCharacterProperty
      * ICU 2.6/uprops format version 3.2 stores full properties instead of "Other_".
      */
     private static final int WHITE_SPACE_PROPERTY_ = 0;
-    //private static final int BIDI_CONTROL_PROPERTY_ = 1;
-    //private static final int JOIN_CONTROL_PROPERTY_ = 2;
-    private static final int DASH_PROPERTY_ = 3;
-    private static final int HYPHEN_PROPERTY_ = 4;
-    private static final int QUOTATION_MARK_PROPERTY_ = 5;
-    private static final int TERMINAL_PUNCTUATION_PROPERTY_ = 6;
-    private static final int MATH_PROPERTY_ = 7;
-    private static final int HEX_DIGIT_PROPERTY_ = 8;
-    private static final int ASCII_HEX_DIGIT_PROPERTY_ = 9;
-    private static final int ALPHABETIC_PROPERTY_ = 10;
-    private static final int IDEOGRAPHIC_PROPERTY_ = 11;
-    private static final int DIACRITIC_PROPERTY_ = 12;
-    private static final int EXTENDER_PROPERTY_ = 13;
-    //private static final int LOWERCASE_PROPERTY_ = 14;
-    //private static final int UPPERCASE_PROPERTY_ = 15;
-    private static final int NONCHARACTER_CODE_POINT_PROPERTY_ = 16;
-    private static final int GRAPHEME_EXTEND_PROPERTY_ = 17;
-    private static final int GRAPHEME_LINK_PROPERTY_ = 18;
-    private static final int IDS_BINARY_OPERATOR_PROPERTY_ = 19;
-    private static final int IDS_TRINARY_OPERATOR_PROPERTY_ = 20;
-    private static final int RADICAL_PROPERTY_ = 21;
-    private static final int UNIFIED_IDEOGRAPH_PROPERTY_ = 22;
-    private static final int DEFAULT_IGNORABLE_CODE_POINT_PROPERTY_ = 23;
-    private static final int DEPRECATED_PROPERTY_ = 24;
-    //private static final int SOFT_DOTTED_PROPERTY_ = 25;
-    private static final int LOGICAL_ORDER_EXCEPTION_PROPERTY_ = 26;
-    private static final int XID_START_PROPERTY_ = 27;
-    private static final int XID_CONTINUE_PROPERTY_ = 28;
-    private static final int ID_START_PROPERTY_    = 29;
-    private static final int ID_CONTINUE_PROPERTY_ = 30;
-    private static final int GRAPHEME_BASE_PROPERTY_ = 31;
-    //private static final int BINARY_1_TOP_PROPERTY_ = 32;
+    private static final int DASH_PROPERTY_ = 1;
+    private static final int HYPHEN_PROPERTY_ = 2;
+    private static final int QUOTATION_MARK_PROPERTY_ = 3;
+    private static final int TERMINAL_PUNCTUATION_PROPERTY_ = 4;
+    private static final int MATH_PROPERTY_ = 5;
+    private static final int HEX_DIGIT_PROPERTY_ = 6;
+    private static final int ASCII_HEX_DIGIT_PROPERTY_ = 7;
+    private static final int ALPHABETIC_PROPERTY_ = 8;
+    private static final int IDEOGRAPHIC_PROPERTY_ = 9;
+    private static final int DIACRITIC_PROPERTY_ = 10;
+    private static final int EXTENDER_PROPERTY_ = 11;
+    private static final int NONCHARACTER_CODE_POINT_PROPERTY_ = 12;
+    private static final int GRAPHEME_EXTEND_PROPERTY_ = 13;
+    private static final int GRAPHEME_LINK_PROPERTY_ = 14;
+    private static final int IDS_BINARY_OPERATOR_PROPERTY_ = 15;
+    private static final int IDS_TRINARY_OPERATOR_PROPERTY_ = 16;
+    private static final int RADICAL_PROPERTY_ = 17;
+    private static final int UNIFIED_IDEOGRAPH_PROPERTY_ = 18;
+    private static final int DEFAULT_IGNORABLE_CODE_POINT_PROPERTY_ = 19;
+    private static final int DEPRECATED_PROPERTY_ = 20;
+    private static final int LOGICAL_ORDER_EXCEPTION_PROPERTY_ = 21;
+    private static final int XID_START_PROPERTY_ = 22;
+    private static final int XID_CONTINUE_PROPERTY_ = 23;
+    private static final int ID_START_PROPERTY_    = 24;
+    private static final int ID_CONTINUE_PROPERTY_ = 25;
+    private static final int GRAPHEME_BASE_PROPERTY_ = 26;
+    private static final int S_TERM_PROPERTY_ = 27;
+    private static final int VARIATION_SELECTOR_PROPERTY_ = 28;
+    private static final int PATTERN_SYNTAX = 29;                   /* new in ICU 3.4 and Unicode 4.1 */
+    private static final int PATTERN_WHITE_SPACE = 30;
 
     /**
      * First nibble shift
@@ -844,11 +842,6 @@ public final class UCharacterProperty
      */
     private static final int AGE_SHIFT_ = 24;
 
-    // boolean properties in vector word 2
-    private static final int V2_S_TERM_PROPERTY_ = 24;
-    private static final int V2_VARIATION_SELECTOR_PROPERTY_ = 25;
-    private static final int V2_PATTERN_SYNTAX = 26;                   /* new in ICU 3.4 and Unicode 4.1 */
-    private static final int V2_PATTERN_WHITE_SPACE = 27;
 
     // private constructors --------------------------------------------------
 

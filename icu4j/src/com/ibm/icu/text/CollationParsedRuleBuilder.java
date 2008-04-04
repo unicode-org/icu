@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2007, International Business Machines Corporation and    *
+* Copyright (C) 1996-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -485,6 +485,7 @@ final class CollationParsedRuleBuilder
                 m_utilElement_.m_cPoints_ = m_utilElement_.m_uchars_;
                 m_utilElement_.m_prefix_ = 0;
                 m_utilElement_.m_CELength_ = 0;
+                m_utilElement_.m_prefixChars_ = null;
                 m_utilColEIter_.setText(m_utilElement_.m_uchars_);
                 while (CE != CollationElementIterator.NULLORDER) {
                     CE = m_utilColEIter_.next();
@@ -610,13 +611,30 @@ final class CollationParsedRuleBuilder
         int offset = 0;
     while (conts[offset] != 0) {
         // tailoredCE = ucmpe32_get(t.m_mapping, *conts);
-            int tailoredCE = t.m_mapping_.getValue(conts[offset]);
+        int tailoredCE = t.m_mapping_.getValue(conts[offset]);
+        Elements prefixElm =  null;
         if (tailoredCE != CE_NOT_FOUND_) {         
         boolean needToAdd = true;
         if (isContractionTableElement(tailoredCE)) {
                     if (isTailored(t.m_contractions_, tailoredCE, 
                                    conts, offset + 1) == true) {
             needToAdd = false;
+            }
+        }
+        if (!needToAdd && isPrefix(tailoredCE) && conts[offset+1]==0) {
+            // pre-context character in UCA
+            // The format for pre-context character is
+            // conts[0]: baseCP  conts[1]:0  conts[2]:pre-context CP
+            Elements elm = new Elements();
+            elm.m_cPoints_=m_utilElement_.m_uchars_;
+            elm.m_CELength_=0;
+            elm.m_uchars_= UCharacter.toString(conts[offset]);
+            elm.m_prefixChars_=UCharacter.toString(conts[offset+2]);
+            elm.m_prefix_=0; // TODO(claireho) : confirm!
+            prefixElm =  (Elements)t.m_prefixLookup_.get(elm);
+            if ((prefixElm== null) ||
+                (prefixElm.m_prefixChars_.charAt(0)!= conts[offset+2])) {
+                needToAdd = true;
             }
         }
                 if(m_parser_.m_removeSet_ != null && m_parser_.m_removeSet_.contains(conts[offset])) {
@@ -626,23 +644,53 @@ final class CollationParsedRuleBuilder
                 
                 if (needToAdd == true) { 
                     // we need to add if this contraction is not tailored.
-            m_utilElement_.m_prefix_ = 0;
-            m_utilElement_.m_prefixChars_ = null;
-            m_utilElement_.m_cPoints_ = m_utilElement_.m_uchars_;
-                    str.delete(0, str.length());
-                    str.append(conts[offset]);
-                    str.append(conts[offset + 1]);
-            if (conts[offset + 2] != 0) {
-            str.append(conts[offset + 2]);
-            } 
-                    m_utilElement_.m_uchars_ = str.toString();
-                    m_utilElement_.m_CELength_ = 0;
-                    m_utilColEIter_.setText(m_utilElement_.m_uchars_);
+                    if (conts[offset+1]!=0) { // not precontext 
+                        m_utilElement_.m_prefix_ = 0;
+                        m_utilElement_.m_prefixChars_ = null;
+                        m_utilElement_.m_cPoints_ = m_utilElement_.m_uchars_;
+                        str.delete(0, str.length());
+                        str.append(conts[offset]);
+                        str.append(conts[offset + 1]);
+                        if (conts[offset + 2] != 0) {
+                            str.append(conts[offset + 2]);
+                        } 
+                        m_utilElement_.m_uchars_ = str.toString();
+                        m_utilElement_.m_CELength_ = 0;
+                        m_utilColEIter_.setText(m_utilElement_.m_uchars_);
+                    }
+                    else {  // add a pre-context element
+                        int preKeyLen=0;
+                        str.delete(0, str.length());  // clean up
+                        m_utilElement_.m_cPoints_ = UCharacter.toString(conts[offset]);
+                        m_utilElement_.m_CELength_ = 0;
+                        m_utilElement_.m_uchars_ = UCharacter.toString(conts[offset]);
+                        m_utilElement_.m_prefixChars_ = UCharacter.toString(conts[offset+2]);
+                        if (prefixElm==null) {
+                            m_utilElement_.m_prefix_=0;
+                        }
+                        else { // TODO (claireho): confirm!
+                            m_utilElement_.m_prefix_= m_utilElement_.m_prefix_; 
+                            // m_utilElement_.m_prefix_= prefixElm.m_prefix_;
+                        }
+                        m_utilColEIter_.setText(m_utilElement_.m_prefixChars_);
+                        while (m_utilColEIter_.next()!=CollationElementIterator.NULLORDER) { 
+                            // count number of keys for pre-context char.
+                            preKeyLen++;
+                        }
+                        str.append(conts[offset+2]);
+                        str.append(conts[offset]);
+                        m_utilColEIter_.setText(str.toString());
+                        // Skip the keys for prefix character, then copy the rest to el.
+                        while ((preKeyLen-->0) && 
+                                m_utilColEIter_.next()!= CollationElementIterator.NULLORDER) {
+                            continue;
+                        }
+                                
+                    }
                     while (true) {
                         int CE = m_utilColEIter_.next();
                         if (CE != CollationElementIterator.NULLORDER) {
-                            m_utilElement_.m_CEs_[m_utilElement_.m_CELength_ 
-                         ++] = CE;
+                            m_utilElement_.m_CEs_[m_utilElement_.m_CELength_++] = CE;
                         }
                         else {
                             break;
@@ -1584,14 +1632,18 @@ final class CollationParsedRuleBuilder
         s --;
         if (lows[fstrength * 3 + s] != highs[fstrength * 3 + s]) {
             if (strength == Collator.SECONDARY) {
-            low = RuleBasedCollator.COMMON_TOP_2_ << 24;
-            high = 0xFFFFFFFF;
+                if (low < (RuleBasedCollator.COMMON_TOP_2_ << 24)) {
+                    // Override if low range is less than UCOL_COMMON_TOP2. 
+                    low = RuleBasedCollator.COMMON_TOP_2_ << 24;
+                }
+                high = 0xFFFFFFFF;
             } 
-                    else {
-                        // low = 0x02000000; 
-                        // This needs to be checked - what if low is
-                        // not good...
-            high = 0x40000000;
+            else {
+                if ( low < RuleBasedCollator.COMMON_BOTTOM_3<<24 ) { 
+                    // Override if low range is less than UCOL_COMMON_BOT3. 
+                    low = RuleBasedCollator.COMMON_BOTTOM_3 <<24;
+                }   
+                high = 0x40000000;
             }
             break;
         }
@@ -2864,6 +2916,19 @@ final class CollationParsedRuleBuilder
             t.m_mapping_.setValue(element.m_cPoints_.charAt(
                                     element.m_cPointsOffset_), 
                       element.m_mapCE_);
+            if (element.m_prefixChars_ != null && 
+                element.m_prefixChars_.length()>0 &&
+                getCETag(CE) != CE_IMPLICIT_TAG_) {
+                // Add CE for standalone precontext char. 
+                Elements origElem = new Elements();
+                origElem.m_prefixChars_ =  null;
+                origElem.m_uchars_ = element.m_cPoints_;
+                origElem.m_cPoints_ = origElem.m_uchars_;
+                origElem.m_CEs_[0] = CE;
+                origElem.m_mapCE_ = CE;
+                origElem.m_CELength_ = 1;
+                finalizeAddition(t, origElem);
+            }
         }
         } 
         else {

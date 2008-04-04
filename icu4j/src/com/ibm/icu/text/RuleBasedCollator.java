@@ -1,7 +1,7 @@
 //##header J2SE15
 /**
 *******************************************************************************
-* Copyright (C) 1996-2007, International Business Machines Corporation and    *
+* Copyright (C) 1996-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -1531,6 +1531,7 @@ public final class RuleBasedCollator extends Collator
     static final byte BYTE_COMMON_ = (byte)0x05;
     static final int COMMON_TOP_2_ = 0x86; // int for unsigness
     static final int COMMON_BOTTOM_2_ = BYTE_COMMON_;
+    static final int COMMON_BOTTOM_3 = 0x05;
     /**
      * Case strength mask
      */

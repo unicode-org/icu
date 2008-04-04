@@ -1,6 +1,6 @@
  /*
  *******************************************************************************
- * Copyright (C) 2002-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -285,7 +285,13 @@ public class CollationMiscTest extends TestFmwk {
         String target = "[";
     
         for (i = 0; i < bytes.length; i++) {
-            target += Integer.toHexString(bytes[i]);
+            String numStr = Integer.toHexString(bytes[i]);
+            if (numStr.length()>2) {
+                target += numStr.substring(numStr.length()-2);
+            }
+            else {
+                target += numStr;
+            }
             target += " ";
         }
         target += "]";
@@ -2281,4 +2287,204 @@ public class CollationMiscTest extends TestFmwk {
         }
         
     }
+    
+    
+    public void Test6179()
+    {
+        String rules[] = {
+                "&[last primary ignorable]<< a  &[first primary ignorable]<<b ",
+                "&[last secondary ignorable]<<< a &[first secondary ignorable]<<<b",  
+        };
+        // defined in UCA5.1
+        String firstPrimIgn = "\u0332";  
+        String lastPrimIgn = "\uD800\uDDFD";
+        String firstVariable = "\u0009";
+        byte[] secIgnKey = {1,1,4,0};
+        
+        int i=0; 
+        {
+            
+            RuleBasedCollator coll = null;
+            try {
+                coll = new RuleBasedCollator(rules[i]);
+            } catch (Exception e) {
+                warnln("Unable to open collator with rules " + rules[i]);
+            }
+
+            logln("Test rule["+i+"]"+rules[i]);
+            
+            CollationKey keyA = coll.getCollationKey("a");
+            logln("Key for \"a\":"+  prettify(keyA));
+            if (keyA.compareTo(coll.getCollationKey(lastPrimIgn))<=0) {
+                CollationKey key = coll.getCollationKey(lastPrimIgn);
+                logln("Collation key for 0xD800 0xDDFD: "+prettify(key));
+                errln("Error! String \"a\" must be greater than \uD800\uDDFD -"+
+                      "[Last Primary Ignorable]");
+            }
+            if (keyA.compareTo(coll.getCollationKey(firstVariable))>=0) {
+                CollationKey key = coll.getCollationKey(firstVariable);
+                logln("Collation key for 0x0009: "+prettify(key));
+                errln("Error! String \"a\" must be less than 0x0009 - [First Variable]");
+            }
+            CollationKey keyB = coll.getCollationKey("b");
+            logln("Key for \"b\":"+  prettify(keyB));
+            if (keyB.compareTo(coll.getCollationKey(firstPrimIgn))<=0) {
+                CollationKey key = coll.getCollationKey(firstPrimIgn);
+                logln("Collation key for 0x0332: "+prettify(key));
+                errln("Error! String \"b\" must be greater than 0x0332 -"+
+                      "[First Primary Ignorable]");
+            }
+            if (keyB.compareTo(coll.getCollationKey(firstVariable))>=0) {
+                CollationKey key = coll.getCollationKey(firstVariable);
+                logln("Collation key for 0x0009: "+prettify(key));
+                errln("Error! String \"b\" must be less than 0x0009 - [First Variable]");
+            }
+        }
+        {
+            i=1;   
+            RuleBasedCollator coll = null;
+            try {
+                coll = new RuleBasedCollator(rules[i]);
+            } catch (Exception e) {
+                warnln("Unable to open collator with rules " + rules[i]);
+            }
+
+            logln("Test rule["+i+"]"+rules[i]);
+            
+            CollationKey keyA = coll.getCollationKey("a");
+            logln("Key for \"a\":"+  prettify(keyA));
+            byte[] keyAInBytes = keyA.toByteArray();
+            for (int j=0; j<keyAInBytes.length && j<secIgnKey.length; j++) {
+                if (keyAInBytes[j]!=secIgnKey[j]) {
+                    if ((char)keyAInBytes[j]<=(char)secIgnKey[j]) {
+                        logln("Error! String \"a\" must be greater than [Last Secondary Ignorable]");
+                    }
+                    break;
+                }
+            }
+            if (keyA.compareTo(coll.getCollationKey(firstVariable))>=0) {
+                errln("Error! String \"a\" must be less than 0x0009 - [First Variable]");
+                CollationKey key = coll.getCollationKey(firstVariable);
+                logln("Collation key for 0x0009: "+prettify(key));
+            }
+            CollationKey keyB = coll.getCollationKey("b");
+            logln("Key for \"b\":"+  prettify(keyB));
+            byte[] keyBInBytes = keyB.toByteArray();
+            for (int j=0; j<keyBInBytes.length && j<secIgnKey.length; j++) {
+                if (keyBInBytes[j]!=secIgnKey[j]) {
+                    if ((char)keyBInBytes[j]<=(char)secIgnKey[j]) {
+                        errln("Error! String \"b\" must be greater than [Last Secondary Ignorable]");
+                    }
+                    break;
+                }
+            }
+            if (keyB.compareTo(coll.getCollationKey(firstVariable))>=0) {
+                CollationKey key = coll.getCollationKey(firstVariable);
+                logln("Collation key for 0x0009: "+prettify(key));
+                errln("Error! String \"b\" must be less than 0x0009 - [First Variable]");
+            }
+        }   
+    }
+    
+    public void TestUCAPrecontext()
+    {
+        String rules[] = {
+                "& \u00B7<a ",
+                "& L\u00B7 << a", // 'a' is an expansion. 
+        };
+        String cases[] = {
+            "\u00B7", 
+            "\u0387", 
+            "a",
+            "l",
+            "L\u0332",
+            "l\u00B7",
+            "l\u0387",
+            "L\u0387",
+            "la\u0387",
+            "La\u00b7",
+        };
+
+        // Test en sort
+        RuleBasedCollator en = null;
+        
+        logln("EN sort:");
+        try {
+            en = (RuleBasedCollator)Collator.getInstance(
+                    new Locale("en", ""));
+            for (int j=0; j<cases.length; j++) {
+                CollationKey key = en.getCollationKey(cases[j]);
+                if (j>0) {
+                    CollationKey prevKey = en.getCollationKey(cases[j-1]);
+                    if (key.compareTo(prevKey)<0) {
+                        errln("Error! EN test["+j+"]:"+"source:" + cases[j]+
+                        "is not greater than previous test.");
+                    }
+                }
+                /*
+                if ( key.compareTo(expectingKey)!=0) {
+                    errln("Error! Test case["+i+"]:"+"source:" + key.getSourceString());
+                    errln("expecting:"+prettify(expectingKey)+ "got:"+  prettify(key));
+                }
+                */
+                logln("String:"+cases[j]+"   Key:"+  prettify(key));
+            }
+        } catch (Exception e) {
+            warnln("Error creating Vietnese collator");
+            return;
+        }
+        
+        // Test ja sort
+        RuleBasedCollator ja = null;
+        logln("JA sort:");
+        try {
+            ja = (RuleBasedCollator)Collator.getInstance(
+                    new Locale("ja", ""));
+            for (int j=0; j<cases.length; j++) {
+                CollationKey key = ja.getCollationKey(cases[j]);
+                if (j>0) {
+                    CollationKey prevKey = ja.getCollationKey(cases[j-1]);
+                    if (key.compareTo(prevKey)<0) {
+                        errln("Error! JA test["+j+"]:"+"source:" + cases[j]+
+                        "is not greater than previous test.");
+                    }
+                }
+                logln("String:"+cases[j]+"   Key:"+  prettify(key));
+            }
+        } catch (Exception e) {
+            warnln("Error creating Vietnese collator");
+            return;
+        }
+        for(int i = 0; i < rules.length; i++) {
+            
+            RuleBasedCollator coll = null;
+            logln("Tailoring rule:"+rules[i]);
+            try {
+                coll = new RuleBasedCollator(rules[i]);
+            } catch (Exception e) {
+                warnln("Unable to open collator with rules " + rules[i]);
+            }
+
+            for (int j=0; j<cases.length; j++) {
+                CollationKey key = coll.getCollationKey(cases[j]);
+                if (j>0) {
+                    CollationKey prevKey = coll.getCollationKey(cases[j-1]);
+                    if (i==1 && j==3) {
+                        if (key.compareTo(prevKey)>0) {
+                            errln("Error! Rule:"+rules[i]+" test["+j+"]:"+"source:"+
+                            cases[j]+"is not greater than previous test.");
+                        }
+                    }
+                    else {
+                        if (key.compareTo(prevKey)<0) {
+                            errln("Error! Rule:"+rules[i]+" test["+j+"]:"+"source:"+ 
+                            cases[j]+"is not greater than previous test.");
+                        }
+                    }
+                }
+                logln("String:"+cases[j]+"   Key:"+  prettify(key));
+            }
+        }   
+    }
 }
+

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2006, International Business Machines Corporation and         *
+ * Copyright (C) 2002-2008, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -97,14 +97,24 @@ public class CollationAPITest extends TestFmwk {
         col.setStrength(Collator.IDENTICAL);
 
         byte key2compat[] = {
+            // 3.9 key, UCA 5.1
+            (byte) 0x2c, (byte) 0x2e, (byte) 0x30,
+            (byte) 0x32, (byte) 0x2c, (byte) 0x01,
+            (byte) 0x09, (byte) 0x01, (byte) 0x09,
+            (byte) 0x01, (byte) 0x2b, (byte) 0x01,
+            (byte) 0x92, (byte) 0x93, (byte) 0x94,
+            (byte) 0x95, (byte) 0x92, (byte) 0x00
+
             // 3.6 key, UCA 5.0
+            /*
             (byte) 0x29, (byte) 0x2b, (byte) 0x2d,
             (byte) 0x2f, (byte) 0x29, (byte) 0x01,
             (byte) 0x09, (byte) 0x01, (byte) 0x09,
             (byte) 0x01, (byte) 0x28, (byte) 0x01,
             (byte) 0x92, (byte) 0x93, (byte) 0x94,
             (byte) 0x95, (byte) 0x92, (byte) 0x00
-            
+            */
+
             // 3.4 key UCA 4.1
             /*
             (byte) 0x28, (byte) 0x2a, (byte) 0x2c, 
@@ -501,7 +511,7 @@ public class CollationAPITest extends TestFmwk {
         doAssert(col.getVersion().equals(expectedVersion), "Expected version "+expectedVersion.toString()+" got "+col.getVersion().toString());
         
         logln("Test getUCAVersion");
-        VersionInfo expectedUCAVersion = VersionInfo.getInstance(0x05, 0, 0, 0);
+        VersionInfo expectedUCAVersion = VersionInfo.getInstance(0x05, 1, 0, 0);
         doAssert(col.getUCAVersion().equals(expectedUCAVersion), "Expected UCA version "+expectedUCAVersion.toString()+" got "+col.getUCAVersion().toString());
         
         doAssert((col.compare("ab", "abc") < 0), "ab < abc comparison failed");
