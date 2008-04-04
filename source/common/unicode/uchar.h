@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2007, International Business Machines
+*   Copyright (C) 1997-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -39,7 +39,7 @@ U_CDECL_BEGIN
  * @see u_getUnicodeVersion
  * @stable ICU 2.0
  */
-#define U_UNICODE_VERSION "5.0"
+#define U_UNICODE_VERSION "5.1"
 
 /**
  * \file
@@ -1254,8 +1254,45 @@ enum UBlockCode {
     /** @stable ICU 3.6 */
     UBLOCK_COUNTING_ROD_NUMERALS = 154, /*[1D360]*/
 
+    /* New blocks in Unicode 5.1 */
+
+    /** @draft ICU 4.0 */
+    UBLOCK_SUNDANESE = 155, /*[1B80]*/
+    /** @draft ICU 4.0 */
+    UBLOCK_LEPCHA = 156, /*[1C00]*/
+    /** @draft ICU 4.0 */
+    UBLOCK_OL_CHIKI = 157, /*[1C50]*/
+    /** @draft ICU 4.0 */
+    UBLOCK_CYRILLIC_EXTENDED_A = 158, /*[2DE0]*/
+    /** @draft ICU 4.0 */
+    UBLOCK_VAI = 159, /*[A500]*/
+    /** @draft ICU 4.0 */
+    UBLOCK_CYRILLIC_EXTENDED_B = 160, /*[A640]*/
+    /** @draft ICU 4.0 */
+    UBLOCK_SAURASHTRA = 161, /*[A880]*/
+    /** @draft ICU 4.0 */
+    UBLOCK_KAYAH_LI = 162, /*[A900]*/
+    /** @draft ICU 4.0 */
+    UBLOCK_REJANG = 163, /*[A930]*/
+    /** @draft ICU 4.0 */
+    UBLOCK_CHAM = 164, /*[AA00]*/
+    /** @draft ICU 4.0 */
+    UBLOCK_ANCIENT_SYMBOLS = 165, /*[10190]*/
+    /** @draft ICU 4.0 */
+    UBLOCK_PHAISTOS_DISC = 166, /*[101D0]*/
+    /** @draft ICU 4.0 */
+    UBLOCK_LYCIAN = 167, /*[10280]*/
+    /** @draft ICU 4.0 */
+    UBLOCK_CARIAN = 168, /*[102A0]*/
+    /** @draft ICU 4.0 */
+    UBLOCK_LYDIAN = 169, /*[10920]*/
+    /** @draft ICU 4.0 */
+    UBLOCK_MAHJONG_TILES = 170, /*[1F000]*/
+    /** @draft ICU 4.0 */
+    UBLOCK_DOMINO_TILES = 171, /*[1F030]*/
+
     /** @stable ICU 2.0 */
-    UBLOCK_COUNT = 155,
+    UBLOCK_COUNT = 172,
 
     /** @stable ICU 2.0 */
     UBLOCK_INVALID_CODE=-1
@@ -1427,6 +1464,7 @@ typedef enum UJoiningGroup {
     U_JG_FE,        /**< @stable ICU 2.6 */
     U_JG_KHAPH,     /**< @stable ICU 2.6 */
     U_JG_ZHAIN,     /**< @stable ICU 2.6 */
+    U_JG_BURUSHASKI_YEH_BARREE, /**< @draft ICU 4.0 */
     U_JG_COUNT
 } UJoiningGroup;
 
@@ -1447,7 +1485,9 @@ typedef enum UGraphemeClusterBreak {
     U_GCB_LVT = 7,              /*[LVT]*/
     U_GCB_T = 8,                /*[T]*/
     U_GCB_V = 9,                /*[V]*/
-    U_GCB_COUNT = 10
+    U_GCB_SPACING_MARK = 10,    /*[SM]*/ /* from here on: new in Unicode 5.1/ICU 4.0 */
+    U_GCB_PREPEND = 11,         /*[PP]*/
+    U_GCB_COUNT = 12
 } UGraphemeClusterBreak;
 
 /**
@@ -1466,7 +1506,12 @@ typedef enum UWordBreakValues {
     U_WB_MIDNUM = 5,            /*[MN]*/
     U_WB_NUMERIC = 6,           /*[NU]*/
     U_WB_EXTENDNUMLET = 7,      /*[EX]*/
-    U_WB_COUNT = 8
+    U_WB_CR = 8,                /*[CR]*/ /* from here on: new in Unicode 5.1/ICU 4.0 */
+    U_WB_EXTEND = 9,            /*[Extend]*/
+    U_WB_LF = 10,               /*[LF]*/
+    U_WB_MIDNUMLET =11,         /*[MB]*/
+    U_WB_NEWLINE =12,           /*[NL]*/
+    U_WB_COUNT = 13
 } UWordBreakValues;
 
 /**
@@ -1486,8 +1531,12 @@ typedef enum USentenceBreak {
     U_SB_SEP = 7,               /*[SE]*/
     U_SB_SP = 8,                /*[SP]*/
     U_SB_STERM = 9,             /*[ST]*/
-    U_SB_UPPER = 10,             /*[UP]*/
-    U_SB_COUNT = 11
+    U_SB_UPPER = 10,            /*[UP]*/
+    U_SB_CR = 11,               /*[CR]*/ /* from here on: new in Unicode 5.1/ICU 4.0 */
+    U_SB_EXTEND = 12,           /*[EX]*/
+    U_SB_LF = 13,               /*[LF]*/
+    U_SB_SCONTINUE = 14,        /*[SC]*/
+    U_SB_COUNT = 15
 } USentenceBreak;
 
 /**

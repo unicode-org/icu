@@ -1027,7 +1027,7 @@ static int32_t hex2num(char hex) {
 * @param codepoints array for storage, assuming size > 5
 * @return position at the end of the codepoint section
 */
-static char * getCodePoints(char *str, UChar *codepoints) {
+static char * getCodePoints(char *str, UChar *codepoints, UChar *contextCPs) {
     char *pStartCP = str;
     char *pEndCP   = str + 4;
 
@@ -1035,6 +1035,21 @@ static char * getCodePoints(char *str, UChar *codepoints) {
                           (hex2num(*(pStartCP + 1)) << 8) |
                           (hex2num(*(pStartCP + 2)) << 4) |
                           (hex2num(*(pStartCP + 3))));
+    if (*pEndCP == '|' || *(pEndCP+1) == '|') {
+        /* pre-context rule */
+        pStartCP = pEndCP;
+        while (*pStartCP==' ' || *pStartCP== '|' ) {
+            pStartCP++;
+        }
+        pEndCP = pStartCP+4;
+        *contextCPs = *codepoints;
+        *(++codepoints) = (UChar)((hex2num(*pStartCP) << 12) |
+                                  (hex2num(*(pStartCP + 1)) << 8) |
+                                  (hex2num(*(pStartCP + 2)) << 4) |
+                                  (hex2num(*(pStartCP + 3))));
+        contextCPs++;
+    }
+    *contextCPs = 0;
     codepoints ++;
     while (*pEndCP != ';') {
         pStartCP = pEndCP + 1;
@@ -1248,11 +1263,12 @@ static void TestCEs() {
     FileStream *file = NULL;
     char        line[1024];
     char       *str;
-    UChar       codepoints[5];
+    UChar       codepoints[10];
     uint32_t    ces[20];
     UErrorCode  status = U_ZERO_ERROR;
     UCollator          *coll = ucol_open("", &status);
     uint32_t lineNo = 0;
+    UChar       contextCPs[5];    
 
     if (U_FAILURE(status)) {
         log_err("Error in opening root collator\n");
@@ -1270,6 +1286,7 @@ static void TestCEs() {
     while (T_FileStream_readLine(file, line, sizeof(line)) != NULL) {
         int                 count = 0;
         UCollationElements *iter;
+        int32_t            preContextCeLen=0;
         lineNo++;
         /* skip this line if it is empty or a comment or is a return value
         or start of some variable section */
@@ -1278,7 +1295,7 @@ static void TestCEs() {
             continue;
         }
 
-        str = getCodePoints(line, codepoints);
+        str = getCodePoints(line, codepoints, contextCPs);
 
         /* these are 'fake' codepoints in the fractional UCA, and are used just 
          * for positioning of indirect values. They should not go through this
@@ -1287,8 +1304,19 @@ static void TestCEs() {
         if(*codepoints == 0xFDD0) {
           continue;
         }
+        if (*contextCPs != 0) {
+            iter = ucol_openElements(coll, contextCPs, -1, &status);
+            if (U_FAILURE(status)) {
+                log_err("Error in opening collation elements\n");
+                break;
+            }
+            while((ces[preContextCeLen] = ucol_next(iter, &status)) != (uint32_t)UCOL_NULLORDER) {
+                preContextCeLen++;
+            }
+            ucol_closeElements(iter);
+        }
 
-        getCEs(str, ces, &status);
+        getCEs(str, ces+preContextCeLen, &status);
         if (U_FAILURE(status)) {
             log_err("Error in parsing collation elements in FractionalUCA.txt\n");
             break;
@@ -1624,6 +1652,7 @@ static void TestCEValidity()
     UChar       codepoints[10];
     int         count = 0;
     int         maxCount = 0;
+    UChar       contextCPs[3];
     UParseError parseError;
     if (U_FAILURE(status)) {
         log_err("en_US collator creation failed\n");
@@ -1642,7 +1671,7 @@ static void TestCEValidity()
             continue;
         }
 
-        getCodePoints(line, codepoints);
+        getCodePoints(line, codepoints, contextCPs);
         checkCEValidity(coll, codepoints, u_strlen(codepoints), 5, 86);
     }
 
@@ -1820,6 +1849,7 @@ static void TestSortKeyValidity(void)
     char        line[1024];
     UChar       codepoints[10];
     int         count = 0;
+    UChar       contextCPs[5];
     UParseError parseError;
     if (U_FAILURE(status)) {
         log_err("en_US collator creation failed\n");
@@ -1838,7 +1868,7 @@ static void TestSortKeyValidity(void)
             continue;
         }
 
-        getCodePoints(line, codepoints);
+        getCodePoints(line, codepoints, contextCPs);
         checkSortKeyValidity(coll, codepoints, u_strlen(codepoints));
     }
 

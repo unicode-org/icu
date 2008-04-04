@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -28,6 +28,7 @@ public:
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 
     void TestAdditionalProperties();
+    void TestBinaryValues();
 
 private:
 

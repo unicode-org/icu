@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2005, International Business Machines
+*   Copyright (C) 2004-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -104,10 +104,15 @@ derCorePropsBinaries={
     "DerivedCoreProperties", derCorePropsNames, LENGTHOF(derCorePropsNames)
 };
 
-/* treat Word_Break=MidLetter as a binary property (we ignore all other Word_Break values) */
+/*
+ * Treat Word_Break=MidLetter and MidNumLet as a single binary property.
+ * We need not distinguish between them because both add to case-ignorable.
+ * We ignore all other Word_Break values.
+ */
 static const Binary
 wordBreakNames[]={
-    { "MidLetter",                          1, U_MASK(UGENCASE_IS_MID_LETTER_SHIFT), U_MASK(UGENCASE_IS_MID_LETTER_SHIFT) }
+    { "MidLetter",                          1, U_MASK(UGENCASE_IS_MID_LETTER_SHIFT), U_MASK(UGENCASE_IS_MID_LETTER_SHIFT) },
+    { "MidNumLet",                          1, U_MASK(UGENCASE_IS_MID_LETTER_SHIFT), U_MASK(UGENCASE_IS_MID_LETTER_SHIFT) }
 };
 
 static const Binaries

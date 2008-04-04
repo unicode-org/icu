@@ -491,11 +491,16 @@ static uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_t
             s--;
             if(lows[fStrength*3+s] != highs[fStrength*3+s]) {
                 if(strength == UCOL_SECONDARY) {
-                    low = UCOL_COMMON_TOP2<<24;
+                    if (low < UCOL_COMMON_TOP2<<24 ) {
+                       // Override if low range is less than UCOL_COMMON_TOP2.
+		        low = UCOL_COMMON_TOP2<<24;
+                    }
                     high = 0xFFFFFFFF;
                 } else {
-                    //low = 0x02000000; // This needs to be checked - what if low is
-                    // not good...
+                    // Override if low range is less than UCOL_COMMON_BOT3.
+		    if ( low < UCOL_COMMON_BOT3<<24 ) {
+                        low = UCOL_COMMON_BOT3<<24;
+		    }
                     high = 0x40000000;
                 }
                 break;
@@ -1208,24 +1213,77 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
                         needToAdd = FALSE;
                     }
                 }
+                if (!needToAdd && isPrefix(tailoredCE) && *(conts+1)==0) {
+                    UCAElements elm;
+                    elm.cPoints = el.uchars;
+                    elm.noOfCEs = 0;
+                    elm.uchars[0] = *conts;
+                    elm.uchars[1] = 0;
+                    elm.cSize = 1;
+                    elm.prefixChars[0] = *(conts+2);
+                    elm.isThai = FALSE;
+                    elm.prefix = elm.prefixChars;
+                    elm.prefixSize = 1;
+                    UCAElements *prefixEnt=(UCAElements *)uhash_get(t->prefixLookup, &elm);
+                    if ((prefixEnt==NULL) || *(prefixEnt->prefix)!=*(conts+2)) {
+                        needToAdd = TRUE;
+                    }
+                }
                 if(src->removeSet != NULL && uset_contains(src->removeSet, *conts)) {
                     needToAdd = FALSE;
                 }
 
                 if(needToAdd == TRUE) { // we need to add if this contraction is not tailored.
-                    el.prefix = el.prefixChars;
-                    el.prefixSize = 0;
-                    el.cPoints = el.uchars;
-                    el.noOfCEs = 0;
-                    el.uchars[0] = *conts;
-                    el.uchars[1] = *(conts+1);
-                    if(*(conts+2)!=0) {
-                        el.uchars[2] = *(conts+2);
-                        el.cSize = 3;
-                    } else {
-                        el.cSize = 2;
+                    if (*(conts+1) != 0) {  // contractions
+                        el.prefix = el.prefixChars;
+                        el.prefixSize = 0;
+                        el.cPoints = el.uchars;
+                        el.noOfCEs = 0;
+                        el.uchars[0] = *conts;
+                        el.uchars[1] = *(conts+1);
+                        if(*(conts+2)!=0) {
+                            el.uchars[2] = *(conts+2);
+                            el.cSize = 3;
+                        } else {
+                            el.cSize = 2;
+                        }
+                        ucol_setText(ucaEl, el.uchars, el.cSize, status);
                     }
-                    ucol_setText(ucaEl, el.uchars, el.cSize, status);
+                    else { // pre-context character
+                        UChar str[4] = { 0 };
+                        int32_t len=0;
+                        int32_t preKeyLen=0;
+                        
+                        el.cPoints = el.uchars;
+                        el.noOfCEs = 0;
+                        el.uchars[0] = *conts;
+                        el.uchars[1] = 0;
+                        el.cSize = 1;
+                        el.prefixChars[0] = *(conts+2);
+                        el.prefix = el.prefixChars;
+                        el.prefixSize = 1;
+                        if (el.prefixChars[0]!=0) {
+                            // get CE of prefix character first
+                            str[0]=el.prefixChars[0];
+                            str[1]=0;
+                            ucol_setText(ucaEl, str, 1, status);
+                            while ((int32_t)(el.CEs[el.noOfCEs] = ucol_next(ucaEl, status))
+                                    != UCOL_NULLORDER) {
+                                preKeyLen++;  // count number of keys for prefix character
+                            }
+                            str[len++] = el.prefixChars[0];
+                        }
+
+                        str[len++] = el.uchars[0];
+                        str[len]=0;
+                        ucol_setText(ucaEl, str, len, status);
+                        // Skip the keys for prefix character, then copy the rest to el.
+                        while ((preKeyLen-->0) && 
+                               (int32_t)(el.CEs[el.noOfCEs] = ucol_next(ucaEl, status)) != UCOL_NULLORDER) {
+                            continue;
+                        }
+                           
+                    }
                     while ((int32_t)(el.CEs[el.noOfCEs] = ucol_next(ucaEl, status)) != UCOL_NULLORDER) {
                         el.noOfCEs++;
                     }

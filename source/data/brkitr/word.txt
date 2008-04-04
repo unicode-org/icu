@@ -1,14 +1,12 @@
 #
-# Copyright (C) 2002-2006, International Business Machines Corporation 
+# Copyright (C) 2002-2008, International Business Machines Corporation 
 # and others. All Rights Reserved.
 #
 # file:  word.txt
 #
 # ICU Word Break Rules
 #      See Unicode Standard Annex #29.
-#      These rules are based on Unicode Version 5.0 0
-#        Includes post Unicode 5.0 change to treat Japanese half width voicing marks
-#        as Extend
+#      These rules are based on UAX-29 Revision 12 for Unicode 5.1
 #
 # Note:  Updates to word.txt will usually need to be merged into
 #        word_POSIX.txt and word_ja.txt also.
@@ -26,20 +24,19 @@
 #  Character Class Definitions.
 #
 
-$VoiceMarks   = [\uff9e\uff9f];
+$CR           = [\p{Word_Break = CR}];
+$LF           = [\p{Word_Break = LF}];
+$Newline      = [\p{Word_Break = Newline}];
+$Extend       = [\p{Word_Break = Extend}];
 $Format       = [\p{Word_Break = Format}];
-$Katakana     = [\p{Word_Break = Katakana}-$VoiceMarks];
+$Katakana     = [\p{Word_Break = Katakana}];
 $ALetter      = [\p{Word_Break = ALetter}];
+$MidNumLet    = [\p{Word_Break = MidNumLet}];
 $MidLetter    = [\p{Word_Break = MidLetter}];
 $MidNum       = [\p{Word_Break = MidNum}];
 $Numeric      = [\p{Word_Break = Numeric}];
 $ExtendNumLet = [\p{Word_Break = ExtendNumLet}];
 
-
-$CR             = \u000d;
-$LF             = \u000a;
-$Extend         = [\p{Grapheme_Cluster_Break = Extend}$VoiceMarks];
-$Control        = [\p{Grapheme_Cluster_Break = Control}];
 
 #   Dictionary character set, for triggering language-based break engines. Currently
 #   limited to LineBreak=Complex_Context. Note that this set only works in Unicode
@@ -47,22 +44,24 @@ $Control        = [\p{Grapheme_Cluster_Break = Control}];
 #   characters requiring dictionary break.
 
 $dictionary   = [:LineBreak = Complex_Context:];
-$ALetterPlus  = [$ALetter [$dictionary-$Extend-$Control]];
-
+$Control        = [\p{Grapheme_Cluster_Break = Control}]; 
+$ALetterPlus  = [$ALetter [$dictionary-$Extend-$Control]];   # Note:  default ALetter does not
+                                                             #  include the dictionary characters.
 
 #
-#  Rules 3    Grapheme Clusters behave like their first char.
-#  Rule  4    Ignore trailing Format characters  (Also see note in TR 29)
+#  Rules 4    Ignore Format and Extend characters, 
+#             except when they appear at the beginning of a region of text.
 #
 $KatakanaEx     = $Katakana     ($Extend |  $Format)*;
 $ALetterEx      = $ALetterPlus  ($Extend |  $Format)*;
+$MidNumLetEx    = $MidNumLet    ($Extend |  $Format)*;
 $MidLetterEx    = $MidLetter    ($Extend |  $Format)*;
 $MidNumEx       = $MidNum       ($Extend |  $Format)*;
 $NumericEx      = $Numeric      ($Extend |  $Format)*;
 $ExtendNumLetEx = $ExtendNumLet ($Extend |  $Format)*;
 
-$Hiragana       = [:Hiragana:];
-$Ideographic    = [:IDEOGRAPHIC:];
+$Hiragana       = [\p{script=Hiragana}];
+$Ideographic    = [\p{Ideographic}];
 $HiraganaEx     = $Hiragana     ($Extend |  $Format)*;
 $IdeographicEx  = $Ideographic  ($Extend |  $Format)*;
 
@@ -72,30 +71,30 @@ $IdeographicEx  = $Ideographic  ($Extend |  $Format)*;
 
 
 # Rule 3 - CR x LF
-#          see character breaks.
-
-$CR $LF  ($Extend | $Format)*;
+#
+$CR $LF;
 
 # Rule 4 - ignore Format and Extend characters, except when they appear at the beginning
 #          of a region of Text.   The rule here comes into play when the start of text
 #          begins with a group of Format chars, or with a "word" consisting of a single
 #          char that is not in any of the listed word break categories followed by
 #          format char(s).
-.? ($Extend |  $Format)+;
-
+[^$CR $LF $Newline]? ($Extend |  $Format)+;
 
 $NumericEx {100};
 $ALetterEx {200};
-$KatakanaEx {300};
-$HiraganaEx {300};
-$IdeographicEx {400};
+$KatakanaEx {300};       # note:  these status values override those from rule 5
+$HiraganaEx {300};       #        by virtual of being numerically larger.
+$IdeographicEx {400};    #
 
+#
 # rule 5
-
+#    Do not break between most letters.
+#
 $ALetterEx $ALetterEx {200};
 
 # rule 6 and 7
-$ALetterEx $MidLetterEx $ALetterEx {200};
+$ALetterEx ($MidLetterEx | $MidNumLetEx) $ALetterEx {200};
 
 # rule 8
 
@@ -103,7 +102,7 @@ $NumericEx $NumericEx {100};
 
 # rule 9
 
-$ALetterEx $Format* $NumericEx {200};
+$ALetterEx $NumericEx {200};
 
 # rule 10
 
@@ -111,7 +110,7 @@ $NumericEx $ALetterEx {200};
 
 # rule 11 and 12 
 
-$NumericEx $MidNumEx $NumericEx {100};
+$NumericEx ($MidNumEx | $MidNumLetEx) $NumericEx {100};
 
 # rule 13
 
@@ -122,7 +121,7 @@ $KatakanaEx  $KatakanaEx {300};
 $ALetterEx      $ExtendNumLetEx {200};    #  (13a)
 $NumericEx      $ExtendNumLetEx {100};    #  (13a)
 $KatakanaEx     $ExtendNumLetEx {300};    #  (13a)
-$ExtendNumLetEx $ExtendNumLetEx{200}; #  (13a)
+$ExtendNumLetEx $ExtendNumLetEx {200};    #  (13a)
 
 $ExtendNumLetEx $ALetterEx  {200};    #  (13b)
 $ExtendNumLetEx $NumericEx  {100};    #  (13b)
@@ -135,6 +134,7 @@ $ExtendNumLetEx $KatakanaEx {300};    #  (13b)
 !!reverse;
 
 $BackALetterEx     = ($Format | $Extend)* $ALetterPlus;
+$BackMidNumLetEx   = ($Format | $Extend)* $MidNumLet;
 $BackNumericEx     = ($Format | $Extend)* $Numeric;
 $BackMidNumEx      = ($Format | $Extend)* $MidNum;
 $BackMidLetterEx   = ($Format | $Extend)* $MidLetter;
@@ -142,10 +142,10 @@ $BackKatakanaEx    = ($Format | $Extend)* $Katakana;
 $BackExtendNumLetEx= ($Format | $Extend)* $ExtendNumLet;
 
 # rule 3
-($Format | $Extend)* $LF $CR;
+$LF $CR;
 
 # rule 4
-($Format | $Extend)*  .?;
+($Format | $Extend)*  [^$CR $LF $Newline]?;
 
 # rule 5
 
@@ -153,7 +153,7 @@ $BackALetterEx $BackALetterEx;
 
 # rule 6 and 7
 
-$BackALetterEx $BackMidLetterEx $BackALetterEx;
+$BackALetterEx ($BackMidLetterEx | $BackMidNumLetEx) $BackALetterEx;
 
 
 # rule 8
@@ -170,7 +170,7 @@ $BackALetterEx $BackNumericEx;
 
 # rule 11 and 12
 
-$BackNumericEx $BackMidNumEx $BackNumericEx;
+$BackNumericEx ($BackMidNumEx | $BackMidNumLetEx) $BackNumericEx;
 
 # rule 13
 
@@ -178,8 +178,8 @@ $BackKatakanaEx $BackKatakanaEx;
 
 # rules 13 a/b
 #
-($BackALetterEx | $BackNumericEx | $BackKatakanaEx | $BackExtendNumLetEx) $BackExtendNumLetEx; 
-$BackExtendNumLetEx ($BackALetterEx | $BackNumericEx | $BackKatakanaEx);
+$BackExtendNumLetEx ($BackALetterEx | $BackNumericEx | $BackKatakanaEx | $BackExtendNumLetEx);
+($BackALetterEx | $BackNumericEx | $BackKatakanaEx) $BackExtendNumLetEx; 
 
 ## -------------------------------------------------
 
@@ -189,10 +189,10 @@ $BackExtendNumLetEx ($BackALetterEx | $BackNumericEx | $BackKatakanaEx);
 ($Extend | $Format)+ .?;
 
 # rule 6
-$MidLetter $BackALetterEx;
+($MidLetter | $MidNumLet) $BackALetterEx;
 
 # rule 11
-$MidNum $BackNumericEx;
+($MidNum | $MidNumLet) $BackNumericEx;
 
 # For dictionary-based break
 $dictionary $dictionary;
@@ -205,10 +205,10 @@ $dictionary $dictionary;
 ($Extend | $Format)+ .?;
 
 # rule 6
-$MidLetterEx $ALetterEx;
+($MidLetterEx | $MidNumLetEx) $ALetterEx;
 
 # rule 11
-$MidNumEx $NumericEx;
+($MidNumEx | $MidNumLetEx) $NumericEx;
 
 # For dictionary-based break
 $dictionary $dictionary;

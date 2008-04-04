@@ -1,4 +1,4 @@
-﻿# Copyright (c) 2001-2007 International Business Machines
+# Copyright (c) 2001-2008 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 # RBBI Test Data
@@ -71,14 +71,14 @@
 
 
 # Hindi combining chars.  (An old test)
-<data>•भ••ा•\u0930•\u0924• •\u0938\u0941\u0902•\u0926•\u0930•
-•\u0939•\u094c•\u0964•</data>
-<data>•\u0916\u0947•\u0938\u0941\u0902•\u0926•\u0930•\u0939•\u094c•\u0964•</data>
+#   TODO:  Update these tests for Unicode 5.1 Extended Grapheme clusters 
+#<data>•भ••ा•\u0930•\u0924• •\u0938\u0941\u0902•\u0926•\u0930•
+#•\u0939•\u094c•\u0964•</data>
+#<data>•\u0916\u0947•\u0938\u0941\u0902•\u0926•\u0930•\u0939•\u094c•\u0964•</data>
 
 
-#  Bug 1587.  Tamil.  \u0baa\u0bc1 should be two separate characters, even though
-#                     Hyangmi would perfer that it be one.
-<data>•\u0baa•\u0bc1•\u0baa•\u0bc1•</data>
+#  Bug 1587.  Tamil.  \u0baa\u0bc1 is an Extended Grpaheme Cluster
+<data>•\u0baa\u0bc1•\u0baa\u0bc1•</data>
 
 #   Regression test for bug 1889
 <data>•\u0f40\u0f7d•\u0000•\u0f7e•</data>
@@ -503,12 +503,16 @@ What is the proper use of the abbreviation pp.? •Yes, I am definatelly 12" tal
 <data>•\u4e01•\ud840\udc01•\u4e02•abc •\ue000 •\udb80\udc01•</data>
 
 #      Regression for bug 836
-<data>•AAA(AAA •</data> 
+#        Note:  Unicode 5.1 changed this behavior
+#               ICU will want to change it back before releasing,
+#               so there is no break preceding the '('
+<data>•AAA•(AAA •</data> 
 
 #       Try some words from other scripts.
 #          Greek, Cyrillic, Hebrew, Arabic, Arabic, Georgian, Latin
 #      
 <data>•ΑΒΓ •БВГ •אבג֓ •ابت •١٢٣ •\u10A0\u10A1\u10A2 •ABC •</data>
+
 
 
 ########################################################################################

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1999-2007, International Business Machines Corporation and
+ * Copyright (c) 1999-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -1916,15 +1916,12 @@ void RBBITest::TestUnicodeFiles() {
     }
     delete bi;
 
-    #if 0
-    bi =  (RuleBasedBreakIterator *)BreakIterator::createCharInstance(Locale::getDefault(), status);
+    bi =  (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getDefault(), status);
     TEST_ASSERT_SUCCESS(status);
     if (U_SUCCESS(status)) {
-        runUnicodeTestData("LBTest.txt", bi);
+        runUnicodeTestData("LineBreakTest.txt", bi);
     }
     delete bi;
-    #endif
-
 }
 
 
@@ -1963,15 +1960,14 @@ void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *
     //  Each kind of token is recognized in its own capture group; what type of item was scanned
     //     is identified by which group had a match.
     //
-    //       Caputure Group #                  1          2            3            4           5
-    //       Parses this item:               divide       x       hex digits   comment & nl   unrecognized
+    //    Caputure Group #                  1          2            3            4           5
+    //    Parses this item:               divide       x      hex digits   comment \n  unrecognized \n
     //
-    UnicodeString tokenExpr = "(?ms)\\s*(?:(\\u00F7)|(\\u00D7)|([0-9a-fA-F]+)|(#.*?$.)|(.*?$.))";
-    RegexMatcher    tokenMatcher(tokenExpr, testFileAsString, 0, status);
+    UnicodeString tokenExpr = "[ \t]*(?:(\\u00F7)|(\\u00D7)|([0-9a-fA-F]+)|((?:#.*?)?$.)|(.*?$.))";
+    RegexMatcher    tokenMatcher(tokenExpr, testFileAsString, UREGEX_MULTILINE | UREGEX_DOTALL, status);
     UnicodeString   testString;
     UVector32       breakPositions(status);
     int             lineNumber = 1;
-    int             charIndex  = 0;
     TEST_ASSERT_SUCCESS(status);
     if (U_FAILURE(status)) {
         return;
@@ -1981,7 +1977,7 @@ void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *
     //  Scan through each test case, building up the string to be broken in testString,
     //   and the positions that should be boundaries in the breakPositions vector.
     //
-    while (tokenMatcher.lookingAt(charIndex, status)) {
+    while (tokenMatcher.find()) {
         if (tokenMatcher.start(1, status) >= 0) {
             // Scanned a divide sign, indicating a break position in the test data.
             if (testString.length()>0) {
@@ -2023,7 +2019,7 @@ void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *
             //    The string and breakPositions vector will be refilled as the next
             //       test case is parsed.
             testString.remove();
-            breakPositions.setSize(0);
+            breakPositions.removeAllElements();
             lineNumber++;
         } else {
             // Scanner catchall.  Something unrecognized appeared on the line.
@@ -2035,14 +2031,13 @@ void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *
 
             // Clean up, in preparation for continuing with the next line.
             testString.remove();
-            breakPositions.setSize(0);
+            breakPositions.removeAllElements();
             lineNumber++;
         }
         TEST_ASSERT_SUCCESS(status);
         if (U_FAILURE(status)) {
             break;
         }
-        charIndex = tokenMatcher.end(status);
     }
 
     delete [] testFile;
@@ -2082,7 +2077,7 @@ void RBBITest::checkUnicodeTestCase(const char *testFileName, int lineNumber,
             break;
         }
         if (pos > expectedPos) {
-            errln("Test file \"%s\", line %d, failed to find break at position %d",
+            errln("Test file \"%s\", line %d, failed to find expected break at position %d",
                 testFileName, lineNumber, expectedPos);
             break;
         }
@@ -2091,7 +2086,7 @@ void RBBITest::checkUnicodeTestCase(const char *testFileName, int lineNumber,
     }
 
     if (pos==BreakIterator::DONE && expectedI<breakPositions->size()) {
-        errln("Test file \"%s\", line %d, failed to find break at position %d",
+        errln("Test file \"%s\", line %d, failed to find expected break at position %d",
             testFileName, lineNumber, breakPositions->elementAti(expectedI));
     }
 }
@@ -2178,10 +2173,16 @@ private:
     UnicodeSet  *fCRLFSet;
     UnicodeSet  *fControlSet;
     UnicodeSet  *fExtendSet;
+    UnicodeSet  *fPrependSet;
+    UnicodeSet  *fSpacingSet;
+    UnicodeSet  *fLSet;
+    UnicodeSet  *fVSet;
+    UnicodeSet  *fTSet;
+    UnicodeSet  *fLVSet;
+    UnicodeSet  *fLVTSet;
     UnicodeSet  *fHangulSet;
     UnicodeSet  *fAnySet;
 
-    RegexMatcher  *fMatcher;
     const UnicodeString *fText;
 };
 
@@ -2190,20 +2191,31 @@ RBBICharMonkey::RBBICharMonkey() {
     UErrorCode  status = U_ZERO_ERROR;
 
     fText = NULL;
-    fMatcher = new RegexMatcher("\\X", 0, status);     // Pattern to match a grampheme cluster
 
     fCRLFSet    = new UnicodeSet("[\\r\\n]", status);
-    fControlSet = new UnicodeSet("[[\\p{Zl}\\p{Zp}\\p{Cc}\\p{Cf}]-[\\n]-[\\r]-\\p{Grapheme_Extend}]", status);
-    fExtendSet  = new UnicodeSet("[\\p{Grapheme_Extend}]", status);
-    fHangulSet  = new UnicodeSet(
-        "[\\p{Hangul_Syllable_Type=L}\\p{Hangul_Syllable_Type=L}\\p{Hangul_Syllable_Type=T}"
-         "\\p{Hangul_Syllable_Type=LV}\\p{Hangul_Syllable_Type=LVT}]", status);
+    fControlSet = new UnicodeSet("[\\p{Grapheme_Cluster_Break = Control}]", status);
+    fExtendSet  = new UnicodeSet("[\\p{Grapheme_Cluster_Break = Extend}]", status);
+    fPrependSet = new UnicodeSet("[\\p{Grapheme_Cluster_Break = Prepend}]", status);
+    fSpacingSet = new UnicodeSet("[\\p{Grapheme_Cluster_Break = SpacingMark}]", status);
+    fLSet       = new UnicodeSet("[\\p{Grapheme_Cluster_Break = L}]", status);
+    fVSet       = new UnicodeSet("[\\p{Grapheme_Cluster_Break = V}]", status);
+    fTSet       = new UnicodeSet("[\\p{Grapheme_Cluster_Break = T}]", status);
+    fLVSet      = new UnicodeSet("[\\p{Grapheme_Cluster_Break = LV}]", status);
+    fLVTSet     = new UnicodeSet("[\\p{Grapheme_Cluster_Break = LVT}]", status);
+    fHangulSet  = new UnicodeSet();
+    fHangulSet->addAll(*fLSet);
+    fHangulSet->addAll(*fVSet);
+    fHangulSet->addAll(*fTSet);
+    fHangulSet->addAll(*fLVSet);
+    fHangulSet->addAll(*fLVTSet);
     fAnySet     = new UnicodeSet("[\\u0000-\\U0010ffff]", status);
-
+    
     fSets       = new UVector(status);
     fSets->addElement(fCRLFSet,    status);
     fSets->addElement(fControlSet, status);
     fSets->addElement(fExtendSet,  status);
+    fSets->addElement(fPrependSet, status);
+    fSets->addElement(fSpacingSet, status);
     fSets->addElement(fHangulSet,  status);
     fSets->addElement(fAnySet,     status);
     if (U_FAILURE(status)) {
@@ -2214,22 +2226,119 @@ RBBICharMonkey::RBBICharMonkey() {
 
 void RBBICharMonkey::setText(const UnicodeString &s) {
     fText = &s;
-    fMatcher->reset(s);
 }
 
 
-int32_t RBBICharMonkey::next(int32_t i) {
-    UErrorCode status = U_ZERO_ERROR;
-    int32_t  retVal = -1;
 
-    if (fMatcher->find(i, status)) {
-        retVal = fMatcher->end(status);
+int32_t RBBICharMonkey::next(int32_t prevPos) {
+    int    p0, p1, p2, p3;    // Indices of the significant code points around the
+                              //   break position being tested.  The candidate break
+                              //   location is before p2.
+
+    int     breakPos = -1;
+
+    UChar32 c0, c1, c2, c3;   // The code points at p0, p1, p2 & p3.
+    
+    if (U_FAILURE(deferredStatus)) {
+        return -1;
     }
-    if (U_FAILURE(status)){
-        retVal = -1;
+
+    // Previous break at end of string.  return DONE.
+    if (prevPos >= fText->length()) {
+        return -1;
     }
-    return retVal;
+    p0 = p1 = p2 = p3 = prevPos;
+    c3 =  fText->char32At(prevPos);
+    c0 = c1 = c2 = 0;
+
+    // Loop runs once per "significant" character position in the input text.
+    for (;;) {
+        // Move all of the positions forward in the input string.
+        p0 = p1;  c0 = c1;
+        p1 = p2;  c1 = c2;
+        p2 = p3;  c2 = c3;
+
+        // Advancd p3 by one codepoint
+        p3 = fText->moveIndex32(p3, 1);
+        c3 = fText->char32At(p3);
+
+        if (p1 == p2) {
+            // Still warming up the loop.  (won't work with zero length strings, but we don't care)
+            continue;
+        }
+        if (p2 == fText->length()) {
+            // Reached end of string.  Always a break position.
+            break;
+        }
+
+        // Rule  GB3   CR x LF
+        //     No Extend or Format characters may appear between the CR and LF,
+        //     which requires the additional check for p2 immediately following p1.
+        //
+        if (c1==0x0D && c2==0x0A && p1==(p2-1)) {
+            continue;
+        }
+
+        // Rule (GB4).   ( Control | CR | LF ) <break>
+        if (fControlSet->contains(c1) ||
+            c1 == 0x0D ||
+            c1 == 0x0A)  {
+            break;
+        }
+
+        // Rule (GB5)    <break>  ( Control | CR | LF )
+        //
+        if (fControlSet->contains(c2) ||
+            c2 == 0x0D ||
+            c2 == 0x0A)  {
+            break;
+        }
+
+
+        // Rule (GB6)  L x ( L | V | LV | LVT )
+        if (fLSet->contains(c1) &&
+               (fLSet->contains(c2)  ||
+                fVSet->contains(c2)  ||
+                fLVSet->contains(c2) ||
+                fLVTSet->contains(c2))) {
+            continue;
+        }
+
+        // Rule (GB7)    ( LV | V )  x  ( V | T )
+        if ((fLVSet->contains(c1) || fVSet->contains(c1)) &&
+            (fVSet->contains(c2) || fTSet->contains(c2)))  {
+            continue;
+        }
+
+        // Rule (GB8)    ( LVT | T)  x T
+        if ((fLVTSet->contains(c1) || fTSet->contains(c1)) &&
+            fTSet->contains(c2))  {
+            continue;
+        }
+
+        // Rule (GB9)    Numeric x ALetter
+        if (fExtendSet->contains(c2))  {
+            continue;
+        }
+
+        // Rule (GB9a)   x  SpacingMark
+        if (fSpacingSet->contains(c2)) {
+            continue;
+        }
+
+        // Rule (GB9b)   Prepend x
+        if (fPrependSet->contains(c1)) {
+            continue;
+        }
+
+        // Rule (GB10)  Any  <break>  Any
+        break;
+    }
+
+    breakPos = p2;
+    return breakPos;
 }
+
 
 
 UVector  *RBBICharMonkey::charClasses() {
@@ -2242,10 +2351,15 @@ RBBICharMonkey::~RBBICharMonkey() {
     delete fCRLFSet;
     delete fControlSet;
     delete fExtendSet;
+    delete fPrependSet;
+    delete fSpacingSet;
+    delete fLSet;
+    delete fVSet;
+    delete fTSet;
+    delete fLVSet;
+    delete fLVTSet;
     delete fHangulSet;
     delete fAnySet;
-
-    delete fMatcher;
 }
 
 //------------------------------------------------------------------------------------------
@@ -2264,8 +2378,12 @@ public:
 private:
     UVector      *fSets;
 
+    UnicodeSet  *fCRSet;
+    UnicodeSet  *fLFSet;
+    UnicodeSet  *fNewlineSet;
     UnicodeSet  *fKatakanaSet;
     UnicodeSet  *fALetterSet;
+    UnicodeSet  *fMidNumLetSet;
     UnicodeSet  *fMidLetterSet;
     UnicodeSet  *fMidNumSet;
     UnicodeSet  *fNumericSet;
@@ -2284,22 +2402,20 @@ RBBIWordMonkey::RBBIWordMonkey()
 {
     UErrorCode  status = U_ZERO_ERROR;
 
-
     fSets            = new UVector(status);
 
-    fALetterSet      = new UnicodeSet("[\\p{Word_Break = ALetter}"
-                         "[\\p{Line_Break = Complex_Context}"
-                         "-\\p{Grapheme_Cluster_Break = Extend}"
-                         "-\\p{Grapheme_Cluster_Break = Control}]]",      status);
-    //fALetterSet      = new UnicodeSet("[\\p{Word_Break = ALetter}]",      status);
-    fKatakanaSet     = new UnicodeSet("[\\p{Word_Break = Katakana}-[\\uff9e\\uff9f]]",     status);
+    fCRSet           = new UnicodeSet("[\\p{Word_Break = CR}]",           status);
+    fLFSet           = new UnicodeSet("[\\p{Word_Break = LF}]",           status);
+    fNewlineSet      = new UnicodeSet("[\\p{Word_Break = Newline}]",      status);
+    fALetterSet      = new UnicodeSet("[\\p{Word_Break = ALetter}]",      status);
+    fKatakanaSet     = new UnicodeSet("[\\p{Word_Break = Katakana}]",     status);
+    fMidNumLetSet    = new UnicodeSet("[\\p{Word_Break = MidNumLet}]",    status);
     fMidLetterSet    = new UnicodeSet("[\\p{Word_Break = MidLetter}]",    status);
     fMidNumSet       = new UnicodeSet("[\\p{Word_Break = MidNum}]",       status);
     fNumericSet      = new UnicodeSet("[\\p{Word_Break = Numeric}]",      status);
     fFormatSet       = new UnicodeSet("[\\p{Word_Break = Format}]",       status);
     fExtendNumLetSet = new UnicodeSet("[\\p{Word_Break = ExtendNumLet}]", status);
-    //fExtendSet       = new UnicodeSet("[\\p{Word_Break = Extend}]", status);
-    fExtendSet       = new UnicodeSet("[\\p{Grapheme_Cluster_Break = Extend}\\uff9e\\uff9f]", status);
+    fExtendSet       = new UnicodeSet("[\\p{Word_Break = Extend}]",       status);
 
     fOtherSet        = new UnicodeSet();
     if(U_FAILURE(status)) {
@@ -2308,6 +2424,9 @@ RBBIWordMonkey::RBBIWordMonkey()
     }
 
     fOtherSet->complement();
+    fOtherSet->removeAll(*fCRSet);
+    fOtherSet->removeAll(*fLFSet);
+    fOtherSet->removeAll(*fNewlineSet);
     fOtherSet->removeAll(*fKatakanaSet);
     fOtherSet->removeAll(*fALetterSet);
     fOtherSet->removeAll(*fMidLetterSet);
@@ -2316,17 +2435,22 @@ RBBIWordMonkey::RBBIWordMonkey()
     fOtherSet->removeAll(*fExtendNumLetSet);
     fOtherSet->removeAll(*fFormatSet);
     fOtherSet->removeAll(*fExtendSet);
+    // Inhibit dictionary characters from being tested at all.
+    fOtherSet->removeAll(UnicodeSet("[\\p{LineBreak = Complex_Context}]", status));
 
+    fSets->addElement(fCRSet,        status);
+    fSets->addElement(fLFSet,        status);
+    fSets->addElement(fNewlineSet,   status);
     fSets->addElement(fALetterSet,   status);
     fSets->addElement(fKatakanaSet,  status);
     fSets->addElement(fMidLetterSet, status);
+    fSets->addElement(fMidNumLetSet, status);
     fSets->addElement(fMidNumSet,    status);
     fSets->addElement(fNumericSet,   status);
     fSets->addElement(fFormatSet,    status);
     fSets->addElement(fExtendSet,    status);
     fSets->addElement(fOtherSet,     status);
     fSets->addElement(fExtendNumLetSet, status);
-
 
     if (U_FAILURE(status)) {
         deferredStatus = status;
@@ -2346,6 +2470,10 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
     int     breakPos = -1;
 
     UChar32 c0, c1, c2, c3;   // The code points at p0, p1, p2 & p3.
+    
+    if (U_FAILURE(deferredStatus)) {
+        return -1;
+    }
 
     // Prev break at end of string.  return DONE.
     if (prevPos >= fText->length()) {
@@ -2363,9 +2491,13 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
         p2 = p3;  c2 = c3;
 
         // Advancd p3 by    X(Extend | Format)*   Rule 4
+        //    But do not advance over Extend & Format following a new line. (Unicode 5.1 change)
         do {
             p3 = fText->moveIndex32(p3, 1);
             c3 = fText->char32At(p3);
+            if (fCRSet->contains(c2) || fLFSet->contains(c2) || fNewlineSet->contains(c2)) {
+               break;
+            };
         }
         while (fFormatSet->contains(c3) || fExtendSet->contains(c3));
 
@@ -2383,9 +2515,18 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
         //     No Extend or Format characters may appear between the CR and LF,
         //     which requires the additional check for p2 immediately following p1.
         //
-        if (c1==0x0D && c2==0x0A && p1==(p2-1)) {
+        if (c1==0x0D && c2==0x0A) {
             continue;
         }
+        
+        // Rule (3a)  Break before and after newlines (including CR and LF)
+        //
+        if (fCRSet->contains(c1) || fLFSet->contains(c1) || fNewlineSet->contains(c1)) {
+            break;
+        };
+        if (fCRSet->contains(c2) || fLFSet->contains(c2) || fNewlineSet->contains(c2)) {
+            break;
+        };
 
         // Rule (5).   ALetter x ALetter
         if (fALetterSet->contains(c1) &&
@@ -2395,10 +2536,8 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
 
         // Rule (6)  ALetter  x  (MidLetter | MidNumLet) ALetter
         //
-        //    Also incorporates rule 7 by skipping pos ahead to position of the
-        //    terminating ALetter.
         if ( fALetterSet->contains(c1)   &&
-             fMidLetterSet->contains(c2) &&
+             (fMidLetterSet->contains(c2) || fMidNumLetSet->contains(c2)) &&
              fALetterSet->contains(c3)) {
             continue;
         }
@@ -2406,7 +2545,7 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
 
         // Rule (7)  ALetter (MidLetter | MidNumLet)  x  ALetter
         if (fALetterSet->contains(c0) &&
-            (fMidLetterSet->contains(c1)  ) &&
+            (fMidLetterSet->contains(c1) ||  fMidNumLetSet->contains(c1)) &&
             fALetterSet->contains(c2)) {
             continue;
         }
@@ -2430,15 +2569,15 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
         }
 
         // Rule (11)   Numeric (MidNum | MidNumLet)  x  Numeric
-        if ( fNumericSet->contains(c0) &&
-             fMidNumSet->contains(c1)  &&
+        if (fNumericSet->contains(c0) &&
+            (fMidNumSet->contains(c1) || fMidNumLetSet->contains(c1))  &&
             fNumericSet->contains(c2)) {
             continue;
         }
 
         // Rule (12)  Numeric x (MidNum | MidNumLet) Numeric
         if (fNumericSet->contains(c1) &&
-            fMidNumSet->contains(c2)  &&
+            (fMidNumSet->contains(c2) || fMidNumLetSet->contains(c2))  &&
             fNumericSet->contains(c3)) {
             continue;
         }
@@ -2479,8 +2618,12 @@ UVector  *RBBIWordMonkey::charClasses() {
 
 RBBIWordMonkey::~RBBIWordMonkey() {
     delete fSets;
+    delete fCRSet;
+    delete fLFSet;
+    delete fNewlineSet;
     delete fKatakanaSet;
     delete fALetterSet;
+    delete fMidNumLetSet;
     delete fMidLetterSet;
     delete fMidNumSet;
     delete fNumericSet;
@@ -2521,6 +2664,7 @@ private:
     UnicodeSet  *fOLetterSet;
     UnicodeSet  *fNumericSet;
     UnicodeSet  *fATermSet;
+    UnicodeSet  *fSContinueSet;
     UnicodeSet  *fSTermSet;
     UnicodeSet  *fCloseSet;
     UnicodeSet  *fOtherSet;
@@ -2536,17 +2680,21 @@ RBBISentMonkey::RBBISentMonkey()
 
     fSets            = new UVector(status);
 
-    fSepSet          = new UnicodeSet("[\\p{Sentence_Break = Sep}]",     status);
-    fFormatSet       = new UnicodeSet("[\\p{Sentence_Break = Format}]",  status);
-    fSpSet           = new UnicodeSet("[\\p{Sentence_Break = Sp}]",      status);
-    fLowerSet        = new UnicodeSet("[\\p{Sentence_Break = Lower}]",   status);
-    fUpperSet        = new UnicodeSet("[\\p{Sentence_Break = Upper}]",   status);
-    fOLetterSet      = new UnicodeSet("[\\p{Sentence_Break = OLetter}-[\\uff9e\\uff9f]]", status);
-    fNumericSet      = new UnicodeSet("[\\p{Sentence_Break = Numeric}]", status);
-    fATermSet        = new UnicodeSet("[\\p{Sentence_Break = ATerm}]",   status);
-    fSTermSet        = new UnicodeSet("[\\p{Sentence_Break = STerm}]",   status);
-    fCloseSet        = new UnicodeSet("[\\p{Sentence_Break = Close}]",   status);
-    fExtendSet       = new UnicodeSet("[\\p{Grapheme_Extend}\\uff9e\\uff9f]", status);
+    //  Separator Set Note:  Beginning with Unicode 5.1, CR and LF were removed from the separator
+    //                       set and made into character classes of their own.  For the monkey impl,
+    //                       they remain in SEP, since Sep always appears with CR and LF in the rules.
+    fSepSet          = new UnicodeSet("[\\p{Sentence_Break = Sep} \\u000a \\u000d]",     status);
+    fFormatSet       = new UnicodeSet("[\\p{Sentence_Break = Format}]",    status);
+    fSpSet           = new UnicodeSet("[\\p{Sentence_Break = Sp}]",        status);
+    fLowerSet        = new UnicodeSet("[\\p{Sentence_Break = Lower}]",     status);
+    fUpperSet        = new UnicodeSet("[\\p{Sentence_Break = Upper}]",     status);
+    fOLetterSet      = new UnicodeSet("[\\p{Sentence_Break = OLetter}]",   status);
+    fNumericSet      = new UnicodeSet("[\\p{Sentence_Break = Numeric}]",   status);
+    fATermSet        = new UnicodeSet("[\\p{Sentence_Break = ATerm}]",     status);
+    fSContinueSet    = new UnicodeSet("[\\p{Sentence_Break = SContinue}]", status);
+    fSTermSet        = new UnicodeSet("[\\p{Sentence_Break = STerm}]",     status);
+    fCloseSet        = new UnicodeSet("[\\p{Sentence_Break = Close}]",     status);
+    fExtendSet       = new UnicodeSet("[\\p{Sentence_Break = Extend}]",    status);
     fOtherSet        = new UnicodeSet();
 
     if(U_FAILURE(status)) {
@@ -2563,23 +2711,24 @@ RBBISentMonkey::RBBISentMonkey()
     fOtherSet->removeAll(*fOLetterSet);
     fOtherSet->removeAll(*fNumericSet);
     fOtherSet->removeAll(*fATermSet);
+    fOtherSet->removeAll(*fSContinueSet);
     fOtherSet->removeAll(*fSTermSet);
     fOtherSet->removeAll(*fCloseSet);
     fOtherSet->removeAll(*fExtendSet);
 
-    fSets->addElement(fSepSet,     status);
-    fSets->addElement(fFormatSet,  status);
-
-    fSets->addElement(fSpSet,      status);
-    fSets->addElement(fLowerSet,   status);
-    fSets->addElement(fUpperSet,   status);
-    fSets->addElement(fOLetterSet, status);
-    fSets->addElement(fNumericSet, status);
-    fSets->addElement(fATermSet,   status);
-    fSets->addElement(fSTermSet,   status);
-    fSets->addElement(fCloseSet,   status);
-    fSets->addElement(fOtherSet,   status);
-    fSets->addElement(fExtendSet,  status);
+    fSets->addElement(fSepSet,       status);
+    fSets->addElement(fFormatSet,    status);
+    fSets->addElement(fSpSet,        status);
+    fSets->addElement(fLowerSet,     status);
+    fSets->addElement(fUpperSet,     status);
+    fSets->addElement(fOLetterSet,   status);
+    fSets->addElement(fNumericSet,   status);
+    fSets->addElement(fATermSet,     status);
+    fSets->addElement(fSContinueSet, status);
+    fSets->addElement(fSTermSet,     status);
+    fSets->addElement(fCloseSet,     status);
+    fSets->addElement(fOtherSet,     status);
+    fSets->addElement(fExtendSet,    status);
 
     if (U_FAILURE(status)) {
         deferredStatus = status;
@@ -2647,6 +2796,10 @@ int32_t RBBISentMonkey::next(int32_t prevPos) {
 
     UChar32 c0, c1, c2, c3;   // The code points at p0, p1, p2 & p3.
     UChar32 c;
+
+    if (U_FAILURE(deferredStatus)) {
+        return -1;
+    }
 
     // Prev break at end of string.  return DONE.
     if (prevPos >= fText->length()) {
@@ -2724,8 +2877,8 @@ int32_t RBBISentMonkey::next(int32_t prevPos) {
             }
         }
 
-        // Rule 8a   (STerm | ATerm) Close* Sp* x (STerm | ATerm);
-        if (fSTermSet->contains(c2) || fATermSet->contains(c2)) {
+        // Rule 8a   (STerm | ATerm) Close* Sp* x (SContinue | STerm | ATerm);
+        if (fSContinueSet->contains(c2) || fSTermSet->contains(c2) || fATermSet->contains(c2)) {
             p8 = p1;
             while (fSpSet->contains(cAt(p8))) {
                 p8 = moveBack(p8);
@@ -2739,7 +2892,7 @@ int32_t RBBISentMonkey::next(int32_t prevPos) {
             }
         }
 
-        // Rule (9)  (STerm | ATerm) Close*  x  (Close | Sp | Sep)
+        // Rule (9)  (STerm | ATerm) Close*  x  (Close | Sp | Sep | CR | LF)
         int p9 = p1;
         while (fCloseSet->contains(cAt(p9))) {
             p9 = moveBack(p9);
@@ -2751,7 +2904,7 @@ int32_t RBBISentMonkey::next(int32_t prevPos) {
             }
         }
 
-        // Rule (10)  (Sterm | ATerm) Close* Sp*  x  (Sp | Sep)
+        // Rule (10)  (Sterm | ATerm) Close* Sp*  x  (Sp | Sep | CR | LF)
         int p10 = p1;
         while (fSpSet->contains(cAt(p10))) {
             p10 = moveBack(p10);
@@ -2765,8 +2918,11 @@ int32_t RBBISentMonkey::next(int32_t prevPos) {
             }
         }
 
-        // Rule (11)  (STerm | ATerm) Close* Sp*   <break>
+        // Rule (11)  (STerm | ATerm) Close* Sp* (Sep | CR | LF)?  <break>
         int p11 = p1;
+        if (fSepSet->contains(cAt(p11))) {
+            p11 = moveBack(p11);
+        }
         while (fSpSet->contains(cAt(p11))) {
             p11 = moveBack(p11);
         }
@@ -2794,6 +2950,7 @@ RBBISentMonkey::~RBBISentMonkey() {
     delete fOLetterSet;
     delete fNumericSet;
     delete fATermSet;
+    delete fSContinueSet;
     delete fSTermSet;
     delete fCloseSet;
     delete fOtherSet;
@@ -3049,6 +3206,10 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
     int32_t    tPos;      //  temp value.
     UChar32    c;
 
+    if (U_FAILURE(deferredStatus)) {
+        return -1;
+    }
+
     if (startPos >= fText->length()) {
         return -1;
     }
@@ -3144,10 +3305,16 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         }
 
         // LB 12
-        //    (!SP) x  GL
         //    GL  x
-        if ((!fSP->contains(prevChar)) && fGL->contains(thisChar) ||
-             fGL->contains(prevChar)) {
+        if (fGL->contains(prevChar)) {
+            continue;
+        }
+        
+        // LB 12a
+        //    [^SP BA HY] x GL
+        if (!(fSP->contains(prevChar) ||
+              fBA->contains(prevChar) ||
+              fHY->contains(prevChar)     ) && fGL->contains(thisChar)) {
             continue;
         }
 
@@ -3363,19 +3530,6 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             continue;
         }
 
-        //LB 30 Do not break between letters, numbers or ordinary symbols and opening or closing punctuation
-        //      (AL | NU) x OP
-        //       CL x (AL | NU)
-        if ((fAL->contains(prevChar) || fNU->contains(prevChar)) &&
-              fOP->contains(thisChar)) {
-            continue;
-        }
-        if (fCL->contains(prevChar) &&
-            (fAL->contains(thisChar) || fNU->contains(thisChar))) {
-            continue;
-        }
-
-
         // LB 31    Break everywhere else
         break;
 
@@ -3547,7 +3701,6 @@ void RBBITest::TestWordBreaks(void)
 {
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
 
-    // <data><>\u1d4a\u206e<?>\u0603\U0001d7ff<>\u2019<></data>
     Locale        locale("en");
     UErrorCode    status = U_ZERO_ERROR;
     // BreakIterator  *bi = BreakIterator::createCharacterInstance(locale, status);
@@ -3557,7 +3710,7 @@ void RBBITest::TestWordBreaks(void)
     {
     "\\U000e0032\\u0097\\u0f94\\uc2d8\\u05f4\\U000e0031\\u060d",
     "\\U000e0037\\u4666\\u1202\\u003a\\U000e0031\\u064d\\u0bea\\u591c\\U000e0040\\u003b",
-    "\\u0589\\u3e99\\U0001d7f3\\U000e0074\\u1810\\u200e\\U000e004b\\u179c\\u0027\\U000e0061\\u003a",
+    "\\u0589\\u3e99\\U0001d7f3\\U000e0074\\u1810\\u200e\\U000e004b\\u0027\\U000e0061\\u003a",
     "\\u398c\\U000104a5\\U0001d173\\u102d\\u002e\\uca3b\\u002e\\u002c\\u5622",
     "\\u90ca\\u3588\\u009c\\u0953\\u194b",
     "\\u200e\\U000e0072\\u0a4b\\U000e003f\\ufd2b\\u2027\\u002e\\u002e",
@@ -3576,7 +3729,7 @@ void RBBITest::TestWordBreaks(void)
     "\\U000e0022\\u003a\\u10b3\\u003a\\ua21b\\u002e\\U000e0058\\u1732\\U000e002b",
     "\\U0001d7f2\\U000e007d\\u0004\\u0589",
     "\\u82ab\\u17e8\\u0736\\u2019\\U0001d64d",
-    "\\u0e01\\ub55c\\u0a68\\U000e0037\\u0cd6\\u002c\\ub959",
+    "\\ub55c\\u0a68\\U000e0037\\u0cd6\\u002c\\ub959",
     "\\U000e0065\\u302c\\uc986\\u09ee\\U000e0068",
     "\\u0be8\\u002e\\u0c68\\u066e\\u136d\\ufc99\\u59e7",
     "\\u0233\\U000e0020\\u0a69\\u0d6a",
@@ -4132,7 +4285,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
         }
 
         // Find the break positions using the preceding() function.
-        memset(precedingBreaks, 0, sizeof(followingBreaks));
+        memset(precedingBreaks, 0, sizeof(precedingBreaks));
         lastBreakPos = testText.length();
         precedingBreaks[testText.length()] = 1;
         for (i=testText.length(); i>0; i--) {
@@ -4145,9 +4298,13 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
                     "Out of range value returned by BreakIterator::preceding().\n"
                     "index=%d;  prev returned %d; lastBreak=%d" ,
                     name,  i, breakPos, lastBreakPos);
-                precedingBreaks[i] = 2;   // Forces an error.
+                if (breakPos >= 0 && breakPos < (int32_t)sizeof(precedingBreaks)) {
+                    precedingBreaks[i] = 2;   // Forces an error.
+                }
             } else {
-                precedingBreaks[breakPos] = 1;
+                if (breakPos >= 0) {
+                    precedingBreaks[breakPos] = 1;
+                } 
                 lastBreakPos = breakPos;
             }
         }

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 //===============================================================================
@@ -1103,11 +1103,17 @@ void CollationAPITest::TestSortKey()
     col->setAttribute(UCOL_STRENGTH, UCOL_IDENTICAL, status);
 
     uint8_t key2compat[] = {
+        /* 3.9 key, from UCA 5.1 */
+        0x2c, 0x2e, 0x30, 0x32, 0x2c, 0x01, 
+        0x09, 0x01, 0x09, 0x01, 0x2b, 0x01, 
+        0x92, 0x93, 0x94, 0x95, 0x92, 0x0
+
         /* 3.6 key, from UCA 5.0 */
+	/*
         0x29, 0x2b, 0x2d, 0x2f, 0x29, 0x01, 
         0x09, 0x01, 0x09, 0x01, 0x28, 0x01, 
         0x92, 0x93, 0x94, 0x95, 0x92, 0x00
-        
+        */
         /* 3.4 key, from UCA 4.1 */
         /*
         0x28, 0x2a, 0x2c, 0x2e, 0x28, 0x01, 

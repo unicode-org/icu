@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2007, International Business Machines
+*   Copyright (C) 2004-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -349,10 +349,14 @@ setProps(Props *p) {
     isCaseIgnorable=FALSE;
     if((value&UCASE_TYPE_MASK)==UCASE_NONE) {
         if(ucdVersion>=UNI_4_1) {
-            /* Unicode 4.1 and up: (D47a) Word_Break=MidLetter or Mn, Me, Cf, Lm, Sk */
+            /*
+             * Unicode 4.1 and up: (D47a) Word_Break=MidLetter or Mn, Me, Cf, Lm, Sk
+             * Unicode 5.1 and up: Word_Break=(MidLetter or MidNumLet) or Mn, Me, Cf, Lm, Sk
+             *   The UGENCASE_IS_MID_LETTER_SHIFT bit is set for both WB=MidLetter and WB=MidNumLet.
+             */
             if(
                 (U_MASK(p->gc)&(U_GC_MN_MASK|U_GC_ME_MASK|U_GC_CF_MASK|U_GC_LM_MASK|U_GC_SK_MASK))!=0 ||
-                ((upvec_getValue(pv, p->code, 1)>>UGENCASE_IS_MID_LETTER_SHIFT)&1)!=0
+                (upvec_getValue(pv, p->code, 1)&U_MASK(UGENCASE_IS_MID_LETTER_SHIFT))!=0
             ) {
                 isCaseIgnorable=TRUE;
             }

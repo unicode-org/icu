@@ -1092,6 +1092,25 @@ static uint32_t uprv_uca_finalizeAddition(tempUCATable *t, UCAElements *element,
             } else {
                 /*ucmpe32_set(t->mapping, element->cPoints[0], element->mapCE);*/
                 utrie_set32(t->mapping, element->cPoints[0], element->mapCE);
+                if ((element->prefixSize!=0) && (getCETag(CE)!=IMPLICIT_TAG)) {
+                    UCAElements *origElem = (UCAElements *)uprv_malloc(sizeof(UCAElements));
+                    /* test for NULL */
+                    if (origElem== NULL) {
+                        *status = U_MEMORY_ALLOCATION_ERROR;
+                        return 0;
+                    }
+                    /* copy the original UCA value */
+                    origElem->prefixSize = 0;
+                    origElem->prefix = NULL;
+                    origElem->cPoints = origElem->uchars;
+                    origElem->cPoints[0] = element->cPoints[0];
+                    origElem->cSize = 1;
+                    origElem->CEs[0]=CE;
+                    origElem->mapCE=CE;
+                    origElem->noOfCEs=1;
+                    uprv_uca_finalizeAddition(t, origElem, status);
+                    uprv_free(origElem);
+                }
 #ifdef UCOL_DEBUG
                 fprintf(stderr, "Warning - trying to overwrite existing data %08X for cp %04X with %08X\n", CE, element->cPoints[0], element->CEs[0]);
                 //*status = U_ILLEGAL_ARGUMENT_ERROR;

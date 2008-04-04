@@ -2555,7 +2555,7 @@ inline UChar getPrevNormalizedChar(collIterate *data, UErrorCode *status)
     }
 
     start = data->pos;
-    if (data->flags & UCOL_ITER_HASLEN) {
+    if ((data->fcdPosition==NULL)||(data->flags & UCOL_ITER_HASLEN)) {
         /* in data string */
         if ((start - 1) == data->string) {
             return *(start - 1);

@@ -288,7 +288,7 @@ void TestProperty()
     UVersionInfo currVersionArray = {0x31, 0xC0, 0x00, 0x05};
     /* ICU 3.4 had UCA 4.1 */
     /*UVersionInfo currUCAVersionArray = {4, 1, 0, 0};*/
-    UVersionInfo currUCAVersionArray = {5, 0, 0, 0};
+    UVersionInfo currUCAVersionArray = {5, 1, 0, 0};
     UVersionInfo versionArray = {0, 0, 0, 0};
     UVersionInfo versionUCAArray = {0, 0, 0, 0};
     
@@ -771,6 +771,7 @@ void TestSafeClone() {
         ucol_close(ucol_safeClone(someCollators[index], buffer[index], &bufferSize, &err));
         if (err != U_SAFECLONE_ALLOCATED_WARNING) {
             log_err("FAIL: collator number %d was not allocated.\n", index);
+            log_err("FAIL: status of Collator[%d] is %d  (hex: %x).\n", index, err, err);
         }
 
         bufferSize = U_COL_SAFECLONE_BUFFERSIZE;
@@ -864,10 +865,17 @@ void TestSortKey()
 {   
     uint8_t *sortk1 = NULL, *sortk2 = NULL, *sortk3 = NULL, *sortkEmpty = NULL;
     uint8_t sortk2_compat[] = { 
+        /* 3.9 key, from UCA 5.1 */
+        0x2c, 0x2e, 0x30, 0x32, 0x2c, 0x01, 
+        0x09, 0x01, 0x09, 0x01, 0x2b, 0x01, 
+        0x92, 0x93, 0x94, 0x95, 0x92, 0x0
+
         /* 3.6 key, from UCA 5.0 */
+        /*
         0x29, 0x2b, 0x2d, 0x2f, 0x29, 0x01, 
         0x09, 0x01, 0x09, 0x01, 0x28, 0x01, 
         0x92, 0x93, 0x94, 0x95, 0x92, 0x00
+	*/
         /* 3.4 key, from UCA 4.1 */
         /* 0x28, 0x2a, 0x2c, 0x2e, 0x28, 0x01, 0x09, 0x01, 0x09, 0x01, 0x27, 0x01, 0x92, 0x93, 0x94, 0x95, 0x92, 0x00 */
         /* 2.6.1 key */
@@ -1836,7 +1844,7 @@ static void TestShortString(void)
         int32_t    expectedOffset;
         uint32_t   expectedIdentifier;
     } testCases[] = {
-        {"LDE_RDE_KPHONEBOOK_T0041_ZLATN","B2900_KPHONEBOOK_LDE", "de@collation=phonebook", U_USING_FALLBACK_WARNING, 0, 0 },
+        {"LDE_RDE_KPHONEBOOK_T0041_ZLATN","B2C00_KPHONEBOOK_LDE", "de@collation=phonebook", U_USING_FALLBACK_WARNING, 0, 0 },
         {"LEN_RUS_NO_AS_S4","AS_LEN_NO_S4", NULL, U_USING_FALLBACK_WARNING, 0, 0 },
         {"LDE_VPHONEBOOK_EO_SI","EO_KPHONEBOOK_LDE_SI", "de@collation=phonebook", U_ZERO_ERROR, 0, 0 },
         {"LDE_Kphonebook","KPHONEBOOK_LDE", "de@collation=phonebook", U_ZERO_ERROR, 0, 0 },
