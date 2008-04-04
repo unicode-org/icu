@@ -338,27 +338,22 @@ public abstract class CharsetICU extends Charset{
     
     /**
     * <p>Returns the set of Unicode code points that can be converted by an ICU Converter. 
-    * 
-    * Returns one of the several kind of set
-    *
-    * <p>ROUNDTRIP_SET
-    * 
-    * The set of all Unicode code points that can be roundtrip-converted
-    * (converted without any data loss) with the converter.
-    * This set will not include code points that have fallback mappings
-    * or are only the result of reverse fallback mappings.
-    * 
+    * <p>
+    * The current implementation returns only one kind of set (UCNV_ROUNDTRIP_SET): The set of all Unicode code points that can be 
+    * roundtrip-converted (converted without any data loss) with the converter This set will not include code points that have fallback 
+    * mappings or are only the result of reverse fallback mappings.  See UTR #22 "Character Mapping Markup Language" at  <a href="http://www.unicode.org/reports/tr22/">http://www.unicode.org/reports/tr22/</a>
+    * <p>* In the future, there may be more UConverterUnicodeSet choices to select sets with different properties.
+    * <p>
     * <p>This is useful for example for
-    * - checking that a string or document can be roundtrip-converted with a converter,
-    *   without/before actually performing the conversion
-    * - testing if a converter can be used for text for typical text for a certain locale,
+    * <ul><li>checking that a string or document can be roundtrip-converted with a converter,
+    *   without/before actually performing the conversion</li>
+    * <li>testing if a converter can be used for text for typical text for a certain locale,
     *   by comparing its roundtrip set with the set of ExemplarCharacters from
-    *   ICU's locale data or other sources
+    *   ICU's locale data or other sources</li></ul>
     *
-    *@param setFillIn A valid UnicodeSet. It will be cleared by this function before
-    *            the converter's specific set is filled in.
-    *@param which A selector;
-    *              currently ROUNDTRIP_SET is the only supported value.
+    *@param setFillIn A valid UnicodeSet. It will be cleared by this function before 
+    *                   the converter's specific set is filled in.
+    *@param which A selector; currently ROUNDTRIP_SET is the only supported value.
     *@throws IllegalArgumentException if the parameters does not match.              
     *@draft ICU 4.0
     *@provisional This API might change or be removed in a future release.
