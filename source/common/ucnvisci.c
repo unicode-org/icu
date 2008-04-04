@@ -1402,7 +1402,7 @@ _ISCIIGetUnicodeSet(const UConverter *cnv,
     for (script = DEVANAGARI; script <= MALAYALAM; script++) {
         mask = (uint8_t)(lookupInitialData[script].maskEnum);
         for (idx = 0; idx < DELTA; idx++) {
-        	//added check for TELUGU character
+        	/* added check for TELUGU character */
             if ((validityTable[idx] & mask) || (script==TELUGU && idx==0x31)) {
                 sa->add(sa->set, idx + (script * DELTA) + INDIC_BLOCK_BEGIN);
 				
