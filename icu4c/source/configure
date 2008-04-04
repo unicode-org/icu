@@ -1358,7 +1358,7 @@ LIB_VERSION_MAJOR=`echo $LIB_VERSION | sed 's/\..*//'`
 echo "$as_me:$LINENO: result: release $VERSION, library $LIB_VERSION" >&5
 echo "${ECHO_T}release $VERSION, library $LIB_VERSION" >&6
 
-UNICODE_VERSION="5.0"
+UNICODE_VERSION="5.1"
 
 
 ac_aux_dir=

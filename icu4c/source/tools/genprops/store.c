@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -41,7 +41,7 @@ the udata API for loading ICU data. Especially, a UDataInfo structure
 precedes the actual data. It contains platform properties values and the
 file format version.
 
-The following is a description of format version 4 .
+The following is a description of format version 5 .
 
 The format changes between version 3 and 4 because the properties related to
 case mappings and bidi/shaping are pulled out into separate files
@@ -50,6 +50,10 @@ In order to reduce the need for code changes, some of the previous data
 structures are omitted, rather than rearranging everything.
 
 For details see "Changes in format version 4" below.
+
+Format version 5 became necessary because the bit field for script codes
+overflowed. Several bit fields got rearranged, and three (Script, Block,
+Word_Break) got widened by one bit each.
 
 Data contents:
 
@@ -219,6 +223,13 @@ Also, some of the previously used properties vector bits are reserved again.
 The indexes[] values for the omitted structures are still filled in
 (indicating zero-length arrays) so that the swapper code remains unchanged.
 
+--- Changes in format version 5 ---
+
+Rearranged bit fields in the second trie (AT) because the script code field
+overflowed. Old code would have seen nonsensically low values for new, higher
+script codes.
+Modified bit fields in icu/source/common/uprops.h
+
 ----------------------------------------------------------------------------- */
 
 /* UDataInfo cf. udata.h */
@@ -232,8 +243,8 @@ static UDataInfo dataInfo={
     0,
 
     { 0x55, 0x50, 0x72, 0x6f },                 /* dataFormat="UPro" */
-    { 4, 0, UTRIE_SHIFT, UTRIE_INDEX_SHIFT },   /* formatVersion */
-    { 4, 0, 1, 0 }                              /* dataVersion */
+    { 5, 0, UTRIE_SHIFT, UTRIE_INDEX_SHIFT },   /* formatVersion */
+    { 5, 1, 0, 0 }                              /* dataVersion */
 };
 
 static UNewTrie *pTrie=NULL;

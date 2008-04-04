@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -12,7 +12,7 @@
 #include "uparse.h"
 #include "ucdtest.h"
 
-#define LENGTHOF(array) (sizeof(array)/sizeof(array[0]))
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof(array[0]))
 
 UnicodeTest::UnicodeTest()
 {
@@ -26,7 +26,8 @@ void UnicodeTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
 {
     if (exec) logln("TestSuite UnicodeTest: ");
     switch (index) {
-        case 0: name = "TestAdditionalProperties"; if(exec) TestAdditionalProperties(); break;  
+        case 0: name = "TestAdditionalProperties"; if(exec) TestAdditionalProperties(); break;
+        case 1: name = "TestBinaryValues"; if(exec) TestBinaryValues(); break;
         default: name = ""; break; //needed to end loop
     }
 }
@@ -212,6 +213,50 @@ void UnicodeTest::TestAdditionalProperties() {
                     }
                 }
             }
+        }
+    }
+}
+
+void UnicodeTest::TestBinaryValues() {
+    /*
+     * Unicode 5.1 explicitly defines binary property value aliases.
+     * Verify that they are all recognized.
+     */
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UnicodeSet alpha(UNICODE_STRING_SIMPLE("[:Alphabetic:]"), errorCode);
+    if(U_FAILURE(errorCode)) {
+        errln("UnicodeSet([:Alphabetic:]) failed - %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    static const char *const falseValues[]={ "N", "No", "F", "False" };
+    static const char *const trueValues[]={ "Y", "Yes", "T", "True" };
+    int32_t i;
+    for(i=0; i<LENGTHOF(falseValues); ++i) {
+        UnicodeString pattern=UNICODE_STRING_SIMPLE("[:Alphabetic=:]");
+        pattern.insert(pattern.length()-2, UnicodeString(falseValues[i], -1, US_INV));
+        errorCode=U_ZERO_ERROR;
+        UnicodeSet set(pattern, errorCode);
+        if(U_FAILURE(errorCode)) {
+            errln("UnicodeSet([:Alphabetic=%s:]) failed - %s\n", falseValues[i], u_errorName(errorCode));
+            continue;
+        }
+        set.complement();
+        if(set!=alpha) {
+            errln("UnicodeSet([:Alphabetic=%s:]).complement()!=UnicodeSet([:Alphabetic:])\n", falseValues[i]);
+        }
+    }
+    for(i=0; i<LENGTHOF(trueValues); ++i) {
+        UnicodeString pattern=UNICODE_STRING_SIMPLE("[:Alphabetic=:]");
+        pattern.insert(pattern.length()-2, UnicodeString(trueValues[i], -1, US_INV));
+        errorCode=U_ZERO_ERROR;
+        UnicodeSet set(pattern, errorCode);
+        if(U_FAILURE(errorCode)) {
+            errln("UnicodeSet([:Alphabetic=%s:]) failed - %s\n", trueValues[i], u_errorName(errorCode));
+            continue;
+        }
+        if(set!=alpha) {
+            errln("UnicodeSet([:Alphabetic=%s:])!=UnicodeSet([:Alphabetic:])\n", trueValues[i]);
         }
     }
 }

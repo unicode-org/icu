@@ -51,7 +51,6 @@ static void TestCodePoint(void);
 static void TestCharLength(void);
 static void TestCharNames(void);
 static void TestMirroring(void);
-/*       void TestUScriptCodeAPI(void);*/    /* defined in cucdapi.h */
 static void TestUScriptRunAPI(void);
 static void TestAdditionalProperties(void);
 static void TestNumericProperties(void);
@@ -167,10 +166,11 @@ void addUnicodeTest(TestNode** root);
 
 void addUnicodeTest(TestNode** root)
 {
-    addTest(root, &TestUnicodeData, "tsutil/cucdtst/TestUnicodeData");
     addTest(root, &TestCodeUnit, "tsutil/cucdtst/TestCodeUnit");
     addTest(root, &TestCodePoint, "tsutil/cucdtst/TestCodePoint");
     addTest(root, &TestCharLength, "tsutil/cucdtst/TestCharLength");
+    addTest(root, &TestBinaryValues, "tsutil/cucdtst/TestBinaryValues");
+    addTest(root, &TestUnicodeData, "tsutil/cucdtst/TestUnicodeData");
     addTest(root, &TestAdditionalProperties, "tsutil/cucdtst/TestAdditionalProperties");
     addTest(root, &TestNumericProperties, "tsutil/cucdtst/TestNumericProperties");
     addTest(root, &TestUpperLower, "tsutil/cucdtst/TestUpperLower");
@@ -2214,14 +2214,17 @@ TestAdditionalProperties() {
         { 0x1801, UCHAR_DEFAULT_IGNORABLE_CODE_POINT, FALSE },
 
         { 0x0341, UCHAR_DEPRECATED, TRUE },
-        { 0xe0041, UCHAR_DEPRECATED, FALSE },
+        { 0xe0041, UCHAR_DEPRECATED, TRUE },        /* changed from Unicode 5 to 5.1 */
+        { 0xe0100, UCHAR_DEPRECATED, FALSE },
 
         { 0x00a0, UCHAR_GRAPHEME_BASE, TRUE },
         { 0x0a4d, UCHAR_GRAPHEME_BASE, FALSE },
-        { 0xff9f, UCHAR_GRAPHEME_BASE, TRUE },      /* changed from Unicode 3.2 to 4 */
+        { 0xff9d, UCHAR_GRAPHEME_BASE, TRUE },
+        { 0xff9f, UCHAR_GRAPHEME_BASE, FALSE },     /* changed from Unicode 3.2 to 4 and again from 5 to 5.1 */
 
         { 0x0300, UCHAR_GRAPHEME_EXTEND, TRUE },
-        { 0xff9f, UCHAR_GRAPHEME_EXTEND, FALSE },   /* changed from Unicode 3.2 to 4 */
+        { 0xff9d, UCHAR_GRAPHEME_EXTEND, FALSE },
+        { 0xff9f, UCHAR_GRAPHEME_EXTEND, TRUE },    /* changed from Unicode 3.2 to 4 and again from 5 to 5.1 */
         { 0x0603, UCHAR_GRAPHEME_EXTEND, FALSE },
 
         { 0x0a4d, UCHAR_GRAPHEME_LINK, TRUE },
@@ -2271,7 +2274,7 @@ TestAdditionalProperties() {
         { 0x10909, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
         { 0x10fe4, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
 
-        { 0x0606, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
+        { 0x0605, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
         { 0x061c, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
         { 0x063f, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
         { 0x070e, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },

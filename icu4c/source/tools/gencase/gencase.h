@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2005, International Business Machines
+*   Copyright (C) 2004-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -62,7 +62,7 @@ enum {
 
 /* Values for additional data stored in pv column 1 */
 enum {
-    UGENCASE_IS_MID_LETTER_SHIFT        /* bit 0 */
+    UGENCASE_IS_MID_LETTER_SHIFT        /* bit 0  WB=MidLetter or WB=MidNumLet */
 };
 
 /* special casing data */

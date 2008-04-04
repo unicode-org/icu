@@ -1,8 +1,8 @@
-# DerivedNormalizationProps-5.0.0.txt
-# Date: 2006-06-07, 17:42:44 GMT [MD]
+# DerivedNormalizationProps-5.1.0.txt
+# Date: 2008-03-03, 21:57:40 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2006 Unicode, Inc.
+# Copyright (c) 1991-2008 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see UCD.html
 
@@ -73,6 +73,7 @@
 213E  ; FC_NFKC; 03B3
 213F  ; FC_NFKC; 03C0
 2145  ; FC_NFKC; 0064
+2C7D  ; FC_NFKC; 0076
 3250  ; FC_NFKC; 0070 0074 0065
 32CC  ; FC_NFKC; 0068 0067
 32CE  ; FC_NFKC; 0065 0076
@@ -580,7 +581,7 @@
 1D7BB ; FC_NFKC; 03C3
 1D7CA ; FC_NFKC; 03DD
 
-# Total code points: 565
+# Total code points: 566
 
 # ================================================
 
@@ -1313,6 +1314,8 @@ FB46..FB4E    ; NFC_QC; N
 2A0C          ; NFKD_QC; N
 2A74..2A76    ; NFKD_QC; N
 2ADC          ; NFKD_QC; N
+2C7C          ; NFKD_QC; N
+2C7D          ; NFKD_QC; N
 2D6F          ; NFKD_QC; N
 2E9F          ; NFKD_QC; N
 2EF3          ; NFKD_QC; N
@@ -1382,6 +1385,7 @@ FB46..FB4E    ; NFC_QC; N
 32B1..32BF    ; NFKD_QC; N
 32C0..32FE    ; NFKD_QC; N
 3300..33FF    ; NFKD_QC; N
+A770          ; NFKD_QC; N
 AC00..D7A3    ; NFKD_QC; N
 F900..FA0D    ; NFKD_QC; N
 FA10          ; NFKD_QC; N
@@ -1549,7 +1553,7 @@ FFED..FFEE    ; NFKD_QC; N
 1D7CE..1D7FF  ; NFKD_QC; N
 2F800..2FA1D  ; NFKD_QC; N
 
-# Total code points: 16574
+# Total code points: 16577
 
 # ================================================
 
@@ -1716,6 +1720,8 @@ FFED..FFEE    ; NFKD_QC; N
 2A0C          ; NFKC_QC; N
 2A74..2A76    ; NFKC_QC; N
 2ADC          ; NFKC_QC; N
+2C7C          ; NFKC_QC; N
+2C7D          ; NFKC_QC; N
 2D6F          ; NFKC_QC; N
 2E9F          ; NFKC_QC; N
 2EF3          ; NFKC_QC; N
@@ -1740,6 +1746,7 @@ FFED..FFEE    ; NFKD_QC; N
 32B1..32BF    ; NFKC_QC; N
 32C0..32FE    ; NFKC_QC; N
 3300..33FF    ; NFKC_QC; N
+A770          ; NFKC_QC; N
 F900..FA0D    ; NFKC_QC; N
 FA10          ; NFKC_QC; N
 FA12          ; NFKC_QC; N
@@ -1906,7 +1913,7 @@ FFED..FFEE    ; NFKC_QC; N
 1D7CE..1D7FF  ; NFKC_QC; N
 2F800..2FA1D  ; NFKC_QC; N
 
-# Total code points: 4486
+# Total code points: 4489
 
 # ================================================
 

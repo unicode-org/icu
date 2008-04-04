@@ -1,8 +1,8 @@
-# GraphemeBreakProperty-5.0.0.txt
-# Date: 2006-03-09, 23:14:04 GMT [MD]
+# GraphemeBreakProperty-5.1.0.txt
+# Date: 2008-03-03, 21:57:47 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2006 Unicode, Inc.
+# Copyright (c) 1991-2008 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see UCD.html
 
@@ -43,7 +43,7 @@
 2028          ; Control
 2029          ; Control
 202A..202E    ; Control
-2060..2063    ; Control
+2060..2064    ; Control
 206A..206F    ; Control
 FEFF          ; Control
 FFF9..FFFB    ; Control
@@ -51,19 +51,19 @@ FFF9..FFFB    ; Control
 E0001         ; Control
 E0020..E007F  ; Control
 
-# Total code points: 201
+# Total code points: 202
 
 # ================================================
 
 0300..036F    ; Extend
-0483..0486    ; Extend
+0483..0487    ; Extend
 0488..0489    ; Extend
 0591..05BD    ; Extend
 05BF          ; Extend
 05C1..05C2    ; Extend
 05C4..05C5    ; Extend
 05C7          ; Extend
-0610..0615    ; Extend
+0610..061A    ; Extend
 064B..065E    ; Extend
 0670          ; Extend
 06D6..06DC    ; Extend
@@ -93,7 +93,9 @@ E0020..E007F  ; Control
 0A41..0A42    ; Extend
 0A47..0A48    ; Extend
 0A4B..0A4D    ; Extend
+0A51          ; Extend
 0A70..0A71    ; Extend
+0A75          ; Extend
 0A81..0A82    ; Extend
 0ABC          ; Extend
 0AC1..0AC5    ; Extend
@@ -104,10 +106,11 @@ E0020..E007F  ; Control
 0B3C          ; Extend
 0B3E          ; Extend
 0B3F          ; Extend
-0B41..0B43    ; Extend
+0B41..0B44    ; Extend
 0B4D          ; Extend
 0B56          ; Extend
 0B57          ; Extend
+0B62..0B63    ; Extend
 0B82          ; Extend
 0BBE          ; Extend
 0BC0          ; Extend
@@ -117,6 +120,7 @@ E0020..E007F  ; Control
 0C46..0C48    ; Extend
 0C4A..0C4D    ; Extend
 0C55..0C56    ; Extend
+0C62..0C63    ; Extend
 0CBC          ; Extend
 0CBF          ; Extend
 0CC2          ; Extend
@@ -125,18 +129,24 @@ E0020..E007F  ; Control
 0CD5..0CD6    ; Extend
 0CE2..0CE3    ; Extend
 0D3E          ; Extend
-0D41..0D43    ; Extend
+0D41..0D44    ; Extend
 0D4D          ; Extend
 0D57          ; Extend
+0D62..0D63    ; Extend
 0DCA          ; Extend
 0DCF          ; Extend
 0DD2..0DD4    ; Extend
 0DD6          ; Extend
 0DDF          ; Extend
+0E30          ; Extend
 0E31          ; Extend
+0E32..0E33    ; Extend
 0E34..0E3A    ; Extend
+0E45          ; Extend
 0E47..0E4E    ; Extend
+0EB0          ; Extend
 0EB1          ; Extend
+0EB2..0EB3    ; Extend
 0EB4..0EB9    ; Extend
 0EBB..0EBC    ; Extend
 0EC8..0ECD    ; Extend
@@ -151,10 +161,15 @@ E0020..E007F  ; Control
 0F99..0FBC    ; Extend
 0FC6          ; Extend
 102D..1030    ; Extend
-1032          ; Extend
-1036..1037    ; Extend
-1039          ; Extend
+1032..1037    ; Extend
+1039..103A    ; Extend
+103D..103E    ; Extend
 1058..1059    ; Extend
+105E..1060    ; Extend
+1071..1074    ; Extend
+1082          ; Extend
+1085..1086    ; Extend
+108D          ; Extend
 135F          ; Extend
 1712..1714    ; Extend
 1732..1734    ; Extend
@@ -177,22 +192,42 @@ E0020..E007F  ; Control
 1B3C          ; Extend
 1B42          ; Extend
 1B6B..1B73    ; Extend
-1DC0..1DCA    ; Extend
+1B80..1B81    ; Extend
+1BA2..1BA5    ; Extend
+1BA8..1BA9    ; Extend
+1C2C..1C33    ; Extend
+1C36..1C37    ; Extend
+1DC0..1DE6    ; Extend
 1DFE..1DFF    ; Extend
 200C..200D    ; Extend
 20D0..20DC    ; Extend
 20DD..20E0    ; Extend
 20E1          ; Extend
 20E2..20E4    ; Extend
-20E5..20EF    ; Extend
+20E5..20F0    ; Extend
+2DE0..2DFF    ; Extend
 302A..302F    ; Extend
 3099..309A    ; Extend
+A66F          ; Extend
+A670..A672    ; Extend
+A67C..A67D    ; Extend
+A802          ; Extend
 A806          ; Extend
 A80B          ; Extend
 A825..A826    ; Extend
+A8C4          ; Extend
+A926..A92D    ; Extend
+A947..A951    ; Extend
+AA29..AA2E    ; Extend
+AA31..AA32    ; Extend
+AA35..AA36    ; Extend
+AA43          ; Extend
+AA4C          ; Extend
 FB1E          ; Extend
 FE00..FE0F    ; Extend
-FE20..FE23    ; Extend
+FE20..FE26    ; Extend
+FF9E..FF9F    ; Extend
+101FD         ; Extend
 10A01..10A03  ; Extend
 10A05..10A06  ; Extend
 10A0C..10A0F  ; Extend
@@ -207,7 +242,99 @@ FE20..FE23    ; Extend
 1D242..1D244  ; Extend
 E0100..E01EF  ; Extend
 
-# Total code points: 911
+# Total code points: 1075
+
+# ================================================
+
+0E40..0E44    ; Prepend
+0EC0..0EC4    ; Prepend
+
+# Total code points: 10
+
+# ================================================
+
+0903          ; SpacingMark
+093E..0940    ; SpacingMark
+0949..094C    ; SpacingMark
+0982..0983    ; SpacingMark
+09BF..09C0    ; SpacingMark
+09C7..09C8    ; SpacingMark
+09CB..09CC    ; SpacingMark
+0A03          ; SpacingMark
+0A3E..0A40    ; SpacingMark
+0A83          ; SpacingMark
+0ABE..0AC0    ; SpacingMark
+0AC9          ; SpacingMark
+0ACB..0ACC    ; SpacingMark
+0B02..0B03    ; SpacingMark
+0B40          ; SpacingMark
+0B47..0B48    ; SpacingMark
+0B4B..0B4C    ; SpacingMark
+0BBF          ; SpacingMark
+0BC1..0BC2    ; SpacingMark
+0BC6..0BC8    ; SpacingMark
+0BCA..0BCC    ; SpacingMark
+0C01..0C03    ; SpacingMark
+0C41..0C44    ; SpacingMark
+0C82..0C83    ; SpacingMark
+0CBE          ; SpacingMark
+0CC0..0CC1    ; SpacingMark
+0CC3..0CC4    ; SpacingMark
+0CC7..0CC8    ; SpacingMark
+0CCA..0CCB    ; SpacingMark
+0D02..0D03    ; SpacingMark
+0D3F..0D40    ; SpacingMark
+0D46..0D48    ; SpacingMark
+0D4A..0D4C    ; SpacingMark
+0D82..0D83    ; SpacingMark
+0DD0..0DD1    ; SpacingMark
+0DD8..0DDE    ; SpacingMark
+0DF2..0DF3    ; SpacingMark
+0F3E..0F3F    ; SpacingMark
+0F7F          ; SpacingMark
+102B..102C    ; SpacingMark
+1031          ; SpacingMark
+1038          ; SpacingMark
+103B..103C    ; SpacingMark
+1056..1057    ; SpacingMark
+1062..1064    ; SpacingMark
+1067..106D    ; SpacingMark
+1083..1084    ; SpacingMark
+1087..108C    ; SpacingMark
+108F          ; SpacingMark
+17B6          ; SpacingMark
+17BE..17C5    ; SpacingMark
+17C7..17C8    ; SpacingMark
+1923..1926    ; SpacingMark
+1929..192B    ; SpacingMark
+1930..1931    ; SpacingMark
+1933..1938    ; SpacingMark
+19B0..19C0    ; SpacingMark
+19C8..19C9    ; SpacingMark
+1A19..1A1B    ; SpacingMark
+1B04          ; SpacingMark
+1B35          ; SpacingMark
+1B3B          ; SpacingMark
+1B3D..1B41    ; SpacingMark
+1B43..1B44    ; SpacingMark
+1B82          ; SpacingMark
+1BA1          ; SpacingMark
+1BA6..1BA7    ; SpacingMark
+1BAA          ; SpacingMark
+1C24..1C2B    ; SpacingMark
+1C34..1C35    ; SpacingMark
+A823..A824    ; SpacingMark
+A827          ; SpacingMark
+A880..A881    ; SpacingMark
+A8B4..A8C3    ; SpacingMark
+A952..A953    ; SpacingMark
+AA2F..AA30    ; SpacingMark
+AA33..AA34    ; SpacingMark
+AA4D          ; SpacingMark
+1D166         ; SpacingMark
+1D16D         ; SpacingMark
+
+# Total code points: 217
 
 # ================================================
 

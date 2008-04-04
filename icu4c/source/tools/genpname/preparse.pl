@@ -1,7 +1,7 @@
 #!/bin/perl -w
 #*******************************************************************
 # COPYRIGHT:
-# Copyright (c) 2002-2006, International Business Machines Corporation and
+# Copyright (c) 2002-2008, International Business Machines Corporation and
 # others. All Rights Reserved.
 #*******************************************************************
 
@@ -185,7 +185,9 @@ sub isIgnoredProperty {
 # 'qc' is a pseudo-property matching any quick-check property
 # see PropertyValueAliases.txt file comments.  'binprop' is
 # a synthetic binary value alias "True"/"False", not present
-# in PropertyValueAliases.txt.
+# in PropertyValueAliases.txt until Unicode 5.0.
+# Starting with Unicode 5.1, PropertyValueAliases.txt does have
+# explicit values for binary properties.
 sub isPseudoProperty {
     $_[0] eq 'qc' ||
         $_[0] eq 'binprop';
@@ -880,7 +882,7 @@ sub read_PropertyValueAliases {
             my $prop = $1;
             my @fields = /;\s*([^\s;]+)/g;
             die "Error: Wrong number of fields in $filename"
-                if (@fields < 2 || @fields > 3);
+                if (@fields < 2 || @fields > 5);
             # Make "n/a" strings unique
             $fields[0] .= sprintf("%03d", $valueNA++) if ($fields[0] eq 'n/a');
             # Squash extra fields together
@@ -908,11 +910,24 @@ sub read_PropertyValueAliases {
     $hash->{'sc'}->{'Qaac'} = 'Coptic'
         unless (exists $hash->{'sc'}->{'Qaac'} || exists $hash->{'sc'}->{'Copt'});
 
-    # Add T|True and F|False -- these are values we recognize for
-    # binary properties (NOT from PropertyValueAliases.txt).  These
-    # are of the same form as the 'ccc' value aliases.
-    $hash->{'binprop'}->{'0'} = 'F|False';
-    $hash->{'binprop'}->{'1'} = 'T|True';
+    # Add N|No|T|True and Y|Yes|F|False -- these are values we recognize for
+    # binary properties (until Unicode 5.0 NOT from PropertyValueAliases.txt).
+    # These are of the same form as the 'ccc' value aliases.
+    # Starting with Unicode 5.1, PropertyValueAliases.txt does have values
+    # for binary properties.
+    if (!exists $hash->{'binprop'}->{'0'}) {
+        if (exists $hash->{'Alpha'}->{'N'}) {
+            # Unicode 5.1 and later: Make the numeric value the key.
+            $hash->{'binprop'}->{'0'} = 'N|' . $hash->{'Alpha'}->{'N'};
+            $hash->{'binprop'}->{'1'} = 'Y|' . $hash->{'Alpha'}->{'Y'};
+        } elsif (exists $hash->{'Alpha'}) {
+            die "Error: Unrecognized short value name for binary property 'Alpha'\n";
+        } else {
+            # Unicode 5.0 and earlier: Add manually.
+            $hash->{'binprop'}->{'0'} = 'N|No|F|False';
+            $hash->{'binprop'}->{'1'} = 'Y|Yes|T|True';
+        }
+    }
 }
 
 #----------------------------------------------------------------------
