@@ -504,11 +504,11 @@ public class MessageFormat extends UFormat {
      * The pattern must contain only named or only numeric arguments,
      * mixing them is not allowed.
      *
-     * @param pattern the pattern for this message format
+     * @param pttrn the pattern for this message format
      * @throws IllegalArgumentException if the pattern is invalid
      * @stable ICU 3.0
      */
-    public void applyPattern(String pattern) {
+    public void applyPattern(String pttrn) {
         StringBuffer[] segments = new StringBuffer[4];
         for (int i = 0; i < segments.length; ++i) {
             segments[i] = new StringBuffer();
@@ -518,12 +518,12 @@ public class MessageFormat extends UFormat {
         boolean inQuote = false;
         int braceStack = 0;
         maxOffset = -1;
-        for (int i = 0; i < pattern.length(); ++i) {
-            char ch = pattern.charAt(i);
+        for (int i = 0; i < pttrn.length(); ++i) {
+            char ch = pttrn.charAt(i);
             if (part == 0) {
                 if (ch == '\'') {
-                    if (i + 1 < pattern.length()
-                        && pattern.charAt(i+1) == '\'') {
+                    if (i + 1 < pttrn.length()
+                        && pttrn.charAt(i+1) == '\'') {
                         segments[part].append(ch);  // handle doubles
                         ++i;
                     } else {

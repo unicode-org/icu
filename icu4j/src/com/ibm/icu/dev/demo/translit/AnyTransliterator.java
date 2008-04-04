@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -162,8 +162,8 @@ public class AnyTransliterator extends Transliterator {
             int limit = expanse.start;
             for (i = current.start; i > limit; i -= UTF16.getCharCount(cp)) {
                 cp = text.char32At(i);
-                int script = UScript.getScript(cp);
-                if (script != UScript.COMMON && script != UScript.INHERITED) break;
+                int scrpt = UScript.getScript(cp);
+                if (scrpt != UScript.COMMON && scrpt != UScript.INHERITED) break;
             }
             current.start = i;
             current.contextStart = (i == limit) ? expanse.contextStart : i; // extend at start
@@ -174,14 +174,14 @@ public class AnyTransliterator extends Transliterator {
             limit = expanse.limit; 
             for (i = current.limit; i < limit; i += UTF16.getCharCount(cp)) {
                 cp = text.char32At(i);
-                int script = UScript.getScript(cp);
-                if (script == UScript.INHERITED) script = UScript.COMMON;
-                if (script != UScript.COMMON) {
+                int scrpt = UScript.getScript(cp);
+                if (scrpt == UScript.INHERITED) scrpt = UScript.COMMON;
+                if (scrpt != UScript.COMMON) {
                     // if we find a real script:
                     //   if we already had a script, bail
                     //   otherwise set our script
-                    if (lastScript == UScript.COMMON) lastScript = script;
-                    else if (lastScript != script) break;
+                    if (lastScript == UScript.COMMON) lastScript = scrpt;
+                    else if (lastScript != scrpt) break;
                 }
             }
             current.limit = i;

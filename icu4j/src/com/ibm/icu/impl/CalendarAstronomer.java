@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -578,12 +578,12 @@ public class CalendarAstronomer {
     /**
      * TODO Make this public when the entire class is package-private.
      */
-    /*public*/ double[] getSunLongitude(double julianDay)
+    /*public*/ double[] getSunLongitude(double julian)
     {
         // See page 86 of "Practial Astronomy with your Calculator",
         // by Peter Duffet-Smith, for details on the algorithm.
         
-        double day = julianDay - JD_EPOCH;       // Days since epoch
+        double day = julian - JD_EPOCH;       // Days since epoch
         
         // Find the angular distance the sun in a fictitious
         // circular orbit has travelled since the epoch.
@@ -1007,7 +1007,7 @@ public class CalendarAstronomer {
         if (moonPosition == null) {
             // Calculate the solar longitude.  Has the side effect of
             // filling in "meanAnomalySun" as well.
-            double sunLongitude = getSunLongitude();
+            double sunLong = getSunLongitude();
             
             //
             // Find the # of days since the epoch of our orbital parameters.
@@ -1026,7 +1026,7 @@ public class CalendarAstronomer {
             //  Annual Eqn: variation in the effect due to earth-sun distance
             //  A3:         correction factor (for ???)
             //
-            double evection = 1.2739*PI/180 * Math.sin(2 * (meanLongitude - sunLongitude)
+            double evection = 1.2739*PI/180 * Math.sin(2 * (meanLongitude - sunLong)
                                                 - meanAnomalyMoon);
             double annual   = 0.1858*PI/180 * Math.sin(meanAnomalySun);
             double a3       = 0.3700*PI/180 * Math.sin(meanAnomalySun);
@@ -1051,7 +1051,7 @@ public class CalendarAstronomer {
             // gravitational pull on the moon varies depending on which side of
             // the earth the moon is on
             //
-            double variation = 0.6583*PI/180 * Math.sin(2*(moonLongitude - sunLongitude));
+            double variation = 0.6583*PI/180 * Math.sin(2*(moonLongitude - sunLong));
             
             moonLongitude += variation;
             

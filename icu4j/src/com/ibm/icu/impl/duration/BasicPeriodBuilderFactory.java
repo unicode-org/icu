@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and   *
+* Copyright (C) 2007-2008, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -317,7 +317,7 @@ abstract class PeriodBuilderImpl implements PeriodBuilder {
     return this;
   }
 
-  protected abstract PeriodBuilder withSettings(BasicPeriodBuilderFactory.Settings settings);
+  protected abstract PeriodBuilder withSettings(BasicPeriodBuilderFactory.Settings settingsToUse);
 
   protected abstract Period handleCreate(long duration, long referenceDate, 
                                          boolean inPast);
@@ -330,9 +330,9 @@ abstract class PeriodBuilderImpl implements PeriodBuilder {
 class FixedUnitBuilder extends PeriodBuilderImpl {
   private TimeUnit unit;
   
-  public static FixedUnitBuilder get(TimeUnit unit, BasicPeriodBuilderFactory.Settings settings) {
-    if (settings != null && (settings.effectiveSet() & (1 << unit.ordinal)) != 0) {
-      return new FixedUnitBuilder(unit, settings);
+  public static FixedUnitBuilder get(TimeUnit unit, BasicPeriodBuilderFactory.Settings settingsToUse) {
+    if (settingsToUse != null && (settingsToUse.effectiveSet() & (1 << unit.ordinal)) != 0) {
+      return new FixedUnitBuilder(unit, settingsToUse);
     }
     return null;
   }
@@ -342,8 +342,8 @@ class FixedUnitBuilder extends PeriodBuilderImpl {
     this.unit = unit;
   }
 
-  protected PeriodBuilder withSettings(BasicPeriodBuilderFactory.Settings settings) {
-    return get(unit, settings);
+  protected PeriodBuilder withSettings(BasicPeriodBuilderFactory.Settings settingsToUse) {
+    return get(unit, settingsToUse);
   }
 
   protected Period handleCreate(long duration, long referenceDate, 
@@ -369,8 +369,8 @@ class SingleUnitBuilder extends PeriodBuilderImpl {
     return new SingleUnitBuilder(settings);
   }
 
-  protected PeriodBuilder withSettings(BasicPeriodBuilderFactory.Settings settings) {
-    return SingleUnitBuilder.get(settings);
+  protected PeriodBuilder withSettings(BasicPeriodBuilderFactory.Settings settingsToUse) {
+    return SingleUnitBuilder.get(settingsToUse);
   }
 
   protected Period handleCreate(long duration, long referenceDate, 
@@ -402,8 +402,8 @@ class OneOrTwoUnitBuilder extends PeriodBuilderImpl {
     return new OneOrTwoUnitBuilder(settings);
   }
 
-  protected PeriodBuilder withSettings(BasicPeriodBuilderFactory.Settings settings) {
-    return OneOrTwoUnitBuilder.get(settings);
+  protected PeriodBuilder withSettings(BasicPeriodBuilderFactory.Settings settingsToUse) {
+    return OneOrTwoUnitBuilder.get(settingsToUse);
   }
 
   protected Period handleCreate(long duration, long referenceDate, 
@@ -451,8 +451,8 @@ class MultiUnitBuilder extends PeriodBuilderImpl {
     return null;
   }
 
-  protected PeriodBuilder withSettings(BasicPeriodBuilderFactory.Settings settings) {
-    return MultiUnitBuilder.get(nPeriods, settings);
+  protected PeriodBuilder withSettings(BasicPeriodBuilderFactory.Settings settingsToUse) {
+    return MultiUnitBuilder.get(nPeriods, settingsToUse);
   }
 
   protected Period handleCreate(long duration, long referenceDate, 

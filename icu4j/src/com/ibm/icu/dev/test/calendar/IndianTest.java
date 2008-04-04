@@ -185,7 +185,6 @@ public class IndianTest extends CalendarTest
     
         {
             // data
-            IndianCalendar cal = new IndianCalendar(-1039, 9, 21);
             String[] calendarLocales = {
                 "bn_IN", "gu_IN", "hi_IN", "kn_IN", "ml_IN", "or_IN", "pa_IN", "ta_IN", "te_IN"
             };
@@ -197,13 +196,14 @@ public class IndianTest extends CalendarTest
             for (int i = 0; i < calendarLocales.length; ++i) {
                 String calLocName = calendarLocales[i];
                 Locale calLocale = LocaleUtility.getLocaleFromName(calLocName);
-                cal = new IndianCalendar(calLocale);
+                IndianCalendar cal = new IndianCalendar(calLocale);
+                cal.set(-1039, 9, 21);
 
                 for (int j = 0; j < formatLocales.length; j++  ) {
                     String locName = formatLocales[j];
                     Locale formatLocale = LocaleUtility.getLocaleFromName(locName);
                     DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
-                    //logln(calLocName + "/" + locName + " --> " + format.format(time));
+                    logln(calLocName + "/" + locName + " --> " + format.format(cal));
                 }
             }
         }

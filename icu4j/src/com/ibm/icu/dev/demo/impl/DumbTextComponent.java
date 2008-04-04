@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -689,7 +689,7 @@ public class DumbTextComponent extends Canvas
     }
 
     // LIU: Enhanced to wrap long lines.  Bug with return of start fixed.
-    public int nextLine(FontMetrics fm, int start, int width) {
+    public int nextLine(FontMetrics fMtr, int start, int width) {
         int len = contents.length();
         for (int i = start; i < len; ++i) {
             // check for line separator
@@ -702,18 +702,18 @@ public class DumbTextComponent extends Canvas
             }
         }
         String subject = contents.substring(start,len);
-        if (visibleWidth(fm, subject) <= width)
+        if (visibleWidth(fMtr, subject) <= width)
           return len;
 
         // LIU: Remainder of this method rewritten to accomodate lines
         // longer than the component width by first trying to break
         // into lines; then words; finally chars.
-        int n = findFittingBreak(fm, subject, width, lineBreaker);
+        int n = findFittingBreak(fMtr, subject, width, lineBreaker);
         if (n == 0) {
-            n = findFittingBreak(fm, subject, width, wordBreaker);
+            n = findFittingBreak(fMtr, subject, width, wordBreaker);
         }
         if (n == 0) {
-            n = findFittingBreak(fm, subject, width, charBreaker);
+            n = findFittingBreak(fMtr, subject, width, charBreaker);
         }
         return n > 0 ? start + n : len;
     }
@@ -722,32 +722,32 @@ public class DumbTextComponent extends Canvas
      * LIU: Finds the longest substring that fits a given width
      * composed of subunits returned by a BreakIterator.  If the smallest
      * subunit is too long, returns 0.
-     * @param fm metrics to use
+     * @param fMtr metrics to use
      * @param line the string to be fix into width
      * @param width line.substring(0, result) must be <= width
      * @param breaker the BreakIterator that will be used to find subunits
      * @return maximum characters, at boundaries returned by breaker,
      * that fit into width, or zero on failure
      */
-    private int findFittingBreak(FontMetrics fm, String line, int width,
+    private int findFittingBreak(FontMetrics fMtr, String line, int width,
                                  BreakIterator breaker) {
         breaker.setText(line);
         int last = breaker.first();
         int end = breaker.next();
         while (end != BreakIterator.DONE &&
-               visibleWidth(fm, line.substring(0, end)) <= width) {
+               visibleWidth(fMtr, line.substring(0, end)) <= width) {
             last = end;
             end = breaker.next();
         }
         return last;
     }
 
-    public int visibleWidth(FontMetrics fm, String s) {
+    public int visibleWidth(FontMetrics fMtr, String s) {
         int i;
         for (i = s.length()-1; i >= 0; --i) {
             char ch = s.charAt(i);
             if (!(ch == ' ' || ch >= 0x000A && ch <= 0x000D || ch == 0x2028 || ch == 0x2029))
-            	return fm.stringWidth(s.substring(0,i+1));
+            	return fMtr.stringWidth(s.substring(0,i+1));
         }
         return 0;
     }

@@ -1,7 +1,7 @@
 //##header J2SE15
 /**
  *******************************************************************************
- * Copyright (C) 2005-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -331,6 +331,7 @@ public class TestCharsetDetector extends TestFmwk
         for (int i=0; i<shortBytes.length; i++) {
             det.setText(shortBytes[i]);
             m = det.detect();
+            logln("i=" + i + " -> " + m.getName());
         }
     }
     

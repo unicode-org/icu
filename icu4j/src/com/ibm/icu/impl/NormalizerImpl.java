@@ -1,6 +1,6 @@
  /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -2618,7 +2618,7 @@ public final class NormalizerImpl {
             char[] table;
             int i=0, start, limit;
             
-            int[] indexes = (int[]) canonStartSets[CANON_SET_INDICIES_INDEX];
+            int[] idxs = (int[]) canonStartSets[CANON_SET_INDICIES_INDEX];
             char[] startSets = (char[]) canonStartSets[CANON_SET_START_SETS_INDEX];
             
             if(c<=0xffff) {
@@ -2643,7 +2643,7 @@ public final class NormalizerImpl {
                         /* result 01xxxxxx xxxxxx contains index x to a 
                          * USerializedSet */
                         i&=(CANON_SET_MAX_CANON_SETS-1);
-                        return fillSet.getSet(startSets,(i-indexes.length));
+                        return fillSet.getSet(startSets,(i-idxs.length));
                     } else {
                         /* other result values are BMP code points for 
                          * single-code point sets */
@@ -2701,7 +2701,7 @@ public final class NormalizerImpl {
                     i=tableVal2;
                     if((h&0x8000)==0) {
                         /* the result is an index to a USerializedSet */
-                        return fillSet.getSet(startSets,(i-indexes.length));
+                        return fillSet.getSet(startSets,(i-idxs.length));
                     } else {
                         /*
                          * single-code point set {x} in

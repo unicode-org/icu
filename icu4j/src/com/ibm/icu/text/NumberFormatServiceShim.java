@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -48,7 +48,7 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
             this.delegate = delegate;
         }
 
-        public Object create(Key key, ICUService service) {
+        public Object create(Key key, ICUService srvc) {
             if (handlesKey(key)) {
                 LocaleKey lkey = (LocaleKey)key;
                 ULocale loc = lkey.canonicalLocale();
@@ -56,7 +56,7 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
 
                 Object result = delegate.createFormat(loc, kind);
                 if (result == null) {
-                    result = service.getKey(key, null, this);
+                    result = srvc.getKey(key, null, this);
                 }
                 return result;
             }
@@ -104,7 +104,7 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
             super("NumberFormat");
 
             class RBNumberFormatFactory extends ICUResourceBundleFactory {
-                protected Object handleCreate(ULocale loc, int kind, ICUService service) {
+                protected Object handleCreate(ULocale loc, int kind, ICUService srvc) {
                     return NumberFormat.createInstance(loc, kind);
                 }
             }

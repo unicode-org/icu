@@ -1,7 +1,7 @@
 //##header J2SE15
 /**
 *******************************************************************************
-* Copyright (C) 1996-2007, International Business Machines Corporation and    *
+* Copyright (C) 1996-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -4160,18 +4160,18 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
 
         // implement UCaseProps.ContextIterator
-        public void reset(int dir) {
-            if(dir>0) {
+        public void reset(int direction) {
+            if(direction>0) {
                 /* reset for forward iteration */
-                this.dir=1;
+                dir=1;
                 index=cpLimit;
-            } else if(dir<0) {
+            } else if(direction<0) {
                 /* reset for backward iteration */
-                this.dir=-1;
+                dir=-1;
                 index=cpStart;
             } else {
                 // not a valid direction
-                this.dir=0;
+                dir=0;
                 index=0;
             }
         }

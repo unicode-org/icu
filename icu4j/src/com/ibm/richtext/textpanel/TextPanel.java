@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2004.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2008.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -30,6 +30,8 @@ import com.ibm.richtext.styledtext.MConstText;
  * @see MTextPanel
  */
 public final class TextPanel extends Panel implements MTextPanel {
+
+    private static final long serialVersionUID = -8134791570789588104L;
 
     private ATextPanelImpl fImpl;
     
@@ -110,6 +112,7 @@ public final class TextPanel extends Panel implements MTextPanel {
             public void paint(Graphics g) {
                 textComponent.paint(g);
             }
+            private static final long serialVersionUID = 1L;
         };
         
         add("Center", textHost);

@@ -1227,15 +1227,15 @@ public class Bidi {
     private Object getMemory(String label, Object array, Class arrayClass,
             boolean mayAllocate, int sizeNeeded)
     {
-        int length = Array.getLength(array);
+        int len = Array.getLength(array);
 
         /* we have at least enough memory and must not allocate */
-        if (sizeNeeded == length) {
+        if (sizeNeeded == len) {
             return array;
         }
         if (!mayAllocate) {
             /* we must not allocate */
-            if (sizeNeeded <= length) {
+            if (sizeNeeded <= len) {
                 return array;
             }
             throw new OutOfMemoryError("Failed to allocate memory for "
@@ -1253,59 +1253,59 @@ public class Bidi {
     }
 
     /* helper methods for each allocated array */
-    private void getDirPropsMemory(boolean mayAllocate, int length)
+    private void getDirPropsMemory(boolean mayAllocate, int len)
     {
-        Object array = getMemory("DirProps", dirPropsMemory, Byte.TYPE, mayAllocate, length);
+        Object array = getMemory("DirProps", dirPropsMemory, Byte.TYPE, mayAllocate, len);
         dirPropsMemory = (byte[]) array;
     }
 
-    void getDirPropsMemory(int length)
+    void getDirPropsMemory(int len)
     {
-        getDirPropsMemory(mayAllocateText, length);
+        getDirPropsMemory(mayAllocateText, len);
     }
 
-    private void getLevelsMemory(boolean mayAllocate, int length)
+    private void getLevelsMemory(boolean mayAllocate, int len)
     {
-        Object array = getMemory("Levels", levelsMemory, Byte.TYPE, mayAllocate, length);
+        Object array = getMemory("Levels", levelsMemory, Byte.TYPE, mayAllocate, len);
         levelsMemory = (byte[]) array;
     }
 
-    void getLevelsMemory(int length)
+    void getLevelsMemory(int len)
     {
-        getLevelsMemory(mayAllocateText, length);
+        getLevelsMemory(mayAllocateText, len);
     }
 
-    private void getRunsMemory(boolean mayAllocate, int length)
+    private void getRunsMemory(boolean mayAllocate, int len)
     {
-        Object array = getMemory("Runs", runsMemory, BidiRun.class, mayAllocate, length);
+        Object array = getMemory("Runs", runsMemory, BidiRun.class, mayAllocate, len);
         runsMemory = (BidiRun[]) array;
     }
 
-    void getRunsMemory(int length)
+    void getRunsMemory(int len)
     {
-        getRunsMemory(mayAllocateRuns, length);
+        getRunsMemory(mayAllocateRuns, len);
     }
 
     /* additional methods used by constructor - always allow allocation */
-    private void getInitialDirPropsMemory(int length)
+    private void getInitialDirPropsMemory(int len)
     {
-        getDirPropsMemory(true, length);
+        getDirPropsMemory(true, len);
     }
 
-    private void getInitialLevelsMemory(int length)
+    private void getInitialLevelsMemory(int len)
     {
-        getLevelsMemory(true, length);
+        getLevelsMemory(true, len);
     }
 
-    private void getInitialParasMemory(int length)
+    private void getInitialParasMemory(int len)
     {
-        Object array = getMemory("Paras", parasMemory, Integer.TYPE, true, length);
+        Object array = getMemory("Paras", parasMemory, Integer.TYPE, true, len);
         parasMemory = (int[]) array;
     }
 
-    private void getInitialRunsMemory(int length)
+    private void getInitialRunsMemory(int len)
     {
-        getRunsMemory(true, length);
+        getRunsMemory(true, len);
     }
 
     /**
@@ -1828,15 +1828,15 @@ public class Bidi {
         byte dirProp;
         byte level = GetParaLevelAt(0);
 
-        byte direction;
+        byte dirct;
         int paraIndex = 0;
 
         /* determine if the text is mixed-directional or single-directional */
-        direction = directionFromFlags();
+        dirct = directionFromFlags();
 
         /* we may not need to resolve any explicit levels, but for multiple
            paragraphs we want to loop on all chars to set the para boundaries */
-        if ((direction != MIXED) && (paraCount == 1)) {
+        if ((dirct != MIXED) && (paraCount == 1)) {
             /* not mixed directionality: levels don't matter - trailingWSStart will be 0 */
         } else if ((paraCount == 1) &&
                    ((flags & MASK_EXPLICIT) == 0 ||
@@ -1975,10 +1975,10 @@ public class Bidi {
             /* subsequently, ignore the explicit codes and BN (X9) */
 
             /* again, determine if the text is mixed-directional or single-directional */
-            direction = directionFromFlags();
+            dirct = directionFromFlags();
         }
 
-        return direction;
+        return dirct;
     }
 
     /*
@@ -3390,33 +3390,33 @@ public class Bidi {
      */
     public void setPara(AttributedCharacterIterator paragraph)
     {
-        byte paraLevel;
+        byte paraLvl;
         Boolean runDirection = (Boolean) paragraph.getAttribute(TextAttribute.RUN_DIRECTION);
         if (runDirection == null) {
-            paraLevel = LEVEL_DEFAULT_LTR;
+            paraLvl = LEVEL_DEFAULT_LTR;
         } else {
-            paraLevel = (runDirection.equals(TextAttribute.RUN_DIRECTION_LTR)) ?
+            paraLvl = (runDirection.equals(TextAttribute.RUN_DIRECTION_LTR)) ?
                         LTR : RTL;
         }
 
-        byte[] levels = null;
-        int length = paragraph.getEndIndex() - paragraph.getBeginIndex();
-        byte[] embeddingLevels = new byte[length];
-        char[] text = new char[length];
+        byte[] lvls = null;
+        int len = paragraph.getEndIndex() - paragraph.getBeginIndex();
+        byte[] embeddingLevels = new byte[len];
+        char[] txt = new char[len];
         int i = 0;
         char ch = paragraph.first();
         while (ch != AttributedCharacterIterator.DONE) {
-            text[i] = ch;
+            txt[i] = ch;
             Integer embedding = (Integer) paragraph.getAttribute(TextAttribute.BIDI_EMBEDDING);
             if (embedding != null) {
                 byte level = embedding.byteValue();
                 if (level == 0) {
                     /* no-op */
                 } else if (level < 0) {
-                    levels = embeddingLevels;
+                    lvls = embeddingLevels;
                     embeddingLevels[i] = (byte)((0 - level) | LEVEL_OVERRIDE);
                 } else {
-                    levels = embeddingLevels;
+                    lvls = embeddingLevels;
                     embeddingLevels[i] = level;
                 }
             }
@@ -3428,10 +3428,10 @@ public class Bidi {
 //#else
         NumericShaper shaper = (NumericShaper) paragraph.getAttribute(TextAttribute.NUMERIC_SHAPING);
         if (shaper != null) {
-            shaper.shape(text, 0, length);
+            shaper.shape(txt, 0, len);
         }
 //#endif
-        setPara(text, paraLevel, levels);
+        setPara(txt, paraLvl, lvls);
     }
 //#endif
 
@@ -3447,15 +3447,15 @@ public class Bidi {
      * position of the text before reordering will go to the first position
      * of the reordered text when the paragraph level is odd.
      *
-     * @param orderParagraphsLTR specifies whether paragraph separators (B) must
+     * @param ordarParaLTR specifies whether paragraph separators (B) must
      * receive level 0, so that successive paragraphs progress from left to right.
      *
      * @see #setPara
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.
      */
-    public void orderParagraphsLTR(boolean orderParagraphsLTR) {
-        this.orderParagraphsLTR = orderParagraphsLTR;
+    public void orderParagraphsLTR(boolean ordarParaLTR) {
+        orderParagraphsLTR = ordarParaLTR;
     }
 
     /**
@@ -4477,20 +4477,20 @@ public class Bidi {
             int flags)
     {
         this();
-        byte paraLevel;
+        byte paraLvl;
         switch (flags) {
         case DIRECTION_LEFT_TO_RIGHT:
         default:
-            paraLevel = LTR;
+            paraLvl = LTR;
             break;
         case DIRECTION_RIGHT_TO_LEFT:
-            paraLevel = RTL;
+            paraLvl = RTL;
             break;
         case DIRECTION_DEFAULT_LEFT_TO_RIGHT:
-            paraLevel = LEVEL_DEFAULT_LTR;
+            paraLvl = LEVEL_DEFAULT_LTR;
             break;
         case DIRECTION_DEFAULT_RIGHT_TO_LEFT:
-            paraLevel = LEVEL_DEFAULT_RTL;
+            paraLvl = LEVEL_DEFAULT_RTL;
             break;
         }
         byte[] paraEmbeddings;
@@ -4504,8 +4504,8 @@ public class Bidi {
                 if (lev < 0) {
                     lev = (byte)((- lev) | LEVEL_OVERRIDE);
                 } else if (lev == 0) {
-                    lev = paraLevel;
-                    if (paraLevel > MAX_EXPLICIT_LEVEL) {
+                    lev = paraLvl;
+                    if (paraLvl > MAX_EXPLICIT_LEVEL) {
                         lev &= 1;
                     }
                 }
@@ -4513,11 +4513,11 @@ public class Bidi {
             }
         }
         if (textStart == 0 && embStart == 0 && paragraphLength == text.length) {
-            setPara(text, paraLevel, paraEmbeddings);
+            setPara(text, paraLvl, paraEmbeddings);
         } else {
             char[] paraText = new char[paragraphLength];
             System.arraycopy(text, textStart, paraText, 0, paragraphLength);
-            setPara(paraText, paraLevel, paraEmbeddings);
+            setPara(paraText, paraLvl, paraEmbeddings);
         }
     }
 
@@ -4739,9 +4739,9 @@ public class Bidi {
         verifyRange(run, 0, runCount);
         getLogicalToVisualRunsMap();
         int idx = logicalToVisualRunsMap[run];
-        int length = idx == 0 ? runs[idx].limit :
+        int len = idx == 0 ? runs[idx].limit :
                                 runs[idx].limit - runs[idx-1].limit;
-        return runs[idx].start + length;
+        return runs[idx].start + len;
     }
 
     /**

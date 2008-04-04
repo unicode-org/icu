@@ -3829,7 +3829,7 @@ public class DecimalFormat extends NumberFormat {
             StringBuffer prefix = new StringBuffer();
             StringBuffer suffix = new StringBuffer();
             int decimalPos = -1;
-            int multiplier = 1;
+            int multpl = 1;
             int digitLeftCount = 0, zeroDigitCount = 0, digitRightCount = 0, sigDigitCount = 0;
             byte groupingCount = -1;
             byte groupingCount2 = -1;
@@ -4054,10 +4054,10 @@ public class DecimalFormat extends NumberFormat {
                         break PARTLOOP; // Go to next part
                     } else if (ch == percent || ch == perMill) {
                         // Next handle characters which are appended directly.
-                        if (multiplier != 1) {
+                        if (multpl != 1) {
                             patternError("Too many percent/permille characters", pattern);
                         }
-                        multiplier = (ch == percent) ? 100 : 1000;
+                        multpl = (ch == percent) ? 100 : 1000;
                         // Convert to non-localized pattern
                         ch = (ch == percent) ? PATTERN_PERCENT : PATTERN_PER_MILLE;
                         // Fall through to append(ch)
@@ -4208,7 +4208,7 @@ public class DecimalFormat extends NumberFormat {
                 this.groupingSize = (groupingCount > 0) ? groupingCount : 0;
                 this.groupingSize2 = (groupingCount2 > 0 && groupingCount2 != groupingCount)
                     ? groupingCount2 : 0;
-                this.multiplier = multiplier;
+                this.multiplier = multpl;
                 setDecimalSeparatorAlwaysShown(decimalPos == 0
                         || decimalPos == digitTotalCount);
                 if (padPos >= 0) {

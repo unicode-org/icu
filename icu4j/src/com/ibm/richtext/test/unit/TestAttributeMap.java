@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2007.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2008.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied
@@ -296,7 +296,7 @@ public class TestAttributeMap extends TestFmwk  {
             return;
         }
         
-        Collection values = map.values();
+        Collection vals = map.values();
         Set entrySet = map.entrySet();
 
         if (keySet.size() != map.size() || entrySet.size() != map.size()) {
@@ -305,7 +305,7 @@ public class TestAttributeMap extends TestFmwk  {
 
         int hashCode = 0;
 
-        Iterator valueIter = values.iterator();
+        Iterator valueIter = vals.iterator();
         while (valueIter.hasNext()) {
             if (!map.containsValue(valueIter.next())) {
                 errln("value set contains value not in map");
@@ -323,7 +323,7 @@ public class TestAttributeMap extends TestFmwk  {
             }
 
             Object value = map.get(entry.getKey());
-            if (!values.contains(value)) {
+            if (!vals.contains(value)) {
                 errln("Entry value is not in value set.");
             }
 

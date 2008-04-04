@@ -861,6 +861,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
 
         int hash = fmt.hashCode();
+        logln("hash code " + hash);
 
         logln("compare to string returns: " + fmt.equals(""));
 

@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
+* Copyright (C) 1996-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -122,13 +122,13 @@ final public class Differ {
      * @return -1 if not found, otherwise start position in b
      */
 
-    public int find (Object[] a, int aStart, int aEnd, Object[] b, int bStart, int bEnd) {
+    public int find (Object[] aArray, int aStart, int aEnd, Object[] bArray, int bStart, int bEnd) {
         int len = aEnd - aStart;
         int bEndMinus = bEnd - len;
         tryA:
         for (int i = bStart; i <= bEndMinus; ++i) {
             for (int j = 0; j < len; ++j) {
-                if (!b[i + j].equals(a[aStart + j])) continue tryA;
+                if (!bArray[i + j].equals(aArray[aStart + j])) continue tryA;
             }
             return i; // we have a match!
         }

@@ -1,5 +1,5 @@
 /****************************************************************************
- * Copyright (C) 2000-2007, International Business Machines Corporation and
+ * Copyright (C) 2000-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ****************************************************************************
  */
@@ -80,8 +80,8 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
     /**
      * @stable ICU 2.0
      */
-    public String getLeapMonth(int isLeapMonth) {
-        return this.isLeapMonth[isLeapMonth];
+    public String getLeapMonth(int leap) {
+        return isLeapMonth[leap];
     }
 
     /**

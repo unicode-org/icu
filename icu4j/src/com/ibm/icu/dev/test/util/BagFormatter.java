@@ -3,7 +3,7 @@
 //#else
 /*
  *******************************************************************************
- * Copyright (C) 2002-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -229,21 +229,21 @@ public class BagFormatter {
     }
 
     public String getAbbreviatedName(
-        String source,
+        String src,
         String pattern,
         String substitute) {
 
-        int matchEnd = NameIterator.findMatchingEnd(source, pattern);
-        int sdiv = source.length() - matchEnd;
+        int matchEnd = NameIterator.findMatchingEnd(src, pattern);
+        int sdiv = src.length() - matchEnd;
         int pdiv = pattern.length() - matchEnd;
         StringBuffer result = new StringBuffer();
         addMatching(
-            source.substring(0, sdiv),
+            src.substring(0, sdiv),
             pattern.substring(0, pdiv),
             substitute,
             result);
         addMatching(
-            source.substring(sdiv),
+            src.substring(sdiv),
             pattern.substring(pdiv),
             substitute,
             result);
@@ -318,14 +318,14 @@ public class BagFormatter {
         return getName("", codePoint, codePoint);
     }
 
-    public String getName(String separator, int start, int end) {
+    public String getName(String sep, int start, int end) {
         if (getNameSource() == null || getNameSource() == UnicodeLabel.NULL) return "";
         String result = getName(start, false);
-        if (start == end) return separator + result;
+        if (start == end) return sep + result;
         String endString = getName(end, false);
-        if (result.length() == 0 && endString.length() == 0) return separator;
+        if (result.length() == 0 && endString.length() == 0) return sep;
         if (abbreviated) endString = getAbbreviatedName(endString,result,"~");
-        return separator + result + ".." + endString;
+        return sep + result + ".." + endString;
     }
 
     public String getName(String s) {
@@ -387,8 +387,8 @@ public class BagFormatter {
         return hex(s,separator);
     }
 
-    public String hex(String s, String separator) {
-        return UnicodeLabel.HEX.getValue(s, separator, true);
+    public String hex(String s, String sep) {
+        return UnicodeLabel.HEX.getValue(s, sep, true);
     }
 
     public String hex(int start, int end) {
@@ -446,11 +446,11 @@ public class BagFormatter {
     */
 
     private void addMatching(
-        String source,
+        String src,
         String pattern,
         String substitute,
         StringBuffer result) {
-        NameIterator n1 = new NameIterator(source);
+        NameIterator n1 = new NameIterator(src);
         NameIterator n2 = new NameIterator(pattern);
         boolean first = true;
         while (true) {
@@ -506,8 +506,8 @@ public class BagFormatter {
           output.print(tabber.process(s) +  lineSeparator);
         }
 
-        public void doAt(Object c, PrintWriter output) {
-            this.output = output;
+        public void doAt(Object c, PrintWriter out) {
+            output = out;
             isHtml = tabber instanceof Tabber.HTMLTabber;
             counter = 0;
             
@@ -745,9 +745,9 @@ public class BagFormatter {
         int start, limit;
         private int veryLimit;
         //String label, value;
-        void reset(int start, int limit) {
-            this.limit = start;
-            this.veryLimit = limit;
+        void reset(int rangeStart, int rangeLimit) {
+            limit = rangeStart;
+            veryLimit = rangeLimit;
         }
         boolean next() {
             if (limit >= veryLimit)
@@ -956,8 +956,8 @@ public class BagFormatter {
         return valueSource;
     }
 
-    private String getValue(int cp, boolean shortValue) {
-        String result = getValueSource().getValue(cp, shortValue);
+    private String getValue(int cp, boolean shortVal) {
+        String result = getValueSource().getValue(cp, shortVal);
         if (result == null) return NULL_VALUE;
         if (hexValue) result = hex(result, " ");
         return result;

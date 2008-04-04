@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -671,7 +671,11 @@ public class Currency extends MeasureUnit implements Serializable {
      * @deprecated This API is obsolete.
      */
     public final ULocale getLocale(ULocale.Type type) {
-        return ULocale.ROOT;
+        ULocale result = (type == ULocale.ACTUAL_LOCALE) ? actualLocale : validLocale;
+        if (result == null) {
+            return ULocale.ROOT;
+        }
+        return result;
     }
 
     /**
@@ -705,20 +709,13 @@ public class Currency extends MeasureUnit implements Serializable {
         this.actualLocale = actual;
     }
 
-    /**
+    /*
      * The most specific locale containing any resource data, or null.
-     * @see com.ibm.icu.util.ULocale
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
     private ULocale validLocale;
 
-    /**
-     * The locale containing data used to construct this object, or
-     * null.
-     * @see com.ibm.icu.util.ULocale
-     * @internal
-     * @deprecated This API is ICU internal only.
+    /*
+     * The locale containing data used to construct this object, or null.
      */
     private ULocale actualLocale;
 

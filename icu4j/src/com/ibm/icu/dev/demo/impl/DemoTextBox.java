@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -19,7 +19,7 @@ public class DemoTextBox {
         text.getChars(0, text.length(), chars, 0);
 
         this.width = width;
-        this.port = g;
+//        this.port = g;
         this.metrics = g.getFontMetrics();
 
         breakText();
@@ -86,7 +86,7 @@ public class DemoTextBox {
 
     private String          text;
     private char[]          chars;
-    private Graphics        port;
+//    private Graphics        port;
     private FontMetrics     metrics;
     private int             width;
 

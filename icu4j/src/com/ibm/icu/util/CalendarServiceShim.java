@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 2007, International Business Machines
+*   Copyright (C) 2007-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -41,13 +41,13 @@ class CalendarServiceShim extends Calendar.CalendarShim {
             this.delegate = delegate;
         }
 
-        public Object create(Key key, ICUService service) {
+        public Object create(Key key, ICUService srvc) {
             if (handlesKey(key)) {
                 LocaleKey lkey = (LocaleKey)key;
                 ULocale loc = lkey.canonicalLocale();
                 Object result = delegate.createCalendar(loc);
                 if (result == null) {
-                    result = service.getKey(key, null, this);
+                    result = srvc.getKey(key, null, this);
                 }
                 return result;
             }

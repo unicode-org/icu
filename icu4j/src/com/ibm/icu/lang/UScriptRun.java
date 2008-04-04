@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2007, International Business Machines
+ *   Copyright (C) 1999-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -230,19 +230,19 @@ public final class UScriptRun
      * in <code>text</code> starting at <code>start</code>. This allows
      * clients to reuse an iterator.
      *
-     * @param text the new string of characters over which to iterate.
+     * @param str the new string of characters over which to iterate.
      * @param start the index of the first character over which to iterate.
      * @param count the nuber of characters over which to iterate.
      *
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public final void reset(String text, int start, int count)
+    public final void reset(String str, int start, int count)
     {
         char[] chars = null;
         
-        if (text != null) {
-            chars = text.toCharArray();
+        if (str != null) {
+            chars = str.toCharArray();
         }
         
         reset(chars, start, count);
@@ -252,20 +252,20 @@ public final class UScriptRun
      * Reset the iterator to iterate over the characters
      * in <code>text</code>. This allows clients to reuse an iterator.
      *
-     * @param text the new string of characters over which to iterate.
+     * @param str the new string of characters over which to iterate.
      *
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public final void reset(String text)
+    public final void reset(String str)
     {
         int length   = 0;
         
-        if (text != null) {
-            length = text.length();
+        if (str != null) {
+            length = str.length();
         }
         
-        reset(text, 0, length);
+        reset(str, 0, length);
     }
         
 
@@ -459,13 +459,13 @@ public final class UScriptRun
         return ! stackIsEmpty();
     }
     
-    private final void push(int pairIndex, int scriptCode)
+    private final void push(int pairIndex, int scrptCode)
     {
         pushCount  = limitInc(pushCount);
         fixupCount = limitInc(fixupCount);
         
         parenSP = inc(parenSP);
-        parenStack[parenSP] = new ParenStackEntry(pairIndex, scriptCode);
+        parenStack[parenSP] = new ParenStackEntry(pairIndex, scrptCode);
     }
     
     private final void pop()
@@ -501,13 +501,13 @@ public final class UScriptRun
         fixupCount = 0;
     }
     
-    private final void fixup(int scriptCode)
+    private final void fixup(int scrptCode)
     {
         int fixupSP = dec(parenSP, fixupCount);
         
         while (fixupCount-- > 0) {
             fixupSP = inc(fixupSP);
-            parenStack[fixupSP].scriptCode = scriptCode;
+            parenStack[fixupSP].scriptCode = scrptCode;
         }
     }
     

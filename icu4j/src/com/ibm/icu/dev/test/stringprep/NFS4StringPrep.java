@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -60,11 +60,11 @@ public final class NFS4StringPrep {
         }
     }
     
-    private static byte[] prepare(byte[] src, StringPrep prep)
+    private static byte[] prepare(byte[] src, StringPrep strprep)
                 throws StringPrepParseException, UnsupportedEncodingException{
         String s = new String(src, "UTF-8");
         UCharacterIterator iter =  UCharacterIterator.getInstance(s);
-        StringBuffer out = prep.prepare(iter,StringPrep.DEFAULT);
+        StringBuffer out = strprep.prepare(iter,StringPrep.DEFAULT);
         return out.toString().getBytes("UTF-8");
     }
     

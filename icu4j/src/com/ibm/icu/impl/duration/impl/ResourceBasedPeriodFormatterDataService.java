@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and   *
+* Copyright (C) 2007-2008, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -36,7 +36,7 @@ public class ResourceBasedPeriodFormatterDataService
   private PeriodFormatterData lastData = null;
   private String lastLocale = null;
   private Map cache = new HashMap(); // String -> PeriodFormatterData
-  private PeriodFormatterData fallbackFormatterData;
+  //private PeriodFormatterData fallbackFormatterData;
 
   private static final String PATH = "data/";
 

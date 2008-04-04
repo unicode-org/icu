@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -131,7 +131,6 @@ public class HolidayBorderPanel extends Panel {
         this();
 
         // set thickness appropriate to this style
-        int thickness;
         switch (style) {
             case SOLID: thickness = DEFAULT_SOLID_THICKNESS; break;
             case RAISED: thickness = DEFAULT_RAISED_THICKNESS; break;
@@ -143,7 +142,6 @@ public class HolidayBorderPanel extends Panel {
             }
 
         this.style = style;
-        this.thickness = thickness;
         }
 
     /**

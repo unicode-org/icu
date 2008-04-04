@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -498,11 +498,11 @@ public class Demo extends Frame {
         }
     }
     
-    static void printBreaks(int num, String testSource, BreakIterator bi) {
+    static void printBreaks(int num, String testSource, BreakIterator brkItr) {
         String result = "";
         int lastPos = 0;
         while (true) {
-            int pos = bi.next();
+            int pos = brkItr.next();
             if (pos == BreakIterator.DONE) break;
             result += testSource.substring(lastPos, pos) + "&";
             lastPos = pos;
@@ -1166,8 +1166,8 @@ public class Demo extends Frame {
             + (inv == null ? " and " + inv.getID() : ""));
     }
     
-    void addHistory(Transliterator translit) {
-        String name = translit.getID();
+    void addHistory(Transliterator trans) {
+        String name = trans.getID();
         MenuItem cmi = (MenuItem) historyMap.get(name);
         if (cmi == null) {
             cmi = new MenuItem(Transliterator.getDisplayName(name));
@@ -1299,8 +1299,8 @@ public class Demo extends Frame {
     }
     */
 
-    private void handleBatchTransliterate(Transliterator translit) {
-        if (translit == null) {
+    private void handleBatchTransliterate(Transliterator trans) {
+        if (trans == null) {
             return;
         }
 
@@ -1316,12 +1316,12 @@ public class Demo extends Frame {
                        ", end " + end + ") -> \"");
         }
 
-        translit.transliterate(s);
+        trans.transliterate(s);
         String str = s.toString();
 
         if (DEBUG) {
             log.append(str + "\"");
-            System.out.println("Batch " + translit.getID() + ": " + log.toString());
+            System.out.println("Batch " + trans.getID() + ": " + log.toString());
         }
 
         text.replaceRange(str, start, end);

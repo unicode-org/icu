@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2002-2007, International Business Machines
+ * Copyright (c) 2002-2008, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -208,7 +208,7 @@ public abstract class PerfTest {
         /**
          * Subclasses should implement this method if the action is not thread-safe
          */
-        public void call(int id) { call(); }
+        public void call(int i) { call(); }
 
         /**
          * Subclasses may implement this method to return positive integer

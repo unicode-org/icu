@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2007, International Business Machines
+*   Copyright (C) 2004-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -152,12 +152,12 @@ class ReplaceableContextIterator implements UCaseProps.ContextIterator {
     }
 
     // implement UCaseProps.ContextIterator
-    public void reset(int dir) {
-        if(dir>0) {
+    public void reset(int direction) {
+        if(direction>0) {
             /* reset for forward iteration */
             this.dir=1;
             index=cpLimit;
-        } else if(dir<0) {
+        } else if(direction<0) {
             /* reset for backward iteration */
             this.dir=-1;
             index=cpStart;

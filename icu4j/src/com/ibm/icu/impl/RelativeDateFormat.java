@@ -10,6 +10,7 @@ import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -69,9 +70,10 @@ public class RelativeDateFormat extends DateFormat {
         } else {
             fTimeFormat = null;
         }
-        
+
         initializeCalendar(null, fLocale);
         loadDates();
+        initializeCombinedFormat(calendar, fLocale);
     }
     
     /**
@@ -84,23 +86,36 @@ public class RelativeDateFormat extends DateFormat {
      */
     public StringBuffer format(Calendar cal, StringBuffer toAppendTo,
             FieldPosition fieldPosition) {
-        // calculate the difference, in days, between 'cal' and now.
-        int dayDiff = dayDifference(cal);
 
-        // look up string
-        String theString = getStringForDay(dayDiff);
-        
-        if(theString==null) {
-            // didn't find it. Fall through to the fDateFormat 
-            if(fDateFormat != null) {
-                return fDateFormat.format(cal,toAppendTo,fieldPosition);
-            } else {
-                return toAppendTo; // no op
+        //TODO: handle FieldPosition properly
+
+        String dayString = null;
+        String timeString = null;
+        if (fDateStyle != DateFormat.NONE) {
+            // calculate the difference, in days, between 'cal' and now.
+            int dayDiff = dayDifference(cal);
+
+            // look up string
+            dayString = getStringForDay(dayDiff);
+
+            if (dayString == null) {
+                // didn't find it. Fall through to the fDateFormat 
+                dayString = fDateFormat.format(cal);
             }
-        } else {
-            // found a relative string
-            return toAppendTo.append(theString);
         }
+        if (fTimeStyle != DateFormat.NONE) {
+            timeString = fTimeFormat.format(cal);
+        }
+
+        if (dayString != null && timeString != null) {
+            return fCombinedFormat.format(new Object[] {dayString, timeString}, toAppendTo,
+                    new FieldPosition(0));
+        } else if (dayString != null) {
+            toAppendTo.append(dayString);
+        } else if (timeString != null) {
+            toAppendTo.append(timeString);
+        }
+        return toAppendTo;
     }
 
     /* (non-Javadoc)
@@ -110,10 +125,10 @@ public class RelativeDateFormat extends DateFormat {
         throw new UnsupportedOperationException("Relative Date parse is not implemented yet");
     }
 
-    private DateFormat fDateFormat; // the held date format 
+    private DateFormat fDateFormat; // the held date format
     private DateFormat fTimeFormat; // the held time format
     private MessageFormat fCombinedFormat; //  the {0} {1} format. 
-    
+
     int fDateStyle;
     int fTimeStyle;
     ULocale  fLocale;
@@ -201,5 +216,20 @@ public class RelativeDateFormat extends DateFormat {
             }
         }
         return calendar;
+    }
+
+    private MessageFormat initializeCombinedFormat(Calendar cal, ULocale locale) {
+        String pattern = "{1} {0}";
+        try {
+            CalendarData calData = new CalendarData(locale, cal.getType());
+            String[] patterns = calData.get("DateTimePatterns").getStringArray();
+            if (patterns != null && patterns.length >= 9) {
+                pattern = patterns[8];
+            }
+        } catch (MissingResourceException e) {
+            // use default
+        }
+        fCombinedFormat = new MessageFormat(pattern, locale);
+        return fCombinedFormat;
     }
 }

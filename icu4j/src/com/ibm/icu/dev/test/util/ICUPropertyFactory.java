@@ -3,7 +3,7 @@
 //#else
 /*
  *******************************************************************************
- * Copyright (C) 2002-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -236,8 +236,8 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
             /* (non-Javadoc)
              * @see com.ibm.icu.dev.test.util.UnicodePropertySource#getPropertyType()
              */
-            private int internalGetPropertyType(int propEnum) {
-                switch(propEnum) {
+            private int internalGetPropertyType(int prop) {
+                switch(prop) {
                     case UProperty.AGE: 
                     case UProperty.BLOCK: 
                     case UProperty.SCRIPT: 
@@ -257,14 +257,14 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
                     case UProperty.UPPERCASE_MAPPING: 
                         return UnicodeProperty.EXTENDED_STRING;
                 }
-                if (propEnum < UProperty.BINARY_START) return UnicodeProperty.UNKNOWN;
-                if (propEnum < UProperty.BINARY_LIMIT) return UnicodeProperty.BINARY;
-                if (propEnum < UProperty.INT_START) return UnicodeProperty.EXTENDED_BINARY;
-                if (propEnum < UProperty.INT_LIMIT) return UnicodeProperty.ENUMERATED;
-                if (propEnum < UProperty.DOUBLE_START) return UnicodeProperty.EXTENDED_ENUMERATED;
-                if (propEnum < UProperty.DOUBLE_LIMIT) return UnicodeProperty.NUMERIC;
-                if (propEnum < UProperty.STRING_START) return UnicodeProperty.EXTENDED_NUMERIC;
-                if (propEnum < UProperty.STRING_LIMIT) return UnicodeProperty.STRING;
+                if (prop < UProperty.BINARY_START) return UnicodeProperty.UNKNOWN;
+                if (prop < UProperty.BINARY_LIMIT) return UnicodeProperty.BINARY;
+                if (prop < UProperty.INT_START) return UnicodeProperty.EXTENDED_BINARY;
+                if (prop < UProperty.INT_LIMIT) return UnicodeProperty.ENUMERATED;
+                if (prop < UProperty.DOUBLE_START) return UnicodeProperty.EXTENDED_ENUMERATED;
+                if (prop < UProperty.DOUBLE_LIMIT) return UnicodeProperty.NUMERIC;
+                if (prop < UProperty.STRING_START) return UnicodeProperty.EXTENDED_NUMERIC;
+                if (prop < UProperty.STRING_LIMIT) return UnicodeProperty.STRING;
                 return UnicodeProperty.EXTENDED_STRING;
             }
 

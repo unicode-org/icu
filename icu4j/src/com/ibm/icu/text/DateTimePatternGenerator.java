@@ -2,10 +2,10 @@
 //#if defined(FOUNDATION10) || defined(J2SE13)
 //#else
 /*
- *******************************************************************************
- * Copyright (C) 2006-2007, Google, International Business Machines Corporation *
- * and others. All Rights Reserved.                                            *
- *******************************************************************************
+ ********************************************************************************
+ * Copyright (C) 2006-2008, Google, International Business Machines Corporation *
+ * and others. All Rights Reserved.                                             *
+ ********************************************************************************
  */
 package com.ibm.icu.text;
 
@@ -611,11 +611,11 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         synchronized (this) { // synchronized since a getter must be thread-safe
             if (output == null) output = new LinkedHashSet();
             for (Iterator it = skeleton2pattern.keySet().iterator(); it.hasNext();) {
-                DateTimeMatcher current = (DateTimeMatcher) it.next();
-                String pattern = (String) skeleton2pattern.get(current);
+                DateTimeMatcher cur = (DateTimeMatcher) it.next();
+                String pattern = (String) skeleton2pattern.get(cur);
                 if (CANONICAL_SET.contains(pattern)) continue;
-                skipMatcher = current;
-                String trial = getBestPattern(current.toString());
+                skipMatcher = cur;
+                String trial = getBestPattern(cur.toString());
                 if (trial.equals(pattern)) {
                     output.add(pattern);
                 }
@@ -624,11 +624,11 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
                 DateTimePatternGenerator results = new DateTimePatternGenerator();
                 PatternInfo pinfo = new PatternInfo();
                 for (Iterator it = skeleton2pattern.keySet().iterator(); it.hasNext();) {
-                    DateTimeMatcher current = (DateTimeMatcher) it.next();
-                    String pattern = (String) skeleton2pattern.get(current);
+                    DateTimeMatcher cur = (DateTimeMatcher) it.next();
+                    String pattern = (String) skeleton2pattern.get(cur);
                     if (CANONICAL_SET.contains(pattern)) continue;
                     //skipMatcher = current;
-                    String trial = results.getBestPattern(current.toString());
+                    String trial = results.getBestPattern(cur.toString());
                     if (trial.equals(pattern)) {
                         output.add(pattern);
                     } else {
@@ -1295,7 +1295,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     private transient DateTimeMatcher current = new DateTimeMatcher();
     private transient FormatParser fp = new FormatParser();
     private transient DistanceInfo _distanceInfo = new DistanceInfo();
-    private transient boolean isComplete = false;
+    //private transient boolean isComplete = false;
     private transient DateTimeMatcher skipMatcher = null; // only used temporarily, for internal purposes
     private transient boolean frozen = false;
     
@@ -1381,7 +1381,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
             //char c = (char)types[i][0];
             addPattern(String.valueOf(CANONICAL_ITEMS[i]), false, patternInfo);
         }
-        isComplete = true;
+        //isComplete = true;
     }
     {
         complete();

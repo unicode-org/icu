@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -239,7 +239,7 @@ public class CollationMonkeyTest extends TestFmwk {
         reportCResult( mysource, target, sortKey1, sortKey2, compareResult, keyResult, compareResult, result );
     }
     
-    public void reportCResult(String source, String target, CollationKey sourceKey, CollationKey targetKey,
+    public void reportCResult(String src, String target, CollationKey sourceKey, CollationKey targetKey,
                               int compareResult, int keyResult, int incResult, int expectedResult ) {
         if (expectedResult < -1 || expectedResult > 1) {
             errln("***** invalid call to reportCResult ****");
@@ -260,18 +260,18 @@ public class CollationMonkeyTest extends TestFmwk {
             sResult = appendCompareResult(compareResult, sResult);
             sExpect = appendCompareResult(expectedResult, sExpect);
             if (ok1) {
-                logln(msg1 + source + msg2 + target + msg3 + sResult);
+                logln(msg1 + src + msg2 + target + msg3 + sResult);
             } else {
-                errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
+                errln(msg1 + src + msg2 + target + msg3 + sResult + msg4 + sExpect);
             }
             msg1 = ok2 ? "Ok: key(\"" : "FAIL: key(\"";
             msg2 = "\").compareTo(key(\"";
             msg3 = "\")) returned ";
             sResult = appendCompareResult(keyResult, sResult);
             if (ok2) {
-                logln(msg1 + source + msg2 + target + msg3 + sResult);
+                logln(msg1 + src + msg2 + target + msg3 + sResult);
             } else {
-                errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
+                errln(msg1 + src + msg2 + target + msg3 + sResult + msg4 + sExpect);
                 msg1 = "  ";
                 msg2 = " vs. ";
                 errln(msg1 + prettify(sourceKey) + msg2 + prettify(targetKey));
@@ -281,9 +281,9 @@ public class CollationMonkeyTest extends TestFmwk {
             msg3 = "\") returned ";
             sResult = appendCompareResult(incResult, sResult);
             if (ok3) {
-                logln(msg1 + source + msg2 + target + msg3 + sResult);
+                logln(msg1 + src + msg2 + target + msg3 + sResult);
             } else {
-                errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
+                errln(msg1 + src + msg2 + target + msg3 + sResult + msg4 + sExpect);
             }                
         }
     }

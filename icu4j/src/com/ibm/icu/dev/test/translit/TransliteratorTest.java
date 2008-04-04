@@ -2071,20 +2071,21 @@ public class TransliteratorTest extends TestFmwk {
      * Test instantiation from a locale.
      */
     public void TestLocaleInstantiation() {
+        Transliterator t;
         try{
-            Transliterator t = Transliterator.getInstance("te_IN-Latin");
+            t = Transliterator.getInstance("te_IN-Latin");
             //expect(t, "\u0430", "a");
         }catch(IllegalArgumentException ex){
             warnln("Could not load locale data for obtaining the script used in the locale te_IN. "+ex.getMessage());
         }
         try{
-            Transliterator t = Transliterator.getInstance("ru_RU-Latin");
+            t = Transliterator.getInstance("ru_RU-Latin");
             expect(t, "\u0430", "a");
         }catch(IllegalArgumentException ex){
             warnln("Could not load locale data for obtaining the script used in the locale ru_RU. "+ex.getMessage());
         }
         try{
-            Transliterator t = Transliterator.getInstance("en-el");
+            t = Transliterator.getInstance("en-el");
             expect(t, "a", "\u03B1");
         }catch(IllegalArgumentException ex){
             warnln("Could not load locale data for obtaining the script used in the locale el. "+ ex.getMessage());

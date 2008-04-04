@@ -177,11 +177,11 @@ public class UnicodeSetIterator {
      * Sets this iterator to visit the elements of the given set and
      * resets it to the start of that set.  The iterator is valid only
      * so long as <tt>set</tt> is valid.
-     * @param set the set to iterate over.
+     * @param uset the set to iterate over.
      * @stable ICU 2.0
      */
-    public void reset(UnicodeSet set) {
-        this.set = set;
+    public void reset(UnicodeSet uset) {
+        set = uset;
         reset();
     }
         
@@ -241,8 +241,8 @@ public class UnicodeSetIterator {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    protected void loadRange(int range) {
-        nextElement = set.getRangeStart(range);
-        endElement = set.getRangeEnd(range);
+    protected void loadRange(int aRange) {
+        nextElement = set.getRangeStart(aRange);
+        endElement = set.getRangeEnd(aRange);
     }
 }
