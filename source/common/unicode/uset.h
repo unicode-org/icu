@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2007, International Business Machines
+*   Copyright (C) 2002-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -244,7 +244,8 @@ typedef struct USerializedSet {
 
 /**
  * Creates a USet object that contains the range of characters
- * start..end, inclusive.
+ * start..end, inclusive.  If <code>start > end</code> 
+ * then an empty set is created.
  * @param start first character of the range, inclusive
  * @param end last character of the range, inclusive
  * @return a newly created USet.  The caller must call uset_close() on
