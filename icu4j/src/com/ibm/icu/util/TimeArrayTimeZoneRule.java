@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -36,7 +36,7 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
      *                      (January 1, 1970, 00:00:00).
      * @param timeType      The time type of the start times, which is one of
      *                      <code>DataTimeRule.WALL_TIME</code>, <code>STANDARD_TIME</code>
-     *                      and <code>UNIVERSAL_TIME</code>.
+     *                      and <code>UTC_TIME</code>.
      * 
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.
@@ -67,7 +67,7 @@ public class TimeArrayTimeZoneRule extends TimeZoneRule {
     /**
      * Gets the time type of the start times used by this rule.  The return value
      * is either <code>DateTimeRule.WALL_TIME</code> or <code>DateTimeRule.STANDARD_TIME</code>
-     * or <code>DateTimeRule.UNIVERSAL_TIME</code>.
+     * or <code>DateTimeRule.UTC_TIME</code>.
      * 
      * @return The time type used of the start times used by this rule.
      * @draft ICU 3.8
