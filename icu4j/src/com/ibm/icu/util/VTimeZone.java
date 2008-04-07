@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.Grego;
+import com.ibm.icu.util.DateTimeRule;
 
 /**
  * <code>VTimeZone</code> is a class implementing RFC2445 VTIMEZONE.  You can create a
@@ -668,7 +669,7 @@ public class VTimeZone extends BasicTimeZone {
                         // Parse TZOFFSETFROM/TZOFFSETTO
                         fromOffset = offsetStrToMillis(from);
                         toOffset = offsetStrToMillis(to);
-                        
+
                         if (dst) {
                             // If daylight, use the previous offset as rawoffset if positive
                             if (toOffset - fromOffset > 0) {
@@ -747,6 +748,77 @@ public class VTimeZone extends BasicTimeZone {
 
         // Finally, create the RuleBasedTimeZone
         RuleBasedTimeZone rbtz = new RuleBasedTimeZone(tzid, initialRule);
+
+        int finalRuleIdx = -1;
+        int finalRuleCount = 0;
+        for (int i = 0; i < rules.size(); i++) {
+            TimeZoneRule r = (TimeZoneRule)rules.get(i);
+            if (r instanceof AnnualTimeZoneRule) {
+                if (((AnnualTimeZoneRule)r).getEndYear() == AnnualTimeZoneRule.MAX_YEAR) {
+                    finalRuleCount++;
+                    finalRuleIdx = i;
+                }
+            }
+        }
+        if (finalRuleCount > 2) {
+            // Too many final rules
+            return false;
+        }
+
+        if (finalRuleCount == 1) {
+            if (rules.size() == 1) {
+                // Only one final rule, only governs the initial rule,
+                // which is already initialized, thus, we do not need to
+                // add this transition rule
+                tz = rbtz;
+                setID(tzid);
+                return true;
+            }
+
+            // Normalize the final rule
+            AnnualTimeZoneRule finalRule = (AnnualTimeZoneRule)rules.get(finalRuleIdx);
+            int tmpRaw = finalRule.getRawOffset();
+            int tmpDST = finalRule.getDSTSavings();
+
+            // Find the last non-final rule
+            Date finalStart = finalRule.getFirstStart(initialRawOffset, initialDSTSavings);
+            Date start = finalStart;
+            for (int i = 0; i < rules.size(); i++) {
+                if (finalRuleIdx == i) {
+                    continue;
+                }
+                TimeZoneRule r = (TimeZoneRule)rules.get(i);
+                Date lastStart = r.getFinalStart(tmpRaw, tmpDST);
+                if (lastStart.after(start)) {
+                    start = finalRule.getNextStart(lastStart.getTime(),
+                            r.getRawOffset(),
+                            r.getDSTSavings(),
+                            false);
+                }
+            }
+            TimeZoneRule newRule;
+            if (start == finalStart) {
+                // Transform this into a single transition
+                newRule = new TimeArrayTimeZoneRule(
+                        finalRule.getName(),
+                        finalRule.getRawOffset(),
+                        finalRule.getDSTSavings(),
+                        new long[] {finalStart.getTime()},
+                        DateTimeRule.UTC_TIME);
+            } else {
+                // Update the end year
+                int fields[] = Grego.timeToFields(start.getTime(), null);
+                newRule = new AnnualTimeZoneRule(
+                        finalRule.getName(),
+                        finalRule.getRawOffset(),
+                        finalRule.getDSTSavings(),
+                        finalRule.getRule(),
+                        finalRule.getStartYear(),
+                        fields[0]);
+            }
+            rules.set(finalRuleIdx, newRule);
+        }
+
         Iterator rit = rules.iterator();
         while(rit.hasNext()) {
             rbtz.addTransitionRule((TimeZoneRule)rit.next());
