@@ -131,30 +131,29 @@ public class RBBITestMonkey extends TestFmwk {
     }
     
     int next(int prevPos) {
-        int    p0, p1, p2, p3;    // Indices of the significant code points around the
-                                  //   break position being tested.  The candidate break
-                                  //   location is before p2.
+        int    p1, p2, p3;    // Indices of the significant code points around the
+                              //   break position being tested.  The candidate break
+                              //   location is before p2.
     
         int     breakPos = -1;
     
-        int   c0, c1, c2, c3;     // The code points at p0, p1, p2 & p3.
+        int   c1, c2, c3;     // The code points at p0, p1, p2 & p3.
         
         // Previous break at end of string.  return DONE.
         if (prevPos >= fText.length()) {
             return -1;
         }
-        p0 = p1 = p2 = p3 = prevPos;
+        p1 = p2 = p3 = prevPos;
         c3 =  UTF16.charAt(fText, prevPos);
-        c0 = c1 = c2 = 0;
+        c1 = c2 = 0;
     
         // Loop runs once per "significant" character position in the input text.
         for (;;) {
             // Move all of the positions forward in the input string.
-            p0 = p1;  c0 = c1;
             p1 = p2;  c1 = c2;
             p2 = p3;  c2 = c3;
     
-            // Advancd p3 by one codepoint
+            // Advance p3 by one codepoint
             p3 = moveIndex32(fText, p3, 1);
             c3 = (p3>=fText.length())? -1: UTF16.charAt(fText, p3);
     
@@ -381,10 +380,10 @@ public class RBBITestMonkey extends TestFmwk {
                 //
                 if (fCRSet.contains(c1) || fLFSet.contains(c1) || fNewlineSet.contains(c1)) {
                     break;
-                };
+                }
                 if (fCRSet.contains(c2) || fLFSet.contains(c2) || fNewlineSet.contains(c2)) {
                     break;
-                };
+                }
 
                 // Rule (5).   ALetter x ALetter
                 if (fALetterSet.contains(c1) &&
@@ -1789,7 +1788,6 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
                 StringBuilder errorText = new StringBuilder();
 
                 int      c;    // Char from test data
-                int      bn;
                 for (ci = startContext;  ci <= endContext && ci != -1;  ci = nextCP(testText, ci)) {
                     if (ci == i) {
                         // This is the location of the error.
