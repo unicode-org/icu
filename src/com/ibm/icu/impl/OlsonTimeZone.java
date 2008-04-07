@@ -1,6 +1,6 @@
  /*
   *******************************************************************************
-  * Copyright (C) 2005-2006, International Business Machines Corporation and         *
+  * Copyright (C) 2005-2008, International Business Machines Corporation and         *
   * others. All Rights Reserved.                                                *
   *******************************************************************************
   */
@@ -12,6 +12,7 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
 
 /**
  * A time zone based on the Olson database.  Olson time zones change
@@ -162,7 +163,21 @@ public class OlsonTimeZone extends TimeZone {
      * @see com.ibm.icu.util.TimeZone#setRawOffset(int)
      */
     public void setRawOffset(int offsetMillis) {
-        finalZone.setRawOffset(offsetMillis);
+        GregorianCalendar cal = new GregorianCalendar(ULocale.ROOT);
+        cal.setTimeZone(this);
+        int tmpFinalYear = cal.get(Calendar.YEAR) - 1;
+
+        // Apply the raw offset starting current year and beyond
+        if (finalYear > tmpFinalYear) {
+            finalYear = tmpFinalYear;
+            finalMillis = fieldsToDay(tmpFinalYear, 0, 1) * TimeZone.MILLIS_PER_DAY;
+        }
+        if (finalZone == null) {
+            // Create SimpleTimeZone instance to store the offset
+            finalZone = new SimpleTimeZone(offsetMillis, getID());
+        } else {
+            finalZone.setRawOffset(offsetMillis);
+        }
     }
     public Object clone() {
         OlsonTimeZone other = (OlsonTimeZone) super.clone();
