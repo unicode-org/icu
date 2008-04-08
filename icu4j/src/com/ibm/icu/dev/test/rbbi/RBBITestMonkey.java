@@ -8,17 +8,18 @@
 
 
 // Monkey testing of RuleBasedBreakIterator
-import com.ibm.icu.dev.test.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.RuleBasedBreakIterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.lang.UProperty;
-import java.util.List;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.Locale;
 
 
 /**
@@ -1501,21 +1502,22 @@ public class RBBITestMonkey extends TestFmwk {
     //   Blank-pad the string if it is shorter than the field.
     //   Truncate the source string if it is too long.
     //
-    private static void appendToBuf(StringBuilder dest, String src, int fieldLen) {
+    private static void appendToBuf(StringBuffer dest, String src, int fieldLen) {
         int appendLen = src.length();
         if (appendLen >= fieldLen) {
-            appendLen = fieldLen;
+            dest.append(src.substring(0, fieldLen));
+        } else {
+            dest.append(src);
+            while (appendLen < fieldLen) {
+                dest.append(' ');
+                appendLen++;
+            }
         }
-        dest.append(src, 0, appendLen);
-        while (appendLen < fieldLen) {
-            dest.append(' ');
-            appendLen++;
-        }    
-     }
-    
+    }
+
     // Helper function for formatting error output.
     // Display a code point in "\\uxxxx" or "\Uxxxxxxxx" format
-    private static void appendCharToBuf(StringBuilder dest, int c, int fieldLen) {
+    private static void appendCharToBuf(StringBuffer dest, int c, int fieldLen) {
            String hexChars = "0123456789abcdef";
            if (c < 0x10000) {
                 dest.append("\\u");
@@ -1785,7 +1787,7 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
                 }
 
                 // Format looks like   "<data><>\uabcd\uabcd<>\U0001abcd...</data>"
-                StringBuilder errorText = new StringBuilder();
+                StringBuffer errorText = new StringBuffer();
 
                 int      c;    // Char from test data
                 for (ci = startContext;  ci <= endContext && ci != -1;  ci = nextCP(testText, ci)) {
