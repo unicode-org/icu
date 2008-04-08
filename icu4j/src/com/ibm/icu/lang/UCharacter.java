@@ -1954,13 +1954,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 m = new HashMap(BLOCKS_.length);
                 for (int i = 0; i < BLOCKS_.length; ++i) {
                     UnicodeBlock b = BLOCKS_[i];
-                    String name = getPropertyValueName(UProperty.BLOCK, b.getID(), UProperty.NameChoice.LONG);
-                    name = name.toUpperCase().replace(" ", "").replace("_", "").replace("-", "");
+                    String name = trimBlockName(getPropertyValueName(UProperty.BLOCK, b.getID(), UProperty.NameChoice.LONG));
                     m.put(name, b);
                 }
                 mref = new SoftReference(m);
             }
-            UnicodeBlock b = (UnicodeBlock)m.get(blockName.toUpperCase().replace(" ", "").replace("_", "").replace("-", ""));
+            UnicodeBlock b = (UnicodeBlock)m.get(trimBlockName(blockName));
             if (b == null) {
                 throw new IllegalArgumentException();
             }
@@ -1968,6 +1967,18 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         private static SoftReference mref;
 
+        private static String trimBlockName(String name) {
+            String upper = name.toUpperCase();
+            StringBuffer result = new StringBuffer(upper.length());
+            for (int i = 0; i < upper.length(); i++) {
+                char c = upper.charAt(i);
+                if (c != ' ' && c != '_' && c != '-') {
+                    result.append(c);
+                }
+            }
+            return result.toString();
+        }
+        
         /**
          * Returns the type ID of this Unicode block
          * @return integer type ID of this Unicode block
