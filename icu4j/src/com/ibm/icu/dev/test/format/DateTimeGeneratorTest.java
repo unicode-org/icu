@@ -213,7 +213,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
                 if (GENERATE_TEST_DATA) {
                     logln("new String[] {\"" + testSkeleton + "\", \"" + Utility.escape(formatted) + "\"},");
                 } else if (!formatted.equals(testFormatted)) {
-                    if(skipIfBeforeICU(3,9,2)&& uLocale.equals("zh_Hans_CN") && testSkeleton.equals("HHmm")){
+                    if(skipIfBeforeICU(3,9,3)&& uLocale.equals("zh_Hans_CN") && testSkeleton.equals("HHmm")){
                         logln(uLocale + "\tformatted string doesn't match test case: " + testSkeleton + "\t generated: " +  pattern + "\t expected: " + testFormatted + "\t got: " + formatted);
                         continue;
                     }
@@ -392,7 +392,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         DateOrder order2 = getOrdering(style2, uLocale);
         if (!order1.hasSameOrderAs(order2)) {
             if (order1.monthLength == order2.monthLength) { // error if have same month length, different ordering
-                if (skipIfBeforeICU(3,9,2)) {
+                if (skipIfBeforeICU(3,9,3)) {
                     logln(showOrderComparison(uLocale, style1, style2, order1, order2));
                 } else {
                     errln(showOrderComparison(uLocale, style1, style2, order1, order2));
