@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- * Copyright (C) 2003-2007, International Business Machines Corporation
+ * Copyright (C) 2003-2008, International Business Machines Corporation
  * and others. All Rights Reserved.
  ********************************************************************************
  *
@@ -107,6 +107,13 @@ public:
      * @internal
      */
     virtual int32_t handleGetExtendedYear();
+
+    /**
+     * Return the maximum value that this field could have, given the current date.
+     * @internal
+     */
+    virtual int32_t getActualMaximum(UCalendarDateFields field, UErrorCode& status) const;
+
 
 public:
     /**

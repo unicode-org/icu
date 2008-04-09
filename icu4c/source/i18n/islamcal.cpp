@@ -138,18 +138,21 @@ UBool IslamicCalendar::isCivil() {
 // Minimum / Maximum access functions
 //-------------------------------------------------------------------------
 
+// Note: Current IslamicCalendar implementation does not work
+// well with negative years.
+
 static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
     // Minimum  Greatest    Least  Maximum
     //           Minimum  Maximum
-    {        0,        0,       0,       0 }, // ERA
-    {        1,        1, 5000000, 5000000 }, // YEAR
-    {        0,        0,      11,      11 }, // MONTH
-    {        1,        1,      50,      51 }, // WEEK_OF_YEAR
-    {        0,        0,       4,       6 }, // WEEK_OF_MONTH
-    {        1,        1,      29,      30 }, // DAY_OF_MONTH
-    {        1,        1,     354,     355 }, // DAY_OF_YEAR
+    {        0,        0,        0,        0}, // ERA
+    {        1,        1,  5000000,  5000000}, // YEAR
+    {        0,        0,       11,       11}, // MONTH
+    {        1,        1,       50,       51}, // WEEK_OF_YEAR
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // WEEK_OF_MONTH
+    {        1,        1,       29,       30}, // DAY_OF_MONTH
+    {        1,        1,      354,      355}, // DAY_OF_YEAR
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DAY_OF_WEEK
-    {       -1,       -1,       5,       5 }, // DAY_OF_WEEK_IN_MONTH
+    {       -1,       -1,        5,        5}, // DAY_OF_WEEK_IN_MONTH
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // AM_PM
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // HOUR
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // HOUR_OF_DAY
@@ -158,9 +161,9 @@ static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECOND
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // ZONE_OFFSET
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DST_OFFSET
-    { 1, 1, 5000001, 5000001 }, // YEAR_WOY
+    {        1,        1,  5000000,  5000000}, // YEAR_WOY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DOW_LOCAL
-    { 1, 1, 5000000, 5000000 }, // EXTENDED_YEAR
+    {        1,        1,  5000000,  5000000}, // EXTENDED_YEAR
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // JULIAN_DAY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECONDS_IN_DAY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // IS_LEAP_MONTH

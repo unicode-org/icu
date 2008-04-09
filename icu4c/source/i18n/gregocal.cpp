@@ -76,27 +76,27 @@ static const int8_t kLeapMonthLength[]
 static const int32_t kGregorianCalendarLimits[UCAL_FIELD_COUNT][4] = {
     // Minimum  Greatest    Least  Maximum
     //           Minimum  Maximum
-    {        0,        0,       1,       1 }, // ERA
-    {        1,        1,  140742,  144683 }, // YEAR
-    {        0,        0,      11,      11 }, // MONTH
-    {        1,        1,      52,      53 }, // WEEK_OF_YEAR
-    {        0,        0,       4,       6 }, // WEEK_OF_MONTH
-    {        1,        1,      28,      31 }, // DAY_OF_MONTH
-    {        1,        1,     365,     366 }, // DAY_OF_YEAR
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// DAY_OF_WEEK
-    {       -1,       -1,       4,       5 }, // DAY_OF_WEEK_IN_MONTH
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// AM_PM
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// HOUR
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// HOUR_OF_DAY
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// MINUTE
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// SECOND
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// MILLISECOND
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// ZONE_OFFSET
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// DST_OFFSET
-    { -140742, -140742, 140742, 144683 }, // YEAR_WOY
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// DOW_LOCAL
-    { -140742, -140742, 140742, 144683 }, // EXTENDED_YEAR
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// JULIAN_DAY
+    {        0,        0,        1,        1}, // ERA
+    {        1,        1,   140742,   144683}, // YEAR
+    {        0,        0,       11,       11}, // MONTH
+    {        1,        1,       52,       53}, // WEEK_OF_YEAR
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // WEEK_OF_MONTH
+    {        1,        1,       28,       31}, // DAY_OF_MONTH
+    {        1,        1,      365,      366}, // DAY_OF_YEAR
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DAY_OF_WEEK
+    {       -1,       -1,        4,        5}, // DAY_OF_WEEK_IN_MONTH
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // AM_PM
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // HOUR
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // HOUR_OF_DAY
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MINUTE
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // SECOND
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECOND
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // ZONE_OFFSET
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DST_OFFSET
+    {  -140742,  -140742,   140742,   144683}, // YEAR_WOY
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DOW_LOCAL
+    {  -140742,  -140742,   140742,   144683}, // EXTENDED_YEAR
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // JULIAN_DAY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECONDS_IN_DAY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // IS_LEAP_MONTH
 };

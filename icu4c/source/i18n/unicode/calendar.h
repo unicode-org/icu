@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2006, International Business Machines
+*   Copyright (C) 1997-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -962,7 +962,7 @@ public:
      * @return         the minimum of the given field for the current date of this Calendar
      * @stable ICU 2.6.
      */
-    int32_t getActualMinimum(UCalendarDateFields field, UErrorCode& status) const;
+    virtual int32_t getActualMinimum(UCalendarDateFields field, UErrorCode& status) const;
 
     /**
      * Return the maximum value that this field could have, given the current date.
@@ -998,7 +998,7 @@ public:
      * @return         the maximum of the given field for the current date of this Calendar
      * @stable ICU 2.6.
      */
-    int32_t getActualMaximum(UCalendarDateFields field, UErrorCode& status) const;
+    virtual int32_t getActualMaximum(UCalendarDateFields field, UErrorCode& status) const;
 
     /**
      * Gets the value for a given time field. Recalculate the current time field values
