@@ -649,19 +649,18 @@ static void TestFieldGetSet()
     verify1("1997 last Tuesday in June = ", cal, datdef,1997,   UCAL_JUNE, 24);
     /*give undesirable input    */
     status = U_ZERO_ERROR;
-        ucal_clear(cal);
-        ucal_set(cal, UCAL_YEAR, 1997);
-        ucal_set(cal, UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
-        ucal_set(cal, UCAL_MONTH, UCAL_JUNE);
-        ucal_set(cal, UCAL_DAY_OF_WEEK_IN_MONTH, 0);
-        d1=ucal_getMillis(cal,&status);
-        if (status != U_ILLEGAL_ARGUMENT_ERROR){ 
-            log_err("FAIL: No IllegalArgumentError for :");
-            log_err("1997 zero-th Tuesday in June \n");
-        }
-        else 
-            log_verbose("PASS: IllegalArgumentError as expected\n");
-   
+    ucal_clear(cal);
+    ucal_set(cal, UCAL_YEAR, 1997);
+    ucal_set(cal, UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
+    ucal_set(cal, UCAL_MONTH, UCAL_JUNE);
+    ucal_set(cal, UCAL_DAY_OF_WEEK_IN_MONTH, 0);
+    d1 = ucal_getMillis(cal, &status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) { 
+        log_err("FAIL: U_ILLEGAL_ARGUMENT_ERROR was not returned for : 1997 zero-th Tuesday in June\n");
+    } else {
+        log_verbose("PASS: U_ILLEGAL_ARGUMENT_ERROR as expected\n");
+    }
+    status = U_ZERO_ERROR;
     ucal_clear(cal);
     ucal_set(cal, UCAL_YEAR, 1997);
     ucal_set(cal, UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
@@ -680,7 +679,13 @@ static void TestFieldGetSet()
     ucal_set(cal, UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
     ucal_set(cal, UCAL_MONTH, UCAL_JUNE);
     ucal_set(cal, UCAL_WEEK_OF_MONTH, 0);
-    verify1("1997 Tuesday in week 0 of June = ", cal, datdef , 1997, UCAL_MAY, 27);
+    d1 = ucal_getMillis(cal,&status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR){ 
+        log_err("FAIL: U_ILLEGAL_ARGUMENT_ERROR was not returned for : 1997 Tuesday zero-th week in June\n");
+    } else {
+        log_verbose("PASS: U_ILLEGAL_ARGUMENT_ERROR as expected\n");
+    }
+    status = U_ZERO_ERROR;
     ucal_clear(cal);
     ucal_set(cal, UCAL_YEAR_WOY, 1997);
     ucal_set(cal, UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
@@ -696,13 +701,13 @@ static void TestFieldGetSet()
     ucal_set(cal, UCAL_DAY_OF_YEAR, 1);
     verify1("1999 1st day of the year =", cal, datdef, 1999, UCAL_JANUARY, 1);
     ucal_set(cal, UCAL_MONTH, -3);
-    d1=ucal_getMillis(cal,&status);
-        if (status != U_ILLEGAL_ARGUMENT_ERROR){ 
-            log_err("FAIL: No IllegalArgumentError for :\"1999 -3th month \" ");
-        }
-        else 
-            log_verbose("PASS: IllegalArgumentError as expected\n");
-    
+    d1 = ucal_getMillis(cal,&status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR){ 
+        log_err("FAIL: U_ILLEGAL_ARGUMENT_ERROR was not returned for : 1999 -3th month\n");
+    } else {
+        log_verbose("PASS: U_ILLEGAL_ARGUMENT_ERROR as expected\n");
+    }
+
     ucal_setAttribute(cal, UCAL_LENIENT, 1);
     
     ucal_set(cal, UCAL_MONTH, -3);
