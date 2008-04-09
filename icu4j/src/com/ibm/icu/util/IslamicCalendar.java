@@ -326,31 +326,34 @@ public class IslamicCalendar extends Calendar {
     // Minimum / Maximum access functions
     //-------------------------------------------------------------------------
 
+    // Note: Current IslamicCalendar implementation does not work
+    // well with negative years.
+
     private static final int LIMITS[][] = {
-        // Minimum  Greatest    Least  Maximum
-        //           Minimum  Maximum
-        {        0,        0,       0,       0 }, // ERA
-        { -5000000, -5000000, 5000000, 5000000 }, // YEAR
-        {        0,        0,      11,      11 }, // MONTH
-        {        1,        1,      50,      51 }, // WEEK_OF_YEAR
-        {/*                                  */}, // WEEK_OF_MONTH
-        {        1,        1,      29,      30 }, // DAY_OF_MONTH
-        {        1,        1,     354,     355 }, // DAY_OF_YEAR
-        {/*                                  */}, // DAY_OF_WEEK
-        {       -1,       -1,       5,       5 }, // DAY_OF_WEEK_IN_MONTH
-        {/*                                  */}, // AM_PM
-        {/*                                  */}, // HOUR
-        {/*                                  */}, // HOUR_OF_DAY
-        {/*                                  */}, // MINUTE
-        {/*                                  */}, // SECOND
-        {/*                                  */}, // MILLISECOND
-        {/*                                  */}, // ZONE_OFFSET
-        {/*                                  */}, // DST_OFFSET
-        { -5000000, -5000000, 5000000, 5000000 }, // YEAR_WOY
-        {/*                                  */}, // DOW_LOCAL
-        { -5000000, -5000000, 5000000, 5000000 }, // EXTENDED_YEAR
-        {/*                                  */}, // JULIAN_DAY
-        {/*                                  */}, // MILLISECONDS_IN_DAY
+        // Minimum  Greatest     Least   Maximum
+        //           Minimum   Maximum
+        {        0,        0,        0,        0}, // ERA
+        {        1,        1,  5000000,  5000000}, // YEAR
+        {        0,        0,       11,       11}, // MONTH
+        {        1,        1,       50,       51}, // WEEK_OF_YEAR
+        {/*                                   */}, // WEEK_OF_MONTH
+        {        1,        1,       29,       30}, // DAY_OF_MONTH
+        {        1,        1,      354,      355}, // DAY_OF_YEAR
+        {/*                                   */}, // DAY_OF_WEEK
+        {       -1,       -1,        5,        5}, // DAY_OF_WEEK_IN_MONTH
+        {/*                                   */}, // AM_PM
+        {/*                                   */}, // HOUR
+        {/*                                   */}, // HOUR_OF_DAY
+        {/*                                   */}, // MINUTE
+        {/*                                   */}, // SECOND
+        {/*                                   */}, // MILLISECOND
+        {/*                                   */}, // ZONE_OFFSET
+        {/*                                   */}, // DST_OFFSET
+        {        1,        1,  5000000,  5000000}, // YEAR_WOY
+        {/*                                   */}, // DOW_LOCAL
+        {        1,        1,  5000000,  5000000}, // EXTENDED_YEAR
+        {/*                                   */}, // JULIAN_DAY
+        {/*                                   */}, // MILLISECONDS_IN_DAY
     };
 
     /**

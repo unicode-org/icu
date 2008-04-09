@@ -321,7 +321,7 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
 
         for (i=0; i<cal.getFieldCount(); ++i) {
             if (cal.getMinimum(i) > cal.getGreatestMinimum(i))
-                errln("FAIL: getMinimum larger getGreatestMinimum for field " + i);
+                errln("FAIL: getMinimum larger than getGreatestMinimum for field " + i);
             if (cal.getLeastMaximum(i) > cal.getMaximum(i))
                 errln("FAIL: getLeastMaximum larger than getMaximum for field " + i);
             if (cal.getMinimum(i) >= cal.getMaximum(i))
@@ -582,17 +582,18 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
         c.set(Calendar.WEEK_OF_YEAR, 10);
         verify765("1997 Tuesday in week 10 of year = ", c, 1997, Calendar.MARCH, 4);
 
+        e = null;
         try {
             c.clear();
             c.set(Calendar.YEAR, 1997);
             c.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
             c.set(Calendar.WEEK_OF_YEAR, 0);
-            verify765("1997 Tuesday in week 0 of year = ", c, 1996, Calendar.DECEMBER, 24);
-            throw new Exception("Fail: WEEK_OF_YEAR 0 should be illegal");
+            c.getTime();
         }
         catch (IllegalArgumentException ex) {
-            System.out.print("");
+            e = ex;
         }
+        verify765("1997 Tuesday in week 0 of year = ", e, c);
     }
     void verify765(String msg, Calendar c, int year, int month, int day) {
         int cy = c.get(Calendar.YEAR); // NEWCAL

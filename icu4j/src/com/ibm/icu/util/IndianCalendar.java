@@ -419,31 +419,30 @@ public class IndianCalendar extends Calendar {
      }
 
     private static final int LIMITS[][] = {
-        // Minimum  Greatest    Least  Maximum
-        //           Minimum  Maximum
-        {        0,        0,       0,       0 }, // ERA
-        { -5000000, -5000000, 5000000, 5000000 }, // YEAR
-        {        0,        0,      11,      11 }, // MONTH
-        {        1,        1,      52,      53 }, // WEEK_OF_YEAR
-        {/*                                  */}, // WEEK_OF_MONTH
-        {        1,        1,      30,      31 }, // DAY_OF_MONTH
-        {        1,        1,     365,     366 }, // DAY_OF_YEAR
-        {/*                                  */}, // DAY_OF_WEEK
-        {       -1,       -1,       5,       5 }, // DAY_OF_WEEK_IN_MONTH
-        {/*                                  */}, // AM_PM
-        {/*                                  */}, // HOUR
-        {/*                                  */}, // HOUR_OF_DAY
-        {/*                                  */}, // MINUTE
-        {/*                                  */}, // SECOND
-        {/*                                  */}, // MILLISECOND
-        {/*                                  */}, // ZONE_OFFSET
-        {/*                                  */}, // DST_OFFSET
-        { -5000000, -5000000, 5000000, 5000000 }, // YEAR_WOY
-        {/*                                  */}, // DOW_LOCAL
-        { -5000000, -5000000, 5000000, 5000000 }, // EXTENDED_YEAR
-        {/*                                  */}, // JULIAN_DAY
-        {/*                                  */}, // MILLISECONDS_IN_DAY
-        {        0,        0,       0,       0 }, // ERA_WOY
+        // Minimum  Greatest     Least    Maximum
+        //           Minimum   Maximum
+        {        0,        0,        0,        0}, // ERA
+        { -5000000, -5000000,  5000000,  5000000}, // YEAR
+        {        0,        0,       11,       11}, // MONTH
+        {        1,        1,       52,       53}, // WEEK_OF_YEAR
+        {/*                                   */}, // WEEK_OF_MONTH
+        {        1,        1,       30,       31}, // DAY_OF_MONTH
+        {        1,        1,      365,      366}, // DAY_OF_YEAR
+        {/*                                   */}, // DAY_OF_WEEK
+        {       -1,       -1,        5,        5}, // DAY_OF_WEEK_IN_MONTH
+        {/*                                   */}, // AM_PM
+        {/*                                   */}, // HOUR
+        {/*                                   */}, // HOUR_OF_DAY
+        {/*                                   */}, // MINUTE
+        {/*                                   */}, // SECOND
+        {/*                                   */}, // MILLISECOND
+        {/*                                   */}, // ZONE_OFFSET
+        {/*                                   */}, // DST_OFFSET
+        { -5000000, -5000000,  5000000,  5000000}, // YEAR_WOY
+        {/*                                   */}, // DOW_LOCAL
+        { -5000000, -5000000,  5000000,  5000000}, // EXTENDED_YEAR
+        {/*                                   */}, // JULIAN_DAY
+        {/*                                   */}, // MILLISECONDS_IN_DAY
     };
 
 
