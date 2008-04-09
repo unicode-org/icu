@@ -135,13 +135,13 @@ const char *ChineseCalendar::getType() const {
 
 
 static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
-    // Minimum  Greatest    Least  Maximum
-    //           Minimum  Maximum
+    // Minimum  Greatest     Least    Maximum
+    //           Minimum   Maximum
     {        1,        1,    83333,    83333}, // ERA
-    {        1,        1,       70,       70}, // YEAR
+    {        1,        1,       60,       60}, // YEAR
     {        0,        0,       11,       11}, // MONTH
     {        1,        1,       50,       55}, // WEEK_OF_YEAR
-    {        1,        1,        4,        6}, // WEEK_OF_MONTH
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // WEEK_OF_MONTH
     {        1,        1,       29,       30}, // DAY_OF_MONTH
     {        1,        1,      353,      385}, // DAY_OF_YEAR
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DAY_OF_WEEK
@@ -154,12 +154,12 @@ static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECOND
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // ZONE_OFFSET
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DST_OFFSET
-    { -5000001, -5000001,  5000001,  5000001}, // YEAR_WOY
+    { -5000000, -5000000,  5000000,  5000000}, // YEAR_WOY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DOW_LOCAL
     { -5000000, -5000000,  5000000,  5000000}, // EXTENDED_YEAR
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // JULIAN_DAY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECONDS_IN_DAY
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // IS_LEAP_MONTH
+    {        0,        0,        1,        1}, // IS_LEAP_MONTH
 };
 
 

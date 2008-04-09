@@ -1,6 +1,6 @@
 /************************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation
+ * Copyright (c) 1997-2008, International Business Machines Corporation
  * and others. All Rights Reserved.
  ************************************************************************/
 
@@ -343,8 +343,8 @@ CalendarTest::TestGenericAPI()
 
     for (i=0; i<UCAL_FIELD_COUNT; ++i)
     {
-        if (cal->getMinimum((UCalendarDateFields)i) != cal->getGreatestMinimum((UCalendarDateFields)i))
-            errln("FAIL: getMinimum doesn't match getGreatestMinimum for field " + i);
+        if (cal->getMinimum((UCalendarDateFields)i) > cal->getGreatestMinimum((UCalendarDateFields)i))
+            errln("FAIL: getMinimum larger than getGreatestMinimum for field " + i);
         if (cal->getLeastMaximum((UCalendarDateFields)i) > cal->getMaximum((UCalendarDateFields)i))
             errln("FAIL: getLeastMaximum larger than getMaximum for field " + i);
         if (cal->getMinimum((UCalendarDateFields)i) >= cal->getMaximum((UCalendarDateFields)i))
@@ -596,20 +596,16 @@ CalendarTest::TestDisambiguation765()
     c->set(UCAL_MONTH, UCAL_JUNE);
     c->set(UCAL_DAY_OF_WEEK_IN_MONTH, - 1);
     verify765("1997 last Tuesday in June = ", c, 1997, UCAL_JUNE, 24);
-    // IllegalArgumentException e = null;
+
     status = U_ZERO_ERROR;
-    //try {
-        c->clear();
-        c->set(UCAL_YEAR, 1997);
-        c->set(UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
-        c->set(UCAL_MONTH, UCAL_JUNE);
-        c->set(UCAL_DAY_OF_WEEK_IN_MONTH, 0);
-        c->getTime(status);
-    //}
-    //catch(IllegalArgumentException ex) {
-    //    e = ex;
-    //}
+    c->clear();
+    c->set(UCAL_YEAR, 1997);
+    c->set(UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
+    c->set(UCAL_MONTH, UCAL_JUNE);
+    c->set(UCAL_DAY_OF_WEEK_IN_MONTH, 0);
+    c->getTime(status);
     verify765("1997 zero-th Tuesday in June = ", status);
+
     c->clear();
     c->set(UCAL_YEAR, 1997);
     c->set(UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
@@ -622,19 +618,16 @@ CalendarTest::TestDisambiguation765()
     c->set(UCAL_MONTH, UCAL_JUNE);
     c->set(UCAL_WEEK_OF_MONTH, 5);
     verify765("1997 Tuesday in week 5 of June = ", c, 1997, UCAL_JULY, 1);
+
     status = U_ZERO_ERROR;
-    //try {
-        c->clear();
-        c->set(UCAL_YEAR, 1997);
-        c->set(UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
-        c->set(UCAL_MONTH, UCAL_JUNE);
-        c->set(UCAL_WEEK_OF_MONTH, 0);
-        verify765("1997 Tuesday in week 0 of June = ", c, 1997, UCAL_MAY, 27);
-    //}
-    //catch(IllegalArgumentException ex) {
-    //    errln("FAIL: Exception seen:");
-    //    ex.printStackTrace(log);
-    //}
+    c->clear();
+    c->set(UCAL_YEAR, 1997);
+    c->set(UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
+    c->set(UCAL_MONTH, UCAL_JUNE);
+    c->set(UCAL_WEEK_OF_MONTH, 0);
+    c->getTime(status);
+    verify765("1997 Tuesday in week 0 of June = ", status);
+
     /* Note: The following test used to expect YEAR 1997, WOY 1 to
      * resolve to a date in Dec 1996; that is, to behave as if
      * YEAR_WOY were 1997.  With the addition of a new explicit

@@ -19,13 +19,13 @@ static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
     //           Minimum  Maximum
     {        0,        0,        1,        1}, // ERA
     {        1,        1,  5000000,  5000000}, // YEAR
-    {        0,        0,       13,       13}, // MONTH
+    {        0,        0,       12,       12}, // MONTH
     {        1,        1,       52,       53}, // WEEK_OF_YEAR
-    {        0,        0,        1,        6}, // WEEK_OF_MONTH
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // WEEK_OF_MONTH
     {        1,        1,        5,       30}, // DAY_OF_MONTH
     {        1,        1,      365,      366}, // DAY_OF_YEAR
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DAY_OF_WEEK
-    {       -1,       -1,        4,        6}, // DAY_OF_WEEK_IN_MONTH
+    {       -1,       -1,        1,        5}, // DAY_OF_WEEK_IN_MONTH
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // AM_PM
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // HOUR
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // HOUR_OF_DAY
