@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
  
@@ -33,7 +33,54 @@ public: // package
 
 public:
     // test behaviour and error reporting at boundaries of defined range
-    virtual void TestCalendarLimit(void);
+    virtual void TestCalendarExtremeLimit(void);
+
+    void TestLimits(void);
+
+private:
+    /*
+     * Test the functions getMaximum/getGeratestMinimum logically correct.
+     * This method assumes day of week cycle is consistent.
+     * @param cal The calendar instance to be tested.
+     * @param leapMonth true if the calendar system has leap months
+     */
+    void doTheoreticalLimitsTest(Calendar& cal, UBool leapMonth);
+
+    /*
+     * Test the functions getXxxMinimum() and getXxxMaximum() by marching a
+     * test calendar 'cal' through 'numberOfDays' sequential days starting
+     * with 'startDate'.  For each date, read a field value along with its
+     * reported actual minimum and actual maximum.  These values are
+     * checked against one another as well as against getMinimum(),
+     * getGreatestMinimum(), getLeastMaximum(), and getMaximum().  We
+     * expect to see:
+     *
+     * 1. minimum <= actualMinimum <= greatestMinimum <=
+     *    leastMaximum <= actualMaximum <= maximum
+     *
+     * 2. actualMinimum <= value <= actualMaximum
+     *
+     * Note: In addition to outright failures, this test reports some
+     * results as warnings.  These are not generally of concern, but they
+     * should be evaluated by a human.  To see these, run this test in
+     * verbose mode.
+     * @param cal the calendar to be tested
+     * @param fieldsToTest an array of field values to be tested, e.g., new
+     * int[] { UCAL_MONTH, UCAL_DAY_OF_MONTH }.  It only makes
+     * sense to test the day fields; the time fields are not tested by this
+     * method.  If null, then test all standard fields.
+     * @param startDate the first date to test
+     * @param testDuration if positive, the number of days to be tested.
+     * If negative, the number of seconds to run the test.
+     */
+    void doLimitsTest(Calendar& cal, const int32_t* fieldsToTest, UDate startDate, int32_t testDuration);
+
+    /**
+     * doLimitsTest with default test duration and fields
+     */
+    void doLimitsTest(Calendar& cal, UDate startDate);
+
+    UnicodeString& ymdToString(const Calendar& cal, UnicodeString& str);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

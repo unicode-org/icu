@@ -201,28 +201,28 @@ PersianCalendar::~PersianCalendar()
 //-------------------------------------------------------------------------
 
 static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
-    // Minimum  Greatest    Least  Maximum
-    //           Minimum  Maximum
-    {       0,       0,       0,       0 }, // ERA
-    {   -2500,   -2500,    2500,    2500 }, // YEAR
-    {       0,       0,      11,      11 }, // MONTH
-    {       1,       1,      52,      53 }, // WEEK_OF_YEAR
-    {       0,       0,       5,       6 }, // WEEK_OF_MONTH
-    {       1,       1,      29,      31 }, // DAY_OF_MONTH
-    {       1,       1,     365,     366 }, // DAY_OF_YEAR
-    {       0,       0,       6,       6 }, // DAY_OF_WEEK
-    {       1,       1,       4,       6 }, // DAY_OF_WEEK_IN_MONTH
-    {       0,       0,       1,       1 }, // AM_PM
-    {       0,       0,      11,      11 }, // HOUR
-    {       0,       0,      23,      23 }, // HOUR_OF_DAY
-    {       0,       0,      59,      59 }, // MINUTE
-    {       0,       0,      59,      59 }, // SECOND
-    {       0,       0,     999,     999 }, // MILLISECOND
-    {     -12,     -12,      12,      12 }, // ZONE_OFFSET
-    {       0,       0,       1,       1 }, // DST_OFFSET
-    { -140742, -140742,  144683,  140742 }, // YEAR_WOY
-    {       0,       0,       6,       6 }, // DOW_LOCAL
-    {   -2500,   -2500,    2500,    2500 }, // EXTENDED_YEAR
+    // Minimum  Greatest     Least   Maximum
+    //           Minimum   Maximum
+    {        0,        0,        0,        0}, // ERA
+    { -5000000, -5000000,  5000000,  5000000}, // YEAR
+    {        0,        0,       11,       11}, // MONTH
+    {        1,        1,       52,       53}, // WEEK_OF_YEAR
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // WEEK_OF_MONTH
+    {        1,       1,        29,       31}, // DAY_OF_MONTH
+    {        1,       1,       365,      366}, // DAY_OF_YEAR
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DAY_OF_WEEK
+    {        1,       1,         5,        5}, // DAY_OF_WEEK_IN_MONTH
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // AM_PM
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // HOUR
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // HOUR_OF_DAY
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MINUTE
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // SECOND
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECOND
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // ZONE_OFFSET
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DST_OFFSET
+    { -5000000, -5000000,  5000000,  5000000}, // YEAR_WOY
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DOW_LOCAL
+    { -5000000, -5000000,  5000000,  5000000}, // EXTENDED_YEAR
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // JULIAN_DAY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECONDS_IN_DAY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // IS_LEAP_MONTH

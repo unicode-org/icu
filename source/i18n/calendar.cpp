@@ -1268,7 +1268,6 @@ void Calendar::computeWeekFields(UErrorCode &ec) {
         return;
     }
     int32_t eyear = fFields[UCAL_EXTENDED_YEAR];
-    int32_t year = fFields[UCAL_YEAR];
     int32_t dayOfWeek = fFields[UCAL_DAY_OF_WEEK];
     int32_t dayOfYear = fFields[UCAL_DAY_OF_YEAR];
 
@@ -1281,7 +1280,7 @@ void Calendar::computeWeekFields(UErrorCode &ec) {
     // the previous year; days at the end of the year may fall into the
     // first week of the next year.  ASSUME that the year length is less than
     // 7000 days.
-    int32_t yearOfWeekOfYear = year;
+    int32_t yearOfWeekOfYear = eyear;
     int32_t relDow = (dayOfWeek + 7 - getFirstDayOfWeek()) % 7; // 0..6
     int32_t relDowJan1 = (dayOfWeek - dayOfYear + 7001 - getFirstDayOfWeek()) % 7; // 0..6
     int32_t woy = (dayOfYear - 1 + relDowJan1) / 7; // 0..53
@@ -2096,6 +2095,25 @@ int32_t Calendar::getLimit(UCalendarDateFields field, ELimitType limitType) cons
     case UCAL_MILLISECONDS_IN_DAY:
     case UCAL_IS_LEAP_MONTH:
         return kCalendarLimits[field][limitType];
+
+    case UCAL_WEEK_OF_MONTH:
+        {
+            int32_t limit;
+            if (limitType == UCAL_LIMIT_MINIMUM) {
+                limit = getMinimalDaysInFirstWeek() == 1 ? 1 : 0;
+            } else if (limitType == UCAL_LIMIT_GREATEST_MINIMUM) {
+                limit = 1;
+            } else {
+                int32_t minDaysInFirst = getMinimalDaysInFirstWeek();
+                int32_t daysInMonth = handleGetLimit(UCAL_DAY_OF_MONTH, limitType);
+                if (limitType == UCAL_LIMIT_LEAST_MAXIMUM) {
+                    limit = (daysInMonth + (7 - minDaysInFirst)) / 7;
+                } else { // limitType == UCAL_LIMIT_MAXIMUM
+                    limit = (daysInMonth + 6 + (7 - minDaysInFirst)) / 7;
+                }
+            }
+            return limit;
+        }
     default:
         return handleGetLimit(field, limitType);
     }
@@ -2904,10 +2922,12 @@ void Calendar::prepareGetActual(UCalendarDateFields field, UBool isMinimum, UErr
 
     switch (field) {
     case UCAL_YEAR:
-    case UCAL_YEAR_WOY:
     case UCAL_EXTENDED_YEAR:
         set(UCAL_DAY_OF_YEAR, getGreatestMinimum(UCAL_DAY_OF_YEAR));
         break;
+
+    case UCAL_YEAR_WOY:
+        set(UCAL_WEEK_OF_YEAR, getGreatestMinimum(UCAL_WEEK_OF_YEAR));
 
     case UCAL_MONTH:
         set(UCAL_DATE, getGreatestMinimum(UCAL_DATE));
@@ -2941,7 +2961,7 @@ void Calendar::prepareGetActual(UCalendarDateFields field, UBool isMinimum, UErr
         }
         break;
     default:
-        ;
+        break;
     }
 
     // Do this last to give it the newest time stamp
@@ -2966,39 +2986,37 @@ int32_t Calendar::getActualHelper(UCalendarDateFields field, int32_t startValue,
     Calendar *work = clone();
     if(!work) { status = U_MEMORY_ALLOCATION_ERROR; return startValue; }
     work->setLenient(TRUE);
-#if defined (U_DEBUG_CAL) 
-    fprintf(stderr, "%s:%d - getActualHelper - %s\n", __FILE__, __LINE__, u_errorName(status));
-#endif 
     work->prepareGetActual(field, delta < 0, status);
-#if defined (U_DEBUG_CAL) 
-    fprintf(stderr, "%s:%d - getActualHelper - %s\n", __FILE__, __LINE__, u_errorName(status));
-#endif
 
     // now try each value from the start to the end one by one until
     // we get a value that normalizes to another value.  The last value that
     // normalizes to itself is the actual maximum for the current date
+    work->set(field, startValue);
+
+    // prepareGetActual sets the first day of week in the same week with
+    // the first day of a month.  Unlike WEEK_OF_YEAR, week number for the
+    // week which contains days from both previous and current month is
+    // not unique.  For example, last several days in the previous month
+    // is week 5, and the rest of week is week 1.
     int32_t result = startValue;
-    do {
+    if (work->get(field, status) != startValue
+        && field != UCAL_WEEK_OF_MONTH && delta > 0 || U_FAILURE(status)) {
 #if defined (U_DEBUG_CAL) 
-        fprintf(stderr, "%s:%d - getActualHelper - %s\n", __FILE__, __LINE__, u_errorName(status));
+        fprintf(stderr, "getActualHelper(fld %d) - got  %d (not %d) - %s\n", field, work->get(field,status), startValue, u_errorName(status));
 #endif
-        work->set(field, startValue);
-#if defined (U_DEBUG_CAL) 
-        fprintf(stderr, "%s:%d - getActualHelper - %s (set to %d)\n", __FILE__, __LINE__, u_errorName(status), startValue);
-#endif
-        if (work->get(field, status) != startValue) {
-#if defined (U_DEBUG_CAL) 
-            fprintf(stderr, "getActualHelper(fld %d) - got  %d (not %d), BREAK - %s\n", field, work->get(field,status), startValue, u_errorName(status));
-#endif
-            break;
-        } else {
-            result = startValue;
+    } else {
+        do {
             startValue += delta;
-#if defined (U_DEBUG_CAL) 
-            fprintf(stderr, "getActualHelper(%d)  result=%d (start), start += %d to %d\n", field, result, delta, startValue);
+            work->add(field, delta, status);
+            if (work->get(field, status) != startValue || U_FAILURE(status)) {
+#if defined (U_DEBUG_CAL)
+                fprintf(stderr, "getActualHelper(fld %d) - got  %d (not %d), BREAK - %s\n", field, work->get(field,status), startValue, u_errorName(status));
 #endif
-        }
-    } while (result != endValue && U_SUCCESS(status));
+                break;
+            }
+            result = startValue;
+        } while (startValue != endValue);
+    }
     delete work;
 #if defined (U_DEBUG_CAL) 
     fprintf(stderr, "getActualHelper(%d) = %d\n", field, result);

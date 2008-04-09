@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003-2007, International Business Machines Corporation
+ * Copyright (C) 2003-2008, International Business Machines Corporation
  * and others. All Rights Reserved.
  ******************************************************************************
  *
@@ -55,31 +55,31 @@ const char *IndianCalendar::getType() const {
 }
   
 static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
-  // Minimum  Greatest    Least  Maximum
-  //           Minimum  Maximum
-  {        0,        0,       0,       0 }, // ERA
-  {        1,        1, 5000000, 5000000 }, // YEAR
-  {        0,        0,      11,      11 }, // MONTH
-  {        1,        1,      52,      53 }, // WEEK_OF_YEAR
-  {        0,        0,       4,       6 }, // WEEK_OF_MONTH
-  {        1,        1,      30,      31 }, // DAY_OF_MONTH
-  {        1,        1,     365,     366 }, // DAY_OF_YEAR
-  {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DAY_OF_WEEK
-  {       -1,       -1,       5,       5 }, // DAY_OF_WEEK_IN_MONTH
-  {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // AM_PM
-  {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // HOUR
-  {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // HOUR_OF_DAY
-  {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MINUTE
-  {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // SECOND
-  {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECOND
-  {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // ZONE_OFFSET
-  {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DST_OFFSET
-  {        1,        1,  5000001,  5000001}, // YEAR_WOY
-  {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DOW_LOCAL
-  {        1,        1,  5000000,  5000000}, // EXTENDED_YEAR
-  {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // JULIAN_DAY
-  {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECONDS_IN_DAY
-  {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // IS_LEAP_MONTH
+    // Minimum  Greatest     Least   Maximum
+    //           Minimum   Maximum
+    {        0,        0,        0,        0}, // ERA
+    { -5000000, -5000000,  5000000,  5000000}, // YEAR
+    {        0,        0,       11,       11}, // MONTH
+    {        1,        1,       52,       53}, // WEEK_OF_YEAR
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // WEEK_OF_MONTH
+    {        1,        1,       30,       31}, // DAY_OF_MONTH
+    {        1,        1,      365,      366}, // DAY_OF_YEAR
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DAY_OF_WEEK
+    {       -1,       -1,        5,        5}, // DAY_OF_WEEK_IN_MONTH
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // AM_PM
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // HOUR
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // HOUR_OF_DAY
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MINUTE
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // SECOND
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECOND
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // ZONE_OFFSET
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DST_OFFSET
+    { -5000000, -5000000,  5000000,  5000000}, // YEAR_WOY
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DOW_LOCAL
+    { -5000000, -5000000,  5000000,  5000000}, // EXTENDED_YEAR
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // JULIAN_DAY
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECONDS_IN_DAY
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // IS_LEAP_MONTH
 };
 
 static const double JULIAN_EPOCH = 1721425.5;
@@ -289,44 +289,47 @@ int32_t IndianCalendar::handleGetExtendedYear() {
  * calendar equivalents for the given Julian day.
  */
 void IndianCalendar::handleComputeFields(int32_t julianDay, UErrorCode& status) {
-   double jdAtStartOfGregYear;
-   int32_t leapMonth, IndianYear, yday, IndianMonth, IndianDayOfMonth, mday;
-   int32_t gregorianYear;      // Stores gregorian date corresponding to Julian day;
-   int32_t gd[3];
+    double jdAtStartOfGregYear;
+    int32_t leapMonth, IndianYear, yday, IndianMonth, IndianDayOfMonth, mday;
+    int32_t gregorianYear;      // Stores gregorian date corresponding to Julian day;
+    int32_t gd[3];
 
-   gregorianYear = jdToGregorian(julianDay, gd)[0];          // Gregorian date for Julian day
-   IndianYear = gregorianYear - INDIAN_ERA_START;            // Year in Saka era
-   jdAtStartOfGregYear = gregorianToJD(gregorianYear, 1, 1); // JD at start of Gregorian year
-   yday = (int32_t)(julianDay - jdAtStartOfGregYear);        // Day number in Gregorian year (starting from 0)
-   leapMonth = isGregorianLeap(gregorianYear) ? 31 : 30;     // Days in leapMonth this year
+    gregorianYear = jdToGregorian(julianDay, gd)[0];          // Gregorian date for Julian day
+    IndianYear = gregorianYear - INDIAN_ERA_START;            // Year in Saka era
+    jdAtStartOfGregYear = gregorianToJD(gregorianYear, 1, 1); // JD at start of Gregorian year
+    yday = (int32_t)(julianDay - jdAtStartOfGregYear);        // Day number in Gregorian year (starting from 0)
 
-   if (yday < INDIAN_YEAR_START) {
-      //  Day is at the end of the preceding Saka year
-      IndianYear -= 1;
-      yday += leapMonth + (31 * 5) + (30 * 3) + 10 + INDIAN_YEAR_START;
-   }
+    if (yday < INDIAN_YEAR_START) {
+        // Day is at the end of the preceding Saka year
+        IndianYear -= 1;
+        leapMonth = isGregorianLeap(gregorianYear - 1) ? 31 : 30; // Days in leapMonth this year, previous Gregorian year
+        yday += leapMonth + (31 * 5) + (30 * 3) + 10;
+    } else {
+        leapMonth = isGregorianLeap(gregorianYear) ? 31 : 30; // Days in leapMonth this year
+        yday -= INDIAN_YEAR_START;
+    }
 
-   yday -= INDIAN_YEAR_START;
-   if (yday < leapMonth) {
-      IndianMonth = 0;
-      IndianDayOfMonth = yday + 1;
-   } else {
-      mday = yday - leapMonth;
-      if (mday < (31 * 5)) {
-         IndianMonth = (int32_t)uprv_floor(mday / 31) + 1;
-         IndianDayOfMonth = (mday % 31) + 1;
-      } else {
-         mday -= 31 * 5;
-         IndianMonth = (int32_t)uprv_floor(mday / 30) + 6;
-         IndianDayOfMonth = (mday % 30) + 1;
-      }
+    if (yday < leapMonth) {
+        IndianMonth = 0;
+        IndianDayOfMonth = yday + 1;
+    } else {
+        mday = yday - leapMonth;
+        if (mday < (31 * 5)) {
+            IndianMonth = (int32_t)uprv_floor(mday / 31) + 1;
+            IndianDayOfMonth = (mday % 31) + 1;
+        } else {
+            mday -= 31 * 5;
+            IndianMonth = (int32_t)uprv_floor(mday / 30) + 6;
+            IndianDayOfMonth = (mday % 30) + 1;
+        }
    }
 
    internalSet(UCAL_ERA, 0);
    internalSet(UCAL_EXTENDED_YEAR, IndianYear);
    internalSet(UCAL_YEAR, IndianYear);
    internalSet(UCAL_MONTH, IndianMonth);
-   internalSet(UCAL_DAY_OF_MONTH, IndianDayOfMonth );
+   internalSet(UCAL_DAY_OF_MONTH, IndianDayOfMonth);
+   internalSet(UCAL_DAY_OF_YEAR, yday + 1); // yday is 0-based
 }    
 
 UBool

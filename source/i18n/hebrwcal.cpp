@@ -37,16 +37,16 @@
 static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
     // Minimum  Greatest    Least  Maximum
     //           Minimum  Maximum
-    {        0,        0,       0,       0 }, // ERA
-    {        1,        1, 5000000, 5000000 }, // YEAR
-    {        0,        0,      12,      12 }, // MONTH
-    {        1,        1,      51,      56 }, // WEEK_OF_YEAR
-    {        0,        0,       4,       6 }, // WEEK_OF_MONTH
-    {        1,        1,      29,      30 }, // DAY_OF_MONTH
-    {        1,        1,     353,     385 }, // DAY_OF_YEAR
+    {        0,        0,        0,        0}, // ERA
+    { -5000000, -5000000,  5000000,  5000000}, // YEAR
+    {        0,        0,       12,       12}, // MONTH
+    {        1,        1,       51,       56}, // WEEK_OF_YEAR
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // WEEK_OF_MONTH
+    {        1,        1,       29,       30}, // DAY_OF_MONTH
+    {        1,        1,      353,      385}, // DAY_OF_YEAR
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DAY_OF_WEEK
-    {       -1,       -1,       5,       5 }, // DAY_OF_WEEK_IN_MONTH
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1/*                                  */}, // AM_PM
+    {       -1,       -1,        5,        5}, // DAY_OF_WEEK_IN_MONTH
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // AM_PM
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // HOUR
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // HOUR_OF_DAY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MINUTE
@@ -54,9 +54,9 @@ static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECOND
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // ZONE_OFFSET
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DST_OFFSET
-    { -5000001, -5000001, 5000001, 5000001 }, // YEAR_WOY
+    { -5000000, -5000000,  5000000,  5000000}, // YEAR_WOY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DOW_LOCAL
-    { -5000000, -5000000, 5000000, 5000000 }, // EXTENDED_YEAR
+    { -5000000, -5000000,  5000000,  5000000}, // EXTENDED_YEAR
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // JULIAN_DAY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECONDS_IN_DAY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // IS_LEAP_MONTH
@@ -392,8 +392,8 @@ int32_t HebrewCalendar::startOfYear(int32_t year, UErrorCode &status)
     if (day == 0) {
         int32_t months = (235 * year - 234) / 19;           // # of months before year
 
-        int32_t frac = months * MONTH_FRACT + BAHARAD;     // Fractional part of day #
-        day  = months * 29 + (frac / DAY_PARTS);        // Whole # part of calculation
+        int64_t frac = (int64_t)months * MONTH_FRACT + BAHARAD;  // Fractional part of day #
+        day  = months * 29 + (int32_t)(frac / DAY_PARTS);        // Whole # part of calculation
         frac = frac % DAY_PARTS;                        // Time of day
 
         int32_t wd = (day % 7);                        // Day of week (0 == Monday)
@@ -573,8 +573,22 @@ void HebrewCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status) 
     UBool isLeap = isLeapYear(year);
 
     int32_t month = 0;
-    while (dayOfYear > (  isLeap ? LEAP_MONTH_START[month][type] : MONTH_START[month][type] ) ) {
+    int32_t momax = sizeof(MONTH_START) / (3 * sizeof(int16_t));
+    while (month < momax && dayOfYear > (  isLeap ? LEAP_MONTH_START[month][type] : MONTH_START[month][type] ) ) {
         month++;
+    }
+    if (month >= momax) {
+        // TODO: I found dayOfYear could be out of range when
+        // a large value is set to julianDay.  I patched startOfYear
+        // to reduce the chace, but it could be still reproduced either
+        // by startOfYear or other places.  For now, we check
+        // the month is in valid range to avoid out of array index
+        // access problem here.  However, we need to carefully review
+        // the calendar implementation to check the extreme limit of
+        // each calendar field and the code works well for any values
+        // in the valid value range.  -yoshito
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
     }
     month--;
     int dayOfMonth = dayOfYear - (isLeap ? LEAP_MONTH_START[month][type] : MONTH_START[month][type]);
