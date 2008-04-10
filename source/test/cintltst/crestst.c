@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -132,7 +132,7 @@ void TestResourceBundles()
     UErrorCode status = U_ZERO_ERROR;
     loadTestData(&status);
     if(U_FAILURE(status)) {
-        log_err("Could not load testdata.dat, status = %s\n", u_errorName(status));
+        log_data_err("Could not load testdata.dat, status = %s\n", u_errorName(status));
         return;
     }
 
@@ -165,7 +165,7 @@ void TestConstruction1()
     testdatapath=loadTestData(&err);
     if(U_FAILURE(err))
     {
-        log_err("Could not load testdata.dat %s \n",myErrorName(err));
+        log_data_err("Could not load testdata.dat %s \n",myErrorName(err));
         return;
     }
 
@@ -477,7 +477,7 @@ TestOpenDirect(void) {
     errorCode=U_ZERO_ERROR;
     idna_rules=ures_openDirect(loadTestData(&errorCode), "idna_rules", &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("ures_openDirect(\"idna_rules\") failed: %s\n", u_errorName(errorCode));
+        log_data_err("ures_openDirect(\"idna_rules\") failed: %s\n", u_errorName(errorCode));
         return;
     }
 
@@ -530,7 +530,7 @@ TestOpenDirect(void) {
     errorCode = U_USING_FALLBACK_WARNING;;
     idna_rules=ures_openDirect("testdata", "idna_rules", &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("ures_openDirect(\"idna_rules\") failed when U_USING_FALLBACK_WARNING was set prior to call: %s\n", u_errorName(errorCode));
+        log_data_err("ures_openDirect(\"idna_rules\") failed when U_USING_FALLBACK_WARNING was set prior to call: %s\n", u_errorName(errorCode));
         return;
     }
     ures_close(idna_rules);
@@ -553,7 +553,7 @@ TestOpenDirect(void) {
     errorCode=U_ZERO_ERROR;
     casing=ures_open("testdata", "casing", &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("ures_open(\"casing\") failed: %s\n", u_errorName(errorCode));
+        log_data_err("ures_open(\"casing\") failed: %s\n", u_errorName(errorCode));
         return;
     }
 
@@ -580,7 +580,7 @@ TestOpenDirect(void) {
     errorCode=U_ZERO_ERROR;
     ne=ures_open("testdata", "ne", &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("ures_open(\"ne\") failed (expected to get root): %s\n", u_errorName(errorCode));
+        log_data_err("ures_open(\"ne\") failed (expected to get root): %s\n", u_errorName(errorCode));
     }
     if(errorCode!=U_USING_DEFAULT_WARNING || 0!=uprv_strcmp("root", ures_getLocale(ne, &errorCode))) {
         log_err("ures_open(\"ne\") found something other than \"root\" - %s\n", u_errorName(errorCode));
@@ -590,7 +590,7 @@ TestOpenDirect(void) {
     errorCode=U_ZERO_ERROR;
     ne=ures_openDirect("testdata", "ne", &errorCode);
     if(U_SUCCESS(errorCode)) {
-        log_err("ures_openDirect(\"ne\") succeeded unexpectedly\n");
+        log_data_err("ures_openDirect(\"ne\") succeeded unexpectedly\n");
         ures_close(ne);
     }
 
@@ -598,7 +598,7 @@ TestOpenDirect(void) {
     errorCode=U_ZERO_ERROR;
     te_IN=ures_openDirect("testdata", "te_IN", &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("ures_open(\"te_IN\") failed: %s\n", u_errorName(errorCode));
+        log_data_err("ures_open(\"te_IN\") failed: %s\n", u_errorName(errorCode));
         return;
     }
     errorCode=U_ZERO_ERROR;
@@ -915,7 +915,7 @@ static void TestGetSize(void) {
     
     if(U_FAILURE(status))
     {
-        log_err("Could not load testdata.dat %s\n", u_errorName(status));
+        log_data_err("Could not load testdata.dat %s\n", u_errorName(status));
         return;
     }
     
@@ -973,7 +973,7 @@ static void TestGetLocaleByType(void) {
     
     if(U_FAILURE(status))
     {
-        log_err("Could not load testdata.dat %s\n", u_errorName(status));
+        log_data_err("Could not load testdata.dat %s\n", u_errorName(status));
         return;
     }
     
