@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2005-2006, International Business Machines
+ *   Copyright (C) 2005-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -80,7 +80,7 @@ UBool IdnaConfTest::ReadAndConvertFile(){
     delete [] absolute_name;
 
     if (f == NULL){
-        errln("fopen error on %s", name);
+        dataerrln("[DATA] fopen error on %s", name);
         return FALSE;
     }
 

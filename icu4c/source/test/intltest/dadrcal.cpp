@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -62,7 +62,7 @@ void DataDrivenCalendarTest::runIndexedTest(int32_t index, UBool exec,
             name = "";
         }
     } else {
-        errln("format/DataDriven*Test data (calendar.res) not initialized!");
+        dataerrln("[DATA] format/DataDriven*Test data (calendar.res) not initialized!");
         name = "";
     }
 

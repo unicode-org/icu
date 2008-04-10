@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2007, International Business Machines
+ * Copyright (c) 1997-2008, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 
@@ -200,7 +200,7 @@ NewResourceBundleTest::TestResourceBundles()
     loadTestData(status);
     if(U_FAILURE(status))
     {
-        errln("Could not load testdata.dat %s " + UnicodeString(u_errorName(status)));
+        dataerrln("[DATA] Could not load testdata.dat %s " + UnicodeString(u_errorName(status)));
         return;
     }
 
@@ -234,7 +234,7 @@ NewResourceBundleTest::TestConstruction()
     testdatapath=loadTestData(err);
     if(U_FAILURE(err))
     {
-        errln("Could not load testdata.dat %s " + UnicodeString(u_errorName(err)));
+        dataerrln("[DATA] Could not load testdata.dat %s " + UnicodeString(u_errorName(err)));
         return;
     }
 
@@ -309,7 +309,7 @@ NewResourceBundleTest::TestIteration()
     testdatapath=loadTestData(err);
     if(U_FAILURE(err))
     {
-        errln("Could not load testdata.dat %s " + UnicodeString(u_errorName(err)));
+        dataerrln("[DATA] Could not load testdata.dat %s " + UnicodeString(u_errorName(err)));
         return;
     }
 
@@ -428,7 +428,7 @@ NewResourceBundleTest::TestOtherAPI(){
 
     if(U_FAILURE(err))
     {
-        errln("Could not load testdata.dat %s " + UnicodeString(u_errorName(err)));
+        dataerrln("[DATA] Could not load testdata.dat %s " + UnicodeString(u_errorName(err)));
         return;
     }
 
@@ -636,7 +636,7 @@ NewResourceBundleTest::testTag(const char* frag,
     testdatapath=loadTestData(status);
     if(U_FAILURE(status))
     {
-        errln("Could not load testdata.dat %s " + UnicodeString(u_errorName(status)));
+        dataerrln("[DATA] Could not load testdata.dat %s " + UnicodeString(u_errorName(status)));
         return FALSE;
     }
 
@@ -1017,7 +1017,7 @@ NewResourceBundleTest::TestNewTypes() {
 
     if(U_FAILURE(status))
     {
-        logln("Could not load testdata.dat %s \n",u_errorName(status));
+        dataerrln("[DATA] Could not load testdata.dat %s \n",u_errorName(status));
         return;
     }
 

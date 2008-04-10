@@ -1915,7 +1915,7 @@ UChar *RegexTest::ReadAndConvertFile(const char *fileName, int32_t &ulen,
     //
     f = fopen(fileName, "rb");
     if (f == 0) {
-        errln("Error opening test data file %s\n", fileName);
+        dataerrln("[DATA] Error opening test data file %s\n", fileName);
         status = U_FILE_ACCESS_ERROR;
         return NULL;
     }

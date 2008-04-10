@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2007, International Business Machines
+ *   Copyright (C) 2003-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -1460,7 +1460,11 @@ void TestIDNA::TestIDNAMonkeyTest(){
 
     getInstance(status);    // Init prep
     if (U_FAILURE(status)) {
-        errln("Test could not initialize. Got %s", u_errorName(status));
+        if (status == U_FILE_ACCESS_ERROR) {
+            dataerrln("[DATA] Test could not initialize.");
+        } else {
+            errln("Test could not initialize. Got %s", u_errorName(status));
+        }
         return;
     }
 
@@ -1535,7 +1539,11 @@ void TestIDNA::TestRefIDNA(){
     UErrorCode status = U_ZERO_ERROR;
     getInstance(status);    // Init prep
     if (U_FAILURE(status)) {
-        errln("Test could not initialize. Got %s", u_errorName(status));
+        if (status == U_FILE_ACCESS_ERROR) {
+            dataerrln("[DATA] Test could not initialize.");
+        } else {
+            errln("Test could not initialize. Got %s", u_errorName(status));
+        }
         return;
     }
 

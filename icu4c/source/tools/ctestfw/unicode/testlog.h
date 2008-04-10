@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2004-2006, International Business Machines Corporation and
+ * Copyright (c) 2004-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -22,6 +22,7 @@ class T_CTEST_EXPORT_API TestLog {
 public:
     virtual ~TestLog();
     virtual void errln( const UnicodeString &message ) = 0;
+    virtual void dataerrln( const UnicodeString &message ) = 0;
     virtual const char* getTestDataPath(UErrorCode& err) = 0;
 };
 

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2007, International Business Machines Corporation and
+ * Copyright (c) 2002-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -31,7 +31,7 @@ status(U_ZERO_ERROR)
 
     const char *srcDir = IntlTest::getSourceTestData(status);
     if (U_FAILURE(status)) {
-        errln("ERROR: could not open test data %s", u_errorName(status));
+        dataerrln("[DATA] Could not open test data %s", u_errorName(status));
         return;
     }
     uprv_strcpy(testDataPath, srcDir);
@@ -136,7 +136,7 @@ void UCAConformanceTest::openTestFile(const char *type)
 
             if (testFile == 0) {
                 *(buffer+bufLen) = 0;
-                errln("ERROR: could not open any of the conformance test files, tried opening base %s\n", buffer);
+                dataerrln("[DATA] Could not open any of the conformance test files, tried opening base %s\n", buffer);
                 return;        
             } else {
                 infoln(
