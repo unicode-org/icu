@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003, International Business Machines
+* Copyright (c) 2003-2008, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -56,13 +56,13 @@ void TestMessageCatalog(void) {
     const char *path = loadTestData(&ec);
  
     if (U_FAILURE(ec)) {
-        log_err("FAIL: loadTestData => %s\n", u_errorName(ec));
+        log_data_err("FAIL: loadTestData => %s\n", u_errorName(ec));
         return;
     }
 
     catd = u_catopen(path, "mc", &ec);
     if (U_FAILURE(ec)) {
-        log_err("FAIL: u_catopen => %s\n", u_errorName(ec));
+        log_data_err("FAIL: u_catopen => %s\n", u_errorName(ec));
         return;
     }
 

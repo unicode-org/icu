@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -534,7 +534,7 @@ const char* loadTestData(UErrorCode* err){
         /* Fall back did not succeed either so return */
         if(U_FAILURE(*err)){
             *err = U_FILE_ACCESS_ERROR;
-            log_err("Could not load testtypes.res in testdata bundle with path %s - %s\n", tdpath, u_errorName(*err));
+            log_data_err("Could not load testtypes.res in testdata bundle with path %s - %s\n", tdpath, u_errorName(*err));
             return "";
         }
         ures_close(test);
