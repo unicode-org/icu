@@ -424,7 +424,7 @@ static void TestDecodedBundle(){
 #if UCONFIG_NO_LEGACY_CONVERSION
         log_info("Couldn't load iscii.bin from test data bundle, (because UCONFIG_NO_LEGACY_CONVERSION  is turned on)\n");
 #else
-        log_err("Could not find iscii.bin from test data bundle. Error: %s\n", u_errorName(error));
+        log_data_err("Could not find iscii.bin from test data bundle. Error: %s\n", u_errorName(error));
 #endif
         ures_close(resB);
         return;
@@ -465,7 +465,7 @@ static void TestNewTypes() {
 
     if(U_FAILURE(status))
     {
-        log_err("Could not load testdata.dat %s \n",myErrorName(status));
+        log_data_err("Could not load testdata.dat %s \n",myErrorName(status));
         return;
     }
 
@@ -763,7 +763,7 @@ static void TestEmptyTypes() {
     testdatapath=loadTestData(&status);
     if(U_FAILURE(status))
     {
-        log_err("Could not load testdata.dat %s \n",myErrorName(status));
+        log_data_err("Could not load testdata.dat %s \n",myErrorName(status));
         return;
     }
     
@@ -897,7 +897,7 @@ static void TestEmptyBundle(){
     testdatapath=loadTestData(&status);
     if(U_FAILURE(status))
     {
-        log_err("Could not load testdata.dat %s \n",myErrorName(status));
+        log_data_err("Could not load testdata.dat %s \n",myErrorName(status));
         return;
     }
     resb = ures_open(testdatapath, "testempty", &status);
@@ -932,7 +932,7 @@ static void TestBinaryCollationData(){
     testdatapath=loadTestData(&status);
     if(U_FAILURE(status))
     {
-        log_err("Could not load testdata.dat %s \n",myErrorName(status));
+        log_data_err("Could not load testdata.dat %s \n",myErrorName(status));
         return;
     }
 
@@ -990,7 +990,7 @@ static void TestAPI() {
     testdatapath=loadTestData(&status);
     if(U_FAILURE(status))
     {
-        log_err("Could not load testdata.dat %s \n",myErrorName(status));
+        log_data_err("Could not load testdata.dat %s \n",myErrorName(status));
         return;
     }
     len =(int32_t)strlen(testdatapath);
@@ -1152,7 +1152,7 @@ static void TestErrorConditions(){
     testdatapath = loadTestData(&status);
     if(U_FAILURE(status))
     {
-        log_err("Could not load testdata.dat %s \n",myErrorName(status));
+        log_data_err("Could not load testdata.dat %s \n",myErrorName(status));
         return;
     }
     len = (int32_t)strlen(testdatapath);
@@ -1459,7 +1459,7 @@ static void TestResourceBundles()
     UErrorCode status = U_ZERO_ERROR;
     loadTestData(&status);
     if(U_FAILURE(status)) {
-        log_err("Could not load testdata.dat, status = %s\n", u_errorName(status));
+        log_data_err("Could not load testdata.dat, status = %s\n", u_errorName(status));
         return;
     }
 
@@ -1501,7 +1501,7 @@ static void TestConstruction1()
     testdatapath=loadTestData(&status);
     if(U_FAILURE(status))
     {
-        log_err("Could not load testdata.dat %s \n",myErrorName(status));
+        log_data_err("Could not load testdata.dat %s \n",myErrorName(status));
         return;
     }
     
@@ -1600,7 +1600,7 @@ static UBool testTag(const char* frag,
     testdatapath = loadTestData(&status);
     if(U_FAILURE(status))
     {
-        log_err("Could not load testdata.dat %s \n",myErrorName(status));
+        log_data_err("Could not load testdata.dat %s \n",myErrorName(status));
         return FALSE;
     }
 
@@ -2103,7 +2103,7 @@ static void TestResourceLevelAliasing(void) {
     testdatapath=loadTestData(&status);
     if(U_FAILURE(status))
     {
-        log_err("Could not load testdata.dat %s \n",myErrorName(status));
+        log_data_err("Could not load testdata.dat %s \n",myErrorName(status));
         return;
     }
     
@@ -2111,7 +2111,7 @@ static void TestResourceLevelAliasing(void) {
 
     if(U_FAILURE(status))
     {
-        log_err("Could not load testaliases.res %s \n",myErrorName(status));
+        log_data_err("Could not load testaliases.res %s \n",myErrorName(status));
         return;
     }
     /* this should fail - circular alias */
@@ -2334,7 +2334,7 @@ static void TestDirectAccess(void) {
     
     t = ures_findResource("/testdata/te/zoneStrings/3/2", t, &status);
     if(U_FAILURE(status)) {
-        log_err("Couldn't access indexed resource, error %s\n", u_errorName(status));
+        log_data_err("Couldn't access indexed resource, error %s\n", u_errorName(status));
         status = U_ZERO_ERROR;
     } else {
         key = ures_getKey(t);
@@ -2344,7 +2344,7 @@ static void TestDirectAccess(void) {
     }
     t = ures_findResource("en/calendar/gregorian/DateTimePatterns/3", t, &status);
     if(U_FAILURE(status)) {
-        log_err("Couldn't access indexed resource, error %s\n", u_errorName(status));
+        log_data_err("Couldn't access indexed resource, error %s\n", u_errorName(status));
         status = U_ZERO_ERROR;
     } else {
         key = ures_getKey(t);
@@ -2355,7 +2355,7 @@ static void TestDirectAccess(void) {
     
     t = ures_findResource("ja/LocaleScript", t, &status);
     if(U_FAILURE(status)) {
-        log_err("Couldn't access keyed resource, error %s\n", u_errorName(status));
+        log_data_err("Couldn't access keyed resource, error %s\n", u_errorName(status));
         status = U_ZERO_ERROR;
     } else {
         key = ures_getKey(t);
@@ -2388,14 +2388,14 @@ static void TestDirectAccess(void) {
 
     t = ures_findResource("root/calendar/islamic-civil/DateTime", t, &status);
     if(U_SUCCESS(status)) {
-        log_err("This resource does not exist. How did it get here?\n");
+        log_data_err("This resource does not exist. How did it get here?\n");
     }
     status = U_ZERO_ERROR;
 
     /* this one will freeze */
     t = ures_findResource("root/calendar/islamic-civil/eras/abbreviated/0/mikimaus/pera", t, &status);
     if(U_SUCCESS(status)) {
-        log_err("Second resource does not exist. How did it get here?\n");
+        log_data_err("Second resource does not exist. How did it get here?\n");
     }
     status = U_ZERO_ERROR;
 
@@ -2634,7 +2634,7 @@ static void TestXPath(void) {
     const char *testdatapath=loadTestData(&status);
     if(U_FAILURE(status))
     {
-        log_err("Could not load testdata.dat %s \n",myErrorName(status));
+        log_data_err("Could not load testdata.dat %s \n",myErrorName(status));
         return;
     }
     
@@ -2694,7 +2694,7 @@ static void TestCLDRStyleAliases(void) {
     const char *expects[7] = { "", "a41", "a12", "a03", "ar4" };
     const char *testdatapath=loadTestData(&status);
     if(U_FAILURE(status)) {
-        log_err("Could not load testdata.dat %s \n",myErrorName(status));
+        log_data_err("Could not load testdata.dat %s \n",myErrorName(status));
         return;
     }
     log_verbose("Testing CLDR style aliases......\n");
@@ -2743,21 +2743,21 @@ static void TestFallbackCodes(void) {
   fall = ures_getByKeyWithFallback(r, "tag2", fall, &status);
 
   if(status != U_ZERO_ERROR) {
-    log_err("Expected error code to be U_ZERO_ERROR, got %s\n", u_errorName(status));
+    log_data_err("Expected error code to be U_ZERO_ERROR, got %s\n", u_errorName(status));
     status = U_ZERO_ERROR;
   }
 
   fall = ures_getByKeyWithFallback(r, "tag7", fall, &status);
 
   if(status != U_USING_FALLBACK_WARNING) {
-    log_err("Expected error code to be U_USING_FALLBACK_WARNING, got %s\n", u_errorName(status));
+    log_data_err("Expected error code to be U_USING_FALLBACK_WARNING, got %s\n", u_errorName(status));
   }
   status = U_ZERO_ERROR;
 
   fall = ures_getByKeyWithFallback(r, "tag1", fall, &status);
 
   if(status != U_USING_DEFAULT_WARNING) {
-    log_err("Expected error code to be U_USING_DEFAULT_WARNING, got %s\n", u_errorName(status));
+    log_data_err("Expected error code to be U_USING_DEFAULT_WARNING, got %s\n", u_errorName(status));
   }
   status = U_ZERO_ERROR;
 
@@ -2773,7 +2773,7 @@ static void TestStackReuse(void) {
     UResourceBundle *rb = ures_open(NULL, "en_US", &errorCode);
 
     if(U_FAILURE(errorCode)) {
-        log_err("Could not load en_US locale. status=%s\n",myErrorName(errorCode));
+        log_data_err("Could not load en_US locale. status=%s\n",myErrorName(errorCode));
         return;
     }
     ures_initStackObject(&table);
@@ -2913,7 +2913,7 @@ TestGetUTF8String() {
     status = U_ZERO_ERROR;
     testdatapath = loadTestData(&status);
     if(U_FAILURE(status)) {
-        log_err("Could not load testdata.dat - %s\n", u_errorName(status));
+        log_data_err("Could not load testdata.dat - %s\n", u_errorName(status));
         return;
     }
 

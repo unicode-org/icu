@@ -882,7 +882,7 @@ static void TestISOFunctions()
     res = ures_openDirect(loadTestData(&status), "structLocale", &status);
     subRes = ures_getByKey(res, "Languages", NULL, &status);
     if (U_FAILURE(status)) {
-        log_err("There is an error in structLocale's ures_getByKey(\"Languages\"), status=%s\n", u_errorName(status));
+        log_data_err("There is an error in structLocale's ures_getByKey(\"Languages\"), status=%s\n", u_errorName(status));
         return;
     }
 

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2007, International Business Machines Corporation and
+ * Copyright (c) 2001-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -1188,7 +1188,7 @@ Test_WCHART_LongString(){
     UBool failed = FALSE;
 
     if(U_FAILURE(status)){
-        log_err("Could not get testinclude resource from testtypes bundle. Error: %s\n",u_errorName(status));
+        log_data_err("Could not get testinclude resource from testtypes bundle. Error: %s\n",u_errorName(status));
         return;
     }
 

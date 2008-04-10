@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*****************************************************************************
@@ -570,7 +570,7 @@ static void TestConvert()
         ucs_file_in = fopen(ucs_file_name,"rb");
         if (!ucs_file_in) 
         {
-            log_err("Couldn't open the Unicode file [%s]... Exiting...\n", ucs_file_name);
+            log_data_err("Couldn't open the Unicode file [%s]... Exiting...\n", ucs_file_name);
             return;
         }
 
@@ -3136,7 +3136,7 @@ static void TestFromUCountPending(){
     int i;
     UConverter* cnv = ucnv_openPackage(loadTestData(&status), "test3", &status);
     if(U_FAILURE(status)){
-        log_err("Could not create converter for test3. Error: %s\n", u_errorName(status));
+        log_data_err("Could not create converter for test3. Error: %s\n", u_errorName(status));
         return;
     }
     for(i=0; i<LENGTHOF(fromUnicodeTests); ++i) {
@@ -3241,7 +3241,7 @@ TestToUCountPending(){
     UConverterToUCallback *oldToUAction= NULL;
     UConverter* cnv = ucnv_openPackage(loadTestData(&status), "test3", &status);
     if(U_FAILURE(status)){
-        log_err("Could not create converter for test3. Error: %s\n", u_errorName(status));
+        log_data_err("Could not create converter for test3. Error: %s\n", u_errorName(status));
         return;
     }
     ucnv_setToUCallBack(cnv, UCNV_TO_U_CALLBACK_STOP, NULL, oldToUAction, NULL, &status);

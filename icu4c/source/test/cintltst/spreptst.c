@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2006, International Business Machines
+ *   Copyright (C) 2003-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -58,7 +58,7 @@ Test_nfs4_cs_prep_data(void){
     UErrorCode errorCode = U_ZERO_ERROR;
     loadTestData(&errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("Could not load testdata.dat, status = %s\n", u_errorName(errorCode));
+        log_data_err("Could not load testdata.dat, status = %s\n", u_errorName(errorCode));
         return;
     }
 
@@ -82,7 +82,7 @@ Test_nfs4_mixed_prep_data(void){
     UErrorCode errorCode = U_ZERO_ERROR;
     loadTestData(&errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("Could not load testdata.dat, status = %s\n", u_errorName(errorCode));
+        log_data_err("Could not load testdata.dat, status = %s\n", u_errorName(errorCode));
         return;
     }
 
@@ -309,7 +309,7 @@ static void Test_nfs4_cis_prep(void){
     UErrorCode loadStatus = U_ZERO_ERROR;
     loadTestData(&loadStatus);
     if (U_FAILURE(loadStatus)) {
-        log_err("Test could not initialize. Got %s\n", u_errorName(loadStatus));
+        log_data_err("Test could not initialize. Got %s\n", u_errorName(loadStatus));
         return;
     }
 
@@ -428,7 +428,7 @@ Test_nfs4_mixed_prep(void){
     UErrorCode loadStatus = U_ZERO_ERROR;
     loadTestData(&loadStatus);
     if (U_FAILURE(loadStatus)) {
-        log_err("Test could not initialize. Got %s\n", u_errorName(loadStatus));
+        log_data_err("Test could not initialize. Got %s\n", u_errorName(loadStatus));
         return;
     }
 
@@ -485,7 +485,7 @@ Test_nfs4_cs_prep(void){
     UErrorCode errorCode = U_ZERO_ERROR;
     loadTestData(&errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("Could not load testdata.dat, status = %s\n", u_errorName(errorCode));
+        log_data_err("Could not load testdata.dat, status = %s\n", u_errorName(errorCode));
         return;
     }
 
@@ -597,7 +597,7 @@ static void TestBEAMWarning(){
     UChar src =0x0000;
     testdatapath = loadTestData(&status);
     if(U_FAILURE(status)) {
-        log_err("Could not load testdata.dat, status = %s\n", u_errorName(status));
+        log_data_err("Could not load testdata.dat, status = %s\n", u_errorName(status));
         return;
     }
     /* open the profile */
