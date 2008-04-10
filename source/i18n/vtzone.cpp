@@ -1328,6 +1328,9 @@ VTimeZone::parse(UErrorCode& status) {
     UVector *dates = NULL;  // list of RDATE or RRULE strings
     UVector *rules = NULL;  // list of TimeZoneRule instances
 
+    int32_t finalRuleIdx = -1;
+    int32_t finalRuleCount = 0;
+
     rules = new UVector(status);
     if (U_FAILURE(status)) {
         goto cleanupParse;
@@ -1545,6 +1548,91 @@ VTimeZone::parse(UErrorCode& status) {
         status = U_MEMORY_ALLOCATION_ERROR;
         goto cleanupParse;
     }
+    initialRule = NULL; // already adopted by RBTZ, no need to delete
+
+    for (n = 0; n < rules->size(); n++) {
+        TimeZoneRule *r = (TimeZoneRule*)rules->elementAt(n);
+        if (r->getDynamicClassID() == AnnualTimeZoneRule::getStaticClassID()) {
+            if (((AnnualTimeZoneRule*)r)->getEndYear() == AnnualTimeZoneRule::MAX_YEAR) {
+                finalRuleCount++;
+                finalRuleIdx = n;
+            }
+        }
+    }
+    if (finalRuleCount > 2) {
+        // Too many final rules
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        goto cleanupParse;
+    }
+
+    if (finalRuleCount == 1) {
+        if (rules->size() == 1) {
+            // Only one final rule, only governs the initial rule,
+            // which is already initialized, thus, we do not need to
+            // add this transition rule
+            rules->removeAllElements();
+        } else {
+            // Normalize the final rule
+            AnnualTimeZoneRule *finalRule = (AnnualTimeZoneRule*)rules->elementAt(finalRuleIdx);
+            int32_t tmpRaw = finalRule->getRawOffset();
+            int32_t tmpDST = finalRule->getDSTSavings();
+
+            // Find the last non-final rule
+            UDate finalStart, start;
+            finalRule->getFirstStart(initialRawOffset, initialDSTSavings, finalStart);
+            start = finalStart;
+            for (n = 0; n < rules->size(); n++) {
+                if (finalRuleIdx == n) {
+                    continue;
+                }
+                TimeZoneRule *r = (TimeZoneRule*)rules->elementAt(n);
+                UDate lastStart;
+                r->getFinalStart(tmpRaw, tmpDST, lastStart);
+                if (lastStart > start) {
+                    finalRule->getNextStart(lastStart,
+                        r->getRawOffset(),
+                        r->getDSTSavings(),
+                        FALSE,
+                        start);
+                }
+            }
+
+            TimeZoneRule *newRule;
+            UnicodeString tznam;
+            if (start == finalStart) {
+                // Transform this into a single transition
+                newRule = new TimeArrayTimeZoneRule(
+                        finalRule->getName(tznam),
+                        finalRule->getRawOffset(),
+                        finalRule->getDSTSavings(),
+                        &finalStart,
+                        1,
+                        DateTimeRule::UTC_TIME);
+            } else {
+                // Update the end year
+                int32_t y, m, d, dow, doy, mid;
+                Grego::timeToFields(start, y, m, d, dow, doy, mid);
+                newRule = new AnnualTimeZoneRule(
+                        finalRule->getName(tznam),
+                        finalRule->getRawOffset(),
+                        finalRule->getDSTSavings(),
+                        *(finalRule->getRule()),
+                        finalRule->getStartYear(),
+                        y);
+            }
+            if (newRule == NULL) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                goto cleanupParse;
+            }
+            rules->removeElementAt(finalRuleIdx);
+            rules->addElement(newRule, status);
+            if (U_FAILURE(status)) {
+                delete newRule;
+                goto cleanupParse;
+            }
+        }
+    }
+
     while (!rules->isEmpty()) {
         TimeZoneRule *tzr = (TimeZoneRule*)rules->orphanElementAt(0);
         rbtz->addTransitionRule(tzr, status);
