@@ -1288,7 +1288,7 @@ public class TimeZoneRuleTest extends TestFmwk {
             "PRODID:-//PYVOBJECT//NONSGML Version 1//EN\r\n" +
             "BEGIN:VTIMEZONE\r\n" +
             "TZID:Asia/Tokyo\r\n" +
-            "BEGIN:STANDARD\n" +
+            "BEGIN:STANDARD\r\n" +
             "DTSTART:20000101T000000\r\n" +
             "RRULE:FREQ=YEARLY;BYMONTH=1\r\n" +
             "TZNAME:Asia/Tokyo\r\n" +

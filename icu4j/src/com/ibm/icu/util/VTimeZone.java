@@ -770,53 +770,51 @@ public class VTimeZone extends BasicTimeZone {
                 // Only one final rule, only governs the initial rule,
                 // which is already initialized, thus, we do not need to
                 // add this transition rule
-                tz = rbtz;
-                setID(tzid);
-                return true;
-            }
-
-            // Normalize the final rule
-            AnnualTimeZoneRule finalRule = (AnnualTimeZoneRule)rules.get(finalRuleIdx);
-            int tmpRaw = finalRule.getRawOffset();
-            int tmpDST = finalRule.getDSTSavings();
-
-            // Find the last non-final rule
-            Date finalStart = finalRule.getFirstStart(initialRawOffset, initialDSTSavings);
-            Date start = finalStart;
-            for (int i = 0; i < rules.size(); i++) {
-                if (finalRuleIdx == i) {
-                    continue;
-                }
-                TimeZoneRule r = (TimeZoneRule)rules.get(i);
-                Date lastStart = r.getFinalStart(tmpRaw, tmpDST);
-                if (lastStart.after(start)) {
-                    start = finalRule.getNextStart(lastStart.getTime(),
-                            r.getRawOffset(),
-                            r.getDSTSavings(),
-                            false);
-                }
-            }
-            TimeZoneRule newRule;
-            if (start == finalStart) {
-                // Transform this into a single transition
-                newRule = new TimeArrayTimeZoneRule(
-                        finalRule.getName(),
-                        finalRule.getRawOffset(),
-                        finalRule.getDSTSavings(),
-                        new long[] {finalStart.getTime()},
-                        DateTimeRule.UTC_TIME);
+                rules.clear();
             } else {
-                // Update the end year
-                int fields[] = Grego.timeToFields(start.getTime(), null);
-                newRule = new AnnualTimeZoneRule(
-                        finalRule.getName(),
-                        finalRule.getRawOffset(),
-                        finalRule.getDSTSavings(),
-                        finalRule.getRule(),
-                        finalRule.getStartYear(),
-                        fields[0]);
+                // Normalize the final rule
+                AnnualTimeZoneRule finalRule = (AnnualTimeZoneRule)rules.get(finalRuleIdx);
+                int tmpRaw = finalRule.getRawOffset();
+                int tmpDST = finalRule.getDSTSavings();
+    
+                // Find the last non-final rule
+                Date finalStart = finalRule.getFirstStart(initialRawOffset, initialDSTSavings);
+                Date start = finalStart;
+                for (int i = 0; i < rules.size(); i++) {
+                    if (finalRuleIdx == i) {
+                        continue;
+                    }
+                    TimeZoneRule r = (TimeZoneRule)rules.get(i);
+                    Date lastStart = r.getFinalStart(tmpRaw, tmpDST);
+                    if (lastStart.after(start)) {
+                        start = finalRule.getNextStart(lastStart.getTime(),
+                                r.getRawOffset(),
+                                r.getDSTSavings(),
+                                false);
+                    }
+                }
+                TimeZoneRule newRule;
+                if (start == finalStart) {
+                    // Transform this into a single transition
+                    newRule = new TimeArrayTimeZoneRule(
+                            finalRule.getName(),
+                            finalRule.getRawOffset(),
+                            finalRule.getDSTSavings(),
+                            new long[] {finalStart.getTime()},
+                            DateTimeRule.UTC_TIME);
+                } else {
+                    // Update the end year
+                    int fields[] = Grego.timeToFields(start.getTime(), null);
+                    newRule = new AnnualTimeZoneRule(
+                            finalRule.getName(),
+                            finalRule.getRawOffset(),
+                            finalRule.getDSTSavings(),
+                            finalRule.getRule(),
+                            finalRule.getStartYear(),
+                            fields[0]);
+                }
+                rules.set(finalRuleIdx, newRule);
             }
-            rules.set(finalRuleIdx, newRule);
         }
 
         Iterator rit = rules.iterator();
