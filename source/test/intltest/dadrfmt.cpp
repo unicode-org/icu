@@ -64,7 +64,7 @@ void DataDrivenFormatTest::runIndexedTest(int32_t index, UBool exec,
             name = "";
         }
     } else {
-        errln("format/DataDriven*Test data (format.res) not initialized!");
+        dataerrln("[DATA] format/DataDriven*Test data (format.res) not initialized!");
         name = "";
     }
 

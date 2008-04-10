@@ -1817,7 +1817,7 @@ void NumberFormatTest::TestCases() {
     UErrorCode ec = U_ZERO_ERROR;
     TextFile reader("NumberFormatTestCases.txt", "UTF8", ec);
     if (U_FAILURE(ec)) {
-        errln("FAIL: Couldn't open NumberFormatTestCases.txt");
+        dataerrln("[DATA] Couldn't open NumberFormatTestCases.txt");
         return;
     }
     TokenIterator tokens(&reader);

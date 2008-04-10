@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1999-2007, International Business Machines Corporation and
+ * Copyright (c) 1999-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -1303,7 +1303,7 @@ void MultithreadTest::TestCollators()
 
             if (testFile == 0) {
                 *(buffer+bufLen) = 0;
-                errln("ERROR: could not open any of the conformance test files, tried opening base %s", buffer);
+                dataerrln("[DATA] could not open any of the conformance test files, tried opening base %s", buffer);
                 return;        
             } else {
                 infoln(
@@ -1339,7 +1339,7 @@ void MultithreadTest::TestCollators()
     }
     fclose(testFile);
     if(U_FAILURE(status)) {
-      errln("Couldn't read the test file!");
+      dataerrln("[DATA] Couldn't read the test file!");
       return;
     }
 

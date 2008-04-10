@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -516,6 +516,7 @@ void IntlTest::setCaller( IntlTest* callingTest )
 {
     caller = callingTest;
     if (caller) {
+        warn_on_missing_data = caller->warn_on_missing_data;
         verbose = caller->verbose;
         no_err_msg = caller->no_err_msg;
         quick = caller->quick;
@@ -1265,7 +1266,7 @@ const char* IntlTest::loadTestData(UErrorCode& err){
 
         if(U_FAILURE(err)){
             err = U_FILE_ACCESS_ERROR;
-            it_errln((UnicodeString)"Could not load testtypes.res in testdata bundle with path " + tdpath + (UnicodeString)" - " + u_errorName(err));
+            it_dataerrln((UnicodeString)"[DATA] Could not load testtypes.res in testdata bundle with path " + tdpath + (UnicodeString)" - " + u_errorName(err));
             return "";
         }
         ures_close(test);
@@ -1469,7 +1470,11 @@ UBool IntlTest::assertFalse(const char* message, UBool condition, UBool quiet) {
 
 UBool IntlTest::assertSuccess(const char* message, UErrorCode ec) {
     if (U_FAILURE(ec)) {
-        errln("FAIL: %s (%s)", message, u_errorName(ec));
+        if (ec == U_FILE_ACCESS_ERROR) {
+            dataerrln("[DATA] Fail: %s.", message);
+        } else {
+            errln("FAIL: %s (%s)", message, u_errorName(ec));
+        }
         return FALSE;
     }
     return TRUE;

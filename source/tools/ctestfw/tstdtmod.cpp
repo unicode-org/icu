@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2006, International Business Machines Corporation and
+ * Copyright (c) 2002-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -158,7 +158,7 @@ RBTestDataModule::getTestBundle(const char* bundleName, UErrorCode &status)
     if (testBundle == NULL) {
         testBundle = ures_openDirect(icu_data, bundleName, &status);
         if (status != U_ZERO_ERROR) {
-            fLog.errln(UNICODE_STRING_SIMPLE("Failed: could not load test data from resourcebundle: ") + UnicodeString(bundleName, -1, US_INV));
+            fLog.dataerrln(UNICODE_STRING_SIMPLE("[DATA] Could not load test data from resourcebundle: ") + UnicodeString(bundleName, -1, US_INV));
             fDataTestValid = FALSE;
         }
     }

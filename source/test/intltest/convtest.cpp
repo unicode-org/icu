@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2007, International Business Machines
+*   Copyright (C) 2003-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -185,7 +185,7 @@ ConversionTest::TestToUnicode() {
         delete dataModule;
     }
     else {
-        errln("Failed: could not load test conversion data");
+        dataerrln("[DATA] Could not load test conversion data");
     }
 }
 
@@ -338,7 +338,7 @@ ConversionTest::TestFromUnicode() {
         delete dataModule;
     }
     else {
-        errln("Failed: could not load test conversion data");
+        dataerrln("[DATA] Could not load test conversion data");
     }
 }
 
@@ -462,7 +462,7 @@ ConversionTest::TestGetUnicodeSet() {
         delete dataModule;
     }
     else {
-        errln("Failed: could not load test conversion data");
+        dataerrln("[DATA] Could not load test conversion data");
     }
 }
 
