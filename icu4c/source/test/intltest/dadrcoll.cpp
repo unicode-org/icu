@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -73,7 +73,7 @@ void DataDrivenCollatorTest::runIndexedTest( int32_t index, UBool exec, const ch
       name = "";
     }
   } else {
-    errln("collate/DataDrivenTest data not initialized!");
+    dataerrln("[DATA] collate/DataDrivenTest data not initialized!");
     name = "";
   }
 

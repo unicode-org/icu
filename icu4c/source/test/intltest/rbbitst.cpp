@@ -37,7 +37,7 @@
 #define TEST_ASSERT(x) {if (!(x)) { \
     errln("Failure in file %s, line %d", __FILE__, __LINE__);}}
 
-#define TEST_ASSERT_SUCCESS(errcode) {if (U_FAILURE(errcode)) { \
+#define TEST_ASSERT_SUCCESS(errcode) { if (U_FAILURE(errcode)) { \
     errln("Failure in file %s, line %d, status = \"%s\"", __FILE__, __LINE__, u_errorName(errcode));}}
 
 
@@ -1804,7 +1804,7 @@ UChar *RBBITest::ReadAndConvertFile(const char *fileName, int &ulen, const char 
     //
     f = fopen(fileName, "rb");
     if (f == 0) {
-        errln("Error opening test data file %s\n", fileName);
+        dataerrln("[DATA] Error opening test data file %s\n", fileName);
         status = U_FILE_ACCESS_ERROR;
         return NULL;
     }
@@ -1940,7 +1940,7 @@ void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *
     const char *testDataDirectory = IntlTest::getSourceTestData(status);
     char testFileName[1000];
     if (testDataDirectory == NULL || strlen(testDataDirectory) >= sizeof(testFileName)) {
-        errln("Can't open test data.  Path too long.");
+        dataerrln("[DATA] Can't open test data.  Path too long.");
         return;
     }
     strcpy(testFileName, testDataDirectory);
@@ -1948,8 +1948,10 @@ void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *
 
     int    len;
     UChar *testFile = ReadAndConvertFile(testFileName, len, "UTF-8", status);
-    TEST_ASSERT_SUCCESS(status);
-    TEST_ASSERT(testFile != NULL);
+    if (status != U_FILE_ACCESS_ERROR) {
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT(testFile != NULL);
+    }
     if (U_FAILURE(status) || testFile == NULL) {
         return; /* something went wrong, error already output */
     }

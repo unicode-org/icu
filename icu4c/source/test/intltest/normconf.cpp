@@ -1,6 +1,6 @@
 /*
 ************************************************************************
-* Copyright (c) 1997-2004, International Business Machines
+* Copyright (c) 1997-2008, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ************************************************************************
 */
@@ -141,7 +141,7 @@ NormalizerConformanceTest::openNormalizationTestFile(const char *filename) {
     }
 #endif
 
-    errln("Failed to open %s", filename);
+    dataerrln("[DATA] Failed to open %s", filename);
     return NULL;
 }
 
