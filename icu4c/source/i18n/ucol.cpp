@@ -7325,7 +7325,7 @@ ucol_strcollRegular( collIterate *sColl, collIterate *tColl,
     UBool qShifted = shifted && checkQuad;
     UBool doHiragana = (coll->hiraganaQ == UCOL_ON) && checkQuad;
 
-    if(doHiragana && (shifted || checkQuad)) {
+    if(doHiragana /* && shifted */) {
         return (ucol_compareUsingSortKeys(sColl, tColl, status));
     }
     uint8_t caseSwitch = coll->caseSwitch;
