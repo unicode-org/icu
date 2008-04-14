@@ -743,10 +743,10 @@ runTestRequest(const TestNode* root,
             errorCount += ERROR_COUNT;
 
             subtreeOptionSeen = TRUE;
-        }
-        else if ((strcmp( argv[i], "-a") == 0) || (strcmp(argv[i],"-all") == 0))
-        {
+        } else if ((strcmp( argv[i], "-a") == 0) || (strcmp(argv[i],"-all") == 0)) {
             subtreeOptionSeen=FALSE;
+        } else if (strcmp( argv[i], "-l") == 0) {
+            doList = TRUE;
         }
         /* else option already handled by initArgs */
     }
