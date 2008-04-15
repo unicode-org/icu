@@ -1463,6 +1463,13 @@ remapPlatformDependentCodepage(const char *locale, const char *name) {
         */
         name = "eucjis";
     }
+    else if (uprv_strcmp(name, "646") == 0) {
+        /*
+         * The default codepage given by Solaris is 646 but the C library routines treat it as if it was 
+         * ISO-8859-1 instead of US-ASCII(646).
+         */
+        name = "ISO-8859-1";
+    }
 #elif defined(U_DARWIN)
     if (locale == NULL && *name == 0) {
         /*
