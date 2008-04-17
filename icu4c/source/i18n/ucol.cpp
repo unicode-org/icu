@@ -1444,7 +1444,11 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
         }
 
         if(collationSource->flags&UCOL_HIRAGANA_Q) {
-            if((ch>=0x3040 && ch<=0x3094) || ch == 0x309d || ch == 0x309e) {
+            /* Codepoints \u3099-\u309C are both Hiragana and Katakana. Set the flag
+             * based on whether the previous codepoint was Hiragana or Katakana.
+             */
+            if(((ch>=0x3040 && ch<=0x3096) || (ch >= 0x309d && ch <= 0x309f)) ||
+                    ((collationSource->flags & UCOL_WAS_HIRAGANA) && (ch >= 0x3099 && ch <= 0x309C))) {
                 collationSource->flags |= UCOL_WAS_HIRAGANA;
             } else {
                 collationSource->flags &= ~UCOL_WAS_HIRAGANA;
@@ -7325,7 +7329,7 @@ ucol_strcollRegular( collIterate *sColl, collIterate *tColl,
     UBool qShifted = shifted && checkQuad;
     UBool doHiragana = (coll->hiraganaQ == UCOL_ON) && checkQuad;
 
-    if(doHiragana /* && shifted */) {
+    if(doHiragana && shifted) {
         return (ucol_compareUsingSortKeys(sColl, tColl, status));
     }
     uint8_t caseSwitch = coll->caseSwitch;
