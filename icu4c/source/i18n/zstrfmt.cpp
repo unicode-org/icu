@@ -145,9 +145,11 @@ getTimeZoneTranslationType(TimeZoneTranslationTypeIndex typeIdx) {
         case ZSIDX_LONG_DAYLIGHT:
             type = DAYLIGHT_LONG;
             break;
+        case ZSIDX_COUNT:
         case ZSIDX_SHORT_DAYLIGHT:
             type = DAYLIGHT_SHORT;
             break;
+       
     }
     return type;
 }
@@ -211,6 +213,11 @@ CharacterNode::getChildNode(UChar32 c) const {
         }
     }
     return result;
+}
+
+//----------------------------------------------------------------------------
+// Virtual destructor to avoid warning
+TextTrieMapSearchResultHandler::~TextTrieMapSearchResultHandler(){
 }
 
 // ----------------------------------------------------------------------------
@@ -1012,6 +1019,7 @@ ZoneStringFormat::getString(const UnicodeString &tzid, TimeZoneTranslationTypeIn
                     break;
                 case ZSIDX_SHORT_STANDARD:
                 case ZSIDX_SHORT_DAYLIGHT:
+                case ZSIDX_COUNT: //added to avoid warning
                 case ZSIDX_SHORT_GENERIC:
                     if (!commonlyUsedOnly || zstrings->isShortFormatCommonlyUsed()) {
                         zstrings->getString(typeIdx, result);
@@ -1036,6 +1044,7 @@ ZoneStringFormat::getString(const UnicodeString &tzid, TimeZoneTranslationTypeIn
                         break;
                     case ZSIDX_SHORT_STANDARD:
                     case ZSIDX_SHORT_DAYLIGHT:
+                    case ZSIDX_COUNT: //added to avoid warning
                     case ZSIDX_SHORT_GENERIC:
                         if (!commonlyUsedOnly || mzstrings->isShortFormatCommonlyUsed()) {
                             mzstrings->getString(typeIdx, result);
