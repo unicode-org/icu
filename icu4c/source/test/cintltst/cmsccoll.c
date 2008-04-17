@@ -5300,7 +5300,80 @@ static void TestCroatianSortKey(void) {
     ucol_close(ucol);
 }
 
+/* ticket: 6140 */
+static void TestHiragana(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator* ucol;
+    UChar data1[] = { 0x3058, 0x30B8 }; /* Hiragana and Katakana letter Zi */
+    UChar data2[] = { 0x3057, 0x3099, 0x30B7, 0x3099 };
+    int32_t data1Len = sizeof(data1)/sizeof(*data1);
+    int32_t data2Len = sizeof(data2)/sizeof(*data2);
+    int i, j;
+    static const int sortKey1Len = 50;
+    unsigned char sortKey1[sortKey1Len];
+    static const int sortKey2Len = 50;
+    unsigned char sortKey2[sortKey2Len];
 
+    UCharIterator uiter1;
+    UCharIterator uiter2;
+    uint32_t state1[2] = { 0, 0 };
+    uint32_t state2[2] = { 0, 0 };
+    int32_t keySize1;
+    int32_t keySize2;
+
+    ucol = ucol_openFromShortString("LJA_AN_CX_EX_FX_HO_NX_S4", FALSE, NULL,
+            &status);
+    if (U_FAILURE(status)) {
+        log_err("Unable to open collator from short string.");
+        return;
+    }
+
+    /* Start of full sort keys */
+    // Full sort key1
+    keySize1 = ucol_getSortKey(ucol, data1, data1Len, sortKey1, sortKey1Len);
+    // Full sort key2
+    keySize2 = ucol_getSortKey(ucol, data2, data2Len, sortKey2, sortKey2Len);
+    if (keySize1 == keySize2) {
+        for (i = 0; i < keySize1; i++) {
+            if (sortKey1[i] != sortKey2[i]) {
+                log_err("Full sort keys are different. Should be equal.");
+            }
+        }
+    } else {
+        log_err("Full sort keys sizes doesn't match: %d %d", keySize1, keySize1);
+    }
+    /* End of full sort keys */
+
+    /* Start of partial sort keys */
+    // Partial sort key1
+    uiter_setString(&uiter1, data1, data1Len);
+    keySize1 = ucol_nextSortKeyPart(ucol, &uiter1, state1, sortKey1,
+            sortKey1Len, &status);
+    // Partial sort key2
+    uiter_setString(&uiter2, data2, data2Len);
+    keySize2 = ucol_nextSortKeyPart(ucol, &uiter2, state2, sortKey2,
+            sortKey2Len, &status);
+    if (keySize1 == keySize2) {
+        for (j = 0; j < keySize1; j++) {
+            if (sortKey1[j] != sortKey2[j]) {
+                log_err("Partial sort keys are different. Should be equal");
+            }
+        }
+    } else {
+        log_err("Partial sort keys sizes doesn't match: %d %d", keySize1, keySize1);
+    }
+    /* End of partial sort keys */
+
+    /* Start of strcoll */
+    // Use ucol_strcoll() to determine ordering
+    UCollationResult strcollresult;
+    strcollresult = ucol_strcoll(ucol, data1, data1Len, data2, data2Len);
+    if (strcollresult != UCOL_EQUAL) {
+        log_err("Result from ucol_strcoll() should be UCOL_EQUAL.");
+    }
+    
+    ucol_close(ucol);
+}
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
 void addMiscCollTest(TestNode** root)
@@ -5370,6 +5443,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestJ5223);
     TEST(TestJ5232);
     TEST(TestJ5367);
+    TEST(TestHiragana);
     TEST(TestSortKeyConsistency);
     TEST(TestVI5913);  /* VI, RO tailored rules */
     TEST(TestCroatianSortKey);
