@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (C) 2001-2005 International Business Machines Corporation
+ * Copyright (C) 2001-2008 International Business Machines Corporation
  * and others. All Rights Reserved.
  *
  ********************************************************************/
@@ -214,7 +214,7 @@ m_fileLen_(0)
     m_file_ = getBuffer(m_fileLen_, status);
 
     if(status== U_ILLEGAL_ARGUMENT_ERROR){
-       fprintf(stderr, gUsageString, "normperf");
+       fprintf(stderr, gUsageString, "ubrkperf");
        fprintf(stderr, "\t-m or --mode        Required mode for breakiterator: char, word, line or sentence\n");
 
        return;
