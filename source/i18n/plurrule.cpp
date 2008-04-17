@@ -163,7 +163,12 @@ PluralRules::operator=(const PluralRules& other) {
     if (this != &other) {
         fLocaleStringsHash=other.fLocaleStringsHash;
         delete mRules;
-        mRules = new RuleChain(*other.mRules);
+        if (other.mRules==NULL) {
+            mRules = NULL;
+        }
+        else {
+            mRules = new RuleChain(*other.mRules);
+        }
         delete mParser;
         mParser = new RuleParser();
     }
@@ -213,11 +218,12 @@ PluralRules::forLocale(const Locale& locale, UErrorCode& status) {
     }
     if (locRules == NULL) {
         // Check parent locales.
-        char parentLocale[ULOC_FULLNAME_CAPACITY];
+        char parentLocaleName[ULOC_FULLNAME_CAPACITY];
         const char *curLocaleName=locale.getName();
         int32_t localeNameLen=0;
-        uprv_strcpy(parentLocale, curLocaleName);
-        while ((localeNameLen=uloc_getParent(parentLocale, parentLocale, ULOC_FULLNAME_CAPACITY, &status)) > 0) {
+        while ((localeNameLen=uloc_getParent(curLocaleName, parentLocaleName, 
+                                       ULOC_FULLNAME_CAPACITY, &status)) > 0) {
+            localeName = UnicodeString(parentLocaleName, -1, US_INV);
             Mutex lock;
             locRules = (RuleChain *) (newRules->fLocaleStringsHash->get(localeName));
             if (locRules != NULL) {
@@ -247,18 +253,23 @@ PluralRules::select(int32_t number) const {
 StringEnumeration*
 PluralRules::getKeywords(UErrorCode& status) const {
     if (U_FAILURE(status))  return NULL;
-    StringEnumeration* nameEnumerator = new PluralKeywordEnumeration(status);
+    StringEnumeration* nameEnumerator = new PluralKeywordEnumeration(mRules, status);
     return nameEnumerator;
 }
 
 
 UBool
 PluralRules::isKeyword(const UnicodeString& keyword) const {
-    if ( mRules == NULL) {
-        return (UBool)( keyword == PLURAL_DEFAULT_RULE );
+    if ( keyword == PLURAL_KEYWORD_OTHER ) {
+        return true;
     }
     else {
-        return mRules->isKeyword(keyword);
+        if (mRules==NULL) {
+            return false;
+        }
+        else {
+            return mRules->isKeyword(keyword);
+        }
     }
 }
 
@@ -463,7 +474,12 @@ PluralRules::getNextLocale(const UnicodeString& localeData, int32_t* curIndex, U
 
 int32_t
 PluralRules::getRepeatLimit() const {
-    return mRules->getRepeatLimit();
+    if (mRules!=NULL) {
+        return mRules->getRepeatLimit();
+    }
+    else {
+        return 0;
+    }
 }
 
 void
@@ -675,7 +691,6 @@ RuleChain::RuleChain() {
 }
 
 RuleChain::RuleChain(const RuleChain& other) {
-    
     this->repeatLimit = other.repeatLimit;
     this->keyword=other.keyword;
     if (other.ruleHeader != NULL) {
@@ -1108,10 +1123,25 @@ RuleParser::isValidKeyword(const UnicodeString& token) {
     }
 }
 
-PluralKeywordEnumeration::PluralKeywordEnumeration(UErrorCode& status) :
+PluralKeywordEnumeration::PluralKeywordEnumeration(RuleChain *header, UErrorCode& status) :
 fKeywordNames(status)
 {
+    RuleChain *node=header;
+    UBool  addKeywordOther=true;
+    
     pos=0;
+    fKeywordNames.removeAllElements();
+    while(node!=NULL) {
+        fKeywordNames.addElement(new UnicodeString(node->keyword), status);
+        if (node->keyword == PLURAL_KEYWORD_OTHER) {
+            addKeywordOther= false;
+        }
+        node=node->next;
+    }
+    
+    if (addKeywordOther) {
+        fKeywordNames.addElement(new UnicodeString(PLURAL_KEYWORD_OTHER), status);
+    }
 }
 
 const UnicodeString*

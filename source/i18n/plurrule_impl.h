@@ -199,7 +199,7 @@ private:
 
 class PluralKeywordEnumeration : public StringEnumeration {
 public:
-    PluralKeywordEnumeration(UErrorCode& status);
+    PluralKeywordEnumeration(RuleChain *header, UErrorCode& status);
     virtual ~PluralKeywordEnumeration();
     static UClassID U_EXPORT2 getStaticClassID(void);
     virtual UClassID getDynamicClassID(void) const;
