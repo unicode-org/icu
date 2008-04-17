@@ -5332,9 +5332,9 @@ static void TestHiragana(void) {
     }
 
     /* Start of full sort keys */
-    // Full sort key1
+    /* Full sort key1 */
     keySize1 = ucol_getSortKey(ucol, data1, data1Len, sortKey1, SORTKEYLEN);
-    // Full sort key2
+    /* Full sort key2 */
     keySize2 = ucol_getSortKey(ucol, data2, data2Len, sortKey2, SORTKEYLEN);
     if (keySize1 == keySize2) {
         for (i = 0; i < keySize1; i++) {
@@ -5348,10 +5348,10 @@ static void TestHiragana(void) {
     /* End of full sort keys */
 
     /* Start of partial sort keys */
-    // Partial sort key1
+    /* Partial sort key1 */
     uiter_setString(&uiter1, data1, data1Len);
     keySize1 = ucol_nextSortKeyPart(ucol, &uiter1, state1, sortKey1, SORTKEYLEN, &status);
-    // Partial sort key2
+    /* Partial sort key2 */
     uiter_setString(&uiter2, data2, data2Len);
     keySize2 = ucol_nextSortKeyPart(ucol, &uiter2, state2, sortKey2, SORTKEYLEN, &status);
     if (U_SUCCESS(status) && keySize1 == keySize2) {
@@ -5366,7 +5366,7 @@ static void TestHiragana(void) {
     /* End of partial sort keys */
 
     /* Start of strcoll */
-    // Use ucol_strcoll() to determine ordering
+    /* Use ucol_strcoll() to determine ordering */
     strcollresult = ucol_strcoll(ucol, data1, data1Len, data2, data2Len);
     if (strcollresult != UCOL_EQUAL) {
         log_err("Result from ucol_strcoll() should be UCOL_EQUAL.");
