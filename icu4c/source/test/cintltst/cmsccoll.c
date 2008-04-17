@@ -5301,18 +5301,21 @@ static void TestCroatianSortKey(void) {
 }
 
 /* ticket: 6140 */
+/* This test ensures that codepoints such as 0x3099 are flagged correctly by the collator since
+ * they are both Hiragana and Katakana 
+ */
+#define SORTKEYLEN 50
 static void TestHiragana(void) {
     UErrorCode status = U_ZERO_ERROR;
     UCollator* ucol;
+    UCollationResult strcollresult;
     UChar data1[] = { 0x3058, 0x30B8 }; /* Hiragana and Katakana letter Zi */
     UChar data2[] = { 0x3057, 0x3099, 0x30B7, 0x3099 };
     int32_t data1Len = sizeof(data1)/sizeof(*data1);
     int32_t data2Len = sizeof(data2)/sizeof(*data2);
-    int i, j;
-    static const int sortKey1Len = 50;
-    unsigned char sortKey1[sortKey1Len];
-    static const int sortKey2Len = 50;
-    unsigned char sortKey2[sortKey2Len];
+    int32_t i, j;
+    uint8_t sortKey1[SORTKEYLEN];
+    uint8_t sortKey2[SORTKEYLEN];
 
     UCharIterator uiter1;
     UCharIterator uiter2;
@@ -5324,15 +5327,15 @@ static void TestHiragana(void) {
     ucol = ucol_openFromShortString("LJA_AN_CX_EX_FX_HO_NX_S4", FALSE, NULL,
             &status);
     if (U_FAILURE(status)) {
-        log_err("Unable to open collator from short string.");
+        log_err("Error status: %s; Unable to open collator from short string.", u_errorName(status));
         return;
     }
 
     /* Start of full sort keys */
     // Full sort key1
-    keySize1 = ucol_getSortKey(ucol, data1, data1Len, sortKey1, sortKey1Len);
+    keySize1 = ucol_getSortKey(ucol, data1, data1Len, sortKey1, SORTKEYLEN);
     // Full sort key2
-    keySize2 = ucol_getSortKey(ucol, data2, data2Len, sortKey2, sortKey2Len);
+    keySize2 = ucol_getSortKey(ucol, data2, data2Len, sortKey2, SORTKEYLEN);
     if (keySize1 == keySize2) {
         for (i = 0; i < keySize1; i++) {
             if (sortKey1[i] != sortKey2[i]) {
@@ -5340,33 +5343,30 @@ static void TestHiragana(void) {
             }
         }
     } else {
-        log_err("Full sort keys sizes doesn't match: %d %d", keySize1, keySize1);
+        log_err("Full sort keys sizes doesn't match: %d %d", keySize1, keySize2);
     }
     /* End of full sort keys */
 
     /* Start of partial sort keys */
     // Partial sort key1
     uiter_setString(&uiter1, data1, data1Len);
-    keySize1 = ucol_nextSortKeyPart(ucol, &uiter1, state1, sortKey1,
-            sortKey1Len, &status);
+    keySize1 = ucol_nextSortKeyPart(ucol, &uiter1, state1, sortKey1, SORTKEYLEN, &status);
     // Partial sort key2
     uiter_setString(&uiter2, data2, data2Len);
-    keySize2 = ucol_nextSortKeyPart(ucol, &uiter2, state2, sortKey2,
-            sortKey2Len, &status);
-    if (keySize1 == keySize2) {
+    keySize2 = ucol_nextSortKeyPart(ucol, &uiter2, state2, sortKey2, SORTKEYLEN, &status);
+    if (U_SUCCESS(status) && keySize1 == keySize2) {
         for (j = 0; j < keySize1; j++) {
             if (sortKey1[j] != sortKey2[j]) {
                 log_err("Partial sort keys are different. Should be equal");
             }
         }
     } else {
-        log_err("Partial sort keys sizes doesn't match: %d %d", keySize1, keySize1);
+        log_err("Error Status: %s or Partial sort keys sizes doesn't match: %d %d", u_errorName(status), keySize1, keySize2);
     }
     /* End of partial sort keys */
 
     /* Start of strcoll */
     // Use ucol_strcoll() to determine ordering
-    UCollationResult strcollresult;
     strcollresult = ucol_strcoll(ucol, data1, data1Len, data2, data2Len);
     if (strcollresult != UCOL_EQUAL) {
         log_err("Result from ucol_strcoll() should be UCOL_EQUAL.");
@@ -5374,6 +5374,7 @@ static void TestHiragana(void) {
     
     ucol_close(ucol);
 }
+
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
 void addMiscCollTest(TestNode** root)
