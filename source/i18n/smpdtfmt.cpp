@@ -938,7 +938,7 @@ SimpleDateFormat::initGMTFormatters(UErrorCode &status) {
         fGMTFormatters = (MessageFormat**)uprv_malloc(kNumGMTFormatters * sizeof(MessageFormat*));
         if (fGMTFormatters) {
             for (int32_t i = 0; i < kNumGMTFormatters; i++) {
-                const UnicodeString *hourPattern;
+                const UnicodeString *hourPattern = NULL; //initialized it to avoid warning
                 switch (i) {
                     case kGMTNegativeHMS:
                         hourPattern = &(fSymbols->fGmtHourFormats[DateFormatSymbols::GMT_NEGATIVE_HMS]);
