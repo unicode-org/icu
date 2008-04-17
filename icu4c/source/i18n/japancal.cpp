@@ -492,6 +492,7 @@ int32_t JapaneseCalendar::handleGetLimit(UCalendarDateFields field, ELimitType l
                 return 1;
             case UCAL_LIMIT_LEAST_MAXIMUM:
                 return 1;
+            case  UCAL_LIMIT_COUNT: //added to avoid warning
             case UCAL_LIMIT_MAXIMUM:
                 return GregorianCalendar::handleGetLimit(UCAL_YEAR, UCAL_LIMIT_MAXIMUM) - kEraInfo[kCurrentEra].year;
             }

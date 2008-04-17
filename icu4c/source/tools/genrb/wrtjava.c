@@ -99,7 +99,6 @@ static void write_tabs(FileStream* os){
 
 static const char* enc ="";
 static UConverter* conv = NULL;
-static char NUMBER = ZERO;
 
 static int32_t
 uCharsToChars( char* target,int32_t targetLen, UChar* source, int32_t sourceLen,UErrorCode* status){

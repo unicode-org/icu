@@ -59,6 +59,7 @@ class TextTrieMapSearchResultHandler : public UMemory {
 public:
     virtual UBool handleMatch(int32_t matchLength,
         const UVector *values, UErrorCode& status) = 0;
+    virtual ~TextTrieMapSearchResultHandler(); //added to avoid warning
 };
 
 /**

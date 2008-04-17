@@ -546,7 +546,8 @@ void RBBITableBuilder::buildStateTable() {
         return;
     }
     RBBIStateDescriptor *failState;
-    RBBIStateDescriptor *initialState;
+    // Set it to NULL to avoid uninitialized warning
+    RBBIStateDescriptor *initialState = NULL; 
     //
     // Add a dummy state 0 - the stop state.  Not from Aho.
     int      lastInputSymbol = fRB->fSetBuilder->getNumCharCategories() - 1;
