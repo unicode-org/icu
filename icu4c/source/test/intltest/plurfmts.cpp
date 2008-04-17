@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2007-2007, International Business Machines Corporation and
+ * Copyright (c) 2007-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -85,6 +85,25 @@ void PluralFormatTest::pluralFormatBasicTest(/*char *par*/)
         }
        delete plFmt[i];
     }
+    // ======= Test clone, assignment operator && == operator.
+    plFmt[0]= new PluralFormat(status[0]);
+    plFmt[1]= new PluralFormat(locale, status[1]);
+    *plFmt[1] = *plFmt[0];
+    if (plFmt[1]!=NULL) {
+        if ( *plFmt[1] != *plFmt[0] ) {
+            errln("ERROR:  clone plural format test failed!");
+        }
+    }
+    plFmt[2]= new PluralFormat(locale, status[1]);
+    *plFmt[1] = *plFmt[2];
+    if (plFmt[1]!=NULL) {
+        if ( *plFmt[1] != *plFmt[2] ) {
+            errln("ERROR:  assignment operator test failed!");
+        }
+        delete plFmt[1];
+    }
+    delete plFmt[0];
+    delete plFmt[2];
     delete numFmt;
     delete plRules;
 }

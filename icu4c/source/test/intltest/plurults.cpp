@@ -86,6 +86,22 @@ void PluralRulesTest::testAPI(/*char *par*/)
         delete test;
         return;
     }
+    
+    // ======= Test clone, assignment operator && == operator.
+    PluralRules *dupRule = defRule.clone();
+    if (dupRule!=NULL) {
+        if ( *dupRule != defRule ) {
+            errln("ERROR:  clone plural rules test failed!");
+        }
+    }
+    *dupRule = *newEnPlural;
+    if (dupRule!=NULL) {
+        if ( *dupRule != *newEnPlural ) {
+            errln("ERROR:  clone plural rules test failed!");
+        }
+        delete dupRule;
+    }
+
     delete newEnPlural;
 
     // ======= Test empty plural rules   
