@@ -155,8 +155,7 @@ PluralFormat::applyPattern(const UnicodeString& newPattern, UErrorCode& status) 
                         status = U_PATTERN_SYNTAX_ERROR;
                         return;
                     }
-                    if (!pluralRules->isKeyword(token) && 
-                        pluralRules->getKeywordOther()!=token) {
+                    if (!pluralRules->isKeyword(token)) {
                         status = U_UNDEFINED_KEYWORD;
                         return;
                     }
@@ -353,11 +352,23 @@ PluralFormat::clone() const
     return new PluralFormat(*this);
 }
 
-/*
-Format*
-PluralFormat::clone() const {
+PluralFormat&
+PluralFormat::operator=(const PluralFormat& other) {
+    if (this != &other) {
+        UErrorCode status = U_ZERO_ERROR;
+        delete pluralRules;   
+        delete fParsedValuesHash;
+        delete numberFormat;
+        locale = other.locale;
+        pluralRules = other.pluralRules->clone();
+        pattern = other.pattern;
+        copyHashtable(other.fParsedValuesHash, status);
+        numberFormat=NumberFormat::createInstance(locale, status);
+        replacedNumberFormat=other.replacedNumberFormat;
+    }
+
+    return *this;
 }
-*/
 
 UBool
 PluralFormat::operator==(const Format& other) const {
