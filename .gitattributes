@@ -85,6 +85,7 @@ icu4c/source/test/perf/strsrchperf/Makefile.in -text
 icu4c/source/test/perf/strsrchperf/StrSrchPerf_r.pl -text
 icu4c/source/test/perf/strsrchperf/strsrchperf.cpp -text
 icu4c/source/test/perf/strsrchperf/strsrchperf.h -text
+icu4c/source/test/perf/strsrchperf/strsrchperf.vcproj -text
 icu4c/source/test/testdata/TestFont1.otf -text
 icu4c/source/test/testdata/icu26_testtypes.res -text
 icu4c/source/test/testdata/icu26e_testtypes.res -text
