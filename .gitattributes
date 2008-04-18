@@ -214,6 +214,7 @@ icu4c/source/test/perf/collperf/CollPerf_r.pl -text
 icu4c/source/test/perf/convperf/Makefile.in -text
 icu4c/source/test/perf/perldriver/Common.pl -text
 icu4c/source/test/perf/strsrchperf/Makefile.in -text
+icu4c/source/test/perf/strsrchperf/StrSrchPerf_r.pl -text
 icu4c/source/test/perf/strsrchperf/strsrchperf.cpp -text
 icu4c/source/test/perf/strsrchperf/strsrchperf.h -text
 icu4c/source/test/testdata/TestFont1.otf -text

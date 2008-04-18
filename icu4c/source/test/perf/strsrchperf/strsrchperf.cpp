@@ -11,8 +11,77 @@
 
 #include "strsrchperf.h"
 
+StringSearchPerformanceTest::StringSearchPerformanceTest(int32_t argc, const char *argv[], UErrorCode &status)
+:UPerfTest(argc,argv,status){
+    int32_t start, end;
+    if(status== U_ILLEGAL_ARGUMENT_ERROR || line_mode){
+       fprintf(stderr,gUsageString, "strsrchperf");
+       return;
+    }
+    /* Get the Text */
+    src = getBuffer(srcLen, status);
+    
+    /* Get a word to find. Do this by selecting a random word with a word breakiterator. */
+    UBreakIterator* brk = ubrk_open(UBRK_WORD, locale, src, srcLen, &status);
+    if(U_FAILURE(status)){
+        fprintf(stderr, "FAILED to create pattern for searching. Error: %s\n", u_errorName(status));
+        return;
+    }
+    start = ubrk_preceding(brk, 100);
+    end = ubrk_following(brk, start);
+    pttrnLen = end - start;
+    UChar* temp = (UChar*)malloc(sizeof(UChar)*(pttrnLen));
+    for (int i = 0; i < pttrnLen; i++) {
+        temp[i] = src[start++];
+    }
+    pttrn = temp; /* store word in pttrn */
+    ubrk_close(brk);
+    
+    /* Create the StringSearch object to be use in performance test. */
+    srch = usearch_open(src, srcLen, pttrn, pttrnLen, locale, NULL, &status);
+    if(U_FAILURE(status)){
+        fprintf(stderr, "FAILED to create UPerfTest object. Error: %s\n", u_errorName(status));
+        return;
+    }
+    
+}
 
-int main (int argc, char** argv) {
-    printf("Done!\n");
+StringSearchPerformanceTest::~StringSearchPerformanceTest() {
+    free(pttrn);
+    usearch_close(srch);
+}
+
+UPerfFunction* StringSearchPerformanceTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char *par) {
+    switch (index) {
+        TESTCASE(0,Test_ICU_Forward_Search);
+        TESTCASE(1,Test_ICU_Backward_Search);
+
+        default: 
+            name = ""; 
+            return NULL;
+    }
+    return NULL;
+}
+
+UPerfFunction* StringSearchPerformanceTest::Test_ICU_Forward_Search(){
+    StringSearchPerfFunction* func = new StringSearchPerfFunction(ICUForwardSearch, srch, src, srcLen, pttrn, pttrnLen);
+    return func;
+}
+
+UPerfFunction* StringSearchPerformanceTest::Test_ICU_Backward_Search(){
+    StringSearchPerfFunction* func = new StringSearchPerfFunction(ICUBackwardSearch, srch, src, srcLen, pttrn, pttrnLen);
+    return func;
+}
+
+int main (int argc, const char* argv[]) {
+    UErrorCode status = U_ZERO_ERROR;
+    StringSearchPerformanceTest test(argc, argv, status);
+    if(U_FAILURE(status)){
+        return status;
+    }
+    if(test.run()==FALSE){
+        fprintf(stderr,"FAILED: Tests could not be run please check the arguments.\n");
+        return -1;
+    }
     return 0;
 }
