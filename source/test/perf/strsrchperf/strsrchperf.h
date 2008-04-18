@@ -29,7 +29,7 @@ public:
     }
     
     virtual long getOperationsPerIteration() {
-        return srcLen;
+        return (long)(srcLen/pttrnLen);
     }
     
     StringSearchPerfFunction(StrSrchFn func, UStringSearch* search, const UChar* source,int32_t sourceLen, const UChar* pattern, int32_t patternLen) {

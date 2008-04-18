@@ -18,6 +18,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "usetperf", "usetperf\usetpe
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "unisetperf", "unisetperf\unisetperf.vcproj", "{E7728E98-0469-AF37-43F4-4529A3D52C6B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "strsrchperf", "strsrchperf\strsrchperf.vcproj", "{241DED26-1635-45E6-9564-7742AC8043B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -60,6 +62,10 @@ Global
 		{E7728E98-0469-AF37-43F4-4529A3D52C6B}.Debug|Win32.Build.0 = Debug|Win32
 		{E7728E98-0469-AF37-43F4-4529A3D52C6B}.Release|Win32.ActiveCfg = Release|Win32
 		{E7728E98-0469-AF37-43F4-4529A3D52C6B}.Release|Win32.Build.0 = Release|Win32
+		{241DED26-1635-45E6-9564-7742AC8043B5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{241DED26-1635-45E6-9564-7742AC8043B5}.Debug|Win32.Build.0 = Debug|Win32
+		{241DED26-1635-45E6-9564-7742AC8043B5}.Release|Win32.ActiveCfg = Release|Win32
+		{241DED26-1635-45E6-9564-7742AC8043B5}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
