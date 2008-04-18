@@ -14,6 +14,8 @@
 StringSearchPerformanceTest::StringSearchPerformanceTest(int32_t argc, const char *argv[], UErrorCode &status)
 :UPerfTest(argc,argv,status){
     int32_t start, end;
+    srch = NULL;
+    pttrn = NULL;
     if(status== U_ILLEGAL_ARGUMENT_ERROR || line_mode){
        fprintf(stderr,gUsageString, "strsrchperf");
        return;
@@ -47,8 +49,12 @@ StringSearchPerformanceTest::StringSearchPerformanceTest(int32_t argc, const cha
 }
 
 StringSearchPerformanceTest::~StringSearchPerformanceTest() {
-    free(pttrn);
-    usearch_close(srch);
+    if (pttrn != NULL) {
+        free(pttrn);
+    }
+    if (srch != NULL) {
+        usearch_close(srch);
+    }
 }
 
 UPerfFunction* StringSearchPerformanceTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char *par) {
