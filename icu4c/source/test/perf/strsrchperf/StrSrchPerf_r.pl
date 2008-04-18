@@ -39,7 +39,7 @@ if ($OnWindows) {
 }
 else {
     $p1 = $ICUPathPrevious . "/strsrchperf/strsrchperf -b";
-    $p2 = $ICUPathLatest . "/strsrchperf/strsrchperf-b";
+    $p2 = $ICUPathLatest . "/strsrchperf/strsrchperf -b";
 }
 
 my $dataFiles = {
