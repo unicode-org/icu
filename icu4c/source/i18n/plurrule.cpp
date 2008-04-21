@@ -221,7 +221,8 @@ PluralRules::forLocale(const Locale& locale, UErrorCode& status) {
         char parentLocaleName[ULOC_FULLNAME_CAPACITY];
         const char *curLocaleName=locale.getName();
         int32_t localeNameLen=0;
-        while ((localeNameLen=uloc_getParent(curLocaleName, parentLocaleName, 
+        uprv_strcpy(parentLocaleName, curLocaleName);
+        while ((localeNameLen=uloc_getParent(parentLocaleName, parentLocaleName, 
                                        ULOC_FULLNAME_CAPACITY, &status)) > 0) {
             localeName = UnicodeString(parentLocaleName, -1, US_INV);
             Mutex lock;
