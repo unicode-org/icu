@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2007, International Business Machines Corporation and    *
+* Copyright (C) 1996-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -269,8 +269,11 @@ public final class CollationElementIterator
         }
         char ch = (char)ch_int;
         if (m_collator_.m_isHiragana4_) {
-            m_isCodePointHiragana_ = (ch >= 0x3040 && ch <= 0x309e)
-                                     && !(ch > 0x3094 && ch < 0x309d);
+            /* Codepoints \u3099-\u309C are both Hiragana and Katakana. Set the flag
+             * based on whether the previous codepoint was Hiragana or Katakana.
+             */
+            m_isCodePointHiragana_ = (m_isCodePointHiragana_ && (ch >= 0x3099 && ch <= 0x309C)) || 
+                                     ((ch >= 0x3040 && ch <= 0x309e) && !(ch > 0x3094 && ch < 0x309d));
         }
 
         int result = NULLORDER;
