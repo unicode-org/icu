@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -14,6 +14,8 @@ package com.ibm.icu.dev.test.collator;
  
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.*;
+import com.ibm.icu.util.ULocale;
+
 import java.util.Locale;
  
 public class CollationKanaTest extends TestFmwk{
@@ -157,7 +159,32 @@ public class CollationKanaTest extends TestFmwk{
             doTest(testChooonKigooCases[i], testChooonKigooCases[i + 1], -1);
         }
     }
-
+    
+    /*
+     * Test common Hiragana and Katakana characters (e.g. 0x3099) (ticket:6140)
+     */
+    public void TestCommonCharacters() {
+        char[] tmp1 = { 0x3058, 0x30B8 };
+        char[] tmp2 = { 0x3057, 0x3099, 0x30B7, 0x3099 };
+        CollationKey key1, key2;
+        int result;
+        String string1 = new String(tmp1);
+        String string2 = new String(tmp2);
+        RuleBasedCollator rb = (RuleBasedCollator)Collator.getInstance(ULocale.JAPAN);
+        rb.setHiraganaQuaternary(true);
+        rb.setStrength(Collator.QUATERNARY);
+        rb.setAlternateHandlingShifted(false);
+        
+        result = rb.compare(string1, string2);
+        
+        key1 = rb.getCollationKey(string1);
+        key2 = rb.getCollationKey(string2);
+        
+        if ( result != 0 || !key1.equals(key2)) {
+            errln("Failed Hiragana and Katakana common characters test. Expected results to be equal.");
+        }
+        
+    }
     // main test routine, tests rules specific to "Kana" locale
     private void doTest(char[] source, char[] target, int result){
         
