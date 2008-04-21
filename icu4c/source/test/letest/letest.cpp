@@ -47,7 +47,7 @@ U_CDECL_BEGIN
 static void U_CALLCONV ScriptTest(void)
 {
     if ((int)scriptCodeCount != (int)USCRIPT_CODE_LIMIT) {
-        log_err("ScriptCodes::scriptCodeCount = %n, but UScriptCode::USCRIPT_CODE_LIMIT = %n\n", scriptCodeCount, USCRIPT_CODE_LIMIT);
+        log_err("ScriptCodes::scriptCodeCount = %d, but UScriptCode::USCRIPT_CODE_LIMIT = %d\n", scriptCodeCount, USCRIPT_CODE_LIMIT);
     }
 }
 
