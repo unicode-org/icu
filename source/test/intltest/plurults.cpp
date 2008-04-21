@@ -169,12 +169,32 @@ void PluralRulesTest::testAPI(/*char *par*/)
      }
 
   
-// ======= Test getStaticClassID()
+    // ======= Test getStaticClassID()
     logln("Testing getStaticClassID()");
     
     if(test->getDynamicClassID() != PluralRules::getStaticClassID()) {
         errln("ERROR: getDynamicClassID() didn't return the expected value");
     }
+    // ====== Test fallback to parent locale
+    PluralRules *en_UK = test->forLocale(Locale::getUK(), status);
+    PluralRules *en = test->forLocale(Locale::getEnglish(), status);
+    if (en_UK != NULL && en != NULL) {
+        if ( *en_UK != *en ) {
+            errln("ERROR:  test locale fallback failed!");
+        }
+    }
+    delete en;
+    delete en_UK;
+
+    PluralRules *zh_Hant = test->forLocale(Locale::getTaiwan(), status);
+    PluralRules *zh = test->forLocale(Locale::getChinese(), status);
+    if (zh_Hant != NULL && zh != NULL) {
+        if ( *zh_Hant != *zh ) {
+            errln("ERROR:  test locale fallback failed!");
+        }
+    }
+    delete zh_Hant;
+    delete zh;
     delete test;
 }
 
