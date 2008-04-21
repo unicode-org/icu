@@ -1414,7 +1414,7 @@ MBCSWrite(NewConverter *cnvData, const UConverterStaticData *staticData,
     if(mbcsData->omitFromU) {
         /* find how much of stage2 can be omitted */
         int32_t utf8Limit=(int32_t)mbcsData->utf8Max+1;
-        uint32_t st2=0; //initialized it to avoid warning
+        uint32_t st2=0; /*initialized it to avoid compiler warnings */
 
         i=utf8Limit>>MBCS_STAGE_1_SHIFT;
         if((utf8Limit&((1<<MBCS_STAGE_1_SHIFT)-1))!=0 && (st2=mbcsData->stage1[i])!=0) {
