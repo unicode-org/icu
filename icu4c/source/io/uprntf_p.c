@@ -1224,7 +1224,7 @@ u_printf_parse(const u_printf_stream_handler *streamHandler,
     const UChar *lastAlias;
     const UChar *orgAlias = fmt;
     /* parsed argument list */
-    ufmt_args *arglist = NULL; //initialized it to avoid warning
+    ufmt_args *arglist = NULL; /* initialized it to avoid compiler warnings */
     UErrorCode status = U_ZERO_ERROR;
     if (!locStringContext || locStringContext->available >= 0) {
         /* get the parsed list of argument types */
