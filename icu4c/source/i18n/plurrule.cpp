@@ -28,6 +28,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+U_NAMESPACE_BEGIN
+
 // gPluralRuleLocaleHash is a global hash table that maps locale name to
 // the pointer of PluralRule. gPluralRuleLocaleHash is built only once and
 // resides in the memory until end of application. We will remove the
@@ -35,9 +37,6 @@
 // bundle in ICU4.0 release.  If Valgrind reports the memory is still 
 // reachable, please ignore it.
 static Hashtable *gPluralRuleLocaleHash=NULL;
-
-
-U_NAMESPACE_BEGIN
 
 #define ARRAY_SIZE(array) (int32_t)(sizeof array  / sizeof array[0])
 

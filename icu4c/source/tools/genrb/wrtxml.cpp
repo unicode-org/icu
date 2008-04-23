@@ -35,6 +35,8 @@
 #include "unicode/unistr.h"
 #include <time.h>
 
+U_NAMESPACE_USE
+
 static int tabCount = 0;
 
 static FileStream* out=NULL;
@@ -1256,3 +1258,4 @@ cleanup_bundle_write_xml:
         uprv_free(outputFileName);
     }
 }
+
