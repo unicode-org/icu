@@ -1119,6 +1119,179 @@ ucurr_openISOCurrencies(uint32_t currType, UErrorCode *pErrorCode) {
     return myEnum;
 }
 
+
+
+U_CAPI int32_t U_EXPORT2
+ucurr_forLocaleAndDate(const char* locale,
+                UDate date,
+                UChar* buff,
+                int32_t buffCapacity,
+                UErrorCode* ec)
+{
+    int32_t resLen = 0;
+    const UChar* s = NULL;
+
+    if (ec != NULL && U_SUCCESS(*ec)) 
+	{
+		// check the arguments passed
+        if ((buff && buffCapacity) || !buffCapacity) 
+		{
+			// local variables
+            UErrorCode localStatus = U_ZERO_ERROR;
+            char id[ULOC_FULLNAME_CAPACITY];
+
+            if ((resLen = uloc_getKeywordValue(locale, "currency", id, ULOC_FULLNAME_CAPACITY, &localStatus))) 
+			{
+                // there is a currency keyword. Try to see if it's valid
+                if(buffCapacity > resLen) 
+				{
+                    u_charsToUChars(id, buff, resLen);
+                }
+            }
+			else
+			{
+				// get country or country_variant in `id'
+				uint32_t variantType = idForLocale(locale, id, sizeof(id), ec);
+				if (U_FAILURE(*ec)) 
+				{
+					return 0;
+				}
+
+#if !UCONFIG_NO_SERVICE
+				const UChar* result = CReg::get(id);
+				if (result) {
+					if(buffCapacity > u_strlen(result)) {
+						u_strcpy(buff, result);
+					}
+					return u_strlen(result);
+				}
+#endif
+
+				// Remove variants, which is only needed for registration.
+				char *idDelim = strchr(id, VAR_DELIM);
+				if (idDelim) 
+				{
+					idDelim[0] = 0;
+				}
+	                
+				// Look up the CurrencyMap element in the root bundle.
+				UResourceBundle *rb = ures_openDirect(NULL, CURRENCY_DATA, &localStatus);
+				UResourceBundle *cm = ures_getByKey(rb, CURRENCY_MAP, rb, &localStatus);
+
+				// Using the id derived from the local, get the currency data
+				UResourceBundle *countryArray = ures_getByKey(rb, id, cm, &localStatus);
+
+				// process each currency to see which one is valid for the given date
+				bool matchFound = false;
+				if (U_SUCCESS(localStatus))
+				{
+					for (int32_t i=0; i<ures_getSize(countryArray); i++)
+					{
+						// get the currency resource
+						UResourceBundle *currencyRes = ures_getByIndex(countryArray, i, NULL, &localStatus);
+						s = ures_getStringByKey(currencyRes, "id", &resLen, &localStatus);
+
+						// get the from date
+						int32_t fromLength = 0;
+						UResourceBundle *fromRes = ures_getByKey(currencyRes, "from", NULL, &localStatus);
+						const int32_t *fromArray = ures_getIntVector(fromRes, &fromLength, &localStatus);
+
+						int64_t currDate64 = (int64_t)fromArray[0] << 32;			
+						currDate64 |= ((int64_t)fromArray[1] & (int64_t)INT64_C(0x00000000FFFFFFFF));
+						UDate fromDate = (UDate)currDate64;
+					
+						if (ures_getSize(currencyRes) > 2)
+						{
+							int32_t toLength = 0;
+							UResourceBundle *toRes = ures_getByKey(currencyRes, "to", NULL, &localStatus);
+							const int32_t *toArray = ures_getIntVector(toRes, &toLength, &localStatus);
+							
+							currDate64 = (int64_t)toArray[0] << 32;			
+							currDate64 |= ((int64_t)toArray[1] & (int64_t)INT64_C(0x00000000FFFFFFFF));
+							UDate toDate = (UDate)currDate64;			
+
+							if ((fromDate <= date) && (date < toDate))
+							{
+								matchFound = true;
+							}
+
+							ures_close(toRes);
+						}
+						else
+						{
+							if (fromDate <= date)
+							{
+								matchFound = true;
+							}
+						}
+
+						// close open resources
+						ures_close(currencyRes);
+						ures_close(fromRes);
+				        
+						// check for loop exit
+						if (matchFound)
+						{
+							break;
+						}
+
+					} // end For loop
+				}
+
+				ures_close(countryArray);
+
+				// Due to gaps in the windows of time for valid currencies,
+				// it is possible that no currency is valid for the given time.
+				// In such a case, use ucurr_forLocale to get a default value.
+				if (!matchFound)
+				{
+					return ucurr_forLocale(locale, buff, buffCapacity, ec);
+				}
+
+				// Check for errors
+				if ((U_FAILURE(localStatus)) && strchr(id, '_') != 0)
+				{
+					// We don't know about it.  
+					// Check to see if we support the variant.
+					uloc_getParent(locale, id, sizeof(id), ec);
+					*ec = U_USING_FALLBACK_WARNING;
+					return ucurr_forLocaleAndDate(id, date, buff, buffCapacity, ec);
+				}
+				else if (*ec == U_ZERO_ERROR || localStatus != U_ZERO_ERROR) 
+				{
+					// There is nothing to fallback to. 
+					// Report the failure/warning if possible.
+					*ec = localStatus;
+				}
+
+				if (U_SUCCESS(*ec)) 
+				{
+					// no errors
+					if(buffCapacity > resLen) 
+					{
+						// write out the currency value
+						u_strcpy(buff, s);
+					}
+				}
+
+			}
+
+			// return null terminated currency string
+            return u_terminateUChars(buff, buffCapacity, resLen, ec);
+		}
+        else 
+		{
+			// illegal argument encountered
+            *ec = U_ILLEGAL_ARGUMENT_ERROR;
+        }
+
+    }
+
+	// If we got here, either error code is invalid or
+	// some argument passed is no good.
+    return resLen;
+}
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof
