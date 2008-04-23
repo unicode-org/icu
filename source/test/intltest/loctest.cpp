@@ -13,6 +13,8 @@
 #include "unicode/coll.h"
 #include "cstring.h"
 #include <stdio.h>
+#include "putilimp.h"
+#include "unicode/ustring.h"
 
 static const char* const rawData[33][8] = {
 
@@ -214,6 +216,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
         TESTCASE(27, TestGetLocale);
         TESTCASE(28, TestVariantWithOutCountry);
         TESTCASE(29, TestCanonicalization);
+        TESTCASE(30, TestCurrencyByDate);
 
         // keep the last index in sync with the condition in default:
 
@@ -2133,4 +2136,211 @@ void LocaleTest::TestCanonicalization(void)
             }
         }
     }
+}
+
+void LocaleTest::TestCurrencyByDate(void)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UDate date = uprv_getUTCtime();
+	UChar TMP[4];
+    UnicodeString tempStr, resultStr;
+
+	// Cycle through historical currencies
+    date = (UDate)-630720000000.0;
+    ucurr_forLocaleAndDate("eo_AM", date, TMP, 4, &status);
+	tempStr.setTo(TMP);
+    resultStr.setTo("AMD");
+    if (resultStr != tempStr) {
+        errln("FAIL: didn't return AMD for eo_AM");
+    }
+
+    date = (UDate)0.0;
+    ucurr_forLocaleAndDate("eo_AM", date, TMP, 4, &status);
+	tempStr.setTo(TMP);
+    resultStr.setTo("SUR");
+    if (resultStr != tempStr) {
+        errln("FAIL: didn't return SUR for eo_AM");
+    }
+
+    date = (UDate)693792000000.0;
+    ucurr_forLocaleAndDate("eo_AM", date, TMP, 4, &status);
+	tempStr.setTo(TMP);
+    resultStr.setTo("RUR");
+    if (resultStr != tempStr) {
+        errln("FAIL: didn't return RUR for eo_AM");
+    }
+
+	date = (UDate)977616000000.0;
+    ucurr_forLocaleAndDate("eo_AM", date, TMP, 4, &status);
+	tempStr.setTo(TMP);
+    resultStr.setTo("AMD");
+    if (resultStr != tempStr) {
+        errln("FAIL: didn't return AMD for eo_AM");
+    }
+
+    // Locale AD has multiple currencies at once
+	date = (UDate)977616000000.0;
+    ucurr_forLocaleAndDate("eo_AD", date, TMP, 4, &status);
+	tempStr.setTo(TMP);
+    resultStr.setTo("EUR");
+    if (resultStr != tempStr) {
+        errln("FAIL: didn't return EUR for eo_AD");
+    }
+
+	date = (UDate)0.0;
+    ucurr_forLocaleAndDate("eo_AD", date, TMP, 4, &status);
+	tempStr.setTo(TMP);
+    resultStr.setTo("ESP");
+    if (resultStr != tempStr) {
+        errln("FAIL: didn't return ESP for eo_AD");
+    }
+
+	// Locale UA has gap between years 1994 - 1996
+	date = (UDate)788400000000.0;
+    ucurr_forLocaleAndDate("eo_UA", date, TMP, 4, &status);
+	tempStr.setTo(TMP);
+    resultStr.setTo("UAH");
+    if (resultStr != tempStr) {
+        errln("FAIL: didn't return UAH for eo_UA");
+    }
+
+    // Cycle through histrocial currencies
+	date = (UDate)977616000000.0;
+    ucurr_forLocaleAndDate("eo_AO", date, TMP, 4, &status);
+	tempStr.setTo(TMP);
+    resultStr.setTo("AOA");
+    if (resultStr != tempStr) {
+        errln("FAIL: didn't return AOA for eo_AO");
+    }
+
+	date = (UDate)819936000000.0;
+    ucurr_forLocaleAndDate("eo_AO", date, TMP, 4, &status);
+	tempStr.setTo(TMP);
+    resultStr.setTo("AOR");
+    if (resultStr != tempStr) {
+        errln("FAIL: didn't return AOR for eo_AO");
+    }
+
+	date = (UDate)662256000000.0;
+    ucurr_forLocaleAndDate("eo_AO", date, TMP, 4, &status);
+	tempStr.setTo(TMP);
+    resultStr.setTo("AON");
+    if (resultStr != tempStr) {
+        errln("FAIL: didn't return AON for eo_AO");
+    }
+
+	date = (UDate)315360000000.0;
+    ucurr_forLocaleAndDate("eo_AO", date, TMP, 4, &status);
+	tempStr.setTo(TMP);
+    resultStr.setTo("AOK");
+    if (resultStr != tempStr) {
+        errln("FAIL: didn't return AOK for eo_AO");
+    }
+
+	date = (UDate)0.0;
+    ucurr_forLocaleAndDate("eo_AO", date, TMP, 4, &status);
+	tempStr.setTo(TMP);
+    resultStr.setTo("AOA");
+    if (resultStr != tempStr) {
+        errln("FAIL: didn't return AOA for eo_AO");
+    }
+
+    // Test with currency keyword override
+    ucurr_forLocaleAndDate("eo_DE@currency=DEM", date, TMP, 4, &status);
+	tempStr.setTo(TMP);
+    resultStr.setTo("DEM");
+    if (resultStr != tempStr) {
+        errln("FAIL: didn't return DEM for eo_DE@currency=DEM");
+    }
+
+    ucurr_forLocaleAndDate("fr_FR@currency=FRF", date, TMP, 4, &status);
+	tempStr.setTo(TMP);
+    resultStr.setTo("FRF");
+    if (resultStr != tempStr) {
+        errln("FAIL: didn't return FRF for fr_FR@currency=FRF");
+    }
+
+    // Test Euro Support
+	status = U_ZERO_ERROR; // reset
+    date = uprv_getUTCtime();
+
+    UChar USD[4];
+    ucurr_forLocaleAndDate("en_US", date, USD, 4, &status);
+    
+	UChar YEN[4];
+    ucurr_forLocaleAndDate("ja_JP", date, YEN, 4, &status);
+
+    ucurr_forLocaleAndDate("en_US", date, TMP, 4, &status);
+    if (u_strcmp(USD, TMP) != 0) {
+        errln("Fail: en_US didn't return USD");
+    }
+    ucurr_forLocaleAndDate("en_US_PREEURO", date, TMP, 4, &status);
+    if (u_strcmp(USD, TMP) != 0) {
+        errln("Fail: en_US_PREEURO didn't fallback to en_US");
+    }
+    ucurr_forLocaleAndDate("en_US_Q", date, TMP, 4, &status);
+    if (u_strcmp(USD, TMP) != 0) {
+        errln("Fail: en_US_Q didn't fallback to en_US");
+    }
+	int32_t invalidLen = ucurr_forLocaleAndDate("en_QQ", date, TMP, 4, &status);
+    if (invalidLen || U_SUCCESS(status)) {
+        errln("Fail: en_QQ didn't return NULL");
+    }
+    status = U_ZERO_ERROR; // reset
+
+    // Test currency registration
+#if !UCONFIG_NO_SERVICE
+
+    static const UChar QQQ[] = {0x51, 0x51, 0x51, 0};
+    if(U_FAILURE(status)) {
+        errln("Unable to get currency for locale, error %s", u_errorName(status));
+        return;
+    }
+
+    UCurrRegistryKey enkey = ucurr_register(YEN, "en_US", &status);
+    UCurrRegistryKey enUSEUROkey = ucurr_register(QQQ, "en_US_EURO", &status);
+    
+    ucurr_forLocaleAndDate("en_US", date, TMP, 4, &status);
+    if (u_strcmp(YEN, TMP) != 0) {
+        errln("FAIL: didn't return YEN registered for en_US");
+    }
+
+    ucurr_forLocaleAndDate("en_US_EURO", date, TMP, 4, &status);
+    if (u_strcmp(QQQ, TMP) != 0) {
+        errln("FAIL: didn't return QQQ for en_US_EURO");
+    }
+    
+    int32_t fallbackLen = ucurr_forLocaleAndDate("en_XX_BAR", date, TMP, 4, &status);
+    if (fallbackLen) {
+        errln("FAIL: tried to fallback en_XX_BAR");
+    }
+    status = U_ZERO_ERROR; // reset
+    
+    if (!ucurr_unregister(enkey, &status)) {
+        errln("FAIL: couldn't unregister enkey");
+    }
+
+    ucurr_forLocaleAndDate("en_US", date, TMP, 4, &status);        
+    if (u_strcmp(USD, TMP) != 0) {
+        errln("FAIL: didn't return USD for en_US after unregister of en_US");
+    }
+    status = U_ZERO_ERROR; // reset
+    
+    ucurr_forLocaleAndDate("en_US_EURO", date, TMP, 4, &status);
+    if (u_strcmp(QQQ, TMP) != 0) {
+        errln("FAIL: didn't return QQQ for en_US_EURO after unregister of en_US");
+    }
+    
+    ucurr_forLocaleAndDate("en_US_BLAH", date, TMP, 4, &status);
+    if (u_strcmp(USD, TMP) != 0) {
+        errln("FAIL: could not find USD for en_US_BLAH after unregister of en");
+    }
+    status = U_ZERO_ERROR; // reset
+    
+    if (!ucurr_unregister(enUSEUROkey, &status)) {
+        errln("FAIL: couldn't unregister enUSEUROkey");
+    }
+    
+    status = U_ZERO_ERROR; // reset
+#endif
 }
