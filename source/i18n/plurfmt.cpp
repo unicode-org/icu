@@ -18,6 +18,8 @@
 #include "unicode/plurrule.h"
 #include "plurrule_impl.h"
 
+U_NAMESPACE_BEGIN
+
 #if !UCONFIG_NO_FORMATTING
 
 U_CDECL_BEGIN
@@ -27,7 +29,6 @@ deleteHashStrings(void *obj) {
 }
 U_CDECL_END
 
-U_NAMESPACE_BEGIN
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralFormat)
 
 #define MAX_KEYWORD_SIZE 30
