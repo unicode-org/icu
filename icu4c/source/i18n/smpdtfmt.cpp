@@ -712,7 +712,7 @@ SimpleDateFormat::parseGMT(const UnicodeString &text, ParsePosition &pos) const 
                 if (pos.getErrorIndex() == -1 && pos.getIndex() > start) {
                     parsed.getArray(parsedCount);
                     if (parsedCount == 1 && parsed[0].getType() == Formattable::kDate) {
-                        return (int32_t)(-1 * parsed[0].getDate());
+                        return (int32_t)(-1 * (int64_t)parsed[0].getDate());
                     }
                 }
 
