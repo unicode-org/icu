@@ -955,7 +955,6 @@ realParseTable(struct SResource *table, char *tag, uint32_t startline, UErrorCod
 
         if (token != TOK_STRING)
         {
-            res_close(table);
             *status = U_INVALID_FORMAT_ERROR;
 
             if (token == TOK_EOF)
@@ -975,14 +974,12 @@ realParseTable(struct SResource *table, char *tag, uint32_t startline, UErrorCod
         } else {
             *status = U_INVALID_FORMAT_ERROR;
             error(line, "invariant characters required for table keys");
-            res_close(table);
             return NULL;
         }
 
         if (U_FAILURE(*status))
         {
             error(line, "parse error. Stopped parsing with %s", u_errorName(*status));
-            res_close(table);
             return NULL;
         }
 
@@ -991,7 +988,6 @@ realParseTable(struct SResource *table, char *tag, uint32_t startline, UErrorCod
         if (member == NULL || U_FAILURE(*status))
         {
             error(line, "parse error. Stopped parsing with %s", u_errorName(*status));
-            res_close(table);
             return NULL;
         }
 
@@ -1000,7 +996,6 @@ realParseTable(struct SResource *table, char *tag, uint32_t startline, UErrorCod
         if (U_FAILURE(*status))
         {
             error(line, "parse error. Stopped parsing with %s", u_errorName(*status));
-            res_close(table);
             return NULL;
         }
         readToken = TRUE;
