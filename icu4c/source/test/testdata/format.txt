@@ -104,5 +104,189 @@ format:table(nofallback) {
                },
             }
         }
+        TestYearLengths {
+            Info {
+                Description { "Test data for multiple year lengths, y yy yyy yyyy yyyyy:" }
+            }
+            Settings {
+                // options: 'format', or 'parse'.  One can be omitted if this is a 1 way test.
+                {
+                    Type { "date_format" }
+                },
+// These are not round trippable, so do not parse.
+//                {
+//                    Type { "date_parse" }
+//                },
+            }
+            Headers { "locale","spec", "date", "str"}
+            // locale: locale including calendar type
+            // spec:   either 'PATTERN=y mm h' etc, or 'DATE=SHORT,TIME=LONG'
+            // date:   either 'MILLIS=####' where #### is millis,
+            //        or a calendar spec ERA=0,YEAR=1, etc.. applied to the calendar type specified by the locale
+            //        or RELATIVE_MILLIS=### where ### is a signed value which is added to the current millis
+            //        or RELATIVE_ADD:DATE=1  which means that the field "DATE" will be added by +1 relative to current time
+            // str:   the expected unicode string
+           
+// from CLDR UTS 35: 
+//Year  	y  	yy  	yyy  	yyyy  	yyyyy
+            
+            Cases { 
+//AD 1 	    1 	01 	001 	0001 	00001
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G y",
+                    "YEAR=1",
+                    "AD 1"
+               },
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G yy",
+                    "YEAR=1",
+                    "AD 01"
+               },
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G yyy",
+                    "YEAR=1",
+                    "AD 001"
+               },
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G yyyy",
+                    "YEAR=1",
+                    "AD 0001"
+               },
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G yyyyy",
+                    "YEAR=1",
+                    "AD 00001"
+               },
+//AD 12 	12 	12 	012 	0012 	00012
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G y",
+                    "YEAR=12",
+                    "AD 12"
+               },
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G yy",
+                    "YEAR=12",
+                    "AD 12"
+               },
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G yyy",
+                    "YEAR=12",
+                    "AD 012"
+               },
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G yyyy",
+                    "YEAR=12",
+                    "AD 0012"
+               },
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G yyyyy",
+                    "YEAR=12",
+                    "AD 00012"
+               },
+//AD 123 	123 	23 	123 	0123 	00123
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G y",
+                    "YEAR=123",
+                    "AD 123"
+               },
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G yy",
+                    "YEAR=123",
+                    "AD 23"
+               },
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G yyy",
+                    "YEAR=123",
+                    "AD 123"
+               },
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G yyyy",
+                    "YEAR=123",
+                    "AD 0123"
+               },
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G yyyyy",
+                    "YEAR=123",
+                    "AD 00123"
+               },
+//AD 1234 	1234 	34 	1234 	1234 	01234
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G y",
+                    "YEAR=1234",
+                    "AD 1234"
+               },
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G yy",
+                    "YEAR=1234",
+                    "AD 34"
+               },
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G yyy",
+                    "YEAR=1234",
+                    "AD 1234"
+               },
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G yyyy",
+                    "YEAR=1234",
+                    "AD 1234"
+               },
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G yyyyy",
+                    "YEAR=1234",
+                    "AD 01234"
+               },
+//AD 12345 	12345 	45 	12345 	12345 	12345
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G y",
+                    "YEAR=12345",
+                    "AD 12345"
+               },
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G yy",
+                    "YEAR=12345",
+                    "AD 45"
+               },
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G yyy",
+                    "YEAR=12345",
+                    "AD 12345"
+               },
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G yyyy",
+                    "YEAR=12345",
+                    "AD 12345"
+               },
+               {
+                    "en_US@calendar=gregorian",         
+                    "PATTERN=G yyyyy",
+                    "YEAR=12345",
+                    "AD 12345"
+               },
+            }
+        }
     }
 }
