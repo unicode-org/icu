@@ -1015,16 +1015,21 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
            _appendSymbol(appendTo, value, fSymbols->fEras, fSymbols->fErasCount);
         break;
 
-    // for "yyyy", write out the whole year; for "yy", write out the last 2 digits
+    // OLD: for "yyyy", write out the whole year; for "yy", write out the last 2 digits
+    // NEW: UTS#35:
+//Year  	y  	yy  	yyy  	yyyy  	yyyyy
+//AD 1 	1 	01 	001 	0001 	00001
+//AD 12 	12 	12 	012 	0012 	00012
+//AD 123 	123 	23 	123 	0123 	00123
+//AD 1234 	1234 	34 	1234 	1234 	01234
+//AD 12345 	12345 	45 	12345 	12345 	12345
     case UDAT_YEAR_FIELD:
     case UDAT_YEAR_WOY_FIELD:
-        if (count >= 4) 
-            zeroPaddingNumber(appendTo, value, 4, maxIntCount);
-        else if(count == 1) 
-            zeroPaddingNumber(appendTo, value, count, maxIntCount);
-        else
+        if(count == 2)
             zeroPaddingNumber(appendTo, value, 2, 2);
-        break;  // TODO: this needs to be synced with Java, with GCL/Shanghai's work
+        else 
+            zeroPaddingNumber(appendTo, value, count, maxIntCount);
+        break; 
 
     // for "MMMM", write out the whole month name, for "MMM", write out the month
     // abbreviation, for "M" or "MM", write out the month as a number with the
