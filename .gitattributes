@@ -54,7 +54,6 @@ icu4c/source/samples/ucnv/data02.bin -text
 icu4c/source/test/compat/tzone.pl -text
 icu4c/source/test/perf/Makefile.in -text
 icu4c/source/test/perf/README -text
-icu4c/source/test/perf/strsrchperf/Makefile.in -text
 icu4c/source/test/perf/strsrchperf/StrSrchPerf_r.pl -text
 icu4c/source/test/perf/strsrchperf/strsrchperf.cpp -text
 icu4c/source/test/perf/strsrchperf/strsrchperf.h -text
