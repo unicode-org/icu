@@ -49,7 +49,7 @@ my $dataFiles = {
     "ru" => ["udhr_rus.txt"],
     "th" => ["udhr_tha.txt"],
     "ja" => ["udhr_jpn.txt"],
-    "ko" => ["udhr_cmn_hans.txt"],
+    "zh" => ["udhr_cmn_hans.txt"],
 };
 
 my $tests = {
