@@ -29,7 +29,7 @@ StringSearchPerformanceTest::StringSearchPerformanceTest(int32_t argc, const cha
         fprintf(stderr, "FAILED to create pattern for searching. Error: %s\n", u_errorName(status));
         return;
     }
-    start = ubrk_preceding(brk, 100);
+    start = ubrk_preceding(brk, 1000);
     end = ubrk_following(brk, start);
     pttrnLen = end - start;
     UChar* temp = (UChar*)malloc(sizeof(UChar)*(pttrnLen));
@@ -40,7 +40,7 @@ StringSearchPerformanceTest::StringSearchPerformanceTest(int32_t argc, const cha
     ubrk_close(brk);
     
     /* Create the StringSearch object to be use in performance test. */
-    srch = usearch_open(src, srcLen, pttrn, pttrnLen, locale, NULL, &status);
+    srch = usearch_open(pttrn, pttrnLen, src, srcLen, locale, NULL, &status);
     if(U_FAILURE(status)){
         fprintf(stderr, "FAILED to create UPerfTest object. Error: %s\n", u_errorName(status));
         return;
