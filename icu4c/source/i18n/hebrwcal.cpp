@@ -573,11 +573,11 @@ void HebrewCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status) 
     UBool isLeap = isLeapYear(year);
 
     int32_t month = 0;
-    int32_t momax = sizeof(MONTH_START) / (3 * sizeof(int16_t));
+    int32_t momax = sizeof(MONTH_START) / (3 * sizeof(MONTH_START[0][0]));
     while (month < momax && dayOfYear > (  isLeap ? LEAP_MONTH_START[month][type] : MONTH_START[month][type] ) ) {
         month++;
     }
-    if (month >= momax) {
+    if (month >= momax || month<=0) {
         // TODO: I found dayOfYear could be out of range when
         // a large value is set to julianDay.  I patched startOfYear
         // to reduce the chace, but it could be still reproduced either
