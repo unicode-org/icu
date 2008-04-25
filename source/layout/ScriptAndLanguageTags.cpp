@@ -5,7 +5,7 @@
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * Generated on: 03/13/2008 05:37:32 PM HST
+ * Generated on: 04/24/2008 10:19:13 AM HST
  */
 
 #include "LETypes.h"
@@ -94,10 +94,10 @@ const LETag OpenTypeLayoutEngine::scriptTags[] = {
     hungScriptTag, /* 'hung' (HUNG) */
     indsScriptTag, /* 'inds' (INDS) */
     javaScriptTag, /* 'java' (JAVA) */
-    kaliScriptTag, /* 'kali' (KALI) */
+    kaliScriptTag, /* 'kali' (KAYAH_LI) */
     latfScriptTag, /* 'latf' (LATF) */
     latgScriptTag, /* 'latg' (LATG) */
-    lepcScriptTag, /* 'lepc' (LEPC) */
+    lepcScriptTag, /* 'lepc' (LEPCHA) */
     linaScriptTag, /* 'lina' (LINA) */
     mandScriptTag, /* 'mand' (MAND) */
     mayaScriptTag, /* 'maya' (MAYA) */
@@ -114,23 +114,37 @@ const LETag OpenTypeLayoutEngine::scriptTags[] = {
     syrjScriptTag, /* 'syrj' (SYRJ) */
     syrnScriptTag, /* 'syrn' (SYRN) */
     tengScriptTag, /* 'teng' (TENG) */
-    vaiiScriptTag, /* 'vai ' (VAII) */
+    vaiiScriptTag, /* 'vai ' (VAI) */
     vispScriptTag, /* 'visp' (VISP) */
     xsuxScriptTag, /* 'xsux' (CUNEIFORM) */
     zxxxScriptTag, /* 'zxxx' (ZXXX) */
     zzzzScriptTag, /* 'zzzz' (UNKNOWN) */
-    cariScriptTag, /* 'cari' (CARI) */
+    cariScriptTag, /* 'cari' (CARIAN) */
     jpanScriptTag, /* 'jpan' (JPAN) */
     lanaScriptTag, /* 'lana' (LANA) */
-    lyciScriptTag, /* 'lyci' (LYCI) */
-    lydiScriptTag, /* 'lydi' (LYDI) */
-    olckScriptTag, /* 'olck' (OLCK) */
-    rjngScriptTag, /* 'rjng' (RJNG) */
-    saurScriptTag, /* 'saur' (SAUR) */
+    lyciScriptTag, /* 'lyci' (LYCIAN) */
+    lydiScriptTag, /* 'lydi' (LYDIAN) */
+    olckScriptTag, /* 'olck' (OL_CHIKI) */
+    rjngScriptTag, /* 'rjng' (REJANG) */
+    saurScriptTag, /* 'saur' (SAURASHTRA) */
     sgnwScriptTag, /* 'sgnw' (SGNW) */
-    sundScriptTag, /* 'sund' (SUND) */
+    sundScriptTag, /* 'sund' (SUNDANESE) */
     moonScriptTag, /* 'moon' (MOON) */
-    mteiScriptTag  /* 'mtei' (MTEI) */
+    mteiScriptTag, /* 'mtei' (MTEI) */
+    armiScriptTag, /* 'armi' (ARMI) */
+    avstScriptTag, /* 'avst' (AVST) */
+    cakmScriptTag, /* 'cakm' (CAKM) */
+    koreScriptTag, /* 'kore' (KORE) */
+    kthiScriptTag, /* 'kthi' (KTHI) */
+    maniScriptTag, /* 'mani' (MANI) */
+    phliScriptTag, /* 'phli' (PHLI) */
+    phlpScriptTag, /* 'phlp' (PHLP) */
+    phlvScriptTag, /* 'phlv' (PHLV) */
+    prtiScriptTag, /* 'prti' (PRTI) */
+    samrScriptTag, /* 'samr' (SAMR) */
+    tavtScriptTag, /* 'tavt' (TAVT) */
+    zmthScriptTag, /* 'zmth' (ZMTH) */
+    zsymScriptTag  /* 'zsym' (ZSYM) */
 };
 
 const LETag OpenTypeLayoutEngine::languageTags[] = {
