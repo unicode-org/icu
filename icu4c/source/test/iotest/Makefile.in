@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999-2005, International Business Machines
+#   Copyright (C) 1999-2008, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -74,7 +74,7 @@ distclean-local: clean-local
 	$(RMV) Makefile
 
 check-local: all-local
-	$(INVOKE) ./$(TARGET) $(IOTEST_OPTS) || true
+	$(INVOKE) ./$(TARGET) $(IOTEST_OPTS) 
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \

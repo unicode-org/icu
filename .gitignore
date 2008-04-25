@@ -268,6 +268,7 @@ icu4c/source/test/letest/letest
 icu4c/source/test/letest/letest.exe
 icu4c/source/test/letest/letest.vcproj.*.*.user
 icu4c/source/test/letest/release
+icu4c/source/test/perf/Makefile
 icu4c/source/test/perf/charperf/*.d
 icu4c/source/test/perf/charperf/*.o
 icu4c/source/test/perf/charperf/Debug
@@ -277,6 +278,7 @@ icu4c/source/test/perf/charperf/charperf
 icu4c/source/test/perf/charperf/charperf.vcproj.*.*.user
 icu4c/source/test/perf/charperf/debug
 icu4c/source/test/perf/charperf/release
+icu4c/source/test/perf/collationperf/Makefile
 icu4c/source/test/perf/collperf/*.d
 icu4c/source/test/perf/collperf/*.o
 icu4c/source/test/perf/collperf/Debug
@@ -301,6 +303,7 @@ icu4c/source/test/perf/normperf/normperf.vcproj.*.*.user
 icu4c/source/test/perf/normperf/release
 icu4c/source/test/perf/perf.ncb
 icu4c/source/test/perf/perf.suo
+icu4c/source/test/perf/strsrchperf/Makefile
 icu4c/source/test/perf/ubrkperf/*.d
 icu4c/source/test/perf/ubrkperf/*.o
 icu4c/source/test/perf/ubrkperf/Debug
