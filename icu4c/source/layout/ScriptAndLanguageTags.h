@@ -5,7 +5,7 @@
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * Generated on: 03/13/2008 05:37:32 PM HST
+ * Generated on: 04/24/2008 10:19:13 AM HST
  */
 
 #ifndef __SCRIPTANDLANGUAGES_H
@@ -99,10 +99,10 @@ const LETag hmngScriptTag = 0x686D6E67; /* 'hmng' (HMNG) */
 const LETag hungScriptTag = 0x68756E67; /* 'hung' (HUNG) */
 const LETag indsScriptTag = 0x696E6473; /* 'inds' (INDS) */
 const LETag javaScriptTag = 0x6A617661; /* 'java' (JAVA) */
-const LETag kaliScriptTag = 0x6B616C69; /* 'kali' (KALI) */
+const LETag kaliScriptTag = 0x6B616C69; /* 'kali' (KAYAH_LI) */
 const LETag latfScriptTag = 0x6C617466; /* 'latf' (LATF) */
 const LETag latgScriptTag = 0x6C617467; /* 'latg' (LATG) */
-const LETag lepcScriptTag = 0x6C657063; /* 'lepc' (LEPC) */
+const LETag lepcScriptTag = 0x6C657063; /* 'lepc' (LEPCHA) */
 const LETag linaScriptTag = 0x6C696E61; /* 'lina' (LINA) */
 const LETag mandScriptTag = 0x6D616E64; /* 'mand' (MAND) */
 const LETag mayaScriptTag = 0x6D617961; /* 'maya' (MAYA) */
@@ -119,23 +119,37 @@ const LETag syreScriptTag = 0x73797265; /* 'syre' (SYRE) */
 const LETag syrjScriptTag = 0x7379726A; /* 'syrj' (SYRJ) */
 const LETag syrnScriptTag = 0x7379726E; /* 'syrn' (SYRN) */
 const LETag tengScriptTag = 0x74656E67; /* 'teng' (TENG) */
-const LETag vaiiScriptTag = 0x76616920; /* 'vai ' (VAII) */
+const LETag vaiiScriptTag = 0x76616920; /* 'vai ' (VAI) */
 const LETag vispScriptTag = 0x76697370; /* 'visp' (VISP) */
 const LETag xsuxScriptTag = 0x78737578; /* 'xsux' (CUNEIFORM) */
 const LETag zxxxScriptTag = 0x7A787878; /* 'zxxx' (ZXXX) */
 const LETag zzzzScriptTag = 0x7A7A7A7A; /* 'zzzz' (UNKNOWN) */
-const LETag cariScriptTag = 0x63617269; /* 'cari' (CARI) */
+const LETag cariScriptTag = 0x63617269; /* 'cari' (CARIAN) */
 const LETag jpanScriptTag = 0x6A70616E; /* 'jpan' (JPAN) */
 const LETag lanaScriptTag = 0x6C616E61; /* 'lana' (LANA) */
-const LETag lyciScriptTag = 0x6C796369; /* 'lyci' (LYCI) */
-const LETag lydiScriptTag = 0x6C796469; /* 'lydi' (LYDI) */
-const LETag olckScriptTag = 0x6F6C636B; /* 'olck' (OLCK) */
-const LETag rjngScriptTag = 0x726A6E67; /* 'rjng' (RJNG) */
-const LETag saurScriptTag = 0x73617572; /* 'saur' (SAUR) */
+const LETag lyciScriptTag = 0x6C796369; /* 'lyci' (LYCIAN) */
+const LETag lydiScriptTag = 0x6C796469; /* 'lydi' (LYDIAN) */
+const LETag olckScriptTag = 0x6F6C636B; /* 'olck' (OL_CHIKI) */
+const LETag rjngScriptTag = 0x726A6E67; /* 'rjng' (REJANG) */
+const LETag saurScriptTag = 0x73617572; /* 'saur' (SAURASHTRA) */
 const LETag sgnwScriptTag = 0x73676E77; /* 'sgnw' (SGNW) */
-const LETag sundScriptTag = 0x73756E64; /* 'sund' (SUND) */
+const LETag sundScriptTag = 0x73756E64; /* 'sund' (SUNDANESE) */
 const LETag moonScriptTag = 0x6D6F6F6E; /* 'moon' (MOON) */
 const LETag mteiScriptTag = 0x6D746569; /* 'mtei' (MTEI) */
+const LETag armiScriptTag = 0x61726D69; /* 'armi' (ARMI) */
+const LETag avstScriptTag = 0x61767374; /* 'avst' (AVST) */
+const LETag cakmScriptTag = 0x63616B6D; /* 'cakm' (CAKM) */
+const LETag koreScriptTag = 0x6B6F7265; /* 'kore' (KORE) */
+const LETag kthiScriptTag = 0x6B746869; /* 'kthi' (KTHI) */
+const LETag maniScriptTag = 0x6D616E69; /* 'mani' (MANI) */
+const LETag phliScriptTag = 0x70686C69; /* 'phli' (PHLI) */
+const LETag phlpScriptTag = 0x70686C70; /* 'phlp' (PHLP) */
+const LETag phlvScriptTag = 0x70686C76; /* 'phlv' (PHLV) */
+const LETag prtiScriptTag = 0x70727469; /* 'prti' (PRTI) */
+const LETag samrScriptTag = 0x73616D72; /* 'samr' (SAMR) */
+const LETag tavtScriptTag = 0x74617674; /* 'tavt' (TAVT) */
+const LETag zmthScriptTag = 0x7A6D7468; /* 'zmth' (ZMTH) */
+const LETag zsymScriptTag = 0x7A73796D; /* 'zsym' (ZSYM) */
 
 const LETag nullScriptTag = 0x00000000; /* ''     (NULL) */
 

@@ -251,7 +251,21 @@ static const le_bool complexTable[scriptCodeCount] = {
     FALSE,  /* Sgnw */
     FALSE,  /* Sund */
     FALSE,  /* Moon */
-    FALSE   /* Mtei */
+    FALSE,  /* Mtei */
+    FALSE,  /* Armi */
+    FALSE,  /* Avst */
+    FALSE,  /* Cakm */
+    FALSE,  /* Kore */
+    FALSE,  /* Kthi */
+    FALSE,  /* Mani */
+    FALSE,  /* Phli */
+    FALSE,  /* Phlp */
+    FALSE,  /* Phlv */
+    FALSE,  /* Prti */
+    FALSE,  /* Samr */
+    FALSE,  /* Tavt */
+    FALSE,  /* Zmth */
+    FALSE   /* Zsym */
 };
 
 

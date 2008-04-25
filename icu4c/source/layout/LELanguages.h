@@ -5,7 +5,12 @@
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * Generated on: 03/13/2008 05:37:32 PM HST
+ * *************************************************************
+ * Hand edited on 04/24/2008 to add correct @stable, @draft tags
+ * prior to updating the tool to track these.
+ * *************************************************************
+ *
+ * Generated on: 04/24/2008 10:19:13 AM HST
  */
 
 #ifndef __LELANGUAGES_H
@@ -25,7 +30,7 @@ U_NAMESPACE_BEGIN
  * this is just a list of languages which the LayoutEngine
  * supports.
  *
- * @draft ICU 3.9
+ * @stable ICU 2.6
  */
 
 enum LanguageCodes {
@@ -59,6 +64,8 @@ enum LanguageCodes {
     zhpLanguageCode = 27,
     zhsLanguageCode = 28,
     zhtLanguageCode = 29,
+
+    /** New langauges codes added 03/13/2008 @draft ICU 4.0 */
     afkLanguageCode = 30,
     belLanguageCode = 31,
     bgrLanguageCode = 32,
