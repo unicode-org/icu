@@ -760,7 +760,7 @@ ICUService::getDisplayNames(UVector& result,
                     return result;
                 }
 
-                int32_t pos = 0;
+                int32_t pos = -1;
                 const UHashElement* entry = NULL;
                 while ((entry = m->nextElement(pos)) != NULL) {
                     const UnicodeString* id = (const UnicodeString*)entry->key.pointer;
@@ -784,7 +784,11 @@ ICUService::getDisplayNames(UVector& result,
     }
 
     ICUServiceKey* matchKey = createKey(matchID, status);
-    int32_t pos = 0;
+    /* To ensure that all elements in the hashtable are iterated, set pos to -1.
+     * nextElement(pos) will skip the position at pos and begin the iteration
+     * at the next position, which in this case will be 0.
+     */
+    int32_t pos = -1; 
     const UHashElement *entry = NULL;
     while ((entry = dnCache->cache.nextElement(pos)) != NULL) {
         const UnicodeString* id = (const UnicodeString*)entry->value.pointer;

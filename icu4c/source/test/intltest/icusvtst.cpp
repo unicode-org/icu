@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -741,7 +741,7 @@ ICUServiceTest::testAPI_Two()
             const StringPair* pair = (const StringPair*)names[i];
             logln("  " + pair->displayName + " --> " + pair->id);
         }
-        confirmIdentical("26) display names", names.size(), 7);
+        confirmIdentical("29) display names", names.size(), 7);
     }
 
     // we should get the display name corresponding to the actual id
