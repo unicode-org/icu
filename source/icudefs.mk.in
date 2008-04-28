@@ -20,6 +20,7 @@ exec_prefix = @exec_prefix@
 
 bindir = @bindir@
 sbindir = @sbindir@
+datarootdir = @datarootdir@
 datadir = @datadir@
 libdir = @libdir@
 includedir = @includedir@
