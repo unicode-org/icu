@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and    *
+* Copyright (C) 1996-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -511,7 +511,7 @@ public final class UCharacterName
     * @param ch character to get the group name
     * @param choice name choice selector to choose a unicode 1.0 or newer name
     */
-    public String getGroupName(int ch, int choice)
+    public synchronized String getGroupName(int ch, int choice)
     {
         // gets the msb
         int msb   = getCodepointMSB(ch);
@@ -1040,7 +1040,7 @@ public final class UCharacterName
     private AlgorithmName m_algorithm_[];
 
     /**
-    * Group use
+    * Group use.  Note - access must be synchronized.
     */
     private char m_groupoffsets_[] = new char[LINES_PER_GROUP_ + 1];
     private char m_grouplengths_[] = new char[LINES_PER_GROUP_ + 1];
