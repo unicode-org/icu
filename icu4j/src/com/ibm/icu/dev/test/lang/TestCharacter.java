@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -22,7 +22,8 @@ public class TestCharacter extends TestGroup {
                   "UCharacterDirectionTest", 
                   "UPropertyAliasesTest",
                   "UTF16Test",
-                  "UCharacterSurrogateTest"
+                  "UCharacterSurrogateTest",
+                  "UCharacterThreadTest"
               },
               "Character Property and UTF16 Tests");
     }
