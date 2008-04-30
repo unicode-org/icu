@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2005, International Business Machines Corporation and         *
+* Copyright (C) 2005 - 2008, International Business Machines Corporation and  *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -44,6 +44,10 @@ abstract class CharsetRecog_2022 extends CharsetRecognizer {
                     checkEscapes:
                         for (escN=0; escN<escapeSequences.length; escN++) {
                             byte [] seq = escapeSequences[escN];
+                            
+                            if ((textLen - i) < seq.length) {
+                                continue checkEscapes;
+                            }
                             
                             for (j=1; j<seq.length; j++) {
                                 if (seq[j] != text[i+j])  {

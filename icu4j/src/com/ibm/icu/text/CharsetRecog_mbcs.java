@@ -1,6 +1,6 @@
 /*
  ****************************************************************************
- * Copyright (C) 2005-2007, International Business Machines Corporation and *
+ * Copyright (C) 2005-2008, International Business Machines Corporation and *
  * others. All Rights Reserved.                                             *
  ****************************************************************************
  *
@@ -81,9 +81,18 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
             
             if (doubleByteCharCount <= 10 && badCharCount== 0) {
                 // Not many multi-byte chars.
-                //   ASCII or ISO file?  It's probably not our encoding,
-                //   but is not incompatible with our encoding, so don't give it a zero.
-                confidence = 10;
+                if (doubleByteCharCount == 0 && totalCharCount < 10) {
+                    // There weren't any multibyte sequences, and there was a low density of non-ASCII single bytes.
+                    // We don't have enough data to have any confidence.
+                    // Statistical analysis of single byte non-ASCII charcters would probably help here.
+                    confidence = 0;
+                }
+                else {
+                    //   ASCII or ISO file?  It's probably not our encoding,
+                    //   but is not incompatible with our encoding, so don't give it a zero.
+                    confidence = 10;
+                }
+                
                 break detectBlock;
             }
             
