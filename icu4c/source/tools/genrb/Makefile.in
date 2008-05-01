@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - tools/genrb
-## Copyright (c) 1999-2007, International Business Machines Corporation and
+## Copyright (c) 1999-2008, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 # SIMPLIFIED WAY TO BUILD ICU4J DATA FROM C
@@ -124,7 +124,7 @@ $(TARGET) : $(OBJECTS)
 	$(POST_BUILD_STEP)
 
 $(DERB) : $(DERB_OBJ)
-	$(LINK.c) $(OUTOPT)$@ $^ $(LIBS)
+	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS)
 	$(POST_BUILD_STEP)
 
 $(GENDTJAR_JARHOME)/jar:
