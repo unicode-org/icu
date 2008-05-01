@@ -201,6 +201,11 @@
         <equals arg1="${java.vm.vendor}" arg2="IBM Corporation"/>
       </and>
     </condition>
+    <condition property="test.jvm.args" value="-ea -Xms192m -Xmx224m -Djava.awt.headless=true">
+      <and>
+        <equals arg1="${java.vm.vendor}" arg2="Apple Computer, Inc."/>
+      </and>
+    </condition>
     <condition property="test.jvm.args" value="-ea -Xms192m -Xmx224m">
       <not>
         <isset property="test.jvm.args" />
