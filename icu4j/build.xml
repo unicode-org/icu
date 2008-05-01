@@ -203,7 +203,7 @@
     </condition>
     <condition property="test.jvm.args" value="-ea -Xms192m -Xmx224m -Djava.awt.headless=true">
       <and>
-        <equals arg1="${java.vm.vendor}" arg2="Apple Computer, Inc."/>
+        <equals arg1="${os.name}" arg2="Mac OS X"/>
       </and>
     </condition>
     <condition property="test.jvm.args" value="-ea -Xms192m -Xmx224m">
