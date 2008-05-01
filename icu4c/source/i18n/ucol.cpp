@@ -6631,6 +6631,19 @@ ucol_setUpLatinOne(UCollator *coll, UErrorCode *status) {
                         }
                     } while(*UCharOffset != 0xFFFF);
                 }
+                break;;
+            case SPEC_PROC_TAG:
+                {
+                    // 0xB7 is a precontext character defined in UCA5.1, a special
+                    // handle is implemeted in order to save LatinOne table for
+                    // most locales.
+                    if (ch==0xb7) {
+                        ucol_addLatinOneEntry(coll, ch, CE, &primShift, &secShift, &terShift);
+                    }
+                    else {
+                        goto cleanup_after_failure;
+                    }
+                }
                 break;
             default:
                 goto cleanup_after_failure;
@@ -8431,4 +8444,3 @@ ucol_getUCAVersion(const UCollator* coll, UVersionInfo info) {
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
-
