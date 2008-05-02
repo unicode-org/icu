@@ -111,7 +111,7 @@ void PluralRulesTest::testAPI(/*char *par*/)
     UnicodeString key;
     for (int32_t i=0; i<10; ++i) {
         key = empRule->select(i);
-        if ( key.charAt(0)!='a' ) {
+        if ( key.charAt(0)!= 0x61 ) { // 'a'
             errln("ERROR:  empty plural rules test failed! - exitting");
         }
     }
@@ -144,9 +144,21 @@ void PluralRulesTest::testAPI(/*char *par*/)
     // TODO: the complex test data is hard coded. It's better to implement 
     // a parser to parse the test data.
     UnicodeString complexRule = UNICODE_STRING_SIMPLE("a: n in 2..5; b: n in 5..8; c: n mod 2 is 1"); 
-    char cRuleResult[] = {
-        'o','c','a','a','a','a','b','b','b','c',
-        'o','c'};
+    char cRuleResult[] = 
+    {
+       0x6F, // 'o'
+       0x63, // 'c'
+       0x61, // 'a'
+       0x61, // 'a'
+       0x61, // 'a'
+       0x61, // 'a'
+       0x62, // 'b'
+       0x62, // 'b'
+       0x62, // 'b'
+       0x63, // 'c'
+       0x6F, // 'o'
+       0x63  // 'c'
+    };
     PluralRules *newRules = test->createRules(complexRule, status);
     if ( !checkEqual(newRules, cRuleResult, 12) ) {
          errln("ERROR:  complex plural rules failed! - exitting");
@@ -204,9 +216,9 @@ void setupResult(const int32_t testSource[], char result[], int32_t* max) {
     
     do {
         while (curIndex < testSource[i]) {
-            result[curIndex++]='o'; //other
+            result[curIndex++]=0x6F; //'o' other
         }
-        result[curIndex++]='a';
+        result[curIndex++]=0x61; // 'a'
         
     } while(testSource[++i]>0);
     *max=curIndex;
