@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
  *
  */
 
@@ -376,7 +376,7 @@ void ULocRuns::init(le_int32 capacity)
 
 void ULocRuns::grow(le_int32 capacity)
 {
-    RunArray::grow(capacity);
+    LocaleRuns::grow(capacity);
     fLocaleNames = (const char **) LE_GROW_ARRAY(fLocaleNames, capacity);
 }
 
