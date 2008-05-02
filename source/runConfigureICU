@@ -37,7 +37,7 @@ The following names can be supplied as the argument for platform:
     Cygwin/ICL          Use the Intel C++ compiler on Cygwin
     FreeBSD             Use the GNU gcc/g++ compilers on Free BSD
     HP-UX/ACC           Use the HP ANSI C/Advanced C++ compilers on HP-UX 11
-    i5OS                Use the i5/OS compilers on i5/OS
+    IBMi                Use the iCC compilers on IBM i, i5/OS, OS/400
     Linux               Use the GNU gcc/g++ compilers on Linux
     Linux/ECC           Use the Intel ECC compiler on Linux
     Linux/ICC           Use the Intel ICC compiler on Linux
@@ -168,9 +168,9 @@ case $platform in
         RELEASE_CFLAGS='+O2 +Ofltacc'
         RELEASE_CXXFLAGS='+O2 +Ofltacc'
         ;;
-    i5OS)
-        THE_OS="i5/OS"
-        THE_COMP="the i5/OS C++"
+    IBMi)
+        THE_OS="IBM i"
+        THE_COMP="the iCC C++"
         CC=/usr/bin/icc; export CC
         CXX=/usr/bin/icc; export CXX
         MAKE=/usr/bin/gmake; export MAKE
