@@ -6,7 +6,7 @@
 
     <title>ReadMe for ICU</title>
     <meta name="COPYRIGHT" content=
-    "Copyright (c) 1997-2007 IBM Corporation and others. All Rights Reserved." />
+    "Copyright (c) 1997-2008 IBM Corporation and others. All Rights Reserved." />
     <meta name="KEYWORDS" content=
     "ICU; International Components for Unicode; ICU4C; what's new; readme; read me; introduction; downloads; downloading; building; installation;" />
     <meta name="DESCRIPTION" content=
@@ -33,8 +33,8 @@
      <abbr title="International Components for Unicode">ICU</abbr> 3.9.1
     ReadMe</h1>
 
-    <p>Version: 2007 December 28<br />
-     Copyright &copy; 1997-2007 International Business Machines Corporation and
+    <p>Version: 2008 May 2<br />
+     Copyright &copy; 1997-2008 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
     <hr />
@@ -66,7 +66,7 @@
 
           <li><a href="#HowToBuildZOS">z/OS (os/390)</a></li>
 
-          <li><a href="#HowToBuildOS400">i5/OS (OS/400 iSeries)</a></li>
+          <li><a href="#HowToBuildOS400">IBM i family (IBM i, i5/OS, OS/400)</a></li>
         </ul>
       </li>
 
@@ -652,7 +652,7 @@
       </tr>
 
       <tr>
-        <td>i5/OS (OS/400 iSeries) V5R3</td>
+        <td>IBM i family (IBM i, i5/OS, OS/400)</td>
 
         <td>iCC</td>
 
@@ -1168,7 +1168,7 @@ Data set name type  : PDS</samp>
 </pre>
 
     <h3><a name="HowToBuildOS400" href="#HowToBuildOS400" id=
-    "HowToBuildOS400">How To Build And Install On i5/OS (OS/400 iSeries)</a></h3>
+    "HowToBuildOS400">How To Build And Install On The IBM i Family (IBM i, i5/OS OS/400)</a></h3>
 
     <p>Before you start building ICU, ICU requires the following:</p>
 
@@ -1176,9 +1176,9 @@ Data set name type  : PDS</samp>
       <li>QSHELL interpreter installed (install base option 30, operating system)
       <!--li>QShell Utilities, PRPQ 5799-XEH (not required for V4R5)</li--></li>
 
-      <li>ILE C/C++ Compiler for iSeries, LPP 5722-WDS</li>
+      <li>ILE C/C++ Compiler installed on the system
 
-      <li>The latest GNU facilities (You can get the GNU facilities for i5/OS
+      <li>The latest GNU facilities (You can get the GNU facilities 
       from <a href=
       "http://www.ibm.com/servers/enable/site/porting/iseries/overview/gnu_utilities.html">
       http://www.ibm.com/servers/enable/site/porting/iseries/overview/gnu_utilities.html</a>).
@@ -1191,7 +1191,7 @@ Data set name type  : PDS</samp>
 
     <ol>
       <li>
-        Create i5/OS target library. This library will be the target for the
+        Create target library. This library will be the target for the
         resulting modules, programs and service programs. You will specify this
         library on the OUTPUTDIR environment variable.
 <pre>
@@ -1216,7 +1216,7 @@ CHGJOB CCSID(37)</samp>
 
       <li>Change your current directory to icu/source.</li>
 
-      <li>Run <tt>'./runConfigureICU i5OS'</tt>  (See <a href="#HowToConfigureICU">configuration
+      <li>Run <tt>'./runConfigureICU IBMi'</tt>  (See <a href="#HowToConfigureICU">configuration
       note</a> for details).</li></li>
 
       <li>Run <tt>'gmake'</tt> to build ICU.</li>
@@ -1225,7 +1225,7 @@ CHGJOB CCSID(37)</samp>
       You can look at the <a href=
       "http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/apis/concept4.htm">
       iSeries Information Center</a> for more details regarding the running of multiple threads
-      on i5/OS.</li>
+      on IBM i.</li>
     </ol>
     <!-- end build environment -->
 
