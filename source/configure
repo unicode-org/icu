@@ -3063,11 +3063,21 @@ fi
             case "${host}" in
             sparc*-*-solaris*)
                 SPARCV9=`isainfo -n 2>&1 | grep sparcv9`
-                SOL64=`$CXX -xarch=v9 2>&1 && $CC -xarch=v9 2>&1 | grep -v usage:`
-                if test -z "$SOL64" && test -n "$SPARCV9"; then
-                    CFLAGS="${CFLAGS} -xtarget=ultra -xarch=v9"
-                    CXXFLAGS="${CXXFLAGS} -xtarget=ultra -xarch=v9"
-                    LDFLAGS="${LDFLAGS} -xtarget=ultra -xarch=v9"
+                SOL64=`$CXX -m64 2>&1 && $CC -m64 2>&1 | grep -v usage:`
+                if test -n "$SOL64"; then
+                    SOL64=`$CXX -xarch=v9 2>&1 && $CC -xarch=v9 2>&1 | grep -v usage:`
+                    if test -z "$SOL64" && test -n "$SPARCV9"; then
+                        CFLAGS="${CFLAGS} -xtarget=ultra -xarch=v9"
+                        CXXFLAGS="${CXXFLAGS} -xtarget=ultra -xarch=v9"
+                        LDFLAGS="${LDFLAGS} -xtarget=ultra -xarch=v9"
+                        ENABLE_64BIT_LIBS=yes
+                    else
+                        ENABLE_64BIT_LIBS=no
+                    fi
+                elif test -z "$SOL64" && test -n "$SPARCV9"; then
+                    CFLAGS="${CFLAGS} -xtarget=ultra -xarch=sparc -m64"
+                    CXXFLAGS="${CXXFLAGS} -xtarget=ultra -xarch=sparc -m64"
+                    LDFLAGS="${LDFLAGS} -xtarget=ultra -xarch=sparc -m64"
                     ENABLE_64BIT_LIBS=yes
                 else
                     ENABLE_64BIT_LIBS=no
