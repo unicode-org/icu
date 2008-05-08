@@ -627,14 +627,6 @@ class CharsetISO2022 extends CharsetICU {
             g = 0;
             prevG = 0;
         }
-        
-        void copyFrom(ISO2022State other) {
-            for (int i = 0; i < cs.length; i++) {
-                cs[i] = other.cs[i];
-            }
-            g = other.g;
-            prevG = other.prevG;
-        }
     }
     
 //    private static final byte UCNV_OPTIONS_VERSION_MASK = 0xf;

@@ -605,6 +605,14 @@ conversion:table(nofallback) {
           :intvector{ 0, 4, 8, 12 },
           :int{1}, :int{0}, "", "?", :bin{""}
         }
+        //Improve coverage of ISCII
+        {
+          "iscii-bng",
+          :bin{ f0a0f0b0b8 },
+          "",
+          :intvector{},
+          :int{1}, :int{0}, "", "0", :bin{""} 
+        }
       }
     }
 
@@ -1489,7 +1497,22 @@ conversion:table(nofallback) {
           "[]",
           :int{0}
         }
-
+        
+        // ISCII,version=0 (note: all versions of ISCII generates the same Unicodeset)
+        {
+          "iscii-dev",
+          "[\x00-\xa0\u0909-\u0939\u0993-\u09a8\u0a13-\u0a28\u0a93-\u0aa8\u0ae6-\u0aef\u0b05-\u0b0c\u0b13-\u0b28\u0bae-\u0bb5\u0c12-\u0c28\u0c92-\u0ca8\u0d12-\u0d28]",
+          "[\u0971-\u0975\u09e4\u0a4e-\u0a58\u0a80\u0b72-\u0b7a\u0bfb-\u0bff\u0c70-\u0c7f\u0c80\u0d00]",
+          :int{0}
+        }
+        
+        {
+          "iso-8859-1",
+          "[\x00-\xff]",
+          "[\u0100-\u01ff]",
+          :int{0}
+        }
+        
         // DBCS-only
         {
           "ibm-971",
