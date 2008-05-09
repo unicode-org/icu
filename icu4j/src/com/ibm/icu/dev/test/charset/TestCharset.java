@@ -679,6 +679,39 @@ public class TestCharset extends TestFmwk {
             errln(converter + " roundtrip test failed: " + ex.getMessage());
             ex.printStackTrace(System.err);
         }
+        
+        /* For better code coverage */
+        CoderResult result = CoderResult.UNDERFLOW;
+        byte byteout[] = {
+                (byte)0x7e, (byte)0x7d, (byte)0x41,
+                (byte)0x7e, (byte)0x7b, (byte)0x21,
+        };
+        char charin[] = {
+                (char)0x0041, (char)0x0042, (char)0x3000
+        };
+        ByteBuffer bb = ByteBuffer.wrap(byteout);
+        CharBuffer cb = CharBuffer.wrap(charin);
+        int testLoopSize = 5;
+        int bbLimits[] = { 0, 1, 3, 4, 6};
+        int bbPositions[] = { 0, 0, 0, 3, 3 };
+        int ccPositions[] = { 0, 0, 0, 2, 2 };
+        for (int i = 0; i < testLoopSize; i++) {
+            encoder.reset();
+            bb.limit(bbLimits[i]);
+            bb.position(bbPositions[i]);
+            cb.position(ccPositions[i]);
+            result = encoder.encode(cb, bb, true);
+            
+            if (i < 3) {
+                if (!result.isOverflow()) {
+                    errln("Overflow buffer error should have occurred while encoding HZ (" + i + ")");
+                }
+            } else {
+                if (result.isError()) {
+                    errln("Error should not have occurred while encoding HZ.(" + i + ")");
+                }
+            }
+        }
     }
 
     public void TestUTF8Surrogates() {
