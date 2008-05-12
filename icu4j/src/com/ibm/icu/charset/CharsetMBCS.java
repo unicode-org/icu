@@ -1636,18 +1636,18 @@ class CharsetMBCS extends CharsetICU {
             }
         }
 
-        private int simpleMatchToU(byte[] source, boolean useFallback) {
+        private int simpleMatchToU(ByteBuffer source, boolean useFallback) {
             int[] value = new int[1];
             int match;
 
-            if (source.length <= 0) {
+            if (source.remaining() <= 0) {
                 return 0xffff;
             }
 
             /* try to match */
-            match = matchToU((byte) -1, source, 0, source.length, null, value, useFallback, true);
+            match = matchToU((byte) -1, source.array(), source.position(), source.limit(), null, value, useFallback, true);
 
-            if (match == source.length) {
+            if (match == source.limit()) {
                 /* write result for simple, single-character conversion */
                 if (TO_U_IS_CODE_POINT(value[0])) {
                     return TO_U_GET_CODE_POINT(value[0]);
@@ -2319,7 +2319,7 @@ class CharsetMBCS extends CharsetICU {
          * 
          * @return U+fffe unassigned U+ffff illegal otherwise the Unicode code point
          */
-        int simpleGetNextUChar(byte[] source, boolean useFallback) {
+        int simpleGetNextUChar(ByteBuffer source, boolean useFallback) {
 
             // #if 0
             // /*
@@ -2349,18 +2349,19 @@ class CharsetMBCS extends CharsetICU {
             int action;
             int entry;
             int c;
-            int i = 0;
+            int i = source.position();
 
             /* conversion loop */
             while (true) {
                 // entry=stateTable[state][(uint8_t)source[i++]];
-                entry = stateTable[state][source[i++] & UConverterConstants.UNSIGNED_BYTE_MASK];
+                entry = stateTable[state][source.get() & UConverterConstants.UNSIGNED_BYTE_MASK];
+                i = source.position();
 
                 if (MBCS_ENTRY_IS_TRANSITION(entry)) {
                     state = MBCS_ENTRY_TRANSITION_STATE(entry);
                     offset += MBCS_ENTRY_TRANSITION_OFFSET(entry);
 
-                    if (i == source.length) {
+                    if (i == source.limit()) {
                         return 0xffff; /* truncated character */
                     }
                 } else {
@@ -2427,7 +2428,7 @@ class CharsetMBCS extends CharsetICU {
                 }
             }
 
-            if (i != source.length) {
+            if (i != source.limit()) {
                 /* illegal for this function: not all input consumed */
                 return 0xffff;
             }

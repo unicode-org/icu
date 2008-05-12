@@ -128,7 +128,7 @@ public class CharsetHZ extends CharsetICU {
                             if (0x21 <= leadByte && leadByte <= 0x7d && 0x21 <= mySourceChar && mySourceChar <= 0x7e) {
                                 tempBuf[0] = (byte) (leadByte + 0x80);
                                 tempBuf[1] = (byte) (mySourceChar + 0x80);
-                                targetUniChar = gbDecoder.simpleGetNextUChar(tempBuf, super.isFallbackUsed());
+                                targetUniChar = gbDecoder.simpleGetNextUChar(ByteBuffer.wrap(tempBuf), super.isFallbackUsed());
                             } else {
                                 targetUniChar = 0xffff;
                             }
