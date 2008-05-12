@@ -73,6 +73,22 @@ conversion:table(nofallback) {
           :intvector{ 3,4,5,9,11,13,15,17,19,21,23,25,27 },
           :int{1}, :int{1}, "", "?", :bin{""}
         }
+        // improve coverage of ISO-2022-JP converter by simulating erroneous input
+        {
+          "ISO-2022-JP-2",
+          :bin{ 0f0ed11b2e41461b244141411b4e411b2e4147451b4ed31b2e4641411b4ed2 },
+          "\u0046\u4eae\u00c1\u6865\u4eae",
+          :intvector{ 6, 10, 14, 18, 26 },
+          :int{1}, :int{0}, "", "0", :bin{""}
+        }
+        // improve coverage of JIS7 converter by simulating incomplete shifted input
+        {
+          "JIS7",
+          :bin{ 0e11 },
+          "",
+          :intvector{},
+          :int{1}, :int{0}, "", "0", :bin{""}
+        }
         // improve coverage of unrolled loops in ucnvmbcs.c/ucnv_MBCSSingleToBMPWithOffsets()
         {
           "ISO-8859-3",

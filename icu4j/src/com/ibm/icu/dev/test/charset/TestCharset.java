@@ -4757,14 +4757,36 @@ public class TestCharset extends TestFmwk {
         CharsetProvider provider = new CharsetProviderICU();       
         CharsetDecoder decoder = provider.charsetForName("ISO-2022-KR").newDecoder();
         
-        byte byteout[] = {
+        byte bytearray[] = {
                 (byte)0x1b, (byte)0x24, (byte)0x29, (byte)0x43, (byte)0x41, (byte)0x42,
         };
-        char charin[] = {
+        char chararray[] = {
                 (char)0x0041
         };
-        ByteBuffer bb = ByteBuffer.wrap(byteout);
-        CharBuffer cb = CharBuffer.wrap(charin);
+        ByteBuffer bb = ByteBuffer.wrap(bytearray);
+        CharBuffer cb = CharBuffer.wrap(chararray);
+        
+        result = decoder.decode(bb, cb, true);
+        
+        if (!result.isOverflow()) {
+            errln("Overflow buffer while decoding ISO-2022-KR should have occurred.");
+        }
+    }
+    
+    //provide better code coverage for Charset ISO-2022-JP
+    public void TestCharsetISO2022JP() {
+        CoderResult result = CoderResult.UNDERFLOW;
+        CharsetProvider provider = new CharsetProviderICU();       
+        CharsetDecoder decoder = provider.charsetForName("ISO-2022-JP-2").newDecoder();
+        
+        byte bytearray[] = {
+                (byte)0x1b, (byte)0x24, (byte)0x28, (byte)0x44, (byte)0x0A, (byte)0x41,
+        };
+        char chararray[] = {
+                (char)0x000A
+        };
+        ByteBuffer bb = ByteBuffer.wrap(bytearray);
+        CharBuffer cb = CharBuffer.wrap(chararray);
         
         result = decoder.decode(bb, cb, true);
         
