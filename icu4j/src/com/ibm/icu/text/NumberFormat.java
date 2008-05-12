@@ -1166,6 +1166,33 @@ public abstract class NumberFormat extends UFormat {
         return c;
     }
 
+    /**
+     * Get the rounding mode used in this NumberFormat.  The default implementation of
+     * tis method in NumberFormat always throws <code>UnsupportedOperationException</code>.
+     * @return A rounding mode, between <code>BigDecimal.ROUND_UP</code>
+     * and <code>BigDecimal.ROUND_UNNECESSARY</code>.
+     * @see #setRoundingMode(int)
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
+    public int getRoundingMode() {
+        throw new UnsupportedOperationException("getRoundingMode must be implemented by the subclass implementation.");
+    }
+
+    /**
+     * Set the rounding mode used in this NumberFormat.  The default implementation of
+     * tis method in NumberFormat always throws <code>UnsupportedOperationException</code>.
+     * @param roundingMode A rounding mode, between
+     * <code>BigDecimal.ROUND_UP</code> and
+     * <code>BigDecimal.ROUND_UNNECESSARY</code>.
+     * @see #getRoundingMode()
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
+    public void setRoundingMode(int roundingMode) {
+        throw new UnsupportedOperationException("setRoundingMode must be implemented by the subclass implementation.");
+    }
+
     // =======================privates===============================
 
     // Hook for service

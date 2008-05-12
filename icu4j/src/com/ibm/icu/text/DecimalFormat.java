@@ -2727,7 +2727,6 @@ public class DecimalFormat extends NumberFormat {
     static final double roundingIncrementEpsilon = 0.000000001;
     
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Get the rounding mode.
      * @return A rounding mode, between <code>BigDecimal.ROUND_UP</code>
      * and <code>BigDecimal.ROUND_UNNECESSARY</code>.
@@ -2742,7 +2741,6 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Set the rounding mode.  This has no effect unless the rounding
      * increment is greater than zero.
      * @param roundingMode A rounding mode, between
