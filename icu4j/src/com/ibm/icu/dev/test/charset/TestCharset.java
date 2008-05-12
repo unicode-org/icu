@@ -2741,6 +2741,22 @@ public class TestCharset extends TestFmwk {
         }
         catch (Exception ex) {
         }
+        
+        // For better code coverage
+        /* For better code coverage */
+        byte byteout[] = {
+                (byte)0x01
+        };
+        char charin[] = {
+                (char)0x0001, (char)0x0002
+        };
+        ByteBuffer bb = ByteBuffer.wrap(byteout);
+        CharBuffer cb = CharBuffer.wrap(charin);
+        CharBuffer cb2 = CharBuffer.wrap(cb.subSequence(0, 2));
+        encoder.reset();
+        if (!(encoder.encode(cb2, bb, true)).isOverflow()) {
+            errln("Overflow error while encoding ASCII should have occurred.");
+        }
     }
     //Test CharsetUTF7
     public void TestCharsetUTF7() {
@@ -4733,5 +4749,27 @@ public class TestCharset extends TestFmwk {
         if (!result.isOverflow()) {
             errln("Overflow buffer while decoding UTF-16 should have occurred.");
         }        
+    }
+    
+    //provide better code coverage for Charset ISO-2022-KR
+    public void TestCharsetISO2022KR() {
+        CoderResult result = CoderResult.UNDERFLOW;
+        CharsetProvider provider = new CharsetProviderICU();       
+        CharsetDecoder decoder = provider.charsetForName("ISO-2022-KR").newDecoder();
+        
+        byte byteout[] = {
+                (byte)0x1b, (byte)0x24, (byte)0x29, (byte)0x43, (byte)0x41, (byte)0x42,
+        };
+        char charin[] = {
+                (char)0x0041
+        };
+        ByteBuffer bb = ByteBuffer.wrap(byteout);
+        CharBuffer cb = CharBuffer.wrap(charin);
+        
+        result = decoder.decode(bb, cb, true);
+        
+        if (!result.isOverflow()) {
+            errln("Overflow buffer while decoding ISO-2022-KR should have occurred.");
+        }
     }
 }
