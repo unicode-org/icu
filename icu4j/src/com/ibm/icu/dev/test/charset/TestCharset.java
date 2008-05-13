@@ -2760,6 +2760,7 @@ public class TestCharset extends TestFmwk {
     }
     //Test CharsetUTF7
     public void TestCharsetUTF7() {
+        CoderResult result = CoderResult.UNDERFLOW;
         CharsetProvider provider = new CharsetProviderICU();
         Charset cs = provider.charsetForName("UTF-7");        
         CharsetEncoder encoder = cs.newEncoder();
@@ -3144,6 +3145,26 @@ public class TestCharset extends TestFmwk {
         try {
             smBufEncode(encoder, "UTF-7-CC-EN-11", ccus, ccbs, false, true);
         } catch (Exception ex) {
+            errln("Exception while encoding UTF-7 code coverage test should not have been thrown.");
+        }
+        
+        ccbs.clear();
+        ccus.clear();
+        
+        //test for overflow buffer error
+        encoder.reset();
+        ccus.put((char)0x3980); ccus.put((char)0x2715);
+        ccbs.put((byte)0x2b); ccbs.put((byte)0x4f); ccbs.put((byte)0x59);
+        
+        ccbs.limit(ccbs.position());
+        ccbs.position(0);
+        ccus.limit(ccus.position());
+        ccus.position(0);
+        
+        result = encoder.encode(ccus, ccbs, true);
+        result = encoder.flush(ccbs);
+        if (!result.isOverflow()) {
+            errln("Overflow buffer while encoding UTF-7 should have occurred.");
         }
         //end of charset encoder code coverage code
     }
@@ -4792,6 +4813,30 @@ public class TestCharset extends TestFmwk {
         
         if (!result.isOverflow()) {
             errln("Overflow buffer while decoding ISO-2022-KR should have occurred.");
+        }
+    }
+    
+    //provide better code coverage for Charset ASCII
+    public void TestCharsetASCII() {
+        CoderResult result = CoderResult.UNDERFLOW;
+        CharsetProvider provider = new CharsetProviderICU();       
+        CharsetDecoder decoder = provider.charsetForName("US-ASCII").newDecoder();
+        
+        byte bytearray[] = {
+                (byte)0x41
+        };
+        char chararray[] = {
+                (char)0x0041
+        };
+        
+        ByteBuffer bb = ByteBuffer.wrap(bytearray);
+        CharBuffer cb = CharBuffer.wrap(chararray);
+        
+        result = decoder.decode(bb, cb, true);
+        result = decoder.flush(cb);
+        
+        if (result.isError()) {
+            errln("Error occurred while decoding US-ASCII.");
         }
     }
 }
