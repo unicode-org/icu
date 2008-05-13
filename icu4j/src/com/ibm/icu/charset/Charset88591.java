@@ -66,8 +66,14 @@ class Charset88591 extends CharsetASCII {
              * perform 88591 conversion from the source array to the target array, making sure each
              * char in the source is within the correct range
              */
-            for (i = oldSource; i < limit && (((ch = (int) sourceArray[i]) & 0xff00) == 0); i++)
-                targetArray[i + offset] = (byte) ch;
+            for (i = oldSource; i < limit; i++) {
+                ch = (int) sourceArray[i];
+                if ((ch & 0xff00) == 0) {
+                    targetArray[i + offset] = (byte) ch;
+                } else {
+                    break;
+                }
+            }
 
             /*
              * if some byte was not in the correct range, we need to deal with this byte by calling
@@ -90,8 +96,11 @@ class Charset88591 extends CharsetASCII {
              * perform 88591 conversion from the source buffer to the target buffer, making sure
              * each char in the source is within the correct range
              */
-            while (((ch = (int) source.get()) & 0xff00) == 0)
+            ch = (int) source.get();
+            while ((ch & 0xff00) == 0) {
                 target.put((byte) ch);
+                ch = (int) source.get();
+            }
 
             /*
              * if we reach here, it's because a character was not in the correct range, and we need
