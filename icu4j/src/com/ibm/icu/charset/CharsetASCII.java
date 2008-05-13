@@ -76,8 +76,8 @@ class CharsetASCII extends CharsetICU {
                  * perform the core loop... if it returns null, it must be due to an overflow or
                  * underflow
                  */
-                if ((cr = decodeLoopCoreOptimized(source, target, sourceArray, targetArray,
-                        sourceIndex, offset, limit)) == null) {
+                cr = decodeLoopCoreOptimized(source, target, sourceArray, targetArray, sourceIndex, offset, limit);
+                if (cr == null) {
                     if (sourceLength <= targetLength) {
                         source.position(oldSource + sourceLength);
                         target.position(oldTarget + sourceLength);
@@ -112,8 +112,7 @@ class CharsetASCII extends CharsetICU {
             if (offsets != null) {
                 int count = target.position() - oldTarget;
                 int sourceIndex = -1;
-                while (--count >= 0)
-                    offsets.put(++sourceIndex);
+                while (--count >= 0) offsets.put(++sourceIndex);
             }
 
             return cr;
@@ -234,8 +233,8 @@ class CharsetASCII extends CharsetICU {
                      * perform the core loop... if it returns null, it must be due to an overflow or
                      * underflow
                      */
-                    if ((cr = encodeLoopCoreOptimized(source, target, sourceArray, targetArray,
-                            sourceIndex, offset, limit, flush)) == null) {
+                    cr = encodeLoopCoreOptimized(source, target, sourceArray, targetArray, sourceIndex, offset, limit, flush);
+                    if (cr == null) {
                         if (sourceLength <= targetLength) {
                             source.position(oldSource + sourceLength);
                             target.position(oldTarget + sourceLength);
@@ -269,8 +268,7 @@ class CharsetASCII extends CharsetICU {
             if (offsets != null) {
                 int count = target.position() - oldTarget;
                 int sourceIndex = -1;
-                while (--count >= 0)
-                    offsets.put(++sourceIndex);
+                while (--count >= 0) offsets.put(++sourceIndex);
             }
 
             return cr;

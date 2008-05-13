@@ -1529,6 +1529,12 @@ conversion:table(nofallback) {
           :int{0}
         }
         
+        {
+          "us-ascii",
+          "[\x00-\x7f]",
+          "[\u0100-\u01ff]",
+          :int{0}
+        }
         // DBCS-only
         {
           "ibm-971",
