@@ -2829,6 +2829,78 @@ uloc_acceptLanguageCompare(const void *context, const void *a, const void *b)
     return rc;
 }
 
+static ULayoutType
+_uloc_getOrientationHelper(const char* localeId,
+                           const char* key,
+                           UErrorCode *status)
+{
+    ULayoutType result = ULOC_LAYOUT_UNKNOWN;
+
+    if (!U_FAILURE(*status)) {
+        int32_t length = 0;
+        char localeBuffer[ULOC_FULLNAME_CAPACITY];
+
+        uloc_canonicalize(localeId, localeBuffer, sizeof(localeBuffer), status);
+
+        if (!U_FAILURE(*status)) {
+            const UChar* const value =
+                _res_getTableStringWithFallback(
+                    NULL,
+                    localeBuffer,
+                    "layout",
+                    NULL,
+                    key,
+                    &length,
+                    status);
+
+            if (!U_FAILURE(*status) && length != 0) {
+                switch(value[0])
+                {
+                case 0x0062: /* 'b' */
+                    result = ULOC_LAYOUT_BTT;
+                    break;
+                case 0x006C: /* 'l' */
+                    result = ULOC_LAYOUT_LTR;
+                    break;
+                case 0x0072: /* 'r' */
+                    result = ULOC_LAYOUT_RTL;
+                    break;
+                case 0x0074: /* 't' */
+                    result = ULOC_LAYOUT_TTB;
+                    break;
+                default:
+                    *status = U_INTERNAL_PROGRAM_ERROR;
+                    break;
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+U_DRAFT ULayoutType U_EXPORT2
+uloc_getCharacterOrientation(const char* localeId,
+                             UErrorCode *status)
+{
+    return _uloc_getOrientationHelper(localeId, "characters", status);
+}
+
+/**
+ * Get the layout line orientation for the specified locale.
+ * 
+ * @param localeID locale name
+ * @param status Error status
+ * @return an enum indicating the layout orientation for lines.
+ * @draft ICU 4.0
+ */
+U_DRAFT ULayoutType U_EXPORT2
+uloc_getLineOrientation(const char* localeId,
+                        UErrorCode *status)
+{
+    return _uloc_getOrientationHelper(localeId, "lines", status);
+}
+
 /* 
 mt-mt, ja;q=0.76, en-us;q=0.95, en;q=0.92, en-gb;q=0.89, fr;q=0.87, iu-ca;q=0.84, iu;q=0.82, ja-jp;q=0.79, mt;q=0.97, de-de;q=0.74, de;q=0.71, es;q=0.68, it-it;q=0.66, it;q=0.63, vi-vn;q=0.61, vi;q=0.58, nl-nl;q=0.55, nl;q=0.53
 */
