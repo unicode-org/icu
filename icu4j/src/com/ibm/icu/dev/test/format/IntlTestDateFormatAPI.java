@@ -1,6 +1,6 @@
 /*****************************************************************************************
  *
- *   Copyright (C) 1996-2004, International Business Machines
+ *   Copyright (C) 1996-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **/
 
@@ -146,10 +146,31 @@ public class IntlTestDateFormatAPI extends com.ibm.icu.dev.test.TestFmwk
         final Locale[] locales = DateFormat.getAvailableLocales();
         long count = locales.length;
         logln("Got " + count + " locales" );
+
+        // Ticket#6280
+        // These locales should be included in the result
+        final Locale[] samples = {
+                new Locale("zh", "CN"),
+                new Locale("zh", "TW"),
+                new Locale("zh", "HK"),
+                new Locale("sr", "RS"),
+        };
+        boolean[] available = new boolean[samples.length];
         for(int i = 0; i < count; i++) {
             String name;
             name = locales[i].getDisplayName();
             logln(name);
+            for (int j = 0; j < samples.length; j++) {
+                if (locales[i].equals(samples[j])) {
+                    available[j] = true;
+                    break;
+                }
+            }
+        }
+        for (int i = 0; i < available.length; i++) {
+            if (!available[i]) {
+                errln("ERROR: missing Locale: " + samples[i]);
+            }
         }
 
         fr.setLenient(it.isLenient());

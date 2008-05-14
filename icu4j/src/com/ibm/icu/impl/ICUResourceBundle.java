@@ -444,11 +444,12 @@ public  class ICUResourceBundle extends UResourceBundle {
      */
     public static final Locale[] getLocaleList(ULocale[] ulocales) {
         ArrayList list = new ArrayList();
+        HashSet uniqueSet = new HashSet();
         for (int i = 0; i < ulocales.length; i++) {
-            // if the ULocale does not contain a script code
-            // only then convert it to a Locale object
-            if (ulocales[i].getScript().length() == 0) {
-                list.add(ulocales[i].toLocale());
+            Locale loc = ulocales[i].toLocale();
+            if (!uniqueSet.contains(loc)) {
+                list.add(loc);
+                uniqueSet.add(loc);
             }
         }
         return (Locale[]) list.toArray(new Locale[list.size()]);
