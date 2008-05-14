@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2007, International Business Machines
+*   Copyright (C) 1997-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -854,6 +854,43 @@ uloc_setKeywordValue(const char* keywordName,
                      const char* keywordValue,
                      char* buffer, int32_t bufferCapacity,
                      UErrorCode* status);
+
+/**
+ * enums for the  return value for the character and line orientation
+ * functions.
+ * @draft ICU 4.0
+ */
+typedef enum {
+  ULOC_LAYOUT_LTR   = 0,  /* left-to-right. */
+  ULOC_LAYOUT_RTL    = 1,  /* right-to-left. */
+  ULOC_LAYOUT_TTB    = 2,  /* top-to-bottom. */
+  ULOC_LAYOUT_BTT    = 3,   /* bottom-to-top. */
+  ULOC_LAYOUT_UNKNOWN
+} ULayoutType;
+
+/**
+ * Get the layout character orientation for the specified locale.
+ * 
+ * @param localeID locale name
+ * @param status Error status
+ * @return an enum indicating the layout orientation for characters.
+ * @draft ICU 4.0
+ */
+U_DRAFT ULayoutType U_EXPORT2
+uloc_getCharacterOrientation(const char* localeId,
+                             UErrorCode *status);
+
+/**
+ * Get the layout line orientation for the specified locale.
+ * 
+ * @param localeID locale name
+ * @param status Error status
+ * @return an enum indicating the layout orientation for lines.
+ * @draft ICU 4.0
+ */
+U_DRAFT ULayoutType U_EXPORT2
+uloc_getLineOrientation(const char* localeId,
+                        UErrorCode *status);
 
 /**
  * enums for the 'outResult' parameter return value
