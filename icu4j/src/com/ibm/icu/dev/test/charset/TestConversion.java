@@ -240,7 +240,8 @@ public class TestConversion extends ModuleTest {
                 encoder.onMalformedInput(CodingErrorAction.REPORT);
             }
 
-            // if callback action is replace, and there is a subchar
+            // if callback action is replace,
+          //   and there is a subchar
             // replace the decoder's default replacement value
             // if substring, skip test due to current api not supporting
             // substring
@@ -858,7 +859,8 @@ public class TestConversion extends ModuleTest {
                 .getString();
         
      
-        int which = 1; // only checking for ROUNDTRIP_SET
+        int which = ((ICUResourceBundle) testcase.getObject("which")).getInt(); // only checking for ROUNDTRIP_SET
+        
         try{
            // if cc.charset starts with '*', obtain it from com/ibm/icu/dev/data/testdata
            charset = (cc.charset != null && cc.charset.length() > 0 && cc.charset.charAt(0) == '*')
@@ -873,30 +875,38 @@ public class TestConversion extends ModuleTest {
                       charset.name()=="lmbcs18"|| charset.name()=="lmbcs19"){
                    
                    logln("Converter not supported at this point :" +charset.displayName());
+                   return;
+               }
+                             
+               if(which==1){
+                   logln("Fallback set not supported at this point for converter : "+charset.displayName());
+                  return;
                }
                
            }catch(Exception e){
                return;
            }
+           
            mapset.clear();
            mapnotset.clear();
                    
-           mapset.applyPattern(cc.map.toString(),false);
+           mapset.applyPattern(cc.map,false);
            mapnotset.applyPattern(cc.mapnot,false);
+           
            charset.getUnicodeSet(unicodeset, which);
            UnicodeSet diffset = new UnicodeSet();
                      
            //are there items that must be in unicodeset but are not?
           
-           (diffset = mapset).removeAll(unicodeset);
            
+           (diffset = mapset).removeAll(unicodeset);
            if(!diffset.isEmpty()){
                StringBuffer s = new StringBuffer(diffset.toPattern(true));
                if(s.length()>100){
                    s.replace(0, 0x7fffffff, ellipsis);
                }
-               logln("error in missing items - conversion/getUnicodeSet test case "+cc.charset);
-               logln(s.toString());
+               errln("error in missing items - conversion/getUnicodeSet test case "+cc.charset);
+               errln(s.toString());
            }
            
           //are the items that must not be in unicodeset but are?
@@ -908,13 +918,13 @@ public class TestConversion extends ModuleTest {
                if(s.length()>100){
                    s.replace(0, 0x7fffffff, ellipsis);
                }
-               logln("contains unexpected items - conversion/getUnicodeSet test case "+cc.charset);
-               logln(s.toString());
+               errln("contains unexpected items - conversion/getUnicodeSet test case "+cc.charset);
+               errln(s.toString());
            }
          } catch (Exception e) {
-             logln("getUnicodeSet returned an error code");
-             logln("ErrorCode expected is: " + cc.outErrorCode);
-             logln("Error Result is: " + e.toString());
+             errln("getUnicodeSet returned an error code");
+             errln("ErrorCode expected is: " + cc.outErrorCode);
+             errln("Error Result is: " + e.toString());
              return;
          }
     }
