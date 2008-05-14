@@ -59,13 +59,17 @@ public abstract class CharsetICU extends Charset{
      byte subChar1;               /* +80: 1  single-byte substitution character for IBM MBCS (0 if none) */
      //byte reserved[/*19*/];           /* +81: 19 to round out the structure */
      
+     
+    // typedef enum UConverterUnicodeSet {
      /** 
       * Parameter that select the set of roundtrippable Unicode code points. 
       * @draft ICU 4.0
       */
-      public static final int ROUNDTRIP_SET=1; //UCNV_ROUNDTRIP_SET,
-      public static final int ROUNDTRIP_AND_FALLBACK_SET =2;
-     
+      public static final int ROUNDTRIP_SET=0; 
+      /** Select the set of Unicode code points with roundtrip or fallback mappings. Not supported at this point. */
+      public static final int ROUNDTRIP_AND_FALLBACK_SET =1;
+      
+    //} UConverterUnicodeSet;
      
     /**
      * 
