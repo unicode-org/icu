@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -110,5 +110,6 @@ static void TestUResourceBundle(void);
 static void TestDisplayName(void);
 
 static void TestAcceptLanguage(void);
+static void TestOrientation(void);
 
 #endif
