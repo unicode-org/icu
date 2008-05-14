@@ -231,6 +231,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestDisplayName); 
     TESTCASE(TestAcceptLanguage); 
     TESTCASE(TestGetLocaleForLCID);
+    TESTCASE(TestOrientation);
 }
 
 
@@ -2555,6 +2556,88 @@ static void TestCollation() {
     }
     ures_close(resIndex);
 #endif
+}
+
+typedef struct OrientationStructTag {
+    const char* localeId;
+    ULayoutType character;
+    ULayoutType line;
+} OrientationStruct;
+
+const char* ULayoutTypeToString(ULayoutType type)
+{
+    switch(type)
+    {
+    case ULOC_LAYOUT_LTR:
+        return "ULOC_LAYOUT_LTR";
+        break;
+    case ULOC_LAYOUT_RTL:
+        return "ULOC_LAYOUT_RTL";
+        break;
+    case ULOC_LAYOUT_TTB:
+        return "ULOC_LAYOUT_TTB";
+        break;
+    case ULOC_LAYOUT_BTT:
+        return "ULOC_LAYOUT_BTT";
+        break;
+    case ULOC_LAYOUT_UNKNOWN:
+        break;
+    }
+
+    return "Unknown enum value for ULayoutType!";
+}
+
+static void  TestOrientation()
+{
+    static const OrientationStruct toTest [] = {
+        { "ar", ULOC_LAYOUT_RTL, ULOC_LAYOUT_TTB },
+        { "aR", ULOC_LAYOUT_RTL, ULOC_LAYOUT_TTB },
+        { "ar_Arab", ULOC_LAYOUT_RTL, ULOC_LAYOUT_TTB },
+        { "fa", ULOC_LAYOUT_RTL, ULOC_LAYOUT_TTB },
+        { "Fa", ULOC_LAYOUT_RTL, ULOC_LAYOUT_TTB },
+        { "he", ULOC_LAYOUT_RTL, ULOC_LAYOUT_TTB },
+        { "ps", ULOC_LAYOUT_RTL, ULOC_LAYOUT_TTB },
+        { "ur", ULOC_LAYOUT_RTL, ULOC_LAYOUT_TTB },
+        { "UR", ULOC_LAYOUT_RTL, ULOC_LAYOUT_TTB },
+        { "en", ULOC_LAYOUT_LTR, ULOC_LAYOUT_TTB }
+    };
+
+    size_t i = 0;
+    for (; i < sizeof(toTest) / sizeof(toTest[0]); ++i) {
+        UErrorCode statusCO = U_ZERO_ERROR;
+        UErrorCode statusLO = U_ZERO_ERROR;
+        const char* const localeId = toTest[i].localeId;
+        const ULayoutType co = uloc_getCharacterOrientation(localeId, &statusCO);
+        const ULayoutType expectedCO = toTest[i].character;
+        const ULayoutType lo = uloc_getLineOrientation(localeId, &statusLO);
+        const ULayoutType expectedLO = toTest[i].line;
+        if (U_FAILURE(statusCO)) {
+            log_err(
+                "  unexpected failure for uloc_getCharacterOrientation(), with localId \"%s\" and status %s\n",
+                localeId,
+                u_errorName(statusCO));
+        }
+        else if (co != expectedCO) {
+            log_err(
+                "  unexpected result for uloc_getCharacterOrientation(), with localeId \"%s\". Expected %s but got result %s\n",
+                localeId,
+                ULayoutTypeToString(expectedCO),
+                ULayoutTypeToString(co));
+        }
+        if (U_FAILURE(statusLO)) {
+            log_err(
+                "  unexpected failure for uloc_getLineOrientation(), with localId \"%s\" and status %s\n",
+                localeId,
+                u_errorName(statusLO));
+        }
+        else if (lo != expectedLO) {
+            log_err(
+                "  unexpected result for uloc_getLineOrientation(), with localeId \"%s\". Expected %s but got result %s\n",
+                localeId,
+                ULayoutTypeToString(expectedLO),
+                ULayoutTypeToString(lo));
+        }
+    }
 }
 
 static void  TestULocale() {
