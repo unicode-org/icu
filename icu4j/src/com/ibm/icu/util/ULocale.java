@@ -2642,6 +2642,28 @@ public final class ULocale implements Serializable {
         return buf.toString();
     }
 
+    /**
+     * Returns this locale's layout orientation for characters.  The possible
+     * values are "left-to-right", "right-to-left", "top-to-bottom" or
+     * "bottom-to-top".
+     * @return The locale's layout orientation for characters.
+     * @draft ICU 4.0
+     */
+    public String getCharacterOrientation() {
+        return getTableString("layout", null, "characters", getName());
+    }
+
+    /**
+     * Returns this locale's layout orientation for lines.  The possible
+     * values are "left-to-right", "right-to-left", "top-to-bottom" or
+     * "bottom-to-top".
+     * @return The locale's layout orientation for lines.
+     * @draft ICU 4.0
+     */
+    public String getLineOrientation() {
+        return getTableString("layout", null, "lines", getName());
+    }
+
     /** 
      * Selector for <tt>getLocale()</tt> indicating the locale of the
      * resource containing the data.  This is always at or above the

@@ -1387,6 +1387,33 @@ public class ULocaleTest extends TestFmwk {
             }
         }
     }
+
+    public void TestOrientation() {
+        {
+            String toTest [][] = {
+                { "ar", "right-to-left", "top-to-bottom" },
+                { "ar_Arab", "right-to-left", "top-to-bottom" },
+                { "fa", "right-to-left", "top-to-bottom" },
+                { "he", "right-to-left", "top-to-bottom" },
+                { "ps", "right-to-left", "top-to-bottom" },
+                { "ur", "right-to-left", "top-to-bottom" },
+                { "en", "left-to-right", "top-to-bottom" }
+            };
+
+            for (int i = 0; i < toTest.length; ++i) {
+                ULocale loc = new ULocale(toTest[i][0]);
+                String co = loc.getCharacterOrientation();
+                String lo = loc.getLineOrientation();
+                if (!co.equals(toTest[i][1])) {
+                    errln("Locale \"" + toTest[i][0] + "\" should have \"" + toTest[i][1] + "\" character orientation, but got \'" + co + "\"");
+                }
+                else if (!lo.equals(toTest[i][2])) {
+                    errln("Locale \"" + toTest[i][0] + "\" should have \"" + toTest[i][2] + "\" line orientation, but got \'" + lo + "\"");
+                }
+            }
+        }
+    }
+
     public void TestJB3962(){
         ULocale loc = new ULocale("de_CH");
         String disp = loc.getDisplayName(ULocale.GERMAN);
