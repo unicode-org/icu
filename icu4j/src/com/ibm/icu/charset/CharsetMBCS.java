@@ -4992,7 +4992,7 @@ class CharsetMBCS extends CharsetICU {
     }
    
     static void extGetUnicodeSetString(ByteBuffer cx,UnicodeSet setFillIn, boolean useFallback, 
-            int minLength, int c, char s[],int length,int sectionIndex){
+        int minLength, int c, char s[],int length,int sectionIndex){
         CharBuffer fromUSectionUChar;
         IntBuffer fromUSectionValues;
         fromUSectionUChar = (CharBuffer)ARRAY(cx, EXT_FROM_U_UCHARS_INDEX,char.class );
@@ -5003,8 +5003,7 @@ class CharsetMBCS extends CharsetICU {
         
         /* read first pair of the section */
        count = fromUSectionUChar.get(fromUSectionUCharIndex++);
-       value = UConverterConstants.UNSIGNED_SHORT_MASK & fromUSectionValues.get(fromUSectionValuesIndex++);
-       
+       value = fromUSectionValues.get(fromUSectionValuesIndex++);
        if(value!=0 && (FROM_U_IS_ROUNDTRIP(value) || useFallback) && FROM_U_GET_LENGTH(value)>=minLength) {
            if(c>=0){
                setFillIn.add(c);
@@ -5027,10 +5026,11 @@ class CharsetMBCS extends CharsetICU {
                        FROM_U_GET_PARTIAL_INDEX(value));
            } else if ((useFallback ? (value&FROM_U_RESERVED_MASK)==0:((value&(FROM_U_ROUNDTRIP_FLAG|FROM_U_RESERVED_MASK))==FROM_U_ROUNDTRIP_FLAG)) 
                    && FROM_U_GET_LENGTH(value)>=minLength) {
+               String normalizedString=""; // String for composite characters 
                for(int j=0; j<(length+1);j++){
-                   setFillIn.add(s[j]);
+                   normalizedString+=s[j];
                }
-             
+             setFillIn.add(normalizedString);
            }
        }
         
@@ -5082,7 +5082,7 @@ class CharsetMBCS extends CharsetICU {
                                 /* no mapping do nothing */
                             }else if (FROM_U_IS_PARTIAL(value)){
                                 length = 0;
-                                UTF16.append(s, length, c);
+                                length=UTF16.append(s, length, c);
                                 extGetUnicodeSetString(cx,setFillIn,useFallback,minLength,c,s,length,(int)FROM_U_GET_PARTIAL_INDEX(value));
                             } else if ((useFallback ?  (value&FROM_U_RESERVED_MASK)==0 :((value&(FROM_U_ROUNDTRIP_FLAG|FROM_U_RESERVED_MASK))== FROM_U_ROUNDTRIP_FLAG)) && 
                                     FROM_U_GET_LENGTH(value)>=minLength){
