@@ -227,10 +227,6 @@ void TransliteratorTest::TestInstantiation() {
                   i + ") != getAvailableIDs().snext()");
             continue;
         }
-        if(id2.indexOf("Thai")>-1 && !isICUVersionAtLeast(ICU_39)){
-            /* The Thai-Latin transliterator doesn't exist in ICU4C yet */
-            continue;
-        }
         UParseError parseError;
         UErrorCode status = U_ZERO_ERROR;
         Transliterator* t = Transliterator::createInstance(id,
@@ -3554,10 +3550,6 @@ void TransliteratorTest::TestIncrementalProgress(void) {
                 Transliterator::getAvailableVariant(k, source, target, variant);
                 UnicodeString id = source + "-" + target + "/" + variant;
                 
-                if(id.indexOf("Thai")>-1 && !isICUVersionAtLeast(ICU_39)){
-                    /* The Thai-Latin transliterator doesn't exist in ICU4C yet */
-                    continue;
-                }    
                 Transliterator *t = Transliterator::createInstance(id, UTRANS_FORWARD, err, status);
                 if (U_FAILURE(status)) {
                     errln((UnicodeString)"FAIL: Could not create " + id);
