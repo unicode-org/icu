@@ -35,6 +35,7 @@
 #include "tolowtrn.h"
 #include "toupptrn.h"
 #include "uni2name.h"
+#include "brktrans.h"
 #include "esctrn.h"
 #include "unesctrn.h"
 #include "tridpars.h"
@@ -1578,9 +1579,12 @@ UBool Transliterator::initializeRegistry(UErrorCode &status) {
     TitlecaseTransliterator* tempTitlecaseTranslit = new TitlecaseTransliterator();
     UnicodeNameTransliterator* tempUnicodeTranslit = new UnicodeNameTransliterator();
     NameUnicodeTransliterator* tempNameUnicodeTranslit = new NameUnicodeTransliterator();
+    BreakTransliterator* tempBreakTranslit         = new BreakTransliterator();
+
     // Check for null pointers
     if (tempNullTranslit == NULL || tempLowercaseTranslit == NULL || tempUppercaseTranslit == NULL ||
-        tempTitlecaseTranslit == NULL || tempUnicodeTranslit == NULL || tempNameUnicodeTranslit == NULL)
+        tempTitlecaseTranslit == NULL || tempUnicodeTranslit == NULL || 
+        tempNameUnicodeTranslit == NULL || tempBreakTranslit == NULL)
     {
         delete tempNullTranslit;
         delete tempLowercaseTranslit;
@@ -1588,6 +1592,7 @@ UBool Transliterator::initializeRegistry(UErrorCode &status) {
         delete tempTitlecaseTranslit;
         delete tempUnicodeTranslit;
         delete tempNameUnicodeTranslit;
+        delete tempBreakTranslit;
 
         // Since there was an error, remove registry
         delete registry;
@@ -1603,6 +1608,7 @@ UBool Transliterator::initializeRegistry(UErrorCode &status) {
     registry->put(tempTitlecaseTranslit, TRUE, status);
     registry->put(tempUnicodeTranslit, TRUE, status);
     registry->put(tempNameUnicodeTranslit, TRUE, status);
+    registry->put(tempBreakTranslit, FALSE, status);   // FALSE means invisible.
 
     RemoveTransliterator::registerIDs(); // Must be within mutex
     EscapeTransliterator::registerIDs();
