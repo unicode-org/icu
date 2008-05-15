@@ -59,7 +59,7 @@ class TransliteratorIDParser;
  * <code>transliterate()</code>.  (However, this does <em>not</em>
  * mean that threads may share transliterators without synchronizing
  * them.  Transliterators are not immutable, so they must be
- * synchronized when shared between threads.)  This1 might seem to
+ * synchronized when shared between threads.)  This might seem to
  * limit the complexity of the transliteration operation.  In
  * practice, subclasses perform complex transliterations by delaying
  * the replacement of text until it is known that no other
