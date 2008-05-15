@@ -56,12 +56,11 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
             if (cr.isUnmappable()) {
                 return onUnmappableCharacter.call(decoder, context, source, target, offsets, buffer,
                         length, cr);
-            } else if (cr.isMalformed()) {
+            } else /* if (cr.isMalformed()) */ {
                 return onMalformedInput.call(decoder, context, source, target, offsets, buffer,
                         length, cr);
             }
-            return CharsetCallback.TO_U_CALLBACK_STOP.call(decoder, context, source, target,
-                    offsets, buffer, length, cr);
+            // return CharsetCallback.TO_U_CALLBACK_STOP.call(decoder, context, source, target, offsets, buffer, length, cr);
         }
     };
                                               
@@ -97,7 +96,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * Fallback is currently always used by icu4j decoders.
      */
     static final boolean isToUUseFallback() {
-        return true;
+        return isToUUseFallback(true);
     }
     
     /**
@@ -179,10 +178,9 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
             return CharsetCallback.TO_U_CALLBACK_SUBSTITUTE;
         }else if(action==CodingErrorAction.IGNORE){
             return CharsetCallback.TO_U_CALLBACK_SKIP;
-        }else if(action==CodingErrorAction.REPORT){
+        }else /* if(action==CodingErrorAction.REPORT) */ {
             return CharsetCallback.TO_U_CALLBACK_STOP;
         }
-        return CharsetCallback.TO_U_CALLBACK_STOP;
     }
     private final ByteBuffer EMPTY = ByteBuffer.allocate(0);
     /**
@@ -348,7 +346,8 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
         return toUnicodeWithCallback(source, target, offsets, flush);
     }
 
-    private void updateOffsets(IntBuffer offsets,int length, int sourceIndex, int errorInputLength) {
+    /* Currently, we are not using offsets in ICU4J. */
+    /* private void updateOffsets(IntBuffer offsets,int length, int sourceIndex, int errorInputLength) {
         int limit;
         int delta, offset;
 
@@ -358,37 +357,37 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
              * minus the length of the input sequence that caused an
              * error, if any
              */
-            delta=sourceIndex-errorInputLength;
+       /*     delta=sourceIndex-errorInputLength;
         } else {
             /*
              * set each offset to -1 because this conversion function
              * does not handle offsets
              */
-            delta=-1;
+        /*    delta=-1;
         }
         limit=offsets.position()+length;
         if(delta==0) {
             /* most common case, nothing to do */
-        } else if(delta>0) {
+        /* } else if(delta>0) {
             /* add the delta to each offset (but not if the offset is <0) */
-            while(offsets.position()<limit) {
+        /*    while(offsets.position()<limit) {
                 offset=offsets.get(offsets.position());
                 if(offset>=0) {
                     offsets.put(offset+delta);
                 }
                 //FIXME: ++offsets;
             }
-        } else /* delta<0 */ {
+        } else /* delta<0 */ /* {
             /*
              * set each offset to -1 because this conversion function
              * does not handle offsets
              * or the error input sequence started in a previous buffer
              */
-            while(offsets.position()<limit) {
+        /*    while(offsets.position()<limit) {
                 offsets.put(-1);
             }
         }
-    }
+    } */
     final CoderResult toUnicodeWithCallback(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush){
         
         int sourceIndex;
@@ -444,23 +443,19 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
          * }
          */
         for(;;) {
-            if(cr.isUnderflow()) {
-                /* convert */
-                cr = decodeLoop(source, target, offsets, flush);
-    
-                /*
-                 * set a flag for whether the converter
-                 * successfully processed the end of the input
-                 *
-                 * need not check cnv->preToULength==0 because a replay (<0) will cause
-                 * s<sourceLimit before converterSawEndOfInput is checked
-                 */
-                converterSawEndOfInput= (cr.isUnderflow() && flush && source.remaining()==0 && toULength == 0);
-            } else {
-                /* handle error from getNextUChar() */
-                converterSawEndOfInput=false;
-            }
-    
+
+            /* convert */
+            cr = decodeLoop(source, target, offsets, flush);
+
+            /*
+             * set a flag for whether the converter
+             * successfully processed the end of the input
+             *
+             * need not check cnv->preToULength==0 because a replay (<0) will cause
+             * s<sourceLimit before converterSawEndOfInput is checked
+             */
+            converterSawEndOfInput= (cr.isUnderflow() && flush && source.remaining()==0 && toULength == 0);
+            
             /* no callback called yet for this iteration */
             calledCallback=false;
     
@@ -477,7 +472,8 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
              */
             for(;;) {
                 /* update offsets if we write any */
-                if(offsets!=null) {
+                /* Currently offsets are not being used in ICU4J */
+                /* if(offsets!=null) {
 
                     int length=(target.position()-t);
                     if(length>0) {
@@ -492,13 +488,13 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
                          * (sourceIndex<0) or may not update the offsets pointer
                          */
                         //TODO: pArgs->offsets=offsets+=length;
-                    }
+                  /*  }
     
                     if(sourceIndex>=0) {
                         sourceIndex+=(source.position()-s);
                     }
                                     
-                }
+                } */
     
                 if(preToULength<0) {
                     /*

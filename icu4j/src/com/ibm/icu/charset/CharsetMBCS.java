@@ -914,12 +914,13 @@ class CharsetMBCS extends CharsetICU {
         }
 
         /* did we really find it? */
-        if (start < limit
-                && byt == TO_U_GET_BYTE((int) (word = (toUSection.get(toUSection.position() + start) & UConverterConstants.UNSIGNED_INT_MASK)))) {
-            return TO_U_GET_VALUE((int) word); /* never 0 */
-        } else {
-            return 0; /* not found */
-        }
+        if (start < limit) {
+            word = (toUSection.get(toUSection.position() + start) & UConverterConstants.UNSIGNED_INT_MASK);
+            if (byt == TO_U_GET_BYTE((int)word)) {
+                return TO_U_GET_VALUE((int) word); /* never 0 */
+            }
+        } 
+        return 0; /* not found */
     }
 
     /*
@@ -1004,7 +1005,8 @@ class CharsetMBCS extends CharsetICU {
              * if we are in the SBCS state for a DBCS-only converter, then load the DBCS state from the MBCS data
              * (dbcsOnlyState==0 if it is not a DBCS-only converter)
              */
-            if ((state = (byte) (mode)) == 0) {
+            state = (byte)mode;
+            if (state == 0) {
                 state = sharedData.mbcs.dbcsOnlyState;
             }
 

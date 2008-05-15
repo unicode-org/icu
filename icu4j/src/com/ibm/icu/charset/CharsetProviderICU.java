@@ -109,14 +109,14 @@ public final class CharsetProviderICU extends CharsetProvider{
         String ret = null;
         try{
             if(enc!=null){
-                if((canonicalName = UConverterAlias.getAlias(enc, 0))!=null){
-                    /* we have some aliases in the form x-blah .. match those first */
-                    ret = canonicalName;
-                } else if((canonicalName = UConverterAlias.getCanonicalName(enc, "MIME"))!=null){
+                 if((canonicalName = UConverterAlias.getCanonicalName(enc, "MIME"))!=null){
                     ret = canonicalName;
                 } else if((canonicalName = UConverterAlias.getCanonicalName(enc, "IANA"))!=null){
                     ret = canonicalName;
-                } /*else if((canonicalName = UConverterAlias.getCanonicalName(enc, ""))!=null){
+                } else if((canonicalName = UConverterAlias.getAlias(enc, 0))!=null){
+                    /* we have some aliases in the form x-blah .. match those */
+                    ret = canonicalName;
+                }/*else if((canonicalName = UConverterAlias.getCanonicalName(enc, ""))!=null){
                     ret = canonicalName;
                 }*/else if(enc.indexOf("x-")==0){
                     /* TODO: Match with getJavaCanonicalName method */
@@ -148,11 +148,12 @@ public final class CharsetProviderICU extends CharsetProvider{
     }
     /**
      * Gets the canonical name of the converter as defined by Java
-     * @param icuCanonicalName converter name
+     * @param charsetName converter name
      * @return canonical name of the converter
      * @internal ICU 3.6
+     * @deprecated This API is ICU internal only.
      */
-    private static String getJavaCanonicalName(String icuCanonicalName){
+    public static String getJavaCanonicalName(String charsetName){
         /*
         If a charset listed in the IANA Charset Registry is supported by an implementation 
         of the Java platform then its canonical name must be the name listed in the registry. 
@@ -162,24 +163,24 @@ public final class CharsetProviderICU extends CharsetProvider{
         the registry must be valid aliases. If a supported charset is not listed in the IANA 
         registry then its canonical name must begin with one of the strings "X-" or "x-".
         */
-        if(icuCanonicalName==null ){
+        if(charsetName==null ){
             return null;
         }  
         try{
             String cName = null;
             /* find out the alias with MIME tag */
-            if((cName=UConverterAlias.getStandardName(icuCanonicalName, "MIME"))!=null){
+            if((cName=UConverterAlias.getStandardName(charsetName, "MIME"))!=null){
             /* find out the alias with IANA tag */
-            }else if((cName=UConverterAlias.getStandardName(icuCanonicalName, "IANA"))!=null){
+            }else if((cName=UConverterAlias.getStandardName(charsetName, "IANA"))!=null){
             }else {
                 /*  
                     check to see if an alias already exists with x- prefix, if yes then 
                     make that the canonical name
                 */
-                int aliasNum = UConverterAlias.countAliases(icuCanonicalName);
+                int aliasNum = UConverterAlias.countAliases(charsetName);
                 String name;
                 for(int i=0;i<aliasNum;i++){
-                    name = UConverterAlias.getAlias(icuCanonicalName, i);
+                    name = UConverterAlias.getAlias(charsetName, i);
                     if(name!=null && name.indexOf("x-")==0){
                         cName = name;
                         break;
@@ -188,13 +189,13 @@ public final class CharsetProviderICU extends CharsetProvider{
                 /* last resort just append x- to any of the alias and 
                 make it the canonical name */
                 if((cName==null || cName.length()==0)){
-                    name = UConverterAlias.getStandardName(icuCanonicalName, "UTR22");
-                    if(name==null && icuCanonicalName.indexOf(",")!=-1){
-                        name = UConverterAlias.getAlias(icuCanonicalName, 1);
+                    name = UConverterAlias.getStandardName(charsetName, "UTR22");
+                    if(name==null && charsetName.indexOf(",")!=-1){
+                        name = UConverterAlias.getAlias(charsetName, 1);
                     }
                     /* if there is no UTR22 canonical name .. then just return itself*/
                     if(name==null){
-                        name = icuCanonicalName;
+                        name = charsetName;
                     }
                     cName = "x-"+ name;
                 }

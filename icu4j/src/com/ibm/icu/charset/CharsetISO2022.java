@@ -224,7 +224,7 @@ class CharsetISO2022 extends CharsetICU {
     }
     
     /* This gets the valid index of the end of buffer when decoding. */
-    private static int getEndOfBuffer_2022(ByteBuffer source, boolean flush) {
+    private static int getEndOfBuffer_2022(ByteBuffer source) {
         int sourceIndex = source.position();
         byte mySource = 0;
         mySource = source.get(sourceIndex);
@@ -1354,7 +1354,7 @@ class CharsetISO2022 extends CharsetICU {
                 if (!gotoEscape) {
                     /* Find the end of the buffer e.g : Next Escape Seq | end of Buffer */
                     int oldSourcePos = source.position();
-                    sourceLimit = getEndOfBuffer_2022(source, flush);
+                    sourceLimit = getEndOfBuffer_2022(source);
                     source.position(oldSourcePos);
                     if (source.position() != sourceLimit) {
                         /*

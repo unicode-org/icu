@@ -96,12 +96,15 @@ class Charset88591 extends CharsetASCII {
              * perform 88591 conversion from the source buffer to the target buffer, making sure
              * each char in the source is within the correct range
              */
-            ch = (int) source.get();
-            while ((ch & 0xff00) == 0) {
-                target.put((byte) ch);
+            
+            while (true) {
                 ch = (int) source.get();
+                if ((ch & 0xff00) == 0) {
+                    target.put((byte) ch);
+                } else {
+                    break;
+                }
             }
-
             /*
              * if we reach here, it's because a character was not in the correct range, and we need
              * to deak with this by calling encodeMalformedOrUnmappable.
