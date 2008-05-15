@@ -26,7 +26,9 @@ import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.SortedMap;
 
+import com.ibm.icu.charset.CharsetCallback;
 import com.ibm.icu.charset.CharsetEncoderICU;
+import com.ibm.icu.charset.CharsetDecoderICU;
 import com.ibm.icu.charset.CharsetICU;
 import com.ibm.icu.charset.CharsetProviderICU;
 import com.ibm.icu.dev.test.TestFmwk;
@@ -4195,6 +4197,7 @@ public class TestCharset extends TestFmwk {
     
     //this method provides better code coverage decoding UTF32 LE/BE
     public void TestDecodeUTF32LEBE() {
+        CoderResult result = CoderResult.UNDERFLOW;
         CharsetProvider provider = new CharsetProviderICU();       
         CharsetDecoder decoder;
         CharBuffer us = CharBuffer.allocate(0x10);
@@ -4215,6 +4218,19 @@ public class TestCharset extends TestFmwk {
             smBufDecode(decoder, "UTF-32LE", bs, us, true, false);
             errln("Overflow exception while decoding UTF32LE (1) should have been thrown.");
         } catch (Exception ex) {
+        }
+        // test overflow buffer handling in CharsetDecoderICU
+        bs.position(0);
+        us.position(0);
+        decoder.reset();
+        result = decoder.decode(bs, us, true);
+        if (result.isOverflow()) {
+            result = decoder.decode(bs, us, true);
+            if (!result.isOverflow()) {
+                errln("Overflow buffer error while decoding UTF32LE should have occurred.");
+            }
+        } else {
+            errln("Overflow buffer error while decoding UTF32LE should have occurred.");
         }
         
         us.clear();
@@ -4838,5 +4854,140 @@ public class TestCharset extends TestFmwk {
         if (result.isError()) {
             errln("Error occurred while decoding US-ASCII.");
         }
+    }
+    
+    // provide better code coverage for Charset Callbacks
+    /* Different aspects of callbacks are being tested including using different context available */
+    public void TestCharsetCallbacks() {
+        CoderResult result = CoderResult.UNDERFLOW;
+        CharsetProvider provider = new CharsetProviderICU();       
+        CharsetEncoder encoder = provider.charsetForName("iso-2022-jp").newEncoder();
+        CharsetDecoder decoder = provider.charsetForName("iso-2022-jp").newDecoder();
+        
+        String context3[] = {
+                "i",
+                "J"
+        };
+        
+        // Testing encoder escape callback
+        String context1[] = {
+                "J",
+                "C",
+                "D",
+                null
+        };
+        char chararray[] = {
+                (char)0xd122
+        };
+        ByteBuffer bb = ByteBuffer.allocate(20);
+        CharBuffer cb = CharBuffer.wrap(chararray);
+        
+        ((CharsetEncoderICU)encoder).setFromUCallback(CoderResult.OVERFLOW, CharsetCallback.FROM_U_CALLBACK_ESCAPE, null);  // This callback is not valid.
+        for (int i = 0; i < context1.length; i++) {
+            encoder.reset();
+            cb.position(0);
+            bb.position(0);
+            ((CharsetEncoderICU)encoder).setFromUCallback(CoderResult.unmappableForLength(1), CharsetCallback.FROM_U_CALLBACK_ESCAPE, context1[i]); // This callback is valid.
+            
+            result = encoder.encode(cb, bb, true);
+            if (result.isError()) {
+                errln("Error occurred while testing of callbacks for ISO-2022-JP encoder.");
+            }
+        }
+        
+        // Testing encoder skip callback
+        for (int i = 0; i < context3.length; i++) {
+            encoder.reset();
+            cb.position(0);
+            bb.position(0);
+            ((CharsetEncoderICU)encoder).setFromUCallback(CoderResult.unmappableForLength(1), CharsetCallback.FROM_U_CALLBACK_SKIP, context3[i]); 
+            
+            result = encoder.encode(cb, bb, true);
+            if (result.isError() && i == 0) {
+                errln("Error occurred while testing of callbacks for ISO-2022-JP encoder.");
+            }
+        }
+        
+        // Testing encoder sub callback
+        for (int i = 0; i < context3.length; i++) {
+            encoder.reset();
+            cb.position(0);
+            bb.position(0);
+            ((CharsetEncoderICU)encoder).setFromUCallback(CoderResult.unmappableForLength(1), CharsetCallback.FROM_U_CALLBACK_SUBSTITUTE, context3[i]); 
+            
+            result = encoder.encode(cb, bb, true);
+            if (result.isError() && i == 0) {
+                errln("Error occurred while testing of callbacks for ISO-2022-JP encoder.");
+            }
+        }
+        
+        // Testing decoder escape callback
+        String context2[] = {
+                "X",
+                "C",
+                "D",
+                null
+        };
+        byte bytearray[] = {
+                (byte)0x1b, (byte)0x2e, (byte)0x43
+        };
+        bb = ByteBuffer.wrap(bytearray);
+        cb = CharBuffer.allocate(20);
+        
+        ((CharsetDecoderICU)decoder).setToUCallback(CoderResult.OVERFLOW, CharsetCallback.TO_U_CALLBACK_ESCAPE, null);  // This callback is not valid.
+        for (int i = 0; i < context2.length; i++) {
+            decoder.reset();
+            cb.position(0);
+            bb.position(0);
+            ((CharsetDecoderICU)decoder).setToUCallback(CoderResult.malformedForLength(1), CharsetCallback.TO_U_CALLBACK_ESCAPE, context2[i]); // This callback is valid.
+            
+            result = decoder.decode(bb, cb, true);
+            if (result.isError()) {
+                errln("Error occurred while testing of callbacks for ISO-2022-JP decoder.");
+            }
+        }
+        
+        // Testing decoder skip callback
+        for (int i = 0; i < context3.length; i++) {
+            decoder.reset();
+            cb.position(0);
+            bb.position(0);
+            ((CharsetDecoderICU)decoder).setToUCallback(CoderResult.malformedForLength(1), CharsetCallback.TO_U_CALLBACK_SKIP, context3[i]);
+            result = decoder.decode(bb, cb, true);
+            if (!result.isError()) {
+                errln("Error occurred while testing of callbacks for ISO-2022-JP decoder should have occurred.");
+            }
+        }
+    }
+    
+    // Testing invalid input exceptions
+    public void TestInvalidInput() {
+        CharsetProvider provider = new CharsetProviderICU();
+        Charset charset = provider.charsetForName("iso-2022-jp");
+        CharsetEncoder encoder = charset.newEncoder();
+        CharsetDecoder decoder = charset.newDecoder();
+        
+        try {
+            encoder.encode(CharBuffer.allocate(10), null, true);
+            errln("Illegal argument exception should have been thrown due to null target.");
+        } catch (Exception ex) {
+        }
+        
+        try {
+            decoder.decode(ByteBuffer.allocate(10), null, true);
+            errln("Illegal argument exception should have been thrown due to null target.");
+        } catch (Exception ex) {
+        }
+    }
+    
+    // Test java canonical names
+    public void TestGetICUJavaCanonicalNames() {
+        // Ambiguous charset name.
+        String javaCName = CharsetProviderICU.getJavaCanonicalName("windows-1250");
+        String icuCName = CharsetProviderICU.getICUCanonicalName("Windows-1250");
+        if (javaCName == null || icuCName == null) {
+            errln("Unable to get Java or ICU canonical name from ambiguous alias");
+        }
+        
     }
 }

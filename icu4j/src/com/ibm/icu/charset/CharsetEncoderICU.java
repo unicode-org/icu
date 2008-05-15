@@ -75,12 +75,11 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
             if (cr.isUnmappable()) {
                 return onUnmappableInput.call(encoder, context, source, target,
                         offsets, buffer, length, cp, cr);
-            } else if (cr.isMalformed()) {
+            } else /* if (cr.isMalformed()) */ {
                 return onMalformedInput.call(encoder, context, source, target,
                         offsets, buffer, length, cp, cr);
             }
-            return CharsetCallback.FROM_U_CALLBACK_STOP.call(encoder, context,
-                    source, target, offsets, buffer, length, cp, cr);
+            // return CharsetCallback.FROM_U_CALLBACK_STOP.call(encoder, context, source, target, offsets, buffer, length, cp, cr);
 
         }
     };
@@ -186,7 +185,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
         }
         
         if (fromUContext == null || !fromUContext.equals(newContext)) {
-            fromUContext = newContext;
+            setFromUContext(newContext);
         }
     }
 
@@ -206,10 +205,9 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
             return CharsetCallback.FROM_U_CALLBACK_SUBSTITUTE;
         } else if (action == CodingErrorAction.IGNORE) {
             return CharsetCallback.FROM_U_CALLBACK_SKIP;
-        } else if (action == CodingErrorAction.REPORT) {
+        } else /* if (action == CodingErrorAction.REPORT) */ {
             return CharsetCallback.FROM_U_CALLBACK_STOP;
         }
-        return CharsetCallback.FROM_U_CALLBACK_STOP;
     }
 
     private static final CharBuffer EMPTY = CharBuffer.allocate(0);
@@ -469,7 +467,8 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
              */
             for (;;) {
                 /* update offsets if we write any */
-                if (offsets != null) {
+                /* Currently offsets are not being used in ICU4J */
+                /* if (offsets != null) {
                     int length = target.remaining();
                     if (length > 0) {
 
@@ -480,13 +479,13 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
                          * however, some converters do not handle offsets at all
                          * (sourceIndex<0) or may not update the offsets pointer
                          */
-                        offsets.position(offsets.position() + length);
+                 /*       offsets.position(offsets.position() + length);
                     }
 
                     if (sourceIndex >= 0) {
                         sourceIndex += (int) (source.position());
                     }
-                }
+                } */
 
                 if (preFromULength < 0) {
                     /*
