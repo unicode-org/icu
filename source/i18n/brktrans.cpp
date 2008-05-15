@@ -73,7 +73,7 @@ BreakTransliterator::BreakTransliterator(const BreakTransliterator& o) :
  */
 Transliterator* BreakTransliterator::clone(void) const {
     return new BreakTransliterator(*this);
-};
+}
 
 /**
  * Implements {@link Transliterator#handleTransliterate}.
