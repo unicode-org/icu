@@ -1252,11 +1252,15 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             // For now, append "ss" to the end.
             if (gmtHourFormats[OFFSET_POSITIVE][OFFSET_HM].indexOf(':') != -1) {
                 gmtHourFormats[OFFSET_POSITIVE][OFFSET_HMS] = gmtHourFormats[OFFSET_POSITIVE][OFFSET_HM] + ":ss";
+            } else if (gmtHourFormats[OFFSET_POSITIVE][OFFSET_HM].indexOf('.') != -1) {
+                gmtHourFormats[OFFSET_POSITIVE][OFFSET_HMS] = gmtHourFormats[OFFSET_POSITIVE][OFFSET_HM] + ".ss";
             } else {
                 gmtHourFormats[OFFSET_POSITIVE][OFFSET_HMS] = gmtHourFormats[OFFSET_POSITIVE][OFFSET_HM] + "ss";
             }
             if (gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HM].indexOf(':') != -1) {
                 gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HMS] = gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HM] + ":ss";
+            } else if (gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HM].indexOf('.') != -1) {
+                gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HMS] = gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HM] + ".ss";
             } else {
                 gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HMS] = gmtHourFormats[OFFSET_NEGATIVE][OFFSET_HM] + "ss";
             }
