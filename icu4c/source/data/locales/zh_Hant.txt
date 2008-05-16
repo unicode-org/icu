@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh_Hant.xml
@@ -54,6 +54,7 @@ zh_Hant{
         BG{"保加利亞"}
         BI{"蒲隆地"}
         BJ{"貝南"}
+        BL{"聖巴瑟米"}
         BM{"百慕達"}
         BN{"汶萊"}
         BO{"玻利維亞"}
@@ -127,6 +128,7 @@ zh_Hant{
         JO{"約旦"}
         KE{"肯亞"}
         KG{"吉爾吉斯"}
+        KH{"柬埔寨"}
         KI{"吉里巴斯"}
         KM{"科摩羅群島"}
         KN{"聖克里斯多福及尼維斯"}
@@ -145,6 +147,8 @@ zh_Hant{
         LY{"利比亞"}
         MC{"摩納哥"}
         MD{"摩爾多瓦"}
+        ME{"蒙特內哥羅"}
+        MF{"聖馬丁"}
         MG{"馬達加斯加"}
         MH{"馬紹爾群島"}
         MK{"馬其頓"}
@@ -180,6 +184,7 @@ zh_Hant{
         PL{"波蘭"}
         PM{"聖彼德與密啟崙"}
         PN{"皮特康"}
+        PR{"波多黎各"}
         PS{"巴勒斯坦"}
         PW{"帛琉"}
         QA{"卡達"}
@@ -619,7 +624,7 @@ zh_Hant{
             "以色列新謝克爾",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
+            "0≤Rs.|1≤Re.|1<Rs.",
             "印度盧布",
         }
         IQD{
@@ -1185,7 +1190,7 @@ zh_Hant{
         currency{"貨幣"}
     }
     Languages{
-        ab{"阿布哈西亞文"}
+        ab{"阿布哈茲文"}
         ace{"亞齊文"}
         ach{"阿僑利文"}
         ada{"阿當莫文"}
@@ -1198,22 +1203,24 @@ zh_Hant{
         alg{"阿爾岡昆文"}
         alt{"南阿爾泰文"}
         an{"阿拉貢文"}
+        anp{"安吉卡文"}
         apa{"阿帕奇語言"}
         arn{"阿勞坎文"}
         art{"其他人工語言"}
         as{"阿薩姆文"}
         ast{"阿斯圖里亞文"}
-        ath{"阿薩巴斯卡文"}
+        ath{"阿薩帕斯坎諸語言"}
         aus{"澳洲英文"}
-        av{"阿法文 Avaric"}
+        av{"阿瓦爾文"}
         awa{"阿瓦文"}
         ay{"艾馬拉文"}
         az{"亞塞拜然文"}
         ba{"巴什客爾文"}
         bad{"班達文"}
-        bai{"巴米累克文"}
+        bai{"巴米累克諸語言"}
+        ban{"峇里文"}
         bas{"巴薩文"}
-        bat{"波羅的文（其他）"}
+        bat{"波羅的海諸語言"}
         be{"白俄羅斯文"}
         bej{"貝扎文"}
         bem{"別姆巴文"}
@@ -1257,7 +1264,8 @@ zh_Hant{
         dar{"達爾格瓦文"}
         day{"迪雅克文"}
         de_AT{"德文 (奧地利)"}
-        del{"德拉瓦"}
+        de_CH{"高地德文 (瑞士)"}
+        del{"德拉瓦文"}
         den{"斯拉夫"}
         dgr{"多格里布文"}
         doi{"多格來文"}
@@ -1265,14 +1273,16 @@ zh_Hant{
         dsb{"下索布文"}
         dua{"杜亞拉文"}
         dv{"迪維西文"}
-        ee{"埃緯文"}
+        ee{"埃維文"}
         efi{"埃菲克文"}
         egy{"古埃及文"}
         eka{"艾卡朱克文"}
         el{"希臘文"}
         en_AU{"英文 (澳洲)"}
+        en_CA{"英文（加拿大）"}
         en_GB{"英文 (英國)"}
         en_US{"英文 (美國)"}
+        enm{"中古英文"}
         eo{"世界語"}
         es_419{"西班牙文 (拉丁美洲)"}
         es_ES{"西班牙文 (西班牙)"}
@@ -1282,10 +1292,13 @@ zh_Hant{
         ff{"富拉文"}
         fi{"芬蘭文"}
         fil{"菲律賓文"}
-        fiu{"芬蘭-烏戈爾族文(其他)"}
+        fiu{"芬烏諸語言"}
         fj{"斐濟文"}
         fo{"法羅文"}
         fon{"豐文"}
+        fr_CA{"法文（加拿大）"}
+        fr_CH{"法文 (瑞士)"}
+        frr{"北弗里西亞文"}
         fy{"弗里斯蘭文"}
         ga{"愛爾蘭文"}
         gaa{"加族文"}
@@ -1299,6 +1312,7 @@ zh_Hant{
         gor{"科隆達羅文"}
         got{"哥德文"}
         grc{"古希臘文"}
+        gsw{"德文 (瑞士)"}
         gu{"吉亞拉塔文"}
         gv{"曼島文"}
         gwi{"圭契文"}
@@ -1320,7 +1334,7 @@ zh_Hant{
         ijo{"伊喬文"}
         ik{"依奴皮維克文"}
         ilo{"伊洛闊文"}
-        inc{"印度語系（其他）"}
+        inc{"印度諸語言"}
         ine{"印歐語系（其他）"}
         io{"伊朗文"}
         ira{"伊芳朗文"}
@@ -1336,8 +1350,9 @@ zh_Hant{
         kab{"卡比爾文"}
         kar{"克倫文"}
         kbd{"卡巴爾達文"}
+        kfo{"科羅文"}
         kg{"剛果文"}
-        khi{"其他科伊桑文"}
+        khi{"科依桑諸語言"}
         kho{"和闐文"}
         ki{"吉庫尤人"}
         kj{"廣亞馬文"}
@@ -1365,7 +1380,7 @@ zh_Hant{
         lg{"干達文"}
         li{"林堡文"}
         lo{"寮國文"}
-        lol{"芒戈语"}
+        lol{"芒戈文"}
         loz{"洛齊文"}
         lt{"立陶宛語"}
         lu{"魯巴加丹加文"}
@@ -1379,7 +1394,7 @@ zh_Hant{
         mag{"馬加伊文"}
         mai{"邁蒂利文"}
         mak{"望加錫文"}
-        map{"南島文"}
+        map{"南島諸語言"}
         mas{"馬賽文"}
         mdr{"曼達文"}
         men{"門德文"}
@@ -1421,6 +1436,7 @@ zh_Hant{
         nn{"新挪威文"}
         nog{"諾蓋文"}
         non{"古諾爾斯文"}
+        nqo{"西非書面語言（N'ko）"}
         nr{"南地畢列文"}
         nub{"努比亞文"}
         nv{"納瓦約文"}
@@ -1430,6 +1446,7 @@ zh_Hant{
         nyn{"尼揚科萊文"}
         nyo{"尼奧囉文"}
         nzi{"尼茲馬文"}
+        oc{"奧克西坦文"}
         oj{"奧杰布瓦文"}
         om{"阿曼文"}
         or{"歐里亞文"}
@@ -1501,7 +1518,8 @@ zh_Hant{
         sus{"蘇蘇文"}
         sux{"蘇美文"}
         sw{"史瓦希里文"}
-        syr{"古敘利亞文"}
+        syc{"古敘利亞文"}
+        syr{"敘利亞文"}
         ta{"坦米爾文"}
         tai{"其他泰文"}
         te{"泰盧固文"}
@@ -1514,6 +1532,7 @@ zh_Hant{
         tk{"土庫曼文"}
         tkl{"托克勞文"}
         tl{"塔加路族文"}
+        tlh{"克林貢文"}
         tli{"特林基特文"}
         tmh{"塔馬奇克文"}
         tn{"突尼西亞文"}
@@ -1527,6 +1546,7 @@ zh_Hant{
         tup{"圖皮文"}
         tut{"其他阿爾泰諸文"}
         tvl{"吐瓦魯文"}
+        tw{"特威文"}
         ty{"大溪地文"}
         tyv{"土凡文"}
         udm{"沃蒂艾克文"}
@@ -1546,18 +1566,22 @@ zh_Hant{
         wen{"文德文"}
         wo{"沃爾夫文"}
         xal{"卡爾梅克文"}
+        xh{"科薩文"}
         yao{"瑤文"}
         yi{"意第緒文"}
         yo{"約魯巴文"}
         ypk{"愛斯基摩文"}
         za{"壯文"}
         zap{"薩波特克文"}
+        zbl{"布列斯符號"}
         zen{"澤納加文"}
         zh_Hans{"簡體中文"}
         zh_Hant{"繁體中文"}
         znd{"贊德文"}
         zu{"祖魯文"}
         zun{"祖尼文"}
+        zxx{"無語言內容"}
+        zza{"扎扎文"}
     }
     LocaleScript{
         "Hani",
@@ -1571,6 +1595,7 @@ zh_Hant{
         Bopo{"注音符號"}
         Brai{"盲人用點字法"}
         Cans{"加拿大原住民通用字符"}
+        Cari{"卡里亞文"}
         Cher{"柴羅基文"}
         Copt{"科普特文"}
         Cprt{"塞浦路斯文"}
@@ -1589,12 +1614,15 @@ zh_Hant{
         Hans{"簡體中文"}
         Hant{"繁體中文"}
         Hebr{"希伯來文"}
+        Hira{"平假名"}
         Hmng{"楊松錄苗文"}
+        Hrkt{"片假名或平假名"}
         Hung{"古匈牙利文"}
         Inds{"印度河流域（哈拉帕文）"}
         Ital{"古意大利文"}
         Java{"爪哇文"}
         Jpan{"日文"}
+        Kana{"片假名"}
         Khmr{"高棉文"}
         Knda{"坎那達文"}
         Laoo{"寮國文"}
@@ -1606,6 +1634,7 @@ zh_Hant{
         Linb{"線性文字 B"}
         Mlym{"馬來亞拉姆文"}
         Mong{"蒙古文"}
+        Mtei{"曼尼普爾文"}
         Mymr{"緬甸文"}
         Nkoo{"Nkoo"}
         Ogam{"歐甘文"}
@@ -1615,7 +1644,9 @@ zh_Hant{
         Perm{"古彼爾姆諸文"}
         Phnx{"腓尼基文"}
         Qaai{"Qaai"}
+        Rjng{"拉讓文"}
         Runr{"古北歐文字"}
+        Saur{"索拉什特拉文"}
         Shaw{"簫柏納字符"}
         Sinh{"錫蘭文"}
         Syrc{"敍利亞文"}
@@ -1639,9 +1670,11 @@ zh_Hant{
             chinese{"農曆"}
             gregorian{"公曆"}
             hebrew{"希伯來曆法"}
+            indian{"印度國家曆法"}
             islamic{"伊斯蘭曆法"}
             islamic-civil{"伊斯蘭城市曆法"}
             japanese{"日本曆法"}
+            roc{"中華民國曆"}
         }
         collation{
             big5han{"繁體中文 (Big5)"}
@@ -1662,22 +1695,41 @@ zh_Hant{
         REVISED{"已修訂"}
         SAAHO{"SAAHO"}
     }
-    Version{"1.91"}
+    Version{"1.128"}
     calendar{
+        chinese{
+            AmPmMarkers{
+                "上午",
+                "下午",
+            }
+        }
         gregorian{
             DateTimePatterns{
-                "ahh時mm分ss秒 v",
-                "ahh時mm分ss秒 z",
-                "a h:mm:ss",
-                "a h:mm",
+                "ahh時mm分ss秒v",
+                "ahh時mm分ss秒z",
+                "ah:mm:ss",
+                "ah:mm",
                 "yyyy年M月d日EEEE",
                 "yyyy年M月d日",
                 "yyyy/M/d",
                 "yyyy/M/d",
-                "{1} {0}",
+                "{1}{0}",
             }
             availableFormats{
+                Hm{"H:mm"}
+                M{"L"}
+                MEd{"M-d（E）"}
+                MMM{"LLL"}
+                MMMEd{"MMM月d日E"}
+                MMMMd{"MMMM月d日"}
+                MMMMdd{"MMMM月dd日"}
+                MMMd{"MMM月d日"}
                 Md{"M/d"}
+                yMEd{"yyyy/M/d（EEE）"}
+                yMMM{"yyyy年M月"}
+                yMMMM{"yyyy年M月"}
+                yyyy{"yyyy年"}
+                yyyyM{"yyyy年M月"}
             }
             dayNames{
                 format{
@@ -1690,9 +1742,55 @@ zh_Hant{
                         "週五",
                         "週六",
                     }
+                    narrow{
+                        "日",
+                        "一",
+                        "二",
+                        "三",
+                        "四",
+                        "五",
+                        "六",
+                    }
+                    wide{
+                        "星期日",
+                        "星期一",
+                        "星期二",
+                        "星期三",
+                        "星期四",
+                        "星期五",
+                        "星期六",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "日",
+                        "一",
+                        "二",
+                        "三",
+                        "四",
+                        "五",
+                        "六",
+                    }
+                    wide{
+                        "星期日",
+                        "星期一",
+                        "星期二",
+                        "星期三",
+                        "星期四",
+                        "星期五",
+                        "星期六",
+                    }
                 }
             }
             eras{
+                abbreviated{
+                    "公元前",
+                    "公元",
+                }
+                narrow{
+                    "公元前",
+                    "公元",
+                }
                 wide{
                     "西元前",
                     "西元",
@@ -1700,7 +1798,11 @@ zh_Hant{
             }
             fields{
                 day{
+                    dn{"日"}
                     relative{
+                        "-1"{"昨天"}
+                        "-2"{"前天"}
+                        "-3"{"大前天"}
                         "2"{"後天"}
                     }
                 }
@@ -1724,6 +1826,96 @@ zh_Hant{
                 }
                 zone{
                     dn{"區域"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "一月",
+                        "二月",
+                        "三月",
+                        "四月",
+                        "五月",
+                        "6月",
+                        "7月",
+                        "8月",
+                        "9月",
+                        "10月",
+                        "11月",
+                        "12月",
+                    }
+                    narrow{
+                        "1月",
+                        "2月",
+                        "3月",
+                        "4月",
+                        "5月",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "一月",
+                        "二月",
+                        "三月",
+                        "四月",
+                        "五月",
+                        "6月",
+                        "7月",
+                        "8月",
+                        "9月",
+                        "10月",
+                        "11月",
+                        "12月",
+                    }
                 }
             }
             quarters{
@@ -1751,17 +1943,17 @@ zh_Hant{
                 }
             }
         }
-        taiwan{
+        roc{
             DateTimePatterns{
-                "ahh時mm分ss秒 v" /**  fallback from 'gregorian'   */,
-                "ahh時mm分ss秒 z" /**  fallback from 'gregorian'   */,
-                "a h:mm:ss" /**  fallback from 'gregorian'   */,
-                "a h:mm" /**  fallback from 'gregorian'   */,
+                "ahh時mm分ss秒v",
+                "ahh時mm分ss秒z",
+                "ah:mm:ss",
+                "ah:mm",
                 "Gy'年'M'月'd'日'EEEE",
                 "Gy'年'M'月'd'日'",
                 "G y/M/d",
                 "G y/M/d",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1}{0}",
             }
             eras{
                 abbreviated{
@@ -1776,6 +1968,10 @@ zh_Hant{
         alternateQuotationStart{"『"}
         quotationEnd{"」"}
         quotationStart{"「"}
+    }
+    measurementSystemNames{
+        US{"美制"}
+        metric{"公制"}
     }
     zoneStrings{
         "Africa:Bamako"{
@@ -1817,6 +2013,9 @@ zh_Hant{
         "America:Argentina:San_Juan"{
             ec{"聖胡安"}
         }
+        "America:Argentina:San_Luis"{
+            ec{"聖路易"}
+        }
         "America:Argentina:Tucuman"{
             ec{"吐庫曼"}
         }
@@ -1831,6 +2030,9 @@ zh_Hant{
         }
         "America:Belize"{
             ec{"貝里斯"}
+        }
+        "America:Blanc-Sablon"{
+            ec{"白朗薩布隆"}
         }
         "America:Boa_Vista"{
             ec{"保維斯塔"}
@@ -1855,6 +2057,9 @@ zh_Hant{
         }
         "America:Chihuahua"{
             ec{"奇華華"}
+        }
+        "America:Coral_Harbour"{
+            ec{"珊瑚港"}
         }
         "America:Cordoba"{
             ec{"哥多華"}
@@ -1922,6 +2127,9 @@ zh_Hant{
         "America:Indiana:Marengo"{
             ec{"馬倫哥"}
         }
+        "America:Indiana:Tell_City"{
+            ec{"泰爾城"}
+        }
         "America:Indiana:Vevay"{
             ec{"維威"}
         }
@@ -1952,6 +2160,9 @@ zh_Hant{
         "America:Los_Angeles"{
             ec{"洛杉磯"}
         }
+        "America:Louisville"{
+            ec{"路易斯維爾"}
+        }
         "America:Maceio"{
             ec{"馬瑟歐"}
         }
@@ -1975,6 +2186,9 @@ zh_Hant{
         }
         "America:Mexico_City"{
             ec{"墨西哥市"}
+        }
+        "America:Moncton"{
+            ec{"蒙克頓"}
         }
         "America:Monterrey"{
             ec{"蒙特瑞"}
@@ -2026,6 +2240,9 @@ zh_Hant{
         }
         "America:Regina"{
             ec{"利宅那"}
+        }
+        "America:Resolute"{
+            ec{"羅斯魯特"}
         }
         "America:Rio_Branco"{
             ec{"布蘭科"}
@@ -2101,6 +2318,9 @@ zh_Hant{
         }
         "Antarctica:South_Pole"{
             ec{"南極"}
+        }
+        "Antarctica:Syowa"{
+            ec{"昭和"}
         }
         "Antarctica:Vostok"{
             ec{"莫斯托克"}
@@ -2246,6 +2466,9 @@ zh_Hant{
         "Australia:Broken_Hill"{
             ec{"斷丘市"}
         }
+        "Australia:Currie"{
+            ec{"克黎"}
+        }
         "Australia:Darwin"{
             ec{"達爾文"}
         }
@@ -2368,6 +2591,9 @@ zh_Hant{
         }
         "Pacific:Johnston"{
             ec{"強斯頓"}
+        }
+        "Pacific:Kiritimati"{
+            ec{"吉里巴斯"}
         }
         "Pacific:Kosrae"{
             ec{"科斯里"}
@@ -2511,15 +2737,40 @@ zh_Hant{
         "meta:GMT"{
             ls{"格林威治標準時間"}
         }
+        "meta:Georgia"{
+            ss{"GET"}
+        }
+        "meta:Gulf"{
+            sg{"GT"}
+            ss{"GST"}
+        }
+        "meta:Hong_Kong"{
+            sd{"HKST"}
+            ss{"HKT"}
+        }
+        "meta:Hovd"{
+            sd{"HOVST"}
+            ss{"HOVT"}
+        }
+        "meta:Iran"{
+            sd{"IRDT"}
+            ss{"IRST"}
+        }
         "meta:Israel"{
             ls{"以色列標準時間"}
+            ss{"IST（以色列）"}
         }
         "meta:Japan"{
             ls{"日本標準時間"}
+            sd{"JDT"}
+            sg{"JT"}
+            ss{"JST"}
         }
         "meta:Newfoundland"{
             ls{"紐芬蘭標準時間"}
         }
+        fallbackFormat{"{1} ({0})"}
         hourFormat{"+HH:mm;-HH:mm"}
+        regionFormat{"{0}時間"}
     }
 }

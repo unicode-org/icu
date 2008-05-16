@@ -77,11 +77,11 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         CharsToUnicodeString("1999\\u5E7401\\u670813\\u65E5"),
         UnicodeString("1-13"),
         UnicodeString("01-13"),
-        CharsToUnicodeString("1999 Q1"),
+        CharsToUnicodeString("1999\\u5E741\\u5B63"),
         CharsToUnicodeString("\\u4E0B\\u534811:58"),
         CharsToUnicodeString("23:58"),
         UnicodeString("58:59"),
-        UnicodeString("1.1999"),  // de_DE
+        UnicodeString("1999-1"),  // de_DE
         UnicodeString("Jan 1999"),
         UnicodeString("13.1.1999"),
         UnicodeString("13. Jan 1999"),
@@ -97,7 +97,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("13. tammita 1999"),
         UnicodeString("13.1."),
         UnicodeString("13. tammita"),
-        UnicodeString("1. nelj./1999"),
+        UnicodeString("1. nelj. 1999"),
         UnicodeString("23.58"),
         UnicodeString("23.58"),
         UnicodeString("58.59"),
@@ -131,9 +131,9 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("10/99"),
         UnicodeString("Oct 14"),
         UnicodeString("Oct 14 6:58 AM"),
-        UnicodeString("Thu Oct 14 6:58:59 AM"),
+        UnicodeString("Thu, Oct 14 6:58:59 AM"),
         UnicodeString("10/14 6:58 AM"),
-        UnicodeString("Thursday Oct 14 6:58:59 AM"),
+        UnicodeString("Thursday, Oct 14 6:58:59 AM"),
         UnicodeString("Oct 14, 1999 06:58:59 AM"),
         UnicodeString("Thu, Oct 14, 1999 06:58:59 AM"),
         UnicodeString("6:58 AM"),
@@ -344,7 +344,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         // Trac# 6104
         status = U_ZERO_ERROR;
         pattern = UnicodeString("YYYYMMM");
-        UnicodeString expR = UnicodeString("1999-01");
+        UnicodeString expR = CharsToUnicodeString("1999\\u5E7401\\u6708");
         Locale loc("ja");
         UDate testDate1= LocaleTest::date(99, 0, 13, 23, 58, 59);
         DateTimePatternGenerator *patGen=DateTimePatternGenerator::createInstance(loc, status);

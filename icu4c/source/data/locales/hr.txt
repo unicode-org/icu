@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/hr.xml
@@ -26,6 +26,7 @@ hr{
         021{"Sjeverna Amerika"}
         029{"Karibi"}
         030{"Istočna Azija"}
+        034{"Južna Azija"}
         035{"Jugoistočna Azija"}
         039{"Južna Europa"}
         053{"Australija i Novi Zeland"}
@@ -34,11 +35,13 @@ hr{
         061{"Polinezija"}
         062{"Južno-centralna Azija"}
         142{"Azija"}
+        143{"Srednja Azija"}
         145{"Zapadna Azija"}
         150{"Europa"}
         151{"Istočna Europa"}
         154{"Sjeverna Europa"}
         155{"Zapadna Europa"}
+        419{"Latinska Amerika i Karibi"}
         830{"Kanalski otoci"}
         AD{"Andora"}
         AE{"Ujedinjeni Arapski Emirati"}
@@ -77,8 +80,8 @@ hr{
         BY{"Bjelorusija"}
         BZ{"Belize"}
         CA{"Kanada"}
-        CC{"Kokos (Keeling) Otoci"}
-        CD{"Kongo, Demokratska Republika"}
+        CC{"Kokosovi Otoci"}
+        CD{"Demokratska Republika Kongo"}
         CF{"Srednjoafrička Republika"}
         CG{"Kongo"}
         CH{"Švicarska"}
@@ -111,14 +114,15 @@ hr{
         FI{"Finska"}
         FJ{"Fidži"}
         FK{"Falklandski Otoci"}
-        FM{"Mikronezija, Federalne Države"}
+        FM{"Mikronezija"}
         FO{"Farski Otoci"}
         FR{"Francuska"}
         GA{"Gabon"}
-        GB{"Ujedinjena Kraljevina"}
+        GB{"Velika Britanija"}
         GD{"Grenada"}
         GE{"Gruzija"}
         GF{"Francuska Gvajana"}
+        GG{"Guernsey"}
         GH{"Gana"}
         GI{"Gibraltar"}
         GL{"Greenland"}
@@ -133,7 +137,7 @@ hr{
         GW{"Gvineja Bisau"}
         GY{"Gvajana"}
         HK{"Hong Kong S.A.R. Kine"}
-        HM{"Heard Otok i McDonald Otoci"}
+        HM{"Otok Heard i Otoci McDonald"}
         HN{"Honduras"}
         HR{"Hrvatska"}
         HT{"Haiti"}
@@ -145,9 +149,10 @@ hr{
         IN{"Indija"}
         IO{"Britanski Teritorij Indijskog Oceana"}
         IQ{"Irak"}
-        IR{"Iran, Islamska Republika"}
+        IR{"Iran"}
         IS{"Island"}
         IT{"Italija"}
+        JE{"Jersey"}
         JM{"Jamajka"}
         JO{"Jordan"}
         JP{"Japan"}
@@ -158,7 +163,7 @@ hr{
         KM{"Komori"}
         KN{"Sveti Kristofor i Nevis"}
         KP{"Koreja, Sjeverna"}
-        KR{"Koreja, Južna"}
+        KR{"Južna Koreja"}
         KW{"Kuvajt"}
         KY{"Kajmanski Otoci"}
         KZ{"Kazakstan"}
@@ -175,10 +180,11 @@ hr{
         LY{"Libijska Arapska Džamahirija"}
         MA{"Maroko"}
         MC{"Monako"}
-        MD{"Moldavija, Republika"}
+        MD{"Moldavija"}
+        ME{"Crna Gora"}
         MG{"Madagaskar"}
         MH{"Maršalovi Otoci"}
-        MK{"Makedonija, Republika"}
+        MK{"Bivša Jugoslavenska Republika Makedonija"}
         ML{"Mali"}
         MM{"Mijanma"}
         MN{"Mongolija"}
@@ -223,10 +229,11 @@ hr{
         PY{"Paragvaj"}
         QA{"Katar"}
         QO{"Ostala oceanija"}
+        QU{"Europska Unija"}
         RE{"Reunion"}
         RO{"Rumunjska"}
         RS{"Srbija"}
-        RU{"Ruska Federacija"}
+        RU{"Rusija"}
         RW{"Ruanda"}
         SA{"Saudijska Arabija"}
         SB{"Salamunovi Otoci"}
@@ -249,7 +256,7 @@ hr{
         SZ{"Svazi"}
         TC{"Turkski i Kaikos Otoci"}
         TD{"Čad"}
-        TF{"Francuske Južne Teritorije"}
+        TF{"Francuski Južni Teritoriji"}
         TG{"Togo"}
         TH{"Tajland"}
         TJ{"Tadžikistan"}
@@ -265,15 +272,15 @@ hr{
         TZ{"Tanzanija"}
         UA{"Ukrajina"}
         UG{"Uganda"}
-        UM{"Sjedinjene Države Manji Vanjski Otoci"}
+        UM{"Ujedinjene Države Manjih Pacifičkih Otoka"}
         US{"Sjedinjene Države"}
         UY{"Urugvaj"}
         UZ{"Uzbekistan"}
-        VA{"Sveta Stolica (Država Vatikanskog Grada)"}
+        VA{"Grad Vatikan"}
         VC{"Sveti Vincent i Grenadini"}
         VE{"Venezuela"}
         VG{"Britanski Djevičanski Otoci"}
-        VI{"U.S. Djevičanski Otoci"}
+        VI{"Američki Djevičanski Otoci"}
         VN{"Vijetnam"}
         VU{"Vanuatu"}
         WF{"Wallis i Futuna"}
@@ -286,6 +293,14 @@ hr{
         ZZ{"nepoznata ili nevažeća oblast"}
     }
     Currencies{
+        ADP{
+            "ADP",
+            "andorska pezeta",
+        }
+        AED{
+            "AED",
+            "UAE dirham",
+        }
         ALL{
             "lek",
             "Albanski lek",
@@ -301,6 +316,10 @@ hr{
         AOK{
             "AOK",
             "Angolska kvanza (1977-1990)",
+        }
+        AON{
+            "AON",
+            "angolska nova kvanza (1990-2000)",
         }
         ARP{
             "ARP",
@@ -318,9 +337,17 @@ hr{
             "$A",
             "Australski dolar",
         }
+        AWG{
+            "AWG",
+            "arupski gulden",
+        }
         AZM{
             "AZM",
             "Azerbejdžanski manat",
+        }
+        BAD{
+            "BAD",
+            "bosansko-hercegovački dinar",
         }
         BAM{
             "KM",
@@ -338,6 +365,14 @@ hr{
             "BF",
             "Belgijski franak",
         }
+        BGN{
+            "BGN",
+            "bugarski novi lev",
+        }
+        BHD{
+            "BHD",
+            "bahreinski dinar",
+        }
         BMD{
             "Ber$",
             "Bermudski dolar",
@@ -346,9 +381,41 @@ hr{
             "BND",
             "Brunejski dolar",
         }
+        BOB{
+            "BOB",
+            "bolivijano",
+        }
+        BOP{
+            "BOP",
+            "bolivijski pezo",
+        }
+        BOV{
+            "BOV",
+            "bolivijski mvdol",
+        }
         BRL{
             "R$",
             "Brazilski Real",
+        }
+        BSD{
+            "BSD",
+            "bahamski dolar",
+        }
+        BWP{
+            "BWP",
+            "pula",
+        }
+        BYB{
+            "BYB",
+            "bjeloruska nova rublja (1994-1999)",
+        }
+        BYR{
+            "BYR",
+            "bjeloruska rublja",
+        }
+        BZD{
+            "BZD",
+            "belizeanski dolar",
         }
         CAD{
             "Can$",
@@ -377,6 +444,10 @@ hr{
         CRC{
             "C",
             "Kostarikanski kolon",
+        }
+        CSD{
+            "CSD",
+            "stari srpski dinar",
         }
         CSK{
             "CSK",
@@ -610,6 +681,10 @@ hr{
             "CF",
             "Comoro Franc",
         }
+        KRW{
+            "KRW",
+            "južnokorejski won",
+        }
         KWD{
             "KD",
             "Kuvajtski dinar",
@@ -806,6 +881,14 @@ hr{
             "leu",
             "Rumunjski lej",
         }
+        RON{
+            "RON",
+            "novi rumunjski lev",
+        }
+        RSD{
+            "RSD",
+            "srpski dinar",
+        }
         RUB{
             "RUB",
             "Ruska rublja",
@@ -813,6 +896,10 @@ hr{
         RUR{
             "RUR",
             "Ruska rublja (1991-1998)",
+        }
+        SAR{
+            "SAR",
+            "saudijski rial",
         }
         SBD{
             "SI$",
@@ -861,6 +948,10 @@ hr{
         SZL{
             "E",
             "Lilangeni",
+        }
+        THB{
+            "THB",
+            "tajlandski bat",
         }
         TJS{
             "TJS",
@@ -946,6 +1037,10 @@ hr{
             "XBB",
             "Europska monetarna jedinica",
         }
+        XEU{
+            "XEU",
+            "europska monetarna jedinica",
+        }
         XXX{
             "XXX",
             "nepoznata ili nevažeća valuta",
@@ -1002,78 +1097,178 @@ hr{
         currency{"Valuta"}
     }
     Languages{
+        af{"afrikaans"}
+        afa{"ostali afričko-azijski"}
+        am{"amharik"}
         ang{"engleski, stari (ca.450-1100)"}
         apa{"apaški"}
         ar{"arapski"}
         art{"umjetni (ostali)"}
         av{"avarski"}
+        az{"azerbajdžanski"}
         bat{"baltički (ostali)"}
         be{"bjeloruski"}
+        ber{"berberski"}
         bg{"bugarski"}
+        bh{"bihari"}
+        bn{"bengalski"}
+        bnt{"bantu"}
+        bo{"tibetanski"}
+        br{"bretonski"}
+        bs{"bosanski"}
+        ca{"katalonski"}
         cel{"keltski (ostali)"}
+        chr{"čeroki"}
+        co{"korzički"}
         cs{"češki"}
         cu{"crkvenoslavenski"}
         cy{"velški"}
         da{"danski"}
         de{"njemački"}
+        de_CH{"gornjonjemački (Švicarska)"}
+        dsb{"lužičkosrpski"}
         dum{"nizozemski, srednji (ca. 1050-1350)"}
         egy{"egipatski (antički)"}
         el{"grčki"}
         en{"engleski"}
+        en_AU{"engleski (australski)"}
+        en_GB{"engleski (britanski)"}
+        en_US{"engleski (američki)"}
         enm{"engleski, srednji (1100-1500)"}
         eo{"esperanto"}
         es{"španjolski"}
+        es_419{"španjolski (Latinska Amerika)"}
         et{"estonijski"}
+        eu{"baskijski"}
         fa{"perzijski"}
         fi{"finski"}
         fil{"filipino"}
+        fiu{"ugro-finski jezici"}
+        fj{"fidžijski"}
+        fo{"faroanski"}
         fr{"francuski"}
         frm{"francuski, srednji (ca.1400-1600)"}
         fro{"francuski, stari (842-ca.1400)"}
+        frr{"sjevernofrizijski"}
+        frs{"istočnofrizijski"}
         fy{"frizijski"}
         ga{"irski"}
+        gd{"škotski-galski"}
         gem{"germanski (ostali)"}
+        gl{"galicijski"}
         gmh{"njemački, srednji visoki (ca.1050-1500)"}
+        gn{"guarani"}
         goh{"njemački, stari visoki (ca.750-1050)"}
         grc{"grčki, antički (do 1453)"}
+        gu{"gujarati"}
         haw{"havajski"}
         he{"hebrejski"}
+        hi{"hindu"}
         hr{"hrvatski"}
+        ht{"kreolski"}
         hu{"mađarski"}
         hy{"armenski"}
+        ia{"interlingua"}
+        id{"indonezijski"}
+        ie{
+            "interlingua (jezik zamišljen za internacionalnu komunikaciju među znanst"
+            "venicima)"
+        }
         inc{"indijski (drugi)"}
         ine{"indoevropski (drugi)"}
         ira{"iranski"}
         is{"islandski"}
         it{"talijanski"}
         ja{"japanski"}
+        jv{"javanski"}
+        ka{"gruzijski"}
+        kg{"kongo"}
+        kk{"kazaški"}
         km{"kmerski"}
+        kn{"kannada"}
         ko{"korejski"}
+        ku{"kurdski"}
+        kw{"kornski"}
+        ky{"kirgiški"}
         la{"latinski"}
+        lb{"luksemburški"}
+        ln{"lingala"}
+        lo{"laoski"}
         lt{"litvanski"}
         lv{"latvijski"}
         mga{"irski, srednji (900-1200)"}
+        mis{"ostali jezici"}
         mk{"makedonski"}
+        ml{"malayalam"}
         mn{"mongolski"}
+        mo{"moldavski"}
+        mr{"marathi"}
+        ms{"malajski"}
         mt{"malteški"}
+        my{"burmanski"}
+        nb{"književni norveški"}
+        nds{"donjonjemački"}
         ne{"nepalski"}
         nl{"nizozemski"}
+        nl_BE{"flamanski"}
+        nn{"novonorveški"}
         no{"norveški"}
+        oc{"okcitanski"}
+        or{"orijski"}
+        ota{"turski - otomanski"}
+        pa{"punjabi"}
+        peo{"staroperzijski"}
         pl{"poljski"}
+        pro{"staroprovansalski"}
+        ps{"paštu"}
         pt{"portugalski"}
+        pt_PT{"portugalski (iberijski)"}
+        rm{"retoromanski"}
         ro{"rumunjski"}
         roa{"romanski (ostali)"}
         ru{"ruski"}
+        sa{"sanskrtski"}
+        sc{"sardski"}
+        sd{"sindhi"}
+        sga{"staroirski"}
+        sh{"srpsko-hrvatski"}
+        si{"singaleški"}
         sk{"slovački"}
         sl{"slovenski"}
         sla{"slavenski (drugi)"}
+        sm{"samoanski"}
+        so{"somalski"}
         sq{"albanski"}
         sr{"srpski"}
+        st{"sesotski"}
+        su{"sundanski"}
         sv{"švedski"}
+        sw{"svahili"}
+        ta{"tamilski"}
+        tai{"tajski"}
+        te{"telugu"}
+        th{"tajlandski"}
+        ti{"tigrinya"}
+        tig{"tigriški"}
+        tk{"turkmenski"}
+        tl{"tagalog"}
+        tlh{"klingonski"}
         tr{"turski"}
+        tw{"twi"}
+        ug{"turkmenski (uighur)"}
         uk{"ukrajinski"}
+        und{"nepoznati ili nevažeći jezik"}
+        ur{"urdu"}
+        uz{"uzbečki"}
         vi{"vijetnamski"}
+        wo{"wolof"}
+        xh{"xhosa"}
+        yi{"jidiš"}
         zh{"kineski"}
+        zh_Hans{"kineski (pojednostavljeni)"}
+        zh_Hant{"kineski (tradicionalni)"}
+        zu{"zulu"}
+        zxx{"bez jezičnog sadržaja"}
     }
     LocaleScript{
         "Latn",
@@ -1093,8 +1288,21 @@ hr{
         "+",
     }
     Scripts{
+        Arab{"arapsko pismo"}
+        Cyrl{"ćirilica"}
+        Egyp{"egipatski hijeroglifi"}
+        Glag{"glagoljica"}
+        Grek{"grčko pismo"}
+        Hebr{"hebrejsko pismo"}
+        Jpan{"japansko pismo"}
         Latn{"Latinski"}
+        Runr{"runsko pismo"}
+        Sinh{"singaleško pismo"}
+        Taml{"tamilsko pismo"}
+        Tfng{"tifinar"}
+        Thai{"tajlandsko pismo"}
         Zxxx{"nepisani jezik"}
+        Zzzz{"nepoznato ili nevažeće pismo"}
     }
     Types{
         calendar{
@@ -1114,7 +1322,7 @@ hr{
             traditional{"Tradicionano poredavanje"}
         }
     }
-    Version{"1.79"}
+    Version{"1.128"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1176,8 +1384,10 @@ hr{
                     dn{"Dan"}
                     relative{
                         "-1"{"Jučer"}
+                        "-2"{"Prekjučer"}
                         "0"{"Danas"}
                         "1"{"Jučer"}
+                        "2"{"Prekosutra"}
                     }
                 }
                 dayperiod{
@@ -1365,6 +1575,8 @@ hr{
         "Europe:Zaporozhye"{
             ec{"Zaporožje"}
         }
+        gmtFormat{"GMT{0}"}
         hourFormat{"+HHmm;-HHmm"}
+        regionFormat{"{0}"}
     }
 }

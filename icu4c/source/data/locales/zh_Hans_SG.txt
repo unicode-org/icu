@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh_Hans_SG.xml
 // *
 // ***************************************************************************
 zh_Hans_SG{
-    Version{"1.47"}
+    Version{"1.128"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -15,12 +15,12 @@ zh_Hans_SG{
                 1,
             }
             DateTimePatterns{
-                "ahh时mm分ss秒 v",
-                "a hh:mm:ss z",
+                "ahh时mm分ss秒v",
+                "ahh:mm:ssz",
                 "ahh:mm:ss",
-                "a hh:mm",
+                "ahh:mm",
                 "yyyy年M月d日EEEE",
-                "dd MMM yyyy",
+                "yyyy年M月d日",
                 "yyyy-M-d",
                 "dd/MM/yy",
                 "{1} {0}",

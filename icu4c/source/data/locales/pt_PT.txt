@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/pt_PT.xml
@@ -18,7 +18,6 @@ pt_PT{
         BH{"Bareine"}
         BJ{"Benim"}
         BY{"Bielorrússia"}
-        CC{"Ilhas Cocos"}
         CD{"República Democrática do Congo"}
         CX{"Ilha do Natal"}
         CZ{"República Checa"}
@@ -145,28 +144,21 @@ pt_PT{
         fro{"francês, arcaico (842-aprox.1400)"}
         gmh{"alemão, medieval alto (aprox.1050-1500)"}
         goh{"alemão, arcaico alto (aprox.750-1050)"}
-        grc{"grego, arcaico (até 1453)"}
-        hsb{"sorbiano superior"}
+        grc{"grego clássico"}
         hy{"arménio"}
         iba{"Iban"}
-        ig{"igbo"}
         ik{"Inupiaq"}
         jv{"jv"}
-        kho{"khotanês"}
-        lez{"lezghiano"}
         mga{"irlandês, medieval (900-1200)"}
         mkh{"mon-khmer (other)"}
         non{"norse, old"}
         nso{"soto, setentrional"}
-        ny{"chichewa; cinyanja"}
-        os{"ossético"}
         peo{"persa arcaico (aprox. 600-400 a.C.)"}
         pl{"polaco"}
         pro{"provençal, arcaico (até 1500)"}
         sal{"salishan languages"}
         sgn{"linguages de sinais"}
         to{"tonga"}
-        tyv{"tuviniano"}
         wak{"wakashan languages"}
         zh_Hans{"chinês simplificado"}
         zh_Hant{"chinês tradicional"}
@@ -180,9 +172,6 @@ pt_PT{
     Scripts{
         Armn{"arménio"}
         Blis{"símbolos Bliss"}
-        Cari{"cariano"}
-        Egyd{"egípcio demótico"}
-        Egyh{"egípcio hierático"}
         Inds{"indus"}
         Linb{"linear B"}
         Sylo{"siloti nagri"}
@@ -199,7 +188,7 @@ pt_PT{
             phonebook{"Ordem da Lista Telefónica"}
         }
     }
-    Version{"1.64"}
+    Version{"1.128"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -232,8 +221,6 @@ pt_PT{
             }
             availableFormats{
                 MMMEd{"E d MMM"}
-                Md{"d-M"}
-                yyMM{"MM-yy"}
             }
             eras{
                 wide{
@@ -309,24 +296,6 @@ pt_PT{
                         "Outubro",
                         "Novembro",
                         "Dezembro",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    wide{
-                        "1.º trimestre",
-                        "2.º trimestre",
-                        "3.º trimestre",
-                        "4.º trimestre",
-                    }
-                }
-                stand-alone{
-                    wide{
-                        "1.º trimestre",
-                        "2.º trimestre",
-                        "3.º trimestre",
-                        "4.º trimestre",
                     }
                 }
             }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/metazoneInfo.xml
@@ -535,6 +535,33 @@ metazoneInfo:table(nofallback){
             }
         }
         "America:Argentina:San_Juan"{
+            mz0{
+                "Argentina",
+                "1970-01-01 00:00",
+                "1991-03-01 02:00",
+            }
+            mz1{
+                "Argentina_Western",
+                "1991-03-01 02:00",
+                "1991-05-07 04:00",
+            }
+            mz2{
+                "Argentina",
+                "1991-05-07 04:00",
+                "2004-05-31 03:00",
+            }
+            mz3{
+                "Argentina_Western",
+                "2004-05-31 03:00",
+                "2004-07-25 04:00",
+            }
+            mz4{
+                "Argentina",
+                "2004-07-25 04:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Argentina:San_Luis"{
             mz0{
                 "Argentina",
                 "1970-01-01 00:00",
@@ -1311,6 +1338,13 @@ metazoneInfo:table(nofallback){
                 "9999-12-31 23:59",
             }
         }
+        "America:Marigot"{
+            mz0{
+                "Atlantic",
+                "1970-01-01 00:00",
+                "9999-12-31 23:59",
+            }
+        }
         "America:Martinique"{
             mz0{
                 "Atlantic",
@@ -1698,6 +1732,13 @@ metazoneInfo:table(nofallback){
         "America:Shiprock"{
             mz0{
                 "America_Mountain",
+                "1970-01-01 00:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:St_Barthelemy"{
+            mz0{
+                "Atlantic",
                 "1970-01-01 00:00",
                 "9999-12-31 23:59",
             }
@@ -2667,13 +2708,6 @@ metazoneInfo:table(nofallback){
         "Atlantic:Faeroe"{
             mz0{
                 "Europe_Western",
-                "1970-01-01 00:00",
-                "9999-12-31 23:59",
-            }
-        }
-        "Atlantic:Jan_Mayen"{
-            mz0{
-                "Europe_Central",
                 "1970-01-01 00:00",
                 "9999-12-31 23:59",
             }

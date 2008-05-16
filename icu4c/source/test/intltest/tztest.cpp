@@ -1670,6 +1670,8 @@ void TimeZoneTest::TestCanonicalID() {
         const char *zone;
     } excluded1[] = {
         {"America/Shiprock", "America/Denver"}, // America/Shiprock is defined as a Link to America/Denver in tzdata
+        {"America/Marigot", "America/Guadeloupe"}, 
+        {"America/St_Barthelemy", "America/Guadeloupe"},
         {"Antarctica/South_Pole", "Antarctica/McMurdo"},
         {"Atlantic/Jan_Mayen", "Europe/Oslo"},
         {"Arctic/Longyearbyen", "Europe/Oslo"},

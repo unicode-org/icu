@@ -49,6 +49,10 @@ README text !eol
 *.tri2 -text
 
 icu4c/source/common/mutex.cpp -text
+icu4c/source/data/coll/ur.txt -text
+icu4c/source/data/coll/ur_IN.txt -text
+icu4c/source/data/coll/ur_PK.txt -text
+icu4c/source/data/xml/collation/ur.xml -text
 icu4c/source/samples/layout/cgnomelayout.c -text
 icu4c/source/samples/ucnv/data02.bin -text
 icu4c/source/test/compat/tzone.pl -text
