@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -49,14 +49,13 @@ public class ConverterPerformanceTest extends PerfTest {
             for (int i=0; i<encBuffer.length; i++)
                 encBuffer[i] = target.get(i);
             
-            // we created some heavy objects, so lets try to clean up a little
-            gc();
-            
-        } catch(Exception e){
-            e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
+        } catch(Exception ex){
+            ex.printStackTrace();
+            throw new RuntimeException(ex.getMessage());
         }
 
+        // we created some heavy objects, so lets try to clean up a little before running the tests
+        gc();
    }
 
    PerfTest.Function TestFromUnicodeStream() {
