@@ -115,7 +115,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                                 numDigits++;
                             }
                         }
-                        if (numDigits >= 4) {
+                        if (numDigits >= 3) {
                             // Localized GMT or RFC: total offset (raw + dst) must be preserved.
                             int inOffset = inOffsets[0] + inOffsets[1];
                             int outOffset = outOffsets[0] + outOffsets[1];
