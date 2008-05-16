@@ -1,0 +1,47 @@
+<!--
+/*
+*******************************************************************************
+* Copyright (C) 2008, International Business Machines Corporation and         *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+* This is the ant build file for ICU4J Locale SPI provider implementation.
+*/
+-->
+<project name="icu4j-localespi" default="build" basedir=".">
+
+  <property name="build.dir" value="classes"/>
+  <property name="src.dir" value="src"/>
+  <property name="javac.src.ver" value="1.6"/>
+  <property name="javac.bin.ver" value="1.6"/>
+  <property name="jar.file" value="icu4j-localespi.jar"/>
+  <property name="icu4j.jar.file" value="../icu4j.jar"/>
+
+  <target name="init">
+    <mkdir dir="${build.dir}"/>
+    <copy todir="${build.dir}/META-INF">
+      <fileset dir="${src.dir}/META-INF" includes="**/*"/>
+    </copy>
+    <copy todir="${build.dir}">
+      <fileset dir="${src.dir}" includes="**/*.properties"/>
+    </copy>
+  </target>
+
+  <target name="build" depends="init">
+    <javac  srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpath="${icu4j.jar.file}"
+            source="${javac.src.ver}"
+            target="${javac.bin.ver}"
+            debug="on"
+            encoding="ascii"/>
+    <jar  jarfile="${jar.file}" compress="true">
+      <fileset dir="${build.dir}" includes="**/*"/>
+    </jar>
+  </target>
+
+  <target name="clean">
+    <delete dir="${build.dir}"/>
+    <delete file="${jar.file}"/>
+  </target>
+
+</project>
