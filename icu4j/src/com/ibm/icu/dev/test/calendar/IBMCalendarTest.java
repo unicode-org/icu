@@ -944,7 +944,7 @@ public class IBMCalendarTest extends CalendarTest {
         // String[] calTypes = Calendar.getAvailableTypes();
         final String[] calTypes = {
             "buddhist", "chinese", "coptic", "ethiopic", "gregorian", "hebrew", 
-            "islamic", "islamic-civil", "japanese", "taiwan"
+            "islamic", "islamic-civil", "japanese", "roc"
         };
         
         // constructing a DateFormat with a locale indicating a calendar type should construct a

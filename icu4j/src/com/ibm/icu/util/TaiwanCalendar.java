@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -24,7 +24,7 @@ import java.util.Locale;
  * <p>
  * TaiwanCalendar usually should be instantiated using 
  * {@link com.ibm.icu.util.Calendar#getInstance(ULocale)} passing in a <code>ULocale</code>
- * with the tag <code>"@calendar=Taiwan"</code>.</p>
+ * with the tag <code>"@calendar=roc"</code>.</p>
  * 
  * @see com.ibm.icu.util.Calendar
  * @see com.ibm.icu.util.GregorianCalendar
@@ -264,6 +264,6 @@ public class TaiwanCalendar extends GregorianCalendar {
      * @provisional This API might change or be removed in a future release.
      */
     public String getType() {
-        return "taiwan";
+        return "roc";
     }
 }

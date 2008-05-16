@@ -55,7 +55,7 @@ import com.ibm.icu.text.SimpleDateFormat;
  * '<code>calendar</code>' tag and value are retrieved if present.  If a recognized
  * value is supplied, a calendar is provided and configured as appropriate.
  * Currently recognized tags are "buddhist", "chinese", "coptic", "ethiopic", 
- * "gregorian", "hebrew", "islamic", "islamic-civil", "japanese", and "taiwan".  For
+ * "gregorian", "hebrew", "islamic", "islamic-civil", "japanese", and "roc".  For
  * example: <blockquote>
  * <pre>Calendar cal = Calendar.getInstance(new ULocale("en_US@calendar=japanese"));</pre>
  * </blockquote> will return an instance of JapaneseCalendar (using en_US conventions for
@@ -1650,7 +1650,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
 
     private static final String[] calTypes = {
         "buddhist", "chinese", "coptic", "ethiopic", "gregorian", "hebrew", 
-        "indian", "islamic", "islamic-civil", "japanese", "taiwan", "ethiopic-amete-alem"
+        "indian", "islamic", "islamic-civil", "japanese", "roc", "ethiopic-amete-alem"
     };
 
     private static int getCalendarType(ULocale l) {
