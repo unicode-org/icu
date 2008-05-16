@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -44,7 +44,7 @@ public class LocaleDataTest extends TestFmwk{
             if(lang.equals("in")){
                 continue;
             }
-            if(locale.toString().indexOf("_US") >= 0){
+            if(locale.toString().indexOf("_US") >= 0 || locale.toString().indexOf("_CA") >= 0 ){
                 if(paperSize.getHeight()!= 279 || paperSize.getWidth() != 216 ){
                     errln("PaperSize did not return the expected value for locale "+ locale+
                           " Expected height: 279 width: 216."+

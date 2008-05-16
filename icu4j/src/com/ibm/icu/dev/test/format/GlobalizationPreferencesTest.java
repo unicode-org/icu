@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -1469,8 +1469,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setCurrency(Currency.getInstance("GBP"));
         nf = gp.getNumberFormat(GlobalizationPreferences.NF_CURRENCY);
         numStr = nf.format(num);
-        if (!numStr.equals("123.456,79 UK\u00A3")) {
-            errln("FAIL: Number string is " + numStr + " Expected: 123.456,79 UK\u00A3");
+        if (!numStr.equals("123.456,79 \u00A3")) {
+            errln("FAIL: Number string is " + numStr + " Expected: 123.456,79 \u00A3");
         }
 
         // Set exliplicit NumberFormat
