@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/collation/fi.xml
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/fi.xml
  */
 fi{
-    Version{"1.25"}
+    Version{"1.26"}
     collations{
         default{"phonebook"}
         phonebook{
@@ -23,7 +23,7 @@ fi{
                 "&Z'\u0020'̵<<ʒ<<<Ʒ"
                 "&ʑ<å<<<Å<ä<<<Ä<<æ<<<Æ<ö<<<Ö<<ø<<<Ø"
             }
-            Version{"1.5"}
+            Version{"1.6"}
         }
         standard{
             Sequence{
@@ -34,7 +34,7 @@ fi{
                 "&Y<<ü<<<Ü<<ű<<<Ű"
                 "&[before 1]ʒ<å<<<Å<ä<<<Ä<<æ<<<Æ<ö<<<Ö<<ø<<<Ø<<ő<<<Ő<<õ<<<Õ<<œ<<<Œ"
             }
-            Version{"1.5"}
+            Version{"1.6"}
         }
     }
 }

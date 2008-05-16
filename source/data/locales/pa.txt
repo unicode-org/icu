@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/pa.xml
@@ -25,31 +25,7 @@ pa{
         " ਫ {ਫ਼} ਬ-ਰ ਲ ਵ ੜ ਾ-ੂ ੇ ੈ ੋ-੍]"
     }
     Languages{
-        af{"ਅਫ਼ਰੀਕੀ"}
-        ar{"ਅਰਬੀ"}
-        az{"ਅਜ਼ੇਰਬੈਜਨਿ"}
-        bn{"ਬੰਗਾਲੀ"}
-        da{"ਡੈਨਿਸ਼"}
-        de{"ਜਰਮਨ"}
-        en{"ਅੰਗਰੇਜ਼ੀ"}
-        eo{"ਏਸਪਰੇਂਟੋ"}
-        es{"ਸਪੇਨਿਸ਼"}
-        fi{"ਫਿਨਿਸ਼"}
-        fr{"ਫਰੈਂਚ"}
-        hi{"ਹਿੰਦੀ"}
-        id{"ਇੰਡੋਨੇਸ਼ੀਆਈ"}
-        it{"ਇਤਾਲਵੀ"}
-        mk{"ਮੈਕੇਡੋਨੀਅਨ"}
-        nl{"ਡੱਚ"}
-        no{"ਨਾਰਵੇਜੀਅਨ"}
         pa{"ਪੰਜਾਬੀ"}
-        pt{"ਪੋਰਤੂਗੂਈਸ"}
-        sv{"ਸਵੈਡਿਸ਼"}
-        ta{"ਤਾਮਿਲ"}
-        te{"ਤੇਲਗੂ"}
-        th{"ਥਾਈ"}
-        tw{"ਤ੍ਵਿ"}
-        ug{"ਉਇਘੁਰ"}
     }
     LocaleScript{
         "Guru",
@@ -74,7 +50,7 @@ pa{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.56"}
+    Version{"1.128"}
     calendar{
         gregorian{
             AmPmMarkers{

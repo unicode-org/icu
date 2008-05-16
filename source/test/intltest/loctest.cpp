@@ -51,14 +51,14 @@ static const char* const rawData[33][8] = {
         // display langage (French)
         {   "anglais",  "fran\\u00E7ais",   "catalan", "grec",    "norv\\u00E9gien",    "italien", "xx", "chinois" },
         // display script (French)
-        {   "",     "",     "",     "",     "",     "",     "",   "id\\u00E9ogrammes han (variante simplifi\\u00E9e)" },
+        {   "",     "",     "",     "",     "",     "",     "",   "id\\u00E9ogrammes han simplifi\\u00E9s" },
         // display country (French)
         {   "\\u00C9tats-Unis",    "France",   "Espagne",  "Gr\\u00E8ce",   "Norv\\u00E8ge", "", "YY", "Chine" },
         // display variant (French)
         {   "",     "",     "",     "",     "NY",     "",     "",   "" },
         // display name (French)
         //{   "anglais (Etats-Unis)", "francais (France)", "catalan (Espagne)", "grec (Grece)", "norvegien (Norvege,Nynorsk)", "italien", "xx (YY)" },
-        {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "catalan (Espagne)", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, NY)", "italien", "xx (YY)", "chinois (id\\u00E9ogrammes han (variante simplifi\\u00E9e), Chine)" }, // STILL not right
+        {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "catalan (Espagne)", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, NY)", "italien", "xx (YY)", "chinois (id\\u00E9ogrammes han simplifi\\u00E9s, Chine)" }, // STILL not right
 
 
         /* display language (Catalan) */

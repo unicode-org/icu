@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh.xml
@@ -1295,7 +1295,7 @@ zh{
         }
         XXX{
             "XXX",
-            "没有货币的交易",
+            "货币未知或无效",
         }
         YDD{
             "YDD",
@@ -1504,6 +1504,8 @@ zh{
         dar{"达尔格瓦文"}
         day{"达雅克文"}
         de{"德文"}
+        de_AT{"德语（奥地利）"}
+        de_CH{"高地德文 (瑞士)"}
         del{"特拉华文"}
         den{"司雷夫文"}
         dgr{"多格里布文"}
@@ -1523,9 +1525,15 @@ zh{
         el{"希腊文"}
         elx{"艾拉米特文"}
         en{"英文"}
+        en_AU{"英语（澳大利亚）"}
+        en_CA{"英语（加拿大）"}
+        en_GB{"英语（英国）"}
+        en_US{"英语（美国）"}
         enm{"中古英文"}
         eo{"世界文"}
         es{"西班牙文"}
+        es_419{"西班牙语（拉丁美洲）"}
+        es_ES{"西班牙语（伊比利亚）"}
         et{"爱沙尼亚文"}
         eu{"巴斯克文"}
         ewo{"旺杜文"}
@@ -1540,8 +1548,11 @@ zh{
         fo{"法罗文"}
         fon{"丰文"}
         fr{"法文"}
+        fr_CA{"法语（加拿大）"}
+        fr_CH{"法语 (瑞士)"}
         frm{"中古法文"}
         fro{"古法文"}
+        frr{"北弗里西亚语"}
         frs{"东弗里西亚文"}
         fur{"弗留利文"}
         fy{"弗里斯兰文"}
@@ -1562,6 +1573,7 @@ zh{
         got{"哥特文"}
         grb{"格列博文"}
         grc{"古希腊文"}
+        gsw{"德文 (瑞士)"}
         gu{"古加拉提文"}
         gv{"马恩岛文"}
         gwi{"吉维克琴文"}
@@ -1725,7 +1737,7 @@ zh{
         nyn{"尼昂科勒文"}
         nyo{"尼约罗文"}
         nzi{"恩济马文"}
-        oc{"奥克西唐文(1500以后)"}
+        oc{"奥克西唐语"}
         oj{"奥吉布瓦文"}
         om{"奥洛莫文"}
         or{"欧里亚文"}
@@ -1735,7 +1747,7 @@ zh{
         oto{"奥托米语系"}
         pa{"旁遮普文"}
         paa{"其他巴布亚文"}
-        pag{"邦阿西楠文"}
+        pag{"邦阿西楠语"}
         pal{"帕拉维文"}
         pam{"邦板牙文"}
         pap{"帕皮亚门托文"}
@@ -1750,6 +1762,7 @@ zh{
         pro{"普罗文斯文"}
         ps{"普什图文"}
         pt{"葡萄牙文"}
+        pt_BR{"葡萄牙语（巴西）"}
         pt_PT{"依伯利亚葡萄牙文"}
         qu{"盖丘亚文"}
         raj{"拉贾斯坦文"}
@@ -1793,13 +1806,13 @@ zh{
         sm{"萨摩亚文"}
         sma{"南萨米文"}
         smi{"其他萨米文"}
-        smj{"Lule 萨米语"}
+        smj{"律勒欧萨莫斯语"}
         smn{"伊纳里萨米语"}
         sms{"斯科特萨米文"}
         sn{"绍纳文"}
         snk{"索尼基文"}
         so{"索马里文"}
-        sog{"古粟特文"}
+        sog{"古粟特语"}
         son{"桑海文"}
         sq{"阿尔巴尼亚文"}
         sr{"塞尔维亚文"}
@@ -1878,6 +1891,8 @@ zh{
         zap{"萨波蒂克文"}
         zen{"泽纳加文"}
         zh{"中文"}
+        zh_Hans{"中文（简体）"}
+        zh_Hant{"中文（繁体）"}
         znd{"赞德文"}
         zu{"祖鲁文"}
         zun{"祖尼语"}
@@ -1918,6 +1933,7 @@ zh{
         Bugi{"布吉语"}
         Buhd{"布希德语"}
         Cans{"加拿大土著统一符号语"}
+        Cari{"卡里亚语"}
         Cham{"占语"}
         Cher{"切罗基语"}
         Cirt{"色斯文"}
@@ -1946,15 +1962,18 @@ zh{
         Hebr{"希伯来语"}
         Hira{"平假名"}
         Hmng{"杨松录苗文"}
+        Hrkt{"片假名或平假名"}
         Hung{"古匈牙利语"}
         Inds{"古希腊哈拉潘"}
         Ital{"古意大利语"}
         Java{"爪哇语"}
+        Jpan{"日语"}
         Kali{"克耶李文字"}
         Kana{"片假名"}
         Khar{"卡罗须提文"}
         Khmr{"高棉语"}
         Knda{"卡纳塔克语"}
+        Lana{"兰拿语"}
         Laoo{"老挝语"}
         Latf{"拉丁文（哥特式字体变体）"}
         Latg{"拉丁文（盖尔语变体）"}
@@ -1963,6 +1982,8 @@ zh{
         Limb{"林布语"}
         Lina{"线形文字 A"}
         Linb{"线形文字 B"}
+        Lyci{"利西亚语"}
+        Lydi{"吕底亚语"}
         Mand{"阿拉米语"}
         Maya{"玛雅圣符文"}
         Mero{"麦若提克文"}
@@ -1979,25 +2000,38 @@ zh{
         Phnx{"腓尼基语"}
         Plrd{"波拉德音标文字"}
         Qaai{"遗传学术语"}
+        Rjng{"拉让语"}
         Roro{"朗格朗格文"}
         Runr{"古代北欧文"}
         Sara{"沙拉堤文"}
+        Saur{"索拉什特拉语"}
+        Sgnw{"书写符号"}
         Shaw{"萧伯纳式语"}
         Sinh{"辛哈拉语"}
         Sund{"巽他文"}
         Sylo{"Syloti Nagri 书写体"}
         Syrc{"叙利亚语"}
+        Syre{"福音体叙利亚文"}
+        Syrj{"西叙利亚语"}
+        Syrn{"东叙利亚语"}
         Tagb{"塔格班瓦语"}
         Tale{"泰乐语"}
+        Talu{"新傣文"}
         Taml{"泰米尔语"}
         Telu{"泰卢固语"}
+        Tfng{"提非纳文"}
         Tglg{"塔加路语"}
         Thaa{"塔安娜语"}
         Thai{"泰语"}
         Tibt{"藏语"}
         Ugar{"乌加里特语"}
+        Vaii{"瓦依语"}
+        Xpeo{"古波斯语"}
         Xsux{"苏美尔-阿卡德楔形文字"}
         Yiii{"彝语"}
+        Zxxx{"撤销写入"}
+        Zyyy{"通用"}
+        Zzzz{"脚本未知或者无效"}
     }
     Types{
         calendar{
@@ -2005,9 +2039,11 @@ zh{
             chinese{"农历"}
             gregorian{"公历"}
             hebrew{"希伯来日历"}
+            indian{"印度国家日历"}
             islamic{"伊斯兰日历"}
             islamic-civil{"伊斯兰希吉来历"}
             japanese{"日本日历"}
+            roc{"中华民国日历"}
         }
         collation{
             big5han{"繁体中文(Big5)"}
@@ -2022,11 +2058,14 @@ zh{
     Variants{
         1901{"传统德语拼字学"}
         1996{"1996 年的德语拼字学"}
+        AREVELA{"东亚美尼亚语"}
+        AREVMDA{"西亚美尼亚语"}
+        FONIPA{"国际音标"}
         POLYTON{"多音"}
         REVISED{"已修订的拼字学"}
         SAAHO{"萨霍"}
     }
-    Version{"1.105"}
+    Version{"1.128"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2034,8 +2073,8 @@ zh{
                 "下午",
             }
             DateTimePatterns{
-                "ahh时mm分ss秒 v",
-                "ahh时mm分ss秒 z",
+                "ahh时mm分ss秒v",
+                "ahh时mm分ss秒z",
                 "ahh:mm:ss",
                 "ah:mm",
                 "yyyy年M月d日EEEE",
@@ -2045,7 +2084,21 @@ zh{
                 "{1} {0}",
             }
             availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                Hm{"H:mm"}
+                MMM{"LLL"}
+                MMMEd{"MMM月d日E"}
+                MMMMEd{"MMMM月d日E"}
+                MMMd{"MMM月d日"}
                 Md{"M-d"}
+                ms{"mm:ss"}
+                yM{"yyyy-M"}
+                yMEd{"1999年9月14日，星期二"}
+                yMMM{"yyyy年MMM月"}
+                yMMMEd{"yyyy年MMM月d日EEE"}
+                yQ{"yyyy年QQQ"}
+                yQQQ{"yyyy年QQQ"}
             }
             dayNames{
                 format{
@@ -2085,10 +2138,21 @@ zh{
                     "公元前",
                     "公元",
                 }
+                wide{
+                    "公元前",
+                    "公元",
+                }
             }
             fields{
                 day{
                     dn{"日"}
+                    relative{
+                        "-1"{"昨天"}
+                        "-2"{"前天"}
+                        "0"{"今天"}
+                        "1"{"明天"}
+                        "2"{"后天"}
+                    }
                 }
                 dayperiod{
                     dn{"上午/下午"}
@@ -2123,6 +2187,34 @@ zh{
             }
             monthNames{
                 format{
+                    abbreviated{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
                     wide{
                         "1",
                         "2",
@@ -2183,18 +2275,42 @@ zh{
                     }
                 }
             }
+            quarters{
+                format{
+                    abbreviated{
+                        "1季",
+                        "2季",
+                        "3季",
+                        "4季",
+                    }
+                    wide{
+                        "第1季度",
+                        "第2季度",
+                        "第3季度",
+                        "第4季度",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                }
+            }
         }
-        taiwan{
+        roc{
             DateTimePatterns{
-                "ahh时mm分ss秒 v" /**  fallback from 'gregorian'   */,
-                "ahh时mm分ss秒 z" /**  fallback from 'gregorian'   */,
-                "ahh:mm:ss" /**  fallback from 'gregorian'   */,
-                "ah:mm" /**  fallback from 'gregorian'   */,
+                "ahh时mm分ss秒v",
+                "ahh时mm分ss秒z",
+                "ahh:mm:ss",
+                "ah:mm",
                 "Gy'年'M'月'd'日'EEEE",
                 "Gy'年'M'月'd'日'",
                 "G y-M-d",
                 "G y-M-d",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}",
             }
             eras{
                 abbreviated{
@@ -2640,6 +2756,9 @@ zh{
         }
         "America:Panama"{
             ec{"巴拿马"}
+        }
+        "America:Pangnirtung"{
+            ec{"旁涅唐"}
         }
         "America:Paramaribo"{
             ec{"帕拉马利玻"}
@@ -3212,6 +3331,9 @@ zh{
         "Pacific:Johnston"{
             ec{"约翰斯顿"}
         }
+        "Pacific:Kiritimati"{
+            ec{"基里地马地岛"}
+        }
         "Pacific:Kosrae"{
             ec{"库赛埃"}
         }
@@ -3390,7 +3512,7 @@ zh{
             sd{"纽芬兰夏令时间"}
             ss{"纽芬兰标准时间"}
         }
-        gmtFormat{"GMT{0}"}
+        gmtFormat{"格林尼治标准时间{0}"}
         hourFormat{"+HHmm;-HHmm"}
         regionFormat{"{0}"}
     }

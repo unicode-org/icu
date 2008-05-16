@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/collation/fa_AF.xml
@@ -10,6 +10,6 @@
  *  ICU <specials> source: <path>/xml/collation/fa_AF.xml
  */
 fa_AF{
-    Version{"1.17"}
+    Version{"1.18"}
     collations:alias{"ps/collations"}
 }

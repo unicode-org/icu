@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/sr.xml
@@ -573,7 +573,7 @@ sr{
         hi{"Хинди"}
         hr{"Хрватски"}
         hu{"Мађарски"}
-        hy{"Арменски"}
+        hy{"Јерменски"}
         ia{"Интерлингва"}
         id{"Индонезијски"}
         ie{"Међујезички"}
@@ -715,7 +715,7 @@ sr{
             traditional{"Традиционално сортирање"}
         }
     }
-    Version{"1.88"}
+    Version{"1.128"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1402,9 +1402,6 @@ sr{
         "Europe:Moscow"{
             ec{"Москва"}
         }
-        "Europe:Sarajevo"{
-            ls{"Средње Европско Време"}
-        }
         "Europe:Uzhgorod"{
             ec{"Ужгород"}
         }
@@ -1487,8 +1484,12 @@ sr{
             ec{"Валис"}
         }
         "meta:Europe_Central"{
-            ld{"Централно Европско Летње Време"}
-            ls{"Средње Европско Време"}
+            ld{"Средњеевропско  летње време"}
+            ls{"Средњеевропско време"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"Источноевропско летње време"}
+            ls{"Источноевропско време"}
         }
         hourFormat{"+HHmm;-HHmm"}
     }

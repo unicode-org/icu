@@ -1,6 +1,6 @@
-# *   Copyright (C) 1998-2007, International Business Machines
+# *   Copyright (C) 1998-2008, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
-COLLATION_CLDR_VERSION = 1.5
+COLLATION_CLDR_VERSION = 1.6
 # A list of txt's to build
 # Note: 
 #
@@ -65,8 +65,9 @@ COLLATION_EMPTY_SOURCE = ar_AE.txt ar_BH.txt ar_DZ.txt ar_EG.txt\
  ru_UA.txt sk_SK.txt sl_SI.txt sq_AL.txt sr_Cyrl.txt\
  sr_Cyrl_BA.txt sr_Cyrl_ME.txt sr_Cyrl_RS.txt sr_Latn_BA.txt sr_Latn_ME.txt\
  sr_Latn_RS.txt sv_FI.txt sv_SE.txt ta_IN.txt te_IN.txt\
- th_TH.txt tr_TR.txt uk_UA.txt vi_VN.txt zh_Hans.txt\
- zh_Hans_CN.txt zh_Hans_SG.txt zh_Hant_HK.txt zh_Hant_MO.txt zh_Hant_TW.txt
+ th_TH.txt tr_TR.txt uk_UA.txt ur_IN.txt ur_PK.txt\
+ vi_VN.txt zh_Hans.txt zh_Hans_CN.txt zh_Hans_SG.txt zh_Hant_HK.txt\
+ zh_Hant_MO.txt zh_Hant_TW.txt
 
 
 # Ordinary resources
@@ -82,6 +83,6 @@ COLLATION_SOURCE = $(COLLATION_EMPTY_SOURCE) ar.txt as.txt be.txt bg.txt\
  om.txt or.txt pa.txt pl.txt ps.txt\
  ro.txt ru.txt sk.txt sl.txt sq.txt\
  sr.txt sr_Latn.txt sv.txt ta.txt te.txt\
- th.txt tr.txt uk.txt vi.txt zh.txt\
- zh_Hant.txt
+ th.txt tr.txt uk.txt ur.txt vi.txt\
+ zh.txt zh_Hant.txt
 

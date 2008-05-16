@@ -139,7 +139,7 @@ static const char * const gCalendarKeywords[] = {
     "gregorian",
         "japanese",
         "buddhist",
-        "taiwan",
+        "roc",
         "persian",
         "islamic-civil",
         "islamic",
@@ -193,7 +193,7 @@ static Calendar *createStandardCalendar(char *calType, const Locale &canLoc, UEr
         return new JapaneseCalendar(canLoc, status);
     } else if(!uprv_strcmp(calType, "buddhist")) {
         return new BuddhistCalendar(canLoc, status);
-    } else if(!uprv_strcmp(calType, "taiwan")) {
+    } else if(!uprv_strcmp(calType, "roc")) {
         return new TaiwanCalendar(canLoc, status);
     } else if(!uprv_strcmp(calType, "islamic-civil")) {
         return new IslamicCalendar(canLoc, status, IslamicCalendar::CIVIL);

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -9,6 +9,7 @@
  * Modification History:
  *  05/13/2003    srl     copied from gregocal.cpp
  *  06/29/2007    srl     copied from buddhcal.cpp
+ *  05/12/2008    jce     modified to use calendar=roc per CLDR
  *
  */
 
@@ -57,7 +58,7 @@ Calendar* TaiwanCalendar::clone(void) const
 
 const char *TaiwanCalendar::getType() const
 {
-    return "taiwan";
+    return "roc";
 }
 
 int32_t TaiwanCalendar::handleGetExtendedYear()
@@ -197,7 +198,7 @@ TaiwanCalendar::initializeSystemDefaultCentury()
     if (fgSystemDefaultCenturyStart == fgSystemDefaultCentury)
     {
         UErrorCode status = U_ZERO_ERROR;
-        TaiwanCalendar calendar(Locale("@calendar=Taiwan"),status);
+        TaiwanCalendar calendar(Locale("@calendar=roc"),status);
         if (U_SUCCESS(status))
         {
             calendar.setTime(Calendar::getNow(), status);

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/en.xml
@@ -411,7 +411,7 @@ en{
         }
         BGN{
             "BGN",
-            "Bulgarian New Lev",
+            "Bulgarian Lev",
         }
         BHD{
             "BD",
@@ -743,7 +743,7 @@ en{
         }
         ILS{
             "ILS",
-            "Israeli New Sheqel",
+            "New Israeli Sheqel",
         }
         INR{
             "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
@@ -1050,11 +1050,11 @@ en{
             "Rhodesian Dollar",
         }
         ROL{
-            "==0#Old lei|1#Old leu|1<Old lei" /** (choice)  */,
+            "ROL",
             "Old Romanian Leu",
         }
         RON{
-            "==0#lei|1#leu|1<lei" /** (choice)  */,
+            "RON",
             "Romanian Leu",
         }
         RSD{
@@ -1122,7 +1122,7 @@ en{
             "Sierra Leone Leone",
         }
         SOS{
-            "So. Sh.",
+            "S",
             "Somali Shilling",
         }
         SRD{
@@ -1183,11 +1183,11 @@ en{
         }
         TRL{
             "TL",
-            "Turkish Lira",
+            "Old Turkish Lira",
         }
         TRY{
             "TRY",
-            "New Turkish Lira",
+            "Turkish Lira",
         }
         TTD{
             "TT$",
@@ -1387,6 +1387,11 @@ en{
         }
     }
     ExemplarCharacters{"[a-z]"}
+    Keys{
+        calendar{"calendar"}
+        collation{"collation"}
+        currency{"currency"}
+    }
     Languages{
         aa{"Afar"}
         ab{"Abkhazian"}
@@ -1790,7 +1795,7 @@ en{
         sgn{"Sign Language"}
         sh{"Serbo-Croatian"}
         shn{"Shan"}
-        si{"Sinhalese"}
+        si{"Sinhala"}
         sid{"Sidamo"}
         sio{"Siouan Language"}
         sit{"Sino-Tibetan Language"}
@@ -1920,6 +1925,7 @@ en{
     }
     Scripts{
         Arab{"Arabic"}
+        Armi{"Imperial Aramaic"}
         Armn{"Armenian"}
         Avst{"Avestan"}
         Bali{"Balinese"}
@@ -1931,6 +1937,7 @@ en{
         Brai{"Braille"}
         Bugi{"Buginese"}
         Buhd{"Buhid"}
+        Cakm{"Chakma"}
         Cans{"Unified Canadian Aboriginal Syllabics"}
         Cari{"Carian"}
         Cham{"Cham"}
@@ -1973,6 +1980,7 @@ en{
         Khmr{"Khmer"}
         Knda{"Kannada"}
         Kore{"Korean"}
+        Kthi{"Kaithi"}
         Lana{"Lanna"}
         Laoo{"Lao"}
         Latf{"Fraktur Latin"}
@@ -2001,9 +2009,12 @@ en{
         Osma{"Osmanya"}
         Perm{"Old Permic"}
         Phag{"Phags-pa"}
+        Phli{"Inscriptional Pahlavi"}
+        Phlp{"Psalter Pahlavi"}
         Phlv{"Book Pahlavi"}
         Phnx{"Phoenician"}
         Plrd{"Pollard Phonetic"}
+        Prti{"Inscriptional Parthian"}
         Qaai{"Inherited"}
         Rjng{"Rejang"}
         Roro{"Rongorongo"}
@@ -2024,6 +2035,7 @@ en{
         Tale{"Tai Le"}
         Talu{"New Tai Lue"}
         Taml{"Tamil"}
+        Tavt{"Tai Viet"}
         Telu{"Telugu"}
         Teng{"Tengwar"}
         Tfng{"Tifinagh"}
@@ -2037,6 +2049,8 @@ en{
         Xpeo{"Old Persian"}
         Xsux{"Sumero-Akkadian Cuneiform"}
         Yiii{"Yi"}
+        Zmth{"Mathematical Notation"}
+        Zsym{"Mathematical notation"}
         Zxxx{"Unwritten"}
         Zyyy{"Common"}
         Zzzz{"Unknown or Invalid Script"}
@@ -2047,9 +2061,11 @@ en{
             chinese{"Chinese Calendar"}
             gregorian{"Gregorian Calendar"}
             hebrew{"Hebrew Calendar"}
+            indian{"Indian National Calendar"}
             islamic{"Islamic Calendar"}
             islamic-civil{"Islamic-Civil Calendar"}
             japanese{"Japanese Calendar"}
+            roc{"Republic of China Calendar"}
         }
         collation{
             big5han{"Traditional Chinese Sort Order - Big5"}
@@ -2063,10 +2079,12 @@ en{
     }
     Variants{
         1606NICT{"Late Middle French to 1606"}
+        1694ACAD{"Early Modern French"}
         1901{"Traditional German orthography"}
         1994{"Standardized Resian orthography"}
         1996{"German orthography of 1996"}
         AREVELA{"Eastern Armenian"}
+        AREVMDA{"Western Armenian"}
         BAKU1926{"Unified Turkic Latin Alphabet"}
         BISKE{"San Giorgio/Bila dialect"}
         BOONT{"Boontling"}
@@ -2090,9 +2108,10 @@ en{
         SCOUSE{"Scouse"}
         SOLBA{"Stolvizza/Solbica dialect"}
         TARASK{"Taraskievica orthography"}
+        VALENCIA{"Valencian"}
         XIANG{"Xiang or Hunanese"}
     }
-    Version{"1.161"}
+    Version{"1.128"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2111,15 +2130,27 @@ en{
                 "{1} {0}",
             }
             availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"E, M/d"}
+                MMM{"LLL"}
+                MMMEd{"E, MMM d"}
+                MMMMEd{"E, MMMM d"}
                 MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
                 Md{"M/d"}
-                mmss{"mm:ss"}
-                yyMM{"MM/yy"}
-                yyQ{"Q yy"}
-                yyQQQQ{"QQQQ yy"}
-                yyyyMMM{"MMM yyyy"}
+                d{"d"}
+                hm{"h:mm a"}
+                ms{"mm:ss"}
+                y{"yyyy"}
+                yM{"M/yyyy"}
+                yMEd{"EEE, M/d/yyyy"}
+                yMMM{"MMM yyyy"}
+                yMMMEd{"EEE, MMM d, yyyy"}
+                yMMMM{"MMMM yyyy"}
+                yQ{"Q yyyy"}
+                yQQQ{"QQQ yyyy"}
             }
             dayNames{
                 format{
@@ -2159,6 +2190,10 @@ en{
                     "BC",
                     "AD",
                 }
+                narrow{
+                    "B",
+                    "A",
+                }
                 wide{
                     "Before Christ",
                     "Anno Domini",
@@ -2166,6 +2201,7 @@ en{
             }
             fields{
                 day{
+                    dn{"Day"}
                     relative{
                         "-1"{"Yesterday"}
                         "0"{"Today"}
@@ -2174,6 +2210,33 @@ en{
                 }
                 dayperiod{
                     dn{"AM/PM"}
+                }
+                era{
+                    dn{"Era"}
+                }
+                hour{
+                    dn{"Hour"}
+                }
+                minute{
+                    dn{"Minute"}
+                }
+                month{
+                    dn{"Month"}
+                }
+                second{
+                    dn{"Second"}
+                }
+                week{
+                    dn{"Week"}
+                }
+                weekday{
+                    dn{"Day of the Week"}
+                }
+                year{
+                    dn{"Year"}
+                }
+                zone{
+                    dn{"Zone"}
                 }
             }
             monthNames{
@@ -2239,15 +2302,66 @@ en{
                         "4th quarter",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                }
+            }
+        }
+        persian{
+            monthNames{
+                format{
+                    wide{
+                        "Farvardin",
+                        "Ordibehesht",
+                        "Khordad",
+                        "Tir",
+                        "Mordad",
+                        "Shahrivar",
+                        "Mehr",
+                        "Aban",
+                        "Azar",
+                        "Dey",
+                        "Bahman",
+                        "Esfand",
+                    }
+                }
+                stand-alone{
+                    wide{
+                        "Farvardin",
+                        "Ordibehesht",
+                        "Khordad",
+                        "Tir",
+                        "Mordad",
+                        "Shahrivar",
+                        "Mehr",
+                        "Aban",
+                        "Azar",
+                        "Dey",
+                        "Bahman",
+                        "Esfand",
+                    }
+                }
             }
         }
     }
+    delimiters{
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
+    }
+    measurementSystemNames{
+        US{"US"}
+        metric{"Metric"}
+    }
     zoneStrings{
-        "America:St_Johns"{
-            ec{"St. John’s"}
-        }
         "Antarctica:DumontDUrville"{
-            ec{"Dumont-d'Urville"}
+            ec{"Dumont d’Urville"}
         }
         "Etc:Unknown"{
             ec{"Unknown"}
@@ -3231,6 +3345,7 @@ en{
             sg{"YT"}
             ss{"YST"}
         }
+        fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} Time"}

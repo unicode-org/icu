@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/or.xml
@@ -14,12 +14,107 @@ or{
     Countries{
         IN{"ଭାରତ"}
     }
-    ExemplarCharacters{"[ଅ-ଋ ଏ ଐ ଓ-ନ ପ-ର ଲ ଳ ଶ-ହ ୟ ୱ ଵ ଂ ଃ ଁ ୍ ଼ ା-ୃ େ ୈ ୋ ୌ]"}
+    Currencies{
+        INR{
+            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
+            "ଟଙକା",
+        }
+    }
+    ExemplarCharacters{"[୦-୯ ଅ-ଋ ଏ ଐ ଓ-ନ ପ-ର ଲ ଳ ଶ-ହ ଡ଼ ଢ଼ ୟ ୱ ଵ ଂ ଃ ଁ ୍ ଼ ା-ୃ େ ୈ ୋ ୌ]"}
     Languages{
-        or{"ଓଡ଼ିଆ"}
+        or{"ଓଡ଼ିଆ"}
     }
     LocaleScript{
         "Orya",
     }
-    Version{"1.35"}
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "୦",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##,##0.###",
+        "¤ #,##,##0.00",
+        "#,##,##0%",
+        "#E0",
+    }
+    Version{"1.128"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "MMMM d,EEEE, yyyy",
+                "MMMM d, yyyy",
+                "dd-MM-yyyy",
+                "dd-MM-yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "ରବି",
+                        "ସୋମ",
+                        "ମଙ୍ଗଳ",
+                        "ବୁଧ",
+                        "ଗୁରୁ",
+                        "ଶୁକ୍ର",
+                        "ଶନି",
+                    }
+                    wide{
+                        "ରବିବାର",
+                        "ସୋମବାର",
+                        "ମଙ୍ଗଳବାର",
+                        "ବୁଧବାର",
+                        "ଗୁରୁବାର",
+                        "ଶୁକ୍ରବାର",
+                        "ଶନିବାର",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "ଜାନୁଆରୀ",
+                        "ଫେବ୍ରୁୟାରୀ",
+                        "ମାର୍ଚ୍ଚ",
+                        "ଅପ୍ରେଲ",
+                        "ମେ",
+                        "ଜୁନ",
+                        "ଜୁଲାଇ",
+                        "ଅଗଷ୍ଟ",
+                        "ସେପ୍ଟେମ୍ବର",
+                        "ଅକ୍ଟୋବର",
+                        "ନଭେମ୍ବର",
+                        "ଡିସେମ୍ବର",
+                    }
+                    wide{
+                        "ଜାନୁଆରୀ",
+                        "ଫେବ୍ରୁୟାରୀ",
+                        "ମାର୍ଚ୍ଚ",
+                        "ଅପ୍ରେଲ",
+                        "ମେ",
+                        "ଜୁନ",
+                        "ଜୁଲାଇ",
+                        "ଅଗଷ୍ଟ",
+                        "ସେପ୍ଟେମ୍ବର",
+                        "ଅକ୍ଟୋବର",
+                        "ନଭେମ୍ବର",
+                        "ଡିସେମ୍ବର",
+                    }
+                }
+            }
+        }
+    }
 }

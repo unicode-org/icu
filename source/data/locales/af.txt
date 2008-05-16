@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/af.xml
@@ -128,7 +128,6 @@ af{
         TJ{"Tadjikistan"}
         TM{"Turkmenië"}
         TN{"Tunisië"}
-        TO{"Tonga"}
         TR{"Turkye"}
         TT{"Trinidad en Tobago"}
         TZ{"Tanzanië"}
@@ -151,18 +150,14 @@ af{
     ExemplarCharacters{"[a á â b-e é è ê ë f-i î ï j-o ô ö p-u û v-z ŉ]"}
     Languages{
         af{"Afrikaans"}
-        am{"Amharies"}
         de{"Duits"}
         en{"Engels"}
         es{"Spaans"}
-        et{"Estnies"}
         fr{"Frans"}
         he{"Hebreeus"}
         it{"Italiaans"}
         ja{"Japannees"}
-        ku{"Koerdies"}
         pt{"Portugees"}
-        ro{"Roemeens"}
         ru{"Russies"}
         zh{"Sjinees"}
     }
@@ -189,7 +184,7 @@ af{
         "#,##0%",
         "#E0",
     }
-    Version{"1.60"}
+    Version{"1.128"}
     calendar{
         gregorian{
             AmPmMarkers{

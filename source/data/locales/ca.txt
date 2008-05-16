@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ca.xml
@@ -262,7 +262,7 @@ ca{
             "Dòlar EUA",
         }
     }
-    ExemplarCharacters{"[a à b c ç d e é è f-i í ï j-n ñ o ó ò p-u ú ü v-z]"}
+    ExemplarCharacters{"[a à b c ç d e é è f-i í ï j-l ŀ m-o ó ò p-u ú ü v-z]"}
     Languages{
         aa{"àfar"}
         ab{"abkhaz"}
@@ -430,7 +430,7 @@ ca{
     Scripts{
         Latn{"Llatí"}
     }
-    Version{"1.78"}
+    Version{"1.128"}
     calendar{
         gregorian{
             DateTimePatterns{

@@ -1,6 +1,6 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2007, International Business Machines
+# *  Copyright (C) 2004-2008, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
@@ -248,7 +248,7 @@
 ￡<>'£'; # from FULLWIDTH POUND SIGN
 ￢<>'¬'; # from FULLWIDTH NOT SIGN
 ￣<>'¯'; # from FULLWIDTH MACRON
-'\u3000'<>' '; # ideographic space (place this after MACRON)
+\u3000<>' '; # ideographic space (place this after MACRON)
 ￤<>'¦'; # from FULLWIDTH BROKEN BAR
 ￥<>'¥'; # from FULLWIDTH YEN SIGN
 ￦<>₩; # from FULLWIDTH WON SIGN

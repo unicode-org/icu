@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/supplementalData.xml
@@ -4173,6 +4173,9 @@ supplementalData:table(nofallback){
         hebrew{
             "IL",
         }
+        indian{
+            "IN",
+        }
         islamic{
             "AE",
             "BH",
@@ -4237,6 +4240,9 @@ supplementalData:table(nofallback){
         persian{
             "AF",
             "IR",
+        }
+        roc{
+            "TW",
         }
     }
     languageData{
@@ -4839,6 +4845,11 @@ supplementalData:table(nofallback){
                     "Ethi",
                 }
             }
+            secondary{
+                territories{
+                    "ER",
+                }
+            }
         }
         ca{
             primary{
@@ -4859,6 +4870,11 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "NG",
                 }
             }
         }
@@ -4935,6 +4951,11 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
             }
+            secondary{
+                territories{
+                    "US",
+                }
+            }
         }
         cja{
             secondary{
@@ -4983,6 +5004,9 @@ supplementalData:table(nofallback){
                     "Arab",
                     "Copt",
                     "Grek",
+                }
+                territories{
+                    "EG",
                 }
             }
         }
@@ -5354,6 +5378,11 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
             }
+            secondary{
+                territories{
+                    "ZZ",
+                }
+            }
         }
         es{
             primary{
@@ -5609,6 +5638,11 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
             }
+            secondary{
+                territories{
+                    "IT",
+                }
+            }
         }
         fuv{
             secondary{
@@ -5700,9 +5734,14 @@ supplementalData:table(nofallback){
             }
         }
         gez{
-            secondary{
+            primary{
                 scripts{
                     "Ethi",
+                }
+            }
+            secondary{
+                territories{
+                    "ER",
                 }
             }
         }
@@ -5836,6 +5875,11 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "GB",
                 }
             }
         }
@@ -6069,6 +6113,9 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
+                territories{
+                    "ZZ",
+                }
             }
         }
         ibb{
@@ -6263,6 +6310,11 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
             }
+            secondary{
+                territories{
+                    "NG",
+                }
+            }
         }
         kam{
             primary{
@@ -6301,6 +6353,11 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
             }
+            secondary{
+                territories{
+                    "NG",
+                }
+            }
         }
         kdt{
             primary{
@@ -6313,6 +6370,11 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "CI",
                 }
             }
         }
@@ -6529,6 +6591,12 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
             }
+            secondary{
+                territories{
+                    "LR",
+                    "GN",
+                }
+            }
         }
         kpv{
             primary{
@@ -6647,6 +6715,11 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "GB",
                 }
             }
         }
@@ -7099,7 +7172,6 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Cyrl",
-                    "Mong",
                 }
                 territories{
                     "MN",
@@ -7107,6 +7179,7 @@ supplementalData:table(nofallback){
             }
             secondary{
                 scripts{
+                    "Mong",
                     "Phag",
                 }
                 territories{
@@ -7443,6 +7516,11 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "ZA",
                 }
             }
         }
@@ -8006,6 +8084,18 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        sh{
+            primary{
+                scripts{
+                    "Latn",
+                }
+                territories{
+                    "BA",
+                    "ME",
+                    "RS",
+                }
+            }
+        }
         shn{
             primary{
                 scripts{
@@ -8353,6 +8443,9 @@ supplementalData:table(nofallback){
                 scripts{
                     "Syrc",
                 }
+                territories{
+                    "SY",
+                }
             }
         }
         ta{
@@ -8483,6 +8576,12 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Ethi",
+                }
+            }
+            secondary{
+                territories{
+                    "ER",
+                    "SD",
                 }
             }
         }
@@ -8757,18 +8856,17 @@ supplementalData:table(nofallback){
             }
         }
         ug{
-            primary{
-                scripts{
-                    "Arab",
-                }
-            }
             secondary{
                 scripts{
+                    "Arab",
                     "Cyrl",
                     "Latn",
                 }
                 territories{
+                    "AF",
                     "CN",
+                    "KZ",
+                    "MN",
                 }
             }
         }
@@ -9456,89 +9554,92 @@ supplementalData:table(nofallback){
             "meta:Yukon_001"{"America/Yakutat"}
         }
         windows{
-            "Africa:Cairo"{"Egypt"}
-            "Africa:Casablanca"{"Greenwich"}
-            "Africa:Johannesburg"{"South Africa"}
-            "Africa:Lagos"{"W. Central Africa"}
-            "Africa:Nairobi"{"E. Africa"}
-            "Africa:Windhoek"{"Namibia"}
-            "America:Anchorage"{"Alaskan"}
-            "America:Bogota"{"SA Pacific"}
-            "America:Buenos_Aires"{"SA Eastern"}
-            "America:Caracas"{"SA Western"}
-            "America:Chicago"{"Central"}
-            "America:Chihuahua"{"Mexico Standard Time 2"}
-            "America:Denver"{"Mountain"}
-            "America:Godthab"{"Greenland"}
-            "America:Guatemala"{"Central America"}
-            "America:Halifax"{"Atlantic"}
-            "America:Indianapolis"{"US Eastern"}
-            "America:Los_Angeles"{"Pacific"}
-            "America:Manaus"{"Central Brazilian"}
-            "America:Mexico_City"{"Mexico"}
-            "America:Montevideo"{"Montevideo"}
-            "America:New_York"{"Eastern"}
-            "America:Noronha"{"Mid-Atlantic"}
-            "America:Phoenix"{"US Mountain"}
-            "America:Regina"{"Canada Central"}
-            "America:Santiago"{"Pacific SA"}
-            "America:Sao_Paulo"{"E. South America"}
-            "America:St_Johns"{"Newfoundland"}
+            "Africa:Cairo"{"Egypt Standard Time"}
+            "Africa:Casablanca"{"Greenwich Standard Time"}
+            "Africa:Johannesburg"{"South Africa Standard Time"}
+            "Africa:Lagos"{"W. Central Africa Standard Time"}
+            "Africa:Nairobi"{"E. Africa Standard Time"}
+            "Africa:Windhoek"{"Namibia Standard Time"}
+            "America:Anchorage"{"Alaskan Standard Time"}
+            "America:Bogota"{"SA Pacific Standard Time"}
+            "America:Buenos_Aires"{"Argentina Standard Time"}
+            "America:Caracas"{"Venezuela Standard Time"}
+            "America:Chicago"{"Central Standard Time"}
+            "America:Chihuahua"{"Mountain Standard Time (Mexico)"}
+            "America:Denver"{"Mountain Standard Time"}
+            "America:Godthab"{"Greenland Standard Time"}
+            "America:Guatemala"{"Central America Standard Time"}
+            "America:Halifax"{"Atlantic Standard Time"}
+            "America:La_Paz"{"SA Western Standard Time"}
+            "America:Los_Angeles"{"Pacific Standard Time"}
+            "America:Mexico_City"{"Central Standard Time (Mexico)"}
+            "America:Montevideo"{"Montevideo Standard Time"}
+            "America:New_York"{"Eastern Standard Time"}
+            "America:Phoenix"{"US Mountain Standard Time"}
+            "America:Regina"{"Canada Central Standard Time"}
+            "America:Santiago"{"Pacific SA Standard Time"}
+            "America:Sao_Paulo"{"E. South America Standard Time"}
+            "America:St_Johns"{"Newfoundland Standard Time"}
             "America:Tijuana"{"Pacific Standard Time (Mexico)"}
-            "Asia:Amman"{"Jordan"}
-            "Asia:Baghdad"{"Arabic"}
-            "Asia:Baku"{"Azerbaijan"}
-            "Asia:Bangkok"{"SE Asia"}
-            "Asia:Beirut"{"Middle East"}
-            "Asia:Calcutta"{"India"}
-            "Asia:Colombo"{"Sri Lanka"}
-            "Asia:Dhaka"{"Central Asia"}
-            "Asia:Jerusalem"{"Israel"}
-            "Asia:Kabul"{"Afghanistan"}
-            "Asia:Karachi"{"West Asia"}
-            "Asia:Katmandu"{"Nepal"}
-            "Asia:Krasnoyarsk"{"North Asia"}
-            "Asia:Muscat"{"Arabian"}
-            "Asia:Novosibirsk"{"N. Central Asia"}
-            "Asia:Rangoon"{"Myanmar"}
-            "Asia:Riyadh"{"Arab"}
-            "Asia:Seoul"{"Korea"}
-            "Asia:Shanghai"{"China"}
-            "Asia:Singapore"{"Singapore"}
-            "Asia:Taipei"{"Taipei"}
-            "Asia:Tbilisi"{"Georgian"}
-            "Asia:Tehran"{"Iran"}
-            "Asia:Tokyo"{"Tokyo"}
-            "Asia:Ulaanbaatar"{"North Asia East"}
-            "Asia:Vladivostok"{"Vladivostok"}
-            "Asia:Yakutsk"{"Yakutsk"}
-            "Asia:Yekaterinburg"{"Ekaterinburg"}
-            "Asia:Yerevan"{"Caucasus"}
-            "Atlantic:Azores"{"Azores"}
-            "Atlantic:Cape_Verde"{"Cape Verde"}
-            "Australia:Adelaide"{"Cen. Australia"}
-            "Australia:Brisbane"{"E. Australia"}
-            "Australia:Darwin"{"AUS Central"}
-            "Australia:Hobart"{"Tasmania"}
-            "Australia:Perth"{"W. Australia"}
-            "Australia:Sydney"{"AUS Eastern"}
-            "Europe:Berlin"{"W. Europe"}
-            "Europe:Helsinki"{"FLE"}
-            "Europe:Istanbul"{"GTB"}
-            "Europe:London"{"GMT"}
-            "Europe:Minsk"{"E. Europe"}
-            "Europe:Moscow"{"Russian"}
-            "Europe:Paris"{"Romance"}
-            "Europe:Prague"{"Central Europe"}
-            "Europe:Warsaw"{"Central European"}
-            "Pacific:Apia"{"Samoa"}
-            "Pacific:Auckland"{"New Zealand"}
-            "Pacific:Fiji"{"Fiji"}
-            "Pacific:Guadalcanal"{"Central Pacific"}
-            "Pacific:Guam"{"West Pacific"}
-            "Pacific:Honolulu"{"Hawaiian"}
-            "Pacific:Kwajalein"{"Dateline"}
-            "Pacific:Tongatapu"{"Tonga"}
+            "Asia:Amman"{"Jordan Standard Time"}
+            "Asia:Baghdad"{"Arabic Standard Time"}
+            "Asia:Baku"{"Azerbaijan Standard Time"}
+            "Asia:Bangkok"{"SE Asia Standard Time"}
+            "Asia:Beirut"{"Middle East Standard Time"}
+            "Asia:Calcutta"{"India Standard Time"}
+            "Asia:Colombo"{"Sri Lanka Standard Time"}
+            "Asia:Dhaka"{"Central Asia Standard Time"}
+            "Asia:Dubai"{"Arabian Standard Time"}
+            "Asia:Irkutsk"{"North Asia East Standard Time"}
+            "Asia:Jerusalem"{"Israel Standard Time"}
+            "Asia:Kabul"{"Afghanistan Standard Time"}
+            "Asia:Karachi"{"West Asia Standard Time"}
+            "Asia:Katmandu"{"Nepal Standard Time"}
+            "Asia:Krasnoyarsk"{"North Asia Standard Time"}
+            "Asia:Novosibirsk"{"N. Central Asia Standard Time"}
+            "Asia:Rangoon"{"Myanmar Standard Time"}
+            "Asia:Riyadh"{"Arab Standard Time"}
+            "Asia:Seoul"{"Korea Standard Time"}
+            "Asia:Shanghai"{"China Standard Time"}
+            "Asia:Singapore"{"Singapore Standard Time"}
+            "Asia:Taipei"{"Taipei Standard Time"}
+            "Asia:Tbilisi"{"Caucasus Standard Time"}
+            "Asia:Tehran"{"Iran Standard Time"}
+            "Asia:Tokyo"{"Tokyo Standard Time"}
+            "Asia:Vladivostok"{"Vladivostok Standard Time"}
+            "Asia:Yakutsk"{"Yakutsk Standard Time"}
+            "Asia:Yekaterinburg"{"Ekaterinburg Standard Time"}
+            "Asia:Yerevan"{"Armenian Standard Time"}
+            "Atlantic:Azores"{"Azores Standard Time"}
+            "Atlantic:Cape_Verde"{"Cape Verde Standard Time"}
+            "Atlantic:South_Georgia"{"Mid-Atlantic Standard Time"}
+            "Australia:Adelaide"{"Cen. Australia Standard Time"}
+            "Australia:Brisbane"{"E. Australia Standard Time"}
+            "Australia:Darwin"{"AUS Central Standard Time"}
+            "Australia:Hobart"{"Tasmania Standard Time"}
+            "Australia:Perth"{"W. Australia Standard Time"}
+            "Australia:Sydney"{"AUS Eastern Standard Time"}
+            "Etc:GMT+12"{"Dateline Standard Time"}
+            "Etc:GMT+3"{"SA Eastern Standard Time"}
+            "Etc:GMT+4"{"Central Brazilian Standard Time"}
+            "Etc:GMT+5"{"US Eastern Standard Time"}
+            "Etc:GMT-3"{"Georgian Standard Time"}
+            "Europe:Berlin"{"W. Europe Standard Time"}
+            "Europe:Budapest"{"Central Europe Standard Time"}
+            "Europe:Istanbul"{"GTB Standard Time"}
+            "Europe:Kiev"{"FLE Standard Time"}
+            "Europe:London"{"GMT Standard Time"}
+            "Europe:Minsk"{"E. Europe Standard Time"}
+            "Europe:Moscow"{"Russian Standard Time"}
+            "Europe:Paris"{"Romance Standard Time"}
+            "Europe:Warsaw"{"Central European Standard Time"}
+            "Pacific:Apia"{"Samoa Standard Time"}
+            "Pacific:Auckland"{"New Zealand Standard Time"}
+            "Pacific:Fiji"{"Fiji Standard Time"}
+            "Pacific:Guadalcanal"{"Central Pacific Standard Time"}
+            "Pacific:Honolulu"{"Hawaiian Standard Time"}
+            "Pacific:Port_Moresby"{"West Pacific Standard Time"}
+            "Pacific:Tongatapu"{"Tonga Standard Time"}
         }
     }
     territoryContainment{
@@ -10157,6 +10258,9 @@ supplementalData:table(nofallback){
         "America:Argentina:San_Juan"{
             territory{"AR"}
         }
+        "America:Argentina:San_Luis"{
+            territory{"AR"}
+        }
         "America:Argentina:Tucuman"{
             territory{"AR"}
         }
@@ -10434,6 +10538,9 @@ supplementalData:table(nofallback){
                 "Brazil/West",
             }
         }
+        "America:Marigot"{
+            territory{"MF"}
+        }
         "America:Martinique"{
             territory{"MQ"}
         }
@@ -10590,6 +10697,9 @@ supplementalData:table(nofallback){
                 "Navajo",
             }
         }
+        "America:St_Barthelemy"{
+            territory{"BL"}
+        }
         "America:St_Johns"{
             territory{"CA"}
             aliases{
@@ -10696,6 +10806,9 @@ supplementalData:table(nofallback){
         }
         "Arctic:Longyearbyen"{
             territory{"SJ"}
+            aliases{
+                "Atlantic/Jan_Mayen",
+            }
         }
         "Asia:Aden"{
             territory{"YE"}
@@ -10745,6 +10858,7 @@ supplementalData:table(nofallback){
         "Asia:Calcutta"{
             territory{"IN"}
             aliases{
+                "Asia/Kolkata",
                 "IST",
             }
         }
@@ -10900,6 +11014,7 @@ supplementalData:table(nofallback){
         "Asia:Saigon"{
             territory{"VN"}
             aliases{
+                "Asia/Ho_Chi_Minh",
                 "VST",
             }
         }
@@ -11003,9 +11118,6 @@ supplementalData:table(nofallback){
             aliases{
                 "Atlantic/Faroe",
             }
-        }
-        "Atlantic:Jan_Mayen"{
-            territory{"SJ"}
         }
         "Atlantic:Madeira"{
             territory{"PT"}
@@ -11612,7 +11724,6 @@ supplementalData:table(nofallback){
             "PF",
             "PT",
             "RU",
-            "SJ",
             "UA",
             "UM",
             "US",

@@ -1,6 +1,6 @@
 // ***************************************************************************
 // *
-// * Copyright (C) 2004-2007 International Business Machines
+// * Copyright (C) 2004-2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
@@ -1939,6 +1939,7 @@ structLocale:table(nofallback){
     Scripts{
         Arab{""}
         Armn{""}
+        Armi{""}
         Avst{""}
         Bali{""}
         Batk{""}
@@ -1949,6 +1950,7 @@ structLocale:table(nofallback){
         Brai{""}
         Bugi{""}
         Buhd{""}
+        Cakm{""}
         Cans{""}
         Cari{""}
         Cham{""}
@@ -1991,6 +1993,7 @@ structLocale:table(nofallback){
         Khmr{""}
         Knda{""}
         Kore{""}
+        Kthi{""}
         Lana{""}
         Laoo{""}
         Latf{""}
@@ -2019,9 +2022,12 @@ structLocale:table(nofallback){
         Osma{""}
         Perm{""}
         Phag{""}
+        Phli{""}
+        Phlp{""}
         Phlv{""}
         Phnx{""}
         Plrd{""}
+        Prti{""}
         Qaai{""}
         Rjng{""}
         Roro{""}
@@ -2042,6 +2048,7 @@ structLocale:table(nofallback){
         Tale{""}
         Talu{""}
         Taml{""}
+        Tavt{""}
         Telu{""}
         Teng{""}
         Tfng{""}
@@ -2055,6 +2062,8 @@ structLocale:table(nofallback){
         Xpeo{""}
         Xsux{""}
         Yiii{""}
+        Zmth{""}
+        Zsym{""}
         Zxxx{""}
         Zyyy{""}
         Zzzz{""}
@@ -2065,11 +2074,12 @@ structLocale:table(nofallback){
             chinese{""}
             gregorian{""}
             hebrew{""}
+            indian{""}
             persian{""}
             islamic{""}
             islamic-civil{""}
             japanese{""}
-            taiwan{""}
+            roc{""}
         }
         collation{
             big5han{""}
@@ -2126,6 +2136,25 @@ structLocale:table(nofallback){
     }
     calendar{
         buddhist{
+            AmPmMarkers{
+                "",
+                "",
+            }
+            availableFormats{
+                HHmm{""}
+                HHmmss{""}
+                KKmm{"KK:mm a"}
+                KKmmss{"KK:mm:ss a"}
+                MMMM{""}
+                MMMdd{""}
+                mmssSS{""}
+                ww{""}
+                yyMM{""}
+                yyMMMEEEd{""}
+                yyMMMd{""}
+                yyMd{""}
+                yyQQQQ{""}
+            }
             DateTimePatterns{
                 "",
                 "",
@@ -2144,9 +2173,31 @@ structLocale:table(nofallback){
                 wide{
                     "",
                 }
+                narrow{
+                    "",
+                }
             }
         }
         chinese{
+            AmPmMarkers{
+                "",
+                "",
+            }
+            availableFormats{
+                HHmm{""}
+                HHmmss{""}
+                KKmm{"KK:mm a"}
+                KKmmss{"KK:mm:ss a"}
+                MMMM{""}
+                MMMdd{""}
+                mmssSS{""}
+                ww{""}
+                yyMM{""}
+                yyMMMEEEd{""}
+                yyMMMd{""}
+                yyMd{""}
+                yyQQQQ{""}
+            }
             DateTimePatterns{
                 "",
                 "",
@@ -2253,6 +2304,39 @@ structLocale:table(nofallback){
             }
         }
         coptic{
+            AmPmMarkers{
+                "",
+                "",
+            }
+            availableFormats{
+                HHmm{""}
+                HHmmss{""}
+                KKmm{"KK:mm a"}
+                KKmmss{"KK:mm:ss a"}
+                MMMM{""}
+                MMMdd{""}
+                mmssSS{""}
+                ww{""}
+                yyMM{""}
+                yyMMMEEEd{""}
+                yyMMMd{""}
+                yyMd{""}
+                yyQQQQ{""}
+            }
+            eras{
+                abbreviated{
+                    "",
+                    "",
+                }
+                wide{
+                    "",
+                    ""
+                }
+                narrow{
+                    "",
+                    ""
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -2290,6 +2374,39 @@ structLocale:table(nofallback){
         }
         default{""}
         ethiopic{
+            AmPmMarkers{
+                "",
+                "",
+            }
+            availableFormats{
+                HHmm{""}
+                HHmmss{""}
+                KKmm{"KK:mm a"}
+                KKmmss{"KK:mm:ss a"}
+                MMMM{""}
+                MMMdd{""}
+                mmssSS{""}
+                ww{""}
+                yyMM{""}
+                yyMMMEEEd{""}
+                yyMMMd{""}
+                yyMd{""}
+                yyQQQQ{""}
+            }
+            eras{
+                abbreviated{
+                    "",
+                    "",
+                }
+                wide{
+                    "",
+                    ""
+                }
+                narrow{
+                    "",
+                    ""
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -2441,11 +2558,11 @@ structLocale:table(nofallback){
                     "",
                     "",
                 }
-                narrow{
+                wide{
                     "",
                     ""
                 }
-                wide{
+                narrow{
                     "",
                     ""
                 }
@@ -2687,21 +2804,119 @@ structLocale:table(nofallback){
             }
         }
         hebrew{
+            AmPmMarkers{
+                "",
+                "",
+            }
+            availableFormats{
+                HHmm{""}
+                HHmmss{""}
+                KKmm{"KK:mm a"}
+                KKmmss{"KK:mm:ss a"}
+                MMMM{""}
+                MMMdd{""}
+                mmssSS{""}
+                ww{""}
+                yyMM{""}
+                yyMMMEEEd{""}
+                yyMMMd{""}
+                yyMd{""}
+                yyQQQQ{""}
+            }
             eras{
                 abbreviated{
                     "",
                 }
                 wide{
                     "",
-                    ""
+                }
+                narrow{
+                    "",
                 }
             }
             monthNames{
                 default{""}
                 format{
-                    abbreviated:alias{"structLocale/calendar/hebrew/monthNames/format/wide"}
                     default{""}
                     wide{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    abbreviated{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    narrow{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                }
+                stand-alone{
+                    wide{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    abbreviated{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    default{""}
+                    narrow{
                         "",
                         "",
                         "",
@@ -2719,7 +2934,162 @@ structLocale:table(nofallback){
                 }
             }
         }
+        indian{
+            AmPmMarkers{
+                "",
+                "",
+            }
+            availableFormats{
+                HHmm{""}
+                HHmmss{""}
+                KKmm{"KK:mm a"}
+                KKmmss{"KK:mm:ss a"}
+                MMMM{""}
+                MMMdd{""}
+                mmssSS{""}
+                ww{""}
+                yyMM{""}
+                yyMMMEEEd{""}
+                yyMMMd{""}
+                yyMd{""}
+                yyQQQQ{""}
+            }
+            DateTimePatterns{
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+            }
+            eras{
+                abbreviated{
+                    "",
+                }
+                wide{
+                    "",
+                }
+                narrow{
+                    "",
+                }
+            }
+            monthNames{
+                default{""}
+                format{
+                    abbreviated{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    default{""}
+                    narrow{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    wide{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    default{""}
+                    narrow{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    wide{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                }
+            }
+        }
         islamic{
+            AmPmMarkers{
+                "",
+                "",
+            }
+            availableFormats{
+                HHmm{""}
+                HHmmss{""}
+                KKmm{"KK:mm a"}
+                KKmmss{"KK:mm:ss a"}
+                MMMM{""}
+                MMMdd{""}
+                mmssSS{""}
+                ww{""}
+                yyMM{""}
+                yyMMMEEEd{""}
+                yyMMMd{""}
+                yyMd{""}
+                yyQQQQ{""}
+            }
             DateTimeElements:intvector{
                 1,
                 1,
@@ -2740,6 +3110,9 @@ structLocale:table(nofallback){
                     "",
                 }
                 wide{
+                    "",
+                }
+                narrow{
                     "",
                 }
             }
@@ -2838,6 +3211,25 @@ structLocale:table(nofallback){
             }
         }
         persian{
+            AmPmMarkers{
+                "",
+                "",
+            }
+            availableFormats{
+                HHmm{""}
+                HHmmss{""}
+                KKmm{"KK:mm a"}
+                KKmmss{"KK:mm:ss a"}
+                MMMM{""}
+                MMMdd{""}
+                mmssSS{""}
+                ww{""}
+                yyMM{""}
+                yyMMMEEEd{""}
+                yyMMMd{""}
+                yyMd{""}
+                yyQQQQ{""}
+            }
             DateTimeElements:intvector{
                 1,
                 1,
@@ -2858,6 +3250,9 @@ structLocale:table(nofallback){
                     "",
                 }
                 wide{
+                    "",
+                }
+                narrow{
                     "",
                 }
             }
@@ -2957,6 +3352,25 @@ structLocale:table(nofallback){
         }
         islamic-civil:alias{"structLocale/calendar/islamic"}
         japanese{
+            AmPmMarkers{
+                "",
+                "",
+            }
+            availableFormats{
+                HHmm{""}
+                HHmmss{""}
+                KKmm{"KK:mm a"}
+                KKmmss{"KK:mm:ss a"}
+                MMMM{""}
+                MMMdd{""}
+                mmssSS{""}
+                ww{""}
+                yyMM{""}
+                yyMMMEEEd{""}
+                yyMMMd{""}
+                yyMd{""}
+                yyQQQQ{""}
+            }
             DateTimePatterns{
                 "",
                 "",
@@ -3204,6 +3618,520 @@ structLocale:table(nofallback){
                     "",
                     "",
                     "",
+                    "",
+                    "",
+                }
+                wide{
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                }
+                narrow{
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                }
+            }
+        }
+        roc{
+            AmPmMarkers{
+                "",
+                "",
+            }
+            availableFormats{
+                HHmm{""}
+                HHmmss{""}
+                KKmm{"KK:mm a"}
+                KKmmss{"KK:mm:ss a"}
+                MMMM{""}
+                MMMdd{""}
+                mmssSS{""}
+                ww{""}
+                yyMM{""}
+                yyMMMEEEd{""}
+                yyMMMd{""}
+                yyMd{""}
+                yyQQQQ{""}
+            }
+            DateTimePatterns{
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+            }
+            eras{
+                abbreviated{
                     "",
                     "",
                 }
@@ -3211,26 +4139,7 @@ structLocale:table(nofallback){
                     "",
                     ""
                 }
-            }
-        }
-        taiwan{
-            DateTimePatterns{
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-            }
-            eras{
-                abbreviated{
-                    "",
-                    "",
-                }
-                wide{
+                narrow{
                     "",
                     ""
                 }
@@ -3972,6 +4881,16 @@ structLocale:table(nofallback){
             ec{""}
             cu:int{0}
         }
+        "America:Argentina:San_Luis"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            ec{""}
+            cu:int{0}
+        }
         "America:Argentina:Tucuman"{
             ld{""}
             lg{""}
@@ -4532,6 +5451,16 @@ structLocale:table(nofallback){
             ec{""}
             cu:int{0}
         }
+        "America:Indiana:Tell_City"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            ec{""}
+            cu:int{0}
+        }
         "America:Indiana:Vevay"{
             ld{""}
             lg{""}
@@ -5033,6 +5962,16 @@ structLocale:table(nofallback){
             cu:int{0}
         }
         "America:Regina"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            ec{""}
+            cu:int{0}
+        }
+        "America:Resolute"{
             ld{""}
             lg{""}
             ls{""}
@@ -9531,6 +10470,16 @@ structLocale:table(nofallback){
             //ec{""} // Metazones have no exemplar city
             cu:int{0}
         }
+        "meta:British"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+            cu:int{0}
+        }
         "meta:Brunei"{
             ld{""}
             lg{""}
@@ -9672,6 +10621,16 @@ structLocale:table(nofallback){
             cu:int{0}
         }
         "meta:Davis"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+            cu:int{0}
+        }
+        "meta:Dominican"{
             ld{""}
             lg{""}
             ls{""}
@@ -9861,6 +10820,16 @@ structLocale:table(nofallback){
             //ec{""} // Metazones have no exemplar city
             cu:int{0}
         }
+        "meta:Goose_Bay"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+            cu:int{0}
+        }
         "meta:Greenland_Central"{
             ld{""}
             lg{""}
@@ -10041,6 +11010,16 @@ structLocale:table(nofallback){
             //ec{""} // Metazones have no exemplar city
             cu:int{0}
         }
+        "meta:Irish"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+            cu:int{0}
+        }
         "meta:Irkutsk"{
             ld{""}
             lg{""}
@@ -10192,6 +11171,16 @@ structLocale:table(nofallback){
             cu:int{0}
         }
         "meta:Lanka"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+            cu:int{0}
+        }
+        "meta:Liberia"{
             ld{""}
             lg{""}
             ls{""}
@@ -10452,6 +11441,16 @@ structLocale:table(nofallback){
             cu:int{0}
         }
         "meta:Omsk"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            //ec{""} // Metazones have no exemplar city
+            cu:int{0}
+        }
+        "meta:Oral"{
             ld{""}
             lg{""}
             ls{""}

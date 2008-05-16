@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/root.xml
@@ -70,7 +70,7 @@ root{
         297,
         210,
     }
-    Version{"1.124"}
+    Version{"1.128"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -313,18 +313,25 @@ root{
                 Year{"{0} {1}"}
             }
             availableFormats{
-                Ed{"E d"}
-                H{"H"}
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
+                Hm{"H:mm"}
+                M{"L"}
+                MEd{"E, M-d"}
+                MMM{"LLL"}
                 MMMEd{"E MMM d"}
+                MMMMEd{"E MMMM d"}
                 MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
                 Md{"M-d"}
-                mmss{"mm:ss"}
-                yyMM{"yy-MM"}
-                yyMMM{"yy MMM"}
-                yyQ{"yy Q"}
-                yyyy{"yyyy"}
+                d{"d"}
+                ms{"mm:ss"}
+                y{"yyyy"}
+                yM{"yyyy-M"}
+                yMEd{"EEE, yyyy-M-d"}
+                yMMM{"yyyy MMM"}
+                yMMMEd{"EEE, yyyy MMM d"}
+                yMMMM{"yyyy MMMM"}
+                yQ{"yyyy Q"}
+                yQQQ{"yyyy QQQ"}
             }
             dayNames{
                 default{"format"}
@@ -531,6 +538,10 @@ root{
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         indian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
@@ -652,6 +663,33 @@ root{
                 "MMM d, y G",
                 "M/d/yy",
                 "{1} {0}",
+            }
+            appendItems{
+                Day{"{0} ({2}: {1})"}
+                Day-Of-Week{"{0} {1}"}
+                Era{"{0} {1}"}
+                Hour{"{0} ({2}: {1})"}
+                Minute{"{0} ({2}: {1})"}
+                Month{"{0} ({2}: {1})"}
+                Quarter{"{0} ({2}: {1})"}
+                Second{"{0} ({2}: {1})"}
+                Timezone{"{0} {1}"}
+                Week{"{0} ({2}: {1})"}
+                Year{"{0} {1}"}
+            }
+            availableFormats{
+                Ed{"E d"}
+                H{"H"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                MMMEd{"E MMM d"}
+                MMMMd{"MMMM d"}
+                Md{"M-d"}
+                ms{"mm:ss"}
+                y{"yyyy GGG"}
+                yM{"GGGGG yy-MM"}
+                yMMM{"GGGGG yy MMM"}
+                yQ{"GGGGG yy Q"}
             }
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
@@ -1191,26 +1229,30 @@ root{
             }
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
-        taiwan{
+        roc{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
             DateTimePatterns{
-                "HH:mm:ss v" /**  fallback from 'gregorian'   */,
-                "HH:mm:ss z" /**  fallback from 'gregorian'   */,
-                "HH:mm:ss" /**  fallback from 'gregorian'   */,
-                "HH:mm" /**  fallback from 'gregorian'   */,
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
                 "EEEE, MMMM d, G y",
                 "MMMM d, G y",
                 "MMM d, G y",
                 "G y/M/d",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}",
             }
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
-                    "Before Minguo",
-                    "Minguo",
+                    "Before R.O.C.",
+                    "R.O.C.",
                 }
-                narrow:alias{"/LOCALE/calendar/taiwan/eras/abbreviated"}
-                wide:alias{"/LOCALE/calendar/taiwan/eras/abbreviated"}
+                narrow:alias{"/LOCALE/calendar/roc/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/roc/eras/abbreviated"}
             }
             monthNames:alias{"/LOCALE/calendar/gregorian/monthNames"}
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
@@ -1237,6 +1279,45 @@ root{
             ls{""}
             sd{""}
             ss{""}
+        }
+        "America:Indiana:Knox"{
+            ec{"Knox, Indiana"}
+        }
+        "America:Indiana:Marengo"{
+            ec{"Marengo, Indiana"}
+        }
+        "America:Indiana:Petersburg"{
+            ec{"Petersburg, Indiana"}
+        }
+        "America:Indiana:Tell_City"{
+            ec{"Tell City, Indiana"}
+        }
+        "America:Indiana:Vevay"{
+            ec{"Vevay, Indiana"}
+        }
+        "America:Indiana:Vincennes"{
+            ec{"Vincennes, Indiana"}
+        }
+        "America:Indiana:Winamac"{
+            ec{"Winamac, Indiana"}
+        }
+        "America:Kentucky:Monticello"{
+            ec{"Monticello, Kentucky"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"Center, North Dakota"}
+        }
+        "America:North_Dakota:New_Salem"{
+            ec{"New Salem, North Dakota"}
+        }
+        "America:St_Johns"{
+            ec{"St. John's"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont d'Urville"}
+        }
+        "Etc:Unknown"{
+            ec{"Unknown"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
