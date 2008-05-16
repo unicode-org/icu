@@ -185,7 +185,7 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
                             numDigits++;
                         }
                     }
-                    if (numDigits >= 4) {
+                    if (numDigits >= 3) {
                         // Localized GMT or RFC: total offset (raw + dst) must be preserved.
                         int32_t inOffset = inRaw + inDst;
                         int32_t outOffset = outRaw + outDst;
