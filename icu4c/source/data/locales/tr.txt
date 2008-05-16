@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/tr.xml
@@ -27,6 +27,7 @@ tr{
         017{"Orta Afrika"}
         018{"Güney Afrika [018]"}
         019{"Amerika"}
+        021{"Amerika'nın Kuzeyi"}
         029{"Karayipler"}
         030{"Doğu Asya"}
         034{"Güney Asya"}
@@ -73,6 +74,7 @@ tr{
         BH{"Bahreyn"}
         BI{"Burundi"}
         BJ{"Benin"}
+        BL{"Saint Barthelemy"}
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivya"}
@@ -117,7 +119,7 @@ tr{
         ET{"Etiyopya"}
         FI{"Finlandiya"}
         FJ{"Fiji"}
-        FK{"Falkland Adaları (Malvinalar)"}
+        FK{"Falkland Adaları"}
         FM{"Mikronezya Federal Eyaletleri"}
         FO{"Faroe Adaları"}
         FR{"Fransa"}
@@ -186,6 +188,7 @@ tr{
         MC{"Monako"}
         MD{"Moldovya Cumhuriyeti"}
         ME{"Karadağ"}
+        MF{"Saint Martin"}
         MG{"Madagaskar"}
         MH{"Marshall Adaları"}
         MK{"Makedonya"}
@@ -655,6 +658,10 @@ tr{
         }
         GHC{
             "GHC",
+            "Gana Sedisi (1979-2007)",
+        }
+        GHS{
+            "GHS",
             "Gana Sedisi",
         }
         GIP{
@@ -1081,9 +1088,13 @@ tr{
             "SDD",
             "Sudan Dinarı",
         }
+        SDG{
+            "SDG",
+            "Sudan Lirası",
+        }
         SDP{
             "SDP",
-            "Sudan Lirası",
+            "Eski Sudan Lirası",
         }
         SEK{
             "SKr",
@@ -1171,11 +1182,11 @@ tr{
         }
         TRL{
             "TL",
-            "Türk Lirası",
+            "Eski Türk Lirası",
         }
         TRY{
             "TRY",
-            "Yeni Türk Lirası",
+            "Türk Lirası",
         }
         TTD{
             "TT$",
@@ -1388,6 +1399,7 @@ tr{
         akk{"Akad Dili"}
         ale{"Aleut"}
         alg{"Algonquian Dilleri"}
+        alt{"Güney Altayca"}
         am{"Amharik"}
         an{"Aragonca"}
         ang{"Eski İngilizce"}
@@ -1725,6 +1737,7 @@ tr{
         pa{"Pencap Dili"}
         paa{"Diğer Papua Dilleri"}
         pag{"Pangasinan"}
+        pal{"Pehlevi"}
         pam{"Pampanga"}
         pap{"Papiamento"}
         pau{"Palau Dili"}
@@ -1749,6 +1762,7 @@ tr{
         ro{"Romence"}
         roa{"Diğer Roman Dilleri"}
         rom{"Romanca"}
+        root{"Köken"}
         ru{"Rusça"}
         rup{"Aromanca"}
         rw{"Kinyarwanda"}
@@ -1802,9 +1816,10 @@ tr{
         sux{"Sümerce"}
         sv{"İsveççe"}
         sw{"Swahili"}
+        syc{"Klasik Süryanice"}
         syr{"Süryanice"}
         ta{"Tamil"}
-        tai{"Tay Dili (Diğer)"}
+        tai{"Tai Dili"}
         te{"Telugu"}
         tem{"Timne"}
         ter{"Tereno"}
@@ -1864,6 +1879,7 @@ tr{
         ypk{"Yupik Dilleri"}
         za{"Zhuang"}
         zap{"Zapotek Dili"}
+        zbl{"Blis Sembolleri"}
         zen{"Zenaga"}
         zh{"Çince"}
         zh_Hans{"Basitleştirilmiş Çince"}
@@ -1871,6 +1887,7 @@ tr{
         znd{"Zande"}
         zu{"Zulu"}
         zun{"Zuni"}
+        zxx{"Dilbilim içeriği yok"}
         zza{"Zazaca"}
     }
     LocaleScript{
@@ -1898,7 +1915,9 @@ tr{
     }
     Scripts{
         Arab{"Arapça"}
+        Armi{"Armi"}
         Armn{"Ermenice"}
+        Avst{"Avestçe"}
         Bali{"Bali Dili"}
         Batk{"Batak"}
         Beng{"Bengalce"}
@@ -1908,6 +1927,7 @@ tr{
         Brai{"Braille"}
         Bugi{"Bugis"}
         Buhd{"Buhid"}
+        Cakm{"Cakm"}
         Cans{"UCAS"}
         Cari{"Karya"}
         Cham{"Cham"}
@@ -1948,6 +1968,7 @@ tr{
         Khar{"Kharoshthi"}
         Khmr{"Khmer"}
         Knda{"Kannada"}
+        Kore{"Korece"}
         Lana{"Lanna"}
         Laoo{"Lao Dili"}
         Latf{"Fraktur Latin"}
@@ -1960,6 +1981,7 @@ tr{
         Lyci{"Likya Dili"}
         Lydi{"Lidya DIli"}
         Mand{"Mandaean"}
+        Mani{"Mani Alfabesi"}
         Maya{"Maya Hiyeroglifleri"}
         Mero{"Meroitik"}
         Mlym{"Malayalam"}
@@ -1975,12 +1997,17 @@ tr{
         Osma{"Osmanya"}
         Perm{"Eski Permic"}
         Phag{"Phags-pa"}
+        Phli{"Phli"}
+        Phlp{"Phlp"}
+        Phlv{"Kitap Pehlevi Dili"}
         Phnx{"Fonetik"}
         Plrd{"Pollard Fonetik"}
+        Prti{"Prti"}
         Qaai{"Kalıtsal"}
         Rjng{"Rejang"}
         Roro{"Rongorongo"}
         Runr{"Runik"}
+        Samr{"Samarit"}
         Sara{"Sarati"}
         Saur{"Saurashtra"}
         Sgnw{"İşaret Dili Yazımı"}
@@ -1993,6 +2020,7 @@ tr{
         Tale{"Tai Le"}
         Talu{"New Tai Lue"}
         Taml{"Tamil"}
+        Tavt{"Tavt"}
         Telu{"Telugu"}
         Teng{"Tengwar"}
         Tfng{"Tifinagh"}
@@ -2005,6 +2033,8 @@ tr{
         Xpeo{"Eski Farsça"}
         Xsux{"Sümer-Akad Çivi Yazısı"}
         Yiii{"Yi"}
+        Zmth{"Zmth"}
+        Zsym{"Zsym"}
         Zxxx{"Yazılı Olmayan"}
         Zyyy{"Common"}
         Zzzz{"Bilinmeyen veya Geçersiz Betik"}
@@ -2015,9 +2045,11 @@ tr{
             chinese{"Çin Takvimi"}
             gregorian{"Miladi Takvim"}
             hebrew{"Yahudi Takvimi"}
+            indian{"Ulusal Hint Takvimi"}
             islamic{"Hicri Takvim"}
             islamic-civil{"Arap Takvimi"}
             japanese{"Japon Takvimi"}
+            roc{"Çin Cumhuriyeti Takvimi"}
         }
         collation{
             big5han{"Geleneksel Çince Sıralaması - Big5"}
@@ -2030,18 +2062,33 @@ tr{
         }
     }
     Variants{
+        1606NICT{"1606'ya Dek Geç Ortaçağ Fransızcası"}
+        1694ACAD{"1694ACAD"}
+        1901{"Geleneksel Alman Yazım Kuralları"}
+        1994{"Standart Resia Yazım Kuralları"}
+        1996{"1996 Alman Yazım Kuralları"}
         AREVELA{"Doğu Ermenicesi"}
         AREVMDA{"Batı Ermenicesi"}
+        BAKU1926{"Birleştirilmiş Yeni Türk Alfabesi"}
+        BISKE{"San Giorgio/Bila Lehçesi"}
         BOONT{"Boontling"}
+        LIPAW{"Resia Lipovaz Lehçesi"}
         MONOTON{"Monotonik"}
         NEDIS{"Natisone Lehçesi"}
+        NJIVA{"Gniva/Njiva Lehçesi"}
+        OSOJS{"Oseacco/Osojane Lehçesi"}
         POLYTON{"Politonik"}
         POSIX{"Bilgisayar"}
+        REVISED{"Gözden Geçirilmiş Yazım Kuralları"}
         ROZAJ{"Resia Lehçesi"}
         SAAHO{"Saho"}
+        SCOTLAND{"İskoç Standart İngilizcesi"}
         SCOUSE{"Scouse"}
+        SOLBA{"Stolvizza/Solbica Lehçesi"}
+        TARASK{"Taraskievica Yazım Kuralları"}
+        VALENCIA{"VALENCIA"}
     }
-    Version{"1.92"}
+    Version{"1.128"}
     calendar{
         coptic{
             monthNames{
@@ -2336,11 +2383,308 @@ tr{
         "Africa:Ceuta"{
             ec{"Septe"}
         }
+        "Africa:Kinshasa"{
+            ec{"Kinshasa"}
+        }
+        "Africa:Lubumbashi"{
+            ec{"Lubumbashi"}
+        }
+        "America:Adak"{
+            ec{"Adak"}
+        }
+        "America:Anchorage"{
+            ec{"Anchorage"}
+        }
+        "America:Araguaina"{
+            ec{"Araguaina"}
+        }
+        "America:Argentina:La_Rioja"{
+            ec{"La Rioja"}
+        }
+        "America:Argentina:Rio_Gallegos"{
+            ec{"Rio Gallegos"}
+        }
+        "America:Argentina:San_Juan"{
+            ec{"San Juan"}
+        }
+        "America:Argentina:Tucuman"{
+            ec{"Tucuman"}
+        }
+        "America:Argentina:Ushuaia"{
+            ec{"Ushuaia"}
+        }
+        "America:Bahia"{
+            ec{"Bahia"}
+        }
+        "America:Belem"{
+            ec{"Belem"}
+        }
+        "America:Blanc-Sablon"{
+            ec{"Blanc-Sablon"}
+        }
+        "America:Boa_Vista"{
+            ec{"Boa Vista"}
+        }
+        "America:Boise"{
+            ec{"Boise"}
+        }
+        "America:Buenos_Aires"{
+            ec{"Buenos Aires"}
+        }
+        "America:Cambridge_Bay"{
+            ec{"Cambridge Bay"}
+        }
+        "America:Campo_Grande"{
+            ec{"Campo Grande"}
+        }
+        "America:Cancun"{
+            ec{"Cancun"}
+        }
+        "America:Catamarca"{
+            ec{"Catamarca"}
+        }
+        "America:Chicago"{
+            ec{"Chicago"}
+        }
+        "America:Chihuahua"{
+            ec{"Chihuahua"}
+        }
+        "America:Coral_Harbour"{
+            ec{"Coral Harbour"}
+        }
+        "America:Cordoba"{
+            ec{"Cordoba"}
+        }
+        "America:Cuiaba"{
+            ec{"Cuiaba"}
+        }
+        "America:Danmarkshavn"{
+            ec{"Danmarkshavn"}
+        }
+        "America:Dawson"{
+            ec{"Dawson"}
+        }
+        "America:Dawson_Creek"{
+            ec{"Dawson Creek"}
+        }
+        "America:Denver"{
+            ec{"Denver"}
+        }
+        "America:Detroit"{
+            ec{"Detroit"}
+        }
+        "America:Edmonton"{
+            ec{"Edmonton"}
+        }
+        "America:Eirunepe"{
+            ec{"Eirunepe"}
+        }
+        "America:Fortaleza"{
+            ec{"Fortaleza"}
+        }
+        "America:Glace_Bay"{
+            ec{"Glace Bay"}
+        }
+        "America:Goose_Bay"{
+            ec{"Goose Bay"}
+        }
+        "America:Halifax"{
+            ec{"Halifax"}
+        }
+        "America:Hermosillo"{
+            ec{"Hermosillo"}
+        }
+        "America:Indiana:Knox"{
+            ec{"Knox"}
+        }
+        "America:Indiana:Marengo"{
+            ec{"Marengo"}
+        }
+        "America:Indiana:Petersburg"{
+            ec{"Petersburg, Indiana"}
+        }
+        "America:Indiana:Tell_City"{
+            ec{"Tell City, Indiana"}
+        }
+        "America:Indiana:Vevay"{
+            ec{"Vevay, Indiana"}
+        }
+        "America:Indiana:Vincennes"{
+            ec{"Vincennes, Indiana"}
+        }
+        "America:Indiana:Winamac"{
+            ec{"Winamac, Indiana"}
+        }
+        "America:Indianapolis"{
+            ec{"Indianapolis"}
+        }
+        "America:Inuvik"{
+            ec{"Inuvik"}
+        }
+        "America:Iqaluit"{
+            ec{"Iqaluit"}
+        }
+        "America:Jujuy"{
+            ec{"Jujuy"}
+        }
+        "America:Juneau"{
+            ec{"Juneau"}
+        }
+        "America:Kentucky:Monticello"{
+            ec{"Monticello, Kentucky"}
+        }
+        "America:Los_Angeles"{
+            ec{"Los Angeles"}
+        }
+        "America:Louisville"{
+            ec{"Louisville"}
+        }
+        "America:Maceio"{
+            ec{"Maceio"}
+        }
+        "America:Manaus"{
+            ec{"Manaus"}
+        }
+        "America:Mazatlan"{
+            ec{"Mazatlan"}
+        }
+        "America:Mendoza"{
+            ec{"Mendoza"}
+        }
+        "America:Menominee"{
+            ec{"Menominee"}
+        }
+        "America:Merida"{
+            ec{"Merida"}
+        }
         "America:Mexico_City"{
             ec{"Meksiko City"}
         }
+        "America:Moncton"{
+            ec{"Moncton"}
+        }
+        "America:Monterrey"{
+            ec{"Monterrey"}
+        }
+        "America:Montreal"{
+            ec{"Montreal"}
+        }
+        "America:New_York"{
+            ec{"New York"}
+        }
+        "America:Nipigon"{
+            ec{"Nipigon"}
+        }
+        "America:Nome"{
+            ec{"Nome"}
+        }
+        "America:Noronha"{
+            ec{"Noronha"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"Merkez, Kuzey Dakota"}
+        }
+        "America:North_Dakota:New_Salem"{
+            ec{"New Salem, Kuzey Dakota"}
+        }
+        "America:Pangnirtung"{
+            ec{"Pangnirtung"}
+        }
+        "America:Phoenix"{
+            ec{"Phoenix"}
+        }
+        "America:Porto_Velho"{
+            ec{"Porto Velho"}
+        }
+        "America:Rainy_River"{
+            ec{"Rainy River"}
+        }
+        "America:Rankin_Inlet"{
+            ec{"Rankin Inlet"}
+        }
+        "America:Recife"{
+            ec{"Recife"}
+        }
+        "America:Regina"{
+            ec{"Regina"}
+        }
+        "America:Resolute"{
+            ec{"Resolute"}
+        }
+        "America:Rio_Branco"{
+            ec{"Rio Branco"}
+        }
+        "America:Sao_Paulo"{
+            ec{"Sao Paulo"}
+        }
+        "America:Scoresbysund"{
+            ec{"Scoresbysund"}
+        }
+        "America:Shiprock"{
+            ec{"Shiprock"}
+        }
+        "America:St_Johns"{
+            ec{"St. John's"}
+        }
+        "America:Swift_Current"{
+            ec{"Swift Current"}
+        }
+        "America:Thule"{
+            ec{"Thule"}
+        }
+        "America:Thunder_Bay"{
+            ec{"Thunder Bay"}
+        }
+        "America:Tijuana"{
+            ec{"Tijuana"}
+        }
+        "America:Toronto"{
+            ec{"Toronto"}
+        }
+        "America:Vancouver"{
+            ec{"Vancouver"}
+        }
+        "America:Whitehorse"{
+            ec{"Whitehorse"}
+        }
+        "America:Winnipeg"{
+            ec{"Winnipeg"}
+        }
+        "America:Yakutat"{
+            ec{"Yakutat"}
+        }
+        "America:Yellowknife"{
+            ec{"Yellowknife"}
+        }
+        "Antarctica:Casey"{
+            ec{"Casey"}
+        }
+        "Antarctica:Davis"{
+            ec{"Davis"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont D'Urville"}
+        }
+        "Antarctica:Mawson"{
+            ec{"Mawson"}
+        }
+        "Antarctica:McMurdo"{
+            ec{"McMurdo"}
+        }
+        "Antarctica:Palmer"{
+            ec{"Palmer"}
+        }
+        "Antarctica:Rothera"{
+            ec{"Rothera"}
+        }
         "Antarctica:South_Pole"{
             ec{"Güney Kutbu"}
+        }
+        "Antarctica:Syowa"{
+            ec{"Syowa"}
+        }
+        "Antarctica:Vostok"{
+            ec{"Vostok"}
         }
         "Asia:Almaty"{
             ec{"Almatı"}
@@ -2360,6 +2704,9 @@ tr{
         "Asia:Chongqing"{
             ec{"Çunking"}
         }
+        "Asia:Harbin"{
+            ec{"Harbin"}
+        }
         "Asia:Hovd"{
             ec{"Kobdo"}
         }
@@ -2369,17 +2716,38 @@ tr{
         "Asia:Jakarta"{
             ec{"Cakarta"}
         }
+        "Asia:Jayapura"{
+            ec{"Jayapura"}
+        }
         "Asia:Kamchatka"{
             ec{"Kamçatka"}
         }
         "Asia:Kashgar"{
             ec{"Kaşgar"}
         }
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnoyarsk"}
+        }
         "Asia:Kuching"{
             ec{"Kuçing"}
         }
+        "Asia:Magadan"{
+            ec{"Magadan"}
+        }
+        "Asia:Makassar"{
+            ec{"Makassar"}
+        }
+        "Asia:Novosibirsk"{
+            ec{"Novosibirsk"}
+        }
+        "Asia:Omsk"{
+            ec{"Omsk"}
+        }
         "Asia:Oral"{
             ec{"Uralsk"}
+        }
+        "Asia:Pontianak"{
+            ec{"Pontianak"}
         }
         "Asia:Qyzylorda"{
             ec{"Kızılorda"}
@@ -2402,17 +2770,68 @@ tr{
         "Asia:Urumqi"{
             ec{"Urumçi"}
         }
+        "Asia:Vladivostok"{
+            ec{"Vladivostok"}
+        }
+        "Asia:Yakutsk"{
+            ec{"Yakutsk"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"Yekaterinburg"}
+        }
         "Atlantic:Azores"{
             ec{"Azor Adaları"}
         }
         "Atlantic:Canary"{
             ec{"Kanarya Adaları"}
         }
+        "Atlantic:Madeira"{
+            ec{"Madeira"}
+        }
+        "Australia:Adelaide"{
+            ec{"Adelaide"}
+        }
+        "Australia:Brisbane"{
+            ec{"Brisbane"}
+        }
+        "Australia:Broken_Hill"{
+            ec{"Broken Hill"}
+        }
+        "Australia:Currie"{
+            ec{"Currie"}
+        }
+        "Australia:Darwin"{
+            ec{"Darwin"}
+        }
+        "Australia:Eucla"{
+            ec{"Eucla"}
+        }
+        "Australia:Hobart"{
+            ec{"Hobart"}
+        }
+        "Australia:Lindeman"{
+            ec{"Lindeman"}
+        }
+        "Australia:Lord_Howe"{
+            ec{"Lord Howe"}
+        }
+        "Australia:Melbourne"{
+            ec{"Melbourne"}
+        }
+        "Australia:Perth"{
+            ec{"Perth"}
+        }
         "Australia:Sydney"{
             ec{"Sidney"}
         }
         "Etc:Unknown"{
             ec{"Bilinmeyen"}
+        }
+        "Europe:Kaliningrad"{
+            ec{"Kaliningrad"}
+        }
+        "Europe:Kiev"{
+            ec{"Kiev"}
         }
         "Europe:Lisbon"{
             ec{"Lizbon"}
@@ -2423,14 +2842,71 @@ tr{
         "Europe:Moscow"{
             ec{"Moskova"}
         }
+        "Europe:Samara"{
+            ec{"Samara"}
+        }
+        "Europe:Simferopol"{
+            ec{"Simferopol"}
+        }
         "Europe:Uzhgorod"{
             ec{"Ujgorod"}
+        }
+        "Europe:Volgograd"{
+            ec{"Volgograd"}
         }
         "Europe:Zaporozhye"{
             ec{"Zaporojye"}
         }
+        "Pacific:Chatham"{
+            ec{"Chatham"}
+        }
+        "Pacific:Easter"{
+            ec{"Easter"}
+        }
+        "Pacific:Enderbury"{
+            ec{"Enderbury"}
+        }
+        "Pacific:Galapagos"{
+            ec{"Galapagos"}
+        }
+        "Pacific:Gambier"{
+            ec{"Gambier"}
+        }
+        "Pacific:Honolulu"{
+            ec{"Honolulu"}
+        }
+        "Pacific:Johnston"{
+            ec{"Johnston"}
+        }
+        "Pacific:Kiritimati"{
+            ec{"Kiritimati"}
+        }
+        "Pacific:Kosrae"{
+            ec{"Kosrae"}
+        }
+        "Pacific:Kwajalein"{
+            ec{"Kwajalein"}
+        }
+        "Pacific:Majuro"{
+            ec{"Majuro"}
+        }
         "Pacific:Marquesas"{
             ec{"Markiz"}
+        }
+        "Pacific:Midway"{
+            ec{"Midway"}
+        }
+        "Pacific:Ponape"{
+            ec{"Ponape"}
+        }
+        "Pacific:Tarawa"{
+            ec{"Tarawa"}
+        }
+        "Pacific:Truk"{
+            ec{"Truk"}
+        }
+        "Pacific:Wake"{
+            ec{"Wake"}
         }
         "meta:Acre"{
             ld{"Acre Yaz Saati"}
@@ -2451,7 +2927,9 @@ tr{
             ss{"EAT"}
         }
         "meta:Africa_Southern"{
+            lg{"Güney Afrika Saati"}
             ls{"Güney Afrika Standart Saati"}
+            sg{"SAT"}
             ss{"SAST"}
         }
         "meta:Africa_Western"{
@@ -2476,9 +2954,15 @@ tr{
         }
         "meta:Alaska_Hawaii"{
             ld{"Alaska-Hawaii Yaz Saati"}
+            lg{"Alaska-Hawaii Saati"}
             ls{"Alaska-Hawaii Standart Saati"}
             sd{"AHDT"}
+            sg{"AHT"}
             ss{"AHST"}
+        }
+        "meta:Almaty"{
+            sd{"ALMST"}
+            ss{"ALMT"}
         }
         "meta:Amazon"{
             ld{"Amazon Yaz Saati"}
@@ -2541,6 +3025,7 @@ tr{
             lg{"Arap Saati"}
             ls{"Arap Standart Saati"}
             sd{"ADT (Arap)"}
+            sg{"AT (Arabistan)"}
             ss{"AST (Arap)"}
         }
         "meta:Argentina"{
@@ -2578,11 +3063,14 @@ tr{
             lg{"Orta Avustralya Saati"}
             ls{"Orta Avustralya Standart Saati"}
             sd{"ACDT"}
+            sg{"ACT"}
             ss{"ACST"}
         }
         "meta:Australia_CentralWestern"{
+            ld{"Avustralya Batı Merkezi Yaz Saati"}
             lg{"Orta Batı Saati"}
             ls{"Batı Merkezi Standart Saati"}
+            sd{"ACWDT"}
             sg{"CWT"}
             ss{"CWST"}
         }
@@ -2591,6 +3079,7 @@ tr{
             lg{"Doğu Avustralya Saati"}
             ls{"Doğu Avustralya Standart Saati"}
             sd{"AEDT"}
+            sg{"AET"}
             ss{"AEST"}
         }
         "meta:Australia_Western"{
@@ -2598,7 +3087,14 @@ tr{
             lg{"Batı Avustralya Saati"}
             ls{"Batı Avustralya Standart Saati"}
             sd{"AWDT"}
+            sg{"AWT"}
             ss{"AWST"}
+        }
+        "meta:Azerbaijan"{
+            ld{"Azerbaycan Yaz Saati"}
+            ls{"Azerbaycan Saati"}
+            sd{"AZST"}
+            ss{"AZT"}
         }
         "meta:Azores"{
             ld{"Azor Yaz Saati"}
@@ -2621,6 +3117,7 @@ tr{
             lg{"Bering Saati"}
             ls{"Bering Standart Saati"}
             sd{"BDT (Bering)"}
+            sg{"BT (Bering)"}
             ss{"BST (Bering)"}
         }
         "meta:Bhutan"{
@@ -2652,7 +3149,9 @@ tr{
             ss{"CVT"}
         }
         "meta:Chamorro"{
+            lg{"Chamorro Saati"}
             ls{"Chamorro Standart Saati"}
+            sg{"ChT"}
             ss{"ChST"}
         }
         "meta:Changbai"{
@@ -2673,8 +3172,10 @@ tr{
         }
         "meta:China"{
             ld{"Çin Yaz Saati"}
+            lg{"Çin Saati"}
             ls{"Çin Standart Saati"}
             sd{"CDT (Çin)"}
+            sg{"CT (Çin)"}
             ss{"CST (Çin)"}
         }
         "meta:Choibalsan"{
@@ -2836,6 +3337,7 @@ tr{
         }
         "meta:Gulf"{
             ls{"Gulf Standart Saati"}
+            sg{"GT"}
             ss{"GST"}
         }
         "meta:Guyana"{
@@ -2866,6 +3368,10 @@ tr{
             ls{"Hint Okyanusu Saati"}
             ss{"IOT"}
         }
+        "meta:Indochina"{
+            ls{"Çinhindi Saati"}
+            ss{"ICT"}
+        }
         "meta:Indonesia_Central"{
             ls{"Orta Endonezya Saati"}
             ss{"CIT"}
@@ -2892,12 +3398,14 @@ tr{
         }
         "meta:Israel"{
             ld{"İsrail Yaz Saati"}
+            lg{"İsrail Saati"}
             ls{"İsrail Standart Saati"}
             sd{"IDT"}
             ss{"IST (İsrail)"}
         }
         "meta:Japan"{
             ld{"Japonya Yaz Saati"}
+            lg{"Japonya Saati"}
             ls{"Japonya Standart Saati"}
             sd{"JDT"}
             ss{"JST"}
@@ -2935,6 +3443,7 @@ tr{
             lg{"Kore Saati"}
             ls{"Kore Standart Saati"}
             sd{"KDT"}
+            sg{"KT"}
             ss{"KST"}
         }
         "meta:Kosrae"{
@@ -2977,7 +3486,8 @@ tr{
             ld{"Lord Howe Yaz Saati"}
             lg{"Lord Howe Saati"}
             ls{"Lord Howe Standart Saati"}
-            ss{"LHDT"}
+            sd{"LHDT"}
+            ss{"LHST"}
         }
         "meta:Macau"{
             ld{"Makao Yaz Saati"}
@@ -3025,6 +3535,13 @@ tr{
             sd{"ULAST"}
             ss{"ULAT"}
         }
+        "meta:Moscow"{
+            ld{"Moskova Yaz Saati"}
+            lg{"Moskova Saati"}
+            ls{"Moskova Standart Saati"}
+            sd{"MSKS"}
+            ss{"MSK"}
+        }
         "meta:Myanmar"{
             ls{"Myanmar Saati"}
             ss{"MMT"}
@@ -3048,6 +3565,7 @@ tr{
             lg{"Yeni Zelanda Saati"}
             ls{"Yeni Zelanda Standart Saati"}
             sd{"NZDT"}
+            sg{"NZT"}
             ss{"NZST"}
         }
         "meta:Newfoundland"{

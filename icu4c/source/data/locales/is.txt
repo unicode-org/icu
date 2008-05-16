@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/is.xml
@@ -12,6 +12,8 @@
 is{
     AuxExemplarCharacters{"[c q w z]"}
     Countries{
+        001{"heimur"}
+        021{"Ameríka norðan Mexikó"}
         AD{"Andorra"}
         AE{"Sameinuðu arabísku furstadæmin"}
         AF{"Afganistan"}
@@ -88,7 +90,6 @@ is{
         GD{"Grenada"}
         GE{"Georgía"}
         GF{"Franska Gvæjana"}
-        GG{"Guernsey"}
         GH{"Gana"}
         GI{"Gíbraltar"}
         GL{"Grænland"}
@@ -117,7 +118,6 @@ is{
         IR{"Íran"}
         IS{"Ísland"}
         IT{"Ítalía"}
-        JE{"Jersey"}
         JM{"Jamaíka"}
         JO{"Jórdanía"}
         JP{"Japan"}
@@ -193,7 +193,6 @@ is{
         QA{"Katar"}
         RE{"Réunion"}
         RO{"Rúmenía"}
-        RS{"Serbía"}
         RU{"Rússland"}
         RW{"Rúanda"}
         SA{"Sádi-Arabía"}
@@ -1013,7 +1012,6 @@ is{
         el{"nýgríska (1453-)"}
         elx{"elamít"}
         en{"enska"}
-        en_US{"enska (BNA)"}
         enm{"miðenska (1100-1500)"}
         eo{"esperantó"}
         es{"spænska"}
@@ -1357,8 +1355,6 @@ is{
         zap{"sapótek"}
         zen{"senaga"}
         zh{"kínverska"}
-        zh_Hans{"kínverska (einfölduð)"}
-        zh_Hant{"kínverska (hefðbundin)"}
         znd{"sande"}
         zu{"súlú"}
         zun{"súní"}
@@ -1386,6 +1382,10 @@ is{
         "#,##0%",
         "#E0",
     }
+    Scripts{
+        Hani{"kínversk"}
+        Jpan{"japönsk"}
+    }
     Types{
         calendar{
             buddhist{"Búddískt dagatal"}
@@ -1404,7 +1404,7 @@ is{
             traditional{"Hefðbundin"}
         }
     }
-    Version{"1.77"}
+    Version{"1.128"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1516,11 +1516,5 @@ is{
                 }
             }
         }
-    }
-    delimiters{
-        alternateQuotationEnd{"‘"}
-        alternateQuotationStart{"‚"}
-        quotationEnd{"“"}
-        quotationStart{"„"}
     }
 }

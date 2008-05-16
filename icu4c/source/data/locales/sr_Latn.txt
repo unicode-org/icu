@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/sr_Latn.xml
@@ -702,7 +702,7 @@ sr_Latn{
             traditional{"Tradicionalno sortiranje"}
         }
     }
-    Version{"1.65"}
+    Version{"1.128"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1380,9 +1380,6 @@ sr_Latn{
         }
         "Europe:Moscow"{
             ec{"Moskva"}
-        }
-        "Europe:Sarajevo"{
-            ls{"Srednje Evropsko Vreme"}
         }
         "Europe:Uzhgorod"{
             ec{"Užgorod"}

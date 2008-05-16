@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/en_US_POSIX.xml
@@ -30,5 +30,5 @@ en_US_POSIX{
         "#0%",
         "0.000000E+000",
     }
-    Version{"1.52"}
+    Version{"1.128"}
 }

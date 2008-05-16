@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation
+ * Copyright (c) 1997-2008, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -327,8 +327,8 @@ void IntlCalendarTest::TestTaiwan() {
     };
     Calendar *cal;
     UErrorCode status = U_ZERO_ERROR;
-    cal = Calendar::createInstance("en_US@calendar=taiwan", status);
-    CHECK(status, UnicodeString("Creating en_US@calendar=taiwan calendar"));
+    cal = Calendar::createInstance("en_US@calendar=roc", status);
+    CHECK(status, UnicodeString("Creating en_US@calendar=roc calendar"));
 
     // Sanity check the calendar 
     UDate timeB = Calendar::getNow();

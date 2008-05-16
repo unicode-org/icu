@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fr_CA.xml
@@ -23,7 +23,11 @@ fr_CA{
         "#,##0 %",
         "#E0",
     }
-    Version{"1.50"}
+    PaperSize:intvector{
+        279,
+        216,
+    }
+    Version{"1.128"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -40,6 +44,33 @@ fr_CA{
                 "yyyy-MM-dd",
                 "yy-MM-dd",
                 "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                MEd{"EEE M-d"}
+                MMMEd{"E d MMM"}
+                MMMMEd{"EEE d MMMM"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                MMMdd{"dd MMM"}
+                MMd{"MM-d"}
+                MMdd{"MM-dd"}
+                Md{"M-d"}
+                d{"d"}
+                hhmm{"HH:mm"}
+                hhmmss{"HH:mm:ss"}
+                y{"yyyy"}
+                yM{"yyyy-MM"}
+                yMEd{"EEE yyyy-MM-dd"}
+                yMMM{"MMM yyyy"}
+                yMMMEd{"EEE d MMM yyyy"}
+                yMMMM{"MMMM yyyy"}
+                yyMM{"yy-MM"}
+                yyMMM{"MMM yy"}
+                yyMMMEEEd{"EEE d MMM yy"}
+                yyMMMd{"d MMM yy"}
+                yyyyMMMM{"MMMM yyyy"}
             }
         }
     }
@@ -64,6 +95,7 @@ fr_CA{
         }
         "meta:Europe_Central"{
             cu:int{0}
+            sg{"HEC"}
         }
         "meta:Europe_Eastern"{
             cu:int{0}

@@ -3,6 +3,9 @@ icu4c/license.html svneol=native#text/html
 icu4c/readme.html svneol=native#text/html
 icu4c/source/common/mutex.cpp -text
 icu4c/source/data/build.xml svneol=native#text/xml
+icu4c/source/data/coll/ur.txt -text
+icu4c/source/data/coll/ur_IN.txt -text
+icu4c/source/data/coll/ur_PK.txt -text
 icu4c/source/data/icu-config.xml svneol=native#text/xml
 icu4c/source/data/misc/metazoneInfo.txt svneol=native#text/plain
 icu4c/source/data/xml/brkitr/en.xml svneol=native#text/xml
@@ -74,6 +77,7 @@ icu4c/source/data/xml/collation/te.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/th.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/tr.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/uk.xml svneol=native#text/xml
+icu4c/source/data/xml/collation/ur.xml -text
 icu4c/source/data/xml/collation/vi.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/zh.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/zh_HK.xml svneol=native#text/xml

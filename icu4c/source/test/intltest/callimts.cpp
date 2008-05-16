@@ -151,7 +151,7 @@ CalendarLimitTest::TestLimits(void) {
         {"gregorian",       FALSE,      DEFAULT_START},
         {"japanese",        FALSE,      596937600000.0}, // 1988-12-01T00:00Z, Showa 63
         {"buddhist",        FALSE,      DEFAULT_START},
-        {"taiwan",          FALSE,      DEFAULT_START},
+        {"roc",             FALSE,      DEFAULT_START},
         {"persian",         FALSE,      DEFAULT_START},
         {"islamic-civil",   FALSE,      DEFAULT_START},
         //{"islamic",         FALSE,      DEFAULT_START}, // TODO: there is a bug in monthlength calculation

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/cs.xml
@@ -20,10 +20,12 @@ cs{
         014{"Východní Afrika"}
         015{"Severní Afrika"}
         017{"Střední Afrika"}
+        018{"Jižní Afrika"}
         019{"Amerika"}
         021{"Severní Amerika"}
         029{"Karibik"}
         030{"Východní Asie"}
+        034{"Jižní Asie"}
         035{"Jihovýchodní Asie"}
         039{"Jižní Evropa"}
         053{"Austrálie a Nový Zéland"}
@@ -32,12 +34,14 @@ cs{
         061{"Polynésie"}
         062{"Jižní a centrální Asie"}
         142{"Asie"}
+        143{"Střední Asie"}
         145{"Západní Asie"}
         150{"Evropa"}
         151{"Východní Evropa"}
         154{"Severní Evropa"}
         155{"Západní Evropa"}
         200{"Československo"}
+        419{"Latinská Amerika a Karibské moře"}
         830{"Normanské ostrovy"}
         AD{"Andorra"}
         AE{"Spojené arabské emiráty"}
@@ -110,7 +114,7 @@ cs{
         FI{"Finsko"}
         FJ{"Fidži"}
         FK{"Falklandské ostrovy"}
-        FM{"Mikronésie, federativní stát"}
+        FM{"Mikronézie"}
         FO{"Faerské ostrovy"}
         FR{"Francie"}
         GA{"Gabon"}
@@ -118,6 +122,7 @@ cs{
         GD{"Grenada"}
         GE{"Gruzie"}
         GF{"Francouzská Guyana"}
+        GG{"Guernsey"}
         GH{"Ghana"}
         GI{"Gibraltar"}
         GL{"Grónsko"}
@@ -147,6 +152,7 @@ cs{
         IR{"Írán"}
         IS{"Island"}
         IT{"Itálie"}
+        JE{"Jersey"}
         JM{"Jamajka"}
         JO{"Jordánsko"}
         JP{"Japonsko"}
@@ -175,13 +181,14 @@ cs{
         MA{"Maroko"}
         MC{"Monako"}
         MD{"Moldavsko, republika"}
+        ME{"Černá Hora"}
         MG{"Madagaskar"}
         MH{"Marshallovy ostrovy"}
         MK{"Macedonia"}
         ML{"Mali"}
         MM{"Myanmar"}
         MN{"Mongolsko"}
-        MO{"Macao S.A.R., China"}
+        MO{"Zvláštní administrativní oblast Číny Macao"}
         MP{"Severní Mariany"}
         MQ{"Martinik"}
         MR{"Mauritánie"}
@@ -222,8 +229,10 @@ cs{
         PY{"Paraguay"}
         QA{"Katar"}
         QO{"Vnější Oceánie"}
+        QU{"Evropská unie"}
         RE{"Réunion"}
         RO{"Rumunsko"}
+        RS{"Srbsko"}
         RU{"Rusko"}
         RW{"Rwanda"}
         SA{"Saúdská Arábie"}
@@ -281,6 +290,7 @@ cs{
         ZA{"Jihoafrická republika"}
         ZM{"Zambie"}
         ZW{"Zimbabwe"}
+        ZZ{"Neznámá nebo neplatná oblast"}
     }
     Currencies{
         ADP{
@@ -1279,6 +1289,7 @@ cs{
         bn{"bengálština"}
         bo{"tibetština"}
         br{"bretaňština"}
+        bs{"bosenština"}
         ca{"katalánština"}
         co{"korsičtina"}
         cs{"čeština"}
@@ -1288,6 +1299,9 @@ cs{
         dz{"bhútánština"}
         el{"řečtina"}
         en{"angličtina"}
+        en_AU{"angličtina (Austrálie)"}
+        en_GB{"angličtina (Velká Británie)"}
+        en_US{"angličtina (USA)"}
         eo{"esperanto"}
         es{"španělština"}
         et{"estonština"}
@@ -1346,6 +1360,7 @@ cs{
         my{"barmština"}
         na{"nauru"}
         ne{"nepálština"}
+        nl{"nizozemština"}
         no{"norština"}
         oc{"occitan"}
         om{"Oromo (Afan)"}
@@ -1354,6 +1369,8 @@ cs{
         pl{"polština"}
         ps{"Pashto (Pushto)"}
         pt{"portugalština"}
+        pt_BR{"portugalština (Brazílie)"}
+        pt_PT{"portugalština (Portugalsko)"}
         qu{"kečuánština"}
         rm{"rétorománština"}
         rn{"kirundi"}
@@ -1392,6 +1409,7 @@ cs{
         tw{"twi"}
         ug{"uighurština"}
         uk{"ukrajinština"}
+        und{"neznámý nebo neplatný jazyk"}
         ur{"urdština"}
         uz{"uzbečtina"}
         vi{"vietnamština"}
@@ -1402,6 +1420,8 @@ cs{
         yo{"yoruba"}
         za{"zhuang"}
         zh{"čínština"}
+        zh_Hans{"čínština (zjednodušená)"}
+        zh_Hant{"čínština (tradiční)"}
         zu{"zulu"}
     }
     LocaleScript{
@@ -1428,7 +1448,88 @@ cs{
         "#E0",
     }
     Scripts{
+        Arab{"Arabský"}
+        Armn{"Arménský"}
+        Bali{"Balijský"}
+        Batk{"Batacký"}
+        Beng{"Bengálský"}
+        Blis{"Bliss"}
+        Bopo{"Bopomofo"}
+        Brah{"Bráhmí"}
+        Brai{"Braillovo písmo"}
+        Bugi{"Buginský"}
+        Buhd{"Buhid"}
+        Cham{"Čam"}
+        Cher{"Čerokí"}
+        Cirt{"Cirth"}
+        Copt{"Koptský"}
+        Cyrl{"Cyrilice"}
+        Deva{"Devanágarí"}
+        Dsrt{"Deseret"}
+        Egyd{"Egyptský démotický"}
+        Egyh{"Egyptský hieratický"}
+        Egyp{"Egyptské hieroglyfy"}
+        Ethi{"Etiopský"}
+        Glag{"Hlaholice"}
+        Goth{"Gotický"}
+        Grek{"Řecký"}
+        Gujr{"Gudžarátí"}
+        Guru{"Gurmukhí"}
+        Hang{"Hangul"}
+        Hani{"Han"}
+        Hano{"Hanunoo"}
+        Hebr{"Hebrejský"}
+        Hira{"Hiragana"}
+        Hmng{"Hmongský"}
+        Hrkt{"Katakana nebo Hiragana"}
+        Hung{"Staromaďarský"}
+        Inds{"Harappský"}
+        Ital{"Etruský"}
+        Java{"Jávský"}
+        Jpan{"Japonský"}
+        Kali{"Kayah li"}
+        Kana{"Katakana"}
+        Khar{"Kháróští"}
+        Khmr{"Khmerský"}
+        Knda{"Kannadský"}
+        Laoo{"Laoský"}
         Latn{"Latinka"}
+        Lepc{"Lepčský"}
+        Lina{"Lineární A"}
+        Linb{"Lineární B"}
+        Mand{"Mandejský"}
+        Maya{"Mayské hieroglyfy"}
+        Mero{"Meroitický"}
+        Mlym{"Malajálamský"}
+        Mong{"Mongolský"}
+        Mymr{"Barmský"}
+        Ogam{"Ogham"}
+        Orkh{"Orchonský"}
+        Orya{"Urijský"}
+        Osma{"Osmanský"}
+        Perm{"Staropermský"}
+        Phnx{"Fénický"}
+        Plrd{"Pollardova fonetická abeceda"}
+        Roro{"Rongorongo"}
+        Runr{"Runové písmo"}
+        Sinh{"Sinhálský"}
+        Syrc{"Syrský"}
+        Tagb{"Tagbanwa"}
+        Taml{"Tamilský"}
+        Telu{"Telužský"}
+        Teng{"Tengwar"}
+        Tglg{"Tagalský"}
+        Thaa{"Thaana"}
+        Thai{"Thajský"}
+        Tibt{"Tibetský"}
+        Ugar{"Ugaritské klínové písmo"}
+        Vaii{"Vai"}
+        Visp{"Viditelná řeč"}
+        Xpeo{"Staroperské klínové písmo"}
+        Xsux{"Sumero-akkadské klínové písmo"}
+        Yiii{"Yi"}
+        Zyyy{"Obecný"}
+        Zzzz{"Neznámý nebo neplatný skript"}
     }
     Types{
         calendar{
@@ -1441,7 +1542,7 @@ cs{
             japanese{"Japonský kalendář"}
         }
     }
-    Version{"1.104"}
+    Version{"1.128"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1591,6 +1692,10 @@ cs{
         alternateQuotationStart{"‚"}
         quotationEnd{"“"}
         quotationStart{"„"}
+    }
+    measurementSystemNames{
+        US{"USA"}
+        metric{"Metrický"}
     }
     zoneStrings{
         "America:Cordoba"{

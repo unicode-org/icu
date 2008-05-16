@@ -85,14 +85,14 @@ static const char* const rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
     /* display language (French) */
     {   "anglais",  "fran\\u00E7ais",   "catalan", "grec",    "norv\\u00E9gien",    "chinois", "allemand", "espagnol", "japonais"     },
     /* display script code (French) */
-    {   "",     "",     "",     "",     "",     "id\\u00e9ogrammes han (variante simplifi\\u00e9e)", "", "", ""         },
+    {   "",     "",     "",     "",     "",     "id\\u00e9ogrammes han simplifi\\u00e9s", "", "", ""         },
     /* display country (French) */
     {   "\\u00C9tats-Unis",    "France",   "Espagne",  "Gr\\u00E8ce",   "Norv\\u00E8ge",    "Chine", "Allemagne", "", "Japon"       },
     /* display variant (French) */
     {   "",     "",     "",     "",     "NY",   "", "", "", ""       },
     /* display name (French) */
     {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "catalan (Espagne)", 
-        "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, NY)",  "chinois (id\\u00e9ogrammes han (variante simplifi\\u00e9e), Chine)", 
+        "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, NY)",  "chinois (id\\u00e9ogrammes han simplifi\\u00e9s, Chine)", 
         "allemand (Allemagne, Ordonnancement=Ordre de l\\u2019annuaire)", "espagnol (Ordonnancement=Ordre traditionnel)", "japonais (Japon, Calendrier=Calendrier japonais)" },
 
     /* display language (Catalan) */

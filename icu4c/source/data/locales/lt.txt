@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/lt.xml
@@ -14,8 +14,8 @@ lt{
     Countries{
         001{"Pasaulis"}
         002{"Afrika"}
+        003{"Šiaurės Amerika"}
         005{"Pietų Amerika"}
-        009{"Okeanija"}
         011{"Vakarų Afrika"}
         013{"Centrinė Amerika"}
         014{"Rytų Afrika"}
@@ -23,7 +23,6 @@ lt{
         017{"Vidurio Afrika"}
         018{"Pietų Afrika [018]"}
         019{"Amerika"}
-        021{"Šiaurės Amerika"}
         029{"Karibai"}
         030{"Rytų Azija"}
         034{"Pietų Azija"}
@@ -121,7 +120,6 @@ lt{
         GD{"Grenada"}
         GE{"Gruzija"}
         GF{"Prancūzijos Gviana"}
-        GG{"Guernsey"}
         GH{"Gana"}
         GI{"Gibraltaras"}
         GL{"Grenlandija"}
@@ -144,7 +142,6 @@ lt{
         ID{"Indonezija"}
         IE{"Airija"}
         IL{"Izraelis"}
-        IM{"Isle of Man"}
         IN{"Indija"}
         IO{"Indijos vandenyno britų sritis"}
         IQ{"Irakas"}
@@ -227,7 +224,6 @@ lt{
         PW{"Palau"}
         PY{"Paragvajus"}
         QA{"Kataras"}
-        RE{"Reunionas"}
         RO{"Rumunija"}
         RS{"Serbija"}
         RU{"Rusijos Federacija"}
@@ -287,6 +283,7 @@ lt{
         ZA{"Pietų Afrika"}
         ZM{"Zambija"}
         ZW{"Zimbabvė"}
+        ZZ{"Nežinoma ar neteisinga sritis"}
     }
     Currencies{
         BRL{
@@ -494,7 +491,7 @@ lt{
         Mong{"Mongolų"}
         Runr{"Runų"}
     }
-    Version{"1.86"}
+    Version{"1.128"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -790,9 +787,6 @@ lt{
         "America:Godthab"{
             ec{"Godthabas"}
         }
-        "America:Grand_Turk"{
-            ec{"Grand Terkas"}
-        }
         "America:Guatemala"{
             ec{"Gvatemala"}
         }
@@ -831,9 +825,6 @@ lt{
         }
         "America:Phoenix"{
             ec{"Fyniksas"}
-        }
-        "America:Port_of_Spain"{
-            ec{"Port of Speinas"}
         }
         "America:Puerto_Rico"{
             ec{"Puerto Rikas"}
@@ -934,9 +925,6 @@ lt{
         "Asia:Kuwait"{
             ec{"Kuveitas"}
         }
-        "Asia:Macau"{
-            ec{"Makao"}
-        }
         "Asia:Muscat"{
             ec{"Maskatas"}
         }
@@ -982,9 +970,6 @@ lt{
         "Atlantic:Bermuda"{
             ec{"Bermudų salos"}
         }
-        "Atlantic:Canary"{
-            ec{"Kanarų salos"}
-        }
         "Atlantic:Faeroe"{
             ec{"Farerai"}
         }
@@ -1023,9 +1008,6 @@ lt{
         }
         "Europe:Helsinki"{
             ec{"Helsinkis"}
-        }
-        "Europe:Istanbul"{
-            ec{"Stambulas"}
         }
         "Europe:Kiev"{
             ec{"Kijevas"}
@@ -1128,9 +1110,6 @@ lt{
         }
         "Pacific:Norfolk"{
             ec{"Norfolkas"}
-        }
-        "Pacific:Ponape"{
-            ec{"Ponapė"}
         }
         "Pacific:Saipan"{
             ec{"Saipanas"}

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/pt.xml
@@ -10,7 +10,6 @@
  *  ICU <specials> source: <path>/xml/main/pt.xml
  */
 pt{
-    AuxExemplarCharacters{"[ă å ä ā æ è ĕ ë ē ì ĭ î ï ī k ñ º ŏ ö ø ō œ ß ù ŭ û ū w y ÿ]"}
     Countries{
         001{"Mundo"}
         002{"África"}
@@ -20,19 +19,19 @@ pt{
         011{"África Ocidental"}
         013{"América Central"}
         014{"África Oriental"}
+        015{"África do Norte"}
         017{"África Central"}
         018{"África Austral"}
         019{"Américas"}
         021{"América Setentrional"}
         029{"Caribe"}
         030{"Ásia Oriental"}
-        035{"Ásia Oriental e do Sul"}
+        034{"Ásia do Sul"}
         039{"Europa do Sul"}
         053{"Austrália e Nova Zelândia"}
         054{"Melanésia"}
         057{"Região da Micronésia"}
         061{"Polinésia"}
-        062{"Ásia Central e do Sul"}
         142{"Ásia"}
         143{"Ásia Central"}
         145{"Ásia Ocidental"}
@@ -80,7 +79,7 @@ pt{
         BZ{"Belize"}
         CA{"Canadá"}
         CC{"Ilhas Cocos (Keeling)"}
-        CD{"Congo, República Democrática do"}
+        CD{"Congo-Kinshasa"}
         CF{"República Centro-Africana"}
         CG{"Congo"}
         CH{"Suíça"}
@@ -227,7 +226,6 @@ pt{
         PW{"Palau"}
         PY{"Paraguai"}
         QA{"Catar"}
-        QO{"Oceania Exterior"}
         QU{"União Européia"}
         RE{"Reunião"}
         RO{"Romênia"}
@@ -373,7 +371,7 @@ pt{
             "Franco belga (conversível)",
         }
         BEF{
-            "BF",
+            "BEF",
             "Franco belga",
         }
         BEL{
@@ -381,7 +379,7 @@ pt{
             "Franco belga (financeiro)",
         }
         BGL{
-            "lev",
+            "BGL",
             "Lev forte búlgaro",
         }
         BGN{
@@ -393,7 +391,7 @@ pt{
             "Dinar bareinita",
         }
         BIF{
-            "Fbu",
+            "BIF",
             "Franco do Burundi",
         }
         BMD{
@@ -476,17 +474,9 @@ pt{
             "CDF",
             "Franco congolês",
         }
-        CHE{
-            "CHE",
-            "Euro WIR",
-        }
         CHF{
             "CHF",
             "Franco suíço",
-        }
-        CHW{
-            "CHW",
-            "Franco WIR",
         }
         CLF{
             "CLF",
@@ -524,10 +514,6 @@ pt{
             "CVE",
             "Escudo cabo-verdiano",
         }
-        CZK{
-            "CZK",
-            "Coroa checa",
-        }
         DDM{
             "DDM",
             "Ostmark da Alemanha Oriental",
@@ -537,11 +523,11 @@ pt{
             "Marco alemão",
         }
         DJF{
-            "DF",
+            "DJF",
             "Franco do Djibuti",
         }
         DKK{
-            "DKr",
+            "DKK",
             "Coroa dinamarquesa",
         }
         DOP{
@@ -568,10 +554,6 @@ pt{
             "EGP",
             "Libra egípcia",
         }
-        EQE{
-            "EQE",
-            "Ekwele",
-        }
         ERN{
             "ERN",
             "Nakfa da Eritréia",
@@ -585,7 +567,7 @@ pt{
             "Peseta espanhola (conta conversível)",
         }
         ESP{
-            "₧",
+            "ESP",
             "Peseta espanhola",
         }
         ETB{
@@ -601,7 +583,7 @@ pt{
             "Marca finlandesa",
         }
         FJD{
-            "F$",
+            "FJD",
             "Dólar de Fiji",
         }
         FKP{
@@ -626,7 +608,7 @@ pt{
         }
         GHC{
             "GHC",
-            "Cedi de Gana",
+            "Cedi de Gana (1979-2007)",
         }
         GIP{
             "GIP",
@@ -637,16 +619,8 @@ pt{
             "Dalasi de Gâmbia",
         }
         GNF{
-            "GF",
+            "GNF",
             "Franco de Guiné",
-        }
-        GNS{
-            "GNS",
-            "Syli da Guiné",
-        }
-        GQE{
-            "GQE",
-            "Ekwele da Guiné Equatorial",
         }
         GRD{
             "GRD",
@@ -689,7 +663,7 @@ pt{
             "Gurde do Haiti",
         }
         HUF{
-            "Ft",
+            "HUF",
             "Forinte húngaro",
         }
         IDR{
@@ -697,7 +671,7 @@ pt{
             "Rupia indonésia",
         }
         IEP{
-            "IR£",
+            "IEP",
             "Libra irlandesa",
         }
         ILP{
@@ -709,7 +683,7 @@ pt{
             "Sheqel Novo israelita",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
+            "0≤Rs.|1≤Re.|1<Rs.",
             "Rúpia indiana",
         }
         IQD{
@@ -725,7 +699,7 @@ pt{
             "Coroa islandesa",
         }
         ITL{
-            "₤",
+            "IT₤",
             "Lira italiana",
         }
         JMD{
@@ -743,10 +717,6 @@ pt{
         KES{
             "KES",
             "Xelim queniano",
-        }
-        KGS{
-            "KGS",
-            "Som do Quirguistão",
         }
         KHR{
             "KHR",
@@ -780,21 +750,9 @@ pt{
             "LBP",
             "Libra libanesa",
         }
-        LKR{
-            "LKR",
-            "Rupia do Sri Lanka",
-        }
         LRD{
             "LRD",
             "Dólar liberiano",
-        }
-        LSL{
-            "LSL",
-            "Loti do Lesoto",
-        }
-        LSM{
-            "LSM",
-            "Maloti",
         }
         LTL{
             "LTL",
@@ -835,10 +793,6 @@ pt{
         MAF{
             "MAF",
             "Franco marroquino",
-        }
-        MDL{
-            "MDL",
-            "Leu da Moldávia",
         }
         MGA{
             "MGA",
@@ -896,14 +850,6 @@ pt{
             "MXN",
             "Peso mexicano",
         }
-        MXP{
-            "MXP",
-            "Peso Prata mexicano (1861-1992)",
-        }
-        MXV{
-            "MXV",
-            "Unidade de Investimento (UDI) mexicana",
-        }
         MYR{
             "MYR",
             "Ringgit malaio",
@@ -923,14 +869,6 @@ pt{
         NGN{
             "NGN",
             "Naira nigeriana",
-        }
-        NIO{
-            "NIO",
-            "Córdoba Ouro nicaraguense",
-        }
-        NLG{
-            "NLG",
-            "Florim holandês",
         }
         NOK{
             "NOK",
@@ -996,18 +934,6 @@ pt{
             "QAR",
             "Rial catariano",
         }
-        RHD{
-            "RHD",
-            "Dólar rodesiano",
-        }
-        RON{
-            "=RON" /** (choice)  */,
-            "Leu romeno",
-        }
-        RSD{
-            "RSD",
-            "Dinar sérvio",
-        }
         RUB{
             "RUB",
             "Rublo russo",
@@ -1068,12 +994,8 @@ pt{
             "SOS",
             "Xelim somali",
         }
-        SRG{
-            "Sf",
-            "Florim do Suriname",
-        }
         STD{
-            "Db",
+            "STD",
             "Dobra de São Tomé e Príncipe",
         }
         SUR{
@@ -1123,10 +1045,6 @@ pt{
         TRL{
             "TRL",
             "Lira turca",
-        }
-        TRY{
-            "TRY",
-            "Nova Lira turca",
         }
         TTD{
             "TTD",
@@ -1184,6 +1102,10 @@ pt{
             "VEB",
             "Bolívar venezuelano",
         }
+        VEF{
+            "VEF",
+            "Bolívar v enezuelano forte",
+        }
         VND{
             "đ",
             "Dong vietnamita",
@@ -1192,17 +1114,9 @@ pt{
             "VUV",
             "Vatu de Vanuatu",
         }
-        WST{
-            "WST",
-            "Tala da Samoa Ocidental",
-        }
         XAF{
             "XAF",
             "Franco CFA BEAC",
-        }
-        XAG{
-            "XAG",
-            "Prata",
         }
         XAU{
             "XAU",
@@ -1248,21 +1162,9 @@ pt{
             "XOF",
             "Franco CFA BCEAO",
         }
-        XPD{
-            "XPD",
-            "Paládio",
-        }
         XPF{
             "CFPF",
             "Franco CFP",
-        }
-        XPT{
-            "XPT",
-            "Platina",
-        }
-        XRE{
-            "XRE",
-            "Fundos RINET",
         }
         XTS{
             "XTS",
@@ -1332,24 +1234,21 @@ pt{
         ady{"adyghe"}
         ae{"avéstico"}
         af{"africâner"}
-        afa{"afro-asiático (outros)"}
+        afa{"Idioma afro-asiático"}
         afh{"Afrihili"}
-        ain{"ainu"}
         ak{"Akan"}
         akk{"acadiano"}
         ale{"aleúte"}
         alg{"idiomas algonquianos"}
-        alt{"altai do sul"}
         am{"amárico"}
         an{"aragonês"}
         ang{"inglês arcaico"}
-        anp{"angika"}
         apa{"idiomas apache"}
         ar{"árabe"}
         arc{"aramaico"}
         arn{"araucano"}
         arp{"arapaho"}
-        art{"artificiais (outros)"}
+        art{"Idioma artificial"}
         arw{"arauaqui"}
         as{"assamês"}
         ast{"asturiano"}
@@ -1365,7 +1264,7 @@ pt{
         bal{"balúchi"}
         ban{"balinês"}
         bas{"basa"}
-        bat{"bálticos (outros)"}
+        bat{"Idioma báltico"}
         be{"bielo-russo"}
         bej{"beja"}
         bem{"bemba"}
@@ -1390,13 +1289,12 @@ pt{
         byn{"Blin"}
         ca{"catalão"}
         cad{"caddo"}
-        cai{"indígenas centro-americanos (outros)"}
+        cai{"Idioma indígena centro-americano"}
         car{"caribe"}
-        cau{"caucasianos (outros)"}
-        cch{"atsam"}
+        cau{"Idioma caucásico"}
         ce{"checheno"}
         ceb{"cebuano"}
-        cel{"célticos (outros)"}
+        cel{"Idioma céltico"}
         ch{"chamorro"}
         chb{"chibcha"}
         chg{"chagatai"}
@@ -1407,15 +1305,14 @@ pt{
         chp{"chipewyan"}
         chr{"cheroqui"}
         chy{"cheiene"}
-        cmc{"idiomas chamic"}
         co{"córsico"}
         cop{"copta"}
-        cpe{"crioulos e pídgin, inglês (outros)"}
-        cpf{"crioulos e pídgin, francês (outros)"}
-        cpp{"crioulos e pídgin, português (outros)"}
+        cpe{"crioulo ou pidgin baseado no inglês"}
+        cpf{"crioulo ou pidgin baseado no francês"}
+        cpp{"crioulo ou pidgin baseado no português"}
         cr{"cree"}
-        crh{"turco da criméia; tártaro da criméia"}
-        crp{"crioulos e pídgins (outros)"}
+        crh{"turco da Criméia"}
+        crp{"crioulo ou pidgin"}
         cs{"tcheco"}
         csb{"kashubian"}
         cu{"eslavo eclesiástico"}
@@ -1432,7 +1329,7 @@ pt{
         dgr{"dogrib"}
         din{"dinka"}
         doi{"dogri"}
-        dra{"dravídicos (outros)"}
+        dra{"Idioma dravítico"}
         dsb{"sérvio baixo"}
         dua{"duala"}
         dum{"holandês medieval"}
@@ -1441,11 +1338,14 @@ pt{
         dz{"dzonga"}
         ee{"eve"}
         efi{"efique"}
-        egy{"egípcio (arcaico)"}
+        egy{"egípcio arcaico"}
         eka{"ekajuk"}
         el{"grego"}
         elx{"elamite"}
         en{"inglês"}
+        en_AU{"inglês australiano"}
+        en_GB{"inglês britânico"}
+        en_US{"inglês americano"}
         enm{"inglês medieval"}
         eo{"esperanto"}
         es{"espanhol"}
@@ -1459,15 +1359,14 @@ pt{
         ff{"fula"}
         fi{"finlandês"}
         fil{"filipino"}
-        fiu{"ugro-finês (outros)"}
+        fiu{"Idioma ugro-finês"}
         fj{"fijiano"}
         fo{"feroês"}
         fon{"fom"}
         fr{"francês"}
+        fr_CH{"francês suíço"}
         frm{"francês medieval"}
         fro{"francês arcaico"}
-        frr{"frisão do norte"}
-        frs{"frisão oriental"}
         fur{"friulano"}
         fy{"frisão"}
         ga{"irlandês"}
@@ -1475,7 +1374,7 @@ pt{
         gay{"gayo"}
         gba{"gbaia"}
         gd{"gaélico escocês"}
-        gem{"germânicos (outros)"}
+        gem{"Idioma germânico"}
         gez{"geez"}
         gil{"gilbertês"}
         gl{"galego"}
@@ -1487,7 +1386,7 @@ pt{
         got{"gótico"}
         grb{"Gerbo"}
         grc{"grego arcaico"}
-        gsw{"alemão (Suíça)"}
+        gsw{"alemão suíço"}
         gu{"guzerate"}
         gv{"manx"}
         ha{"hauçá"}
@@ -1513,11 +1412,10 @@ pt{
         ie{"interlingue"}
         ig{"ibo"}
         ii{"sichuan yi"}
-        ijo{"ijo"}
         ik{"inupiaque"}
         ilo{"ilocano"}
-        inc{"índicos (outros)"}
-        ine{"indo-europeus (outros)"}
+        inc{"Idioma índico"}
+        ine{"Idioma indo-europeu"}
         inh{"inguche"}
         io{"ido"}
         ira{"iraniano"}
@@ -1534,17 +1432,14 @@ pt{
         kaa{"kara-Kalpak"}
         kab{"kabyle"}
         kac{"kachin"}
-        kaj{"jju"}
         kam{"kamba"}
         kar{"karen"}
         kaw{"kawi"}
         kbd{"kabardiano"}
-        kcg{"tyap"}
-        kfo{"koro"}
         kg{"congolês"}
         kha{"khasi"}
         khi{"khoisan (outros)"}
-        kho{"khotanese"}
+        kho{"khotanês"}
         ki{"quicuio"}
         kj{"Kuanyama"}
         kk{"cazaque"}
@@ -1558,7 +1453,6 @@ pt{
         kpe{"kpelle"}
         kr{"canúri"}
         krc{"karachay-Balkar"}
-        krl{"careliano"}
         kro{"kru"}
         kru{"kurukh"}
         ks{"kashmiri"}
@@ -1585,7 +1479,6 @@ pt{
         lua{"luba-Lulua"}
         lui{"luiseno"}
         lun{"lunda"}
-        luo{"luo"}
         lus{"lushai"}
         lv{"letão"}
         mad{"madurês"}
@@ -1600,7 +1493,6 @@ pt{
         men{"mende"}
         mg{"malgaxe"}
         mga{"irlandês medieval"}
-        mh{"marshalês"}
         mi{"maori"}
         mic{"miquemaque"}
         min{"minangkabau"}
@@ -1611,7 +1503,6 @@ pt{
         mn{"mongol"}
         mnc{"manchu"}
         mni{"manipuri"}
-        mno{"idiomas manobo"}
         mo{"moldávio"}
         moh{"mohawk"}
         mos{"mossi"}
@@ -1621,14 +1512,13 @@ pt{
         mul{"idiomas múltiplos"}
         mun{"idiomas munda"}
         mus{"creek"}
-        mwl{"mirandês"}
         mwr{"marwari"}
         my{"birmanês"}
         myn{"maia"}
         myv{"erzya"}
         na{"nauruano"}
         nah{"náuatle"}
-        nai{"indígenas norte-americanos (outros)"}
+        nai{"Idioma indígena norte-americano"}
         nap{"napolitano"}
         nb{"bokmål norueguês"}
         nd{"ndebele do norte"}
@@ -1637,20 +1527,18 @@ pt{
         new{"newari"}
         ng{"dongo"}
         nia{"nias"}
-        nic{"Cordofano-nigeriano (outros)"}
+        nic{"Idioma cordofano-nigeriano"}
         niu{"niueano"}
         nl{"holandês"}
         nn{"nynorsk norueguês"}
         no{"norueguês"}
         nog{"nogai"}
         non{"nórdico arcaico"}
-        nqo{"n'ko"}
         nr{"ndebele do sul"}
         nso{"soto setentrional"}
         nub{"idiomas núbios"}
         nv{"navajo"}
-        nwc{"newari clássico"}
-        ny{"nianja; chicheua; cheua"}
+        ny{"nianja"}
         nym{"nyamwezi"}
         nyn{"nyankole"}
         nyo{"nyoro"}
@@ -1664,14 +1552,14 @@ pt{
         ota{"turco otomano"}
         oto{"idiomas otomanos"}
         pa{"panjabi"}
-        paa{"papuanos (outros)"}
+        paa{"Idioma papuano"}
         pag{"pangasinã"}
         pal{"pálavi"}
         pam{"pampanga"}
         pap{"papiamento"}
         pau{"palauano"}
         peo{"persa arcaico"}
-        phi{"filipinos (outros)"}
+        phi{"Idioma filipino"}
         phn{"fenício"}
         pi{"páli"}
         pl{"polonês"}
@@ -1680,6 +1568,8 @@ pt{
         pro{"provençal arcaico"}
         ps{"pashto"}
         pt{"português"}
+        pt_BR{"português do Brasil"}
+        pt_PT{"português ibérico"}
         qu{"quíchua"}
         raj{"rajastani"}
         rap{"rapanui"}
@@ -1687,16 +1577,14 @@ pt{
         rm{"reto-romano"}
         rn{"rundi"}
         ro{"romeno"}
-        roa{"romances (outros)"}
+        roa{"Idioma romântico"}
         rom{"romani"}
-        root{"root"}
         ru{"russo"}
-        rup{"aromeno"}
         rw{"kinyarwanda"}
         sa{"sânscrito"}
         sad{"sandawe"}
         sah{"iacuto"}
-        sai{"indígenas sul-americanos (outros)"}
+        sai{"Idioma indígeno sul-americano"}
         sal{"idiomas salisanos"}
         sam{"aramaico samaritano"}
         sas{"sasak"}
@@ -1707,7 +1595,7 @@ pt{
         sd{"sindi"}
         se{"sami do norte"}
         sel{"selkup"}
-        sem{"semíticos (outros)"}
+        sem{"Idioma semítico"}
         sg{"sango"}
         sga{"irlandês arcaico"}
         sgn{"linguagem de sinais"}
@@ -1716,27 +1604,20 @@ pt{
         si{"cingalês"}
         sid{"sidamo"}
         sio{"idiomas sioux"}
-        sit{"sino-tibetanos (outros)"}
+        sit{"Idioma sino-tibetano"}
         sk{"eslovaco"}
         sl{"esloveno"}
         sla{"idiomas eslavos"}
         sm{"samoano"}
-        sma{"sami do sul"}
-        smi{"outros idiomas sami"}
-        smj{"lule sami"}
-        smn{"inari sami"}
-        sms{"skolt sami"}
         sn{"shona"}
-        snk{"soninke"}
         so{"somali"}
         sog{"sogdien"}
         son{"songai"}
         sq{"albanês"}
         sr{"sérvio"}
-        srn{"sranan tongo"}
         srr{"serere"}
         ss{"swati"}
-        ssa{"nilo-saarianos (outros)"}
+        ssa{"Idioma nilo-saariano"}
         st{"soto do sul"}
         su{"sundanês"}
         suk{"sukuma"}
@@ -1746,7 +1627,7 @@ pt{
         sw{"suaíli"}
         syr{"siríaco"}
         ta{"tâmil"}
-        tai{"tai (outros)"}
+        tai{"Idioma tailandês"}
         te{"telugu"}
         tem{"timne"}
         ter{"tereno"}
@@ -1755,7 +1636,6 @@ pt{
         th{"tailandês"}
         ti{"tigrínia"}
         tig{"tigré"}
-        tiv{"tiv"}
         tk{"turcomano"}
         tkl{"toquelauano"}
         tl{"tagalog"}
@@ -1763,8 +1643,8 @@ pt{
         tli{"tlinguite"}
         tmh{"tamaxeque"}
         tn{"tswana"}
-        to{"tonga (ilhas tonga)"}
-        tog{"toganês (Nyasa)"}
+        to{"tonganês"}
+        tog{"tonganês de Nyasa"}
         tpi{"tok pisin"}
         tr{"turco"}
         ts{"tsonga"}
@@ -1772,7 +1652,7 @@ pt{
         tt{"tatar"}
         tum{"tumbuka"}
         tup{"idiomas tupi"}
-        tut{"altaicos (outros)"}
+        tut{"Idioma altaico"}
         tvl{"tuvaluano"}
         tw{"twi"}
         ty{"taitiano"}
@@ -1785,7 +1665,6 @@ pt{
         und{"indeterminado"}
         ur{"urdu"}
         uz{"usbeque"}
-        vai{"vai"}
         ve{"venda"}
         vi{"vietnamita"}
         vo{"volapuque"}
@@ -1814,7 +1693,6 @@ pt{
         zu{"zulu"}
         zun{"zunhi"}
         zxx{"sem conteúdo lingüístico"}
-        zza{"zaza"}
     }
     LocaleScript{
         "Latn",
@@ -1833,41 +1711,27 @@ pt{
         "NaN",
         "+",
     }
-    NumberPatterns{
-        "#,##0.###",
-        "¤#,##0.00;(¤#,##0.00)",
-        "#,##0%",
-        "#E0",
-    }
     Scripts{
         Arab{"árabe"}
         Armn{"armênio"}
         Bali{"balinês"}
-        Batk{"bataque"}
         Beng{"bengali"}
-        Blis{"símbolos bliss"}
         Bopo{"bopomofo"}
-        Brah{"brahmi"}
         Brai{"braile"}
-        Bugi{"buginês"}
         Buhd{"buhid"}
         Cans{"símbolos aborígenes do Canadá Unificado"}
-        Cham{"cham"}
+        Cari{"cariano"}
         Cher{"cheroqui"}
-        Cirt{"cirth"}
         Copt{"cóptico"}
         Cprt{"cipriota"}
         Cyrl{"cirílico"}
-        Cyrs{"cirílico eslavo eclesiástico"}
         Deva{"devanágari"}
         Dsrt{"deseret"}
         Egyd{"demótico egípcio"}
         Egyh{"hierático egípcio"}
         Egyp{"hieróglifos egípcios"}
         Ethi{"etiópico"}
-        Geok{"khutsuri georgiano"}
         Geor{"georgiano"}
-        Glag{"glagolítico"}
         Goth{"gótico"}
         Grek{"grego"}
         Gujr{"gujerati"}
@@ -1879,76 +1743,43 @@ pt{
         Hant{"han tradicional"}
         Hebr{"hebraico"}
         Hira{"hiragana"}
-        Hmng{"pahawh hmong"}
-        Hrkt{"katakana ou hiragana"}
-        Hung{"húngaro antigo"}
-        Inds{"indo"}
         Ital{"itálico antigo"}
         Java{"javanês"}
         Jpan{"japonês"}
-        Kali{"kayah li"}
         Kana{"katakana"}
-        Khar{"kharoshthi"}
         Khmr{"khmer"}
         Knda{"kannada"}
-        Lana{"lanna"}
         Laoo{"lao"}
-        Latf{"latim fraktur"}
         Latg{"latim gaélico"}
         Latn{"latim"}
-        Lepc{"lepcha"}
         Limb{"limbu"}
+        Lina{"A linear"}
         Linb{"b linear"}
         Lyci{"lício"}
         Lydi{"lídio"}
-        Mand{"mandaico"}
         Maya{"hieróglifos maias"}
-        Mero{"meroítico"}
         Mlym{"malaiala"}
         Mong{"mongol"}
-        Moon{"moon"}
-        Mtei{"meitei mayek"}
         Mymr{"myanmar"}
-        Nkoo{"n'ko"}
         Ogam{"ogâmico"}
-        Olck{"ol chiki"}
-        Orkh{"orkhon"}
         Orya{"oriya"}
-        Osma{"osmania"}
-        Phag{"phags-pa"}
         Phnx{"fenício"}
-        Plrd{"fonético pollard"}
         Qaai{"herdado"}
-        Rjng{"rejang"}
-        Roro{"rongorongo"}
         Runr{"rúnico"}
-        Sara{"sarati"}
-        Saur{"saurashtra"}
-        Sgnw{"signwriting"}
+        Samr{"samaritano"}
         Shaw{"shaviano"}
         Sinh{"cingalês"}
-        Sund{"sundanês"}
-        Sylo{"syloti nagri"}
         Syrc{"siríaco"}
-        Syre{"siríaco estrangelo"}
-        Syrj{"siríaco ocidental"}
         Syrn{"siríaco oriental"}
         Tagb{"tagbanwa"}
         Tale{"tai Le"}
-        Talu{"novo tai lue"}
         Taml{"tâmil"}
         Telu{"télugu"}
-        Teng{"tengwar"}
-        Tfng{"tifinagh"}
         Tglg{"tagalo"}
         Thaa{"thaana"}
         Thai{"tailandês"}
         Tibt{"tibetano"}
         Ugar{"ugarítico"}
-        Vaii{"vai"}
-        Visp{"visible speech"}
-        Xpeo{"persa antigo"}
-        Xsux{"sumero-acadiano cuneiforme"}
         Yiii{"yi"}
         Zxxx{"roteiro em branco"}
         Zyyy{"comum"}
@@ -1960,9 +1791,11 @@ pt{
             chinese{"Calendário Chinês"}
             gregorian{"Calendário Gregoriano"}
             hebrew{"Calendário Hebraico"}
+            indian{"Calendário Nacional Indiano"}
             islamic{"Calendário Islâmico"}
             islamic-civil{"Calendário Civil Islâmico"}
             japanese{"Calendário Japonês"}
+            roc{"Calendário da República da China"}
         }
         collation{
             big5han{"Ordem do Chinês Tradicional - Big5"}
@@ -1979,33 +1812,15 @@ pt{
         1996{"ortografia alemã de 1996"}
         AREVELA{"armênio oriental"}
         AREVMDA{"armênio ocidental"}
-        BOONT{"boontling"}
         FONIPA{"fonética do Alfabeto Fonético Internacional"}
         FONUPA{"fonética do Alfabeto Fonético Urálico"}
         MONOTON{"monotônico"}
-        NEDIS{"dialeto natisone"}
         POLYTON{"politônico"}
         POSIX{"computador"}
         REVISED{"Ortografia Revisada"}
-        ROZAJ{"resian"}
-        SAAHO{"saho"}
-        SCOUSE{"scouse"}
     }
-    Version{"1.91"}
+    Version{"1.128"}
     calendar{
-        buddhist{
-            DateTimePatterns{
-                "HH'h'mm'min'ss's' v",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, d 'de' MMMM 'de' yyyy G",
-                "d 'de' MMMM 'de' yyyy G",
-                "d 'de' MMMM 'de' yyyy G",
-                "d/M/yyyy",
-                "{1} {0}",
-            }
-        }
         gregorian{
             AmPmMarkers{
                 "AM",
@@ -2025,13 +1840,28 @@ pt{
             availableFormats{
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
+                MEd{"EEE, dd/MM"}
+                MMMEd{"EEE, d MMM"}
+                MMMMEd{"EEE, d MMMM"}
                 MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                MMdd{"dd/MM"}
                 Md{"d/M"}
+                d{"d"}
                 mmss{"mm:ss"}
+                y{"yyyy"}
+                yM{"MM/yyyy"}
+                yMEd{"EEE, dd/MM/yyyy"}
+                yMMM{"MMM 'de' yyyy"}
+                yMMMEd{"EEE, d 'de' MMM 'de' yyyy"}
+                yMMMM{"MMMM 'de' yyyy"}
                 yyMM{"MM/yy"}
                 yyMMM{"MMM yy"}
+                yyMMMEEEd{"EEE, d 'de' MMM 'de' yy"}
+                yyMMMd{"d 'de' MMM 'de' yy"}
                 yyQ{"Q yy"}
-                yyyyMMM{"MMM/yyyy"}
+                yyyyMM{"MM/yyyy"}
+                yyyyMMM{"MMM 'de' yyyy"}
             }
             dayNames{
                 format{
@@ -2197,8 +2027,8 @@ pt{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, d de MMMM de y G",
-                "d de MMMM de y G",
+                "EEEE, MMMM d, y G",
+                "MMMM d, y G",
                 "MMM d, y G",
                 "d/M/yy",
                 "{1} {0}",
@@ -2217,8 +2047,14 @@ pt{
         "America:Araguaina"{
             ec{"Araguaína"}
         }
+        "America:Bahia"{
+            ec{"Bahia"}
+        }
         "America:Belem"{
             ec{"Belém"}
+        }
+        "America:Boa_Vista"{
+            ec{"Boa Vista"}
         }
         "America:Cancun"{
             ec{"Cancún"}
@@ -2249,6 +2085,9 @@ pt{
         }
         "America:North_Dakota:Center"{
             ec{"Central"}
+        }
+        "America:Rio_Branco"{
+            ec{"Rio Branco"}
         }
         "America:Sao_Paulo"{
             ec{"São Paulo"}
@@ -2324,55 +2163,35 @@ pt{
         }
         "meta:Africa_Southern"{
             ls{"Horário Padrão da África do Sul"}
-            ss{"SAST"}
         }
         "meta:Africa_Western"{
             ld{"Horário de Verão da África Ocidental"}
             ls{"Horário da África Ocidental"}
-            sd{"WAST"}
-            ss{"WAT"}
-        }
-        "meta:Aktyubinsk"{
-            ld{"Horário de Verão de Aktyubinsk"}
-            ls{"Horário de Aktyubinsk"}
-            sd{"AKTST"}
-            ss{"AKTT"}
         }
         "meta:Alaska"{
             ld{"Horário de Verão do Alasca"}
             lg{"Horário do Alaska"}
             ls{"Horário Padrão do Alasca"}
-            sd{"AKDT"}
-            sg{"AKT"}
-            ss{"AKST"}
         }
         "meta:Alaska_Hawaii"{
             ld{"Horário de Verão do Alaska-Havaí"}
             ls{"Horário Padrão do Alaska-Havaí"}
-            sd{"AHDT"}
-            ss{"AHST"}
         }
         "meta:Amazon"{
             cu:int{1}
             ld{"Horário de Verão do Amazonas"}
             ls{"Horário do Amazonas"}
-            sd{"AMST"}
-            ss{"AMT"}
         }
         "meta:America_Central"{
             ld{"Horário de Verão Central"}
-            lg{"Horário Central"}
             ls{"Horário Padrão Central"}
             sd{"CDT"}
-            sg{"CT"}
             ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"Horário de Verão Oriental"}
-            lg{"Horário Oriental"}
             ls{"Horário Padrão Oriental"}
             sd{"EDT"}
-            sg{"ET"}
             ss{"EST"}
         }
         "meta:America_Mountain"{
@@ -2380,7 +2199,6 @@ pt{
             lg{"Horário da Montanha"}
             ls{"Horário Padrão da Montanha"}
             sd{"MDT"}
-            sg{"MT"}
             ss{"MST"}
         }
         "meta:America_Pacific"{
@@ -2390,161 +2208,51 @@ pt{
             sd{"PDT"}
             ss{"PST"}
         }
-        "meta:Aqtau"{
-            ld{"Horário de Verão de Aqtau"}
-            sd{"AQTST (Aqtau)"}
-            ss{"AQTT (Aqtau)"}
-        }
-        "meta:Aqtobe"{
-            ld{"Horário de Verão de Aqtobe"}
-            ls{"Horário de Aqtobe"}
-            sd{"AQTST (Aqtobe)"}
-            ss{"AQTT (Aqtobe)"}
-        }
-        "meta:Arabian"{
-            ld{"Horário de Verão Árabe"}
-            lg{"Horário Árabe"}
-            ls{"Horário Padrão Árabe"}
-            sd{"ADT (Árabe)"}
-            ss{"AST (Árabe)"}
-        }
         "meta:Argentina"{
             ld{"Horário de Verão da Argentina"}
             ls{"Horário da Argentina"}
-            sd{"ARST"}
-            ss{"ART"}
         }
         "meta:Argentina_Western"{
             ls{"Horário da Argentina Ocidental"}
-            ss{"WART"}
         }
         "meta:Armenia"{
             ld{"Horário de Verão da Armênia"}
             ls{"Horário da Armênia"}
-            sd{"AMST (Armênia)"}
-            ss{"AMT (Armênia)"}
-        }
-        "meta:Ashkhabad"{
-            ld{"Horário de Verão de Ashkhabad"}
-            ls{"Horário de Ashkhabad"}
-            sd{"ASHST"}
-            ss{"ASHT"}
         }
         "meta:Atlantic"{
             ld{"Horário de Verão do Atlântico"}
             lg{"Horário do Atlântico"}
             ls{"Horário Padrão do Atlântico"}
             sd{"ADT"}
-            sg{"AT"}
             ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"Horário de Verão da Austrália Central"}
             lg{"Horário da Austrália Central"}
             ls{"Horário Padrão da Austrália Central"}
-            sd{"ACDT"}
-            ss{"ACST (Austrália)"}
         }
         "meta:Australia_Eastern"{
             ld{"Horário de Verão da Austrália Oriental"}
             lg{"Horário da Austrália Oriental"}
             ls{"Horário Padrão da Austrália Oriental"}
-            sd{"AEDT"}
-            ss{"AEST"}
         }
         "meta:Australia_Western"{
             ld{"Horário de Verão da Austrália Ocidental"}
-            lg{"Horário da Austrália Ocidental"}
-            ls{"Horário Padrão da Austrália Ocidental"}
-            sd{"AWDT"}
-            ss{"AWST"}
-        }
-        "meta:Azores"{
-            ld{"Horário de Verão de Açores"}
-            ls{"Horário de Açores"}
-            sd{"AZOST"}
-            ss{"AZOT"}
-        }
-        "meta:Baku"{
-            ld{"Horário de Verão de Baku"}
-            ls{"Horário de Baku"}
-            sd{"BAKST"}
-            ss{"BAKT"}
-        }
-        "meta:Bangladesh"{
-            ls{"Horário de Bangladesh"}
-            ss{"BDT"}
-        }
-        "meta:Bering"{
-            ld{"Horário de Verão de Bering"}
-            lg{"Horário de Bering"}
-            ls{"Horário Padrão de Bering"}
-            sd{"BDT (Bering)"}
-            ss{"BST (Bering)"}
-        }
-        "meta:Bhutan"{
-            ls{"Horário de Bhutan"}
-            ss{"BTT"}
-        }
-        "meta:Borneo"{
-            ld{"Horário de Verão de Bornéo"}
-            ls{"Horário de Bornéo"}
-            sd{"BORST"}
-            ss{"BORT"}
         }
         "meta:Brasilia"{
             cu:int{1}
-            ld{"Horário de Verão de Brasília"}
-            ls{"Horário de Brasília"}
             sd{"BRST"}
             ss{"BRT"}
-        }
-        "meta:Chamorro"{
-            ls{"Horário Padrão de Chamorro"}
-            ss{"ChST"}
-        }
-        "meta:Changbai"{
-            ls{"Horário de Changbai"}
-            ss{"CHAT"}
-        }
-        "meta:Chile"{
-            ld{"Horário de Verão do Chile"}
-            ls{"Horário do Chile"}
-            sd{"CLST"}
-            ss{"CLT"}
         }
         "meta:China"{
             ld{"Horário de Verão da China"}
             ls{"Horário Padrão da China"}
-            sd{"CDT (China)"}
-            ss{"CST (China)"}
-        }
-        "meta:Choibalsan"{
-            ld{"Horário de Verão de Choibalsan"}
-            ls{"Horário de Choibalsan"}
-            sd{"CHOST"}
-            ss{"CHOT"}
-        }
-        "meta:Dacca"{
-            ls{"Horário de Dacca"}
-            ss{"DACT"}
-        }
-        "meta:Dushanbe"{
-            ld{"Horário de Verão de Dushanbe"}
-            ls{"Horário de Dushanbe"}
-            sd{"DUSST"}
-            ss{"DUST"}
-        }
-        "meta:Dutch_Guiana"{
-            ss{"NEGT"}
         }
         "meta:East_Timor"{
             ls{"Horário do Timor do Leste"}
-            ss{"TLT"}
         }
         "meta:Ecuador"{
             ls{"Horário do Equador"}
-            ss{"ACT"}
         }
         "meta:Europe_Central"{
             ld{"Horário de Verão da Europa Central"}
@@ -2561,75 +2269,27 @@ pt{
         "meta:Europe_Western"{
             ld{"Horário de Verão da Europa Ocidental"}
             ls{"Horário da Europa Ocidental"}
-            sd{"WEST"}
-            ss{"WET"}
-        }
-        "meta:Frunze"{
-            ld{"Horário de Verão de Frunze"}
-            ls{"Horário de Frunze"}
-            sd{"FRUST"}
-            ss{"FRUT"}
         }
         "meta:GMT"{
-            cu:int{1}
             ls{"Horário do Meridiano de Greenwich"}
             ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Horário de Galápagos"}
-            ss{"GALT"}
         }
         "meta:Georgia"{
             ld{"Horário de Verão da Georgia"}
             ls{"Horário da Georgia"}
-            sd{"GEST"}
-            ss{"GET"}
         }
         "meta:Greenland_Central"{
             ld{"Horário de Verão da Groenlândia Central"}
-            ls{"Horário da Groenlândia Central"}
-            sd{"CGST"}
-            ss{"CGT"}
-        }
-        "meta:Greenland_Eastern"{
-            ld{"Horário de Verão da Groenlândia do Leste"}
-            ls{"Horário da Groenlândia do Leste"}
-            sd{"EGST"}
-            ss{"EGT"}
         }
         "meta:Greenland_Western"{
             ld{"Horário de Verão da Groenlândia Ocidental"}
             ls{"Horário da Groenlândia Ocidental"}
-            sd{"WGST"}
-            ss{"WGT"}
-        }
-        "meta:Guam"{
-            ls{"Horário Padrão de Guam"}
-            ss{"GST (Guam)"}
-        }
-        "meta:Gulf"{
-            ls{"Horário Padrão de Gulf"}
-            ss{"GST"}
-        }
-        "meta:Hawaii_Aleutian"{
-            ls{"Horário Padrão do Havaí-Aleuta"}
-            ss{"HST"}
         }
         "meta:India"{
             ls{"Horário Padrão da Índia"}
-            ss{"IST"}
-        }
-        "meta:Indonesia_Central"{
-            ls{"Horário Central da Indonésia"}
-            ss{"CIT"}
-        }
-        "meta:Indonesia_Eastern"{
-            ls{"Horário da Indonésia Oriental"}
-            ss{"EIT"}
-        }
-        "meta:Indonesia_Western"{
-            ls{"Horário da indonésia Ocidental"}
-            ss{"WIT"}
         }
         "meta:Israel"{
             ld{"Horário de Verão de Israel"}
@@ -2643,222 +2303,32 @@ pt{
             sd{"JDT"}
             ss{"JST"}
         }
-        "meta:Karachi"{
-            ls{"Horário de Karachi"}
-            ss{"KART"}
-        }
-        "meta:Kashgar"{
-            ls{"Horário de Kashgar"}
-            ss{"KAST"}
-        }
-        "meta:Kazakhstan_Eastern"{
-            ls{"Horário Padrão do Cazaquistão do Leste"}
-            ss{"EKST"}
-        }
-        "meta:Kazakhstan_Western"{
-            ls{"Horário do Cazaquistão Ocidental"}
-            ss{"WKST"}
-        }
-        "meta:Kizilorda"{
-            ld{"Horário de Verão de Kizilorda"}
-            ls{"Horário de Kizilorda"}
-            sd{"KIZST"}
-            ss{"KIZT"}
-        }
-        "meta:Korea"{
-            ld{"Horário de Verão da Coréia"}
-            lg{"Horário da Coréia"}
-            ls{"Horário Padrão da Coréia"}
-            sd{"KDT"}
-            ss{"KST"}
-        }
-        "meta:Kuybyshev"{
-            ld{"Horário de Verão de Kuybyshev"}
-            ls{"Horário de Kuybyshev"}
-            sd{"KUYST"}
-            ss{"KUYT"}
-        }
-        "meta:Kwajalein"{
-            ls{"Horário de Kwajalein"}
-            ss{"KWAT"}
-        }
-        "meta:Kyrgystan"{
-            ls{"Horário de Kyrgystan"}
-        }
-        "meta:Lanka"{
-            ls{"Horário de Lanka"}
-            ss{"LKT"}
-        }
-        "meta:Long_Shu"{
-            ls{"Horário de Long-Shu"}
-            ss{"LONT"}
-        }
-        "meta:Lord_Howe"{
-            ld{"Horário de Verão de Lord Howe"}
-            lg{"Horário de Lord Howe"}
-            ls{"Horário Padrão de Lord Howe"}
-            ss{"LHDT"}
-        }
         "meta:Macau"{
             ld{"Horário de Verão de Macau"}
             ls{"Horário de Macau"}
-            sd{"MOST"}
-            ss{"MOT"}
-        }
-        "meta:Malaya"{
-            ls{"Horário de Malaia"}
-            ss{"MALT"}
-        }
-        "meta:Malaysia"{
-            ls{"Horário de Malásia"}
-            ss{"MYT"}
-        }
-        "meta:Marshall_Islands"{
-            ls{"Horário das Ilhas Marshall"}
-            ss{"MHT"}
-        }
-        "meta:Mongolia"{
-            ld{"Horário de Verão de Ulan Bator"}
-            ls{"Horário de Ulan Bator"}
-            sd{"ULAST"}
-            ss{"ULAT"}
         }
         "meta:New_Zealand"{
             ld{"Horário de Verão da Nova Zelândia"}
             lg{"Horário da Nova Zelândia"}
             ls{"Horário Padrão da Nova Zelândia"}
-            sd{"NZDT"}
-            ss{"NZST"}
         }
         "meta:Newfoundland"{
             ld{"Horário de Verão de Terra Nova"}
-            lg{"Horário de Terra Nova"}
             ls{"Horário Padrão de Terra Nova"}
             sd{"NDT"}
-            sg{"NT"}
             ss{"NST"}
-        }
-        "meta:North_Mariana"{
-            ls{"Horário das Ilhas Mariana do Norte"}
-            ss{"MPT"}
         }
         "meta:Pakistan"{
             ld{"Horário de Verão do Paquistão"}
             ls{"Horário do Paquistão"}
-            sd{"PKST"}
-            ss{"PKT"}
-        }
-        "meta:Pierre_Miquelon"{
-            ld{"Horário de Verão de S. Pedro e Miquelão"}
-            lg{"Horário de S. Pedro e Miquelão"}
-            ls{"Horário Padrão de S. Pedro e Miquelão"}
-            sd{"PMDT"}
-            ss{"PMST"}
-        }
-        "meta:Qyzylorda"{
-            ld{"Horário de Verão de Qyzylorda"}
-            ls{"Horário de Qyzylorda"}
-            sd{"QYZST"}
-            ss{"QYZT"}
-        }
-        "meta:Samara"{
-            ld{"Horário de Verão de Samara"}
-            ls{"Horário de Samara"}
-            sd{"SAMST"}
-            ss{"SAMT"}
-        }
-        "meta:Samarkand"{
-            ld{"Horário de Verão de Samarkand"}
-            ls{"Horário de Samarkand"}
-            sd{"SAMST (Samarkand)"}
-            ss{"SAMT (Samarkand)"}
-        }
-        "meta:Samoa"{
-            ls{"Horário Padrão de Samoa"}
-            ss{"SST"}
-        }
-        "meta:Shevchenko"{
-            ld{"Horário de Verão de Shevchenko"}
-            ls{"Horáro de Shevchenko"}
-            sd{"SHEST"}
-            ss{"SHET"}
-        }
-        "meta:Suriname"{
-            ls{"Horário do Suriname"}
-            ss{"SRT"}
-        }
-        "meta:Sverdlovsk"{
-            ld{"Horário de Verão de Sverdlovsk"}
-            ls{"Horário de Sverdlovsk"}
-            sd{"SVEST"}
-            ss{"SVET"}
-        }
-        "meta:Tajikistan"{
-            ls{"Horário de Tajikistan"}
-            ss{"TJT"}
-        }
-        "meta:Tashkent"{
-            ld{"Horário de Verão de Tashkent"}
-            ls{"Horário de Tashkent"}
-            sd{"TASST"}
-            ss{"TAST"}
-        }
-        "meta:Tbilisi"{
-            ld{"Horário de Verão de Tbilisi"}
-            ls{"Horário de Tbilisi"}
-            sd{"TBIST"}
-            ss{"TBIT"}
         }
         "meta:Turkey"{
             ld{"Horário de Verão da Turquia"}
             ls{"Horário da Turquia"}
-            sd{"TRST"}
-            ss{"TRT"}
-        }
-        "meta:Turkmenistan"{
-            ld{"Horário de Verão do Turquemenistão"}
-            ls{"Horário do Turquemenistão"}
-            sd{"TMST"}
-            ss{"TMT"}
-        }
-        "meta:Uralsk"{
-            ld{"Horário de Verão de Ural'sk"}
-            ls{"Horário de Ural'sk"}
-            sd{"URAST"}
-            ss{"URAT"}
-        }
-        "meta:Urumqi"{
-            ls{"Horário de Urumqi"}
-            ss{"URUT"}
         }
         "meta:Uzbekistan"{
-            ld{"Horário de Verão do Uzbequistão"}
             ls{"Horário do Uzbequistão"}
-            sd{"UZST"}
-            ss{"UZT"}
         }
-        "meta:Yekaterinburg"{
-            ld{"Horário de Verão de Yekaterinburg"}
-            ls{"Horário de Yekaterinburg"}
-            sd{"YEKST"}
-            ss{"YEKT"}
-        }
-        "meta:Yerevan"{
-            ld{"Horário de Verão de Yerevan"}
-            ls{"Horário de Yerevan"}
-            sd{"YERST"}
-            ss{"YERT"}
-        }
-        "meta:Yukon"{
-            ld{"Horário de Verão de Yukon"}
-            lg{"Horário de Yukon"}
-            ls{"Horário Padrão de Yukon"}
-            sd{"YDT"}
-            sg{"YT"}
-            ss{"YST"}
-        }
-        gmtFormat{"GMT{0}"}
-        hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Horário {0}"}
     }
 }

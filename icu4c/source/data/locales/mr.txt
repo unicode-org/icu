@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2007 International Business Machines
+// * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/mr.xml
@@ -175,7 +175,7 @@ mr{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.63"}
+    Version{"1.128"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -214,7 +214,7 @@ mr{
                 format{
                     abbreviated{
                         "जानेवारी",
-                        "फेबृवारी",
+                        "फेब्रुवारी",
                         "मार्च",
                         "एप्रिल",
                         "मे",
@@ -228,7 +228,7 @@ mr{
                     }
                     wide{
                         "जानेवारी",
-                        "फेबृवारी",
+                        "फेब्रुवारी",
                         "मार्च",
                         "एप्रिल",
                         "मे",
