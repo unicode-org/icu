@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999-2007, International Business Machines
+#   Copyright (C) 1999-2008, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -67,7 +67,7 @@ playout.o \
 plruns.o
 
 ## Header files to install
-HEADERS= $(srcdir)/layout/ParagraphLayout.h $(srcdir)/layout/RunArrays.h
+HEADERS= $(srcdir)/layout/ParagraphLayout.h $(srcdir)/layout/RunArrays.h $(srcdir)/layout/playout.h $(srcdir)/layout/plruns.h
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
