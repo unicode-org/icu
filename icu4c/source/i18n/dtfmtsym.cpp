@@ -1368,11 +1368,15 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
                 // For now, append "ss" to the end.
                 if (fGmtHourFormats[GMT_NEGATIVE_HM].indexOf((UChar)0x003A /* ':' */) != -1) {
                     fGmtHourFormats[GMT_NEGATIVE_HMS] = fGmtHourFormats[GMT_NEGATIVE_HM] + UNICODE_STRING_SIMPLE(":ss");
+                } else if (fGmtHourFormats[GMT_NEGATIVE_HM].indexOf((UChar)0x002E /* '.' */) != -1) {
+                    fGmtHourFormats[GMT_NEGATIVE_HMS] = fGmtHourFormats[GMT_NEGATIVE_HM] + UNICODE_STRING_SIMPLE(".ss");
                 } else {
                     fGmtHourFormats[GMT_NEGATIVE_HMS] = fGmtHourFormats[GMT_NEGATIVE_HM] + UNICODE_STRING_SIMPLE("ss");
                 }
                 if (fGmtHourFormats[GMT_POSITIVE_HM].indexOf((UChar)0x003A /* ':' */) != -1) {
                     fGmtHourFormats[GMT_POSITIVE_HMS] = fGmtHourFormats[GMT_POSITIVE_HM] + UNICODE_STRING_SIMPLE(":ss");
+                } else if (fGmtHourFormats[GMT_POSITIVE_HM].indexOf((UChar)0x002E /* '.' */) != -1) {
+                    fGmtHourFormats[GMT_POSITIVE_HMS] = fGmtHourFormats[GMT_POSITIVE_HM] + UNICODE_STRING_SIMPLE(".ss");
                 } else {
                     fGmtHourFormats[GMT_POSITIVE_HMS] = fGmtHourFormats[GMT_POSITIVE_HM] + UNICODE_STRING_SIMPLE("ss");
                 }
