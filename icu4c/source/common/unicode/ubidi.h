@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -1403,8 +1403,12 @@ ubidi_countRuns(UBiDi *pBiDi, UErrorCode *pErrorCode);
  * </pre>
  *
  * Note that in right-to-left runs, code like this places
- * modifier letters before base characters and second surrogates
- * before first ones.
+ * second surrogates before first ones (which is generally a bad idea)
+ * and combining characters before base characters.
+ * <p>
+ * Use of <code>ubidi_writeReordered()</code>, optionally with the
+ * <code>#UBIDI_KEEP_BASE_COMBINING</code> option, can be considered in order
+ * to avoid these issues.
  * @stable ICU 2.0
  */
 U_STABLE UBiDiDirection U_EXPORT2
@@ -1429,8 +1433,11 @@ ubidi_getVisualRun(UBiDi *pBiDi, int32_t runIndex,
  * such as <code>UBIDI_OPTION_INSERT_MARKS</code> and <code>UBIDI_OPTION_REMOVE_CONTROLS</code>.
  * <p>
  * Note that in right-to-left runs, this mapping places
- * modifier letters before base characters and second surrogates
- * before first ones.
+ * second surrogates before first ones (which is generally a bad idea)
+ * and combining characters before base characters.
+ * Use of <code>ubidi_writeReordered()</code>, optionally with the
+ * <code>#UBIDI_KEEP_BASE_COMBINING</code> option can be considered instead
+ * of using the mapping, in order to avoid these issues.
  *
  * @param pBiDi is the paragraph or line <code>UBiDi</code> object.
  *
@@ -1497,6 +1504,13 @@ ubidi_getLogicalIndex(UBiDi *pBiDi, int32_t visualIndex, UErrorCode *pErrorCode)
  * <code>UBIDI_REMOVE_BIDI_CONTROLS</code>, the visual positions returned may not
  * be correct. It is advised to use, when possible, reordering options
  * such as <code>UBIDI_OPTION_INSERT_MARKS</code> and <code>UBIDI_OPTION_REMOVE_CONTROLS</code>.
+ * <p>
+ * Note that in right-to-left runs, this mapping places
+ * second surrogates before first ones (which is generally a bad idea)
+ * and combining characters before base characters.
+ * Use of <code>ubidi_writeReordered()</code>, optionally with the
+ * <code>#UBIDI_KEEP_BASE_COMBINING</code> option can be considered instead
+ * of using the mapping, in order to avoid these issues.
  *
  * @param pBiDi is the paragraph or line <code>UBiDi</code> object.
  *
@@ -1878,7 +1892,7 @@ ubidi_getClassCallback(UBiDi *pBiDi, UBiDiClassCallback **fn, const void **conte
  * destination buffer.
  *
  * This function preserves the integrity of characters with multiple
- * code units and (optionally) modifier letters.
+ * code units and (optionally) combining characters.
  * Characters in RTL runs can be replaced by mirror-image characters
  * in the destination buffer. Note that "real" mirroring has
  * to be done in a rendering engine by glyph selection
@@ -1945,7 +1959,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
  * Reverse a Right-To-Left run of Unicode text.
  *
  * This function preserves the integrity of characters with multiple
- * code units and (optionally) modifier letters.
+ * code units and (optionally) combining characters.
  * Characters can be replaced by mirror-image characters
  * in the destination buffer. Note that "real" mirroring has
  * to be done in a rendering engine by glyph selection
