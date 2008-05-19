@@ -8,18 +8,26 @@ package com.ibm.icu.impl.jdkadapter;
 
 import java.math.RoundingMode;
 import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
+import java.text.CharacterIterator;
 import java.text.DecimalFormatSymbols;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Currency;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.NumberFormat;
 
 /**
  * DecimalFormatICU is an adapter class which wraps ICU4J DecimalFormat and
  * implements java.text.DecimalFormat APIs.
  */
 public class DecimalFormatICU extends java.text.DecimalFormat {
+
+    private static final long serialVersionUID = 6441573352964019403L;
 
     private DecimalFormat fIcuDecfmt;
 
@@ -73,8 +81,50 @@ public class DecimalFormatICU extends java.text.DecimalFormat {
 
     @Override
     public AttributedCharacterIterator formatToCharacterIterator(Object obj) {
-        // TODO
-        return null;
+        AttributedCharacterIterator aci = fIcuDecfmt.formatToCharacterIterator(obj);
+
+        // Create a new AttributedString
+        StringBuilder sb = new StringBuilder(aci.getEndIndex() - aci.getBeginIndex());
+        char c = aci.first();
+        while (true) {
+            sb.append(c);
+            c = aci.next();
+            if (c == CharacterIterator.DONE) {
+                break;
+            }
+        }
+        AttributedString resstr = new AttributedString(sb.toString());
+
+        // Mapping attributes
+        Map<AttributedCharacterIterator.Attribute,Object> attributes = null;
+        int index = aci.getBeginIndex();
+        int residx = 0;
+        while (true) {
+            if (aci.setIndex(index) == CharacterIterator.DONE) {
+                break;
+            }
+            attributes = aci.getAttributes();
+            if (attributes != null) {
+                int end = aci.getRunLimit();
+                Map<AttributedCharacterIterator.Attribute,Object> jdkAttributes = 
+                    new HashMap<AttributedCharacterIterator.Attribute,Object>();
+                Set<AttributedCharacterIterator.Attribute> keys = attributes.keySet();
+                for (AttributedCharacterIterator.Attribute key : keys) {
+                    AttributedCharacterIterator.Attribute jdkKey = mapAttribute(key);
+                    Object jdkVal = attributes.get(key);
+                    if (jdkVal instanceof AttributedCharacterIterator.Attribute) {
+                        jdkVal = mapAttribute((AttributedCharacterIterator.Attribute)jdkVal);
+                    }
+                    jdkAttributes.put(jdkKey, jdkVal);
+                }
+                int resend = residx + (end - index);
+                resstr.addAttributes(jdkAttributes, residx, resend);
+
+                index = end;
+                residx = resend;
+            }
+        }
+        return resstr.getIterator();
     }
 
     @Override
@@ -88,7 +138,7 @@ public class DecimalFormatICU extends java.text.DecimalFormat {
 
     @Override
     public DecimalFormatSymbols getDecimalFormatSymbols() {
-        return null;
+        return DecimalFormatSymbolsICU.wrap(fIcuDecfmt.getDecimalFormatSymbols());
     }
 
     @Override
@@ -239,32 +289,44 @@ public class DecimalFormatICU extends java.text.DecimalFormat {
 
     @Override
     public void setDecimalSeparatorAlwaysShown(boolean newValue) {
-        fIcuDecfmt.setDecimalSeparatorAlwaysShown(newValue);
+        if (fIcuDecfmt != null) {
+            fIcuDecfmt.setDecimalSeparatorAlwaysShown(newValue);
+        }
     }
 
     @Override
     public void setGroupingSize(int newValue) {
-        fIcuDecfmt.setGroupingSize(newValue);
+        if (fIcuDecfmt != null) {
+            fIcuDecfmt.setGroupingSize(newValue);
+        }
     }
 
     @Override
     public void setMaximumFractionDigits(int newValue) {
-        fIcuDecfmt.setMaximumFractionDigits(newValue);
+        if (fIcuDecfmt != null) {
+            fIcuDecfmt.setMaximumFractionDigits(newValue);
+        }
     }
 
     @Override
     public void setMaximumIntegerDigits(int newValue) {
-        fIcuDecfmt.setMaximumIntegerDigits(newValue);
+        if (fIcuDecfmt != null) {
+            fIcuDecfmt.setMaximumIntegerDigits(newValue);
+        }
     }
 
     @Override
     public void setMinimumFractionDigits(int newValue) {
-        fIcuDecfmt.setMinimumFractionDigits(newValue);
+        if (fIcuDecfmt != null) {
+            fIcuDecfmt.setMinimumFractionDigits(newValue);
+        }
     }
 
     @Override
     public void setMinimumIntegerDigits(int newValue) {
-        fIcuDecfmt.setMinimumIntegerDigits(newValue);
+        if (fIcuDecfmt != null) {
+            fIcuDecfmt.setMinimumIntegerDigits(newValue);
+        }
     }
 
     @Override
@@ -344,11 +406,44 @@ public class DecimalFormatICU extends java.text.DecimalFormat {
 
     @Override
     public void setGroupingUsed(boolean newValue) {
-        fIcuDecfmt.setGroupingUsed(newValue);
+        if (fIcuDecfmt != null) {
+            fIcuDecfmt.setGroupingUsed(newValue);
+        }
     }
 
     @Override
     public void setParseIntegerOnly(boolean value) {
         fIcuDecfmt.setParseIntegerOnly(value);
     }
+
+    private static AttributedCharacterIterator.Attribute mapAttribute(AttributedCharacterIterator.Attribute icuAttribute) {
+        AttributedCharacterIterator.Attribute jdkAttribute = icuAttribute;
+
+        if (icuAttribute == NumberFormat.Field.CURRENCY) {
+            jdkAttribute = java.text.NumberFormat.Field.CURRENCY;
+        } else if (icuAttribute == NumberFormat.Field.DECIMAL_SEPARATOR) {
+            jdkAttribute = java.text.NumberFormat.Field.DECIMAL_SEPARATOR;
+        } else if (icuAttribute == NumberFormat.Field.EXPONENT) {
+            jdkAttribute = java.text.NumberFormat.Field.EXPONENT;
+        } else if (icuAttribute == NumberFormat.Field.EXPONENT_SIGN) {
+            jdkAttribute = java.text.NumberFormat.Field.EXPONENT_SIGN;
+        } else if (icuAttribute == NumberFormat.Field.EXPONENT_SYMBOL) {
+            jdkAttribute = java.text.NumberFormat.Field.EXPONENT_SYMBOL;
+        } else if (icuAttribute == NumberFormat.Field.FRACTION) {
+            jdkAttribute = java.text.NumberFormat.Field.FRACTION;
+        } else if (icuAttribute == NumberFormat.Field.GROUPING_SEPARATOR) {
+            jdkAttribute = java.text.NumberFormat.Field.GROUPING_SEPARATOR;
+        } else if (icuAttribute == NumberFormat.Field.INTEGER) {
+            jdkAttribute = java.text.NumberFormat.Field.INTEGER;
+        } else if (icuAttribute == NumberFormat.Field.PERCENT) {
+            jdkAttribute = java.text.NumberFormat.Field.PERCENT;
+        } else if (icuAttribute == NumberFormat.Field.PERMILLE) {
+            jdkAttribute = java.text.NumberFormat.Field.PERMILLE;
+        } else if (icuAttribute == NumberFormat.Field.SIGN) {
+            jdkAttribute = java.text.NumberFormat.Field.SIGN;
+        }
+
+        return jdkAttribute;
+    }
+
 }
