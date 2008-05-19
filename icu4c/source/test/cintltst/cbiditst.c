@@ -1543,6 +1543,25 @@ testMultipleParagraphs(void) {
     static const char* const text2 = "\\u05d0 1-2\\u001c\\u0630 1-2\\u001c1-2";
     static const UBiDiLevel levels2[] = {1,1,2,2,2,0, 1,1,2,1,2,0, 2,2,2};
     static UBiDiLevel myLevels[10] = {0,0,0,0,0,0,0,0,0,0};
+    static const UChar multiparaTestString[] =
+        {0x5de, 0x5e0, 0x5e1, 0x5d4, 0x20,  0x5e1, 0x5e4, 0x5da,
+         0x20,  0xa,   0xa,   0x41,  0x72,  0x74,  0x69,  0x73,
+         0x74,  0x3a,  0x20,  0x5de, 0x5e0, 0x5e1, 0x5d4, 0x20,
+         0x5e1, 0x5e4, 0x5da, 0x20,  0xa,   0xa,   0x41,  0x6c,
+         0x62,  0x75,  0x6d,  0x3a,  0x20,  0x5de, 0x5e0, 0x5e1,
+         0x5d4, 0x20,  0x5e1, 0x5e4, 0x5da, 0x20,  0xa,   0xa,
+         0x54,  0x69,  0x6d,  0x65,  0x3a,  0x20,  0x32,  0x3a,
+         0x32,  0x37,  0xa,  0xa};
+    static const UChar multiparaTestLevels[] =
+        {1, 1, 1, 1, 1, 1, 1, 1,
+         1, 1, 0, 0, 0, 0, 0, 0,
+         0, 0, 0, 1, 1, 1, 1, 1,
+         1, 1, 1, 0, 0, 0, 0, 0,
+         0, 0, 0, 0, 0, 1, 1, 1,
+         1, 1, 1, 1, 1, 0, 0, 0,
+         0, 0, 0, 0, 0, 0, 0, 0,
+         0, 0, 0, 0};
+
     UBiDiLevel gotLevel;
     const UBiDiLevel* gotLevels;
     UBool orderParagraphsLTR;
@@ -1835,6 +1854,33 @@ testMultipleParagraphs(void) {
     ubidi_close(pLine);
     ubidi_close(pBidi);
     log_verbose("\nExiting TestMultipleParagraphs\n\n");
+
+    /* check levels in multiple paragraphs with default para level
+     */
+    pBidi = ubidi_open();
+    errorCode = U_ZERO_ERROR;
+    ubidi_setPara(pBidi, multiparaTestString, LENGTHOF(multiparaTestString),
+                  UBIDI_DEFAULT_LTR, NULL, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        log_err("ubidi_setPara failed for multiparaTestString\n");
+        ubidi_close(pBidi);
+        return;
+    }
+    gotLevels = ubidi_getLevels(pBidi, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        log_err("ubidi_getLevels failed for multiparaTestString\n");
+        ubidi_close(pBidi);
+        return;
+    }
+    for (i = 0; i < LENGTHOF(multiparaTestString); i++) {
+        if (gotLevels[i] != multiparaTestLevels[i]) {
+            log_err("Error on level for multiparaTestString at index %d, "
+                    "expected=%d, actual=%d\n",
+                    i, multiparaTestLevels[i], gotLevels[i]);
+        }
+    }
+    ubidi_close(pBidi);
+
 }
 
 
