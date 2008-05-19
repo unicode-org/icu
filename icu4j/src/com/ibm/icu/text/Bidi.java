@@ -1,4 +1,4 @@
-//##header J2SE15
+//##header J2SE14
 /*
 *******************************************************************************
 *   Copyright (C) 2001-2008, International Business Machines
@@ -4027,8 +4027,12 @@ public class Bidi {
      * </pre>
      * <p>
      * Note that in right-to-left runs, code like this places
-     * modifier letters before base characters and second surrogates
-     * before first ones.
+     * second surrogates before first ones (which is generally a bad idea)
+     * and combining characters before base characters.
+     * <p>
+     * Use of <code>{@link #writeReordered}</code>, optionally with the
+     * <code>{@link #KEEP_BASE_COMBINING}</code> option, can be considered in
+     * order to avoid these issues.
      *
      * @param runIndex is the number of the run in visual order, in the
      *        range <code>[0..countRuns()-1]</code>.
@@ -4078,8 +4082,11 @@ public class Bidi {
      * such as {@link #OPTION_INSERT_MARKS} and {@link #OPTION_REMOVE_CONTROLS}.
      * <p>
      * Note that in right-to-left runs, this mapping places
-     * modifier letters before base characters and second surrogates
-     * before first ones.
+     * second surrogates before first ones (which is generally a bad idea)
+     * and combining characters before base characters.
+     * Use of <code>{@link #writeReordered}</code>, optionally with the
+     * <code>{@link #KEEP_BASE_COMBINING}</code> option can be considered instead
+     * of using the mapping, in order to avoid these issues.
      *
      * @param logicalIndex is the index of a character in the text.
      *
@@ -4176,6 +4183,13 @@ public class Bidi {
      * <code>REMOVE_BIDI_CONTROLS</code>, the visual positions returned may not
      * be correct. It is advised to use, when possible, reordering options
      * such as {@link #OPTION_INSERT_MARKS} and {@link #OPTION_REMOVE_CONTROLS}.
+     * <p>
+     * Note that in right-to-left runs, this mapping places
+     * second surrogates before first ones (which is generally a bad idea)
+     * and combining characters before base characters.
+     * Use of <code>{@link #writeReordered}</code>, optionally with the
+     * <code>{@link #KEEP_BASE_COMBINING}</code> option can be considered instead
+     * of using the mapping, in order to avoid these issues.
      *
      * @return an array of <code>getProcessedLength()</code>
      *        indexes which will reflect the reordering of the characters.<br><br>
@@ -4823,7 +4837,7 @@ public class Bidi {
      * since the <code>setPara()</code> call.</p>
      *
      * This method preserves the integrity of characters with multiple
-     * code units and (optionally) modifier letters.
+     * code units and (optionally) combining characters.
      * Characters in RTL runs can be replaced by mirror-image characters
      * in the returned string. Note that "real" mirroring has to be done in a
      * rendering engine by glyph selection and that for many "mirrored"
@@ -4886,7 +4900,7 @@ public class Bidi {
      * Reverse a Right-To-Left run of Unicode text.
      *
      * This method preserves the integrity of characters with multiple
-     * code units and (optionally) modifier letters.
+     * code units and (optionally) combining characters.
      * Characters can be replaced by mirror-image characters
      * in the destination buffer. Note that "real" mirroring has
      * to be done in a rendering engine by glyph selection
