@@ -74,7 +74,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\iculx39.dll"
+				OutputFile="..\..\bin\iculx40.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				ProgramDatabaseFile=".\..\..\lib\iculx.pdb"
@@ -170,7 +170,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\iculx39d.dll"
+				OutputFile="..\..\bin\iculx40d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
@@ -249,7 +249,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout&#x0D;&#x0A;"
 						Outputs="..\..\include\layout\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -258,7 +258,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout&#x0D;&#x0A;"
 						Outputs="..\..\include\layout\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -271,7 +271,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout&#x0D;&#x0A;"
 						Outputs="..\..\include\layout\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -280,7 +280,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout&#x0D;&#x0A;"
 						Outputs="..\..\include\layout\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -293,7 +293,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout&#x0D;&#x0A;"
 						Outputs="..\..\include\layout\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -302,7 +302,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout&#x0D;&#x0A;"
 						Outputs="..\..\include\layout\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -315,7 +315,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout&#x0D;&#x0A;"
 						Outputs="..\..\include\layout\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -324,7 +324,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout&#x0D;&#x0A;"
 						Outputs="..\..\include\layout\$(InputFileName)"
 					/>
 				</FileConfiguration>
