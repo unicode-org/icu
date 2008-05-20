@@ -1,7 +1,7 @@
 ## -*-makefile-*-
 ## Darwin-specific setup (Darwin is the Mac OS X developer preview, successor
 ## to Rhapsody, aka Mac OS X Server)
-## Copyright (c) 1999-2007 International Business Machines Corporation and
+## Copyright (c) 1999-2008 International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Flags for position independent code
@@ -83,5 +83,8 @@ MIDDLE_SO_TARGET= $(basename $(SO_TARGET)).$(SO_TARGET_VERSION_MAJOR).$(SO)
 
 # tzcode option
 TZORIG_EXTRA_CFLAGS=-DSTD_INSPIRED
+
+# genren opts
+GENREN_PL_OPTS=-x Mach-O -n '-g' -p '| c++filt'
 
 ## End Darwin-specific setup

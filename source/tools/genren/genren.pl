@@ -20,6 +20,11 @@ $headername = 'urename.h';
 
 $path = substr($0, 0, rindex($0, "/")+1)."../../common/unicode/uversion.h";
 
+$nmopts = '-Cg -f s';
+$post = '';
+
+$mode = 'LINUX';
+
 (-e $path) || die "Cannot find uversion.h";
 
 open(UVERSION, $path);
@@ -38,6 +43,9 @@ while($ARGV[0] =~ /^-/) { # detects whether there are any arguments
     /^-v/ && ($VERBOSE++, next);                      # verbose
     /^-h/ && (&printHelpMsgAndExit, next);               # help
     /^-o/ && (($headername = shift (@ARGV)), next);   # output file
+    /^-n/ && (($nmopts = shift (@ARGV)), next);   # nm opts
+    /^-p/ && (($post = shift (@ARGV)), next);   # nm opts
+    /^-x/ && (($mode = shift (@ARGV)), next);   # nm opts
     /^-S/ && (($U_ICU_VERSION_SUFFIX = shift(@ARGV)), next); # pick the suffix
     warn("Invalid option $_\n");
     &printHelpMsgAndExit;
@@ -89,15 +97,28 @@ print HEADER <<"EndOfHeaderComment";
 EndOfHeaderComment
 
 for(;@ARGV; shift(@ARGV)) {
-    @NMRESULT = `nm -Cg -f s $ARGV[0]`;
+    @NMRESULT = `nm $nmopts $ARGV[0] $post`;
     if($?) {
         warn "Couldn't do 'nm' for $ARGV[0], continuing...\n";
         next; # Couldn't do nm for the file
     }
-    splice @NMRESULT, 0, 6;
-    
+    if($mode =~ /POSIX/) {
+        splice @NMRESULT, 0, 6;
+    } elsif ($mode =~ /Mach-O/) {
+#        splice @NMRESULT, 0, 10;
+    }
     foreach (@NMRESULT) { # Process every line of result and stuff it in $_
-        ($_, $address, $type) = split(/\|/);
+        if($mode =~ /POSIX/) {
+            ($_, $address, $type) = split(/\|/);
+        } elsif ($mode =~ /Mach-O/) {
+            if(/^(?:[0-9a-fA-F]){8} ([A-Z]) (?:_)?(.*)$/) {
+                ($_, $type) = ($2, $1);
+            } else {
+                next;
+            }
+        } else {
+            die "Unknown mode $mode";
+        }
         &verbose( "type: \"$type\" ");
         if(!($type =~ /[UAwW?]/)) {
             if(/@@/) { # These would be imports
@@ -112,11 +133,19 @@ for(;@ARGV; shift(@ARGV)) {
                 }
                 ## ures_getUnicodeStringByIndex(UResourceBundle -> ures_getUnicodeStringByIndex
                 @CppName = split(/\(/, $CppName[0]); ## remove function args
-                $CppClasses{$CppName[0]}++;
+                if($CppName[0] =~ /^operator/) {
+                    &verbose ("Skipping C++ function: $_\n");
+                } elsif($CppName[0] =~ /^~/) {
+                    &verbose ("Skipping C++ destructor: $_\n");
+                } else {
+                    $CppClasses{$CppName[0]}++;
+                }
             } elsif ( /\(/) { # These are strange functions
                 print STDERR "$_\n";
             } elsif ( /icu_/) {
                 print STDERR "Skipped strange mangled function $_\n";
+            } elsif ( /operator\+/ ) {
+                print STDERR "Skipped ignored function $_\n";
             } else { # This is regular C function 
                 &verbose( "C func: $_\n");
                 @funcname = split(/[\(\s+]/);
