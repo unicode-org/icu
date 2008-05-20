@@ -35,6 +35,7 @@
  *                   that it contains the new major/minor combination
  * source/i18n/i18n.vcproj - same as for the common.vcproj
  * source/layout/layout.vcproj - same as for the common.vcproj
+ * source/layoutex/layoutex.vcproj - same
  * source/stubdata/stubdata.vcproj - same as for the common.vcproj
  * source/io/io.vcproj - same as for the common.vcproj
  * source/data/makedata.mak - change U_ICUDATA_NAME so that it contains
