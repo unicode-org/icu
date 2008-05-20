@@ -1,4 +1,4 @@
-//##header J2SE15
+//##header J2SE14
 /*
 *******************************************************************************
 *   Copyright (C) 2001-2008, International Business Machines
@@ -3237,7 +3237,8 @@ public class Bidi {
              * Examples for "insignificant" ones are empty embeddings
              * LRE-PDF, LRE-RLE-PDF-PDF, etc.
              */
-            if (embeddingLevels == null && (flags & DirPropFlagMultiRuns) == 0) {
+            if (embeddingLevels == null && paraCount <= 1 &&
+                (flags & DirPropFlagMultiRuns) == 0) {
                 resolveImplicitLevels(0, length,
                         GetLRFromLevel(GetParaLevelAt(0)),
                         GetLRFromLevel(GetParaLevelAt(length - 1)));
