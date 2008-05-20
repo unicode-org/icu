@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2007, International Business Machines
+*   Copyright (C) 2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -50,6 +50,26 @@ public class TestMultipleParagraphs extends BidiTest {
     private static final String text2 = "\u05d0 1-2\u001c\u0630 1-2\u001c1-2";
     private static final byte[] levels2 = {
         1, 1, 2, 2, 2, 0, 1, 1, 2, 1, 2, 0, 2, 2, 2
+    };
+    private static final char[] multiparaTestString = {
+        0x5de, 0x5e0, 0x5e1, 0x5d4, 0x20,  0x5e1, 0x5e4, 0x5da,
+        0x20,  0xa,   0xa,   0x41,  0x72,  0x74,  0x69,  0x73,
+        0x74,  0x3a,  0x20,  0x5de, 0x5e0, 0x5e1, 0x5d4, 0x20,
+        0x5e1, 0x5e4, 0x5da, 0x20,  0xa,   0xa,   0x41,  0x6c,
+        0x62,  0x75,  0x6d,  0x3a,  0x20,  0x5de, 0x5e0, 0x5e1,
+        0x5d4, 0x20,  0x5e1, 0x5e4, 0x5da, 0x20,  0xa,   0xa,
+        0x54,  0x69,  0x6d,  0x65,  0x3a,  0x20,  0x32,  0x3a,
+        0x32,  0x37,  0xa,  0xa
+    };
+    private static final byte[] multiparaTestLevels = {
+        1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 1, 1, 1, 1, 1,
+        1, 1, 1, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 1, 1, 1,
+        1, 1, 1, 1, 1, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0
     };
 
     public void testMultipleParagraphs()
@@ -409,6 +429,24 @@ public class TestMultipleParagraphs extends BidiTest {
         assertEquals("\nInvalid number of paras", 2, bidi.countParagraphs());
 
         logln("\nExiting TestMultipleParagraphs\n");
+
+        /* check levels in multiple paragraphs with default para level
+         */
+        bidi = new Bidi();
+        bidi.setPara(multiparaTestString, Bidi.LEVEL_DEFAULT_LTR, null);
+        try {
+            gotLevels = bidi.getLevels();
+        } catch (Exception e) {
+            errln("Error on Bidi.getLevels for multiparaTestString");
+            return;
+        }
+        for (i = 0; i < multiparaTestString.length; i++) {
+            if (gotLevels[i] != multiparaTestLevels[i]) {
+                errln("Error on level for multiparaTestString at index " + i +
+                      ", expected=" + multiparaTestLevels[i] +
+                      ", actual=" + gotLevels[i]);
+            }
+        }
     }
 
 
