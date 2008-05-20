@@ -11,6 +11,7 @@ import java.text.ChoiceFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.Date;
 
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -117,6 +118,104 @@ public class Currency extends MeasureUnit implements Serializable {
         }
 
         return shim.createInstance(locale);
+    }
+
+	/**
+     * Returns a currency object for the currency in the given
+     * locale for the givne date.
+     * @draft ICU 4.0
+     */
+    public static Currency getInstance(ULocale locale, Date date) 
+    {
+        // local variables
+        String country = locale.getCountry();
+        String variant = locale.getVariant();
+        boolean isPreEuro = variant.equals("PREEURO");
+        boolean isEuro = variant.equals("EURO");
+        long mask = 4294967295L;
+        long dateL = date.getTime();
+
+        // Get supplementalData
+        ICUResourceBundle bundle = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,
+            "supplementalData",
+            ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        if (bundle == null)
+        {
+            //throw new MissingResourceException()
+            return null;
+        }
+
+        // Work with the supplementalData
+        try
+        {
+            UResourceBundle cm = bundle.get("CurrencyMap");
+            UResourceBundle countryArray = cm.get(country);
+            boolean matchFound = false;
+
+            // process each currency to see which one is valid for the given date.
+            // Some regions can have more than one current currency in use for
+            // a given date.  In such a case, latest default currency is returned.
+            int foo = countryArray.getSize();
+            for (int i = 0; i < foo; i++)
+            {
+                // get the currency resource
+                UResourceBundle currencyReq = countryArray.get(i);
+                String curriso = null;
+                curriso = currencyReq.getString("id");
+
+                // get the from date
+                long fromDate = 0;
+                UResourceBundle fromRes = currencyReq.get("from");
+                int[] fromArray = fromRes.getIntVector();
+                fromDate  = (long)fromArray[0] << 32;
+                fromDate |= ((long)fromArray[1] & mask);
+
+                // get the to date and check the date range
+                if (currencyReq.getSize() > 2)
+                {
+                    long toDate = 0;
+                    UResourceBundle toRes = currencyReq.get("to");
+                    int[] toArray = toRes.getIntVector();
+                    toDate  = (long)toArray[0] << 32;
+                    toDate |= ((long)toArray[1] & mask);
+
+                    if ((fromDate <= dateL) && (dateL < toDate))
+                    {
+                        matchFound = true;
+                    }
+                }
+                else
+                {
+                    if (fromDate <= dateL)
+                    {
+                        matchFound = true;
+                    }
+                }
+
+                // return a match if we got it
+                if ((curriso != null) && (matchFound))
+                {
+                    return new Currency(curriso);
+                }
+
+            }  // end For loop
+
+            // Due to gaps in the windows of time for valid currencies,
+            // it is possible that no currency is valid for the given time.
+            // In such a case, use the most current value
+            return getInstance(locale);
+        }
+        catch (MissingResourceException ex)
+        {
+            // We don't know about this region.
+            // As of CLDR 1.5.1, the data includes deprecated region history too.
+            // So if we get here, either the region doesn't exist, or the data is really bad.
+            // Deprecated regions should return the last valid currency for that region in the data.
+            // We don't try to resolve it to a new region.
+        }
+
+        // if we get this far, return nothing
+        return null;
     }
 
     private static final String EUR_STR = "EUR";
