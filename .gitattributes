@@ -223,6 +223,10 @@ icu4j/eclipseProjectMisc/initSrc.launch -text
 icu4j/eclipseProjectMisc/normSrc.launch -text
 icu4j/ee.foundation.jar -text svneol=unset#application/java-archive
 icu4j/license.html svneol=native#text/html
+icu4j/localespi/.classpath -text
+icu4j/localespi/.project -text
+icu4j/localespi/.settings/org.eclipse.jdt.core.prefs -text
+icu4j/localespi/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/localespi/src/META-INF/services/java.text.spi.BreakIteratorProvider -text
 icu4j/localespi/src/META-INF/services/java.text.spi.CollatorProvider -text
 icu4j/localespi/src/META-INF/services/java.text.spi.DateFormatProvider -text
