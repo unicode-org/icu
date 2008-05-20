@@ -75,7 +75,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icudt39.dll"
+				OutputFile="..\..\bin\icudt40.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				GenerateManifest="false"
@@ -174,7 +174,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icudt39.dll"
+				OutputFile="..\..\bin\icudt40.dll"
 				SuppressStartupBanner="true"
 				GenerateManifest="false"
 				ProgramDatabaseFile=".\Debug/icudt.pdb"
