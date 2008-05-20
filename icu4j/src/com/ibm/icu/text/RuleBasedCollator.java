@@ -1869,11 +1869,7 @@ public final class RuleBasedCollator extends Collator
                         init();
                         return;
                     }
-                    else {
-                        // due to resource redirection ICUListResourceBundle does not
-                        // raise missing resource error
-                        //throw new MissingResourceException("Could not get resource for constructing RuleBasedCollator","com.ibm.icu.impl.data.LocaleElements_"+locale.toString(), "%%CollationBin");
-                        
+                    else {                        
                         init(m_rules_);
                         return;
                     }

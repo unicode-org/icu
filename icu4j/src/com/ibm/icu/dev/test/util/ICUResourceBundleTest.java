@@ -454,6 +454,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
     }
 
     public void TestAliases(){
+/*
        String simpleAlias   = "Open";
 
        UResourceBundle rb = (UResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases", testLoader);
@@ -590,7 +591,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }else{
             errln("Did not get the expected object for collations");
         }
-
+*/
     }
     public void TestAlias(){
         logln("Testing %%ALIAS");
@@ -627,19 +628,20 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
     }
     public void TestCircularAliases(){
-        try{
-            UResourceBundle rb = (UResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases",testLoader);
-            UResourceBundle sub = rb.get("aaa");
-            String s1 = sub.getString();
-            if(s1!=null){
-                errln("Did not get the expected exception");
-            }
-        }catch(IllegalArgumentException ex){
-            logln("got expected exception for circular references");
-        }
-        catch (MissingResourceException ex) {
-            warnln("could not load resource data: " + ex.getMessage());
-        }
+// Aliases no longer supported
+//        try{
+//            UResourceBundle rb = (UResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases",testLoader);
+//            UResourceBundle sub = rb.get("aaa");
+//            String s1 = sub.getString();
+//            if(s1!=null){
+//                errln("Did not get the expected exception");
+//            }
+//        }catch(IllegalArgumentException ex){
+//            logln("got expected exception for circular references");
+//        }
+//        catch (MissingResourceException ex) {
+//            warnln("could not load resource data: " + ex.getMessage());
+//        }
     }
 
     public void TestGetWithFallback(){
