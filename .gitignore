@@ -543,6 +543,9 @@ icu4c/source/tools/genrb/genrb.[0-9]
 icu4c/source/tools/genrb/genrb.vcproj.*.*.user
 icu4c/source/tools/genrb/release
 icu4c/source/tools/genrb/temp
+icu4c/source/tools/genren/ICUunrenamed
+icu4c/source/tools/genren/Makefile.local
+icu4c/source/tools/genren/urename.*
 icu4c/source/tools/gensprep/*.8
 icu4c/source/tools/gensprep/*.d
 icu4c/source/tools/gensprep/*.o
