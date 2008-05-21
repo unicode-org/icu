@@ -8,15 +8,14 @@ package com.ibm.icu.dev.data;
 import java.util.ListResourceBundle;
 
 public class TestDataElements_testtypes extends ListResourceBundle {
+    /**
+     * Overrides ListResourceBundle
+     */
+    public final Object[][] getContents() {
+          return  contents;
+    }
 
-    public TestDataElements_testtypes  () {}
-
-	protected Object[][] getContents()
-	{
-		return data;
-	}
-
-    private static Object[][] data = new Object[][] { 
+	private static Object[][] contents = {
                 {
                     "binarytest",
                     new byte[] {
