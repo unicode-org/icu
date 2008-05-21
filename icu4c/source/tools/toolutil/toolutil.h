@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -48,6 +48,12 @@ getLongPathname(const char *pathname);
  */
 U_CAPI const char * U_EXPORT2
 findBasename(const char *filename);
+
+/*
+ * Return the current year in the Gregorian calendar. Used for copyright generation.
+ */
+U_CAPI int32_t U_EXPORT2
+getCurrentYear(void);
 
 /*
  * Creates a diretory with pathname.
