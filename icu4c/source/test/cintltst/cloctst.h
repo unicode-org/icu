@@ -110,6 +110,9 @@ static void TestUResourceBundle(void);
 static void TestDisplayName(void);
 
 static void TestAcceptLanguage(void);
+
 static void TestOrientation(void);
+
+static void TestLikelySubtags(void);
 
 #endif

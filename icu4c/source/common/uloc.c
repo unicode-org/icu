@@ -232,8 +232,8 @@ static const char * const LANGUAGES_3[] = {
     "enm", "epo", "spa", "est", "eus", "ewo", "fas",
 /*  "fan", "fat", "ff",  "fi",  "fil", "fiu", "fj",  "fo",  "fon",    */
     "fan", "fat", "ful", "fin", "fil", "fiu", "fij", "fao", "fon",
-/*  "fr",  "frm", "fro", "fur", "frr", "frs", "fy",  "ga",  "gaa", "gay",    */
-    "fra", "frm", "fro", "fur", "frr", "frs", "fry", "gle", "gaa", "gay",
+/*  "fr",  "frm", "fro", "frr", "frs", "fur", "fy",  "ga",  "gaa", "gay",    */
+    "fra", "frm", "fro", "frr", "frs", "fur", "fry", "gle", "gaa", "gay",
 /*  "gba", "gd",  "gem", "gez", "gil", "gl",  "gmh", "gn",     */
     "gba", "gla", "gem", "gez", "gil", "glg", "gmh", "grn",
 /*  "goh", "gon", "gor", "got", "grb", "grc", "gsw", "gu",  "gv",     */
@@ -3153,6 +3153,2783 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
     }
     uprv_free(fallbackList);
     return -1;
+}
+
+
+/*
+ * A struct that contains a pair of pointers to strings.
+ * The key member contains a minimal set of subtags, and the
+ * value contains the corresponding maximal set of subtags.
+ */
+typedef struct StringPair_tag {
+  const char* minimal;
+  const char* maximal;
+} StringPair;
+
+static int32_t U_CALLCONV
+compareStringPairStructs(const void *left, const void *right)
+{
+    const char* leftString = ((const StringPair *)left)->minimal;
+    const char* rightString = ((const StringPair *)right)->minimal;
+
+    return uprv_strcmp(leftString, rightString);
+}
+
+/*
+ * TODO(dbertoni)  This will be moved into the ICU data when the CLDR
+ * tool has been updated to generate it.
+ *
+ * This array maps a set of tags to its likely maximal set of tags.
+ */
+const StringPair likely_subtags[] = {
+  {
+    /* { Afar; ?; ? } => { Afar; Latin; Ethiopia } */
+    "aa",
+    "aa_Latn_ET"
+  }, {
+    /* { Afrikaans; ?; ? } => { Afrikaans; Latin; South Africa } */
+    "af",
+    "af_Latn_ZA"
+  }, {
+    /* { Akan; ?; ? } => { Akan; Latin; Ghana } */
+    "ak",
+    "ak_Latn_GH"
+  }, {
+    /* { Amharic; ?; ? } => { Amharic; Ethiopic; Ethiopia } */
+    "am",
+    "am_Ethi_ET"
+  }, {
+    /* { Arabic; ?; ? } => { Arabic; Arabic; Egypt } */
+    "ar",
+    "ar_Arab_EG"
+  }, {
+    /* { Assamese; ?; ? } => { Assamese; Bengali; India } */
+    "as",
+    "as_Beng_IN"
+  }, {
+    /* { Azerbaijani; ?; ? } => { Azerbaijani; Latin; Azerbaijan } */
+    "az",
+    "az_Latn_AZ"
+  }, {
+    /* { Belarusian; ?; ? } => { Belarusian; Cyrillic; Belarus } */
+    "be",
+    "be_Cyrl_BY"
+  }, {
+    /* { Bulgarian; ?; ? } => { Bulgarian; Cyrillic; Bulgaria } */
+    "bg",
+    "bg_Cyrl_BG"
+  }, {
+    /* { Bengali; ?; ? } => { Bengali; Bengali; Bangladesh } */
+    "bn",
+    "bn_Beng_BD"
+  }, {
+    /* { Tibetan; ?; ? } => { Tibetan; Tibetan; China } */
+    "bo",
+    "bo_Tibt_CN"
+  }, {
+    /* { Bosnian; ?; ? } => { Bosnian; Latin; Bosnia and Herzegovina } */
+    "bs",
+    "bs_Latn_BA"
+  }, {
+    /* { Blin; ?; ? } => { Blin; Ethiopic; Eritrea } */
+    "byn",
+    "byn_Ethi_ER"
+  }, {
+    /* { Catalan; ?; ? } => { Catalan; Latin; Spain } */
+    "ca",
+    "ca_Latn_ES"
+  }, {
+    /* { Atsam; ?; ? } => { Atsam; Latin; Nigeria } */
+    "cch",
+    "cch_Latn_NG"
+  }, {
+    /* { Chamorro; ?; ? } => { Chamorro; Latin; Guam } */
+    "ch",
+    "ch_Latn_GU"
+  }, {
+    /* { Chuukese; ?; ? } => { Chuukese; Latin; Micronesia } */
+    "chk",
+    "chk_Latn_FM"
+  }, {
+    /* { Coptic; ?; ? } => { Coptic; Arabic; Egypt } */
+    "cop",
+    "cop_Arab_EG"
+  }, {
+    /* { Czech; ?; ? } => { Czech; Latin; Czech Republic } */
+    "cs",
+    "cs_Latn_CZ"
+  }, {
+    /* { Welsh; ?; ? } => { Welsh; Latin; United Kingdom } */
+    "cy",
+    "cy_Latn_GB"
+  }, {
+    /* { Danish; ?; ? } => { Danish; Latin; Denmark } */
+    "da",
+    "da_Latn_DK"
+  }, {
+    /* { German; ?; ? } => { German; Latin; Germany } */
+    "de",
+    "de_Latn_DE"
+  }, {
+    /* { Divehi; ?; ? } => { Divehi; Thaana; Maldives } */
+    "dv",
+    "dv_Thaa_MV"
+  }, {
+    /* { Dzongkha; ?; ? } => { Dzongkha; Tibetan; Bhutan } */
+    "dz",
+    "dz_Tibt_BT"
+  }, {
+    /* { Ewe; ?; ? } => { Ewe; Latin; Ghana } */
+    "ee",
+    "ee_Latn_GH"
+  }, {
+    /* { Greek; ?; ? } => { Greek; Greek; Greece } */
+    "el",
+    "el_Grek_GR"
+  }, {
+    /* { English; ?; ? } => { English; Latin; United States } */
+    "en",
+    "en_Latn_US"
+  }, {
+    /* { Spanish; ?; ? } => { Spanish; Latin; Spain } */
+    "es",
+    "es_Latn_ES"
+  }, {
+    /* { Estonian; ?; ? } => { Estonian; Latin; Estonia } */
+    "et",
+    "et_Latn_EE"
+  }, {
+    /* { Basque; ?; ? } => { Basque; Latin; Spain } */
+    "eu",
+    "eu_Latn_ES"
+  }, {
+    /* { Persian; ?; ? } => { Persian; Arabic; Iran } */
+    "fa",
+    "fa_Arab_IR"
+  }, {
+    /* { Finnish; ?; ? } => { Finnish; Latin; Finland } */
+    "fi",
+    "fi_Latn_FI"
+  }, {
+    /* { Filipino; ?; ? } => { Filipino; Latin; Philippines } */
+    "fil",
+    "fil_Latn_PH"
+  }, {
+    /* { Fijian; ?; ? } => { Fijian; Latin; Fiji } */
+    "fj",
+    "fj_Latn_FJ"
+  }, {
+    /* { Faroese; ?; ? } => { Faroese; Latin; Faroe Islands } */
+    "fo",
+    "fo_Latn_FO"
+  }, {
+    /* { French; ?; ? } => { French; Latin; France } */
+    "fr",
+    "fr_Latn_FR"
+  }, {
+    /* { Friulian; ?; ? } => { Friulian; Latin; Italy } */
+    "fur",
+    "fur_Latn_IT"
+  }, {
+    /* { Irish; ?; ? } => { Irish; Latin; Ireland } */
+    "ga",
+    "ga_Latn_IE"
+  }, {
+    /* { Ga; ?; ? } => { Ga; Latin; Ghana } */
+    "gaa",
+    "gaa_Latn_GH"
+  }, {
+    /* { Geez; ?; ? } => { Geez; Ethiopic; Eritrea } */
+    "gez",
+    "gez_Ethi_ER"
+  }, {
+    /* { Galician; ?; ? } => { Galician; Latin; Spain } */
+    "gl",
+    "gl_Latn_ES"
+  }, {
+    /* { Guarani; ?; ? } => { Guarani; Latin; Paraguay } */
+    "gn",
+    "gn_Latn_PY"
+  }, {
+    /* { Gujarati; ?; ? } => { Gujarati; Gujarati; India } */
+    "gu",
+    "gu_Gujr_IN"
+  }, {
+    /* { Manx; ?; ? } => { Manx; Latin; United Kingdom } */
+    "gv",
+    "gv_Latn_GB"
+  }, {
+    /* { Hausa; ?; ? } => { Hausa; Latin; Nigeria } */
+    "ha",
+    "ha_Latn_NG"
+  }, {
+    /* { Hawaiian; ?; ? } => { Hawaiian; Latin; United States } */
+    "haw",
+    "haw_Latn_US"
+  }, {
+    /* { Hindi; ?; ? } => { Hindi; Devanagari; India } */
+    "hi",
+    "hi_Deva_IN"
+  }, {
+    /* { Croatian; ?; ? } => { Croatian; Latin; Croatia } */
+    "hr",
+    "hr_Latn_HR"
+  }, {
+    /* { Haitian; ?; ? } => { Haitian; Latin; Haiti } */
+    "ht",
+    "ht_Latn_HT"
+  }, {
+    /* { Hungarian; ?; ? } => { Hungarian; Latin; Hungary } */
+    "hu",
+    "hu_Latn_HU"
+  }, {
+    /* { Armenian; ?; ? } => { Armenian; Armenian; Armenia } */
+    "hy",
+    "hy_Armn_AM"
+  }, {
+    /* { Indonesian; ?; ? } => { Indonesian; Latin; Indonesia } */
+    "id",
+    "id_Latn_ID"
+  }, {
+    /* { Igbo; ?; ? } => { Igbo; Latin; Nigeria } */
+    "ig",
+    "ig_Latn_NG"
+  }, {
+    /* { Sichuan Yi; ?; ? } => { Sichuan Yi; Yi; China } */
+    "ii",
+    "ii_Yiii_CN"
+  }, {
+    /* { Icelandic; ?; ? } => { Icelandic; Latin; Iceland } */
+    "is",
+    "is_Latn_IS"
+  }, {
+    /* { Italian; ?; ? } => { Italian; Latin; Italy } */
+    "it",
+    "it_Latn_IT"
+  }, {
+    /* { Inuktitut; ?; ? } */
+    /*  => { Inuktitut; Unified Canadian Aboriginal Syllabics; Canada } */
+    "iu",
+    "iu_Cans_CA"
+  }, {
+    /* { null; ?; ? } => { null; Hebrew; Israel } */
+    "iw",
+    "iw_Hebr_IL"
+  }, {
+    /* { Japanese; ?; ? } => { Japanese; Japanese; Japan } */
+    "ja",
+    "ja_Jpan_JP"
+  }, {
+    /* { Georgian; ?; ? } => { Georgian; Georgian; Georgia } */
+    "ka",
+    "ka_Geor_GE"
+  }, {
+    /* { Jju; ?; ? } => { Jju; Latin; Nigeria } */
+    "kaj",
+    "kaj_Latn_NG"
+  }, {
+    /* { Kamba; ?; ? } => { Kamba; Latin; Kenya } */
+    "kam",
+    "kam_Latn_KE"
+  }, {
+    /* { Tyap; ?; ? } => { Tyap; Latin; Nigeria } */
+    "kcg",
+    "kcg_Latn_NG"
+  }, {
+    /* { Koro; ?; ? } => { Koro; Latin; Nigeria } */
+    "kfo",
+    "kfo_Latn_NG"
+  }, {
+    /* { Kazakh; ?; ? } => { Kazakh; Cyrillic; Kazakhstan } */
+    "kk",
+    "kk_Cyrl_KZ"
+  }, {
+    /* { Kalaallisut; ?; ? } => { Kalaallisut; Latin; Greenland } */
+    "kl",
+    "kl_Latn_GL"
+  }, {
+    /* { Khmer; ?; ? } => { Khmer; Khmer; Cambodia } */
+    "km",
+    "km_Khmr_KH"
+  }, {
+    /* { Kannada; ?; ? } => { Kannada; Kannada; India } */
+    "kn",
+    "kn_Knda_IN"
+  }, {
+    /* { Korean; ?; ? } => { Korean; Korean; South Korea } */
+    "ko",
+    "ko_Kore_KR"
+  }, {
+    /* { Konkani; ?; ? } => { Konkani; Devanagari; India } */
+    "kok",
+    "kok_Deva_IN"
+  }, {
+    /* { Kpelle; ?; ? } => { Kpelle; Latin; Liberia } */
+    "kpe",
+    "kpe_Latn_LR"
+  }, {
+    /* { Kurdish; ?; ? } => { Kurdish; Latin; Turkey } */
+    "ku",
+    "ku_Latn_TR"
+  }, {
+    /* { Cornish; ?; ? } => { Cornish; Latin; United Kingdom } */
+    "kw",
+    "kw_Latn_GB"
+  }, {
+    /* { Kirghiz; ?; ? } => { Kirghiz; Cyrillic; Kyrgyzstan } */
+    "ky",
+    "ky_Cyrl_KG"
+  }, {
+    /* { Latin; ?; ? } => { Latin; Latin; Vatican } */
+    "la",
+    "la_Latn_VA"
+  }, {
+    /* { Lingala; ?; ? } => { Lingala; Latin; Congo _ Kinshasa } */
+    "ln",
+    "ln_Latn_CD"
+  }, {
+    /* { Lao; ?; ? } => { Lao; Lao; Laos } */
+    "lo",
+    "lo_Laoo_LA"
+  }, {
+    /* { Lithuanian; ?; ? } => { Lithuanian; Latin; Lithuania } */
+    "lt",
+    "lt_Latn_LT"
+  }, {
+    /* { Latvian; ?; ? } => { Latvian; Latin; Latvia } */
+    "lv",
+    "lv_Latn_LV"
+  }, {
+    /* { Malagasy; ?; ? } => { Malagasy; Latin; Madagascar } */
+    "mg",
+    "mg_Latn_MG"
+  }, {
+    /* { Marshallese; ?; ? } => { Marshallese; Latin; Marshall Islands } */
+    "mh",
+    "mh_Latn_MH"
+  }, {
+    /* { Macedonian; ?; ? } => { Macedonian; Cyrillic; Macedonia } */
+    "mk",
+    "mk_Cyrl_MK"
+  }, {
+    /* { Malayalam; ?; ? } => { Malayalam; Malayalam; India } */
+    "ml",
+    "ml_Mlym_IN"
+  }, {
+    /* { Mongolian; ?; ? } => { Mongolian; Cyrillic; Mongolia } */
+    "mn",
+    "mn_Cyrl_MN"
+  }, {
+    /* { Marathi; ?; ? } => { Marathi; Devanagari; India } */
+    "mr",
+    "mr_Deva_IN"
+  }, {
+    /* { Malay; ?; ? } => { Malay; Latin; Malaysia } */
+    "ms",
+    "ms_Latn_MY"
+  }, {
+    /* { Maltese; ?; ? } => { Maltese; Latin; Malta } */
+    "mt",
+    "mt_Latn_MT"
+  }, {
+    /* { Burmese; ?; ? } => { Burmese; Myanmar; Myanmar } */
+    "my",
+    "my_Mymr_MM"
+  }, {
+    /* { Nauru; ?; ? } => { Nauru; Latin; Nauru } */
+    "na",
+    "na_Latn_NR"
+  }, {
+    /* { Nepali; ?; ? } => { Nepali; Devanagari; Nepal } */
+    "ne",
+    "ne_Deva_NP"
+  }, {
+    /* { Niuean; ?; ? } => { Niuean; Latin; Niue } */
+    "niu",
+    "niu_Latn_NU"
+  }, {
+    /* { Dutch; ?; ? } => { Dutch; Latin; Netherlands } */
+    "nl",
+    "nl_Latn_NL"
+  }, {
+    /* { Norwegian Nynorsk; ?; ? } => { Norwegian Nynorsk; Latin; Norway } */
+    "nn",
+    "nn_Latn_NO"
+  }, {
+    /* { Norwegian; ?; ? } => { Norwegian; Latin; Norway } */
+    "no",
+    "no_Latn_NO"
+  }, {
+    /* { South Ndebele; ?; ? } => { South Ndebele; Latin; South Africa } */
+    "nr",
+    "nr_Latn_ZA"
+  }, {
+    /* { Northern Sotho; ?; ? } => { Northern Sotho; Latin; South Africa } */
+    "nso",
+    "nso_Latn_ZA"
+  }, {
+    /* { Nyanja; ?; ? } => { Nyanja; Latin; Malawi } */
+    "ny",
+    "ny_Latn_MW"
+  }, {
+    /* { Oromo; ?; ? } => { Oromo; Latin; Ethiopia } */
+    "om",
+    "om_Latn_ET"
+  }, {
+    /* { Oriya; ?; ? } => { Oriya; Oriya; India } */
+    "or",
+    "or_Orya_IN"
+  }, {
+    /* { Punjabi; ?; ? } => { Punjabi; Gurmukhi; India } */
+    "pa",
+    "pa_Guru_IN"
+  }, {
+    /* { Punjabi; Arabic; ? } => { Punjabi; Arabic; Pakistan } */
+    "pa_Arab",
+    "pa_Arab_PK"
+  }, {
+    /* { Punjabi; ?; Pakistan } => { Punjabi; Arabic; Pakistan } */
+    "pa_PK",
+    "pa_Arab_PK"
+  }, {
+    /* { Papiamento; ?; ? } => { Papiamento; Latin; Netherlands Antilles } */
+    "pap",
+    "pap_Latn_AN"
+  }, {
+    /* { Palauan; ?; ? } => { Palauan; Latin; Palau } */
+    "pau",
+    "pau_Latn_PW"
+  }, {
+    /* { Polish; ?; ? } => { Polish; Latin; Poland } */
+    "pl",
+    "pl_Latn_PL"
+  }, {
+    /* { Pashto; ?; ? } => { Pashto; Arabic; Afghanistan } */
+    "ps",
+    "ps_Arab_AF"
+  }, {
+    /* { Portuguese; ?; ? } => { Portuguese; Latin; Brazil } */
+    "pt",
+    "pt_Latn_BR"
+  }, {
+    /* { Rundi; ?; ? } => { Rundi; Latin; Burundi } */
+    "rn",
+    "rn_Latn_BI"
+  }, {
+    /* { Romanian; ?; ? } => { Romanian; Latin; Romania } */
+    "ro",
+    "ro_Latn_RO"
+  }, {
+    /* { Russian; ?; ? } => { Russian; Cyrillic; Russia } */
+    "ru",
+    "ru_Cyrl_RU"
+  }, {
+    /* { Kinyarwanda; ?; ? } => { Kinyarwanda; Latin; Rwanda } */
+    "rw",
+    "rw_Latn_RW"
+  }, {
+    /* { Sanskrit; ?; ? } => { Sanskrit; Devanagari; India } */
+    "sa",
+    "sa_Deva_IN"
+  }, {
+    /* { Northern Sami; ?; ? } => { Northern Sami; Latin; Norway } */
+    "se",
+    "se_Latn_NO"
+  }, {
+    /* { Sango; ?; ? } => { Sango; Latin; Central African Republic } */
+    "sg",
+    "sg_Latn_CF"
+  }, {
+    /* { Serbo_Croatian; ?; ? } => { Serbian; Latin; Serbia } */
+    "sh",
+    "sr_Latn_RS"
+  }, {
+    /* { Sinhalese; ?; ? } => { Sinhalese; Sinhala; Sri Lanka } */
+    "si",
+    "si_Sinh_LK"
+  }, {
+    /* { Sidamo; ?; ? } => { Sidamo; Latin; Ethiopia } */
+    "sid",
+    "sid_Latn_ET"
+  }, {
+    /* { Slovak; ?; ? } => { Slovak; Latin; Slovakia } */
+    "sk",
+    "sk_Latn_SK"
+  }, {
+    /* { Slovenian; ?; ? } => { Slovenian; Latin; Slovenia } */
+    "sl",
+    "sl_Latn_SI"
+  }, {
+    /* { Samoan; ?; ? } => { Samoan; Latin; American Samoa } */
+    "sm",
+    "sm_Latn_AS"
+  }, {
+    /* { Somali; ?; ? } => { Somali; Latin; Somalia } */
+    "so",
+    "so_Latn_SO"
+  }, {
+    /* { Albanian; ?; ? } => { Albanian; Latin; Albania } */
+    "sq",
+    "sq_Latn_AL"
+  }, {
+    /* { Serbian; ?; ? } => { Serbian; Cyrillic; Serbia } */
+    "sr",
+    "sr_Cyrl_RS"
+  }, {
+    /* { Swati; ?; ? } => { Swati; Latin; South Africa } */
+    "ss",
+    "ss_Latn_ZA"
+  }, {
+    /* { Southern Sotho; ?; ? } => { Southern Sotho; Latin; South Africa } */
+    "st",
+    "st_Latn_ZA"
+  }, {
+    /* { Sundanese; ?; ? } => { Sundanese; Latin; Indonesia } */
+    "su",
+    "su_Latn_ID"
+  }, {
+    /* { Swedish; ?; ? } => { Swedish; Latin; Sweden } */
+    "sv",
+    "sv_Latn_SE"
+  }, {
+    /* { Swahili; ?; ? } => { Swahili; Latin; Tanzania } */
+    "sw",
+    "sw_Latn_TZ"
+  }, {
+    /* { Syriac; ?; ? } => { Syriac; Syriac; Syria } */
+    "syr",
+    "syr_Syrc_SY"
+  }, {
+    /* { Tamil; ?; ? } => { Tamil; Tamil; India } */
+    "ta",
+    "ta_Taml_IN"
+  }, {
+    /* { Telugu; ?; ? } => { Telugu; Telugu; India } */
+    "te",
+    "te_Telu_IN"
+  }, {
+    /* { Tetum; ?; ? } => { Tetum; Latin; East Timor } */
+    "tet",
+    "tet_Latn_TL"
+  }, {
+    /* { Tajik; ?; ? } => { Tajik; Cyrillic; Tajikistan } */
+    "tg",
+    "tg_Cyrl_TJ"
+  }, {
+    /* { Thai; ?; ? } => { Thai; Thai; Thailand } */
+    "th",
+    "th_Thai_TH"
+  }, {
+    /* { Tigrinya; ?; ? } => { Tigrinya; Ethiopic; Ethiopia } */
+    "ti",
+    "ti_Ethi_ET"
+  }, {
+    /* { Tigre; ?; ? } => { Tigre; Ethiopic; Eritrea } */
+    "tig",
+    "tig_Ethi_ER"
+  }, {
+    /* { Turkmen; ?; ? } => { Turkmen; Latin; Turkmenistan } */
+    "tk",
+    "tk_Latn_TM"
+  }, {
+    /* { Tokelau; ?; ? } => { Tokelau; Latin; Tokelau } */
+    "tkl",
+    "tkl_Latn_TK"
+  }, {
+    /* { Tswana; ?; ? } => { Tswana; Latin; South Africa } */
+    "tn",
+    "tn_Latn_ZA"
+  }, {
+    /* { Tonga; ?; ? } => { Tonga; Latin; Tonga } */
+    "to",
+    "to_Latn_TO"
+  }, {
+    /* { Tok Pisin; ?; ? } => { Tok Pisin; Latin; Papua New Guinea } */
+    "tpi",
+    "tpi_Latn_PG"
+  }, {
+    /* { Turkish; ?; ? } => { Turkish; Latin; Turkey } */
+    "tr",
+    "tr_Latn_TR"
+  }, {
+    /* { Tsonga; ?; ? } => { Tsonga; Latin; South Africa } */
+    "ts",
+    "ts_Latn_ZA"
+  }, {
+    /* { Tatar; ?; ? } => { Tatar; Cyrillic; Russia } */
+    "tt",
+    "tt_Cyrl_RU"
+  }, {
+    /* { Tuvalu; ?; ? } => { Tuvalu; Latin; Tuvalu } */
+    "tvl",
+    "tvl_Latn_TV"
+  }, {
+    /* { Tahitian; ?; ? } => { Tahitian; Latin; French Polynesia } */
+    "ty",
+    "ty_Latn_PF"
+  }, {
+    /* { Ukrainian; ?; ? } => { Ukrainian; Cyrillic; Ukraine } */
+    "uk",
+    "uk_Cyrl_UA"
+  }, {
+    /* { ?; ?; ? } => { English; Latin; United States } */
+    "und",
+    "en_Latn_US"
+  }, {
+    /* { ?; ?; Andorra } => { Catalan; Latin; Andorra } */
+    "und_AD",
+    "ca_Latn_AD"
+  }, {
+    /* { ?; ?; United Arab Emirates } */
+    /*  => { Arabic; Arabic; United Arab Emirates } */
+    "und_AE",
+    "ar_Arab_AE"
+  }, {
+    /* { ?; ?; Afghanistan } => { Persian; Arabic; Afghanistan } */
+    "und_AF",
+    "fa_Arab_AF"
+  }, {
+    /* { ?; ?; Albania } => { Albanian; Latin; Albania } */
+    "und_AL",
+    "sq_Latn_AL"
+  }, {
+    /* { ?; ?; Armenia } => { Armenian; Armenian; Armenia } */
+    "und_AM",
+    "hy_Armn_AM"
+  }, {
+    /* { ?; ?; Netherlands Antilles } */
+    /*  => { Papiamento; Latin; Netherlands Antilles } */
+    "und_AN",
+    "pap_Latn_AN"
+  }, {
+    /* { ?; ?; Angola } => { Portuguese; Latin; Angola } */
+    "und_AO",
+    "pt_Latn_AO"
+  }, {
+    /* { ?; ?; Argentina } => { Spanish; Latin; Argentina } */
+    "und_AR",
+    "es_Latn_AR"
+  }, {
+    /* { ?; ?; American Samoa } => { Samoan; Latin; American Samoa } */
+    "und_AS",
+    "sm_Latn_AS"
+  }, {
+    /* { ?; ?; Austria } => { German; Latin; Austria } */
+    "und_AT",
+    "de_Latn_AT"
+  }, {
+    /* { ?; ?; Aruba } => { Dutch; Latin; Aruba } */
+    "und_AW",
+    "nl_Latn_AW"
+  }, {
+    /* { ?; ?; Aland Islands } => { Swedish; Latin; Aland Islands } */
+    "und_AX",
+    "sv_Latn_AX"
+  }, {
+    /* { ?; ?; Azerbaijan } => { Azerbaijani; Latin; Azerbaijan } */
+    "und_AZ",
+    "az_Latn_AZ"
+  }, {
+    /* { ?; Arabic; ? } => { Arabic; Arabic; Egypt } */
+    "und_Arab",
+    "ar_Arab_EG"
+  }, {
+    /* { ?; Arabic; India } => { Urdu; Arabic; India } */
+    "und_Arab_IN",
+    "ur_Arab_IN"
+  }, {
+    /* { ?; Arabic; Pakistan } => { Punjabi; Arabic; Pakistan } */
+    "und_Arab_PK",
+    "pa_Arab_PK"
+  }, {
+    /* { ?; Arabic; Senegal } => { Wolof; Arabic; Senegal } */
+    "und_Arab_SN",
+    "wo_Arab_SN"
+  }, {
+    /* { ?; Armenian; ? } => { Armenian; Armenian; Armenia } */
+    "und_Armn",
+    "hy_Armn_AM"
+  }, {
+    /* { ?; ?; Bosnia and Herzegovina } */
+    /*  => { Bosnian; Latin; Bosnia and Herzegovina } */
+    "und_BA",
+    "bs_Latn_BA"
+  }, {
+    /* { ?; ?; Bangladesh } => { Bengali; Bengali; Bangladesh } */
+    "und_BD",
+    "bn_Beng_BD"
+  }, {
+    /* { ?; ?; Belgium } => { Dutch; Latin; Belgium } */
+    "und_BE",
+    "nl_Latn_BE"
+  }, {
+    /* { ?; ?; Burkina Faso } => { French; Latin; Burkina Faso } */
+    "und_BF",
+    "fr_Latn_BF"
+  }, {
+    /* { ?; ?; Bulgaria } => { Bulgarian; Cyrillic; Bulgaria } */
+    "und_BG",
+    "bg_Cyrl_BG"
+  }, {
+    /* { ?; ?; Bahrain } => { Arabic; Arabic; Bahrain } */
+    "und_BH",
+    "ar_Arab_BH"
+  }, {
+    /* { ?; ?; Burundi } => { Rundi; Latin; Burundi } */
+    "und_BI",
+    "rn_Latn_BI"
+  }, {
+    /* { ?; ?; Benin } => { French; Latin; Benin } */
+    "und_BJ",
+    "fr_Latn_BJ"
+  }, {
+    /* { ?; ?; Brunei } => { Malay; Latin; Brunei } */
+    "und_BN",
+    "ms_Latn_BN"
+  }, {
+    /* { ?; ?; Bolivia } => { Spanish; Latin; Bolivia } */
+    "und_BO",
+    "es_Latn_BO"
+  }, {
+    /* { ?; ?; Brazil } => { Portuguese; Latin; Brazil } */
+    "und_BR",
+    "pt_Latn_BR"
+  }, {
+    /* { ?; ?; Bhutan } => { Dzongkha; Tibetan; Bhutan } */
+    "und_BT",
+    "dz_Tibt_BT"
+  }, {
+    /* { ?; ?; Belarus } => { Belarusian; Cyrillic; Belarus } */
+    "und_BY",
+    "be_Cyrl_BY"
+  }, {
+    /* { ?; Bengali; ? } => { Bengali; Bengali; Bangladesh } */
+    "und_Beng",
+    "bn_Beng_BD"
+  }, {
+    /* { ?; Bengali; India } => { Assamese; Bengali; India } */
+    "und_Beng_IN",
+    "as_Beng_IN"
+  }, {
+    /* { ?; ?; Congo _ Kinshasa } => { French; Latin; Congo _ Kinshasa } */
+    "und_CD",
+    "fr_Latn_CD"
+  }, {
+    /* { ?; ?; Central African Republic } */
+    /*  => { Sango; Latin; Central African Republic } */
+    "und_CF",
+    "sg_Latn_CF"
+  }, {
+    /* { ?; ?; Congo _ Brazzaville } */
+    /*  => { Lingala; Latin; Congo _ Brazzaville } */
+    "und_CG",
+    "ln_Latn_CG"
+  }, {
+    /* { ?; ?; Switzerland } => { German; Latin; Switzerland } */
+    "und_CH",
+    "de_Latn_CH"
+  }, {
+    /* { ?; ?; Ivory Coast } => { French; Latin; Ivory Coast } */
+    "und_CI",
+    "fr_Latn_CI"
+  }, {
+    /* { ?; ?; Chile } => { Spanish; Latin; Chile } */
+    "und_CL",
+    "es_Latn_CL"
+  }, {
+    /* { ?; ?; Cameroon } => { French; Latin; Cameroon } */
+    "und_CM",
+    "fr_Latn_CM"
+  }, {
+    /* { ?; ?; China } => { Chinese; Simplified Han; China } */
+    "und_CN",
+    "zh_Hans_CN"
+  }, {
+    /* { ?; ?; Colombia } => { Spanish; Latin; Colombia } */
+    "und_CO",
+    "es_Latn_CO"
+  }, {
+    /* { ?; ?; Costa Rica } => { Spanish; Latin; Costa Rica } */
+    "und_CR",
+    "es_Latn_CR"
+  }, {
+    /* { ?; ?; Cuba } => { Spanish; Latin; Cuba } */
+    "und_CU",
+    "es_Latn_CU"
+  }, {
+    /* { ?; ?; Cape Verde } => { Portuguese; Latin; Cape Verde } */
+    "und_CV",
+    "pt_Latn_CV"
+  }, {
+    /* { ?; ?; Cyprus } => { Greek; Greek; Cyprus } */
+    "und_CY",
+    "el_Grek_CY"
+  }, {
+    /* { ?; ?; Czech Republic } => { Czech; Latin; Czech Republic } */
+    "und_CZ",
+    "cs_Latn_CZ"
+  }, {
+    /* { ?; Unified Canadian Aboriginal Syllabics; ? } */
+    /*  => { Inuktitut; Unified Canadian Aboriginal Syllabics; Canada } */
+    "und_Cans",
+    "iu_Cans_CA"
+  }, {
+    /* { ?; Cyrillic; ? } => { Russian; Cyrillic; Russia } */
+    "und_Cyrl",
+    "ru_Cyrl_RU"
+  }, {
+    /* { ?; Cyrillic; Kazakhstan } => { Kazakh; Cyrillic; Kazakhstan } */
+    "und_Cyrl_KZ",
+    "kk_Cyrl_KZ"
+  }, {
+    /* { ?; ?; Germany } => { German; Latin; Germany } */
+    "und_DE",
+    "de_Latn_DE"
+  }, {
+    /* { ?; ?; Djibouti } => { Arabic; Arabic; Djibouti } */
+    "und_DJ",
+    "ar_Arab_DJ"
+  }, {
+    /* { ?; ?; Denmark } => { Danish; Latin; Denmark } */
+    "und_DK",
+    "da_Latn_DK"
+  }, {
+    /* { ?; ?; Dominican Republic } => {Spanish; Latin; Dominican Republic } */
+    "und_DO",
+    "es_Latn_DO"
+  }, {
+    /* { ?; ?; Algeria } => { Arabic; Arabic; Algeria } */
+    "und_DZ",
+    "ar_Arab_DZ"
+  }, {
+    /* { ?; Devanagari; ? } => { Hindi; Devanagari; India } */
+    "und_Deva",
+    "hi_Deva_IN"
+  }, {
+    /* { ?; ?; Ecuador } => { Spanish; Latin; Ecuador } */
+    "und_EC",
+    "es_Latn_EC"
+  }, {
+    /* { ?; ?; Estonia } => { Estonian; Latin; Estonia } */
+    "und_EE",
+    "et_Latn_EE"
+  }, {
+    /* { ?; ?; Egypt } => { Arabic; Arabic; Egypt } */
+    "und_EG",
+    "ar_Arab_EG"
+  }, {
+    /* { ?; ?; Western Sahara } => { Arabic; Arabic; Western Sahara } */
+    "und_EH",
+    "ar_Arab_EH"
+  }, {
+    /* { ?; ?; Eritrea } => { Tigrinya; Ethiopic; Eritrea } */
+    "und_ER",
+    "ti_Ethi_ER"
+  }, {
+    /* { ?; ?; Spain } => { Spanish; Latin; Spain } */
+    "und_ES",
+    "es_Latn_ES"
+  }, {
+    /* { ?; ?; Ethiopia } => { Amharic; Ethiopic; Ethiopia } */
+    "und_ET",
+    "am_Ethi_ET"
+  }, {
+    /* { ?; Ethiopic; ? } => { Amharic; Ethiopic; Ethiopia } */
+    "und_Ethi",
+    "am_Ethi_ET"
+  }, {
+    /* { ?; Ethiopic; Eritrea } => { Blin; Ethiopic; Eritrea } */
+    "und_Ethi_ER",
+    "byn_Ethi_ER"
+  }, {
+    /* { ?; ?; Finland } => { Finnish; Latin; Finland } */
+    "und_FI",
+    "fi_Latn_FI"
+  }, {
+    /* { ?; ?; Fiji } => { Fijian; Latin; Fiji } */
+    "und_FJ",
+    "fj_Latn_FJ"
+  }, {
+    /* { ?; ?; Micronesia } => { Chuukese; Latin; Micronesia } */
+    "und_FM",
+    "chk_Latn_FM"
+  }, {
+    /* { ?; ?; Faroe Islands } => { Faroese; Latin; Faroe Islands } */
+    "und_FO",
+    "fo_Latn_FO"
+  }, {
+    /* { ?; ?; France } => { French; Latin; France } */
+    "und_FR",
+    "fr_Latn_FR"
+  }, {
+    /* { ?; ?; Gabon } => { French; Latin; Gabon } */
+    "und_GA",
+    "fr_Latn_GA"
+  }, {
+    /* { ?; ?; Georgia } => { Georgian; Georgian; Georgia } */
+    "und_GE",
+    "ka_Geor_GE"
+  }, {
+    /* { ?; ?; French Guiana } => { French; Latin; French Guiana } */
+    "und_GF",
+    "fr_Latn_GF"
+  }, {
+    /* { ?; ?; Greenland } => { Kalaallisut; Latin; Greenland } */
+    "und_GL",
+    "kl_Latn_GL"
+  }, {
+    /* { ?; ?; Guinea } => { French; Latin; Guinea } */
+    "und_GN",
+    "fr_Latn_GN"
+  }, {
+    /* { ?; ?; Guadeloupe } => { French; Latin; Guadeloupe } */
+    "und_GP",
+    "fr_Latn_GP"
+  }, {
+    /* { ?; ?; Equatorial Guinea } => { French; Latin; Equatorial Guinea } */
+    "und_GQ",
+    "fr_Latn_GQ"
+  }, {
+    /* { ?; ?; Greece } => { Greek; Greek; Greece } */
+    "und_GR",
+    "el_Grek_GR"
+  }, {
+    /* { ?; ?; Guatemala } => { Spanish; Latin; Guatemala } */
+    "und_GT",
+    "es_Latn_GT"
+  }, {
+    /* { ?; ?; Guam } => { Chamorro; Latin; Guam } */
+    "und_GU",
+    "ch_Latn_GU"
+  }, {
+    /* { ?; ?; Guinea_Bissau } => { Portuguese; Latin; Guinea_Bissau } */
+    "und_GW",
+    "pt_Latn_GW"
+  }, {
+    /* { ?; Georgian; ? } => { Georgian; Georgian; Georgia } */
+    "und_Geor",
+    "ka_Geor_GE"
+  }, {
+    /* { ?; Greek; ? } => { Greek; Greek; Greece } */
+    "und_Grek",
+    "el_Grek_GR"
+  }, {
+    /* { ?; Gujarati; ? } => { Gujarati; Gujarati; India } */
+    "und_Gujr",
+    "gu_Gujr_IN"
+  }, {
+    /* { ?; Gurmukhi; ? } => { Punjabi; Gurmukhi; India } */
+    "und_Guru",
+    "pa_Guru_IN"
+  }, {
+    /* { ?; ?; Hong Kong SAR China } */
+    /*  => { Chinese; Traditional Han; Hong Kong SAR China } */
+    "und_HK",
+    "zh_Hant_HK"
+  }, {
+    /* { ?; ?; Honduras } => { Spanish; Latin; Honduras } */
+    "und_HN",
+    "es_Latn_HN"
+  }, {
+    /* { ?; ?; Croatia } => { Croatian; Latin; Croatia } */
+    "und_HR",
+    "hr_Latn_HR"
+  }, {
+    /* { ?; ?; Haiti } => { Haitian; Latin; Haiti } */
+    "und_HT",
+    "ht_Latn_HT"
+  }, {
+    /* { ?; ?; Hungary } => { Hungarian; Latin; Hungary } */
+    "und_HU",
+    "hu_Latn_HU"
+  }, {
+    /* { ?; Han; ? } => { Chinese; Simplified Han; China } */
+    "und_Hani",
+    "zh_Hans_CN"
+  }, {
+    /* { ?; Simplified Han; ? } => { Chinese; Simplified Han; China } */
+    "und_Hans",
+    "zh_Hans_CN"
+  }, {
+    /* { ?; Traditional Han; ? } */
+    /*  => { Chinese; Traditional Han; Hong Kong SAR China } */
+    "und_Hant",
+    "zh_Hant_HK"
+  }, {
+    /* { ?; Hebrew; ? } => { null; Hebrew; Israel } */
+    "und_Hebr",
+    "iw_Hebr_IL"
+  }, {
+    /* { ?; ?; Indonesia } => { Sundanese; Latin; Indonesia } */
+    "und_ID",
+    "su_Latn_ID"
+  }, {
+    /* { ?; ?; Israel } => { null; Hebrew; Israel } */
+    "und_IL",
+    "iw_Hebr_IL"
+  }, {
+    /* { ?; ?; India } => { Hindi; Devanagari; India } */
+    "und_IN",
+    "hi_Deva_IN"
+  }, {
+    /* { ?; ?; Iraq } => { Arabic; Arabic; Iraq } */
+    "und_IQ",
+    "ar_Arab_IQ"
+  }, {
+    /* { ?; ?; Iran } => { Persian; Arabic; Iran } */
+    "und_IR",
+    "fa_Arab_IR"
+  }, {
+    /* { ?; ?; Iceland } => { Icelandic; Latin; Iceland } */
+    "und_IS",
+    "is_Latn_IS"
+  }, {
+    /* { ?; ?; Italy } => { Italian; Latin; Italy } */
+    "und_IT",
+    "it_Latn_IT"
+  }, {
+    /* { ?; ?; Jordan } => { Arabic; Arabic; Jordan } */
+    "und_JO",
+    "ar_Arab_JO"
+  }, {
+    /* { ?; ?; Japan } => { Japanese; Japanese; Japan } */
+    "und_JP",
+    "ja_Jpan_JP"
+  }, {
+    /* { ?; Japanese; ? } => { Japanese; Japanese; Japan } */
+    "und_Jpan",
+    "ja_Jpan_JP"
+  }, {
+    /* { ?; ?; Kyrgyzstan } => { Kirghiz; Cyrillic; Kyrgyzstan } */
+    "und_KG",
+    "ky_Cyrl_KG"
+  }, {
+    /* { ?; ?; Cambodia } => { Khmer; Khmer; Cambodia } */
+    "und_KH",
+    "km_Khmr_KH"
+  }, {
+    /* { ?; ?; Comoros } => { Arabic; Arabic; Comoros } */
+    "und_KM",
+    "ar_Arab_KM"
+  }, {
+    /* { ?; ?; North Korea } => { Korean; Korean; North Korea } */
+    "und_KP",
+    "ko_Kore_KP"
+  }, {
+    /* { ?; ?; South Korea } => { Korean; Korean; South Korea } */
+    "und_KR",
+    "ko_Kore_KR"
+  }, {
+    /* { ?; ?; Kuwait } => { Arabic; Arabic; Kuwait } */
+    "und_KW",
+    "ar_Arab_KW"
+  }, {
+    /* { ?; ?; Kazakhstan } => { Russian; Cyrillic; Kazakhstan } */
+    "und_KZ",
+    "ru_Cyrl_KZ"
+  }, {
+    /* { ?; Khmer; ? } => { Khmer; Khmer; Cambodia } */
+    "und_Khmr",
+    "km_Khmr_KH"
+  }, {
+    /* { ?; Kannada; ? } => { Kannada; Kannada; India } */
+    "und_Knda",
+    "kn_Knda_IN"
+  }, {
+    /* { ?; Korean; ? } => { Korean; Korean; South Korea } */
+    "und_Kore",
+    "ko_Kore_KR"
+  }, {
+    /* { ?; ?; Laos } => { Lao; Lao; Laos } */
+    "und_LA",
+    "lo_Laoo_LA"
+  }, {
+    /* { ?; ?; Lebanon } => { Arabic; Arabic; Lebanon } */
+    "und_LB",
+    "ar_Arab_LB"
+  }, {
+    /* { ?; ?; Liechtenstein } => { German; Latin; Liechtenstein } */
+    "und_LI",
+    "de_Latn_LI"
+  }, {
+    /* { ?; ?; Sri Lanka } => { Sinhalese; Sinhala; Sri Lanka } */
+    "und_LK",
+    "si_Sinh_LK"
+  }, {
+    /* { ?; ?; Lesotho } => { Southern Sotho; Latin; Lesotho } */
+    "und_LS",
+    "st_Latn_LS"
+  }, {
+    /* { ?; ?; Lithuania } => { Lithuanian; Latin; Lithuania } */
+    "und_LT",
+    "lt_Latn_LT"
+  }, {
+    /* { ?; ?; Luxembourg } => { French; Latin; Luxembourg } */
+    "und_LU",
+    "fr_Latn_LU"
+  }, {
+    /* { ?; ?; Latvia } => { Latvian; Latin; Latvia } */
+    "und_LV",
+    "lv_Latn_LV"
+  }, {
+    /* { ?; ?; Libya } => { Arabic; Arabic; Libya } */
+    "und_LY",
+    "ar_Arab_LY"
+  }, {
+    /* { ?; Lao; ? } => { Lao; Lao; Laos } */
+    "und_Laoo",
+    "lo_Laoo_LA"
+  }, {
+    /* { ?; Latin; Spain } => { Catalan; Latin; Spain } */
+    "und_Latn_ES",
+    "ca_Latn_ES"
+  }, {
+    /* { ?; Latin; Ethiopia } => { Afar; Latin; Ethiopia } */
+    "und_Latn_ET",
+    "aa_Latn_ET"
+  }, {
+    /* { ?; Latin; United Kingdom } => { Welsh; Latin; United Kingdom } */
+    "und_Latn_GB",
+    "cy_Latn_GB"
+  }, {
+    /* { ?; Latin; Ghana } => { Akan; Latin; Ghana } */
+    "und_Latn_GH",
+    "ak_Latn_GH"
+  }, {
+    /* { ?; Latin; Indonesia } => { Indonesian; Latin; Indonesia } */
+    "und_Latn_ID",
+    "id_Latn_ID"
+  }, {
+    /* { ?; Latin; Italy } => { Friulian; Latin; Italy } */
+    "und_Latn_IT",
+    "fur_Latn_IT"
+  }, {
+    /* { ?; Latin; Nigeria } => { Atsam; Latin; Nigeria } */
+    "und_Latn_NG",
+    "cch_Latn_NG"
+  }, {
+    /* { ?; Latin; Turkey } => { Kurdish; Latin; Turkey } */
+    "und_Latn_TR",
+    "ku_Latn_TR"
+  }, {
+    /* { ?; Latin; South Africa } => { Afrikaans; Latin; South Africa } */
+    "und_Latn_ZA",
+    "af_Latn_ZA"
+  }, {
+    /* { ?; ?; Morocco } => { Arabic; Arabic; Morocco } */
+    "und_MA",
+    "ar_Arab_MA"
+  }, {
+    /* { ?; ?; Monaco } => { French; Latin; Monaco } */
+    "und_MC",
+    "fr_Latn_MC"
+  }, {
+    /* { ?; ?; Moldova } => { Romanian; Latin; Moldova } */
+    "und_MD",
+    "ro_Latn_MD"
+  }, {
+    /* { ?; ?; Montenegro } => { Serbian; Cyrillic; Montenegro } */
+    "und_ME",
+    "sr_Cyrl_ME"
+  }, {
+    /* { ?; ?; Madagascar } => { Malagasy; Latin; Madagascar } */
+    "und_MG",
+    "mg_Latn_MG"
+  }, {
+    /* { ?; ?; Marshall Islands } => {Marshallese; Latin; Marshall Islands } */
+    "und_MH",
+    "mh_Latn_MH"
+  }, {
+    /* { ?; ?; Macedonia } => { Macedonian; Cyrillic; Macedonia } */
+    "und_MK",
+    "mk_Cyrl_MK"
+  }, {
+    /* { ?; ?; Mali } => { French; Latin; Mali } */
+    "und_ML",
+    "fr_Latn_ML"
+  }, {
+    /* { ?; ?; Myanmar } => { Burmese; Myanmar; Myanmar } */
+    "und_MM",
+    "my_Mymr_MM"
+  }, {
+    /* { ?; ?; Mongolia } => { Mongolian; Cyrillic; Mongolia } */
+    "und_MN",
+    "mn_Cyrl_MN"
+  }, {
+    /* { ?; ?; Macao SAR China } */
+    /*  => { Chinese; Traditional Han; Macao SAR China } */
+    "und_MO",
+    "zh_Hant_MO"
+  }, {
+    /* { ?; ?; Martinique } => { French; Latin; Martinique } */
+    "und_MQ",
+    "fr_Latn_MQ"
+  }, {
+    /* { ?; ?; Mauritania } => { Arabic; Arabic; Mauritania } */
+    "und_MR",
+    "ar_Arab_MR"
+  }, {
+    /* { ?; ?; Malta } => { Maltese; Latin; Malta } */
+    "und_MT",
+    "mt_Latn_MT"
+  }, {
+    /* { ?; ?; Maldives } => { Divehi; Thaana; Maldives } */
+    "und_MV",
+    "dv_Thaa_MV"
+  }, {
+    /* { ?; ?; Malawi } => { Nyanja; Latin; Malawi } */
+    "und_MW",
+    "ny_Latn_MW"
+  }, {
+    /* { ?; ?; Mexico } => { Spanish; Latin; Mexico } */
+    "und_MX",
+    "es_Latn_MX"
+  }, {
+    /* { ?; ?; Malaysia } => { Malay; Latin; Malaysia } */
+    "und_MY",
+    "ms_Latn_MY"
+  }, {
+    /* { ?; ?; Mozambique } => { Portuguese; Latin; Mozambique } */
+    "und_MZ",
+    "pt_Latn_MZ"
+  }, {
+    /* { ?; Malayalam; ? } => { Malayalam; Malayalam; India } */
+    "und_Mlym",
+    "ml_Mlym_IN"
+  }, {
+    /* { ?; Myanmar; ? } => { Burmese; Myanmar; Myanmar } */
+    "und_Mymr",
+    "my_Mymr_MM"
+  }, {
+    /* { ?; ?; New Caledonia } => { French; Latin; New Caledonia } */
+    "und_NC",
+    "fr_Latn_NC"
+  }, {
+    /* { ?; ?; Niger } => { French; Latin; Niger } */
+    "und_NE",
+    "fr_Latn_NE"
+  }, {
+    /* { ?; ?; Nigeria } => { Hausa; Latin; Nigeria } */
+    "und_NG",
+    "ha_Latn_NG"
+  }, {
+    /* { ?; ?; Nicaragua } => { Spanish; Latin; Nicaragua } */
+    "und_NI",
+    "es_Latn_NI"
+  }, {
+    /* { ?; ?; Netherlands } => { Dutch; Latin; Netherlands } */
+    "und_NL",
+    "nl_Latn_NL"
+  }, {
+    /* { ?; ?; Norway } => { Norwegian; Latin; Norway } */
+    "und_NO",
+    "no_Latn_NO"
+  }, {
+    /* { ?; ?; Nepal } => { Nepali; Devanagari; Nepal } */
+    "und_NP",
+    "ne_Deva_NP"
+  }, {
+    /* { ?; ?; Nauru } => { Nauru; Latin; Nauru } */
+    "und_NR",
+    "na_Latn_NR"
+  }, {
+    /* { ?; ?; Niue } => { Niuean; Latin; Niue } */
+    "und_NU",
+    "niu_Latn_NU"
+  }, {
+    /* { ?; ?; Oman } => { Arabic; Arabic; Oman } */
+    "und_OM",
+    "ar_Arab_OM"
+  }, {
+    /* { ?; Oriya; ? } => { Oriya; Oriya; India } */
+    "und_Orya",
+    "or_Orya_IN"
+  }, {
+    /* { ?; ?; Panama } => { Spanish; Latin; Panama } */
+    "und_PA",
+    "es_Latn_PA"
+  }, {
+    /* { ?; ?; Peru } => { Spanish; Latin; Peru } */
+    "und_PE",
+    "es_Latn_PE"
+  }, {
+    /* { ?; ?; French Polynesia } => { Tahitian; Latin; French Polynesia } */
+    "und_PF",
+    "ty_Latn_PF"
+  }, {
+    /* { ?; ?; Papua New Guinea } => { Tok Pisin; Latin; Papua New Guinea } */
+    "und_PG",
+    "tpi_Latn_PG"
+  }, {
+    /* { ?; ?; Philippines } => { Filipino; Latin; Philippines } */
+    "und_PH",
+    "fil_Latn_PH"
+  }, {
+    /* { ?; ?; Poland } => { Polish; Latin; Poland } */
+    "und_PL",
+    "pl_Latn_PL"
+  }, {
+    /* { ?; ?; Saint Pierre and Miquelon } */
+    /*  => { French; Latin; Saint Pierre and Miquelon } */
+    "und_PM",
+    "fr_Latn_PM"
+  }, {
+    /* { ?; ?; Puerto Rico } => { Spanish; Latin; Puerto Rico } */
+    "und_PR",
+    "es_Latn_PR"
+  }, {
+    /* { ?; ?; Palestinian Territory } */
+    /*  => { Arabic; Arabic; Palestinian Territory } */
+    "und_PS",
+    "ar_Arab_PS"
+  }, {
+    /* { ?; ?; Portugal } => { Portuguese; Latin; Portugal } */
+    "und_PT",
+    "pt_Latn_PT"
+  }, {
+    /* { ?; ?; Palau } => { Palauan; Latin; Palau } */
+    "und_PW",
+    "pau_Latn_PW"
+  }, {
+    /* { ?; ?; Paraguay } => { Guarani; Latin; Paraguay } */
+    "und_PY",
+    "gn_Latn_PY"
+  }, {
+    /* { ?; ?; Qatar } => { Arabic; Arabic; Qatar } */
+    "und_QA",
+    "ar_Arab_QA"
+  }, {
+    /* { ?; ?; Reunion } => { French; Latin; Reunion } */
+    "und_RE",
+    "fr_Latn_RE"
+  }, {
+    /* { ?; ?; Romania } => { Romanian; Latin; Romania } */
+    "und_RO",
+    "ro_Latn_RO"
+  }, {
+    /* { ?; ?; Serbia } => { Serbian; Cyrillic; Serbia } */
+    "und_RS",
+    "sr_Cyrl_RS"
+  }, {
+    /* { ?; ?; Russia } => { Russian; Cyrillic; Russia } */
+    "und_RU",
+    "ru_Cyrl_RU"
+  }, {
+    /* { ?; ?; Rwanda } => { Kinyarwanda; Latin; Rwanda } */
+    "und_RW",
+    "rw_Latn_RW"
+  }, {
+    /* { ?; ?; Saudi Arabia } => { Arabic; Arabic; Saudi Arabia } */
+    "und_SA",
+    "ar_Arab_SA"
+  }, {
+    /* { ?; ?; Sudan } => { Arabic; Arabic; Sudan } */
+    "und_SD",
+    "ar_Arab_SD"
+  }, {
+    /* { ?; ?; Sweden } => { Swedish; Latin; Sweden } */
+    "und_SE",
+    "sv_Latn_SE"
+  }, {
+    /* { ?; ?; Singapore } => { Chinese; Simplified Han; Singapore } */
+    "und_SG",
+    "zh_Hans_SG"
+  }, {
+    /* { ?; ?; Slovenia } => { Slovenian; Latin; Slovenia } */
+    "und_SI",
+    "sl_Latn_SI"
+  }, {
+    /* { ?; ?; Svalbard and Jan Mayen } */
+    /*  => { Norwegian; Latin; Svalbard and Jan Mayen } */
+    "und_SJ",
+    "no_Latn_SJ"
+  }, {
+    /* { ?; ?; Slovakia } => { Slovak; Latin; Slovakia } */
+    "und_SK",
+    "sk_Latn_SK"
+  }, {
+    /* { ?; ?; San Marino } => { Italian; Latin; San Marino } */
+    "und_SM",
+    "it_Latn_SM"
+  }, {
+    /* { ?; ?; Senegal } => { French; Latin; Senegal } */
+    "und_SN",
+    "fr_Latn_SN"
+  }, {
+    /* { ?; ?; Somalia } => { Somali; Latin; Somalia } */
+    "und_SO",
+    "so_Latn_SO"
+  }, {
+    /* { ?; ?; Suriname } => { Dutch; Latin; Suriname } */
+    "und_SR",
+    "nl_Latn_SR"
+  }, {
+    /* { ?; ?; Sao Tome and Principe } */
+    /*  => { Portuguese; Latin; Sao Tome and Principe } */
+    "und_ST",
+    "pt_Latn_ST"
+  }, {
+    /* { ?; ?; El Salvador } => { Spanish; Latin; El Salvador } */
+    "und_SV",
+    "es_Latn_SV"
+  }, {
+    /* { ?; ?; Syria } => { Arabic; Arabic; Syria } */
+    "und_SY",
+    "ar_Arab_SY"
+  }, {
+    /* { ?; Sinhala; ? } => { Sinhalese; Sinhala; Sri Lanka } */
+    "und_Sinh",
+    "si_Sinh_LK"
+  }, {
+    /* { ?; Syriac; ? } => { Syriac; Syriac; Syria } */
+    "und_Syrc",
+    "syr_Syrc_SY"
+  }, {
+    /* { ?; ?; Chad } => { Arabic; Arabic; Chad } */
+    "und_TD",
+    "ar_Arab_TD"
+  }, {
+    /* { ?; ?; Togo } => { French; Latin; Togo } */
+    "und_TG",
+    "fr_Latn_TG"
+  }, {
+    /* { ?; ?; Thailand } => { Thai; Thai; Thailand } */
+    "und_TH",
+    "th_Thai_TH"
+  }, {
+    /* { ?; ?; Tajikistan } => { Tajik; Cyrillic; Tajikistan } */
+    "und_TJ",
+    "tg_Cyrl_TJ"
+  }, {
+    /* { ?; ?; Tokelau } => { Tokelau; Latin; Tokelau } */
+    "und_TK",
+    "tkl_Latn_TK"
+  }, {
+    /* { ?; ?; East Timor } => { Tetum; Latin; East Timor } */
+    "und_TL",
+    "tet_Latn_TL"
+  }, {
+    /* { ?; ?; Turkmenistan } => { Turkmen; Latin; Turkmenistan } */
+    "und_TM",
+    "tk_Latn_TM"
+  }, {
+    /* { ?; ?; Tunisia } => { Arabic; Arabic; Tunisia } */
+    "und_TN",
+    "ar_Arab_TN"
+  }, {
+    /* { ?; ?; Tonga } => { Tonga; Latin; Tonga } */
+    "und_TO",
+    "to_Latn_TO"
+  }, {
+    /* { ?; ?; Turkey } => { Turkish; Latin; Turkey } */
+    "und_TR",
+    "tr_Latn_TR"
+  }, {
+    /* { ?; ?; Tuvalu } => { Tuvalu; Latin; Tuvalu } */
+    "und_TV",
+    "tvl_Latn_TV"
+  }, {
+    /* { ?; ?; Taiwan } => { Chinese; Traditional Han; Taiwan } */
+    "und_TW",
+    "zh_Hant_TW"
+  }, {
+    /* { ?; Tamil; ? } => { Tamil; Tamil; India } */
+    "und_Taml",
+    "ta_Taml_IN"
+  }, {
+    /* { ?; Telugu; ? } => { Telugu; Telugu; India } */
+    "und_Telu",
+    "te_Telu_IN"
+  }, {
+    /* { ?; Thaana; ? } => { Divehi; Thaana; Maldives } */
+    "und_Thaa",
+    "dv_Thaa_MV"
+  }, {
+    /* { ?; Thai; ? } => { Thai; Thai; Thailand } */
+    "und_Thai",
+    "th_Thai_TH"
+  }, {
+    /* { ?; Tibetan; ? } => { Tibetan; Tibetan; China } */
+    "und_Tibt",
+    "bo_Tibt_CN"
+  }, {
+    /* { ?; ?; Ukraine } => { Ukrainian; Cyrillic; Ukraine } */
+    "und_UA",
+    "uk_Cyrl_UA"
+  }, {
+    /* { ?; ?; Uruguay } => { Spanish; Latin; Uruguay } */
+    "und_UY",
+    "es_Latn_UY"
+  }, {
+    /* { ?; ?; Uzbekistan } => { Uzbek; Cyrillic; Uzbekistan } */
+    "und_UZ",
+    "uz_Cyrl_UZ"
+  }, {
+    /* { ?; ?; Vatican } => { Latin; Latin; Vatican } */
+    "und_VA",
+    "la_Latn_VA"
+  }, {
+    /* { ?; ?; Venezuela } => { Spanish; Latin; Venezuela } */
+    "und_VE",
+    "es_Latn_VE"
+  }, {
+    /* { ?; ?; Vietnam } => { Vietnamese; Latin; Vietnam } */
+    "und_VN",
+    "vi_Latn_VN"
+  }, {
+    /* { ?; ?; Vanuatu } => { French; Latin; Vanuatu } */
+    "und_VU",
+    "fr_Latn_VU"
+  }, {
+    /* { ?; ?; Wallis and Futuna } => { French; Latin; Wallis and Futuna } */
+    "und_WF",
+    "fr_Latn_WF"
+  }, {
+    /* { ?; ?; Samoa } => { Samoan; Latin; Samoa } */
+    "und_WS",
+    "sm_Latn_WS"
+  }, {
+    /* { ?; ?; Yemen } => { Arabic; Arabic; Yemen } */
+    "und_YE",
+    "ar_Arab_YE"
+  }, {
+    /* { ?; ?; Mayotte } => { French; Latin; Mayotte } */
+    "und_YT",
+    "fr_Latn_YT"
+  }, {
+    /* { ?; Yi; ? } => { Sichuan Yi; Yi; China } */
+    "und_Yiii",
+    "ii_Yiii_CN"
+  }, {
+    /* { Urdu; ?; ? } => { Urdu; Arabic; India } */
+    "ur",
+    "ur_Arab_IN"
+  }, {
+    /* { Uzbek; ?; ? } => { Uzbek; Cyrillic; Uzbekistan } */
+    "uz",
+    "uz_Cyrl_UZ"
+  }, {
+    /* { Uzbek; ?; Afghanistan } => { Uzbek; Arabic; Afghanistan } */
+    "uz_AF",
+    "uz_Arab_AF"
+  }, {
+    /* { Uzbek; Arabic; ? } => { Uzbek; Arabic; Afghanistan } */
+    "uz_Arab",
+    "uz_Arab_AF"
+  }, {
+    /* { Venda; ?; ? } => { Venda; Latin; South Africa } */
+    "ve",
+    "ve_Latn_ZA"
+  }, {
+    /* { Vietnamese; ?; ? } => { Vietnamese; Latin; Vietnam } */
+    "vi",
+    "vi_Latn_VN"
+  }, {
+    /* { Walamo; ?; ? } => { Walamo; Ethiopic; Ethiopia } */
+    "wal",
+    "wal_Ethi_ET"
+  }, {
+    /* { Wolof; ?; ? } => { Wolof; Arabic; Senegal } */
+    "wo",
+    "wo_Arab_SN"
+  }, {
+    /* { Wolof; ?; Senegal } => { Wolof; Latin; Senegal } */
+    "wo_SN",
+    "wo_Latn_SN"
+  }, {
+    /* { Xhosa; ?; ? } => { Xhosa; Latin; South Africa } */
+    "xh",
+    "xh_Latn_ZA"
+  }, {
+    /* { Yoruba; ?; ? } => { Yoruba; Latin; Nigeria } */
+    "yo",
+    "yo_Latn_NG"
+  }, {
+    /* { Chinese; ?; ? } => { Chinese; Simplified Han; China } */
+    "zh",
+    "zh_Hans_CN"
+  }, {
+    /* { Chinese; ?; Hong Kong SAR China } */
+    /*  => { Chinese; Traditional Han; Hong Kong SAR China } */
+    "zh_HK",
+    "zh_Hant_HK"
+  }, {
+    /* { Chinese; Han; ? } => { Chinese; Simplified Han; China } */
+    "zh_Hani",
+    "zh_Hans_CN"
+  }, {
+    /* { Chinese; Traditional Han; ? } */
+    /*  => { Chinese; Traditional Han; Taiwan } */
+    "zh_Hant",
+    "zh_Hant_TW"
+  }, {
+    /* { Chinese; ?; Macao SAR China } */
+    /*  => { Chinese; Traditional Han; Macao SAR China } */
+    "zh_MO",
+    "zh_Hant_MO"
+  }, {
+    /* { Chinese; ?; Taiwan } => { Chinese; Traditional Han; Taiwan } */
+    "zh_TW",
+    "zh_Hant_TW"
+  }, {
+    /* { Zulu; ?; ? } => { Zulu; Latin; South Africa } */
+    "zu",
+    "zu_Latn_ZA"
+  }
+};
+
+/**
+ * This trivial function searches the array for a matching entry.
+ *
+ * @param localeID The tag to find.
+ * @return The corresponding StringPair if found, or a null pointer if not.
+ */
+static const StringPair*  U_CALLCONV
+findStringPair(const char* localeID) {
+  StringPair dummy;
+  const void* entry = NULL;
+
+  dummy.minimal = localeID;
+  dummy.maximal = "";
+
+  entry = bsearch(
+        &dummy,
+        likely_subtags,
+        sizeof(likely_subtags) / sizeof(likely_subtags[0]),
+        sizeof(likely_subtags[0]),
+        compareStringPairStructs);
+
+  return (const StringPair*)entry;
+}
+
+/**
+ * Append a tag to a buffer, adding the separator if necessary.  The buffer
+ * must be large enough to contain the resulting tag plus any separator
+ * necessary. The tag must not be a zero-length string.
+ *
+ * @param tag The tag to add.
+ * @param tagLength The length of the tag.
+ * @param buffer The output buffer.
+ * @param bufferLength The length of the output buffer.  This is an input/ouput parameter.
+ **/
+static void U_CALLCONV
+appendTag(
+    const char* tag,
+    int32_t tagLength,
+    char* buffer,
+    int32_t* bufferLength) {
+
+    if (*bufferLength > 0) {
+        buffer[*bufferLength] = '_';
+        ++(*bufferLength);
+    }
+
+    uprv_memmove(
+        &buffer[*bufferLength],
+        tag,
+        tagLength);
+
+    *bufferLength += tagLength;
+}
+
+/**
+ * These are the canonical strings for unknown languages, scripts and regions.
+ **/
+static const char* const unknownLanguage = "und";
+static const char* const unknownScript = "Zzzz";
+static const char* const unknownRegion = "ZZ";
+
+/**
+ * Create a tag string from the supplied parameters.  The lang, script and region
+ * parameters may be NULL pointers. If they are, their corresponding length parameters
+ * must be less than or equal to 0.
+ *
+ * If any of the language, script or region parameters are empty, and the alternateTags
+ * parameter is not NULL, it will be parsed for potential language, script and region tags
+ * to be used when constructing the new tag.  If the alternateTags parameter is NULL, or
+ * it contains no language tag, the default tag for the unknown language is used.
+ *
+ * If the length of the new string exceeds the capacity of the output buffer, 
+ * the function copies as many bytes to the output buffer as it can, and returns
+ * the error U_BUFFER_OVERFLOW_ERROR.
+ *
+ * If an illegal argument is provided, the function returns the error
+ * U_ILLEGAL_ARGUMENT_ERROR.
+ *
+ * Note that this function can return the warning U_STRING_NOT_TERMINATED_WARNING if
+ * the tag string fits in the output buffer, but the null terminator doesn't.
+ *
+ * @param lang The language tag to use.
+ * @param langLength The length of the language tag.
+ * @param script The script tag to use.
+ * @param scriptLength The length of the script tag.
+ * @param region The region tag to use.
+ * @param regionLength The length of the region tag.
+ * @param trailing Any trailing data to append to the new tag.
+ * @param trailingLength The length of the trailing data.
+ * @param alternateTags A string containing any alternate tags.
+ * @param tag The output buffer.
+ * @param tagCapacity The capacity of the output buffer.
+ * @param err A pointer to a UErrorCode for error reporting.
+ * @return The length of the tag string, which may be greater than tagCapacity, or -1 on error.
+ **/
+static int32_t U_CALLCONV
+createTagStringWithAlternates(
+    const char* lang,
+    int32_t langLength,
+    const char* script,
+    int32_t scriptLength,
+    const char* region,
+    int32_t regionLength,
+    const char* trailing,
+    int32_t trailingLength,
+    const char* alternateTags,
+    char* tag,
+    int32_t tagCapacity,
+    UErrorCode* err) {
+
+    if (U_FAILURE(*err)) {
+        goto error;
+    }
+    else if (tag == NULL ||
+             tagCapacity <= 0 ||
+             langLength >= ULOC_LANG_CAPACITY ||
+             scriptLength >= ULOC_SCRIPT_CAPACITY ||
+             regionLength >= ULOC_COUNTRY_CAPACITY) {
+        goto error;
+    }
+    else {
+        /**
+         * ULOC_FULLNAME_CAPACITY will provide enough capacity
+         * that we can build a string that contains the language,
+         * script and region code without worrying about overrunning
+         * the user-supplied buffer.
+         **/
+        char tagBuffer[ULOC_FULLNAME_CAPACITY];
+        int32_t tagLength = 0;
+        int32_t capacityRemaining = tagCapacity;
+        UBool regionAppended = FALSE;
+
+        if (langLength > 0) {
+            appendTag(
+                lang,
+                langLength,
+                tagBuffer,
+                &tagLength);
+        }
+        else if (alternateTags == NULL) {
+            /*
+             * Append the value for an unknown language, if
+             * we found no language.
+             */
+            appendTag(
+                unknownLanguage,
+                uprv_strlen(unknownLanguage),
+                tagBuffer,
+                &tagLength);
+        }
+        else {
+            /*
+             * Parse the alternateTags string for the language.
+             */
+            char alternateLang[ULOC_LANG_CAPACITY];
+            int32_t alternateLangLength = sizeof(alternateLang);
+
+            alternateLangLength =
+                uloc_getLanguage(
+                    alternateTags,
+                    alternateLang,
+                    alternateLangLength,
+                    err);
+            if(U_FAILURE(*err) ||
+                alternateLangLength >= ULOC_LANG_CAPACITY) {
+                goto error;
+            }
+            else if (alternateLangLength == 0) {
+                /*
+                 * Append the value for an unknown language, if
+                 * we found no language.
+                 */
+                appendTag(
+                    unknownLanguage,
+                    uprv_strlen(unknownLanguage),
+                    tagBuffer,
+                    &tagLength);
+            }
+            else {
+                appendTag(
+                    alternateLang,
+                    alternateLangLength,
+                    tagBuffer,
+                    &tagLength);
+            }
+        }
+
+        if (scriptLength > 0) {
+            appendTag(
+                script,
+                scriptLength,
+                tagBuffer,
+                &tagLength);
+        }
+        else if (alternateTags != NULL) {
+            /*
+             * Parse the alternateTags string for the script.
+             */
+            char alternateScript[ULOC_SCRIPT_CAPACITY];
+
+            const int32_t alternateScriptLength =
+                uloc_getScript(
+                    alternateTags,
+                    alternateScript,
+                    sizeof(alternateScript),
+                    err);
+
+            if (U_FAILURE(*err) ||
+                alternateScriptLength >= ULOC_SCRIPT_CAPACITY) {
+                goto error;
+            }
+            else if (alternateScriptLength > 0) {
+                appendTag(
+                    alternateScript,
+                    alternateScriptLength,
+                    tagBuffer,
+                    &tagLength);
+            }
+        }
+
+        if (regionLength > 0) {
+            appendTag(
+                region,
+                regionLength,
+                tagBuffer,
+                &tagLength);
+
+            regionAppended = TRUE;
+        }
+        else if (alternateTags != NULL) {
+            /*
+             * Parse the alternateTags string for the region.
+             */
+            char alternateRegion[ULOC_COUNTRY_CAPACITY];
+
+            const int32_t alternateRegionLength =
+                uloc_getCountry(
+                    alternateTags,
+                    alternateRegion,
+                    sizeof(alternateRegion),
+                    err);
+            if (U_FAILURE(*err) ||
+                alternateRegionLength >= ULOC_COUNTRY_CAPACITY) {
+                goto error;
+            }
+            else if (alternateRegionLength > 0) {
+                appendTag(
+                    alternateRegion,
+                    alternateRegionLength,
+                    tagBuffer,
+                    &tagLength);
+
+                regionAppended = TRUE;
+            }
+        }
+
+        {
+            const int32_t toCopy =
+                tagLength >= tagCapacity ? tagCapacity : tagLength;
+
+            /**
+             * Copy the partial tag from our internal buffer to the supplied
+             * target.
+             **/
+            uprv_memcpy(
+                tag,
+                tagBuffer,
+                toCopy);
+
+            capacityRemaining -= toCopy;
+        }
+
+        if (trailingLength > 0) {
+            if (capacityRemaining > 0 && !regionAppended) {
+                tag[tagLength++] = '_';
+                --capacityRemaining;
+            }
+
+            if (capacityRemaining > 0) {
+                /*
+                 * Copy the trailing data into the supplied buffer.  Use uprv_memmove, since we
+                 * don't know if the user-supplied buffers overlap.
+                 */
+                const int32_t toCopy =
+                    trailingLength >= capacityRemaining ? capacityRemaining : trailingLength;
+
+                uprv_memmove(
+                    &tag[tagLength],
+                    trailing,
+                    toCopy);
+            }
+        }
+
+        tagLength += trailingLength;
+
+        return u_terminateChars(
+                    tag,
+                    tagCapacity,
+                    tagLength,
+                    err);
+    }
+
+error:
+
+    /**
+     * An overflow indicates the locale ID passed in
+     * is ill-formed.  If we got here, and there was
+     * no previous error, it's an implicit overflow.
+     **/
+    if (*err ==  U_BUFFER_OVERFLOW_ERROR ||
+        U_SUCCESS(*err)) {
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+    }
+
+    return -1;
+}
+
+/**
+ * Create a tag string from the supplied parameters.  The lang, script and region
+ * parameters may be NULL pointers. If they are, their corresponding length parameters
+ * must be less than or equal to 0.  If the lang parameter is an empty string, the
+ * default value for an unknown language is written to the output buffer.
+ *
+ * If the length of the new string exceeds the capacity of the output buffer, 
+ * the function copies as many bytes to the output buffer as it can, and returns
+ * the error U_BUFFER_OVERFLOW_ERROR.
+ *
+ * If an illegal argument is provided, the function returns the error
+ * U_ILLEGAL_ARGUMENT_ERROR.
+ *
+ * @param lang The language tag to use.
+ * @param langLength The length of the language tag.
+ * @param script The script tag to use.
+ * @param scriptLength The length of the script tag.
+ * @param region The region tag to use.
+ * @param regionLength The length of the region tag.
+ * @param trailing Any trailing data to append to the new tag.
+ * @param trailingLength The length of the trailing data.
+ * @param tag The output buffer.
+ * @param tagCapacity The capacity of the output buffer.
+ * @param err A pointer to a UErrorCode for error reporting.
+ * @return The length of the tag string, which may be greater than tagCapacity.
+ **/
+static int32_t U_CALLCONV
+createTagString(
+    const char* lang,
+    int32_t langLength,
+    const char* script,
+    int32_t scriptLength,
+    const char* region,
+    int32_t regionLength,
+    const char* trailing,
+    int32_t trailingLength,
+    char* tag,
+    int32_t tagCapacity,
+    UErrorCode* err)
+{
+    return createTagStringWithAlternates(
+                lang,
+                langLength,
+                script,
+                scriptLength,
+                region,
+                regionLength,
+                trailing,
+                trailingLength,
+                NULL,
+                tag,
+                tagCapacity,
+                err);
+}
+
+/**
+ * Parse the language, script, and region subtags from a tag string, and copy the
+ * results into the corresponding output parameters. The buffers are null-terminated,
+ * unless overflow occurs.
+ *
+ * The langLength, scriptLength, and regionLength parameters are input/output
+ * parameters, and must contain the capacity of their corresponding buffers on
+ * input.  On output, they will contain the actual length of the buffers, not
+ * including the null terminator.
+ *
+ * If the length of any of the output subtags exceeds the capacity of the corresponding
+ * buffer, the function copies as many bytes to the output buffer as it can, and returns
+ * the error U_BUFFER_OVERFLOW_ERROR.  It will not parse any more subtags once overflow
+ * occurs.
+ *
+ * If an illegal argument is provided, the function returns the error
+ * U_ILLEGAL_ARGUMENT_ERROR.
+ *
+ * @param localeID The locale ID to parse.
+ * @param lang The language tag buffer.
+ * @param langLength The length of the language tag.
+ * @param script The script tag buffer.
+ * @param scriptLength The length of the script tag.
+ * @param region The region tag buffer.
+ * @param regionLength The length of the region tag.
+ * @param err A pointer to a UErrorCode for error reporting.
+ * @return The number of chars of the localeID parameter consumed.
+ **/
+static int32_t U_CALLCONV
+parseTagString(
+    const char* localeID,
+    char* lang,
+    int32_t* langLength,
+    char* script,
+    int32_t* scriptLength,
+    char* region,
+    int32_t* regionLength,
+    UErrorCode* err)
+{
+    const char* position = localeID;
+    int32_t subtagLength = 0;
+
+    if(U_FAILURE(*err) ||
+       localeID == NULL ||
+       lang == NULL ||
+       langLength == NULL ||
+       script == NULL ||
+       scriptLength == NULL ||
+       region == NULL ||
+       regionLength == NULL) {
+        goto error;
+    }
+
+    subtagLength = _getLanguage(position, lang, *langLength, &position);
+    u_terminateChars(lang, *langLength, subtagLength, err);
+
+    /*
+     * Note that we explicit consider U_STRING_NOT_TERMINATED_WARNING
+     * to be an error, because it indicates the user-supplied tag is
+     * not well-formed.
+     */
+    if(*err != U_ZERO_ERROR) {
+        goto error;
+    }
+
+    *langLength = subtagLength;
+
+    /*
+     * If no language was present, use the value of unknownLanguage
+     * instead.  Otherwise, move past any separator.
+     */
+    if (*langLength == 0) {
+        uprv_strcpy(
+            lang,
+            unknownLanguage);
+        *langLength = uprv_strlen(lang);
+    }
+    else if (_isIDSeparator(*position)) {
+        ++position;
+    }
+
+    subtagLength = _getScript(position, script, *scriptLength, &position);
+    u_terminateChars(script, *scriptLength, subtagLength, err);
+
+    if(*err != U_ZERO_ERROR) {
+        goto error;
+    }
+
+    *scriptLength = subtagLength;
+
+    if (*scriptLength > 0) {
+        if (uprv_strnicmp(script, unknownScript, *scriptLength) == 0) {
+            /**
+             * If the script part is the "unknown" script, then don't return it.
+             **/
+            *scriptLength = 0;
+        }
+
+        /*
+         * Move past any separator.
+         */
+        if (_isIDSeparator(*position)) {
+            ++position;
+        }    
+    }
+
+    subtagLength = _getCountry(position, region, *regionLength, &position);
+    u_terminateChars(region, *regionLength, subtagLength, err);
+
+    if(*err != U_ZERO_ERROR) {
+        goto error;
+    }
+
+    *regionLength = subtagLength;
+
+    if (*regionLength > 0) {
+        if (uprv_strnicmp(region, unknownRegion, *regionLength) == 0) {
+            /**
+             * If the region part is the "unknown" region, then don't return it.
+             **/
+            *regionLength = 0;
+        }
+    }
+
+exit:
+
+    return (int32_t)(position - localeID);
+
+error:
+
+    /**
+     * If we get here, we have no explicit error, it's the result of an
+     * illegal argument.
+     **/
+    if (!U_FAILURE(*err)) {
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+    }
+
+    goto exit;
+}
+
+static int32_t U_CALLCONV
+createLikelySubtagsString(
+    const char* lang,
+    int32_t langLength,
+    const char* script,
+    int32_t scriptLength,
+    const char* region,
+    int32_t regionLength,
+    const char* variants,
+    int32_t variantsLength,
+    char* tag,
+    int32_t tagCapacity,
+    UErrorCode* err)
+{
+    /**
+     * ULOC_FULLNAME_CAPACITY will provide enough capacity
+     * that we can build a string that contains the language,
+     * script and region code without worrying about overrunning
+     * the user-supplied buffer.
+     **/
+    char tagBuffer[ULOC_FULLNAME_CAPACITY];
+    int32_t tagBufferLength = 0;
+
+    if(U_FAILURE(*err)) {
+        goto error;
+    }
+
+    /**
+     * Try the language with the script and region first.
+     **/
+    if (scriptLength > 0 && regionLength > 0) {
+
+        const StringPair* likelySubtags = NULL;
+
+        tagBufferLength = createTagString(
+            lang,
+            langLength,
+            script,
+            scriptLength,
+            region,
+            regionLength,
+            NULL,
+            0,
+            tagBuffer,
+            sizeof(tagBuffer),
+            err);
+        if(U_FAILURE(*err)) {
+            goto error;
+        }
+
+        likelySubtags = findStringPair(tagBuffer);
+
+        if (likelySubtags != NULL) {
+            // Always use the language tag from the
+            // maximal string, since it may be more
+            // specific than the one provided.
+            return createTagStringWithAlternates(
+                        NULL,
+                        0,
+                        NULL,
+                        0,
+                        NULL,
+                        0,
+                        variants,
+                        variantsLength,
+                        likelySubtags->maximal,
+                        tag,
+                        tagCapacity,
+                        err);
+        }
+    }
+
+    /**
+     * Try the language with just the script.
+     **/
+    if (scriptLength > 0) {
+
+        const StringPair* likelySubtags = NULL;
+
+        tagBufferLength = createTagString(
+            lang,
+            langLength,
+            script,
+            scriptLength,
+            NULL,
+            0,
+            NULL,
+            0,
+            tagBuffer,
+            sizeof(tagBuffer),
+            err);
+        if(U_FAILURE(*err)) {
+            goto error;
+        }
+
+        likelySubtags = findStringPair(tagBuffer);
+
+        if (likelySubtags != NULL) {
+            // Always use the language tag from the
+            // maximal string, since it may be more
+            // specific than the one provided.
+            return createTagStringWithAlternates(
+                        NULL,
+                        0,
+                        NULL,
+                        0,
+                        region,
+                        regionLength,
+                        variants,
+                        variantsLength,
+                        likelySubtags->maximal,
+                        tag,
+                        tagCapacity,
+                        err);
+        }
+    }
+
+    /**
+     * Try the language with just the region.
+     **/
+    if (regionLength > 0) {
+
+        const StringPair* likelySubtags = NULL;
+
+        createTagString(
+            lang,
+            langLength,
+            NULL,
+            0,
+            region,
+            regionLength,
+            NULL,
+            0,
+            tagBuffer,
+            sizeof(tagBuffer),
+            err);
+        if(U_FAILURE(*err)) {
+            goto error;
+        }
+
+        likelySubtags = findStringPair(tagBuffer);
+
+        if (likelySubtags != NULL) {
+            // Always use the language tag from the
+            // maximal string, since it may be more
+            // specific than the one provided.
+            return createTagStringWithAlternates(
+                        NULL,
+                        0,
+                        script,
+                        scriptLength,
+                        NULL,
+                        0,
+                        variants,
+                        variantsLength,
+                        likelySubtags->maximal,
+                        tag,
+                        tagCapacity,
+                        err);
+        }
+    }
+
+    /**
+     * Finally, try just the language.
+     **/
+    {
+        const StringPair* likelySubtags = NULL;
+
+        createTagString(
+            lang,
+            langLength,
+            NULL,
+            0,
+            NULL,
+            0,
+            NULL,
+            0,
+            tagBuffer,
+            sizeof(tagBuffer),
+            err);
+        if(U_FAILURE(*err)) {
+            goto error;
+        }
+
+        likelySubtags = findStringPair(tagBuffer);
+
+        if (likelySubtags != NULL) {
+            // Always use the language tag from the
+            // maximal string, since it may be more
+            // specific than the one provided.
+            return createTagStringWithAlternates(
+                        NULL,
+                        0,
+                        script,
+                        scriptLength,
+                        region,
+                        regionLength,
+                        variants,
+                        variantsLength,
+                        likelySubtags->maximal,
+                        tag,
+                        tagCapacity,
+                        err);
+        }
+    }
+
+    return u_terminateChars(
+                tag,
+                tagCapacity,
+                0,
+                err);
+
+error:
+
+    if (!U_FAILURE(*err)) {
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+    }
+
+    return -1;
+}
+
+static int32_t
+_uloc_addLikelySubtags(const char*    localeID,
+         char* maximizedLocaleID,
+         int32_t maximizedLocaleIDCapacity,
+         UErrorCode* err)
+{
+    char lang[ULOC_LANG_CAPACITY];
+    int32_t langLength = sizeof(lang);
+    char script[ULOC_SCRIPT_CAPACITY];
+    int32_t scriptLength = sizeof(script);
+    char region[ULOC_COUNTRY_CAPACITY];
+    int32_t regionLength = sizeof(region);
+    const char* trailing = "";
+    int32_t trailingLength = 0;
+    int32_t trailingIndex = 0;
+    int32_t resultLength = 0;
+
+    if(U_FAILURE(*err)) {
+        goto error;
+    }
+    else if (localeID == NULL ||
+             maximizedLocaleID == NULL ||
+             maximizedLocaleIDCapacity <= 0) {
+        goto error;
+    }
+
+    trailingIndex = parseTagString(
+        localeID,
+        lang,
+        &langLength,
+        script,
+        &scriptLength,
+        region,
+        &regionLength,
+        err);
+    if(U_FAILURE(*err)) {
+        /* Overflow indicates an illegal argument error */
+        if (*err == U_BUFFER_OVERFLOW_ERROR) {
+            *err = U_ILLEGAL_ARGUMENT_ERROR;
+        }
+
+        goto error;
+    }
+
+    /* Find the length of the trailing portion. */
+    trailing = &localeID[trailingIndex];
+    trailingLength = uprv_strlen(trailing);
+
+    resultLength =
+        createLikelySubtagsString(
+            lang,
+            langLength,
+            script,
+            scriptLength,
+            region,
+            regionLength,
+            trailing,
+            trailingLength,
+            maximizedLocaleID,
+            maximizedLocaleIDCapacity,
+            err);
+
+    if (resultLength == 0) {
+        const int32_t localIDLength =
+            uprv_strlen(localeID);
+
+        /*
+         * If we get here, we need to return localeID.
+         */
+        uprv_memcpy(
+            maximizedLocaleID,
+            localeID,
+            localIDLength <= maximizedLocaleIDCapacity ? 
+                localIDLength : maximizedLocaleIDCapacity);
+
+        resultLength =
+            u_terminateChars(
+                maximizedLocaleID,
+                maximizedLocaleIDCapacity,
+                localIDLength,
+                err);
+    }
+
+    return resultLength;
+
+error:
+
+    if (!U_FAILURE(*err)) {
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+    }
+
+    return -1;
+}
+
+static int32_t
+_uloc_minimizeSubtags(const char*    localeID,
+         char* minimizedLocaleID,
+         int32_t minimizedLocaleIDCapacity,
+         UErrorCode* err)
+{
+    /**
+     * ULOC_FULLNAME_CAPACITY will provide enough capacity
+     * that we can build a string that contains the language,
+     * script and region code without worrying about overrunning
+     * the user-supplied buffer.
+     **/
+    char maximizedTagBuffer[ULOC_FULLNAME_CAPACITY];
+    int32_t maximizedTagBufferLength = sizeof(maximizedTagBuffer);
+
+    char lang[ULOC_LANG_CAPACITY];
+    int32_t langLength = sizeof(lang);
+    char script[ULOC_SCRIPT_CAPACITY];
+    int32_t scriptLength = sizeof(script);
+    char region[ULOC_COUNTRY_CAPACITY];
+    int32_t regionLength = sizeof(region);
+    const char* trailing = "";
+    int32_t trailingLength = 0;
+    int32_t trailingIndex = 0;
+
+    if(U_FAILURE(*err)) {
+        goto error;
+    }
+    else if (localeID == NULL ||
+             minimizedLocaleID == NULL ||
+             minimizedLocaleIDCapacity <= 0) {
+        goto error;
+    }
+
+    trailingIndex =
+        parseTagString(
+            localeID,
+            lang,
+            &langLength,
+            script,
+            &scriptLength,
+            region,
+            &regionLength,
+            err);
+    if(U_FAILURE(*err)) {
+
+        /* Overflow indicates an illegal argument error */
+        if (*err == U_BUFFER_OVERFLOW_ERROR) {
+            *err = U_ILLEGAL_ARGUMENT_ERROR;
+        }
+
+        goto error;
+    }
+
+    /* Find the spot where the variants begin, if any. */
+    trailing = &localeID[trailingIndex];
+    trailingLength = uprv_strlen(trailing);
+
+    createTagString(
+        lang,
+        langLength,
+        script,
+        scriptLength,
+        region,
+        regionLength,
+        NULL,
+        0,
+        maximizedTagBuffer,
+        maximizedTagBufferLength,
+        err);
+    if(U_FAILURE(*err)) {
+        goto error;
+    }
+
+    /**
+     * First, we need to first get the maximization
+     * from AddLikelySubtags.
+     **/
+    maximizedTagBufferLength =
+        uloc_addLikelySubtags(
+            maximizedTagBuffer,
+            maximizedTagBuffer,
+            maximizedTagBufferLength,
+            err);
+
+    if(U_FAILURE(*err)) {
+        goto error;
+    }
+
+    /**
+     * Start first with just the language.
+     **/
+    {
+        char tagBuffer[ULOC_FULLNAME_CAPACITY];
+
+        const int32_t tagBufferLength =
+            createLikelySubtagsString(
+                lang,
+                langLength,
+                NULL,
+                0,
+                NULL,
+                0,
+                NULL,
+                0,
+                tagBuffer,
+                sizeof(tagBuffer),
+                err);
+
+        if(U_FAILURE(*err)) {
+            goto error;
+        }
+        else if (uprv_strnicmp(
+                    maximizedTagBuffer,
+                    tagBuffer,
+                    tagBufferLength) == 0) {
+
+            return createTagString(
+                        lang,
+                        langLength,
+                        NULL,
+                        0,
+                        NULL,
+                        0,
+                        trailing,
+                        trailingLength,
+                        minimizedLocaleID,
+                        minimizedLocaleIDCapacity,
+                        err);
+        }
+    }
+
+    /**
+     * Next, try the language and region.
+     **/
+    if (regionLength > 0) {
+
+        char tagBuffer[ULOC_FULLNAME_CAPACITY];
+
+        const int32_t tagBufferLength =
+            createLikelySubtagsString(
+                lang,
+                langLength,
+                NULL,
+                0,
+                region,
+                regionLength,
+                NULL,
+                0,
+                tagBuffer,
+                sizeof(tagBuffer),
+                err);
+
+        if(U_FAILURE(*err)) {
+            goto error;
+        }
+        else if (uprv_strnicmp(
+                    maximizedTagBuffer,
+                    tagBuffer,
+                    tagBufferLength) == 0) {
+
+            return createTagString(
+                        lang,
+                        langLength,
+                        NULL,
+                        0,
+                        region,
+                        regionLength,
+                        trailing,
+                        trailingLength,
+                        minimizedLocaleID,
+                        minimizedLocaleIDCapacity,
+                        err);
+        }
+    }
+
+    /**
+     * Finally, try the language and script.  This is our last chance,
+     * since trying with all three subtags would only yield the
+     * maximal version that we already have.
+     **/
+    if (scriptLength > 0 && regionLength > 0) {
+        char tagBuffer[ULOC_FULLNAME_CAPACITY];
+
+        const int32_t tagBufferLength =
+            createLikelySubtagsString(
+                lang,
+                langLength,
+                script,
+                scriptLength,
+                NULL,
+                0,
+                NULL,
+                0,
+                tagBuffer,
+                sizeof(tagBuffer),
+                err);
+
+        if(U_FAILURE(*err)) {
+            goto error;
+        }
+        else if (uprv_strnicmp(
+                    maximizedTagBuffer,
+                    tagBuffer,
+                    tagBufferLength) == 0) {
+
+            return createTagString(
+                        lang,
+                        langLength,
+                        script,
+                        scriptLength,
+                        NULL,
+                        0,
+                        trailing,
+                        trailingLength,
+                        minimizedLocaleID,
+                        minimizedLocaleIDCapacity,
+                        err);
+        }
+    }
+
+    {
+        /**
+         * If we got here, return the locale ID parameter.
+         **/
+        const int32_t localeIDLength = uprv_strlen(localeID);
+
+        uprv_memcpy(
+            minimizedLocaleID,
+            localeID,
+            localeIDLength <= minimizedLocaleIDCapacity ? 
+                localeIDLength : minimizedLocaleIDCapacity);
+
+        return u_terminateChars(
+                    minimizedLocaleID,
+                    minimizedLocaleIDCapacity,
+                    localeIDLength,
+                    err);
+    }
+
+error:
+
+    if (!U_FAILURE(*err)) {
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+    }
+
+    return -1;
+
+
+}
+
+static UBool
+do_canonicalize(const char*    localeID,
+         char* buffer,
+         int32_t bufferCapacity,
+         UErrorCode* err)
+{
+    uloc_canonicalize(
+        localeID,
+        buffer,
+        bufferCapacity,
+        err);
+
+    if (*err == U_STRING_NOT_TERMINATED_WARNING ||
+        *err == U_BUFFER_OVERFLOW_ERROR) {
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+
+        return FALSE;
+    }
+    else if (U_FAILURE(*err)) {
+
+        return FALSE;
+    }
+    else {
+        return TRUE;
+    }
+}
+
+U_DRAFT int32_t U_EXPORT2
+uloc_addLikelySubtags(const char*    localeID,
+         char* maximizedLocaleID,
+         int32_t maximizedLocaleIDCapacity,
+         UErrorCode* err)
+{
+    char localeBuffer[ULOC_FULLNAME_CAPACITY];
+
+    if (!do_canonicalize(
+        localeID,
+        localeBuffer,
+        sizeof(localeBuffer),
+        err)) {
+        return -1;
+    }
+    else {
+        return _uloc_addLikelySubtags(
+                    localeBuffer,
+                    maximizedLocaleID,
+                    maximizedLocaleIDCapacity,
+                    err);
+    }    
+}
+
+U_DRAFT int32_t U_EXPORT2
+uloc_minimizeSubtags(const char*    localeID,
+         char* minimizedLocaleID,
+         int32_t minimizedLocaleIDCapacity,
+         UErrorCode* err)
+{
+    char localeBuffer[ULOC_FULLNAME_CAPACITY];
+
+    if (!do_canonicalize(
+        localeID,
+        localeBuffer,
+        sizeof(localeBuffer),
+        err)) {
+        return -1;
+    }
+    else {
+        return _uloc_minimizeSubtags(
+                    localeBuffer,
+                    minimizedLocaleID,
+                    minimizedLocaleIDCapacity,
+                    err);
+    }    
 }
 
 /*eof*/
