@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -29,14 +29,20 @@ public class PluralRulesTest extends TestFmwk {
         "a: n is not 1", "a:0,2,3,4,5",
         "a: n mod 3 is not 1", "a:0,2,3,5,6,8,9",
         "a: n in 2..5", "a:2,3,4,5",
+        "a: n within 2..5", "a:2,3,4,5",
         "a: n not in 2..5", "a:0,1,6,7,8",
+        "a: n not within 2..5", "a:0,1,6,7,8",
         "a: n mod 10 in 2..5", "a:2,3,4,5,12,13,14,15,22,23,24,25",
+        "a: n mod 10 within 2..5", "a:2,3,4,5,12,13,14,15,22,23,24,25",
         "a: n mod 10 is 2 and n is not 12", "a:2,22,32,42",
         "a: n mod 10 in 2..3 or n mod 10 is 5", "a:2,3,5,12,13,15,22,23,25",
+        "a: n mod 10 within 2..3 or n mod 10 is 5", "a:2,3,5,12,13,15,22,23,25",
         "a: n is 1 or n is 4 or n is 23", "a:1,4,23",
         "a: n mod 2 is 1 and n is not 3 and n in 1..11", "a:1,5,7,9,11",
+        "a: n mod 2 is 1 and n is not 3 and n within 1..11", "a:1,5,7,9,11",
         "a: n mod 2 is 1 or n mod 5 is 1 and n is not 6", "a:1,3,5,7,9,11,13,15,16",
         "a: n in 2..5; b: n in 5..8; c: n mod 2 is 1", "a:2,3,4,5;b:6,7,8;c:1,9,11",
+        "a: n within 2..5; b: n within 5..8; c: n mod 2 is 1", "a:2,3,4,5;b:6,7,8;c:1,9,11",
     };
 
     private String[] getTargetStrings(String targets) {
