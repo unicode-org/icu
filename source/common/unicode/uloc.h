@@ -963,6 +963,84 @@ U_DRAFT int32_t U_EXPORT2
 uloc_getLocaleForLCID(uint32_t hostID, char *locale, int32_t localeCapacity,
                     UErrorCode *status);
 
+
+/**
+ * Add the likely subtags for a provided locale ID, per the algorithm described
+ * in the following CLDR technical report:
+ *
+ *   http://www.unicode.org/reports/tr35/#Likely_Subtags
+ *
+ * If localeID is already in the maximal form, or there is no data available
+ * for maximization, it will be copied to the output buffer.  For example,
+ * "und-Zzzz" cannot be maximized, since there is no reasonable maximization.
+ *
+ * Examples:
+ *
+ * "en" maximizes to "en_Latn_US"
+ *
+ * "de" maximizes to "de_Latn_US"
+ *
+ * "sr" maximizes to "sr_Cyrl_RS"
+ *
+ * "sh" maximizes to "sr_Latn_RS" (Note this will not reverse.)
+ *
+ * "zh_Hani" maximizes to "zh_Hans_CN" (Note this will not reverse.)
+ *
+ * @param localeID The locale to maximize
+ * @param maximizedLocaleID The maximized locale
+ * @param maximizedLocaleIDCapacity The capacity of the maximizedLocaleID buffer
+ * @param err Error information if maximizing the locale failed.  If the length
+ * of the localeID and the null-terminator is greater than the maximum allowed size,
+ * or the localeId is not well-formed, the error code is U_ILLEGAL_ARGUMENT_ERROR.
+ * @return The actual buffer size needed for the maximized locale.  If it's
+ * greater than maximizedLocaleIDCapacity, the returned ID will be truncated.
+ * On error, the return value is -1.
+ * @draft ICU 4.0
+ */
+U_DRAFT int32_t U_EXPORT2
+uloc_addLikelySubtags(const char*    localeID,
+         char* maximizedLocaleID,
+         int32_t maximizedLocaleIDCapacity,
+         UErrorCode* err);
+
+
+/**
+ * Minimize the subtags for a provided locale ID, per the algorithm described
+ * in the following CLDR technical report:
+ *
+ *   http://www.unicode.org/reports/tr35/#Likely_Subtags
+ *
+ * If localeID is already in the minimal form, or there is no data available
+ * for minimization, it will be copied to the output buffer.  Since the
+ * minimization algorithm relies on proper maximization, see the comments
+ * for uloc_addLikelySubtags for reasons why there might not be any data.
+ *
+ * Examples:
+ *
+ * "en_Latn_US" minimizes to "en"
+ *
+ * "de_Latn_US" minimizes to "de"
+ *
+ * "sr_Cyrl_RS" minimizes to "sr"
+ *
+ * "zh_Hant_TW" minimizes to "zh_TW" (The region is preferred to the
+ * script, and minimizing to "zh" would imply "zh_Hans_CN".)
+ *
+ * @param localeID The locale to minimize
+ * @param minimizedLocaleID The minimized locale
+ * @param minimizedLocaleIDCapacity The capacity of the minimizedLocaleID buffer
+ * @param err Error information if minimizing the locale failed.  If the length
+ * of the localeID and the null-terminator is greater than the maximum allowed size,
+ * or the localeId is not well-formed, the error code is U_ILLEGAL_ARGUMENT_ERROR.
+ * @return The actual buffer size needed for the minimized locale.  If it's
+ * greater than minimizedLocaleIDCapacity, the returned ID will be truncated.
+ * On error, the return value is -1.
+ * @draft ICU 4.0
+ */
+U_DRAFT int32_t U_EXPORT2
+uloc_minimizeSubtags(const char*    localeID,
+         char* minimizedLocaleID,
+         int32_t minimizedLocaleIDCapacity,
+         UErrorCode* err);
+
 #endif /*_ULOC*/
-
-
