@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and         *
+* Copyright (C) 2007-2008, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -24,14 +24,14 @@ U_NAMESPACE_BEGIN
  * a rule specified by month, day of month, day of week and
  * time in the day.
  * 
- * @draft ICU 3.8
+ * @stable ICU 4.0
  */
 class U_I18N_API DateTimeRule : public UObject {
 public:
 
     /**
      * Date rule type constants.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     enum DateRuleType {
         DOM = 0,        /**< The exact day of month,
@@ -46,7 +46,7 @@ public:
 
     /**
      * Time rule type constants.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     enum TimeRuleType {
         WALL_TIME = 0,  /**< The local wall clock time */
@@ -64,7 +64,7 @@ public:
      * @param millisInDay   The milliseconds in the rule date.
      * @param timeType      The time type, <code>WALL_TIME</code> or <code>STANDARD_TIME</code>
      *                      or <code>UTC_TIME</code>.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     DateTimeRule(int32_t month, int32_t dayOfMonth,
         int32_t millisInDay, TimeRuleType timeType);
@@ -82,7 +82,7 @@ public:
      * @param millisInDay   The milliseconds in the rule date.
      * @param timeType      The time type, <code>WALL_TIME</code> or <code>STANDARD_TIME</code>
      *                      or <code>UTC_TIME</code>.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     DateTimeRule(int32_t month, int32_t weekInMonth, int32_t dayOfWeek,
         int32_t millisInDay, TimeRuleType timeType);
@@ -100,7 +100,7 @@ public:
      * @param millisInDay   The milliseconds in the rule date.
      * @param timeType      The time type, <code>WALL_TIME</code> or <code>STANDARD_TIME</code>
      *                      or <code>UTC_TIME</code>.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     DateTimeRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, UBool after,
         int32_t millisInDay, TimeRuleType timeType);
@@ -108,13 +108,13 @@ public:
     /**
      * Copy constructor.
      * @param source    The DateTimeRule object to be copied.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     DateTimeRule(const DateTimeRule& source);
 
     /**
      * Destructor.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     ~DateTimeRule();
 
@@ -122,14 +122,14 @@ public:
      * Clone this DateTimeRule object polymorphically. The caller owns the result and
      * should delete it when done.
      * @return    A copy of the object.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     DateTimeRule* clone(void) const;
 
     /**
      * Assignment operator.
      * @param right The object to be copied.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     DateTimeRule& operator=(const DateTimeRule& right);
 
@@ -138,7 +138,7 @@ public:
      * of different subclasses are considered unequal.
      * @param that  The object to be compared with.
      * @return  true if the given DateTimeRule objects are semantically equal.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     UBool operator==(const DateTimeRule& that) const;
 
@@ -147,14 +147,14 @@ public:
      * of different subclasses are considered unequal.
      * @param that  The object to be compared with.
      * @return  true if the given DateTimeRule objects are semantically unequal.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     UBool operator!=(const DateTimeRule& that) const;
 
     /**
      * Gets the date rule type, such as <code>DOM</code>
      * @return The date rule type.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     DateRuleType getDateRuleType(void) const;
 
@@ -162,14 +162,14 @@ public:
      * Gets the time rule type
      * @return The time rule type, either <code>WALL_TIME</code> or <code>STANDARD_TIME</code>
      *         or <code>UTC_TIME</code>.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     TimeRuleType getTimeRuleType(void) const;
 
     /**
      * Gets the rule month.
      * @return The rule month.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     int32_t getRuleMonth(void) const;
 
@@ -177,7 +177,7 @@ public:
      * Gets the rule day of month.  When the date rule type
      * is <code>DOW</code>, the value is always 0.
      * @return The rule day of month
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     int32_t getRuleDayOfMonth(void) const;
 
@@ -185,7 +185,7 @@ public:
      * Gets the rule day of week.  When the date rule type
      * is <code>DOM</code>, the value is always 0.
      * @return The rule day of week.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     int32_t getRuleDayOfWeek(void) const;
 
@@ -194,14 +194,14 @@ public:
      * in the month.  When the date rule type is not <code>DOW</code>,
      * the value is always 0.
      * @return The rule day of week ordinal number in the month.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     int32_t getRuleWeekInMonth(void) const;
 
     /**
      * Gets the rule time in the rule day.
      * @return The time in the rule day in milliseconds.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     int32_t getRuleMillisInDay(void) const;
 
@@ -224,7 +224,7 @@ public:
      * .       erived::getStaticClassID()) ...
      * </pre>
      * @return          The class ID for all objects of this class.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     static UClassID U_EXPORT2 getStaticClassID(void);
 
@@ -237,7 +237,7 @@ public:
      * @return          The class ID for this object. All objects of a
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     virtual UClassID getDynamicClassID(void) const;
 };

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2004 - 2006, International Business Machines Corporation and
+* Copyright (C) 2004 - 2008, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -277,7 +277,7 @@ typedef enum UDateTimeScale {
      * Similar to Unix time (linear value from 1970) and struct timeval
      * (microseconds resolution).
      *
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     UDTS_UNIX_MICROSECONDS_TIME,
 

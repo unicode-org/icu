@@ -37,7 +37,7 @@ class PatternMap;
  * <p><i>Issue: may be useful to also have a function that returns the list of 
  * fields in a pattern, in order, since we have that internally.
  * That would be useful for getting the UI order of field elements.</i>
- * @draft ICU 3.8
+ * @stable ICU 4.0
 **/
 class U_I18N_API DateTimePatternGenerator : public UObject {
 public:
@@ -45,7 +45,7 @@ public:
      * Construct a flexible generator according to default locale.
      * @param status  Output param set to success/failure code on exit,
      *               which must not indicate a failure before the function call.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     static DateTimePatternGenerator* U_EXPORT2 createInstance(UErrorCode& status);
 
@@ -54,7 +54,7 @@ public:
      * @param uLocale
      * @param status  Output param set to success/failure code on exit,
      *               which must not indicate a failure before the function call.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     static DateTimePatternGenerator* U_EXPORT2 createInstance(const Locale& uLocale, UErrorCode& status);
 
@@ -62,20 +62,20 @@ public:
      * Create an empty generator, to be constructed with addPattern(...) etc.
      * @param status  Output param set to success/failure code on exit,
      *               which must not indicate a failure before the function call.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
      static DateTimePatternGenerator* U_EXPORT2 createEmptyInstance(UErrorCode& status);
      
     /**
      * Destructor.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     virtual ~DateTimePatternGenerator();
 
     /**
      * Clone DateTimePatternGenerator object. Clients are responsible for 
      * deleting the DateTimePatternGenerator object cloned.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     DateTimePatternGenerator* clone() const;
 
@@ -84,7 +84,7 @@ public:
       *
       * @param other    the DateTimePatternGenerator object to be compared with.
       * @return         true if other is semantically equal to this.
-      * @draft ICU 3.8
+      * @stable ICU 4.0
       */
     UBool operator==(const DateTimePatternGenerator& other) const;
     
@@ -93,7 +93,7 @@ public:
      *
      * @param other    the DateTimePatternGenerator object to be compared with.
      * @return         true if other is semantically unequal to this.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     UBool operator!=(const DateTimePatternGenerator& other) const;
 
@@ -105,7 +105,7 @@ public:
      * @param status  Output param set to success/failure code on exit,
      *                  which must not indicate a failure before the function call.
      * @return skeleton such as "MMMdd"
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     UnicodeString getSkeleton(const UnicodeString& pattern, UErrorCode& status);
 
@@ -120,7 +120,7 @@ public:
      * @param status  Output param set to success/failure code on exit,
      *               which must not indicate a failure before the function call.
      * @return base skeleton, such as "Md"
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     UnicodeString getBaseSkeleton(const UnicodeString& pattern, UErrorCode& status);
 
@@ -142,7 +142,7 @@ public:
      *               which must not indicate a failure before the function call.
      * @return conflicting status.  The value could be UDATPG_NO_CONFLICT, 
      *                             UDATPG_BASE_CONFLICT or UDATPG_CONFLICT.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     UDateTimePatternConflict addPattern(const UnicodeString& pattern, 
                                         UBool override, 
@@ -165,7 +165,7 @@ public:
      *
      * @param field  such as UDATPG_ERA_FIELD.
      * @param value  pattern, such as "{0}, {1}"
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     void setAppendItemFormat(UDateTimePatternField field, const UnicodeString& value);
 
@@ -175,7 +175,7 @@ public:
      *
      * @param  field  such as UDATPG_ERA_FIELD.
      * @return append pattern for field
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     const UnicodeString& getAppendItemFormat(UDateTimePatternField field) const;
 
@@ -188,7 +188,7 @@ public:
      *
      * @param field   such as UDATPG_ERA_FIELD.
      * @param value   name of the field
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     void setAppendItemName(UDateTimePatternField field, const UnicodeString& value);
 
@@ -198,7 +198,7 @@ public:
      *
      * @param field  such as UDATPG_ERA_FIELD.
      * @return name for field
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     const UnicodeString& getAppendItemName(UDateTimePatternField field) const;
 
@@ -219,14 +219,14 @@ public:
      * @param dateTimeFormat
      *            message format pattern, here {0} will be replaced by the date
      *            pattern and {1} will be replaced by the time pattern.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     void setDateTimeFormat(const UnicodeString& dateTimeFormat);
 
     /**
      * Getter corresponding to setDateTimeFormat.
      * @return DateTimeFormat.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     const UnicodeString& getDateTimeFormat() const;
 
@@ -241,7 +241,7 @@ public:
      *               which must not indicate a failure before the function call.
      * @return bestPattern
      *            The best pattern found from the given skeleton.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
      UnicodeString getBestPattern(const UnicodeString& skeleton, UErrorCode& status);
 
@@ -260,7 +260,7 @@ public:
      * @param status  Output param set to success/failure code on exit,
      *               which must not indicate a failure before the function call.
      * @return pattern adjusted to match the skeleton fields widths and subtypes.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
      UnicodeString replaceFieldTypes(const UnicodeString& pattern, 
                                      const UnicodeString& skeleton, 
@@ -275,7 +275,7 @@ public:
      *               which must not indicate a failure before the function call.
      * @return StringEnumeration with the skeletons.
      *         The caller must delete the object.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
      StringEnumeration* getSkeletons(UErrorCode& status) const;
 
@@ -283,7 +283,7 @@ public:
       * Get the pattern corresponding to a given skeleton.
       * @param skeleton 
       * @return pattern corresponding to a given skeleton.
-      * @draft ICU 3.8
+      * @stable ICU 4.0
       */
      const UnicodeString& getPatternForSkeleton(const UnicodeString& skeleton) const;
      
@@ -294,7 +294,7 @@ public:
      *               which must not indicate a failure before the function call.
      * @return a StringEnumeration with the base skeletons.
      *         The caller must delete the object.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
      StringEnumeration* getBaseSkeletons(UErrorCode& status) const;
      
@@ -321,55 +321,55 @@ public:
      * "H:mm:ss,SSSS"
      *
      * @param decimal 
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     void setDecimal(const UnicodeString& decimal);
 
     /**
      * Getter corresponding to setDecimal.
      * @return UnicodeString corresponding to the decimal point
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     const UnicodeString& getDecimal() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     static UClassID U_EXPORT2 getStaticClassID(void);
 
 private:
     /**
      * Constructor.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     DateTimePatternGenerator(UErrorCode & status);
 
     /**
      * Constructor.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     DateTimePatternGenerator(const Locale& locale, UErrorCode & status);
 
     /**
      * Copy constructor.
      * @param other DateTimePatternGenerator to copy
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     DateTimePatternGenerator(const DateTimePatternGenerator& other);
 
     /**
      * Default assignment operator.
      * @param other DateTimePatternGenerator to copy
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     DateTimePatternGenerator& operator=(const DateTimePatternGenerator& other);
 
