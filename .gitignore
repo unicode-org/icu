@@ -54,6 +54,7 @@ icu4c/source/data/icupkg.inc
 icu4c/source/data/in
 icu4c/source/data/makedata.vcproj.*.*.user
 icu4c/source/data/out
+icu4c/source/doc
 icu4c/source/extra/Makefile
 icu4c/source/extra/scrptrun/Makefile
 icu4c/source/extra/uconv/*.d

@@ -479,8 +479,8 @@ uregex_reset(URegularExpression    *regexp,
   *  is less than zero or greater than the length of the string being matched.
   *
   * @param regexp The compiled regular expression.
-  * @param start  The index to begin searches at.
-  * @param limit  The index to end searches at (exclusive).
+  * @param regionStart  The index to begin searches at.
+  * @param regionLimit  The index to end searches at (exclusive).
   * @param status A pointer to a UErrorCode to receive any errors.
   * @draft ICU 4.0
   */

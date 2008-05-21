@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines
+ * Copyright (C) 1996-2008, International Business Machines
  * Corporation and others. All Rights Reserved.
  *******************************************************************************
 */
@@ -363,7 +363,7 @@ typedef enum UDateFormatField {
     UDAT_TIMEZONE_GENERIC_FIELD = 24,
     /**
      * FieldPosition selector for 'c' field alignment,
-     * corresponding to the {@link #UCAL_DAY} field. 
+     * corresponding to the {@link #UCAL_DATE} field. 
      * This displays the stand alone day name, if available.
      * @stable ICU 3.4
      */

@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2005, International Business Machines
+*   Copyright (C) 1997-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -58,7 +58,7 @@
  *    If u_setDataDirectory() has been called, that is it, otherwise
  *    if the ICU_DATA environment variable is set, use that, otherwise
  *    If a data directory was specifed at ICU build time
- *      (#define ICU_DATA_DIR "path"), use that,
+ *      <code>( #define ICU_DATA_DIR "path" )</code>, use that,
  *    otherwise no data directory is available.
  *
  * @return the data directory, or an empty string ("") if no data directory has

@@ -63,14 +63,14 @@ class RuleParser;
  *  before the test as in the previous example.  The second part applies
  *  a different modulus and also uses negation, thus it matches all
  *  numbers _not_ in 12, 13, 14, 112, 113, 114, 212, 213, 214...
- *  </p><pre>
+ *  </p>
  *
  *  Keywords
  *  could be defined by users or from ICU locale data. There are 6
  *  predefined values in ICU - 'zero', 'one', 'two', 'few', 'many' and
  *  'other'. Callers need to check the value of keyword returned by
  *  {@link #select} method.
- *  </p><pre>
+ *  </p>
  *
  * Examples:<pre>
  * UnicodeString keyword = pl->select(number);
@@ -78,7 +78,7 @@ class RuleParser;
  *     ...
  * }
  * else if ( ... )
- *
+ * </pre>
  */
 class U_I18N_API PluralRules : public UObject {
 public:

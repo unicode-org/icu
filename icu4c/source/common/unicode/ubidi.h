@@ -1644,7 +1644,7 @@ ubidi_reorderVisual(const UBiDiLevel *levels, int32_t length, int32_t *indexMap)
  *        inverse map will have a value equal to <code>UBIDI_MAP_NOWHERE</code>.
  *
  * @param length is the length of each array.
- * @See UBIDI_MAP_NOWHERE
+ * @see UBIDI_MAP_NOWHERE
  * @stable ICU 2.0
  */
 U_STABLE void U_EXPORT2
