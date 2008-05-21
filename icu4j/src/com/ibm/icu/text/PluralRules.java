@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Set;
 
 /** 
- * <p>Defines rules for mapping positive long values onto a small set of
+ * <p>Defines rules for mapping positive double values onto a small set of
  * keywords. Serializable so can be used in formatters, which are
  * serializable. Rules are constructed from a text description, consisting
  * of a series of keywords and conditions.  The {@link #select} method
@@ -60,9 +60,10 @@ import java.util.Set;
  * keyword       = <identifier>
  * condition     = and_condition ('or' and_condition)*
  * and_condition = relation ('and' relation)*
- * relation      = is_relation | in_relation | 'n' <EOL>
+ * relation      = is_relation | in_relation | within_relation | 'n' <EOL>
  * is_relation   = expr 'is' ('not')? value
  * in_relation   = expr ('not')? 'in' range
+ * within_relation = expr ('not')? 'within' range
  * expr          = 'n' ('mod' value)?
  * value         = digit+
  * digit         = 0|1|2|3|4|5|6|7|8|9
@@ -145,11 +146,11 @@ public class PluralRules implements Serializable {
     private static final Constraint NO_CONSTRAINT = new Constraint() {
         private static final long serialVersionUID = 9163464945387899416L;
 
-        public boolean isFulfilled(long n) {
+        public boolean isFulfilled(double x) {
             return true;
         }
         public String toString() {
-            return "n is any";
+            return "x is any";
         }
 
         public int updateRepeatLimit(int limit) {
@@ -167,7 +168,7 @@ public class PluralRules implements Serializable {
             return KEYWORD_OTHER;
         }
 
-        public boolean appliesTo(long n) {
+        public boolean appliesTo(double x) {
             return true;
         }
 
@@ -233,7 +234,7 @@ public class PluralRules implements Serializable {
          * Returns true if the number fulfills the constraint.
          * @param n the number to test, >= 0.
          */
-        boolean isFulfilled(long n);
+        boolean isFulfilled(double x);
 
         /** 
          * Returns the larger of limit or the limit of this constraint.
@@ -253,7 +254,7 @@ public class PluralRules implements Serializable {
         /** Returns the keyword that names this rule. */
         String getKeyword();
         /** Returns true if the rule applies to the number. */
-        boolean appliesTo(long n);
+        boolean appliesTo(double x);
         /** Returns the larger of limit and this rule's limit. */
         int updateRepeatLimit(int limit);
     }
@@ -263,7 +264,7 @@ public class PluralRules implements Serializable {
      */
     private interface RuleList extends Serializable {
         /** Returns the keyword of the first rule that applies to the number. */
-        String select(long n);
+        String select(double x);
 
         /** Returns the set of defined keywords. */
         Set getKeywords();
@@ -320,12 +321,15 @@ public class PluralRules implements Serializable {
      * and_condition : relation
      *                 relation 'and' relation
      * relation :      is_relation
-     *                 in_relation 
+     *                 in_relation
+     *                 within_relation
      *                 'n' EOL
      * is_relation :   expr 'is' value
      *                 expr 'is' 'not' value
      * in_relation :   expr 'in' range
      *                 expr 'not' 'in' range
+     * within_relation : expr 'within' range
+     *                   expr 'not' 'within' range
      * expr :          'n'
      *                 'n' 'mod' value
      * value :         digit+
@@ -349,7 +353,8 @@ public class PluralRules implements Serializable {
                 String[] tokens = Utility.splitWhitespace(condition);
 
                 int mod = 0;
-                boolean within = true;
+                boolean inRange = true;
+                boolean integersOnly = true;
                 long lowBound = -1;
                 long highBound = -1;
 
@@ -369,16 +374,19 @@ public class PluralRules implements Serializable {
                     if ("is".equals(t)) {
                         t = nextToken(tokens, x++, condition);
                         if ("not".equals(t)) {
-                            within = false;
+                            inRange = false;
                             t = nextToken(tokens, x++, condition);
                         }
                     } else {
                         isRange = true;
                         if ("not".equals(t)) {
-                            within = false;
+                            inRange = false;
                             t = nextToken(tokens, x++, condition);
                         }
                         if ("in".equals(t)) {
+                            t = nextToken(tokens, x++, condition);
+                        } else if ("within".equals(t)) {
+                            integersOnly = false;
                             t = nextToken(tokens, x++, condition);
                         } else {
                             throw unexpected(t, condition);
@@ -402,7 +410,7 @@ public class PluralRules implements Serializable {
                     }
 
                     newConstraint = 
-                        new RangeConstraint(mod, within, lowBound, highBound);
+                        new RangeConstraint(mod, inRange, integersOnly, lowBound, highBound);
                 }
 
                 if (andConstraint == null) {
@@ -498,21 +506,26 @@ public class PluralRules implements Serializable {
         private static final long serialVersionUID = 1;
       
         private int mod;
-        private boolean within;
+        private boolean inRange;
+        private boolean integersOnly;
         private long lowerBound;
         private long upperBound;
 
-        public boolean isFulfilled(long n) {
+        public boolean isFulfilled(double x) {
+        	if (integersOnly && (x - (long)x) != 0.0) {
+                 return false;
+        	}
             if (mod != 0) {
-                n = n % mod;
+                x = x % mod;	// java % handles double numerator the way we want
             }
-            return within == (n >= lowerBound && n <= upperBound);
+            return inRange == (x >= lowerBound && x <= upperBound);
         }
 
-        RangeConstraint(int mod, boolean within, long lowerBound, 
-                        long upperBound) {
+        RangeConstraint(int mod, boolean inRange, boolean integersOnly,
+                        long lowerBound, long upperBound) {
             this.mod = mod;
-            this.within = within;
+            this.inRange = inRange;
+            this.integersOnly = integersOnly;
             this.lowerBound = lowerBound;
             this.upperBound = upperBound;
         }
@@ -523,8 +536,9 @@ public class PluralRules implements Serializable {
         }
 
         public String toString() {
-            return "[mod: " + mod + " within: " + within + " low: " + lowerBound + 
-                " high: " + upperBound + "]";
+            return "[mod: " + mod + " inRange: " + inRange +
+                " integersOnly: " + integersOnly +
+                " low: " + lowerBound + " high: " + upperBound + "]";
         }
     }
 
@@ -559,8 +573,8 @@ public class PluralRules implements Serializable {
             super(a, b, " && ");
         }
 
-        public boolean isFulfilled(long n) {
-            return a.isFulfilled(n) && b.isFulfilled(n);
+        public boolean isFulfilled(double x) {
+            return a.isFulfilled(x) && b.isFulfilled(x);
         }
     }
 
@@ -572,8 +586,8 @@ public class PluralRules implements Serializable {
             super(a, b, " || ");
         }
 
-        public boolean isFulfilled(long n) {
-            return a.isFulfilled(n) || b.isFulfilled(n);
+        public boolean isFulfilled(double x) {
+            return a.isFulfilled(x) || b.isFulfilled(x);
         }
     }
 
@@ -603,8 +617,8 @@ public class PluralRules implements Serializable {
             return keyword;
         }
 
-        public boolean appliesTo(long n) {
-            return constraint.isFulfilled(n);
+        public boolean appliesTo(double x) {
+            return constraint.isFulfilled(x);
         }
 
         public int updateRepeatLimit(int limit) {
@@ -639,19 +653,19 @@ public class PluralRules implements Serializable {
             return new RuleChain(nextRule, this);
         }
 
-        private Rule selectRule(long n) {
+        private Rule selectRule(double x) {
             Rule r = null;
             if (next != null) {
-                r = next.selectRule(n);
+                r = next.selectRule(x);
             }
-            if (r == null && rule.appliesTo(n)) {
+            if (r == null && rule.appliesTo(x)) {
                 r = rule;
             }
             return r;
         }
 
-        public String select(long n) {
-            Rule r = selectRule(n);
+        public String select(double x) {
+            Rule r = selectRule(x);
             if (r == null) {
                 return KEYWORD_OTHER;
             }
@@ -752,7 +766,7 @@ public class PluralRules implements Serializable {
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.
      */
-     public String select(long number) {
+     public String select(double number) {
          return rules.select(number);
      }
 
