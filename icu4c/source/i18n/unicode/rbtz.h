@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and    *
+* Copyright (C) 2007-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -34,27 +34,27 @@ public:
      * delete it.
      * @param id                The time zone ID.
      * @param initialRule       The initial time zone rule.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     RuleBasedTimeZone(const UnicodeString& id, InitialTimeZoneRule* initialRule);
 
     /**
      * Copy constructor.
      * @param source    The RuleBasedTimeZone object to be copied.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     RuleBasedTimeZone(const RuleBasedTimeZone& source);
 
     /**
      * Destructor.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     virtual ~RuleBasedTimeZone();
 
     /**
      * Assignment operator.
      * @param right The object to be copied.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     RuleBasedTimeZone& operator=(const RuleBasedTimeZone& right);
 
@@ -64,7 +64,7 @@ public:
      * @param that  The object to be compared with.
      * @return  true if the given <code>TimeZone</code> objects are
       *semantically equal.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     virtual UBool operator==(const TimeZone& that) const;
 
@@ -74,7 +74,7 @@ public:
      * @param that  The object to be compared with.
      * @return  true if the given <code>TimeZone</code> objects are
      * semantically unequal.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     virtual UBool operator!=(const TimeZone& that) const;
 
@@ -91,7 +91,7 @@ public:
      * zone functions.
      * @param rule The <code>TimeZoneRule</code>.
      * @param status Output param to filled in with a success or an error.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     void addTransitionRule(TimeZoneRule* rule, UErrorCode& status);
 
@@ -102,7 +102,7 @@ public:
      * builds internal structure for making the object ready to support
      * time zone APIs such as getOffset(), getNextTransition() and others.
      * @param status Output param to filled in with a success or an error.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     void complete(UErrorCode& status);
 
@@ -111,7 +111,7 @@ public:
      * the TimeZone object cloned.
      *
      * @return   A new copy of this TimeZone object.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     virtual TimeZone* clone(void) const;
 
@@ -137,7 +137,7 @@ public:
      * @param millis     The reference date's milliseconds in day, local standard time
      * @param status     Output param to filled in with a success or an error.
      * @return           The offset in milliseconds to add to GMT to get local time.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                               uint8_t dayOfWeek, int32_t millis, UErrorCode& status) const;
@@ -159,7 +159,7 @@ public:
      * @param monthLength The length of the given month in days.
      * @param status     Output param to filled in with a success or an error.
      * @return           The offset in milliseconds to add to GMT to get local time.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                            uint8_t dayOfWeek, int32_t millis,
@@ -185,7 +185,7 @@ public:
      * effect, this value is zero; otherwise it is a positive value,
      * typically one hour.
      * @param ec input-output error code
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     virtual void getOffset(UDate date, UBool local, int32_t& rawOffset,
                            int32_t& dstOffset, UErrorCode& ec) const;
@@ -195,7 +195,7 @@ public:
      * to GMT to get local time, before taking daylight savings time into account).
      *
      * @param offsetMillis  The new raw GMT offset for this time zone.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     virtual void setRawOffset(int32_t offsetMillis);
 
@@ -204,7 +204,7 @@ public:
      * to GMT to get local time, before taking daylight savings time into account).
      *
      * @return   The TimeZone's raw GMT offset.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     virtual int32_t getRawOffset(void) const;
 
@@ -212,7 +212,7 @@ public:
      * Queries if this time zone uses daylight savings time.
      * @return true if this time zone uses daylight savings time,
      * false, otherwise.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     virtual UBool useDaylightTime(void) const;
 
@@ -237,7 +237,7 @@ public:
      * @param other the <code>TimeZone</code> object to be compared with
      * @return true if the given zone is the same as this one,
      * with the possible exception of the ID
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     virtual UBool hasSameRules(const TimeZone& other) const;
 
@@ -247,7 +247,7 @@ public:
      * @param inclusive Whether the base time is inclusive or not.
      * @param result    Receives the first transition after the base time.
      * @return  TRUE if the transition is found.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     virtual UBool getNextTransition(UDate base, UBool inclusive, TimeZoneTransition& result) /*const*/;
 
@@ -257,7 +257,7 @@ public:
      * @param inclusive Whether the base time is inclusive or not.
      * @param result    Receives the most recent transition before the base time.
      * @return  TRUE if the transition is found.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     virtual UBool getPreviousTransition(UDate base, UBool inclusive, TimeZoneTransition& result) /*const*/;
 
@@ -267,7 +267,7 @@ public:
      * <code>InitialTimeZoneRule</code>.  The return value range is 0 or any positive value.
      * @param status    Receives error status code.
      * @return The number of <code>TimeZoneRule</code>s representing time transitions.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     virtual int32_t countTransitionRules(UErrorCode& status) /*const*/;
 
@@ -285,7 +285,7 @@ public:
      *                      the timezone transition rules.  On output, actual number of
      *                      rules filled in the array will be set.
      * @param status        Receives error status code.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     virtual void getTimeZoneRules(const InitialTimeZoneRule*& initial,
         const TimeZoneRule* trsrules[], int32_t& trscount, UErrorCode& status) /*const*/;
@@ -328,7 +328,7 @@ public:
      * .       erived::getStaticClassID()) ...
      * </pre>
      * @return          The class ID for all objects of this class.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     static UClassID U_EXPORT2 getStaticClassID(void);
 
@@ -341,7 +341,7 @@ public:
      * @return          The class ID for this object. All objects of a
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     virtual UClassID getDynamicClassID(void) const;
 };

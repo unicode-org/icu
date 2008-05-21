@@ -474,6 +474,10 @@ icu4c/source/tools/genctd/genctd
 icu4c/source/tools/genctd/genctd.1
 icu4c/source/tools/genctd/genctd.vcproj.*.*.user
 icu4c/source/tools/genctd/release
+icu4c/source/tools/gendraft/udeprctd.h
+icu4c/source/tools/gendraft/udraft.h
+icu4c/source/tools/gendraft/uintrnal.h
+icu4c/source/tools/gendraft/usystem.h
 icu4c/source/tools/gennames/*.d
 icu4c/source/tools/gennames/*.ncb
 icu4c/source/tools/gennames/*.o

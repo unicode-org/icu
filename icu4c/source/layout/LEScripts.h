@@ -150,7 +150,7 @@ enum ScriptCodes {
     zxxxScriptCode = 102,
     zzzzScriptCode = 103,
 
-    /** New script codes from ISO 15924 @draft ICU 3.8 */
+    /** New script codes from ISO 15924 @stable ICU 4.0 */
     cariScriptCode = 104,
     jpanScriptCode = 105,
     lanaScriptCode = 106,
