@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -494,7 +494,7 @@ public abstract class BreakIterator implements Cloneable {
      * @param where A Locale specifying the language of the text being analyzed.
      * @return A new instance of BreakIterator that locates logical-character
      * boundaries.
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      */
     public static BreakIterator getCharacterInstance(ULocale where) {
         return getBreakInstance(where.toLocale(), KIND_CHARACTER);

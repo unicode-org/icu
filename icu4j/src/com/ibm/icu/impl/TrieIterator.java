@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2007, International Business Machines Corporation and   *
+* Copyright (C) 1996-2008, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -89,7 +89,6 @@ public class TrieIterator implements RangeValueIterator
     * TrieEnumeration constructor
     * @param trie to be used
     * @exception IllegalArgumentException throw when argument is null.
-    * @draft 2.1
     */
     public TrieIterator(Trie trie)
     {
@@ -114,7 +113,6 @@ public class TrieIterator implements RangeValueIterator
     * @return true if we are not at the end of the iteration, false otherwise.
     * @exception NoSuchElementException - if no more elements exist.
     * @see com.ibm.icu.util.RangeValueIterator.Element
-    * @draft 2.1
     */
     public final boolean next(Element element)
     {
@@ -131,7 +129,6 @@ public class TrieIterator implements RangeValueIterator
      
     /**
     * Resets the iterator to the beginning of the iteration
-    * @draft 2.1
     */
     public final void reset()
     {
@@ -159,7 +156,6 @@ public class TrieIterator implements RangeValueIterator
     * The default function is to return the value as it is.
     * @param value a value from the trie
     * @return extracted value
-    * @draft 2.1
     */
     protected int extract(int value)
     {
@@ -251,7 +247,6 @@ public class TrieIterator implements RangeValueIterator
     * Note, if there are no more iterations, it will never get to here. 
     * Blocked out by next().
     * @param element return result object
-    * @draft 2.1
     */
     private final void calculateNextSupplementaryElement(Element element)
     {

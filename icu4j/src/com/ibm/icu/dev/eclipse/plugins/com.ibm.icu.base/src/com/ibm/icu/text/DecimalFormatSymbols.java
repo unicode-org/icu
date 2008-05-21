@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -68,7 +68,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Create a DecimalFormatSymbols object for the given locale.
      * @param locale the locale
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      */
     public DecimalFormatSymbols(ULocale locale) {
         this(new java.text.DecimalFormatSymbols(locale.toLocale()));

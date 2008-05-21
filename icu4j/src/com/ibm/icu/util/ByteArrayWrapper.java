@@ -1,7 +1,7 @@
 //##header J2SE15
 /**
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -61,8 +61,7 @@ public class ByteArrayWrapper implements Comparable
      * @param size the length of valid data in the byte array
      * @throws IndexOutOfBoundsException if bytesToAdopt == null and size != 0, or
      * size < 0, or size > bytesToAdopt.length.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.2
      */
     public ByteArrayWrapper(byte[] bytesToAdopt, int size) {
         if ((bytesToAdopt == null && size != 0) || size < 0 || size > bytesToAdopt.length) {
@@ -75,8 +74,7 @@ public class ByteArrayWrapper implements Comparable
     /**
      * Construct a new ByteArrayWrapper from the contents of a ByteBuffer.
      * @param source the ByteBuffer from which to get the data.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.2
      */
     public ByteArrayWrapper(ByteBuffer source) {
         size = source.limit();
@@ -115,8 +113,7 @@ public class ByteArrayWrapper implements Comparable
      * The contents of the array (between 0 and size) remain unchanged. 
      * @param capacity minimum length of internal byte array.
      * @return this ByteArrayWrapper
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.2
      */
     public ByteArrayWrapper ensureCapacity(int capacity) 
     {
@@ -137,8 +134,7 @@ public class ByteArrayWrapper implements Comparable
      * @param start start offset of src to copy from
      * @param limit end + 1 offset of src to copy from
      * @return this ByteArrayWrapper
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.2
      */
     public final ByteArrayWrapper set(byte[] src, int start, int limit) 
     {
@@ -165,8 +161,7 @@ public class ByteArrayWrapper implements Comparable
      * @param start start offset of src to copy from
      * @param limit end + 1 offset of src to copy from
      * @return this ByteArrayWrapper
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.2
      */
     public final ByteArrayWrapper append(byte[] src, int start, int limit) 
     {
@@ -202,8 +197,7 @@ public class ByteArrayWrapper implements Comparable
     
     /**
      * Returns string value for debugging
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.2
      */
     public String toString() {
         StringBuffer result = new StringBuffer();
@@ -218,8 +212,7 @@ public class ByteArrayWrapper implements Comparable
      * Return true if the bytes in each wrapper are equal.
      * @param other the object to compare to.
      * @return true if the two objects are equal.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.2
      */
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -240,8 +233,7 @@ public class ByteArrayWrapper implements Comparable
     /**
      * Return the hashcode.
      * @return the hashcode.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.2
      */
     public int hashCode() {
         int result = bytes.length;
@@ -257,8 +249,7 @@ public class ByteArrayWrapper implements Comparable
      * @return a value <0, 0, or >0 as this compares less than, equal to, or
      * greater than other.
      * @throws ClassCastException if the other object is not a ByteArrayWrapper
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.2
      */
     public int compareTo(Object other) {
         if (this == other) return 0;

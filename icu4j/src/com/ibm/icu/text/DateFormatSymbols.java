@@ -81,15 +81,13 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     // Constants for context
     /**
      * Constant for context.
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
      */
     public static final int FORMAT = 0;
 
     /**
      * Constant for context.
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
      */
     public static final int STANDALONE = 1;
 
@@ -104,22 +102,19 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     /**
      * Constant for width.
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
      */
     public static final int ABBREVIATED = 0;
 
     /**
      * Constant for width.
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
      */
     public static final int WIDE = 1;
 
     /**
      * Constant for width.
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
      */
     public static final int NARROW = 2;
 
@@ -776,8 +771,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param width      The width or the returned quarter string,
      *                   either WIDE or ABBREVIATED. There are no NARROW quarters.
      * @return the quarter strings.
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
      */
     public String[] getQuarters(int context, int width) {
         String [] returnValue = null;
@@ -819,8 +813,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param context    The formatting context, FORMAT or STANDALONE.
      * @param width      The width of the quarter string,
      *                   either WIDE or ABBREVIATED. There are no NARROW quarters.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public void setQuarters(String[] newQuarters, int context, int width) {
         switch (context) {

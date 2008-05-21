@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and    *
+* Copyright (C) 1996-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -22,7 +22,6 @@ import java.util.Arrays;
 * package.</p>
 * @author Syn Wee Quek
 * @since release 2.1, February 1st 2002
-* @draft 2.1
 */
 
 final class UCharacterNameReader implements ICUBinary.Authenticate
@@ -40,7 +39,6 @@ final class UCharacterNameReader implements ICUBinary.Authenticate
     * <p>Protected constructor.</p>
     * @param inputStream ICU uprop.dat file input stream
     * @exception IOException throw if data file fails authentication 
-    * @draft 2.1
     */
     protected UCharacterNameReader(InputStream inputStream) 
                                                         throws IOException
@@ -112,7 +110,6 @@ final class UCharacterNameReader implements ICUBinary.Authenticate
     * @param dataformatid
     * @param dataformatversion
     * @return true if the file format version is correct
-    * @draft 2.1
     */
     ///CLOVER:OFF
     protected boolean authenticate(byte dataformatid[],

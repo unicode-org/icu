@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2007, International Business Machines Corporation and    *
+* Copyright (C) 1996-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -75,7 +75,6 @@ import com.ibm.icu.text.UCharacterIterator;
  *
  * @author Syn Wee Quek
  * @since release 2.2, May 3rd 2002
- * @draft 2.2 
  */
 public class BOCU 
 {      

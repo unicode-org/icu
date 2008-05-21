@@ -35,48 +35,40 @@ import com.ibm.icu.util.VersionInfo;
 public  class ICUResourceBundle extends UResourceBundle {
     /**
      * The data path to be used with getBundleInstance API
-     * @draft ICU 3.0
      */
     protected static final String ICU_DATA_PATH = "com/ibm/icu/impl/";
     /**
      * The data path to be used with getBundleInstance API
-     * @draft ICU 3.0
      */
     public static final String ICU_BUNDLE = "data/icudt" + VersionInfo.ICU_DATA_VERSION;
 
     /**
      * The base name of ICU data to be used with getBundleInstance API
-     * @draft ICU 3.0
      */
     public static final String ICU_BASE_NAME = ICU_DATA_PATH + ICU_BUNDLE;
 
     /**
      * The base name of collation data to be used with getBundleInstance API
-     * @draft ICU 3.0
      */
     public static final String ICU_COLLATION_BASE_NAME = ICU_BASE_NAME + "/coll";
 
     /**
      * The base name of rbbi data to be used with getData API
-     * @draft ICU 3.6
      */
     public static final String ICU_BRKITR_NAME = "/brkitr";
 
     /**
      * The base name of rbbi data to be used with getBundleInstance API
-     * @draft ICU 3.6
      */
     public static final String ICU_BRKITR_BASE_NAME = ICU_BASE_NAME + ICU_BRKITR_NAME;
 
     /**
      * The base name of rbnf data to be used with getBundleInstance API
-     * @draft ICU 3.0
      */
     public static final String ICU_RBNF_BASE_NAME = ICU_BASE_NAME + "/rbnf";
 
     /**
      * The base name of transliterator data to be used with getBundleInstance API
-     * @draft ICU 3.0
      */
     public static final String ICU_TRANSLIT_BASE_NAME = ICU_BASE_NAME + "/translit";
 
@@ -89,7 +81,6 @@ public  class ICUResourceBundle extends UResourceBundle {
 
     /**
      * The class loader constant to be used with getBundleInstance API
-     * @draft ICU 3.0
      */
     public static final ClassLoader ICU_DATA_CLASS_LOADER;
     static {
@@ -102,7 +93,6 @@ public  class ICUResourceBundle extends UResourceBundle {
 
     /**
      * The name of the resource containing the installed locales
-     * @draft ICU 3.0
      */
     protected static final String INSTALLED_LOCALES = "InstalledLocales";
 
@@ -401,7 +391,6 @@ public  class ICUResourceBundle extends UResourceBundle {
     /**
      * Get the set of Locales installed in the specified bundles.
      * @return the list of available locales
-     * @draft ICU 3.0
      */
     public static final ULocale[] getAvailableULocales(String baseName) {
         return getAvailEntry(baseName).getULocaleList();
@@ -410,7 +399,6 @@ public  class ICUResourceBundle extends UResourceBundle {
     /**
      * Get the set of ULocales installed the base bundle.
      * @return the list of available locales
-     * @draft ICU 3.0
      */
     public static final ULocale[] getAvailableULocales() {
         return getAvailableULocales(ICU_BASE_NAME);
@@ -419,7 +407,6 @@ public  class ICUResourceBundle extends UResourceBundle {
     /**
      * Get the set of Locales installed in the specified bundles.
      * @return the list of available locales
-     * @draft ICU 3.0
      */
     public static final Locale[] getAvailableLocales(String baseName) {
         return getAvailEntry(baseName).getLocaleList();
@@ -428,7 +415,6 @@ public  class ICUResourceBundle extends UResourceBundle {
    /**
      * Get the set of Locales installed the base bundle.
      * @return the list of available locales
-     * @draft ICU 3.0
      */
     public static final Locale[] getAvailableLocales() {
         return getAvailEntry(ICU_BASE_NAME).getLocaleList();
@@ -440,7 +426,6 @@ public  class ICUResourceBundle extends UResourceBundle {
      * one-to-one, and that the returned list might be shorter than the input list.
      * @param ulocales a list of ULocales to convert to a list of Locales.
      * @return the list of converted ULocales
-     * @draft ICU 3.0
      */
     public static final Locale[] getLocaleList(ULocale[] ulocales) {
         ArrayList list = new ArrayList();

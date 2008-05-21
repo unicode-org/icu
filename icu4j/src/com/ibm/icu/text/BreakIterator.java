@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -736,7 +736,7 @@ s     */
      * Returns a list of locales for which BreakIterators can be used.
      * @return An array of Locales.  All of the locales in the array can
      * be used when creating a BreakIterator.
-     * @draft ICU 3.2
+     * @draft ICU 3.2 (retain)
      * @provisional This API might change or be removed in a future release.
      */
     public static synchronized ULocale[] getAvailableULocales()

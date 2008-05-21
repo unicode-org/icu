@@ -351,8 +351,7 @@ public abstract class DateFormat extends UFormat {
      * FieldPosition selector for 'Q' field alignment,
      * corresponding to the {@link Calendar#MONTH} field.  
      * This displays the quarter.
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
      */
     public final static int QUARTER_FIELD = 27;
     
@@ -360,8 +359,7 @@ public abstract class DateFormat extends UFormat {
      * FieldPosition selector for 'q' field alignment,
      * corresponding to the {@link Calendar#MONTH} field.  
      * This displays the stand alone quarter, if available.
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
      */
     public final static int STANDALONE_QUARTER_FIELD = 28;
     
@@ -600,7 +598,7 @@ public abstract class DateFormat extends UFormat {
 
     /**
      * Constant for empty style pattern.
-     * @draft ICU 3.8
+     * @stable ICU 3.8
      */
     public static final int NONE = -1;
     
@@ -637,36 +635,42 @@ public abstract class DateFormat extends UFormat {
     /**
      * Constant for relative style mask.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int RELATIVE = (1 << 7);
 
     /**
      * Constant for relative full style pattern.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int RELATIVE_FULL = RELATIVE | FULL;
 
     /**
      * Constant for relative style pattern.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int RELATIVE_LONG = RELATIVE | LONG;
 
     /**
      * Constant for relative style pattern.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int RELATIVE_MEDIUM = RELATIVE | MEDIUM;
 
     /**
      * Constant for relative style pattern.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int RELATIVE_SHORT = RELATIVE | SHORT;
 
     /**
      * Constant for relative default style pattern.
      * @draft ICU 3.8
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int RELATIVE_DEFAULT = RELATIVE | DEFAULT;
 
@@ -828,8 +832,7 @@ public abstract class DateFormat extends UFormat {
      * @param timeStyle the given time formatting style.
      * @param locale the given ulocale.
      * @return a date/time formatter.
-     * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.2
      */
     public final static DateFormat
         getDateTimeInstance(int dateStyle, int timeStyle, ULocale locale)
@@ -859,7 +862,7 @@ public abstract class DateFormat extends UFormat {
     /**
      * Gets the set of locales for which DateFormats are installed.
      * @return the set of locales for which DateFormats are installed.
-     * @draft ICU 3.2
+     * @draft ICU 3.2 (retain)
      * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales()
@@ -1188,7 +1191,7 @@ public abstract class DateFormat extends UFormat {
 
     /**
      * Convenience overload
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      * @provisional This API might change or be removed in a future release.
      */
     static final public DateFormat getInstance(Calendar cal, ULocale locale) {
@@ -1404,8 +1407,7 @@ public abstract class DateFormat extends UFormat {
 
         /**
          * Constant identifying the quarter field.
-         * @draft ICU 3.8
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.8
          */
         public static final Field QUARTER = new Field("quarter", -1);
 

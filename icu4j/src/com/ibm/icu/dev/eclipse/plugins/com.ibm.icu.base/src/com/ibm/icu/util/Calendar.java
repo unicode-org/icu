@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1139,7 +1139,7 @@ public class Calendar implements Serializable, Cloneable, Comparable {
      * Gets a calendar using the default time zone and specified locale.  
      * @param locale the ulocale for the week data
      * @return a Calendar.
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      */
     public static synchronized Calendar getInstance(ULocale locale)     {
         return new Calendar(java.util.Calendar.getInstance(locale.toLocale()));
@@ -1161,7 +1161,7 @@ public class Calendar implements Serializable, Cloneable, Comparable {
      * @param zone the time zone to use
      * @param locale the ulocale for the week data
      * @return a Calendar.
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      */
     public static synchronized Calendar getInstance(TimeZone zone, ULocale locale) {
         return new Calendar(java.util.Calendar.getInstance(zone.timeZone, locale.toLocale()));
@@ -1179,7 +1179,7 @@ public class Calendar implements Serializable, Cloneable, Comparable {
     /**
      * Gets the list of locales for which Calendars are installed.
      * @return the list of locales for which Calendars are installed.
-     * @draft ICU 3.2
+     * @draft ICU 3.2 (retain)
      */
     public static ULocale[] getAvailableULocales() {
         if (availableULocales == null) {
@@ -1641,7 +1641,7 @@ public class Calendar implements Serializable, Cloneable, Comparable {
         
     /**
      * Return the name of this calendar in the language of the given locale.
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      */
     public String getDisplayName(ULocale loc) {
         return "Calendar";
@@ -1664,7 +1664,7 @@ public class Calendar implements Serializable, Cloneable, Comparable {
      * @throws IllegalArgumentException if the time of that 
      * <code>Calendar</code> can't be obtained because of invalid
      * calendar values.
-     * @draft ICU 3.4
+     * @stable ICU 3.4
      */
     public int compareTo(Calendar that) {
         long v = getTimeInMillis() - that.getTimeInMillis();
@@ -1674,7 +1674,7 @@ public class Calendar implements Serializable, Cloneable, Comparable {
     /**
      * Implement comparable API as a convenience override of
      * {@link #compareTo(Calendar)}.
-     * @draft ICU 3.4
+     * @stable ICU 3.4
      */
     public int compareTo(Object that) {
         return compareTo((Calendar)that);
@@ -1694,7 +1694,7 @@ public class Calendar implements Serializable, Cloneable, Comparable {
         
     /**
      * Return a <code>DateFormat</code> appropriate to this calendar.
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      */
     public DateFormat getDateTimeFormat(int dateStyle, int timeStyle, ULocale loc) {
         return formatHelper(this, loc.toLocale(), dateStyle, timeStyle);

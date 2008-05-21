@@ -656,13 +656,15 @@ class CharsetUTF8 extends CharsetICU {
     /* single-code point definitions -------------------------------------------- */
 
     /*
-     * Does this code unit (byte) encode a code point by itself (US-ASCII 0..0x7f)? @param c 8-bit
-     * code unit (byte) @return TRUE or FALSE @draft ICU 3.6
+     * Does this code unit (byte) encode a code point by itself (US-ASCII 0..0x7f)?
+     * @param c 8-bit code unit (byte)
+     * @return TRUE or FALSE
      */
     // static final boolean isSingle(byte c) {return (((c)&0x80)==0);}
     /*
-     * Is this code unit (byte) a UTF-8 lead byte? @param c 8-bit code unit (byte) @return TRUE or
-     * FALSE @draft ICU 3.6
+     * Is this code unit (byte) a UTF-8 lead byte?
+     * @param c 8-bit code unit (byte)
+     * @return TRUE or FALSE
      */
     // static final boolean isLead(byte c) {return ((((c)-0xc0) &
     // UConverterConstants.UNSIGNED_BYTE_MASK)<0x3e);}
@@ -672,7 +674,6 @@ class CharsetUTF8 extends CharsetICU {
      * @param c
      *            8-bit code unit (byte)
      * @return TRUE or FALSE
-     * @draft ICU 3.6
      */
     /*private static final boolean isTrail(byte c) {
         return (((c) & 0xc0) == 0x80);

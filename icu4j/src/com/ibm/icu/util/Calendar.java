@@ -4687,8 +4687,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * taking year and era into account.  Defaults to 0 (JANUARY) for Gregorian.
      * @param extendedYear the extendedYear, as returned by handleGetExtendedYear
      * @return the default month
-     * @provisional ICU 3.6
      * @draft ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      * @see #MONTH
      */
     protected int getDefaultMonthInYear(int extendedYear) {
@@ -4703,7 +4703,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * @param month the month, as returned by getDefaultMonthInYear
      * @return the default day of the month
      * @draft ICU 3.6
-     * @provisional ICU 3.6
+     * @provisional This API might change or be removed in a future release.
      * @see #DAY_OF_MONTH
      */
     protected int getDefaultDayInMonth(int extendedYear, int month) {
@@ -5203,8 +5203,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * Return the current Calendar type.
      * Note, in 3.0 this function will return 'gregorian' in Calendar to emulate legacy behavior
      * @return type of calendar (gregorian, etc)
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String getType() {
         return "gregorian";

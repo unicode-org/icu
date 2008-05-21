@@ -29,7 +29,6 @@ import com.ibm.icu.util.VersionInfo;
 * This class is uses CollationRuleParser
 * @author Syn Wee Quek
 * @since release 2.2, June 11 2002
-* @draft 2.2
 */
 final class CollationParsedRuleBuilder
 {     
@@ -1021,7 +1020,6 @@ final class CollationParsedRuleBuilder
      * @param cp
      * @param offset
      * @return data offset or 0 
-     * @draft 2.2
      */
     public int getFoldedValue(int cp, int offset)
     {

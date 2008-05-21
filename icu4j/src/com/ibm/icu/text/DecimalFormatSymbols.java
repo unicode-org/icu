@@ -449,8 +449,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Return the monetary decimal separator.
      * @return the monetary decimal separator character
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
      */
     public char getMonetaryGroupingSeparator()
     {
@@ -477,8 +476,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * Set the monetary decimal separator.
      * @param sep the monetary decimal separator character
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
      */
     public void setMonetaryGroupingSeparator(char sep)
     {

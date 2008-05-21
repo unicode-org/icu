@@ -1,7 +1,7 @@
 //##header J2SE15
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -389,8 +389,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * Valid options are IGNORE_SPACE and CASE.
      * @exception java.lang.IllegalArgumentException if the pattern contains
      * a syntax error.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public UnicodeSet(String pattern, int options) {
         this();
@@ -514,8 +513,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * Valid options are IGNORE_SPACE and CASE.
      * @exception java.lang.IllegalArgumentException if the pattern
      * contains a syntax error.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public UnicodeSet applyPattern(String pattern, int options) {
         checkFrozen();
@@ -645,8 +643,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * This does not use this.pat, the cleaned up copy of the string
      * passed to applyPattern().
      * @param includeStrings if false, doesn't include the strings.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public StringBuffer _generatePattern(StringBuffer result,
                                          boolean escapeUnprintable, boolean includeStrings) {
@@ -3489,8 +3486,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * which UCharacterProperty.isRuleWhiteSpace() returns true,
      * unless they are quoted or escaped.  This may be ORed together
      * with other selectors.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int IGNORE_SPACE = 1;
 
@@ -3521,8 +3517,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * This is not necessary (that is, redundant) for the above matching method
      * but results in the same closure sets regardless of whether the original
      * set contained the code point or a string.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int CASE = 2;
 
@@ -3587,8 +3582,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * Currently only the CASE bit is supported.  Any undefined bits
      * are ignored.
      * @return a reference to this set.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release. 
+     * @stable ICU 3.8
      */
     public UnicodeSet closeOver(int attribute) {
         checkFrozen();
@@ -3725,8 +3719,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
     /**
      * Is this frozen, according to the Freezable interface?
      * @return value
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public boolean isFrozen() {
         return frozen;
@@ -3735,8 +3728,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
     /**
      * Freeze this class, according to the Freezable interface.
      * @return this
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public Object freeze() {
         frozen = true;
@@ -3746,8 +3738,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
     /**
      * Clone a thawed version of this class, according to the Freezable interface.
      * @return this
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public Object cloneAsThawed() {
         UnicodeSet result = (UnicodeSet) clone();

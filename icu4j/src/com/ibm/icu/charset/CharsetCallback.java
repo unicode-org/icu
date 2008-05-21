@@ -74,13 +74,13 @@ public class CharsetCallback {
     /*public*/ static final String ESCAPE_XML_DEC  = "D";
     /**
      * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to XML Hex escape \htmlonly(&amp;#xXXXX;)\endhtmlonly
-     * TO_U_CALLBACK_ESCAPE context option to escape the character value accoding to XML Hex escape \htmlonly(&amp;#xXXXX;)\endhtmlonly
+     * TO_U_CALLBACK_ESCAPE context option to escape the character value according to XML Hex escape \htmlonly(&amp;#xXXXX;)\endhtmlonly
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
     /*public*/ static final String ESCAPE_XML_HEX  = "X";
     /**
-     * FROM_U_CALLBACK_ESCAPE context option to escape teh code unit according to Unicode (U+XXXXX)
+     * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to Unicode (U+XXXXX)
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */

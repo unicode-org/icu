@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -102,7 +102,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @throws  java.util.MissingResourceException
      *          if the resources for the specified locale cannot be
      *          found or cannot be loaded.
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      */
     public DateFormatSymbols(ULocale locale) {
         this(new java.text.DateFormatSymbols(locale.toLocale()));
@@ -262,7 +262,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Return a string suitable for debugging.
      * @return a string suitable for debugging
-     * @draft ICU 3.4.2
+     * @stable ICU 3.4.2
      */
     public String toString() {
         return dfs.toString();
@@ -271,7 +271,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Return a clone of this DateFormatSymbols.
      * @return a clone of this DateFormatSymbols
-     * @draft ICU 3.4.2
+     * @stable ICU 3.4.2
      */
     public Object clone() {
         return new DateFormatSymbols((java.text.DateFormatSymbols)dfs.clone());
@@ -280,7 +280,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Return true if rhs is a DateFormatSymbols and has the same symbols as this.
      * @return true if rhs equals this
-     * @draft ICU 3.4.2
+     * @stable ICU 3.4.2
      */
     public boolean equals(Object rhs) {
         try {
@@ -294,7 +294,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     /**
      * Return a hashCode.
      * @return a hashCode
-     * @draft ICU 3.4.2
+     * @stable ICU 3.4.2
      */
     public int hashCode() {
         return dfs.hashCode();

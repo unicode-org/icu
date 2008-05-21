@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -66,7 +66,7 @@ public class StringPrepParseException extends ParseException {
     public static final int ZERO_LENGTH_LABEL   = 10;
     
     /**
-     * @draft ICU 3.8
+     * @stable ICU 3.8
      */
     public static final int DOMAIN_NAME_TOO_LONG_ERROR   = 11;
     
@@ -215,7 +215,7 @@ public class StringPrepParseException extends ParseException {
      * Returns the error code of this exception. 
      * This method is only used for testing to verify the error.
      * @return The error code
-     * @draft ICU 3.8
+     * @stable ICU 3.8
      */
     public int getError(){
         return error;

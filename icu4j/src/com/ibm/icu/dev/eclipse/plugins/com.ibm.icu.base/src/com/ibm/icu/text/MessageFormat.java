@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -901,8 +901,7 @@ public class MessageFormat extends Format {
     *
     * @param pattern the 'apostrophe-friendly' patttern to convert
     * @return the standard equivalent of the original pattern
-    * @draft ICU 3.4
-    * @provisional
+    * @stable ICU 3.4
     */
    public static String autoQuoteApostrophe(String pattern) {
        StringBuffer buf = new StringBuffer(pattern.length()*2);
@@ -1002,7 +1001,7 @@ public class MessageFormat extends Format {
    /**
     * Return a string suitable for debugging.
     * @return a string suitable for debugging
-    * @draft ICU 3.4.2
+    * @stable ICU 3.4.2
     */
    public String toString() {
        return messageFormat.toPattern();

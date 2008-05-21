@@ -3598,12 +3598,10 @@ public final class NormalizerImpl {
 
     /** 
      * Options bit 0, do not decompose Hangul syllables. 
-     * @draft ICU 2.6 
      */
     private static final int NX_HANGUL = 1;
     /** 
      * Options bit 1, do not decompose CJK compatibility characters.
-     * @draft ICU 2.6 
      */
     private static final int NX_CJK_COMPAT=2;
     /**
@@ -3615,8 +3613,6 @@ public final class NormalizerImpl {
      * of IDNA definition based on Unicode 3.2 which predates PRI #29.
      *
      * See ICU4C unormimp.h
-     * 
-     * @draft ICU 3.2
      */
     public static final int BEFORE_PRI_29=0x100;
 

@@ -29,8 +29,7 @@ import com.ibm.icu.text.UnicodeSet;
  * different types of converters, there are other functions in this API to
  * iterate over the converter aliases. 
  * 
- * @draft ICU 3.6
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 3.6
  */
 public abstract class CharsetICU extends Charset{
 	
@@ -64,9 +63,15 @@ public abstract class CharsetICU extends Charset{
      /** 
       * Parameter that select the set of roundtrippable Unicode code points. 
       * @draft ICU 4.0
+      * @provisional This API might change or be removed in a future release.
       */
       public static final int ROUNDTRIP_SET=0; 
-      /** Select the set of Unicode code points with roundtrip or fallback mappings. Not supported at this point. */
+      /**
+       * Select the set of Unicode code points with roundtrip or fallback mappings.
+       * Not supported at this point.
+       * @internal
+       * @deprecated This API is ICU internal only.
+       */
       public static final int ROUNDTRIP_AND_FALLBACK_SET =1;
       
     //} UConverterUnicodeSet;
@@ -76,8 +81,7 @@ public abstract class CharsetICU extends Charset{
      * @param icuCanonicalName
      * @param canonicalName
      * @param aliases
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
      */
     protected CharsetICU(String icuCanonicalName, String canonicalName, String[] aliases) {
 		super(canonicalName,aliases);
@@ -194,8 +198,6 @@ public abstract class CharsetICU extends Charset{
     
     /*
      * Returns the default charset name 
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
      */
 //    static final String getDefaultCharsetName(){
 //        String defaultEncoding = new InputStreamReader(new ByteArrayInputStream(new byte[0])).getEncoding();
@@ -217,8 +219,7 @@ public abstract class CharsetICU extends Charset{
      * @throws UnsupportedCharsetException If no support for the
      * named charset is available in this instance of th Java
      * virtual machine
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
      */
     public static Charset forNameICU(String charsetName) throws IllegalCharsetNameException, UnsupportedCharsetException {
         CharsetProviderICU icuProvider = new CharsetProviderICU();
@@ -355,12 +356,12 @@ public abstract class CharsetICU extends Charset{
     *   by comparing its roundtrip set with the set of ExemplarCharacters from
     *   ICU's locale data or other sources</li></ul>
     *
-    *@param setFillIn A valid UnicodeSet. It will be cleared by this function before 
+    * @param setFillIn A valid UnicodeSet. It will be cleared by this function before 
     *                   the converter's specific set is filled in.
-    *@param which A selector; currently ROUNDTRIP_SET is the only supported value.
-    *@throws IllegalArgumentException if the parameters does not match.              
-    *@draft ICU 4.0
-    *@provisional This API might change or be removed in a future release.
+    * @param which A selector; currently ROUNDTRIP_SET is the only supported value.
+    * @throws IllegalArgumentException if the parameters does not match.              
+    * @draft ICU 4.0
+    * @provisional This API might change or be removed in a future release.
     */
        public void getUnicodeSet(UnicodeSet setFillIn, int which){
            if( setFillIn == null || which != ROUNDTRIP_SET ){

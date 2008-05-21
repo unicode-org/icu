@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -77,7 +77,6 @@ public final class ICUBinary
     *                     can be null, if no extra authentication is needed.
     * @exception IOException thrown if there is a read error or 
     *            when header authentication fails.
-    * @draft 2.1
     */
     public static final byte[] readHeader(InputStream inputStream,
                                         byte dataFormatIDExpected[],

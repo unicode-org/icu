@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -220,7 +220,7 @@ public class TimeZone implements Serializable, Cloneable {
      * @param locale the ulocale in which to supply the display name.
      * @return the human-readable name of this time zone in the given locale
      * or in the default ulocale if the given ulocale is not recognized.
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      */
     public final String getDisplayName(ULocale locale) {
         return timeZone.getDisplayName(locale.toLocale());
@@ -271,7 +271,7 @@ public class TimeZone implements Serializable, Cloneable {
      * @return the human-readable name of this time zone in the given locale
      * or in the default locale if the given locale is not recognized.
      * @exception IllegalArgumentException style is invalid.
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      */
     public String getDisplayName(boolean daylight, int style, ULocale locale) {
         return timeZone.getDisplayName(daylight, style, locale.toLocale());
@@ -410,7 +410,7 @@ public class TimeZone implements Serializable, Cloneable {
     /**
      * Return true if rhs is a TimeZone and has the same time rules as this.
      * @return true if rhs equals this
-     * @draft ICU 3.4.2
+     * @stable ICU 3.4.2
      */
     public boolean equals(Object rhs){
         try {
@@ -424,7 +424,7 @@ public class TimeZone implements Serializable, Cloneable {
     /**
      * Return a hashCode.
      * @return a hashCode
-     * @draft ICU 3.4.2
+     * @stable ICU 3.4.2
      */
     public int hashCode(){
         return timeZone.hashCode();

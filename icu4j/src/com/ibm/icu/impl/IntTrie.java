@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and   *
+* Copyright (C) 1996-2008, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -32,7 +32,6 @@ public class IntTrie extends Trie
     * @param dataManipulate object which provides methods to parse the char 
     *                        data
     * @throws IOException thrown when data reading fails
-    * @draft 2.1
     */
     public IntTrie(InputStream inputStream, DataManipulate dataManipulate)
                                                     throws IOException
@@ -110,7 +109,6 @@ public class IntTrie extends Trie
     * returned.
     * @param ch codepoint
     * @return offset to data
-    * @draft 2.1
     */
     public final int getCodePointValue(int ch)
     {
@@ -137,7 +135,6 @@ public class IntTrie extends Trie
     * This method does not guarantee correct results for trail surrogates.
     * @param ch lead surrogate character
     * @return data value
-    * @draft 2.1
     */
     public final int getLeadValue(char ch)
     {
@@ -150,7 +147,6 @@ public class IntTrie extends Trie
     * unfolded values that may differ from getLeadValue() results.
     * @param ch the input BMP code point
     * @return trie data value associated with the BMP codepoint
-    * @draft 2.1
     */
     public final int getBMPValue(char ch)
     {
@@ -161,7 +157,6 @@ public class IntTrie extends Trie
     * Get the value associated with a pair of surrogates.
     * @param lead a lead surrogate
     * @param trail a trail surrogate
-    * @draft 2.1
     */
     public final int getSurrogateValue(char lead, char trail)
     {
@@ -188,7 +183,6 @@ public class IntTrie extends Trie
     *        folding offset
     * @param trail surrogate
     * @return trie data value associated with the trail character
-    * @draft 2.1
     */
     public final int getTrailValue(int leadvalue, char trail)
     {
@@ -264,7 +258,6 @@ public class IntTrie extends Trie
     * @param lead lead surrogate
     * @param trail trailing surrogate
     * @return offset to data
-    * @draft 2.1
     */
     protected final int getSurrogateOffset(char lead, char trail)
     {
@@ -291,7 +284,6 @@ public class IntTrie extends Trie
     * @param index value at index will be retrieved
     * @return 32 bit value
     * @see com.ibm.icu.impl.TrieIterator
-    * @draft 2.1
     */
     protected final int getValue(int index)
     {
@@ -301,7 +293,6 @@ public class IntTrie extends Trie
     /**
     * Gets the default initial value
     * @return 32 bit value 
-    * @draft 2.1
     */
     protected final int getInitialValue()
     {

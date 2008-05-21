@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -21,15 +21,11 @@ import com.ibm.icu.util.UniversalTimeScale;
  * convert from one local time scale to another.
  * 
  * @see UniversalTimeScale
- * 
- * @draft ICU 3.2
  */
 public class PivotDemo {
 
     /**
      * The default constructor.
-     * 
-     * @draft ICU 3.2
      */
     public PivotDemo()
     {
@@ -41,8 +37,6 @@ public class PivotDemo {
      * a <code>Calendar</code> object to display the ICU time values.
      * 
      * @param args the command line arguments.
-     * 
-     * @draft ICU 3.2
      */
     public static void main(String[] args)
     {

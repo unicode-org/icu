@@ -44,7 +44,6 @@ final class UCharacterPropertyReader implements ICUBinary.Authenticate
     * <p>Protected constructor.</p>
     * @param inputStream ICU uprop.dat file input stream
     * @exception IOException throw if data file fails authentication 
-    * @draft 2.1
     */
     protected UCharacterPropertyReader(InputStream inputStream) 
                                                         throws IOException
@@ -61,7 +60,6 @@ final class UCharacterPropertyReader implements ICUBinary.Authenticate
     * UCharacterProperty.</P
     * @param ucharppty UCharacterProperty instance
     * @exception IOException thrown when data reading fails
-    * @draft 2.1
     */
     protected void read(UCharacterProperty ucharppty) throws IOException
     {

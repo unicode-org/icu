@@ -1,9 +1,7 @@
-/**
+/*
  *******************************************************************************
- * Copyright (C) 2006-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2006-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
- *******************************************************************************
- *
  *******************************************************************************
  */
 package com.ibm.icu.charset;
@@ -382,8 +380,6 @@ final class UConverterSharedData {
     
     /*
      * Enum for specifying basic types of converters
-     * 
-     * @see getType @draft ICU 3.6
      */
     static final class UConverterType {
         static final int UNSUPPORTED_CONVERTER = -1;
@@ -429,8 +425,6 @@ final class UConverterSharedData {
     /**
      * Enum for specifying which platform a converter ID refers to. The use of
      * platform/CCSID is not recommended. See openCCSID().
-     * 
-     * @draft ICU 3.6
      */
     static final class UConverterPlatform {
         static final int UNKNOWN = -1;

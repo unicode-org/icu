@@ -235,8 +235,7 @@ public final class CopticCalendar extends CECalendar
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String getType() {
         return "coptic";
@@ -308,7 +307,7 @@ public final class CopticCalendar extends CECalendar
      * @param year the year
      * @param month the month
      * @param date the day
-     * @draft ICU 3.4
+     * @draft ICU 3.4 (retain)
      * @provisional This API might change or be removed in a future release.
      */
     // The equivalent operation can be done by public Calendar API.
