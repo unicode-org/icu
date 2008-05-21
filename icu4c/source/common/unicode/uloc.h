@@ -871,7 +871,7 @@ typedef enum {
 /**
  * Get the layout character orientation for the specified locale.
  * 
- * @param localeID locale name
+ * @param localeId locale name
  * @param status Error status
  * @return an enum indicating the layout orientation for characters.
  * @draft ICU 4.0
@@ -883,7 +883,7 @@ uloc_getCharacterOrientation(const char* localeId,
 /**
  * Get the layout line orientation for the specified locale.
  * 
- * @param localeID locale name
+ * @param localeId locale name
  * @param status Error status
  * @return an enum indicating the layout orientation for lines.
  * @draft ICU 4.0
@@ -957,7 +957,7 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
  * @param status an error is returned if the LCID is unrecognized or the output buffer
  *  is too small
  * @return actual the actual size of the locale ID, not including NUL-termination 
- * @draft ICU 3.8
+ * @stable ICU 4.0
  */
 U_DRAFT int32_t U_EXPORT2
 uloc_getLocaleForLCID(uint32_t hostID, char *locale, int32_t localeCapacity,

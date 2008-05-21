@@ -1085,7 +1085,7 @@ ucal_getLocaleByType(const UCalendar *cal, ULocDataLocaleType type, UErrorCode* 
  * Returns the timezone data version currently used by ICU.
  * @param status error code for the operation
  * @return the version string, such as "2007f"
- * @draft ICU 3.8
+ * @stable ICU 4.0
  */
 U_DRAFT const char * U_EXPORT2
 ucal_getTZDataVersion(UErrorCode* status);

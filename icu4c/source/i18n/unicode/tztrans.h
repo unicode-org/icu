@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and         *
+* Copyright (C) 2007-2008, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -26,7 +26,7 @@ class TimeZoneRule;
 /**
  * <code>TimeZoneTransition</code> is a class representing a time zone transition.
  * An instance has a time of transition and rules for both before and after the transition.
- * @draft ICU 3.8
+ * @stable ICU 4.0
  */
 class U_I18N_API TimeZoneTransition : public UObject {
 public:
@@ -37,26 +37,26 @@ public:
      * @param time  The time of transition in milliseconds since the base time.
      * @param from  The time zone rule used before the transition.
      * @param to    The time zone rule used after the transition.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     TimeZoneTransition(UDate time, const TimeZoneRule& from, const TimeZoneRule& to);
 
     /**
      * Constructs an empty <code>TimeZoneTransition</code>
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     TimeZoneTransition();
 
     /**
      * Copy constructor.
      * @param source    The TimeZoneTransition object to be copied.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     TimeZoneTransition(const TimeZoneTransition& source);
 
     /**
      * Destructor.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     ~TimeZoneTransition();
 
@@ -64,14 +64,14 @@ public:
      * Clone this TimeZoneTransition object polymorphically. The caller owns the result and
      * should delete it when done.
      * @return  A copy of the object.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     TimeZoneTransition* clone(void) const;
 
     /**
      * Assignment operator.
      * @param right The object to be copied.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     TimeZoneTransition& operator=(const TimeZoneTransition& right);
 
@@ -80,7 +80,7 @@ public:
      * of different subclasses are considered unequal.
      * @param that  The object to be compared with.
      * @return  true if the given TimeZoneTransition objects are semantically equal.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     UBool operator==(const TimeZoneTransition& that) const;
 
@@ -89,28 +89,28 @@ public:
      * of different subclasses are considered unequal.
      * @param that  The object to be compared with.
      * @return  true if the given TimeZoneTransition objects are semantically unequal.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     UBool operator!=(const TimeZoneTransition& that) const;
 
     /**
      * Returns the time of transition in milliseconds.
      * @return The time of the transition in milliseconds since the 1970 Jan 1 epoch time.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     UDate getTime(void) const;
 
     /**
      * Sets the time of transition in milliseconds.
      * @param time The time of the transition in milliseconds since the 1970 Jan 1 epoch time.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     void setTime(UDate time);
 
     /**
      * Returns the rule used before the transition.
      * @return The time zone rule used after the transition.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     const TimeZoneRule* getFrom(void) const;
 
@@ -118,7 +118,7 @@ public:
      * Sets the rule used before the transition.  The caller remains
      * responsible for deleting the <code>TimeZoneRule</code> object.
      * @param from The time zone rule used before the transition.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     void setFrom(const TimeZoneRule& from);
 
@@ -126,7 +126,7 @@ public:
      * Adopts the rule used before the transition.  The caller must
      * not delete the <code>TimeZoneRule</code> object passed in.
      * @param from The time zone rule used before the transition.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     void adoptFrom(TimeZoneRule* from);
 
@@ -134,7 +134,7 @@ public:
      * Sets the rule used after the transition.  The caller remains
      * responsible for deleting the <code>TimeZoneRule</code> object.
      * @param to The time zone rule used after the transition.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     void setTo(const TimeZoneRule& to);
 
@@ -142,14 +142,14 @@ public:
      * Adopts the rule used after the transition.  The caller must
      * not delete the <code>TimeZoneRule</code> object passed in.
      * @param to The time zone rule used after the transition.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     void adoptTo(TimeZoneRule* to);
 
     /**
      * Returns the rule used after the transition.
      * @return The time zone rule used after the transition.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     const TimeZoneRule* getTo(void) const;
 
@@ -168,7 +168,7 @@ public:
      * .       erived::getStaticClassID()) ...
      * </pre>
      * @return          The class ID for all objects of this class.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     static UClassID U_EXPORT2 getStaticClassID(void);
 
@@ -181,7 +181,7 @@ public:
      * @return          The class ID for this object. All objects of a
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
-     * @draft ICU 3.8
+     * @stable ICU 4.0
      */
     virtual UClassID getDynamicClassID(void) const;
 };
