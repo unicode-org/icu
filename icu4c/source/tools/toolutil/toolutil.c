@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -22,6 +22,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "toolutil.h"
+#include "unicode/ucal.h"
 
 #ifdef U_WINDOWS
 #   define VC_EXTRALEAN
@@ -37,6 +38,22 @@
 #   include <sys/types.h>
 #endif
 #include <errno.h>
+
+static int32_t currentYear = -1;
+
+U_CAPI int32_t U_EXPORT2 getCurrentYear() {
+    UErrorCode status=U_ZERO_ERROR;    
+    UCalendar *cal = NULL;
+
+    if(currentYear == -1) {
+        cal = ucal_open(NULL, -1, NULL, UCAL_TRADITIONAL, &status);
+        ucal_setMillis(cal, ucal_getNow(), &status);
+        currentYear = ucal_get(cal, UCAL_YEAR, &status);
+        ucal_close(cal);
+    }
+    return currentYear;
+}
+
 
 U_CAPI const char * U_EXPORT2
 getLongPathname(const char *pathname) {

@@ -23,12 +23,12 @@
 #include "unicode/uclean.h"
 #include "unicode/udata.h"
 #include "unicode/udbgutil.h"
-#include "unicode/ucal.h"
 #include "unewdata.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "uoptions.h"
 #include "gentest.h"
+#include "toolutil.h"
 
 #define DATA_NAME "test"
 #define DATA_TYPE "icu"
@@ -138,22 +138,12 @@ createData(const char* outputDirectory, UErrorCode *errorCode) {
 
 /* Create Java file ----------------------------------------------------- */
 
-int getCurrentYear() {
-    UErrorCode status=U_ZERO_ERROR;
-    int year = 0;
-    UCalendar *cal =  ucal_open(NULL, -1, NULL, UCAL_TRADITIONAL, &status);
-    ucal_setMillis(cal, ucal_getNow(), &status);
-    year = ucal_get(cal, UCAL_YEAR, &status);
-    ucal_close(cal);
-    return year;
-}
-
 static int
 outputJavaStuff(const char* progname, const char *outputDir) {
     int32_t i,t,count;
     char file[512];
     FILE *out;
-    int year = getCurrentYear();
+    int32_t year = getCurrentYear();
 
     uprv_strcpy(file,outputDir);
     if(*outputDir &&  /* don't put a trailing slash if outputDir is empty */ 
