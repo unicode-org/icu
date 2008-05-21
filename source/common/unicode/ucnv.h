@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
  *  ucnv.h:
@@ -316,7 +316,7 @@ ucnv_compareNames(const char *name1, const char *name2);
  * @see ucnv_getAlias
  * @see ucnv_getDefaultName
  * @see ucnv_close
- * @ee ucnv_compareNames
+ * @see ucnv_compareNames
  * @stable ICU 2.0
  */
 U_STABLE UConverter* U_EXPORT2 
@@ -346,7 +346,7 @@ ucnv_open(const char *converterName, UErrorCode *err);
  * @see ucnv_open
  * @see ucnv_openCCSID
  * @see ucnv_close
- * @ee ucnv_compareNames
+ * @see ucnv_compareNames
  * @stable ICU 2.0
  */
 U_STABLE UConverter* U_EXPORT2 
