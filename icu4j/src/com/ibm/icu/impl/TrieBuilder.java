@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and   *
+* Copyright (C) 1996-2008, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -45,7 +45,6 @@ public class TrieBuilder
      * This interface specifies methods to be implemented in order for
      * com.ibm.impl.Trie, to surrogate offset information encapsulated within 
      * the data.
-     * @draft 2.2
      */
     public static interface DataManipulate
     {

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- *   Copyright (C) 2002-2007, International Business Machines
+ *   Copyright (C) 2002-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
 */
@@ -24,7 +24,6 @@ public final class USerializedSet {
      * @param src pointer to start of array
      * @param srcStart pointer to start of serialized data (length value)
      * @return true if the given array is valid, otherwise false
-     * @draft ICU 2.4
      */
     public final boolean getSet(char src[], int srcStart) {
         // leave most argument checking up to Java exceptions
@@ -59,7 +58,6 @@ public final class USerializedSet {
     /**
      * Set the USerializedSet to contain the given character (and nothing
      * else).
-     * @draft ICU 2.4
      */
     public final void setToOne(int c) {
         if( 0x10ffff<c) {
@@ -99,7 +97,6 @@ public final class USerializedSet {
      * getSerializedRangeCount()-1</code>
      * @param range variable to receive the data in the range
      * @return true if rangeIndex is valid, otherwise false
-     * @draft ICU 2.4
      */
     public final boolean getRange(int rangeIndex, int[] range) {
         if( rangeIndex<0) {
@@ -149,7 +146,6 @@ public final class USerializedSet {
      * character.
      * @param c the character to test for
      * @return true if set contains c
-     * @draft ICU 2.4
      */
     public final boolean contains(int c) {
         
@@ -181,7 +177,6 @@ public final class USerializedSet {
      * set.
      * @return a non-negative integer counting the character ranges
      * contained in set
-     * @draft ICU 2.4
      */
     public final int countRanges() {
         return (bmpLength+(length-bmpLength)/2+1)/2;

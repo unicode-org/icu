@@ -629,8 +629,7 @@ public class JapaneseCalendar extends GregorianCalendar {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String getType() {
         return "japanese";

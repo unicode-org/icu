@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -236,7 +236,7 @@ public class SimpleDateFormat extends DateFormat {
      * generality, use the factory methods in the DateFormat class.
      * @param pattern the pattern to use
      * @param loc the ulocale to use for localization
-     * @draft ICU 3.2
+     * @stable ICU 3.2
      */
     public SimpleDateFormat(String pattern, ULocale loc) {
         this(pattern, loc.toLocale());

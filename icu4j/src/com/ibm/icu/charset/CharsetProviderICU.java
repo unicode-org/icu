@@ -23,15 +23,13 @@ import com.ibm.icu.impl.InvalidFormatException;
 /**
  * A concrete subclass of CharsetProvider for loading and providing charset converters
  * in ICU.
- * @draft ICU 3.6
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 3.6
  */
 public final class CharsetProviderICU extends CharsetProvider{
     
     /**
      * Default constructor 
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
      */
     public CharsetProviderICU() {
     }
@@ -71,7 +69,7 @@ public final class CharsetProviderICU extends CharsetProvider{
      * @param charsetName The name of the charset conversion table.
      * @param classPath The class path that contain the conversion table.
      * @return charset object for the given charset name, null if unsupported
-     * @draft ICU 3.8
+     * @stable ICU 3.8
      */
     public final Charset charsetForName(String charsetName, String classPath) {
         return charsetForName(charsetName, classPath, null);
@@ -84,7 +82,7 @@ public final class CharsetProviderICU extends CharsetProvider{
      * @param classPath The class path that contain the conversion table.
      * @param loader the class object from which to load the charset conversion table
      * @return charset object for the given charset name, null if unsupported
-     * @draft ICU 3.8
+     * @stable ICU 3.8
      */
     public Charset charsetForName(String charsetName, String classPath, ClassLoader loader) {
         CharsetMBCS cs = null;

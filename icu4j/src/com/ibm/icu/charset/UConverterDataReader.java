@@ -1,9 +1,7 @@
-/**
+/*
 *******************************************************************************
-* Copyright (C) 2006-2007, International Business Machines Corporation and    *
+* Copyright (C) 2006-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
-*******************************************************************************
-*
 *******************************************************************************
 */ 
  
@@ -417,7 +415,6 @@ final class UConverterDataReader implements ICUBinary.Authenticate {
     * <p>Protected constructor.</p>
     * @param inputStream ICU uprop.dat file input stream
     * @exception IOException throw if data file fails authentication 
-    * @draft 2.1
     */
     protected UConverterDataReader(InputStream inputStream) 
                                         throws IOException{

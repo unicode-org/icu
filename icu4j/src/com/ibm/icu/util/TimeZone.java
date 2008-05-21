@@ -873,8 +873,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @throws MissingResourceException if ICU timezone resource bundle
      * is missing or the version information is not available.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static synchronized String getTZDataVersion() {
         if (TZDATA_VERSION == null) {

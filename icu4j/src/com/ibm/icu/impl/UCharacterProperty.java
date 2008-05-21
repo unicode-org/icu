@@ -36,7 +36,6 @@ import com.ibm.icu.impl.NormalizerImpl;
 * <a href=UCharacter.html>UCharacter</a>.</p>
 * @author Syn Wee Quek
 * @since release 2.1, february 1st 2002
-* @draft 2.1
 */
 
 public final class UCharacterProperty
@@ -233,7 +232,6 @@ public final class UCharacterProperty
      * <p>This API does not check the validity of the codepoint.</p>
      * @param codepoint The code point.
      * @return the Unicode version number
-     * @draft ICU 2.1
      */
     public VersionInfo getAge(int codepoint)
     {
@@ -358,7 +356,6 @@ public final class UCharacterProperty
      *         Unicode version does not have data for the property at all, or
      *         not for this code point.
      * @see com.ibm.icu.lang.UProperty
-     * @draft ICU 2.1
      */
 
     public boolean hasBinaryProperty(int codepoint, int property)

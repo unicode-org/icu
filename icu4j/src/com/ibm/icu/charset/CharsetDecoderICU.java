@@ -22,8 +22,7 @@ import com.ibm.icu.impl.Assert;
  * An abstract class that provides framework methods of decoding operations for concrete
  * subclasses. 
  * In the future this class will contain API that will implement converter sematics of ICU4C.
- * @draft ICU 3.6
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 3.6
  */
 public abstract class CharsetDecoderICU extends CharsetDecoder{ 
 
@@ -68,25 +67,21 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
     private boolean malformedInputCalled = false;
     private boolean unmappableCharacterCalled = false;
     
-    /**
+    /*
      * Construct a CharsetDecorderICU based on the information provided from a CharsetICU object.
      * 
      * @param cs The CharsetICU object containing information about how to charset to decode.
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
      */
     CharsetDecoderICU(CharsetICU cs) {
         super(cs, (float) (1/(float)cs.maxCharsPerByte), cs.maxCharsPerByte);
     }
 
-    /**
+    /*
      * Is this Decoder allowed to use fallbacks? A fallback mapping is a mapping
      * that will convert a byte sequence to a Unicode codepoint sequence, but
      * the encoded Unicode codepoint sequence will round trip convert to a different
      * byte sequence. In ICU, this is can be called a reverse fallback.
      * @return A boolean
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
      */
     final boolean isFallbackUsed() {
         return true;
@@ -158,6 +153,8 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * @param err CoderResult
      * @param newCallback CharsetCallback.Encoder
      * @param newContext Object
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public final void setToUCallback(CoderResult err, CharsetCallback.Decoder newCallback, Object newContext) {
         if (err.isMalformed()) {
@@ -251,18 +248,16 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
         return ret;
 	}
  
-    /**
+    /*
      * Implements the ICU semantic for decode operation
      * @param in The input byte buffer
      * @param out The output character buffer
      * @return Result of decoding action. Returns CoderResult.UNDERFLOW if the decoding
      *         action succeeds or more input is needed for completing the decoding action.
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
      */
     abstract CoderResult decodeLoop(ByteBuffer in, CharBuffer out, IntBuffer offsets, boolean flush);
     
-    /**
+    /*
      * Implements the ICU semantic for decode operation
      * @param source The input byte buffer
      * @param target The output character buffer
@@ -271,8 +266,6 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      *  additional input bytes beyond those in the given buffer.
      * @return Result of decoding action. Returns CoderResult.UNDERFLOW if the decoding
      *         action succeeds or more input is needed for completing the decoding action.
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
      */
     final CoderResult decode(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
     
@@ -634,13 +627,12 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
         }
     }
 
-    /**
+    /*
      * Returns the number of chars held in the converter's internal state
      * because more input is needed for completing the conversion. This function is 
      * useful for mapping semantics of ICU's converter interface to those of iconv,
      * and this information is not needed for normal conversion.
      * @return The number of chars in the state. -1 if an error is encountered.
-     * @draft ICU 3.6
      */
     /*public*/ int toUCountPending()    {
         if(preToULength > 0){
@@ -660,13 +652,11 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
             dst[dstOffset++]=(char)src[srcOffset++];
         }
     }
-    /**
+    /*
      * ONLY used by ToU callback functions.
      * This function will write out the specified characters to the target
      * character buffer.
      * @return A CoderResult object that contains the error result when an error occurs.
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
      */
     static final CoderResult toUWriteUChars( CharsetDecoderICU cnv,
                                                 char[] ucharsArray, int ucharsBegin, int length,  
@@ -699,7 +689,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
         }
         return cr;
     }
-    /**
+    /*
      * This function will write out the Unicode substitution character to the
      * target character buffer.
      * Sub classes to override this method if required
@@ -708,8 +698,6 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * @param target
      * @param offsets
      * @return A CoderResult object that contains the error result when an error occurs.
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
      */
      CoderResult cbToUWriteSub(CharsetDecoderICU decoder, 
                                         ByteBuffer source, CharBuffer target, 

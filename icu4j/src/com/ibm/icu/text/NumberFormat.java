@@ -455,8 +455,7 @@ public abstract class NumberFormat extends UFormat {
      * This is the default behavior.
      * @param value True to enable strict parsing.  Default is false.
      * @see #isParseStrict
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
      */
     public void setParseStrict(boolean value) {
         parseStrict = value;
@@ -466,8 +465,7 @@ public abstract class NumberFormat extends UFormat {
      * Return whether strict parsing is in effect.
      * @return true if strict parsing is in effect
      * @see #setParseStrict
-     * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.6
      */
     public boolean isParseStrict() {
         return parseStrict;
@@ -882,7 +880,7 @@ public abstract class NumberFormat extends UFormat {
     /**
      * Get the list of Locales for which NumberFormats are available.
      * @return the available locales
-     * @draft ICU 3.2
+     * @draft ICU 3.2 (retain)
      * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales() {

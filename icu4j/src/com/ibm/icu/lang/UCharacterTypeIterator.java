@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2007, International Business Machines Corporation and   *
+* Copyright (C) 1996-2008, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -38,7 +38,6 @@ class UCharacterTypeIterator extends TrieIterator
     /**
     * TrieEnumeration constructor
     * @param property the unicode character properties to be used
-    * @draft 2.1
     */
     protected UCharacterTypeIterator(UCharacterProperty property)
     {

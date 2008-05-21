@@ -1,9 +1,7 @@
-/**
+/*
 *******************************************************************************
-* Copyright (C) 2006-2007, International Business Machines Corporation and    *
+* Copyright (C) 2006-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
-*******************************************************************************
-*
 *******************************************************************************
 */ 
 package com.ibm.icu.charset;
@@ -19,7 +17,6 @@ interface UConverterConstants {
 	/**
 	 * Useful constant for the maximum size of the whole locale ID
 	 * (including the terminating NULL).
-	 * @draft ICU 3.6
 	 */
 	static final int ULOC_FULLNAME_CAPACITY = 56;
 	
@@ -36,7 +33,6 @@ interface UConverterConstants {
 	 * Those may need to be distinguished from
 	 * actual U+ffff text contents by calling functions like
 	 * CharacterIterator::hasNext() or UnicodeString::length().
-	 * @draft ICU 2.4
 	 */
 	static final int U_SENTINEL = -1;
 	
@@ -46,18 +42,17 @@ interface UConverterConstants {
 	/**
 	 * Character that separates converter names from options and options from each other.
 	 * @see CharsetICU#forNameICU(String)
-	 * @draft ICU 3.6
 	 */
 	static final byte OPTION_SEP_CHAR  = ',';
 	
-	/** Maximum length of a converter name including the terminating NULL @draft ICU 3.6 */
+	/** Maximum length of a converter name including the terminating NULL */
 	static final int MAX_CONVERTER_NAME_LENGTH  = 60;
-	/** Maximum length of a converter name including path and terminating NULL @draft ICU 3.6 */
+	/** Maximum length of a converter name including path and terminating NULL */
 	static final int MAX_FULL_FILE_NAME_LENGTH = (600+MAX_CONVERTER_NAME_LENGTH);
 	
-	/** Shift in for EBDCDIC_STATEFUL and iso2022 states @draft ICU 3.6 */
+	/** Shift in for EBDCDIC_STATEFUL and iso2022 states */
 	static final int SI = 0x0F;
-	/** Shift out for EBDCDIC_STATEFUL and iso2022 states @draft ICU 3.6 */
+	/** Shift out for EBDCDIC_STATEFUL and iso2022 states */
 	static final int SO = 0x0E;
 	
 	//end ucnv.h
@@ -89,8 +84,6 @@ interface UConverterConstants {
 	 /**
       * 
       * @author ram
-      * @draft ICU 3.6
-      * @provisional This API might change or be removed in a future release.
 	  */
 	static interface UConverterResetChoice {
 	    static final int RESET_BOTH = 0;
@@ -101,7 +94,6 @@ interface UConverterConstants {
 	// begin utf16.h
 	/**
 	 * The maximum number of 16-bit code units per Unicode code point (U+0000..U+10ffff).
-	 * @draft ICU 2.4
 	 */
 	static final int U16_MAX_LENGTH = 2;
 	// end utf16.h	
@@ -109,13 +101,11 @@ interface UConverterConstants {
 	// begin err.h	
 	/**
 	 * FROM_U, TO_U context options for sub callback
-	 * @draft ICU 3.6
 	 */
 	static byte[] SUB_STOP_ON_ILLEGAL = {'i'};
 	
 	/**
 	 * FROM_U, TO_U context options for skip callback
-	 * @draft ICU 3.6
 	 */
 	static byte[] SKIP_STOP_ON_ILLEGAL = {'i'};	
 	
@@ -123,8 +113,6 @@ interface UConverterConstants {
 	 * The process condition code to be used with the callbacks.  
 	 * Codes which are greater than IRREGULAR should be 
 	 * passed on to any chained callbacks.
-	 * @draft ICU 3.6
-     * @provisional This API might change or be removed in a future release.
 	 */
 	static interface UConverterCallbackReason {
 		 static final int UNASSIGNED = 0;  /**< The code point is unassigned.
@@ -154,7 +142,6 @@ interface UConverterConstants {
 	                              by the new converter, the callback must clone 
 	                              the data and call setFromUCallback 
 	                              (or setToUCallback) with the correct pointer.
-	                              @draft ICU 2.2
 	                           */
 	}
 	//end err.h

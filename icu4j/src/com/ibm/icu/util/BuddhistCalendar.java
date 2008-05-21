@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -239,8 +239,7 @@ public class BuddhistCalendar extends GregorianCalendar {
     /**
      * Return the current Calendar type.
      * @return type of calendar
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String getType() {
         return "buddhist";

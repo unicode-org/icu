@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -21,16 +21,12 @@ import com.ibm.icu.util.UniversalTimeScale;
  * print <code>U_INT64_MIN</code> or <code>U_INT64_MAX</code> for these values.
  * 
  * @see com.ibm.icu.util.UniversalTimeScale
- * 
- * @draft ICU 3.2
  */
 public class GenerateCTimeScaleData
 {
 
     /**
      * The default constructor.
-     * 
-     * @draft ICU 3.2
      */
     public GenerateCTimeScaleData()
     {
@@ -66,8 +62,6 @@ public class GenerateCTimeScaleData
      * @param args - the command line arguments
      * 
      * @see com.ibm.icu.util.UniversalTimeScale
-     * 
-     * @draft ICU 3.2
      */
     public static void main(String[] args)
     {

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -22,15 +22,11 @@ import com.ibm.icu.util.UniversalTimeScale;
  * for all of the calculations to run without throwing an error.
  * 
  * @see com.ibm.icu.util.UniversalTimeScale
- * 
- * @draft ICU 3.2
  */
 public class CalculateLimits {
 
     /**
      * The default constructor.
-     * 
-     * @draft ICU 3.2
      */
     public CalculateLimits()
     {
@@ -49,8 +45,6 @@ public class CalculateLimits {
      * @see com.ibm.icu.util.UniversalTimeScale
      * 
      * @param args - the command line arugments
-     * 
-     * @draft ICU 3.2
      */
     public static void main(String[] args)
     {

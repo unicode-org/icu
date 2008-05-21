@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -22,16 +22,12 @@ import com.ibm.icu.util.TimeZone;
  * used in UniversalTimeScale.
  * 
  * @see com.ibm.icu.util.UniversalTimeScale
- * 
- *@draft ICU 3.2 
  */
 public class EpochOffsets
 {
 
     /**
      * The default constructor.
-     * 
-     * @draft ICU 3.2
      */
     public EpochOffsets()
     {
@@ -67,8 +63,6 @@ public class EpochOffsets
      * that value to ticks.
      * 
      * @param args - the command line arguments.
-     * 
-     * @draft ICU 3.2
      */
     public static void main(String[] args)
     {

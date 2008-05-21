@@ -226,8 +226,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      *                If null the bundle for default locale is opened.
      * @param loader  the loader to use
      * @return a resource bundle for the given base name and locale
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static UResourceBundle getBundleInstance(String baseName, Locale locale, ClassLoader loader) {
  	if (baseName == null) {
@@ -249,8 +248,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      *                If null the bundle for default locale is opened.
      * @param loader  the loader to use
      * @return a resource bundle for the given base name and locale
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static UResourceBundle getBundleInstance(String baseName, ULocale locale, ClassLoader loader) {
  	if (baseName == null) {
@@ -559,8 +557,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @see #getInt
      * @throws MissingResourceException
      * @throws UResourceTypeMismatchException
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public ByteBuffer getBinary() {
         throw new UResourceTypeMismatchException("");
@@ -575,8 +572,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @see #getInt
      * @throws MissingResourceException
      * @throws UResourceTypeMismatchException
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String getString() {
         throw new UResourceTypeMismatchException("");
@@ -590,8 +586,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @see #getIntVector
      * @throws MissingResourceException
      * @throws UResourceTypeMismatchException
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String[] getStringArray() {
         throw new UResourceTypeMismatchException("");
@@ -606,8 +601,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @see #getInt
      * @throws MissingResourceException
      * @throws UResourceTypeMismatchException
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public byte[] getBinary(byte[] ba) {
         throw new UResourceTypeMismatchException("");
@@ -621,8 +615,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @see #getInt
      * @throws MissingResourceException
      * @throws UResourceTypeMismatchException
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public int[] getIntVector() {
         throw new UResourceTypeMismatchException("");
@@ -636,8 +629,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @see #getBinary()
      * @throws MissingResourceException
      * @throws UResourceTypeMismatchException
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public int getInt() {
         throw new UResourceTypeMismatchException("");
@@ -652,8 +644,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @see #getBinary()
      * @throws MissingResourceException
      * @throws UResourceTypeMismatchException
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public int getUInt() {
         throw new UResourceTypeMismatchException("");
@@ -665,8 +656,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @param aKey               a key associated with the wanted resource
      * @return                  a resource bundle object representing the resource
      * @throws MissingResourceException
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public UResourceBundle get(String aKey) {
         UResourceBundle obj = handleGet(aKey, null, this);
@@ -695,8 +685,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @return                  a string which lives in the resource.
      * @throws IndexOutOfBoundsException
      * @throws UResourceTypeMismatchException
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String getString(int index) {
         ICUResourceBundle temp = (ICUResourceBundle)get(index);
@@ -713,8 +702,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @return                  the sub resource UResourceBundle object
      * @throws IndexOutOfBoundsException
      * @throws MissingResourceException
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public UResourceBundle get(int index) {
         UResourceBundle obj = handleGet(index, null, this);
@@ -735,8 +723,7 @@ public abstract class UResourceBundle extends ResourceBundle{
     /**
      * Returns the keys in this bundle as an enumeration
      * @return an enumeration containing key strings
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public Enumeration getKeys() {
         initKeysVector();
@@ -766,8 +753,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      *          APIs to access individual members of an integer array. It
      *          is always returned as a whole.
      * @return number of resources in a given resource.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public int getSize() {
         return size;
@@ -780,8 +766,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * {@link #STRING STRING}, {@link #TABLE TABLE}.
      *
      * @return type of the given resource.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public int getType() {
         int type = ICUResourceBundle.RES_GET_TYPE(resource);
@@ -795,8 +780,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * Return the version number associated with this UResourceBundle as an
      * VersionInfo object.
      * @return VersionInfo object containing the version of the bundle
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public VersionInfo getVersion() {
         return null;
@@ -806,8 +790,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * Returns the iterator which iterates over this
      * resource bundle
      * @return UResourceBundleIterator that iterates over the resources in the bundle
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public UResourceBundleIterator getIterator() {
         return new UResourceBundleIterator(this);
@@ -816,37 +799,32 @@ public abstract class UResourceBundle extends ResourceBundle{
      * Returns the key associated with a given resource. Not all the resources have a key - only
      * those that are members of a table.
      * @return a key associated to this resource, or null if it doesn't have a key
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String getKey() {
         return key;
     }
     /**
      * Resource type constant for "no resource".
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int NONE = -1;
 
     /**
      * Resource type constant for strings.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int STRING = 0;
 
     /**
      * Resource type constant for binary data.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int BINARY = 1;
 
     /**
      * Resource type constant for tables of key-value pairs.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int TABLE = 2;
 
@@ -873,23 +851,20 @@ public abstract class UResourceBundle extends ResourceBundle{
      * Resource type constant for a single 28-bit integer, interpreted as
      * signed or unsigned by the getInt() function.
      * @see #getInt
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int INT = 7;
 
     /**
      * Resource type constant for arrays of resources.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int ARRAY = 8;
 
     /**
      * Resource type constant for vectors of 32-bit integers.
      * @see #getIntVector
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int INT_VECTOR = 14;
 
@@ -925,13 +900,12 @@ public abstract class UResourceBundle extends ResourceBundle{
      * Actual worker method for fetching a resource based on the given key.
      * Sub classes must override this method if they support resources with keys.
      * @param aKey the key string of the resource to be fetched
-     * @param table hastable object to hold references of resources already seen
+     * @param table hashtable object to hold references of resources already seen
      * @param requested the original resource bundle object on which the get method was invoked.
      *                  The requested bundle and the bundle on which this method is invoked
      *                  are the same, except in the cases where aliases are involved.
-     * @return UResourceBundle a resource assoicated with the key
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @return UResourceBundle a resource associated with the key
+     * @stable ICU 3.8
      */
     protected UResourceBundle handleGet(String aKey, HashMap table, UResourceBundle requested) {
         return null;
@@ -941,13 +915,12 @@ public abstract class UResourceBundle extends ResourceBundle{
      * Actual worker method for fetching a resource based on the given index.
      * Sub classes must override this method if they support arrays of resources.
      * @param index the index of the resource to be fetched
-     * @param table hastable object to hold references of resources already seen
+     * @param table hashtable object to hold references of resources already seen
      * @param requested the original resource bundle object on which the get method was invoked.
      *                  The requested bundle and the bundle on which this method is invoked
      *                  are the same, except in the cases where aliases are involved.
-     * @return UResourceBundle a resource assoicated with the index
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @return UResourceBundle a resource associated with the index
+     * @stable ICU 3.8
      */
     protected UResourceBundle handleGet(int index, HashMap table, UResourceBundle requested) {
         return null;
@@ -957,8 +930,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * Actual worker method for fetching the array of strings in a resource.
      * Sub classes must override this method if they support arrays of strings.
      * @return String[] An array of strings containing strings
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     protected String[] handleGetStringArray() {
         return null;
@@ -969,8 +941,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * Sub classes must override this method if they support keys and associated resources.
      *
      * @return Enumeration An enumeration of all the keys in this resource.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     protected Enumeration handleGetKeys(){
         Vector resKeys = new Vector();
@@ -984,8 +955,7 @@ public abstract class UResourceBundle extends ResourceBundle{
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     // this method is declared in ResourceBundle class
     // so cannot change the signature

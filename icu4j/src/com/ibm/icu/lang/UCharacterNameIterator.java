@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and   *
+* Copyright (C) 1996-2008, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -31,7 +31,6 @@ class UCharacterNameIterator implements ValueIterator
     * @param element for storing the result codepoint and name
     * @return true if we are not at the end of the iteration, false otherwise.
     * @see Element
-    * @draft 2.1
     */
     public boolean next(ValueIterator.Element element)
     {
@@ -107,7 +106,6 @@ class UCharacterNameIterator implements ValueIterator
     * <p>Resets the iterator to start iterating from the integer index
     * UCharacter.MIN_VALUE or X if a setRange(X, Y) has been called previously.
     * </p>
-    * @draft 2.1
     */
     public void reset()
     {
@@ -130,7 +128,6 @@ class UCharacterNameIterator implements ValueIterator
      * @param limit 1 integer after the last integer in range
      * @exception IllegalArgumentException thrown when attempting to set an
      *            illegal range. E.g limit <= start
-     * @draft 2.1
      */
     public void setRange(int start, int limit)
     {
@@ -161,7 +158,6 @@ class UCharacterNameIterator implements ValueIterator
     * @param name name data
     * @param choice name choice from the class
     *               com.ibm.icu.lang.UCharacterNameChoice
-    * @draft 2.1
     */
     protected UCharacterNameIterator(UCharacterName name, int choice)
     {

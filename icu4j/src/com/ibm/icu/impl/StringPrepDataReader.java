@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 2003-2007, International Business Machines Corporation and   *
+ * Copyright (C) 2003-2008, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  *
@@ -30,7 +30,6 @@ public final class StringPrepDataReader implements ICUBinary.Authenticate {
     * <p>private constructor.</p>
     * @param inputStream ICU uprop.dat file input stream
     * @exception IOException throw if data file fails authentication 
-    * @draft 2.1
     */
     public StringPrepDataReader(InputStream inputStream) 
                                         throws IOException{

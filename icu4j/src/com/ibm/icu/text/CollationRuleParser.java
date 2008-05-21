@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2007, International Business Machines Corporation and    *
+* Copyright (C) 1996-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -17,7 +17,6 @@ import com.ibm.icu.impl.UCharacterProperty;
 * turned into collation elements
 * @author Syn Wee Quek
 * @since release 2.2, June 7 2002
-* @draft 2.2
 */
 final class CollationRuleParser
 {
@@ -33,7 +32,6 @@ final class CollationRuleParser
      * @param rules the collation rules to build the collation table from.
      * @exception ParseException thrown when argument rules have an invalid
      *            syntax.
-     * @draft 2.2
      */
     CollationRuleParser(String rules) throws ParseException
     {

@@ -257,7 +257,7 @@ public final class EthiopicCalendar extends CECalendar
     /**
      * {@inheritDoc}
      * @return type of calendar
-     * @draft ICU 3.8
+     * @stable ICU 3.8
      */
     public String getType() {
         if (isAmeteAlemEra()) {
@@ -375,7 +375,7 @@ public final class EthiopicCalendar extends CECalendar
      * @param month the month
      * @param date the day
      *
-     * @draft ICU 3.4
+     * @draft ICU 3.4 (retain)
      * @provisional This API might change or be removed in a future release.
      */
     // The equivalent operation can be done by public Calendar API.

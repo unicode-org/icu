@@ -1558,7 +1558,6 @@ public final class Utility {
     * @param dst char array to store the retrieved chars
     * @param dstBegin offset to the start of the destination char array to
     *                 store the retrieved chars
-    * @draft since ICU4J 2.0
     */
     public static void getChars(StringBuffer src, int srcBegin, int srcEnd,
                                 char dst[], int dstBegin)

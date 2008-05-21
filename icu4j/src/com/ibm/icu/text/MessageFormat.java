@@ -715,8 +715,7 @@ public class MessageFormat extends UFormat {
      *
      * @param newFormats a map from String to Format providing new
      *        formats for named arguments.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public void setFormatsByArgumentName(Map newFormats) {
         for (int i = 0; i <= maxOffset; i++) {
@@ -815,8 +814,7 @@ public class MessageFormat extends UFormat {
      *
      * @param argumentName the name of the argument to change
      * @param newFormat the new format to use
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public void setFormatByArgumentName(String argumentName, Format newFormat) {
         for (int i = 0; i < maxOffset; ++i) {
@@ -1031,8 +1029,7 @@ public class MessageFormat extends UFormat {
      *         <code>arguments</code> array is not of the type
      *         expected by the format element(s) that use it.
      * @return the passed-in StringBuffer
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public final StringBuffer format(Map arguments, StringBuffer result,
                                      FieldPosition pos) {
@@ -1070,8 +1067,7 @@ public class MessageFormat extends UFormat {
      *         that use it.
      * @see #format(Map, StringBuffer, FieldPosition)
      * @see #format(String, Object[])
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static String format(String pattern, Map arguments) {
         MessageFormat temp = new MessageFormat(pattern);
@@ -1083,8 +1079,7 @@ public class MessageFormat extends UFormat {
      * and false otherwise.  See class description.
      *
      * @return true if named arguments are used.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public boolean usesNamedArguments() {
         return !argumentNamesAreNumeric;
@@ -1261,8 +1256,7 @@ public class MessageFormat extends UFormat {
      * @param pos the position at which to start parsing.  on return,
      *        contains the result of the parse.
      * @return a Map containing key/value pairs for each parsed argument.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public Map parseToMap(String source, ParsePosition pos) {
         if (source == null) {
@@ -1382,8 +1376,7 @@ public class MessageFormat extends UFormat {
      * @throws ParseException if the beginning of the specified string cannot 
      *         be parsed.
      * @see #parseToMap(String, ParsePosition)
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public Map parseToMap(String source) throws ParseException {
         

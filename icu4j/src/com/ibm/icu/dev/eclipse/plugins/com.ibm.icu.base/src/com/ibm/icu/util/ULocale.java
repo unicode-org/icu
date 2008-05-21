@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -2456,8 +2456,7 @@ public final class ULocale implements Serializable {
     * @param availableLocales list of available locales. One of these will be returned.
     * @param fallback if non-null, a 1-element array containing a boolean to be set with the fallback status
     * @return one of the locales from the availableLocales list, or null if none match
-    * @draft ICU 3.4
-    * @provisional
+    * @stable ICU 3.4
     */
     public static ULocale acceptLanguage(String acceptLanguageList, 
                 ULocale[] availableLocales, boolean[] fallback) {
@@ -2558,8 +2557,7 @@ public final class ULocale implements Serializable {
     * @param availableLocales list of available locales. One of these will be returned.
     * @param fallback if non-null, a 1-element array containing a boolean to be set with the fallback status
     * @return one of the locales from the availableLocales list, or null if none match
-    * @draft ICU 3.4
-    * @provisional
+    * @stable ICU 3.4
     */
     public static ULocale acceptLanguage(ULocale[] acceptLanguageList, 
                         ULocale[] availableLocales, boolean[] fallback) {
@@ -2600,8 +2598,7 @@ public final class ULocale implements Serializable {
     * @param acceptLanguageList list in HTTP "Accept-Language:" format of acceptable locales
     * @param fallback if non-null, a 1-element array containing a boolean to be set with the fallback status
     * @return one of the locales from the ULocale.getAvailableLocales() list, or null if none match
-    * @draft ICU 3.4
-    * @provional
+    * @stable ICU 3.4
     */
     public static ULocale acceptLanguage(String acceptLanguageList, boolean[] fallback) {
         return acceptLanguage(acceptLanguageList, ULocale.getAvailableLocales(), fallback);
@@ -2620,8 +2617,7 @@ public final class ULocale implements Serializable {
     * @param acceptLanguageList ordered array of acceptable locales (preferred are listed first)
     * @param fallback if non-null, a 1-element array containing a boolean to be set with the fallback status
     * @return one of the locales from the ULocale.getAvailableLocales() list, or null if none match
-    * @draft ICU 3.4
-    * @provisional
+    * @stable ICU 3.4
     */
     public static ULocale acceptLanguage(ULocale[] acceptLanguageList, boolean[] fallback) {
         return acceptLanguage(acceptLanguageList, ULocale.getAvailableLocales(), fallback);

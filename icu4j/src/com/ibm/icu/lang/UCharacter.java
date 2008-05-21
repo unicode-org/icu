@@ -810,48 +810,39 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /* New blocks in Unicode 5.0 */
 
         /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.6
          */
         public static final int NKO_ID = 146; /*[07C0]*/
         /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.6
          */
         public static final int BALINESE_ID = 147; /*[1B00]*/
         /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.6
          */
         public static final int LATIN_EXTENDED_C_ID = 148; /*[2C60]*/
         /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release. 
+         * @stable ICU 3.6 
          */
         public static final int LATIN_EXTENDED_D_ID = 149; /*[A720]*/
         /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.6
          */
         public static final int PHAGS_PA_ID = 150; /*[A840]*/
         /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.6
          */
         public static final int PHOENICIAN_ID = 151; /*[10900]*/
         /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.6
          */
         public static final int CUNEIFORM_ID = 152; /*[12000]*/
         /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.6
          */
         public static final int CUNEIFORM_NUMBERS_AND_PUNCTUATION_ID = 153; /*[12400]*/
         /**
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.6
          */
         public static final int COUNTING_ROD_NUMERALS_ID = 154; /*[1D360]*/
 
@@ -1732,48 +1723,39 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final UnicodeBlock VERTICAL_FORMS = new UnicodeBlock("VERTICAL_FORMS", VERTICAL_FORMS_ID); /*[FE10]*/
 
         /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.6
          */
         public static final UnicodeBlock NKO = new UnicodeBlock("NKO", NKO_ID); /*[07C0]*/
         /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.6
          */
         public static final UnicodeBlock BALINESE = new UnicodeBlock("BALINESE", BALINESE_ID); /*[1B00]*/
         /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.6
          */
         public static final UnicodeBlock LATIN_EXTENDED_C = new UnicodeBlock("LATIN_EXTENDED_C", LATIN_EXTENDED_C_ID); /*[2C60]*/
         /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release. 
+         * @stable ICU 3.6 
          */
         public static final UnicodeBlock LATIN_EXTENDED_D = new UnicodeBlock("LATIN_EXTENDED_D", LATIN_EXTENDED_D_ID); /*[A720]*/
         /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.6
          */
         public static final UnicodeBlock PHAGS_PA = new UnicodeBlock("PHAGS_PA", PHAGS_PA_ID); /*[A840]*/
         /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.6
          */
         public static final UnicodeBlock PHOENICIAN = new UnicodeBlock("PHOENICIAN", PHOENICIAN_ID); /*[10900]*/
         /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.6
          */
         public static final UnicodeBlock CUNEIFORM = new UnicodeBlock("CUNEIFORM", CUNEIFORM_ID); /*[12000]*/
         /** 
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.6
          */
         public static final UnicodeBlock CUNEIFORM_NUMBERS_AND_PUNCTUATION = new UnicodeBlock("CUNEIFORM_NUMBERS_AND_PUNCTUATION", CUNEIFORM_NUMBERS_AND_PUNCTUATION_ID); /*[12400]*/
         /**
-         * @draft ICU 3.6 
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 3.6
          */
         public static final UnicodeBlock COUNTING_ROD_NUMERALS = new UnicodeBlock("COUNTING_ROD_NUMERALS", COUNTING_ROD_NUMERALS_ID); /*[1D360]*/
 
@@ -3020,8 +3002,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * With this option, the other characters will not be modified.
      *
      * @see #toTitleCase
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int TITLECASE_NO_LOWERCASE = 0x100;
 
@@ -3043,8 +3024,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      *
      * @see #toTitleCase
      * @see #TITLECASE_NO_LOWERCASE
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int TITLECASE_NO_BREAK_ADJUSTMENT = 0x200;
 
@@ -3990,8 +3970,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param s string to format
      * @param separator string to go between names
      * @return string of names
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static String getName(String s, String separator) {
         if (s.length() == 1) { // handle common case
@@ -4697,8 +4676,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      *        the character should be title cased.
      * @param options bit set to modify the titlecasing operation
      * @return lowercase version of the argument string
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      * @see #TITLECASE_NO_LOWERCASE
      * @see #TITLECASE_NO_BREAK_ADJUSTMENT
      */
