@@ -12,10 +12,10 @@ h3.doc { background: #CCCCFF }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 3.8</h3>
+<h3>Read Me for ICU4J 4.0 d01</h3>
 <hr size="2" width="100%">
 <p><b>Release Date</b><br>
-September 14, 2007<br>
+May 21, 2008<br>
 </p>
 <p><b>Note:</b> This is major release of ICU4J.  It contains bug fixes
 and adds implementations of inherited API and introduces new API
@@ -127,31 +127,14 @@ current and complete version is always found in ICU4J.</p>
 
 <h3 class="doc"><a name="news"></a>What Is New In This Release?</h3>
 
-<p><b>Changes to J2SE version requirement for building ICU4J</b>
-<p>Previous version of ICU4J was successfully built with J2SE SDK 1.4 or later
-versions.  In this release, there is a new feature which uses a new type introduced
-in J2SE 5.0.  Although the new feature does not need the type available at run time,
-it requires J2SE 5.0 or newer version of Java class library at the build time to enable
-the feature.  The binary distribution version of ICU4J available at the ICU download
-page was built with J2SE SDK 5.0 and this version should work well on JRE 1.4 or later
-versions.  If you want to build your own copy of ICU4J binaries with J2SE SDK 1.4,
-you can still run all of the Ant standard build targets in build.xml and make ICU4J
-binaries.  The build script detects the current Java version and comments out code
-blocks including references to J2SE 5.0 only types.</p>
-<p><b>Changes to timezone formatting and parsing</b>
-<p>In ICU 3.8, the behavior of date formatting and parsing has changed
-significantly, perhaps requiring recoding on your part depending on your
-usage. For more information, see <a href="http://icu-project.org/userguide/formatDateTime.html">
-Formatting Dates and Times</a> in the User Guide.
-</p>
 <p><b>Status of ICU4J charset converter</b>
-<p>The ICU4J implementation of java.nio.charset.Charset is included as a Technology
-Preview. Not all functionality from the java.nio.Charset interfaces is operational,
-and some converters are known to mis-handle Unicode supplementary characters. Use with caution.
+<p>The ICU4J implementation of java.nio.charset.Charset was included in ICU4J 3.8 as
+a Technology Preview.  In this release, all functionality from the java.nio.Charset
+interfaces is operational and promoted to the draft status.
 </p>
 <p><b>New features</b></p>
 <p>
-See the <a href="http://www.icu-project.org/download/">ICU 3.8 download page</a> about new features in this release.
+See the <a href="http://www.icu-project.org/download/">ICU 4.0 download page</a> about new features in this release.
 </p>
 <h3 class="doc"><a name="license"></a>License Information</h3>
 <p>
@@ -192,59 +175,58 @@ used by the ICU development team.
 <table bgcolor="#CCCCFF">
 <tr>
   <th rowspan="2" bgcolor="#FFFFFF">Operating System</th>
-  <th colspan="5" bgcolor="#FFFFFF">Sun Java SE</th>
+  <th colspan="3" bgcolor="#FFFFFF">Sun Java SE</th>
   <th colspan="3" bgcolor="#FFFFFF">IBM Java SE</th>
 </tr>
 <tr>
   <th bgcolor="#FFFFFF">1.6.0</th>
   <th bgcolor="#FFFFFF">1.5.0</th>
   <th bgcolor="#FFFFFF">1.4.2</th>
-  <th bgcolor="#FFFFFF">1.4.1</th>
-  <th bgcolor="#FFFFFF">1.4.0</th>
+  <th bgcolor="#FFFFFF">1.6.0</th>
   <th bgcolor="#FFFFFF">1.5.0</th>
   <th bgcolor="#FFFFFF">1.4.2</th>
-  <th bgcolor="#FFFFFF">1.4.1</th>
 </tr>
 <tr>
   <th bgcolor="#FFFFFF">AIX 5.2</th>
   <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
-  <td align="center" bgcolor="#FFFFFF">-</td>
-  <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#EEEEFF">Rarely tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
 </tr>
 <tr>
   <th bgcolor="#FFFFFF">AIX 5.3</th>
   <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
-  <td align="center" bgcolor="#FFFFFF">-</td>
-  <td align="center" bgcolor="#FFFFFF">-</td>
-  <td align="center" bgcolor="#CCCCFF"><em><b>Reference platform</b></em></td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#EEEEFF">Rarely tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
+</tr>
+<tr>
+  <th bgcolor="#FFFFFF">AIX 6.1</th>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#CCCCFF"><em><b>Reference platform</b></em></td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
 </tr>
 <tr>
   <th bgcolor="#FFFFFF">HP-UX 11 (PA-RISC)</th>
-  <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#FFFFFF">-</td>
-  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
 </tr>
 <tr>
   <th bgcolor="#FFFFFF">HP-UX 11 (IA64)</th>
-  <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#FFFFFF">-</td>
-  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
@@ -253,31 +235,25 @@ used by the ICU development team.
   <th bgcolor="#FFFFFF">Redhat Enterprise Linux 4 (x86)</th>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#EEEEFF">Rarely tested</td>
-  <td align="center" bgcolor="#EEEEFF">Rarely tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
 </tr>
 <tr bgcolor="#FFFFFF">
   <th>Redhat Enterprise Linux 5 (x86)</th>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#EEEEFF">Rarely tested</td>
-  <td align="center" bgcolor="#EEEEFF">Rarely tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
 </tr>
 <tr bgcolor="#FFFFFF">
   <th>Solaris 9 (SPARC)</th>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#EEEEFF">Rarely tested</td>
-  <td align="center" bgcolor="#EEEEFF">Rarely tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
@@ -286,9 +262,7 @@ used by the ICU development team.
   <th>Solaris 10 (SPARC)</th>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#CCCCFF"><em><b>Reference platform</b></em></td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#EEEEFF">Rarely tested</td>
-  <td align="center" bgcolor="#EEEEFF">Rarely tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
@@ -297,23 +271,28 @@ used by the ICU development team.
   <th bgcolor="#FFFFFF">Windows XP</th>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#FFFFFF">-</td>
-  <td align="center" bgcolor="#FFFFFF">-</td>
-  <td align="center" bgcolor="#CCCCFF"><em><b>Reference platform</b></em></td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#EEEEFF">Rarely tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
 </tr>
 <tr>
   <th bgcolor="#FFFFFF">Windows Vista</th>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#FFFFFF">-</td>
-  <td align="center" bgcolor="#FFFFFF">-</td>
+  <td align="center" bgcolor="#CCCCFF"><em><b>Reference platform</b></em></td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
+</tr>
+<tr>
+  <th bgcolor="#FFFFFF">Windows 2003 Server</th>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center" bgcolor="#EEEEFF">Rarely tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
 </tr>
 </table>
 
@@ -1609,20 +1588,20 @@ from release to release, so clients should not depend on the exact
 organization
 of the data in ICU4J.</p>
 <ul>
-  <li>The primary <b>locale data</b> is under the directory <tt>icudt38b</tt>,
+  <li>The primary <b>locale data</b> is under the directory <tt>icudt40b</tt>,
 as a set of <tt>".res"</tt> files whose names are the locale identifiers. 
 Locale naming is documented the <code>com.ibm.icu.util.ULocale</code>
 class, and the use of these names in searching for resources is documented 
 in <code>com.ibm.icu.util.UResourceBundle</code>.
   </li>
-  <li>The <b>collation data</b> is under the directory <tt>icudt38b/coll</tt>,
+  <li>The <b>collation data</b> is under the directory <tt>icudt40b/coll</tt>,
 as a set of <tt>".res"</tt> files.</li>
   <li>The <b>rule-based transliterator data</b> is under the directory
-<tt>icudt38b/translit</tt> as a set of <tt>".res"</tt> files.  (<b>Note:</b> the
+<tt>icudt40b/translit</tt> as a set of <tt>".res"</tt> files.  (<b>Note:</b> the
 Han transliterator test data is no longer included in the core icu4j.jar 
 file by default.)</li>
   <li>The <b>rule-based number format data</b> is under the directory
-<tt>icudt38b/rbnf</tt> as a set of <tt>".res"</tt> files.
+<tt>icudt40b/rbnf</tt> as a set of <tt>".res"</tt> files.
   <li>The <b>break iterator data</b> is directly under the data
 directory, as a set of <tt>".brk"</tt> files, named according to the
 type of break and the locale where there are locale-specific versions.</li>
@@ -1634,10 +1613,10 @@ data</b> and default <b>unicode collation algorithm (UCA) data</b>
 is found under the <tt>data</tt> directory as a set of <tt>".icu"</tt>
 files. </li>
   <li>The <b>character set converter data</b> is under the directory
-  <tt>icudt38b</tt>, as a set of <tt>".cnv"</tt> files.  These files are
+  <tt>icudt40b</tt>, as a set of <tt>".cnv"</tt> files.  These files are
   currently included only in icu-charset.jar.</li>
   <li>The <b>time zone data</b> is named <tt>zoneinfo.res</tt> under
-  the directory <tt>icudt38b</tt>.</li>
+  the directory <tt>icudt40b</tt>.</li>
 </ul>
 <p>
 Some of the data files alias or otherwise reference data from other
@@ -1810,7 +1789,7 @@ review all comments.</p>
 <h2>Thank you for your interest in ICU4J!</h2>
 <br>
 <hr align="center" size="2" width="100%">
-<p><I><font size="-1">Copyright &copy; 2002-2007 International Business
+<p><I><font size="-1">Copyright &copy; 2002-2008 International Business
 Machines Corporation and others. All Rights
 Reserved.<br>
 4400 North First Street, San Jos&eacute;, CA 95193, USA
