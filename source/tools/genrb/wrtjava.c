@@ -72,7 +72,7 @@ static const char* javaClass1=  " extends ListResourceBundle {\n\n"
                                 "     */\n"
                                 "    public final Object[][] getContents() { \n"
                                 "          return  contents;\n"
-                                "    }\n"
+                                "    }\n\n"
                                 "    private static Object[][] contents = {\n";
 static const char* javaClassICU= " extends ListResourceBundle {\n\n"
                                  "    public %s  () {\n"
@@ -671,12 +671,14 @@ bundle_write_java(struct SRBRoot *bundle, const char *outputDir,const char* outp
     T_FileStream_write(out,";\n\n",3);
     T_FileStream_write(out, javaClass, (int32_t)uprv_strlen(javaClass));
     T_FileStream_write(out, className, (int32_t)uprv_strlen(className));
-    if(j1){
-        T_FileStream_write(out, javaClass1, (int32_t)uprv_strlen(javaClass1));
-    }else{
-        sprintf(constructor,javaClassICU,className);
-        T_FileStream_write(out, constructor, (int32_t)uprv_strlen(constructor));
-    }
+	T_FileStream_write(out, javaClass1, (int32_t)uprv_strlen(javaClass1));
+
+    // if(j1){
+    //    T_FileStream_write(out, javaClass1, (int32_t)uprv_strlen(javaClass1));
+    // }else{
+    //     sprintf(constructor,javaClassICU,className);
+    //     T_FileStream_write(out, constructor, (int32_t)uprv_strlen(constructor));
+    // }
 
     if(outputEnc && *outputEnc!='\0'){
         /* store the output encoding */
