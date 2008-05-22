@@ -673,12 +673,13 @@ bundle_write_java(struct SRBRoot *bundle, const char *outputDir,const char* outp
     T_FileStream_write(out, className, (int32_t)uprv_strlen(className));
 	T_FileStream_write(out, javaClass1, (int32_t)uprv_strlen(javaClass1));
 
-    // if(j1){
-    //    T_FileStream_write(out, javaClass1, (int32_t)uprv_strlen(javaClass1));
-    // }else{
-    //     sprintf(constructor,javaClassICU,className);
-    //     T_FileStream_write(out, constructor, (int32_t)uprv_strlen(constructor));
-    // }
+    /* if(j1){
+          T_FileStream_write(out, javaClass1, (int32_t)uprv_strlen(javaClass1));
+       }else{
+           sprintf(constructor,javaClassICU,className);
+           T_FileStream_write(out, constructor, (int32_t)uprv_strlen(constructor));
+       }
+    */
 
     if(outputEnc && *outputEnc!='\0'){
         /* store the output encoding */
