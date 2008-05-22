@@ -5344,9 +5344,9 @@ createLikelySubtagsString(
         likelySubtags = findStringPair(tagBuffer);
 
         if (likelySubtags != NULL) {
-            // Always use the language tag from the
-            // maximal string, since it may be more
-            // specific than the one provided.
+            /* Always use the language tag from the
+               maximal string, since it may be more
+               specific than the one provided. */
             return createTagStringWithAlternates(
                         NULL,
                         0,
@@ -5389,9 +5389,9 @@ createLikelySubtagsString(
         likelySubtags = findStringPair(tagBuffer);
 
         if (likelySubtags != NULL) {
-            // Always use the language tag from the
-            // maximal string, since it may be more
-            // specific than the one provided.
+            /* Always use the language tag from the
+               maximal string, since it may be more
+               specific than the one provided. */
             return createTagStringWithAlternates(
                         NULL,
                         0,
@@ -5434,9 +5434,9 @@ createLikelySubtagsString(
         likelySubtags = findStringPair(tagBuffer);
 
         if (likelySubtags != NULL) {
-            // Always use the language tag from the
-            // maximal string, since it may be more
-            // specific than the one provided.
+            /* Always use the language tag from the
+               maximal string, since it may be more
+               specific than the one provided. */
             return createTagStringWithAlternates(
                         NULL,
                         0,
@@ -5478,9 +5478,9 @@ createLikelySubtagsString(
         likelySubtags = findStringPair(tagBuffer);
 
         if (likelySubtags != NULL) {
-            // Always use the language tag from the
-            // maximal string, since it may be more
-            // specific than the one provided.
+            /* Always use the language tag from the
+               maximal string, since it may be more
+               specific than the one provided. */
             return createTagStringWithAlternates(
                         NULL,
                         0,
