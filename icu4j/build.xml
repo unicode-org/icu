@@ -948,8 +948,6 @@
       <include name="com/ibm/icu/text/*BreakIterator*.java"/>
       <include name="com/ibm/icu/text/UnicodeSetIterator.java"/>
     </javac>
-    <copy file="${src.dir}/com/ibm/icu/impl/data/th.brk"
-          todir="${build.dir}/com/ibm/icu/impl/data/"/>
   </target>
 
   <target name="breakIteratorTests" depends="breakIterator" description="test breakIterator modular build target">
@@ -1211,6 +1209,7 @@
         <include name="**/pnames.icu" />
         <include name="**/*.res" />
         <include name="**/*.brk" />
+        <include name="**/*.ctd" />
         <exclude name="**/coll/*.res" />
         <exclude name="**/translit/*.res" />
         <exclude name="**/rbnf/*.res" />
@@ -1265,7 +1264,6 @@
 
   <!-- Module: Transliterator -->
   <target name="copyTranslitData" depends="initBase">
-    <!-- Calendar does not require Collation data, BreakIterator data -->
     <unjar src="${icudatajar.file}" dest="${build.dir}">
       <patternset>
         <include name="**/unorm.icu" />
@@ -1275,6 +1273,8 @@
         <include name="**/unames.icu" />
         <include name="**/pnames.icu" />
         <include name="**/*.brk" />
+        <include name="**/*.ctd" />
+        <include name="**/brkitr/*.res" />
         <include name="**/translit/*.res" />
       </patternset>
     </unjar>
