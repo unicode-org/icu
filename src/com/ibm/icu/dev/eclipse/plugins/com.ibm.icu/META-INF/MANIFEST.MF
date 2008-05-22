@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: com.ibm.icu; singleton:=true
+Bundle-Version: @BUILD_VERSION@
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Bundle-Copyright: @COPYRIGHT@
+Export-Package: com.ibm.icu.lang;version="@IMPL_VERSION@",
+ com.ibm.icu.math;version="@IMPL_VERSION@",
+ com.ibm.icu.text;version="@IMPL_VERSION@",
+ com.ibm.icu.util;version="@IMPL_VERSION@",
+ com.ibm.icu.impl;x-internal:=true,
+ com.ibm.icu.impl.data;x-internal:=true,
+ com.ibm.icu.impl.data.icudt@DATA_VERSION_NUMBER@b;x-internal:=true,
+ com.ibm.icu.impl.data.icudt@DATA_VERSION_NUMBER@b.brkitr;x-internal:=true,
+ com.ibm.icu.impl.data.icudt@DATA_VERSION_NUMBER@b.coll;x-internal:=true,
+ com.ibm.icu.impl.data.icudt@DATA_VERSION_NUMBER@b.rbnf;x-internal:=true,
+ com.ibm.icu.impl.data.icudt@DATA_VERSION_NUMBER@b.translit;x-internal:=true
+Eclipse-LazyStart: true
+Bundle-RequiredExecutionEnvironment: CDC-1.0/Foundation-1.0,
+ J2SE-1.3
+Bundle-ClassPath: icu-jse4.jar,icu-data.jar,.
+Eclipse-ExtensibleAPI: true

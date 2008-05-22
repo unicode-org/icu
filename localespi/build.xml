@@ -1,0 +1,73 @@
+<!--
+/*
+*******************************************************************************
+* Copyright (C) 2008, International Business Machines Corporation and         *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+* This is the ant build file for ICU4J Locale SPI implementation.
+*/
+-->
+<project name="icu4j-localespi" default="build" basedir=".">
+  <property file="../build.properties"/>
+  <property name="build.dir" value="classes"/>
+  <property name="src.dir" value="src"/>
+  <property name="javac.src.ver" value="1.6"/>
+  <property name="javac.bin.ver" value="1.6"/>
+  <property name="jar.file" value="icu4j-localespi.jar"/>
+  <property name="icu4j.jar.file" value="../icu4j.jar"/>
+  <condition property="is.java6">
+    <contains string="${java.version}" substring="1.6."/>
+  </condition>
+
+  <target name="init" depends="check-env-java6">
+    <mkdir dir="${build.dir}"/>
+    <copy todir="${build.dir}/META-INF">
+      <fileset dir="${src.dir}/META-INF" includes="**/*"/>
+    </copy>
+    <copy todir="${build.dir}">
+      <fileset dir="${src.dir}" includes="**/*.properties"/>
+    </copy>
+  </target>
+
+  <target name="check-env-java6" unless="is.java6">
+    <echo message="######################## ERROR ########################"/>
+    <echo message="Java SE 6 SDK is required for building the ICU4J Locale"/>
+    <echo message="Service Provider module.  Terminating the build task."/>
+    <echo message="#######################################################"/>
+    <fail message="Java SE 6 SDK is required"/>
+  </target>
+
+  <target name="build" depends="init">
+    <javac  srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpath="${icu4j.jar.file}"
+            source="${javac.src.ver}"
+            target="${javac.bin.ver}"
+            debug="on"
+            encoding="ascii"/>
+    <jar  jarfile="${jar.file}" compress="true">
+      <fileset dir="../" includes="license.html"/>
+      <fileset dir="${build.dir}" includes="**/*"/>
+      <manifest>
+        <attribute name="Built-By" value="${corp}"/>
+        <section name="common">
+          <attribute name="Specification-Title" value="ICU4J Locale Service Provider" />
+          <attribute name="Specification-Version" value="${icu4j.spec.version.string}" />
+          <attribute name="Specification-Vendor" value="ICU" />
+          <attribute name="Implementation-Title" value=" ICU4J Locale Service Providers for Java 6" />
+          <attribute name="Implementation-Version" value="${icu4j.impl.version.string}" />
+          <attribute name="Implementation-Vendor" value="${corp}" />
+          <attribute name="Implementation-Vendor-Id" value="com.ibm" />
+          <attribute name="Copyright-Info" value="${copyright}" />
+          <attribute name="Sealed" value="false" />
+        </section>
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="clean">
+    <delete dir="${build.dir}"/>
+    <delete file="${jar.file}"/>
+  </target>
+
+</project>
