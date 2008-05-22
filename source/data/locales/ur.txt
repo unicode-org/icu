@@ -1,0 +1,131 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/ur.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/ur.xml
+ */
+ur{
+    Countries{
+        IN{"بھارت"}
+        PK{"پاکستان"}
+    }
+    Currencies{
+        INR{
+            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
+            "انڈین روپیہ",
+        }
+    }
+    ExemplarCharacters{"[ء-ؤ ئ-ب ٻ پ ة-ث ٹ ٺ ټ ٽ ج چ ح-ذ ڈ ر ز ڑ ژ س-غ ف ق ک گ ل-ن ں ه ھ ہ و ي ی ے]"}
+    Languages{
+        ur{"اردو"}
+    }
+    LocaleScript{
+        "Arab",
+    }
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.128"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "h:mm:ss a v",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, d, MMMM yyyy",
+                "d, MMMM yyyy",
+                "d, MMM yyyy",
+                "d/M/yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    wide{
+                        "اتوار",
+                        "پير",
+                        "منگل",
+                        "بده",
+                        "جمعرات",
+                        "جمعہ",
+                        "ہفتہ",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "ق م",
+                    "عيسوی سن",
+                }
+                wide{
+                    "قبل مسيح",
+                    "عيسوی سن",
+                }
+            }
+            fields{
+                day{
+                    relative{
+                        "0"{"آج"}
+                    }
+                }
+                dayperiod{
+                    dn{"رات/صبح"}
+                }
+            }
+            monthNames{
+                format{
+                    wide{
+                        "جنوری",
+                        "فروری",
+                        "مار چ",
+                        "اپريل",
+                        "مئ",
+                        "جون",
+                        "جولائ",
+                        "اگست",
+                        "ستمبر",
+                        "اکتوبر",
+                        "نومبر",
+                        "دسمبر",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    wide{
+                        "پہلی سہ ماہی",
+                        "دوسری سہ ماہی",
+                        "تيسری سہ ماہی",
+                        "چوتهی سہ ماہی",
+                    }
+                }
+            }
+        }
+    }
+    layout{
+        characters{"right-to-left"}
+        lines{"top-to-bottom"}
+    }
+}
