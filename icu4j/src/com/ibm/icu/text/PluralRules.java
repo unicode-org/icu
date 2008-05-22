@@ -516,7 +516,7 @@ public class PluralRules implements Serializable {
 
         public boolean isFulfilled(double n) {
         	if (integersOnly && (n - (long)n) != 0.0) {
-                 return false;
+                return !inRange;
         	}
             if (mod != 0) {
                 n = n % mod;	// java % handles double numerator the way we want
