@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -800,7 +800,7 @@ static const uint8_t groupProp[] =          /* dirProp regrouped */
 /*  L   R   EN  ES  ET  AN  CS  B   S   WS  ON  LRE LRO AL  RLE RLO PDF NSM BN  */
     0,  1,  2,  7,  8,  3,  9,  6,  5,  4,  4,  10, 10, 12, 10, 10, 10, 11, 10
 };
-enum { _L=0, _R=1, _EN=2, _AN=3, _ON=4, _S=5, _B=6 }; /* reduced dirProp */
+enum { DirProp_L=0, DirProp_R=1, DirProp_EN=2, DirProp_AN=3, DirProp_ON=4, DirProp_S=5, DirProp_B=6 }; /* reduced dirProp */
 
 /******************************************************************
 
@@ -840,24 +840,24 @@ enum { _L=0, _R=1, _EN=2, _AN=3, _ON=4, _S=5, _B=6 }; /* reduced dirProp */
 static const uint8_t impTabProps[][IMPTABPROPS_COLUMNS] =
 {
 /*                        L ,     R ,    EN ,    AN ,    ON ,     S ,     B ,    ES ,    ET ,    CS ,    BN ,   NSM ,    AL ,  Res */
-/* 0 Init        */ {     1 ,     2 ,     4 ,     5 ,     7 ,    15 ,    17 ,     7 ,     9 ,     7 ,     0 ,     7 ,     3 ,  _ON },
-/* 1 L           */ {     1 , s(1,2), s(1,4), s(1,5), s(1,7),s(1,15),s(1,17), s(1,7), s(1,9), s(1,7),     1 ,     1 , s(1,3),   _L },
-/* 2 R           */ { s(1,1),     2 , s(1,4), s(1,5), s(1,7),s(1,15),s(1,17), s(1,7), s(1,9), s(1,7),     2 ,     2 , s(1,3),   _R },
-/* 3 AL          */ { s(1,1), s(1,2), s(1,6), s(1,6), s(1,8),s(1,16),s(1,17), s(1,8), s(1,8), s(1,8),     3 ,     3 ,     3 ,   _R },
-/* 4 EN          */ { s(1,1), s(1,2),     4 , s(1,5), s(1,7),s(1,15),s(1,17),s(2,10),    11 ,s(2,10),     4 ,     4 , s(1,3),  _EN },
-/* 5 AN          */ { s(1,1), s(1,2), s(1,4),     5 , s(1,7),s(1,15),s(1,17), s(1,7), s(1,9),s(2,12),     5 ,     5 , s(1,3),  _AN },
-/* 6 AL:EN/AN    */ { s(1,1), s(1,2),     6 ,     6 , s(1,8),s(1,16),s(1,17), s(1,8), s(1,8),s(2,13),     6 ,     6 , s(1,3),  _AN },
-/* 7 ON          */ { s(1,1), s(1,2), s(1,4), s(1,5),     7 ,s(1,15),s(1,17),     7 ,s(2,14),     7 ,     7 ,     7 , s(1,3),  _ON },
-/* 8 AL:ON       */ { s(1,1), s(1,2), s(1,6), s(1,6),     8 ,s(1,16),s(1,17),     8 ,     8 ,     8 ,     8 ,     8 , s(1,3),  _ON },
-/* 9 ET          */ { s(1,1), s(1,2),     4 , s(1,5),     7 ,s(1,15),s(1,17),     7 ,     9 ,     7 ,     9 ,     9 , s(1,3),  _ON },
-/*10 EN+ES/CS    */ { s(3,1), s(3,2),     4 , s(3,5), s(4,7),s(3,15),s(3,17), s(4,7),s(4,14), s(4,7),    10 , s(4,7), s(3,3),  _EN },
-/*11 EN+ET       */ { s(1,1), s(1,2),     4 , s(1,5), s(1,7),s(1,15),s(1,17), s(1,7),    11 , s(1,7),    11 ,    11 , s(1,3),  _EN },
-/*12 AN+CS       */ { s(3,1), s(3,2), s(3,4),     5 , s(4,7),s(3,15),s(3,17), s(4,7),s(4,14), s(4,7),    12 , s(4,7), s(3,3),  _AN },
-/*13 AL:EN/AN+CS */ { s(3,1), s(3,2),     6 ,     6 , s(4,8),s(3,16),s(3,17), s(4,8), s(4,8), s(4,8),    13 , s(4,8), s(3,3),  _AN },
-/*14 ON+ET       */ { s(1,1), s(1,2), s(4,4), s(1,5),     7 ,s(1,15),s(1,17),     7 ,    14 ,     7 ,    14 ,    14 , s(1,3),  _ON },
-/*15 S           */ { s(1,1), s(1,2), s(1,4), s(1,5), s(1,7),    15 ,s(1,17), s(1,7), s(1,9), s(1,7),    15 , s(1,7), s(1,3),   _S },
-/*16 AL:S        */ { s(1,1), s(1,2), s(1,6), s(1,6), s(1,8),    16 ,s(1,17), s(1,8), s(1,8), s(1,8),    16 , s(1,8), s(1,3),   _S },
-/*17 B           */ { s(1,1), s(1,2), s(1,4), s(1,5), s(1,7),s(1,15),    17 , s(1,7), s(1,9), s(1,7),    17 , s(1,7), s(1,3),   _B }
+/* 0 Init        */ {     1 ,     2 ,     4 ,     5 ,     7 ,    15 ,    17 ,     7 ,     9 ,     7 ,     0 ,     7 ,     3 ,  DirProp_ON },
+/* 1 L           */ {     1 , s(1,2), s(1,4), s(1,5), s(1,7),s(1,15),s(1,17), s(1,7), s(1,9), s(1,7),     1 ,     1 , s(1,3),   DirProp_L },
+/* 2 R           */ { s(1,1),     2 , s(1,4), s(1,5), s(1,7),s(1,15),s(1,17), s(1,7), s(1,9), s(1,7),     2 ,     2 , s(1,3),   DirProp_R },
+/* 3 AL          */ { s(1,1), s(1,2), s(1,6), s(1,6), s(1,8),s(1,16),s(1,17), s(1,8), s(1,8), s(1,8),     3 ,     3 ,     3 ,   DirProp_R },
+/* 4 EN          */ { s(1,1), s(1,2),     4 , s(1,5), s(1,7),s(1,15),s(1,17),s(2,10),    11 ,s(2,10),     4 ,     4 , s(1,3),  DirProp_EN },
+/* 5 AN          */ { s(1,1), s(1,2), s(1,4),     5 , s(1,7),s(1,15),s(1,17), s(1,7), s(1,9),s(2,12),     5 ,     5 , s(1,3),  DirProp_AN },
+/* 6 AL:EN/AN    */ { s(1,1), s(1,2),     6 ,     6 , s(1,8),s(1,16),s(1,17), s(1,8), s(1,8),s(2,13),     6 ,     6 , s(1,3),  DirProp_AN },
+/* 7 ON          */ { s(1,1), s(1,2), s(1,4), s(1,5),     7 ,s(1,15),s(1,17),     7 ,s(2,14),     7 ,     7 ,     7 , s(1,3),  DirProp_ON },
+/* 8 AL:ON       */ { s(1,1), s(1,2), s(1,6), s(1,6),     8 ,s(1,16),s(1,17),     8 ,     8 ,     8 ,     8 ,     8 , s(1,3),  DirProp_ON },
+/* 9 ET          */ { s(1,1), s(1,2),     4 , s(1,5),     7 ,s(1,15),s(1,17),     7 ,     9 ,     7 ,     9 ,     9 , s(1,3),  DirProp_ON },
+/*10 EN+ES/CS    */ { s(3,1), s(3,2),     4 , s(3,5), s(4,7),s(3,15),s(3,17), s(4,7),s(4,14), s(4,7),    10 , s(4,7), s(3,3),  DirProp_EN },
+/*11 EN+ET       */ { s(1,1), s(1,2),     4 , s(1,5), s(1,7),s(1,15),s(1,17), s(1,7),    11 , s(1,7),    11 ,    11 , s(1,3),  DirProp_EN },
+/*12 AN+CS       */ { s(3,1), s(3,2), s(3,4),     5 , s(4,7),s(3,15),s(3,17), s(4,7),s(4,14), s(4,7),    12 , s(4,7), s(3,3),  DirProp_AN },
+/*13 AL:EN/AN+CS */ { s(3,1), s(3,2),     6 ,     6 , s(4,8),s(3,16),s(3,17), s(4,8), s(4,8), s(4,8),    13 , s(4,8), s(3,3),  DirProp_AN },
+/*14 ON+ET       */ { s(1,1), s(1,2), s(4,4), s(1,5),     7 ,s(1,15),s(1,17),     7 ,    14 ,     7 ,    14 ,    14 , s(1,3),  DirProp_ON },
+/*15 S           */ { s(1,1), s(1,2), s(1,4), s(1,5), s(1,7),    15 ,s(1,17), s(1,7), s(1,9), s(1,7),    15 , s(1,7), s(1,3),   DirProp_S },
+/*16 AL:S        */ { s(1,1), s(1,2), s(1,6), s(1,6), s(1,8),    16 ,s(1,17), s(1,8), s(1,8), s(1,8),    16 , s(1,8), s(1,3),   DirProp_S },
+/*17 B           */ { s(1,1), s(1,2), s(1,4), s(1,5), s(1,7),s(1,15),    17 , s(1,7), s(1,9), s(1,7),    17 , s(1,7), s(1,3),   DirProp_B }
 };
 
 /*  we must undef macro s because the levels table have a different
@@ -884,7 +884,7 @@ static const uint8_t impTabProps[][IMPTABPROPS_COLUMNS] =
  Definitions and type for levels state tables
 *******************************************************************
 */
-#define IMPTABLEVELS_COLUMNS (_B + 2)
+#define IMPTABLEVELS_COLUMNS (DirProp_B + 2)
 #define IMPTABLEVELS_RES (IMPTABLEVELS_COLUMNS - 1)
 #define GET_STATE(cell) ((cell)&0x0f)
 #define GET_ACTION(cell) ((cell)>>4)
@@ -1238,7 +1238,7 @@ processPropertySeq(UBiDi *pBiDi, LevState *pLevState, uint8_t _prop,
                 if ((level & 1) && (pLevState->startON > 0)) {  /* after ON */
                     start=pLevState->startON;   /* reset to basic run level */
                 }
-                if (_prop == _S)                /* add LRM before S */
+                if (_prop == DirProp_S)                /* add LRM before S */
                 {
                     addPoint(pBiDi, start0, LRM_BEFORE);
                     pInsertPoints->confirmed=pInsertPoints->size;
@@ -1254,7 +1254,7 @@ processPropertySeq(UBiDi *pBiDi, LevState *pLevState, uint8_t _prop,
             /* mark insert points as confirmed */
             pInsertPoints->confirmed=pInsertPoints->size;
             pLevState->lastStrongRTL=-1;
-            if (_prop == _S)            /* add LRM before S */
+            if (_prop == DirProp_S)            /* add LRM before S */
             {
                 addPoint(pBiDi, start0, LRM_BEFORE);
                 pInsertPoints->confirmed=pInsertPoints->size;
@@ -1274,7 +1274,7 @@ processPropertySeq(UBiDi *pBiDi, LevState *pLevState, uint8_t _prop,
 
         case 5:                         /* EN/AN after R/AL + possible cont */
             /* check for real AN */
-            if ((_prop == _AN) && (NO_CONTEXT_RTL(pBiDi->dirProps[start0]) == AN) &&
+            if ((_prop == DirProp_AN) && (NO_CONTEXT_RTL(pBiDi->dirProps[start0]) == AN) &&
                 (pBiDi->reorderingMode!=UBIDI_REORDER_INVERSE_FOR_NUMBERS_SPECIAL))
             {
                 /* real AN */
@@ -1326,7 +1326,7 @@ processPropertySeq(UBiDi *pBiDi, LevState *pLevState, uint8_t _prop,
             /* false alert, infirm LRMs around previous AN */
             pInsertPoints=&(pBiDi->insertPoints);
             pInsertPoints->size=pInsertPoints->confirmed;
-            if (_prop == _S)            /* add RLM before S */
+            if (_prop == DirProp_S)            /* add RLM before S */
             {
                 addPoint(pBiDi, start0, RLM_BEFORE);
                 pInsertPoints->confirmed=pInsertPoints->size;
@@ -1479,7 +1479,7 @@ resolveImplicitLevels(UBiDi *pBiDi,
                 break;
             case 3:             /* process seq1, process seq2, init new seq1 */
                 processPropertySeq(pBiDi, &levState, resProp, start1, start2);
-                processPropertySeq(pBiDi, &levState, _ON, start2, i);
+                processPropertySeq(pBiDi, &levState, DirProp_ON, start2, i);
                 start1=i;
                 break;
             case 4:             /* process seq1, set seq1=seq2, init new seq2 */
