@@ -16,7 +16,7 @@ import java.nio.charset.CoderResult;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 
-public class CharsetHZ extends CharsetICU {
+class CharsetHZ extends CharsetICU {
 
     private static final int UCNV_TILDE = 0x7E; /* ~ */
     private static final int UCNV_OPEN_BRACE = 0x7B; /* { */
