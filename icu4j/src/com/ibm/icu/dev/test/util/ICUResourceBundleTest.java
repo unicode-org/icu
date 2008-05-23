@@ -825,7 +825,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
                    inLocale.toString() + "\t\t" + expectLocale.toString());
 
            ULocale equivLocale = ICUResourceBundle.getFunctionalEquivalent(ICUResourceBundle.ICU_COLLATION_BASE_NAME,COLLATION_RESNAME,
-                   COLLATION_KEYWORD, inLocale, isAvail);
+                   COLLATION_KEYWORD, inLocale, isAvail, true);
            boolean gotAvail = isAvail[0];
 
            if((gotAvail!=expectAvail) || !equivLocale.equals(expectLocale)) {
@@ -838,7 +838,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
        logln("Testing error conditions:");
        try {
            ICUResourceBundle.getFunctionalEquivalent(ICUResourceBundle.ICU_COLLATION_BASE_NAME, "calendar",
-              "calendar", new ULocale("ar_EG@calendar=islamic"), new boolean[1]);
+              "calendar", new ULocale("ar_EG@calendar=islamic"), new boolean[1], true);
            errln("Err: expected MissingResourceException");
        } catch ( MissingResourceException t ) {
            logln("expected MissingResourceException caught (PASS): " + t.toString());

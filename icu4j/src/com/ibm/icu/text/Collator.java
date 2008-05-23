@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2007, International Business Machines Corporation and    *
+* Copyright (C) 1996-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -640,7 +640,7 @@ public abstract class Collator implements Comparator, Cloneable
                                                         ULocale locID,
                                                         boolean isAvailable[]) {
         return ICUResourceBundle.getFunctionalEquivalent(
-                                                         BASE, RESOURCE, keyword, locID, isAvailable);
+                                                         BASE, RESOURCE, keyword, locID, isAvailable, true);
     }
     
     /**
