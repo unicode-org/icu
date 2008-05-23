@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -42,12 +42,16 @@
 #include "normconf.h"
 #include "thcoll.h"
 #include "srchtest.h"
+#include "ssearch.h"
 #include "cntabcol.h"
 #include "lcukocol.h"
 #include "ucaconf.h"
 #include "svccoll.h"
 #include "cmemory.h"
 //#include "rndmcoll.h"
+
+// Set to 1 to test offsets in backAndForth()
+#define TEST_OFFSETS 0
 
 #define TESTCLASS(n,classname)        \
     case n:                           \
@@ -89,6 +93,7 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
       TESTCLASS(19, CollationServiceTest);
       TESTCLASS(20, CollationFinnishTest); // removed by weiv - we have changed Finnish collation
       //TESTCLASS(21, RandomCollatorTest); // See ticket 5747 about reenabling this test.
+      TESTCLASS(21, SSearchTest);
 
       default: name = ""; break;
     }
@@ -392,7 +397,7 @@ void IntlTestCollator::backAndForth(CollationElementIterator &iter)
 {
     // Run through the iterator forwards and stick it into an array
     int32_t orderLength = 0;
-    int32_t *orders = getOrders(iter, orderLength);
+    Order *orders = getOrders(iter, orderLength);
     UErrorCode status = U_ZERO_ERROR;
 
     // Now go through it backwards and make sure we get the same values
@@ -404,6 +409,8 @@ void IntlTestCollator::backAndForth(CollationElementIterator &iter)
 
     while ((o = iter.previous(status)) != CollationElementIterator::NULLORDER)
     {
+        int32_t offset = iter.getOffset();
+
         if (index == 0) {
           if(o == 0) {
             continue;
@@ -411,28 +418,39 @@ void IntlTestCollator::backAndForth(CollationElementIterator &iter)
             // going backwards
             errln("Backward iteration returned a non ignorable after orders are exhausted");
             break;
+          }
         }
-        }
-        if (o != orders[--index])
-        {
+
+        index -= 1;
+        if (o != orders[index].order) {
             if (o == 0)
-                index ++;
-            else
-            {
-                while (index > 0 && orders[--index] == 0)
-                {
+                index += 1;
+            else {
+                while (index > 0 && orders[--index].order == 0) {
+                  // nothing...
                 }
-                if (o != orders[index])
-                {
-            errln("Mismatch at index %d: 0x%X vs 0x%X", index,
-                  orders[index], o);
-                    break;
+
+                if (o != orders[index].order) {
+                    errln("Mismatched order at index %d: 0x%0:8X vs. 0x%0:8X", index,
+                    orders[index].order, o);
+                //break;
+                  goto bail;
                 }
             }
         }
+
+#if TEST_OFFSETS
+        if (offset != orders[index].offset) {
+          errln("Mismatched offset at index %d: %d vs. %d", index,
+            orders[index].offset, offset);
+       //break;
+         goto bail;
+        }
+#endif
+
     }
 
-    while (index != 0 && orders[index - 1] == 0)
+    while (index != 0 && orders[index - 1].order == 0)
     {
       index --;
     }
@@ -466,6 +484,7 @@ void IntlTestCollator::backAndForth(CollationElementIterator &iter)
         errln("");
     }
 
+bail:
     delete[] orders;
 }
 
@@ -474,12 +493,13 @@ void IntlTestCollator::backAndForth(CollationElementIterator &iter)
  * Return an integer array containing all of the collation orders
  * returned by calls to next on the specified iterator
  */
-int32_t *IntlTestCollator::getOrders(CollationElementIterator &iter, int32_t &orderLength)
+IntlTestCollator::Order *IntlTestCollator::getOrders(CollationElementIterator &iter, int32_t &orderLength)
 {
     int32_t maxSize = 100;
     int32_t size = 0;
-    int32_t *orders = new int32_t[maxSize];
+    Order *orders = new Order[maxSize];
     UErrorCode status = U_ZERO_ERROR;
+    int32_t offset = iter.getOffset();
 
     int32_t order;
     while ((order = iter.next(status)) != CollationElementIterator::NULLORDER)
@@ -487,21 +507,25 @@ int32_t *IntlTestCollator::getOrders(CollationElementIterator &iter, int32_t &or
         if (size == maxSize)
         {
             maxSize *= 2;
-            int32_t *temp = new int32_t[maxSize];
+            Order *temp = new Order[maxSize];
 
-            uprv_memcpy(temp, orders, size * sizeof(int32_t));
+            uprv_memcpy(temp, orders, size * sizeof(Order));
             delete[] orders;
             orders = temp;
         }
 
-        orders[size++] = order;
+        orders[size].order  = order;
+        orders[size].offset = offset;
+
+        offset = iter.getOffset();
+        size += 1;
     }
 
     if (maxSize > size)
     {
-        int32_t *temp = new int32_t[size];
+        Order *temp = new Order[size];
 
-        uprv_memcpy(temp, orders, size * sizeof(int32_t));
+        uprv_memcpy(temp, orders, size * sizeof(Order));
         delete[] orders;
         orders = temp;
     }

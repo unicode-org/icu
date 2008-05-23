@@ -366,6 +366,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ssearch.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ssearch.h"
+				>
+			</File>
+			<File
 				RelativePath="svccoll.cpp"
 				>
 			</File>

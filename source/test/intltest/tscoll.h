@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -23,6 +23,12 @@
 class IntlTestCollator: public IntlTest {
     void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = NULL );
 protected:
+    struct Order
+    {
+        int32_t order;
+        int32_t offset;
+    };
+
     // These two should probably go down in IntlTest
     void doTest(Collator* col, const UChar *source, const UChar *target, Collator::EComparisonResult result);
 
@@ -42,7 +48,7 @@ protected:
      * Return an integer array containing all of the collation orders
      * returned by calls to next on the specified iterator
      */
-    int32_t *getOrders(CollationElementIterator &iter, int32_t &orderLength);
+    Order *getOrders(CollationElementIterator &iter, int32_t &orderLength);
     UCollationResult compareUsingPartials(UCollator *coll, const UChar source[], int32_t sLen, const UChar target[], int32_t tLen, int32_t pieceSize, UErrorCode &status);
 
 };

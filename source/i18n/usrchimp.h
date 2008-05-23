@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2007 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2008 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  08/13/2001   synwee      Creation.
@@ -31,8 +31,8 @@ struct USearch {
     // value USEARCH_DONE is the default value
     // if we are not at the start of the text or the end of the text, 
     // depending on the iteration direction and matchedIndex is USEARCH_DONE 
-    // it means that we can find any more matches in that particular direction
-          int32_t         matchedIndex; 
+    // it means that we can't find any more matches in that particular direction
+          int32_t             matchedIndex; 
           int32_t             matchedLength;
           UBool               isForwardSearching;
           UBool               reset;
@@ -45,6 +45,9 @@ struct UPattern {
           int32_t             CELength; 
           int32_t            *CE;
           int32_t             CEBuffer[INITIAL_ARRAY_SIZE_];
+          int32_t             PCELength;
+          int64_t            *PCE;
+          int64_t             PCEBuffer[INITIAL_ARRAY_SIZE_];
           UBool               hasPrefixAccents;
           UBool               hasSuffixAccents;
           int16_t             defaultShiftSize;

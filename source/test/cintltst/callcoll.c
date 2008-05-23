@@ -54,6 +54,9 @@
 #include "cmemory.h"
 #include "ucol_imp.h"
 
+/* set to 1 to test offsets in backAndForth() */
+#define TEST_OFFSETS 0
+
 /* perform test with strength PRIMARY */
 static void TestPrimary(void);
 
@@ -436,14 +439,15 @@ void doTest(UCollator* myCollation, const UChar source[], const UChar target[], 
  * Return an integer array containing all of the collation orders
  * returned by calls to next on the specified iterator
  */
-int32_t* getOrders(UCollationElements *iter, int32_t *orderLength)
+OrderAndOffset* getOrders(UCollationElements *iter, int32_t *orderLength)
 {
     UErrorCode status;
     int32_t order;
     int32_t maxSize = 100;
     int32_t size = 0;
-    int32_t *temp;
-    int32_t *orders =(int32_t*)malloc(sizeof(int32_t) * maxSize);
+    int32_t offset = ucol_getOffset(iter);
+    OrderAndOffset *temp;
+    OrderAndOffset *orders =(OrderAndOffset *)malloc(sizeof(OrderAndOffset) * maxSize);
     status= U_ZERO_ERROR;
 
 
@@ -452,22 +456,26 @@ int32_t* getOrders(UCollationElements *iter, int32_t *orderLength)
         if (size == maxSize)
         {
             maxSize *= 2;
-            temp = (int32_t*)malloc(sizeof(int32_t) * maxSize);
+            temp = (OrderAndOffset *)malloc(sizeof(OrderAndOffset) * maxSize);
 
-            memcpy(temp, orders, size * sizeof(int32_t));
+            memcpy(temp, orders, size * sizeof(OrderAndOffset));
             free(orders);
             orders = temp;
 
         }
 
-        orders[size++] = order;
+        orders[size].order  = order;
+        orders[size].offset = offset;
+
+        offset = ucol_getOffset(iter);
+        size += 1;
     }
 
     if (maxSize > size && size > 0)
     {
-        temp = (int32_t*)malloc(sizeof(int32_t) * size);
+        temp = (OrderAndOffset *)malloc(sizeof(OrderAndOffset) * size);
 
-        memcpy(temp, orders, size * sizeof(int32_t));
+        memcpy(temp, orders, size * sizeof(OrderAndOffset));
         free(orders);
         orders = temp;
 
@@ -486,8 +494,7 @@ backAndForth(UCollationElements *iter)
     int32_t index, o;
     UErrorCode status = U_ZERO_ERROR;
     int32_t orderLength = 0;
-    int32_t *orders;
-    orders= getOrders(iter, &orderLength);
+    OrderAndOffset *orders = getOrders(iter, &orderLength);
 
 
     /* Now go through it backwards and make sure we get the same values */
@@ -495,49 +502,60 @@ backAndForth(UCollationElements *iter)
     ucol_reset(iter);
 
     /* synwee : changed */
-    while ((o = ucol_previous(iter, &status)) != UCOL_NULLORDER)
-    {
-        if (o != orders[-- index])
-        {
+    while ((o = ucol_previous(iter, &status)) != UCOL_NULLORDER) {
+      int32_t offset = ucol_getOffset(iter);
+
+      index -= 1;
+      if (o != orders[index].order) {
         if (o == 0)
           index ++;
-        else
-        {
-          while (index > 0 && orders[-- index] == 0)
-          {
+        else {
+          while (index > 0 && orders[-- index].order == 0) {
+            /* nothing... */
           }
-          if (o != orders[index])
-          {
-            log_err("Mismatch at index : 0x%x\n", index);
-            return;
-        }
 
+          if (o != orders[index].order) {
+              log_err("Mismatched order at index %d: 0x%0:8X vs. 0x%0:8X\n", index,
+                orders[index].order, o);
+            goto bail;
+          }
         }
       }
+
+#if TEST_OFFSETS
+      if (offset != orders[index].offset) {
+        log_err("Mismatched offset at index %d: %d vs. %d\n", index,
+            orders[index].offset, offset);
+        goto bail;
+      }
+#endif
+
     }
 
-    while (index != 0 && orders[index - 1] == 0) {
-      index --;
+    while (index != 0 && orders[index - 1].order == 0) {
+      index -= 1;
     }
 
-    if (index != 0)
-    {
+    if (index != 0) {
         log_err("Didn't get back to beginning - index is %d\n", index);
 
         ucol_reset(iter);
         log_err("\nnext: ");
-        if ((o = ucol_next(iter, &status)) != UCOL_NULLORDER)
-        {
+
+        if ((o = ucol_next(iter, &status)) != UCOL_NULLORDER) {
             log_err("Error at %x\n", o);
         }
+
         log_err("\nprev: ");
-        if ((o = ucol_previous(iter, &status)) != UCOL_NULLORDER)
-        {
+
+        if ((o = ucol_previous(iter, &status)) != UCOL_NULLORDER) {
             log_err("Error at %x\n", o);
         }
+
         log_verbose("\n");
     }
 
+bail:
     free(orders);
 }
 
