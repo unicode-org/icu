@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2006, International Business Machines
+*   Copyright (C) 2004-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -74,10 +74,15 @@ UXMLParser::UXMLParser(UErrorCode &status) :
       
       //  XML Doctype decl  production #28
       //     example   "<!DOCTYPE foo SYSTEM "somewhere" >
+      //       or      "<!DOCTYPE foo [internal dtd]>
       //    TODO:  we don't actually parse the DOCTYPE or internal subsets.
       //           Some internal dtd subsets could confuse this simple-minded
-      //           attempt at skipping over them.
-      mXMLDoctype(UnicodeString("(?s)<!DOCTYPE.+?>"), 0, status),
+      //           attempt at skipping over them, specifically, occcurences
+      //           of closeing square brackets.  These could appear in comments, 
+      //           or in parameter entity declarations, for example.
+      mXMLDoctype(UnicodeString(
+           "(?s)<!DOCTYPE.*?(>|\\[.*?\\].*?>)"
+           ), 0, status),
       
       //  XML PI     production #16
       //     example   "<?target stuff?>

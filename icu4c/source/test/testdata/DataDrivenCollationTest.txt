@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2001-2007 International Business Machines
+﻿// Copyright (c) 2001-2008 International Business Machines
 // Corporation and others. All Rights Reserved.
 DataDrivenCollationTest:table(nofallback) {
     Info {
@@ -513,6 +513,25 @@ DataDrivenCollationTest:table(nofallback) {
                 "xj<xSx<xș=xş<xȘ=xŞ<Xș=Xş<XȘ=XŞ<xșx=xşx<xȘx=xŞx<xT<xTx<xț=xţ<xȚ=xŢ<Xț=Xţ<XȚ"
                 "=XŢ<xțx=xţx<xȚx=xŢx<xU"
             }
-        }      
+        }
+        
+        testOffsets {
+            Info {
+                Description { "This tests cases where forwards and backwards iteration get different offsets" }
+            }
+            
+            Settings {
+                {
+                    TestLocale { "en" }
+                    Arguments  { "[strength 3]" }
+                }
+            }
+                
+            Cases {
+                "a\uD800\uDC00\uDC00<b\uD800\uDC00\uDC00",
+                "\u0301A\u0301\u0301<\u0301B\u0301\u0301",
+                "abcd\r\u0301<abce\r\u0301"
+            }
+        }    
     }
 }

@@ -562,7 +562,7 @@ static void TestOffset()
     UCollator *en_us=NULL;
     UCollationElements *iter, *pristine;
     int32_t offset;
-    int32_t *orders;
+    OrderAndOffset *orders;
     int32_t orderLength=0;
     int     count = 0;
     UChar test1[50];
@@ -649,7 +649,7 @@ static void TestOffset()
         switch (count) {
         case 0:
             if (ucol_getOffset(iter) != 1) {
-                log_err("ERROR: Offset of iteration should be 0\n");
+                log_err("ERROR: Offset of iteration should be 1\n");
             }
             break;
         case 3:
@@ -671,8 +671,14 @@ static void TestOffset()
         U_SUCCESS(status)) {
         switch (count) {
         case 0:
+        case 1:
             if (ucol_getOffset(iter) != 3) {
                 log_err("ERROR: Offset of iteration should be 3\n");
+            }
+            break;
+        case 2:
+            if (ucol_getOffset(iter) != 1) {
+                log_err("ERROR: Offset of iteration should be 1\n");
             }
             break;
         default:
@@ -937,7 +943,7 @@ static void TestSmallBuffer()
     UCollationElements *testiter,
                        *iter;
     int32_t             count = 0;
-    int32_t            *testorders,
+    OrderAndOffset     *testorders,
                        *orders;
 
     UChar teststr[500];
@@ -977,8 +983,8 @@ static void TestSmallBuffer()
 
       while (count != 0) {
           /* UCA collation element for 0x0F76 */
-          if ((count > 250 && testorders[-- count] != orders[1]) ||
-              (count <= 250 && testorders[-- count] != orders[0])) {
+          if ((count > 250 && testorders[-- count].order != orders[1].order) ||
+              (count <= 250 && testorders[-- count].order != orders[0].order)) {
               log_err("Error decomposition does not give the right collation element at %d count\n", count);
               break;
           }

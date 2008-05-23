@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -188,7 +188,7 @@ void CollationIteratorTest::TestOffset(/* char* par */)
 
     // Run all the way through the iterator, then get the offset
     int32_t orderLength = 0;
-    int32_t *orders = getOrders(*iter, orderLength);
+    Order *orders = getOrders(*iter, orderLength);
 
     int32_t offset = iter->getOffset();
 
