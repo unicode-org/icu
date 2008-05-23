@@ -1612,7 +1612,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         String calType = locale.getKeywordValue("calendar");
         if (calType == null) {
             locale = ICUResourceBundle.getFunctionalEquivalent(
-                ICUResourceBundle.ICU_BASE_NAME, "calendar", "calendar", locale, null);
+                ICUResourceBundle.ICU_BASE_NAME, "calendar", "calendar", locale, null, false);
             calType = locale.getKeywordValue("calendar");
         }
         return calType;

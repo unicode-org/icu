@@ -143,12 +143,14 @@ public  class ICUResourceBundle extends UResourceBundle {
      * @param isAvailable If non-null, 1-element array of fillin parameter that indicates whether the
      * requested locale was available. The locale is defined as 'available' if it physically
      * exists within the specified tree and included in 'InstalledLocales'.
+     * @param omitDefault  if true, omit keyword and value if default.
+     * 'de_DE\@collation=standard' -> 'de_DE'
      * @return the locale
      * @internal ICU 3.0
      */
     public static final ULocale getFunctionalEquivalent(String baseName,
             String resName, String keyword, ULocale locID,
-            boolean isAvailable[]) {
+            boolean isAvailable[], boolean omitDefault) {
         String kwVal = locID.getKeywordValue(keyword);
         String baseLoc = locID.getBaseName();
         String defStr = null;
@@ -270,7 +272,8 @@ public  class ICUResourceBundle extends UResourceBundle {
                 baseName, keyword + "=" + kwVal);
         }
 
-        if (defStr.equals(kwVal) // if default was requested and
+        if (omitDefault
+            && defStr.equals(kwVal) // if default was requested and
             && resDepth <= defDepth) { // default was set in same locale or child
             return fullBase; // Keyword value is default - no keyword needed in locale
         } else {

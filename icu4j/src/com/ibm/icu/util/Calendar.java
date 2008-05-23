@@ -1657,7 +1657,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
         String s = l.getKeywordValue("calendar");
         if (s == null) {
             l = ICUResourceBundle.getFunctionalEquivalent(
-                ICUResourceBundle.ICU_BASE_NAME, "calendar", "calendar", l, null);
+                ICUResourceBundle.ICU_BASE_NAME, "calendar", "calendar", l, null, false);
             s = l.getKeywordValue("calendar");
         }
         return getCalendarType(s);
