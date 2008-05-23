@@ -270,6 +270,12 @@ typedef struct collIterate {
 
   uint32_t *toReturn; /* This is the CE from CEs buffer that should be returned */
   uint32_t *CEpos; /* This is the position to which we have stored processed CEs */
+
+  int32_t *offsetReturn; /* This is the offset to return, if non-NULL */
+  int32_t *offsetStore;  /* This is the pointer for storing offsets */
+  int32_t offsetRepeatCount;  /* Repeat stored offset if non-zero */
+  int32_t offsetRepeatValue;  /* offset value to repeat */
+
   UChar *writableBuffer;
   uint32_t writableBufSize;
   UChar *fcdPosition; /* Position in the original string to continue FCD check from. */
@@ -280,6 +286,10 @@ typedef struct collIterate {
   int32_t extendCEsSize; /* Holds the size of the dynamic CEs buffer */
   uint32_t CEs[UCOL_EXPAND_CE_BUFFER_SIZE]; /* This is where we store CEs */
   UChar stackWritableBuffer[UCOL_WRITABLE_BUFFER_SIZE]; /* A writable buffer. */
+
+  int32_t *offsetBuffer;    /* A dynamic buffer to hold offsets */
+  int32_t offsetBufferSize; /* The size of the offset buffer */
+
   UCharIterator *iterator;
   /*int32_t iteratorIndex;*/
 } collIterate;
@@ -293,6 +303,7 @@ data similar to collIterate.
 */
 struct collIterateState {
     UChar    *pos; /* This is position in the string.  Can be to original or writable buf */
+    UChar    *returnPos;
     UChar    *fcdPosition; /* Position in the original string to continue FCD check from. */
     UChar    *bufferaddress; /* address of the normalization buffer */
     uint32_t  buffersize;
@@ -305,6 +316,8 @@ struct collIterateState {
 U_CAPI void U_EXPORT2 
 uprv_init_collIterate(const UCollator *collator, const UChar *sourceString, int32_t sourceLen, collIterate *s);
 
+struct UCollationPCE;
+typedef struct UCollationPCE UCollationPCE;
 
 struct UCollationElements
 {
@@ -320,8 +333,16 @@ struct UCollationElements
   * Indicates if the data should be deleted.
   */
         UBool              isWritable;
+
+/**
+ * Data for getNextProcessed, getPreviousProcessed.
+ */
+        UCollationPCE     *pce;
 };
 
+
+U_CAPI void U_EXPORT2
+uprv_init_pce(const struct UCollationElements *elems);
 
 #define UCOL_LEVELTERMINATOR 1
 

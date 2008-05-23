@@ -1,6 +1,6 @@
 /*
 *****************************************************************************
-* Copyright (C) 2001-2006, International Business Machines orporation  
+* Copyright (C) 2001-2008, International Business Machines orporation  
 * and others. All Rights Reserved.
 ****************************************************************************/
 
@@ -154,7 +154,7 @@ void StringSearchTest::runIndexedTest(int32_t index, UBool exec,
         CASE(33, TestUClassID)
         CASE(34, TestSubclass)
         CASE(35, TestCoverage)
-        CASE(36, TestDiactricMatch)
+        CASE(36, TestDiacriticMatch)
         default: name = ""; break;
     }
 }
@@ -256,8 +256,8 @@ UBool StringSearchTest::assertEqualWithStringSearch(StringSearch *strsrch,
             char *str = toCharString(strsrch->getText());
             errln("Text: %s", str);
             str = toCharString(strsrch->getPattern());
-            errln("Pattern: %s", str);
-            errln("Error following match found at %d %d", 
+            infoln("Pattern: %s", str);
+            infoln("Error following match found at %d %d", 
                     strsrch->getMatchedStart(), strsrch->getMatchedLength());
             return FALSE;
         }
@@ -375,7 +375,7 @@ UBool StringSearchTest::assertEqual(const SearchData *search)
     if( strsrch2 == strsrch || *strsrch2 != *strsrch ||
         !assertEqualWithStringSearch(strsrch2, search)
     ) {
-        errln("failure with StringSearch.clone()");
+        infoln("failure with StringSearch.clone()");
         collator->setStrength(getECollationStrength(UCOL_TERTIARY));
         delete strsrch;
         delete strsrch2;
@@ -395,6 +395,7 @@ UBool StringSearchTest::assertCanonicalEqual(const SearchData *search)
     BreakIterator *breaker  = getBreakIterator(search->breaker);
     StringSearch  *strsrch; 
     UChar          temp[128];
+    UBool          result = TRUE;
     
 #if UCONFIG_NO_BREAK_ITERATION
     if(search->breaker) {
@@ -415,22 +416,27 @@ UBool StringSearchTest::assertCanonicalEqual(const SearchData *search)
     }
 #endif
     collator->setStrength(getECollationStrength(search->strength));
+    collator->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
     strsrch = new StringSearch(pattern, text, (RuleBasedCollator *)collator, 
                                breaker, status);
     strsrch->setAttribute(USEARCH_CANONICAL_MATCH, USEARCH_ON, status);
     if (U_FAILURE(status)) {
         errln("Error opening string search %s", u_errorName(status));
-        return FALSE;
+        result = FALSE;
+        goto bail;
     }   
     
     if (!assertEqualWithStringSearch(strsrch, search)) {
-        collator->setStrength(getECollationStrength(UCOL_TERTIARY));
-        delete strsrch;
-        return FALSE;
+        result = FALSE;
+        goto bail;
     }
+
+bail:
     collator->setStrength(getECollationStrength(UCOL_TERTIARY));
+    collator->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_OFF, status);
     delete strsrch;
-    return TRUE;
+
+    return result;
 }
    
 UBool StringSearchTest::assertEqualWithAttribute(const SearchData *search, 
@@ -681,7 +687,7 @@ void StringSearchTest::TestBasic()
     while (BASIC[count].text != NULL) {
         //printf("count %d", count);
         if (!assertEqual(&BASIC[count])) {
-            errln("Error at test number %d", count);
+            infoln("Error at test number %d", count);
         }
         count ++;
     }
@@ -698,14 +704,14 @@ void StringSearchTest::TestNormExact()
     }
     while (BASIC[count].text != NULL) {
         if (!assertEqual(&BASIC[count])) {
-            errln("Error at test number %d", count);
+            infoln("Error at test number %d", count);
         }
         count ++;
     }
     count = 0;
     while (NORMEXACT[count].text != NULL) {
         if (!assertEqual(&NORMEXACT[count])) {
-            errln("Error at test number %d", count);
+            infoln("Error at test number %d", count);
         }
         count ++;
     }
@@ -713,7 +719,7 @@ void StringSearchTest::TestNormExact()
     count = 0;
     while (NONNORMEXACT[count].text != NULL) {
         if (!assertEqual(&NONNORMEXACT[count])) {
-            errln("Error at test number %d", count);
+            infoln("Error at test number %d", count);
         }
         count ++;
     }
@@ -724,7 +730,7 @@ void StringSearchTest::TestStrength()
     int count = 0;
     while (STRENGTH[count].text != NULL) {
         if (!assertEqual(&STRENGTH[count])) {
-            errln("Error at test number %d", count);
+            infoln("Error at test number %d", count);
         }
         count ++;
     }
@@ -810,7 +816,7 @@ void StringSearchTest::TestBreakIterator()
         }
         strsrch->reset();
         if (!assertEqualWithStringSearch(strsrch, search)) {
-             errln("Error at test number %d", count);
+             infoln("Error at test number %d", count);
         }
         delete strsrch;
         count += 2;
@@ -818,7 +824,7 @@ void StringSearchTest::TestBreakIterator()
     count = 0;
     while (BREAKITERATOREXACT[count].text != NULL) {
          if (!assertEqual(&BREAKITERATOREXACT[count])) {
-             errln("Error at test number %d", count);
+             infoln("Error at test number %d", count);
          }
          count ++;
     }
@@ -838,7 +844,7 @@ void StringSearchTest::TestVariable()
     while (VARIABLE[count].text != NULL) {
         logln("variable %d", count);
         if (!assertEqual(&VARIABLE[count])) {
-            errln("Error at test number %d", count);
+            infoln("Error at test number %d", count);
         }
         count ++;
     }
@@ -1546,7 +1552,7 @@ void StringSearchTest::TestIgnorable()
     delete collator;
 }
 
-void StringSearchTest::TestDiactricMatch()
+void StringSearchTest::TestDiacriticMatch()
 {
 	UChar temp[128];
     UErrorCode status = U_ZERO_ERROR;
@@ -1559,7 +1565,7 @@ void StringSearchTest::TestDiactricMatch()
     
     const SearchData *search; 
     
-    search = &(DIACTRICMATCH[count]);
+    search = &(DIACRITICMATCH[count]);
     while (search->text != NULL) {
    		coll = getCollator(search->collator);
     	coll->setStrength(getECollationStrength(search->strength));
@@ -1577,7 +1583,7 @@ void StringSearchTest::TestDiactricMatch()
         if (!assertEqualWithStringSearch(strsrch, search)) {
             errln("Error at test number %d", count);
         }
-        search = &(DIACTRICMATCH[++count]);
+        search = &(DIACRITICMATCH[++count]);
         delete strsrch;
     }
     
@@ -1818,6 +1824,8 @@ void StringSearchTest::TestCollatorCanonical()
         if (tailored != NULL) {
             delete tailored;
         }
+
+        return;
     }
         
     strsrch->setCollator(m_en_us_, status);
@@ -1980,6 +1988,10 @@ void StringSearchTest::TestGetSetOffsetCanonical()
     UnicodeString  pattern("pattern");
     StringSearch  *strsrch = new StringSearch(pattern, text, m_en_us_, NULL, 
                                               status);
+    Collator *collator = strsrch->getCollator();
+
+    collator->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
+
     strsrch->setAttribute(USEARCH_CANONICAL_MATCH, USEARCH_ON, status);
     /* testing out of bounds error */
     strsrch->setOffset(-1, status);
@@ -2023,7 +2035,7 @@ void StringSearchTest::TestGetSetOffsetCanonical()
                 errln("Error match found at %d %d", 
                       strsrch->getMatchedStart(), 
                       strsrch->getMatchedLength());
-                return;
+                goto bail;
             }
             matchindex = search.offset[count + 1] == -1 ? -1 : 
                          search.offset[count + 2];
@@ -2031,7 +2043,7 @@ void StringSearchTest::TestGetSetOffsetCanonical()
                 strsrch->setOffset(search.offset[count + 1] + 1, status);
                 if (strsrch->getOffset() != search.offset[count + 1] + 1) {
                     errln("Error setting offset");
-                    return;
+                    goto bail;
                 }
             }
             
@@ -2045,9 +2057,12 @@ void StringSearchTest::TestGetSetOffsetCanonical()
             errln("Pattern: %s", str);
             errln("Error match found at %d %d", strsrch->getMatchedStart(), 
                    strsrch->getMatchedLength());
-            return;
+            goto bail;
         }
     }
+
+bail:
+    collator->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_OFF, status);
     delete strsrch;
 }
     

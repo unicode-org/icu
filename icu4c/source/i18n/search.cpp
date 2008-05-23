@@ -106,9 +106,21 @@ void SearchIterator::setBreakIterator(BreakIterator *breakiter,
                                       UErrorCode &status)
 {
     if (U_SUCCESS(status)) {
+#if 0
         m_search_->breakIter = NULL;
         // the c++ breakiterator may not make use of ubreakiterator.
         // so we'll have to keep track of it ourselves.
+#else
+        // Well, gee... the Constructors that take a BreakIterator
+        // all cast the BreakIterator to a UBreakIterator and
+        // pass it to the corresponding usearch_openFromXXX
+        // routine, so there's no reason not to do this.
+        //
+        // Besides, a UBreakIterator is a BreakIterator, so
+        // any subclass of BreakIterator should work fine here...
+        m_search_->breakIter = (UBreakIterator *) breakiter;
+#endif
+        
         m_breakiterator_ = breakiter;
     }
 }
@@ -283,10 +295,16 @@ int32_t SearchIterator::previous(UErrorCode &status)
         }
 
         if (matchindex != USEARCH_DONE) {
+            if (m_search_->isOverlap) {
+                matchindex += m_search_->matchedLength - 2;
+            }
+
             return handlePrev(matchindex, status); 
         }
+
         return handlePrev(offset, status);
     }
+
     return USEARCH_DONE;
 }
 

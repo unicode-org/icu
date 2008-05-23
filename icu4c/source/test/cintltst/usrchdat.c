@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2001-2007 International Business Machines 
+ * Copyright (c) 2001-2008 International Business Machines 
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  * File USRCHDAT.H
@@ -18,6 +18,9 @@ Note: This file is included by other C and C++ files. This file should not be di
 #include "unicode/ucol.h"
 
 #if !UCONFIG_NO_COLLATION
+
+/* Set to 1 if matches must be on grapheme boundaries */
+#define GRAPHEME_BOUNDARIES 1
 
 U_CDECL_BEGIN
 struct SearchData {
@@ -51,9 +54,15 @@ static const SearchData BASIC[] = {
     {"Scott Ganyo", " ", NULL, UCOL_TERTIARY, NULL, {5, -1}, {1}},
     {"\\u0300\\u0325", "\\u0300", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
     {"a\\u0300\\u0325", "\\u0300", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
-    {"a\\u0300\\u0325", "\\u0300\\u0325", NULL, UCOL_TERTIARY, NULL, {1, -1}, 
-    {2}},
+
+#if GRAPHEME_BOUNDARIES
+    {"a\\u0300\\u0325", "\\u0300\\u0325", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"a\\u0300b", "\\u0300", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+#else
+    {"a\\u0300\\u0325", "\\u0300\\u0325", NULL, UCOL_TERTIARY, NULL, {1, -1}, {2}},
     {"a\\u0300b", "\\u0300", NULL, UCOL_TERTIARY, NULL, {1, -1}, {1}},
+#endif
+
     {"\\u00c9", "e", NULL, UCOL_PRIMARY,  NULL, {0, -1}, {1}},
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
@@ -74,6 +83,10 @@ static const SearchData BREAKITERATOREXACT[] = {
     {"testing that string ab\\u00e9cd does not match e", "e", NULL, 
      UCOL_TERTIARY, "characterbreaker", {1, 28, 41, -1}, {1, 1, 1}},
     {"\\u00c9", "e", "fr", UCOL_PRIMARY,  "characterbreaker", {0, -1}, {1}},
+#if 0 
+    /* Problem reported by Dave Bertoni, same as ticket 4279? */
+    {"\\u0043\\u004F\\u0302\\u0054\\u00C9", "\\u004F", NULL, UCOL_TERTIARY,  "characterbreaker", {1, -1}, {2}},
+#endif
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
@@ -92,6 +105,12 @@ static const SearchData STRENGTH[] = {
     {7, 7, 7, 7}},
     {"\\u00c0 should match but not A", "A\\u0300", "en", UCOL_IDENTICAL, 
     NULL, {0, -1}, {1, 0}},
+
+#if 0
+    /* Ticket 5382 */ 
+    {"12\\u0171", "\\u0170", NULL, UCOL_SECONDARY, NULL, {2, -1}, {2}},
+#endif
+
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
@@ -120,14 +139,19 @@ static const SearchData VARIABLE[] = {
 };
 
 static const SearchData NORMEXACT[] = {
-    {"a\\u0300\\u0325", "\\u0325\\u0300", NULL, UCOL_TERTIARY, NULL, {1, -1}, 
-    {2}},
+    {"a\\u0300\\u0325", "a\\u0325\\u0300", NULL, UCOL_TERTIARY, NULL, {0, -1}, {3}},
+
+#if GRAPHEME_BOUNDARIES
+    {"a\\u0300\\u0325", "\\u0325\\u0300", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+#else
+    {"a\\u0300\\u0325", "\\u0325\\u0300", NULL, UCOL_TERTIARY, NULL, {1, -1}, {2}},
+#endif
+
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
 static const SearchData NONNORMEXACT[] = {
-    {"a\\u0300\\u0325", "\\u0325\\u0300", NULL, UCOL_TERTIARY, NULL, {-1}, 
-    {0}},
+    {"a\\u0300\\u0325", "\\u0325\\u0300", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
@@ -167,6 +191,15 @@ static const SearchData TEXT[] = {
 };
 
 static const SearchData COMPOSITEBOUNDARIES[] = {
+#if GRAPHEME_BOUNDARIES
+    {"\\u00C0", "A", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"A\\u00C0C", "A", NULL, UCOL_TERTIARY, NULL, {0, -1}, {1}},
+    {"\\u00C0A", "A", NULL, UCOL_TERTIARY, NULL, {1, -1}, {1}},
+    {"B\\u00C0", "A", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"\\u00C0B", "A", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"\\u00C0", "\\u0300", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"\\u0300\\u00C0", "\\u0300", NULL, UCOL_TERTIARY, NULL, {0, -1}, {1}},
+#else
     {"\\u00C0", "A", NULL, UCOL_TERTIARY, NULL, {0, -1}, {1}},
     {"A\\u00C0C", "A", NULL, UCOL_TERTIARY, NULL, {0, 1, -1}, {1, 1}},
     {"\\u00C0A", "A", NULL, UCOL_TERTIARY, NULL, {0, 1, -1}, {1, 1}},
@@ -175,16 +208,25 @@ static const SearchData COMPOSITEBOUNDARIES[] = {
     {"\\u00C0", "\\u0300", NULL, UCOL_TERTIARY, NULL, {0, -1}, {1}},
     {"\\u0300\\u00C0", "\\u0300", NULL, UCOL_TERTIARY, NULL, {0, 1, -1}, 
     {1, 1}},
+#endif
+
     {"\\u00C0\\u0300", "\\u0300", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
     /* A + 030A + 0301 */
     {"\\u01FA", "\\u01FA", NULL, UCOL_TERTIARY, NULL, {0, -1}, {1}},
+    {"\\u01FA", "A\\u030A\\u0301", NULL, UCOL_TERTIARY, NULL, {0, -1}, {1}},
     {"\\u01FA", "\\u030A", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
     {"\\u01FA", "A\\u030A", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
     {"\\u01FA", "\\u030AA", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
     {"\\u01FA", "\\u0301", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
     {"\\u01FA", "A\\u0301", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
     {"\\u01FA", "\\u0301A", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+
+#if GRAPHEME_BOUNDARIES
+    {"\\u01FA", "\\u030A\\u0301", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+#else
     {"\\u01FA", "\\u030A\\u0301", NULL, UCOL_TERTIARY, NULL, {0, -1}, {1}},
+#endif
+
     {"A\\u01FA", "A\\u030A", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
     {"\\u01FAA", "\\u0301A", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
     {"\\u0F73", "\\u0F73", NULL, UCOL_TERTIARY, NULL, {0, -1}, {1}},
@@ -193,6 +235,15 @@ static const SearchData COMPOSITEBOUNDARIES[] = {
     {"\\u0F73", "\\u0F71\\u0F72", NULL, UCOL_TERTIARY, NULL, {0, -1}, {1}},
     {"A\\u0F73", "A\\u0F71", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
     {"\\u0F73A", "\\u0F72A", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+
+    /* Ticket 5024  */
+    {"a\\u00e1", "a\\u00e1", NULL, UCOL_SECONDARY, NULL, {0, -1}, {2}},
+
+    /* Ticket 5420  */
+    {"fu\\u00dfball", "fu\\u00df", NULL, UCOL_TERTIARY, NULL, {0, -1}, {3}},
+    {"fu\\u00dfball", "fuss", NULL, UCOL_PRIMARY, NULL, {0, -1}, {3}},
+    {"fu\\u00dfball", "uss", NULL, UCOL_PRIMARY, NULL, {1, -1}, {2}},
+
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
@@ -229,12 +280,24 @@ static const char *CONTRACTIONRULE =
 static const SearchData CONTRACTION[] = {
     /* common discontiguous */
     {"A\\u0300\\u0315", "\\u0300", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
-    {"A\\u0300\\u0315", "\\u0300\\u0315", NULL, UCOL_TERTIARY, NULL, {1, -1}, 
-    {2}},
+
+#if GRAPHEME_BOUNDARIES
+    {"A\\u0300\\u0315", "\\u0300\\u0315", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+#else
+    {"A\\u0300\\u0315", "\\u0300\\u0315", NULL, UCOL_TERTIARY, NULL, {1, -1}, {2}},
+#endif
+
     /* contraction prefix */
     {"AB\\u0315C", "A", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+
+#if GRAPHEME_BOUNDARIES
+    {"AB\\u0315C", "AB", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"AB\\u0315C", "\\u0315", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+#else
     {"AB\\u0315C", "AB", NULL, UCOL_TERTIARY, NULL, {0, -1}, {2}},
     {"AB\\u0315C", "\\u0315", NULL, UCOL_TERTIARY, NULL, {2, -1}, {1}},
+#endif
+
     /* discontiguous problem here for backwards iteration. 
     accents not found because discontiguous stores all information */
     {"X\\u0300\\u0319\\u0315", "\\u0319", NULL, UCOL_TERTIARY, NULL, {-1}, 
@@ -249,15 +312,37 @@ static const SearchData CONTRACTION[] = {
     /* blocked discontiguous */
     {"X\\u0300\\u031A\\u0315D", "\\u031A\\u0315D", NULL, UCOL_TERTIARY, NULL, 
     {-1}, {0}},
+
+#if GRAPHEME_BOUNDARIES
+    /*
+     * "ab" generates a contraction that's an expansion. The "z" matches the
+     * first CE of the expansion but the match fails because it ends in the
+     * middle of an expansion...
+     */
+    {"ab", "z", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+#else
     {"ab", "z", NULL, UCOL_TERTIARY, NULL, {0, -1}, {2}},
+#endif
+
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
 static const char *IGNORABLERULE = "&a = \\u0300";
 
 static const SearchData IGNORABLE[] = {
+#if GRAPHEME_BOUNDARIES
+    /*
+     * This isn't much of a test when matches have to be on 
+     * grapheme boundiaries. The match at 0 only works because
+     * it's at the start of the text.
+     */
+    {"\\u0300\\u0315 \\u0300\\u0315 ", "\\u0300", NULL, UCOL_PRIMARY, NULL, 
+    {0, -1}, {2}},
+#else
     {"\\u0300\\u0315 \\u0300\\u0315 ", "\\u0300", NULL, UCOL_PRIMARY, NULL, 
     {0, 3, -1}, {2, 2}},
+#endif
+
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
@@ -273,6 +358,20 @@ static const SearchData BASICCANONICAL[] = {
     {6, 6}},
     {"Scott Ganyo", "c", NULL, UCOL_TERTIARY, NULL, {1, -1}, {1}},
     {"Scott Ganyo", " ", NULL, UCOL_TERTIARY, NULL, {5, -1}, {1}},
+
+#if GRAPHEME_BOUNDARIES
+    {"\\u0300\\u0325", "\\u0300", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"a\\u0300\\u0325", "\\u0300", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"a\\u0300\\u0325", "\\u0300\\u0325", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"a\\u0300b", "\\u0300", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"a\\u0300\\u0325b", "\\u0300b", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"\\u0325\\u0300A\\u0325\\u0300", "\\u0300A\\u0300", NULL, UCOL_TERTIARY, 
+    NULL, {-1}, {0}},
+    {"\\u0325\\u0300A\\u0325\\u0300", "\\u0325A\\u0325", NULL, UCOL_TERTIARY, 
+    NULL, {-1}, {0}},
+    {"a\\u0300\\u0325b\\u0300\\u0325c \\u0325b\\u0300 \\u0300b\\u0325", 
+    "\\u0300b\\u0325", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+#else
     {"\\u0300\\u0325", "\\u0300", NULL, UCOL_TERTIARY, NULL, {0, -1}, {2}},
     {"a\\u0300\\u0325", "\\u0300", NULL, UCOL_TERTIARY, NULL, {1, -1}, {2}},
     {"a\\u0300\\u0325", "\\u0300\\u0325", NULL, UCOL_TERTIARY, NULL, {1, -1}, 
@@ -285,12 +384,28 @@ static const SearchData BASICCANONICAL[] = {
     NULL, {0, -1}, {5}},
     {"a\\u0300\\u0325b\\u0300\\u0325c \\u0325b\\u0300 \\u0300b\\u0325", 
     "\\u0300b\\u0325", NULL, UCOL_TERTIARY, NULL, {1, 12, -1}, {5, 3}},
+#endif
+
     {"\\u00c4\\u0323", "A\\u0323\\u0308", NULL, UCOL_TERTIARY, NULL, {0, -1}, {2}},
     {"\\u0308\\u0323", "\\u0323\\u0308", NULL, UCOL_TERTIARY, NULL, {0, -1}, {2}},
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
+
 static const SearchData NORMCANONICAL[] = {
+#if GRAPHEME_BOUNDARIES
+    /*
+     * These tests don't really mean anything. With matches restricted to grapheme
+     * boundaries, isCanonicalMatch doesn't mean anything unless normalization is
+     * also turned on...
+     */
+    {"\\u0300\\u0325", "\\u0300", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"\\u0300\\u0325", "\\u0325", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"a\\u0300\\u0325", "\\u0325\\u0300", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"a\\u0300\\u0325", "\\u0300\\u0325", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"a\\u0300\\u0325", "\\u0325", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"a\\u0300\\u0325", "\\u0300", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+#else
     {"\\u0300\\u0325", "\\u0300", NULL, UCOL_TERTIARY, NULL, {0, -1}, {2}},
     {"\\u0300\\u0325", "\\u0325", NULL, UCOL_TERTIARY, NULL, {0, -1}, {2}},
     {"a\\u0300\\u0325", "\\u0325\\u0300", NULL, UCOL_TERTIARY, NULL, {1, -1}, 
@@ -299,6 +414,8 @@ static const SearchData NORMCANONICAL[] = {
     {2}},
     {"a\\u0300\\u0325", "\\u0325", NULL, UCOL_TERTIARY, NULL, {1, -1}, {2}},
     {"a\\u0300\\u0325", "\\u0300", NULL, UCOL_TERTIARY, NULL, {1, -1}, {2}},
+#endif
+
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
@@ -397,6 +514,20 @@ static const SearchData TEXTCANONICAL[] = {
 };
 
 static const SearchData COMPOSITEBOUNDARIESCANONICAL[] = {
+#if GRAPHEME_BOUNDARIES
+    {"\\u00C0", "A", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"A\\u00C0C", "A", NULL, UCOL_TERTIARY, NULL, {0, -1}, {1}},
+    {"\\u00C0A", "A", NULL, UCOL_TERTIARY, NULL, {1, -1}, {1}},
+    {"B\\u00C0", "A", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"\\u00C0B", "A", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"\\u00C0", "\\u0300", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+
+    /* first one matches only because it's at the start of the text */
+    {"\\u0300\\u00C0", "\\u0300", NULL, UCOL_TERTIARY, NULL, {0, -1}, {1}},
+
+    /* \\u0300 blocked by \\u0300 */
+    {"\\u00C0\\u0300", "\\u0300", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+#else
     {"\\u00C0", "A", NULL, UCOL_TERTIARY, NULL, {0, -1}, {1}},
     {"A\\u00C0C", "A", NULL, UCOL_TERTIARY, NULL, {0, 1, -1}, {1, 1}},
     {"\\u00C0A", "A", NULL, UCOL_TERTIARY, NULL, {0, 1, -1}, {1, 1}},
@@ -407,26 +538,66 @@ static const SearchData COMPOSITEBOUNDARIESCANONICAL[] = {
     {1, 1}},
     /* \\u0300 blocked by \\u0300 */
     {"\\u00C0\\u0300", "\\u0300", NULL, UCOL_TERTIARY, NULL, {0, -1}, {2}},
+#endif
+
     /* A + 030A + 0301 */
     {"\\u01FA", "\\u01FA", NULL, UCOL_TERTIARY, NULL, {0, -1}, {1}},
+    {"\\u01FA", "A\\u030A\\u0301", NULL, UCOL_TERTIARY, NULL, {0, -1}, {1}},
+
+#if GRAPHEME_BOUNDARIES
+    {"\\u01FA", "\\u030A", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"\\u01FA", "A\\u030A", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+#else
     {"\\u01FA", "\\u030A", NULL, UCOL_TERTIARY, NULL, {0, -1}, {1}},
     {"\\u01FA", "A\\u030A", NULL, UCOL_TERTIARY, NULL, {0, -1}, {1}},
+#endif
+
     {"\\u01FA", "\\u030AA", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+
+#if GRAPHEME_BOUNDARIES
+    {"\\u01FA", "\\u0301", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+#else
     {"\\u01FA", "\\u0301", NULL, UCOL_TERTIARY, NULL, {0, -1}, {1}},
+#endif
+
     /* blocked accent */
     {"\\u01FA", "A\\u0301", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
     {"\\u01FA", "\\u0301A", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+
+#if GRAPHEME_BOUNDARIES
+    {"\\u01FA", "\\u030A\\u0301", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"A\\u01FA", "A\\u030A", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"\\u01FAA", "\\u0301A", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+#else
     {"\\u01FA", "\\u030A\\u0301", NULL, UCOL_TERTIARY, NULL, {0, -1}, {1}},
     {"A\\u01FA", "A\\u030A", NULL, UCOL_TERTIARY, NULL, {1, -1}, {1}},
     {"\\u01FAA", "\\u0301A", NULL, UCOL_TERTIARY, NULL, {0, -1}, {2}},
+#endif
+
     {"\\u0F73", "\\u0F73", NULL, UCOL_TERTIARY, NULL, {0, -1}, {1}},
+
+#if GRAPHEME_BOUNDARIES
+    {"\\u0F73", "\\u0F71", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"\\u0F73", "\\u0F72", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+#else
     {"\\u0F73", "\\u0F71", NULL, UCOL_TERTIARY, NULL, {0, -1}, {1}},
     {"\\u0F73", "\\u0F72", NULL, UCOL_TERTIARY, NULL, {0, -1}, {1}},
+#endif
+
     {"\\u0F73", "\\u0F71\\u0F72", NULL, UCOL_TERTIARY, NULL, {0, -1}, {1}},
+
+#if GRAPHEME_BOUNDARIES
+    {"A\\u0F73", "A\\u0F71", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"\\u0F73A", "\\u0F72A", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"\\u01FA A\\u0301\\u030A A\\u030A\\u0301 A\\u030A \\u01FA", "A\\u030A", 
+      NULL, UCOL_TERTIARY, NULL, {10, -1}, {2}},
+#else
     {"A\\u0F73", "A\\u0F71", NULL, UCOL_TERTIARY, NULL, {0, -1}, {2}},
     {"\\u0F73A", "\\u0F72A", NULL, UCOL_TERTIARY, NULL, {0, -1}, {2}},
     {"\\u01FA A\\u0301\\u030A A\\u030A\\u0301 A\\u030A \\u01FA", "A\\u030A", 
     NULL, UCOL_TERTIARY, NULL, {0, 6, 10, 13, -1}, {1, 3, 2, 1}},
+#endif
+
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
@@ -459,33 +630,59 @@ static const SearchData SUPPLEMENTARYCANONICAL[] = {
 
 static const SearchData CONTRACTIONCANONICAL[] = {
     /* common discontiguous */
+#if GRAPHEME_BOUNDARIES
+    {"A\\u0300\\u0315", "\\u0300", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"A\\u0300\\u0315", "\\u0300\\u0315", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+#else
     {"A\\u0300\\u0315", "\\u0300", NULL, UCOL_TERTIARY, NULL, {1, -1}, {2}},
-    {"A\\u0300\\u0315", "\\u0300\\u0315", NULL, UCOL_TERTIARY, NULL, {1, -1}, 
-    {2}},
+    {"A\\u0300\\u0315", "\\u0300\\u0315", NULL, UCOL_TERTIARY, NULL, {1, -1}, {2}},
+#endif
+
     /* contraction prefix */
     {"AB\\u0315C", "A", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+
+#if GRAPHEME_BOUNDARIES
+    {"AB\\u0315C", "AB", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"AB\\u0315C", "\\u0315", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+#else
     {"AB\\u0315C", "AB", NULL, UCOL_TERTIARY, NULL, {0, -1}, {2}},
     {"AB\\u0315C", "\\u0315", NULL, UCOL_TERTIARY, NULL, {2, -1}, {1}},
+#endif
+
     /* discontiguous problem here for backwards iteration. 
     forwards gives 0, 4 but backwards give 1, 3 */
     /* {"X\\u0300\\u0319\\u0315", "\\u0319", NULL, UCOL_TERTIARY, NULL, {0, -1}, 
     {4}}, */
     
      /* ends not with a contraction character */
-    {"X\\u0315\\u0300D", "\\u0300\\u0315", NULL, UCOL_TERTIARY, NULL, {-1}, 
-    {0}},
-    {"X\\u0315\\u0300D", "X\\u0300\\u0315", NULL, UCOL_TERTIARY, NULL, 
-    {0, -1}, {3}},
-    {"X\\u0300\\u031A\\u0315D", "X\\u0300", NULL, UCOL_TERTIARY, NULL, 
-    {0, -1}, {4}},
+    {"X\\u0315\\u0300D", "\\u0300\\u0315", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+    {"X\\u0315\\u0300D", "X\\u0300\\u0315", NULL, UCOL_TERTIARY, NULL, {0, -1}, {3}},
+
+#if GRAPHEME_BOUNDARIES
+    {"X\\u0300\\u031A\\u0315D", "X\\u0300", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+
     /* blocked discontiguous */
-    {"X\\u0300\\u031A\\u0315D", "\\u031A\\u0315D", NULL, UCOL_TERTIARY, NULL, 
-    {1, -1}, {4}},
+    {"X\\u0300\\u031A\\u0315D", "\\u031A\\u0315D", NULL, UCOL_TERTIARY, NULL, {-1}, {0}},
+
+    /*
+     * "ab" generates a contraction that's an expansion. The "z" matches the
+     * first CE of the expansion but the match fails because it ends in the
+     * middle of an expansion...
+     */
+    {"ab", "z", NULL, UCOL_TERTIARY, NULL, {-1}, {2}},
+#else
+    {"X\\u0300\\u031A\\u0315D", "X\\u0300", NULL, UCOL_TERTIARY, NULL, {0, -1}, {4}},
+
+    /* blocked discontiguous */
+    {"X\\u0300\\u031A\\u0315D", "\\u031A\\u0315D", NULL, UCOL_TERTIARY, NULL, {1, -1}, {4}},
+
     {"ab", "z", NULL, UCOL_TERTIARY, NULL, {0, -1}, {2}},
+#endif
+
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
-static const SearchData DIACTRICMATCH[] = {
+static const SearchData DIACRITICMATCH[] = {
 		{"\\u03BA\\u03B1\\u03B9\\u0300\\u0020\\u03BA\\u03B1\\u1F76", "\\u03BA\\u03B1\\u03B9", NULL, UCOL_PRIMARY, NULL, {0, 5,-1}, {4, 3}},
 		{"\\u0061\\u0061\\u00E1", "\\u0061\\u00E1", NULL, UCOL_SECONDARY, NULL, {1, -1}, {2}},
 		{"\\u0020\\u00C2\\u0303\\u0020\\u0041\\u0061\\u1EAA\\u0041\\u0302\\u0303\\u00C2\\u0303\\u1EAB\\u0061\\u0302\\u0303\\u00E2\\u0303\\uD806\\uDC01\\u0300\\u0020",
