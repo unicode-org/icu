@@ -12,17 +12,13 @@ import java.nio.IntBuffer;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
-import java.nio.charset.UnsupportedCharsetException;
 import java.util.Arrays;
 
+import com.ibm.icu.charset.CharsetMBCS.CharsetDecoderMBCS;
+import com.ibm.icu.charset.CharsetMBCS.CharsetEncoderMBCS;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.charset.CharsetMBCS.MBCSToUFallback;
-import com.ibm.icu.charset.CharsetMBCS.UConverterMBCSTable;
-import com.ibm.icu.charset.CharsetMBCS;
-import com.ibm.icu.charset.CharsetMBCS.CharsetEncoderMBCS;
-import com.ibm.icu.charset.CharsetMBCS.CharsetDecoderMBCS;
 
 class CharsetISO2022 extends CharsetICU {
     private UConverterDataISO2022 myConverterData;
