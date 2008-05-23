@@ -386,7 +386,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
         int sourceIndex;
         int errorInputLength;
         boolean converterSawEndOfInput, calledCallback;
-        int t=target.position();
+        //int t=target.position();
         int s=source.position();
         /* variables for m:n conversion */
         ByteBuffer replayArray = ByteBuffer.allocate(EXT_MAX_BYTES);
@@ -520,7 +520,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
     
                 /* update pointers */
                 s=source.position();
-                t=target.position();
+                //t=target.position();
     
                 if(cr.isUnderflow()) {
                     if(s<source.limit())

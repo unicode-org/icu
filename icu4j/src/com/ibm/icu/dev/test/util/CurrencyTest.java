@@ -179,8 +179,6 @@ public class CurrencyTest extends TestFmwk {
 	public void TestCurrencyByDate()
 	{
 		// local Variables
-		Date date;
-		ULocale locale;
 		Currency currency;
         String result;		
  
