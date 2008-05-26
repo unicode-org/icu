@@ -544,7 +544,6 @@ static void TestNormExact(void)
             u_errorName(status));
     }
     while (BASIC[count].text != NULL) {
-        log_info("TestNormExact: BASIC test %d\n", count);
         if (!assertEqual(BASIC[count])) {
             log_err("Error at test number %d\n", count);
         }
@@ -552,7 +551,6 @@ static void TestNormExact(void)
     }
     count = 0;
     while (NORMEXACT[count].text != NULL) {
-        log_info("TestNormExact: NORMEXACT test %d\n", count);
         if (!assertEqual(NORMEXACT[count])) {
             log_err("Error at test number %d\n", count);
         }
@@ -561,7 +559,6 @@ static void TestNormExact(void)
     ucol_setAttribute(EN_US_, UCOL_NORMALIZATION_MODE, UCOL_OFF, &status);
     count = 0;
     while (NONNORMEXACT[count].text != NULL) {
-        log_info("TestNormExact: NONNORMEXACT test %d\n", count);
         if (!assertEqual(NONNORMEXACT[count])) {
             log_err("Error at test number %d\n", count);
         }
