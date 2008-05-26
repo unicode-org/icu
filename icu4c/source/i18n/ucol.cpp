@@ -1642,7 +1642,7 @@ void collPrevIterNormalize(collIterate *data)
 	     * **** THIS IS PROBABLY NOT A COMPLETE TEST ****
 	     */
 	    if (baseChar >= 0x100) {
-		    int32_t baseOrder = UTRIE_GET32_FROM_LEAD(&data->coll->mapping, baseChar);
+		    uint32_t baseOrder = UTRIE_GET32_FROM_LEAD(&data->coll->mapping, baseChar);
 
 		    if (baseOrder == UCOL_NOT_FOUND && data->coll->UCA) {
 			    baseOrder = UTRIE_GET32_FROM_LEAD(&data->coll->UCA->mapping, baseChar);
@@ -1903,16 +1903,18 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                     Because pointer points to the last accessed character,
                     hence we have to increment it by one here.
                     */
-                    if (data->fcdPosition == NULL) {
+                    data->flags = data->origFlags;
+                    data->offsetRepeatValue = 0;
+ 
+                     if (data->fcdPosition == NULL) {
                         data->pos = data->string;
                         return UCOL_NO_MORE_CES;
                     }
                     else {
                         data->pos   = data->fcdPosition + 1;
                     }
-                    data->flags = data->origFlags;
-                    data->offsetRepeatValue = 0;
-                    continue;
+                    
+                   continue;
                 }
             }
 
@@ -3794,7 +3796,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
 
             // **** doesn't work if using iterator ****
             if (source->offsetReturn != NULL) {
-                if (source->offsetReturn == source->offsetBuffer) {
+                if (! (source->flags & UCOL_ITER_INNORMBUF) && source->offsetReturn == source->offsetBuffer) {
                     source->offsetStore = source->offsetBuffer;
                 }else {
                   firstOffset = -1;

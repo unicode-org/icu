@@ -497,7 +497,7 @@ ucol_previousProcessed(UCollationElements *elems,
  // UCollationStrength strength = ucol_getStrength(coll);
  //  UBool toShift   = ucol_getAttribute(coll, UCOL_ALTERNATE_HANDLING, status) ==  UCOL_SHIFTED;
  // uint32_t variableTop = coll->variableTopValue;
-    uint32_t low = 0, high = 0;
+    int32_t  low = 0, high = 0;
 
     if (U_FAILURE(*status)) {
         return UCOL_PROCESSED_NULLORDER;
