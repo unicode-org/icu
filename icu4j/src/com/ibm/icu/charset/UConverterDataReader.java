@@ -486,6 +486,14 @@ final class UConverterDataReader implements ICUBinary.Authenticate {
         bytesRead+=4;
         h.fromUBytesLength = dataInputStream.readInt();
         bytesRead+=4;
+        if (h.version[0] == 5 && h.version[1] >= 3) {
+            h.options = dataInputStream.readInt();
+            bytesRead+=4;
+            if ((h.options & CharsetMBCS.MBCS_OPT_NO_FROM_U) != 0) {
+                h.fullStage2Length = dataInputStream.readInt();
+                bytesRead+=4;
+            }
+        }
     }
     
     protected void readMBCSTable(int[][] stateTableArray, CharsetMBCS.MBCSToUFallback[] toUFallbacksArray, char[] unicodeCodeUnitsArray, char[] fromUnicodeTableArray, byte[] fromUnicodeBytesArray) throws IOException
