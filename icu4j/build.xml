@@ -10,9 +10,8 @@
 
 <project name="icu4j" default="core" basedir=".">
 
-  <!-- ### Begin Clover 1.2 setup ### -->
-  <typedef resource="clovertypes" onerror="ignore" />
-  <taskdef resource="clovertasks" onerror="ignore" />
+  <!-- ### Begin Clover 2.x setup ### -->
+  <taskdef resource="cloverlib.xml" onerror="ignore" />
 
   <target name="with.clover">
     <mkdir dir="tmp/" />
@@ -48,7 +47,7 @@
     </clover-log>
   </target>
 
-  <!-- ### End Clover 1.2 setup ### -->
+  <!-- ### End Clover 2.x setup ### -->
 
   <target name="checkAntVersion">
     <condition property="supported.ant.version">
