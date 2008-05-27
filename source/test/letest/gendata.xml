@@ -113,4 +113,9 @@
     <test-font name="BMIN00M.TTF"/>
     <test-text>中華人民共和國 臺灣</test-text>
   </test-case>
+
+  <test-case id="Telugu Syllable Boundary Test" script="telu">
+    <test-font name="Gautami.ttf"/>
+    <test-text>ప్రకాష్</test-text>
+  </test-case>
 </layout-tests>
