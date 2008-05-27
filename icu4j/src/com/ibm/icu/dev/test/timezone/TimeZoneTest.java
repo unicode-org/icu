@@ -134,7 +134,7 @@ public class TimeZoneTest extends TestFmwk
             // As of bug 4191164, fix NET
             new ZoneDescriptor("NET", 240, true),
             // PLT behaves differently under different JDKs, so we don't check it
-            // new ZoneDescriptor("PLT", 300, false), // updated Oct 2003 aliu
+            // new ZoneDescriptor("PLT", 300, true), // updated by tzdata 2008c
             new ZoneDescriptor("IST", 330, false),
             new ZoneDescriptor("BST", 360, false),
             new ZoneDescriptor("VST", 420, false),
