@@ -73,8 +73,8 @@ private:
     LEUnicode   fLengthMark;
     le_int32    fLengthMarkIndex;
 
-    LEUnicode   fVirama;
-    le_int32    fViramaIndex;
+    LEUnicode   fAlLakuna;
+    le_int32    fAlLakunaIndex;
 
     FeatureMask fMatraFeatures;
     
@@ -97,9 +97,9 @@ private:
         if (IndicClassTable::isLengthMark(matraClass)) {
             fLengthMark = matra;
             fLengthMarkIndex = matraIndex;
-        } else if (IndicClassTable::isVirama(matraClass)) {
-            fVirama = matra;
-            fViramaIndex = matraIndex;
+        } else if (IndicClassTable::isAlLakuna(matraClass)) {
+            fAlLakuna = matra;
+            fAlLakunaIndex = matraIndex;
         } else {
             switch (matraClass & CF_POS_MASK) {
             case CF_POS_BEFORE:
@@ -133,7 +133,7 @@ public:
     IndicReorderingOutput(LEUnicode *outChars, LEGlyphStorage &glyphStorage, MPreFixups *mpreFixups)
         : fSyllableCount(0), fOutIndex(0), fOutChars(outChars), fGlyphStorage(glyphStorage),
           fMpre(0), fMpreIndex(0), fMbelow(0), fMbelowIndex(0), fMabove(0), fMaboveIndex(0),
-          fMpost(0), fMpostIndex(0), fLengthMark(0), fLengthMarkIndex(0), fVirama(0), fViramaIndex(0),
+          fMpost(0), fMpostIndex(0), fLengthMark(0), fLengthMarkIndex(0), fAlLakuna(0), fAlLakunaIndex(0),
           fMatraFeatures(0), fMPreOutIndex(-1), fMPreFixups(mpreFixups),
           fVMabove(0), fVMpost(0), fVMIndex(0), fVMFeatures(0),
           fSMabove(0), fSMbelow(0), fSMIndex(0), fSMFeatures(0)
@@ -150,7 +150,7 @@ public:
     {
         fSyllableCount += 1;
 
-        fMpre = fMbelow = fMabove = fMpost = fLengthMark = fVirama = 0;
+        fMpre = fMbelow = fMabove = fMpost = fLengthMark = fAlLakuna = 0;
         fMPreOutIndex = -1;
         
         fVMabove = fVMpost  = 0;
@@ -255,11 +255,11 @@ public:
         }
     }
 
-    // Handles virama in Sinhala split vowels.
-    void writeVirama()
+    // Handles Al-Lakuna in Sinhala split vowels.
+    void writeAlLakuna()
     {
-        if (fVirama != 0) {
-            writeChar(fVirama, fViramaIndex, fMatraFeatures);
+        if (fAlLakuna != 0) {
+            writeChar(fAlLakuna, fAlLakunaIndex, fMatraFeatures);
         }
     }
 
@@ -371,20 +371,21 @@ static const le_int32 featureCount = LE_ARRAY_SIZE(featureMap);
 
 static const le_int8 stateTable[][CC_COUNT] =
 {
-//   xx  vm  sm  iv  i2  i3  ct  cn  nu  dv  s1  s2  s3  vr  zw
-    { 1,  6,  1,  5,  8, 11,  3,  2,  1,  5,  9,  5,  5,  1,  1}, //  0 - ground state
-    {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, //  1 - exit state
-    {-1,  6,  1, -1, -1, -1, -1, -1, -1,  5,  9,  5,  5,  4, 12}, //  2 - consonant with nukta
-    {-1,  6,  1, -1, -1, -1, -1, -1,  2,  5,  9,  5,  5,  4, 12}, //  3 - consonant
-    {-1, -1, -1, -1, -1, -1,  3,  2, -1, -1, -1, -1, -1, -1,  7}, //  4 - consonant virama
-    {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, //  5 - dependent vowels
-    {-1, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, //  6 - vowel mark
-    {-1, -1, -1, -1, -1, -1,  3,  2, -1, -1, -1, -1, -1, -1, -1}, //  7 - consonant virama ZWJ, consonant ZWJ virama
-    {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  4, -1}, //  8 - independent vowels that can take a virama
-    {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, 10,  5, -1, -1}, //  9 - first part of split vowel
-    {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  5, -1, -1}, // 10 - second part of split vowel
-    {-1,  6,  1, -1, -1, -1, -1, -1, -1,  5,  9,  5,  5,  4, -1}, // 11 - independent vowels that can take an iv
-    {-1, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  7, -1}  // 12 - consonant ZWJ (TODO: Take everything else that can be after a consonant?)
+//   xx  vm  sm  iv  i2  i3  ct  cn  nu  dv  s1  s2  s3  vr  zw  al
+    { 1,  6,  1,  5,  8, 11,  3,  2,  1,  5,  9,  5,  5,  1,  1,  1}, //  0 - ground state
+    {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, //  1 - exit state
+    {-1,  6,  1, -1, -1, -1, -1, -1, -1,  5,  9,  5,  5,  4, 12, -1}, //  2 - consonant with nukta
+    {-1,  6,  1, -1, -1, -1, -1, -1,  2,  5,  9,  5,  5,  4, 12, 13}, //  3 - consonant
+    {-1, -1, -1, -1, -1, -1,  3,  2, -1, -1, -1, -1, -1, -1,  7, -1}, //  4 - consonant virama
+    {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, //  5 - dependent vowels
+    {-1, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, //  6 - vowel mark
+    {-1, -1, -1, -1, -1, -1,  3,  2, -1, -1, -1, -1, -1, -1, -1, -1}, //  7 - consonant virama ZWJ, consonant ZWJ virama
+    {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  4, -1, -1}, //  8 - independent vowels that can take a virama
+    {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, 10,  5, -1, -1, -1}, //  9 - first part of split vowel
+    {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  5, -1, -1, -1}, // 10 - second part of split vowel
+    {-1,  6,  1, -1, -1, -1, -1, -1, -1,  5,  9,  5,  5,  4, -1, -1}, // 11 - independent vowels that can take an iv
+    {-1, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  7, -1,  7}, // 12 - consonant ZWJ (TODO: Take everything else that can be after a consonant?)
+    {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  7, -1}  // 13 - consonant al-lakuna ZWJ consonant
 };
 
 
@@ -511,7 +512,7 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
             }
 
             output.writeLengthMark();
-            output.writeVirama();
+            output.writeAlLakuna();
 
             if ((classTable->scriptFlags & SF_REPH_AFTER_BELOW) == 0) {
                 output.writeVMabove();
@@ -643,7 +644,8 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
                 bcSpan += 1;
             }
 
-            if (baseConsonant == lastConsonant && bcSpan < markStart && classTable->isVirama(chars[bcSpan])) {
+            if (baseConsonant == lastConsonant && bcSpan < markStart &&
+                 (classTable->isVirama(chars[bcSpan]) || classTable->isAlLakuna(chars[bcSpan]))) {
                 bcSpan += 1;
 
                 if (bcSpan < markStart && chars[bcSpan] == C_SIGN_ZWNJ) {
@@ -719,7 +721,7 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
             }
 
             output.writeLengthMark();
-            output.writeVirama();
+            output.writeAlLakuna();
 
             // write reph
             if ((classTable->scriptFlags & SF_REPH_AFTER_BELOW) == 0) {

@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
  *
  */
 
@@ -37,7 +37,8 @@ U_NAMESPACE_BEGIN
 #define CC_SPLIT_VOWEL_PIECE_3   12U
 #define CC_VIRAMA                13U
 #define CC_ZERO_WIDTH_MARK       14U
-#define CC_COUNT                 15U
+#define CC_AL_LAKUNA             15U
+#define CC_COUNT                 16U
 
 // Character class flags
 #define CF_CLASS_MASK    0x0000FFFFU
@@ -98,6 +99,7 @@ struct IndicClassTable
     inline le_bool isConsonant(LEUnicode ch) const;
     inline le_bool isReph(LEUnicode ch) const;
     inline le_bool isVirama(LEUnicode ch) const;
+    inline le_bool isAlLakuna(LEUnicode ch) const;
     inline le_bool isNukta(LEUnicode ch) const;
     inline le_bool isVattu(LEUnicode ch) const;
     inline le_bool isMatra(LEUnicode ch) const;
@@ -112,6 +114,7 @@ struct IndicClassTable
     inline static le_bool isConsonant(CharClass charClass);
     inline static le_bool isReph(CharClass charClass);
     inline static le_bool isVirama(CharClass charClass);
+    inline static le_bool isAlLakuna(CharClass charClass);
     inline static le_bool isNukta(CharClass charClass);
     inline static le_bool isVattu(CharClass charClass);
     inline static le_bool isMatra(CharClass charClass);
@@ -193,6 +196,11 @@ inline le_bool IndicClassTable::isVirama(CharClass charClass)
     return (charClass & CF_CLASS_MASK) == CC_VIRAMA;
 }
 
+inline le_bool IndicClassTable::isAlLakuna(CharClass charClass)
+{
+    return (charClass & CF_CLASS_MASK) == CC_AL_LAKUNA;
+}
+
 inline le_bool IndicClassTable::isVattu(CharClass charClass)
 {
     return (charClass & CF_VATTU) != 0;
@@ -253,6 +261,11 @@ inline le_bool IndicClassTable::isReph(LEUnicode ch) const
 inline le_bool IndicClassTable::isVirama(LEUnicode ch) const
 {
     return isVirama(getCharClass(ch));
+}
+
+inline le_bool IndicClassTable::isAlLakuna(LEUnicode ch) const
+{
+    return isAlLakuna(getCharClass(ch));
 }
 
 inline le_bool IndicClassTable::isNukta(LEUnicode ch) const
