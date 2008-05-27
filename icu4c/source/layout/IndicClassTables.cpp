@@ -48,6 +48,7 @@ U_NAMESPACE_BEGIN
 #define _m2  (CC_SPLIT_VOWEL_PIECE_2 | CF_LENGTH_MARK)
 #define _m3  (CC_SPLIT_VOWEL_PIECE_3 | CF_LENGTH_MARK)
 #define _vr  (CC_VIRAMA)
+#define _al  (CC_AL_LAKUNA)
 
 // split matras
 #define _s1  (_dv | _x1)
@@ -206,7 +207,7 @@ static const IndicClassTable::CharClass sinhCharClasses[] =
     _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _xx, _xx, _ct, _ct, _ct, _ct, _ct, _ct, // 0D90 - 0D9F
     _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, // 0DA0 - 0DAF
     _ct, _ct, _xx, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _xx, _ct, _xx, _xx, // 0DB0 - 0DBF
-    _ct, _ct, _ct, _ct, _ct, _ct, _ct, _xx, _xx, _xx, _vr, _xx, _xx, _xx, _xx, _dr, // 0DC0 - 0DCF
+    _ct, _ct, _ct, _ct, _ct, _ct, _ct, _xx, _xx, _xx, _al, _xx, _xx, _xx, _xx, _dr, // 0DC0 - 0DCF
     _dr, _dr, _da, _da, _db, _xx, _db, _xx, _dr, _dl, _s1, _dl, _s2, _s3, _s4, _dr, // 0DD0 - 0DDF
     _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 0DE0 - 0DEF
     _xx, _xx, _dr, _dr, _xx                                                         // 0DF0 - 0DF4
@@ -229,7 +230,7 @@ static const SplitMatra kndaSplitTable[] = {{0x0CBF, 0x0CD5}, {0x0CC6, 0x0CD5}, 
 static const SplitMatra mlymSplitTable[] = {{0x0D46, 0x0D3E}, {0x0D47, 0x0D3E}, {0x0D46, 0x0D57}};
 
  
-static const SplitMatra sinhSplitTable[] = {{0x0DD9, 0x0DCA}, {0x0DD9, 0x0DCF}, {0x0DD9, 0x0DCF,0x0DCA},
+static const SplitMatra sinhSplitTable[] = {{0x0DD9, 0x0DCA}, {0x0DD9, 0x0DCF}, {0x0DD9, 0x0DCF, 0x0DCA},
                                             {0x0DD9, 0x0DDF}};
 //
 // Script Flags
@@ -248,7 +249,7 @@ static const SplitMatra sinhSplitTable[] = {{0x0DD9, 0x0DCA}, {0x0DD9, 0x0DCF}, 
 #define TELU_SCRIPT_FLAGS (SF_MATRAS_AFTER_BASE | SF_FILTER_ZERO_WIDTH | 3)
 #define KNDA_SCRIPT_FLAGS (SF_MATRAS_AFTER_BASE | SF_FILTER_ZERO_WIDTH | 3)
 #define MLYM_SCRIPT_FLAGS (SF_MPRE_FIXUP | SF_NO_POST_BASE_LIMIT /*| SF_FILTER_ZERO_WIDTH*/)
-#define SINH_SCRIPT_FLAGS (SF_MPRE_FIXUP | SF_NO_POST_BASE_LIMIT)
+#define SINH_SCRIPT_FLAGS (SF_NO_POST_BASE_LIMIT)
 
 //
 // Indic Class Tables
