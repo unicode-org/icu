@@ -861,6 +861,11 @@ public class TestConversion extends ModuleTest {
      
         int which = ((ICUResourceBundle) testcase.getObject("which")).getInt(); // only checking for ROUNDTRIP_SET
         
+        // ----for debugging only
+        logln("");
+        logln("TestGetUnicodeSet[" + cc.charset + "] ");
+        logln("...............................................");
+        
         try{
            // if cc.charset starts with '*', obtain it from com/ibm/icu/dev/data/testdata
            charset = (cc.charset != null && cc.charset.length() > 0 && cc.charset.charAt(0) == '*')
@@ -895,31 +900,25 @@ public class TestConversion extends ModuleTest {
            
            charset.getUnicodeSet(unicodeset, which);
            UnicodeSet diffset = new UnicodeSet();
-                     
-           //are there items that must be in unicodeset but are not?
-          
            
+           //are there items that must be in unicodeset but are not?           
            (diffset = mapset).removeAll(unicodeset);
            if(!diffset.isEmpty()){
                StringBuffer s = new StringBuffer(diffset.toPattern(true));
                if(s.length()>100){
                    s.replace(0, 0x7fffffff, ellipsis);
                }
-               errln("error in missing items - conversion/getUnicodeSet test case "+cc.charset);
-               errln(s.toString());
+               errln("error in missing items - conversion/getUnicodeSet test case "+cc.charset + "\n" + s.toString());
            }
            
           //are the items that must not be in unicodeset but are?
-           
            (diffset=mapnotset).retainAll(unicodeset);
-           
            if(!diffset.isEmpty()){
                StringBuffer s = new StringBuffer(diffset.toPattern(true));
                if(s.length()>100){
                    s.replace(0, 0x7fffffff, ellipsis);
                }
-               errln("contains unexpected items - conversion/getUnicodeSet test case "+cc.charset);
-               errln(s.toString());
+               errln("contains unexpected items - conversion/getUnicodeSet test case "+cc.charset + "\n" + s.toString());
            }
          } catch (Exception e) {
              errln("getUnicodeSet returned an error code");
