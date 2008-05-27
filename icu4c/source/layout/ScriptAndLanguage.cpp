@@ -47,7 +47,7 @@ const ScriptTable *ScriptListTable::findScript(LETag scriptTag) const
      * to be unsorted.
      */
     le_uint16 count = SWAPW(scriptCount);
-    le_uint16 limit = ((SWAPW(scriptRecordArray[0].offset) - sizeof(ScriptListTable)) / sizeof sizeof(scriptRecordArray)) + ANY_NUMBER;
+    le_uint16 limit = ((SWAPW(scriptRecordArray[0].offset) - sizeof(ScriptListTable)) / sizeof(scriptRecordArray)) + ANY_NUMBER;
     Offset scriptTableOffset = 0;
 
     if (count > limit) {
