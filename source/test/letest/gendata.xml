@@ -118,4 +118,9 @@
     <test-font name="Gautami.ttf"/>
     <test-text>ప్రకాష్</test-text>
   </test-case>
+
+  <test-case id="Angsana New Mark Test" script="thai">
+    <test-font name="ANGSA.TTF"/>
+    <test-text>บทที่๑พายุไซโคลนโดโรธีอาศัยอยู่ท่ามกลางทุ่งใหญ่ในแคนซัสกับลุงเฮนรีชาวไร่และป้าเอ็มภรรยาชาวไร่บ้านของพวกเขาหลังเล็กเพราะไม้สร้างบ้านต้องขนมาด้วยเกวียนเป็นระยะทางหลายไมล์</test-text>
+  </test-case>
 </layout-tests>
