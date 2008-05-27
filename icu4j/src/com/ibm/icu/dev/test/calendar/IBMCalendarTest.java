@@ -301,6 +301,19 @@ public class IBMCalendarTest extends CalendarTest {
     }
 
     /**
+     * Default calendar for Thai (Ticket#6302)
+     */
+    public void TestThaiDefault() {
+        // Buddhist calendar is used as the default calendar for
+        // Thai locale
+        Calendar cal = Calendar.getInstance(new ULocale("th_TH"));
+        String type = cal.getType();
+        if (!type.equals("buddhist")) {
+            errln("FAIL: Buddhist calendar is not returned for locale " + cal.toString());
+        }
+    }
+    
+    /**
      * Verify that TaiwanCalendar shifts years to Minguo Era but otherwise
      * behaves like GregorianCalendar.
      */
