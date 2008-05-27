@@ -1050,7 +1050,7 @@ static int32_t minLengthInChars(const CEList *ceList, int32_t offset, StringToCE
         offset += bestCeLength;
     }
 
-    debug.append(0x0000);
+    debug.append((UChar)0x0000);
     return totalStringLength;
 }
 
