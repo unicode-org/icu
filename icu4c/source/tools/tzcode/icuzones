@@ -1,5 +1,5 @@
 ######################################################################
-# Copyright (C) 2007, International Business Machines
+# Copyright (C) 2007-2008, International Business Machines
 # Corporation and others.  All Rights Reserved.
 ######################################################################
 # This is an ICU-specific file with the same format as regular
@@ -57,7 +57,7 @@ Link Europe/Paris ECT
 ####Link EST America/New_York EST # Defined as -05:00
 ####Link Pacific/Honolulu HST # Defined as -10:00
 Link America/Indiana/Indianapolis IET
-Link Asia/Calcutta IST
+Link Asia/Kolkata IST
 Link Asia/Tokyo JST
 #Link Asia/Tehran MET # MET is a standard UNIX zone
 Link Pacific/Apia MIT
@@ -70,4 +70,4 @@ Link America/Puerto_Rico PRT
 Link America/Los_Angeles PST
 Link Pacific/Guadalcanal SST
 #Link Etc/UTC UTC # Olson LINK
-Link Asia/Saigon VST
+Link Asia/Ho_Chi_Minh VST
