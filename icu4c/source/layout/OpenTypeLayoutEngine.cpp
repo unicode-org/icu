@@ -177,15 +177,7 @@ le_int32 OpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[], le_i
             return 0;
         }
 
-        if (LE_FAILURE(success)) {
-            LE_DELETE_ARRAY(outChars);
-            return 0;
-        }
-
         CanonShaping::reorderMarks(&chars[offset], count, rightToLeft, outChars, glyphStorage);
-    }
-    if (LE_FAILURE(success)) {
-        return 0;
     }
 
     glyphStorage.allocateGlyphArray(count, rightToLeft, success);
