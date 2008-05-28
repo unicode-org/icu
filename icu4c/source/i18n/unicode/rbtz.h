@@ -25,6 +25,12 @@ U_NAMESPACE_BEGIN
 class UVector;
 struct Transition;
 
+/**
+ * a BasicTimeZone subclass implemented in terms of InitialTimeZoneRule and TimeZoneRule instances
+ * @see BasicTimeZone
+ * @see InitialTimeZoneRule
+ * @see TimeZoneRule
+ */
 class U_I18N_API RuleBasedTimeZone : public BasicTimeZone {
 public:
     /**

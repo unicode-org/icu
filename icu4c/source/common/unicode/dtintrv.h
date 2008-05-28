@@ -15,6 +15,12 @@
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 
+/**
+ * \file
+ * \brief C++ API: Date Interval data type
+ */
+
+
 U_NAMESPACE_BEGIN
 
 

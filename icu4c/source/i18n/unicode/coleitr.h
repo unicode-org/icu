@@ -1,8 +1,13 @@
 /*
  ******************************************************************************
- *   Copyright (C) 1997-2005, International Business Machines
+ *   Copyright (C) 1997-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  ******************************************************************************
+ */
+
+/**
+ * \file 
+ * \brief C++ API: Collation Element Iterator.
  */
 
 /**
@@ -29,10 +34,6 @@
 
 #include "unicode/utypes.h"
 
-/**
- * \file 
- * \brief C++ API: Collation Element Iterator.
- */
  
 #if !UCONFIG_NO_COLLATION
 

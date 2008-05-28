@@ -1,9 +1,14 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2007, International Business Machines Corporation and
+* Copyright (C) 1996-2008, International Business Machines Corporation and
 * others. All Rights Reserved.
 ******************************************************************************
 */
+
+/**
+ * \file 
+ * \brief C++ API: RuleBasedCollator class provides the simple implementation of Collator.
+ */
 
 /**
 * File tblcoll.h
@@ -56,10 +61,6 @@
 
 #include "unicode/utypes.h"
 
-/**
- * \file 
- * \brief C++ API: RuleBasedCollator class provides the simple implementation of Collator.
- */
  
 #if !UCONFIG_NO_COLLATION
 
