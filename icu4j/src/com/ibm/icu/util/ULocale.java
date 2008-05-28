@@ -4843,21 +4843,6 @@ public final class ULocale implements Serializable {
         String originalRegion = (String)tags[2];
         String originalTrailing = null;
 
-        /*
-         * Create a new tag string that contains just
-         * the language, script, and region.  This will
-         * normalize the subtags we're interested in,
-         * including removing any explicit unknown
-         * script or region subtags.  It also removes
-         * any variants and keywords.
-         */
-//        String originalTag = 
-//                    createTagString(
-//                        originalLang,
-//                        originalScript,
-//                        originalRegion,
-//                        null);
-
         if (trailingIndex < loc.localeID.length()) {
             /*
              * Create a String that contains everything
