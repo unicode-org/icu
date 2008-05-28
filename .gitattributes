@@ -511,6 +511,7 @@ icu4j/src/com/ibm/icu/impl/duration/impl/data/pfd_zh_Hant_HK.xml -text
 icu4j/src/com/ibm/icu/lang/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/math/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/text/BreakCTDictionary.java -text
+icu4j/src/com/ibm/icu/text/DateIntervalFormat.java -text
 icu4j/src/com/ibm/icu/text/DurationFormat.java -text
 icu4j/src/com/ibm/icu/text/ThaiBreakIterator.java -text
 icu4j/src/com/ibm/icu/text/package.html svneol=native#text/html
