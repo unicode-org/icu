@@ -1362,6 +1362,47 @@ public abstract class DateFormat extends UFormat {
         return getInstance(cal, ULocale.getDefault());
     }
 
+
+
+    /**
+     * Create a date/time formatter from skeleton and a given locale.
+     *
+     * Users are encouraged to use the static skeletons 
+     * defined in DateIntervalFormat.
+     * For example, MONTH_DOW_DAY_LONG_FORMAT, which is "MMMMEEEEd",
+     * and which means the pattern should have day, month, and day-of-week
+     * fields, and follow the long date format defined in date time pattern.
+     * For example, for English, the full pattern should be
+     * "EEEE, MMMM d".
+     *
+     * Temporarily, this is internal API, used by DateIntervalFormat only.
+     * And there will be a new set of public API for the same purpose coming
+     * soon. After which, this API will be replaced.
+     *
+     * @param skeleton  the skeleton on which date format based.
+     * @param adjustFieldWidth  whether adjust the skeleton field width or not.
+     *                          It is used for DateTimePatternGenerator to 
+     *                          adjust field width when get  
+     *                          full pattern from skeleton.
+     * @param locale    the given locale.
+     * @return          a simple date formatter.
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
+    static final DateFormat getInstance(String skeleton,
+                                        boolean adjustFieldWidth,
+                                        ULocale locale) 
+    {
+        DateTimePatternGenerator dtptg = 
+                   DateTimePatternGenerator.getInstance(locale);
+    
+        // TODO (xji): use adjustFieldWidth later
+        String pattern = dtptg.getBestPattern(skeleton);
+        SimpleDateFormat dtfmt = new SimpleDateFormat(pattern, locale);
+        return dtfmt;
+    }
+
+
     /**
      * Convenience overload
      * @stable ICU 2.0
