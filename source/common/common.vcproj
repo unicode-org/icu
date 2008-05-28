@@ -1367,6 +1367,14 @@
 			Name="formatting"
 			>
 			<File
+				RelativePath=".\dtintrv.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\dtintrv.h"
+				>
+			</File>
+			<File
 				RelativePath=".\unicode\parseerr.h"
 				>
 				<FileConfiguration

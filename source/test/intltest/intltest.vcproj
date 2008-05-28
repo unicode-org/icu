@@ -614,6 +614,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\dtifmtts.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\dtifmtts.h"
+				>
+			</File>
+			<File
 				RelativePath=".\dtptngts.cpp"
 				>
 			</File>
