@@ -46,6 +46,70 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         new DateFormatTest().run(args);
     }
     
+    /**
+     * Verify that patterns have the correct values and could produce the 
+     * the DateFormat instances that contain the correct localized patterns.
+     */
+    public void TestPatterns() {
+        final String[][] EXPECTED = {
+                {DateFormat.MINUTE_SECOND, "mss", "en", "m:ss"},
+                {DateFormat.HOUR_MINUTE, "Hmm", "en", "H:mm"},
+                {DateFormat.HOUR_MINUTE_SECOND, "Hmmss","en","H:mm:ss"},
+                {DateFormat.HOUR12_MINUTE, "hmma","en","h:mm a"},
+                {DateFormat.HOUR12_MINUTE_SECOND, "hmmssa","en","h:mm:ss a"},
+                {DateFormat.DAY, "d","en","d"},
+                {DateFormat.MONTH, "LLLL","en","LLLL"},
+                {DateFormat.ABBR_MONTH, "LLL","en","LLL"},
+                {DateFormat.YEAR, "yyyy","en","yyyy"},
+                {DateFormat.MONTH_DAY, "MMMMd","en","MMMM d"},
+                {DateFormat.ABBR_MONTH_DAY, "MMMd","en","MMM d"},
+                {DateFormat.NUM_MONTH_DAY, "Md","en","M/d"},
+                {DateFormat.MONTH_DAY_WEEKDAY, "MMMMdE","en","E MMMM d"},
+                {DateFormat.ABBR_MONTH_DAY_WEEKDAY, "MMMdE","en","E MMM d"},
+                {DateFormat.NUM_MONTH_DAY_WEEKDAY, "MdE","en","E M d"},
+                {DateFormat.YEAR_MONTH, "yyyyMMMM","en","MMMM yyyy"},
+                {DateFormat.YEAR_ABBR_MONTH, "yyyyMMM","en","MMM yyyy"},
+                {DateFormat.YEAR_NUM_MONTH, "yyyyM","en","M yyyy"}, 
+                {DateFormat.YEAR_ABBR_MONTH_DAY_WEEKDAY, "yyyyMMMdEEE", "en", 
+                    "EEE, MMM d, yyyy"},
+                {DateFormat.YEAR_NUM_MONTH_DAY_WEEKDAY, "yyyyMdEEE", "en", 
+                        "EEE, M d, yyyy"},
+                {DateFormat.YEAR_QUARTER, "yyyyQQQ", "en", "QQQ yyyy"},
+                {DateFormat.YEAR_ABBR_QUARTER, "yyyyQ", "en", "Q yyyy"}
+        };
+        
+        for (int i = 0; i < EXPECTED.length; i++) {
+            
+            // Verify that patterns have the correct values
+            String actualPattern = EXPECTED[i][0];
+            String expectedPattern = EXPECTED[i][1];
+            ULocale locale = new ULocale(EXPECTED[i][2], "", "");
+            if (!actualPattern.equals(expectedPattern)) {
+                errln("FAILURE! Expected pattern: " + expectedPattern + 
+                        " but was: " + actualPattern);
+            }
+            
+            // Verify that DataFormat instances produced contain the correct 
+            // localized patterns
+            DateFormat date1 = DateFormat.getPatternInstance(actualPattern, 
+                    locale);
+            DateFormat date2 = DateFormat.getPatternInstance(Calendar.getInstance(locale),
+                    actualPattern, locale);
+            
+            String expectedLocalPattern = EXPECTED[i][3];
+            String actualLocalPattern1 = ((SimpleDateFormat)date1).toLocalizedPattern();
+            String actualLocalPattern2 = ((SimpleDateFormat)date2).toLocalizedPattern();
+            if (!actualLocalPattern1.equals(expectedLocalPattern)) {
+                errln("FAILURE! Expected local pattern: " + expectedLocalPattern 
+                        + " but was: " + actualLocalPattern1);
+            }       
+            if (!actualLocalPattern2.equals(expectedLocalPattern)) {
+                errln("FAILURE! Expected local pattern: " + expectedLocalPattern 
+                        + " but was: " + actualLocalPattern2);
+            }      
+        }
+    }
+    
     // Test written by Wally Wedel and emailed to me.
     public void TestWallyWedel() {
         /*
