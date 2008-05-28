@@ -346,6 +346,8 @@ private:
      */
     friend class DateIntervalFormat;
 
+    friend static UBool U_CALLCONV hashTableValueComparator(UHashTok val1, UHashTok val2) ;
+
     /**
      * Following is for saving the interval patterns.
      * We only support interval patterns on
@@ -489,17 +491,6 @@ private:
      * @draft ICU 4.0
      */
     void copyHash(const Hashtable* source, Hashtable* target, UErrorCode& status);
-
-
-
-    /**
-     * set hash table value comparator
-     *
-     * @param val1  one value in comparison
-     * @param val2  the other value in comparison
-     * @return      TRUE if 2 values are the same, FALSE otherwise
-     */
-    static UBool U_EXPORT2 hashTableValueComparator(UHashTok val1, UHashTok val2);
 
 
     // data members
