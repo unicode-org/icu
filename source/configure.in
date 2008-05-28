@@ -1,6 +1,6 @@
 dnl -*-m4-*-
 dnl configure.in for ICU
-dnl Copyright (c) 1999-2007, International Business Machines Corporation and
+dnl Copyright (c) 1999-2008, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
@@ -425,8 +425,15 @@ i*86-*-linux*|x86_64-*-linux*|powerpc*-*-linux*|i*86-*-*bsd*|i*86-pc-gnu)
     fi ;;
 i*86-*-solaris*)
     if test "$GCC" = yes; then
-        dnl We're using gcc, and the simple -a gcc command line works for genccode
-        GENCCODE_ASSEMBLY="-a gcc"
+        dnl When using gcc, look if we're also using GNU as.
+        dnl When using GNU as, the simple -a gcc command line works for genccode.
+        asv=`"${CC}" -print-prog-name=as 2>/dev/null`
+        asv=`"${asv}" --version 2>/dev/null`
+        case "X${asv}" in
+        X*GNU*) GENCCODE_ASSEMBLY="-a gcc" ;;
+        X*) GENCCODE_ASSEMBLY="-a sun-x86" ;;
+        esac
+        unset asv
     else
         GENCCODE_ASSEMBLY="-a sun-x86"
     fi ;;
