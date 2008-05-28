@@ -516,6 +516,7 @@ icu4j/src/com/ibm/icu/text/DateIntervalInfo.java -text
 icu4j/src/com/ibm/icu/text/DurationFormat.java -text
 icu4j/src/com/ibm/icu/text/ThaiBreakIterator.java -text
 icu4j/src/com/ibm/icu/text/package.html svneol=native#text/html
+icu4j/src/com/ibm/icu/util/DateInterval.java -text
 icu4j/src/com/ibm/icu/util/package.html svneol=native#text/html
 icu4j/src/com/ibm/richtext/awtui/package.html svneol=native#text/html
 icu4j/src/com/ibm/richtext/demo/package.html svneol=native#text/html
