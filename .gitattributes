@@ -332,6 +332,7 @@ icu4j/src/com/ibm/icu/text/DateIntervalFormat.java -text
 icu4j/src/com/ibm/icu/text/DateIntervalInfo.java -text
 icu4j/src/com/ibm/icu/text/DurationFormat.java -text
 icu4j/src/com/ibm/icu/text/ThaiBreakIterator.java -text
+icu4j/src/com/ibm/icu/util/DateInterval.java -text
 icu4j/src/com/ibm/richtext/textapps/resources/unicode.arabic.red -text
 icu4j/src/com/ibm/richtext/textapps/resources/unicode.hebrew.red -text
 tools/unicodetools/com/ibm/rbm/docs/images/TitleLogo_transparent.gif -text
