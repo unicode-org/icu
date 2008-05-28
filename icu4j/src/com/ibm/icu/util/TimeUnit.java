@@ -52,7 +52,7 @@ public class TimeUnit extends MeasureUnit {
      * @provisional This API might change or be removed in a future release.
      */
     public static TimeUnit[] values() {
-        return values.clone();
+        return (TimeUnit[])values.clone();
     }
 
     /**
