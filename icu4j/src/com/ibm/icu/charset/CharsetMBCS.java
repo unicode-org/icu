@@ -2932,7 +2932,7 @@ class CharsetMBCS extends CharsetICU {
             int prevSourceIndex, sourceIndex, nextSourceIndex;
             int stage2Entry = 0, value = 0, length = 0, prevLength;
             short uniMask;
-            long asciiRoundtrips;
+            //long asciiRoundtrips;
             boolean utf8Friendly = false, gotoUnassigned = false;
 
             try {
@@ -2972,7 +2972,7 @@ class CharsetMBCS extends CharsetICU {
                 } else {
                     bytes = sharedData.mbcs.fromUnicodeBytes;
                 }
-                asciiRoundtrips = sharedData.mbcs.asciiRoundtrips;
+                //asciiRoundtrips = sharedData.mbcs.asciiRoundtrips;
 
                 /* get the converter state from UConverter */
                 c = fromUChar32;
