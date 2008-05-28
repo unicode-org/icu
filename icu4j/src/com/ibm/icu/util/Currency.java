@@ -674,8 +674,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * code.  This constructor assumes that the code is valid.
      * 
      * @param theISOCode The iso code used to construct the currency.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.4
      */
     protected Currency(String theISOCode) {
         isoCode = theISOCode;

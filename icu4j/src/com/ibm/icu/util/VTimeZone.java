@@ -31,8 +31,7 @@ import com.ibm.icu.util.DateTimeRule;
  * decode or encode Non-ASCII text.  Methods reading/writing VTIMEZONE data in this class
  * do nothing with MIME encoding.
  * 
- * @draft ICU 3.8
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 3.8
  */
 public class VTimeZone extends BasicTimeZone {
 
@@ -45,8 +44,7 @@ public class VTimeZone extends BasicTimeZone {
      * @return A <code>VTimeZone</code> initialized by the time zone ID, or null
      * when the ID is unknown.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static VTimeZone create(String tzid) {
         VTimeZone vtz = new VTimeZone();
@@ -64,8 +62,7 @@ public class VTimeZone extends BasicTimeZone {
      * @return A <code>VTimeZone</code> initialized by the VTIMEZONE data or
      * null if failed to load the rule from the VTIMEZONE data.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static VTimeZone create(Reader reader) {
         VTimeZone vtz = new VTimeZone();
@@ -77,8 +74,7 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public int getOffset(int era, int year, int month, int day, int dayOfWeek,
             int milliseconds) {
@@ -87,8 +83,7 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public void getOffset(long date, boolean local, int[] offsets) {
         tz.getOffset(date, local, offsets);
@@ -106,8 +101,7 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public int getRawOffset() {
         return tz.getRawOffset();
@@ -115,8 +109,7 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public boolean inDaylightTime(Date date) {
         return tz.inDaylightTime(date);
@@ -124,8 +117,7 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public void setRawOffset(int offsetMillis) {
         tz.setRawOffset(offsetMillis);
@@ -133,8 +125,7 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public boolean useDaylightTime() {
         return tz.useDaylightTime();
@@ -142,8 +133,7 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public boolean hasSameRules(TimeZone other) {
         return tz.hasSameRules(other);
@@ -156,8 +146,7 @@ public class VTimeZone extends BasicTimeZone {
      * 
      * @return The RFC2445 TZURL property value
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String getTZURL() {
         return tzurl;
@@ -168,8 +157,7 @@ public class VTimeZone extends BasicTimeZone {
      * 
      * @param url The TZURL property value.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public void setTZURL(String url) {
         tzurl = url;
@@ -182,8 +170,7 @@ public class VTimeZone extends BasicTimeZone {
      * 
      * @return The Date represents the RFC2445 LAST-MODIFIED date.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public Date getLastModified() {
         return lastmod;
@@ -194,8 +181,7 @@ public class VTimeZone extends BasicTimeZone {
      * 
      * @param date The <code>Date</code> object represents the date for RFC2445 LAST-MODIFIED property value.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public void setLastModified(Date date) {
         lastmod = date;
@@ -207,8 +193,7 @@ public class VTimeZone extends BasicTimeZone {
      * @param writer A <code>Writer</code> used for the output
      * @throws IOException
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public void write(Writer writer) throws IOException {
         BufferedWriter bw = new BufferedWriter(writer);
@@ -255,8 +240,7 @@ public class VTimeZone extends BasicTimeZone {
      * 
      * @throws IOException
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public void write(Writer writer, long start) throws IOException {
         // Extract rules applicable to dates after the start time
@@ -290,8 +274,7 @@ public class VTimeZone extends BasicTimeZone {
      * 
      * @throws IOException
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public void writeSimple(Writer writer, long time) throws IOException {
         // Extract simple rules
@@ -315,8 +298,7 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public TimeZoneTransition getNextTransition(long base, boolean inclusive) {
         return tz.getNextTransition(base, inclusive);
@@ -324,8 +306,7 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public TimeZoneTransition getPreviousTransition(long base, boolean inclusive) {
         return tz.getPreviousTransition(base, inclusive);
@@ -333,8 +314,7 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public boolean hasEquivalentTransitions(TimeZone other, long start, long end) {
         return tz.hasEquivalentTransitions(other, start, end);
@@ -342,8 +322,7 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public TimeZoneRule[] getTimeZoneRules() {
         return tz.getTimeZoneRules();
@@ -351,8 +330,7 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public TimeZoneRule[] getTimeZoneRules(long start) {
         return tz.getTimeZoneRules(start);
@@ -360,8 +338,7 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public Object clone() {
         VTimeZone other = (VTimeZone)super.clone();

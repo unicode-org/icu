@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -15,8 +15,7 @@ import com.ibm.icu.impl.Grego;
  * rule which takes effect annually.  Years used in this class are
  * all Gregorian calendar years.
  * 
- * @draft ICU 3.8
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 3.8
  */
 public class AnnualTimeZoneRule extends TimeZoneRule {
 
@@ -24,8 +23,7 @@ public class AnnualTimeZoneRule extends TimeZoneRule {
 
     /**
      * The constant representing the maximum year used for designating a rule is permanent.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int MAX_YEAR = Integer.MAX_VALUE;
 
@@ -48,8 +46,7 @@ public class AnnualTimeZoneRule extends TimeZoneRule {
      * @param endYear       The last year when this rule takes effect.  If this
      *                      rule is effective forever in future, specify MAX_YEAR.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public AnnualTimeZoneRule(String name, int rawOffset, int dstSavings,
             DateTimeRule dateTimeRule, int startYear, int endYear) {
@@ -65,8 +62,7 @@ public class AnnualTimeZoneRule extends TimeZoneRule {
      * @return  An <code>AnnualDateTimeRule</code> which represents the start date/time
      *          rule used by this time zone rule.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public DateTimeRule getRule() {
         return dateTimeRule;
@@ -78,8 +74,7 @@ public class AnnualTimeZoneRule extends TimeZoneRule {
      * @return  The start year of this rule.  The year is in Gregorian calendar
      *          with 0 == 1 BCE, -1 == 2 BCE, etc.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public int getStartYear() {
         return startYear;
@@ -91,8 +86,7 @@ public class AnnualTimeZoneRule extends TimeZoneRule {
      * @return  The end year of this rule (inclusive). The year is in Gregorian calendar
      *          with 0 == 1 BCE, -1 == 2 BCE, etc.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public int getEndYear() {
         return endYear;
@@ -110,8 +104,7 @@ public class AnnualTimeZoneRule extends TimeZoneRule {
      * @return  The time when this rule takes effect in the year, or
      *          null if this rule is not applicable in the year.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public Date getStartInYear(int year, int prevRawOffset, int prevDSTSavings) {
         if (year < startYear || year > endYear) {
@@ -171,8 +164,7 @@ public class AnnualTimeZoneRule extends TimeZoneRule {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public Date getFirstStart(int prevRawOffset, int prevDSTSavings) {
         return getStartInYear(startYear, prevRawOffset, prevDSTSavings);
@@ -180,8 +172,7 @@ public class AnnualTimeZoneRule extends TimeZoneRule {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public Date getFinalStart(int prevRawOffset, int prevDSTSavings) {
         if (endYear == MAX_YEAR) {
@@ -192,8 +183,7 @@ public class AnnualTimeZoneRule extends TimeZoneRule {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public Date getNextStart(long base, int prevRawOffset, int prevDSTSavings, boolean inclusive) {
         int[] fields = Grego.timeToFields(base, null);
@@ -210,8 +200,7 @@ public class AnnualTimeZoneRule extends TimeZoneRule {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public Date getPreviousStart(long base, int prevRawOffset, int prevDSTSavings, boolean inclusive) {
         int[] fields = Grego.timeToFields(base, null);
@@ -228,8 +217,7 @@ public class AnnualTimeZoneRule extends TimeZoneRule {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public boolean isEquivalentTo(TimeZoneRule other) {
         if (!(other instanceof AnnualTimeZoneRule)) {
@@ -247,8 +235,7 @@ public class AnnualTimeZoneRule extends TimeZoneRule {
     /**
      * {@inheritDoc}<br><br>
      * Note: This method in <code>AnnualTimeZoneRule</code> always returns true.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public boolean isTransitionRule() {
         return true;
@@ -259,8 +246,7 @@ public class AnnualTimeZoneRule extends TimeZoneRule {
      * This method is used for debugging purpose only.  The string representation can be changed
      * in future version of ICU without any notice.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String toString() {
         StringBuffer buf = new StringBuffer();

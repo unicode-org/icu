@@ -1184,8 +1184,7 @@ public class SimpleTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public TimeZoneTransition getNextTransition(long base, boolean inclusive) {
         if (startMonth == 0) {
@@ -1210,8 +1209,7 @@ public class SimpleTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public TimeZoneTransition getPreviousTransition(long base, boolean inclusive) {
         if (startMonth == 0) {
@@ -1236,8 +1234,7 @@ public class SimpleTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public TimeZoneRule[] getTimeZoneRules() {
         initTransitionRules();

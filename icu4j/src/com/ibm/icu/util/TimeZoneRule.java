@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -17,8 +17,7 @@ import java.util.Date;
  * @see com.ibm.icu.util.TimeZoneTransition
  * @see com.ibm.icu.util.RuleBasedTimeZone
  * 
- * @draft ICU 3.8
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 3.8
  */
 public abstract class TimeZoneRule implements Serializable {
 
@@ -35,8 +34,7 @@ public abstract class TimeZoneRule implements Serializable {
      * @param dstSavings    The amount of daylight saving offset adjustment in milliseconds.
      *                      If this is a rule for standard time, the value of this argument is 0.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public TimeZoneRule(String name, int rawOffset, int dstSavings) {
         this.name = name;
@@ -49,8 +47,7 @@ public abstract class TimeZoneRule implements Serializable {
      * 
      * @return The name of this time zone.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String getName() {
         return name;
@@ -61,8 +58,7 @@ public abstract class TimeZoneRule implements Serializable {
      * 
      * @return The standard time offset from UTC in milliseconds.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public int getRawOffset() {
         return rawOffset;
@@ -74,8 +70,7 @@ public abstract class TimeZoneRule implements Serializable {
      * @return  The amount of daylight saving offset used by this rule
      *          in milliseconds.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public int getDSTSavings() {
         return dstSavings;
@@ -89,8 +84,7 @@ public abstract class TimeZoneRule implements Serializable {
      * @param other The <code>TimeZoneRule</code> object to be compared with.
      * @return true if the other <code>TimeZoneRule</code> is the same as this one.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public boolean isEquivalentTo(TimeZoneRule other) {
         if (rawOffset == other.rawOffset && dstSavings == other.dstSavings) {
@@ -109,8 +103,7 @@ public abstract class TimeZoneRule implements Serializable {
      * 
      * @return  The very first time when this rule takes effect.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public abstract Date getFirstStart(int prevRawOffset, int prevDSTSavings);
 
@@ -125,8 +118,7 @@ public abstract class TimeZoneRule implements Serializable {
      * @return  The very last time when this rule takes effect,
      *          or null if this rule is applied for future dates infinitely.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public abstract Date getFinalStart(int prevRawOffset, int prevDSTSavings);
 
@@ -143,8 +135,7 @@ public abstract class TimeZoneRule implements Serializable {
      * @return  The first time when this rule takes effect after the specified time,
      *          or null when this rule never takes effect after the specified time.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public abstract Date getNextStart(long base, int prevRawOffset, int prevDSTSavings, boolean inclusive);
 
@@ -162,8 +153,7 @@ public abstract class TimeZoneRule implements Serializable {
      * @return  The most recent time when this rule takes effect before the specified time,
      *          or null when this rule never takes effect before the specified time.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public abstract Date getPreviousStart(long base, int prevRawOffset, int prevDSTSavings, boolean inclusive);
 
@@ -172,8 +162,7 @@ public abstract class TimeZoneRule implements Serializable {
      * 
      * @return true if this <TimeZoneRule</code> has one or more start times.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public abstract boolean isTransitionRule();
 
@@ -181,8 +170,7 @@ public abstract class TimeZoneRule implements Serializable {
      * Returns a <code>String</code> representation of this <code>TimeZoneRule</code> object.
      * This method is used for debugging purpose only.  The string representation can be changed
      * in future version of ICU without any notice.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String toString() {
         StringBuffer buf = new StringBuffer();
