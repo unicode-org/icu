@@ -1,7 +1,7 @@
 //##header J2SE15
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -24,6 +24,7 @@ public class TestAll extends TestGroup {
                   "TestAll$RBNF",
                   "TestAll$NumberFormat",
                   "TestAll$DateFormat",
+                  "TestAll$DateIntervalFormat",
                   "TestAll$MessageFormat",
                   "TestAll$PluralFormat",
                   "com.ibm.icu.dev.test.format.BigNumberFormatTest",
@@ -79,6 +80,14 @@ public class TestAll extends TestGroup {
                 "IntlTestSimpleDateFormatAPI",
                 "DateFormatRegressionTestJ",
                 "TimeZoneFormatTest"
+            });
+        }
+    }
+    
+    public static class DateIntervalFormat extends TestGroup {
+        public DateIntervalFormat() {
+            super(new String[] {
+                "DateIntervalFormatTest"
             });
         }
     }
