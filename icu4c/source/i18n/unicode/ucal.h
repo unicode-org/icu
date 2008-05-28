@@ -623,6 +623,18 @@ U_STABLE void U_EXPORT2
 ucal_close(UCalendar *cal);
 
 /**
+ * Open a copy of a UCalendar.
+ * This function performs a deep copy.
+ * @param cal The calendar to copy
+ * @param status A pointer to an UErrorCode to receive any errors.
+ * @return A pointer to a UCalendar identical to cal.
+ * @draft ICU 4.0
+ */
+U_DRAFT UCalendar* U_EXPORT2 
+ucal_clone(const UCalendar* cal,
+           UErrorCode*      status);
+
+/**
  * Set the TimeZone used by a UCalendar.
  * A UCalendar uses a timezone for converting from Greenwich time to local time.
  * @param cal The UCalendar to set.
