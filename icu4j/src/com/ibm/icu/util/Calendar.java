@@ -1691,7 +1691,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
     /**
      * Gets the list of locales for which Calendars are installed.
      * @return the list of locales for which Calendars are installed.
-     * @draft ICU 3.2
+     * @draft ICU 3.2 (retain)
      * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales()

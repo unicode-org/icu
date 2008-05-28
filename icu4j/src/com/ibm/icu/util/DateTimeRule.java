@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -13,8 +13,7 @@ import java.io.Serializable;
  * a rule specified by month, day of month, day of week and
  * time in the day.
  * 
- * @draft ICU 3.8
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 3.8
  */
 public class DateTimeRule implements Serializable {
 
@@ -24,8 +23,7 @@ public class DateTimeRule implements Serializable {
      * Date rule type defined by exact day of month.
      * For example, March 14.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int DOM = 0;
 
@@ -33,8 +31,7 @@ public class DateTimeRule implements Serializable {
      * Date rule type defined by day of week in month.
      * For example, 2nd Sunday in March.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int DOW = 1;
 
@@ -43,8 +40,7 @@ public class DateTimeRule implements Serializable {
      * after exact day of month.
      * For example, 1st Monday on or after March 15.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int DOW_GEQ_DOM = 2;
 
@@ -53,32 +49,28 @@ public class DateTimeRule implements Serializable {
      * before exact day of month.
      * For example, last Saturday on or before March 15.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int DOW_LEQ_DOM = 3;
     
     /**
      * Time rule type for local wall time.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int WALL_TIME = 0;
 
     /**
      * Time rule type for local standard time.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int STANDARD_TIME = 1;
 
     /**
      * Time rule type for coordinated universal time.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final int UTC_TIME = 2;
 
@@ -103,8 +95,7 @@ public class DateTimeRule implements Serializable {
      * @param timeType      The time type, <code>WALL_TIME</code> or <code>STANDARD_TIME</code>
      *                      or <code>UTC_TIME</code>.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public DateTimeRule(int month, int dayOfMonth,
             int millisInDay, int timeType) {
@@ -134,8 +125,7 @@ public class DateTimeRule implements Serializable {
      * @param timeType      The time type, <code>WALL_TIME</code> or <code>STANDARD_TIME</code>
      *                      or <code>UTC_TIME</code>.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public DateTimeRule(int month, int weekInMonth, int dayOfWeek,
             int millisInDay, int timeType) {
@@ -165,8 +155,7 @@ public class DateTimeRule implements Serializable {
      * @param timeType      The time type, <code>WALL_TIME</code> or <code>STANDARD_TIME</code>
      *                      or <code>UTC_TIME</code>.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public DateTimeRule(int month, int dayOfMonth, int dayOfWeek, boolean after,
             int millisInDay, int timeType) {
@@ -187,8 +176,7 @@ public class DateTimeRule implements Serializable {
      * 
      * @return The date rule type.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public int getDateRuleType() {
         return dateRuleType;
@@ -199,8 +187,7 @@ public class DateTimeRule implements Serializable {
      * 
      * @return The rule month.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public int getRuleMonth() {
         return month;
@@ -212,8 +199,7 @@ public class DateTimeRule implements Serializable {
      * 
      * @return The rule day of month
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public int getRuleDayOfMonth() {
         return dayOfMonth;
@@ -225,8 +211,7 @@ public class DateTimeRule implements Serializable {
      * 
      * @return The rule day of week.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public int getRuleDayOfWeek() {
         return dayOfWeek;
@@ -239,8 +224,7 @@ public class DateTimeRule implements Serializable {
      * 
      * @return The rule day of week ordinal number in the month.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public int getRuleWeekInMonth() {
         return weekInMonth;
@@ -252,8 +236,7 @@ public class DateTimeRule implements Serializable {
      * @return The time rule type, either <code>WALL_TIME</code> or <code>STANDARD_TIME</code>
      *         or <code>UTC_TIME</code>.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public int getTimeRuleType() {
         return timeRuleType;
@@ -264,8 +247,7 @@ public class DateTimeRule implements Serializable {
      * 
      * @return The time in the rule day in milliseconds.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public int getRuleMillisInDay() {
         return millisInDay;
@@ -279,8 +261,7 @@ public class DateTimeRule implements Serializable {
      * This method is used for debugging purpose only.  The string representation can be changed
      * in future version of ICU without any notice.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String toString() {
         String sDate = null;

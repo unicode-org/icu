@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -10,8 +10,7 @@ package com.ibm.icu.util;
  * An instance has a time of transition and rules for both before and
  * after the transition.
  * 
- * @draft ICU 3.8
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 3.8
  */
 public class TimeZoneTransition {
     private final TimeZoneRule from;
@@ -26,8 +25,7 @@ public class TimeZoneTransition {
      * @param from  The time zone rule used before the transition.
      * @param to    The time zone rule used after the transition.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public TimeZoneTransition(long time, TimeZoneRule from, TimeZoneRule to) {
         this.time = time;
@@ -40,8 +38,7 @@ public class TimeZoneTransition {
      * 
      * @return The time of the transition in milliseconds since the base time.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public long getTime() {
         return time;
@@ -52,8 +49,7 @@ public class TimeZoneTransition {
      * 
      * @return The time zone rule used after the transition.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public TimeZoneRule getTo() {
         return to;
@@ -64,8 +60,7 @@ public class TimeZoneTransition {
      * 
      * @return The time zone rule used after the transition.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public TimeZoneRule getFrom() {
         return from;
@@ -76,8 +71,7 @@ public class TimeZoneTransition {
      * This method is used for debugging purpose only.  The string representation can be changed
      * in future version of ICU without any notice.
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String toString() {
         StringBuffer buf = new StringBuffer();
