@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- *   Copyright (C) 1997-2007, International Business Machines
+ *   Copyright (C) 1997-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  ********************************************************************************
  *
@@ -412,6 +412,33 @@ public:
      * @stable ICU 2.0
      */
     static DateFormat* U_EXPORT2 createInstance(void);
+
+    /**
+     * Create a date/time formatter from skeleton and a given locale.
+     *
+     * Users are encouraged to use the skeleton macros defined in udat.h.
+     * For example, MONTH_DOW_DAY_LONG_FORMAT, which is "MMMMEEEEd",
+     * and which means the pattern should have day, month, and day-of-week 
+     * fields, and follow the long date format defined in date time pattern.
+     * For example, for English, the full pattern should be 
+     * "EEEE, MMMM d".
+     * 
+     * Temporarily, this is an internal API, used by DateIntevalFormat only.
+     * There will be a new set of APIs for the same purpose coming soon.
+     * After which, this API will be replaced.
+     *
+     * @param skeleton  the skeleton on which date format based.
+     * @param adjustFieldWidth  whether adjust the skeleton field width or not.
+     *                          It is used for DateTimePatternGenerator to 
+     *                          adjust field width when get  
+     *                          full pattern from skeleton.
+     * @param locale    the given locale.
+     * @return          a simple date formatter which the caller owns.
+     * @internal ICU 4.0
+     */
+    static DateFormat* U_EXPORT2 createInstance(const UnicodeString& skeleton,
+                                                UBool adjustFieldWidth,
+                                                const Locale& locale);
 
     /**
      * Creates a time formatter with the given formatting style for the given

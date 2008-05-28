@@ -65,6 +65,8 @@
 
 U_NAMESPACE_BEGIN
 
+static const UChar PATTERN_CHAR_BASE = 0x40;
+
 /**
  * Last-resort string to use for "GMT" when constructing time zone strings.
  */
@@ -579,6 +581,38 @@ SimpleDateFormat::format(const Formattable& obj,
 }
 
 //----------------------------------------------------------------------
+
+/* Map calendar field into calendar field level.
+ * the larger the level, the smaller the field unit.
+ * For example, UCAL_ERA level is 0, UCAL_YEAR level is 10,
+ * UCAL_MONTH level is 20.
+ */
+const int32_t
+SimpleDateFormat::fgCalendarFieldToLevel[] =
+{
+    /*GyM*/ 0, 10, 20,
+    /*wW*/ 20, 30,
+    /*dDEF*/ 30, 20, 30, 30,
+    /*ahHm*/ 40, 50, 50, 60,
+    /*sS..*/ 70, 80, 
+    /*z?Y*/ 0, 0, 10, 
+    /*eug*/ 30, 10, 0,
+    /*A*/ 40 
+};
+
+
+const int32_t
+SimpleDateFormat::fgPatternCharToLevel[] = {
+    //       A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
+        -1, 40, -1, -1, 20,  30, 30,  0,  50, -1, -1, 50, 20,  20, -1, -1,
+    //   P   Q   R   S   T   U   V   W   X   Y   Z
+        -1, 20, -1,  80, -1, -1, 0, 30, -1, 10, 0, -1, -1, -1, -1, -1,
+    //       a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
+        -1, 40, -1, 30,  30, 30, -1, 0, 50, -1, -1,  50, -1,  60, -1, -1,
+    //   p   q   r   s   t   u   v   w   x   y   z
+        -1, 20, -1,  70, -1, 10, 0, 20, -1,  10, 0, -1, -1, -1, -1, -1
+};
+
 
 // Map index into pattern character string to Calendar field number.
 const UCalendarDateFields
@@ -2426,6 +2460,67 @@ void SimpleDateFormat::adoptCalendar(Calendar* calendarToAdopt)
   initializeSymbols(fLocale, fCalendar, status);  // we need new symbols
   initializeDefaultCentury();  // we need a new century (possibly)
 }
+
+
+//----------------------------------------------------------------------
+
+
+UBool
+SimpleDateFormat::isFieldUnitIgnored(UCalendarDateFields field) const {
+    return isFieldUnitIgnored(fPattern, field);
+}
+
+
+UBool
+SimpleDateFormat::isFieldUnitIgnored(const UnicodeString& pattern, 
+                                     UCalendarDateFields field) {
+    int32_t fieldLevel = fgCalendarFieldToLevel[field];
+    int32_t level;
+    UChar ch;
+    UBool inQuote = FALSE;
+    UChar prevCh = 0;
+    int32_t count = 0;
+
+    for (int32_t i = 0; i < pattern.length(); ++i) {
+        ch = pattern[i];
+        if (ch != prevCh && count > 0) {
+            level = fgPatternCharToLevel[prevCh - PATTERN_CHAR_BASE];
+            if ( fieldLevel <= level ) {
+                return FALSE;
+            }
+            count = 0;
+        }
+        if (ch == QUOTE) {
+            if ((i+1) < pattern.length() && pattern[i+1] == QUOTE) {
+                ++i;
+            } else {
+                inQuote = ! inQuote;
+            }
+        } 
+        else if ( ! inQuote && ((ch >= 0x0061 /*'a'*/ && ch <= 0x007A /*'z'*/) 
+                    || (ch >= 0x0041 /*'A'*/ && ch <= 0x005A /*'Z'*/))) {
+            prevCh = ch;
+            ++count;
+        }
+    }
+    if ( count > 0 ) {
+        // last item
+        level = fgPatternCharToLevel[prevCh - PATTERN_CHAR_BASE];
+            if ( fieldLevel <= level ) {
+                return FALSE;
+            }
+    }
+    return TRUE;
+}
+
+
+
+const Locale&
+SimpleDateFormat::getSmpFmtLocale(void) const {
+    return fLocale;
+}
+
+
 
 U_NAMESPACE_END
 

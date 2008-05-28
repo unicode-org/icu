@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines
+ * Copyright (c) 1997-2008, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 
@@ -50,6 +50,7 @@
 #include "tzfmttst.h"       // TimeZoneFormatTest
 #include "plurults.h"       // PluralRulesTest
 #include "plurfmts.h"       // PluralFormatTest
+#include "dtifmtts.h"       // DateIntervalFormatTest
 
 #define TESTCLASS(id, TestClass)          \
     case id:                              \
@@ -117,6 +118,7 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCLASS(34,TimeZoneFormatTest);
         TESTCLASS(35,PluralRulesTest);
         TESTCLASS(36,PluralFormatTest);
+        TESTCLASS(37,DateIntervalFormatTest);
 
         default: name = ""; break; //needed to end loop
     }
