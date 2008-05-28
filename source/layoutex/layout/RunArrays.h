@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2003-2007, International Business Machines
+ *   Copyright (C) 2003-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -502,6 +502,9 @@ protected:
     virtual void init(le_int32 capacity);
     virtual void grow(le_int32 capacity);
 
+    /**
+     * @internal
+     */
     const Locale **fLocales;
 
 private:

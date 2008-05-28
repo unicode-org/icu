@@ -317,7 +317,7 @@ public:
     void setFallbackIntervalPattern(const UnicodeString& fallbackPattern);
 
 
-    /* Get default order
+    /** Get default order
      * return default date ordering in interval pattern
      * @draft ICU 4.0 
      */

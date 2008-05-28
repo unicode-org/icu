@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2007, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 2007-2008, International Business Machines Corporation and others. All Rights Reserved.
 ********************************************************************************
 *
 * File MSGFMT.H
@@ -541,7 +541,7 @@ public:
      * the item will be ignored.
      * The caller should not delete the Format object after this call.
      * @param formatName  Name of the subformat.
-     * @param format      Format to be adopted.
+     * @param formatToAdopt  Format to be adopted.
      * @param status      output param set to success/failure code.
      * @draft ICU 4.0
      */

@@ -1192,7 +1192,7 @@ struct UTextFuncs {
       *              Do not use, reserved for use by the UText framework only.
       *   @internal
       */
-    int32_t       reserved1, reserved2, reserved3;
+    int32_t       reserved1, /** @internal */ reserved2, /** @internal */ reserved3;
 
 
     /**
@@ -1287,6 +1287,10 @@ struct UTextFuncs {
     UTextClose  *spare3;
 
 };
+/**
+ * Function dispatch table for UText
+ * @see UTextFuncs
+ */
 typedef struct UTextFuncs UTextFuncs;
 
  /**
