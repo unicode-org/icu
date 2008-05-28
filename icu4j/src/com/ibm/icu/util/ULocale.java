@@ -2672,6 +2672,7 @@ public final class ULocale implements Serializable {
      * "bottom-to-top".
      * @return The locale's layout orientation for characters.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public String getCharacterOrientation() {
         return getTableString("layout", null, "characters", getName());
@@ -2683,6 +2684,7 @@ public final class ULocale implements Serializable {
      * "bottom-to-top".
      * @return The locale's layout orientation for lines.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public String getLineOrientation() {
         return getTableString("layout", null, "lines", getName());
@@ -4770,6 +4772,7 @@ public final class ULocale implements Serializable {
      * @param loc The ULocale to maximize
      * @return The maximized ULocale instance.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static ULocale
     addLikelySubtags(ULocale loc)
@@ -4822,6 +4825,7 @@ public final class ULocale implements Serializable {
      * @param loc The ULocale to minimize
      * @return The minimized ULocale instance.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static ULocale
     minimizeSubtags(ULocale loc)
@@ -4844,16 +4848,16 @@ public final class ULocale implements Serializable {
          * the language, script, and region.  This will
          * normalize the subtags we're interested in,
          * including removing any explicit unknown
-         * script or region subtags.  It also remmoves
+         * script or region subtags.  It also removes
          * any variants and keywords.
          */
-        String originalTag = 
-                    createTagString(
-                        originalLang,
-                        originalScript,
-                        originalRegion,
-                        null);
-     
+//        String originalTag = 
+//                    createTagString(
+//                        originalLang,
+//                        originalScript,
+//                        originalRegion,
+//                        null);
+
         if (trailingIndex < loc.localeID.length()) {
             /*
              * Create a String that contains everything
