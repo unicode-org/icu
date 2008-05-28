@@ -171,6 +171,94 @@ typedef enum UDateFormatStyle {
 
 } UDateFormatStyle;
 
+
+/**
+ * Below are a set of pre-defined skeletons.
+ * They have pre-defined interval patterns in resource files.
+ * Users are encouraged to use them in date interval format factory methods.
+ *
+ * <P>
+ * We choose to use predefined skeleton string instead of skeleton enum because
+ * we need to keep consistency between DateFormat and DateIntervalFormat 
+ * factory methods.
+ * It is not good to introduce another set of enum for skeleton while having 
+ * UDateFormatStyle for full pattern.
+ * And it is not good to mix the set of enum for skeleton into UDateFormatStyle.
+ * So, a new set of pre-defined skeleton is introduced below.
+ * <P>
+ *
+ * A skeleton 
+ * <ul>
+ * <li>
+ * 1. only keeps the field pattern letter and ignores all other parts 
+ *    in a pattern, such as space, punctuations, and string literals.
+ * <li>
+ * 2. hides the order of fields. 
+ * <li>
+ * 3. might hide a field's pattern letter length.
+ *
+ *    For those non-digit calendar fields, the pattern letter length is 
+ *    important, such as MMM, MMMM, and MMMMM; EEE and EEEE, 
+ *    and the field's pattern letter length is honored.
+ *    
+ *    For the digit calendar fields,  such as M or MM, d or dd, yy or yyyy, 
+ *    the field pattern length is ignored and the best match, which is defined 
+ *    in date time patterns, will be returned without honor the field pattern
+ *    letter length in skeleton.
+ * </ul>
+ *
+ * <P>
+ * For example, given skeleton YEAR_MONTH_DAY_SHORT_FORMAT, which is "yMd",
+ * for English, the full pattern is "M/d/yy", which is the short format
+ * of date pattern having DAY, MONTH, and YEAR.
+ * 
+ * <P>
+ * The skeletons defined below consists of the desired calendar field set 
+ * (for example,  DAY, MONTH, YEAR) and the format length (long, medium, short)
+ * used in date time patterns.
+ * 
+ * For example, skeleton YEAR_MONTH_MEDIUM_FORMAT consists month and year,
+ * and it's corresponding full pattern is medium format date pattern.
+ * So, the skeleton is "yMMM", for English, the full pattern is "MMM yyyy", 
+ * which is the format by removing DATE from medium date format.
+ *
+ * For example, skeleton YEAR_MONTH_DOW_DAY_MEDIUM_FORMAT consists day, month,
+ * year, and day-of-week, and it's corresponding full pattern is the medium
+ * format date pattern. So, the skeleton is "yMMMEEEd", for English,
+ * the full pattern is "EEE, MMM d, yyyy", which is the medium date format
+ * plus day-of-week.
+ *
+ * @draft ICU 4.0
+ */
+
+#define YEAR_MONTH_DOW_DAY_LONG_FORMAT   "yMMMMEEEEd"
+#define YEAR_MONTH_DAY_LONG_FORMAT       "yMMMMd"
+#define MONTH_DAY_LONG_FORMAT            "MMMMd"
+#define YEAR_MONTH_LONG_FORMAT           "yMMMM"
+#define MONTH_DOW_DAY_LONG_FORMAT        "MMMMEEEEd"
+#define YEAR_MONTH_DOW_DAY_MEDIUM_FORMAT "yMMMEEEd"
+#define YEAR_MONTH_DAY_MEDIUM_FORMAT     "yMMMd"
+#define MONTH_DAY_MEDIUM_FORMAT          "MMMd"
+#define YEAR_MONTH_MEDIUM_FORMAT         "yMMM"
+#define MONTH_DOW_DAY_MEDIUM_FORMAT      "MMMEEEd"
+#define YEAR_MONTH_DOW_DAY_SHORT_FORMAT  "yMEEEd"
+#define YEAR_MONTH_DAY_SHORT_FORMAT      "yMd"
+#define MONTH_DAY_SHORT_FORMAT           "Md"
+#define YEAR_MONTH_SHORT_FORMAT          "yM"
+#define MONTH_DOW_DAY_SHORT_FORMAT       "MEEEd"
+#define DAY_ONLY_SHORT_FORMAT            "d"
+#define DOW_DAY_SHORT_FORMAT             "EEEd"
+#define YEAR_ONLY_SHORT_FORMAT           "y"
+#define MONTH_ONLY_SHORT_FORMAT          "M"
+#define MONTH_ONLY_MEDIUM_FORMAT         "MMM"
+#define MONTH_ONLY_LONG_FORMAT           "MMMM"
+#define HOUR_MINUTE_FORMAT               "hm"
+#define HOUR_MINUTE_GENERAL_TZ_FORMAT    "hmv"
+#define HOUR_MINUTE_DAYLIGNT_TZ_FORMAT   "hmz"
+#define HOUR_ONLY_FORMAT                 "h"
+#define HOUR_GENERAL_TZ_FORMAT           "hv"
+#define HOUR_DAYLIGNT_TZ_FORMAT          "hz"
+
 /**
  * FieldPosition and UFieldPosition selectors for format fields
  * defined by DateFormat and UDateFormat.
