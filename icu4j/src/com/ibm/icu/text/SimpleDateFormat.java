@@ -235,6 +235,49 @@ public class SimpleDateFormat extends DateFormat {
     // - 1 for version from JDK 1.1.4, which includes a new field
     static final int currentSerialVersion = 1;
 
+    
+    /*
+     * From calendar field to its level.
+     * Used to order calendar field.
+     * For example, calendar fields can be defined in the following order:
+     * year >  month > date > am-pm > hour >  minute
+     * YEAR --> 10, MONTH -->20, DATE --> 30; 
+     * AM_PM -->40, HOUR --> 50, MINUTE -->60
+     */
+    private static final int[] CALENDAR_FIELD_TO_LEVEL =
+    {
+        /*GyM*/ 0, 10, 20,
+        /*wW*/ 20, 30,
+        /*dDEF*/ 30, 20, 30, 30,
+        /*ahHm*/ 40, 50, 50, 60,
+        /*sS..*/ 70, 80, 
+        /*z?Y*/ 0, 0, 10, 
+        /*eug*/ 30, 10, 0,
+        /*A*/ 40 
+    };
+
+
+    
+    /*
+     * From calendar field letter to its level.
+     * Used to order calendar field.
+     * For example, calendar fields can be defined in the following order:
+     * year >  month > date > am-pm > hour >  minute
+     * 'y' --> 10, 'M' -->20, 'd' --> 30; 'a' -->40, 'h' --> 50, 'm' -->60
+     */
+    private static final int[] PATTERN_CHAR_TO_LEVEL = 
+    {
+    //       A   B   C   D    E   F   G    H   I   J   K   L    M   N   O
+        -1, 40, -1, -1, 20,  30, 30,  0,  50, -1, -1, 50, 20,  20, -1, -1,
+    //   P   Q   R    S   T   U  V   W   X   Y  Z
+        -1, 20, -1,  80, -1, -1, 0, 30, -1, 10, 0, -1, -1, -1, -1, -1,
+    //       a   b   c   d    e   f  g   h   i   j    k   l    m   n   o
+        -1, 40, -1, 30,  30, 30, -1, 0, 50, -1, -1,  50, -1,  60, -1, -1,
+    //   p   q   r    s   t   u  v   w   x    y  z
+        -1, 20, -1,  70, -1, 10, 0, 20, -1,  10, 0, -1, -1, -1, -1, -1
+    };
+
+
     /**
      * The version of the serialized data on the stream.  Possible values:
      * <ul>
@@ -2533,5 +2576,331 @@ public class SimpleDateFormat extends DateFormat {
         // return the CharacterIterator from AttributedString
         return as.getIterator();
     }
+
+
+    /**
+     * Get the locale of this simple date formatter.
+     * It is package accessible. also used in DateIntervalFormat.
+     *
+     * @return   locale in this simple date formatter
+     */
+    ULocale getLocale() 
+    {
+        return locale;
+    }
+
+
+    
+    /**
+     * Check whether the 'field' is smaller than all the fields covered in
+     * pattern, return true if it is.
+     * The sequence of calendar field,
+     * from large to small is: ERA, YEAR, MONTH, DATE, AM_PM, HOUR, MINUTE,...
+     * @param field    the calendar field need to check against
+     * @return         true if the 'field' is smaller than all the fields 
+     *                 covered in pattern. false otherwise.
+     */
+
+    boolean isFieldUnitIgnored(int field) {
+        return isFieldUnitIgnored(pattern, field);
+    }
+
+
+    /*
+     * Check whether the 'field' is smaller than all the fields covered in
+     * pattern, return true if it is.
+     * The sequence of calendar field,
+     * from large to small is: ERA, YEAR, MONTH, DATE, AM_PM, HOUR, MINUTE,...
+     * @param pattern  the pattern to check against
+     * @param field    the calendar field need to check against
+     * @return         true if the 'field' is smaller than all the fields 
+     *                 covered in pattern. false otherwise.
+     * @internal ICU 4.0
+     */
+    static boolean isFieldUnitIgnored(String pattern, int field) {
+        int fieldLevel = CALENDAR_FIELD_TO_LEVEL[field];
+        int level;
+        char ch;
+        boolean inQuote = false;
+        char prevCh = 0;
+        int count = 0;
+    
+        for (int i = 0; i < pattern.length(); ++i) {
+            ch = pattern.charAt(i);
+            if (ch != prevCh && count > 0) {
+                level = PATTERN_CHAR_TO_LEVEL[prevCh - PATTERN_CHAR_BASE];
+                if ( fieldLevel <= level ) {
+                    return false;
+                }
+                count = 0;
+            }
+            if (ch == '\'') {
+                if ((i+1) < pattern.length() && pattern.charAt(i+1) == '\'') {
+                    ++i;
+                } else {
+                    inQuote = ! inQuote;
+                }
+            } 
+            else if ( ! inQuote && ((ch >= 0x0061 /*'a'*/ && ch <= 0x007A /*'z'*/) 
+                        || (ch >= 0x0041 /*'A'*/ && ch <= 0x005A /*'Z'*/))) {
+                prevCh = ch;
+                ++count;
+            }
+        }
+        if ( count > 0 ) {
+            // last item
+            level = PATTERN_CHAR_TO_LEVEL[prevCh - PATTERN_CHAR_BASE];
+                if ( fieldLevel <= level ) {
+                    return false;
+                }
+        }
+        return true;
+    }
+
+
+    /**
+     * Format date interval by algorithm. 
+     * It is supposed to be used only by CLDR survey tool.
+     *
+     * @param fromCalendar      calendar set to the from date in date interval
+     *                          to be formatted into date interval stirng
+     * @param toCalendar        calendar set to the to date in date interval
+     *                          to be formatted into date interval stirng
+     * @param appendTo          Output parameter to receive result.
+     *                          Result is appended to existing contents.
+     * @param pos               On input: an alignment field, if desired.
+     *                          On output: the offsets of the alignment field.
+     * @exception IllegalArgumentException when there is non-recognized
+     *                                     pattern letter
+     * @return                  Reference to 'appendTo' parameter.
+     * @internal ICU 4.0
+     */
+    public final StringBuffer intervalFormatByAlgorithm(Calendar fromCalendar,
+                                                        Calendar toCalendar,
+                                                        StringBuffer appendTo,
+                                                        FieldPosition pos)
+                              throws IllegalArgumentException
+    {
+        // not support different calendar types and time zones
+        if ( !fromCalendar.isEquivalentTo(toCalendar) ) {
+            throw new IllegalArgumentException("can not format on two different calendars");
+        }
+     
+        Object[] items = getPatternItems();
+        int diffBegin = -1;
+        int diffEnd = -1;
+
+        /* look for different formatting string range */
+        // look for start of difference
+        try {
+            for (int i = 0; i < items.length; i++) {
+                if ( diffCalFieldValue(fromCalendar, toCalendar, items, i) ) {
+                    diffBegin = i;
+                    break;
+                }
+            } 
+        
+            if ( diffBegin == -1 ) { 
+                // no difference, single date format
+                return format(fromCalendar, appendTo, pos);
+            }
+    
+            // look for end of difference
+            for (int i = items.length-1; i >= diffBegin; i--) {
+                if ( diffCalFieldValue(fromCalendar, toCalendar, items, i) ) {
+                    diffEnd = i;
+                    break;
+                }
+            }
+        } catch ( IllegalArgumentException e ) {
+            throw new IllegalArgumentException(e.toString());
+        }
+
+        // full range is different
+        if ( diffBegin == 0 && diffEnd == items.length-1 ) {
+            format(fromCalendar, appendTo, pos);
+            appendTo.append(" \u2013 "); // default separator
+            format(toCalendar, appendTo, pos);
+            return appendTo;
+        }
+
+
+        /* search for largest calendar field within the different range */
+        int highestLevel = 1000;
+        for (int i = diffBegin; i <= diffEnd; i++) {
+            if ( items[i] instanceof String) {
+                continue;
+            } 
+            PatternItem item = (PatternItem)items[i];
+            char ch = item.type; 
+            int patternCharIndex = -1;
+            if ('A' <= ch && ch <= 'z') {
+                patternCharIndex = PATTERN_CHAR_TO_LEVEL[(int)ch - PATTERN_CHAR_BASE];
+            }
+    
+            if (patternCharIndex == -1) {
+                throw new IllegalArgumentException("Illegal pattern character " +
+                                                   "'" + ch + "' in \"" +
+                                                   new String(pattern) + '"');
+            }
+    
+            if ( patternCharIndex < highestLevel ) {
+                highestLevel = patternCharIndex;
+            }
+        }
+
+        /* re-calculate diff range, including those calendar field which
+           is in lower level than the largest calendar field covered
+           in diff range calculated. */
+        try {
+            for (int i = 0; i < diffBegin; i++) {
+                if ( lowerLevel(items, i, highestLevel) ) {
+                    diffBegin = i;
+                    break;
+                }
+            }
+    
+    
+            for (int i = items.length-1; i > diffEnd; i--) {
+                if ( lowerLevel(items, i, highestLevel) ) {
+                    diffEnd = i;
+                    break;
+                }
+            }
+        } catch ( IllegalArgumentException e ) {
+            throw new IllegalArgumentException(e.toString());
+        }
+
+
+        // full range is different
+        if ( diffBegin == 0 && diffEnd == items.length-1 ) {
+            format(fromCalendar, appendTo, pos);
+            appendTo.append(" \u2013 "); // default separator
+            format(toCalendar, appendTo, pos);
+            return appendTo;
+        }
+
+
+        // formatting
+        // Initialize
+        pos.setBeginIndex(0);
+        pos.setEndIndex(0);
+
+        // formatting date 1
+        for (int i = 0; i <= diffEnd; i++) {
+            if (items[i] instanceof String) {
+                appendTo.append((String)items[i]);
+            } else {
+                PatternItem item = (PatternItem)items[i];
+                if (useFastFormat) {
+                    subFormat(appendTo, item.type, item.length, appendTo.length(), pos, fromCalendar);
+                } else {
+                    appendTo.append(subFormat(item.type, item.length, appendTo.length(), pos, formatData, fromCalendar));
+                }
+            }
+        }
+
+        appendTo.append(" \u2013 "); // default separator
+
+        // formatting date 2
+        for (int i = diffBegin; i < items.length; i++) {
+            if (items[i] instanceof String) {
+                appendTo.append((String)items[i]);
+            } else {
+                PatternItem item = (PatternItem)items[i];
+                if (useFastFormat) {
+                    subFormat(appendTo, item.type, item.length, appendTo.length(), pos, toCalendar);
+                } else {
+                    appendTo.append(subFormat(item.type, item.length, appendTo.length(), pos, formatData, toCalendar));
+                }
+            }
+        }
+        return appendTo;
+    }
+
+
+    /**
+     * check whether the i-th item in 2 calendar is in different value.
+     *
+     * It is supposed to be used only by CLDR survey tool.
+     * It is used by intervalFormatByAlgorithm().
+     *
+     * @param fromCalendar   one calendar
+     * @param toCalendar     the other calendar
+     * @param items          pattern items
+     * @param i              the i-th item in pattern items
+     * @exception IllegalArgumentException when there is non-recognized
+     *                                     pattern letter
+     * @return               true is i-th item in 2 calendar is in different 
+     *                       value, false otherwise.
+     */
+    private boolean diffCalFieldValue(Calendar fromCalendar,
+                                      Calendar toCalendar,
+                                      Object[] items,
+                                      int i) throws IllegalArgumentException {
+        if ( items[i] instanceof String) {
+            return false;
+        } 
+        PatternItem item = (PatternItem)items[i];
+        char ch = item.type; 
+        int patternCharIndex = -1;
+        if ('A' <= ch && ch <= 'z') {
+            patternCharIndex = PATTERN_CHAR_TO_INDEX[(int)ch - PATTERN_CHAR_BASE];
+        }
+   
+        if (patternCharIndex == -1) {
+            throw new IllegalArgumentException("Illegal pattern character " +
+                                               "'" + ch + "' in \"" +
+                                               new String(pattern) + '"');
+        }
+  
+        final int field = PATTERN_INDEX_TO_CALENDAR_FIELD[patternCharIndex];
+        int value = fromCalendar.get(field);
+        int value_2 = toCalendar.get(field);
+        if ( value != value_2 ) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * check whether the i-th item's level is lower than the input 'level'
+     *
+     * It is supposed to be used only by CLDR survey tool.
+     * It is used by intervalFormatByAlgorithm().
+     *
+     * @param items  the pattern items
+     * @param i      the i-th item in pattern items
+     * @param level  the level with which the i-th pattern item compared to
+     * @exception IllegalArgumentException when there is non-recognized
+     *                                     pattern letter
+     * @return       true if i-th pattern item is lower than 'level',
+     *               false otherwise
+     */
+    private boolean lowerLevel(Object[] items, int i, int level) 
+                    throws IllegalArgumentException {
+        if ( items[i] instanceof String) {
+            return false;
+        } 
+        PatternItem item = (PatternItem)items[i];
+        char ch = item.type; 
+        int patternCharIndex = -1;
+        if ('A' <= ch && ch <= 'z') {
+            patternCharIndex = PATTERN_CHAR_TO_LEVEL[(int)ch - PATTERN_CHAR_BASE];
+        }
+    
+        if (patternCharIndex == -1) {
+            throw new IllegalArgumentException("Illegal pattern character " +
+                                               "'" + ch + "' in \"" +
+                                               new String(pattern) + '"');
+        }
+    
+        if ( patternCharIndex >= level ) {
+            return true;
+        }    
+        return false;
+    }
+
 //#endif
 }
