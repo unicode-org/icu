@@ -33,6 +33,10 @@
 
 U_NAMESPACE_BEGIN
 
+/**
+ * @internal ICU 4.0
+ */
+static UBool U_CALLCONV hashTableValueComparator(UHashTok val1, UHashTok val2) ;
 
 
 /**
@@ -346,7 +350,7 @@ private:
      */
     friend class DateIntervalFormat;
 
-    friend static UBool U_CALLCONV hashTableValueComparator(UHashTok val1, UHashTok val2) ;
+    friend UBool U_CALLCONV hashTableValueComparator(UHashTok val1, UHashTok val2) ;
 
     /**
      * Following is for saving the interval patterns.
