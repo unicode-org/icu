@@ -139,6 +139,22 @@ ucal_close(UCalendar *cal)
   delete (Calendar*) cal;
 }
 
+U_CAPI UCalendar* U_EXPORT2 
+ucal_clone(const UCalendar* cal,
+           UErrorCode*      status)
+{
+  if(U_FAILURE(*status)) return 0;
+  
+  Calendar* res = ((Calendar*)cal)->clone();
+
+  if(res == 0) {
+    *status = U_MEMORY_ALLOCATION_ERROR;
+    return 0;
+  }
+
+  return (UCalendar*) res;
+}
+
 U_CAPI void  U_EXPORT2
 ucal_setTimeZone(    UCalendar*      cal,
             const    UChar*            zoneID,

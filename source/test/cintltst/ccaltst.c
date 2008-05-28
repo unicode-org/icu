@@ -58,7 +58,7 @@ static const UChar AMERICA_LOS_ANGELES[] = {0x41, 0x6D, 0x65, 0x72, 0x69, 0x63, 
 
 static void TestCalendar()
 {
-    UCalendar *caldef = 0, *caldef2 = 0, *calfr = 0, *calit = 0;
+    UCalendar *caldef = 0, *caldef2 = 0, *calfr = 0, *calit = 0, *calfrclone = 0;
     UEnumeration* uenum = NULL;
     int32_t count, count2, i,j;
     UChar tzID[4];
@@ -234,7 +234,12 @@ static void TestCalendar()
     if(U_FAILURE(status))    {
         log_err("FAIL: error in ucal_open calit : %s\n", u_errorName(status));
     }
-    
+
+    /*Testing the  clone() function*/
+    calfrclone = ucal_clone(calfr, &status);
+    if(U_FAILURE(status)){
+        log_err("FAIL: error in ucal_clone calfr : %s\n", u_errorName(status));
+    }
     
     /*Testing udat_getAvailable() and udat_countAvailable()*/ 
     log_verbose("\nTesting getAvailableLocales and countAvailable()\n");
@@ -256,7 +261,7 @@ static void TestCalendar()
     log_verbose("\nTesting ucal_equivalentTo()\n");
     if(caldef && caldef2 && calfr && calit) { 
       if(ucal_equivalentTo(caldef, caldef2) == FALSE || ucal_equivalentTo(caldef, calfr)== TRUE || 
-        ucal_equivalentTo(caldef, calit)== TRUE) {
+        ucal_equivalentTo(caldef, calit)== TRUE || ucal_equivalentTo(calfr, calfrclone) == FALSE) {
           log_err("FAIL: Error. equivalentTo test failed\n");
       } else {
           log_verbose("PASS: equivalentTo test passed\n");
@@ -390,6 +395,7 @@ static void TestCalendar()
     ucal_close(caldef2);
     ucal_close(calfr);
     ucal_close(calit);
+    ucal_close(calfrclone);
     /*closing the UDateFormat used */
     udat_close(datdef);
     free(result);
