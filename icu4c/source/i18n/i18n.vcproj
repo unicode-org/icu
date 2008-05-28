@@ -805,6 +805,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\dtitv_impl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\dtitvfmt.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\dtitvfmt.h"
+				>
+			</File>
+			<File
+				RelativePath=".\dtitvinf.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\dtitvinf.h"
+				>
+			</File>
+			<File
 				RelativePath=".\dtptngen.cpp"
 				>
 			</File>
@@ -1237,6 +1257,10 @@
 						Outputs="..\..\include\unicode\$(InputFileName)"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\plurrule_impl.h"
+				>
 			</File>
 			<File
 				RelativePath=".\rbnf.cpp"

@@ -524,6 +524,28 @@ DateIntervalInfo::deleteHash(Hashtable* hTable)
 }
 
 
+/**
+ * set hash table value comparator
+ *
+ * @param val1  one value in comparison
+ * @param val2  the other value in comparison
+ * @return      TRUE if 2 values are the same, FALSE otherwise
+ */
+static UBool U_CALLCONV hashTableValueComparator(UHashTok val1, UHashTok val2);
+
+UBool 
+U_CALLCONV hashTableValueComparator(UHashTok val1, UHashTok val2) {
+    const UnicodeString* pattern1 = (UnicodeString*)val1.pointer;
+    const UnicodeString* pattern2 = (UnicodeString*)val2.pointer;
+    UBool ret = TRUE;
+    int8_t i;
+    for ( i = 0; i < DateIntervalInfo::kIPI_MAX_INDEX && ret == TRUE; ++i ) {
+        ret = (pattern1[i] == pattern2[i]);
+    }
+    return ret;
+}
+
+
 
 Hashtable*
 DateIntervalInfo::initHash(UErrorCode& status) {
@@ -536,20 +558,6 @@ DateIntervalInfo::initHash(UErrorCode& status) {
     hTable->setValueCompartor(hashTableValueComparator);
     return hTable;
 }
-
-
-UBool 
-DateIntervalInfo::hashTableValueComparator(UHashTok val1, UHashTok val2) {
-    const UnicodeString* pattern1 = (UnicodeString*)val1.pointer;
-    const UnicodeString* pattern2 = (UnicodeString*)val2.pointer;
-    UBool ret = TRUE;
-    int8_t i;
-    for ( i = 0; i < kIPI_MAX_INDEX && ret == TRUE; ++i ) {
-        ret = (pattern1[i] == pattern2[i]);
-    }
-    return ret;
-}
-
 
 
 void
