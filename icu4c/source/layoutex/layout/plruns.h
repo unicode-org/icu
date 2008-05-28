@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
  *
  */
 
@@ -13,8 +13,17 @@
 
 #include "layout/loengine.h"
 
+/**
+ * Opaque datatype representing an array of font runs
+ */
 typedef void pl_fontRuns;
+/**
+ * Opaque datatype representing an array of value runs
+ */
 typedef void pl_valueRuns;
+/**
+ * Opaque datatype representing an array of locale runs
+ */
 typedef void pl_localeRuns;
 
 /**

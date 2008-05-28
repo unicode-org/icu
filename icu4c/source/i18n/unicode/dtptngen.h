@@ -19,6 +19,12 @@
 
 U_NAMESPACE_BEGIN
 
+/**
+ * \file
+ * \brief C++ API: Date/Time Pattern Generator
+ */
+
+
 class Hashtable;
 class FormatParser;
 class DateTimeMatcher;
