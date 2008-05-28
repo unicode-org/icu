@@ -677,60 +677,70 @@ public abstract class DateFormat extends UFormat {
     /** 
      * Constant for date pattern denoted by the skeleton <code>mss</code>.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String MINUTE_SECOND = "mss";
     
     /** 
      * Constant for date pattern denoted by the skeleton <code>Hmm</code>.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String HOUR_MINUTE = "Hmm";
     
     /** 
      * Constant for date pattern denoted by the skeleton <code>Hmmss</code>.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String HOUR_MINUTE_SECOND = "Hmmss";      
     
     /** 
      * Constant for date pattern denoted by the skeleton <code>hmma</code>.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String HOUR12_MINUTE = "hmma";
     
     /** 
      * Constant for date pattern denoted by the skeleton <code>hmmssa</code>.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String HOUR12_MINUTE_SECOND = "hmmssa";
     
     /** 
      * Constant for date pattern denoted by the skeleton <code>d</code>.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String DAY = "d";
     
     /** 
      * Constant for date pattern denoted by the skeleton <code>LLLL</code>.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String MONTH = "LLLL";
     
     /** 
      * Constant for date pattern denoted by the skeleton <code>LLL</code>.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String ABBR_MONTH = "LLL";
     
     /** 
      * Constant for date pattern denoted by the skeleton <code>yyyy</code>.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String YEAR = "yyyy";
     
     /** 
      * Constant for date pattern denoted by the skeleton <code>MMMMd</code>.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String MONTH_DAY = "MMMMd";
     
@@ -738,72 +748,84 @@ public abstract class DateFormat extends UFormat {
     /** 
      * Constant for date pattern denoted by the skeleton <code>MMMd</code>.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String ABBR_MONTH_DAY = "MMMd"; 
     
     /** 
      * Constant for date pattern denoted by the skeleton <code>Md</code>.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String NUM_MONTH_DAY = "Md";
     
     /** 
      * Constant for date pattern denoted by the skeleton <code>MMMMdE</code>.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String MONTH_DAY_WEEKDAY = "MMMMdE";
     
     /** 
      * Constant for date pattern denoted by the skeleton <code>MMMdE</code>.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String ABBR_MONTH_DAY_WEEKDAY = "MMMdE";
     
     /** 
      * Constant for date pattern denoted by the skeleton <code>MdE</code>.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String NUM_MONTH_DAY_WEEKDAY = "MdE";
     
     /** 
      * Constant for date pattern denoted by the skeleton <code>yyyyMMMM</code>.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String YEAR_MONTH = "yyyyMMMM";
     
     /** 
      * Constant for date pattern denoted by the skeleton <code>yyyyMMM</code>.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String YEAR_ABBR_MONTH = "yyyyMMM";
     
     /** 
      * Constant for date pattern denoted by the skeleton <code>yyyyM</code>.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String YEAR_NUM_MONTH = "yyyyM";              
     
     /** 
      * Constant for date pattern denoted by the skeleton <code>yyyyMMMdEEE</code>.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String YEAR_ABBR_MONTH_DAY_WEEKDAY = "yyyyMMMdEEE"; 
     
     /** 
      * Constant for date pattern denoted by the skeleton <code>yyyyMdEEE</code>.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String YEAR_NUM_MONTH_DAY_WEEKDAY = "yyyyMdEEE";
       
     /** 
      * Constant for date pattern denoted by the skeleton <code>yyyyQQQ</code>.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String YEAR_QUARTER = "yyyyQQQ";
     
     /** 
      * Constant for date pattern denoted by the skeleton <code>yyyyQ</code>.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String YEAR_ABBR_QUARTER = "yyyyQ";
 
@@ -1365,7 +1387,8 @@ public abstract class DateFormat extends UFormat {
     /**
      * Convenience overload
      * @draft ICU 4.0
-     */    
+     * @provisional This API might change or be removed in a future release.
+     */
     public final static DateFormat getPatternInstance(String pattern) {
         return getPatternInstance(pattern, ULocale.getDefault());
     }
@@ -1373,6 +1396,7 @@ public abstract class DateFormat extends UFormat {
     /**
      * Convenience overload
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public final static DateFormat getPatternInstance(String pattern, Locale locale) {
         return getPatternInstance(pattern, ULocale.forLocale(locale));
@@ -1393,6 +1417,7 @@ public abstract class DateFormat extends UFormat {
      * @param locale The locale for which the date/time format is desired.
      *
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public final static DateFormat getPatternInstance(String pattern, ULocale locale) {
         DateTimePatternGenerator generator = DateTimePatternGenerator.getInstance(locale);
@@ -1403,6 +1428,7 @@ public abstract class DateFormat extends UFormat {
     /**
      * Convenience overload
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public final static DateFormat getPatternInstance(Calendar cal, String pattern, Locale locale) {
         return getPatternInstance(cal, pattern, ULocale.forLocale(locale));
@@ -1425,6 +1451,7 @@ public abstract class DateFormat extends UFormat {
      * @param locale The locale for which the date/time format is desired.
      *
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public final static DateFormat getPatternInstance(Calendar cal, String pattern, ULocale locale) {
         DateTimePatternGenerator generator = DateTimePatternGenerator.getInstance(locale);
