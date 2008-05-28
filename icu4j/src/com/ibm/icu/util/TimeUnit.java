@@ -6,10 +6,6 @@
  */
 package com.ibm.icu.util;
 
-import java.util.Set;
-
-import com.ibm.icu.text.TimeUnitFormat;
-
 /**
  * Measurement unit for time units.
  * @see TimeUnitAmount
