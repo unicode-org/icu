@@ -115,7 +115,7 @@
   </test-case>
 
   <test-case id="Telugu Syllable Boundary Test" script="telu">
-    <test-font name="Gautami.ttf"/>
+    <test-font name="gautami.ttf"/>
     <test-text>ప్రకాష్</test-text>
   </test-case>
 
