@@ -538,21 +538,14 @@ ucbuf_ungetc(int32_t c,UCHARBUF* buf){
     /* decrement currentPos pointer
      * if not at the begining of buffer
      */
-    UChar escaped[8] ={'\0'};
-    int32_t len =0;
-    if(c > 0xFFFF){
-        len = uprv_itou(escaped,8,c,16,8);
-    }else{
-        len=uprv_itou(escaped,8,c,16,4);
-    }
     if(buf->currentPos!=buf->buffer){
         if(*(buf->currentPos-1)==c){
             buf->currentPos--;
-        }else if(u_strncmp(buf->currentPos-len,escaped,len) == 0){
-            while(--len>0){
-                buf->currentPos--;
-            }
+        } else {
+            /* ungetc failed - did not match. */
         }
+    } else {
+       /* ungetc failed - beginning of buffer. */
     }
 }
 
