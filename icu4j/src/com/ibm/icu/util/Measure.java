@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2006, International Business Machines
+* Copyright (c) 2004-2008, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -59,10 +59,29 @@ public abstract class Measure {
         if (obj == this) return true;
         try {
             Measure m = (Measure) obj;
-            return number.equals(m.number) && unit.equals(m.unit);
+            return unit.equals(m.unit) && numbersEqual(number, m.number);
         } catch (ClassCastException e) {
             return false;
         }
+    }
+    
+    /**
+     * See if two numbers are identical or have the same double value.
+     * @param a
+     * @param b
+     * @return
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
+    // TODO improve this to catch more cases (two different longs that have same double values, BigDecimals, etc)
+    public static boolean numbersEqual(Number a, Number b) {
+        if (a.equals(b)) {
+            return true;
+        }
+        if (a.doubleValue() == b.doubleValue()) {
+            return true;
+        }
+        return false;
     }
 
     /**
