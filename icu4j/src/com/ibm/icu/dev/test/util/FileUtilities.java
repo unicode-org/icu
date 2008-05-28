@@ -3,7 +3,7 @@
 //#else
 /*
  *******************************************************************************
- * Copyright (C) 2002-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -17,7 +17,7 @@ import java.util.Locale;
 
 public class FileUtilities {
     public static void appendFile(String filename, String encoding, PrintWriter output) throws IOException {
-    	appendFile(filename, encoding, output, null);
+        appendFile(filename, encoding, output, null);
     }
     
     public static void appendFile(String filename, String encoding, PrintWriter output, String[] replacementList) throws IOException {
@@ -31,9 +31,9 @@ public class FileUtilities {
             String line = br.readLine();
             if (line == null) break;
             if (replacementList != null) {
-            	for (int i = 0; i < replacementList.length; i += 2) {
-            		line = replace(line, replacementList[i], replacementList[i+1]);
-            	}
+                for (int i = 0; i < replacementList.length; i += 2) {
+                    line = replace(line, replacementList[i], replacementList[i+1]);
+                }
             }
             output.println(line);
         }
@@ -44,7 +44,7 @@ public class FileUtilities {
      */
     public static String replace(String source, String piece, String replacement) {
         if (source == null || source.length() < piece.length()) return source;
-    	int pos = 0;
+        int pos = 0;
         while (true) {
             pos = source.indexOf(piece, pos);
             if (pos < 0) return source;
@@ -76,7 +76,7 @@ public class FileUtilities {
         String result = source.toLowerCase(Locale.ENGLISH).replaceAll("[^\\p{L}\\p{N}]+", "_");
         if (result.endsWith("_")) result = result.substring(0,result.length()-1);
         if (result.startsWith("_")) result = result.substring(1);
-    	return result;
+        return result;
     }
 }
 //#endif

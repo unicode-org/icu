@@ -279,6 +279,6 @@ public class LocaleDataTest extends TestFmwk{
         logln(ld.getDelimiter(LocaleData.QUOTATION_START));
         logln(ld.getDelimiter(LocaleData.QUOTATION_END));
         logln(ld.getDelimiter(LocaleData.ALT_QUOTATION_START));
-        logln(ld.getDelimiter(LocaleData.ALT_QUOTATION_END));    	
+        logln(ld.getDelimiter(LocaleData.ALT_QUOTATION_END));
     }
 }

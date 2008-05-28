@@ -67,9 +67,9 @@ public abstract class Measure {
     
     /**
      * See if two numbers are identical or have the same double value.
-     * @param a
-     * @param b
-     * @return
+     * @param a A number
+     * @param b Another number to be compared with
+     * @return Returns true if two numbers are identical or have the same double value.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */

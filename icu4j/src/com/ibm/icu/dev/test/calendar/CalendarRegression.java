@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -962,10 +962,10 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
         TimeZone atz1 = a.getTimeZone();
         TimeZone atz2 = (TimeZone)atz1.clone();
         if(!atz1.equals(atz2)){
-        	errln("The clone timezones are not equal");
+            errln("The clone timezones are not equal");
         }
         if(atz1.hashCode()!=atz2.hashCode()){
-        	errln("TimeZone hash code unequal for cloned objects");
+            errln("TimeZone hash code unequal for cloned objects");
         }
         b.setMinimalDaysInFirstWeek(7 - a.getMinimalDaysInFirstWeek());
         if (a.hashCode() == b.hashCode()) {
@@ -992,7 +992,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
 
         btz.setRawOffset(atz.getRawOffset() + 60*60*1000);
         if(atz.hashCode()== btz.hashCode()){
-        	errln(atz.hashCode()+"=="+btz.hashCode());
+            errln(atz.hashCode()+"=="+btz.hashCode());
         }
         if (a.getTimeZone()!= b.getTimeZone() && a.hashCode() == b.hashCode()) {
             errln("Calendar hash code ignores zone");

@@ -1226,7 +1226,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
             return (String) unicodeMap.getValue(codepoint);
         }
 
-        /*		protected List _getValueAliases(String valueAlias, List result) {
+        /* protected List _getValueAliases(String valueAlias, List result) {
          if (!unicodeMap.getAvailableValues().contains(valueAlias)) return result;
          result.add(valueAlias);
          return result; // no other aliases

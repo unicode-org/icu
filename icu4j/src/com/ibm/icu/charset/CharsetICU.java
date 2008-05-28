@@ -32,7 +32,7 @@ import com.ibm.icu.text.UnicodeSet;
  * @stable ICU 3.6
  */
 public abstract class CharsetICU extends Charset{
-	
+
      String icuCanonicalName;
      String javaCanonicalName;
      int options;
@@ -84,7 +84,7 @@ public abstract class CharsetICU extends Charset{
      * @stable ICU 3.6
      */
     protected CharsetICU(String icuCanonicalName, String canonicalName, String[] aliases) {
-		super(canonicalName,aliases);
+        super(canonicalName,aliases);
         if(canonicalName.length() == 0){
             throw new IllegalCharsetNameException(canonicalName);
         }

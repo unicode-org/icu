@@ -1155,7 +1155,7 @@ public class UnicodeSetTest extends TestFmwk {
     if (uset.containsNone(string) != shouldContainNone) {
       errln("containsNone " +  string + " should be " + shouldContainNone);
     } else {
-      logln("containsNone " +  string + " = " + shouldContainNone);	    	
+      logln("containsNone " +  string + " = " + shouldContainNone);
     }
   }
   

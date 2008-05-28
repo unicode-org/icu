@@ -329,6 +329,6 @@ public class CopticTest extends CalendarTest
         Date eFuture=eCal.getTime();
         DateFormat eDF = DateFormat.getDateInstance(eCal,DateFormat.FULL);
         logln("ethiopic calendar: " + eDF.format(eToday) +
-              " + 2 months = " + eDF.format(eFuture));		
+              " + 2 months = " + eDF.format(eFuture));
     }
 }

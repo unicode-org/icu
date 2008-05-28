@@ -198,7 +198,7 @@ import com.ibm.icu.util.ULocale;
  *
  */
 public abstract class BreakIterator implements Cloneable {
-	
+
     protected BreakIterator() {
     }
 
@@ -207,7 +207,7 @@ public abstract class BreakIterator implements Cloneable {
      * @return A copy of this
      */
     public Object clone() {
-    	// this is here for subclass use.  we must override it ourselves, though.
+        // this is here for subclass use.  we must override it ourselves, though.
         try {
             return super.clone();
         }
@@ -223,7 +223,7 @@ public abstract class BreakIterator implements Cloneable {
      */
     public static final int DONE = -1;
         
-	/**
+    /**
      * Return the first boundary position.  This is always the beginning
      * index of the text this iterator iterates over.  For example, if
      * the iterator iterates over a whole string, this function will
@@ -335,7 +335,7 @@ public abstract class BreakIterator implements Cloneable {
      * @stable ICU 2.0
      */
     public boolean isBoundary(int offset) {
-    	return offset == 0 || following(offset - 1) == offset;    	
+        return offset == 0 || following(offset - 1) == offset;
     }
         
     /**
@@ -569,93 +569,93 @@ public abstract class BreakIterator implements Cloneable {
     }
     
     // forwarding implementation class
-	static final class BreakIteratorHandle extends BreakIterator {
-	    /**
-	     * @internal
-	     */
-	    public final java.text.BreakIterator breakIterator;
-	        
-	    /**
-	     * @internal
-	     * @param delegate the BreakIterator to which to delegate
-	     */
-	    public BreakIteratorHandle(java.text.BreakIterator delegate) {
-	        this.breakIterator = delegate;
-	    }
-	        
-	    public int first() {
-	        return breakIterator.first();
-	    }
-	    public int last() {
-	        return breakIterator.last();
-	    }
-	    public int next(int n) {
-	        return breakIterator.next(n);
-	    }
-	    public int next() {
-	        return breakIterator.next();
-	    }
-	    public int previous() {
-	        return breakIterator.previous();
-	    }
-	    public int following(int offset) {
-	        return breakIterator.following(offset);
-	    }
-	    public int preceding(int offset) {
-	        return breakIterator.preceding(offset);
-	    }
-	    public boolean isBoundary(int offset) {
-	        return breakIterator.isBoundary(offset);
-	    }
-	    public int current() {
-	        return breakIterator.current();
-	    }
-	    public CharacterIterator getText() {
-	        return breakIterator.getText();
-	    }
-	    public void setText(CharacterIterator newText) {
-	        breakIterator.setText(newText);
-	    }
-	
-	    /**
-	     * Return a string suitable for debugging.
-	     * @return a string suitable for debugging
-	     * @stable ICU 3.4.3
-	     */
-	    public String toString() {
-	    	return breakIterator.toString();
-	    }
+    static final class BreakIteratorHandle extends BreakIterator {
+        /**
+         * @internal
+         */
+        public final java.text.BreakIterator breakIterator;
 
-	    /**
-	     * Return a clone of this BreakIterator.
-	     * @return a clone of this BreakIterator
-	     * @stable ICU 3.4.3
-	     */
-	    public Object clone() {
-	    	return new BreakIteratorHandle((java.text.BreakIterator)breakIterator.clone());
-	    }
+        /**
+         * @internal
+         * @param delegate the BreakIterator to which to delegate
+         */
+        public BreakIteratorHandle(java.text.BreakIterator delegate) {
+            this.breakIterator = delegate;
+        }
 
-	    /**
-	     * Return true if rhs is a BreakIterator with the same break behavior as this.
-	     * @return true if rhs equals this
-	     * @stable ICU 3.4.3
-	     */
-	    public boolean equals(Object rhs) {
-	    	try {
-	    		return breakIterator.equals(((BreakIteratorHandle)rhs).breakIterator);
-	    	}
-	    	catch (Exception e) {
-	    		return false;
-	    	}
-	    }
+        public int first() {
+            return breakIterator.first();
+        }
+        public int last() {
+            return breakIterator.last();
+        }
+        public int next(int n) {
+            return breakIterator.next(n);
+        }
+        public int next() {
+            return breakIterator.next();
+        }
+        public int previous() {
+            return breakIterator.previous();
+        }
+        public int following(int offset) {
+            return breakIterator.following(offset);
+        }
+        public int preceding(int offset) {
+            return breakIterator.preceding(offset);
+        }
+        public boolean isBoundary(int offset) {
+            return breakIterator.isBoundary(offset);
+        }
+        public int current() {
+            return breakIterator.current();
+        }
+        public CharacterIterator getText() {
+            return breakIterator.getText();
+        }
+        public void setText(CharacterIterator newText) {
+            breakIterator.setText(newText);
+        }
 
-	    /**
-	     * Return a hashCode.
-	     * @return a hashCode
-	     * @stable ICU 3.4.3
-	     */
-	    public int hashCode() {
-	    	return breakIterator.hashCode();
-	    }
-	}
+        /**
+         * Return a string suitable for debugging.
+         * @return a string suitable for debugging
+         * @stable ICU 3.4.3
+         */
+        public String toString() {
+            return breakIterator.toString();
+        }
+
+        /**
+         * Return a clone of this BreakIterator.
+         * @return a clone of this BreakIterator
+         * @stable ICU 3.4.3
+         */
+        public Object clone() {
+            return new BreakIteratorHandle((java.text.BreakIterator)breakIterator.clone());
+        }
+
+        /**
+         * Return true if rhs is a BreakIterator with the same break behavior as this.
+         * @return true if rhs equals this
+         * @stable ICU 3.4.3
+         */
+        public boolean equals(Object rhs) {
+            try {
+                return breakIterator.equals(((BreakIteratorHandle)rhs).breakIterator);
+            }
+            catch (Exception e) {
+                return false;
+            }
+        }
+
+        /**
+         * Return a hashCode.
+         * @return a hashCode
+         * @stable ICU 3.4.3
+         */
+        public int hashCode() {
+            return breakIterator.hashCode();
+        }
+    }
 }

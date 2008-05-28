@@ -401,7 +401,7 @@ final class UConverterDataReader implements ICUBinary.Authenticate {
     //private final static boolean debug = ICUDebug.enabled("UConverterDataReader");
 
     /*
-     * 	 UConverterDataReader(UConverterDataReader r)
+     *  UConverterDataReader(UConverterDataReader r)
         {
             dataInputStream = new DataInputStream(r.dataInputStream);
             unicodeVersion = r.unicodeVersion;

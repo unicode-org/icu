@@ -1,7 +1,7 @@
 //##header J2SE15
 /**
 *******************************************************************************
-* Copyright (C) 2002-2007, International Business Machines Corporation and    *
+* Copyright (C) 2002-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -200,7 +200,7 @@ public abstract class ICUTaglet implements Taglet {
 //##        private static final String NAME = "deprecated";
 //##
 //##        public static void register(Map taglets) {
-//##	    taglets.remove(NAME); // override standard deprecated taglet
+//##            taglets.remove(NAME); // override standard deprecated taglet
 //##            taglets.put(NAME, new ICUDeprecatedTaglet());
 //##        }
 //##
@@ -231,7 +231,7 @@ public abstract class ICUTaglet implements Taglet {
         private static final String NAME = "provisional";
 
         public static void register(Map taglets) {
-	    taglets.remove(NAME); // override standard deprecated taglet
+            taglets.remove(NAME); // override standard deprecated taglet
             taglets.put(NAME, new ICUProvisionalTaglet());
         }
 

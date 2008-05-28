@@ -747,7 +747,7 @@ public class DumbTextComponent extends Canvas
         for (i = s.length()-1; i >= 0; --i) {
             char ch = s.charAt(i);
             if (!(ch == ' ' || ch >= 0x000A && ch <= 0x000D || ch == 0x2028 || ch == 0x2029))
-            	return fMtr.stringWidth(s.substring(0,i+1));
+                return fMtr.stringWidth(s.substring(0,i+1));
         }
         return 0;
     }

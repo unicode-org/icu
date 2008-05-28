@@ -1454,10 +1454,10 @@ public class RBBITestMonkey extends TestFmwk {
      * @return   true if the set contains c.
      */
     static boolean setContains(UnicodeSet s, int c) {
-    	if (c<0 || c>UTF16.CODEPOINT_MAX_VALUE ) {
-    		return false;
-    	}
-    	return s.contains(c);
+        if (c<0 || c>UTF16.CODEPOINT_MAX_VALUE ) {
+            return false;
+        }
+        return s.contains(c);
     }
     
     

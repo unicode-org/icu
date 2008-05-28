@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 2005, International Business Machines Corporation and        *
+ * Copyright (C) 2005-2008, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
 */
@@ -18,17 +18,17 @@ package com.ibm.icu.dev.test.util;
  * of internal objects, since those are safe. * @author davis
  */
 public interface Lockable extends Cloneable {
-	/**
-	 * Determines whether the object has been locked or not.
-	 */
-	public boolean isLocked();
-	/**
-	 * Locks the object.
-	 * @return the object itself.
-	 */
-	public Object lock();
-	/**
-	 * Provides for the clone operation. Any clone is initially unlocked.
-	 */
-	public Object clone();
+    /**
+     * Determines whether the object has been locked or not.
+     */
+    public boolean isLocked();
+    /**
+     * Locks the object.
+     * @return the object itself.
+     */
+    public Object lock();
+    /**
+     * Provides for the clone operation. Any clone is initially unlocked.
+     */
+    public Object clone();
 }

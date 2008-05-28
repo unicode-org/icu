@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -81,17 +81,17 @@ package com.ibm.icu.text;
  * @stable ICU 2.8 
  */
 public final class CollationKey implements Comparable {
-	/**
-	 * @internal
-	 */
-	final java.text.CollationKey key;
-	
-	/**
-	 * @internal
-	 */
-	CollationKey(java.text.CollationKey delegate) {
-		this.key = delegate;
-	}
+    /**
+     * @internal
+     */
+    final java.text.CollationKey key;
+
+    /**
+     * @internal
+     */
+    CollationKey(java.text.CollationKey delegate) {
+        this.key = delegate;
+    }
 
     /**
      * Return the source string that this CollationKey represents.
@@ -154,12 +154,12 @@ public final class CollationKey implements Comparable {
      * @exception NullPointerException is thrown if argument is null.
      * @see Collator#compare(String, String)
      * @stable ICU 2.8 
-	 */
-	public int compareTo(CollationKey target) {
-		return key.compareTo(target.key);
-	}
-	
-	/**
+     */
+    public int compareTo(CollationKey target) {
+        return key.compareTo(target.key);
+    }
+
+    /**
      * <p>Compare this CollationKey with the specified Object.  The
      * collation rules of the Collator that created this key are
      * applied.</p>
@@ -176,12 +176,12 @@ public final class CollationKey implements Comparable {
      *            is null.
      * @see #compareTo(CollationKey)
      * @stable ICU 2.8 
-	 */
-	public int compareTo(Object o) {
-		return compareTo((CollationKey)o);
-	}
-	
-	/**
+     */
+    public int compareTo(Object o) {
+        return compareTo((CollationKey)o);
+    }
+
+    /**
      * <p>Compare this CollationKey and the specified Object for
      * equality.  The collation rules of the Collator that created
      * this key are applied.</p>
@@ -196,16 +196,16 @@ public final class CollationKey implements Comparable {
      *            a CollationKey.  NullPointerException is thrown when the argument 
      *            is null.
      * @stable ICU 2.8 
-	 */
-	public boolean equals(Object target) {
-		try {
-			return key.equals(((CollationKey)target).key);
-		}
-		catch (Exception e) {
-			return false;
-		}
-	}
-	
+     */
+    public boolean equals(Object target) {
+        try {
+            return key.equals(((CollationKey)target).key);
+        }
+        catch (Exception e) {
+            return false;
+        }
+    }
+
     /**
      * <p>
      * Compare this CollationKey and the argument target CollationKey for 
@@ -225,7 +225,7 @@ public final class CollationKey implements Comparable {
             return key.equals(target.key);
     }
     
-	/**
+    /**
      * <p>Returns a hash code for this CollationKey. The hash value is calculated 
      * on the key itself, not the String from which the key was created. Thus 
      * if x and y are CollationKeys, then x.hashCode(x) == y.hashCode() 
@@ -234,17 +234,17 @@ public final class CollationKey implements Comparable {
      * </p>
      * @return the hash value.
      * @stable ICU 2.8
-	 */
-	public int hashCode() {
-		return key.hashCode();
-	}
-	
-	/**
-	 * Return a description of the CollationKey.
+     */
+    public int hashCode() {
+        return key.hashCode();
+    }
+
+    /**
+     * Return a description of the CollationKey.
      * @return a description of the CollationKey, used for debugging
      * @stable ICU 3.4.2
-	 */
-	public String toString() {
-		return key.toString();
-	}
+     */
+    public String toString() {
+        return key.toString();
+    }
 }

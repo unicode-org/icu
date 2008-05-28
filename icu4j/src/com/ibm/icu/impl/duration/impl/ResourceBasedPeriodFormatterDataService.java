@@ -104,7 +104,7 @@ public class ResourceBasedPeriodFormatterDataService
                   new XMLRecordReader(
                       new InputStreamReader(is, "UTF-8")));
               if (dr != null) {
-		  // debug
+                  // debug
 //                if (false && ln.equals("ar_EG")) {
 //                  OutputStreamWriter osw = new OutputStreamWriter(System.out, "UTF-8");
 //                  XMLRecordWriter xrw = new XMLRecordWriter(osw);

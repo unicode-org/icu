@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -20,14 +20,14 @@ public class ArrayComparator implements Comparator {
         this.comparators = comparators;
         this.reordering = reordering;
         if (this.reordering == null) {
-        	this.reordering = new int[comparators.length];
-        	for (int i = 0; i < this.reordering.length; ++i) {
-        		this.reordering[i] = i;
-        	}
+            this.reordering = new int[comparators.length];
+            for (int i = 0; i < this.reordering.length; ++i) {
+                this.reordering[i] = i;
+            }
         } else {
-        	if (this.reordering.length != this.comparators.length) {
-        		throw new IllegalArgumentException("comparator and reordering lengths must match");
-        	}
+            if (this.reordering.length != this.comparators.length) {
+                throw new IllegalArgumentException("comparator and reordering lengths must match");
+            }
         }
     }
     
@@ -41,12 +41,12 @@ public class ArrayComparator implements Comparator {
      * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
      */
     public int compare(Object a0, Object a1) {
-    	Object[] arg0 = (Object[]) a0;
-    	Object[] arg1 = (Object[]) a1;
+        Object[] arg0 = (Object[]) a0;
+        Object[] arg1 = (Object[]) a1;
         for (int j = 0; j < comparators.length; ++j) {
-        	int i = reordering[j];
-        	Comparator comp = comparators[i];
-        	if (comp == null) continue;
+            int i = reordering[j];
+            Comparator comp = comparators[i];
+            if (comp == null) continue;
             int result = comp.compare(arg0[i], arg1[i]);
             if (result == 0) continue;
             if (result > 0) return i+1;

@@ -515,11 +515,11 @@ public class PluralRules implements Serializable {
         private long upperBound;
 
         public boolean isFulfilled(double n) {
-        	if (integersOnly && (n - (long)n) != 0.0) {
+            if (integersOnly && (n - (long)n) != 0.0) {
                 return !inRange;
-        	}
+            }
             if (mod != 0) {
-                n = n % mod;	// java % handles double numerator the way we want
+                n = n % mod;    // java % handles double numerator the way we want
             }
             return inRange == (n >= lowerBound && n <= upperBound);
         }

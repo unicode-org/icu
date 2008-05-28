@@ -222,13 +222,13 @@ public class BasicPeriodFormatterFactory implements PeriodFormatterFactory {
     byte countVariant = ECountVariant.INTEGER;
     
     public Customizations copy() {
-	Customizations result = new Customizations();
-	result.displayLimit = displayLimit;
-	result.displayDirection = displayDirection;
-	result.separatorVariant = separatorVariant;
-	result.unitVariant = unitVariant;
-	result.countVariant = countVariant;
-	return result;
+        Customizations result = new Customizations();
+        result.displayLimit = displayLimit;
+        result.displayDirection = displayDirection;
+        result.separatorVariant = separatorVariant;
+        result.unitVariant = unitVariant;
+        result.countVariant = countVariant;
+        return result;
     }
   }
 }

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2005, International Business Machines Corporation and         *
+ * Copyright (C) 2005-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -15,29 +15,29 @@ public final class TestLogWriter extends Writer {
     private boolean closed;
 
     public TestLogWriter(TestLog log, int level) {
-	this.log = log;
-	this.level = level;
+    this.log = log;
+    this.level = level;
     }
 
     public void write(char cbuf[], int off, int len) throws IOException {
-	write(new String(cbuf, off, len));
+        write(new String(cbuf, off, len));
     }
 
     public void write(String str) throws IOException {
-	if (closed) {
-	    throw new IOException("stream closed");
-	}
-	if ("\r\n".indexOf(str) != -1) {
-	    log.msg("", level, level == TestLog.ERR, true);
-	} else {
-	    log.msg(str, level, level == TestLog.ERR, false);
-	}
+        if (closed) {
+            throw new IOException("stream closed");
+        }
+        if ("\r\n".indexOf(str) != -1) {
+            log.msg("", level, level == TestLog.ERR, true);
+        } else {
+            log.msg(str, level, level == TestLog.ERR, false);
+        }
     }
 
     public void flush() throws IOException {
     }
 
     public void close() throws IOException {
-	closed = true;
+        closed = true;
     }
 }

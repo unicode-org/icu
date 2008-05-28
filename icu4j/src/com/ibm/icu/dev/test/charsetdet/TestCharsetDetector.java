@@ -242,7 +242,7 @@ public class TestCharsetDetector extends TestFmwk
         
         reader = det.getReader(new ByteArrayInputStream(bytes), "UTF-8");
         CheckAssert(s.equals(stringFromReader(reader)));
-        det.setDeclaredEncoding("UTF-8");	// Jitterbug 4451, for coverage
+        det.setDeclaredEncoding("UTF-8"); // Jitterbug 4451, for coverage
     }
     
     public void TestUTF16() throws Exception

@@ -65,12 +65,12 @@ class BasicPeriodBuilderFactory implements PeriodBuilderFactory {
             lastUnit = i;
           }
         }
-	if (lastUnit == -1) { 
-	    // currently empty, but this might be transient so no fail
-	    result.minUnit = result.maxUnit = null;
-	} else {
-	    result.minUnit = TimeUnit.units[lastUnit];
-	}
+        if (lastUnit == -1) { 
+            // currently empty, but this might be transient so no fail
+            result.minUnit = result.maxUnit = null;
+        } else {
+            result.minUnit = TimeUnit.units[lastUnit];
+        }
       }
 
       return result;
@@ -156,35 +156,35 @@ class BasicPeriodBuilderFactory implements PeriodBuilderFactory {
     }
 
     public Settings copy() {
-	Settings result = new Settings();
-	result.inUse = inUse;
-	result.uset = uset;
-	result.maxUnit = maxUnit;
-	result.minUnit = minUnit;
-	result.maxLimit = maxLimit;
-	result.minLimit = minLimit;
-	result.allowZero = allowZero;
-	result.weeksAloneOnly = weeksAloneOnly;
-	result.useMilliseconds = useMilliseconds;
-	return result;
+        Settings result = new Settings();
+        result.inUse = inUse;
+        result.uset = uset;
+        result.maxUnit = maxUnit;
+        result.minUnit = minUnit;
+        result.maxLimit = maxLimit;
+        result.minLimit = minLimit;
+        result.allowZero = allowZero;
+        result.weeksAloneOnly = weeksAloneOnly;
+        result.useMilliseconds = useMilliseconds;
+        return result;
     }
   }
 
-  public PeriodBuilderFactory setAvailableUnitRange(TimeUnit minUnit, 
-							 TimeUnit maxUnit) {
+  public PeriodBuilderFactory setAvailableUnitRange(TimeUnit minUnit,
+                                                    TimeUnit maxUnit) {
     int uset = 0;
     for (int i = maxUnit.ordinal; i <= minUnit.ordinal; ++i) {
-	uset |= 1 << i;
+        uset |= 1 << i;
     }
     if (uset == 0) {
-	throw new IllegalArgumentException("range " + minUnit + " to " + maxUnit + " is empty");
+        throw new IllegalArgumentException("range " + minUnit + " to " + maxUnit + " is empty");
     }
     settings = settings.setUnits(uset);
     return this;
   }
 
   public PeriodBuilderFactory setUnitIsAvailable(TimeUnit unit, 
-						      boolean available) {
+                                                      boolean available) {
     int uset = settings.uset;
     if (available) {
       uset |= 1 << unit.ordinal;
@@ -308,7 +308,7 @@ abstract class PeriodBuilderImpl implements PeriodBuilder {
       // ignore the time zone
       return this;
   }
-	
+
   public PeriodBuilder withLocale(String localeName) {
     BasicPeriodBuilderFactory.Settings newSettings = settings.setLocale(localeName);
     if (newSettings != settings) {
