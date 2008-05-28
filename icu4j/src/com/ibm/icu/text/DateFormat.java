@@ -673,7 +673,9 @@ public abstract class DateFormat extends UFormat {
      * @provisional This API might change or be removed in a future release.
      */
     public static final int RELATIVE_DEFAULT = RELATIVE | DEFAULT;
-    
+
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /** 
      * Constant for date pattern denoted by the skeleton <code>mss</code>.
      * @draft ICU 4.0
@@ -828,7 +830,7 @@ public abstract class DateFormat extends UFormat {
      * @provisional This API might change or be removed in a future release.
      */
     public static final String YEAR_ABBR_QUARTER = "yyyyQ";
-
+//#endif
     /**
      * Gets the time formatter with the default formatting style
      * for the default locale.
@@ -1384,6 +1386,8 @@ public abstract class DateFormat extends UFormat {
         return getDateTimeInstance(cal, dateStyle, timeStyle, ULocale.getDefault());
     }
 
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /**
      * Convenience overload
      * @draft ICU 4.0
@@ -1401,7 +1405,7 @@ public abstract class DateFormat extends UFormat {
     public final static DateFormat getPatternInstance(String pattern, Locale locale) {
         return getPatternInstance(pattern, ULocale.forLocale(locale));
     }
-    
+
     /**
      * Create a {@link DateFormat} object that can be used to format dates and times in
      * the given locale.
@@ -1424,7 +1428,7 @@ public abstract class DateFormat extends UFormat {
         final String bestPattern = generator.getBestPattern(pattern);
         return new SimpleDateFormat(bestPattern, locale);
     }
-    
+
     /**
      * Convenience overload
      * @draft ICU 4.0
@@ -1433,7 +1437,7 @@ public abstract class DateFormat extends UFormat {
     public final static DateFormat getPatternInstance(Calendar cal, String pattern, Locale locale) {
         return getPatternInstance(cal, pattern, ULocale.forLocale(locale));
     }
-    
+
     /**
      * Create a {@link DateFormat} object that can be used to format dates and times in
      * the calendar system specified by <code>cal</code>.
@@ -1460,6 +1464,7 @@ public abstract class DateFormat extends UFormat {
         format.setCalendar(cal);
         return format;
     }
+//#endif
 
 //#if defined(FOUNDATION10) || defined(J2SE13)
 //#else

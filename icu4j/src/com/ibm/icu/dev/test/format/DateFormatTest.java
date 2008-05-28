@@ -45,7 +45,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     public static void main(String[] args) throws Exception {
         new DateFormatTest().run(args);
     }
-    
+
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /**
      * Verify that patterns have the correct values and could produce the 
      * the DateFormat instances that contain the correct localized patterns.
@@ -107,7 +109,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }      
         }
     }
-    
+//#endif
+
     // Test written by Wally Wedel and emailed to me.
     public void TestWallyWedel() {
         /*
