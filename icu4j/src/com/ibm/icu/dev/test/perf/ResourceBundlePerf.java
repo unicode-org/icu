@@ -10,7 +10,6 @@ package com.ibm.icu.dev.test.perf;
 import java.nio.ByteBuffer;
 import java.util.ResourceBundle;
 
-import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.util.UResourceBundle;
 
 public class ResourceBundlePerf extends PerfTest {
@@ -24,20 +23,20 @@ public class ResourceBundlePerf extends PerfTest {
     
     protected void setup(String[] args) {
         icuRes = UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", "testtypes");
-        javaRes = ICULocaleData.getResourceBundle("com.ibm.icu.dev.data","TestDataElements","testtypes");
+        javaRes = ResourceBundle.getBundle("com.ibm.icu.dev.data.TestDataElements_testtypes");
     }    
 
     PerfTest.Function TestResourceBundleConstructionJava() {
         return new PerfTest.Function() {
             public void call() {
-                ICULocaleData.getResourceBundle("com.ibm.icu.dev.data","TestDataElements","testtypes");                
-            }            
+                javaRes = ResourceBundle.getBundle("com.ibm.icu.dev.data.TestDataElements_testtypes");
+            }
         };
     }
     PerfTest.Function TestResourceBundleConstructionICU() {
         return new PerfTest.Function() {
             public void call() {
-                UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", "testtypes");                
+                UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", "testtypes");
             }       
         };
     }
