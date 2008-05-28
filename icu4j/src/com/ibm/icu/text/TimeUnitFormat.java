@@ -28,6 +28,8 @@ import com.ibm.icu.util.ULocale;
  */
 public class TimeUnitFormat extends MeasureFormat {
 
+    private static final long serialVersionUID = -3707773153184971529L;
+
     private NumberFormat format;
     private ULocale locale;
     private transient Map timeUnitToCountToPatterns = new HashMap();
@@ -79,6 +81,8 @@ public class TimeUnitFormat extends MeasureFormat {
     /**
      * Format a TimeUnitAmount.
      * @see java.text.Format#format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition)
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public StringBuffer format(Object obj, StringBuffer toAppendTo,
             FieldPosition pos) {
@@ -93,6 +97,8 @@ public class TimeUnitFormat extends MeasureFormat {
 
     /**
      * Parse a TimeUnitAmount.
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public Object parseObject(String source, ParsePosition pos) {
         if (needToBuild) setup();
@@ -145,7 +151,7 @@ public class TimeUnitFormat extends MeasureFormat {
         {TimeUnit.YEAR, "one", "{0} year", "other", "{0} years"}
     };
 
-    // Initally, we are storing all of these as MessageFormats.
+    // Initially, we are storing all of these as MessageFormats.
     // I think it might actually be simpler to make them Decimal Formats later.
     private void setup() {
         if (locale == null) {
