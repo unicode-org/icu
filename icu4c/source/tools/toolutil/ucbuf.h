@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2005, International Business Machines
+*   Copyright (C) 1998-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -138,7 +138,7 @@ U_CAPI void U_EXPORT2
 ucbuf_close(UCHARBUF* buf);
 
 /**
- * Rewinds the buffer by one codepoint
+ * Rewinds the buffer by one codepoint. Does not rewind over escaped characters.
  */
 U_CAPI void U_EXPORT2
 ucbuf_ungetc(int32_t ungetChar,UCHARBUF* buf);
