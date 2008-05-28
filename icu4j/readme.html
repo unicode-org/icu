@@ -12,15 +12,19 @@ h3.doc { background: #CCCCFF }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 4.0 d01</h3>
+<h3>Read Me for ICU4J 4.0 d02</h3>
 <hr size="2" width="100%">
 <p><b>Release Date</b><br>
-May 21, 2008<br>
+May 28, 2008<br>
 </p>
-<p><b>Note:</b> This is major release of ICU4J.  It contains bug fixes
+<!-- <p><b>Note:</b> This is major release of ICU4J.  It contains bug fixes
 and adds implementations of inherited API and introduces new API
-or functionality.
+or functionality. -->
+
+<p><b>Note:</b> This is a draft release of ICU4J 4.0.  All new APIs planned
+for ICU4J 4.0 release are available for evaluation.
 </p>
+
 <p>For the most recent release, see the <a
  href="http://www.icu-project.org/download/"> ICU4J
 download site</a>. </p>
@@ -479,9 +483,9 @@ packages</td>
     <tr>
       <th align="right" bgcolor="#ffffff" valign="baseline"><code>com.ibm.icu.impl.data</code></th>
       <td bgcolor="#ffffff" valign="baseline">Holds data used by the
-ICU4J core packages (<code>com.ibm.icu.lang</code>, <code>com.ibm.icu.text</code>,
-      <code>com.ibm.icu.util</code>, <code>com.ibm.icu.math</code> and
-      <code>com.ibm.icu.text</code>). In particular, all resource
+ICU4J core and charset packages (<code>com.ibm.icu.lang</code>, <code>com.ibm.icu.text</code>,
+      <code>com.ibm.icu.util</code>, <code>com.ibm.icu.math</code>,
+      <code>com.ibm.icu.text</code> and <code>com.ibm.icu.charset</code>). In particular, all resource
 information is stored here.</td>
     </tr>
     <tr>
@@ -1745,10 +1749,10 @@ downloading and building ICU4C, please click <a
 <ol>
     <li>Checkout CLDR.  $cldr_root in the following steps is the root directory where
     the CLDR source files checked out.</li>
-    <li>Update <I>$cldr_root</I>/common to 'release-1-5-0-1' tag</li>
-    <li>Update <I>$cldr_root</I>/tools to 'release-1-5-0-1' tag</li>
-    <li>Checkout ICU with tag 'release-3-8'</li>
-    <li>Checkout ICU4J with tag 'release-3-8'</li>
+    <li>Update <I>$cldr_root</I>/common to 'release-1-6-0' tag</li>
+    <li>Update <I>$cldr_root</I>/tools to 'release-1-6-0' tag</li>
+    <li>Checkout ICU with tag 'release-4-0'</li>
+    <li>Checkout ICU4J with tag 'release-4-0'</li>
     <li>Build ICU4J</li>
     <li>Build ICU4C</li>
     <li>Change to <I>$cldr_root</I>/tools/java directory</li>
