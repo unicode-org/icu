@@ -32,10 +32,10 @@ public class TimeUnitFormat extends MeasureFormat {
 
     private NumberFormat format;
     private ULocale locale;
-    private transient Map timeUnitToCountToPatterns = new HashMap();
+    private transient Map timeUnitToCountToPatterns;
     private transient PluralRules pluralRules;
-    private transient boolean needToBuild = true;
-    
+    private transient boolean isReady;
+
     /**
      * Create empty format. Use setLocale and/or setFormat to modify.
      * @draft ICU 4.0
@@ -51,7 +51,6 @@ public class TimeUnitFormat extends MeasureFormat {
      */
     public TimeUnitFormat setLocale(ULocale locale) {
         this.locale = locale;
-        needToBuild = true;
         return this;
     }
     
@@ -63,7 +62,6 @@ public class TimeUnitFormat extends MeasureFormat {
      */
     public TimeUnitFormat setLocale(Locale locale) {
         this.locale = ULocale.forLocale(locale);
-        needToBuild = true;
         return this;
     }
     
@@ -86,7 +84,9 @@ public class TimeUnitFormat extends MeasureFormat {
      */
     public StringBuffer format(Object obj, StringBuffer toAppendTo,
             FieldPosition pos) {
-        if (needToBuild) setup();
+        if (!isReady) {
+            setup();
+        }
         TimeUnitAmount amount = (TimeUnitAmount) obj;
         Map countToPattern = (Map) timeUnitToCountToPatterns.get(amount.getTimeUnit());
         double number = amount.getNumber().doubleValue();
@@ -101,7 +101,9 @@ public class TimeUnitFormat extends MeasureFormat {
      * @provisional This API might change or be removed in a future release.
      */
     public Object parseObject(String source, ParsePosition pos) {
-        if (needToBuild) setup();
+        if (isReady) {
+            setup();
+        }
         Number resultNumber = null;
         TimeUnit resultTimeUnit = null;
         int oldPos = pos.getIndex();
@@ -166,6 +168,7 @@ public class TimeUnitFormat extends MeasureFormat {
             format = NumberFormat.getNumberInstance(locale);
         }
         pluralRules = PluralRules.forLocale(locale);
+        timeUnitToCountToPatterns = new HashMap();
         for (int i = 0; i < data.length; ++i) {
             Map temp = new TreeMap();
             for (int j = 1; j < data[i].length; j += 2) {
@@ -180,7 +183,7 @@ public class TimeUnitFormat extends MeasureFormat {
         // it's an internal error if we get a count that we can't handle
         // so check here to make sure that the rules are all covered
         // TODO
-        needToBuild = false;
+        isReady = true;
     }
 
 }

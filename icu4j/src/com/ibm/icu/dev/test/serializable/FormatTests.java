@@ -1,7 +1,7 @@
 //##header J2SE15
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -27,8 +27,11 @@ import com.ibm.icu.text.PluralFormat;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.text.TimeUnitFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.TimeUnit;
+import com.ibm.icu.util.TimeUnitAmount;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -1978,48 +1981,65 @@ public class FormatTests
         }
     }
 
-  public static class PluralFormatHandler implements SerializableTest.Handler {
-    public Object[] getTestObjects() {
-      Locale[] locales = { Locale.US }; // main test is in plural rules handler
-      PluralFormat[] plfmts = new PluralFormat[locales.length];
-      for (int i = 0; i < locales.length; i++) {
-        ULocale uloc = ULocale.forLocale(locales[i]);
-        try {
-          plfmts[i] = new PluralFormat(uloc, "one{1 foo} other{# foo}");
-        } catch (Exception e) {
-          e.printStackTrace();
+    public static class PluralFormatHandler implements SerializableTest.Handler {
+        public Object[] getTestObjects() {
+            Locale[] locales = { Locale.US }; // main test is in plural rules handler
+            PluralFormat[] plfmts = new PluralFormat[locales.length];
+            for (int i = 0; i < locales.length; i++) {
+                ULocale uloc = ULocale.forLocale(locales[i]);
+                try {
+                    plfmts[i] = new PluralFormat(uloc, "one{1 foo} other{# foo}");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return plfmts;
         }
-      }
-      return plfmts;
+        public boolean hasSameBehavior(Object a, Object b) {
+            return a.equals(b);
+        }
     }
-    public boolean hasSameBehavior(Object a, Object b) {
-      return a.equals(b);
-    }
-  }
 
-  public static class PluralRulesHandler implements SerializableTest.Handler {
-    public Object[] getTestObjects() {
-      
-      String[] localeNames = {"ja","da","fr","lv","ga","ro","lt","hr","cs","pl","sl"};
-      PluralRules[] plrulz = new PluralRules[localeNames.length];
-      for (int i = 0; i < localeNames.length; i++) {
-        ULocale uloc = ULocale.createCanonical(localeNames[i]);
-        try {
-          plrulz[i] = PluralRules.forLocale(uloc);
-        } catch (Exception e) {
-          e.printStackTrace();
+    public static class PluralRulesHandler implements SerializableTest.Handler {
+        public Object[] getTestObjects() {
+            String[] localeNames = {"ja","da","fr","lv","ga","ro","lt","hr","cs","pl","sl"};
+            PluralRules[] plrulz = new PluralRules[localeNames.length];
+            for (int i = 0; i < localeNames.length; i++) {
+                ULocale uloc = ULocale.createCanonical(localeNames[i]);
+                try {
+                    plrulz[i] = PluralRules.forLocale(uloc);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return plrulz;
         }
-      }
-      return plrulz;
+        public boolean hasSameBehavior(Object a, Object b) {
+            return a.equals(b);
+        }
     }
-    public boolean hasSameBehavior(Object a, Object b) {
-      return a.equals(b);
-    }
-  }
     
+    public static class TimeUnitFormatHandler implements SerializableTest.Handler {
+        // TODO - more test coverage!
+        public Object[] getTestObjects() {
+            return new Object[] { new TimeUnitFormat().setLocale(ULocale.ENGLISH) };
+        }
+        public boolean hasSameBehavior(Object a, Object b) {
+            TimeUnitFormat tufa = (TimeUnitFormat)a;
+            TimeUnitFormat tufb = (TimeUnitFormat)b;
+
+            TimeUnitAmount amount = new TimeUnitAmount(3, TimeUnit.HOUR);
+            String resa = tufa.format(amount);
+            String resb = tufb.format(amount);
+
+            return resa.equals(resb);
+        }
+    }
+
     public static void main(String[] args)
     {
         // nothing needed...
     }
+
 }
 //eof
