@@ -50,7 +50,7 @@ public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk 
                 errln("did not throw exception on null unregister");
             }
             catch (Exception e) {
-            	logln("PASS: null unregister failed as expected");
+                logln("PASS: null unregister failed as expected");
             }
 
             try {
@@ -58,7 +58,7 @@ public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk 
                 errln("did not throw exception on null register");
             }
             catch (Exception e) {
-            	logln("PASS: null register failed as expected");
+                logln("PASS: null register failed as expected");
             }
 
             try {

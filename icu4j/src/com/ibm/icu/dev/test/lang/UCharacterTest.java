@@ -449,13 +449,13 @@ public final class UCharacterTest extends TestFmwk
             } while(++start<=end);
         }
 
-	// verify that Unicode Corrigendum #6 reverts mirrored status of the following
-	if (UCharacter.isMirrored(0x2018) ||
-	    UCharacter.isMirrored(0x201d) ||
-	    UCharacter.isMirrored(0x201f) ||
-	    UCharacter.isMirrored(0x301e)) {
-	    errln("Unicode Corrigendum #6 conflict, one or more of 2018/201d/201f/301e has mirrored property");
-	}
+        // verify that Unicode Corrigendum #6 reverts mirrored status of the following
+        if (UCharacter.isMirrored(0x2018) ||
+            UCharacter.isMirrored(0x201d) ||
+            UCharacter.isMirrored(0x201f) ||
+            UCharacter.isMirrored(0x301e)) {
+            errln("Unicode Corrigendum #6 conflict, one or more of 2018/201d/201f/301e has mirrored property");
+        }
     }
 
     /**

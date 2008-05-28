@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2002-2006, International Business Machines Corporation and    *
+* Copyright (C) 2002-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -111,7 +111,7 @@ public class CheckTags {
             DocNode last = stack[ix];
             if (error) {
                 last.errorCount += 1;
-	    }
+        }
 
             boolean show = !brief || last.reportError;
             // boolean nomsg = show && brief && error;
@@ -309,12 +309,12 @@ public class CheckTags {
         Tag[] tags = doc.tags();
         boolean foundRequiredTag = false;
         boolean foundDraftTag = false;
-	boolean foundProvisionalTag = false;
+        boolean foundProvisionalTag = false;
         boolean foundDeprecatedTag = false;
         boolean foundObsoleteTag = false;
-	boolean foundInternalTag = false;
-	boolean foundStableTag = false;
-	boolean retainAll = false;
+        boolean foundInternalTag = false;
+        boolean foundStableTag = false;
+        boolean retainAll = false;
 
         for (int i = 0; i < tags.length; ++i) {
             Tag tag = tags[i];
@@ -329,14 +329,14 @@ public class CheckTags {
 
             case INTERNAL:
                 foundRequiredTag = true;
-		foundInternalTag = true;
+                foundInternalTag = true;
                 break;
 
             case DRAFT:
                 foundRequiredTag = true;
                 foundDraftTag = true;
                 if (tag.text().indexOf("ICU 2.8") != -1 &&
-		    tag.text().indexOf("(retain") == -1) { // catch both retain and retainAll
+                    tag.text().indexOf("(retain") == -1) { // catch both retain and retainAll
                     tagErr(tag);
                     break;
                 }
@@ -344,12 +344,12 @@ public class CheckTags {
                     tagErr(tag);
                     break;
                 }
-		retainAll |= (tag.text().indexOf("(retainAll)") != -1);
+                retainAll |= (tag.text().indexOf("(retainAll)") != -1);
                 break;
 
-	    case PROVISIONAL:
-		foundProvisionalTag = true;
-		break;
+            case PROVISIONAL:
+                foundProvisionalTag = true;
+                break;
 
             case DEPRECATED:
                 foundDeprecatedTag = true;
@@ -373,7 +373,7 @@ public class CheckTags {
                         tagErr(tag);
                     }
                     foundRequiredTag = true;
-		    foundStableTag = true;
+                    foundStableTag = true;
                 }
                 break;
 
@@ -412,10 +412,10 @@ public class CheckTags {
         if (foundObsoleteTag && !foundDeprecatedTag) {
             errln("obsolete tag missing deprecated");
         }
-	if (foundStableTag && foundDeprecatedTag) {
-	    logln("stable deprecated");
-	}
+        if (foundStableTag && foundDeprecatedTag) {
+            logln("stable deprecated");
+        }
 
-	return !retainAll;
+        return !retainAll;
     }
 }

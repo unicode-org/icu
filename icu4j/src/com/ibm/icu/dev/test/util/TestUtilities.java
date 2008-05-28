@@ -3,7 +3,7 @@
 //#else
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -103,25 +103,25 @@ public class TestUtilities extends TestFmwk {
         logln("Getting Scripts");
         UnicodeMap scripts = ICUPropertyFactory.make().getProperty("script").getUnicodeMap_internal();
         UnicodeMap.Composer composer = new UnicodeMap.Composer() {
-			public Object compose(int codePoint, Object a, Object b) {
-				return a.toString() + "_" + b.toString();
-			}       	
+            public Object compose(int codePoint, Object a, Object b) {
+                return a.toString() + "_" + b.toString();
+            }
         };
         
         logln("Trying Compose");
         UnicodeMap composed = ((UnicodeMap)scripts.cloneAsThawed()).composeWith(map1, composer);
         Object last = "";
         for (int i = 0; i < 0x10FFFF; ++i) {
-        	Object comp = composed.getValue(i);
-        	Object gc = map1.getValue(i);
-        	Object sc = scripts.getValue(i);
-        	if (!comp.equals(composer.compose(i, gc, sc))) {
-        		errln("Failed compose at: " + i);
-        	}
-        	if (!last.equals(comp)) {
-        		logln(Utility.hex(i) + "\t" + comp);
-        		last = comp;
-        	}
+            Object comp = composed.getValue(i);
+            Object gc = map1.getValue(i);
+            Object sc = scripts.getValue(i);
+            if (!comp.equals(composer.compose(i, gc, sc))) {
+                errln("Failed compose at: " + i);
+            }
+            if (!last.equals(comp)) {
+                logln(Utility.hex(i) + "\t" + comp);
+                last = comp;
+            }
         }
 
         // check boilerplate
@@ -163,27 +163,27 @@ public class TestUtilities extends TestFmwk {
     }
     
     public void TestCollectionUtilities() {
-		String[][] test = {{"a", "c", "e", "g", "h", "z"}, {"b", "d", "f", "h", "w"}, { "a", "b" }, { "a", "d" }, {"d"}, {}}; // 
+        String[][] test = {{"a", "c", "e", "g", "h", "z"}, {"b", "d", "f", "h", "w"}, { "a", "b" }, { "a", "d" }, {"d"}, {}}; // 
         int resultMask = 0;
-		for (int i = 0; i < test.length; ++i) {
-			Collection a = new TreeSet(Arrays.asList(test[i]));
-			for (int j = 0; j < test.length; ++j) {
-				Collection b = new TreeSet(Arrays.asList(test[j]));
-				int relation = CollectionUtilities.getContainmentRelation(a, b);
+        for (int i = 0; i < test.length; ++i) {
+            Collection a = new TreeSet(Arrays.asList(test[i]));
+            for (int j = 0; j < test.length; ++j) {
+                Collection b = new TreeSet(Arrays.asList(test[j]));
+                int relation = CollectionUtilities.getContainmentRelation(a, b);
                 resultMask |= (1 << relation);
-				switch (relation) {
-				case CollectionUtilities.ALL_EMPTY:
-					checkContainment(a.size() == 0 && b.size() == 0, a, relation, b);
-					break;
-				case CollectionUtilities.NOT_A_SUPERSET_B:
-					checkContainment(a.size() == 0 && b.size() != 0, a, relation, b);
-					break;
-				case CollectionUtilities.NOT_A_DISJOINT_B:
-					checkContainment(a.equals(b) && a.size() != 0, a, relation, b);
-					break;
-				case CollectionUtilities.NOT_A_SUBSET_B:
-					checkContainment(a.size() != 0 && b.size() == 0, a, relation, b);
-					break;
+                switch (relation) {
+                case CollectionUtilities.ALL_EMPTY:
+                    checkContainment(a.size() == 0 && b.size() == 0, a, relation, b);
+                    break;
+                case CollectionUtilities.NOT_A_SUPERSET_B:
+                    checkContainment(a.size() == 0 && b.size() != 0, a, relation, b);
+                    break;
+                case CollectionUtilities.NOT_A_DISJOINT_B:
+                    checkContainment(a.equals(b) && a.size() != 0, a, relation, b);
+                    break;
+                case CollectionUtilities.NOT_A_SUBSET_B:
+                    checkContainment(a.size() != 0 && b.size() == 0, a, relation, b);
+                    break;
                 case CollectionUtilities.A_PROPER_SUBSET_OF_B:
                     checkContainment(b.containsAll(a) && !a.equals(b), a, relation, b);
                     break;
@@ -196,23 +196,23 @@ public class TestUtilities extends TestFmwk {
                 case CollectionUtilities.A_PROPER_OVERLAPS_B:
                     checkContainment(!b.containsAll(a) && !a.containsAll(b) && CollectionUtilities.containsSome(a, b), a, relation, b);
                 break;
-				}
-			}
-		}
+                }
+            }
+        }
         if (resultMask != 0xFF) {
             String missing = "";
             for (int i = 0; i < 8; ++i) {
-            	if ((resultMask & (1 << i)) == 0) {
+                if ((resultMask & (1 << i)) == 0) {
                     if (missing.length() != 0) missing += ", ";
                     missing += RelationName[i];
                 }
             }
             errln("Not all ContainmentRelations checked: " + missing);
         }
-	}
+    }
 
     static final String[] RelationName = {"ALL_EMPTY",
-    		"NOT_A_SUPERSET_B",
+            "NOT_A_SUPERSET_B",
             "NOT_A_DISJOINT_B",
             "NOT_A_SUBSET_B",
             "A_PROPER_SUBSET_OF_B",
@@ -221,15 +221,15 @@ public class TestUtilities extends TestFmwk {
             "A_PROPER_OVERLAPS_B"};
 
     /**
-	 *  
-	 */
-	private void checkContainment(boolean c, Collection a, int relation, Collection b) {
-		if (!c) {
-			errln("Fails relation: " + a + " \t" + RelationName[relation] + " \t" + b);
-        }		
-	}
+     *  
+     */
+    private void checkContainment(boolean c, Collection a, int relation, Collection b) {
+        if (!c) {
+            errln("Fails relation: " + a + " \t" + RelationName[relation] + " \t" + b);
+        }
+    }
 
-	private void checkNext(int limit) {
+    private void checkNext(int limit) {
         logln("Comparing nextRange");
         UnicodeMap.MapIterator mi = new UnicodeMap.MapIterator(map1);
         Map localMap = new TreeMap();

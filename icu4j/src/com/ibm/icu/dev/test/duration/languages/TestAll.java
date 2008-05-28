@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and        *
+* Copyright (C) 2007-2008, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -22,7 +22,7 @@ public class TestAll extends TestGroup {
 
     public TestAll() {
         super(new String[] {
-		  //                  "com.ibm.icu.dev.test.duration.languages.Test_ar_EG",
+//                  "com.ibm.icu.dev.test.duration.languages.Test_ar_EG",
                   "com.ibm.icu.dev.test.duration.languages.Test_en",
                   "com.ibm.icu.dev.test.duration.languages.Test_es",
                   "com.ibm.icu.dev.test.duration.languages.Test_fr",

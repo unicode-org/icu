@@ -1077,7 +1077,7 @@ public class ULocaleTest extends TestFmwk {
         if (!loc5.equals(loc4)){
             errln("ULocale.clone should get the same ULocale");
         }
-        ULocale.getISOCountries();	// To check the result ?!
+        ULocale.getISOCountries(); // To check the result ?!
     }
 
     public void TestBamBm() {

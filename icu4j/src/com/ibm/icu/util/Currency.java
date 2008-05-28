@@ -120,20 +120,23 @@ public class Currency extends MeasureUnit implements Serializable {
         return shim.createInstance(locale);
     }
 
-	/**
+    /**
      * Returns an array of Strings which contain the currency
-	 * identifiers which are valid for the given locale on the 
-	 * given date.
-	 * 
+     * identifiers which are valid for the given locale on the 
+     * given date.
+     * @param loc the locale for which to retrieve currency codes.
+     * @param d the date for which to retrieve currency codes for the given locale.
+     * @return The array of ISO currency codes.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public static String[] getAvailableCurrencyCodes(ULocale loc, Date d) 
     {
         // local variables
         String country = loc.getCountry();
         String variant = loc.getVariant();
-		long dateL = d.getTime();
-		long mask = 4294967295L;
+        long dateL = d.getTime();
+        long mask = 4294967295L;
 
         // Get supplementalData
         ICUResourceBundle bundle = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,
@@ -148,16 +151,16 @@ public class Currency extends MeasureUnit implements Serializable {
         // Work with the supplementalData
         try
         {
-			// Process each currency to see which one is valid for the given date.
-			// Some regions can have more than one current currency in use for
-			// a given date.
+            // Process each currency to see which one is valid for the given date.
+            // Some regions can have more than one current currency in use for
+            // a given date.
             UResourceBundle cm = bundle.get("CurrencyMap");
             UResourceBundle countryArray = cm.get(country);
-         
-			// First pass, get a count of valid currencies
-			int currCount = 0;
-			for (int i = 0; i < countryArray.getSize(); i++)
-			{
+
+            // First pass, get a count of valid currencies
+            int currCount = 0;
+            for (int i = 0; i < countryArray.getSize(); i++)
+            {
                 // get the currency resource
                 UResourceBundle currencyReq = countryArray.get(i);
 
@@ -177,32 +180,32 @@ public class Currency extends MeasureUnit implements Serializable {
                     toDate  = (long)toArray[0] << 32;
                     toDate |= ((long)toArray[1] & mask);
 
-					if ((fromDate <= dateL) && (dateL < toDate))
-					{
-						currCount++;
-					}
+                    if ((fromDate <= dateL) && (dateL < toDate))
+                    {
+                        currCount++;
+                    }
                 }
                 else
                 {
                     if (fromDate <= dateL)
                     {
-						currCount++;
+                        currCount++;
                     }
                 }
 
             }  // end For loop
 
-			// Allocate array to return
-			if (currCount == 0)
-			{
-				return null;
-			}
+            // Allocate array to return
+            if (currCount == 0)
+            {
+                return null;
+            }
 
-			String[] currCodes = new String[currCount];
-			int currIndex = 0;
+            String[] currCodes = new String[currCount];
+            int currIndex = 0;
 
-			// Second pass, get the actual currency codes
-			for (int i = 0; i < countryArray.getSize(); i++)
+            // Second pass, get the actual currency codes
+            for (int i = 0; i < countryArray.getSize(); i++)
             {
                 // get the currency resource
                 UResourceBundle currencyReq = countryArray.get(i);
@@ -227,26 +230,26 @@ public class Currency extends MeasureUnit implements Serializable {
 
                     if ((fromDate <= dateL) && (dateL < toDate)) 
                     {
-						currCodes[currIndex] = new String(curriso);
-						currIndex++;
+                        currCodes[currIndex] = new String(curriso);
+                        currIndex++;
                     }
                 }
                 else
                 {
                     if (fromDate <= dateL)
                     {
-						currCodes[currIndex] = new String(curriso);
-						currIndex++;
+                        currCodes[currIndex] = new String(curriso);
+                        currIndex++;
                     }
                 }
 
             }  // end For loop
 
-			// Process the matching ids.  Due to gaps in the windows of time 
-			// for valid currencies, it is possible that no currency is valid 
-			// for the given time.  It is possible that we will return multiple
-			// currencies for the given time.
-			return currCodes;
+            // Process the matching ids.  Due to gaps in the windows of time 
+            // for valid currencies, it is possible that no currency is valid 
+            // for the given time.  It is possible that we will return multiple
+            // currencies for the given time.
+            return currCodes;
         }
         catch (MissingResourceException ex)
         {

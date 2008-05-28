@@ -1,7 +1,7 @@
 //##header J2SE15
 /*
 **********************************************************************
-* Copyright (c) 2003-2006, International Business Machines
+* Copyright (c) 2003-2008, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -181,7 +181,7 @@ public class UtilityTest extends TestFmwk {
         }
         catch (IllegalStateException e) {
             if (e.getMessage().equals("assert failed")) {
-            	logln("Assert.assrt(false) works");
+                logln("Assert.assrt(false) works");
             }
             else {
                 errln("FAIL: Assert.assrt(false) returned " + e.getMessage());
@@ -221,7 +221,7 @@ public class UtilityTest extends TestFmwk {
     }
     
     public void TestCaseInsensitiveString() {
-    	CaseInsensitiveString str1 = new CaseInsensitiveString("ThIs is A tEst");
+        CaseInsensitiveString str1 = new CaseInsensitiveString("ThIs is A tEst");
         CaseInsensitiveString str2 = new CaseInsensitiveString("This IS a test");
         if (!str1.equals(str2)
             || !str1.toString().equals(str1.getString())

@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and   *
+* Copyright (C) 2007-2008, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -17,8 +17,8 @@ public interface PeriodBuilderFactory {
    * @param maxUnit the largest time unit available for use
    * @return this factory
    */
-  PeriodBuilderFactory setAvailableUnitRange(TimeUnit minUnit, 
-					     TimeUnit maxUnit);
+  PeriodBuilderFactory setAvailableUnitRange(TimeUnit minUnit,
+                         TimeUnit maxUnit);
 
   /**
    * Sets whether the time unit is available for use.

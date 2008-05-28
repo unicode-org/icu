@@ -25,11 +25,11 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
         private final int POSSIBLE_WORD_LIST_MAX = 20;
         //list of word candidate lengths, in increasing length order
         private int lengths[];
-        private int count[];	// Count of candidates
-        private int prefix;		// The longeset match with a dictionary word
-        private int offset;		// Offset in the text of these candidates
-        private int mark;		// The preferred candidate's offset
-        private int current;	// The candidate we're currently looking at
+        private int count[];    // Count of candidates
+        private int prefix;     // The longeset match with a dictionary word
+        private int offset;     // Offset in the text of these candidates
+        private int mark;       // The preferred candidate's offset
+        private int current;    // The candidate we're currently looking at
 
         // Default constructor
         public PossibleWord() {
@@ -95,7 +95,7 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
     // How many words in a row are "good enough"?
     private static final byte THAI_LOOKAHEAD = 3;
     // Will not combine a non-word with a preceding dictionary word longer than this
-    private static final byte THAI_ROOT_COMBINE_THRESHOLD = 3;	
+    private static final byte THAI_ROOT_COMBINE_THRESHOLD = 3;
     // Will not combine a non-word that shares at least this much prefix with a
     // dictionary word with a preceding word
     private static final byte THAI_PREFIX_COMBINE_THRESHOLD = 3;

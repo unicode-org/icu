@@ -126,7 +126,7 @@ public class DateFormat extends Format {
      * work correctly unless they manipulate the delegate.
      */
     protected DateFormat() {
-    	this.dateFormat = java.text.DateFormat.getInstance();
+        this.dateFormat = java.text.DateFormat.getInstance();
     }
 
     /**

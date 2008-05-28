@@ -169,7 +169,7 @@ public class NumberFormat extends Format {
      * they manipulate the delegate.
      */
     public NumberFormat() {
-    	this.numberFormat = java.text.NumberFormat.getInstance();
+        this.numberFormat = java.text.NumberFormat.getInstance();
     }
 
     /**

@@ -37,25 +37,25 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
         jdkCal.clear();
         jdkCal.set(1582, Calendar.OCTOBER, 15);
         
-//        if(jdkCal instanceof java.util.GregorianCalendar) {
-//        		logln("jdk IS grego");
-//        		java.util.GregorianCalendar jdkgc = (java.util.GregorianCalendar)
-//						jdkCal;
-//        		logln("jdk change at: " + jdkgc.getGregorianChange() + "(" + jdkgc.getGregorianChange().getTime() +")" );
-//        } else {
-//        	    logln("jdk NOT grego");
-//        }
-      
+//      if(jdkCal instanceof java.util.GregorianCalendar) {
+//          logln("jdk IS grego");
+//          java.util.GregorianCalendar jdkgc = (java.util.GregorianCalendar)
+//          jdkCal;
+//          logln("jdk change at: " + jdkgc.getGregorianChange() + "(" + jdkgc.getGregorianChange().getTime() +")" );
+//      } else {
+//          logln("jdk NOT grego");
+//      }
+
         long a = jdkCal.getTime().getTime();
         Date c = jdkCal.getTime();
         c.toString();
         long b = c.getTime();
         if(a!=b) {
-             logln(" " + a + " != " + b);
-            	logln("JDK has Gregorian cutover anomaly (1.5?) - skipping this test.");
-            	return;
+            logln(" " + a + " != " + b);
+            logln("JDK has Gregorian cutover anomaly (1.5?) - skipping this test.");
+            return;
         }
-        
+
         Date co = jdkCal.getTime();
         logln("Change over (Oct 15 1582) = " + co + " (" + co.getTime() + ")");
         final int ONE_DAY = 24*60*60*1000;

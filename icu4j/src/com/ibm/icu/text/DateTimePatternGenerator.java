@@ -160,8 +160,8 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
                 dnBundle = fieldBundle.getWithFallback("dn");
                 String value = dnBundle.getString();
                 //System.out.println("Field name:"+value);
-                result.setAppendItemName(i, value);      		
-        	}
+                result.setAppendItemName(i, value);
+            }
         }
           
         // set the AvailableFormat in CLDR

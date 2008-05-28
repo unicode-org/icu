@@ -753,7 +753,7 @@ public class DecimalFormat extends NumberFormat {
          * issues raised by bugs 4106658, 4106667, and 4147706.  Liu 7/6/98.
          */
         boolean isNegative = (number < 0.0) || (number == 0.0 && 1/number < 0.0);
-		if (isNegative) number = -number;
+        if (isNegative) number = -number;
 
         // Apply rounding after multiplier
         if (roundingDouble > 0.0) {

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -107,7 +107,7 @@ public final class ICUBinaryTest extends TestFmwk
             ICUBinary.readHeader(inputstream, formatid, authenticate);
             errln("Failed: Invalid version number should not pass authenticate object");
         } catch (IOException e) {
-        	logln("PASS: ICUBinary.readHeader with invalid version number failed as expected");
+            logln("PASS: ICUBinary.readHeader with invalid version number failed as expected");
         }
     }
 }

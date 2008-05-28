@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and    *
+* Copyright (C) 1996-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -1533,13 +1533,13 @@ public final class UTF16Test extends TestFmwk
             UTF16.hasMoreCodePointsThan(strarray, -2, -1, 5);
             errln("hasMoreCodePointsThan(chararray) with negative indexes has to throw an exception");
         } catch (Exception e) {
-        	logln("PASS: UTF16.hasMoreCodePointsThan failed as expected");
+            logln("PASS: UTF16.hasMoreCodePointsThan failed as expected");
         }
         try {
             UTF16.hasMoreCodePointsThan(strarray, 5, 2, 5);
             errln("hasMoreCodePointsThan(chararray) with limit less than start index has to throw an exception");
         } catch (Exception e) {
-        	logln("PASS: UTF16.hasMoreCodePointsThan failed as expected");
+            logln("PASS: UTF16.hasMoreCodePointsThan failed as expected");
         }
         try {
             if (UTF16.hasMoreCodePointsThan(strarray, -2, 2, 5)) {

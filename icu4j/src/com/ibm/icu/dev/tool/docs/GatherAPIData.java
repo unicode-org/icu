@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2004-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -193,12 +193,12 @@ public class GatherAPIData {
         if (doc.qualifiedName().indexOf(".misc") != -1) { 
             System.out.println("misc: " + doc.qualifiedName()); return true; 
         }
-	if (!internal) { // debug
-	    Tag[] tags = doc.tags();
-	    for (int i = 0; i < tags.length; ++i) {
-		if (tagKindIndex(tags[i].kind()) == INTERNAL) { return true; }
-	    }
-	}
+        if (!internal) { // debug
+            Tag[] tags = doc.tags();
+            for (int i = 0; i < tags.length; ++i) {
+                if (tagKindIndex(tags[i].kind()) == INTERNAL) { return true; }
+            }
+        }
         if (pat != null && (doc.isClass() || doc.isInterface())) {
             if (!pat.matcher(doc.name()).matches()) {
                 return true;

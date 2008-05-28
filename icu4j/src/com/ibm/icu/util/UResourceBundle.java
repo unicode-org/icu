@@ -170,10 +170,10 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @stable ICU 3.0
      */
     public static UResourceBundle getBundleInstance(String baseName) {
-	if (baseName == null) {
-	    baseName = ICUResourceBundle.ICU_BASE_NAME;
-	}
-	ULocale uloc = ULocale.getDefault();
+        if (baseName == null) {
+            baseName = ICUResourceBundle.ICU_BASE_NAME;
+        }
+        ULocale uloc = ULocale.getDefault();
         return getBundleInstance(baseName, uloc.toString(), ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
     }
 
@@ -189,10 +189,10 @@ public abstract class UResourceBundle extends ResourceBundle{
      */
 
     public static UResourceBundle getBundleInstance(String baseName, Locale locale) {
-	if (baseName == null) {
-	    baseName = ICUResourceBundle.ICU_BASE_NAME;
-	}
-	ULocale uloc = locale == null ? ULocale.getDefault() : ULocale.forLocale(locale);
+        if (baseName == null) {
+            baseName = ICUResourceBundle.ICU_BASE_NAME;
+        }
+        ULocale uloc = locale == null ? ULocale.getDefault() : ULocale.forLocale(locale);
 
         return getBundleInstance(baseName, uloc.toString(), ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
     }
@@ -208,12 +208,12 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @stable ICU 3.0
      */
     public static UResourceBundle getBundleInstance(String baseName, ULocale locale) {
- 	if (baseName == null) {
-	    baseName = ICUResourceBundle.ICU_BASE_NAME;
-	}
-	if (locale == null) {
-	    locale = ULocale.getDefault();
-	}
+        if (baseName == null) {
+            baseName = ICUResourceBundle.ICU_BASE_NAME;
+        }
+        if (locale == null) {
+            locale = ULocale.getDefault();
+        }
         return getBundleInstance(baseName, locale.toString(), ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
     }
 
@@ -229,10 +229,10 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @stable ICU 3.8
      */
     public static UResourceBundle getBundleInstance(String baseName, Locale locale, ClassLoader loader) {
- 	if (baseName == null) {
-	    baseName = ICUResourceBundle.ICU_BASE_NAME;
-	}
-	ULocale uloc = locale == null ? ULocale.getDefault() : ULocale.forLocale(locale);
+        if (baseName == null) {
+            baseName = ICUResourceBundle.ICU_BASE_NAME;
+        }
+        ULocale uloc = locale == null ? ULocale.getDefault() : ULocale.forLocale(locale);
         return getBundleInstance(baseName, uloc.toString(), loader, false);
     }
 
@@ -251,12 +251,12 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @stable ICU 3.8
      */
     public static UResourceBundle getBundleInstance(String baseName, ULocale locale, ClassLoader loader) {
- 	if (baseName == null) {
-	    baseName = ICUResourceBundle.ICU_BASE_NAME;
-	}
-	if (locale == null) {
-	    locale = ULocale.getDefault();
-	}
+        if (baseName == null) {
+            baseName = ICUResourceBundle.ICU_BASE_NAME;
+        }
+        if (locale == null) {
+            locale = ULocale.getDefault();
+        }
         return getBundleInstance(baseName, locale.toString(), loader, false);
     }
 

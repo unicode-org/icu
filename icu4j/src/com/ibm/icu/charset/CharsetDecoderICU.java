@@ -246,8 +246,8 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
         in.position(in.position() - toUCountPending());
         
         return ret;
-	}
- 
+    }
+
     /*
      * Implements the ICU semantic for decode operation
      * @param in The input byte buffer

@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
  * Copyright (C) 2006-2008, International Business Machines Corporation and    *
- * others. All Rights Reserved.				                                  *
+ * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  *******************************************************************************
@@ -213,7 +213,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * resets the converter.
      * @param out action to be taken
      * @return result of flushing action and completes the decoding all input. 
-     *	   Returns CoderResult.UNDERFLOW if the action succeeds.
+     *         Returns CoderResult.UNDERFLOW if the action succeeds.
      * @stable ICU 3.6
      */
     protected CoderResult implFlush(ByteBuffer out) {
@@ -244,7 +244,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * @param in buffer to decode
      * @param out buffer to populate with decoded result
      * @return result of decoding action. Returns CoderResult.UNDERFLOW if the decoding
-     *	   action succeeds or more input is needed for completing the decoding action.
+     *         action succeeds or more input is needed for completing the decoding action.
      * @stable ICU 3.6
      */
     protected CoderResult encodeLoop(CharBuffer in, ByteBuffer out) {
@@ -627,31 +627,31 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * responsibility of assembling the int value lies with the caller.
      * For assembling a code point the caller can use UTF16 class of ICU4J and do something like:
      * <pre>
-     * while(i<mySource.length){
-     *	  if(UTF16.isLeadSurrogate(mySource[i])&& i+1< mySource.length){
-     *	      if(UTF16.isTrailSurrogate(mySource[i+1])){
-     *	          int temp = UTF16.charAt(mySource,i,i+1,0);
-     *	          if(!((CharsetEncoderICU) myConv).canEncode(temp)){
-     *		  passed=false;
-     *	          }
-     *	          i++;
-     *	          i++;
-     *	      }
-     *	 }
-     * }
+     *  while(i<mySource.length){
+     *      if(UTF16.isLeadSurrogate(mySource[i])&& i+1< mySource.length){
+     *          if(UTF16.isTrailSurrogate(mySource[i+1])){
+     *              int temp = UTF16.charAt(mySource,i,i+1,0);
+     *              if(!((CharsetEncoderICU) myConv).canEncode(temp)){
+     *                  passed=false;
+     *              }
+     *              i++;
+     *              i++;
+     *          }
+     *      }
+     *  }
      * </pre>
      * or
      * <pre>
-     * String src = new String(mySource);
-     * int i,codepoint;
-     * boolean passed = false;
-     * while(i<src.length()){
-     *	codepoint = UTF16.charAt(src,i);
-     *	i+= (codepoint>0xfff)? 2:1;
-     *	if(!(CharsetEncoderICU) myConv).canEncode(codepoint)){
-     *	    passed = false;
-     *	}
-     * }
+     *  String src = new String(mySource);
+     *  int i,codepoint;
+     *  boolean passed = false;
+     *  while(i<src.length()){
+     *      codepoint = UTF16.charAt(src,i);
+     *      i+= (codepoint>0xfff)? 2:1;
+     *      if(!(CharsetEncoderICU) myConv).canEncode(codepoint)){
+     *          passed = false;
+     *      }
+     *  }
      * </pre>
      *
      * @param codepoint Unicode code point as int value

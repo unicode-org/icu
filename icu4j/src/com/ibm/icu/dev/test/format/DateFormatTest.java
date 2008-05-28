@@ -2578,13 +2578,13 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             DateFormatSymbols datsym2 = new DateFormatSymbols();
             if (!datsym1.equals(datsym2)) {
                 errln("FAIL: DateFormatSymbols returned by getInstance()" +
-                		"does not match new DateFormatSymbols().");
+                        "does not match new DateFormatSymbols().");
             }
             datsym1 = DateFormatSymbols.getInstance(Locale.JAPAN);
             datsym2 = DateFormatSymbols.getInstance(ULocale.JAPAN);
             if (!datsym1.equals(datsym2)) {
                 errln("FAIL: DateFormatSymbols returned by getInstance(Locale.JAPAN)" +
-                		"does not match the one returned by getInstance(ULocale.JAPAN).");
+                        "does not match the one returned by getInstance(ULocale.JAPAN).");
             }
         }
         {
@@ -3199,7 +3199,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                         DateFormat.Field attr = (DateFormat.Field)keyIterator.next();
                         if (!DATEFORMAT_FIELDS[patidx].equals(attr)) {
                             errln("FAIL: The attribute at " + acit.getIndex() + " in patterns[" + i + "" +
-                            		"] is " + attr + " - Expected: " + DATEFORMAT_FIELDS[patidx]);
+                                    "] is " + attr + " - Expected: " + DATEFORMAT_FIELDS[patidx]);
                         }
                     } else {
                         // SimpleDateFormat#formatToCharacterIterator never set multiple

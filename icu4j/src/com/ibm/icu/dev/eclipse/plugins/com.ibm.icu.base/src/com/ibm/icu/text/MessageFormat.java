@@ -484,35 +484,35 @@ public class MessageFormat extends Format {
     * support this method.
     */
    public void setFormatsByArgumentIndex(Format[] newFormats) {
-	   if (sfsbai == null) {
-		   synchronized (missing) {
-			   try {
-				   Class[] params = { Format[].class };
-				   sfsbai = java.text.MessageFormat.class.getMethod("setFormatsByArgumentIndex", params);
-			   }
-			   catch (NoSuchMethodException e) {
-				   sfsbai = missing;
-			   }
-		   }
-	   }
-	   if (sfsbai != missing) {
-		   try {
-			   Format[] unwrapped = new Format[newFormats.length];
-			   for (int i = 0; i < newFormats.length; ++i) {
-				   unwrapped[i] = unwrap(newFormats[i]);
-			   }
-			   Object[] args = { unwrapped };
-			   ((Method)sfsbai).invoke(messageFormat, args);
-			   return;
-		   }
-		   catch (IllegalAccessException e) {
-			   // can't happen
-		   }
-		   catch (InvocationTargetException e) {
-			   // can't happen
-		   }
-	   }
-	   throw new UnsupportedOperationException();
+       if (sfsbai == null) {
+           synchronized (missing) {
+               try {
+                   Class[] params = { Format[].class };
+                   sfsbai = java.text.MessageFormat.class.getMethod("setFormatsByArgumentIndex", params);
+               }
+               catch (NoSuchMethodException e) {
+                   sfsbai = missing;
+               }
+           }
+       }
+       if (sfsbai != missing) {
+           try {
+               Format[] unwrapped = new Format[newFormats.length];
+               for (int i = 0; i < newFormats.length; ++i) {
+                   unwrapped[i] = unwrap(newFormats[i]);
+               }
+               Object[] args = { unwrapped };
+               ((Method)sfsbai).invoke(messageFormat, args);
+               return;
+           }
+           catch (IllegalAccessException e) {
+               // can't happen
+           }
+           catch (InvocationTargetException e) {
+               // can't happen
+           }
+       }
+       throw new UnsupportedOperationException();
     }
    private static Object sfsbai;
    
@@ -564,31 +564,31 @@ public class MessageFormat extends Format {
     * support this method.
     */
    public void setFormatByArgumentIndex(int argumentIndex, Format newFormat) {
-	   if (sfbai == null) {
-		   synchronized (missing) {
-			   try {
-				   Class[] params = { Integer.TYPE, Format.class };
-				   sfbai = java.text.MessageFormat.class.getMethod("setFormatByArgumentIndex", params);
-			   }
-			   catch (NoSuchMethodException e) {
-				   sfbai = missing;
-			   }
-		   }
-	   }
-	   if (sfbai != missing) {
-		   try {
-			   Object[] args = { new Integer(argumentIndex), newFormat };
-			   ((Method)sfbai).invoke(messageFormat, args);
-			   return;
-		   }
-		   catch (IllegalAccessException e) {
-			   // can't happen
-		   }
-		   catch (InvocationTargetException e) {
-			   // can't happen
-		   }
-	   }
-	   throw new UnsupportedOperationException();
+       if (sfbai == null) {
+           synchronized (missing) {
+               try {
+                   Class[] params = { Integer.TYPE, Format.class };
+                   sfbai = java.text.MessageFormat.class.getMethod("setFormatByArgumentIndex", params);
+               }
+               catch (NoSuchMethodException e) {
+                   sfbai = missing;
+               }
+           }
+       }
+       if (sfbai != missing) {
+           try {
+               Object[] args = { new Integer(argumentIndex), newFormat };
+               ((Method)sfbai).invoke(messageFormat, args);
+               return;
+           }
+           catch (IllegalAccessException e) {
+               // can't happen
+           }
+           catch (InvocationTargetException e) {
+               // can't happen
+           }
+       }
+       throw new UnsupportedOperationException();
    }
    private static Object sfbai;
 
@@ -637,32 +637,32 @@ public class MessageFormat extends Format {
     * support this method.
     */
    public Format[] getFormatsByArgumentIndex() {
-	   if (gfbai == null) {
-		   synchronized (missing) {
-			   try {
-				   gfbai = java.text.MessageFormat.class.getMethod("getFormatsByArgumentIndex", null);
-			   }
-			   catch (NoSuchMethodException e) {
-				   gfbai = missing;
-			   }
-		   }
-	   }
-	   if (gfbai != missing) {
-		   try {
-			   Format[] result = (Format[])((Method)gfbai).invoke(messageFormat, null);
-			   for (int i = 0; i < result.length; ++i) {
-				   result[i] = wrap(result[i]);
-			   }
-			   return result;
-		   }
-		   catch (IllegalAccessException e) {
-			   // can't happen
-		   }
-		   catch (InvocationTargetException e) {
-			   // can't happen
-		   }
-	   }
-	   throw new UnsupportedOperationException();
+       if (gfbai == null) {
+           synchronized (missing) {
+               try {
+                   gfbai = java.text.MessageFormat.class.getMethod("getFormatsByArgumentIndex", null);
+               }
+               catch (NoSuchMethodException e) {
+                   gfbai = missing;
+               }
+           }
+       }
+       if (gfbai != missing) {
+           try {
+               Format[] result = (Format[])((Method)gfbai).invoke(messageFormat, null);
+               for (int i = 0; i < result.length; ++i) {
+                   result[i] = wrap(result[i]);
+               }
+               return result;
+           }
+           catch (IllegalAccessException e) {
+               // can't happen
+           }
+           catch (InvocationTargetException e) {
+               // can't happen
+           }
+       }
+       throw new UnsupportedOperationException();
    }
    private static Object gfbai;
    private static final Object missing = new Object();

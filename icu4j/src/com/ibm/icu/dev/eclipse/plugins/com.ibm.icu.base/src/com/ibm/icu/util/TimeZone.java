@@ -86,7 +86,7 @@ public class TimeZone implements Serializable, Cloneable {
      * they manipulate the delegate.
      */
     public TimeZone() {
-    	this.timeZone = java.util.TimeZone.getDefault();
+        this.timeZone = java.util.TimeZone.getDefault();
     }
     
     /**
@@ -138,10 +138,10 @@ public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 2.8
      */
     public int getOffset(long date) {
-    	if (inDaylightTime(new Date(date))) {
-    	    return getRawOffset() + getDSTSavings();
-    	}
-    	return getRawOffset();
+        if (inDaylightTime(new Date(date))) {
+            return getRawOffset() + getDSTSavings();
+        }
+        return getRawOffset();
     }
 
    /**

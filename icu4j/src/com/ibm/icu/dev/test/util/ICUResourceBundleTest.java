@@ -42,8 +42,8 @@ public final class ICUResourceBundleTest extends TestFmwk {
     }
     public void TestGetResources(){
         try{
-        	// It does not work well in eclipse plug-in test because of class loader configuration??
-        	// For now, specify resource path explicitly in this test case
+            // It does not work well in eclipse plug-in test because of class loader configuration??
+            // For now, specify resource path explicitly in this test case
             //Enumeration en = testLoader.getResources("META-INF");
             Enumeration en = testLoader.getResources("com.ibm.icu.dev.data");
             for(;en.hasMoreElements();) {

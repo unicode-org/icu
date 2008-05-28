@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -220,8 +220,8 @@ public class LocaleAliasTest extends com.ibm.icu.dev.test.TestFmwk {
             UResourceBundle urb1 = null;
             UResourceBundle urb2 = null;
             
-    	    urb1 = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, oldLoc);
-    	    urb2 = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, newLoc);
+            urb1 = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, oldLoc);
+            urb2 = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, newLoc);
             ULocale l1 = urb1.getULocale();
             ULocale l2 = urb2.getULocale();        
             if (!newLoc.equals(l1)) {

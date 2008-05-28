@@ -3918,8 +3918,8 @@ public class TestCharset extends TestFmwk {
             errln("Exception while encoding UTF32LE (6) should have been thrown.");
         } catch (Exception ex) {
         }
-    }			
-    
+    }
+
     //Test for charset UTF16LE to provide better code coverage
     public void TestCharsetUTF16LE() {
         CoderResult result = CoderResult.UNDERFLOW;
