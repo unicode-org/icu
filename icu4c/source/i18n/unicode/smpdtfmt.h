@@ -606,6 +606,43 @@ public:
      */
     virtual void adoptCalendar(Calendar* calendarToAdopt);
 
+    /**
+     * Check whether the 'field' is smaller than all the fields covered in
+     * pattern, return TRUE if it is. The sequence of calendar field, 
+     * from large to small is: ERA, YEAR, MONTH, DATE, AM_PM, HOUR, MINUTE,...
+     * @param field    the calendar field need to check against
+     * @return         TRUE if the 'field' is smaller than all the fields 
+     *                 covered in pattern. FALSE otherwise.
+     * @internal ICU 4.0
+     */
+    UBool isFieldUnitIgnored(UCalendarDateFields field) const;
+
+
+    /**
+     * Check whether the 'field' is smaller than all the fields covered in
+     * pattern, return TRUE if it is. The sequence of calendar field, 
+     * from large to small is: ERA, YEAR, MONTH, DATE, AM_PM, HOUR, MINUTE,...
+     * @param pattern  the pattern to check against
+     * @param field    the calendar field need to check against
+     * @return         TRUE if the 'field' is smaller than all the fields 
+     *                 covered in pattern. FALSE otherwise.
+     * @internal ICU 4.0
+     */
+    static UBool isFieldUnitIgnored(const UnicodeString& pattern, 
+                                    UCalendarDateFields field);
+
+
+
+    /**
+     * Get the locale of this simple date formatter.
+     * It is used in DateIntervalFormat.
+     *
+     * @return   locale in this simple date formatter
+     * @internal ICU 4.0
+     */
+    const Locale& getSmpFmtLocale(void) const;
+
+
 private:
     friend class DateFormat;
 
@@ -825,6 +862,15 @@ private:
      * Map index into pattern character string to DateFormat field number
      */
     static const UDateFormatField fgPatternIndexToDateFormatField[];
+
+    /**
+     * Used to map Calendar field to field level.
+     * The larger the level, the smaller the field unit.
+     * For example, UCAL_ERA level is 0, UCAL_YEAR level is 10,
+     * UCAL_MONTH level is 20.
+     */
+    static const int32_t fgCalendarFieldToLevel[];
+    static const int32_t fgPatternCharToLevel[];
 
     /**
      * The formatting pattern for this formatter.

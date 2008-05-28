@@ -24,6 +24,7 @@
 #include "unicode/ures.h"
 #include "unicode/datefmt.h"
 #include "unicode/smpdtfmt.h"
+#include "unicode/dtptngen.h"
 #include "reldtfmt.h"
 
 #include "cstring.h"
@@ -272,6 +273,36 @@ DateFormat* U_EXPORT2
 DateFormat::createInstance()
 {
     return create(kShort, (EStyle) (kShort + kDateOffset), Locale::getDefault());
+}
+
+//----------------------------------------------------------------------
+DateFormat* U_EXPORT2
+DateFormat::createInstance(const UnicodeString& skeleton,
+                           UBool adjustFieldWidth,
+                           const Locale& locale) 
+{
+    UErrorCode status = U_ZERO_ERROR;
+
+    DateTimePatternGenerator* dtptg = 
+               DateTimePatternGenerator::createInstance(locale, status);
+    if ( dtptg == NULL || U_FAILURE(status) ) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        delete dtptg;
+        return NULL;
+    }
+
+    // FIXME: use adjustFieldWidth later
+    const UnicodeString pattern = dtptg->getBestPattern(skeleton, status);
+    delete dtptg;
+    if ( U_FAILURE(status) ) {
+        return NULL;
+    }
+    SimpleDateFormat* dtfmt = new SimpleDateFormat(pattern, locale, status);
+    if ( U_FAILURE(status) ) {
+        delete dtfmt;
+        return NULL;
+    }
+    return dtfmt;
 }
 
 //----------------------------------------------------------------------
