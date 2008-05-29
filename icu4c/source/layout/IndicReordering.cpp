@@ -468,6 +468,7 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
 
             break;
 
+        case CC_AL_LAKUNA:
         case CC_NUKTA:
             output.writeChar(C_DOTTED_CIRCLE, prev, tagArray1);
             output.writeChar(chars[prev], prev, tagArray1);
