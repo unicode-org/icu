@@ -7,6 +7,8 @@
 
 #
 # Some of these variables are overridden in the config/mh-* files.
+# 
+# Please be sure to update config/Makefile.inc.in  if you add something here.
 #
 
 # Shell to use
