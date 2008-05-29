@@ -134,7 +134,7 @@ public class Currency extends MeasureUnit implements Serializable {
     {
         // local variables
         String country = loc.getCountry();
-        String variant = loc.getVariant();
+        //String variant = loc.getVariant();
         long dateL = d.getTime();
         long mask = 4294967295L;
 
