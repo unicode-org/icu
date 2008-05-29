@@ -378,7 +378,6 @@ icu4j/src/com/ibm/icu/dev/test/duration/testdata/testdata_zh_Hans_SG.txt -text
 icu4j/src/com/ibm/icu/dev/test/duration/testdata/testdata_zh_Hant.txt -text
 icu4j/src/com/ibm/icu/dev/test/duration/testdata/testdata_zh_Hant_HK.txt -text
 icu4j/src/com/ibm/icu/dev/test/format/DataDrivenFormatTest.java -text
-icu4j/src/com/ibm/icu/dev/test/format/DateIntervalFormatTest.java -text
 icu4j/src/com/ibm/icu/dev/test/normalizer/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Asian.txt -text svneol=unset#application/octet-stream

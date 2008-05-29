@@ -14,7 +14,8 @@ import java.io.Serializable;
  * This class represents date interval.
  * It is a pair of long representing from long 1 to long 2.
  * @draft ICU 4.0
-**/
+ * @provisional This API might change or be removed in a future release.
+ */
 public final class DateInterval implements Serializable {
 
     private static final long serialVersionUID = 1;
@@ -27,6 +28,7 @@ public final class DateInterval implements Serializable {
      * @param from      The from date in date interval.
      * @param to        The to date in date interval.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public DateInterval(long from, long to)
     {
@@ -38,6 +40,7 @@ public final class DateInterval implements Serializable {
      * Get the from date.
      * @return  the from date in dateInterval.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public long getFromDate()
     {
@@ -48,12 +51,18 @@ public final class DateInterval implements Serializable {
      * Get the to date.
      * @return  the to date in dateInterval.
      * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
      */
     public long getToDate()
     {
         return toDate;
     }
 
+    /**
+     * Override equals
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
     public boolean equals(Object a) {
         if ( a instanceof DateInterval ) {
             DateInterval di = (DateInterval)a;
@@ -62,12 +71,22 @@ public final class DateInterval implements Serializable {
         return false;
     }
 
+    /**
+     * Override hashcode
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
     public int hashCode() {
         return (int)(fromDate + toDate);
     }
 
-   public String toString() {
-       return String.valueOf(fromDate) + " " + String.valueOf(toDate);
-   }
+    /**
+     * Override toString
+     * @draft ICU 4.0
+     * @provisional This API might change or be removed in a future release.
+     */
+    public String toString() {
+        return String.valueOf(fromDate) + " " + String.valueOf(toDate);
+    }
 
 } // end class DateInterval
