@@ -188,6 +188,8 @@ icu4c/source/samples/uciter8/Debug
 icu4c/source/samples/uciter8/release
 icu4c/source/samples/uciter8/uciter8.vcproj.*.*.user
 icu4c/source/samples/ucnv/Debug
+icu4c/source/samples/ucnv/convsamp
+icu4c/source/samples/ucnv/convsamp.out
 icu4c/source/samples/ucnv/release
 icu4c/source/samples/ucnv/ucnv.vcproj.*.*.user
 icu4c/source/samples/udata/Debug
