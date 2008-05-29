@@ -1878,7 +1878,7 @@ public class FormatTests
         public Object[] getTestObjects()
         {
             DateIntervalFormat dateIntervalFormats[] = {
-                DateIntervalFormat.getInstance("yMMMMEEEEd", false)
+                DateIntervalFormat.getInstance("yMMMMEEEEd")
             };
             return dateIntervalFormats;
         }
