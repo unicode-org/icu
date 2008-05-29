@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 #******************************************************************************
-#   Copyright (C) 1999-2007, International Business Machines
+#   Copyright (C) 1999-2008, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #******************************************************************************
 # This Makefile.inc is designed to be included into projects which make use
@@ -30,6 +30,7 @@ exec_prefix = @exec_prefix@
 libdir = @libdir@
 libexecdir = @libexecdir@
 bindir = @bindir@
+datarootdir = @datarootdir@
 datadir = @datadir@
 sbindir = @sbindir@
 
@@ -141,6 +142,10 @@ GENCMN   = $(sbindir)/gencmn
 GENRB    = $(bindir)/genrb
 PKGDATA  = $(bindir)/pkgdata
 
+# moved here because of dependencies
+pkgdatadir = $(datadir)/$(PACKAGE)$(ICULIBSUFFIX)/$(VERSION)
+pkglibdir = $(libdir)/$(PACKAGE)$(ICULIBSUFFIX)/$(VERSION)
+
 ##################################################################
 ##################################################################
 #
@@ -214,8 +219,6 @@ INSTALL-L = ${INSTALL_DATA}
 #
 ##################################################################
 
-pkgdatadir = $(datadir)/$(PACKAGE)$(ICULIBSUFFIX)/$(VERSION)
-pkglibdir = $(libdir)/$(PACKAGE)$(ICULIBSUFFIX)/$(VERSION)
 
 # The basename of the ICU data file (i.e. icudt21b )
 ICUDATA_CHAR = @ICUDATA_CHAR@
