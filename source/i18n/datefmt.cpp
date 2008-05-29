@@ -277,9 +277,8 @@ DateFormat::createInstance()
 
 //----------------------------------------------------------------------
 DateFormat* U_EXPORT2
-DateFormat::createInstance(const UnicodeString& skeleton,
-                           UBool adjustFieldWidth,
-                           const Locale& locale) 
+DateFormat::createPatternInstance(const UnicodeString& skeleton,
+                                 const Locale& locale) 
 {
     UErrorCode status = U_ZERO_ERROR;
 
@@ -291,7 +290,6 @@ DateFormat::createInstance(const UnicodeString& skeleton,
         return NULL;
     }
 
-    // FIXME: use adjustFieldWidth later
     const UnicodeString pattern = dtptg->getBestPattern(skeleton, status);
     delete dtptg;
     if ( U_FAILURE(status) ) {

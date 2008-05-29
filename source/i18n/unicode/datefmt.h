@@ -417,7 +417,7 @@ public:
      * Create a date/time formatter from skeleton and a given locale.
      *
      * Users are encouraged to use the skeleton macros defined in udat.h.
-     * For example, MONTH_DOW_DAY_LONG_FORMAT, which is "MMMMEEEEd",
+     * For example, MONTH_WEEKDAY_DAY, which is "MMMMEEEEd",
      * and which means the pattern should have day, month, and day-of-week 
      * fields, and follow the long date format defined in date time pattern.
      * For example, for English, the full pattern should be 
@@ -428,16 +428,12 @@ public:
      * After which, this API will be replaced.
      *
      * @param skeleton  the skeleton on which date format based.
-     * @param adjustFieldWidth  whether adjust the skeleton field width or not.
-     *                          It is used for DateTimePatternGenerator to 
-     *                          adjust field width when get  
-     *                          full pattern from skeleton.
      * @param locale    the given locale.
      * @return          a simple date formatter which the caller owns.
      * @internal ICU 4.0
      */
-    static DateFormat* U_EXPORT2 createInstance(const UnicodeString& skeleton,
-                                                UBool adjustFieldWidth,
+    static DateFormat* U_EXPORT2 createPatternInstance(
+                                                const UnicodeString& skeleton,
                                                 const Locale& locale);
 
     /**

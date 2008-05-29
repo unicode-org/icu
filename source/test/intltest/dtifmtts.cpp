@@ -52,123 +52,12 @@ void DateIntervalFormatTest::runIndexedTest( int32_t index, UBool exec, const ch
  */
 void DateIntervalFormatTest::testAPI() {
 
-    // ======= Test create instance with default local
-    UErrorCode status = U_ZERO_ERROR;
-    logln("Testing DateIntervalFormat create instance with defaule locale");
- 
-    DateIntervalFormat* dtitvfmt = DateIntervalFormat::createInstance(status);
-    if(U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create DateIntervalFormat (default) - exitting");
-        return;
-    } else {
-        delete dtitvfmt;
-    }
-
-    // ======= Test create instance with given locale
-    status = U_ZERO_ERROR;
-    logln("Testing DateIntervalFormat create instance with given locale");
- 
-    dtitvfmt = DateIntervalFormat::createInstance(Locale::getGerman(), status);
-    if(U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create DateIntervalFormat (given locale) - exitting");
-        return;
-    } else {
-        delete dtitvfmt;
-    }
-
-    /* ====== Test create date interval instance with default locale and 
-     * ====== date format style
-     */
-    status = U_ZERO_ERROR;
-    logln("Testing DateIntervalFormat create date instance with default locale and date format style");
- 
-    dtitvfmt = DateIntervalFormat::createDateIntervalInstance(DateFormat::kFull, status);
-    if(U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create DateIntervalFormat (default local + date style) - exitting");
-        return;
-    } else {
-        delete dtitvfmt;
-    }
-
-    /* ====== Test create date interval instance with given locale and 
-     * ====== date format style
-     */
-    status = U_ZERO_ERROR;
-    logln("Testing DateIntervalFormat create date instance with given locale and date format style");
- 
-    dtitvfmt = DateIntervalFormat::createDateIntervalInstance(DateFormat::kFull, Locale::getFrench(), status);
-    if(U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create DateIntervalFormat (local + date style) - exitting");
-        return;
-    } else {
-        delete dtitvfmt;
-    }
-
-
-    /* ====== Test create time interval instance with default locale and 
-     * ====== time format style
-     */
-    status = U_ZERO_ERROR;
-    logln("Testing DateIntervalFormat create time instance with default locale and time format style");
-
-    dtitvfmt = DateIntervalFormat::createTimeIntervalInstance(DateFormat::kLong, status);
-    if(U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create DateIntervalFormat (default local + time style) - exitting");
-        return;
-    } else {
-        delete dtitvfmt;
-    }
-
-    /* ====== Test create time interval instance with given locale and 
-     * ====== time format style
-     */
-    status = U_ZERO_ERROR;
-    logln("Testing DateIntervalFormat create time instance with given locale and time format style");
-
-    dtitvfmt = DateIntervalFormat::createTimeIntervalInstance(DateFormat::kLong, Locale::getItalian(), status);
-    if(U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create DateIntervalFormat (local + time style) - exitting");
-        return;
-    } else {
-        delete dtitvfmt;
-    }
-
-    /* ====== Test create date time interval instance with default locale and 
-     * ====== date time format style
-     */
-    status = U_ZERO_ERROR;
-    logln("Testing DateIntervalFormat create date time instance with iven locale and date time format style");
- 
-    dtitvfmt = DateIntervalFormat::createDateTimeIntervalInstance(DateFormat::kMedium, DateFormat::kShort,  status);
-    if(U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create DateIntervalFormat (default locale + date time style) - exitting");
-        return;
-    } else {
-        delete dtitvfmt;
-    }
-
-
-    /* ====== Test create date time interval instance with given locale and 
-     * ====== date time format style
-     */
-    status = U_ZERO_ERROR;
-    logln("Testing DateIntervalFormat create date time instance with given locale and date time format style");
- 
-    dtitvfmt = DateIntervalFormat::createDateTimeIntervalInstance(DateFormat::kMedium, DateFormat::kShort, Locale::getItalian(), status);
-    if(U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create DateIntervalFormat (local + date time style) - exitting");
-        return;
-    } else {
-        delete dtitvfmt;
-    }
-
-
     /* ====== Test create interval instance with default locale and skeleton
      */
-    status = U_ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     logln("Testing DateIntervalFormat create instance with default locale and skeleton");
  
-    dtitvfmt = DateIntervalFormat::createInstance(YEAR_MONTH_DAY_LONG_FORMAT, FALSE, status);
+    DateIntervalFormat* dtitvfmt = DateIntervalFormat::createInstance(YEAR_MONTH_DAY_LONG_FORMAT, status);
     if(U_FAILURE(status)) {
         dataerrln("ERROR: Could not create DateIntervalFormat (skeleton + default locale) - exitting");
         return;
@@ -182,7 +71,7 @@ void DateIntervalFormatTest::testAPI() {
     status = U_ZERO_ERROR;
     logln("Testing DateIntervalFormat create instance with given locale and skeleton");
  
-    dtitvfmt = DateIntervalFormat::createInstance(YEAR_MONTH_DAY_LONG_FORMAT, FALSE, Locale::getJapanese(), status);
+    dtitvfmt = DateIntervalFormat::createInstance(YEAR_MONTH_DAY_LONG_FORMAT, Locale::getJapanese(), status);
     if(U_FAILURE(status)) {
         dataerrln("ERROR: Could not create DateIntervalFormat (skeleton + locale) - exitting");
         return;
@@ -198,7 +87,7 @@ void DateIntervalFormatTest::testAPI() {
  
     DateIntervalInfo* dtitvinf = new DateIntervalInfo(Locale::getSimplifiedChinese(), status);
 
-    dtitvfmt = DateIntervalFormat::createInstance("EEEdMMMyhms", FALSE, dtitvinf, status);
+    dtitvfmt = DateIntervalFormat::createInstance("EEEdMMMyhms", dtitvinf, status);
     if(U_FAILURE(status)) {
         dataerrln("ERROR: Could not create DateIntervalFormat (skeleton + DateIntervalInfo + default locale) - exitting");
         return;
@@ -214,7 +103,7 @@ void DateIntervalFormatTest::testAPI() {
  
     dtitvinf = new DateIntervalInfo(Locale::getSimplifiedChinese(), status);
 
-    dtitvfmt = DateIntervalFormat::createInstance("EEEdMMMyhms", FALSE, Locale::getSimplifiedChinese(), dtitvinf, status);
+    dtitvfmt = DateIntervalFormat::createInstance("EEEdMMMyhms", Locale::getSimplifiedChinese(), dtitvinf, status);
     if(U_FAILURE(status)) {
         dataerrln("ERROR: Could not create DateIntervalFormat (skeleton + DateIntervalInfo + locale) - exitting");
         return;
@@ -462,66 +351,11 @@ void DateIntervalFormatTest::expect(const char** data, int32_t data_length,
             if (!assertSuccess("parse", ec)) return;
             DateInterval dtitv(date, date_2);
 
-            for ( DateFormat::EStyle style = DateFormat::kFull; 
-                  style  < DateFormat::kDateOffset;
-                  style = (DateFormat::EStyle)(style+1) ) {
-                DateIntervalFormat* dtitvfmt = DateIntervalFormat::createDateIntervalInstance(style, loc, ec);
-                FieldPosition pos=0;
-                if (!assertSuccess("createDateInstance", ec)) return;
-                dtitvfmt->format(&dtitv, str.remove(), pos, ec);
-                if (!assertSuccess("format", ec)) return;
-#ifdef DTIFMTTS_DEBUG
-                sprintf(mesg, "date interval, style = %d\n", style);
-                PRINTMESG(mesg)
-                str.extract(0,  str.length(), result, "UTF-8");
-                sprintf(mesg, "interval date: %s\n", result);
-                PRINTMESG(mesg)
-#endif
-                delete dtitvfmt;
-            } 
- 
-            for ( DateFormat::EStyle style = DateFormat::kFull; 
-                  style  < DateFormat::kDateOffset;
-                  style = (DateFormat::EStyle)(style+1) ) {
-                DateIntervalFormat* dtitvfmt = DateIntervalFormat::createTimeIntervalInstance(style, loc, ec);
-
-                if (!assertSuccess("createTimeInstance", ec)) return;
-                FieldPosition pos=0;
-                dtitvfmt->format(&dtitv, str.remove(), pos, ec);
-                if (!assertSuccess("format", ec)) return;
-#ifdef DTIFMTTS_DEBUG
-                sprintf(mesg, "time interval, style = %d\n", style);
-                PRINTMESG(mesg)
-                str.extract(0,  str.length(), result, "UTF-8");
-                sprintf(mesg, "interval date: %s\n", result);
-                PRINTMESG(mesg)
-#endif
-                delete dtitvfmt;
-            } 
- 
-            for ( DateFormat::EStyle style = DateFormat::kFull; 
-                  style  < DateFormat::kDateOffset;
-                  style = (DateFormat::EStyle)(style+1) ) {
-                DateIntervalFormat* dtitvfmt = DateIntervalFormat::createDateTimeIntervalInstance(style, style, loc, ec);
-                if (!assertSuccess("createDateTimeInstance", ec)) return;
-                FieldPosition pos=0;
-                dtitvfmt->format(&dtitv, str.remove(), pos, ec);
-                if (!assertSuccess("format", ec)) return;
-#ifdef DTIFMTTS_DEBUG
-                sprintf(mesg, "date time interval, style = %d\n", style);
-                PRINTMESG(mesg)
-                str.extract(0,  str.length(), result, "UTF-8");
-                sprintf(mesg, "interval date: %s\n", result);
-                PRINTMESG(mesg)
-#endif
-                delete dtitvfmt;
-            } 
-
             for ( uint32_t skeletonIndex = 0; 
                   skeletonIndex < ARRAY_SIZE(skeleton); 
                   ++skeletonIndex ) {
                 const UnicodeString& oneSkeleton = skeleton[skeletonIndex];
-                DateIntervalFormat* dtitvfmt = DateIntervalFormat::createInstance(oneSkeleton, FALSE, loc, ec);
+                DateIntervalFormat* dtitvfmt = DateIntervalFormat::createInstance(oneSkeleton, loc, ec);
                 if (!assertSuccess("createInstance(skeleton)", ec)) return;
                 FieldPosition pos=0;
                 dtitvfmt->format(&dtitv, str.remove(), pos, ec);
@@ -545,7 +379,7 @@ void DateIntervalFormatTest::expect(const char** data, int32_t data_length,
             if (!assertSuccess("DateIntervalInfo::setIntervalPattern", ec)) return;
             dtitvinf->setIntervalPattern(YEAR_MONTH_DAY_MEDIUM_FORMAT, UCAL_HOUR_OF_DAY, "yyyy MMM d HH:mm - HH:mm", ec);
             if (!assertSuccess("DateIntervalInfo::setIntervalPattern", ec)) return;
-            DateIntervalFormat* dtitvfmt = DateIntervalFormat::createInstance(YEAR_MONTH_DAY_MEDIUM_FORMAT, FALSE, loc, dtitvinf, ec);
+            DateIntervalFormat* dtitvfmt = DateIntervalFormat::createInstance(YEAR_MONTH_DAY_MEDIUM_FORMAT, loc, dtitvinf, ec);
             if (!assertSuccess("createInstance(skeleton,dtitvinf)", ec)) return;
             FieldPosition pos=0;
             dtitvfmt->format(&dtitv, str.remove(), pos, ec);
