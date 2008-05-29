@@ -661,9 +661,12 @@ public class SerializableTest extends TestFmwk.TestGroup
         map.put("com.ibm.icu.text.DateFormat", new FormatTests.DateFormatHandler());
         map.put("com.ibm.icu.text.DateFormatSymbols", new FormatTests.DateFormatSymbolsHandler());
         map.put("com.ibm.icu.util.DateInterval", new DateIntervalHandler());
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
         map.put("com.ibm.icu.text.DateIntervalFormat", new FormatTests.DateIntervalFormatHandler());
         map.put("com.ibm.icu.text.DateIntervalInfo", new FormatTests.DateIntervalInfoHandler());
         map.put("com.ibm.icu.text.DateIntervalInfo$PatternInfo", new FormatTests.PatternInfoHandler());
+//#endif
         map.put("com.ibm.icu.text.SimpleDateFormat", new FormatTests.SimpleDateFormatHandler());
         map.put("com.ibm.icu.text.ChineseDateFormat", new FormatTests.ChineseDateFormatHandler());
         map.put("com.ibm.icu.text.ChineseDateFormatSymbols", new FormatTests.ChineseDateFormatSymbolsHandler());

@@ -19,8 +19,11 @@ import com.ibm.icu.text.ChineseDateFormatSymbols;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.util.DateInterval;
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
 import com.ibm.icu.text.DateIntervalFormat;
 import com.ibm.icu.text.DateIntervalInfo;
+//#endif
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.DurationFormat;
@@ -1867,6 +1870,8 @@ public class FormatTests
     }
 
 
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
 
     public static class DateIntervalFormatHandler implements SerializableTest.Handler
     {
@@ -1889,8 +1894,8 @@ public class FormatTests
             return sfa.equals(sfb);
         }
     }
-    
-    
+
+
     public static class DateIntervalInfoHandler implements SerializableTest.Handler
     {
         public Object[] getTestObjects()
@@ -1927,6 +1932,8 @@ public class FormatTests
             return a.equals(b);
         }
     }
+//#endif
+
     public static class ChineseDateFormatHandler extends DateFormatHandler
     {
         String patterns[] = {

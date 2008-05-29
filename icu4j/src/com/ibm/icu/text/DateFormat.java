@@ -1362,7 +1362,32 @@ public abstract class DateFormat extends UFormat {
         return getInstance(cal, ULocale.getDefault());
     }
 
+    /**
+     * Convenience overload
+     * @stable ICU 2.0
+     */
+    static final public DateFormat getDateInstance(Calendar cal, int dateStyle) {
+        return getDateInstance(cal, dateStyle, ULocale.getDefault());
+    }
 
+    /**
+     * Convenience overload
+     * @stable ICU 2.0
+     */
+    static final public DateFormat getTimeInstance(Calendar cal, int timeStyle) {
+        return getTimeInstance(cal, timeStyle, ULocale.getDefault());
+    }
+
+    /**
+     * Convenience overload
+     * @stable ICU 2.0
+     */
+    static final public DateFormat getDateTimeInstance(Calendar cal, int dateStyle, int timeStyle) {
+        return getDateTimeInstance(cal, dateStyle, timeStyle, ULocale.getDefault());
+    }
+
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
 
     /**
      * Create a date/time formatter from skeleton and a given locale.
@@ -1402,33 +1427,6 @@ public abstract class DateFormat extends UFormat {
         return dtfmt;
     }
 
-
-    /**
-     * Convenience overload
-     * @stable ICU 2.0
-     */
-    static final public DateFormat getDateInstance(Calendar cal, int dateStyle) {
-        return getDateInstance(cal, dateStyle, ULocale.getDefault());
-    }
-
-    /**
-     * Convenience overload
-     * @stable ICU 2.0
-     */
-    static final public DateFormat getTimeInstance(Calendar cal, int timeStyle) {
-        return getTimeInstance(cal, timeStyle, ULocale.getDefault());
-    }
-
-    /**
-     * Convenience overload
-     * @stable ICU 2.0
-     */
-    static final public DateFormat getDateTimeInstance(Calendar cal, int dateStyle, int timeStyle) {
-        return getDateTimeInstance(cal, dateStyle, timeStyle, ULocale.getDefault());
-    }
-
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     /**
      * Convenience overload
      * @draft ICU 4.0
