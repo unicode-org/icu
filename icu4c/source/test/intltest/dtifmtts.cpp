@@ -57,7 +57,7 @@ void DateIntervalFormatTest::testAPI() {
     UErrorCode status = U_ZERO_ERROR;
     logln("Testing DateIntervalFormat create instance with default locale and skeleton");
  
-    DateIntervalFormat* dtitvfmt = DateIntervalFormat::createInstance(YEAR_MONTH_DAY_LONG_FORMAT, status);
+    DateIntervalFormat* dtitvfmt = DateIntervalFormat::createInstance(UDAT_YEAR_MONTH_DAY, status);
     if(U_FAILURE(status)) {
         dataerrln("ERROR: Could not create DateIntervalFormat (skeleton + default locale) - exitting");
         return;
@@ -71,7 +71,7 @@ void DateIntervalFormatTest::testAPI() {
     status = U_ZERO_ERROR;
     logln("Testing DateIntervalFormat create instance with given locale and skeleton");
  
-    dtitvfmt = DateIntervalFormat::createInstance(YEAR_MONTH_DAY_LONG_FORMAT, Locale::getJapanese(), status);
+    dtitvfmt = DateIntervalFormat::createInstance(UDAT_YEAR_MONTH_DAY, Locale::getJapanese(), status);
     if(U_FAILURE(status)) {
         dataerrln("ERROR: Could not create DateIntervalFormat (skeleton + locale) - exitting");
         return;
@@ -375,11 +375,11 @@ void DateIntervalFormatTest::expect(const char** data, int32_t data_length,
             ec = U_ZERO_ERROR;
             DateIntervalInfo* dtitvinf = new DateIntervalInfo(ec);
             dtitvinf->setFallbackIntervalPattern("{0} --- {1}");
-            dtitvinf->setIntervalPattern(YEAR_MONTH_DAY_MEDIUM_FORMAT, UCAL_MONTH, "yyyy MMM d - MMM y",ec);
+            dtitvinf->setIntervalPattern(UDAT_YEAR_ABBR_MONTH_DAY, UCAL_MONTH, "yyyy MMM d - MMM y",ec);
             if (!assertSuccess("DateIntervalInfo::setIntervalPattern", ec)) return;
-            dtitvinf->setIntervalPattern(YEAR_MONTH_DAY_MEDIUM_FORMAT, UCAL_HOUR_OF_DAY, "yyyy MMM d HH:mm - HH:mm", ec);
+            dtitvinf->setIntervalPattern(UDAT_YEAR_ABBR_MONTH_DAY, UCAL_HOUR_OF_DAY, "yyyy MMM d HH:mm - HH:mm", ec);
             if (!assertSuccess("DateIntervalInfo::setIntervalPattern", ec)) return;
-            DateIntervalFormat* dtitvfmt = DateIntervalFormat::createInstance(YEAR_MONTH_DAY_MEDIUM_FORMAT, loc, dtitvinf, ec);
+            DateIntervalFormat* dtitvfmt = DateIntervalFormat::createInstance(UDAT_YEAR_ABBR_MONTH_DAY, loc, dtitvinf, ec);
             if (!assertSuccess("createInstance(skeleton,dtitvinf)", ec)) return;
             FieldPosition pos=0;
             dtitvfmt->format(&dtitv, str.remove(), pos, ec);
