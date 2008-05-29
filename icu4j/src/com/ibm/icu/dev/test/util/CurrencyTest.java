@@ -15,7 +15,6 @@ import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.*;
 
 import java.util.Locale;
-import java.util.Date;
 
 /**
  * @test
@@ -178,133 +177,133 @@ public class CurrencyTest extends TestFmwk {
 
     public void TestAvailableCurrencyCodes()
     {
+/*
         // local Variables
         String[] currency;
 
         // Cycle through historical currencies 
         currency = Currency.getAvailableCurrencyCodes(new ULocale("eo_AM"), new Date(-630720000000L));
-        /*
-                if (currency != null)
-                {
-                    errln("got currency");
-                }
-                else
-                {
-                    errln("no currency");
-                }
-                if (!"AMD".equals(currency[0]))
-                {
-                    errln("didn't return AMD for eo_AM returned: " + currency);
-                }
-                currency = Currency.getInstance(new ULocale("eo_AM"), new Date(0L));
-                result = currency.getCurrencyCode();
-                if (!"SUR".equals(result))
-                {
-                    errln("didn't return SUR for eo_AM returned: " + result);
-                }
+        if (currency != null)
+        {
+            errln("got currency");
+        }
+        else
+        {
+            errln("no currency");
+        }
+        if (!"AMD".equals(currency[0]))
+        {
+            errln("didn't return AMD for eo_AM returned: " + currency);
+        }
+        currency = Currency.getInstance(new ULocale("eo_AM"), new Date(0L));
+        result = currency.getCurrencyCode();
+        if (!"SUR".equals(result))
+        {
+            errln("didn't return SUR for eo_AM returned: " + result);
+        }
 
-                currency = Currency.getInstance(new ULocale("eo_AM"), new Date(693792000000L));
-                result = currency.getCurrencyCode();
-                if (!"RUR".equals(result))
-                {
-                    errln("didn't return RUR for eo_AM returned: " + result);
-                }
+        currency = Currency.getInstance(new ULocale("eo_AM"), new Date(693792000000L));
+        result = currency.getCurrencyCode();
+        if (!"RUR".equals(result))
+        {
+            errln("didn't return RUR for eo_AM returned: " + result);
+        }
 
-                currency = Currency.getInstance(new ULocale("eo_AM"), new Date(977616000000L));
-                result = currency.getCurrencyCode();
-                if (!"AMD".equals(result))
-                {
-                    errln("didn't return AMD for eo_AM returned: " + result);
-                }
+        currency = Currency.getInstance(new ULocale("eo_AM"), new Date(977616000000L));
+        result = currency.getCurrencyCode();
+        if (!"AMD".equals(result))
+        {
+            errln("didn't return AMD for eo_AM returned: " + result);
+        }
 
-                // Locale AD has multiple currencies at once
-                currency = Currency.getInstance(new ULocale("eo_AD"), new Date(977616000000L));
-                result = currency.getCurrencyCode();
-                if (!"EUR".equals(result))
-                {
-                    errln("didn't return EUR for eo_AD returned: " + result);
-                }
+        // Locale AD has multiple currencies at once
+        currency = Currency.getInstance(new ULocale("eo_AD"), new Date(977616000000L));
+        result = currency.getCurrencyCode();
+        if (!"EUR".equals(result))
+        {
+            errln("didn't return EUR for eo_AD returned: " + result);
+        }
 
-                currency = Currency.getInstance(new ULocale("eo_AD"), new Date(0L));
-                result = currency.getCurrencyCode();
-                if (!"ESP".equals(result))
-                {
-                    errln("didn't return ESP for eo_AD returned: " + result);
-                }
+        currency = Currency.getInstance(new ULocale("eo_AD"), new Date(0L));
+        result = currency.getCurrencyCode();
+        if (!"ESP".equals(result))
+        {
+            errln("didn't return ESP for eo_AD returned: " + result);
+        }
 
-                // Locale UA has gap between years 1994 - 1996
-                currency = Currency.getInstance(new ULocale("eo_UA"), new Date(788400000000L));
-                result = currency.getCurrencyCode();
-                if (!"UAH".equals(result))
-                {
-                    errln("didn't return UAH for eo_UA returned: " + result);
-                }
+        // Locale UA has gap between years 1994 - 1996
+        currency = Currency.getInstance(new ULocale("eo_UA"), new Date(788400000000L));
+        result = currency.getCurrencyCode();
+        if (!"UAH".equals(result))
+        {
+            errln("didn't return UAH for eo_UA returned: " + result);
+        }
 
-                // Cycle through historical currencies 
-                currency = Currency.getInstance(new ULocale("eo_AO"), new Date(977616000000L));
-                result = currency.getCurrencyCode();
-                if (!"AOA".equals(result))
-                {
-                    errln("didn't return AOA for eo_AO returned: " + result);
-                }
+        // Cycle through historical currencies 
+        currency = Currency.getInstance(new ULocale("eo_AO"), new Date(977616000000L));
+        result = currency.getCurrencyCode();
+        if (!"AOA".equals(result))
+        {
+            errln("didn't return AOA for eo_AO returned: " + result);
+        }
 
-                currency = Currency.getInstance(new ULocale("eo_AO"), new Date(819936000000L));
-                result = currency.getCurrencyCode();
-                if (!"AOR".equals(result))
-                {
-                    errln("didn't return AOR for eo_AO returned: " + result);
-                }
+        currency = Currency.getInstance(new ULocale("eo_AO"), new Date(819936000000L));
+        result = currency.getCurrencyCode();
+        if (!"AOR".equals(result))
+        {
+            errln("didn't return AOR for eo_AO returned: " + result);
+        }
 
-                currency = Currency.getInstance(new ULocale("eo_AO"), new Date(662256000000L));
-                result = currency.getCurrencyCode();
-                if (!"AON".equals(result))
-                {
-                    errln("didn't return AON for eo_AO returned: " + result);
-                }
+        currency = Currency.getInstance(new ULocale("eo_AO"), new Date(662256000000L));
+        result = currency.getCurrencyCode();
+        if (!"AON".equals(result))
+        {
+            errln("didn't return AON for eo_AO returned: " + result);
+        }
 
-                currency = Currency.getInstance(new ULocale("eo_AO"), new Date(315360000000L));
-                result = currency.getCurrencyCode();
-                if (!"AOK".equals(result))
-                {
-                    errln("didn't return AOK for eo_AO returned: " + result);
-                }
+        currency = Currency.getInstance(new ULocale("eo_AO"), new Date(315360000000L));
+        result = currency.getCurrencyCode();
+        if (!"AOK".equals(result))
+        {
+            errln("didn't return AOK for eo_AO returned: " + result);
+        }
 
-                currency = Currency.getInstance(new ULocale("eo_AO"), new Date(0L));
-                result = currency.getCurrencyCode();
-                if (!"AOA".equals(result))
-                {
-                    errln("didn't return AOA for eo_AO returned: " + result);
-                }
+        currency = Currency.getInstance(new ULocale("eo_AO"), new Date(0L));
+        result = currency.getCurrencyCode();
+        if (!"AOA".equals(result))
+        {
+            errln("didn't return AOA for eo_AO returned: " + result);
+        }
 
-                // Test EURO support
-                currency = Currency.getInstance(new ULocale("en_US"), new Date(System.currentTimeMillis()));
-                result = currency.getCurrencyCode();
-                if (!"USD".equals(result))
-                {
-                    errln("didn't return USD for en_US returned: " + result);
-                }
+        // Test EURO support
+        currency = Currency.getInstance(new ULocale("en_US"), new Date(System.currentTimeMillis()));
+        result = currency.getCurrencyCode();
+        if (!"USD".equals(result))
+        {
+            errln("didn't return USD for en_US returned: " + result);
+        }
 
-                currency = Currency.getInstance(new ULocale("en_US_PREEURO"), new Date(System.currentTimeMillis()));
-                result = currency.getCurrencyCode();
-                if (!"USD".equals(result))
-                {
-                    errln("didn't return USD for en_US_PREEURO returned: " + result);
-                }
+        currency = Currency.getInstance(new ULocale("en_US_PREEURO"), new Date(System.currentTimeMillis()));
+        result = currency.getCurrencyCode();
+        if (!"USD".equals(result))
+        {
+            errln("didn't return USD for en_US_PREEURO returned: " + result);
+        }
 
-                currency = Currency.getInstance(new ULocale("en_US_Q"), new Date(System.currentTimeMillis()));
-                result = currency.getCurrencyCode();
-                if (!"USD".equals(result))
-                {
-                    errln("didn't return USD for en_US_Q returned: " + result);
-                }
+        currency = Currency.getInstance(new ULocale("en_US_Q"), new Date(System.currentTimeMillis()));
+        result = currency.getCurrencyCode();
+        if (!"USD".equals(result))
+        {
+            errln("didn't return USD for en_US_Q returned: " + result);
+        }
 
-                // non-existant locale
-                currency = Currency.getAvailableCurrencyCodes(new ULocale("en_QQ"), new Date(System.currentTimeMillis()));
-                if (currency != null)
-                {
-                    errln("didn't return NULL for en_QQ");
-                }
-        */
+        // non-existant locale
+        currency = Currency.getAvailableCurrencyCodes(new ULocale("en_QQ"), new Date(System.currentTimeMillis()));
+        if (currency != null)
+        {
+            errln("didn't return NULL for en_QQ");
+        }
+*/
     }
 
 
