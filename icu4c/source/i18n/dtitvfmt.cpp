@@ -60,98 +60,22 @@ static const UChar gEarlierFirstPrefix[] = {LOW_E, LOW_A, LOW_R, LOW_L, LOW_I, L
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DateIntervalFormat)
 
 
-DateIntervalFormat* U_EXPORT2
-DateIntervalFormat::createInstance(UErrorCode& status) {
-    return createInstance(Locale::getDefault(), status);
-}
-
-
-DateIntervalFormat* U_EXPORT2
-DateIntervalFormat::createInstance(const Locale& locale, UErrorCode& status) {
-    return createDateTimeIntervalInstance(DateFormat::kDefault, 
-                                          DateFormat::kDefault, locale, status);
-}
-
-
-DateIntervalFormat*  U_EXPORT2
-DateIntervalFormat::createDateIntervalInstance(DateFormat::EStyle style,
-                                               UErrorCode& status) {
-    return createDateIntervalInstance(style, Locale::getDefault(), status);
-}
-
-
-DateIntervalFormat*  U_EXPORT2
-DateIntervalFormat::createDateIntervalInstance(DateFormat::EStyle style,
-                                               const Locale& locale,
-                                               UErrorCode& status) {
-    if ( U_FAILURE(status) ) {
-        return NULL;
-    }
-    DateFormat* dtfmt = DateFormat::createDateInstance(style, locale);
-    DateIntervalInfo* dtitvinf = new DateIntervalInfo(locale, status);
-    // for CJK, even for non-short format,
-    // get skeleton will always return yMd.
-    // so, assign it directly instead of getting if from getSkeleton().
-    UnicodeString skeleton = UnicodeString(gDateFormatSkeleton[(int32_t)style]);
-    return create(dtfmt, dtitvinf, &skeleton, status);
-}
-
-
-DateIntervalFormat*  U_EXPORT2
-DateIntervalFormat::createTimeIntervalInstance(DateFormat::EStyle style,
-                                               UErrorCode& status) {
-    return createTimeIntervalInstance(style, Locale::getDefault(), status);
-}
-
-
-DateIntervalFormat*  U_EXPORT2
-DateIntervalFormat::createTimeIntervalInstance(DateFormat::EStyle style,
-                                               const Locale& locale,
-                                               UErrorCode& status) {
-    return createDateTimeIntervalInstance(DateFormat::kNone, style, locale, status);
-}
-
-
-DateIntervalFormat*  U_EXPORT2
-DateIntervalFormat::createDateTimeIntervalInstance(DateFormat::EStyle dateStyle,
-                                                   DateFormat::EStyle timeStyle,
-                                                   UErrorCode& status) {
-    return createDateTimeIntervalInstance(dateStyle, timeStyle, Locale::getDefault(), status);
-}
-
-
-DateIntervalFormat*  U_EXPORT2
-DateIntervalFormat::createDateTimeIntervalInstance(DateFormat::EStyle dateStyle,
-                                                   DateFormat::EStyle timeStyle,
-                                                   const Locale& locale,
-                                                   UErrorCode& status) {
-    if ( U_FAILURE(status) ) {
-        return NULL;
-    }
-    DateFormat* dtfmt = DateFormat::createDateTimeInstance(dateStyle, timeStyle, locale);
-    DateIntervalInfo* dtitvinf = new DateIntervalInfo(locale, status);
-    return create(dtfmt, dtitvinf, status);
-}
-
-
 
 DateIntervalFormat* U_EXPORT2
 DateIntervalFormat::createInstance(const UnicodeString& skeleton, 
-                                   UBool adjustFieldWidth,
                                    UErrorCode& status) {
-    return createInstance(skeleton, adjustFieldWidth, Locale::getDefault(), status);
+    return createInstance(skeleton, Locale::getDefault(), status);
 }
 
 
 DateIntervalFormat* U_EXPORT2
 DateIntervalFormat::createInstance(const UnicodeString& skeleton, 
-                                   UBool adjustFieldWidth,
                                    const Locale& locale, 
                                    UErrorCode& status) {
     if ( U_FAILURE(status) ) {
         return NULL;
     }
-    DateFormat* dtfmt = DateFormat::createInstance(skeleton, adjustFieldWidth, locale);
+    DateFormat* dtfmt = DateFormat::createPatternInstance(skeleton, locale);
 
 #ifdef DTITVFMT_DEBUG
     char result[1000];
@@ -173,16 +97,14 @@ DateIntervalFormat::createInstance(const UnicodeString& skeleton,
 
 DateIntervalFormat* U_EXPORT2
 DateIntervalFormat::createInstance(const UnicodeString& skeleton,
-                                   UBool adjustFieldWidth,
                                    DateIntervalInfo* dtitvinf,
                                    UErrorCode& status) {
-    return createInstance(skeleton, adjustFieldWidth, Locale::getDefault(), dtitvinf, status);
+    return createInstance(skeleton, Locale::getDefault(), dtitvinf, status);
 }
 
 
 DateIntervalFormat* U_EXPORT2
 DateIntervalFormat::createInstance(const UnicodeString& skeleton,
-                                   UBool adjustFieldWidth,
                                    const Locale& locale,
                                    DateIntervalInfo* dtitvinf,
                                    UErrorCode& status) {
@@ -190,7 +112,7 @@ DateIntervalFormat::createInstance(const UnicodeString& skeleton,
         delete dtitvinf;
         return NULL;
     }
-    DateFormat* dtfmt = DateFormat::createInstance(skeleton, adjustFieldWidth, locale);
+    DateFormat* dtfmt = DateFormat::createPatternInstance(skeleton, locale);
     return create(dtfmt, dtitvinf, &skeleton, status);
 }
 

@@ -70,23 +70,6 @@ static UBool U_CALLCONV hashTableValueComparator(UHashTok val1, UHashTok val2) ;
  * </ol>
  *
  * <P>
- * There is a set of pre-defined static skeleton strings.
- * The skeletons defined consist of the desired calendar field set 
- * (for example,  DAY, MONTH, YEAR) and the format length (long, medium, short)
- * used in date time patterns.
- * 
- * For example, skeleton YEAR_MONTH_MEDIUM_FORMAT consists month and year,
- * and it's corresponding full pattern is medium format date pattern.
- * So, the skeleton is "yMMM", for English, the full pattern is "MMM yyyy", 
- * which is the format by removing DATE from medium date format.
- *
- * For example, skeleton YEAR_MONTH_DOW_DAY_MEDIUM_FORMAT consists day, month,
- * year, and day-of-week, and it's corresponding full pattern is the medium
- * format date pattern. So, the skeleton is "yMMMEEEd", for English,
- * the full pattern is "EEE, MMM d, yyyy", which is the medium date format
- * plus day-of-week.
- *
- * <P>
  * The calendar fields we support for interval formatting are:
  * year, month, date, day-of-week, am-pm, hour, hour-of-day, and minute.
  * Those calendar fields can be defined in the following order:
@@ -99,9 +82,10 @@ static UBool U_CALLCONV hashTableValueComparator(UHashTok val1, UHashTok val2) ;
  * and "Feb 20, 2008" is year.
  *   
  * <P>
+ * There is a set of pre-defined static skeleton strings.
  * There are pre-defined interval patterns for those pre-defined skeletons
  * in locales' resource files.
- * For example, for a skeleton YEAR_MONTH_DAY_MEDIUM_FORMAT, which is  "yMMMd",
+ * For example, for a skeleton UDAT_YEAR_ABBR_MONTH_DAY, which is  "yMMMd",
  * in  en_US, if the largest different calendar field between date1 and date2 
  * is "year", the date interval pattern  is "MMM d, yyyy - MMM d, yyyy", 
  * such as "Jan 10, 2007 - Jan 10, 2008".

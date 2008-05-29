@@ -85,23 +85,6 @@ U_NAMESPACE_BEGIN
  * </ol>
  *
  * <P>
- * There is a set of pre-defined static skeleton strings.
- * The skeletons defined consist of the desired calendar field set 
- * (for example,  DAY, MONTH, YEAR) and the format length (long, medium, short)
- * used in date time patterns.
- * 
- * For example, skeleton YEAR_MONTH_MEDIUM_FORMAT consists month and year,
- * and it's corresponding full pattern is medium format date pattern.
- * So, the skeleton is "yMMM", for English, the full pattern is "MMM yyyy", 
- * which is the format by removing DATE from medium date format.
- *
- * For example, skeleton YEAR_MONTH_DOW_DAY_MEDIUM_FORMAT consists day, month,
- * year, and day-of-week, and it's corresponding full pattern is the medium
- * format date pattern. So, the skeleton is "yMMMEEEd", for English,
- * the full pattern is "EEE, MMM d, yyyy", which is the medium date format
- * plus day-of-week.
- *
- * <P>
  * The calendar fields we support for interval formatting are:
  * year, month, date, day-of-week, am-pm, hour, hour-of-day, and minute.
  * Those calendar fields can be defined in the following order:
@@ -114,9 +97,10 @@ U_NAMESPACE_BEGIN
  * and "Feb 20, 2008" is year.
  *   
  * <P>
+ * There is a set of pre-defined static skeleton strings.
  * There are pre-defined interval patterns for those pre-defined skeletons
  * in locales' resource files.
- * For example, for a skeleton YEAR_MONTH_DAY_MEDIUM_FORMAT, which is  "yMMMd",
+ * For example, for a skeleton UDAT_YEAR_ABBR_MONTH_DAY, which is  "yMMMd",
  * in  en_US, if the largest different calendar field between date1 and date2 
  * is "year", the date interval pattern  is "MMM d, yyyy - MMM d, yyyy", 
  * such as "Jan 10, 2007 - Jan 10, 2008".
@@ -175,20 +159,12 @@ U_NAMESPACE_BEGIN
  * It can be instantiated in several ways:
  * <ul>
  * <li>
- * 1. create a date interval instance based on default or given locale plus 
- *    date format style FULL, or LONG, or MEDIUM, or SHORT.
- * 2. create a time interval instance based on default or given locale plus 
- *    time format style FULL, or LONG, or MEDIUM, or SHORT.
- * 3. create date and time interval instance based on default or given locale
- *    plus data and time format style
- * 4. create an instance using default or given locale plus default skeleton, 
- *    which  is "dMyhm"
- * 5. create an instance using default or given locale plus given skeleton.
+ * 1. create an instance using default or given locale plus given skeleton.
  *    Users are encouraged to created date interval formatter this way and 
  *    to use the pre-defined skeleton macros, such as
- *    YEAR_MONTH_SHORT_FORMAT, which consists the calendar fields and
+ *    UDAT_YEAR_NUM_MONTH, which consists the calendar fields and
  *    the format style. 
- * 6. create an instance using default or given locale plus given skeleton
+ * 2. create an instance using default or given locale plus given skeleton
  *    plus a given DateIntervalInfo.
  *    This factory method is for powerful users who want to provide their own 
  *    interval patterns. 
@@ -211,8 +187,8 @@ U_NAMESPACE_BEGIN
  *   DateInterval*  dtInterval = new DateInterval(1000*3600*24, 1000*3600*24*2);
  *   UErrorCode status = U_ZERO_ERROR;
  *   DateIntervalFormat* dtIntervalFmt = DateIntervalFormat::createInstance(
- *                           YEAR_MONTH_DAY_FULL_FORMAT, 
- *                           FALSE, Locale("en", "GB", ""), status);
+ *                           UDAT_YEAR_MONTH_DAY, 
+ *                           Locale("en", "GB", ""), status);
  *   UnicodeUnicodeString dateIntervalString;
  *   FieldPosition pos = 0;
  *   // formatting
@@ -226,232 +202,39 @@ class U_I18N_API DateIntervalFormat : public Format {
 public:
 
     /**
-     * Construct a DateIntervalFormat from default locale and
-     * default date time instance. 
-     *
-     * This is a convenient override of getDateTimeIntervalInstance() with
-     * the date and time style value as DEFAULT.
-     *
-     * @param status    output param set to success/failure code on exit
-     * @return          a date time interval formatter whick the caller owns.
-     * @draft ICU 4.0
-     */
-    static DateIntervalFormat* U_EXPORT2 createInstance(UErrorCode& status);
-
-
-    /**
-     * Construct a DateIntervalFormat using given locale and
-     * default date time instance.
-     *
-     * This is a convenient override of getDateTimeIntervalInstance() with
-     * the date and time style value as DEFAULT.
-     *
-     * @param locale    the given locale.
-     * @param status    output param set to success/failure code on exit
-     * @return          a date time interval formatter which the caller owns.
-     * @draft ICU 4.0
-     */
-    static DateIntervalFormat* U_EXPORT2 createInstance(const Locale& locale,
-                                                        UErrorCode& status);
-
-
-    /**
-     * Construct a DateIntervalFormat using default locale.
-     *
-     * This is a convenient override of 
-     * getDateIntervalInstance(int, ULocale)
-     * with the locale value as default locale.
-     *
-     * @param style     The given date formatting style. For example,
-     *                  SHORT for "M/d/yy" in the US locale.
-     * @param status    output param set to success/failure code on exit
-     * @return          a date time interval formatter whick the caller owns.
-     * @draft ICU 4.0
-     */
-    static DateIntervalFormat* U_EXPORT2 createDateIntervalInstance(
-                                                 DateFormat::EStyle style,
-                                                 UErrorCode& status);
-
-    /**
-     * Construct a DateIntervalFormat using given locale.
-     *
-     * The interval pattern is based on the date format only.
-     * For full date format, interval pattern is based on skeleton "EEEEdMMMMy".
-     * For long date format, interval pattern is based on skeleton "dMMMMy".
-     * For medium date format, interval pattern is based on skeleton "dMMMy".
-     * For short date format, interval pattern is based on skeleton "dMy".
-     *
-     * @param style     The given date formatting style. For example,
-     *                  SHORT for "M/d/yy" in the US locale.
-     * @param locale    The given locale.
-     * @param status    output param set to success/failure code on exit
-     * @return          a date time interval formatter whick the caller owns.
-     * @draft ICU 4.0
-     */
-    static DateIntervalFormat* U_EXPORT2 createDateIntervalInstance(
-                                DateFormat::EStyle style,
-                                const Locale& locale,
-                                UErrorCode& status);
-
-
-    /**
-     * Construct a DateIntervalFormat using default locale.
-     * The interval pattern is based on the time format only.
-     *
-     * This is the convenient override of getDateTimeIntervalInstance()
-     * with the date style as NONE and a given time style.
-     *
-     * @param style     The given time formatting style. For example,
-     *                  SHORT for "h:mm a" in the US locale.
-     * @param status    output param set to success/failure code on exit
-     * @return          a date time interval formatter whick the caller owns.
-     * @draft ICU 4.0
-     */
-    static DateIntervalFormat* U_EXPORT2 createTimeIntervalInstance(
-                                DateFormat::EStyle style,
-                                UErrorCode& status);
-
-
-
-    /**
-     * Construct a DateIntervalFormat using given locale.
-     * The interval pattern is based on the time format only.
-     *
-     * This is the convenient override of getDateTimeIntervalInstance()
-     * with the date style as NONE and a given time style.
-     *
-     * @param style     The given time formatting style. For example,
-     *                  SHORT for "h:mm a" in the US locale.
-     * @param locale    The given locale.
-     * @param status    output param set to success/failure code on exit
-     * @return          a date time interval formatter whick the caller owns.
-     * @draft ICU 4.0
-     */
-    static DateIntervalFormat* U_EXPORT2 createTimeIntervalInstance(
-                                DateFormat::EStyle style,
-                                const Locale& locale,
-                                UErrorCode& status);
-
-    /**
-     * Construct a DateIntervalFormat using default locale.
-     * The interval pattern is based on the date/time format.
-     *
-     * This is a convenient override of 
-     * getDateTimeIntervalInstance(int, int, ULocale)
-     * with the locale value as default locale.
-     *
-     * @param dateStyle The given date formatting style. For example,
-     *                  SHORT for "M/d/yy" in the US locale.
-     * @param timeStyle The given time formatting style. For example,
-     *                  SHORT for "h:mm a" in the US locale.
-     * @param status    output param set to success/failure code on exit
-     * @return          a date time interval formatter whick the caller owns.
-     * @draft ICU 4.0
-     */
-    static DateIntervalFormat* U_EXPORT2 createDateTimeIntervalInstance(
-                            DateFormat::EStyle dateStyle,
-                            DateFormat::EStyle timeStyle,
-                            UErrorCode& status);
-
-
-    /**
-     * Construct a DateIntervalFormat using given locale.
-     * The interval pattern is based on the date/time format.
-     * 
-     * The interval pattern is based on the date/time format.
-     *
-     * @param dateStyle The given date formatting style. For example,
-     *                  SHORT for "M/d/yy" in the US locale.
-     * @param timeStyle The given time formatting style. For example,
-     *                  SHORT for "h:mm a" in the US locale.
-     * @param locale    The given locale.
-     * @param status    output param set to success/failure code on exit
-     * @return          a date time interval formatter whick the caller owns.
-     * @draft ICU 4.0
-     */
-    static DateIntervalFormat* U_EXPORT2 createDateTimeIntervalInstance(
-                            DateFormat::EStyle dateStyle,
-                            DateFormat::EStyle timeStyle,
-                            const Locale& locale,
-                            UErrorCode& status);
-
-
-    /**
      * Construct a DateIntervalFormat from skeleton and  the default locale.
      *
      * This is a convenient override of 
-     * createInstance(UnicodeString skeleton, UBool adjustFieldWidth, ULocale locale)  
+     * createInstance(const UnicodeString& skeleton, const Locale& locale,
+     *                UErrorCode&)  
      * with the value of locale as default locale.
      *
      * @param skeleton  the skeleton on which interval format based.
-     * @param adjustFieldWidth  whether adjust the skeleton field width or not
-     *                          It is used for DateTimePatternGenerator on 
-     *                          whether to adjust field width when get 
-     *                          full pattern from skeleton
      * @param status    output param set to success/failure code on exit
      * @return          a date time interval formatter whick the caller owns.
      * @draft ICU 4.0
      */
     static DateIntervalFormat* U_EXPORT2 createInstance(
                                                const UnicodeString& skeleton,
-                                               UBool adjustFieldWidth,
                                                UErrorCode& status);
 
     /**
      * Construct a DateIntervalFormat from skeleton and a given locale.
      *
-     * Following are the skeletons (defined in udate.h) having predefined 
+     * There are pre-defined skeletons (defined in udate.h) having predefined 
      * interval patterns in resource files.
      * Users are encouraged to use those macros.
      * For example: 
-     * DateIntervalFormat::createInstance(MONTH_DAY_FULL_FORMAT, FALSE, status) 
-     * 
-     * 
-     * #define YEAR_MONTH_DOW_DAY_LONG_FORMAT   "yMMMMEEEEd"
-     * #define YEAR_MONTH_DAY_LONG_FORMAT       "yMMMMd"
-     * #define MONTH_DAY_LONG_FORMAT            "MMMMd"
-     * #define YEAR_MONTH_LONG_FORMAT           "yMMMM"
-     * #define MONTH_DOW_DAY_LONG_FORMAT        "MMMMEEEEd"
-     * #define YEAR_MONTH_DOW_DAY_MEDIUM_FORMAT "yMMMEEEd"
-     * #define YEAR_MONTH_DAY_MEDIUM_FORMAT     "yMMMd"
-     * #define MONTH_DAY_MEDIUM_FORMAT          "MMMd"
-     * #define YEAR_MONTH_MEDIUM_FORMAT         "yMMM"
-     * #define MONTH_DOW_DAY_MEDIUM_FORMAT      "MMMEEEd"
-     * #define YEAR_MONTH_DOW_DAY_SHORT_FORMAT  "yMEEEd"
-     * #define YEAR_MONTH_DAY_SHORT_FORMAT      "yMd"
-     * #define MONTH_DAY_SHORT_FORMAT           "Md"
-     * #define YEAR_MONTH_SHORT_FORMAT          "yM"
-     * #define MONTH_DOW_DAY_SHORT_FORMAT       "MEEEd"
-     * #define DAY_ONLY_SHORT_FORMAT            "d"
-     * #define DOW_DAY_SHORT_FORMAT             "EEEd"
-     * #define YEAR_ONLY_SHORT_FORMAT           "y"
-     * #define MONTH_ONLY_SHORT_FORMAT          "M"
-     * #define MONTH_ONLY_MEDIUM_FORMAT         "MMM"
-     * #define MONTH_ONLY_LONG_FORMAT           "MMMM"
-     * #define HOUR_MINUTE_FORMAT               "hm"
-     * #define HOUR_MINUTE_GENERAL_TZ_FORMAT    "hmv"
-     * #define HOUR_MINUTE_DAYLIGNT_TZ_FORMAT   "hmz"
-     * #define HOUR_ONLY_FORMAT                 "h"
-     * #define HOUR_GENERAL_TZ_FORMAT           "hv"
-     * #define HOUR_DAYLIGNT_TZ_FORMAT          "hz"
+     * DateIntervalFormat::createInstance(UDAT_MONTH_DAY, status) 
      *
-     * Those skeletons have pre-defined interval patterns in resource files.
-     * Users are encouraged to use them. 
-     * For example:
-     * DateIntervalFormat.createInstance(MONTH_DAY_FULL_FORMAT, false, loc);
-     * 
      * The given Locale provides the interval patterns.
-     * For example, for en_GB, if skeleton is YEAR_MONTH_DOW_DAY_MEDIUM_FORMAT,
+     * For example, for en_GB, if skeleton is UDAT_YEAR_ABBR_MONTH_WEEKDAY_DAY,
      * which is "yMMMEEEd",
      * the interval patterns defined in resource file to above skeleton are:
      * "EEE, d MMM, yyyy - EEE, d MMM, yyyy" for year differs,
      * "EEE, d MMM - EEE, d MMM, yyyy" for month differs,
      * "EEE, d - EEE, d MMM, yyyy" for day differs,
      * @param skeleton  the skeleton on which interval format based.
-     * @param adjustFieldWidth  whether adjust the skeleton field width or not
-     *                          It is used for DateTimePatternGenerator on 
-     *                          whether to adjust field width when get 
-     *                          full pattern from skeleton
      * @param locale    the given locale
      * @param status    output param set to success/failure code on exit
      * @return          a date time interval formatter whick the caller owns.
@@ -460,20 +243,16 @@ public:
 
     static DateIntervalFormat* U_EXPORT2 createInstance(
                                                const UnicodeString& skeleton,
-                                               UBool adjustFieldWidth,
                                                const Locale& locale,
                                                UErrorCode& status);
-
-
-
 
     /**
      * Construct a DateIntervalFormat from skeleton
      *  DateIntervalInfo, and default locale.
      *
      * This is a convenient override of
-     * createInstance(UnicodeString skeleton, UBool adjustFieldWidth, 
-     *             ULocale locale, DateIntervalInfo dtitvinf)
+     * createInstance(const UnicodeString& skeleton, const Locale& locale, 
+     *                DateIntervalInfo* dtitvinf, UErrorCode&)
      * with the locale value as default locale.
      *
      * Note: the DateIntervalFormat takes ownership of 
@@ -481,10 +260,6 @@ public:
      * Caller should not delete them.
      *
      * @param skeleton  the skeleton on which interval format based.
-     * @param adjustFieldWidth  whether adjust the skeleton field width or not
-     *                          It is used for DateTimePatternGenerator on 
-     *                          whether to adjust field width when get 
-     *                          full pattern from skeleton
      * @param dtitvinf  the DateIntervalInfo object to be adopted.
      * @param status    output param set to success/failure code on exit
      * @return          a date time interval formatter whick the caller owns.
@@ -492,7 +267,6 @@ public:
      */
     static DateIntervalFormat* U_EXPORT2 createInstance(
                                               const UnicodeString& skeleton,
-                                              UBool adjustFieldWidth,
                                               DateIntervalInfo* dtitvinf,
                                               UErrorCode& status);
 
@@ -500,44 +274,11 @@ public:
      * Construct a DateIntervalFormat from skeleton
      * a DateIntervalInfo, and the given locale.
      *
-     * Following are the skeletons (defined in udate.h) having predefined 
+     * There are pre-defined skeletons (defined in udate.h) having predefined 
      * interval patterns in resource files.
      * Users are encouraged to use those macros.
      * For example: 
-     * DateIntervalFormat::createInstance(MONTH_DAY_FULL_FORMAT, FALSE, status) 
-     * 
-     * #define YEAR_MONTH_DOW_DAY_LONG_FORMAT   "yMMMMEEEEd"
-     * #define YEAR_MONTH_DAY_LONG_FORMAT       "yMMMMd"
-     * #define MONTH_DAY_LONG_FORMAT            "MMMMd"
-     * #define YEAR_MONTH_LONG_FORMAT           "yMMMM"
-     * #define MONTH_DOW_DAY_LONG_FORMAT        "MMMMEEEEd"
-     * #define YEAR_MONTH_DOW_DAY_MEDIUM_FORMAT "yMMMEEEd"
-     * #define YEAR_MONTH_DAY_MEDIUM_FORMAT     "yMMMd"
-     * #define MONTH_DAY_MEDIUM_FORMAT          "MMMd"
-     * #define YEAR_MONTH_MEDIUM_FORMAT         "yMMM"
-     * #define MONTH_DOW_DAY_MEDIUM_FORMAT      "MMMEEEd"
-     * #define YEAR_MONTH_DOW_DAY_SHORT_FORMAT  "yMEEEd"
-     * #define YEAR_MONTH_DAY_SHORT_FORMAT      "yMd"
-     * #define MONTH_DAY_SHORT_FORMAT           "Md"
-     * #define YEAR_MONTH_SHORT_FORMAT          "yM"
-     * #define MONTH_DOW_DAY_SHORT_FORMAT       "MEEEd"
-     * #define DAY_ONLY_SHORT_FORMAT            "d"
-     * #define DOW_DAY_SHORT_FORMAT             "EEEd"
-     * #define YEAR_ONLY_SHORT_FORMAT           "y"
-     * #define MONTH_ONLY_SHORT_FORMAT          "M"
-     * #define MONTH_ONLY_MEDIUM_FORMAT         "MMM"
-     * #define MONTH_ONLY_LONG_FORMAT           "MMMM"
-     * #define HOUR_MINUTE_FORMAT               "hm"
-     * #define HOUR_MINUTE_GENERAL_TZ_FORMAT    "hmv"
-     * #define HOUR_MINUTE_DAYLIGNT_TZ_FORMAT   "hmz"
-     * #define HOUR_ONLY_FORMAT                 "h"
-     * #define HOUR_GENERAL_TZ_FORMAT           "hv"
-     * #define HOUR_DAYLIGNT_TZ_FORMAT          "hz"
-     *
-     * Those skeletons have pre-defined interval patterns in resource files.
-     * Users are encouraged to use them. 
-     * For example:
-     * DateIntervalFormat.createInstance(MONTH_DAY_FULL_FORMAT, false, loc,itvinf);
+     * DateIntervalFormat::createInstance(UDAT_MONTH_DAY, status) 
      *
      * the DateIntervalInfo provides the interval patterns.
      *
@@ -555,10 +296,6 @@ public:
      * Caller should not delete them.
      *
      * @param skeleton  the skeleton on which interval format based.
-     * @param adjustFieldWidth  whether adjust the skeleton field width or not
-     *                          It is used for DateTimePatternGenerator on 
-     *                          whether to adjust field width when get 
-     *                          full pattern from skeleton
      * @param locale    the given locale
      * @param dtitvinf  the DateIntervalInfo object to be adopted.
      * @param status    output param set to success/failure code on exit
@@ -567,7 +304,6 @@ public:
      */
     static DateIntervalFormat* U_EXPORT2 createInstance(
                                               const UnicodeString& skeleton,
-                                              UBool adjustFieldWidth,
                                               const Locale& locale,
                                               DateIntervalInfo* dtitvinf,
                                               UErrorCode& status);
