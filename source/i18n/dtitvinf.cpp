@@ -386,6 +386,8 @@ DateIntervalInfo::getBestSkeleton(const UnicodeString& skeleton,
     const int32_t DIFFERENT_FIELD = 0x1000;
     const int32_t STRING_NUMERIC_DIFFERENCE = 0x100;
     const int32_t BASE = 0x41;
+    const UChar CHAR_V = 0x0076;
+    const UChar CHAR_Z = 0x007A;
 
     // hack for 'v' and 'z'.
     // resource bundle only have time skeletons ending with 'v',
@@ -393,9 +395,15 @@ DateIntervalInfo::getBestSkeleton(const UnicodeString& skeleton,
     UBool replaceZWithV = false;
     const UnicodeString* inputSkeleton = &skeleton; 
     UnicodeString copySkeleton;
-    if ( skeleton.indexOf('z') != -1 ) {
+    if ( skeleton.indexOf(CHAR_Z) != -1 ) {
+        UChar zstr[2];
+        UChar vstr[2]; 
+        zstr[0]=CHAR_Z;
+        vstr[0]=CHAR_V;
+        zstr[1]=0;
+        vstr[1]=0;
         copySkeleton = skeleton;
-        copySkeleton.findAndReplace("z", "v");
+        copySkeleton.findAndReplace(zstr, vstr);
         inputSkeleton = &copySkeleton;
         replaceZWithV = true;
     }
