@@ -1779,7 +1779,7 @@
     <copy file="license.html"
           todir="${eclipse.projects.dir}/plugins/com.ibm.icu.base/about_files" />
     <!-- about -->
-    <copy file="${eclipse.dir}/misc/about_icu.html"
+    <copy file="${eclipse.dir}/misc/about_icu_base.html"
           tofile="${eclipse.projects.dir}/plugins/com.ibm.icu.base/about.html" />
 
     <!-- FEATURE FILES -->
