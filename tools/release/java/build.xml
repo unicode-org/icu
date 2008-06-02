@@ -1,42 +1,50 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2006, International Business Machines Corporation and    *
+* Copyright (C) 2006-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 * This is the ant build file for ICU tools. 
 */
 -->
-<project name="API-Tools" default="main" basedir=".">
+<project name="release-tools" default="tools" basedir=".">
     <target name="init">
         <tstamp/>
         <property name="src.dir" value="src"/>
         <property name="build.dir" value="classes"/>
-        <property name="jar.file" value="cldr.jar"/>
-        <property name="jarSrc.file" value="cldrsrc.jar"/>
         <property file="api-report.properties" />
-        
+
         <mkdir dir="${build.dir}"/>
         <echo message="java home: ${java.home}"/>
         <echo message="java version: ${java.version}"/>
+        <echo message="java vendor: ${java.vm.vendor}"/>
         <echo message="ant java version: ${ant.java.version}"/>
         <echo message="${ant.version}"/>
-        <echo message="${basedir}"/>        
+        <echo message="${basedir}"/>
+
+        <condition property="is.sun.jdk14">
+            <and>
+                <equals arg1="${ant.java.version}" arg2="1.4"/>
+                <contains string="${java.vm.vendor}" substring="Sun Microsystems Inc"/>
+            </and>
+        </condition>
+        <fail unless="is.sun.jdk14" message="Sun JDK1.4 is required."/>
     </target>
 
-    <target name="doctools"  depends="init" description="build StableAPI classes">
-        <javac includes="com/ibm/icu/dev/tools/docs/*.java"
-            excludes="**/CVS/**/*"
+    <target name="tools"  depends="init" description="compile release tools">
+        <javac includes="**/*.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
             source="1.4"
             debug="on" deprecation="off"
             encoding="ascii"/>
     </target>             
+
     <target name="clean" depends="init" description="remove all build targets">
         <delete dir="${build.dir}"/>
     </target>
-    <target name="apireport" depends="doctools">    
+
+    <target name="apireport" depends="tools">    
         <java classname="com.ibm.icu.dev.tools.docs.StableAPI" fork="yes" failonerror="true">
             
             <arg value = "--oldver"/>
@@ -62,7 +70,7 @@
             
             <arg value = "--resultfile"/>
             <arg value = "${basedir}/APIChangeReport.html"/>
-    
+
             <classpath>
                 <pathelement location="${build.dir}"/>
                 <pathelement path="${java.class.path}/"/>
