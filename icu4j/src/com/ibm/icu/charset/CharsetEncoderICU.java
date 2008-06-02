@@ -258,10 +258,11 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
         /* do the conversion */
         CoderResult ret = encode(in, out, null, false);
         setSourcePosition(in);
-        if (ret.isUnderflow() && in.hasRemaining()) {
+        /* No need to reset to keep the proper state of the encoder.
+         if (ret.isUnderflow() && in.hasRemaining()) {
             // The Java framework is going to substitute what is left.
-            fromUnicodeReset();
-        }
+            //fromUnicodeReset();
+        } */
         return ret;
     }
 
@@ -408,9 +409,9 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
 
             //UConverterUtility.uprv_memcpy(replayArray, replayArrayIndex, preFromUArray, 0, -preFromULength*UMachine.U_SIZEOF_UCHAR);
             replayArray.put(preFromUArray, 0, -preFromULength);
+            source = replayArray;
             source.position(replayArrayIndex);
             source.limit(replayArrayIndex - preFromULength); //preFromULength is negative, see declaration
-            source = replayArray;
             flush = false;
 
             preFromULength = 0;
@@ -747,7 +748,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      */
     private final void setSourcePosition(CharBuffer source) {
 
-        // ok was there input held in the previous invocation of decodeLoop 
+        // ok was there input held in the previous invocation of encodeLoop 
         // that resulted in output in this invocation?
         source.position(source.position() - fromUCountPending());
     }

@@ -648,8 +648,8 @@ class CharsetMBCS extends CharsetICU {
         for (int i = 0; i < stage1.length; ++i) {
             stage1[i] = (char)(((stage[i*2])<<8)|(stage[i*2+1] & UConverterConstants.UNSIGNED_BYTE_MASK));
         }
-        byte[] stage2 = new byte[fullStage2Length*4];
-        System.arraycopy(stage, stage1Length*2, stage2, 0, stage2.length);
+        byte[] stage2 = new byte[stage.length - ((stage1Length * 2) + (fullStage2Length * 4))];
+        System.arraycopy(stage, ((stage1Length * 2) + (fullStage2Length * 4)), stage2, 0, stage2.length);
         
         mbcsTable.fromUnicodeTable = stage1;
         mbcsTable.fromUnicodeBytes = stage2;
@@ -2932,12 +2932,13 @@ class CharsetMBCS extends CharsetICU {
             int prevSourceIndex, sourceIndex, nextSourceIndex;
             int stage2Entry = 0, value = 0, length = 0, prevLength;
             short uniMask;
-            //long asciiRoundtrips;
+            // long asciiRoundtrips;
+            
             boolean utf8Friendly = false, gotoUnassigned = false;
 
             try {
 
-                if (preFromUFirstCP >= 0) {
+                if (!flush && preFromUFirstCP >= 0) {
                     /*
                      * pass sourceIndex=-1 because we continue from an earlier buffer in the future, this may change
                      * with continuous offsets
@@ -2972,7 +2973,8 @@ class CharsetMBCS extends CharsetICU {
                 } else {
                     bytes = sharedData.mbcs.fromUnicodeBytes;
                 }
-                //asciiRoundtrips = sharedData.mbcs.asciiRoundtrips;
+
+                // asciiRoundtrips = sharedData.mbcs.asciiRoundtrips;
 
                 /* get the converter state from UConverter */
                 c = fromUChar32;
