@@ -699,7 +699,10 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * @param offsets
      * @return A CoderResult object that contains the error result when an error occurs.
      */
-     CoderResult cbToUWriteSub(CharsetDecoderICU decoder, 
+    /* Note: Currently, this method is not being used because the callback method calls toUWriteUChars with
+     * the substitution characters. Will leave in here for the time being. To be removed later. (4.0)
+     */
+     /*CoderResult cbToUWriteSub(CharsetDecoderICU decoder, 
                                         ByteBuffer source, CharBuffer target, 
                                         IntBuffer offsets){
         String sub = decoder.replacement();
@@ -713,5 +716,5 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
                     0, sub.length(), target, offsets, source.position());
             
         }
-    }
+    }*/
 }

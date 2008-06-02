@@ -4990,4 +4990,72 @@ public class TestCharset extends TestFmwk {
         }
         
     }
+    
+    // Port over from ICU4C for test conversion tables (mbcs version 5.x)
+    // Provide better code coverage in CharsetMBCS, CharsetDecoderICU, and CharsetEncoderICU.
+    public void TestCharsetTestData() {
+        CoderResult result = CoderResult.UNDERFLOW;
+        String charsetName = "test4";
+        CharsetProvider provider = new CharsetProviderICU();
+        Charset charset = ((CharsetProviderICU)provider).charsetForName(charsetName, "../dev/data/testdata");
+        CharsetEncoder encoder = charset.newEncoder();
+        CharsetDecoder decoder = charset.newDecoder();
+        
+        byte bytearray[] = {
+                0x01, 0x02, 0x03, 0x0a,
+                0x01, 0x02, 0x03, 0x0b,
+                0x01, 0x02, 0x03, 0x0d,
+        };
+        
+        // set the callback for overflow errors
+        ((CharsetDecoderICU)decoder).setToUCallback(CoderResult.OVERFLOW, CharsetCallback.TO_U_CALLBACK_STOP, null);
+        
+        ByteBuffer bb = ByteBuffer.wrap(bytearray);
+        CharBuffer cb = CharBuffer.allocate(10);
+        
+        bb.limit(4);
+        cb.limit(1); // Overflow should occur and is expected
+        result = decoder.decode(bb, cb, false);
+        if (result.isError()) {
+            errln("Error occurred while decoding: " + charsetName + " with error: " + result);
+        }
+        
+        bb.limit(8);
+        result = decoder.decode(bb, cb, false);
+        if (result.isError()) {
+            errln("Error occurred while decoding: " + charsetName + " with error: " + result);
+        }
+        
+        bb.limit(12);
+        result = decoder.decode(bb, cb, true);
+        if (result.isError()) {
+            errln("Error occurred while decoding: " + charsetName + " with error: " + result);
+        }
+        
+        char chararray[] = {
+                0xDBC4,0xDE34,0xD900,0xDC05,/* \U00101234\U00050005 */
+                0xD940,     /* first half of \U00060006 or \U00060007 */
+                0xDC07/* second half of \U00060007 */
+        };
+        
+        cb = CharBuffer.wrap(chararray);
+        bb = ByteBuffer.allocate(10);
+        
+        bb.limit(2);
+        cb.limit(4);
+        result = encoder.encode(cb, bb, false);
+        if (result.isError()) {
+            errln("Error occurred while encoding: " + charsetName + " with error: " + result);
+        }
+        cb.limit(5);
+        result = encoder.encode(cb, bb, false);
+        if (result.isError()) {
+            errln("Error occurred while encoding: " + charsetName + " with error: " + result);
+        }
+        cb.limit(6);
+        result = encoder.encode(cb, bb, true);
+        if (!result.isError()) {
+            errln("Error should have occurred while encoding: " + charsetName);
+        }
+    }
 }
