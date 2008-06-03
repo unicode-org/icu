@@ -420,15 +420,19 @@ static le_font *openFont(const char *fontName, const char *checksum, const char 
 
 static le_bool getRTL(const LEUnicode *text, le_int32 charCount)
 {
-    UBiDiLevel paraLevel;
+    UBiDiLevel level;
+    le_int32 limit = -1;
     UErrorCode status = U_ZERO_ERROR;
     UBiDi *ubidi = ubidi_openSized(charCount, 0, &status);
 
     ubidi_setPara(ubidi, text, charCount, UBIDI_DEFAULT_LTR, NULL, &status);
-    paraLevel = ubidi_getParaLevel(ubidi);
+    
+    /* TODO: Should check that there's only a single logical run... */
+    ubidi_getLogicalRun(ubidi, 0, &limit, &level);
+
     ubidi_close(ubidi);
 
-    return paraLevel & 1;
+    return level & 1;
 }
 
 static void doTestCase (const char *testID,

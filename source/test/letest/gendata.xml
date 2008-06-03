@@ -128,4 +128,14 @@
     <test-font name="lklug.hj.ttf"/>
     <test-text>ක්‍රෙ ක්‍යෙ ක්‍ෂෙ ක්‍ෂ්‍යෙ ක්ෂෙ කර්‍මෙ ස්ට්‍රේ ස‍්සෙ ස්ස</test-text>
   </test-case>
+
+  <test-case id="Arabic Presentation Forms LRO Test" script="arab">
+    <test-font name="trado.ttf"/>
+    <test-text>‭ﻲﺑﺮﻌﻟﺎﺑ</test-text>
+  </test-case>
+
+  <test-case id="Arabic Presentation Forms No LRO Test" script="arab">
+    <test-font name="trado.ttf"/>
+    <test-text>ﻲﺑﺮﻌﻟﺎﺑ</test-text>
+  </test-case>
 </layout-tests>
