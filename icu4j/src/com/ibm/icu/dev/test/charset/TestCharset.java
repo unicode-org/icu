@@ -4808,6 +4808,21 @@ public class TestCharset extends TestFmwk {
         if (!result.isOverflow()) {
             errln("Overflow buffer while decoding ISO-2022-KR should have occurred.");
         }
+        
+        /* This is part of the ambiguous converter test in ICU4C and is used here to provide
+         * better code coverage.
+         */
+        byte [] bytearray2 = {
+                0x61, 0x5b, 0x5c
+        };
+        
+        bb = ByteBuffer.wrap(bytearray2);
+        cb = CharBuffer.allocate(20);
+        
+        result = decoder.decode(bb, cb, true);
+        if (!result.isMalformed()) {
+            errln("Malformed error while decoding ISO-2022-KR should have occurred.");
+        }
     }
     
     //provide better code coverage for Charset ISO-2022-JP
