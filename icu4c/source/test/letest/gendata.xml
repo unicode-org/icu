@@ -138,4 +138,9 @@
     <test-font name="trado.ttf"/>
     <test-text>ﻲﺑﺮﻌﻟﺎﺑ</test-text>
   </test-case>
+
+  <test-case id="Canonical Char Indices Test" script="latn">
+    <test-font name="arial.ttf"/>
+    <test-text>ḤḤ</test-text>
+  </test-case>
 </layout-tests>
