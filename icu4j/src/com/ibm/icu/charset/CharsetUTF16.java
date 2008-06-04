@@ -52,7 +52,7 @@ class CharsetUTF16 extends CharsetICU {
             this.endianXOR = ENDIAN_XOR_LE;
         }
 
-        maxBytesPerChar = 2;
+        maxBytesPerChar = 4;
         minBytesPerChar = 2;
         maxCharsPerByte = 1;
     }
