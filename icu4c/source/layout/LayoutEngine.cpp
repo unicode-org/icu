@@ -179,7 +179,7 @@ void LayoutEngine::getGlyphPosition(le_int32 glyphIndex, float &x, float &y, LEE
 }
 
 le_int32 LayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
-                LEUnicode *&outChars, LEGlyphStorage &/*glyphStorage*/, LEErrorCode &success)
+                LEUnicode *&outChars, LEGlyphStorage &glyphStorage, LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {
         return 0;
@@ -245,6 +245,14 @@ le_int32 LayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 off
         outCharCount = canonGSUBTable->process(fakeGlyphStorage, rightToLeft, scriptTag, langSysTag, NULL, substitutionFilter, canonFeatureMap, canonFeatureMapCount, FALSE);
 
         out = (rightToLeft? outCharCount - 1 : 0);
+
+        /*
+         * The char indices array in fakeGlyphStorage has the correct mapping
+         * back to the original input characters. Save it in glyphStorage. The
+         * subsequent call to glyphStoratge.allocateGlyphArray will keep this
+         * array rather than allocating and initializing a new one.
+         */
+        glyphStorage.adoptCharIndicesArray(fakeGlyphStorage);
 
         outChars = LE_NEW_ARRAY(LEUnicode, outCharCount);
         for (i = 0; i < outCharCount; i += 1, out += dir) {
