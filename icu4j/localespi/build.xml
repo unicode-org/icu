@@ -7,7 +7,7 @@
 * This is the ant build file for ICU4J Locale SPI implementation.
 */
 -->
-<project name="icu4j-localespi" default="build" basedir=".">
+<project name="icu4j-localespi" default="build-jar" basedir=".">
   <property file="../build.properties"/>
   <property name="build.dir" value="classes"/>
   <property name="src.dir" value="src"/>
@@ -15,19 +15,13 @@
   <property name="javac.bin.ver" value="1.6"/>
   <property name="jar.file" value="icu4j-localespi.jar"/>
   <property name="icu4j.jar.file" value="../icu4j.jar"/>
+  <property name="icu4j.build.dir" value="../classes"/>
+  <property name="icu4j.core.build.file" value="../build.xml"/>
+  <property name="ext.dir" value="ext"/>
   <condition property="is.java6">
     <contains string="${java.version}" substring="1.6."/>
   </condition>
-
-  <target name="init" depends="check-env-java6">
-    <mkdir dir="${build.dir}"/>
-    <copy todir="${build.dir}/META-INF">
-      <fileset dir="${src.dir}/META-INF" includes="**/*"/>
-    </copy>
-    <copy todir="${build.dir}">
-      <fileset dir="${src.dir}" includes="**/*.properties"/>
-    </copy>
-  </target>
+  <available file="${icu4j.jar.file}" property="is.icu4j.jar.available"/>
 
   <target name="check-env-java6" unless="is.java6">
     <echo message="######################## ERROR ########################"/>
@@ -37,17 +31,37 @@
     <fail message="Java SE 6 SDK is required"/>
   </target>
 
-  <target name="build" depends="init">
+  <target name="icu4j-jar" unless="is.icu4j.jar.available">
+    <!-- Building icu4j.jar if missing.  We do not want to build
+         icu4j.jar here, because Java 6 is not the standard JDK
+         for icu4j core library. -->
+    <echo message="WARNING: Building icu4j.jar with Java 6"/>
+    <ant antfile="${icu4j.core.build.file}" target="jar" inheritAll="false"/>
+  </target>
+
+  <target name="compile" depends="check-env-java6,icu4j-jar">
+    <mkdir dir="${build.dir}"/>
     <javac  srcdir="${src.dir}"
+            includes="com/ibm/icu/impl/**/*.java"
             destdir="${build.dir}"
             classpath="${icu4j.jar.file}"
             source="${javac.src.ver}"
             target="${javac.bin.ver}"
             debug="on"
-            encoding="ascii"/>
-    <jar  jarfile="${jar.file}" compress="true">
-      <fileset dir="../" includes="license.html"/>
-      <fileset dir="${build.dir}" includes="**/*"/>
+            encoding="ascii">
+    </javac>
+  </target>
+
+  <target name="jar">
+    <jar jarfile="${jar.file}" compress="true">
+      <fileset dir="${src.dir}">
+        <include name="META-INF/services/java.*Provider"/>
+        <include name="com/ibm/icu/impl/javaspi/ICUProvider.properties"/>
+      </fileset>
+      <fileset dir="${build.dir}">
+        <include name="com/ibm/icu/impl/**/*"/>
+      </fileset>
+        <fileset dir="../" includes="license.html"/>
       <manifest>
         <attribute name="Built-By" value="${corp}"/>
         <section name="common">
@@ -65,9 +79,41 @@
     </jar>
   </target>
 
+  <target name="tests" depends="check-env-java6">
+    <ant antfile="${icu4j.core.build.file}" target="tests" inheritAll="false"/>
+    <javac  srcdir="${src.dir}"
+            includes="com/ibm/icu/dev/test/**/*.java"
+            destdir="${build.dir}"
+            classpath="${icu4j.build.dir}"
+            source="${javac.src.ver}"
+            target="${javac.bin.ver}"
+            debug="on"
+            encoding="ascii">
+    </javac>
+  </target>
+
+  <target name="run-check">
+    <mkdir dir="${ext.dir}"/>
+    <copy file="${icu4j.jar.file}" todir="${ext.dir}"/>
+    <copy file="${jar.file}" todir="${ext.dir}"/>
+
+    <java classname="com.ibm.icu.dev.test.localespi.TestAll" fork="yes" failonerror="true">
+      <jvmarg line="-Djava.ext.dirs=${ext.dir}"/>
+      <arg value="-n" />
+      <classpath>
+        <pathelement path="${build.dir}" />
+        <pathelement path="${icu4j.build.dir}/"/>
+      </classpath>
+    </java>
+  </target>
+
   <target name="clean">
     <delete dir="${build.dir}"/>
     <delete file="${jar.file}"/>
+    <delete dir="${ext.dir}"/>
   </target>
+
+  <target name="build-jar" depends="compile,jar"/>
+  <target name="check" depends="build-jar,tests,run-check"/>
 
 </project>
