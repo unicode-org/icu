@@ -12,7 +12,7 @@ import com.ibm.icu.impl.javaspi.ICULocale;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.TimeZone;
 
-public class TimeZoneNameProvider extends java.util.spi.TimeZoneNameProvider {
+public class TimeZoneNameProviderICU extends java.util.spi.TimeZoneNameProvider {
 
     @Override
     public String getDisplayName(String ID, boolean daylight, int style, Locale locale) {
