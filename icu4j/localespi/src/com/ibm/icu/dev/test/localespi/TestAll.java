@@ -22,6 +22,9 @@ public class TestAll extends TestGroup {
             "DateFormatTest",
             "DecimalFormatSymbolsTest",
             "NumberFormatTest",
-        });     
+            "CurrencyNameTest",
+            "LocaleNameTest",
+            "TimeZoneNameTest",
+        });
     }
 }

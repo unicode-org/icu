@@ -96,9 +96,9 @@
     <mkdir dir="${ext.dir}"/>
     <copy file="${icu4j.jar.file}" todir="${ext.dir}"/>
     <copy file="${jar.file}" todir="${ext.dir}"/>
-
+	
     <java classname="com.ibm.icu.dev.test.localespi.TestAll" fork="yes" failonerror="true">
-      <jvmarg line="-Djava.ext.dirs=${ext.dir}"/>
+      <jvmarg line="-Djava.ext.dirs=${java.ext.dirs}${path.separator}${ext.dir}"/>
       <arg value="-n" />
       <classpath>
         <pathelement path="${build.dir}" />

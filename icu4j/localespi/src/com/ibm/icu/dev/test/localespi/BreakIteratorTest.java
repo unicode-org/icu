@@ -21,8 +21,11 @@ public class BreakIteratorTest extends TestFmwk {
     private static final int LINE_BRK = 2;
     private static final int SENTENCE_BRK = 3;
 
+    /*
+     * Check if getInstance returns the ICU implementation.
+     */
     public void TestGetInstance() {
-        for (Locale loc : TestUtil.getICULocales()) {
+        for (Locale loc : BreakIterator.getAvailableLocales()) {
             checkGetInstance(CHARACTER_BRK, loc);
             checkGetInstance(WORD_BRK, loc);
             checkGetInstance(LINE_BRK, loc);
@@ -55,30 +58,42 @@ public class BreakIteratorTest extends TestFmwk {
             return;
         }
 
-        if (TestUtil.isICUOnly(loc)) {
-            if (!(brkitr instanceof com.ibm.icu.impl.jdkadapter.BreakIteratorICU)) {
+        boolean isIcuImpl = (brkitr instanceof com.ibm.icu.impl.jdkadapter.BreakIteratorICU);
+
+        if (TestUtil.isICUExtendedLocale(loc)) {
+            if (!isIcuImpl) {
                 errln("FAIL: " + method + " returned JDK BreakIterator for locale " + loc);
             }
         } else {
-            if (brkitr instanceof com.ibm.icu.impl.jdkadapter.BreakIteratorICU) {
+            if (isIcuImpl) {
                 logln("INFO: " + method + " returned ICU BreakIterator for locale " + loc);
-            } else {
-                Locale iculoc = TestUtil.toICUExtendedLocale(loc);
-                switch (type) {
-                case CHARACTER_BRK:
-                    brkitr = BreakIterator.getCharacterInstance(iculoc);
-                    break;
-                case WORD_BRK:
-                    brkitr = BreakIterator.getWordInstance(iculoc);
-                    break;
-                case LINE_BRK:
-                    brkitr = BreakIterator.getLineInstance(iculoc);
-                    break;
-                case SENTENCE_BRK:
-                    brkitr = BreakIterator.getSentenceInstance(iculoc);
-                    break;
+            } 
+            BreakIterator brkitrIcu = null;
+            Locale iculoc = TestUtil.toICUExtendedLocale(loc);
+            switch (type) {
+            case CHARACTER_BRK:
+                brkitrIcu = BreakIterator.getCharacterInstance(iculoc);
+                break;
+            case WORD_BRK:
+                brkitrIcu = BreakIterator.getWordInstance(iculoc);
+                break;
+            case LINE_BRK:
+                brkitrIcu = BreakIterator.getLineInstance(iculoc);
+                break;
+            case SENTENCE_BRK:
+                brkitrIcu = BreakIterator.getSentenceInstance(iculoc);
+                break;
+            }
+            if (isIcuImpl) {
+                if (!brkitr.equals(brkitrIcu)) {
+                    // BreakIterator.getXXXInstance returns a cached BreakIterator instance.
+                    // BreakIterator does not override Object#equals, so the result may not be
+                    // consistent.
+//                        logln("INFO: " + method + " returned ICU BreakIterator for locale " + loc
+//                                + ", but different from the one for locale " + iculoc);
                 }
-                if (!(brkitr instanceof com.ibm.icu.impl.jdkadapter.BreakIteratorICU)) {
+            } else {
+                if (!(brkitrIcu instanceof com.ibm.icu.impl.jdkadapter.BreakIteratorICU)) {
                     errln("FAIL: " + method + " returned JDK BreakIterator for locale " + iculoc);
                 }
             }

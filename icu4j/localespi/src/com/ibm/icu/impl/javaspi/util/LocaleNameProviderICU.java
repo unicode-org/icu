@@ -26,7 +26,7 @@ public class LocaleNameProviderICU extends LocaleNameProvider {
 
     @Override
     public String getDisplayLanguage(String languageCode, Locale locale) {
-        String disp = ULocale.getDisplayCountry(languageCode, ULocale.forLocale(ICULocale.canonicalize(locale)));
+        String disp = ULocale.getDisplayLanguage(languageCode, ULocale.forLocale(ICULocale.canonicalize(locale)));
         if (disp.length() == 0 || disp.equals(languageCode)) {
             return null;
         }
