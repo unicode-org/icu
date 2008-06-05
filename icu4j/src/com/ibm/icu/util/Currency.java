@@ -12,6 +12,7 @@ import java.text.ParsePosition;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Date;
+import java.util.Vector;
 
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -134,9 +135,10 @@ public class Currency extends MeasureUnit implements Serializable {
     {
         // local variables
         String country = loc.getCountry();
-        //String variant = loc.getVariant();
         long dateL = d.getTime();
         long mask = 4294967295L;
+		
+		Vector currCodeVector = new Vector();
 
         // Get supplementalData
         ICUResourceBundle bundle = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,
@@ -157,99 +159,52 @@ public class Currency extends MeasureUnit implements Serializable {
             UResourceBundle cm = bundle.get("CurrencyMap");
             UResourceBundle countryArray = cm.get(country);
 
-            // First pass, get a count of valid currencies
-            int currCount = 0;
-            for (int i = 0; i < countryArray.getSize(); i++)
-            {
-                // get the currency resource
-                UResourceBundle currencyReq = countryArray.get(i);
+			// Get valid currencies
+			for (int i = 0; i < countryArray.getSize(); i++)
+			{
+				// get the currency resource
+				UResourceBundle currencyReq = countryArray.get(i);
+				String curriso = null;
+				curriso = currencyReq.getString("id");
 
-                // get the from date
-                long fromDate = 0;
-                UResourceBundle fromRes = currencyReq.get("from");
-                int[] fromArray = fromRes.getIntVector();
-                fromDate  = (long)fromArray[0] << 32;
-                fromDate |= ((long)fromArray[1] & mask);
+				// get the from date
+				long fromDate = 0;
+				UResourceBundle fromRes = currencyReq.get("from");
+				int[] fromArray = fromRes.getIntVector();
+				fromDate = (long)fromArray[0] << 32;
+				fromDate |= ((long)fromArray[1] & mask);
 
-                // get the to date and check the date range
-                if (currencyReq.getSize() > 2)
-                {
-                    long toDate = 0;
-                    UResourceBundle toRes = currencyReq.get("to");
-                    int[] toArray = toRes.getIntVector();
-                    toDate  = (long)toArray[0] << 32;
-                    toDate |= ((long)toArray[1] & mask);
+				// get the to date and check the date range
+				if (currencyReq.getSize() > 2)
+				{
+					long toDate = 0;
+					UResourceBundle toRes = currencyReq.get("to");
+					int[] toArray = toRes.getIntVector();
+					toDate = (long)toArray[0] << 32;
+					toDate |= ((long)toArray[1] & mask);
 
-                    if ((fromDate <= dateL) && (dateL < toDate))
-                    {
-                        currCount++;
-                    }
-                }
-                else
-                {
-                    if (fromDate <= dateL)
-                    {
-                        currCount++;
-                    }
-                }
+					if ((fromDate <= dateL) && (dateL < toDate))
+					{
+						currCodeVector.addElement(curriso);
+					}
+				}
+				else
+				{
+					if (fromDate <= dateL)
+					{
+						currCodeVector.addElement(curriso);
+					}
+				}
 
-            }  // end For loop
+			}  // end For loop
 
-            // Allocate array to return
-            if (currCount == 0)
-            {
-                return null;
-            }
+			// return the String array if we have matches
+			currCodeVector.trimToSize();
+			if (currCodeVector.size() != 0)
+			{
+				return ((String[])currCodeVector.toArray(new String[0]));
+			}
 
-            String[] currCodes = new String[currCount];
-            int currIndex = 0;
-
-            // Second pass, get the actual currency codes
-            for (int i = 0; i < countryArray.getSize(); i++)
-            {
-                // get the currency resource
-                UResourceBundle currencyReq = countryArray.get(i);
-                String curriso = null;
-                curriso = currencyReq.getString("id");
-
-                // get the from date
-                long fromDate = 0;
-                UResourceBundle fromRes = currencyReq.get("from");
-                int[] fromArray = fromRes.getIntVector();
-                fromDate  = (long)fromArray[0] << 32;
-                fromDate |= ((long)fromArray[1] & mask);
-
-                // get the to date and check the date range
-                if (currencyReq.getSize() > 2)
-                {
-                    long toDate = 0;
-                    UResourceBundle toRes = currencyReq.get("to");
-                    int[] toArray = toRes.getIntVector();
-                    toDate  = (long)toArray[0] << 32;
-                    toDate |= ((long)toArray[1] & mask);
-
-                    if ((fromDate <= dateL) && (dateL < toDate)) 
-                    {
-                        currCodes[currIndex] = new String(curriso);
-                        currIndex++;
-                    }
-                }
-                else
-                {
-                    if (fromDate <= dateL)
-                    {
-                        currCodes[currIndex] = new String(curriso);
-                        currIndex++;
-                    }
-                }
-
-            }  // end For loop
-
-            // Process the matching ids.  Due to gaps in the windows of time 
-            // for valid currencies, it is possible that no currency is valid 
-            // for the given time.  It is possible that we will return multiple
-            // currencies for the given time.
-            return currCodes;
         }
         catch (MissingResourceException ex)
         {
