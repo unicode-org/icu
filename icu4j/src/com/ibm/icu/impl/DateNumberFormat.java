@@ -88,6 +88,10 @@ public final class DateNumberFormat extends NumberFormat {
         return zeroDigit;
     }
 
+    public void setZeroDigit(char zero) {
+        zeroDigit = zero;
+    }
+
     public StringBuffer format(double number, StringBuffer toAppendTo,
             FieldPosition pos) {
         throw new UnsupportedOperationException("StringBuffer format(double, StringBuffer, FieldPostion) is not implemented");
