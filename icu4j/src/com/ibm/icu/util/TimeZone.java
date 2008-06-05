@@ -542,31 +542,52 @@ abstract public class TimeZone implements Serializable, Cloneable {
         }
 
         String[] patterns = { "z", "zzzz", "v", "vvvv" };
-        format.applyPattern(patterns[style]);      
-        if ( style >= 2 ) {
+        format.applyPattern(patterns[style]);
+        Date d = new Date();
+        if (style >= 2) {
             // Generic names may change time to time even for a single time zone.
             // This method returns the one used for the zone now.
             format.setTimeZone(this);
-            return format.format(new Date());
+            return format.format(d);
         } else {
+            int[] offsets = new int[2];
+            getOffset(d.getTime(), false, offsets);
+            if ((daylight && offsets[1] != 0) || (!daylight && offsets[1] == 0)) {
+                format.setTimeZone(this);
+                return format.format(d);
+            }
+
             // Create a new SimpleTimeZone as a stand-in for this zone; the stand-in
-            // will have no DST, or DST during January, but the same ID and offset,
+            // will have no DST, or DST during July, but the same ID and offset,
             // and hence the same display name.  We don't cache these because
             // they're small and cheap to create.
             SimpleTimeZone tz;
             if (daylight && useDaylightTime()) {
-                int savings = getDSTSavings();
-                tz = new SimpleTimeZone(getRawOffset(), getID(),
-                                        Calendar.JANUARY, 1, 0, 0,
-                                        Calendar.FEBRUARY, 1, 0, 0,
-                                        savings);
+                // The display name for daylight saving time was requested, but currently not in DST
+
+                // Set a fixed date (July 1) in this Gregorian year
+                GregorianCalendar cal = new GregorianCalendar(this);
+                cal.set(Calendar.MONTH, Calendar.JULY);
+                cal.set(Calendar.DATE, 1);
+
+                // Get July 1 date
+                d = cal.getTime();
+
+                // Check if it is in DST
+                if (cal.get(Calendar.DST_OFFSET) == 0) {
+                    // We need to create a fake time zone
+                    tz = new SimpleTimeZone(offsets[0], getID(),
+                            Calendar.JUNE, 1, 0, 0,
+                            Calendar.AUGUST, 1, 0, 0,
+                            getDSTSavings());
+                    format.setTimeZone(tz);
+                }
             } else {
-                tz = new SimpleTimeZone(getRawOffset(), getID());
+                // The display name for standard time was requested, but currently in DST
+                tz = new SimpleTimeZone(offsets[0], getID());
+                format.setTimeZone(tz);
             }
-            format.setTimeZone(tz);
-            // Format a date in January.  We use the value 10*ONE_DAY == Jan 11 1970
-            // 0:00 GMT.
-            return format.format(new Date(864000000L));
+            return format.format(d);
         }
     }
 
