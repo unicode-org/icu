@@ -16,20 +16,32 @@ public class CollatorTest extends TestFmwk {
         new CollatorTest().run(args);
     }
 
+    /*
+     * Check if getInstance returns the ICU implementation.
+     */
     public void TestGetInstance() {
-        for (Locale loc : TestUtil.getICULocales()) {
+        for (Locale loc : Collator.getAvailableLocales()) {
             Collator coll = Collator.getInstance(loc);
-            if (TestUtil.isICUOnly(loc)) {
-                if (!(coll instanceof com.ibm.icu.impl.jdkadapter.CollatorICU)) {
+
+            boolean isIcuImpl = (coll instanceof com.ibm.icu.impl.jdkadapter.CollatorICU);
+
+            if (TestUtil.isICUExtendedLocale(loc)) {
+                if (!isIcuImpl) {
                     errln("FAIL: getInstance returned JDK Collator for locale " + loc);
                 }
             } else {
-                if (coll instanceof com.ibm.icu.impl.jdkadapter.CollatorICU) {
+                if (isIcuImpl) {
                     logln("INFO: getInstance returned ICU Collator for locale " + loc);
+                }
+                Locale iculoc = TestUtil.toICUExtendedLocale(loc);
+                Collator collIcu = Collator.getInstance(iculoc);
+                if (isIcuImpl) {
+                    if (!coll.equals(collIcu)) {
+                        errln("FAIL: getInstance returned ICU Collator for locale " + loc
+                                + ", but different from the one for locale " + iculoc);
+                    }
                 } else {
-                    Locale iculoc = TestUtil.toICUExtendedLocale(loc);
-                    coll = Collator.getInstance(iculoc);
-                    if (!(coll instanceof com.ibm.icu.impl.jdkadapter.CollatorICU)) {
+                    if (!(collIcu instanceof com.ibm.icu.impl.jdkadapter.CollatorICU)) {
                         errln("FAIL: getInstance returned JDK Collator for locale " + iculoc);
                     }
                 }

@@ -15,48 +15,29 @@ import com.ibm.icu.impl.jdkadapter.DecimalFormatICU;
 
 public class NumberFormatProviderICU extends NumberFormatProvider {
 
+    private final int NUMBER = 0;
+    private final int INTEGER = 1;
+    private final int CURRENCY = 2;
+    private final int PERCENT = 3;
+
     @Override
     public NumberFormat getCurrencyInstance(Locale locale) {
-        com.ibm.icu.text.NumberFormat icuNfmt = com.ibm.icu.text.NumberFormat.getCurrencyInstance(
-                ICULocale.canonicalize(locale));
-        if (!(icuNfmt instanceof com.ibm.icu.text.DecimalFormat)) {
-            // icuNfmt must be always DecimalFormat
-            return null;
-        }
-        return DecimalFormatICU.wrap((com.ibm.icu.text.DecimalFormat)icuNfmt);
+        return getInstance(CURRENCY, locale);
     }
 
     @Override
     public NumberFormat getIntegerInstance(Locale locale) {
-        com.ibm.icu.text.NumberFormat icuNfmt = com.ibm.icu.text.NumberFormat.getIntegerInstance(
-                ICULocale.canonicalize(locale));
-        if (!(icuNfmt instanceof com.ibm.icu.text.DecimalFormat)) {
-            // icuNfmt must be always DecimalFormat
-            return null;
-        }
-        return DecimalFormatICU.wrap((com.ibm.icu.text.DecimalFormat)icuNfmt);
+        return getInstance(INTEGER, locale);
     }
 
     @Override
     public NumberFormat getNumberInstance(Locale locale) {
-        com.ibm.icu.text.NumberFormat icuNfmt = com.ibm.icu.text.NumberFormat.getNumberInstance(
-                ICULocale.canonicalize(locale));
-        if (!(icuNfmt instanceof com.ibm.icu.text.DecimalFormat)) {
-            // icuNfmt must be always DecimalFormat
-            return null;
-        }
-        return DecimalFormatICU.wrap((com.ibm.icu.text.DecimalFormat)icuNfmt);
+        return getInstance(NUMBER, locale);
     }
 
     @Override
     public NumberFormat getPercentInstance(Locale locale) {
-        com.ibm.icu.text.NumberFormat icuNfmt = com.ibm.icu.text.NumberFormat.getPercentInstance(
-                ICULocale.canonicalize(locale));
-        if (!(icuNfmt instanceof com.ibm.icu.text.DecimalFormat)) {
-            // icuNfmt must be always DecimalFormat
-            return null;
-        }
-        return DecimalFormatICU.wrap((com.ibm.icu.text.DecimalFormat)icuNfmt);
+        return getInstance(PERCENT, locale);
     }
 
     @Override
@@ -64,4 +45,35 @@ public class NumberFormatProviderICU extends NumberFormatProvider {
         return ICULocale.getAvailableLocales();
     }
 
+    private NumberFormat getInstance(int type, Locale locale) {
+        com.ibm.icu.text.NumberFormat icuNfmt;
+        Locale actual = ICULocale.canonicalize(locale);
+        switch (type) {
+        case NUMBER:
+            icuNfmt = com.ibm.icu.text.NumberFormat.getNumberInstance(actual);
+            break;
+        case INTEGER:
+            icuNfmt = com.ibm.icu.text.NumberFormat.getIntegerInstance(actual);
+            break;
+        case CURRENCY:
+            icuNfmt = com.ibm.icu.text.NumberFormat.getCurrencyInstance(actual);
+            break;
+        case PERCENT:
+            icuNfmt = com.ibm.icu.text.NumberFormat.getPercentInstance(actual);
+            break;
+        default:
+            return null;
+        }
+        if (!(icuNfmt instanceof com.ibm.icu.text.DecimalFormat)) {
+            // icuNfmt must be always DecimalFormat
+            return null;
+        }
+
+        com.ibm.icu.text.DecimalFormatSymbols decfs = ICULocale.getDecimalFormatSymbolsForLocale(actual);
+        if (decfs != null) {
+            ((com.ibm.icu.text.DecimalFormat)icuNfmt).setDecimalFormatSymbols(decfs);
+        }
+
+        return DecimalFormatICU.wrap((com.ibm.icu.text.DecimalFormat)icuNfmt);
+    }
 }
