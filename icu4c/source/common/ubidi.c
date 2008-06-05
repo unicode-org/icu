@@ -184,7 +184,7 @@ ubidi_openSized(int32_t maxLength, int32_t maxRunCount, UErrorCode *pErrorCode) 
 /*
  * We are allowed to allocate memory if memory==NULL or
  * mayAllocate==TRUE for each array that we need.
- * We also try to grow and shrink memory as needed if we
+ * We also try to grow memory as needed if we
  * allocate it.
  *
  * Assume sizeNeeded>0.
@@ -207,17 +207,20 @@ ubidi_getMemory(BidiMemoryForAllocation *bidiMem, int32_t *pSize, UBool mayAlloc
             return FALSE;
         }
     } else {
-        /* there is some memory, is it enough or too much? */
-        if(sizeNeeded>*pSize && !mayAllocate) {
+        if(sizeNeeded<=*pSize) {
+            /* there is already enough memory */
+            return TRUE;
+        }
+        else if(!mayAllocate) {
             /* not enough memory, and we must not allocate */
             return FALSE;
-        } else if(sizeNeeded!=*pSize && mayAllocate) {
-            /* FOOD FOR THOUGHT: in hope to improve performance, we should
-             * try never shrinking memory, only growing it when required.
-             */
-            /* we may try to grow or shrink */
+        } else {
+            /* we try to grow */
             void *memory;
-
+            /* in most cases, we do not need the copy-old-data part of
+             * realloc, but it is needed when adding runs using getRunsMemory()
+             * in setParaRunsOnly()
+             */
             if((memory=uprv_realloc(*pMemory, sizeNeeded))!=NULL) {
                 *pMemory=memory;
                 *pSize=sizeNeeded;
@@ -226,9 +229,6 @@ ubidi_getMemory(BidiMemoryForAllocation *bidiMem, int32_t *pSize, UBool mayAlloc
                 /* we failed to grow */
                 return FALSE;
             }
-        } else {
-            /* we have at least enough memory and must not allocate */
-            return TRUE;
         }
     }
 }
