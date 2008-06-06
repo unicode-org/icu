@@ -3181,7 +3181,7 @@ compareStringPairStructs(const void *left, const void *right)
  *
  * This array maps a set of tags to its likely maximal set of tags.
  */
-const StringPair likely_subtags[] = {
+static const StringPair likely_subtags[] = {
   {
     /* { Afar; ?; ? } => { Afar; Latin; Ethiopia } */
     "aa",
