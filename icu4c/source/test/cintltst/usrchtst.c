@@ -2208,6 +2208,58 @@ static void TestNumeric(void) {
 
 }
 
+/* This test is for ticket 4038 due to incorrect backward searching when certain patterns have a length > 1 */
+static void TestForwardBackward(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator *coll = NULL;
+    UStringSearch *search = NULL;
+    UChar usrcstr[32], value[2];
+    int32_t pos= -1;
+    int32_t expectedPos = 9;
+    
+    coll = ucol_open("en_GB", &status);
+    if (U_FAILURE(status)) {
+        log_err("ucol_open failed: %s\n", u_errorName(status));
+        goto exitTestForwardBackward;
+    }
+    ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_PRIMARY, &status);
+    ucol_setAttribute(coll, UCOL_CASE_LEVEL, UCOL_ON, &status);
+    ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_NON_IGNORABLE, &status);
+    
+    u_uastrcpy(usrcstr, "QBitArray::bitarr_data"); /* text */
+    u_uastrcpy(value, "::");                       /* pattern */
+    
+    search = usearch_openFromCollator(value, 2, usrcstr, 22, coll, NULL, &status);
+    if (U_FAILURE(status)) {
+        log_err("usearch_openFromCollator failed: %s\n", u_errorName(status));
+        goto exitTestForwardBackward;
+    }
+
+    usearch_reset(search);
+    /* forward search */
+    pos = usearch_first(search, &status);
+    if (pos != expectedPos) {
+        log_err("Expected search result: %d; Got instead: %d\n", expectedPos, pos);
+        goto exitTestForwardBackward;
+    }
+    
+    pos = -1;
+    usearch_reset(search);
+    /* backward search */
+    pos = usearch_last(search, &status);
+    if (pos != expectedPos) {
+        log_err("Expected search result: %d; Got instead: %d\n", expectedPos, pos);
+    }
+
+exitTestForwardBackward :
+    if (coll != NULL) {
+        ucol_close(coll);
+    }
+    if (search != NULL) {
+        usearch_close(search);
+    }
+}
+
 void addSearchTest(TestNode** root)
 {
     addTest(root, &TestStart, "tscoll/usrchtst/TestStart");
@@ -2259,6 +2311,7 @@ void addSearchTest(TestNode** root)
     addTest(root, &TestEnd, "tscoll/usrchtst/TestEnd");
     addTest(root, &TestNumeric, "tscoll/usrchtst/TestNumeric");
     addTest(root, &TestDiacriticMatch, "tscoll/usrchtst/TestDiacriticMatch");
+    addTest(root, &TestForwardBackward, "tscoll/usrchtst/TestForwardBackward");
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
