@@ -280,7 +280,8 @@ void SSearchTest::searchTest()
         }
 
         usearch_close(uss);
-        usearch_openFromCollator(pattern.getBuffer(), pattern.length(),
+       
+        uss = usearch_openFromCollator(pattern.getBuffer(), pattern.length(),
             target.getBuffer(), target.length(),
             collator,
             NULL,
