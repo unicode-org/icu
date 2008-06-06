@@ -21,6 +21,8 @@
 #include "ucln_in.h"
 #include "uassert.h"
 
+U_NAMESPACE_USE
+
 // don't use Boyer-Moore
 #define BOYER_MOORE 0
 
@@ -3446,6 +3448,9 @@ struct  CEI {
     int32_t highIndex;
 };
 
+U_NAMESPACE_BEGIN
+
+
 //
 //  CEBuffer   A circular buffer of CEs from the text being searched.
 //
@@ -3573,6 +3578,9 @@ const CEI *CEBuffer::getPrevious(int32_t index) {
 
     return &buf[i];
 }
+
+U_NAMESPACE_END
+
 
 // #define USEARCH_DEBUG
 

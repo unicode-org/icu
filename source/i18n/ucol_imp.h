@@ -316,8 +316,12 @@ struct collIterateState {
 U_CAPI void U_EXPORT2 
 uprv_init_collIterate(const UCollator *collator, const UChar *sourceString, int32_t sourceLen, collIterate *s);
 
+U_NAMESPACE_BEGIN
+
 struct UCollationPCE;
 typedef struct UCollationPCE UCollationPCE;
+
+U_NAMESPACE_END
 
 struct UCollationElements
 {
