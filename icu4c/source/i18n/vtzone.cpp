@@ -20,6 +20,14 @@
 
 U_NAMESPACE_BEGIN
 
+// This is the deleter that will be use to remove TimeZoneRule
+U_CDECL_BEGIN
+static void U_CALLCONV
+deleteTimeZoneRule(void* obj) {
+    delete (TimeZoneRule*) obj;
+}
+U_CDECL_END
+
 // Smybol characters used by RFC2445 VTIMEZONE
 static const UChar COLON = 0x3A; /* : */
 static const UChar SEMICOLON = 0x3B; /* ; */
@@ -1335,6 +1343,9 @@ VTimeZone::parse(UErrorCode& status) {
     if (U_FAILURE(status)) {
         goto cleanupParse;
     }
+     // Set the deleter to remove TimeZoneRule vectors to avoid memory leaks due to unowned TimeZoneRules.
+    rules->setDeleter(deleteTimeZoneRule);
+    
     dates = new UVector(uhash_deleteUnicodeString, uhash_compareUnicodeString, status);
     if (U_FAILURE(status)) {
         goto cleanupParse;
