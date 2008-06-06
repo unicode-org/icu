@@ -17,7 +17,8 @@ public class TimeZoneNameProviderICU extends java.util.spi.TimeZoneNameProvider 
     @Override
     public String getDisplayName(String ID, boolean daylight, int style, Locale locale) {
         TimeZone tz = TimeZone.getTimeZone(ID);
-        String disp = tz.getDisplayName(daylight, style, ICULocale.canonicalize(locale));
+        Locale actualLocale = ICULocale.canonicalize(locale);
+        String disp = tz.getDisplayName(daylight, style, actualLocale);
         if (disp.length() == 0) {
             return null;
         }
@@ -26,13 +27,24 @@ public class TimeZoneNameProviderICU extends java.util.spi.TimeZoneNameProvider 
         int numDigits = 0;
         for (int i = 0; i < disp.length(); i++) {
             char c = disp.charAt(i);
-            if (UCharacter.isDefined(c)) {
+            if (UCharacter.isDigit(c)) {
                 numDigits++;
             }
         }
         // If there are more than 3 numbers, this code assume GMT format was used.
         if (numDigits >= 3) {
             return null;
+        }
+
+        if (daylight) {
+            // ICU uses standard name for daylight name when the zone does not use
+            // daylight saving time.
+
+            // This is yet another ugly hack to support the JDK's behavior
+            String stdDisp = tz.getDisplayName(false, style, actualLocale);
+            if (disp.equals(stdDisp)) {
+                return null;
+            }
         }
         return disp;
     }
