@@ -127,6 +127,85 @@ public class DecimalFormatSymbolsICU extends java.text.DecimalFormatSymbols {
     }
 
     @Override
+    public void setCurrency(Currency currency) {
+        com.ibm.icu.util.Currency icuCurrency = null;
+        if (currency != null) {
+            icuCurrency = com.ibm.icu.util.Currency.getInstance(currency.getCurrencyCode());
+        }
+        fIcuDecfs.setCurrency(icuCurrency);
+    }
+
+    @Override
+    public void setCurrencySymbol(String currency) {
+        fIcuDecfs.setCurrencySymbol(currency);
+    }
+
+    @Override
+    public void setDecimalSeparator(char decimalSeparator) {
+        fIcuDecfs.setDecimalSeparator(decimalSeparator);
+    }
+
+    @Override
+    public void setDigit(char digit) {
+        fIcuDecfs.setDigit(digit);
+    }
+
+    @Override
+    public void setExponentSeparator(String exp) {
+        fIcuDecfs.setExponentSeparator(exp);
+    }
+
+    @Override
+    public void setGroupingSeparator(char groupingSeparator) {
+        fIcuDecfs.setGroupingSeparator(groupingSeparator);
+    }
+
+    @Override
+    public void setInfinity(String infinity) {
+        fIcuDecfs.setInfinity(infinity);
+    }
+
+    @Override
+    public void setInternationalCurrencySymbol(String currencyCode) {
+        fIcuDecfs.setInternationalCurrencySymbol(currencyCode);
+    }
+
+    @Override
+    public void setMinusSign(char minusSign) {
+        fIcuDecfs.setMinusSign(minusSign);
+    }
+
+    @Override
+    public void setMonetaryDecimalSeparator(char sep) {
+        fIcuDecfs.setMonetaryDecimalSeparator(sep);
+    }
+
+    @Override
+    public void setNaN(String NaN) {
+        fIcuDecfs.setNaN(NaN);
+    }
+
+    @Override
+    public void setPatternSeparator(char patternSeparator) {
+        fIcuDecfs.setPatternSeparator(patternSeparator);
+    }
+
+    @Override
+    public void setPercent(char percent) {
+        fIcuDecfs.setPercent(percent);
+    }
+
+    @Override
+    public void setPerMill(char perMill) {
+        fIcuDecfs.setPerMill(perMill);
+    }
+
+    @Override
+    public void setZeroDigit(char zeroDigit) {
+        fIcuDecfs.setZeroDigit(zeroDigit);
+    }
+
+    @Override
     public int hashCode() {
         return fIcuDecfs.hashCode();
     }
