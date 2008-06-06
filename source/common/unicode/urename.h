@@ -442,6 +442,7 @@
 #define ucal_add ucal_add_4_0
 #define ucal_clear ucal_clear_4_0
 #define ucal_clearField ucal_clearField_4_0
+#define ucal_clone ucal_clone_4_0
 #define ucal_close ucal_close_4_0
 #define ucal_countAvailable ucal_countAvailable_4_0
 #define ucal_equivalentTo ucal_equivalentTo_4_0
@@ -670,6 +671,7 @@
 #define ucol_keyHashCode ucol_keyHashCode_4_0
 #define ucol_mergeSortkeys ucol_mergeSortkeys_4_0
 #define ucol_next ucol_next_4_0
+#define ucol_nextProcessed ucol_nextProcessed_4_0
 #define ucol_nextSortKeyPart ucol_nextSortKeyPart_4_0
 #define ucol_nextWeight ucol_nextWeight_4_0
 #define ucol_normalizeShortDefinitionString ucol_normalizeShortDefinitionString_4_0
@@ -682,6 +684,7 @@
 #define ucol_open_internal ucol_open_internal_4_0
 #define ucol_prepareShortStringOpen ucol_prepareShortStringOpen_4_0
 #define ucol_previous ucol_previous_4_0
+#define ucol_previousProcessed ucol_previousProcessed_4_0
 #define ucol_primaryOrder ucol_primaryOrder_4_0
 #define ucol_prv_getSpecialCE ucol_prv_getSpecialCE_4_0
 #define ucol_prv_getSpecialPrevCE ucol_prv_getSpecialPrevCE_4_0
@@ -721,6 +724,7 @@
 #define ucsdet_open ucsdet_open_4_0
 #define ucsdet_setDeclaredEncoding ucsdet_setDeclaredEncoding_4_0
 #define ucsdet_setText ucsdet_setText_4_0
+#define ucurr_countCurrencies ucurr_countCurrencies_4_0
 #define ucurr_forLocale ucurr_forLocale_4_0
 #define ucurr_forLocaleAndDate ucurr_forLocaleAndDate_4_0
 #define ucurr_getDefaultFractionDigits ucurr_getDefaultFractionDigits_4_0
@@ -876,6 +880,7 @@
 #define uiter_setUTF8 uiter_setUTF8_4_0
 #define uloc_acceptLanguage uloc_acceptLanguage_4_0
 #define uloc_acceptLanguageFromHTTP uloc_acceptLanguageFromHTTP_4_0
+#define uloc_addLikelySubtags uloc_addLikelySubtags_4_0
 #define uloc_canonicalize uloc_canonicalize_4_0
 #define uloc_countAvailable uloc_countAvailable_4_0
 #define uloc_getAvailable uloc_getAvailable_4_0
@@ -903,6 +908,7 @@
 #define uloc_getParent uloc_getParent_4_0
 #define uloc_getScript uloc_getScript_4_0
 #define uloc_getVariant uloc_getVariant_4_0
+#define uloc_minimizeSubtags uloc_minimizeSubtags_4_0
 #define uloc_openKeywordList uloc_openKeywordList_4_0
 #define uloc_openKeywords uloc_openKeywords_4_0
 #define uloc_setDefault uloc_setDefault_4_0
@@ -1034,6 +1040,7 @@
 #define uprv_getUTCtime uprv_getUTCtime_4_0
 #define uprv_haveProperties uprv_haveProperties_4_0
 #define uprv_init_collIterate uprv_init_collIterate_4_0
+#define uprv_init_pce uprv_init_pce_4_0
 #define uprv_int32Comparator uprv_int32Comparator_4_0
 #define uprv_isInfinite uprv_isInfinite_4_0
 #define uprv_isInvariantString uprv_isInvariantString_4_0
@@ -1190,6 +1197,8 @@
 #define usearch_preceding usearch_preceding_4_0
 #define usearch_previous usearch_previous_4_0
 #define usearch_reset usearch_reset_4_0
+#define usearch_search usearch_search_4_0
+#define usearch_searchBackwards usearch_searchBackwards_4_0
 #define usearch_setAttribute usearch_setAttribute_4_0
 #define usearch_setBreakIterator usearch_setBreakIterator_4_0
 #define usearch_setCollator usearch_setCollator_4_0
@@ -1361,6 +1370,7 @@
 #define BuildCompactTrieHorizontalNode BuildCompactTrieHorizontalNode_4_0
 #define BuildCompactTrieNode BuildCompactTrieNode_4_0
 #define BuildCompactTrieVerticalNode BuildCompactTrieVerticalNode_4_0
+#define CEBuffer CEBuffer_4_0
 #define CECalendar CECalendar_4_0
 #define CFactory CFactory_4_0
 #define Calendar Calendar_4_0
@@ -1462,6 +1472,9 @@
 #define DTSkeletonEnumeration DTSkeletonEnumeration_4_0
 #define DateFormat DateFormat_4_0
 #define DateFormatSymbols DateFormatSymbols_4_0
+#define DateInterval DateInterval_4_0
+#define DateIntervalFormat DateIntervalFormat_4_0
+#define DateIntervalInfo DateIntervalInfo_4_0
 #define DateTimeMatcher DateTimeMatcher_4_0
 #define DateTimePatternGenerator DateTimePatternGenerator_4_0
 #define DateTimeRule DateTimeRule_4_0
@@ -1602,6 +1615,7 @@
 #define OpenTypeLayoutEngine OpenTypeLayoutEngine_4_0
 #define OpenTypeUtilities OpenTypeUtilities_4_0
 #define OrConstraint OrConstraint_4_0
+#define PCEBuffer PCEBuffer_4_0
 #define PairPositioningFormat1Subtable PairPositioningFormat1Subtable_4_0
 #define PairPositioningFormat2Subtable PairPositioningFormat2Subtable_4_0
 #define PairPositioningSubtable PairPositioningSubtable_4_0
@@ -1627,6 +1641,7 @@
 #define RBBISymbolTable RBBISymbolTable_4_0
 #define RBBISymbolTableEntry RBBISymbolTableEntry_4_0
 #define RBBITableBuilder RBBITableBuilder_4_0
+#define RCEBuffer RCEBuffer_4_0
 #define RangeDescriptor RangeDescriptor_4_0
 #define RegexCImpl RegexCImpl_4_0
 #define RegexCompile RegexCompile_4_0
@@ -1713,6 +1728,7 @@
 #define TrieWordDictionary TrieWordDictionary_4_0
 #define TrimmedArrayProcessor TrimmedArrayProcessor_4_0
 #define UCharCharacterIterator UCharCharacterIterator_4_0
+#define UCollationPCE UCollationPCE_4_0
 #define ULocRuns ULocRuns_4_0
 #define UMemory UMemory_4_0
 #define UObject UObject_4_0
