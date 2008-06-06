@@ -50,6 +50,8 @@ struct RCEI
     int32_t  high;
 };
 
+U_NAMESPACE_BEGIN
+
 struct RCEBuffer
 {
     RCEI    defaultBuffer[DEFAULT_BUFFER_SIZE];
@@ -237,6 +239,10 @@ UCollationPCE::~UCollationPCE()
     // nothing to do
 }
 
+
+U_NAMESPACE_END
+
+
 inline uint64_t processCE(UCollationElements *elems, uint32_t ce)
 {
     uint64_t primary = 0, secondary = 0, tertiary = 0, quaternary = 0;
@@ -290,6 +296,8 @@ uprv_init_pce(const UCollationElements *elems)
         elems->pce->init(elems->iteratordata_.coll);
     }
 }
+
+
 
 /* public methods ---------------------------------------------------- */
 
