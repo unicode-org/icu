@@ -33,10 +33,14 @@
 
 U_NAMESPACE_BEGIN
 
+U_CDECL_BEGIN 
+
 /**
  * @internal ICU 4.0
  */
 static UBool U_CALLCONV hashTableValueComparator(UHashTok val1, UHashTok val2) ;
+
+U_CDECL_END 
 
 
 /**
