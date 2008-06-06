@@ -532,6 +532,8 @@ DateIntervalInfo::deleteHash(Hashtable* hTable)
 }
 
 
+U_CDECL_BEGIN 
+
 /**
  * set hash table value comparator
  *
@@ -540,6 +542,8 @@ DateIntervalInfo::deleteHash(Hashtable* hTable)
  * @return      TRUE if 2 values are the same, FALSE otherwise
  */
 static UBool U_CALLCONV hashTableValueComparator(UHashTok val1, UHashTok val2);
+
+U_CDECL_END
 
 UBool 
 U_CALLCONV hashTableValueComparator(UHashTok val1, UHashTok val2) {
