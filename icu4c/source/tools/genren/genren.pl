@@ -144,6 +144,10 @@ for(;@ARGV; shift(@ARGV)) {
                 print STDERR "$_\n";
             } elsif ( /icu_/) {
                 print STDERR "Skipped strange mangled function $_\n";
+            } elsif ( /^vtable for /) {
+                print STDERR "Skipped vtable $_\n";
+            } elsif ( /^typeinfo for /) {
+                print STDERR "Skipped typeinfo $_\n";
             } elsif ( /operator\+/ ) {
                 print STDERR "Skipped ignored function $_\n";
             } else { # This is regular C function 
