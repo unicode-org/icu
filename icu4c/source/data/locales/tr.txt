@@ -1121,7 +1121,7 @@ tr{
             "Sierra Leone Leonesi",
         }
         SOS{
-            "So. Sh.",
+            "Sh.",
             "Somali Şilini",
         }
         SRD{
@@ -1228,6 +1228,10 @@ tr{
             "USS",
             "ABD Doları (Aynı gün)",
         }
+        UYI{
+            "UYI",
+            "Uruguay Peso en Unidades Indexadas",
+        }
         UYP{
             "UYP",
             "Uruguay Pezosu (1975-1993)",
@@ -1243,6 +1247,10 @@ tr{
         VEB{
             "Be",
             "Venezuela Bolivarı",
+        }
+        VEF{
+            "BsF",
+            "Güçlü Venezuela Bolivarı",
         }
         VND{
             "VND",
@@ -1775,6 +1783,7 @@ tr{
         sas{"Sasak"}
         sat{"Santali"}
         sc{"Sardunya Dili"}
+        scn{"Sicilyaca"}
         sco{"İskoç"}
         sd{"Sindhi"}
         se{"Kuzey Sami"}
@@ -1936,6 +1945,7 @@ tr{
         Copt{"Koptik"}
         Cprt{"Kıbrıs"}
         Cyrl{"Kiril"}
+        Cyrs{"Eski Kilise Slavca"}
         Deva{"Devanagari"}
         Dsrt{"Deseret"}
         Egyd{"Mısır Yazısı - Demotik"}
@@ -1969,6 +1979,7 @@ tr{
         Khmr{"Khmer"}
         Knda{"Kannada"}
         Kore{"Korece"}
+        Kthi{"Kthi"}
         Lana{"Lanna"}
         Laoo{"Lao Dili"}
         Latf{"Fraktur Latin"}
@@ -2016,6 +2027,9 @@ tr{
         Sund{"Sunda"}
         Sylo{"Syloti Nagri"}
         Syrc{"Süryanice"}
+        Syre{"Estrangela Süryanice"}
+        Syrj{"Batı Süryanice"}
+        Syrn{"Doğu Süryanice"}
         Tagb{"Tagbanwa"}
         Tale{"Tai Le"}
         Talu{"New Tai Lue"}
@@ -2024,6 +2038,7 @@ tr{
         Telu{"Telugu"}
         Teng{"Tengwar"}
         Tfng{"Tifinagh"}
+        Tglg{"Takalotça"}
         Thaa{"Thaana"}
         Thai{"Tayca"}
         Tibt{"Tibetçe"}
@@ -2072,6 +2087,8 @@ tr{
         BAKU1926{"Birleştirilmiş Yeni Türk Alfabesi"}
         BISKE{"San Giorgio/Bila Lehçesi"}
         BOONT{"Boontling"}
+        FONIPA{"IPA Ses Bilimi"}
+        FONUPA{"UPA Ses Bilimi"}
         LIPAW{"Resia Lipovaz Lehçesi"}
         MONOTON{"Monotonik"}
         NEDIS{"Natisone Lehçesi"}
@@ -2088,7 +2105,7 @@ tr{
         TARASK{"Taraskievica Yazım Kuralları"}
         VALENCIA{"VALENCIA"}
     }
-    Version{"1.128"}
+    Version{"1.101"}
     calendar{
         coptic{
             monthNames{
@@ -2132,10 +2149,26 @@ tr{
                 H{"H"}
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
+                Hm{"HH:mm"}
+                M{"L"}
+                MEd{"d-M E"}
+                MMM{"LLL"}
                 MMMEd{"d MMM E"}
+                MMMMEd{"d MMMM E"}
                 MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
                 Md{"d/M"}
+                d{"d"}
                 mmss{"mm:ss"}
+                ms{"mm:ss"}
+                y{"yyyy"}
+                yM{"M/yyyy"}
+                yMEd{"d/M/yyyy EEE"}
+                yMMM{"MMM yyyy"}
+                yMMMEd{"d MMM yyyy EEE"}
+                yMMMM{"MMMM yyyy"}
+                yQ{"Q yyyy"}
+                yQQQ{"QQQ yyyy"}
                 yyMM{"MM/yy"}
                 yyMMM{"MMM yy"}
                 yyQ{"Q yy"}
@@ -2196,6 +2229,9 @@ tr{
                         "2"{"Yarından sonraki gün"}
                         "3"{"Üç gün sonra"}
                     }
+                }
+                dayperiod{
+                    dn{"AM/PM"}
                 }
                 era{
                     dn{"Miladi Dönem"}
@@ -2364,6 +2400,60 @@ tr{
                         "Şevval",
                         "Zilkade",
                         "Zilhicce",
+                    }
+                }
+            }
+        }
+        islamic-civil{
+            monthNames{
+                format{
+                    wide{
+                        "Muharrem",
+                        "Safer",
+                        "Rebiülevvel",
+                        "Rebiülahir",
+                        "Cemaziyelevvel",
+                        "Cemaziyelahir",
+                        "Recep",
+                        "Şaban",
+                        "Ramazan",
+                        "Şevval",
+                        "Zilkade",
+                        "Zilhicce",
+                    }
+                }
+            }
+        }
+        persian{
+            monthNames{
+                format{
+                    abbreviated{
+                        "Ferverdin",
+                        "Ordibeheşt",
+                        "Hordad",
+                        "Tir",
+                        "Mordad",
+                        "Şehriver",
+                        "Mehr",
+                        "Aban",
+                        "Azer",
+                        "Dey",
+                        "Behmen",
+                        "Esfend",
+                    }
+                    wide{
+                        "Ferverdin",
+                        "Ordibeheşt",
+                        "Hordad",
+                        "Tir",
+                        "Mordad",
+                        "Şehriver",
+                        "Mehr",
+                        "Aban",
+                        "Azer",
+                        "Dey",
+                        "Behmen",
+                        "Esfend",
                     }
                 }
             }
@@ -2686,6 +2776,9 @@ tr{
         "Antarctica:Vostok"{
             ec{"Vostok"}
         }
+        "Arctic:Longyearbyen"{
+            ec{"Longyearbyen"}
+        }
         "Asia:Almaty"{
             ec{"Almatı"}
         }
@@ -2961,6 +3054,8 @@ tr{
             ss{"AHST"}
         }
         "meta:Almaty"{
+            ld{"Almatı Yaz Saati"}
+            ls{"Almatı Saati"}
             sd{"ALMST"}
             ss{"ALMT"}
         }
@@ -3135,6 +3230,8 @@ tr{
             ss{"BORT"}
         }
         "meta:Brasilia"{
+            ld{"Brasilia Yaz Saati"}
+            ls{"Brasilia Saati"}
             sd{"BRST"}
             ss{"BRT"}
         }
@@ -3336,6 +3433,7 @@ tr{
             ss{"GST (Guam)"}
         }
         "meta:Gulf"{
+            lg{"Körfez Saati"}
             ls{"Gulf Standart Saati"}
             sg{"GT"}
             ss{"GST"}
@@ -3425,10 +3523,12 @@ tr{
             ss{"KAST"}
         }
         "meta:Kazakhstan_Eastern"{
+            lg{"Doğu Kazakistan Saati"}
             ls{"Doğu Kazakistan Standart Saati"}
             ss{"EKST"}
         }
         "meta:Kazakhstan_Western"{
+            lg{"Batı Kazakistan Saati"}
             ls{"Batı Kazakistan Standart Saati"}
             ss{"WKST"}
         }
@@ -3647,6 +3747,7 @@ tr{
             lg{"Pierre ve Miquelon Saati"}
             ls{"Pierre ve Miquelon Standart Saati"}
             sd{"PMDT"}
+            sg{"PMT"}
             ss{"PMST"}
         }
         "meta:Pitcairn"{
@@ -3780,6 +3881,8 @@ tr{
             ss{"TVT"}
         }
         "meta:Uralsk"{
+            ld{"Oral Yaz Saati"}
+            ls{"Oral Saati"}
             sd{"URAST"}
             ss{"URAT"}
         }
@@ -3859,6 +3962,7 @@ tr{
             sg{"YT"}
             ss{"YST"}
         }
+        fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} Saati"}

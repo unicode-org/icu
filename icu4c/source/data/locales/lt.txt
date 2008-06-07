@@ -16,6 +16,7 @@ lt{
         002{"Afrika"}
         003{"Šiaurės Amerika"}
         005{"Pietų Amerika"}
+        009{"Okeanija"}
         011{"Vakarų Afrika"}
         013{"Centrinė Amerika"}
         014{"Rytų Afrika"}
@@ -23,6 +24,7 @@ lt{
         017{"Vidurio Afrika"}
         018{"Pietų Afrika [018]"}
         019{"Amerika"}
+        021{"Šiaurinė Amerika"}
         029{"Karibai"}
         030{"Rytų Azija"}
         034{"Pietų Azija"}
@@ -32,6 +34,7 @@ lt{
         054{"Melanezija"}
         057{"Mikronezija [057]"}
         061{"Polinezija"}
+        062{"Pietų-vidurio Azija"}
         142{"Azija"}
         143{"Centrinė Azija"}
         145{"Vakarų Azija"}
@@ -120,6 +123,7 @@ lt{
         GD{"Grenada"}
         GE{"Gruzija"}
         GF{"Prancūzijos Gviana"}
+        GG{"Guernsey"}
         GH{"Gana"}
         GI{"Gibraltaras"}
         GL{"Grenlandija"}
@@ -142,6 +146,7 @@ lt{
         ID{"Indonezija"}
         IE{"Airija"}
         IL{"Izraelis"}
+        IM{"Meno sala"}
         IN{"Indija"}
         IO{"Indijos vandenyno britų sritis"}
         IQ{"Irakas"}
@@ -224,6 +229,8 @@ lt{
         PW{"Palau"}
         PY{"Paragvajus"}
         QA{"Kataras"}
+        QU{"Europos Sąjunga"}
+        RE{"Reunionas"}
         RO{"Rumunija"}
         RS{"Serbija"}
         RU{"Rusijos Federacija"}
@@ -286,167 +293,1159 @@ lt{
         ZZ{"Nežinoma ar neteisinga sritis"}
     }
     Currencies{
+        ADP{
+            "ADP",
+            "Andoros peseta",
+        }
+        AED{
+            "AED",
+            "JAE dirhamas",
+        }
+        AFA{
+            "AFA",
+            "Afganis (1927-2002)",
+        }
+        AFN{
+            "AFN",
+            "Afganis",
+        }
+        ALL{
+            "ALL",
+            "Albanijos lekas",
+        }
+        AMD{
+            "AMD",
+            "Armėnijos dramas",
+        }
+        ANG{
+            "ANG",
+            "Nyderlandų Antilų guldenas",
+        }
+        AOA{
+            "AOA",
+            "Angolos kvanza",
+        }
+        AOK{
+            "AOK",
+            "Angolos kvanza (1977-1990)",
+        }
+        AON{
+            "AON",
+            "Angolos naujoji kvanza",
+        }
+        ARP{
+            "ARP",
+            "Argentinos pesas (1983-1985)",
+        }
+        ARS{
+            "ARS",
+            "Argentinos pesas",
+        }
+        ATS{
+            "ATS",
+            "Austrijos šilingas",
+        }
+        AUD{
+            "AUD",
+            "Australijos doleris",
+        }
+        AWG{
+            "AWG",
+            "Arubos guldenas",
+        }
+        AZM{
+            "AZM",
+            "Azerbaidžano manatas (1993-2006)",
+        }
+        AZN{
+            "AZN",
+            "Azerbaidžano manatas",
+        }
+        BAD{
+            "BAD",
+            "Bosnijos ir Hercegovinos dinaras",
+        }
+        BAM{
+            "BAM",
+            "Bosnijos ir Hercegovinos konvertuojamoji markė",
+        }
+        BBD{
+            "BBD",
+            "Barbadoso doleris",
+        }
+        BDT{
+            "BDT",
+            "Bangladešo taka",
+        }
+        BEC{
+            "BEC",
+            "Belgijos frankas (konvertuojamas)",
+        }
+        BEF{
+            "BEF",
+            "Belgijos frankas",
+        }
+        BEL{
+            "BEL",
+            "Belgijos frankas (finansinis)",
+        }
+        BGL{
+            "BGL",
+            "Bulgarijos levas (1962-1999)",
+        }
+        BGN{
+            "BGN",
+            "Bulgarijos levas",
+        }
+        BHD{
+            "BHD",
+            "Bahreino dinaras",
+        }
+        BIF{
+            "BIF",
+            "Burundžio frankas",
+        }
+        BMD{
+            "BMD",
+            "Bermudos doleris",
+        }
+        BND{
+            "BND",
+            "Brunėjaus doleris",
+        }
+        BOB{
+            "BOB",
+            "Bolivijos bolivijanas",
+        }
+        BOP{
+            "BOP",
+            "Bolivijos pesas",
+        }
+        BOV{
+            "BOV",
+            "Bolivijos mvdol",
+        }
+        BRB{
+            "BRB",
+            "Brazilijos naujasis kruzeiras",
+        }
+        BRC{
+            "BRC",
+            "Brazilijos kruzadas",
+        }
+        BRE{
+            "BRE",
+            "Brazilijos kruzeiras (1990-1993)",
+        }
         BRL{
             "R$",
             "Brazilijos realas",
+        }
+        BRN{
+            "BRN",
+            "Brazilijos naujasis kruzadas",
+        }
+        BRR{
+            "BRR",
+            "Brazilijos kruzeiras",
+        }
+        BSD{
+            "BSD",
+            "Bahamų doleris",
+        }
+        BTN{
+            "BTN",
+            "Butano ngultrumas",
+        }
+        BWP{
+            "BWP",
+            "Botsvanos pula",
+        }
+        BYB{
+            "BYB",
+            "Baltarusijos naujasis rublis",
+        }
+        BYR{
+            "BYR",
+            "Baltarusijos rublis",
+        }
+        BZD{
+            "BZD",
+            "Belizo doleris",
+        }
+        CAD{
+            "CAD",
+            "Kanados doleris",
+        }
+        CDF{
+            "CDF",
+            "Kongo frankas",
+        }
+        CHF{
+            "CHF",
+            "Šveicarijos frankas",
+        }
+        CLP{
+            "CLP",
+            "Čilės pesas",
         }
         CNY{
             "CNY",
             "Ženminbi juanis",
         }
+        COP{
+            "COP",
+            "Kolumbijos pesas",
+        }
+        CRC{
+            "CRC",
+            "Kosta Rikos kolonas",
+        }
+        CSD{
+            "CSD",
+            "Senasis Serbijos dinaras",
+        }
+        CUP{
+            "CUP",
+            "Kubos pesas",
+        }
+        CYP{
+            "CYP",
+            "Kipro svaras",
+        }
+        CZK{
+            "CZK",
+            "Čekijos krona",
+        }
+        DDM{
+            "DDM",
+            "Rytų Vokietijos ostmarkė",
+        }
+        DEM{
+            "DEM",
+            "Vokietijos markė",
+        }
+        DJF{
+            "DJF",
+            "Džibučio frankas",
+        }
+        DKK{
+            "DKK",
+            "Danijos krona",
+        }
+        DOP{
+            "DOP",
+            "Dominikos pesas",
+        }
+        DZD{
+            "DZD",
+            "Alžyro dinaras",
+        }
+        ECS{
+            "ECS",
+            "Ekvadoro sukrė",
+        }
+        ECV{
+            "ECV",
+            "Ekvadoro constante (UVC)",
+        }
+        EEK{
+            "EEK",
+            "Estijos krona",
+        }
+        EGP{
+            "EGP",
+            "Egipto svaras",
+        }
+        ERN{
+            "ERN",
+            "Eritrėjos nakfa",
+        }
+        ESP{
+            "ESP",
+            "Ispanijos peseta",
+        }
+        ETB{
+            "ETB",
+            "Etiopijos biras",
+        }
         EUR{
             "€",
             "Euras",
+        }
+        FIM{
+            "FIM",
+            "Suomijos markė",
+        }
+        FJD{
+            "FJD",
+            "Fidžio doleris",
+        }
+        FKP{
+            "FKP",
+            "Falklando salų svaras",
+        }
+        FRF{
+            "FRF",
+            "Prancūzijos frankas",
         }
         GBP{
             "UK£",
             "Svaras sterlingų",
         }
+        GEL{
+            "GEL",
+            "Gruzijos laris",
+        }
+        GHC{
+            "GHC",
+            "Ganos sedis (1979-2007)",
+        }
+        GHS{
+            "GHS",
+            "Ganos sedis",
+        }
+        GIP{
+            "GIP",
+            "Gibraltaro svaras",
+        }
+        GMD{
+            "GMD",
+            "Gambijos dalasis",
+        }
+        GNF{
+            "GNF",
+            "Gvinėjos frankas",
+        }
+        GRD{
+            "GRD",
+            "Graikijos drachma",
+        }
+        GTQ{
+            "GTQ",
+            "Gvatemalos ketcalis",
+        }
+        GWE{
+            "GWE",
+            "Portugalų Gvinėjos eskudas",
+        }
+        GWP{
+            "GWP",
+            "Gvinėjos-Bisau pesas",
+        }
+        GYD{
+            "GYD",
+            "Gajanos doleris",
+        }
+        HKD{
+            "HKD",
+            "Honkongo doleris",
+        }
+        HNL{
+            "HNL",
+            "Honduro lempira",
+        }
+        HRD{
+            "HRD",
+            "Kroatijos dinaras",
+        }
+        HRK{
+            "HRK",
+            "Kroatijos kuna",
+        }
+        HTG{
+            "HTG",
+            "Haičio gurdas",
+        }
+        HUF{
+            "HUF",
+            "Vengrijos forintas",
+        }
+        IDR{
+            "IDR",
+            "Indonezijos rupija",
+        }
+        IEP{
+            "IEP",
+            "Airijos svaras",
+        }
+        ILP{
+            "ILP",
+            "Izraelio svaras",
+        }
+        ILS{
+            "ILS",
+            "Izraelio šekelis",
+        }
         INR{
             "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
             "Indijos rupija",
+        }
+        IQD{
+            "IQD",
+            "Irako dinaras",
+        }
+        IRR{
+            "IRR",
+            "Irano rialas",
+        }
+        ISK{
+            "ISK",
+            "Islandijos krona",
+        }
+        ITL{
+            "IT₤",
+            "Italijos lira",
+        }
+        JMD{
+            "JMD",
+            "Jamaikos doleris",
+        }
+        JOD{
+            "JOD",
+            "Jordanijos dinaras",
         }
         JPY{
             "JP¥",
             "Jena",
         }
+        KES{
+            "KES",
+            "Kenijos šilingas",
+        }
+        KGS{
+            "KGS",
+            "Kirgizijos somas",
+        }
+        KMF{
+            "KMF",
+            "Komoro frankas",
+        }
+        KPW{
+            "KPW",
+            "Šiaurės Korėjos vonas",
+        }
+        KRW{
+            "KRW",
+            "Pietų Korėjos vonas",
+        }
+        KWD{
+            "KWD",
+            "Kuveito dinaras",
+        }
+        KZT{
+            "KZT",
+            "Kazachstano tengė",
+        }
+        LAK{
+            "LAK",
+            "Laoso kipas",
+        }
+        LBP{
+            "LBP",
+            "Libano svaras",
+        }
+        LKR{
+            "LKR",
+            "Šri Lankos rupija",
+        }
+        LRD{
+            "LRD",
+            "Liberijos doleris",
+        }
+        LSL{
+            "LSL",
+            "Lesoto lotis",
+        }
         LTL{
             "Lt",
             "Litas",
+        }
+        LTT{
+            "LTT",
+            "Lietuvos talonas",
+        }
+        LUC{
+            "LUC",
+            "Liuksemburgo konvertuojamas frankas",
+        }
+        LUF{
+            "LUF",
+            "Liuksemburgo frankas",
+        }
+        LUL{
+            "LUL",
+            "Liuksemburgo finansinis frankas",
+        }
+        LVL{
+            "LVL",
+            "Latvijos latas",
+        }
+        LVR{
+            "LVR",
+            "Latvijos rublis",
+        }
+        LYD{
+            "LYD",
+            "Libijos dinaras",
+        }
+        MAD{
+            "MAD",
+            "Maroko dirhamas",
+        }
+        MAF{
+            "MAF",
+            "Maroko frankas",
+        }
+        MDL{
+            "MDL",
+            "Moldovos lėja",
+        }
+        MGA{
+            "MGA",
+            "Madagaskaro ariaris",
+        }
+        MGF{
+            "MGF",
+            "Madagaskaro frankas",
+        }
+        MKD{
+            "MKD",
+            "Makedonijos denaras",
+        }
+        MLF{
+            "MLF",
+            "Malio frankas",
+        }
+        MMK{
+            "MMK",
+            "Mianmaro kijatas",
+        }
+        MNT{
+            "MNT",
+            "Mongolijos tugrikas",
+        }
+        MOP{
+            "MOP",
+            "Macao pataka",
+        }
+        MRO{
+            "MRO",
+            "Mauritanijos ugija",
+        }
+        MTL{
+            "MTL",
+            "Maltos lira",
+        }
+        MTP{
+            "MTP",
+            "Maltos svaras",
+        }
+        MUR{
+            "MUR",
+            "Mauricijaus rupija",
+        }
+        MVR{
+            "MVR",
+            "Maldyvų salų rufija",
+        }
+        MWK{
+            "MWK",
+            "Malavio kvača",
+        }
+        MXN{
+            "MXN",
+            "Meksikos pesas",
+        }
+        MXP{
+            "MXP",
+            "Meksikos sidabrinis pesas",
+        }
+        MXV{
+            "MXV",
+            "Meksikos United de Inversion (UDI)",
+        }
+        MYR{
+            "MYR",
+            "Malaizijos ringitas",
+        }
+        MZE{
+            "MZE",
+            "Mozambiko eskudas",
+        }
+        MZM{
+            "MZM",
+            "Senasis Mozambiko metikalis",
+        }
+        MZN{
+            "MZN",
+            "Mozambiko metikalis",
+        }
+        NAD{
+            "NAD",
+            "Namibijos doleris",
+        }
+        NGN{
+            "NGN",
+            "Nigerijos naira",
+        }
+        NIC{
+            "NIC",
+            "Nikaragvos kardoba",
+        }
+        NIO{
+            "NIO",
+            "Nikaragvos kardoba oras",
+        }
+        NLG{
+            "NLG",
+            "Nyderlandų guldenas",
+        }
+        NOK{
+            "NOK",
+            "Norvegijos krona",
+        }
+        NPR{
+            "NPR",
+            "Nepalo rupija",
+        }
+        NZD{
+            "NZD",
+            "Naujosios Zelandijos doleris",
+        }
+        OMR{
+            "OMR",
+            "Omano rialas",
+        }
+        PAB{
+            "PAB",
+            "Panamos balboja",
+        }
+        PEN{
+            "PEN",
+            "Peru naujasis solis",
+        }
+        PES{
+            "PES",
+            "Peru solis",
+        }
+        PGK{
+            "PGK",
+            "Papua Naujosios Gvinėjos kina",
+        }
+        PHP{
+            "PHP",
+            "Filipinų pesas",
+        }
+        PKR{
+            "PKR",
+            "Pakistano rupija",
+        }
+        PLN{
+            "PLN",
+            "Lenkijos zlotas",
+        }
+        PLZ{
+            "PLZ",
+            "Lenkijos zlotas (1950-1995)",
+        }
+        PTE{
+            "PTE",
+            "Portugalijos eskudas",
+        }
+        PYG{
+            "PYG",
+            "Paragvajaus guaranis",
+        }
+        QAR{
+            "QAR",
+            "Kataro rialas",
+        }
+        RHD{
+            "RHD",
+            "Rodezijos doleris",
+        }
+        ROL{
+            "ROL",
+            "Senoji Rumunijos lėja",
+        }
+        RON{
+            "RON",
+            "Naujoji Rumunijos lėja",
+        }
+        RSD{
+            "RSD",
+            "Serbijos dinaras",
         }
         RUB{
             "RUB",
             "Rusijos rublis",
         }
+        RUR{
+            "RUR",
+            "Rusijos rublis (1991-1998)",
+        }
+        RWF{
+            "RWF",
+            "Ruandos frankas",
+        }
+        SAR{
+            "SAR",
+            "Saudo Arabijos rialas",
+        }
+        SBD{
+            "SBD",
+            "Saliamono salų doleris",
+        }
+        SCR{
+            "SCR",
+            "Seišelių salų rupija",
+        }
+        SDD{
+            "SDD",
+            "Senasis Sudano dinaras",
+        }
+        SDG{
+            "SDG",
+            "Sudano svaras",
+        }
+        SDP{
+            "SDP",
+            "Senasis Sudano svaras",
+        }
+        SEK{
+            "SEK",
+            "Švedijos krona",
+        }
+        SGD{
+            "SGD",
+            "Singapūro doleris",
+        }
+        SHP{
+            "SHP",
+            "Šv. Elenos salų svaras",
+        }
+        SIT{
+            "SIT",
+            "Slovėnijos tolaras",
+        }
+        SKK{
+            "SKK",
+            "Slovakijos krona",
+        }
+        SLL{
+            "SLL",
+            "Siera Leonės leonė",
+        }
+        SOS{
+            "SOS",
+            "Somalio šilingas",
+        }
+        SRD{
+            "SRD",
+            "Surimano doleris",
+        }
+        SRG{
+            "SRG",
+            "Surimano guldenas",
+        }
+        STD{
+            "STD",
+            "Sao Tomės ir Principės dobra",
+        }
+        SUR{
+            "SUR",
+            "Sovietų Sąjungos rublis",
+        }
+        SVC{
+            "SVC",
+            "Salvadoro kolonas",
+        }
+        SYP{
+            "SYP",
+            "Sirijos svaras",
+        }
+        SZL{
+            "SZL",
+            "Svazilendo lilangenis",
+        }
+        THB{
+            "THB",
+            "Batas",
+        }
+        TJR{
+            "TJR",
+            "Tadžikistano rublis",
+        }
+        TJS{
+            "TJS",
+            "Tadžikistano somonis",
+        }
+        TMM{
+            "TMM",
+            "Turkmėnistano manatas",
+        }
+        TND{
+            "TND",
+            "Tuniso dinaras",
+        }
+        TOP{
+            "TOP",
+            "Tongo paanga",
+        }
+        TPE{
+            "TPE",
+            "Timoro eskudas",
+        }
+        TRL{
+            "TRL",
+            "Turkijos lira",
+        }
+        TRY{
+            "TRY",
+            "Naujoji Turkijos Lira",
+        }
+        TTD{
+            "TTD",
+            "Trinidado ir Tobago doleris",
+        }
+        TWD{
+            "TWD",
+            "Naujasis Taivano doleris",
+        }
+        TZS{
+            "TZS",
+            "Tanzanijos šilingas",
+        }
+        UAH{
+            "UAH",
+            "Ukrainos grivina",
+        }
+        UAK{
+            "UAK",
+            "Ukrainos karbovanecas",
+        }
+        UGS{
+            "UGS",
+            "Ugandos šilingas (1966-1987)",
+        }
+        UGX{
+            "UGX",
+            "Ugandos šilingas",
+        }
         USD{
             "US$",
             "JAV doleris",
+        }
+        USN{
+            "USN",
+            "JAV doleris (sekančios dienos)",
+        }
+        USS{
+            "USS",
+            "JAV doleris (šios dienos)",
+        }
+        UYP{
+            "UYP",
+            "Urugvajaus pesas (1975-1993)",
+        }
+        UYU{
+            "UYU",
+            "Urugvajaus pesas",
+        }
+        UZS{
+            "UZS",
+            "Uzbekistano sumas",
+        }
+        VEF{
+            "VEF",
+            "Stiprusis Venesuelos bolivaras",
+        }
+        WST{
+            "WST",
+            "Vakarų Samoa tala",
+        }
+        XAF{
+            "XAF",
+            "CFA BEAC frankas",
+        }
+        XAG{
+            "XAG",
+            "Sidabras",
+        }
+        XAU{
+            "XAU",
+            "Auksas",
+        }
+        XBA{
+            "XBA",
+            "Europos suvestinės vienetas",
+        }
+        XBB{
+            "XBB",
+            "Europos piniginis vienetas",
+        }
+        XBC{
+            "XBC",
+            "Europos valiutos/apskaitos vienetas (XBC)",
+        }
+        XBD{
+            "XBD",
+            "Europos valiutos/apskaitos vienetas (XBD)",
+        }
+        XCD{
+            "XCD",
+            "Rytų Karibų doleris",
+        }
+        XDR{
+            "XDR",
+            "SDR Tarptautinis valiutos fondas",
+        }
+        XEU{
+            "XEU",
+            "Europos piniginis vienetas (1993-1999)",
+        }
+        XFO{
+            "XFO",
+            "Auksinis - frankas",
+        }
+        XFU{
+            "XFU",
+            "Uic -frankas",
+        }
+        XOF{
+            "XOF",
+            "CFA BCEAO frankas",
+        }
+        XPD{
+            "XPD",
+            "Paladis",
+        }
+        XPF{
+            "XPF",
+            "CFP frankas",
+        }
+        XPT{
+            "XPT",
+            "Platina",
+        }
+        YDD{
+            "YDD",
+            "Jemeno dinaras",
+        }
+        YER{
+            "YER",
+            "Jemeno rialas",
+        }
+        YUM{
+            "YUM",
+            "Jugoslavijos naujasis dinaras",
+        }
+        YUN{
+            "YUN",
+            "Jugoslavijos konvertuojamas dinaras",
+        }
+        ZAL{
+            "ZAL",
+            "Pietų Afrikos Respublikos finansinis randas",
+        }
+        ZAR{
+            "ZAR",
+            "PAR Randas",
+        }
+        ZMK{
+            "ZMK",
+            "Zambijos kvača",
+        }
+        ZRN{
+            "ZRN",
+            "Zairo naujasis zairas",
+        }
+        ZRZ{
+            "ZRZ",
+            "Zairo zairas",
+        }
+        ZWD{
+            "ZWD",
+            "Zimbabvės doleris",
         }
     }
     ExemplarCharacters{"[a ą b c č d e ę ė f-i į y j-p r s š t u ų ū v z ž]"}
     Keys{
         calendar{"kalendorius"}
+        collation{"gretinimas"}
         currency{"valiuta"}
     }
     Languages{
-        ab{"Abchazų"}
-        ady{"Adygėjų"}
-        ale{"Aleutų"}
-        ang{"Senoji anglų (450-1100)"}
+        ab{"abchazų"}
+        ady{"adygėjų"}
+        af{"afrikanų"}
+        ale{"aleutų"}
+        am{"amharų"}
+        ang{"senoji anglų"}
         ar{"arabų"}
-        art{"Dirbtinė (kita)"}
-        aus{"Australų kalbos"}
-        az{"Azerbaidžaniečių"}
-        ba{"Baškirų"}
-        bat{"Baltų (kita)"}
-        be{"Baltarusių"}
-        ber{"Berberų"}
+        art{"dirbtinė kalba"}
+        as{"asamų"}
+        aus{"australų kalba"}
+        az{"azerbaidžaniečių"}
+        ba{"baškirų"}
+        bat{"baltų kalba"}
+        be{"baltarusių"}
+        ber{"berberų"}
         bg{"bulgarų"}
+        bh{"biharų"}
         bn{"bengalų"}
-        bnt{"Bantų"}
-        bo{"Tibetiečių"}
-        br{"Bretonų"}
-        bs{"Bosnių"}
-        bua{"Buriatų"}
-        ca{"Katalonų"}
-        cai{"Centrinės Amerikos indėnų (kita)"}
-        cau{"Kaukaziečių (kita)"}
-        ce{"Čečėnų"}
-        cel{"Keltų (kita)"}
-        co{"Korsikiečių"}
-        crh{"Krymo turkų; Krymo totorių"}
+        bnt{"bantų"}
+        bo{"tibetiečių"}
+        br{"bretonų"}
+        bs{"bosnių"}
+        bua{"buriatų"}
+        ca{"katalonų"}
+        cai{"Centrinės Amerikos indėnų kalba"}
+        cau{"kaukaziečių kalba"}
+        ce{"čečėnų"}
+        cel{"keltų kalba"}
+        co{"korsikiečių"}
+        crh{"krymo turkų"}
         cs{"čekų"}
-        cu{"Bažnytinė slavų"}
-        cv{"Čiuvašų"}
-        cy{"Valų"}
+        cu{"bažnytinė slavų"}
+        cv{"čiuvašų"}
+        cy{"valų"}
         da{"danų"}
         de{"vokiečių"}
+        egy{"senovės egiptiečių"}
         el{"graikų"}
         en{"anglų"}
+        en_AU{"anglų kalba (australija)"}
+        en_GB{"anglų (britų)"}
+        en_US{"anglų (amerikiečių)"}
+        eo{"esperanto"}
         es{"ispanų"}
         et{"estų"}
-        eu{"Baskų"}
-        fa{"Persų"}
+        eu{"baskų"}
+        fa{"persų"}
         fi{"suomių"}
-        fiu{"Finougrų (kita)"}
+        fil{"tagalų"}
+        fiu{"finougrų kalba"}
+        fo{"fareriečių"}
         fr{"prancūzų"}
-        fro{"Senoji prancūzų"}
+        fro{"senoji prancūzų"}
+        frr{"šiaurinių fryzų"}
+        frs{"rytų fryzų"}
         fy{"Fryzų"}
-        ga{"Airių"}
-        gem{"Germanų (kita)"}
-        got{"Gotų"}
-        grc{"Senovės graikų"}
+        ga{"airių"}
+        gd{"škotų (gėlų)"}
+        gem{"germanų kalba"}
+        gl{"galisų"}
+        gn{"gvaranių"}
+        got{"gotų"}
+        grc{"senovės graikų"}
+        gu{"gudžaratų"}
         he{"hebrajų"}
         hi{"hindi"}
         hr{"kroatų"}
         hu{"vengrų"}
-        hy{"Armėnų"}
-        id{"Indoneziečių"}
-        ine{"Indoeuropiečių (kita)"}
-        inh{"Ingušų"}
+        hy{"armėnų"}
+        ia{"interlingva"}
+        id{"indoneziečių"}
+        ine{"indoeuropiečių kalba"}
+        inh{"ingušų"}
         ira{"Iraniečių"}
-        is{"Islandų"}
+        is{"islandų"}
         it{"italų"}
         ja{"japonų"}
-        ka{"Gruzinų"}
-        kaa{"Karakalpakų"}
-        kbd{"Kabardinų"}
-        kk{"Kazachų"}
-        km{"Khmerų"}
+        jv{"javiečių"}
+        ka{"gruzinų"}
+        kaa{"karakalpakų"}
+        kbd{"kabardinų"}
+        kk{"kazachų"}
+        km{"khmerų"}
+        kn{"kanadų"}
         ko{"korėjiečių"}
-        ku{"Kurdų"}
-        ky{"Kirgizų"}
-        la{"Lotynų"}
-        lb{"Liuksemburgiečių"}
-        lez{"Lezginų"}
+        ku{"kurdų"}
+        ky{"kirgizų"}
+        la{"lotynų"}
+        lb{"liuksemburgiečių"}
+        lez{"lezginų"}
+        ln{"lingala"}
+        lo{"laosiečių"}
         lt{"lietuvių"}
         lv{"latvių"}
-        mis{"Įvairios kalbos"}
-        mk{"Makedonų"}
-        mn{"Mongolų"}
-        mo{"Moldavų"}
-        ms{"Malajų"}
-        mul{"Kelios kalbos"}
-        nai{"Šiaurės Amerikos indėnų (kita)"}
-        nap{"Neapoliečių"}
+        mis{"įvairios kalbos"}
+        mk{"makedonų"}
+        ml{"malajalių"}
+        mn{"mongolų"}
+        mo{"moldavų"}
+        mr{"maratų"}
+        ms{"malajiečių"}
+        mt{"maltiečių"}
+        mul{"kelios kalbos"}
+        nai{"Šiaurės Amerikos indėnų kalba"}
+        nap{"neapoliečių"}
+        ne{"nepalų"}
         nl{"olandų"}
+        nn{"norvegų nynorsk"}
         no{"norvegų"}
-        os{"Osetinų"}
-        paa{"Papuasų (kita)"}
-        peo{"Senoji persų"}
+        oc{"provansalų"}
+        or{"orijų"}
+        os{"osetinų"}
+        pa{"pandžabų"}
+        paa{"papuasų kalba"}
+        peo{"senoji persų"}
         pl{"lenkų"}
+        ps{"puštūnų"}
         pt{"portugalų"}
+        pt_BR{"portugalų (Brazilijos)"}
+        pt_PT{"portugalų (Portugalijos)"}
         ro{"rumunų"}
         ru{"rusų"}
         sa{"Sanskritas"}
-        sah{"Jakutų"}
-        sc{"Sardiniečių"}
-        scn{"Siciliečių"}
-        sco{"Škotų"}
-        sga{"Senoji airių"}
+        sah{"jakutų"}
+        sc{"sardiniečių"}
+        scn{"siciliečių"}
+        sco{"škotų"}
+        sd{"sindų"}
+        se{"šiaurinių samių"}
+        sga{"senoji airių"}
+        sh{"serbų-kroatų"}
+        si{"sinhalų"}
         sk{"slovakų"}
         sl{"slovėnų"}
-        sla{"Slavų (kita)"}
-        sq{"Albanų"}
-        sr{"Serbų"}
-        sux{"Šumerų"}
+        sla{"slavų kalba"}
+        so{"somalių"}
+        sq{"albanų"}
+        sr{"serbų"}
+        st{"sesuto"}
+        su{"sundų"}
+        sux{"šumerų"}
         sv{"švedų"}
-        ta{"Tamilų"}
+        sw{"svahili"}
+        ta{"tamilų"}
+        te{"telugų"}
         th{"tajų"}
-        tk{"Turkmėnų"}
+        ti{"tigrajų"}
+        tk{"turkmėnų"}
+        tl{"tagalogų"}
         tr{"turkų"}
-        tt{"Totorių"}
-        tyv{"Tuvių"}
-        udm{"Udmurtų"}
-        uk{"Ukrainiečių"}
-        und{"Nenustatyta"}
-        uz{"Uzbekų"}
-        vi{"Vietnamiečių"}
-        vo{"Volapiuk"}
-        wa{"Valonų"}
-        xal{"Kalmukų"}
-        yi{"Jidiš"}
+        tt{"totorių"}
+        tw{"tvi"}
+        tyv{"tuvių"}
+        udm{"udmurtų"}
+        ug{"uigūrų"}
+        uk{"ukrainiečių"}
+        und{"nenustatyta kalba"}
+        ur{"urdu"}
+        uz{"uzbekų"}
+        vi{"vietnamiečių"}
+        vo{"volapiuk"}
+        wa{"valonų"}
+        xal{"kalmukų"}
+        xh{"kosų"}
+        yi{"jidiš"}
         zh{"kinų"}
+        zh_Hans{"kinų supaprastinta"}
+        zh_Hant{"kinų tradicinė"}
+        zu{"zulų"}
     }
     LocaleScript{
         "Latn",
@@ -472,26 +1471,46 @@ lt{
         "#E0",
     }
     Scripts{
-        Arab{"Arabų"}
-        Armn{"Armėnų"}
-        Beng{"Bengalų"}
-        Cyrl{"Kirilica"}
-        Cyrs{"Kirilica (senasis bažnytinis variantas)"}
-        Egyp{"Egipto hieroglifai"}
-        Ethi{"Etiopų"}
-        Geor{"Gruzinų"}
-        Goth{"Gotų"}
-        Grek{"Graikų"}
-        Hebr{"Hebrajų"}
-        Hung{"Senasis vengrų"}
-        Ital{"Senasis italų"}
-        Kana{"Katakana"}
-        Khmr{"Khmerų"}
-        Latn{"Lotynų"}
-        Mong{"Mongolų"}
-        Runr{"Runų"}
+        Arab{"arabų"}
+        Armn{"armėnų"}
+        Beng{"bengalų"}
+        Brai{"brailio"}
+        Cher{"čerokių"}
+        Copt{"koptų"}
+        Cyrl{"kirilica"}
+        Cyrs{"senoji bažnytinė slavų kirilica"}
+        Egyp{"egipto hieroglifai"}
+        Ethi{"etiopų"}
+        Geor{"gruzinų"}
+        Goth{"gotų"}
+        Grek{"graikų"}
+        Hang{"hangul"}
+        Hebr{"hebrajų"}
+        Hira{"hiragana"}
+        Hrkt{"katakana/hiragana"}
+        Hung{"senasis vengrų"}
+        Ital{"senasis italų"}
+        Jpan{"japonų"}
+        Kana{"katakana"}
+        Khmr{"khmerų"}
+        Kore{"korejiečių"}
+        Latn{"lotynų"}
+        Maya{"malų hieroglifai"}
+        Mong{"mongolų"}
+        Runr{"runų"}
     }
-    Version{"1.128"}
+    Types{
+        calendar{
+            buddhist{"Budistų kalendorius"}
+            chinese{"Kiniečių kalendorius"}
+            gregorian{"Grigaliaus kalendorius"}
+            hebrew{"Hebrajų kalendorius"}
+            islamic{"Islamo kalendorius"}
+            japanese{"Japonų kalendorius"}
+            roc{"Kinijos respublikos kalendorius"}
+        }
+    }
+    Version{"1.90"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -669,6 +1688,10 @@ lt{
         quotationEnd{"“"}
         quotationStart{"„"}
     }
+    measurementSystemNames{
+        US{"JAV"}
+        metric{"Metrinė"}
+    }
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžanas"}
@@ -739,6 +1762,9 @@ lt{
         "Africa:Tunis"{
             ec{"Tunisas"}
         }
+        "America:Anchorage"{
+            ec{"Ankoridžas"}
+        }
         "America:Asuncion"{
             ec{"Asunsjonas"}
         }
@@ -787,6 +1813,9 @@ lt{
         "America:Godthab"{
             ec{"Godthabas"}
         }
+        "America:Grand_Turk"{
+            ec{"Grand Terkas"}
+        }
         "America:Guatemala"{
             ec{"Gvatemala"}
         }
@@ -825,6 +1854,9 @@ lt{
         }
         "America:Phoenix"{
             ec{"Fyniksas"}
+        }
+        "America:Port_of_Spain"{
+            ec{"Port of Speinas"}
         }
         "America:Puerto_Rico"{
             ec{"Puerto Rikas"}
@@ -925,6 +1957,9 @@ lt{
         "Asia:Kuwait"{
             ec{"Kuveitas"}
         }
+        "Asia:Macau"{
+            ec{"Makao"}
+        }
         "Asia:Muscat"{
             ec{"Maskatas"}
         }
@@ -970,6 +2005,9 @@ lt{
         "Atlantic:Bermuda"{
             ec{"Bermudų salos"}
         }
+        "Atlantic:Canary"{
+            ec{"Kanarų salos"}
+        }
         "Atlantic:Faeroe"{
             ec{"Farerai"}
         }
@@ -1008,6 +2046,9 @@ lt{
         }
         "Europe:Helsinki"{
             ec{"Helsinkis"}
+        }
+        "Europe:Istanbul"{
+            ec{"Stambulas"}
         }
         "Europe:Kiev"{
             ec{"Kijevas"}
@@ -1111,6 +2152,9 @@ lt{
         "Pacific:Norfolk"{
             ec{"Norfolkas"}
         }
+        "Pacific:Ponape"{
+            ec{"Ponapė"}
+        }
         "Pacific:Saipan"{
             ec{"Saipanas"}
         }
@@ -1119,6 +2163,171 @@ lt{
         }
         "Pacific:Tarawa"{
             ec{"Tarava"}
+        }
+        "Pacific:Truk"{
+            ec{"Trukas"}
+        }
+        "Pacific:Wake"{
+            ec{"Klivateris"}
+        }
+        "meta:Africa_Central"{
+            ls{"Centrinės Afrikos laikas"}
+            ss{"CAT"}
+        }
+        "meta:Africa_Eastern"{
+            ls{"Rytų Afrikos laikas"}
+            ss{"EAT"}
+        }
+        "meta:Africa_Southern"{
+            lg{"Pietų Afrikos laikas"}
+            ls{"Pietų Afrikos standartinis laikas"}
+            sg{"SAT"}
+            ss{"SAST"}
+        }
+        "meta:Africa_Western"{
+            ld{"Vakarų Afrikos vasaros laikas"}
+            ls{"Vakarų Afrikos laikas"}
+            sd{"WAST"}
+            ss{"WAT"}
+        }
+        "meta:Alaska"{
+            ld{"Aliaskos vasaros laikas"}
+            lg{"Aliaskos laikas"}
+            ls{"Aliaskos standartinis laikas"}
+        }
+        "meta:Alaska_Hawaii"{
+            ld{"Aliaskos-Havajų vasaros laikas"}
+            lg{"Aliaskos-Havajų laikas"}
+            ls{"Aliaskos-Havajų standartinis laikas"}
+        }
+        "meta:Amazon"{
+            ld{"Amazonės vasaros laikas"}
+            ls{"Amazonės laikas"}
+        }
+        "meta:America_Central"{
+            ld{"Centro vasaros laikas"}
+            lg{"Centro laikas"}
+            ls{"Centro standartinis laikas"}
+        }
+        "meta:America_Eastern"{
+            ld{"Rytų vasaros laikas"}
+            lg{"Rytų laikas"}
+            ls{"Rytų standartinis laikas"}
+        }
+        "meta:America_Pacific"{
+            ld{"Ramiojo vandenyno vasaros laikas"}
+            lg{"Ramiojo vandenyno laikas"}
+            ls{"Ramiojo vandenyno standartinis laikas"}
+        }
+        "meta:Argentina"{
+            ld{"Argentinos vasaros laikas"}
+            ls{"Argentinos laikas"}
+        }
+        "meta:Argentina_Western"{
+            ls{"Vakarų Argentinos laikas"}
+        }
+        "meta:Atlantic"{
+            ld{"Atlanto vasaros laikas"}
+            lg{"Atlanto laikas"}
+            ls{"Atlanto standartinis laikas"}
+        }
+        "meta:Bering"{
+            ld{"Beringo vasaros laikas"}
+            lg{"Beringo laikas"}
+            ls{"Beringo standartinis laikas"}
+        }
+        "meta:Bolivia"{
+            ls{"Bolivijos laikas"}
+        }
+        "meta:Brasilia"{
+            ld{"Brazilijos vasaros laikas"}
+            ls{"Brazilijos laikas"}
+        }
+        "meta:Chile"{
+            ld{"Čilės vasaros laikas"}
+            ls{"Čilės laikas"}
+        }
+        "meta:Colombia"{
+            ld{"Kolumbijos vasaros laikas"}
+            ls{"Kolumbijos laikas"}
+        }
+        "meta:Cuba"{
+            ld{"Kubos vasaros laikas"}
+            lg{"Kubos laikas"}
+            ls{"Kubos standartinis laikas"}
+        }
+        "meta:Dutch_Guiana"{
+            ls{"Olandų Gajanos laikas"}
+        }
+        "meta:Ecuador"{
+            ls{"Ekvadoro laikas"}
+        }
+        "meta:Europe_Central"{
+            ld{"Vidurio Europos vasaros laikas"}
+            ls{"Vidurio Europos laikas"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"Rytų Europos vasaros laikas"}
+            ls{"Rytų Europos laikas"}
+        }
+        "meta:French_Guiana"{
+            ls{"Prancūzų Gajanos laikas"}
+        }
+        "meta:Greenland_Central"{
+            ld{"Grenlandijos centro vasaros laikas"}
+            ls{"Grenlandijos centro laikas"}
+        }
+        "meta:Greenland_Eastern"{
+            ld{"Grenlandijos rytų vasaros laikas"}
+            ls{"Grenlandijos rytų laikas"}
+        }
+        "meta:Greenland_Western"{
+            ld{"Grenlandijos vakarų vasaros laikas"}
+            ls{"Grenlandijos vakarų laikas"}
+        }
+        "meta:Guyana"{
+            ls{"Gajanos laikas"}
+        }
+        "meta:Kuybyshev"{
+            ld{"Kuibyševo vasaros laikas"}
+            ls{"Kuibyševo laikas"}
+        }
+        "meta:Moscow"{
+            ld{"Maskvos vasaros laikas"}
+            lg{"Maskvos laikas"}
+            ls{"Maskvos standartinis laikas"}
+        }
+        "meta:Newfoundland"{
+            ld{"Niufaundlendo vasaros laikas"}
+            lg{"Niufaundlendo laikas"}
+            ls{"Niufaundlendo standartinis laikas"}
+        }
+        "meta:Paraguay"{
+            ld{"Paragvajaus vasaros laikas"}
+            ls{"Paragvajaus laikas"}
+        }
+        "meta:Peru"{
+            ld{"Peru vasaros laikas"}
+            ls{"Peru laikas"}
+        }
+        "meta:Samara"{
+            ld{"Samaros vasaros laikas"}
+            ls{"Samaros laikas"}
+        }
+        "meta:Turkey"{
+            ld{"Turkijos vasaros laikas"}
+            ls{"Turkijos laikas"}
+        }
+        "meta:Uruguay"{
+            ld{"Urugvajaus vasaros laikas"}
+            ls{"Urugvajaus laikas"}
+        }
+        "meta:Venezuela"{
+            ls{"Venesuelos laikas"}
+        }
+        "meta:Volgograd"{
+            ld{"Volgogrado vasaros laikas"}
+            ls{"Volgogrado laikas"}
         }
     }
 }

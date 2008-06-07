@@ -13,7 +13,7 @@ sr_Latn_RS{
         "#,##0%",
         "#E0",
     }
-    Version{"1.128"}
+    Version{"1.16"}
     calendar{
         gregorian{
             DateTimePatterns{

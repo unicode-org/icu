@@ -21,7 +21,7 @@ de_LU{
             }
         }
     }
-    Version{"1.128"}
+    Version{"1.51"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

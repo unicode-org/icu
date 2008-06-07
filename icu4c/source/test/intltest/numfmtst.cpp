@@ -746,7 +746,7 @@ void NumberFormatTest::TestCurrencyObject() {
                    1234.56, CharsToUnicodeString("\\u00A51,235")); // Yen
 
     expectCurrency(*fmt, Locale("fr", "CH", ""),
-                   1234.56, "SwF1,234.55"); // 0.05 rounding
+                   1234.56, "Fr.1,234.55"); // 0.05 rounding
 
     expectCurrency(*fmt, Locale::getUS(),
                    1234.56, "$1,234.56");
@@ -907,7 +907,7 @@ void NumberFormatTest::TestWhiteSpaceParsing(void) {
  */
 void NumberFormatTest::TestComplexCurrency() {
     UErrorCode ec = U_ZERO_ERROR;
-    Locale loc("en", "IN", "");
+    Locale loc("kn", "IN", "");
     NumberFormat* fmt = NumberFormat::createCurrencyInstance(loc, ec);
     if (U_SUCCESS(ec)) {
         expect2(*fmt, 1.0, "Re. 1.00");
@@ -918,7 +918,7 @@ void NumberFormatTest::TestComplexCurrency() {
         expect2(*fmt, -1.0, "-Re. 1.00");
         expect2(*fmt, -10.0, "-Rs. 10.00");
     } else {
-        errln("FAIL: getCurrencyInstance(en_IN)");
+        errln("FAIL: getCurrencyInstance(kn_IN)");
     }
     delete fmt;
 }
@@ -1505,7 +1505,7 @@ void NumberFormatTest::TestCurrencyNames(void) {
                                              UCURR_LONG_NAME,
                                              &isChoiceFormat, &len, &ec)));
     assertEquals("CAD.getName(SYMBOL_NAME)",
-                 UnicodeString("Can$"),
+                 UnicodeString("CA$"),
                  UnicodeString(ucurr_getName(CAD, "en",
                                              UCURR_SYMBOL_NAME,
                                              &isChoiceFormat, &len, &ec)));
@@ -1520,7 +1520,7 @@ void NumberFormatTest::TestCurrencyNames(void) {
                                              UCURR_SYMBOL_NAME,
                                              &isChoiceFormat, &len, &ec)));
     assertEquals("CAD.getName(SYMBOL_NAME)",
-                 UnicodeString("Can$"),
+                 UnicodeString("CA$"),
                  UnicodeString(ucurr_getName(CAD, "en_AU",
                                              UCURR_SYMBOL_NAME,
                                              &isChoiceFormat, &len, &ec)));

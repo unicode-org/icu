@@ -7,13 +7,23 @@
 // *
 // ***************************************************************************
 en_BZ{
+    Currencies{
+        BZD{
+            "$",
+            "Belize Dollar",
+        }
+        USD{
+            "US$",
+            "US Dollar",
+        }
+    }
     NumberPatterns{
         "#,##0.###",
         "¤#,##0.00",
         "#,##0%",
         "#E0",
     }
-    Version{"1.128"}
+    Version{"1.44"}
     calendar{
         gregorian{
             DateTimePatterns{

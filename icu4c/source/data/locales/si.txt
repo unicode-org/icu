@@ -1,0 +1,189 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/si.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/si.xml
+ */
+si{
+    Countries{
+        LK{"ශ්‍රී ලංකාව"}
+    }
+    Currencies{
+        LKR{
+            "SL Re",
+            "ලංකා රුපියල",
+        }
+    }
+    ExemplarCharacters{"[\u200C \u200D ං ඃ අ-ඖ ක-න ඳ-ර ල ව-ෆ ් ා-ු ූ ෘ-ෟ ෲ ෳ]"}
+    Keys{
+        calendar{"දිනදසුන"}
+        currency{"මුදල්"}
+    }
+    Languages{
+        si{"සිංහල"}
+    }
+    LocaleScript{
+        "Sinh",
+    }
+    NumberPatterns{
+        "#,##,##0.###",
+        "¤#,##,##0.00;(¤#,##,##0.00)",
+        "#,##,##0%",
+        "#E0",
+    }
+    Scripts{
+        Sinh{"සිංහල"}
+    }
+    Types{
+        calendar{
+            buddhist{"බුද්‍ධ දිනදසුන"}
+            gregorian{"දිනදසුන"}
+        }
+    }
+    Version{"1.2"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "පෙ.ව.",
+                "ප.ව.",
+            }
+            DateTimePatterns{
+                "h:mm:ss a v",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, yyyy MMMM d",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yyyy/MM/dd",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "ඉරි",
+                        "සඳු",
+                        "අඟ",
+                        "බදා",
+                        "බ්‍රහ",
+                        "සිකු",
+                        "සෙන",
+                    }
+                    wide{
+                        "ඉරිදා",
+                        "සඳුදා",
+                        "අඟහරුවාදා",
+                        "බදාදා",
+                        "බ්‍රහස්පතින්දා",
+                        "සිකුරාදා",
+                        "සෙනසුරාදා",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "ඉ",
+                        "ස",
+                        "අ",
+                        "බ",
+                        "බ්‍ර",
+                        "සි",
+                        "සෙ",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "ක්‍රි.පූ.",
+                    "ක්‍රි.ව.",
+                }
+                wide{
+                    "ක්‍රිස්තු පූර්‍ව",
+                    "ක්‍රිස්තු වර්‍ෂ",
+                }
+            }
+            fields{
+                day{
+                    relative{
+                        "-1"{"ඊයෙ"}
+                        "0"{"අද"}
+                        "1"{"හෙට"}
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "ජන",
+                        "පෙබ",
+                        "මාර්ත",
+                        "අප්‍රේල",
+                        "මැය",
+                        "ජූන",
+                        "ජූල",
+                        "අගෝ",
+                        "සැප",
+                        "ඔක",
+                        "නොවැ",
+                        "දෙසැ",
+                    }
+                    wide{
+                        "ජනවාර",
+                        "පෙබරවාර",
+                        "මාර්ත",
+                        "අප්‍රේල්",
+                        "මැයි",
+                        "ජූන",
+                        "ජූලි",
+                        "අගෝස්තු",
+                        "සැප්තැම්බර්",
+                        "ඔක්තෝබර්",
+                        "නොවැම්බර්",
+                        "දෙසැම්බර්",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "ජ",
+                        "පෙ",
+                        "මා",
+                        "අ",
+                        "මැ",
+                        "ජූ",
+                        "ජූ",
+                        "අ",
+                        "සැ",
+                        "ඔ",
+                        "නො",
+                        "දෙ",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "කාර්:1",
+                        "කාර්:2",
+                        "කාර්:3",
+                        "කාර්:4",
+                    }
+                    wide{
+                        "1 වන කාර්තුව",
+                        "2 වන කාර්තුව",
+                        "3 වන කාර්තුව",
+                        "4 වන කාර්තුව",
+                    }
+                }
+            }
+        }
+    }
+    zoneStrings{
+        "meta:Lanka"{
+            ls{"ශ්‍රී ලංකා වේලාව"}
+        }
+    }
+}

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 zh_Hant_MO{
-    Version{"1.128"}
+    Version{"1.58"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

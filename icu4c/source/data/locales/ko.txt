@@ -1537,6 +1537,7 @@ ko{
         cai{"중앙 아메리카 인디안어 (기타)"}
         car{"카리브어"}
         cau{"카프카스어 (기타)"}
+        cch{"아삼어"}
         ce{"체첸어"}
         ceb{"세부아노어"}
         cel{"켈트어 (기타)"}
@@ -1898,6 +1899,7 @@ ko{
         sux{"수메르어"}
         sv{"스웨덴어"}
         sw{"스와힐리어"}
+        syc{"시리아어 (고전)"}
         syr{"시리아어"}
         ta{"타밀어"}
         tai{"태국어 (기타)"}
@@ -1960,6 +1962,7 @@ ko{
         ypk{"야픽어"}
         za{"주앙어"}
         zap{"사포테크어"}
+        zbl{"블리스 심볼"}
         zen{"제나가어"}
         zh{"중국어"}
         zh_Hans{"중국어(간체)"}
@@ -1999,51 +2002,87 @@ ko{
         Bali{"발리 문자"}
         Batk{"바타크 문자"}
         Beng{"벵골 문자"}
+        Blis{"블리스기호 문자"}
         Bopo{"주음부호"}
+        Brah{"브라미"}
+        Brai{"브라유 점자"}
         Bugi{"부기 문자"}
         Buhd{"부히드 문자"}
         Cans{"통합 캐나다 토착어"}
+        Cari{"카리 문자"}
+        Cham{"칸 고어"}
         Cher{"체로키 문자"}
+        Cirt{"키르쓰"}
         Copt{"콥트 문자"}
         Cprt{"키프로스 문자"}
         Cyrl{"키릴 문자"}
+        Cyrs{"고대교회슬라브어 키릴문자"}
         Deva{"데바나가리"}
         Dsrt{"디저렛 문자"}
+        Egyd{"고대 이집트 민중문자"}
+        Egyh{"고대 이집트 신관문자"}
+        Egyp{"고대 이집트 신성문자"}
         Ethi{"에티오피아 문자"}
         Geor{"그루지야 문자"}
+        Glag{"글라골 문자"}
         Goth{"고트 문자"}
         Grek{"그리스 문자"}
         Gujr{"구쟈라티 문자"}
         Guru{"구르무키 문자"}
+        Hang{"한글"}
         Hani{"한자"}
         Hano{"하누누어"}
         Hans{"중국어 간체"}
         Hant{"중국어 번체"}
         Hebr{"히브리어"}
         Hira{"히라카나"}
+        Hmng{"파하우 몽 문자"}
         Hrkt{"가나"}
         Hung{"고대 헝가리 문자"}
         Inds{"인더스 문자"}
         Ital{"고이탈리아어"}
         Java{"자바 문자"}
+        Jpan{"일본 문자"}
         Kana{"가타카나"}
         Khmr{"크메르어"}
         Knda{"칸나다"}
+        Kore{"한국어"}
         Laoo{"라오어"}
         Latf{"독일식 로마자"}
         Latg{"아일랜드식 로마자"}
         Latn{"라틴어"}
+        Lepc{"렙차문자"}
         Limb{"림부어"}
         Lina{"선형 문자 A"}
         Linb{"선형 문자 B"}
+        Lyci{"리키아어"}
+        Lydi{"리디아어"}
+        Mand{"만데아어"}
+        Maya{"마야 상형 문자"}
+        Mero{"메로에 문자"}
         Mlym{"말라얄람어"}
         Mong{"몽골어"}
         Mymr{"미얀마어"}
+        Nkoo{"응코 문자"}
+        Ogam{"오검 문자"}
+        Olck{"올 치키 문자"}
+        Orkh{"오르혼어"}
         Orya{"오리야어"}
         Osma{"오스만야어"}
+        Perm{"고대 페름어"}
+        Phag{"파스파 문자"}
+        Phnx{"페니키아 문자"}
+        Plrd{"폴라드 표음 문자"}
+        Rjng{"레장 문자"}
+        Roro{"롱고롱고"}
         Runr{"룬 문자"}
+        Sara{"사라티"}
+        Saur{"사우라슈트라 문자"}
+        Sgnw{"수화 문자"}
         Shaw{"샤비안어"}
         Sinh{"신할라어"}
+        Sund{"순다 문자"}
+        Sylo{"실헤티 나가리"}
         Syrc{"시리아어"}
         Syre{"에스트랑겔로식 시리아 문자"}
         Syrj{"서부 시리아 문자"}
@@ -2052,13 +2091,19 @@ ko{
         Tale{"타이 레어"}
         Taml{"타밀어"}
         Telu{"탤루그어"}
+        Teng{"텡과르"}
+        Tfng{"티피나그"}
         Tglg{"타갈로그어"}
         Thaa{"타나어"}
         Thai{"태국어"}
         Tibt{"티벳어"}
         Ugar{"우가릿어"}
+        Vaii{"바이어"}
+        Visp{"시화법"}
         Xpeo{"고대 페르시아 문자"}
+        Xsux{"수메르-아카드어 설형문자"}
         Yiii{"이어"}
+        Zxxx{"구전"}
         Zzzz{"기록되지 않은 문자(구전)"}
     }
     Types{
@@ -2112,12 +2157,80 @@ ko{
         TARASK{"TARASK"}
         VALENCIA{"VALENCIA"}
     }
-    Version{"1.128"}
+    Version{"1.110"}
     calendar{
         buddhist{
+            AmPmMarkers{
+                "오전",
+                "오후",
+            }
+            DateTimePatterns{
+                "a hh시 mm분 ss초 v",
+                "a hh시 mm분 ss초 z",
+                "a h:mm:ss",
+                "a h:mm",
+                "EEEE, MMMM d, yyyy G",
+                "MMMM d, yyyy G",
+                "MMM d, yyyy G",
+                "M/d/yyyy",
+                "{1} {0}",
+            }
             eras{
                 abbreviated{
                     "불기",
+                }
+            }
+        }
+        chinese{
+            DateTimePatterns{
+                "a hh시 mm분 ss초 v",
+                "a hh시 mm분 ss초 z",
+                "a h:mm:ss",
+                "a h:mm",
+                "EEEE y'x'G-Ml-d",
+                "y'x'G-Ml-d",
+                "y'x'G-Ml-d",
+                "y'x'G-Ml-d",
+                "{1} {0}",
+            }
+        }
+        coptic{
+            AmPmMarkers{
+                "오전",
+                "PM",
+            }
+            eras{
+                abbreviated{
+                    "ERA0",
+                    "ERA1",
+                }
+                narrow{
+                    "ERA0",
+                    "ERA1",
+                }
+                wide{
+                    "ERA0",
+                    "ERA1",
+                }
+            }
+        }
+        ethiopic{
+            AmPmMarkers{
+                "오전",
+                "오후",
+            }
+            eras{
+                abbreviated{
+                    "ERA0",
+                    "ERA1",
+                }
+                narrow{
+                    "ERA0",
+                    "ERA1",
+                }
+                wide{
+                    "ERA0",
+                    "ERA1",
                 }
             }
         }
@@ -2146,10 +2259,10 @@ ko{
                 M{"L"}
                 MEd{"M. d. (E)"}
                 MMM{"LLL"}
-                MMMEd{"MMM월 d일 (E)"}
-                MMMMEd{"MMMM월 d일 (E)"}
-                MMMMd{"MMMM월 d일"}
-                MMMd{"MMM월 d일"}
+                MMMEd{"MMM d일 (E)"}
+                MMMMEd{"MMMM d일 (E)"}
+                MMMMd{"MMMM d일"}
+                MMMd{"MMM d일"}
                 MMdd{"MM. dd"}
                 Md{"M. d."}
                 d{"d"}
@@ -2158,12 +2271,13 @@ ko{
                 y{"yyyy"}
                 yM{"yyyy. M."}
                 yMEd{"yyyy. M. d. EEE"}
-                yMMM{"yyyy년 MMM월"}
-                yMMMEd{"yyyy년 MMM월 d일 EEE"}
-                yMMMM{"yyyy년 MMMM월"}
+                yMMM{"yyyy년 MMM"}
+                yMMMEd{"yyyy년 MMM d일 EEE"}
+                yMMMM{"yyyy년 MMMM"}
                 yQ{"yyyy년 Q분기"}
                 yQQQ{"yyyy년 QQQ"}
-                yyMMM{"yy년 MMM월"}
+                yyMM{"YY. M."}
+                yyMMM{"yy년 MMM"}
                 yyQ{"yy년 Q분기"}
                 yyyyMM{"yyyy. MM"}
             }
@@ -2257,18 +2371,18 @@ ko{
             monthNames{
                 format{
                     abbreviated{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
+                        "1월",
+                        "2월",
+                        "3월",
+                        "4월",
+                        "5월",
+                        "6월",
+                        "7월",
+                        "8월",
+                        "9월",
+                        "10월",
+                        "11월",
+                        "12월",
                     }
                     narrow{
                         "1",
@@ -2285,18 +2399,18 @@ ko{
                         "12",
                     }
                     wide{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
+                        "1월",
+                        "2월",
+                        "3월",
+                        "4월",
+                        "5월",
+                        "6월",
+                        "7월",
+                        "8월",
+                        "9월",
+                        "10월",
+                        "11월",
+                        "12월",
                     }
                 }
                 stand-alone{
@@ -2369,6 +2483,286 @@ ko{
                 }
             }
         }
+        hebrew{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            availableFormats{
+                MMMMEd{"MMMM d E"}
+                yMMMEd{"yyyy MMM d EEE"}
+            }
+            eras{
+                abbreviated{
+                    "AM",
+                }
+                narrow{
+                    "AM",
+                }
+                wide{
+                    "AM",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Tishri",
+                        "Heshvan",
+                        "Kislev",
+                        "Tevet",
+                        "Shevat",
+                        "Adar I",
+                        "Adar",
+                        "Nisan",
+                        "Iyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                    }
+                    wide{
+                        "Tishri",
+                        "Heshvan",
+                        "Kislev",
+                        "Tevet",
+                        "Shevat",
+                        "Adar I",
+                        "Adar",
+                        "Nisan",
+                        "Iyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                    }
+                    wide{
+                        "Tishri",
+                        "Heshvan",
+                        "Kislev",
+                        "Tevet",
+                        "Shevat",
+                        "Adar I",
+                        "Adar",
+                        "Nisan",
+                        "Iyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                    }
+                }
+            }
+        }
+        indian{
+            eras{
+                abbreviated{
+                    "SAKA",
+                }
+                narrow{
+                    "SAKA",
+                }
+                wide{
+                    "SAKA",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Chaitra",
+                        "Vaisakha",
+                        "Jyaistha",
+                        "Asadha",
+                        "Sravana",
+                        "Bhadra",
+                        "Asvina",
+                        "Kartika",
+                        "Agrahayana",
+                        "Pausa",
+                        "Magha",
+                        "Phalguna",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "Chaitra",
+                        "Vaisakha",
+                        "Jyaistha",
+                        "Asadha",
+                        "Sravana",
+                        "Bhadra",
+                        "Asvina",
+                        "Kartika",
+                        "Agrahayana",
+                        "Pausa",
+                        "Magha",
+                        "Phalguna",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "Chaitra",
+                        "Vaisakha",
+                        "Jyaistha",
+                        "Asadha",
+                        "Sravana",
+                        "Bhadra",
+                        "Asvina",
+                        "Kartika",
+                        "Agrahayana",
+                        "Pausa",
+                        "Magha",
+                        "Phalguna",
+                    }
+                }
+            }
+        }
+        islamic{
+            eras{
+                abbreviated{
+                    "AH",
+                }
+                narrow{
+                    "AH",
+                }
+                wide{
+                    "AH",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Muharram",
+                        "Safar",
+                        "Rabiʻ I",
+                        "Rabiʻ II",
+                        "Jumada I",
+                        "Jumada II",
+                        "Rajab",
+                        "Shaʻban",
+                        "Ramadan",
+                        "Shawwal",
+                        "Dhuʻl-Qiʻdah",
+                        "Dhuʻl-Hijjah",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "Muharram",
+                        "Safar",
+                        "Rabiʻ I",
+                        "Rabiʻ II",
+                        "Jumada I",
+                        "Jumada II",
+                        "Rajab",
+                        "Shaʻban",
+                        "Ramadan",
+                        "Shawwal",
+                        "Dhuʻl-Qiʻdah",
+                        "Dhuʻl-Hijjah",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "Muharram",
+                        "Safar",
+                        "Rabiʻ I",
+                        "Rabiʻ II",
+                        "Jumada I",
+                        "Jumada II",
+                        "Rajab",
+                        "Shaʻban",
+                        "Ramadan",
+                        "Shawwal",
+                        "Dhuʻl-Qiʻdah",
+                        "Dhuʻl-Hijjah",
+                    }
+                }
+            }
+        }
         islamic-civil{
             AmPmMarkers{
                 "오전",
@@ -2376,6 +2770,34 @@ ko{
             }
         }
         japanese{
+            AmPmMarkers{
+                "오전",
+                "오후",
+            }
+            DateTimePatterns{
+                "a hh시 mm분 ss초 v",
+                "a hh시 mm분 ss초 z",
+                "a h:mm:ss",
+                "a h:mm",
+                "EEEE, MMMM d, y G",
+                "MMMM d, y G",
+                "MMM d, y G",
+                "M/d/yy",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"E d"}
+                H{"H"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                MMMEd{"E MMM d"}
+                MMMMd{"MMMM d"}
+                Md{"M-d"}
+                ms{"mm:ss"}
+                y{"yyyy GGG"}
+                yMMM{"GGGGG yy MMM"}
+                yQ{"GGGGG yy Q"}
+            }
             eras{
                 abbreviated{
                     "Taika",
@@ -2615,6 +3037,244 @@ ko{
                     "Shōwa",
                     "Heisei",
                 }
+                narrow{
+                    "Taika" /** (abbr.)  */,
+                    "Hakuchi" /** (abbr.)  */,
+                    "Hakuhō" /** (abbr.)  */,
+                    "Shuchō" /** (abbr.)  */,
+                    "Taihō" /** (abbr.)  */,
+                    "Keiun" /** (abbr.)  */,
+                    "Wadō" /** (abbr.)  */,
+                    "Reiki" /** (abbr.)  */,
+                    "Yōrō" /** (abbr.)  */,
+                    "Jinki" /** (abbr.)  */,
+                    "Tempyō" /** (abbr.)  */,
+                    "Tempyō-kampō" /** (abbr.)  */,
+                    "Tempyō-shōhō" /** (abbr.)  */,
+                    "Tempyō-hōji" /** (abbr.)  */,
+                    "Temphō-jingo" /** (abbr.)  */,
+                    "Jingo-keiun" /** (abbr.)  */,
+                    "Hōki" /** (abbr.)  */,
+                    "Ten-ō" /** (abbr.)  */,
+                    "Enryaku" /** (abbr.)  */,
+                    "Daidō" /** (abbr.)  */,
+                    "Kōnin" /** (abbr.)  */,
+                    "Tenchō" /** (abbr.)  */,
+                    "Shōwa" /** (abbr.)  */,
+                    "Kajō" /** (abbr.)  */,
+                    "Ninju" /** (abbr.)  */,
+                    "Saiko" /** (abbr.)  */,
+                    "Tennan" /** (abbr.)  */,
+                    "Jōgan" /** (abbr.)  */,
+                    "Genkei" /** (abbr.)  */,
+                    "Ninna" /** (abbr.)  */,
+                    "Kampyō" /** (abbr.)  */,
+                    "Shōtai" /** (abbr.)  */,
+                    "Engi" /** (abbr.)  */,
+                    "Enchō" /** (abbr.)  */,
+                    "Shōhei" /** (abbr.)  */,
+                    "Tengyō" /** (abbr.)  */,
+                    "Tenryaku" /** (abbr.)  */,
+                    "Tentoku" /** (abbr.)  */,
+                    "Ōwa" /** (abbr.)  */,
+                    "Kōhō" /** (abbr.)  */,
+                    "Anna" /** (abbr.)  */,
+                    "Tenroku" /** (abbr.)  */,
+                    "Ten-en" /** (abbr.)  */,
+                    "Jōgen" /** (abbr.)  */,
+                    "Tengen" /** (abbr.)  */,
+                    "Eikan" /** (abbr.)  */,
+                    "Kanna" /** (abbr.)  */,
+                    "Ei-en" /** (abbr.)  */,
+                    "Eiso" /** (abbr.)  */,
+                    "Shōryaku" /** (abbr.)  */,
+                    "Chōtoku" /** (abbr.)  */,
+                    "Chōhō" /** (abbr.)  */,
+                    "Kankō" /** (abbr.)  */,
+                    "Chōwa" /** (abbr.)  */,
+                    "Kannin" /** (abbr.)  */,
+                    "Jian" /** (abbr.)  */,
+                    "Manju" /** (abbr.)  */,
+                    "Chōgen" /** (abbr.)  */,
+                    "Chōryaku" /** (abbr.)  */,
+                    "Chōkyū" /** (abbr.)  */,
+                    "Kantoku" /** (abbr.)  */,
+                    "Eishō" /** (abbr.)  */,
+                    "Tengi" /** (abbr.)  */,
+                    "Kōhei" /** (abbr.)  */,
+                    "Jiryaku" /** (abbr.)  */,
+                    "Enkyū" /** (abbr.)  */,
+                    "Shōho" /** (abbr.)  */,
+                    "Shōryaku" /** (abbr.)  */,
+                    "Eiho" /** (abbr.)  */,
+                    "Ōtoku" /** (abbr.)  */,
+                    "Kanji" /** (abbr.)  */,
+                    "Kaho" /** (abbr.)  */,
+                    "Eichō" /** (abbr.)  */,
+                    "Shōtoku" /** (abbr.)  */,
+                    "Kōwa" /** (abbr.)  */,
+                    "Chōji" /** (abbr.)  */,
+                    "Kashō" /** (abbr.)  */,
+                    "Tennin" /** (abbr.)  */,
+                    "Ten-ei" /** (abbr.)  */,
+                    "Eikyū" /** (abbr.)  */,
+                    "Gen-ei" /** (abbr.)  */,
+                    "Hoan" /** (abbr.)  */,
+                    "Tenji" /** (abbr.)  */,
+                    "Daiji" /** (abbr.)  */,
+                    "Tenshō" /** (abbr.)  */,
+                    "Chōshō" /** (abbr.)  */,
+                    "Hoen" /** (abbr.)  */,
+                    "Eiji" /** (abbr.)  */,
+                    "Kōji" /** (abbr.)  */,
+                    "Tenyō" /** (abbr.)  */,
+                    "Kyūan" /** (abbr.)  */,
+                    "Ninpei" /** (abbr.)  */,
+                    "Kyūju" /** (abbr.)  */,
+                    "Hogen" /** (abbr.)  */,
+                    "Heiji" /** (abbr.)  */,
+                    "Eiryaku" /** (abbr.)  */,
+                    "Ōho" /** (abbr.)  */,
+                    "Chōkan" /** (abbr.)  */,
+                    "Eiman" /** (abbr.)  */,
+                    "Nin-an" /** (abbr.)  */,
+                    "Kaō" /** (abbr.)  */,
+                    "Shōan" /** (abbr.)  */,
+                    "Angen" /** (abbr.)  */,
+                    "Jishō" /** (abbr.)  */,
+                    "Yōwa" /** (abbr.)  */,
+                    "Juei" /** (abbr.)  */,
+                    "Genryuku" /** (abbr.)  */,
+                    "Bunji" /** (abbr.)  */,
+                    "Kenkyū" /** (abbr.)  */,
+                    "Shōji" /** (abbr.)  */,
+                    "Kennin" /** (abbr.)  */,
+                    "Genkyū" /** (abbr.)  */,
+                    "Ken-ei" /** (abbr.)  */,
+                    "Shōgen" /** (abbr.)  */,
+                    "Kenryaku" /** (abbr.)  */,
+                    "Kenpō" /** (abbr.)  */,
+                    "Shōkyū" /** (abbr.)  */,
+                    "Jōō" /** (abbr.)  */,
+                    "Gennin" /** (abbr.)  */,
+                    "Karoku" /** (abbr.)  */,
+                    "Antei" /** (abbr.)  */,
+                    "Kanki" /** (abbr.)  */,
+                    "Jōei" /** (abbr.)  */,
+                    "Tempuku" /** (abbr.)  */,
+                    "Bunryaku" /** (abbr.)  */,
+                    "Katei" /** (abbr.)  */,
+                    "Ryakunin" /** (abbr.)  */,
+                    "En-ō" /** (abbr.)  */,
+                    "Ninji" /** (abbr.)  */,
+                    "Kangen" /** (abbr.)  */,
+                    "Hōji" /** (abbr.)  */,
+                    "Kenchō" /** (abbr.)  */,
+                    "Kōgen" /** (abbr.)  */,
+                    "Shōka" /** (abbr.)  */,
+                    "Shōgen" /** (abbr.)  */,
+                    "Bun-ō" /** (abbr.)  */,
+                    "Kōchō" /** (abbr.)  */,
+                    "Bun-ei" /** (abbr.)  */,
+                    "Kenji" /** (abbr.)  */,
+                    "Kōan" /** (abbr.)  */,
+                    "Shōō" /** (abbr.)  */,
+                    "Einin" /** (abbr.)  */,
+                    "Shōan" /** (abbr.)  */,
+                    "Kengen" /** (abbr.)  */,
+                    "Kagen" /** (abbr.)  */,
+                    "Tokuji" /** (abbr.)  */,
+                    "Enkei" /** (abbr.)  */,
+                    "Ōchō" /** (abbr.)  */,
+                    "Shōwa" /** (abbr.)  */,
+                    "Bunpō" /** (abbr.)  */,
+                    "Genō" /** (abbr.)  */,
+                    "Genkyō" /** (abbr.)  */,
+                    "Shōchū" /** (abbr.)  */,
+                    "Kareki" /** (abbr.)  */,
+                    "Gentoku" /** (abbr.)  */,
+                    "Genkō" /** (abbr.)  */,
+                    "Kemmu" /** (abbr.)  */,
+                    "Engen" /** (abbr.)  */,
+                    "Kōkoku" /** (abbr.)  */,
+                    "Shōhei" /** (abbr.)  */,
+                    "Kentoku" /** (abbr.)  */,
+                    "Bunchũ" /** (abbr.)  */,
+                    "Tenju" /** (abbr.)  */,
+                    "Kōryaku" /** (abbr.)  */,
+                    "Kōwa" /** (abbr.)  */,
+                    "Genchũ" /** (abbr.)  */,
+                    "Meitoku" /** (abbr.)  */,
+                    "Kakei" /** (abbr.)  */,
+                    "Kōō" /** (abbr.)  */,
+                    "Meitoku" /** (abbr.)  */,
+                    "Ōei" /** (abbr.)  */,
+                    "Shōchō" /** (abbr.)  */,
+                    "Eikyō" /** (abbr.)  */,
+                    "Kakitsu" /** (abbr.)  */,
+                    "Bun-an" /** (abbr.)  */,
+                    "Hōtoku" /** (abbr.)  */,
+                    "Kyōtoku" /** (abbr.)  */,
+                    "Kōshō" /** (abbr.)  */,
+                    "Chōroku" /** (abbr.)  */,
+                    "Kanshō" /** (abbr.)  */,
+                    "Bunshō" /** (abbr.)  */,
+                    "Ōnin" /** (abbr.)  */,
+                    "Bunmei" /** (abbr.)  */,
+                    "Chōkyō" /** (abbr.)  */,
+                    "Entoku" /** (abbr.)  */,
+                    "Meiō" /** (abbr.)  */,
+                    "Bunki" /** (abbr.)  */,
+                    "Eishō" /** (abbr.)  */,
+                    "Taiei" /** (abbr.)  */,
+                    "Kyōroku" /** (abbr.)  */,
+                    "Tenmon" /** (abbr.)  */,
+                    "Kōji" /** (abbr.)  */,
+                    "Eiroku" /** (abbr.)  */,
+                    "Genki" /** (abbr.)  */,
+                    "Tenshō" /** (abbr.)  */,
+                    "Bunroku" /** (abbr.)  */,
+                    "Keichō" /** (abbr.)  */,
+                    "Genwa" /** (abbr.)  */,
+                    "Kan-ei" /** (abbr.)  */,
+                    "Shōho" /** (abbr.)  */,
+                    "Keian" /** (abbr.)  */,
+                    "Shōō" /** (abbr.)  */,
+                    "Meiryaku" /** (abbr.)  */,
+                    "Manji" /** (abbr.)  */,
+                    "Kanbun" /** (abbr.)  */,
+                    "Enpō" /** (abbr.)  */,
+                    "Tenwa" /** (abbr.)  */,
+                    "Jōkyō" /** (abbr.)  */,
+                    "Genroku" /** (abbr.)  */,
+                    "Hōei" /** (abbr.)  */,
+                    "Shōtoku" /** (abbr.)  */,
+                    "Kyōhō" /** (abbr.)  */,
+                    "Genbun" /** (abbr.)  */,
+                    "Kanpō" /** (abbr.)  */,
+                    "Enkyō" /** (abbr.)  */,
+                    "Kan-en" /** (abbr.)  */,
+                    "Hōryaku" /** (abbr.)  */,
+                    "Meiwa" /** (abbr.)  */,
+                    "An-ei" /** (abbr.)  */,
+                    "Tenmei" /** (abbr.)  */,
+                    "Kansei" /** (abbr.)  */,
+                    "Kyōwa" /** (abbr.)  */,
+                    "Bunka" /** (abbr.)  */,
+                    "Bunsei" /** (abbr.)  */,
+                    "Tenpō" /** (abbr.)  */,
+                    "Kōka" /** (abbr.)  */,
+                    "Kaei" /** (abbr.)  */,
+                    "Ansei" /** (abbr.)  */,
+                    "Man-en" /** (abbr.)  */,
+                    "Bunkyū" /** (abbr.)  */,
+                    "Genji" /** (abbr.)  */,
+                    "Keiō" /** (abbr.)  */,
+                    "M",
+                    "T",
+                    "S",
+                    "H",
+                }
                 wide{
                     "Taika",
                     "Hakuchi",
@@ -2852,6 +3512,99 @@ ko{
                     "Taishō",
                     "Shōwa",
                     "Heisei",
+                }
+            }
+        }
+        persian{
+            AmPmMarkers{
+                "오전",
+                "PM",
+            }
+            eras{
+                abbreviated{
+                    "AP",
+                }
+                narrow{
+                    "AP",
+                }
+                wide{
+                    "AP",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Farvardin",
+                        "Ordibehesht",
+                        "Khordad",
+                        "Tir",
+                        "Mordad",
+                        "Shahrivar",
+                        "Mehr",
+                        "Aban",
+                        "Azar",
+                        "Dey",
+                        "Bahman",
+                        "Esfand",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "Farvardin",
+                        "Ordibehesht",
+                        "Khordad",
+                        "Tir",
+                        "Mordad",
+                        "Shahrivar",
+                        "Mehr",
+                        "Aban",
+                        "Azar",
+                        "Dey",
+                        "Bahman",
+                        "Esfand",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "Farvardin",
+                        "Ordibehesht",
+                        "Khordad",
+                        "Tir",
+                        "Mordad",
+                        "Shahrivar",
+                        "Mehr",
+                        "Aban",
+                        "Azar",
+                        "Dey",
+                        "Bahman",
+                        "Esfand",
+                    }
                 }
             }
         }
@@ -3972,6 +4725,7 @@ ko{
         }
         "meta:Acre"{
             cu:int{0}
+            ld{"아크레 하계 표준시"}
             ls{"아크레 표준시"}
             sd{"ACST (아크레)"}
             ss{"ACT (아크레)"}
@@ -3994,6 +4748,7 @@ ko{
         }
         "meta:Africa_Southern"{
             cu:int{0}
+            lg{"남아프리카 시간"}
             ls{"남아프리카 표준시"}
             ss{"SAST"}
         }
@@ -4074,6 +4829,9 @@ ko{
         }
         "meta:Arabian"{
             cu:int{0}
+            ld{"아라비아 하계 표준시"}
+            lg{"아라비아 시간"}
+            ls{"아라비아 표준시"}
             sd{"ADT(아라비아)"}
             sg{"AT(아라비아)"}
             ss{"AST(아라비아)"}
@@ -4111,6 +4869,7 @@ ko{
         "meta:Australia_CentralWestern"{
             cu:int{0}
             ld{"오스트레일리아 중서부 하계 표준시"}
+            lg{"오스트레일리아 중서부 시간"}
             ls{"오스트레일리아 중서부 표준시"}
             sd{"ACWDT"}
             sg{"ACWT"}
@@ -4139,6 +4898,8 @@ ko{
         }
         "meta:Azores"{
             cu:int{0}
+            ld{"아조레스 하계 표준시"}
+            ls{"아조레스 표준시"}
             sd{"AZOST"}
         }
         "meta:Baku"{
@@ -4171,15 +4932,21 @@ ko{
         }
         "meta:Cape_Verde"{
             cu:int{0}
+            ld{"카보 베르데 하계 표준시"}
+            ls{"카보 베르데 표준시"}
         }
         "meta:Chamorro"{
             cu:int{0}
+            lg{"차모로 시간"}
+            ls{"차모로 표준시"}
         }
         "meta:Changbai"{
             cu:int{0}
         }
         "meta:Chatham"{
             cu:int{0}
+            ld{"채텀 하계 표준시"}
+            ls{"채텀 표준시"}
         }
         "meta:Chile"{
             cu:int{0}
@@ -4195,15 +4962,19 @@ ko{
         }
         "meta:Christmas"{
             cu:int{0}
+            ls{"크리스마스섬 표준시"}
         }
         "meta:Cocos"{
             cu:int{0}
+            ls{"코코스섬 표준시"}
         }
         "meta:Colombia"{
             cu:int{0}
         }
         "meta:Cook"{
             cu:int{0}
+            ld{"쿡제도 하계 표준시"}
+            ls{"쿡제도 표준시"}
         }
         "meta:Cuba"{
             cu:int{0}
@@ -4213,12 +4984,14 @@ ko{
         }
         "meta:Davis"{
             cu:int{0}
+            ls{"데이비스 표준시"}
         }
         "meta:Dominican"{
             cu:int{0}
         }
         "meta:DumontDUrville"{
             cu:int{0}
+            ls{"뒤몽 뒤르빌 표준시"}
         }
         "meta:Dushanbe"{
             cu:int{0}
@@ -4231,6 +5004,8 @@ ko{
         }
         "meta:Easter"{
             cu:int{0}
+            ld{"이스터섬 하계 표준시"}
+            ls{"이스터섬 표준시"}
         }
         "meta:Ecuador"{
             cu:int{0}
@@ -4244,27 +5019,34 @@ ko{
         }
         "meta:Europe_Eastern"{
             cu:int{0}
+            ld{"동부유럽 하계 표준시"}
             ls{"동부유럽 표준시"}
             sd{"EEST"}
             ss{"EET"}
         }
         "meta:Europe_Western"{
             cu:int{0}
+            ld{"서부 유럽 하계 표준시"}
             ls{"서부 유럽 시간"}
             sd{"WEST"}
             ss{"WET"}
         }
         "meta:Falkland"{
             cu:int{0}
+            ld{"포클랜드 하계 표준시"}
+            ls{"포클랜드 표준시"}
         }
         "meta:Fiji"{
             cu:int{0}
+            ld{"피지 하계 표준시"}
+            ls{"피지 표준시"}
         }
         "meta:French_Guiana"{
             cu:int{0}
         }
         "meta:French_Southern"{
             cu:int{0}
+            ls{"프랑스령 남쪽식민지 표준시"}
         }
         "meta:Frunze"{
             cu:int{0}
@@ -4276,6 +5058,7 @@ ko{
         }
         "meta:Galapagos"{
             cu:int{0}
+            ls{"갈라파고스 표준시"}
         }
         "meta:Gambier"{
             cu:int{0}
@@ -4312,6 +5095,8 @@ ko{
         }
         "meta:Hong_Kong"{
             cu:int{0}
+            ld{"홍콩 하계 표준시"}
+            ls{"홍콩 시간"}
             sd{"HKST"}
             ss{"HKT"}
         }
@@ -4320,25 +5105,31 @@ ko{
         }
         "meta:India"{
             cu:int{0}
+            ls{"인도 표준시"}
             ss{"IST"}
         }
         "meta:Indian_Ocean"{
             cu:int{0}
+            ls{"영국령 인도양 식민지 표준시"}
         }
         "meta:Indochina"{
             cu:int{0}
+            ls{"인도차이나 시간"}
             ss{"ICT"}
         }
         "meta:Indonesia_Central"{
             cu:int{0}
+            ls{"중앙인도네시아 시간"}
             ss{"CIT"}
         }
         "meta:Indonesia_Eastern"{
             cu:int{0}
+            ls{"동인도네시아 시간"}
             ss{"EIT"}
         }
         "meta:Indonesia_Western"{
             cu:int{0}
+            ls{"서인도네시아 시간"}
             ss{"WIT"}
         }
         "meta:Iran"{
@@ -4418,6 +5209,9 @@ ko{
         }
         "meta:Lord_Howe"{
             cu:int{0}
+            ld{"로드 하우 하계 표준시"}
+            lg{"로드 하우 시간"}
+            ls{"로드 하우 표준시"}
             sd{"LHDT"}
             sg{"LHT"}
             ss{"LHST"}
@@ -4436,6 +5230,7 @@ ko{
         }
         "meta:Maldives"{
             cu:int{0}
+            ls{"몰디브 표준시"}
         }
         "meta:Marquesas"{
             cu:int{0}
@@ -4445,15 +5240,18 @@ ko{
         }
         "meta:Mauritius"{
             cu:int{0}
+            ls{"모리셔스 표준시"}
         }
         "meta:Mawson"{
             cu:int{0}
+            ls{"모슨 표준시"}
         }
         "meta:Mongolia"{
             cu:int{0}
         }
         "meta:Moscow"{
             cu:int{0}
+            ld{"모스크바 하계 표준시"}
             ls{"모스크바 표준시"}
             sd{"MSKS"}
             ss{"MSK"}
@@ -4542,9 +5340,11 @@ ko{
         }
         "meta:Reunion"{
             cu:int{0}
+            ls{"리유니온 표준시"}
         }
         "meta:Rothera"{
             cu:int{0}
+            ls{"로데라 표준시"}
         }
         "meta:Sakhalin"{
             cu:int{0}
@@ -4560,6 +5360,7 @@ ko{
         }
         "meta:Seychelles"{
             cu:int{0}
+            ls{"세이셸 표준시"}
         }
         "meta:Shevchenko"{
             cu:int{0}
@@ -4572,6 +5373,7 @@ ko{
         }
         "meta:South_Georgia"{
             cu:int{0}
+            ls{"사우스 조지아 표준시"}
             ss{"GST (사우스 조지아)"}
         }
         "meta:Suriname"{
@@ -4582,8 +5384,18 @@ ko{
         }
         "meta:Syowa"{
             cu:int{0}
+            ls{"쇼와 표준시"}
         }
         "meta:Tahiti"{
+            cu:int{0}
+        }
+        "meta:Tajikistan"{
+            cu:int{0}
+        }
+        "meta:Tashkent"{
+            cu:int{0}
+        }
+        "meta:Tbilisi"{
             cu:int{0}
         }
         "meta:Tokelau"{
@@ -4598,10 +5410,22 @@ ko{
         "meta:Turkey"{
             cu:int{0}
         }
+        "meta:Turkmenistan"{
+            cu:int{0}
+        }
         "meta:Tuvalu"{
             cu:int{0}
         }
+        "meta:Uralsk"{
+            cu:int{0}
+        }
         "meta:Uruguay"{
+            cu:int{0}
+        }
+        "meta:Urumqi"{
+            cu:int{0}
+        }
+        "meta:Uzbekistan"{
             cu:int{0}
         }
         "meta:Vanuatu"{
@@ -4610,16 +5434,29 @@ ko{
         "meta:Venezuela"{
             cu:int{0}
         }
+        "meta:Vladivostok"{
+            cu:int{0}
+        }
         "meta:Volgograd"{
             cu:int{0}
         }
         "meta:Vostok"{
             cu:int{0}
+            ls{"모스토크 표준시"}
         }
         "meta:Wake"{
             cu:int{0}
         }
         "meta:Wallis"{
+            cu:int{0}
+        }
+        "meta:Yakutsk"{
+            cu:int{0}
+        }
+        "meta:Yekaterinburg"{
+            cu:int{0}
+        }
+        "meta:Yerevan"{
             cu:int{0}
         }
         "meta:Yukon"{

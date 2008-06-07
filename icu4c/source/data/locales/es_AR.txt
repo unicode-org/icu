@@ -7,15 +7,50 @@
 // *
 // ***************************************************************************
 es_AR{
+    Countries{
+        AX{"Islas Åland"}
+        BL{"San Bartolomé"}
+        DM{"Dominica"}
+        MF{"San Martín"}
+    }
     Currencies{
         ARS{
             "$",
             "Peso Argentino",
         }
+        TRL{
+            "TL",
+            "lira turca antigua",
+        }
+        TRY{
+            "TRY",
+            "nueva lira turca",
+        }
+        USD{
+            "US$",
+            "dólar estadounidense",
+        }
     }
-    Version{"1.128"}
+    Scripts{
+        Cans{"símbolos aborígenes canadienses unificados"}
+        Inds{"Indio (harappan)"}
+        Kore{"coreano"}
+        Latf{"latín (variante fraktur)"}
+        Latg{"latín (variante gaélica)"}
+    }
+    Variants{
+        FONIPA{"alfabeto fonético internacional IPA"}
+        MONOTON{"Monotónico"}
+        POLYTON{"Politónico"}
+        REVISED{"Ortografía revisada"}
+    }
+    Version{"1.56"}
     calendar{
         gregorian{
+            AmPmMarkers{
+                "a.m.",
+                "p.m.",
+            }
             DateTimePatterns{
                 "HH'h'''mm:ss v",
                 "H:mm:ss z",
@@ -27,6 +62,47 @@ es_AR{
                 "dd/MM/yy",
                 "{1} {0}",
             }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                Hm{"H:mm"}
+                M{"L"}
+                MEd{"E d-M"}
+                MMM{"LLL"}
+                MMMEd{"E d MMM"}
+                MMMMEd{"E d MMMM"}
+                MMMMd{"d 'de' MMMM"}
+                MMMd{"d MMM"}
+                MMMdd{"dd-MMM"}
+                MMd{"d/MM"}
+                Md{"d/M"}
+                d{"d"}
+                hhmm{"hh:mm a"}
+                hhmmss{"hh:mm:ss a"}
+                mmss{"mm:ss"}
+                ms{"mm:ss"}
+                y{"yyyy"}
+                yM{"M-yyyy"}
+                yMEd{"EEE d/M/yyyy"}
+                yMMM{"MMM yyyy"}
+                yMMMEd{"EEE, d MMM yyyy"}
+            }
+        }
+    }
+    measurementSystemNames{
+        US{"estadounidense"}
+        metric{"métrico"}
+    }
+    zoneStrings{
+        "meta:Africa_Central"{
+            ls{"Hora de África central"}
+        }
+        "meta:Africa_Eastern"{
+            ls{"Hora de África oriental"}
+        }
+        "meta:Africa_Western"{
+            ld{"Hora de verano de África occidental"}
+            ls{"Hora de África occidental"}
         }
     }
 }

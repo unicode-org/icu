@@ -84,7 +84,7 @@ uz_Latn{
         Cyrl{"Kiril"}
         Latn{"Lotin"}
     }
-    Version{"1.128"}
+    Version{"1.19"}
     calendar{
         gregorian{
             dayNames{

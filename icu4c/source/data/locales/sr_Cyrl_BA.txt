@@ -13,7 +13,7 @@ sr_Cyrl_BA{
             "Конвертибилна Марка",
         }
     }
-    Version{"1.128"}
+    Version{"1.33"}
     calendar{
         gregorian{
             DateTimePatterns{

@@ -12,6 +12,10 @@ ms_BN{
             "$",
             "BND",
         }
+        USD{
+            "US$",
+            "USD",
+        }
     }
     NumberElements{
         ",",
@@ -33,7 +37,7 @@ ms_BN{
         "#,##0%",
         "#E0",
     }
-    Version{"1.128"}
+    Version{"1.45"}
     calendar{
         gregorian{
             DateTimePatterns{

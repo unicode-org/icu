@@ -34,6 +34,7 @@ ar{
         054{"ميلانيزيا"}
         057{"الجزر الميكرونيزية"}
         061{"بولينيزيا"}
+        062{"جنوب وسط آسيا"}
         142{"آسيا"}
         143{"وسط آسيا"}
         145{"غرب آسيا"}
@@ -80,7 +81,7 @@ ar{
         BY{"روسيا البيضاء"}
         BZ{"بليز"}
         CA{"كندا"}
-        CC{"جزر كوكوس (كيلنج)"}
+        CC{"جزر كوكوس"}
         CD{"جمهورية الكونغو الديمقراطية"}
         CF{"جمهورية افريقيا الوسطى"}
         CG{"الكونغو - برازافيل"}
@@ -215,7 +216,7 @@ ar{
         OM{"عمان"}
         PA{"بنما"}
         PE{"بيرو"}
-        PF{"بولينيزيا [PF]"}
+        PF{"بولينيزيا الفرنسية"}
         PG{"بابوا غينيا الجديدة"}
         PH{"الفيلبين"}
         PK{"باكستان"}
@@ -381,9 +382,17 @@ ar{
             "BDT",
             "تاكا بنجلاديشى",
         }
+        BEC{
+            "BEC",
+            "فرنك بلجيكى (تحويلات)‏",
+        }
         BEF{
             "BEF",
             "فرنك بلجيكى",
+        }
+        BEL{
+            "BEL",
+            "فرنك بلجيكى (مالي)‏",
         }
         BGL{
             "BGL",
@@ -1081,6 +1090,14 @@ ar{
             "US$",
             "دولار أمريكي",
         }
+        USN{
+            "USN",
+            "دولار أمريكي (اليوم التالي)‏",
+        }
+        USS{
+            "USS",
+            "دولار أمريكي (نفس اليوم)‏",
+        }
         UYP{
             "UYP",
             "بيزو أوروجواى  - 1975-1993",
@@ -1335,15 +1352,18 @@ ar{
         fon{"الفون"}
         fr{"الفرنسية"}
         fr_CA{"الفرنسية الكندية"}
+        fr_CH{"الفرنسية السويسرية"}
         frm{"الفرنسية الوسطى"}
         fro{"الفرنسية القديمة"}
+        frr{"الفريزينية الشمالية"}
+        frs{"الفريزينية الشرقية"}
         fur{"الفريلايان"}
         fy{"الفريزيان"}
         ga{"الأيرلندية"}
         gay{"الجايو"}
         gba{"الجبيا"}
         gd{"الغيلية الأسكتلندية"}
-        gem{"لغة جرمانية"}
+        gem{"الجرمانية (أخرى)"}
         gez{"الجيز"}
         gil{"لغة أهل جبل طارق"}
         gl{"الجاليكية"}
@@ -1479,6 +1499,7 @@ ar{
         mt{"المالطية"}
         mul{"اللغات المتعددة"}
         mun{"لغات المندا"}
+        mus{"الكريك"}
         mwl{"الميرانديز"}
         mwr{"الماروارى"}
         my{"البورمية"}
@@ -1502,6 +1523,7 @@ ar{
         nog{"النوجاى"}
         non{"النورس القديم"}
         nr{"النديبيل الجنوبى"}
+        nso{"السوتو الشمالية"}
         nub{"اللغات النوبية"}
         nv{"النافاجو"}
         nwc{"النوارية التقليدية"}
@@ -1535,6 +1557,7 @@ ar{
         ps{"البشتونية"}
         pt{"البرتغالية"}
         pt_BR{"البرتغالية البرازيلية"}
+        pt_PT{"البرتغالية الأيبيرية"}
         qu{"الكويتشوا"}
         raj{"الراجاسثانية"}
         rap{"الرابانى"}
@@ -1661,6 +1684,7 @@ ar{
         znd{"الزاند"}
         zu{"الزولو"}
         zun{"الزونية"}
+        zxx{"بدون محتوى لغوي"}
     }
     LocaleScript{
         "Arab",
@@ -1668,15 +1692,15 @@ ar{
     NumberElements{
         "٫",
         "٬",
-        ";",
+        "؛",
         "٪",
         "٠",
         "#",
         "-",
-        "E",
+        "اس",
         "‰",
         "∞",
-        "NaN",
+        "ليس رقم",
         "+",
     }
     NumberPatterns{
@@ -1697,7 +1721,8 @@ ar{
         Brai{"البرايل"}
         Bugi{"البجينيز"}
         Buhd{"البهيدية"}
-        Cans{"رموز أصلية كندية موحدة"}
+        Cans{"مقطعيات أصلية كندية موحدة"}
+        Cari{"الكارية"}
         Cham{"التشامية"}
         Cher{"الشيروكى"}
         Cirt{"السيرث"}
@@ -1738,6 +1763,7 @@ ar{
         Khmr{"الخميرية"}
         Knda{"الكانادا"}
         Kore{"الكورية"}
+        Lana{"الانا"}
         Laoo{"اللاو"}
         Latf{"اللاتينية - متغير فراكتر"}
         Latg{"اللاتينية - متغير غيلى"}
@@ -1746,12 +1772,14 @@ ar{
         Limb{"الليمبو"}
         Lina{"الخطية أ"}
         Linb{"الخطية ب"}
+        Lyci{"الليسية"}
         Lydi{"الليدية"}
         Mand{"المانداينية"}
         Maya{"المايا الهيروغليفية"}
         Mero{"الميرويتيك"}
         Mlym{"الماليالام"}
         Mong{"المغولية"}
+        Moon{"مون"}
         Mymr{"الميانمار"}
         Nkoo{"انكو"}
         Ogam{"الأوجهام"}
@@ -1768,6 +1796,7 @@ ar{
         Sara{"الساراتى"}
         Shaw{"الشوانى"}
         Sinh{"السينهالا"}
+        Sund{"السوندانية"}
         Sylo{"السيلوتى ناجرى"}
         Syrc{"السريانية"}
         Syre{"السريانية [Syre]"}
@@ -1813,10 +1842,14 @@ ar{
         }
     }
     Variants{
+        1901{"الكتابة الألمانية التقليدية"}
+        1996{"الكتابة الألمانية لعام 1996"}
         MONOTON{"أحادي النغمة"}
         NEDIS{"لهجة ناتيسون"}
+        POSIX{"كمبيوتر"}
+        REVISED{"كتابة تم مراجعتها"}
     }
-    Version{"1.128"}
+    Version{"1.100"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -1846,8 +1879,8 @@ ar{
                 "z h:mm:ss a",
                 "h:mm:ss a",
                 "h:mm a",
-                "EEEE, d MMMM, yyyy",
-                "d MMMM, yyyy",
+                "EEEE، d MMMM، yyyy",
+                "d MMMM، yyyy",
                 "dd‏/MM‏/yyyy",
                 "d‏/M‏/yyyy",
                 "{1} {0}",
@@ -1855,15 +1888,23 @@ ar{
             availableFormats{
                 Hm{"H:mm"}
                 M{"L"}
+                MMM{"LLL"}
                 MMMEd{"E d MMM"}
                 MMMMEd{"E d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 MMdd{"dd‏/MM"}
+                d{"d"}
+                ms{"mm:ss"}
+                y{"yyyy"}
                 yM{"M/yyyy"}
                 yMMM{"MMM yyyy"}
                 yMMMM{"MMMM yyyy"}
+                yQ{"yyyy Q"}
+                yQQQ{"yyyy QQQ"}
+                yyQ{"Q yy"}
                 yyyyMM{"MM‏/yyyy"}
+                yyyyMMMM{"MMMM, yyyy"}
             }
             dayNames{
                 format{
@@ -1887,6 +1928,15 @@ ar{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "أحد",
+                        "اثنين",
+                        "ثلاثاء",
+                        "أربعاء",
+                        "خميس",
+                        "جمعة",
+                        "سبت",
+                    }
                     narrow{
                         "ح",
                         "ن",
@@ -1902,6 +1952,10 @@ ar{
                 abbreviated{
                     "ق.م",
                     "م",
+                }
+                wide{
+                    "قبل الميلاد",
+                    "ميلادي",
                 }
             }
             fields{
@@ -2061,8 +2115,491 @@ ar{
         metric{"النظام المتري"}
     }
     zoneStrings{
+        "Africa:Ceuta"{
+            ec{"سيتا"}
+        }
+        "Africa:Kinshasa"{
+            ec{"كينشاسا"}
+        }
+        "Africa:Lubumbashi"{
+            ec{"لومبباشا"}
+        }
+        "America:Adak"{
+            ec{"أداك"}
+        }
+        "America:Anchorage"{
+            ec{"أنكوريج"}
+        }
+        "America:Araguaina"{
+            ec{"أروجوانيا"}
+        }
+        "America:Argentina:La_Rioja"{
+            ec{"لاريوها"}
+        }
+        "America:Argentina:Rio_Gallegos"{
+            ec{"ريو جالييوس"}
+        }
+        "America:Argentina:San_Juan"{
+            ec{"سان خوان"}
+        }
+        "America:Argentina:San_Luis"{
+            ec{"سان لويس"}
+        }
+        "America:Argentina:Tucuman"{
+            ec{"تاكمان"}
+        }
+        "America:Argentina:Ushuaia"{
+            ec{"أشوا"}
+        }
+        "America:Bahia"{
+            ec{"باهيا"}
+        }
+        "America:Belem"{
+            ec{"بلم"}
+        }
+        "America:Boa_Vista"{
+            ec{"باو فيستا"}
+        }
+        "America:Boise"{
+            ec{"بويزي"}
+        }
+        "America:Buenos_Aires"{
+            ec{"بوينوس أيرس"}
+        }
+        "America:Cambridge_Bay"{
+            ec{"كامبرديج باي"}
+        }
+        "America:Campo_Grande"{
+            ec{"كومبو جراند"}
+        }
+        "America:Cancun"{
+            ec{"كانكون"}
+        }
+        "America:Catamarca"{
+            ec{"كاتاماركا"}
+        }
+        "America:Chicago"{
+            ec{"شيكاغو"}
+        }
+        "America:Chihuahua"{
+            ec{"تشيواوا"}
+        }
+        "America:Coral_Harbour"{
+            ec{"كورال هاربر"}
+        }
+        "America:Cordoba"{
+            ec{"كوردوبا"}
+        }
+        "America:Cuiaba"{
+            ec{"كيابا"}
+        }
+        "America:Danmarkshavn"{
+            ec{"دانمرك شافن"}
+        }
+        "America:Dawson"{
+            ec{"داوسان"}
+        }
+        "America:Dawson_Creek"{
+            ec{"داوسن كريك"}
+        }
+        "America:Denver"{
+            ec{"دنفر"}
+        }
+        "America:Detroit"{
+            ec{"ديترويت"}
+        }
+        "America:Edmonton"{
+            ec{"ايدمونتون"}
+        }
+        "America:Eirunepe"{
+            ec{"ايرونبي"}
+        }
+        "America:Fortaleza"{
+            ec{"فورتاليزا"}
+        }
+        "America:Glace_Bay"{
+            ec{"جلاس باي"}
+        }
+        "America:Goose_Bay"{
+            ec{"جوس باي"}
+        }
+        "America:Halifax"{
+            ec{"هاليفاكس"}
+        }
+        "America:Hermosillo"{
+            ec{"هيرموسيلو"}
+        }
+        "America:Indiana:Knox"{
+            ec{"كونكس"}
+        }
+        "America:Indiana:Marengo"{
+            ec{"مارنجو"}
+        }
         "America:Indiana:Petersburg"{
             ec{"بيترسبرج"}
+        }
+        "America:Indiana:Vevay"{
+            ec{"فيفاي"}
+        }
+        "America:Indiana:Vincennes"{
+            ec{"فينسينس"}
+        }
+        "America:Indiana:Winamac"{
+            ec{"ويناماك"}
+        }
+        "America:Indianapolis"{
+            ec{"إنديانابوليس"}
+        }
+        "America:Inuvik"{
+            ec{"اينوفيك"}
+        }
+        "America:Iqaluit"{
+            ec{"اكويلت"}
+        }
+        "America:Juneau"{
+            ec{"جوني"}
+        }
+        "America:Kentucky:Monticello"{
+            ec{"مونتيسيلو"}
+        }
+        "America:Los_Angeles"{
+            ec{"لوس انجلوس"}
+        }
+        "America:Louisville"{
+            ec{"لويس فيل"}
+        }
+        "America:Maceio"{
+            ec{"ماشيو"}
+        }
+        "America:Manaus"{
+            ec{"ماناوس"}
+        }
+        "America:Mazatlan"{
+            ec{"مازاتلان"}
+        }
+        "America:Mendoza"{
+            ec{"ميندوزا"}
+        }
+        "America:Menominee"{
+            ec{"مينوميني"}
+        }
+        "America:Merida"{
+            ec{"ميريدا"}
+        }
+        "America:Mexico_City"{
+            ec{"مدينة المكسيك"}
+        }
+        "America:Moncton"{
+            ec{"وينكتون"}
+        }
+        "America:Monterrey"{
+            ec{"مونتيري"}
+        }
+        "America:Montreal"{
+            ec{"مونتريال"}
+        }
+        "America:New_York"{
+            ec{"نيويورك"}
+        }
+        "America:Nipigon"{
+            ec{"نيبيجون"}
+        }
+        "America:Nome"{
+            ec{"نوم"}
+        }
+        "America:Noronha"{
+            ec{"نوروناه"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"سنتر"}
+        }
+        "America:North_Dakota:New_Salem"{
+            ec{"نيو ساليم"}
+        }
+        "America:Pangnirtung"{
+            ec{"بانجينتينج"}
+        }
+        "America:Phoenix"{
+            ec{"فينكس"}
+        }
+        "America:Porto_Velho"{
+            ec{"بورتو فيلو"}
+        }
+        "America:Rainy_River"{
+            ec{"راني ريفر"}
+        }
+        "America:Rankin_Inlet"{
+            ec{"رانكن انلت"}
+        }
+        "America:Recife"{
+            ec{"ريسيف"}
+        }
+        "America:Regina"{
+            ec{"ريجينا"}
+        }
+        "America:Rio_Branco"{
+            ec{"ريوبرانكو"}
+        }
+        "America:Sao_Paulo"{
+            ec{"ساو باولو"}
+        }
+        "America:Scoresbysund"{
+            ec{"سكورسبيسند"}
+        }
+        "America:Shiprock"{
+            ec{"شيبروك"}
+        }
+        "America:St_Johns"{
+            ec{"سانت جونز"}
+        }
+        "America:Swift_Current"{
+            ec{"سوفت كارنت"}
+        }
+        "America:Thule"{
+            ec{"ثيل"}
+        }
+        "America:Thunder_Bay"{
+            ec{"ثندر باي"}
+        }
+        "America:Tijuana"{
+            ec{"تيخوانا"}
+        }
+        "America:Toronto"{
+            ec{"تورونتو"}
+        }
+        "America:Vancouver"{
+            ec{"فانكوفر"}
+        }
+        "America:Whitehorse"{
+            ec{"وايت هورس"}
+        }
+        "America:Winnipeg"{
+            ec{"وينيبيج"}
+        }
+        "America:Yakutat"{
+            ec{"ياكوتات"}
+        }
+        "America:Yellowknife"{
+            ec{"يلونيف"}
+        }
+        "Antarctica:Casey"{
+            ec{"كاساي"}
+        }
+        "Antarctica:Davis"{
+            ec{"دافيز"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"دي مونت دو روفيل"}
+        }
+        "Antarctica:Mawson"{
+            ec{"ماوسون"}
+        }
+        "Antarctica:McMurdo"{
+            ec{"ماك موردو"}
+        }
+        "Antarctica:Palmer"{
+            ec{"بالمير"}
+        }
+        "Antarctica:Rothera"{
+            ec{"روثيرا"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"القطب الجنوبي"}
+        }
+        "Antarctica:Syowa"{
+            ec{"سايووا"}
+        }
+        "Antarctica:Vostok"{
+            ec{"فوستوك"}
+        }
+        "Asia:Almaty"{
+            ec{"ألماتي"}
+        }
+        "Asia:Anadyr"{
+            ec{"أندير"}
+        }
+        "Asia:Aqtau"{
+            ec{"أكتاو"}
+        }
+        "Asia:Aqtobe"{
+            ec{"أكتوب"}
+        }
+        "Asia:Choibalsan"{
+            ec{"تشوبالسان"}
+        }
+        "Asia:Chongqing"{
+            ec{"تشونجكينج"}
+        }
+        "Asia:Harbin"{
+            ec{"هاربين"}
+        }
+        "Asia:Hovd"{
+            ec{"هوفد"}
+        }
+        "Asia:Irkutsk"{
+            ec{"ايركيتسك"}
+        }
+        "Asia:Jakarta"{
+            ec{"جاكرتا"}
+        }
+        "Asia:Jayapura"{
+            ec{"جايابيورا"}
+        }
+        "Asia:Kamchatka"{
+            ec{"كامتشاتكا"}
+        }
+        "Asia:Kashgar"{
+            ec{"كاشجار"}
+        }
+        "Asia:Krasnoyarsk"{
+            ec{"كراسنويارسك"}
+        }
+        "Asia:Kuching"{
+            ec{"كيشينج"}
+        }
+        "Asia:Magadan"{
+            ec{"مجادن"}
+        }
+        "Asia:Makassar"{
+            ec{"ماكسار"}
+        }
+        "Asia:Novosibirsk"{
+            ec{"نوفوسبيرسك"}
+        }
+        "Asia:Omsk"{
+            ec{"أومسك"}
+        }
+        "Asia:Oral"{
+            ec{"أورال"}
+        }
+        "Asia:Pontianak"{
+            ec{"بونتيانك"}
+        }
+        "Asia:Qyzylorda"{
+            ec{"كيزيلوردا"}
+        }
+        "Asia:Sakhalin"{
+            ec{"سكالين"}
+        }
+        "Asia:Samarkand"{
+            ec{"سمرقند"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"آلانباتار"}
+        }
+        "Asia:Urumqi"{
+            ec{"أرومكي"}
+        }
+        "Asia:Vladivostok"{
+            ec{"فلاديفوستك"}
+        }
+        "Asia:Yakutsk"{
+            ec{"ياكتسك"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"يكاترنبيرج"}
+        }
+        "Atlantic:Azores"{
+            ec{"أزورس"}
+        }
+        "Atlantic:Canary"{
+            ec{"كناري"}
+        }
+        "Atlantic:Madeira"{
+            ec{"ماديرا"}
+        }
+        "Australia:Adelaide"{
+            ec{"أدليادا"}
+        }
+        "Australia:Brisbane"{
+            ec{"برسيبان"}
+        }
+        "Australia:Broken_Hill"{
+            ec{"بروكن هيل"}
+        }
+        "Australia:Darwin"{
+            ec{"دارون"}
+        }
+        "Australia:Hobart"{
+            ec{"هوبارت"}
+        }
+        "Australia:Lindeman"{
+            ec{"ليندمان"}
+        }
+        "Australia:Lord_Howe"{
+            ec{"لورد هاو"}
+        }
+        "Australia:Melbourne"{
+            ec{"ميلبورن"}
+        }
+        "Australia:Perth"{
+            ec{"برثا"}
+        }
+        "Australia:Sydney"{
+            ec{"سيدني"}
+        }
+        "Etc:Unknown"{
+            ec{"غير معروف"}
+        }
+        "Europe:Kaliningrad"{
+            ec{"كالينجراد"}
+        }
+        "Europe:Kiev"{
+            ec{"كييف"}
+        }
+        "Europe:Moscow"{
+            ec{"موسكو"}
+        }
+        "Europe:Uzhgorod"{
+            ec{"أوزجرود"}
+        }
+        "Europe:Volgograd"{
+            ec{"فولوجراد"}
+        }
+        "Europe:Zaporozhye"{
+            ec{"زابوروزي"}
+        }
+        "Pacific:Chatham"{
+            ec{"تشاثام"}
+        }
+        "Pacific:Gambier"{
+            ec{"جامبير"}
+        }
+        "Pacific:Honolulu"{
+            ec{"هونولولو"}
+        }
+        "Pacific:Johnston"{
+            ec{"جونستون"}
+        }
+        "Pacific:Kiritimati"{
+            ec{"كيريتي ماتي"}
+        }
+        "Pacific:Kosrae"{
+            ec{"كوسرا"}
+        }
+        "Pacific:Kwajalein"{
+            ec{"كواجالين"}
+        }
+        "Pacific:Majuro"{
+            ec{"ماجورو"}
+        }
+        "Pacific:Marquesas"{
+            ec{"ماركيساس"}
+        }
+        "Pacific:Midway"{
+            ec{"ميدواي"}
+        }
+        "Pacific:Ponape"{
+            ec{"باناب"}
+        }
+        "Pacific:Tarawa"{
+            ec{"تاراوا"}
+        }
+        "Pacific:Truk"{
+            ec{"ترك"}
+        }
+        "Pacific:Wake"{
+            ec{"واك"}
         }
     }
 }

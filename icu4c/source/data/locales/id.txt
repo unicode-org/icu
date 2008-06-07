@@ -504,9 +504,20 @@ id{
         "#,##0%",
         "#E0",
     }
-    Version{"1.128"}
+    Version{"1.66"}
     calendar{
         gregorian{
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "dd MMMM yyyy",
+                "dd MMM yyyy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
             dayNames{
                 format{
                     abbreviated{

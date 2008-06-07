@@ -31,7 +31,7 @@ fr_LU{
         "NaN",
         "+",
     }
-    Version{"1.128"}
+    Version{"1.46"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

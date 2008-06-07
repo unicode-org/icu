@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sv.xml
  */
 sv{
-    AuxExemplarCharacters{"[à ã ç é ë í ñ ó w ÿ ü]"}
+    AuxExemplarCharacters{"[á à â ã ā ç é ë í-ï ī ñ ó ú w ÿ ü æ ø]"}
     Countries{
         001{"världen"}
         002{"Afrika"}
@@ -313,6 +313,10 @@ sv{
             "AFN",
             "afghani",
         }
+        ALK{
+            "ALK" /** ===  */,
+            "albansk gamla lek",
+        }
         ALL{
             "lek",
             "albansk lek",
@@ -402,8 +406,12 @@ sv{
             "belgisk franc (finansiell)",
         }
         BGL{
-            "lev",
-            "bulgarisk hård lev",
+            "BGL",
+            "bulgarisk lev (1962–1999)",
+        }
+        BGM{
+            "BGM" /** ===  */,
+            "bulgarisk lev (1952–1962)",
         }
         BGN{
             "BGN",
@@ -1118,7 +1126,7 @@ sv{
             "sierraleonsk leone",
         }
         SOS{
-            "So. Sh.",
+            "Sh.",
             "somalisk shilling",
         }
         SRD{
@@ -1224,6 +1232,10 @@ sv{
         USS{
             "USS",
             "US-dollar (samma dag)",
+        }
+        UYI{
+            "UYI",
+            "UYI",
         }
         UYP{
             "UYP",
@@ -2000,6 +2012,7 @@ sv{
         Osma{"osmanja"}
         Perm{"fornpermiska"}
         Phag{"phags-pa"}
+        Phlv{"bokpahlavi"}
         Phnx{"fenikiska"}
         Plrd{"pollardtecken"}
         Qaai{"ärvda"}
@@ -2082,11 +2095,13 @@ sv{
         REVISED{"reformerad stavning"}
         ROZAJ{"resisk dialekt"}
         SAAHO{"saho-dialekt"}
+        SCOTLAND{"skotska"}
         SCOUSE{"scouse"}
         SOLBA{"Solbica-dialekt"}
+        TARASK{"Taraskievika-stavning"}
         VALENCIA{"valensisk dialekt"}
     }
-    Version{"1.128"}
+    Version{"1.118"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2117,15 +2132,25 @@ sv{
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 MMd{"d/M"}
+                MMdd{"dd/MM"}
                 Md{"d/M"}
                 d{"d"}
                 hhmm{"hh.mm"}
+                hhmmss{"HH:mm:ss"}
                 mmss{"mm.ss"}
                 ms{"mm.ss"}
                 y{"yyyy"}
+                yM{"yyyy-MM"}
                 yMEd{"EEE, yyyy-MM-dd"}
+                yMMM{"yyyy MMM"}
                 yMMMEd{"EEE d MMM yyyy"}
+                yMMMM{"yyyy MMMM"}
+                yQ{"yyyy Q"}
+                yQQQ{"yyyy QQQ"}
+                yyMM{"yy-MM"}
                 yyMMM{"MMM -yy"}
+                yyQ{"Q yy"}
+                yyyyMM{"yyyy-MM"}
                 yyyyMMM{"MMM yyyy"}
                 yyyyQQQQ{"QQQQ yyyy"}
             }
@@ -2277,6 +2302,70 @@ sv{
                         "4:e kvartalet",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                }
+            }
+        }
+        hebrew{
+            monthNames{
+                format{
+                    abbreviated{
+                        "tishrí",
+                        "heshván",
+                        "kislév",
+                        "tevét",
+                        "shevát",
+                        "adár",
+                        "adár II",
+                        "nisán",
+                        "ijjár",
+                        "siván",
+                        "tammúz",
+                        "ab",
+                        "elúl",
+                    }
+                    wide{
+                        "tishrí",
+                        "heshván",
+                        "kislév",
+                        "tevét",
+                        "shevát",
+                        "adár",
+                        "adár II",
+                        "Nisan",
+                        "ijjár",
+                        "siván",
+                        "tammúz",
+                        "ab",
+                        "elúl",
+                    }
+                }
+            }
+        }
+        indian{
+            monthNames{
+                format{
+                    wide{
+                        "chaitra",
+                        "vaishākh",
+                        "jyaishtha",
+                        "āshādha",
+                        "shrāvana",
+                        "bhādrapad",
+                        "āshwin",
+                        "kārtik",
+                        "mārgashīrsha",
+                        "paush",
+                        "māgh",
+                        "phālgun",
+                    }
+                }
             }
         }
     }
@@ -2287,6 +2376,7 @@ sv{
         quotationStart{"”"}
     }
     measurementSystemNames{
+        US{"engelska enheter"}
         metric{"SI-enheter"}
     }
     zoneStrings{
@@ -2299,8 +2389,17 @@ sv{
         "Africa:Cairo"{
             ec{"Kairo"}
         }
+        "Africa:Ceuta"{
+            ec{"Ceuta"}
+        }
         "Africa:Gaborone"{
             ec{"Gabonore"}
+        }
+        "Africa:Kinshasa"{
+            ec{"Kinshasa"}
+        }
+        "Africa:Lubumbashi"{
+            ec{"Lubumbashi"}
         }
         "Africa:Lusaka"{
             ec{"Lukasa"}
@@ -2314,8 +2413,29 @@ sv{
         "Africa:Sao_Tome"{
             ec{"São Tomé"}
         }
-        "America:Argentina:ComodRivadavia"{
-            ec{"Comodoro Rivadavia"}
+        "America:Adak"{
+            ec{"Adak"}
+        }
+        "America:Anchorage"{
+            ec{"Anchorage"}
+        }
+        "America:Araguaina"{
+            ec{"Araguaina"}
+        }
+        "America:Argentina:La_Rioja"{
+            ec{"La Rioja"}
+        }
+        "America:Argentina:Rio_Gallegos"{
+            ec{"Rio Gallegos"}
+        }
+        "America:Argentina:San_Juan"{
+            ec{"San Juan"}
+        }
+        "America:Argentina:San_Luis"{
+            ec{"San Luis"}
+        }
+        "America:Argentina:Tucuman"{
+            ec{"Tucuman"}
         }
         "America:Argentina:Ushuaia"{
             ec{"Ushuaïa"}
@@ -2323,14 +2443,50 @@ sv{
         "America:Asuncion"{
             ec{"Asunción"}
         }
+        "America:Bahia"{
+            ec{"Bahia"}
+        }
         "America:Belem"{
             ec{"Belém"}
+        }
+        "America:Blanc-Sablon"{
+            ec{"Blanc-Sablon"}
+        }
+        "America:Boa_Vista"{
+            ec{"Boa Vista"}
         }
         "America:Bogota"{
             ec{"Bogotá"}
         }
+        "America:Boise"{
+            ec{"Boise"}
+        }
+        "America:Buenos_Aires"{
+            ec{"Buenos Aires"}
+        }
+        "America:Cambridge_Bay"{
+            ec{"Cambridge Bay"}
+        }
+        "America:Campo_Grande"{
+            ec{"Campo Grande"}
+        }
         "America:Cancun"{
             ec{"Cancún"}
+        }
+        "America:Catamarca"{
+            ec{"Catamarca"}
+        }
+        "America:Chicago"{
+            ec{"Chicago"}
+        }
+        "America:Chihuahua"{
+            ec{"Chihuahua"}
+        }
+        "America:Coral_Harbour"{
+            ec{"Coral Harbour"}
+        }
+        "America:Cordoba"{
+            ec{"Córdoba"}
         }
         "America:Cuiaba"{
             ec{"Cuiabá"}
@@ -2338,44 +2494,149 @@ sv{
         "America:Curacao"{
             ec{"Curaçao"}
         }
+        "America:Danmarkshavn"{
+            ec{"Danmarkshavn"}
+        }
+        "America:Dawson"{
+            ec{"Dawson"}
+        }
+        "America:Dawson_Creek"{
+            ec{"Dawson Creek"}
+        }
+        "America:Denver"{
+            ec{"Denver"}
+        }
+        "America:Detroit"{
+            ec{"Detroit"}
+        }
+        "America:Edmonton"{
+            ec{"Edmonton"}
+        }
         "America:Eirunepe"{
             ec{"Eirunepé"}
         }
         "America:El_Salvador"{
             ec{"San Salvador"}
         }
+        "America:Fortaleza"{
+            ec{"Fortaleza"}
+        }
+        "America:Glace_Bay"{
+            ec{"Glace Bay"}
+        }
         "America:Godthab"{
             ec{"Godthåb"}
+        }
+        "America:Goose_Bay"{
+            ec{"Goose Bay"}
+        }
+        "America:Halifax"{
+            ec{"Halifax"}
         }
         "America:Havana"{
             ec{"Havanna"}
         }
+        "America:Hermosillo"{
+            ec{"Hermosillo"}
+        }
         "America:Indiana:Winamac"{
             ec{"Winamac, Indiana"}
+        }
+        "America:Indianapolis"{
+            ec{"Indianapolis"}
+        }
+        "America:Inuvik"{
+            ec{"Inuvik"}
+        }
+        "America:Iqaluit"{
+            ec{"Iqaluit"}
         }
         "America:Jujuy"{
             ec{"San Salvador de Jujuy"}
         }
+        "America:Juneau"{
+            ec{"Juneau"}
+        }
+        "America:Los_Angeles"{
+            ec{"Los Angeles"}
+        }
+        "America:Louisville"{
+            ec{"Louisville"}
+        }
         "America:Maceio"{
             ec{"Maceió"}
+        }
+        "America:Manaus"{
+            ec{"Manaus"}
         }
         "America:Mazatlan"{
             ec{"Mazatlán"}
         }
+        "America:Mendoza"{
+            ec{"Mendoza"}
+        }
+        "America:Menominee"{
+            ec{"Menominee"}
+        }
         "America:Merida"{
             ec{"Mérida"}
+        }
+        "America:Mexico_City"{
+            ec{"Mexico City"}
+        }
+        "America:Moncton"{
+            ec{"Moncton"}
+        }
+        "America:Monterrey"{
+            ec{"Monterrey"}
         }
         "America:Montreal"{
             ec{"Montréal"}
         }
+        "America:New_York"{
+            ec{"New York"}
+        }
+        "America:Nipigon"{
+            ec{"Nipigon"}
+        }
+        "America:Nome"{
+            ec{"Nome"}
+        }
+        "America:Noronha"{
+            ec{"Noronha"}
+        }
         "America:North_Dakota:Center"{
             ec{"North Dakota"}
+        }
+        "America:Pangnirtung"{
+            ec{"Pangnirtung"}
+        }
+        "America:Phoenix"{
+            ec{"Phoenix"}
         }
         "America:Port-au-Prince"{
             ec{"Port au Prince"}
         }
+        "America:Porto_Velho"{
+            ec{"Porto Velho"}
+        }
+        "America:Rainy_River"{
+            ec{"Rainy River"}
+        }
+        "America:Rankin_Inlet"{
+            ec{"Rankin Inlet"}
+        }
+        "America:Recife"{
+            ec{"Recife"}
+        }
         "America:Regina"{
             ec{"Régina"}
+        }
+        "America:Resolute"{
+            ec{"Resolute"}
+        }
+        "America:Rio_Branco"{
+            ec{"Rio Branco"}
         }
         "America:Sao_Paulo"{
             ec{"São Paulo"}
@@ -2400,6 +2661,9 @@ sv{
         }
         "America:Tegucigalpa"{
             ec{"Tequciqalpa"}
+        }
+        "America:Thule"{
+            ec{"Thule"}
         }
         "America:Thunder_Bay"{
             ec{"Thunder Bay"}
@@ -2464,6 +2728,9 @@ sv{
         "Asia:Aqtau"{
             ec{"Aqtau"}
         }
+        "Asia:Aqtobe"{
+            ec{"Aqtobe"}
+        }
         "Asia:Baghdad"{
             ec{"Bagdad"}
         }
@@ -2488,6 +2755,9 @@ sv{
         "Asia:Harbin"{
             ec{"Harbin"}
         }
+        "Asia:Hovd"{
+            ec{"Hovd"}
+        }
         "Asia:Irkutsk"{
             ec{"Irkutsk"}
         }
@@ -2511,6 +2781,9 @@ sv{
         }
         "Asia:Kuching"{
             ec{"Kuching"}
+        }
+        "Asia:Macau"{
+            ec{"Macao"}
         }
         "Asia:Magadan"{
             ec{"Magadan"}
@@ -2557,6 +2830,9 @@ sv{
         "Asia:Thimphu"{
             ec{"Thimpu"}
         }
+        "Asia:Ulaanbaatar"{
+            ec{"Ulaanbaatar"}
+        }
         "Asia:Urumqi"{
             ec{"Urumqi"}
         }
@@ -2586,6 +2862,9 @@ sv{
         }
         "Atlantic:Madeira"{
             ec{"Madeira"}
+        }
+        "Atlantic:South_Georgia"{
+            ec{"Grytviken"}
         }
         "Australia:Adelaide"{
             ec{"Adelaide"}
@@ -2728,6 +3007,45 @@ sv{
         "Pacific:Galapagos"{
             ec{"Galápagos"}
         }
+        "Pacific:Gambier"{
+            ec{"Gambier"}
+        }
+        "Pacific:Honolulu"{
+            ec{"Honolulu"}
+        }
+        "Pacific:Johnston"{
+            ec{"Johnston"}
+        }
+        "Pacific:Kiritimati"{
+            ec{"Kiritimati"}
+        }
+        "Pacific:Kosrae"{
+            ec{"Kosrae"}
+        }
+        "Pacific:Kwajalein"{
+            ec{"Kwajalein"}
+        }
+        "Pacific:Majuro"{
+            ec{"Majuro"}
+        }
+        "Pacific:Marquesas"{
+            ec{"Marquesas"}
+        }
+        "Pacific:Midway"{
+            ec{"Midway"}
+        }
+        "Pacific:Ponape"{
+            ec{"Ponape"}
+        }
+        "Pacific:Tarawa"{
+            ec{"Tarawa"}
+        }
+        "Pacific:Truk"{
+            ec{"Truk"}
+        }
+        "Pacific:Wake"{
+            ec{"Wake"}
+        }
         "meta:Acre"{
             lg{"västbrasiliansk tid"}
         }
@@ -2737,13 +3055,21 @@ sv{
         }
         "meta:Africa_Eastern"{
             lg{"östafrikansk tid"}
+            ls{"östafrikansk normaltid"}
             ss{"EAT"}
         }
         "meta:Africa_Southern"{
             lg{"sydafrikansk tid"}
+            ls{"sydafrikansk normaltid"}
+            sg{"SAT"}
+            ss{"SAST"}
         }
         "meta:Africa_Western"{
+            ld{"västafrikansk sommartid"}
             lg{"västafrikansk tid"}
+            ls{"västafrikansk normaltid"}
+            sd{"VAST"}
+            ss{"WAT"}
         }
         "meta:Alaska"{
             ld{"Alaska, sommartid"}
@@ -2758,25 +3084,41 @@ sv{
         }
         "meta:America_Central"{
             ld{"Central, sommartid"}
+            lg{"centralnordamerikansk tid"}
             ls{"Central, normaltid"}
+            sd{"CDT"}
+            sg{"CT"}
+            ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"Eastern, sommartid"}
+            lg{"östnordamerikansk tid"}
             ls{"Eastern, normaltid"}
             sd{"EDT"}
+            sg{"ET"}
             ss{"EST"}
         }
         "meta:America_Mountain"{
             ld{"Mountain, sommartid"}
             ls{"Mountain, normaltid"}
             sd{"MDT"}
+            sg{"MT"}
             ss{"MST"}
         }
         "meta:America_Pacific"{
             ld{"Pacific, sommartid"}
+            lg{"västnordamerikansk tid"}
             ls{"Pacific, normaltid"}
             sd{"PDT"}
+            sg{"PT"}
             ss{"PST"}
+        }
+        "meta:Arabian"{
+            ld{"saudiarabisk sommartid"}
+            lg{"saudiarabisk tid"}
+            ls{"saudiarabisk normaltid"}
+            sg{"AT (saudiarabisk)"}
+            ss{"AST (saudiarabisk)"}
         }
         "meta:Argentina"{
             lg{"östargentinsk tid"}
@@ -2789,7 +3131,10 @@ sv{
         }
         "meta:Atlantic"{
             ld{"Atlantic, sommartid"}
+            lg{"nordamerikansk atlanttid"}
             ls{"Atlantic, normaltid"}
+            sg{"AT"}
+            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"centralaustralisk sommartid"}
@@ -2805,6 +3150,9 @@ sv{
             ld{"västaustralisk sommartid"}
             lg{"västaustralisk tid"}
             ls{"västaustralisk normaltid"}
+        }
+        "meta:Azerbaijan"{
+            lg{"azerbajdzjansk tid"}
         }
         "meta:Azores"{
             lg{"azorisk tid"}
@@ -2840,24 +3188,92 @@ sv{
             lg{"kinesisk tid"}
             ls{"Kina, normaltid"}
         }
+        "meta:Colombia"{
+            ld{"colombiansk sommartid"}
+            lg{"colombiansk tid"}
+            ls{"colombiansk normaltid"}
+        }
+        "meta:Cuba"{
+            ld{"kubansk sommartid"}
+            lg{"kubansk tid"}
+        }
+        "meta:East_Timor"{
+            lg{"östimoransk tid"}
+        }
+        "meta:Ecuador"{
+            lg{"equadoriansk tid"}
+        }
         "meta:Europe_Central"{
+            cu:int{1}
             ld{"Centraleuropa, sommartid"}
+            lg{"centraleuropeisk tid"}
             ls{"Centraleuropa, normaltid"}
             sd{"CEST"}
             ss{"CET"}
         }
         "meta:Europe_Eastern"{
+            cu:int{1}
             ld{"Östeuropa, sommartid"}
+            lg{"östeuropeisk tid"}
             ls{"Östeuropa, normaltid"}
             sd{"EEST"}
             ss{"EET"}
         }
+        "meta:Europe_Western"{
+            cu:int{1}
+            ld{"västeuropeisk sommartid"}
+            lg{"västeuropeisk tid"}
+            ls{"västeuropeisk normaltid"}
+            sd{"WEST"}
+            ss{"WET"}
+        }
         "meta:GMT"{
+            cu:int{1}
             ls{"Greenwichtid"}
             ss{"GMT"}
         }
+        "meta:Galapagos"{
+            lg{"galapagostid"}
+        }
+        "meta:Georgia"{
+            lg{"georgientid"}
+        }
+        "meta:Greenland_Central"{
+            ld{"centralgrönländsk sommartid"}
+            lg{"centralgrönländsk tid"}
+            ls{"centralgrönländsk normaltid"}
+        }
+        "meta:Greenland_Eastern"{
+            ld{"östgrönländsk sommartid"}
+            lg{"östgrönländsk tid"}
+            ls{"östgrönländsk normaltid"}
+        }
+        "meta:Greenland_Western"{
+            ld{"västgrönländsk sommartid"}
+            lg{"västgrönländsk tid"}
+            ls{"västgrönländsk normaltid"}
+        }
+        "meta:Guam"{
+            lg{"Guamtid"}
+        }
+        "meta:India"{
+            lg{"indisk tid"}
+        }
+        "meta:Indochina"{
+            lg{"indokinesisk tid"}
+        }
+        "meta:Indonesia_Central"{
+            lg{"centralindonesisk tid"}
+        }
+        "meta:Indonesia_Eastern"{
+            lg{"östindonesisk tid"}
+        }
+        "meta:Indonesia_Western"{
+            lg{"västindonesisk tid"}
+        }
         "meta:Israel"{
             ld{"Israel, sommartid"}
+            lg{"israelisk tid"}
             ls{"Israel, normaltid"}
             sd{"IDT"}
             ss{"IST (Israel)"}
@@ -2868,11 +3284,62 @@ sv{
             sd{"JDT"}
             ss{"JST"}
         }
+        "meta:Korea"{
+            ld{"koreansk sommartid"}
+            lg{"koreansk tid"}
+            ls{"koreansk normaltid"}
+        }
+        "meta:Macau"{
+            lg{"Macautid"}
+        }
+        "meta:Malaysia"{
+            lg{"malaysisk tid"}
+        }
+        "meta:Marshall_Islands"{
+            lg{"Marshallötid"}
+        }
+        "meta:Mongolia"{
+            lg{"Ulan Bator-tid"}
+        }
+        "meta:Moscow"{
+            lg{"Moskvatid"}
+        }
+        "meta:New_Zealand"{
+            lg{"nyzeeländsk tid"}
+        }
         "meta:Newfoundland"{
             ld{"Newfoundland, sommartid"}
+            lg{"New Foundland-tid"}
             ls{"Newfoundland, normaltid"}
             sd{"NDT"}
             ss{"NST"}
+        }
+        "meta:Pakistan"{
+            lg{"pakistansk tid"}
+        }
+        "meta:Samarkand"{
+            lg{"Samarkandtid"}
+        }
+        "meta:Samoa"{
+            lg{"samoansk tid"}
+        }
+        "meta:Suriname"{
+            lg{"Surinamtid"}
+        }
+        "meta:Turkey"{
+            lg{"turkisk tid"}
+        }
+        "meta:Turkmenistan"{
+            lg{"turkmenisk tid"}
+        }
+        "meta:Uzbekistan"{
+            lg{"uzbeskisk tid"}
+        }
+        "meta:Yekaterinburg"{
+            lg{"Jekaterinburgtid"}
+        }
+        "meta:Yukon"{
+            lg{"Yukontid"}
         }
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH.mm;-HH.mm"}

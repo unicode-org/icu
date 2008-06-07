@@ -47,7 +47,7 @@ or{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.128"}
+    Version{"1.37"}
     calendar{
         gregorian{
             DateTimePatterns{

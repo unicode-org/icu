@@ -27,7 +27,7 @@ fr_CH{
         "#,##0 %",
         "#E0",
     }
-    Version{"1.128"}
+    Version{"1.51"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

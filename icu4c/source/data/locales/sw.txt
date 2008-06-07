@@ -10,6 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sw.xml
  */
 sw{
+    AuxExemplarCharacters{"[q x]"}
     Countries{
         AE{"Muugano wa Falme za Nchi za Kiarabu"}
         AG{"Antigua na Barbuda"}
@@ -123,7 +124,7 @@ sw{
         "#,##0%",
         "#E0",
     }
-    Version{"1.128"}
+    Version{"1.62"}
     calendar{
         gregorian{
             dayNames{

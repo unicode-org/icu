@@ -34,11 +34,14 @@ sl{
         061{"Polinezija"}
         062{"Južno-centralna Azija"}
         142{"Azija"}
+        143{"Osrednja Azija"}
         145{"Zahodna Azija"}
         150{"Evropa"}
         151{"Vzhodna Evropa"}
         154{"Severna Evropa"}
         155{"Zapadna Evropa"}
+        172{"Skupnost neodvisnih držav"}
+        419{"Latinska Amerika in Karibsko otočje"}
         830{"Kanalski otoki"}
         AD{"Andora"}
         AE{"Združeni arabski emirati"}
@@ -119,6 +122,7 @@ sl{
         GD{"Grenada"}
         GE{"Gruzija"}
         GF{"Francoska Gvajana"}
+        GG{"Guernsey"}
         GH{"Gana"}
         GI{"Gibraltar"}
         GL{"Grenlandija"}
@@ -148,6 +152,7 @@ sl{
         IR{"Iran"}
         IS{"Islandija"}
         IT{"Italija"}
+        JE{"Jersey"}
         JM{"Jamajka"}
         JO{"Jordan"}
         JP{"Japonska"}
@@ -176,6 +181,7 @@ sl{
         MA{"Maroko"}
         MC{"Monako"}
         MD{"Republika Moldova"}
+        ME{"Črna gora"}
         MG{"Madagaskar"}
         MH{"Marshallovi otoki"}
         MK{"Republika Makedonija"}
@@ -223,8 +229,10 @@ sl{
         PY{"Paragvaj"}
         QA{"Katar"}
         QO{"Ostala oceanija"}
+        QU{"Evropska unija"}
         RE{"Reunion"}
         RO{"Romunija"}
+        RS{"Srbija"}
         RU{"Ruska federacija"}
         RW{"Ruanda"}
         SA{"Saudova Arabija"}
@@ -282,6 +290,7 @@ sl{
         ZA{"Južna Afrika"}
         ZM{"Zambija"}
         ZW{"Zimbabve"}
+        ZZ{"Neznana ali neveljavna regija"}
     }
     Currencies{
         BRL{
@@ -328,36 +337,69 @@ sl{
         currency{"Valuta"}
     }
     Languages{
+        af{"afrikanščina"}
         ar{"arabščina"}
+        be{"beloruščina"}
         bg{"bolgarščina"}
+        br{"bretonščina"}
+        bs{"bosanščina"}
+        ca{"katalonščina"}
         cs{"češčina"}
+        cy{"valižanščina"}
         da{"danščina"}
         de{"nemščina"}
         el{"grščina"}
         en{"angleščina"}
+        eo{"esperanto"}
         es{"španščina"}
         et{"estonščina"}
+        eu{"baskovščina"}
         fi{"finščina"}
+        fo{"ferščina"}
         fr{"francoščina"}
+        ga{"irščina"}
+        gd{"škotska galščina"}
+        gl{"galicijščina"}
         he{"hebrejščina"}
+        hi{"hindijščina"}
         hr{"hrvaščina"}
         hu{"madžarščina"}
+        ia{"interlingua"}
+        id{"indonezijščina"}
+        is{"islandščina"}
         it{"italijanščina"}
         ja{"japonščina"}
+        ka{"gruzinščina"}
         ko{"korejščina"}
+        ku{"kurdščina"}
+        ky{"kirgizijščina"}
+        lb{"luksemburščina"}
+        lo{"laoščina"}
         lt{"litovščina"}
         lv{"letonščina"}
+        mk{"makedonščina"}
+        mt{"malteščina"}
         nl{"nizozemščina"}
         no{"norveščina"}
         pl{"poljščina"}
         pt{"portugalščina"}
+        pt_PT{"iberska portugalščina"}
         ro{"romunščina"}
         ru{"ruščina"}
+        sh{"srbohrvaščina"}
         sk{"slovaščina"}
         sl{"slovenščina"}
+        sq{"albanščina"}
+        sr{"srbščina"}
         sv{"švedščina"}
+        tlh{"klingonščina"}
         tr{"turščina"}
+        tw{"tvi (dialekt jezika akan)"}
+        uk{"ukrajinščina"}
+        und{"Neznan ali neveljaven jezik"}
+        uz{"uzbekistanščina"}
         zh{"kitajščina"}
+        zh_Hans{"poenostavljena kitajščina"}
     }
     LocaleScript{
         "Latn",
@@ -390,6 +432,7 @@ sl{
             japanese{"Japonski kolendar"}
         }
         collation{
+            big5han{"Razvrščanje po sistemu tradicionalne kitajščine - Big5"}
             direct{"Direktno zlaganje"}
             phonebook{"Zlaganje po abecedi"}
             pinyin{"Pinyin zlaganje"}
@@ -397,7 +440,7 @@ sl{
             traditional{"Tradicionano zlaganje"}
         }
     }
-    Version{"1.128"}
+    Version{"1.90"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -503,24 +546,391 @@ sl{
             }
         }
     }
+    delimiters{
+        alternateQuotationEnd{"“"}
+        alternateQuotationStart{"„"}
+        quotationEnd{"«"}
+        quotationStart{"»"}
+    }
+    measurementSystemNames{
+        US{"Imperialni"}
+        metric{"Metrični"}
+    }
     zoneStrings{
+        "Africa:Ceuta"{
+            ec{"Ceuta"}
+        }
         "Africa:Kinshasa"{
             ec{"Kinšasa"}
         }
         "Africa:Lubumbashi"{
             ec{"Lubumbaši"}
         }
+        "America:Adak"{
+            ec{"Adak"}
+        }
+        "America:Anchorage"{
+            ec{"Anchorage"}
+        }
+        "America:Araguaina"{
+            ec{"Araguaina"}
+        }
+        "America:Argentina:La_Rioja"{
+            ec{"La Rioja"}
+        }
+        "America:Argentina:Rio_Gallegos"{
+            ec{"Rio Gallegos"}
+        }
+        "America:Argentina:San_Juan"{
+            ec{"San Juan"}
+        }
+        "America:Argentina:San_Luis"{
+            ec{"San Luis"}
+        }
+        "America:Argentina:Tucuman"{
+            ec{"Tucuman"}
+        }
+        "America:Argentina:Ushuaia"{
+            ec{"Ushuaia"}
+        }
+        "America:Bahia"{
+            ec{"Bahia"}
+        }
+        "America:Belem"{
+            ec{"Belem"}
+        }
+        "America:Blanc-Sablon"{
+            ec{"Blanc-Sablon"}
+        }
+        "America:Boa_Vista"{
+            ec{"Boa Vista"}
+        }
+        "America:Boise"{
+            ec{"Boise"}
+        }
+        "America:Buenos_Aires"{
+            ec{"Buenos Aires"}
+        }
+        "America:Cambridge_Bay"{
+            ec{"Cambridge Bay"}
+        }
+        "America:Campo_Grande"{
+            ec{"Campo Grande"}
+        }
+        "America:Cancun"{
+            ec{"Cancun"}
+        }
+        "America:Catamarca"{
+            ec{"Catamarca"}
+        }
+        "America:Chihuahua"{
+            ec{"Chihuahua"}
+        }
+        "America:Coral_Harbour"{
+            ec{"Coral Harbour"}
+        }
+        "America:Cordoba"{
+            ec{"Cordoba"}
+        }
+        "America:Cuiaba"{
+            ec{"Cuiaba"}
+        }
+        "America:Danmarkshavn"{
+            ec{"Danmarkshavn"}
+        }
+        "America:Dawson"{
+            ec{"Dawson"}
+        }
+        "America:Dawson_Creek"{
+            ec{"Dawson Creek"}
+        }
+        "America:Denver"{
+            ec{"Denver"}
+        }
+        "America:Detroit"{
+            ec{"Detroit"}
+        }
+        "America:Edmonton"{
+            ec{"Edmonton"}
+        }
+        "America:Eirunepe"{
+            ec{"Eirunepe"}
+        }
+        "America:Fortaleza"{
+            ec{"Fortaleza"}
+        }
+        "America:Glace_Bay"{
+            ec{"Glace Bay"}
+        }
+        "America:Goose_Bay"{
+            ec{"Goose Bay"}
+        }
+        "America:Halifax"{
+            ec{"Halifax"}
+        }
+        "America:Hermosillo"{
+            ec{"Hermosillo"}
+        }
+        "America:Indiana:Knox"{
+            ec{"Knox"}
+        }
+        "America:Indiana:Marengo"{
+            ec{"Marengo"}
+        }
+        "America:Indiana:Petersburg"{
+            ec{"Petersburg"}
+        }
+        "America:Indiana:Tell_City"{
+            ec{"Tell City"}
+        }
+        "America:Indiana:Vevay"{
+            ec{"Vevay"}
+        }
+        "America:Indiana:Vincennes"{
+            ec{"Vincennes"}
+        }
+        "America:Indiana:Winamac"{
+            ec{"Winamac"}
+        }
+        "America:Indianapolis"{
+            ec{"Indianapolis"}
+        }
+        "America:Inuvik"{
+            ec{"Inuvik"}
+        }
+        "America:Jujuy"{
+            ec{"Jujuy"}
+        }
+        "America:Juneau"{
+            ec{"Juneau"}
+        }
+        "America:Kentucky:Monticello"{
+            ec{"Monticello"}
+        }
+        "America:Los_Angeles"{
+            ec{"Los Angeles"}
+        }
+        "America:Louisville"{
+            ec{"Louisville"}
+        }
+        "America:Maceio"{
+            ec{"Maceio"}
+        }
+        "America:Manaus"{
+            ec{"Manaus"}
+        }
+        "America:Mazatlan"{
+            ec{"Mazatlan"}
+        }
+        "America:Mendoza"{
+            ec{"Mendoza"}
+        }
+        "America:Menominee"{
+            ec{"Menominee"}
+        }
+        "America:Merida"{
+            ec{"Merida"}
+        }
+        "America:Mexico_City"{
+            ec{"Mexico City"}
+        }
+        "America:Moncton"{
+            ec{"Moncton"}
+        }
+        "America:Monterrey"{
+            ec{"Monterrey"}
+        }
+        "America:Montreal"{
+            ec{"Montreal"}
+        }
+        "America:New_York"{
+            ec{"New York"}
+        }
+        "America:Nipigon"{
+            ec{"Nipigon"}
+        }
+        "America:Nome"{
+            ec{"Nome"}
+        }
+        "America:Noronha"{
+            ec{"Noronha"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"Center"}
+        }
+        "America:North_Dakota:New_Salem"{
+            ec{"New Salem"}
+        }
+        "America:Pangnirtung"{
+            ec{"Pangnirtung"}
+        }
+        "America:Phoenix"{
+            ec{"Phoenix"}
+        }
+        "America:Porto_Velho"{
+            ec{"Porto Velho"}
+        }
+        "America:Rainy_River"{
+            ec{"Rainy River"}
+        }
+        "America:Rankin_Inlet"{
+            ec{"Rankin Inlet"}
+        }
+        "America:Recife"{
+            ec{"Recife"}
+        }
+        "America:Regina"{
+            ec{"Regina"}
+        }
+        "America:Resolute"{
+            ec{"Resolute"}
+        }
+        "America:Rio_Branco"{
+            ec{"Rio Branco"}
+        }
+        "America:Sao_Paulo"{
+            ec{"Sao Paulo"}
+        }
+        "America:Scoresbysund"{
+            ec{"Scoresbysund"}
+        }
+        "America:Shiprock"{
+            ec{"Shiprock"}
+        }
+        "America:St_Johns"{
+            ec{"St Johns"}
+        }
+        "America:Swift_Current"{
+            ec{"Swift Current"}
+        }
+        "America:Thule"{
+            ec{"Thule"}
+        }
+        "America:Thunder_Bay"{
+            ec{"Thunder Bay"}
+        }
+        "America:Tijuana"{
+            ec{"Tijuana"}
+        }
+        "America:Toronto"{
+            ec{"Toronto"}
+        }
+        "America:Vancouver"{
+            ec{"Vancouver"}
+        }
+        "America:Whitehorse"{
+            ec{"Whitehorse"}
+        }
+        "America:Winnipeg"{
+            ec{"Winnipeg"}
+        }
+        "America:Yakutat"{
+            ec{"Yakutat"}
+        }
+        "America:Yellowknife"{
+            ec{"Yellowknife"}
+        }
+        "Antarctica:Casey"{
+            ec{"Casey"}
+        }
+        "Antarctica:Davis"{
+            ec{"Davis"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont D'Urville"}
+        }
+        "Antarctica:Mawson"{
+            ec{"Mawson"}
+        }
+        "Antarctica:McMurdo"{
+            ec{"McMurdo"}
+        }
+        "Antarctica:Palmer"{
+            ec{"Palmer"}
+        }
+        "Antarctica:Rothera"{
+            ec{"Rothera"}
+        }
         "Antarctica:South_Pole"{
             ec{"Južni pol"}
+        }
+        "Antarctica:Syowa"{
+            ec{"Syowa"}
+        }
+        "Antarctica:Vostok"{
+            ec{"Vostok"}
+        }
+        "Asia:Almaty"{
+            ec{"Almati"}
         }
         "Asia:Anadyr"{
             ec{"Anadir"}
         }
+        "Asia:Aqtau"{
+            ec{"Aqtau"}
+        }
+        "Asia:Aqtobe"{
+            ec{"Aqtobe"}
+        }
+        "Asia:Choibalsan"{
+            ec{"Choibalsan"}
+        }
+        "Asia:Chongqing"{
+            ec{"Chongqing"}
+        }
+        "Asia:Harbin"{
+            ec{"Harbin"}
+        }
+        "Asia:Hovd"{
+            ec{"Hovd"}
+        }
+        "Asia:Irkutsk"{
+            ec{"Irkutsk"}
+        }
+        "Asia:Jakarta"{
+            ec{"Džakarta"}
+        }
+        "Asia:Jayapura"{
+            ec{"Jayapura"}
+        }
         "Asia:Kamchatka"{
             ec{"Kamčatka"}
         }
+        "Asia:Kashgar"{
+            ec{"Kashgar"}
+        }
         "Asia:Krasnoyarsk"{
             ec{"Krasnojarsk"}
+        }
+        "Asia:Kuching"{
+            ec{"Kuching"}
+        }
+        "Asia:Magadan"{
+            ec{"Magadan"}
+        }
+        "Asia:Makassar"{
+            ec{"Makassar"}
+        }
+        "Asia:Novosibirsk"{
+            ec{"Novosibirsk"}
+        }
+        "Asia:Omsk"{
+            ec{"Omsk"}
+        }
+        "Asia:Oral"{
+            ec{"Oral"}
+        }
+        "Asia:Pontianak"{
+            ec{"Pontianak"}
+        }
+        "Asia:Qyzylorda"{
+            ec{"Qyzylorda"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Sakhalin"}
+        }
+        "Asia:Samarkand"{
+            ec{"Samarkand"}
         }
         "Asia:Shanghai"{
             ec{"Šangaj"}
@@ -528,18 +938,159 @@ sl{
         "Asia:Tashkent"{
             ec{"Taškent"}
         }
+        "Asia:Ulaanbaatar"{
+            ec{"Ulan Bator"}
+        }
+        "Asia:Urumqi"{
+            ec{"Urumqi"}
+        }
+        "Asia:Vladivostok"{
+            ec{"Vladivostok"}
+        }
+        "Asia:Yakutsk"{
+            ec{"Yakutsk"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"Jekaterinburg"}
+        }
+        "Atlantic:Azores"{
+            ec{"Azori"}
+        }
+        "Atlantic:Canary"{
+            ec{"Kanarski otoki"}
+        }
+        "Atlantic:Madeira"{
+            ec{"Madeira"}
+        }
+        "Australia:Adelaide"{
+            ec{"Adelaide"}
+        }
+        "Australia:Brisbane"{
+            ec{"Brisbane"}
+        }
+        "Australia:Broken_Hill"{
+            ec{"Broken Hill"}
+        }
+        "Australia:Currie"{
+            ec{"Currie"}
+        }
+        "Australia:Darwin"{
+            ec{"Darwin"}
+        }
+        "Australia:Eucla"{
+            ec{"Eucla"}
+        }
+        "Australia:Hobart"{
+            ec{"Hobart"}
+        }
+        "Australia:Lindeman"{
+            ec{"Lindeman"}
+        }
+        "Australia:Lord_Howe"{
+            ec{"Lord Howe"}
+        }
+        "Australia:Melbourne"{
+            ec{"Melbourne"}
+        }
+        "Australia:Perth"{
+            ec{"Perth"}
+        }
+        "Australia:Sydney"{
+            ec{"Sydney"}
+        }
+        "Etc:Unknown"{
+            ec{"Neznano"}
+        }
+        "Europe:Kaliningrad"{
+            ec{"Kaliningrad"}
+        }
         "Europe:Kiev"{
             ec{"Kijev"}
         }
         "Europe:Moscow"{
             ec{"Moskva"}
         }
+        "Europe:Samara"{
+            ec{"Samara"}
+        }
+        "Europe:Simferopol"{
+            ec{"Simferopol"}
+        }
         "Europe:Uzhgorod"{
             ec{"Užgorod"}
+        }
+        "Europe:Volgograd"{
+            ec{"Volgograd"}
         }
         "Europe:Zaporozhye"{
             ec{"Zaporožje"}
         }
+        "Pacific:Chatham"{
+            ec{"Chatham"}
+        }
+        "Pacific:Easter"{
+            ec{"Velikonočni otok"}
+        }
+        "Pacific:Enderbury"{
+            ec{"Enderbury"}
+        }
+        "Pacific:Galapagos"{
+            ec{"Galapagos"}
+        }
+        "Pacific:Gambier"{
+            ec{"Gambier"}
+        }
+        "Pacific:Honolulu"{
+            ec{"Honolulu"}
+        }
+        "Pacific:Johnston"{
+            ec{"Johnston"}
+        }
+        "Pacific:Kiritimati"{
+            ec{"Kiritimati"}
+        }
+        "Pacific:Kosrae"{
+            ec{"Kosrae"}
+        }
+        "Pacific:Kwajalein"{
+            ec{"Kwajalein"}
+        }
+        "Pacific:Majuro"{
+            ec{"Majuro"}
+        }
+        "Pacific:Marquesas"{
+            ec{"Marquesas"}
+        }
+        "Pacific:Midway"{
+            ec{"Midway"}
+        }
+        "Pacific:Ponape"{
+            ec{"Ponape"}
+        }
+        "Pacific:Tarawa"{
+            ec{"Tarawa"}
+        }
+        "Pacific:Truk"{
+            ec{"Truk"}
+        }
+        "Pacific:Wake"{
+            ec{"Wake"}
+        }
+        "meta:Europe_Central"{
+            ld{"Srednjeevropski poletni čas"}
+            ls{"Srednjeevropski čas"}
+            sd{"CEST"}
+            ss{"CET"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"Vzhodnoevropski poletni čas"}
+            ls{"Vzhodnoevropski čas"}
+            sd{"EEST"}
+            ss{"EET"}
+        }
+        fallbackFormat{"{1} ({0})"}
+        gmtFormat{"GMT{0}"}
         hourFormat{"+HHmm;-HHmm"}
+        regionFormat{"{0}"}
     }
 }

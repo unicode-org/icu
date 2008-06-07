@@ -109,6 +109,17 @@ supplementalData:table(nofallback){
                     -1851097344,
                 }
             }
+            {
+                id{"ALK"}
+                from:intvector{ /** 1946-11-01  */
+                    -177,
+                    -1467495904,
+                }
+                to:intvector{ /** 1965-08-16  */
+                    -37,
+                    -1851097344,
+                }
+            }
         }
         AM{
             {
@@ -486,6 +497,17 @@ supplementalData:table(nofallback){
                 to:intvector{ /** 1999-07-05  */
                     213,
                     666785952,
+                }
+            }
+            {
+                id{"BGM"}
+                from:intvector{ /** 1952-05-12  */
+                    -133,
+                    -193616928,
+                }
+                to:intvector{ /** 1962-01-01  */
+                    -59,
+                    942330464,
                 }
             }
         }
@@ -4028,6 +4050,18 @@ supplementalData:table(nofallback){
             0,
             0,
         }
+        AFN:intvector{
+            0,
+            0,
+        }
+        ALL:intvector{
+            0,
+            0,
+        }
+        AMD:intvector{
+            0,
+            0,
+        }
         BHD:intvector{
             3,
             0,
@@ -4052,6 +4086,14 @@ supplementalData:table(nofallback){
             0,
             0,
         }
+        COP:intvector{
+            0,
+            0,
+        }
+        CRC:intvector{
+            0,
+            0,
+        }
         DEFAULT:intvector{
             2,
             0,
@@ -4068,8 +4110,28 @@ supplementalData:table(nofallback){
             0,
             0,
         }
+        GYD:intvector{
+            0,
+            0,
+        }
+        HUF:intvector{
+            0,
+            0,
+        }
+        IDR:intvector{
+            0,
+            0,
+        }
         IQD:intvector{
-            3,
+            0,
+            0,
+        }
+        IRR:intvector{
+            0,
+            0,
+        }
+        ISK:intvector{
+            0,
             0,
         }
         ITL:intvector{
@@ -4088,12 +4150,24 @@ supplementalData:table(nofallback){
             0,
             0,
         }
+        KPW:intvector{
+            0,
+            0,
+        }
         KRW:intvector{
             0,
             0,
         }
         KWD:intvector{
             3,
+            0,
+        }
+        LAK:intvector{
+            0,
+            0,
+        }
+        LBP:intvector{
+            0,
             0,
         }
         LUF:intvector{
@@ -4112,15 +4186,59 @@ supplementalData:table(nofallback){
             0,
             0,
         }
+        MMK:intvector{
+            0,
+            0,
+        }
+        MNT:intvector{
+            0,
+            0,
+        }
+        MRO:intvector{
+            0,
+            0,
+        }
+        MUR:intvector{
+            0,
+            0,
+        }
         OMR:intvector{
             3,
+            0,
+        }
+        PKR:intvector{
+            0,
             0,
         }
         PYG:intvector{
             0,
             0,
         }
+        RSD:intvector{
+            0,
+            0,
+        }
         RWF:intvector{
+            0,
+            0,
+        }
+        SLL:intvector{
+            0,
+            0,
+        }
+        SOS:intvector{
+            0,
+            0,
+        }
+        STD:intvector{
+            0,
+            0,
+        }
+        SYP:intvector{
+            0,
+            0,
+        }
+        TMM:intvector{
             0,
             0,
         }
@@ -4129,6 +4247,26 @@ supplementalData:table(nofallback){
             0,
         }
         TRL:intvector{
+            0,
+            0,
+        }
+        TWD:intvector{
+            0,
+            0,
+        }
+        TZS:intvector{
+            0,
+            0,
+        }
+        UGX:intvector{
+            0,
+            0,
+        }
+        UZS:intvector{
+            0,
+            0,
+        }
+        VND:intvector{
             0,
             0,
         }
@@ -4145,6 +4283,18 @@ supplementalData:table(nofallback){
             0,
         }
         XPF:intvector{
+            0,
+            0,
+        }
+        YER:intvector{
+            0,
+            0,
+        }
+        ZMK:intvector{
+            0,
+            0,
+        }
+        ZWD:intvector{
             0,
             0,
         }
@@ -8704,6 +8854,18 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        trv{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
+            secondary{
+                territories{
+                    "TW",
+                }
+            }
+        }
         ts{
             primary{
                 scripts{
@@ -9364,7 +9526,6 @@ supplementalData:table(nofallback){
             "meta:Europe_Central_CZ"{"Europe/Prague"}
             "meta:Europe_Central_DE"{"Europe/Berlin"}
             "meta:Europe_Central_DK"{"Europe/Copenhagen"}
-            "meta:Europe_Central_DZ"{"Africa/Algiers"}
             "meta:Europe_Central_ES"{"Europe/Madrid"}
             "meta:Europe_Central_GI"{"Europe/Gibraltar"}
             "meta:Europe_Central_HR"{"Europe/Zagreb"}
@@ -9386,26 +9547,15 @@ supplementalData:table(nofallback){
             "meta:Europe_Central_TN"{"Africa/Tunis"}
             "meta:Europe_Eastern_001"{"Europe/Bucharest"}
             "meta:Europe_Eastern_BG"{"Europe/Sofia"}
-            "meta:Europe_Eastern_BY"{"Europe/Minsk"}
             "meta:Europe_Eastern_CY"{"Asia/Nicosia"}
-            "meta:Europe_Eastern_EE"{"Europe/Tallinn"}
             "meta:Europe_Eastern_EG"{"Africa/Cairo"}
             "meta:Europe_Eastern_FI"{"Europe/Helsinki"}
             "meta:Europe_Eastern_GR"{"Europe/Athens"}
             "meta:Europe_Eastern_JO"{"Asia/Amman"}
             "meta:Europe_Eastern_LB"{"Asia/Beirut"}
-            "meta:Europe_Eastern_LT"{"Europe/Vilnius"}
-            "meta:Europe_Eastern_LV"{"Europe/Riga"}
-            "meta:Europe_Eastern_LY"{"Africa/Tripoli"}
-            "meta:Europe_Eastern_MD"{"Europe/Chisinau"}
-            "meta:Europe_Eastern_PS"{"Asia/Gaza"}
-            "meta:Europe_Eastern_RU"{"Europe/Kaliningrad"}
             "meta:Europe_Eastern_SY"{"Asia/Damascus"}
-            "meta:Europe_Eastern_UA"{"Europe/Kiev"}
             "meta:Europe_Western_001"{"Atlantic/Canary"}
-            "meta:Europe_Western_EH"{"Africa/El_Aaiun"}
             "meta:Europe_Western_FO"{"Atlantic/Faeroe"}
-            "meta:Europe_Western_MA"{"Africa/Casablanca"}
             "meta:Falkland_001"{"Atlantic/Stanley"}
             "meta:Fiji_001"{"Pacific/Fiji"}
             "meta:French_Guiana_001"{"America/Cayenne"}
@@ -9554,92 +9704,838 @@ supplementalData:table(nofallback){
             "meta:Yukon_001"{"America/Yakutat"}
         }
         windows{
-            "Africa:Cairo"{"Egypt Standard Time"}
-            "Africa:Casablanca"{"Greenwich Standard Time"}
-            "Africa:Johannesburg"{"South Africa Standard Time"}
-            "Africa:Lagos"{"W. Central Africa Standard Time"}
-            "Africa:Nairobi"{"E. Africa Standard Time"}
-            "Africa:Windhoek"{"Namibia Standard Time"}
-            "America:Anchorage"{"Alaskan Standard Time"}
-            "America:Bogota"{"SA Pacific Standard Time"}
-            "America:Buenos_Aires"{"Argentina Standard Time"}
-            "America:Caracas"{"Venezuela Standard Time"}
-            "America:Chicago"{"Central Standard Time"}
-            "America:Chihuahua"{"Mountain Standard Time (Mexico)"}
-            "America:Denver"{"Mountain Standard Time"}
-            "America:Godthab"{"Greenland Standard Time"}
-            "America:Guatemala"{"Central America Standard Time"}
-            "America:Halifax"{"Atlantic Standard Time"}
-            "America:La_Paz"{"SA Western Standard Time"}
-            "America:Los_Angeles"{"Pacific Standard Time"}
-            "America:Mexico_City"{"Central Standard Time (Mexico)"}
-            "America:Montevideo"{"Montevideo Standard Time"}
-            "America:New_York"{"Eastern Standard Time"}
-            "America:Phoenix"{"US Mountain Standard Time"}
-            "America:Regina"{"Canada Central Standard Time"}
-            "America:Santiago"{"Pacific SA Standard Time"}
-            "America:Sao_Paulo"{"E. South America Standard Time"}
-            "America:St_Johns"{"Newfoundland Standard Time"}
-            "America:Tijuana"{"Pacific Standard Time (Mexico)"}
-            "Asia:Amman"{"Jordan Standard Time"}
-            "Asia:Baghdad"{"Arabic Standard Time"}
-            "Asia:Baku"{"Azerbaijan Standard Time"}
-            "Asia:Bangkok"{"SE Asia Standard Time"}
-            "Asia:Beirut"{"Middle East Standard Time"}
-            "Asia:Calcutta"{"India Standard Time"}
-            "Asia:Colombo"{"Sri Lanka Standard Time"}
-            "Asia:Dhaka"{"Central Asia Standard Time"}
-            "Asia:Dubai"{"Arabian Standard Time"}
-            "Asia:Irkutsk"{"North Asia East Standard Time"}
-            "Asia:Jerusalem"{"Israel Standard Time"}
-            "Asia:Kabul"{"Afghanistan Standard Time"}
-            "Asia:Karachi"{"West Asia Standard Time"}
-            "Asia:Katmandu"{"Nepal Standard Time"}
-            "Asia:Krasnoyarsk"{"North Asia Standard Time"}
-            "Asia:Novosibirsk"{"N. Central Asia Standard Time"}
-            "Asia:Rangoon"{"Myanmar Standard Time"}
-            "Asia:Riyadh"{"Arab Standard Time"}
-            "Asia:Seoul"{"Korea Standard Time"}
-            "Asia:Shanghai"{"China Standard Time"}
-            "Asia:Singapore"{"Singapore Standard Time"}
-            "Asia:Taipei"{"Taipei Standard Time"}
-            "Asia:Tbilisi"{"Caucasus Standard Time"}
-            "Asia:Tehran"{"Iran Standard Time"}
-            "Asia:Tokyo"{"Tokyo Standard Time"}
-            "Asia:Vladivostok"{"Vladivostok Standard Time"}
-            "Asia:Yakutsk"{"Yakutsk Standard Time"}
-            "Asia:Yekaterinburg"{"Ekaterinburg Standard Time"}
-            "Asia:Yerevan"{"Armenian Standard Time"}
-            "Atlantic:Azores"{"Azores Standard Time"}
-            "Atlantic:Cape_Verde"{"Cape Verde Standard Time"}
-            "Atlantic:South_Georgia"{"Mid-Atlantic Standard Time"}
-            "Australia:Adelaide"{"Cen. Australia Standard Time"}
-            "Australia:Brisbane"{"E. Australia Standard Time"}
-            "Australia:Darwin"{"AUS Central Standard Time"}
-            "Australia:Hobart"{"Tasmania Standard Time"}
-            "Australia:Perth"{"W. Australia Standard Time"}
-            "Australia:Sydney"{"AUS Eastern Standard Time"}
-            "Etc:GMT+12"{"Dateline Standard Time"}
-            "Etc:GMT+3"{"SA Eastern Standard Time"}
-            "Etc:GMT+4"{"Central Brazilian Standard Time"}
-            "Etc:GMT+5"{"US Eastern Standard Time"}
-            "Etc:GMT-3"{"Georgian Standard Time"}
-            "Europe:Berlin"{"W. Europe Standard Time"}
-            "Europe:Budapest"{"Central Europe Standard Time"}
-            "Europe:Istanbul"{"GTB Standard Time"}
-            "Europe:Kiev"{"FLE Standard Time"}
-            "Europe:London"{"GMT Standard Time"}
-            "Europe:Minsk"{"E. Europe Standard Time"}
-            "Europe:Moscow"{"Russian Standard Time"}
-            "Europe:Paris"{"Romance Standard Time"}
-            "Europe:Warsaw"{"Central European Standard Time"}
-            "Pacific:Apia"{"Samoa Standard Time"}
-            "Pacific:Auckland"{"New Zealand Standard Time"}
-            "Pacific:Fiji"{"Fiji Standard Time"}
-            "Pacific:Guadalcanal"{"Central Pacific Standard Time"}
-            "Pacific:Honolulu"{"Hawaiian Standard Time"}
-            "Pacific:Port_Moresby"{"West Pacific Standard Time"}
-            "Pacific:Tongatapu"{"Tonga Standard Time"}
+            "AUS Central Standard Time"{"Australia/Darwin"}
+            "AUS Eastern Standard Time"{"Australia/Sydney"}
+            "Afghanistan Standard Time"{"Asia/Kabul"}
+            "Alaskan Standard Time"{"America/Anchorage"}
+            "Arab Standard Time"{"Asia/Riyadh"}
+            "Arabian Standard Time"{"Asia/Dubai"}
+            "Arabic Standard Time"{"Asia/Baghdad"}
+            "Argentina Standard Time"{"America/Buenos_Aires"}
+            "Armenian Standard Time"{"Asia/Yerevan"}
+            "Atlantic Standard Time"{"America/Halifax"}
+            "Azerbaijan Standard Time"{"Asia/Baku"}
+            "Azores Standard Time"{"Atlantic/Azores"}
+            "Canada Central Standard Time"{"America/Regina"}
+            "Cape Verde Standard Time"{"Atlantic/Cape_Verde"}
+            "Caucasus Standard Time"{"Asia/Tbilisi"}
+            "Cen. Australia Standard Time"{"Australia/Adelaide"}
+            "Central America Standard Time"{"America/Guatemala"}
+            "Central Asia Standard Time"{"Asia/Dhaka"}
+            "Central Brazilian Standard Time"{"Etc/GMT+4"}
+            "Central Europe Standard Time"{"Europe/Budapest"}
+            "Central European Standard Time"{"Europe/Warsaw"}
+            "Central Pacific Standard Time"{"Pacific/Guadalcanal"}
+            "Central Standard Time (Mexico)"{"America/Mexico_City"}
+            "Central Standard Time"{"America/Chicago"}
+            "China Standard Time"{"Asia/Shanghai"}
+            "Dateline Standard Time"{"Etc/GMT+12"}
+            "E. Africa Standard Time"{"Africa/Nairobi"}
+            "E. Australia Standard Time"{"Australia/Brisbane"}
+            "E. Europe Standard Time"{"Europe/Minsk"}
+            "E. South America Standard Time"{"America/Sao_Paulo"}
+            "Eastern Standard Time"{"America/New_York"}
+            "Egypt Standard Time"{"Africa/Cairo"}
+            "Ekaterinburg Standard Time"{"Asia/Yekaterinburg"}
+            "FLE Standard Time"{"Europe/Kiev"}
+            "Fiji Standard Time"{"Pacific/Fiji"}
+            "GMT Standard Time"{"Europe/London"}
+            "GTB Standard Time"{"Europe/Istanbul"}
+            "Georgian Standard Time"{"Etc/GMT-3"}
+            "Greenland Standard Time"{"America/Godthab"}
+            "Greenwich Standard Time"{"Africa/Casablanca"}
+            "Hawaiian Standard Time"{"Pacific/Honolulu"}
+            "India Standard Time"{"Asia/Calcutta"}
+            "Iran Standard Time"{"Asia/Tehran"}
+            "Israel Standard Time"{"Asia/Jerusalem"}
+            "Jordan Standard Time"{"Asia/Amman"}
+            "Korea Standard Time"{"Asia/Seoul"}
+            "Mexico Standard Time 2"{"America/Chihuahua"}
+            "Mexico Standard Time"{"America/Mexico_City"}
+            "Mid-Atlantic Standard Time"{"Atlantic/South_Georgia"}
+            "Middle East Standard Time"{"Asia/Beirut"}
+            "Montevideo Standard Time"{"America/Montevideo"}
+            "Mountain Standard Time (Mexico)"{"America/Chihuahua"}
+            "Mountain Standard Time"{"America/Denver"}
+            "Myanmar Standard Time"{"Asia/Rangoon"}
+            "N. Central Asia Standard Time"{"Asia/Novosibirsk"}
+            "Namibia Standard Time"{"Africa/Windhoek"}
+            "Nepal Standard Time"{"Asia/Katmandu"}
+            "New Zealand Standard Time"{"Pacific/Auckland"}
+            "Newfoundland Standard Time"{"America/St_Johns"}
+            "North Asia East Standard Time"{"Asia/Irkutsk"}
+            "North Asia Standard Time"{"Asia/Krasnoyarsk"}
+            "Pacific SA Standard Time"{"America/Santiago"}
+            "Pacific Standard Time (Mexico)"{"America/Tijuana"}
+            "Pacific Standard Time"{"America/Los_Angeles"}
+            "Romance Standard Time"{"Europe/Paris"}
+            "Russian Standard Time"{"Europe/Moscow"}
+            "SA Eastern Standard Time"{"Etc/GMT+3"}
+            "SA Pacific Standard Time"{"America/Bogota"}
+            "SA Western Standard Time"{"America/La_Paz"}
+            "SE Asia Standard Time"{"Asia/Bangkok"}
+            "Samoa Standard Time"{"Pacific/Apia"}
+            "Singapore Standard Time"{"Asia/Singapore"}
+            "South Africa Standard Time"{"Africa/Johannesburg"}
+            "Sri Lanka Standard Time"{"Asia/Colombo"}
+            "Taipei Standard Time"{"Asia/Taipei"}
+            "Tasmania Standard Time"{"Australia/Hobart"}
+            "Tokyo Standard Time"{"Asia/Tokyo"}
+            "Tonga Standard Time"{"Pacific/Tongatapu"}
+            "US Eastern Standard Time"{"Etc/GMT+5"}
+            "US Mountain Standard Time"{"America/Phoenix"}
+            "Venezuela Standard Time"{"America/Caracas"}
+            "Vladivostok Standard Time"{"Asia/Vladivostok"}
+            "W. Australia Standard Time"{"Australia/Perth"}
+            "W. Central Africa Standard Time"{"Africa/Lagos"}
+            "W. Europe Standard Time"{"Europe/Berlin"}
+            "West Asia Standard Time"{"Asia/Karachi"}
+            "West Pacific Standard Time"{"Pacific/Port_Moresby"}
+            "Yakutsk Standard Time"{"Asia/Yakutsk"}
+        }
+    }
+    /**
+     * Map from territory codes to ITU telephone codes.
+     * NOTE: This is not true locale data; it exists only in ROOT
+     */
+    telephoneCodeData{
+        001{
+            "388",
+            "800",
+            "808",
+            "870",
+            "871",
+            "872",
+            "873",
+            "874",
+            "878",
+            "881",
+            "882",
+            "883",
+            "888",
+            "979",
+            "991",
+        }
+        AC{
+            "247",
+        }
+        AD{
+            "376",
+        }
+        AE{
+            "971",
+        }
+        AF{
+            "93",
+        }
+        AG{
+            "1",
+        }
+        AI{
+            "1",
+        }
+        AL{
+            "355",
+        }
+        AM{
+            "374",
+        }
+        AN{
+            "599",
+        }
+        AO{
+            "244",
+        }
+        AQ{
+            "672",
+        }
+        AR{
+            "54",
+        }
+        AS{
+            "1",
+        }
+        AT{
+            "43",
+        }
+        AU{
+            "61",
+        }
+        AW{
+            "297",
+        }
+        AX{
+            "358",
+        }
+        AZ{
+            "994",
+        }
+        BA{
+            "387",
+        }
+        BB{
+            "1",
+        }
+        BD{
+            "880",
+        }
+        BE{
+            "32",
+        }
+        BF{
+            "226",
+        }
+        BG{
+            "359",
+        }
+        BH{
+            "973",
+        }
+        BI{
+            "257",
+        }
+        BJ{
+            "229",
+        }
+        BL{
+            "590",
+        }
+        BM{
+            "1",
+        }
+        BN{
+            "673",
+        }
+        BO{
+            "591",
+        }
+        BR{
+            "55",
+        }
+        BS{
+            "1",
+        }
+        BT{
+            "975",
+        }
+        BW{
+            "267",
+        }
+        BY{
+            "375",
+        }
+        BZ{
+            "501",
+        }
+        CA{
+            "1",
+        }
+        CC{
+            "61",
+        }
+        CD{
+            "243",
+        }
+        CF{
+            "236",
+        }
+        CG{
+            "242",
+        }
+        CH{
+            "41",
+        }
+        CI{
+            "225",
+        }
+        CK{
+            "682",
+        }
+        CL{
+            "56",
+        }
+        CM{
+            "237",
+        }
+        CN{
+            "86",
+        }
+        CO{
+            "57",
+        }
+        CR{
+            "506",
+        }
+        CU{
+            "53",
+        }
+        CV{
+            "238",
+        }
+        CX{
+            "61",
+        }
+        CY{
+            "357",
+        }
+        CZ{
+            "420",
+        }
+        DE{
+            "49",
+        }
+        DJ{
+            "253",
+        }
+        DK{
+            "45",
+        }
+        DM{
+            "1",
+        }
+        DO{
+            "1",
+        }
+        DZ{
+            "213",
+        }
+        EC{
+            "593",
+        }
+        EE{
+            "372",
+        }
+        EG{
+            "20",
+        }
+        ER{
+            "291",
+        }
+        ES{
+            "34",
+        }
+        ET{
+            "251",
+        }
+        FI{
+            "358",
+        }
+        FJ{
+            "679",
+        }
+        FK{
+            "500",
+        }
+        FM{
+            "691",
+        }
+        FO{
+            "298",
+        }
+        FR{
+            "33",
+        }
+        GA{
+            "241",
+        }
+        GB{
+            "44",
+        }
+        GD{
+            "1",
+        }
+        GE{
+            "995",
+        }
+        GF{
+            "594",
+        }
+        GG{
+            "44",
+        }
+        GH{
+            "233",
+        }
+        GI{
+            "350",
+        }
+        GL{
+            "299",
+        }
+        GM{
+            "220",
+        }
+        GN{
+            "224",
+        }
+        GP{
+            "590",
+        }
+        GQ{
+            "240",
+        }
+        GR{
+            "30",
+        }
+        GT{
+            "502",
+        }
+        GU{
+            "1",
+        }
+        GW{
+            "245",
+        }
+        GY{
+            "592",
+        }
+        HK{
+            "852",
+        }
+        HN{
+            "504",
+        }
+        HR{
+            "385",
+        }
+        HT{
+            "509",
+        }
+        HU{
+            "36",
+        }
+        ID{
+            "62",
+        }
+        IE{
+            "353",
+        }
+        IL{
+            "972",
+        }
+        IM{
+            "44",
+        }
+        IN{
+            "91",
+        }
+        IO{
+            "246",
+        }
+        IQ{
+            "964",
+        }
+        IR{
+            "98",
+        }
+        IS{
+            "354",
+        }
+        IT{
+            "39",
+        }
+        JE{
+            "44",
+        }
+        JM{
+            "1",
+        }
+        JO{
+            "962",
+        }
+        JP{
+            "81",
+        }
+        KE{
+            "254",
+        }
+        KG{
+            "996",
+        }
+        KH{
+            "855",
+        }
+        KI{
+            "686",
+        }
+        KM{
+            "269",
+        }
+        KN{
+            "1",
+        }
+        KP{
+            "850",
+        }
+        KR{
+            "82",
+        }
+        KW{
+            "965",
+        }
+        KY{
+            "1",
+        }
+        KZ{
+            "7",
+        }
+        LA{
+            "856",
+        }
+        LB{
+            "961",
+        }
+        LC{
+            "1",
+        }
+        LI{
+            "423",
+        }
+        LK{
+            "94",
+        }
+        LR{
+            "231",
+        }
+        LS{
+            "266",
+        }
+        LT{
+            "370",
+        }
+        LU{
+            "352",
+        }
+        LV{
+            "371",
+        }
+        LY{
+            "218",
+        }
+        MA{
+            "212",
+        }
+        MC{
+            "377",
+        }
+        MD{
+            "373",
+        }
+        ME{
+            "382",
+        }
+        MG{
+            "261",
+        }
+        MH{
+            "692",
+        }
+        MK{
+            "389",
+        }
+        ML{
+            "223",
+        }
+        MM{
+            "95",
+        }
+        MN{
+            "976",
+        }
+        MO{
+            "853",
+        }
+        MP{
+            "1",
+        }
+        MQ{
+            "596",
+        }
+        MR{
+            "222",
+        }
+        MS{
+            "1",
+        }
+        MT{
+            "356",
+        }
+        MU{
+            "230",
+        }
+        MV{
+            "960",
+        }
+        MW{
+            "265",
+        }
+        MX{
+            "52",
+        }
+        MY{
+            "60",
+        }
+        MZ{
+            "258",
+        }
+        NA{
+            "264",
+        }
+        NC{
+            "687",
+        }
+        NE{
+            "227",
+        }
+        NF{
+            "672",
+        }
+        NG{
+            "234",
+        }
+        NI{
+            "505",
+        }
+        NL{
+            "31",
+        }
+        NO{
+            "47",
+        }
+        NP{
+            "977",
+        }
+        NR{
+            "674",
+        }
+        NU{
+            "683",
+        }
+        NZ{
+            "64",
+        }
+        OM{
+            "968",
+        }
+        PA{
+            "507",
+        }
+        PE{
+            "51",
+        }
+        PF{
+            "689",
+        }
+        PG{
+            "675",
+        }
+        PH{
+            "63",
+        }
+        PK{
+            "92",
+        }
+        PL{
+            "48",
+        }
+        PM{
+            "508",
+        }
+        PR{
+            "1",
+        }
+        PS{
+            "972",
+            "970" /** limitedAvailability  */,
+        }
+        PT{
+            "351",
+        }
+        PW{
+            "680",
+        }
+        PY{
+            "595",
+        }
+        QA{
+            "974",
+        }
+        RE{
+            "262",
+        }
+        RO{
+            "40",
+        }
+        RS{
+            "381",
+        }
+        RU{
+            "7",
+        }
+        RW{
+            "250",
+        }
+        SA{
+            "966",
+        }
+        SB{
+            "677",
+        }
+        SC{
+            "248",
+        }
+        SD{
+            "249",
+        }
+        SE{
+            "46",
+        }
+        SG{
+            "65",
+        }
+        SH{
+            "290",
+        }
+        SI{
+            "386",
+        }
+        SJ{
+            "47",
+        }
+        SK{
+            "421",
+        }
+        SL{
+            "232",
+        }
+        SM{
+            "378",
+        }
+        SN{
+            "221",
+        }
+        SO{
+            "252",
+        }
+        SR{
+            "597",
+        }
+        ST{
+            "239",
+        }
+        SV{
+            "503",
+        }
+        SY{
+            "963",
+        }
+        SZ{
+            "268",
+        }
+        TC{
+            "1",
+        }
+        TD{
+            "235",
+        }
+        TF{
+            "262",
+        }
+        TG{
+            "228",
+        }
+        TH{
+            "66",
+        }
+        TJ{
+            "992",
+        }
+        TK{
+            "690",
+        }
+        TL{
+            "670",
+        }
+        TM{
+            "993",
+        }
+        TN{
+            "216",
+        }
+        TO{
+            "676",
+        }
+        TR{
+            "90",
+        }
+        TT{
+            "1",
+        }
+        TV{
+            "688",
+        }
+        TW{
+            "886",
+        }
+        TZ{
+            "255",
+        }
+        UA{
+            "380",
+        }
+        UG{
+            "256",
+        }
+        US{
+            "1",
+        }
+        UY{
+            "598",
+        }
+        UZ{
+            "998",
+        }
+        VA{
+            "39",
+        }
+        VC{
+            "1",
+        }
+        VE{
+            "58",
+        }
+        VG{
+            "1",
+        }
+        VI{
+            "1",
+        }
+        VN{
+            "84",
+        }
+        VU{
+            "678",
+        }
+        WF{
+            "681",
+        }
+        WS{
+            "685",
+        }
+        YE{
+            "967",
+        }
+        YT{
+            "262",
+        }
+        ZA{
+            "27",
+        }
+        ZM{
+            "260",
+        }
+        ZW{
+            "263",
         }
     }
     territoryContainment{

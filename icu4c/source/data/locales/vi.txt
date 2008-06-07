@@ -10,16 +10,53 @@
  *  ICU <specials> source: <path>/xml/main/vi.xml
  */
 vi{
+    AuxExemplarCharacters{"[f j w z]"}
     Countries{
+        001{"Thế giới"}
+        002{"Châu Phi"}
+        003{"Bắc Mỹ"}
+        005{"Nam Mỹ"}
+        009{"Châu Đại Dương"}
+        011{"Tây Phi"}
+        013{"Trung Mỹ"}
+        014{"Đông Phí"}
+        015{"Bắc Phi"}
+        017{"Trung Phi"}
+        018{"Miền Nam Châu Phi"}
+        019{"Châu Mỹ"}
+        021{"Miền Bắc Châu Mỹ"}
+        029{"Ca-ri-bê"}
+        030{"Đông Á"}
+        034{"Nam Á"}
+        035{"Đông Nam Á"}
+        039{"Nam Âu"}
+        053{"Úc và New Zealand"}
+        054{"Melanesia"}
+        057{"Vùng Micronesian"}
+        061{"Polynesia"}
+        062{"Trung Nam Á"}
+        142{"Châu Á"}
+        143{"Trung Á"}
+        145{"Tây Á"}
+        150{"Âu Châu"}
+        151{"Đông Âu"}
+        154{"Miền Bắc Châu Âu"}
+        155{"Tây Âu"}
+        419{"Châu Mỹ La-tinh và Ca-ri-be"}
+        AD{"Andorra"}
         AE{"Các Tiểu Vương quốc A-rập Thống nhất"}
         AF{"Áp-ga-ni-xtan"}
         AG{"An-ti-gu-a và Ba-bu-đa"}
         AL{"An-ba-ni"}
         AM{"Ác-mê-ni-a"}
+        AN{"Tây Ấn Hà Lan"}
         AO{"Ăng-gô-la"}
+        AQ{"Nam Cực"}
         AR{"Ác-hen-ti-na"}
+        AS{"Đảo Somoa thuộc Mỹ"}
         AT{"Áo"}
         AU{"Úc"}
+        AX{"Quần đảo Aland"}
         AZ{"Ai-déc-bai-gian"}
         BA{"Bô-xni-a Héc-xê-gô-vi-na"}
         BB{"Bác-ba-đốt"}
@@ -30,18 +67,24 @@ vi{
         BH{"Ba-ren"}
         BI{"Bu-run-đi"}
         BJ{"Bê-nanh"}
+        BL{"BL"}
         BN{"Bru-nây"}
         BO{"Bô-li-vi-a"}
         BR{"Bra-xin"}
         BS{"Ba-ha-ma"}
+        BT{"Bu-tan (Bhutan)"}
+        BV{"Đảo Bouvet (Na Uy)"}
         BW{"Bốt-xoa-na"}
         BY{"Bê-la-rút"}
         BZ{"Bê-li-xê"}
         CA{"Ca-na-đa"}
+        CC{"Quần đảo Cocos"}
+        CD{"Cộng hoà dân chủ Côngô"}
         CF{"Cộng hòa Trung Phi"}
         CG{"Công-gô"}
         CH{"Thụy Sĩ"}
         CI{"Bờ Biển Ngà"}
+        CK{"Quần Đảo Cook"}
         CL{"Chi-lê"}
         CM{"Ca-mơ-run"}
         CN{"Trung Quốc"}
@@ -50,11 +93,13 @@ vi{
         CS{"Séc-bia"}
         CU{"Cu Ba"}
         CV{"Cáp-ve"}
+        CX{"Đảo Giáng Sinh"}
         CY{"Síp"}
         CZ{"Cộng hòa Séc"}
         DE{"Đức"}
         DJ{"Gi-bu-ti"}
         DK{"Đan Mạch"}
+        DO{"Cộng hoà Đô-mi-ni-ca"}
         DZ{"An-giê-ri"}
         EC{"Ê-cu-a-đo"}
         EE{"E-xtô-ni-a"}
@@ -65,20 +110,29 @@ vi{
         ET{"Ê-ti-ô-pi-a"}
         FI{"Phần Lan"}
         FJ{"Phi-gi"}
+        FK{"Quần Đảo Falkland"}
         FM{"Mi-crô-nê-xi-a"}
+        FO{"Quần Đảo Faroe"}
         FR{"Pháp"}
         GA{"Ga-bông"}
         GB{"Vương quốc Anh"}
         GD{"Grê-na-đa"}
         GE{"Gru-di-a"}
+        GF{"Quiana thuộc Pháp"}
+        GG{"Guernsey"}
         GH{"Gha-na"}
+        GL{"Băng Đảo"}
         GM{"Găm-bi-a"}
         GN{"Ghi-nê"}
         GQ{"Ghi-nê Xích-đạo"}
         GR{"Hy Lạp"}
+        GS{"Quần đảo Nam Georgia và Nam Sandwich"}
         GT{"Goa-tê-ma-la"}
+        GU{"Đảo Gu-am"}
         GW{"Ghi-nê Bít-xao"}
         GY{"Guy-a-na"}
+        HK{"Đặc khu hành chính Hồng Kông thuộc CHND Trung Hoa"}
+        HM{"Đảo Heard và Quần đảo McDonald"}
         HN{"Hôn-đu-rát"}
         HR{"Crô-a-ti-a"}
         HT{"Ha-i-ti"}
@@ -86,11 +140,14 @@ vi{
         ID{"Nam Dương"}
         IE{"Ai-len"}
         IL{"I-xra-en"}
+        IM{"Đảo Man"}
         IN{"Ấn Độ"}
+        IO{"Thuộc địa Anh tại Ấn Độ Dương"}
         IQ{"I-rắc"}
         IR{"I-ran"}
         IS{"Ai-xơ-len"}
         IT{"Ý"}
+        JE{"Jersey"}
         JM{"Ha-mai-ca"}
         JO{"Gióc-đa-ni"}
         JP{"Nhật Bản"}
@@ -103,6 +160,7 @@ vi{
         KP{"Bắc Triều Tiên"}
         KR{"Hàn Quốc"}
         KW{"Cô-oét"}
+        KY{"Quần Đảo Cayman"}
         KZ{"Ka-dắc-xtan"}
         LA{"Lào"}
         LB{"Li-băng"}
@@ -118,12 +176,17 @@ vi{
         MA{"Ma-rốc"}
         MC{"Mô-na-cô"}
         MD{"Môn-đô-va"}
+        ME{"Montenegro"}
+        MF{"MF"}
         MG{"Ma-đa-gát-xca"}
         MH{"Quần đảo Mác-san"}
         MK{"Ma-xê-đô-ni-a"}
         ML{"Ma-li"}
         MM{"Mi-an-ma"}
         MN{"Mông Cổ"}
+        MO{"Đặc khu hành chính Macao thuộc CHND Trung Hoa"}
+        MP{"Quần Đảo Bắc Mariana"}
+        MQ{"MQ"}
         MR{"Mô-ri-ta-ni"}
         MT{"Man-ta"}
         MU{"Mô-ri-xơ"}
@@ -133,7 +196,9 @@ vi{
         MY{"Ma-lay-xi-a"}
         MZ{"Mô-dăm-bích"}
         NA{"Nam-mi-bi-a"}
+        NC{"New Caledonia"}
         NE{"Ni-giê"}
+        NF{"Đảo Norfolk"}
         NG{"Ni-giê-ri-a"}
         NI{"Ni-ca-ra-goa"}
         NL{"Hà Lan"}
@@ -143,14 +208,21 @@ vi{
         OM{"Ô-man"}
         PA{"Pa-na-ma"}
         PE{"Pê-ru"}
+        PF{"Polynesia thuộc Pháp"}
         PG{"Pa-pu-a Niu Ghi-nê"}
         PH{"Phi-lip-pin"}
         PK{"Pa-ki-xtan"}
         PL{"Ba Lan"}
+        PM{"Saint Pierre và Miquelon"}
+        PS{"Lãnh thổ Palestine"}
         PT{"Bồ Đào Nha"}
         PY{"Pa-ra-goay"}
         QA{"Ca-ta"}
+        QO{"Vùng xa xôi thuộc Châu Đại Dương"}
+        QU{"Liên Minh Châu Âu"}
+        RE{"RE"}
         RO{"Ru-ma-ni"}
+        RS{"Xéc-bi"}
         RU{"Nga"}
         RW{"Ru-an-đa"}
         SA{"A-rập Xê-út"}
@@ -159,7 +231,9 @@ vi{
         SD{"Xu-đăng"}
         SE{"Thụy Điển"}
         SG{"Xin-ga-po"}
+        SH{"Saint Helena"}
         SI{"Xlô-ven-ni-a"}
+        SJ{"Svalbard và Jan Mayen"}
         SK{"Xlô-va-ki-a"}
         SL{"Xi-ê-ra Lê-ôn"}
         SM{"Xan Ma-ri-nô"}
@@ -170,10 +244,14 @@ vi{
         SV{"En-san-va-đo"}
         SY{"Xi-ri"}
         SZ{"Xoa-di-len"}
+        TC{"Quần Đảo Turk và Caicos"}
         TD{"Sát"}
+        TF{"Thuộc Địa Nam của Pháp"}
         TG{"Tô-gô"}
         TH{"Thái Lan"}
         TJ{"Tát-gi-ki-xtan"}
+        TK{"Tokelau"}
+        TL{"Đông Ti-mo"}
         TM{"Tuốc-mê-ni-xtan"}
         TN{"Tuy-ni-di"}
         TO{"Tông-ga"}
@@ -184,24 +262,1094 @@ vi{
         TZ{"Tan-da-ni-a"}
         UA{"U-crai-na"}
         UG{"U-gan-đa"}
+        UM{"Các đảo nhỏ xa trung tâm thuộc Mỹ"}
         US{"Hoa Kỳ"}
         UY{"U-ru-goay"}
         UZ{"U-dơ-bê-ki-xtan"}
         VA{"Va-ti-căng"}
         VC{"Xan Vin-xen và Grê-na-din"}
         VE{"Vê-nê-zu-ê-la"}
+        VG{"Đảo Virgin, thuộc Anh"}
+        VI{"Quần đảo Virgin, Mỹ"}
         VN{"Việt Nam"}
         VU{"Va-nu-a-tu"}
+        WF{"Wallis và Futuna"}
         WS{"Xa-moa"}
         YE{"Y-ê-men"}
+        YT{"YT"}
         ZA{"Nam Phi"}
         ZM{"Dăm-bi-a"}
         ZW{"Dim-ba-bu-ê"}
+        ZZ{"Vùng Chưa biết hoặc không Hợp lệ"}
     }
     Currencies{
+        ADP{
+            "ADP",
+            "ADP",
+        }
+        AED{
+            "AED",
+            "Điram UAE",
+        }
+        AFA{
+            "AFA",
+            "AFA",
+        }
+        AFN{
+            "AFN",
+            "AFN",
+        }
+        ALL{
+            "ALL",
+            "ALL",
+        }
+        AMD{
+            "AMD",
+            "AMD",
+        }
+        ANG{
+            "ANG",
+            "ANG",
+        }
+        AOA{
+            "AOA",
+            "AOA",
+        }
+        AOK{
+            "AOK",
+            "AOK",
+        }
+        AON{
+            "AON",
+            "AON",
+        }
+        AOR{
+            "AOR",
+            "AOR",
+        }
+        ARA{
+            "ARA",
+            "ARA",
+        }
+        ARP{
+            "ARP",
+            "ARP",
+        }
+        ARS{
+            "ARS",
+            "ARS",
+        }
+        ATS{
+            "ATS",
+            "ATS",
+        }
+        AUD{
+            "AUD",
+            "AUD",
+        }
+        AWG{
+            "AWG",
+            "AWG",
+        }
+        AZM{
+            "AZM",
+            "AZM",
+        }
+        AZN{
+            "AZN",
+            "AZN",
+        }
+        BAD{
+            "BAD",
+            "BAD",
+        }
+        BAM{
+            "BAM",
+            "BAM",
+        }
+        BBD{
+            "BBD",
+            "BBD",
+        }
+        BDT{
+            "BDT",
+            "BDT",
+        }
+        BEC{
+            "BEC",
+            "BEC",
+        }
+        BEF{
+            "BEF",
+            "BEF",
+        }
+        BEL{
+            "BEL",
+            "BEL",
+        }
+        BGL{
+            "BGL",
+            "BGL",
+        }
+        BGN{
+            "BGN",
+            "Lép Bungari",
+        }
+        BHD{
+            "BHD",
+            "BHD",
+        }
+        BIF{
+            "BIF",
+            "BIF",
+        }
+        BMD{
+            "BMD",
+            "BMD",
+        }
+        BND{
+            "BND",
+            "BND",
+        }
+        BOB{
+            "BOB",
+            "BOB",
+        }
+        BOP{
+            "BOP",
+            "BOP",
+        }
+        BOV{
+            "BOV",
+            "BOV",
+        }
+        BRB{
+            "BRB",
+            "BRB",
+        }
+        BRC{
+            "BRC",
+            "BRC",
+        }
+        BRE{
+            "BRE",
+            "BRE",
+        }
+        BRL{
+            "R$",
+            "BRL",
+        }
+        BRN{
+            "BRN",
+            "BRN",
+        }
+        BRR{
+            "BRR",
+            "BRR",
+        }
+        BSD{
+            "BSD",
+            "BSD",
+        }
+        BTN{
+            "BTN",
+            "BTN",
+        }
+        BUK{
+            "BUK",
+            "BUK",
+        }
+        BWP{
+            "BWP",
+            "BWP",
+        }
+        BYB{
+            "BYB",
+            "BYB",
+        }
+        BYR{
+            "BYR",
+            "BYR",
+        }
+        BZD{
+            "BZD",
+            "BZD",
+        }
+        CAD{
+            "CAD",
+            "CAD",
+        }
+        CDF{
+            "CDF",
+            "CDF",
+        }
+        CHF{
+            "CHF",
+            "Franc Thụy sĩ",
+        }
+        CLF{
+            "CLF",
+            "CLF",
+        }
+        CLP{
+            "CLP",
+            "CLP",
+        }
+        CNY{
+            "CNY",
+            "CNY",
+        }
+        COP{
+            "COP",
+            "COP",
+        }
+        COU{
+            "COU",
+            "COU",
+        }
+        CRC{
+            "CRC",
+            "CRC",
+        }
+        CSD{
+            "CSD",
+            "CSD",
+        }
+        CSK{
+            "CSK",
+            "CSK",
+        }
+        CUP{
+            "CUP",
+            "CUP",
+        }
+        CVE{
+            "CVE",
+            "CVE",
+        }
+        CYP{
+            "CYP",
+            "CYP",
+        }
+        CZK{
+            "CZK",
+            "CZK",
+        }
+        DDM{
+            "DDM",
+            "DDM",
+        }
+        DEM{
+            "DEM",
+            "DEM",
+        }
+        DJF{
+            "DJF",
+            "DJF",
+        }
+        DKK{
+            "DKK",
+            "DKK",
+        }
+        DOP{
+            "DOP",
+            "DOP",
+        }
+        DZD{
+            "DZD",
+            "DZD",
+        }
+        ECS{
+            "ECS",
+            "ECS",
+        }
+        ECV{
+            "ECV",
+            "ECV",
+        }
+        EEK{
+            "EEK",
+            "Crun Extônia",
+        }
+        EGP{
+            "EGP",
+            "EGP",
+        }
+        EQE{
+            "EQE",
+            "EQE",
+        }
+        ERN{
+            "ERN",
+            "ERN",
+        }
+        ESA{
+            "ESA",
+            "ESA",
+        }
+        ESB{
+            "ESB",
+            "ESB",
+        }
+        ESP{
+            "ESP",
+            "ESP",
+        }
+        ETB{
+            "ETB",
+            "ETB",
+        }
+        EUR{
+            "€",
+            "Euro",
+        }
+        FIM{
+            "FIM",
+            "FIM",
+        }
+        FJD{
+            "FJD",
+            "Đô-la Fi-ji",
+        }
+        FKP{
+            "FKP",
+            "FKP",
+        }
+        FRF{
+            "FRF",
+            "Franc Pháp",
+        }
+        GBP{
+            "UK£",
+            "Bảng Anh",
+        }
+        GEK{
+            "GEK",
+            "GEK",
+        }
+        GEL{
+            "GEL",
+            "Lari Georgia",
+        }
+        GHC{
+            "GHC",
+            "Cedi Ghana (1979-2007)",
+        }
+        GHS{
+            "GHS",
+            "Cedi Ghana",
+        }
+        GIP{
+            "GIP",
+            "Pao Gibraltar",
+        }
+        GMD{
+            "GMD",
+            "GMD",
+        }
+        GNF{
+            "GNF",
+            "Franc Guinea",
+        }
+        GNS{
+            "GNS",
+            "Syli Guinea",
+        }
+        GQE{
+            "GQE",
+            "GQE",
+        }
+        GRD{
+            "GRD",
+            "Drachma Hy Lạp",
+        }
+        GTQ{
+            "GTQ",
+            "Quetzal Guatemala",
+        }
+        GWE{
+            "GWE",
+            "GWE",
+        }
+        GWP{
+            "GWP",
+            "Peso Guinea-Bissau",
+        }
+        GYD{
+            "GYD",
+            "Đô-la Guyana",
+        }
+        HKD{
+            "HKD",
+            "Đô-la Hồng Kông",
+        }
+        HNL{
+            "HNL",
+            "Honduras Lempira",
+        }
+        HRD{
+            "HRD",
+            "HRD",
+        }
+        HRK{
+            "HRK",
+            "HRK",
+        }
+        HTG{
+            "HTG",
+            "Gourde Haiti",
+        }
+        HUF{
+            "HUF",
+            "Phôrin Hungari",
+        }
+        IDR{
+            "IDR",
+            "Rupia Inđônêxia",
+        }
+        IEP{
+            "IEP",
+            "Pao Ai-len",
+        }
+        ILP{
+            "ILP",
+            "Pao Ixraen",
+        }
+        ILS{
+            "ILS",
+            "Sêken Ixraen",
+        }
+        INR{
+            "0≤Rs.|1≤Re.|1<Rs.",
+            "Rupi Ấn Độ",
+        }
+        IQD{
+            "IQD",
+            "Dinar I-rắc",
+        }
+        IRR{
+            "IRR",
+            "Rial I-ran",
+        }
+        ISK{
+            "ISK",
+            "ISK",
+        }
+        ITL{
+            "IT₤",
+            "Lia Ý",
+        }
+        JMD{
+            "JMD",
+            "Đô la Jamaica",
+        }
+        JOD{
+            "JOD",
+            "Dinar Jordan",
+        }
+        JPY{
+            "JP¥",
+            "Yên Nhật",
+        }
+        KES{
+            "KES",
+            "Si-ling Kê-ny-a",
+        }
+        KGS{
+            "KGS",
+            "KGS",
+        }
+        KHR{
+            "KHR",
+            "KHR",
+        }
+        KMF{
+            "KMF",
+            "KMF",
+        }
+        KPW{
+            "KPW",
+            "KPW",
+        }
+        KRW{
+            "KRW",
+            "Won Hàn Quốc",
+        }
+        KWD{
+            "KWD",
+            "KWD",
+        }
+        KYD{
+            "KYD",
+            "KYD",
+        }
+        KZT{
+            "KZT",
+            "Kazakhstan Tenge",
+        }
+        LAK{
+            "LAK",
+            "LAK",
+        }
+        LBP{
+            "LBP",
+            "LBP",
+        }
+        LKR{
+            "LKR",
+            "LKR",
+        }
+        LRD{
+            "LRD",
+            "LRD",
+        }
+        LSL{
+            "LSL",
+            "LSL",
+        }
+        LSM{
+            "LSM",
+            "LSM",
+        }
+        LTL{
+            "LTL",
+            "Litat Lituani",
+        }
+        LTT{
+            "LTT",
+            "LTT",
+        }
+        LUC{
+            "LUC",
+            "LUC",
+        }
+        LUF{
+            "LUF",
+            "LUF",
+        }
+        LUL{
+            "LUL",
+            "LUL",
+        }
+        LVL{
+            "LVL",
+            "LVL",
+        }
+        LVR{
+            "LVR",
+            "LVR",
+        }
+        LYD{
+            "LYD",
+            "LYD",
+        }
+        MAD{
+            "MAD",
+            "Điaham Marốc",
+        }
+        MAF{
+            "MAF",
+            "MAF",
+        }
+        MDL{
+            "MDL",
+            "MDL",
+        }
+        MGA{
+            "MGA",
+            "MGA",
+        }
+        MGF{
+            "MGF",
+            "MGF",
+        }
+        MLF{
+            "MLF",
+            "MLF",
+        }
+        MMK{
+            "MMK",
+            "MMK",
+        }
+        MNT{
+            "MNT",
+            "MNT",
+        }
+        MOP{
+            "MOP",
+            "MOP",
+        }
+        MRO{
+            "MRO",
+            "MRO",
+        }
+        MTL{
+            "MTL",
+            "Lia xứ Man-tơ",
+        }
+        MTP{
+            "MTP",
+            "MTP",
+        }
+        MUR{
+            "MUR",
+            "MUR",
+        }
+        MVR{
+            "MVR",
+            "MVR",
+        }
+        MWK{
+            "MWK",
+            "MWK",
+        }
+        MXN{
+            "MXN",
+            "Peso Mêhicô",
+        }
+        MXP{
+            "MXP",
+            "MXP",
+        }
+        MXV{
+            "MXV",
+            "MXV",
+        }
+        MYR{
+            "MYR",
+            "Rinhgit Malaixia",
+        }
+        MZE{
+            "MZE",
+            "MZE",
+        }
+        MZM{
+            "MZM",
+            "MZM",
+        }
+        MZN{
+            "MZN",
+            "MZN",
+        }
+        NAD{
+            "NAD",
+            "NAD",
+        }
+        NGN{
+            "NGN",
+            "NGN",
+        }
+        NIC{
+            "NIC",
+            "NIC",
+        }
+        NIO{
+            "NIO",
+            "NIO",
+        }
+        NLG{
+            "NLG",
+            "NLG",
+        }
+        NOK{
+            "NOK",
+            "Curon Na Uy",
+        }
+        NPR{
+            "NPR",
+            "NPR",
+        }
+        NZD{
+            "NZD",
+            "Đô-la New Zealand",
+        }
+        OMR{
+            "OMR",
+            "OMR",
+        }
+        PAB{
+            "PAB",
+            "PAB",
+        }
+        PEI{
+            "PEI",
+            "PEI",
+        }
+        PEN{
+            "PEN",
+            "Nuevo Sol Pêru",
+        }
+        PES{
+            "PES",
+            "PES",
+        }
+        PGK{
+            "PGK",
+            "PGK",
+        }
+        PHP{
+            "PHP",
+            "Peso Philíppin",
+        }
+        PKR{
+            "PKR",
+            "Rupi Pakistan",
+        }
+        PLN{
+            "PLN",
+            "Zloty Ba Lan",
+        }
+        PLZ{
+            "PLZ",
+            "PLZ",
+        }
+        PTE{
+            "PTE",
+            "PTE",
+        }
+        PYG{
+            "PYG",
+            "PYG",
+        }
+        QAR{
+            "QAR",
+            "QAR",
+        }
+        RHD{
+            "RHD",
+            "RHD",
+        }
+        ROL{
+            "ROL",
+            "ROL",
+        }
+        RON{
+            "RON",
+            "Lây Rumani",
+        }
+        RSD{
+            "RSD",
+            "Đina Xéc-bi",
+        }
+        RUB{
+            "RUB",
+            "Rúp Nga",
+        }
+        RUR{
+            "RUR",
+            "RUR",
+        }
+        RWF{
+            "RWF",
+            "RWF",
+        }
+        SAR{
+            "SAR",
+            "Rian Ả rập Xêút",
+        }
+        SBD{
+            "SBD",
+            "SBD",
+        }
+        SCR{
+            "SCR",
+            "SCR",
+        }
+        SDD{
+            "SDD",
+            "SDD",
+        }
+        SDG{
+            "SDG",
+            "SDG",
+        }
+        SDP{
+            "SDP",
+            "SDP",
+        }
+        SEK{
+            "SEK",
+            "Cua-ron Thuỵ Điển",
+        }
+        SGD{
+            "SGD",
+            "Đô-la Singapore",
+        }
+        SHP{
+            "SHP",
+            "SHP",
+        }
+        SIT{
+            "SIT",
+            "Tôla Xlôvênia",
+        }
+        SKK{
+            "SKK",
+            "Cuaron Xlôvác",
+        }
+        SLL{
+            "SLL",
+            "SLL",
+        }
+        SOS{
+            "SOS",
+            "SOS",
+        }
+        SRD{
+            "SRD",
+            "SRD",
+        }
+        SRG{
+            "SRG",
+            "SRG",
+        }
+        STD{
+            "STD",
+            "STD",
+        }
+        SUR{
+            "SUR",
+            "SUR",
+        }
+        SVC{
+            "SVC",
+            "SVC",
+        }
+        SYP{
+            "SYP",
+            "SYP",
+        }
+        SZL{
+            "SZL",
+            "SZL",
+        }
+        THB{
+            "THB",
+            "Bạt Thái Lan",
+        }
+        TJR{
+            "TJR",
+            "TJR",
+        }
+        TJS{
+            "TJS",
+            "TJS",
+        }
+        TMM{
+            "TMM",
+            "TMM",
+        }
+        TND{
+            "TND",
+            "TND",
+        }
+        TOP{
+            "TOP",
+            "TOP",
+        }
+        TPE{
+            "TPE",
+            "TPE",
+        }
+        TRL{
+            "TRL",
+            "Lia Thổ Nhĩ Kỳ",
+        }
+        TRY{
+            "TRY",
+            "Lia Thổ Nhĩ Kỳ Mới",
+        }
+        TTD{
+            "TTD",
+            "TTD",
+        }
+        TWD{
+            "TWD",
+            "Đô-la Đài Loan",
+        }
+        TZS{
+            "TZS",
+            "TZS",
+        }
+        UAH{
+            "UAH",
+            "Rúp U-crai-na",
+        }
+        UAK{
+            "UAK",
+            "UAK",
+        }
+        UGS{
+            "UGS",
+            "UGS",
+        }
+        UGX{
+            "UGX",
+            "UGX",
+        }
+        USD{
+            "US$",
+            "Đô-la Mỹ",
+        }
+        USN{
+            "USN",
+            "USN",
+        }
+        USS{
+            "USS",
+            "USS",
+        }
+        UYI{
+            "UYI",
+            "UYI",
+        }
+        UYP{
+            "UYP",
+            "UYP",
+        }
+        UYU{
+            "UYU",
+            "UYU",
+        }
+        UZS{
+            "UZS",
+            "UZS",
+        }
+        VEB{
+            "VEB",
+            "Bôliva Vênêduêla",
+        }
+        VEF{
+            "VEF",
+            "VEF",
+        }
         VND{
             "₫",
             "đồng",
+        }
+        VUV{
+            "VUV",
+            "VUV",
+        }
+        WST{
+            "WST",
+            "WST",
+        }
+        XAF{
+            "XAF",
+            "XAF",
+        }
+        XAG{
+            "XAG",
+            "XAG",
+        }
+        XAU{
+            "XAU",
+            "Vàng",
+        }
+        XBA{
+            "XBA",
+            "XBA",
+        }
+        XBB{
+            "XBB",
+            "XBB",
+        }
+        XBC{
+            "XBC",
+            "XBC",
+        }
+        XBD{
+            "XBD",
+            "XBD",
+        }
+        XCD{
+            "XCD",
+            "XCD",
+        }
+        XDR{
+            "XDR",
+            "XDR",
+        }
+        XEU{
+            "XEU",
+            "XEU",
+        }
+        XFO{
+            "XFO",
+            "XFO",
+        }
+        XFU{
+            "XFU",
+            "XFU",
+        }
+        XOF{
+            "XOF",
+            "XOF",
+        }
+        XPD{
+            "XPD",
+            "XPD",
+        }
+        XPF{
+            "XPF",
+            "XPF",
+        }
+        XPT{
+            "XPT",
+            "XPT",
+        }
+        XRE{
+            "XRE",
+            "XRE",
+        }
+        XTS{
+            "XTS",
+            "XTS",
+        }
+        XXX{
+            "XXX",
+            "Tiền tệ chưa biết hoặc không hợp lệ",
+        }
+        YDD{
+            "YDD",
+            "YDD",
+        }
+        YER{
+            "YER",
+            "YER",
+        }
+        YUD{
+            "YUD",
+            "YUD",
+        }
+        YUM{
+            "YUM",
+            "YUM",
+        }
+        ZAL{
+            "ZAL",
+            "ZAL",
+        }
+        ZAR{
+            "ZAR",
+            "Ran Nam Phi",
+        }
+        ZMK{
+            "ZMK",
+            "ZMK",
+        }
+        ZRN{
+            "ZRN",
+            "ZRN",
+        }
+        ZRZ{
+            "ZRZ",
+            "ZRZ",
+        }
+        ZWD{
+            "ZWD",
+            "ZWD",
         }
     }
     ExemplarCharacters{
@@ -210,24 +1358,43 @@ vi{
         " ỹ ý ỵ z]"
     }
     Languages{
+        af{"Tiếng Nam Phi"}
+        am{"Tiếng Amharic"}
         ar{"Tiếng A-rập"}
+        as{"Tiếng Assam"}
+        ay{"Tiếng Aymara"}
         az{"Tiếng Ai-déc-bai-gian"}
         be{"Tiếng Bê-la-rút"}
         bg{"Tiếng Bun-ga-ri"}
+        bh{"Tiếng Bihari"}
+        bn{"Tiếng Bengali (Ấn Độ)"}
         bo{"Tiếng Tây Tạng"}
+        br{"Tiếng Breton"}
+        bs{"Tiếng Nam Tư"}
         ca{"Tiếng Ca-ta-lăng"}
         cs{"Tiếng Séc"}
+        cy{"Tiếng Xentơ"}
         da{"Tiếng Đan Mạch"}
         de{"Tiếng Đức"}
         el{"Tiếng Hy Lạp"}
         en{"Tiếng Anh"}
+        en_GB{"Tiếng Anh (Anh)"}
+        en_US{"Tiếng Anh (Mỹ)"}
         eo{"Tiếng Quốc Tế Ngữ"}
         es{"Tiếng Tây Ban Nha"}
         et{"Tiếng E-xtô-ni-a"}
+        eu{"Tiếng Basque"}
         fa{"Tiếng Ba Tư"}
         fi{"Tiếng Phần Lan"}
+        fil{"Tiếng Philipin"}
+        fo{"Tiếng Faore"}
         fr{"Tiếng Pháp"}
+        fy{"Tiếng Frisian"}
         ga{"Tiếng Ai-len"}
+        gd{"Tiếng Xentơ (Xcốt len)"}
+        gl{"Tiếng Galician"}
+        gn{"Tiếng Guarani"}
+        gu{"Tiếng  Gujarati"}
         he{"Tiếng Hê-brơ"}
         hi{"Tiếng Hin-đi"}
         hr{"Tiếng Crô-a-ti-a"}
@@ -235,41 +1402,76 @@ vi{
         hy{"Tiếng Ác-mê-ni"}
         ia{"Tiếng Khoa Học Quốc Tế"}
         id{"Tiếng In-đô-nê-xia"}
+        ie{"Tiếng Khoa học quốc tế"}
         is{"Tiếng Ai-xơ-len"}
         it{"Tiếng Ý"}
         ja{"Tiếng Nhật"}
         jv{"Tiếng Gia-va"}
+        ka{"Tiếng Georgian"}
         km{"Tiếng Campuchia"}
         kn{"Tiếng Kan-na-đa"}
         ko{"Tiếng Hàn Quốc"}
+        ks{"Tiếng Kashmiri"}
+        ku{"Tiếng Kurd (Iran)"}
+        ky{"Tiếng Kyrgyz"}
         la{"Tiếng La-tinh"}
+        ln{"Tiếng Lingala"}
         lo{"Tiếng Lào"}
         lt{"Tiếng Lít-va"}
         lv{"Tiếng Lát-vi-a"}
         mk{"Tiếng Ma-xê-đô-ni-a"}
+        ml{"Tiếng Malayalam"}
         mn{"Tiếng Mông Cổ"}
+        mr{"Tiếng Marathi"}
         ms{"Tiếng Ma-lay-xi-a"}
+        mt{"Tiếng Mantơ"}
         ne{"Tiếng Nê-pan"}
         nl{"Tiếng Hà Lan"}
+        nn{"Tiếng Na Uy (Nynorsk)"}
         no{"Tiếng Na Uy"}
+        oc{"Tiếng Occitan"}
+        or{"Tiếng Ô-ri-a"}
+        pa{"Tiếng Punjabi"}
         pl{"Tiếng Ba Lan"}
+        ps{"Tiếng Pa-tô"}
         pt{"Tiếng Bồ Đào Nha"}
+        pt_BR{"Tiếng Bồ Đào Nha (Braxin)"}
+        pt_PT{"Tiếng Bồ Đào Nha (I-bê-ri)"}
+        rm{"Tiếng Rhaeto-Romance"}
         ro{"Tiếng Ru-ma-ni"}
         ru{"Tiếng Nga"}
         sa{"Tiếng Phạn"}
+        sd{"Tiếng Sin-hi"}
+        sh{"Tiếng Xéc bi - Croatia"}
+        si{"Tiếng Sinhala"}
         sk{"Tiếng Xlô-vác"}
         sl{"Tiếng Xlô-ven"}
         so{"Tiếng Xô-ma-li"}
         sq{"Tiếng An-ba-ni"}
         sr{"Tiếng Séc-bi"}
+        su{"Tiếng Xu đăng"}
         sv{"Tiếng Thụy Điển"}
+        sw{"Tiếng Bantu (Đông Phi)"}
+        ta{"Tiếng Tamil"}
+        te{"Tiếng Telugu"}
         th{"Tiếng Thái"}
+        ti{"Tiếng Tigrigya"}
+        tk{"Tiếng Tuôc-men"}
+        tlh{"Tiếng Klingon"}
         tr{"Tiếng Thổ Nhĩ Kỳ"}
+        tw{"Tiếng Twi"}
+        ug{"Tiếng Uighur"}
         uk{"Tiếng U-crai-na"}
+        ur{"Tiếng Uđu"}
         uz{"Tiếng U-dơ-bếch"}
         vi{"Tiếng Việt"}
+        wo{"Tiếng Wolof"}
+        xh{"Tiếng Bantu"}
         yi{"Tiếng Y-đit"}
         zh{"Tiếng Trung Quốc"}
+        zh_Hans{"Tiếng Trung Quốc (Giản thể)"}
+        zh_Hant{"Tiếng Trung Quốc (Phồn thể)"}
+        zu{"Tiếng Zulu"}
     }
     LocaleScript{
         "Latn",
@@ -294,8 +1496,71 @@ vi{
         "#,##0%",
         "#E0",
     }
-    Version{"1.128"}
+    Types{
+        calendar{
+            buddhist{"buddhist"}
+            chinese{"chinese"}
+            gregorian{"gregorian"}
+            hebrew{"hebrew"}
+            indian{"indian"}
+            islamic{"islamic"}
+            islamic-civil{"islamic-civil"}
+            japanese{"japanese"}
+            roc{"roc"}
+        }
+        collation{
+            big5han{"big5han"}
+            direct{"direct"}
+            gb2312han{"gb2312han"}
+            phonebook{"phonebook"}
+            pinyin{"pinyin"}
+            stroke{"stroke"}
+            traditional{"traditional"}
+        }
+    }
+    Version{"1.66"}
     calendar{
+        buddhist{
+            availableFormats{
+                MMMMEd{"E MMMM d"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"M-d"}
+                yMEd{"EEE, yyyy-M-d"}
+                yMMM{"yyyy MMM"}
+                yMMMEd{"EEE, yyyy MMM d"}
+                yMMMM{"yyyy MMMM"}
+                yQ{"yyyy Q"}
+                yQQQ{"yyyy QQQ"}
+            }
+        }
+        coptic{
+            availableFormats{
+                MMMMEd{"E MMMM d"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"M-d"}
+                yMEd{"EEE, yyyy-M-d"}
+                yMMM{"yyyy MMM"}
+                yMMMEd{"EEE, yyyy MMM d"}
+                yMMMM{"yyyy MMMM"}
+                yQ{"yyyy Q"}
+                yQQQ{"yyyy QQQ"}
+            }
+        }
+        ethiopic{
+            availableFormats{
+                MMMMEd{"E MMMM d"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"M-d"}
+                yMEd{"EEE, yyyy-M-d"}
+                yMMM{"yyyy MMM"}
+                yMMMEd{"EEE, yyyy MMM d"}
+                yMMMM{"yyyy MMMM"}
+                yQ{"yyyy Q"}
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "SA",
@@ -311,6 +1576,28 @@ vi{
                 "dd-MM-yyyy",
                 "dd/MM/yyyy",
                 "{0} {1}",
+            }
+            availableFormats{
+                H{"H"}
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                MEd{"E, d-M"}
+                MMMEd{"E d MMM"}
+                MMMMEd{"E d MMMM"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                MMdd{"dd-MM"}
+                Md{"d-M"}
+                mmss{"mm:ss"}
+                yMEd{"EEE, d-M-yyyy"}
+                yMMM{"MMM yyyy"}
+                yMMMEd{"EEE, d MMM yyyy"}
+                yMMMM{"MMMM yyyy"}
+                yQ{"Q yyyy"}
+                yQQQ{"QQQ yyyy"}
+                yyQ{"Q yy"}
+                yyyy{"yyyy"}
+                yyyyMM{"MM-yyyy"}
             }
             dayNames{
                 format{
@@ -331,6 +1618,17 @@ vi{
                         "Thứ năm",
                         "Thứ sáu",
                         "Thứ bảy",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
                     }
                 }
             }
@@ -371,7 +1669,359 @@ vi{
                         "tháng mười hai",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    wide{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                }
             }
         }
+        hebrew{
+            availableFormats{
+                MMMMEd{"E MMMM d"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"M-d"}
+                yMEd{"EEE, yyyy-M-d"}
+                yMMM{"yyyy MMM"}
+                yMMMEd{"EEE, yyyy MMM d"}
+                yMMMM{"yyyy MMMM"}
+                yQ{"yyyy Q"}
+                yQQQ{"yyyy QQQ"}
+            }
+        }
+        indian{
+            availableFormats{
+                MMMMEd{"E MMMM d"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"M-d"}
+                yMEd{"EEE, yyyy-M-d"}
+                yMMM{"yyyy MMM"}
+                yMMMEd{"EEE, yyyy MMM d"}
+                yMMMM{"yyyy MMMM"}
+                yQ{"yyyy Q"}
+                yQQQ{"yyyy QQQ"}
+            }
+        }
+        persian{
+            availableFormats{
+                MMMMEd{"E MMMM d"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"M-d"}
+                yMEd{"EEE, yyyy-M-d"}
+                yMMM{"yyyy MMM"}
+                yMMMEd{"EEE, yyyy MMM d"}
+                yMMMM{"yyyy MMMM"}
+                yQ{"yyyy Q"}
+                yQQQ{"yyyy QQQ"}
+            }
+        }
+        roc{
+            availableFormats{
+                MMMMEd{"E MMMM d"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"M-d"}
+                yMEd{"EEE, yyyy-M-d"}
+                yMMM{"yyyy MMM"}
+                yMMMEd{"EEE, yyyy MMM d"}
+                yMMMM{"yyyy MMMM"}
+                yQ{"yyyy Q"}
+                yQQQ{"yyyy QQQ"}
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
+    }
+    zoneStrings{
+        "Africa:Lubumbashi"{
+            ec{"Lubumbashi"}
+        }
+        "America:Anchorage"{
+            ec{"Anchorage"}
+        }
+        "America:Argentina:La_Rioja"{
+            ec{"La Rioja"}
+        }
+        "America:Argentina:Rio_Gallegos"{
+            ec{"Rio Gallegos"}
+        }
+        "America:Argentina:San_Juan"{
+            ec{"San Juan"}
+        }
+        "America:Argentina:San_Luis"{
+            ec{"San Luis"}
+        }
+        "America:Argentina:Tucuman"{
+            ec{"Tucuman"}
+        }
+        "America:Argentina:Ushuaia"{
+            ec{"Ushuaia"}
+        }
+        "America:Indiana:Marengo"{
+            ec{"Marengo, Indiana"}
+        }
+        "America:Indiana:Tell_City"{
+            ec{"Tell City, Indiana"}
+        }
+        "America:Indiana:Vevay"{
+            ec{"Vevay, Indiana"}
+        }
+        "America:Kentucky:Monticello"{
+            ec{"Monticello, Kentucky"}
+        }
+        "America:Los_Angeles"{
+            ec{"Los Angeles"}
+        }
+        "America:Louisville"{
+            ec{"Louisville"}
+        }
+        "America:Maceio"{
+            ec{"Maceio"}
+        }
+        "America:Manaus"{
+            ec{"Manaus"}
+        }
+        "America:Mazatlan"{
+            ec{"Mazatlan"}
+        }
+        "America:Mendoza"{
+            ec{"Mendoza"}
+        }
+        "America:Menominee"{
+            ec{"Menominee"}
+        }
+        "America:Merida"{
+            ec{"Merida"}
+        }
+        "America:Mexico_City"{
+            ec{"Mexico City"}
+        }
+        "America:Moncton"{
+            ec{"Moncton"}
+        }
+        "America:Monterrey"{
+            ec{"Monterrey"}
+        }
+        "America:Montreal"{
+            ec{"Montreal"}
+        }
+        "America:New_York"{
+            ec{"New York"}
+        }
+        "America:Nipigon"{
+            ec{"Nipigon"}
+        }
+        "America:Nome"{
+            ec{"Nome"}
+        }
+        "America:Noronha"{
+            ec{"Noronha"}
+        }
+        "America:North_Dakota:New_Salem"{
+            ec{"New Salem, North Dakota"}
+        }
+        "America:Pangnirtung"{
+            ec{"Pangnirtung"}
+        }
+        "America:Phoenix"{
+            ec{"Phoenix"}
+        }
+        "America:Rainy_River"{
+            ec{"Rainy River"}
+        }
+        "America:Rankin_Inlet"{
+            ec{"Rankin Inlet"}
+        }
+        "America:Recife"{
+            ec{"Recife"}
+        }
+        "America:Regina"{
+            ec{"Regina"}
+        }
+        "America:Resolute"{
+            ec{"Resolute"}
+        }
+        "America:Rio_Branco"{
+            ec{"Rio Branco"}
+        }
+        "America:Sao_Paulo"{
+            ec{"Sao Paulo"}
+        }
+        "America:Scoresbysund"{
+            ec{"Scoresbysund"}
+        }
+        "America:Shiprock"{
+            ec{"Shiprock"}
+        }
+        "America:St_Johns"{
+            ec{"St. John's"}
+        }
+        "America:Swift_Current"{
+            ec{"Swift Current"}
+        }
+        "America:Thule"{
+            ec{"Thule"}
+        }
+        "America:Thunder_Bay"{
+            ec{"Thunder Bay"}
+        }
+        "America:Tijuana"{
+            ec{"Tijuana"}
+        }
+        "America:Toronto"{
+            ec{"Toronto"}
+        }
+        "America:Vancouver"{
+            ec{"Vancouver"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont D'Urville"}
+        }
+        "Antarctica:Mawson"{
+            ec{"Mawson"}
+        }
+        "Antarctica:McMurdo"{
+            ec{"McMurdo"}
+        }
+        "Antarctica:Palmer"{
+            ec{"Palmer"}
+        }
+        "Antarctica:Rothera"{
+            ec{"Rothera"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"South Pole"}
+        }
+        "Antarctica:Syowa"{
+            ec{"Syowa"}
+        }
+        "Asia:Magadan"{
+            ec{"Magadan"}
+        }
+        "Asia:Makassar"{
+            ec{"Makassar"}
+        }
+        "Asia:Novosibirsk"{
+            ec{"Novosibirsk"}
+        }
+        "Asia:Omsk"{
+            ec{"Omsk"}
+        }
+        "Asia:Oral"{
+            ec{"Oral"}
+        }
+        "Asia:Pontianak"{
+            ec{"Pontianak"}
+        }
+        "Asia:Qyzylorda"{
+            ec{"Qyzylorda"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Sakhalin"}
+        }
+        "Asia:Samarkand"{
+            ec{"Samarkand"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"Ulaanbaatar"}
+        }
+        "Asia:Urumqi"{
+            ec{"Urumqi"}
+        }
+        "Atlantic:Canary"{
+            ec{"Quần Đảo Canary"}
+        }
+        "Atlantic:Madeira"{
+            ec{"Madeira"}
+        }
+        "Australia:Lindeman"{
+            ec{"Lindeman"}
+        }
+        "Australia:Lord_Howe"{
+            ec{"Lord Howe"}
+        }
+        "Australia:Melbourne"{
+            ec{"Melbourne"}
+        }
+        "Australia:Perth"{
+            ec{"Perth"}
+        }
+        "Australia:Sydney"{
+            ec{"Sydney"}
+        }
+        "Etc:Unknown"{
+            ec{"Không rõ"}
+        }
+        "Europe:Moscow"{
+            ec{"Moscow"}
+        }
+        "Europe:Samara"{
+            ec{"Samara"}
+        }
+        "Europe:Simferopol"{
+            ec{"Simferopol"}
+        }
+        "Europe:Uzhgorod"{
+            ec{"Uzhgorod"}
+        }
+        "Pacific:Easter"{
+            ec{"Easter"}
+        }
+        "Pacific:Majuro"{
+            ec{"Majuro"}
+        }
+        "Pacific:Marquesas"{
+            ec{"Marquesas"}
+        }
+        "Pacific:Midway"{
+            ec{"Midway"}
+        }
+        "Pacific:Ponape"{
+            ec{"Ponape"}
+        }
+        "Pacific:Tarawa"{
+            ec{"Tarawa"}
+        }
+        "Pacific:Truk"{
+            ec{"Truk"}
+        }
+        fallbackFormat{"{1} ({0})"}
+        gmtFormat{"GMT{0}"}
+        hourFormat{"+HH:mm;-HH:mm"}
+        regionFormat{"{0}"}
     }
 }

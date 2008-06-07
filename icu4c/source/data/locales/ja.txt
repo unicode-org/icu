@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ja.xml
  */
 ja{
-    AuxExemplarCharacters{"[拼 錄 鳯]"}
+    AuxExemplarCharacters{"[兌 拼 楔 錄 鳯]"}
     Countries{
         001{"世界"}
         002{"アフリカ"}
@@ -1402,6 +1402,7 @@ ja{
         am{"アムハラ語"}
         an{"アラゴン語"}
         ang{"古代英語"}
+        anp{"アンギカ語"}
         apa{"アパッチ語族"}
         ar{"アラビア語"}
         arc{"アラム語"}
@@ -1451,6 +1452,7 @@ ja{
         cai{"中米インディアン諸語"}
         car{"カリブ語"}
         cau{"コーカサス諸語"}
+        cch{"チャワイ語"}
         ce{"チェチェン語"}
         ceb{"セブアノ語"}
         cel{"ケルト諸語"}
@@ -1485,6 +1487,7 @@ ja{
         day{"ダヤク語"}
         de{"ドイツ語"}
         de_AT{"ドイツ語（オーストリア）"}
+        de_CH{"正統ドイツ語（スイス）"}
         del{"デラウェア語"}
         den{"スレイビー語"}
         dgr{"ドグリブ語"}
@@ -1504,6 +1507,7 @@ ja{
         el{"ギリシャ語"}
         elx{"エラム語"}
         en{"英語"}
+        en_AU{"英語(オーストラリア)"}
         en_CA{"カナダ英語"}
         en_GB{"イギリス英語"}
         en_US{"アメリカ英語"}
@@ -1530,6 +1534,7 @@ ja{
         fr_CH{"フランス語（スイス）"}
         frm{"中期フランス語"}
         fro{"古フランス語"}
+        frs{"東フリジア語"}
         fur{"フリウリ語"}
         fy{"フリジア語"}
         ga{"アイルランド語"}
@@ -1549,6 +1554,7 @@ ja{
         got{"ゴート語"}
         grb{"グレボ語"}
         grc{"古代ギリシャ語"}
+        gsw{"スイスドイツ語（スイス）"}
         gu{"グジャラート語"}
         gv{"マン島語"}
         gwi{"グウィッチン語"}
@@ -1596,10 +1602,13 @@ ja{
         kaa{"カラ・カルパク語"}
         kab{"カビル語"}
         kac{"カチン語"}
+        kaj{"カジェ語"}
         kam{"カンバ語"}
         kar{"カレン語"}
         kaw{"カウィ語"}
         kbd{"カバルド語"}
+        kcg{"カタブ語"}
+        kfo{"コロ語"}
         kg{"コンゴ語"}
         kha{"カシ語"}
         khi{"コイサン諸語"}
@@ -1617,6 +1626,7 @@ ja{
         kpe{"クペレ語"}
         kr{"カヌリ語"}
         krc{"カラチャイ語"}
+        krl{"カレリア語"}
         kro{"クルー語"}
         kru{"クルク語"}
         ks{"カシミール語"}
@@ -1703,6 +1713,7 @@ ja{
         no{"ノルウェー語"}
         nog{"ノガイ語"}
         non{"古ノルド語"}
+        nqo{"ンコ語"}
         nr{"南ンデベレ語"}
         nso{"北部ソト語"}
         nub{"ヌビア語族"}
@@ -1713,7 +1724,7 @@ ja{
         nyn{"ニャンコレ語"}
         nyo{"ニョロ語"}
         nzi{"ンゼマ語"}
-        oc{"オック語 (1500以降)、プロバンス語"}
+        oc{"オック語"}
         oj{"オブジワ語"}
         om{"オロモ語"}
         or{"オリヤー語"}
@@ -1738,6 +1749,7 @@ ja{
         pro{"古期プロバンス語"}
         ps{"パシュトゥー語"}
         pt{"ポルトガル語"}
+        pt_BR{"ポルトガル語 (ブラジル)"}
         pt_PT{"ポルトガル語（イベリア半島）"}
         qu{"ケチュア語"}
         raj{"ラージャスターン語"}
@@ -1943,28 +1955,36 @@ ja{
         Hung{"古代ハンガリー文字"}
         Inds{"インダス文字 (ハラッパ文字)"}
         Java{"ジャワ文字"}
+        Jpan{"日本語の文字"}
+        Kali{"カヤー文字"}
         Kana{"カタカナ"}
         Khar{"カローシュティー文字"}
         Khmr{"クメール文字"}
         Knda{"カンナダ文字"}
         Kore{"韓国語の文字"}
         Laoo{"ラオ文字"}
+        Latf{"ラテン文字 (ドイツ文字)"}
         Latn{"ラテン文字"}
         Lepc{"レプチャ文字 (ロン文字)"}
         Limb{"リンブ文字"}
+        Lina{"線文字A"}
         Linb{"線文字B"}
         Mand{"マンダ文字"}
         Maya{"マヤ象形文字"}
         Mero{"メロエ文字"}
         Mlym{"マラヤーラム文字"}
         Mong{"モンゴル文字"}
+        Moon{"ムーン文字"}
+        Mtei{"メイテイ文字"}
         Mymr{"ミャンマー文字"}
         Ogam{"オガム文字"}
+        Olck{"オルチキ文字"}
         Orkh{"オルホン文字"}
         Orya{"オリヤー文字"}
         Osma{"オスマニア文字"}
         Phag{"パスパ文字"}
         Phnx{"フェニキア文字"}
+        Plrd{"ポラード音声記号"}
         Roro{"ロンゴロンゴ文字"}
         Runr{"ルーン文字"}
         Sara{"サラティ文字"}
@@ -1973,8 +1993,8 @@ ja{
         Sylo{"シロティ・ナグリ文字"}
         Syrc{"シリア文字"}
         Syre{"シリア文字 (エストランゲロ文字)"}
-        Syrj{"シリア文字 (東方シリア文字)"}
-        Syrn{"シリア文字 (西方シリア文字)"}
+        Syrj{"シリア文字 (西方シリア文字)"}
+        Syrn{"シリア文字 (東方シリア文字)"}
         Tagb{"タグバンワ文字"}
         Tale{"タイレ文字"}
         Talu{"新タイ・ルー文字"}
@@ -1989,6 +2009,7 @@ ja{
         Ugar{"ウガリト文字"}
         Vaii{"ヴァイ文字"}
         Xpeo{"古代ペルシア文字"}
+        Xsux{"シュメール＝アッカド語楔形文字"}
         Yiii{"イ文字"}
         Zxxx{"口承言語のコード"}
         Zyyy{"共通コード"}
@@ -2013,12 +2034,26 @@ ja{
         }
     }
     Variants{
+        1606NICT{"後期中世フランス語（〜1606）"}
+        1694ACAD{"初期現代フランス語"}
+        1901{"伝統的ドイツ語正書法（1901）"}
+        1996{"ドイツ語正書法（1996）"}
+        AREVELA{"東アルメニア文語"}
+        AREVMDA{"西アルメニア文語"}
+        BOONT{"ブーントリング"}
+        FONIPA{"国際音声記号"}
+        FONUPA{"ウラル音声記号"}
+        MONOTON{"モノトニック"}
         NEDIS{"ナティゾーネ方言"}
         POLYTON{"ポリトニック"}
         POSIX{"コンピュータ"}
         REVISED{"改訂版"}
+        ROZAJ{"レシア方言"}
+        SAAHO{"サホ語"}
+        SCOUSE{"リバプール方言"}
+        VALENCIA{"バレンシア方言"}
     }
-    Version{"1.128"}
+    Version{"1.137"}
     calendar{
         buddhist{
             availableFormats{
@@ -2032,7 +2067,7 @@ ja{
             }
             DateTimePatterns{
                 "H時mm分ss秒v",
-                "H:mm:ss:z",
+                "HH:mm:ssz",
                 "H:mm:ss",
                 "H:mm",
                 "yyyy年M月d日EEEE",
@@ -2042,22 +2077,34 @@ ja{
                 "{1} {0}",
             }
             availableFormats{
-                Ed{"d日（E)"}
+                Ed{"d日(EEE)"}
                 GGGGyMd{"GGGGy年M月d日"}
                 H{"H時"}
-                MEd{"M-d（E）"}
-                MMMEd{"MMM/d（E）"}
+                Hm{"H:mm"}
+                M{"L"}
+                MEd{"M/d(E)"}
+                MMM{"LLL"}
+                MMMEd{"M月d日(E)"}
                 MMMMEd{"M月d日(E)"}
-                MMMMd{"MMMM月d日"}
+                MMMMd{"M月d日"}
+                MMMd{"M月d日"}
                 MMdd{"MM/dd"}
                 Md{"M/d"}
+                d{"d日"}
                 mmss{"mm:ss"}
+                ms{"mm:ss"}
                 y{"y"}
+                yM{"y/M"}
+                yMEd{"y/M/d(EEE)"}
                 yMMM{"y年M月"}
                 yMMMEd{"y年M月d日(EEE)"}
                 yMMMM{"y年M月"}
-                yyMMM{"yy年MMM月"}
+                yQ{"y/Q"}
+                yQQQ{"yyyyQQQ"}
+                yyMMM{"y年M月"}
                 yyQ{"yy/Q"}
+                yyyy{"y年"}
+                yyyyMM{"yyyy/MM"}
             }
             dayNames{
                 format{
@@ -2141,24 +2188,24 @@ ja{
                     dn{"年"}
                 }
                 zone{
-                    dn{"時間帯"}
+                    dn{"タイムゾーン"}
                 }
             }
             monthNames{
                 format{
                     abbreviated{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
+                        "1月",
+                        "2月",
+                        "3月",
+                        "4月",
+                        "5月",
+                        "6月",
+                        "7月",
+                        "8月",
+                        "9月",
+                        "10月",
+                        "11月",
+                        "12月",
                     }
                     narrow{
                         "1",
@@ -2175,18 +2222,18 @@ ja{
                         "12",
                     }
                     wide{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
+                        "1月",
+                        "2月",
+                        "3月",
+                        "4月",
+                        "5月",
+                        "6月",
+                        "7月",
+                        "8月",
+                        "9月",
+                        "10月",
+                        "11月",
+                        "12月",
                     }
                 }
                 stand-alone{
@@ -2205,32 +2252,18 @@ ja{
                         "12月",
                     }
                     narrow{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
-                    }
-                    wide{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
                     }
                 }
             }
@@ -2249,14 +2282,22 @@ ja{
                         "第4四半期",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                }
             }
         }
         japanese{
             DateTimePatterns{
                 "H時mm分ss秒v",
-                "H:mm:ss:z",
-                "H:mm:ss",
-                "H:mm",
+                "HH:mm:ssz",
+                "HH:mm:ss",
+                "HH:mm",
                 "Gy年M月d日EEEE",
                 "Gy年M月d日",
                 "Gyy/MM/dd",
@@ -2264,6 +2305,9 @@ ja{
                 "{1} {0}",
             }
             availableFormats{
+                Ed{"d日(EEE)"}
+                MMMEd{"M月d日(EEE)"}
+                y{"Gy年"}
                 yyMM{"Gyy/MM"}
                 yyMMM{"Gy年M月"}
                 yyQ{"Gyy/Q"}
@@ -2508,18 +2552,256 @@ ja{
                     "昭和",
                     "平成",
                 }
+                narrow{
+                    "大化" /** (abbr.)  */,
+                    "白雉" /** (abbr.)  */,
+                    "白鳯" /** (abbr.)  */,
+                    "朱鳥" /** (abbr.)  */,
+                    "大宝" /** (abbr.)  */,
+                    "慶雲" /** (abbr.)  */,
+                    "和銅" /** (abbr.)  */,
+                    "霊亀" /** (abbr.)  */,
+                    "養老" /** (abbr.)  */,
+                    "神亀" /** (abbr.)  */,
+                    "天平" /** (abbr.)  */,
+                    "天平感宝" /** (abbr.)  */,
+                    "天平勝宝" /** (abbr.)  */,
+                    "天平宝字" /** (abbr.)  */,
+                    "天平神護" /** (abbr.)  */,
+                    "神護景雲" /** (abbr.)  */,
+                    "宝亀" /** (abbr.)  */,
+                    "天応" /** (abbr.)  */,
+                    "延暦" /** (abbr.)  */,
+                    "大同" /** (abbr.)  */,
+                    "弘仁" /** (abbr.)  */,
+                    "天長" /** (abbr.)  */,
+                    "承和" /** (abbr.)  */,
+                    "嘉祥" /** (abbr.)  */,
+                    "仁寿" /** (abbr.)  */,
+                    "斉衡" /** (abbr.)  */,
+                    "天安" /** (abbr.)  */,
+                    "貞観" /** (abbr.)  */,
+                    "元慶" /** (abbr.)  */,
+                    "仁和" /** (abbr.)  */,
+                    "寛平" /** (abbr.)  */,
+                    "昌泰" /** (abbr.)  */,
+                    "延喜" /** (abbr.)  */,
+                    "延長" /** (abbr.)  */,
+                    "承平" /** (abbr.)  */,
+                    "天慶" /** (abbr.)  */,
+                    "天暦" /** (abbr.)  */,
+                    "天徳" /** (abbr.)  */,
+                    "応和" /** (abbr.)  */,
+                    "康保" /** (abbr.)  */,
+                    "安和" /** (abbr.)  */,
+                    "天禄" /** (abbr.)  */,
+                    "天延" /** (abbr.)  */,
+                    "貞元" /** (abbr.)  */,
+                    "天元" /** (abbr.)  */,
+                    "永観" /** (abbr.)  */,
+                    "寛和" /** (abbr.)  */,
+                    "永延" /** (abbr.)  */,
+                    "永祚" /** (abbr.)  */,
+                    "正暦" /** (abbr.)  */,
+                    "長徳" /** (abbr.)  */,
+                    "長保" /** (abbr.)  */,
+                    "寛弘" /** (abbr.)  */,
+                    "長和" /** (abbr.)  */,
+                    "寛仁" /** (abbr.)  */,
+                    "治安" /** (abbr.)  */,
+                    "万寿" /** (abbr.)  */,
+                    "長元" /** (abbr.)  */,
+                    "長暦" /** (abbr.)  */,
+                    "長久" /** (abbr.)  */,
+                    "寛徳" /** (abbr.)  */,
+                    "永承" /** (abbr.)  */,
+                    "天喜" /** (abbr.)  */,
+                    "康平" /** (abbr.)  */,
+                    "治暦" /** (abbr.)  */,
+                    "延久" /** (abbr.)  */,
+                    "承保" /** (abbr.)  */,
+                    "承暦" /** (abbr.)  */,
+                    "永保" /** (abbr.)  */,
+                    "応徳" /** (abbr.)  */,
+                    "寛治" /** (abbr.)  */,
+                    "嘉保" /** (abbr.)  */,
+                    "永長" /** (abbr.)  */,
+                    "承徳" /** (abbr.)  */,
+                    "康和" /** (abbr.)  */,
+                    "長治" /** (abbr.)  */,
+                    "嘉承" /** (abbr.)  */,
+                    "天仁" /** (abbr.)  */,
+                    "天永" /** (abbr.)  */,
+                    "永久" /** (abbr.)  */,
+                    "元永" /** (abbr.)  */,
+                    "保安" /** (abbr.)  */,
+                    "天治" /** (abbr.)  */,
+                    "大治" /** (abbr.)  */,
+                    "天承" /** (abbr.)  */,
+                    "長承" /** (abbr.)  */,
+                    "保延" /** (abbr.)  */,
+                    "永治" /** (abbr.)  */,
+                    "康治" /** (abbr.)  */,
+                    "天養" /** (abbr.)  */,
+                    "久安" /** (abbr.)  */,
+                    "仁平" /** (abbr.)  */,
+                    "久寿" /** (abbr.)  */,
+                    "保元" /** (abbr.)  */,
+                    "平治" /** (abbr.)  */,
+                    "永暦" /** (abbr.)  */,
+                    "応保" /** (abbr.)  */,
+                    "長寛" /** (abbr.)  */,
+                    "永万" /** (abbr.)  */,
+                    "仁安" /** (abbr.)  */,
+                    "嘉応" /** (abbr.)  */,
+                    "承安" /** (abbr.)  */,
+                    "安元" /** (abbr.)  */,
+                    "治承" /** (abbr.)  */,
+                    "養和" /** (abbr.)  */,
+                    "寿永" /** (abbr.)  */,
+                    "元暦" /** (abbr.)  */,
+                    "文治" /** (abbr.)  */,
+                    "建久" /** (abbr.)  */,
+                    "正治" /** (abbr.)  */,
+                    "建仁" /** (abbr.)  */,
+                    "元久" /** (abbr.)  */,
+                    "建永" /** (abbr.)  */,
+                    "承元" /** (abbr.)  */,
+                    "建暦" /** (abbr.)  */,
+                    "建保" /** (abbr.)  */,
+                    "承久" /** (abbr.)  */,
+                    "貞応" /** (abbr.)  */,
+                    "元仁" /** (abbr.)  */,
+                    "嘉禄" /** (abbr.)  */,
+                    "安貞" /** (abbr.)  */,
+                    "寛喜" /** (abbr.)  */,
+                    "貞永" /** (abbr.)  */,
+                    "天福" /** (abbr.)  */,
+                    "文暦" /** (abbr.)  */,
+                    "嘉禎" /** (abbr.)  */,
+                    "暦仁" /** (abbr.)  */,
+                    "延応" /** (abbr.)  */,
+                    "仁治" /** (abbr.)  */,
+                    "寛元" /** (abbr.)  */,
+                    "宝治" /** (abbr.)  */,
+                    "建長" /** (abbr.)  */,
+                    "康元" /** (abbr.)  */,
+                    "正嘉" /** (abbr.)  */,
+                    "正元" /** (abbr.)  */,
+                    "文応" /** (abbr.)  */,
+                    "弘長" /** (abbr.)  */,
+                    "文永" /** (abbr.)  */,
+                    "建治" /** (abbr.)  */,
+                    "弘安" /** (abbr.)  */,
+                    "正応" /** (abbr.)  */,
+                    "永仁" /** (abbr.)  */,
+                    "正安" /** (abbr.)  */,
+                    "乾元" /** (abbr.)  */,
+                    "嘉元" /** (abbr.)  */,
+                    "徳治" /** (abbr.)  */,
+                    "延慶" /** (abbr.)  */,
+                    "応長" /** (abbr.)  */,
+                    "正和" /** (abbr.)  */,
+                    "文保" /** (abbr.)  */,
+                    "元応" /** (abbr.)  */,
+                    "元亨" /** (abbr.)  */,
+                    "正中" /** (abbr.)  */,
+                    "嘉暦" /** (abbr.)  */,
+                    "元徳" /** (abbr.)  */,
+                    "元弘" /** (abbr.)  */,
+                    "建武" /** (abbr.)  */,
+                    "延元" /** (abbr.)  */,
+                    "興国" /** (abbr.)  */,
+                    "正平" /** (abbr.)  */,
+                    "建徳" /** (abbr.)  */,
+                    "文中" /** (abbr.)  */,
+                    "天授" /** (abbr.)  */,
+                    "康暦" /** (abbr.)  */,
+                    "弘和" /** (abbr.)  */,
+                    "元中" /** (abbr.)  */,
+                    "至徳" /** (abbr.)  */,
+                    "嘉慶" /** (abbr.)  */,
+                    "康応" /** (abbr.)  */,
+                    "明徳" /** (abbr.)  */,
+                    "応永" /** (abbr.)  */,
+                    "正長" /** (abbr.)  */,
+                    "永享" /** (abbr.)  */,
+                    "嘉吉" /** (abbr.)  */,
+                    "文安" /** (abbr.)  */,
+                    "宝徳" /** (abbr.)  */,
+                    "享徳" /** (abbr.)  */,
+                    "康正" /** (abbr.)  */,
+                    "長禄" /** (abbr.)  */,
+                    "寛正" /** (abbr.)  */,
+                    "文正" /** (abbr.)  */,
+                    "応仁" /** (abbr.)  */,
+                    "文明" /** (abbr.)  */,
+                    "長享" /** (abbr.)  */,
+                    "延徳" /** (abbr.)  */,
+                    "明応" /** (abbr.)  */,
+                    "文亀" /** (abbr.)  */,
+                    "永正" /** (abbr.)  */,
+                    "大永" /** (abbr.)  */,
+                    "享禄" /** (abbr.)  */,
+                    "天文" /** (abbr.)  */,
+                    "弘治" /** (abbr.)  */,
+                    "永禄" /** (abbr.)  */,
+                    "元亀" /** (abbr.)  */,
+                    "天正" /** (abbr.)  */,
+                    "文禄" /** (abbr.)  */,
+                    "慶長" /** (abbr.)  */,
+                    "元和" /** (abbr.)  */,
+                    "寛永" /** (abbr.)  */,
+                    "正保" /** (abbr.)  */,
+                    "慶安" /** (abbr.)  */,
+                    "承応" /** (abbr.)  */,
+                    "明暦" /** (abbr.)  */,
+                    "万治" /** (abbr.)  */,
+                    "寛文" /** (abbr.)  */,
+                    "延宝" /** (abbr.)  */,
+                    "天和" /** (abbr.)  */,
+                    "貞享" /** (abbr.)  */,
+                    "元禄" /** (abbr.)  */,
+                    "宝永" /** (abbr.)  */,
+                    "正徳" /** (abbr.)  */,
+                    "享保" /** (abbr.)  */,
+                    "元文" /** (abbr.)  */,
+                    "寛保" /** (abbr.)  */,
+                    "延享" /** (abbr.)  */,
+                    "寛延" /** (abbr.)  */,
+                    "宝暦" /** (abbr.)  */,
+                    "明和" /** (abbr.)  */,
+                    "安永" /** (abbr.)  */,
+                    "天明" /** (abbr.)  */,
+                    "寛政" /** (abbr.)  */,
+                    "享和" /** (abbr.)  */,
+                    "文化" /** (abbr.)  */,
+                    "文政" /** (abbr.)  */,
+                    "天保" /** (abbr.)  */,
+                    "弘化" /** (abbr.)  */,
+                    "嘉永" /** (abbr.)  */,
+                    "安政" /** (abbr.)  */,
+                    "万延" /** (abbr.)  */,
+                    "文久" /** (abbr.)  */,
+                    "元治" /** (abbr.)  */,
+                    "慶応" /** (abbr.)  */,
+                    "M",
+                    "T",
+                    "S",
+                    "H",
+                }
             }
         }
         roc{
             DateTimePatterns{
                 "H時mm分ss秒v",
-                "H:mm:ss:z",
+                "HH:mm:ssz",
                 "H:mm:ss",
                 "H:mm",
                 "Gy'年'M'月'd'日'EEEE",
                 "Gy'年'M'月'd'日'EEEE",
-                "G yy/MM/dd(EE)",
-                "G yy/MM/dd(E)",
+                "Gyy/MM/dd(EE)",
+                "Gyy/MM/dd(E)",
                 "{1} {0}",
             }
             eras{
@@ -2538,6 +2820,7 @@ ja{
     }
     measurementSystemNames{
         US{"ヤード・ポンド法"}
+        metric{"メートル法"}
     }
     zoneStrings{
         "Africa:Bamako"{
@@ -2555,9 +2838,6 @@ ja{
         "Africa:Lubumbashi"{
             ec{"ルブンバシ"}
         }
-        "Africa:Timbuktu"{
-            ec{"ティンブクトゥ"}
-        }
         "America:Adak"{
             ec{"アダック"}
         }
@@ -2566,9 +2846,6 @@ ja{
         }
         "America:Araguaina"{
             ec{"アラグァイナ"}
-        }
-        "America:Argentina:ComodRivadavia"{
-            ec{"アメリカ/アルゼンチン/コモドロリバダビア"}
         }
         "America:Argentina:La_Rioja"{
             ec{"ラリオハ"}
@@ -2646,25 +2923,25 @@ ja{
             ec{"デンバー"}
         }
         "America:Detroit"{
-            ec{"アメリカ/デトロイト"}
+            ec{"デトロイト"}
         }
         "America:Edmonton"{
-            ec{"アメリカ/エドモントン"}
+            ec{"エドモントン"}
         }
         "America:Eirunepe"{
-            ec{"アメリカ/エイルネペ"}
+            ec{"エイルネペ"}
         }
         "America:Fortaleza"{
             ec{"フォルタレザ"}
         }
         "America:Glace_Bay"{
-            ec{"アメリカ/グレースベイ"}
+            ec{"グレースベイ"}
         }
         "America:Godthab"{
             ec{"アメリカ/ゴッドホープ"}
         }
         "America:Goose_Bay"{
-            ec{"アメリカ/グースベイ"}
+            ec{"グースベイ"}
         }
         "America:Guayaquil"{
             ec{"アメリカ/グアヤキル"}
@@ -2673,7 +2950,7 @@ ja{
             ec{"ハリファクス"}
         }
         "America:Hermosillo"{
-            ec{"アメリカ/エルモシヨ"}
+            ec{"エルモシヨ"}
         }
         "America:Indiana:Knox"{
             ec{"インディアナ州ノックス"}
@@ -2700,16 +2977,16 @@ ja{
             ec{"インディアナポリス"}
         }
         "America:Inuvik"{
-            ec{"アメリカ/イヌヴィク"}
+            ec{"イヌヴィク"}
         }
         "America:Iqaluit"{
-            ec{"アメリカ/イカルイット"}
+            ec{"イカルイット"}
         }
         "America:Jujuy"{
-            ec{"アメリカ/フフイ"}
+            ec{"フフイ"}
         }
         "America:Juneau"{
-            ec{"アメリカ/ジュノー"}
+            ec{"ジュノー"}
         }
         "America:Kentucky:Monticello"{
             ec{"ケンタッキー州モンティチェロ"}
@@ -2718,7 +2995,7 @@ ja{
             ec{"ロサンゼルス"}
         }
         "America:Louisville"{
-            ec{"アメリカ/ルイスビル"}
+            ec{"ルイスビル"}
         }
         "America:Maceio"{
             ec{"マセイオ"}
@@ -2727,37 +3004,37 @@ ja{
             ec{"マナウス"}
         }
         "America:Mazatlan"{
-            ec{"アメリカ/マサトラン"}
+            ec{"マサトラン"}
         }
         "America:Mendoza"{
-            ec{"アメリカ/メンドーサ"}
+            ec{"メンドーサ"}
         }
         "America:Menominee"{
-            ec{"アメリカ/メノミニー"}
+            ec{"メノミニー"}
         }
         "America:Merida"{
-            ec{"アメリカ/メリダ"}
+            ec{"メリダ"}
         }
         "America:Mexico_City"{
-            ec{"アメリカ/メキシコシティー"}
+            ec{"メキシコシティー"}
         }
         "America:Moncton"{
             ec{"モンクトン"}
         }
         "America:Monterrey"{
-            ec{"アメリカ/モンテレイ"}
+            ec{"モンテレイ"}
         }
         "America:Montreal"{
-            ec{"アメリカ/モントリオール"}
+            ec{"モントリオール"}
         }
         "America:New_York"{
             ec{"ニューヨーク"}
         }
         "America:Nipigon"{
-            ec{"アメリカ/ニピゴン"}
+            ec{"ニピゴン"}
         }
         "America:Nome"{
-            ec{"アメリカ/ノーメ"}
+            ec{"ノーメ"}
         }
         "America:Noronha"{
             ec{"ノロニャ"}
@@ -2765,8 +3042,11 @@ ja{
         "America:North_Dakota:Center"{
             ec{"ノースダコタ州センター"}
         }
+        "America:North_Dakota:New_Salem"{
+            ec{"ノースダコタ州ニューセーラム"}
+        }
         "America:Pangnirtung"{
-            ec{"アメリカ/パンナータング"}
+            ec{"パンナータング"}
         }
         "America:Phoenix"{
             ec{"フェニックス"}
@@ -2775,16 +3055,16 @@ ja{
             ec{"ポルトベーリョ"}
         }
         "America:Rainy_River"{
-            ec{"アメリカ/レイニーリバー"}
+            ec{"レイニーリバー"}
         }
         "America:Rankin_Inlet"{
-            ec{"アメリカ/ランキン湾"}
+            ec{"ランキン湾"}
         }
         "America:Recife"{
             ec{"レシフェ"}
         }
         "America:Regina"{
-            ec{"アメリカ/レジャイナ"}
+            ec{"レジャイナ"}
         }
         "America:Resolute"{
             ec{"レソリュート"}
@@ -2802,40 +3082,40 @@ ja{
             ec{"スコレスビスン"}
         }
         "America:Shiprock"{
-            ec{"アメリカ/シップロック"}
+            ec{"シップロック"}
         }
         "America:St_Johns"{
             ec{"セントジョンズ"}
         }
         "America:Swift_Current"{
-            ec{"アメリカ/スウィフトカレント"}
+            ec{"スウィフトカレント"}
         }
         "America:Thule"{
             ec{"チューレ"}
         }
         "America:Thunder_Bay"{
-            ec{"アメリカ/サンダーベイ"}
+            ec{"サンダーベイ"}
         }
         "America:Tijuana"{
-            ec{"アメリカ/ティフアナ"}
+            ec{"ティフアナ"}
         }
         "America:Toronto"{
-            ec{"アメリカ/トロント"}
+            ec{"トロント"}
         }
         "America:Vancouver"{
-            ec{"アメリカ/バンクーバー"}
+            ec{"バンクーバー"}
         }
         "America:Whitehorse"{
-            ec{"アメリカ/ホワイトホース"}
+            ec{"ホワイトホース"}
         }
         "America:Winnipeg"{
-            ec{"アメリカ/ウィニペグ"}
+            ec{"ウィニペグ"}
         }
         "America:Yakutat"{
-            ec{"アメリカ/ヤクタット"}
+            ec{"ヤクタット"}
         }
         "America:Yellowknife"{
-            ec{"アメリカ/イエローナイフ"}
+            ec{"イエローナイフ"}
         }
         "Antarctica:Casey"{
             ec{"ケーシー"}
@@ -2874,7 +3154,7 @@ ja{
             ec{"アルマトイ"}
         }
         "Asia:Anadyr"{
-            ec{"アジア/アナジル"}
+            ec{"アナジル"}
         }
         "Asia:Aqtau"{
             ec{"アクタウ"}
@@ -2886,16 +3166,16 @@ ja{
             ec{"チョイバルサン"}
         }
         "Asia:Chongqing"{
-            ec{"アジア/重慶"}
+            ec{"重慶"}
         }
         "Asia:Harbin"{
-            ec{"アジア/ハルビン"}
+            ec{"ハルビン"}
         }
         "Asia:Hovd"{
             ec{"ホブド"}
         }
         "Asia:Irkutsk"{
-            ec{"アジア/イルクーツク"}
+            ec{"イルクーツク"}
         }
         "Asia:Jakarta"{
             ec{"ジャカルタ"}
@@ -2907,43 +3187,43 @@ ja{
             ec{"エルサレム"}
         }
         "Asia:Kamchatka"{
-            ec{"アジア/カムチャッカ"}
+            ec{"カムチャッカ"}
         }
         "Asia:Kashgar"{
-            ec{"アジア/カシガル"}
+            ec{"カシガル"}
         }
         "Asia:Krasnoyarsk"{
-            ec{"アジア/クラスノヤルスク"}
+            ec{"クラスノヤルスク"}
         }
         "Asia:Kuala_Lumpur"{
             ec{"アジア/クアラルンプール"}
         }
         "Asia:Kuching"{
-            ec{"アジア/クチン"}
+            ec{"クチン"}
         }
         "Asia:Magadan"{
-            ec{"アジア/マガダン"}
+            ec{"マガダン"}
         }
         "Asia:Makassar"{
             ec{"マカッサル"}
         }
         "Asia:Novosibirsk"{
-            ec{"アジア/ノボシビルスク"}
+            ec{"ノボシビルスク"}
         }
         "Asia:Omsk"{
-            ec{"アジア/オムスク"}
+            ec{"オムスク"}
         }
         "Asia:Oral"{
-            ec{"アジア/オラル"}
+            ec{"オラル"}
         }
         "Asia:Pontianak"{
-            ec{"アジア/ポンティアナク"}
+            ec{"ポンティアナク"}
         }
         "Asia:Qyzylorda"{
-            ec{"アジア/キジルオルダ"}
+            ec{"キジルオルダ"}
         }
         "Asia:Sakhalin"{
-            ec{"アジア/サハリン"}
+            ec{"サハリン"}
         }
         "Asia:Samarkand"{
             ec{"サマルカンド"}
@@ -2961,16 +3241,16 @@ ja{
             ec{"ウランバートル"}
         }
         "Asia:Urumqi"{
-            ec{"アジア/ウルムチ"}
+            ec{"ウルムチ"}
         }
         "Asia:Vladivostok"{
-            ec{"アジア/ウラジオストク"}
+            ec{"ウラジオストク"}
         }
         "Asia:Yakutsk"{
-            ec{"アジア/ヤクーツク"}
+            ec{"ヤクーツク"}
         }
         "Asia:Yekaterinburg"{
-            ec{"アジア/エカテリンブルグ"}
+            ec{"エカテリンブルグ"}
         }
         "Atlantic:Azores"{
             ec{"アゾレス諸島"}
@@ -2978,56 +3258,53 @@ ja{
         "Atlantic:Canary"{
             ec{"カナリア諸島"}
         }
-        "Atlantic:Jan_Mayen"{
-            ec{"大西洋/ヤンマイエン"}
-        }
         "Atlantic:Madeira"{
-            ec{"大西洋/マデイラ"}
+            ec{"マデイラ"}
         }
         "Australia:Adelaide"{
-            ec{"オーストラリア/アデレード"}
+            ec{"アデレード"}
         }
         "Australia:Brisbane"{
-            ec{"オーストラリア/ブリスベン"}
+            ec{"ブリスベン"}
         }
         "Australia:Broken_Hill"{
-            ec{"オーストラリア/ブロークンヒル"}
+            ec{"ブロークンヒル"}
         }
         "Australia:Currie"{
             ec{"カリー"}
         }
         "Australia:Darwin"{
-            ec{"オーストラリア/ダーウィン"}
+            ec{"ダーウィン"}
         }
         "Australia:Eucla"{
             ec{"ユークラ"}
         }
         "Australia:Hobart"{
-            ec{"オーストラリア/ホバート"}
+            ec{"ホバート"}
         }
         "Australia:Lindeman"{
-            ec{"オーストラリア/リンデマン"}
+            ec{"リンデマン"}
         }
         "Australia:Lord_Howe"{
-            ec{"オーストラリア/ロードハウ"}
+            ec{"ロードハウ"}
         }
         "Australia:Melbourne"{
-            ec{"オーストラリア/メルボルン"}
+            ec{"メルボルン"}
         }
         "Australia:Perth"{
-            ec{"オーストラリア/パース"}
+            ec{"パース"}
         }
         "Australia:Sydney"{
-            ec{"オーストラリア/シドニー"}
+            ec{"シドニー"}
         }
-        "Europe:Belfast"{
-            ec{"ヨーロッパ/ベルファスト"}
+        "Etc:Unknown"{
+            ec{"不明"}
         }
         "Europe:Bucharest"{
             ec{"ブカレスト"}
         }
         "Europe:Kaliningrad"{
-            ec{"ヨーロッパ/カリーニングラード"}
+            ec{"カリーニングラード"}
         }
         "Europe:Kiev"{
             ec{"キエフ"}
@@ -3042,31 +3319,31 @@ ja{
             ec{"ヨーロッパ/マドリード"}
         }
         "Europe:Moscow"{
-            ec{"ヨーロッパ/モスクワ"}
+            ec{"モスクワ"}
         }
         "Europe:Paris"{
             ec{"パリ"}
         }
         "Europe:Samara"{
-            ec{"ヨーロッパ/サマラ"}
+            ec{"サマラ"}
         }
         "Europe:Simferopol"{
-            ec{"ヨーロッパ/シンフェローポリ"}
+            ec{"シンフェローポリ"}
         }
         "Europe:Uzhgorod"{
-            ec{"ヨーロッパ/ウジゴロド"}
+            ec{"ウジゴロド"}
         }
         "Europe:Volgograd"{
             ec{"ボルゴグラード"}
         }
         "Europe:Zaporozhye"{
-            ec{"ヨーロッパ/ザポロージェ"}
+            ec{"ザポロージェ"}
         }
         "Pacific:Auckland"{
             ec{"太平洋/オークランド"}
         }
         "Pacific:Chatham"{
-            ec{"太平洋/チャタム"}
+            ec{"チャタム"}
         }
         "Pacific:Easter"{
             ec{"イースター島"}
@@ -3118,9 +3395,6 @@ ja{
         }
         "Pacific:Wake"{
             ec{"ウェーク"}
-        }
-        "Pacific:Yap"{
-            ec{"太平洋/ヤップ"}
         }
         "meta:Africa_Central"{
             lg{"中央アフリカ時間"}

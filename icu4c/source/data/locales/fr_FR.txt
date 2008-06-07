@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 fr_FR{
-    Version{"1.128"}
+    Version{"1.43"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

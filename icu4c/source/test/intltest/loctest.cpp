@@ -62,15 +62,15 @@ static const char* const rawData[33][8] = {
 
 
         /* display language (Catalan) */
-        {   "angl\\u00E8s", "franc\\u00E8s", "catal\\u00E0", "grec",  "noruec", "itali\\u00E0", "", "xin\\u00E9s" },
+        {   "angl\\u00E8s", "franc\\u00E8s", "catal\\u00E0", "grec",  "noruec", "itali\\u00E0", "", "xin\\u00E8s" },
         /* display script (Catalan) */
-        {   "", "", "",                    "", "", "", "", "Hans" },
+        {   "", "", "",                    "", "", "", "", "Xin\\u00E8s Simplificat (Han)" },
         /* display country (Catalan) */
         {   "Estats Units", "Fran\\u00E7a", "Espanya",  "Gr\\u00E8cia", "Noruega", "", "", "Xina" },
         /* display variant (Catalan) */
         {   "", "", "",                    "", "NY", "", "" },
         /* display name (Catalan) */
-        {   "angl\\u00E8s (Estats Units)", "franc\\u00E8s (Fran\\u00E7a)", "catal\\u00E0 (Espanya)", "grec (Gr\\u00E8cia)", "noruec (Noruega, NY)", "itali\\u00E0", "", "xin\\u00E9s (Hans, Xina)" },
+        {   "angl\\u00E8s (Estats Units)", "franc\\u00E8s (Fran\\u00E7a)", "catal\\u00E0 (Espanya)", "grec (Gr\\u00E8cia)", "noruec (Noruega, NY)", "itali\\u00E0", "", "xin\\u00E8s (Xin\\u00E8s Simplificat (Han), Xina)" },
 
         // display langage (Greek)[actual values listed below]
         {   "\\u0391\\u03b3\\u03b3\\u03bb\\u03b9\\u03ba\\u03ac",

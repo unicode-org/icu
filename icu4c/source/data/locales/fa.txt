@@ -59,6 +59,7 @@ fa{
         AT{"اتریش"}
         AU{"استرالیا"}
         AW{"آروبا"}
+        AX{"جزایر آلاند"}
         AZ{"جمهوری آذربایجان"}
         BA{"بوسنی و هرزگوین"}
         BB{"باربادوس"}
@@ -69,6 +70,7 @@ fa{
         BH{"بحرین"}
         BI{"بوروندی"}
         BJ{"بنین"}
+        BL{"سنت بارتلیمی"}
         BM{"برمودا"}
         BN{"برونئی"}
         BO{"بولیوی"}
@@ -122,6 +124,7 @@ fa{
         GD{"گرانادا"}
         GE{"گرجستان"}
         GF{"گویان فرانسه"}
+        GG{"گورنسی"}
         GH{"غنا"}
         GI{"گیبرالتار"}
         GL{"گروئنلند"}
@@ -151,6 +154,7 @@ fa{
         IR{"ایران"}
         IS{"ایسلند"}
         IT{"ایتالیا"}
+        JE{"جرسی"}
         JM{"جامائیکا"}
         JO{"اردن"}
         JP{"ژاپن"}
@@ -785,6 +789,9 @@ fa{
         ae{"اوستایی"}
         af{"آفریکانس"}
         afa{"زبان افریقا و آسیایی"}
+        afh{"آفریهیلی"}
+        ain{"آینو"}
+        ak{"آکان"}
         akk{"آکدی"}
         ale{"آلئوتی"}
         alg{"زبان آلگونکینی"}
@@ -792,6 +799,7 @@ fa{
         am{"امهری"}
         an{"an"}
         ang{"انگلیسی باستان"}
+        anp{"آنگیکا"}
         apa{"زبان آپاچیایی"}
         ar{"عربی"}
         arc{"آرامی"}
@@ -823,16 +831,19 @@ fa{
         bho{"بوجپوری"}
         bi{"بیسلاما"}
         bik{"بیکولی"}
+        bin{"بینی"}
         bla{"bla"}
         bm{"بامبارایی"}
         bn{"بنگالی"}
         bnt{"بانتویی"}
         bo{"تبتی"}
         br{"برتانیایی"}
+        bra{"براج"}
         bs{"بوسنیایی"}
         btk{"باتاکی"}
         bua{"بوریاتی"}
         bug{"بوگیایی"}
+        byn{"بلین"}
         ca{"کاتالونیایی"}
         cad{"کادویی"}
         cai{"زبان سرخپوستی امریکای مرکزی"}
@@ -843,6 +854,9 @@ fa{
         ceb{"سبویی"}
         cel{"زبان سلتی"}
         ch{"چامورویی"}
+        chb{"چیبچا"}
+        chg{"چاگاتایی"}
+        chk{"چوکزی"}
         chm{"ماریایی"}
         chn{"chn"}
         cho{"چوکتویی"}
@@ -850,6 +864,7 @@ fa{
         chr{"چروکیایی"}
         chy{"شایانی"}
         cmc{"cmc"}
+        co{"کورسی"}
         cop{"قبطی"}
         cpe{"کریول یا پیجین مبتنی بر انگلیسی"}
         cpf{"کریول یا پیجین مبتنی بر فرانسوی"}
@@ -865,12 +880,16 @@ fa{
         cy{"ویلزی"}
         da{"دانمارکی"}
         dak{"داکوتایی"}
+        dar{"دارگوا"}
+        day{"دایاک"}
         de{"آلمانی"}
         de_AT{"آلمانی اتریش"}
         de_CH{"آلمانی علیای سوئیس"}
         del{"دلاواری"}
         den{"den"}
+        dgr{"دوگریب"}
         din{"دینکایی"}
+        doi{"دوگری"}
         dra{"زبان دراویدی"}
         dsb{"صُربی سفلی"}
         dua{"دوآلایی"}
@@ -881,6 +900,7 @@ fa{
         ee{"اوه‌ای"}
         efi{"افیکی"}
         egy{"مصری کهن"}
+        eka{"اکاجوک"}
         el{"یونانی"}
         elx{"عیلامی"}
         en{"انگلیسی"}
@@ -895,11 +915,13 @@ fa{
         es_ES{"اسپانیایی اسپانیا"}
         et{"استونیایی"}
         eu{"باسکی"}
+        ewo{"اواندو"}
         fa{"فارسی"}
         fan{"فانکی"}
         fat{"فانتیایی"}
         ff{"فولایی"}
         fi{"فنلاندی"}
+        fil{"فیلیپینی"}
         fiu{"زبان فین و اوگرایی"}
         fj{"فیجیایی"}
         fo{"فارویی"}
@@ -926,25 +948,33 @@ fa{
         gn{"گوارانی"}
         goh{"آلمانی علیای باستان"}
         gon{"گوندی"}
+        gor{"گورونتالو"}
         got{"گاتیک"}
         grb{"گریبویی"}
         grc{"یونانی کهن"}
+        gsw{"آلمانی سوئیسی"}
         gu{"گجراتی"}
         gv{"مانی"}
+        gwi{"گویچ این"}
         ha{"هوسیایی"}
         hai{"هایدایی"}
         haw{"هاوائیایی"}
         he{"عبری"}
         hi{"هندی"}
         hil{"هیلی‌گاینونی"}
+        him{"هیماچالی"}
         hit{"هیتی"}
+        hmn{"همونگ"}
+        ho{"هیری موتو"}
         hr{"کرواتی"}
         hsb{"صُربی علیا"}
         ht{"هائیتیایی"}
         hu{"مجاری"}
+        hup{"هوپا"}
         hy{"ارمنی"}
         hz{"هریرویی"}
         ia{"میان‌زبان"}
+        iba{"آیبن"}
         id{"اندونزیایی"}
         ie{"بین زبانی"}
         ig{"ایگبویی"}
@@ -955,12 +985,14 @@ fa{
         inc{"زبان هندیک"}
         ine{"زبان هند و اروپایی"}
         inh{"اینگوشی"}
+        io{"ایدو"}
         ira{"زبان ایرانی"}
         iro{"زبان ایروکوایی"}
         is{"ایسلندی"}
         it{"ایتالیایی"}
         iu{"اینوکتیتوت"}
         ja{"ژاپنی"}
+        jbo{"لوجبان"}
         jpr{"فارسی یهودی"}
         jrb{"عربی یهودی"}
         jv{"جاوه‌ای"}
@@ -968,15 +1000,19 @@ fa{
         kaa{"قره‌قالپاقی"}
         kab{"قبایلی"}
         kac{"کاچینی"}
+        kaj{"جو"}
         kam{"کامبایی"}
         kar{"کارنی"}
+        kaw{"کاوی"}
         kbd{"کاباردینی"}
         kcg{"kcg"}
+        kfo{"کورو"}
         kg{"کنگویی"}
         kha{"خازیایی"}
         khi{"زبان خواسی"}
         kho{"ختنی"}
         ki{"کیکویویی"}
+        kj{"کوانیاما"}
         kk{"قزاقی"}
         kl{"گرینلندی"}
         km{"خمری"}
@@ -994,12 +1030,14 @@ fa{
         ks{"کشمیری"}
         ku{"کردی"}
         kum{"کومیکی"}
+        kut{"کوتنی"}
         kv{"کومیایی"}
         kw{"کرنوالی"}
         ky{"قرقیزی"}
         la{"لاتینی"}
         lad{"لادینو"}
         lah{"لاهندا"}
+        lam{"لامبا"}
         lb{"لوگزامبورگی"}
         lez{"لزگی"}
         lg{"گاندایی"}
@@ -1011,6 +1049,7 @@ fa{
         lt{"لیتوانیایی"}
         lu{"لوبایی‐کاتانگا"}
         lua{"لوبایی‐لولوا"}
+        lui{"لویسنو"}
         lun{"لوندایی"}
         luo{"لوئویی"}
         lus{"لوشه‌ای"}
@@ -1018,10 +1057,12 @@ fa{
         mad{"مادورایی"}
         mag{"ماگاهیایی"}
         mai{"مایدیلی"}
+        mak{"ماکاسار"}
         man{"ماندینگویی"}
         map{"آسترونیزیایی"}
         mas{"ماسایی"}
         mdf{"مکشایی"}
+        mdr{"ماندار"}
         men{"منده‌ای"}
         mg{"مالاگاسیایی"}
         mga{"ایرلندی میانه"}
@@ -1035,6 +1076,8 @@ fa{
         ml{"مالایالامی"}
         mn{"مغولی"}
         mnc{"مانچویی"}
+        mni{"مانیپوری"}
+        mno{"زبان مانوبو"}
         mo{"مولداویایی"}
         moh{"موهاکی"}
         mos{"ماسیایی"}
@@ -1045,6 +1088,7 @@ fa{
         mun{"زبان موندایی"}
         mus{"کریکی"}
         mwl{"mwl"}
+        mwr{"مارواری"}
         my{"برمه‌ای"}
         myn{"زبان مایایی"}
         myv{"ارزیایی"}
@@ -1058,6 +1102,7 @@ fa{
         ne{"نپالی"}
         new{"نواریایی"}
         ng{"ندونگایی"}
+        nia{"نیاس"}
         nic{"nic"}
         niu{"نیویی"}
         nl{"هلندی"}
@@ -1076,7 +1121,10 @@ fa{
         nym{"nym"}
         nyn{"نیانکوله‌ای"}
         nyo{"نیورویی"}
+        nzi{"نزیمایی"}
+        oc{"اوکیتایی"}
         oj{"اوجیبوایی"}
+        om{"اورومویی"}
         or{"اوریه‌ای"}
         os{"آسی"}
         osa{"اوسیجی"}
@@ -1103,6 +1151,7 @@ fa{
         pt_PT{"پرتغالی پرتغال"}
         qu{"کچوایی"}
         raj{"راجستانی"}
+        rap{"راپانویی"}
         rar{"راروتونگایی"}
         rm{"رتو‐رومیایی"}
         rn{"روندیایی"}
@@ -1119,11 +1168,13 @@ fa{
         sai{"زبان سرخپوستی امریکای جنوبی"}
         sal{"زبان سالیشی"}
         sam{"sam"}
+        sas{"ساساک"}
         sat{"سانتالی"}
         sc{"ساردینیایی"}
         scn{"سیسیلی"}
         sco{"اسکاتلندی"}
         sd{"سندی"}
+        se{"سامی شمالی"}
         sel{"سلکوپی"}
         sem{"زبان سامی"}
         sg{"سانگویی"}
@@ -1139,7 +1190,11 @@ fa{
         sl{"اسلووینیایی"}
         sla{"زبان اسلاوی"}
         sm{"ساموآیی"}
+        sma{"سامی جنوبی"}
         smi{"smi"}
+        smj{"سامی لول"}
+        smn{"سامی ایناری"}
+        sms{"سامی اسکالت"}
         sn{"شونایی"}
         snk{"سونینکه‌ای"}
         so{"سومالیایی"}
@@ -1163,12 +1218,15 @@ fa{
         tai{"زبان تایی"}
         te{"تلوگویی"}
         tem{"تیمنه‌ای"}
+        ter{"ترنو"}
+        tet{"تتومی"}
         tg{"تاجیکی"}
         th{"تایلندی"}
         ti{"تیگرینیایی"}
         tig{"تیگره‌ای"}
         tiv{"تیوی"}
         tk{"ترکمنی"}
+        tkl{"توکلوی"}
         tl{"تاگالوگی"}
         tlh{"کلینگون"}
         tli{"تلین‌گیتی"}
@@ -1190,6 +1248,7 @@ fa{
         tyv{"تووایی"}
         udm{"اودمورتی"}
         ug{"اویغوری"}
+        uga{"اوگاریتی"}
         uk{"اوکراینی"}
         umb{"امبندویی"}
         und{"زبان نامشخص یا نامعتبر"}
@@ -1199,8 +1258,12 @@ fa{
         ve{"وندایی"}
         vi{"ویتنامی"}
         vo{"ولاپوک"}
+        vot{"وتیک"}
         wa{"والونی"}
         wak{"زبان واکاشی"}
+        wal{"والامو"}
+        war{"وارایی"}
+        was{"واشویی"}
         wen{"زبان صُربی"}
         wo{"ولوفی"}
         xal{"قلموقی"}
@@ -1213,6 +1276,7 @@ fa{
         za{"چوانگی"}
         zap{"زاپوتکی"}
         zbl{"zbl"}
+        zen{"زناگا"}
         zh{"چینی"}
         zh_Hans{"چینی ساده‌شده"}
         zh_Hant{"چینی سنتی"}
@@ -1220,6 +1284,7 @@ fa{
         zu{"زولویی"}
         zun{"زونیایی"}
         zxx{"zxx"}
+        zza{"زازایی"}
     }
     LocaleScript{
         "Arab",
@@ -1246,16 +1311,22 @@ fa{
     }
     Scripts{
         Arab{"عربی"}
+        Armi{"آرمی"}
         Armn{"ارمنی"}
         Avst{"اوستایی"}
         Bali{"بالیایی"}
         Batk{"باتاکی"}
         Beng{"بنگالی"}
+        Blis{"نمادهای بلیس"}
         Bopo{"بوپوموفو"}
         Brah{"براهمی"}
         Brai{"بریل"}
         Bugi{"بوگیایی"}
+        Buhd{"بوهید"}
+        Cakm{"کاکم"}
         Cans{"Cans"}
+        Cari{"کاری"}
+        Cham{"چمی"}
         Cher{"چروکیایی"}
         Cirt{"Cirt"}
         Copt{"قبطی"}
@@ -1263,15 +1334,21 @@ fa{
         Cyrl{"سیریلی"}
         Cyrs{"Cyrs"}
         Deva{"دوناگری"}
+        Dsrt{"دیسرتی"}
         Egyd{"Egyd"}
+        Egyh{"کاهنی مصری"}
         Egyp{"هیروگلیف مصری"}
         Ethi{"اتیوپیایی"}
+        Geok{"گرجی خوتسوری"}
         Geor{"گرجی"}
+        Glag{"گلاگولیتیک"}
         Goth{"گوتیک"}
         Grek{"یونانی"}
         Gujr{"گجراتی"}
+        Guru{"گورموخی"}
         Hang{"هانگول"}
         Hani{"هان"}
+        Hano{"هانونویی"}
         Hans{"هان ساده‌شده"}
         Hant{"هان سنتی"}
         Hebr{"عبری"}
@@ -1279,27 +1356,41 @@ fa{
         Hmng{"Hmng"}
         Hrkt{"کاتاکانا یا هیراگانا"}
         Hung{"مجاری باستان"}
+        Inds{"ایندوس"}
         Ital{"Ital"}
         Java{"جاوه‌ای"}
         Jpan{"ژاپنی"}
+        Kali{"کایالی"}
         Kana{"کاتاکانا"}
         Khar{"Khar"}
         Khmr{"خمری"}
         Knda{"کاناده‌ای"}
         Kore{"کره‌ای"}
+        Kthi{"کثی"}
+        Lana{"لانایی"}
         Laoo{"لائوسی"}
         Latf{"Latf"}
         Latg{"لاتینی گیلی"}
         Latn{"لاتینی"}
         Lepc{"Lepc"}
+        Limb{"لیمبایی"}
+        Lina{"خطی الف"}
+        Linb{"خطی ب"}
+        Lyci{"لسیایی"}
+        Lydi{"لدیایی"}
         Mand{"منده‌ای"}
         Mani{"مانوی"}
         Maya{"هیروگلیف مایایی"}
+        Mero{"مروییتی"}
         Mlym{"مالایالامی"}
         Mong{"مغولی"}
+        Moon{"مونی"}
+        Mtei{"مایک میتی"}
         Mymr{"میانمار"}
         Nkoo{"Nkoo"}
+        Ogam{"اوگامی"}
         Olck{"Olck"}
+        Orkh{"اورخونی"}
         Orya{"اوریه‌ای"}
         Osma{"Osma"}
         Perm{"Perm"}
@@ -1307,26 +1398,36 @@ fa{
         Phlv{"پهلوی کتابی"}
         Phnx{"فنیقی"}
         Plrd{"Plrd"}
+        Prti{"پرتی"}
         Qaai{"موروثی"}
+        Rjng{"رجنگی"}
         Roro{"Roro"}
         Runr{"رونی"}
+        Samr{"ساماراتی"}
+        Sara{"ساراتی"}
+        Saur{"سوراشترایی"}
         Sgnw{"Sgnw"}
         Shaw{"شاوی"}
         Sinh{"سینهالی"}
         Sund{"Sund"}
+        Sylo{"سیلوتی نگاری"}
         Syrc{"سریانی"}
         Syre{"Syre"}
         Syrj{"سریانی غربی"}
         Syrn{"سریانی شرقی"}
+        Tagb{"تگبنوایی"}
         Tale{"Tale"}
         Talu{"Talu"}
         Taml{"تامیلی"}
         Telu{"تلوگویی"}
+        Teng{"تنگوار"}
         Tfng{"Tfng"}
         Tglg{"تاگالوگی"}
+        Thaa{"ثانایی"}
         Thai{"تایلندی"}
         Tibt{"تبتی"}
         Vaii{"ویایی"}
+        Visp{"گفتار قابل مشاهده"}
         Xpeo{"فارسی باستان"}
         Xsux{"میخی سومری‐آکدی"}
         Yiii{"یی"}
@@ -1349,6 +1450,7 @@ fa{
         }
         collation{
             big5han{"ترتیب چینی سنتی  Big5"}
+            direct{"ترتیب مستقیم"}
             gb2312han{"ترتیب چینی ساده‌شده GB2312"}
             phonebook{"ترتیب دفتر تلفن"}
             pinyin{"pinyin"}
@@ -1364,7 +1466,7 @@ fa{
         REVISED{"رسم‌الخط تجدیدنظرشده"}
         SCOTLAND{"انگلیسی معیار اسکاتلند"}
     }
-    Version{"1.128"}
+    Version{"1.87"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1380,7 +1482,7 @@ fa{
                 "d MMMM yyyy",
                 "yyyy/M/d",
                 "yy/M/d",
-                "{1} {0}",
+                "{1}، ساعت {0}",
             }
             appendItems{
                 Day-Of-Week{"{1} {0}"}
@@ -1406,6 +1508,8 @@ fa{
                 yMMM{"MMM yyyy"}
                 yMMMEd{"E d MMM yyyy"}
                 yMMMM{"MMMM yyyy"}
+                yQ{"yyyy Q"}
+                yQQQ{"yyyy QQQ"}
                 yyyyM{"yyyy/M"}
                 yyyyMMMM{"MMMM yyyy"}
                 yyyyMMMMEEEEd{"EEEE d MMMM yyyy"}
@@ -1560,6 +1664,12 @@ fa{
             }
             quarters{
                 format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
                     wide{
                         "سه‌ماههٔ اول",
                         "سه‌ماههٔ دوم",
@@ -1580,6 +1690,36 @@ fa{
         hebrew{
             monthNames{
                 format{
+                    abbreviated{
+                        "تشری",
+                        "حشوان",
+                        "کسلو",
+                        "طوت",
+                        "شباط",
+                        "آذار",
+                        "واذار",
+                        "نیسان",
+                        "ایار",
+                        "سیوان",
+                        "تموز",
+                        "آب",
+                        "ایلول",
+                    }
+                    narrow{
+                        "ت",
+                        "ح",
+                        "ک",
+                        "ط",
+                        "ش",
+                        "آ",
+                        "و",
+                        "ن",
+                        "ا",
+                        "س",
+                        "ت",
+                        "آ",
+                        "ا",
+                    }
                     wide{
                         "تشری",
                         "حشوان",
@@ -1597,6 +1737,21 @@ fa{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "تشری",
+                        "حشوان",
+                        "کسلو",
+                        "طوت",
+                        "شباط",
+                        "آ",
+                        "واذار",
+                        "نیسان",
+                        "ایار",
+                        "سیوان",
+                        "تموز",
+                        "آب",
+                        "ایلول",
+                    }
                     narrow{
                         "ت",
                         "ح",
@@ -1611,6 +1766,21 @@ fa{
                         "ت",
                         "آ",
                         "ا",
+                    }
+                    wide{
+                        "تشری",
+                        "حشوان",
+                        "کسلو",
+                        "طوت",
+                        "شباط",
+                        "آذار",
+                        "واذار",
+                        "نیسان",
+                        "ایار",
+                        "سیوان",
+                        "تموز",
+                        "آب",
+                        "ایلول",
                     }
                 }
             }
@@ -1629,7 +1799,7 @@ fa{
                 "d MMMM yyyy",
                 "yyyy/M/d G",
                 "yy/M/d G",
-                "{1} {0}",
+                "{1}، ساعت {0}",
             }
             eras{
                 abbreviated{
@@ -1709,7 +1879,7 @@ fa{
                 "d MMMM yyyy",
                 "yyyy/M/d",
                 "yy/M/d",
-                "{0}، ساعت {1}",
+                "{1}، ساعت {0}",
             }
             eras{
                 abbreviated{
@@ -1802,6 +1972,33 @@ fa{
         "America:Araguaina"{
             ec{"آراگواینا"}
         }
+        "America:Argentina:La_Rioja"{
+            ec{"لاریوجا"}
+        }
+        "America:Argentina:Rio_Gallegos"{
+            ec{"ریو گالگوس"}
+        }
+        "America:Argentina:San_Juan"{
+            ec{"سن خوان"}
+        }
+        "America:Argentina:San_Luis"{
+            ec{"سن لوئیس"}
+        }
+        "America:Argentina:Tucuman"{
+            ec{"توکومن"}
+        }
+        "America:Argentina:Ushuaia"{
+            ec{"اوشوایا"}
+        }
+        "America:Bahia"{
+            ec{"باهیا"}
+        }
+        "America:Belem"{
+            ec{"بلم"}
+        }
+        "America:Blanc-Sablon"{
+            ec{"بلنک-سابلن"}
+        }
         "America:Boa_Vista"{
             ec{"بوئاویشتا"}
         }
@@ -1838,6 +2035,9 @@ fa{
         "America:Cuiaba"{
             ec{"کویاوا"}
         }
+        "America:Danmarkshavn"{
+            ec{"دانمارک شاون"}
+        }
         "America:Dawson"{
             ec{"داوسن"}
         }
@@ -1852,6 +2052,9 @@ fa{
         }
         "America:Edmonton"{
             ec{"ادمونتون"}
+        }
+        "America:Eirunepe"{
+            ec{"ایرونپه"}
         }
         "America:Fortaleza"{
             ec{"فورتالزا"}
@@ -1888,6 +2091,12 @@ fa{
         }
         "America:Indiana:Vevay"{
             ec{"ویوی"}
+        }
+        "America:Indiana:Vincennes"{
+            ec{"وینسنس ایندیانا"}
+        }
+        "America:Indiana:Winamac"{
+            ec{"ویناماک ایندیانا"}
         }
         "America:Indianapolis"{
             ec{"ایندیاناپولیس"}
@@ -1958,6 +2167,9 @@ fa{
         "America:North_Dakota:Center"{
             ec{"سنتر، داکوتای شمالی"}
         }
+        "America:North_Dakota:New_Salem"{
+            ec{"سالم جدید، داکوتای شمالی"}
+        }
         "America:Pangnirtung"{
             ec{"پانگنیرتونگ"}
         }
@@ -1973,8 +2185,14 @@ fa{
         "America:Rankin_Inlet"{
             ec{"خلیجک رنکین"}
         }
+        "America:Recife"{
+            ec{"ریسایف"}
+        }
         "America:Regina"{
             ec{"رجاینا"}
+        }
+        "America:Resolute"{
+            ec{"رسولوت"}
         }
         "America:Rio_Branco"{
             ec{"ریو برانکو"}
@@ -1984,6 +2202,27 @@ fa{
         }
         "America:Sao_Paulo"{
             ec{"سائوپائولو"}
+        }
+        "America:Scoresbysund"{
+            ec{"اسکورسبیساند"}
+        }
+        "America:Shiprock"{
+            ec{"شیپراک"}
+        }
+        "America:St_Johns"{
+            ec{"سنت جان"}
+        }
+        "America:Swift_Current"{
+            ec{"سوئیفت کورنت"}
+        }
+        "America:Thule"{
+            ec{"تول"}
+        }
+        "America:Thunder_Bay"{
+            ec{"ثاندر بی"}
+        }
+        "America:Tijuana"{
+            ec{"تی جوانا"}
         }
         "America:Toronto"{
             ec{"تورنتو"}
@@ -1997,6 +2236,9 @@ fa{
         "America:Winnipeg"{
             ec{"وینیپگ"}
         }
+        "America:Yakutat"{
+            ec{"یاکوتات"}
+        }
         "America:Yellowknife"{
             ec{"یلونایف"}
         }
@@ -2006,20 +2248,62 @@ fa{
         "Antarctica:Davis"{
             ec{"دیویس"}
         }
+        "Antarctica:DumontDUrville"{
+            ec{"دومونت د اورویل"}
+        }
+        "Antarctica:Mawson"{
+            ec{"ماوسون"}
+        }
+        "Antarctica:McMurdo"{
+            ec{"مک موردو"}
+        }
         "Antarctica:Palmer"{
             ec{"پالمر"}
+        }
+        "Antarctica:Rothera"{
+            ec{"روترا"}
         }
         "Antarctica:South_Pole"{
             ec{"قطب جنوب"}
         }
+        "Antarctica:Syowa"{
+            ec{"سی ووا"}
+        }
+        "Antarctica:Vostok"{
+            ec{"ووستوک"}
+        }
         "Asia:Almaty"{
             ec{"آلماتی"}
+        }
+        "Asia:Anadyr"{
+            ec{"آنادیر"}
+        }
+        "Asia:Aqtau"{
+            ec{"آکتا"}
+        }
+        "Asia:Aqtobe"{
+            ec{"آکتوبه"}
+        }
+        "Asia:Choibalsan"{
+            ec{"چیو بال سان"}
+        }
+        "Asia:Chongqing"{
+            ec{"چونگ کینگ"}
+        }
+        "Asia:Harbin"{
+            ec{"هاربین"}
+        }
+        "Asia:Hovd"{
+            ec{"هود"}
         }
         "Asia:Irkutsk"{
             ec{"ایرکوتسک"}
         }
         "Asia:Jakarta"{
             ec{"جاکارتا"}
+        }
+        "Asia:Jayapura"{
+            ec{"جیاپورا"}
         }
         "Asia:Kabul"{
             ec{"کابل"}
@@ -2029,6 +2313,36 @@ fa{
         }
         "Asia:Kashgar"{
             ec{"کاشغر"}
+        }
+        "Asia:Krasnoyarsk"{
+            ec{"کراسنویارسک"}
+        }
+        "Asia:Kuching"{
+            ec{"کوچینگ"}
+        }
+        "Asia:Magadan"{
+            ec{"مگادن"}
+        }
+        "Asia:Makassar"{
+            ec{"ماکاسار"}
+        }
+        "Asia:Novosibirsk"{
+            ec{"نووسیبیریسک"}
+        }
+        "Asia:Omsk"{
+            ec{"اومسک"}
+        }
+        "Asia:Oral"{
+            ec{"اورال"}
+        }
+        "Asia:Pontianak"{
+            ec{"پونتیاناک"}
+        }
+        "Asia:Qyzylorda"{
+            ec{"کویزیلوردا"}
+        }
+        "Asia:Sakhalin"{
+            ec{"ساخالین"}
         }
         "Asia:Samarkand"{
             ec{"سمرقند"}
@@ -2042,6 +2356,9 @@ fa{
         "Asia:Tehran"{
             ec{"تهران"}
         }
+        "Asia:Ulaanbaatar"{
+            ec{"اولان باتار"}
+        }
         "Asia:Urumqi"{
             ec{"ارومچی"}
         }
@@ -2051,11 +2368,17 @@ fa{
         "Asia:Yakutsk"{
             ec{"یاکوتسک"}
         }
+        "Asia:Yekaterinburg"{
+            ec{"یکاترینبرگ"}
+        }
+        "Atlantic:Azores"{
+            ec{"آزورس"}
+        }
         "Atlantic:Canary"{
             ec{"قناری"}
         }
-        "Atlantic:Jan_Mayen"{
-            ec{"جان ماین"}
+        "Atlantic:Madeira"{
+            ec{"مادریا"}
         }
         "Australia:Adelaide"{
             ec{"آدلاید"}
@@ -2066,11 +2389,29 @@ fa{
         "Australia:Broken_Hill"{
             ec{"بروکن هیل"}
         }
+        "Australia:Currie"{
+            ec{"کوری"}
+        }
         "Australia:Darwin"{
             ec{"داروین"}
         }
+        "Australia:Eucla"{
+            ec{"اوکلا"}
+        }
+        "Australia:Hobart"{
+            ec{"هوبارت"}
+        }
+        "Australia:Lindeman"{
+            ec{"لیندمن"}
+        }
+        "Australia:Lord_Howe"{
+            ec{"لردهاو"}
+        }
         "Australia:Melbourne"{
             ec{"ملبورن"}
+        }
+        "Australia:Perth"{
+            ec{"پرت"}
         }
         "Australia:Sydney"{
             ec{"سیدنی"}
@@ -2093,14 +2434,35 @@ fa{
         "Europe:Moscow"{
             ec{"مسکو"}
         }
+        "Europe:Samara"{
+            ec{"سامارا"}
+        }
+        "Europe:Simferopol"{
+            ec{"سیمفروپل"}
+        }
+        "Europe:Uzhgorod"{
+            ec{"اوژگورود"}
+        }
         "Europe:Volgograd"{
             ec{"ولگاگراد"}
+        }
+        "Europe:Zaporozhye"{
+            ec{"زاپوروژی"}
+        }
+        "Pacific:Chatham"{
+            ec{"چاتام"}
         }
         "Pacific:Easter"{
             ec{"ایستر"}
         }
+        "Pacific:Enderbury"{
+            ec{"اندربری"}
+        }
         "Pacific:Galapagos"{
             ec{"گالاپاگوس"}
+        }
+        "Pacific:Gambier"{
+            ec{"گامبیر"}
         }
         "Pacific:Honolulu"{
             ec{"هونولولو"}
@@ -2108,11 +2470,35 @@ fa{
         "Pacific:Johnston"{
             ec{"جانستون"}
         }
+        "Pacific:Kiritimati"{
+            ec{"کریتیماتی"}
+        }
+        "Pacific:Kosrae"{
+            ec{"کوساره"}
+        }
+        "Pacific:Kwajalein"{
+            ec{"کواجالین"}
+        }
+        "Pacific:Majuro"{
+            ec{"ماجورو"}
+        }
+        "Pacific:Marquesas"{
+            ec{"مارکوس"}
+        }
         "Pacific:Midway"{
             ec{"میدوی"}
         }
+        "Pacific:Ponape"{
+            ec{"پناپه"}
+        }
         "Pacific:Tahiti"{
             ec{"تاهیتی"}
+        }
+        "Pacific:Tarawa"{
+            ec{"تاراوا"}
+        }
+        "Pacific:Truk"{
+            ec{"تراک"}
         }
         "Pacific:Wake"{
             ec{"ویک"}
@@ -2121,7 +2507,6 @@ fa{
             cu:int{0}
             ld{"وقت تابستانی افغانستان"}
             lg{"وقت افغانستان"}
-            ls{"وقت افغانستان"}
             ss{"AFT"}
         }
         "meta:Africa_Central"{

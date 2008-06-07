@@ -59,6 +59,7 @@ ms{
         CN{"Cina"}
         CO{"Colombia"}
         CR{"Kosta Rika"}
+        CS{"Serbia dan Montenegro"}
         CU{"Cuba"}
         CV{"Cape Verde"}
         CX{"Christmas Island"}
@@ -261,7 +262,58 @@ ms{
         "z]"
     }
     Languages{
+        af{"Afrikaans"}
+        am{"Amharic"}
+        ar{"Arab"}
+        as{"Assam"}
+        be{"Belarus"}
+        bn{"Benggala"}
+        bs{"Bosnia"}
+        ca{"Catalonia"}
+        cy{"Wales"}
+        eo{"Esperanto"}
+        eu{"Basque"}
+        fa{"Parsi"}
+        fy{"Frisian"}
+        gd{"Scots Gaelic"}
+        gl{"Galicia"}
+        gu{"Gujerat"}
+        hr{"Croat"}
+        hu{"Hungary"}
+        hy{"Armenia"}
+        id{"Indonesia"}
+        ka{"Georgia"}
+        km{"Khmer"}
+        kn{"Kannada"}
+        la{"Latin"}
+        ln{"Lingala"}
+        lo{"Laos"}
+        ml{"Malayalam"}
+        mn{"Mongolia"}
+        mr{"Marathi"}
         ms{"Bahasa Melayu"}
+        mt{"Malta"}
+        ne{"Nepal"}
+        nn{"Nynorsk Norway"}
+        pa{"Punjabi"}
+        pt_PT{"Portugis Iberia"}
+        sa{"Sanskrit"}
+        sd{"Sindhi"}
+        sh{"SerboCroatia"}
+        si{"Sinhala"}
+        sk{"Slovak"}
+        sl{"Slovenia"}
+        so{"Somali"}
+        sq{"Albania"}
+        sr{"Serbia"}
+        su{"Sunda"}
+        sw{"Swahili"}
+        ta{"Tamil"}
+        te{"Telugu"}
+        th{"Thai"}
+        ti{"Tigrinya"}
+        ug{"Uighur"}
+        vi{"Vietnam"}
     }
     LocaleScript{
         "Latn",
@@ -272,7 +324,7 @@ ms{
         "#,##0%",
         "#E0",
     }
-    Version{"1.128"}
+    Version{"1.59"}
     calendar{
         gregorian{
             dayNames{

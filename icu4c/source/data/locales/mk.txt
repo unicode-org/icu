@@ -821,7 +821,7 @@ mk{
             "Сиералеонско леоне",
         }
         SOS{
-            "So. Sh.",
+            "Sh.",
             "Сомалијски шилинг",
         }
         SRG{
@@ -1032,7 +1032,7 @@ mk{
             traditional{"Традиционално"}
         }
     }
-    Version{"1.128"}
+    Version{"1.74"}
     calendar{
         gregorian{
             DateTimePatterns{

@@ -70,7 +70,7 @@ root{
         297,
         210,
     }
-    Version{"1.128"}
+    Version{"1.157"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -1328,6 +1328,8 @@ root{
         }
         regionFormat{"{0}"}
         singleCountries{
+            "Europe/Kiev",
+            "Pacific/Majuro",
             "Africa/Bamako",
             "America/Godthab",
             "America/Santiago",

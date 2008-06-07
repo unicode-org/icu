@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 zh_Hans_SG{
-    Version{"1.128"}
+    Version{"1.57"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -23,7 +23,7 @@ zh_Hans_SG{
                 "yyyy年M月d日",
                 "yyyy-M-d",
                 "dd/MM/yy",
-                "{1} {0}",
+                "{1}{0}",
             }
         }
     }

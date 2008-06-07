@@ -10,13 +10,413 @@
  *  ICU <specials> source: <path>/xml/main/gl.xml
  */
 gl{
+    AuxExemplarCharacters{"[ª à â ä ã ç è ê-ì î ï º ò ô ö õ ù û]"}
     Countries{
+        001{"Mundo"}
+        002{"África"}
+        003{"Norteamérica"}
+        005{"Sudamérica"}
+        009{"Oceanía"}
+        011{"África Occidental"}
+        013{"América Central"}
+        014{"África Oriental"}
+        015{"África Septentrional"}
+        017{"África Central"}
+        018{"África Meridional"}
+        019{"América"}
+        021{"América do Norte"}
+        029{"Caribe"}
+        030{"Asia Oriental"}
+        034{"Sul de Asia"}
+        035{"Sureste Asiático"}
+        039{"Europa Meridional"}
+        053{"Australia e Nova Celandia"}
+        054{"Melanesia"}
+        057{"Rexión da Micronesia"}
+        061{"Polinesia"}
+        062{"Asia do Sul-Centro"}
+        142{"Asia"}
+        143{"Asia Central"}
+        145{"Asia Occidental"}
+        150{"Europa"}
+        151{"Europa do Leste"}
+        154{"Europa Septentrional"}
+        155{"Europa Occidental"}
+        172{"Comunidade de Estados Independentes"}
+        419{"América Latina e o Caribe"}
+        AD{"Andorra"}
+        AE{"Emiratos Árabes Unidos"}
+        AF{"Afganistán"}
+        AG{"Antiga e Barbuda"}
+        AI{"Anguila"}
+        AL{"Albania"}
+        AM{"Armenia"}
+        AN{"Antillas Holandesas"}
+        AO{"Angola"}
+        AQ{"Antártida"}
+        AR{"Arxentina"}
+        AS{"Samoa Americana"}
+        AT{"Austria"}
+        AU{"Australia"}
+        AW{"Aruba"}
+        AX{"Illas Aland"}
+        AZ{"Acerbaixán"}
+        BA{"Bosnia e Hercegovina"}
+        BB{"Barbados"}
+        BD{"Bangladesh"}
+        BE{"Bélxica"}
+        BF{"Burkina Faso"}
+        BG{"Bulgaria"}
+        BH{"Bahrein"}
+        BI{"Burundi"}
+        BJ{"Benin"}
+        BL{"San Bartolomé"}
+        BM{"Bermudas"}
+        BN{"Brunei"}
+        BO{"Bolivia"}
+        BR{"Brasil"}
+        BS{"Bahamas"}
+        BT{"Bután"}
+        BV{"Illa Bouvet"}
+        BW{"Botsuana"}
+        BY{"Bielorrusia"}
+        BZ{"Belice"}
+        CA{"Canadá"}
+        CC{"Illas Cocos"}
+        CD{"República Democrática do Congo"}
+        CF{"República Africana Central"}
+        CG{"Congo"}
+        CH{"Suíza"}
+        CI{"Costa de Marfil"}
+        CK{"Illas Cook"}
+        CL{"Chile"}
+        CM{"Camerún"}
+        CN{"China"}
+        CO{"Colombia"}
+        CR{"Costa Rica"}
+        CS{"Serbia e Montenegro"}
+        CU{"Cuba"}
+        CV{"Cabo Verde"}
+        CX{"Illa Christmas"}
+        CY{"Chipre"}
+        CZ{"República Checa"}
+        DE{"Alemaña"}
+        DJ{"Xibuti"}
+        DK{"Dinamarca"}
+        DM{"Dominica"}
+        DO{"República Dominicana"}
+        DZ{"Arxelia"}
+        EC{"Ecuador"}
+        EE{"Estonia"}
+        EG{"Exipto"}
+        EH{"Sahara Occidental"}
+        ER{"Eritrea"}
         ES{"España"}
+        ET{"Etiopía"}
+        FI{"Finlandia"}
+        FJ{"Fixi"}
+        FK{"Illas Malvinas"}
+        FM{"Micronesia"}
+        FO{"Illas Feroe"}
+        FR{"Francia"}
+        GA{"Gabón"}
+        GB{"Reino Unido"}
+        GD{"Granada"}
+        GE{"Xeorxia"}
+        GF{"Güiana Francesa"}
+        GG{"Guernsey"}
+        GH{"Gana"}
+        GI{"Xibraltar"}
+        GL{"Grenlandia"}
+        GM{"Gambia"}
+        GN{"Guinea"}
+        GP{"Guadalupe"}
+        GQ{"Guinea Ecuatorial"}
+        GR{"Grecia"}
+        GS{"Xeorxia do Sur e Illas Sandwich"}
+        GT{"Guatemala"}
+        GU{"Guam"}
+        GW{"Guinea-Bissau"}
+        GY{"Güiana"}
+        HK{"Hong Kong RAE de China"}
+        HM{"Illa Heard e Illas McDonald"}
+        HN{"Honduras"}
+        HR{"Croacia"}
+        HT{"Haití"}
+        HU{"Hungría"}
+        ID{"Indonesia"}
+        IE{"Irlanda"}
+        IL{"Israel"}
+        IM{"Illa de Man"}
+        IN{"India"}
+        IO{"Territorio Británico do Océano Índico"}
+        IQ{"Iraq"}
+        IR{"Irán"}
+        IS{"Islandia"}
+        IT{"Italia"}
+        JE{"Jersey"}
+        JM{"Xamaica"}
+        JO{"Xordania"}
+        JP{"Xapón"}
+        KE{"Quenia"}
+        KG{"Quirguicistán"}
+        KH{"Cambodia"}
+        KI{"Kiribati"}
+        KM{"Comores"}
+        KN{"San Cristovo e Nevis"}
+        KP{"Corea do Norte"}
+        KR{"Corea do Sur"}
+        KW{"Kuwait"}
+        KY{"Illas Caimán"}
+        KZ{"Kazakhstan"}
+        LA{"Laos"}
+        LB{"Líbano"}
+        LC{"Santa Lucía"}
+        LI{"Liechtenstein"}
+        LK{"Sri Lanka"}
+        LR{"Liberia"}
+        LS{"Lesotho"}
+        LT{"Lituania"}
+        LU{"Luxemburgo"}
+        LV{"Letonia"}
+        LY{"Libia"}
+        MA{"Marrocos"}
+        MC{"Mónaco"}
+        MD{"Moldova"}
+        ME{"Montenegro"}
+        MF{"San Martiño"}
+        MG{"Madagascar"}
+        MH{"Illas Marshall"}
+        MK{"Macedonia"}
+        ML{"Mali"}
+        MM{"Myanmar"}
+        MN{"Mongolia"}
+        MO{"Macau RAE de China"}
+        MP{"Illas Marianas do norte"}
+        MQ{"Martinica"}
+        MR{"Mauritania"}
+        MS{"Montserrat"}
+        MT{"Malta"}
+        MU{"Mauricio"}
+        MV{"Maldivas"}
+        MW{"Malaui"}
+        MX{"México"}
+        MY{"Malaisia"}
+        MZ{"Mozambique"}
+        NA{"Namibia"}
+        NC{"Nova Caledonia"}
+        NE{"Níxer"}
+        NF{"Illa Norfolk"}
+        NG{"Nixeria"}
+        NI{"Nicaragua"}
+        NL{"Países Baixos"}
+        NO{"Noruega"}
+        NP{"Nepal"}
+        NR{"Nauru"}
+        NU{"Niue"}
+        NZ{"Nova Celandia"}
+        OM{"Omán"}
+        PA{"Panamá"}
+        PE{"Perú"}
+        PF{"Polinesia Francesa"}
+        PG{"Papúa Nova Guinea"}
+        PH{"Filipinas"}
+        PK{"Paquistán"}
+        PL{"Polonia"}
+        PM{"San Pedro e Miguelón"}
+        PN{"Pitcairn"}
+        PR{"Porto Rico"}
+        PS{"Palestina"}
+        PT{"Portugal"}
+        PW{"Palau"}
+        PY{"Paraguai"}
+        QA{"Qatar"}
+        QO{"Oceanía Distante"}
+        QU{"Unión Europea"}
+        RE{"Reunión"}
+        RO{"Romanía"}
+        RS{"Serbia"}
+        RU{"Rusia"}
+        RW{"Ruanda"}
+        SA{"Arabia Saudita"}
+        SB{"Illas Salomón"}
+        SD{"Sudán"}
+        SE{"Suecia"}
+        SG{"Singapur"}
+        SH{"Santa Helena"}
+        SI{"Eslovenia"}
+        SJ{"Svalbard e Jan Mayen"}
+        SK{"Eslovaquia"}
+        SL{"Serra Leoa"}
+        SM{"San Marino"}
+        SN{"Senegal"}
+        SO{"Somalia"}
+        SR{"Surinam"}
+        ST{"Santo Tomé e Príncipe"}
+        SV{"El Salvador"}
+        SY{"Siria"}
+        SZ{"Suacilandia"}
+        TC{"Illas Turks e Caicos"}
+        TF{"Territorios Franceses do Sul"}
+        TG{"Togo"}
+        TH{"Tailandia"}
+        TJ{"Taxiquistán"}
+        TK{"Tokelau"}
+        TL{"Timor Leste"}
+        TM{"Turkmenistán"}
+        TN{"Tunisia"}
+        TO{"Tonga"}
+        TR{"Turquía"}
+        TT{"Trindade e Tobago"}
+        TV{"Tuvalu"}
+        TW{"Taiwán"}
+        TZ{"Tanzania"}
+        UA{"Ucraína"}
+        UG{"Uganda"}
+        UM{"Illas Menores Distantes dos EUA."}
+        US{"Estados Unidos de América"}
+        UY{"Uruguai"}
+        UZ{"Uzbekistán"}
+        VA{"Cidade do Vaticano"}
+        VC{"San Vicente e Granadinas"}
+        VE{"Venezuela"}
+        VG{"Illas Virxes Británicas"}
+        VI{"Illas Virxes Estadounidenses"}
+        VN{"Vietnam"}
+        VU{"Vanuatu"}
+        WF{"Wallis e Futuna"}
+        WS{"Samoa"}
+        YE{"Iemen"}
+        YT{"Mayotte"}
+        ZA{"Sudáfrica"}
+        ZM{"Zambia"}
+        ZW{"Cimbabue"}
+        ZZ{"rexión descoñecida ou non válida"}
     }
     Currencies{
+        ADP{
+            "ADP",
+            "peseta andorrana",
+        }
+        ARP{
+            "ARP",
+            "Peso arxentino (1983-1985)",
+        }
+        ARS{
+            "ARS",
+            "Peso arxentino",
+        }
+        BEC{
+            "BEC",
+            "Franco belga (convertible)",
+        }
+        BEF{
+            "BEF",
+            "Franco belga",
+        }
+        BEL{
+            "BEL",
+            "Franco belga (financeiro)",
+        }
+        BOB{
+            "BOB",
+            "Boliviano",
+        }
+        BOP{
+            "BOP",
+            "Peso boliviano",
+        }
+        BOV{
+            "BOV",
+            "MVDOL boliviano",
+        }
+        BRB{
+            "BRB",
+            "Cruzeiro novo brasileiro (1967-1986)",
+        }
+        BRC{
+            "BRC",
+            "Cruzado brasileiro",
+        }
+        BRE{
+            "BRE",
+            "Cruzeiro brasileiro (1990-1993)",
+        }
+        BRL{
+            "R$",
+            "Real brasileiro",
+        }
+        BRN{
+            "BRN",
+            "Cruzado novo brasileiro",
+        }
+        BRR{
+            "BRR",
+            "Cruzeiro brasileiro",
+        }
+        CAD{
+            "CAD",
+            "Dólar canadiano",
+        }
+        CHF{
+            "CHF",
+            "Franco suizo",
+        }
+        CLF{
+            "CLF",
+            "Unidades de fomento chilenas",
+        }
+        CLP{
+            "CLP",
+            "Peso chileno",
+        }
+        CNY{
+            "CNY",
+            "Iuan renminbi chinés",
+        }
+        COP{
+            "COP",
+            "Peso colombiano",
+        }
+        CRC{
+            "CRC",
+            "Colón costarricense",
+        }
+        CUP{
+            "CUP",
+            "Peso cubano",
+        }
+        DEM{
+            "DEM",
+            "Marco alemán",
+        }
+        DKK{
+            "DKK",
+            "Coroa dinamarquesa",
+        }
+        DOP{
+            "DOP",
+            "Peso dominicano",
+        }
+        ECS{
+            "ECS",
+            "Sucre ecuatoriano",
+        }
+        ECV{
+            "ECV",
+            "Unidade de valor constante ecuatoriana",
+        }
+        ESA{
+            "ESA",
+            "Peseta española (conta A)",
+        }
+        ESB{
+            "ESB",
+            "Peseta española (conta convertible)",
+        }
         ESP{
             "₧",
-            "ESP",
+            "Peseta española",
             {
                 /**
                  * Duplicated from NumberPatterns resource
@@ -26,10 +426,362 @@ gl{
                 ".",
             }
         }
+        EUR{
+            "€",
+            "Euro",
+        }
+        FRF{
+            "FRF",
+            "Franco francés",
+        }
+        GBP{
+            "UK£",
+            "Libra esterlina",
+        }
+        GIP{
+            "GIP",
+            "Libra de Xibraltar",
+        }
+        GNF{
+            "GNF",
+            "Franco guineano",
+        }
+        GNS{
+            "GNS",
+            "Syli guineano",
+        }
+        GQE{
+            "GQE",
+            "Ekwele guineana",
+        }
+        GRD{
+            "GRD",
+            "Dracma grego",
+        }
+        GTQ{
+            "GTQ",
+            "Quetzal guatemalteco",
+        }
+        HNL{
+            "HNL",
+            "Lempira hondureño",
+        }
+        HUF{
+            "HUF",
+            "Florín húngaro",
+        }
+        IEP{
+            "IEP",
+            "Libra irlandesa",
+        }
+        INR{
+            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
+            "Rupia india",
+        }
+        ISK{
+            "ISK",
+            "Coroa islandesa",
+        }
+        ITL{
+            "IT₤",
+            "Lira italiana",
+        }
+        JPY{
+            "JP¥",
+            "Ien xaponés",
+        }
+        LUC{
+            "LUC",
+            "Franco convertible luxemburgués",
+        }
+        LUF{
+            "LUF",
+            "Franco luxemburgués",
+        }
+        LUL{
+            "LUL",
+            "Franco financeiro luxemburgués",
+        }
+        MAD{
+            "MAD",
+            "Dirham marroquí",
+        }
+        MAF{
+            "MAF",
+            "Franco marroquí",
+        }
+        MXN{
+            "MXN",
+            "Peso mexicano",
+        }
+        MXP{
+            "MXP",
+            "Peso de prata mexicano (1861-1992)",
+        }
+        MXV{
+            "MXV",
+            "Unidade de inversión mexicana",
+        }
+        NIC{
+            "NIC",
+            "Córdoba nicaragüense",
+        }
+        NIO{
+            "NIO",
+            "Córdoba de ouro nicaragüense",
+        }
+        NLG{
+            "NLG",
+            "Florín holandés",
+        }
+        NOK{
+            "NOK",
+            "Coroa norueguesa",
+        }
+        PAB{
+            "PAB",
+            "Balboa panameño",
+        }
+        PEI{
+            "PEI",
+            "Inti peruano",
+        }
+        PEN{
+            "PEN",
+            "Sol novo peruano",
+        }
+        PES{
+            "PES",
+            "Sol peruano",
+        }
+        PHP{
+            "PHP",
+            "Peso filipino",
+        }
+        PTE{
+            "PTE",
+            "Escudo portugués",
+        }
+        PYG{
+            "PYG",
+            "Guaraní paraguaio",
+        }
+        RUB{
+            "RUB",
+            "Rublo ruso",
+        }
+        RUR{
+            "RUR",
+            "Rublo ruso (1991-1998)",
+        }
+        SEK{
+            "SEK",
+            "Coroa sueca",
+        }
+        SUR{
+            "SUR",
+            "Rublo soviético",
+        }
+        SVC{
+            "SVC",
+            "Colón salvadoreño",
+        }
+        USD{
+            "US$",
+            "Dólar estadounidense",
+        }
+        UYI{
+            "UYI",
+            "Peso en unidades indexadas uruguaio",
+        }
+        UYP{
+            "UYP",
+            "Peso uruguaio (1975-1993)",
+        }
+        UYU{
+            "UYU",
+            "Peso uruguaio",
+        }
+        VEB{
+            "VEB",
+            "Bolívar venezolano",
+        }
+        VEF{
+            "VEF",
+            "Bolívar forte venezolano",
+        }
+        XAG{
+            "XAG",
+            "Prata",
+        }
+        XAU{
+            "XAU",
+            "Ouro",
+        }
+        XPD{
+            "XPD",
+            "Paladio",
+        }
+        XPT{
+            "XPT",
+            "Platino",
+        }
+        XXX{
+            "XXX",
+            "Unidade monetaria descoñecida ou non válida",
+        }
+        ZAR{
+            "ZAR",
+            "Rand sudafricano",
+        }
     }
     ExemplarCharacters{"[a á b-e é f-i í j-n ñ o ó p-u ú ü v-z]"}
+    Keys{
+        calendar{"calendario"}
+        collation{"orde alfabética"}
+        currency{"moeda"}
+    }
     Languages{
+        af{"Afrikaans"}
+        afa{"Lingua afro-asiática"}
+        alg{"Lingua algonquina"}
+        am{"Amárico"}
+        an{"Aragonés"}
+        apa{"Lingua apache"}
+        ar{"Árabe"}
+        arc{"Arameo"}
+        art{"Lingua artificial"}
+        as{"Assamés"}
+        ast{"Asturiano"}
+        aus{"Lingua australiana"}
+        az{"Azerbaiano"}
+        bat{"Lingua báltica"}
+        be{"Bielorruso"}
+        bg{"Búlgaro"}
+        bh{"Bihariano"}
+        bn{"Bengalí"}
+        br{"Bretón"}
+        bs{"Bosnio"}
+        ca{"Catalán"}
+        cai{"Lingua india centroamericana"}
+        cau{"Lingua caucásica"}
+        cel{"Lingua céltica"}
+        cs{"Checo"}
+        cu{"Eslavo eclesiástico"}
+        cy{"Galés"}
+        da{"Dinamarqués"}
+        de{"Alemán"}
+        de_AT{"Alemán de Austria"}
+        de_CH{"Alemán suízo"}
+        egy{"Exipcio antigo"}
+        el{"Grego"}
+        en{"Inglés"}
+        en_AU{"Inglés australiano"}
+        en_CA{"Inglés canadiano"}
+        en_GB{"Inglés británico"}
+        en_US{"Inglés americano"}
+        eo{"Esperanto"}
+        es{"Español"}
+        es_419{"Español latinoamericano"}
+        es_ES{"Castelán"}
+        et{"Estoniano"}
+        eu{"Éuscaro"}
+        fa{"Persa"}
+        fi{"Finés"}
+        fil{"Filipino"}
+        fiu{"Lingua finno-úgrica"}
+        fo{"Faroés"}
+        fr{"Francés"}
+        fr_CA{"Francés canadiano"}
+        fr_CH{"Francés suízo"}
+        fy{"Frisón"}
+        ga{"Irlandés"}
+        gd{"Gaélico escocés"}
+        gem{"Lingua xermánica"}
         gl{"galego"}
+        gn{"Guaraní"}
+        grc{"Grego antigo"}
+        gu{"Guxaratiano"}
+        he{"Hebreo"}
+        hi{"Hindi"}
+        hr{"Croata"}
+        hu{"Húngaro"}
+        hy{"Armenio"}
+        ia{"Interlingua"}
+        id{"Indonesio"}
+        inc{"Lingua índica"}
+        ine{"Lingua indoeuropea"}
+        is{"Islandés"}
+        it{"Italiano"}
+        ja{"Xaponés"}
+        jv{"Xavanés"}
+        ka{"Xeorxiano"}
+        km{"Cambodiano"}
+        kn{"Kannada"}
+        ko{"Coreano"}
+        ku{"Kurdo"}
+        ky{"Kyrgiz"}
+        la{"Latín"}
+        ln{"Lingala"}
+        lo{"Laotiano"}
+        lt{"Lituano"}
+        lv{"Letón"}
+        mis{"Lingua miscelánea"}
+        mk{"Macedonio"}
+        mn{"Mongol"}
+        mr{"Marathi"}
+        ms{"Malaio"}
+        mt{"Maltés"}
+        mul{"Varias linguas"}
+        nai{"Lingua india norteamericana"}
+        nb{"Noruegués Bokmal"}
+        ne{"Nepalí"}
+        nl{"Holandés"}
+        nl_BE{"Flamenco"}
+        nn{"Noruegués nynorsk"}
+        no{"Noruegués"}
+        nub{"Lingua nubia"}
+        oc{"Occitano"}
+        pa{"Punjabi"}
+        phi{"Lingua filipina"}
+        pl{"Polaco"}
+        pt{"Portugués"}
+        pt_BR{"Portugués brasileiro"}
+        pt_PT{"Portugués ibérico"}
+        ro{"Romanés"}
+        roa{"Lingua románica"}
+        ru{"Ruso"}
+        sa{"Sánscrito"}
+        sai{"Lingua india sudamericana"}
+        sd{"Sindhi"}
+        sem{"Lingua semita"}
+        sgn{"Lingua de signos"}
+        sh{"Serbocroata"}
+        sk{"Eslovaco"}
+        sla{"Lingua eslávica"}
+        sq{"Albanés"}
+        sr{"Serbio"}
+        ssa{"Lingua do Nilo-Sáhara"}
+        sv{"Sueco"}
+        ta{"Tamil"}
+        te{"Telugu"}
+        th{"Tailandés"}
+        tl{"Tagalo"}
+        tlh{"Clingon"}
+        tr{"Turco"}
+        tut{"Lingua altaica"}
+        uk{"Ucraíno"}
+        und{"Lingua descoñecida ou non válida"}
+        ur{"Urdú"}
+        uz{"Uzbeco"}
+        vi{"Vietnamita"}
+        xh{"Xhosa"}
+        yi{"Yiddish"}
+        zh{"Chinés"}
+        zh_Hans{"Chinés simplificado"}
+        zh_Hant{"Chinés tradicional"}
+        zu{"Zulú"}
+        zxx{"Sen contido lingüístico"}
     }
     LocaleScript{
         "Latn",
@@ -54,9 +806,81 @@ gl{
         "#,##0%",
         "#E0",
     }
-    Version{"1.128"}
+    Scripts{
+        Arab{"árabe"}
+        Brai{"braille"}
+        Cans{"silabario aborixe canadiano unificado"}
+        Cyrl{"cirílico"}
+        Grek{"grego"}
+        Hebr{"hebreo"}
+        Latn{"latino"}
+        Zxxx{"non escrita"}
+        Zzzz{"escritura descoñecida ou non válida"}
+    }
+    Types{
+        calendar{
+            buddhist{"calendario budista"}
+            chinese{"calendario chinés"}
+            gregorian{"calendario gregoriano"}
+            hebrew{"calendario hebreo"}
+            islamic{"calendario islámico"}
+            islamic-civil{"calendario islámico civil"}
+            japanese{"calendario xaponés"}
+        }
+        collation{
+            big5han{"orde chinesa tradicional - Big5"}
+            direct{"orde alfabética directa"}
+            gb2312han{"orde chinesa simplificada - GB2312"}
+            phonebook{"orde da guía telefónica"}
+            pinyin{"orde pinyin"}
+            stroke{"orde polo número de trazos"}
+            traditional{"orde tradicional"}
+        }
+    }
+    Version{"1.57"}
     calendar{
         gregorian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE dd MMMM yyyy",
+                "dd MMMM yyyy",
+                "d MMM, yyyy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+            availableFormats{
+                Hm{"HH:mm"}
+                M{"L"}
+                MEd{"E, d-M"}
+                MMM{"LLL"}
+                MMMEd{"E d MMM"}
+                MMMMEd{"E d MMMM"}
+                MMMMd{"d MMMM"}
+                MMMMdd{"dd MMMM"}
+                MMMd{"d MMM"}
+                MMdd{"dd/MM"}
+                Md{"d-M"}
+                d{"d"}
+                ms{"mm:ss"}
+                y{"yyyy"}
+                yM{"M-yyyy"}
+                yMEd{"EEE, d-M-yyyy"}
+                yMMM{"MMM yyyy"}
+                yMMMEd{"EEE, d MMM yyyy"}
+                yMMMM{"MMMM yyyy"}
+                yQ{"Q yyyy"}
+                yQQQ{"QQQ yyyy"}
+                yyMM{"MM/yy"}
+                yyQ{"Q yy"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
             dayNames{
                 format{
                     abbreviated{
@@ -77,6 +901,67 @@ gl{
                         "Venres",
                         "Sábado",
                     }
+                }
+                stand-alone{
+                    narrow{
+                        "D",
+                        "L",
+                        "M",
+                        "M",
+                        "X",
+                        "V",
+                        "S",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "a.C.",
+                    "d.C.",
+                }
+                wide{
+                    "antes de Cristo",
+                    "despois de Cristo",
+                }
+            }
+            fields{
+                day{
+                    dn{"Día"}
+                    relative{
+                        "-1"{"onte"}
+                        "-2"{"antonte"}
+                        "-3"{"trasantonte"}
+                        "0"{"hoxe"}
+                        "1"{"mañá"}
+                        "2"{"pasadomañá"}
+                    }
+                }
+                era{
+                    dn{"Era"}
+                }
+                hour{
+                    dn{"Hora"}
+                }
+                minute{
+                    dn{"Minuto"}
+                }
+                month{
+                    dn{"Mes"}
+                }
+                second{
+                    dn{"Segundo"}
+                }
+                week{
+                    dn{"Semana"}
+                }
+                weekday{
+                    dn{"Día da semana"}
+                }
+                year{
+                    dn{"Ano"}
+                }
+                zone{
+                    dn{"Fuso horario"}
                 }
             }
             monthNames{
@@ -110,7 +995,604 @@ gl{
                         "Decembro",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "X",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "X",
+                        "X",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "T1",
+                        "T2",
+                        "T3",
+                        "T4",
+                    }
+                    wide{
+                        "1o trimestre",
+                        "2o trimestre",
+                        "3o trimestre",
+                        "4o trimestre",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                }
             }
         }
+    }
+    delimiters{
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
+    }
+    measurementSystemNames{
+        US{"americano"}
+        metric{"métrico decimal"}
+    }
+    zoneStrings{
+        "Africa:Ceuta"{
+            ec{"Ceuta"}
+        }
+        "Africa:Kinshasa"{
+            ec{"Kinshasa"}
+        }
+        "Africa:Lubumbashi"{
+            ec{"Lubumbashi"}
+        }
+        "America:Adak"{
+            ec{"Adak"}
+        }
+        "America:Anchorage"{
+            ec{"Anchorage"}
+        }
+        "America:Araguaina"{
+            ec{"Araguaina"}
+        }
+        "America:Argentina:La_Rioja"{
+            ec{"La Rioja"}
+        }
+        "America:Argentina:Rio_Gallegos"{
+            ec{"Río Gallegos"}
+        }
+        "America:Argentina:San_Juan"{
+            ec{"San Juan"}
+        }
+        "America:Argentina:Tucuman"{
+            ec{"Tucumán"}
+        }
+        "America:Argentina:Ushuaia"{
+            ec{"Ushuaia"}
+        }
+        "America:Bahia"{
+            ec{"Bahia"}
+        }
+        "America:Belem"{
+            ec{"Belém"}
+        }
+        "America:Blanc-Sablon"{
+            ec{"Blanc-Sablon"}
+        }
+        "America:Boa_Vista"{
+            ec{"Boa Vista"}
+        }
+        "America:Boise"{
+            ec{"Boise"}
+        }
+        "America:Buenos_Aires"{
+            ec{"Bos Aires"}
+        }
+        "America:Cambridge_Bay"{
+            ec{"Cambridge Bay"}
+        }
+        "America:Campo_Grande"{
+            ec{"Campo Grande"}
+        }
+        "America:Cancun"{
+            ec{"Cancún"}
+        }
+        "America:Catamarca"{
+            ec{"Catamarca"}
+        }
+        "America:Chicago"{
+            ec{"Chicago"}
+        }
+        "America:Chihuahua"{
+            ec{"Chihuahua"}
+        }
+        "America:Coral_Harbour"{
+            ec{"Coral Harbour"}
+        }
+        "America:Cordoba"{
+            ec{"Córdoba"}
+        }
+        "America:Cuiaba"{
+            ec{"Cuiaba"}
+        }
+        "America:Danmarkshavn"{
+            ec{"Danmarkshavn"}
+        }
+        "America:Dawson"{
+            ec{"Dawson"}
+        }
+        "America:Dawson_Creek"{
+            ec{"Dawson Creek"}
+        }
+        "America:Denver"{
+            ec{"Denver"}
+        }
+        "America:Detroit"{
+            ec{"Detroit"}
+        }
+        "America:Edmonton"{
+            ec{"Edmonton"}
+        }
+        "America:Eirunepe"{
+            ec{"Eirunepe"}
+        }
+        "America:Fortaleza"{
+            ec{"Fortaleza"}
+        }
+        "America:Glace_Bay"{
+            ec{"Glace Bay"}
+        }
+        "America:Goose_Bay"{
+            ec{"Goose Bay"}
+        }
+        "America:Halifax"{
+            ec{"Halifax"}
+        }
+        "America:Hermosillo"{
+            ec{"Hermosillo"}
+        }
+        "America:Indiana:Knox"{
+            ec{"Knox"}
+        }
+        "America:Indiana:Marengo"{
+            ec{"Marengo"}
+        }
+        "America:Indiana:Petersburg"{
+            ec{"Petersburg"}
+        }
+        "America:Indiana:Tell_City"{
+            ec{"Tell City"}
+        }
+        "America:Indiana:Vevay"{
+            ec{"Vevay"}
+        }
+        "America:Indiana:Vincennes"{
+            ec{"Vincennes"}
+        }
+        "America:Indiana:Winamac"{
+            ec{"Winamac"}
+        }
+        "America:Indianapolis"{
+            ec{"Indianapolis"}
+        }
+        "America:Inuvik"{
+            ec{"Inuvik"}
+        }
+        "America:Iqaluit"{
+            ec{"Iqaluit"}
+        }
+        "America:Jujuy"{
+            ec{"Jujuy"}
+        }
+        "America:Juneau"{
+            ec{"Juneau"}
+        }
+        "America:Kentucky:Monticello"{
+            ec{"Monticello"}
+        }
+        "America:Los_Angeles"{
+            ec{"Los Angeles"}
+        }
+        "America:Louisville"{
+            ec{"Louisville"}
+        }
+        "America:Maceio"{
+            ec{"Maceió"}
+        }
+        "America:Manaus"{
+            ec{"Manaus"}
+        }
+        "America:Mazatlan"{
+            ec{"Mazatlán"}
+        }
+        "America:Mendoza"{
+            ec{"Mendoza"}
+        }
+        "America:Menominee"{
+            ec{"Menominee"}
+        }
+        "America:Merida"{
+            ec{"Mérida"}
+        }
+        "America:Mexico_City"{
+            ec{"Cidade de México"}
+        }
+        "America:Moncton"{
+            ec{"Moncton"}
+        }
+        "America:Monterrey"{
+            ec{"Monterrei"}
+        }
+        "America:Montreal"{
+            ec{"Montreal"}
+        }
+        "America:New_York"{
+            ec{"New York"}
+        }
+        "America:Nipigon"{
+            ec{"Nipigon"}
+        }
+        "America:Nome"{
+            ec{"Nome"}
+        }
+        "America:Noronha"{
+            ec{"Noronha"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"Central"}
+        }
+        "America:North_Dakota:New_Salem"{
+            ec{"New Salem"}
+        }
+        "America:Pangnirtung"{
+            ec{"Pangnirtung"}
+        }
+        "America:Phoenix"{
+            ec{"Phoenix"}
+        }
+        "America:Porto_Velho"{
+            ec{"Porto Velho"}
+        }
+        "America:Rainy_River"{
+            ec{"Rainy River"}
+        }
+        "America:Rankin_Inlet"{
+            ec{"Rankin Inlet"}
+        }
+        "America:Recife"{
+            ec{"Recife"}
+        }
+        "America:Regina"{
+            ec{"Regina"}
+        }
+        "America:Resolute"{
+            ec{"Resolute"}
+        }
+        "America:Rio_Branco"{
+            ec{"Rio Branco"}
+        }
+        "America:Sao_Paulo"{
+            ec{"São Paulo"}
+        }
+        "America:Scoresbysund"{
+            ec{"Scoresbysund"}
+        }
+        "America:Shiprock"{
+            ec{"Shiprock"}
+        }
+        "America:St_Johns"{
+            ec{"St Johns"}
+        }
+        "America:Swift_Current"{
+            ec{"Swift Current"}
+        }
+        "America:Thule"{
+            ec{"Thule"}
+        }
+        "America:Thunder_Bay"{
+            ec{"Thunder Bay"}
+        }
+        "America:Tijuana"{
+            ec{"Tijuana"}
+        }
+        "America:Toronto"{
+            ec{"Toronto"}
+        }
+        "America:Vancouver"{
+            ec{"Vancouver"}
+        }
+        "America:Whitehorse"{
+            ec{"Whitehorse"}
+        }
+        "America:Winnipeg"{
+            ec{"Winnipeg"}
+        }
+        "America:Yakutat"{
+            ec{"Yakutat"}
+        }
+        "America:Yellowknife"{
+            ec{"Yellowknife"}
+        }
+        "Antarctica:Casey"{
+            ec{"Casey"}
+        }
+        "Antarctica:Davis"{
+            ec{"Davis"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont-d'Urville"}
+        }
+        "Antarctica:Mawson"{
+            ec{"Mawson"}
+        }
+        "Antarctica:McMurdo"{
+            ec{"McMurdo"}
+        }
+        "Antarctica:Palmer"{
+            ec{"Palmer"}
+        }
+        "Antarctica:Rothera"{
+            ec{"Rothera"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"Polo Sul"}
+        }
+        "Antarctica:Syowa"{
+            ec{"Syowa"}
+        }
+        "Antarctica:Vostok"{
+            ec{"Vostok"}
+        }
+        "Arctic:Longyearbyen"{
+            ec{"Longyearbyen"}
+        }
+        "Asia:Almaty"{
+            ec{"Almaty"}
+        }
+        "Asia:Anadyr"{
+            ec{"Anadyr"}
+        }
+        "Asia:Aqtau"{
+            ec{"Aqtau"}
+        }
+        "Asia:Aqtobe"{
+            ec{"Aqtobe"}
+        }
+        "Asia:Choibalsan"{
+            ec{"Choibalsan"}
+        }
+        "Asia:Chongqing"{
+            ec{"Chongqing"}
+        }
+        "Asia:Harbin"{
+            ec{"Harbin"}
+        }
+        "Asia:Hovd"{
+            ec{"Hovd"}
+        }
+        "Asia:Irkutsk"{
+            ec{"Irkutsk"}
+        }
+        "Asia:Jakarta"{
+            ec{"Iacarta"}
+        }
+        "Asia:Jayapura"{
+            ec{"Jayapura"}
+        }
+        "Asia:Kamchatka"{
+            ec{"Kamchatka"}
+        }
+        "Asia:Kashgar"{
+            ec{"Kashgar"}
+        }
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnoyarsk"}
+        }
+        "Asia:Kuching"{
+            ec{"Kuching"}
+        }
+        "Asia:Magadan"{
+            ec{"Magadan"}
+        }
+        "Asia:Makassar"{
+            ec{"Makassar"}
+        }
+        "Asia:Novosibirsk"{
+            ec{"Novosibirsk"}
+        }
+        "Asia:Omsk"{
+            ec{"Omsk"}
+        }
+        "Asia:Oral"{
+            ec{"Oral"}
+        }
+        "Asia:Pontianak"{
+            ec{"Pontianak"}
+        }
+        "Asia:Qyzylorda"{
+            ec{"Qyzylorda"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Sakhalin"}
+        }
+        "Asia:Samarkand"{
+            ec{"Samarcanda"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"Ulan Bator"}
+        }
+        "Asia:Urumqi"{
+            ec{"Urumqi"}
+        }
+        "Asia:Vladivostok"{
+            ec{"Vladivostok"}
+        }
+        "Asia:Yakutsk"{
+            ec{"Yakutsk"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"Ecaterinburgo"}
+        }
+        "Atlantic:Azores"{
+            ec{"Azores"}
+        }
+        "Atlantic:Canary"{
+            ec{"Illas Canarias"}
+        }
+        "Atlantic:Madeira"{
+            ec{"Madeira"}
+        }
+        "Australia:Adelaide"{
+            ec{"Adelaide"}
+        }
+        "Australia:Brisbane"{
+            ec{"Brisbane"}
+        }
+        "Australia:Broken_Hill"{
+            ec{"Broken Hill"}
+        }
+        "Australia:Currie"{
+            ec{"Currie"}
+        }
+        "Australia:Darwin"{
+            ec{"Darwin"}
+        }
+        "Australia:Eucla"{
+            ec{"Eucla"}
+        }
+        "Australia:Hobart"{
+            ec{"Hobart"}
+        }
+        "Australia:Lindeman"{
+            ec{"Lindeman"}
+        }
+        "Australia:Lord_Howe"{
+            ec{"Lord Howe"}
+        }
+        "Australia:Melbourne"{
+            ec{"Melbourne"}
+        }
+        "Australia:Perth"{
+            ec{"Perth"}
+        }
+        "Australia:Sydney"{
+            ec{"Sydney"}
+        }
+        "Etc:Unknown"{
+            ec{"Descoñecido"}
+        }
+        "Europe:Kaliningrad"{
+            ec{"Kaliningrado"}
+        }
+        "Europe:Kiev"{
+            ec{"Kiev"}
+        }
+        "Europe:Moscow"{
+            ec{"Moscova"}
+        }
+        "Europe:Samara"{
+            ec{"Samara"}
+        }
+        "Europe:Simferopol"{
+            ec{"Simferopol"}
+        }
+        "Europe:Uzhgorod"{
+            ec{"Uzhgorod"}
+        }
+        "Europe:Volgograd"{
+            ec{"Volgogrado"}
+        }
+        "Europe:Zaporozhye"{
+            ec{"Zaporozhye"}
+        }
+        "Pacific:Chatham"{
+            ec{"Chatham"}
+        }
+        "Pacific:Easter"{
+            ec{"Illa de Pascua"}
+        }
+        "Pacific:Enderbury"{
+            ec{"Enderbury"}
+        }
+        "Pacific:Galapagos"{
+            ec{"Illas Galápagos"}
+        }
+        "Pacific:Gambier"{
+            ec{"Gambier"}
+        }
+        "Pacific:Honolulu"{
+            ec{"Honolulú"}
+        }
+        "Pacific:Johnston"{
+            ec{"Johnston"}
+        }
+        "Pacific:Kiritimati"{
+            ec{"Kiritimati"}
+        }
+        "Pacific:Kosrae"{
+            ec{"Kosrae"}
+        }
+        "Pacific:Kwajalein"{
+            ec{"Kwajalein"}
+        }
+        "Pacific:Majuro"{
+            ec{"Majuro"}
+        }
+        "Pacific:Marquesas"{
+            ec{"Marquesas"}
+        }
+        "Pacific:Midway"{
+            ec{"Midway"}
+        }
+        "Pacific:Ponape"{
+            ec{"Ponape"}
+        }
+        "Pacific:Tarawa"{
+            ec{"Tarawa"}
+        }
+        "Pacific:Truk"{
+            ec{"Truk"}
+        }
+        "Pacific:Wake"{
+            ec{"Wake"}
+        }
+        "meta:Europe_Central"{
+            ld{"horario de verán europeo central"}
+            ls{"horario europeo central"}
+            sd{"CEST"}
+            ss{"CET"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"horario de verán europeo oriental"}
+            ls{"horario europeo oriental"}
+            sd{"EEST"}
+            ss{"EET"}
+        }
+        "meta:Europe_Western"{
+            ld{"horario de verán europeo occidental"}
+            ls{"horario europeo occidental"}
+            sd{"WEST"}
+            ss{"WET"}
+        }
+        "meta:GMT"{
+            ls{"horario medio de Greenwich"}
+            ss{"GMT"}
+        }
+        fallbackFormat{"{1} ({0})"}
+        gmtFormat{"GMT{0}"}
+        hourFormat{"+HH:mm;-HH:mm"}
+        regionFormat{"Hora de {0}"}
     }
 }

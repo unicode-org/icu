@@ -96,17 +96,17 @@ static const char* const rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
         "allemand (Allemagne, Ordonnancement=Ordre de l\\u2019annuaire)", "espagnol (Ordonnancement=Ordre traditionnel)", "japonais (Japon, Calendrier=Calendrier japonais)" },
 
     /* display language (Catalan) */
-    {   "angl\\u00E8s", "franc\\u00E8s", "catal\\u00E0", "grec",  "noruec", "xin\\u00E9s", "alemany", "espanyol", "japon\\u00E8s"    },
+    {   "angl\\u00E8s", "franc\\u00E8s", "catal\\u00E0", "grec",  "noruec", "xin\\u00E8s", "alemany", "espanyol", "japon\\u00E8s"    },
     /* display script code (Catalan) */
-    {   "",     "",     "",     "",     "",     "Hans", "", "", ""         },
+    {   "",     "",     "",     "",     "",     "Xin\\u00e8s Simplificat (Han)", "", "", ""         },
     /* display country (Catalan) */
     {   "Estats Units", "Fran\\u00E7a", "Espanya",  "Gr\\u00E8cia", "Noruega",  "Xina", "Alemanya", "", "Jap\\u00F3"    },
     /* display variant (Catalan) */
     {   "", "", "",                    "", "NY",    "", "", "", ""    },
     /* display name (Catalan) */
     {   "angl\\u00E8s (Estats Units)", "franc\\u00E8s (Fran\\u00E7a)", "catal\\u00E0 (Espanya)", 
-    "grec (Gr\\u00E8cia)", "noruec (Noruega, NY)", "xin\\u00E9s (Hans, Xina)", 
-    "alemany (Alemanya, collation=phonebook)", "espanyol (collation=traditional)", "japon\\u00E8s (Jap\\u00F3, calendar=japanese)" },
+    "grec (Gr\\u00E8cia)", "noruec (Noruega, NY)", "xin\\u00E8s (Xin\\u00e8s Simplificat (Han), Xina)", 
+    "alemany (Alemanya, ordre alfab\\u00e8tic=phonebook)", "espanyol (ordre alfab\\u00e8tic=traditional)", "japon\\u00E8s (Jap\\u00F3, calendari=calendari japon\\u00e8s)" },
 
     /* display language (Greek) */
     {
@@ -600,7 +600,7 @@ static void TestDisplayNames()
             "el_GR" };
         static const char *expect[] = { "Spanish (calendar=Japanese Calendar, collation=Traditional Sort Order)", /* note sorted order of keywords */
             "espagnol (Calendrier=Calendrier japonais, Ordonnancement=Ordre traditionnel)",
-            "espanyol (calendar=japanese, collation=traditional)",
+            "espanyol (calendari=calendari japon\\u00e8s, ordre alfab\\u00e8tic=traditional)",
             "\\u0399\\u03C3\\u03C0\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC (\\u0397\\u03BC\\u03B5\\u03C1\\u03BF\\u03BB\\u03CC\\u03B3\\u03B9\\u03BF=\\u0399\\u03B1\\u03C0\\u03C9\\u03BD\\u03B9\\u03BA\\u03CC \\u0397\\u03BC\\u03B5\\u03C1\\u03BF\\u03BB\\u03CC\\u03B3\\u03B9\\u03BF, \\u03A4\\u03B1\\u03BA\\u03C4\\u03BF\\u03C0\\u03BF\\u03AF\\u03B7\\u03C3\\u03B7=\\u03A0\\u03B1\\u03C1\\u03B1\\u03B4\\u03BF\\u03C3\\u03B9\\u03B1\\u03BA\\u03AE \\u03A3\\u03B5\\u03B9\\u03C1\\u03AC)" };
         UChar *expectBuffer;
 
