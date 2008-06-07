@@ -314,6 +314,10 @@ structLocale:table(nofallback){
             "",
             "",
         }
+        ALK{
+            "",
+            "",
+	}
         ALL{
             "",
             "",
@@ -403,6 +407,10 @@ structLocale:table(nofallback){
             "",
         }
         BGL{
+            "",
+            "",
+        }
+        BGM{
             "",
             "",
         }

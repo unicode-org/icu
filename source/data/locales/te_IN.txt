@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 te_IN{
-    Version{"1.128"}
+    Version{"1.54"}
     calendar{
         gregorian{
             weekend:intvector{

@@ -10,20 +10,20 @@
  *  ICU <specials> source: <path>/xml/main/he.xml
  */
 he{
-    AuxExemplarCharacters{"[ֽ ׄ ְ-ֹ ֻ ׂ ׁ ּ ֿ ׳ ״ a-z]"}
+    AuxExemplarCharacters{"[ֽ ׄ ְ-ֹ ֻ ׂ ׁ ּ ֿ ־ ׳ ״ a-z]"}
     Countries{
-        001{"עולם"}
+        001{"העולם"}
         002{"אפריקה"}
         003{"צפון אמריקה"}
         005{"דרום אמריקה"}
-        009{"אוקיניה"}
+        009{"אוקיאניה"}
         011{"מערב אפריקה"}
         013{"מרכז אמריקה"}
         014{"מזרח אפריקה"}
         015{"צפון אפריקה"}
         017{"מרכז אפריקה"}
-        018{"אפריקה הדרומית"}
-        019{"אמריקות"}
+        018{"דרום יבשת אפריקה"}
+        019{"אמריקה"}
         021{"אמריקה הצפונית"}
         029{"קריביים"}
         030{"מזרח אסיה"}
@@ -32,7 +32,7 @@ he{
         039{"דרום אירופה"}
         053{"אוסטרליה וניו-זילנד"}
         054{"מלנסיה"}
-        057{"חבל מקרונזיה"}
+        057{"האיזור המיקרונזי"}
         061{"פולינזיה"}
         062{"דרום-מרכז אסיה"}
         142{"אסיה"}
@@ -42,12 +42,14 @@ he{
         151{"מזרח אירופה"}
         154{"צפון אירופה"}
         155{"מערב אירופה"}
+        172{"חבר המדינות העצמאיות"}
         419{"אמריקה הלטינית והקריביים"}
-        830{"איי קנל"}
+        830{"איי התעלה"}
         AD{"אנדורה"}
         AE{"איחוד האמירויות הערביות"}
         AF{"אפגניסטן"}
         AG{"אנטיגואה וברבודה"}
+        AI{"אנגילה"}
         AL{"אלבניה"}
         AM{"ארמניה"}
         AN{"אנטילים הולנדיים"}
@@ -59,18 +61,19 @@ he{
         AU{"אוסטרליה"}
         AW{"ארובה"}
         AX{"איי אלנד"}
-        AZ{"אזרבייג׳אן"}
+        AZ{"אזרביג'ן"}
         BA{"בוסניה והרצגובינה"}
         BB{"ברבדוס"}
-        BD{"בנגלאדש"}
+        BD{"בנגלדש"}
         BE{"בלגיה"}
         BF{"בורקינה פאסו"}
         BG{"בולגריה"}
         BH{"בחריין"}
         BI{"בורונדי"}
         BJ{"בנין"}
+        BL{"סנט ברתולומיאו"}
         BM{"ברמודה"}
-        BN{"ברוניי דארסלאם"}
+        BN{"ברוניי"}
         BO{"בוליביה"}
         BR{"ברזיל"}
         BS{"איי באהאמה"}
@@ -88,24 +91,27 @@ he{
         CI{"חוף השנהב"}
         CK{"איי קוק"}
         CL{"צ׳ילה"}
+        CM{"קמרון"}
         CN{"סין"}
         CO{"קולומביה"}
         CR{"קוסטה ריקה"}
         CS{"סרביה ומונטנגרו"}
         CU{"קובה"}
+        CV{"כף ורדה"}
         CX{"איי כריסטמס"}
         CY{"קפריסין"}
+        CZ{"צ׳כיה"}
         DE{"גרמניה"}
         DJ{"ג׳יבוטי"}
         DK{"דנמרק"}
         DM{"דומיניקה"}
         DO{"הרפובליקה הדומיניקנית"}
         DZ{"אלג׳יריה"}
-        EC{"אקוואדור"}
+        EC{"אקוודור"}
         EE{"אסטוניה"}
         EG{"מצרים"}
         EH{"סהרה המערבית"}
-        ER{"אריטראה"}
+        ER{"אריתראה"}
         ES{"ספרד"}
         ET{"אתיופיה"}
         FI{"פינלנד"}
@@ -116,8 +122,10 @@ he{
         FR{"צרפת"}
         GA{"גאבון"}
         GB{"בריטניה"}
+        GD{"גרנדה"}
         GE{"גאורגיה"}
         GF{"גיאנה הצרפתית"}
+        GG{"גרנסי"}
         GH{"גאנה"}
         GI{"גיברלטר"}
         GL{"גרינלנד"}
@@ -127,11 +135,12 @@ he{
         GQ{"גיניאה המשוונית"}
         GR{"יוון"}
         GS{"ג׳ורג׳יה הדרומית ואיי סנדוויץ׳ הדרומיים"}
-        GT{"גוואטמאלה"}
+        GT{"גווטמלה"}
         GU{"גואם"}
         GW{"גיניאה-ביסאו"}
         GY{"גיאנה"}
         HK{"הונג קונג S.A.R. של סין"}
+        HM{"איי הרד ואיי מקדונלנד"}
         HN{"הונדורס"}
         HR{"קרואטיה"}
         HT{"האיטי"}
@@ -147,16 +156,20 @@ he{
         IS{"איסלנד"}
         IT{"איטליה"}
         JE{"ג'רסי"}
+        JM{"ג׳מייקה"}
         JO{"ירדן"}
         JP{"יפן"}
         KE{"קניה"}
+        KG{"קירגיזסטן"}
         KH{"קמבודיה"}
         KI{"קיריבאטי"}
         KM{"קומורוס"}
         KN{"סנט קיטס ונוויס"}
         KP{"צפון קוריאה"}
         KR{"דרום קוריאה"}
-        KY{"איי קיימאן"}
+        KW{"כווית"}
+        KY{"איי קיימן"}
+        KZ{"קזחסטן"}
         LA{"לאוס"}
         LB{"לבנון"}
         LC{"סנט לוסיה"}
@@ -172,6 +185,7 @@ he{
         MC{"מונקו"}
         MD{"מולדובה"}
         ME{"מונטנגרו"}
+        MF{"סנט מרטין"}
         MG{"מדגסקר"}
         MH{"איי מרשל"}
         MK{"מקדוניה"}
@@ -182,6 +196,7 @@ he{
         MP{"איי מריאנה הצפוניים"}
         MQ{"מרטיניק"}
         MR{"מאוריטניה"}
+        MS{"מונסראט"}
         MT{"מלטה"}
         MU{"מאוריציוס"}
         MV{"מלדיבים"}
@@ -189,11 +204,12 @@ he{
         MX{"מקסיקו"}
         MY{"מלזיה"}
         MZ{"מוזמביק"}
+        NA{"נמיביה"}
         NC{"קלדוניה החדשה"}
         NE{"ניז׳ר"}
         NF{"איי נורפוק"}
         NG{"ניגריה"}
-        NI{"ניקאראגואה"}
+        NI{"ניקרגואה"}
         NL{"הולנד"}
         NO{"נורווגיה"}
         NP{"נפאל"}
@@ -206,6 +222,7 @@ he{
         PF{"פולינזיה הצרפתית"}
         PG{"פפואה גיניאה החדשה"}
         PH{"פיליפינים"}
+        PK{"פקיסטן"}
         PL{"פולין"}
         PM{"סנט פייר ומיקלון"}
         PN{"פיטקרן"}
@@ -213,7 +230,9 @@ he{
         PS{"הרשות הפלשתינית"}
         PT{"פורטוגל"}
         PW{"פאלאו"}
-        QA{"קאטאר"}
+        PY{"פרגוואי"}
+        QA{"קטר"}
+        QO{"QO"}
         QU{"האיחוד האירופי"}
         RE{"ראוניון"}
         RO{"רומניה"}
@@ -222,6 +241,8 @@ he{
         RW{"רואנדה"}
         SA{"ערב הסעודית"}
         SB{"איי שלמה"}
+        SC{"איי סיישל"}
+        SD{"סודן"}
         SE{"שוודיה"}
         SG{"סינגפור"}
         SH{"סנט הלנה"}
@@ -229,44 +250,51 @@ he{
         SJ{"סוולבארד וז׳אן מאיין"}
         SK{"סלובקיה"}
         SL{"סיירה לאונה"}
-        SM{"סאן מארינו"}
-        SO{"סומאליה"}
-        SR{"סורינאם"}
+        SM{"סן מרינו"}
+        SN{"סנגל"}
+        SO{"סומליה"}
+        SR{"סורינם"}
         ST{"סאו טומה ופרינסיפה"}
-        SV{"אל סלבאדור"}
+        SV{"אל סלבדור"}
         SY{"סוריה"}
+        SZ{"סווזילנד"}
         TC{"איי טורקס וקאיקוס"}
         TD{"צ׳אד"}
         TF{"טריטוריות דרומיות של צרפת"}
         TG{"טוגו"}
         TH{"תאילנד"}
+        TJ{"טג׳יקיסטן"}
         TK{"טוקלאו"}
         TL{"מזרח טימור"}
-        TN{"טוניסיה"}
+        TM{"טורקמניסטן"}
+        TN{"תוניסיה"}
         TO{"טונגה"}
         TR{"טורקיה"}
-        TV{"טובאלו"}
-        TW{"טאיוון"}
+        TT{"טרינידד וטובגו"}
+        TV{"טובלו"}
+        TW{"טייוואן"}
         TZ{"טנזניה"}
         UA{"אוקראינה"}
         UG{"אוגנדה"}
         UM{"איים קטנים שלחוף ארצות הברית"}
         US{"ארצות הברית"}
         UY{"אורוגוואי"}
+        UZ{"אוזבקיסטן"}
         VA{"ותיקן"}
         VC{"סנט וינסנט והגרנדינים"}
         VE{"ונצואלה"}
         VG{"איי הבתולה הבריטיים"}
         VI{"איי הבתולה האמריקניים"}
         VN{"וייטנאם"}
-        VU{"ואנואטו"}
-        WF{"ואליס ופוטונה"}
+        VU{"ונואטו"}
+        WF{"איי ווליס ופוטונה"}
         WS{"סמואה"}
         YE{"תימן"}
         YT{"מאיוט"}
         ZA{"דרום אפריקה"}
         ZM{"זמביה"}
         ZW{"זימבאבווה"}
+        ZZ{"איזור לא ידוע או לא תקף"}
     }
     Currencies{
         ADP{
@@ -305,9 +333,17 @@ he{
             "AUD",
             "דולר אוסטרלי",
         }
+        AWG{
+            "AWG",
+            "פלורין",
+        }
+        AZN{
+            "AZN",
+            "מאנאט אזרביג׳ני",
+        }
         BAD{
             "BAD",
-            "דינר של בוסניה-הרצגובינה",
+            "דינר של בוסניה־הרצגובינה",
         }
         BEC{
             "BEC",
@@ -316,6 +352,10 @@ he{
         BEF{
             "BEF",
             "פרנק בלגי",
+        }
+        BGN{
+            "BGN",
+            "לב בולגרי",
         }
         BHD{
             "BHD",
@@ -445,6 +485,10 @@ he{
             "GNF",
             "פרנק גינאי",
         }
+        GRD{
+            "GRD",
+            "דרכמה",
+        }
         GWP{
             "GWP",
             "פזו גינאי",
@@ -553,6 +597,10 @@ he{
             "LRD",
             "דולר ליברי",
         }
+        LTL{
+            "LTL",
+            "ליטא ליטאי",
+        }
         LUF{
             "LUF",
             "פרנק לוקסמבורגי",
@@ -632,6 +680,10 @@ he{
         RON{
             "RON",
             "לאו רומני חדש",
+        }
+        RSD{
+            "RSD",
+            "דינר סרבי",
         }
         RUB{
             "RUB",
@@ -781,6 +833,10 @@ he{
             "VND",
             "דונג וייטנאמי",
         }
+        XAG{
+            "XAG",
+            "כסף",
+        }
         XCD{
             "XCD",
             "דולר מזרח קריבי",
@@ -792,6 +848,14 @@ he{
         XFO{
             "XFO",
             "פרנק זהב",
+        }
+        XPD{
+            "XPD",
+            "פלדיום",
+        }
+        XPT{
+            "XPT",
+            "פלטינה",
         }
         XTS{
             "XTS",
@@ -835,63 +899,118 @@ he{
     Languages{
         aa{"אתיופית"}
         ab{"אבחזית"}
+        ace{"ace"}
+        ach{"ach"}
+        ada{"ada"}
         ady{"אדיגית"}
         ae{"אבסטן"}
-        af{"אפריקנית"}
+        af{"אפריקאנס"}
         afa{"אפרו-אסיאתית (אחר)"}
         afh{"אפריהילי"}
         ain{"אינו"}
         ak{"אקאן"}
         akk{"אכדית"}
+        ale{"ale"}
+        alg{"alg"}
         am{"אמהרית"}
+        an{"an"}
         ang{"אנגלית עתיקה"}
+        anp{"anp"}
         apa{"שפות אפצ'יות"}
         ar{"ערבית"}
         arc{"ארמית"}
+        arn{"arn"}
+        arp{"arp"}
         art{"שפה מלאכותית אחרת"}
+        arw{"arw"}
         as{"אסאמית"}
-        ast{"אוסטרית"}
+        ast{"אסטורית"}
+        ath{"ath"}
         aus{"שפות אוסטרליות"}
+        av{"av"}
         awa{"אוואדית"}
+        ay{"איימארית"}
         az{"אזרית"}
         ba{"בשקירית"}
+        bad{"bad"}
+        bai{"bai"}
         bal{"באלוצ'י"}
+        ban{"בלינזית"}
+        bas{"bas"}
+        bat{"bat"}
         be{"בלארוסית"}
         bej{"בז'ה"}
+        bem{"bem"}
         ber{"ברברית"}
         bg{"בולגרית"}
         bh{"ביהארי"}
+        bho{"bho"}
         bi{"ביסלמה"}
+        bik{"bik"}
+        bin{"bin"}
+        bm{"bm"}
         bn{"בנגלית"}
+        bnt{"בנטו"}
         bo{"טיבטית"}
         br{"ברטונית"}
+        bra{"bra"}
         bs{"בוסנית"}
+        btk{"btk"}
+        bua{"bua"}
+        bug{"bug"}
+        byn{"byn"}
         ca{"קטלונית"}
         cad{"קאדו"}
         cai{"אינדיאנית מרכז אמריקאית אחרת"}
+        car{"car"}
         cau{"קווקזית אחרת"}
+        cch{"cch"}
         ce{"צ'צ'נית"}
         ceb{"קבואנו"}
         cel{"קלטית"}
+        ch{"ch"}
+        chb{"chb"}
         chg{"צ'אגאטאי"}
+        chk{"chk"}
+        chn{"chn"}
+        cho{"cho"}
+        chp{"chp"}
         chr{"צ'ירוקית"}
+        chy{"chy"}
+        cmc{"cmc"}
         co{"קורסיקאית"}
         cop{"קופטית"}
+        cpe{"cpe"}
+        cpf{"cpf"}
+        cr{"cr"}
         crh{"טטרית של קרים"}
+        crp{"crp"}
         cs{"צ׳כית"}
         cu{"סלאבית כנסייתית עתיקה"}
+        cus{"cus"}
+        cv{"cv"}
         cy{"וולשית"}
         da{"דנית"}
         dak{"דקוטה"}
+        dar{"dar"}
+        day{"day"}
         de{"גרמנית"}
         de_AT{"גרמנית אוסטרית"}
         del{"דלאוור"}
         den{"סלאבית"}
+        dgr{"dgr"}
+        din{"din"}
         doi{"דוגרי"}
+        dra{"dra"}
+        dua{"dua"}
         dum{"הולנדית תיכונה"}
         dv{"דיבהי"}
+        dyu{"dyu"}
         dz{"דזונקה"}
+        ee{"ee"}
+        efi{"efi"}
         egy{"מצרית עתיקה"}
+        eka{"eka"}
         el{"יוונית"}
         elx{"עילמית"}
         en{"אנגלית"}
@@ -903,26 +1022,42 @@ he{
         eo{"אספרנטו"}
         es{"ספרדית"}
         es_419{"ספרדית לטינו־אמריקאית"}
+        es_ES{"ספרדית איברית"}
         et{"אסטונית"}
         eu{"בסקית"}
+        ewo{"ewo"}
         fa{"פרסית"}
+        fan{"fan"}
+        fat{"fat"}
+        ff{"ff"}
         fi{"פינית"}
         fil{"פיליפינית"}
+        fiu{"fiu"}
         fj{"פיג'ית"}
         fo{"פארואזית"}
+        fon{"fon"}
         fr{"צרפתית"}
         fr_CA{"צרפתית קנדית"}
         fr_CH{"צרפתית שוויצרית"}
         frm{"צרפתית תיכונה"}
         fro{"צרפתית עתיקה"}
+        frs{"frs"}
+        fur{"fur"}
+        fy{"פריזית"}
         ga{"אירית"}
+        gaa{"gaa"}
+        gay{"gay"}
+        gba{"gba"}
         gd{"סקוטית גאלית"}
         gem{"גרמאנית אחרת"}
         gez{"געז"}
+        gil{"gil"}
         gl{"גליציאנית"}
         gn{"גוארני"}
         gon{"גונדי"}
+        gor{"gor"}
         got{"גותית"}
+        grb{"grb"}
         grc{"יוונית עתיקה"}
         gsw{"גרמנית שוויצרית"}
         gu{"גוג'ראטית"}
@@ -937,7 +1072,9 @@ he{
         ht{"האיטית"}
         hu{"הונגרית"}
         hy{"ארמנית"}
+        ia{"אינטרלינגוה"}
         id{"אינדונזית"}
+        ie{"אינטרלינגואה"}
         ine{"אינדו-אירופית אחרת"}
         inh{"אינגושית"}
         io{"אידו"}
@@ -961,6 +1098,7 @@ he{
         la{"לטינית"}
         lad{"לדינו"}
         lb{"לוקסמבורגית"}
+        lg{"lg"}
         ln{"לינגאלה"}
         lo{"לאו"}
         lt{"ליטאית"}
@@ -972,7 +1110,7 @@ he{
         mg{"מלגשית"}
         mga{"אירית תיכונה"}
         mi{"מאורית"}
-        mis{"שפות שונות"}
+        mis{"שפה שונה"}
         mk{"מקדונית"}
         ml{"מלאיאלם"}
         mn{"מונגולית"}
@@ -982,14 +1120,16 @@ he{
         ms{"מאלזית"}
         mt{"מלטזית"}
         mul{"מספר שפות"}
+        mus{"mus"}
         my{"בורמזית"}
         myn{"מאיה"}
+        myv{"myv"}
         na{"נאורית"}
         nah{"נאהואטל"}
         nai{"אינדיאנית צפון אמריקאית אחרת"}
         nap{"נפוליטנית"}
         nb{"נורבגית שפה הספר - בוקמול"}
-        nds{"גרמניה תחתית, סקסון תחתית"}
+        nds{"גרמנית תחתית"}
         ne{"נפאלית"}
         nl{"הולנדית"}
         nl_BE{"פלמית"}
@@ -999,9 +1139,11 @@ he{
         nv{"נבחו"}
         nwc{"נווארית קלאסית"}
         oc{"אוקסיטנית"}
+        or{"אוריה"}
         ota{"טורקית עותומנית"}
         pa{"פונג'אבית"}
         peo{"פרסית עתיקה"}
+        phi{"פיליפינית אחרת"}
         phn{"פניקית"}
         pl{"פולנית"}
         ps{"פאשטו"}
@@ -1041,6 +1183,7 @@ he{
         sux{"שומרית"}
         sv{"שוודית"}
         sw{"סווהילית"}
+        syc{"syc"}
         syr{"סורית"}
         ta{"טמילית"}
         te{"טלוגו"}
@@ -1051,6 +1194,7 @@ he{
         tlh{"קלינגונית"}
         tr{"טורקית"}
         tt{"טטרית"}
+        tut{"tut"}
         tw{"טווי"}
         ty{"טהיטית"}
         ug{"אויגהור"}
@@ -1060,9 +1204,14 @@ he{
         ur{"אורדו"}
         uz{"אוזבקית"}
         vi{"ויאטנמית"}
+        wo{"ג'ולוף"}
         xh{"קוהסה"}
         yap{"יאפזית"}
         yi{"יידיש"}
+        yo{"יורובה"}
+        zap{"זאפוטק"}
+        zbl{"zbl"}
+        zen{"זנאגה"}
         zh{"סינית"}
         zh_Hans{"סינית (מפושטת)"}
         zh_Hant{"סינית מסורתית"}
@@ -1093,50 +1242,85 @@ he{
         "#E0",
     }
     Scripts{
-        Arab{"ערבית"}
-        Armn{"ארמנית"}
-        Bali{"באלינזית"}
-        Beng{"בנגאלית"}
+        Arab{"ערבי"}
+        Armi{"Armi"}
+        Armn{"ארמני"}
+        Avst{"Avst"}
+        Bali{"באלינזי"}
+        Batk{"Batk"}
+        Beng{"בנגלי"}
+        Blis{"Blis"}
+        Bopo{"Bopo"}
+        Brah{"Brah"}
         Brai{"ברייל"}
-        Cher{"צ'רוקית"}
-        Copt{"קופטית"}
-        Cprt{"קפריסאית"}
-        Cyrl{"קירילית"}
-        Cyrs{"קירילית סלאבונית כנסייתית עתיקה"}
+        Bugi{"Bugi"}
+        Buhd{"Buhd"}
+        Cakm{"Cakm"}
+        Cari{"Cari"}
+        Cham{"Cham"}
+        Cher{"צ׳ירוקי"}
+        Cirt{"Cirt"}
+        Copt{"קופטי"}
+        Cprt{"קפריסאי"}
+        Cyrl{"קירילי"}
+        Cyrs{"קירילי סלאבוני כנסייתי עתיק"}
         Deva{"דוואנגרי"}
+        Dsrt{"Dsrt"}
+        Egyd{"Egyd"}
+        Egyh{"Egyh"}
         Egyp{"כתב חרטומים"}
-        Ethi{"אתיופית"}
-        Geor{"גאורגית"}
-        Goth{"גותית"}
-        Grek{"יוונית"}
+        Ethi{"אתיופי"}
+        Geok{"Geok"}
+        Geor{"גאורגי"}
+        Glag{"Glag"}
+        Goth{"גותי"}
+        Grek{"יווני"}
+        Gujr{"Gujr"}
+        Guru{"Guru"}
         Hang{"האנגול"}
         Hani{"האן"}
+        Hano{"Hano"}
         Hans{"האן מפושט"}
         Hant{"האן מסורתי"}
-        Hebr{"עברית"}
-        Hung{"הונגרית עתיקה"}
+        Hebr{"עברי"}
+        Hira{"Hira"}
+        Hrkt{"Hrkt"}
+        Hung{"הונגרי עתיק"}
         Inds{"אינדוס"}
-        Ital{"איטלקית עתיקה"}
-        Jpan{"יפנית"}
+        Ital{"איטלקי עתיק"}
+        Java{"Java"}
+        Jpan{"יפני"}
+        Kali{"Kali"}
+        Kana{"Kana"}
+        Khar{"Khar"}
         Khmr{"קמרית"}
         Knda{"קאנדה"}
+        Kore{"קוריאני"}
+        Kthi{"Kthi"}
+        Lana{"Lana"}
         Laoo{"לאית"}
-        Latg{"לטינית גאלית"}
-        Latn{"לטינית"}
-        Mong{"מונגולית"}
+        Latf{"Latf"}
+        Latg{"לטיני גאלי"}
+        Latn{"לטיני"}
+        Lepc{"Lepc"}
+        Mong{"מונגולי"}
         Orya{"אורייה"}
+        Phlv{"Phlv"}
         Phnx{"פיניקי"}
+        Qaai{"Qaai"}
         Runr{"רוני"}
-        Syrc{"סורית"}
-        Syrj{"סורית מערבית"}
-        Syrn{"סורית מזרחית"}
+        Syrc{"סורי"}
+        Syre{"Syre"}
+        Syrj{"סורי מערבי"}
+        Syrn{"סורי מזרחי"}
         Taml{"טמיל"}
         Telu{"טלוגו"}
-        Thai{"תאילנדית"}
-        Tibt{"טיבטית"}
-        Ugar{"אוגריתית"}
-        Xpeo{"פרסית עתיקה"}
+        Thai{"תאי"}
+        Tibt{"טיבטי"}
+        Ugar{"אוגריתי"}
+        Xpeo{"פרסי עתיק"}
         Zxxx{"לא כתוב"}
+        Zyyy{"Zyyy"}
         Zzzz{"כתב לא ידוע או לא תקף"}
     }
     Types{
@@ -1145,9 +1329,11 @@ he{
             chinese{"לוח שנה סיני"}
             gregorian{"לוח שנה גרגוריאני"}
             hebrew{"לוח שנה עברי"}
+            indian{"indian"}
             islamic{"לוח שנה מוסלמי"}
             islamic-civil{"לוח שנה מוסלמי-אזרחי"}
             japanese{"לוח שנה יפני"}
+            roc{"roc"}
         }
         collation{
             big5han{"מיון סינית מסורתית"}
@@ -1155,6 +1341,7 @@ he{
             gb2312han{"מיון סינית מודרנית"}
             phonebook{"מיון ספר טלפונים"}
             pinyin{"מיון פיניין"}
+            stroke{"stroke"}
             traditional{"מיון מסורתי"}
         }
     }
@@ -1165,7 +1352,7 @@ he{
         MONOTON{"מונוטונית"}
         POSIX{"מחשב"}
     }
-    Version{"1.128"}
+    Version{"1.98"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1188,15 +1375,27 @@ he{
                 H{"H"}
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
+                Hm{"H:mm"}
                 M{"L"}
+                MEd{"E, M-d"}
                 MMM{"LLL"}
                 MMMEd{"E d MMM"}
+                MMMMEd{"E MMMM d"}
+                MMMMd{"d MMMM"}
+                MMMd{"MMM d"}
                 MMdd{"dd/MM"}
                 Md{"d/M"}
                 d{"d"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"yyyy"}
+                yM{"yyyy-M"}
+                yMEd{"EEE, yyyy-M-d"}
+                yMMM{"yyyy MMM"}
+                yMMMEd{"EEE, yyyy MMM d"}
+                yMMMM{"yyyy MMMM"}
+                yQ{"yyyy Q"}
+                yQQQ{"yyyy QQQ"}
                 yyMM{"MM/yy"}
                 yyMMM{"MMM yy"}
                 yyQ{"Q yy"}
@@ -1259,6 +1458,9 @@ he{
                         "2"{"מחרתיים"}
                         "3"{"בעוד שלושה ימים"}
                     }
+                }
+                dayperiod{
+                    dn{"Dayperiod"}
                 }
                 era{
                     dn{"תקופה"}
@@ -1395,7 +1597,9 @@ he{
                 "אחה\"צ",
             }
             availableFormats{
+                Hm{"H:mm"}
                 M{"L"}
+                MEd{"E, M-d"}
                 MMM{"LLL"}
                 d{"d"}
                 ms{"mm:ss"}
@@ -1408,21 +1612,6 @@ he{
             }
             monthNames{
                 format{
-                    abbreviated{
-                        "תשרי",
-                        "חשון",
-                        "כסלו",
-                        "טבת",
-                        "שבט",
-                        "אד\"א",
-                        "אדר שני",
-                        "ניסן",
-                        "אייר",
-                        "סיון",
-                        "תמוז",
-                        "אב",
-                        "אלול",
-                    }
                     wide{
                         "תשרי",
                         "חשון",
@@ -1470,6 +1659,8 @@ he{
     delimiters{
         alternateQuotationEnd{"\""}
         alternateQuotationStart{"\""}
+        quotationEnd{"”"}
+        quotationStart{"“"}
     }
     layout{
         characters{"right-to-left"}
@@ -1480,29 +1671,95 @@ he{
         metric{"מטרי"}
     }
     zoneStrings{
-        "Africa:Timbuktu"{
-            ec{"אפריקה/טימבקטו"}
+        "Africa:Ceuta"{
+            ec{"סאוטה"}
+        }
+        "Africa:Kinshasa"{
+            ec{"קינשסה"}
+        }
+        "Africa:Lubumbashi"{
+            ec{"לובומבאשי"}
         }
         "Africa:Tunis"{
             ec{"תוניסיה"}
         }
+        "America:Adak"{
+            ec{"Adak"}
+        }
+        "America:Anchorage"{
+            ec{"זמן אלסקה"}
+        }
+        "America:Araguaina"{
+            ec{"אראגואינה"}
+        }
+        "America:Argentina:La_Rioja"{
+            ec{"La Rioja"}
+        }
+        "America:Argentina:Rio_Gallegos"{
+            ec{"Rio Gallegos"}
+        }
         "America:Argentina:San_Juan"{
             ec{"אמריקה/ארגנטינה/סאן-חואן"}
+        }
+        "America:Argentina:San_Luis"{
+            ec{"San Luis"}
+        }
+        "America:Argentina:Tucuman"{
+            ec{"Tucuman"}
+        }
+        "America:Argentina:Ushuaia"{
+            ec{"Ushuaia"}
         }
         "America:Bahia"{
             ec{"אמריקה/בהיאה"}
         }
+        "America:Belem"{
+            ec{"בלם"}
+        }
+        "America:Blanc-Sablon"{
+            ec{"Blanc-Sablon"}
+        }
+        "America:Boa_Vista"{
+            ec{"בואה ויסטה"}
+        }
+        "America:Boise"{
+            ec{"Boise"}
+        }
         "America:Buenos_Aires"{
             ec{"בואנוס איירס"}
+        }
+        "America:Cambridge_Bay"{
+            ec{"Cambridge Bay"}
+        }
+        "America:Campo_Grande"{
+            ec{"קמפו גרנדה"}
         }
         "America:Cancun"{
             ec{"אמריקה/קנקון"}
         }
+        "America:Catamarca"{
+            ec{"Catamarca"}
+        }
         "America:Chicago"{
             ec{"אמריקה/שיקגו"}
         }
+        "America:Chihuahua"{
+            ec{"Chihuahua"}
+        }
+        "America:Coral_Harbour"{
+            ec{"Coral Harbour"}
+        }
         "America:Cordoba"{
             ec{"אמריקה/קורדובה"}
+        }
+        "America:Cuiaba"{
+            ec{"קויאבה"}
+        }
+        "America:Danmarkshavn"{
+            ec{"דנמרקסהוון"}
+        }
+        "America:Dawson"{
+            ec{"Dawson"}
         }
         "America:Dawson_Creek"{
             ec{"אמריקה/דוסון-קריק"}
@@ -1516,11 +1773,62 @@ he{
         "America:Edmonton"{
             ec{"אמריקה/אדמנטון"}
         }
+        "America:Eirunepe"{
+            ec{"Eirunepe"}
+        }
+        "America:Fortaleza"{
+            ec{"פורטאלזה"}
+        }
+        "America:Glace_Bay"{
+            ec{"Glace Bay"}
+        }
+        "America:Goose_Bay"{
+            ec{"Goose Bay"}
+        }
         "America:Halifax"{
             ec{"אמריקה/הליפקס"}
         }
+        "America:Hermosillo"{
+            ec{"Hermosillo"}
+        }
+        "America:Indiana:Knox"{
+            ec{"Knox, Indiana"}
+        }
+        "America:Indiana:Marengo"{
+            ec{"Marengo, Indiana"}
+        }
+        "America:Indiana:Petersburg"{
+            ec{"Petersburg, Indiana"}
+        }
+        "America:Indiana:Tell_City"{
+            ec{"Tell City, Indiana"}
+        }
+        "America:Indiana:Vevay"{
+            ec{"Vevay, Indiana"}
+        }
+        "America:Indiana:Vincennes"{
+            ec{"Vincennes, Indiana"}
+        }
+        "America:Indiana:Winamac"{
+            ec{"Winamac, Indiana"}
+        }
         "America:Indianapolis"{
             ec{"אינדיאנפוליס"}
+        }
+        "America:Inuvik"{
+            ec{"Inuvik"}
+        }
+        "America:Iqaluit"{
+            ec{"Iqaluit"}
+        }
+        "America:Jujuy"{
+            ec{"Jujuy"}
+        }
+        "America:Juneau"{
+            ec{"Juneau"}
+        }
+        "America:Kentucky:Monticello"{
+            ec{"Monticello, Kentucky"}
         }
         "America:Los_Angeles"{
             ec{"אמריקה/לוס-אנג'לס"}
@@ -1528,14 +1836,29 @@ he{
         "America:Louisville"{
             ec{"אמריקה/לואיסוויל"}
         }
+        "America:Maceio"{
+            ec{"מאסיו"}
+        }
+        "America:Manaus"{
+            ec{"מנאוס"}
+        }
         "America:Mazatlan"{
             ec{"אמריקה/מזטלן"}
         }
         "America:Mendoza"{
             ec{"אמריקה/מנדוזה"}
         }
+        "America:Menominee"{
+            ec{"Menominee"}
+        }
+        "America:Merida"{
+            ec{"Merida"}
+        }
         "America:Mexico_City"{
             ec{"אמריקה/מקסיקו סיטי"}
+        }
+        "America:Moncton"{
+            ec{"Moncton"}
         }
         "America:Monterrey"{
             ec{"אמריקה/מונטריי"}
@@ -1546,11 +1869,47 @@ he{
         "America:New_York"{
             ec{"אמריקה/ניו-יורק"}
         }
+        "America:Nipigon"{
+            ec{"Nipigon"}
+        }
+        "America:Nome"{
+            ec{"Nome"}
+        }
+        "America:Noronha"{
+            ec{"נורונהה"}
+        }
         "America:North_Dakota:Center"{
             ec{"אמריקה/צפון דקוטה/מרכז"}
         }
+        "America:North_Dakota:New_Salem"{
+            ec{"New Salem, North Dakota"}
+        }
+        "America:Pangnirtung"{
+            ec{"Pangnirtung"}
+        }
         "America:Phoenix"{
             ec{"אמריקה/פיניקס"}
+        }
+        "America:Porto_Velho"{
+            ec{"פורטו וולהו"}
+        }
+        "America:Rainy_River"{
+            ec{"Rainy River"}
+        }
+        "America:Rankin_Inlet"{
+            ec{"Rankin Inlet"}
+        }
+        "America:Recife"{
+            ec{"רסיפה"}
+        }
+        "America:Regina"{
+            ec{"Regina"}
+        }
+        "America:Resolute"{
+            ec{"Resolute"}
+        }
+        "America:Rio_Branco"{
+            ec{"ריאו ברנצ'ו"}
         }
         "America:Santiago"{
             ec{"אמריקה/סנטיאגו"}
@@ -1558,8 +1917,26 @@ he{
         "America:Sao_Paulo"{
             ec{"אמריקה/סאן-פאולו"}
         }
+        "America:Scoresbysund"{
+            ec{"סקורסביסונד"}
+        }
         "America:Shiprock"{
             ec{"אמריקה/שיפרוק"}
+        }
+        "America:St_Johns"{
+            ec{"St. John's"}
+        }
+        "America:Swift_Current"{
+            ec{"Swift Current"}
+        }
+        "America:Thule"{
+            ec{"טולה"}
+        }
+        "America:Thunder_Bay"{
+            ec{"Thunder Bay"}
+        }
+        "America:Tijuana"{
+            ec{"Tijuana"}
         }
         "America:Toronto"{
             ec{"אמריקה/טורנטו"}
@@ -1567,17 +1944,98 @@ he{
         "America:Vancouver"{
             ec{"אמריקה/ונקובר"}
         }
+        "America:Whitehorse"{
+            ec{"Whitehorse"}
+        }
         "America:Winnipeg"{
             ec{"אמריקה/וויניפוג"}
+        }
+        "America:Yakutat"{
+            ec{"Yakutat"}
+        }
+        "America:Yellowknife"{
+            ec{"Yellowknife"}
+        }
+        "Antarctica:Casey"{
+            ec{"קאסיי"}
+        }
+        "Antarctica:Davis"{
+            ec{"דייויס"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"דומון ד'אורווי"}
+        }
+        "Antarctica:Mawson"{
+            ec{"מאוסון"}
+        }
+        "Antarctica:McMurdo"{
+            ec{"מקמרדו"}
         }
         "Antarctica:Palmer"{
             ec{"אמריקה/פאלמר"}
         }
+        "Antarctica:Rothera"{
+            ec{"רות'רה"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"הקוטב הדרומי"}
+        }
+        "Antarctica:Syowa"{
+            ec{"שויה"}
+        }
+        "Antarctica:Vostok"{
+            ec{"ווסטוק"}
+        }
+        "Asia:Almaty"{
+            ec{"אלמאטי"}
+        }
+        "Asia:Anadyr"{
+            ec{"Anadyr"}
+        }
+        "Asia:Aqtau"{
+            ec{"אקטאו"}
+        }
+        "Asia:Aqtobe"{
+            ec{"אקטובה"}
+        }
+        "Asia:Choibalsan"{
+            ec{"צ'ואיבלסאן"}
+        }
+        "Asia:Chongqing"{
+            ec{"Chongqing"}
+        }
+        "Asia:Harbin"{
+            ec{"Harbin"}
+        }
+        "Asia:Hovd"{
+            ec{"חובד"}
+        }
+        "Asia:Irkutsk"{
+            ec{"Irkutsk"}
+        }
         "Asia:Jakarta"{
             ec{"אסיה/ג'קרטה"}
         }
+        "Asia:Kamchatka"{
+            ec{"Kamchatka"}
+        }
+        "Asia:Kashgar"{
+            ec{"Kashgar"}
+        }
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnoyarsk"}
+        }
         "Asia:Kuala_Lumpur"{
             ec{"קואלה לומפור"}
+        }
+        "Asia:Kuching"{
+            ec{"Kuching"}
+        }
+        "Asia:Magadan"{
+            ec{"Magadan"}
+        }
+        "Asia:Makassar"{
+            ec{"מאקאסאר"}
         }
         "Asia:Novosibirsk"{
             ec{"אסיה/נובוסיבירסק"}
@@ -1588,8 +2046,17 @@ he{
         "Asia:Oral"{
             ec{"אסיה/אורל"}
         }
+        "Asia:Pontianak"{
+            ec{"Pontianak"}
+        }
         "Asia:Pyongyang"{
             ec{"צפון קוריאה"}
+        }
+        "Asia:Qyzylorda"{
+            ec{"Qyzylorda"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Sakhalin"}
         }
         "Asia:Samarkand"{
             ec{"אסיה/סמרקנד"}
@@ -1603,8 +2070,29 @@ he{
         "Asia:Tashkent"{
             ec{"אסיה/טשקנט"}
         }
+        "Asia:Ulaanbaatar"{
+            ec{"אולאאנבטאר"}
+        }
+        "Asia:Urumqi"{
+            ec{"Urumqi"}
+        }
+        "Asia:Vladivostok"{
+            ec{"Vladivostok"}
+        }
+        "Asia:Yakutsk"{
+            ec{"Yakutsk"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"Yekaterinburg"}
+        }
+        "Atlantic:Azores"{
+            ec{"האיים האזורים"}
+        }
         "Atlantic:Canary"{
             ec{"אטלנטי/קנרי"}
+        }
+        "Atlantic:Madeira"{
+            ec{"Madeira"}
         }
         "Australia:Adelaide"{
             ec{"אדלייד"}
@@ -1615,11 +2103,23 @@ he{
         "Australia:Broken_Hill"{
             ec{"אוסטרליה/ברוקן-היל"}
         }
+        "Australia:Currie"{
+            ec{"Currie"}
+        }
         "Australia:Darwin"{
             ec{"אוסטרליה/דרווין"}
         }
+        "Australia:Eucla"{
+            ec{"Eucla"}
+        }
         "Australia:Hobart"{
             ec{"אוסטרליה/הוברט"}
+        }
+        "Australia:Lindeman"{
+            ec{"Lindeman"}
+        }
+        "Australia:Lord_Howe"{
+            ec{"Lord Howe"}
         }
         "Australia:Melbourne"{
             ec{"אוסטרליה/מלבורן"}
@@ -1633,8 +2133,8 @@ he{
         "Etc:Unknown"{
             ec{"לא ידוע"}
         }
-        "Europe:Belfast"{
-            ec{"אירופה/בלפסט"}
+        "Europe:Kaliningrad"{
+            ec{"Kaliningrad"}
         }
         "Europe:Kiev"{
             ec{"אירופה/קייב"}
@@ -1654,18 +2154,82 @@ he{
         "Europe:Samara"{
             ec{"אירופה/סמרה"}
         }
+        "Europe:Simferopol"{
+            ec{"Simferopol"}
+        }
+        "Europe:Uzhgorod"{
+            ec{"Uzhgorod"}
+        }
+        "Europe:Volgograd"{
+            ec{"Volgograd"}
+        }
+        "Europe:Zaporozhye"{
+            ec{"Zaporozhye"}
+        }
         "Pacific:Auckland"{
             ec{"פסיפי/אוקלנד"}
+        }
+        "Pacific:Chatham"{
+            ec{"Chatham"}
+        }
+        "Pacific:Easter"{
+            ec{"איי הפסחא"}
+        }
+        "Pacific:Enderbury"{
+            ec{"אנדרבורי"}
         }
         "Pacific:Galapagos"{
             ec{"פסיפי/גלאפגוס"}
         }
+        "Pacific:Gambier"{
+            ec{"איי גמביר"}
+        }
         "Pacific:Honolulu"{
             ec{"פסיפי/הונולולו"}
+        }
+        "Pacific:Johnston"{
+            ec{"ג'ונסטון"}
+        }
+        "Pacific:Kiritimati"{
+            ec{"קיריטימאטי"}
+        }
+        "Pacific:Kwajalein"{
+            ec{"Kwajalein"}
+        }
+        "Pacific:Majuro"{
+            ec{"מאג'ורו"}
+        }
+        "Pacific:Marquesas"{
+            ec{"איי מרקיז"}
+        }
+        "Pacific:Midway"{
+            ec{"מידוויי"}
+        }
+        "Pacific:Ponape"{
+            ec{"פונפה"}
         }
         "Pacific:Tahiti"{
             ec{"פסיפי/טהיטי"}
         }
+        "Pacific:Tarawa"{
+            ec{"טאראווה"}
+        }
+        "Pacific:Truk"{
+            ec{"טרוק"}
+        }
+        "Pacific:Wake"{
+            ec{"וואק"}
+        }
+        "meta:India"{
+            ss{"IST (הודו)"}
+        }
+        "meta:Israel"{
+            lg{"שעון ישראל"}
+            ss{"IST"}
+        }
+        fallbackFormat{"{1} ({0})"}
+        gmtFormat{"GMT{0}"}
+        hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"שעון {0}"}
     }
 }

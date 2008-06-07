@@ -1914,7 +1914,7 @@ nb{
         Arab{"arabisk"}
         Armi{"arameisk"}
         Armn{"armensk"}
-        Avst{"avestansk"}
+        Avst{"avestisk"}
         Bali{"balinesisk"}
         Batk{"batak"}
         Beng{"bengalsk"}
@@ -2078,11 +2078,15 @@ nb{
         SCOUSE{"scouse dialekt"}
         VALENCIA{"valensisk dialekt"}
     }
-    Version{"1.128"}
+    Version{"1.92"}
     calendar{
         buddhist{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
             DateTimePatterns{
-                "'kl'. HH.mm.ss v",
+                "HH.mm.ss v",
                 "HH.mm.ss z",
                 "HH.mm.ss",
                 "HH.mm",
@@ -2994,23 +2998,66 @@ nb{
         "Pacific:Wake"{
             ec{"Wake"}
         }
+        "meta:Acre"{
+            ld{"Acre sommertid"}
+            sd{"ACST (Acre)"}
+            ss{"ACT (Acre)"}
+        }
         "meta:Africa_Central"{
             ls{"sentralafrikansk tid"}
+            ss{"CAT"}
         }
         "meta:Africa_Eastern"{
             ls{"østafrikansk tid"}
+            ss{"EAT"}
         }
         "meta:Africa_Southern"{
             ls{"sørafrikansk normaltid"}
+            ss{"SAST"}
         }
         "meta:Africa_Western"{
             ld{"vestafrikansk sommertid"}
             ls{"vestafrikansk tid"}
+            sd{"WAST"}
+            ss{"WAT"}
+        }
+        "meta:Amazon"{
+            ld{"Amazonas sommertid"}
+            sd{"AMST"}
+            ss{"AMT"}
+        }
+        "meta:America_Central"{
+            sd{"CDT"}
+            sg{"CT"}
+            ss{"CST"}
+        }
+        "meta:America_Eastern"{
+            sd{"EDT"}
+            sg{"ET"}
+            ss{"EST"}
+        }
+        "meta:America_Mountain"{
+            sd{"MDT"}
+            sg{"MT"}
+            ss{"MST"}
+        }
+        "meta:America_Pacific"{
+            sd{"PDT"}
+            sg{"PT"}
+            ss{"PST"}
         }
         "meta:Arabian"{
             ld{"arabisk sommertid"}
             lg{"arabisk tid"}
             ls{"arabisk standardtid"}
+            sd{"ADT (arabisk)"}
+            sg{"AT (arabisk)"}
+            ss{"AST (arabisk)"}
+        }
+        "meta:Atlantic"{
+            sd{"ADT"}
+            sg{"AT"}
+            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"sentralaustralsk sommertid"}
@@ -3032,8 +3079,14 @@ nb{
             lg{"vestaustralsk tid"}
             ls{"vestaustralsk standardtid"}
         }
+        "meta:Brasilia"{
+            ld{"Brasilia sommertid"}
+            sd{"BRST"}
+            ss{"BRT"}
+        }
         "meta:China"{
             ls{"kinesisk standardtid"}
+            ss{"CST (Kina)"}
         }
         "meta:Europe_Central"{
             ld{"sentraleuropeisk sommertid"}
@@ -3060,31 +3113,42 @@ nb{
         "meta:Hong_Kong"{
             ld{"Hong Kong-sommertid"}
             ls{"Hong Kong-tid"}
+            sd{"HKST"}
+            ss{"HKT"}
         }
         "meta:India"{
             ls{"indisk standardtid"}
+            ss{"IST"}
         }
         "meta:Indochina"{
             ls{"indokinesisk tid"}
+            ss{"ICT"}
         }
         "meta:Indonesia_Central"{
             ls{"sentralindonesisk tid"}
+            ss{"CIT"}
         }
         "meta:Indonesia_Eastern"{
             ls{"østindonesisk tid"}
+            ss{"EIT"}
         }
         "meta:Indonesia_Western"{
             ls{"vestindonesisk tid"}
+            ss{"WIT"}
         }
         "meta:Israel"{
             ld{"israelsk sommertid"}
             ls{"israelsk standardtid"}
+            sd{"IDT"}
+            ss{"IST (Israel)"}
         }
         "meta:Japan"{
             ls{"japansk standardtid"}
+            ss{"JST"}
         }
         "meta:Korea"{
             ls{"koreansk standardtid"}
+            ss{"KST"}
         }
         "meta:Moscow"{
             ld{"Moskva sommertid"}

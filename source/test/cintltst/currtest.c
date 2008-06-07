@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2005-2007, International Business Machines Corporation and
+ * Copyright (c) 2005-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 #include "unicode/utypes.h"
@@ -159,8 +159,8 @@ static void TestFractionDigitOverride(void) {
     UNumberFormat *fmt = unum_open(UNUM_CURRENCY, NULL, 0, "hu_HU", NULL, &status);
     UChar buffer[256];
     UChar expectedBuf[256];
-    const char expectedFirst[] = "123,46 Ft";
-    const char expectedSecond[] = "123 Ft";
+    const char expectedFirst[] = "123 Ft";
+    const char expectedSecond[] = "123,46 Ft";
     const char expectedThird[] = "123,456 Ft";
     if (U_FAILURE(status)) {
        log_err("Error: unum_open returned %s\n", myErrorName(status));
@@ -172,8 +172,8 @@ static void TestFractionDigitOverride(void) {
     if (u_strcmp(buffer, expectedBuf) != 0) {
        log_err("Error: unum_formatDouble didn't return %s\n", expectedFirst);
     }
-    /* Make sure that you can format no fraction digits. */
-    unum_setAttribute(fmt, UNUM_FRACTION_DIGITS, 0);
+    /* Make sure that you can format 2 fraction digits. */
+    unum_setAttribute(fmt, UNUM_FRACTION_DIGITS, 2);
     unum_formatDouble(fmt, 123.456, buffer, sizeof(buffer)/sizeof(buffer[0]), NULL, &status);
     u_charsToUChars(expectedSecond, expectedBuf, strlen(expectedSecond)+1);
     if (u_strcmp(buffer, expectedBuf) != 0) {

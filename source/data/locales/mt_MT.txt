@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 mt_MT{
-    Version{"1.128"}
+    Version{"1.45"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

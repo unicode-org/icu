@@ -10,6 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/hr.xml
  */
 hr{
+    AuxExemplarCharacters{"[q w-y]"}
     Countries{
         001{"Svijet"}
         002{"Afrika"}
@@ -934,7 +935,7 @@ hr{
             "Slovačka kruna",
         }
         SOS{
-            "So. Sh.",
+            "Sh.",
             "Somalijski šiling",
         }
         SRG{
@@ -1104,6 +1105,7 @@ hr{
         apa{"apaški"}
         ar{"arapski"}
         art{"umjetni (ostali)"}
+        as{"asamski (Britanska Indija)"}
         av{"avarski"}
         az{"azerbajdžanski"}
         bat{"baltički (ostali)"}
@@ -1160,6 +1162,7 @@ hr{
         gn{"guarani"}
         goh{"njemački, stari visoki (ca.750-1050)"}
         grc{"grčki, antički (do 1453)"}
+        gsw{"njemački (Švicarska)"}
         gu{"gujarati"}
         haw{"havajski"}
         he{"hebrejski"}
@@ -1199,6 +1202,7 @@ hr{
         mga{"irski, srednji (900-1200)"}
         mis{"ostali jezici"}
         mk{"makedonski"}
+        mkh{"mkh"}
         ml{"malayalam"}
         mn{"mongolski"}
         mo{"moldavski"}
@@ -1255,6 +1259,7 @@ hr{
         tlh{"klingonski"}
         tr{"turski"}
         tw{"twi"}
+        ty{"tahićanski"}
         ug{"turkmenski (uighur)"}
         uk{"ukrajinski"}
         und{"nepoznati ili nevažeći jezik"}
@@ -1287,6 +1292,12 @@ hr{
         "NaN",
         "+",
     }
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤; -#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
     Scripts{
         Arab{"arapsko pismo"}
         Cyrl{"ćirilica"}
@@ -1301,6 +1312,7 @@ hr{
         Taml{"tamilsko pismo"}
         Tfng{"tifinar"}
         Thai{"tajlandsko pismo"}
+        Tibt{"tibetansko pismo"}
         Zxxx{"nepisani jezik"}
         Zzzz{"nepoznato ili nevažeće pismo"}
     }
@@ -1322,9 +1334,13 @@ hr{
             traditional{"Tradicionano poredavanje"}
         }
     }
-    Version{"1.128"}
+    Version{"1.86"}
     calendar{
         gregorian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
             DateTimePatterns{
                 "HH:mm:ss v",
                 "HH:mm:ss z",
@@ -1335,6 +1351,19 @@ hr{
                 "yyyy.MM.dd",
                 "yyyy.MM.dd",
                 "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                MMMMdd{"MMMM dd"}
+                MMdd{"MM.dd"}
+                hhmm{"hh:mm a"}
+                hhmmss{"hh:mm:ss a"}
+                yyMMMEEEd{"EEE yy.MMM d"}
+                yyQ{"Q yy"}
+                yyQQQQ{"QQQQ yy"}
+                yyyyMM{"yyyy.MM"}
+                yyyyMMMM{"yyyy. MMMM"}
             }
             dayNames{
                 format{
@@ -1535,12 +1564,21 @@ hr{
         quotationEnd{"’"}
         quotationStart{"‘"}
     }
+    measurementSystemNames{
+        metric{"metrički"}
+    }
     zoneStrings{
         "Africa:Kinshasa"{
             ec{"Kinšasa"}
         }
         "Africa:Lubumbashi"{
             ec{"Lubumbaši"}
+        }
+        "America:Anchorage"{
+            ec{"Alaska vremenska zona"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont D'Urville"}
         }
         "Antarctica:South_Pole"{
             ec{"Južni pol"}
@@ -1560,6 +1598,9 @@ hr{
         "Asia:Tashkent"{
             ec{"Taškent"}
         }
+        "Atlantic:Canary"{
+            ec{"Kanarska Otočja"}
+        }
         "Etc:Unknown"{
             ec{"Nepoznat ili nevažeći grad"}
         }
@@ -1574,6 +1615,9 @@ hr{
         }
         "Europe:Zaporozhye"{
             ec{"Zaporožje"}
+        }
+        "Pacific:Easter"{
+            ec{"Uskrsni Otok"}
         }
         gmtFormat{"GMT{0}"}
         hourFormat{"+HHmm;-HHmm"}

@@ -12,7 +12,7 @@ haw_US{
         279,
         216,
     }
-    Version{"1.128"}
+    Version{"1.35"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

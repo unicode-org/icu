@@ -10,5 +10,5 @@
  *  ICU <specials> source: <path>/xml/collation/kok.xml
  */
 kok{
-    Version{"1.4"}
+    Version{"1.6"}
 }

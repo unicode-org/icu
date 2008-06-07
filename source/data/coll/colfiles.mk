@@ -60,29 +60,29 @@ COLLATION_EMPTY_SOURCE = ar_AE.txt ar_BH.txt ar_DZ.txt ar_EG.txt\
  kn_IN.txt ko_KR.txt lt_LT.txt lv_LV.txt mk_MK.txt\
  mr_IN.txt ms.txt ms_BN.txt ms_MY.txt mt_MT.txt\
  nb_NO.txt nl.txt nl_BE.txt nl_NL.txt nn_NO.txt\
- om_ET.txt om_KE.txt pa_IN.txt pl_PL.txt ps_AF.txt\
- pt.txt pt_BR.txt pt_PT.txt ro_RO.txt ru_RU.txt\
- ru_UA.txt sk_SK.txt sl_SI.txt sq_AL.txt sr_Cyrl.txt\
- sr_Cyrl_BA.txt sr_Cyrl_ME.txt sr_Cyrl_RS.txt sr_Latn_BA.txt sr_Latn_ME.txt\
- sr_Latn_RS.txt sv_FI.txt sv_SE.txt ta_IN.txt te_IN.txt\
- th_TH.txt tr_TR.txt uk_UA.txt ur_IN.txt ur_PK.txt\
- vi_VN.txt zh_Hans.txt zh_Hans_CN.txt zh_Hans_SG.txt zh_Hant_HK.txt\
- zh_Hant_MO.txt zh_Hant_TW.txt
+ om_ET.txt om_KE.txt pa_Arab.txt pa_Arab_PK.txt pa_Guru.txt\
+ pa_Guru_IN.txt pl_PL.txt ps_AF.txt pt.txt pt_BR.txt\
+ pt_PT.txt ro_RO.txt ru_RU.txt ru_UA.txt sk_SK.txt\
+ sl_SI.txt sq_AL.txt sr_Cyrl.txt sr_Cyrl_BA.txt sr_Cyrl_ME.txt\
+ sr_Cyrl_RS.txt sr_Latn_BA.txt sr_Latn_ME.txt sr_Latn_RS.txt sv_FI.txt\
+ sv_SE.txt ta_IN.txt te_IN.txt th_TH.txt tr_TR.txt\
+ uk_UA.txt ur_IN.txt ur_PK.txt vi_VN.txt zh_Hans.txt\
+ zh_Hans_CN.txt zh_Hans_SG.txt zh_Hant_HK.txt zh_Hant_MO.txt zh_Hant_TW.txt
 
 
 # Ordinary resources
 COLLATION_SOURCE = $(COLLATION_EMPTY_SOURCE) ar.txt as.txt be.txt bg.txt\
- bn.txt ca.txt cs.txt cy.txt da.txt\
- de.txt el.txt en.txt en_BE.txt eo.txt\
- es.txt et.txt fa.txt fa_AF.txt fi.txt\
- fo.txt fr.txt gu.txt haw.txt he.txt\
- hi.txt hr.txt hu.txt is.txt it.txt\
- ja.txt kk.txt kl.txt km.txt kn.txt\
- ko.txt kok.txt lt.txt lv.txt mk.txt\
- ml.txt mr.txt mt.txt nb.txt nn.txt\
- om.txt or.txt pa.txt pl.txt ps.txt\
- ro.txt ru.txt sk.txt sl.txt sq.txt\
- sr.txt sr_Latn.txt sv.txt ta.txt te.txt\
- th.txt tr.txt uk.txt ur.txt vi.txt\
- zh.txt zh_Hant.txt
+ bn.txt bn_IN.txt ca.txt cs.txt cy.txt\
+ da.txt de.txt el.txt en.txt en_BE.txt\
+ eo.txt es.txt et.txt fa.txt fa_AF.txt\
+ fi.txt fo.txt fr.txt gu.txt haw.txt\
+ he.txt hi.txt hr.txt hu.txt is.txt\
+ it.txt ja.txt kk.txt kl.txt km.txt\
+ kn.txt ko.txt kok.txt lt.txt lv.txt\
+ mk.txt ml.txt mr.txt mt.txt nb.txt\
+ nn.txt om.txt or.txt pa.txt pl.txt\
+ ps.txt ro.txt ru.txt sk.txt sl.txt\
+ sq.txt sr.txt sr_Latn.txt sv.txt ta.txt\
+ te.txt th.txt tr.txt uk.txt ur.txt\
+ vi.txt zh.txt zh_Hant.txt
 

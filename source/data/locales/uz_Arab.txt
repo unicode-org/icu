@@ -46,7 +46,7 @@ uz_Arab{
         "NaN",
         "+",
     }
-    Version{"1.128"}
+    Version{"1.27"}
     layout{
         characters{"right-to-left"}
         lines{"top-to-bottom"}

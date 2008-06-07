@@ -10,21 +10,21 @@ ar_MA{
     NumberElements{
         "٫",
         "٬",
-        ";",
+        "؛",
         "٪",
         "0",
         "#",
         "-",
-        "E",
+        "اس",
         "‰",
         "∞",
-        "NaN",
+        "ليس رقم",
         "+",
     }
     Scripts{
         Ital{"اللأيطالية القديمة"}
     }
-    Version{"1.128"}
+    Version{"1.46"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

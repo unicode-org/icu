@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 lt_LT{
-    Version{"1.128"}
+    Version{"1.48"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

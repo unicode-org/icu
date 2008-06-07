@@ -22,6 +22,7 @@ sq{
         AR{"Argjentinë"}
         AT{"Austri"}
         AU{"Australi"}
+        AX{"Ishujt Aland"}
         AZ{"Azerbajxhan"}
         BA{"Bosnja dhe Hercegovina"}
         BE{"Belgjikë"}
@@ -152,6 +153,7 @@ sq{
         TH{"Tajlandë"}
         TJ{"Taxhikistan"}
         TN{"Tunisi"}
+        TO{"Tonga"}
         TR{"Turqi"}
         TT{"Trinidad e Tobago"}
         TW{"Tajvan"}
@@ -166,6 +168,7 @@ sq{
         ZA{"Afrika e Jugut"}
         ZM{"Zambi"}
         ZW{"Zimbabve"}
+        ZZ{"Rajon i panjohur ose i pavlefshëm"}
     }
     Currencies{
         ALL{
@@ -220,6 +223,7 @@ sq{
         ja{"Japanisht"}
         pt{"Portugeze"}
         ru{"Rusisht"}
+        sh{"Serbo-Kroatisht"}
         sq{"shqipe"}
         zh{"Kineze"}
     }
@@ -248,8 +252,10 @@ sq{
     }
     Scripts{
         Latn{"Latine"}
+        Zxxx{"I pashkruar"}
+        Zzzz{"Skript i panjohur ose i pavlefshëm"}
     }
-    Version{"1.128"}
+    Version{"1.69"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -266,6 +272,25 @@ sq{
                 "yyyy-MM-dd",
                 "yy-MM-dd",
                 "{1} {0}",
+            }
+            availableFormats{
+                Hm{"H:mm"}
+                M{"L"}
+                MEd{"E, d.M"}
+                MMM{"LLL"}
+                MMMEd{"E d MMM"}
+                MMMMEd{"E d MMMM"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                Md{"M-d"}
+                d{"d"}
+                ms{"mm:ss"}
+                y{"yyyy"}
+                yM{"M.yyyy"}
+                yMEd{"EEE, d.M.yyyy"}
+                yMMM{"MMM yyyy"}
+                yMMMEd{"d MMM yyyy"}
+                yMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -354,6 +379,27 @@ sq{
                     }
                 }
             }
+            quarters{
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                }
+            }
+        }
+    }
+    zoneStrings{
+        "meta:Europe_Central"{
+            ls{"Ora qendrore evropiane"}
+        }
+        "meta:Europe_Eastern"{
+            ls{"Ora lindore evropiane"}
+        }
+        "meta:Moscow"{
+            ls{"Ora standarde e Moskës"}
         }
     }
 }

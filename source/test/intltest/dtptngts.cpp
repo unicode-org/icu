@@ -94,9 +94,9 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("1/1999"),  // fi
         UnicodeString("tammi 1999"),
         UnicodeString("13.1.1999"),
-        UnicodeString("13. tammita 1999"),
+        UnicodeString("13. tammi 1999"),
         UnicodeString("13.1."),
-        UnicodeString("13. tammita"),
+        UnicodeString("13. tammi"),
         UnicodeString("1. nelj. 1999"),
         UnicodeString("23.58"),
         UnicodeString("23.58"),
@@ -344,7 +344,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         // Trac# 6104
         status = U_ZERO_ERROR;
         pattern = UnicodeString("YYYYMMM");
-        UnicodeString expR = CharsToUnicodeString("1999\\u5E7401\\u6708");
+        UnicodeString expR = CharsToUnicodeString("1999/01");
         Locale loc("ja");
         UDate testDate1= LocaleTest::date(99, 0, 13, 23, 58, 59);
         DateTimePatternGenerator *patGen=DateTimePatternGenerator::createInstance(loc, status);

@@ -702,9 +702,13 @@ sr_Latn{
             traditional{"Tradicionalno sortiranje"}
         }
     }
-    Version{"1.128"}
+    Version{"1.70"}
     calendar{
         gregorian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
             DateTimePatterns{
                 "HH 'časova', mm 'minuta', ss 'sekundi' vvvv",
                 "HH.mm.ss z",

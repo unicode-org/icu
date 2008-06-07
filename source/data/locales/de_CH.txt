@@ -40,7 +40,7 @@ de_CH{
         "#,##0 %",
         "#E0",
     }
-    Version{"1.128"}
+    Version{"1.52"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -48,5 +48,11 @@ de_CH{
                 4,
             }
         }
+    }
+    delimiters{
+        alternateQuotationEnd{"›"}
+        alternateQuotationStart{"‹"}
+        quotationEnd{"»"}
+        quotationStart{"«"}
     }
 }

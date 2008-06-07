@@ -4,7 +4,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2005-2007, International Business Machines Corporation and    *
+* Copyright (C) 2005-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -70,7 +70,7 @@
         </taskdef>
     </target>
     <!-- target for generating ICU data -->
-    <target name="all" depends="locales, resfiles, collation, colfiles, supplementalData, metazoneInfo, brkitr, brkfiles" />
+    <target name="all" depends="locales, resfiles, collation, colfiles, supplementalData, metazoneInfo, translit, brkitr, brkfiles" />
 
     <!-- parallel target -->
     <target name="pall" depends="init">
@@ -141,7 +141,9 @@
                     <alias from="en_RH" to="en_ZW" />
                     <alias from="th_TH_TRADITIONAL" to="th_TH@calendar=buddhist" xpath="//ldml/dates/calendars/default[@type='buddhist']" />
                     <aliasLocale locale="az_AZ" />
+                    <aliasLocale locale="ha_NG" />
                     <aliasLocale locale="pa_IN" />
+                    <aliasLocale locale="pa_PK" />
                     <aliasLocale locale="sh" />
                     <aliasLocale locale="sh_BA" />
                     <aliasLocale locale="sh_CS" />

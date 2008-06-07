@@ -124,7 +124,13 @@ so{
     }
     ExemplarCharacters{"[a-z]"}
     Languages{
+        ar{"Carabi"}
+        de{"Jarmal"}
+        es{"Isbaanish"}
+        fa{"Faarisi"}
+        fr{"Faransiis"}
         fy{"Firiisiyan Galbeed"}
+        it{"Talyaani"}
         so{"Soomaali"}
     }
     LocaleScript{
@@ -154,7 +160,7 @@ so{
         Zxxx{"Aan la qorin"}
         Zzzz{"Far aan la aqoon amase aan saxnayn"}
     }
-    Version{"1.128"}
+    Version{"1.56"}
     calendar{
         gregorian{
             AmPmMarkers{

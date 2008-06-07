@@ -23,7 +23,7 @@ en_AU{
         "#,##0%",
         "#E0",
     }
-    Version{"1.128"}
+    Version{"1.52"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -40,6 +40,12 @@ en_AU{
                 "dd/MM/yyyy",
                 "d/MM/yy",
                 "{1} {0}",
+            }
+            availableFormats{
+                MMMMd{"d MMMM"}
+                MMdd{"dd/MM"}
+                yyyyMM{"MM/yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
             }
         }
     }

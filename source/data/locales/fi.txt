@@ -391,7 +391,7 @@ fi{
         }
         BEC{
             "BEC",
-            "Belgian frangi (vaihdettava)",
+            "Belgian vaihdettava frangi",
         }
         BEF{
             "BEF",
@@ -399,7 +399,7 @@ fi{
         }
         BEL{
             "BEL",
-            "Belgian frangi (rahoitus)",
+            "Belgian rahoitusfrangi",
         }
         BGL{
             "BGL",
@@ -1245,6 +1245,10 @@ fi{
             "VEB",
             "Venezuelan bolivar",
         }
+        VEF{
+            "VEF",
+            "Venezuelan bolivar fuerte",
+        }
         VND{
             "VND",
             "Vietnamin dong",
@@ -1355,7 +1359,7 @@ fi{
         }
         ZAL{
             "ZAL",
-            "Etelä-Afrikan randi (rahoitus)",
+            "Etelä-Afrikan rahoitusrandi",
         }
         ZAR{
             "ZAR",
@@ -1881,7 +1885,7 @@ fi{
         ypk{"jupikkikieli"}
         za{"zhuang"}
         zap{"sapoteekki"}
-        zbl{"Bliss-symbolit"}
+        zbl{"blisskieli"}
         zen{"zenaga"}
         zh{"kiina"}
         zh_Hans{"yksinkertaistettu kiina"}
@@ -1923,10 +1927,10 @@ fi{
         Bali{"balilainen"}
         Batk{"batakilainen"}
         Beng{"bengalilainen"}
-        Blis{"Bliss-symbolit"}
+        Blis{"bliss-symbolit"}
         Bopo{"bopomofo"}
         Brah{"brahmi"}
-        Brai{"Braille-pistekirjoitus"}
+        Brai{"braille-pistekirjoitus"}
         Bugi{"bugilainen"}
         Buhd{"buhidilainen"}
         Cakm{"chakmalainen"}
@@ -1990,7 +1994,7 @@ fi{
         Mero{"meroiittinen"}
         Mlym{"malajalamilainen"}
         Mong{"mongolilainen"}
-        Moon{"Moon-kohokirjoitus"}
+        Moon{"moon-kohokirjoitus"}
         Mtei{"meitei"}
         Mymr{"burmalainen"}
         Nkoo{"n'ko"}
@@ -2006,7 +2010,7 @@ fi{
         Phlv{"kirjapahlavilainen"}
         Phnx{"foinikialainen"}
         Plrd{"Pollardin foneettinen"}
-        Prti{"piirtokirjoituspartilainen"}
+        Prti{"piirtokirjoitusparthialainen"}
         Qaai{"peritty"}
         Rjng{"rejang"}
         Roro{"rongorongo"}
@@ -2073,32 +2077,32 @@ fi{
         1606NICT{"myöhäiskeskiranska"}
         1694ACAD{"varhaisnykyranska"}
         1901{"saksan perinteinen oikeinkirjoitus"}
-        1994{"sloveenin Resian murteen yhdenmukaistettu oikeinkirjoitus"}
+        1994{"sloveenin resian murteen yhdenmukaistettu oikeinkirjoitus"}
         1996{"saksan uusi oikeinkirjoitus"}
         AREVELA{"itäarmenialainen"}
         AREVMDA{"länsiarmenialainen"}
         BAKU1926{"yhtenäistetty turkkilainen latinalainen aakkosto"}
-        BISKE{"sloveenin Resian San Giorgion/Bilan alamurre"}
+        BISKE{"sloveenin resian San Giorgion/Bilan alamurre"}
         BOONT{"englannin boontling-murre"}
         FONIPA{"kansainvälinen foneettinen aakkosto IPA"}
         FONUPA{"uralilainen foneettinen aakkosto UPA"}
-        LIPAW{"sloveenin Resian Lipovazin/Lipovecin alamurre"}
+        LIPAW{"sloveenin resian Lipovazin/Lipovecin alamurre"}
         MONOTON{"monotoninen kreikka"}
-        NEDIS{"sloveenin Natisonen murre"}
-        NJIVA{"sloveenin Resian Gnivan/Njivan alamurre"}
-        OSOJS{"sloveenin Resian Oseaccon/Osojanen alamurre"}
+        NEDIS{"sloveenin natisonen murre"}
+        NJIVA{"sloveenin resian Gnivan/Njivan alamurre"}
+        OSOJS{"sloveenin resian Oseaccon/Osojanen alamurre"}
         POLYTON{"polytoninen kreikka"}
         POSIX{"tietokonemäärittely POSIX"}
         REVISED{"uudistettu oikeinkirjoitus"}
-        ROZAJ{"sloveenin Resian murre"}
+        ROZAJ{"sloveenin resian murre"}
         SAAHO{"afarin saho-murre"}
         SCOTLAND{"skotlanninenglanti"}
         SCOUSE{"englannin scouse-murre"}
-        SOLBA{"sloveenin Resian Stolvizzan/Solbican alamurre"}
-        TARASK{"valkovenäjän Taraškevitsa-oikeinkirjoitus"}
-        VALENCIA{"katalaanin valencia-murre"}
+        SOLBA{"sloveenin resian Stolvizzan/Solbican alamurre"}
+        TARASK{"valkovenäjän taraškevitsa-oikeinkirjoitus"}
+        VALENCIA{"katalaanin valencian murre"}
     }
-    Version{"1.128"}
+    Version{"1.105"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2110,8 +2114,8 @@ fi{
                 "H.mm.ss z",
                 "H.mm.ss",
                 "H.mm",
-                "EEEE d. MMMM'ta' yyyy",
-                "d. MMMM'ta' yyyy",
+                "EEEE d. MMMM yyyy",
+                "d. MMMM yyyy",
                 "d.M.yyyy",
                 "d.M.yyyy",
                 "{1} {0}",
@@ -2125,7 +2129,7 @@ fi{
                 MMM{"LLL"}
                 MMMEd{"E d. MMM"}
                 MMMMEd{"E d. MMMM"}
-                MMMMd{"d. MMMM'ta'"}
+                MMMMd{"d. MMMM"}
                 MMMd{"d. MMM"}
                 Md{"d.M."}
                 d{"d"}
@@ -2139,12 +2143,12 @@ fi{
                 yMMMM{"LLLL yyyy"}
                 yQ{"Q/yyyy"}
                 yQQQ{"QQQ yyyy"}
-                yyMM{"MM/yy"}
+                yyMM{"M/yy"}
                 yyMMM{"MMM yy"}
                 yyQ{"Q/yy"}
                 yyyyM{"M/yyyy"}
                 yyyyMEEEd{"EEE d.M.yyyy"}
-                yyyyMMMM{"MMMM yyyy"}
+                yyyyMMMM{"LLLL yyyy"}
                 yyyyQQQQ{"QQQQ yyyy"}
             }
             dayNames{
@@ -2159,13 +2163,13 @@ fi{
                         "la",
                     }
                     wide{
-                        "sunnuntai",
-                        "maanantai",
-                        "tiistai",
-                        "keskiviikko",
-                        "torstai",
-                        "perjantai",
-                        "lauantai",
+                        "sunnuntaina",
+                        "maanantaina",
+                        "tiistaina",
+                        "keskiviikkona",
+                        "torstaina",
+                        "perjantaina",
+                        "lauantaina",
                     }
                 }
                 stand-alone{
@@ -2404,9 +2408,6 @@ fi{
         }
         "America:Araguaina"{
             ec{"Araguaina"}
-        }
-        "America:Argentina:ComodRivadavia"{
-            ec{"Comodoro Rivadavia"}
         }
         "America:Argentina:La_Rioja"{
             ec{"La Rioja"}
@@ -3008,6 +3009,9 @@ fi{
         "meta:Africa_Eastern"{
             cu:int{0}
         }
+        "meta:Africa_FarWestern"{
+            cu:int{0}
+        }
         "meta:Africa_Southern"{
             cu:int{0}
         }
@@ -3131,6 +3135,9 @@ fi{
         "meta:Brasilia"{
             cu:int{0}
         }
+        "meta:British"{
+            cu:int{0}
+        }
         "meta:Brunei"{
             cu:int{0}
         }
@@ -3178,6 +3185,9 @@ fi{
             cu:int{0}
         }
         "meta:Davis"{
+            cu:int{0}
+        }
+        "meta:Dominican"{
             cu:int{0}
         }
         "meta:DumontDUrville"{
@@ -3231,6 +3241,7 @@ fi{
             cu:int{0}
         }
         "meta:GMT"{
+            cu:int{0}
             ls{"Greenwichin normaaliaika"}
             ss{"GMT"}
         }
@@ -3244,6 +3255,9 @@ fi{
             cu:int{0}
         }
         "meta:Gilbert_Islands"{
+            cu:int{0}
+        }
+        "meta:Goose_Bay"{
             cu:int{0}
         }
         "meta:Greenland_Central"{
@@ -3292,6 +3306,9 @@ fi{
             cu:int{0}
         }
         "meta:Iran"{
+            cu:int{0}
+        }
+        "meta:Irish"{
             cu:int{0}
         }
         "meta:Irkutsk"{
@@ -3348,6 +3365,9 @@ fi{
             cu:int{0}
         }
         "meta:Lanka"{
+            cu:int{0}
+        }
+        "meta:Liberia"{
             cu:int{0}
         }
         "meta:Line_Islands"{
@@ -3429,6 +3449,9 @@ fi{
             cu:int{0}
         }
         "meta:Omsk"{
+            cu:int{0}
+        }
+        "meta:Oral"{
             cu:int{0}
         }
         "meta:Pakistan"{
@@ -3581,8 +3604,9 @@ fi{
         "meta:Yukon"{
             cu:int{0}
         }
+        fallbackFormat{"{1} ({0})"}
         gmtFormat{"UTC{0}"}
-        hourFormat{"+HH.mm;-HH.mm"}
+        hourFormat{"+H.mm;-H.mm"}
         regionFormat{"{0}"}
     }
 }

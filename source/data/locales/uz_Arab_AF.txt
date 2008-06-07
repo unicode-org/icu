@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 uz_Arab_AF{
-    Version{"1.128"}
+    Version{"1.20"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
