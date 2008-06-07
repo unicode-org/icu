@@ -318,7 +318,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                        1234.56, "\u00A51,235"); // Yen
 
         expectCurrency(fmt, Currency.getInstance(new Locale("fr", "CH", "")),
-                       1234.56, "SwF1,234.55"); // 0.05 rounding
+                       1234.56, "Fr.1,234.55"); // 0.05 rounding
 
         expectCurrency(fmt, Currency.getInstance(Locale.US),
                        1234.56, "$1,234.56");
@@ -869,11 +869,11 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
         DecimalFormat df = new DecimalFormat("'*&'' '\u00A4' ''&*' #,##0.00", US);
         df.setCurrency(Currency.getInstance("INR"));
-        expect2(df, 1.0, "*&' Re. '&* 1.00");
-        expect2(df, -2.0, "-*&' Rs. '&* 2.00");
+        expect2(df, 1.0, "*&' \u20a8 '&* 1.00");
+        expect2(df, -2.0, "-*&' \u20a8 '&* 2.00");
         df.applyPattern("#,##0.00 '*&'' '\u00A4' ''&*'");
-        expect2(df, 2.0, "2.00 *&' Rs. '&*");
-        expect2(df, -1.0, "-1.00 *&' Re. '&*");
+        expect2(df, 2.0, "2.00 *&' \u20a8 '&*");
+        expect2(df, -1.0, "-1.00 *&' \u20a8 '&*");
 
 //#if defined(FOUNDATION10)
 //##        com.ibm.icu.math.BigDecimal r = df.getRoundingIncrement();
@@ -952,7 +952,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      * Test currencies whose display name is a ChoiceFormat.
      */
     public void TestComplexCurrency() {
-        Locale loc = new Locale("en", "IN", "");
+        Locale loc = new Locale("kn", "IN", "");
         NumberFormat fmt = NumberFormat.getCurrencyInstance(loc);
 
         expect2(fmt, 1.0, "Re. 1.00");
