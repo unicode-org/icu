@@ -215,7 +215,7 @@ fa_AF{
         Mani{"مانوی"}
         Mong{"مغلی"}
     }
-    Version{"1.128"}
+    Version{"1.57"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -229,7 +229,7 @@ fa_AF{
                         "فوریهٔ",
                         "مارس",
                         "آوریل",
-                        "مهٔ",
+                        "مـی",
                         "جون",
                         "جول",
                         "اوت",

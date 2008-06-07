@@ -196,7 +196,7 @@ en{
         ML{"Mali"}
         MM{"Myanmar"}
         MN{"Mongolia"}
-        MO{"Macao SAR China"}
+        MO{"Macau SAR China"}
         MP{"Northern Mariana Islands"}
         MQ{"Martinique"}
         MR{"Mauritania"}
@@ -326,11 +326,11 @@ en{
             "Armenian Dram",
         }
         ANG{
-            "NA f.",
+            "NAf.",
             "Netherlands Antillan Guilder",
         }
         AOA{
-            "AOA",
+            "Kz",
             "Angolan Kwanza",
         }
         AOK{
@@ -354,7 +354,7 @@ en{
             "Argentine Peso (1983-1985)",
         }
         ARS{
-            "Arg$",
+            "AR$",
             "Argentine Peso",
         }
         ATS{
@@ -362,19 +362,19 @@ en{
             "Austrian Schilling",
         }
         AUD{
-            "$A",
+            "A$",
             "Australian Dollar",
         }
         AWG{
-            "AWG",
-            "Aruban Guilder",
+            "Afl.",
+            "Aruban Florin",
         }
         AZM{
             "AZM",
             "Azerbaijanian Manat (1993-2006)",
         }
         AZN{
-            "AZN",
+            "man.",
             "Azerbaijanian Manat",
         }
         BAD{
@@ -386,12 +386,12 @@ en{
             "Bosnia-Herzegovina Convertible Mark",
         }
         BBD{
-            "BDS$",
+            "Bds$",
             "Barbados Dollar",
         }
         BDT{
             "Tk",
-            "Bangladesh Taka",
+            "Bangladeshi Taka",
         }
         BEC{
             "BEC",
@@ -418,15 +418,15 @@ en{
             "Bahraini Dinar",
         }
         BIF{
-            "Fbu",
+            "FBu",
             "Burundi Franc",
         }
         BMD{
-            "Ber$",
+            "BD$",
             "Bermudan Dollar",
         }
         BND{
-            "BND",
+            "B$",
             "Brunei Dollar",
         }
         BOB{
@@ -478,7 +478,7 @@ en{
             "Burmese Kyat",
         }
         BWP{
-            "BWP",
+            "P",
             "Botswanan Pula",
         }
         BYB{
@@ -494,7 +494,7 @@ en{
             "Belize Dollar",
         }
         CAD{
-            "Can$",
+            "CA$",
             "Canadian Dollar",
         }
         CDF{
@@ -506,7 +506,7 @@ en{
             "WIR Euro",
         }
         CHF{
-            "SwF",
+            "Fr.",
             "Swiss Franc",
         }
         CHW{
@@ -518,15 +518,15 @@ en{
             "Chilean Unidades de Fomento",
         }
         CLP{
-            "Ch$",
+            "CL$",
             "Chilean Peso",
         }
         CNY{
-            "Y",
+            "RMB",
             "Chinese Yuan Renminbi",
         }
         COP{
-            "Col$",
+            "CO$",
             "Colombian Peso",
         }
         COU{
@@ -534,7 +534,7 @@ en{
             "Unidad de Valor Real",
         }
         CRC{
-            "C",
+            "₡",
             "Costa Rican Colon",
         }
         CSD{
@@ -550,7 +550,7 @@ en{
             "Cuban Peso",
         }
         CVE{
-            "CVEsc",
+            "Esc",
             "Cape Verde Escudo",
         }
         CYP{
@@ -558,7 +558,7 @@ en{
             "Cyprus Pound",
         }
         CZK{
-            "CZK",
+            "Kč",
             "Czech Republic Koruna",
         }
         DDM{
@@ -570,11 +570,11 @@ en{
             "Deutsche Mark",
         }
         DJF{
-            "DF",
+            "Fdj",
             "Djibouti Franc",
         }
         DKK{
-            "DKr",
+            "Dkr",
             "Danish Krone",
         }
         DOP{
@@ -662,7 +662,7 @@ en{
             "Ghana Cedi (1979-2007)",
         }
         GHS{
-            "GH¢",
+            "₵",
             "Ghana Cedi",
         }
         GIP{
@@ -742,11 +742,11 @@ en{
             "Israeli Pound",
         }
         ILS{
-            "ILS",
+            "₪",
             "New Israeli Sheqel",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
+            "₨",
             "Indian Rupee",
         }
         IQD{
@@ -798,7 +798,7 @@ en{
             "North Korean Won",
         }
         KRW{
-            "KRW",
+            "₩",
             "South Korean Won",
         }
         KWD{
@@ -902,7 +902,7 @@ en{
             "Myanmar Kyat",
         }
         MNT{
-            "Tug",
+            "₮",
             "Mongolian Tugrik",
         }
         MOP{
@@ -966,11 +966,11 @@ en{
             "Namibia Dollar",
         }
         NGN{
-            "NGN",
+            "₦",
             "Nigerian Naira",
         }
         NIC{
-            "NIC",
+            "C$",
             "Nicaraguan Cordoba",
         }
         NIO{
@@ -990,7 +990,7 @@ en{
             "Nepalese Rupee",
         }
         NZD{
-            "$NZ",
+            "NZ$",
             "New Zealand Dollar",
         }
         OMR{
@@ -1018,7 +1018,7 @@ en{
             "Papua New Guinea Kina",
         }
         PHP{
-            "Php",
+            "₱",
             "Philippine Peso",
         }
         PKR{
@@ -1026,7 +1026,7 @@ en{
             "Pakistan Rupee",
         }
         PLN{
-            "Zl",
+            "zł",
             "Polish Zloty",
         }
         PLZ{
@@ -1038,7 +1038,7 @@ en{
             "Portuguese Escudo",
         }
         PYG{
-            "PYG",
+            "₲",
             "Paraguay Guarani",
         }
         QAR{
@@ -1122,7 +1122,7 @@ en{
             "Sierra Leone Leone",
         }
         SOS{
-            "S",
+            "Sh.",
             "Somali Shilling",
         }
         SRD{
@@ -1154,7 +1154,7 @@ en{
             "Swaziland Lilangeni",
         }
         THB{
-            "THB",
+            "฿",
             "Thai Baht",
         }
         TJR{
@@ -1202,7 +1202,7 @@ en{
             "Tanzanian Shilling",
         }
         UAH{
-            "UAH",
+            "₴",
             "Ukrainian Hryvnia",
         }
         UAK{
@@ -1254,7 +1254,7 @@ en{
             "Venezuelan Bolivar Fuerte",
         }
         VND{
-            "VND",
+            "₫",
             "Vietnamese Dong",
         }
         VUV{
@@ -2050,7 +2050,7 @@ en{
         Xsux{"Sumero-Akkadian Cuneiform"}
         Yiii{"Yi"}
         Zmth{"Mathematical Notation"}
-        Zsym{"Mathematical notation"}
+        Zsym{"Symbols"}
         Zxxx{"Unwritten"}
         Zyyy{"Common"}
         Zzzz{"Unknown or Invalid Script"}
@@ -2111,7 +2111,7 @@ en{
         VALENCIA{"Valencian"}
         XIANG{"Xiang or Hunanese"}
     }
-    Version{"1.128"}
+    Version{"1.192"}
     calendar{
         gregorian{
             AmPmMarkers{

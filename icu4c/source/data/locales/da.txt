@@ -1475,6 +1475,7 @@ da{
         co{"korsikansk"}
         cop{"koptisk"}
         cpe{"engelsk baseret kreolsk eller pidgin"}
+        cpf{"fransk baseret kreolsk eller pidginsprog"}
         cpp{"portugisisk baseret kreolsk eller pidginsprog"}
         cr{"cree"}
         crh{"krim tyrkisk"}
@@ -1900,7 +1901,7 @@ da{
     NumberElements{
         ",",
         ".",
-        ";",
+        ",",
         "%",
         "0",
         "#",
@@ -2059,6 +2060,7 @@ da{
             islamic{"islamisk kalender"}
             islamic-civil{"verdslig islamisk kalender"}
             japanese{"japansk kalender"}
+            roc{"kalender for Republikken Kina"}
         }
         collation{
             big5han{"sorteringsrækkefølge uforkortet kinesisk - Big5"}
@@ -2080,8 +2082,32 @@ da{
         POSIX{"computer"}
         REVISED{"revideret retskrivning"}
     }
-    Version{"1.128"}
+    Version{"1.98"}
     calendar{
+        buddhist{
+            DateTimePatterns{
+                "HH.mm.ss v",
+                "HH:mm:ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE d. MMMM yyyy G",
+                "d. MMMM yyyy G",
+                "d. MMM yyyy G",
+                "d/M/yyyy",
+                "{1} {0}",
+            }
+        }
+        coptic{
+            availableFormats{
+                MMMMEd{"E. d. MMMM"}
+            }
+        }
+        ethiopic{
+            availableFormats{
+                MMMEd{"E. d. MMM"}
+                MMMMEd{"E. d. MMMM"}
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "f.m.",
@@ -2115,11 +2141,13 @@ da{
                 d{"d."}
                 mmss{"mm.ss"}
                 ms{"mm.ss"}
+                y{"yyyy"}
                 yM{"M-yyyy"}
                 yMEd{"EEE. d-M-yyyy"}
                 yMMM{"MMM yyyy"}
                 yMMMEd{"EEE. d. MMM yyyy"}
                 yMMMM{"MMMM yyyy"}
+                yQ{"Q yyyy"}
                 yQQQ{"QQQ yyyy"}
                 yyMM{"MM/yy"}
                 yyMMM{"MMM yy"}
@@ -2914,6 +2942,10 @@ da{
             ls{"vestafrikansk tid"}
             sd{"WAST"}
             ss{"WAT"}
+        }
+        "meta:Aktyubinsk"{
+            ld{"Aktyubinsk-sommertid"}
+            ls{"Aktyubinsk-tid"}
         }
         "meta:Alaska"{
             ld{"Alaska-sommertid"}

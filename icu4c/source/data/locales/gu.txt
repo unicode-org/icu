@@ -30,8 +30,15 @@ gu{
         }
     }
     ExemplarCharacters{"[૦-૯ ૐ અ-ઋ ૠ ઍ એ-ઑ ઓ-ન પ-ર લ ળ વ-હ ઼ ઁ-ઃ ઽ ્ ા-ૅ ે-ૉ ો ૌ]"}
+    Keys{
+        calendar{"કેલેન્ડર"}
+        collation{"ક્રમ"}
+        currency{"ચલણ"}
+    }
     Languages{
+        bho{"ભોજપુરી"}
         gu{"ગુજરાતી"}
+        ta{"તમિલ"}
     }
     LocaleScript{
         "Gujr",
@@ -56,7 +63,12 @@ gu{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.128"}
+    Scripts{
+        Arab{"અરેબી"}
+        Armn{"અર્મેનિયાઈ"}
+        Beng{"બંગાળી"}
+    }
+    Version{"1.58"}
     calendar{
         gregorian{
             AmPmMarkers{

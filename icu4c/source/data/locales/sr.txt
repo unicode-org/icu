@@ -10,6 +10,10 @@
  *  ICU <specials> source: <path>/xml/main/sr.xml
  */
 sr{
+    AuxExemplarCharacters{
+        "[a á à ă â å ä ā æ b c ç d e é è ĕ ê ë ē f-i í ì ĭ î ï ī j-n ñ o ó ò ŏ ô ö ø"
+        " ō œ p-s ß t u ú ù ŭ û ü ū v-y ÿ z]"
+    }
     Countries{
         001{"Свет"}
         002{"Африка"}
@@ -35,6 +39,7 @@ sr{
         061{"Полинезија"}
         062{"Јужно-централна Азија"}
         142{"Азија"}
+        143{"Централна Азија"}
         145{"Западна Азија"}
         150{"Европа"}
         151{"Источна Европа"}
@@ -77,7 +82,7 @@ sr{
         BV{"Буве Острва"}
         BW{"Боцвана"}
         BY{"Белорусија"}
-        BZ{"Белисе"}
+        BZ{"Белизе"}
         CA{"Канада"}
         CC{"Кокос (Келинг) Острва"}
         CD{"Демократска република Конго"}
@@ -181,6 +186,7 @@ sr{
         MC{"Монако"}
         MD{"Молдавија"}
         ME{"Црна Гора"}
+        MF{"Сент Мартин"}
         MG{"Мадагаскар"}
         MH{"Маршалска Острва"}
         MK{"Македонија"}
@@ -292,6 +298,18 @@ sr{
         ZZ{"Непозната или неважећа област"}
     }
     Currencies{
+        AED{
+            "AED",
+            "Уједињени арапски емирати дирхам",
+        }
+        ALL{
+            "ALL",
+            "Албански лек",
+        }
+        AMD{
+            "AMD",
+            "Јерменски драм",
+        }
         ARS{
             "ARS",
             "Аргентински пезо",
@@ -303,6 +321,10 @@ sr{
         AUD{
             "$A",
             "Аустралијски долар",
+        }
+        BAD{
+            "BAD",
+            "Босанско-Херцеговачки динар",
         }
         BAM{
             "KM",
@@ -378,7 +400,7 @@ sr{
         }
         EUR{
             "€",
-            "ЕВРО",
+            "Евро",
         }
         FIM{
             "FIM",
@@ -440,6 +462,10 @@ sr{
             "KES",
             "Кенијски шилинг",
         }
+        KRW{
+            "KRW",
+            "Јужнокорејски Вон",
+        }
         KWD{
             "KD",
             "Кувајтски динар",
@@ -452,9 +478,17 @@ sr{
             "LUF",
             "Луксембуршки франак",
         }
+        LYD{
+            "LYD",
+            "Либијски динар",
+        }
         MAD{
             "MAD",
             "Марокански дирхам",
+        }
+        MKD{
+            "MKD",
+            "Македонијски денар",
         }
         MTL{
             "MTL",
@@ -504,6 +538,10 @@ sr{
             "SIT",
             "Толар",
         }
+        TRL{
+            "TRL",
+            "Стара Турска Лира",
+        }
         TRY{
             "TRY",
             "Нова турска лира",
@@ -520,6 +558,10 @@ sr{
             "Дин",
             "YUN",
         }
+        ZAR{
+            "ZAR",
+            "Јужно Афрички Ранд",
+        }
     }
     ExemplarCharacters{"[а-д ђ е-и ј к л љ м н њ о-т ћ у-ч џ ш]"}
     Keys{
@@ -529,69 +571,105 @@ sr{
     }
     Languages{
         af{"Африканерски"}
+        akk{"Акадијски"}
         am{"Амхарски"}
+        ang{"Староенглески"}
+        apa{"Апачки језик"}
         ar{"Арапски"}
         as{"Асемијски"}
+        aus{"Аустралијски језик"}
+        av{"Аварски"}
         az{"Азербејџански"}
+        bat{"Балтички језик"}
         be{"Белоруски"}
         bg{"Бугарски"}
         bh{"Бихарски"}
         bn{"Бенгласки"}
+        bnt{"Банту"}
+        bo{"Тибетански"}
         br{"Бретонски"}
         bs{"Босански"}
         ca{"Каталонски"}
+        cai{"Централно амерички Индијански језик"}
         ce{"Чеченски"}
+        cel{"Келтски"}
         chr{"Чероки"}
         co{"Корзикански"}
+        cop{"Коптски"}
         cs{"Чешки"}
         cu{"Старословенски"}
         cy{"Велшки"}
         da{"Дански"}
+        dak{"Дакота"}
         de{"Немачки"}
+        de_AT{"Немачки (Аустрија)"}
+        del{"Делавер"}
+        egy{"Староегипатски"}
         el{"Грчки"}
         en{"Енглески"}
         en_AU{"Енглески (Аустралија)"}
+        en_CA{"Енглески (Канада)"}
+        en_GB{"Енглески (Велика Британија)"}
         en_US{"Енглески (САД)"}
         eo{"Есперанто"}
         es{"Шпански"}
+        es_419{"Шпански (Јужна Америка и Кариби)"}
+        es_ES{"Шпански (Шпанија)"}
         et{"Естонски"}
         eu{"Баскијски"}
         fa{"Персијски"}
         fi{"Фински"}
         fil{"Тагалог"}
+        fiu{"Угро-фински"}
         fo{"Фарски"}
         fr{"Француски"}
+        fr_CA{"Француски (Канада)"}
         fr_CH{"Француски (Швајцарска)"}
+        fro{"Старофранцуски"}
         fy{"Фризијски"}
         ga{"Ирски"}
         gd{"Шкотски Галски"}
+        gem{"Германски језик"}
         gl{"Галски"}
         gn{"Гварани"}
+        goh{"Старонемачки"}
+        got{"Готски"}
+        grc{"Старогрчки"}
+        gsw{"Немачки (Швајцарска)"}
         gu{"Гуџарати"}
         haw{"Хавајски"}
         he{"Хебрејски"}
         hi{"Хинди"}
         hr{"Хрватски"}
+        ht{"Хаитски"}
         hu{"Мађарски"}
         hy{"Јерменски"}
         ia{"Интерлингва"}
-        id{"Индонезијски"}
+        id{"Индонежански"}
         ie{"Међујезички"}
+        ine{"Индо-европски језик"}
+        ira{"Ирански језик"}
         is{"Исландски"}
         it{"Италијански"}
         ja{"Јапански"}
+        jpr{"Јудео-персијски"}
+        jrb{"Јудео-арапски"}
         jv{"Јавански"}
         ka{"Грузијски"}
+        kk{"Козачки"}
         km{"Кмерски"}
         kn{"Канада"}
         ko{"Корејски"}
         ku{"Курдски"}
         ky{"Киргиски"}
         la{"Латински"}
+        lb{"Луксембуршки"}
         ln{"Лингала"}
-        lo{"Лаошки"}
+        lo{"Лаоски"}
         lt{"Литвански"}
         lv{"Летонски"}
+        mas{"Масаи"}
+        mi{"Маорски"}
         mk{"Македонски"}
         ml{"Малајалам"}
         mn{"Монголски"}
@@ -600,13 +678,19 @@ sr{
         ms{"Малајски"}
         mt{"Мелтешки"}
         my{"Бурмански"}
+        nai{"Језик северноамеричких Индијанаца"}
         ne{"Непалски"}
         nl{"Холандски"}
+        nl_BE{"Фламански"}
         no{"Норвешки"}
+        nv{"Навахо"}
         oc{"Провансалски"}
         or{"Оријски"}
         pa{"Панџабски"}
+        peo{"Староперсијски"}
+        phi{"Филипински језик"}
         pl{"Пољски"}
+        pro{"Старопровансалски"}
         ps{"Паштунски"}
         pt{"Португалски"}
         pt_BR{"Португалски (Бразил)"}
@@ -615,11 +699,17 @@ sr{
         ro{"Румунски"}
         ru{"Руски"}
         sa{"Санскрит"}
+        sai{"Језик јужноамеричких Индијанаца"}
+        sc{"Сардињаски"}
+        scn{"Сицилијански"}
         sd{"Синди"}
-        sh{"Српско-Хрватски"}
+        sga{"Староирски"}
+        sgn{"Знаковни језик"}
+        sh{"Српскохрватски"}
         si{"Сингалески"}
         sk{"Словачки"}
         sl{"Словеначки"}
+        sla{"Словенски језик"}
         so{"Сомалски"}
         sq{"Албански"}
         sr{"Српски"}
@@ -636,17 +726,22 @@ sr{
         tl{"Тагалски"}
         tlh{"Клингонски"}
         tr{"Турски"}
+        tt{"Татарски"}
+        tw{"Тви"}
+        ty{"Тахићански"}
         ug{"Ујгурски"}
         uk{"Украјински"}
         und{"Непознат или неважећи језик"}
         ur{"Урду"}
         uz{"Узбечки"}
         vi{"Вијетнамски"}
+        xh{"Хауса"}
         yi{"Јидиш"}
         zh{"Кинески"}
         zh_Hans{"Кинески (поједностављен)"}
         zh_Hant{"Кинески (традиционални)"}
         zu{"Зулу"}
+        zxx{"Без лингвистичког садржаја"}
     }
     LocaleScript{
         "Cyrl",
@@ -659,16 +754,23 @@ sr{
         "0",
         "#",
         "-",
-        "E",
+        "е",
         "‰",
         "∞",
         "NaN",
         "+",
     }
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
     Scripts{
         Arab{"арапско писмо"}
         Armn{"јерменско писмо"}
         Beng{"бенгалско писмо"}
+        Brah{"браманско писмо"}
         Brai{"Брајево писмо"}
         Cher{"Чероки"}
         Copt{"коптичко писмо"}
@@ -676,6 +778,7 @@ sr{
         Cyrs{"Старословенска црквена ћирилица"}
         Deva{"Деванагари"}
         Dsrt{"Дезерет"}
+        Egyp{"египатски хијероглифи"}
         Ethi{"етиопско писмо"}
         Geor{"грузијско писмо"}
         Glag{"глагољица"}
@@ -686,12 +789,20 @@ sr{
         Hebr{"хебрејско писмо"}
         Hira{"Хирагана"}
         Hrkt{"Катакана или Хирагана"}
+        Hung{"старомађарско писмо"}
         Kana{"Катакана"}
         Khmr{"кмерско писмо"}
+        Kore{"корејско писмо"}
         Latf{"латиница (фрактур варијанта)"}
+        Latg{"галска латиница"}
         Latn{"Латиница"}
+        Mong{"монголско писмо"}
         Phnx{"Феничанско писмо"}
         Runr{"рунско писмо"}
+        Syrj{"западносиријско писмо"}
+        Tglg{"Тагалог"}
+        Thai{"тајландско писмо"}
+        Xpeo{"староперсијско писмо"}
         Zxxx{"Неписани језик"}
         Zzzz{"Непознато или неважеће писмо"}
     }
@@ -715,9 +826,17 @@ sr{
             traditional{"Традиционално сортирање"}
         }
     }
-    Version{"1.128"}
+    Variants{
+        1606NICT{"Француски из касног средњег века до 1606."}
+        SCOTLAND{"Шкотски стандардни Енглески"}
+    }
+    Version{"1.94"}
     calendar{
         gregorian{
+            AmPmMarkers{
+                "преподне",
+                "поподне",
+            }
             DateTimePatterns{
                 "HH 'часова', mm 'минута', ss 'секунди' vvvv",
                 "HH.mm.ss z",
@@ -731,10 +850,18 @@ sr{
             }
             availableFormats{
                 Ed{"E d."}
+                M{"L"}
                 MMMEd{"E d. MMM"}
+                MMMMd{"MMMM d."}
+                MMMMdd{"dd. MMMM"}
+                d{"d"}
+                hhmm{"hh:mm a"}
+                hhmmss{"hh:mm:ss a"}
                 mmss{"mm:ss"}
+                yMEd{"EEE, d. M. yyyy."}
                 yyMMMd{"d. MMM yy."}
                 yyMMdd{"dd.MM.yy"}
+                yyQQQQ{"QQQQ yy"}
                 yyyy{"yyyy."}
             }
             dayNames{
@@ -1060,6 +1187,9 @@ sr{
         "Africa:Windhoek"{
             ec{"Виндхук"}
         }
+        "America:Adak"{
+            ec{"Адак"}
+        }
         "America:Anchorage"{
             ec{"Енкориџ"}
         }
@@ -1072,11 +1202,32 @@ sr{
         "America:Araguaina"{
             ec{"Арагвајана"}
         }
+        "America:Argentina:La_Rioja"{
+            ec{"La Rioja"}
+        }
+        "America:Argentina:Rio_Gallegos"{
+            ec{"Rio Gallegos"}
+        }
+        "America:Argentina:San_Juan"{
+            ec{"Сан Хуан"}
+        }
+        "America:Argentina:San_Luis"{
+            ec{"San Luis"}
+        }
+        "America:Argentina:Tucuman"{
+            ec{"Tucuman"}
+        }
+        "America:Argentina:Ushuaia"{
+            ec{"Ushuaia"}
+        }
         "America:Aruba"{
             ec{"Аруба"}
         }
         "America:Asuncion"{
             ec{"Асунсион"}
+        }
+        "America:Bahia"{
+            ec{"Бахиа"}
         }
         "America:Barbados"{
             ec{"Барбадос"}
@@ -1087,26 +1238,53 @@ sr{
         "America:Belize"{
             ec{"Белизе"}
         }
+        "America:Blanc-Sablon"{
+            ec{"Бланк-Сејблон"}
+        }
         "America:Boa_Vista"{
             ec{"Боа Виста"}
         }
         "America:Bogota"{
             ec{"Богота"}
         }
+        "America:Boise"{
+            ec{"Бојзи"}
+        }
         "America:Buenos_Aires"{
             ec{"Буенос Аирес"}
+        }
+        "America:Cambridge_Bay"{
+            ec{"Кембриџ Беј"}
         }
         "America:Campo_Grande"{
             ec{"Кампо Гранде"}
         }
+        "America:Cancun"{
+            ec{"Канкун"}
+        }
         "America:Caracas"{
             ec{"Каракас"}
+        }
+        "America:Catamarca"{
+            ec{"Катамарка"}
         }
         "America:Cayenne"{
             ec{"Кајен"}
         }
         "America:Cayman"{
             ec{"Кајманска острва"}
+        }
+        "America:Chicago"{
+            ec{"Чикаго"}
+        }
+        "America:Chihuahua"{
+            ec{"Чихуахуа"}
+        }
+        "America:Coral_Harbour"{
+            ec{"Корал Харбур"}
+        }
+        "America:Cordoba"{
+            ec{"Кордоба"}
         }
         "America:Costa_Rica"{
             ec{"Костарика"}
@@ -1120,14 +1298,38 @@ sr{
         "America:Danmarkshavn"{
             ec{"Данмарксхаген"}
         }
+        "America:Dawson"{
+            ec{"Досон"}
+        }
+        "America:Dawson_Creek"{
+            ec{"Досон Крик"}
+        }
+        "America:Denver"{
+            ec{"Денвер"}
+        }
+        "America:Detroit"{
+            ec{"Детроит"}
+        }
         "America:Dominica"{
             ec{"Доминика"}
+        }
+        "America:Edmonton"{
+            ec{"Едмонтон"}
+        }
+        "America:Eirunepe"{
+            ec{"Еирунепе"}
         }
         "America:El_Salvador"{
             ec{"Салвадор"}
         }
         "America:Fortaleza"{
             ec{"Форталеза"}
+        }
+        "America:Glace_Bay"{
+            ec{"Глејс Беј"}
+        }
+        "America:Goose_Bay"{
+            ec{"Гус Беј"}
         }
         "America:Grand_Turk"{
             ec{"Гранд Турк"}
@@ -1147,17 +1349,68 @@ sr{
         "America:Guyana"{
             ec{"Гуана"}
         }
+        "America:Halifax"{
+            ec{"Халифакс"}
+        }
         "America:Havana"{
             ec{"Хавана"}
         }
+        "America:Hermosillo"{
+            ec{"Хермосиљо"}
+        }
+        "America:Indiana:Knox"{
+            ec{"Кнокс, Индијана"}
+        }
+        "America:Indiana:Marengo"{
+            ec{"Маренго, Индијана"}
+        }
+        "America:Indiana:Petersburg"{
+            ec{"Петерсбург, Индијана"}
+        }
+        "America:Indiana:Tell_City"{
+            ec{"Тел Сити"}
+        }
+        "America:Indiana:Vevay"{
+            ec{"Vevay, Indiana"}
+        }
+        "America:Indiana:Vincennes"{
+            ec{"Vincennes, Indiana"}
+        }
+        "America:Indiana:Winamac"{
+            ec{"Winamac, Indiana"}
+        }
+        "America:Indianapolis"{
+            ec{"Индианаполис"}
+        }
+        "America:Inuvik"{
+            ec{"Инувик"}
+        }
+        "America:Iqaluit"{
+            ec{"Iqaluit"}
+        }
         "America:Jamaica"{
             ec{"Јамајка"}
+        }
+        "America:Jujuy"{
+            ec{"Jujuy"}
+        }
+        "America:Juneau"{
+            ec{"Juneau"}
+        }
+        "America:Kentucky:Monticello"{
+            ec{"Монтичело, Кентаки"}
         }
         "America:La_Paz"{
             ec{"Ла Паз"}
         }
         "America:Lima"{
             ec{"Лима"}
+        }
+        "America:Los_Angeles"{
+            ec{"Лос Анђелес"}
+        }
+        "America:Louisville"{
+            ec{"Луивиле"}
         }
         "America:Maceio"{
             ec{"Масејо"}
@@ -1171,11 +1424,35 @@ sr{
         "America:Martinique"{
             ec{"Мартиник"}
         }
+        "America:Mazatlan"{
+            ec{"Мазатлан"}
+        }
+        "America:Mendoza"{
+            ec{"Мендоза"}
+        }
+        "America:Menominee"{
+            ec{"Menominee"}
+        }
+        "America:Merida"{
+            ec{"Мерида"}
+        }
+        "America:Mexico_City"{
+            ec{"Мексико Сити"}
+        }
         "America:Miquelon"{
             ec{"Микелон"}
         }
+        "America:Moncton"{
+            ec{"Moncton"}
+        }
+        "America:Monterrey"{
+            ec{"Монтереј"}
+        }
         "America:Montevideo"{
             ec{"Монтевидео"}
+        }
+        "America:Montreal"{
+            ec{"Монтреал"}
         }
         "America:Montserrat"{
             ec{"Монтсерат"}
@@ -1183,14 +1460,35 @@ sr{
         "America:Nassau"{
             ec{"Насау"}
         }
+        "America:New_York"{
+            ec{"Њујорк"}
+        }
+        "America:Nipigon"{
+            ec{"Nipigon"}
+        }
+        "America:Nome"{
+            ec{"Nome"}
+        }
         "America:Noronha"{
             ec{"Нороња"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"Центар, Северна Дакота"}
+        }
+        "America:North_Dakota:New_Salem"{
+            ec{"Нови Салем, Северна Даткоа"}
         }
         "America:Panama"{
             ec{"Панама"}
         }
+        "America:Pangnirtung"{
+            ec{"Pangnirtung"}
+        }
         "America:Paramaribo"{
             ec{"Парамирбо"}
+        }
+        "America:Phoenix"{
+            ec{"Феникс"}
         }
         "America:Port-au-Prince"{
             ec{"Порт-о-Пренс"}
@@ -1201,8 +1499,20 @@ sr{
         "America:Puerto_Rico"{
             ec{"Порто Рико"}
         }
+        "America:Rainy_River"{
+            ec{"Rainy River"}
+        }
+        "America:Rankin_Inlet"{
+            ec{"Rankin Inlet"}
+        }
         "America:Recife"{
             ec{"Ресифе"}
+        }
+        "America:Regina"{
+            ec{"Regina"}
+        }
+        "America:Resolute"{
+            ec{"Resolute"}
         }
         "America:Rio_Branco"{
             ec{"Рио Бранко"}
@@ -1219,6 +1529,12 @@ sr{
         "America:Scoresbysund"{
             ec{"Скорезбисунд"}
         }
+        "America:Shiprock"{
+            ec{"Шипрок"}
+        }
+        "America:St_Johns"{
+            ec{"Св. Џон"}
+        }
         "America:St_Kitts"{
             ec{"Сент Китс"}
         }
@@ -1231,11 +1547,38 @@ sr{
         "America:St_Vincent"{
             ec{"Сент Винсент"}
         }
+        "America:Swift_Current"{
+            ec{"Swift Current"}
+        }
         "America:Thule"{
             ec{"Туле"}
         }
+        "America:Thunder_Bay"{
+            ec{"Thunder Bay"}
+        }
+        "America:Tijuana"{
+            ec{"Тихуана"}
+        }
+        "America:Toronto"{
+            ec{"Торонто"}
+        }
         "America:Tortola"{
             ec{"Тортола"}
+        }
+        "America:Vancouver"{
+            ec{"Ванкувер"}
+        }
+        "America:Whitehorse"{
+            ec{"Whitehorse"}
+        }
+        "America:Winnipeg"{
+            ec{"Винипег"}
+        }
+        "America:Yakutat"{
+            ec{"Yakutat"}
+        }
+        "America:Yellowknife"{
+            ec{"Yellowknife"}
         }
         "Antarctica:Casey"{
             ec{"Касеј"}
@@ -1250,7 +1593,7 @@ sr{
             ec{"Мосон"}
         }
         "Antarctica:McMurdo"{
-            ec{"МакМурдо"}
+            ec{"Макмурдо"}
         }
         "Antarctica:Palmer"{
             ec{"Палмер"}
@@ -1312,6 +1655,9 @@ sr{
         "Asia:Choibalsan"{
             ec{"Чојбалсан"}
         }
+        "Asia:Chongqing"{
+            ec{"Чонгкинг"}
+        }
         "Asia:Colombo"{
             ec{"Коломбо"}
         }
@@ -1333,11 +1679,17 @@ sr{
         "Asia:Gaza"{
             ec{"Газа"}
         }
+        "Asia:Harbin"{
+            ec{"Харбин"}
+        }
         "Asia:Hong_Kong"{
             ec{"Хонг Конг"}
         }
         "Asia:Hovd"{
             ec{"Ховд"}
+        }
+        "Asia:Irkutsk"{
+            ec{"Иркуцк"}
         }
         "Asia:Jakarta"{
             ec{"Џакарта"}
@@ -1354,6 +1706,9 @@ sr{
         "Asia:Karachi"{
             ec{"Карачи"}
         }
+        "Asia:Kashgar"{
+            ec{"Кашгар"}
+        }
         "Asia:Katmandu"{
             ec{"Катманду"}
         }
@@ -1363,11 +1718,17 @@ sr{
         "Asia:Kuala_Lumpur"{
             ec{"Куала Лумпур"}
         }
+        "Asia:Kuching"{
+            ec{"Kuching"}
+        }
         "Asia:Kuwait"{
             ec{"Кувајт"}
         }
         "Asia:Macau"{
             ec{"Макау"}
+        }
+        "Asia:Magadan"{
+            ec{"Магадан"}
         }
         "Asia:Makassar"{
             ec{"Макасар"}
@@ -1381,11 +1742,32 @@ sr{
         "Asia:Nicosia"{
             ec{"Никозија"}
         }
+        "Asia:Novosibirsk"{
+            ec{"Новосибирск"}
+        }
+        "Asia:Omsk"{
+            ec{"Омск"}
+        }
+        "Asia:Oral"{
+            ec{"Орал"}
+        }
         "Asia:Phnom_Penh"{
             ec{"Пном Пен"}
         }
+        "Asia:Pontianak"{
+            ec{"Pontianak"}
+        }
         "Asia:Pyongyang"{
             ec{"Пјонгјанг"}
+        }
+        "Asia:Qyzylorda"{
+            ec{"Qyzylorda"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Сахалин"}
+        }
+        "Asia:Samarkand"{
+            ec{"Самарканд"}
         }
         "Asia:Shanghai"{
             ec{"Шангај"}
@@ -1393,8 +1775,71 @@ sr{
         "Asia:Tashkent"{
             ec{"Ташкент"}
         }
+        "Asia:Ulaanbaatar"{
+            ec{"Улан Батор"}
+        }
+        "Asia:Urumqi"{
+            ec{"Urumqi"}
+        }
+        "Asia:Vladivostok"{
+            ec{"Владивосток"}
+        }
+        "Asia:Yakutsk"{
+            ec{"Јакутск"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"Јекатеринбург"}
+        }
+        "Atlantic:Azores"{
+            ec{"Азори"}
+        }
+        "Atlantic:Canary"{
+            ec{"Канарска острва"}
+        }
+        "Atlantic:Madeira"{
+            ec{"Madeira"}
+        }
+        "Australia:Adelaide"{
+            ec{"Аделајд"}
+        }
+        "Australia:Brisbane"{
+            ec{"Бризбејн"}
+        }
+        "Australia:Broken_Hill"{
+            ec{"Брокен Хил"}
+        }
+        "Australia:Currie"{
+            ec{"Курие"}
+        }
+        "Australia:Darwin"{
+            ec{"Дарвин"}
+        }
+        "Australia:Eucla"{
+            ec{"Иукла"}
+        }
+        "Australia:Hobart"{
+            ec{"Хобарт"}
+        }
+        "Australia:Lindeman"{
+            ec{"Lindeman"}
+        }
+        "Australia:Lord_Howe"{
+            ec{"Lord Howe"}
+        }
+        "Australia:Melbourne"{
+            ec{"Мелбурн"}
+        }
+        "Australia:Perth"{
+            ec{"Перт"}
+        }
+        "Australia:Sydney"{
+            ec{"Сиднеј"}
+        }
         "Etc:Unknown"{
             ec{"Непознат или неважећи град"}
+        }
+        "Europe:Kaliningrad"{
+            ec{"Kaliningrad"}
         }
         "Europe:Kiev"{
             ec{"Кијев"}
@@ -1402,14 +1847,41 @@ sr{
         "Europe:Moscow"{
             ec{"Москва"}
         }
+        "Europe:Samara"{
+            ec{"Самара"}
+        }
+        "Europe:Simferopol"{
+            ec{"Simferopol"}
+        }
         "Europe:Uzhgorod"{
             ec{"Ужгород"}
+        }
+        "Europe:Volgograd"{
+            ec{"Волгоград"}
         }
         "Europe:Zaporozhye"{
             ec{"Запорожје"}
         }
+        "Pacific:Chatham"{
+            ec{"Катхам"}
+        }
+        "Pacific:Easter"{
+            ec{"Ускршње острво"}
+        }
+        "Pacific:Enderbury"{
+            ec{"Ендербери"}
+        }
+        "Pacific:Galapagos"{
+            ec{"Галапагос"}
+        }
+        "Pacific:Gambier"{
+            ec{"Гамбије"}
+        }
         "Pacific:Guam"{
             ec{"Гуам"}
+        }
+        "Pacific:Honolulu"{
+            ec{"Хонолулу"}
         }
         "Pacific:Johnston"{
             ec{"Џонстон"}

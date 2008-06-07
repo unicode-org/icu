@@ -32,7 +32,7 @@ en_GB{
         "#,##0%",
         "#E0",
     }
-    Version{"1.128"}
+    Version{"1.59"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -46,6 +46,17 @@ en_GB{
                 "dd/MM/yyyy",
                 "{1} {0}",
             }
+            availableFormats{
+                MEd{"E, d/M"}
+                MMMEd{"E d MMM"}
+                MMMMd{"d MMMM"}
+                MMdd{"dd/MM"}
+                Md{"d/M"}
+                yMEd{"EEE, d/M/yyyy"}
+                yyMMM{"MMM yy"}
+                yyyyMM{"MM/yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
         }
     }
     delimiters{
@@ -55,6 +66,96 @@ en_GB{
         quotationStart{"‘"}
     }
     zoneStrings{
+        "America:Anchorage"{
+            ec{"Anchorage"}
+        }
+        "America:Buenos_Aires"{
+            ec{"Buenos Aires"}
+        }
+        "America:Campo_Grande"{
+            ec{"Campo Grande"}
+        }
+        "America:Chicago"{
+            ec{"Chicago"}
+        }
+        "America:Chihuahua"{
+            ec{"Chihuahua"}
+        }
+        "America:Denver"{
+            ec{"Denver"}
+        }
+        "America:Edmonton"{
+            ec{"Edmonton"}
+        }
+        "America:Halifax"{
+            ec{"Halifax"}
+        }
+        "America:Hermosillo"{
+            ec{"Hermosillo"}
+        }
+        "America:Indianapolis"{
+            ec{"Indianapolis"}
+        }
+        "America:Los_Angeles"{
+            ec{"Los Angeles"}
+        }
+        "America:Mexico_City"{
+            ec{"Mexico City"}
+        }
+        "America:New_York"{
+            ec{"New York"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"Center, North Dakota"}
+        }
+        "America:Phoenix"{
+            ec{"Phoenix"}
+        }
+        "America:Regina"{
+            ec{"Regina"}
+        }
+        "America:Rio_Branco"{
+            ec{"Rio Branco"}
+        }
+        "America:Sao_Paulo"{
+            ec{"Sao Paulo"}
+        }
+        "America:St_Johns"{
+            ec{"St. John's"}
+        }
+        "America:Tijuana"{
+            ec{"Tijuana"}
+        }
+        "America:Toronto"{
+            ec{"Toronto"}
+        }
+        "America:Vancouver"{
+            ec{"Vancouver"}
+        }
+        "America:Winnipeg"{
+            ec{"Winnipeg"}
+        }
+        "Australia:Adelaide"{
+            ec{"Adelaide"}
+        }
+        "Australia:Brisbane"{
+            ec{"Brisbane"}
+        }
+        "Australia:Darwin"{
+            ec{"Darwin"}
+        }
+        "Australia:Hobart"{
+            ec{"Hobart"}
+        }
+        "Australia:Perth"{
+            ec{"Perth"}
+        }
+        "Australia:Sydney"{
+            ec{"Sydney"}
+        }
+        "Pacific:Honolulu"{
+            ec{"Honolulu"}
+        }
         "meta:Europe_Central"{
             cu:int{1}
         }
@@ -64,5 +165,9 @@ en_GB{
         "meta:Europe_Western"{
             cu:int{1}
         }
+        fallbackFormat{"{1} ({0})"}
+        gmtFormat{"GMT{0}"}
+        hourFormat{"+HH:mm;-HH:mm"}
+        regionFormat{"{0} Time"}
     }
 }

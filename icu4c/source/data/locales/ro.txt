@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ro.xml
  */
 ro{
-    AuxExemplarCharacters{"[]"}
+    AuxExemplarCharacters{"[q w y]"}
     Countries{
         001{"Lume"}
         002{"Africa"}
@@ -1108,7 +1108,7 @@ ro{
             "dolar Zimbabwe",
         }
     }
-    ExemplarCharacters{"[a ă â b-i î j-s ș t ț u-z]"}
+    ExemplarCharacters{"[a ă â b-i î j-p r s ș t ț u v x z]"}
     Keys{
         calendar{"calendar"}
         collation{"sortare"}
@@ -1289,6 +1289,8 @@ ro{
         sem{"limbă semitică"}
         sga{"irlandeză veche"}
         sgn{"limbaj mimico-gestual"}
+        sh{"sârbo-croată"}
+        si{"singaleză"}
         sit{"limbă sino-tibetană"}
         sk{"slovacă"}
         sl{"slovenă"}
@@ -1347,7 +1349,7 @@ ro{
         ";",
         "%",
         "0",
-        "#",
+        "9",
         "-",
         "E",
         "‰",
@@ -1444,8 +1446,29 @@ ro{
             traditional{"sortare tradițională"}
         }
     }
-    Version{"1.128"}
+    Version{"1.92"}
     calendar{
+        buddhist{
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d MMMM, yyyy G",
+                "MMMM d, yyyy G",
+                "MMM d, yyyy G",
+                "M/d/yyyy",
+                "{1}, {0}",
+            }
+            eras{
+                abbreviated{
+                    "e.b.",
+                }
+                wide{
+                    "era budistă",
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "AM",
@@ -1463,6 +1486,8 @@ ro{
                 "{1}, {0}",
             }
             availableFormats{
+                Hm{"H:mm"}
+                MEd{"E, d MMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 MMdd{"dd.MM"}
@@ -1606,20 +1631,6 @@ ro{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "ian.",
-                        "feb.",
-                        "mar.",
-                        "apr.",
-                        "mai",
-                        "iun.",
-                        "iul.",
-                        "aug.",
-                        "sept.",
-                        "oct.",
-                        "Nov",
-                        "dec.",
-                    }
                     narrow{
                         "I",
                         "F",
@@ -1665,7 +1676,7 @@ ro{
                         "4",
                     }
                     wide{
-                        "trimestrul 1",
+                        "trimestrul al I-lea",
                         "trimestrul al II-lea",
                         "trimestrul al III-lea",
                         "trimestrul al IV-lea",
@@ -1835,6 +1846,8 @@ ro{
         "Pacific:Marquesas"{
             ec{"Marchize"}
         }
+        gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;−HH:mm"}
+        regionFormat{"{0}"}
     }
 }

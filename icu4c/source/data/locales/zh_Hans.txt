@@ -13,5 +13,5 @@ zh_Hans{
     LocaleScript{
         "Hani",
     }
-    Version{"1.128"}
+    Version{"1.48"}
 }

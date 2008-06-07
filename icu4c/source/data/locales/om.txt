@@ -37,7 +37,7 @@ om{
         "#,##0%",
         "#E0",
     }
-    Version{"1.128"}
+    Version{"1.52"}
     calendar{
         gregorian{
             dayNames{

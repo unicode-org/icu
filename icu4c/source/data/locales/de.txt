@@ -1490,7 +1490,7 @@ de{
         de_AT{"Österreichisches Deutsch"}
         de_CH{"Schweizer Hochdeutsch"}
         del{"Delaware-Sprache"}
-        den{"Slave (Athapaskische Sprachen)"}
+        den{"Slavey"}
         dgr{"Dogrib"}
         din{"Dinka-Sprache"}
         doi{"Dogri"}
@@ -2097,8 +2097,84 @@ de{
         TARASK{"Taraskievica-Orthographie"}
         VALENCIA{"VALENCIA"}
     }
-    Version{"1.128"}
+    Version{"1.109"}
     calendar{
+        buddhist{
+            AmPmMarkers{
+                "vorm.",
+                "nachm.",
+            }
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE d. MMMM yyyy G",
+                "d. MMMM yyyy G",
+                "d. MMM yyyy G",
+                "d.M.yyyy",
+                "{1} {0}",
+            }
+            availableFormats{
+                yMMMM{"yyyy MMMM"}
+            }
+            eras{
+                abbreviated{
+                    "BE",
+                }
+                narrow{
+                    "BE",
+                }
+                wide{
+                    "BE",
+                }
+            }
+        }
+        chinese{
+            AmPmMarkers{
+                "vorm.",
+                "nachm.",
+            }
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE y'x'G-Ml-d",
+                "y'x'G-Ml-d",
+                "y'x'G-Ml-d",
+                "y'x'G-Ml-d",
+                "{1} {0}",
+            }
+            availableFormats{
+                MMMd{"MMM d"}
+            }
+        }
+        coptic{
+            AmPmMarkers{
+                "vorm.",
+                "nachm.",
+            }
+            eras{
+                abbreviated{
+                    "ERA0",
+                    "ERA1",
+                }
+                narrow{
+                    "ERA0",
+                    "ERA1",
+                }
+                wide{
+                    "ERA0",
+                    "ERA1",
+                }
+            }
+        }
+        ethiopic{
+            availableFormats{
+                MEd{"E, M-d"}
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "vorm.",
@@ -2325,6 +2401,203 @@ de{
                         "4",
                     }
                 }
+            }
+        }
+        hebrew{
+            AmPmMarkers{
+                "vorm.",
+                "nachm.",
+            }
+            eras{
+                abbreviated{
+                    "vorm.",
+                }
+                narrow{
+                    "vorm.",
+                }
+                wide{
+                    "vorm.",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Tishri",
+                        "Heshvan",
+                        "Kislev",
+                        "Tevet",
+                        "Shevat",
+                        "Adar I",
+                        "Adar",
+                        "Nisan",
+                        "Iyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                    }
+                    wide{
+                        "Tishri",
+                        "Heshvan",
+                        "Kislev",
+                        "Tevet",
+                        "Shevat",
+                        "Adar I",
+                        "Adar",
+                        "Nisan",
+                        "Iyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                    }
+                    wide{
+                        "Tishri",
+                        "Heshvan",
+                        "Kislev",
+                        "Tevet",
+                        "Shevat",
+                        "Adar I",
+                        "Adar",
+                        "Nisan",
+                        "Iyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                    }
+                }
+            }
+        }
+        islamic{
+            AmPmMarkers{
+                "vorm.",
+                "nachm.",
+            }
+            eras{
+                abbreviated{
+                    "AH",
+                }
+                narrow{
+                    "AH",
+                }
+                wide{
+                    "AH",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Muharram",
+                        "Safar",
+                        "Rabiʻ I",
+                        "Rabiʻ II",
+                        "Jumada I",
+                        "Jumada II",
+                        "Rajab",
+                        "Shaʻban",
+                        "Ramadan",
+                        "Shawwal",
+                        "Dhuʻl-Qiʻdah",
+                        "Dhuʻl-Hijjah",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "Muharram",
+                        "Safar",
+                        "Rabiʻ I",
+                        "Rabiʻ II",
+                        "Jumada I",
+                        "Jumada II",
+                        "Rajab",
+                        "Shaʻban",
+                        "Ramadan",
+                        "Shawwal",
+                        "Dhuʻl-Qiʻdah",
+                        "Dhuʻl-Hijjah",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "Muharram",
+                        "Safar",
+                        "Rabiʻ I",
+                        "Rabiʻ II",
+                        "Jumada I",
+                        "Jumada II",
+                        "Rajab",
+                        "Shaʻban",
+                        "Ramadan",
+                        "Shawwal",
+                        "Dhuʻl-Qiʻdah",
+                        "Dhuʻl-Hijjah",
+                    }
+                }
+            }
+        }
+        roc{
+            AmPmMarkers{
+                "AM",
+                "PM",
             }
         }
     }
@@ -3131,6 +3404,10 @@ de{
             ls{"Westeuropäische Zeit"}
             sd{"WESZ"}
             ss{"WEZ"}
+        }
+        "meta:Moscow"{
+            ld{"Moskauer Sommerzeit"}
+            ls{"Moskauer Zeit"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

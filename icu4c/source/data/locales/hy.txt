@@ -203,6 +203,12 @@ hy{
         ZM{"Զամբիա"}
         ZW{"Զիմբաբվե"}
     }
+    Currencies{
+        AMD{
+            "դր.",
+            "AMD",
+        }
+    }
     ExemplarCharacters{"[֊ ՝ ՜ ՞ ՚ ՛ ՟ ա-ե և զ-ֆ]"}
     Languages{
         hy{"Հայերէն"}
@@ -230,7 +236,7 @@ hy{
         "#0%",
         "#E0",
     }
-    Version{"1.128"}
+    Version{"1.63"}
     calendar{
         gregorian{
             AmPmMarkers{

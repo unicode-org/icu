@@ -37,9 +37,13 @@ en_NZ{
         "#,##0%",
         "#E0",
     }
-    Version{"1.128"}
+    Version{"1.55"}
     calendar{
         gregorian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
             DateTimeElements:intvector{
                 1,
                 1,
@@ -56,7 +60,26 @@ en_NZ{
                 "{1} {0}",
             }
             availableFormats{
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MMM{"LLL"}
+                MMMEd{"E, MMM d"}
+                MMMMEd{"E, MMMM d"}
+                MMMMd{"d MMMM"}
+                MMMd{"MMM d"}
                 Md{"d/M"}
+                d{"d"}
+                hm{"h:mm a"}
+                ms{"mm:ss"}
+                y{"yyyy"}
+                yM{"M/yyyy"}
+                yMMM{"MMM yyyy"}
+                yMMMEd{"EEE, MMM d, yyyy"}
+                yMMMM{"MMMM yyyy"}
+                yQQQ{"QQQ yyyy"}
+                yyyyMM{"MM/yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -68,6 +91,53 @@ en_NZ{
                         "Thu",
                         "Fri",
                         "Sat",
+                    }
+                    narrow{
+                        "S",
+                        "M",
+                        "T",
+                        "W",
+                        "T",
+                        "F",
+                        "S",
+                    }
+                    wide{
+                        "Sunday",
+                        "Monday",
+                        "Tuesday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Sun",
+                        "Mon",
+                        "Tue",
+                        "Wed",
+                        "Thu",
+                        "Fri",
+                        "Sat",
+                    }
+                    narrow{
+                        "S",
+                        "M",
+                        "T",
+                        "W",
+                        "T",
+                        "F",
+                        "S",
+                    }
+                    wide{
+                        "Sunday",
+                        "Monday",
+                        "Tuesday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday",
                     }
                 }
             }

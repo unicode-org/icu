@@ -255,6 +255,7 @@ eo{
         bn{"bengala"}
         bo{"tibeta"}
         br{"bretona"}
+        bs{"bosnia"}
         ca{"kataluna"}
         co{"korsika"}
         cs{"ĉeĥa"}
@@ -270,6 +271,7 @@ eo{
         eu{"eŭska"}
         fa{"persa"}
         fi{"finna"}
+        fil{"filipina"}
         fj{"fiĝia"}
         fo{"feroa"}
         fr{"franca"}
@@ -320,6 +322,7 @@ eo{
         na{"naura"}
         ne{"nepala"}
         nl{"nederlanda"}
+        nn{"novnorvega"}
         no{"norvega"}
         oc{"okcitana"}
         om{"oroma"}
@@ -328,6 +331,8 @@ eo{
         pl{"pola"}
         ps{"paŝtua"}
         pt{"portugala"}
+        pt_BR{"brazilportugala"}
+        pt_PT{"portugalportugala"}
         qu{"keĉua"}
         rm{"romanĉa"}
         rn{"burunda"}
@@ -357,7 +362,8 @@ eo{
         th{"taja"}
         ti{"tigraja"}
         tk{"turkmena"}
-        tl{"filipina"}
+        tl{"tagaloga"}
+        tlh{"klingona"}
         tn{"cvana"}
         to{"tongaa"}
         tr{"turka"}
@@ -395,7 +401,7 @@ eo{
         "NaN",
         "+",
     }
-    Version{"1.128"}
+    Version{"1.66"}
     calendar{
         gregorian{
             AmPmMarkers{

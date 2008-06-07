@@ -13,7 +13,7 @@ es_CO{
             "Peso de Colombia",
         }
     }
-    Version{"1.128"}
+    Version{"1.56"}
     calendar{
         gregorian{
             DateTimePatterns{

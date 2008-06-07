@@ -27,5 +27,5 @@ es_MX{
         "NaN",
         "+",
     }
-    Version{"1.128"}
+    Version{"1.51"}
 }

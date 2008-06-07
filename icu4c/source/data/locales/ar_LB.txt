@@ -7,15 +7,37 @@
 // *
 // ***************************************************************************
 ar_LB{
+    Currencies{
+        LBP{
+            "ل.ل.‏",
+            "جنية لبنانى",
+        }
+    }
     Scripts{
         Ital{"اللأيطالية القديمة"}
     }
-    Version{"1.128"}
+    Version{"1.45"}
     calendar{
         gregorian{
+            AmPmMarkers{
+                "ص",
+                "م",
+            }
             DateTimeElements:intvector{
                 7,
                 1,
+            }
+            availableFormats{
+                Hm{"H:mm"}
+                M{"L"}
+                MMM{"LLL"}
+                MMMEd{"E d MMM"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                Md{"d/M"}
+                d{"d"}
+                yMMMEd{"EEE، d MMM yyyy"}
+                yMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{

@@ -13,5 +13,5 @@ pa_Guru{
     LocaleScript{
         "Guru",
     }
-    Version{"1.128"}
+    Version{"1.12"}
 }

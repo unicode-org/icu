@@ -11,7 +11,7 @@ sv_FI{
     Countries{
         UM{"USA:s yttre öar"}
     }
-    Version{"1.128"}
+    Version{"1.54"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

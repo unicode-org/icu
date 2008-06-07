@@ -841,7 +841,7 @@ mt{
     Variants{
         REVISED{"Ortografija Irriveda"}
     }
-    Version{"1.128"}
+    Version{"1.76"}
     calendar{
         gregorian{
             AmPmMarkers{

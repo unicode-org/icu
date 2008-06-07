@@ -23,7 +23,7 @@ en_IE{
         "#,##0%",
         "#E0",
     }
-    Version{"1.128"}
+    Version{"1.56"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -44,6 +44,15 @@ en_IE{
                 "d MMM yyyy",
                 "dd/MM/yyyy",
                 "{1} {0}",
+            }
+            availableFormats{
+                MEd{"E, d/M"}
+                MMMMd{"d MMMM"}
+                MMdd{"dd/MM"}
+                Md{"d/M"}
+                yMEd{"EEE, d/M/yyyy"}
+                yyyyMM{"MM/yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
             }
         }
     }

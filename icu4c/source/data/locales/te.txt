@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/te.xml
  */
 te{
-    AuxExemplarCharacters{"[\u200C \u200D ౦-౯]"}
+    AuxExemplarCharacters{"[\u200C \u200D ౦-౯ b c e g m q t]"}
     Countries{
         BR{"బ్రజిల్"}
         CN{"చైనా"}
@@ -97,6 +97,7 @@ te{
     }
     Scripts{
         Arab{"అరబ్బి లిపి"}
+        Beng{"Beng"}
         Cyrl{"సిరిలిక్ లిపి"}
         Hans{"సరళమైన చైనా లిపి"}
         Hant{"ప్రాచీన చైనా లిపి"}
@@ -108,7 +109,7 @@ te{
         1996{"1996 ఙర్మన వర్ణక్రమం"}
         REVISED{"సవరించబడిన వర్ణక్రమం"}
     }
-    Version{"1.128"}
+    Version{"1.64"}
     calendar{
         gregorian{
             AmPmMarkers{
