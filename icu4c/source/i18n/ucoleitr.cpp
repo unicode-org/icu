@@ -319,10 +319,10 @@ ucol_openElements(const UCollator  *coll,
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
-
-  result->reset_     = TRUE;
-  result->isWritable = FALSE;
-  result->pce        = NULL;
+    
+    result->reset_ = TRUE;
+    result->isWritable = FALSE;
+    result->pce = NULL;
 
     if (text == NULL) {
         textLength = 0;
@@ -672,6 +672,9 @@ ucol_setText(      UCollationElements *elems,
     }
 
     elems->isWritable = FALSE;
+    
+    /* free offset buffer to avoid memory leak before initializing. */
+    freeOffsetBuffer(&(elems->iteratordata_));
     uprv_init_collIterate(elems->iteratordata_.coll, text, textLength, 
                           &elems->iteratordata_);
 
