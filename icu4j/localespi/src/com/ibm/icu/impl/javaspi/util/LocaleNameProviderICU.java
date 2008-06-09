@@ -9,7 +9,7 @@ package com.ibm.icu.impl.javaspi.util;
 import java.util.Locale;
 import java.util.spi.LocaleNameProvider;
 
-import com.ibm.icu.impl.javaspi.ICULocale;
+import com.ibm.icu.impl.javaspi.ICULocaleServiceProvider;
 import com.ibm.icu.util.ULocale;
 
 public class LocaleNameProviderICU extends LocaleNameProvider {
@@ -17,7 +17,7 @@ public class LocaleNameProviderICU extends LocaleNameProvider {
     @Override
     public String getDisplayCountry(String countryCode, Locale locale) {
         String id = "und_" + countryCode;
-        String disp = ULocale.getDisplayCountry(id, ULocale.forLocale(ICULocale.canonicalize(locale)));
+        String disp = ULocale.getDisplayCountry(id, ULocale.forLocale(ICULocaleServiceProvider.canonicalize(locale)));
         if (disp.length() == 0 || disp.equals(countryCode)) {
             return null;
         }
@@ -26,7 +26,7 @@ public class LocaleNameProviderICU extends LocaleNameProvider {
 
     @Override
     public String getDisplayLanguage(String languageCode, Locale locale) {
-        String disp = ULocale.getDisplayLanguage(languageCode, ULocale.forLocale(ICULocale.canonicalize(locale)));
+        String disp = ULocale.getDisplayLanguage(languageCode, ULocale.forLocale(ICULocaleServiceProvider.canonicalize(locale)));
         if (disp.length() == 0 || disp.equals(languageCode)) {
             return null;
         }
@@ -41,7 +41,7 @@ public class LocaleNameProviderICU extends LocaleNameProvider {
 
     @Override
     public Locale[] getAvailableLocales() {
-        return ICULocale.getAvailableLocales();
+        return ICULocaleServiceProvider.getAvailableLocales();
     }
 
 }

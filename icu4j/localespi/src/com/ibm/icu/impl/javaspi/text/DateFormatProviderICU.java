@@ -10,7 +10,7 @@ import java.text.DateFormat;
 import java.text.spi.DateFormatProvider;
 import java.util.Locale;
 
-import com.ibm.icu.impl.javaspi.ICULocale;
+import com.ibm.icu.impl.javaspi.ICULocaleServiceProvider;
 import com.ibm.icu.impl.jdkadapter.SimpleDateFormatICU;
 
 public class DateFormatProviderICU extends DateFormatProvider {
@@ -34,12 +34,12 @@ public class DateFormatProviderICU extends DateFormatProvider {
 
     @Override
     public Locale[] getAvailableLocales() {
-        return ICULocale.getAvailableLocales();
+        return ICULocaleServiceProvider.getAvailableLocales();
     }
 
     private DateFormat getInstance(int dstyle, int tstyle, Locale locale) {
         com.ibm.icu.text.DateFormat icuDfmt;
-        Locale actual = ICULocale.canonicalize(locale);
+        Locale actual = ICULocaleServiceProvider.canonicalize(locale);
         if (dstyle == NONE) {
             icuDfmt = com.ibm.icu.text.DateFormat.getTimeInstance(tstyle, actual);
         } else if (tstyle == NONE) {
@@ -52,7 +52,7 @@ public class DateFormatProviderICU extends DateFormatProvider {
             return null;
         }
 
-        com.ibm.icu.text.DecimalFormatSymbols decfs = ICULocale.getDecimalFormatSymbolsForLocale(actual);
+        com.ibm.icu.text.DecimalFormatSymbols decfs = ICULocaleServiceProvider.getDecimalFormatSymbolsForLocale(actual);
         if (decfs != null) {
             com.ibm.icu.text.NumberFormat icuNfmt = icuDfmt.getNumberFormat();
             if (icuNfmt instanceof com.ibm.icu.text.DecimalFormat) {

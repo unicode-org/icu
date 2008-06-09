@@ -56,7 +56,7 @@
     <jar jarfile="${jar.file}" compress="true">
       <fileset dir="${src.dir}">
         <include name="META-INF/services/java.*Provider"/>
-        <include name="com/ibm/icu/impl/javaspi/ICUProvider.properties"/>
+        <include name="com/ibm/icu/impl/javaspi/ICULocaleServiceProviderConfig.properties"/>
       </fileset>
       <fileset dir="${build.dir}">
         <include name="com/ibm/icu/impl/**/*"/>

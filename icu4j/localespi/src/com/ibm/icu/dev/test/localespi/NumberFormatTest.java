@@ -6,7 +6,10 @@
  */
 package com.ibm.icu.dev.test.localespi;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
@@ -37,7 +40,39 @@ public class NumberFormatTest extends TestFmwk {
 
     private void checkGetInstance(int type, Locale loc) {
         NumberFormat nf;
-        String method;
+        String[] method = new String[1];
+        nf = getJDKInstance(type, loc, method);
+
+        boolean isIcuImpl = (nf instanceof com.ibm.icu.impl.jdkadapter.DecimalFormatICU)
+                            || (nf instanceof com.ibm.icu.impl.jdkadapter.NumberFormatICU);
+        if (TestUtil.isICUExtendedLocale(loc)) {
+            if (!isIcuImpl) {
+                errln("FAIL: " + method[0] + " returned JDK NumberFormat for locale " + loc);
+            }
+        } else {
+            if (isIcuImpl) {
+                logln("INFO: " + method[0] + " returned ICU NumberFormat for locale " + loc);
+            }
+            Locale iculoc = TestUtil.toICUExtendedLocale(loc);
+            NumberFormat nfIcu = null;
+            nfIcu = getJDKInstance(type, iculoc, null);
+            if (isIcuImpl) {
+                if (!nf.equals(nfIcu)) {
+                    errln("FAIL: " + method[0] + " returned ICU NumberFormat for locale " + loc
+                            + ", but different from the one for locale " + iculoc);
+                }
+            } else {
+                if (!(nfIcu instanceof com.ibm.icu.impl.jdkadapter.DecimalFormatICU)
+                        && !(nfIcu instanceof com.ibm.icu.impl.jdkadapter.NumberFormatICU)) {
+                    errln("FAIL: " + method[0] + " returned JDK NumberFormat for locale " + iculoc);
+                }
+            }
+        }
+    }
+
+    private NumberFormat getJDKInstance(int type, Locale loc, String[] methodName) {
+        NumberFormat nf = null;
+        String method = null;
 
         switch (type) {
         case DEFAULT_TYPE:
@@ -60,47 +95,191 @@ public class NumberFormatTest extends TestFmwk {
             nf = NumberFormat.getCurrencyInstance(loc);
             method = "getCurrencyInstance";
             break;
-        default:
-            errln("FAIL: Unknown number format type");
-            return;
         }
+        if (methodName != null) {
+            methodName[0] = method;
+        }
+        return nf;
+    }
 
-        boolean isIcuImpl = (nf instanceof com.ibm.icu.impl.jdkadapter.DecimalFormatICU);
-        if (TestUtil.isICUExtendedLocale(loc)) {
-            if (!isIcuImpl) {
-                errln("FAIL: " + method + " returned JDK NumberFormat for locale " + loc);
-            }
-        } else {
-            if (isIcuImpl) {
-                logln("INFO: " + method + " returned ICU NumberFormat for locale " + loc);
-            }
-            Locale iculoc = TestUtil.toICUExtendedLocale(loc);
-            NumberFormat nfIcu = null;
-            switch (type) {
-            case DEFAULT_TYPE:
-                nfIcu = NumberFormat.getInstance(iculoc);
-                break;
-            case NUMBER_TYPE:
-                nfIcu = NumberFormat.getNumberInstance(iculoc);
-                break;
-            case INTEGER_TYPE:
-                nfIcu = NumberFormat.getIntegerInstance(iculoc);
-                break;
-            case PERCENT_TYPE:
-                nfIcu = NumberFormat.getPercentInstance(iculoc);
-                break;
-            case CURRENCY_TYPE:
-                nfIcu = NumberFormat.getCurrencyInstance(iculoc);
-                break;
-            }
-            if (isIcuImpl) {
-                if (!nf.equals(nfIcu)) {
-                    errln("FAIL: " + method + " returned ICU NumberFormat for locale " + loc
-                            + ", but different from the one for locale " + iculoc);
+    private com.ibm.icu.text.NumberFormat getICUInstance(int type, Locale loc, String[] methodName) {
+        com.ibm.icu.text.NumberFormat icunf = null;
+        String method = null;
+
+        switch (type) {
+        case DEFAULT_TYPE:
+            icunf = com.ibm.icu.text.NumberFormat.getInstance(loc);
+            method = "getInstance";
+            break;
+        case NUMBER_TYPE:
+            icunf = com.ibm.icu.text.NumberFormat.getNumberInstance(loc);
+            method = "getNumberInstance";
+            break;
+        case INTEGER_TYPE:
+            icunf = com.ibm.icu.text.NumberFormat.getIntegerInstance(loc);
+            method = "getIntegerInstance";
+            break;
+        case PERCENT_TYPE:
+            icunf = com.ibm.icu.text.NumberFormat.getPercentInstance(loc);
+            method = "getPercentInstance";
+            break;
+        case CURRENCY_TYPE:
+            icunf = com.ibm.icu.text.NumberFormat.getCurrencyInstance(loc);
+            method = "getCurrencyInstance";
+            break;
+        }
+        if (methodName != null) {
+            methodName[0] = method;
+        }
+        return icunf;
+    }
+
+    /*
+     * Testing the behavior of number format between ICU instance and its
+     * equivalent created via the Locale SPI framework.
+     */
+    public void TestICUEquivalent() {
+        Locale[] TEST_LOCALES = {
+                new Locale("en", "US"),
+                new Locale("de", "DE"),
+                new Locale("zh"),
+        };
+
+        long[] TEST_LONGS = {
+                40L,
+                -1578L,
+                112233445566778899L,
+        };
+
+        double[] TEST_DOUBLES = {
+                0.0451D,
+                -1.679D,
+                124578.369D,
+        };
+
+        Object[] TEST_NUMBERS = {
+                Byte.valueOf((byte)13),
+                Integer.valueOf(3961),
+                Long.valueOf(-3451237890000L),
+                Float.valueOf(1.754F),
+                Double.valueOf(-129.942362353D),
+                new BigInteger("-15253545556575859505"),
+                new BigDecimal("3.14159265358979323846264338"),
+        };
+
+        String[] methodName = new String[1];
+        for (Locale loc : TEST_LOCALES) {
+            for (int type = 0; type <= 4; type++) {
+                Locale iculoc = TestUtil.toICUExtendedLocale(loc);
+                NumberFormat nf = getJDKInstance(type, iculoc, methodName);
+                com.ibm.icu.text.NumberFormat icunf = getICUInstance(type, loc, null);
+
+                String s1, s2;
+                Number n1, n2;
+                boolean pe1, pe2;
+                for (long l : TEST_LONGS) {
+                    s1 = nf.format(l);
+                    s2 = icunf.format(l);
+
+                    if (!s1.equals(s2)) {
+                        errln("FAIL: Different results for formatting long " + l + " by NumberFormat("
+                                + methodName[0] + ") in locale " + loc + " - JDK:" + s1 + " ICU:" + s2);
+                    }
+
+                    pe1 = false;
+                    n1 = n2 = null;
+                    try {
+                        n1 = nf.parse(s1);
+                    } catch (ParseException e) {
+                        pe1 = true;
+                    }
+                    pe2 = false;
+                    try {
+                        n2 = icunf.parse(s2);
+                    } catch (ParseException e) {
+                        pe2 = true;
+                    }
+                    if ((pe1 && !pe2) || (!pe1 && pe2)) {
+                        errln("FAIL: ParseException thrown by " + (pe1 ? "JDK" : "ICU")
+                                + " NumberFormat(" + methodName[0] + ") for parsing long" + l
+                                + " in locale " + loc);
+                    } else if (!pe1 && !pe2 && !n1.equals(n2)) {
+                        errln("FAIL: Different results for parsing long " + l + " by NumberFormat("
+                                + methodName[0] + ") in locale " + loc + " - JDK:" + n1 + " ICU:" + n2);
+                    } else if (pe1 && pe2) {
+                        logln("INFO: ParseException thrown by both JDK and ICU NumberFormat("
+                                + methodName[0] + ") for parsing long " + l + " in locale " + loc);
+                    }
                 }
-            } else {
-                if (!(nfIcu instanceof com.ibm.icu.impl.jdkadapter.DecimalFormatICU)) {
-                    errln("FAIL: " + method + " returned JDK NumberFormat for locale " + iculoc);
+
+                for (double d : TEST_DOUBLES) {
+                    s1 = nf.format(d);
+                    s2 = icunf.format(d);
+
+                    if (!s1.equals(s2)) {
+                        errln("FAIL: Different results for formatting double " + d + " by NumberFormat("
+                                + methodName[0] + ") in locale " + loc + " - JDK:" + s1 + " ICU:" + s2);
+                    }
+
+                    pe1 = false;
+                    n1 = n2 = null;
+                    try {
+                        n1 = nf.parse(s1);
+                    } catch (ParseException e) {
+                        pe1 = true;
+                    }
+                    pe2 = false;
+                    try {
+                        n2 = icunf.parse(s2);
+                    } catch (ParseException e) {
+                        pe2 = true;
+                    }
+                    if ((pe1 && !pe2) || (!pe1 && pe2)) {
+                        errln("FAIL: ParseException thrown by " + (pe1 ? "JDK" : "ICU")
+                                + " NumberFormat(" + methodName[0] + ") for parsing double" + d
+                                + " in locale " + loc);
+                    } else if (!pe1 && !pe2 && !n1.equals(n2)) {
+                        errln("FAIL: Different results for parsing double " + d + " by NumberFormat("
+                                + methodName[0] + ") in locale " + loc + " - JDK:" + n1 + " ICU:" + n2);
+                    } else if (pe1 && pe2) {
+                        logln("INFO: ParseException thrown by both JDK and ICU NumberFormat("
+                                + methodName[0] + ") for parsing double " + d + " in locale " + loc);
+                    }
+                }
+
+                for (Object o : TEST_NUMBERS) {
+                    s1 = nf.format(o);
+                    s2 = icunf.format(o);
+
+                    if (!s1.equals(s2)) {
+                        errln("FAIL: Different results for formatting " + o.getClass().getName() + " by NumberFormat("
+                                + methodName[0] + ") in locale " + loc + " - JDK:" + s1 + " ICU:" + s2);
+                    }
+
+                    pe1 = false;
+                    n1 = n2 = null;
+                    try {
+                        n1 = nf.parse(s1);
+                    } catch (ParseException e) {
+                        pe1 = true;
+                    }
+                    pe2 = false;
+                    try {
+                        n2 = icunf.parse(s2);
+                    } catch (ParseException e) {
+                        pe2 = true;
+                    }
+                    if ((pe1 && !pe2) || (!pe1 && pe2)) {
+                        errln("FAIL: ParseException thrown by " + (pe1 ? "JDK" : "ICU")
+                                + " NumberFormat(" + methodName[0] + ") for parsing " + o.getClass().getName()
+                                + " in locale " + loc);
+                    } else if (!pe1 && !pe2 && !n1.equals(n2)) {
+                        errln("FAIL: Different results for parsing " + o.getClass().getName() + " by NumberFormat("
+                                + methodName[0] + ") in locale " + loc + " - JDK:" + n1 + " ICU:" + n2);
+                    } else if (pe1 && pe2) {
+                        logln("INFO: ParseException thrown by both JDK and ICU NumberFormat("
+                                + methodName[0] + ") for parsing " + o.getClass().getName() + " in locale " + loc);
+                    }
                 }
             }
         }
