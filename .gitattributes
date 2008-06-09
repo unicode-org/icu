@@ -277,7 +277,7 @@ icu4j/localespi/src/META-INF/services/java.text.spi.NumberFormatProvider -text
 icu4j/localespi/src/META-INF/services/java.util.spi.CurrencyNameProvider -text
 icu4j/localespi/src/META-INF/services/java.util.spi.LocaleNameProvider -text
 icu4j/localespi/src/META-INF/services/java.util.spi.TimeZoneNameProvider -text
-icu4j/localespi/src/com/ibm/icu/impl/javaspi/ICUProvider.properties -text
+icu4j/localespi/src/com/ibm/icu/impl/javaspi/ICULocaleServiceProviderConfig.properties -text
 icu4j/preprocessor.txt -text
 icu4j/readme.html svneol=native#text/html
 icu4j/src/com/ibm/icu/ICUConfig.properties -text

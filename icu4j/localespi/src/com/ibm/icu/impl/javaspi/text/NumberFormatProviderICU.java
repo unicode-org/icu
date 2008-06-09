@@ -10,8 +10,9 @@ import java.text.NumberFormat;
 import java.text.spi.NumberFormatProvider;
 import java.util.Locale;
 
-import com.ibm.icu.impl.javaspi.ICULocale;
+import com.ibm.icu.impl.javaspi.ICULocaleServiceProvider;
 import com.ibm.icu.impl.jdkadapter.DecimalFormatICU;
+import com.ibm.icu.impl.jdkadapter.NumberFormatICU;
 
 public class NumberFormatProviderICU extends NumberFormatProvider {
 
@@ -42,12 +43,12 @@ public class NumberFormatProviderICU extends NumberFormatProvider {
 
     @Override
     public Locale[] getAvailableLocales() {
-        return ICULocale.getAvailableLocales();
+        return ICULocaleServiceProvider.getAvailableLocales();
     }
 
     private NumberFormat getInstance(int type, Locale locale) {
         com.ibm.icu.text.NumberFormat icuNfmt;
-        Locale actual = ICULocale.canonicalize(locale);
+        Locale actual = ICULocaleServiceProvider.canonicalize(locale);
         switch (type) {
         case NUMBER:
             icuNfmt = com.ibm.icu.text.NumberFormat.getNumberInstance(actual);
@@ -64,16 +65,24 @@ public class NumberFormatProviderICU extends NumberFormatProvider {
         default:
             return null;
         }
+
         if (!(icuNfmt instanceof com.ibm.icu.text.DecimalFormat)) {
             // icuNfmt must be always DecimalFormat
             return null;
         }
 
-        com.ibm.icu.text.DecimalFormatSymbols decfs = ICULocale.getDecimalFormatSymbolsForLocale(actual);
+        NumberFormat nf = null;
+        if (ICULocaleServiceProvider.useDecimalFormat()) {
+            nf = DecimalFormatICU.wrap((com.ibm.icu.text.DecimalFormat)icuNfmt);
+        } else {
+            nf = NumberFormatICU.wrap(icuNfmt);
+        }
+
+        com.ibm.icu.text.DecimalFormatSymbols decfs = ICULocaleServiceProvider.getDecimalFormatSymbolsForLocale(actual);
         if (decfs != null) {
             ((com.ibm.icu.text.DecimalFormat)icuNfmt).setDecimalFormatSymbols(decfs);
         }
 
-        return DecimalFormatICU.wrap((com.ibm.icu.text.DecimalFormat)icuNfmt);
+        return nf;
     }
 }

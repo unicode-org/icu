@@ -79,7 +79,7 @@ public class DateFormatTest extends TestFmwk {
     }
 
     private com.ibm.icu.text.DateFormat getICUInstance(int dstyle, int tstyle, Locale loc, String[] methodName) {
-        com.ibm.icu.text.DateFormat icudf;;
+        com.ibm.icu.text.DateFormat icudf;
         String method;
         if (dstyle < 0) {
             icudf = com.ibm.icu.text.DateFormat.getTimeInstance(tstyle, loc);

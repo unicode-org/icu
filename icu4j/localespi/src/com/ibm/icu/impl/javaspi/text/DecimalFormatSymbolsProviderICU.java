@@ -10,7 +10,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.spi.DecimalFormatSymbolsProvider;
 import java.util.Locale;
 
-import com.ibm.icu.impl.javaspi.ICULocale;
+import com.ibm.icu.impl.javaspi.ICULocaleServiceProvider;
 import com.ibm.icu.impl.jdkadapter.DecimalFormatSymbolsICU;
 
 public class DecimalFormatSymbolsProviderICU extends
@@ -19,13 +19,13 @@ public class DecimalFormatSymbolsProviderICU extends
     @Override
     public DecimalFormatSymbols getInstance(Locale locale) {
         com.ibm.icu.text.DecimalFormatSymbols icuDecfs = com.ibm.icu.text.DecimalFormatSymbols.getInstance(
-                ICULocale.canonicalize(locale));
+                ICULocaleServiceProvider.canonicalize(locale));
         return DecimalFormatSymbolsICU.wrap(icuDecfs);
     }
 
     @Override
     public Locale[] getAvailableLocales() {
-        return ICULocale.getAvailableLocales();
+        return ICULocaleServiceProvider.getAvailableLocales();
     }
 
 }

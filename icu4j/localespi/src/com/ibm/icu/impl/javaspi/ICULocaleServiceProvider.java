@@ -18,15 +18,20 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.ULocale;
 
-public class ICULocale {
-    private static final String SPI_PROP_FILE = "com/ibm/icu/impl/javaspi/ICUProvider.properties";
-    private static final String ADD_VARIANTS_KEY = "com.ibm.icu.impl.javaspi.ICULocale.addIcuVariants";
-    private static final String ADD_ISO3_LANG_KEY = "com.ibm.icu.impl.javaspi.ICULocale.addIso3Languages";
-    private static final String SUFFIX_KEY = "com.ibm.icu.impl.javaspi.ICULocale.icuVariantSuffix";
+public class ICULocaleServiceProvider {
+    private static final String SPI_PROP_FILE = "com/ibm/icu/impl/javaspi/ICULocaleServiceProviderConfig.properties";
 
-    private static final String DEFAULT_SUFFIX = "ICU";
-    private static final boolean DEFAULT_ADD_VARIANTS = true;
-    private static final boolean DEFAULT_ADD_ISO3_LANG = true;
+    private static final String SUFFIX_KEY = "com.ibm.icu.impl.javaspi.ICULocaleServiceProvider.icuVariantSuffix";
+    private static final String ENABLE_VARIANTS_KEY = "com.ibm.icu.impl.javaspi.ICULocaleServiceProvider.enableIcuVariants";
+    private static final String ENABLE_ISO3_LANG_KEY = "com.ibm.icu.impl.javaspi.ICULocaleServiceProvider.enableIso3Languages";
+    private static final String USE_DECIMALFORMAT_KEY = "com.ibm.icu.impl.javaspi.ICULocaleServiceProvider.useDecimalFormat";
+
+    private static boolean configLoaded = false;
+
+    private static String suffix = "ICU";
+    private static boolean enableVariants = true;
+    private static boolean enableIso3Lang = true;
+    private static boolean useDecimalFormat = false;
 
     private static final Locale[] SPECIAL_LOCALES = {
         new Locale("ja", "JP", "JP"),
@@ -38,9 +43,6 @@ public class ICULocale {
     };
 
     private static Locale[] LOCALES = null;
-    private static Boolean ADD_VARIANTS = null;
-    private static Boolean ADD_ISO3_LANG = null;
-    private static String SUFFIX = null;
 
     public static Locale[] getAvailableLocales() {
         Locale[] all = getLocales();
@@ -59,6 +61,11 @@ public class ICULocale {
             result = new Locale(locale.getLanguage(), locale.getCountry(), variant);
         }
         return result;
+    }
+
+    public static boolean useDecimalFormat() {
+        loadConfiguration();
+        return useDecimalFormat;
     }
 
     private static final Locale THAI_NATIVE_DIGIT_LOCALE = new Locale("th", "TH", "TH");
@@ -94,7 +101,7 @@ public class ICULocale {
             String language = uloc.getLanguage();
             String country = uloc.getCountry();
             String variant = uloc.getVariant();
-            if (language.length() >= 3 && !addIso3Languages()) {
+            if (language.length() >= 3 && !enableIso3Languages()) {
                 continue;
             }
             addLocale(new Locale(language, country, variant), localeSet);
@@ -111,7 +118,7 @@ public class ICULocale {
     private static void addLocale(Locale loc, Set<Locale> locales) {
         locales.add(loc);
 
-        if (addIcuVariants()) {
+        if (enableIcuVariants()) {
             // Add ICU variant
             String language = loc.getLanguage();
             String country = loc.getCountry();
@@ -126,49 +133,51 @@ public class ICULocale {
         }
     }
 
-    private static boolean addIso3Languages() {
-        initConfig();
-        return ADD_ISO3_LANG.booleanValue();
+    private static boolean enableIso3Languages() {
+        return enableIso3Lang;
     }
 
-    private static boolean addIcuVariants() {
-        initConfig();
-        return ADD_VARIANTS.booleanValue();
+    private static boolean enableIcuVariants() {
+        loadConfiguration();
+        return enableVariants;
     }
 
     private static String getIcuSuffix() {
-        initConfig();
-        return SUFFIX;
+        loadConfiguration();
+        return suffix;
     }
 
-    private static synchronized void initConfig() {
-        if (SUFFIX != null) {
+    private static synchronized void loadConfiguration() {
+        if (configLoaded) {
             return;
         }
-
         Properties spiConfigProps = new Properties();
         try {
             InputStream is = ClassLoader.getSystemResourceAsStream(SPI_PROP_FILE);
             spiConfigProps.load(is);
 
-            String addVariants = (String)spiConfigProps.get(ADD_VARIANTS_KEY);
-            ADD_VARIANTS = Boolean.parseBoolean(addVariants);
-
-            String addIso3Lang = (String)spiConfigProps.get(ADD_ISO3_LANG_KEY);
-            ADD_ISO3_LANG = Boolean.parseBoolean(addIso3Lang);
-
-            SUFFIX = (String)spiConfigProps.get(SUFFIX_KEY);
+            String val = (String)spiConfigProps.get(SUFFIX_KEY);
+            if (val != null && val.length() > 0) {
+                suffix = val;
+            }
+            enableVariants = parseBooleanString((String)spiConfigProps.get(ENABLE_VARIANTS_KEY), enableVariants);
+            enableIso3Lang = parseBooleanString((String)spiConfigProps.get(ENABLE_ISO3_LANG_KEY), enableIso3Lang);
+            useDecimalFormat = parseBooleanString((String)spiConfigProps.get(USE_DECIMALFORMAT_KEY), useDecimalFormat);
         } catch (IOException ioe) {
             // Any IO errors, ignore
         }
-        if (ADD_ISO3_LANG == null) {
-            ADD_ISO3_LANG = Boolean.valueOf(DEFAULT_ADD_VARIANTS);
+        configLoaded = true;
+    }
+
+    private static boolean parseBooleanString(String str, boolean defaultVal) {
+        if (str == null) {
+            return defaultVal;
         }
-        if (ADD_VARIANTS == null) {
-            ADD_VARIANTS = Boolean.valueOf(DEFAULT_ADD_ISO3_LANG);
+        if (str.equalsIgnoreCase("true")) {
+            return true;
+        } else if (str.equalsIgnoreCase("false")) {
+            return false;
         }
-        if (SUFFIX == null) {
-            SUFFIX = DEFAULT_SUFFIX;
-        }
+        return defaultVal;
     }
 }

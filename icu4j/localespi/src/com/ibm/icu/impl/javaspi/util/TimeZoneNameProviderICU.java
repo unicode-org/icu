@@ -8,7 +8,7 @@ package com.ibm.icu.impl.javaspi.util;
 
 import java.util.Locale;
 
-import com.ibm.icu.impl.javaspi.ICULocale;
+import com.ibm.icu.impl.javaspi.ICULocaleServiceProvider;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.TimeZone;
 
@@ -17,7 +17,7 @@ public class TimeZoneNameProviderICU extends java.util.spi.TimeZoneNameProvider 
     @Override
     public String getDisplayName(String ID, boolean daylight, int style, Locale locale) {
         TimeZone tz = TimeZone.getTimeZone(ID);
-        Locale actualLocale = ICULocale.canonicalize(locale);
+        Locale actualLocale = ICULocaleServiceProvider.canonicalize(locale);
         String disp = tz.getDisplayName(daylight, style, actualLocale);
         if (disp.length() == 0) {
             return null;
@@ -51,7 +51,7 @@ public class TimeZoneNameProviderICU extends java.util.spi.TimeZoneNameProvider 
 
     @Override
     public Locale[] getAvailableLocales() {
-        return ICULocale.getAvailableLocales();
+        return ICULocaleServiceProvider.getAvailableLocales();
     }
 
 }
