@@ -55,6 +55,7 @@ void TimeZoneTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
         CASE(14, TestFractionalDST);
         CASE(15, TestFebruary);
         CASE(16, TestCanonicalID);
+        CASE(17, TestDisplayNamesMeta);
        default: name = ""; break;
     }
 }
@@ -1802,6 +1803,86 @@ void TimeZoneTest::TestCanonicalID() {
             errln((UnicodeString)"FAIL: getCanonicalID(\"" + data[i].id
                 + "\") set " + isSystemID + " to isSystemID");
         }
+    }
+}
+
+//
+//  Test Display Names, choosing zones and lcoales where there are multiple
+//                      meta-zones defined.
+//
+static struct   {
+    const char            *zoneName;
+    const char            *localeName;
+    UBool                  summerTime;
+    TimeZone::EDisplayType style;
+    const char            *expectedDisplayName; } 
+ zoneDisplayTestData [] =  {
+     //  zone id         locale   summer   format          expected display name
+      {"Europe/London",     "en", FALSE, TimeZone::SHORT, "GMT"},
+      {"Europe/London",     "en", FALSE, TimeZone::LONG,  "Greenwich Mean Time"},
+      {"Europe/London",     "en", TRUE,  TimeZone::SHORT, "GMT+01:00" /*"BST"*/},
+      {"Europe/London",     "en", TRUE,  TimeZone::LONG,  "British Summer Time"},
+      
+      {"America/Anchorage", "en", FALSE, TimeZone::SHORT, "AKST"},
+      {"America/Anchorage", "en", FALSE, TimeZone::LONG,  "Alaska Standard Time"},
+      {"America/Anchorage", "en", TRUE,  TimeZone::SHORT, "AKDT"},
+      {"America/Anchorage", "en", TRUE,  TimeZone::LONG,  "Alaska Daylight Time"},
+      
+      // Southern Hemisphere, all data from meta:Australia_Western
+      {"Australia/Perth",   "en", FALSE, TimeZone::SHORT, "GMT+08:00"/*"AWST"*/},
+      {"Australia/Perth",   "en", FALSE, TimeZone::LONG,  "Australian Western Standard Time"},
+      {"Australia/Perth",   "en", TRUE,  TimeZone::SHORT, "GMT+09:00"/*"AWDT"*/},
+      {"Australia/Perth",   "en", TRUE,  TimeZone::LONG,  "Australian Western Daylight Time"},
+       
+      {"America/Sao_Paulo",  "en", FALSE, TimeZone::SHORT, "GMT-03:00"/*"BRT"*/},
+      {"America/Sao_Paulo",  "en", FALSE, TimeZone::LONG,  "Brasilia Time"},
+      {"America/Sao_Paulo",  "en", TRUE,  TimeZone::SHORT, "GMT-02:00"/*"BRST"*/},
+      {"America/Sao_Paulo",  "en", TRUE,  TimeZone::LONG,  "Brasilia Summer Time"},
+       
+      // No Summer Time, but had it before 1983.
+      {"Pacific/Honolulu",   "en", FALSE, TimeZone::SHORT, "HST"},
+      {"Pacific/Honolulu",   "en", FALSE, TimeZone::LONG,  "Hawaii-Aleutian Standard Time"},
+      {"Pacific/Honolulu",   "en", TRUE,  TimeZone::SHORT, "HST"},
+      {"Pacific/Honolulu",   "en", TRUE,  TimeZone::LONG,  "Hawaii-Aleutian Standard Time"},
+       
+      // Northern, has Summer, not commonly used.
+      {"Europe/Helsinki",    "en", FALSE, TimeZone::SHORT, "GMT+02:00"/*"EET"*/},
+      {"Europe/Helsinki",    "en", FALSE, TimeZone::LONG,  "Eastern European Time"},
+      {"Europe/Helsinki",    "en", TRUE,  TimeZone::SHORT, "GMT+03:00"/*"EEST"*/},
+      {"Europe/Helsinki",    "en", true,  TimeZone::LONG,  "Eastern European Summer Time"},
+      {NULL, NULL, FALSE, TimeZone::SHORT, NULL}   // NULL values terminate list
+    };
+
+void TimeZoneTest::TestDisplayNamesMeta() {
+    UBool sawAnError = FALSE;
+    for (int testNum   = 0; zoneDisplayTestData[testNum].zoneName != NULL; testNum++) {
+        Locale locale  = Locale::createFromName(zoneDisplayTestData[testNum].localeName);
+        TimeZone *zone = TimeZone::createTimeZone(zoneDisplayTestData[testNum].zoneName);
+        UnicodeString displayName;
+        zone->getDisplayName(zoneDisplayTestData[testNum].summerTime,
+                             zoneDisplayTestData[testNum].style,
+                             locale,
+                             displayName);
+        if (displayName != zoneDisplayTestData[testNum].expectedDisplayName) {
+            sawAnError = TRUE;
+            char  name[100];
+            UErrorCode status = U_ZERO_ERROR;
+            displayName.extract(name, 100, NULL, status);
+            errln("Incorrect time zone display name.  zone = \"%s\",\n"
+                  "   locale = \"%s\",   style = %s,  Summertime = %d\n"
+                  "   Expected \"%s\", "
+                  "   Got \"%s\"\n", zoneDisplayTestData[testNum].zoneName,
+                                     zoneDisplayTestData[testNum].localeName,
+                                     zoneDisplayTestData[testNum].style==TimeZone::SHORT ?
+                                        "SHORT" : "LONG",
+                                     zoneDisplayTestData[testNum].summerTime,
+                                     zoneDisplayTestData[testNum].expectedDisplayName,
+                                     name);
+        }
+        delete zone;
+    }
+    if (sawAnError) {
+        errln("Note: Errors could be the result of changes to zoneStrings locale data");
     }
 }
 
