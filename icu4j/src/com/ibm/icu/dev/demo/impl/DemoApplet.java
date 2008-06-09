@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public abstract class DemoApplet extends java.applet.Applet {
+    private static final long serialVersionUID = -8983602961925702071L;
     private Button   demoButton;
     private Frame    demoFrame;
     private static int demoFrameCount = 0;
