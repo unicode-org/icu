@@ -641,7 +641,7 @@ void SSearchTest::offsetTest()
         backwardList.reverse();
 
         if (forwardList.compare(backwardList)) {
-            logln("Works with \"%S\"", test[i].getTerminatedBuffer());
+            logln("Works with \"%s\"", test[i].getTerminatedBuffer());
             logln("Forward offsets:  [%s]", printOffsets(buffer, forwardList));
 //          logln("Backward offsets: [%s]", printOffsets(buffer, backwardList));
 
@@ -659,7 +659,9 @@ void SSearchTest::offsetTest()
 
             infoln();
         }
+        delete iter;
     }
+    delete col;
 }
 
 class CEList
@@ -914,6 +916,7 @@ public:
 private:
 
     static void deleteCEList(void *obj);
+    static void deleteUnicodeStringKey(void *obj);
 
     UHashtable *map;
 };
@@ -928,6 +931,7 @@ StringToCEsMap::StringToCEsMap()
                      &status);
 
     uhash_setValueDeleter(map, deleteCEList);
+    uhash_setKeyDeleter(map, deleteUnicodeStringKey);
 }
 
 StringToCEsMap::~StringToCEsMap()
@@ -952,6 +956,13 @@ void StringToCEsMap::deleteCEList(void *obj)
     CEList *list = (CEList *) obj;
 
     delete list;
+}
+
+void StringToCEsMap::deleteUnicodeStringKey(void *obj)
+{
+    UnicodeString *key = (UnicodeString *) obj;
+
+    delete key;
 }
 
 static void buildData(UCollator *coll, USet *charsToTest, StringToCEsMap *charsToCEList, CEToStringsMap *ceToCharsStartingWith)
@@ -1669,7 +1680,8 @@ void SSearchTest::monkeyTest(char *params)
     uset_close(contractions);
     uset_close(expansions);
     uset_close(charsToTest);
-
+    uset_close(letters);
+    
     ucol_close(coll);
 }
         

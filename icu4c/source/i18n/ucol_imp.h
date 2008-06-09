@@ -43,6 +43,7 @@
 
 #include "unicode/ucol.h"
 #include "utrie.h"
+#include "cmemory.h"
 
 /* This is the internal header file which contains important declarations for 
  * the collation framework. 
@@ -1038,6 +1039,15 @@ static inline UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
     return ((htbyte >> (hash & 7)) & 1);
 }
 #endif /* XP_CPLUSPLUS */
+
+/* The offsetBuffer in collIterate might need to be freed to avoid memory leaks. */
+static inline void freeOffsetBuffer(collIterate *s) {
+    if (s != NULL && s->offsetBuffer != NULL) {
+        uprv_free(s->offsetBuffer);
+        s->offsetBuffer = NULL;
+        s->offsetBufferSize = 0;
+    }
+}
 
 
 #endif /* #if !UCONFIG_NO_COLLATION */

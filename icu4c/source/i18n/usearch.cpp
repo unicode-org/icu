@@ -3044,6 +3044,8 @@ U_CAPI void U_EXPORT2 usearch_setCollator(      UStringSearch *strsrch,
             if (U_SUCCESS(*status)) {
                 initialize(strsrch, status);
                 if (U_SUCCESS(*status)) {
+                    /* free offset buffer to avoid memory leak before initializing. */
+                    freeOffsetBuffer(&(strsrch->textIter->iteratordata_));
                     uprv_init_collIterate(collator, strsrch->search->text, 
                                           strsrch->search->textLength, 
                                           &(strsrch->textIter->iteratordata_));
@@ -3426,6 +3428,8 @@ U_CAPI void U_EXPORT2 usearch_reset(UStringSearch *strsrch)
         if (!sameCollAttribute) {
             initialize(strsrch, &status);
         }
+        /* free offset buffer to avoid memory leak before initializing. */
+        freeOffsetBuffer(&(strsrch->textIter->iteratordata_));
         uprv_init_collIterate(strsrch->collator, strsrch->search->text, 
                               strsrch->search->textLength, 
                               &(strsrch->textIter->iteratordata_));
