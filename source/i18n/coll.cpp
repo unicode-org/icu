@@ -349,7 +349,7 @@ Collator* Collator::makeInstance(const Locale&  desiredLocale,
     // non-table-based Collator in some other way, when it sees that it needs 
     // to.
     // The specific caution is this: RuleBasedCollator(Locale&) will ALWAYS 
-    // return a valid collation object, if the system if functioning properly.  
+    // return a valid collation object, if the system is functioning properly.  
     // The reason is that it will fall back, use the default locale, and even 
     // use the built-in default collation rules. THEREFORE, createInstance() 
     // should in general ONLY CALL RuleBasedCollator(Locale&) IF IT KNOWS IN 

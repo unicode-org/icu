@@ -2065,6 +2065,7 @@ TimeZoneRuleTest::TestT6216(void) {
                 errln((UnicodeString)"FAIL: Invalid offset at time(" + times[j] + "):" + offset + " Expected:" + Expected[i][j]);
             }
         }
+        delete vtz;
     }
 }
 
