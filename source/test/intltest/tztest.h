@@ -89,6 +89,8 @@ public:
     void TestFebruary(void);
 
     void TestCanonicalID(void);
+    
+    virtual void TestDisplayNamesMeta();
 
     static const UDate INTERVAL;
 
