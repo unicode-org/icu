@@ -12,9 +12,13 @@
  *   9/23/2003 mehran        posted to icu-design
  *****************************************************************************
  */
+
 #include "persncal.h"
 
 #if !UCONFIG_NO_FORMATTING
+
+#include "umutex.h"
+#include <float.h>
 
 static const int8_t monthDays[] = { 31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29 };
 
@@ -371,19 +375,89 @@ PersianCalendar::inDaylightTime(UErrorCode& status) const
     return (UBool)(U_SUCCESS(status) ? (internalGet(UCAL_DST_OFFSET) != 0) : FALSE);
 }
 
+// default century
+const UDate     PersianCalendar::fgSystemDefaultCentury        = DBL_MIN;
+const int32_t   PersianCalendar::fgSystemDefaultCenturyYear    = -1;
+
+UDate           PersianCalendar::fgSystemDefaultCenturyStart       = DBL_MIN;
+int32_t         PersianCalendar::fgSystemDefaultCenturyStartYear   = -1;
+
 UBool PersianCalendar::haveDefaultCentury() const
 {
-    return FALSE;
+    return TRUE;
 }
 
 UDate PersianCalendar::defaultCenturyStart() const
 {
-    return -1;
+    return internalGetDefaultCenturyStart();
 }
 
 int32_t PersianCalendar::defaultCenturyStartYear() const
 {
-    return -1;
+    return internalGetDefaultCenturyStartYear();
+}
+
+UDate
+PersianCalendar::internalGetDefaultCenturyStart() const
+{
+    // lazy-evaluate systemDefaultCenturyStart
+    UBool needsUpdate;
+    UMTX_CHECK(NULL, (fgSystemDefaultCenturyStart == fgSystemDefaultCentury), needsUpdate);
+
+    if (needsUpdate) {
+        initializeSystemDefaultCentury();
+    }
+
+    // use defaultCenturyStart unless it's the flag value;
+    // then use systemDefaultCenturyStart
+
+    return fgSystemDefaultCenturyStart;
+}
+
+int32_t
+PersianCalendar::internalGetDefaultCenturyStartYear() const
+{
+    // lazy-evaluate systemDefaultCenturyStartYear
+    UBool needsUpdate;
+    UMTX_CHECK(NULL, (fgSystemDefaultCenturyStart == fgSystemDefaultCentury), needsUpdate);
+
+    if (needsUpdate) {
+        initializeSystemDefaultCentury();
+    }
+
+    // use defaultCenturyStart unless it's the flag value;
+    // then use systemDefaultCenturyStartYear
+
+    return    fgSystemDefaultCenturyStartYear;
+}
+
+void
+PersianCalendar::initializeSystemDefaultCentury()
+{
+    // initialize systemDefaultCentury and systemDefaultCenturyYear based
+    // on the current time.  They'll be set to 80 years before
+    // the current time.
+    // No point in locking as it should be idempotent.
+    if (fgSystemDefaultCenturyStart == fgSystemDefaultCentury)
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        PersianCalendar calendar(Locale("@calendar=persian"),status);
+        if (U_SUCCESS(status))
+        {
+            calendar.setTime(Calendar::getNow(), status);
+            calendar.add(UCAL_YEAR, -80, status);
+            UDate    newStart =  calendar.getTime(status);
+            int32_t  newYear  =  calendar.get(UCAL_YEAR, status);
+            {
+                umtx_lock(NULL);
+                fgSystemDefaultCenturyStart = newStart;
+                fgSystemDefaultCenturyStartYear = newYear;
+                umtx_unlock(NULL);
+            }
+        }
+        // We have no recourse upon failure unless we want to propagate the failure
+        // out.
+    }
 }
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PersianCalendar)
