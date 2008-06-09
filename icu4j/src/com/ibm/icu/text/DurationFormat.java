@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -20,7 +20,9 @@ import com.ibm.icu.util.ULocale;
  * @provisional This API might change or be removed in a future release.
  */
 public abstract class DurationFormat extends UFormat {
-    
+
+    private static final long serialVersionUID = 1L;
+
     /**
      * Construct a duration format for the specified locale
      * @draft ICU 3.8

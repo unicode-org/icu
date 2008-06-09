@@ -21,6 +21,8 @@ import java.util.Date;
  */
 public abstract class TimeZoneRule implements Serializable {
 
+    private static final long serialVersionUID = 6374143828553768100L;
+
     private final String name;
     private final int rawOffset;
     private final int dstSavings;

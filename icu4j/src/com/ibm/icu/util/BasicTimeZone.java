@@ -26,6 +26,8 @@ import com.ibm.icu.impl.Grego;
  */
 public abstract class BasicTimeZone extends TimeZone {
 
+    private static final long serialVersionUID = -3204278532246180932L;
+
     private static final long MILLIS_PER_YEAR = 365*24*60*60*1000L;
 
     /**
