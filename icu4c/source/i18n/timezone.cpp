@@ -1175,7 +1175,7 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
     char buf[128];
     fID.extract(0, sizeof(buf)-1, buf, sizeof(buf), "");
 #endif
-    SimpleDateFormat format(style == LONG ? ZZZZ_STR : Z_STR,locale,status);
+    SimpleDateFormat format(style == LONG ? ZZZZ_STR : Z_STR, locale, status);
     U_DEBUG_TZ_MSG(("getDisplayName(%s)\n", buf));
     if(!U_SUCCESS(status))
     {
@@ -1187,30 +1187,69 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
       return result.remove();
     }
 
+    UDate d = Calendar::getNow();
+    int32_t  rawOffset;
+    int32_t  dstOffset;
+    this->getOffset(d, FALSE, rawOffset, dstOffset, status);
+    if (U_FAILURE(status)) {
+        return result.remove();
+    }
+    
+    if ((daylight && dstOffset != 0) || (!daylight && dstOffset == 0)) {
+        // Current time and the request (daylight / not daylight) agree.
+        format.setTimeZone(*this);
+        return format.format(d, result);
+    }
+    
     // Create a new SimpleTimeZone as a stand-in for this zone; the
-    // stand-in will have no DST, or all DST, but the same ID and offset,
+    // stand-in will have no DST, or DST during July, but the same ID and offset,
     // and hence the same display name.
     // We don't cache these because they're small and cheap to create.
     UnicodeString tempID;
+    getID(tempID);
     SimpleTimeZone *tz = NULL;
-    if(daylight  && useDaylightTime()){
-        // For the pure-DST zone, we use JANUARY and DECEMBER        
-        int savings = getDSTSavings();
-        tz = new SimpleTimeZone(getRawOffset(), getID(tempID),
-                                UCAL_JANUARY, 1, 0, 0,
-                                UCAL_FEBRUARY, 1, 0, 0,
-                                savings, status);
-    }else{
-        tz = new SimpleTimeZone(getRawOffset(), getID(tempID));
+    if(daylight && useDaylightTime()){
+        // The display name for daylight saving time was requested, but currently not in DST
+        // Set a fixed date (July 1) in this Gregorian year
+        GregorianCalendar cal(*this, status);
+        if (U_FAILURE(status)) {
+            return result.remove();
+        }
+        cal.set(UCAL_MONTH, UCAL_JULY);
+        cal.set(UCAL_DATE, 1);
+        
+        // Get July 1 date
+        d = cal.getTime(status);
+        
+        // Check if it is in DST
+        if (cal.get(UCAL_DST_OFFSET, status) == 0) {
+            // We need to create a fake time zone
+            tz = new SimpleTimeZone(rawOffset, tempID,
+                                UCAL_JUNE, 1, 0, 0,
+                                UCAL_AUGUST, 1, 0, 0,
+                                getDSTSavings(), status);
+            if (U_FAILURE(status) || tz == NULL) {
+                if (U_SUCCESS(status)) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                }
+                return result.remove();
+            }
+            format.adoptTimeZone(tz);
+        }
+    } else {
+        // The display name for standard time was requested, but currently in DST
+        tz = new SimpleTimeZone(rawOffset, tempID);
+        if (U_FAILURE(status) || tz == NULL) {
+            if (U_SUCCESS(status)) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+            }
+            return result.remove();
+        }
+        format.adoptTimeZone(tz);
     }
-    format.applyPattern(style == LONG ? ZZZZ_STR : Z_STR);
-    Calendar *myCalendar = (Calendar*)format.getCalendar();
-    myCalendar->setTimeZone(*tz); // copy
-    
-    delete tz;
 
-    FieldPosition pos(FieldPosition::DONT_CARE);
-    return format.format(UDate(864000000L), result, pos); // Must use a valid date here.
+    format.format(d, result, status);
+    return  result;
 }
 
 
