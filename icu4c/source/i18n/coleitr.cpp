@@ -199,6 +199,8 @@ void CollationElementIterator::setText(const UnicodeString& source,
         }
         *string = 0;
     }
+    /* Free offsetBuffer before initializing it. */
+    freeOffsetBuffer(&(m_data_->iteratordata_));
     uprv_init_collIterate(m_data_->iteratordata_.coll, string, length, 
         &m_data_->iteratordata_);
 
@@ -244,6 +246,8 @@ void CollationElementIterator::setText(CharacterIterator& source,
         uprv_free(m_data_->iteratordata_.string);
     }
     m_data_->isWritable = TRUE;
+    /* Free offsetBuffer before initializing it. */
+    freeOffsetBuffer(&(m_data_->iteratordata_));
     uprv_init_collIterate(m_data_->iteratordata_.coll, buffer, length, 
         &m_data_->iteratordata_);
     m_data_->reset_   = TRUE;
