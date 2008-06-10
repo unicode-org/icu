@@ -47,6 +47,22 @@ public class CurrencyTest extends TestFmwk {
             errln("FAIL: USD != USD");
         }
 
+        try {
+            Currency nullCurrency = Currency.getInstance((String)null);
+            errln("FAIL: Expected getInstance(null) to throw "
+                    + "a NullPointerException, but returned " + nullCurrency);
+        } catch (NullPointerException npe) {
+            logln("PASS: getInstance(null) threw a NullPointerException");
+        }
+
+        try {
+            Currency bogusCurrency = Currency.getInstance("BOGUS");
+            errln("FAIL: Expected getInstance(\"BOGUS\") to throw "
+                    + "an IllegalArgumentException, but returned " + bogusCurrency);
+        } catch (IllegalArgumentException iae) {
+            logln("PASS: getInstance(\"BOGUS\") threw an IllegalArgumentException");
+        }
+
         Locale[] avail = Currency.getAvailableLocales();
         if(avail==null){
             errln("FAIL: getAvailableLocales returned null");
