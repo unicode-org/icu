@@ -2213,7 +2213,7 @@ static void TestForwardBackward(void) {
     UErrorCode status = U_ZERO_ERROR;
     UCollator *coll = NULL;
     UStringSearch *search = NULL;
-    UChar usrcstr[32], value[2];
+    UChar usrcstr[32], value[4];
     int32_t pos= -1;
     int32_t expectedPos = 9;
     
