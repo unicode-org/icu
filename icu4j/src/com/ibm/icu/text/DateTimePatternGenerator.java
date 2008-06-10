@@ -1483,9 +1483,9 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     DELTA = 0x10,
     NUMERIC = 0x100,
     NONE = 0,
-    NARROW = -0x100,
-    SHORT = -0x101,
-    LONG = -0x102,
+    NARROW = -0x101,
+    SHORT = -0x102,
+    LONG = -0x103,
     EXTRA_FIELD =   0x10000,
     MISSING_FIELD = 0x1000;
     
