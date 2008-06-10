@@ -131,7 +131,9 @@ icu4j/localespi/src/META-INF/services/java.util.spi.TimeZoneNameProvider -text
 icu4j/localespi/src/com/ibm/icu/impl/javaspi/ICULocaleServiceProviderConfig.properties -text
 icu4j/preprocessor.txt -text
 icu4j/src/com/ibm/icu/ICUConfig.properties -text
+icu4j/src/com/ibm/icu/charset/CharsetBOCU1.java -text
 icu4j/src/com/ibm/icu/charset/CharsetISO2022.java -text
+icu4j/src/com/ibm/icu/charset/CharsetSCSU.java -text
 icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict -text
 icu4j/src/com/ibm/icu/dev/data/testdata.jar -text
 icu4j/src/com/ibm/icu/dev/data/thai6.ucs -text
