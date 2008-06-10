@@ -86,6 +86,8 @@ public class DateTimeGeneratorTest extends TestFmwk {
               {"yyyyMMM", "Oct 1999"},
               {"yyyyMM", "10/1999"},
               {"yyMM", "10/99"},
+              {"yMMMMMd", "O/14/1999"},  // narrow format
+              {"EEEEEMMMMMd", "T, O 14"},  // narrow format
               {"MMMd", "Oct 14"},
               {"MMMdhmm", "Oct 14 6:58 AM"},
               {"EMMMdhmms", "Thu, Oct 14 6:58:59 AM"},
@@ -246,7 +248,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"yM", "1/1999"},
         new String[] {"yMMM", "Jan 1999"},
         new String[] {"yMd", "1/13/1999"},
-        new String[] {"yMMMd", "Jan/13/1999"},
+        new String[] {"yMMMd", "Jan 13, 1999"},
         new String[] {"Md", "1/13"},
         new String[] {"MMMd", "Jan 13"},
         new String[] {"yQQQ", "Q1 1999"},
