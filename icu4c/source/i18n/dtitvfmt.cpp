@@ -8,13 +8,15 @@
 *******************************************************************************
 */
 
+#include "unicode/dtitvfmt.h"
+
+#if !UCONFIG_NO_FORMATTING
 
 //FIXME: put in compilation
 //#define DTITVFMT_DEBUG 1
 
 #include "unicode/msgfmt.h"
 #include "unicode/dtptngen.h"
-#include "unicode/dtitvfmt.h"
 #include "unicode/dtitvinf.h"
 #include "unicode/calendar.h"
 #include "dtitv_impl.h"
@@ -24,8 +26,7 @@
 #include "cstring.h"
 #endif
 
-
-#if !UCONFIG_NO_FORMATTING
+#include "gregoimp.h"
 
 U_NAMESPACE_BEGIN
 

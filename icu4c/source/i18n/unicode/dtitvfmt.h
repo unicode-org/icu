@@ -11,6 +11,8 @@
 #define DTITVFMT_H__
 
 
+#include "unicode/utypes.h"
+
 /**
  * \file 
  * \brief C++ API: Format and parse date interval in a language-independent manner.
@@ -18,7 +20,6 @@
  
 #if !UCONFIG_NO_FORMATTING
 
-#include "unicode/utypes.h"
 #include "unicode/ucal.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/dtintrv.h"

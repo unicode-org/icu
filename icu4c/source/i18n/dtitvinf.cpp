@@ -8,6 +8,10 @@
 *******************************************************************************
 */
 
+#include "unicode/dtitvinf.h"
+
+
+#if !UCONFIG_NO_FORMATTING
 
 //FIXME: how to define it in compiler time
 //#define DTITVINF_DEBUG 0
@@ -19,10 +23,13 @@
 
 #include "cstring.h"
 #include "unicode/msgfmt.h"
-#include "unicode/dtitvinf.h"
 #include "dtitv_impl.h"
-
-#if !UCONFIG_NO_FORMATTING
+#include "hash.h"
+#include "gregoimp.h"
+#include "uresimp.h"
+#include "hash.h"
+#include "gregoimp.h"
+#include "uresimp.h"
 
 
 U_NAMESPACE_BEGIN
