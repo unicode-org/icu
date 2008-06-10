@@ -756,7 +756,7 @@ void IntlCalendarTest::TestPersianFormat() {
     } else {
         UnicodeString str;
         fmt->format(aDate, str);
-        logln(UnicodeString() + "as Persian Calendar: " + escape(str)); 
+        logln(UnicodeString() + "as Persian Calendar: " + escape(str));
         UnicodeString expected("Dey 28, 1385 AP");
         if(str != expected) {
             errln("Expected " + escape(expected) + " but got " + escape(str));
@@ -766,6 +766,20 @@ void IntlCalendarTest::TestPersianFormat() {
             UnicodeString str3;
             fmt->format(otherDate, str3);
             errln("Parse incorrect of " + escape(expected) + " - wanted " + aDate + " but got " +  otherDate + ", " + escape(str3)); 
+        } else {
+            logln("Parsed OK: " + expected);
+        }
+        // Two digit year parsing problem #4732
+        fmt->applyPattern("yy-MM-dd");
+        str.remove();
+        fmt->format(aDate, str);
+        expected.setTo("85-10-28");
+        if(str != expected) {
+            errln("Expected " + escape(expected) + " but got " + escape(str));
+        }
+        otherDate = fmt->parse(expected, status);
+        if (otherDate != aDate) {
+            errln("Parse incorrect of " + escape(expected) + " - wanted " + aDate + " but got " + otherDate); 
         } else {
             logln("Parsed OK: " + expected);
         }
