@@ -137,8 +137,8 @@ public class Currency extends MeasureUnit implements Serializable {
         String country = loc.getCountry();
         long dateL = d.getTime();
         long mask = 4294967295L;
-		
-		Vector currCodeVector = new Vector();
+
+            Vector currCodeVector = new Vector();
 
         // Get supplementalData
         ICUResourceBundle bundle = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,
@@ -159,51 +159,51 @@ public class Currency extends MeasureUnit implements Serializable {
             UResourceBundle cm = bundle.get("CurrencyMap");
             UResourceBundle countryArray = cm.get(country);
 
-			// Get valid currencies
-			for (int i = 0; i < countryArray.getSize(); i++)
-			{
-				// get the currency resource
-				UResourceBundle currencyReq = countryArray.get(i);
-				String curriso = null;
-				curriso = currencyReq.getString("id");
+            // Get valid currencies
+            for (int i = 0; i < countryArray.getSize(); i++)
+            {
+                // get the currency resource
+                UResourceBundle currencyReq = countryArray.get(i);
+                String curriso = null;
+                curriso = currencyReq.getString("id");
 
-				// get the from date
-				long fromDate = 0;
-				UResourceBundle fromRes = currencyReq.get("from");
-				int[] fromArray = fromRes.getIntVector();
-				fromDate = (long)fromArray[0] << 32;
-				fromDate |= ((long)fromArray[1] & mask);
+                // get the from date
+                long fromDate = 0;
+                UResourceBundle fromRes = currencyReq.get("from");
+                int[] fromArray = fromRes.getIntVector();
+                fromDate = (long)fromArray[0] << 32;
+                fromDate |= ((long)fromArray[1] & mask);
 
-				// get the to date and check the date range
-				if (currencyReq.getSize() > 2)
-				{
-					long toDate = 0;
-					UResourceBundle toRes = currencyReq.get("to");
-					int[] toArray = toRes.getIntVector();
-					toDate = (long)toArray[0] << 32;
-					toDate |= ((long)toArray[1] & mask);
+                // get the to date and check the date range
+                if (currencyReq.getSize() > 2)
+                {
+                    long toDate = 0;
+                    UResourceBundle toRes = currencyReq.get("to");
+                    int[] toArray = toRes.getIntVector();
+                    toDate = (long)toArray[0] << 32;
+                    toDate |= ((long)toArray[1] & mask);
 
-					if ((fromDate <= dateL) && (dateL < toDate))
-					{
-						currCodeVector.addElement(curriso);
-					}
-				}
-				else
-				{
-					if (fromDate <= dateL)
-					{
-						currCodeVector.addElement(curriso);
-					}
-				}
+                    if ((fromDate <= dateL) && (dateL < toDate))
+                    {
+                        currCodeVector.addElement(curriso);
+                    }
+                }
+                else
+                {
+                    if (fromDate <= dateL)
+                    {
+                        currCodeVector.addElement(curriso);
+                    }
+                }
 
-			}  // end For loop
+            }  // end For loop
 
-			// return the String array if we have matches
-			currCodeVector.trimToSize();
-			if (currCodeVector.size() != 0)
-			{
-				return ((String[])currCodeVector.toArray(new String[0]));
-			}
+            // return the String array if we have matches
+            currCodeVector.trimToSize();
+            if (currCodeVector.size() != 0)
+            {
+                return ((String[])currCodeVector.toArray(new String[0]));
+            }
 
         }
         catch (MissingResourceException ex)
@@ -266,10 +266,32 @@ public class Currency extends MeasureUnit implements Serializable {
      * Returns a currency object given an ISO 4217 3-letter code.
      * @param theISOCode the iso code
      * @return the currency for this iso code
+     * @throws NullPoninterException if <code>theISOCode</code> is null.
+     * @throws IllegalArgumentException if <code>theISOCode</code> is not a
+     *         3-letter alpha code.
      * @stable ICU 2.2
      */
     public static Currency getInstance(String theISOCode) {
-        return new Currency(theISOCode);
+        if (theISOCode == null) {
+            throw new NullPointerException("The input currency code is null.");
+        }
+        boolean is3alpha = true;
+        if (theISOCode.length() != 3) {
+            is3alpha = false;
+        } else {
+            for (int i = 0; i < 3; i++) {
+                char ch = theISOCode.charAt(i);
+                if (ch < 'A' || (ch > 'Z' && ch < 'a') || ch > 'z') {
+                    is3alpha = false;
+                    break;
+                }
+            }
+        }
+        if (!is3alpha) {
+            throw new IllegalArgumentException(
+                    "The input currency code is not 3-letter alphabetic code.");
+        }
+        return new Currency(theISOCode.toUpperCase(Locale.US));
     }
 
     /**
