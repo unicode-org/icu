@@ -1173,8 +1173,8 @@ void RBBITest::TestBug4153072() {
 //    One.<kSoftHyphen><kSpace>Two.
 //
 //    Sentence break at start (0) and then on calling next() it breaks at
-//   ‘T’ of “Two”. Now, at this point if I do next() and
-//    then previous(), it breaks at <kSOftHyphen> instead of ‘T’ of Two.
+//   'T' of "Two". Now, at this point if I do next() and
+//    then previous(), it breaks at <kSOftHyphen> instead of 'T' of "Two".
 //
 void RBBITest::TestBug5775() {
     UErrorCode status = U_ZERO_ERROR;
@@ -3522,7 +3522,7 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
 
 
 
-        // LB 28  Do not break between alphabetics (“at”).
+        // LB 28  Do not break between alphabetics ("at").
         if (fAL->contains(prevChar) && fAL->contains(thisChar)) {
             continue;
         }
