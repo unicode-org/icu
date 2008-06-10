@@ -1,5 +1,7 @@
 #!/bin/sh
 #
+# Copyright (c) 2006-2008 IBM All Rights Reserved
+#
 # This test script enumerates all locales and all timezones installed on a
 # machine (usually Linux), and runs the existing ICU4C tests to make sure that
 # the tests pass. Not everyone is using and testing ICU4C in the en_US locale
@@ -10,8 +12,8 @@ cd $top_icu_dir/source/test/intltest
 $release_tools_dir/allLocaleTest.sh intltest &
 $release_tools_dir/allTimezoneTest.sh intltest &
 cd ../iotest
-$release_tools_dir/allLocaleTest.sh iotest &
-$release_tools_dir/allTimezoneTest.sh iotest &
+# iotest uses a fixed filename for tests, so can't run in parallel
+$release_tools_dir/allLocaleTest.sh iotest; $release_tools_dir/allTimezoneTest.sh iotest &
 cd ../cintltst
 $release_tools_dir/allLocaleTest.sh cintltst &
 $release_tools_dir/allTimezoneTest.sh cintltst &
