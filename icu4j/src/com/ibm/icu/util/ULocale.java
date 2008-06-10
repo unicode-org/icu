@@ -790,13 +790,13 @@ public final class ULocale implements Serializable {
      * script, if present, is four characters long-- this distinguishes it
      * from a country code, which is two characters long.  Other fields
      * are distinguished by position as indicated by the underscores.  The
-     * start of the keyword list is indicated by '@', and consists of one
-     * or more keyword/value pairs separated by commas.
+     * start of the keyword list is indicated by '@', and consists of two
+     * or more keyword/value pairs separated by semicolons(';').
      * <p>
      * This constructor does not canonicalize the localeID.
      * 
      * @param localeID string representation of the locale, e.g:
-     * "en_US", "sy_Cyrl_YU", "zh__pinyin", "es_ES@currency=EUR,collation=traditional"
+     * "en_US", "sy_Cyrl_YU", "zh__pinyin", "es_ES@currency=EUR;collation=traditional"
      * @stable ICU 2.8
      */ 
     public ULocale(String localeID) {
