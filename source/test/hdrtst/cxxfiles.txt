@@ -1,4 +1,4 @@
-# Copyright (c) 2001-2007 International Business Machines 
+# Copyright (c) 2001-2008 International Business Machines 
 # Corporation and others. All Rights Reserved.
 bidi.h
 basictz.h
@@ -86,3 +86,9 @@ measure.h
 pmacos.h
 pos400.h
 pwin32.h
+# interval format
+dtintrv.h
+dtitvinf.h
+dtitvfmt.h
+plurfmt.h
+plurrule.h
