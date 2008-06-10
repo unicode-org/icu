@@ -12,6 +12,8 @@
 #ifndef __DTITVINF_H__
 #define __DTITVINF_H__
 
+#include "unicode/utypes.h"
+
 /**
  * \file
  * \brief C++ API: Date/Time interval patterns for formatting date/time interval
@@ -19,16 +21,17 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "hash.h"
-#include "gregoimp.h"
-#include "uresimp.h"
-#include "unicode/utypes.h"
 #include "unicode/udat.h"
 #include "unicode/locid.h"
 #include "unicode/ucal.h"
 #include "unicode/dtptngen.h"
 //#include "dtitv_impl.h"
 
+/**
+ * @internal ICU 4.0
+ */
+ 
+union UHashTok;
 
 
 U_NAMESPACE_BEGIN
