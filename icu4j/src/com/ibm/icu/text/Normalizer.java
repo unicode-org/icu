@@ -1996,14 +1996,14 @@ public final class Normalizer implements Cloneable {
      * @param newMode the new mode for this <tt>Normalizer</tt>.
      * The supported modes are:
      * <ul>
-     *  <li>{@link #COMPOSE}        - Unicode canonical decompositiion
-     *                                  followed by canonical composition.
-     *  <li>{@link #COMPOSE_COMPAT} - Unicode compatibility decompositiion
-     *                                  follwed by canonical composition.
-     *  <li>{@link #DECOMP}         - Unicode canonical decomposition
-     *  <li>{@link #DECOMP_COMPAT}  - Unicode compatibility decomposition.
-     *  <li>{@link #NO_OP}          - Do nothing but return characters
-     *                                  from the underlying input text.
+     *  <li>{@link #NFC}    - Unicode canonical decompositiion
+     *                        followed by canonical composition.
+     *  <li>{@link #NFKC}   - Unicode compatibility decompositiion
+     *                        follwed by canonical composition.
+     *  <li>{@link #NFD}    - Unicode canonical decomposition
+     *  <li>{@link #NFKD}   - Unicode compatibility decomposition.
+     *  <li>{@link #NONE}   - Do nothing but return characters
+     *                        from the underlying input text.
      * </ul>
      *
      * @see #getMode
