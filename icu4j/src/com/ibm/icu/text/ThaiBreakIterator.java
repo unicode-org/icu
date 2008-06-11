@@ -259,7 +259,7 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
                                 }
                             } while (words[(wordsFound+1)%THAI_LOOKAHEAD].backUp(fIter));
                         }
-                    } while (words[(wordsFound+1)%THAI_LOOKAHEAD].backUp(fIter) && !foundBest);
+                    } while (words[wordsFound%THAI_LOOKAHEAD].backUp(fIter) && !foundBest);
                 }
                 /* foundBest: */wordLength = words[wordsFound%THAI_LOOKAHEAD].acceptMarked(fIter);
                 wordsFound += 1;
