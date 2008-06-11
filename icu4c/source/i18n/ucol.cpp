@@ -5056,16 +5056,20 @@ ucol_calcSortKey(const    UCollator    *coll,
                                     /* not compressible */
                                     leadPrimary = 0;
                                     *primaries++ = primary1;
-                                    *primaries++ = primary2;
+                                    if(primaries <= primarySafeEnd) {
+                                        *primaries++ = primary2;
+                                    }
                             } else { /* compress */
                                 *primaries++ = leadPrimary = primary1;
-                                *primaries++ = primary2;
+                                if(primaries <= primarySafeEnd) {
+                                    *primaries++ = primary2;
+                                }
                             }
                         }
                     } else { /* we are in continuation, so we're gonna add primary to the key don't care about compression */
                         *primaries++ = primary1;
-                        if(primary2 != UCOL_IGNORABLE) {
-                            *primaries++ = primary2; /* second part */
+                        if((primary2 != UCOL_IGNORABLE) && (primaries <= primarySafeEnd)) {
+                                *primaries++ = primary2; /* second part */
                         }
                     }
                 }
