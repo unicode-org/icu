@@ -1579,12 +1579,17 @@ UBool Transliterator::initializeRegistry(UErrorCode &status) {
     TitlecaseTransliterator* tempTitlecaseTranslit = new TitlecaseTransliterator();
     UnicodeNameTransliterator* tempUnicodeTranslit = new UnicodeNameTransliterator();
     NameUnicodeTransliterator* tempNameUnicodeTranslit = new NameUnicodeTransliterator();
-    BreakTransliterator* tempBreakTranslit         = new BreakTransliterator();
-
+#if !UCONFIG_NO_BREAK_ITERATION
+     // TODO: could or should these transliterators be referenced polymorphically once constructed?
+     BreakTransliterator* tempBreakTranslit         = new BreakTransliterator();
+#endif
     // Check for null pointers
     if (tempNullTranslit == NULL || tempLowercaseTranslit == NULL || tempUppercaseTranslit == NULL ||
         tempTitlecaseTranslit == NULL || tempUnicodeTranslit == NULL || 
-        tempNameUnicodeTranslit == NULL || tempBreakTranslit == NULL)
+#if !UCONFIG_NO_BREAK_ITERATION
+        tempBreakTranslit == NULL ||
+#endif
+        tempNameUnicodeTranslit == NULL )
     {
         delete tempNullTranslit;
         delete tempLowercaseTranslit;
@@ -1592,8 +1597,9 @@ UBool Transliterator::initializeRegistry(UErrorCode &status) {
         delete tempTitlecaseTranslit;
         delete tempUnicodeTranslit;
         delete tempNameUnicodeTranslit;
+#if !UCONFIG_NO_BREAK_ITERATION
         delete tempBreakTranslit;
-
+#endif
         // Since there was an error, remove registry
         delete registry;
         registry = NULL;
@@ -1608,7 +1614,9 @@ UBool Transliterator::initializeRegistry(UErrorCode &status) {
     registry->put(tempTitlecaseTranslit, TRUE, status);
     registry->put(tempUnicodeTranslit, TRUE, status);
     registry->put(tempNameUnicodeTranslit, TRUE, status);
+#if !UCONFIG_NO_BREAK_ITERATION
     registry->put(tempBreakTranslit, FALSE, status);   // FALSE means invisible.
+#endif
 
     RemoveTransliterator::registerIDs(); // Must be within mutex
     EscapeTransliterator::registerIDs();

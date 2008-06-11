@@ -12,6 +12,14 @@
 #ifndef __MSGFMT_IMPL_H__
 #define __MSGFMT_IMPL_H__
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+    
+#include "unicode/msgfmt.h"
+#include "uvector.h"
+#include "unicode/strenum.h"
+
 U_NAMESPACE_BEGIN
 
 class FormatNameEnumeration : public StringEnumeration {
@@ -29,5 +37,7 @@ private:
 };
 
 U_NAMESPACE_END
+
+#endif
 
 #endif

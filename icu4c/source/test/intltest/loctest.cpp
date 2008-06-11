@@ -2140,6 +2140,7 @@ void LocaleTest::TestCanonicalization(void)
 
 void LocaleTest::TestCurrencyByDate(void)
 {
+#if !UCONFIG_NO_FORMATTING
     UErrorCode status = U_ZERO_ERROR;
     UDate date = uprv_getUTCtime();
 	UChar TMP[4];
@@ -2452,5 +2453,5 @@ void LocaleTest::TestCurrencyByDate(void)
         errln("Fail: en_US_Q didn't fallback to en_US");
     }
     status = U_ZERO_ERROR; // reset
-
+#endif
 }

@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002-2007, International Business Machines
+*   Copyright (C) 2002-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  uconfig.h
@@ -14,6 +14,7 @@
 
 #ifndef __UCONFIG_H__
 #define __UCONFIG_H__
+
 
 /*!
  * \file
@@ -33,6 +34,18 @@
  *
  * @stable ICU 2.4
  */
+
+/**
+ * \def UCONFIG_USE_LOCAL
+ * If this switch is defined, ICU will attempt to load a header file named "uconfig_local.h"
+ * prior to determining default settings for uconfig variables.
+ * 
+ * @internal ICU 4.0
+ * 
+ */
+#if defined(UCONFIG_USE_LOCAL)
+#include "uconfig_local.h"
+#endif
 
 /**
  * \def UCONFIG_ONLY_COLLATION
