@@ -2810,9 +2810,11 @@ U_CAPI void U_EXPORT2 usearch_close(UStringSearch *strsrch)
             ucol_close((UCollator *)strsrch->collator);
         }
 
+#if !UCONFIG_NO_BREAK_ITERATION
         if (strsrch->search->internalBreakIter) {
         	ubrk_close(strsrch->search->internalBreakIter);
         }
+#endif
 
         uprv_free(strsrch->search);
         uprv_free(strsrch);

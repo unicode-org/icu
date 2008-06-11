@@ -7,6 +7,9 @@
 
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/unistr.h"
 #include "unicode/putil.h"
 #include "unicode/usearch.h"
@@ -1482,6 +1485,7 @@ static int32_t  getIntParam(UnicodeString name, UnicodeString &params, int32_t d
 }
 #endif
 
+#if !UCONFIG_NO_COLLATION
 int32_t SSearchTest::monkeyTestCase(UCollator *coll, const UnicodeString &testCase, const UnicodeString &pattern, const UnicodeString &altPattern,
                                     const char *name, const char *strength, uint32_t seed)
 {
@@ -1543,6 +1547,7 @@ int32_t SSearchTest::monkeyTestCase(UCollator *coll, const UnicodeString &testCa
 
     return notFoundCount;
 }
+#endif
 
 void SSearchTest::monkeyTest(char *params)
 {
@@ -1686,3 +1691,4 @@ void SSearchTest::monkeyTest(char *params)
 }
         
         
+#endif

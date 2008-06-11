@@ -14,6 +14,8 @@
 
 #include "intltest.h"
 
+#if !UCONFIG_NO_COLLATION
+
 //
 //  Test of the function usearch_search()
 //
@@ -38,3 +40,5 @@ private:
 };
 
 #endif
+
+#endif                                         

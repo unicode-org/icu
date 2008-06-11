@@ -18,9 +18,9 @@
 #include "unicode/plurrule.h"
 #include "plurrule_impl.h"
 
-U_NAMESPACE_BEGIN
-
 #if !UCONFIG_NO_FORMATTING
+
+U_NAMESPACE_BEGIN
 
 U_CDECL_BEGIN
 static void U_CALLCONV

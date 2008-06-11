@@ -12,7 +12,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_TRANSLITERATION
+#if !UCONFIG_NO_TRANSLITERATION && !UCONFIG_NO_BREAK_ITERATION
 
 #include "unicode/translit.h"
 
