@@ -3224,6 +3224,41 @@ the ::BEGIN/::END stuff)
         Transliterator.unregister(fakeID);
     }
 
+    /**
+     * Test the Halfwidth-Fullwidth transliterator (ticket 6281).
+     */
+    public void TestHalfwidthFullwidth() {
+        Transliterator hf = Transliterator.getInstance("Halfwidth-Fullwidth");
+        Transliterator fh = Transliterator.getInstance("Fullwidth-Halfwidth");
+
+        // Array of 3n items
+        // Each item is
+        //   "hf"|"fh"|"both",
+        //   <Halfwidth>,
+        //   <Fullwidth>
+        String[] DATA = {
+            "both",
+            "\uFFE9\uFFEA\uFFEB\uFFEC\u0061\uFF71\u00AF\u0020",
+            "\u2190\u2191\u2192\u2193\uFF41\u30A2\uFFE3\u3000",
+        };
+
+        for (int i=0; i<DATA.length; i+=3) {
+            switch (DATA[i].charAt(0)) {
+            case 'h': // Halfwidth-Fullwidth only
+                expect(hf, DATA[i+1], DATA[i+2]);
+                break;
+            case 'f': // Fullwidth-Halfwidth only
+                expect(fh, DATA[i+2], DATA[i+1]);
+                break;
+            case 'b': // both directions
+                expect(hf, DATA[i+1], DATA[i+2]);
+                expect(fh, DATA[i+2], DATA[i+1]);
+                break;
+            }
+        }
+
+    }
+
     //======================================================================
     // These tests are not mirrored (yet) in icu4c at
     // source/test/intltest/transtst.cpp
