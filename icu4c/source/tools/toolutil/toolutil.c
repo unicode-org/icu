@@ -42,6 +42,7 @@
 static int32_t currentYear = -1;
 
 U_CAPI int32_t U_EXPORT2 getCurrentYear() {
+#if !UCONFIG_NO_FORMATTING
     UErrorCode status=U_ZERO_ERROR;    
     UCalendar *cal = NULL;
 
@@ -52,6 +53,9 @@ U_CAPI int32_t U_EXPORT2 getCurrentYear() {
         ucal_close(cal);
     }
     return currentYear;
+#else
+    return 2008;
+#endif
 }
 
 
