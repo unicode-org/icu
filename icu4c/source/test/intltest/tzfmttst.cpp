@@ -269,7 +269,9 @@ TimeZoneFormatTest::TestTimeRoundTrip(void) {
     // Whether each pattern is ambiguous at STD->STD/DST->DST local time overlap
     UBool AMBIGUOUS_NEGATIVE_SHIFT[] = {TRUE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE};
 
-    UnicodeString BASEPATTERN("yyyy-MM-dd'T'HH:mm:ss.SSS");
+    // Workaround for #6338
+    //UnicodeString BASEPATTERN("yyyy-MM-dd'T'HH:mm:ss.SSS");
+    UnicodeString BASEPATTERN("yyyy.MM.dd HH:mm:ss.SSS");
 
     // timer for performance analysis
     UDate timer;
