@@ -5200,6 +5200,37 @@ TestUCAPrecontext(void)
         ucol_close(coll);
 }
 
+static void
+TestOutOfBuffer5468(void)
+{
+    static const char *test = "\\u4e00";
+    UChar ustr[256];
+    int32_t ustr_length = u_unescape(test, ustr, 256);
+    unsigned char shortKeyBuf[1];
+    int32_t sortkey_length;
+    UErrorCode status = U_ZERO_ERROR;
+    static UCollator *coll = NULL;
+    
+    coll = ucol_open("root", &status);
+    if(U_FAILURE(status)) {
+      log_err("Couldn't open UCA\n");
+      return;
+    }
+    ucol_setStrength(coll, UCOL_PRIMARY);
+    ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_PRIMARY, &status);
+    ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+    if (U_FAILURE(status)) {
+      log_err("Failed setting atributes\n");
+      return;
+    } 
+    
+    sortkey_length = ucol_getSortKey(coll, ustr, ustr_length, shortKeyBuf, sizeof(shortKeyBuf));
+    if (sortkey_length != 4) {
+        log_err("expecting length of sortKey is 4  got:%d ", sortkey_length);
+    }
+    log_verbose("length of sortKey is %d", sortkey_length);
+    ucol_close(coll);
+}
 
 #define TSKC_DATA_SIZE 5
 #define TSKC_BUF_SIZE  50
@@ -5450,6 +5481,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestCroatianSortKey);
     TEST(TestTailor6179);
     TEST(TestUCAPrecontext);
+    TEST(TestOutOfBuffer5468);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
