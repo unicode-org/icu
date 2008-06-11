@@ -78,10 +78,10 @@
 #define LOW_W             ((UChar)0x0077)
 #define LOW_Y             ((UChar)0x0079)
 #define LOW_Z             ((UChar)0x007A)
-#define DT_SHORT          -0x101
-#define DT_LONG           -0x102
+#define DT_SHORT          -0x102
+#define DT_LONG           -0x103
 #define DT_NUMERIC         0x100
-#define DT_NARROW         -0x100
+#define DT_NARROW         -0x101
 #define DT_DELTA           0x10
 
 U_NAMESPACE_BEGIN
