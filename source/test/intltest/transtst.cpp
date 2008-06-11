@@ -188,6 +188,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(79,TestBeginEndToRules);
         TESTCASE(80,TestRegisterAlias);
         TESTCASE(81,TestRuleStripping);
+        TESTCASE(82,TestHalfwidthFullwidth);
         default: name = ""; break;
     }
 }
@@ -4464,6 +4465,53 @@ void TransliteratorTest::TestRuleStripping() {
     if (u_strncmp(expectedRule, result, len) != 0) {
         errln("utrans_stripRules did not return expected string");
     }
+}
+
+/**
+ * Test the Halfwidth-Fullwidth transliterator (ticket 6281).
+ */
+void TransliteratorTest::TestHalfwidthFullwidth(void) {
+    UParseError parseError;
+    UErrorCode status = U_ZERO_ERROR;
+    Transliterator* hf = Transliterator::createInstance("Halfwidth-Fullwidth", UTRANS_FORWARD, parseError, status);
+    Transliterator* fh = Transliterator::createInstance("Fullwidth-Halfwidth", UTRANS_FORWARD, parseError, status);
+    if (hf == 0 || fh == 0) {
+        errln("FAIL: createInstance failed");
+        delete hf;
+        delete fh;
+        return;
+    }
+
+    // Array of 2n items
+    // Each item is
+    //   "hf"|"fh"|"both",
+    //   <Halfwidth>,
+    //   <Fullwidth>
+    const char* DATA[] = {
+        "both",
+        "\\uFFE9\\uFFEA\\uFFEB\\uFFEC\\u0061\\uFF71\\u00AF\\u0020",
+        "\\u2190\\u2191\\u2192\\u2193\\uFF41\\u30A2\\uFFE3\\u3000",
+    };
+    int32_t DATA_length = (int32_t)(sizeof(DATA) / sizeof(DATA[0]));
+
+    for (int32_t i=0; i<DATA_length; i+=3) {
+        UnicodeString h = CharsToUnicodeString(DATA[i+1]);
+        UnicodeString f = CharsToUnicodeString(DATA[i+2]);
+        switch (*DATA[i]) {
+        case 0x68: //'h': // Halfwidth-Fullwidth only
+            expect(*hf, h, f);
+            break;
+        case 0x66: //'f': // Fullwidth-Halfwidth only
+            expect(*fh, f, h);
+            break;
+        case 0x62: //'b': // both directions
+            expect(*hf, h, f);
+            expect(*fh, f, h);
+            break;
+        }
+    }
+    delete hf;
+    delete fh;
 }
 
 //======================================================================
