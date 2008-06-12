@@ -6,14 +6,16 @@
 # machine (usually Linux), and runs the existing ICU4C tests to make sure that
 # the tests pass. Not everyone is using and testing ICU4C in the en_US locale
 # with the Pacific timezone.
-top_icu_dir=../../../icu
+#top_icu_dir=../../../icu
+top_icu_dir=../../../build/release
 release_tools_dir=../../../../tools/release/c
-cd $top_icu_dir/source/test/intltest
+#cd $top_icu_dir/source/test/intltest
+cd $top_icu_dir/test/intltest
 $release_tools_dir/allLocaleTest.sh intltest &
 $release_tools_dir/allTimezoneTest.sh intltest &
 cd ../iotest
-# iotest uses a fixed filename for tests, so can't run in parallel
-$release_tools_dir/allLocaleTest.sh iotest; $release_tools_dir/allTimezoneTest.sh iotest &
+$release_tools_dir/allLocaleTest.sh iotest IOTEST_OPTS=iotest-c-loc.txt &
+$release_tools_dir/allTimezoneTest.sh iotest IOTEST_OPTS=iotest-c-tz.txt &
 cd ../cintltst
 $release_tools_dir/allLocaleTest.sh cintltst &
 $release_tools_dir/allTimezoneTest.sh cintltst &
