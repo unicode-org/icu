@@ -777,6 +777,25 @@ static void ctest_setICU_DATA() {
     }
 }
 
+U_CDECL_BEGIN
+/*
+ * Note: this assumes that context is a pointer to STANDARD_TEST_FILE. It would be
+ * cleaner to define an acutal context with a string pointer in it and set STANDARD_TEST_FILE
+ * after the call to initArgs()...
+ */
+static int U_CALLCONV argHandler(int arg, int /*argc*/, const char * const argv[], void *context)
+{
+    const char **str = (const char **) context;
+
+    if (argv[arg][0] != '/' && argv[arg][0] != '-') {
+        *str = argv[arg];
+        return 1;
+    }
+
+    return 0;
+}
+U_CDECL_END
+
 int main(int argc, char* argv[])
 {
     int32_t nerrors = 0;
@@ -802,7 +821,7 @@ int main(int argc, char* argv[])
     }
     u_cleanup();
     errorCode = U_ZERO_ERROR;
-    if (!initArgs(argc, argv)) {
+    if (!initArgs(argc, argv, argHandler, (void *) &STANDARD_TEST_FILE)) {
         /* Error already displayed. */
         return -1;
     }
