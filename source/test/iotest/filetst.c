@@ -1,16 +1,16 @@
 /*
-**********************************************************************
-*   Copyright (C) 2004-2006, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-**********************************************************************
-*   file name:  filetst.c
-*   encoding:   US-ASCII
-*   tab size:   8 (not used)
-*   indentation:4
-*
-*   created on: 2004apr06
-*   created by: George Rhoten
-*/
+ **********************************************************************
+ *   Copyright (C) 2004-2008, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ *   file name:  filetst.c
+ *   encoding:   US-ASCII
+ *   tab size:   8 (not used)
+ *   indentation:4
+ *
+ *   created on: 2004apr06
+ *   created by: George Rhoten
+ */
 
 #include "iotest.h"
 #include "unicode/ustdio.h"
@@ -19,7 +19,7 @@
 
 #include <string.h>
 
-const char STANDARD_TEST_FILE[] = "iotest-c.txt";
+const char *STANDARD_TEST_FILE = "iotest-c.txt";
 
 
 #if !UCONFIG_NO_FORMATTING
@@ -233,9 +233,17 @@ static void TestFileFromICU(UFILE *myFile) {
     }
 
     u_fgets(myUString, 4, myFile);
+    myString[2] = '!';
+    myString[3] = '!';
     u_austrncpy(myString, myUString, sizeof(myUString)/sizeof(*myUString));
     if (myString == NULL || strcmp(myString, "\t\n") != 0) {
+#if 0
         log_err("u_fgets got \"%s\"\n", myString);
+#else
+        log_err("u_fgets got \"\\u%04X\\u%04X\\u%04X\\u%04X\" u_austrncpy got \"\\x%02.2X\\x%02.2X\\x%02.2X\\x%02.2X\".\n",
+                myUString[0], myUString[1], myUString[2], myUString[3],
+                myString[0],  myString[1],  myString[2] & 0xFF,  myString[3]);
+#endif
     }
 
     if (u_fgets(myUString, sizeof(myUString)/sizeof(*myUString), myFile) != myUString) {

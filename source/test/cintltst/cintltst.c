@@ -83,7 +83,7 @@ int main(int argc, const char* const argv[])
 
     gOrigArgc = argc;
     gOrigArgv = argv;
-    if (!initArgs(argc, argv)) {
+    if (!initArgs(argc, argv, NULL, NULL)) {
         /* Error already displayed. */
         return -1;
     }
@@ -107,7 +107,7 @@ int main(int argc, const char* const argv[])
 
     while (REPEAT_TESTS > 0) {   /* Loop runs once per complete execution of the tests 
                                   *   used for -r  (repeat) test option.                */
-        if (!initArgs(argc, argv)) {
+        if (!initArgs(argc, argv, NULL, NULL)) {
             /* Error already displayed. */
             return -1;
         }
@@ -433,7 +433,7 @@ UBool ctest_resetICU() {
     char         *dataDir = safeGetICUDataDirectory();
 
     u_cleanup();
-    if (!initArgs(gOrigArgc, gOrigArgv)) {
+    if (!initArgs(gOrigArgc, gOrigArgv, NULL, NULL)) {
         /* Error already displayed. */
         return FALSE;
     }
