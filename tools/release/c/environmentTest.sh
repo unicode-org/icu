@@ -6,11 +6,9 @@
 # machine (usually Linux), and runs the existing ICU4C tests to make sure that
 # the tests pass. Not everyone is using and testing ICU4C in the en_US locale
 # with the Pacific timezone.
-#top_icu_dir=../../../icu
-top_icu_dir=../../../build/release
+top_icu_dir=../../../icu
 release_tools_dir=../../../../tools/release/c
-#cd $top_icu_dir/source/test/intltest
-cd $top_icu_dir/test/intltest
+cd $top_icu_dir/source/test/intltest
 $release_tools_dir/allLocaleTest.sh intltest &
 $release_tools_dir/allTimezoneTest.sh intltest &
 cd ../iotest
