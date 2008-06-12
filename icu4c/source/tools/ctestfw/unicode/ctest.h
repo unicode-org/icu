@@ -1,11 +1,11 @@
 /*
-********************************************************************************
-*
-*   Copyright (C) 1996-2007, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*
-********************************************************************************
-*/
+ ********************************************************************************
+ *
+ *   Copyright (C) 1996-2008, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *
+ ********************************************************************************
+ */
 
 #ifndef CTEST_H
 #define CTEST_H
@@ -18,6 +18,7 @@
 
 U_CDECL_BEGIN
 typedef void (U_CALLCONV *TestFunctionPtr)(void);
+typedef int (U_CALLCONV *ArgHandlerPtr)(int arg, int argc, const char* const argv[], void *context);
 typedef struct TestNode TestNode;
 U_CDECL_END
 
@@ -193,7 +194,7 @@ log_data_err(const char *pattern, ...);
  * This must be called before runTests.
  */
 T_CTEST_API int T_CTEST_EXPORT2 
-initArgs( int argc, const char* const argv[]);
+initArgs( int argc, const char* const argv[], ArgHandlerPtr argHandler, void *context);
 
 /**
  * Processes the command line arguments.

@@ -1068,7 +1068,7 @@ int main(int argc, char* argv[])
 
     startTime = uprv_getUTCtime();
 
-    if (!initArgs(argc, argv)) {
+    if (!initArgs(argc, argv, NULL, NULL)) {
         /* Error already displayed. */
         return -1;
     }
@@ -1091,7 +1091,7 @@ int main(int argc, char* argv[])
     u_cleanup();
     errorCode = U_ZERO_ERROR;
 
-    if (!initArgs(argc, argv)) {
+    if (!initArgs(argc, argv, NULL, NULL)) {
         /* Error already displayed. */
         return -1;
     }

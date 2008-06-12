@@ -586,10 +586,11 @@ static void U_CALLCONV ctest_libFree(const void *context, void *mem) {
 }
 
 int T_CTEST_EXPORT2
-initArgs( int argc, const char* const argv[])
+initArgs( int argc, const char* const argv[], ArgHandlerPtr argHandler, void *context)
 {
     int                i;
     int                doList = FALSE;
+	int                argSkip = 0;
 
     VERBOSITY = FALSE;
     ERR_MSG = TRUE;
@@ -685,6 +686,10 @@ initArgs( int argc, const char* const argv[])
         {
             help( argv[0] );
             return 0;
+        }
+        else if (argHandler != NULL && (argSkip = argHandler(i, argc, argv, context)) > 0)
+        {
+            i += argSkip - 1;
         }
         else
         {
