@@ -238,9 +238,9 @@ void    BITestData::err(const char *heading, RBBITest *test, int32_t expectedIdx
         o    = actual - fExpectedBreakPositions.elementAti(expectedIdx-1);
     }
     if (actual < expected) {
-        test->errln("%s unexpected break at offset %d in test item from line %d", heading, o, line);
+        test->errln("%s unexpected break at offset %d in test item from line %d. actual break: %d  expected break: %d", heading, o, line, actual, expected);
     } else {
-        test->errln("%s Failed to find break at end of item from line %d", heading, line);
+        test->errln("%s Failed to find break at end of item from line %d. actual break: %d  expected break: %d", heading, line, actual, expected);
     }
 }
 
@@ -871,7 +871,7 @@ void  RBBITest::testLastAndPrevious(RuleBasedBreakIterator& bi,  BITestData &td)
     int32_t     lastP  = 0x7ffffffe;
     int32_t     tag;
 
-    logln("Test first and next");
+    logln("Test last and previous");
     bi.setText(td.fDataToBreak);
     td.clearResults();
 
