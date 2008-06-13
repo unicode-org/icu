@@ -805,17 +805,12 @@ ucase_isCaseSensitive(const UCaseProps *csp, UChar32 c) {
  *     zero or more case-ignorable characters.
  */
 
-enum {
-    LOC_UNKNOWN,
-    LOC_ROOT,
-    LOC_TURKISH,
-    LOC_LITHUANIAN
-};
-
 #define is_a(c) ((c)=='a' || (c)=='A')
+#define is_d(c) ((c)=='d' || (c)=='D')
 #define is_e(c) ((c)=='e' || (c)=='E')
 #define is_i(c) ((c)=='i' || (c)=='I')
 #define is_l(c) ((c)=='l' || (c)=='L')
+#define is_n(c) ((c)=='n' || (c)=='N')
 #define is_r(c) ((c)=='r' || (c)=='R')
 #define is_t(c) ((c)=='t' || (c)=='T')
 #define is_u(c) ((c)=='u' || (c)=='U')
@@ -834,11 +829,11 @@ ucase_getCaseLocale(const char *locale, int32_t *locCache) {
     int32_t result;
     char c;
 
-    if(locCache!=NULL && (result=*locCache)!=LOC_UNKNOWN) {
+    if(locCache!=NULL && (result=*locCache)!=UCASE_LOC_UNKNOWN) {
         return result;
     }
 
-    result=LOC_ROOT;
+    result=UCASE_LOC_ROOT;
 
     /*
      * This function used to use uloc_getLanguage(), but the current code
@@ -859,7 +854,7 @@ ucase_getCaseLocale(const char *locale, int32_t *locCache) {
         if(is_r(c)) {
             c=*locale;
             if(is_sep(c)) {
-                result=LOC_TURKISH;
+                result=UCASE_LOC_TURKISH;
             }
         }
     } else if(is_a(c)) {
@@ -871,7 +866,7 @@ ucase_getCaseLocale(const char *locale, int32_t *locCache) {
                 c=*locale;
             }
             if(is_sep(c)) {
-                result=LOC_TURKISH;
+                result=UCASE_LOC_TURKISH;
             }
         }
     } else if(is_l(c)) {
@@ -883,7 +878,19 @@ ucase_getCaseLocale(const char *locale, int32_t *locCache) {
         if(is_t(c)) {
             c=*locale;
             if(is_sep(c)) {
-                result=LOC_LITHUANIAN;
+                result=UCASE_LOC_LITHUANIAN;
+            }
+        }
+    } else if(is_n(c)) {
+        /* nl or nld? */
+        c=*locale++;
+        if(is_l(c)) {
+            c=*locale++;
+            if(is_d(c)) {
+                c=*locale;
+            }
+            if(is_sep(c)) {
+                result=UCASE_LOC_DUTCH;
             }
         }
     }
@@ -1078,7 +1085,7 @@ ucase_toFullLower(const UCaseProps *csp, UChar32 c,
              * then test for characters that have unconditional mappings in SpecialCasing.txt,
              * then get the UnicodeData.txt mappings.
              */
-            if( loc==LOC_LITHUANIAN &&
+            if( loc==UCASE_LOC_LITHUANIAN &&
                     /* base characters, find accents above */
                     (((c==0x49 || c==0x4a || c==0x12e) &&
                         isFollowedByMoreAbove(csp, iter, context)) ||
@@ -1124,7 +1131,7 @@ ucase_toFullLower(const UCaseProps *csp, UChar32 c,
                     return 0; /* will not occur */
                 }
             /* # Turkish and Azeri */
-            } else if(loc==LOC_TURKISH && c==0x130) {
+            } else if(loc==UCASE_LOC_TURKISH && c==0x130) {
                 /*
                     # I and i-dotless; I-dot and i are case pairs in Turkish and Azeri
                     # The following rules handle those cases.
@@ -1133,7 +1140,7 @@ ucase_toFullLower(const UCaseProps *csp, UChar32 c,
                     0130; 0069; 0130; 0130; az # LATIN CAPITAL LETTER I WITH DOT ABOVE
                  */
                 return 0x69;
-            } else if(loc==LOC_TURKISH && c==0x307 && isPrecededBy_I(csp, iter, context)) {
+            } else if(loc==UCASE_LOC_TURKISH && c==0x307 && isPrecededBy_I(csp, iter, context)) {
                 /*
                     # When lowercasing, remove dot_above in the sequence I + dot_above, which will turn into i.
                     # This matches the behavior of the canonically equivalent I-dot_above
@@ -1142,7 +1149,7 @@ ucase_toFullLower(const UCaseProps *csp, UChar32 c,
                     0307; ; 0307; 0307; az After_I; # COMBINING DOT ABOVE
                  */
                 return 0; /* remove the dot (continue without output) */
-            } else if(loc==LOC_TURKISH && c==0x49 && !isFollowedByDotAbove(csp, iter, context)) {
+            } else if(loc==UCASE_LOC_TURKISH && c==0x49 && !isFollowedByDotAbove(csp, iter, context)) {
                 /*
                     # When lowercasing, unless an I is before a dot_above, it turns into a dotless i.
 
@@ -1219,7 +1226,7 @@ toUpperOrTitle(const UCaseProps *csp, UChar32 c,
             /* use hardcoded conditions and mappings */
             int32_t loc=ucase_getCaseLocale(locale, locCache);
 
-            if(loc==LOC_TURKISH && c==0x69) {
+            if(loc==UCASE_LOC_TURKISH && c==0x69) {
                 /*
                     # Turkish and Azeri
 
@@ -1232,7 +1239,7 @@ toUpperOrTitle(const UCaseProps *csp, UChar32 c,
                     0069; 0069; 0130; 0130; az; # LATIN SMALL LETTER I
                 */
                 return 0x130;
-            } else if(loc==LOC_LITHUANIAN && c==0x307 && isPrecededBySoftDotted(csp, iter, context)) {
+            } else if(loc==UCASE_LOC_LITHUANIAN && c==0x307 && isPrecededBySoftDotted(csp, iter, context)) {
                 /*
                     # Lithuanian
 
