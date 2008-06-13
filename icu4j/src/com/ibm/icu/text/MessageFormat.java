@@ -14,7 +14,6 @@ package com.ibm.icu.text;
 import java.io.IOException;
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
-import java.text.CharacterIterator;
 import java.text.ChoiceFormat;
 import java.text.FieldPosition;
 import java.text.Format;
@@ -31,6 +30,7 @@ import java.util.HashMap;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 import java.util.ArrayList;
+import java.text.CharacterIterator;
 //#endif
 
 import com.ibm.icu.impl.Utility;
@@ -1751,6 +1751,8 @@ public class MessageFormat extends UFormat {
         return result;
     }
 
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     /**
      * Convenience method to append all the characters in
      * <code>iterator</code> to the StringBuffer <code>result</code>.
@@ -1765,6 +1767,7 @@ public class MessageFormat extends UFormat {
             }
         }
     }
+//#endif
 
     private static final String[] typeList =
         {"", "number", "date", "time", "choice", "spellout", "ordinal",

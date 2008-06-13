@@ -19,6 +19,10 @@ import com.ibm.icu.dev.test.TestFmwk.TestParams;
 
 public class UnitTest extends TestCase {
     
+    public void testBidi() throws Exception {
+        runUtility("Bidi");
+    }
+
     public void testCalendar() throws Exception {
         runUtility("Calendar");
     }
@@ -29,6 +33,10 @@ public class UnitTest extends TestCase {
 
     public void testCompression() throws Exception {
         runUtility("Compression");
+    }
+
+    public void testDuration() throws Exception {
+        runUtility("Duration");
     }
 
     public void testDiagBigDecimal() throws Exception {
