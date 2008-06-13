@@ -536,6 +536,36 @@ public class RBBITest extends TestFmwk
                errln("Error with ThaiDictionaryBreakIterator backward iteration test at " + position + ".\nShould have been " + result[index-1]);
            }
        }
+       
+       //Test invalid sequence and spaces
+       char text2[] = {
+               0x0E01, 0x0E39, 0x0020, 0x0E01, 0x0E34, 0x0E19, 0x0E01, 0x0E38, 0x0E49, 0x0E07, 0x0020, 0x0E1B, 
+               0x0E34, 0x0E49, 0x0E48, 0x0E07, 0x0E2D, 0x0E22, 0x0E39, 0x0E48, 0x0E43, 0x0E19, 
+               0x0E16, 0x0E49, 0x0E33
+       };
+       int expectedWordResult[] = {
+               2, 3, 6, 10, 11, 15, 17, 20, 22
+       };
+       int expectedLineResult[] = {
+               3, 6, 11, 15, 17, 20, 22
+       };
+       BreakIterator brk = BreakIterator.getWordInstance(new ULocale("th"));
+       brk.setText(new String(text2));
+       position = index = 0;;
+       while ((position = brk.next()) != BreakIterator.DONE && position < text2.length) {
+           if (position != expectedWordResult[index++]) {
+               errln("Incorrect break given by thai word break iterator. Expected: " + expectedWordResult[index-1] + " Got: " + position);
+           }
+       }
+      
+       brk = BreakIterator.getLineInstance(new ULocale("th"));
+       brk.setText(new String(text2));
+       position = index = 0;
+       while ((position = brk.next()) != BreakIterator.DONE && position < text2.length) {
+           if (position != expectedLineResult[index++]) {
+               errln("Incorrect break given by thai line break iterator. Expected: " + expectedLineResult[index-1] + " Got: " + position);
+           }
+       }
    }
   
 }

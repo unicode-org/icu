@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 1999-2007, International Business Machines
+ * Copyright (c) 1999-2008, International Business Machines
  * Corporation and others. All Rights Reserved.
  *************************************************************************
  *   Date        Name        Description
@@ -68,6 +68,7 @@ public:
     void TestTrieDict();
     void TestUnicodeFiles();
     void TestBug5775();
+    void TestThaiBreaks();
 
     void TestDebug();
 
