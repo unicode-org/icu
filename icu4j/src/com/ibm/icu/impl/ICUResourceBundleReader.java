@@ -1,7 +1,6 @@
-//##header J2SE15
 /*
  *******************************************************************************
- * Copyright (C) 2004-2007, International Business Machines Corporation and         *
+ * Copyright (C) 2004-2008, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -178,11 +177,7 @@ public final class ICUResourceBundleReader implements ICUBinary.Authenticate{
             readData(bs);
             stream.close();
         }catch(IOException ex){
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##            throw new RuntimeException("Data file "+ resolvedName+ " is corrupt.");   
-//#else
-            throw new RuntimeException("Data file "+ resolvedName+ " is corrupt.", ex);   
-//#endif
+            throw new RuntimeException("Data file "+ resolvedName+ " is corrupt - " + ex.getMessage());   
         }
     }
     public static ICUResourceBundleReader getReader(String baseName, String localeName, ClassLoader root){
