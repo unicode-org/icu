@@ -343,7 +343,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
 //##                skeleton = tmp.toString();
 //##            }
 //#else
-//            skeleton = skeleton.replaceAll("MMM+", "MM");
+            skeleton = skeleton.replaceAll("MMM+", "MM");
 //#endif
         }
         //if (!isComplete) complete();
