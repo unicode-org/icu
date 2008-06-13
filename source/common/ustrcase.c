@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2007, International Business Machines
+*   Copyright (C) 2001-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -217,7 +217,7 @@ _toTitle(UCaseMap *csm,
          UErrorCode *pErrorCode) {
     const UChar *s;
     UChar32 c;
-    int32_t prev, titleStart, titleLimit, index, destIndex, length;
+    int32_t prev, titleStart, titleLimit, titleLimitSave, index, indexSave, destIndex, length;
     UBool isFirstIndex;
 
     if(csm->iter!=NULL) {
@@ -296,7 +296,17 @@ _toTitle(UCaseMap *csm,
                 csc->cpStart=titleStart;
                 csc->cpLimit=titleLimit;
                 c=ucase_toFullTitle(csm->csp, c, utf16_caseContextIterator, csc, &s, csm->locale, &csm->locCache);
-                destIndex=appendResult(dest, destIndex, destCapacity, c, s);
+                destIndex=appendResult(dest, destIndex, destCapacity, c, s); 
+
+                /* Special case Dutch IJ titlecasing */
+                if ( titleStart+1 < index && 
+                     ucase_getCaseLocale(csm->locale,&csm->locCache) == UCASE_LOC_DUTCH &&
+                     ( src[titleStart] == (UChar32) 0x0049 || src[titleStart] == (UChar32) 0x0069 ) &&
+                     ( src[titleStart+1] == (UChar32) 0x004A || src[titleStart+1] == (UChar32) 0x006A )) { 
+                            c=(UChar32) 0x004A;
+                            destIndex=appendResult(dest, destIndex, destCapacity, c, s);
+                            titleLimit++;
+                }
 
                 /* lowercase [titleLimit..index[ */
                 if(titleLimit<index) {
