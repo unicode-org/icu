@@ -380,7 +380,6 @@ icu4j/src/com/ibm/icu/dev/test/duration/PeriodBuilderFactoryTest.java -text
 icu4j/src/com/ibm/icu/dev/test/duration/PeriodBuilderTest.java -text
 icu4j/src/com/ibm/icu/dev/test/duration/PeriodTest.java -text
 icu4j/src/com/ibm/icu/dev/test/duration/ResourceBasedPeriodFormatterDataServiceTest.java -text
-icu4j/src/com/ibm/icu/dev/test/duration/TestAll.java -text
 icu4j/src/com/ibm/icu/dev/test/duration/languages/TestAll.java -text
 icu4j/src/com/ibm/icu/dev/test/duration/languages/Test_ar_EG.java -text
 icu4j/src/com/ibm/icu/dev/test/duration/languages/Test_en.java -text
