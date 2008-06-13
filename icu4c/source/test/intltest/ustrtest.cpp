@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -225,7 +225,7 @@ UnicodeStringTest::TestBasicManipulation()
         cnv=ucnv_open("ISO-8859-1", &errorCode);
         UnicodeString v(cs, -1, cnv, errorCode);
         ucnv_close(cnv);
-        if(v!=UnicodeString("a\\xe4\\x85").unescape()) {
+        if(v!=CharsToUnicodeString("a\\xe4\\x85")) {
             errln("UnicodeString(const char *, length, cnv, errorCode) does not work with length==-1");
         }
     }
@@ -1235,7 +1235,7 @@ UnicodeStringTest::TestStackAllocation()
  * Test the unescape() function.
  */
 void UnicodeStringTest::TestUnescape(void) {
-    UnicodeString IN("abc\\u4567 \\n\\r \\U00101234xyz\\x1\\x{5289}\\x1b");
+    UnicodeString IN("abc\\u4567 \\n\\r \\U00101234xyz\\x1\\x{5289}\\x1b", -1, US_INV);
     UnicodeString OUT("abc");
     OUT.append((UChar)0x4567);
     OUT.append(" ");
