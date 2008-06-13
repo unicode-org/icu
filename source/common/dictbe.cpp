@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2006, International Business Machines Corporation and others. *
+ * Copyright (C) 2006-2008, International Business Machines Corporation and others. *
  * All Rights Reserved.                                                        *
  *******************************************************************************
  */
@@ -220,6 +220,7 @@ ThaiBreakEngine::ThaiBreakEngine(const TrieWordDictionary *adoptDictionary, UErr
         setCharacters(fThaiWordSet);
     }
     fMarkSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Thai:]&[:LineBreak=SA:]&[:M:]]"), status);
+    fMarkSet.add(0x0020);
     fEndWordSet = fThaiWordSet;
     fEndWordSet.remove(0x0E31);             // MAI HAN-AKAT
     fEndWordSet.remove(0x0E40, 0x0E44);     // SARA E through SARA AI MAIMALAI

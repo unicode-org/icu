@@ -104,6 +104,8 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
             if(exec) TestTrieDict();                           break;
         case 21: name = "TestBug5775";
             if (exec) TestBug5775();                        break;
+        case 22: name = "TestThaiBreaks";
+            if (exec) TestThaiBreaks();                        break;
 
         default: name = ""; break; //needed to end loop
     }
@@ -1763,6 +1765,55 @@ end_test:
     delete tp.srcCol;
     delete [] testFile;
 #endif
+}
+
+void RBBITest::TestThaiBreaks() {
+    UErrorCode status=U_ZERO_ERROR;
+    BreakIterator* b;
+    Locale locale = Locale("th");
+    int32_t p, index;
+    UChar c[]= { 
+            0x0E01, 0x0E39, 0x0020, 0x0E01, 0x0E34, 0x0E19, 0x0E01, 0x0E38, 0x0E49, 0x0E07, 0x0020, 0x0E1B, 
+            0x0E34, 0x0E49, 0x0E48, 0x0E07, 0x0E2D, 0x0E22, 0x0E39, 0x0E48, 0x0E43, 0x0E19, 
+            0x0E16, 0x0E49, 0x0E33
+    };
+    int32_t expectedWordResult[] = {
+            2, 3, 6, 10, 11, 15, 17, 20, 22
+    };
+    int32_t expectedLineResult[] = {
+            3, 6, 11, 15, 17, 20, 22
+    };
+    int32_t size = sizeof(c)/sizeof(UChar);
+    UnicodeString text=UnicodeString(c);
+    
+    b = BreakIterator::createWordInstance(locale, status);
+    if (U_FAILURE(status)) {
+        errln("Unable to create thai word break iterator.\n");
+        return;
+    }
+    b->setText(text);
+    p = index = 0;
+    while ((p=b->next())!=BreakIterator::DONE && p < size) {
+        if (p != expectedWordResult[index++]) {
+            errln("Incorrect break given by thai word break iterator. Expected: %d  Got: %d", expectedWordResult[index-1], p);
+        }
+    }
+    delete b;
+    
+    b = BreakIterator::createLineInstance(locale, status);
+    if (U_FAILURE(status)) {
+        printf("Unable to create thai line break iterator.\n");
+        return;
+    }
+    b->setText(text);
+    p = index = 0;
+    while ((p=b->next())!=BreakIterator::DONE && p < size) {
+        if (p != expectedLineResult[index++]) {
+            errln("Incorrect break given by thai line break iterator. Expected: %d  Got: %d", expectedLineResult[index-1], p);
+        }
+    }
+
+    delete b;
 }
 
 
