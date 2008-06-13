@@ -1,6 +1,6 @@
 ﻿//*******************************************************************************
 //*
-//*   Copyright (C) 2002-2007, International Business Machines
+//*   Copyright (C) 2002-2008, International Business Machines
 //*   Corporation and others.  All Rights Reserved.
 //*
 //*******************************************************************************
@@ -41,6 +41,8 @@ casing:table(nofallback) {
             { " tHe QUIcK bRoWn", " The Quick Brown", "", "4", "" },
             { "ǄǅǆǇǈǉǊǋǌ", "ǅǅǅǈǈǈǋǋǋ", "", "0", "" }, // UBRK_CHARACTER
             { "ǉubav ljubav", "ǈubav Ljubav", "", "-1", "" }, // Lj vs. L+j
+            { "ijssel igloo IJMUIDEN", "Ijssel Igloo Ijmuiden", "", "1", "" }, // Dutch titlecasing default
+            { "ijssel igloo IJMUIDEN", "IJssel Igloo IJmuiden", "nl", "1", "" }, // Dutch titlecasing
             { "'oH dOn'T tItLeCaSe AfTeR lEtTeR+'", "'Oh Don't Titlecase After Letter+'", "", "-1", "" },
             
             { "a ʻCaT. A ʻdOg! ʻeTc.", "A ʻCat. A ʻDog! ʻEtc.", "", "-1", "" }, // default
@@ -50,7 +52,8 @@ casing:table(nofallback) {
             { "ʻcAt! ʻeTc.", "ʻCat! ʻetc.", "", "-2", "" }, // -2=Trivial break iterator
             { "ʻcAt! ʻeTc.", "ʻcat! ʻetc.", "", "-2", "A" }, // U_TITLECASE_NO_BREAK_ADJUSTMENT
             { "ʻcAt! ʻeTc.", "ʻCAt! ʻeTc.", "", "-2", "L" }, // U_TITLECASE_NO_LOWERCASE
-            { "ʻcAt! ʻeTc.", "ʻcAt! ʻeTc.", "", "-2", "AL" } // Both options
+            { "ʻcAt! ʻeTc.", "ʻcAt! ʻeTc.", "", "-2", "AL" }, // Both options
+
         }
       }
       casefolding {
