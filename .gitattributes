@@ -305,6 +305,7 @@ icu4j/src/com/ibm/icu/dev/eclipse/features/com.ibm.icu/.project -text
 icu4j/src/com/ibm/icu/dev/eclipse/features/com.ibm.icu/build.properties -text
 icu4j/src/com/ibm/icu/dev/eclipse/features/com.ibm.icu/feature.xml -text
 icu4j/src/com/ibm/icu/dev/eclipse/misc/about_icu.html svneol=native#text/html
+icu4j/src/com/ibm/icu/dev/eclipse/misc/about_icu_base.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/eclipse/pdebuild/allElements.xml -text
 icu4j/src/com/ibm/icu/dev/eclipse/pdebuild/build.properties -text
 icu4j/src/com/ibm/icu/dev/eclipse/pdebuild/customTargets.xml -text

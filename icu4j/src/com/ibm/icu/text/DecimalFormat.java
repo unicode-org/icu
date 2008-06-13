@@ -13,7 +13,6 @@ import java.math.BigInteger;
 import java.text.ChoiceFormat;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
-import java.util.ArrayList;
 
 //#if defined(FOUNDATION10)
 //#else
@@ -25,6 +24,7 @@ import java.io.ObjectOutputStream;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 import java.text.Format;
+import java.util.ArrayList;
 //#endif
 
 import com.ibm.icu.impl.UCharacterProperty;
