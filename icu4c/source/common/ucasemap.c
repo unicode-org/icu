@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005-2007, International Business Machines
+*   Copyright (C) 2005-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -359,6 +359,16 @@ _toTitle(UCaseMap *csm,
                 c=ucase_toFullTitle(csm->csp, c, utf8_caseContextIterator, csc, &s, csm->locale, &csm->locCache);
                 destIndex=appendResult(dest, destIndex, destCapacity, c, s);
 
+                
+                /* Special case Dutch IJ titlecasing */
+                if ( titleStart+1 < index && 
+                     ucase_getCaseLocale(csm->locale,&csm->locCache) == UCASE_LOC_DUTCH &&
+                     ( src[titleStart] == 0x0049 || src[titleStart] == 0x0069 ) &&
+                     ( src[titleStart+1] == 0x004A || src[titleStart+1] == 0x006A )) { 
+                            c=0x004A;
+                            destIndex=appendResult(dest, destIndex, destCapacity, c, s);
+                            titleLimit++;
+                }
                 /* lowercase [titleLimit..index[ */
                 if(titleLimit<index) {
                     if((csm->options&U_TITLECASE_NO_LOWERCASE)==0) {

@@ -73,6 +73,15 @@ ucase_addPropertyStarts(const UCaseProps *csp, const USetAdder *sa, UErrorCode *
 U_CFUNC int32_t
 ucase_getCaseLocale(const char *locale, int32_t *locCache);
 
+/* Casing locale types for ucase_getCaseLocale */
+enum {
+    UCASE_LOC_UNKNOWN,
+    UCASE_LOC_ROOT,
+    UCASE_LOC_TURKISH,
+    UCASE_LOC_LITHUANIAN,
+    UCASE_LOC_DUTCH
+};
+
 /**
  * Bit mask for getting just the options from a string compare options word
  * that are relevant for case-insensitive string comparison.
