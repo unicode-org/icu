@@ -2072,6 +2072,7 @@
   </target>
 
   <target name="eclipseRunCheck" depends="eclipseTests">
+    <delete dir="${build.dir}/META-INF"/>
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
       <jvmarg line="${test.jvm.args}"/>
       <arg value="-n" />

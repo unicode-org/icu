@@ -1,6 +1,3 @@
-//##header J2SE15
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
 /*
  *******************************************************************************
  * Copyright (C) 2001-2008, International Business Machines Corporation and    *
@@ -278,4 +275,3 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 }
-//#endif

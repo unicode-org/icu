@@ -2576,6 +2576,7 @@ public class SimpleDateFormat extends DateFormat {
         // return the CharacterIterator from AttributedString
         return as.getIterator();
     }
+//#endif
 
 
     /**
@@ -2901,6 +2902,4 @@ public class SimpleDateFormat extends DateFormat {
         }    
         return false;
     }
-
-//#endif
 }

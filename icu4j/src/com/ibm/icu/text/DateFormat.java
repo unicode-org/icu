@@ -674,8 +674,6 @@ public abstract class DateFormat extends UFormat {
      */
     public static final int RELATIVE_DEFAULT = RELATIVE | DEFAULT;
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     /* Below are pre-defined skeletons
      *
      * <P>
@@ -943,7 +941,6 @@ public abstract class DateFormat extends UFormat {
      */
     public static final String HOUR_TZ = "hz";
 
-//#endif
     /**
      * Gets the time formatter with the default formatting style
      * for the default locale.
@@ -1499,9 +1496,6 @@ public abstract class DateFormat extends UFormat {
         return getDateTimeInstance(cal, dateStyle, timeStyle, ULocale.getDefault());
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
-
     /**
      * Convenience overload
      * @draft ICU 4.0
@@ -1578,7 +1572,6 @@ public abstract class DateFormat extends UFormat {
         format.setCalendar(cal);
         return format;
     }
-//#endif
 
 //#if defined(FOUNDATION10) || defined(J2SE13)
 //#else

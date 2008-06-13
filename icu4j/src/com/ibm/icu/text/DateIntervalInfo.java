@@ -1,6 +1,3 @@
-//##header J2SE15
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
 /*
 *   Copyright (C) 2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
@@ -945,4 +942,3 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
     //}
 
 }// end class DateIntervalInfo
-//#endif

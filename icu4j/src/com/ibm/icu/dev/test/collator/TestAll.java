@@ -1,7 +1,6 @@
-//##header J2SE15
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -42,10 +41,7 @@ public class TestAll extends TestGroup {
                   "CollationChineseTest",
                   "CollationServiceTest",
                   "CollationThreadTest",
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
                   //"RandomCollator", //Disabled until the problem in the test case is resolved #5747
-//#endif
                   "UCAConformanceTest",
                   // don't test Search API twice!
                   //"com.ibm.icu.dev.test.search.SearchTest"

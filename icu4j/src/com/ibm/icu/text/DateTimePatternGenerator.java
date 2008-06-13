@@ -1,6 +1,4 @@
 //##header J2SE15
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
 /*
  ********************************************************************************
  * Copyright (C) 2006-2008, Google, International Business Machines Corporation *
@@ -22,10 +20,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//##import java.util.HashMap;
+//#endif
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
+//import java.util.LinkedHashMap;
+//import java.util.LinkedHashSet;
+//#endif
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -322,9 +326,26 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * @stable ICU 3.6
      */
     public String getBestPattern(String skeleton) {
-      if (chineseMonthHack) {
-        skeleton = skeleton.replaceAll("MMM+", "MM");
-      }
+        if (chineseMonthHack) {
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//##            int monidx = skeleton.indexOf("MMM");
+//##            if (monidx >= 0) {
+//##                StringBuffer tmp = new StringBuffer(skeleton.substring(0, monidx));
+//##                tmp.append("MM");
+//##                monidx += 3;
+//##                while (monidx < skeleton.length()) {
+//##                    if (skeleton.charAt(monidx) != 'M') {
+//##                        break;
+//##                    }
+//##                    monidx++;
+//##                }
+//##                tmp.append(skeleton.substring(monidx));
+//##                skeleton = tmp.toString();
+//##            }
+//#else
+//            skeleton = skeleton.replaceAll("MMM+", "MM");
+//#endif
+        }
         //if (!isComplete) complete();
         current.set(skeleton, fp);
         String best = getBestRaw(current, -1, _distanceInfo);
@@ -472,7 +493,13 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * @stable ICU 3.6
      */
     public Map getSkeletons(Map result) {
-        if (result == null) result = new LinkedHashMap();
+        if (result == null) {
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//##            result = new HashMap();
+//#else
+//            result = new LinkedHashMap();
+//#endif
+        }
         for (Iterator it = skeleton2pattern.keySet().iterator(); it.hasNext();) {
             DateTimeMatcher item = (DateTimeMatcher) it.next();
             String pattern = (String) skeleton2pattern.get(item);
@@ -586,7 +613,13 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      */
     public Collection getRedundants(Collection output) {
         synchronized (this) { // synchronized since a getter must be thread-safe
-            if (output == null) output = new LinkedHashSet();
+            if (output == null) {
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//##                output = new HashSet();
+//#else
+//                output = new LinkedHashSet();
+//#endif
+            }
             for (Iterator it = skeleton2pattern.keySet().iterator(); it.hasNext();) {
                 DateTimeMatcher cur = (DateTimeMatcher) it.next();
                 String pattern = (String) skeleton2pattern.get(cur);
@@ -1764,5 +1797,4 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         }
     }
 }
-//#endif
 //eof

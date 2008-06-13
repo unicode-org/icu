@@ -8,21 +8,26 @@
 package com.ibm.icu.dev.test.charsetdet;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
 
 //#if defined(FOUNDATION10) || defined(J2SE13)
-//##import com.ibm.icu.impl.Utility;
+//#else
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 //#endif
-
-import javax.xml.parsers.*;
-import org.w3c.dom.*;
-
 
 /**
  * @author andy
@@ -84,103 +89,6 @@ public class TestCharsetDetector extends TestFmwk
         } catch (Exception e) {
             errln("stringFromReader() failed: " + e.toString());
             return null;
-        }
-    }
-    
-    private void checkMatch(CharsetDetector det, String testString, String encoding, String language, String id) throws Exception
-    {
-        CharsetMatch m = det.detect();
-        String decoded;
-        
-        if (! m.getName().equals(encoding)) {
-            errln(id + ": encoding detection failure - expected " + encoding + ", got " + m.getName());
-            return;
-        }
-        
-        String charsetMatchLanguage = m.getLanguage();
-        if ((language != null && !charsetMatchLanguage.equals(language))
-            || (language == null && charsetMatchLanguage != null)
-            || (language != null && charsetMatchLanguage == null))
-        {
-            errln(id + ", " + encoding + ": language detection failure - expected " + language + ", got " + m.getLanguage());
-        }
-        
-        if (encoding.startsWith("UTF-32")) {
-            return;
-        }
-        
-        decoded = m.getString();
-        
-        if (! testString.equals(decoded)) {
-            errln(id + ", " + encoding + ": getString() didn't return the original string!");
-        }
-        
-        decoded = stringFromReader(m.getReader());
-        
-        if (! testString.equals(decoded)) {
-            errln(id + ", " + encoding + ": getReader() didn't yield the original string!");
-        }
-    }
-    
-    private void checkEncoding(String testString, String encoding, String id)
-    {
-        String enc = null, lang = null;
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##        String[] split = Utility.split(encoding,'/');
-//#else
-        String[] split = encoding.split("/");
-//#endif
-        
-        enc = split[0];
-        
-        if (split.length > 1) {
-            lang = split[1];
-        }
-
-        try {
-            CharsetDetector det = new CharsetDetector();
-            byte[] bytes;
-            
-            //if (enc.startsWith("UTF-32")) {
-            //    UTF32 utf32 = UTF32.getInstance(enc);
-                
-            //    bytes = utf32.toBytes(testString);
-            //} else {
-                String from = enc;
-
-                while (true) {
-                    try {
-                        bytes = testString.getBytes(from);
-                    } catch (UnsupportedOperationException uoe) {
-                         // In some runtimes, the ISO-2022-CN converter
-                         // only converts *to* Unicode - we have to use
-                         // x-ISO-2022-CN-GB to convert *from* Unicode.
-                        if (from.equals("ISO-2022-CN")) {
-                            from = "x-ISO-2022-CN-GB";
-                            continue;
-                        }
-                        
-                        // Ignore any other converters that can't
-                        // convert from Unicode.
-                        return;
-                    } catch (UnsupportedEncodingException uee) {
-                        // Ignore any encodings that this runtime
-                        // doesn't support.
-                        return;
-                    }
-                    
-                    break;
-                }
-            //}
-        
-            det.setText(bytes);
-            checkMatch(det, testString, enc, lang, id);
-            
-            det.setText(new ByteArrayInputStream(bytes));
-            checkMatch(det, testString, enc, lang, id);
-         } catch (Exception e) {
-            errln(id + ": " + e.toString() + "enc=" + enc);
-            e.printStackTrace();
         }
     }
     
@@ -385,7 +293,9 @@ public class TestCharsetDetector extends TestFmwk
             }
         }
     }
-    
+
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
     public void TestDetection()
     {
         //
@@ -433,12 +343,7 @@ public class TestCharsetDetector extends TestFmwk
                 
                 // Process test text with each encoding / language pair.
                 String testString = testText.toString();
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##                String[] encodingList = Utility.split(encodings, ' ');
-//#else
                 String[] encodingList = encodings.split(" ");
-//#endif
-                
                 for (int e = 0; e < encodingList.length; e += 1) {
                     checkEncoding(testString, encodingList[e], id);
                 }
@@ -448,4 +353,98 @@ public class TestCharsetDetector extends TestFmwk
             errln("exception while processing test cases: " + e.toString());
         }
     }
+
+    private void checkMatch(CharsetDetector det, String testString, String encoding, String language, String id) throws Exception
+    {
+        CharsetMatch m = det.detect();
+        String decoded;
+        
+        if (! m.getName().equals(encoding)) {
+            errln(id + ": encoding detection failure - expected " + encoding + ", got " + m.getName());
+            return;
+        }
+        
+        String charsetMatchLanguage = m.getLanguage();
+        if ((language != null && !charsetMatchLanguage.equals(language))
+            || (language == null && charsetMatchLanguage != null)
+            || (language != null && charsetMatchLanguage == null))
+        {
+            errln(id + ", " + encoding + ": language detection failure - expected " + language + ", got " + m.getLanguage());
+        }
+        
+        if (encoding.startsWith("UTF-32")) {
+            return;
+        }
+        
+        decoded = m.getString();
+        
+        if (! testString.equals(decoded)) {
+            errln(id + ", " + encoding + ": getString() didn't return the original string!");
+        }
+        
+        decoded = stringFromReader(m.getReader());
+        
+        if (! testString.equals(decoded)) {
+            errln(id + ", " + encoding + ": getReader() didn't yield the original string!");
+        }
+    }
+    
+    private void checkEncoding(String testString, String encoding, String id)
+    {
+        String enc = null, lang = null;
+        String[] split = encoding.split("/");
+        
+        enc = split[0];
+        
+        if (split.length > 1) {
+            lang = split[1];
+        }
+
+        try {
+            CharsetDetector det = new CharsetDetector();
+            byte[] bytes;
+            
+            //if (enc.startsWith("UTF-32")) {
+            //    UTF32 utf32 = UTF32.getInstance(enc);
+                
+            //    bytes = utf32.toBytes(testString);
+            //} else {
+                String from = enc;
+
+                while (true) {
+                    try {
+                        bytes = testString.getBytes(from);
+                    } catch (UnsupportedOperationException uoe) {
+                         // In some runtimes, the ISO-2022-CN converter
+                         // only converts *to* Unicode - we have to use
+                         // x-ISO-2022-CN-GB to convert *from* Unicode.
+                        if (from.equals("ISO-2022-CN")) {
+                            from = "x-ISO-2022-CN-GB";
+                            continue;
+                        }
+                        
+                        // Ignore any other converters that can't
+                        // convert from Unicode.
+                        return;
+                    } catch (UnsupportedEncodingException uee) {
+                        // Ignore any encodings that this runtime
+                        // doesn't support.
+                        return;
+                    }
+                    
+                    break;
+                }
+            //}
+        
+            det.setText(bytes);
+            checkMatch(det, testString, enc, lang, id);
+            
+            det.setText(new ByteArrayInputStream(bytes));
+            checkMatch(det, testString, enc, lang, id);
+         } catch (Exception e) {
+            errln(id + ": " + e.toString() + "enc=" + enc);
+            e.printStackTrace();
+        }
+    }
+//#endif
 }
