@@ -237,13 +237,7 @@ static void TestFileFromICU(UFILE *myFile) {
     myString[3] = '!';
     u_austrncpy(myString, myUString, sizeof(myUString)/sizeof(*myUString));
     if (myString == NULL || strcmp(myString, "\t\n") != 0) {
-#if 0
         log_err("u_fgets got \"%s\"\n", myString);
-#else
-        log_err("u_fgets got \"\\u%04X\\u%04X\\u%04X\\u%04X\" u_austrncpy got \"\\x%02.2X\\x%02.2X\\x%02.2X\\x%02.2X\".\n",
-                myUString[0], myUString[1], myUString[2], myUString[3],
-                myString[0],  myString[1],  myString[2] & 0xFF,  myString[3]);
-#endif
     }
 
     if (u_fgets(myUString, sizeof(myUString)/sizeof(*myUString), myFile) != myUString) {
