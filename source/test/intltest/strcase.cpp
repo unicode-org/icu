@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2007, International Business Machines
+*   Copyright (C) 2002-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -448,6 +448,7 @@ StringCaseTest::TestCasingImpl(const UnicodeString &input,
         errln("error: %s() got an error for a test case from casing.res - %s", name, u_errorName(errorCode));
     } else if(result!=output) {
         errln("error: %s() got a wrong result for a test case from casing.res", name);
+        errln("expected \"" + output + "\" got \"" + result + "\"" );
     }
     ucasemap_close(csm);
 }
