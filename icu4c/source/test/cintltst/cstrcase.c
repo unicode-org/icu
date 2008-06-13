@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2007, International Business Machines
+*   Copyright (C) 2002-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -326,6 +326,68 @@ TestCaseTitle(void) {
     }
 
     ubrk_close(titleIterChars);
+}
+
+static void
+TestCaseDutchTitle(void) {
+    static const UChar
+
+    beforeTitle[]= { 0x69, 0x6A, 0x73, 0x73,  0x45, 0x6c, 0x20, 0x69, 0x67, 0x6c, 0x4f, 0x6f , 0x20 , 0x49, 0x4A, 0x53, 0x53, 0x45, 0x4C },
+    titleRoot[]=   { 0x49, 0x6A, 0x73, 0x73,  0x65, 0x6c, 0x20, 0x49, 0x67, 0x6c, 0x6f, 0x6f , 0x20 , 0x49, 0x6A, 0x73, 0x73, 0x65, 0x6C },
+    titleDutch[]=  { 0x49, 0x4A, 0x73, 0x73,  0x65, 0x6c, 0x20, 0x49, 0x67, 0x6c, 0x6f, 0x6f , 0x20 , 0x49, 0x4A, 0x73, 0x73, 0x65, 0x6C };
+
+    UChar buffer[32];
+    UBreakIterator *titleIterWord;
+    int32_t length;
+    UErrorCode errorCode;
+
+    errorCode=U_ZERO_ERROR;
+    titleIterWord=ubrk_open(UBRK_WORD, "", beforeTitle, sizeof(beforeTitle)/U_SIZEOF_UCHAR, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("error: ubrk_open(UBRK_WORD)->%s\n", u_errorName(errorCode));
+        return;
+    }
+
+    /* titlecase with default locale */
+    buffer[0]=0xabcd;
+    errorCode=U_ZERO_ERROR;
+    length=u_strToTitle(buffer, sizeof(buffer)/U_SIZEOF_UCHAR,
+                        beforeTitle, sizeof(beforeTitle)/U_SIZEOF_UCHAR,
+                        titleIterWord, "",
+                        &errorCode);
+    if( U_FAILURE(errorCode) ||
+        length!=(sizeof(titleRoot)/U_SIZEOF_UCHAR) ||
+        uprv_memcmp(titleRoot, buffer, length*U_SIZEOF_UCHAR)!=0 ||
+        buffer[length]!=0
+    ) {
+        char charsOut[21];
+        u_UCharsToChars(buffer,charsOut,sizeof(charsOut));
+        log_err("error in u_strToTitle(UBRK_CHARACTERS)=%ld error=%s root locale string matches: %s\noutput buffer is {%s}\n",
+            length,
+            u_errorName(errorCode),
+            uprv_memcmp(titleRoot, buffer, length*U_SIZEOF_UCHAR)==0 && buffer[length]==0 ? "yes" : "no", charsOut);
+    }
+    /* titlecase with Dutch locale */
+    buffer[0]=0xabcd;
+    errorCode=U_ZERO_ERROR;
+    length=u_strToTitle(buffer, sizeof(buffer)/U_SIZEOF_UCHAR,
+                        beforeTitle, sizeof(beforeTitle)/U_SIZEOF_UCHAR,
+                        titleIterWord, "nl",
+                        &errorCode);
+    if( U_FAILURE(errorCode) ||
+        length!=(sizeof(titleDutch)/U_SIZEOF_UCHAR) ||
+        uprv_memcmp(titleDutch, buffer, length*U_SIZEOF_UCHAR)!=0 ||
+        buffer[length]!=0
+    ) {
+        char charsOut[21];
+        u_UCharsToChars(buffer,charsOut,sizeof(charsOut));
+        log_err("error in u_strToTitle(UBRK_CHARACTERS)=%ld error=%s dutch locale string matches: %s\noutput buffer is {%s}\n",
+            length,
+            u_errorName(errorCode),
+            uprv_memcmp(titleDutch, buffer, length*U_SIZEOF_UCHAR)==0 && buffer[length]==0 ? "yes" : "no", charsOut);
+    }
+
+    ubrk_close(titleIterWord);
 }
 
 #endif
@@ -934,6 +996,7 @@ void addCaseTest(TestNode** root) {
     addTest(root, &TestCaseUpper, "tsutil/cstrcase/TestCaseUpper");
 #if !UCONFIG_NO_BREAK_ITERATION
     addTest(root, &TestCaseTitle, "tsutil/cstrcase/TestCaseTitle");
+    addTest(root, &TestCaseDutchTitle, "tsutil/cstrcase/TestCaseDutchTitle");
 #endif
     addTest(root, &TestCaseFolding, "tsutil/cstrcase/TestCaseFolding");
     addTest(root, &TestCaseCompare, "tsutil/cstrcase/TestCaseCompare");
