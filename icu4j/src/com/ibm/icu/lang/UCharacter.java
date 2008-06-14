@@ -4686,7 +4686,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         StringContextIterator iter = new StringContextIterator(str);
         StringBuffer result = new StringBuffer(str.length());
         int[] locCache = new int[1];
-        int c, srcLength = str.length();
+        int c, nc, srcLength = str.length();
 
         if (locale == null) {
             locale = ULocale.getDefault();
@@ -4700,6 +4700,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
 
         int prev, titleStart, index;
         boolean isFirstIndex;
+        boolean isDutch = locale.getLanguage().equals("nl");
+        boolean FirstIJ = true;
 
         /* set up local variables */
         prev=0;
@@ -4747,6 +4749,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 }
 
                 if(titleStart<index) {
+                    FirstIJ = true;
                     /* titlecase c which is from titleStart */
                     c=gCsp.toFullTitle(c, iter, result, locale, locCache);
 
@@ -4773,16 +4776,27 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
 
                         if((options&TITLECASE_NO_LOWERCASE)!=0) {
                             /* Optionally just copy the rest of the word unchanged. */
+
                             int titleLimit=iter.getCPLimit();
                             if(titleLimit<index) {
-                                // TODO: With Java 5, this would want to be result.append(str, titleLimit, index);
-                                result.append(str.substring(titleLimit, index));
+                            // TODO: With Java 5, this would want to be result.append(str, titleLimit, index);
+                                String appendStr = str.substring(titleLimit,index);
+                                /* Special Case - Dutch IJ Titlecasing */
+                                if ( isDutch && c == 0x0049 && appendStr.startsWith("j")) {
+                                   appendStr = "J" + appendStr.substring(1);
+                                }
+                                result.append(appendStr);
                                 iter.moveToLimit();
                                 break;
                             }
-                        } else if((c=iter.nextCaseMapCP())>=0) {
-                            /* Normal operation: Lowercase the rest of the word. */
-                            c=gCsp.toFullLower(c, iter, result, locale, locCache);
+                        } else if((nc=iter.nextCaseMapCP())>=0) {
+                            if ( isDutch && ( nc == 0x004A ||  nc == 0x006A ) && ( c == 0x0049 ) && ( FirstIJ == true )) {
+                                c = 0x004A; /* J */
+                                FirstIJ = false;
+                            } else {
+                                /* Normal operation: Lowercase the rest of the word. */
+                                c=gCsp.toFullLower(nc, iter, result, locale, locCache);
+                            }
                         } else {
                             break;
                         }

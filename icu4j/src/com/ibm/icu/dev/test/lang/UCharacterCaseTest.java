@@ -351,6 +351,26 @@ public final class UCharacterCaseTest extends TestFmwk
          }
     }
 
+    public void TestDutchTitle() {
+        ULocale LOC_DUTCH = new ULocale("nl");
+        int options = 0;
+        options |= UCharacter.TITLECASE_NO_LOWERCASE;
+        BreakIterator iter = BreakIterator.getWordInstance(LOC_DUTCH);
+
+        assertEquals("Dutch titlecase check in English",
+                "Ijssel Igloo Ijmuiden",
+                UCharacter.toTitleCase(ULocale.ENGLISH, "ijssel igloo IJMUIDEN", null));
+
+        assertEquals("Dutch titlecase check in Dutch",
+                "IJssel Igloo IJmuiden",
+                UCharacter.toTitleCase(LOC_DUTCH, "ijssel igloo IJMUIDEN", null));
+
+        iter.setText("ijssel igloo IjMUIdEN iPoD ijenough");
+        assertEquals("Dutch titlecase check in Dutch with nolowercase option",
+                "IJssel Igloo IJMUIdEN IPoD IJenough",
+                UCharacter.toTitleCase(LOC_DUTCH, "ijssel igloo IjMUIdEN iPoD ijenough", iter, options));
+    }
+
     public void TestSpecial()
     {
         for (int i = 0; i < SPECIAL_LOCALES_.length; i ++) {
