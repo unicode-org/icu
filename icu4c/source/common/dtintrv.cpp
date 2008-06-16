@@ -20,7 +20,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DateInterval)
 //DateInterval::DateInterval(){}
 
 
-DateInterval::DateInterval(const UDate from, const UDate to)
+DateInterval::DateInterval(UDate from, UDate to)
 :   fromDate(from),
     toDate(to)
 {}
@@ -44,6 +44,17 @@ DateInterval::operator=(const DateInterval& other) {
     return *this;
 }
 
+
+DateInterval* 
+DateInterval::clone() const {
+    return new DateInterval(*this);
+}
+
+
+UBool 
+DateInterval::operator==(const DateInterval& other) const { 
+    return ( fromDate == other.fromDate && toDate == other.toDate );
+}
 
 
 U_NAMESPACE_END
