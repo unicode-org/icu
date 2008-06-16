@@ -586,6 +586,7 @@ SimpleDateFormat::format(const Formattable& obj,
  * the larger the level, the smaller the field unit.
  * For example, UCAL_ERA level is 0, UCAL_YEAR level is 10,
  * UCAL_MONTH level is 20.
+ * NOTE: if new fields adds in, the table needs to update.
  */
 const int32_t
 SimpleDateFormat::fgCalendarFieldToLevel[] =
@@ -601,6 +602,10 @@ SimpleDateFormat::fgCalendarFieldToLevel[] =
 };
 
 
+/* Map calendar field LETTER into calendar field level.
+ * the larger the level, the smaller the field unit.
+ * NOTE: if new fields adds in, the table needs to update.
+ */
 const int32_t
 SimpleDateFormat::fgPatternCharToLevel[] = {
     //       A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
@@ -2485,6 +2490,7 @@ SimpleDateFormat::isFieldUnitIgnored(const UnicodeString& pattern,
         ch = pattern[i];
         if (ch != prevCh && count > 0) {
             level = fgPatternCharToLevel[prevCh - PATTERN_CHAR_BASE];
+            // the larger the level, the smaller the field unit.
             if ( fieldLevel <= level ) {
                 return FALSE;
             }

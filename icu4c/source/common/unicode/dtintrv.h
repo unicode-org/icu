@@ -25,7 +25,7 @@ U_NAMESPACE_BEGIN
 
 
 /**
- * This class represents date interval.
+ * This class represents a date interval.
  * It is a pair of UDate representing from UDate 1 to UDate 2.
  * @draft ICU 4.0
 **/
@@ -33,18 +33,18 @@ class U_COMMON_API DateInterval : public UObject {
 public:
 
     /** 
-     * Constructor given from date and to date.
+     * Construct a DateInterval given a from date and a to date.
      * @param fromDate  The from date in date interval.
      * @param toDate    The to date in date interval.
      * @draft ICU 4.0
      */
-    DateInterval(const UDate fromDate, const UDate toDate);
+    DateInterval(UDate fromDate, UDate toDate);
 
     /**
      * destructor
      * @draft ICU 4.0
      */
-    ~DateInterval();
+    virtual ~DateInterval();
  
     /** 
      * Get the from date.
@@ -105,7 +105,7 @@ public:
      * @return TRUE if the two DateIntervals are the same
      * @draft ICU 4.0
      */
-    UBool operator==(const DateInterval& other) const;
+    virtual UBool operator==(const DateInterval& other) const;
 
     /**
      * Non-equality operator
@@ -121,7 +121,7 @@ public:
      * @return a cloned DateInterval
      * @draft ICU 4.0
      */
-    DateInterval* clone() const;
+     virtual DateInterval* clone() const;
 
 private:
     /** 
@@ -149,22 +149,9 @@ DateInterval::getToDate() const {
 
 
 inline UBool 
-DateInterval::operator==(const DateInterval& other) const { 
-    return ( fromDate == other.fromDate && toDate == other.toDate );
-}
-
-
-inline UBool 
 DateInterval::operator!=(const DateInterval& other) const { 
     return ( !operator==(other) );
 }
-
-
-inline DateInterval* 
-DateInterval::clone() const {
-    return new DateInterval(*this);
-}
-
 
 
 U_NAMESPACE_END
