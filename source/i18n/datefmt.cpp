@@ -278,14 +278,21 @@ DateFormat::createInstance()
 //----------------------------------------------------------------------
 DateFormat* U_EXPORT2
 DateFormat::createPatternInstance(const UnicodeString& skeleton,
-                                 const Locale& locale) 
+                                  const Locale& locale,
+                                  UErrorCode& status) 
 {
-    UErrorCode status = U_ZERO_ERROR;
+    if ( U_FAILURE(status) ) {
+        return NULL;
+    }
 
     DateTimePatternGenerator* dtptg = 
                DateTimePatternGenerator::createInstance(locale, status);
-    if ( dtptg == NULL || U_FAILURE(status) ) {
+    if ( dtptg == NULL ) {
         status = U_MEMORY_ALLOCATION_ERROR;
+        delete dtptg;
+        return NULL;
+    }
+    if ( U_FAILURE(status) ) {
         delete dtptg;
         return NULL;
     }

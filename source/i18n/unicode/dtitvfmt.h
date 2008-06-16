@@ -7,8 +7,8 @@
 *******************************************************************************
 */
 
-#ifndef DTITVFMT_H__
-#define DTITVFMT_H__
+#ifndef __DTITVFMT_H__
+#define __DTITVFMT_H__
 
 
 #include "unicode/utypes.h"
@@ -32,6 +32,8 @@ U_NAMESPACE_BEGIN
 /**
  * DateIntervalFormat is a class for formatting and parsing date 
  * intervals in a language-independent manner. 
+ * Date interval formatting is supported in Gregorian calendar only.
+ * And only formatting is supported. Parsing is not supported.
  *
  * <P>
  * Date interval means from one date to another date,
@@ -70,10 +72,14 @@ U_NAMESPACE_BEGIN
  * <li>
  * only keeps the field pattern letter and ignores all other parts 
  * in a pattern, such as space, punctuations, and string literals.
+ * </li>
  * <li>
  * hides the order of fields. 
+ * </li>
  * <li>
  * might hide a field's pattern letter length.
+ * </li>
+ * </ol>
  *
  * For those non-digit calendar fields, the pattern letter length is 
  * important, such as MMM, MMMM, and MMMMM; EEE and EEEE, 
@@ -96,6 +102,11 @@ U_NAMESPACE_BEGIN
  *
  * For example: the largest different calendar fields between "Jan 10, 2007" 
  * and "Feb 20, 2008" is year.
+ *
+ * <P>
+ * For other calendar fields, the compact interval formatting is not
+ * supported. And the interval format will be fall back to fall-back
+ * patterns, which is mostly "{date0} - {date1}".
  *   
  * <P>
  * There is a set of pre-defined static skeleton strings.
@@ -126,21 +137,23 @@ U_NAMESPACE_BEGIN
  *
  * <P>
  * For the combination of date and time, 
- * The rule to genearte interval patterns are:
- * <ul>
+ * The rule to generate interval patterns are:
+ * <ol>
  * <li>
- *    1) when the year, month, or day differs, falls back to fall-back
+ *    when the year, month, or day differs, falls back to fall-back
  *    interval pattern, which mostly is the concatenate the two original 
  *    expressions with a separator between, 
  *    For example, interval pattern from "Jan 10, 2007 10:10 am" 
  *    to "Jan 11, 2007 10:10am" is 
  *    "Jan 10, 2007 10:10 am - Jan 11, 2007 10:10am" 
+ * </li>
  * <li>
- *    2) otherwise, present the date followed by the range expression 
+ *    otherwise, present the date followed by the range expression 
  *    for the time.
  *    For example, interval pattern from "Jan 10, 2007 10:10 am" 
  *    to "Jan 10, 2007 11:10am" is "Jan 10, 2007 10:10 am - 11:10am" 
- * </ul>
+ * </li>
+ * </ol>
  *
  *
  * <P>
@@ -157,22 +170,25 @@ U_NAMESPACE_BEGIN
  * DateIntervalFormat needs the following information for correct 
  * formatting: time zone, calendar type, pattern, date format symbols, 
  * and date interval patterns.
- * It can be instantiated in several ways:
- * <ul>
+ * It can be instantiated in 2 ways:
+ * <ol>
  * <li>
- * 1. create an instance using default or given locale plus given skeleton.
+ *    create an instance using default or given locale plus given skeleton.
  *    Users are encouraged to created date interval formatter this way and 
  *    to use the pre-defined skeleton macros, such as
  *    UDAT_YEAR_NUM_MONTH, which consists the calendar fields and
  *    the format style. 
- * 2. create an instance using default or given locale plus given skeleton
+ * </li>
+ * <li>
+ *    create an instance using default or given locale plus given skeleton
  *    plus a given DateIntervalInfo.
  *    This factory method is for powerful users who want to provide their own 
  *    interval patterns. 
  *    Locale provides the timezone, calendar, and format symbols information.
  *    Local plus skeleton provides full pattern information.
  *    DateIntervalInfo provides the date interval patterns.
- * <li>
+ * </li>
+ * </ol>
  *
  * <P>
  * For the calendar field pattern letter, such as G, y, M, d, a, h, H, m, s etc.
@@ -212,7 +228,7 @@ public:
      *
      * @param skeleton  the skeleton on which interval format based.
      * @param status    output param set to success/failure code on exit
-     * @return          a date time interval formatter whick the caller owns.
+     * @return          a date time interval formatter which the caller owns.
      * @draft ICU 4.0
      */
     static DateIntervalFormat* U_EXPORT2 createInstance(
@@ -221,7 +237,13 @@ public:
 
     /**
      * Construct a DateIntervalFormat from skeleton and a given locale.
+     * <P>
+     * In this factory method, 
+     * the date interval pattern information is load from resource files.
+     * Users are encouraged to created date interval formatter this way and 
+     * to use the pre-defined skeleton macros.
      *
+     * <P>
      * There are pre-defined skeletons (defined in udate.h) having predefined 
      * interval patterns in resource files.
      * Users are encouraged to use those macros.
@@ -238,7 +260,7 @@ public:
      * @param skeleton  the skeleton on which interval format based.
      * @param locale    the given locale
      * @param status    output param set to success/failure code on exit
-     * @return          a date time interval formatter whick the caller owns.
+     * @return          a date time interval formatter which the caller owns.
      * @draft ICU 4.0
      */
 
@@ -253,35 +275,38 @@ public:
      *
      * This is a convenient override of
      * createInstance(const UnicodeString& skeleton, const Locale& locale, 
-     *                DateIntervalInfo* dtitvinf, UErrorCode&)
+     *                const DateIntervalInfo& dtitvinf, UErrorCode&)
      * with the locale value as default locale.
      *
-     * Note: the DateIntervalFormat takes ownership of 
-     * DateIntervalInfo objects. 
-     * Caller should not delete them.
-     *
      * @param skeleton  the skeleton on which interval format based.
-     * @param dtitvinf  the DateIntervalInfo object to be adopted.
+     * @param dtitvinf  the DateIntervalInfo object. 
      * @param status    output param set to success/failure code on exit
-     * @return          a date time interval formatter whick the caller owns.
+     * @return          a date time interval formatter which the caller owns.
      * @draft ICU 4.0
      */
     static DateIntervalFormat* U_EXPORT2 createInstance(
                                               const UnicodeString& skeleton,
-                                              DateIntervalInfo* dtitvinf,
+                                              const DateIntervalInfo& dtitvinf,
                                               UErrorCode& status);
 
     /**
      * Construct a DateIntervalFormat from skeleton
      * a DateIntervalInfo, and the given locale.
      *
+     * <P>
+     * In this factory method, user provides its own date interval pattern
+     * information, instead of using those pre-defined data in resource file. 
+     * This factory method is for powerful users who want to provide their own 
+     * interval patterns. 
+     * <P>
      * There are pre-defined skeletons (defined in udate.h) having predefined 
      * interval patterns in resource files.
      * Users are encouraged to use those macros.
      * For example: 
      * DateIntervalFormat::createInstance(UDAT_MONTH_DAY, status) 
      *
-     * the DateIntervalInfo provides the interval patterns.
+     * The DateIntervalInfo provides the interval patterns.
+     * and the DateIntervalInfo ownership remains to the caller. 
      *
      * User are encouraged to set default interval pattern in DateIntervalInfo
      * as well, if they want to set other interval patterns ( instead of
@@ -292,21 +317,17 @@ public:
      * If user does not provide default interval pattern, it fallback to
      * "{date0} - {date1}" 
      *
-     * Note: the DateIntervalFormat takes ownership of 
-     * DateIntervalInfo objects. 
-     * Caller should not delete them.
-     *
      * @param skeleton  the skeleton on which interval format based.
      * @param locale    the given locale
-     * @param dtitvinf  the DateIntervalInfo object to be adopted.
+     * @param dtitvinf  the DateIntervalInfo object.
      * @param status    output param set to success/failure code on exit
-     * @return          a date time interval formatter whick the caller owns.
+     * @return          a date time interval formatter which the caller owns.
      * @draft ICU 4.0
      */
     static DateIntervalFormat* U_EXPORT2 createInstance(
                                               const UnicodeString& skeleton,
                                               const Locale& locale,
-                                              DateIntervalInfo* dtitvinf,
+                                              const DateIntervalInfo& dtitvinf,
                                               UErrorCode& status);
 
     /**
@@ -389,9 +410,9 @@ public:
      * since calendar is not const in  SimpleDateFormat::format(Calendar&),
      *
      * @param fromCalendar      calendar set to the from date in date interval
-     *                          to be formatted into date interval stirng
+     *                          to be formatted into date interval string
      * @param toCalendar        calendar set to the to date in date interval
-     *                          to be formatted into date interval stirng
+     *                          to be formatted into date interval string
      * @param appendTo          Output parameter to receive result.
      *                          Result is appended to existing contents.
      * @param fieldPosition     On input: an alignment field, if desired.
@@ -409,11 +430,11 @@ public:
                           UErrorCode& status) const ;
 
     /**
-     * Parse a string to produce an object. This methods handles parsing of
+     * Date interval parsing is not supported.
+     * <P>
+     * This method should handle parsing of
      * date time interval strings into Formattable objects with 
      * DateInterval type, which is a pair of UDate.
-     * <P>
-     * In ICU 4.0, date interval format is not supported.
      * <P>
      * Before calling, set parse_pos.index to the offset you want to start
      * parsing at in the source. After calling, parse_pos.index is the end of
@@ -427,15 +448,12 @@ public:
      * @param source    The string to be parsed into an object.
      * @param result    Formattable to be set to the parse result.
      *                  If parse fails, return contents are undefined.
-     * @param parse_pos The position to start parsing at. Upon return
-     *                  this param is set to the position after the
-     *                  last character successfully parsed. If the
-     *                  source is not parsed successfully, this param
-     *                  will remain unchanged.
+     * @param parse_pos The position to start parsing at. Since no parsing
+     *                  is supported, upon return this param is unchanged.
      * @return          A newly created Formattable* object, or NULL
      *                  on failure.  The caller owns this and should
      *                  delete it when done.
-     * @draft ICU 4.0
+     * @internal ICU 4.0
      */
     virtual void parseObject(const UnicodeString& source,
                              Formattable& result,
@@ -444,7 +462,7 @@ public:
 
     /**
      * Gets the date time interval patterns.
-     * @return a copy of the date time interval patterns associated with
+     * @return the date time interval patterns associated with
      * this date interval formatter.
      * @draft ICU 4.0
      */
@@ -460,53 +478,13 @@ public:
     void setDateIntervalInfo(const DateIntervalInfo& newIntervalPatterns,
                              UErrorCode& status);
 
-    /**
-     * Set the date time interval patterns. 
-     * The caller no longer owns the DateIntervalInfo object and
-     * should not delete it after making this call.
-     * @param newIntervalPatterns   the given interval patterns to copy.
-     * @param status          output param set to success/failure code on exit
-     * @draft ICU 4.0
-     */
-    void adoptDateIntervalInfo(DateIntervalInfo* newIntervalPatterns,
-                               UErrorCode& status);
-
 
     /**
      * Gets the date formatter
-     * @return a copy of the date formatter associated with
-     * this date interval formatter.
+     * @return the date formatter associated with this date interval formatter.
      * @draft ICU 4.0
      */
     const DateFormat* getDateFormat(void) const;
-
-
-    /**
-     * Set the date formatter.
-     * @param newDateFormat   the given date formatter to copy.
-     *                        caller needs to make sure that
-     *                        it is a SimpleDateFormatter.
-     * @param status          Output param set to success/failure code.
-     *                        caller needs to make sure it is SUCCESS
-     *                        at the function entrance.
-     * @draft ICU 4.0
-     */
-    void setDateFormat(const DateFormat& newDateFormat, UErrorCode& status);
-
-    /**
-     * Set the date formatter.
-     * The caller no longer owns the DateFormat object and
-     * should not delete it after making this call.
-     * @param newDateFormat   the given date formatter to copy.
-     *                        caller needs to make sure that
-     *                        it is a SimpleDateFormatter.
-     * @param status          Output param set to success/failure code.
-     *                        caller needs to make sure it is SUCCESS
-     *                        at the function entrance.
-     * @draft ICU 4.0
-     */
-    void adoptDateFormat(DateFormat* newDateFormat, UErrorCode& status);
-
 
     /**
      * Return the class ID for this class. This is useful only for comparing to
@@ -561,9 +539,8 @@ private:
      * Also, the first date appears in an interval pattern could be 
      * the earlier date or the later date.
      * And such information is saved in the interval pattern as well.
-     * FIXME: do I need to define an inner class
      */
-    typedef struct PatternInfo {
+    struct PatternInfo {
         UnicodeString firstPart;
         UnicodeString secondPart;
         /**
@@ -580,30 +557,14 @@ private:
          * the interval format is "10 Feb - 10 Jan, 2007"
          */
         UBool         laterDateFirst;
-    } PatternInfo;
+    };
 
    
     /**
      * default constructor 
-     * @draft ICU 4.0
+     * @internal ICU 4.0
      */
     DateIntervalFormat();
-
-    /**
-     * Construct a DateIntervalFormat from DateFormat and a DateIntervalInfo.
-     *
-     * This is the convenient override of 
-     * DateIntervalFormat(DateFormat, DateIntervalInfo, UnicodeString) 
-     * with the UnicodeString value as null.
-     *
-     * @param dtfmt     the SimpleDateFormat object to be adopted.
-     * @param dtitvinf  the DateIntervalInfo object to be adopted.
-     * @param status    output param set to success/failure code on exit
-     * @draft ICU 4.0
-     */
-    DateIntervalFormat(DateFormat* dtfmt, DateIntervalInfo* dtItvInfo,
-                       UErrorCode& status);
-
 
     /**
      * Construct a DateIntervalFormat from DateFormat,
@@ -622,11 +583,10 @@ private:
      * @param dtitvinf  the DateIntervalInfo object to be adopted.
      * @param skeleton  the skeleton of the date formatter
      * @param status    output param set to success/failure code on exit
-     * @draft ICU 4.0
+     * @internal ICU 4.0
      */
     DateIntervalFormat(DateFormat* dtfmt, DateIntervalInfo* dtItvInfo,
                        const UnicodeString* skeleton, UErrorCode& status);
-
 
     
     /**
@@ -637,28 +597,10 @@ private:
      *
      * @param dtfmt     the DateFormat object to be adopted.
      * @param dtitvinf  the DateIntervalInfo object to be adopted.
-     * @param status    Output param set to success/failure code.
-     * @return          a date time interval formatter whick the caller owns.
-     * @draft ICU 4.0
-     */
-    static DateIntervalFormat* U_EXPORT2 create(DateFormat* dtfmt,
-                                                DateIntervalInfo* dtitvinf,
-                                                UErrorCode& status);
-
-
-
-    /**
-     * Construct a DateIntervalFormat from DateFormat
-     * and a DateIntervalInfo.
-     *
-     * It is a wrapper of the constructor.
-     *
-     * @param dtfmt     the DateFormat object to be adopted.
-     * @param dtitvinf  the DateIntervalInfo object to be adopted.
      * @param skeleton  the skeleton of this formatter.
      * @param status    Output param set to success/failure code.
-     * @return          a date time interval formatter whick the caller owns.
-     * @draft ICU 4.0
+     * @return          a date time interval formatter which the caller owns.
+     * @internal ICU 4.0
      */
     static DateIntervalFormat* U_EXPORT2 create(DateFormat* dtfmt,
                                                 DateIntervalInfo* dtitvinf,
@@ -678,16 +620,16 @@ private:
      * full pattern of the date formatter.
      *
      * @param fromCalendar      calendar set to the from date in date interval
-     *                          to be formatted into date interval stirng
+     *                          to be formatted into date interval string
      * @param toCalendar        calendar set to the to date in date interval
-     *                          to be formatted into date interval stirng
+     *                          to be formatted into date interval string
      * @param appendTo          Output parameter to receive result.
      *                          Result is appended to existing contents.
      * @param pos               On input: an alignment field, if desired.
      *                          On output: the offsets of the alignment field.
      * @param status            output param set to success/failure code on exit
      * @return                  Reference to 'appendTo' parameter.
-     * @draft ICU 4.0
+     * @internal ICU 4.0
      */
     UnicodeString& fallbackFormat(Calendar& fromCalendar,
                                   Calendar& toCalendar,
@@ -709,7 +651,7 @@ private:
      *    For example, it has interval patterns on skeleton "dMy" and "hm",
      *    but it does not have interval patterns on skeleton "dMyhm".
      *    
-     *    The rule to genearte interval patterns for both date and time skeleton are
+     *    The rule to generate interval patterns for both date and time skeleton are
      *    1) when the year, month, or day differs, concatenate the two original 
      *    expressions with a separator between, 
      *    For example, interval pattern from "Jan 10, 2007 10:10 am" 
@@ -722,7 +664,7 @@ private:
      *    to "Jan 10, 2007 11:10am" is 
      *    "Jan 10, 2007 10:10 am - 11:10am" 
      *
-     * 2. even a pattern does not request a certion calendar field,
+     * 2. even a pattern does not request a certain calendar field,
      *    the interval pattern needs to include such field if such fields are
      *    different between 2 dates.
      *    For example, a pattern/skeleton is "hm", but the interval pattern 
@@ -730,7 +672,7 @@ private:
      * 
      *
      * @param status    output param set to success/failure code on exit
-     * @draft ICU 4.0 
+     * @internal ICU 4.0 
      */
     void initializePattern(UErrorCode& status); 
                               
@@ -743,7 +685,7 @@ private:
      * @param skeleton   a skeleton
      * @param dtpng      date time pattern generator
      * @param status     output param set to success/failure code on exit
-     * @draft ICU 4.0 
+     * @internal ICU 4.0 
      */
     void setFallbackPattern(UCalendarDateFields field, 
                             const UnicodeString& skeleton,
@@ -775,7 +717,7 @@ private:
      *  @param normalizedTime         Output parameter for normalized time only
      *                                skeleton.
      *
-     * @draft ICU 4.0 
+     * @internal ICU 4.0 
      */
     static void  U_EXPORT2 getDateTimeSkeleton(const UnicodeString& skeleton,
                                     UnicodeString& date,
@@ -807,7 +749,7 @@ private:
      * @return               whether the resource is found for the skeleton.
      *                       TRUE if interval pattern found for the skeleton,
      *                       FALSE otherwise.
-     * @draft ICU 4.0
+     * @internal ICU 4.0
      */
     UBool setSeparateDateTimePtn(const UnicodeString& dateSkeleton, 
                                  const UnicodeString& timeSkeleton);
@@ -837,7 +779,7 @@ private:
      *                              through extending skeleton or not.
      *                              TRUE if interval pattern is found by
      *                              extending skeleton, FALSE otherwise.
-     * @draft ICU 4.0
+     * @internal ICU 4.0
      */
     UBool setIntervalPattern(UCalendarDateFields field, 
                              const UnicodeString* skeleton, 
@@ -873,7 +815,7 @@ private:
      *                                 1 means only field width differs
      *                                 2 means v/z exchange
      * @param adjustedIntervalPattern  adjusted interval pattern
-     * @draft ICU 4.0
+     * @internal ICU 4.0
      */
     static void U_EXPORT2 adjustFieldWidth(
                             const UnicodeString& inputSkeleton,
@@ -893,7 +835,7 @@ private:
      * @param datePattern    date pattern
      * @param field          time calendar field: AM_PM, HOUR, MINUTE
      * @param status         output param set to success/failure code on exit
-     * @draft ICU 4.0 
+     * @internal ICU 4.0 
      */
     void concatSingleDate2TimeInterval(const UChar* format,
                                        int32_t formatLen,
@@ -906,7 +848,7 @@ private:
      * @param field      calendar field need to check
      * @param skeleton   given skeleton on which to check the calendar field
      * @return           true if field present in a skeleton.
-     * @draft ICU 4.0 
+     * @internal ICU 4.0 
      */
     static UBool U_EXPORT2 fieldExistsInSkeleton(UCalendarDateFields field, 
                                                  const UnicodeString& skeleton);
@@ -916,7 +858,7 @@ private:
      * Split interval patterns into 2 part.
      * @param intervalPattern  interval pattern
      * @return the index in interval pattern which split the pattern into 2 part
-     * @draft ICU 4.0
+     * @internal ICU 4.0
      */
     static int32_t  U_EXPORT2 splitPatternInto2Part(const UnicodeString& intervalPattern);
 
@@ -998,40 +940,6 @@ DateIntervalFormat::operator!=(const Format& other) const  {
     return !operator==(other); 
 }
  
-inline const DateIntervalInfo*
-DateIntervalFormat::getDateIntervalInfo() const {
-    return fInfo;
-}
-
-
-inline void
-DateIntervalFormat::setDateIntervalInfo(const DateIntervalInfo& newItvPattern,
-                                        UErrorCode& status) {
-    delete fInfo;
-    fInfo = new DateIntervalInfo(newItvPattern);
-    if ( fDateFormat ) {
-        initializePattern(status);
-    }
-}
-
-
-inline void 
-DateIntervalFormat::adoptDateIntervalInfo(DateIntervalInfo* newItvPattern,
-                                          UErrorCode& status) {
-    delete fInfo;
-    fInfo = newItvPattern;
-    if ( fDateFormat ) {
-        initializePattern(status);
-    }
-}
-
- 
-inline const DateFormat*
-DateIntervalFormat::getDateFormat() const {
-    return fDateFormat;
-}
-
-
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -174,28 +174,19 @@ typedef enum UDateFormatStyle {
 
 /**
  * Below are a set of pre-defined skeletons.
- * They have pre-defined interval patterns in resource files.
- * Users are encouraged to use them in date interval format factory methods.
  *
  * <P>
- * We choose to use predefined skeleton string instead of skeleton enum because
- * we need to keep consistency between DateFormat and DateIntervalFormat 
- * factory methods.
- * It is not good to introduce another set of enum for skeleton while having 
- * UDateFormatStyle for full pattern.
- * And it is not good to mix the set of enum for skeleton into UDateFormatStyle.
- * So, a new set of pre-defined skeleton is introduced below.
- * <P>
- *
  * A skeleton 
- * <ul>
+ * <ol>
  * <li>
- * 1. only keeps the field pattern letter and ignores all other parts 
+ *    only keeps the field pattern letter and ignores all other parts 
  *    in a pattern, such as space, punctuations, and string literals.
+ * </li>
  * <li>
- * 2. hides the order of fields. 
+ *    hides the order of fields. 
+ * </li>
  * <li>
- * 3. might hide a field's pattern letter length.
+ *    might hide a field's pattern letter length.
  *
  *    For those non-digit calendar fields, the pattern letter length is 
  *    important, such as MMM, MMMM, and MMMMM; EEE and EEEE, 
@@ -205,28 +196,8 @@ typedef enum UDateFormatStyle {
  *    the field pattern length is ignored and the best match, which is defined 
  *    in date time patterns, will be returned without honor the field pattern
  *    letter length in skeleton.
- * </ul>
- *
- * <P>
- * For example, given skeleton YEAR_MONTH_DAY_SHORT_FORMAT, which is "yMd",
- * for English, the full pattern is "M/d/yy", which is the short format
- * of date pattern having DAY, MONTH, and YEAR.
- * 
- * <P>
- * The skeletons defined below consists of the desired calendar field set 
- * (for example,  DAY, MONTH, YEAR) and the format length (long, medium, short)
- * used in date time patterns.
- * 
- * For example, skeleton YEAR_MONTH_MEDIUM_FORMAT consists month and year,
- * and it's corresponding full pattern is medium format date pattern.
- * So, the skeleton is "yMMM", for English, the full pattern is "MMM yyyy", 
- * which is the format by removing DATE from medium date format.
- *
- * For example, skeleton YEAR_MONTH_DOW_DAY_MEDIUM_FORMAT consists day, month,
- * year, and day-of-week, and it's corresponding full pattern is the medium
- * format date pattern. So, the skeleton is "yMMMEEEd", for English,
- * the full pattern is "EEE, MMM d, yyyy", which is the medium date format
- * plus day-of-week.
+ * </li>
+ * </ol>
  *
  * @draft ICU 4.0
  */
@@ -239,6 +210,12 @@ typedef enum UDateFormatStyle {
 #define UDAT_ABBR_STANDALONE_MONTH      "LLL"
 #define UDAT_YEAR_QUARTER               "yQQQ"
 #define UDAT_YEAR_ABBR_QUARTER          "yQ"
+/**
+ * Below are a set of pre-defined skeletons that 
+ * have pre-defined interval patterns in resource files.
+ * Users are encouraged to use them in date interval format factory methods.
+ *
+ */
 #define UDAT_HOUR_MINUTE                "hm"
 #define UDAT_YEAR                       "y"
 #define UDAT_DAY                        "d"

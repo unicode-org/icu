@@ -27,12 +27,36 @@ public:
     void testAPI();
 
     /**
-     * test formatting
+     * Test formatting
      */
     void testFormat();
 
+    /**
+     * Test formatting using user defined DateIntervalInfo
+     */
+    void testFormatUserDII();
+
+    /**
+     * Stress test -- stress test formatting on 40 locales
+     */
+    void testStress();
+
 private:
-    void expect(const char** data, int32_t data_length, const Locale& loc, 
+    /**
+     * Test formatting against expected result
+     */
+    void expect(const char** data, int32_t data_length);
+
+    /**
+     * Test formatting against expected result using user defined 
+     * DateIntervalInfo
+     */
+    void expectUserDII(const char** data, int32_t data_length);
+
+    /**
+     * Stress test formatting 
+     */
+    void stress(const char** data, int32_t data_length, const Locale& loc, 
                 const char* locName);
 };
 

@@ -13,7 +13,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-//FIXME: how to define it in compiler time
+//FIXME: define it in compiler time
 //#define DTITVINF_DEBUG 0
 
 
@@ -41,8 +41,10 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DateIntervalInfo)
 
-static const char gIntervalDateTimePatternTag[]="IntervalDateTimePatterns";
-static const char gFallbackPatternTag[]="Fallback";
+static const char gCalendarTag[]="calendar";
+static const char gGregorianTag[]="gregorian";
+static const char gIntervalDateTimePatternTag[]="intervalFormats";
+static const char gFallbackPatternTag[]="fallback";
 
 // {0}
 static const UChar gFirstPattern[] = {LEFT_CURLY_BRACKET, DIGIT_ZERO, RIGHT_CURLY_BRACKET, 0};
@@ -59,9 +61,6 @@ DateIntervalInfo::DateIntervalInfo(UErrorCode& status)
     fFirstDateInPtnIsLaterDate(false),
     fIntervalPatterns(NULL)
 {
-    if ( U_FAILURE(status) ) {
-        return;
-    }
     fIntervalPatterns = initHash(status);
 }
 
@@ -72,9 +71,6 @@ DateIntervalInfo::DateIntervalInfo(const Locale& locale, UErrorCode& status)
     fFirstDateInPtnIsLaterDate(false),
     fIntervalPatterns(NULL)
 {
-    if ( U_FAILURE(status) ) {
-        return;
-    }
     initializeData(locale, status);
 }
 
@@ -85,9 +81,6 @@ DateIntervalInfo::setIntervalPattern(const UnicodeString& skeleton,
                                      UCalendarDateFields lrgDiffCalUnit,
                                      const UnicodeString& intervalPattern,
                                      UErrorCode& status) {
-    if ( U_FAILURE(status) ) {
-        return;
-    }
     
     if ( lrgDiffCalUnit == UCAL_HOUR_OF_DAY ) {
         setIntervalPatternInternally(skeleton, UCAL_AM_PM, intervalPattern, status);
@@ -134,9 +127,6 @@ DateIntervalInfo::operator=(const DateIntervalInfo& dtitvinf) {
     UErrorCode status = U_ZERO_ERROR;
     deleteHash(fIntervalPatterns);
     fIntervalPatterns = initHash(status);
-    if ( U_FAILURE(status) ) {
-        return *this;
-    } 
     copyHash(dtitvinf.fIntervalPatterns, fIntervalPatterns, status);
     if ( U_FAILURE(status) ) {
         return *this;
@@ -198,105 +188,115 @@ DateIntervalInfo::getIntervalPattern(const UnicodeString& skeleton,
 
 
 void 
-DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& status)
+DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& err)
 {
-    fIntervalPatterns = initHash(status);
-    if ( U_FAILURE(status) ) {
-        return;
-    }
-    CalendarData* calData = new CalendarData(locale, NULL, status);
-    if ( calData == NULL ) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
+  fIntervalPatterns = initHash(err);
+  if ( U_FAILURE(err) ) {
+      return;
+  }
+  const char *locName = locale.getName();
+  char parentLocale[50];
+  int32_t locNameLen;
+  uprv_strcpy(parentLocale, locName);
+  UErrorCode status = U_ZERO_ERROR;
+  Hashtable skeletonSet(TRUE, status);
+  if ( U_FAILURE(status) ) {
+      return;
+  }
+  do {
+    UResourceBundle *rb, *calBundle, *gregorianBundle, *itvDtPtnResource;
+    rb = ures_open(NULL, parentLocale, &status);
+    calBundle = ures_getByKey(rb, gCalendarTag, NULL, &status); 
+    gregorianBundle = ures_getByKey(calBundle, gGregorianTag, NULL, &status);
+    itvDtPtnResource = ures_getByKeyWithFallback(gregorianBundle, 
+                         gIntervalDateTimePatternTag, NULL, &status);
 
-    const UResourceBundle* itvDtPtnResource = calData->getByKey(
-                                       gIntervalDateTimePatternTag, status);
-
-    // look for fallback first, since it establishes the default order
-    const UChar* resStr;
-    int32_t resStrLen = 0;
-    resStr = ures_getStringByKeyWithFallback(itvDtPtnResource, 
+    if ( U_SUCCESS(status) ) {
+        // look for fallback first, since it establishes the default order
+        const UChar* resStr;
+        int32_t resStrLen = 0;
+        resStr = ures_getStringByKeyWithFallback(itvDtPtnResource, 
                                              gFallbackPatternTag, 
                                              &resStrLen, &status);
-    if ( U_FAILURE(status) ) {
-        delete calData;
-        return;
+        if ( U_SUCCESS(status) ) {
+            UnicodeString pattern = UnicodeString(TRUE, resStr, resStrLen);
+            setFallbackIntervalPattern(pattern);
+        }
+
+        int32_t size = ures_getSize(itvDtPtnResource);
+        int32_t index;
+        for ( index = 0; index < size; ++index ) {
+            UResourceBundle* oneRes = ures_getByIndex(itvDtPtnResource, index, 
+                                                     NULL, &status);
+            if ( U_SUCCESS(status) ) {
+                const char* skeleton = ures_getKey(oneRes);
+                if ( skeleton == NULL || 
+                     skeletonSet.geti(UnicodeString(skeleton)) == 1 ) {
+                    ures_close(oneRes);
+                    continue;
+                }
+                skeletonSet.puti(UnicodeString(skeleton), 1, status);
+                if ( uprv_strcmp(skeleton, gFallbackPatternTag) == 0 ) {
+                    ures_close(oneRes);
+                    continue;  // fallback
+                }
+    
+                UResourceBundle* intervalPatterns = ures_getByKey(
+                                     itvDtPtnResource, skeleton, NULL, &status);
+    
+                if ( U_FAILURE(status) ) {
+                    ures_close(intervalPatterns);
+                    ures_close(oneRes);
+                    break;
+                }
+                if ( intervalPatterns == NULL ) {
+                    ures_close(intervalPatterns);
+                    ures_close(oneRes);
+                    continue;
+                }
+    
+                const UChar* pattern;
+                const char* key;
+                int32_t ptLength;
+                int32_t ptnNum = ures_getSize(intervalPatterns);
+                int32_t ptnIndex;
+                for ( ptnIndex = 0; ptnIndex < ptnNum; ++ptnIndex ) {
+                    pattern = ures_getNextString(intervalPatterns, &ptLength, &key,
+                                                 &status);
+                    if ( U_FAILURE(status) ) {
+                        break;
+                    }
+        
+                    UCalendarDateFields calendarField = UCAL_FIELD_COUNT;
+                    if ( !uprv_strcmp(key, "y") ) {
+                        calendarField = UCAL_YEAR;
+                    } else if ( !uprv_strcmp(key, "M") ) {
+                        calendarField = UCAL_MONTH;
+                    } else if ( !uprv_strcmp(key, "d") ) {
+                        calendarField = UCAL_DATE;
+                    } else if ( !uprv_strcmp(key, "a") ) {
+                        calendarField = UCAL_AM_PM;
+                    } else if ( !uprv_strcmp(key, "h") ) {
+                        calendarField = UCAL_HOUR;
+                    } else if ( !uprv_strcmp(key, "m") ) {
+                        calendarField = UCAL_MINUTE;
+                    }
+                    if ( calendarField != UCAL_FIELD_COUNT ) {
+                        setIntervalPatternInternally(skeleton, calendarField, pattern,status);
+                    }
+                }
+                ures_close(intervalPatterns);
+            }
+            ures_close(oneRes);
+        }
     }
-
-    UnicodeString pattern = UnicodeString(TRUE, resStr, resStrLen);
-    setFallbackIntervalPattern(pattern);
-
-    int32_t size = ures_getSize(itvDtPtnResource);
-    int32_t index;
-    for ( index = 0; index < size; ++index ) {
-        UResourceBundle* oneRes = ures_getByIndex(itvDtPtnResource, index, 
-                                                 NULL, &status);
-        if ( U_FAILURE(status) ) {
-            delete calData;
-            return;
-        }
-
-        const char* skeleton = ures_getKey(oneRes);
-        ures_close(oneRes);
-        if ( skeleton == NULL ) {
-            status = U_MISSING_RESOURCE_ERROR;
-            delete calData;
-            return;
-        }
-        if ( uprv_strcmp(skeleton, gFallbackPatternTag) == 0 ) {
-            continue;  // fallback
-        }
-
-        UResourceBundle* intervalPatterns = ures_getByKey(itvDtPtnResource,
-                                                      skeleton, NULL, &status);
-
-        if ( U_FAILURE(status) ) {
-            delete calData;
-            return;
-        }
-
-        // return if interval patterns for skeleton not found
-        if ( intervalPatterns == NULL ) {
-            status = U_MISSING_RESOURCE_ERROR;
-            delete calData;
-            return;
-        }
-
-        const UChar* pattern;
-        const char* key;
-        int32_t ptLength;
-        int32_t ptnNum = ures_getSize(intervalPatterns);
-        int32_t ptnIndex;
-        for ( ptnIndex = 0; ptnIndex < ptnNum; ++ptnIndex ) {
-            pattern = ures_getNextString(intervalPatterns, &ptLength, &key,
-                                         &status);
-            if ( U_FAILURE(status) ) {
-                delete calData;
-                return;
-            }
-
-            UCalendarDateFields calendarField = UCAL_FIELD_COUNT;
-            if ( !uprv_strcmp(key, "y") ) {
-                calendarField = UCAL_YEAR;
-            } else if ( !uprv_strcmp(key, "M") ) {
-                calendarField = UCAL_MONTH;
-            } else if ( !uprv_strcmp(key, "d") ) {
-                calendarField = UCAL_DATE;
-            } else if ( !uprv_strcmp(key, "a") ) {
-                calendarField = UCAL_AM_PM;
-            } else if ( !uprv_strcmp(key, "h") ) {
-                calendarField = UCAL_HOUR;
-            } else if ( !uprv_strcmp(key, "m") ) {
-                calendarField = UCAL_MINUTE;
-            }
-            if ( calendarField != UCAL_FIELD_COUNT ) {
-                setIntervalPatternInternally(skeleton, calendarField, pattern,status);
-            }
-        }
-        ures_close(intervalPatterns);
-    }
-    delete calData;
+    ures_close(itvDtPtnResource);
+    ures_close(gregorianBundle);
+    ures_close(calBundle);
+    ures_close(rb);
+    status = U_ZERO_ERROR;
+    locNameLen = uloc_getParent(parentLocale, parentLocale,50,&status);
+  } while ( locNameLen > 0 );
 }
 
 
@@ -488,9 +488,13 @@ DateIntervalInfo::getBestSkeleton(const UnicodeString& skeleton,
 DateIntervalInfo::IntervalPatternIndex
 DateIntervalInfo::calendarFieldToIntervalIndex(UCalendarDateFields field, 
                                                UErrorCode& status) {
-    IntervalPatternIndex index = kIPI_ERA;
+    if ( U_FAILURE(status) ) {
+        return kIPI_MAX_INDEX;
+    }
+    IntervalPatternIndex index = kIPI_MAX_INDEX;
     switch ( field ) {
       case UCAL_ERA:
+        index = kIPI_ERA;
         break;
       case UCAL_YEAR:
         index = kIPI_YEAR;
@@ -568,7 +572,9 @@ U_CALLCONV hashTableValueComparator(UHashTok val1, UHashTok val2) {
 
 Hashtable*
 DateIntervalInfo::initHash(UErrorCode& status) {
-    
+    if ( U_FAILURE(status) ) {
+        return NULL;
+    }
     Hashtable* hTable;
     if ( (hTable = new Hashtable(TRUE, status)) == NULL ) {
         status = U_MEMORY_ALLOCATION_ERROR;
@@ -583,6 +589,9 @@ void
 DateIntervalInfo::copyHash(const Hashtable* source,
                            Hashtable* target,
                            UErrorCode& status) {
+    if ( U_FAILURE(status) ) {
+        return;
+    }
     int32_t pos = -1;
     const UHashElement* element = NULL;
     if ( source ) {

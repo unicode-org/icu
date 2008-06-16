@@ -15,6 +15,7 @@
 //FIXME: put in compilation
 //#define DTITVFMT_DEBUG 1
 
+#include "cstring.h"
 #include "unicode/msgfmt.h"
 #include "unicode/dtptngen.h"
 #include "unicode/dtitvinf.h"
@@ -73,10 +74,7 @@ DateIntervalFormat* U_EXPORT2
 DateIntervalFormat::createInstance(const UnicodeString& skeleton, 
                                    const Locale& locale, 
                                    UErrorCode& status) {
-    if ( U_FAILURE(status) ) {
-        return NULL;
-    }
-    DateFormat* dtfmt = DateFormat::createPatternInstance(skeleton, locale);
+    DateFormat* dtfmt = DateFormat::createPatternInstance(skeleton, locale, status);
 
 #ifdef DTITVFMT_DEBUG
     char result[1000];
@@ -98,7 +96,7 @@ DateIntervalFormat::createInstance(const UnicodeString& skeleton,
 
 DateIntervalFormat* U_EXPORT2
 DateIntervalFormat::createInstance(const UnicodeString& skeleton,
-                                   DateIntervalInfo* dtitvinf,
+                                   const DateIntervalInfo& dtitvinf,
                                    UErrorCode& status) {
     return createInstance(skeleton, Locale::getDefault(), dtitvinf, status);
 }
@@ -107,14 +105,11 @@ DateIntervalFormat::createInstance(const UnicodeString& skeleton,
 DateIntervalFormat* U_EXPORT2
 DateIntervalFormat::createInstance(const UnicodeString& skeleton,
                                    const Locale& locale,
-                                   DateIntervalInfo* dtitvinf,
+                                   const DateIntervalInfo& dtitvinf,
                                    UErrorCode& status) {
-    if ( U_FAILURE(status) ) {
-        delete dtitvinf;
-        return NULL;
-    }
-    DateFormat* dtfmt = DateFormat::createPatternInstance(skeleton, locale);
-    return create(dtfmt, dtitvinf, &skeleton, status);
+    DateFormat* dtfmt = DateFormat::createPatternInstance(skeleton, locale, status);
+    DateIntervalInfo* ptn = dtitvinf.clone();
+    return create(dtfmt, ptn, &skeleton, status);
 }
 
 
@@ -229,7 +224,6 @@ DateIntervalFormat::operator==(const Format& other) const {
 
 
 
-
 UnicodeString&
 DateIntervalFormat::format(const Formattable& obj,
                            UnicodeString& appendTo,
@@ -283,7 +277,8 @@ DateIntervalFormat::format(Calendar& fromCalendar,
 
     // not support different calendar types and time zones
     //if ( fromCalendar.getType() != toCalendar.getType() ) {
-    if ( !fromCalendar.isEquivalentTo(toCalendar) ) {
+    if ( !fromCalendar.isEquivalentTo(toCalendar) ||
+         uprv_strcmp(fromCalendar.getType(), "gregorian") ) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return appendTo;
     }
@@ -323,7 +318,8 @@ DateIntervalFormat::format(Calendar& fromCalendar,
         return fDateFormat->format(fromCalendar, appendTo, pos);
     }
     
-    // following will not set wrong status
+    // following call should not set wrong status,
+    // all the pass-in fields are valid till here
     int32_t itvPtnIndex = DateIntervalInfo::calendarFieldToIntervalIndex(field,
                                                                         status);
     const PatternInfo& intervalPattern = fIntervalPatterns[itvPtnIndex];
@@ -380,74 +376,36 @@ void
 DateIntervalFormat::parseObject(const UnicodeString& /* source */, 
                                 Formattable& /* result */,
                                 ParsePosition& /* parse_pos */) const {
-    // FIXME: THERE is no error code,
-    // then, where to set the not-supported error
+    // parseObject(const UnicodeString&, Formattable&, UErrorCode&) const
+    // will set status as U_INVALID_FORMAT_ERROR if 
+    // parse_pos is still 0
 }
 
 
+
+
+const DateIntervalInfo*
+DateIntervalFormat::getDateIntervalInfo() const {
+    return fInfo;
+}
 
 
 void
-DateIntervalFormat::setDateFormat(const DateFormat& newDateFormat,
-                                  UErrorCode& status) {
-    if ( U_FAILURE(status) ) {
-        return;
-    }
-    if ( newDateFormat.getDynamicClassID() == SimpleDateFormat::getStaticClassID() ) {
-        delete fDateFormat;
-        delete fFromCalendar;
-        delete fToCalendar;
-        fDateFormat = new SimpleDateFormat((SimpleDateFormat&)newDateFormat);
-        if ( fDateFormat && fDateFormat->getCalendar() ) {
-            fFromCalendar = fDateFormat->getCalendar()->clone();
-            fToCalendar = fDateFormat->getCalendar()->clone();
-        } else {
-            fFromCalendar = NULL;
-            fToCalendar = NULL;
-        }
-        if ( fInfo ) {
-            initializePattern(status);
-        }
-    } else {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
+DateIntervalFormat::setDateIntervalInfo(const DateIntervalInfo& newItvPattern,
+                                        UErrorCode& status) {
+    delete fInfo;
+    fInfo = new DateIntervalInfo(newItvPattern);
+    if ( fDateFormat ) {
+        initializePattern(status);
     }
 }
 
 
-void 
-DateIntervalFormat::adoptDateFormat(DateFormat* newDateFormat,
-                                    UErrorCode& status) {
-    if ( U_FAILURE(status) ) {
-        return;
-    }
-    if ( newDateFormat->getDynamicClassID() == SimpleDateFormat::getStaticClassID() ) {
-        delete fDateFormat;
-        delete fFromCalendar;
-        delete fToCalendar;
-        fDateFormat = (SimpleDateFormat*)newDateFormat;
-        if ( fDateFormat && fDateFormat->getCalendar() ) {
-            fFromCalendar = fDateFormat->getCalendar()->clone();
-            fToCalendar = fDateFormat->getCalendar()->clone();
-        } else {
-            fFromCalendar = NULL;
-            fToCalendar = NULL;
-        }
-        if ( fInfo ) {
-            initializePattern(status);
-        }
-    } else {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-    }
+ 
+const DateFormat*
+DateIntervalFormat::getDateFormat() const {
+    return fDateFormat;
 }
-
-
-DateIntervalFormat::DateIntervalFormat(DateFormat* dtfmt,
-                                       DateIntervalInfo* dtItvInfo,
-                                       UErrorCode& status) 
-{
-    DateIntervalFormat(dtfmt, dtItvInfo, NULL, status);
-}
-
 
 
 DateIntervalFormat::DateIntervalFormat(DateFormat* dtfmt,
@@ -484,15 +442,6 @@ DateIntervalFormat::DateIntervalFormat(DateFormat* dtfmt,
         fToCalendar = NULL;
     }
     initializePattern(status);
-}
-
-
-
-DateIntervalFormat* U_EXPORT2
-DateIntervalFormat::create(DateFormat* dtfmt,
-                           DateIntervalInfo* dtItvInfo,
-                           UErrorCode& status) {
-    return create(dtfmt, dtItvInfo, NULL, status);
 }
 
 
@@ -554,7 +503,9 @@ DateIntervalFormat::create(DateFormat* dtfmt,
  */
 void 
 DateIntervalFormat::initializePattern(UErrorCode& status) {
-    // FIXME: WHY can not getLocale()
+    if ( U_FAILURE(status) ) {
+        return;
+    }
     const Locale& locale = fDateFormat->getSmpFmtLocale();
     DateTimePatternGenerator* dtpng = DateTimePatternGenerator::createInstance(locale, status);
     if ( U_FAILURE(status) ) {
@@ -708,6 +659,12 @@ DateIntervalFormat::initializePattern(UErrorCode& status) {
         // calendar, that is why need to get the CalendarData here.
         CalendarData* calData = new CalendarData(locale, NULL, status);
 
+        if ( U_FAILURE(status) ) {
+            delete calData;
+            delete dtpng;
+            return;
+        }
+
         if ( calData == NULL ) {
             status = U_MEMORY_ALLOCATION_ERROR;
             delete dtpng;
@@ -848,8 +805,6 @@ DateIntervalFormat::getDateTimeSkeleton(const UnicodeString& skeleton,
     if ( ECount != 0 ) {
         if ( ECount <= 3 ) {
             normalizedDateSkeleton.append(CAP_E);
-            normalizedDateSkeleton.append(CAP_E);
-            normalizedDateSkeleton.append(CAP_E);
         } else {
             int32_t i;
             for ( i = 0; i < ECount && i < MAX_E_COUNT; ++i ) {
@@ -929,6 +884,18 @@ DateIntervalFormat::setSeparateDateTimePtn(
     int8_t differenceInfo = 0;
     const UnicodeString* bestSkeleton = fInfo->getBestSkeleton(*skeleton, 
                                                                differenceInfo);
+    /* best skeleton could be NULL.
+       For example: in "ca" resource file,
+       interval format is defined as following
+           intervalFormats{
+                fallback{"{0} - {1}"}
+            }
+       there is no skeletons/interval patterns defined,
+       and the best skeleton match could be NULL
+     */
+    if ( bestSkeleton == NULL ) {
+        return false; 
+    } 
    
     // difference:
     // 0 means the best matched skeleton is the same as input skeleton
@@ -995,9 +962,12 @@ DateIntervalFormat::setPatternInfo(UCalendarDateFields field,
     // the second part of the pattern is the full-pattern
     // should be used in fall-back.
     UErrorCode status = U_ZERO_ERROR;
-    // following will not set any wrong status.
+    // following should not set any wrong status.
     int32_t itvPtnIndex = DateIntervalInfo::calendarFieldToIntervalIndex(field,
                                                                         status);
+    if ( U_FAILURE(status) ) {
+        return;
+    }
     PatternInfo& ptn = fIntervalPatterns[itvPtnIndex];
     if ( firstPart ) {
         ptn.firstPart = *firstPart;
@@ -1224,6 +1194,9 @@ DateIntervalFormat::fallbackFormat(Calendar& fromCalendar,
                                    UnicodeString& appendTo,
                                    FieldPosition& pos,
                                    UErrorCode& status) const {
+    if ( U_FAILURE(status) ) {
+        return appendTo;
+    }
     // the fall back
     // no need delete earlierDate and laterDate since they are adopted
     UnicodeString* earlierDate = new UnicodeString();
@@ -1237,10 +1210,9 @@ DateIntervalFormat::fallbackFormat(Calendar& fromCalendar,
     
     UnicodeString fallback;
     MessageFormat::format(fallbackPattern, fmtArray, 2, fallback, status);
-    if ( U_FAILURE(status) ) {
-        return appendTo;
+    if ( U_SUCCESS(status) ) {
+        appendTo.append(fallback);
     }
-    appendTo.append(fallback);
     return appendTo;
 }
 
@@ -1373,12 +1345,12 @@ DateIntervalFormat::concatSingleDate2TimeInterval(const UChar* format,
                                               const UnicodeString& datePattern,
                                               UCalendarDateFields field,
                                               UErrorCode& status) {
+    // following should not set wrong status
+    int32_t itvPtnIndex = DateIntervalInfo::calendarFieldToIntervalIndex(field,
+                                                                        status);
     if ( U_FAILURE(status) ) {
         return;
     }
-    // following will not set wrong status
-    int32_t itvPtnIndex = DateIntervalInfo::calendarFieldToIntervalIndex(field,
-                                                                        status);
     PatternInfo&  timeItvPtnInfo = fIntervalPatterns[itvPtnIndex];
     if ( !timeItvPtnInfo.firstPart.isEmpty() ) {
         // UnicodeString allocated here is adopted, so no need to delete
