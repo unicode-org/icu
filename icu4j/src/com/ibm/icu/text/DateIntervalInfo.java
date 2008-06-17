@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.MissingResourceException;
 import java.util.Iterator;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -18,6 +19,8 @@ import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.Freezable;
+import com.ibm.icu.util.UResourceBundle;
+
 
 /**
  * DateIntervalInfo is a public class for encapsulating localizable
@@ -249,7 +252,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
                                                           Calendar.MINUTE;
     //private static boolean DEBUG = true;
 
-    private static String FALLBACK_STRING = "Fallback";
+    private static String FALLBACK_STRING = "fallback";
     private static String LATEST_FIRST_PREFIX = "latestFirst:";
     private static String EARLIEST_FIRST_PREFIX = "earliestFirst:";
 
@@ -309,8 +312,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
         DateIntervalInfo dii = (DateIntervalInfo) DIICACHE.get(key);
         if ( dii == null ) {
             // initialize data from scratch
-            CalendarData calData = new CalendarData(locale, null);
-            initializeData(calData);
+            setup(locale);
             // FIXME: should put a clone in cache?
             // or put itself in cache?
             // DIICACHE.put(key, this);
@@ -338,50 +340,74 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
      * Initialize DateIntervalInfo from calendar data
      * @param calData  calendar data
      */
-    private void initializeData(CalendarData calData) {
+    private void setup(ULocale locale) {
         int DEFAULT_HASH_SIZE = 19;
         fIntervalPatterns = new HashMap(DEFAULT_HASH_SIZE);
         // initialize to guard if there is no interval date format defined in 
         // resource files
         fFallbackIntervalPattern = "{0} \u2013 {1}";
+        HashSet skeletonSet = new HashSet();
         try {
-            ICUResourceBundle itvDtPtnResource = calData.get(
-                                                   "IntervalDateTimePatterns");
-            // look for fallback first, since it establish the default order
-            String fallback = itvDtPtnResource.getStringWithFallback(FALLBACK_STRING);
-            setFallbackIntervalPattern(fallback);
-            int size = itvDtPtnResource.getSize();
-            for ( int index = 0; index < size; ++index ) {
-                String skeleton = itvDtPtnResource.get(index).getKey();
-                if ( skeleton.compareTo(FALLBACK_STRING) == 0 ) {
-                    continue;
+            // loop through all locales to get all available skeletons'
+            // interval format
+            ULocale parentLocale = locale;
+            // FIXME: how to check for root
+            //while ( !parentLocale.equals(ULocale.ROOT) ) {
+            while (parentLocale != null && !parentLocale.equals(ULocale.ROOT)) {
+                String name = parentLocale.getName();
+                if ( name.length() == 0 ) {
+                    break;
                 }
-                ICUResourceBundle intervalPatterns =
-                    itvDtPtnResource.getWithFallback(skeleton);
-                int ptnNum = intervalPatterns.getSize();
-                for ( int ptnIndex = 0; ptnIndex < ptnNum; ++ptnIndex ) {
-                    String key = intervalPatterns.get(ptnIndex).getKey();
-                    String pattern = intervalPatterns.get(ptnIndex).getString();
 
-                    int calendarField = Calendar.MILLISECONDS_IN_DAY + 1;
-                    if ( key.compareTo(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.YEAR]) == 0 ) {
-                        calendarField = Calendar.YEAR;    
-                    } else if ( key.compareTo(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.MONTH]) == 0 ) {
-                        calendarField = Calendar.MONTH;
-                    } else if ( key.compareTo(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.DATE]) == 0 ) {
-                        calendarField = Calendar.DATE;
-                    } else if ( key.compareTo(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.AM_PM]) == 0 ) {
-                        calendarField = Calendar.AM_PM;    
-                    } else if ( key.compareTo(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.HOUR]) == 0 ) {
-                        calendarField = Calendar.HOUR;    
-                    } else if ( key.compareTo(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.MINUTE]) == 0 ) {
-                        calendarField = Calendar.MINUTE;    
+                ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.
+                  getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
+                rb = rb.getWithFallback("calendar");
+                ICUResourceBundle gregorianBundle = rb.getWithFallback(
+                                                              "gregorian");
+                ICUResourceBundle itvDtPtnResource =gregorianBundle.
+                                      getWithFallback("intervalFormats");
+                // look for fallback first, since it establishes the default order
+                String fallback = itvDtPtnResource.getStringWithFallback(
+                                                          FALLBACK_STRING);
+                setFallbackIntervalPattern(fallback);
+                int size = itvDtPtnResource.getSize();
+                for ( int index = 0; index < size; ++index ) {
+                    String skeleton = itvDtPtnResource.get(index).getKey();
+                    if ( skeletonSet.contains(skeleton) ) {
+                        continue;
                     }
-         
-                    if ( calendarField != Calendar.MILLISECONDS_IN_DAY + 1 ) {
-                        setIntervalPatternInternally(skeleton, key, pattern);
+                    skeletonSet.add(skeleton);
+                    if ( skeleton.compareTo(FALLBACK_STRING) == 0 ) {
+                        continue;
+                    }
+                    ICUResourceBundle intervalPatterns =
+                        itvDtPtnResource.getWithFallback(skeleton);
+                    int ptnNum = intervalPatterns.getSize();
+                    for ( int ptnIndex = 0; ptnIndex < ptnNum; ++ptnIndex) {
+                        String key = intervalPatterns.get(ptnIndex).getKey();
+                        String pattern = intervalPatterns.get(ptnIndex).getString();
+    
+                        int calendarField = Calendar.MILLISECONDS_IN_DAY + 1;
+                        if ( key.compareTo(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.YEAR]) == 0 ) {
+                            calendarField = Calendar.YEAR;    
+                        } else if ( key.compareTo(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.MONTH]) == 0 ) {
+                            calendarField = Calendar.MONTH;
+                        } else if ( key.compareTo(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.DATE]) == 0 ) {
+                            calendarField = Calendar.DATE;
+                        } else if ( key.compareTo(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.AM_PM]) == 0 ) {
+                            calendarField = Calendar.AM_PM;    
+                        } else if ( key.compareTo(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.HOUR]) == 0 ) {
+                            calendarField = Calendar.HOUR;    
+                        } else if ( key.compareTo(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.MINUTE]) == 0 ) {
+                            calendarField = Calendar.MINUTE;    
+                        }
+             
+                        if ( calendarField != Calendar.MILLISECONDS_IN_DAY + 1 ) {
+                            setIntervalPatternInternally(skeleton, key, pattern);
+                        }
                     }
                 }
+                parentLocale = parentLocale.getFallback();
             }
         } catch ( MissingResourceException e) {
             // ok, will fallback to {data0} - {date1}
@@ -495,8 +521,6 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
     public void setIntervalPattern(String skeleton, 
                                    int lrgDiffCalUnit, 
                                    String intervalPattern)
-                                   throws IllegalArgumentException,
-                                          UnsupportedOperationException
     {
         if ( frozen ) {
             throw new UnsupportedOperationException("no modification is allowed after DII is frozen");
@@ -616,9 +640,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
      * @draft ICU 4.0 
      * @provisional This API might change or be removed in a future release.
      */
-    public PatternInfo getIntervalPattern(String skeleton,
-                                          int field) 
-                       throws IllegalArgumentException
+    public PatternInfo getIntervalPattern(String skeleton, int field) 
     {
         if ( field > MINIMUM_SUPPORTED_CALENDAR_FIELD ) {
             throw new IllegalArgumentException("no support for field less than MINUTE");
@@ -671,7 +693,6 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
      * @provisional This API might change or be removed in a future release.
      */
     public void setFallbackIntervalPattern(String fallbackPattern)
-                                   throws UnsupportedOperationException
     {
         if ( frozen ) {
             throw new UnsupportedOperationException("no modification is allowed after DII is frozen");
@@ -715,9 +736,8 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
     /*
      * Clone an unfrozen DateIntervalInfo object.
      * @return     a copy of the object
-     * @throws     IllegalStateException  If clone is not supported
      */
-    private Object cloneUnfrozenDII() throws IllegalStateException
+    private Object cloneUnfrozenDII() //throws IllegalStateException
     {
         try {
             DateIntervalInfo other = (DateIntervalInfo) super.clone();
@@ -743,7 +763,6 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
             throw new  IllegalStateException("clone is not supported");
         }
     }
-
 
     
     /**
@@ -925,20 +944,4 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
         return fIntervalPatterns.hashCode();
     }
     
-    /*
-     * WriteObject.
-     */
-    //private void writeObject(ObjectOutputStream stream) throws IOException{
-     //   stream.defaultWriteObject();
-    //}
-    
-    /*
-     * readObject.
-     */
-    //private void readObject(ObjectInputStream stream)
-     //   throws IOException, ClassNotFoundException {
-      //  stream.defaultReadObject();
-       // serialVersionOnStream = currentSerialVersion;
-    //}
-
 }// end class DateIntervalInfo

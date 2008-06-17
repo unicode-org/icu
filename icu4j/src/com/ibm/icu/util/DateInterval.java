@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 /**
  * This class represents date interval.
- * It is a pair of long representing from long 1 to long 2.
+ * It is a pair of long representing from date 1 to date 2.
  * @draft ICU 4.0
  * @provisional This API might change or be removed in a future release.
  */

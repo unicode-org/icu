@@ -27,6 +27,8 @@ import com.ibm.icu.text.SimpleDateFormat;
 /**
  * DateIntervalFormat is a class for formatting and parsing date 
  * intervals in a language-independent manner. 
+ * Date interval formatting is supported in Gregorian calendar only.
+ * And only formatting is supported. Parsing is not supported.
  *
  * <P>
  * Date interval means from one date to another date,
@@ -91,6 +93,11 @@ import com.ibm.icu.text.SimpleDateFormat;
  *
  * For example: the largest different calendar fields between "Jan 10, 2007" 
  * and "Feb 20, 2008" is year.
+ *
+ * <P>
+ * For other calendar fields, the compact interval formatting is not
+ * supported. And the interval format will be fall back to fall-back
+ * patterns, which is mostly "{date0} - {date1}".
  *   
  * <P>
  * There is a set of pre-defined static skeleton strings in DateFormat,
@@ -202,15 +209,7 @@ import com.ibm.icu.text.SimpleDateFormat;
  *     ....................
  *     
  *     // Get DateIntervalFormat instance using default locale
- *     DateIntervalFormat dtitvfmt = DateIntervalFormat.getInstance();
- *     
- *     // Create a SimpleDateFormat object as usual.
- *     // The SimpleDateFormat object has calendar, timezone, format symbols, 
- *     // and full pattern, which are needed for date interval formatter.
- *     SimpleDateFormat dtfmt = new SimpleDateFormat("yyyy 'year' MMM 'month' dd 'day'", locale);
- *     
- *     // Set the new SimpleDateFormat object just created as the date formatter in date interval formatter
- *     dtitvfmt.setDateFormat(dtfmt);
+ *     DateIntervalFormat dtitvfmt = DateIntervalFormat.getInstance(YEAR_MONTH_DAY);
  *     
  *     // Create an empty DateIntervalInfo object, which does not have any interval patterns inside.
  *     dtitvinf = new DateIntervalInfo();
@@ -372,7 +371,7 @@ public class DateIntervalFormat extends UFormat {
      * with the value of locale as default locale.
      *
      * @param skeleton  the skeleton on which interval format based.
-     * @return          a date time interval formatter which the caller owns.
+     * @return          a date time interval formatter.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
@@ -392,7 +391,7 @@ public class DateIntervalFormat extends UFormat {
      *
      * @param skeleton  the skeleton on which interval format based.
      * @param locale    the given locale
-     * @return          a date time interval formatter which the caller owns.
+     * @return          a date time interval formatter.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
@@ -405,7 +404,13 @@ public class DateIntervalFormat extends UFormat {
 
     /**
      * Construct a DateIntervalFormat from skeleton and a given locale.
+     * <P>
+     * In this factory method,
+     * the date interval pattern information is load from resource files.
+     * Users are encouraged to created date interval formatter this way and
+     * to use the pre-defined skeleton macros.
      *
+     * <P>
      * There are pre-defined skeletons in DateFormat,
      * such as MONTH_DAY, YEAR_MONTH_WEEKDAY_DAY etc.
      *
@@ -423,7 +428,7 @@ public class DateIntervalFormat extends UFormat {
      * "EEE, d - EEE, d MMM, yyyy" for day differs,
      * @param skeleton  the skeleton on which interval format based.
      * @param locale    the given locale
-     * @return          a date time interval formatter which the caller owns.
+     * @return          a date time interval formatter.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
@@ -447,7 +452,7 @@ public class DateIntervalFormat extends UFormat {
      *
      * @param skeleton  the skeleton on which interval format based.
      * @param dtitvinf  the DateIntervalInfo object to be adopted.
-     * @return          a date time interval formatter which the caller owns.
+     * @return          a date time interval formatter.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
@@ -469,7 +474,7 @@ public class DateIntervalFormat extends UFormat {
      * @param skeleton  the skeleton on which interval format based.
      * @param locale    the given locale
      * @param dtitvinf  the DateIntervalInfo object to be adopted.
-     * @return          a date time interval formatter which the caller owns.
+     * @return          a date time interval formatter.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
@@ -486,6 +491,13 @@ public class DateIntervalFormat extends UFormat {
      * Construct a DateIntervalFormat from skeleton
      * a DateIntervalInfo, and the given locale.
      *
+     * <P>
+     * In this factory method, user provides its own date interval pattern
+     * information, instead of using those pre-defined data in resource file.
+     * This factory method is for powerful users who want to provide their own
+     * interval patterns.
+     *
+     * <P>
      * There are pre-defined skeleton in DateFormat,
      * such as MONTH_DAY, YEAR_MONTH_WEEKDAY_DAY etc.
      *
@@ -508,7 +520,7 @@ public class DateIntervalFormat extends UFormat {
      * @param skeleton  the skeleton on which interval format based.
      * @param locale    the given locale
      * @param dtitvinf  the DateIntervalInfo object to be adopted.
-     * @return          a date time interval formatter which the caller owns.
+     * @return          a date time interval formatter.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
@@ -564,7 +576,6 @@ public class DateIntervalFormat extends UFormat {
      */
     public final StringBuffer 
         format(Object obj, StringBuffer appendTo, FieldPosition fieldPosition)
-        throws IllegalArgumentException
     {
         if ( obj instanceof DateInterval ) {
             return format( (DateInterval)obj, appendTo, fieldPosition);
@@ -608,7 +619,7 @@ public class DateIntervalFormat extends UFormat {
      * @param pos               On input: an alignment field, if desired.
      *                          On output: the offsets of the alignment field.
      * @return                  Reference to 'appendTo' parameter.
-     * @throws    IllegalArgumentException  if the two calendars are not equivalent
+     * @throws    IllegalArgumentException  if the two calendars are not equivalent, or the calendars are not Gregorian calendar.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
@@ -616,11 +627,11 @@ public class DateIntervalFormat extends UFormat {
                                      Calendar toCalendar,
                                      StringBuffer appendTo,
                                      FieldPosition pos)
-                              throws IllegalArgumentException
     {
         // not support different calendar types and time zones
-        if ( !fromCalendar.isEquivalentTo(toCalendar) ) {
-            throw new IllegalArgumentException("can not format on two different calendars");
+        if ( !fromCalendar.isEquivalentTo(toCalendar) ||
+             !fromCalendar.getType().equals("gregorian") ) {
+            throw new IllegalArgumentException("can not format on two different calendars or non-Gregorian calendars");
         }
     
         // First, find the largest different calendar field.
@@ -765,11 +776,12 @@ public class DateIntervalFormat extends UFormat {
 
 
     /**
-     * Parse a string to produce an object. This methods handles parsing of
+     * Date interval parsing is not supported.
+     * <P>
+     * This method should handle parsing of
      * date time interval strings into Formattable objects with 
      * DateInterval type, which is a pair of UDate.
      * <P>
-     * In ICU 4.0, date interval format is not supported.
      * <P>
      * Before calling, set parse_pos.index to the offset you want to start
      * parsing at in the source. After calling, parse_pos.index is the end of
@@ -781,15 +793,12 @@ public class DateIntervalFormat extends UFormat {
      * See Format.parseObject() for more.
      *
      * @param source    The string to be parsed into an object.
-     * @param parse_pos The position to start parsing at. Upon return
-     *                  this param is set to the position after the
-     *                  last character successfully parsed. If the
-     *                  source is not parsed successfully, this param
-     *                  will remain unchanged.
+     * @param parse_pos The position to start parsing at. Since no parsing
+     *                  is supported, upon return this param is unchanged.
      * @return          A newly created Formattable* object, or NULL
      *                  on failure.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @internal ICU 4.0
+     * @deprecated This API is ICU internal only.
      */
     public Object parseObject(String source, ParsePosition parse_pos)
     {
@@ -840,34 +849,6 @@ public class DateIntervalFormat extends UFormat {
     {
         return (DateFormat)fDateFormat.clone();
     }
-
-
-    /**
-     * Set the date formatter.
-     * @param newDateFormat   the given date formatter to copy.
-     *                        caller needs to make sure that
-     *                        it is a SimpleDateFormatter.
-     * @throws IllegalArgumentException  if the passing in DateFormat is not
-     *                                   a simple date formatter
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
-     */
-    public void setDateFormat(DateFormat newDateFormat) 
-                throws IllegalArgumentException
-    {
-        if ( newDateFormat instanceof SimpleDateFormat ) {
-            fDateFormat = (SimpleDateFormat) newDateFormat;
-            fFromCalendar = (Calendar) fDateFormat.getCalendar().clone();
-            fToCalendar = (Calendar) fDateFormat.getCalendar().clone();
-            fSkeleton = null;
-            if ( fInfo != null ) {
-                initializePattern();
-            }
-        } else {
-            throw new IllegalArgumentException("Can not setDateFormat using non SimpleDateFormat");
-        }
-    }
-
 
 
     /*
@@ -1264,8 +1245,6 @@ public class DateIntervalFormat extends UFormat {
         }
         if ( ECount != 0 ) {
             if ( ECount <= 3 ) {
-                normalizedDateSkeleton.append('E');
-                normalizedDateSkeleton.append('E');
                 normalizedDateSkeleton.append('E');
             } else {
                 for ( i = 0; i < ECount && i < 5; ++i ) {
