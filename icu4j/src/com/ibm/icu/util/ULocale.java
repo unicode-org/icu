@@ -793,7 +793,11 @@ public final class ULocale implements Serializable {
      * start of the keyword list is indicated by '@', and consists of two
      * or more keyword/value pairs separated by semicolons(';').
      * <p>
-     * This constructor does not canonicalize the localeID.
+     * This constructor does not canonicalize the localeID.  So, for
+     * example, "zh__pinyin" remains unchanged instead of converting
+     * to "zh@collation=pinyin".  By default ICU only recognizes the
+     * latter as specifying pinyin collation.  Use {@link #createCanonical}
+     * or {@link #canonicalize} if you need to canonicalize the localeID.
      * 
      * @param localeID string representation of the locale, e.g:
      * "en_US", "sy_Cyrl_YU", "zh__pinyin", "es_ES@currency=EUR;collation=traditional"
