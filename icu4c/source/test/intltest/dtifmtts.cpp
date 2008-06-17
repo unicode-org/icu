@@ -1612,7 +1612,7 @@ void DateIntervalFormatTest::stress(const char** data, int32_t data_length,
         } else {
             // for "th", the default calendar is Budhist, 
             // not Gregorian.
-            assert(ec == U_ILLEGAL_ARGUMENT_ERROR);
+            assertTrue("Default calendar for \"th\" is Budhist", ec == U_ILLEGAL_ARGUMENT_ERROR);
             ec = U_ZERO_ERROR;
         }
         delete dtitvfmt;

@@ -1002,7 +1002,7 @@ void UnicodeSetTest::TestPropertySet() {
     static const int32_t DATA_LEN = sizeof(DATA)/sizeof(DATA[0]);
 
     for (int32_t i=0; i<DATA_LEN; i+=3) {  
-        expectContainment(UNICODE_STRING_SIMPLE(DATA[i]), CharsToUnicodeString(DATA[i+1]),
+        expectContainment(UnicodeString(DATA[i], -1, US_INV), CharsToUnicodeString(DATA[i+1]),
                           CharsToUnicodeString(DATA[i+2]));
     }
 }
@@ -1354,7 +1354,7 @@ void UnicodeSetTest::TestEscapePattern() {
 
         UnicodeString newpat;
         set.toPattern(newpat, TRUE);
-        if (newpat == UNICODE_STRING_SIMPLE(exp)) {
+        if (newpat == UnicodeString(exp, -1, US_INV)) {
             logln(escape(pat) + " => " + newpat);
         } else {
             errln((UnicodeString)"FAIL: " + escape(pat) + " => " + newpat);
@@ -1587,7 +1587,7 @@ void UnicodeSetTest::TestSymbolTable() {
 
         // Set up variables
         while (DATA[i+2] != NULL) {
-            sym.add(UNICODE_STRING_SIMPLE(DATA[i]), UNICODE_STRING_SIMPLE(DATA[i+1]), ec);
+            sym.add(UnicodeString(DATA[i], -1, US_INV), UnicodeString(DATA[i+1], -1, US_INV), ec);
             if (U_FAILURE(ec)) {
                 errln("FAIL: couldn't add to TokenSymbolTable");
                 continue;
@@ -1596,7 +1596,7 @@ void UnicodeSetTest::TestSymbolTable() {
         }
 
         // Input pattern and expected output pattern
-        UnicodeString inpat = UNICODE_STRING_SIMPLE(DATA[i]), exppat = UNICODE_STRING_SIMPLE(DATA[i+1]);
+        UnicodeString inpat = UnicodeString(DATA[i], -1, US_INV), exppat = UnicodeString(DATA[i+1], -1, US_INV);
         i += 2;
 
         ParsePosition pos(0);
@@ -1640,8 +1640,8 @@ void UnicodeSetTest::TestSurrogate() {
     };
     for (int i=0; DATA[i] != 0; ++i) {
         UErrorCode ec = U_ZERO_ERROR;
-        logln((UnicodeString)"Test pattern " + i + " :" + UNICODE_STRING_SIMPLE(DATA[i]));
-        UnicodeSet set(UNICODE_STRING_SIMPLE(DATA[i]), ec);
+        logln((UnicodeString)"Test pattern " + i + " :" + UnicodeString(DATA[i], -1, US_INV));
+        UnicodeSet set(UnicodeString(DATA[i], -1, US_INV), ec);
         if (U_FAILURE(ec)) {
             errln("FAIL: UnicodeSet constructor");
             continue;
@@ -1650,7 +1650,7 @@ void UnicodeSetTest::TestSurrogate() {
                           CharsToUnicodeString("abc\\U00010000"),
                           CharsToUnicodeString("\\uD800;\\uDC00")); // split apart surrogate-pair
         if (set.size() != 4) {
-            errln((UnicodeString)"FAIL: " + UNICODE_STRING_SIMPLE(DATA[i]) + ".size() == " + 
+            errln((UnicodeString)"FAIL: " + UnicodeString(DATA[i], -1, US_INV) + ".size() == " + 
                   set.size() + ", expected 4");
         }
     }

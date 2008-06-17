@@ -3168,15 +3168,16 @@ RBBILineMonkey::RBBILineMonkey()
     fSets->addElement(fSA, status);
     fSets->addElement(fSG, status);
 
-    fNumberMatcher = new RegexMatcher(
-        UNICODE_STRING_SIMPLE(
+    const char *rules = 
             "((\\p{Line_Break=PR}|\\p{Line_Break=PO})\\p{Line_Break=CM}*)?"
             "((\\p{Line_Break=OP}|\\p{Line_Break=HY})\\p{Line_Break=CM}*)?"
             "\\p{Line_Break=NU}\\p{Line_Break=CM}*"
             "((\\p{Line_Break=NU}|\\p{Line_Break=IS}|\\p{Line_Break=SY})\\p{Line_Break=CM}*)*"
             "(\\p{Line_Break=CL}\\p{Line_Break=CM}*)?"
-            "((\\p{Line_Break=PR}|\\p{Line_Break=PO})\\p{Line_Break=CM}*)?"
-        ), 0, status);
+            "((\\p{Line_Break=PR}|\\p{Line_Break=PO})\\p{Line_Break=CM}*)?";
+
+    fNumberMatcher = new RegexMatcher(
+        UnicodeString(rules, -1, US_INV), 0, status);
 
     fCharBI = BreakIterator::createCharacterInstance(Locale::getEnglish(), status);
 
