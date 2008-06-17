@@ -2623,7 +2623,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /**
          * @stable ICU 4.0
          */
-        public static final int MIDNUMLEFT = 11;
+        public static final int MIDNUMLET = 11;
         /**
          * @stable ICU 4.0
          */
