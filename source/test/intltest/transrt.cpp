@@ -522,7 +522,7 @@ void RTTest::test(const UnicodeString& sourceRangeVal,
 
     this->roundtripExclusionsSet.clear();
     if (roundtripExclusions != NULL && strlen(roundtripExclusions) > 0) {
-        this->roundtripExclusionsSet.applyPattern(UNICODE_STRING_SIMPLE(roundtripExclusions), status);
+        this->roundtripExclusionsSet.applyPattern(UnicodeString(roundtripExclusions, -1, US_INV), status);
         if (U_FAILURE(status)) {
             parent->errln("FAIL: UnicodeSet::applyPattern(%s)", roundtripExclusions);
             return;
@@ -991,7 +991,7 @@ void TransliteratorRoundTripTest::TestHiragana() {
     RTTest test("Latin-Hiragana");
     Legal *legal = new Legal();
     test.test(UnicodeString("[a-zA-Z]", ""), 
-              UNICODE_STRING_SIMPLE(HIRAGANA), 
+              UnicodeString(HIRAGANA, -1, US_INV), 
               HIRAGANA_ITERATION, this, quick, legal);
     delete legal;
 }
@@ -1005,7 +1005,7 @@ void TransliteratorRoundTripTest::TestKatakana() {
     strcat(temp, HALFWIDTH_KATAKANA);
     strcat(temp, "]");
     test.test(UnicodeString("[a-zA-Z]", ""), 
-              UNICODE_STRING_SIMPLE(KATAKANA),
+              UnicodeString(KATAKANA, -1, US_INV),
               temp, 
               this, quick, legal);
     delete legal;

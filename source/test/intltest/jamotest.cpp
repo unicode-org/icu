@@ -26,7 +26,7 @@ JamoTest::JamoTest()
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
     NAME_JAMO = Transliterator::createFromRules("Name-Jamo",
-                                            UNICODE_STRING_SIMPLE(JAMO_NAMES_RULES),
+                                            UnicodeString(JAMO_NAMES_RULES, -1, US_INV),
                                             UTRANS_FORWARD, parseError, status);
 
     if (U_FAILURE(status)) {
@@ -35,7 +35,7 @@ JamoTest::JamoTest()
     }
     status = U_ZERO_ERROR;
     JAMO_NAME = Transliterator::createFromRules("Jamo-Name",
-                                            UNICODE_STRING_SIMPLE(JAMO_NAMES_RULES),
+                                            UnicodeString(JAMO_NAMES_RULES, -1, US_INV),
                                             UTRANS_REVERSE, parseError, status);
     if (U_FAILURE(status)) {
         delete JAMO_NAME;
@@ -400,7 +400,7 @@ JamoTest::TestRealText() {
     int32_t i;
     for (i=0; i < WHAT_IS_UNICODE_length; ++i) {
         ++total;
-        UnicodeString hangul = UNICODE_STRING_SIMPLE(WHAT_IS_UNICODE[i]);
+        UnicodeString hangul = UnicodeString(WHAT_IS_UNICODE[i], -1, US_INV);
         hangul = hangul.unescape(); // Parse backslash-u escapes
         UnicodeString hangulX = hangul;
         rt.transliterate(hangulX);

@@ -1480,7 +1480,7 @@ void TestIDNA::TestIDNAMonkeyTest(){
     /* for debugging */
     for (i=0; i<(int)(sizeof(failures)/sizeof(failures[0])); i++){
         source.truncate(0);
-        source.append( UNICODE_STRING_SIMPLE(failures[i]) );
+        source.append( UnicodeString(failures[i], -1, US_INV) );
         source = source.unescape();
         source.append((UChar)0x0000);
         const UChar *src = source.getBuffer();
