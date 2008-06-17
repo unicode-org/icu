@@ -546,7 +546,7 @@ static char *printOrders(char *buffer, OrderList &list)
 
 void SSearchTest::offsetTest()
 {
-    UnicodeString test[] = {
+    const char *test[] = {
         "\\ua191\\u16ef\\u2036\\u017a",
 
 #if 0
@@ -610,7 +610,7 @@ void SSearchTest::offsetTest()
     col->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
 
     for(int32_t i = 0; i < testCount; i += 1) {
-        UnicodeString ts = test[i].unescape();
+        UnicodeString ts = CharsToUnicodeString(test[i]);
         CollationElementIterator *iter = col->createCollationElementIterator(ts);
         OrderList forwardList;
         OrderList backwardList;
@@ -644,7 +644,7 @@ void SSearchTest::offsetTest()
         backwardList.reverse();
 
         if (forwardList.compare(backwardList)) {
-            logln("Works with \"%s\"", test[i].getTerminatedBuffer());
+            logln("Works with \"%s\"", test[i]);
             logln("Forward offsets:  [%s]", printOffsets(buffer, forwardList));
 //          logln("Backward offsets: [%s]", printOffsets(buffer, backwardList));
 
@@ -653,7 +653,7 @@ void SSearchTest::offsetTest()
 
             logln();
         } else {
-            errln("Fails with \"%S\"", test[i].getTerminatedBuffer());
+            errln("Fails with \"%s\"", test[i]);
             infoln("Forward offsets:  [%s]", printOffsets(buffer, forwardList));
             infoln("Backward offsets: [%s]", printOffsets(buffer, backwardList));
 

@@ -330,13 +330,13 @@ static const int T_IDEO   = 400;
 //
 //-----------------------------------------------------------------------------------
 void RBBITest::TestStatusReturn() {
-     UnicodeString rulesString1 = "$Letters = [:L:];\n"
+     UnicodeString rulesString1("$Letters = [:L:];\n"
                                   "$Numbers = [:N:];\n"
                                   "$Letters+{1};\n"
                                   "$Numbers+{2};\n"
                                   "Help\\ {4}/me\\!;\n"
                                   "[^$Letters $Numbers];\n"
-                                  "!.*;\n";
+                                  "!.*;\n", -1, US_INV);
      UnicodeString testString1  = "abc123..abc Help me Help me!";
                                 // 01234567890123456789012345678
      int32_t bounds1[]   = {0, 3, 6, 7, 8, 11, 12, 16, 17, 19, 20, 25, 27, 28, -1};
@@ -1189,7 +1189,7 @@ void RBBITest::TestBug5775() {
         return;
     }
 
-    UnicodeString s("One.\\u00ad Two.");
+    UnicodeString s("One.\\u00ad Two.", -1, US_INV);
     //               01234      56789
     s = s.unescape();
     bi->setText(s);
@@ -1422,7 +1422,7 @@ void RBBITest::TestExtended() {
     tp.srcLine        = new UVector32(status);
     tp.srcCol         = new UVector32(status);
 
-    RegexMatcher      localeMatcher("<locale *([\\p{L}\\p{Nd}_]*) *>", 0, status);
+    RegexMatcher      localeMatcher(UNICODE_STRING_SIMPLE("<locale *([\\p{L}\\p{Nd}_]*) *>"), 0, status);
     TEST_ASSERT_SUCCESS(status);
 
 
@@ -1597,7 +1597,7 @@ void RBBITest::TestExtended() {
                 break;
             }
 
-            if (testString.compare(charIdx-1, 3, "\\N{") == 0) {
+            if (testString.compare(charIdx-1, 3, UNICODE_STRING_SIMPLE("\\N{")) == 0) {
                 // Named character, e.g. \N{COMBINING GRAVE ACCENT}
                 // Get the code point from the name and insert it into the test data.
                 //   (Damn, no API takes names in Unicode  !!!
@@ -2016,7 +2016,7 @@ void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *
     //    Caputure Group #                  1          2            3            4           5
     //    Parses this item:               divide       x      hex digits   comment \n  unrecognized \n
     //
-    UnicodeString tokenExpr = "[ \t]*(?:(\\u00F7)|(\\u00D7)|([0-9a-fA-F]+)|((?:#.*?)?$.)|(.*?$.))";
+    UnicodeString tokenExpr("[ \t]*(?:(\\u00F7)|(\\u00D7)|([0-9a-fA-F]+)|((?:#.*?)?$.)|(.*?$.))", -1, US_INV);
     RegexMatcher    tokenMatcher(tokenExpr, testFileAsString, UREGEX_MULTILINE | UREGEX_DOTALL, status);
     UnicodeString   testString;
     UVector32       breakPositions(status);
@@ -2245,23 +2245,23 @@ RBBICharMonkey::RBBICharMonkey() {
 
     fText = NULL;
 
-    fCRLFSet    = new UnicodeSet("[\\r\\n]", status);
-    fControlSet = new UnicodeSet("[\\p{Grapheme_Cluster_Break = Control}]", status);
-    fExtendSet  = new UnicodeSet("[\\p{Grapheme_Cluster_Break = Extend}]", status);
-    fPrependSet = new UnicodeSet("[\\p{Grapheme_Cluster_Break = Prepend}]", status);
-    fSpacingSet = new UnicodeSet("[\\p{Grapheme_Cluster_Break = SpacingMark}]", status);
-    fLSet       = new UnicodeSet("[\\p{Grapheme_Cluster_Break = L}]", status);
-    fVSet       = new UnicodeSet("[\\p{Grapheme_Cluster_Break = V}]", status);
-    fTSet       = new UnicodeSet("[\\p{Grapheme_Cluster_Break = T}]", status);
-    fLVSet      = new UnicodeSet("[\\p{Grapheme_Cluster_Break = LV}]", status);
-    fLVTSet     = new UnicodeSet("[\\p{Grapheme_Cluster_Break = LVT}]", status);
+    fCRLFSet    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\r\\n]"), status);
+    fControlSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = Control}]"), status);
+    fExtendSet  = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = Extend}]"), status);
+    fPrependSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = Prepend}]"), status);
+    fSpacingSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = SpacingMark}]"), status);
+    fLSet       = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = L}]"), status);
+    fVSet       = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = V}]"), status);
+    fTSet       = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = T}]"), status);
+    fLVSet      = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = LV}]"), status);
+    fLVTSet     = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = LVT}]"), status);
     fHangulSet  = new UnicodeSet();
     fHangulSet->addAll(*fLSet);
     fHangulSet->addAll(*fVSet);
     fHangulSet->addAll(*fTSet);
     fHangulSet->addAll(*fLVSet);
     fHangulSet->addAll(*fLVTSet);
-    fAnySet     = new UnicodeSet("[\\u0000-\\U0010ffff]", status);
+    fAnySet     = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\u0000-\\U0010ffff]"), status);
     
     fSets       = new UVector(status);
     fSets->addElement(fCRLFSet,    status);
@@ -2457,18 +2457,18 @@ RBBIWordMonkey::RBBIWordMonkey()
 
     fSets            = new UVector(status);
 
-    fCRSet           = new UnicodeSet("[\\p{Word_Break = CR}]",           status);
-    fLFSet           = new UnicodeSet("[\\p{Word_Break = LF}]",           status);
-    fNewlineSet      = new UnicodeSet("[\\p{Word_Break = Newline}]",      status);
-    fALetterSet      = new UnicodeSet("[\\p{Word_Break = ALetter}]",      status);
-    fKatakanaSet     = new UnicodeSet("[\\p{Word_Break = Katakana}]",     status);
-    fMidNumLetSet    = new UnicodeSet("[\\p{Word_Break = MidNumLet}]",    status);
-    fMidLetterSet    = new UnicodeSet("[\\p{Word_Break = MidLetter}]",    status);
-    fMidNumSet       = new UnicodeSet("[\\p{Word_Break = MidNum}]",       status);
-    fNumericSet      = new UnicodeSet("[\\p{Word_Break = Numeric}]",      status);
-    fFormatSet       = new UnicodeSet("[\\p{Word_Break = Format}]",       status);
-    fExtendNumLetSet = new UnicodeSet("[\\p{Word_Break = ExtendNumLet}]", status);
-    fExtendSet       = new UnicodeSet("[\\p{Word_Break = Extend}]",       status);
+    fCRSet           = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = CR}]"),           status);
+    fLFSet           = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = LF}]"),           status);
+    fNewlineSet      = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Newline}]"),      status);
+    fALetterSet      = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = ALetter}]"),      status);
+    fKatakanaSet     = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Katakana}]"),     status);
+    fMidNumLetSet    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = MidNumLet}]"),    status);
+    fMidLetterSet    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = MidLetter}]"),    status);
+    fMidNumSet       = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = MidNum}]"),       status);
+    fNumericSet      = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Numeric}]"),      status);
+    fFormatSet       = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Format}]"),       status);
+    fExtendNumLetSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = ExtendNumLet}]"), status);
+    fExtendSet       = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Extend}]"),       status);
 
     fOtherSet        = new UnicodeSet();
     if(U_FAILURE(status)) {
@@ -2489,7 +2489,7 @@ RBBIWordMonkey::RBBIWordMonkey()
     fOtherSet->removeAll(*fFormatSet);
     fOtherSet->removeAll(*fExtendSet);
     // Inhibit dictionary characters from being tested at all.
-    fOtherSet->removeAll(UnicodeSet("[\\p{LineBreak = Complex_Context}]", status));
+    fOtherSet->removeAll(UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{LineBreak = Complex_Context}]"), status));
 
     fSets->addElement(fCRSet,        status);
     fSets->addElement(fLFSet,        status);
@@ -2736,18 +2736,18 @@ RBBISentMonkey::RBBISentMonkey()
     //  Separator Set Note:  Beginning with Unicode 5.1, CR and LF were removed from the separator
     //                       set and made into character classes of their own.  For the monkey impl,
     //                       they remain in SEP, since Sep always appears with CR and LF in the rules.
-    fSepSet          = new UnicodeSet("[\\p{Sentence_Break = Sep} \\u000a \\u000d]",     status);
-    fFormatSet       = new UnicodeSet("[\\p{Sentence_Break = Format}]",    status);
-    fSpSet           = new UnicodeSet("[\\p{Sentence_Break = Sp}]",        status);
-    fLowerSet        = new UnicodeSet("[\\p{Sentence_Break = Lower}]",     status);
-    fUpperSet        = new UnicodeSet("[\\p{Sentence_Break = Upper}]",     status);
-    fOLetterSet      = new UnicodeSet("[\\p{Sentence_Break = OLetter}]",   status);
-    fNumericSet      = new UnicodeSet("[\\p{Sentence_Break = Numeric}]",   status);
-    fATermSet        = new UnicodeSet("[\\p{Sentence_Break = ATerm}]",     status);
-    fSContinueSet    = new UnicodeSet("[\\p{Sentence_Break = SContinue}]", status);
-    fSTermSet        = new UnicodeSet("[\\p{Sentence_Break = STerm}]",     status);
-    fCloseSet        = new UnicodeSet("[\\p{Sentence_Break = Close}]",     status);
-    fExtendSet       = new UnicodeSet("[\\p{Sentence_Break = Extend}]",    status);
+    fSepSet          = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Sentence_Break = Sep} \\u000a \\u000d]"),     status);
+    fFormatSet       = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Sentence_Break = Format}]"),    status);
+    fSpSet           = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Sentence_Break = Sp}]"),        status);
+    fLowerSet        = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Sentence_Break = Lower}]"),     status);
+    fUpperSet        = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Sentence_Break = Upper}]"),     status);
+    fOLetterSet      = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Sentence_Break = OLetter}]"),   status);
+    fNumericSet      = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Sentence_Break = Numeric}]"),   status);
+    fATermSet        = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Sentence_Break = ATerm}]"),     status);
+    fSContinueSet    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Sentence_Break = SContinue}]"), status);
+    fSTermSet        = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Sentence_Break = STerm}]"),     status);
+    fCloseSet        = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Sentence_Break = Close}]"),     status);
+    fExtendSet       = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Sentence_Break = Extend}]"),    status);
     fOtherSet        = new UnicodeSet();
 
     if(U_FAILURE(status)) {
@@ -3082,42 +3082,42 @@ RBBILineMonkey::RBBILineMonkey()
 
     fSets  = new UVector(status);
 
-    fBK    = new UnicodeSet("[\\p{Line_Break=BK}]", status);
-    fCR    = new UnicodeSet("[\\p{Line_break=CR}]", status);
-    fLF    = new UnicodeSet("[\\p{Line_break=LF}]", status);
-    fCM    = new UnicodeSet("[\\p{Line_break=CM}]", status);
-    fNL    = new UnicodeSet("[\\p{Line_break=NL}]", status);
-    fWJ    = new UnicodeSet("[\\p{Line_break=WJ}]", status);
-    fZW    = new UnicodeSet("[\\p{Line_break=ZW}]", status);
-    fGL    = new UnicodeSet("[\\p{Line_break=GL}]", status);
-    fCB    = new UnicodeSet("[\\p{Line_break=CB}]", status);
-    fSP    = new UnicodeSet("[\\p{Line_break=SP}]", status);
-    fB2    = new UnicodeSet("[\\p{Line_break=B2}]", status);
-    fBA    = new UnicodeSet("[\\p{Line_break=BA}]", status);
-    fBB    = new UnicodeSet("[\\p{Line_break=BB}]", status);
-    fHY    = new UnicodeSet("[\\p{Line_break=HY}]", status);
-    fH2    = new UnicodeSet("[\\p{Line_break=H2}]", status);
-    fH3    = new UnicodeSet("[\\p{Line_break=H3}]", status);
-    fCL    = new UnicodeSet("[\\p{Line_break=CL}]", status);
-    fEX    = new UnicodeSet("[\\p{Line_break=EX}]", status);
-    fIN    = new UnicodeSet("[\\p{Line_break=IN}]", status);
-    fJL    = new UnicodeSet("[\\p{Line_break=JL}]", status);
-    fJV    = new UnicodeSet("[\\p{Line_break=JV}]", status);
-    fJT    = new UnicodeSet("[\\p{Line_break=JT}]", status);
-    fNS    = new UnicodeSet("[\\p{Line_break=NS}]", status);
-    fOP    = new UnicodeSet("[\\p{Line_break=OP}]", status);
-    fQU    = new UnicodeSet("[\\p{Line_break=QU}]", status);
-    fIS    = new UnicodeSet("[\\p{Line_break=IS}]", status);
-    fNU    = new UnicodeSet("[\\p{Line_break=NU}]", status);
-    fPO    = new UnicodeSet("[\\p{Line_break=PO}]", status);
-    fPR    = new UnicodeSet("[\\p{Line_break=PR}]", status);
-    fSY    = new UnicodeSet("[\\p{Line_break=SY}]", status);
-    fAI    = new UnicodeSet("[\\p{Line_break=AI}]", status);
-    fAL    = new UnicodeSet("[\\p{Line_break=AL}]", status);
-    fID    = new UnicodeSet("[\\p{Line_break=ID}]", status);
-    fSA    = new UnicodeSet("[\\p{Line_break=SA}]", status);
-    fSG    = new UnicodeSet("[\\ud800-\\udfff]", status);
-    fXX    = new UnicodeSet("[\\p{Line_break=XX}]", status);
+    fBK    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_Break=BK}]"), status);
+    fCR    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=CR}]"), status);
+    fLF    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=LF}]"), status);
+    fCM    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=CM}]"), status);
+    fNL    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=NL}]"), status);
+    fWJ    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=WJ}]"), status);
+    fZW    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=ZW}]"), status);
+    fGL    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=GL}]"), status);
+    fCB    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=CB}]"), status);
+    fSP    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=SP}]"), status);
+    fB2    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=B2}]"), status);
+    fBA    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=BA}]"), status);
+    fBB    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=BB}]"), status);
+    fHY    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=HY}]"), status);
+    fH2    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=H2}]"), status);
+    fH3    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=H3}]"), status);
+    fCL    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=CL}]"), status);
+    fEX    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=EX}]"), status);
+    fIN    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=IN}]"), status);
+    fJL    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=JL}]"), status);
+    fJV    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=JV}]"), status);
+    fJT    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=JT}]"), status);
+    fNS    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=NS}]"), status);
+    fOP    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=OP}]"), status);
+    fQU    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=QU}]"), status);
+    fIS    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=IS}]"), status);
+    fNU    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=NU}]"), status);
+    fPO    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=PO}]"), status);
+    fPR    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=PR}]"), status);
+    fSY    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=SY}]"), status);
+    fAI    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=AI}]"), status);
+    fAL    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=AL}]"), status);
+    fID    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=ID}]"), status);
+    fSA    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=SA}]"), status);
+    fSG    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\ud800-\\udfff]"), status);
+    fXX    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=XX}]"), status);
 
     if (U_FAILURE(status)) {
         deferredStatus = status;
@@ -3169,13 +3169,14 @@ RBBILineMonkey::RBBILineMonkey()
     fSets->addElement(fSG, status);
 
     fNumberMatcher = new RegexMatcher(
-        "((\\p{Line_Break=PR}|\\p{Line_Break=PO})\\p{Line_Break=CM}*)?"
-        "((\\p{Line_Break=OP}|\\p{Line_Break=HY})\\p{Line_Break=CM}*)?"
-        "\\p{Line_Break=NU}\\p{Line_Break=CM}*"
-        "((\\p{Line_Break=NU}|\\p{Line_Break=IS}|\\p{Line_Break=SY})\\p{Line_Break=CM}*)*"
-        "(\\p{Line_Break=CL}\\p{Line_Break=CM}*)?"
-        "((\\p{Line_Break=PR}|\\p{Line_Break=PO})\\p{Line_Break=CM}*)?",
-        0, status);
+        UNICODE_STRING_SIMPLE(
+            "((\\p{Line_Break=PR}|\\p{Line_Break=PO})\\p{Line_Break=CM}*)?"
+            "((\\p{Line_Break=OP}|\\p{Line_Break=HY})\\p{Line_Break=CM}*)?"
+            "\\p{Line_Break=NU}\\p{Line_Break=CM}*"
+            "((\\p{Line_Break=NU}|\\p{Line_Break=IS}|\\p{Line_Break=SY})\\p{Line_Break=CM}*)*"
+            "(\\p{Line_Break=CL}\\p{Line_Break=CM}*)?"
+            "((\\p{Line_Break=PR}|\\p{Line_Break=PO})\\p{Line_Break=CM}*)?"
+        ), 0, status);
 
     fCharBI = BreakIterator::createCharacterInstance(Locale::getEnglish(), status);
 
@@ -3758,7 +3759,6 @@ void RBBITest::TestWordBreaks(void)
     UErrorCode    status = U_ZERO_ERROR;
     // BreakIterator  *bi = BreakIterator::createCharacterInstance(locale, status);
     BreakIterator *bi = BreakIterator::createWordInstance(locale, status);
-    UChar         str[300];
     static const char *strlist[] =
     {
     "\\U000e0032\\u0097\\u0f94\\uc2d8\\u05f4\\U000e0031\\u060d",
@@ -3808,8 +3808,7 @@ void RBBITest::TestWordBreaks(void)
     }
     for (loop = 0; loop < (int)(sizeof(strlist) / sizeof(char *)); loop ++) {
         // printf("looping %d\n", loop);
-        u_unescape(strlist[loop], str, 25);
-        UnicodeString ustr(str);
+        UnicodeString ustr = CharsToUnicodeString(strlist[loop]);
         // RBBICharMonkey monkey;
         RBBIWordMonkey monkey;
 
@@ -4105,7 +4104,7 @@ void RBBITest::TestMonkey(char *params) {
 
 
         // m.reset(p);
-        if (RegexMatcher("\\S", p, 0, status).find()) {
+        if (RegexMatcher(UNICODE_STRING_SIMPLE("\\S"), p, 0, status).find()) {
             // Each option is stripped out of the option string as it is processed.
             // All options have been checked.  The option string should have been completely emptied..
             char buf[100];

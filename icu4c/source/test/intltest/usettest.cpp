@@ -170,19 +170,19 @@ void UnicodeSetTest::TestToPattern() {
             const char* exp2[] = {"aa", "ab", "ac", NOT, "xy", NULL};
             expectToPattern(*s, "[a-z{aa}{ab}{ac}]", exp2);
 
-            s->applyPattern("[a-z {\\{l} {r\\}}]", ec);
+            s->applyPattern(UNICODE_STRING_SIMPLE("[a-z {\\{l} {r\\}}]"), ec);
             if (U_FAILURE(ec)) break;
             const char* exp3[] = {"{l", "r}", NOT, "xy", NULL};
-            expectToPattern(*s, "[a-z{r\\}}{\\{l}]", exp3);
+            expectToPattern(*s, UNICODE_STRING_SIMPLE("[a-z{r\\}}{\\{l}]"), exp3);
 
             s->add("[]");
             const char* exp4[] = {"{l", "r}", "[]", NOT, "xy", NULL};
-            expectToPattern(*s, "[a-z{\\[\\]}{r\\}}{\\{l}]", exp4);
+            expectToPattern(*s, UNICODE_STRING_SIMPLE("[a-z{\\[\\]}{r\\}}{\\{l}]"), exp4);
 
-            s->applyPattern("[a-z {\\u4E01\\u4E02}{\\n\\r}]", ec);
+            s->applyPattern(UNICODE_STRING_SIMPLE("[a-z {\\u4E01\\u4E02}{\\n\\r}]"), ec);
             if (U_FAILURE(ec)) break;
             const char* exp5[] = {"\\u4E01\\u4E02", "\n\r", NULL};
-            expectToPattern(*s, "[a-z{\\u000A\\u000D}{\\u4E01\\u4E02}]", exp5);
+            expectToPattern(*s, UNICODE_STRING_SIMPLE("[a-z{\\u000A\\u000D}{\\u4E01\\u4E02}]"), exp5);
 
             // j2189
             s->clear();
@@ -318,14 +318,14 @@ UnicodeSetTest::TestCloneEqualHash(void) {
     // set1 and set2 used to be built with the obsolete constructor taking
     // UCharCategory values; replaced with pattern constructors
     // markus 20030502
-    UnicodeSet *set1=new UnicodeSet("\\p{Lowercase Letter}", status); //  :Ll: Letter, lowercase
-    UnicodeSet *set1a=new UnicodeSet("[:Ll:]", status); //  Letter, lowercase
+    UnicodeSet *set1=new UnicodeSet(UNICODE_STRING_SIMPLE("\\p{Lowercase Letter}"), status); //  :Ll: Letter, lowercase
+    UnicodeSet *set1a=new UnicodeSet(UNICODE_STRING_SIMPLE("[:Ll:]"), status); //  Letter, lowercase
     if (U_FAILURE(status)){
         errln((UnicodeString)"FAIL: Can't construst set with category->Ll");
         return;
     }
-    UnicodeSet *set2=new UnicodeSet("\\p{Decimal Number}", status);   //Number, Decimal digit
-    UnicodeSet *set2a=new UnicodeSet("[:Nd:]", status);   //Number, Decimal digit
+    UnicodeSet *set2=new UnicodeSet(UNICODE_STRING_SIMPLE("\\p{Decimal Number}"), status);   //Number, Decimal digit
+    UnicodeSet *set2a=new UnicodeSet(UNICODE_STRING_SIMPLE("[:Nd:]"), status);   //Number, Decimal digit
     if (U_FAILURE(status)){
         errln((UnicodeString)"FAIL: Can't construct set with category->Nd");
         return;
@@ -705,7 +705,7 @@ void UnicodeSetTest::TestIteration() {
     
     // 6 code points, 3 ranges, 2 strings, 8 total elements
     //   Iteration will access them in sorted order -  a, b, c, y, z, U0001abcd, "str1", "str2"
-    UnicodeSet set("[zabyc\\U0001abcd{str1}{str2}]", ec);
+    UnicodeSet set(UNICODE_STRING_SIMPLE("[zabyc\\U0001abcd{str1}{str2}]"), ec);
     TEST_ASSERT_SUCCESS(ec);
     UnicodeSetIterator it(set);
 
@@ -822,12 +822,12 @@ void UnicodeSetTest::TestStrings() {
  * Test the [:Latin:] syntax.
  */
 void UnicodeSetTest::TestScriptSet() {
-    expectContainment("[:Latin:]", "aA", CharsToUnicodeString("\\u0391\\u03B1"));
+    expectContainment(UNICODE_STRING_SIMPLE("[:Latin:]"), "aA", CharsToUnicodeString("\\u0391\\u03B1"));
 
-    expectContainment("[:Greek:]", CharsToUnicodeString("\\u0391\\u03B1"), "aA");
+    expectContainment(UNICODE_STRING_SIMPLE("[:Greek:]"), CharsToUnicodeString("\\u0391\\u03B1"), "aA");
     
     /* Jitterbug 1423 */
-    expectContainment("[[:Common:][:Inherited:]]", CharsToUnicodeString("\\U00003099\\U0001D169\\u0000"), "aA");
+    expectContainment(UNICODE_STRING_SIMPLE("[[:Common:][:Inherited:]]"), CharsToUnicodeString("\\U00003099\\U0001D169\\u0000"), "aA");
 
 }
 
@@ -1002,7 +1002,7 @@ void UnicodeSetTest::TestPropertySet() {
     static const int32_t DATA_LEN = sizeof(DATA)/sizeof(DATA[0]);
 
     for (int32_t i=0; i<DATA_LEN; i+=3) {  
-        expectContainment(DATA[i], CharsToUnicodeString(DATA[i+1]),
+        expectContainment(UNICODE_STRING_SIMPLE(DATA[i]), CharsToUnicodeString(DATA[i+1]),
                           CharsToUnicodeString(DATA[i+2]));
     }
 }
@@ -1015,56 +1015,56 @@ void UnicodeSetTest::TestPosixClasses() {
     {
         UErrorCode status = U_ZERO_ERROR;
         UnicodeSet s1("[:alpha:]", status);
-        UnicodeSet s2("\\p{Alphabetic}", status);
+        UnicodeSet s2(UNICODE_STRING_SIMPLE("\\p{Alphabetic}"), status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT(s1==s2);
     }
     {
         UErrorCode status = U_ZERO_ERROR;
         UnicodeSet s1("[:lower:]", status);
-        UnicodeSet s2("\\p{lowercase}", status);
+        UnicodeSet s2(UNICODE_STRING_SIMPLE("\\p{lowercase}"), status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT(s1==s2);
     }
     {
         UErrorCode status = U_ZERO_ERROR;
         UnicodeSet s1("[:upper:]", status);
-        UnicodeSet s2("\\p{Uppercase}", status);
+        UnicodeSet s2(UNICODE_STRING_SIMPLE("\\p{Uppercase}"), status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT(s1==s2);
     }
     {
         UErrorCode status = U_ZERO_ERROR;
         UnicodeSet s1("[:punct:]", status);
-        UnicodeSet s2("\\p{gc=Punctuation}", status);
+        UnicodeSet s2(UNICODE_STRING_SIMPLE("\\p{gc=Punctuation}"), status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT(s1==s2);
     }
     {
         UErrorCode status = U_ZERO_ERROR;
         UnicodeSet s1("[:digit:]", status);
-        UnicodeSet s2("\\p{gc=DecimalNumber}", status);
+        UnicodeSet s2(UNICODE_STRING_SIMPLE("\\p{gc=DecimalNumber}"), status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT(s1==s2);
     }
     {
         UErrorCode status = U_ZERO_ERROR;
         UnicodeSet s1("[:xdigit:]", status);
-        UnicodeSet s2("[\\p{DecimalNumber}\\p{HexDigit}]", status);
+        UnicodeSet s2(UNICODE_STRING_SIMPLE("[\\p{DecimalNumber}\\p{HexDigit}]"), status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT(s1==s2);
     }
     {
         UErrorCode status = U_ZERO_ERROR;
         UnicodeSet s1("[:alnum:]", status);
-        UnicodeSet s2("[\\p{Alphabetic}\\p{DecimalNumber}]", status);
+        UnicodeSet s2(UNICODE_STRING_SIMPLE("[\\p{Alphabetic}\\p{DecimalNumber}]"), status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT(s1==s2);
     }
     {
         UErrorCode status = U_ZERO_ERROR;
         UnicodeSet s1("[:space:]", status);
-        UnicodeSet s2("\\p{Whitespace}", status);
+        UnicodeSet s2(UNICODE_STRING_SIMPLE("\\p{Whitespace}"), status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT(s1==s2);
     }
@@ -1072,7 +1072,7 @@ void UnicodeSetTest::TestPosixClasses() {
         UErrorCode status = U_ZERO_ERROR;
         UnicodeSet s1("[:blank:]", status);
         TEST_ASSERT_SUCCESS(status);
-        UnicodeSet s2("[\\p{Whitespace}-[\\u000a\\u000B\\u000c\\u000d\\u0085\\p{LineSeparator}\\p{ParagraphSeparator}]]",
+        UnicodeSet s2(UNICODE_STRING_SIMPLE("[\\p{Whitespace}-[\\u000a\\u000B\\u000c\\u000d\\u0085\\p{LineSeparator}\\p{ParagraphSeparator}]]"),
             status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT(s1==s2);
@@ -1081,7 +1081,7 @@ void UnicodeSetTest::TestPosixClasses() {
         UErrorCode status = U_ZERO_ERROR;
         UnicodeSet s1("[:cntrl:]", status);
         TEST_ASSERT_SUCCESS(status);
-        UnicodeSet s2("\\p{Control}", status);
+        UnicodeSet s2(UNICODE_STRING_SIMPLE("\\p{Control}"), status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT(s1==s2);
     }
@@ -1089,7 +1089,7 @@ void UnicodeSetTest::TestPosixClasses() {
         UErrorCode status = U_ZERO_ERROR;
         UnicodeSet s1("[:graph:]", status);
         TEST_ASSERT_SUCCESS(status);
-        UnicodeSet s2("[^\\p{Whitespace}\\p{Control}\\p{Surrogate}\\p{Unassigned}]", status);
+        UnicodeSet s2(UNICODE_STRING_SIMPLE("[^\\p{Whitespace}\\p{Control}\\p{Surrogate}\\p{Unassigned}]"), status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT(s1==s2);
     }
@@ -1097,7 +1097,7 @@ void UnicodeSetTest::TestPosixClasses() {
         UErrorCode status = U_ZERO_ERROR;
         UnicodeSet s1("[:print:]", status);
         TEST_ASSERT_SUCCESS(status);
-        UnicodeSet s2("[[:graph:][:blank:]-[\\p{Control}]]" ,status);
+        UnicodeSet s2(UNICODE_STRING_SIMPLE("[[:graph:][:blank:]-[\\p{Control}]]") ,status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT(s1==s2);
     }
@@ -1222,8 +1222,8 @@ void UnicodeSetTest::TestCloseOver() {
     UnicodeString buf;
     for (int32_t i=0; DATA[i]!=NULL; i+=3) {
         int32_t selector = DATA[i][0];
-        UnicodeString pat(DATA[i+1]);
-        UnicodeString exp(DATA[i+2]);
+        UnicodeString pat(DATA[i+1], -1, US_INV);
+        UnicodeString exp(DATA[i+2], -1, US_INV);
         s.applyPattern(pat, ec);
         s.closeOver(selector);
         t.applyPattern(exp, ec);
@@ -1331,7 +1331,7 @@ void UnicodeSetTest::TestEscapePattern() {
     // this fails -- which is what we expect.
     for (int32_t pass=1; pass<=2; ++pass) {
         UErrorCode ec = U_ZERO_ERROR;
-        UnicodeString pat(pattern);
+        UnicodeString pat(pattern, -1, US_INV);
         if (pass==2) {
             pat = pat.unescape();
         }
@@ -1354,7 +1354,7 @@ void UnicodeSetTest::TestEscapePattern() {
 
         UnicodeString newpat;
         set.toPattern(newpat, TRUE);
-        if (newpat == exp) {
+        if (newpat == UNICODE_STRING_SIMPLE(exp)) {
             logln(escape(pat) + " => " + newpat);
         } else {
             errln((UnicodeString)"FAIL: " + escape(pat) + " => " + newpat);
@@ -1587,7 +1587,7 @@ void UnicodeSetTest::TestSymbolTable() {
 
         // Set up variables
         while (DATA[i+2] != NULL) {
-            sym.add(DATA[i], DATA[i+1], ec);
+            sym.add(UNICODE_STRING_SIMPLE(DATA[i]), UNICODE_STRING_SIMPLE(DATA[i+1]), ec);
             if (U_FAILURE(ec)) {
                 errln("FAIL: couldn't add to TokenSymbolTable");
                 continue;
@@ -1596,7 +1596,7 @@ void UnicodeSetTest::TestSymbolTable() {
         }
 
         // Input pattern and expected output pattern
-        UnicodeString inpat = DATA[i], exppat = DATA[i+1];
+        UnicodeString inpat = UNICODE_STRING_SIMPLE(DATA[i]), exppat = UNICODE_STRING_SIMPLE(DATA[i+1]);
         i += 2;
 
         ParsePosition pos(0);
@@ -1640,8 +1640,8 @@ void UnicodeSetTest::TestSurrogate() {
     };
     for (int i=0; DATA[i] != 0; ++i) {
         UErrorCode ec = U_ZERO_ERROR;
-        logln((UnicodeString)"Test pattern " + i + " :" + DATA[i]);
-        UnicodeSet set(DATA[i], ec);
+        logln((UnicodeString)"Test pattern " + i + " :" + UNICODE_STRING_SIMPLE(DATA[i]));
+        UnicodeSet set(UNICODE_STRING_SIMPLE(DATA[i]), ec);
         if (U_FAILURE(ec)) {
             errln("FAIL: UnicodeSet constructor");
             continue;
@@ -1650,7 +1650,7 @@ void UnicodeSetTest::TestSurrogate() {
                           CharsToUnicodeString("abc\\U00010000"),
                           CharsToUnicodeString("\\uD800;\\uDC00")); // split apart surrogate-pair
         if (set.size() != 4) {
-            errln((UnicodeString)"FAIL: " + DATA[i] + ".size() == " + 
+            errln((UnicodeString)"FAIL: " + UNICODE_STRING_SIMPLE(DATA[i]) + ".size() == " + 
                   set.size() + ", expected 4");
         }
     }

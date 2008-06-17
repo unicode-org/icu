@@ -115,15 +115,15 @@ if (status!=errcode) {errln("RegexTest failure at line %d.  Expected status=%s, 
 #define REGEX_TESTLM(pat, text, looking, match) doRegexLMTest(pat, text, looking, match, __LINE__);
 
 UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking, UBool match, int32_t line) {
-    const UnicodeString pattern(pat);
-    const UnicodeString inputText(text);
+    const UnicodeString pattern(pat, -1, US_INV);
+    const UnicodeString inputText(text, -1, US_INV);
     UErrorCode          status  = U_ZERO_ERROR;
     UParseError         pe;
     RegexPattern        *REPattern = NULL;
     RegexMatcher        *REMatcher = NULL;
     UBool               retVal     = TRUE;
 
-    UnicodeString patString(pat);
+    UnicodeString patString(pat, -1, US_INV);
     REPattern = RegexPattern::compile(patString, 0, pe, status);
     if (U_FAILURE(status)) {
         errln("RegexTest failure in RegexPattern::compile() at line %d.  Status = %s\n",
@@ -636,7 +636,7 @@ void RegexTest::API_Match() {
         UParseError         pe;
         UErrorCode          status=U_ZERO_ERROR;
 
-        UnicodeString       re(".*?(?:(\\Gabc)|(abc))");
+        UnicodeString       re(".*?(?:(\\Gabc)|(abc))", -1, US_INV);
         RegexPattern *pat = RegexPattern::compile(re, flags, pe, status);
         REGEX_CHECK_STATUS;
         UnicodeString data = ".abcabc.abc..";
@@ -681,7 +681,7 @@ void RegexTest::API_Match() {
         REGEX_ASSERT(i==5);
 
         // Check that the bump goes over surrogate pairs OK
-        s = "\\U00010001\\U00010002\\U00010003\\U00010004";
+        s = UNICODE_STRING_SIMPLE("\\U00010001\\U00010002\\U00010003\\U00010004");
         s = s.unescape();
         m.reset(s);
         for (i=0; ; i+=2) {
@@ -1027,7 +1027,7 @@ void RegexTest::API_Replace() {
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(dest == "bcbcdefg");
 
-    dest = matcher2->replaceFirst("The value of \\$1 is $1.", status);
+    dest = matcher2->replaceFirst(UNICODE_STRING_SIMPLE("The value of \\$1 is $1."), status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(dest == "The value of $1 is bc.defg");
 
@@ -1035,7 +1035,7 @@ void RegexTest::API_Replace() {
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(dest == "$ by itself, no group number $$$defg");
 
-    UnicodeString replacement = "Supplemental Digit 1 $\\U0001D7CF.";
+    UnicodeString replacement = UNICODE_STRING_SIMPLE("Supplemental Digit 1 $\\U0001D7CF.");
     replacement = replacement.unescape();
     dest = matcher2->replaceFirst(replacement, status);
     REGEX_CHECK_STATUS;
@@ -1049,7 +1049,7 @@ void RegexTest::API_Replace() {
     //
     {
         UnicodeString  src = "abc 1 abc 2 abc 3";
-        UnicodeString  substitute = "--\\u0043--";
+        UnicodeString  substitute = UNICODE_STRING_SIMPLE("--\\u0043--");
         matcher->reset(src);
         UnicodeString  result = matcher->replaceAll(substitute, status);
         REGEX_CHECK_STATUS;
@@ -1057,7 +1057,7 @@ void RegexTest::API_Replace() {
     }
     {
         UnicodeString  src = "abc !";
-        UnicodeString  substitute = "--\\U00010000--";
+        UnicodeString  substitute = UNICODE_STRING_SIMPLE("--\\U00010000--");
         matcher->reset(src);
         UnicodeString  result = matcher->replaceAll(substitute, status);
         REGEX_CHECK_STATUS;
@@ -1186,7 +1186,7 @@ void RegexTest::API_Pattern() {
     //
     {
         UErrorCode     status     = U_ZERO_ERROR;
-        RegexPattern  *pSource    = RegexPattern::compile("\\p{L}+", 0, status);
+        RegexPattern  *pSource    = RegexPattern::compile(UNICODE_STRING_SIMPLE("\\p{L}+"), 0, status);
         RegexPattern  *pClone     = pSource->clone();
         delete         pSource;
         RegexMatcher  *mFromClone = pClone->matcher(status);
@@ -1278,7 +1278,7 @@ void RegexTest::API_Pattern() {
     delete pat1;
 
     //  split, with a pattern with (capture)
-    pat1 = RegexPattern::compile("<(\\w*)>",  pe, status);
+    pat1 = RegexPattern::compile(UNICODE_STRING_SIMPLE("<(\\w*)>"),  pe, status);
     REGEX_CHECK_STATUS;
 
     status = U_ZERO_ERROR;
@@ -1444,11 +1444,11 @@ void RegexTest::Extended() {
     //
     UnicodeString testString(FALSE, testData, len);
 
-    RegexMatcher    quotedStuffMat("\\s*([\\'\\\"/])(.*?)\\1", 0, status);
-    RegexMatcher    commentMat    ("\\s*(#.*)?$", 0, status);
-    RegexMatcher    flagsMat      ("\\s*([ixsmdteDEGLMvabtyYzZ2-9]*)([:letter:]*)", 0, status);
+    RegexMatcher    quotedStuffMat(UNICODE_STRING_SIMPLE("\\s*([\\'\\\"/])(.*?)\\1"), 0, status);
+    RegexMatcher    commentMat    (UNICODE_STRING_SIMPLE("\\s*(#.*)?$"), 0, status);
+    RegexMatcher    flagsMat      (UNICODE_STRING_SIMPLE("\\s*([ixsmdteDEGLMvabtyYzZ2-9]*)([:letter:]*)"), 0, status);
 
-    RegexMatcher    lineMat("(.*?)\\r?\\n", testString, 0, status);
+    RegexMatcher    lineMat(UNICODE_STRING_SIMPLE("(.*?)\\r?\\n"), testString, 0, status);
     UnicodeString   testPattern;   // The pattern for test from the test file.
     UnicodeString   testFlags;     // the flags   for a test.
     UnicodeString   matchString;   // The marked up string to be used as input
@@ -2073,7 +2073,7 @@ void RegexTest::PerlTests() {
     //  Regex to break the input file into lines, and strip the new lines.
     //     One line per match, capture group one is the desired data.
     //
-    RegexPattern* linePat = RegexPattern::compile("(.+?)[\\r\\n]+", 0, pe, status);
+    RegexPattern* linePat = RegexPattern::compile(UNICODE_STRING_SIMPLE("(.+?)[\\r\\n]+"), 0, pe, status);
     if (U_FAILURE(status)) {
         dataerrln("RegexPattern::compile() error");
         return;
@@ -2084,7 +2084,7 @@ void RegexTest::PerlTests() {
     //  Regex to split a test file line into fields.
     //    There are six fields, separated by tabs.
     //
-    RegexPattern* fieldPat = RegexPattern::compile("\\t", 0, pe, status);
+    RegexPattern* fieldPat = RegexPattern::compile(UNICODE_STRING_SIMPLE("\\t"), 0, pe, status);
 
     //
     //  Regex to identify test patterns with flag settings, and to separate them.
@@ -2092,7 +2092,7 @@ void RegexTest::PerlTests() {
     //    Test patterns without flags are not quoted:   pattern
     //   Coming out, capture group 2 is the pattern, capture group 3 is the flags.
     //
-    RegexPattern *flagPat = RegexPattern::compile("('?)(.*)\\1(.*)", 0, pe, status);
+    RegexPattern *flagPat = RegexPattern::compile(UNICODE_STRING_SIMPLE("('?)(.*)\\1(.*)"), 0, pe, status);
     RegexMatcher* flagMat = flagPat->matcher(status);
 
     //
@@ -2101,19 +2101,19 @@ void RegexTest::PerlTests() {
     //   are string constants and REs for these constructs.
     //
     UnicodeString nulnulSrc("${nulnul}");
-    UnicodeString nulnul("\\u0000\\u0000");
+    UnicodeString nulnul("\\u0000\\u0000", -1, US_INV);
     nulnul = nulnul.unescape();
 
     UnicodeString ffffSrc("${ffff}");
-    UnicodeString ffff("\\uffff");
+    UnicodeString ffff("\\uffff", -1, US_INV);
     ffff = ffff.unescape();
 
     //  regexp for $-[0], $+[2], etc.
-    RegexPattern *groupsPat = RegexPattern::compile("\\$([+\\-])\\[(\\d+)\\]", 0, pe, status);
+    RegexPattern *groupsPat = RegexPattern::compile(UNICODE_STRING_SIMPLE("\\$([+\\-])\\[(\\d+)\\]"), 0, pe, status);
     RegexMatcher *groupsMat = groupsPat->matcher(status);
 
     //  regexp for $0, $1, $2, etc.
-    RegexPattern *cgPat = RegexPattern::compile("\\$(\\d+)", 0, pe, status);
+    RegexPattern *cgPat = RegexPattern::compile(UNICODE_STRING_SIMPLE("\\$(\\d+)"), 0, pe, status);
     RegexMatcher *cgMat = cgPat->matcher(status);
 
 
@@ -2138,7 +2138,7 @@ void RegexTest::PerlTests() {
         flagMat->matches(status);
         UnicodeString pattern  = flagMat->group(2, status);
         pattern.findAndReplace("${bang}", "!");
-        pattern.findAndReplace(nulnulSrc, "\\u0000\\u0000");
+        pattern.findAndReplace(nulnulSrc, UNICODE_STRING_SIMPLE("\\u0000\\u0000"));
         pattern.findAndReplace(ffffSrc, ffff);
 
         //
@@ -2218,7 +2218,7 @@ void RegexTest::PerlTests() {
         // Replace any \n in the match string with an actual new-line char.
         //  Don't do full unescape, as this unescapes more than Perl does, which
         //  causes other spurious failures in the tests.
-        matchString.findAndReplace("\\n", "\n");
+        matchString.findAndReplace(UNICODE_STRING_SIMPLE("\\n"), "\n");
 
 
 
@@ -2315,7 +2315,7 @@ void RegexTest::PerlTests() {
                 perlExpr.remove(0, 2);
             }
 
-            else if (perlExpr.startsWith("\\")) {    // \Escape.  Take following char as a literal.
+            else if (perlExpr.startsWith(UNICODE_STRING_SIMPLE("\\"))) {    // \Escape.  Take following char as a literal.
                                                      //           or as an escaped sequence (e.g. \n)
                 if (perlExpr.length() > 1) {
                     perlExpr.remove(0, 1);  // Remove the '\', but only if not last char.
@@ -2349,7 +2349,7 @@ void RegexTest::PerlTests() {
         UnicodeString expectedS(fields[4]);
         expectedS.findAndReplace(nulnulSrc, nulnul);
         expectedS.findAndReplace(ffffSrc,   ffff);
-        expectedS.findAndReplace("\\n", "\n");
+        expectedS.findAndReplace(UNICODE_STRING_SIMPLE("\\n"), "\n");
 
 
         if (expectedS.compare(resultString) != 0) {
@@ -2437,7 +2437,7 @@ void RegexTest::Callbacks() {
         const void          *returnedContext;
         URegexMatchCallback *returnedFn;
         UErrorCode status = U_ZERO_ERROR;
-        RegexMatcher matcher("((.)+\\2)+x", 0, status);  // A pattern that can run long.
+        RegexMatcher matcher(UNICODE_STRING_SIMPLE("((.)+\\2)+x"), 0, status);  // A pattern that can run long.
         REGEX_CHECK_STATUS;
         matcher.setMatchCallback(testCallBackFn, &cbInfo, status);
         REGEX_CHECK_STATUS;

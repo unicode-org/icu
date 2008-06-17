@@ -696,7 +696,7 @@ NumberFormatTest::TestCurrency(void)
     for(int i=0; i < (int)(sizeof(testCases)/sizeof(testCases[i])); i++){
         status = U_ZERO_ERROR;
         const char *localeID = testCases[i][0];
-        UnicodeString expected(testCases[i][1]);
+        UnicodeString expected(testCases[i][1], -1, US_INV);
         expected = expected.unescape();
         s.truncate(0);
         char loc[256]={0};
@@ -1358,7 +1358,7 @@ void NumberFormatTest::TestSurrogateSupport(void) {
     custom.setSymbol(DecimalFormatSymbols::kZeroDigitSymbol, (UChar)0x30);
     custom.setSymbol(DecimalFormatSymbols::kCurrencySymbol, "units of money");
     custom.setSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol, "money separator");
-    patternStr = "0.00 \\u00A4' in your bank account'";
+    patternStr = UNICODE_STRING_SIMPLE("0.00 \\u00A4' in your bank account'");
     patternStr = patternStr.unescape();
     expStr = UnicodeString(" minus 20money separator00 units of money in your bank account", "");
     status = U_ZERO_ERROR;

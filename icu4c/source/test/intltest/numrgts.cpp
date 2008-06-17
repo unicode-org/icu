@@ -1,5 +1,5 @@
 /***********************************************************************
- * Copyright (c) 1997-2007, International Business Machines Corporation
+ * Copyright (c) 1997-2008, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
  
@@ -1085,7 +1085,7 @@ void NumberFormatRegressionTest::Test4071859 (void)
     String expectedPercent = "-578.998%";
     */
     UnicodeString expectedDefault("-5.789,988");
-    UnicodeString expectedCurrency("-\\u20A4 5.790");
+    UnicodeString expectedCurrency("-\\u20A4 5.790", -1, US_INV);
     UnicodeString expectedPercent("-578.999%");
     expectedCurrency = expectedCurrency.unescape();
 

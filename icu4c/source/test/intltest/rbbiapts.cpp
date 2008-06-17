@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1999-2007, International Business Machines
+ * Copyright (c) 1999-2008, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  *   Date        Name        Description
@@ -744,12 +744,12 @@ void RBBIAPITest::TestRuleStatus() {
 //      Test the vector form of  break rule status.
 //
 void RBBIAPITest::TestRuleStatusVec() {
-    UnicodeString rulesString  = "[A-N]{100}; \n"
+    UnicodeString rulesString(   "[A-N]{100}; \n"
                                  "[a-w]{200}; \n"
                                  "[\\p{L}]{300}; \n"
                                  "[\\p{N}]{400}; \n"
                                  "[0-5]{500}; \n"
-                                  "!.*;\n";
+                                  "!.*;\n", -1, US_INV);
      UnicodeString testString1  = "Aapz5?";
      int32_t  statusVals[10];
      int32_t  numStatuses;
