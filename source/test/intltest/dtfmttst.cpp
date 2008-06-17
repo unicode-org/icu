@@ -1047,7 +1047,7 @@ DateFormatTest::TestLocaleDateFormat() // Bug 495
         DateFormat::FULL, Locale::getFrench());
     DateFormat *dfUS = DateFormat::createDateTimeInstance(DateFormat::FULL, 
         DateFormat::FULL, Locale::getUS());
-    UnicodeString expectedFRENCH ( "lundi 15 septembre 1997 00:00:00 \\u00C9tats-Unis (Los Angeles)" );
+    UnicodeString expectedFRENCH ( "lundi 15 septembre 1997 00:00:00 \\u00C9tats-Unis (Los Angeles)", -1, US_INV );
     expectedFRENCH = expectedFRENCH.unescape();
     //UnicodeString expectedUS ( "Monday, September 15, 1997 12:00:00 o'clock AM PDT" );
     UnicodeString expectedUS ( "Monday, September 15, 1997 12:00:00 AM PT" );

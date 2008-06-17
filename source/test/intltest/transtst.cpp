@@ -1269,7 +1269,7 @@ void TransliteratorTest::TestNameMap(void) {
     // Careful:  CharsToUS will convert "\\N" => "N"; use "\\\\N" for \N
     expect(*uni2name, CharsToUnicodeString("\\u00A0abc\\u4E01\\u00B5\\u0A81\\uFFFD\\u0004\\u0009\\u0081\\uFFFF"),
            CharsToUnicodeString("\\\\N{NO-BREAK SPACE}abc\\\\N{CJK UNIFIED IDEOGRAPH-4E01}\\\\N{MICRO SIGN}\\\\N{GUJARATI SIGN CANDRABINDU}\\\\N{REPLACEMENT CHARACTER}\\\\N{END OF TRANSMISSION}\\\\N{CHARACTER TABULATION}\\\\N{<control-0081>}\\\\N{<noncharacter-FFFF>}"));
-    expect(*name2uni, "{\\N { NO-BREAK SPACE}abc\\N{  CJK UNIFIED  IDEOGRAPH-4E01  }\\N{x\\N{MICRO SIGN}\\N{GUJARATI SIGN CANDRABINDU}\\N{REPLACEMENT CHARACTER}\\N{END OF TRANSMISSION}\\N{CHARACTER TABULATION}\\N{<control-0081>}\\N{<noncharacter-FFFF>}\\N{<control-0004>}\\N{",
+    expect(*name2uni, UNICODE_STRING_SIMPLE("{\\N { NO-BREAK SPACE}abc\\N{  CJK UNIFIED  IDEOGRAPH-4E01  }\\N{x\\N{MICRO SIGN}\\N{GUJARATI SIGN CANDRABINDU}\\N{REPLACEMENT CHARACTER}\\N{END OF TRANSMISSION}\\N{CHARACTER TABULATION}\\N{<control-0081>}\\N{<noncharacter-FFFF>}\\N{<control-0004>}\\N{"),
            CharsToUnicodeString("{\\u00A0abc\\u4E01\\\\N{x\\u00B5\\u0A81\\uFFFD\\u0004\\u0009\\u0081\\uFFFF\\u0004\\\\N{"));
 
     delete uni2name;
@@ -1516,7 +1516,7 @@ void TransliteratorTest::TestCompoundRBT(void) {
         errln("FAIL: createFromRules failed");
         return;
     }
-    expect(*t, "\\u0043at in the hat, bat on the mat",
+    expect(*t, UNICODE_STRING_SIMPLE("\\u0043at in the hat, bat on the mat"),
            "C.A.t IN tHE H.A.t, .B..A.t ON tHE M.A.t");
     UnicodeString r;
     t->toRules(r, TRUE);
@@ -1728,7 +1728,7 @@ void TransliteratorTest::TestToRules(void) {
             UParseError parseError;
             UErrorCode status = U_ZERO_ERROR;
             Transliterator *t = Transliterator::createFromRules("ID",
-                                                                DATA[d+1], UTRANS_FORWARD, parseError, status);
+                                                                UNICODE_STRING_SIMPLE(DATA[d+1]), UTRANS_FORWARD, parseError, status);
             if (t == 0) {
                 errln("FAIL: createFromRules failed");
                 return;
@@ -1737,19 +1737,19 @@ void TransliteratorTest::TestToRules(void) {
             t->toRules(rules, FALSE);
             t->toRules(escapedRules, TRUE);
             UnicodeString expRules = CharsToUnicodeString(DATA[d+2]);
-            UnicodeString expEscapedRules(DATA[d+2]);
+            UnicodeString expEscapedRules(DATA[d+2], -1, US_INV);
             if (rules == expRules) {
-                logln((UnicodeString)"Ok: " + DATA[d+1] +
+                logln((UnicodeString)"Ok: " + UNICODE_STRING_SIMPLE(DATA[d+1]) +
                       " => " + rules);
             } else {
-                errln((UnicodeString)"FAIL: " + DATA[d+1] +
+                errln((UnicodeString)"FAIL: " + UNICODE_STRING_SIMPLE(DATA[d+1]) +
                       " => " + rules + ", exp " + expRules);
             }
             if (escapedRules == expEscapedRules) {
-                logln((UnicodeString)"Ok: " + DATA[d+1] +
+                logln((UnicodeString)"Ok: " + UNICODE_STRING_SIMPLE(DATA[d+1]) +
                       " => " + escapedRules);
             } else {
-                errln((UnicodeString)"FAIL: " + DATA[d+1] +
+                errln((UnicodeString)"FAIL: " + UNICODE_STRING_SIMPLE(DATA[d+1]) +
                       " => " + escapedRules + ", exp " + expEscapedRules);
             }
             delete t;
@@ -1757,8 +1757,8 @@ void TransliteratorTest::TestToRules(void) {
         } else {
             // UnicodeSet test
             UErrorCode status = U_ZERO_ERROR;
-            UnicodeString pat(DATA[d+1]);
-            UnicodeString expToPat(DATA[d+2]);
+            UnicodeString pat(DATA[d+1], -1, US_INV);
+            UnicodeString expToPat(DATA[d+2], -1, US_INV);
             UnicodeSet set(pat, status);
             if (U_FAILURE(status)) {
                 errln("FAIL: UnicodeSet ct failed");
@@ -1820,23 +1820,23 @@ void TransliteratorTest::TestSupplemental() {
 
     expectT("Any-Name",
            CharsToUnicodeString("\\U00010330\\U000E0061\\u00A0"),
-           "\\N{GOTHIC LETTER AHSA}\\N{TAG LATIN SMALL LETTER A}\\N{NO-BREAK SPACE}");
+           UNICODE_STRING_SIMPLE("\\N{GOTHIC LETTER AHSA}\\N{TAG LATIN SMALL LETTER A}\\N{NO-BREAK SPACE}"));
 
     expectT("Any-Hex/Unicode",
            CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
-           "U+10330U+10FF00U+E0061U+00A0");
+           UNICODE_STRING_SIMPLE("U+10330U+10FF00U+E0061U+00A0"));
 
     expectT("Any-Hex/C",
            CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
-           "\\U00010330\\U0010FF00\\U000E0061\\u00A0");
+           UNICODE_STRING_SIMPLE("\\U00010330\\U0010FF00\\U000E0061\\u00A0"));
 
     expectT("Any-Hex/Perl",
            CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
-           "\\x{10330}\\x{10FF00}\\x{E0061}\\x{A0}");
+           UNICODE_STRING_SIMPLE("\\x{10330}\\x{10FF00}\\x{E0061}\\x{A0}"));
 
     expectT("Any-Hex/Java",
            CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
-           "\\uD800\\uDF30\\uDBFF\\uDF00\\uDB40\\uDC61\\u00A0");
+           UNICODE_STRING_SIMPLE("\\uD800\\uDF30\\uDBFF\\uDF00\\uDB40\\uDC61\\u00A0"));
 
     expectT("Any-Hex/XML",
            CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
@@ -1846,7 +1846,7 @@ void TransliteratorTest::TestSupplemental() {
            CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
            "&#66352;&#1113856;&#917601;&#160;");
 
-    expectT("[\\U000E0000-\\U000E0FFF] Remove",
+    expectT(UNICODE_STRING_SIMPLE("[\\U000E0000-\\U000E0FFF] Remove"),
            CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
            CharsToUnicodeString("\\U00010330\\U0010FF00\\u00A0"));
 }
@@ -2363,7 +2363,7 @@ void TransliteratorTest::TestCompoundFilterID(void) {
  * Test new property set syntax
  */
 void TransliteratorTest::TestPropertySet() {
-    expect("a>A; \\p{Lu}>x; \\p{ANY}>y;", "abcDEF", "Ayyxxx");
+    expect(UNICODE_STRING_SIMPLE("a>A; \\p{Lu}>x; \\p{ANY}>y;"), "abcDEF", "Ayyxxx");
     expect("(.+)>'[' $1 ']';", " a stitch \n in time \r saves 9",
            "[ a stitch ]\n[ in time ]\r[ saves 9]");
 }
@@ -2838,8 +2838,8 @@ void TransliteratorTest::TestGurmukhiDevanagari(){
     // (\u0902) (when preceded by vowel)      --->  (\u0A02)
     // (\u0902) (when preceded by consonant)  --->  (\u0A70)
     UErrorCode status = U_ZERO_ERROR;
-    UnicodeSet vowel(UnicodeString("[\\u0905-\\u090A \\u090F\\u0910\\u0913\\u0914 \\u093e-\\u0942\\u0947\\u0948\\u094B\\u094C\\u094D]").unescape(), status);
-    UnicodeSet non_vowel(UnicodeString("[\\u0915-\\u0928\\u092A-\\u0930]").unescape(), status);
+    UnicodeSet vowel(UnicodeString("[\\u0905-\\u090A \\u090F\\u0910\\u0913\\u0914 \\u093e-\\u0942\\u0947\\u0948\\u094B\\u094C\\u094D]", -1, US_INV).unescape(), status);
+    UnicodeSet non_vowel(UnicodeString("[\\u0915-\\u0928\\u092A-\\u0930]", -1, US_INV).unescape(), status);
     UParseError parseError;
 
     UnicodeSetIterator vIter(vowel);
@@ -2850,8 +2850,8 @@ void TransliteratorTest::TestGurmukhiDevanagari(){
       delete trans;
       return;
     }
-    UnicodeString src (" \\u0902");
-    UnicodeString expected(" \\u0A02");
+    UnicodeString src (" \\u0902", -1, US_INV);
+    UnicodeString expected(" \\u0A02", -1, US_INV);
     src = src.unescape();
     expected= expected.unescape();
 
@@ -3165,8 +3165,8 @@ void TransliteratorTest::TestToRulesMark() {
     
     UParseError pe;
     UErrorCode ec = U_ZERO_ERROR;
-    Transliterator *t2 = Transliterator::createFromRules("source-target", testRules, UTRANS_FORWARD, pe, ec);
-    Transliterator *t3 = Transliterator::createFromRules("target-source", testRules, UTRANS_REVERSE, pe, ec);
+    Transliterator *t2 = Transliterator::createFromRules("source-target", UNICODE_STRING_SIMPLE(testRules), UTRANS_FORWARD, pe, ec);
+    Transliterator *t3 = Transliterator::createFromRules("target-source", UNICODE_STRING_SIMPLE(testRules), UTRANS_REVERSE, pe, ec);
 
     if (U_FAILURE(ec)) {
         delete t2;
@@ -3178,8 +3178,8 @@ void TransliteratorTest::TestToRulesMark() {
     expect(*t2, source, target);
     expect(*t3, target, source);
     
-    checkRules("Failed toRules FORWARD", *t2, testRulesForward);
-    checkRules("Failed toRules BACKWARD", *t3, testRulesBackward);
+    checkRules("Failed toRules FORWARD", *t2, UNICODE_STRING_SIMPLE(testRulesForward));
+    checkRules("Failed toRules BACKWARD", *t3, UNICODE_STRING_SIMPLE(testRulesBackward));
 
     delete t2;
     delete t3;
@@ -3199,7 +3199,7 @@ void TransliteratorTest::TestEscape() {
         errln((UnicodeString)"FAIL: createInstance");
     } else {
         expect(*t,
-               "\\x{40}\\U00000031&#x32;&#81;",
+               UNICODE_STRING_SIMPLE("\\x{40}\\U00000031&#x32;&#81;"),
                "@12Q");
     }
     delete t;
@@ -3211,7 +3211,7 @@ void TransliteratorTest::TestEscape() {
     } else {
         expect(*t,
                CharsToUnicodeString("A\\U0010BEEF\\uFEED"),
-               "\\u0041\\U0010BEEF\\uFEED");
+               UNICODE_STRING_SIMPLE("\\u0041\\U0010BEEF\\uFEED"));
     }
     delete t;
 
@@ -3222,7 +3222,7 @@ void TransliteratorTest::TestEscape() {
     } else {
         expect(*t,
                CharsToUnicodeString("A\\U0010BEEF\\uFEED"),
-               "\\u0041\\uDBEF\\uDEEF\\uFEED");
+               UNICODE_STRING_SIMPLE("\\u0041\\uDBEF\\uDEEF\\uFEED"));
     }
     delete t;
 
@@ -3233,7 +3233,7 @@ void TransliteratorTest::TestEscape() {
     } else {
         expect(*t,
                CharsToUnicodeString("A\\U0010BEEF\\uFEED"),
-               "\\x{41}\\x{10BEEF}\\x{FEED}");
+               UNICODE_STRING_SIMPLE("\\x{41}\\x{10BEEF}\\x{FEED}"));
     }
     delete t;
 }
@@ -3638,7 +3638,7 @@ void TransliteratorTest::TestFunction() {
     }
     
     expect(*t, "The Quick Brown Fox",
-           "T(t=\\u0074)he Q(q=\\u0071)uick B(b=\\u0062)rown F(f=\\u0066)ox");
+           UNICODE_STRING_SIMPLE("T(t=\\u0074)he Q(q=\\u0071)uick B(b=\\u0062)rown F(f=\\u0066)ox"));
 
     delete t;
 }
@@ -3756,7 +3756,7 @@ void TransliteratorTest::TestUserFunction() {
 
     // There's no need to register inverses if we don't use them
     t = Transliterator::createFromRules("gif",
-                                        "'\\'u(..)(..) > '<img src=\"http://www.unicode.org/gifs/24/' $1 '/U' $1$2 '.gif\">';",
+                                        UNICODE_STRING_SIMPLE("'\\'u(..)(..) > '<img src=\"http://www.unicode.org/gifs/24/' $1 '/U' $1$2 '.gif\">';"),
                                         UTRANS_FORWARD, pe, ec);
     if (t == NULL || U_FAILURE(ec)) {
         errln((UnicodeString)"FAIL: createFromRules gif " + u_errorName(ec));
@@ -3765,13 +3765,13 @@ void TransliteratorTest::TestUserFunction() {
     _TUFReg("Any-gif", t, 0);
 
     t = Transliterator::createFromRules("RemoveCurly",
-                                        "[\\{\\}] > ; '\\N' > ;",
+                                        UNICODE_STRING_SIMPLE("[\\{\\}] > ; '\\N' > ;"),
                                         UTRANS_FORWARD, pe, ec);
     if (t == NULL || U_FAILURE(ec)) {
         errln((UnicodeString)"FAIL: createFromRules RemoveCurly " + u_errorName(ec));
         goto FAIL;
     }
-    expect(*t, "\\N{name}", "name");
+    expect(*t, UNICODE_STRING_SIMPLE("\\N{name}"), "name");
     _TUFReg("Any-RemoveCurly", t, 1);
 
     logln("Trying &hex");
@@ -3789,7 +3789,7 @@ void TransliteratorTest::TestUserFunction() {
         errln((UnicodeString)"FAIL: createInstance Any-hex2 " + u_errorName(ec));
         goto FAIL;
     }
-    expect(*t, "abc", "\\u0061\\u0062\\u0063");
+    expect(*t, "abc", UNICODE_STRING_SIMPLE("\\u0061\\u0062\\u0063"));
     delete t;
 
     logln("Trying &gif");
@@ -3820,7 +3820,7 @@ void TransliteratorTest::TestUserFunction() {
         goto FAIL;
     }
     expect(*t, "abc",
-           "\\u0061 LATIN SMALL LETTER A \\u0062 LATIN SMALL LETTER B \\u0063 LATIN SMALL LETTER C ");
+           UNICODE_STRING_SIMPLE("\\u0061 LATIN SMALL LETTER A \\u0062 LATIN SMALL LETTER B \\u0063 LATIN SMALL LETTER C "));
     delete t;
 
  FAIL:
@@ -4039,7 +4039,7 @@ void TransliteratorTest::TestAlternateSyntax() {
            "xbz");
     expect(CharsToUnicodeString("([:^ASCII:]) \\u2192 \\u2206Name($1);"),
            CharsToUnicodeString("<=\\u2190; >=\\u2192; <>=\\u2194; &=\\u2206"),
-           "<=\\N{LEFTWARDS ARROW}; >=\\N{RIGHTWARDS ARROW}; <>=\\N{LEFT RIGHT ARROW}; &=\\N{INCREMENT}");
+           UNICODE_STRING_SIMPLE("<=\\N{LEFTWARDS ARROW}; >=\\N{RIGHTWARDS ARROW}; <>=\\N{LEFT RIGHT ARROW}; &=\\N{INCREMENT}"));
 }
 
 static const char* BEGIN_END_RULES[] = {
@@ -4276,9 +4276,9 @@ void TransliteratorTest::TestBeginEnd() {
     int32_t i = 0;
     for (i = 0; i < BEGIN_END_TEST_CASES_length; i += 3) {
         expect((UnicodeString)"Test case #" + (i / 3),
-               UnicodeString(BEGIN_END_TEST_CASES[i]),
-               UnicodeString(BEGIN_END_TEST_CASES[i + 1]),
-               UnicodeString(BEGIN_END_TEST_CASES[i + 2]));
+               UnicodeString(BEGIN_END_TEST_CASES[i], -1, US_INV),
+               UnicodeString(BEGIN_END_TEST_CASES[i + 1], -1, US_INV),
+               UnicodeString(BEGIN_END_TEST_CASES[i + 2], -1, US_INV));
     }
 
     // instantiate the one reversible rule set in the reverse direction and make sure it does the right thing
@@ -4319,7 +4319,7 @@ void TransliteratorTest::TestBeginEndToRules() {
     for (int32_t i = 0; i < BEGIN_END_TEST_CASES_length; i += 3) {
         UParseError parseError;
         UErrorCode status = U_ZERO_ERROR;
-        Transliterator* t = Transliterator::createFromRules("--", UnicodeString(BEGIN_END_TEST_CASES[i]),
+        Transliterator* t = Transliterator::createFromRules("--", UnicodeString(BEGIN_END_TEST_CASES[i], -1, US_INV),
                 UTRANS_FORWARD, parseError, status);
         if (U_FAILURE(status)) {
             reportParseError(UnicodeString("FAIL: Couldn't create transliterator"), parseError, status);
@@ -4334,8 +4334,8 @@ void TransliteratorTest::TestBeginEndToRules() {
                 delete t;
             } else {
                 expect(*t2,
-                       UnicodeString(BEGIN_END_TEST_CASES[i + 1]),
-                       UnicodeString(BEGIN_END_TEST_CASES[i + 2]));
+                       UnicodeString(BEGIN_END_TEST_CASES[i + 1], -1, US_INV),
+                       UnicodeString(BEGIN_END_TEST_CASES[i + 2], -1, US_INV));
                 delete t;
                 delete t2;
             }

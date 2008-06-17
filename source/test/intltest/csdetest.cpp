@@ -426,7 +426,7 @@ void CharsetDetectionTest::C1BytesTest()
 #if !UCONFIG_NO_LEGACY_CONVERSION
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString sISO = "This is a small sample of some English text. Just enough to be sure that it detects correctly.";
-    UnicodeString ssWindows = "This is another small sample of some English text. Just enough to be sure that it detects correctly. It also includes some \\u201CC1\\u201D bytes.";
+    UnicodeString ssWindows("This is another small sample of some English text. Just enough to be sure that it detects correctly. It also includes some \\u201CC1\\u201D bytes.", -1, US_INV);
     UnicodeString sWindows  = ssWindows.unescape();
     int32_t lISO = 0, lWindows = 0;
     char *bISO = extractBytes(sISO, "ISO-8859-1", lISO);

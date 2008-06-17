@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2005-2007, International Business Machines Corporation and
+ * Copyright (c) 2005-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -1044,7 +1044,7 @@ void UTextTest::ErrorTest()
     {    //  Similar test, with utf16 instead of utf8
          //  TODO:  merge the common parts of these tests.
         
-        UnicodeString u16str("\\u1000\\U00011000\\u2000\\U00022000");
+        UnicodeString u16str("\\u1000\\U00011000\\u2000\\U00022000", -1, US_INV);
         int32_t startMap[]  ={ 0,     1,   1,    3,     4,  4,     6,  6};
         int32_t nextMap[]  = { 1,     3,   3,    4,     6,  6,     6,  6};
         int32_t prevMap[]  = { 0,     0,   0,    1,     3,  3,     4,  4};
@@ -1112,7 +1112,7 @@ void UTextTest::ErrorTest()
     {    //  Similar test, with UText over Replaceable
          //  TODO:  merge the common parts of these tests.
         
-        UnicodeString u16str("\\u1000\\U00011000\\u2000\\U00022000");
+        UnicodeString u16str("\\u1000\\U00011000\\u2000\\U00022000", -1, US_INV);
         int32_t startMap[]  ={ 0,     1,   1,    3,     4,  4,     6,  6};
         int32_t nextMap[]  = { 1,     3,   3,    4,     6,  6,     6,  6};
         int32_t prevMap[]  = { 0,     0,   0,    1,     3,  3,     4,  4};
