@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.SimpleCache;
