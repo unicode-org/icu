@@ -38,7 +38,7 @@
 #define TESTCLASSID_CTOR(c, x) { delete testClass(new c x, #c, "new " #c #x, c ::getStaticClassID()); if(U_FAILURE(status)) { errln(UnicodeString(#c " - new " #x " - got err status ") + UnicodeString(u_errorName(status))); status = U_ZERO_ERROR; } }
 #define TESTCLASSID_DEFAULT(c) delete testClass(new c, #c, "new " #c , c::getStaticClassID())
 #define TESTCLASSID_ABSTRACT(c) testClass(NULL, #c, NULL, c::getStaticClassID())
-#define TESTCLASSID_FACTORY_HIDDEN(c, f) {UObject *objVar = f; delete testClass(objVar, #c, #f, objVar->getDynamicClassID()); if(U_FAILURE(status)) { errln(UnicodeString(#c " - " #f " - got err status ") + UnicodeString(u_errorName(status))); status = U_ZERO_ERROR; } }
+#define TESTCLASSID_FACTORY_HIDDEN(c, f) {UObject *objVar = f; delete testClass(objVar, #c, #f, objVar!=NULL? objVar->getDynamicClassID(): NULL); if(U_FAILURE(status)) { errln(UnicodeString(#c " - " #f " - got err status ") + UnicodeString(u_errorName(status))); status = U_ZERO_ERROR; } }
 
 #define MAX_CLASS_ID 200
 

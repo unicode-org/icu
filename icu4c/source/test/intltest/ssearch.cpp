@@ -72,7 +72,7 @@ void SSearchTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
        case 0: name = "searchTest";
             if (exec) searchTest();
             break;
-            
+
         case 1: name = "offsetTest";
             if (exec) offsetTest();
             break;
@@ -603,6 +603,10 @@ void SSearchTest::offsetTest()
     int32_t testCount = ARRAY_SIZE(test);
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *col = (RuleBasedCollator *) Collator::createInstance(Locale::getEnglish(), status);
+    if (U_FAILURE(status)) {
+        errln("Failed to create collator in offsetTest!");
+        return;
+    }
     char buffer[4096];  // A bit of a hack... just happens to be long enough for all the test cases...
                         // We could allocate one that's the right size by (CE_count * 10) + 2
                         // 10 chars is enough room for 8 hex digits plus ", ". 2 extra chars for "[" and "]"
@@ -1556,6 +1560,10 @@ void SSearchTest::monkeyTest(char *params)
     U_STRING_DECL(test_pattern, "[[:assigned:]-[:ideographic:]-[:hangul:]-[:c:]]", 47);
     U_STRING_INIT(test_pattern, "[[:assigned:]-[:ideographic:]-[:hangul:]-[:c:]]", 47);
     UCollator *coll = ucol_open(NULL, &status);
+    if (U_FAILURE(status)) {
+        errln("Failed to create collator in MonkeyTest!");
+        return;
+    }
     USet *charsToTest  = uset_openPattern(test_pattern, 47, &status);
     USet *expansions   = uset_openEmpty();
     USet *contractions = uset_openEmpty();
