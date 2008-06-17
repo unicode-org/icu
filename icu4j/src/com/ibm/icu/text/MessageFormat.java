@@ -256,6 +256,18 @@ import com.ibm.icu.util.ULocale;
  *       <td><i>SubformatPattern</i>
  *       <td><code>new ChoiceFormat(subformatPattern)</code>
  *    <tr>
+ *       <td><code>spellout</code>
+ *       <td><i>Ruleset name (optional)</i>
+ *       <td><code>new RuleBasedNumberFormat(getLocale(), RuleBasedNumberFormat.SPELLOUT)<br/>&nbsp;&nbsp;&nbsp;&nbsp;.setDefaultRuleset(ruleset);</code>
+ *    <tr>
+ *       <td><code>ordinal</code>
+ *       <td><i>Ruleset name (optional)</i>
+ *       <td><code>new RuleBasedNumberFormat(getLocale(), RuleBasedNumberFormat.ORDINAL)<br/>&nbsp;&nbsp;&nbsp;&nbsp;.setDefaultRuleset(ruleset);</code>
+ *    <tr>
+ *       <td><code>duration</code>
+ *       <td><i>Ruleset name (optional)</i>
+ *       <td><code>new RuleBasedNumberFormat(getLocale(), RuleBasedNumberFormat.DURATION)<br/>&nbsp;&nbsp;&nbsp;&nbsp;.setDefaultRuleset(ruleset);</code>
+ *    <tr>
  *       <td><code>plural</code>
  *       <td><i>SubformatPattern</i>
  *       <td><code>new PluralFormat(subformatPattern)</code>
