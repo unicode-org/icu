@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1824,7 +1824,7 @@ IntlTestRBNF::doTest(RuleBasedNumberFormat* formatter, const char* const testDat
                     errln(msg);
                     break;
                 } else {
-                    UnicodeString expectedString = UnicodeString(expectedWords).unescape();
+                    UnicodeString expectedString = UnicodeString(expectedWords, -1, US_INV).unescape();
                     if (actualString != expectedString) {
                         UnicodeString msg = "FAIL: check failed for ";
                         decFmt.format(expectedNumber, msg, status);
