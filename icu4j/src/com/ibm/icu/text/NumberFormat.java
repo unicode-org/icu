@@ -31,19 +31,13 @@ import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
+// this is an enhanced version that is based on the standard version in the JDK
 /**
  * <code>NumberFormat</code> is the abstract base class for all number
  * formats. This class provides the interface for formatting and parsing
  * numbers. <code>NumberFormat</code> also provides methods for determining
  * which locales have number formats, and what their names are.
  *
- * <p><strong>This is an enhanced version of <code>NumberFormat</code> that
- * is based on the standard version in the JDK.  New or changed functionality
- * is labeled
- * <strong><font face=helvetica color=red>NEW</font></strong> or
- * <strong><font face=helvetica color=red>CHANGED</font></strong>.</strong>
- *
- * <p>
  * <code>NumberFormat</code> helps you to format and parse numbers for any locale.
  * Your code can be completely independent of the locale conventions for
  * decimal points, thousands-separators, or even the particular decimal
@@ -181,8 +175,8 @@ public abstract class NumberFormat extends UFormat {
      */
     public static final int FRACTION_FIELD = 1;
 
+    // changed in ICU4J
     /**
-     * <strong><font face=helvetica color=red>CHANGED</font></strong>
      * Format an object.  Change: recognizes <code>BigInteger</code>
      * and <code>BigDecimal</code> objects.
      * @stable ICU 2.0
@@ -241,9 +235,9 @@ public abstract class NumberFormat extends UFormat {
         format(number, buf, pos);
         return buf.toString();
     }
-
+    
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Convenience method to format a BigInteger.
      * @stable ICU 2.0
      */
@@ -254,8 +248,8 @@ public abstract class NumberFormat extends UFormat {
 
 //#if defined(FOUNDATION10)
 //#else
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Convenience method to format a BigDecimal.
      * @stable ICU 2.0
      */
@@ -265,8 +259,8 @@ public abstract class NumberFormat extends UFormat {
     }
 //#endif
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Convenience method to format an ICU BigDecimal.
      * @stable ICU 2.0
      */
@@ -275,8 +269,8 @@ public abstract class NumberFormat extends UFormat {
                       new FieldPosition(0)).toString();
     }
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Convenience method to format a CurrencyAmount.
      * @stable ICU 3.0
      */
@@ -302,9 +296,8 @@ public abstract class NumberFormat extends UFormat {
     public abstract StringBuffer format(long number,
                                         StringBuffer toAppendTo,
                                         FieldPosition pos);
-
+    // [NEW] 
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a BigInteger.
      * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
      * @stable ICU 2.0
@@ -314,8 +307,9 @@ public abstract class NumberFormat extends UFormat {
                                         FieldPosition pos); 
 //#if defined(FOUNDATION10)
 //#else
+    
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a BigDecimal.
      * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
      * @stable ICU 2.0
@@ -325,8 +319,8 @@ public abstract class NumberFormat extends UFormat {
                                         FieldPosition pos);
 //#endif
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a BigDecimal.
      * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
      * @stable ICU 2.0
@@ -334,9 +328,8 @@ public abstract class NumberFormat extends UFormat {
     public abstract StringBuffer format(com.ibm.icu.math.BigDecimal number,
                                         StringBuffer toAppendTo,
                                         FieldPosition pos);
-
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a CurrencyAmount.
      * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
      * @stable ICU 3.0
@@ -389,8 +382,8 @@ public abstract class NumberFormat extends UFormat {
         return result;
     }
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Parses text from the given string as a CurrencyAmount.  Unlike
      * the parse() method, this method will attempt to parse a generic
      * currency name, searching for a match of this object's locale's
@@ -635,8 +628,8 @@ public abstract class NumberFormat extends UFormat {
         return getInstance(inLocale, PERCENTSTYLE);
     }
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Returns a scientific format for the current default locale.
      * @return a scientific number format
      * @stable ICU 2.0
@@ -645,8 +638,8 @@ public abstract class NumberFormat extends UFormat {
         return getInstance(ULocale.getDefault(), SCIENTIFICSTYLE);
     }
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Returns a scientific format for the specified locale.
      * @return a scientific number format
      * @stable ICU 2.0
@@ -655,8 +648,8 @@ public abstract class NumberFormat extends UFormat {
         return getInstance(ULocale.forLocale(inLocale), SCIENTIFICSTYLE);
     }
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Returns a scientific format for the specified locale.
      * @return a scientific number format
      * @stable ICU 3.2
