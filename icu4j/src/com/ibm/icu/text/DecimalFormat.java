@@ -34,6 +34,7 @@ import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 
+//This is an enhanced version of DecimalFormat that is based on the standard version in the JDK. 
 /**
  * <code>DecimalFormat</code> is a concrete subclass of
  * {@link NumberFormat} that formats decimal numbers. It has a variety of
@@ -44,12 +45,7 @@ import com.ibm.icu.util.ULocale;
  * ("12%"), and currency amounts ("$123").  All of these flavors can be easily
  * localized.
  *
- * <p><strong>This is an enhanced version of <code>DecimalFormat</code> that
- * is based on the standard version in the JDK.  New or changed functionality
- * is labeled
- * <strong><font face=helvetica color=red>NEW</font></strong> or
- * <strong><font face=helvetica color=red>CHANGED</font></strong>.</strong>
- *
+ * 
  * <p>To obtain a {@link NumberFormat} for a specific locale (including the
  * default locale) call one of <code>NumberFormat</code>'s factory methods such
  * as {@link NumberFormat#getInstance}. Do not call the <code>DecimalFormat</code>
@@ -149,14 +145,13 @@ import com.ibm.icu.util.ULocale;
  *     <td><code>1-9</code>
  *     <td>Number
  *     <td>Yes
- *     <td><strong><font face=helvetica color=red>NEW</font></strong>
- *         '1' through '9' indicate rounding.
+ *     <td>'1' through '9' indicate rounding. 
+ *         
  *   <tr valign=top>
  *     <td><code>@</code>
  *     <td>Number
  *     <td>No
- *     <td><strong><font face=helvetica color=red>NEW</font></strong>
- *         Significant digit
+ *     <td>Significant digit
  *   <tr valign=top bgcolor="#eeeeff">
  *     <td><code>#</code>
  *     <td>Number
@@ -187,8 +182,7 @@ import com.ibm.icu.util.ULocale;
  *     <td><code>+</code>
  *     <td>Exponent
  *     <td>Yes
- *     <td><strong><font face=helvetica color=red>NEW</font></strong>
- *         Prefix positive exponents with localized plus sign.
+ *     <td>Prefix positive exponents with localized plus sign.
  *         <em>Need not be quoted in prefix or suffix.</em>
  *   <tr valign=top bgcolor="#eeeeff">
  *     <td><code>;</code>
@@ -225,8 +219,7 @@ import com.ibm.icu.util.ULocale;
  *     <td><code>*</code>
  *     <td>Prefix or suffix boundary
  *     <td>Yes
- *     <td><strong><font face=helvetica color=red>NEW</font></strong>
- *         Pad escape, precedes pad character
+ *     <td>Pad escape, precedes pad character
  * </table>
  * </blockquote>
  *
@@ -302,8 +295,7 @@ import com.ibm.icu.util.ULocale;
  * element, as long as the integer or sigDigits element is not
  * followed by the exponent element.
  *
- * <li><font color=red face=helvetica><strong>NEW</strong></font>
- *     Two grouping intervals are recognized: That between the
+ * <li>Two grouping intervals are recognized: That between the
  *     decimal point and the first grouping symbol, and that
  *     between the first and second grouping symbols. These
  *     intervals are identical in most locales, but in some
@@ -312,12 +304,10 @@ import com.ibm.icu.util.ULocale;
  *     &quot;12,34,56,789&quot;.</li>
  * 
  * <li>
- * <strong><font face=helvetica color=red>NEW</font></strong>
  * The pad specifier <code>padSpec</code> may appear before the prefix,
  * after the prefix, before the suffix, after the suffix, or not at all.
  *
  * <li>
- * <strong><font face=helvetica color=red>NEW</font></strong>
  * In place of '0', the digits '1' through '9' may be used to
  * indicate a rounding increment.
  * </ul>
@@ -439,7 +429,6 @@ import com.ibm.icu.util.ULocale;
  * </ul>
  *
  * <a name="sigdig"><h4>
- * <strong><font face=helvetica color=red>NEW</font></strong>
  * Significant Digits</h4></a>
  *
  * <code>DecimalFormat</code> has two ways of controlling how many
@@ -541,7 +530,6 @@ import com.ibm.icu.util.ULocale;
  * </ul>
  * 
  * <h4>
- * <strong><font face=helvetica color=red>NEW</font></strong>
  * Padding</h4>
  *
  * <p><code>DecimalFormat</code> supports padding the result of
@@ -581,7 +569,6 @@ import com.ibm.icu.util.ULocale;
  * </ul>
  *
  * <p>
- * <strong><font face=helvetica color=red>NEW</font></strong>
  * <strong>Rounding</strong>
  *
  * <p><code>DecimalFormat</code> supports rounding to a specific increment.  For
@@ -801,8 +788,8 @@ public class DecimalFormat extends NumberFormat {
         }
     }
     
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Round a double value to the nearest multiple of the given
      * rounding increment, according to the given mode.  This is
      * equivalent to rounding value/roundingInc to the nearest
@@ -952,9 +939,9 @@ public class DecimalFormat extends NumberFormat {
         }
     }
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong> Format a
-     * BigInteger number.
+     * Format a BigInteger number.
      * 
      * @stable ICU 2.0
      */
@@ -986,8 +973,8 @@ public class DecimalFormat extends NumberFormat {
 
 //#if defined(FOUNDATION10)
 //#else
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a BigDecimal number.
      * @stable ICU 2.0
      */
@@ -1015,8 +1002,8 @@ public class DecimalFormat extends NumberFormat {
     }
 //#endif
     
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a BigDecimal number.
      * @stable ICU 2.0
      */
@@ -1570,8 +1557,8 @@ public class DecimalFormat extends NumberFormat {
         }
     }
 
+    // [CHANGED]
     /**
-     * <strong><font face=helvetica color=red>CHANGED</font></strong>
      * Parse the given string, returning a <code>Number</code> object to
      * represent the parsed value.  <code>Double</code> objects are returned to
      * represent non-integral values which cannot be stored in a
@@ -1594,8 +1581,8 @@ public class DecimalFormat extends NumberFormat {
        return (Number) parse(text, parsePosition, false);
     }
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Parses text from the given string as a CurrencyAmount.  Unlike
      * the parse() method, this method will attempt to parse a generic
      * currency name, searching for a match of this object's locale's
@@ -2613,9 +2600,9 @@ public class DecimalFormat extends NumberFormat {
         }
         multiplier = newValue;
     }
-
+    
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Get the rounding increment.
      * @return A positive rounding increment, or <code>null</code> if rounding
      * is not in effect.
@@ -2638,8 +2625,8 @@ public class DecimalFormat extends NumberFormat {
     
 //#if defined(FOUNDATION10)
 //#else
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Set the rounding increment.  This method also controls whether
      * rounding is enabled.
      * @param newValue A positive rounding increment, or <code>null</code> or
@@ -2659,8 +2646,8 @@ public class DecimalFormat extends NumberFormat {
     }
 //#endif
     
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Set the rounding increment.  This method also controls whether
      * rounding is enabled.
      * @param newValue A positive rounding increment, or <code>null</code> or
@@ -2685,9 +2672,8 @@ public class DecimalFormat extends NumberFormat {
         setRoundingDouble();
     }
 
-
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Set the rounding increment.  This method also controls whether
      * rounding is enabled.
      * @param newValue A positive rounding increment, or 0.0 to disable
@@ -2763,8 +2749,8 @@ public class DecimalFormat extends NumberFormat {
         this.roundingMode = roundingMode;
     }
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Get the width to which the output of <code>format()</code> is padded.
      * The width is counted in 16-bit code units.
      * @return the format width, or zero if no padding is in effect
@@ -2779,8 +2765,8 @@ public class DecimalFormat extends NumberFormat {
         return formatWidth;
     }
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Set the width to which the output of <code>format()</code> is padded.
      * The width is counted in 16-bit code units.
      * This method also controls whether padding is enabled.
@@ -2801,8 +2787,8 @@ public class DecimalFormat extends NumberFormat {
         formatWidth = width;
     }
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Get the character used to pad to the format width.  The default is ' '.
      * @return the pad character
      * @see #setFormatWidth
@@ -2816,8 +2802,8 @@ public class DecimalFormat extends NumberFormat {
         return pad;
     }
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Set the character used to pad to the format width.  If padding
      * is not enabled, then this will take effect if padding is later
      * enabled.
@@ -2833,8 +2819,8 @@ public class DecimalFormat extends NumberFormat {
         pad = padChar;
     }
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Get the position at which padding will take place.  This is the location
      * at which padding will be inserted if the result of <code>format()</code>
      * is shorter than the format width.
@@ -2856,8 +2842,8 @@ public class DecimalFormat extends NumberFormat {
         return padPosition;
     }
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Set the position at which padding will take place.  This is the location
      * at which padding will be inserted if the result of <code>format()</code>
      * is shorter than the format width.  This has no effect unless padding is
@@ -2885,8 +2871,8 @@ public class DecimalFormat extends NumberFormat {
         padPosition = padPos;
     }
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Return whether or not scientific notation is used.
      * @return true if this object formats and parses scientific notation
      * @see #setScientificNotation
@@ -2900,8 +2886,8 @@ public class DecimalFormat extends NumberFormat {
         return useExponentialNotation;
     }
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Set whether or not scientific notation is used.  When scientific notation
      * is used, the effective maximum number of integer digits is <= 8.  If the
      * maximum number of integer digits is set to more than 8, the effective
@@ -2920,8 +2906,8 @@ public class DecimalFormat extends NumberFormat {
         useExponentialNotation = useScientific;
     }
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Return the minimum exponent digits that will be shown.
      * @return the minimum exponent digits that will be shown
      * @see #setScientificNotation
@@ -2935,8 +2921,8 @@ public class DecimalFormat extends NumberFormat {
         return minExponentDigits;
     }
     
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Set the minimum exponent digits that will be shown.  This has no
      * effect unless scientific notation is in use.
      * @param minExpDig a value >= 1 indicating the fewest exponent digits
@@ -2956,8 +2942,8 @@ public class DecimalFormat extends NumberFormat {
         minExponentDigits = minExpDig;
     }
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Return whether the exponent sign is always shown.
      * @return true if the exponent is always prefixed with either the
      * localized minus sign or the localized plus sign, false if only negative
@@ -2973,8 +2959,8 @@ public class DecimalFormat extends NumberFormat {
         return exponentSignAlwaysShown;
     }
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Set whether the exponent sign is always shown.  This has no effect
      * unless scientific notation is in use.
      * @param expSignAlways true if the exponent is always prefixed with either
@@ -3017,6 +3003,7 @@ public class DecimalFormat extends NumberFormat {
         groupingSize = (byte)newValue;
     }
 
+    // [NEW]
     /**
      * Return the secondary grouping size. In some locales one
      * grouping interval is used for the least significant integer
@@ -3028,7 +3015,6 @@ public class DecimalFormat extends NumberFormat {
      * grouping size is 4, and the secondary grouping size is 2, then
      * the number 123456789 formats as "1,23,45,6789", and the pattern
      * appears as "#,##,###0".
-     * [NEW]
      * @return the secondary grouping size, or a value less than
      * one if there is none
      * @see #setSecondaryGroupingSize
@@ -3040,11 +3026,11 @@ public class DecimalFormat extends NumberFormat {
         return groupingSize2;
     }
 
+    // [NEW]
     /**
      * Set the secondary grouping size. If set to a value less than 1,
      * then secondary grouping is turned off, and the primary grouping
      * size is used for all intervals, not just the least significant.
-     * [NEW]
      * @see #getSecondaryGroupingSize
      * @see NumberFormat#setGroupingUsed
      * @see DecimalFormatSymbols#setGroupingSeparator
@@ -4696,12 +4682,13 @@ public class DecimalFormat extends NumberFormat {
      */
     private byte    groupingSize = 3;  // invariant, > 0 if useThousands
 
+    // [NEW]
     /**
      * The secondary grouping size.  This is only used for Hindi
      * numerals, which use a primary grouping of 3 and a secondary
      * grouping of 2, e.g., "12,34,567".  If this value is less than
      * 1, then secondary grouping is equal to the primary grouping.
-     * [NEW]
+     * 
      */
     private byte    groupingSize2 = 0;
     
@@ -4782,8 +4769,8 @@ public class DecimalFormat extends NumberFormat {
      */
     private byte    minExponentDigits;       // Newly persistent in JDK 1.2
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * If true, the exponent is always prefixed with either the plus
      * sign or the minus sign.  Otherwise, only negative exponents are
      * prefixed with the minus sign.  This has no effect unless
@@ -4795,8 +4782,8 @@ public class DecimalFormat extends NumberFormat {
 
 //#if defined(FOUNDATION10)
 //#else
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * The value to which numbers are rounded during formatting.  For example,
      * if the rounding increment is 0.05, then 13.371 would be formatted as
      * 13.350, assuming 3 fraction digits.  Has the value <code>null</code> if
@@ -4810,8 +4797,8 @@ public class DecimalFormat extends NumberFormat {
     private java.math.BigDecimal roundingIncrement = null;
 //#endif
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * The value to which numbers are rounded during formatting.  For example,
      * if the rounding increment is 0.05, then 13.371 would be formatted as
      * 13.350, assuming 3 fraction digits.  Has the value <code>null</code> if
@@ -4823,23 +4810,23 @@ public class DecimalFormat extends NumberFormat {
      */
     private transient BigDecimal roundingIncrementICU = null;
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * The rounding increment as a double.  If this value is <= 0, then no
      * rounding is done.  This value is
      * <code>roundingIncrementICU.doubleValue()</code>.  Default value 0.0.
      */
     private transient double roundingDouble = 0.0;
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * If the roundingDouble is the reciprocal of an integer (the most common case!),
      * this is set to be that integer. Otherwise it is 0.0.
      */
     private transient double roundingDoubleReciprocal = 0.0;
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * The rounding mode.  This value controls any rounding operations which
      * occur when applying a rounding increment or when reducing the number of
      * fraction digits to satisfy a maximum fraction digits limit.  The value
@@ -4850,8 +4837,8 @@ public class DecimalFormat extends NumberFormat {
      */
     private int roundingMode = BigDecimal.ROUND_HALF_EVEN;
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * The padded format width, or zero if there is no padding.  Must
      * be >= 0.  Default value zero.
      * @serial
@@ -4859,8 +4846,8 @@ public class DecimalFormat extends NumberFormat {
      */
     private int formatWidth = 0;
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * The character used to pad the result of format to
      * <code>formatWidth</code>, if padding is in effect.  Default value ' '.
      * @serial
@@ -4868,8 +4855,8 @@ public class DecimalFormat extends NumberFormat {
      */
     private char pad = ' ';
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * The position in the string at which the <code>pad</code> character
      * will be inserted, if padding is in effect.  Must have a value from
      * <code>PAD_BEFORE_PREFIX</code> to <code>PAD_AFTER_SUFFIX</code>.
@@ -4912,8 +4899,8 @@ public class DecimalFormat extends NumberFormat {
     // CONSTANTS
     //----------------------------------------------------------------------
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Constant for <code>getPadPosition()</code> and
      * <code>setPadPosition()</code> specifying pad characters inserted before
      * the prefix.
@@ -4926,8 +4913,8 @@ public class DecimalFormat extends NumberFormat {
      */
     public static final int PAD_BEFORE_PREFIX = 0;
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Constant for <code>getPadPosition()</code> and
      * <code>setPadPosition()</code> specifying pad characters inserted after
      * the prefix.
@@ -4940,8 +4927,8 @@ public class DecimalFormat extends NumberFormat {
      */
     public static final int PAD_AFTER_PREFIX  = 1;
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Constant for <code>getPadPosition()</code> and
      * <code>setPadPosition()</code> specifying pad characters inserted before
      * the suffix.
@@ -4954,8 +4941,8 @@ public class DecimalFormat extends NumberFormat {
      */
     public static final int PAD_BEFORE_SUFFIX = 2;
 
+    // [NEW]
     /**
-     * <strong><font face=helvetica color=red>NEW</font></strong>
      * Constant for <code>getPadPosition()</code> and
      * <code>setPadPosition()</code> specifying pad characters inserted after
      * the suffix.
