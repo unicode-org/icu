@@ -3064,9 +3064,94 @@ public final class NormalizerImpl {
     }
     */
     public static int cmpEquivFold(String s1, String s2,int options){
-        return cmpEquivFold(s1.toCharArray(),0,s1.length(),
-                            s2.toCharArray(),0,s2.length(),
+        if ((options & Normalizer.COMPARE_IGNORE_CASE) !=0) {
+            return cmpSimpleEquivFold(s1, s2, options);
+        }
+        else {
+            return cmpEquivFold(s1.toCharArray(),0,s1.length(),
+                                s2.toCharArray(),0,s2.length(),
+                                options);
+        }
+    }
+
+
+    private static int cmpSimpleEquivFold(String s1, String s2, int options) {
+        int cmp = 0;
+        int i=0, j=0;
+        String foldS1=null;
+        String foldS2=null;
+        int offset1=1;
+        int offset2=1;
+        while ((i+offset1<=s1.length() && j+offset2<=s2.length())) {
+            if ((cmp!=0) || (s1.charAt(i) != s2.charAt(j))) {
+                if(i>0 && j>0 && 
+                   (UTF16.isLeadSurrogate((char)s1.charAt(i-1)) ||
+                    UTF16.isLeadSurrogate((char)s2.charAt(j-1)))) {
+                    // Current codepoint may be the low surrogate pair.
+                    return cmpEquivFold(s1.toCharArray(),i-1,s1.length(),
+                            s2.toCharArray(),j-1,s2.length(),
                             options);
+                }
+                else if (UTF16.isLeadSurrogate((char)s1.charAt(i))||
+                         UTF16.isLeadSurrogate((char)s2.charAt(j))) {
+                    return cmpEquivFold(s1.toCharArray(),i,s1.length(),
+                            s2.toCharArray(),j,s2.length(),
+                            options);
+                }
+                else {
+                    if ( offset1 > 0 ) {
+                        foldS1 = UCharacter.foldCase(s1.substring(i, i+offset1),options);
+                    }
+                    if ( offset2 > 0 ) {
+                        foldS2 = UCharacter.foldCase(s2.substring(j, j+offset2),options);
+                    }
+                    cmp = foldS1.compareTo(foldS2);
+                    if (cmp==0) {
+                        i = moveToNext(i, offset1);
+                        j = moveToNext(j, offset2);
+                        offset1 = offset2 = 1;
+                        continue;
+                    }
+                }
+                if (foldS1.length()==foldS2.length()) {
+                    return cmp;
+                }
+                if (foldS1.length()<foldS2.length()) {
+                    offset1++;
+                    offset2=0;
+                }
+                else {
+                    offset1=0;
+                    offset2++;
+                }
+                continue;
+            }
+            i++;
+            j++;
+        }
+        if (cmp!=0) {
+            return cmp;
+        }
+        if (i+offset1-1==s1.length()) {
+            if (j+offset2-1==s2.length()) {
+                return 0;
+            }
+            else {
+                return -1;
+            }
+        }
+        else {
+            return 1;
+        }
+    }
+    
+    private static int moveToNext(int pos, int offset) {
+        if (offset>0) {
+            return pos+offset;
+        }
+        else {
+            return pos+1;
+        }
     }
     
     
