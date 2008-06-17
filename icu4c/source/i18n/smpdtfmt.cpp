@@ -1284,11 +1284,13 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
 void
 SimpleDateFormat::zeroPaddingNumber(UnicodeString &appendTo, int32_t value, int32_t minDigits, int32_t maxDigits) const
 {
-    FieldPosition pos(0);
+    if (fNumberFormat!=NULL) {
+        FieldPosition pos(0);
 
-    fNumberFormat->setMinimumIntegerDigits(minDigits);
-    fNumberFormat->setMaximumIntegerDigits(maxDigits);
-    fNumberFormat->format(value, appendTo, pos);  // 3rd arg is there to speed up processing
+        fNumberFormat->setMinimumIntegerDigits(minDigits);
+        fNumberFormat->setMaximumIntegerDigits(maxDigits);
+        fNumberFormat->format(value, appendTo, pos);  // 3rd arg is there to speed up processing
+    }
 }
 
 //----------------------------------------------------------------------

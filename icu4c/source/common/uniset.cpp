@@ -1302,13 +1302,17 @@ UnicodeSet& UnicodeSet::complement(const UnicodeString& s) {
  * @see #add(char, char)
  */
 UnicodeSet& UnicodeSet::addAll(const UnicodeSet& c) {
-    add(c.list, c.len, 0);
+    if ( c.len>0 && c.list!=NULL ) {
+        add(c.list, c.len, 0);
+    }
 
     // Add strings in order
-    for (int32_t i=0; i<c.strings->size(); ++i) {
-        const UnicodeString* s = (const UnicodeString*)c.strings->elementAt(i);
-        if (!strings->contains((void*) s)) {
-            _add(*s);
+    if ( c.strings!=NULL ) {
+        for (int32_t i=0; i<c.strings->size(); ++i) {
+            const UnicodeString* s = (const UnicodeString*)c.strings->elementAt(i);
+            if (!strings->contains((void*) s)) {
+                _add(*s);
+            }
         }
     }
     return *this;
@@ -1677,7 +1681,7 @@ void UnicodeSet::exclusiveOr(const UChar32* other, int32_t otherLen, int8_t pola
 // polarity = 3: ~x union ~y
 
 void UnicodeSet::add(const UChar32* other, int32_t otherLen, int8_t polarity) {
-    if (isFrozen() || isBogus()) {
+    if (isFrozen() || isBogus() || other==NULL) {
         return;
     }
     UErrorCode status = U_ZERO_ERROR;
