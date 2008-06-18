@@ -22,8 +22,7 @@ import com.ibm.icu.lang.UCharacter;
  * @author krajwade
  *
  */
-public class CharsetBOCU1 extends CharsetICU {
-    
+class CharsetBOCU1 extends CharsetICU {   
     /* BOCU constants and macros */
     
     /* initial value for "prev": middle of the ASCII range */
@@ -124,7 +123,7 @@ public class CharsetBOCU1 extends CharsetICU {
      * to external byte values 0x00..0x20.
      */
     private static final int[] 
-    bocu1TrailToByte={
+    bocu1TrailToByte = {
     /*  0     1     2     3     4     5     6     7    */
         0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x10, 0x11,
 
@@ -166,14 +165,9 @@ public class CharsetBOCU1 extends CharsetICU {
      */
     private static int BOCU1_TRAIL_TO_BYTE(int trail) {
         return ((trail)>=BOCU1_TRAIL_CONTROLS_COUNT ? (trail)+BOCU1_TRAIL_BYTE_OFFSET : bocu1TrailToByte[trail]);
-    }
-
-
-
-        
+    }    
     
     /* BOCU-1 implementation functions ------------------------------------------ */
-
     private static int BOCU1_SIMPLE_PREV(int c){
         return (((c)&~0x7f)+BOCU1_ASCII_PREV);
     }
@@ -224,8 +218,7 @@ public class CharsetBOCU1 extends CharsetICU {
     /** Is a diff value encodable in two bytes? */
     private static boolean DIFF_IS_DOUBLE(int diff){
         return (BOCU1_REACH_NEG_2<=(diff) && (diff)<=BOCU1_REACH_POS_2);
-    }
-    
+    }   
       
     public CharsetBOCU1(String icuCanonicalName, String javaCanonicalName, String[] aliases){
         super(icuCanonicalName, javaCanonicalName, aliases);
@@ -254,7 +247,6 @@ public class CharsetBOCU1 extends CharsetICU {
         private boolean LabelLoop; //used to break the while loop
         private int labelType = fastSingle; //labeType is set to fastSingle to start the code from fastSingle:
         
-        
         /**
          * Integer division and modulo with negative numerators
          * yields negative modulo results and quotients that are one more than
@@ -268,7 +260,6 @@ public class CharsetBOCU1 extends CharsetICU {
          * @param d Divisor.
          * @param m Output variable for the rest (modulo result).
          */
-        
         private int NEGDIVMOD(int n, int d, int m) {
             diff = n;
             (m)=(diff)%(d); 
@@ -298,7 +289,7 @@ public class CharsetBOCU1 extends CharsetICU {
          *      0xwwxxyyzz for 4-byte sequence ww xx yy zz (ww>0x03)
          */
         private int packDiff(int n) {
-            int result, m =0;
+            int result, m = 0;
             diff = n;
 
             if(diff>=BOCU1_REACH_NEG_1) {
@@ -393,9 +384,7 @@ public class CharsetBOCU1 extends CharsetICU {
             }
             return result;
         }
-        
-        
-        
+           
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){
             cr = CoderResult.UNDERFLOW;
             
@@ -413,11 +402,11 @@ public class CharsetBOCU1 extends CharsetICU {
             }
             
             /*sourceIndex ==-1 if the current characte began in the previous buffer*/
-            sourceIndex = c ==0 ? 0: -1;
+            sourceIndex = c == 0 ? 0: -1;
             nextSourceIndex = 0;
             
             /*conversion loop*/
-            if(c!=0 &&targetCapacity>0){
+            if(c!=0 && targetCapacity>0){
                 labelType = getTrail;
             }
             
@@ -438,11 +427,8 @@ public class CharsetBOCU1 extends CharsetICU {
             return cr;
         }
         
-        
-        private int fastSingle(CharBuffer source, ByteBuffer target, IntBuffer offsets){
-                        
-//fastSingle:
-            
+        private int fastSingle(CharBuffer source, ByteBuffer target, IntBuffer offsets){                     
+//fastSingle:        
             /*fast loop for single-byte differences*/
             /*use only one loop counter variable , targetCapacity, not also source*/
             diff = source.limit() - source.position();
@@ -712,7 +698,6 @@ public class CharsetBOCU1 extends CharsetICU {
         private boolean LabelLoop;//used to break the while loop
         private boolean afterTrail; // its value is set to true to ignore code after getTrail:
         private int labelType;
-        
         /*
          * The BOCU-1 converter uses the standard setup code in ucnv.c/ucnv_bld.c.
          * The UConverter fields are used as follows:
@@ -928,7 +913,6 @@ public class CharsetBOCU1 extends CharsetICU {
             return labelType;
             
         }
-
         
         private int afterGetTrail(ByteBuffer source, CharBuffer target, IntBuffer offsets){
             /* decode a sequence of single and lead bytes */
