@@ -108,10 +108,8 @@ class CharsetSCSU extends CharsetICU{
     private static final int definePairTwo=5;
     private static final int defineOne=6;
   //  };
-    
        
-    private final class SCSUData{
-        
+    private final class SCSUData{   
         /* dynamic window offsets, intitialize to default values from initialDynamicOffsets */
         int toUDynamicOffsets[] = new int[8] ;
         int fromUDynamicOffsets[] = new int[8] ; 
@@ -190,9 +188,7 @@ class CharsetSCSU extends CharsetICU{
         extraInfo = new SCSUData();
     }
     
-    
-    class CharsetDecoderSCSU extends CharsetDecoderICU {
-        
+    class CharsetDecoderSCSU extends CharsetDecoderICU {       
         /* label values for supporting behavior similar to goto in C */
         private static final int FastSingle=0;
         private static final int SingleByteMode=1;
@@ -200,8 +196,7 @@ class CharsetSCSU extends CharsetICU{
         
         /* Mode Type */
         private static final int ByteMode = 0;
-        private static final int UnicodeMode =1;
-        
+        private static final int UnicodeMode =1;       
         
         public CharsetDecoderSCSU(CharsetICU cs) {
             super(cs);
@@ -363,151 +358,149 @@ class CharsetSCSU extends CharsetICU{
                         LabelLoop = false;
                         return label;
                      }
-                        //b = (short)source.get();
-                        b = (short)(source.get() & UConverterConstants.UNSIGNED_BYTE_MASK);
-                        ++nextSourceIndex;
-                        switch(state){
-                            case readCommand:
-                                /*redundant conditions are commented out */
-                                if(((1L<<b)&0x2601)!=0){
-                                    target.put((char)b);
-                                    if(offsets != null){
-                                        offsets.put(sourceIndex);
-                                    }
-                                    sourceIndex = nextSourceIndex;
-                                    label = FastSingle;
-                                    return label;
-                                }else if(SC0 <= b){
-                                    if(b<=SC7){
-                                        dynamicWindow = (byte)(b-SC0);
-                                        sourceIndex = nextSourceIndex;
-                                        label = FastSingle;
-                                        return label;
-                                    }else /* if(SD0<=b && b<=SQ7)*/{
-                                        dynamicWindow = (byte)(b - SD0);
-                                        state = defineOne;
-                                    }
-                                }else if(/* SQ0<=b &&*/b <= SQ7){
-                                    quoteWindow = (byte)(b - SQ0);
-                                    state = quoteOne;
-                                }else if(b==SDX){
-                                    state = definePairOne;
-                                }else if(b==SQU){
-                                    state = quotePairOne;
-                                }else if(b==SCU){
-                                    sourceIndex = nextSourceIndex;
-                                    isSingleByteMode = false;
-                                    label = FastSingle;
-                                    return label;
-                                }else{
-                                    /*callback (illegal)*/
-                                    cr = CoderResult.malformedForLength(1);
-                                    toUBytesArray[0] = (byte)b;
-                                    toULength =1;
-                                    label = EndLoop;
-                                    return label;
-                                }
-                                
-                                /* Store the first byte of a multibyte sequence in toUByte[] */
-                                toUBytesArray[0] = (byte)b;
-                                toULength = 1;
-                                break;
-                            case quotePairOne:
-                                byteOne = b;
-                                toUBytesArray[1] = (byte)b;
-                                toULength = 2;
-                                state = quotePairTwo;
-                                break;
-                            case quotePairTwo:
-                                target.put((char)((byteOne<< 8) | b));
+                    b = (short)(source.get() & UConverterConstants.UNSIGNED_BYTE_MASK);
+                    ++nextSourceIndex;
+                    switch(state){
+                    case readCommand:
+                        /*redundant conditions are commented out */
+                        if(((1L<<b)&0x2601)!=0){
+                            target.put((char)b);
+                            if(offsets != null){
+                                offsets.put(sourceIndex);
+                            }
+                            sourceIndex = nextSourceIndex;
+                            label = FastSingle;
+                            return label;
+                        }else if(SC0 <= b){
+                            if(b<=SC7){
+                                dynamicWindow = (byte)(b-SC0);
+                                sourceIndex = nextSourceIndex;
+                                label = FastSingle;
+                                return label;
+                            }else /* if(SD0<=b && b<=SQ7)*/{
+                                dynamicWindow = (byte)(b - SD0);
+                                state = defineOne;
+                            }
+                        }else if(/* SQ0<=b &&*/b <= SQ7){
+                            quoteWindow = (byte)(b - SQ0);
+                            state = quoteOne;
+                        }else if(b==SDX){
+                            state = definePairOne;
+                        }else if(b==SQU){
+                            state = quotePairOne;
+                        }else if(b==SCU){
+                            sourceIndex = nextSourceIndex;
+                            isSingleByteMode = false;
+                            label = FastSingle;
+                            return label;
+                        }else{
+                            /*callback (illegal)*/
+                            cr = CoderResult.malformedForLength(1);
+                            toUBytesArray[0] = (byte)b;
+                            toULength =1;
+                            label = EndLoop;
+                            return label;
+                        }
+                        
+                        /* Store the first byte of a multibyte sequence in toUByte[] */
+                        toUBytesArray[0] = (byte)b;
+                        toULength = 1;
+                        break;
+                    case quotePairOne:
+                        byteOne = b;
+                        toUBytesArray[1] = (byte)b;
+                        toULength = 2;
+                        state = quotePairTwo;
+                        break;
+                    case quotePairTwo:
+                        target.put((char)((byteOne<< 8) | b));
+                        if(offsets != null){
+                            offsets.put(sourceIndex);
+                        }
+                        sourceIndex = nextSourceIndex;
+                        state = readCommand;
+                        label = FastSingle;
+                        return label;
+                    case quoteOne:
+                        if(b<0x80){
+                            /* all static offsets are in the BMP */
+                            target.put((char)(staticOffsets[quoteWindow] + b));
+                            if(offsets != null){
+                                offsets.put(sourceIndex);
+                            }
+                        }else {
+                            /*write from dynamic window */
+                            int c = data.toUDynamicOffsets[quoteWindow] + (b&0x7f);
+                            if(c<=0xffff){
+                                target.put((char)c);
                                 if(offsets != null){
                                     offsets.put(sourceIndex);
                                 }
-                                sourceIndex = nextSourceIndex;
-                                state = readCommand;
-                                label = FastSingle;
-                                return label;
-                            case quoteOne:
-                                if(b<0x80){
-                                    /* all static offsets are in the BMP */
-                                    target.put((char)(staticOffsets[quoteWindow] + b));
+                            }else {
+                                /* output surrogate pair */
+                                target.put((char)(0xd7c0+(c>>10)));
+                                if(target.hasRemaining()){
+                                    target.put((char)(0xdc00 | (c&0x3ff)));
                                     if(offsets != null){
+                                        offsets.put(sourceIndex);
                                         offsets.put(sourceIndex);
                                     }
                                 }else {
-                                    /*write from dynamic window */
-                                    int c = data.toUDynamicOffsets[quoteWindow] + (b&0x7f);
-                                    if(c<=0xffff){
-                                        target.put((char)c);
-                                        if(offsets != null){
-                                            offsets.put(sourceIndex);
-                                        }
-                                    }else {
-                                        /* output surrogate pair */
-                                        target.put((char)(0xd7c0+(c>>10)));
-                                        if(target.hasRemaining()){
-                                            target.put((char)(0xdc00 | (c&0x3ff)));
-                                            if(offsets != null){
-                                                offsets.put(sourceIndex);
-                                                offsets.put(sourceIndex);
-                                            }
-                                        }else {
-                                            /* target overflow */
-                                            if(offsets != null){
-                                                offsets.put(sourceIndex);
-                                            }
-                                            charErrorBufferArray[0] = (char)(0xdc00 | (c&0x3ff));
-                                            charErrorBufferLength = 1;
-                                            label = EndLoop;
-                                            cr = CoderResult.OVERFLOW;
-                                            LabelLoop = false;
-                                            return label;
-                                        }
+                                    /* target overflow */
+                                    if(offsets != null){
+                                        offsets.put(sourceIndex);
                                     }
-                                }
-                                sourceIndex = nextSourceIndex;
-                                state = readCommand;
-                                label = FastSingle;
-                                return label;
-                            case definePairOne:
-                                dynamicWindow = (byte)((b>>5)&7);
-                                byteOne = (byte)(b&0x1f);
-                                toUBytesArray[1] = (byte)b;
-                                toULength = 2;
-                                state = definePairTwo;
-                                break;
-                            case definePairTwo:
-                                data.toUDynamicOffsets[dynamicWindow] = 0x10000 + (byteOne<<15L | b<<7L);
-                                sourceIndex = nextSourceIndex;
-                                state = readCommand;
-                                label = FastSingle;
-                                return label;
-                            case defineOne:
-                                if(b==0){
-                                    /*callback (illegal)*/
-                                    toUBytesArray[1] = (byte)b;
-                                    toULength =2;
+                                    charErrorBufferArray[0] = (char)(0xdc00 | (c&0x3ff));
+                                    charErrorBufferLength = 1;
                                     label = EndLoop;
-                                    return label;
-                                }else if(b<gapThreshold){
-                                    data.toUDynamicOffsets[dynamicWindow] = b<<7L;
-                                }else if((byte)(b - gapThreshold)<(reservedStart - gapThreshold)){
-                                    data.toUDynamicOffsets[dynamicWindow] = (b<<7L) + gapOffset;
-                                }else if(b>=fixedThreshold){
-                                    data.toUDynamicOffsets[dynamicWindow] = fixedOffsets[b-fixedThreshold];
-                                }else{
-                                    /*callback (illegal)*/
-                                    toUBytesArray[1] = (byte)b;
-                                    toULength =2;
-                                    label = EndLoop;
+                                    cr = CoderResult.OVERFLOW;
+                                    LabelLoop = false;
                                     return label;
                                 }
-                                sourceIndex = nextSourceIndex;
-                                state = readCommand;
-                                label = FastSingle;
-                                return label;
+                            }
                         }
-                    //}
+                        sourceIndex = nextSourceIndex;
+                        state = readCommand;
+                        label = FastSingle;
+                        return label;
+                    case definePairOne:
+                        dynamicWindow = (byte)((b>>5)&7);
+                        byteOne = (byte)(b&0x1f);
+                        toUBytesArray[1] = (byte)b;
+                        toULength = 2;
+                        state = definePairTwo;
+                        break;
+                    case definePairTwo:
+                        data.toUDynamicOffsets[dynamicWindow] = 0x10000 + (byteOne<<15L | b<<7L);
+                        sourceIndex = nextSourceIndex;
+                        state = readCommand;
+                        label = FastSingle;
+                        return label;
+                    case defineOne:
+                        if(b==0){
+                            /*callback (illegal)*/
+                            toUBytesArray[1] = (byte)b;
+                            toULength =2;
+                            label = EndLoop;
+                            return label;
+                        }else if(b<gapThreshold){
+                            data.toUDynamicOffsets[dynamicWindow] = b<<7L;
+                        }else if((byte)(b - gapThreshold)<(reservedStart - gapThreshold)){
+                            data.toUDynamicOffsets[dynamicWindow] = (b<<7L) + gapOffset;
+                        }else if(b>=fixedThreshold){
+                            data.toUDynamicOffsets[dynamicWindow] = fixedOffsets[b-fixedThreshold];
+                        }else{
+                            /*callback (illegal)*/
+                            toUBytesArray[1] = (byte)b;
+                            toULength =2;
+                            label = EndLoop;
+                            return label;
+                        }
+                        sourceIndex = nextSourceIndex;
+                        state = readCommand;
+                        label = FastSingle;
+                        return label;
+                    }
                 }
                 
             }else if(modeType==UnicodeMode){
@@ -517,70 +510,67 @@ class CharsetSCSU extends CharsetICU{
                         LabelLoop = false;
                         return label;
                     }
-              //      if(target.hasRemaining()){
-                        b = source.get();
-                        ++nextSourceIndex;
-                        switch(state){
-                            case readCommand:
-                                if((byte)(b -UC0)>(Urs - UC0)){
-                                    byteOne = b;
-                                    toUBytesArray[0] = (byte)b;
-                                    toULength = 1;
-                                    state = quotePairOne;
-                                }else if((b&UConverterConstants.UNSIGNED_BYTE_MASK) <= UC7){
-                                    dynamicWindow = (byte)(b - UC0);
-                                    sourceIndex = nextSourceIndex;
-                                    isSingleByteMode = true;
-                                    label = FastSingle;
-                                    return label;
-                                }else if((b&UConverterConstants.UNSIGNED_BYTE_MASK) <= UD7){
-                                    dynamicWindow = (byte)(b - UD0);
-                                    isSingleByteMode = true;
-                                    toUBytesArray[0] = (byte)b;
-                                    toULength = 1;
-                                    state = defineOne;
-                                    label = SingleByteMode;
-                                    return label;
-                                }else if((b&UConverterConstants.UNSIGNED_BYTE_MASK) == UDX){
-                                    isSingleByteMode = true;
-                                    toUBytesArray[0] = (byte)b;
-                                    toULength = 1;
-                                    state = definePairOne;
-                                    label = SingleByteMode;
-                                    return label;
-                                }else if((b&UConverterConstants.UNSIGNED_BYTE_MASK) == UQU){
-                                    toUBytesArray[0] = (byte)b;
-                                    toULength = 1;
-                                    state = quotePairOne;
-                                }else {
-                                    /* callback (illegal)*/
-                                    cr = CoderResult.malformedForLength(1);
-                                    toUBytesArray[0] = (byte)b;
-                                    toULength = 1;
-                                    label = EndLoop;
-                                    return label;
-                                }
-                                break;
-                            case quotePairOne:
-                                byteOne = b;
-                                toUBytesArray[1] = (byte)b;
-                                toULength = 2;
-                                state = quotePairTwo;
-                                break;
-                            case quotePairTwo:
-                                target.put((char)((byteOne<<8) | b));
-                                if(offsets != null){
-                                    offsets.put(sourceIndex);
-                                }
-                                sourceIndex = nextSourceIndex;
-                                state = readCommand;
-                                label = FastSingle;
-                                return label;
+                    b = source.get();
+                    ++nextSourceIndex;
+                    switch(state){
+                    case readCommand:
+                        if((byte)(b -UC0)>(Urs - UC0)){
+                            byteOne = b;
+                            toUBytesArray[0] = (byte)b;
+                            toULength = 1;
+                            state = quotePairOne;
+                        }else if((b&UConverterConstants.UNSIGNED_BYTE_MASK) <= UC7){
+                            dynamicWindow = (byte)(b - UC0);
+                            sourceIndex = nextSourceIndex;
+                            isSingleByteMode = true;
+                            label = FastSingle;
+                            return label;
+                        }else if((b&UConverterConstants.UNSIGNED_BYTE_MASK) <= UD7){
+                            dynamicWindow = (byte)(b - UD0);
+                            isSingleByteMode = true;
+                            toUBytesArray[0] = (byte)b;
+                            toULength = 1;
+                            state = defineOne;
+                            label = SingleByteMode;
+                            return label;
+                        }else if((b&UConverterConstants.UNSIGNED_BYTE_MASK) == UDX){
+                            isSingleByteMode = true;
+                            toUBytesArray[0] = (byte)b;
+                            toULength = 1;
+                            state = definePairOne;
+                            label = SingleByteMode;
+                            return label;
+                        }else if((b&UConverterConstants.UNSIGNED_BYTE_MASK) == UQU){
+                            toUBytesArray[0] = (byte)b;
+                            toULength = 1;
+                            state = quotePairOne;
+                        }else {
+                            /* callback (illegal)*/
+                            cr = CoderResult.malformedForLength(1);
+                            toUBytesArray[0] = (byte)b;
+                            toULength = 1;
+                            label = EndLoop;
+                            return label;
                         }
-                 //   }
+                        break;
+                    case quotePairOne:
+                        byteOne = b;
+                        toUBytesArray[1] = (byte)b;
+                        toULength = 2;
+                        state = quotePairTwo;
+                        break;
+                    case quotePairTwo:
+                        target.put((char)((byteOne<<8) | b));
+                        if(offsets != null){
+                            offsets.put(sourceIndex);
+                        }
+                        sourceIndex = nextSourceIndex;
+                        state = readCommand;
+                        label = FastSingle;
+                        return label;
+                    }
                 }
             }
-            //LabelLoop = false;
             label = EndLoop;
             return label;
         }
@@ -598,9 +588,7 @@ class CharsetSCSU extends CharsetICU{
             data.toUByteOne = byteOne;
             LabelLoop = false;
         }
-        
     }
-    
     
     class CharsetEncoderSCSU extends CharsetEncoderICU{
         public CharsetEncoderSCSU(CharsetICU cs) {
@@ -620,14 +608,14 @@ class CharsetSCSU extends CharsetICU{
         private static final int OutputBytes=2;
         private static final int EndLoop =3;
         
-        int delta;
-        int length;
+        private int delta;
+        private int length;
         
         ///variables of compression heuristics
-        int offset;
-        char lead, trail;
-        int code;
-        byte window;
+        private int offset;
+        private char lead, trail;
+        private int code;
+        private byte window;
         
         //Get the state machine state 
         private boolean isSingleByteMode;
@@ -675,18 +663,18 @@ class CharsetSCSU extends CharsetICU{
             
             while(LabelLoop){
                 switch(labelType){
-                    case Loop:
-                        labelType = loop(source, target, offsets);
-                        break;
-                    case GetTrailUnicode:
-                        labelType = getTrailUnicode(source, target, offsets);
-                        break;
-                    case OutputBytes:
-                        labelType = outputBytes(source, target, offsets);
-                        break;
-                    case EndLoop:
-                        endLoop(source, target, offsets);
-                        break;
+                case Loop:
+                    labelType = loop(source, target, offsets);
+                    break;
+                case GetTrailUnicode:
+                    labelType = getTrailUnicode(source, target, offsets);
+                    break;
+                case OutputBytes:
+                    labelType = outputBytes(source, target, offsets);
+                    break;
+                case EndLoop:
+                    endLoop(source, target, offsets);
+                    break;
                 }
             }
             return cr;
@@ -768,7 +756,6 @@ class CharsetSCSU extends CharsetICU{
             }else{
                 return -1;
             }
-                
         }
         
         private int loop(CharBuffer source, ByteBuffer target, IntBuffer offsets){
@@ -966,7 +953,7 @@ class CharsetSCSU extends CharsetICU{
                 }
             
                 /*state machine for Unicode*/
-           /*unicodeByteMode*/
+                /*unicodeByteMode*/
                 while(AfterGetTrailUnicode || source.hasRemaining()){
                     if(targetCapacity<=0 && !AfterGetTrailUnicode){
                         /*target is full*/
@@ -1278,7 +1265,6 @@ class CharsetSCSU extends CharsetICU{
         }
         
     }
-    
     
     public CharsetDecoder newDecoder() {
         return new CharsetDecoderSCSU(this);
