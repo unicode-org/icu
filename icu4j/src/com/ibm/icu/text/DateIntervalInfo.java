@@ -26,6 +26,17 @@ import com.ibm.icu.util.UResourceBundle;
  * date time interval patterns. It is used by DateIntervalFormat.
  *
  * <P>
+ * For most users, ordinary use of DateIntervalFormat does not need to create
+ * DateIntervalInfo object directly.
+ * DateIntervalFormat will take care of it when creating a date interval
+ * formatter when user pass in skeleton and locale.
+ *
+ * <P>
+ * For power users, who want to create their own date interval patterns,
+ * or want to re-set date interval patterns, they could do so by
+ * directly creating DateIntervalInfo and manupulating it.
+ *
+ * <P>
  * Logically, the interval patterns are mappings
  * from (skeleton, the_largest_different_calendar_field)
  * to (date_interval_pattern).
@@ -109,7 +120,7 @@ import com.ibm.icu.util.UResourceBundle;
  * <P>
  * Users can also create DateIntervalFormat object 
  * by supplying their own interval patterns.
- * It provides flexibility for powerful usage.
+ * It provides flexibility for power usage.
  *
  * <P>
  * After a DateIntervalInfo object is created, clients may modify
@@ -272,10 +283,13 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
 
     /**
      * Create empty instance.
-     * It does not initialize any interval patterns.
+     * It does not initialize any interval patterns except
+     * that it initialize default fall-back pattern as "{0} - {1}",
+     * which can be reset by setFallbackIntervalPattern().
+     *
      * It should be followed by setFallbackIntervalPattern() and 
      * setIntervalPattern(), 
-     * and is recommended to be used only for powerful users who
+     * and is recommended to be used only for power users who
      * wants to create their own interval patterns and use them to create
      * date interval formatter.
      * @internal ICU 4.0
@@ -485,7 +499,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
     /** 
      * Provides a way for client to build interval patterns.
      * User could construct DateIntervalInfo by providing 
-     * a list of patterns.
+     * a list of skeletons and their patterns.
      * <P>
      * For example:
      * <pre>
@@ -670,21 +684,13 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
 
 
     /**
-     * Set the fallback interval pattern.
-     * Fall-back interval pattern is get from locale resource.
-     * If a user want to set their own fall-back interval pattern,
-     * they can do so by calling the following method.
-     * For users who construct DateIntervalInfo() by default constructor,
-     * all interval patterns ( including fall-back ) are not set,
-     * those users need to call setIntervalPattern() to set their own
-     * interval patterns, and call setFallbackIntervalPattern() to set
-     * their own fall-back interval patterns. If a certain interval pattern
-     * ( for example, the interval pattern when 'year' is different ) is not
-     * found, fall-back pattern will be used. 
-     * For those users who set all their patterns ( instead of calling 
-     * non-defaul constructor to let constructor get those patterns from 
-     * locale ), if they do not set the fall-back interval pattern, 
-     * it will be fall-back to '{date0} - {date1}'.
+     * Re-set the fallback interval pattern.
+     *
+     * In construction, default fallback pattern is set as "{0} - {1}".
+     * And constructor taking locale as parameter will set the
+     * fallback pattern as what defined in the locale resource file.
+     *
+     * This method provides a way for user to replace the fallback pattern.
      *
      * @param fallbackPattern     fall-back interval pattern.
      * @throws UnsupportedOperationException  if the object is frozen
@@ -706,8 +712,11 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
 
 
     /**
-     * Get default order
-     * return default date ordering in interval pattern
+     * Get default order -- whether the first date in pattern is later date
+     *                      or not.
+     *
+     * return default date ordering in interval pattern. TRUE if the first date 
+     *        in pattern is later date, FALSE otherwise.
      * @draft ICU 4.0 
      * @provisional This API might change or be removed in a future release.
      */

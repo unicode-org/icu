@@ -1421,7 +1421,20 @@ public class DateIntervalFormat extends UFormat {
                 DateIntervalInfo.CALENDAR_FIELD_TO_PATTERN_LETTER[field];
             bestSkeleton = fieldLetter + bestSkeleton;
             skeleton = fieldLetter + skeleton;
+            // for example, looking for patterns when 'y' differ for
+            // skeleton "MMMM".
             pattern = fInfo.getIntervalPattern(bestSkeleton, field);
+            if ( pattern == null && differenceInfo == 0 ) {
+                // if there is no skeleton "yMMMM" defined,
+                // look for the best match skeleton, for example: "yMMM"
+                BestMatchInfo tmpRetValue = fInfo.getBestSkeleton(skeleton);
+                String tmpBestSkeleton = tmpRetValue.bestMatchSkeleton;
+                differenceInfo =  tmpRetValue.bestMatchDistanceInfo;
+                if ( tmpBestSkeleton.length() != 0 && differenceInfo != -1 ) {
+                    pattern = fInfo.getIntervalPattern(tmpBestSkeleton, field);
+                    bestSkeleton = tmpBestSkeleton;
+                }
+            }
             if ( pattern != null ) {
                 retValue = new SkeletonAndItsBestMatch(skeleton, bestSkeleton);
             }
