@@ -122,9 +122,9 @@ public abstract class CharsetICU extends Charset{
         algorithmicCharsets.put("lmbcs5",                "com.ibm.icu.charset.CharsetLMBCS5" );
         algorithmicCharsets.put("lmbcs6",                "com.ibm.icu.charset.CharsetLMBCS6" );
         algorithmicCharsets.put("lmbcs8",                "com.ibm.icu.charset.CharsetLMBCS8" );
+        */
         algorithmicCharsets.put("BOCU-1",                "com.ibm.icu.charset.CharsetBOCU1" );
         algorithmicCharsets.put("SCSU",                  "com.ibm.icu.charset.CharsetSCSU" ); 
-        */
         algorithmicCharsets.put("US-ASCII",              "com.ibm.icu.charset.CharsetASCII" );
         algorithmicCharsets.put("ISO-8859-1",            "com.ibm.icu.charset.Charset88591" );
         algorithmicCharsets.put("UTF-16",                "com.ibm.icu.charset.CharsetUTF16" );
