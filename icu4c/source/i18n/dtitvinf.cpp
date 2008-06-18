@@ -96,7 +96,11 @@ DateIntervalInfo::setIntervalPattern(const UnicodeString& skeleton,
 
 void
 DateIntervalInfo::setFallbackIntervalPattern(
-                                    const UnicodeString& fallbackPattern) {
+                                    const UnicodeString& fallbackPattern,
+                                    UErrorCode& status) {
+    if ( U_FAILURE(status) ) {
+        return;
+    }
     int32_t firstPatternIndex = fallbackPattern.indexOf(gFirstPattern, 
                         sizeof(gFirstPattern)/sizeof(gFirstPattern[0]), 0);
     int32_t secondPatternIndex = fallbackPattern.indexOf(gSecondPattern, 
@@ -187,6 +191,18 @@ DateIntervalInfo::getIntervalPattern(const UnicodeString& skeleton,
 }
 
 
+UBool
+DateIntervalInfo::getDefaultOrder() const {
+    return fFirstDateInPtnIsLaterDate;
+}
+
+
+const UnicodeString&
+DateIntervalInfo::getFallbackIntervalPattern() const {
+    return fFallbackIntervalPattern;
+}
+
+
 void 
 DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& err)
 {
@@ -220,7 +236,7 @@ DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& err)
                                              &resStrLen, &status);
         if ( U_SUCCESS(status) ) {
             UnicodeString pattern = UnicodeString(TRUE, resStr, resStrLen);
-            setFallbackIntervalPattern(pattern);
+            setFallbackIntervalPattern(pattern, status);
         }
 
         int32_t size = ures_getSize(itvDtPtnResource);
