@@ -1092,7 +1092,19 @@ DateIntervalFormat::setIntervalPattern(UCalendarDateFields field,
             *extendedBestSkeleton = *bestSkeleton;
             extendedSkeleton->insert(0, fieldLetter);
             extendedBestSkeleton->insert(0, fieldLetter);
+            // for example, looking for patterns when 'y' differ for
+            // skeleton "MMMM". 
             pattern = fInfo->getIntervalPattern(*extendedBestSkeleton, field, status);
+            if ( pattern == NULL && differenceInfo == 0 ) {
+                // if there is no skeleton "yMMMM" defined,
+                // look for the best match skeleton, for example: "yMMM" 
+                const UnicodeString* tmpBest = fInfo->getBestSkeleton(
+                                        *extendedBestSkeleton, differenceInfo);
+                if ( tmpBest != 0 && differenceInfo != -1 ) {
+                    pattern = fInfo->getIntervalPattern(*tmpBest, field, status);
+                    bestSkeleton = tmpBest;
+                }
+            }
         }
     } 
     if ( pattern != NULL ) {
