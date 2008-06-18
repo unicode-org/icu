@@ -436,6 +436,9 @@ public class TimeUnitFormat extends MeasureFormat {
             } else if ( timeUnit == TimeUnit.YEAR ) {
                 messageFormat = new MessageFormat(DEFAULT_PATTERN_FOR_YEAR, locale);
             }
+            if (format != null && messageFormat != null ) {
+                messageFormat.setFormatByArgumentIndex(0, format);
+            }
             countToPatterns.put(srcPluralCount, messageFormat);
         } else {
             // fall back to rule "other", and search in parents
