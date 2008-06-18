@@ -342,7 +342,7 @@ struct UCollationElements
 /**
  * Data for getNextProcessed, getPreviousProcessed.
  */
-        UCollationPCE     *pce;
+        U_NAMESPACE_QUALIFIER UCollationPCE     *pce;
 };
 
 
