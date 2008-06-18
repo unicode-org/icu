@@ -1568,11 +1568,12 @@ static void TestDiacriticMatch(void)
     	if (search.collator != NULL) {
     		coll = ucol_openFromShortString(search.collator, FALSE, NULL, &status);
     	} else {
-    		coll = ucol_open(uloc_getDefault(), &status);
+            /* Always use "en_US" because some of these tests fail in Danish locales. */
+    		coll = ucol_open("en_US"/*uloc_getDefault()*/, &status);
     		ucol_setStrength(coll, search.strength);
     	}
     	if (U_FAILURE(status)) {
-	        log_err("Error opening string search collator %s\n", u_errorName(status));
+	        log_err("Error opening string search collator(\"%s\") %s\n", search.collator, u_errorName(status));
 	        return;
 	    }
     	
