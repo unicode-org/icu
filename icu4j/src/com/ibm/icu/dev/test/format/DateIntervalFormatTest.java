@@ -89,7 +89,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             "en", "2007 10 10 10:10:10", "2008 10 10 10:10:10", "MMM", "Oct 2007 \\u2013 Oct 2008", 
             
-            "en", "2007 10 10 10:10:10", "2008 10 10 10:10:10", "MMMM", "October \\u2013 October", 
+            "en", "2007 10 10 10:10:10", "2008 10 10 10:10:10", "MMMM", "October 2007 \\u2013 October 2008", 
             
             "en", "2007 10 10 10:10:10", "2008 10 10 10:10:10", "hm", "10/10/2007 10:10 AM \\u2013 10/10/2008 10:10 AM", 
             
@@ -312,7 +312,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             "en", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "EdMMMy", "Wed, Jan 10, 2007", 
             
-            "en", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "dMMMy", "Jan/10/2007", 
+            "en", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "dMMMy", "Jan 10, 2007", 
             
             "en", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "dMMM", "Jan 10", 
             
