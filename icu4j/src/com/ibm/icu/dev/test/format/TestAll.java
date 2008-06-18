@@ -24,6 +24,7 @@ public class TestAll extends TestGroup {
                   "TestAll$NumberFormat",
                   "TestAll$DateFormat",
                   "TestAll$DateIntervalFormat",
+                  "TestAll$TimeUnitFormat",
                   "TestAll$MessageFormat",
                   "TestAll$PluralFormat",
                   "com.ibm.icu.dev.test.format.BigNumberFormatTest",
@@ -84,6 +85,14 @@ public class TestAll extends TestGroup {
         public DateIntervalFormat() {
             super(new String[] {
                 "DateIntervalFormatTest"
+            });
+        }
+    }
+    
+    public static class TimeUnitFormat extends TestGroup {
+        public TimeUnitFormat() {
+            super(new String[] {
+                "TimeUnitTest"
             });
         }
     }
