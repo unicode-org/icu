@@ -6,8 +6,6 @@
  */
 package com.ibm.icu.util;
 
-import com.ibm.icu.text.TimeUnitFormat;
-
 /**
  * Express a duration as a time unit and number. Patterned after Currency.
  * <p>Immutable.
