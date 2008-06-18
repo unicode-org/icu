@@ -70,8 +70,7 @@
         </taskdef>
     </target>
     <!-- target for generating ICU data -->
-    <target name="all" depends="locales, resfiles, collation, colfiles, supplementalData, metazoneInfo, translit, brkitr, brkfiles" />
-
+    <target name="all" depends="locales, resfiles, collation, colfiles, supplementalData, metazoneInfo, likelySubtags, plurals, translit, brkitr, brkfiles" />
     <!-- parallel target -->
     <target name="pall" depends="init">
         <parallel threadsPerProcessor ="1">
@@ -135,13 +134,13 @@
                     <alias from="iw" to="he" />
                     <alias from="iw_IL" to="he_IL" />
                     <alias from="ja_JP_TRADITIONAL" to="ja_JP@calendar=japanese" xpath="//ldml/dates/calendars/default[@type='japanese']"/>
-                    <alias from="no" to="nb"/>
-                    <alias from="no_NO" to="nb_NO"/>
+                    <alias from="no_NO" to="nb_NO" />
                     <alias from="no_NO_NY" to="nn_NO" />
                     <alias from="en_RH" to="en_ZW" />
                     <alias from="th_TH_TRADITIONAL" to="th_TH@calendar=buddhist" xpath="//ldml/dates/calendars/default[@type='buddhist']" />
                     <aliasLocale locale="az_AZ" />
                     <aliasLocale locale="ha_NG" />
+                    <aliasLocale locale="no" />
                     <aliasLocale locale="pa_IN" />
                     <aliasLocale locale="pa_PK" />
                     <aliasLocale locale="sh" />
@@ -253,6 +252,34 @@
             </run>
         </cldr-build>
     </target>
+    <target name="likelySubtags" depends="init,setup" description="builds likelySubtags.txt from likelySubtags.xml">
+        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" destFile="likelySubtags.txt" noArgs="true">
+            <!-- launch the tool and generate the data after reading the config file -->
+            <run>
+                <args>
+                    <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
+                    <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
+                    <arg name="-t"/>
+                    <arg name="-f"/>
+                    <arg name="-m" value="${env.CLDR_DIR}/common/supplemental" />
+                </args>
+            </run>
+        </cldr-build>
+    </target>
+    <target name="plurals" depends="init,setup" description="builds plurals.txt from plurals.xml">
+        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" destFile="plurals.txt" noArgs="true">
+            <!-- launch the tool and generate the data after reading the config file -->
+            <run>
+                <args>
+                    <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
+                    <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
+                    <arg name="-r"/>
+                    <arg name="-f"/>
+                    <arg name="-m" value="${env.CLDR_DIR}/common/supplemental" />
+                </args>
+            </run>
+        </cldr-build>
+    </target>
     <target name="brkitr" depends="init,setup" description="builds break iterator files in ICU text format">
         <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" srcFile=".*xml" destFile=".*txt">
             <run>
@@ -334,6 +361,12 @@
             </fileset>
             <fileset id="locales" dir="${env.ICU4C_DIR}/source/data/misc">
                 <include name="metazoneInfo.txt" />
+            </fileset>
+            <fileset id="locales" dir="${env.ICU4C_DIR}/source/data/misc">
+                <include name="likelySubtags.txt" />
+            </fileset>
+            <fileset id="plurals" dir="${env.ICU4C_DIR}/source/data/misc">
+                <include name="plurals.txt" />
             </fileset>
         </delete>
     </target>
