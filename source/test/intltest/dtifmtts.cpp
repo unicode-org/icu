@@ -31,20 +31,6 @@
 #ifdef DTIFMTTS_DEBUG 
 //#define PRINTMESG(msg) { std::cout << "(" << __FILE__ << ":" << __LINE__ << ") " << msg << "\n"; }
 #define PRINTMESG(msg) { std::cout << msg; }
-
-static void printUnicodeString(const UnicodeString& src) {
-    printf("\"");
-    for ( int i=0; i < src.length(); ++i ) {
-        UChar32 ch = src.char32At(i);
-        //printf("ch = \\\\u%x\n", ch);
-        if ( ch < 128 ) {
-		printf("%c", ch);
-	} else {
-               printf("\\\\u%04x", ch);
-	}
-    }
-    printf("\", ");
-}
 #endif
 
 #define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
@@ -292,6 +278,8 @@ void DateIntervalFormatTest::testFormat() {
     // followed by a group of locale/from_data/to_data/skeleton/interval_data
     const char* DATA[] = {
         "yyyy MM dd HH:mm:ss",    
+        "en", "2007 10 10 10:10:10", "2008 10 10 10:10:10", "MMMM", "October 2007 \\u2013 October 2008", 
+        "en", "2007 10 10 10:10:10", "2008 10 10 10:10:10", "MMM", "Oct 2007 \\u2013 Oct 2008", 
         // test skeleton with both date and time
         "en", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "dMMMyhm", "Nov 10, 2007 10:10 AM \\u2013 Nov 20, 2007 10:10 AM", 
         
@@ -337,9 +325,7 @@ void DateIntervalFormatTest::testFormat() {
         
         "en", "2007 10 10 10:10:10", "2008 10 10 10:10:10", "M", "10/07 \\u2013 10/08", 
         
-        "en", "2007 10 10 10:10:10", "2008 10 10 10:10:10", "MMM", "Oct 2007 \\u2013 Oct 2008", 
         
-        "en", "2007 10 10 10:10:10", "2008 10 10 10:10:10", "MMMM", "October \\u2013 October", 
         
         "en", "2007 10 10 10:10:10", "2008 10 10 10:10:10", "hm", "10/10/2007 10:10 AM \\u2013 10/10/2008 10:10 AM", 
         
@@ -1000,7 +986,7 @@ void DateIntervalFormatTest::expectUserDII(const char** data,
         ec = U_ZERO_ERROR;
         // test user created DateIntervalInfo
         DateIntervalInfo* dtitvinf = new DateIntervalInfo(ec);
-        dtitvinf->setFallbackIntervalPattern("{0} --- {1}");
+        dtitvinf->setFallbackIntervalPattern("{0} --- {1}", ec);
         dtitvinf->setIntervalPattern(UDAT_YEAR_ABBR_MONTH_DAY, UCAL_MONTH, "yyyy MMM d - MMM y",ec);
         if (!assertSuccess("DateIntervalInfo::setIntervalPattern", ec)) return;
         dtitvinf->setIntervalPattern(UDAT_YEAR_ABBR_MONTH_DAY, UCAL_HOUR_OF_DAY, "yyyy MMM d HH:mm - HH:mm", ec);
@@ -1192,7 +1178,7 @@ void DateIntervalFormatTest::stress(const char** data, int32_t data_length,
         // test user created DateIntervalInfo
         ec = U_ZERO_ERROR;
         DateIntervalInfo* dtitvinf = new DateIntervalInfo(ec);
-        dtitvinf->setFallbackIntervalPattern("{0} --- {1}");
+        dtitvinf->setFallbackIntervalPattern("{0} --- {1}", ec);
         dtitvinf->setIntervalPattern(UDAT_YEAR_ABBR_MONTH_DAY, UCAL_MONTH, "yyyy MMM d - MMM y",ec);
         if (!assertSuccess("DateIntervalInfo::setIntervalPattern", ec)) return;
         dtitvinf->setIntervalPattern(UDAT_YEAR_ABBR_MONTH_DAY, UCAL_HOUR_OF_DAY, "yyyy MMM d HH:mm - HH:mm", ec);
