@@ -31,7 +31,9 @@ icu4c/source/data/locales/si.txt -text
 icu4c/source/data/locales/si_LK.txt -text
 icu4c/source/data/locales/zh_Hans_HK.txt -text
 icu4c/source/data/locales/zh_Hans_MO.txt -text
+icu4c/source/data/misc/likelySubtags.txt -text
 icu4c/source/data/misc/metazoneInfo.txt svneol=native#text/plain
+icu4c/source/data/misc/plurals.txt -text
 icu4c/source/data/xml/brkitr/en.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/en_US.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/en_US_POSIX.xml svneol=native#text/xml
