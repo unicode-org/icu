@@ -30,13 +30,13 @@ class CharsetSCSU extends CharsetICU{
     private static final short SQ0=0x01; /* Quote from window pair 0 */
     private static final short SQ7=0x08; /* Quote from window pair 7 */
     private static final short SDX=0x0B; /* Define a window as extended */
-    private static final short Srs=0x0C; /* reserved */
+    //private static final short Srs=0x0C; /* reserved */
     private static final short SQU=0x0E; /* Quote a single Unicode character */
     private static final short SCU=0x0F; /* Change to Unicode mode */
     private static final short SC0=0x10; /* Select window 0 */
     private static final short SC7=0x17; /* Select window 7 */
     private static final short SD0=0x18; /* Define and select window 0 */
-    private static final short SD7=0x1F; /* Define and select window 7 */
+    //private static final short SD7=0x1F; /* Define and select window 7 */
     
     private static final short UC0=0xE0; /* Select window 0 */
     private static final short UC7=0xE7; /* Select window 7 */
@@ -61,7 +61,7 @@ class CharsetSCSU extends CharsetICU{
     private static final int fixedThreshold=0xF;
     //};
     
-    protected byte[] fromUSubstitution = new byte[]{(byte)0x1A};
+    protected byte[] fromUSubstitution = new byte[]{(byte)0x0E,(byte)0xFF, (byte)0xFD};
     
     /* constant offsets for the 8 static windows */
     private static final int staticOffsets[]={
@@ -176,7 +176,7 @@ class CharsetSCSU extends CharsetICU{
     static final byte initialWindowUse_ja[]={ 3, 2, 4, 1, 0, 7, 5, 6 };
 
     //enum {
-    private static final int lGeneric = 0;
+    //private static final int lGeneric = 0;
     private static final int l_ja = 1;
     //};
     
@@ -184,7 +184,7 @@ class CharsetSCSU extends CharsetICU{
     
     public CharsetSCSU(String icuCanonicalName, String javaCanonicalName, String[] aliases){
         super(icuCanonicalName, javaCanonicalName, aliases);
-        maxBytesPerChar = 4; 
+        maxBytesPerChar = 3; 
         minBytesPerChar = 1;
         maxCharsPerByte = 1;
         extraInfo = new SCSUData();
@@ -193,7 +193,7 @@ class CharsetSCSU extends CharsetICU{
     
     class CharsetDecoderSCSU extends CharsetDecoderICU {
         
-        /* label Values */
+        /* label values for supporting behavior similar to goto in C */
         private static final int FastSingle=0;
         private static final int SingleByteMode=1;
         private static final int EndLoop=2;
@@ -223,57 +223,62 @@ class CharsetSCSU extends CharsetICU{
         private byte quoteWindow ;
         private byte dynamicWindow ;
         private short byteOne;
-        private boolean LabelLoop;
+        
         
         //sourceIndex=-1 if the current character began in the previous buffer
         private int sourceIndex  ;
         private int nextSourceIndex ;
         
+        CoderResult cr;
+        SCSUData data ;
+        private boolean LabelLoop;// used to break the while loop
+        
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets,
                 boolean flush){
-            SCSUData data ;
             data = extraInfo;
+            
             //Get the state machine state 
             isSingleByteMode = data.toUIsSingleByteMode;
             state = data.toUState;
             quoteWindow = data.toUQuoteWindow;
             dynamicWindow = data.toUDynamicWindow;
             byteOne = data.toUByteOne;
+            
             LabelLoop = true;
             
             //sourceIndex=-1 if the current character began in the previous buffer
             sourceIndex = data.toUState == readCommand ? 0: -1 ;
             nextSourceIndex = 0;
             
-            CoderResult cr = CoderResult.UNDERFLOW;
+            cr = CoderResult.UNDERFLOW;
             int labelType = 0;
             while(LabelLoop){
                 if(isSingleByteMode){
                     switch(labelType){
                         case FastSingle:
                             /*fast path for single-byte mode*/
-                            labelType = fastSingle(source, target, offsets, data, cr, ByteMode);
+                            labelType = fastSingle(source, target, offsets, ByteMode);
                             break;
                         case SingleByteMode:
                             /* normal state machine for single-byte mode, minus handling for what fastSingleCovers */
-                            labelType = singleByteMode(source, target, offsets, data,cr, ByteMode);
+                            labelType = singleByteMode(source, target, offsets, ByteMode);
                             break;
                         case EndLoop:
-                            endLoop(source, target, offsets,data, cr);
+                            endLoop(source, target, offsets);
                             break;
                     }
                 }else{
                     switch(labelType){
                         case FastSingle:
                             /*fast path for single-byte mode*/
-                            labelType = fastSingle(source, target, offsets, data,cr, UnicodeMode);
+                            labelType = fastSingle(source, target, offsets, UnicodeMode);
                             break;
                         case SingleByteMode:
                             /* normal state machine for single-byte mode, minus handling for what fastSingleCovers */
-                            labelType = singleByteMode(source, target, offsets, data,cr, UnicodeMode);
+                            labelType = singleByteMode(source, target, offsets, UnicodeMode);
                             break;
                         case EndLoop:
-                            endLoop(source, target, offsets, data, cr);
+                            endLoop(source, target, offsets);
                             break;
                     }
                     //LabelLoop = false;
@@ -282,7 +287,7 @@ class CharsetSCSU extends CharsetICU{
             return cr;
         }
         
-        private int fastSingle(ByteBuffer source, CharBuffer target, IntBuffer offsets, SCSUData data,CoderResult cr, int modeType){
+        private int fastSingle(ByteBuffer source, CharBuffer target, IntBuffer offsets, int modeType){
             int label = 0;
             if(modeType==ByteMode){
                 
@@ -349,7 +354,7 @@ class CharsetSCSU extends CharsetICU{
             return label;
         }
         
-        private int singleByteMode(ByteBuffer source, CharBuffer target, IntBuffer offsets, SCSUData data,CoderResult cr, int modeType){
+        private int singleByteMode(ByteBuffer source, CharBuffer target, IntBuffer offsets, int modeType){
             int label = SingleByteMode;
             if(modeType == ByteMode){
                 while(source.hasRemaining()){
@@ -580,8 +585,10 @@ class CharsetSCSU extends CharsetICU{
             return label;
         }
         
-        private void endLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, SCSUData data, CoderResult cr){
-            if(state == readCommand){
+        private void endLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets){
+            if(cr==CoderResult.OVERFLOW){
+                state = readCommand;
+            }else if(state == readCommand){
                 toULength = 0;
             }
             data.toUIsSingleByteMode = isSingleByteMode;
@@ -607,8 +614,8 @@ class CharsetSCSU extends CharsetICU{
             extraInfo.initialize();
         }
         
-        /* label Values */
-        private static final int Loop=0;
+        /* label values for supporting behavior similar to goto in C */
+        private static final int Loop=0; 
         private static final int GetTrailUnicode=1;
         private static final int OutputBytes=2;
         private static final int EndLoop =3;
@@ -625,94 +632,108 @@ class CharsetSCSU extends CharsetICU{
         //Get the state machine state 
         private boolean isSingleByteMode;
         private byte dynamicWindow ;
-        private boolean LabelLoop;
         private int currentOffset;
-        int c = fromUChar32;
+        int c;
         
+        SCSUData data ;
         
         //sourceIndex=-1 if the current character began in the previous buffer
-        private int sourceIndex = c== 0 ? 0: -1 ;
-        private int nextSourceIndex = 0;
+        private int sourceIndex ;
+        private int nextSourceIndex;
         private int targetCapacity;
         
+        private boolean LabelLoop;//used to break the while loop
+        private boolean AfterGetTrail;// its value is set to true in order to ignore the code before getTrailSingle:
+        private boolean AfterGetTrailUnicode;// is value is set to true in order to ignore the code before getTrailUnicode:
+        
+        CoderResult cr;
+        
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
-            CoderResult[] cr = {CoderResult.UNDERFLOW};
-            SCSUData data ;
             data = extraInfo;
+            cr = CoderResult.UNDERFLOW;
+            
             //Get the state machine state 
             isSingleByteMode = data.fromUIsSingleByteMode;
             dynamicWindow = data.fromUDynamicWindow;
-            LabelLoop = true;
             currentOffset = data.fromUDynamicOffsets[dynamicWindow];
-            int c = fromUChar32;
+            c = fromUChar32;
+            
+            sourceIndex = c== 0 ? 0: -1 ;
+            nextSourceIndex = 0;
+                        
             
             targetCapacity = target.limit()-target.position();
+            
             //sourceIndex=-1 if the current character began in the previous buffer
             sourceIndex = c== 0 ? 0: -1 ;
             nextSourceIndex = 0;
             
-            int labelType = 0;
+            int labelType = Loop; // set to Loop so that the code starts from loop:
+            LabelLoop = true; 
+            AfterGetTrail = false; 
+            AfterGetTrailUnicode = false; 
+            
             while(LabelLoop){
                 switch(labelType){
                     case Loop:
-                        labelType = loop(source, target, offsets, data,cr);
+                        labelType = loop(source, target, offsets);
                         break;
                     case GetTrailUnicode:
-                        labelType = getTrailUnicode(source, target, offsets, data,cr);
+                        labelType = getTrailUnicode(source, target, offsets);
                         break;
                     case OutputBytes:
-                        labelType = outputBytes(source, target, offsets, data, cr);
+                        labelType = outputBytes(source, target, offsets);
                         break;
                     case EndLoop:
-                        endLoop(source, target, offsets, data, cr);
+                        endLoop(source, target, offsets);
                         break;
                 }
             }
-            return cr[0];
+            return cr;
         }
         
-        private byte getWindow(int[] offsets, int c){
+        private byte getWindow(int[] offsets){
             int i;
             for (i=0;i<8;i++){
-                if((int)((c-offsets[i]) & UConverterConstants.UNSIGNED_SHORT_MASK) <= 0x7f){
+                if(((c-offsets[i]) & UConverterConstants.UNSIGNED_INT_MASK) <= 0x7f){
                     return (byte)i;
                 }
             }
             return -1;
         }
         
-        private boolean isInOffsetWindowOrDirect(int offset, int c){
-            return (boolean)((c & UConverterConstants.UNSIGNED_SHORT_MASK)<=(offset & UConverterConstants.UNSIGNED_SHORT_MASK)+0x7f & 
-                    ((c & UConverterConstants.UNSIGNED_SHORT_MASK)>=(offset & UConverterConstants.UNSIGNED_SHORT_MASK) || 
-                            ((c & UConverterConstants.UNSIGNED_SHORT_MASK)<=0x7f && ((c & UConverterConstants.UNSIGNED_SHORT_MASK)>=0x20 
-                                    || ((1L<<(c & UConverterConstants.UNSIGNED_SHORT_MASK))&0x2601)!=0))));
+        private boolean isInOffsetWindowOrDirect(int offsetValue, int a){
+            return (boolean)((a & UConverterConstants.UNSIGNED_INT_MASK)<=(offsetValue & UConverterConstants.UNSIGNED_INT_MASK)+0x7f & 
+                    ((a & UConverterConstants.UNSIGNED_INT_MASK)>=(offsetValue & UConverterConstants.UNSIGNED_INT_MASK) || 
+                            ((a & UConverterConstants.UNSIGNED_INT_MASK)<=0x7f && ((a & UConverterConstants.UNSIGNED_INT_MASK)>=0x20 
+                                    || ((1L<<(a & UConverterConstants.UNSIGNED_INT_MASK))&0x2601)!=0))));
         }
         
-        private byte getNextDynamicWindow(SCSUData scsu){
-            byte window = scsu.windowUse[scsu.nextWindowUseIndex];
-            if(++scsu.nextWindowUseIndex==8){
-                scsu.nextWindowUseIndex=0;
+        private byte getNextDynamicWindow(){
+            byte windowValue = data.windowUse[data.nextWindowUseIndex];
+            if(++data.nextWindowUseIndex==8){
+                data.nextWindowUseIndex=0;
             }
-            return window;
+            return windowValue;
         }
         
-        private void useDynamicWindow(SCSUData scsu, byte window){
+        private void useDynamicWindow(byte windowValue){
             /*first find the index of the window*/
             int i,j;
-            i = scsu.nextWindowUseIndex;
+            i = data.nextWindowUseIndex;
             do{
                 if(--i<0){
                     i=7;
                 }
-            }while(scsu.windowUse[i]!=window);
+            }while(data.windowUse[i]!=windowValue);
             
             /*now copy each window[i+1] to [i]*/
             j= i+1;
             if(j==8){
                 j=0;
             }
-            while(j!=scsu.nextWindowUseIndex){
-                scsu.windowUse[i] = scsu.windowUse[j];
+            while(j!=data.nextWindowUseIndex){
+                data.windowUse[i] = data.windowUse[j];
                 i=j;
                 if(++j==8){
                     j=0;
@@ -720,29 +741,29 @@ class CharsetSCSU extends CharsetICU{
             }
             
             /*finally, set the window into the most recently used index*/
-            scsu.windowUse[i]= window;
+            data.windowUse[i]= windowValue;
         }
         
         
-       private int getDynamicOffset(int c){
+       private int getDynamicOffset(){
             int i;
             for(i=0;i<7;++i){
-                if(((c-fixedOffsets[i])&UConverterConstants.UNSIGNED_SHORT_MASK)<=0x7f){
+                if(((c-fixedOffsets[i])&UConverterConstants.UNSIGNED_INT_MASK)<=0x7f){
                     offset = fixedOffsets[i];
                     return 0xf9+i;
                 }
             }
-            if((c&UConverterConstants.UNSIGNED_SHORT_MASK)<0x80){
+            if((c&UConverterConstants.UNSIGNED_INT_MASK)<0x80){
                 /*No dynamic window for US-ASCII*/
                 return -1;
-            }else if(c<0x3400 || ((c-0x10000)&UConverterConstants.UNSIGNED_INT_MASK)<(0x14000-0x10000) || 
+            }else if((c&UConverterConstants.UNSIGNED_INT_MASK)<0x3400 || ((c-0x10000)&UConverterConstants.UNSIGNED_INT_MASK)<(0x14000-0x10000) || 
                     ((c-0x1d000)&UConverterConstants.UNSIGNED_INT_MASK)<=(0x1ffff-0x1d000)){
                 /*This character is in the code range for a "small", i.e, reasonably windowable, script*/
-                offset = (c&UConverterConstants.UNSIGNED_SHORT_MASK)&0x7fffff80;
+                offset = c&0x7fffff80;
                 return (int)(c>>7);
-            }else if(0xe000<=c && c!=0xfeff && c < 0xfff0){
+            }else if(0xe000<=(c&UConverterConstants.UNSIGNED_INT_MASK) && (c&UConverterConstants.UNSIGNED_INT_MASK)!=0xfeff && (c&UConverterConstants.UNSIGNED_INT_MASK) < 0xfff0){
                 /*for these characters we need to take the gapOffset into account*/
-                offset=(c&UConverterConstants.UNSIGNED_SHORT_MASK)&0x7fffff80;
+                offset=(c)&0x7fffff80;
                 return (int)((c-gapOffset)>>7);
             }else{
                 return -1;
@@ -750,33 +771,35 @@ class CharsetSCSU extends CharsetICU{
                 
         }
         
-        private int loop(CharBuffer source, ByteBuffer target, IntBuffer offsets, SCSUData data,CoderResult[] cr){
+        private int loop(CharBuffer source, ByteBuffer target, IntBuffer offsets){
             int label = 0;
-            //int targetCapacity = target.limit()-target.position();
             if(isSingleByteMode){
-                if(c!=0 && targetCapacity>0){
-                    label = getTrail(source, target, offsets,data, cr, c);
+                if(c!=0 && targetCapacity>0 && !AfterGetTrail){
+                    label = getTrail(source, target, offsets);
                     return label;
                 }
                 /*state machine for single byte mode*/
-                while(source.hasRemaining()){
-                    if(target.capacity()<=0){
+                while(AfterGetTrail || source.hasRemaining()){
+                    if(targetCapacity<=0 && !AfterGetTrail){
                         /*target is full*/
-                        cr[0] = CoderResult.OVERFLOW;
-                        LabelLoop = false;
-                        break;
+                        cr = CoderResult.OVERFLOW;
+                        label = EndLoop;
+                        return label;
                     }
-                    c = source.get();
-                    ++nextSourceIndex;
-                    if((c -0x20)<=0x5f){
+                    if(!AfterGetTrail){
+                        c = source.get();
+                        ++nextSourceIndex;
+                        
+                    }
+                    if(((c -0x20)&UConverterConstants.UNSIGNED_INT_MASK)<=0x5f && !AfterGetTrail){
                         /*pass US-ASCII graphic character through*/
                         target.put((byte)c);
                         if(offsets!=null){
                             offsets.put(sourceIndex);
                         }
                         --targetCapacity;
-                    }else if((c & UConverterConstants.UNSIGNED_SHORT_MASK)<0x20){
-                        if(((1L<<(c & UConverterConstants.UNSIGNED_SHORT_MASK))&0x2601)!=0){
+                    }else if((c & UConverterConstants.UNSIGNED_INT_MASK)<0x20 && !AfterGetTrail){
+                        if(((1L<<(c & UConverterConstants.UNSIGNED_INT_MASK))&0x2601)!=0){
                             /*CR/LF/TAB/NUL*/
                             target.put((byte)c);
                             if(offsets!=null){
@@ -790,24 +813,32 @@ class CharsetSCSU extends CharsetICU{
                             label = OutputBytes;
                             return label;
                         }
-                    } else if(((delta=(c-currentOffset))&UConverterConstants.UNSIGNED_INT_MASK)<=0x7f){
+                    } else if(((delta=(c-currentOffset))&UConverterConstants.UNSIGNED_INT_MASK)<=0x7f && !AfterGetTrail){
                         /*use the current dynamic window*/
                         target.put((byte)(delta|0x80));
                         if(offsets!=null){
                             offsets.put(sourceIndex);
                         }
                         --targetCapacity;
-                    } else if(UTF16.isSurrogate((char)c)){
-                        if(UTF16.isLeadSurrogate((char)c)){
-                            label = getTrail(source, target, offsets,data,cr, c);
-                            if(label==EndLoop){
+                    } else if(AfterGetTrail || UTF16.isSurrogate((char)c)){
+                        if(!AfterGetTrail){
+                            if(UTF16.isLeadSurrogate((char)c)){
+                                label = getTrail(source, target, offsets);
+                                if(label==EndLoop){
+                                    return label;
+                                }
+                            } else {
+                                /*this is unmatched lead code unit (2nd Surrogate)*/
+                                /*callback(illegal)*/
+                                cr = CoderResult.malformedForLength(1);
+                                label = EndLoop;
                                 return label;
                             }
-                        } else {
-                            /*this is unmatched lead code unit (2nd Surrogate)*/
-                            /*callback(illegal)*/
-                            cr[0] = CoderResult.malformedForLength(1);
-                            label = EndLoop;
+                        }
+                                                
+                        
+                        if(AfterGetTrail){
+                            AfterGetTrail = false;
                         }
                         
                         /*Compress supplementary character U+10000...U+10ffff */
@@ -818,24 +849,26 @@ class CharsetSCSU extends CharsetICU{
                                 offsets.put(sourceIndex);
                             }
                             --targetCapacity;
-                        } else if((window=getWindow(data.fromUDynamicOffsets, c))>=0){
+                        } else if((window=getWindow(data.fromUDynamicOffsets))>=0){
                             /*there is a dynamic window that contains this character, change to it*/
                             dynamicWindow = window;
                             currentOffset = data.fromUDynamicOffsets[dynamicWindow];
-                            useDynamicWindow(data, dynamicWindow);
+                            useDynamicWindow(dynamicWindow);
                             c = (((int)(SC0+dynamicWindow))<<8 | (c-currentOffset)|0x80);
                             length = 2;
                             label  = OutputBytes;
                             return label;
-                        } else if((code=getDynamicOffset(c))>=0){
+                        } else if((code=getDynamicOffset())>=0){
                             /*might check if there are come character in this window to come */
                             /*define an extended window with this character*/
                             code-=0x200;
-                            dynamicWindow=getNextDynamicWindow(data);
+                            dynamicWindow=getNextDynamicWindow();
                             currentOffset = data.fromUDynamicOffsets[dynamicWindow]=offset;
-                            useDynamicWindow(data, dynamicWindow);
-                            c = ((int)(SDX<<25) | (int)(dynamicWindow<<21)|
-                                  (int)(code<<8)| (c- currentOffset) |0x80  );
+                            useDynamicWindow(dynamicWindow);
+                            c = ((int)(SDX<<24) | (int)(dynamicWindow<<21)|
+                                 (int)(code<<8)| (c- currentOffset) |0x80  );
+                           // c = (((SDX)<<25) | (dynamicWindow<<21)|
+                             //           (code<<8)| (c- currentOffset) |0x80  );
                             length = 4;
                             label = OutputBytes;
                             return label;
@@ -852,13 +885,13 @@ class CharsetSCSU extends CharsetICU{
                             label = OutputBytes;
                             return label;
                         }
-                    } else if(c<0xa0){
+                    } else if((c&UConverterConstants.UNSIGNED_INT_MASK)<0xa0){
                         /*quote C1 control character*/
                         c = (c&0x7f) | (SQ0+1)<<8; /*SQ0+1 == SQ1*/
                         length = 2;
                         label = OutputBytes;
                         return label;
-                    } else if(c==0xfeff || c>= 0xfff0){
+                    } else if((c&UConverterConstants.UNSIGNED_INT_MASK)==0xfeff || (c&UConverterConstants.UNSIGNED_INT_MASK)>= 0xfff0){
                         /*quote signature character = byte order mark and specials*/
                         c |= SQU<<16;
                         length = 3;
@@ -866,13 +899,13 @@ class CharsetSCSU extends CharsetICU{
                         return label;
                     } else {
                         /*compress all other BMP characters*/
-                        if((window=getWindow(data.fromUDynamicOffsets, c))>=0){
+                        if((window=getWindow(data.fromUDynamicOffsets))>=0){
                             /*there is a window defined that contains this character - switch to it or quote from it*/
                             if(source.position()>=source.limit() || isInOffsetWindowOrDirect(data.fromUDynamicOffsets[window], source.get(source.position()))){
                                 /*change to dynamic window*/
                                 dynamicWindow = window;
                                 currentOffset = data.fromUDynamicOffsets[dynamicWindow];
-                                useDynamicWindow(data, dynamicWindow);
+                                useDynamicWindow(dynamicWindow);
                                 c = ((int)((SC0+window)<<8)) | (c- currentOffset) | 0x80;
                                 length = 2;
                                 label = OutputBytes;
@@ -885,24 +918,25 @@ class CharsetSCSU extends CharsetICU{
                                 label = OutputBytes;
                                 return label;
                             }
-                        } else if((window = getWindow(staticOffsets, c))>=0){
+                        } else if((window = getWindow(staticOffsets))>=0){
                             /*quote from static window*/
                             c = ((int)((SQ0+window)<<8)) | (c - staticOffsets[window]);
                             length = 2;
                             label = OutputBytes;
                             return label;
-                        }else if((code=getDynamicOffset(c))>=0){
+                        }else if((code=getDynamicOffset())>=0){
                             /*define a dynamic window with this character*/
-                            dynamicWindow = getNextDynamicWindow(data);
+                            dynamicWindow = getNextDynamicWindow();
                             currentOffset = data.fromUDynamicOffsets[dynamicWindow]=offset;
-                            useDynamicWindow(data, dynamicWindow);
+                            useDynamicWindow(dynamicWindow);
                             c = ((int)((SD0+dynamicWindow)<<16)) | (int)(code<<8)|
                                 (c- currentOffset) | 0x80;
                             length = 3;
                             label = OutputBytes;
                             return label;
-                        } else if(((int)((c-0x3400)&UConverterConstants.UNSIGNED_SHORT_MASK))<(0xd800-0x3400) && (source.position()>=source.limit() || 
-                                ((int)((source.get(source.position())-0x3400)&UConverterConstants.UNSIGNED_SHORT_MASK))< (0xd800 - 0x3400))){
+                        } else if(((int)((c-0x3400)&UConverterConstants.UNSIGNED_INT_MASK))<(0xd800-0x3400) && (source.position()>=source.limit() || 
+                                ((int)((source.get(source.position())-0x3400)&UConverterConstants.UNSIGNED_INT_MASK))< (0xd800 - 0x3400))){
+                            
                             /*
                              * this character is not compressible (a BMP ideograph of similar)
                              * switch to Unicode mode if this is the last character in the block
@@ -926,24 +960,26 @@ class CharsetSCSU extends CharsetICU{
                     sourceIndex = nextSourceIndex;
                 }
             } else {
-                if(c!=0 && targetCapacity>0){
+                if(c!=0 && targetCapacity>0 && !AfterGetTrailUnicode){
                     label = GetTrailUnicode;
                     return label;
                 }
             
                 /*state machine for Unicode*/
            /*unicodeByteMode*/
-                while(source.hasRemaining()){
-                    if(target.capacity()<=0){
+                while(AfterGetTrailUnicode || source.hasRemaining()){
+                    if(targetCapacity<=0 && !AfterGetTrailUnicode){
                         /*target is full*/
-                        cr[0] = CoderResult.OVERFLOW;
+                        cr = CoderResult.OVERFLOW;
                         LabelLoop = false;
                         break;
                     }
-                    c = source.get();
-                    ++nextSourceIndex;
+                    if(!AfterGetTrailUnicode){
+                        c = source.get();
+                        ++nextSourceIndex;
+                    }
                     
-                    if((((c-0x3400)& UConverterConstants.UNSIGNED_INT_MASK))<(0xd800-0x3400)){
+                    if((((c-0x3400)& UConverterConstants.UNSIGNED_INT_MASK))<(0xd800-0x3400) && !AfterGetTrailUnicode){
                         /*not compressible, write character directly */
                         if(targetCapacity>=2){
                             target.put((byte)(c>>8));
@@ -958,7 +994,7 @@ class CharsetSCSU extends CharsetICU{
                             label = OutputBytes;
                             return label;
                         }
-                    } else if((((c-0x3400)& UConverterConstants.UNSIGNED_INT_MASK))>=(0xf300-0x3400) /* c<0x3400 || c>=0xf300*/){
+                    } else if((((c-0x3400)& UConverterConstants.UNSIGNED_INT_MASK))>=(0xf300-0x3400) /* c<0x3400 || c>=0xf300*/&& !AfterGetTrailUnicode){
                         /*compress BMP character if the following one is not an uncompressible ideograph*/
                         if(!(source.hasRemaining() && (((source.get(source.position())-0x3400)& UConverterConstants.UNSIGNED_INT_MASK))<(0xd800-0x3400))){
                             if(((((c-0x30)&UConverterConstants.UNSIGNED_INT_MASK))<10 || (((c-0x61)&UConverterConstants.UNSIGNED_INT_MASK))<26 
@@ -969,22 +1005,22 @@ class CharsetSCSU extends CharsetICU{
                                 length = 2;
                                 label = OutputBytes;
                                 return label;
-                            } else if((window=getWindow(data.fromUDynamicOffsets, c))>=0){
+                            } else if((window=getWindow(data.fromUDynamicOffsets))>=0){
                                 /*there is a dynamic window that contains this character, change to it*/
                                 isSingleByteMode = true;
                                 dynamicWindow = window;
                                 currentOffset = data.fromUDynamicOffsets[dynamicWindow];
-                                useDynamicWindow(data, dynamicWindow);
+                                useDynamicWindow(dynamicWindow);
                                 c = ((int)((UC0+dynamicWindow)<<8)) | (c- currentOffset) | 0x80;
                                 length = 2;
                                 label = OutputBytes;
                                 return label;
-                            } else if((code=getDynamicOffset(c))>=0){
+                            } else if((code=getDynamicOffset())>=0){
                                 /*define a dynamic window with this character*/
                                 isSingleByteMode = true;
-                                dynamicWindow = getNextDynamicWindow(data);
+                                dynamicWindow = getNextDynamicWindow();
                                 currentOffset = data.fromUDynamicOffsets[dynamicWindow]=offset;
-                                useDynamicWindow(data, dynamicWindow);
+                                useDynamicWindow(dynamicWindow);
                                 c = ((int)((UD0+dynamicWindow)<<16)) | (int)(code<<8) 
                                     |(c- currentOffset) | 0x80;
                                 length = 3;
@@ -997,7 +1033,7 @@ class CharsetSCSU extends CharsetICU{
                         length = 2;
                         label = OutputBytes;
                         return label;
-                    } else if(c<0xe000){
+                    } else if(c<0xe000 && !AfterGetTrailUnicode){
                         label = GetTrailUnicode;
                         return label;
                     } else {
@@ -1008,6 +1044,9 @@ class CharsetSCSU extends CharsetICU{
                         return label;
                     }
                     
+                    if(AfterGetTrailUnicode){
+                        AfterGetTrailUnicode = false;
+                    }
                     /*normal end of conversion, prepare for a new character*/
                     c = 0;
                     sourceIndex = nextSourceIndex;
@@ -1017,8 +1056,8 @@ class CharsetSCSU extends CharsetICU{
             return label;
         }
         
-        private int getTrail(CharBuffer source, ByteBuffer target, IntBuffer offsets, SCSUData data,CoderResult[] cr, int b){
-            lead = (char)b;
+        private int getTrail(CharBuffer source, ByteBuffer target, IntBuffer offsets){
+            lead = (char)c;
             int label = Loop;
             if(source.hasRemaining()){
                 /*test the following code unit*/
@@ -1026,23 +1065,25 @@ class CharsetSCSU extends CharsetICU{
                 if(UTF16.isTrailSurrogate((char)trail)){
                     source.position(source.position()+1);
                     ++nextSourceIndex;
-                    c = UCharacter.getCodePoint((char)b, trail);
+                    c = UCharacter.getCodePoint((char)c, trail);
                     label = Loop;
                 } else {
                     /*this is unmatched lead code unit (1st Surrogate)*/
                     /*callback(illegal)*/
-                    cr[0] = CoderResult.malformedForLength(1);
+                    cr = CoderResult.malformedForLength(1);
                     label = EndLoop;
                 }
             }else {
                 /*no more input*/
                 label = EndLoop;
             }
+            AfterGetTrail = true;
             return label;
         }
         
-        private int getTrailUnicode(CharBuffer source, ByteBuffer target, IntBuffer offsets, SCSUData data,CoderResult[] cr){
+        private int getTrailUnicode(CharBuffer source, ByteBuffer target, IntBuffer offsets){
             int label = EndLoop;
+            AfterGetTrailUnicode = true;
             /*c is surrogate*/
             if(UTF16.isLeadSurrogate((char)c)){
       // getTrailUnicode:   
@@ -1059,7 +1100,7 @@ class CharsetSCSU extends CharsetICU{
                     } else {
                         /*this is unmatched lead code unit(1st surrogate)*/
                         /*callback(illegal)*/
-                        cr[0] = CoderResult.malformedForLength(1);
+                        cr = CoderResult.malformedForLength(1);
                         label = EndLoop;
                         return label;
                     }
@@ -1071,13 +1112,13 @@ class CharsetSCSU extends CharsetICU{
             } else {
                 /*this is an unmatched trail code point (2nd surrogate)*/
                 /*callback (illegal)*/
-                cr[0] = CoderResult.malformedForLength(1);
+                cr = CoderResult.malformedForLength(1);
                 label = EndLoop;
                 return label;
             }
             
             /*compress supplementary character*/
-            if((window=getWindow(data.fromUDynamicOffsets, c))>=0 && 
+            if((window=getWindow(data.fromUDynamicOffsets))>=0 && 
                     !(source.hasRemaining() && ((source.get(source.position())-0x3400)&UConverterConstants.UNSIGNED_INT_MASK) < 
                             (0xd800 - 0x3400))){
                 /*
@@ -1088,17 +1129,17 @@ class CharsetSCSU extends CharsetICU{
                 isSingleByteMode = true;
                 dynamicWindow = window;
                 currentOffset = data.fromUDynamicOffsets[dynamicWindow];
-                useDynamicWindow(data, dynamicWindow);
+                useDynamicWindow(dynamicWindow);
                 c = ((UC0+dynamicWindow)<<8 | (c-currentOffset) | 0x80);
                 length = 2;
                 label = OutputBytes;
                 return label;
-            } else if(source.hasRemaining() && lead == source.get(source.position()) && (code=getDynamicOffset(c))>=0){
+            } else if(source.hasRemaining() && lead == source.get(source.position()) && (code=getDynamicOffset())>=0){
                 /*two supplementary characters in (probably) the same window - define an extended one*/
                 isSingleByteMode = true;
-                dynamicWindow = getNextDynamicWindow(data);
+                dynamicWindow = getNextDynamicWindow();
                 currentOffset = data.fromUDynamicOffsets[dynamicWindow] = offset;
-                useDynamicWindow(data, dynamicWindow);
+                useDynamicWindow(dynamicWindow);
                 c = (UDX<<24) | (dynamicWindow<<21) |(code<<8) |(c - currentOffset) | 0x80;
                 length = 4;
                 label = OutputBytes;
@@ -1113,7 +1154,7 @@ class CharsetSCSU extends CharsetICU{
             
         }
         
-        private void endLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, SCSUData data,CoderResult[] cr){
+        private void endLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets){
             /*set the converter state back to UConverter*/
             data.fromUIsSingleByteMode = isSingleByteMode;
             data.fromUDynamicWindow = dynamicWindow;
@@ -1121,7 +1162,7 @@ class CharsetSCSU extends CharsetICU{
             LabelLoop = false;
         }
         
-        private int outputBytes(CharBuffer source, ByteBuffer target, IntBuffer offsets, SCSUData data,CoderResult[] cr){
+        private int outputBytes(CharBuffer source, ByteBuffer target, IntBuffer offsets){
             int label;
             //int targetCapacity = target.limit()-target.position();
             /*write the output character byte from c and length*/
@@ -1229,7 +1270,7 @@ class CharsetSCSU extends CharsetICU{
                 
                 /*target overflow*/
                 targetCapacity = 0;
-                cr[0] = CoderResult.OVERFLOW;
+                cr = CoderResult.OVERFLOW;
                 c = 0;
                 label = EndLoop;
                 return label;
