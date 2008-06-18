@@ -76,6 +76,8 @@ icu4c/source/data/locales/si.txt -text
 icu4c/source/data/locales/si_LK.txt -text
 icu4c/source/data/locales/zh_Hans_HK.txt -text
 icu4c/source/data/locales/zh_Hans_MO.txt -text
+icu4c/source/data/misc/likelySubtags.txt -text
+icu4c/source/data/misc/plurals.txt -text
 icu4c/source/data/xml/collation/bn_IN.xml -text
 icu4c/source/data/xml/collation/ur.xml -text
 icu4c/source/data/xml/main/ha.xml -text
