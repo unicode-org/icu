@@ -32,12 +32,12 @@ public class CharsetBOCU1 extends CharsetICU {
     /* bounding byte values for differences */
     private static final int BOCU1_MIN = 0x21;
     private static final int BOCU1_MIDDLE = 0x90;
-    private static final int BOCU1_MAX_LEAD = 0xfe;
+    //private static final int BOCU1_MAX_LEAD = 0xfe;
     private static final int BOCU1_MAX_TRAIL = 0xff;
     private static final int BOCU1_RESET = 0xff;
 
     /* number of lead bytes */
-    private static final int BOCU1_COUNT = (BOCU1_MAX_LEAD-BOCU1_MIN+1);
+    //private static final int BOCU1_COUNT = (BOCU1_MAX_LEAD-BOCU1_MIN+1);
 
     /* adjust trail byte counts for the use of some C0 control byte values */
     private static final int BOCU1_TRAIL_CONTROLS_COUNT =  20;
@@ -55,7 +55,7 @@ public class CharsetBOCU1 extends CharsetICU {
     /* number of lead bytes for positive and negative 2/3/4-byte sequences */
     private static final int BOCU1_LEAD_2 = 43;
     private static final int BOCU1_LEAD_3 = 3;
-    private static final int BOCU1_LEAD_4 = 1;
+    //private static final int BOCU1_LEAD_4 = 1;
 
     /* The difference value range for single-byters. */
     private static final int BOCU1_REACH_POS_1 = (BOCU1_SINGLE-1);
@@ -79,15 +79,15 @@ public class CharsetBOCU1 extends CharsetICU {
 
     private static final int BOCU1_START_NEG_2 = (BOCU1_MIDDLE+BOCU1_REACH_NEG_1);
     private static final int BOCU1_START_NEG_3 = (BOCU1_START_NEG_2-BOCU1_LEAD_2);
-    private static final int BOCU1_START_NEG_4 = (BOCU1_START_NEG_3-BOCU1_LEAD_3);
+    //private static final int BOCU1_START_NEG_4 = (BOCU1_START_NEG_3-BOCU1_LEAD_3);
          /* ==BOCU1_MIN+1 */
 
     /* The length of a byte sequence, according to the lead byte (!=BOCU1_RESET). */
-    private static int BOCU1_LENGTH_FROM_LEAD(int lead) {
+   /* private static int BOCU1_LENGTH_FROM_LEAD(int lead) {
        return ((BOCU1_START_NEG_2<=(lead) && (lead)<BOCU1_START_POS_2) ? 1 : 
          (BOCU1_START_NEG_3<=(lead) && (lead)<BOCU1_START_POS_3) ? 2 : 
          (BOCU1_START_NEG_4<=(lead) && (lead)<BOCU1_START_POS_4) ? 3 : 4);
-    }
+    }*/
 
     /* The length of a byte sequence, according to its packed form. */
     private static int BOCU1_LENGTH_FROM_PACKED(int packed) {
@@ -241,15 +241,18 @@ public class CharsetBOCU1 extends CharsetICU {
         
         int sourceIndex, nextSourceIndex;
         int prev, c , diff;
-        boolean checkNegative = false;
+        boolean checkNegative;
+        boolean LoopAfterTrail;
         int targetCapacity;
-        /* label Values */
+        CoderResult cr;        
+        
+        /* label values for supporting behavior similar to goto in C */
         private static final int fastSingle=0;
         private static final int getTrail=1;
         private static final int regularLoop=2;
         
-        private boolean LabelLoop = true;
-        private int labelType = fastSingle;
+        private boolean LabelLoop; //used to break the while loop
+        private int labelType = fastSingle; //labeType is set to fastSingle to start the code from fastSingle:
         
         
         /**
@@ -394,13 +397,17 @@ public class CharsetBOCU1 extends CharsetICU {
         
         
         protected CoderResult encodeLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush){
-            CoderResult cr = CoderResult.UNDERFLOW;
+            cr = CoderResult.UNDERFLOW;
             
+            LabelLoop = true; //used to break the while loop
+            checkNegative = false; // its value is set to true to get out of while loop when c = -c
+            LoopAfterTrail = false; // its value is set to true to ignore code before getTrail:
             
             /*set up the local pointers*/
             targetCapacity = target.limit() - target.position();
             c = fromUChar32;
             prev = fromUnicodeStatus;
+            
             if(prev==0){
                 prev = BOCU1_ASCII_PREV;
             }
@@ -408,6 +415,11 @@ public class CharsetBOCU1 extends CharsetICU {
             /*sourceIndex ==-1 if the current characte began in the previous buffer*/
             sourceIndex = c ==0 ? 0: -1;
             nextSourceIndex = 0;
+            
+            /*conversion loop*/
+            if(c!=0 &&targetCapacity>0){
+                labelType = getTrail;
+            }
             
             while(LabelLoop){
                 switch(labelType){
@@ -418,7 +430,7 @@ public class CharsetBOCU1 extends CharsetICU {
                         labelType = getTrail(source, target, offsets);
                         break;
                     case regularLoop:
-                        labelType = regularLoop(source, target, offsets, cr);
+                        labelType = regularLoop(source, target, offsets);
                         break;
                 }
             }
@@ -428,12 +440,7 @@ public class CharsetBOCU1 extends CharsetICU {
         
         
         private int fastSingle(CharBuffer source, ByteBuffer target, IntBuffer offsets){
-            
-            /*conversion loop*/
-            if(c!=0 &&targetCapacity>0){
-                labelType = getTrail;
-                return labelType;
-            }
+                        
 //fastSingle:
             
             /*fast loop for single-byte differences*/
@@ -485,43 +492,53 @@ public class CharsetBOCU1 extends CharsetICU {
                 c = -c; /*negative lead surrogate as "incomplete" indicator to avoid c=0 everywhere else*/
                 checkNegative = true;
             }
+            LoopAfterTrail = true;
             return regularLoop;
         }
         
-        private int regularLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets, CoderResult cr){
-            /*restore real values*/
-            targetCapacity = target.limit()-target.position();
-            sourceIndex = nextSourceIndex; /*wrong if offsets==null but does not matter*/
-            
+        private int regularLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets){
+            if(!LoopAfterTrail){
+                /*restore real values*/
+                targetCapacity = target.limit()-target.position();
+                sourceIndex = nextSourceIndex; /*wrong if offsets==null but does not matter*/
+            }
             /*regular loop for all classes*/
-            while(source.hasRemaining()){
-                if(targetCapacity>0){
-                    c = source.get();
-                    ++nextSourceIndex;
+            while(LoopAfterTrail || source.hasRemaining()){
+                if(LoopAfterTrail || targetCapacity>0){
                     
-                    if(c<=0x20){
-                        /*
-                         * ISO C0 control & space:
-                         * Encode directly for MIME compatibility,
-                         * and reset state except for space, to not disrupt compression.
-                         */
-                        if(c!=0x20) {
-                            prev=BOCU1_ASCII_PREV;
+                    if(!LoopAfterTrail){
+                        c = source.get();
+                        ++nextSourceIndex;
+                        
+                        if(c<=0x20){
+                            /*
+                             * ISO C0 control & space:
+                             * Encode directly for MIME compatibility,
+                             * and reset state except for space, to not disrupt compression.
+                             */
+                            if(c!=0x20) {
+                                prev=BOCU1_ASCII_PREV;
+                            }
+                            target.put((byte)c);
+                            if(offsets != null){
+                                offsets.put(sourceIndex++);
+                            }
+                            --targetCapacity;
+                         
+                            sourceIndex=nextSourceIndex;
+                            continue;
                         }
-                        target.put((byte)c);
-                        if(offsets != null){
-                            offsets.put(sourceIndex++);
+                        
+                        if(UTF16.isLeadSurrogate((char)c)){
+                            getTrail(source, target, offsets);
+                            if(checkNegative){
+                                break;
+                            }
                         }
-                        --targetCapacity;
-                     
-                        sourceIndex=nextSourceIndex;
-                        continue;
                     }
-                    if(UTF16.isLeadSurrogate((char)c)){
-                        getTrail(source, target, offsets);
-                        if(checkNegative){
-                            break;
-                        }
+                        
+                    if(LoopAfterTrail){
+                        LoopAfterTrail = false; 
                     }
                     
                     /*
@@ -662,7 +679,7 @@ public class CharsetBOCU1 extends CharsetICU {
                     cr = CoderResult.OVERFLOW;
                     break;
                 }
-                    
+                   
             }
             /*set the converter state back into UConverter*/
             fromUChar32 = c<0 ? -c :0;
@@ -684,18 +701,17 @@ public class CharsetBOCU1 extends CharsetICU {
         int prev, c , diff, count;
         byte[] bytes;
         int targetCapacity;
+        CoderResult cr;
         
-        /* label Values */
+        /* label values for supporting behavior similar to goto in C */
         private static final int fastSingle=0;
         private static final int getTrail=1;
         private static final int regularLoop=2;
         private static final int endLoop=3;
         
-        private boolean LabelLoop = true;
-        private boolean afterTrail = false;
-        private int labelType = fastSingle;
-        
-        
+        private boolean LabelLoop;//used to break the while loop
+        private boolean afterTrail; // its value is set to true to ignore code after getTrail:
+        private int labelType;
         
         /*
          * The BOCU-1 converter uses the standard setup code in ucnv.c/ucnv_bld.c.
@@ -719,42 +735,42 @@ public class CharsetBOCU1 extends CharsetICU {
          * @return (diff<<2)|count
          */
         private int decodeBocu1LeadByte(int b) {
-            int diff, count;
+            int diffValue, countValue;
 
             if(b >= BOCU1_START_NEG_2) {
                 /* positive difference */
                 if(b < BOCU1_START_POS_3) {
                     /* two bytes */
-                    diff = (b - BOCU1_START_POS_2)*BOCU1_TRAIL_COUNT + BOCU1_REACH_POS_1+1;
-                    count = 1;
+                    diffValue = (b - BOCU1_START_POS_2)*BOCU1_TRAIL_COUNT + BOCU1_REACH_POS_1+1;
+                    countValue = 1;
                 } else if(b < BOCU1_START_POS_4) {
                     /* three bytes */
-                    diff = (b-BOCU1_START_POS_3)*BOCU1_TRAIL_COUNT*BOCU1_TRAIL_COUNT+BOCU1_REACH_POS_2+1;
-                    count = 2;
+                    diffValue = (b-BOCU1_START_POS_3)*BOCU1_TRAIL_COUNT*BOCU1_TRAIL_COUNT+BOCU1_REACH_POS_2+1;
+                    countValue = 2;
                 } else {
                     /* four bytes */
-                    diff = BOCU1_REACH_POS_3+1;
-                    count = 3;
+                    diffValue = BOCU1_REACH_POS_3+1;
+                    countValue = 3;
                 }
             } else {
                 /* negative difference */
                 if(b >= BOCU1_START_NEG_3) {
                     /* two bytes */
-                    diff=(b -BOCU1_START_NEG_2)*BOCU1_TRAIL_COUNT + BOCU1_REACH_NEG_1;
-                    count=1;
+                    diffValue=(b -BOCU1_START_NEG_2)*BOCU1_TRAIL_COUNT + BOCU1_REACH_NEG_1;
+                    countValue=1;
                 } else if(b>BOCU1_MIN) {
                     /* three bytes */
-                    diff=(b - BOCU1_START_NEG_3)*BOCU1_TRAIL_COUNT*BOCU1_TRAIL_COUNT + BOCU1_REACH_NEG_2;
-                    count = 2;
+                    diffValue=(b - BOCU1_START_NEG_3)*BOCU1_TRAIL_COUNT*BOCU1_TRAIL_COUNT + BOCU1_REACH_NEG_2;
+                    countValue = 2;
                 } else {
                     /* four bytes */
-                    diff=-BOCU1_TRAIL_COUNT*BOCU1_TRAIL_COUNT*BOCU1_TRAIL_COUNT+BOCU1_REACH_NEG_3;
-                    count=3;
+                    diffValue=-BOCU1_TRAIL_COUNT*BOCU1_TRAIL_COUNT*BOCU1_TRAIL_COUNT+BOCU1_REACH_NEG_3;
+                    countValue=3;
                 }
             }
 
             /* return the state for decoding the trail byte(s) */
-            return (diff<<2)|count;
+            return (diffValue<<2)|countValue;
         }
         
         /**
@@ -766,7 +782,7 @@ public class CharsetBOCU1 extends CharsetICU {
          *
          * @see decodeBocu1
          */
-        private int decodeBocu1TrailByte(int count, int b) {
+        private int decodeBocu1TrailByte(int countValue, int b) {
             b = b&UConverterConstants.UNSIGNED_BYTE_MASK;
             if((b)<=0x20) {
                 /* skip some C0 controls and make the trail byte range contiguous */
@@ -778,9 +794,9 @@ public class CharsetBOCU1 extends CharsetICU {
             }
 
             /* add trail byte into difference and decrement count */
-            if(count==1) {
+            if(countValue==1) {
                 return b;
-            } else if(count==2) {
+            } else if(countValue==2) {
                 return b*BOCU1_TRAIL_COUNT;
             } else /* count==3 */ {
                 return b*(BOCU1_TRAIL_COUNT*BOCU1_TRAIL_COUNT);
@@ -789,8 +805,15 @@ public class CharsetBOCU1 extends CharsetICU {
         
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets,
                 boolean flush){
-            CoderResult cr = CoderResult.UNDERFLOW;
+            cr = CoderResult.UNDERFLOW;
+            
+            LabelLoop = true; 
+            afterTrail = false; 
+            labelType = fastSingle; // labelType is set to fastSingle so t
+            
+            /*get the converter state*/
             prev = toUnicodeStatus;
+            
             if(prev==0){
                 prev = BOCU1_ASCII_PREV;
             }
@@ -808,23 +831,22 @@ public class CharsetBOCU1 extends CharsetICU {
             /* conversion "loop" similar to _SCSUToUnicodeWithOffsets() */
             if(count>0 && byteIndex>0 && target.position()<target.limit()) {
                 //labelType = getTrail;
-                labelType = getTrail(source, target, offsets, cr);
-                afterTrail = true;
+                labelType = getTrail(source, target, offsets);
             }
             
             while(LabelLoop){
                 switch(labelType){
                     case fastSingle:
-                        labelType = fastSingle(source, target, offsets, cr);
+                        labelType = fastSingle(source, target, offsets);
                         break;
                     case getTrail:
-                        labelType = getTrail(source, target, offsets, cr);
+                        labelType = getTrail(source, target, offsets);
                         break;
                     case regularLoop:
-                        labelType = afterGetTrail(source, target, offsets, cr);
+                        labelType = afterGetTrail(source, target, offsets);
                         break;
                     case endLoop:
-                        endLoop(source, target, offsets, cr);
+                        endLoop(source, target, offsets);
                         break;
                 }
             }
@@ -832,7 +854,7 @@ public class CharsetBOCU1 extends CharsetICU {
             return cr;
         }
         
-        private int fastSingle(ByteBuffer source, CharBuffer target, IntBuffer offsets, CoderResult cr){
+        private int fastSingle(ByteBuffer source, CharBuffer target, IntBuffer offsets){
             labelType = regularLoop;
             /* fast loop for single-byte differences */
             /* use count as the only loop counter variable */
@@ -871,7 +893,7 @@ public class CharsetBOCU1 extends CharsetICU {
             return labelType;
         }
         
-        private int getTrail(ByteBuffer source, CharBuffer target, IntBuffer offsets, CoderResult cr){
+        private int getTrail(ByteBuffer source, CharBuffer target, IntBuffer offsets){
             labelType = regularLoop;
             for(;;) {
                 if(source.position() >= source.limit()) {
@@ -902,14 +924,15 @@ public class CharsetBOCU1 extends CharsetICU {
                     break;
                 }
             }
+            afterTrail = true;
             return labelType;
             
         }
 
         
-        private int afterGetTrail(ByteBuffer source, CharBuffer target, IntBuffer offsets, CoderResult cr){
+        private int afterGetTrail(ByteBuffer source, CharBuffer target, IntBuffer offsets){
             /* decode a sequence of single and lead bytes */
-            while(source.hasRemaining()) {
+            while(afterTrail || source.hasRemaining()) {
                 if(!afterTrail){
                     if(target.position() >= target.limit()) {
                         /* target is full */
@@ -981,13 +1004,17 @@ public class CharsetBOCU1 extends CharsetICU {
                         diff = decodeBocu1LeadByte(c);
                         count = diff&3;
                         diff>>=2;
-                        getTrail(source, target, offsets, cr);
+                        getTrail(source, target, offsets);
                         if(labelType != regularLoop){
                             return labelType;
                         }
                     }
                 }
-            
+                
+                if(afterTrail){
+                    afterTrail = false;
+                }
+                
                 /* calculate the next prev and output c */
                 prev = BOCU1_PREV(c);
                 if(c<=0xffff) {
@@ -1021,7 +1048,7 @@ public class CharsetBOCU1 extends CharsetICU {
           return labelType;
         }
         
-        private void endLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, CoderResult cr){
+        private void endLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets){
             if(cr.isMalformed()) {
                 /* set the converter state in UConverter to deal with the next character */
                 toUnicodeStatus = BOCU1_ASCII_PREV;
