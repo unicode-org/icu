@@ -646,7 +646,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
      * Get the interval pattern given the largest different calendar field.
      * @param skeleton   the skeleton
      * @param field      the largest different calendar field
-     * @return interval pattern
+     * @return interval pattern  return null if interval pattern is not found.
      * @throws IllegalArgumentException  if getting interval pattern on 
      *                            a calendar field that is smaller
      *                            than the MINIMUM_SUPPORTED_CALENDAR_FIELD 
@@ -692,8 +692,11 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
      *
      * This method provides a way for user to replace the fallback pattern.
      *
-     * @param fallbackPattern     fall-back interval pattern.
+     * @param fallbackPattern                 fall-back interval pattern.
      * @throws UnsupportedOperationException  if the object is frozen
+     * @throws IllegalArgumentException       if there is no pattern {0} or 
+     *                                        pattern {1} in fallbakckPattern
+     *                   
      * @draft ICU 4.0 
      * @provisional This API might change or be removed in a future release.
      */
@@ -704,6 +707,9 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
         }
         int firstPatternIndex = fallbackPattern.indexOf("{0}");
         int secondPatternIndex = fallbackPattern.indexOf("{1}");
+        if ( firstPatternIndex == -1 || secondPatternIndex == -1 ) {
+            throw new IllegalArgumentException("no pattern {0} or pattern {1} in fallbackPattern");
+        }
         if ( firstPatternIndex > secondPatternIndex ) {
             fFirstDateInPtnIsLaterDate = true;
         }
