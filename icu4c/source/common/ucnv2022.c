@@ -1118,6 +1118,22 @@ _2022FromGR94DBCS(uint32_t value) {
     }
 }
 
+/*
+ * This method does the reverse of _2022FromGR94DBCS(). Given the 2022 code point, it returns the
+ * 2 byte value that is in the range A1..FE for each byte. Otherwise it returns the 2022 code point
+ * unchanged. 
+ */
+static U_INLINE uint32_t
+_2022ToGR94DBCS(uint32_t value) {
+    uint32_t returnValue = value + 0x8080;
+    if( (uint16_t)(returnValue - 0xa1a1) <= (0xfefe - 0xa1a1) &&
+        (uint8_t)(returnValue - 0xa1) <= (0xfe - 0xa1)) {
+        return returnValue;
+    } else {
+        return value;
+    }
+}
+
 #ifdef U_ENABLE_GENERIC_ISO_2022
 
 /**********************************************************************************
@@ -1958,6 +1974,7 @@ UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     const char *mySourceLimit = args->sourceLimit;
     uint32_t targetUniChar = 0x0000;
     uint32_t mySourceChar = 0x0000;
+    uint32_t tmpSourceChar = 0x0000;
     UConverterDataISO2022* myData;
     ISO2022State *pToU2022State;
     StateEnum cs;
@@ -2105,14 +2122,18 @@ escape:
                         char trailByte;
 getTrailByte:
                         trailByte = *mySource++;
+                        tmpSourceChar = (mySourceChar << 8) | (uint8_t)(trailByte);
                         if(cs == JISX208) {
                             _2022ToSJIS((uint8_t)mySourceChar, (uint8_t)trailByte, tempBuf);
                         } else {
-                            tempBuf[0] = (char)mySourceChar;
-                            tempBuf[1] = trailByte;
+                            if (cs == KSC5601) {
+                                tmpSourceChar = _2022ToGR94DBCS(tmpSourceChar);
+                            }
+                            tempBuf[0] = (char)(tmpSourceChar >> 8);
+                            tempBuf[1] = (char)(tmpSourceChar);
                         }
-                        mySourceChar = (mySourceChar << 8) | (uint8_t)(trailByte);
                         targetUniChar = ucnv_MBCSSimpleGetNextUChar(myData->myConverterArray[cs], tempBuf, 2, FALSE);
+                        mySourceChar = tmpSourceChar;
                     } else {
                         args->converter->toUBytes[0] = (uint8_t)mySourceChar;
                         args->converter->toULength = 1;
