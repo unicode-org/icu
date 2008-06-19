@@ -551,7 +551,7 @@ public class RBBITest extends TestFmwk
        };
        BreakIterator brk = BreakIterator.getWordInstance(new ULocale("th"));
        brk.setText(new String(text2));
-       position = index = 0;;
+       position = index = 0;
        while ((position = brk.next()) != BreakIterator.DONE && position < text2.length) {
            if (position != expectedWordResult[index++]) {
                errln("Incorrect break given by thai word break iterator. Expected: " + expectedWordResult[index-1] + " Got: " + position);
