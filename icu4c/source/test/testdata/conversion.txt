@@ -621,13 +621,21 @@ conversion:table(nofallback) {
           :intvector{ 0, 4, 8, 12 },
           :int{1}, :int{0}, "", "?", :bin{""}
         }
-        //Improve coverage of ISCII
+        // Improve coverage of ISCII
         {
           "iscii-bng",
           :bin{ f0a0f0b0b8 },
           "",
           :intvector{},
           :int{1}, :int{0}, "", "0", :bin{""} 
+        }
+        // Test iso-2022-jp-2 miscellaneous symbols
+        {
+          "iso-2022-jp-2",
+          :bin{ 1b242843224f224e1b2842 },
+          "\u260E\u260F",
+          :intvector{ 4, 6 },
+          :int{1}, :int{0}, "", ".", :bin{""}
         }
       }
     }

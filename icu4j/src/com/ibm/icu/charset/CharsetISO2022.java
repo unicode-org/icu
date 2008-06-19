@@ -210,6 +210,22 @@ class CharsetISO2022 extends CharsetICU {
         }
     }
     
+    /*
+     * This method does the reverse of _2022FromGR94DBCS(). Given the 2022 code point, it returns the
+     * 2 byte value that is in the range A1..FE for each byte. Otherwise it returns the 2022 code point
+     * unchanged. 
+     */
+    private static int _2022ToGR94DBCS(int value) {
+        int returnValue = value + 0x8080;
+        
+        if ((returnValue <= 0xfefe && returnValue >= 0xa1a1) && 
+                ((short)(returnValue&UConverterConstants.UNSIGNED_BYTE_MASK) <= 0xfe && ((short)(returnValue&UConverterConstants.UNSIGNED_BYTE_MASK) >= 0xa1))) {
+            return returnValue;
+        } else {
+            return value;
+        }
+    }
+    
     /* is the StateEnum charset value for a DBCS charset? */
     private static boolean IS_JP_DBCS(byte cs) {
         return ((JISX208 <= cs) && (cs <= KSC5601));
@@ -250,7 +266,7 @@ class CharsetISO2022 extends CharsetICU {
          int returnValue;
          UConverterSharedData tempSharedData = myConverterData.currentConverter.sharedData;
          myConverterData.currentConverter.sharedData = sharedData;
-         returnValue = ((CharsetDecoderMBCS)myConverterData.currentConverter.newDecoder()).simpleGetNextUChar(source, useFallback);
+         returnValue = ((CharsetDecoderMBCS)myConverterData.currentDecoder).simpleGetNextUChar(source, useFallback);
          myConverterData.currentConverter.sharedData = tempSharedData;
          
          return returnValue;
@@ -960,19 +976,24 @@ class CharsetISO2022 extends CharsetICU {
                                 /* G0 DBCS */
                                 if (gotoGetTrail || source.hasRemaining()) {
 // getTrailByte:
+                                    int tmpSourceChar;
                                     gotoGetTrail = false;
                                     byte trailByte;
                                     trailByte = source.get();
+                                    tmpSourceChar = (mySourceChar << 8) | (short)(UConverterConstants.UNSIGNED_BYTE_MASK & trailByte);
                                     if (cs == JISX208) {
                                         _2022ToSJIS((char)(UConverterConstants.UNSIGNED_BYTE_MASK & mySourceChar), 
                                                 (char)(UConverterConstants.UNSIGNED_BYTE_MASK & trailByte), tempBuf);
                                     } else {
-                                        tempBuf[0] = (byte)(UConverterConstants.UNSIGNED_BYTE_MASK & mySourceChar);
-                                        tempBuf[1] = (byte)(UConverterConstants.UNSIGNED_BYTE_MASK & trailByte);
+                                        if (cs == KSC5601) {
+                                            tmpSourceChar = _2022ToGR94DBCS(tmpSourceChar);
+                                        }
+                                        tempBuf[0] = (byte)(UConverterConstants.UNSIGNED_BYTE_MASK & (tmpSourceChar >> 8));
+                                        tempBuf[1] = (byte)(UConverterConstants.UNSIGNED_BYTE_MASK & tmpSourceChar);
                                     }
-                                    mySourceChar = (mySourceChar << 8) | (short)(UConverterConstants.UNSIGNED_BYTE_MASK & trailByte);
                                     ByteBuffer tempByteBuf = ByteBuffer.wrap(tempBuf);
                                     targetUniChar = MBCSSimpleGetNextUChar(myConverterData.myConverterArray[cs], tempByteBuf, false);
+                                    mySourceChar = tmpSourceChar;
                                 } else {
                                     toUBytesArray[0] = (byte)mySourceChar;
                                     toULength = 1;
