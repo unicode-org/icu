@@ -430,7 +430,7 @@ public:
                           UErrorCode& status) const ;
 
     /**
-     * Date interval parsing is not supported.
+     * Date interval parsing is not supported. Please do not use.
      * <P>
      * This method should handle parsing of
      * date time interval strings into Formattable objects with 
@@ -528,7 +528,8 @@ protected:
 
 private:
 
-    /**
+    /*
+     * This is for ICU internal use only. Please do not use.
      * Save the interval pattern information.
      * Interval pattern consists of 2 single date patterns and the separator.
      * For example, interval pattern "MMM d - MMM d, yyyy" consists
@@ -539,6 +540,7 @@ private:
      * Also, the first date appears in an interval pattern could be 
      * the earlier date or the later date.
      * And such information is saved in the interval pattern as well.
+     * @internal ICU 4.0
      */
     struct PatternInfo {
         UnicodeString firstPart;

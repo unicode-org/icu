@@ -283,22 +283,23 @@ public:
      * the largest different calendar field.
      * @param skeleton   the skeleton
      * @param field      the largest different calendar field
+     * @param result     output param to receive the pattern
      * @param status     output param set to success/failure code on exit
-     * @return interval pattern  NULL is returned if there is no 
-     *                           interval pattern defined for such skeleton 
-     *                           and largest different calendar field pair
+     * @return a reference to 'result'
      * @draft ICU 4.0 
      */
-    const UnicodeString* getIntervalPattern(const UnicodeString& skeleton,
-                                            UCalendarDateFields field,
-                                            UErrorCode& status) const; 
+    UnicodeString& getIntervalPattern(const UnicodeString& skeleton,
+                                      UCalendarDateFields field,
+                                      UnicodeString& result,
+                                      UErrorCode& status) const; 
 
     /**
      * Get the fallback interval pattern.
-     * @return fallback interval pattern
+     * @param  result   output param to receive the pattern
+     * @return a reference to 'result'
      * @draft ICU 4.0 
      */
-    const UnicodeString& getFallbackIntervalPattern() const;
+    UnicodeString& getFallbackIntervalPattern(UnicodeString& result) const;
 
 
     /**
