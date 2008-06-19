@@ -1058,9 +1058,9 @@ DateIntervalFormat::setIntervalPattern(UCalendarDateFields field,
                                        UnicodeString* extendedBestSkeleton) {
     UErrorCode status = U_ZERO_ERROR;
     // following getIntervalPattern() should not generate error status
-    const UnicodeString* pattern = fInfo->getIntervalPattern(*bestSkeleton, 
-                                                            field, status);
-    if ( pattern == NULL ) {
+    UnicodeString pattern;
+    fInfo->getIntervalPattern(*bestSkeleton, field, pattern, status);
+    if ( pattern.isEmpty() ) {
         // single date
         if ( SimpleDateFormat::isFieldUnitIgnored(*bestSkeleton, field) ) {
             // do nothing, format will handle it
@@ -1072,11 +1072,9 @@ DateIntervalFormat::setIntervalPattern(UCalendarDateFields field,
         // which should be the same as hour differ.
         // add it here for simplicity
         if ( field == UCAL_AM_PM ) {
-            pattern = fInfo->getIntervalPattern(*bestSkeleton, 
-                                                UCAL_HOUR,
-                                                status);
-            if ( pattern != NULL ) {
-                setIntervalPattern(field, *pattern);
+            fInfo->getIntervalPattern(*bestSkeleton, UCAL_HOUR, pattern,status);
+            if ( !pattern.isEmpty() ) {
+                setIntervalPattern(field, pattern);
             }
             return false;
         } 
@@ -1094,27 +1092,27 @@ DateIntervalFormat::setIntervalPattern(UCalendarDateFields field,
             extendedBestSkeleton->insert(0, fieldLetter);
             // for example, looking for patterns when 'y' differ for
             // skeleton "MMMM". 
-            pattern = fInfo->getIntervalPattern(*extendedBestSkeleton, field, status);
-            if ( pattern == NULL && differenceInfo == 0 ) {
+            fInfo->getIntervalPattern(*extendedBestSkeleton,field,pattern,status);
+            if ( pattern.isEmpty() && differenceInfo == 0 ) {
                 // if there is no skeleton "yMMMM" defined,
                 // look for the best match skeleton, for example: "yMMM" 
                 const UnicodeString* tmpBest = fInfo->getBestSkeleton(
                                         *extendedBestSkeleton, differenceInfo);
                 if ( tmpBest != 0 && differenceInfo != -1 ) {
-                    pattern = fInfo->getIntervalPattern(*tmpBest, field, status);
+                    fInfo->getIntervalPattern(*tmpBest, field, pattern, status);
                     bestSkeleton = tmpBest;
                 }
             }
         }
     } 
-    if ( pattern != NULL ) {
+    if ( !pattern.isEmpty() ) {
         if ( differenceInfo != 0 ) {
             UnicodeString adjustIntervalPattern;
-            adjustFieldWidth(*skeleton, *bestSkeleton, *pattern, differenceInfo,
+            adjustFieldWidth(*skeleton, *bestSkeleton, pattern, differenceInfo,
                               adjustIntervalPattern);
             setIntervalPattern(field, adjustIntervalPattern);
         } else {
-            setIntervalPattern(field, *pattern);
+            setIntervalPattern(field, pattern);
         }
         if ( extendedSkeleton && !extendedSkeleton->isEmpty() ) {
             return TRUE;
@@ -1215,7 +1213,8 @@ DateIntervalFormat::fallbackFormat(Calendar& fromCalendar,
     *earlierDate = fDateFormat->format(fromCalendar, *earlierDate, pos);
     UnicodeString* laterDate = new UnicodeString();
     *laterDate = fDateFormat->format(toCalendar, *laterDate, pos);
-    const UnicodeString& fallbackPattern = fInfo->getFallbackIntervalPattern();
+    UnicodeString fallbackPattern;
+    fInfo->getFallbackIntervalPattern(fallbackPattern);
     Formattable fmtArray[2];
     fmtArray[0].adoptString(earlierDate);
     fmtArray[1].adoptString(laterDate);
