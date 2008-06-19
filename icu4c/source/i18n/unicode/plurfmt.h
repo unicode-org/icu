@@ -123,7 +123,7 @@ class Hashtable;
  * <pre>
  * UErrorCode status = U_ZERO_ERROR;
  * MessageFormat* msgFmt = new MessageFormat(UnicodeString("{0, plural,
- *   one{0, number, C''est #,##0.0#  fichier} other {Ce sont # fichiers}} dans la liste."),
+ *   one{{0, number, C''est #,##0.0#  fichier}} other {Ce sont # fichiers}} dans la liste."),
  *   Locale("fr"), status);
  * if (U_FAILURE(status)) {
  *     return;

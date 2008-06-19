@@ -107,7 +107,7 @@ import java.util.Set;
  * Example
  * <pre>
  * MessageFormat msgFmt = new MessageFormat("{0, plural, " +
- *     "singular{{0, number, C''''est #,##0.0#  fichier}} " +
+ *     "one{{0, number, C''''est #,##0.0#  fichier}} " +
  *     "other {Ce sont # fichiers}} dans la liste.",
  *     new ULocale("fr"));
  * Object args[] = {new Long(0)};
