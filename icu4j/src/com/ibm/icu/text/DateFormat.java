@@ -698,42 +698,43 @@ public abstract class DateFormat extends UFormat {
      * </ul>
      */
     /** 
-     * Constant for date pattern denoted by the skeleton <code>ms</code>.
+     * Constant for date pattern with minute and second.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String MINUTE_SECOND = "ms";
     
     /** 
-     * Constant for date pattern denoted by the skeleton <code>Hm</code>.
+     * Constant for date pattern with hour and minute in 24-hour presentation.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String HOUR24_MINUTE = "Hm";
     
     /** 
-     * Constant for date pattern denoted by the skeleton <code>Hms</code>.
+     * Constant for date pattern with hour, minute, and second in
+     * 24-hour presentation.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String HOUR24_MINUTE_SECOND = "Hms";      
     
     /** 
-     * Constant for date pattern denoted by the skeleton <code>hms</code>.
+     * Constant for date pattern with hour, minute, and second.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String HOUR_MINUTE_SECOND = "hms";
     
     /** 
-     * Constant for date pattern denoted by the skeleton <code>LLLL</code>.
+     * Constant for date pattern with standalone month.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String STANDALONE_MONTH = "LLLL";
     
     /** 
-     * Constant for date pattern denoted by the skeleton <code>LLL</code>.
+     * Constant for date pattern with standalone abbreviated month.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
@@ -741,14 +742,14 @@ public abstract class DateFormat extends UFormat {
     
     
     /** 
-     * Constant for date pattern denoted by the skeleton <code>yQQQ</code>.
+     * Constant for date pattern with year and quarter.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String YEAR_QUARTER = "yQQQ";
     
     /** 
-     * Constant for date pattern denoted by the skeleton <code>yQ</code>.
+     * Constant for date pattern with year and abbreviated quarter.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
@@ -759,77 +760,77 @@ public abstract class DateFormat extends UFormat {
      * Users are encouraged to use them in date interval format factory methods.
      */
     /** 
-     * Constant for date pattern denoted by the skeleton <code>hm</code>.
+     * Constant for date pattern with hour and miunte.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String HOUR_MINUTE = "hm";
 
     /** 
-     * Constant for date pattern denoted by the skeleton <code>y</code>.
+     * Constant for date pattern with year.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String YEAR = "y";
     
     /** 
-     * Constant for date pattern denoted by the skeleton <code>d</code>.
+     * Constant for date pattern with day.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String DAY = "d";
     
     /** 
-     * Constant for date pattern denoted by the skeleton <code>MEd</code>.
+     * Constant for date pattern with numeric month, weekday, and day.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String NUM_MONTH_WEEKDAY_DAY = "MEd";
     
     /** 
-     * Constant for date pattern denoted by the skeleton <code>yM</code>.
+     * Constant for date pattern with year and numeric month.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String YEAR_NUM_MONTH = "yM";              
     
     /** 
-     * Constant for date pattern denoted by the skeleton <code>Md</code>.
+     * Constant for date pattern with numeric month and day.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String NUM_MONTH_DAY = "Md";
     
     /** 
-     * Constant for date pattern denoted by the skeleton <code>yMEd</code>.
+     * Constant for date pattern with year, numeric month, weekday, and day.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String YEAR_NUM_MONTH_WEEKDAY_DAY = "yMEd";
       
     /** 
-     * Constant for date pattern denoted by the skeleton <code>MMMEd</code>.
+     * Constant for date pattern with abbreviated month, weekday, and day.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String ABBR_MONTH_WEEKDAY_DAY = "MMMEd";
     
     /** 
-     * Constant for date pattern denoted by the skeleton <code>yMMMM</code>.
+     * Constant for date pattern with year and month.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String YEAR_MONTH = "yMMMM";
     
     /** 
-     * Constant for date pattern denoted by the skeleton <code>yMMM</code>.
+     * Constant for date pattern with year and abbreviated month.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String YEAR_ABBR_MONTH = "yMMM";
     
     /** 
-     * Constant for date pattern denoted by the skeleton <code>MMMMd</code>.
+     * Constant for date pattern having month and day.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
@@ -837,105 +838,106 @@ public abstract class DateFormat extends UFormat {
     
     
     /** 
-     * Constant for date pattern denoted by the skeleton <code>MMMd</code>.
+     * Constant for date pattern with abbreviated month and day.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String ABBR_MONTH_DAY = "MMMd"; 
 
     /** 
-     * Constant for date pattern denoted by the skeleton <code>MMMMEEEEd</code>.
+     * Constant for date pattern with month, weekday, and day.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String MONTH_WEEKDAY_DAY = "MMMMEEEEd";
     
     /** 
-     * Constant for date pattern denoted by the skeleton <code>yMMMEd</code>.
+     * Constant for date pattern with year, abbreviated month, weekday, 
+     * and day.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String YEAR_ABBR_MONTH_WEEKDAY_DAY = "yMMMEd"; 
     
     /** 
-     * Constant for date pattern denoted by the skeleton <code>yMMMMEEEEd</code>.
+     * Constant for date pattern with year, month, weekday, and day.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String YEAR_MONTH_WEEKDAY_DAY = "yMMMMEEEEd";
 
     /** 
-     * Constant for date pattern denoted by the skeleton <code>yMMMMd</code>.
+     * Constant for date pattern with year, month, and day.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String YEAR_MONTH_DAY = "yMMMMd";
 
     /** 
-     * Constant for date pattern denoted by the skeleton <code>yMMMd</code>.
+     * Constant for date pattern with year, abbreviated month, and day.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String YEAR_ABBR_MONTH_DAY = "yMMMd";
 
     /** 
-     * Constant for date pattern denoted by the skeleton <code>yMd</code>.
+     * Constant for date pattern with year, numeric month, and day.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String YEAR_NUM_MONTH_DAY = "yMd";
 
     /** 
-     * Constant for date pattern denoted by the skeleton <code>M</code>.
+     * Constant for date pattern with numeric month.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String NUM_MONTH = "M";
 
     /** 
-     * Constant for date pattern denoted by the skeleton <code>MMM</code>.
+     * Constant for date pattern with abbreviated month.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String ABBR_MONTH = "MMM";
 
     /** 
-     * Constant for date pattern denoted by the skeleton <code>MMMM</code>.
+     * Constant for date pattern with month.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String MONTH = "MMMM";
 
     /** 
-     * Constant for date pattern denoted by the skeleton <code>hmv</code>.
+     * Constant for date pattern with hour, minute, and generic timezone.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String HOUR_MINUTE_GENERIC_TZ = "hmv";
 
     /** 
-     * Constant for date pattern denoted by the skeleton <code>hmz</code>.
+     * Constant for date pattern with hour, minute, and timezone.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String HOUR_MINUTE_TZ = "hmz";
 
     /** 
-     * Constant for date pattern denoted by the skeleton <code>h</code>.
+     * Constant for date pattern with hour.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String HOUR = "h";
 
     /** 
-     * Constant for date pattern denoted by the skeleton <code>hv</code>.
+     * Constant for date pattern with hour and generic timezone.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
     public static final String HOUR_GENERIC_TZ = "hv";
 
     /** 
-     * Constant for date pattern denoted by the skeleton <code>hz</code>.
+     * Constant for date pattern with hour and timezone.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
