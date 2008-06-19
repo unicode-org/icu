@@ -244,14 +244,12 @@ private:
     RuleParser      *mParser;
 
     PluralRules();   // default constructor not implemented
-    void getRuleData(UErrorCode& status);
     int32_t getRepeatLimit() const;
     void parseDescription(UnicodeString& ruleData, RuleChain& rules, UErrorCode &status);
     void getNextLocale(const UnicodeString& localeData, int32_t* curIndex, UnicodeString& localeName);
-    void addRules(RuleChain& rules, UErrorCode& err);
-    void addRules(const UnicodeString& localeName, RuleChain& rules, UBool addToHash, UErrorCode& err);
-    void initHashtable(UErrorCode& err);
+    void addRules(RuleChain& rules);
     int32_t getNumberValue(const UnicodeString& token) const;
+    UnicodeString getRuleFromResource(const Locale& locale, UErrorCode& status);
 
 };
 
