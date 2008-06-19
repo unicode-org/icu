@@ -3003,13 +3003,10 @@ const char* const full_data[][3] = {
     "as_Beng_IN",
     "as"
   }, {
-#if 0
-    /* Asking Mark about this one */
     "az",
-    "az_Latn_AZ",
+    "az_Cyrl_AZ",
     "az"
   }, {
-#endif
     "be",
     "be_Cyrl_BY",
     "be"
@@ -3598,13 +3595,10 @@ const char* const full_data[][3] = {
     "sv_Latn_AX",
     "sv_AX"
   }, {
-#if 0
-    /* Asking Mark about this one */
     "und_AZ",
     "az_Cyrl_AZ",
     "az"
   }, {
-#endif
     "und_Arab",
     "ar_Arab_EG",
     "ar"
