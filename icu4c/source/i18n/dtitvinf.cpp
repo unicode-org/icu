@@ -14,7 +14,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 //FIXME: define it in compiler time
-//#define DTITVINF_DEBUG 0
+//#define DTITVINF_DEBUG 1
 
 
 #ifdef DTITVINF_DEBUG 
@@ -47,9 +47,9 @@ static const char gIntervalDateTimePatternTag[]="intervalFormats";
 static const char gFallbackPatternTag[]="fallback";
 
 // {0}
-static const UChar gFirstPattern[] = {LEFT_CURLY_BRACKET, DIGIT_ZERO, RIGHT_CURLY_BRACKET, 0};
+static const UChar gFirstPattern[] = {LEFT_CURLY_BRACKET, DIGIT_ZERO, RIGHT_CURLY_BRACKET};
 // {1}
-static const UChar gSecondPattern[] = {LEFT_CURLY_BRACKET, DIGIT_ONE, RIGHT_CURLY_BRACKET, 0};
+static const UChar gSecondPattern[] = {LEFT_CURLY_BRACKET, DIGIT_ONE, RIGHT_CURLY_BRACKET};
 
 // default fall-back
 static const UChar gDefaultFallbackPattern[] = {LEFT_CURLY_BRACKET, DIGIT_ZERO, RIGHT_CURLY_BRACKET, SPACE, EN_DASH, SPACE, LEFT_CURLY_BRACKET, DIGIT_ONE, RIGHT_CURLY_BRACKET, 0};
@@ -105,6 +105,10 @@ DateIntervalInfo::setFallbackIntervalPattern(
                         sizeof(gFirstPattern)/sizeof(gFirstPattern[0]), 0);
     int32_t secondPatternIndex = fallbackPattern.indexOf(gSecondPattern, 
                         sizeof(gSecondPattern)/sizeof(gSecondPattern[0]), 0);
+    if ( firstPatternIndex == -1 || secondPatternIndex == -1 ) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
     if ( firstPatternIndex > secondPatternIndex ) { 
         fFirstDateInPtnIsLaterDate = true;
     }
@@ -168,26 +172,27 @@ DateIntervalInfo::operator==(const DateIntervalInfo& other) const {
 }
 
 
-const UnicodeString*
+UnicodeString&
 DateIntervalInfo::getIntervalPattern(const UnicodeString& skeleton,
                                      UCalendarDateFields field,
+                                     UnicodeString& result,
                                      UErrorCode& status) const {
     if ( U_FAILURE(status) ) {
-        return NULL;
+        return result;
     }
    
     const UnicodeString* patternsOfOneSkeleton = (UnicodeString*) fIntervalPatterns->get(skeleton);
     if ( patternsOfOneSkeleton != NULL ) {
-        int8_t index = (int8_t)calendarFieldToIntervalIndex(field, status);
+        IntervalPatternIndex index = calendarFieldToIntervalIndex(field, status);
         if ( U_FAILURE(status) ) {
-            return NULL;
+            return result;
         }
         const UnicodeString& intervalPattern =  patternsOfOneSkeleton[index];
         if ( !intervalPattern.isEmpty() ) {
-            return &intervalPattern;
+            result = intervalPattern;
         }
     }
-    return NULL;
+    return result;
 }
 
 
@@ -197,9 +202,10 @@ DateIntervalInfo::getDefaultOrder() const {
 }
 
 
-const UnicodeString&
-DateIntervalInfo::getFallbackIntervalPattern() const {
-    return fFallbackIntervalPattern;
+UnicodeString&
+DateIntervalInfo::getFallbackIntervalPattern(UnicodeString& result) const {
+    result = fFallbackIntervalPattern;
+    return result;
 }
 
 
@@ -211,7 +217,7 @@ DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& err)
       return;
   }
   const char *locName = locale.getName();
-  char parentLocale[50];
+  char parentLocale[ULOC_FULLNAME_CAPACITY];
   int32_t locNameLen;
   uprv_strcpy(parentLocale, locName);
   UErrorCode status = U_ZERO_ERROR;
@@ -322,7 +328,7 @@ DateIntervalInfo::setIntervalPatternInternally(const UnicodeString& skeleton,
                                       UCalendarDateFields lrgDiffCalUnit,
                                       const UnicodeString& intervalPattern,
                                       UErrorCode& status) {
-    int8_t index = (int8_t)calendarFieldToIntervalIndex(lrgDiffCalUnit,status);
+    IntervalPatternIndex index = calendarFieldToIntervalIndex(lrgDiffCalUnit,status);
     if ( U_FAILURE(status) ) {
         return;
     }

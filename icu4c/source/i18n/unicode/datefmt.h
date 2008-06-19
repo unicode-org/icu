@@ -414,6 +414,7 @@ public:
     static DateFormat* U_EXPORT2 createInstance(void);
 
     /**
+     * This is for ICU internal use only. Please do not use.
      * Create a date/time formatter from skeleton and a given locale.
      *
      * Users are encouraged to use the skeleton macros defined in udat.h.

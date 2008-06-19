@@ -607,6 +607,7 @@ public:
     virtual void adoptCalendar(Calendar* calendarToAdopt);
 
     /**
+     * This is for ICU internal use only. Please do not use.
      * Check whether the 'field' is smaller than all the fields covered in
      * pattern, return TRUE if it is. The sequence of calendar field, 
      * from large to small is: ERA, YEAR, MONTH, DATE, AM_PM, HOUR, MINUTE,...
@@ -619,6 +620,7 @@ public:
 
 
     /**
+     * This is for ICU internal use only. Please do not use.
      * Check whether the 'field' is smaller than all the fields covered in
      * pattern, return TRUE if it is. The sequence of calendar field, 
      * from large to small is: ERA, YEAR, MONTH, DATE, AM_PM, HOUR, MINUTE,...
@@ -634,6 +636,7 @@ public:
 
 
     /**
+     * This is for ICU internal use only. Please do not use.
      * Get the locale of this simple date formatter.
      * It is used in DateIntervalFormat.
      *
