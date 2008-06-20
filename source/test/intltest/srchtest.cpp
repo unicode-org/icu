@@ -34,9 +34,13 @@
 
 // public contructors and destructors --------------------------------------
 
-StringSearchTest::StringSearchTest() :
+StringSearchTest::StringSearchTest() 
+#if !UCONFIG_NO_BREAK_ITERATION
+:
     m_en_wordbreaker_(NULL), m_en_characterbreaker_(NULL)
+#endif
 {
+#if !UCONFIG_NO_BREAK_ITERATION
     UErrorCode    status = U_ZERO_ERROR;
     
     m_en_us_ = (RuleBasedCollator *)Collator::createInstance("en_US", status);
@@ -79,10 +83,12 @@ StringSearchTest::StringSearchTest() :
     m_en_characterbreaker_ = BreakIterator::createCharacterInstance(
                                                     Locale::getEnglish(), status);
 #endif
+#endif
 }
 
 StringSearchTest::~StringSearchTest() 
 {
+#if !UCONFIG_NO_BREAK_ITERATION
     delete m_en_us_;
     delete m_fr_fr_;
     delete m_de_;
@@ -91,6 +97,7 @@ StringSearchTest::~StringSearchTest()
     delete m_en_wordbreaker_;
     delete m_en_characterbreaker_;
 #endif
+#endif
 }
 
 // public methods ----------------------------------------------------------
@@ -98,6 +105,7 @@ StringSearchTest::~StringSearchTest()
 void StringSearchTest::runIndexedTest(int32_t index, UBool exec, 
                                       const char* &name, char* ) 
 {
+#if !UCONFIG_NO_BREAK_ITERATION
     UBool areBroken = FALSE;
     if (m_en_us_ == NULL && m_fr_fr_ == NULL && m_de_ == NULL &&
         m_es_ == NULL && m_en_wordbreaker_ == NULL &&
@@ -157,8 +165,12 @@ void StringSearchTest::runIndexedTest(int32_t index, UBool exec,
         CASE(36, TestDiacriticMatch)
         default: name = ""; break;
     }
+#else
+    name="";
+#endif
 }
 
+#if !UCONFIG_NO_BREAK_ITERATION
 // private methods ------------------------------------------------------
 
 RuleBasedCollator * StringSearchTest::getCollator(const char *collator)
@@ -2361,5 +2373,7 @@ void StringSearchTest::TestCoverage(){
         errln("SearchIterator::operator =  assigned object should be equal");
     }
 }
+
+#endif /* !UCONFIG_NO_BREAK_ITERATION */
 
 #endif /* #if !UCONFIG_NO_COLLATION */

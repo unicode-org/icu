@@ -69,6 +69,7 @@ void SSearchTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
 {
     if (exec) logln("TestSuite SSearchTest: ");
     switch (index) {
+#if !UCONFIG_NO_BREAK_ITERATION
        case 0: name = "searchTest";
             if (exec) searchTest();
             break;
@@ -80,13 +81,14 @@ void SSearchTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
         case 2: name = "monkeyTest";
             if (exec) monkeyTest(params);
             break;
-
+#endif
         default: name = "";
             break; //needed to end loop
     }
 }
 
 
+#if !UCONFIG_NO_BREAK_ITERATION
 
 #define PATH_BUFFER_SIZE 2048
 const char *SSearchTest::getPath(char buffer[2048], const char *filename) {
@@ -1697,6 +1699,7 @@ void SSearchTest::monkeyTest(char *params)
     
     ucol_close(coll);
 }
-        
+
+#endif        
         
 #endif
