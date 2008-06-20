@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2007 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2008 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  03/22/2000   helena      Creation.
@@ -17,7 +17,7 @@
  * \brief C++ API: Service for searching text based on RuleBasedCollator.
  */
  
-#if !UCONFIG_NO_COLLATION
+#if !UCONFIG_NO_COLLATION && !UCONFIG_NO_BREAK_ITERATION
 
 #include "unicode/tblcoll.h"
 #include "unicode/coleitr.h"

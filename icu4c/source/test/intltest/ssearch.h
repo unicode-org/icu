@@ -28,6 +28,7 @@ public:
     virtual ~SSearchTest();
 
     virtual void runIndexedTest(int32_t index, UBool exec, const char* &name, char* params = NULL );
+#if !UCONFIG_NO_BREAK_ITERATION
 
     virtual void searchTest();
     virtual void offsetTest();
@@ -37,6 +38,8 @@ private:
     virtual const char   *getPath(char buffer[2048], const char *filename);
     virtual       int32_t monkeyTestCase(UCollator *coll, const UnicodeString &testCase, const UnicodeString &pattern, const UnicodeString &altPattern,
                                          const char *name, const char *strength, uint32_t seed);
+#endif
+                                         
 };
 
 #endif

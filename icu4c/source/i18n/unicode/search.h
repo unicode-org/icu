@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2005 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2008 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  03/22/2000   helena      Creation.
@@ -17,7 +17,7 @@
  * \brief C++ API: SearchIterator object.
  */
  
-#if !UCONFIG_NO_COLLATION
+#if !UCONFIG_NO_COLLATION && !UCONFIG_NO_BREAK_ITERATION
 
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
