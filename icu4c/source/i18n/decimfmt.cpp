@@ -67,9 +67,9 @@ U_NAMESPACE_BEGIN
 static void debugout(UnicodeString s) {
     char buf[2000];
     s.extract((int32_t) 0, s.length(), buf);
-    printf("%s", buf);
+    printf("%s\n", buf);
 }
-#define debug(x) printf("%s", x);
+#define debug(x) printf("%s\n", x);
 #else
 #define debugout(x)
 #define debug(x)
@@ -1730,6 +1730,11 @@ int32_t DecimalFormat::compareSimpleAffix(const UnicodeString& affix,
             if (pos == s && !literalMatch) {
                 return -1;
             }
+
+            // If we skip UWhiteSpace in the input text, we need to skip it in the pattern.
+            // Otherwise, the previous lines may have skipped over text (such as U+00A0) that
+            // is also in the affix.
+            i = skipUWhiteSpace(affix, i);
         } else {
             if (pos < input.length() &&
                 input.char32At(pos) == c) {
