@@ -273,7 +273,7 @@
 
   <target name="doMangle" unless="dontMangle">
     <echo message="Running source code preprocessor for [${target.defs}]"/>
-    <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true">
+    <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true" fork="true" dir="${basedir}">
       <arg value="-d${target.defs}" />
       <arg value="${input.file}" />
     </java>

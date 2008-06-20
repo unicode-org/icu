@@ -270,6 +270,7 @@ icu4j/localespi/.project -text
 icu4j/localespi/.settings/org.eclipse.core.resources.prefs -text
 icu4j/localespi/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/localespi/.settings/org.eclipse.jdt.ui.prefs -text
+icu4j/localespi/readme.html svneol=native#text/html
 icu4j/localespi/src/META-INF/services/java.text.spi.BreakIteratorProvider -text
 icu4j/localespi/src/META-INF/services/java.text.spi.CollatorProvider -text
 icu4j/localespi/src/META-INF/services/java.text.spi.DateFormatProvider -text
