@@ -44,8 +44,9 @@ void addCollTest(TestNode** root)
     addCollIterTest(root);
     addAllCollTest(root);
     addMiscCollTest(root);
-
+#if !UCONFIG_NO_BREAK_ITERATION
     addSearchTest(root);
+#endif
 }
 
 
