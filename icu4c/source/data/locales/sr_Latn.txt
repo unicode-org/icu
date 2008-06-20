@@ -522,7 +522,7 @@ sr_Latn{
             "YUN",
         }
     }
-    ExemplarCharacters{"[a-c ć č d đ {dž} e-l {lj} m n {nj} o p r s š t-v z ž]"}
+    ExemplarCharacters{"[a-c č ć d đ {dž} e-l {lj} m n {nj} o p r s š t-v z ž]"}
     Keys{
         calendar{"Kalendar"}
         collation{"Sortiranje"}
@@ -551,7 +551,6 @@ sr_Latn{
         de{"Nemački"}
         el{"Grčki"}
         en{"Engleski"}
-        en_AU{"Engleski (Australija)"}
         en_US{"Engleski (SAD)"}
         eo{"Esperanto"}
         es{"Španski"}
@@ -562,7 +561,6 @@ sr_Latn{
         fil{"Tagalog"}
         fo{"Farski"}
         fr{"Francuski"}
-        fr_CH{"Francuski (Švajcarska)"}
         fy{"Frizijski"}
         ga{"Irski"}
         gd{"Škotski Galski"}
@@ -610,7 +608,6 @@ sr_Latn{
         pl{"Poljski"}
         ps{"Paštunski"}
         pt{"Portugalski"}
-        pt_BR{"Portugalski (Brazil)"}
         pt_PT{"Portugalski (Portugalija)"}
         rm{"Reto-Romanski"}
         ro{"Rumunski"}
@@ -702,23 +699,12 @@ sr_Latn{
             traditional{"Tradicionalno sortiranje"}
         }
     }
-    Version{"1.70"}
+    Version{"1.74"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "AM",
                 "PM",
-            }
-            DateTimePatterns{
-                "HH 'časova', mm 'minuta', ss 'sekundi' vvvv",
-                "HH.mm.ss z",
-                "HH.mm.ss",
-                "HH.mm",
-                "EEEE, dd. MMMM yyyy.",
-                "dd. MMMM yyyy.",
-                "dd.MM.yyyy.",
-                "d.M.yy.",
-                "{1} {0}",
             }
             dayNames{
                 format{

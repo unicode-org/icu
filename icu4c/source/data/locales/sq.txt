@@ -391,6 +391,33 @@ sq{
             }
         }
     }
+    units{
+        day{
+            one{"{0} ditë"}
+            other{"{0} ditë"}
+        }
+        hour{
+            one{"{0} orë"}
+        }
+        minute{
+            one{"{0} minutë"}
+            other{"{0} minuta"}
+        }
+        month{
+            one{"{0} muaj"}
+        }
+        second{
+            one{"{0} sekondë"}
+            other{"{0} sekonda"}
+        }
+        week{
+            one{"{0} javë"}
+        }
+        year{
+            one{"{0} vit"}
+            other{"{0} vjet"}
+        }
+    }
     zoneStrings{
         "meta:Europe_Central"{
             ls{"Ora qendrore evropiane"}

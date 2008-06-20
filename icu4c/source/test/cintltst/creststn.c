@@ -1362,7 +1362,7 @@ static void TestErrorConditions(){
 
 static void TestGetVersion(){
     UVersionInfo minVersionArray = {0x01, 0x00, 0x00, 0x00};
-    UVersionInfo maxVersionArray = {0x50, 0xc0, 0xcf, 0xcf};
+    UVersionInfo maxVersionArray = {0x50, 0xff, 0xcf, 0xcf};
     UVersionInfo versionArray;
     UErrorCode status= U_ZERO_ERROR;
     UResourceBundle* resB = NULL; 

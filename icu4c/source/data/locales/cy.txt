@@ -119,8 +119,6 @@ cy{
         pl{"Pwyleg"}
         ps{"Pashto"}
         pt{"Portiwgaleg"}
-        pt_BR{"Portiwgaleg (Brasil)"}
-        pt_PT{"Portiwgaleg (Portiwgal)"}
         ro{"Rwmaneg"}
         ru{"Rwsieg"}
         sa{"Sansgrit"}
@@ -143,8 +141,6 @@ cy{
         uz{"Wsbeceg"}
         vi{"Fietnameg"}
         zh{"Tseineeg"}
-        zh_Hans{"zh_Hans"}
-        zh_Hant{"zh_Hant"}
         zu{"Zwlw"}
     }
     LocaleScript{
@@ -153,7 +149,7 @@ cy{
     Scripts{
         Latn{"Lladin"}
     }
-    Version{"1.55"}
+    Version{"1.56"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -269,6 +265,90 @@ cy{
                 }
                 zone{
                     dn{"Cylchfa"}
+                }
+            }
+            intervalFormats{
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E, d/M – E, d/M"}
+                    d{"E, d/M – E, d/M"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"E, d MMM – E, d MMM"}
+                    d{"E, d MMM – E, d MMM"}
+                }
+                MMMM{
+                    M{"LLLL-LLLL"}
+                }
+                MMMd{
+                    M{"d MMM – d MMM"}
+                    d{"MMM d–d"}
+                }
+                Md{
+                    M{"d/M – d/M"}
+                    d{"d/M – d/M"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} – {1}"}
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"M/yy – M/yy"}
+                    y{"M/yy – M/yy"}
+                }
+                yMEd{
+                    M{"E, d/M/yy - E, d/M/yy"}
+                    d{"E, d/M/yy - E, d/M/yy"}
+                    y{"E, d/M/yy - E, d/M/yy"}
+                }
+                yMMM{
+                    M{"MMM - MMM, yyyy"}
+                    y{"MMM yyyy - MMM yyyy"}
+                }
+                yMMMEd{
+                    M{"E, d MMM - E, d MMM, yyyy"}
+                    d{"E, d MMM - E, d MMM, yyyy"}
+                    y{"E, d MMM, yyyy - E, d MMM, yyyy"}
+                }
+                yMMMM{
+                    M{"yyyy-MM – MM"}
+                    y{"yyyy-MM – yyyy-MM"}
+                }
+                yMMMd{
+                    M{"d MMM - d MMM, yyyy"}
+                    d{"d-d MMM, yyyy"}
+                    y{"d MMM, yyyy - d MMM, yyyy"}
+                }
+                yMd{
+                    M{"d/M/yy - d/M/yy"}
+                    d{"d/M/yy - d/M/yy"}
+                    y{"d/M/yy - d/M/yy"}
                 }
             }
             monthNames{

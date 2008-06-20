@@ -644,15 +644,15 @@ NumberFormatTest::escape(UnicodeString& s)
 // -------------------------------------
 static const char* testCases[][2]= {
      /* locale ID */  /* expected */
-    {"ca_ES_PREEURO", "1.150 \\u20A7" },
-    {"de_LU_PREEURO", "1,150 F" },
-    {"el_GR_PREEURO", "1.150,50\\u0394\\u03C1\\u03C7" },
-    {"en_BE_PREEURO", "1.150,50 BF" },
-    {"es_ES_PREEURO", "1.150 \\u20A7" },
-    {"eu_ES_PREEURO", "1.150 \\u20A7" }, 
-    {"gl_ES_PREEURO", "1.150 \\u20A7" },
-    {"it_IT_PREEURO", "\\u20A4 1.150" },
-    {"pt_PT_PREEURO", "1,150$50 Esc."},
+    {"ca_ES_PREEURO", "1.150\\u00A0\\u20A7" },
+    {"de_LU_PREEURO", "1,150\\u00A0F" },
+    {"el_GR_PREEURO", "1.150,50\\u00A0\\u0394\\u03C1\\u03C7" },
+    {"en_BE_PREEURO", "1.150,50\\u00A0BF" },
+    {"es_ES_PREEURO", "\\u20A7\\u00A01.150" },
+    {"eu_ES_PREEURO", "1.150\\u00A0\\u20A7" }, 
+    {"gl_ES_PREEURO", "1.150\\u00A0\\u20A7" },
+    {"it_IT_PREEURO", "\\u20A4\\u00A01.150" },
+    {"pt_PT_PREEURO", "1,150$50\\u00A0Esc."},
     {"en_US@currency=JPY", "\\u00A51,150"}
 };
 /**
@@ -670,8 +670,8 @@ NumberFormatTest::TestCurrency(void)
 
     UnicodeString s; currencyFmt->format(1.50, s);
     logln((UnicodeString)"Un pauvre ici a..........." + s);
-    if (!(s=="1,50 $"))
-        errln((UnicodeString)"FAIL: Expected 1,50 $");
+    if (!(s==CharsToUnicodeString("1,50\\u00A0$")))
+        errln((UnicodeString)"FAIL: Expected 1,50<nbsp>$");
     delete currencyFmt;
     s.truncate(0);
     char loc[256]={0};
@@ -679,16 +679,16 @@ NumberFormatTest::TestCurrency(void)
     currencyFmt = NumberFormat::createCurrencyInstance(Locale(loc),status);
     currencyFmt->format(1.50, s);
     logln((UnicodeString)"Un pauvre en Allemagne a.." + s);
-    if (!(s=="1,50 DM"))
-        errln((UnicodeString)"FAIL: Expected 1,50 DM");
+    if (!(s==CharsToUnicodeString("1,50\\u00A0DM")))
+        errln((UnicodeString)"FAIL: Expected 1,50<nbsp>DM");
     delete currencyFmt;
     s.truncate(0);
     len = uloc_canonicalize("fr_FR_PREEURO", loc, 256, &status);
     currencyFmt = NumberFormat::createCurrencyInstance(Locale(loc), status);
     currencyFmt->format(1.50, s);
     logln((UnicodeString)"Un pauvre en France a....." + s);
-    if (!(s=="1,50 F"))
-        errln((UnicodeString)"FAIL: Expected 1,50 F");
+    if (!(s==CharsToUnicodeString("1,50\\u00A0F")))
+        errln((UnicodeString)"FAIL: Expected 1,50<nbsp>F");
     delete currencyFmt;
     if (U_FAILURE(status))
         errln((UnicodeString)"FAIL: Status " + (int32_t)status);
@@ -910,13 +910,13 @@ void NumberFormatTest::TestComplexCurrency() {
     Locale loc("kn", "IN", "");
     NumberFormat* fmt = NumberFormat::createCurrencyInstance(loc, ec);
     if (U_SUCCESS(ec)) {
-        expect2(*fmt, 1.0, "Re. 1.00");
+        expect2(*fmt, 1.0, CharsToUnicodeString("Re.\\u00A01.00"));
         // Use .00392625 because that's 2^-8.  Any value less than 0.005 is fine.
-        expect(*fmt, 1.00390625, "Re. 1.00"); // tricky
-        expect2(*fmt, 12345678.0, "Rs. 1,23,45,678.00");
-        expect2(*fmt, 0.5, "Rs. 0.50");
-        expect2(*fmt, -1.0, "-Re. 1.00");
-        expect2(*fmt, -10.0, "-Rs. 10.00");
+        expect(*fmt, 1.00390625, CharsToUnicodeString("Re.\\u00A01.00")); // tricky
+        expect2(*fmt, 12345678.0, CharsToUnicodeString("Rs.\\u00A01,23,45,678.00"));
+        expect2(*fmt, 0.5, CharsToUnicodeString("Rs.\\u00A00.50"));
+        expect2(*fmt, -1.0, CharsToUnicodeString("-Re.\\u00A01.00"));
+        expect2(*fmt, -10.0, CharsToUnicodeString("-Rs.\\u00A010.00"));
     } else {
         errln("FAIL: getCurrencyInstance(kn_IN)");
     }
@@ -2224,7 +2224,7 @@ void NumberFormatTest::TestJB3832(){
     const char* localeID = "pt_PT@currency=PTE";
     Locale loc(localeID);
     UErrorCode status = U_ZERO_ERROR;
-    UnicodeString expected("1,150$50 Esc.");
+    UnicodeString expected(CharsToUnicodeString("1,150$50\\u00A0Esc."));
     UnicodeString s;
     NumberFormat* currencyFmt = NumberFormat::createCurrencyInstance(loc, status);
     if(U_FAILURE(status)){

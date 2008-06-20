@@ -1270,6 +1270,265 @@ lt{
             "Zimbabvės doleris",
         }
     }
+    CurrencyPlurals{
+        ADP{
+            few{"Andoros pesetos"}
+            one{"Andoros peseta"}
+            other{"Andoros pesetos"}
+        }
+        AFA{
+            few{"Afganiai (1927-2002)"}
+            one{"Afganis (1927-2002)"}
+            other{"Afganiai (1927-2002)"}
+        }
+        AFN{
+            few{"Afganiai"}
+            one{"Afganis"}
+            other{"Afganiai"}
+        }
+        ALL{
+            few{"Albanijos lekai"}
+            one{"Albanijos lekas"}
+            other{"Albanijos lekai"}
+        }
+        AMD{
+            few{"Armėnijos dramai"}
+            one{"Armėnijos dramas"}
+            other{"Armėnijos dramai"}
+        }
+        ANG{
+            few{"Nyderlandų Antilų guldenas"}
+            other{"Nyderlandų Antilų guldenai"}
+        }
+        AOA{
+            few{"Angolos kvanzos"}
+            one{"Angolos kvanza"}
+            other{"Angolos kvanzai"}
+        }
+        AOK{
+            few{"Angolos kvanzos (1977-1990)"}
+            one{"Angolos kvanza (1977-1990)"}
+            other{"Angolos kvanzai (1977-1990)"}
+        }
+        AON{
+            few{"Angolos naujosios kvanzos"}
+            one{"Angolos naujoji kvanza"}
+            other{"Angolos naujosios kvanzos"}
+        }
+        ARP{
+            few{"Argentinos pesai (1983-1985)"}
+            one{"Argentinos pesas (1983-1985)"}
+            other{"Argentinos pesai (1983-1985)"}
+        }
+        ARS{
+            one{"Argentinos pesas"}
+            other{"Argentinos pesai"}
+        }
+        ATS{
+            few{"Austrijos šilingai"}
+            one{"Austrijos šilingas"}
+            other{"Austrijos šilingai"}
+        }
+        AUD{
+            one{"Australijos doleris"}
+            other{"Australijos doleriai"}
+        }
+        AWG{
+            few{"Arubos guldenai"}
+            one{"Arubos guldenas"}
+            other{"Arubos guldenai"}
+        }
+        AZM{
+            few{"Azerbaidžano manatai (1993-2006)"}
+            one{"Azerbaidžano manatas (1993-2006)"}
+            other{"Azerbaidžano manatai (1993-2006)"}
+        }
+        AZN{
+            few{"Azerbaidžano manatai"}
+            one{"Azerbaidžano manatas"}
+            other{"Azerbaidžano manatai"}
+        }
+        BAD{
+            few{"Bosnijos ir Hercegovinos dinarai"}
+            one{"Bosnijos ir Hercegovinos dinaras"}
+            other{"Bosnijos ir Hercegovinos dinarai"}
+        }
+        BAM{
+            few{"Bosnijos ir Hercegovinos konvertuojamosios markės"}
+            one{"Bosnijos ir Hercegovinos konvertuojamoji markė"}
+            other{"Bosnijos ir Hercegovinos konvertuojamosios markės"}
+        }
+        BBD{
+            few{"Barbadoso doleriai"}
+            one{"Barbadoso doleris"}
+            other{"Barbadoso doleriai"}
+        }
+        BDT{
+            few{"Bangladešo takos"}
+            one{"Bangladešo taka"}
+            other{"Bangladešo takos"}
+        }
+        BEC{
+            few{"Belgijos frankai (konvertuojami)"}
+            one{"Belgijos frankas (konvertuojamas)"}
+            other{"Belgijos frankai (konvertuojami)"}
+        }
+        BEF{
+            few{"Belgijos frankai"}
+            one{"Belgijos frankas"}
+            other{"Belgijos frankai"}
+        }
+        BEL{
+            few{"Belgijos frankai (finansiniai)"}
+            one{"Belgijos frankas (finansinis)"}
+            other{"Belgijos frankai (finansiniai)"}
+        }
+        BGL{
+            few{"Bulgarijos levai"}
+            one{"Bulgarijos levas (1962-1999)"}
+            other{"Bulgarijos levai"}
+        }
+        BGN{
+            one{"Bulgarijos naujasis levas"}
+            other{"Bulgarijos naujasis levai"}
+        }
+        BHD{
+            few{"Bahreino dinarai"}
+            one{"Bahreino dinaras"}
+            other{"Bahreino dinarai"}
+        }
+        BIF{
+            few{"Burundžio frankai"}
+            one{"Burundžio frankas"}
+            other{"Burundžio frankai"}
+        }
+        BMD{
+            few{"Bermudos doleriai"}
+            one{"Bermudos doleris"}
+            other{"Bermudos doleriai"}
+        }
+        BND{
+            one{"Brunėjaus doleris"}
+            other{"Brunėjaus doleriai"}
+        }
+        BOB{
+            one{"Bolivijos bolivijanas"}
+            other{"Bolivijos bolivijanai"}
+        }
+        BOP{
+            few{"Bolivijos pesai"}
+            one{"Bolivijos pesas"}
+            other{"Bolivijos pesai"}
+        }
+        BOV{
+            one{"Bolivijos mvdol"}
+            other{"Bolivijos mvdol"}
+        }
+        BRB{
+            few{"Brazilijos naujieji kruzeirai"}
+            one{"Brazilijos naujasis kruzeiras"}
+            other{"Brazilijos naujieji kruzeirai"}
+        }
+        BRC{
+            few{"Brazilijos kruzadai"}
+            one{"Brazilijos kruzadas"}
+            other{"Brazilijos kruzadai"}
+        }
+        BRE{
+            few{"Brazilijos kruzeirai (1990-1993)"}
+            one{"Brazilijos kruzeiras (1990-1993)"}
+            other{"Brazilijos kruzeirai (1990-1993)"}
+        }
+        BRL{
+            one{"Brazilijos realas"}
+            other{"Brazilijos realai"}
+        }
+        BRN{
+            few{"Brazilijos naujieji  kruzadai"}
+            one{"Brazilijos naujasis kruzadas"}
+            other{"Brazilijos naujieji kruzadai"}
+        }
+        BRR{
+            few{"Brazilijos kruzeirai"}
+            one{"Brazilijos kruzeiras"}
+            other{"Brazilijos kruzeirai"}
+        }
+        BSD{
+            few{"Bahamų doleriai"}
+            one{"Bahamų doleris"}
+            other{"Bahamų doleriai"}
+        }
+        BTN{
+            few{"Butano ngultrumai"}
+            one{"Butano ngultrumas"}
+            other{"Butano ngultrumai"}
+        }
+        BWP{
+            few{"Botsvanos pulos"}
+            one{"Botsvanos pula"}
+            other{"Botsvanos pulos"}
+        }
+        BYB{
+            one{"Baltarusijos naujasis rublis"}
+            other{"Baltarusijos naujieji rubliai"}
+        }
+        BYR{
+            one{"Baltarusijos rublis"}
+            other{"Baltarusijos rubliai"}
+        }
+        BZD{
+            one{"Belizo doleris"}
+            other{"Belizo doleriai"}
+        }
+        CAD{
+            one{"Kanados doleris"}
+            other{"Kanados doleriai"}
+        }
+        CDF{
+            one{"Kongo frankas"}
+            other{"Kongo frankai"}
+        }
+        CLP{
+            one{"Čilės pesas"}
+            other{"Čilės pesai"}
+        }
+        CNY{
+            one{"Kinijos ženminbi juanis"}
+            other{"Kinijos ženminbi juaniai"}
+        }
+        COP{
+            one{"Kolumbijos pesas"}
+            other{"Kolumbijos pesai"}
+        }
+        CRC{
+            one{"Kosta Rikos kolonas"}
+            other{"Kosta Rikos kolonai"}
+        }
+        DZD{
+            one{"Alžyro dinaras"}
+            other{"Alžyro dinarai"}
+        }
+        GBP{
+            one{"Didžiosios Britanijos svaras sterlingų"}
+            other{"Didžiosios Britanijos svarai sterlingų"}
+        }
+        KMF{
+            one{"Komoro frankas"}
+            other{"Komoro frankai"}
+        }
+        XAF{
+            one{"CFA BEAC frankas"}
+            other{"CFA BEAC frankai"}
+        }
+        XOF{
+            one{"CFA BCEAO frankas"}
+            other{"CFA BCEAO frankai"}
+        }
+        XPF{
+            one{"CFP frankas"}
+            other{"CFP frankai"}
+        }
+    }
     ExemplarCharacters{"[a ą b c č d e ę ė f-i į y j-p r s š t u ų ū v z ž]"}
     Keys{
         calendar{"kalendorius"}
@@ -1466,7 +1725,7 @@ lt{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤",
+        "#,##0.00 ¤",
         "#,##0%",
         "#E0",
     }
@@ -1510,7 +1769,7 @@ lt{
             roc{"Kinijos respublikos kalendorius"}
         }
     }
-    Version{"1.90"}
+    Version{"1.92"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2172,23 +2431,17 @@ lt{
         }
         "meta:Africa_Central"{
             ls{"Centrinės Afrikos laikas"}
-            ss{"CAT"}
         }
         "meta:Africa_Eastern"{
             ls{"Rytų Afrikos laikas"}
-            ss{"EAT"}
         }
         "meta:Africa_Southern"{
             lg{"Pietų Afrikos laikas"}
             ls{"Pietų Afrikos standartinis laikas"}
-            sg{"SAT"}
-            ss{"SAST"}
         }
         "meta:Africa_Western"{
             ld{"Vakarų Afrikos vasaros laikas"}
             ls{"Vakarų Afrikos laikas"}
-            sd{"WAST"}
-            ss{"WAT"}
         }
         "meta:Alaska"{
             ld{"Aliaskos vasaros laikas"}

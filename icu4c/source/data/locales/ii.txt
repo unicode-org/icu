@@ -211,6 +211,11 @@ ii{
             }
         }
     }
+    codePatterns{
+        language{"ꅇꉙ: {0}"}
+        script{"ꇇꁱ: {0}"}
+        territory{"ꃅꄷ: {0}"}
+    }
     measurementSystemNames{
         US{"ꂰꇩ"}
         metric{"ꂰꌬꌠ"}

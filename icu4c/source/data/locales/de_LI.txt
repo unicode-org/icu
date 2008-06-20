@@ -23,11 +23,11 @@ de_LI{
     }
     NumberPatterns{
         "#,##0.###",
-        "¤ #,##0.00",
-        "#,##0 %",
+        "¤ #,##0.00",
+        "#,##0 %",
         "#E0",
     }
-    Version{"1.41"}
+    Version{"1.42"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

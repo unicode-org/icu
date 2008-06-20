@@ -1333,9 +1333,7 @@ cs{
         dz{"bhútánština"}
         el{"řečtina"}
         en{"angličtina"}
-        en_AU{"angličtina (Austrálie)"}
         en_CA{"anglicky (Kanada)"}
-        en_GB{"angličtina (Velká Británie)"}
         en_US{"angličtina (USA)"}
         eo{"esperanto"}
         es{"španělština"}
@@ -1411,8 +1409,6 @@ cs{
         pl{"polština"}
         ps{"Pashto (Pushto)"}
         pt{"portugalština"}
-        pt_BR{"portugalština (Brazílie)"}
-        pt_PT{"portugalština (Portugalsko)"}
         qu{"kečuánština"}
         rm{"rétorománština"}
         rn{"kirundi"}
@@ -1492,7 +1488,7 @@ cs{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤",
+        "#,##0.00 ¤",
         "#,##0%",
         "#E0",
     }
@@ -1601,7 +1597,7 @@ cs{
             japanese{"Japonský kalendář"}
         }
     }
-    Version{"1.112"}
+    Version{"1.116"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1746,6 +1742,10 @@ cs{
             }
         }
     }
+    codePatterns{
+        language{"Jazyk: {0}"}
+        territory{"Region: {0}"}
+    }
     delimiters{
         alternateQuotationEnd{"‘"}
         alternateQuotationStart{"‚"}
@@ -1756,15 +1756,36 @@ cs{
         US{"USA"}
         metric{"Metrický"}
     }
+    units{
+        day{
+            few{"{0} dny"}
+            one{"{0} den"}
+        }
+        hour{
+            one{"{0} hodina"}
+        }
+        minute{
+            one{"{0} minuta"}
+        }
+        month{
+            one{"{0} měsíc"}
+        }
+        second{
+            one{"{0} sekunda"}
+        }
+        week{
+            one{"{0} týden"}
+        }
+        year{
+            one{"{0} rok"}
+        }
+    }
     zoneStrings{
         "America:Belem"{
             ec{"Belém"}
         }
         "America:Cordoba"{
             ec{"Kordoba"}
-        }
-        "America:Rio_Branco"{
-            ec{"Rio Branco"}
         }
         "America:St_Johns"{
             ec{"St. Johns"}
@@ -1853,75 +1874,52 @@ cs{
         "meta:Alaska"{
             ld{"Aljašský letní čas"}
             ls{"Aljašský standardní čas"}
-            sd{"AKDT"}
-            ss{"AKST"}
         }
         "meta:America_Central"{
             ld{"Centrální letní čas"}
             ls{"Centrální standardní čas"}
-            sd{"CDT"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"Východní letní čas"}
             ls{"Východní standardní čas"}
-            sd{"EDT"}
-            ss{"EST"}
         }
         "meta:America_Mountain"{
             ld{"Horský letní čas"}
             ls{"Horský standardní čas"}
-            sd{"MDT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             ld{"Pacifický letní čas"}
             ls{"Pacifický standardní čas"}
-            sd{"PDT"}
-            ss{"PST"}
         }
         "meta:Atlantic"{
             ld{"Atlantický letní čas"}
             ls{"Atlantický standardní čas"}
-            sd{"ADT"}
-            ss{"AST"}
         }
         "meta:China"{
             ls{"Čínský standardní čas"}
-            ss{"CTT"}
         }
         "meta:Europe_Central"{
             ld{"Středoevropský letní čas"}
             ls{"Středoevropský standardní čas"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Východoevropský letní čas"}
             ls{"Východoevropský standardní čas"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "meta:GMT"{
             ls{"Greenwichský střední čas"}
-            ss{"GMT"}
         }
         "meta:Israel"{
             ld{"Izraelský letní čas"}
             ls{"Izraelský standardní čas"}
-            sd{"IDT"}
-            ss{"IST"}
         }
         "meta:Japan"{
             ld{"Japonský letní čas"}
             ls{"Japonský standardní čas"}
-            sd{"JDT"}
-            ss{"JST"}
         }
         "meta:Newfoundland"{
             ld{"Newfoundlandský letní čas"}
             ls{"Newfoundlandský standardní čas"}
-            ss{"CNT"}
         }
     }
 }

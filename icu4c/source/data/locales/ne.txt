@@ -549,7 +549,7 @@ ne{
         AREVELA{"पूर्वी आर्मेनियाली"}
         POSIX{"कम्प्युटर"}
     }
-    Version{"1.22"}
+    Version{"1.23"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -625,6 +625,11 @@ ne{
                     dn{"क्षेत्र"}
                 }
             }
+            intervalFormats{
+                MMM{
+                    M{"फेब्रु-मार्च"}
+                }
+            }
             monthNames{
                 stand-alone{
                     narrow{
@@ -668,6 +673,30 @@ ne{
         alternateQuotationStart{"\""}
         quotationEnd{"'"}
         quotationStart{"'"}
+    }
+    units{
+        day{
+            one{"{0} दिन"}
+        }
+        hour{
+            one{"{0} घण्टा"}
+        }
+        minute{
+            one{"{0} मिनेट"}
+        }
+        month{
+            one{"{0} महिना"}
+        }
+        second{
+            one{"{0} सेकेण्ड"}
+        }
+        week{
+            one{"{0} हप्ता"}
+        }
+        year{
+            one{"{0} बर्ष"}
+            other{"{0} बर्ष"}
+        }
     }
     zoneStrings{
         "Africa:Ceuta"{

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/km.xml
  */
 km{
-    AuxExemplarCharacters{"[\u200B ឝ ឞ \u17B4 \u17B5]"}
+    AuxExemplarCharacters{"[\u17B4 \u17B5\u200B ឝ ឞ]"}
     Countries{
         AD{"អានដូរ៉ា"}
         AE{"អេមីរ៉ែទអារ៉ាប់រួម"}
@@ -198,7 +198,7 @@ km{
             "Riel",
         }
     }
-    ExemplarCharacters{"[ំ-៑ ក-វ ស-អ {អា} ឥ-ឧ {ឧក} ឩ-ឳ ា-ៅ ្]"}
+    ExemplarCharacters{"[៎ ៏ ៑ ័ ៈ ់ ៉ ៊ ៍ ៌ ក-រ ឫ ឬ ល ឭ ឮ វ ស-អ {អា} ឥ-ឧ {ឧក} ឪ ឩ ឯ-ឳ ា-ះ ្]"}
     Languages{
         aa{"ភាសាអាហ្វារ"}
         ae{"ភាសាអាវែស្តង់"}
@@ -324,7 +324,7 @@ km{
         "#,##0%",
         "#E0",
     }
-    Version{"1.62"}
+    Version{"1.63"}
     calendar{
         gregorian{
             AmPmMarkers{

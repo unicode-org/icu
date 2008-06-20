@@ -166,11 +166,11 @@ fo{
     }
     NumberPatterns{
         "#,##0.###",
-        "¤#,##0.00;¤ -#,##0.00",
+        "¤#,##0.00;¤-#,##0.00",
         "#,##0%",
         "#E0",
     }
-    Version{"1.58"}
+    Version{"1.61"}
     calendar{
         gregorian{
             DateTimePatterns{

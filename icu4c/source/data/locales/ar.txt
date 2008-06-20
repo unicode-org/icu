@@ -428,7 +428,7 @@ ar{
         }
         BRB{
             "BRB",
-            "نوفو كروزايرو برازيلى  - 1967-1986",
+            "نوفو كروزايرو برازيلى - 1967-1986",
         }
         BRC{
             "BRC",
@@ -460,7 +460,7 @@ ar{
         }
         BYB{
             "BYB",
-            "روبل بيلاروسى جديد  - 1994-1999",
+            "روبل بيلاروسى جديد - 1994-1999",
         }
         BYR{
             "BYR",
@@ -1100,7 +1100,7 @@ ar{
         }
         UYP{
             "UYP",
-            "بيزو أوروجواى  - 1975-1993",
+            "بيزو أوروجواى - 1975-1993",
         }
         UZS{
             "UZS",
@@ -1202,6 +1202,14 @@ ar{
             "ZWD",
             "دولار زمبابوى",
         }
+    }
+    CurrencyUnitPatterns{
+        few{"{0} {1}"}
+        many{"{0} {1}"}
+        one{"{0} {1}"}
+        other{"{0} {1}"}
+        two{"{0} {1}"}
+        zero{"{0} {1}"}
     }
     ExemplarCharacters{"[ً-ْ ـ ء-غ ف-ي]"}
     Keys{
@@ -1705,7 +1713,7 @@ ar{
     }
     NumberPatterns{
         "#,##0.###;#,##0.###-",
-        "¤ #,##0.00;¤ #,##0.00-",
+        "¤ #,##0.00;¤ #,##0.00-",
         "#,##0%",
         "#E0",
     }
@@ -1849,7 +1857,7 @@ ar{
         POSIX{"كمبيوتر"}
         REVISED{"كتابة تم مراجعتها"}
     }
-    Version{"1.100"}
+    Version{"1.102"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -2106,13 +2114,80 @@ ar{
             monthNames:alias{"/LOCALE/calendar/islamic/monthNames"}
         }
     }
+    codePatterns{
+        language{"اللغة: {0}"}
+        script{"نظام الكتابة: {0}"}
+        territory{"المنطقة: {0}"}
+    }
     layout{
         characters{"right-to-left"}
         lines{"top-to-bottom"}
     }
+    localeDisplayPattern{
+        pattern{"{0} ({1})"}
+        separator{"،"}
+    }
     measurementSystemNames{
         US{"النظام الأمريكي"}
         metric{"النظام المتري"}
+    }
+    units{
+        day{
+            few{"{0} أيام"}
+            many{"{0} يوماً"}
+            one{"يوم"}
+            other{"{0} يوم"}
+            two{"يومان"}
+            zero{"لا أيام"}
+        }
+        hour{
+            few{"{0} ساعات"}
+            many{"{0} ساعةً"}
+            one{"ساعة"}
+            other{"{0} ساعة"}
+            two{"ساعتان"}
+            zero{"لا ساعات"}
+        }
+        minute{
+            few{"{0} دقائق"}
+            many{"{0} دقيقةً"}
+            one{"دقيقة"}
+            other{"{0} دقيقة"}
+            two{"دقيقتان"}
+            zero{"لا دقائق"}
+        }
+        month{
+            few{"{0} أشهر"}
+            many{"{0} شهراً"}
+            one{"شهر"}
+            other{"{0} شهر"}
+            two{"شهران"}
+            zero{"لا أشهر"}
+        }
+        second{
+            few{"{0} ثوان"}
+            many{"{0} ثانيةً"}
+            one{"ثانية"}
+            other{"{0} ثانية"}
+            two{"ثانيتان"}
+            zero{"لا ثوان"}
+        }
+        week{
+            few{"{0} أسابيع"}
+            many{"{0} أسبوعاً"}
+            one{"أسبوع"}
+            other{"{0} أسبوع"}
+            two{"أسبوعان"}
+            zero{"لا أسابيع"}
+        }
+        year{
+            few{"{0} سنوات"}
+            many{"{0} سنةً"}
+            one{"سنة"}
+            other{"{0} سنة"}
+            two{"سنتان"}
+            zero{"لا سنوات"}
+        }
     }
     zoneStrings{
         "Africa:Ceuta"{

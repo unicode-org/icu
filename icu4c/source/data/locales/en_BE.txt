@@ -15,7 +15,7 @@ en_BE{
                 /**
                  * Duplicated from NumberPatterns resource
                  */
-                "#,##0.00 ¤",
+                "#,##0.00 ¤",
                 ",",
                 ".",
             }
@@ -37,11 +37,11 @@ en_BE{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤",
+        "#,##0.00 ¤",
         "#,##0%",
         "#E0",
     }
-    Version{"1.56"}
+    Version{"1.57"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

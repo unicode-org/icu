@@ -2922,9 +2922,6 @@ const char* const basic_maximize_data[][2] = {
     "ar_ZZ",
     "ar_Arab_EG"
   }, {
-    "cch",
-    "cch_Latn_NG"
-  }, {
     "zh",
     "zh_Hans_CN"
   }, {
@@ -3027,17 +3024,9 @@ const char* const full_data[][3] = {
     "bs_Latn_BA",
     "bs"
   }, {
-    "byn",
-    "byn_Ethi_ER",
-    "byn"
-  }, {
     "ca",
     "ca_Latn_ES",
     "ca"
-  }, {
-    "cch",
-    "cch_Latn_NG",
-    "cch"
   }, {
     "ch",
     "ch_Latn_GU",
@@ -3143,10 +3132,6 @@ const char* const full_data[][3] = {
     "gu_Gujr_IN",
     "gu"
   }, {
-    "gv",
-    "gv_Latn_GB",
-    "gv"
-  }, {
     "ha",
     "ha_Latn_NG",
     "ha"
@@ -3218,14 +3203,6 @@ const char* const full_data[][3] = {
     "kam",
     "kam_Latn_KE",
     "kam"
-  }, {
-    "kcg",
-    "kcg_Latn_NG",
-    "kcg"
-  }, {
-    "kfo",
-    "kfo_Latn_CI",
-    "kfo"
   }, {
     "kk",
     "kk_Cyrl_KZ",
@@ -3300,7 +3277,7 @@ const char* const full_data[][3] = {
     "ml"
   }, {
     "mn",
-    "mn_Mong_CN",
+    "mn_Cyrl_MN",
     "mn"
   }, {
     "mr",
@@ -3467,10 +3444,6 @@ const char* const full_data[][3] = {
     "sw_Latn_TZ",
     "sw"
   }, {
-    "syr",
-    "syr_Syrc_SY",
-    "syr"
-  }, {
     "ta",
     "ta_Taml_IN",
     "ta"
@@ -3608,8 +3581,8 @@ const char* const full_data[][3] = {
     "ur_IN"
   }, {
     "und_Arab_PK",
-    "ar_Arab_PK",
-    "ar_PK"
+    "ur_Arab_PK",
+    "ur"
   }, {
     "und_Arab_SN",
     "ar_Arab_SN",
@@ -3696,8 +3669,8 @@ const char* const full_data[][3] = {
     "de_CH"
   }, {
     "und_CI",
-    "kfo_Latn_CI",
-    "kfo"
+    "fr_Latn_CI",
+    "fr_CI"
   }, {
     "und_CL",
     "es_Latn_CL",
@@ -3908,8 +3881,8 @@ const char* const full_data[][3] = {
     "hu"
   }, {
     "und_Hani",
-    "za_Hani_CN",
-    "za"
+    "zh_Hans_CN",
+    "zh"
   }, {
     "und_Hans",
     "zh_Hans_CN",
@@ -4113,7 +4086,7 @@ const char* const full_data[][3] = {
   }, {
     "und_MN",
     "mn_Cyrl_MN",
-    "mn_MN"
+    "mn"
   }, {
     "und_MO",
     "zh_Hant_MO",
@@ -4335,10 +4308,6 @@ const char* const full_data[][3] = {
     "si_Sinh_LK",
     "si"
   }, {
-    "und_Syrc",
-    "syr_Syrc_SY",
-    "syr"
-  }, {
     "und_TD",
     "ar_Arab_TD",
     "ar_TD"
@@ -4504,8 +4473,8 @@ const char* const full_data[][3] = {
     "zh_HK"
   }, {
     "zh_Hani",
-    "zh_Hani_CN",
-    "zh_Hani"
+    "zh_Hans_CN",
+    "zh"
   }, {
     "zh_Hant",
     "zh_Hant_TW",

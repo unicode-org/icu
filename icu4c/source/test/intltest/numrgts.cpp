@@ -868,14 +868,14 @@ void NumberFormatRegressionTest::Test4070798 (void)
     
     /* User error :
     String expectedDefault = "-5\u00a0789,987";
-    String expectedCurrency = "5\u00a0789,98 F";
+    String expectedCurrency = "5\u00a0789,98\u00a0F";
     String expectedPercent = "-578\u00a0998%";
     */
     UChar chars1 [] = {
         0x2d, 0x35, 0x00a0, 0x37, 0x38, 0x39, 0x2c, 0x39, 0x38, 0x38
     };
     UChar chars2 [] = {
-        0x35, 0x00a0, 0x37, 0x38, 0x39, 0x2c, 0x39, 0x39, 0x20, 0x46
+        0x35, 0x00a0, 0x37, 0x38, 0x39, 0x2c, 0x39, 0x39, 0x00a0, 0x46
     };
     UChar chars3 [] = {
         0x2d, 0x35, 0x37, 0x38, 0x00a0, 0x39, 0x39, 0x39, 0x00a0, 0x25
@@ -944,14 +944,14 @@ void NumberFormatRegressionTest::Test4071005 (void)
     UnicodeString tempString;
     /* User error :
     String expectedDefault = "-5\u00a0789,987";
-    String expectedCurrency = "5\u00a0789,98 $";
+    String expectedCurrency = "5\u00a0789,98\u00a0$";
     String expectedPercent = "-578\u00a0998%";
     */
     UChar chars1 [] = {
         0x2d, 0x35, 0x00a0, 0x37, 0x38, 0x39, 0x2c, 0x39, 0x38, 0x38
     };
     UChar chars2 [] = {
-        0x35, 0x00a0, 0x37, 0x38, 0x39, 0x2c, 0x39, 0x39, 0x20, 0x24
+        0x35, 0x00a0, 0x37, 0x38, 0x39, 0x2c, 0x39, 0x39, 0x00a0, 0x24
     };
     UChar chars3 [] = {
         0x2d, 0x35, 0x37, 0x38, 0x00a0, 0x39, 0x39, 0x39, 0x00a0, 0x25
@@ -1020,8 +1020,11 @@ void NumberFormatRegressionTest::Test4071014 (void)
     String expectedPercent = "-578.998%";
     */
     UnicodeString expectedDefault("-5.789,988");
-    UnicodeString expectedCurrency("5.789,99 DM");
-    UnicodeString expectedPercent("-578.999 %");
+    UnicodeString expectedCurrency("5.789,99\\u00A0DM");
+    UnicodeString expectedPercent("-578.999\\u00A0%");
+
+    expectedCurrency = expectedCurrency.unescape();
+    expectedPercent = expectedPercent.unescape();
 
     UErrorCode status = U_ZERO_ERROR;
     char loc[256]={0};
@@ -1081,11 +1084,11 @@ void NumberFormatRegressionTest::Test4071859 (void)
     UnicodeString tempString;
     /* user error :
     String expectedDefault = "-5.789,987";
-    String expectedCurrency = "-L. 5.789,98";
+    String expectedCurrency = "-L.\\u00A05.789,98";
     String expectedPercent = "-578.998%";
     */
     UnicodeString expectedDefault("-5.789,988");
-    UnicodeString expectedCurrency("-\\u20A4 5.790", -1, US_INV);
+    UnicodeString expectedCurrency("-\\u20A4\\u00A05.790", -1, US_INV);
     UnicodeString expectedPercent("-578.999%");
     expectedCurrency = expectedCurrency.unescape();
 

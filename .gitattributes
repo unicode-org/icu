@@ -66,6 +66,8 @@ icu4c/source/data/locales/ha_Latn_NG.txt -text
 icu4c/source/data/locales/ha_NG.txt -text
 icu4c/source/data/locales/ii.txt -text
 icu4c/source/data/locales/ii_CN.txt -text
+icu4c/source/data/locales/kk_Cyrl.txt -text
+icu4c/source/data/locales/kk_Cyrl_KZ.txt -text
 icu4c/source/data/locales/ne.txt -text
 icu4c/source/data/locales/ne_IN.txt -text
 icu4c/source/data/locales/ne_NP.txt -text
@@ -82,6 +84,8 @@ icu4c/source/data/xml/collation/bn_IN.xml -text
 icu4c/source/data/xml/collation/ur.xml -text
 icu4c/source/data/xml/main/ha.xml -text
 icu4c/source/data/xml/main/ha_Latn.xml -text
+icu4c/source/data/xml/main/in.xml -text
+icu4c/source/data/xml/main/kk_Cyrl.xml -text
 icu4c/source/data/xml/main/ne.xml -text
 icu4c/source/data/xml/main/pa_Arab.xml -text
 icu4c/source/data/xml/main/pa_PK.xml -text

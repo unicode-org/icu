@@ -1373,6 +1373,488 @@ es{
             "dólar de Zimbabue",
         }
     }
+    CurrencyPlurals{
+        ADP{
+            one{"peseta andorrana"}
+            other{"pesetas andorranas"}
+        }
+        ARA{
+            one{"austral argentino"}
+            other{"australes argentinos"}
+        }
+        ARP{
+            one{"peso argentino (ARP)"}
+            other{"pesos argentinos (ARP)"}
+        }
+        ARS{
+            one{"peso argentino"}
+            other{"pesos argentinos"}
+        }
+        ATS{
+            one{"chelín austriaco"}
+            other{"chelines austriacos"}
+        }
+        AUD{
+            one{"dólar australiano"}
+            other{"dólares australianos"}
+        }
+        BAD{
+            one{"dinar bosnio"}
+            other{"dinares bosnios"}
+        }
+        BAM{
+            one{"marco convertible de Bosnia-Herzegovina"}
+            other{"marcos convertibles de Bosnia-Herzegovina"}
+        }
+        BEC{
+            one{"franco belga (convertible)"}
+            other{"francos belgas (convertibles)"}
+        }
+        BEF{
+            one{"franco belga"}
+            other{"francos belgas"}
+        }
+        BEL{
+            one{"franco belga (financiero)"}
+            other{"francos belgas (financieros)"}
+        }
+        BGL{
+            one{"lev fuerte búlgaro"}
+            other{"leva fuertes búlgaros"}
+        }
+        BGN{
+            one{"nuevo lev búlgaro"}
+            other{"nuevos leva búlgaros"}
+        }
+        BOB{
+            one{"boliviano"}
+            other{"bolivianos"}
+        }
+        BOP{
+            one{"peso boliviano"}
+            other{"pesos bolivianos"}
+        }
+        BOV{
+            one{"MVDOL boliviano"}
+            other{"MVDOL bolivianos"}
+        }
+        BRB{
+            one{"nuevo cruzado brasileño (BRB)"}
+            other{"nuevos cruzados brasileños (BRB)"}
+        }
+        BRC{
+            one{"cruzado brasileño"}
+            other{"cruzados brasileños"}
+        }
+        BRE{
+            one{"cruceiro brasileño (BRE)"}
+            other{"cruceiros brasileños (BRE)"}
+        }
+        BRL{
+            one{"real brasileño"}
+            other{"reales brasileños"}
+        }
+        BRN{
+            one{"nuevo cruzado brasileño"}
+            other{"nuevos cruzados brasileños"}
+        }
+        BRR{
+            one{"cruceiro brasileño"}
+            other{"cruceiros brasileños"}
+        }
+        CAD{
+            one{"dólar canadiense"}
+            other{"dólares canadienses"}
+        }
+        CHE{
+            one{"euro WIR"}
+            other{"euros WIR"}
+        }
+        CHF{
+            one{"franco suizo"}
+            other{"francos suizos"}
+        }
+        CHW{
+            one{"franco WIR"}
+            other{"francos WIR"}
+        }
+        CLF{
+            one{"unidad de fomento chilena"}
+            other{"unidades de fomento chilenas"}
+        }
+        CLP{
+            one{"peso chileno"}
+            other{"pesos chilenos"}
+        }
+        COP{
+            one{"peso colombiano"}
+            other{"pesos colombianos"}
+        }
+        COU{
+            one{"unidad de valor real"}
+            other{"unidades de valor reales"}
+        }
+        CRC{
+            one{"colón costarricense"}
+            other{"colones costarricenses"}
+        }
+        CSD{
+            one{"antiguo dinar serbio"}
+            other{"antiguos dinares serbios"}
+        }
+        CSK{
+            one{"corona fuerte checoslovaca"}
+            other{"coronas fuertes checoslovacas"}
+        }
+        CUP{
+            one{"peso cubano"}
+            other{"pesos cubanos"}
+        }
+        CZK{
+            one{"corona checa"}
+            other{"coronas checas"}
+        }
+        DDM{
+            one{"ostmark de Alemania del Este"}
+            other{"ostmarks de Alemania del Este"}
+        }
+        DEM{
+            one{"marco alemán"}
+            other{"marcos alemanes"}
+        }
+        DKK{
+            one{"corona danesa"}
+            other{"coronas danesas"}
+        }
+        DOP{
+            one{"peso dominicano"}
+            other{"pesos dominicanos"}
+        }
+        ECS{
+            one{"sucre ecuatoriano"}
+            other{"sucres ecuatorianos"}
+        }
+        ECV{
+            one{"unidad de valor constante (UVC) ecuatoriana"}
+            other{"unidades de valor constante (UVC) ecuatorianas"}
+        }
+        EEK{
+            one{"corona estonia"}
+            other{"coronas estonias"}
+        }
+        EQE{
+            one{"ekuele"}
+            other{"ekueles"}
+        }
+        ESA{
+            one{"peseta española (cuenta A)"}
+            other{"pesetas españolas (cuenta A)"}
+        }
+        ESB{
+            one{"peseta española (cuenta convertible)"}
+            other{"pesetas españolas (cuenta convertible)"}
+        }
+        ESP{
+            one{"peseta española"}
+            other{"pesetas españolas"}
+        }
+        EUR{
+            one{"euro"}
+            other{"euros"}
+        }
+        FIM{
+            one{"marco finlandés"}
+            other{"marcos finlandeses"}
+        }
+        FRF{
+            one{"franco francés"}
+            other{"francos franceses"}
+        }
+        GBP{
+            one{"libra esterlina británica"}
+            other{"libras esterlinas británicas"}
+        }
+        GIP{
+            one{"libra de Gibraltar"}
+            other{"libras de Gibraltar"}
+        }
+        GQE{
+            one{"ekuele de Guinea Ecuatorial"}
+            other{"ekueles de Guinea Ecuatorial"}
+        }
+        GRD{
+            one{"dracma griego"}
+            other{"dracmas griegos"}
+        }
+        GTQ{
+            one{"quetzal guatemalteco"}
+            other{"quetzales guatemaltecos"}
+        }
+        HNL{
+            one{"lempira hondureño"}
+            other{"lempiras hondureños"}
+        }
+        HRD{
+            one{"dinar croata"}
+            other{"dinares croatas"}
+        }
+        HRK{
+            one{"kuna croata"}
+            other{"kunas croatas"}
+        }
+        HUF{
+            one{"florín húngaro"}
+            other{"florines húngaros"}
+        }
+        IEP{
+            one{"libra irlandesa"}
+            other{"libras irlandesas"}
+        }
+        ISK{
+            one{"corona islandesa"}
+            other{"coronas islandesas"}
+        }
+        ITL{
+            one{"lira italiana"}
+            other{"liras italianas"}
+        }
+        JPY{
+            one{"yen japonés"}
+            other{"yenes japoneses"}
+        }
+        LTL{
+            one{"litas lituano"}
+            other{"litas lituanos"}
+        }
+        LTT{
+            one{"talonas lituano"}
+            other{"talonas lituanos"}
+        }
+        LUC{
+            one{"franco convertible luxemburgués"}
+            other{"francos convertibles luxemburgueses"}
+        }
+        LUF{
+            one{"franco luxemburgués"}
+            other{"francos luxemburgueses"}
+        }
+        LUL{
+            one{"franco financiero luxemburgués"}
+            other{"francos financieros luxemburgueses"}
+        }
+        LVL{
+            one{"lats letón"}
+            other{"lats letones"}
+        }
+        LVR{
+            one{"rublo letón"}
+            other{"rublos letones"}
+        }
+        MAD{
+            one{"dírham marroquí"}
+            other{"dírhams marroquíes"}
+        }
+        MAF{
+            one{"franco marroquí"}
+            other{"francos marroquíes"}
+        }
+        MXN{
+            one{"peso mexicano"}
+            other{"pesos mexicanos"}
+        }
+        MXP{
+            one{"peso de plata mexicano (MXP)"}
+            other{"pesos de plata mexicanos (MXP)"}
+        }
+        MXV{
+            one{"unidad de inversión (UDI) mexicana"}
+            other{"unidades de inversión (UDI) mexicanas"}
+        }
+        NIC{
+            one{"córdoba nicaragüense"}
+            other{"córdobas nicaragüenses"}
+        }
+        NIO{
+            one{"córdoba oro nicaragüense"}
+            other{"córdobas oro nicaragüenses"}
+        }
+        NLG{
+            one{"florín neerlandés"}
+            other{"florines neerlandeses"}
+        }
+        NOK{
+            one{"corona noruega"}
+            other{"coronas noruegas"}
+        }
+        PAB{
+            one{"balboa panameño"}
+            other{"balboas panameños"}
+        }
+        PEI{
+            one{"inti peruano"}
+            other{"intis peruanos"}
+        }
+        PEN{
+            one{"nuevo sol peruano"}
+            other{"nuevos soles peruanos"}
+        }
+        PES{
+            one{"sol peruano"}
+            other{"soles peruanos"}
+        }
+        PHP{
+            one{"peso filipino"}
+            other{"pesos filipinos"}
+        }
+        PLN{
+            one{"zloty polaco"}
+            other{"zlotys polacos"}
+        }
+        PLZ{
+            one{"zloty polaco (PLZ)"}
+            other{"zlotys polacos (PLZ)"}
+        }
+        PTE{
+            one{"escudo portugués"}
+            other{"escudos portugueses"}
+        }
+        PYG{
+            one{"guaraní paraguayo"}
+            other{"guaraníes paraguayos"}
+        }
+        ROL{
+            one{"antiguo leu rumano"}
+            other{"antiguos lei rumanos"}
+        }
+        RON{
+            one{"leu rumano"}
+            other{"lei rumanos"}
+        }
+        RSD{
+            one{"dinar serbio"}
+            other{"dinares serbios"}
+        }
+        RUB{
+            one{"rublo ruso"}
+            other{"rublos rusos"}
+        }
+        RUR{
+            one{"rublo ruso (RUR)"}
+            other{"rublos rusos (RUR)"}
+        }
+        SEK{
+            one{"corona sueca"}
+            other{"coronas suecas"}
+        }
+        SIT{
+            one{"tólar esloveno"}
+            other{"tólares eslovenos"}
+        }
+        SKK{
+            one{"corona eslovaca"}
+            other{"coronas eslovacas"}
+        }
+        SUR{
+            one{"rublo soviético"}
+            other{"rublos soviéticos"}
+        }
+        SVC{
+            one{"colón salvadoreño"}
+            other{"colones salvadoreños"}
+        }
+        TRL{
+            one{"lira turca antigua"}
+            other{"liras turcas antiguas"}
+        }
+        TRY{
+            one{"lira turca"}
+            other{"liras turcas"}
+        }
+        UAH{
+            one{"grivna ucraniana"}
+            other{"grivnas ucranianas"}
+        }
+        UAK{
+            one{"karbovanet ucraniano"}
+            other{"karbovanets ucranianos"}
+        }
+        USD{
+            one{"dólar estadounidense"}
+            other{"dólares estadounidenses"}
+        }
+        USN{
+            one{"dólar estadounidense (día siguiente)"}
+            other{"dólares estadounidenses (día siguiente)"}
+        }
+        USS{
+            one{"dólar estadounidense (mismo día)"}
+            other{"dólares estadounidenses (mismo día)"}
+        }
+        UYI{
+            one{"peso uruguayo en unidades indexadas"}
+            other{"pesos uruguayos en unidades indexadas"}
+        }
+        UYP{
+            one{"peso uruguayo (UYP)"}
+            other{"pesos uruguayos (UYP)"}
+        }
+        UYU{
+            one{"peso uruguayo"}
+            other{"pesos uruguayos"}
+        }
+        VEB{
+            one{"bolívar venezolano"}
+            other{"bolívares venezolanos"}
+        }
+        VEF{
+            one{"bolívar fuerte venezolano"}
+            other{"bolívares fuertes venezolanos"}
+        }
+        XAG{
+            one{"plata"}
+        }
+        XAU{
+            one{"oro"}
+        }
+        XBA{
+            one{"unidad compuesta europea"}
+            other{"unidades compuestas europeas"}
+        }
+        XBB{
+            one{"unidad monetaria europea"}
+            other{"unidades monetarias europeas"}
+        }
+        XBC{
+            one{"unidad de cuenta europea (XBC)"}
+            other{"unidades de cuenta europeas (XBC)"}
+        }
+        XBD{
+            one{"unidad de cuenta europea (XBD)"}
+            other{"unidades de cuenta europeas (XBD)"}
+        }
+        XEU{
+            one{"unidad de moneda europea"}
+            other{"unidades de moneda europeas"}
+        }
+        XFO{
+            one{"franco oro francés"}
+            other{"francos oro franceses"}
+        }
+        XFU{
+            one{"franco UIC francés"}
+            other{"francos UIC franceses"}
+        }
+        XPD{
+            one{"paladio"}
+        }
+        XPT{
+            one{"platino"}
+        }
+        XXX{
+            one{"moneda desconocida/no válida"}
+            other{"monedas desconocidas/no válidas"}
+        }
+    }
     ExemplarCharacters{"[a á b-e é f-i í j-n ñ o ó p-u ú ü v-z]"}
     Keys{
         calendar{"calendario"}
@@ -1904,7 +2386,7 @@ es{
     }
     NumberPatterns{
         "#,##0.###",
-        "¤ #,##0.00",
+        "¤ #,##0.00",
         "#,##0%",
         "#E0",
     }
@@ -2060,7 +2542,7 @@ es{
         POSIX{"Ordenador"}
         REVISED{"Ortografía revisada"}
     }
-    Version{"1.107"}
+    Version{"1.112"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2196,6 +2678,90 @@ es{
                     dn{"zona"}
                 }
             }
+            intervalFormats{
+                M{
+                    M{"M–M"}
+                }
+                MEd{
+                    M{"E d/M – E d/M"}
+                    d{"E d/M – E d/M"}
+                }
+                MMM{
+                    M{"MMM–MMM"}
+                }
+                MMMEd{
+                    M{"E d MMM – E d MMM"}
+                    d{"E d MMM – E d MMM"}
+                }
+                MMMM{
+                    M{"LLLL-LLLL"}
+                }
+                MMMd{
+                    M{"d MMM – d MMM"}
+                    d{"d–d MMM"}
+                }
+                Md{
+                    M{"d/M - d/M"}
+                    d{"d/M - d/M"}
+                }
+                d{
+                    d{"d–d"}
+                }
+                fallback{"{0} – {1}"}
+                h{
+                    a{"H–H"}
+                    h{"H–H"}
+                }
+                hm{
+                    a{"H:mm - H:mm"}
+                    h{"H:mm - H:mm"}
+                    m{"H:mm - H:mm"}
+                }
+                hmv{
+                    a{"H:mm - H:mm v"}
+                    h{"H:mm - H:mm v"}
+                    m{"H:mm - H:mm v"}
+                }
+                hv{
+                    a{"H–H v"}
+                    h{"H–H v"}
+                }
+                y{
+                    y{"y–y"}
+                }
+                yM{
+                    M{"M/yy – M/yy"}
+                    y{"M/yy – M/yy"}
+                }
+                yMEd{
+                    M{"E d/M/yy - E d/M/yy"}
+                    d{"E d/M/yy – E d/M/yy"}
+                    y{"E d/M/yy - E d/M/yy"}
+                }
+                yMMM{
+                    M{"MMM–MMM yyyy"}
+                    y{"MMM yyyy – MMM yyyy"}
+                }
+                yMMMEd{
+                    M{"E d MMM – E d MMM yyyy"}
+                    d{"E d MMM – E d MMM yyyy"}
+                    y{"E d MMM yyyy – E d MMM yyyy"}
+                }
+                yMMMM{
+                    M{"MM–MM yyyy"}
+                    y{"MM-yyyy – MM-yyyy"}
+                }
+                yMMMd{
+                    M{"d MMM – d MMM yyyy"}
+                    d{"d–d MMM yyyy"}
+                    y{"d MMM yyyy – d MMM yyyy"}
+                }
+                yMd{
+                    M{"d/M/yy - d/M/yy"}
+                    d{"M/d/yy – M/d/yy"}
+                    y{"d/M/yy - d/M/yy"}
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -2270,15 +2836,54 @@ es{
             }
         }
     }
+    codePatterns{
+        language{"Idioma: {0}"}
+        script{"Dialecto: {0}"}
+        territory{"Región: {0}"}
+    }
     delimiters{
         alternateQuotationEnd{"”"}
         alternateQuotationStart{"“"}
         quotationEnd{"’"}
         quotationStart{"‘"}
     }
+    localeDisplayPattern{
+        pattern{"{0} ({1})"}
+        separator{","}
+    }
     measurementSystemNames{
         US{"estadounidense"}
         metric{"métrico"}
+    }
+    units{
+        day{
+            one{"{0} día"}
+            other{"{0} días"}
+        }
+        hour{
+            one{"{0} hora"}
+            other{"{0} horas"}
+        }
+        minute{
+            one{"{0} minuto"}
+            other{"{0} minutos"}
+        }
+        month{
+            one{"{0} mes"}
+            other{"{0} meses"}
+        }
+        second{
+            one{"{0} segundo"}
+            other{"{0} segundos"}
+        }
+        week{
+            one{"{0} semana"}
+            other{"{0} semanas"}
+        }
+        year{
+            one{"{0} año"}
+            other{"{0} años"}
+        }
     }
     zoneStrings{
         "Africa:Addis_Ababa"{
@@ -2289,9 +2894,6 @@ es{
         }
         "Africa:Cairo"{
             ec{"El Cairo"}
-        }
-        "Africa:Ceuta"{
-            ec{"Ceuta"}
         }
         "Africa:Djibouti"{
             ec{"Yibuti"}
@@ -2313,9 +2915,6 @@ es{
         }
         "Africa:Tunis"{
             ec{"Túnez"}
-        }
-        "America:Anchorage"{
-            ec{"Anchorage"}
         }
         "America:Anguilla"{
             ec{"Anguila"}
@@ -2344,17 +2943,8 @@ es{
         "America:Bogota"{
             ec{"Bogotá"}
         }
-        "America:Buenos_Aires"{
-            ec{"Buenos Aires"}
-        }
-        "America:Campo_Grande"{
-            ec{"Campo Grande"}
-        }
         "America:Cancun"{
             ec{"Cancún"}
-        }
-        "America:Catamarca"{
-            ec{"Catamarca"}
         }
         "America:Cayenne"{
             ec{"Cayena"}
@@ -2362,26 +2952,11 @@ es{
         "America:Cayman"{
             ec{"Caimán"}
         }
-        "America:Chicago"{
-            ec{"Chicago"}
-        }
-        "America:Chihuahua"{
-            ec{"Chihuahua"}
-        }
         "America:Cordoba"{
             ec{"Córdoba"}
         }
         "America:Cuiaba"{
             ec{"Cuiabá"}
-        }
-        "America:Denver"{
-            ec{"Denver"}
-        }
-        "America:Detroit"{
-            ec{"Detroit"}
-        }
-        "America:Edmonton"{
-            ec{"Edmonton"}
         }
         "America:Eirunepe"{
             ec{"Eirunepé"}
@@ -2392,20 +2967,11 @@ es{
         "America:Guadeloupe"{
             ec{"Guadalupe"}
         }
-        "America:Halifax"{
-            ec{"Halifax"}
-        }
         "America:Havana"{
             ec{"La Habana"}
         }
-        "America:Hermosillo"{
-            ec{"Hermosillo"}
-        }
         "America:Indianapolis"{
             ec{"Indianápolis"}
-        }
-        "America:Jujuy"{
-            ec{"Jujuy"}
         }
         "America:Los_Angeles"{
             ec{"Los Ángeles"}
@@ -2437,17 +3003,11 @@ es{
         "America:Panama"{
             ec{"Panamá"}
         }
-        "America:Phoenix"{
-            ec{"Phoenix"}
-        }
         "America:Port-au-Prince"{
             ec{"Puerto Príncipe"}
         }
         "America:Port_of_Spain"{
             ec{"Puerto España"}
-        }
-        "America:Regina"{
-            ec{"Regina"}
         }
         "America:Rio_Branco"{
             ec{"Río Branco"}
@@ -2466,18 +3026,6 @@ es{
         }
         "America:St_Vincent"{
             ec{"San Vicente"}
-        }
-        "America:Tijuana"{
-            ec{"Tijuana"}
-        }
-        "America:Toronto"{
-            ec{"Toronto"}
-        }
-        "America:Vancouver"{
-            ec{"Vancouver"}
-        }
-        "America:Winnipeg"{
-            ec{"Winnipeg"}
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont d'Urville"}
@@ -2592,18 +3140,6 @@ es{
         }
         "Australia:Adelaide"{
             ec{"Adelaida"}
-        }
-        "Australia:Brisbane"{
-            ec{"Brisbane"}
-        }
-        "Australia:Darwin"{
-            ec{"Darwin"}
-        }
-        "Australia:Hobart"{
-            ec{"Hobart"}
-        }
-        "Australia:Perth"{
-            ec{"Perth"}
         }
         "Australia:Sydney"{
             ec{"Sídney"}
@@ -2722,29 +3258,22 @@ es{
         "meta:Acre"{
             ld{"Hora de verano de Acre"}
             ls{"Hora de Acre"}
-            sd{"ACST (Acre)"}
-            ss{"ACT (Acre)"}
         }
         "meta:Afghanistan"{
             ls{"Hora de Afganistán"}
         }
         "meta:Africa_Central"{
             ls{"Hora de África central"}
-            ss{"CAT"}
         }
         "meta:Africa_Eastern"{
             ls{"Hora de África oriental"}
-            ss{"EAT"}
         }
         "meta:Africa_Southern"{
             ls{"Hora estándar de África meridional"}
-            ss{"SAST"}
         }
         "meta:Africa_Western"{
             ld{"Hora de verano de África occidental"}
             ls{"Hora de África occidental"}
-            sd{"WAST"}
-            ss{"WAT"}
         }
         "meta:Aktyubinsk"{
             ld{"Hora de verano de Aktyubinsk"}
@@ -2755,8 +3284,6 @@ es{
             ld{"Hora de verano de Alaska"}
             lg{"Hora de Alaska"}
             ls{"Hora estándar de Alaska"}
-            sd{"AKDT"}
-            ss{"AKST"}
         }
         "meta:Alaska_Hawaii"{
             cu:int{1}
@@ -2767,44 +3294,30 @@ es{
         "meta:Amazon"{
             ld{"Hora de verano del Amazonas"}
             ls{"Hora del Amazonas"}
-            sd{"AMST"}
-            ss{"AMT"}
         }
         "meta:America_Central"{
             cu:int{1}
             ld{"Hora de verano central"}
             lg{"Hora central"}
             ls{"Hora estándar central"}
-            sd{"CDT"}
-            sg{"CT"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             cu:int{1}
             ld{"Hora de verano oriental"}
             lg{"Hora oriental"}
             ls{"Hora estándar oriental"}
-            sd{"EDT"}
-            sg{"ET"}
-            ss{"EST"}
         }
         "meta:America_Mountain"{
             cu:int{1}
             ld{"Hora de verano de Montaña"}
             lg{"Hora de las Montañas"}
             ls{"Hora estándar de Montaña"}
-            sd{"MDT"}
-            sg{"MT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             cu:int{1}
             ld{"Hora de verano del Pacífico"}
             lg{"Hora del Pacífico"}
             ls{"Hora estándar del Pacífico"}
-            sd{"PDT"}
-            sg{"PT"}
-            ss{"PST"}
         }
         "meta:Aqtau"{
             ld{"Hora de verano de Aktau"}
@@ -2845,40 +3358,26 @@ es{
             ld{"Hora de verano del Atlántico"}
             lg{"Hora del Atlántico"}
             ls{"Hora estándar del Atlántico"}
-            sd{"ADT"}
-            sg{"AT"}
-            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"Hora de verano de Australia central"}
             lg{"Hora de Australia central"}
             ls{"Hora estándar de Australia central"}
-            sd{"ACDT"}
-            sg{"ACT"}
-            ss{"ACST"}
         }
         "meta:Australia_CentralWestern"{
             ld{"Hora de verano de Australia centroriental"}
             lg{"Hora de Australia centroriental"}
             ls{"Hora estándar de Australia centroriental"}
-            sd{"ACWDT"}
-            ss{"ACWST"}
         }
         "meta:Australia_Eastern"{
             ld{"Hora de verano de Australia oriental"}
             lg{"Hora de Australia oriental"}
             ls{"Hora estándar de Australia oriental"}
-            sd{"AEDT"}
-            sg{"AET"}
-            ss{"AEST"}
         }
         "meta:Australia_Western"{
             ld{"Hora de verano de Australia occidental"}
             lg{"Hora de Australia occidental"}
             ls{"Hora estándar de Australia occidental"}
-            sd{"AWDT"}
-            sg{"AWT"}
-            ss{"AWST"}
         }
         "meta:Azerbaijan"{
             ld{"Hora de verano de Azerbaiyán"}
@@ -2913,8 +3412,6 @@ es{
         "meta:Brasilia"{
             ld{"Hora de verano de Brasilia"}
             ls{"Hora de Brasilia"}
-            sd{"BRST"}
-            ss{"BRT"}
         }
         "meta:Chamorro"{
             ls{"Hora estándar de Chamorro"}
@@ -2964,20 +3461,14 @@ es{
         "meta:Europe_Central"{
             ld{"Hora de verano de Europa Central"}
             ls{"Hora estándar de Europa Central"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Hora de verano de Europa del Este"}
             ls{"Hora estándar de Europa del Este"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Hora de verano de Europa Occidental"}
             ls{"Hora de Europa Occidental"}
-            sd{"WEST"}
-            ss{"WET"}
         }
         "meta:French_Guiana"{
             ls{"Hora de la Guayana Francesa"}
@@ -2988,7 +3479,6 @@ es{
         }
         "meta:GMT"{
             ls{"Hora media de Greenwich"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Hora de Galápagos"}
@@ -3021,47 +3511,36 @@ es{
         "meta:Hawaii_Aleutian"{
             cu:int{1}
             ls{"Hora estándar de Hawái-Aleutianas"}
-            ss{"HST"}
         }
         "meta:Hong_Kong"{
             ld{"Hora de verano de Hong Kong"}
             ls{"Hora de Hong Kong"}
-            sd{"HKST"}
-            ss{"HKT"}
         }
         "meta:India"{
             ls{"Hora estándar de la India"}
-            ss{"IST"}
         }
         "meta:Indochina"{
             ls{"Hora de Indochina"}
-            ss{"ICT"}
         }
         "meta:Indonesia_Central"{
             ls{"Hora de Indonesia central"}
-            ss{"CIT"}
         }
         "meta:Indonesia_Eastern"{
             ls{"Hora de Indonesia oriental"}
-            ss{"EIT"}
         }
         "meta:Indonesia_Western"{
             ls{"Hora de Indonesia occidental"}
-            ss{"WIT"}
         }
         "meta:Israel"{
             ld{"Hora de verano de Israel"}
             lg{"Hora de Israel"}
             ls{"Hora estándar de Israel"}
-            sd{"IDT"}
             ss{"IST (Israel)"}
         }
         "meta:Japan"{
             ld{"Hora de verano de Japón"}
             lg{"Hora de Japón"}
             ls{"Hora estándar de Japón"}
-            sd{"JDT"}
-            ss{"JST"}
         }
         "meta:Karachi"{
             ls{"Hora de Karachi"}
@@ -3083,7 +3562,6 @@ es{
             ld{"Hora de verano de Corea"}
             lg{"Hora de Corea"}
             ls{"Hora estándar de Corea"}
-            ss{"KST"}
         }
         "meta:Kuybyshev"{
             ld{"Hora de verano de Kuibishev"}
@@ -3127,8 +3605,6 @@ es{
             ld{"Hora de verano de Moscú"}
             lg{"Hora de Moscú"}
             ls{"Hora estándar de Moscú"}
-            sd{"MSKS"}
-            ss{"MSK"}
         }
         "meta:Myanmar"{
             ls{"Hora de Myanmar"}
@@ -3140,15 +3616,11 @@ es{
             ld{"Hora de verano de Nueva Zelanda"}
             lg{"Hora de Nueva Zelanda"}
             ls{"Hora estándar de Nueva Zelanda"}
-            sd{"NZDT"}
-            sg{"NZT"}
-            ss{"NZST"}
         }
         "meta:Newfoundland"{
             ld{"Hora de verano de Newfoundland"}
             lg{"Hora de Terranova"}
             ls{"Hora estándar de Newfoundland"}
-            ss{"NST"}
         }
         "meta:Noronha"{
             ld{"Hora de verano de Fernando de Noronha"}

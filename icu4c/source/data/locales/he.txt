@@ -890,6 +890,15 @@ he{
             "דולר זימבבואי",
         }
     }
+    CurrencyPlurals{
+        ILS{
+            other{"שקלים חדשים"}
+        }
+    }
+    CurrencyUnitPatterns{
+        one{"{0} {1}"}
+        other{"{0} {1}"}
+    }
     ExemplarCharacters{"[א-י כ ך ל מ ם נ ן ס ע פ ף צ ץ ק-ת]"}
     Keys{
         calendar{"לוח שנה"}
@@ -1237,7 +1246,7 @@ he{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤",
+        "#,##0.00 ¤",
         "#,##0%",
         "#E0",
     }
@@ -1329,11 +1338,9 @@ he{
             chinese{"לוח שנה סיני"}
             gregorian{"לוח שנה גרגוריאני"}
             hebrew{"לוח שנה עברי"}
-            indian{"indian"}
             islamic{"לוח שנה מוסלמי"}
             islamic-civil{"לוח שנה מוסלמי-אזרחי"}
             japanese{"לוח שנה יפני"}
-            roc{"roc"}
         }
         collation{
             big5han{"מיון סינית מסורתית"}
@@ -1341,7 +1348,6 @@ he{
             gb2312han{"מיון סינית מודרנית"}
             phonebook{"מיון ספר טלפונים"}
             pinyin{"מיון פיניין"}
-            stroke{"stroke"}
             traditional{"מיון מסורתי"}
         }
     }
@@ -1352,7 +1358,7 @@ he{
         MONOTON{"מונוטונית"}
         POSIX{"מחשב"}
     }
-    Version{"1.98"}
+    Version{"1.104"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1490,6 +1496,90 @@ he{
                     dn{"אזור"}
                 }
             }
+            intervalFormats{
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"EEEE dd/MM - EEEE dd/MM"}
+                    d{"EEEE dd/MM - EEEE dd/MM"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"EEEE d MMM - EEEE d MMM"}
+                    d{"EEEE d MMM - EEEE d MMM"}
+                }
+                MMMM{
+                    M{"LLLL-LLLL"}
+                }
+                MMMd{
+                    M{"d MMM - d MMM"}
+                    d{"d-d MMM"}
+                }
+                Md{
+                    M{"dd/MM - dd/MM"}
+                    d{"dd/MM - dd/MM"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} – {1}"}
+                h{
+                    a{"HH-HH"}
+                    h{"HH–HH"}
+                }
+                hm{
+                    a{"HH:mm-HH:mm"}
+                    h{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
+                }
+                hmv{
+                    a{"HH:mm-HH:mm v"}
+                    h{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
+                }
+                hv{
+                    a{"HH-HH v"}
+                    h{"HH–HH v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"MM/yy - MM/yy"}
+                    y{"MM/yy - MM/yy"}
+                }
+                yMEd{
+                    M{"EEEE dd/MM/yy - EEEE dd/MM/yy"}
+                    d{"EEEE dd/MM/yy - EEEE dd/MM/yy"}
+                    y{"EEEE dd/MM/yy - EEEE dd/MM/yy"}
+                }
+                yMMM{
+                    M{"MMM-MMM yyyy"}
+                    y{"MMM yyyy - MMM yyyy"}
+                }
+                yMMMEd{
+                    M{"EEEE d MMM - EEEE d MMM yyyy"}
+                    d{"EEEE d MMM - EEEE d MMM yyyy"}
+                    y{"EEEE d MMM yyyy - EEEE d MMM yyyy"}
+                }
+                yMMMM{
+                    M{"yyyy-MM – MM"}
+                    y{"yyyy-MM – yyyy-MM"}
+                }
+                yMMMd{
+                    M{"d MMM - d MMM yyyy"}
+                    d{"d-d MMM yyyy"}
+                    y{"d MMM yyyy - d MMM yyyy"}
+                }
+                yMd{
+                    M{"dd/MM/yy - dd/MM/yy"}
+                    d{"dd/MM/yy - dd/MM/yy"}
+                    y{"dd/MM/yy - dd/MM/yy"}
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -1596,15 +1686,6 @@ he{
                 "לפנה\"צ",
                 "אחה\"צ",
             }
-            availableFormats{
-                Hm{"H:mm"}
-                M{"L"}
-                MEd{"E, M-d"}
-                MMM{"LLL"}
-                d{"d"}
-                ms{"mm:ss"}
-                y{"yyyy"}
-            }
             eras{
                 abbreviated{
                     "לבה\"ע",
@@ -1656,6 +1737,11 @@ he{
             }
         }
     }
+    codePatterns{
+        language{"{0}"}
+        script{"{0}"}
+        territory{"{0}"}
+    }
     delimiters{
         alternateQuotationEnd{"\""}
         alternateQuotationStart{"\""}
@@ -1666,9 +1752,36 @@ he{
         characters{"right-to-left"}
         lines{"top-to-bottom"}
     }
+    localeDisplayPattern{
+        pattern{"{0} ({1})"}
+        separator{", "}
+    }
     measurementSystemNames{
         US{"ארה\"ב"}
         metric{"מטרי"}
+    }
+    units{
+        day{
+            one{"{0} ימים"}
+        }
+        hour{
+            one{"{0} שעות"}
+        }
+        minute{
+            one{"{0} דקות"}
+        }
+        month{
+            one{"{0} חודשים"}
+        }
+        second{
+            one{"{0} שניות"}
+        }
+        week{
+            one{"{0} שבועות"}
+        }
+        year{
+            one{"{0} שנים"}
+        }
     }
     zoneStrings{
         "Africa:Ceuta"{
@@ -1683,32 +1796,14 @@ he{
         "Africa:Tunis"{
             ec{"תוניסיה"}
         }
-        "America:Adak"{
-            ec{"Adak"}
-        }
         "America:Anchorage"{
             ec{"זמן אלסקה"}
         }
         "America:Araguaina"{
             ec{"אראגואינה"}
         }
-        "America:Argentina:La_Rioja"{
-            ec{"La Rioja"}
-        }
-        "America:Argentina:Rio_Gallegos"{
-            ec{"Rio Gallegos"}
-        }
         "America:Argentina:San_Juan"{
             ec{"אמריקה/ארגנטינה/סאן-חואן"}
-        }
-        "America:Argentina:San_Luis"{
-            ec{"San Luis"}
-        }
-        "America:Argentina:Tucuman"{
-            ec{"Tucuman"}
-        }
-        "America:Argentina:Ushuaia"{
-            ec{"Ushuaia"}
         }
         "America:Bahia"{
             ec{"אמריקה/בהיאה"}
@@ -1716,20 +1811,11 @@ he{
         "America:Belem"{
             ec{"בלם"}
         }
-        "America:Blanc-Sablon"{
-            ec{"Blanc-Sablon"}
-        }
         "America:Boa_Vista"{
             ec{"בואה ויסטה"}
         }
-        "America:Boise"{
-            ec{"Boise"}
-        }
         "America:Buenos_Aires"{
             ec{"בואנוס איירס"}
-        }
-        "America:Cambridge_Bay"{
-            ec{"Cambridge Bay"}
         }
         "America:Campo_Grande"{
             ec{"קמפו גרנדה"}
@@ -1737,17 +1823,8 @@ he{
         "America:Cancun"{
             ec{"אמריקה/קנקון"}
         }
-        "America:Catamarca"{
-            ec{"Catamarca"}
-        }
         "America:Chicago"{
             ec{"אמריקה/שיקגו"}
-        }
-        "America:Chihuahua"{
-            ec{"Chihuahua"}
-        }
-        "America:Coral_Harbour"{
-            ec{"Coral Harbour"}
         }
         "America:Cordoba"{
             ec{"אמריקה/קורדובה"}
@@ -1757,9 +1834,6 @@ he{
         }
         "America:Danmarkshavn"{
             ec{"דנמרקסהוון"}
-        }
-        "America:Dawson"{
-            ec{"Dawson"}
         }
         "America:Dawson_Creek"{
             ec{"אמריקה/דוסון-קריק"}
@@ -1773,62 +1847,14 @@ he{
         "America:Edmonton"{
             ec{"אמריקה/אדמנטון"}
         }
-        "America:Eirunepe"{
-            ec{"Eirunepe"}
-        }
         "America:Fortaleza"{
             ec{"פורטאלזה"}
-        }
-        "America:Glace_Bay"{
-            ec{"Glace Bay"}
-        }
-        "America:Goose_Bay"{
-            ec{"Goose Bay"}
         }
         "America:Halifax"{
             ec{"אמריקה/הליפקס"}
         }
-        "America:Hermosillo"{
-            ec{"Hermosillo"}
-        }
-        "America:Indiana:Knox"{
-            ec{"Knox, Indiana"}
-        }
-        "America:Indiana:Marengo"{
-            ec{"Marengo, Indiana"}
-        }
-        "America:Indiana:Petersburg"{
-            ec{"Petersburg, Indiana"}
-        }
-        "America:Indiana:Tell_City"{
-            ec{"Tell City, Indiana"}
-        }
-        "America:Indiana:Vevay"{
-            ec{"Vevay, Indiana"}
-        }
-        "America:Indiana:Vincennes"{
-            ec{"Vincennes, Indiana"}
-        }
-        "America:Indiana:Winamac"{
-            ec{"Winamac, Indiana"}
-        }
         "America:Indianapolis"{
             ec{"אינדיאנפוליס"}
-        }
-        "America:Inuvik"{
-            ec{"Inuvik"}
-        }
-        "America:Iqaluit"{
-            ec{"Iqaluit"}
-        }
-        "America:Jujuy"{
-            ec{"Jujuy"}
-        }
-        "America:Juneau"{
-            ec{"Juneau"}
-        }
-        "America:Kentucky:Monticello"{
-            ec{"Monticello, Kentucky"}
         }
         "America:Los_Angeles"{
             ec{"אמריקה/לוס-אנג'לס"}
@@ -1848,17 +1874,8 @@ he{
         "America:Mendoza"{
             ec{"אמריקה/מנדוזה"}
         }
-        "America:Menominee"{
-            ec{"Menominee"}
-        }
-        "America:Merida"{
-            ec{"Merida"}
-        }
         "America:Mexico_City"{
             ec{"אמריקה/מקסיקו סיטי"}
-        }
-        "America:Moncton"{
-            ec{"Moncton"}
         }
         "America:Monterrey"{
             ec{"אמריקה/מונטריי"}
@@ -1869,23 +1886,11 @@ he{
         "America:New_York"{
             ec{"אמריקה/ניו-יורק"}
         }
-        "America:Nipigon"{
-            ec{"Nipigon"}
-        }
-        "America:Nome"{
-            ec{"Nome"}
-        }
         "America:Noronha"{
             ec{"נורונהה"}
         }
         "America:North_Dakota:Center"{
             ec{"אמריקה/צפון דקוטה/מרכז"}
-        }
-        "America:North_Dakota:New_Salem"{
-            ec{"New Salem, North Dakota"}
-        }
-        "America:Pangnirtung"{
-            ec{"Pangnirtung"}
         }
         "America:Phoenix"{
             ec{"אמריקה/פיניקס"}
@@ -1893,20 +1898,8 @@ he{
         "America:Porto_Velho"{
             ec{"פורטו וולהו"}
         }
-        "America:Rainy_River"{
-            ec{"Rainy River"}
-        }
-        "America:Rankin_Inlet"{
-            ec{"Rankin Inlet"}
-        }
         "America:Recife"{
             ec{"רסיפה"}
-        }
-        "America:Regina"{
-            ec{"Regina"}
-        }
-        "America:Resolute"{
-            ec{"Resolute"}
         }
         "America:Rio_Branco"{
             ec{"ריאו ברנצ'ו"}
@@ -1923,20 +1916,8 @@ he{
         "America:Shiprock"{
             ec{"אמריקה/שיפרוק"}
         }
-        "America:St_Johns"{
-            ec{"St. John's"}
-        }
-        "America:Swift_Current"{
-            ec{"Swift Current"}
-        }
         "America:Thule"{
             ec{"טולה"}
-        }
-        "America:Thunder_Bay"{
-            ec{"Thunder Bay"}
-        }
-        "America:Tijuana"{
-            ec{"Tijuana"}
         }
         "America:Toronto"{
             ec{"אמריקה/טורנטו"}
@@ -1944,17 +1925,8 @@ he{
         "America:Vancouver"{
             ec{"אמריקה/ונקובר"}
         }
-        "America:Whitehorse"{
-            ec{"Whitehorse"}
-        }
         "America:Winnipeg"{
             ec{"אמריקה/וויניפוג"}
-        }
-        "America:Yakutat"{
-            ec{"Yakutat"}
-        }
-        "America:Yellowknife"{
-            ec{"Yellowknife"}
         }
         "Antarctica:Casey"{
             ec{"קאסיי"}
@@ -1989,9 +1961,6 @@ he{
         "Asia:Almaty"{
             ec{"אלמאטי"}
         }
-        "Asia:Anadyr"{
-            ec{"Anadyr"}
-        }
         "Asia:Aqtau"{
             ec{"אקטאו"}
         }
@@ -2001,38 +1970,14 @@ he{
         "Asia:Choibalsan"{
             ec{"צ'ואיבלסאן"}
         }
-        "Asia:Chongqing"{
-            ec{"Chongqing"}
-        }
-        "Asia:Harbin"{
-            ec{"Harbin"}
-        }
         "Asia:Hovd"{
             ec{"חובד"}
-        }
-        "Asia:Irkutsk"{
-            ec{"Irkutsk"}
         }
         "Asia:Jakarta"{
             ec{"אסיה/ג'קרטה"}
         }
-        "Asia:Kamchatka"{
-            ec{"Kamchatka"}
-        }
-        "Asia:Kashgar"{
-            ec{"Kashgar"}
-        }
-        "Asia:Krasnoyarsk"{
-            ec{"Krasnoyarsk"}
-        }
         "Asia:Kuala_Lumpur"{
             ec{"קואלה לומפור"}
-        }
-        "Asia:Kuching"{
-            ec{"Kuching"}
-        }
-        "Asia:Magadan"{
-            ec{"Magadan"}
         }
         "Asia:Makassar"{
             ec{"מאקאסאר"}
@@ -2046,17 +1991,8 @@ he{
         "Asia:Oral"{
             ec{"אסיה/אורל"}
         }
-        "Asia:Pontianak"{
-            ec{"Pontianak"}
-        }
         "Asia:Pyongyang"{
             ec{"צפון קוריאה"}
-        }
-        "Asia:Qyzylorda"{
-            ec{"Qyzylorda"}
-        }
-        "Asia:Sakhalin"{
-            ec{"Sakhalin"}
         }
         "Asia:Samarkand"{
             ec{"אסיה/סמרקנד"}
@@ -2073,26 +2009,11 @@ he{
         "Asia:Ulaanbaatar"{
             ec{"אולאאנבטאר"}
         }
-        "Asia:Urumqi"{
-            ec{"Urumqi"}
-        }
-        "Asia:Vladivostok"{
-            ec{"Vladivostok"}
-        }
-        "Asia:Yakutsk"{
-            ec{"Yakutsk"}
-        }
-        "Asia:Yekaterinburg"{
-            ec{"Yekaterinburg"}
-        }
         "Atlantic:Azores"{
             ec{"האיים האזורים"}
         }
         "Atlantic:Canary"{
             ec{"אטלנטי/קנרי"}
-        }
-        "Atlantic:Madeira"{
-            ec{"Madeira"}
         }
         "Australia:Adelaide"{
             ec{"אדלייד"}
@@ -2103,23 +2024,11 @@ he{
         "Australia:Broken_Hill"{
             ec{"אוסטרליה/ברוקן-היל"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Australia:Darwin"{
             ec{"אוסטרליה/דרווין"}
         }
-        "Australia:Eucla"{
-            ec{"Eucla"}
-        }
         "Australia:Hobart"{
             ec{"אוסטרליה/הוברט"}
-        }
-        "Australia:Lindeman"{
-            ec{"Lindeman"}
-        }
-        "Australia:Lord_Howe"{
-            ec{"Lord Howe"}
         }
         "Australia:Melbourne"{
             ec{"אוסטרליה/מלבורן"}
@@ -2132,9 +2041,6 @@ he{
         }
         "Etc:Unknown"{
             ec{"לא ידוע"}
-        }
-        "Europe:Kaliningrad"{
-            ec{"Kaliningrad"}
         }
         "Europe:Kiev"{
             ec{"אירופה/קייב"}
@@ -2154,23 +2060,8 @@ he{
         "Europe:Samara"{
             ec{"אירופה/סמרה"}
         }
-        "Europe:Simferopol"{
-            ec{"Simferopol"}
-        }
-        "Europe:Uzhgorod"{
-            ec{"Uzhgorod"}
-        }
-        "Europe:Volgograd"{
-            ec{"Volgograd"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporozhye"}
-        }
         "Pacific:Auckland"{
             ec{"פסיפי/אוקלנד"}
-        }
-        "Pacific:Chatham"{
-            ec{"Chatham"}
         }
         "Pacific:Easter"{
             ec{"איי הפסחא"}
@@ -2192,9 +2083,6 @@ he{
         }
         "Pacific:Kiritimati"{
             ec{"קיריטימאטי"}
-        }
-        "Pacific:Kwajalein"{
-            ec{"Kwajalein"}
         }
         "Pacific:Majuro"{
             ec{"מאג'ורו"}

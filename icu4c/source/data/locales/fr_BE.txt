@@ -21,7 +21,7 @@ fr_BE{
         "NaN",
         "+",
     }
-    Version{"1.53"}
+    Version{"1.54"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

@@ -20,7 +20,7 @@ ar_SY{
     calendar{
         gregorian{
             DateTimeElements:intvector{
-                5,
+                1,
                 1,
             }
             dayNames{

@@ -563,6 +563,117 @@ sr{
             "Јужно Афрички Ранд",
         }
     }
+    CurrencyPlurals{
+        ALL{
+            few{"Албанске леке"}
+            many{"Албанских лека"}
+        }
+        AMD{
+            few{"Јерменска драма"}
+            many{"Јерменских драма"}
+        }
+        AUD{
+            few{"Аустралијска долара"}
+            many{"Аустралијских долара"}
+        }
+        BAD{
+            few{"Босанско-Херцеговачка динара"}
+            many{"Босанско-Херцеговачких динара"}
+        }
+        BAM{
+            few{"Босанско-Херцеговачке конвертибилне марке"}
+            many{"Босанско-Херцеговачких конвертабилних марака"}
+        }
+        BGN{
+            few{"Бугарска лева"}
+            many{"Бугарских лева"}
+        }
+        CAD{
+            few{"Канадска долара"}
+            many{"Канадских долара"}
+        }
+        CHF{
+            few{"Швајцарска франка"}
+            many{"Швајцарских франака"}
+        }
+        DEM{
+            few{"Немачке марке"}
+            many{"Немачких марака"}
+        }
+        FIM{
+            few{"Финске марке"}
+            many{"Финских марака"}
+        }
+        FRF{
+            few{"Француска франка"}
+            many{"Француских франака"}
+        }
+        HRD{
+            few{"Хрватска динара"}
+            many{"Хрватских динара"}
+        }
+        HRK{
+            few{"Хрватске куне"}
+            many{"Хрватских куна"}
+        }
+        ITL{
+            few{"Италијанске лире"}
+            many{"Италијанских лира"}
+        }
+        JPY{
+            few{"Јапанска јена"}
+            many{"Јапанских јена"}
+        }
+        LYD{
+            few{"Либијска динара"}
+            many{"Либијских динара"}
+            one{"Либијски динар"}
+        }
+        MKD{
+            few{"Македонијска денара"}
+            many{"Македонијских денара"}
+            one{"Македонијски денар"}
+        }
+        NOK{
+            few{"Норвешке круне"}
+            many{"Норвешких круна"}
+            one{"Норвешка круна"}
+        }
+        RSD{
+            few{"Српска динара"}
+            many{"Српских динара"}
+            one{"Српски динар"}
+        }
+        RUB{
+            few{"Руске рубље"}
+            many{"Руских рубљи"}
+            one{"Руска рубља"}
+        }
+        TRL{
+            few{"Старе турске лире"}
+            many{"Старих турских лира"}
+        }
+        TRY{
+            few{"Турске лире"}
+            many{"Турских лира"}
+            one{"Турска лира"}
+        }
+        USD{
+            few{"Америчка долара"}
+            many{"Америчких долара"}
+            one{"Амерички долар"}
+        }
+        XXX{
+            few{"Непознате или неважеће валуте"}
+            many{"Непознатих или неважећих валута"}
+        }
+    }
+    CurrencyUnitPatterns{
+        few{"{0} {1}"}
+        many{"{0} {1}"}
+        one{"{0} {1}"}
+        other{"{0} {1}"}
+    }
     ExemplarCharacters{"[а-д ђ е-и ј к л љ м н њ о-т ћ у-ч џ ш]"}
     Keys{
         calendar{"Календар"}
@@ -602,19 +713,14 @@ sr{
         da{"Дански"}
         dak{"Дакота"}
         de{"Немачки"}
-        de_AT{"Немачки (Аустрија)"}
         del{"Делавер"}
         egy{"Староегипатски"}
         el{"Грчки"}
         en{"Енглески"}
-        en_AU{"Енглески (Аустралија)"}
-        en_CA{"Енглески (Канада)"}
-        en_GB{"Енглески (Велика Британија)"}
         en_US{"Енглески (САД)"}
         eo{"Есперанто"}
         es{"Шпански"}
         es_419{"Шпански (Јужна Америка и Кариби)"}
-        es_ES{"Шпански (Шпанија)"}
         et{"Естонски"}
         eu{"Баскијски"}
         fa{"Персијски"}
@@ -623,8 +729,6 @@ sr{
         fiu{"Угро-фински"}
         fo{"Фарски"}
         fr{"Француски"}
-        fr_CA{"Француски (Канада)"}
-        fr_CH{"Француски (Швајцарска)"}
         fro{"Старофранцуски"}
         fy{"Фризијски"}
         ga{"Ирски"}
@@ -693,7 +797,6 @@ sr{
         pro{"Старопровансалски"}
         ps{"Паштунски"}
         pt{"Португалски"}
-        pt_BR{"Португалски (Бразил)"}
         pt_PT{"Португалски (Португалија)"}
         rm{"Рето-Романски"}
         ro{"Румунски"}
@@ -762,7 +865,7 @@ sr{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤",
+        "#,##0.00 ¤",
         "#,##0%",
         "#E0",
     }
@@ -830,7 +933,7 @@ sr{
         1606NICT{"Француски из касног средњег века до 1606."}
         SCOTLAND{"Шкотски стандардни Енглески"}
     }
-    Version{"1.94"}
+    Version{"1.98"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -838,7 +941,7 @@ sr{
                 "поподне",
             }
             DateTimePatterns{
-                "HH 'часова', mm 'минута', ss 'секунди' vvvv",
+                "HH.mm.ss v",
                 "HH.mm.ss z",
                 "HH.mm.ss",
                 "HH.mm",
@@ -955,6 +1058,79 @@ sr{
                     dn{"зона"}
                 }
             }
+            intervalFormats{
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E, d.M - E, d.M"}
+                    d{"E, d.M - E, d.M"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"E, dd. MMM - E, dd. MMM"}
+                    d{"E, dd. - E, dd. MMM"}
+                }
+                MMMd{
+                    M{"dd. MMM - dd. MMM"}
+                    d{"dd.-dd. MMM"}
+                }
+                Md{
+                    M{"d.M - d.M"}
+                    d{"d.M - d.M"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    h{"HH-HH"}
+                }
+                hm{
+                    h{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                hmv{
+                    h{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                hv{
+                    h{"HH-HH v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"yyyy M - M"}
+                    y{"yyyy M - M"}
+                }
+                yMEd{
+                    M{"E, d.M.yy. - E, d.M.yy."}
+                    d{"E, d.M.yy. - E, d.M.yy."}
+                    y{"E, d.M.yy. - E, d.M.yy."}
+                }
+                yMMM{
+                    M{"MMM-MMM yyyy."}
+                    y{"MMM yyyy. - MMM yyyy."}
+                }
+                yMMMEd{
+                    M{"E, dd. MMM - E, dd. MMM yyyy."}
+                    d{"E, dd. - E, dd. MMM yyyy."}
+                    y{"E, dd. MMM yyyy. - E, dd. MMM yyyy."}
+                }
+                yMMMd{
+                    M{"dd. MMM - dd. MMM yyyy."}
+                    d{"dd.-dd. MMM yyyy."}
+                    y{"dd. MMM yyyy. - dd. MMM yyyy."}
+                }
+                yMd{
+                    M{"d.M.yy. - d.M.yy."}
+                    d{"d.M.yy. - d.M.yy."}
+                    y{"d.M.yy. - d.M.yy."}
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -1029,9 +1205,50 @@ sr{
             }
         }
     }
+    codePatterns{
+        language{"{0}"}
+        territory{"{0}"}
+    }
     measurementSystemNames{
         US{"САД"}
         metric{"Метрички"}
+    }
+    units{
+        day{
+            few{"{0} дана"}
+            many{"{0} дана"}
+            one{"{0} дан"}
+        }
+        hour{
+            few{"{0} сата"}
+            many{"{0} сати"}
+            one{"{0} сат"}
+        }
+        minute{
+            few{"{0} минута"}
+            many{"{0} минута"}
+            one{"{0} минут"}
+        }
+        month{
+            few{"{0} месеца"}
+            many{"{0} месеци"}
+            one{"{0} месец"}
+        }
+        second{
+            few{"{0} секунде"}
+            many{"{0} секунди"}
+            one{"{0} секунда"}
+        }
+        week{
+            few{"{0} недеље"}
+            many{"{0} недеља"}
+            one{"{0} недеља"}
+        }
+        year{
+            few{"{0} године"}
+            many{"{0} година"}
+            one{"{0} година"}
+        }
     }
     zoneStrings{
         "Africa:Abidjan"{
@@ -1202,23 +1419,8 @@ sr{
         "America:Araguaina"{
             ec{"Арагвајана"}
         }
-        "America:Argentina:La_Rioja"{
-            ec{"La Rioja"}
-        }
-        "America:Argentina:Rio_Gallegos"{
-            ec{"Rio Gallegos"}
-        }
         "America:Argentina:San_Juan"{
             ec{"Сан Хуан"}
-        }
-        "America:Argentina:San_Luis"{
-            ec{"San Luis"}
-        }
-        "America:Argentina:Tucuman"{
-            ec{"Tucuman"}
-        }
-        "America:Argentina:Ushuaia"{
-            ec{"Ushuaia"}
         }
         "America:Aruba"{
             ec{"Аруба"}
@@ -1370,32 +1572,14 @@ sr{
         "America:Indiana:Tell_City"{
             ec{"Тел Сити"}
         }
-        "America:Indiana:Vevay"{
-            ec{"Vevay, Indiana"}
-        }
-        "America:Indiana:Vincennes"{
-            ec{"Vincennes, Indiana"}
-        }
-        "America:Indiana:Winamac"{
-            ec{"Winamac, Indiana"}
-        }
         "America:Indianapolis"{
             ec{"Индианаполис"}
         }
         "America:Inuvik"{
             ec{"Инувик"}
         }
-        "America:Iqaluit"{
-            ec{"Iqaluit"}
-        }
         "America:Jamaica"{
             ec{"Јамајка"}
-        }
-        "America:Jujuy"{
-            ec{"Jujuy"}
-        }
-        "America:Juneau"{
-            ec{"Juneau"}
         }
         "America:Kentucky:Monticello"{
             ec{"Монтичело, Кентаки"}
@@ -1430,9 +1614,6 @@ sr{
         "America:Mendoza"{
             ec{"Мендоза"}
         }
-        "America:Menominee"{
-            ec{"Menominee"}
-        }
         "America:Merida"{
             ec{"Мерида"}
         }
@@ -1441,9 +1622,6 @@ sr{
         }
         "America:Miquelon"{
             ec{"Микелон"}
-        }
-        "America:Moncton"{
-            ec{"Moncton"}
         }
         "America:Monterrey"{
             ec{"Монтереј"}
@@ -1463,12 +1641,6 @@ sr{
         "America:New_York"{
             ec{"Њујорк"}
         }
-        "America:Nipigon"{
-            ec{"Nipigon"}
-        }
-        "America:Nome"{
-            ec{"Nome"}
-        }
         "America:Noronha"{
             ec{"Нороња"}
         }
@@ -1480,9 +1652,6 @@ sr{
         }
         "America:Panama"{
             ec{"Панама"}
-        }
-        "America:Pangnirtung"{
-            ec{"Pangnirtung"}
         }
         "America:Paramaribo"{
             ec{"Парамирбо"}
@@ -1499,20 +1668,8 @@ sr{
         "America:Puerto_Rico"{
             ec{"Порто Рико"}
         }
-        "America:Rainy_River"{
-            ec{"Rainy River"}
-        }
-        "America:Rankin_Inlet"{
-            ec{"Rankin Inlet"}
-        }
         "America:Recife"{
             ec{"Ресифе"}
-        }
-        "America:Regina"{
-            ec{"Regina"}
-        }
-        "America:Resolute"{
-            ec{"Resolute"}
         }
         "America:Rio_Branco"{
             ec{"Рио Бранко"}
@@ -1547,14 +1704,8 @@ sr{
         "America:St_Vincent"{
             ec{"Сент Винсент"}
         }
-        "America:Swift_Current"{
-            ec{"Swift Current"}
-        }
         "America:Thule"{
             ec{"Туле"}
-        }
-        "America:Thunder_Bay"{
-            ec{"Thunder Bay"}
         }
         "America:Tijuana"{
             ec{"Тихуана"}
@@ -1568,17 +1719,8 @@ sr{
         "America:Vancouver"{
             ec{"Ванкувер"}
         }
-        "America:Whitehorse"{
-            ec{"Whitehorse"}
-        }
         "America:Winnipeg"{
             ec{"Винипег"}
-        }
-        "America:Yakutat"{
-            ec{"Yakutat"}
-        }
-        "America:Yellowknife"{
-            ec{"Yellowknife"}
         }
         "Antarctica:Casey"{
             ec{"Касеј"}
@@ -1718,9 +1860,6 @@ sr{
         "Asia:Kuala_Lumpur"{
             ec{"Куала Лумпур"}
         }
-        "Asia:Kuching"{
-            ec{"Kuching"}
-        }
         "Asia:Kuwait"{
             ec{"Кувајт"}
         }
@@ -1754,14 +1893,8 @@ sr{
         "Asia:Phnom_Penh"{
             ec{"Пном Пен"}
         }
-        "Asia:Pontianak"{
-            ec{"Pontianak"}
-        }
         "Asia:Pyongyang"{
             ec{"Пјонгјанг"}
-        }
-        "Asia:Qyzylorda"{
-            ec{"Qyzylorda"}
         }
         "Asia:Sakhalin"{
             ec{"Сахалин"}
@@ -1778,9 +1911,6 @@ sr{
         "Asia:Ulaanbaatar"{
             ec{"Улан Батор"}
         }
-        "Asia:Urumqi"{
-            ec{"Urumqi"}
-        }
         "Asia:Vladivostok"{
             ec{"Владивосток"}
         }
@@ -1795,9 +1925,6 @@ sr{
         }
         "Atlantic:Canary"{
             ec{"Канарска острва"}
-        }
-        "Atlantic:Madeira"{
-            ec{"Madeira"}
         }
         "Australia:Adelaide"{
             ec{"Аделајд"}
@@ -1820,12 +1947,6 @@ sr{
         "Australia:Hobart"{
             ec{"Хобарт"}
         }
-        "Australia:Lindeman"{
-            ec{"Lindeman"}
-        }
-        "Australia:Lord_Howe"{
-            ec{"Lord Howe"}
-        }
         "Australia:Melbourne"{
             ec{"Мелбурн"}
         }
@@ -1838,9 +1959,6 @@ sr{
         "Etc:Unknown"{
             ec{"Непознат или неважећи град"}
         }
-        "Europe:Kaliningrad"{
-            ec{"Kaliningrad"}
-        }
         "Europe:Kiev"{
             ec{"Кијев"}
         }
@@ -1849,9 +1967,6 @@ sr{
         }
         "Europe:Samara"{
             ec{"Самара"}
-        }
-        "Europe:Simferopol"{
-            ec{"Simferopol"}
         }
         "Europe:Uzhgorod"{
             ec{"Ужгород"}

@@ -219,7 +219,7 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
                                 ures_getKey(currentBundle),
                                 locale);
                     }
-                    else if (localeStr[localeStrLen - 1] == (UChar)0x20) {
+                    else if ((localeStr[localeStrLen - 1] == (UChar)0x20) && (strcmp(subBundleKey,"separator") != 0)) {
                         log_err("key \"%s\" at index %d in \"%s\" ends with a space in locale \"%s\"\n",
                                 subBundleKey,
                                 idx,
@@ -305,7 +305,8 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
                         subBundleKey,
                         ures_getKey(currentBundle),
                         locale);
-            } else if (string[len - 1] == (UChar)0x20) {
+            /* localeDisplayPattern/separator can end with a space */
+            } else if (string[len - 1] == (UChar)0x20 && (strcmp(subBundleKey,"separator"))) {
                 log_err("key \"%s\" in \"%s\" ends with a space in locale \"%s\"\n",
                         subBundleKey,
                         ures_getKey(currentBundle),

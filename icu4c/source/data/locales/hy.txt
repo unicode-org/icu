@@ -232,11 +232,11 @@ hy{
     }
     NumberPatterns{
         "#0.###",
-        "#0.00 ¤",
+        "#0.00 ¤",
         "#0%",
         "#E0",
     }
-    Version{"1.63"}
+    Version{"1.64"}
     calendar{
         gregorian{
             AmPmMarkers{

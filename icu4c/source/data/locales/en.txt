@@ -1386,12 +1386,1089 @@ en{
             "Zimbabwe Dollar",
         }
     }
-    ExemplarCharacters{"[a-z]"}
-    Keys{
-        calendar{"calendar"}
-        collation{"collation"}
-        currency{"currency"}
+    CurrencyPlurals{
+        ADP{
+            one{"Andorran peseta"}
+            other{"Andorran pesetas"}
+        }
+        AED{
+            one{"UAE dirham"}
+            other{"UAE dirhams"}
+        }
+        AFA{
+            one{"Afghani (AFA)"}
+            other{"Afghanis (AFA)"}
+        }
+        AFN{
+            one{"Afghani"}
+            other{"Afghanis"}
+        }
+        ALL{
+            one{"Albanian lek"}
+            other{"Albanian lekë"}
+        }
+        AMD{
+            one{"Armenian dram"}
+            other{"Armenian drams"}
+        }
+        ANG{
+            one{"Netherlands Antillan guilder"}
+            other{"Netherlands Antillan guilders"}
+        }
+        AOA{
+            one{"Angolan kwanza"}
+            other{"Angolan kwanzas"}
+        }
+        AOK{
+            one{"Angolan kwanza (AOK)"}
+            other{"Angolan kwanzas (AOK)"}
+        }
+        AON{
+            one{"Angolan new kwanza (AON)"}
+            other{"Angolan new kwanzas (AON)"}
+        }
+        AOR{
+            one{"Angolan kwanza reajustado (AOR)"}
+            other{"Angolan kwanzas reajustado (AOR)"}
+        }
+        ARA{
+            one{"Argentine austral"}
+            other{"Argentine australs"}
+        }
+        ARP{
+            one{"Argentine peso (ARP)"}
+            other{"Argentine pesos (ARP)"}
+        }
+        ARS{
+            one{"Argentine peso"}
+            other{"Argentine pesos"}
+        }
+        ATS{
+            one{"Austrian schilling"}
+            other{"Austrian schillings"}
+        }
+        AUD{
+            one{"Australian dollar"}
+            other{"Australian dollars"}
+        }
+        AWG{
+            one{"Aruban florin"}
+            other{"Aruban florin"}
+        }
+        AZM{
+            one{"Azerbaijanian manat (AZM)"}
+            other{"Azerbaijanian manats (AZM)"}
+        }
+        AZN{
+            one{"Azerbaijanian manat"}
+            other{"Azerbaijanian manats"}
+        }
+        BAD{
+            one{"Bosnia-Herzegovina dinar"}
+            other{"Bosnia-Herzegovina dinars"}
+        }
+        BAM{
+            one{"Bosnia-Herzegovina convertible mark"}
+            other{"Bosnia-Herzegovina convertible marks"}
+        }
+        BBD{
+            one{"Barbados dollar"}
+            other{"Barbados dollars"}
+        }
+        BDT{
+            one{"Bangladeshi taka"}
+            other{"Bangladeshi takas"}
+        }
+        BEC{
+            one{"Belgian franc (convertible)"}
+            other{"Belgian francs (convertible)"}
+        }
+        BEF{
+            one{"Belgian franc"}
+            other{"Belgian francs"}
+        }
+        BEL{
+            one{"Belgian franc (financial)"}
+            other{"Belgian francs (financial)"}
+        }
+        BGL{
+            one{"Bulgarian hard lev"}
+            other{"Bulgarian hard levs"}
+        }
+        BGN{
+            one{"Bulgarian lev"}
+            other{"Bulgarian Levs"}
+        }
+        BHD{
+            one{"Bahraini dinar"}
+            other{"Bahraini dinars"}
+        }
+        BIF{
+            one{"Burundi franc"}
+            other{"Burundi francs"}
+        }
+        BMD{
+            one{"Bermudan dollar"}
+            other{"Bermudan dollars"}
+        }
+        BND{
+            one{"Brunei dollar"}
+            other{"Brunei dollars"}
+        }
+        BOB{
+            one{"Boliviano"}
+            other{"Bolivianos"}
+        }
+        BOP{
+            one{"Bolivian peso"}
+            other{"Bolivian pesos"}
+        }
+        BOV{
+            one{"Bolivian mvdol"}
+            other{"Bolivian mvdols"}
+        }
+        BRB{
+            one{"Brazilian cruzeiro novo (BRB)"}
+            other{"Brazilian cruzeiros novo (BRB)"}
+        }
+        BRC{
+            one{"Brazilian cruzado"}
+            other{"Brazilian cruzados"}
+        }
+        BRE{
+            one{"Brazilian cruzeiro (BRE)"}
+            other{"Brazilian cruzeiros (BRE)"}
+        }
+        BRL{
+            one{"Brazilian real"}
+            other{"Brazilian reals"}
+        }
+        BRN{
+            one{"Brazilian cruzado novo"}
+            other{"Brazilian cruzado novos"}
+        }
+        BRR{
+            one{"Brazilian cruzeiro"}
+            other{"Brazilian cruzeiros"}
+        }
+        BSD{
+            one{"Bahamian dollar"}
+            other{"Bahamian dollars"}
+        }
+        BTN{
+            one{"Bhutan ngultrum"}
+            other{"Bhutan ngultrums"}
+        }
+        BUK{
+            one{"Burmese kyat"}
+            other{"Burmese kyats"}
+        }
+        BWP{
+            one{"Botswanan pula"}
+            other{"Botswanan pulas"}
+        }
+        BYB{
+            one{"Belarussian new ruble (BYB)"}
+            other{"Belarussian new rubles (BYB)"}
+        }
+        BYR{
+            one{"Belarussian ruble"}
+            other{"Belarussian rubles"}
+        }
+        BZD{
+            one{"Belize dollar"}
+            other{"Belize dollars"}
+        }
+        CAD{
+            one{"Canadian dollar"}
+            other{"Canadian dollars"}
+        }
+        CDF{
+            one{"Congolese franc Congolais"}
+            other{"Congolese francs Congolais"}
+        }
+        CHE{
+            one{"WIR euro"}
+            other{"WIR euros"}
+        }
+        CHF{
+            one{"Swiss franc"}
+            other{"Swiss francs"}
+        }
+        CHW{
+            one{"WIR franc"}
+            other{"WIR francs"}
+        }
+        CLF{
+            one{"Chilean unidades de fomento"}
+            other{"Chilean unidades de fomentos"}
+        }
+        CLP{
+            one{"Chilean peso"}
+            other{"Chilean pesos"}
+        }
+        CNY{
+            one{"Chinese yuan"}
+            other{"Chinese yuan"}
+        }
+        COP{
+            one{"Colombian peso"}
+            other{"Colombian pesos"}
+        }
+        COU{
+            one{"unidad de valor real"}
+            other{"unidad de valor reals"}
+        }
+        CRC{
+            one{"Costa Rican colon"}
+            other{"Costa Rican colons"}
+        }
+        CSD{
+            one{"Old Serbian dinar"}
+            other{"Old Serbian dinars"}
+        }
+        CSK{
+            one{"Czechoslovak hard koruna"}
+            other{"Czechoslovak hard korunas"}
+        }
+        CUP{
+            one{"Cuban peso"}
+            other{"Cuban pesos"}
+        }
+        CVE{
+            one{"Cape Verde escudo"}
+            other{"Cape Verde escudos"}
+        }
+        CYP{
+            one{"Cyprus pound"}
+            other{"Cyprus pounds"}
+        }
+        CZK{
+            one{"Czech Republic koruna"}
+            other{"Czech Republic korunas"}
+        }
+        DDM{
+            one{"East German ostmark"}
+            other{"East German ostmarks"}
+        }
+        DEM{
+            one{"Deutsche mark"}
+            other{"Deutsche marks"}
+        }
+        DJF{
+            one{"Djibouti franc"}
+            other{"Djibouti francs"}
+        }
+        DKK{
+            one{"Danish krone"}
+            other{"Danish kroner"}
+        }
+        DOP{
+            one{"Dominican peso"}
+            other{"Dominican pesos"}
+        }
+        DZD{
+            one{"Algerian dinar"}
+            other{"Algerian dinars"}
+        }
+        ECS{
+            one{"Ecuador sucre"}
+            other{"Ecuador sucres"}
+        }
+        ECV{
+            one{"Ecuador unidad de valor Constante (UVC)"}
+            other{"Ecuador unidads de valor Constante (UVC)"}
+        }
+        EEK{
+            one{"Estonian kroon"}
+            other{"Estonian kroons"}
+        }
+        EGP{
+            one{"Egyptian pound"}
+            other{"Egyptian pounds"}
+        }
+        EQE{
+            one{"ekwele"}
+            other{"ekweles"}
+        }
+        ERN{
+            one{"Eritrean nakfa"}
+            other{"Eritrean nakfas"}
+        }
+        ESA{
+            one{"Spanish peseta (A account)"}
+            other{"Spanish pesetas (A account)"}
+        }
+        ESB{
+            one{"Spanish peseta (convertible account)"}
+            other{"Spanish pesetas (convertible account)"}
+        }
+        ESP{
+            one{"Spanish peseta"}
+            other{"Spanish pesetas"}
+        }
+        ETB{
+            one{"Ethiopian birr"}
+            other{"Ethiopian birrs"}
+        }
+        EUR{
+            one{"euro"}
+            other{"euros"}
+        }
+        FIM{
+            one{"Finnish markka"}
+            other{"Finnish markkas"}
+        }
+        FJD{
+            one{"Fiji dollar"}
+            other{"Fiji dollars"}
+        }
+        FKP{
+            one{"Falkland Islands pound"}
+            other{"Falkland Islands pounds"}
+        }
+        FRF{
+            one{"French franc"}
+            other{"French francs"}
+        }
+        GBP{
+            one{"British pound sterling"}
+            other{"British pound sterlings"}
+        }
+        GEK{
+            one{"Georgian kupon larit"}
+            other{"Georgian kupon larits"}
+        }
+        GEL{
+            one{"Georgian lari"}
+            other{"Georgian laris"}
+        }
+        GHC{
+            one{"Ghana cedi (GHC)"}
+            other{"Ghana cedis (GHC)"}
+        }
+        GHS{
+            one{"Ghana cedi"}
+            other{"Ghana cedis"}
+        }
+        GIP{
+            one{"Gibraltar pound"}
+            other{"Gibraltar pounds"}
+        }
+        GMD{
+            one{"Gambia dalasi"}
+            other{"Gambia dalasis"}
+        }
+        GNF{
+            one{"Guinea franc"}
+            other{"Guinea francs"}
+        }
+        GNS{
+            one{"Guinea syli"}
+            other{"Guinea sylis"}
+        }
+        GQE{
+            one{"Equatorial Guinea ekwele"}
+            other{"Equatorial Guinea ekwele"}
+        }
+        GRD{
+            one{"Greek drachma"}
+            other{"Greek drachmas"}
+        }
+        GTQ{
+            one{"Guatemala quetzal"}
+            other{"Guatemala quetzals"}
+        }
+        GWE{
+            one{"Portuguese Guinea escudo"}
+            other{"Portuguese Guinea escudos"}
+        }
+        GWP{
+            one{"Guinea-Bissau peso"}
+            other{"Guinea-Bissau pesos"}
+        }
+        GYD{
+            one{"Guyana dollar"}
+            other{"Guyana dollars"}
+        }
+        HKD{
+            one{"Hong Kong dollar"}
+            other{"Hong Kong dollars"}
+        }
+        HNL{
+            one{"Honduras lempira"}
+            other{"Honduras lempiras"}
+        }
+        HRD{
+            one{"Croatian dinar"}
+            other{"Croatian dinars"}
+        }
+        HRK{
+            one{"Croatian kuna"}
+            other{"Croatian kunas"}
+        }
+        HTG{
+            one{"Haitian gourde"}
+            other{"Haitian gourdes"}
+        }
+        HUF{
+            one{"Hungarian forint"}
+            other{"Hungarian forints"}
+        }
+        IDR{
+            one{"Indonesian rupiah"}
+            other{"Indonesian rupiahs"}
+        }
+        IEP{
+            one{"Irish pound"}
+            other{"Irish pounds"}
+        }
+        ILP{
+            one{"Israeli pound"}
+            other{"Israeli pounds"}
+        }
+        ILS{
+            one{"Israeli new sheqel"}
+            other{"New Israeli Sheqels"}
+        }
+        INR{
+            one{"Indian rupee"}
+            other{"Indian rupees"}
+        }
+        IQD{
+            one{"Iraqi dinar"}
+            other{"Iraqi dinars"}
+        }
+        IRR{
+            one{"Iranian rial"}
+            other{"Iranian rials"}
+        }
+        ISK{
+            one{"Icelandic krona"}
+            other{"Icelandic kronas"}
+        }
+        ITL{
+            one{"Italian lira"}
+            other{"Italian liras"}
+        }
+        JMD{
+            one{"Jamaican dollar"}
+            other{"Jamaican dollars"}
+        }
+        JOD{
+            one{"Jordanian dinar"}
+            other{"Jordanian dinars"}
+        }
+        JPY{
+            one{"Japanese yen"}
+            other{"Japanese yen"}
+        }
+        KES{
+            one{"Kenyan shilling"}
+            other{"Kenyan shillings"}
+        }
+        KGS{
+            one{"Kyrgystan som"}
+            other{"Kyrgystan soms"}
+        }
+        KHR{
+            one{"Cambodian riel"}
+            other{"Cambodian riels"}
+        }
+        KMF{
+            one{"Comoro franc"}
+            other{"Comoro francs"}
+        }
+        KPW{
+            one{"North Korean won"}
+            other{"North Korean wons"}
+        }
+        KRW{
+            one{"South Korean won"}
+            other{"South Korean wons"}
+        }
+        KWD{
+            one{"Kuwaiti dinar"}
+            other{"Kuwaiti dinars"}
+        }
+        KYD{
+            one{"Cayman Islands dollar"}
+            other{"Cayman Islands dollars"}
+        }
+        KZT{
+            one{"Kazakhstan tenge"}
+            other{"Kazakhstan tenges"}
+        }
+        LAK{
+            one{"Laotian kip"}
+            other{"Laotian kips"}
+        }
+        LBP{
+            one{"Lebanese pound"}
+            other{"Lebanese pounds"}
+        }
+        LKR{
+            one{"Sri Lanka rupee"}
+            other{"Sri Lanka rupees"}
+        }
+        LRD{
+            one{"Liberian dollar"}
+            other{"Liberian dollars"}
+        }
+        LSL{
+            one{"Lesotho loti"}
+            other{"Lesotho lotis"}
+        }
+        LSM{
+            one{"maloti"}
+            other{"malotis"}
+        }
+        LTL{
+            one{"Lithuanian lita"}
+            other{"Lithuanian litas"}
+        }
+        LTT{
+            one{"Lithuanian talonas"}
+            other{"Lithuanian talonases"}
+        }
+        LUC{
+            one{"Luxembourg convertible franc"}
+            other{"Luxembourg convertible francs"}
+        }
+        LUF{
+            one{"Luxembourg franc"}
+            other{"Luxembourg francs"}
+        }
+        LUL{
+            one{"Luxembourg financial franc"}
+            other{"Luxembourg financial francs"}
+        }
+        LVL{
+            one{"Latvian lats"}
+            other{"Latvian latses"}
+        }
+        LVR{
+            one{"Latvian ruble"}
+            other{"Latvian rubles"}
+        }
+        LYD{
+            one{"Libyan dinar"}
+            other{"Libyan dinars"}
+        }
+        MAD{
+            one{"Moroccan dirham"}
+            other{"Moroccan dirhams"}
+        }
+        MAF{
+            one{"Moroccan franc"}
+            other{"Moroccan francs"}
+        }
+        MDL{
+            one{"Moldovan leu"}
+            other{"Moldovan leus"}
+        }
+        MGA{
+            one{"Madagascar Ariary"}
+            other{"Madagascar Ariaries"}
+        }
+        MGF{
+            one{"Madagascar franc"}
+            other{"Madagascar francs"}
+        }
+        MKD{
+            one{"Macedonian denar"}
+            other{"Macedonian denars"}
+        }
+        MLF{
+            one{"Mali franc"}
+            other{"Mali francs"}
+        }
+        MMK{
+            one{"Myanmar kyat"}
+            other{"Myanmar kyats"}
+        }
+        MNT{
+            one{"Mongolian tugrik"}
+            other{"Mongolian tugriks"}
+        }
+        MOP{
+            one{"Macao pataca"}
+            other{"Macao patacas"}
+        }
+        MRO{
+            one{"Mauritania ouguiya"}
+            other{"Mauritania ouguiyas"}
+        }
+        MTL{
+            one{"Maltese lira"}
+            other{"Maltese liras"}
+        }
+        MTP{
+            one{"Maltese pound"}
+            other{"Maltese pounds"}
+        }
+        MUR{
+            one{"Mauritius rupee"}
+            other{"Mauritius rupees"}
+        }
+        MVR{
+            one{"Maldive Islands rufiyaa"}
+            other{"Maldive Islands rufiyaas"}
+        }
+        MWK{
+            one{"Malawi Kwacha"}
+            other{"Malawi Kwachas"}
+        }
+        MXN{
+            one{"Mexican peso"}
+            other{"Mexican pesos"}
+        }
+        MXP{
+            one{"Mexican silver peso (MXP)"}
+            other{"Mexican silver pesos (MXP)"}
+        }
+        MXV{
+            one{"Mexican unidad de inversion (UDI)"}
+            other{"Mexican unidads de inversion (UDI)"}
+        }
+        MYR{
+            one{"Malaysian ringgit"}
+            other{"Malaysian ringgits"}
+        }
+        MZE{
+            one{"Mozambique escudo"}
+            other{"Mozambique escudos"}
+        }
+        MZM{
+            one{"Old Mozambique metical"}
+            other{"Old Mozambique meticals"}
+        }
+        MZN{
+            one{"Mozambique metical"}
+            other{"Mozambique meticals"}
+        }
+        NAD{
+            one{"Namibia dollar"}
+            other{"Namibia dollars"}
+        }
+        NGN{
+            one{"Nigerian naira"}
+            other{"Nigerian nairas"}
+        }
+        NIC{
+            one{"Nicaraguan cordoba"}
+            other{"Nicaraguan cordobas"}
+        }
+        NIO{
+            one{"Nicaraguan cordoba oro"}
+            other{"Nicaraguan cordoba oros"}
+        }
+        NLG{
+            one{"Netherlands guilder"}
+            other{"Netherlands guilders"}
+        }
+        NOK{
+            one{"Norwegian krone"}
+            other{"Norwegian krones"}
+        }
+        NPR{
+            one{"Nepalese rupee"}
+            other{"Nepalese rupees"}
+        }
+        NZD{
+            one{"New Zealand dollar"}
+            other{"New Zealand dollars"}
+        }
+        OMR{
+            one{"Oman rial"}
+            other{"Oman rials"}
+        }
+        PAB{
+            one{"Panamanian balboa"}
+            other{"Panamanian balboas"}
+        }
+        PEI{
+            one{"Peruvian inti"}
+            other{"Peruvian intis"}
+        }
+        PEN{
+            one{"Peruvian sol nuevo"}
+            other{"Peruvian sol nuevos"}
+        }
+        PES{
+            one{"Peruvian sol"}
+            other{"Peruvian sols"}
+        }
+        PGK{
+            one{"Papua New Guinea kina"}
+            other{"Papua New Guinea kinas"}
+        }
+        PHP{
+            one{"Philippine peso"}
+            other{"Philippine pesos"}
+        }
+        PKR{
+            one{"Pakistan rupee"}
+            other{"Pakistan rupees"}
+        }
+        PLN{
+            one{"Polish zloty"}
+            other{"Polish zloties"}
+        }
+        PLZ{
+            one{"Polish zloty (PLZ)"}
+            other{"Polish zlotys (PLZ)"}
+        }
+        PTE{
+            one{"Portuguese escudo"}
+            other{"Portuguese escudos"}
+        }
+        PYG{
+            one{"Paraguay guarani"}
+            other{"Paraguay guaranis"}
+        }
+        QAR{
+            one{"Qatari rial"}
+            other{"Qatari rials"}
+        }
+        RHD{
+            one{"Rhodesian dollar"}
+            other{"Rhodesian dollars"}
+        }
+        ROL{
+            one{"Old Romanian leu"}
+            other{"Old Romanian Lei"}
+        }
+        RON{
+            one{"Romanian leu"}
+            other{"Romanian lei"}
+        }
+        RSD{
+            one{"Serbian dinar"}
+            other{"Serbian dinars"}
+        }
+        RUB{
+            one{"Russian ruble"}
+            other{"Russian rubles"}
+        }
+        RUR{
+            one{"Russian ruble (RUR)"}
+            other{"Russian rubles (RUR)"}
+        }
+        RWF{
+            one{"Rwandan franc"}
+            other{"Rwandan francs"}
+        }
+        SAR{
+            one{"Saudi riyal"}
+            other{"Saudi riyals"}
+        }
+        SBD{
+            one{"Solomon Islands dollar"}
+            other{"Solomon Islands dollars"}
+        }
+        SCR{
+            one{"Seychelles rupee"}
+            other{"Seychelles rupees"}
+        }
+        SDD{
+            one{"Old Sudanese dinar"}
+            other{"Old Sudanese dinars"}
+        }
+        SDG{
+            one{"Sudanese pound"}
+            other{"Sudanese pounds"}
+        }
+        SDP{
+            one{"Old Sudanese pound"}
+            other{"Old Sudanese pounds"}
+        }
+        SEK{
+            one{"Swedish krona"}
+            other{"Swedish kronas"}
+        }
+        SGD{
+            one{"Singapore dollar"}
+            other{"Singapore dollars"}
+        }
+        SHP{
+            one{"Saint Helena pound"}
+            other{"Saint Helena pounds"}
+        }
+        SIT{
+            one{"Slovenia tolar"}
+            other{"Slovenia tolars"}
+        }
+        SKK{
+            one{"Slovak koruna"}
+            other{"Slovak korunas"}
+        }
+        SLL{
+            one{"Sierra Leone leone"}
+            other{"Sierra Leone leones"}
+        }
+        SOS{
+            one{"Somali shilling"}
+            other{"Somali shillings"}
+        }
+        SRD{
+            one{"Surinam dollar"}
+            other{"Surinam dollars"}
+        }
+        SRG{
+            one{"Suriname guilder"}
+            other{"Suriname guilders"}
+        }
+        STD{
+            one{"Sao Tome and Principe dobra"}
+            other{"Sao Tome and Principe dobras"}
+        }
+        SUR{
+            one{"Soviet rouble"}
+            other{"Soviet roubles"}
+        }
+        SVC{
+            one{"El Salvador colon"}
+            other{"El Salvador colons"}
+        }
+        SYP{
+            one{"Syrian pound"}
+            other{"Syrian pounds"}
+        }
+        SZL{
+            one{"Swaziland lilangeni"}
+            other{"Swaziland lilangenis"}
+        }
+        THB{
+            one{"Thai baht"}
+            other{"Thai bahts"}
+        }
+        TJR{
+            one{"Tajikistan ruble"}
+            other{"Tajikistan rubles"}
+        }
+        TJS{
+            one{"Tajikistan somoni"}
+            other{"Tajikistan somonis"}
+        }
+        TMM{
+            one{"Turkmenistan manat"}
+            other{"Turkmenistan manats"}
+        }
+        TND{
+            one{"Tunisian dinar"}
+            other{"Tunisian dinars"}
+        }
+        TOP{
+            one{"Tonga paʻanga"}
+            other{"Tonga paʻangas"}
+        }
+        TPE{
+            one{"Timor escudo"}
+            other{"Timor escudos"}
+        }
+        TRL{
+            one{"old Turkish lira"}
+            other{"Old Turkish Lira"}
+        }
+        TRY{
+            one{"Turkish lira"}
+            other{"Turkish Lira"}
+        }
+        TTD{
+            one{"Trinidad and Tobago dollar"}
+            other{"Trinidad and Tobago dollars"}
+        }
+        TWD{
+            one{"Taiwan dollar"}
+            other{"Taiwan dollars"}
+        }
+        TZS{
+            one{"Tanzanian shilling"}
+            other{"Tanzanian shillings"}
+        }
+        UAH{
+            one{"Ukrainian hryvnia"}
+            other{"Ukrainian hryvnias"}
+        }
+        UAK{
+            one{"Ukrainian karbovanetz"}
+            other{"Ukrainian karbovanetzs"}
+        }
+        UGS{
+            one{"Ugandan shilling (UGS)"}
+            other{"Ugandan shillings (UGS)"}
+        }
+        UGX{
+            one{"Ugandan shilling"}
+            other{"Ugandan shillings"}
+        }
+        USD{
+            one{"US dollar"}
+            other{"US dollars"}
+        }
+        USN{
+            one{"US dollar (next day)"}
+            other{"US dollars (next day)"}
+        }
+        USS{
+            one{"US dollar (same day)"}
+            other{"US dollars (same day)"}
+        }
+        UYI{
+            one{"Uruguay peso en unidades indexadas"}
+            other{"Uruguay pesos en unidades indexadas"}
+        }
+        UYP{
+            one{"Uruguay peso (UYP)"}
+            other{"Uruguay pesos (UYP)"}
+        }
+        UYU{
+            one{"Uruguay peso"}
+            other{"Uruguay peso"}
+        }
+        UZS{
+            one{"Uzbekistan sum"}
+            other{"Uzbekistan sums"}
+        }
+        VEB{
+            one{"Venezuelan bolivar"}
+            other{"Venezuelan bolivars"}
+        }
+        VEF{
+            one{"Venezuelan bolivar fuerte"}
+            other{"Venezuelan bolivar fuertes"}
+        }
+        VND{
+            one{"Vietnamese dong"}
+            other{"Vietnamese dongs"}
+        }
+        VUV{
+            one{"Vanuatu vatu"}
+            other{"Vanuatu vatus"}
+        }
+        WST{
+            one{"Western Samoa tala"}
+            other{"Western Samoa talas"}
+        }
+        XAF{
+            one{"CFA franc BEAC"}
+            other{"CFA francs BEAC"}
+        }
+        XAG{
+            one{"Silver"}
+        }
+        XAU{
+            one{"Gold"}
+        }
+        XBA{
+            one{"European composite unit"}
+            other{"European composite units"}
+        }
+        XBB{
+            one{"European monetary unit"}
+            other{"European monetary units"}
+        }
+        XBC{
+            one{"European unit of account (XBC)"}
+            other{"European units of account (XBC)"}
+        }
+        XBD{
+            one{"European unit of account (XBD)"}
+            other{"European units of account (XBD)"}
+        }
+        XCD{
+            one{"East Caribbean dollar"}
+            other{"East Caribbean dollars"}
+        }
+        XDR{
+            one{"special drawing rights"}
+            other{"special drawing rights"}
+        }
+        XEU{
+            one{"European currency unit"}
+            other{"European currency units"}
+        }
+        XFO{
+            one{"French gold franc"}
+            other{"French gold francs"}
+        }
+        XFU{
+            one{"French UIC-franc"}
+            other{"French UIC-francs"}
+        }
+        XOF{
+            one{"CFA franc BCEAO"}
+            other{"CFA francs BCEAO"}
+        }
+        XPD{
+            one{"Palladium"}
+        }
+        XPF{
+            one{"CFP franc"}
+            other{"CFP francs"}
+        }
+        XPT{
+            one{"Platinum"}
+        }
+        XRE{
+            one{"RINET Funds"}
+        }
+        XTS{
+            one{"Testing Currency Code"}
+        }
+        XXX{
+            one{"unknown/invalid currency"}
+        }
+        YDD{
+            one{"Yemeni dinar"}
+            other{"Yemeni dinars"}
+        }
+        YER{
+            one{"Yemeni rial"}
+            other{"Yemeni rials"}
+        }
+        YUD{
+            one{"Yugoslavian hard dinar"}
+            other{"Yugoslavian hard dinars"}
+        }
+        YUM{
+            one{"Yugoslavian noviy dinar"}
+            other{"Yugoslavian Noviy dinars"}
+        }
+        YUN{
+            one{"Yugoslavian convertible dinar"}
+            other{"Yugoslavian convertible dinars"}
+        }
+        ZAL{
+            one{"South African rand (financial)"}
+            other{"South African rands (financial)"}
+        }
+        ZAR{
+            one{"South African rand"}
+            other{"South African rands"}
+        }
+        ZMK{
+            one{"Zambian kwacha"}
+            other{"Zambian kwachas"}
+        }
+        ZRN{
+            one{"Zairean new zaire"}
+            other{"Zairean new zaires"}
+        }
+        ZRZ{
+            one{"Zairean zaire"}
+            other{"Zairean zaires"}
+        }
+        ZWD{
+            one{"Zimbabwe dollar"}
+            other{"Zimbabwe dollars"}
+        }
     }
+    CurrencyUnitPatterns{
+        one{"{0} {1}"}
+    }
+    ExemplarCharacters{"[a-z]"}
     Languages{
         aa{"Afar"}
         ab{"Abkhazian"}
@@ -2111,7 +3188,7 @@ en{
         VALENCIA{"Valencian"}
         XIANG{"Xiang or Hunanese"}
     }
-    Version{"1.192"}
+    Version{"1.195"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2239,6 +3316,86 @@ en{
                     dn{"Zone"}
                 }
             }
+            intervalFormats{
+                M{
+                    M{"M–M"}
+                }
+                MEd{
+                    M{"E, M/d – E, M/d"}
+                    d{"E, M/d – E, M/d"}
+                }
+                MMM{
+                    M{"MMM–MMM"}
+                }
+                MMMEd{
+                    M{"E, MMM d – E, MMM d"}
+                    d{"E, MMM d – E, MMM d"}
+                }
+                MMMM{
+                    M{"LLLL-LLLL"}
+                }
+                MMMd{
+                    M{"MMM d – MMM d"}
+                    d{"MMM d–d"}
+                }
+                Md{
+                    M{"M/d – M/d"}
+                    d{"M/d – M/d"}
+                }
+                d{
+                    d{"d–d"}
+                }
+                fallback{"{0} – {1}"}
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
+                }
+                y{
+                    y{"y–y"}
+                }
+                yM{
+                    M{"M/yy – M/yy"}
+                    y{"M/yy – M/yy"}
+                }
+                yMEd{
+                    M{"E, M/d/yy – E, M/d/yy"}
+                    d{"E, M/d/yy – E, M/d/yy"}
+                    y{"E, M/d/yy – E, M/d/yy"}
+                }
+                yMMM{
+                    M{"MMM–MMM yyyy"}
+                    y{"MMM yyyy – MMM yyyy"}
+                }
+                yMMMEd{
+                    M{"E, MMM d – E, MMM d, yyyy"}
+                    d{"E, MMM d – E, MMM d, yyyy"}
+                    y{"E, MMM d, yyyy – E, MMM d, yyyy"}
+                }
+                yMMMd{
+                    M{"MMM d – MMM d, yyyy"}
+                    d{"MMM d–d, yyyy"}
+                    y{"MMM d, yyyy – MMM d, yyyy"}
+                }
+                yMd{
+                    M{"M/d/yy – M/d/yy"}
+                    d{"M/d/yy – M/d/yy"}
+                    y{"M/d/yy – M/d/yy"}
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -2312,42 +3469,11 @@ en{
                 }
             }
         }
-        persian{
-            monthNames{
-                format{
-                    wide{
-                        "Farvardin",
-                        "Ordibehesht",
-                        "Khordad",
-                        "Tir",
-                        "Mordad",
-                        "Shahrivar",
-                        "Mehr",
-                        "Aban",
-                        "Azar",
-                        "Dey",
-                        "Bahman",
-                        "Esfand",
-                    }
-                }
-                stand-alone{
-                    wide{
-                        "Farvardin",
-                        "Ordibehesht",
-                        "Khordad",
-                        "Tir",
-                        "Mordad",
-                        "Shahrivar",
-                        "Mehr",
-                        "Aban",
-                        "Azar",
-                        "Dey",
-                        "Bahman",
-                        "Esfand",
-                    }
-                }
-            }
-        }
+    }
+    codePatterns{
+        language{"Language: {0}"}
+        script{"Script: {0}"}
+        territory{"Region: {0}"}
     }
     delimiters{
         alternateQuotationEnd{"’"}
@@ -2355,9 +3481,43 @@ en{
         quotationEnd{"”"}
         quotationStart{"“"}
     }
+    localeDisplayPattern{
+        pattern{"{0} ({1})"}
+        separator{", "}
+    }
     measurementSystemNames{
         US{"US"}
         metric{"Metric"}
+    }
+    units{
+        day{
+            one{"{0} day"}
+            other{"{0} days"}
+        }
+        hour{
+            one{"{0} hour"}
+            other{"{0} hours"}
+        }
+        minute{
+            one{"{0} minute"}
+            other{"{0} minutes"}
+        }
+        month{
+            one{"{0} month"}
+            other{"{0} months"}
+        }
+        second{
+            one{"{0} second"}
+            other{"{0} seconds"}
+        }
+        week{
+            one{"{0} week"}
+            other{"{0} weeks"}
+        }
+        year{
+            one{"{0} year"}
+            other{"{0} years"}
+        }
     }
     zoneStrings{
         "Antarctica:DumontDUrville"{
@@ -2377,139 +3537,94 @@ en{
         "meta:Acre"{
             ld{"Acre Summer Time"}
             ls{"Acre Time"}
-            sd{"ACST (Acre)"}
-            ss{"ACT (Acre)"}
         }
         "meta:Afghanistan"{
             ls{"Afghanistan Time"}
-            ss{"AFT"}
         }
         "meta:Africa_Central"{
             ls{"Central Africa Time"}
-            ss{"CAT"}
         }
         "meta:Africa_Eastern"{
             ls{"East Africa Time"}
-            ss{"EAT"}
         }
         "meta:Africa_Southern"{
             lg{"South Africa Time"}
             ls{"South Africa Standard Time"}
-            sg{"SAT"}
-            ss{"SAST"}
         }
         "meta:Africa_Western"{
             ld{"West Africa Summer Time"}
             ls{"West Africa Time"}
-            sd{"WAST"}
-            ss{"WAT"}
         }
         "meta:Aktyubinsk"{
             ld{"Aktyubinsk Summer Time"}
             ls{"Aktyubinsk Time"}
-            sd{"AKTST"}
-            ss{"AKTT"}
         }
         "meta:Alaska"{
             cu:int{1}
             ld{"Alaska Daylight Time"}
             lg{"Alaska Time"}
             ls{"Alaska Standard Time"}
-            sd{"AKDT"}
-            sg{"AKT"}
-            ss{"AKST"}
         }
         "meta:Alaska_Hawaii"{
             ld{"Alaska-Hawaii Daylight Time"}
             lg{"Alaska-Hawaii Time"}
             ls{"Alaska-Hawaii Standard Time"}
-            sd{"AHDT"}
-            sg{"AHT"}
-            ss{"AHST"}
         }
         "meta:Almaty"{
             ld{"Almaty Summer Time"}
             ls{"Almaty Time"}
-            sd{"ALMST"}
-            ss{"ALMT"}
         }
         "meta:Amazon"{
             ld{"Amazon Summer Time"}
             ls{"Amazon Time"}
-            sd{"AMST"}
-            ss{"AMT"}
         }
         "meta:America_Central"{
             cu:int{1}
             ld{"Central Daylight Time"}
             lg{"Central Time"}
             ls{"Central Standard Time"}
-            sd{"CDT"}
-            sg{"CT"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             cu:int{1}
             ld{"Eastern Daylight Time"}
             lg{"Eastern Time"}
             ls{"Eastern Standard Time"}
-            sd{"EDT"}
-            sg{"ET"}
-            ss{"EST"}
         }
         "meta:America_Mountain"{
             cu:int{1}
             ld{"Mountain Daylight Time"}
             lg{"Mountain Time"}
             ls{"Mountain Standard Time"}
-            sd{"MDT"}
-            sg{"MT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             cu:int{1}
             ld{"Pacific Daylight Time"}
             lg{"Pacific Time"}
             ls{"Pacific Standard Time"}
-            sd{"PDT"}
-            sg{"PT"}
-            ss{"PST"}
         }
         "meta:Anadyr"{
             ld{"Anadyr Summer Time"}
             ls{"Anadyr Time"}
-            sd{"ANAST"}
-            ss{"ANAT"}
         }
         "meta:Aqtau"{
             ld{"Aqtau Summer Time"}
             ls{"Aqtau Time"}
-            sd{"AQTST (Aqtau)"}
-            ss{"AQTT (Aqtau)"}
         }
         "meta:Aqtobe"{
             ld{"Aqtobe Summer Time"}
             ls{"Aqtobe Time"}
-            sd{"AQTST (Aqtobe)"}
-            ss{"AQTT (Aqtobe)"}
         }
         "meta:Arabian"{
             ld{"Arabian Daylight Time"}
             lg{"Arabian Time"}
             ls{"Arabian Standard Time"}
-            sd{"ADT (Arabian)"}
-            sg{"AT (Arabian)"}
-            ss{"AST (Arabian)"}
         }
         "meta:Argentina"{
             ld{"Argentina Summer Time"}
             ls{"Argentina Time"}
-            sd{"ARST"}
-            ss{"ART"}
         }
         "meta:Argentina_Western"{
             ls{"Western Argentina Time"}
-            ss{"WART"}
         }
         "meta:Armenia"{
             ld{"Armenia Summer Time"}
@@ -2520,131 +3635,88 @@ en{
         "meta:Ashkhabad"{
             ld{"Ashkhabad Summer Time"}
             ls{"Ashkhabad Time"}
-            sd{"ASHST"}
-            ss{"ASHT"}
         }
         "meta:Atlantic"{
             cu:int{1}
             ld{"Atlantic Daylight Time"}
             lg{"Atlantic Time"}
             ls{"Atlantic Standard Time"}
-            sd{"ADT"}
-            sg{"AT"}
-            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"Australian Central Daylight Time"}
             lg{"Central Australia Time"}
             ls{"Australian Central Standard Time"}
-            sd{"ACDT"}
-            sg{"ACT"}
-            ss{"ACST"}
         }
         "meta:Australia_CentralWestern"{
             ld{"Australian Central Western Daylight Time"}
             lg{"Australian Central Western Time"}
             ls{"Australian Central Western Standard Time"}
-            sd{"ACWDT"}
-            sg{"ACWT"}
-            ss{"ACWST"}
         }
         "meta:Australia_Eastern"{
             ld{"Australian Eastern Daylight Time"}
             lg{"Eastern Australia Time"}
             ls{"Australian Eastern Standard Time"}
-            sd{"AEDT"}
-            sg{"AET"}
-            ss{"AEST"}
         }
         "meta:Australia_Western"{
             ld{"Australian Western Daylight Time"}
             lg{"Western Australia Time"}
             ls{"Australian Western Standard Time"}
-            sd{"AWDT"}
-            sg{"AWT"}
-            ss{"AWST"}
         }
         "meta:Azerbaijan"{
             ld{"Azerbaijan Summer Time"}
             ls{"Azerbaijan Time"}
-            sd{"AZST"}
-            ss{"AZT"}
         }
         "meta:Azores"{
             ld{"Azores Summer Time"}
             ls{"Azores Time"}
-            sd{"AZOST"}
-            ss{"AZOT"}
         }
         "meta:Baku"{
             ld{"Baku Summer Time"}
             ls{"Baku Time"}
-            sd{"BAKST"}
-            ss{"BAKT"}
         }
         "meta:Bangladesh"{
             ls{"Bangladesh Time"}
-            ss{"BDT"}
         }
         "meta:Bering"{
             ld{"Bering Daylight Time"}
             lg{"Bering Time"}
             ls{"Bering Standard Time"}
-            sd{"BDT (Bering)"}
-            sg{"BT (Bering)"}
-            ss{"BST (Bering)"}
         }
         "meta:Bhutan"{
             ls{"Bhutan Time"}
-            ss{"BTT"}
         }
         "meta:Bolivia"{
             ls{"Bolivia Time"}
-            ss{"BOT"}
         }
         "meta:Borneo"{
             ld{"Borneo Summer Time"}
             ls{"Borneo Time"}
-            sd{"BORST"}
-            ss{"BORT"}
         }
         "meta:Brasilia"{
             ld{"Brasilia Summer Time"}
             ls{"Brasilia Time"}
-            sd{"BRST"}
-            ss{"BRT"}
         }
         "meta:Brunei"{
             ls{"Brunei Darussalam Time"}
-            ss{"BNT"}
         }
         "meta:Cape_Verde"{
             ld{"Cape Verde Summer Time"}
             ls{"Cape Verde Time"}
-            sd{"CVST"}
-            ss{"CVT"}
         }
         "meta:Chamorro"{
             lg{"Chamorro Time"}
             ls{"Chamorro Standard Time"}
-            sg{"ChT"}
-            ss{"ChST"}
         }
         "meta:Changbai"{
             ls{"Changbai Time"}
-            ss{"CHAT"}
         }
         "meta:Chatham"{
             ld{"Chatham Daylight Time"}
             ls{"Chatham Standard Time"}
-            sd{"CHADT"}
-            ss{"CHAST"}
         }
         "meta:Chile"{
             ld{"Chile Summer Time"}
             ls{"Chile Time"}
-            sd{"CLST"}
-            ss{"CLT"}
         }
         "meta:China"{
             ld{"China Daylight Time"}
@@ -2657,28 +3729,20 @@ en{
         "meta:Choibalsan"{
             ld{"Choibalsan Summer Time"}
             ls{"Choibalsan Time"}
-            sd{"CHOST"}
-            ss{"CHOT"}
         }
         "meta:Christmas"{
             ls{"Christmas Island Time"}
-            ss{"CXT"}
         }
         "meta:Cocos"{
             ls{"Cocos Islands Time"}
-            ss{"CCT"}
         }
         "meta:Colombia"{
             ld{"Colombia Summer Time"}
             ls{"Colombia Time"}
-            sd{"COST"}
-            ss{"COT"}
         }
         "meta:Cook"{
             ld{"Cook Islands Half Summer Time"}
             ls{"Cook Islands Time"}
-            sd{"CKHST"}
-            ss{"CKT"}
         }
         "meta:Cuba"{
             ld{"Cuba Daylight Time"}
@@ -2689,124 +3753,88 @@ en{
         }
         "meta:Dacca"{
             ls{"Dacca Time"}
-            ss{"DACT"}
         }
         "meta:Davis"{
             ls{"Davis Time"}
-            ss{"DAVT"}
         }
         "meta:DumontDUrville"{
             ls{"Dumont-d'Urville Time"}
-            ss{"DDUT"}
         }
         "meta:Dushanbe"{
             ld{"Dushanbe Summer Time"}
             ls{"Dushanbe Time"}
-            sd{"DUSST"}
-            ss{"DUST"}
         }
         "meta:Dutch_Guiana"{
             ls{"Dutch Guiana Time"}
-            ss{"NEGT"}
         }
         "meta:East_Timor"{
             ls{"East Timor Time"}
-            ss{"TLT"}
         }
         "meta:Easter"{
             ld{"Easter Island Summer Time"}
             ls{"Easter Island Time"}
-            sd{"EASST"}
-            ss{"EAST"}
         }
         "meta:Ecuador"{
             ls{"Ecuador Time"}
-            ss{"ECT"}
         }
         "meta:Europe_Central"{
             ld{"Central European Summer Time"}
             ls{"Central European Time"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Eastern European Summer Time"}
             ls{"Eastern European Time"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Western European Summer Time"}
             ls{"Western European Time"}
-            sd{"WEST"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Falkland Islands Summer Time"}
             ls{"Falkland Islands Time"}
-            sd{"FKST"}
-            ss{"FKT"}
         }
         "meta:Fiji"{
             ld{"Fiji Summer Time"}
             ls{"Fiji Time"}
-            sd{"FJST"}
-            ss{"FJT"}
         }
         "meta:French_Guiana"{
             ls{"French Guiana Time"}
-            ss{"GFT"}
         }
         "meta:French_Southern"{
             ls{"French Southern and Antarctic Time"}
-            ss{"TFT"}
         }
         "meta:Frunze"{
             ld{"Frunze Summer Time"}
             ls{"Frunze Time"}
-            sd{"FRUST"}
-            ss{"FRUT"}
         }
         "meta:GMT"{
             cu:int{1}
             ls{"Greenwich Mean Time"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Galapagos Time"}
-            ss{"GALT"}
         }
         "meta:Gambier"{
             ls{"Gambier Time"}
-            ss{"GAMT"}
         }
         "meta:Georgia"{
             ld{"Georgia Summer Time"}
             ls{"Georgia Time"}
-            sd{"GEST"}
-            ss{"GET"}
         }
         "meta:Gilbert_Islands"{
             ls{"Gilbert Islands Time"}
-            ss{"GILT"}
         }
         "meta:Greenland_Central"{
             ld{"Central Greenland Summer Time"}
             ls{"Central Greenland Time"}
-            sd{"CGST"}
-            ss{"CGT"}
         }
         "meta:Greenland_Eastern"{
             ld{"East Greenland Summer Time"}
             ls{"East Greenland Time"}
-            sd{"EGST"}
-            ss{"EGT"}
         }
         "meta:Greenland_Western"{
             ld{"West Greenland Summer Time"}
             ls{"West Greenland Time"}
-            sd{"WGST"}
-            ss{"WGT"}
         }
         "meta:Guam"{
             ls{"Guam Standard Time"}
@@ -2815,385 +3843,272 @@ en{
         "meta:Gulf"{
             lg{"Gulf Time"}
             ls{"Gulf Standard Time"}
-            sg{"GT"}
-            ss{"GST"}
         }
         "meta:Guyana"{
             ls{"Guyana Time"}
-            ss{"GYT"}
         }
         "meta:Hawaii_Aleutian"{
             cu:int{1}
             ls{"Hawaii-Aleutian Standard Time"}
-            ss{"HST"}
         }
         "meta:Hong_Kong"{
             ld{"Hong Kong Summer Time"}
             ls{"Hong Kong Time"}
-            sd{"HKST"}
-            ss{"HKT"}
         }
         "meta:Hovd"{
             ld{"Hovd Summer Time"}
             ls{"Hovd Time"}
-            sd{"HOVST"}
-            ss{"HOVT"}
         }
         "meta:India"{
             ls{"India Standard Time"}
-            ss{"IST"}
         }
         "meta:Indian_Ocean"{
             ls{"Indian Ocean Time"}
-            ss{"IOT"}
         }
         "meta:Indochina"{
             ls{"Indochina Time"}
-            ss{"ICT"}
         }
         "meta:Indonesia_Central"{
             ls{"Central Indonesia Time"}
-            ss{"CIT"}
         }
         "meta:Indonesia_Eastern"{
             ls{"Eastern Indonesia Time"}
-            ss{"EIT"}
         }
         "meta:Indonesia_Western"{
             ls{"Western Indonesia Time"}
-            ss{"WIT"}
         }
         "meta:Iran"{
             ld{"Iran Daylight Time"}
             ls{"Iran Standard Time"}
-            sd{"IRDT"}
-            ss{"IRST"}
         }
         "meta:Irkutsk"{
             ld{"Irkutsk Summer Time"}
             ls{"Irkutsk Time"}
-            sd{"IRKST"}
-            ss{"IRKT"}
         }
         "meta:Israel"{
             ld{"Israel Daylight Time"}
             lg{"Israel Time"}
             ls{"Israel Standard Time"}
-            sd{"IDT"}
             ss{"IST (Israel)"}
         }
         "meta:Japan"{
             ld{"Japan Daylight Time"}
             lg{"Japan Time"}
             ls{"Japan Standard Time"}
-            sd{"JDT"}
-            sg{"JT"}
-            ss{"JST"}
         }
         "meta:Kamchatka"{
             ld{"Petropavlovsk-Kamchatski Summer Time"}
             ls{"Petropavlovsk-Kamchatski Time"}
-            sd{"PETST"}
-            ss{"PETT"}
         }
         "meta:Karachi"{
             ls{"Karachi Time"}
-            ss{"KART"}
         }
         "meta:Kashgar"{
             ls{"Kashgar Time"}
-            ss{"KAST"}
         }
         "meta:Kazakhstan_Eastern"{
             lg{"East Kazakhstan Time"}
             ls{"East Kazakhstan Standard Time"}
-            ss{"EKST"}
         }
         "meta:Kazakhstan_Western"{
             lg{"West Kazakhstan Time"}
             ls{"West Kazakhstan Standard Time"}
-            ss{"WKST"}
         }
         "meta:Kizilorda"{
             ld{"Kizilorda Summer Time"}
             ls{"Kizilorda Time"}
-            sd{"KIZST"}
-            ss{"KIZT"}
         }
         "meta:Korea"{
             ld{"Korean Daylight Time"}
             lg{"Korean Time"}
             ls{"Korean Standard Time"}
-            sd{"KDT"}
-            sg{"KT"}
-            ss{"KST"}
         }
         "meta:Kosrae"{
             ls{"Kosrae Time"}
-            ss{"KOST"}
         }
         "meta:Krasnoyarsk"{
             ld{"Krasnoyarsk Summer Time"}
             ls{"Krasnoyarsk Time"}
-            sd{"KRAST"}
-            ss{"KRAT"}
         }
         "meta:Kuybyshev"{
             ld{"Kuybyshev Summer Time"}
             ls{"Kuybyshev Time"}
-            sd{"KUYST"}
-            ss{"KUYT"}
         }
         "meta:Kwajalein"{
             ls{"Kwajalein Time"}
-            ss{"KWAT"}
         }
         "meta:Kyrgystan"{
             ls{"Kyrgystan Time"}
-            ss{"KGT"}
         }
         "meta:Lanka"{
             ls{"Lanka Time"}
-            ss{"LKT"}
         }
         "meta:Line_Islands"{
             ls{"Line Islands Time"}
-            ss{"LINT"}
         }
         "meta:Long_Shu"{
             ls{"Long-Shu Time"}
-            ss{"LONT"}
         }
         "meta:Lord_Howe"{
             ld{"Lord Howe Daylight Time"}
             lg{"Lord Howe Time"}
             ls{"Lord Howe Standard Time"}
-            sd{"LHDT"}
-            sg{"LHT"}
-            ss{"LHST"}
         }
         "meta:Macau"{
             ld{"Macau Summer Time"}
             ls{"Macau Time"}
-            sd{"MOST"}
-            ss{"MOT"}
         }
         "meta:Magadan"{
             ld{"Magadan Summer Time"}
             ls{"Magadan Time"}
-            sd{"MAGST"}
-            ss{"MAGT"}
         }
         "meta:Malaya"{
             ls{"Malaya Time"}
-            ss{"MALT"}
         }
         "meta:Malaysia"{
             ls{"Malaysia Time"}
-            ss{"MYT"}
         }
         "meta:Maldives"{
             ls{"Maldives Time"}
-            ss{"MVT"}
         }
         "meta:Marquesas"{
             ls{"Marquesas Time"}
-            ss{"MART"}
         }
         "meta:Marshall_Islands"{
             ls{"Marshall Islands Time"}
-            ss{"MHT"}
         }
         "meta:Mauritius"{
             ls{"Mauritius Time"}
-            ss{"MUT"}
         }
         "meta:Mawson"{
             ls{"Mawson Time"}
-            ss{"MAWT"}
         }
         "meta:Mongolia"{
             ld{"Ulan Bator Summer Time"}
             ls{"Ulan Bator Time"}
-            sd{"ULAST"}
-            ss{"ULAT"}
         }
         "meta:Moscow"{
             ld{"Moscow Summer Time"}
             lg{"Moscow Time"}
             ls{"Moscow Standard Time"}
-            sd{"MSKS"}
-            ss{"MSK"}
         }
         "meta:Myanmar"{
             ls{"Myanmar Time"}
-            ss{"MMT"}
         }
         "meta:Nauru"{
             ls{"Nauru Time"}
-            ss{"NRT"}
         }
         "meta:Nepal"{
             ls{"Nepal Time"}
-            ss{"NPT"}
         }
         "meta:New_Caledonia"{
             ld{"New Caledonia Summer Time"}
             ls{"New Caledonia Time"}
-            sd{"NCST"}
-            ss{"NCT"}
         }
         "meta:New_Zealand"{
             ld{"New Zealand Daylight Time"}
             lg{"New Zealand Time"}
             ls{"New Zealand Standard Time"}
-            sd{"NZDT"}
-            sg{"NZT"}
-            ss{"NZST"}
         }
         "meta:Newfoundland"{
             ld{"Newfoundland Daylight Time"}
             lg{"Newfoundland Time"}
             ls{"Newfoundland Standard Time"}
-            sd{"NDT"}
-            sg{"NT"}
-            ss{"NST"}
         }
         "meta:Niue"{
             ls{"Niue Time"}
-            ss{"NUT"}
         }
         "meta:Norfolk"{
             ls{"Norfolk Islands Time"}
-            ss{"NFT"}
         }
         "meta:Noronha"{
             ld{"Fernando de Noronha Summer Time"}
             ls{"Fernando de Noronha Time"}
-            sd{"FNST"}
-            ss{"FNT"}
         }
         "meta:North_Mariana"{
             ls{"North Mariana Islands Time"}
-            ss{"MPT"}
         }
         "meta:Novosibirsk"{
             ld{"Novosibirsk Summer Time"}
             ls{"Novosibirsk Time"}
-            sd{"NOVST"}
-            ss{"NOVT"}
         }
         "meta:Omsk"{
             ld{"Omsk Summer Time"}
             ls{"Omsk Time"}
-            sd{"OMSST"}
-            ss{"OMST"}
         }
         "meta:Pakistan"{
             ld{"Pakistan Summer Time"}
             ls{"Pakistan Time"}
-            sd{"PKST"}
-            ss{"PKT"}
         }
         "meta:Palau"{
             ls{"Palau Time"}
-            ss{"PWT"}
         }
         "meta:Papua_New_Guinea"{
             ls{"Papua New Guinea Time"}
-            ss{"PGT"}
         }
         "meta:Paraguay"{
             ld{"Paraguay Summer Time"}
             ls{"Paraguay Time"}
-            sd{"PYST"}
-            ss{"PYT"}
         }
         "meta:Peru"{
             ld{"Peru Summer Time"}
             ls{"Peru Time"}
-            sd{"PEST"}
-            ss{"PET"}
         }
         "meta:Philippines"{
             ld{"Philippine Summer Time"}
             ls{"Philippine Time"}
-            sd{"PHST"}
-            ss{"PHT"}
         }
         "meta:Phoenix_Islands"{
             ls{"Phoenix Islands Time"}
-            ss{"PHOT"}
         }
         "meta:Pierre_Miquelon"{
             ld{"Pierre and Miquelon Daylight Time"}
             lg{"Pierre and Miquelon Time"}
             ls{"Pierre and Miquelon Standard Time"}
-            sd{"PMDT"}
-            sg{"PMT"}
-            ss{"PMST"}
         }
         "meta:Pitcairn"{
             ls{"Pitcairn Time"}
-            ss{"PNT"}
         }
         "meta:Ponape"{
             ls{"Ponape Time"}
-            ss{"PONT"}
         }
         "meta:Qyzylorda"{
             ld{"Qyzylorda Summer Time"}
             ls{"Qyzylorda Time"}
-            sd{"QYZST"}
-            ss{"QYZT"}
         }
         "meta:Reunion"{
             ls{"Reunion Time"}
-            ss{"RET"}
         }
         "meta:Rothera"{
             ls{"Rothera Time"}
-            ss{"ROTT"}
         }
         "meta:Sakhalin"{
             ld{"Sakhalin Summer Time"}
             ls{"Sakhalin Time"}
-            sd{"SAKST"}
-            ss{"SAKT"}
         }
         "meta:Samara"{
             ld{"Samara Summer Time"}
             ls{"Samara Time"}
-            sd{"SAMST"}
-            ss{"SAMT"}
         }
         "meta:Samarkand"{
             ld{"Samarkand Summer Time"}
             ls{"Samarkand Time"}
-            sd{"SAMST (Samarkand)"}
-            ss{"SAMT (Samarkand)"}
         }
         "meta:Samoa"{
             ls{"Samoa Standard Time"}
-            ss{"SST"}
         }
         "meta:Seychelles"{
             ls{"Seychelles Time"}
-            ss{"SCT"}
         }
         "meta:Shevchenko"{
             ld{"Shevchenko Summer Time"}
             ls{"Shevchenko Time"}
-            sd{"SHEST"}
-            ss{"SHET"}
         }
         "meta:Singapore"{
             ls{"Singapore Standard Time"}
-            ss{"SGT"}
         }
         "meta:Solomon"{
             ls{"Solomon Islands Time"}
-            ss{"SBT"}
         }
         "meta:South_Georgia"{
             ls{"South Georgia Time"}
@@ -3201,149 +4116,104 @@ en{
         }
         "meta:Suriname"{
             ls{"Suriname Time"}
-            ss{"SRT"}
         }
         "meta:Sverdlovsk"{
             ld{"Sverdlovsk Summer Time"}
             ls{"Sverdlovsk Time"}
-            sd{"SVEST"}
-            ss{"SVET"}
         }
         "meta:Syowa"{
             ls{"Syowa Time"}
-            ss{"SYOT"}
         }
         "meta:Tahiti"{
             ls{"Tahiti Time"}
-            ss{"TAHT"}
         }
         "meta:Tajikistan"{
             ls{"Tajikistan Time"}
-            ss{"TJT"}
         }
         "meta:Tashkent"{
             ld{"Tashkent Summer Time"}
             ls{"Tashkent Time"}
-            sd{"TASST"}
-            ss{"TAST"}
         }
         "meta:Tbilisi"{
             ld{"Tbilisi Summer Time"}
             ls{"Tbilisi Time"}
-            sd{"TBIST"}
-            ss{"TBIT"}
         }
         "meta:Tokelau"{
             ls{"Tokelau Time"}
-            ss{"TKT"}
         }
         "meta:Tonga"{
             ld{"Tonga Summer Time"}
             ls{"Tonga Time"}
-            sd{"TOST"}
-            ss{"TOT"}
         }
         "meta:Truk"{
             ls{"Truk Time"}
-            ss{"TRUT"}
         }
         "meta:Turkey"{
             ld{"Turkey Summer Time"}
             ls{"Turkey Time"}
-            sd{"TRST"}
-            ss{"TRT"}
         }
         "meta:Turkmenistan"{
             ld{"Turkmenistan Summer Time"}
             ls{"Turkmenistan Time"}
-            sd{"TMST"}
-            ss{"TMT"}
         }
         "meta:Tuvalu"{
             ls{"Tuvalu Time"}
-            ss{"TVT"}
         }
         "meta:Uralsk"{
             ld{"Ural'sk Summer Time"}
             ls{"Ural'sk Time"}
-            sd{"URAST"}
-            ss{"URAT"}
         }
         "meta:Uruguay"{
             ld{"Uruguay Summer Time"}
             ls{"Uruguay Time"}
-            sd{"UYST"}
-            ss{"UYT"}
         }
         "meta:Urumqi"{
             ls{"Urumqi Time"}
-            ss{"URUT"}
         }
         "meta:Uzbekistan"{
             ld{"Uzbekistan Summer Time"}
             ls{"Uzbekistan Time"}
-            sd{"UZST"}
-            ss{"UZT"}
         }
         "meta:Vanuatu"{
             ld{"Vanuatu Summer Time"}
             ls{"Vanuatu Time"}
-            sd{"VUST"}
-            ss{"VUT"}
         }
         "meta:Venezuela"{
             ls{"Venezuela Time"}
-            ss{"VET"}
         }
         "meta:Vladivostok"{
             ld{"Vladivostok Summer Time"}
             ls{"Vladivostok Time"}
-            sd{"VLAST"}
-            ss{"VLAT"}
         }
         "meta:Volgograd"{
             ld{"Volgograd Summer Time"}
             ls{"Volgograd Time"}
-            sd{"VOLST"}
-            ss{"VOLT"}
         }
         "meta:Vostok"{
             ls{"Vostok Time"}
-            ss{"VOST"}
         }
         "meta:Wake"{
             ls{"Wake Island Time"}
-            ss{"WAKT"}
         }
         "meta:Wallis"{
             ls{"Wallis and Futuna Time"}
-            ss{"WFT"}
         }
         "meta:Yakutsk"{
             ld{"Yakutsk Summer Time"}
             ls{"Yakutsk Time"}
-            sd{"YAKST"}
-            ss{"YAKT"}
         }
         "meta:Yekaterinburg"{
             ld{"Yekaterinburg Summer Time"}
             ls{"Yekaterinburg Time"}
-            sd{"YEKST"}
-            ss{"YEKT"}
         }
         "meta:Yerevan"{
             ld{"Yerevan Summer Time"}
             ls{"Yerevan Time"}
-            sd{"YERST"}
-            ss{"YERT"}
         }
         "meta:Yukon"{
             ld{"Yukon Daylight Time"}
             lg{"Yukon Time"}
             ls{"Yukon Standard Time"}
-            sd{"YDT"}
-            sg{"YT"}
-            ss{"YST"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

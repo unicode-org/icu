@@ -10,9 +10,10 @@
 >
 <ldml>
 	<identity>
-		<version number="$Revision: 1.23 $"/>
-		<generation date="$Date: 2008/05/25 01:05:50 $"/>
-		<language type="az"/> 
+		<version number="$Revision: 1.22 $"/>
+		<generation date="$Date: 2008/05/25 01:05:53 $"/>
+		<language type="kk"/> 
+		<script type="Cyrl"/> 
 	</identity>
 	<characters>
 		<special xmlns:icu="http://www.icu-project.org/">

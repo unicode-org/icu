@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/kn.xml
  */
 kn{
-    Version{"1.24"}
+    Version{"1.25"}
     collations{
         standard{
             Sequence{" [normalization on ]"}

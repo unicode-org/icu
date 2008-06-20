@@ -130,7 +130,7 @@ eu{
                 /**
                  * Duplicated from NumberPatterns resource
                  */
-                "#,##0.00 ¤",
+                "#,##0.00 ¤",
                 ",",
                 ".",
             }
@@ -168,11 +168,11 @@ eu{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤",
+        "#,##0.00 ¤",
         "#,##0%",
         "#E0",
     }
-    Version{"1.64"}
+    Version{"1.65"}
     calendar{
         gregorian{
             dayNames{

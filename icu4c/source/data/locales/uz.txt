@@ -21,7 +21,7 @@ uz{
     LocaleScript{
         "Cyrl",
     }
-    Version{"1.44"}
+    Version{"1.45"}
     zoneStrings{
         "Asia:Kabul"{
             ec{"کابل"}
