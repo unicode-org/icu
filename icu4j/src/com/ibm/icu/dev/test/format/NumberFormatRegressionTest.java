@@ -281,4 +281,46 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
+    
+    void checkNBSPPatternRtNum(String testcase, NumberFormat nf, double myNumber) {
+        String myString = nf.format(myNumber);
+        
+            double aNumber;
+            try {
+                aNumber = nf.parse(myString).doubleValue();
+            } catch (ParseException e) {
+                // TODO Auto-generated catch block
+                errln("FAIL: " + testcase +" - failed to parse. " + e.toString());
+                return;
+            }
+            if(Math.abs(aNumber-myNumber)>.001) {
+            errln("FAIL: "+testcase+": formatted "+myNumber+", parsed into "+aNumber+"\n");
+        } else {
+            logln("PASS: "+testcase+": formatted "+myNumber+", parsed into "+aNumber+"\n");
+        }
+    }
+
+    void checkNBSPPatternRT(String testcase, NumberFormat nf) {
+        checkNBSPPatternRtNum(testcase, nf, 12345.);
+        checkNBSPPatternRtNum(testcase, nf, -12345.);
+    }
+
+    public void TestNBSPInPattern() {
+    NumberFormat nf = null;
+    String testcase;
+    
+    
+    testcase="ar_AE UNUM_CURRENCY";
+    nf = NumberFormat.getCurrencyInstance(new ULocale("ar_AE"));
+    checkNBSPPatternRT(testcase, nf);
+    // if we don't have CLDR 1.6 data, bring out the problem anyways 
+    
+    String SPECIAL_PATTERN = "\u00A4\u00A4'\u062f.\u0625.\u200f\u00a0'###0.00";
+    testcase = "ar_AE special pattern: " + SPECIAL_PATTERN;
+    nf = new DecimalFormat();
+    ((DecimalFormat)nf).applyPattern(SPECIAL_PATTERN);
+    checkNBSPPatternRT(testcase, nf);
+    
+    }
+    
 }
