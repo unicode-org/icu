@@ -813,10 +813,6 @@ pl{
             "LTT",
             "talon litewski",
         }
-        LUC{
-            "LUC",
-            "LUC",
-        }
         LUF{
             "LUF",
             "frank luksemburski",
@@ -1306,6 +1302,210 @@ pl{
             "dolar Zimbabwe",
         }
     }
+    CurrencyPlurals{
+        ADP{
+            few{"pesety andorskie"}
+            other{"peset andorskich"}
+        }
+        AED{
+            few{"dirhamy arabskie"}
+            other{"dirhamów arabskich"}
+        }
+        AFA{
+            few{"afgani (1927-2002)"}
+            other{"afgani (1927-2002)"}
+        }
+        AFN{
+            few{"afgani"}
+            other{"afgani"}
+        }
+        ALL{
+            few{"leki albańskie"}
+            other{"leków albańskich"}
+        }
+        AMD{
+            few{"dramy armeńskie"}
+            other{"dramów armeńskich"}
+        }
+        ANG{
+            few{"guldeny Antyle Holenderskie"}
+            other{"guldenów (Antyle Holenderskie)"}
+        }
+        AOA{
+            few{"kwanzy angolańskie"}
+            other{"kwanz angolańskich"}
+        }
+        AOK{
+            few{"kwanzy angolańskie (1977-1990)"}
+            other{"kwanz angolańskich (1977-1990)"}
+        }
+        AON{
+            few{"nowe kwanzy angolańskie (1990-2000)"}
+            other{"nowych kwanz angolańskich (1990-2000)"}
+        }
+        AOR{
+            few{"kwanzy angolańskie Reajustado (1995-1999)"}
+            other{"kwanz angolańskich Reajustado (1995-1999)"}
+        }
+        AUD{
+            few{"dolary australijskie"}
+            one{"dolar australijski"}
+            other{"dolarów australijskich"}
+        }
+        AZN{
+            few{"manaty azerskie"}
+            one{"manat azerski"}
+            other{"manatów azerskich"}
+        }
+        BAM{
+            few{"marki wymienne Bośni i Hercegowiny"}
+            one{"marka wymienna Bośni i Hercegowiny"}
+            other{"marek wymiennych Bośni i Hercegowiny"}
+        }
+        BYR{
+            few{"ruble białoruskie"}
+            one{"rubel białoruski"}
+            other{"rubli białoruskich"}
+        }
+        CAD{
+            few{"dolary kanadyjskie"}
+            one{"dolar kanadyjski"}
+            other{"dolarów kanadyjskich"}
+        }
+        CHF{
+            few{"franki szwajcarskie"}
+            one{"frank szwajcarski"}
+            other{"franków szwajcarskich"}
+        }
+        CSK{
+            few{"korony czechosłowackie"}
+            one{"korona czechosłowacka"}
+            other{"koron czechosłowackich"}
+        }
+        CZK{
+            few{"korony czeskie"}
+            one{"korona czeska"}
+            other{"koron czeskich"}
+        }
+        DEM{
+            few{"marki niemieckie"}
+            one{"marka niemiecka"}
+            other{"marek niemieckich"}
+        }
+        DKK{
+            few{"korony duńskie"}
+            one{"korona duńska"}
+            other{"koron duńskich"}
+        }
+        EEK{
+            few{"korony estońskie"}
+            one{"korona estońska"}
+            other{"koron estońskich"}
+        }
+        EUR{
+            few{"euro"}
+            one{"euro"}
+            other{"euro"}
+        }
+        FRF{
+            few{"franki francuskie"}
+            one{"frank francuski"}
+            other{"franków francuskich"}
+        }
+        HUF{
+            few{"forinty węgierskie"}
+            one{"forint węgierski"}
+            other{"forintów węgierskich"}
+        }
+        JPY{
+            few{"jeny japońskie"}
+            one{"jen japoński"}
+            other{"jenów japońskich"}
+        }
+        MAF{
+            few{"franki marokańskie"}
+            one{"frank marokański"}
+            other{"franków marokańskich"}
+        }
+        NOK{
+            few{"korony norweskie"}
+            one{"korona norweska"}
+            other{"koron norweskich"}
+        }
+        NZD{
+            few{"dolary nowozelandzkie"}
+            one{"dolar nowozelandzki"}
+            other{"dolarów nowozelandzkich"}
+        }
+        PLN{
+            few{"złote polskie"}
+            one{"złoty polski"}
+            other{"złotych polskich"}
+        }
+        RUB{
+            few{"ruble rosyjskie"}
+            one{"rubel rosyjski"}
+            other{"rubli rosyjskich"}
+        }
+        SEK{
+            few{"korony szwedzkie"}
+            one{"korona szwedzka"}
+            other{"koron szwedzkich"}
+        }
+        SIT{
+            few{"tolary słoweńskie"}
+            one{"tolar słoweński"}
+            other{"tolarów słoweńskich"}
+        }
+        SKK{
+            few{"korony słowackie"}
+            one{"korona słowacka"}
+            other{"koron słowackich"}
+        }
+        SRD{
+            few{"dolary surinamskie"}
+            one{"dolar surinamski"}
+            other{"dolarów surinamskich"}
+        }
+        SUR{
+            few{"ruble radzieckie"}
+            one{"rubel radziecki"}
+            other{"rubli radzieckich"}
+        }
+        TRL{
+            few{"liry tureckie"}
+            one{"lira turecka"}
+            other{"lir tureckich"}
+        }
+        TRY{
+            few{"nowe liry tureckie"}
+            one{"nowa lira turecka"}
+            other{"nowych lir tureckich"}
+        }
+        UAH{
+            few{"hrywny ukraińskie"}
+            one{"hrywna ukraińska"}
+            other{"hrywien ukraińskich"}
+        }
+        UAK{
+            few{"karbowańce ukraińskie"}
+            one{"karbowaniec ukraiński"}
+            other{"karbowańców ukraińskich"}
+        }
+        USD{
+            few{"dolary amerykańskie"}
+            one{"dolar amerykański"}
+            other{"dolarów amerykańskich"}
+        }
+        XXX{
+            few{"XXX"}
+            one{"nieznana/nieprawidłowa waluta"}
+            other{"XXX"}
+        }
+    }
+    CurrencyUnitPatterns{
+        one{"{0} {1}"}
+    }
     ExemplarCharacters{"[a ą b c ć d e ę f-l ł m n ń o ó p r s ś t u w y z ź ż]"}
     Keys{
         calendar{"kalendarz"}
@@ -1416,7 +1616,6 @@ pl{
         dar{"dargwijski"}
         day{"dajak"}
         de{"niemiecki"}
-        de_AT{"niemiecki (Austria)"}
         de_CH{"wysokoniemiecki (Szwajcaria)"}
         del{"delaware"}
         den{"slave"}
@@ -1437,15 +1636,11 @@ pl{
         el{"grecki"}
         elx{"elamicki"}
         en{"angielski"}
-        en_AU{"angielski (Australia)"}
-        en_CA{"angielski (Kanada)"}
-        en_GB{"angielski (Wielka Brytania)"}
         en_US{"angielski (USA)"}
         enm{"średnioangielski"}
         eo{"esperanto"}
         es{"hiszpański"}
         es_419{"hiszpański (Ameryka Łacińska)"}
-        es_ES{"hiszpański (Hiszpania)"}
         et{"estoński"}
         eu{"baskijski"}
         ewo{"ewondo"}
@@ -1460,8 +1655,6 @@ pl{
         fo{"farerski"}
         fon{"fon"}
         fr{"francuski"}
-        fr_CA{"francuski (Kanada)"}
-        fr_CH{"francuski (Szwajcaria)"}
         frm{"średniofrancuski"}
         fro{"starofrancuski"}
         frr{"północnofryzyjski"}
@@ -1680,8 +1873,6 @@ pl{
         pro{"staroprowansalski"}
         ps{"paszto"}
         pt{"portugalski"}
-        pt_BR{"portugalski (Brazylia)"}
-        pt_PT{"portugalski (Portugalia)"}
         qu{"keczua"}
         raj{"radźasthani"}
         rap{"rapanui"}
@@ -1839,7 +2030,7 @@ pl{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤",
+        "#,##0.00 ¤",
         "#,##0%",
         "#E0",
     }
@@ -2026,13 +2217,9 @@ pl{
         TARASK{"ortografia taraszkiewicka"}
         VALENCIA{"walencki"}
     }
-    Version{"1.99"}
+    Version{"1.106"}
     calendar{
         buddhist{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "HH:mm:ss v",
                 "HH:mm:ss z",
@@ -2045,51 +2232,7 @@ pl{
                 "{1} {0}",
             }
             availableFormats{
-                Hm{"H:mm"}
-                M{"L"}
-                MEd{"E, M-d"}
-                MMM{"LLL"}
                 MMMd{"d MMM"}
-                d{"d"}
-                ms{"mm:ss"}
-                y{"yyyy"}
-                yM{"yyyy-M"}
-                yMEd{"EEE, yyyy-M-d"}
-                yMMM{"yyyy MMM"}
-                yQ{"yyyy Q"}
-                yQQQ{"yyyy QQQ"}
-            }
-            eras{
-                abbreviated{
-                    "BE",
-                }
-                narrow{
-                    "BE",
-                }
-                wide{
-                    "BE",
-                }
-            }
-        }
-        ethiopic{
-            monthNames{
-                format{
-                    wide{
-                        "Meskerem",
-                        "Tekemt",
-                        "Hedar",
-                        "Tahsas",
-                        "Ter",
-                        "Yekatit",
-                        "Megabit",
-                        "Miazia",
-                        "Genbot",
-                        "Sene",
-                        "Hamle",
-                        "Nehasse",
-                        "Pagumen",
-                    }
-                }
             }
         }
         gregorian{
@@ -2226,6 +2369,90 @@ pl{
                     dn{"Strefa"}
                 }
             }
+            intervalFormats{
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E, dd.MM - E, dd.MM"}
+                    d{"E, dd.MM - E, dd.MM"}
+                }
+                MMM{
+                    M{"LLL-LLL"}
+                }
+                MMMEd{
+                    M{"E, d MMM - E, d MMM"}
+                    d{"E, MM-d – E, MM-d"}
+                }
+                MMMM{
+                    M{"LLLL-LLLL"}
+                }
+                MMMd{
+                    M{"d MMM - d MMM"}
+                    d{"d-d MMM"}
+                }
+                Md{
+                    M{"dd.MM-dd.MM"}
+                    d{"dd.MM-dd.MM"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    a{"HH-HH"}
+                    h{"HH-HH"}
+                }
+                hm{
+                    a{"HH:mm-HH:mm"}
+                    h{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                hmv{
+                    a{"HH:mm-HH:mm v"}
+                    h{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                hv{
+                    a{"HH-HH v"}
+                    h{"HH-HH v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"MM.yy-MM.yy"}
+                    y{"MM.yy-MM.yy"}
+                }
+                yMEd{
+                    M{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
+                    d{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
+                    y{"E, dd-MM-yyyy-E, dd-MM-yyyy"}
+                }
+                yMMM{
+                    M{"LLL-LLL yyyy"}
+                    y{"LLL yyyy - LLL yyyy"}
+                }
+                yMMMEd{
+                    M{"E, d MMM - E, d MMM yyyy"}
+                    d{"E, d - E, d MMM yyyy"}
+                    y{"E, d MMM yyyy - E, d MMM yyyy"}
+                }
+                yMMMM{
+                    M{"MM.yyyy - MM.yyyy"}
+                    y{"MM.yyyy - MM.yyyy"}
+                }
+                yMMMd{
+                    M{"d MMM - d MMM yyyy"}
+                    d{"d-d MMM yyyy"}
+                    y{"d MMM yyyy - d MMM yyyy"}
+                }
+                yMd{
+                    M{"dd.MM-dd.MM.yyyy"}
+                    d{"dd-dd.MM.yy"}
+                    y{"dd.MM.yyyy-dd.MM.yyyy"}
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -2347,26 +2574,11 @@ pl{
                 }
             }
         }
-        indian{
-            monthNames{
-                format{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                }
-            }
-        }
+    }
+    codePatterns{
+        language{"Język: {0}"}
+        script{"Pismo: {0}"}
+        territory{"Region: {0}"}
     }
     delimiters{
         alternateQuotationEnd{"”"}
@@ -2374,9 +2586,50 @@ pl{
         quotationEnd{"’"}
         quotationStart{"‘"}
     }
+    localeDisplayPattern{
+        pattern{"{0} ({1})"}
+        separator{", "}
+    }
     measurementSystemNames{
         US{"anglosaski"}
         metric{"metryczny"}
+    }
+    units{
+        day{
+            few{"{0} dni"}
+            one{"{0} dzień"}
+            other{"{0} dni"}
+        }
+        hour{
+            few{"{0} godziny"}
+            one{"{0} godzina"}
+            other{"{0} godzin"}
+        }
+        minute{
+            few{"{0} minuty"}
+            one{"{0} minuta"}
+            other{"{0} minut"}
+        }
+        month{
+            few{"{0} miesiące"}
+            one{"{0} miesiąc"}
+            other{"{0} miesięcy"}
+        }
+        second{
+            few{"{0} sekundy"}
+            one{"{0} sekunda"}
+            other{"{0} sekund"}
+        }
+        week{
+            few{"{0} tygodnie"}
+            one{"{0} tydzień"}
+            other{"{0} tygodni"}
+        }
+        year{
+            few{"{0} lata"}
+            one{"{0} rok"}
+            other{"{0} lat"}
+        }
     }
     zoneStrings{
         "Africa:Abidjan"{
@@ -2406,9 +2659,6 @@ pl{
         "Africa:Cairo"{
             ec{"Kair"}
         }
-        "Africa:Ceuta"{
-            ec{"Ceuta"}
-        }
         "Africa:Conakry"{
             ec{"Konakri"}
         }
@@ -2433,9 +2683,6 @@ pl{
         "Africa:Lome"{
             ec{"Lomé"}
         }
-        "Africa:Lubumbashi"{
-            ec{"Lubumbashi"}
-        }
         "Africa:Ndjamena"{
             ec{"Ndżamena"}
         }
@@ -2457,33 +2704,6 @@ pl{
         "Africa:Tripoli"{
             ec{"Trypolis"}
         }
-        "America:Adak"{
-            ec{"Adak"}
-        }
-        "America:Anchorage"{
-            ec{"Anchorage"}
-        }
-        "America:Araguaina"{
-            ec{"Araguaina"}
-        }
-        "America:Argentina:La_Rioja"{
-            ec{"La Rioja"}
-        }
-        "America:Argentina:Rio_Gallegos"{
-            ec{"Rio Gallegos"}
-        }
-        "America:Argentina:San_Juan"{
-            ec{"San Juan"}
-        }
-        "America:Argentina:San_Luis"{
-            ec{"San Luis"}
-        }
-        "America:Argentina:Tucuman"{
-            ec{"Tucuman"}
-        }
-        "America:Argentina:Ushuaia"{
-            ec{"Ushuaia"}
-        }
         "America:Asuncion"{
             ec{"Asunción"}
         }
@@ -2493,47 +2713,11 @@ pl{
         "America:Belem"{
             ec{"Belém"}
         }
-        "America:Blanc-Sablon"{
-            ec{"Blanc-Sablon"}
-        }
-        "America:Boa_Vista"{
-            ec{"Boa Vista"}
-        }
-        "America:Boise"{
-            ec{"Boise"}
-        }
-        "America:Buenos_Aires"{
-            ec{"Buenos Aires"}
-        }
-        "America:Cambridge_Bay"{
-            ec{"Cambridge Bay"}
-        }
-        "America:Campo_Grande"{
-            ec{"Campo Grande"}
-        }
-        "America:Cancun"{
-            ec{"Cancun"}
-        }
-        "America:Catamarca"{
-            ec{"Catamarca"}
-        }
         "America:Cayenne"{
             ec{"Kajenna"}
         }
         "America:Cayman"{
             ec{"Kajmany"}
-        }
-        "America:Chicago"{
-            ec{"Chicago"}
-        }
-        "America:Chihuahua"{
-            ec{"Chihuahua"}
-        }
-        "America:Coral_Harbour"{
-            ec{"Coral Harbour"}
-        }
-        "America:Cordoba"{
-            ec{"Cordoba"}
         }
         "America:Costa_Rica"{
             ec{"Kostaryka"}
@@ -2544,41 +2728,11 @@ pl{
         "America:Curacao"{
             ec{"Curaçao"}
         }
-        "America:Danmarkshavn"{
-            ec{"Danmarkshavn"}
-        }
-        "America:Dawson"{
-            ec{"Dawson"}
-        }
-        "America:Dawson_Creek"{
-            ec{"Dawson Creek"}
-        }
-        "America:Denver"{
-            ec{"Denver"}
-        }
-        "America:Detroit"{
-            ec{"Detroit"}
-        }
         "America:Dominica"{
             ec{"Dominika"}
         }
-        "America:Edmonton"{
-            ec{"Edmonton"}
-        }
-        "America:Eirunepe"{
-            ec{"Eirunepe"}
-        }
         "America:El_Salvador"{
             ec{"Salwador"}
-        }
-        "America:Fortaleza"{
-            ec{"Fortaleza"}
-        }
-        "America:Glace_Bay"{
-            ec{"Glace Bay"}
-        }
-        "America:Goose_Bay"{
-            ec{"Goose Bay"}
         }
         "America:Guadeloupe"{
             ec{"Gwadelupa"}
@@ -2589,14 +2743,8 @@ pl{
         "America:Guyana"{
             ec{"Gujana"}
         }
-        "America:Halifax"{
-            ec{"Halifax"}
-        }
         "America:Havana"{
             ec{"Hawana"}
-        }
-        "America:Hermosillo"{
-            ec{"Hermosillo"}
         }
         "America:Indiana:Knox"{
             ec{"Knox"}
@@ -2607,9 +2755,6 @@ pl{
         "America:Indiana:Petersburg"{
             ec{"Petersburg"}
         }
-        "America:Indiana:Tell_City"{
-            ec{"Tell City, Indiana"}
-        }
         "America:Indiana:Vevay"{
             ec{"Vevay"}
         }
@@ -2619,89 +2764,26 @@ pl{
         "America:Indiana:Winamac"{
             ec{"Winamac"}
         }
-        "America:Indianapolis"{
-            ec{"Indianapolis"}
-        }
-        "America:Inuvik"{
-            ec{"Inuvik"}
-        }
-        "America:Iqaluit"{
-            ec{"Iqaluit"}
-        }
         "America:Jamaica"{
             ec{"Jamajka"}
-        }
-        "America:Jujuy"{
-            ec{"Jujuy"}
-        }
-        "America:Juneau"{
-            ec{"Juneau"}
         }
         "America:Kentucky:Monticello"{
             ec{"Monticello"}
         }
-        "America:Los_Angeles"{
-            ec{"Los Angeles"}
-        }
-        "America:Louisville"{
-            ec{"Louisville"}
-        }
         "America:Maceio"{
             ec{"Maceió"}
-        }
-        "America:Manaus"{
-            ec{"Manaus"}
         }
         "America:Martinique"{
             ec{"Martynika"}
         }
-        "America:Mazatlan"{
-            ec{"Mazatlan"}
-        }
-        "America:Mendoza"{
-            ec{"Mendoza"}
-        }
-        "America:Menominee"{
-            ec{"Menominee"}
-        }
-        "America:Merida"{
-            ec{"Merida"}
-        }
         "America:Mexico_City"{
             ec{"Meksyk"}
-        }
-        "America:Moncton"{
-            ec{"Moncton"}
-        }
-        "America:Monterrey"{
-            ec{"Monterrey"}
-        }
-        "America:Montreal"{
-            ec{"Montreal"}
         }
         "America:New_York"{
             ec{"Nowy Jork"}
         }
-        "America:Nipigon"{
-            ec{"Nipigon"}
-        }
-        "America:Nome"{
-            ec{"Nome"}
-        }
-        "America:Noronha"{
-            ec{"Noronha"}
-        }
-        "America:North_Dakota:Center"{
-            ec{"Center, North Dakota"}
-        }
         "America:North_Dakota:New_Salem"{
             ec{"New Salem"}
-        }
-        "America:Pangnirtung"{
-            ec{"Pangnirtung"}
-        }
-        "America:Phoenix"{
-            ec{"Phoenix"}
         }
         "America:Port_of_Spain"{
             ec{"Port-of-Spain"}
@@ -2712,35 +2794,8 @@ pl{
         "America:Puerto_Rico"{
             ec{"Portoryko"}
         }
-        "America:Rainy_River"{
-            ec{"Rainy River"}
-        }
-        "America:Rankin_Inlet"{
-            ec{"Rankin Inlet"}
-        }
-        "America:Recife"{
-            ec{"Recife"}
-        }
-        "America:Regina"{
-            ec{"Regina"}
-        }
-        "America:Resolute"{
-            ec{"Resolute"}
-        }
-        "America:Rio_Branco"{
-            ec{"Rio Branco"}
-        }
         "America:Sao_Paulo"{
             ec{"Săo Paulo"}
-        }
-        "America:Scoresbysund"{
-            ec{"Scoresbysund"}
-        }
-        "America:Shiprock"{
-            ec{"Shiprock"}
-        }
-        "America:St_Johns"{
-            ec{"St. John's"}
         }
         "America:St_Kitts"{
             ec{"Saint Kitts"}
@@ -2754,44 +2809,11 @@ pl{
         "America:St_Vincent"{
             ec{"Saint Vincent"}
         }
-        "America:Swift_Current"{
-            ec{"Swift Current"}
-        }
-        "America:Thule"{
-            ec{"Thule"}
-        }
-        "America:Thunder_Bay"{
-            ec{"Thunder Bay"}
-        }
-        "America:Tijuana"{
-            ec{"Tijuana"}
-        }
-        "America:Toronto"{
-            ec{"Toronto"}
-        }
-        "America:Vancouver"{
-            ec{"Vancouver"}
-        }
-        "America:Whitehorse"{
-            ec{"Whitehorse"}
-        }
-        "America:Winnipeg"{
-            ec{"Winnipeg"}
-        }
-        "America:Yakutat"{
-            ec{"Yakutat"}
-        }
-        "America:Yellowknife"{
-            ec{"Yellowknife"}
-        }
         "Antarctica:Casey"{
             ec{"Stacja Casey"}
         }
         "Antarctica:Davis"{
             ec{"Stacja Davis"}
-        }
-        "Antarctica:DumontDUrville"{
-            ec{"Dumont d'Urville"}
         }
         "Antarctica:Mawson"{
             ec{"Wybrzeże Mawsona"}
@@ -2814,14 +2836,8 @@ pl{
         "Antarctica:Vostok"{
             ec{"Stacja Vostok"}
         }
-        "Arctic:Longyearbyen"{
-            ec{"Longyearbyen"}
-        }
         "Asia:Almaty"{
             ec{"Ałma Ata"}
-        }
-        "Asia:Anadyr"{
-            ec{"Anadyr"}
         }
         "Asia:Aqtau"{
             ec{"Aktau"}
@@ -2865,9 +2881,6 @@ pl{
         "Asia:Dushanbe"{
             ec{"Duszanbe"}
         }
-        "Asia:Harbin"{
-            ec{"Harbin"}
-        }
         "Asia:Hong_Kong"{
             ec{"Hongkong"}
         }
@@ -2879,9 +2892,6 @@ pl{
         }
         "Asia:Jakarta"{
             ec{"Dżakarta"}
-        }
-        "Asia:Jayapura"{
-            ec{"Jayapura"}
         }
         "Asia:Jerusalem"{
             ec{"Jerozolima"}
@@ -2907,12 +2917,6 @@ pl{
         "Asia:Macau"{
             ec{"Makau"}
         }
-        "Asia:Magadan"{
-            ec{"Magadan"}
-        }
-        "Asia:Makassar"{
-            ec{"Makassar"}
-        }
         "Asia:Muscat"{
             ec{"Maskat"}
         }
@@ -2922,14 +2926,8 @@ pl{
         "Asia:Novosibirsk"{
             ec{"Nowosybirsk"}
         }
-        "Asia:Omsk"{
-            ec{"Omsk"}
-        }
         "Asia:Oral"{
             ec{"Uralsk"}
-        }
-        "Asia:Pontianak"{
-            ec{"Pontianak"}
         }
         "Asia:Qatar"{
             ec{"Katar"}
@@ -3024,38 +3022,8 @@ pl{
         "Australia:Adelaide"{
             ec{"Adelajda"}
         }
-        "Australia:Brisbane"{
-            ec{"Brisbane"}
-        }
-        "Australia:Broken_Hill"{
-            ec{"Broken Hill"}
-        }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
-        "Australia:Darwin"{
-            ec{"Darwin"}
-        }
-        "Australia:Eucla"{
-            ec{"Eucla"}
-        }
-        "Australia:Hobart"{
-            ec{"Hobart"}
-        }
-        "Australia:Lindeman"{
-            ec{"Lindeman"}
-        }
         "Australia:Lord_Howe"{
             ec{"Wyspa Lord Howe"}
-        }
-        "Australia:Melbourne"{
-            ec{"Melbourne"}
-        }
-        "Australia:Perth"{
-            ec{"Perth"}
-        }
-        "Australia:Sydney"{
-            ec{"Sydney"}
         }
         "Etc:Unknown"{
             ec{"Nieznane"}
@@ -3080,9 +3048,6 @@ pl{
         }
         "Europe:Copenhagen"{
             ec{"Kopenhaga"}
-        }
-        "Europe:Kaliningrad"{
-            ec{"Kaliningrad"}
         }
         "Europe:Kiev"{
             ec{"Kijów"}
@@ -3116,9 +3081,6 @@ pl{
         }
         "Europe:Rome"{
             ec{"Rzym"}
-        }
-        "Europe:Samara"{
-            ec{"Samara"}
         }
         "Europe:Simferopol"{
             ec{"Symferopol"}
@@ -3174,65 +3136,20 @@ pl{
         "Indian:Maldives"{
             ec{"Malediwy"}
         }
-        "Pacific:Chatham"{
-            ec{"Chatham"}
-        }
         "Pacific:Easter"{
             ec{"Wyspa Wielkanocna"}
-        }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
         }
         "Pacific:Fiji"{
             ec{"Fidżi"}
         }
-        "Pacific:Galapagos"{
-            ec{"Galapagos"}
-        }
-        "Pacific:Gambier"{
-            ec{"Gambier"}
-        }
-        "Pacific:Honolulu"{
-            ec{"Honolulu"}
-        }
-        "Pacific:Johnston"{
-            ec{"Johnston"}
-        }
-        "Pacific:Kiritimati"{
-            ec{"Kiritimati"}
-        }
-        "Pacific:Kosrae"{
-            ec{"Kosrae"}
-        }
-        "Pacific:Kwajalein"{
-            ec{"Kwajalein"}
-        }
-        "Pacific:Majuro"{
-            ec{"Majuro"}
-        }
         "Pacific:Marquesas"{
             ec{"Markizy"}
-        }
-        "Pacific:Midway"{
-            ec{"Midway"}
         }
         "Pacific:Noumea"{
             ec{"Numea"}
         }
         "Pacific:Pitcairn"{
             ec{"Wyspy Pitcairn"}
-        }
-        "Pacific:Ponape"{
-            ec{"Ponape"}
-        }
-        "Pacific:Tarawa"{
-            ec{"Tarawa"}
-        }
-        "Pacific:Truk"{
-            ec{"Truk"}
-        }
-        "Pacific:Wake"{
-            ec{"Wake"}
         }
         "meta:Acre"{
             cu:int{0}
@@ -3268,20 +3185,14 @@ pl{
             cu:int{1}
             ld{"Czas środkowoeuropejski letni"}
             ls{"Czas środkowoeuropejski"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Czas wschodnioeuropejski letni"}
             ls{"Czas wschodnioeuropejski"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Czas zachodnioeuropejski letni"}
             ls{"Czas zachodnioeuropejski"}
-            sd{"WEST"}
-            ss{"WET"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

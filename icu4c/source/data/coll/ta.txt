@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/ta.xml
  */
 ta{
-    Version{"1.26"}
+    Version{"1.27"}
     collations{
         standard{
             Sequence{" [normalization on ]"}

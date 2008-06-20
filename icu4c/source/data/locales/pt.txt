@@ -1381,6 +1381,1087 @@ pt{
             "Dólar do Zimbábue",
         }
     }
+    CurrencyPlurals{
+        ADP{
+            one{"Peseta de Andorra"}
+            other{"Pesetas de Andorra"}
+        }
+        AED{
+            one{"Dirham de UAE"}
+            other{"Dirhans de UAE"}
+        }
+        AFA{
+            one{"Afghani (AFA)"}
+            other{"Afghani (AFA)"}
+        }
+        AFN{
+            one{"Afghani"}
+            other{"Afghanis"}
+        }
+        ALL{
+            one{"Lek albanês"}
+            other{"Leks albaneses"}
+        }
+        AMD{
+            one{"Dram armênio"}
+            other{"Drams armênios"}
+        }
+        ANG{
+            one{"Florim das Antilhas Holandesas"}
+            other{"Florins das Antilhas Holandesas"}
+        }
+        AOA{
+            one{"Kwanza angolano"}
+            other{"Kwanzas angolanos"}
+        }
+        AOK{
+            one{"Kwanza angolano (AOK)"}
+            other{"Kwanzas angolanos (AOK)"}
+        }
+        AON{
+            one{"Novo kwanza angolano (AOK)"}
+            other{"Novos kwanzas angolanos (AOK)"}
+        }
+        AOR{
+            one{"Kwanza angolano reajustado (AOR)"}
+            other{"Kwanzas angolanos reajustados (AOR)"}
+        }
+        ARA{
+            one{"Austral argentino"}
+            other{"Austrais argentinos"}
+        }
+        ARP{
+            one{"Peso argentino (ARP)"}
+            other{"Pesos argentinos (ARP)"}
+        }
+        ARS{
+            one{"Peso argentino"}
+            other{"Pesos argentinos"}
+        }
+        ATS{
+            one{"Schilling australiano"}
+            other{"Schillings australianos"}
+        }
+        AUD{
+            one{"Dólar australiano"}
+            other{"Dólares australianos"}
+        }
+        AWG{
+            one{"Florim de Aruba"}
+            other{"Florins de Aruba"}
+        }
+        AZM{
+            one{"Manat do Azeibaijão (AZM)"}
+            other{"Manats do Azeibaijão (AZM)"}
+        }
+        AZN{
+            one{"Manat do Azeibaijão"}
+            other{"Manats do Azeibaijão"}
+        }
+        BAD{
+            one{"Dinar da Bósnia Herzegovina"}
+            other{"Dinares da Bósnia Herzegovina"}
+        }
+        BAM{
+            one{"Marca conversível da Bósnia Herzegovina"}
+            other{"Marcas conversíveis da Bósnia Herzegovina"}
+        }
+        BBD{
+            one{"Dólar de Barbados"}
+            other{"Dólares de Barbados"}
+        }
+        BDT{
+            one{"Taka de Bangladesh"}
+            other{"Takas de Bangladesh"}
+        }
+        BEC{
+            one{"Franco belga (conversível)"}
+            other{"Francos belgas (conversível)"}
+        }
+        BEF{
+            one{"Franco belga"}
+            other{"Francos belgas"}
+        }
+        BEL{
+            one{"Franco belga (financeiro)"}
+            other{"Francos belgas (financeiro)"}
+        }
+        BGL{
+            one{"Lev pesado da Bulgária"}
+            other{"Levs pesados da Bulgária"}
+        }
+        BGN{
+            one{"Novo lev da Bulgária"}
+            other{"Novos levs da Bulgária"}
+        }
+        BHD{
+            one{"Dinar do Bahraini"}
+            other{"Dinares do Bahraini"}
+        }
+        BIF{
+            one{"Franco do Burundi"}
+            other{"Francos do Burundi"}
+        }
+        BMD{
+            one{"Dólar das Bermudas"}
+            other{"Dólares das Bermudas"}
+        }
+        BND{
+            one{"Dólar de Brunei"}
+            other{"Dólares de Brunei"}
+        }
+        BOB{
+            one{"Boliviano"}
+            other{"Bolivianos"}
+        }
+        BOP{
+            one{"Peso boliviano"}
+            other{"Pesos bolivianos"}
+        }
+        BOV{
+            one{"Mvdol boliviano"}
+            other{"Mvdols bolivianos"}
+        }
+        BRB{
+            one{"Cruzeiro novo brasileiro"}
+            other{"Cruzeiro novo brasileiro (BRB)"}
+        }
+        BRC{
+            one{"Cruzado brasileiro"}
+            other{"Cruzados brasileiros"}
+        }
+        BRE{
+            one{"Cruzeiro brasileiro (BRE)"}
+            other{"Cruzeiros brasileiros (BRE)"}
+        }
+        BRL{
+            one{"Real brasileiro"}
+            other{"Reais brasileiros"}
+        }
+        BRN{
+            one{"Cruzado novo brasileiro"}
+            other{"Cruzados novos brasileiros"}
+        }
+        BRR{
+            one{"Cruzeiro brasileiro"}
+            other{"Cruzeiros brasileiros"}
+        }
+        BSD{
+            one{"Dólar de Bahamian"}
+            other{"Dólares de Bahamian"}
+        }
+        BTN{
+            one{"Ngultrum do Butão"}
+            other{"Ngultruns do Butão"}
+        }
+        BUK{
+            one{"Kyat burmês"}
+            other{"Kyats burmeses"}
+        }
+        BWP{
+            one{"Pula de Botsuana"}
+            other{"Pulas de Botsuana"}
+        }
+        BYB{
+            one{"Novo rublo bielorusso"}
+            other{"Novos rublos bielorussos"}
+        }
+        BYR{
+            one{"Rublo bielorusso"}
+            other{"Rublos bielorussos"}
+        }
+        BZD{
+            one{"Dólar de Belize"}
+            other{"Dólares de Belize"}
+        }
+        CAD{
+            one{"Dólar canadense"}
+            other{"Dólares canadenses"}
+        }
+        CDF{
+            one{"Franco congolês"}
+            other{"Francos congoleses"}
+        }
+        CHE{
+            one{"Euro WIR"}
+            other{"Euros WIR"}
+        }
+        CHF{
+            one{"Franco suíço"}
+            other{"Francos suíços"}
+        }
+        CHW{
+            one{"Franco WIR"}
+            other{"Francos WIR"}
+        }
+        CLF{
+            one{"Unidade de fomento chilena"}
+            other{"Unidades de fomento chilenas"}
+        }
+        CLP{
+            one{"Peso chileno"}
+            other{"Pesos chilenos"}
+        }
+        CNY{
+            one{"Yuan chinês"}
+            other{"Yuans chineses"}
+        }
+        COP{
+            one{"Peso colombiano"}
+            other{"Pesos colombianos"}
+        }
+        COU{
+            one{"Unidade de valor real"}
+            other{"Unidades de valor real"}
+        }
+        CRC{
+            one{"Colon costa-riquenho"}
+            other{"Colons costa-riquenhos"}
+        }
+        CSD{
+            one{"Dinar antigo da Sérvia"}
+            other{"Dinares antigos da Sérvia"}
+        }
+        CSK{
+            one{"Corona tcheca"}
+            other{"Coronas tchecas"}
+        }
+        CUP{
+            one{"Peso cubano"}
+            other{"Pesos cubanos"}
+        }
+        CVE{
+            one{"Escudo de Cabo Verde"}
+            other{"Escudos de Cabo Verde"}
+        }
+        CYP{
+            one{"Libra do Chipre"}
+            other{"Libras do Chipre"}
+        }
+        CZK{
+            one{"Corona da República Tcheca"}
+            other{"Coronas da República Tcheca"}
+        }
+        DDM{
+            one{"Ostmark da Alemannha Oriental"}
+            other{"Ostmarks da Alemannha Oriental"}
+        }
+        DEM{
+            one{"Marco alemão"}
+            other{"Marcos alemães"}
+        }
+        DJF{
+            one{"Franco de Djibouti"}
+            other{"Francos de Djibouti"}
+        }
+        DKK{
+            one{"Krone dinamarquês"}
+            other{"Krones dinamarqueses"}
+        }
+        DOP{
+            one{"Peso dominicano"}
+            other{"Pesos dominicanos"}
+        }
+        DZD{
+            one{"Dinar algeriano"}
+            other{"Dinares algerianos"}
+        }
+        ECS{
+            one{"Sucre equatoriano"}
+            other{"Sucres equatorianos"}
+        }
+        ECV{
+            one{"Unidade de valor constante equatoriana (UVC)"}
+            other{"Unidades de valor constante equatoriana (UVC)"}
+        }
+        EEK{
+            one{"Kroon estoniano"}
+            other{"Kroons estonianos"}
+        }
+        EGP{
+            one{"Libra egípcia"}
+            other{"Libras egípcias"}
+        }
+        EQE{
+            one{"Ekwele"}
+            other{"Ekweles"}
+        }
+        ERN{
+            one{"Nakfa da Eritréia"}
+            other{"Nakfas da Eritréia"}
+        }
+        ESA{
+            one{"Peseta espanhola (conta A)"}
+            other{"Pesetas espanholas (conta A)"}
+        }
+        ESB{
+            one{"Peseta espanhola (conta conversível)"}
+            other{"Pesetas espanholas (conta conversível)"}
+        }
+        ESP{
+            one{"Peseta espanhola"}
+            other{"Pesetas espanholas"}
+        }
+        ETB{
+            one{"Birr etíope"}
+            other{"Birrs etíopes"}
+        }
+        EUR{
+            one{"Euro"}
+            other{"Euros"}
+        }
+        FIM{
+            one{"Markka finlandesa"}
+            other{"Markkas finlandesas"}
+        }
+        FJD{
+            one{"Dólar de Fiji"}
+            other{"Dólares de Fiji"}
+        }
+        FKP{
+            one{"Libra das Ilhas Malvinas"}
+            other{"Libras das Ilhas Malvinas"}
+        }
+        FRF{
+            one{"Franco francês"}
+            other{"Francos franceses"}
+        }
+        GBP{
+            one{"Libra esterlina britânica"}
+            other{"Libras esterlinas britânicas"}
+        }
+        GEK{
+            one{"Kupon larit da Geórgia"}
+            other{"Kupon larits da Geórgia"}
+        }
+        GEL{
+            one{"Lari da Geórgia"}
+            other{"Laris da Geórgia"}
+        }
+        GHC{
+            one{"Cedi de Gana (GHC)"}
+            other{"Cedis de Gana (GHC)"}
+        }
+        GHS{
+            one{"Cedi de Gana"}
+            other{"Cedis de Gana"}
+        }
+        GIP{
+            one{"Libra de Gibraltar"}
+            other{"Libras de Gibraltar"}
+        }
+        GMD{
+            one{"Dalasi da Gâmbia"}
+            other{"Dalasis da Gâmbia"}
+        }
+        GNF{
+            one{"Franco da Guinéa"}
+            other{"Francos da Guinéa"}
+        }
+        GNS{
+            one{"Syli da Guinéa"}
+            other{"Sylis da Guinéa"}
+        }
+        GQE{
+            one{"Ekwele da Guinéa Equatorial"}
+            other{"Ekweles da Guinéa Equatorial"}
+        }
+        GRD{
+            one{"Dracma grego"}
+            other{"Dracmas gregos"}
+        }
+        GTQ{
+            one{"Quetzal da Guatemala"}
+            other{"Quetzales da Guatemala"}
+        }
+        GWE{
+            one{"Escudo da Guinéa Portuguesa"}
+            other{"Escudos da Guinéa Portuguesa"}
+        }
+        GWP{
+            one{"Peso de Guiné-Bissau"}
+            other{"Pesos de Guiné-Bissau"}
+        }
+        GYD{
+            one{"Dólar da Guiana"}
+            other{"Dólares da Guiana"}
+        }
+        HKD{
+            one{"Dólar de Hong Kong"}
+            other{"Dólar de Hong Kong"}
+        }
+        HNL{
+            one{"Lempira de Honduras"}
+            other{"Lempiras de Honduras"}
+        }
+        HRD{
+            one{"Dinar croata"}
+            other{"Dinares croata"}
+        }
+        HRK{
+            one{"Kuna croata"}
+            other{"Kunas croatas"}
+        }
+        HTG{
+            one{"Gourde haitiano"}
+            other{"Gourdes haitianos"}
+        }
+        HUF{
+            one{"Forint húngaro"}
+            other{"Forints húngaros"}
+        }
+        IDR{
+            one{"Rúpia da Indonésia"}
+            other{"Rúpias da Indonésia"}
+        }
+        IEP{
+            one{"Libra irlandesa"}
+            other{"Libras irlandesas"}
+        }
+        ILP{
+            one{"Libra israeli"}
+            other{"Libras israelis"}
+        }
+        ILS{
+            one{"Sheqel novo israeli"}
+            other{"Sheqels novos israelis"}
+        }
+        INR{
+            one{"Rúpia indú"}
+            other{"Rúpias indús"}
+        }
+        IQD{
+            one{"Dinar iraquiano"}
+            other{"Dinares iraquianos"}
+        }
+        IRR{
+            one{"Rial iraniano"}
+            other{"Riales iranianos"}
+        }
+        ISK{
+            one{"Krona islandesa"}
+            other{"Kronas islandesas"}
+        }
+        ITL{
+            one{"Lira italiana"}
+            other{"Liras italianas"}
+        }
+        JMD{
+            one{"Dólar jamaicano"}
+            other{"Dólares jamaicanos"}
+        }
+        JOD{
+            one{"Dinar jordaniano"}
+            other{"Dinares jordanianos"}
+        }
+        JPY{
+            one{"Ien japonês"}
+            other{"Ienes japoneses"}
+        }
+        KES{
+            one{"Shilling queniano"}
+            other{"Shillings quenianos"}
+        }
+        KGS{
+            one{"Som do Quirguistão"}
+            other{"Soms do Quirguistão"}
+        }
+        KHR{
+            one{"Riel cambojano"}
+            other{"Rieles cambojanos"}
+        }
+        KMF{
+            one{"Franco de Comoro"}
+            other{"Francos de Comoro"}
+        }
+        KPW{
+            one{"Won norte coreano"}
+            other{"Wons norte coreano"}
+        }
+        KRW{
+            one{"Won sul-coreano"}
+            other{"Won sul coreano"}
+        }
+        KWD{
+            one{"Wons sul coreanos"}
+            other{"Dinares kuaitianos"}
+        }
+        KYD{
+            one{"Dólar das Ilhas Cayman"}
+            other{"Dólares das Ilhas Caiman"}
+        }
+        KZT{
+            one{"Tengue do Casaquistão"}
+        }
+        LAK{
+            one{"Kip do Laos"}
+            other{"Kips do Laos"}
+        }
+        LBP{
+            one{"Libra libanesa"}
+            other{"Libras libanesas"}
+        }
+        LKR{
+            one{"Rúpia do Siri Lanka"}
+            other{"Rúpias do Siri Lanka"}
+        }
+        LRD{
+            one{"Dólar da Libéria"}
+            other{"Dólares da Libéria"}
+        }
+        LSL{
+            one{"Loti do Lesoto"}
+            other{"Lotis do Lesoto"}
+        }
+        LSM{
+            one{"Maloti"}
+            other{"Malotis"}
+        }
+        LTL{
+            one{"Lita lituana"}
+            other{"Litas lituanas"}
+        }
+        LTT{
+            one{"Talonas lituanas"}
+            other{"Talonases lituanas"}
+        }
+        LUC{
+            one{"Franco conversível de Luxemburgo"}
+            other{"Francos conversíveis de Luxemburgo"}
+        }
+        LUF{
+            one{"Franco de Luxemburgo"}
+            other{"Francos de Luxemburgo"}
+        }
+        LUL{
+            one{"Franco financeiro de Luxemburgo"}
+            other{"Francos financeiros de Luxemburgo"}
+        }
+        LVL{
+            one{"Lats da Letônia"}
+            other{"Latses da Letônia"}
+        }
+        LVR{
+            one{"Rublo da Letônia"}
+            other{"Rublos da Letônia"}
+        }
+        LYD{
+            one{"Dinar líbio"}
+            other{"Dinares líbios"}
+        }
+        MAD{
+            one{"Dirham marroquino"}
+            other{"Dirhams marroquinos"}
+        }
+        MAF{
+            one{"Franco marroquino"}
+            other{"Francos marroquinos"}
+        }
+        MDL{
+            one{"Leu da Moldávia"}
+            other{"Leus da Moldávia"}
+        }
+        MGA{
+            one{"Ariari de Madagascar"}
+            other{"Ariaries de Madagascar"}
+        }
+        MGF{
+            one{"Franco de Madagascar"}
+            other{"Francos de Madagascar"}
+        }
+        MKD{
+            one{"Denar da Macedônia"}
+            other{"Denares da Macedônia"}
+        }
+        MLF{
+            one{"Franco de Mali"}
+            other{"Francos de Mali"}
+        }
+        MMK{
+            one{"Kyat de Mianmar"}
+            other{"Kyats de Mianmar"}
+        }
+        MNT{
+            one{"Tugrik da Mongólia"}
+            other{"Tugriks da Mongólia"}
+        }
+        MOP{
+            one{"Pataca de Macau"}
+            other{"Patacas de Macau"}
+        }
+        MRO{
+            one{"Ouguiya da Mauritânia"}
+            other{"Ouguiyas da Mauritânia"}
+        }
+        MTL{
+            one{"Lira Maltesa"}
+            other{"Liras maltesas"}
+        }
+        MTP{
+            one{"Libra maltesa"}
+            other{"Libras maltesas"}
+        }
+        MUR{
+            one{"Rúpia das Ilhas Maurício"}
+            other{"Rúpias das Ilhas Maurício"}
+        }
+        MVR{
+            one{"Rufiyaa das Ilhas Maldivas"}
+            other{"Rufiyaas das Ilhas Maldivas"}
+        }
+        MWK{
+            one{"Kwacha do Malawi"}
+            other{"Kwachas do Malawi"}
+        }
+        MXN{
+            one{"Peso mexicano"}
+            other{"Pesos mexicanos"}
+        }
+        MXP{
+            one{"Peso de prata mexicano (MXP)"}
+            other{"Pesos de prata mexicanos (MXP)"}
+        }
+        MXV{
+            one{"Unidade de investimento mexicana (UDI)"}
+            other{"Unidades de investimento mexicanas (UDI)"}
+        }
+        MYR{
+            one{"Ringgit malaio"}
+            other{"Ringgits da Malásia"}
+        }
+        MZE{
+            one{"Escudo de Moçambique"}
+            other{"Escudos de Moçambique"}
+        }
+        MZM{
+            one{"Metical antigo de Moçambique"}
+            other{"Meticales antigos de Moçambique"}
+        }
+        MZN{
+            one{"Metical de Moçambique"}
+            other{"Meticales de Moçambique"}
+        }
+        NAD{
+            one{"Dólar da Namíbia"}
+            other{"Dólares da Namíbia"}
+        }
+        NGN{
+            one{"Naira da Nigéria"}
+            other{"Nairas da Nigéria"}
+        }
+        NIC{
+            one{"Córdoba nicaraguense"}
+            other{"Córdobas da Nicarágua"}
+        }
+        NIO{
+            one{"Córdoba de ouro da Nicarágua"}
+            other{"Córdobas de ouro da Nicarágua"}
+        }
+        NLG{
+            one{"Florim holandês"}
+            other{"Florins holandeses"}
+        }
+        NOK{
+            one{"Crone norueguês"}
+            other{"Crones noruegueses"}
+        }
+        NPR{
+            one{"Rúpia nepalesa"}
+            other{"Rúpias nepalesas"}
+        }
+        NZD{
+            one{"Dólar da Nova Zelândia"}
+            other{"Dólares da Nova Zelândia"}
+        }
+        OMR{
+            one{"Rial de Omã"}
+            other{"Riales de Omã"}
+        }
+        PAB{
+            one{"Balboa do Panamá"}
+            other{"Balboas do Panamá"}
+        }
+        PEI{
+            one{"Inti peruano"}
+            other{"Intis peruanos"}
+        }
+        PEN{
+            one{"Novo sol peruano"}
+            other{"Novos soles peruanos"}
+        }
+        PES{
+            one{"Sol peruano"}
+            other{"Soles peruanos"}
+        }
+        PGK{
+            one{"Kina de Papua Nova Guiné"}
+            other{"Kinas de Papua Nova Guiné"}
+        }
+        PHP{
+            one{"peso filipino"}
+            other{"Pesos filipinos"}
+        }
+        PKR{
+            one{"rúpia paquistanesa"}
+            other{"Rúpias paquistanesas"}
+        }
+        PLN{
+            one{"Zloti polonês"}
+            other{"Zlotis poloneses"}
+        }
+        PLZ{
+            one{"Zloti polonês (PLZ)"}
+            other{"Zlotis poloneses (PLZ)"}
+        }
+        PTE{
+            one{"Escudo português"}
+            other{"Escudos portugueses"}
+        }
+        PYG{
+            one{"Guarani paraguaio"}
+            other{"Guaranis paraguaios"}
+        }
+        QAR{
+            one{"Rial do Quatar"}
+            other{"Riales do Quatar"}
+        }
+        RHD{
+            one{"Dólar da Rodésia"}
+            other{"Dólares da Rodésia"}
+        }
+        ROL{
+            one{"Leu antigo da Romênia"}
+            other{"Leus antigos da Romênia"}
+        }
+        RON{
+            one{"Leu da Romênia"}
+            other{"Lei da Romênia"}
+        }
+        RSD{
+            one{"Dinar sérvio"}
+            other{"Dinares sérvios"}
+        }
+        RUB{
+            one{"Rúpias russa"}
+            other{"Rúpias russas"}
+        }
+        RUR{
+            one{"Rúpia russa (RUR)"}
+            other{"Rúpias russas (RUR)"}
+        }
+        RWF{
+            one{"Franco de Ruanda"}
+            other{"Francos de Ruanda"}
+        }
+        SAR{
+            one{"Riyal saudita"}
+            other{"Riyales sauditas"}
+        }
+        SBD{
+            one{"Dólar das Ilhas Salomão"}
+            other{"Dólares das Ilhas Salomão"}
+        }
+        SCR{
+            one{"Rúpia das Ilhas Seychelles"}
+            other{"Rúpias das Ilhas Seychelles"}
+        }
+        SDD{
+            one{"Dinar antigo do Sudão"}
+            other{"Dinares antigos do Sudão"}
+        }
+        SDG{
+            one{"Libra sudanesa"}
+            other{"Libras sudanesas"}
+        }
+        SDP{
+            one{"Libra antiga sudanesa"}
+            other{"Libras antigas sudanesas"}
+        }
+        SEK{
+            one{"Crona suéca"}
+            other{"Cronas suécas"}
+        }
+        SGD{
+            one{"Dólar de Singapura"}
+            other{"Dólares de Singapura"}
+        }
+        SHP{
+            one{"Libra de Santa Helena"}
+            other{"Libras de Santa Helena"}
+        }
+        SIT{
+            one{"Tolar da Eslovênia"}
+            other{"Tolares da Eslovênia"}
+        }
+        SKK{
+            one{"Coruna eslovaca"}
+            other{"Corunas eslovacas"}
+        }
+        SLL{
+            one{"Leone de Serra Leoa"}
+            other{"Leones de Serra Leoa"}
+        }
+        SOS{
+            one{"Shilling da Somália"}
+            other{"Shillings da Somália"}
+        }
+        SRD{
+            one{"Dólar do Suriname"}
+            other{"Dólares do Suriname"}
+        }
+        SRG{
+            one{"Florim do Suriname"}
+            other{"Florins do Suriname"}
+        }
+        STD{
+            one{"Dobra de San Tomé e Príncipe"}
+            other{"Dobras de San Tomé e Príncipe"}
+        }
+        SUR{
+            one{"Rúpia soviética"}
+            other{"Rúpias soviéticas"}
+        }
+        SVC{
+            one{"Colon de El Salvador"}
+            other{"Colons de El Salvador"}
+        }
+        SYP{
+            one{"Libra síria"}
+            other{"Libras sírias"}
+        }
+        SZL{
+            one{"Lilangeni da Suazilândia"}
+            other{"Lilangenis da Suazilândia"}
+        }
+        THB{
+            one{"Baht da Tailândia"}
+            other{"Bahts da Tailândia"}
+        }
+        TJR{
+            one{"Rúpia do Tajaquistão"}
+            other{"Rúpias do Tajaquistão"}
+        }
+        TJS{
+            one{"Somoni do Tajaquistão"}
+            other{"Somonis do Tajaquistão"}
+        }
+        TMM{
+            one{"Manat do Turcomenistão"}
+            other{"Manats do Turcomenistão"}
+        }
+        TND{
+            one{"Dinar da Tunísia"}
+            other{"Dinares da Tunísia"}
+        }
+        TOP{
+            one{"Paʻanga de Tonga"}
+            other{"Paʻangas de Tonga"}
+        }
+        TPE{
+            one{"Escudo do Timor"}
+            other{"Escudos do Timor"}
+        }
+        TRL{
+            one{"Lira turca antiga"}
+            other{"Liras turcas antigas"}
+        }
+        TRY{
+            one{"Nova Lira turca"}
+            other{"Liras turcas"}
+        }
+        TTD{
+            one{"Dólar de Trinidad e Tobago"}
+            other{"Dólares de Trinidad e Tobago"}
+        }
+        TWD{
+            one{"Dólar de Taiwan"}
+            other{"Dólares de Taiwan"}
+        }
+        TZS{
+            one{"Shilling da Tanzânia"}
+            other{"Shillings da Tanzânia"}
+        }
+        UAH{
+            one{"Hryvnia da Ucrânia"}
+            other{"Hryvnias da Ucrânia"}
+        }
+        UAK{
+            one{"Karbovanetz da Ucrânia"}
+            other{"Karbovanetzs da Ucrânia"}
+        }
+        UGS{
+            one{"Shilling de Uganda (UGS)"}
+            other{"Shillings de Uganda (UGS)"}
+        }
+        UGX{
+            one{"Shilling de Uganda"}
+            other{"Shillings de Uganda"}
+        }
+        USD{
+            one{"Dólar americano"}
+            other{"Dólares americanos"}
+        }
+        USN{
+            one{"Dólar americano (dia seguinte)"}
+            other{"Dólares americanos (dia seguinte)"}
+        }
+        USS{
+            one{"Dólar americano (mesmo dia)"}
+            other{"Dólares americanos (mesmo dia)"}
+        }
+        UYI{
+            one{"Peso uruguaio em unidades indexadas"}
+            other{"Pesos uruguaios em unidades indexadas"}
+        }
+        UYP{
+            one{"Peso uruguaio (UYP)"}
+            other{"Pesos uruguaios (UYP)"}
+        }
+        UYU{
+            one{"Peso uruguaio"}
+            other{"Pesos uruguaios"}
+        }
+        UZS{
+            one{"Sum do Uzbequistão"}
+            other{"Sums do Uzbequistão"}
+        }
+        VEB{
+            one{"Bolívar venezuelano"}
+            other{"Bolívares venezuelano"}
+        }
+        VEF{
+            one{"Bolívar forte da Venezuela"}
+            other{"Bolívares fortes da Venezuela"}
+        }
+        VND{
+            one{"Dong vietnamês"}
+            other{"Dongs vietnameses"}
+        }
+        VUV{
+            one{"Vatu de Vanuatu"}
+            other{"Vatus de Vanuatu"}
+        }
+        WST{
+            one{"Tala da Samoa Ocidental"}
+            other{"Talas da Samoa Ocidental"}
+        }
+        XAF{
+            one{"Franco CFA de BEAC"}
+            other{"Francos CFA de BEAC"}
+        }
+        XAG{
+            one{"Prata"}
+        }
+        XAU{
+            one{"Ouro"}
+        }
+        XBA{
+            one{"Unidade de composição européia"}
+            other{"Unidades de composição européias"}
+        }
+        XBB{
+            one{"Unidade monetária européia"}
+            other{"Unidades monetárias européias"}
+        }
+        XBC{
+            one{"Unidade européia de conta (XBC)"}
+            other{"Unidades européias de conta (XBC)"}
+        }
+        XBD{
+            one{"Unidade européia de conta (XBD)"}
+            other{"Unidades européias de conta (XBD)"}
+        }
+        XCD{
+            one{"Dólar do Caribe Oriental"}
+            other{"Dólares do Caribe Oriental"}
+        }
+        XDR{
+            one{"direitos de desenho especiais"}
+            other{"direitos de desenho especiais"}
+        }
+        XEU{
+            one{"Unidade de moeda européia"}
+            other{"Unidades de moedas européias"}
+        }
+        XFO{
+            one{"Franco de ouro francês"}
+            other{"Francos de ouro franceses"}
+        }
+        XFU{
+            one{"Franco UIC francês"}
+            other{"Francos UIC franceses"}
+        }
+        XOF{
+            one{"Franco CFA de BCEAO"}
+            other{"Francos CFA de BCEAO"}
+        }
+        XPD{
+            one{"Paládio"}
+        }
+        XPF{
+            one{"Franco CFP"}
+            other{"Francos CFP"}
+        }
+        XPT{
+            one{"Platina"}
+        }
+        XRE{
+            one{"Fundos RINET"}
+        }
+        XTS{
+            one{"Código de moeda de teste"}
+        }
+        XXX{
+            one{"moeda desconhecida ou inválida"}
+        }
+        YDD{
+            one{"Dinar do Iêmen"}
+            other{"Dinares do Iêmen"}
+        }
+        YER{
+            one{"Rial do Iêmen"}
+            other{"Riales do Iêmen"}
+        }
+        YUD{
+            one{"Dinar pesado da Iugoslávia"}
+            other{"Dinares pesados da Iugoslávia"}
+        }
+        YUM{
+            one{"Dinar noviy da Iugoslávia"}
+            other{"Dinares noviy da Iugoslávia"}
+        }
+        YUN{
+            one{"Dinar conversível da Iugoslávia"}
+            other{"Dinares conversíveis da Iugoslávia"}
+        }
+        ZAL{
+            one{"Rand da África do Sul (financeiro)"}
+            other{"Rands da África do Sul (financeiro)"}
+        }
+        ZAR{
+            one{"Rand da África do Sul"}
+            other{"Rands da África do Sul"}
+        }
+        ZMK{
+            one{"Kwacha da Zâmbia"}
+            other{"Kwachas da Zâmbia"}
+        }
+        ZRN{
+            one{"Novo zaire do Zaire"}
+            other{"Novos zaires do Zaire"}
+        }
+        ZRZ{
+            one{"Zaire do Zaire"}
+            other{"Zaires do Zaire"}
+        }
+        ZWD{
+            one{"Dólar do Zimbábue"}
+            other{"Dólares do Zimbábue"}
+        }
+    }
+    CurrencyUnitPatterns{
+        one{"{0} {1}"}
+    }
     ExemplarCharacters{"[a á à â ã b c ç d e é ê f-i í j-o ó ò ô õ p-u ú ü v-z]"}
     Keys{
         calendar{"Calendário"}
@@ -2074,7 +3155,6 @@ pt{
     }
     Variants{
         1606NICT{"francês antigo de 1606"}
-        1694ACAD{"1694ACAD"}
         1901{"ortografia alemã tradicional"}
         1994{"ortografia resiana padronizada"}
         1996{"ortografia alemã de 1996"}
@@ -2099,15 +3179,10 @@ pt{
         SCOUSE{"scouse"}
         SOLBA{"dialeto stolvizza/solbica"}
         TARASK{"ortografia taraskievica"}
-        VALENCIA{"VALENCIA"}
     }
-    Version{"1.101"}
+    Version{"1.105"}
     calendar{
         buddhist{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "HH'h'mm'min'ss's' v",
                 "HH:mm:ss z",
@@ -2118,82 +3193,6 @@ pt{
                 "d 'de' MMMM 'de' yyyy G",
                 "d/M/yyyy",
                 "{1} {0}",
-            }
-            availableFormats{
-                MEd{"E, M-d"}
-                MMMMEd{"E MMMM d"}
-                MMMd{"MMM d"}
-            }
-            eras{
-                abbreviated{
-                    "BE",
-                }
-                narrow{
-                    "BE",
-                }
-                wide{
-                    "BE",
-                }
-            }
-        }
-        chinese{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
-            DateTimePatterns{
-                "HH'h'mm'min'ss's' v",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE y'x'G-Ml-d",
-                "y'x'G-Ml-d",
-                "y'x'G-Ml-d",
-                "y'x'G-Ml-d",
-                "{1} {0}",
-            }
-        }
-        coptic{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
-            eras{
-                abbreviated{
-                    "ERA0",
-                    "ERA1",
-                }
-                narrow{
-                    "ERA0",
-                    "ERA1",
-                }
-                wide{
-                    "ERA0",
-                    "ERA1",
-                }
-            }
-        }
-        ethiopic{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
-            availableFormats{
-                MEd{"E, M-d"}
-            }
-            eras{
-                abbreviated{
-                    "ERA0",
-                    "ERA1",
-                }
-                narrow{
-                    "ERA0",
-                    "ERA1",
-                }
-                wide{
-                    "ERA0",
-                    "ERA1",
-                }
             }
         }
         gregorian{
@@ -2331,6 +3330,90 @@ pt{
                     dn{"Fuso"}
                 }
             }
+            intervalFormats{
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E, dd/MM - E, dd/MM"}
+                    d{"E, dd/MM - E, dd/MM"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"E, d 'de' MMM - E, d 'de' MMM"}
+                    d{"E, d - E, d 'de' MMM"}
+                }
+                MMMM{
+                    M{"LLLL-LLLL"}
+                }
+                MMMd{
+                    M{"d 'de' MMM - d 'de' MMM"}
+                    d{"d-d 'de' MMM"}
+                }
+                Md{
+                    M{"dd/MM - dd/MM"}
+                    d{"dd/MM - dd/MM"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    a{"HH-HH"}
+                    h{"HH-HH"}
+                }
+                hm{
+                    a{"HH:mm-HH:mm"}
+                    h{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                hmv{
+                    a{"HH:mm-HH:mm v"}
+                    h{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                hv{
+                    a{"HH-HH v"}
+                    h{"HH-HH v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"MM/yy - MM/yy"}
+                    y{"MM/yy - MM/yy"}
+                }
+                yMEd{
+                    M{"E, dd/MM/yy - E, dd/MM/yy"}
+                    d{"E, dd/MM/yy - E, dd/MM/yy"}
+                    y{"E, dd/MM/yy - E, dd/MM/yy"}
+                }
+                yMMM{
+                    M{"MMM-MMM 'de' yyyy"}
+                    y{"MMM 'de' yyyy - MMM 'de' yyyy"}
+                }
+                yMMMEd{
+                    M{"E, d 'de' MMM - E, d 'de' MMM 'de' yyyy"}
+                    d{"E, d - E, d 'de' MMM 'de' yyyy"}
+                    y{"E, d 'de' MMM 'de' yyyy - E, d 'de' MMM 'de' yyyy"}
+                }
+                yMMMM{
+                    M{"yyyy-MM – MM"}
+                    y{"yyyy-MM – yyyy-MM"}
+                }
+                yMMMd{
+                    M{"d 'de' MMM - d 'de' MMM 'de' yyyy"}
+                    d{"d-d 'de' MMM 'de' yyyy"}
+                    y{"d 'de' MMM 'de' yyyy - d 'de' MMM 'de' yyyy"}
+                }
+                yMd{
+                    M{"dd/MM/yy - dd/MM/yy"}
+                    d{"dd/MM/yy - dd/MM/yy"}
+                    y{"dd/MM/yy - dd/MM/yy"}
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -2404,298 +3487,7 @@ pt{
                 }
             }
         }
-        hebrew{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
-            eras{
-                abbreviated{
-                    "AM",
-                }
-                narrow{
-                    "AM",
-                }
-                wide{
-                    "AM",
-                }
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "Tishri",
-                        "Heshvan",
-                        "Kislev",
-                        "Tevet",
-                        "Shevat",
-                        "Adar I",
-                        "Adar",
-                        "Nisan",
-                        "Iyar",
-                        "Sivan",
-                        "Tamuz",
-                        "Av",
-                        "Elul",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                        "13",
-                    }
-                    wide{
-                        "Tishri",
-                        "Heshvan",
-                        "Kislev",
-                        "Tevet",
-                        "Shevat",
-                        "Adar I",
-                        "Adar",
-                        "Nisan",
-                        "Iyar",
-                        "Sivan",
-                        "Tamuz",
-                        "Av",
-                        "Elul",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                        "13",
-                    }
-                    wide{
-                        "Tishri",
-                        "Heshvan",
-                        "Kislev",
-                        "Tevet",
-                        "Shevat",
-                        "Adar I",
-                        "Adar",
-                        "Nisan",
-                        "Iyar",
-                        "Sivan",
-                        "Tamuz",
-                        "Av",
-                        "Elul",
-                    }
-                }
-            }
-        }
-        indian{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
-            availableFormats{
-                MMMd{"MMM d"}
-            }
-            eras{
-                abbreviated{
-                    "SAKA",
-                }
-                narrow{
-                    "SAKA",
-                }
-                wide{
-                    "SAKA",
-                }
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "Chaitra",
-                        "Vaisakha",
-                        "Jyaistha",
-                        "Asadha",
-                        "Sravana",
-                        "Bhadra",
-                        "Asvina",
-                        "Kartika",
-                        "Agrahayana",
-                        "Pausa",
-                        "Magha",
-                        "Phalguna",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                    wide{
-                        "Chaitra",
-                        "Vaisakha",
-                        "Jyaistha",
-                        "Asadha",
-                        "Sravana",
-                        "Bhadra",
-                        "Asvina",
-                        "Kartika",
-                        "Agrahayana",
-                        "Pausa",
-                        "Magha",
-                        "Phalguna",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                    wide{
-                        "Chaitra",
-                        "Vaisakha",
-                        "Jyaistha",
-                        "Asadha",
-                        "Sravana",
-                        "Bhadra",
-                        "Asvina",
-                        "Kartika",
-                        "Agrahayana",
-                        "Pausa",
-                        "Magha",
-                        "Phalguna",
-                    }
-                }
-            }
-        }
-        islamic{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
-            eras{
-                abbreviated{
-                    "AH",
-                }
-                narrow{
-                    "AH",
-                }
-                wide{
-                    "AH",
-                }
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "Muharram",
-                        "Safar",
-                        "Rabiʻ I",
-                        "Rabiʻ II",
-                        "Jumada I",
-                        "Jumada II",
-                        "Rajab",
-                        "Shaʻban",
-                        "Ramadan",
-                        "Shawwal",
-                        "Dhuʻl-Qiʻdah",
-                        "Dhuʻl-Hijjah",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                    wide{
-                        "Muharram",
-                        "Safar",
-                        "Rabiʻ I",
-                        "Rabiʻ II",
-                        "Jumada I",
-                        "Jumada II",
-                        "Rajab",
-                        "Shaʻban",
-                        "Ramadan",
-                        "Shawwal",
-                        "Dhuʻl-Qiʻdah",
-                        "Dhuʻl-Hijjah",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                    wide{
-                        "Muharram",
-                        "Safar",
-                        "Rabiʻ I",
-                        "Rabiʻ II",
-                        "Jumada I",
-                        "Jumada II",
-                        "Rajab",
-                        "Shaʻban",
-                        "Ramadan",
-                        "Shawwal",
-                        "Dhuʻl-Qiʻdah",
-                        "Dhuʻl-Hijjah",
-                    }
-                }
-            }
-        }
         japanese{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "HH'h'mm'min'ss's' v",
                 "HH:mm:ss z",
@@ -2707,851 +3499,9 @@ pt{
                 "d/M/yy",
                 "{1} {0}",
             }
-            availableFormats{
-                Ed{"E d"}
-                H{"H"}
-                Hm{"HH:mm"}
-                Hms{"HH:mm:ss"}
-                MMMEd{"E MMM d"}
-                MMMMd{"MMMM d"}
-                Md{"M-d"}
-                ms{"mm:ss"}
-                y{"yyyy GGG"}
-                yM{"GGGGG yy-MM"}
-                yMMM{"GGGGG yy MMM"}
-                yQ{"GGGGG yy Q"}
-            }
-            eras{
-                abbreviated{
-                    "Taika",
-                    "Hakuchi",
-                    "Hakuhō",
-                    "Shuchō",
-                    "Taihō",
-                    "Keiun",
-                    "Wadō",
-                    "Reiki",
-                    "Yōrō",
-                    "Jinki",
-                    "Tempyō",
-                    "Tempyō-kampō",
-                    "Tempyō-shōhō",
-                    "Tempyō-hōji",
-                    "Temphō-jingo",
-                    "Jingo-keiun",
-                    "Hōki",
-                    "Ten-ō",
-                    "Enryaku",
-                    "Daidō",
-                    "Kōnin",
-                    "Tenchō",
-                    "Shōwa",
-                    "Kajō",
-                    "Ninju",
-                    "Saiko",
-                    "Tennan",
-                    "Jōgan",
-                    "Genkei",
-                    "Ninna",
-                    "Kampyō",
-                    "Shōtai",
-                    "Engi",
-                    "Enchō",
-                    "Shōhei",
-                    "Tengyō",
-                    "Tenryaku",
-                    "Tentoku",
-                    "Ōwa",
-                    "Kōhō",
-                    "Anna",
-                    "Tenroku",
-                    "Ten-en",
-                    "Jōgen",
-                    "Tengen",
-                    "Eikan",
-                    "Kanna",
-                    "Ei-en",
-                    "Eiso",
-                    "Shōryaku",
-                    "Chōtoku",
-                    "Chōhō",
-                    "Kankō",
-                    "Chōwa",
-                    "Kannin",
-                    "Jian",
-                    "Manju",
-                    "Chōgen",
-                    "Chōryaku",
-                    "Chōkyū",
-                    "Kantoku",
-                    "Eishō",
-                    "Tengi",
-                    "Kōhei",
-                    "Jiryaku",
-                    "Enkyū",
-                    "Shōho",
-                    "Shōryaku",
-                    "Eiho",
-                    "Ōtoku",
-                    "Kanji",
-                    "Kaho",
-                    "Eichō",
-                    "Shōtoku",
-                    "Kōwa",
-                    "Chōji",
-                    "Kashō",
-                    "Tennin",
-                    "Ten-ei",
-                    "Eikyū",
-                    "Gen-ei",
-                    "Hoan",
-                    "Tenji",
-                    "Daiji",
-                    "Tenshō",
-                    "Chōshō",
-                    "Hoen",
-                    "Eiji",
-                    "Kōji",
-                    "Tenyō",
-                    "Kyūan",
-                    "Ninpei",
-                    "Kyūju",
-                    "Hogen",
-                    "Heiji",
-                    "Eiryaku",
-                    "Ōho",
-                    "Chōkan",
-                    "Eiman",
-                    "Nin-an",
-                    "Kaō",
-                    "Shōan",
-                    "Angen",
-                    "Jishō",
-                    "Yōwa",
-                    "Juei",
-                    "Genryuku",
-                    "Bunji",
-                    "Kenkyū",
-                    "Shōji",
-                    "Kennin",
-                    "Genkyū",
-                    "Ken-ei",
-                    "Shōgen",
-                    "Kenryaku",
-                    "Kenpō",
-                    "Shōkyū",
-                    "Jōō",
-                    "Gennin",
-                    "Karoku",
-                    "Antei",
-                    "Kanki",
-                    "Jōei",
-                    "Tempuku",
-                    "Bunryaku",
-                    "Katei",
-                    "Ryakunin",
-                    "En-ō",
-                    "Ninji",
-                    "Kangen",
-                    "Hōji",
-                    "Kenchō",
-                    "Kōgen",
-                    "Shōka",
-                    "Shōgen",
-                    "Bun-ō",
-                    "Kōchō",
-                    "Bun-ei",
-                    "Kenji",
-                    "Kōan",
-                    "Shōō",
-                    "Einin",
-                    "Shōan",
-                    "Kengen",
-                    "Kagen",
-                    "Tokuji",
-                    "Enkei",
-                    "Ōchō",
-                    "Shōwa",
-                    "Bunpō",
-                    "Genō",
-                    "Genkyō",
-                    "Shōchū",
-                    "Kareki",
-                    "Gentoku",
-                    "Genkō",
-                    "Kemmu",
-                    "Engen",
-                    "Kōkoku",
-                    "Shōhei",
-                    "Kentoku",
-                    "Bunchũ",
-                    "Tenju",
-                    "Kōryaku",
-                    "Kōwa",
-                    "Genchũ",
-                    "Meitoku",
-                    "Kakei",
-                    "Kōō",
-                    "Meitoku",
-                    "Ōei",
-                    "Shōchō",
-                    "Eikyō",
-                    "Kakitsu",
-                    "Bun-an",
-                    "Hōtoku",
-                    "Kyōtoku",
-                    "Kōshō",
-                    "Chōroku",
-                    "Kanshō",
-                    "Bunshō",
-                    "Ōnin",
-                    "Bunmei",
-                    "Chōkyō",
-                    "Entoku",
-                    "Meiō",
-                    "Bunki",
-                    "Eishō",
-                    "Taiei",
-                    "Kyōroku",
-                    "Tenmon",
-                    "Kōji",
-                    "Eiroku",
-                    "Genki",
-                    "Tenshō",
-                    "Bunroku",
-                    "Keichō",
-                    "Genwa",
-                    "Kan-ei",
-                    "Shōho",
-                    "Keian",
-                    "Shōō",
-                    "Meiryaku",
-                    "Manji",
-                    "Kanbun",
-                    "Enpō",
-                    "Tenwa",
-                    "Jōkyō",
-                    "Genroku",
-                    "Hōei",
-                    "Shōtoku",
-                    "Kyōhō",
-                    "Genbun",
-                    "Kanpō",
-                    "Enkyō",
-                    "Kan-en",
-                    "Hōryaku",
-                    "Meiwa",
-                    "An-ei",
-                    "Tenmei",
-                    "Kansei",
-                    "Kyōwa",
-                    "Bunka",
-                    "Bunsei",
-                    "Tenpō",
-                    "Kōka",
-                    "Kaei",
-                    "Ansei",
-                    "Man-en",
-                    "Bunkyū",
-                    "Genji",
-                    "Keiō",
-                    "Meiji",
-                    "Taishō",
-                    "Shōwa",
-                    "Heisei",
-                }
-                narrow{
-                    "Taika" /** (abbr.)  */,
-                    "Hakuchi" /** (abbr.)  */,
-                    "Hakuhō" /** (abbr.)  */,
-                    "Shuchō" /** (abbr.)  */,
-                    "Taihō" /** (abbr.)  */,
-                    "Keiun" /** (abbr.)  */,
-                    "Wadō" /** (abbr.)  */,
-                    "Reiki" /** (abbr.)  */,
-                    "Yōrō" /** (abbr.)  */,
-                    "Jinki" /** (abbr.)  */,
-                    "Tempyō" /** (abbr.)  */,
-                    "Tempyō-kampō" /** (abbr.)  */,
-                    "Tempyō-shōhō" /** (abbr.)  */,
-                    "Tempyō-hōji" /** (abbr.)  */,
-                    "Temphō-jingo" /** (abbr.)  */,
-                    "Jingo-keiun" /** (abbr.)  */,
-                    "Hōki" /** (abbr.)  */,
-                    "Ten-ō" /** (abbr.)  */,
-                    "Enryaku" /** (abbr.)  */,
-                    "Daidō" /** (abbr.)  */,
-                    "Kōnin" /** (abbr.)  */,
-                    "Tenchō" /** (abbr.)  */,
-                    "Shōwa" /** (abbr.)  */,
-                    "Kajō" /** (abbr.)  */,
-                    "Ninju" /** (abbr.)  */,
-                    "Saiko" /** (abbr.)  */,
-                    "Tennan" /** (abbr.)  */,
-                    "Jōgan" /** (abbr.)  */,
-                    "Genkei" /** (abbr.)  */,
-                    "Ninna" /** (abbr.)  */,
-                    "Kampyō" /** (abbr.)  */,
-                    "Shōtai" /** (abbr.)  */,
-                    "Engi" /** (abbr.)  */,
-                    "Enchō" /** (abbr.)  */,
-                    "Shōhei" /** (abbr.)  */,
-                    "Tengyō" /** (abbr.)  */,
-                    "Tenryaku" /** (abbr.)  */,
-                    "Tentoku" /** (abbr.)  */,
-                    "Ōwa" /** (abbr.)  */,
-                    "Kōhō" /** (abbr.)  */,
-                    "Anna" /** (abbr.)  */,
-                    "Tenroku" /** (abbr.)  */,
-                    "Ten-en" /** (abbr.)  */,
-                    "Jōgen" /** (abbr.)  */,
-                    "Tengen" /** (abbr.)  */,
-                    "Eikan" /** (abbr.)  */,
-                    "Kanna" /** (abbr.)  */,
-                    "Ei-en" /** (abbr.)  */,
-                    "Eiso" /** (abbr.)  */,
-                    "Shōryaku" /** (abbr.)  */,
-                    "Chōtoku" /** (abbr.)  */,
-                    "Chōhō" /** (abbr.)  */,
-                    "Kankō" /** (abbr.)  */,
-                    "Chōwa" /** (abbr.)  */,
-                    "Kannin" /** (abbr.)  */,
-                    "Jian" /** (abbr.)  */,
-                    "Manju" /** (abbr.)  */,
-                    "Chōgen" /** (abbr.)  */,
-                    "Chōryaku" /** (abbr.)  */,
-                    "Chōkyū" /** (abbr.)  */,
-                    "Kantoku" /** (abbr.)  */,
-                    "Eishō" /** (abbr.)  */,
-                    "Tengi" /** (abbr.)  */,
-                    "Kōhei" /** (abbr.)  */,
-                    "Jiryaku" /** (abbr.)  */,
-                    "Enkyū" /** (abbr.)  */,
-                    "Shōho" /** (abbr.)  */,
-                    "Shōryaku" /** (abbr.)  */,
-                    "Eiho" /** (abbr.)  */,
-                    "Ōtoku" /** (abbr.)  */,
-                    "Kanji" /** (abbr.)  */,
-                    "Kaho" /** (abbr.)  */,
-                    "Eichō" /** (abbr.)  */,
-                    "Shōtoku" /** (abbr.)  */,
-                    "Kōwa" /** (abbr.)  */,
-                    "Chōji" /** (abbr.)  */,
-                    "Kashō" /** (abbr.)  */,
-                    "Tennin" /** (abbr.)  */,
-                    "Ten-ei" /** (abbr.)  */,
-                    "Eikyū" /** (abbr.)  */,
-                    "Gen-ei" /** (abbr.)  */,
-                    "Hoan" /** (abbr.)  */,
-                    "Tenji" /** (abbr.)  */,
-                    "Daiji" /** (abbr.)  */,
-                    "Tenshō" /** (abbr.)  */,
-                    "Chōshō" /** (abbr.)  */,
-                    "Hoen" /** (abbr.)  */,
-                    "Eiji" /** (abbr.)  */,
-                    "Kōji" /** (abbr.)  */,
-                    "Tenyō" /** (abbr.)  */,
-                    "Kyūan" /** (abbr.)  */,
-                    "Ninpei" /** (abbr.)  */,
-                    "Kyūju" /** (abbr.)  */,
-                    "Hogen" /** (abbr.)  */,
-                    "Heiji" /** (abbr.)  */,
-                    "Eiryaku" /** (abbr.)  */,
-                    "Ōho" /** (abbr.)  */,
-                    "Chōkan" /** (abbr.)  */,
-                    "Eiman" /** (abbr.)  */,
-                    "Nin-an" /** (abbr.)  */,
-                    "Kaō" /** (abbr.)  */,
-                    "Shōan" /** (abbr.)  */,
-                    "Angen" /** (abbr.)  */,
-                    "Jishō" /** (abbr.)  */,
-                    "Yōwa" /** (abbr.)  */,
-                    "Juei" /** (abbr.)  */,
-                    "Genryuku" /** (abbr.)  */,
-                    "Bunji" /** (abbr.)  */,
-                    "Kenkyū" /** (abbr.)  */,
-                    "Shōji" /** (abbr.)  */,
-                    "Kennin" /** (abbr.)  */,
-                    "Genkyū" /** (abbr.)  */,
-                    "Ken-ei" /** (abbr.)  */,
-                    "Shōgen" /** (abbr.)  */,
-                    "Kenryaku" /** (abbr.)  */,
-                    "Kenpō" /** (abbr.)  */,
-                    "Shōkyū" /** (abbr.)  */,
-                    "Jōō" /** (abbr.)  */,
-                    "Gennin" /** (abbr.)  */,
-                    "Karoku" /** (abbr.)  */,
-                    "Antei" /** (abbr.)  */,
-                    "Kanki" /** (abbr.)  */,
-                    "Jōei" /** (abbr.)  */,
-                    "Tempuku" /** (abbr.)  */,
-                    "Bunryaku" /** (abbr.)  */,
-                    "Katei" /** (abbr.)  */,
-                    "Ryakunin" /** (abbr.)  */,
-                    "En-ō" /** (abbr.)  */,
-                    "Ninji" /** (abbr.)  */,
-                    "Kangen" /** (abbr.)  */,
-                    "Hōji" /** (abbr.)  */,
-                    "Kenchō" /** (abbr.)  */,
-                    "Kōgen" /** (abbr.)  */,
-                    "Shōka" /** (abbr.)  */,
-                    "Shōgen" /** (abbr.)  */,
-                    "Bun-ō" /** (abbr.)  */,
-                    "Kōchō" /** (abbr.)  */,
-                    "Bun-ei" /** (abbr.)  */,
-                    "Kenji" /** (abbr.)  */,
-                    "Kōan" /** (abbr.)  */,
-                    "Shōō" /** (abbr.)  */,
-                    "Einin" /** (abbr.)  */,
-                    "Shōan" /** (abbr.)  */,
-                    "Kengen" /** (abbr.)  */,
-                    "Kagen" /** (abbr.)  */,
-                    "Tokuji" /** (abbr.)  */,
-                    "Enkei" /** (abbr.)  */,
-                    "Ōchō" /** (abbr.)  */,
-                    "Shōwa" /** (abbr.)  */,
-                    "Bunpō" /** (abbr.)  */,
-                    "Genō" /** (abbr.)  */,
-                    "Genkyō" /** (abbr.)  */,
-                    "Shōchū" /** (abbr.)  */,
-                    "Kareki" /** (abbr.)  */,
-                    "Gentoku" /** (abbr.)  */,
-                    "Genkō" /** (abbr.)  */,
-                    "Kemmu" /** (abbr.)  */,
-                    "Engen" /** (abbr.)  */,
-                    "Kōkoku" /** (abbr.)  */,
-                    "Shōhei" /** (abbr.)  */,
-                    "Kentoku" /** (abbr.)  */,
-                    "Bunchũ" /** (abbr.)  */,
-                    "Tenju" /** (abbr.)  */,
-                    "Kōryaku" /** (abbr.)  */,
-                    "Kōwa" /** (abbr.)  */,
-                    "Genchũ" /** (abbr.)  */,
-                    "Meitoku" /** (abbr.)  */,
-                    "Kakei" /** (abbr.)  */,
-                    "Kōō" /** (abbr.)  */,
-                    "Meitoku" /** (abbr.)  */,
-                    "Ōei" /** (abbr.)  */,
-                    "Shōchō" /** (abbr.)  */,
-                    "Eikyō" /** (abbr.)  */,
-                    "Kakitsu" /** (abbr.)  */,
-                    "Bun-an" /** (abbr.)  */,
-                    "Hōtoku" /** (abbr.)  */,
-                    "Kyōtoku" /** (abbr.)  */,
-                    "Kōshō" /** (abbr.)  */,
-                    "Chōroku" /** (abbr.)  */,
-                    "Kanshō" /** (abbr.)  */,
-                    "Bunshō" /** (abbr.)  */,
-                    "Ōnin" /** (abbr.)  */,
-                    "Bunmei" /** (abbr.)  */,
-                    "Chōkyō" /** (abbr.)  */,
-                    "Entoku" /** (abbr.)  */,
-                    "Meiō" /** (abbr.)  */,
-                    "Bunki" /** (abbr.)  */,
-                    "Eishō" /** (abbr.)  */,
-                    "Taiei" /** (abbr.)  */,
-                    "Kyōroku" /** (abbr.)  */,
-                    "Tenmon" /** (abbr.)  */,
-                    "Kōji" /** (abbr.)  */,
-                    "Eiroku" /** (abbr.)  */,
-                    "Genki" /** (abbr.)  */,
-                    "Tenshō" /** (abbr.)  */,
-                    "Bunroku" /** (abbr.)  */,
-                    "Keichō" /** (abbr.)  */,
-                    "Genwa" /** (abbr.)  */,
-                    "Kan-ei" /** (abbr.)  */,
-                    "Shōho" /** (abbr.)  */,
-                    "Keian" /** (abbr.)  */,
-                    "Shōō" /** (abbr.)  */,
-                    "Meiryaku" /** (abbr.)  */,
-                    "Manji" /** (abbr.)  */,
-                    "Kanbun" /** (abbr.)  */,
-                    "Enpō" /** (abbr.)  */,
-                    "Tenwa" /** (abbr.)  */,
-                    "Jōkyō" /** (abbr.)  */,
-                    "Genroku" /** (abbr.)  */,
-                    "Hōei" /** (abbr.)  */,
-                    "Shōtoku" /** (abbr.)  */,
-                    "Kyōhō" /** (abbr.)  */,
-                    "Genbun" /** (abbr.)  */,
-                    "Kanpō" /** (abbr.)  */,
-                    "Enkyō" /** (abbr.)  */,
-                    "Kan-en" /** (abbr.)  */,
-                    "Hōryaku" /** (abbr.)  */,
-                    "Meiwa" /** (abbr.)  */,
-                    "An-ei" /** (abbr.)  */,
-                    "Tenmei" /** (abbr.)  */,
-                    "Kansei" /** (abbr.)  */,
-                    "Kyōwa" /** (abbr.)  */,
-                    "Bunka" /** (abbr.)  */,
-                    "Bunsei" /** (abbr.)  */,
-                    "Tenpō" /** (abbr.)  */,
-                    "Kōka" /** (abbr.)  */,
-                    "Kaei" /** (abbr.)  */,
-                    "Ansei" /** (abbr.)  */,
-                    "Man-en" /** (abbr.)  */,
-                    "Bunkyū" /** (abbr.)  */,
-                    "Genji" /** (abbr.)  */,
-                    "Keiō" /** (abbr.)  */,
-                    "M",
-                    "T",
-                    "S",
-                    "H",
-                }
-                wide{
-                    "Taika",
-                    "Hakuchi",
-                    "Hakuhō",
-                    "Shuchō",
-                    "Taihō",
-                    "Keiun",
-                    "Wadō",
-                    "Reiki",
-                    "Yōrō",
-                    "Jinki",
-                    "Tempyō",
-                    "Tempyō-kampō",
-                    "Tempyō-shōhō",
-                    "Tempyō-hōji",
-                    "Temphō-jingo",
-                    "Jingo-keiun",
-                    "Hōki",
-                    "Ten-ō",
-                    "Enryaku",
-                    "Daidō",
-                    "Kōnin",
-                    "Tenchō",
-                    "Shōwa",
-                    "Kajō",
-                    "Ninju",
-                    "Saiko",
-                    "Tennan",
-                    "Jōgan",
-                    "Genkei",
-                    "Ninna",
-                    "Kampyō",
-                    "Shōtai",
-                    "Engi",
-                    "Enchō",
-                    "Shōhei",
-                    "Tengyō",
-                    "Tenryaku",
-                    "Tentoku",
-                    "Ōwa",
-                    "Kōhō",
-                    "Anna",
-                    "Tenroku",
-                    "Ten-en",
-                    "Jōgen",
-                    "Tengen",
-                    "Eikan",
-                    "Kanna",
-                    "Ei-en",
-                    "Eiso",
-                    "Shōryaku",
-                    "Chōtoku",
-                    "Chōhō",
-                    "Kankō",
-                    "Chōwa",
-                    "Kannin",
-                    "Jian",
-                    "Manju",
-                    "Chōgen",
-                    "Chōryaku",
-                    "Chōkyū",
-                    "Kantoku",
-                    "Eishō",
-                    "Tengi",
-                    "Kōhei",
-                    "Jiryaku",
-                    "Enkyū",
-                    "Shōho",
-                    "Shōryaku",
-                    "Eiho",
-                    "Ōtoku",
-                    "Kanji",
-                    "Kaho",
-                    "Eichō",
-                    "Shōtoku",
-                    "Kōwa",
-                    "Chōji",
-                    "Kashō",
-                    "Tennin",
-                    "Ten-ei",
-                    "Eikyū",
-                    "Gen-ei",
-                    "Hoan",
-                    "Tenji",
-                    "Daiji",
-                    "Tenshō",
-                    "Chōshō",
-                    "Hoen",
-                    "Eiji",
-                    "Kōji",
-                    "Tenyō",
-                    "Kyūan",
-                    "Ninpei",
-                    "Kyūju",
-                    "Hogen",
-                    "Heiji",
-                    "Eiryaku",
-                    "Ōho",
-                    "Chōkan",
-                    "Eiman",
-                    "Nin-an",
-                    "Kaō",
-                    "Shōan",
-                    "Angen",
-                    "Jishō",
-                    "Yōwa",
-                    "Juei",
-                    "Genryuku",
-                    "Bunji",
-                    "Kenkyū",
-                    "Shōji",
-                    "Kennin",
-                    "Genkyū",
-                    "Ken-ei",
-                    "Shōgen",
-                    "Kenryaku",
-                    "Kenpō",
-                    "Shōkyū",
-                    "Jōō",
-                    "Gennin",
-                    "Karoku",
-                    "Antei",
-                    "Kanki",
-                    "Jōei",
-                    "Tempuku",
-                    "Bunryaku",
-                    "Katei",
-                    "Ryakunin",
-                    "En-ō",
-                    "Ninji",
-                    "Kangen",
-                    "Hōji",
-                    "Kenchō",
-                    "Kōgen",
-                    "Shōka",
-                    "Shōgen",
-                    "Bun-ō",
-                    "Kōchō",
-                    "Bun-ei",
-                    "Kenji",
-                    "Kōan",
-                    "Shōō",
-                    "Einin",
-                    "Shōan",
-                    "Kengen",
-                    "Kagen",
-                    "Tokuji",
-                    "Enkei",
-                    "Ōchō",
-                    "Shōwa",
-                    "Bunpō",
-                    "Genō",
-                    "Genkyō",
-                    "Shōchū",
-                    "Kareki",
-                    "Gentoku",
-                    "Genkō",
-                    "Kemmu",
-                    "Engen",
-                    "Kōkoku",
-                    "Shōhei",
-                    "Kentoku",
-                    "Bunchũ",
-                    "Tenju",
-                    "Kōryaku",
-                    "Kōwa",
-                    "Genchũ",
-                    "Meitoku",
-                    "Kakei",
-                    "Kōō",
-                    "Meitoku",
-                    "Ōei",
-                    "Shōchō",
-                    "Eikyō",
-                    "Kakitsu",
-                    "Bun-an",
-                    "Hōtoku",
-                    "Kyōtoku",
-                    "Kōshō",
-                    "Chōroku",
-                    "Kanshō",
-                    "Bunshō",
-                    "Ōnin",
-                    "Bunmei",
-                    "Chōkyō",
-                    "Entoku",
-                    "Meiō",
-                    "Bunki",
-                    "Eishō",
-                    "Taiei",
-                    "Kyōroku",
-                    "Tenmon",
-                    "Kōji",
-                    "Eiroku",
-                    "Genki",
-                    "Tenshō",
-                    "Bunroku",
-                    "Keichō",
-                    "Genwa",
-                    "Kan-ei",
-                    "Shōho",
-                    "Keian",
-                    "Shōō",
-                    "Meiryaku",
-                    "Manji",
-                    "Kanbun",
-                    "Enpō",
-                    "Tenwa",
-                    "Jōkyō",
-                    "Genroku",
-                    "Hōei",
-                    "Shōtoku",
-                    "Kyōhō",
-                    "Genbun",
-                    "Kanpō",
-                    "Enkyō",
-                    "Kan-en",
-                    "Hōryaku",
-                    "Meiwa",
-                    "An-ei",
-                    "Tenmei",
-                    "Kansei",
-                    "Kyōwa",
-                    "Bunka",
-                    "Bunsei",
-                    "Tenpō",
-                    "Kōka",
-                    "Kaei",
-                    "Ansei",
-                    "Man-en",
-                    "Bunkyū",
-                    "Genji",
-                    "Keiō",
-                    "Meiji",
-                    "Taishō",
-                    "Shōwa",
-                    "Heisei",
-                }
-            }
-        }
-        persian{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
-            eras{
-                abbreviated{
-                    "AP",
-                }
-                narrow{
-                    "AP",
-                }
-                wide{
-                    "AP",
-                }
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "Farvardin",
-                        "Ordibehesht",
-                        "Khordad",
-                        "Tir",
-                        "Mordad",
-                        "Shahrivar",
-                        "Mehr",
-                        "Aban",
-                        "Azar",
-                        "Dey",
-                        "Bahman",
-                        "Esfand",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                    wide{
-                        "Farvardin",
-                        "Ordibehesht",
-                        "Khordad",
-                        "Tir",
-                        "Mordad",
-                        "Shahrivar",
-                        "Mehr",
-                        "Aban",
-                        "Azar",
-                        "Dey",
-                        "Bahman",
-                        "Esfand",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                    wide{
-                        "Farvardin",
-                        "Ordibehesht",
-                        "Khordad",
-                        "Tir",
-                        "Mordad",
-                        "Shahrivar",
-                        "Mehr",
-                        "Aban",
-                        "Azar",
-                        "Dey",
-                        "Bahman",
-                        "Esfand",
-                    }
-                }
-            }
         }
         roc{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
-            DateTimePatterns{
-                "HH'h'mm'min'ss's' v",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, MMMM d, G y",
-                "MMMM d, G y",
-                "MMM d, G y",
-                "G y/M/d",
-                "{1} {0}",
-            }
             eras{
-                abbreviated{
-                    "Before R.O.C.",
-                    "R.O.C.",
-                }
                 narrow{
                     "Antes de R.O.C.",
                     "R.O.C.",
@@ -3562,6 +3512,11 @@ pt{
                 }
             }
         }
+    }
+    codePatterns{
+        language{"Idioma: {0}"}
+        script{"Roteiro: {0}"}
+        territory{"Região: {0}"}
     }
     delimiters{
         alternateQuotationEnd{"’"}
@@ -3569,85 +3524,56 @@ pt{
         quotationEnd{"“"}
         quotationStart{"”"}
     }
+    localeDisplayPattern{
+        pattern{"{0} ({1})"}
+        separator{", "}
+    }
     measurementSystemNames{
         US{"americano"}
         metric{"métrico"}
     }
+    units{
+        day{
+            one{"{0} dia"}
+            other{"{0} dias"}
+        }
+        hour{
+            one{"{0} hora"}
+            other{"{0} horas"}
+        }
+        minute{
+            one{"{0} minuto"}
+            other{"{0} minutos"}
+        }
+        month{
+            one{"{0} mês"}
+            other{"{0} meses"}
+        }
+        second{
+            one{"{0} segundo"}
+            other{"{0} segundos"}
+        }
+        week{
+            one{"{0} semana"}
+            other{"{0} semanas"}
+        }
+        year{
+            one{"{0} ano"}
+            other{"{0} anos"}
+        }
+    }
     zoneStrings{
-        "Africa:Ceuta"{
-            ec{"Ceuta"}
-        }
-        "Africa:Kinshasa"{
-            ec{"Kinshasa"}
-        }
-        "Africa:Lubumbashi"{
-            ec{"Lubumbashi"}
-        }
-        "America:Adak"{
-            ec{"Adak"}
-        }
-        "America:Anchorage"{
-            ec{"Anchorage"}
-        }
         "America:Araguaina"{
             ec{"Araguaína"}
-        }
-        "America:Argentina:La_Rioja"{
-            ec{"La Rioja"}
-        }
-        "America:Argentina:Rio_Gallegos"{
-            ec{"Rio Gallegos"}
-        }
-        "America:Argentina:San_Juan"{
-            ec{"San Juan"}
-        }
-        "America:Argentina:San_Luis"{
-            ec{"San Luis"}
         }
         "America:Argentina:Tucuman"{
             ec{"Tucumã"}
         }
-        "America:Argentina:Ushuaia"{
-            ec{"Ushuaia"}
-        }
-        "America:Bahia"{
-            ec{"Bahia"}
-        }
         "America:Belem"{
             ec{"Belém"}
         }
-        "America:Blanc-Sablon"{
-            ec{"Blanc-Sablon"}
-        }
-        "America:Boa_Vista"{
-            ec{"Boa Vista"}
-        }
-        "America:Boise"{
-            ec{"Boise"}
-        }
-        "America:Buenos_Aires"{
-            ec{"Buenos Aires"}
-        }
-        "America:Cambridge_Bay"{
-            ec{"Cambridge Bay"}
-        }
-        "America:Campo_Grande"{
-            ec{"Campo Grande"}
-        }
         "America:Cancun"{
             ec{"Cancún"}
-        }
-        "America:Catamarca"{
-            ec{"Catamarca"}
-        }
-        "America:Chicago"{
-            ec{"Chicago"}
-        }
-        "America:Chihuahua"{
-            ec{"Chihuahua"}
-        }
-        "America:Coral_Harbour"{
-            ec{"Coral Harbour"}
         }
         "America:Cordoba"{
             ec{"Córdoba"}
@@ -3655,101 +3581,17 @@ pt{
         "America:Cuiaba"{
             ec{"Cuiabá"}
         }
-        "America:Danmarkshavn"{
-            ec{"Danmarkshavn"}
-        }
-        "America:Dawson"{
-            ec{"Dawson"}
-        }
-        "America:Dawson_Creek"{
-            ec{"Dawson Creek"}
-        }
-        "America:Denver"{
-            ec{"Denver"}
-        }
-        "America:Detroit"{
-            ec{"Detroit"}
-        }
-        "America:Edmonton"{
-            ec{"Edmonton"}
-        }
         "America:Eirunepe"{
             ec{"Eirunepé"}
-        }
-        "America:Fortaleza"{
-            ec{"Fortaleza"}
-        }
-        "America:Glace_Bay"{
-            ec{"Glace Bay"}
         }
         "America:Guayaquil"{
             ec{"Guaiaquil"}
         }
-        "America:Halifax"{
-            ec{"Halifax"}
-        }
-        "America:Hermosillo"{
-            ec{"Hermosillo"}
-        }
-        "America:Indiana:Knox"{
-            ec{"Knox, Indiana"}
-        }
-        "America:Indiana:Marengo"{
-            ec{"Marengo, Indiana"}
-        }
-        "America:Indiana:Petersburg"{
-            ec{"Petersburg, Indiana"}
-        }
-        "America:Indiana:Tell_City"{
-            ec{"Tell City, Indiana"}
-        }
-        "America:Indiana:Vevay"{
-            ec{"Vevay, Indiana"}
-        }
-        "America:Indiana:Vincennes"{
-            ec{"Vincennes, Indiana"}
-        }
-        "America:Indiana:Winamac"{
-            ec{"Winamac, Indiana"}
-        }
         "America:Indianapolis"{
             ec{"Indianápolis"}
         }
-        "America:Inuvik"{
-            ec{"Inuvik"}
-        }
-        "America:Iqaluit"{
-            ec{"Iqaluit"}
-        }
-        "America:Jujuy"{
-            ec{"Jujuy"}
-        }
-        "America:Juneau"{
-            ec{"Juneau"}
-        }
-        "America:Kentucky:Monticello"{
-            ec{"Monticello, Kentucky"}
-        }
-        "America:Los_Angeles"{
-            ec{"Los Angeles"}
-        }
-        "America:Louisville"{
-            ec{"Louisville"}
-        }
         "America:Maceio"{
             ec{"Maceió"}
-        }
-        "America:Manaus"{
-            ec{"Manaus"}
-        }
-        "America:Mazatlan"{
-            ec{"Mazatlan"}
-        }
-        "America:Mendoza"{
-            ec{"Mendoza"}
-        }
-        "America:Menominee"{
-            ec{"Menominee"}
         }
         "America:Merida"{
             ec{"Mérida"}
@@ -3757,23 +3599,8 @@ pt{
         "America:Mexico_City"{
             ec{"Cidade do México"}
         }
-        "America:Moncton"{
-            ec{"Moncton"}
-        }
-        "America:Monterrey"{
-            ec{"Monterrey"}
-        }
-        "America:Montreal"{
-            ec{"Montreal"}
-        }
         "America:New_York"{
             ec{"Nova Iorque"}
-        }
-        "America:Nipigon"{
-            ec{"Nipigon"}
-        }
-        "America:Nome"{
-            ec{"Nome"}
         }
         "America:Noronha"{
             ec{"Fernando de Noronha"}
@@ -3784,179 +3611,23 @@ pt{
         "America:North_Dakota:New_Salem"{
             ec{"New Salen, Dakota do Norte"}
         }
-        "America:Pangnirtung"{
-            ec{"Pangnirtung"}
-        }
-        "America:Phoenix"{
-            ec{"Phoenix"}
-        }
-        "America:Porto_Velho"{
-            ec{"Porto Velho"}
-        }
-        "America:Rainy_River"{
-            ec{"Rainy River"}
-        }
-        "America:Rankin_Inlet"{
-            ec{"Rankin Inlet"}
-        }
-        "America:Recife"{
-            ec{"Recife"}
-        }
-        "America:Regina"{
-            ec{"Regina"}
-        }
-        "America:Resolute"{
-            ec{"Resolute"}
-        }
-        "America:Rio_Branco"{
-            ec{"Rio Branco"}
-        }
         "America:Sao_Paulo"{
             ec{"São Paulo"}
-        }
-        "America:Scoresbysund"{
-            ec{"Scoresbysund"}
-        }
-        "America:Shiprock"{
-            ec{"Shiprock"}
         }
         "America:St_Johns"{
             ec{"St. Johns"}
         }
-        "America:Swift_Current"{
-            ec{"Swift Current"}
-        }
-        "America:Thule"{
-            ec{"Thule"}
-        }
-        "America:Thunder_Bay"{
-            ec{"Thunder Bay"}
-        }
-        "America:Tijuana"{
-            ec{"Tijuana"}
-        }
-        "America:Toronto"{
-            ec{"Toronto"}
-        }
-        "America:Vancouver"{
-            ec{"Vancouver"}
-        }
-        "America:Whitehorse"{
-            ec{"Whitehorse"}
-        }
-        "America:Winnipeg"{
-            ec{"Winnipeg"}
-        }
-        "America:Yakutat"{
-            ec{"Yakutat"}
-        }
-        "America:Yellowknife"{
-            ec{"Yellowknife"}
-        }
-        "Antarctica:Casey"{
-            ec{"Casey"}
-        }
-        "Antarctica:Davis"{
-            ec{"Davis"}
-        }
         "Antarctica:DumontDUrville"{
             ec{"Dumont D'Urville"}
-        }
-        "Antarctica:Mawson"{
-            ec{"Mawson"}
-        }
-        "Antarctica:McMurdo"{
-            ec{"McMurdo"}
-        }
-        "Antarctica:Palmer"{
-            ec{"Palmer"}
-        }
-        "Antarctica:Rothera"{
-            ec{"Rothera"}
         }
         "Antarctica:South_Pole"{
             ec{"Pólo Sul"}
         }
-        "Antarctica:Syowa"{
-            ec{"Syowa"}
-        }
-        "Antarctica:Vostok"{
-            ec{"Vostok"}
-        }
-        "Asia:Almaty"{
-            ec{"Almaty"}
-        }
-        "Asia:Anadyr"{
-            ec{"Anadyr"}
-        }
-        "Asia:Aqtau"{
-            ec{"Aqtau"}
-        }
-        "Asia:Aqtobe"{
-            ec{"Aqtobe"}
-        }
-        "Asia:Choibalsan"{
-            ec{"Choibalsan"}
-        }
-        "Asia:Chongqing"{
-            ec{"Chongqing"}
-        }
-        "Asia:Harbin"{
-            ec{"Harbin"}
-        }
-        "Asia:Hovd"{
-            ec{"Hovd"}
-        }
-        "Asia:Irkutsk"{
-            ec{"Irkutsk"}
-        }
         "Asia:Jakarta"{
             ec{"Jacarta"}
         }
-        "Asia:Jayapura"{
-            ec{"Jayapura"}
-        }
         "Asia:Jerusalem"{
             ec{"Jerusalém"}
-        }
-        "Asia:Kamchatka"{
-            ec{"Kamchatka"}
-        }
-        "Asia:Kashgar"{
-            ec{"Kashgar"}
-        }
-        "Asia:Krasnoyarsk"{
-            ec{"Krasnoyarsk"}
-        }
-        "Asia:Kuching"{
-            ec{"Kuching"}
-        }
-        "Asia:Magadan"{
-            ec{"Magadan"}
-        }
-        "Asia:Makassar"{
-            ec{"Makassar"}
-        }
-        "Asia:Novosibirsk"{
-            ec{"Novosibirsk"}
-        }
-        "Asia:Omsk"{
-            ec{"Omsk"}
-        }
-        "Asia:Oral"{
-            ec{"Oral"}
-        }
-        "Asia:Pontianak"{
-            ec{"Pontianak"}
-        }
-        "Asia:Qyzylorda"{
-            ec{"Qyzylorda"}
-        }
-        "Asia:Sakhalin"{
-            ec{"Sakhalin"}
-        }
-        "Asia:Samarkand"{
-            ec{"Samarkand"}
         }
         "Asia:Shanghai"{
             ec{"Xangai"}
@@ -3967,77 +3638,17 @@ pt{
         "Asia:Tokyo"{
             ec{"Tóquio"}
         }
-        "Asia:Ulaanbaatar"{
-            ec{"Ulaanbaatar"}
-        }
-        "Asia:Urumqi"{
-            ec{"Urumqi"}
-        }
-        "Asia:Vladivostok"{
-            ec{"Vladivostok"}
-        }
-        "Asia:Yakutsk"{
-            ec{"Yakutsk"}
-        }
-        "Asia:Yekaterinburg"{
-            ec{"Yekaterinburg"}
-        }
         "Atlantic:Azores"{
             ec{"Açores"}
         }
         "Atlantic:Canary"{
             ec{"Canárias"}
         }
-        "Atlantic:Madeira"{
-            ec{"Madeira"}
-        }
-        "Australia:Adelaide"{
-            ec{"Adelaide"}
-        }
-        "Australia:Brisbane"{
-            ec{"Brisbane"}
-        }
-        "Australia:Broken_Hill"{
-            ec{"Broken Hill"}
-        }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
-        "Australia:Darwin"{
-            ec{"Darwin"}
-        }
-        "Australia:Eucla"{
-            ec{"Eucla"}
-        }
-        "Australia:Hobart"{
-            ec{"Hobart"}
-        }
-        "Australia:Lindeman"{
-            ec{"Lindeman"}
-        }
-        "Australia:Lord_Howe"{
-            ec{"Lord Howe"}
-        }
-        "Australia:Melbourne"{
-            ec{"Melbourne"}
-        }
-        "Australia:Perth"{
-            ec{"Perth"}
-        }
-        "Australia:Sydney"{
-            ec{"Sydney"}
-        }
         "Etc:Unknown"{
             ec{"Desconhecido"}
         }
         "Europe:Bucharest"{
             ec{"Bucareste"}
-        }
-        "Europe:Kaliningrad"{
-            ec{"Kaliningrad"}
-        }
-        "Europe:Kiev"{
-            ec{"Kiev"}
         }
         "Europe:Lisbon"{
             ec{"Lisboa"}
@@ -4051,74 +3662,14 @@ pt{
         "Europe:Moscow"{
             ec{"Moscou"}
         }
-        "Europe:Samara"{
-            ec{"Samara"}
-        }
-        "Europe:Simferopol"{
-            ec{"Simferopol"}
-        }
-        "Europe:Uzhgorod"{
-            ec{"Uzhgorod"}
-        }
-        "Europe:Volgograd"{
-            ec{"Volgograd"}
-        }
-        "Europe:Zaporozhye"{
-            ec{"Zaporozhye"}
-        }
-        "Pacific:Chatham"{
-            ec{"Chatham"}
-        }
         "Pacific:Easter"{
             ec{"Ilha de Páscoa"}
-        }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
         }
         "Pacific:Galapagos"{
             ec{"Galápagos"}
         }
-        "Pacific:Gambier"{
-            ec{"Gambier"}
-        }
-        "Pacific:Honolulu"{
-            ec{"Honolulu"}
-        }
-        "Pacific:Johnston"{
-            ec{"Johnston"}
-        }
-        "Pacific:Kiritimati"{
-            ec{"Kiritimati"}
-        }
-        "Pacific:Kosrae"{
-            ec{"Kosrae"}
-        }
-        "Pacific:Kwajalein"{
-            ec{"Kwajalein"}
-        }
-        "Pacific:Majuro"{
-            ec{"Majuro"}
-        }
-        "Pacific:Marquesas"{
-            ec{"Marquesas"}
-        }
-        "Pacific:Midway"{
-            ec{"Midway"}
-        }
-        "Pacific:Ponape"{
-            ec{"Ponape"}
-        }
         "Pacific:Tahiti"{
             ec{"Taiti"}
-        }
-        "Pacific:Tarawa"{
-            ec{"Tarawa"}
-        }
-        "Pacific:Truk"{
-            ec{"Truk"}
-        }
-        "Pacific:Wake"{
-            ec{"Wake"}
         }
         "meta:Acre"{
             cu:int{1}
@@ -4129,27 +3680,20 @@ pt{
         }
         "meta:Afghanistan"{
             ls{"Horário do Afeganistão"}
-            ss{"AFT"}
         }
         "meta:Africa_Central"{
             ls{"Horário da África Central"}
-            ss{"CAT"}
         }
         "meta:Africa_Eastern"{
             ls{"Horário da África Oriental"}
-            ss{"EAT"}
         }
         "meta:Africa_Southern"{
             lg{"Horário da África do Sul"}
             ls{"Horário Padrão da África do Sul"}
-            sg{"SAT"}
-            ss{"SAST"}
         }
         "meta:Africa_Western"{
             ld{"Horário de Verão da África Ocidental"}
             ls{"Horário da África Ocidental"}
-            sd{"WAST"}
-            ss{"WAT"}
         }
         "meta:Aktyubinsk"{
             ld{"Horário de Verão do Aktyubinsk"}
@@ -4160,68 +3704,44 @@ pt{
             ld{"Horário de Verão do Alasca"}
             lg{"Horário do Alaska"}
             ls{"Horário Padrão do Alasca"}
-            sd{"AKDT"}
-            sg{"AKT"}
-            ss{"AKST"}
         }
         "meta:Alaska_Hawaii"{
             ld{"Horário de Verão do Alaska-Havaí"}
             lg{"Horário do Alasca-Havaí"}
             ls{"Horário Padrão do Alaska-Havaí"}
-            sd{"AHDT"}
-            sg{"AHT"}
-            ss{"AHST"}
         }
         "meta:Almaty"{
             ld{"Horário de Verão do Almaty"}
             ls{"Horário do Almaty"}
-            sd{"ALMST"}
-            ss{"ALMT"}
         }
         "meta:Amazon"{
             cu:int{1}
             ld{"Horário de Verão do Amazonas"}
             ls{"Horário do Amazonas"}
-            sd{"AMST"}
-            ss{"AMT"}
         }
         "meta:America_Central"{
             ld{"Horário de Verão Central"}
             lg{"Horário Central"}
             ls{"Horário Padrão Central"}
-            sd{"CDT"}
-            sg{"CT"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"Horário de Verão Oriental"}
             lg{"Horário Oriental"}
             ls{"Horário Padrão Oriental"}
-            sd{"EDT"}
-            sg{"ET"}
-            ss{"EST"}
         }
         "meta:America_Mountain"{
             ld{"Horário de Verão da Montanha"}
             lg{"Horário da Montanha"}
             ls{"Horário Padrão da Montanha"}
-            sd{"MDT"}
-            sg{"MT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             ld{"Horário de Verão do Pacífico"}
             lg{"Horário do Pacífico"}
             ls{"Horário Padrão do Pacífico"}
-            sd{"PDT"}
-            sg{"PT"}
-            ss{"PST"}
         }
         "meta:Anadyr"{
             ld{"Horário de Verão do Anadyr"}
             ls{"Horário do Anadyr"}
-            sd{"ANAST"}
-            ss{"ANAT"}
         }
         "meta:Aqtau"{
             ld{"Horário de Verão do Aqtau"}
@@ -4242,12 +3762,9 @@ pt{
         "meta:Argentina"{
             ld{"Horário de Verão da Argentina"}
             ls{"Horário da Argentina"}
-            sd{"ARST"}
-            ss{"ART"}
         }
         "meta:Argentina_Western"{
             ls{"Horário da Argentina Ocidental"}
-            ss{"WART"}
         }
         "meta:Armenia"{
             ld{"Horário de Verão da Armênia"}
@@ -4257,9 +3774,6 @@ pt{
             ld{"Horário de Verão do Atlântico"}
             lg{"Horário do Atlântico"}
             ls{"Horário Padrão do Atlântico"}
-            sd{"ADT"}
-            sg{"AT"}
-            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"Horário de Verão da Austrália Central"}
@@ -4273,40 +3787,29 @@ pt{
             ld{"Horário de Verão da Austrália Centro Ocidental"}
             lg{"Horário da Austrália Centro Ocidental"}
             ls{"Horário Padrão da Austrália Centro Ocidental"}
-            sd{"ACWDT"}
-            sg{"ACWT"}
-            ss{"ACWST"}
         }
         "meta:Australia_Eastern"{
             ld{"Horário de Verão da Austrália Oriental"}
             lg{"Horário da Austrália Oriental"}
             ls{"Horário Padrão da Austrália Oriental"}
-            sg{"AET"}
         }
         "meta:Australia_Western"{
             ld{"Horário de Verão da Austrália Ocidental"}
-            sg{"AWT"}
         }
         "meta:Azerbaijan"{
             ld{"Horário de Verão do Arzeibaijão"}
             ls{"Horário do Arzeibaijão"}
-            sd{"AZST"}
-            ss{"AZT"}
         }
         "meta:Bering"{
             ld{"Horário de Verão de Bering"}
             lg{"Horário de Bering"}
             ls{"Horário Padrão de Bering"}
-            sd{"BDT (Bering)"}
-            sg{"BT (Bering)"}
-            ss{"BST (Bering)"}
         }
         "meta:Bhutan"{
             ls{"Horário do Butão"}
         }
         "meta:Bolivia"{
             ls{"Horário da Bolívia"}
-            ss{"BOT"}
         }
         "meta:Borneo"{
             ld{"Horário de Verão de Bornéo"}
@@ -4316,34 +3819,24 @@ pt{
             cu:int{1}
             ld{"Horário de Verão de Brasília"}
             ls{"Horário de Brasília"}
-            sd{"BRST"}
-            ss{"BRT"}
         }
         "meta:Brunei"{
             ls{"Horário de Brunei Darussalam"}
-            ss{"BNT"}
         }
         "meta:Cape_Verde"{
             ld{"Horário de Verão de Cabo Verde"}
             ls{"Horário de Cabo Verde"}
-            sd{"CVST"}
-            ss{"CVT"}
         }
         "meta:Chamorro"{
             lg{"Horário de Chamorro"}
-            sg{"ChT"}
         }
         "meta:Chatham"{
             ld{"Horário de Verão de Chatham"}
             ls{"Horário de Padrão de Chatham"}
-            sd{"CHADT"}
-            ss{"CHAST"}
         }
         "meta:Chile"{
             ld{"Horário de Verão do Chile"}
             ls{"Horário do Chile"}
-            sd{"CLST"}
-            ss{"CLT"}
         }
         "meta:China"{
             ld{"Horário de Verão da China"}
@@ -4357,23 +3850,17 @@ pt{
         }
         "meta:Christmas"{
             ls{"Horário das Ilhas Christmas"}
-            ss{"CXT"}
         }
         "meta:Cocos"{
             ls{"Horário das Ilhas Coco"}
-            ss{"CCT"}
         }
         "meta:Colombia"{
             ld{"Horário de Verão da Colômbia"}
             ls{"Horário da Colômbia"}
-            sd{"COST"}
-            ss{"COT"}
         }
         "meta:Cook"{
             ld{"Meio Horário de Verão das Ilhas Cook"}
             ls{"Horário das Ilhas Cook"}
-            sd{"CKHST"}
-            ss{"CKT"}
         }
         "meta:Cuba"{
             ld{"Horário de Verão de Cuba"}
@@ -4384,15 +3871,12 @@ pt{
         }
         "meta:Davis"{
             ls{"Horário de Davis"}
-            ss{"DAVT"}
         }
         "meta:DumontDUrville"{
             ls{"Horário de Dumont-d'Urville"}
-            ss{"DDUT"}
         }
         "meta:Dutch_Guiana"{
             ls{"Horário da Guiana Holandesa"}
-            ss{"NEGT"}
         }
         "meta:East_Timor"{
             ls{"Horário do Timor do Leste"}
@@ -4400,24 +3884,17 @@ pt{
         "meta:Easter"{
             ld{"Horário de Verão da Ilha de Páscoa"}
             ls{"Horário da Ilha de Páscoa"}
-            sd{"EASST"}
-            ss{"EAST"}
         }
         "meta:Ecuador"{
             ls{"Horário do Equador"}
-            ss{"ECT"}
         }
         "meta:Europe_Central"{
             ld{"Horário de Verão da Europa Central"}
             ls{"Horário da Europa Central"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Horário de Verão da Europa Oriental"}
             ls{"Horário Padrão da Europa Oriental"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Horário de Verão da Europa Ocidental"}
@@ -4426,34 +3903,26 @@ pt{
         "meta:Falkland"{
             ld{"Horário de Verão das Ilhas Malvinas"}
             ls{"Horário das Ilhas Malvinas"}
-            sd{"FKST"}
-            ss{"FKT"}
         }
         "meta:Fiji"{
             ld{"Horário de Verão de Fiji"}
             ls{"Horário de Fiji"}
-            sd{"FJST"}
-            ss{"FJT"}
         }
         "meta:French_Guiana"{
             ls{"Horário da Guiana Francesa"}
-            ss{"GFT"}
         }
         "meta:French_Southern"{
             ls{"Horário da Antártida e do Sul da França"}
-            ss{"TFT"}
         }
         "meta:GMT"{
             cu:int{1}
             ls{"Horário do Meridiano de Greenwich"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Horário de Galápagos"}
         }
         "meta:Gambier"{
             ls{"Horário de Gambier"}
-            ss{"GAMT"}
         }
         "meta:Georgia"{
             ld{"Horário de Verão da Georgia"}
@@ -4461,13 +3930,10 @@ pt{
         }
         "meta:Gilbert_Islands"{
             ls{"Horário das Ilhas Gilberto"}
-            ss{"GILT"}
         }
         "meta:Greenland_Central"{
             ld{"Horário de Verão da Groenlândia Central"}
             ls{"Horário da Groelândia Central"}
-            sd{"CGST"}
-            ss{"CGT"}
         }
         "meta:Greenland_Eastern"{
             ld{"Horário de Verão da Groelândia Oriental"}
@@ -4480,11 +3946,9 @@ pt{
         "meta:Gulf"{
             lg{"Horário do Golfo"}
             ls{"Horário Padrão do Golfo"}
-            sg{"GT"}
         }
         "meta:Guyana"{
             ls{"Horário da Guiana"}
-            ss{"GYT"}
         }
         "meta:Hawaii_Aleutian"{
             cu:int{1}
@@ -4493,25 +3957,19 @@ pt{
         "meta:Hong_Kong"{
             ld{"Horário de Verão de Hong Kong"}
             ls{"Horário de Hong Kong"}
-            sd{"HKST"}
-            ss{"HKT"}
         }
         "meta:Hovd"{
             ld{"Horário de Verão de Hovd"}
             ls{"Horário de Hovd"}
-            sd{"HOVST"}
-            ss{"HOVT"}
         }
         "meta:India"{
             ls{"Horário Padrão da Índia"}
         }
         "meta:Indian_Ocean"{
             ls{"Horário do Oceano Índico"}
-            ss{"IOT"}
         }
         "meta:Indochina"{
             ls{"Horário da Indochina"}
-            ss{"ICT"}
         }
         "meta:Indonesia_Central"{
             ls{"Horário da Indonésia Central"}
@@ -4522,35 +3980,25 @@ pt{
         "meta:Iran"{
             ld{"Horário de Verão do Irã"}
             ls{"Horário Padrão do Irã"}
-            sd{"IRDT"}
-            ss{"IRST"}
         }
         "meta:Irkutsk"{
             ld{"Horário de Verão de Irkutsk"}
             ls{"Horário de Irkutsk"}
-            sd{"IRKST"}
-            ss{"IRKT"}
         }
         "meta:Israel"{
             ld{"Horário de Verão de Israel"}
             lg{"Horário de Israel"}
             ls{"Horário Padrão de Israel"}
-            sd{"IDT"}
             ss{"IST (Israel)"}
         }
         "meta:Japan"{
             ld{"Horário de Verão do Japão"}
             lg{"Horário do Japão"}
             ls{"Horário Padrão do Japão"}
-            sd{"JDT"}
-            sg{"JT"}
-            ss{"JST"}
         }
         "meta:Kamchatka"{
             ld{"Horário de Verão de Petropavlovsk-Kamchatski"}
             ls{"Horário de Petropavlovsk-Kamchatski"}
-            sd{"PETST"}
-            ss{"PETT"}
         }
         "meta:Kazakhstan_Eastern"{
             lg{"Horário do Casaquistão do Leste"}
@@ -4560,30 +4008,18 @@ pt{
             lg{"Horário do Casaquistão do Oeste"}
             ls{"Horário do Cazaquistão Ocidental"}
         }
-        "meta:Korea"{
-            sg{"KT"}
-        }
         "meta:Kosrae"{
             ls{"Horário da Coréia"}
-            ss{"KOST"}
         }
         "meta:Krasnoyarsk"{
             ld{"Horário de Verão de Krasnoyarsk"}
             ls{"Horário de Krasnoyarsk"}
-            sd{"KRAST"}
-            ss{"KRAT"}
         }
         "meta:Kyrgystan"{
             ls{"Horário do Quirguistão"}
         }
         "meta:Line_Islands"{
             ls{"Horário das Ilhas Line"}
-            ss{"LINT"}
-        }
-        "meta:Lord_Howe"{
-            sd{"LHDT"}
-            sg{"LHT"}
-            ss{"LHST"}
         }
         "meta:Macau"{
             ld{"Horário de Verão de Macau"}
@@ -4592,8 +4028,6 @@ pt{
         "meta:Magadan"{
             ld{"Horário de Verão de Magadan"}
             ls{"Horário de Magadan"}
-            sd{"MAGST"}
-            ss{"MAGT"}
         }
         "meta:Malaya"{
             ls{"Horário de Malaia"}
@@ -4603,72 +4037,53 @@ pt{
         }
         "meta:Maldives"{
             ls{"Horário das Ilhas Maldivas"}
-            ss{"MVT"}
         }
         "meta:Marquesas"{
             ls{"Horário das Marquesas"}
-            ss{"MART"}
         }
         "meta:Mauritius"{
             ls{"Horário das Ilhas Maurício"}
-            ss{"MUT"}
         }
         "meta:Mawson"{
             ls{"Horário de Mawson"}
-            ss{"MAWT"}
         }
         "meta:Moscow"{
             ld{"Horário de Verão de Moscou"}
             lg{"Horário de Moscou"}
             ls{"Horário Padrão de Moscou"}
-            sd{"MSKS"}
-            ss{"MSK"}
         }
         "meta:Myanmar"{
             ls{"Horário de Mianmar"}
-            ss{"MMT"}
         }
         "meta:Nauru"{
             ls{"Horário de Nauru"}
-            ss{"NRT"}
         }
         "meta:Nepal"{
             ls{"Horário do Nepal"}
-            ss{"NPT"}
         }
         "meta:New_Caledonia"{
             ld{"Horário de Verão da Nova Caledônia"}
             ls{"Horário da Nova Caledônia"}
-            sd{"NCST"}
-            ss{"NCT"}
         }
         "meta:New_Zealand"{
             ld{"Horário de Verão da Nova Zelândia"}
             lg{"Horário da Nova Zelândia"}
             ls{"Horário Padrão da Nova Zelândia"}
-            sg{"NZT"}
         }
         "meta:Newfoundland"{
             ld{"Horário de Verão de Terra Nova"}
             lg{"Horário de Newfoundland"}
             ls{"Horário Padrão de Terra Nova"}
-            sd{"NDT"}
-            sg{"NT"}
-            ss{"NST"}
         }
         "meta:Niue"{
             ls{"Horário de Niue"}
-            ss{"NUT"}
         }
         "meta:Norfolk"{
             ls{"Horário das Ilhas Norfolk"}
-            ss{"NFT"}
         }
         "meta:Noronha"{
             ld{"Horário de Verão de Fernando de Noronha"}
             ls{"Horário de Fernando de Noronha"}
-            sd{"FNST"}
-            ss{"FNT"}
         }
         "meta:North_Mariana"{
             ls{"Horário das Ilhas Mariana do Norte"}
@@ -4676,14 +4091,10 @@ pt{
         "meta:Novosibirsk"{
             ld{"Horário de Verão de Novosibirsk"}
             ls{"Horário de Novosibirsk"}
-            sd{"NOVST"}
-            ss{"NOVT"}
         }
         "meta:Omsk"{
             ld{"Horário de Verão de Omsk"}
             ls{"Horário de Omsk"}
-            sd{"OMSST"}
-            ss{"OMST"}
         }
         "meta:Pakistan"{
             ld{"Horário de Verão do Paquistão"}
@@ -4691,115 +4102,84 @@ pt{
         }
         "meta:Palau"{
             ls{"Horário de Palau"}
-            ss{"PWT"}
         }
         "meta:Papua_New_Guinea"{
             ls{"Horário de Papua Nova Guiné"}
-            ss{"PGT"}
         }
         "meta:Paraguay"{
             ld{"Horário de Verão do Paraguai"}
             ls{"Horário do Paraguai"}
-            sd{"PYST"}
-            ss{"PYT"}
         }
         "meta:Peru"{
             ld{"Horário de Verão do Peru"}
             ls{"Horário do Peru"}
-            sd{"PEST"}
-            ss{"PET"}
         }
         "meta:Philippines"{
             ld{"Horário de Verão das Filipinas"}
             ls{"Horário das Filipinas"}
-            sd{"PHST"}
-            ss{"PHT"}
         }
         "meta:Phoenix_Islands"{
             ls{"Horário das Ilhas Fênix"}
-            ss{"PHOT"}
         }
         "meta:Pierre_Miquelon"{
             ld{"Horário de Verão de Pierre e Miquelon"}
             lg{"Horário de Pierre e Miquelon"}
             ls{"Horário Padrão de Pierre e Miquelon"}
-            sg{"PMT"}
-            ss{"PMST"}
         }
         "meta:Pitcairn"{
             ls{"Horário de Pitcairn"}
-            ss{"PNT"}
         }
         "meta:Ponape"{
             ls{"Horário de Ponape"}
-            ss{"PONT"}
         }
         "meta:Reunion"{
             ls{"Horário das Ilhas Reunião"}
-            ss{"RET"}
         }
         "meta:Rothera"{
             ls{"Horário de Rothera"}
-            ss{"ROTT"}
         }
         "meta:Sakhalin"{
             ld{"Horário de Verão de Sakhalin"}
             ls{"Horário de Sakhalin"}
-            sd{"SAKST"}
-            ss{"SAKT"}
         }
         "meta:Samarkand"{
             ld{"Horário de Verão de Samarkand"}
             ls{"Horário de Samarkand"}
-            sd{"SAMST (Samarkand)"}
-            ss{"SAMT (Samarkand)"}
         }
         "meta:Seychelles"{
             ls{"Horário das Ilhas Seychelles"}
-            ss{"SCT"}
         }
         "meta:Shevchenko"{
             ls{"Horário de Shevchenko"}
         }
         "meta:Singapore"{
             ls{"Horário Padrão de Cingapura"}
-            ss{"SGT"}
         }
         "meta:Solomon"{
             ls{"Horário das Ilhas Salomão"}
-            ss{"SBT"}
         }
         "meta:South_Georgia"{
             ls{"Horário da Georgia do Sul"}
             ss{"GST (Georgia do Sul)"}
         }
-        "meta:Suriname"{
-            ss{"SRT"}
-        }
         "meta:Syowa"{
             ls{"Horário de Syowa"}
-            ss{"SYOT"}
         }
         "meta:Tahiti"{
             ls{"Horário do Haiti"}
-            ss{"TAHT"}
         }
         "meta:Tajikistan"{
             ls{"Horário do Tajiquistão"}
         }
         "meta:Tokelau"{
             ls{"Horário de Tokelau"}
-            ss{"TKT"}
         }
         "meta:Tonga"{
             ld{"Horário de Verão de Tonga"}
             ls{"Horário de Tonga"}
-            sd{"TOST"}
-            ss{"TOT"}
         }
         "meta:Truk"{
             ls{"Horário de Truk"}
-            ss{"TRUT"}
         }
         "meta:Turkey"{
             ld{"Horário de Verão da Turquia"}
@@ -4811,13 +4191,10 @@ pt{
         }
         "meta:Tuvalu"{
             ls{"Horário de Tuvalu"}
-            ss{"TVT"}
         }
         "meta:Uruguay"{
             ld{"Horário de Verão do Uruguai"}
             ls{"Horário do Uruguai"}
-            sd{"UYST"}
-            ss{"UYT"}
         }
         "meta:Uzbekistan"{
             ld{"Horário de Verão do Uzbequistão"}
@@ -4826,51 +4203,30 @@ pt{
         "meta:Vanuatu"{
             ld{"Horário de Verão de Vanuatu"}
             ls{"Horário de Vanuatu"}
-            sd{"VUST"}
-            ss{"VUT"}
         }
         "meta:Venezuela"{
             ls{"Horário da Venezuela"}
-            ss{"VET"}
         }
         "meta:Vladivostok"{
             ld{"Horário de Verão de Vladivostok"}
             ls{"Horário de Vladivostok"}
-            sd{"VLAST"}
-            sg{"VLAT"}
-            ss{"VLAT"}
         }
         "meta:Volgograd"{
             ld{"Horário de Verão de Volgograd"}
             ls{"Horário de Volgograd"}
-            sd{"VOLST"}
-            ss{"VOLT"}
         }
         "meta:Vostok"{
             ls{"Horário de Vostok"}
-            ss{"VOST"}
         }
         "meta:Wake"{
             ls{"Horário das Ilhas Wake"}
-            ss{"WAKT"}
         }
         "meta:Wallis"{
             ls{"Horário de Wallis e Fortuna"}
-            ss{"WFT"}
         }
         "meta:Yakutsk"{
             ld{"Horário de Verão de Yakutsk"}
             ls{"Horário de Yakutsk"}
-            sd{"YAKST"}
-            ss{"YAKT"}
-        }
-        "meta:Yekaterinburg"{
-            ss{"YEKST"}
-        }
-        "meta:Yukon"{
-            sd{"YDT"}
-            sg{"YT"}
-            ss{"YST"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

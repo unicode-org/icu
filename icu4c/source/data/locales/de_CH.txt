@@ -36,11 +36,11 @@ de_CH{
     }
     NumberPatterns{
         "#,##0.###",
-        "¤ #,##0.00;¤-#,##0.00",
-        "#,##0 %",
+        "¤ #,##0.00;¤-#,##0.00",
+        "#,##0 %",
         "#E0",
     }
-    Version{"1.52"}
+    Version{"1.53"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

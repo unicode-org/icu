@@ -43,6 +43,7 @@ plurals:table(nofallback){
         hr{"set9"}
         is{"set2"}
         it{"set2"}
+        iw{"set2"}
         ku{"set2"}
         lb{"set2"}
         ln{"set3"}

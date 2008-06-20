@@ -303,6 +303,11 @@ lv{
             "Latvijas lats",
         }
     }
+    CurrencyPlurals{
+        KZT{
+            zero{"Kazahstānas tenge"}
+        }
+    }
     ExemplarCharacters{"[a ā b c č d e ē f g ģ h i ī j k ķ l ļ m n ņ o p r s š t u ū v z ž]"}
     Keys{
         calendar{"Kalendārs"}
@@ -368,7 +373,7 @@ lv{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤",
+        "#,##0.00 ¤",
         "#,##0%",
         "#E0",
     }
@@ -394,7 +399,7 @@ lv{
             traditional{"Tradicionālā kārtošanas secība"}
         }
     }
-    Version{"1.77"}
+    Version{"1.81"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -560,9 +565,6 @@ lv{
         "America:Blanc-Sablon"{
             ec{"Blanksablona"}
         }
-        "America:Boise"{
-            ec{"Boise"}
-        }
         "America:Cambridge_Bay"{
             ec{"Kembridžbeja"}
         }
@@ -620,9 +622,6 @@ lv{
         "America:Indiana:Knox"{
             ec{"Noksa"}
         }
-        "America:Indiana:Marengo"{
-            ec{"Marengo, Indiana"}
-        }
         "America:Indiana:Petersburg"{
             ec{"Pēterburga"}
         }
@@ -671,9 +670,6 @@ lv{
         "America:Menominee"{
             ec{"Menominī"}
         }
-        "America:Merida"{
-            ec{"Merida"}
-        }
         "America:Mexico_City"{
             ec{"Mehiko"}
         }
@@ -694,9 +690,6 @@ lv{
         }
         "America:Nome"{
             ec{"Noma"}
-        }
-        "America:Noronha"{
-            ec{"Noronha"}
         }
         "America:North_Dakota:Center"{
             ec{"Centra Ziemeļdakotā"}
@@ -821,9 +814,6 @@ lv{
         "Asia:Yekaterinburg"{
             ec{"Jekaterinburga"}
         }
-        "Atlantic:Madeira"{
-            ec{"Madeira"}
-        }
         "Australia:Adelaide"{
             ec{"Adelaida"}
         }
@@ -863,9 +853,6 @@ lv{
         "Europe:Kaliningrad"{
             ec{"Kaļiņingrada"}
         }
-        "Europe:Samara"{
-            ec{"Samara"}
-        }
         "Europe:Simferopol"{
             ec{"Simferopole"}
         }
@@ -884,20 +871,11 @@ lv{
         "Pacific:Chatham"{
             ec{"Četema"}
         }
-        "Pacific:Honolulu"{
-            ec{"Honolulu"}
-        }
-        "Pacific:Kiritimati"{
-            ec{"Kiritimati"}
-        }
         "Pacific:Kosrae"{
             ec{"Kosraja"}
         }
         "Pacific:Kwajalein"{
             ec{"Kvadžaleina"}
-        }
-        "Pacific:Ponape"{
-            ec{"Ponape"}
         }
     }
 }

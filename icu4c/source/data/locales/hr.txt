@@ -1294,7 +1294,7 @@ hr{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤; -#,##0.00 ¤",
+        "#,##0.00 ¤;-#,##0.00 ¤",
         "#,##0%",
         "#E0",
     }
@@ -1334,7 +1334,7 @@ hr{
             traditional{"Tradicionano poredavanje"}
         }
     }
-    Version{"1.86"}
+    Version{"1.89"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1346,10 +1346,10 @@ hr{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, dd MMMM yyyy.",
-                "dd. MMMM yyyy.",
-                "yyyy.MM.dd",
-                "yyyy.MM.dd",
+                "EEEE, d. MMMM yyyy.",
+                "d. MMMM yyyy.",
+                "d. MMM. yyyy.",
+                "dd.MM.yyyy.",
                 "{1} {0}",
             }
             availableFormats{
@@ -1448,6 +1448,81 @@ hr{
                 }
                 zone{
                     dn{"Zona"}
+                }
+            }
+            intervalFormats{
+                M{
+                    M{"MM. - MM."}
+                }
+                MEd{
+                    M{"E, dd.MM. - E, dd.MM."}
+                    d{"E, dd.MM. - E, dd.MM."}
+                }
+                MMM{
+                    M{"LLL-LLL"}
+                }
+                MMMEd{
+                    M{"E, dd. MMM - E, dd. MMM"}
+                    d{"E, dd. - E, dd. MMM"}
+                }
+                MMMd{
+                    M{"dd. MMM - dd. MMM"}
+                    d{"dd. - dd. MMM"}
+                }
+                Md{
+                    M{"dd.MM. - dd.MM."}
+                    d{"dd.MM. - dd.MM."}
+                }
+                d{
+                    d{"dd. - dd."}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    a{"HH - HH'h'"}
+                    h{"HH - HH'h'"}
+                }
+                hm{
+                    h{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                hmv{
+                    h{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                hv{
+                    a{"HH - HH 'h' v"}
+                    h{"HH - HH 'h' v"}
+                }
+                y{
+                    y{"y. - y."}
+                }
+                yM{
+                    M{"MM.yyyy. - MM.yyyy."}
+                    y{"MM.yyyy. - MM.yyyy."}
+                }
+                yMEd{
+                    M{"E, dd.MM.yyyy. - E, dd.MM.yyyy."}
+                    d{"E, dd.MM.yyyy. - E, dd.MM.yyyy."}
+                    y{"E, dd.MM.yyyy. - E, dd.MM.yyyy."}
+                }
+                yMMM{
+                    M{"LLL-LLL yyyy."}
+                    y{"LLL yyyy. - LLL yyyy."}
+                }
+                yMMMEd{
+                    M{"E, dd. MMM - E, dd. MMM yyyy."}
+                    d{"E, dd. - E, dd. MMM yyyy."}
+                    y{"E, dd. MMM yyyy. - E, dd. MMM yyyy."}
+                }
+                yMMMd{
+                    M{"dd. MMM - dd. MMM yyyy."}
+                    d{"dd. - dd. MMM yyyy."}
+                    y{"dd. MMM yyyy. - dd. MMM yyyy."}
+                }
+                yMd{
+                    M{"dd.MM.yyyy. - dd.MM.yyyy."}
+                    d{"dd.MM.yyyy. - dd.MM.yyyy."}
+                    y{"dd.MM.yyyy. - dd.MM.yyyy."}
                 }
             }
             monthNames{

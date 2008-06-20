@@ -59,7 +59,7 @@ gu{
     }
     NumberPatterns{
         "#,##,##0.###",
-        "¤ #,##,##0.00",
+        "¤ #,##,##0.00",
         "#,##,##0%",
         "#E0",
     }
@@ -68,7 +68,7 @@ gu{
         Armn{"અર્મેનિયાઈ"}
         Beng{"બંગાળી"}
     }
-    Version{"1.58"}
+    Version{"1.59"}
     calendar{
         gregorian{
             AmPmMarkers{

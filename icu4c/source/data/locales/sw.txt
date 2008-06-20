@@ -120,11 +120,11 @@ sw{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤",
+        "#,##0.00 ¤",
         "#,##0%",
         "#E0",
     }
-    Version{"1.62"}
+    Version{"1.64"}
     calendar{
         gregorian{
             dayNames{
@@ -192,7 +192,6 @@ sw{
     zoneStrings{
         "meta:Africa_Eastern"{
             ls{"Saa za Africa Mashariki"}
-            ss{"EAT"}
         }
     }
 }

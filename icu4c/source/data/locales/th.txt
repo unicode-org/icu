@@ -657,10 +657,6 @@ th{
             "GHC",
             "เซดีกานา",
         }
-        GHS{
-            "GHS",
-            "GHS",
-        }
         GIP{
             "GIP",
             "ปอนด์ยิบรอลตาร์",
@@ -1085,10 +1081,6 @@ th{
             "SDD",
             "ดีนาร์ซูดาน",
         }
-        SDG{
-            "SDG",
-            "SDG",
-        }
         SDP{
             "SDP",
             "ปอนด์ซูดาน",
@@ -1225,10 +1217,6 @@ th{
             "USS",
             "ดอลลาร์สหรัฐ (วันเดียวกัน)",
         }
-        UYI{
-            "UYI",
-            "UYI",
-        }
         UYP{
             "UYP",
             "เปโซอุรุกวัย (1975-1993)",
@@ -1292,10 +1280,6 @@ th{
         XCD{
             "XCD",
             "ดอลลาร์แคริบเบียนตะวันออก",
-        }
-        XDR{
-            "XDR",
-            "XDR",
         }
         XEU{
             "XEU",
@@ -2064,13 +2048,9 @@ th{
         ROZAJ{"เรเซียน"}
         SAAHO{"ซาโฮ"}
     }
-    Version{"1.106"}
+    Version{"1.110"}
     calendar{
         buddhist{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "H นาฬิกา m นาที ss วินาที",
                 "H นาฬิกา m นาที",
@@ -2232,6 +2212,76 @@ th{
                     dn{"เขต"}
                 }
             }
+            intervalFormats{
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E d/M – E d/M"}
+                    d{"E d – E d/M"}
+                }
+                MMM{
+                    M{"LLL-LLL"}
+                }
+                MMMEd{
+                    M{"E d MMM – E d MMM"}
+                    d{"E d – E d MMM"}
+                }
+                MMMM{
+                    M{"LLLL-LLLL"}
+                }
+                MMMd{
+                    M{"d MMM – d MMM"}
+                    d{"d – d MMM"}
+                }
+                Md{
+                    M{"d/M - d/M"}
+                    d{"d/M - d/M"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                h{
+                    h{"H-H"}
+                }
+                hm{
+                    h{"H:mm-H:mm"}
+                    m{"H:mm-H:mm"}
+                }
+                hmv{
+                    h{""}
+                }
+                hv{
+                    h{""}
+                }
+                yM{
+                    M{"M–M/yy"}
+                }
+                yMEd{
+                    M{"E d/M/yy – E d/M/yy"}
+                    d{"E d – E d/M/yy"}
+                    y{"E d/M/yy – E d/M/yy"}
+                }
+                yMMMEd{
+                    M{"E d MMM – E d MMM yyyy"}
+                    d{"E d – E d MMM yyyy"}
+                    y{"E d MMM yyyy – E d MMM yyyy"}
+                }
+                yMMMM{
+                    M{"M–M/yyyy"}
+                    y{"M/yyyy – M/yyyy"}
+                }
+                yMMMd{
+                    M{"d MMM – d MMM yyyy"}
+                    d{"d–d MMM yyyy"}
+                    y{"d MMM yyyy – d MMM yyyy"}
+                }
+                yMd{
+                    M{"d/M/yy – d/M/yy"}
+                    d{"d-d/M/yy"}
+                    y{"d/M/yy – d/M/yy"}
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -2312,9 +2362,36 @@ th{
         quotationEnd{"'"}
         quotationStart{"'"}
     }
+    localeDisplayPattern{
+        pattern{"{0} ({1})"}
+        separator{", "}
+    }
     measurementSystemNames{
         US{"อเมริกัน"}
         metric{"เมตริก"}
+    }
+    units{
+        day{
+            other{"{0} วัน"}
+        }
+        hour{
+            other{"{0} ชั่วโมง"}
+        }
+        minute{
+            other{"{0} นาที"}
+        }
+        month{
+            other{"{0} เดือน"}
+        }
+        second{
+            other{"{0} วินาที"}
+        }
+        week{
+            other{"{0} สัปดาห์"}
+        }
+        year{
+            other{"{0} ปี"}
+        }
     }
     zoneStrings{
         "Africa:Accra"{

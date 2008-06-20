@@ -3,15 +3,15 @@
 // * Copyright (C) 2008 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/ha_Latn.xml
+// * Source File:<path>/common/main/kk_Cyrl.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ha_Latn.xml
+ *  ICU <specials> source: <path>/xml/main/kk_Cyrl.xml
  */
-ha_Latn{
+kk_Cyrl{
     LocaleScript{
-        "Latn",
+        "Cyrl",
     }
-    Version{"1.11"}
+    Version{"1.1"}
 }

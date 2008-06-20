@@ -514,10 +514,6 @@ nn{
             "STD",
             "Sao Tome og Principe-dobra",
         }
-        THB{
-            "THB",
-            "THB",
-        }
         USD{
             "USD",
             "amerikansk dollar",
@@ -684,8 +680,6 @@ nn{
         el{"gresk"}
         elx{"elamittisk"}
         en{"engelsk"}
-        en_AU{"engelsk (Australia)"}
-        en_GB{"engelsk (Storbritannia)"}
         en_US{"engelsk (amerikansk)"}
         enm{"mellomengelsk"}
         eo{"esperanto"}
@@ -921,8 +915,6 @@ nn{
         pro{"gammalprovençalsk"}
         ps{"pashto"}
         pt{"portugisisk"}
-        pt_BR{"portugisisk (Brasil)"}
-        pt_PT{"portugisisk (Portugal)"}
         qu{"quechua"}
         raj{"rajasthani"}
         rap{"rapanui"}
@@ -1080,8 +1072,8 @@ nn{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤",
-        "#,##0 %",
+        "#,##0.00 ¤",
+        "#,##0 %",
         "#E0",
     }
     Scripts{
@@ -1248,7 +1240,7 @@ nn{
         SCOUSE{"scouse-dialekt"}
         VALENCIA{"valensisk dialekt"}
     }
-    Version{"1.83"}
+    Version{"1.87"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1361,6 +1353,9 @@ nn{
                     dn{"år"}
                 }
             }
+            intervalFormats{
+                fallback{"{0} – {1}"}
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -1416,6 +1411,10 @@ nn{
         alternateQuotationStart{"“"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    localeDisplayPattern{
+        pattern{"{0} ({1})"}
+        separator{", "}
     }
     measurementSystemNames{
         US{"amerikansk"}
@@ -1492,24 +1491,17 @@ nn{
         "meta:Europe_Central"{
             ld{"sentraleuropeisk sommartid"}
             ls{"sentraleuropeisk tid"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"austeuropeisk sommartid"}
             ls{"austeuropeisk tid"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"vesteuropeisk sommartid"}
             ls{"vesteuropeisk tid"}
-            sd{"WEST"}
-            ss{"WET"}
         }
         "meta:GMT"{
             ls{"Greenwich middeltid"}
-            ss{"GMT"}
         }
         hourFormat{"+HH.mm;-HH.mm"}
     }

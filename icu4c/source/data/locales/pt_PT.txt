@@ -30,7 +30,6 @@ pt_PT{
         ER{"Eritreia"}
         FM{"Estados Federados da Micronésia"}
         GL{"Gronelândia"}
-        GU{"Guam"}
         GW{"Guiné-Bissau"}
         HK{"Hong Kong - Região Administrativa Especial da China"}
         IR{"Irão"}
@@ -46,7 +45,6 @@ pt_PT{
         MC{"Mónaco"}
         MD{"Moldávia, República da"}
         MG{"Madagáscar"}
-        MH{"Ilhas Marshall"}
         MK{"Macedónia, República da"}
         MO{"Macau - Região Administrativa Especial da China"}
         MP{"Ilhas Mariana do Norte"}
@@ -71,28 +69,11 @@ pt_PT{
         VI{"Ilhas Virgin E.U.A."}
         VN{"Vietname"}
         YE{"Iémen"}
-        YT{"Mayotte"}
     }
     Currencies{
         AFA{
             "AFA",
             "Afeghani (1927-2002)",
-        }
-        AOA{
-            "AOA",
-            "Cuanza angolano",
-        }
-        AOK{
-            "AOK",
-            "Cuanza angolano (1977-1990)",
-        }
-        AON{
-            "AON",
-            "Novo cuanza angolano (1990-2000)",
-        }
-        AOR{
-            "AOR",
-            "Cuanza angolano reajustado (1995-1999)",
         }
         BAD{
             "BAD",
@@ -126,10 +107,6 @@ pt_PT{
             "KYD",
             "Dólar das Ilhas Caimão",
         }
-        MAD{
-            "MAD",
-            "Dirém marroquino",
-        }
         MWK{
             "MK",
             "Cuacha do Malawi",
@@ -157,7 +134,7 @@ pt_PT{
                 /**
                  * Duplicated from NumberPatterns resource
                  */
-                "#,##0.00 ¤",
+                "#,##0.00 ¤",
                 "$",
                 ",",
             }
@@ -169,10 +146,6 @@ pt_PT{
         WST{
             "WST",
             "Tala de Samoa Ocidental",
-        }
-        ZMK{
-            "ZMK",
-            "Cuacha zambiano",
         }
     }
     Languages{
@@ -197,35 +170,24 @@ pt_PT{
         ce{"chechene"}
         cel{"idioma céltico"}
         chn{"jargão chinook"}
-        chy{"cheiene"}
         cmc{"idioma chamic"}
         cpe{"crioulo ou pidgin do inglês"}
         cpf{"crioulo ou pidgin do francês"}
         cpp{"crioulo ou pidgin do português"}
         crh{"turco da Crimeia"}
-        crp{"crioulo ou pidgin"}
         cs{"checo"}
         cus{"idioma cuchita"}
-        de_AT{"alemão da Áustria"}
         dra{"idioma dravítico"}
-        dsb{"sérvio baixo"}
-        dum{"holandês medieval"}
         dyu{"diula"}
-        ee{"eve"}
         egy{"egípcio clássico"}
         en{"Inglês"}
-        en_CA{"inglês do Canadá"}
         enm{"inglês, medieval (1100-1500)"}
         et{"estónio"}
         fiu{"idioma ugro-finês"}
-        fo{"feroês"}
-        fr_CA{"francês do Canadá"}
         frm{"francês, medieval (aprox.1400-1600)"}
         fro{"francês, arcaico (842-aprox.1400)"}
-        frr{"frisão do norte"}
         frs{"frísio oriental"}
         gem{"idioma germânico"}
-        gl{"galego"}
         gmh{"alemão, medieval alto (aprox.1050-1500)"}
         goh{"alemão, arcaico alto (aprox.750-1050)"}
         grb{"grebo"}
@@ -236,33 +198,24 @@ pt_PT{
         iba{"Iban"}
         ig{"igbo"}
         ik{"Inupiaq"}
-        ilo{"ilocano"}
         inc{"idioma índico"}
         ine{"idioma indo-europeu"}
         jv{"jv"}
-        kaj{"jju"}
         khi{"khoisan"}
-        kho{"khotanês"}
         kj{"kuanyama"}
-        kl{"groenlandês"}
         lez{"lezghiano"}
         lua{"luba-lulua"}
         mga{"irlandês, medieval (900-1200)"}
-        mh{"marshalês"}
         mk{"macedónio"}
         mkh{"mon-khmer (other)"}
         mno{"idioma manobo"}
-        mul{"idiomas múltiplos"}
         nah{"Nauatle"}
         nai{"idioma indígena norte-americano"}
-        nb{"bokmål norueguês"}
         nds{"baixo alemão"}
         nic{"nigeriano - cordofano"}
-        nl{"holandês"}
         non{"norse, old"}
         nso{"soto, setentrional"}
         nub{"idioma núbio"}
-        ny{"nianja"}
         oc{"provençal"}
         os{"ossético"}
         oto{"idioma otomano"}
@@ -278,14 +231,12 @@ pt_PT{
         sai{"idioma indígeno sul-americano"}
         sal{"salishan languages"}
         sem{"idioma semítico"}
-        sga{"irlandês arcaico"}
         sgn{"linguages de sinais"}
         sio{"idioma sioux"}
         sit{"idioma sino-tibetano"}
         sla{"idioma eslavo"}
         smi{"idioma sami"}
         ssa{"idioma nilo-sariano"}
-        syc{"siríaco clássico"}
         tai{"idioma tailândes"}
         tg{"tajique"}
         to{"tonga"}
@@ -298,7 +249,6 @@ pt_PT{
         ypk{"idioma iúpique"}
         zh_Hans{"chinês simplificado"}
         zh_Hant{"chinês tradicional"}
-        zxx{"sem conteúdo lingüístico"}
     }
     NumberElements{
         ",",
@@ -316,14 +266,13 @@ pt_PT{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤",
+        "#,##0.00 ¤",
         "#,##0%",
         "#E0",
     }
     Scripts{
         Armn{"arménio"}
         Blis{"símbolos Bliss"}
-        Cari{"cariano"}
         Egyd{"egípcio demótico"}
         Egyh{"egípcio hierático"}
         Inds{"indus"}
@@ -354,10 +303,9 @@ pt_PT{
         NJIVA{"dialecto gniva/njiva"}
         OSOJS{"dialecto oseacco/osojane"}
         POLYTON{"politónico"}
-        ROZAJ{"resiano"}
         SOLBA{"dialecto stolvizza/solbica"}
     }
-    Version{"1.70"}
+    Version{"1.74"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -389,7 +337,6 @@ pt_PT{
                 "{1} {0}",
             }
             availableFormats{
-                MMM{"LLL"}
                 MMMEd{"E d MMM"}
                 MMMMEd{"EEE, d 'de' MMMM"}
                 MMMMd{"d 'de' MMMM"}
@@ -397,49 +344,6 @@ pt_PT{
                 Md{"d-M"}
                 yyMM{"MM-yy"}
                 yyyyMM{"MM-yyyy"}
-                yyyyMMM{"MMM 'de' yyyy"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "dom",
-                        "seg",
-                        "ter",
-                        "qua",
-                        "qui",
-                        "sex",
-                        "sáb",
-                    }
-                    wide{
-                        "domingo",
-                        "segunda-feira",
-                        "terça-feira",
-                        "quarta-feira",
-                        "quinta-feira",
-                        "sexta-feira",
-                        "sábado",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "dom",
-                        "seg",
-                        "ter",
-                        "qua",
-                        "qui",
-                        "sex",
-                        "sáb",
-                    }
-                    wide{
-                        "domingo",
-                        "segunda-feira",
-                        "terça-feira",
-                        "quarta-feira",
-                        "quinta-feira",
-                        "sexta-feira",
-                        "sábado",
-                    }
-                }
             }
             eras{
                 wide{
@@ -454,12 +358,6 @@ pt_PT{
                         "-3"{"Trás-anteontem"}
                         "3"{"Em três dias"}
                     }
-                }
-                second{
-                    dn{"Segundo"}
-                }
-                zone{
-                    dn{"Fuso"}
                 }
             }
             monthNames{
@@ -526,12 +424,6 @@ pt_PT{
             }
             quarters{
                 format{
-                    abbreviated{
-                        "T1",
-                        "T2",
-                        "T3",
-                        "T4",
-                    }
                     wide{
                         "1.º trimestre",
                         "2.º trimestre",
@@ -632,7 +524,6 @@ pt_PT{
             cu:int{1}
             lg{"Hora da África do Sul"}
             ls{"Hora Padrão da África do Sul"}
-            sg{"SAT"}
         }
         "meta:Africa_Western"{
             cu:int{1}
@@ -647,7 +538,6 @@ pt_PT{
             ls{"Hora de Aktyubinsk"}
         }
         "meta:Alaska"{
-            cu:int{1}
             ld{"Hora de Verão do Alaska"}
             lg{"Hora do Alaska"}
             ls{"Hora Padrão do Alaska"}
@@ -970,7 +860,6 @@ pt_PT{
             sg{"Hora do Quirguizistão"}
         }
         "meta:GMT"{
-            cu:int{1}
             ls{"Hora do Meridiano de Greenwich"}
         }
         "meta:Galapagos"{
@@ -1002,11 +891,9 @@ pt_PT{
         }
         "meta:Gulf"{
             cu:int{1}
-            lg{"Horário do Golfo"}
             ls{"Hora Padrão do Golfo"}
         }
         "meta:Hawaii_Aleutian"{
-            cu:int{1}
             ls{"Hora Padrão do Havai"}
         }
         "meta:Hong_Kong"{
@@ -1033,7 +920,6 @@ pt_PT{
         "meta:Indochina"{
             cu:int{1}
             lg{"Hora do Vietname"}
-            ls{"Horário da Indochina"}
             sg{"Hora do Vietname"}
         }
         "meta:Indonesia_Central"{

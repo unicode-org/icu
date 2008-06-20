@@ -936,6 +936,12 @@ is{
             "Simbabveskur dalur",
         }
     }
+    CurrencyPlurals{
+        XXX{
+            one{"óþekktur eða ógildur gjaldeyrir"}
+            other{"óþekktur eða ógildur gjaldeyrir"}
+        }
+    }
     ExemplarCharacters{"[a á b d ð e é f-i í j-o ó p r-u ú v y ý þ æ ö]"}
     Keys{
         calendar{"Dagatal"}
@@ -1447,7 +1453,7 @@ is{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤",
+        "#,##0.00 ¤",
         "#,##0%",
         "#E0",
     }
@@ -1492,7 +1498,7 @@ is{
             traditional{"Hefðbundin"}
         }
     }
-    Version{"1.84"}
+    Version{"1.87"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1623,6 +1629,73 @@ is{
                     dn{"svæði"}
                 }
             }
+            intervalFormats{
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E, d.M - E, d.M"}
+                    d{"E, d.M - E, d.M"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"E, d. MMM - E, d. MMM"}
+                    d{"E, d. - E, d. MMM"}
+                }
+                MMMd{
+                    M{"d. MMM - d. MMM"}
+                    d{"d.-d. MMM"}
+                }
+                Md{
+                    M{"d.M - d.M"}
+                    d{"d.M - d.M"}
+                }
+                fallback{"{0} - {1}"}
+                hm{
+                    h{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                hmv{
+                    h{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                hv{
+                    h{"HH-HH v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"M.yyyy - M.yyyy"}
+                    y{"M.yyyy - M.yyyy"}
+                }
+                yMEd{
+                    M{"E, d.M.yyyy - E, d.M.yyyy"}
+                    d{"E, d.M.yyyy - E, d.M.yyyy"}
+                    y{"E, d.M.yyyy - E, d.M.yyyy"}
+                }
+                yMMM{
+                    M{"MMM-MMM yyyy"}
+                    y{"MMM yyyy - MMM yyyy"}
+                }
+                yMMMEd{
+                    M{"E, d. MMM - E, d. MMM yyyy"}
+                    d{"E, d. - E, d. MMM yyyy"}
+                    y{"E, d. MMM yyyy - E, d. MMM yyyy"}
+                }
+                yMMMd{
+                    M{"d. MMM - d. MMM yyyy"}
+                    d{"d.-d. MMM yyyy"}
+                    y{"d. MMM yyyy - d. MMM yyyy"}
+                }
+                yMd{
+                    M{"d.M.yyyy - d.M.yyyy"}
+                    d{"d.M.yyyy - d.M.yyyy"}
+                    y{"d.M.yyyy - d.M.yyyy"}
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -1709,76 +1782,67 @@ is{
             }
         }
     }
+    codePatterns{
+        language{"tungumál: {0}"}
+        script{"leturgerð: {0}"}
+        territory{"svæði: {0}"}
+    }
     delimiters{
         alternateQuotationEnd{"‘"}
         alternateQuotationStart{"‚"}
         quotationEnd{"“"}
         quotationStart{"„"}
     }
+    localeDisplayPattern{
+        pattern{"{0} ({1})"}
+        separator{", "}
+    }
     measurementSystemNames{
         US{"bandarískt"}
         metric{"metrakerfi"}
     }
-    zoneStrings{
-        "Africa:Kinshasa"{
-            ec{"Kinshasa"}
+    units{
+        day{
+            one{"{0} dagur"}
+            other{"{0} dagar"}
         }
+        hour{
+            one{"{0} klukkustund"}
+            other{"{0} klukkustundir"}
+        }
+        minute{
+            one{"{0} mínúta"}
+            other{"{0} mínútur"}
+        }
+        month{
+            one{"{0} mánuður"}
+            other{"{0} mánuðir"}
+        }
+        second{
+            one{"{0} sekúnda"}
+            other{"{0} sekúndur"}
+        }
+        week{
+            one{"{0} vika"}
+            other{"{0} vikur"}
+        }
+        year{
+            one{"{0} ár"}
+            other{"{0} ár"}
+        }
+    }
+    zoneStrings{
         "America:Anchorage"{
             ec{"Anchorage"}
-        }
-        "America:Buenos_Aires"{
-            ec{"Buenos Aires"}
         }
         "America:Cancun"{
             ec{"Kankún"}
         }
-        "America:Danmarkshavn"{
-            ec{"Danmarkshavn"}
-        }
-        "America:Dawson_Creek"{
-            ec{"Dawson Creek"}
-        }
         "America:Denver"{
             ec{"Denver"}
         }
-        "America:Detroit"{
-            ec{"Detroit"}
-        }
-        "America:Edmonton"{
-            ec{"Edmonton"}
-        }
-        "America:Eirunepe"{
-            ec{"Eirunepe"}
-        }
-        "America:Fortaleza"{
-            ec{"Fortaleza"}
-        }
-        "America:Glace_Bay"{
-            ec{"Glace Bay"}
-        }
-        "America:Goose_Bay"{
-            ec{"Goose Bay"}
-        }
-        "America:Halifax"{
-            ec{"Halifax"}
-        }
-        "America:Hermosillo"{
-            ec{"Hermosillo"}
-        }
         "America:Indianapolis"{
             ec{"Indianapolis"}
-        }
-        "America:Inuvik"{
-            ec{"Inuvik"}
-        }
-        "America:Iqaluit"{
-            ec{"Iqaluit"}
-        }
-        "America:Jujuy"{
-            ec{"Jujuy"}
-        }
-        "America:Juneau"{
-            ec{"Juneau"}
         }
         "America:Mexico_City"{
             ec{"Mexíkóborg"}
@@ -1789,29 +1853,14 @@ is{
         "America:Rio_Branco"{
             ec{"Rio Branco"}
         }
-        "Antarctica:Davis"{
-            ec{"Davis"}
-        }
         "Antarctica:DumontDUrville"{
             ec{"Dumont D'Urville"}
         }
         "Antarctica:South_Pole"{
             ec{"Suðurpóllinn"}
         }
-        "Asia:Hovd"{
-            ec{"Hovd"}
-        }
         "Asia:Jakarta"{
             ec{"Djakarta"}
-        }
-        "Asia:Jayapura"{
-            ec{"Jayapura"}
-        }
-        "Asia:Kamchatka"{
-            ec{"Kamchatka"}
-        }
-        "Asia:Kashgar"{
-            ec{"Kashgar"}
         }
         "Asia:Ulaanbaatar"{
             ec{"Úlan Bator"}
@@ -1822,23 +1871,8 @@ is{
         "Atlantic:Canary"{
             ec{"Kanaríeyjar"}
         }
-        "Australia:Darwin"{
-            ec{"Darwin"}
-        }
-        "Australia:Eucla"{
-            ec{"Eucla"}
-        }
-        "Australia:Hobart"{
-            ec{"Hobart"}
-        }
         "Etc:Unknown"{
             ec{"óþekkt"}
-        }
-        "Europe:Kaliningrad"{
-            ec{"Kaliningrad"}
-        }
-        "Europe:Kiev"{
-            ec{"Kiev"}
         }
         "Europe:Moscow"{
             ec{"Moskva"}
@@ -1846,20 +1880,8 @@ is{
         "Pacific:Easter"{
             ec{"Páskaeyja"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
-        "Pacific:Galapagos"{
-            ec{"Galapagos"}
-        }
-        "Pacific:Gambier"{
-            ec{"Gambier"}
-        }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
-        }
-        "Pacific:Johnston"{
-            ec{"Johnston"}
         }
         "Pacific:Marquesas"{
             ec{"Marquesas-eyjar"}

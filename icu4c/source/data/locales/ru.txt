@@ -1370,6 +1370,46 @@ ru{
             "Доллар Зимбабве",
         }
     }
+    CurrencyPlurals{
+        ADP{
+            few{"андоррские песеты"}
+            other{"андоррских песет"}
+        }
+        ALL{
+            few{"албанских лека"}
+            other{"албанских леков"}
+        }
+        AMD{
+            few{"армянских драма"}
+            other{"армянских драмов"}
+        }
+        AOK{
+            few{"ангольские кванзы"}
+            other{"ангольских кванз"}
+        }
+        AOR{
+            few{"ангольские кванзы реюстадо (1995-1999)"}
+            other{"ангольских кванз реюстадо (1995-1999)"}
+        }
+        RUB{
+            few{"Российских рубля"}
+            many{"Российских рублей"}
+            one{"Российский рубль"}
+            other{"Российского рубля"}
+        }
+        TRL{
+            few{"турецкие лиры"}
+            many{"турецких лир"}
+            one{"туркцкая лира"}
+            other{"турецких лир"}
+        }
+        TRY{
+            few{"новые турецкие лиры"}
+            many{"Новых турецких лир"}
+            one{"Новая турецкая лира"}
+            other{"новых турецких лир"}
+        }
+    }
     ExemplarCharacters{"[а-е ё ж-я]"}
     Keys{
         calendar{"Календарь"}
@@ -1903,8 +1943,8 @@ ru{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤",
-        "#,##0 %",
+        "#,##0.00 ¤",
+        "#,##0 %",
         "#E0",
     }
     Scripts{
@@ -2073,7 +2113,7 @@ ru{
         TARASK{"Тарашкевица"}
         VALENCIA{"Валенсийский"}
     }
-    Version{"1.120"}
+    Version{"1.124"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2218,6 +2258,90 @@ ru{
                 }
                 zone{
                     dn{"Часовой пояс"}
+                }
+            }
+            intervalFormats{
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E, MM-dd – E, MM-dd"}
+                    d{"E, MM-dd – E, MM-dd"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"d MMM - d MMM"}
+                    d{"d-d MMM"}
+                }
+                MMMM{
+                    M{"LLLL-LLLL"}
+                }
+                MMMd{
+                    M{"d MMM - d MMM"}
+                    d{"d-d MMM"}
+                }
+                Md{
+                    M{"dd.MM - dd.MM"}
+                    d{"dd.MM - dd.MM"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    a{"HH-HH"}
+                    h{"HH-HH"}
+                }
+                hm{
+                    a{"HH:mm-HH:mm"}
+                    h{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                hmv{
+                    a{"HH:mm-HH:mm v"}
+                    h{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                hv{
+                    a{"HH-HH v"}
+                    h{"HH-HH v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"MM.yy - MM.yy"}
+                    y{"MM.yy - MM.yy"}
+                }
+                yMEd{
+                    M{"dd.MM.yy - dd.MM.yy"}
+                    d{"dd.MM.yy - dd.MM.yy"}
+                    y{"dd.MM.yy - dd.MM.yy"}
+                }
+                yMMM{
+                    M{"MMM-MMM yyyy 'г'."}
+                    y{"MMM yyyy - MMM yyyy 'г'."}
+                }
+                yMMMEd{
+                    M{"d MMM - d MMM yyyy 'г'."}
+                    d{"d-d MMM yyyy 'г'."}
+                    y{"d MMM yyyy - d MMM yyyy 'г'."}
+                }
+                yMMMM{
+                    M{"LLLL-LLLL yyyy 'г'."}
+                    y{"LLLL yyyy - LLLL yyyy 'г'."}
+                }
+                yMMMd{
+                    M{"d MMM - d MMM yyyy 'г'."}
+                    d{"d-d MMM yyyy 'г'."}
+                    y{"d MMM yyyy - d MMM yyyy 'г'."}
+                }
+                yMd{
+                    M{"dd.MM.yy - dd.MM.yy"}
+                    d{"dd.MM.yy - dd.MM.yy"}
+                    y{"dd.MM.yy - dd.MM.yy"}
                 }
             }
             monthNames{
@@ -2451,11 +2575,20 @@ ru{
             }
         }
     }
+    codePatterns{
+        language{"Язык: {0}"}
+        script{"Написание: {0}"}
+        territory{"Регион: {0}"}
+    }
     delimiters{
         alternateQuotationEnd{"“"}
         alternateQuotationStart{"„"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    localeDisplayPattern{
+        pattern{"{0} ({1})"}
+        separator{", "}
     }
     measurementSystemNames{
         US{"Англо-американская"}

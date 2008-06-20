@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/ca.xml
  */
 ca{
-    Version{"1.24"}
+    Version{"1.25"}
     collations{
         standard{
             Sequence{" [backwards 2]&C<ch<<<Ch<<<CH&L<ll<<<l·l<<<Ll<<<L·l<<<LL<<<L·L"}

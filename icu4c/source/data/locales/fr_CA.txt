@@ -19,7 +19,7 @@ fr_CA{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤;(#,##0.00¤)",
+        "#,##0.00 ¤;(#,##0.00 ¤)",
         "#,##0 %",
         "#E0",
     }
@@ -27,7 +27,7 @@ fr_CA{
         279,
         216,
     }
-    Version{"1.54"}
+    Version{"1.57"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -46,31 +46,75 @@ fr_CA{
                 "{1} {0}",
             }
             availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
                 MEd{"EEE M-d"}
-                MMMEd{"E d MMM"}
-                MMMMEd{"EEE d MMMM"}
-                MMMMd{"d MMMM"}
-                MMMd{"d MMM"}
-                MMMdd{"dd MMM"}
                 MMd{"MM-d"}
                 MMdd{"MM-dd"}
                 Md{"M-d"}
-                d{"d"}
-                hhmm{"HH:mm"}
-                hhmmss{"HH:mm:ss"}
-                y{"yyyy"}
                 yM{"yyyy-MM"}
                 yMEd{"EEE yyyy-MM-dd"}
-                yMMM{"MMM yyyy"}
-                yMMMEd{"EEE d MMM yyyy"}
-                yMMMM{"MMMM yyyy"}
                 yyMM{"yy-MM"}
-                yyMMM{"MMM yy"}
-                yyMMMEEEd{"EEE d MMM yy"}
-                yyMMMd{"d MMM yy"}
-                yyyyMMMM{"MMMM yyyy"}
+            }
+            intervalFormats{
+                MEd{
+                    M{"E MM-dd – E MM-dd"}
+                    d{"E MM-dd – E MM-dd"}
+                }
+                MMMM{
+                    M{"LLLL-LLLL"}
+                }
+                Md{
+                    M{"MM-dd – MM-dd"}
+                    d{"MM-dd – MM-dd"}
+                }
+                d{
+                    d{"d–d"}
+                }
+                h{
+                    h{"HH–HH"}
+                }
+                hm{
+                    h{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
+                }
+                hmv{
+                    h{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
+                }
+                hv{
+                    h{"HH–HH v"}
+                }
+                y{
+                    y{"y–y"}
+                }
+                yM{
+                    M{"yy-MM – yy-MM"}
+                    y{"yy-MM – yy-MM"}
+                }
+                yMEd{
+                    M{"'du' E yy-MM-dd 'au' E yy-MM-dd"}
+                    d{"'du' E yy-MM-dd 'au' E yy-MM-dd"}
+                    y{"'du' E yy-MM-dd 'au' E yy-MM-dd"}
+                }
+                yMMM{
+                    y{"'de' MMM yyyy 'à' MMM yyyy"}
+                }
+                yMMMEd{
+                    M{"'du' E d MMM 'au' E d MMM yyyy"}
+                    d{"'du' E d 'au' E d MMM yyyy"}
+                    y{"'du' E d MMM yyyy 'au' E d MMM yyyy"}
+                }
+                yMMMM{
+                    M{"MMMM  – MMMM yyyy"}
+                }
+                yMMMd{
+                    M{"'du' d MMM 'au' d MMM yyyy"}
+                    y{"'du' d MMM yyyy 'au' d MMM yyyy"}
+                }
+                yMd{
+                    M{"yy-MM-dd – yy-MM-dd"}
+                    d{"yy-MM-dd – yy-MM-dd"}
+                    y{"yy-MM-dd – yy-MM-dd"}
+                }
             }
         }
     }
@@ -95,7 +139,6 @@ fr_CA{
         }
         "meta:Europe_Central"{
             cu:int{0}
-            sg{"HEC"}
         }
         "meta:Europe_Eastern"{
             cu:int{0}

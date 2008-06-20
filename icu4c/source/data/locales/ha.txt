@@ -43,11 +43,11 @@ ha{
     }
     NumberPatterns{
         "#,##0.###",
-        "¤ #,##0.00",
+        "¤ #,##0.00",
         "#,##0%",
         "#E0",
     }
-    Version{"1.25"}
+    Version{"1.27"}
     calendar{
         gregorian{
             AmPmMarkers{

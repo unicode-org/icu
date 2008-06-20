@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/haw.xml
  */
 haw{
-    Version{"1.7"}
+    Version{"1.5"}
     collations{
         standard{
             Sequence{

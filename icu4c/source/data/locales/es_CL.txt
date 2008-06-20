@@ -31,10 +31,7 @@ es_CL{
             phonebook{"orden de directorio telefónico"}
         }
     }
-    Variants{
-        1996{"Ortografía alemana de 1996"}
-    }
-    Version{"1.57"}
+    Version{"1.58"}
     calendar{
         gregorian{
             DateTimePatterns{

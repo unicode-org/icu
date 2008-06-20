@@ -21,6 +21,8 @@ icu4c/source/data/locales/ha_Latn_NG.txt -text
 icu4c/source/data/locales/ha_NG.txt -text
 icu4c/source/data/locales/ii.txt -text
 icu4c/source/data/locales/ii_CN.txt -text
+icu4c/source/data/locales/kk_Cyrl.txt -text
+icu4c/source/data/locales/kk_Cyrl_KZ.txt -text
 icu4c/source/data/locales/ne.txt -text
 icu4c/source/data/locales/ne_IN.txt -text
 icu4c/source/data/locales/ne_NP.txt -text
@@ -154,12 +156,14 @@ icu4c/source/data/xml/main/hu.xml svneol=native#text/xml
 icu4c/source/data/xml/main/hy.xml svneol=native#text/xml
 icu4c/source/data/xml/main/id.xml svneol=native#text/xml
 icu4c/source/data/xml/main/ii.xml svneol=native#text/xml
+icu4c/source/data/xml/main/in.xml -text
 icu4c/source/data/xml/main/is.xml svneol=native#text/xml
 icu4c/source/data/xml/main/it.xml svneol=native#text/xml
 icu4c/source/data/xml/main/iw.xml svneol=native#text/xml
 icu4c/source/data/xml/main/ja.xml svneol=native#text/xml
 icu4c/source/data/xml/main/ka.xml svneol=native#text/xml
 icu4c/source/data/xml/main/kk.xml svneol=native#text/xml
+icu4c/source/data/xml/main/kk_Cyrl.xml -text
 icu4c/source/data/xml/main/kl.xml svneol=native#text/xml
 icu4c/source/data/xml/main/km.xml svneol=native#text/xml
 icu4c/source/data/xml/main/kn.xml svneol=native#text/xml

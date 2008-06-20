@@ -7,26 +7,5 @@
 // *
 // ***************************************************************************
 sr_Latn_RS{
-    NumberPatterns{
-        "#,##0.###",
-        "¤ #,##0.00",
-        "#,##0%",
-        "#E0",
-    }
-    Version{"1.16"}
-    calendar{
-        gregorian{
-            DateTimePatterns{
-                "HH.mm.ss v",
-                "HH.mm.ss z",
-                "HH.mm.ss",
-                "HH.mm",
-                "EEEE, dd. MMMM yyyy.",
-                "d. MMM yyyy.",
-                "dd.MM.yyyy.",
-                "d.M.yy.",
-                "{1} {0}",
-            }
-        }
-    }
+    Version{"1.19"}
 }
