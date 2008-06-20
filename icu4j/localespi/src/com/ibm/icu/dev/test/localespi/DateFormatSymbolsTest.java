@@ -21,6 +21,11 @@ public class DateFormatSymbolsTest extends TestFmwk {
      */
     public void TestGetInstance() {
         for (Locale loc : DateFormatSymbols.getAvailableLocales()) {
+            if (TestUtil.isProblematicIBMLocale(loc)) {
+                logln("Skipped " + loc);
+                continue;
+            }
+
             DateFormatSymbols dfs = DateFormatSymbols.getInstance(loc);
 
             boolean isIcuImpl = (dfs instanceof com.ibm.icu.impl.jdkadapter.DateFormatSymbolsICU);

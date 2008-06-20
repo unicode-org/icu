@@ -39,6 +39,11 @@ public class CurrencyNameTest extends TestFmwk {
                 continue;
             }
             for (Locale loc : Locale.getAvailableLocales()) {
+                if (TestUtil.isProblematicIBMLocale(loc)) {
+                    logln("Skipped " + loc);
+                    continue;
+                }
+
                 String curSymbol = currency.getSymbol(loc);
                 String curSymbolIcu = currencyIcu.getSymbol(loc);
 

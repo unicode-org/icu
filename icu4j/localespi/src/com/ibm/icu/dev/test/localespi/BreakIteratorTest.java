@@ -26,6 +26,10 @@ public class BreakIteratorTest extends TestFmwk {
      */
     public void TestGetInstance() {
         for (Locale loc : BreakIterator.getAvailableLocales()) {
+            if (TestUtil.isProblematicIBMLocale(loc)) {
+                logln("Skipped " + loc);
+                continue;
+            }
             checkGetInstance(CHARACTER_BRK, loc);
             checkGetInstance(WORD_BRK, loc);
             checkGetInstance(LINE_BRK, loc);

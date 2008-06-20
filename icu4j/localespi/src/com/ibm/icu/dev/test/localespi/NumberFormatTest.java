@@ -30,6 +30,10 @@ public class NumberFormatTest extends TestFmwk {
      */
     public void TestGetInstance() {
         for (Locale loc : NumberFormat.getAvailableLocales()) {
+            if (TestUtil.isProblematicIBMLocale(loc)) {
+                logln("Skipped " + loc);
+                continue;
+            }
             checkGetInstance(DEFAULT_TYPE, loc);
             checkGetInstance(NUMBER_TYPE, loc);
             checkGetInstance(INTEGER_TYPE, loc);

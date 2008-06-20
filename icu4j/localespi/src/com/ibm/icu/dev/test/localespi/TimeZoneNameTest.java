@@ -21,6 +21,10 @@ public class TimeZoneNameTest extends TestFmwk {
     public void TestTimeZoneNames() {
         String[] tzids = TimeZone.getAvailableIDs();
         for (Locale loc : Locale.getAvailableLocales()) {
+            if (TestUtil.isProblematicIBMLocale(loc)) {
+                logln("Skipped " + loc);
+                continue;
+            }
             for (String tzid : tzids) {
                 TimeZone tz = TimeZone.getTimeZone(tzid);
                 com.ibm.icu.util.TimeZone tzIcu = com.ibm.icu.util.TimeZone.getTimeZone(tzid);
