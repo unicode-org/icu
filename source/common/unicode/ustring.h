@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-2007, International Business Machines
+*   Copyright (C) 1998-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -71,10 +71,6 @@
  */
 
 /**
-* \defgroup ustring_ustrlen
- */
-/*@{*/
-/**
  * Determine the length of an array of UChar.
  *
  * @param s The array of UChars, NULL (U+0000) terminated.
@@ -83,7 +79,6 @@
  */
 U_STABLE int32_t U_EXPORT2
 u_strlen(const UChar *s);
-/*@}*/
 
 /**
  * Count Unicode code points in the length UChar code units of the string.
