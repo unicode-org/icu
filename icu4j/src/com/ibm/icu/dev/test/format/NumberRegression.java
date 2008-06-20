@@ -464,11 +464,11 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         String tempString;
         /* User error :
         String expectedDefault = "-5\u00a0789,987";
-        String expectedCurrency = "5\u00a0789,98 F";
+        String expectedCurrency = "5\u00a0789,98\u00a0F";
         String expectedPercent = "-578\u00a0998%";
         */
         String expectedDefault = "-5\u00a0789,988";
-        String expectedCurrency = "5\u00a0789,99 " + EURO; // euro
+        String expectedCurrency = "5\u00a0789,99\u00a0" + EURO; // euro
         String expectedPercent = "-578\u00a0999\u00a0%";
 
         formatter = NumberFormat.getNumberInstance(Locale.FRANCE);
@@ -515,11 +515,11 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         String tempString;
     /* user error :
         String expectedDefault = "-5 789,987";
-        String expectedCurrency = "5 789,98 $";
+        String expectedCurrency = "5 789,98\u00a0$";
         String expectedPercent = "-578 998%";
     */
         String expectedDefault = "-5\u00a0789,988";
-        String expectedCurrency = "5\u00a0789,99 $";
+        String expectedCurrency = "5\u00a0789,99\u00a0$";
         String expectedPercent = "-578\u00a0999\u00A0%";
 
         formatter = NumberFormat.getNumberInstance(Locale.CANADA_FRENCH);
@@ -562,12 +562,12 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         String tempString;
         /* user error :
         String expectedDefault = "-5.789,987";
-        String expectedCurrency = "5.789,98 DM";
+        String expectedCurrency = "5.789,98\u00a0DM";
         String expectedPercent = "-578.998%";
         */
         String expectedDefault = "-5.789,988";
-        String expectedCurrency = "5.789,99 " + EURO;
-        String expectedPercent = "-578.999 %";
+        String expectedCurrency = "5.789,99\u00a0" + EURO;
+        String expectedPercent = "-578.999\u00a0%";
 
         formatter = NumberFormat.getNumberInstance(Locale.GERMANY);
         tempString = formatter.format (-5789.9876);
@@ -612,11 +612,11 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         String tempString;
         /* user error :
         String expectedDefault = "-5.789,987";
-        String expectedCurrency = "-L. 5.789,98";
+        String expectedCurrency = "-L.\u00a05.789,98";
         String expectedPercent = "-578.998%";
         */
         String expectedDefault = "-5.789,988";
-        String expectedCurrency = "-" + EURO + " 5.789,99";
+        String expectedCurrency = "-" + EURO + "\u00a05.789,99";
         String expectedPercent = "-578.999%";
 
         formatter = NumberFormat.getNumberInstance(Locale.ITALY);

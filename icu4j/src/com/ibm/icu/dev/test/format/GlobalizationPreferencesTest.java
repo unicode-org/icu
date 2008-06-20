@@ -1384,8 +1384,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setLocale(new ULocale("ang_KR"));
         nf = gp.getNumberFormat(GlobalizationPreferences.NF_CURRENCY);
         numStr = nf.format(num);
-        if (!numStr.equals("KRW 123,457")) {
-            errln("FAIL: Number string is " + numStr + " Expected: KRW 123,457");
+        if (!numStr.equals("KRW\u00a0123,457")) {
+            errln("FAIL: Number string is " + numStr + " Expected: KRW\u00a0123,457");
         }
         
         // Set locale - de_DE
@@ -1404,16 +1404,16 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         logln("CURRENCY type");
         nf = gp.getNumberFormat(GlobalizationPreferences.NF_CURRENCY);
         numStr = nf.format(num);
-        if (!numStr.equals("123.456,79 \u20AC")) {
-            errln("FAIL: Number string is " + numStr + " Expected: 123.456,79 \u20AC");
+        if (!numStr.equals("123.456,79\u00a0\u20AC")) {
+            errln("FAIL: Number string is " + numStr + " Expected: 123.456,79\u00a0\u20AC");
         }
 
         // NF_PERCENT
         logln("PERCENT type");
         nf = gp.getNumberFormat(GlobalizationPreferences.NF_PERCENT);
         numStr = nf.format(num);
-        if (!numStr.equals("12.345.679 %")) {
-            errln("FAIL: Number string is " + numStr + " Expected: 12.345.679 %");
+        if (!numStr.equals("12.345.679\u00a0%")) {
+            errln("FAIL: Number string is " + numStr + " Expected: 12.345.679\u00a0%");
         }
 
         // NF_SCIENTIFIC
@@ -1460,8 +1460,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setTerritory("US");
         nf = gp.getNumberFormat(GlobalizationPreferences.NF_CURRENCY);
         numStr = nf.format(num);
-        if (!numStr.equals("123.456,79 $")) {
-            errln("FAIL: Number string is " + numStr + " Expected: 123.456,79 $");
+        if (!numStr.equals("123.456,79\u00a0$")) {
+            errln("FAIL: Number string is " + numStr + " Expected: 123.456,79\u00a0$");
         }
 
         // Set explicit currency
@@ -1469,8 +1469,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setCurrency(Currency.getInstance("GBP"));
         nf = gp.getNumberFormat(GlobalizationPreferences.NF_CURRENCY);
         numStr = nf.format(num);
-        if (!numStr.equals("123.456,79 \u00A3")) {
-            errln("FAIL: Number string is " + numStr + " Expected: 123.456,79 \u00A3");
+        if (!numStr.equals("123.456,79\u00a0\u00A3")) {
+            errln("FAIL: Number string is " + numStr + " Expected: 123.456,79\u00a0\u00A3");
         }
 
         // Set exliplicit NumberFormat
