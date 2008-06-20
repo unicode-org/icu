@@ -380,7 +380,7 @@ print(UnicodeString *Accumulator, UChar* src, int32_t srcLen,const char *tagStar
     if(U_SUCCESS(*status)){
         trim(&buf,&bufLen);
         Accumulator->append(UnicodeString(tagStart));
-        Accumulator->append(UnicodeString(buf, "UTF-8")); 
+        Accumulator->append(UnicodeString(buf, bufLen, "UTF-8")); 
         Accumulator->append(UnicodeString(tagEnd));
         Accumulator->append(UnicodeString("\n")); 
         //T_FileStream_write(out,tagStart, (int32_t)uprv_strlen(tagStart));
@@ -492,7 +492,7 @@ printComments(UnicodeString *Accumulator, struct UString *src, const char *resNa
             /* print translate attribute */
             buf = convertAndEscape(&buf, 0, &bufLen, trans, transLen, status);
             if(U_SUCCESS(*status)){
-                printAttribute(Accumulator, "translate", UnicodeString(buf, "UTF-8"), bufLen);
+                printAttribute(Accumulator, "translate", UnicodeString(buf, bufLen, "UTF-8"), bufLen);
                 Accumulator->append(UnicodeString(">\n")); 
                 //T_FileStream_write(out,">\n", 2);
             }
