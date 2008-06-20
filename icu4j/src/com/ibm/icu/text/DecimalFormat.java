@@ -2255,6 +2255,10 @@ public class DecimalFormat extends NumberFormat {
                 if (pos == s && !literalMatch) {
                     return -1;
                 }
+                // If we skip UWhiteSpace in the input text, we need to skip it in the pattern.
+                // Otherwise, the previous lines may have skipped over text (such as U+00A0) that
+                // is also in the affix.
+                i = skipUWhiteSpace(affix, i);
             } else {
                 if (pos < input.length() &&
                     UTF16.charAt(input, pos) == c) {
