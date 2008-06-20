@@ -20,6 +20,11 @@ public class LocaleNameTest extends TestFmwk {
         Locale[] locales = Locale.getAvailableLocales();
         StringBuffer icuid = new StringBuffer();
         for (Locale inLocale : locales) {
+            if (TestUtil.isProblematicIBMLocale(inLocale)) {
+                logln("Skipped " + inLocale);
+                continue;
+            }
+
             ULocale inULocale = ULocale.forLocale(inLocale);
             Locale inLocaleICU = TestUtil.toICUExtendedLocale(inLocale);
             for (Locale forLocale : locales) {
@@ -73,6 +78,11 @@ public class LocaleNameTest extends TestFmwk {
     public void TestCountryNames() {
         Locale[] locales = Locale.getAvailableLocales();
         for (Locale inLocale : locales) {
+            if (TestUtil.isProblematicIBMLocale(inLocale)) {
+                logln("Skipped " + inLocale);
+                continue;
+            }
+
             ULocale inULocale = ULocale.forLocale(inLocale);
             Locale inLocaleICU = TestUtil.toICUExtendedLocale(inLocale);
             for (Locale forLocale : locales) {
@@ -114,6 +124,11 @@ public class LocaleNameTest extends TestFmwk {
         Locale[] locales = Locale.getAvailableLocales();
         StringBuffer icuid = new StringBuffer();
         for (Locale inLocale : locales) {
+            if (TestUtil.isProblematicIBMLocale(inLocale)) {
+                logln("Skipped " + inLocale);
+                continue;
+            }
+
             ULocale inULocale = ULocale.forLocale(inLocale);
             Locale inLocaleICU = TestUtil.toICUExtendedLocale(inLocale);
             for (Locale forLocale : locales) {

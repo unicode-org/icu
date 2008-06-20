@@ -22,6 +22,11 @@ public class CollatorTest extends TestFmwk {
      */
     public void TestGetInstance() {
         for (Locale loc : Collator.getAvailableLocales()) {
+            if (TestUtil.isProblematicIBMLocale(loc)) {
+                logln("Skipped " + loc);
+                continue;
+            }
+
             Collator coll = Collator.getInstance(loc);
 
             boolean isIcuImpl = (coll instanceof com.ibm.icu.impl.jdkadapter.CollatorICU);

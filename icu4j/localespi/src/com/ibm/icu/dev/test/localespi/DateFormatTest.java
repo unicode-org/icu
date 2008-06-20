@@ -24,6 +24,10 @@ public class DateFormatTest extends TestFmwk {
      */
     public void TestGetInstance() {
         for (Locale loc : DateFormat.getAvailableLocales()) {
+            if (TestUtil.isProblematicIBMLocale(loc)) {
+                logln("Skipped " + loc);
+                continue;
+            }
             checkGetInstance(DateFormat.FULL, DateFormat.LONG, loc);
             checkGetInstance(DateFormat.MEDIUM, -1, loc);
             checkGetInstance(1, DateFormat.SHORT, loc);

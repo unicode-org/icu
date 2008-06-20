@@ -22,6 +22,11 @@ public class DecimalFormatSymbolsTest extends TestFmwk {
      */
     public void TestGetInstance() {
         for (Locale loc : DecimalFormatSymbols.getAvailableLocales()) {
+            if (TestUtil.isProblematicIBMLocale(loc)) {
+                logln("Skipped " + loc);
+                continue;
+            }
+
             DecimalFormatSymbols decfs = DecimalFormatSymbols.getInstance(loc);
 
             boolean isIcuImpl = (decfs instanceof com.ibm.icu.impl.jdkadapter.DecimalFormatSymbolsICU);
