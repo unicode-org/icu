@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/ml.xml
  */
 ml{
-    Version{"1.10"}
+    Version{"1.12"}
     collations{
         standard{
             Sequence{" [normalization on ]&ല<വ&ഴ<റ&ഹ<ഃ<ം"}

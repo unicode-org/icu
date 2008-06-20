@@ -283,337 +283,37 @@ vi{
         ZZ{"Vùng Chưa biết hoặc không Hợp lệ"}
     }
     Currencies{
-        ADP{
-            "ADP",
-            "ADP",
-        }
         AED{
             "AED",
             "Điram UAE",
-        }
-        AFA{
-            "AFA",
-            "AFA",
-        }
-        AFN{
-            "AFN",
-            "AFN",
-        }
-        ALL{
-            "ALL",
-            "ALL",
-        }
-        AMD{
-            "AMD",
-            "AMD",
-        }
-        ANG{
-            "ANG",
-            "ANG",
-        }
-        AOA{
-            "AOA",
-            "AOA",
-        }
-        AOK{
-            "AOK",
-            "AOK",
-        }
-        AON{
-            "AON",
-            "AON",
-        }
-        AOR{
-            "AOR",
-            "AOR",
-        }
-        ARA{
-            "ARA",
-            "ARA",
-        }
-        ARP{
-            "ARP",
-            "ARP",
-        }
-        ARS{
-            "ARS",
-            "ARS",
-        }
-        ATS{
-            "ATS",
-            "ATS",
-        }
-        AUD{
-            "AUD",
-            "AUD",
-        }
-        AWG{
-            "AWG",
-            "AWG",
-        }
-        AZM{
-            "AZM",
-            "AZM",
-        }
-        AZN{
-            "AZN",
-            "AZN",
-        }
-        BAD{
-            "BAD",
-            "BAD",
-        }
-        BAM{
-            "BAM",
-            "BAM",
-        }
-        BBD{
-            "BBD",
-            "BBD",
-        }
-        BDT{
-            "BDT",
-            "BDT",
-        }
-        BEC{
-            "BEC",
-            "BEC",
-        }
-        BEF{
-            "BEF",
-            "BEF",
-        }
-        BEL{
-            "BEL",
-            "BEL",
-        }
-        BGL{
-            "BGL",
-            "BGL",
         }
         BGN{
             "BGN",
             "Lép Bungari",
         }
-        BHD{
-            "BHD",
-            "BHD",
-        }
-        BIF{
-            "BIF",
-            "BIF",
-        }
-        BMD{
-            "BMD",
-            "BMD",
-        }
-        BND{
-            "BND",
-            "BND",
-        }
-        BOB{
-            "BOB",
-            "BOB",
-        }
-        BOP{
-            "BOP",
-            "BOP",
-        }
-        BOV{
-            "BOV",
-            "BOV",
-        }
-        BRB{
-            "BRB",
-            "BRB",
-        }
-        BRC{
-            "BRC",
-            "BRC",
-        }
-        BRE{
-            "BRE",
-            "BRE",
-        }
         BRL{
             "R$",
             "BRL",
-        }
-        BRN{
-            "BRN",
-            "BRN",
-        }
-        BRR{
-            "BRR",
-            "BRR",
-        }
-        BSD{
-            "BSD",
-            "BSD",
-        }
-        BTN{
-            "BTN",
-            "BTN",
-        }
-        BUK{
-            "BUK",
-            "BUK",
-        }
-        BWP{
-            "BWP",
-            "BWP",
-        }
-        BYB{
-            "BYB",
-            "BYB",
-        }
-        BYR{
-            "BYR",
-            "BYR",
-        }
-        BZD{
-            "BZD",
-            "BZD",
-        }
-        CAD{
-            "CAD",
-            "CAD",
-        }
-        CDF{
-            "CDF",
-            "CDF",
         }
         CHF{
             "CHF",
             "Franc Thụy sĩ",
         }
-        CLF{
-            "CLF",
-            "CLF",
-        }
-        CLP{
-            "CLP",
-            "CLP",
-        }
         CNY{
             "CNY",
             "CNY",
-        }
-        COP{
-            "COP",
-            "COP",
-        }
-        COU{
-            "COU",
-            "COU",
-        }
-        CRC{
-            "CRC",
-            "CRC",
-        }
-        CSD{
-            "CSD",
-            "CSD",
-        }
-        CSK{
-            "CSK",
-            "CSK",
-        }
-        CUP{
-            "CUP",
-            "CUP",
-        }
-        CVE{
-            "CVE",
-            "CVE",
-        }
-        CYP{
-            "CYP",
-            "CYP",
-        }
-        CZK{
-            "CZK",
-            "CZK",
-        }
-        DDM{
-            "DDM",
-            "DDM",
-        }
-        DEM{
-            "DEM",
-            "DEM",
-        }
-        DJF{
-            "DJF",
-            "DJF",
-        }
-        DKK{
-            "DKK",
-            "DKK",
-        }
-        DOP{
-            "DOP",
-            "DOP",
-        }
-        DZD{
-            "DZD",
-            "DZD",
-        }
-        ECS{
-            "ECS",
-            "ECS",
-        }
-        ECV{
-            "ECV",
-            "ECV",
         }
         EEK{
             "EEK",
             "Crun Extônia",
         }
-        EGP{
-            "EGP",
-            "EGP",
-        }
-        EQE{
-            "EQE",
-            "EQE",
-        }
-        ERN{
-            "ERN",
-            "ERN",
-        }
-        ESA{
-            "ESA",
-            "ESA",
-        }
-        ESB{
-            "ESB",
-            "ESB",
-        }
-        ESP{
-            "ESP",
-            "ESP",
-        }
-        ETB{
-            "ETB",
-            "ETB",
-        }
         EUR{
             "€",
             "Euro",
         }
-        FIM{
-            "FIM",
-            "FIM",
-        }
         FJD{
             "FJD",
             "Đô-la Fi-ji",
-        }
-        FKP{
-            "FKP",
-            "FKP",
         }
         FRF{
             "FRF",
@@ -622,10 +322,6 @@ vi{
         GBP{
             "UK£",
             "Bảng Anh",
-        }
-        GEK{
-            "GEK",
-            "GEK",
         }
         GEL{
             "GEL",
@@ -643,10 +339,6 @@ vi{
             "GIP",
             "Pao Gibraltar",
         }
-        GMD{
-            "GMD",
-            "GMD",
-        }
         GNF{
             "GNF",
             "Franc Guinea",
@@ -655,10 +347,6 @@ vi{
             "GNS",
             "Syli Guinea",
         }
-        GQE{
-            "GQE",
-            "GQE",
-        }
         GRD{
             "GRD",
             "Drachma Hy Lạp",
@@ -666,10 +354,6 @@ vi{
         GTQ{
             "GTQ",
             "Quetzal Guatemala",
-        }
-        GWE{
-            "GWE",
-            "GWE",
         }
         GWP{
             "GWP",
@@ -686,14 +370,6 @@ vi{
         HNL{
             "HNL",
             "Honduras Lempira",
-        }
-        HRD{
-            "HRD",
-            "HRD",
-        }
-        HRK{
-            "HRK",
-            "HRK",
         }
         HTG{
             "HTG",
@@ -731,10 +407,6 @@ vi{
             "IRR",
             "Rial I-ran",
         }
-        ISK{
-            "ISK",
-            "ISK",
-        }
         ITL{
             "IT₤",
             "Lia Ý",
@@ -755,237 +427,45 @@ vi{
             "KES",
             "Si-ling Kê-ny-a",
         }
-        KGS{
-            "KGS",
-            "KGS",
-        }
-        KHR{
-            "KHR",
-            "KHR",
-        }
-        KMF{
-            "KMF",
-            "KMF",
-        }
-        KPW{
-            "KPW",
-            "KPW",
-        }
         KRW{
             "KRW",
             "Won Hàn Quốc",
-        }
-        KWD{
-            "KWD",
-            "KWD",
-        }
-        KYD{
-            "KYD",
-            "KYD",
         }
         KZT{
             "KZT",
             "Kazakhstan Tenge",
         }
-        LAK{
-            "LAK",
-            "LAK",
-        }
-        LBP{
-            "LBP",
-            "LBP",
-        }
-        LKR{
-            "LKR",
-            "LKR",
-        }
-        LRD{
-            "LRD",
-            "LRD",
-        }
-        LSL{
-            "LSL",
-            "LSL",
-        }
-        LSM{
-            "LSM",
-            "LSM",
-        }
         LTL{
             "LTL",
             "Litat Lituani",
-        }
-        LTT{
-            "LTT",
-            "LTT",
-        }
-        LUC{
-            "LUC",
-            "LUC",
-        }
-        LUF{
-            "LUF",
-            "LUF",
-        }
-        LUL{
-            "LUL",
-            "LUL",
-        }
-        LVL{
-            "LVL",
-            "LVL",
-        }
-        LVR{
-            "LVR",
-            "LVR",
-        }
-        LYD{
-            "LYD",
-            "LYD",
         }
         MAD{
             "MAD",
             "Điaham Marốc",
         }
-        MAF{
-            "MAF",
-            "MAF",
-        }
-        MDL{
-            "MDL",
-            "MDL",
-        }
-        MGA{
-            "MGA",
-            "MGA",
-        }
-        MGF{
-            "MGF",
-            "MGF",
-        }
-        MLF{
-            "MLF",
-            "MLF",
-        }
-        MMK{
-            "MMK",
-            "MMK",
-        }
-        MNT{
-            "MNT",
-            "MNT",
-        }
-        MOP{
-            "MOP",
-            "MOP",
-        }
-        MRO{
-            "MRO",
-            "MRO",
-        }
         MTL{
             "MTL",
             "Lia xứ Man-tơ",
-        }
-        MTP{
-            "MTP",
-            "MTP",
-        }
-        MUR{
-            "MUR",
-            "MUR",
-        }
-        MVR{
-            "MVR",
-            "MVR",
-        }
-        MWK{
-            "MWK",
-            "MWK",
         }
         MXN{
             "MXN",
             "Peso Mêhicô",
         }
-        MXP{
-            "MXP",
-            "MXP",
-        }
-        MXV{
-            "MXV",
-            "MXV",
-        }
         MYR{
             "MYR",
             "Rinhgit Malaixia",
-        }
-        MZE{
-            "MZE",
-            "MZE",
-        }
-        MZM{
-            "MZM",
-            "MZM",
-        }
-        MZN{
-            "MZN",
-            "MZN",
-        }
-        NAD{
-            "NAD",
-            "NAD",
-        }
-        NGN{
-            "NGN",
-            "NGN",
-        }
-        NIC{
-            "NIC",
-            "NIC",
-        }
-        NIO{
-            "NIO",
-            "NIO",
-        }
-        NLG{
-            "NLG",
-            "NLG",
         }
         NOK{
             "NOK",
             "Curon Na Uy",
         }
-        NPR{
-            "NPR",
-            "NPR",
-        }
         NZD{
             "NZD",
             "Đô-la New Zealand",
         }
-        OMR{
-            "OMR",
-            "OMR",
-        }
-        PAB{
-            "PAB",
-            "PAB",
-        }
-        PEI{
-            "PEI",
-            "PEI",
-        }
         PEN{
             "PEN",
             "Nuevo Sol Pêru",
-        }
-        PES{
-            "PES",
-            "PES",
-        }
-        PGK{
-            "PGK",
-            "PGK",
         }
         PHP{
             "PHP",
@@ -999,30 +479,6 @@ vi{
             "PLN",
             "Zloty Ba Lan",
         }
-        PLZ{
-            "PLZ",
-            "PLZ",
-        }
-        PTE{
-            "PTE",
-            "PTE",
-        }
-        PYG{
-            "PYG",
-            "PYG",
-        }
-        QAR{
-            "QAR",
-            "QAR",
-        }
-        RHD{
-            "RHD",
-            "RHD",
-        }
-        ROL{
-            "ROL",
-            "ROL",
-        }
         RON{
             "RON",
             "Lây Rumani",
@@ -1035,37 +491,9 @@ vi{
             "RUB",
             "Rúp Nga",
         }
-        RUR{
-            "RUR",
-            "RUR",
-        }
-        RWF{
-            "RWF",
-            "RWF",
-        }
         SAR{
             "SAR",
             "Rian Ả rập Xêút",
-        }
-        SBD{
-            "SBD",
-            "SBD",
-        }
-        SCR{
-            "SCR",
-            "SCR",
-        }
-        SDD{
-            "SDD",
-            "SDD",
-        }
-        SDG{
-            "SDG",
-            "SDG",
-        }
-        SDP{
-            "SDP",
-            "SDP",
         }
         SEK{
             "SEK",
@@ -1075,10 +503,6 @@ vi{
             "SGD",
             "Đô-la Singapore",
         }
-        SHP{
-            "SHP",
-            "SHP",
-        }
         SIT{
             "SIT",
             "Tôla Xlôvênia",
@@ -1087,69 +511,9 @@ vi{
             "SKK",
             "Cuaron Xlôvác",
         }
-        SLL{
-            "SLL",
-            "SLL",
-        }
-        SOS{
-            "SOS",
-            "SOS",
-        }
-        SRD{
-            "SRD",
-            "SRD",
-        }
-        SRG{
-            "SRG",
-            "SRG",
-        }
-        STD{
-            "STD",
-            "STD",
-        }
-        SUR{
-            "SUR",
-            "SUR",
-        }
-        SVC{
-            "SVC",
-            "SVC",
-        }
-        SYP{
-            "SYP",
-            "SYP",
-        }
-        SZL{
-            "SZL",
-            "SZL",
-        }
         THB{
             "THB",
             "Bạt Thái Lan",
-        }
-        TJR{
-            "TJR",
-            "TJR",
-        }
-        TJS{
-            "TJS",
-            "TJS",
-        }
-        TMM{
-            "TMM",
-            "TMM",
-        }
-        TND{
-            "TND",
-            "TND",
-        }
-        TOP{
-            "TOP",
-            "TOP",
-        }
-        TPE{
-            "TPE",
-            "TPE",
         }
         TRL{
             "TRL",
@@ -1159,198 +523,41 @@ vi{
             "TRY",
             "Lia Thổ Nhĩ Kỳ Mới",
         }
-        TTD{
-            "TTD",
-            "TTD",
-        }
         TWD{
             "TWD",
             "Đô-la Đài Loan",
-        }
-        TZS{
-            "TZS",
-            "TZS",
         }
         UAH{
             "UAH",
             "Rúp U-crai-na",
         }
-        UAK{
-            "UAK",
-            "UAK",
-        }
-        UGS{
-            "UGS",
-            "UGS",
-        }
-        UGX{
-            "UGX",
-            "UGX",
-        }
         USD{
             "US$",
             "Đô-la Mỹ",
-        }
-        USN{
-            "USN",
-            "USN",
-        }
-        USS{
-            "USS",
-            "USS",
-        }
-        UYI{
-            "UYI",
-            "UYI",
-        }
-        UYP{
-            "UYP",
-            "UYP",
-        }
-        UYU{
-            "UYU",
-            "UYU",
-        }
-        UZS{
-            "UZS",
-            "UZS",
         }
         VEB{
             "VEB",
             "Bôliva Vênêduêla",
         }
-        VEF{
-            "VEF",
-            "VEF",
-        }
         VND{
             "₫",
             "đồng",
-        }
-        VUV{
-            "VUV",
-            "VUV",
-        }
-        WST{
-            "WST",
-            "WST",
-        }
-        XAF{
-            "XAF",
-            "XAF",
-        }
-        XAG{
-            "XAG",
-            "XAG",
         }
         XAU{
             "XAU",
             "Vàng",
         }
-        XBA{
-            "XBA",
-            "XBA",
-        }
-        XBB{
-            "XBB",
-            "XBB",
-        }
-        XBC{
-            "XBC",
-            "XBC",
-        }
-        XBD{
-            "XBD",
-            "XBD",
-        }
-        XCD{
-            "XCD",
-            "XCD",
-        }
-        XDR{
-            "XDR",
-            "XDR",
-        }
-        XEU{
-            "XEU",
-            "XEU",
-        }
-        XFO{
-            "XFO",
-            "XFO",
-        }
-        XFU{
-            "XFU",
-            "XFU",
-        }
-        XOF{
-            "XOF",
-            "XOF",
-        }
-        XPD{
-            "XPD",
-            "XPD",
-        }
-        XPF{
-            "XPF",
-            "XPF",
-        }
-        XPT{
-            "XPT",
-            "XPT",
-        }
-        XRE{
-            "XRE",
-            "XRE",
-        }
-        XTS{
-            "XTS",
-            "XTS",
-        }
         XXX{
             "XXX",
             "Tiền tệ chưa biết hoặc không hợp lệ",
-        }
-        YDD{
-            "YDD",
-            "YDD",
-        }
-        YER{
-            "YER",
-            "YER",
-        }
-        YUD{
-            "YUD",
-            "YUD",
-        }
-        YUM{
-            "YUM",
-            "YUM",
-        }
-        ZAL{
-            "ZAL",
-            "ZAL",
         }
         ZAR{
             "ZAR",
             "Ran Nam Phi",
         }
-        ZMK{
-            "ZMK",
-            "ZMK",
-        }
-        ZRN{
-            "ZRN",
-            "ZRN",
-        }
-        ZRZ{
-            "ZRZ",
-            "ZRZ",
-        }
-        ZWD{
-            "ZWD",
-            "ZWD",
-        }
+    }
+    CurrencyUnitPatterns{
+        other{"{0} {1}"}
     }
     ExemplarCharacters{
         "[a à ả ã á ạ ă ằ ẳ ẵ ắ ặ â ầ ẩ ẫ ấ ậ b-d đ e è ẻ ẽ é ẹ ê ề ể ễ ế ệ f-i ì ỉ ĩ"
@@ -1492,75 +699,17 @@ vi{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤",
+        "#,##0.00 ¤",
         "#,##0%",
         "#E0",
     }
     Types{
         calendar{
-            buddhist{"buddhist"}
-            chinese{"chinese"}
             gregorian{"gregorian"}
-            hebrew{"hebrew"}
-            indian{"indian"}
-            islamic{"islamic"}
-            islamic-civil{"islamic-civil"}
-            japanese{"japanese"}
-            roc{"roc"}
-        }
-        collation{
-            big5han{"big5han"}
-            direct{"direct"}
-            gb2312han{"gb2312han"}
-            phonebook{"phonebook"}
-            pinyin{"pinyin"}
-            stroke{"stroke"}
-            traditional{"traditional"}
         }
     }
-    Version{"1.66"}
+    Version{"1.70"}
     calendar{
-        buddhist{
-            availableFormats{
-                MMMMEd{"E MMMM d"}
-                MMMMd{"MMMM d"}
-                MMMd{"MMM d"}
-                Md{"M-d"}
-                yMEd{"EEE, yyyy-M-d"}
-                yMMM{"yyyy MMM"}
-                yMMMEd{"EEE, yyyy MMM d"}
-                yMMMM{"yyyy MMMM"}
-                yQ{"yyyy Q"}
-                yQQQ{"yyyy QQQ"}
-            }
-        }
-        coptic{
-            availableFormats{
-                MMMMEd{"E MMMM d"}
-                MMMMd{"MMMM d"}
-                MMMd{"MMM d"}
-                Md{"M-d"}
-                yMEd{"EEE, yyyy-M-d"}
-                yMMM{"yyyy MMM"}
-                yMMMEd{"EEE, yyyy MMM d"}
-                yMMMM{"yyyy MMMM"}
-                yQ{"yyyy Q"}
-                yQQQ{"yyyy QQQ"}
-            }
-        }
-        ethiopic{
-            availableFormats{
-                MMMMEd{"E MMMM d"}
-                MMMMd{"MMMM d"}
-                MMMd{"MMM d"}
-                Md{"M-d"}
-                yMEd{"EEE, yyyy-M-d"}
-                yMMM{"yyyy MMM"}
-                yMMMEd{"EEE, yyyy MMM d"}
-                yMMMM{"yyyy MMMM"}
-                yQ{"yyyy Q"}
-            }
-        }
         gregorian{
             AmPmMarkers{
                 "SA",
@@ -1638,6 +787,87 @@ vi{
                     "sau CN",
                 }
             }
+            intervalFormats{
+                M{
+                    M{"'Tháng' M - 'Tháng' M"}
+                }
+                MEd{
+                    M{"EEEE, dd/MM - EEEE, dd/MM"}
+                    d{"EEEE, dd/MM - EEEE, dd/MM"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"EEEE, 'ngày' dd 'tháng' M - EEEE, 'ngày' dd 'tháng' M"}
+                    d{"EEEE, 'ngày' dd - EEEE, 'ngày' dd 'tháng' M"}
+                }
+                MMMd{
+                    M{"'Ngày' dd 'tháng' M - 'Ngày' dd 'tháng' M"}
+                    d{"'Ngày' dd 'tháng' M - 'Ngày' dd 'tháng' M"}
+                }
+                Md{
+                    M{"dd/MM - dd/MM"}
+                    d{"dd/MM - dd/MM"}
+                }
+                d{
+                    d{"'Ngày' d-d"}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    a{"HH'h' - HH'h'"}
+                    h{"HH'h' - HH'h'"}
+                }
+                hm{
+                    h{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                hmv{
+                    h{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                hv{
+                    a{"HH'h'-HH'h' v"}
+                    h{"HH'h'-HH'h' v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"MM/yyyy - MM/yyyy"}
+                    y{"MM/yyyy - MM/yyyy"}
+                }
+                yMEd{
+                    M{"EEEE, dd/MM/yyyy - EEEE, dd/MM/yyyy"}
+                    d{"EEEE, dd/MM/yyyy - EEEE, dd/MM/yyyy"}
+                    y{"EEEE, dd/MM/yyyy - EEEE, dd/MM/yyyy"}
+                }
+                yMMM{
+                    M{"'Tháng' M - 'Tháng' M 'năm' yyyy"}
+                    y{"'Tháng' M 'năm' yyyy - 'Tháng' M 'năm' yyyy"}
+                }
+                yMMMEd{
+                    M{"EEEE, 'ngày' dd MMM - EEEE, 'ngày' dd MMM 'năm' yyyy"}
+                    d{"EEEE, 'ngày' dd MMM - EEEE, 'ngày' dd MMM 'năm' yyyy"}
+                    y{
+                        "EEEE, 'ngày' dd MMM 'năm' yyyy - EEEE, 'ngày' dd MMM 'năm' y"
+                        "yyy"
+                    }
+                }
+                yMMMd{
+                    M{"'Ngày' dd 'tháng' M - 'Ngày' dd 'tháng' M 'năm' yyyy"}
+                    d{"'Ngày' dd 'tháng' M - 'Ngày' dd 'tháng' M 'năm' yyyy"}
+                    y{
+                        "'Ngày' dd 'tháng' M 'năm' yyyy - 'Ngày' dd 'tháng' M 'năm' y"
+                        "yyy"
+                    }
+                }
+                yMd{
+                    M{"dd/MM/yyyy - dd/MM/yyyy"}
+                    d{"dd/MM/yyyy - dd/MM/yyyy"}
+                    y{"dd/MM/yyyy - dd/MM/yyyy"}
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -1703,62 +933,11 @@ vi{
                 }
             }
         }
-        hebrew{
-            availableFormats{
-                MMMMEd{"E MMMM d"}
-                MMMMd{"MMMM d"}
-                MMMd{"MMM d"}
-                Md{"M-d"}
-                yMEd{"EEE, yyyy-M-d"}
-                yMMM{"yyyy MMM"}
-                yMMMEd{"EEE, yyyy MMM d"}
-                yMMMM{"yyyy MMMM"}
-                yQ{"yyyy Q"}
-                yQQQ{"yyyy QQQ"}
-            }
-        }
-        indian{
-            availableFormats{
-                MMMMEd{"E MMMM d"}
-                MMMMd{"MMMM d"}
-                MMMd{"MMM d"}
-                Md{"M-d"}
-                yMEd{"EEE, yyyy-M-d"}
-                yMMM{"yyyy MMM"}
-                yMMMEd{"EEE, yyyy MMM d"}
-                yMMMM{"yyyy MMMM"}
-                yQ{"yyyy Q"}
-                yQQQ{"yyyy QQQ"}
-            }
-        }
-        persian{
-            availableFormats{
-                MMMMEd{"E MMMM d"}
-                MMMMd{"MMMM d"}
-                MMMd{"MMM d"}
-                Md{"M-d"}
-                yMEd{"EEE, yyyy-M-d"}
-                yMMM{"yyyy MMM"}
-                yMMMEd{"EEE, yyyy MMM d"}
-                yMMMM{"yyyy MMMM"}
-                yQ{"yyyy Q"}
-                yQQQ{"yyyy QQQ"}
-            }
-        }
-        roc{
-            availableFormats{
-                MMMMEd{"E MMMM d"}
-                MMMMd{"MMMM d"}
-                MMMd{"MMM d"}
-                Md{"M-d"}
-                yMEd{"EEE, yyyy-M-d"}
-                yMMM{"yyyy MMM"}
-                yMMMEd{"EEE, yyyy MMM d"}
-                yMMMM{"yyyy MMMM"}
-                yQ{"yyyy Q"}
-                yQQQ{"yyyy QQQ"}
-            }
-        }
+    }
+    codePatterns{
+        language{"Ngôn ngữ: {0}"}
+        script{"Chữ viết: {0}"}
+        territory{"Vùng: {0}"}
     }
     delimiters{
         alternateQuotationEnd{"’"}
@@ -1766,258 +945,42 @@ vi{
         quotationEnd{"”"}
         quotationStart{"“"}
     }
+    localeDisplayPattern{
+        pattern{"{0} ({1})"}
+        separator{", "}
+    }
+    units{
+        day{
+            other{"{0} ngày"}
+        }
+        hour{
+            other{"{0} giờ"}
+        }
+        minute{
+            other{"{0} phút"}
+        }
+        month{
+            other{"{0} tháng"}
+        }
+        second{
+            other{"{0} giây"}
+        }
+        week{
+            other{"{0} tuần"}
+        }
+        year{
+            other{"{0} năm"}
+        }
+    }
     zoneStrings{
-        "Africa:Lubumbashi"{
-            ec{"Lubumbashi"}
-        }
-        "America:Anchorage"{
-            ec{"Anchorage"}
-        }
-        "America:Argentina:La_Rioja"{
-            ec{"La Rioja"}
-        }
-        "America:Argentina:Rio_Gallegos"{
-            ec{"Rio Gallegos"}
-        }
-        "America:Argentina:San_Juan"{
-            ec{"San Juan"}
-        }
-        "America:Argentina:San_Luis"{
-            ec{"San Luis"}
-        }
-        "America:Argentina:Tucuman"{
-            ec{"Tucuman"}
-        }
-        "America:Argentina:Ushuaia"{
-            ec{"Ushuaia"}
-        }
-        "America:Indiana:Marengo"{
-            ec{"Marengo, Indiana"}
-        }
-        "America:Indiana:Tell_City"{
-            ec{"Tell City, Indiana"}
-        }
-        "America:Indiana:Vevay"{
-            ec{"Vevay, Indiana"}
-        }
-        "America:Kentucky:Monticello"{
-            ec{"Monticello, Kentucky"}
-        }
-        "America:Los_Angeles"{
-            ec{"Los Angeles"}
-        }
-        "America:Louisville"{
-            ec{"Louisville"}
-        }
-        "America:Maceio"{
-            ec{"Maceio"}
-        }
-        "America:Manaus"{
-            ec{"Manaus"}
-        }
-        "America:Mazatlan"{
-            ec{"Mazatlan"}
-        }
-        "America:Mendoza"{
-            ec{"Mendoza"}
-        }
-        "America:Menominee"{
-            ec{"Menominee"}
-        }
-        "America:Merida"{
-            ec{"Merida"}
-        }
-        "America:Mexico_City"{
-            ec{"Mexico City"}
-        }
-        "America:Moncton"{
-            ec{"Moncton"}
-        }
-        "America:Monterrey"{
-            ec{"Monterrey"}
-        }
-        "America:Montreal"{
-            ec{"Montreal"}
-        }
-        "America:New_York"{
-            ec{"New York"}
-        }
-        "America:Nipigon"{
-            ec{"Nipigon"}
-        }
-        "America:Nome"{
-            ec{"Nome"}
-        }
-        "America:Noronha"{
-            ec{"Noronha"}
-        }
-        "America:North_Dakota:New_Salem"{
-            ec{"New Salem, North Dakota"}
-        }
-        "America:Pangnirtung"{
-            ec{"Pangnirtung"}
-        }
-        "America:Phoenix"{
-            ec{"Phoenix"}
-        }
-        "America:Rainy_River"{
-            ec{"Rainy River"}
-        }
-        "America:Rankin_Inlet"{
-            ec{"Rankin Inlet"}
-        }
-        "America:Recife"{
-            ec{"Recife"}
-        }
-        "America:Regina"{
-            ec{"Regina"}
-        }
-        "America:Resolute"{
-            ec{"Resolute"}
-        }
-        "America:Rio_Branco"{
-            ec{"Rio Branco"}
-        }
-        "America:Sao_Paulo"{
-            ec{"Sao Paulo"}
-        }
-        "America:Scoresbysund"{
-            ec{"Scoresbysund"}
-        }
-        "America:Shiprock"{
-            ec{"Shiprock"}
-        }
-        "America:St_Johns"{
-            ec{"St. John's"}
-        }
-        "America:Swift_Current"{
-            ec{"Swift Current"}
-        }
-        "America:Thule"{
-            ec{"Thule"}
-        }
-        "America:Thunder_Bay"{
-            ec{"Thunder Bay"}
-        }
-        "America:Tijuana"{
-            ec{"Tijuana"}
-        }
-        "America:Toronto"{
-            ec{"Toronto"}
-        }
-        "America:Vancouver"{
-            ec{"Vancouver"}
-        }
         "Antarctica:DumontDUrville"{
             ec{"Dumont D'Urville"}
-        }
-        "Antarctica:Mawson"{
-            ec{"Mawson"}
-        }
-        "Antarctica:McMurdo"{
-            ec{"McMurdo"}
-        }
-        "Antarctica:Palmer"{
-            ec{"Palmer"}
-        }
-        "Antarctica:Rothera"{
-            ec{"Rothera"}
-        }
-        "Antarctica:South_Pole"{
-            ec{"South Pole"}
-        }
-        "Antarctica:Syowa"{
-            ec{"Syowa"}
-        }
-        "Asia:Magadan"{
-            ec{"Magadan"}
-        }
-        "Asia:Makassar"{
-            ec{"Makassar"}
-        }
-        "Asia:Novosibirsk"{
-            ec{"Novosibirsk"}
-        }
-        "Asia:Omsk"{
-            ec{"Omsk"}
-        }
-        "Asia:Oral"{
-            ec{"Oral"}
-        }
-        "Asia:Pontianak"{
-            ec{"Pontianak"}
-        }
-        "Asia:Qyzylorda"{
-            ec{"Qyzylorda"}
-        }
-        "Asia:Sakhalin"{
-            ec{"Sakhalin"}
-        }
-        "Asia:Samarkand"{
-            ec{"Samarkand"}
-        }
-        "Asia:Ulaanbaatar"{
-            ec{"Ulaanbaatar"}
-        }
-        "Asia:Urumqi"{
-            ec{"Urumqi"}
         }
         "Atlantic:Canary"{
             ec{"Quần Đảo Canary"}
         }
-        "Atlantic:Madeira"{
-            ec{"Madeira"}
-        }
-        "Australia:Lindeman"{
-            ec{"Lindeman"}
-        }
-        "Australia:Lord_Howe"{
-            ec{"Lord Howe"}
-        }
-        "Australia:Melbourne"{
-            ec{"Melbourne"}
-        }
-        "Australia:Perth"{
-            ec{"Perth"}
-        }
-        "Australia:Sydney"{
-            ec{"Sydney"}
-        }
         "Etc:Unknown"{
             ec{"Không rõ"}
-        }
-        "Europe:Moscow"{
-            ec{"Moscow"}
-        }
-        "Europe:Samara"{
-            ec{"Samara"}
-        }
-        "Europe:Simferopol"{
-            ec{"Simferopol"}
-        }
-        "Europe:Uzhgorod"{
-            ec{"Uzhgorod"}
-        }
-        "Pacific:Easter"{
-            ec{"Easter"}
-        }
-        "Pacific:Majuro"{
-            ec{"Majuro"}
-        }
-        "Pacific:Marquesas"{
-            ec{"Marquesas"}
-        }
-        "Pacific:Midway"{
-            ec{"Midway"}
-        }
-        "Pacific:Ponape"{
-            ec{"Ponape"}
-        }
-        "Pacific:Tarawa"{
-            ec{"Tarawa"}
-        }
-        "Pacific:Truk"{
-            ec{"Truk"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

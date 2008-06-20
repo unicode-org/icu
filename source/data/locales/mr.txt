@@ -171,11 +171,11 @@ mr{
     }
     NumberPatterns{
         "#,##,##0.###",
-        "¤ #,##,##0.00",
+        "¤ #,##,##0.00",
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.66"}
+    Version{"1.69"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -254,7 +254,6 @@ mr{
         "meta:India"{
             cu:int{1}
             ls{"भारतीय समय"}
-            ss{"IST"}
         }
     }
 }

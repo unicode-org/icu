@@ -1288,7 +1288,6 @@ sk{
         egy{"staroegyptský"}
         el{"grécky"}
         en{"anglický"}
-        en_AU{"anglický (Austrália)"}
         en_GB{"anglický (Veľká Británia)"}
         en_US{"anglický (USA)"}
         eo{"esperantsky"}
@@ -1360,8 +1359,6 @@ sk{
         pl{"poľský"}
         ps{"paštúnsky"}
         pt{"portugalský"}
-        pt_BR{"portugalský (Brazília)"}
-        pt_PT{"portugalský (Portugalsko)"}
         rm{"rétorománsky"}
         ro{"rumunský"}
         ru{"ruský"}
@@ -1431,7 +1428,7 @@ sk{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤",
+        "#,##0.00 ¤",
         "#,##0%",
         "#E0",
     }
@@ -1484,7 +1481,7 @@ sk{
             traditional{"Tradičné"}
         }
     }
-    Version{"1.80"}
+    Version{"1.84"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1578,6 +1575,23 @@ sk{
                     dn{"zóna"}
                 }
             }
+            intervalFormats{
+                MMMM{
+                    M{"LLLL-LLLL"}
+                }
+                h{
+                    a{"HH-HH"}
+                }
+                hm{
+                    a{"HH:mm-HH:mm"}
+                }
+                hmv{
+                    a{"HH:mm-HH:mm v"}
+                }
+                hv{
+                    a{"HH-HH v"}
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -1638,6 +1652,11 @@ sk{
             }
         }
     }
+    codePatterns{
+        language{"Jazyk: {0}"}
+        script{"Skript: {0}"}
+        territory{"Región: {0}"}
+    }
     delimiters{
         alternateQuotationEnd{"“"}
         alternateQuotationStart{"„"}
@@ -1649,383 +1668,29 @@ sk{
         metric{"Metrický"}
     }
     zoneStrings{
-        "Africa:Ceuta"{
-            ec{"Ceuta"}
-        }
-        "Africa:Kinshasa"{
-            ec{"Kinshasa"}
-        }
-        "Africa:Lubumbashi"{
-            ec{"Lubumbashi"}
-        }
-        "America:Adak"{
-            ec{"Adak"}
-        }
         "America:Anchorage"{
             ec{"Aljaška"}
-        }
-        "America:Araguaina"{
-            ec{"Araguaina"}
-        }
-        "America:Argentina:La_Rioja"{
-            ec{"La Rioja"}
-        }
-        "America:Argentina:Rio_Gallegos"{
-            ec{"Rio Gallegos"}
-        }
-        "America:Argentina:San_Juan"{
-            ec{"San Juan"}
-        }
-        "America:Argentina:San_Luis"{
-            ec{"San Luis"}
-        }
-        "America:Argentina:Tucuman"{
-            ec{"Tucuman"}
-        }
-        "America:Argentina:Ushuaia"{
-            ec{"Ushuaia"}
-        }
-        "America:Bahia"{
-            ec{"Bahia"}
-        }
-        "America:Belem"{
-            ec{"Belem"}
-        }
-        "America:Blanc-Sablon"{
-            ec{"Blanc-Sablon"}
-        }
-        "America:Boa_Vista"{
-            ec{"Boa Vista"}
-        }
-        "America:Boise"{
-            ec{"Boise"}
-        }
-        "America:Buenos_Aires"{
-            ec{"Buenos Aires"}
-        }
-        "America:Cambridge_Bay"{
-            ec{"Cambridge Bay"}
-        }
-        "America:Campo_Grande"{
-            ec{"Campo Grande"}
-        }
-        "America:Cancun"{
-            ec{"Cancun"}
-        }
-        "America:Catamarca"{
-            ec{"Catamarca"}
-        }
-        "America:Chicago"{
-            ec{"Chicago"}
-        }
-        "America:Chihuahua"{
-            ec{"Chihuahua"}
-        }
-        "America:Coral_Harbour"{
-            ec{"Coral Harbour"}
-        }
-        "America:Cordoba"{
-            ec{"Cordoba"}
-        }
-        "America:Cuiaba"{
-            ec{"Cuiaba"}
-        }
-        "America:Danmarkshavn"{
-            ec{"Danmarkshavn"}
-        }
-        "America:Dawson"{
-            ec{"Dawson"}
-        }
-        "America:Dawson_Creek"{
-            ec{"Dawson Creek"}
-        }
-        "America:Denver"{
-            ec{"Denver"}
-        }
-        "America:Detroit"{
-            ec{"Detroit"}
-        }
-        "America:Edmonton"{
-            ec{"Edmonton"}
-        }
-        "America:Eirunepe"{
-            ec{"Eirunepe"}
-        }
-        "America:Fortaleza"{
-            ec{"Fortaleza"}
-        }
-        "America:Glace_Bay"{
-            ec{"Glace Bay"}
-        }
-        "America:Goose_Bay"{
-            ec{"Goose Bay"}
-        }
-        "America:Halifax"{
-            ec{"Halifax"}
-        }
-        "America:Hermosillo"{
-            ec{"Hermosillo"}
-        }
-        "America:Indiana:Knox"{
-            ec{"Knox, Indiana"}
-        }
-        "America:Indiana:Marengo"{
-            ec{"Marengo, Indiana"}
-        }
-        "America:Indiana:Petersburg"{
-            ec{"Petersburg, Indiana"}
-        }
-        "America:Indiana:Tell_City"{
-            ec{"Tell City, Indiana"}
-        }
-        "America:Indiana:Vevay"{
-            ec{"Vevay, Indiana"}
-        }
-        "America:Indiana:Vincennes"{
-            ec{"Vincennes, Indiana"}
-        }
-        "America:Indiana:Winamac"{
-            ec{"Winamac, Indiana"}
-        }
-        "America:Indianapolis"{
-            ec{"Indianapolis"}
-        }
-        "America:Inuvik"{
-            ec{"Inuvik"}
-        }
-        "America:Iqaluit"{
-            ec{"Iqaluit"}
-        }
-        "America:Jujuy"{
-            ec{"Jujuy"}
-        }
-        "America:Juneau"{
-            ec{"Juneau"}
-        }
-        "America:Kentucky:Monticello"{
-            ec{"Monticello, Kentucky"}
-        }
-        "America:Los_Angeles"{
-            ec{"Los Angeles"}
-        }
-        "America:Louisville"{
-            ec{"Louisville"}
-        }
-        "America:Maceio"{
-            ec{"Maceio"}
-        }
-        "America:Manaus"{
-            ec{"Manaus"}
-        }
-        "America:Mazatlan"{
-            ec{"Mazatlan"}
-        }
-        "America:Mendoza"{
-            ec{"Mendoza"}
-        }
-        "America:Menominee"{
-            ec{"Menominee"}
-        }
-        "America:Merida"{
-            ec{"Merida"}
-        }
-        "America:Mexico_City"{
-            ec{"Mexico City"}
-        }
-        "America:Moncton"{
-            ec{"Moncton"}
-        }
-        "America:Monterrey"{
-            ec{"Monterrey"}
-        }
-        "America:Montreal"{
-            ec{"Montreal"}
-        }
-        "America:Nipigon"{
-            ec{"Nipigon"}
-        }
-        "America:Nome"{
-            ec{"Nome"}
-        }
-        "America:Noronha"{
-            ec{"Noronha"}
-        }
-        "America:North_Dakota:Center"{
-            ec{"Center, North Dakota"}
         }
         "America:North_Dakota:New_Salem"{
             ec{"New Salem, Severná Dakota"}
         }
-        "America:Pangnirtung"{
-            ec{"Pangnirtung"}
-        }
-        "America:Phoenix"{
-            ec{"Phoenix"}
-        }
-        "America:Porto_Velho"{
-            ec{"Porto Velho"}
-        }
-        "America:Rainy_River"{
-            ec{"Rainy River"}
-        }
-        "America:Rankin_Inlet"{
-            ec{"Rankin Inlet"}
-        }
-        "America:Recife"{
-            ec{"Recife"}
-        }
-        "America:Regina"{
-            ec{"Regina"}
-        }
-        "America:Resolute"{
-            ec{"Resolute"}
-        }
-        "America:Rio_Branco"{
-            ec{"Rio Branco"}
-        }
-        "America:Sao_Paulo"{
-            ec{"Sao Paulo"}
-        }
-        "America:Scoresbysund"{
-            ec{"Scoresbysund"}
-        }
-        "America:Shiprock"{
-            ec{"Shiprock"}
-        }
-        "America:St_Johns"{
-            ec{"St. John's"}
-        }
-        "America:Swift_Current"{
-            ec{"Swift Current"}
-        }
-        "America:Thule"{
-            ec{"Thule"}
-        }
-        "America:Thunder_Bay"{
-            ec{"Thunder Bay"}
-        }
-        "America:Tijuana"{
-            ec{"Tijuana"}
-        }
-        "America:Toronto"{
-            ec{"Toronto"}
-        }
-        "America:Vancouver"{
-            ec{"Vancouver"}
-        }
-        "America:Whitehorse"{
-            ec{"Whitehorse"}
-        }
-        "America:Winnipeg"{
-            ec{"Winnipeg"}
-        }
-        "America:Yakutat"{
-            ec{"Yakutat"}
-        }
-        "America:Yellowknife"{
-            ec{"Yellowknife"}
-        }
-        "Antarctica:Casey"{
-            ec{"Casey"}
-        }
-        "Antarctica:Davis"{
-            ec{"Davis"}
-        }
         "Antarctica:DumontDUrville"{
             ec{"Dumont D'Urville"}
-        }
-        "Antarctica:Mawson"{
-            ec{"Mawson"}
-        }
-        "Antarctica:McMurdo"{
-            ec{"McMurdo"}
-        }
-        "Antarctica:Palmer"{
-            ec{"Palmer"}
-        }
-        "Antarctica:Rothera"{
-            ec{"Rothera"}
         }
         "Antarctica:South_Pole"{
             ec{"Južný pól"}
         }
-        "Antarctica:Syowa"{
-            ec{"Syowa"}
-        }
-        "Antarctica:Vostok"{
-            ec{"Vostok"}
-        }
-        "Asia:Almaty"{
-            ec{"Almaty"}
-        }
-        "Asia:Anadyr"{
-            ec{"Anadyr"}
-        }
-        "Asia:Aqtau"{
-            ec{"Aqtau"}
-        }
-        "Asia:Aqtobe"{
-            ec{"Aqtobe"}
-        }
-        "Asia:Choibalsan"{
-            ec{"Choibalsan"}
-        }
-        "Asia:Chongqing"{
-            ec{"Chongqing"}
-        }
-        "Asia:Harbin"{
-            ec{"Harbin"}
-        }
-        "Asia:Hovd"{
-            ec{"Hovd"}
-        }
         "Asia:Irkutsk"{
             ec{"Irkutsko"}
-        }
-        "Asia:Jakarta"{
-            ec{"Jakarta"}
-        }
-        "Asia:Jayapura"{
-            ec{"Jayapura"}
         }
         "Asia:Kamchatka"{
             ec{"Kamčatka"}
         }
-        "Asia:Kashgar"{
-            ec{"Kashgar"}
-        }
         "Asia:Krasnoyarsk"{
             ec{"Krasnojarsko"}
         }
-        "Asia:Kuching"{
-            ec{"Kuching"}
-        }
-        "Asia:Magadan"{
-            ec{"Magadan"}
-        }
-        "Asia:Makassar"{
-            ec{"Makassar"}
-        }
-        "Asia:Novosibirsk"{
-            ec{"Novosibirsk"}
-        }
-        "Asia:Omsk"{
-            ec{"Omsk"}
-        }
-        "Asia:Oral"{
-            ec{"Oral"}
-        }
-        "Asia:Pontianak"{
-            ec{"Pontianak"}
-        }
-        "Asia:Qyzylorda"{
-            ec{"Qyzylorda"}
-        }
         "Asia:Sakhalin"{
             ec{"Sachalin"}
-        }
-        "Asia:Samarkand"{
-            ec{"Samarkand"}
         }
         "Asia:Shanghai"{
             ec{"Šanghaj"}
@@ -2035,12 +1700,6 @@ sk{
         }
         "Asia:Ulaanbaatar"{
             ec{"Ulanbátar"}
-        }
-        "Asia:Urumqi"{
-            ec{"Urumqi"}
-        }
-        "Asia:Vladivostok"{
-            ec{"Vladivostok"}
         }
         "Asia:Yakutsk"{
             ec{"Jakutsko"}
@@ -2054,50 +1713,8 @@ sk{
         "Atlantic:Canary"{
             ec{"Kanárske ostrovy"}
         }
-        "Atlantic:Madeira"{
-            ec{"Madeira"}
-        }
-        "Australia:Adelaide"{
-            ec{"Adelaide"}
-        }
-        "Australia:Brisbane"{
-            ec{"Brisbane"}
-        }
-        "Australia:Broken_Hill"{
-            ec{"Broken Hill"}
-        }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
-        "Australia:Darwin"{
-            ec{"Darwin"}
-        }
-        "Australia:Eucla"{
-            ec{"Eucla"}
-        }
-        "Australia:Hobart"{
-            ec{"Hobart"}
-        }
-        "Australia:Lindeman"{
-            ec{"Lindeman"}
-        }
-        "Australia:Lord_Howe"{
-            ec{"Lord Howe"}
-        }
-        "Australia:Melbourne"{
-            ec{"Melbourne"}
-        }
-        "Australia:Perth"{
-            ec{"Perth"}
-        }
-        "Australia:Sydney"{
-            ec{"Sydney"}
-        }
         "Etc:Unknown"{
             ec{"Neznáme časové pásmo"}
-        }
-        "Europe:Kaliningrad"{
-            ec{"Kaliningrad"}
         }
         "Europe:Kiev"{
             ec{"Kyjev"}
@@ -2111,71 +1728,17 @@ sk{
         "Europe:Moscow"{
             ec{"Moskva"}
         }
-        "Europe:Samara"{
-            ec{"Samara"}
-        }
-        "Europe:Simferopol"{
-            ec{"Simferopol"}
-        }
         "Europe:Uzhgorod"{
             ec{"Užhorod"}
-        }
-        "Europe:Volgograd"{
-            ec{"Volgograd"}
         }
         "Europe:Zaporozhye"{
             ec{"Záporožie"}
         }
-        "Pacific:Chatham"{
-            ec{"Chatham"}
-        }
         "Pacific:Easter"{
             ec{"Veľkonočné ostrovy"}
         }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Galapagos"{
             ec{"Galapágy"}
-        }
-        "Pacific:Gambier"{
-            ec{"Gambier"}
-        }
-        "Pacific:Honolulu"{
-            ec{"Honolulu"}
-        }
-        "Pacific:Johnston"{
-            ec{"Johnston"}
-        }
-        "Pacific:Kiritimati"{
-            ec{"Kiritimati"}
-        }
-        "Pacific:Kosrae"{
-            ec{"Kosrae"}
-        }
-        "Pacific:Kwajalein"{
-            ec{"Kwajalein"}
-        }
-        "Pacific:Majuro"{
-            ec{"Majuro"}
-        }
-        "Pacific:Marquesas"{
-            ec{"Marquesas"}
-        }
-        "Pacific:Midway"{
-            ec{"Midway"}
-        }
-        "Pacific:Ponape"{
-            ec{"Ponape"}
-        }
-        "Pacific:Tarawa"{
-            ec{"Tarawa"}
-        }
-        "Pacific:Truk"{
-            ec{"Truk"}
-        }
-        "Pacific:Wake"{
-            ec{"Wake"}
         }
         hourFormat{"+HHmm;-HHmm"}
     }

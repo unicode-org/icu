@@ -643,7 +643,7 @@ el{
                 /**
                  * Duplicated from NumberPatterns resource
                  */
-                "#,##0.00¤;-¤#,##0.00",
+                "#,##0.00 ¤;-#,##0.00 ¤",
                 ",",
                 ".",
             }
@@ -1265,6 +1265,11 @@ el{
             "Δολάριο Ζιμπάμπουε",
         }
     }
+    CurrencyPlurals{
+        XXX{
+            other{"Άγνωστο ή Ακατάλληλο Νόμισμα"}
+        }
+    }
     ExemplarCharacters{"[α ά β-ε έ ζ η ή θ ι ί ϊ ΐ κ-ο ό π ρ σ ς τ υ ύ ϋ ΰ φ-ω ώ]"}
     Keys{
         calendar{"Ημερολόγιο"}
@@ -1463,7 +1468,7 @@ el{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00¤;-¤#,##0.00",
+        "#,##0.00 ¤;-#,##0.00 ¤",
         "#,##0%",
         "#E0",
     }
@@ -1517,7 +1522,6 @@ el{
             islamic{"Ισλαμικό Ημερολόγιο"}
             islamic-civil{"Ισλαμικό-Αστικό Ημερολόγιο"}
             japanese{"Ιαπωνικό Ημερολόγιο"}
-            roc{"roc"}
         }
         collation{
             big5han{"Κινεζική Παραδοσιακή Σειρά - Big5"}
@@ -1536,7 +1540,7 @@ el{
         POLYTON{"Πολυτονικό"}
         REVISED{"Αναθεωρημένη Ορθογραφία"}
     }
-    Version{"1.91"}
+    Version{"1.94"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1667,6 +1671,83 @@ el{
                     dn{"Ζώνη"}
                 }
             }
+            intervalFormats{
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E, dd/MM - E, dd/MM"}
+                    d{"E, dd/MM - E, dd/MM"}
+                }
+                MMM{
+                    M{"LLL-LLL"}
+                }
+                MMMEd{
+                    M{"E, dd MMM - E, dd MMM"}
+                    d{"E, dd - E, dd MMM"}
+                }
+                MMMd{
+                    M{"dd MMM - dd MMM"}
+                    d{"dd-dd MMM"}
+                }
+                Md{
+                    M{"dd/MM - dd/MM"}
+                    d{"dd/MM - dd/MM"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    a{"h a - h a"}
+                    h{"h-h a"}
+                }
+                hm{
+                    a{"h:mm a - h:mm a"}
+                    h{"h:mm-h:mm a"}
+                    m{"h:mm-h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a - h:mm a v"}
+                    h{"h:mm-h:mm a v"}
+                    m{"h:mm-h:mm a v"}
+                }
+                hv{
+                    a{"h a - h a v"}
+                    h{"h-h a v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"MM/yyyy - MM/yyyy"}
+                    y{"MM/yyyy - MM/yyyy"}
+                }
+                yMEd{
+                    M{"E, dd/MM/yyyy - E, dd/MM/yyyy"}
+                    d{"E, dd/MM/yyyy - E, dd/MM/yyyy"}
+                    y{"E, dd/MM/yyyy - E, dd/MM/yyyy"}
+                }
+                yMMM{
+                    M{"LLL-LLL yyyy"}
+                    y{"LLL yyyy - LLL yyyy"}
+                }
+                yMMMEd{
+                    M{"E, dd MMM - E, dd MMM yyyy"}
+                    d{"E, dd - E, dd MMM yyyy"}
+                    y{"E, dd MMM yyyy - E, dd MMM yyyy"}
+                }
+                yMMMd{
+                    M{"dd MMM - dd MMM yyyy"}
+                    d{"dd-dd MMM yyyy"}
+                    y{"dd MMM yyyy - dd MMM yyyy"}
+                }
+                yMd{
+                    M{"dd/MM/yyyy - dd/MM/yyyy"}
+                    d{"dd/MM/yyyy - dd/MM/yyyy"}
+                    y{"dd/MM/yyyy - dd/MM/yyyy"}
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -1783,6 +1864,11 @@ el{
             }
         }
     }
+    codePatterns{
+        language{"Γλώσσα: {0}"}
+        script{"Σύστημα Γραφής: {0}"}
+        territory{"Περιοχή: {0}"}
+    }
     delimiters{
         alternateQuotationEnd{"”"}
         alternateQuotationStart{"“"}
@@ -1792,6 +1878,36 @@ el{
     measurementSystemNames{
         US{"Αγγλοσαξωνικό"}
         metric{"Μετρικό"}
+    }
+    units{
+        day{
+            one{"{0} ημέρα"}
+            other{"{0} ημέρες"}
+        }
+        hour{
+            one{"{0} ώρα"}
+            other{"{0} ώρες"}
+        }
+        minute{
+            one{"{0} λεπτό"}
+            other{"{0} λεπτά"}
+        }
+        month{
+            one{"{0} μήνας"}
+            other{"{0} μήνες"}
+        }
+        second{
+            one{"{0} δευτερόλεπτο"}
+            other{"{0} δευτερόλεπτα"}
+        }
+        week{
+            one{"{0} εβδομάδα"}
+            other{"{0} εβδομάδες"}
+        }
+        year{
+            one{"{0} έτος"}
+            other{"{0} έτη"}
+        }
     }
     zoneStrings{
         "Africa:Abidjan"{
@@ -2135,9 +2251,6 @@ el{
         }
         "Europe:Athens"{
             ec{"Αθήνα"}
-        }
-        "Europe:Belfast"{
-            ec{"Μπέλφαστ"}
         }
         "Europe:Berlin"{
             ec{"Βερολίνο"}

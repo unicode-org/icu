@@ -42,11 +42,11 @@ kl{
     }
     NumberPatterns{
         "#,##0.###",
-        "¤#,##0.00;¤ -#,##0.00",
+        "¤#,##0.00;¤-#,##0.00",
         "#,##0%",
         "#E0",
     }
-    Version{"1.44"}
+    Version{"1.46"}
     calendar{
         gregorian{
             dayNames{

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 zh_Hant_MO{
-    Version{"1.58"}
+    Version{"1.59"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -23,7 +23,7 @@ zh_Hant_MO{
                 "yyyy年MM月dd日",
                 "yyyy年M月d日",
                 "yy年M月d日",
-                "{1}{0}",
+                "{1} {0}",
             }
         }
     }

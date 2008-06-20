@@ -1066,6 +1066,9 @@ ka{
             "ზიმბაბვეს დოლარი",
         }
     }
+    CurrencyUnitPatterns{
+        other{"{0} {1}"}
+    }
     ExemplarCharacters{
         "[ა ⴀ ბ ⴁ გ ⴂ დ ⴃ ე ⴄ ვ ⴅ ზ ⴆ ჱ ⴡ თ ⴇ ი ⴈ კ ⴉ ლ ⴊ მ ⴋ ნ ⴌ ჲ ⴢ ო ⴍ პ ⴎ ჟ ⴏ რ ⴐ"
         " ს ⴑ ტ ⴒ ჳ ⴣ უ ⴓ ფ ⴔ ქ ⴕ ღ ⴖ ყ ⴗ შ ⴘ ჩ ⴙ ც ⴚ ძ ⴛ წ ⴜ ჭ ⴝ ხ ⴞ ჴ ⴤ ჯ ⴟ ჰ ⴠ ჵ ⴥ"
@@ -1313,7 +1316,7 @@ ka{
             traditional{"ტრადიციული"}
         }
     }
-    Version{"1.51"}
+    Version{"1.55"}
     calendar{
         gregorian{
             availableFormats{
@@ -1343,9 +1346,36 @@ ka{
         quotationEnd{"”"}
         quotationStart{"“"}
     }
+    localeDisplayPattern{
+        pattern{"{0} ({1})"}
+        separator{", "}
+    }
     measurementSystemNames{
         US{"US"}
         metric{"Metric"}
+    }
+    units{
+        day{
+            other{"{0} დღე"}
+        }
+        hour{
+            other{"{0} საათი"}
+        }
+        minute{
+            other{"{0} წუთი"}
+        }
+        month{
+            other{"{0} თვე"}
+        }
+        second{
+            other{"{0} წამი"}
+        }
+        week{
+            other{"{0} კვირა"}
+        }
+        year{
+            other{"{0} წელი"}
+        }
     }
     zoneStrings{
         "Africa:Ceuta"{

@@ -11,13 +11,13 @@
 <ldml>
 	<identity>
 		<version number="$Revision: 1.23 $"/>
-		<generation date="$Date: 2008/05/25 01:05:50 $"/>
-		<language type="az"/> 
+		<generation date="$Date: 2008/05/25 01:05:55 $"/>
+		<language type="in"/> 
 	</identity>
 	<characters>
 		<special xmlns:icu="http://www.icu-project.org/">
 			<icu:scripts>
-				<icu:script type="1">Cyrl</icu:script>
+				<icu:script type="1">Latn</icu:script>
 			</icu:scripts>
 		</special>
 	</characters>

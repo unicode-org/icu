@@ -337,7 +337,7 @@ ca{
                 /**
                  * Duplicated from NumberPatterns resource
                  */
-                "#,##0.00 ¤",
+                "#,##0.00 ¤",
                 ",",
                 ".",
             }
@@ -352,7 +352,7 @@ ca{
         }
         FRF{
             "FRF",
-            "FRF",
+            "Franc francès",
         }
         GBP{
             "UK£",
@@ -425,6 +425,96 @@ ca{
         XXX{
             "XXX",
             "sense moneda",
+        }
+    }
+    CurrencyPlurals{
+        ADP{
+            one{"Pesseta andorrana"}
+            other{"Pessetes andorranes"}
+        }
+        ATS{
+            one{"Xíling austríac"}
+            other{"Xílings austríacs"}
+        }
+        BEF{
+            one{"Franc belga"}
+            other{"Francs belges"}
+        }
+        CHF{
+            one{"Franc suís"}
+            other{"Francs suíssos"}
+        }
+        CYP{
+            one{"Lliura xipriota"}
+            other{"Lliures xipriotes"}
+        }
+        DEM{
+            one{"Marc alemany"}
+            other{"Marcs alemanys"}
+        }
+        ESP{
+            one{"Pesseta espanyola"}
+            other{"Pessetes espanyoles"}
+        }
+        EUR{
+            one{"Euro"}
+            other{"Euro"}
+        }
+        FIM{
+            one{"Marc finlandès"}
+            other{"Marcs finlandèsos"}
+        }
+        FRF{
+            one{"Franc francès"}
+            other{"Francs francèsos"}
+        }
+        GBP{
+            one{"Lliura esterlina"}
+            other{"Lliures esterlines"}
+        }
+        GRD{
+            one{"Dracma grega"}
+            other{"Dracmes gregues"}
+        }
+        IEP{
+            one{"Lliura irlandesa"}
+            other{"Lliures irlandeses"}
+        }
+        ITL{
+            one{"Lira italiana"}
+            other{"Lires italianes"}
+        }
+        LUF{
+            one{"Franc luxemburguès"}
+            other{"Francs luxemburguèsos"}
+        }
+        MTL{
+            one{"Lira maltesa"}
+            other{"Lires malteses"}
+        }
+        NLG{
+            one{"Florí neerlandès"}
+            other{"Florís neerlandèsos"}
+        }
+        PTE{
+            one{"Escut portuguès"}
+            other{"Escuts portuguèsos"}
+        }
+        SIT{
+            one{"Tolar eslovè"}
+            other{"Tolars eslovens"}
+        }
+        USD{
+            one{"Dòlar EUA"}
+            other{"Dòlars EUA"}
+        }
+        XEU{
+            one{"Unitat de compte europea"}
+            other{"Unitats de compte europea"}
+        }
+        XXX{
+            one{"sense moneda"}
+            other{"sense moneda"}
         }
     }
     ExemplarCharacters{"[a à b c ç d e é è f-i í ï j-l ŀ m-o ó ò p-u ú ü v-z]"}
@@ -829,7 +919,7 @@ ca{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤",
+        "#,##0.00 ¤",
         "#,##0%",
         "#E0",
     }
@@ -877,24 +967,8 @@ ca{
         FONIPA{"alfabet fonètic internacional"}
         POSIX{"ordenador"}
     }
-    Version{"1.84"}
+    Version{"1.89"}
     calendar{
-        buddhist{
-            availableFormats{
-                MMM{"LLL"}
-            }
-            eras{
-                abbreviated{
-                    "BE",
-                }
-                narrow{
-                    "BE",
-                }
-                wide{
-                    "BE",
-                }
-            }
-        }
         gregorian{
             AmPmMarkers{
                 "AM",
@@ -1029,6 +1103,9 @@ ca{
                     dn{"zona"}
                 }
             }
+            intervalFormats{
+                fallback{"{0} - {1}"}
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -1099,12 +1176,6 @@ ca{
                         "3T",
                         "4T",
                     }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
                     wide{
                         "1r trimestre",
                         "2n trimestre",
@@ -1123,46 +1194,64 @@ ca{
             }
         }
     }
+    codePatterns{
+        language{"Idioma: {0}"}
+        script{"Escriptura: {0}"}
+        territory{"Regió: {0}"}
+    }
     delimiters{
         alternateQuotationEnd{"”"}
         alternateQuotationStart{"“"}
         quotationEnd{"’"}
         quotationStart{"‘"}
     }
+    localeDisplayPattern{
+        pattern{"{0} ({1})"}
+        separator{", "}
+    }
     measurementSystemNames{
         US{"imperial"}
         metric{"mètric"}
     }
+    units{
+        day{
+            one{"{0} dia"}
+            other{"{0} dies"}
+        }
+        hour{
+            one{"{0} hora"}
+            other{"{0} hores"}
+        }
+        minute{
+            one{"{0} minut"}
+            other{"{0} minuts"}
+        }
+        month{
+            one{"{0} mes"}
+            other{"{0} mesos"}
+        }
+        second{
+            one{"{0} segon"}
+            other{"{0} segons"}
+        }
+        week{
+            one{"{0} setmana"}
+            other{"{0} setmanes"}
+        }
+        year{
+            one{"{0} any"}
+            other{"{0} anys"}
+        }
+    }
     zoneStrings{
         "America:Anchorage"{
             ec{"Hora d'Alaska"}
-        }
-        "America:Argentina:La_Rioja"{
-            ec{"La Rioja"}
-        }
-        "America:Argentina:Ushuaia"{
-            ec{"Ushuaia"}
         }
         "America:Mexico_City"{
             ec{"Mèxic Districte Federal"}
         }
         "America:New_York"{
             ec{"Nova York"}
-        }
-        "America:Rio_Branco"{
-            ec{"Rio Branco"}
-        }
-        "America:Sao_Paulo"{
-            ec{"Sao Paulo"}
-        }
-        "America:Tijuana"{
-            ec{"Tijuana"}
-        }
-        "America:Toronto"{
-            ec{"Toronto"}
-        }
-        "America:Vancouver"{
-            ec{"Vancouver"}
         }
         "Antarctica:South_Pole"{
             ec{"Pol sud"}
@@ -1175,9 +1264,6 @@ ca{
         }
         "Atlantic:Canary"{
             ec{"Illes Canàries"}
-        }
-        "Australia:Sydney"{
-            ec{"Sydney"}
         }
         "Etc:Unknown"{
             ec{"Zona desconeguda"}

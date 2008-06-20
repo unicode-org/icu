@@ -159,30 +159,30 @@ static void TestFractionDigitOverride(void) {
     UNumberFormat *fmt = unum_open(UNUM_CURRENCY, NULL, 0, "hu_HU", NULL, &status);
     UChar buffer[256];
     UChar expectedBuf[256];
-    const char expectedFirst[] = "123 Ft";
-    const char expectedSecond[] = "123,46 Ft";
-    const char expectedThird[] = "123,456 Ft";
+    const char expectedFirst[] = "123\\u00A0Ft";
+    const char expectedSecond[] = "123,46\\u00A0Ft";
+    const char expectedThird[] = "123,456\\u00A0Ft";
     if (U_FAILURE(status)) {
        log_err("Error: unum_open returned %s\n", myErrorName(status));
        return;
     }
     /* Make sure that you can format normal fraction digits. */
     unum_formatDouble(fmt, 123.456, buffer, sizeof(buffer)/sizeof(buffer[0]), NULL, &status);
-    u_charsToUChars(expectedFirst, expectedBuf, strlen(expectedFirst)+1);
+    u_unescape(expectedFirst, expectedBuf, strlen(expectedFirst)+1);
     if (u_strcmp(buffer, expectedBuf) != 0) {
        log_err("Error: unum_formatDouble didn't return %s\n", expectedFirst);
     }
     /* Make sure that you can format 2 fraction digits. */
     unum_setAttribute(fmt, UNUM_FRACTION_DIGITS, 2);
     unum_formatDouble(fmt, 123.456, buffer, sizeof(buffer)/sizeof(buffer[0]), NULL, &status);
-    u_charsToUChars(expectedSecond, expectedBuf, strlen(expectedSecond)+1);
+    u_unescape(expectedSecond, expectedBuf, strlen(expectedSecond)+1);
     if (u_strcmp(buffer, expectedBuf) != 0) {
        log_err("Error: unum_formatDouble didn't return %s\n", expectedSecond);
     }
     /* Make sure that you can format more fraction digits. */
     unum_setAttribute(fmt, UNUM_FRACTION_DIGITS, 3);
     unum_formatDouble(fmt, 123.456, buffer, sizeof(buffer)/sizeof(buffer[0]), NULL, &status);
-    u_charsToUChars(expectedThird, expectedBuf, strlen(expectedThird)+1);
+    u_unescape(expectedThird, expectedBuf, strlen(expectedThird)+1);
     if (u_strcmp(buffer, expectedBuf) != 0) {
        log_err("Error: unum_formatDouble didn't return %s\n", expectedThird);
     }

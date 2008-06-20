@@ -27,12 +27,7 @@ ru_UA{
         mh{"маршальский"}
         tlh{"клингон"}
     }
-    Types{
-        calendar{
-            buddhist{"Буддийский календарь"}
-        }
-    }
-    Version{"1.52"}
+    Version{"1.53"}
     calendar{
         gregorian{
             DateTimePatterns{

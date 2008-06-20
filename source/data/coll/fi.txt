@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/fi.xml
  */
 fi{
-    Version{"1.26"}
+    Version{"1.27"}
     collations{
         default{"phonebook"}
         phonebook{

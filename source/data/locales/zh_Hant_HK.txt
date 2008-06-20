@@ -36,10 +36,6 @@ zh_Hant_HK{
             "₤",
             "意大利里拉",
         }
-        JPY{
-            "JP¥",
-            "日圓",
-        }
         NZD{
             "$NZ",
             "紐西蘭元",
@@ -95,13 +91,9 @@ zh_Hant_HK{
         SCOTLAND{"蘇格蘭標準英語"}
         SOLBA{"Stolvizza/Solbica 方言"}
     }
-    Version{"1.65"}
+    Version{"1.67"}
     calendar{
         chinese{
-            AmPmMarkers{
-                "上午",
-                "下午",
-            }
             availableFormats{
                 MMMMEd{"M月d日E"}
                 yMEd{"yyyy年M月d日，E"}
@@ -127,5 +119,13 @@ zh_Hant_HK{
     }
     measurementSystemNames{
         metric{"十進制"}
+    }
+    units{
+        hour{
+            other{"{0}時"}
+        }
+        week{
+            other{"{0}星期"}
+        }
     }
 }

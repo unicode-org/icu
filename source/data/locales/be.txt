@@ -335,7 +335,7 @@ be{
             "невядомая або недапушчальная валюта",
         }
     }
-    ExemplarCharacters{"[’ а-д {дж} {дз} е ё ж з й і к-у ў ф-ш ы-я]"}
+    ExemplarCharacters{"[а-д {дж} {дз} е ё ж з й і к-у ў ф-ш ы-я]"}
     Keys{
         calendar{"каляндар"}
         collation{"параўнаньне тэксту"}
@@ -536,7 +536,7 @@ be{
             japanese{"японскі каляндар"}
         }
     }
-    Version{"1.71"}
+    Version{"1.75"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -795,15 +795,68 @@ be{
             }
         }
     }
+    codePatterns{
+        language{"Мова: {0}"}
+        script{"Пісьмо: {0}"}
+        territory{"Рэгіён: {0}"}
+    }
     delimiters{
         alternateQuotationEnd{"»"}
         alternateQuotationStart{"«"}
         quotationEnd{"”"}
         quotationStart{"„"}
     }
+    localeDisplayPattern{
+        pattern{"{0} ({1})"}
+        separator{", "}
+    }
     measurementSystemNames{
         US{"ЗША"}
         metric{"метрычная"}
+    }
+    units{
+        day{
+            few{"{0} дні"}
+            many{"{0} дзён"}
+            one{"{0} дзень"}
+            other{"{0} дня"}
+        }
+        hour{
+            few{"{0} гадзіны"}
+            many{"{0} гадзін"}
+            one{"{0} гадзіна"}
+            other{"{0} гадзіны"}
+        }
+        minute{
+            few{"{0} хвіліны"}
+            many{"{0} хвілін"}
+            one{"{0} хвіліна"}
+            other{"{0} хвіліны"}
+        }
+        month{
+            few{"{0} месяца"}
+            many{"{0} месяцаў"}
+            one{"{0} месяц"}
+            other{"{0} месяца"}
+        }
+        second{
+            few{"{0} сэкунды"}
+            many{"{0} сэкунд"}
+            one{"{0} сэкунда"}
+            other{"{0} сэкунды"}
+        }
+        week{
+            few{"{0} тыдні"}
+            many{"{0} тыдняў"}
+            one{"{0} тыдзень"}
+            other{"{0} тыдня"}
+        }
+        year{
+            few{"{0} гады"}
+            many{"{0} гадоў"}
+            one{"{0} год"}
+            other{"{0} году"}
+        }
     }
     zoneStrings{
         "America:Anchorage"{
@@ -859,36 +912,24 @@ be{
             ld{"Паўночнаамэрыканскі цэнтральны летні час"}
             lg{"Паўночнаамэрыканскі цэнтральны час"}
             ls{"Паўночнаамэрыканскі цэнтральны стандартны час"}
-            sd{"CDT"}
-            sg{"CT"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             cu:int{0}
             ld{"Паўночнаамэрыканскі усходні летні час"}
             lg{"Паўночнаамэрыканскі усходні час"}
             ls{"Паўночнаамэрыканскі усходні стандартны час"}
-            sd{"EDT"}
-            sg{"ET"}
-            ss{"EST"}
         }
         "meta:America_Mountain"{
             cu:int{0}
             ld{"Паўночнаамэрыканскі горны летні час"}
             lg{"Паўночнаамэрыканскі горны час"}
             ls{"Паўночнаамэрыканскі горны стандартны час"}
-            sd{"MDT"}
-            sg{"MT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             cu:int{0}
             ld{"Ціхаакіянскі летні час"}
             lg{"Ціхаакіянскі час"}
             ls{"Ціхаакіянскі стандартны час"}
-            sd{"PDT"}
-            sg{"PT"}
-            ss{"PST"}
         }
         "meta:Argentina"{
             cu:int{0}
@@ -901,9 +942,6 @@ be{
             ld{"Атлянтычны летні час"}
             lg{"Атлянтычны час"}
             ls{"Атлянтычны стандартны час"}
-            sd{"ADT"}
-            sg{"AT"}
-            ss{"AST"}
         }
         "meta:Azores"{
             cu:int{0}
@@ -921,22 +959,16 @@ be{
             cu:int{0}
             ld{"Цэнтральнаэўрапейскі летні час"}
             ls{"Цэнтральнаэўрапейскі час"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             cu:int{0}
             ld{"Усходнеэўрапейскі летні час"}
             ls{"Усходнеэўрапейскі час"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
             cu:int{0}
             ld{"Заходнеэўрапейскі летні час"}
             ls{"Заходнеэўрапейскі час"}
-            sd{"WEST"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             cu:int{0}
@@ -944,10 +976,6 @@ be{
         "meta:GMT"{
             cu:int{1}
             ls{"Грынвічскі час"}
-            ss{"GMT"}
-        }
-        "meta:Irish"{
-            cu:int{0}
         }
         "meta:Kuybyshev"{
             cu:int{0}

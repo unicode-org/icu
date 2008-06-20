@@ -1385,7 +1385,10 @@ tr{
             "Zimbabwe Doları",
         }
     }
-    ExemplarCharacters{"[a-c ç d-g ğ h ı i İ j-o ö p r s ş t u ü v y z]"}
+    CurrencyUnitPatterns{
+        other{"{0} {1}"}
+    }
+    ExemplarCharacters{"[a-c ç d-g ğ h ı i İ {i̇} j-o ö p r s ş t u ü v y z]"}
     Keys{
         calendar{"Takvim"}
         collation{"Sıralama"}
@@ -1918,8 +1921,8 @@ tr{
     }
     NumberPatterns{
         "#,##0.###",
-        "#,##0.00 ¤",
-        "% #,##0",
+        "#,##0.00 ¤",
+        "% #,##0",
         "#E0",
     }
     Scripts{
@@ -2078,7 +2081,6 @@ tr{
     }
     Variants{
         1606NICT{"1606'ya Dek Geç Ortaçağ Fransızcası"}
-        1694ACAD{"1694ACAD"}
         1901{"Geleneksel Alman Yazım Kuralları"}
         1994{"Standart Resia Yazım Kuralları"}
         1996{"1996 Alman Yazım Kuralları"}
@@ -2103,9 +2105,8 @@ tr{
         SCOUSE{"Scouse"}
         SOLBA{"Stolvizza/Solbica Lehçesi"}
         TARASK{"Taraskievica Yazım Kuralları"}
-        VALENCIA{"VALENCIA"}
     }
-    Version{"1.101"}
+    Version{"1.107"}
     calendar{
         coptic{
             monthNames{
@@ -2259,6 +2260,79 @@ tr{
                 }
                 zone{
                     dn{"Saat Dilimi"}
+                }
+            }
+            intervalFormats{
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"dd.MM E - dd.MM E"}
+                    d{"dd.MM E - dd.MM E"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"d MMM E - d MMM E"}
+                    d{"d MMM E - d MMM E"}
+                }
+                MMMd{
+                    M{"d MMM - d MMM"}
+                    d{"d-d MMM"}
+                }
+                Md{
+                    M{"dd.MM - dd.MM"}
+                    d{"dd.MM - dd.MM"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    h{"HH-HH"}
+                }
+                hm{
+                    h{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                hmv{
+                    h{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                hv{
+                    h{"HH-HH v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"MM.yyyy - MM.yyyy"}
+                    y{"MM.yyyy - MM.yyyy"}
+                }
+                yMEd{
+                    M{"dd.MM.yyyy E - dd.MM.yyyy E"}
+                    d{"dd.MM.yyyy E - dd.MM.yyyy E"}
+                    y{"dd.MM.yyyy E - dd.MM.yyyy E"}
+                }
+                yMMM{
+                    M{"MMM-MMM yyyy"}
+                    y{"MMM yyyy - MMM yyyy"}
+                }
+                yMMMEd{
+                    M{"dd MMM yyyy E - dd MMM yyyy E"}
+                    d{"dd MMM yyyy E - dd MMM yyyy E"}
+                    y{"dd MMM yyyy E - dd MMM yyyy E"}
+                }
+                yMMMd{
+                    M{"d MMM - d MMM yyyy"}
+                    d{"d-d MMM yyyy"}
+                    y{"d MMM yyyy - d MMM yyyy"}
+                }
+                yMd{
+                    M{"dd.MM.yyyy - dd.MM.yyyy"}
+                    d{"dd.MM.yyyy - dd.MM.yyyy"}
+                    y{"dd.MM.yyyy - dd.MM.yyyy"}
                 }
             }
             monthNames{
@@ -2459,130 +2533,51 @@ tr{
             }
         }
     }
+    codePatterns{
+        language{"Dil: {0}"}
+        script{"Betik: {0}"}
+        territory{"Bölge: {0}"}
+    }
     delimiters{
         alternateQuotationEnd{"’"}
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
     }
+    localeDisplayPattern{
+        pattern{"{0} ({1})"}
+        separator{", "}
+    }
     measurementSystemNames{
         US{"ABD"}
         metric{"Metrik"}
     }
+    units{
+        day{
+            other{"{0} gün"}
+        }
+        hour{
+            other{"{0} saat"}
+        }
+        minute{
+            other{"{0} dakika"}
+        }
+        month{
+            other{"{0} ay"}
+        }
+        second{
+            other{"{0} saniye"}
+        }
+        week{
+            other{"{0} hafta"}
+        }
+        year{
+            other{"{0} yıl"}
+        }
+    }
     zoneStrings{
         "Africa:Ceuta"{
             ec{"Septe"}
-        }
-        "Africa:Kinshasa"{
-            ec{"Kinshasa"}
-        }
-        "Africa:Lubumbashi"{
-            ec{"Lubumbashi"}
-        }
-        "America:Adak"{
-            ec{"Adak"}
-        }
-        "America:Anchorage"{
-            ec{"Anchorage"}
-        }
-        "America:Araguaina"{
-            ec{"Araguaina"}
-        }
-        "America:Argentina:La_Rioja"{
-            ec{"La Rioja"}
-        }
-        "America:Argentina:Rio_Gallegos"{
-            ec{"Rio Gallegos"}
-        }
-        "America:Argentina:San_Juan"{
-            ec{"San Juan"}
-        }
-        "America:Argentina:Tucuman"{
-            ec{"Tucuman"}
-        }
-        "America:Argentina:Ushuaia"{
-            ec{"Ushuaia"}
-        }
-        "America:Bahia"{
-            ec{"Bahia"}
-        }
-        "America:Belem"{
-            ec{"Belem"}
-        }
-        "America:Blanc-Sablon"{
-            ec{"Blanc-Sablon"}
-        }
-        "America:Boa_Vista"{
-            ec{"Boa Vista"}
-        }
-        "America:Boise"{
-            ec{"Boise"}
-        }
-        "America:Buenos_Aires"{
-            ec{"Buenos Aires"}
-        }
-        "America:Cambridge_Bay"{
-            ec{"Cambridge Bay"}
-        }
-        "America:Campo_Grande"{
-            ec{"Campo Grande"}
-        }
-        "America:Cancun"{
-            ec{"Cancun"}
-        }
-        "America:Catamarca"{
-            ec{"Catamarca"}
-        }
-        "America:Chicago"{
-            ec{"Chicago"}
-        }
-        "America:Chihuahua"{
-            ec{"Chihuahua"}
-        }
-        "America:Coral_Harbour"{
-            ec{"Coral Harbour"}
-        }
-        "America:Cordoba"{
-            ec{"Cordoba"}
-        }
-        "America:Cuiaba"{
-            ec{"Cuiaba"}
-        }
-        "America:Danmarkshavn"{
-            ec{"Danmarkshavn"}
-        }
-        "America:Dawson"{
-            ec{"Dawson"}
-        }
-        "America:Dawson_Creek"{
-            ec{"Dawson Creek"}
-        }
-        "America:Denver"{
-            ec{"Denver"}
-        }
-        "America:Detroit"{
-            ec{"Detroit"}
-        }
-        "America:Edmonton"{
-            ec{"Edmonton"}
-        }
-        "America:Eirunepe"{
-            ec{"Eirunepe"}
-        }
-        "America:Fortaleza"{
-            ec{"Fortaleza"}
-        }
-        "America:Glace_Bay"{
-            ec{"Glace Bay"}
-        }
-        "America:Goose_Bay"{
-            ec{"Goose Bay"}
-        }
-        "America:Halifax"{
-            ec{"Halifax"}
-        }
-        "America:Hermosillo"{
-            ec{"Hermosillo"}
         }
         "America:Indiana:Knox"{
             ec{"Knox"}
@@ -2590,86 +2585,8 @@ tr{
         "America:Indiana:Marengo"{
             ec{"Marengo"}
         }
-        "America:Indiana:Petersburg"{
-            ec{"Petersburg, Indiana"}
-        }
-        "America:Indiana:Tell_City"{
-            ec{"Tell City, Indiana"}
-        }
-        "America:Indiana:Vevay"{
-            ec{"Vevay, Indiana"}
-        }
-        "America:Indiana:Vincennes"{
-            ec{"Vincennes, Indiana"}
-        }
-        "America:Indiana:Winamac"{
-            ec{"Winamac, Indiana"}
-        }
-        "America:Indianapolis"{
-            ec{"Indianapolis"}
-        }
-        "America:Inuvik"{
-            ec{"Inuvik"}
-        }
-        "America:Iqaluit"{
-            ec{"Iqaluit"}
-        }
-        "America:Jujuy"{
-            ec{"Jujuy"}
-        }
-        "America:Juneau"{
-            ec{"Juneau"}
-        }
-        "America:Kentucky:Monticello"{
-            ec{"Monticello, Kentucky"}
-        }
-        "America:Los_Angeles"{
-            ec{"Los Angeles"}
-        }
-        "America:Louisville"{
-            ec{"Louisville"}
-        }
-        "America:Maceio"{
-            ec{"Maceio"}
-        }
-        "America:Manaus"{
-            ec{"Manaus"}
-        }
-        "America:Mazatlan"{
-            ec{"Mazatlan"}
-        }
-        "America:Mendoza"{
-            ec{"Mendoza"}
-        }
-        "America:Menominee"{
-            ec{"Menominee"}
-        }
-        "America:Merida"{
-            ec{"Merida"}
-        }
         "America:Mexico_City"{
             ec{"Meksiko City"}
-        }
-        "America:Moncton"{
-            ec{"Moncton"}
-        }
-        "America:Monterrey"{
-            ec{"Monterrey"}
-        }
-        "America:Montreal"{
-            ec{"Montreal"}
-        }
-        "America:New_York"{
-            ec{"New York"}
-        }
-        "America:Nipigon"{
-            ec{"Nipigon"}
-        }
-        "America:Nome"{
-            ec{"Nome"}
-        }
-        "America:Noronha"{
-            ec{"Noronha"}
         }
         "America:North_Dakota:Center"{
             ec{"Merkez, Kuzey Dakota"}
@@ -2677,107 +2594,11 @@ tr{
         "America:North_Dakota:New_Salem"{
             ec{"New Salem, Kuzey Dakota"}
         }
-        "America:Pangnirtung"{
-            ec{"Pangnirtung"}
-        }
-        "America:Phoenix"{
-            ec{"Phoenix"}
-        }
-        "America:Porto_Velho"{
-            ec{"Porto Velho"}
-        }
-        "America:Rainy_River"{
-            ec{"Rainy River"}
-        }
-        "America:Rankin_Inlet"{
-            ec{"Rankin Inlet"}
-        }
-        "America:Recife"{
-            ec{"Recife"}
-        }
-        "America:Regina"{
-            ec{"Regina"}
-        }
-        "America:Resolute"{
-            ec{"Resolute"}
-        }
-        "America:Rio_Branco"{
-            ec{"Rio Branco"}
-        }
-        "America:Sao_Paulo"{
-            ec{"Sao Paulo"}
-        }
-        "America:Scoresbysund"{
-            ec{"Scoresbysund"}
-        }
-        "America:Shiprock"{
-            ec{"Shiprock"}
-        }
-        "America:St_Johns"{
-            ec{"St. John's"}
-        }
-        "America:Swift_Current"{
-            ec{"Swift Current"}
-        }
-        "America:Thule"{
-            ec{"Thule"}
-        }
-        "America:Thunder_Bay"{
-            ec{"Thunder Bay"}
-        }
-        "America:Tijuana"{
-            ec{"Tijuana"}
-        }
-        "America:Toronto"{
-            ec{"Toronto"}
-        }
-        "America:Vancouver"{
-            ec{"Vancouver"}
-        }
-        "America:Whitehorse"{
-            ec{"Whitehorse"}
-        }
-        "America:Winnipeg"{
-            ec{"Winnipeg"}
-        }
-        "America:Yakutat"{
-            ec{"Yakutat"}
-        }
-        "America:Yellowknife"{
-            ec{"Yellowknife"}
-        }
-        "Antarctica:Casey"{
-            ec{"Casey"}
-        }
-        "Antarctica:Davis"{
-            ec{"Davis"}
-        }
         "Antarctica:DumontDUrville"{
             ec{"Dumont D'Urville"}
         }
-        "Antarctica:Mawson"{
-            ec{"Mawson"}
-        }
-        "Antarctica:McMurdo"{
-            ec{"McMurdo"}
-        }
-        "Antarctica:Palmer"{
-            ec{"Palmer"}
-        }
-        "Antarctica:Rothera"{
-            ec{"Rothera"}
-        }
         "Antarctica:South_Pole"{
             ec{"Güney Kutbu"}
-        }
-        "Antarctica:Syowa"{
-            ec{"Syowa"}
-        }
-        "Antarctica:Vostok"{
-            ec{"Vostok"}
-        }
-        "Arctic:Longyearbyen"{
-            ec{"Longyearbyen"}
         }
         "Asia:Almaty"{
             ec{"Almatı"}
@@ -2797,9 +2618,6 @@ tr{
         "Asia:Chongqing"{
             ec{"Çunking"}
         }
-        "Asia:Harbin"{
-            ec{"Harbin"}
-        }
         "Asia:Hovd"{
             ec{"Kobdo"}
         }
@@ -2809,38 +2627,17 @@ tr{
         "Asia:Jakarta"{
             ec{"Cakarta"}
         }
-        "Asia:Jayapura"{
-            ec{"Jayapura"}
-        }
         "Asia:Kamchatka"{
             ec{"Kamçatka"}
         }
         "Asia:Kashgar"{
             ec{"Kaşgar"}
         }
-        "Asia:Krasnoyarsk"{
-            ec{"Krasnoyarsk"}
-        }
         "Asia:Kuching"{
             ec{"Kuçing"}
         }
-        "Asia:Magadan"{
-            ec{"Magadan"}
-        }
-        "Asia:Makassar"{
-            ec{"Makassar"}
-        }
-        "Asia:Novosibirsk"{
-            ec{"Novosibirsk"}
-        }
-        "Asia:Omsk"{
-            ec{"Omsk"}
-        }
         "Asia:Oral"{
             ec{"Uralsk"}
-        }
-        "Asia:Pontianak"{
-            ec{"Pontianak"}
         }
         "Asia:Qyzylorda"{
             ec{"Kızılorda"}
@@ -2863,68 +2660,17 @@ tr{
         "Asia:Urumqi"{
             ec{"Urumçi"}
         }
-        "Asia:Vladivostok"{
-            ec{"Vladivostok"}
-        }
-        "Asia:Yakutsk"{
-            ec{"Yakutsk"}
-        }
-        "Asia:Yekaterinburg"{
-            ec{"Yekaterinburg"}
-        }
         "Atlantic:Azores"{
             ec{"Azor Adaları"}
         }
         "Atlantic:Canary"{
             ec{"Kanarya Adaları"}
         }
-        "Atlantic:Madeira"{
-            ec{"Madeira"}
-        }
-        "Australia:Adelaide"{
-            ec{"Adelaide"}
-        }
-        "Australia:Brisbane"{
-            ec{"Brisbane"}
-        }
-        "Australia:Broken_Hill"{
-            ec{"Broken Hill"}
-        }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
-        "Australia:Darwin"{
-            ec{"Darwin"}
-        }
-        "Australia:Eucla"{
-            ec{"Eucla"}
-        }
-        "Australia:Hobart"{
-            ec{"Hobart"}
-        }
-        "Australia:Lindeman"{
-            ec{"Lindeman"}
-        }
-        "Australia:Lord_Howe"{
-            ec{"Lord Howe"}
-        }
-        "Australia:Melbourne"{
-            ec{"Melbourne"}
-        }
-        "Australia:Perth"{
-            ec{"Perth"}
-        }
         "Australia:Sydney"{
             ec{"Sidney"}
         }
         "Etc:Unknown"{
             ec{"Bilinmeyen"}
-        }
-        "Europe:Kaliningrad"{
-            ec{"Kaliningrad"}
-        }
-        "Europe:Kiev"{
-            ec{"Kiev"}
         }
         "Europe:Lisbon"{
             ec{"Lizbon"}
@@ -2935,173 +2681,81 @@ tr{
         "Europe:Moscow"{
             ec{"Moskova"}
         }
-        "Europe:Samara"{
-            ec{"Samara"}
-        }
-        "Europe:Simferopol"{
-            ec{"Simferopol"}
-        }
         "Europe:Uzhgorod"{
             ec{"Ujgorod"}
-        }
-        "Europe:Volgograd"{
-            ec{"Volgograd"}
         }
         "Europe:Zaporozhye"{
             ec{"Zaporojye"}
         }
-        "Pacific:Chatham"{
-            ec{"Chatham"}
-        }
-        "Pacific:Easter"{
-            ec{"Easter"}
-        }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
-        "Pacific:Galapagos"{
-            ec{"Galapagos"}
-        }
-        "Pacific:Gambier"{
-            ec{"Gambier"}
-        }
-        "Pacific:Honolulu"{
-            ec{"Honolulu"}
-        }
-        "Pacific:Johnston"{
-            ec{"Johnston"}
-        }
-        "Pacific:Kiritimati"{
-            ec{"Kiritimati"}
-        }
-        "Pacific:Kosrae"{
-            ec{"Kosrae"}
-        }
-        "Pacific:Kwajalein"{
-            ec{"Kwajalein"}
-        }
-        "Pacific:Majuro"{
-            ec{"Majuro"}
-        }
         "Pacific:Marquesas"{
             ec{"Markiz"}
-        }
-        "Pacific:Midway"{
-            ec{"Midway"}
-        }
-        "Pacific:Ponape"{
-            ec{"Ponape"}
-        }
-        "Pacific:Tarawa"{
-            ec{"Tarawa"}
-        }
-        "Pacific:Truk"{
-            ec{"Truk"}
-        }
-        "Pacific:Wake"{
-            ec{"Wake"}
         }
         "meta:Acre"{
             ld{"Acre Yaz Saati"}
             ls{"Acre Saati"}
-            sd{"ACST (Acre)"}
-            ss{"ACT (Acre)"}
         }
         "meta:Afghanistan"{
             ls{"Afganistan Saati"}
-            ss{"AFT"}
         }
         "meta:Africa_Central"{
             ls{"Orta Afrika Saati"}
-            ss{"CAT"}
         }
         "meta:Africa_Eastern"{
             ls{"Doğu Afrika Saati"}
-            ss{"EAT"}
         }
         "meta:Africa_Southern"{
             lg{"Güney Afrika Saati"}
             ls{"Güney Afrika Standart Saati"}
-            sg{"SAT"}
-            ss{"SAST"}
         }
         "meta:Africa_Western"{
             ld{"Batı Afrika Yaz Saati"}
             ls{"Batı Afrika Saati"}
-            sd{"WAST"}
-            ss{"WAT"}
         }
         "meta:Aktyubinsk"{
             ld{"Aktyubinsk Yaz Saati"}
             ls{"Aktyubinsk Saati"}
-            sd{"AKTST"}
-            ss{"AKTT"}
         }
         "meta:Alaska"{
             ld{"Alaska Yaz Saati"}
             lg{"Alaska Saati"}
             ls{"Alaska Standart Saati"}
-            sd{"AKDT"}
-            sg{"AKT"}
-            ss{"AKST"}
         }
         "meta:Alaska_Hawaii"{
             ld{"Alaska-Hawaii Yaz Saati"}
             lg{"Alaska-Hawaii Saati"}
             ls{"Alaska-Hawaii Standart Saati"}
-            sd{"AHDT"}
-            sg{"AHT"}
-            ss{"AHST"}
         }
         "meta:Almaty"{
             ld{"Almatı Yaz Saati"}
             ls{"Almatı Saati"}
-            sd{"ALMST"}
-            ss{"ALMT"}
         }
         "meta:Amazon"{
             ld{"Amazon Yaz Saati"}
             ls{"Amazon Saati"}
-            sd{"AMST"}
-            ss{"AMT"}
         }
         "meta:America_Central"{
             ld{"Merkezi Yaz Saati"}
             lg{"Merkezi Saat"}
             ls{"Merkezi Standart Saati"}
-            sd{"CDT"}
-            sg{"CT"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"Doğu Yaz Saati"}
             lg{"Doğu Saati"}
             ls{"Doğu Standart Saati"}
-            sd{"EDT"}
-            sg{"ET"}
-            ss{"EST"}
         }
         "meta:America_Mountain"{
             ld{"ABD Sıradağlar Yaz Saati"}
             lg{"ABD Sıradağlar Saati"}
             ls{"ABD Sıradağlar Standart Saati"}
-            sd{"MDT"}
-            sg{"MT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             ld{"Pasifik Yaz Saati"}
             lg{"Pasifik Saati"}
             ls{"Pasifik Standart Saati"}
-            sd{"PDT"}
-            sg{"PT"}
-            ss{"PST"}
         }
         "meta:Anadyr"{
             ld{"Anadır Yaz Saati"}
             ls{"Anadır Saati"}
-            sd{"ANAST"}
-            ss{"ANAT"}
         }
         "meta:Aqtau"{
             ld{"Aktau Yaz Saati"}
@@ -3126,12 +2780,9 @@ tr{
         "meta:Argentina"{
             ld{"Arjantin Yaz Saati"}
             ls{"Arjantin Saati"}
-            sd{"ARST"}
-            ss{"ART"}
         }
         "meta:Argentina_Western"{
             ls{"Batı Arjantin Saati"}
-            ss{"WART"}
         }
         "meta:Armenia"{
             ld{"Ermenistan Yaz Saati"}
@@ -3142,130 +2793,87 @@ tr{
         "meta:Ashkhabad"{
             ld{"Aşkabat Yaz Saati"}
             ls{"Aşkabat Saati"}
-            sd{"ASHST"}
-            ss{"ASHT"}
         }
         "meta:Atlantic"{
             ld{"Atlantik Yaz Saati"}
             lg{"Atlantik Saati"}
             ls{"Atlantik Standart Saati"}
-            sd{"ADT"}
-            sg{"AT"}
-            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"Orta Avustralya Yaz Saati"}
             lg{"Orta Avustralya Saati"}
             ls{"Orta Avustralya Standart Saati"}
-            sd{"ACDT"}
-            sg{"ACT"}
-            ss{"ACST"}
         }
         "meta:Australia_CentralWestern"{
             ld{"Avustralya Batı Merkezi Yaz Saati"}
             lg{"Orta Batı Saati"}
             ls{"Batı Merkezi Standart Saati"}
-            sd{"ACWDT"}
-            sg{"CWT"}
-            ss{"CWST"}
         }
         "meta:Australia_Eastern"{
             ld{"Doğu Avustralya Yaz Saati"}
             lg{"Doğu Avustralya Saati"}
             ls{"Doğu Avustralya Standart Saati"}
-            sd{"AEDT"}
-            sg{"AET"}
-            ss{"AEST"}
         }
         "meta:Australia_Western"{
             ld{"Batı Avustralya Yaz Saati"}
             lg{"Batı Avustralya Saati"}
             ls{"Batı Avustralya Standart Saati"}
-            sd{"AWDT"}
-            sg{"AWT"}
-            ss{"AWST"}
         }
         "meta:Azerbaijan"{
             ld{"Azerbaycan Yaz Saati"}
             ls{"Azerbaycan Saati"}
-            sd{"AZST"}
-            ss{"AZT"}
         }
         "meta:Azores"{
             ld{"Azor Yaz Saati"}
             ls{"Azor Saati"}
-            sd{"AZOST"}
-            ss{"AZOT"}
         }
         "meta:Baku"{
             ld{"Bakü Yaz Saati"}
             ls{"Bakü Saati"}
-            sd{"BAKST"}
-            ss{"BAKT"}
         }
         "meta:Bangladesh"{
             ls{"Bangladeş Saati"}
-            ss{"BDT"}
         }
         "meta:Bering"{
             ld{"Bering Yaz Saati"}
             lg{"Bering Saati"}
             ls{"Bering Standart Saati"}
-            sd{"BDT (Bering)"}
-            sg{"BT (Bering)"}
-            ss{"BST (Bering)"}
         }
         "meta:Bhutan"{
             ls{"Bhutan Saati"}
-            ss{"BTT"}
         }
         "meta:Bolivia"{
             ls{"Bolivya Saati"}
-            ss{"BOT"}
         }
         "meta:Borneo"{
             ld{"Borneo Yaz Saati"}
             ls{"Borneo Saati"}
-            sd{"BORST"}
-            ss{"BORT"}
         }
         "meta:Brasilia"{
             ld{"Brasilia Yaz Saati"}
             ls{"Brasilia Saati"}
-            sd{"BRST"}
-            ss{"BRT"}
         }
         "meta:Brunei"{
             ls{"Brunei Saati"}
-            ss{"BNT"}
         }
         "meta:Cape_Verde"{
             ld{"Cape Verde Yaz Saati"}
             ls{"Cape Verde Saati"}
-            sd{"CVST"}
-            ss{"CVT"}
         }
         "meta:Chamorro"{
             lg{"Chamorro Saati"}
             ls{"Chamorro Standart Saati"}
-            sg{"ChT"}
-            ss{"ChST"}
         }
         "meta:Changbai"{
             ls{"Changbai Saati"}
-            ss{"CHAT"}
         }
         "meta:Chatham"{
             ld{"Chatham Yaz Saati"}
             ls{"Chatham Standart Saati"}
-            sd{"CHADT"}
-            ss{"CHAST"}
         }
         "meta:Chile"{
             ld{"Şili Yaz Saati"}
             ls{"Şili Saati"}
-            sd{"CLST"}
-            ss{"CLT"}
         }
         "meta:China"{
             ld{"Çin Yaz Saati"}
@@ -3278,28 +2886,20 @@ tr{
         "meta:Choibalsan"{
             ld{"Çoybalsan Yaz Saati"}
             ls{"Çoybalsan Saati"}
-            sd{"CHOST"}
-            ss{"CHOT"}
         }
         "meta:Christmas"{
             ls{"Christmas Adası Saati"}
-            ss{"CXT"}
         }
         "meta:Cocos"{
             ls{"Cocos Adaları Saati"}
-            ss{"CCT"}
         }
         "meta:Colombia"{
             ld{"Kolombiya Yaz Saati"}
             ls{"Kolombiya Saati"}
-            sd{"COST"}
-            ss{"COT"}
         }
         "meta:Cook"{
             ld{"Cook Adaları Yarı Yaz Saati"}
             ls{"Cook Adaları Saati"}
-            sd{"CKHST"}
-            ss{"CKT"}
         }
         "meta:Cuba"{
             ld{"Küba Yaz Saati"}
@@ -3310,123 +2910,87 @@ tr{
         }
         "meta:Dacca"{
             ls{"Dakka Saati"}
-            ss{"DACT"}
         }
         "meta:Davis"{
             ls{"Davis Saati"}
-            ss{"DAVT"}
         }
         "meta:DumontDUrville"{
             ls{"Dumont-d'Urville Saati"}
-            ss{"DDUT"}
         }
         "meta:Dushanbe"{
             ld{"Duşanbe Yaz Saati"}
             ls{"Duşanbe Saati"}
-            sd{"DUSST"}
-            ss{"DUST"}
         }
         "meta:Dutch_Guiana"{
             ls{"Hollanda Guyanası Saati"}
-            ss{"NEGT"}
         }
         "meta:East_Timor"{
             ls{"Doğu Timor Saati"}
-            ss{"TLT"}
         }
         "meta:Easter"{
             ld{"Easter Adası Yaz Saati"}
             ls{"Easter Adası Saati"}
-            sd{"EASST"}
-            ss{"EAST"}
         }
         "meta:Ecuador"{
             ls{"Ekvator Saati"}
-            ss{"ECT"}
         }
         "meta:Europe_Central"{
             ld{"Orta Avrupa Yaz Saati"}
             ls{"Orta Avrupa Saati"}
-            sd{"CEST"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Doğu Avrupa Yaz Saati"}
             ls{"Doğu Avrupa Saati"}
-            sd{"EEST"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Batı Avrupa Yaz Saati"}
             ls{"Batı Avrupa Saati"}
-            sd{"WEST"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Falkland Adaları Yaz Saati"}
             ls{"Falkland Adaları Saati"}
-            sd{"FKST"}
-            ss{"FKT"}
         }
         "meta:Fiji"{
             ld{"Fiji Yaz Saati"}
             ls{"Fiji Saati"}
-            sd{"FJST"}
-            ss{"FJT"}
         }
         "meta:French_Guiana"{
             ls{"Fransız Guyanası Saati"}
-            ss{"GFT"}
         }
         "meta:French_Southern"{
             ls{"Fransız Güney Bölgeleri Saati"}
-            ss{"TFT"}
         }
         "meta:Frunze"{
             ld{"Bişkek Yaz Saati"}
             ls{"Bişkek Saati"}
-            sd{"FRUST"}
-            ss{"FRUT"}
         }
         "meta:GMT"{
             ls{"Greenwich Merkez Saati"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Galapagos Saati"}
-            ss{"GALT"}
         }
         "meta:Gambier"{
             ls{"Gambier Saati"}
-            ss{"GAMT"}
         }
         "meta:Georgia"{
             ld{"Gürcistan Yaz Saati"}
             ls{"Gürcistan Saati"}
-            sd{"GEST"}
-            ss{"GET"}
         }
         "meta:Gilbert_Islands"{
             ls{"Gilbert Adaları Saati"}
-            ss{"GILT"}
         }
         "meta:Greenland_Central"{
             ld{"Orta Grönland Yaz Saati"}
             ls{"Orta Grönland Saati"}
-            sd{"CGST"}
-            ss{"CGT"}
         }
         "meta:Greenland_Eastern"{
             ld{"Doğu Grönland Yaz Saati"}
             ls{"Doğu Grönland Saati"}
-            sd{"EGST"}
-            ss{"EGT"}
         }
         "meta:Greenland_Western"{
             ld{"Batı Grönland Yaz Saati"}
             ls{"Batı Grönland Saati"}
-            sd{"WGST"}
-            ss{"WGT"}
         }
         "meta:Guam"{
             ls{"Guam Standart Saati"}
@@ -3435,354 +2999,251 @@ tr{
         "meta:Gulf"{
             lg{"Körfez Saati"}
             ls{"Gulf Standart Saati"}
-            sg{"GT"}
-            ss{"GST"}
         }
         "meta:Guyana"{
             ls{"Guyana Saati"}
-            ss{"GYT"}
         }
         "meta:Hawaii_Aleutian"{
             ls{"Hawaii-Aleutian Standart Saati"}
-            ss{"HST"}
         }
         "meta:Hong_Kong"{
             ld{"Hong Kong Yaz Saati"}
             ls{"Hong Kong Saati"}
-            sd{"HKST"}
-            ss{"HKT"}
         }
         "meta:Hovd"{
             ld{"Hovd Yaz Saati"}
             ls{"Hovd Saati"}
-            sd{"HOVST"}
-            ss{"HOVT"}
         }
         "meta:India"{
             ls{"Hindistan Standart Saati"}
-            ss{"IST"}
         }
         "meta:Indian_Ocean"{
             ls{"Hint Okyanusu Saati"}
-            ss{"IOT"}
         }
         "meta:Indochina"{
             ls{"Çinhindi Saati"}
-            ss{"ICT"}
         }
         "meta:Indonesia_Central"{
             ls{"Orta Endonezya Saati"}
-            ss{"CIT"}
         }
         "meta:Indonesia_Eastern"{
             ls{"Doğu Endonezya Saati"}
-            ss{"EIT"}
         }
         "meta:Indonesia_Western"{
             ls{"Batı Endonezya Saati"}
-            ss{"WIT"}
         }
         "meta:Iran"{
             ld{"İran Yaz Saati"}
             ls{"İran Standart Saati"}
-            sd{"IRDT"}
-            ss{"IRST"}
         }
         "meta:Irkutsk"{
             ld{"Irkutsk Yaz Saati"}
             ls{"Irkutsk Saati"}
-            sd{"IRKST"}
-            ss{"IRKT"}
         }
         "meta:Israel"{
             ld{"İsrail Yaz Saati"}
             lg{"İsrail Saati"}
             ls{"İsrail Standart Saati"}
-            sd{"IDT"}
             ss{"IST (İsrail)"}
         }
         "meta:Japan"{
             ld{"Japonya Yaz Saati"}
             lg{"Japonya Saati"}
             ls{"Japonya Standart Saati"}
-            sd{"JDT"}
-            ss{"JST"}
         }
         "meta:Kamchatka"{
             ld{"Petropavlovsk-Kamçatski Yaz Saati"}
             ls{"Petropavlovsk-Kamçatski Saati"}
-            sd{"PETST"}
-            ss{"PETT"}
         }
         "meta:Karachi"{
             ls{"Karaçi Saati"}
-            ss{"KART"}
         }
         "meta:Kashgar"{
             ls{"Kaşgar Saati"}
-            ss{"KAST"}
         }
         "meta:Kazakhstan_Eastern"{
             lg{"Doğu Kazakistan Saati"}
             ls{"Doğu Kazakistan Standart Saati"}
-            ss{"EKST"}
         }
         "meta:Kazakhstan_Western"{
             lg{"Batı Kazakistan Saati"}
             ls{"Batı Kazakistan Standart Saati"}
-            ss{"WKST"}
         }
         "meta:Kizilorda"{
             ld{"Kızılorda Yaz Saati"}
             ls{"Kızılorda Saati"}
-            sd{"KIZST"}
-            ss{"KIZT"}
         }
         "meta:Korea"{
             ld{"Kore Yaz Saati"}
             lg{"Kore Saati"}
             ls{"Kore Standart Saati"}
-            sd{"KDT"}
-            sg{"KT"}
-            ss{"KST"}
         }
         "meta:Kosrae"{
             ls{"Kosrae Saati"}
-            ss{"KOST"}
         }
         "meta:Krasnoyarsk"{
             ld{"Krasnoyarsk Yaz Saati"}
             ls{"Krasnoyarsk Saati"}
-            sd{"KRAST"}
-            ss{"KRAT"}
         }
         "meta:Kuybyshev"{
             ld{"Kuybişev Yaz Saati"}
             ls{"Kuybişev Saati"}
-            sd{"KUYST"}
-            ss{"KUYT"}
         }
         "meta:Kwajalein"{
             ls{"Kwajalein Saati"}
-            ss{"KWAT"}
         }
         "meta:Kyrgystan"{
             ls{"Kırgızistan Saati"}
-            ss{"KGT"}
         }
         "meta:Lanka"{
             ls{"Lanka Saati"}
-            ss{"LKT"}
         }
         "meta:Line_Islands"{
             ls{"Line Adaları Saati"}
-            ss{"LINT"}
         }
         "meta:Long_Shu"{
             ls{"Long-Shu Saati"}
-            ss{"LONT"}
         }
         "meta:Lord_Howe"{
             ld{"Lord Howe Yaz Saati"}
             lg{"Lord Howe Saati"}
             ls{"Lord Howe Standart Saati"}
-            sd{"LHDT"}
-            ss{"LHST"}
         }
         "meta:Macau"{
             ld{"Makao Yaz Saati"}
             ls{"Makao Saati"}
-            sd{"MOST"}
-            ss{"MOT"}
         }
         "meta:Magadan"{
             ld{"Magadan Yaz Saati"}
             ls{"Magadan Saati"}
-            sd{"MAGST"}
-            ss{"MAGT"}
         }
         "meta:Malaya"{
             ls{"Malaya Saati"}
-            ss{"MALT"}
         }
         "meta:Malaysia"{
             ls{"Malezya Saati"}
-            ss{"MYT"}
         }
         "meta:Maldives"{
             ls{"Maldivler Saati"}
-            ss{"MVT"}
         }
         "meta:Marquesas"{
             ls{"Markiz Saati"}
-            ss{"MART"}
         }
         "meta:Marshall_Islands"{
             ls{"Marshall Adaları Saati"}
-            ss{"MHT"}
         }
         "meta:Mauritius"{
             ls{"Mauritius Saati"}
-            ss{"MUT"}
         }
         "meta:Mawson"{
             ls{"Mawson Saati"}
-            ss{"MAWT"}
         }
         "meta:Mongolia"{
             ld{"Ulan Batur Yaz Saati"}
             ls{"Ulan Batur Saati"}
-            sd{"ULAST"}
-            ss{"ULAT"}
         }
         "meta:Moscow"{
             ld{"Moskova Yaz Saati"}
             lg{"Moskova Saati"}
             ls{"Moskova Standart Saati"}
-            sd{"MSKS"}
-            ss{"MSK"}
         }
         "meta:Myanmar"{
             ls{"Myanmar Saati"}
-            ss{"MMT"}
         }
         "meta:Nauru"{
             ls{"Nauru Saati"}
-            ss{"NRT"}
         }
         "meta:Nepal"{
             ls{"Nepal Saati"}
-            ss{"NPT"}
         }
         "meta:New_Caledonia"{
             ld{"Yeni Kaledonya Yaz Saati"}
             ls{"Yeni Kaledonya Saati"}
-            sd{"NCST"}
-            ss{"NCT"}
         }
         "meta:New_Zealand"{
             ld{"Yeni Zelanda Yaz Saati"}
             lg{"Yeni Zelanda Saati"}
             ls{"Yeni Zelanda Standart Saati"}
-            sd{"NZDT"}
-            sg{"NZT"}
-            ss{"NZST"}
         }
         "meta:Newfoundland"{
             ld{"Newfoundland Yaz Saati"}
             lg{"Newfoundland Saati"}
             ls{"Newfoundland Standart Saati"}
-            sd{"NDT"}
-            sg{"NT"}
-            ss{"NST"}
         }
         "meta:Niue"{
             ls{"Niue Saati"}
-            ss{"NUT"}
         }
         "meta:Norfolk"{
             ls{"Norfolk Adası Saati"}
-            ss{"NFT"}
         }
         "meta:Noronha"{
             ld{"Fernando de Noronha Yaz Saati"}
             ls{"Fernando de Noronha Saati"}
-            sd{"FNST"}
-            ss{"FNT"}
         }
         "meta:North_Mariana"{
             ls{"Kuzey Mariana Adaları Saati"}
-            ss{"MPT"}
         }
         "meta:Novosibirsk"{
             ld{"Novosibirsk Yaz Saati"}
             ls{"Novosibirsk Saati"}
-            sd{"NOVST"}
-            ss{"NOVT"}
         }
         "meta:Omsk"{
             ld{"Omsk Yaz Saati"}
             ls{"Omsk Saati"}
-            sd{"OMSST"}
-            ss{"OMST"}
         }
         "meta:Pakistan"{
             ld{"Pakistan Yaz Saati"}
             ls{"Pakistan Saati"}
-            sd{"PKST"}
-            ss{"PKT"}
         }
         "meta:Palau"{
             ls{"Palau Saati"}
-            ss{"PWT"}
         }
         "meta:Papua_New_Guinea"{
             ls{"Papua Yeni Gine Saati"}
-            ss{"PGT"}
         }
         "meta:Paraguay"{
             ld{"Paraguay Yaz Saati"}
             ls{"Paraguay Saati"}
-            sd{"PYST"}
-            ss{"PYT"}
         }
         "meta:Peru"{
             ld{"Peru Yaz Saati"}
             ls{"Peru Saati"}
-            sd{"PEST"}
-            ss{"PET"}
         }
         "meta:Philippines"{
             ld{"Filipinler Yaz Saati"}
             ls{"Filipinler Saati"}
-            sd{"PHST"}
-            ss{"PHT"}
         }
         "meta:Phoenix_Islands"{
             ls{"Phoenix Adaları Saati"}
-            ss{"PHOT"}
         }
         "meta:Pierre_Miquelon"{
             ld{"Pierre ve Miquelon Yaz Saati"}
             lg{"Pierre ve Miquelon Saati"}
             ls{"Pierre ve Miquelon Standart Saati"}
-            sd{"PMDT"}
-            sg{"PMT"}
-            ss{"PMST"}
         }
         "meta:Pitcairn"{
             ls{"Pitcairn Saati"}
-            ss{"PNT"}
         }
         "meta:Ponape"{
             ls{"Ponape Saati"}
-            ss{"PONT"}
         }
         "meta:Qyzylorda"{
             ld{"Kızılorda Yaz Saati"}
             ls{"Kızılorda Saati"}
-            sd{"QYZST"}
-            ss{"QYZT"}
         }
         "meta:Reunion"{
             ls{"Reunion Saati"}
-            ss{"RET"}
         }
         "meta:Rothera"{
             ls{"Rothera Saati"}
-            ss{"ROTT"}
         }
         "meta:Sakhalin"{
             ld{"Sakhalin Yaz Saati"}
             ls{"Sakhalin Saati"}
-            sd{"SAKST"}
-            ss{"SAKT"}
         }
         "meta:Samara"{
             ld{"Samara Yaz Saati"}
             ls{"Samara Saati"}
-            sd{"SAMST"}
-            ss{"SAMT"}
         }
         "meta:Samarkand"{
             ld{"Semerkand Yaz Saati"}
@@ -3792,25 +3253,19 @@ tr{
         }
         "meta:Samoa"{
             ls{"Samoa Standart Saati"}
-            ss{"SST"}
         }
         "meta:Seychelles"{
             ls{"Seyşeller Saati"}
-            ss{"SCT"}
         }
         "meta:Shevchenko"{
             ld{"Şevçenko Yaz Saati"}
             ls{"Şevçenko Saati"}
-            sd{"SHEST"}
-            ss{"SHET"}
         }
         "meta:Singapore"{
             ls{"Singapur Standart Saati"}
-            ss{"SGT"}
         }
         "meta:Solomon"{
             ls{"Solomon Adaları Saati"}
-            ss{"SBT"}
         }
         "meta:South_Georgia"{
             ls{"Güney Georgia Saati"}
@@ -3818,149 +3273,104 @@ tr{
         }
         "meta:Suriname"{
             ls{"Surinam Saati"}
-            ss{"SRT"}
         }
         "meta:Sverdlovsk"{
             ld{"Sverdlovsk Yaz Saati"}
             ls{"Sverdlovsk Saati"}
-            sd{"SVEST"}
-            ss{"SVET"}
         }
         "meta:Syowa"{
             ls{"Showa Saati"}
-            ss{"SYOT"}
         }
         "meta:Tahiti"{
             ls{"Tahiti Saati"}
-            ss{"TAHT"}
         }
         "meta:Tajikistan"{
             ls{"Tacikistan Saati"}
-            ss{"TJT"}
         }
         "meta:Tashkent"{
             ld{"Taşkent Yaz Saati"}
             ls{"Taşkent Saati"}
-            sd{"TASST"}
-            ss{"TAST"}
         }
         "meta:Tbilisi"{
             ld{"Tiflis Yaz Saati"}
             ls{"Tiflis Saati"}
-            sd{"TBIST"}
-            ss{"TBIT"}
         }
         "meta:Tokelau"{
             ls{"Tokelau Saati"}
-            ss{"TKT"}
         }
         "meta:Tonga"{
             ld{"Tonga Yaz Saati"}
             ls{"Tonga Saati"}
-            sd{"TOST"}
-            ss{"TOT"}
         }
         "meta:Truk"{
             ls{"Truk Saati"}
-            ss{"TRUT"}
         }
         "meta:Turkey"{
             ld{"Türkiye Yaz Saati"}
             ls{"Türkiye Saati"}
-            sd{"TRST"}
-            ss{"TRT"}
         }
         "meta:Turkmenistan"{
             ld{"Türkmenistan Yaz Saati"}
             ls{"Türkmenistan Saati"}
-            sd{"TMST"}
-            ss{"TMT"}
         }
         "meta:Tuvalu"{
             ls{"Tuvalu Saati"}
-            ss{"TVT"}
         }
         "meta:Uralsk"{
             ld{"Oral Yaz Saati"}
             ls{"Oral Saati"}
-            sd{"URAST"}
-            ss{"URAT"}
         }
         "meta:Uruguay"{
             ld{"Uruguay Yaz Saati"}
             ls{"Uruguay Saati"}
-            sd{"UYST"}
-            ss{"UYT"}
         }
         "meta:Urumqi"{
             ls{"Urumçi Saati"}
-            ss{"URUT"}
         }
         "meta:Uzbekistan"{
             ld{"Özbekistan Yaz Saati"}
             ls{"Özbekistan Saati"}
-            sd{"UZST"}
-            ss{"UZT"}
         }
         "meta:Vanuatu"{
             ld{"Vanuatu Yaz Saati"}
             ls{"Vanuatu Saati"}
-            sd{"VUST"}
-            ss{"VUT"}
         }
         "meta:Venezuela"{
             ls{"Venezuela Saati"}
-            ss{"VET"}
         }
         "meta:Vladivostok"{
             ld{"Vladivostok Yaz Saati"}
             ls{"Vladivostok Saati"}
-            sd{"VLAST"}
-            ss{"VLAT"}
         }
         "meta:Volgograd"{
             ld{"Volgograd Yaz Saati"}
             ls{"Volgograd Saati"}
-            sd{"VOLST"}
-            ss{"VOLT"}
         }
         "meta:Vostok"{
             ls{"Vostok Saati"}
-            ss{"VOST"}
         }
         "meta:Wake"{
             ls{"Wake Adası Saati"}
-            ss{"WAKT"}
         }
         "meta:Wallis"{
             ls{"Wallis ve Futuna Saati"}
-            ss{"WFT"}
         }
         "meta:Yakutsk"{
             ld{"Yakutsk Yaz Saati"}
             ls{"Yakutsk Saati"}
-            sd{"YAKST"}
-            ss{"YAKT"}
         }
         "meta:Yekaterinburg"{
             ld{"Yekaterinburg Yaz Saati"}
             ls{"Yekaterinburg Saati"}
-            sd{"YEKST"}
-            ss{"YEKT"}
         }
         "meta:Yerevan"{
             ld{"Erivan Yaz Saati"}
             ls{"Erivan Saati"}
-            sd{"YERST"}
-            ss{"YERT"}
         }
         "meta:Yukon"{
             ld{"Yukon Yaz Saati"}
             lg{"Yukon Saati"}
             ls{"Yukon Standart Saati"}
-            sd{"YDT"}
-            sg{"YT"}
-            ss{"YST"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

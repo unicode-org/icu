@@ -1049,7 +1049,8 @@ public:
                 messageLocale=                      Locale("de","DE@currency=DEM");
                 countryToCheck=                     Locale("","BF");
                 currencyToCheck=                    2.32;
-                expected=                           "1:A customer in Burkina Faso is receiving a #8 error - U_INDEX_OUTOFBOUNDS_ERROR. Their telephone call is costing 2,32 DM.";
+                expected=                           CharsToUnicodeString(
+                                                    "1:A customer in Burkina Faso is receiving a #8 error - U_INDEX_OUTOFBOUNDS_ERROR. Their telephone call is costing 2,32\\u00A0DM.");
                 break;
             case 2:
                 statusToCheck=                      U_MEMORY_ALLOCATION_ERROR;
@@ -1062,7 +1063,7 @@ public:
                 expected=       CharsToUnicodeString(
                             "2:user in Vereinigte Staaten is receiving a #7 error"
                             " - U_MEMORY_ALLOCATION_ERROR. They insist they just spent"
-                            " \\u00f6S 40.193,12 on memory.");
+                            " \\u00f6S\\u00A040.193,12 on memory.");
                 break;
             }
             

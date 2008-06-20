@@ -156,14 +156,18 @@
         <include locales="hy_AM"/>
         <include locales="hy_AM_REVISED"/>
         <include locales="id"/>        
-        <include locales="id_ID"/>
+        <include locales="id_ID"/>        
         <include locales="ii"/>        
         <include locales="ii_CN"/>
+        <include locales="in"/>        
+        <include locales="in_ID"/>
         <include locales="is"/> 
         <include locales="is_IS"/>
         <include locales="it"/> 
         <include locales="it_CH"/> 
         <include locales="it_IT"/>
+        <include locales="iw"/>
+        <include locales="iw_IL"/>
         <include locales="ja"/> 
         <include locales="ja_JP"/>
         <include locales="ka"/>
@@ -171,6 +175,8 @@
         <include locales="kok"/>
         <include locales="kok_IN"/>
         <include locales="kk"/>        
+        <include locales="kk_Cyrl"/>
+        <include locales="kk_Cyrl_KZ"/>
         <include locales="kk_KZ"/>
         <include locales="kl"/>
         <include locales="kl_GL"/>
@@ -208,6 +214,7 @@
         <include locales="nn"/>
         <include locales="nn_NO"/>
         <include locales="no"/> 
+        <include locales="no_NO"/> 
         <include locales="om"/>
         <include locales="om_ET"/>
         <include locales="om_KE"/>

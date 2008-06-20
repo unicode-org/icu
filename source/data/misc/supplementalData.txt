@@ -4658,6 +4658,7 @@ supplementalData:table(nofallback){
             }
             secondary{
                 territories{
+                    "IR",
                     "PK",
                 }
             }
@@ -4855,7 +4856,7 @@ supplementalData:table(nofallback){
             }
         }
         bku{
-            primary{
+            secondary{
                 scripts{
                     "Buhd",
                 }
@@ -4996,11 +4997,6 @@ supplementalData:table(nofallback){
                     "Ethi",
                 }
             }
-            secondary{
-                territories{
-                    "ER",
-                }
-            }
         }
         ca{
             primary{
@@ -5021,11 +5017,6 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Latn",
-                }
-            }
-            secondary{
-                territories{
-                    "NG",
                 }
             }
         }
@@ -5102,16 +5093,15 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
             }
-            secondary{
-                territories{
-                    "US",
-                }
-            }
         }
         cja{
-            secondary{
+            primary{
                 scripts{
                     "Cham",
+                }
+            }
+            secondary{
+                scripts{
                     "Deva",
                 }
             }
@@ -5155,9 +5145,6 @@ supplementalData:table(nofallback){
                     "Arab",
                     "Copt",
                     "Grek",
-                }
-                territories{
-                    "EG",
                 }
             }
         }
@@ -5412,7 +5399,7 @@ supplementalData:table(nofallback){
         emk{
             primary{
                 scripts{
-                    "Deva",
+                    "Nkoo",
                 }
             }
             secondary{
@@ -5527,11 +5514,6 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Latn",
-                }
-            }
-            secondary{
-                territories{
-                    "ZZ",
                 }
             }
         }
@@ -5789,11 +5771,6 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
             }
-            secondary{
-                territories{
-                    "IT",
-                }
-            }
         }
         fuv{
             secondary{
@@ -5844,6 +5821,11 @@ supplementalData:table(nofallback){
         gag{
             primary{
                 scripts{
+                    "Latn",
+                }
+            }
+            secondary{
+                scripts{
                     "Cyrl",
                 }
             }
@@ -5885,14 +5867,9 @@ supplementalData:table(nofallback){
             }
         }
         gez{
-            primary{
+            secondary{
                 scripts{
                     "Ethi",
-                }
-            }
-            secondary{
-                territories{
-                    "ER",
                 }
             }
         }
@@ -6026,11 +6003,6 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Latn",
-                }
-            }
-            secondary{
-                territories{
-                    "GB",
                 }
             }
         }
@@ -6264,9 +6236,6 @@ supplementalData:table(nofallback){
                 scripts{
                     "Latn",
                 }
-                territories{
-                    "ZZ",
-                }
             }
         }
         ibb{
@@ -6461,11 +6430,6 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
             }
-            secondary{
-                territories{
-                    "NG",
-                }
-            }
         }
         kam{
             primary{
@@ -6504,11 +6468,6 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
             }
-            secondary{
-                territories{
-                    "NG",
-                }
-            }
         }
         kdt{
             primary{
@@ -6521,11 +6480,6 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Latn",
-                }
-            }
-            secondary{
-                territories{
-                    "CI",
                 }
             }
         }
@@ -6544,6 +6498,11 @@ supplementalData:table(nofallback){
             }
         }
         kg{
+            primary{
+                scripts{
+                    "Latn",
+                }
+            }
             secondary{
                 territories{
                     "CD",
@@ -6742,12 +6701,6 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
             }
-            secondary{
-                territories{
-                    "LR",
-                    "GN",
-                }
-            }
         }
         kpv{
             primary{
@@ -6868,11 +6821,6 @@ supplementalData:table(nofallback){
                     "Latn",
                 }
             }
-            secondary{
-                territories{
-                    "GB",
-                }
-            }
         }
         kxm{
             secondary{
@@ -6956,7 +6904,7 @@ supplementalData:table(nofallback){
             }
         }
         lep{
-            secondary{
+            primary{
                 scripts{
                     "Lepc",
                 }
@@ -7323,6 +7271,7 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Cyrl",
+                    "Mong",
                 }
                 territories{
                     "MN",
@@ -7330,7 +7279,6 @@ supplementalData:table(nofallback){
             }
             secondary{
                 scripts{
-                    "Mong",
                     "Phag",
                 }
                 territories{
@@ -7446,12 +7394,6 @@ supplementalData:table(nofallback){
             }
         }
         muw{
-            primary{
-                scripts{
-                    "Beng",
-                    "Deva",
-                }
-            }
             secondary{
                 territories{
                     "IN",
@@ -7667,11 +7609,6 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Latn",
-                }
-            }
-            secondary{
-                territories{
-                    "ZA",
                 }
             }
         }
@@ -8235,18 +8172,6 @@ supplementalData:table(nofallback){
                 }
             }
         }
-        sh{
-            primary{
-                scripts{
-                    "Latn",
-                }
-                territories{
-                    "BA",
-                    "ME",
-                    "RS",
-                }
-            }
-        }
         shn{
             primary{
                 scripts{
@@ -8416,11 +8341,11 @@ supplementalData:table(nofallback){
                 }
                 territories{
                     "AL",
+                    "MK",
                 }
             }
             secondary{
                 territories{
-                    "MK",
                     "RS",
                 }
             }
@@ -8594,9 +8519,6 @@ supplementalData:table(nofallback){
                 scripts{
                     "Syrc",
                 }
-                territories{
-                    "SY",
-                }
             }
         }
         ta{
@@ -8729,12 +8651,6 @@ supplementalData:table(nofallback){
                     "Ethi",
                 }
             }
-            secondary{
-                territories{
-                    "ER",
-                    "SD",
-                }
-            }
         }
         tiv{
             primary{
@@ -8852,18 +8768,6 @@ supplementalData:table(nofallback){
             secondary{
                 scripts{
                     "Syrc",
-                }
-            }
-        }
-        trv{
-            primary{
-                scripts{
-                    "Latn",
-                }
-            }
-            secondary{
-                territories{
-                    "TW",
                 }
             }
         }
@@ -9019,17 +8923,18 @@ supplementalData:table(nofallback){
             }
         }
         ug{
-            secondary{
+            primary{
                 scripts{
                     "Arab",
+                }
+            }
+            secondary{
+                scripts{
                     "Cyrl",
                     "Latn",
                 }
                 territories{
-                    "AF",
                     "CN",
-                    "KZ",
-                    "MN",
                 }
             }
         }
@@ -9322,7 +9227,7 @@ supplementalData:table(nofallback){
         za{
             primary{
                 scripts{
-                    "Hani",
+                    "Hans",
                 }
             }
             secondary{
@@ -9427,7 +9332,6 @@ supplementalData:table(nofallback){
             "meta:America_Central_GT"{"America/Guatemala"}
             "meta:America_Central_HN"{"America/Tegucigalpa"}
             "meta:America_Central_MX"{"America/Mexico_City"}
-            "meta:America_Central_NI"{"America/Managua"}
             "meta:America_Central_SV"{"America/El_Salvador"}
             "meta:America_Eastern_001"{"America/New_York"}
             "meta:America_Eastern_BS"{"America/Nassau"}
@@ -9464,7 +9368,6 @@ supplementalData:table(nofallback){
             "meta:Atlantic_BB"{"America/Barbados"}
             "meta:Atlantic_BM"{"America/Bermuda"}
             "meta:Atlantic_DM"{"America/Dominica"}
-            "meta:Atlantic_DO"{"America/Santo_Domingo"}
             "meta:Atlantic_GD"{"America/Grenada"}
             "meta:Atlantic_GL"{"America/Thule"}
             "meta:Atlantic_GP"{"America/Guadaloupe"}
@@ -9723,7 +9626,7 @@ supplementalData:table(nofallback){
             "Cen. Australia Standard Time"{"Australia/Adelaide"}
             "Central America Standard Time"{"America/Guatemala"}
             "Central Asia Standard Time"{"Asia/Dhaka"}
-            "Central Brazilian Standard Time"{"Etc/GMT+4"}
+            "Central Brazilian Standard Time"{"America/Manaus"}
             "Central Europe Standard Time"{"Europe/Budapest"}
             "Central European Standard Time"{"Europe/Warsaw"}
             "Central Pacific Standard Time"{"Pacific/Guadalcanal"}

@@ -8,12 +8,4 @@
 // ***************************************************************************
 af_ZA{
     Version{"1.48"}
-    calendar{
-        gregorian{
-            DateTimeElements:intvector{
-                1,
-                1,
-            }
-        }
-    }
 }

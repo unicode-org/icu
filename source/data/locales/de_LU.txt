@@ -15,7 +15,7 @@ de_LU{
                 /**
                  * Duplicated from NumberPatterns resource
                  */
-                "#,##0.00 ¤",
+                "#,##0.00 ¤",
                 ".",
                 ",",
             }

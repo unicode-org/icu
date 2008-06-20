@@ -9,11 +9,11 @@
 sr_Latn_ME{
     NumberPatterns{
         "#,##0.###",
-        "¤ #,##0.00",
+        "¤ #,##0.00",
         "#,##0%",
         "#E0",
     }
-    Version{"1.16"}
+    Version{"1.18"}
     calendar{
         gregorian{
             DateTimePatterns{

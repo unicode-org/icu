@@ -773,6 +773,9 @@ fa{
             "دلار زیمبابوه",
         }
     }
+    CurrencyUnitPatterns{
+        other{"{0} {1}"}
+    }
     ExemplarCharacters{"[َ ِ ُ ً ٍ ٌ ّ ْ ٔ آ ا ء أ ؤ ئ ب پ ت-ج چ ح-ز ژ س-غ ف ق ک گ ل-ن و ه ة ی]"}
     Keys{
         calendar{"تقویم"}
@@ -1305,7 +1308,7 @@ fa{
     }
     NumberPatterns{
         "#,##0.###;'‪'-#,##0.###'‬'",
-        "#,##0.00 ¤;'‪'-#,##0.00'‬' ¤",
+        "#,##0.00 ¤;'‪'-#,##0.00'‬' ¤",
         "'‪'%#,##0'‬'",
         "#E0",
     }
@@ -1453,8 +1456,6 @@ fa{
             direct{"ترتیب مستقیم"}
             gb2312han{"ترتیب چینی ساده‌شده GB2312"}
             phonebook{"ترتیب دفتر تلفن"}
-            pinyin{"pinyin"}
-            stroke{"stroke"}
             traditional{"ترتیب سنتی"}
         }
     }
@@ -1466,7 +1467,7 @@ fa{
         REVISED{"رسم‌الخط تجدیدنظرشده"}
         SCOTLAND{"انگلیسی معیار اسکاتلند"}
     }
-    Version{"1.87"}
+    Version{"1.92"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1597,6 +1598,90 @@ fa{
                 }
                 zone{
                     dn{"منطقهٔ زمانی"}
+                }
+            }
+            intervalFormats{
+                M{
+                    M{"M تا M"}
+                }
+                MEd{
+                    M{"E M/d تا E M/d"}
+                    d{"E M/d تا E M/d"}
+                }
+                MMM{
+                    M{"LLL تا LLL"}
+                }
+                MMMEd{
+                    M{"E d LLL تا E d LLL"}
+                    d{"E d LLL تا E d LLL"}
+                }
+                MMMM{
+                    M{"LLLL تا LLLL"}
+                }
+                MMMd{
+                    M{"d LLL تا d LLL"}
+                    d{"d تا d LLL"}
+                }
+                Md{
+                    M{"M/d تا M/d"}
+                    d{"d تا M/d"}
+                }
+                d{
+                    d{"d تا d"}
+                }
+                fallback{"{0} تا {1}"}
+                h{
+                    a{"H تا H"}
+                    h{"H تا H"}
+                }
+                hm{
+                    a{"H:mm تا H:mm"}
+                    h{"H:mm تا H:mm"}
+                    m{"H:mm تا H:mm"}
+                }
+                hmv{
+                    a{"H:mm تا H:mm (v)"}
+                    h{"H:mm تا H:mm (v)"}
+                    m{"H:mm تا H:mm (v)"}
+                }
+                hv{
+                    a{"H تا H (v)"}
+                    h{"H تا H (v)"}
+                }
+                y{
+                    y{"yyyy تا yyyy"}
+                }
+                yM{
+                    M{"yyyy/M تا yyyy/M"}
+                    y{"yyyy/M تا yyyy/M"}
+                }
+                yMEd{
+                    M{"E yyyy/M/d تا E yyyy/M/d"}
+                    d{"E yyyy/M/d تا E yyyy/M/d"}
+                    y{"E yyyy/M/d تا E yyyy/M/d"}
+                }
+                yMMM{
+                    M{"LLL تا MMM yyyy"}
+                    y{"MMM yyyy تا MMM yyyy"}
+                }
+                yMMMEd{
+                    M{"E d LLL تا E d MMM yyyy"}
+                    d{"E d LLL تا E d MMM yyyy"}
+                    y{"E d MMM yyyy تا E d MMM yyyy"}
+                }
+                yMMMM{
+                    M{"LLLL تا MMMM yyyy"}
+                    y{"MMMM yyyy تا MMMM yyyy"}
+                }
+                yMMMd{
+                    M{"d LLL تا d MMM yyyy"}
+                    d{"d تا d MMM yyyy"}
+                    y{"d MMM yyyy تا d MMM yyyy"}
+                }
+                yMd{
+                    M{"yyyy/M/d تا yyyy/M/d"}
+                    d{"yyyy/M/d تا yyyy/M/d"}
+                    y{"yyyy/M/d تا yyyy/M/d"}
                 }
             }
             monthNames{
@@ -1939,6 +2024,11 @@ fa{
             }
         }
     }
+    codePatterns{
+        language{"زبان: {0}"}
+        script{"خط: {0}"}
+        territory{"ناحیه: {0}"}
+    }
     delimiters{
         alternateQuotationEnd{"›"}
         alternateQuotationStart{"‹"}
@@ -1949,9 +2039,36 @@ fa{
         characters{"right-to-left"}
         lines{"top-to-bottom"}
     }
+    localeDisplayPattern{
+        pattern{"{0} ({1})"}
+        separator{"، "}
+    }
     measurementSystemNames{
         US{"امریکایی"}
         metric{"متریک"}
+    }
+    units{
+        day{
+            other{"{0} روز"}
+        }
+        hour{
+            other{"{0} ساعت"}
+        }
+        minute{
+            other{"{0} دقیقه"}
+        }
+        month{
+            other{"{0} ماه"}
+        }
+        second{
+            other{"{0} ثانیه"}
+        }
+        week{
+            other{"{0} هفته"}
+        }
+        year{
+            other{"{0} سال"}
+        }
     }
     zoneStrings{
         "Africa:Ceuta"{
@@ -2507,7 +2624,6 @@ fa{
             cu:int{0}
             ld{"وقت تابستانی افغانستان"}
             lg{"وقت افغانستان"}
-            ss{"AFT"}
         }
         "meta:Africa_Central"{
             ls{"وقت مرکز افریقا"}
@@ -2760,9 +2876,6 @@ fa{
             ld{"وقت تابستانی ایران"}
             lg{"وقت ایران"}
             ls{"وقت عادی ایران"}
-            sd{"IRDT"}
-            sg{"IRT"}
-            ss{"IRST"}
         }
         "meta:Irkutsk"{
             ld{"وقت تابستانی ایرکوتسک"}

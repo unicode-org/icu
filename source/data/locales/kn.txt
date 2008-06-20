@@ -77,7 +77,7 @@ kn{
     }
     NumberPatterns{
         "#,##,##0.###",
-        "¤ #,##,##0.00",
+        "¤ #,##,##0.00",
         "#,##,##0%",
         "#E0",
     }
@@ -163,7 +163,7 @@ kn{
         Zyyy{"ಸಾಮಾನ್ಯ"}
         Zzzz{"ಅಜ್ಞಾತ ಅಥವ ಅಮಾನ್ಯವಾದ ಲಿಪಿ"}
     }
-    Version{"1.59"}
+    Version{"1.60"}
     calendar{
         gregorian{
             AmPmMarkers{
