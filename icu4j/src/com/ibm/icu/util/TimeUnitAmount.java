@@ -10,7 +10,7 @@ package com.ibm.icu.util;
  * Express a duration as a time unit and number. Patterned after Currency.
  * <p>Immutable.
  * @see TimeUnitAmount
- * @see TimeUnitFormat
+ * @see com.ibm.icu.text.TimeUnitFormat
  * @author markdavis
  * @draft ICU 4.0
  * @provisional This API might change or be removed in a future release.
