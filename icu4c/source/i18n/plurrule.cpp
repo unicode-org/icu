@@ -59,10 +59,13 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralRules)
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralKeywordEnumeration)
 
 PluralRules::PluralRules(UErrorCode& status)
-:
+:   UObject(),
     mRules(NULL),
     mParser(new RuleParser())
 {
+    if (mParser==NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
 }
 
 PluralRules::PluralRules(const PluralRules& other)
