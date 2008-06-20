@@ -1,7 +1,7 @@
 # Doxyfile 1.3.7
 #  ********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2004-2007, International Business Machines Corporation
+#  * Copyright (c) 2004-2008, International Business Machines Corporation
 #  * and others. All Rights Reserved.
 #  ********************************************************************
 
@@ -35,7 +35,7 @@ ALIASES                = "memo=\par Note:\n" \
                          "deprecated=\xrefitem deprecated \"Deprecated\" \"Deprecated List\"" \
                          "obsolete=\xrefitem obsolete \"Obsolete\" \"Obsolete List\"" \
                          "system=\xrefitem system \"System\" \"System List\" \n Do not use unless you know what you are doing." \
-                         "internal=\xrefitem internal \"Internal\"  \"Internal List\"  Do not use. This API is for interal use only." 
+                         "internal=\xrefitem internal \"Internal\"  \"Internal List\"  Do not use. This API is for internal use only." 
 
 OPTIMIZE_OUTPUT_FOR_C  = YES
 OPTIMIZE_OUTPUT_JAVA   = NO

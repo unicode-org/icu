@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2007, International Business Machines Corporation and others.
+* Copyright (C) 1997-2008, International Business Machines Corporation and others.
 * All Rights Reserved.
 * Modification History:
 *
@@ -95,9 +95,9 @@
  *    num = unum_parse(nf, str, u_strlen(str), &pos, &status);
  * \endcode
  * </pre>
- * Use UCAL_DECIMAL to get the normal number format for that country.
- * There are other static options available.  Use UCAL_CURRENCY
- * to get the currency number format for that country.  Use UCAL_PERCENT
+ * Use UNUM_DECIMAL to get the normal number format for that country.
+ * There are other static options available.  Use UNUM_CURRENCY
+ * to get the currency number format for that country.  Use UNUM_PERCENT
  * to get a format for displaying percentages. With this format, a
  * fraction from 0.53 is displayed as 53%.
  * <P>
