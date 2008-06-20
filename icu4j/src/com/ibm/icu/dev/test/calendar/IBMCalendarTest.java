@@ -41,7 +41,7 @@ public class IBMCalendarTest extends CalendarTest {
 
         // NOTE
         // This test tests for specific locale data.  This is probably okay
-        // as far as US data is concerned, but if the Arabic/Bahrain data
+        // as far as US data is concerned, but if the Arabic/Yemen data
         // changes, this test will have to be updated.
 
         // Test specific days
@@ -56,7 +56,7 @@ public class IBMCalendarTest extends CalendarTest {
                 2000, Calendar.MARCH, 20,  0,  0, 0, // Mon 00:00
                 2000, Calendar.MARCH, 20,  8,  0, 0, // Mon 08:00
             },
-            new Locale("ar", "BH"), new int[] { // Thursday:Friday
+            new Locale("ar", "YE"), new int[] { // Thursday:Friday
                 2000, Calendar.MARCH, 15, 23,  0, 0, // Wed 23:00
                 2000, Calendar.MARCH, 16,  0, -1, 0, // Wed 23:59:59.999
                 2000, Calendar.MARCH, 16,  0,  0, 1, // Thu 00:00
@@ -76,7 +76,7 @@ public class IBMCalendarTest extends CalendarTest {
                 Calendar.SATURDAY, Calendar.WEEKEND,
                 Calendar.SUNDAY,   Calendar.WEEKEND_CEASE,
             },
-            new Locale("ar", "BH"), new int[] { // Thursday:Friday
+            new Locale("ar", "YE"), new int[] { // Thursday:Friday
                 Calendar.WEDNESDAY,Calendar.WEEKDAY,
                 Calendar.SATURDAY, Calendar.WEEKDAY,
                 Calendar.THURSDAY, Calendar.WEEKEND,

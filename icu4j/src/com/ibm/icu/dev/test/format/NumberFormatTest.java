@@ -243,11 +243,11 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      */
     public void TestCurrency() {
         String[] DATA = {
-            "fr", "CA", "", "1,50 $",
-            "de", "DE", "", "1,50 \u20AC",
-            "de", "DE", "PREEURO", "1,50 DM",
-            "fr", "FR", "", "1,50 \u20AC",
-            "fr", "FR", "PREEURO", "1,50 F",
+            "fr", "CA", "", "1,50\u00a0$",
+            "de", "DE", "", "1,50\u00a0\u20AC",
+            "de", "DE", "PREEURO", "1,50\u00a0DM",
+            "fr", "FR", "", "1,50\u00a0\u20AC",
+            "fr", "FR", "PREEURO", "1,50\u00a0F",
         };
 
         for (int i=0; i<DATA.length; i+=4) {
@@ -955,12 +955,12 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         Locale loc = new Locale("kn", "IN", "");
         NumberFormat fmt = NumberFormat.getCurrencyInstance(loc);
 
-        expect2(fmt, 1.0, "Re. 1.00");
-        expect(fmt, 1.001, "Re. 1.00"); // tricky
-        expect2(fmt, 12345678.0, "Rs. 1,23,45,678.00");
-        expect2(fmt, 0.5, "Rs. 0.50");
-        expect2(fmt, -1.0, "-Re. 1.00");
-        expect2(fmt, -10.0, "-Rs. 10.00");
+        expect2(fmt, 1.0, "Re.\u00a01.00");
+        expect(fmt, 1.001, "Re.\u00a01.00"); // tricky
+        expect2(fmt, 12345678.0, "Rs.\u00a01,23,45,678.00");
+        expect2(fmt, 0.5, "Rs.\u00a00.50");
+        expect2(fmt, -1.0, "-Re.\u00a01.00");
+        expect2(fmt, -10.0, "-Rs.\u00a010.00");
     }
 
     public void TestCurrencyKeyword() {
@@ -1562,7 +1562,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         CurrencyAmount cAmt = new CurrencyAmount(1150.50, curr);
         logln("CurrencyAmount object's hashCode is: " + cAmt.hashCode()); //cover hashCode
         String str = format.format(cAmt);
-        String expected = "1,150$50 Esc.";
+        String expected = "1,150$50\u00a0Esc.";
         if(!expected.equals(str)){
             errln("Did not get the expected output Expected: "+expected+" Got: "+ str);
         }
