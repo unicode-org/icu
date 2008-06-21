@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -48,15 +48,19 @@ public class PluralFormatTest extends TestFmwk {
     */
     log("test pattern: '" + testPattern + "'");
     for (int i = 0; i < locales.length; ++i) {
-      PluralFormat plf = new PluralFormat(new ULocale(locales[i]), testPattern);
-      log("plf: " + plf);
-      String expected = (String) changes.get(new Integer(0));
-      for (int n = 0; n < 200; ++n) {
-        if (changes.get(new Integer(n)) != null) {
-          expected = (String) changes.get(new Integer(n));
+      try {
+        PluralFormat plf = new PluralFormat(new ULocale(locales[i]), testPattern);
+        log("plf: " + plf);
+        String expected = (String) changes.get(new Integer(0));
+        for (int n = 0; n < 200; ++n) {
+          if (changes.get(new Integer(n)) != null) {
+            expected = (String) changes.get(new Integer(n));
+          }
+          assertEquals("Locale: " + locales[i] + ", number: " + n,
+                       expected, plf.format(n));
         }
-        assertEquals("Locale: " + locales[i] + ", number: " + n,
-                     expected, plf.format(n));
+      } catch (IllegalArgumentException e) {
+        errln(e.getMessage() + " locale: " + locales[i] + " pattern: '" + testPattern + "' " + System.currentTimeMillis());
       }
     }
   }
@@ -70,7 +74,7 @@ public class PluralFormatTest extends TestFmwk {
   }
   
   public void TestSingular1Locales() {
-    String localeIDs = "da,de,el,en,eo,es,et,fi,fo,he,hu,it,nb,nl,nn,no,pt,sv";
+    String localeIDs = "da,de,el,en,eo,es,et,fi,fo,he,it,nb,nl,nn,no,pt_PT,sv";
     String testPattern = "one{one} other{other}";
     Map changes = new HashMap();
     changes.put(new Integer(0), "other");
@@ -118,13 +122,13 @@ public class PluralFormatTest extends TestFmwk {
   
   public void TestSingularZeroSome() {
       String localeIDs = "ro";
-      String testPattern = "zero{zero} one{one} other{other}";
+      String testPattern = "few{few} one{one} other{other}";
       Map changes = new HashMap();
-      changes.put(new Integer(0), "zero");
+      changes.put(new Integer(0), "few");
       changes.put(new Integer(1), "one");
-      changes.put(new Integer(2), "zero");
+      changes.put(new Integer(2), "few");
       changes.put(new Integer(20), "other");
-      changes.put(new Integer(101), "zero");
+      changes.put(new Integer(101), "few");
       changes.put(new Integer(120), "other");
       helperTestRules(localeIDs, testPattern, changes);
   }
@@ -187,7 +191,7 @@ public class PluralFormatTest extends TestFmwk {
       changes.put(new Integer(2), "few");
       changes.put(new Integer(5), "other");
       for (int i = 2; i < 20; ++i) {
-        if (i == 11) {
+        if (i == 2 || i == 11 || i == 12) {
           continue;
         }
         changes.put(new Integer(i*10 + 2), "few");

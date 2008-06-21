@@ -9,6 +9,7 @@ package com.ibm.icu.dev.test.format;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.PluralRules;
+import com.ibm.icu.util.ULocale;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -130,5 +131,23 @@ public class PluralRulesTest extends TestFmwk {
             }
             compareEquality(rules);
         }
+    }
+
+    public void testBuiltInRules() {
+        // spot check
+        PluralRules rules = PluralRules.forLocale(ULocale.US);
+        assertEquals("us 0", PluralRules.KEYWORD_OTHER, rules.select(0));
+        assertEquals("us 1", PluralRules.KEYWORD_ONE, rules.select(1));
+        assertEquals("us 2", PluralRules.KEYWORD_OTHER, rules.select(2));
+
+        rules = PluralRules.forLocale(ULocale.JAPAN);
+        assertEquals("ja 0", PluralRules.KEYWORD_OTHER, rules.select(0));
+        assertEquals("ja 1", PluralRules.KEYWORD_OTHER, rules.select(1));
+        assertEquals("ja 2", PluralRules.KEYWORD_OTHER, rules.select(2));
+
+        rules = PluralRules.forLocale(ULocale.createCanonical("ru"));
+        assertEquals("ru 0", PluralRules.KEYWORD_MANY, rules.select(0));
+        assertEquals("ru 1", PluralRules.KEYWORD_ONE, rules.select(1));
+        assertEquals("ru 2", PluralRules.KEYWORD_FEW, rules.select(2));
     }
 }
