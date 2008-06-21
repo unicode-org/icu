@@ -7,17 +7,16 @@
 
 package com.ibm.icu.text;
 
-import com.ibm.icu.util.ULocale;
+import com.ibm.icu.impl.PluralRulesLoader;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.util.ULocale;
 
 import java.io.Serializable;
 
 import java.text.ParseException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 
 /** 
@@ -77,8 +76,6 @@ import java.util.Set;
  */
 public class PluralRules implements Serializable {
     private static final long serialVersionUID = 1;
-
-    private static final Map ruleMap; // from locale string to PluralRules
 
     private final RuleList rules;
     private final Set keywords;
@@ -274,46 +271,6 @@ public class PluralRules implements Serializable {
 
         /** Return the value at which this rulelist starts repeating. */
         int getRepeatLimit();
-    }
-
-    // default data
-    static {
-        String[] ruledata = {
-          "other: n/ja,ko,tr,vi",  // not strictly necessary, default for all
-          "zero: n is 0; one: n is 1; two: n is 2; few: n in 3..10; " +
-          "many: n in 11..99/ar",
-            "one: n is 1/da,de,el,en,eo,es,et,fi,fo,he,hu,it,nb,nl,nn,no,pt,sv",
-            "one: n in 0..1/fr,pt_BR",
-            "zero: n is 0; one: n mod 10 is 1 and n mod 100 is not 11/lv",
-            "one: n is 1; two: n is 2/ga",
-            "zero: n is 0; one: n is 1; zero: n mod 100 in 1..19/ro",
-            "other: n mod 100 in 11..19; one: n mod 10 is 1; " + 
-                "few: n mod 10 in 2..9/lt",
-            "one: n mod 10 is 1 and n mod 100 is not 11; " +
-                "few: n mod 10 in 2..4 " +
-                "and n mod 100 not in 12..14/hr,ru,sr,uk",
-            "one: n is 1; few: n in 2..4/cs,sk",
-            "one: n is 1; few: n mod 10 in 2..4 and n mod 100 not in 12..14/pl",
-            "one: n mod 100 is 1; two: n mod 100 is 2; " +
-                "few: n mod 100 in 3..4/sl",
-        };
-
-        HashMap map = new HashMap();
-        for (int i = 0; i < ruledata.length; ++i) {
-            String[] data = Utility.split(ruledata[i], '/');
-            try {
-              PluralRules pluralRules = parseDescription(data[0]);
-              String[] locales = Utility.split(data[1], ',');
-              for (int j = 0; j < locales.length; ++j) {
-                map.put(locales[j].trim(), pluralRules);
-              }
-            } catch (Exception e) {
-              System.err.println("PluralRules init failure, " + 
-                                 e.getMessage() + " at line " + i);
-            }
-        }
-           
-        ruleMap = map;
     }
 
     /**
@@ -724,14 +681,7 @@ public class PluralRules implements Serializable {
      * @provisional This API might change or be removed in a future release.
      */
     public static PluralRules forLocale(ULocale locale) {
-        PluralRules result = null;
-        while (null == (result = (PluralRules) ruleMap.get(locale.getName()))) {
-            locale = locale.getFallback();
-            if (locale == null) {
-              return DEFAULT;
-            }
-        }
-        return result;
+      return PluralRulesLoader.loader.forLocale(locale);
     }
 
     /**
@@ -846,4 +796,4 @@ public class PluralRules implements Serializable {
       }
       return repeatLimit;
     }
-}
+ }
