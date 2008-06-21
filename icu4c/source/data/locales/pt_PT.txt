@@ -305,7 +305,7 @@ pt_PT{
         POLYTON{"politónico"}
         SOLBA{"dialecto stolvizza/solbica"}
     }
-    Version{"1.74"}
+    Version{"1.75"}
     calendar{
         buddhist{
             DateTimePatterns{
