@@ -3188,7 +3188,7 @@ en{
         VALENCIA{"Valencian"}
         XIANG{"Xiang or Hunanese"}
     }
-    Version{"1.195"}
+    Version{"1.196"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -3550,6 +3550,7 @@ en{
         "meta:Africa_Southern"{
             lg{"South Africa Time"}
             ls{"South Africa Standard Time"}
+            sg{"SAT"}
         }
         "meta:Africa_Western"{
             ld{"West Africa Summer Time"}
@@ -3564,11 +3565,13 @@ en{
             ld{"Alaska Daylight Time"}
             lg{"Alaska Time"}
             ls{"Alaska Standard Time"}
+            sg{"AKT"}
         }
         "meta:Alaska_Hawaii"{
             ld{"Alaska-Hawaii Daylight Time"}
             lg{"Alaska-Hawaii Time"}
             ls{"Alaska-Hawaii Standard Time"}
+            sg{"AHT"}
         }
         "meta:Almaty"{
             ld{"Almaty Summer Time"}
@@ -3583,24 +3586,28 @@ en{
             ld{"Central Daylight Time"}
             lg{"Central Time"}
             ls{"Central Standard Time"}
+            sg{"CT"}
         }
         "meta:America_Eastern"{
             cu:int{1}
             ld{"Eastern Daylight Time"}
             lg{"Eastern Time"}
             ls{"Eastern Standard Time"}
+            sg{"ET"}
         }
         "meta:America_Mountain"{
             cu:int{1}
             ld{"Mountain Daylight Time"}
             lg{"Mountain Time"}
             ls{"Mountain Standard Time"}
+            sg{"MT"}
         }
         "meta:America_Pacific"{
             cu:int{1}
             ld{"Pacific Daylight Time"}
             lg{"Pacific Time"}
             ls{"Pacific Standard Time"}
+            sg{"PT"}
         }
         "meta:Anadyr"{
             ld{"Anadyr Summer Time"}
@@ -3618,6 +3625,9 @@ en{
             ld{"Arabian Daylight Time"}
             lg{"Arabian Time"}
             ls{"Arabian Standard Time"}
+            sd{"ADT (Arabian)"}
+            sg{"AT (Arabian)"}
+            ss{"AST (Arabian)"}
         }
         "meta:Argentina"{
             ld{"Argentina Summer Time"}
@@ -3641,26 +3651,31 @@ en{
             ld{"Atlantic Daylight Time"}
             lg{"Atlantic Time"}
             ls{"Atlantic Standard Time"}
+            sg{"AT"}
         }
         "meta:Australia_Central"{
             ld{"Australian Central Daylight Time"}
             lg{"Central Australia Time"}
             ls{"Australian Central Standard Time"}
+            sg{"ACT"}
         }
         "meta:Australia_CentralWestern"{
             ld{"Australian Central Western Daylight Time"}
             lg{"Australian Central Western Time"}
             ls{"Australian Central Western Standard Time"}
+            sg{"ACWT"}
         }
         "meta:Australia_Eastern"{
             ld{"Australian Eastern Daylight Time"}
             lg{"Eastern Australia Time"}
             ls{"Australian Eastern Standard Time"}
+            sg{"AET"}
         }
         "meta:Australia_Western"{
             ld{"Australian Western Daylight Time"}
             lg{"Western Australia Time"}
             ls{"Australian Western Standard Time"}
+            sg{"AWT"}
         }
         "meta:Azerbaijan"{
             ld{"Azerbaijan Summer Time"}
@@ -3681,6 +3696,7 @@ en{
             ld{"Bering Daylight Time"}
             lg{"Bering Time"}
             ls{"Bering Standard Time"}
+            sg{"BT (Bering)"}
         }
         "meta:Bhutan"{
             ls{"Bhutan Time"}
@@ -3706,6 +3722,7 @@ en{
         "meta:Chamorro"{
             lg{"Chamorro Time"}
             ls{"Chamorro Standard Time"}
+            sg{"ChT"}
         }
         "meta:Changbai"{
             ls{"Changbai Time"}
@@ -3843,6 +3860,7 @@ en{
         "meta:Gulf"{
             lg{"Gulf Time"}
             ls{"Gulf Standard Time"}
+            sg{"GT"}
         }
         "meta:Guyana"{
             ls{"Guyana Time"}
@@ -3895,6 +3913,7 @@ en{
             ld{"Japan Daylight Time"}
             lg{"Japan Time"}
             ls{"Japan Standard Time"}
+            sg{"JT"}
         }
         "meta:Kamchatka"{
             ld{"Petropavlovsk-Kamchatski Summer Time"}
@@ -3922,6 +3941,7 @@ en{
             ld{"Korean Daylight Time"}
             lg{"Korean Time"}
             ls{"Korean Standard Time"}
+            sg{"KT"}
         }
         "meta:Kosrae"{
             ls{"Kosrae Time"}
@@ -3953,6 +3973,7 @@ en{
             ld{"Lord Howe Daylight Time"}
             lg{"Lord Howe Time"}
             ls{"Lord Howe Standard Time"}
+            sg{"LHT"}
         }
         "meta:Macau"{
             ld{"Macau Summer Time"}
@@ -4009,11 +4030,13 @@ en{
             ld{"New Zealand Daylight Time"}
             lg{"New Zealand Time"}
             ls{"New Zealand Standard Time"}
+            sg{"NZT"}
         }
         "meta:Newfoundland"{
             ld{"Newfoundland Daylight Time"}
             lg{"Newfoundland Time"}
             ls{"Newfoundland Standard Time"}
+            sg{"NT"}
         }
         "meta:Niue"{
             ls{"Niue Time"}
@@ -4065,6 +4088,7 @@ en{
             ld{"Pierre and Miquelon Daylight Time"}
             lg{"Pierre and Miquelon Time"}
             ls{"Pierre and Miquelon Standard Time"}
+            sg{"PMT"}
         }
         "meta:Pitcairn"{
             ls{"Pitcairn Time"}
@@ -4214,6 +4238,7 @@ en{
             ld{"Yukon Daylight Time"}
             lg{"Yukon Time"}
             ls{"Yukon Standard Time"}
+            sg{"YT"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

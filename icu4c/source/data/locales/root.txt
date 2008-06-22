@@ -73,7 +73,7 @@ root{
         297,
         210,
     }
-    Version{"1.160"}
+    Version{"1.161"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -1452,7 +1452,6 @@ root{
             ss{"EAT"}
         }
         "meta:Africa_Southern"{
-            sg{"SAT"}
             ss{"SAST"}
         }
         "meta:Africa_Western"{
@@ -1465,12 +1464,10 @@ root{
         }
         "meta:Alaska"{
             sd{"AKDT"}
-            sg{"AKT"}
             ss{"AKST"}
         }
         "meta:Alaska_Hawaii"{
             sd{"AHDT"}
-            sg{"AHT"}
             ss{"AHST"}
         }
         "meta:Almaty"{
@@ -1483,22 +1480,18 @@ root{
         }
         "meta:America_Central"{
             sd{"CDT"}
-            sg{"CT"}
             ss{"CST"}
         }
         "meta:America_Eastern"{
             sd{"EDT"}
-            sg{"ET"}
             ss{"EST"}
         }
         "meta:America_Mountain"{
             sd{"MDT"}
-            sg{"MT"}
             ss{"MST"}
         }
         "meta:America_Pacific"{
             sd{"PDT"}
-            sg{"PT"}
             ss{"PST"}
         }
         "meta:Anadyr"{
@@ -1515,7 +1508,6 @@ root{
         }
         "meta:Arabian"{
             sd{"ADT (SA)"}
-            sg{"AT (SA)"}
             ss{"AST (SA)"}
         }
         "meta:Argentina"{
@@ -1535,27 +1527,22 @@ root{
         }
         "meta:Atlantic"{
             sd{"ADT"}
-            sg{"AT"}
             ss{"AST"}
         }
         "meta:Australia_Central"{
             sd{"ACDT"}
-            sg{"ACT"}
             ss{"ACST"}
         }
         "meta:Australia_CentralWestern"{
             sd{"ACWDT"}
-            sg{"ACWT"}
             ss{"ACWST"}
         }
         "meta:Australia_Eastern"{
             sd{"AEDT"}
-            sg{"AET"}
             ss{"AEST"}
         }
         "meta:Australia_Western"{
             sd{"AWDT"}
-            sg{"AWT"}
             ss{"AWST"}
         }
         "meta:Azerbaijan"{
@@ -1575,7 +1562,6 @@ root{
         }
         "meta:Bering"{
             sd{"BDT (Bering)"}
-            sg{"BT (Bering)"}
             ss{"BST (Bering)"}
         }
         "meta:Bhutan"{
@@ -1600,7 +1586,6 @@ root{
             ss{"CVT"}
         }
         "meta:Chamorro"{
-            sg{"ChT"}
             ss{"ChST"}
         }
         "meta:Changbai"{
@@ -1616,7 +1601,6 @@ root{
         }
         "meta:China"{
             sd{"CDT (CN)"}
-            sg{"CT (CN)"}
             ss{"CST (CN)"}
         }
         "meta:Choibalsan"{
@@ -1729,7 +1713,6 @@ root{
             ss{"GST (GU)"}
         }
         "meta:Gulf"{
-            sg{"GT"}
             ss{"GST"}
         }
         "meta:Guyana"{
@@ -1778,7 +1761,6 @@ root{
         }
         "meta:Japan"{
             sd{"JDT"}
-            sg{"JT"}
             ss{"JST"}
         }
         "meta:Kamchatka"{
@@ -1803,7 +1785,6 @@ root{
         }
         "meta:Korea"{
             sd{"KDT"}
-            sg{"KT"}
             ss{"KST"}
         }
         "meta:Kosrae"{
@@ -1834,7 +1815,6 @@ root{
         }
         "meta:Lord_Howe"{
             sd{"LHDT"}
-            sg{"LHT"}
             ss{"LHST"}
         }
         "meta:Macau"{
@@ -1889,12 +1869,10 @@ root{
         }
         "meta:New_Zealand"{
             sd{"NZDT"}
-            sg{"NZT"}
             ss{"NZST"}
         }
         "meta:Newfoundland"{
             sd{"NDT"}
-            sg{"NT"}
             ss{"NST"}
         }
         "meta:Niue"{
@@ -1945,7 +1923,6 @@ root{
         }
         "meta:Pierre_Miquelon"{
             sd{"PMDT"}
-            sg{"PMT"}
             ss{"PMST"}
         }
         "meta:Pitcairn"{
@@ -2093,7 +2070,6 @@ root{
         }
         "meta:Yukon"{
             sd{"YDT"}
-            sg{"YT"}
             ss{"YST"}
         }
         fallbackFormat{"{1} ({0})"}
