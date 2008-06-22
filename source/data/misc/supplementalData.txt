@@ -9299,7 +9299,6 @@ supplementalData:table(nofallback){
             "meta:Africa_Eastern_ET"{"Africa/Addis_Ababa"}
             "meta:Africa_Eastern_KM"{"Indian/Comoro"}
             "meta:Africa_Eastern_MG"{"Indian/Antananarivo"}
-            "meta:Africa_Eastern_SD"{"Africa/Khartoum"}
             "meta:Africa_Eastern_SO"{"Africa/Mogadishu"}
             "meta:Africa_Eastern_TZ"{"Africa/Dar_es_Salaam"}
             "meta:Africa_Eastern_UG"{"Africa/Kampala"}
@@ -9470,7 +9469,6 @@ supplementalData:table(nofallback){
             "meta:GMT_CI"{"Africa/Abidjan"}
             "meta:GMT_GB"{"Europe/London"}
             "meta:GMT_GH"{"Africa/Accra"}
-            "meta:GMT_GL"{"America/Danmarkshavn"}
             "meta:GMT_GM"{"Africa/Banjul"}
             "meta:GMT_GN"{"Africa/Conakry"}
             "meta:GMT_GW"{"Africa/Bissau"}
