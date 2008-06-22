@@ -24,6 +24,7 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.DateInterval;
 import com.ibm.icu.text.DateIntervalInfo;
 import com.ibm.icu.text.DateIntervalFormat;
+import com.ibm.icu.util.ULocale;
 
 public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
@@ -613,7 +614,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         int i = 1;
         while (i<data_length) {
             String locName = data[i++];
-            Locale loc = new Locale(locName);
+            ULocale loc = new ULocale(locName);
             SimpleDateFormat ref = new SimpleDateFormat(data[0], loc);
             // 'f'
             String datestr = data[i++];
@@ -707,7 +708,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         int i = 1;
         while (i<data_length) {
             String locName = data[i++];
-            Locale loc = new Locale(locName);
+            ULocale loc = new ULocale(locName);
             SimpleDateFormat ref = new SimpleDateFormat(data[0], loc);
             // 'f'
             String datestr = data[i++];
@@ -782,7 +783,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         int i = 1;
         while (i<data_length) {
             String locName = data[i++];
-            Locale loc = new Locale(locName);
+            ULocale loc = new ULocale(locName);
             SimpleDateFormat ref = new SimpleDateFormat(data[0], loc);
             // 'f'
             String datestr = data[i++];
