@@ -91,17 +91,6 @@
 #        define uregex_setTimeLimit uregex_setTimeLimit_DRAFT_API_DO_NOT_USE
 #        define uregex_useAnchoringBounds uregex_useAnchoringBounds_DRAFT_API_DO_NOT_USE
 #        define uregex_useTransparentBounds uregex_useTransparentBounds_DRAFT_API_DO_NOT_USE
-#        define uspoof_areConfusable uspoof_areConfusable_DRAFT_API_DO_NOT_USE
-#        define uspoof_areConfusableUTF8 uspoof_areConfusableUTF8_DRAFT_API_DO_NOT_USE
-#        define uspoof_check uspoof_check_DRAFT_API_DO_NOT_USE
-#        define uspoof_checkUTF8 uspoof_checkUTF8_DRAFT_API_DO_NOT_USE
-#        define uspoof_getAllowedLocales uspoof_getAllowedLocales_DRAFT_API_DO_NOT_USE
-#        define uspoof_getChecks uspoof_getChecks_DRAFT_API_DO_NOT_USE
-#        define uspoof_getSkeleton uspoof_getSkeleton_DRAFT_API_DO_NOT_USE
-#        define uspoof_getSkeletonUTF8 uspoof_getSkeletonUTF8_DRAFT_API_DO_NOT_USE
-#        define uspoof_open uspoof_open_DRAFT_API_DO_NOT_USE
-#        define uspoof_setAllowedLocales uspoof_setAllowedLocales_DRAFT_API_DO_NOT_USE
-#        define uspoof_setChecks uspoof_setChecks_DRAFT_API_DO_NOT_USE
 #    else
 #        define afkLanguageCode_4_0 afkLanguageCode_DRAFT_API_DO_NOT_USE
 #        define armiScriptCode_4_0 armiScriptCode_DRAFT_API_DO_NOT_USE
@@ -170,17 +159,6 @@
 #        define uregex_setTimeLimit_4_0 uregex_setTimeLimit_DRAFT_API_DO_NOT_USE
 #        define uregex_useAnchoringBounds_4_0 uregex_useAnchoringBounds_DRAFT_API_DO_NOT_USE
 #        define uregex_useTransparentBounds_4_0 uregex_useTransparentBounds_DRAFT_API_DO_NOT_USE
-#        define uspoof_areConfusableUTF8_4_0 uspoof_areConfusableUTF8_DRAFT_API_DO_NOT_USE
-#        define uspoof_areConfusable_4_0 uspoof_areConfusable_DRAFT_API_DO_NOT_USE
-#        define uspoof_checkUTF8_4_0 uspoof_checkUTF8_DRAFT_API_DO_NOT_USE
-#        define uspoof_check_4_0 uspoof_check_DRAFT_API_DO_NOT_USE
-#        define uspoof_getAllowedLocales_4_0 uspoof_getAllowedLocales_DRAFT_API_DO_NOT_USE
-#        define uspoof_getChecks_4_0 uspoof_getChecks_DRAFT_API_DO_NOT_USE
-#        define uspoof_getSkeletonUTF8_4_0 uspoof_getSkeletonUTF8_DRAFT_API_DO_NOT_USE
-#        define uspoof_getSkeleton_4_0 uspoof_getSkeleton_DRAFT_API_DO_NOT_USE
-#        define uspoof_open_4_0 uspoof_open_DRAFT_API_DO_NOT_USE
-#        define uspoof_setAllowedLocales_4_0 uspoof_setAllowedLocales_DRAFT_API_DO_NOT_USE
-#        define uspoof_setChecks_4_0 uspoof_setChecks_DRAFT_API_DO_NOT_USE
 #    endif /* U_DISABLE_RENAMING */
 
 #endif /* U_HIDE_DRAFT_API */
