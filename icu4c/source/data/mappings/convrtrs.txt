@@ -677,7 +677,7 @@ ibm-1363_P11B-1998 { UTR22* }
                         ibm-1363 # Leave untagged because this isn't the default
                         KS_C_5601-1987 { IANA* }
                         KS_C_5601-1989 { IANA }
-                        KSC_5601 { MIME IANA }
+                        KSC_5601 { IANA }
                         csKSC56011987 { IANA }
                         korean { IANA }
                         iso-ir-149 { IANA }
@@ -697,7 +697,7 @@ windows-949-2000 { UTR22* }
                         windows-949 { JAVA* WINDOWS* }
                         KS_C_5601-1987 { WINDOWS }
                         KS_C_5601-1989 { WINDOWS }
-                        KSC_5601 { WINDOWS } # Needed by iso-2022
+                        KSC_5601 { MIME WINDOWS } # Needed by iso-2022
                         csKSC56011987 { WINDOWS }
                         korean { WINDOWS }
                         iso-ir-149 { WINDOWS }
