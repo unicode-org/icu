@@ -24,8 +24,6 @@ public class TimeUnitTest extends TestFmwk {
     }
 
     public void TestBasic() {
-        // FIXME: uncomment later
-        if ( true ) return;
         TimeUnitFormat format = new TimeUnitFormat();
         //String[] locales = {"en", "sl", "fr", "zh", "ar"};
         String[] locales = {"ar", "ru", "en", "sl", "fr", "zh"};
