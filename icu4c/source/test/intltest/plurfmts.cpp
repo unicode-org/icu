@@ -35,7 +35,7 @@ void PluralFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
     switch (index) {
         TESTCASE(0, pluralFormatBasicTest);
         TESTCASE(1, pluralFormatUnitTest);
-        // TESTCASE(2, pluralFormatLocaleTest);
+        TESTCASE(2, pluralFormatLocaleTest);
         default: name = "";
             break;
     }
