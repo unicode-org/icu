@@ -5077,105 +5077,103 @@ public class TestCharset extends TestFmwk {
     /* Round trip test of SCSU converter*/
     public void TestSCSUConverter(){
         byte allFeaturesSCSU[]={
-                
-                0x41,(byte) 0xdf, 0x12,(byte) 0x81, 0x03, 0x5f, 0x10, (byte)0xdf, 0x1b, 0x03,
-                (byte)0xdf, 0x1c,(byte) 0x88,(byte) 0x80, 0x0b, (byte)0xbf,(byte) 0xff,(byte) 0xff, 0x0d, 0x0a,
-                0x41, 0x10, (byte)0xdf, 0x12, (byte)0x81, 0x03, 0x5f, 0x10, (byte)0xdf, 0x13,
-                (byte)0xdf, 0x14,(byte) 0x80, 0x15, (byte)0xff 
+            0x41,(byte) 0xdf, 0x12,(byte) 0x81, 0x03, 0x5f, 0x10, (byte)0xdf, 0x1b, 0x03,
+            (byte)0xdf, 0x1c,(byte) 0x88,(byte) 0x80, 0x0b, (byte)0xbf,(byte) 0xff,(byte) 0xff, 0x0d, 0x0a,
+            0x41, 0x10, (byte)0xdf, 0x12, (byte)0x81, 0x03, 0x5f, 0x10, (byte)0xdf, 0x13,
+            (byte)0xdf, 0x14,(byte) 0x80, 0x15, (byte)0xff 
+        }; 
 
-            
-            }; 
+        char allFeaturesUTF16[]={
+            0x0041, 0x00df, 0x0401, 0x015f, 0x00df, 0x01df, 0xf000, 0xdbff,
+            0xdfff, 0x000d, 0x000a, 0x0041, 0x00df, 0x0401, 0x015f, 0x00df,
+            0x01df, 0xf000, 0xdbff, 0xdfff
+        };
 
-            char allFeaturesUTF16[]={
-                0x0041, 0x00df, 0x0401, 0x015f, 0x00df, 0x01df, 0xf000, 0xdbff,
-                0xdfff, 0x000d, 0x000a, 0x0041, 0x00df, 0x0401, 0x015f, 0x00df,
-                0x01df, 0xf000, 0xdbff, 0xdfff
-            };
+        
+        char germanUTF16[]={
+            0x00d6, 0x006c, 0x0020, 0x0066, 0x006c, 0x0069, 0x0065, 0x00df, 0x0074
+        };
 
-            
-            char germanUTF16[]={
-                0x00d6, 0x006c, 0x0020, 0x0066, 0x006c, 0x0069, 0x0065, 0x00df, 0x0074
-            };
+        byte germanSCSU[]={
+            (byte)0xd6, 0x6c, 0x20, 0x66, 0x6c, 0x69, 0x65,(byte) 0xdf, 0x74
+        };
 
-            byte germanSCSU[]={
-                    (byte)0xd6, 0x6c, 0x20, 0x66, 0x6c, 0x69, 0x65,(byte) 0xdf, 0x74
-            };
+       char russianUTF16[]={
+            0x041c, 0x043e, 0x0441, 0x043a, 0x0432, 0x0430
+        };
 
-           char russianUTF16[]={
-                    0x041c, 0x043e, 0x0441, 0x043a, 0x0432, 0x0430
-                };
+       byte russianSCSU[]={
+            0x12, (byte)0x9c,(byte)0xbe,(byte) 0xc1, (byte)0xba, (byte)0xb2, (byte)0xb0
+        };
 
-           byte russianSCSU[]={
-                    0x12, (byte)0x9c,(byte)0xbe,(byte) 0xc1, (byte)0xba, (byte)0xb2, (byte)0xb0
-                };
+       char japaneseUTF16[]={
+            0x3000, 0x266a, 0x30ea, 0x30f3, 0x30b4, 0x53ef, 0x611b,
+            0x3044, 0x3084, 0x53ef, 0x611b, 0x3044, 0x3084, 0x30ea, 0x30f3,
+            0x30b4, 0x3002, 0x534a, 0x4e16, 0x7d00, 0x3082, 0x524d, 0x306b,
+            0x6d41, 0x884c, 0x3057, 0x305f, 0x300c, 0x30ea, 0x30f3, 0x30b4,
+            0x306e, 0x6b4c, 0x300d, 0x304c, 0x3074, 0x3063, 0x305f, 0x308a,
+            0x3059, 0x308b, 0x304b, 0x3082, 0x3057, 0x308c, 0x306a, 0x3044,
+            0x3002, 0x7c73, 0x30a2, 0x30c3, 0x30d7, 0x30eb, 0x30b3, 0x30f3,
+            0x30d4, 0x30e5, 0x30fc, 0x30bf, 0x793e, 0x306e, 0x30d1, 0x30bd,
+            0x30b3, 0x30f3, 0x300c, 0x30de, 0x30c3, 0x30af, 0xff08, 0x30de,
+            0x30c3, 0x30ad, 0x30f3, 0x30c8, 0x30c3, 0x30b7, 0x30e5, 0xff09,
+            0x300d, 0x3092, 0x3001, 0x3053, 0x3088, 0x306a, 0x304f, 0x611b,
+            0x3059, 0x308b, 0x4eba, 0x305f, 0x3061, 0x306e, 0x3053, 0x3068,
+            0x3060, 0x3002, 0x300c, 0x30a2, 0x30c3, 0x30d7, 0x30eb, 0x4fe1,
+            0x8005, 0x300d, 0x306a, 0x3093, 0x3066, 0x8a00, 0x3044, 0x65b9,
+            0x307e, 0x3067, 0x3042, 0x308b, 0x3002
+        };
 
-           char japaneseUTF16[]={
-                0x3000, 0x266a, 0x30ea, 0x30f3, 0x30b4, 0x53ef, 0x611b,
-                0x3044, 0x3084, 0x53ef, 0x611b, 0x3044, 0x3084, 0x30ea, 0x30f3,
-                0x30b4, 0x3002, 0x534a, 0x4e16, 0x7d00, 0x3082, 0x524d, 0x306b,
-                0x6d41, 0x884c, 0x3057, 0x305f, 0x300c, 0x30ea, 0x30f3, 0x30b4,
-                0x306e, 0x6b4c, 0x300d, 0x304c, 0x3074, 0x3063, 0x305f, 0x308a,
-                0x3059, 0x308b, 0x304b, 0x3082, 0x3057, 0x308c, 0x306a, 0x3044,
-                0x3002, 0x7c73, 0x30a2, 0x30c3, 0x30d7, 0x30eb, 0x30b3, 0x30f3,
-                0x30d4, 0x30e5, 0x30fc, 0x30bf, 0x793e, 0x306e, 0x30d1, 0x30bd,
-                0x30b3, 0x30f3, 0x300c, 0x30de, 0x30c3, 0x30af, 0xff08, 0x30de,
-                0x30c3, 0x30ad, 0x30f3, 0x30c8, 0x30c3, 0x30b7, 0x30e5, 0xff09,
-                0x300d, 0x3092, 0x3001, 0x3053, 0x3088, 0x306a, 0x304f, 0x611b,
-                0x3059, 0x308b, 0x4eba, 0x305f, 0x3061, 0x306e, 0x3053, 0x3068,
-                0x3060, 0x3002, 0x300c, 0x30a2, 0x30c3, 0x30d7, 0x30eb, 0x4fe1,
-                0x8005, 0x300d, 0x306a, 0x3093, 0x3066, 0x8a00, 0x3044, 0x65b9,
-                0x307e, 0x3067, 0x3042, 0x308b, 0x3002
-            };
-
-            // SCSUEncoder produces a slightly longer result (179B vs. 178B) because of one different choice:
-             //it uses an SQn once where a longer look-ahead could have shown that SCn is more efficient 
-            byte japaneseSCSU[]={
-                0x08, 0x00, 0x1b, 0x4c,(byte) 0xea, 0x16, (byte)0xca, (byte)0xd3,(byte) 0x94, 0x0f, 0x53, (byte)0xef, 0x61, 0x1b, (byte)0xe5,(byte) 0x84,
-                (byte)0xc4, 0x0f, (byte)0x53,(byte) 0xef, 0x61, 0x1b, (byte)0xe5, (byte)0x84, (byte)0xc4, 0x16, (byte)0xca, (byte)0xd3, (byte)0x94, 0x08, 0x02, 0x0f,
-                0x53, 0x4a, 0x4e, 0x16, 0x7d, 0x00, 0x30, (byte)0x82, 0x52, 0x4d, 0x30, 0x6b, 0x6d, 0x41,(byte) 0x88, 0x4c,
-                (byte) 0xe5,(byte) 0x97, (byte)0x9f, 0x08, 0x0c, 0x16,(byte) 0xca,(byte) 0xd3, (byte)0x94, 0x15, (byte)0xae, 0x0e, 0x6b, 0x4c, 0x08, 0x0d,
-                (byte) 0x8c, (byte)0xb4, (byte)0xa3,(byte) 0x9f,(byte) 0xca, (byte)0x99, (byte)0xcb,(byte) 0x8b, (byte)0xc2,(byte) 0x97,(byte) 0xcc,(byte) 0xaa,(byte) 0x84, 0x08, 0x02, 0x0e,
-                0x7c, 0x73, (byte)0xe2, 0x16, (byte)0xa3,(byte) 0xb7, (byte)0xcb, (byte)0x93, (byte)0xd3,(byte) 0xb4,(byte) 0xc5, (byte)0xdc, (byte)0x9f, 0x0e, 0x79, 0x3e,
-                0x06, (byte)0xae, (byte)0xb1, (byte)0x9d,(byte) 0x93, (byte)0xd3, 0x08, 0x0c, (byte)0xbe,(byte) 0xa3, (byte)0x8f, 0x08,(byte) 0x88,(byte) 0xbe,(byte) 0xa3,(byte) 0x8d,
-                (byte)0xd3,(byte) 0xa8, (byte)0xa3, (byte)0x97,(byte) 0xc5, 0x17,(byte) 0x89, 0x08, 0x0d, 0x15,(byte) 0xd2, 0x08, 0x01, (byte)0x93, (byte)0xc8,(byte) 0xaa,
-                (byte)0x8f, 0x0e, 0x61, 0x1b, (byte)0x99,(byte) 0xcb, 0x0e, 0x4e, (byte)0xba, (byte)0x9f, (byte)0xa1,(byte) 0xae,(byte) 0x93, (byte)0xa8,(byte) 0xa0, 0x08,
-                0x02, 0x08, 0x0c, (byte)0xe2, 0x16, (byte)0xa3, (byte)0xb7, (byte)0xcb, 0x0f, 0x4f,(byte) 0xe1,(byte) 0x80, 0x05,(byte) 0xec, 0x60, (byte)0x8d,
-                (byte)0xea, 0x06,(byte) 0xd3,(byte) 0xe6, 0x0f,(byte) 0x8a, 0x00, 0x30, 0x44, 0x65,(byte) 0xb9, (byte)0xe4, (byte)0xfe,(byte) 0xe7,(byte) 0xc2, 0x06,
-                (byte)0xcb, (byte)0x82
-            };
-            
-            CharsetProviderICU cs = new CharsetProviderICU();
-            CharsetICU charset = (CharsetICU)cs.charsetForName("scsu");
-            CharsetDecoder decode = charset.newDecoder();
-            CharsetEncoder encode = charset.newEncoder();
-            
-            //String[] codePoints = {"allFeatures", "german","russian","japanese"};
-            byte[][] fromUnicode={allFeaturesSCSU,germanSCSU,russianSCSU,japaneseSCSU};
-            char[][] toUnicode = {allFeaturesUTF16, germanUTF16,russianUTF16,japaneseUTF16};
-            
-            for(int i=0;i<4;i++){
-                ByteBuffer decoderBuffer = ByteBuffer.wrap(fromUnicode[i]);
-                CharBuffer encoderBuffer = CharBuffer.wrap(toUnicode[i]);
-                               
-                try{
-                    // Decoding 
-                    CharBuffer decoderResult = decode.decode(decoderBuffer);
-                    encoderBuffer.position(0);
-                    if(!decoderResult.equals(encoderBuffer)){
-                        errln("Error occured while decoding "+ charset.name());
-                    }
-                    // Encoding 
-                    ByteBuffer encoderResult = encode.encode(encoderBuffer);
-                    // RoundTrip Test
-                    ByteBuffer roundTrip = encoderResult;
-                    CharBuffer roundTripResult = decode.decode(roundTrip);
-                    encoderBuffer.position(0);
-                    if(!roundTripResult.equals(encoderBuffer)){
-                        errln("Error occured while encoding "+ charset.name());
-                    }
-                }catch(Exception e){
+        // SCSUEncoder produces a slightly longer result (179B vs. 178B) because of one different choice:
+         //it uses an SQn once where a longer look-ahead could have shown that SCn is more efficient 
+        byte japaneseSCSU[]={
+            0x08, 0x00, 0x1b, 0x4c,(byte) 0xea, 0x16, (byte)0xca, (byte)0xd3,(byte) 0x94, 0x0f, 0x53, (byte)0xef, 0x61, 0x1b, (byte)0xe5,(byte) 0x84,
+            (byte)0xc4, 0x0f, (byte)0x53,(byte) 0xef, 0x61, 0x1b, (byte)0xe5, (byte)0x84, (byte)0xc4, 0x16, (byte)0xca, (byte)0xd3, (byte)0x94, 0x08, 0x02, 0x0f,
+            0x53, 0x4a, 0x4e, 0x16, 0x7d, 0x00, 0x30, (byte)0x82, 0x52, 0x4d, 0x30, 0x6b, 0x6d, 0x41,(byte) 0x88, 0x4c,
+            (byte) 0xe5,(byte) 0x97, (byte)0x9f, 0x08, 0x0c, 0x16,(byte) 0xca,(byte) 0xd3, (byte)0x94, 0x15, (byte)0xae, 0x0e, 0x6b, 0x4c, 0x08, 0x0d,
+            (byte) 0x8c, (byte)0xb4, (byte)0xa3,(byte) 0x9f,(byte) 0xca, (byte)0x99, (byte)0xcb,(byte) 0x8b, (byte)0xc2,(byte) 0x97,(byte) 0xcc,(byte) 0xaa,(byte) 0x84, 0x08, 0x02, 0x0e,
+            0x7c, 0x73, (byte)0xe2, 0x16, (byte)0xa3,(byte) 0xb7, (byte)0xcb, (byte)0x93, (byte)0xd3,(byte) 0xb4,(byte) 0xc5, (byte)0xdc, (byte)0x9f, 0x0e, 0x79, 0x3e,
+            0x06, (byte)0xae, (byte)0xb1, (byte)0x9d,(byte) 0x93, (byte)0xd3, 0x08, 0x0c, (byte)0xbe,(byte) 0xa3, (byte)0x8f, 0x08,(byte) 0x88,(byte) 0xbe,(byte) 0xa3,(byte) 0x8d,
+            (byte)0xd3,(byte) 0xa8, (byte)0xa3, (byte)0x97,(byte) 0xc5, 0x17,(byte) 0x89, 0x08, 0x0d, 0x15,(byte) 0xd2, 0x08, 0x01, (byte)0x93, (byte)0xc8,(byte) 0xaa,
+            (byte)0x8f, 0x0e, 0x61, 0x1b, (byte)0x99,(byte) 0xcb, 0x0e, 0x4e, (byte)0xba, (byte)0x9f, (byte)0xa1,(byte) 0xae,(byte) 0x93, (byte)0xa8,(byte) 0xa0, 0x08,
+            0x02, 0x08, 0x0c, (byte)0xe2, 0x16, (byte)0xa3, (byte)0xb7, (byte)0xcb, 0x0f, 0x4f,(byte) 0xe1,(byte) 0x80, 0x05,(byte) 0xec, 0x60, (byte)0x8d,
+            (byte)0xea, 0x06,(byte) 0xd3,(byte) 0xe6, 0x0f,(byte) 0x8a, 0x00, 0x30, 0x44, 0x65,(byte) 0xb9, (byte)0xe4, (byte)0xfe,(byte) 0xe7,(byte) 0xc2, 0x06,
+            (byte)0xcb, (byte)0x82
+        };
+        
+        CharsetProviderICU cs = new CharsetProviderICU();
+        CharsetICU charset = (CharsetICU)cs.charsetForName("scsu");
+        CharsetDecoder decode = charset.newDecoder();
+        CharsetEncoder encode = charset.newEncoder();
+        
+        //String[] codePoints = {"allFeatures", "german","russian","japanese"};
+        byte[][] fromUnicode={allFeaturesSCSU,germanSCSU,russianSCSU,japaneseSCSU};
+        char[][] toUnicode = {allFeaturesUTF16, germanUTF16,russianUTF16,japaneseUTF16};
+        
+        for(int i=0;i<4;i++){
+            ByteBuffer decoderBuffer = ByteBuffer.wrap(fromUnicode[i]);
+            CharBuffer encoderBuffer = CharBuffer.wrap(toUnicode[i]);
+                           
+            try{
+                // Decoding 
+                CharBuffer decoderResult = decode.decode(decoderBuffer);
+                encoderBuffer.position(0);
+                if(!decoderResult.equals(encoderBuffer)){
+                    errln("Error occured while decoding "+ charset.name());
                 }
+                // Encoding 
+                ByteBuffer encoderResult = encode.encode(encoderBuffer);
+                // RoundTrip Test
+                ByteBuffer roundTrip = encoderResult;
+                CharBuffer roundTripResult = decode.decode(roundTrip);
+                encoderBuffer.position(0);
+                if(!roundTripResult.equals(encoderBuffer)){
+                    errln("Error occured while encoding "+ charset.name());
+                }
+            }catch(Exception e){
+                errln("Exception while converting SCSU thrown: " + e);
             }
+        }
     } 
     
     /* Test for BOCU1 converter*/
@@ -5198,83 +5196,90 @@ public class TestCharset extends TestFmwk {
 
                   0xDFFF, 0x0001, 0x0E40, 0x0020, // 40 
                   0x0009  
-              };       
+        };
+        
+        byte sampleText[]={ // from cintltst/bocu1tst.c/TestBOCU1 text 1 
+            (byte) 0xFB,
+            (byte) 0xEE,
+            0x28, // from source offset 0
+            0x24, 0x1E, 0x52, (byte) 0xB2, 0x20,
+            (byte) 0xB3,
+            (byte) 0xB1,
+            0x0D,
+            0x0A,
+
+            0x20, // from 8
+            0x00, (byte) 0xD0, 0x6C, (byte) 0xB6, (byte) 0xD8, (byte) 0xA5,
+            0x20, 0x68,
+            0x59,
+
+            (byte) 0xF9,
+            0x28, // from 16
+            0x6D, 0x20, 0x73, (byte) 0xE0, 0x2D, (byte) 0xDE, 0x43,
+            (byte) 0xD0, 0x33, 0x20,
+
+            (byte) 0xFA,
+            (byte) 0x83, // from 24
+            0x25, 0x01, (byte) 0xFB, 0x16, (byte) 0x87, 0x4B, 0x16, 0x20,
+            (byte) 0xE6, (byte) 0xBD, (byte) 0xEB, 0x5B, 0x4B, (byte) 0xCC,
+
+            (byte) 0xF9,
+            (byte) 0xA2, // from 32
+            (byte) 0xFC, 0x10, 0x3E, (byte) 0xFE, 0x16, 0x3A, (byte) 0x8C,
+            0x20, (byte) 0xFC, 0x03, (byte) 0xAC,
+
+            0x01, /// from 41 
+            (byte) 0xDE, (byte) 0x83, 0x20, 0x09 
+        };
+        
+        CharsetProviderICU cs = new CharsetProviderICU();
+        CharsetICU charset = (CharsetICU)cs.charsetForName("BOCU-1");
+        CharsetDecoder decode = charset.newDecoder();
+        CharsetEncoder encode = charset.newEncoder();
        
-       byte sampleText[]={ // from cintltst/bocu1tst.c/TestBOCU1 text 1 
-              (byte) 0xFB, (byte)0xEE, 0x28,       // from source offset 0
-              0x24, 0x1E, 0x52,
-              (byte)0xB2,
-              0x20,
-              (byte)0xB3,
-              (byte)0xB1,
-              0x0D,
-              0x0A,
-
-              0x20,                   // from 8 
-              0x00,
-              (byte)0xD0, 0x6C,
-              (byte)0xB6,
-              (byte) 0xD8, (byte)0xA5,
-              0x20,
-              0x68,
-              0x59,
-
-              (byte)0xF9, 0x28,             // from 16 
-              0x6D,
-              0x20,
-              0x73,
-              (byte)0xE0, 0x2D,
-              (byte)0xDE, 0x43,
-              (byte)0xD0, 0x33,
-              0x20,
-
-              (byte)0xFA,(byte) 0x83,             // from 24 
-              0x25, 0x01,
-              (byte) 0xFB, 0x16, (byte)0x87,
-              0x4B, 0x16,
-              0x20,
-              (byte)0xE6,(byte) 0xBD,
-              (byte)0xEB, 0x5B,
-              0x4B,(byte) 0xCC,
-
-              (byte)0xF9, (byte)0xA2,             // from 32 
-              (byte)0xFC, 0x10, 0x3E,
-              (byte)0xFE, 0x16, 0x3A, (byte)0x8C,
-              0x20,
-              (byte)0xFC, 0x03,(byte) 0xAC,
-
-              0x01,                   /// from 41 
-              (byte)0xDE, (byte)0x83,
-              0x20,
-              0x09
-          };
-            CharsetProviderICU cs = new CharsetProviderICU();
-            CharsetICU charset = (CharsetICU)cs.charsetForName("BOCU-1");
-            CharsetDecoder decode = charset.newDecoder();
-            CharsetEncoder encode = charset.newEncoder();
-           
-            ByteBuffer decoderBuffer = ByteBuffer.wrap(sampleText);
-            CharBuffer encoderBuffer = CharBuffer.wrap(expected);
-            try{
-                // Decoding 
-                CharBuffer decoderResult = decode.decode(decoderBuffer);
-                
-                encoderBuffer.position(0);
-                if(!decoderResult.equals(encoderBuffer)){
-                    errln("Error occured while decoding "+ charset.name());
-                }
-                // Encoding 
-                ByteBuffer encoderResult = encode.encode(encoderBuffer);
-                // RoundTrip Test
-                ByteBuffer roundTrip = encoderResult;
-                CharBuffer roundTripResult = decode.decode(roundTrip);
-                
-                encoderBuffer.position(0);
-                if(!roundTripResult.equals(encoderBuffer)){
-                    errln("Error occured while encoding "+ charset.name());
-                }
-            }catch(Exception e){
+        ByteBuffer decoderBuffer = ByteBuffer.wrap(sampleText);
+        CharBuffer encoderBuffer = CharBuffer.wrap(expected);
+        try{
+            // Decoding 
+            CharBuffer decoderResult = decode.decode(decoderBuffer);
+            
+            encoderBuffer.position(0);
+            if(!decoderResult.equals(encoderBuffer)){
+                errln("Error occured while decoding "+ charset.name());
             }
-    } 
+            // Encoding 
+            ByteBuffer encoderResult = encode.encode(encoderBuffer);
+            // RoundTrip Test
+            ByteBuffer roundTrip = encoderResult;
+            CharBuffer roundTripResult = decode.decode(roundTrip);
+            
+            encoderBuffer.position(0);
+            if(!roundTripResult.equals(encoderBuffer)){
+                errln("Error occured while encoding "+ charset.name());
+            }
+        }catch(Exception e){
+            errln("Exception while converting BOCU-1 thrown: " + e);
+        }
+    }
+    
+    /* Test that ICU4C and ICU4J get the same ICU canonical name when given the same alias. */
+    public void TestICUCanonicalNameConsistency() {
+        String[] alias = {
+                "KSC_5601"
+        };
+        String[] expected = {
+                "windows-949-2000"
+        };
+        
+        CharsetProviderICU provider = new CharsetProviderICU();
+        
+        for (int i = 0; i < alias.length; i++) {
+            String name = provider.getICUCanonicalName(alias[i]);
+            if (!name.equals(expected[i])) {
+                errln("The ICU canonical name in ICU4J does not match that in ICU4C. Result: " + name + "Expected: " + expected[i]);
+            }
+        }
+        
+    }
 
 }
