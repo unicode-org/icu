@@ -389,7 +389,7 @@ public class SerializableTest extends TestFmwk.TestGroup
     public static class DateIntervalHandler implements Handler
     {
         private DateInterval dateInterval[] = {
-                new DateInterval(1, System.currentTimeMillis())
+                new DateInterval(0L, 1164931200000L/*20061201T000000Z*/)
         };
         public Object[] getTestObjects()
         {

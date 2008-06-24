@@ -1769,6 +1769,27 @@ public class FormatTests
             String sfa = dfa.format(fixedDate);
             String sfb = dfb.format(fixedDate);
 
+            if (!sfa.equals(sfb)) {
+                // TODO
+                // In ICU3.8, localized GMT format pattern was added in
+                // DateFormatSymbols, which has no public setter.
+                // The difference of locale data for localized GMT format
+                // will produce different format result.  This is a temporary
+                // workaround for the issue.
+                DateFormatSymbols dfsa = ((SimpleDateFormat)dfa).getDateFormatSymbols();
+                DateFormatSymbols tmp = (DateFormatSymbols)((SimpleDateFormat)dfb).getDateFormatSymbols().clone();
+
+                tmp.setMonths(dfsa.getMonths());
+                tmp.setShortMonths(dfsa.getShortMonths());
+                tmp.setWeekdays(dfsa.getWeekdays());
+                tmp.setShortWeekdays(dfsa.getShortWeekdays());
+                tmp.setAmPmStrings(dfsa.getAmPmStrings());
+
+                ((SimpleDateFormat)dfa).setDateFormatSymbols(tmp);
+
+                sfa = dfa.format(fixedDate);
+            }
+
             return sfa.equals(sfb);
         }
         
