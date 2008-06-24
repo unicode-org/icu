@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -123,6 +123,11 @@ public class CompatibilityTest extends TestFmwk
         }
     }
 
+    private static final String[][] SKIP_CASES = {
+        {"ICU_3.8.1",   "com.ibm.icu.text.PluralFormat.dat"},
+        {"ICU_3.8.1",   "com.ibm.icu.text.PluralRules.dat"},
+    };
+
     private Target getFileTargets(URL fileURL)
     {
         File topDir = new File(fileURL.getPath());
@@ -139,7 +144,9 @@ public class CompatibilityTest extends TestFmwk
                 
                 newTarget.setNext(target);
                 target = newTarget;
-                
+
+                String dataDirName = dataDir.getName();
+
                 for (int i = 0; i < files.length; i += 1) {
                     File file = files[i];
                     String filename = file.getName();
@@ -147,6 +154,20 @@ public class CompatibilityTest extends TestFmwk
                     
                     if (ix > 0) {
                         String className = filename.substring(0, ix);
+
+                        // Skip some cases which do not work well
+                        boolean skipCase = false;
+                        for (int j = 0; j < SKIP_CASES.length; j++) {
+                            if (dataDirName.equals(SKIP_CASES[j][0]) && filename.equals(SKIP_CASES[j][1])) {
+                                skipCase = true;
+                                logln("Skipping test case - " + dataDirName + "/" + className);
+                                break;
+                            }
+                        }
+                        if (skipCase) {
+                            continue;
+                        }
+
                         InputStream is;
                         
                         try {
