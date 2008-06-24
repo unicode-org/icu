@@ -21,7 +21,7 @@ import com.ibm.icu.util.ULocale;
  */
 public abstract class DurationFormat extends UFormat {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -2076961954727774282L;
 
     /**
      * Construct a duration format for the specified locale
