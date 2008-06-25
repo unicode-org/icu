@@ -1035,7 +1035,7 @@ UBool RegexCompile::doParseActions(int32_t action)
         // Finished scanning a Possessive {lower,upper}+ interval.  Generate the code for it.
         {
             // Remember the loc for the top of the block being looped over.
-            //   (Can not reserve a slot in the compiled pattern at this time, becuase
+            //   (Can not reserve a slot in the compiled pattern at this time, because
             //    compileInterval needs to reserve also, and blockTopLoc can only reserve
             //    once per block.)
             int32_t topLoc = blockTopLoc(FALSE);

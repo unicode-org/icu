@@ -1409,7 +1409,7 @@ inline REStackFrame *RegexMatcher::StateSave(REStackFrame *fp, int32_t savePatId
         status = U_REGEX_STACK_OVERFLOW;
         // We need to return a writable stack frame, so just return the
         //    previous frame.  The match operation will stop quickly
-        //    becuase of the error status, after which the frame will never
+        //    because of the error status, after which the frame will never
         //    be looked at again.
         return fp;
     }
