@@ -421,10 +421,10 @@ public class PluralFormat extends UFormat {
      *        <code>PluralFormat</code> object yet, the formatted number will
      *        be returned.
      * @return the string containing the formatted plural message.
-     * @draft ICU 3.8
+     * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
-    public final String format(long number) {
+    public final String format(double number) {
         // If no pattern was applied, return the formatted number.
         if (parsedValues == null) {
             return numberFormat.format(number);
@@ -458,13 +458,14 @@ public class PluralFormat extends UFormat {
      * @param pos will be ignored by this method. 
      * @return the string buffer passed in as toAppendTo, with formatted text
      *         appended.
+     * @throws IllegalArgumentException if number is not an instance of Number
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.
      */
     public StringBuffer format(Object number, StringBuffer toAppendTo,
             FieldPosition pos) {
         if (number instanceof Number) {
-            toAppendTo.append(format(((Number) number).longValue()));
+            toAppendTo.append(format(((Number) number).doubleValue()));
             return toAppendTo;
         }
         throw new IllegalArgumentException("'" + number + 
@@ -575,7 +576,7 @@ public class PluralFormat extends UFormat {
      * @param message is the text in which '#' will be replaced.
      * @return the text with inserted numbers.
      */
-    private String insertFormattedNumber(long number, String message) {
+    private String insertFormattedNumber(double number, String message) {
         if (message == null) {
             return "";
         }
