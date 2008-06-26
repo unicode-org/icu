@@ -15,6 +15,7 @@ import java.util.HashSet;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.SimpleCache;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.Freezable;
@@ -227,8 +228,8 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
         public boolean equals(Object a) {
             if ( a instanceof PatternInfo ) {
                 PatternInfo patternInfo = (PatternInfo)a;
-                return fIntervalPatternFirstPart.equals(patternInfo.fIntervalPatternFirstPart) && 
-                       fIntervalPatternSecondPart.equals(patternInfo.fIntervalPatternSecondPart) &&
+                return Utility.objectEquals(fIntervalPatternFirstPart, patternInfo.fIntervalPatternFirstPart) && 
+                       Utility.objectEquals(fIntervalPatternSecondPart, fIntervalPatternSecondPart) &&
                        fFirstDateInPtnIsLaterDate == patternInfo.fFirstDateInPtnIsLaterDate;
             }
             return false;
@@ -240,8 +241,14 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
          * @provisional This API might change or be removed in a future release.
          */
         public int hashCode() {
-            return fIntervalPatternFirstPart.hashCode() +
-                   fIntervalPatternSecondPart.hashCode();
+            int hash = fIntervalPatternFirstPart != null ? fIntervalPatternFirstPart.hashCode() : 0;
+            if (fIntervalPatternSecondPart != null) {
+                hash ^= fIntervalPatternSecondPart.hashCode();
+            }
+            if (fFirstDateInPtnIsLaterDate) {
+                hash ^= -1;
+            }
+            return hash;
         }
     }
 
