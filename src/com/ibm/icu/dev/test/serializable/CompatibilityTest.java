@@ -210,27 +210,39 @@ public class CompatibilityTest extends TestFmwk
                 
                 if (name.startsWith(prefix)) {
                     name = name.substring(prefix.length());
-                    
+
                     if (! entry.isDirectory()) {
                         int dx = name.lastIndexOf("/");
                         String dirName  = name.substring(1, dx);
                         String filename = name.substring(dx + 1);
-                        
+
                         if (! dirName.equals(currentDir)) {
                             currentDir = dirName;
-                            
+
                             FolderTarget newTarget = new FolderTarget(currentDir);
-                            
+
                             newTarget.setNext(target);
                             target = newTarget;
                         }
-                        
+
                         int xx = filename.indexOf(".dat");
                         
                         if (xx > 0) {
                             String className = filename.substring(0, xx);
 
-                            target.add(className, jarFile.getInputStream(entry));
+                            // Skip some cases which do not work well
+                            boolean skipCase = false;
+                            for (int i = 0; i < SKIP_CASES.length; i++) {
+                                if (dirName.equals(SKIP_CASES[i][0]) && filename.equals(SKIP_CASES[i][1])) {
+                                    skipCase = true;
+                                    logln("Skipping test case - " + dirName + "/" + className);
+                                    break;
+                                }
+                            }
+
+                            if (!skipCase) {
+                                target.add(className, jarFile.getInputStream(entry));
+                            }
                         }
                     }
                 }

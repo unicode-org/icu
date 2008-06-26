@@ -716,7 +716,7 @@ public class PluralRules implements Serializable {
      * 
      * @param number The number for which the rule has to be determined.
      * @return The keyword of the selected rule.
-     * @draft ICU 3.8
+     * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
      public String select(double number) {
