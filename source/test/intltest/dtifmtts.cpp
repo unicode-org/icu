@@ -40,14 +40,11 @@
 
 void DateIntervalFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ ) {
     if (exec) logln("TestSuite DateIntervalFormat");
-    // FIXME: UNCOMMENT
     switch (index) {
-        /*
         TESTCASE(0, testAPI);
         TESTCASE(1, testFormat);
         TESTCASE(2, testFormatUserDII);
         TESTCASE(3, testStress);
-        */
         default: name = ""; break;
     }
 }
