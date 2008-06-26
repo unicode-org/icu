@@ -251,8 +251,25 @@ PluralFormat::format(int32_t number, UErrorCode& status) const {
     return format(number, result, fpos, status);
 }
 
+UnicodeString
+PluralFormat::format(double number, UErrorCode& status) const {
+    FieldPosition fpos(0);
+    UnicodeString result;
+    
+    return format(number, result, fpos, status);
+}
+
+
 UnicodeString&
 PluralFormat::format(int32_t number,
+                     UnicodeString& appendTo, 
+                     FieldPosition& pos,
+                     UErrorCode& status) const {
+    return format((double)number, appendTo, pos, status);
+}
+
+UnicodeString&
+PluralFormat::format(double number,
                      UnicodeString& appendTo, 
                      FieldPosition& pos,
                      UErrorCode& /*status*/) const {
@@ -396,7 +413,7 @@ PluralFormat::parseObject(const UnicodeString& /*source*/,
 }
 
 UnicodeString
-PluralFormat::insertFormattedNumber(int32_t number, 
+PluralFormat::insertFormattedNumber(double number, 
                                     UnicodeString& message,
                                     UnicodeString& appendTo,
                                     FieldPosition& pos) const {

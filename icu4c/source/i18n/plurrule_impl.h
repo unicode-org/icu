@@ -122,6 +122,7 @@ typedef enum tokenType {
   tMod,
   tNot,
   tIn,
+  tWithin,
   tNotIn,
   tVariableN,
   tIs,
@@ -153,16 +154,17 @@ public:
     } RuleOp;
     RuleOp  op;
     int32_t opNum;
-    int32_t rangeLow;
-    int32_t rangeHigh;
+    int32_t  rangeLow;
+    int32_t  rangeHigh;
     UBool   notIn;
+    UBool   integerOnly;
     AndConstraint *next;
     
     AndConstraint();
     AndConstraint(const AndConstraint& other);
     virtual ~AndConstraint();
     AndConstraint* add();
-    UBool isFulfilled(int32_t number);
+    UBool isFulfilled(double number);
     int32_t updateRepeatLimit(int32_t maxLimit);
 };
 
@@ -175,7 +177,7 @@ public:
     OrConstraint(const OrConstraint& other);
     virtual ~OrConstraint();
     AndConstraint* add();
-    UBool isFulfilled(int32_t number);
+    UBool isFulfilled(double number);
 };
 
 class RuleChain : public UMemory  {
@@ -187,7 +189,7 @@ public:
     RuleChain *next;
     
     virtual ~RuleChain();
-    UnicodeString select(int32_t number) const;
+    UnicodeString select(double number) const;
     void dumpRules(UnicodeString& result);
     int32_t getRepeatLimit();  
     UErrorCode getKeywords(int32_t maxArraySize, UnicodeString *keywords, int32_t& arraySize) const;

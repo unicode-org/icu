@@ -164,6 +164,16 @@ PluralRules::select(int32_t number) const {
     }
 }
 
+UnicodeString
+PluralRules::select(double number) const {
+    if (mRules == NULL) {
+        return PLURAL_DEFAULT_RULE;
+    }
+    else {
+        return mRules->select(number);
+    }
+}
+
 StringEnumeration*
 PluralRules::getKeywords(UErrorCode& status) const {
     if (U_FAILURE(status))  return NULL;
@@ -289,6 +299,10 @@ PluralRules::parseDescription(UnicodeString& data, RuleChain& rules, UErrorCode 
             curAndConstraint->notIn=TRUE;
             break;
         case tIn:
+            curAndConstraint->rangeHigh=PLURAL_RANGE_HIGH;
+            curAndConstraint->integerOnly = TRUE;
+            break;
+        case tWithin:
             curAndConstraint->rangeHigh=PLURAL_RANGE_HIGH;
             break;
         case tNumber:
@@ -479,6 +493,7 @@ AndConstraint::AndConstraint() {
     rangeLow=-1;
     rangeHigh=-1;
     notIn=FALSE;
+    integerOnly=FALSE;
     next=NULL;
 }
 
@@ -488,6 +503,7 @@ AndConstraint::AndConstraint(const AndConstraint& other) {
     this->opNum=other.opNum;
     this->rangeLow=other.rangeLow;
     this->rangeHigh=other.rangeHigh;
+    this->integerOnly=other.integerOnly;
     this->notIn=other.notIn;
     if (other.next==NULL) {
         this->next=NULL;
@@ -505,12 +521,12 @@ AndConstraint::~AndConstraint() {
 
 
 UBool
-AndConstraint::isFulfilled(int32_t number) {
+AndConstraint::isFulfilled(double number) {
     UBool result=TRUE;
-    int32_t value=number;
+    double value=number;
     
     if ( op == MOD ) {
-        value = value % opNum;
+        value = (int32_t)value % opNum;
     }
     if ( rangeHigh == -1 ) {
         if ( rangeLow == -1 ) {
@@ -527,7 +543,17 @@ AndConstraint::isFulfilled(int32_t number) {
     }
     else {
         if ((rangeLow <= value) && (value <= rangeHigh)) {
-            result = TRUE;
+            if (integerOnly) {
+                if ( value != (int32_t)value) {
+                    result = FALSE;
+                }
+                else {
+                    result = TRUE;
+                }
+            }
+            else {
+                result = TRUE;
+            }
         }
         else {
             result = FALSE;
@@ -610,7 +636,7 @@ OrConstraint::add()
 }
 
 UBool
-OrConstraint::isFulfilled(int32_t number) {
+OrConstraint::isFulfilled(double number) {
     OrConstraint* orRule=this;
     UBool result=FALSE;
     
@@ -662,7 +688,7 @@ RuleChain::~RuleChain() {
 }
 
 UnicodeString
-RuleChain::select(int32_t number) const {
+RuleChain::select(double number) const {
    
    if ( ruleHeader != NULL ) {
        if (ruleHeader->isFulfilled(number)) {
@@ -719,7 +745,12 @@ RuleChain::dumpRules(UnicodeString& result) {
                     }
                     else {
                         if (andRule->notIn) {
-                            result += UNICODE_STRING_SIMPLE("  not in ");
+                            if ( andRule->integerOnly ) {
+                                result += UNICODE_STRING_SIMPLE("  not in ");
+                            }
+                            else {
+                                result += UNICODE_STRING_SIMPLE("  not within ");
+                            }
                             uprv_itou(digitString,16, andRule->rangeLow,10,0);
                             result += UnicodeString(digitString);
                             result += UNICODE_STRING_SIMPLE(" .. ");
@@ -727,7 +758,12 @@ RuleChain::dumpRules(UnicodeString& result) {
                             result += UnicodeString(digitString);
                         }
                         else {
-                            result += UNICODE_STRING_SIMPLE(" in ");
+                            if ( andRule->integerOnly ) {
+                                result += UNICODE_STRING_SIMPLE(" in ");
+                            }
+                            else {
+                                result += UNICODE_STRING_SIMPLE(" within ");
+                            }
                             uprv_itou(digitString,16, andRule->rangeLow,10,0);
                             result += UnicodeString(digitString);
                             result += UNICODE_STRING_SIMPLE(" .. ");
@@ -836,7 +872,8 @@ RuleParser::checkSyntax(tokenType prevType, tokenType curType, UErrorCode &statu
         }
         break;
     case tVariableN :
-        if (curType != tIs && curType != tMod && curType != tIn && curType != tNot) {
+        if (curType != tIs && curType != tMod && curType != tIn && 
+            curType != tNot && curType != tWithin) {
             status = U_UNEXPECTED_TOKEN;
         }
         break;
@@ -862,13 +899,14 @@ RuleParser::checkSyntax(tokenType prevType, tokenType curType, UErrorCode &statu
         }
         break;
     case tNot:
-        if (curType != tNumber && curType != tIn) {
+        if (curType != tNumber && curType != tIn && curType != tWithin) {
             status = U_UNEXPECTED_TOKEN;
         }
         break;
     case tMod:
     case tDot:
     case tIn:
+    case tWithin:
     case tAnd:
     case tOr:
         if (curType != tNumber && curType != tVariableN) {
@@ -877,7 +915,7 @@ RuleParser::checkSyntax(tokenType prevType, tokenType curType, UErrorCode &statu
         break;
     case tNumber:
         if (curType != tDot && curType != tSemiColon && curType != tIs && curType != tNot &&
-            curType != tIn && curType != tAnd && curType != tOr)
+            curType != tIn && curType != tWithin && curType != tAnd && curType != tOr)
         {
             status = U_UNEXPECTED_TOKEN;
         }
@@ -1032,7 +1070,7 @@ RuleParser::getKeyType(const UnicodeString& token, tokenType& keyType, UErrorCod
         keyType = tIn;
     }
     else if (token==PK_WITHIN) {  //TODO: need to support float in 4.2
-        keyType = tIn;
+        keyType = tWithin;
     }
     else if (token==PK_NOT) {
         keyType = tNot;
