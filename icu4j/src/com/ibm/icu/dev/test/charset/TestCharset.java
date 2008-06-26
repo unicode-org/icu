@@ -5012,7 +5012,8 @@ public class TestCharset extends TestFmwk {
         CoderResult result = CoderResult.UNDERFLOW;
         String charsetName = "test4";
         CharsetProvider provider = new CharsetProviderICU();
-        Charset charset = ((CharsetProviderICU)provider).charsetForName(charsetName, "../dev/data/testdata");
+        Charset charset = ((CharsetProviderICU)provider).charsetForName(charsetName, "com/ibm/icu/dev/data/testdata",
+                            this.getClass().getClassLoader());
         CharsetEncoder encoder = charset.newEncoder();
         CharsetDecoder decoder = charset.newDecoder();
         
