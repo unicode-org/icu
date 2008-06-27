@@ -2113,7 +2113,7 @@ ru{
         TARASK{"Тарашкевица"}
         VALENCIA{"Валенсийский"}
     }
-    Version{"1.125"}
+    Version{"1.126"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2152,9 +2152,9 @@ ru{
                 y{"yyyy"}
                 yM{"yyyy-M"}
                 yMEd{"EEE, yyyy-M-d"}
-                yMMM{"'сент'. 1999"}
-                yMMMEd{"'Вт', 14 'сент'. 1999"}
-                yMMMM{"'сентябрь' 1999"}
+                yMMM{"MMM. y"}
+                yMMMEd{"E, d MMM. y"}
+                yMMMM{"MMMM y"}
                 yQQQ{"yyyy QQQ"}
                 yyMM{"MM.yy"}
                 yyMMM{"MMM yy"}
@@ -2360,20 +2360,6 @@ ru{
                         "нояб.",
                         "дек.",
                     }
-                    narrow{
-                        "Я",
-                        "Ф",
-                        "М",
-                        "А",
-                        "М",
-                        "И",
-                        "И",
-                        "А",
-                        "С",
-                        "О",
-                        "Н",
-                        "Д",
-                    }
                     wide{
                         "января",
                         "февраля",
@@ -2530,17 +2516,6 @@ ru{
             }
         }
         persian{
-            DateTimePatterns{
-                "H:mm:ss v",
-                "H:mm:ss z",
-                "H:mm:ss",
-                "'Эсфанд'",
-                "EEEE, d MMMM yyyy 'г'.",
-                "d MMMM yyyy 'г'.",
-                "dd.MM.yyyy",
-                "dd.MM.yy",
-                "{1} {0}",
-            }
             monthNames{
                 format{
                     abbreviated{

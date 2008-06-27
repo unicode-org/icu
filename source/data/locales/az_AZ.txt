@@ -10,5 +10,5 @@
  *  ICU <specials> source: <path>/xml/main/az_AZ.xml
  */
 az_AZ{
-    "%%ALIAS"{"az_Cyrl_AZ"}
+    "%%ALIAS"{"az_Latn_AZ"}
 }

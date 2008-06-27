@@ -11,22 +11,26 @@ plurals:table(nofallback){
         af{"set2"}
         am{"set3"}
         ar{"set1"}
+        az{""}
         be{"set9"}
         bg{"set2"}
         bh{"set3"}
         bn{"set2"}
+        bo{""}
         bs{"set9"}
         ca{"set2"}
         cs{"set10"}
         cy{"set15"}
         da{"set2"}
         de{"set2"}
+        dz{""}
         el{"set2"}
         en{"set2"}
         eo{"set2"}
         es{"set2"}
         et{"set2"}
         eu{"set2"}
+        fa{""}
         fi{"set2"}
         fil{"set3"}
         fo{"set2"}
@@ -41,9 +45,17 @@ plurals:table(nofallback){
         he{"set2"}
         hi{"set3"}
         hr{"set9"}
+        hu{""}
+        id{""}
         is{"set2"}
         it{"set2"}
         iw{"set2"}
+        ja{""}
+        jv{""}
+        ka{""}
+        km{""}
+        kn{""}
+        ko{""}
         ku{"set2"}
         lb{"set2"}
         ln{"set3"}
@@ -55,7 +67,9 @@ plurals:table(nofallback){
         mn{"set2"}
         mo{"set7"}
         mr{"set2"}
+        ms{""}
         mt{"set13"}
+        my{""}
         nah{"set2"}
         nb{"set2"}
         ne{"set2"}
@@ -89,12 +103,18 @@ plurals:table(nofallback){
         sw{"set2"}
         ta{"set2"}
         te{"set2"}
+        th{""}
         ti{"set3"}
         tk{"set2"}
         tl{"set3"}
+        to{""}
+        tr{""}
         uk{"set9"}
         ur{"set2"}
+        vi{""}
         wa{"set3"}
+        yo{""}
+        zh{""}
         zu{"set2"}
     }
     rules{

@@ -2902,7 +2902,7 @@ de{
         SOLBA{"Solbica-Dialekt"}
         TARASK{"Taraskievica-Orthographie"}
     }
-    Version{"1.115"}
+    Version{"1.116"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -3249,17 +3249,6 @@ de{
             AmPmMarkers{
                 "vorm.",
                 "nachm.",
-            }
-            eras{
-                abbreviated{
-                    "vorm.",
-                }
-                narrow{
-                    "vorm.",
-                }
-                wide{
-                    "vorm.",
-                }
             }
         }
         islamic{

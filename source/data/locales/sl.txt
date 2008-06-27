@@ -440,7 +440,7 @@ sl{
             traditional{"Tradicionano zlaganje"}
         }
     }
-    Version{"1.93"}
+    Version{"1.94"}
     calendar{
         gregorian{
             DateTimePatterns{

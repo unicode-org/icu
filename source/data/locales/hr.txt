@@ -1334,7 +1334,7 @@ hr{
             traditional{"Tradicionano poredavanje"}
         }
     }
-    Version{"1.89"}
+    Version{"1.90"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1541,20 +1541,6 @@ hr{
                         "stu",
                         "pro",
                     }
-                    narrow{
-                        "s",
-                        "v",
-                        "o",
-                        "t",
-                        "s",
-                        "l",
-                        "s",
-                        "k",
-                        "r",
-                        "l",
-                        "s",
-                        "p",
-                    }
                     wide{
                         "siječnja",
                         "veljače",
@@ -1571,20 +1557,6 @@ hr{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "sij",
-                        "vel",
-                        "ožu",
-                        "tra",
-                        "svi",
-                        "lip",
-                        "srp",
-                        "kol",
-                        "ruj",
-                        "lis",
-                        "stu",
-                        "pro",
-                    }
                     narrow{
                         "s",
                         "v",
