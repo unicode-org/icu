@@ -2048,7 +2048,7 @@ th{
         ROZAJ{"เรเซียน"}
         SAAHO{"ซาโฮ"}
     }
-    Version{"1.110"}
+    Version{"1.111"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -2247,12 +2247,6 @@ th{
                 hm{
                     h{"H:mm-H:mm"}
                     m{"H:mm-H:mm"}
-                }
-                hmv{
-                    h{""}
-                }
-                hv{
-                    h{""}
                 }
                 yM{
                     M{"M–M/yy"}

@@ -699,7 +699,7 @@ sr_Latn{
             traditional{"Tradicionalno sortiranje"}
         }
     }
-    Version{"1.74"}
+    Version{"1.75"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -853,14 +853,6 @@ sr_Latn{
                         "K3",
                         "K4",
                     }
-                    wide{
-                        "Prvo tromesečje",
-                        "Drugo tromesečje",
-                        "Treće tromesečje",
-                        "Četvrto tromesečje",
-                    }
-                }
-                stand-alone{
                     wide{
                         "Prvo tromesečje",
                         "Drugo tromesečje",

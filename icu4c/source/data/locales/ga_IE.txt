@@ -8,4 +8,12 @@
 // ***************************************************************************
 ga_IE{
     Version{"1.47"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector{
+                1,
+                1,
+            }
+        }
+    }
 }

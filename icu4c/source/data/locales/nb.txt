@@ -2101,7 +2101,7 @@ nb{
         SCOUSE{"scouse dialekt"}
         VALENCIA{"valensisk dialekt"}
     }
-    Version{"1.95"}
+    Version{"1.96"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -2184,15 +2184,6 @@ nb{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "søn.",
-                        "man.",
-                        "tir.",
-                        "ons.",
-                        "tor.",
-                        "fre.",
-                        "lør.",
-                    }
                     narrow{
                         "S",
                         "M",
@@ -2374,20 +2365,6 @@ nb{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "jan.",
-                        "feb.",
-                        "mars",
-                        "apr.",
-                        "mai",
-                        "juni",
-                        "juli",
-                        "aug.",
-                        "sep.",
-                        "okt.",
-                        "nov.",
-                        "des.",
-                    }
                     narrow{
                         "J",
                         "F",
