@@ -331,7 +331,7 @@ public:
      * @param status  output param set to success/failure code on exit, which
      *                must not indicate a failure before the function call.
      * @return        the string containing the formatted plural message.
-     * @draft ICU 4.2
+     * @draft ICU 4.0
      */
     UnicodeString format(double number, UErrorCode& status) const;
 
@@ -370,7 +370,7 @@ public:
      * @param status   output param set to success/failure code on exit, which
      *                 must not indicate a failure before the function call.
      * @return         the string containing the formatted plural message.
-     * @draft ICU 4.2
+     * @draft ICU 4.0
      */
     UnicodeString& format(double number,
                           UnicodeString& appendTo,

@@ -1069,7 +1069,7 @@ RuleParser::getKeyType(const UnicodeString& token, tokenType& keyType, UErrorCod
     else if (token==PK_IN) {
         keyType = tIn;
     }
-    else if (token==PK_WITHIN) {  //TODO: need to support float in 4.2
+    else if (token==PK_WITHIN) {
         keyType = tWithin;
     }
     else if (token==PK_NOT) {
