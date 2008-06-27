@@ -305,7 +305,7 @@ pt_PT{
         POLYTON{"politónico"}
         SOLBA{"dialecto stolvizza/solbica"}
     }
-    Version{"1.75"}
+    Version{"1.76"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -391,47 +391,9 @@ pt_PT{
                         "Dezembro",
                     }
                 }
-                stand-alone{
-                    abbreviated{
-                        "Jan",
-                        "Fev",
-                        "Mar",
-                        "Abr",
-                        "Mai",
-                        "Jun",
-                        "Jul",
-                        "Ago",
-                        "Set",
-                        "Out",
-                        "Nov",
-                        "Dez",
-                    }
-                    wide{
-                        "Janeiro",
-                        "Fevereiro",
-                        "Março",
-                        "Abril",
-                        "Maio",
-                        "Junho",
-                        "Julho",
-                        "Agosto",
-                        "Setembro",
-                        "Outubro",
-                        "Novembro",
-                        "Dezembro",
-                    }
-                }
             }
             quarters{
                 format{
-                    wide{
-                        "1.º trimestre",
-                        "2.º trimestre",
-                        "3.º trimestre",
-                        "4.º trimestre",
-                    }
-                }
-                stand-alone{
                     wide{
                         "1.º trimestre",
                         "2.º trimestre",

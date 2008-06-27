@@ -2474,7 +2474,7 @@ da{
         POSIX{"computer"}
         REVISED{"revideret retskrivning"}
     }
-    Version{"1.102"}
+    Version{"1.103"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -2487,17 +2487,6 @@ da{
                 "d. MMM yyyy G",
                 "d/M/yyyy",
                 "{1} {0}",
-            }
-        }
-        coptic{
-            availableFormats{
-                MMMMEd{"E. d. MMMM"}
-            }
-        }
-        ethiopic{
-            availableFormats{
-                MMMEd{"E. d. MMM"}
-                MMMMEd{"E. d. MMMM"}
             }
         }
         gregorian{

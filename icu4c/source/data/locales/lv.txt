@@ -399,7 +399,7 @@ lv{
             traditional{"Tradicionālā kārtošanas secība"}
         }
     }
-    Version{"1.81"}
+    Version{"1.82"}
     calendar{
         gregorian{
             DateTimePatterns{

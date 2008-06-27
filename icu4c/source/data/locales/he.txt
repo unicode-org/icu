@@ -1358,7 +1358,7 @@ he{
         MONOTON{"מונוטונית"}
         POSIX{"מחשב"}
     }
-    Version{"1.104"}
+    Version{"1.105"}
     calendar{
         gregorian{
             AmPmMarkers{

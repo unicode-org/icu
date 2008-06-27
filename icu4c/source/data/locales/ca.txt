@@ -967,7 +967,7 @@ ca{
         FONIPA{"alfabet fonètic internacional"}
         POSIX{"ordenador"}
     }
-    Version{"1.89"}
+    Version{"1.90"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1138,20 +1138,6 @@ ca{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "gen.",
-                        "febr.",
-                        "març",
-                        "abr.",
-                        "mai.",
-                        "juny",
-                        "jul.",
-                        "ag.",
-                        "set.",
-                        "oct.",
-                        "nov.",
-                        "des.",
-                    }
                     narrow{
                         "g",
                         "f",

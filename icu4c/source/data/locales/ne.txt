@@ -549,7 +549,7 @@ ne{
         AREVELA{"पूर्वी आर्मेनियाली"}
         POSIX{"कम्प्युटर"}
     }
-    Version{"1.23"}
+    Version{"1.24"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -625,11 +625,6 @@ ne{
                     dn{"क्षेत्र"}
                 }
             }
-            intervalFormats{
-                MMM{
-                    M{"फेब्रु-मार्च"}
-                }
-            }
             monthNames{
                 stand-alone{
                     narrow{
@@ -649,14 +644,6 @@ ne{
                 }
             }
             quarters{
-                format{
-                    narrow{
-                        "१",
-                        "२",
-                        "३",
-                        "४",
-                    }
-                }
                 stand-alone{
                     narrow{
                         "१",

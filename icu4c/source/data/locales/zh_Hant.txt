@@ -1827,7 +1827,7 @@ zh_Hant{
         REVISED{"已修訂"}
         SAAHO{"SAAHO"}
     }
-    Version{"1.115"}
+    Version{"1.116"}
     calendar{
         chinese{
             AmPmMarkers{
@@ -2020,11 +2020,6 @@ zh_Hant{
                         "第4季",
                     }
                 }
-            }
-        }
-        persian{
-            availableFormats{
-                MEd{"E,M-d"}
             }
         }
         roc{
