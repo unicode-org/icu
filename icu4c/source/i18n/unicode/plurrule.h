@@ -193,7 +193,7 @@ public:
      *
      * @param number  The number for which the rule has to be determined.
      * @return        The keyword of the selected rule.
-     * @draft ICU 4.2
+     * @draft ICU 4.0
      */
     UnicodeString select(double number) const;
 
