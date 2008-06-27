@@ -5271,16 +5271,12 @@ public class TestCharset extends TestFmwk {
         String[] expected = {
                 "windows-949-2000"
         };
-        
-        CharsetProviderICU provider = new CharsetProviderICU();
-        
+
         for (int i = 0; i < alias.length; i++) {
-            String name = provider.getICUCanonicalName(alias[i]);
+            String name = CharsetProviderICU.getICUCanonicalName(alias[i]);
             if (!name.equals(expected[i])) {
                 errln("The ICU canonical name in ICU4J does not match that in ICU4C. Result: " + name + "Expected: " + expected[i]);
             }
         }
-        
     }
-
 }

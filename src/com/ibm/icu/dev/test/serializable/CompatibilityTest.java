@@ -147,6 +147,7 @@ public class CompatibilityTest extends TestFmwk
 
                 String dataDirName = dataDir.getName();
 
+                element_loop:
                 for (int i = 0; i < files.length; i += 1) {
                     File file = files[i];
                     String filename = file.getName();
@@ -156,16 +157,11 @@ public class CompatibilityTest extends TestFmwk
                         String className = filename.substring(0, ix);
 
                         // Skip some cases which do not work well
-                        boolean skipCase = false;
                         for (int j = 0; j < SKIP_CASES.length; j++) {
                             if (dataDirName.equals(SKIP_CASES[j][0]) && filename.equals(SKIP_CASES[j][1])) {
-                                skipCase = true;
                                 logln("Skipping test case - " + dataDirName + "/" + className);
-                                break;
+                                continue element_loop;
                             }
-                        }
-                        if (skipCase) {
-                            continue;
                         }
 
                         InputStream is;
@@ -203,7 +199,8 @@ public class CompatibilityTest extends TestFmwk
             jarFile = conn.getJarFile();
 
             Enumeration entries = jarFile.entries();
-            
+
+            element_loop:
             while (entries.hasMoreElements()) {
                 JarEntry entry = (JarEntry)entries.nextElement();
                 String name = entry.getName();
@@ -231,18 +228,14 @@ public class CompatibilityTest extends TestFmwk
                             String className = filename.substring(0, xx);
 
                             // Skip some cases which do not work well
-                            boolean skipCase = false;
                             for (int i = 0; i < SKIP_CASES.length; i++) {
                                 if (dirName.equals(SKIP_CASES[i][0]) && filename.equals(SKIP_CASES[i][1])) {
-                                    skipCase = true;
                                     logln("Skipping test case - " + dirName + "/" + className);
-                                    break;
+                                    continue element_loop;
                                 }
                             }
 
-                            if (!skipCase) {
-                                target.add(className, jarFile.getInputStream(entry));
-                            }
+                            target.add(className, jarFile.getInputStream(entry));
                         }
                     }
                 }

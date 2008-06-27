@@ -19,11 +19,11 @@ import java.util.Locale;
 
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.DateIntervalFormat;
+import com.ibm.icu.text.DateIntervalInfo;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.DateInterval;
-import com.ibm.icu.text.DateIntervalInfo;
-import com.ibm.icu.text.DateIntervalFormat;
 import com.ibm.icu.util.ULocale;
 
 public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
@@ -981,5 +981,25 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 dtfmt.intervalFormatByAlgorithm(fromCalendar, toCalendar, str, pos);
             } 
         } 
+    }
+
+    /*
+     * Ticket#6396 DateIntervalInfo of ICU4J 4.0d3 throw NullPointerException 
+     */
+    public void TestT6396() {
+        DateIntervalInfo dii = new DateIntervalInfo(new ULocale("th_TH"));
+        try {
+            // ticket#6396 reported toString() throws NullPointerException
+            String diiStr = dii.toString();
+            logln("new DateIntervalInfo(new ULocale(\"th_TH\")).toString() - " + diiStr);
+
+            // equals also had the similar problem
+            DateIntervalInfo dii1 = (DateIntervalInfo)dii.clone();
+            if (!dii.equals(dii1)) {
+                errln("FAIL: Cloned DateIntervalInfo is not equal to the source");
+            }
+        } catch (Exception e) {
+            errln("FAIL: Exception - " + e.getClass().getName());
+        }
     }
 }
