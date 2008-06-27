@@ -2086,7 +2086,7 @@ ko{
     Variants{
         REVISED{"개정"}
     }
-    Version{"1.116"}
+    Version{"1.117"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -2430,12 +2430,6 @@ ko{
                 }
             }
         }
-        hebrew{
-            availableFormats{
-                MMMMEd{"MMMM d E"}
-                yMMMEd{"yyyy MMM d EEE"}
-            }
-        }
         islamic-civil{
             AmPmMarkers{
                 "오전",
@@ -2451,7 +2445,7 @@ ko{
         persian{
             AmPmMarkers{
                 "오전",
-                "PM",
+                "오후",
             }
         }
         roc{

@@ -1443,7 +1443,7 @@ is{
         ";",
         "%",
         "0",
-        "nr.",
+        "#",
         "−",
         "×10^",
         "‰",
@@ -1498,7 +1498,7 @@ is{
             traditional{"Hefðbundin"}
         }
     }
-    Version{"1.87"}
+    Version{"1.88"}
     calendar{
         gregorian{
             AmPmMarkers{

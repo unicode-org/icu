@@ -18,8 +18,9 @@ likelySubtags:table(nofallback){
     ast{"ast_Latn_ES"}
     av{"av_Cyrl_RU"}
     ay{"ay_Latn_BO"}
-    az{"az_Cyrl_AZ"}
+    az{"az_Latn_AZ"}
     az_Arab{"az_Arab_IR"}
+    az_Cyrl{"az_Cyrl_AZ"}
     az_IR{"az_Arab_IR"}
     ba{"ba_Cyrl_RU"}
     be{"be_Cyrl_BY"}
@@ -221,7 +222,7 @@ likelySubtags:table(nofallback){
     und_AT{"de_Latn_AT"}
     und_AW{"nl_Latn_AW"}
     und_AX{"sv_Latn_AX"}
-    und_AZ{"az_Cyrl_AZ"}
+    und_AZ{"az_Latn_AZ"}
     und_Arab{"ar_Arab_EG"}
     und_Arab_CN{"ug_Arab_CN"}
     und_Arab_DJ{"ar_Arab_DJ"}

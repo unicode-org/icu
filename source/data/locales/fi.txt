@@ -2928,7 +2928,7 @@ fi{
         TARASK{"valkovenäjän taraškevitsa-oikeinkirjoitus"}
         VALENCIA{"katalaanin valencian murre"}
     }
-    Version{"1.108"}
+    Version{"1.109"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -3277,11 +3277,6 @@ fi{
         }
         islamic-civil{
             monthNames:alias{"/LOCALE/calendar/islamic/monthNames"}
-        }
-        roc{
-            availableFormats{
-                MMMMEd{"E d. MMMM'ta'"}
-            }
         }
     }
     codePatterns{

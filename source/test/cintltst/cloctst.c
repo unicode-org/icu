@@ -3001,7 +3001,7 @@ const char* const full_data[][3] = {
     "as"
   }, {
     "az",
-    "az_Cyrl_AZ",
+    "az_Latn_AZ",
     "az"
   }, {
     "be",
@@ -3569,7 +3569,7 @@ const char* const full_data[][3] = {
     "sv_AX"
   }, {
     "und_AZ",
-    "az_Cyrl_AZ",
+    "az_Latn_AZ",
     "az"
   }, {
     "und_Arab",

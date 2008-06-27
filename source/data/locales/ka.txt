@@ -1236,7 +1236,7 @@ ka{
         ";",
         "%",
         "0",
-        "№",
+        "#",
         "-",
         "E",
         "‰",
@@ -1316,11 +1316,11 @@ ka{
             traditional{"ტრადიციული"}
         }
     }
-    Version{"1.55"}
+    Version{"1.56"}
     calendar{
         gregorian{
             availableFormats{
-                MMdd{"14/09"}
+                MMdd{"dd/MM"}
             }
             quarters{
                 format{

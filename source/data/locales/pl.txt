@@ -2217,7 +2217,7 @@ pl{
         TARASK{"ortografia taraszkiewicka"}
         VALENCIA{"walencki"}
     }
-    Version{"1.106"}
+    Version{"1.107"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -2469,20 +2469,6 @@ pl{
                         "lis",
                         "gru",
                     }
-                    narrow{
-                        "s",
-                        "l",
-                        "m",
-                        "k",
-                        "m",
-                        "c",
-                        "l",
-                        "s",
-                        "w",
-                        "p",
-                        "l",
-                        "g",
-                    }
                     wide{
                         "stycznia",
                         "lutego",
@@ -2499,20 +2485,6 @@ pl{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "sty",
-                        "lut",
-                        "mar",
-                        "kwi",
-                        "maj",
-                        "cze",
-                        "lip",
-                        "sie",
-                        "wrz",
-                        "paź",
-                        "lis",
-                        "gru",
-                    }
                     narrow{
                         "s",
                         "l",

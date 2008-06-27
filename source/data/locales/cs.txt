@@ -1597,7 +1597,7 @@ cs{
             japanese{"Japonský kalendář"}
         }
     }
-    Version{"1.116"}
+    Version{"1.117"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1656,20 +1656,6 @@ cs{
             }
             monthNames{
                 format{
-                    narrow{
-                        "l",
-                        "ú",
-                        "b",
-                        "d",
-                        "k",
-                        "č",
-                        "č",
-                        "s",
-                        "z",
-                        "ř",
-                        "l",
-                        "p",
-                    }
                     wide{
                         "ledna",
                         "února",

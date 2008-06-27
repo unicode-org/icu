@@ -1356,7 +1356,7 @@ ro{
         ";",
         "%",
         "0",
-        "9",
+        "#",
         "-",
         "E",
         "‰",
@@ -1453,7 +1453,7 @@ ro{
             traditional{"sortare tradițională"}
         }
     }
-    Version{"1.95"}
+    Version{"1.96"}
     calendar{
         buddhist{
             DateTimePatterns{

@@ -2102,7 +2102,7 @@ zh{
         REVISED{"已修订的拼字学"}
         SAAHO{"萨霍"}
     }
-    Version{"1.133"}
+    Version{"1.134"}
     calendar{
         chinese{
             availableFormats{
@@ -2420,11 +2420,6 @@ zh{
                         "4",
                     }
                 }
-            }
-        }
-        islamic-civil{
-            availableFormats{
-                yyyyM{"yyyy年M月"}
             }
         }
         japanese{

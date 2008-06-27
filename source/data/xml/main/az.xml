@@ -17,7 +17,7 @@
 	<characters>
 		<special xmlns:icu="http://www.icu-project.org/">
 			<icu:scripts>
-				<icu:script type="1">Cyrl</icu:script>
+				<icu:script type="1">Latn</icu:script>
 			</icu:scripts>
 		</special>
 	</characters>
