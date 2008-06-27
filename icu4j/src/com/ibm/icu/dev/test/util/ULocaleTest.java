@@ -1581,7 +1581,7 @@ public class ULocaleTest extends TestFmwk {
                 "as"
             }, {
                 "az",
-                "az_Cyrl_AZ",
+                "az_Latn_AZ",
                 "az"
             }, {
                 "be",
@@ -2149,7 +2149,7 @@ public class ULocaleTest extends TestFmwk {
                 "sv_AX"
             }, {
                 "und_AZ",
-                "az_Cyrl_AZ",
+                "az_Latn_AZ",
                 "az"
             }, {
                 "und_Arab",
