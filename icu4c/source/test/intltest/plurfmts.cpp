@@ -448,11 +448,11 @@ PluralFormatTest::pluralFormatLocaleTest(/*char *par*/)
     }
     else {
         status = U_ZERO_ERROR;
-        UnicodeString plResult = plFmt.format(0, status);  // retrun ONE
+        UnicodeString plResult = plFmt.format(0.0, status);  // retrun ONE
         plResult = plFmt.format(0.5, status);  // retrun ONE
-        plResult = plFmt.format(1, status);  // retrun ONE
+        plResult = plFmt.format(1.0, status);  // retrun ONE
         plResult = plFmt.format(1.9, status);  // retrun ONE
-        plResult = plFmt.format(2, status);  // retrun OTHER
+        plResult = plFmt.format(2.0, status);  // retrun OTHER
     }
 }
 

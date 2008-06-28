@@ -1996,6 +1996,8 @@ void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *
     }
     strcpy(testFileName, testDataDirectory);
     strcat(testFileName, fileName);
+    
+    logln("Opening data file %s\n", fileName);
 
     int    len;
     UChar *testFile = ReadAndConvertFile(testFileName, len, "UTF-8", status);

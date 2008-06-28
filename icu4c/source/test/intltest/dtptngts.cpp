@@ -71,8 +71,8 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("11:58 PM"),
         UnicodeString("23:58"),
         UnicodeString("58:59"),
-        UnicodeString("1999-1"),  // zh_Hans_CN
-        UnicodeString("1999-01"),
+        UnicodeString("1999-1", -1, US_INV),  // zh_Hans_CN
+        UnicodeString("1999-01", -1, US_INV),
         CharsToUnicodeString("1999\\u5E741\\u670813\\u65E5"),
         CharsToUnicodeString("1999\\u5E7401\\u670813\\u65E5"),
         UnicodeString("1-13"),
@@ -240,13 +240,13 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     UnicodeString dateReturned, expectedResult;
     dateReturned.remove();
     dateReturned = format->format(sampleDate, dateReturned, status);
-    expectedResult=UnicodeString("14. Okt 8:58");
+    expectedResult=UnicodeString("14. Okt 8:58", -1, US_INV);
     if ( dateReturned != expectedResult ) {
         errln("ERROR: Simple test in getBestPattern with Locale::getGermany()).");
     }
     // add new pattern
     status = U_ZERO_ERROR;
-    conflictingStatus = gen->addPattern(UnicodeString("d'. von' MMMM"), true, conflictingPattern, status); 
+    conflictingStatus = gen->addPattern(UnicodeString("d'. von' MMMM", -1, US_INV), true, conflictingPattern, status); 
     if (U_FAILURE(status)) {
         errln("ERROR: Could not addPattern - d\'. von\' MMMM");
     }
@@ -256,7 +256,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     format->applyPattern(gen->getBestPattern(UnicodeString("MMMMddHmm"), status));
     dateReturned.remove();
     dateReturned = format->format(sampleDate, dateReturned, status);
-    expectedResult=UnicodeString("14. von Oktober 8:58");
+    expectedResult=UnicodeString("14. von Oktober 8:58", -1, US_INV);
     if ( dateReturned != expectedResult ) {
         errln("ERROR: Simple test addPattern failed!: d\'. von\' MMMM  ");
     }
@@ -374,7 +374,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     }
     {   // Trac# 6104
         Locale loc("zh");
-        UnicodeString expR = UnicodeString("1999-01");
+        UnicodeString expR = UnicodeString("1999-01", -1, US_INV);
         UDate testDate1= LocaleTest::date(99, 0, 13, 23, 58, 59);
         DateTimePatternGenerator *patGen=DateTimePatternGenerator::createInstance(loc, status);
         if(U_FAILURE(status)) {

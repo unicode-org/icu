@@ -36,7 +36,90 @@
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
+#if U_CHARSET_FAMILY==U_EBCDIC_FAMILY
+/**
+ * If we are on EBCDIC, use an iterator which will 
+ * traverse the bundles in ASCII order.
+ */
+#define U_USE_ASCII_BUNDLE_ITERATOR
+#define U_SORT_ASCII_BUNDLE_ITERATOR
+#endif
+
+#if defined(U_USE_ASCII_BUNDLE_ITERATOR)
+
+#include "unicode/ustring.h"
+#include "uarrsort.h"
+
+struct UResAEntry {
+    UChar *key;
+    UResourceBundle *item;
+};
+
+struct UResourceBundleAIterator {
+    UResourceBundle  *bund;
+    UResAEntry *entries;
+    int32_t num;
+    int32_t cursor;
+};
+
+static int32_t U_CALLCONV
+ures_a_codepointSort(const void *context, const void *left, const void *right) {
+    //CompareContext *cmp=(CompareContext *)context;
+    return u_strcmp(((const UResAEntry *)left)->key,
+                    ((const UResAEntry *)right)->key);
+}
+
+
+static void ures_a_open(UResourceBundleAIterator *aiter, UResourceBundle *bund, UErrorCode *status) {
+    if(U_FAILURE(*status)) {
+        return;
+    }
+    aiter->bund = bund;
+    aiter->num = ures_getSize(aiter->bund);
+    aiter->cursor = 0;
+#if !defined(U_SORT_ASCII_BUNDLE_ITERATOR)
+    aiter->entries = NULL;
+#else
+    aiter->entries = (UResAEntry*)uprv_malloc(sizeof(UResAEntry)*aiter->num);
+    for(int i=0;i<aiter->num;i++) {
+        aiter->entries[i].item = ures_getByIndex(aiter->bund, i, NULL, status);
+        const char *akey = ures_getKey(aiter->entries[i].item);
+        int32_t len = uprv_strlen(akey)+1;
+        aiter->entries[i].key = (UChar*)uprv_malloc(len*sizeof(UChar));
+        u_charsToUChars(akey, aiter->entries[i].key, len);
+    }
+    uprv_sortArray(aiter->entries, aiter->num, sizeof(UResAEntry), ures_a_codepointSort, NULL, TRUE, status);
+#endif
+}
+
+static void ures_a_close(UResourceBundleAIterator *aiter) {
+#if defined(U_SORT_ASCII_BUNDLE_ITERATOR)
+    for(int i=0;i<aiter->num;i++) {
+        uprv_free(aiter->entries[i].key);
+        ures_close(aiter->entries[i].item);
+    }
+#endif
+}
+
+static const UChar *ures_a_getNextString(UResourceBundleAIterator *aiter, int32_t *len, const char **key, UErrorCode *err) {
+#if !defined(U_SORT_ASCII_BUNDLE_ITERATOR)
+    return ures_getNextString(aiter->bund, len, key, err);
+#else
+    if(U_FAILURE(*err)) return NULL;
+    UResourceBundle *item = aiter->entries[aiter->cursor].item;
+    const UChar* ret = ures_getString(item, len, err);
+    *key = ures_getKey(item);
+    aiter->cursor++;
+    return ret;
+#endif
+}
+
+
+#endif
+
+
 U_NAMESPACE_BEGIN
+
 
 // *****************************************************************************
 // class DateTimePatternGenerator
@@ -108,7 +191,7 @@ static const char* const CLDR_FIELD_APPEND[] = {
 static const char* const CLDR_FIELD_NAME[] = {
     "era", "year", "quarter", "month", "week", "*", "weekday", "day", "*", "*", "dayperiod",
     "hour", "minute", "second", "*", "zone"
-};
+};  
 
 static const char* const Resource_Fields[] = {
     "day", "dayperiod", "era", "hour", "minute", "month", "second", "week",
@@ -472,7 +555,7 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
         patBundle = ures_getByKeyWithFallback(fBundle, Resource_Fields[i], NULL, &err);
         fieldBundle = ures_getByKeyWithFallback(patBundle, "dn", NULL, &err);
         rbPattern = ures_getNextUnicodeString(fieldBundle, &key, &err);
-        ures_close(fieldBundle);
+       ures_close(fieldBundle);
         ures_close(patBundle);
         if (rbPattern.length()==0 ) {
             continue;  
@@ -492,13 +575,24 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
         int32_t len;
         const UChar *retPattern;
         key=NULL;
+#if defined(U_USE_ASCII_BUNDLE_ITERATOR)
+        UResourceBundleAIterator aiter;
+        ures_a_open(&aiter, patBundle, &err);
+#endif
         for(i=0; i<numberKeys; ++i) {
+#if defined(U_USE_ASCII_BUNDLE_ITERATOR)
+            retPattern=ures_a_getNextString(&aiter, &len, &key, &err);
+#else
             retPattern=ures_getNextString(patBundle, &len, &key, &err);
+#endif
             UnicodeString format=UnicodeString(retPattern);
             UnicodeString retKey=UnicodeString(key, -1, US_INV);
             setAvailableFormat(retKey, err);
             conflictingStatus = addPattern(format, FALSE, conflictingPattern, err);
         }
+#if defined(U_USE_ASCII_BUNDLE_ITERATOR)
+        ures_a_close(&aiter);
+#endif
     }
     ures_close(patBundle);
     ures_close(gregorianBundle);
@@ -520,9 +614,16 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
             int32_t len;
             const UChar *retPattern;
             key=NULL;
-
+#if defined(U_USE_ASCII_BUNDLE_ITERATOR)
+            UResourceBundleAIterator aiter;
+            ures_a_open(&aiter, patBundle, &err);
+#endif
             for(i=0; i<numberKeys; ++i) {
+#if defined(U_USE_ASCII_BUNDLE_ITERATOR)
+                retPattern=ures_a_getNextString(&aiter, &len, &key, &err);
+#else
                 retPattern=ures_getNextString(patBundle, &len, &key, &err);
+#endif            
                 UnicodeString format=UnicodeString(retPattern);
                 UnicodeString retKey=UnicodeString(key, -1, US_INV);
                 if ( !isAvailableFormatSet(retKey) ) {
@@ -530,6 +631,9 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
                     conflictingStatus = addPattern(format, FALSE, conflictingPattern, err);
                 }
             }
+#if defined(U_USE_ASCII_BUNDLE_ITERATOR)
+            ures_a_close(&aiter);
+#endif
         }
         ures_close(patBundle);
         ures_close(gregorianBundle);
