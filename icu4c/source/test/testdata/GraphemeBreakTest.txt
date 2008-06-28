@@ -1,4 +1,4 @@
-# GraphemeBreakTest-5.1.0.txt
+﻿# GraphemeBreakTest-5.1.0.txt
 # Date: 2008-03-11, 02:19:22 GMT [MD]
 #
 # Unicode Character Database
