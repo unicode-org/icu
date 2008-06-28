@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2006, International Business Machines
+*   Copyright (C) 1997-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -1185,10 +1185,7 @@ public:
      * @see #setPadCharacter
      * @see #getPadCharacterString
      * @see #setPadPosition
-     * @see #kPadBeforePrefix
-     * @see #kPadAfterPrefix
-     * @see #kPadBeforeSuffix
-     * @see #kPadAfterSuffix
+     * @see #EPadPosition
      * @stable ICU 2.0
      */
     virtual EPadPosition getPadPosition(void) const;
@@ -1206,10 +1203,7 @@ public:
      * @see #setPadCharacter
      * @see #getPadCharacterString
      * @see #getPadPosition
-     * @see #kPadBeforePrefix
-     * @see #kPadAfterPrefix
-     * @see #kPadBeforeSuffix
-     * @see #kPadAfterSuffix
+     * @see #EPadPosition
      * @stable ICU 2.0
      */
     virtual void setPadPosition(EPadPosition padPos);
