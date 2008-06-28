@@ -1,4 +1,4 @@
-# LineBreakTest-5.1.0.txt
+﻿# LineBreakTest-5.1.0.txt
 # Date: 2008-03-11, 02:19:24 GMT [MD]
 #
 # Unicode Character Database
