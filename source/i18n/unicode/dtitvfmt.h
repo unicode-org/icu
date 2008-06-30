@@ -89,7 +89,6 @@ U_NAMESPACE_BEGIN
  * the field pattern length is ignored and the best match, which is defined 
  * in date time patterns, will be returned without honor the field pattern
  * letter length in skeleton.
- * </ol>
  *
  * <P>
  * The calendar fields we support for interval formatting are:

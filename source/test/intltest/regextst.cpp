@@ -874,7 +874,7 @@ void RegexTest::API_Match() {
     //
     {
         UErrorCode status = U_ZERO_ERROR;
-        UnicodeString testString(1000000, 0x41, 1000000);  // Length 1,000,000, filled with 'A'
+        UnicodeString testString(600000, 0x41, 600000);  // Length 600,000, filled with 'A'
         
         // Adding the capturing parentheses to the pattern "(A)+A$" inhibits optimizations
         //   of the '+', and makes the stack frames larger.

@@ -67,6 +67,12 @@ GENERATE_DEPRECATEDLIST= YES
 ENABLED_SECTIONS       = 
 MAX_INITIALIZER_LINES  = 30
 SHOW_USED_FILES        = YES
+
+# docset
+GENERATE_DOCSET        = NO
+DOCSET_FEEDNAME        = "ICU @VERSION@"
+DOCSET_BUNDLE_ID       = org.icu-project.icu4c
+
 #---------------------------------------------------------------------------
 # configuration options related to warning and progress messages
 #---------------------------------------------------------------------------

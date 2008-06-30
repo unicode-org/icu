@@ -511,6 +511,7 @@ public:
      * nor should the ponter of other object .  The pointer and its 
      * contents remain valid only until the next call to any method
      * of this class is made with this object. 
+     * @param formatName the name or number specifying a format
      * @param status  output param set to success/failure code.
      * @draft ICU 4.0
      */
