@@ -12,17 +12,17 @@ h3.doc { background: #CCCCFF }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 4.0 d03</h3>
+<h3>Read Me for ICU4J 4.0</h3>
 <hr size="2" width="100%">
 <p><b>Release Date</b><br>
-June 23, 2008<br>
+July 2, 2008<br>
 </p>
 <!-- <p><b>Note:</b> This is major release of ICU4J.  It contains bug fixes
 and adds implementations of inherited API and introduces new API
 or functionality. -->
 
-<p><b>Note:</b> This is a draft release of ICU4J 4.0.  All new APIs planned
-for ICU4J 4.0 release are available for evaluation.
+<p><b>Note:</b> This is major release of ICU4J. It contains bug fixes and adds
+implementations of inherited API and introduces new API or functionality. 
 </p>
 
 <p>For the most recent release, see the <a
@@ -41,6 +41,7 @@ download site</a>. </p>
   <li><a href="#HowToModularize">How to modularize ICU4J</a></li>
   <li><a href="#tryingout">Trying Out ICU4J</a></li>
   <li><a href="#resources">ICU4J Resource Information</a></li>
+  <li><a href="#timezone">About ICU4J Time Zone</a></li>
   <li><a href="#WhereToFindMore">Where to Find More Information</a></li>
   <li><a href="#SubmittingComments">Submitting Comments, Requesting
 Features and Reporting Bugs</a></li>
@@ -314,17 +315,14 @@ used by the ICU development team.
 <p>There are two ways to download the ICU4J releases.
 </p>
 <ul type="disc">
-  <li><b>Official Release Snapshot:</b><br>
+  <li><b>Official Release:</b><br>
 If you want to use ICU4J (as opposed to developing it), your best bet
-is to download an official, packaged version of the ICU4J source
-code. These versions are tested more thoroughly than day-to-day
-development builds, and they are packaged in jar files for convenient
-download. These packaged files can be found at the <a
- href="http://www.icu-project.org/download/">ICU Downloads page</a>.
-A packaged snapshot is named <b>icu4j-XXX-src.jar</b>, where XXX
-is the release version number. Please unjar this file. It
-will reconstruct the source directory.</li>
-</ul>
+is to download an official, packaged version of the ICU4J library files.
+These versions are tested more thoroughly than day-to-day development
+builds, and they are packaged in jar files for convenient download.
+These packaged files can be found at the
+<a href="http://www.icu-project.org/download/">ICU Downloads page</a>.
+</li></ul>
 <ul type="disc">
   <li><b>Subversion Source Repository:</b><br>
 If you are interested in developing features, patches, or bug fixes for
@@ -581,9 +579,6 @@ multi-lingual searching</a> </li>
 <p>To install ICU4J, simply place the prebuilt jar file <strong>icu4j.jar</strong>
 on your Java CLASSPATH. If you need Charset API support please place
 <strong>icu4j-charsets.jar</strong> on your class path. No other files are needed.</p>
-<p><b>Eclipse users:</b> See the ICU4J site for information on<a
- href="http://www.icu-project.org/docs/eclipse_howto/eclipse_howto.html">
-how to configure Eclipse</a> to build ICU4J.</p>
 <p>To build ICU4J, you will need a J2SE SDK and the Ant build system.
 We strongly recommend using the Ant build system to build ICU4J.
 It's recommended to install both the J2SE SDK and Ant somewhere <em>outside</em>
@@ -749,6 +744,10 @@ typing<br>
 <tt>"ant check"</tt> or
 "java -classpath classes com.ibm.icu.dev.test.TestAll -nothrow".</p>
 
+<p><b>Eclipse users:</b> See the ICU4J site for information on<a
+ href="http://www.icu-project.org/docs/eclipse_howto/eclipse_howto.html">
+how to configure Eclipse</a> to build and develop ICU4J on Eclipse IDE.</p>
+
 <p><b>Note: </b>To install/build ICU4J Locale Service Provider, please refer
 <a href="localespi/readme.html">Read Me for ICU4J Locale Service Provider</a>.</p>
 
@@ -820,7 +819,7 @@ Starting with release 2.1, ICU4J includes its own
 resource information
 which is completely independent of the JRE resource information. (Note,
 ICU4J 2.8 to 3.4, time zone information depends on the underlying JRE).
-The new ICU4J information is equivalent to the information in ICU4C and
+The ICU4J resource information is equivalent to the information in ICU4C and
 many resources are, in fact, the same binary files that ICU4C uses.
 <p>
 By default the ICU4J distribution includes all of the standard resource
@@ -1004,6 +1003,18 @@ downloading and building ICU4C, please click <a
     <li>cd to <I>$icu4j_root</I> dir</li>
     <li>Build and test icu4j</li>
 </ol>
+
+<h3 class="doc"><a name="timezone"></a>About ICU4J Time Zone</h3>
+<p>ICU4J 4.0 includes time zone data version 2008c, which is the latest one as of
+the release date.  However, time zone data is frequently updated in response
+to changes made by local governments around the world.  If you need to update
+the time zone data, please refer the ICU user guide topic
+<a href="http://www.icu-project.org/userguide/dateTimezone.html#tzupdate">Updating the Time Zone Data</a>.</p>
+<p>Starting with ICU4J 4.0, you can optionally configure ICU4J date and time
+service classes to use underlying JDK TimeZone implementation (see the ICU4J API reference
+<a href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/util/TimeZone.html">TimeZone</a>
+for the details).  When this configuration is enabled, ICU's own time zone data
+won't be used and you have to get time zone data patches from the JRE vendor.</p>
 
 <h3 class="doc"><a name="WhereToFindMore"></a>Where to Find More
 Information</h3>
