@@ -1211,7 +1211,7 @@ class CharsetISCII extends CharsetICU {
             short range = 0;
             boolean deltaChanged = false;
             int tempContextFromUnicode = 0x0000;    /* For special handling of the Gurmukhi script. */
-            CoderResult cr;
+            CoderResult cr = CoderResult.UNDERFLOW;
             
             /* initialize data */
             converterData = extraInfo;
@@ -1224,11 +1224,10 @@ class CharsetISCII extends CharsetICU {
             }
             
             /* writing the char to the output stream */
-            while (true) {
-                if (!source.hasRemaining())
-                    return CoderResult.UNDERFLOW;
-                if (!target.hasRemaining())
+            while (!cr.isError() && source.hasRemaining()) {
+                if (!target.hasRemaining()) {
                     return CoderResult.OVERFLOW;
+                }
                 
                 targetByteUnit = UConverterConstants.missingCharMarker;
                 sourceChar = source.get();
