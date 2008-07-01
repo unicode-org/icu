@@ -123,7 +123,7 @@ class CharsetISO2022 extends CharsetICU {
         if((jpCharsetMasks[version]&CSM(ISO8859_7)) != 0) {
             myConverterData.myConverterArray[ISO8859_7] = ((CharsetMBCS)CharsetICU.forNameICU("ISO8859_7")).sharedData;
         }
-        //myConverterData.myConverterArray[JISX201] = ((CharsetMBCS)CharsetICU.forNameICU("jisx-201")).sharedData;
+        // myConverterData.myConverterArray[JISX201] = ((CharsetMBCS)CharsetICU.forNameICU("jisx-201")).sharedData;
         myConverterData.myConverterArray[JISX208] = ((CharsetMBCS)CharsetICU.forNameICU("Shift-JIS")).sharedData;
         if ((jpCharsetMasks[version]&CSM(JISX212)) != 0) {
             myConverterData.myConverterArray[JISX212] = ((CharsetMBCS)CharsetICU.forNameICU("jisx-212")).sharedData;
@@ -134,7 +134,6 @@ class CharsetISO2022 extends CharsetICU {
         if ((jpCharsetMasks[version]&CSM(KSC5601)) != 0) {
             myConverterData.myConverterArray[KSC5601] = ((CharsetMBCS)CharsetICU.forNameICU("ksc_5601")).sharedData;
         }
-        myConverterData.name = "ISO_2022,locale=ja,version=" + version;
         
         // create a generic CharsetMBCS object
         myConverterData.currentConverter = (CharsetMBCS)CharsetICU.forNameICU("icu-internal-25546");
@@ -150,17 +149,10 @@ class CharsetISO2022 extends CharsetICU {
         myConverterData.myConverterArray[GB2312_1] = ((CharsetMBCS)CharsetICU.forNameICU("ibm-5478")).sharedData;
         if (version == 1) {
             myConverterData.myConverterArray[ISO_IR_165] = ((CharsetMBCS)CharsetICU.forNameICU("iso-ir-165")).sharedData;
-        }
+        } 
         myConverterData.myConverterArray[CNS_11643] = ((CharsetMBCS)CharsetICU.forNameICU("cns-11643-1992")).sharedData;
         
-        if (version == 1) {
-            myConverterData.name = "ISO_2022,locale=ja,version=" + version;
-        } else {
-            myConverterData.version = 0;
-            myConverterData.name = "ISO_2022,locale=ja,version=0";
-        }
-        
-     // create a generic CharsetMBCS object
+        // create a generic CharsetMBCS object
         myConverterData.currentConverter = (CharsetMBCS)CharsetICU.forNameICU("icu-internal-25546");
     }
     
@@ -174,11 +166,8 @@ class CharsetISO2022 extends CharsetICU {
         if (version == 1) {
             myConverterData.currentConverter = (CharsetMBCS)CharsetICU.forNameICU("icu-internal-25546");
             myConverterData.currentConverter.subChar1 = fromUSubstitutionChar[0][0];
-            myConverterData.name = "ISO_2022,locale=ko,version=1";
         } else {
             myConverterData.currentConverter = (CharsetMBCS)CharsetICU.forNameICU("ibm-949");
-            myConverterData.version = 0;
-            myConverterData.name = "ISO_2022,locale=ko,version=0";
         }
         
         myConverterData.currentEncoder = (CharsetEncoderMBCS)myConverterData.currentConverter.newEncoder();
@@ -355,16 +344,12 @@ class CharsetISO2022 extends CharsetICU {
         ISO2022State fromU2022State;
         int key;
         int version;
-        String name;
-        String locale;
         boolean isEmptySegment;
         
         UConverterDataISO2022() {
             myConverterArray = new UConverterSharedData[UCNV_2022_MAX_CONVERTERS];
             toU2022State = new ISO2022State();
             fromU2022State = new ISO2022State();
-            name = new String();
-            locale = new String();
             currentType = 0;
             key = 0;
             version = 0;
