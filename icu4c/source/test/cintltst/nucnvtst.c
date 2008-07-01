@@ -5355,7 +5355,7 @@ static void TestJB5275_1(){
                                 "\xEF\x40\x3B\xB3\x0A";
     static const UChar expected[] ={ 
             0x003b, 0x0a15, 0x000a, /* Easy characters */
-            0x0a22, 0x0a3c, 0x0a5c, 0x0a4d, 0x0a39, 0x000a, /* Gurmukhi test */
+            0x0a5c, 0x0a4d, 0x0a39, 0x0a5c, 0x0a4d, 0x0a39, 0x000a, /* Gurmukhi test */
             0x09dd, 0x09dc, 0x09cd, 0x09b9, 0x000a, /* Switch script: to Bengali*/ 
             0x003b, 0x0a15, 0x000a, /* Easy characters - new line, so should default!*/
             0x003b, 0x0a15, 0x000a /* Back to Gurmukhi*/
@@ -5400,7 +5400,7 @@ static void TestJB5275(){
         "\xEF\x4B\x3B\xB3\x0A"  /* Punjabi test */
         /* "\xEF\x4C\x3C\xB3\x0A"  unsupported sequence \xEF\x41 */;
     static const UChar expected[] ={ 
-        0x0A22, 0x0A3C, 0x0A5C, 0x0A4D, 0x0A39, 0x000A, /* Gurmukhi test */
+        0x0A5C, 0x0A4D, 0x0A39, 0x0A5C, 0x0A4D, 0x0A39, 0x000A, /* Gurmukhi test */
         0x0AA2, 0x0AB5, 0x0AA1, 0x0AB5, 0x0ACD, 0x0AB9, 0x000A,     /* Gujarati test */
         0x0038, 0x0C95, 0x000A, /* Kannada test */
         0x0039, 0x0D15, 0x000A, /* Malayalam test */
