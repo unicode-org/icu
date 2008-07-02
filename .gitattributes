@@ -349,7 +349,6 @@ icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/Collator.java -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/DateFormat.java -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/DateFormatSymbols.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/DecimalFormat.java -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/DecimalFormatSymbols.java -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/MessageFormat.java -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/NumberFormat.java -text
