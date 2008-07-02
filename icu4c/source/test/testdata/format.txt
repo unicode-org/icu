@@ -380,5 +380,33 @@ format:table(nofallback) {
 
             }
         }
-    }
+        TestHebrew{
+            Info {
+                Description { "Test Hebrew calendar:" }
+            }
+            Settings {
+                // options: 'format', or 'parse'.  One can be omitted if this is a 1 way test.
+                {
+                    Type { "date_format" }
+                },
+            }
+            Headers { "locale","spec", "date", "str"}
+            // locale: locale including calendar type
+            // spec:   either 'PATTERN=y mm h' etc, or 'DATE=SHORT,TIME=LONG'
+            // date:   either 'MILLIS=####' where #### is millis,
+            //        or a calendar spec ERA=0,YEAR=1, etc.. applied to the calendar type specified by the locale
+            //        or RELATIVE_MILLIS=### where ### is a signed value which is added to the current millis
+            //        or RELATIVE_ADD:DATE=1  which means that the field "DATE" will be added by +1 relative to current time
+            // str:   the expected unicode string
+            
+            Cases { 
+               {
+                    "en_US@calendar=hebrew",         
+                    "DATE=FULL,TIME=FULL",
+                    "MILLIS=3076424179200000.5",
+                    "Friday, Heshvan 3, 103217 12:00:00 AM United States (Los Angeles)"
+               },
+            }    
+        }
+    }        
 }
