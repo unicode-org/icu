@@ -245,6 +245,7 @@ icu4c/source/test/letest/readme.html svneol=native#text/html
 icu4c/source/test/perf/Makefile.in -text
 icu4c/source/test/perf/README -text
 icu4c/source/test/perf/collationperf/readme.html svneol=native#text/html
+icu4c/source/test/perf/normperf/normperf.cpp -text
 icu4c/source/test/perf/strsrchperf/Makefile.in -text
 icu4c/source/test/perf/strsrchperf/StrSrchPerf_r.pl -text
 icu4c/source/test/perf/strsrchperf/strsrchperf.cpp -text
