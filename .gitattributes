@@ -289,9 +289,6 @@ icu4j/localespi/src/com/ibm/icu/impl/javaspi/ICULocaleServiceProviderConfig.prop
 icu4j/preprocessor.txt -text
 icu4j/readme.html svneol=native#text/html
 icu4j/src/com/ibm/icu/ICUConfig.properties -text
-icu4j/src/com/ibm/icu/charset/CharsetBOCU1.java -text
-icu4j/src/com/ibm/icu/charset/CharsetISO2022.java -text
-icu4j/src/com/ibm/icu/charset/CharsetSCSU.java -text
 icu4j/src/com/ibm/icu/charset/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict -text svneol=native#application/octet-stream
 icu4j/src/com/ibm/icu/dev/data/testdata.jar -text svneol=unset#application/java-archive
@@ -323,20 +320,6 @@ icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/.settings/org.e
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/META-INF/MANIFEST.MF -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/build.properties -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/BreakIteratorTest.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/CalendarTest.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/CollationKeyTest.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/CollatorTest.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/DateFormatSymbolsTest.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/DateFormatTest.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/DecimalFormatSymbolsTest.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/DecimalFormatTest.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/ICUTestCase.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/MessageFormatTest.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/NumberFormatTest.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/SimpleDateFormatTest.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/TimeZoneTest.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base.tests/src/com/ibm/icu/tests/ULocaleTest.java -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/.classpath -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/.project -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/.settings/org.eclipse.jdt.core.prefs -text
@@ -344,18 +327,6 @@ icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/.settings/org.eclipse
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/META-INF/MANIFEST.MF -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/build.properties -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/plugin.properties -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/BreakIterator.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/CollationKey.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/Collator.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/DateFormat.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/DateFormatSymbols.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/DecimalFormatSymbols.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/MessageFormat.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/NumberFormat.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/text/SimpleDateFormat.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/util/Calendar.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/util/TimeZone.java -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.base/src/com/ibm/icu/util/ULocale.java -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.jse4/.classpath -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.jse4/.project -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.jse4/.settings/org.eclipse.jdt.core.prefs -text
@@ -369,7 +340,6 @@ icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.tests/.settings/org.eclips
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.tests/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.tests/META-INF/MANIFEST.MF -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.tests/build.properties -text
-icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu.tests/src/com/ibm/icu/tests/UnitTest.java -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu/.classpath -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu/.project -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu/.settings/org.eclipse.jdt.core.prefs -text
@@ -377,12 +347,9 @@ icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu/.settings/org.eclipse.jdt.
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu/META-INF/MANIFEST.MF -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu/build.properties -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu/plugin.properties -text
-icu4j/src/com/ibm/icu/dev/test/calendar/DataDrivenCalendarTest.java -text
-icu4j/src/com/ibm/icu/dev/test/calendar/IndianTest.java -text
 icu4j/src/com/ibm/icu/dev/test/calendar/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/charsetdet/CharsetDetectionTests.xml svneol=native#text/xml
 icu4j/src/com/ibm/icu/dev/test/compression/package.html svneol=native#text/html
-icu4j/src/com/ibm/icu/dev/test/format/DataDrivenFormatTest.java -text
 icu4j/src/com/ibm/icu/dev/test/normalizer/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Asian.txt -text svneol=unset#application/octet-stream
@@ -488,12 +455,6 @@ icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.8.1/com.ibm.icu.util.ULoc
 icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.8.1/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
 icu4j/src/com/ibm/icu/dev/test/serializable/data/ICU_3.8.1/com.ibm.icu.util.VTimeZone.dat -text
 icu4j/src/com/ibm/icu/dev/test/translit/package.html svneol=native#text/html
-icu4j/src/com/ibm/icu/dev/test/util/CalendarFieldsSet.java -text
-icu4j/src/com/ibm/icu/dev/test/util/DateTimeStyleSet.java -text
-icu4j/src/com/ibm/icu/dev/test/util/DebugUtilities.java -text
-icu4j/src/com/ibm/icu/dev/test/util/DebugUtilitiesData.java -text
-icu4j/src/com/ibm/icu/dev/test/util/DebugUtilitiesTest.java -text
-icu4j/src/com/ibm/icu/dev/test/util/FieldsSet.java -text
 icu4j/src/com/ibm/icu/dev/tool/compression/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j28.api.gz -text svneol=unset#application/gzip
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j30.api.gz -text svneol=unset#application/gzip
@@ -517,33 +478,6 @@ icu4j/src/com/ibm/icu/dev/tool/tzu/runicutzuenv.cmd -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/runicutzuenv.sh -text
 icu4j/src/com/ibm/icu/impl/data/icudata.jar -text svneol=unset#application/java-archive
 icu4j/src/com/ibm/icu/impl/data/package.html svneol=native#text/html
-icu4j/src/com/ibm/icu/impl/duration/BasicDurationFormatter.java -text
-icu4j/src/com/ibm/icu/impl/duration/BasicDurationFormatterFactory.java -text
-icu4j/src/com/ibm/icu/impl/duration/BasicPeriodBuilderFactory.java -text
-icu4j/src/com/ibm/icu/impl/duration/BasicPeriodFormatter.java -text
-icu4j/src/com/ibm/icu/impl/duration/BasicPeriodFormatterFactory.java -text
-icu4j/src/com/ibm/icu/impl/duration/BasicPeriodFormatterService.java -text
-icu4j/src/com/ibm/icu/impl/duration/DateFormatter.java -text
-icu4j/src/com/ibm/icu/impl/duration/DurationFormatter.java -text
-icu4j/src/com/ibm/icu/impl/duration/DurationFormatterFactory.java -text
-icu4j/src/com/ibm/icu/impl/duration/Period.java -text
-icu4j/src/com/ibm/icu/impl/duration/PeriodBuilder.java -text
-icu4j/src/com/ibm/icu/impl/duration/PeriodBuilderFactory.java -text
-icu4j/src/com/ibm/icu/impl/duration/PeriodFormatter.java -text
-icu4j/src/com/ibm/icu/impl/duration/PeriodFormatterFactory.java -text
-icu4j/src/com/ibm/icu/impl/duration/PeriodFormatterService.java -text
-icu4j/src/com/ibm/icu/impl/duration/TimeUnit.java -text
-icu4j/src/com/ibm/icu/impl/duration/TimeUnitConstants.java -text
-icu4j/src/com/ibm/icu/impl/duration/impl/DataRecord.java -text
-icu4j/src/com/ibm/icu/impl/duration/impl/PeriodFormatterData.java -text
-icu4j/src/com/ibm/icu/impl/duration/impl/PeriodFormatterDataService.java -text
-icu4j/src/com/ibm/icu/impl/duration/impl/RecordReader.java -text
-icu4j/src/com/ibm/icu/impl/duration/impl/RecordWriter.java -text
-icu4j/src/com/ibm/icu/impl/duration/impl/ResourceBasedPeriodFormatterDataService.java -text
-icu4j/src/com/ibm/icu/impl/duration/impl/Utils.java -text
-icu4j/src/com/ibm/icu/impl/duration/impl/XMLRecordReader.java -text
-icu4j/src/com/ibm/icu/impl/duration/impl/XMLRecordWriter.java -text
-icu4j/src/com/ibm/icu/impl/duration/impl/YMDDateFormatter.java -text
 icu4j/src/com/ibm/icu/impl/duration/impl/data/index.txt -text
 icu4j/src/com/ibm/icu/impl/duration/impl/data/pfd_ar_EG.xml -text
 icu4j/src/com/ibm/icu/impl/duration/impl/data/pfd_ar_EG.xml.escaped -text
@@ -563,9 +497,6 @@ icu4j/src/com/ibm/icu/impl/duration/impl/data/pfd_zh_Hant.xml -text
 icu4j/src/com/ibm/icu/impl/duration/impl/data/pfd_zh_Hant_HK.xml -text
 icu4j/src/com/ibm/icu/lang/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/math/package.html svneol=native#text/html
-icu4j/src/com/ibm/icu/text/BreakCTDictionary.java -text
-icu4j/src/com/ibm/icu/text/DurationFormat.java -text
-icu4j/src/com/ibm/icu/text/ThaiBreakIterator.java -text
 icu4j/src/com/ibm/icu/text/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/util/package.html svneol=native#text/html
 icu4j/src/com/ibm/richtext/awtui/package.html svneol=native#text/html
