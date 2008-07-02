@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2007, International Business Machines Corporation and
+ * Copyright (c) 2007-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -116,6 +116,18 @@ udbg_stoi(const UnicodeString &s)
     u_UCharsToChars(u, ch, len);
     ch[len] = 0; /* include terminating \0 */
     return atoi(ch);
+}
+
+
+T_CTEST_API double 
+udbg_stod(const UnicodeString &s)
+{
+    char ch[256];
+    const UChar *u = s.getBuffer();
+    int32_t len = s.length();
+    u_UCharsToChars(u, ch, len);
+    ch[len] = 0; /* include terminating \0 */
+    return atof(ch);
 }
 
 T_CTEST_API UnicodeString *
