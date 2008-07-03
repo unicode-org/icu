@@ -36,7 +36,8 @@ static const UChar SPACE       = 32;  // ' '
  * '}'.
  */
 BreakTransliterator::BreakTransliterator(UnicodeFilter* adoptedFilter) :
-    Transliterator(UNICODE_STRING("Any-BreakInternal", 17), adoptedFilter) {
+    Transliterator(UNICODE_STRING("Any-BreakInternal", 17), adoptedFilter),
+    fInsertion(SPACE) {
         bi = NULL;
         UErrorCode status = U_ZERO_ERROR;
         boundaries = new UVector32(status);
