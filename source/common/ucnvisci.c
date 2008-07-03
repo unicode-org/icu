@@ -910,27 +910,29 @@ static void UConverter_fromUnicode_ISCII_OFFSETS_LOGIC(
 
     /*writing the char to the output stream */
     while (source < sourceLimit) {
-
-        targetByteUnit = missingCharMarker;
-
-        sourceChar = *source++;
-        tempContextFromUnicode = converterData->contextCharFromUnicode;
-
-        /*check if input is in ASCII and C0 control codes range*/
-        if (sourceChar <= ASCII_END) {
-            WRITE_TO_TARGET_FROM_U(args,offsets,source,target,targetLimit,sourceChar,err);
+        /* Write the language code following LF only if LF is not the last character. */
+        if (args->converter->fromUnicodeStatus == LF) {
+            targetByteUnit = ATR<<8;
+            targetByteUnit += (uint8_t) lookupInitialData[range].isciiLang;
+            args->converter->fromUnicodeStatus = 0x0000;
+            /* now append ATR and language code */
+            WRITE_TO_TARGET_FROM_U(args,offsets,source,target,targetLimit,targetByteUnit,err);
             if (U_FAILURE(*err)) {
                 break;
             }
-            if (sourceChar == LF) {
-                targetByteUnit = ATR<<8;
-                targetByteUnit += (uint8_t) lookupInitialData[range].isciiLang;
-                args->converter->fromUnicodeStatus=sourceChar;
-                /* now append ATR and language code */
-                WRITE_TO_TARGET_FROM_U(args,offsets,source,target,targetLimit,targetByteUnit,err);
-                if (U_FAILURE(*err)) {
-                    break;
-                }
+        }
+        
+        sourceChar = *source++;
+        tempContextFromUnicode = converterData->contextCharFromUnicode;
+        
+        targetByteUnit = missingCharMarker;
+        
+        /*check if input is in ASCII and C0 control codes range*/
+        if (sourceChar <= ASCII_END) {
+            args->converter->fromUnicodeStatus = sourceChar;
+            WRITE_TO_TARGET_FROM_U(args,offsets,source,target,targetLimit,sourceChar,err);
+            if (U_FAILURE(*err)) {
+                break;
             }
             continue;
         }
