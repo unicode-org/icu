@@ -3432,8 +3432,8 @@ public class TestCharset extends TestFmwk {
         ccus.clear();
         
         //test ascii overflow buffer
-        ccus.put((char)0x0A);
-        ccbs.put((byte)0x00);
+        ccus.put((char)0x0A); ccus.put((char)0x0043);
+        ccbs.put((byte)0x00); ccbs.put((byte)0x00);
         
         ccus.limit(ccus.position());
         ccus.position(0);
