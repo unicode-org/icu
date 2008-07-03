@@ -110,10 +110,10 @@ public class DataDrivenFormatTest extends ModuleTest {
             // parse 'date' - either 'MILLIS=12345' or  a CalendarFieldsSet
             if(date.startsWith(kMILLIS)) {
                 useDate = true;
-                fromDate = new Date(Long.parseLong(date.substring(kMILLIS.length())));
+                fromDate = new Date((long)Double.parseDouble(date.substring(kMILLIS.length())));
             } else if(date.startsWith(kRELATIVE_MILLIS)) {
                 useDate = true;
-                fromDate = new Date(now+Long.parseLong(date.substring(kRELATIVE_MILLIS.length())));
+                fromDate = new Date(now+(long)Double.parseDouble(date.substring(kRELATIVE_MILLIS.length())));
             } else if(date.startsWith(kRELATIVE_ADD)) {
                 String add = date.substring(kRELATIVE_ADD.length()); // "add" is a string indicating which fields to add
                 CalendarFieldsSet addSet = new CalendarFieldsSet();
