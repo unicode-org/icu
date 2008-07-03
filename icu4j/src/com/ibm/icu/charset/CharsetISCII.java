@@ -838,7 +838,7 @@ class CharsetISCII extends CharsetICU {
             //data.contextCharToUnicode; /* contains previous ISCII codepoint visited */
             //this.toUnicodeStatus; /* contains the mapping to Unicode of the above codepoint */
             
-            while (!cr.isError() && source.hasRemaining()) {
+            while (source.hasRemaining()) {
                 targetUniChar = UConverterConstants.missingCharMarker;
                 
                 if (target.hasRemaining()) {
@@ -1006,16 +1006,16 @@ class CharsetISCII extends CharsetICU {
                                  * convert the code point given based on the delta provided.
                                  */
                                 cr = WriteToTargetToU(offsets, (source.position() - 2), source, target, PNJ_RRA, (short)0);
-                                if (!cr.isError()) {
+                                if (!cr.isOverflow()) {
                                     cr = WriteToTargetToU(offsets, (source.position() - 2), source, target, PNJ_SIGN_VIRAMA, (short)0);
-                                    if (!cr.isError()) {
+                                    if (!cr.isOverflow()) {
                                         cr = WriteToTargetToU(offsets, (source.position() - 2), source, target, PNJ_HA, (short)0);
                                     } else {
-                                        this.charErrorBufferArray[this.charErrorBufferLength++] = 0x0939;
+                                        this.charErrorBufferArray[this.charErrorBufferLength++] = PNJ_HA;
                                     }
                                 } else {
-                                    this.charErrorBufferArray[this.charErrorBufferLength++] = 0x094D;
-                                    this.charErrorBufferArray[this.charErrorBufferLength++] = 0x0939;
+                                    this.charErrorBufferArray[this.charErrorBufferLength++] = PNJ_SIGN_VIRAMA;
+                                    this.charErrorBufferArray[this.charErrorBufferLength++] = PNJ_HA;
                                 }
                                 this.toUnicodeStatus = UConverterConstants.missingCharMarker;
                                 data.contextCharToUnicode = NO_CHAR_MARKER;
@@ -1125,7 +1125,7 @@ class CharsetISCII extends CharsetICU {
                 
             } //end of while
             
-            if (!cr.isError() && !cr.isOverflow() && flush && !source.hasRemaining()) {
+            if (cr.isUnderflow() && flush && !source.hasRemaining()) {
                 /*end of the input stream */
                 if (data.contextCharToUnicode == ATR || data.contextCharToUnicode == EXT || data.contextCharToUnicode == ISCII_INV) {
                     /* set toUBytes[] */
@@ -1224,30 +1224,34 @@ class CharsetISCII extends CharsetICU {
             }
             
             /* writing the char to the output stream */
-            while (!cr.isError() && source.hasRemaining()) {
+            while (source.hasRemaining()) {
                 if (!target.hasRemaining()) {
                     return CoderResult.OVERFLOW;
                 }
                 
-                targetByteUnit = UConverterConstants.missingCharMarker;
+                /* Write the language code following LF only if LF is not the last character. */
+                if (fromUnicodeStatus == LF) {
+                    targetByteUnit = ATR << 8;
+                    targetByteUnit += (byte)lookupInitialData[range].isciiLang;
+                    fromUnicodeStatus = 0x0000;
+                    /* now append ATR and language code */
+                    cr = WriteToTargetFromU(offsets, source, target, targetByteUnit);
+                    if (cr.isOverflow()) {
+                        break;
+                    }
+                }
+                
                 sourceChar = source.get();
                 tempContextFromUnicode = converterData.contextCharFromUnicode;
                 
+                targetByteUnit = UConverterConstants.missingCharMarker;
+                
                 /* check if input is in ASCII and C0 control codes range */
                 if (sourceChar <= ASCII_END) {
+                    fromUnicodeStatus = sourceChar;
                     cr = WriteToTargetFromU(offsets, source, target, sourceChar);
-                    if (cr.isError()) {
+                    if (cr.isOverflow()) {
                         break;
-                    }
-                    if (sourceChar == LF) {
-                        targetByteUnit = ATR << 8;
-                        targetByteUnit += (byte)lookupInitialData[range].isciiLang;
-                        fromUnicodeStatus = sourceChar;
-                        /* now append ATR and language code */
-                        cr = WriteToTargetFromU(offsets, source, target, targetByteUnit);
-                        if (cr.isOverflow()) {
-                            break;
-                        }
                     }
                     continue;
                 }
@@ -1346,7 +1350,7 @@ class CharsetISCII extends CharsetICU {
                     targetByteUnit = targetByteUnit << 16 | ISCII_HALANT << 8 | targetByteUnit;
                     /*write targetByteUnit to target */
                     cr = WriteToTargetFromU(offsets, source, target, targetByteUnit);
-                    if (cr.isError()) {
+                    if (cr.isOverflow()) {
                         break;
                     }
                 } else if (targetByteUnit != UConverterConstants.missingCharMarker) {
@@ -1355,7 +1359,7 @@ class CharsetISCII extends CharsetICU {
                     }
                     /*write targetByteUnit to target */
                     cr = WriteToTargetFromU(offsets, source, target, targetByteUnit);
-                    if (cr.isError()) {
+                    if (cr.isOverflow()) {
                         break;
                     }
                 } else if (UTF16.isSurrogate((char)sourceChar)) {
