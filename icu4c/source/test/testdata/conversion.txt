@@ -1307,9 +1307,9 @@ conversion:table(nofallback) {
         // Test Gurmukhi (Bindi Tippi and Consonant clusters)
         {
           "iscii-gur",
-          "\u0a15\u0a70\u0a02\u0a71\u0a15\u0a5c\u0a4d\u0a39",
-          :bin { ef4bb3a2a2b3e8b3bfe9e8d8 },
-          :intvector{ 0, 0, 0, 1, 2, 3, 3, 3, 5, 5, 6, 7 },
+          "\u0a15\u0a70\u0a02\u0a71\u0a15\u0a5c\u0a4d\u0a39\u000a\u0043\u0041\u000a",
+          :bin { ef4bb3a2a2b3e8b3bfe9e8d80aef4b43410a },
+          :intvector{ 0, 0, 0, 1, 2, 3, 3, 3, 5, 5, 6, 7, 8, 8, 8, 9, 10, 11  },
           :int{1}, :int{0}, "", ".", ""
         }
         // escape callback
