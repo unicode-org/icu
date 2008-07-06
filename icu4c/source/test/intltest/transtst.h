@@ -348,6 +348,8 @@ private:
 
     void TestHalfwidthFullwidth(void);
 
+    void TestThai(void);
+
     /**
      * Tests the multiple-pass syntax
      */
