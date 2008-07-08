@@ -138,7 +138,6 @@ icu4j/localespi/src/com/ibm/icu/impl/javaspi/ICULocaleServiceProviderConfig.prop
 icu4j/preprocessor.txt -text
 icu4j/src/com/ibm/icu/ICUConfig.properties -text
 icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict -text
-icu4j/src/com/ibm/icu/dev/data/testdata.jar -text
 icu4j/src/com/ibm/icu/dev/data/thai6.ucs -text
 icu4j/src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.base/.project -text
 icu4j/src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.base/build.properties -text
