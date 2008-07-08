@@ -343,13 +343,13 @@ calendar:table(nofallback) {
                     "MONTH=-10", // month - 10
                     "EXTENDED_YEAR=4638,MONTH=5,DATE=29,IS_LEAP_MONTH=0",  // ch  
                },
-//               {
-//                    "en_US@calendar=hebrew",         
-//                    "MILLIS=-180799750799999.500000",
-//                    "add",
-//                    "YEAR=100000", // year + 100000
-//                    "MILLIS=2974930005600000",
-//               },
+               {
+                    "en_US@calendar=hebrew",         
+                    "MILLIS=-180799750799999",
+                    "add",
+                    "YEAR=100000", // year + 100000
+                    "MILLIS=2974930005600001",
+               },
             }
         }	          
     }	    

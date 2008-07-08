@@ -403,7 +403,7 @@ format:table(nofallback) {
                {
                     "en_US@calendar=hebrew",         
                     "DATE=FULL,TIME=FULL",
-                    "MILLIS=3076424179200000.5",
+                    "MILLIS=3076424179200000",
                     "Friday, Heshvan 3, 103217 12:00:00 AM United States (Los Angeles)"
                },
             }    
