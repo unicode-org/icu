@@ -71,6 +71,11 @@ void DataDrivenCalendarTest::runIndexedTest(int32_t index, UBool exec,
 void DataDrivenCalendarTest::testOps(TestData *testData,
         const DataMap * /*settings*/) {
     UErrorCode status = U_ZERO_ERROR;
+    UBool useDate = FALSE; // TODO
+    UnicodeString kMILLIS("MILLIS="); // TODO: static
+    UDate fromDate = 0; // TODO
+    UDate toDate = 0;
+    
     const DataMap *currentCase= NULL;
     char toCalLoc[256] = "";
 
@@ -126,13 +131,17 @@ void DataDrivenCalendarTest::testOps(TestData *testData,
                     + UnicodeString(" - "));
             continue;
         }
-        fromSet.parseFrom(testSetting, status);
-        if (U_FAILURE(status)) {
-            errln(caseString+": Failed to parse '"+param+"' parameter: "
-                    +testSetting);
-            continue;
+                
+        if(from.startsWith(kMILLIS)){
+        	UnicodeString millis = UnicodeString(from, kMILLIS.length());
+        	useDate = TRUE;
+        	fromDate = udbg_stod(millis);
+        } else if(fromSet.parseFrom(testSetting, status)<0 || U_FAILURE(status)){
+        	errln(caseString+": Failed to parse '"+param+"' parameter: "
+        	                    +testSetting);
+        	            continue;
         }
-
+        
         // #4 'operation' info
         param = "operation";
         UnicodeString operation = testSetting=currentCase->getString(param,
@@ -174,13 +183,16 @@ void DataDrivenCalendarTest::testOps(TestData *testData,
                     + UnicodeString(" - "));
             continue;
         }
-        toSet.parseFrom(testSetting, &fromSet, status); // parse with inheritance.
-        if (U_FAILURE(status)) {
+        if(to.startsWith(kMILLIS)){
+        	UnicodeString millis = UnicodeString(to, kMILLIS.length());
+            useDate = TRUE;
+            toDate = udbg_stod(millis);
+        } else if(toSet.parseFrom(testSetting, &fromSet, status)<0 || U_FAILURE(status)){
             errln(caseString+": Failed to parse '"+param+"' parameter: "
-                    +testSetting);
+                   +testSetting);
             continue;
         }
-
+        
         UnicodeString caseContentsString = locale+":  from "+from+": "
                 +operation +" [[[ "+params+" ]]]   >>> "+to;
         logln(caseString+": "+caseContentsString);
@@ -189,13 +201,21 @@ void DataDrivenCalendarTest::testOps(TestData *testData,
         // now, do it.
 
         /// prepare calendar
-        fromSet.setOnCalendar(fromCalendar, status);
-        if (U_FAILURE(status)) {
-            errln(caseString+" FAIL: Failed to set on Source calendar: "
-                    + u_errorName(status));
-            return;
+        if(useDate){
+        	fromCalendar->setTime(fromDate, status);
+        	if (U_FAILURE(status)) {
+        	        	            errln(caseString+" FAIL: Failed to set time on Source calendar: "
+        	        	                    + u_errorName(status));
+        	        	            return;
+        	        	        }
+        } else {
+        	fromSet.setOnCalendar(fromCalendar, status);
+        	        if (U_FAILURE(status)) {
+        	            errln(caseString+" FAIL: Failed to set on Source calendar: "
+        	                    + u_errorName(status));
+        	            return;
+        	        }
         }
-
         
         diffSet.clear();
         // Is the calendar sane after being set?
@@ -239,15 +259,23 @@ void DataDrivenCalendarTest::testOps(TestData *testData,
         // now - what's the result?
         diffSet.clear();
 
-        if (!toSet.matches(toCalendar, diffSet, status)) {
+        if(useDate){
+        	if(!(toCalendar->getTime(status)==toDate) || U_FAILURE(status)){
+        		errln("FAIL: "+caseString+" Match operation had an error: "
+        		                    +u_errorName(status));
+        	}else{
+        		logln(caseString + " SUCCESS: got=expected="+toDate);
+        		logln("PASS: "+caseString+" matched!");
+        	}
+        } else if (!toSet.matches(toCalendar, diffSet, status)) {
             UnicodeString diffs = diffSet.diffFrom(toSet, status);
             errln((UnicodeString)"FAIL: "+caseString+" - , "+caseContentsString
                     +" Differences: "+ diffs +"', status: "
                     + u_errorName(status));
-        } else if (U_FAILURE(status)) {
+        }else if (U_FAILURE(status)) {
             errln("FAIL: "+caseString+" Match operation had an error: "
                     +u_errorName(status));
-        } else {
+        }else {
             logln("PASS: "+caseString+" matched!");
         }
 
