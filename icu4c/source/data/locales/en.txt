@@ -3188,7 +3188,7 @@ en{
         VALENCIA{"Valencian"}
         XIANG{"Xiang or Hunanese"}
     }
-    Version{"1.196"}
+    Version{"1.197"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -3999,6 +3999,7 @@ en{
             ls{"Marshall Islands Time"}
         }
         "meta:Mauritius"{
+            ld{"Mauritius Summer Time"}
             ls{"Mauritius Time"}
         }
         "meta:Mawson"{
