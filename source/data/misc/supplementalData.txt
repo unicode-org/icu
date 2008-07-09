@@ -11983,6 +11983,9 @@ supplementalData:table(nofallback){
                 "Brazil/Acre",
             }
         }
+        "America:Santarem"{
+            territory{"BR"}
+        }
         "America:Santiago"{
             territory{"CL"}
             aliases{
