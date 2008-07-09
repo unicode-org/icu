@@ -73,7 +73,7 @@ root{
         297,
         210,
     }
-    Version{"1.161"}
+    Version{"1.162"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -1841,6 +1841,7 @@ root{
             ss{"MHT"}
         }
         "meta:Mauritius"{
+            sd{"MUST"}
             ss{"MUT"}
         }
         "meta:Mawson"{
