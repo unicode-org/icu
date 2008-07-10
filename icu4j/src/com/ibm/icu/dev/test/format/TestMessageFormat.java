@@ -1293,6 +1293,25 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+  // Test toPattern when there is a PluralFormat
+  public void testPluralFormatToPattern() {
+    String[] patterns = {
+      "Beware of vicious {0, plural, one {hamster} other {hamsters}}.",
+      "{0, plural, one {{0, number,C''''est #,##0.0# fichier}} other {Ce sont # fichiers}} dans la liste.",
+      "{0, plural, one {C''est # fichier} other {Ce sont # fichiers}} dans la liste.",
+    };
+
+    for (int i = 0; i < patterns.length; ++i) {
+      String pattern = patterns[i];
+      MessageFormat mf = new MessageFormat(pattern);
+      MessageFormat mf2 = new MessageFormat(mf.toPattern());
+      if (!mf.equals(mf2)) {
+        errln("message formats not equal for pattern:\n*** '" + pattern + "'\n*** '" +
+              mf.toPattern() + "'");
+      }
+    }
+  }
+
 //#if defined(FOUNDATION10) || defined(J2SE13)
 //#else
     // Test case for formatToCharacterIterator
