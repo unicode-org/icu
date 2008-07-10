@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -35,6 +35,8 @@ public:
     void TestSunriseTimes(void);
 
     void TestBasics(void);
+    
+    void TestMoonAge(void);
  private:
     void initAstro(UErrorCode&);
     void closeAstro(UErrorCode&);
