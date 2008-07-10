@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1996-2006, International Business Machines Corporation and
+ * Copyright (c) 1996-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -36,6 +36,7 @@ void AstroTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
       CASE(3,TestCoverage);
       CASE(4,TestSunriseTimes);
       CASE(5,TestBasics);
+      CASE(6,TestMoonAge);
     default: name = ""; break;
     }
 }
@@ -424,6 +425,50 @@ void AstroTest::TestBasics(void) {
   closeAstro(status);
   ASSERT_OK(status);
 
+}
+
+void AstroTest::TestMoonAge(void){
+	UErrorCode status = U_ZERO_ERROR;
+	initAstro(status);
+	ASSERT_OK(status);
+	
+	// more testcases are around the date 05/20/2012
+	//ticket#3785  UDate ud0 = 1337557623000.0;
+	static const double testcase[][10] = {{2012, 5, 20 , 16 , 48, 59},
+	                {2012, 5, 20 , 16 , 47, 34},
+	                {2012, 5, 21, 00, 00, 00},
+	                {2012, 5, 20, 14, 55, 59},
+	                {2012, 5, 21, 7, 40, 40},
+	                {2023, 9, 25, 10,00, 00},
+	                {2008, 7, 7, 15, 00, 33}, 
+	                {1832, 9, 24, 2, 33, 41 },
+	                {2016, 1, 31, 23, 59, 59},
+	                {2099, 5, 20, 14, 55, 59}
+	        };
+	// Moon phase angle - Got from http://www.moonsystem.to/checkupe.htm
+	static const double angle[] = {356.8493418421329, 356.8386760059673, 0.09625415252237701, 355.9986960782416, 3.5714026601303317, 124.26906744384183, 59.80247650195558,
+									357.54163205513123, 268.41779281511094, 4.82340276581624};
+	static const double precision = CalendarAstronomer::PI/32;
+	for (int32_t i = 0; i < (int32_t)(sizeof(testcase)/sizeof(testcase[0])); i++) {
+		gc->clear();
+		logln((UnicodeString)"CASE["+i+"]: Year "+(int32_t)testcase[i][0]+" Month "+(int32_t)testcase[i][1]+" Day "+
+		                                    (int32_t)testcase[i][2]+" Hour "+(int32_t)testcase[i][3]+" Minutes "+(int32_t)testcase[i][4]+
+		                                    " Seconds "+(int32_t)testcase[i][5]);
+		gc->set((int32_t)testcase[i][0], (int32_t)testcase[i][1]-1, (int32_t)testcase[i][2], (int32_t)testcase[i][3], (int32_t)testcase[i][4], (int32_t)testcase[i][5]);
+		astro->setDate(gc->getTime(status));
+		double expectedAge = (angle[i]*CalendarAstronomer::PI)/180;
+		double got = astro->getMoonAge();
+		//logln(testString);
+		if(!(got>expectedAge-precision && got<expectedAge+precision)){
+			errln((UnicodeString)"FAIL: expected " + expectedAge +
+					" got " + got);
+		}else{
+			logln((UnicodeString)"PASS: expected " + expectedAge +
+					" got " + got);
+		}
+	}
+	closeAstro(status);
+	ASSERT_OK(status);
 }
 
 
