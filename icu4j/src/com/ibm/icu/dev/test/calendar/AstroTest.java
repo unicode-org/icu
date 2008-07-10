@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -339,5 +339,44 @@ public class AstroTest extends TestFmwk {
 //        cal3.add(cal3.DATE, -1);
 //        astro.setDate(cal3.getTime());
 //        astro.foo();
+    }
+    
+    public void TestMoonAge(){
+        GregorianCalendar gc = new GregorianCalendar(new SimpleTimeZone(0,"GMT"));
+        CalendarAstronomer calastro = new CalendarAstronomer();
+        // more testcases are around the date 05/20/2012
+        //ticket#3785  UDate ud0 = 1337557623000.0;
+        double testcase[][] = {{2012, 5, 20 , 16 , 48, 59},
+                {2012, 5, 20 , 16 , 47, 34},
+                {2012, 5, 21, 00, 00, 00},
+                {2012, 5, 20, 14, 55, 59},
+                {2012, 5, 21, 7, 40, 40},
+                {2023, 9, 25, 10,00, 00},
+                {2008, 7, 7, 15, 00, 33}, 
+                {1832, 9, 24, 2, 33, 41 },
+                {2016, 1, 31, 23, 59, 59},
+                {2099, 5, 20, 14, 55, 59}
+        };
+        // Moon phase angle - Got from http://www.moonsystem.to/checkupe.htm
+        double angle[] = {356.8493418421329, 356.8386760059673, 0.09625415252237701, 355.9986960782416, 3.5714026601303317, 124.26906744384183, 59.80247650195558, 357.54163205513123, 268.41779281511094, 4.82340276581624};
+        double precision = PI/32;
+        for(int i=0; i<testcase.length; i++){
+            gc.clear();
+            String testString = "CASE["+i+"]: Year "+(int)testcase[i][0]+" Month "+(int)testcase[i][1]+" Day "+
+                                    (int)testcase[i][2]+" Hour "+(int)testcase[i][3]+" Minutes "+(int)testcase[i][4]+
+                                    " Seconds "+(int)testcase[i][5];
+            gc.set((int)testcase[i][0],(int)testcase[i][1]-1,(int)testcase[i][2],(int)testcase[i][3],(int)testcase[i][4], (int)testcase[i][5]);
+            calastro.setDate(gc.getTime());
+            double expectedAge = (angle[i]*PI)/180;
+            double got = calastro.getMoonAge();
+            logln(testString);
+            if(!(got>expectedAge-precision && got<expectedAge+precision)){
+                errln("FAIL: expected " + expectedAge +
+                        " got " + got);
+            }else{
+                logln("PASS: expected " + expectedAge +
+                        " got " + got);
+            }
+        }
     }
 }
