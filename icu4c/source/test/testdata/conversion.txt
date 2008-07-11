@@ -578,7 +578,7 @@ conversion:table(nofallback) {
         { "UTF-8", :bin{ 61F48FBFBF }, "a\U0010FFFF", :intvector{ 0, 1, 1 }, :int{1}, :int{0}, "", "", :bin{""} }
         //      Headers { "charset", "bytes", "unicode", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidChars" }
         {
-            "iscii",
+            "iscii-dev",
             :bin{ EF4BC0E9BFE9E8D80AEF4AC0D4BFD4E8D80AEF4838B30AEF4939B30AEF4A3AB30AEF4B3BB30A},  
             "\u0A5C\u0A4D\u0A39\u0A5C\u0A4D\u0A39\u000A" /* Gurmukhi test */
             "\u0AA2\u0AB5\u0AA1\u0AB5\u0ACD\u0AB9\u000A"     /* Gujarati test */
@@ -1314,7 +1314,7 @@ conversion:table(nofallback) {
         }
         // escape callback
         {
-          "ISCII",
+          "iscii-dev",
           "A\u0901\U00023456\u0902B\U00023456C",
           :bin{ 41ef42a1255544383444255544433536a24225554438344425554443353643 },
           :intvector{
