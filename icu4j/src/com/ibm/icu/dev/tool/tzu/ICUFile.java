@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and others.
+ * Copyright (C) 2007-2008, International Business Machines Corporation and others.
  * All Rights Reserved.
  * ******************************************************************************
  */
@@ -55,20 +55,14 @@ public class ICUFile {
     public static final String TZ_ENTRY_DIR = "com/ibm/icu/impl";
 
     /**
-     * Prefix of the timezone resource filename.
-     */
-    public static final String TZ_ENTRY_FILENAME_PREFIX = "zoneinfo";
-
-    /**
-     * Extension of the timezone resource filename.
-     */
-    public static final String TZ_ENTRY_FILENAME_EXTENSION = ".res";
-
-    /**
      * The timezone resource filename.
      */
-    public static final String TZ_ENTRY_FILENAME = TZ_ENTRY_FILENAME_PREFIX
-            + TZ_ENTRY_FILENAME_EXTENSION;
+    public static final String TZ_ENTRY_FILENAME = "zoneinfo.res";
+
+    /**
+     * The metazone resource filename.
+     */
+    private static final String MZ_ENTRY_FILENAME = "metazoneInfo.res";
 
     /**
      * Key to use when getting the version of a timezone resource.
@@ -187,17 +181,18 @@ public class ICUFile {
      * Finds the jar entry in the jar file that represents a timezone resource and returns it, or
      * null if none is found.
      * 
-     * @param jar
-     *            The jar file to search.
+     * @param jar       The jar file to search.
+     * @param entryName The target entry name
+     *              
      * @return The jar entry representing the timezone resource in the jar file, or null if none is
      *         found.
      */
-    private static JarEntry getTZEntry(JarFile jar) {
+    private static JarEntry getTZEntry(JarFile jar, String entryName) {
         JarEntry tzEntry = null;
         Enumeration e = jar.entries();
         while (e.hasMoreElements()) {
             tzEntry = (JarEntry) e.nextElement();
-            if (tzEntry.getName().endsWith(TZ_ENTRY_FILENAME))
+            if (tzEntry.getName().endsWith(entryName))
                 return tzEntry;
         }
         return null;
@@ -222,6 +217,11 @@ public class ICUFile {
      * The entry for the timezone resource inside the ICU4J jar.
      */
     private JarEntry tzEntry;
+
+    /**
+     * The entry for the metazone resource inside the ICU4J jar.
+     */
+    private JarEntry mzEntry;
 
     /**
      * The version of the timezone resource inside the ICU4J jar.
@@ -382,9 +382,28 @@ public class ICUFile {
 
         if (!icuFile.canRead() || !icuFile.canWrite())
             throw new IOException("Missing permissions for " + icuFile.getPath());
-        if ((insertURL = getCachedURL(insertURL)) == null)
+
+        JarEntry[] jarEntries = new JarEntry[2];
+        URL[] insertURLs = new URL[2];
+
+        jarEntries[0] = tzEntry;
+        insertURLs[0] = getCachedURL(insertURL);
+
+        if (insertURLs[0] == null)
             throw new IOException(
                     "Could not download the Time Zone data, skipping update for this jar.");
+
+        // Check if metazoneInfo.res is available
+        String tzURLStr = insertURL.toString();
+        int lastSlashIdx = tzURLStr.lastIndexOf('/');
+        if (lastSlashIdx >= 0) {
+            String mzURLStr = tzURLStr.substring(0, lastSlashIdx + 1) + MZ_ENTRY_FILENAME;
+            insertURLs[1] = getCachedURL(new URL(mzURLStr));
+            if (insertURLs[1] != null) {
+                jarEntries[1] = mzEntry;
+            }
+        }
+
         File backupFile = null;
         if ((backupFile = createBackupFile(icuFile, backupDir)) == null)
             throw new IOException(
@@ -393,7 +412,7 @@ public class ICUFile {
             throw new IOException(
                     "Could not copy the original jar file to the backup location (the original jar file remains unchanged).");
         logger.printlnToBoth("Backup location: " + backupFile.getPath());
-        if (!createUpdatedJar(backupFile, icuFile, tzEntry, insertURL))
+        if (!createUpdatedJar(backupFile, icuFile, jarEntries, insertURLs))
             throw new IOException(
                     "Could not create an updated jar file at the original location (the original jar file is at the backup location).");
 
@@ -562,10 +581,15 @@ public class ICUFile {
      *            The URL to use in replacing the entry.
      * @return Whether the operation was successful.
      */
-    private boolean createUpdatedJar(File inputFile, File outputFile, JarEntry insertEntry,
-            URL inputURL) {
-        logger.loglnToBoth("Copying " + inputFile + " to " + outputFile + ", replacing "
-                + insertEntry + " with " + inputURL + ".");
+    private boolean createUpdatedJar(File inputFile, File outputFile, JarEntry[] insertEntries,
+            URL[] inputURLs) {
+        logger.loglnToBoth("Copying " + inputFile + " to " + outputFile + ",");
+        for (int i = 0; i < insertEntries.length; i++) {
+            if (insertEntries[i] != null) {
+                logger.loglnToBoth("    replacing " + insertEntries[i] + " with " + inputURLs[i]);
+            }
+        }
+
         JarFile jar = null;
         JarOutputStream ostream = null;
         InputStream istream = null;
@@ -578,9 +602,6 @@ public class ICUFile {
         try {
             jar = new JarFile(inputFile);
             ostream = new JarOutputStream(new FileOutputStream(outputFile));
-            URLConnection con = inputURL.openConnection();
-            con.setRequestProperty("user-agent", System.getProperty("http.agent"));
-            istream = con.getInputStream();
 
             Enumeration e = jar.entries();
             while (e.hasMoreElements()) {
@@ -598,7 +619,29 @@ public class ICUFile {
                     }
                 }
 
-                if (!entryName.equals(insertEntry.getName())) {
+                boolean isReplaced = false;
+                for (int i = 0; i < insertEntries.length; i++) {
+                    if (insertEntries[i] != null) {
+                        if (entryName.equals(insertEntries[i].getName())) {
+                            // if the current entry *is* the one that needs updating write a new entry based
+                            // on the input stream (from the URL)
+                            // currentEntry.setTime(System.currentTimeMillis());
+                            ostream.putNextEntry(new JarEntry(entryName));
+
+                            URLConnection con = inputURLs[i].openConnection();
+                            con.setRequestProperty("user-agent", System.getProperty("http.agent"));
+                            istream = con.getInputStream();
+
+                            while ((bytesRead = istream.read(buffer)) != -1) {
+                                ostream.write(buffer, 0, bytesRead);
+                            }
+                            istream.close();
+                            isReplaced = true;
+                            break;
+                        }
+                    }
+                }
+                if (!isReplaced) {
                     // if the current entry isn't the one that needs updating write a copy of the
                     // old entry from the old file
                     ostream.putNextEntry(new JarEntry(entryName));
@@ -607,14 +650,6 @@ public class ICUFile {
                     while ((bytesRead = jstream.read(buffer)) != -1)
                         ostream.write(buffer, 0, bytesRead);
                     jstream.close();
-                } else {
-                    // if the current entry *is* the one that needs updating write a new entry based
-                    // on the input stream (from the URL)
-                    // currentEntry.setTime(System.currentTimeMillis());
-                    ostream.putNextEntry(new JarEntry(entryName));
-
-                    while ((bytesRead = istream.read(buffer)) != -1)
-                        ostream.write(buffer, 0, bytesRead);
                 }
             }
 
@@ -757,7 +792,13 @@ public class ICUFile {
             // if the jar's directory structure contains TZ_ENTRY_DIR and there
             // is a timezone resource in the jar, then the jar is updatable
             success = (jar.getJarEntry(TZ_ENTRY_DIR) != null)
-                    && ((this.tzEntry = getTZEntry(jar)) != null);
+                    && ((this.tzEntry = getTZEntry(jar, TZ_ENTRY_FILENAME)) != null);
+
+            // if the jar file contains metazoneInfo.res, initialize mzEntry -
+            // this is true for ICU4J 3.8.1 or later releases
+            if (success) {
+                mzEntry = getTZEntry(jar, MZ_ENTRY_FILENAME);
+            }
         } catch (IOException ex) {
             // unable to create the JarFile or unable to get the Manifest
             // log the unexplained i/o error, but we must drudge on
@@ -789,7 +830,10 @@ public class ICUFile {
             boolean success = false;
 
             try {
-                outputFile = File.createTempFile("zoneinfo", ".res");
+                String urlStr = url.toString();
+                int lastSlash = urlStr.lastIndexOf('/');
+                String fileName = lastSlash >= 0 ? urlStr.substring(lastSlash + 1) : urlStr;
+                outputFile = File.createTempFile(fileName, null);
                 outputFile.deleteOnExit();
 
                 logger.loglnToBoth("Downloading from " + url + " to " + outputFile.getPath() + ".");

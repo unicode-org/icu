@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and others.
+ * Copyright (C) 2007-2008, International Business Machines Corporation and others.
  * All Rights Reserved.
  * ******************************************************************************
  */
@@ -66,7 +66,7 @@ public class ICUTZUMain {
     public static void main(String[] args) {
         try {
             // TODO: fix this to properly set the user agent
-            String agent = "ICUTZU/1.0 (" + System.getProperty("os.name") + " "
+            String agent = "ICUTZU/1.2 (" + System.getProperty("os.name") + " "
                     + System.getProperty("os.version") + "; " + Locale.getDefault().toString()
                     + ")";
             System.setProperty("http.agent", agent);
