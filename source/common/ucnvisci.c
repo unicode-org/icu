@@ -1007,7 +1007,7 @@ static void UConverter_fromUnicode_ISCII_OFFSETS_LOGIC(
                     /* we are in a script block which is different than
                      * previous sourceChar's script block write ATR and language codes
                      */
-                    uint16_t temp=0;
+                    uint32_t temp=0;
                     temp =(uint16_t)(ATR<<8);
                     temp += (uint16_t)((uint8_t) lookupInitialData[range].isciiLang);
                     /* reset */
