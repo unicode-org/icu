@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -49,23 +49,20 @@ public class TestCanonicalIterator extends TestFmwk {
         //Transliterator name = Transliterator.getInstance("[^\\u0020-\\u007F] name");
         //Set itSet = new TreeSet();
         //Set slowItSet = new TreeSet();
-        
-        
+
+
         for (int i = 0; i < 0x10FFFF; ++i) {
-            
+
             // skip characters we know don't have decomps
             int type = UCharacter.getType(i);
             if (type == Character.UNASSIGNED || type == Character.PRIVATE_USE
                 || type == Character.SURROGATE) continue;
-                
+
             if ((++counter % 5000) == 0) logln("Testing " + Utility.hex(i,0));
-            
+
             String s = UTF16.valueOf(i);
-            
-            if (! skipIfBeforeICU(3, 4,0)) {
-                characterTest(s, i, it);
-            }
-            
+            characterTest(s, i, it);
+
             characterTest(s + "\u0345", i, it);
         }
     }

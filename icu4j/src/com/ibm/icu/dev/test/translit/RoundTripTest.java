@@ -206,7 +206,7 @@ public class RoundTripTest extends TestFmwk {
 
     String getGreekSet() {
         // Time bomb
-        if (skipIfBeforeICU(4,0,0)) {
+        if (skipIfBeforeICU(4,1,0)) {
             // We temporarily filter against Unicode 4.1, but we only do this
             // before version 3.5.
             logln("TestGreek needs to be updated to remove delete the section marked [:Age=4.0:] filter");
@@ -268,7 +268,7 @@ public class RoundTripTest extends TestFmwk {
 
     public void TestHebrew() throws IOException {
         //      Time bomb
-        if (skipIfBeforeICU(4,0,0)) {
+        if (skipIfBeforeICU(4,1,0)) {
             // We temporarily filter against Unicode 4.1, but we only do this
             // before version 3.5.
             logln("TestHebrew needs to be updated to remove delete the section marked [:Age=4.0:] filter");
@@ -283,7 +283,7 @@ public class RoundTripTest extends TestFmwk {
 
     public void TestThai() throws IOException {
         long start = System.currentTimeMillis();
-        if(skipIfBeforeICU(4,0,0)){
+        if(skipIfBeforeICU(4,1,0)){
             new Test("Latin-Thai")
             .test("[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268\u02CC]",
                   "[\u0E01-\u0E3A\u0E40-\u0E5B]", 
@@ -365,22 +365,16 @@ public class RoundTripTest extends TestFmwk {
 
     public void TestDevanagariLatin() throws IOException {
         long start = System.currentTimeMillis();
-        if(skipIfBeforeICU(2,8,0)){
-            new Test("Latin-DEVANAGARI", 50)
-              .test(latinForIndic, "[[:Devanagari:][\u094d][\u0964\u0965] & [:Age=3.2:]]", "[\u0965]", this, new LegalIndic());
-
-        }else{
-            if (skipIfBeforeICU(4,0,0)) {
-                logln("Warning: TestDevanagariLatin needs to be updated to remove delete the section marked [:Age=4.1:] filter");
-            } else {
+        if (skipIfBeforeICU(4,1,0)) {
+            logln("Warning: TestDevanagariLatin needs to be updated to remove delete the section marked [:Age=4.1:] filter");
+        } else {
 //              We temporarily filter against Unicode 4.1, but we only do this
-                // before version 3.4.
-                errln("FAIL: TestDevanagariLatin needs to be updated to remove delete the [:Age=4.1:] filter ");
-                return;
-            }
-            new Test("Latin-DEVANAGARI", 50)
-              .test(latinForIndic, "[[[:Devanagari:][\u094d][\u0964\u0965]]&[:Age=4.1:]]", "[\u0965\u0904]", this, new LegalIndic());
+            // before version 3.4.
+            errln("FAIL: TestDevanagariLatin needs to be updated to remove delete the [:Age=4.1:] filter ");
+            return;
         }
+        new Test("Latin-DEVANAGARI", 50)
+          .test(latinForIndic, "[[[:Devanagari:][\u094d][\u0964\u0965]]&[:Age=4.1:]]", "[\u0965\u0904]", this, new LegalIndic());
         showElapsed(start, "TestDevanagariLatin");
     }
 
@@ -744,7 +738,7 @@ public class RoundTripTest extends TestFmwk {
             logln("Testing only 5 of "+ interIndicArray.length+" Skipping rest (use -e for exhaustive)");
             num = 5;
         }
-        if (skipIfBeforeICU(4,0,0)) {
+        if (skipIfBeforeICU(4,1,0)) {
             logln("Warning: TestInterIndic needs to be updated to remove delete the section marked [:Age=4.1:] filter");
         } else {
 //          We temporarily filter against Unicode 4.1, but we only do this
@@ -753,31 +747,22 @@ public class RoundTripTest extends TestFmwk {
             return;
         }
         for(int i=0; i<num;i++){
-           logln("Testing " + interIndicArray[i][0] + " at index " + i   );
-           if(skipIfBeforeICU(2,8,0)){
-               new Test(interIndicArray[i][0], 50)
-                    .test("[" + interIndicArray[i][1]+" & [:Age=3.2:]]",
-                          "[" + interIndicArray[i][2]+" & [:Age=3.2:]]",
-                          interIndicArray[i][3],
-                          this, new LegalIndic());
-           }else{
-               /*TODO: uncomment the line below when the transliterator is fixed
-               new Test(interIndicArray[i][0], 50)
-                    .test(interIndicArray[i][1],
-                          interIndicArray[i][2],
-                          interIndicArray[i][3],
-                          this, new LegalIndic());
-               */
-               /* comment lines below  when transliterator is fixed */
-               // start
-               new Test(interIndicArray[i][0], 50)
-               .test("["+interIndicArray[i][1]+" &[:Age=4.1:]]",
-                     "["+interIndicArray[i][2]+" &[:Age=4.1:]]",
-                     interIndicArray[i][3],
-                     this, new LegalIndic());
-               //end
-           }
-
+            logln("Testing " + interIndicArray[i][0] + " at index " + i   );
+            /*TODO: uncomment the line below when the transliterator is fixed
+            new Test(interIndicArray[i][0], 50)
+                .test(interIndicArray[i][1],
+                      interIndicArray[i][2],
+                      interIndicArray[i][3],
+                      this, new LegalIndic());
+            */
+            /* comment lines below  when transliterator is fixed */
+            // start
+            new Test(interIndicArray[i][0], 50)
+            .test("["+interIndicArray[i][1]+" &[:Age=4.1:]]",
+                  "["+interIndicArray[i][2]+" &[:Age=4.1:]]",
+                  interIndicArray[i][3],
+                  this, new LegalIndic());
+            //end
         }
         showElapsed(start, "TestInterIndic");
     }

@@ -214,7 +214,7 @@ public class TestConversion extends ModuleTest {
             
         } catch (Exception e) {
             // TODO implement loading of test data.
-            if (skipIfBeforeICU(4,0,0)) {
+            if (skipIfBeforeICU(4,1,0)) {
                 logln("Skipping test:(" + cc.charset + ") due to ICU Charset not supported at this time");
             } else {
                 errln(cc.charset + " was not found");
@@ -498,7 +498,7 @@ public class TestConversion extends ModuleTest {
 
         } catch (Exception e) {
             // TODO implement loading of test data.
-            if (skipIfBeforeICU(4,0,0)) {
+            if (skipIfBeforeICU(4,1,0)) {
                 logln("Skipping test:(" + cc.charset + ") due to ICU Charset not supported at this time");
             } else {
                 errln(cc.charset + " was not found");
