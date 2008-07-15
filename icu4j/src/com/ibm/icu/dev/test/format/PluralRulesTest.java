@@ -13,7 +13,10 @@ import com.ibm.icu.util.ULocale;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author dougfelt (Doug Felt)
@@ -169,5 +172,13 @@ public class PluralRulesTest extends TestFmwk {
         ULocale ru_equiv = PluralRules.getFunctionalEquivalent(russian, available);
         assertTrue("ru listed", available[0]);
         assertEquals("ru and ru_RU equivalent locales", ru_ru_equiv, ru_equiv);
+    }
+
+    public void testAvailableULocales() {
+        ULocale[] locales = PluralRules.getAvailableULocales();
+        Set localeSet = new HashSet();
+        localeSet.addAll(Arrays.asList(locales));
+
+        assertEquals("locales are unique in list", locales.length, localeSet.size());
     }
 }
