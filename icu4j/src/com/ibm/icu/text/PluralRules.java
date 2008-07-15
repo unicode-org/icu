@@ -736,6 +736,37 @@ public class PluralRules implements Serializable {
     }
 
     /**
+     * Returns the set of locales for which PluralRules are known.
+     * @return the set of locales for which PluralRules are known, as a list
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static ULocale[] getAvailableULocales() {
+      return PluralRulesLoader.loader.getAvailableULocales();
+    }
+
+    /**
+     * Returns the 'functionally equivalent' locale with respect to
+     * plural rules.  Calling PluralRules.forLocale with the functionally equivalent
+     * locale, and with the provided locale, returns rules that behave the same.
+     * <br/>
+     * All locales with the same functionally equivalent locale have
+     * plural rules that behave the same.  This is not exaustive;
+     * there may be other locales whose plural rules behave the same
+     * that do not have the same equivalent locale.
+     *
+     * @param locale the locale to check
+     * @param isAvailable if not null and of length > 0, this will hold 'true' at
+     * index 0 if locale is directly defined (without fallback) as having plural rules
+     * @return the functionally-equivalent locale
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static ULocale getFunctionalEquivalent(ULocale locale, boolean[] isAvailable) {
+        return PluralRulesLoader.loader.getFunctionalEquivalent(locale, isAvailable);
+    }
+
+    /**
      * {@inheritDoc}
      * @draft ICU 3.8
      * @provisional This API might change or be removed in a future release.

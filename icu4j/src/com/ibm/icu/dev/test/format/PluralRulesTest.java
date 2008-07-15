@@ -17,7 +17,6 @@ import java.util.List;
 
 /**
  * @author dougfelt (Doug Felt)
- *
  */
 public class PluralRulesTest extends TestFmwk {
     public static void main(String[] args) throws Exception {
@@ -149,5 +148,26 @@ public class PluralRulesTest extends TestFmwk {
         assertEquals("ru 0", PluralRules.KEYWORD_MANY, rules.select(0));
         assertEquals("ru 1", PluralRules.KEYWORD_ONE, rules.select(1));
         assertEquals("ru 2", PluralRules.KEYWORD_FEW, rules.select(2));
+    }
+
+    public void testFunctionalEquivalent() {
+        // spot check
+        ULocale unknown = ULocale.createCanonical("zz_ZZ");
+        ULocale un_equiv = PluralRules.getFunctionalEquivalent(unknown, null);
+        assertEquals("unknown locales have root", ULocale.ROOT, un_equiv);
+
+        ULocale jp_equiv = PluralRules.getFunctionalEquivalent(ULocale.JAPAN, null);
+        ULocale cn_equiv = PluralRules.getFunctionalEquivalent(ULocale.CHINA, null);
+        assertEquals("japan and china equivalent locales", jp_equiv, cn_equiv);
+
+        boolean[] available = new boolean[1];
+        ULocale russia = ULocale.createCanonical("ru_RU");
+        ULocale ru_ru_equiv = PluralRules.getFunctionalEquivalent(russia, available);
+        assertFalse("ru_RU not listed", available[0]);
+
+        ULocale russian = ULocale.createCanonical("ru");
+        ULocale ru_equiv = PluralRules.getFunctionalEquivalent(russian, available);
+        assertTrue("ru listed", available[0]);
+        assertEquals("ru and ru_RU equivalent locales", ru_ru_equiv, ru_equiv);
     }
 }
