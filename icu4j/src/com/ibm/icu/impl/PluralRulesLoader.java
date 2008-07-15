@@ -24,6 +24,7 @@ import java.util.TreeMap;
 public class PluralRulesLoader {
   private final Map rulesIdToRules;
   private Map localeIdToRulesId; // lazy init, use getLocaleIdToRulesIdMap to access
+  private Map rulesIdToEquivalentULocale; // lazy init, use getRulesIdToEquivalentULocaleMap to access
 
   /**
    * Access through singleton.
@@ -47,28 +48,72 @@ public class PluralRulesLoader {
   }
 
   /**
-   * Lazily construct the map from localeIds to rulesIds.  This
-   * map exactly reflects the contents of the locales resource
-   * in plurals.res.
+   * Returns the functionally equivalent locale.
+   */
+  public ULocale getFunctionalEquivalent(ULocale locale, boolean[] isAvailable) {
+    if (isAvailable != null && isAvailable.length > 0) {
+      String localeId = ULocale.canonicalize(locale.getBaseName());
+      Map idMap = getLocaleIdToRulesIdMap();
+      isAvailable[0] = idMap.containsKey(localeId);
+    }
+
+    String rulesId = getRulesIdForLocale(locale);
+    if (rulesId == null || rulesId.trim().length() == 0) {
+      return ULocale.ROOT; // ultimate fallback
+    }
+
+    ULocale result = (ULocale) getRulesIdToEquivalentULocaleMap().get(rulesId);
+    if (result == null) {
+      return ULocale.ROOT; // ultimate fallback
+    }
+
+    return result;
+  }
+
+  /**
+   * Returns the lazily-constructed map.
    */
   private Map getLocaleIdToRulesIdMap() {
+    checkBuildRulesIdMaps();
+    return localeIdToRulesId;
+  }
+
+  /**
+   * Returns the lazily-constructed map.
+   */
+  private Map getRulesIdToEquivalentULocaleMap() {
+    checkBuildRulesIdMaps();
+    return rulesIdToEquivalentULocale;
+  }
+
+  /**
+   * Lazily constructs the localeIdToRulesId and rulesIdToEquivalentULocale
+   * maps if necessary. These exactly reflect the contents of the locales resource
+   * in plurals.res.
+   */
+  private void checkBuildRulesIdMaps() {
     if (localeIdToRulesId == null) {
       try {
         UResourceBundle pluralb = getPluralBundle();
         UResourceBundle localeb = pluralb.get("locales");
         localeIdToRulesId = new TreeMap();  // sort for convenience of getAvailableULocales
+        rulesIdToEquivalentULocale = new HashMap(); // not visible
         for (int i = 0; i < localeb.getSize(); ++i) {
           UResourceBundle b = localeb.get(i);
           String id = b.getKey();
           String value = b.getString().intern();
           localeIdToRulesId.put(id, value);
+
+          if (!rulesIdToEquivalentULocale.containsKey(value)) {
+            rulesIdToEquivalentULocale.put(value, new ULocale(id));
+          }
         }
       }
       catch (MissingResourceException e) {
-        localeIdToRulesId = new HashMap(); // dummy so we don't try again
+        localeIdToRulesId = new HashMap(); // dummy so we don't try again, can read
+        rulesIdToEquivalentULocale = new HashMap();
       }
     }
-    return localeIdToRulesId;
   }
 
   /**
