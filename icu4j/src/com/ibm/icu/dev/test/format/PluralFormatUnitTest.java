@@ -12,8 +12,6 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.*;
 import com.ibm.icu.util.ULocale;
 
-import java.text.ChoiceFormat;
-import java.text.Format;
 import java.text.ParsePosition;
 
 /**
