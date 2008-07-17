@@ -652,20 +652,20 @@ public class MessageFormat extends UFormat {
                 result.append(",choice,"
                         + ((ChoiceFormat) formats[i]).toPattern());
             } else if (formats[i] instanceof PluralFormat) {
-              String pattern = ((PluralFormat)formats[i]).toPattern();
+              String pat = ((PluralFormat)formats[i]).toPattern();
               // TODO: PluralFormat doesn't do the single quote thing, just reapply
-              if (pattern.indexOf('\'') != 0) {
+              if (pat.indexOf('\'') != 0) {
                 StringBuffer buf = new StringBuffer();
-                for (int j = 0; j < pattern.length(); ++j) {
-                  char ch = pattern.charAt(j);
+                for (int j = 0; j < pat.length(); ++j) {
+                  char ch = pat.charAt(j);
                   if (ch == '\'') {
                     buf.append(ch); // double it
                   }
                   buf.append(ch);
                 }
-                pattern = buf.toString();
+                pat = buf.toString();
               }
-              result.append(",plural," + pattern);
+              result.append(",plural," + pat);
             } else {
                 //result.append(", unknown");
             }
