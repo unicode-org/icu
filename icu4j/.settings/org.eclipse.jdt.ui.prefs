@@ -1,9 +1,8 @@
-#Wed Aug 22 13:05:31 EDT 2007
+#Thu Jul 17 14:46:50 EDT 2008
 eclipse.preferences.version=1
 formatter_profile=_ICU4J standard
 formatter_settings_version=11
 instance/org.eclipse.core.net/org.eclipse.core.net.hasMigrated=true
-internal.default.compliance=user
 org.eclipse.jdt.ui.exception.name=e
 org.eclipse.jdt.ui.gettersetter.use.is=true
 org.eclipse.jdt.ui.javadoc=true
