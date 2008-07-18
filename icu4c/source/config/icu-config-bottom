@@ -1,6 +1,6 @@
 ## -*-sh-*-
 ## BEGIN of icu-config-bottom.
-## Copyright (c) 2002-2007, International Business Machines Corporation and
+## Copyright (c) 2002-2008, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ICUUC_FILE=${libdir}/${ICULIBS_COMMON_LIB_NAME}
@@ -127,9 +127,9 @@ do
 	    set -x
 	    ;;
 
-        --so)
-            echo $SO
-            ;;
+    --so)
+        echo $SO
+        ;;
 
 	--bindir)
 	    echo $bindir
@@ -179,73 +179,73 @@ do
 	    ;;
 
 	--cflags)
-	    echo $CFLAGS
+	    echo -n $CFLAGS" "
 	    ;;
 	    
 	--cc)
-	    echo $CC
+	    echo -n $CC" "
 	    ;;
 	    
 	--cxx)
-	    echo $CXX
+	    echo -n $CXX" "
 	    ;;
 
 	--cxxflags)
-	    echo $CXXFLAGS
+	    echo -n $CXXFLAGS" "
 	    ;;
 
 	--cppflags)
 	    # Don't echo the -I. - it's unneeded.
-	    echo $CPPFLAGS | sed -e 's/-I. //'
+	    echo -n $CPPFLAGS" " | sed -e 's/-I. //'
 	    ;;
 
 	--cppflags-searchpath)
-	    echo -I${prefix}/include
+	    echo -n -I${prefix}/include" "
 	    ;;
 
 	--cppflags-dynamic)
-	    echo $SHAREDLIBCPPFLAGS
+	    echo -n $SHAREDLIBCPPFLAGS" "
 	    ;;
 
 	--cxxflags-dynamic)
-	    echo $SHAREDLIBCXXFLAGS
+	    echo -n $SHAREDLIBCXXFLAGS" "
 	    ;;
 
 	--cflags-dynamic)
-	    echo $SHAREDLIBCFLAGS
+	    echo -n $SHAREDLIBCFLAGS" "
 	    ;;
 
 	--ldflags-system)
-	    echo $LIBS
+	    echo -n $LIBS" "
 	    ;;
 
 	--ldflags)
-	    echo $LDFLAGS $ICULIBS $LIBS 
+	    echo -n $LDFLAGS $ICULIBS $LIBS" "
 # $RPATH_LDFLAGS
 	    ;;
 
 	--ldflags-libsonly)
-	    echo $ICULIBS_I18N $ICULIBS_COMMON $ICULIBS_DATA 
+	    echo -n $ICULIBS_I18N $ICULIBS_COMMON $ICULIBS_DATA" "
 	    ;;
 
 	--ldflags-icuio)
-	    echo $ICULIBS_ICUIO
+	    echo -n $ICULIBS_ICUIO" "
 	    ;;
 
 	--ldflags-obsolete)
-	    echo $ICULIBS_OBSOLETE
+	    echo -n $ICULIBS_OBSOLETE" "
 	    ;;
 
 	--ldflags-toolutil)
-	    echo $ICULIBS_TOOLUTIL
+	    echo -n $ICULIBS_TOOLUTIL" "
 	    ;;
 
 	--ldflags-layout)
-	    echo $ICULIBS_LAYOUT $ICULIBS_LAYOUTEX
+	    echo -n $ICULIBS_LAYOUT $ICULIBS_LAYOUTEX" "
 	    ;;
 
 	--ldflags-searchpath)
-	    echo -L${libdir}
+	    echo -n -L${libdir}" "
 	    ;;
 
 	--detect-prefix)
@@ -283,44 +283,44 @@ do
 	    ;;
 
 	--shared-datadir)
-	    echo $datadir
+	    echo -n $datadir" "
 	    ;;
 
         --incfile)
-	    echo $pkglibdir/Makefile.inc
+	    echo -n $pkglibdir/Makefile.inc" "
 	    ;;
 
 	--icudata)
-	    echo $ICUDATA_NAME
+	    echo -n $ICUDATA_NAME" "
 	    ;;
 
 	--icudata-mode)
-	    echo $PKGDATA_MODE
+	    echo -n $PKGDATA_MODE" "
 	    ;;
 
 	--icudata-install-dir)
-            echo $ICUPKGDATA_DIR
+        echo -n $ICUPKGDATA_DIR" "
 	    ;;
 	    
 	--icudatadir)
-	    echo $ICUDATA_DIR
+	    echo -n $ICUDATA_DIR" "
 	    ;;
 
 	--shlib-c)
-	    echo $SHLIB_c
+	    echo -n $SHLIB_c" "
 	    ;;
 
 	--shlib-cc)
-	    echo $SHLIB_cc
+	    echo -n $SHLIB_cc" "
 	    ;;
 
 	--version)
-            echo $VERSION
-            ;;
+        echo $VERSION
+        ;;
 
-        --unicode-version)
-            echo $UNICODE_VERSION
-            ;;
+    --unicode-version)
+        echo $UNICODE_VERSION
+        ;;
 
 	--help)
 	    usage
@@ -352,7 +352,7 @@ do
     esac
     shift
 done
-
+echo
 # Check once before we quit (will check last used prefix)
 sanity
 ## END of icu-config-bottom
