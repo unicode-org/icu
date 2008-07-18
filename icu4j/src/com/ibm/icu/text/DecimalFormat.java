@@ -4495,7 +4495,15 @@ public class DecimalFormat extends NumberFormat {
 //                roundingIncrement = roundingIncrementICU.toBigDecimal();
 //            }
 
-            stream.defaultWriteObject();
+        // Ticket#6449
+        // Format.Field instances are not serializable.  When formatToCharacterIterator
+        // is called, attributes (ArrayList) stores FieldPosition instances with
+        // NumberFormat.Field.  Because NumberFormat.Field is not serializable, we need
+        // to clear the contents of the list when writeObject is called.  We could remove
+        // the field or make it transient, but it will break serialization compatibility.
+        attributes.clear();
+
+        stream.defaultWriteObject();
     }
 //#endif
 

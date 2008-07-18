@@ -9,6 +9,7 @@
 
 package com.ibm.icu.dev.test.serializable;
 
+import java.text.AttributedCharacterIterator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -18,7 +19,6 @@ import com.ibm.icu.text.ChineseDateFormat;
 import com.ibm.icu.text.ChineseDateFormatSymbols;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
-import com.ibm.icu.util.DateInterval;
 import com.ibm.icu.text.DateIntervalFormat;
 import com.ibm.icu.text.DateIntervalInfo;
 import com.ibm.icu.text.DecimalFormat;
@@ -32,6 +32,7 @@ import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.text.TimeUnitFormat;
 import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.DateInterval;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.TimeUnit;
 import com.ibm.icu.util.TimeUnitAmount;
@@ -1099,7 +1100,20 @@ public class FormatTests
                 
                 formats[i] = getCannedDecimalFormat("#,##0.###", uloc);
             }
-            
+
+            if (formats[0] != null) {
+                // Ticket#6449
+                // Once formatToCharacterIterator is called, NumberFormat.Field
+                // instances are created and stored in the private List field.
+                // NumberForamt.Field is not a serializable, so serializing such
+                // instances end up NotSerializableException.  This problem was
+                // reproduced since formatToCharacterIterator was introduced,
+                // up to ICU 4.0.
+
+                AttributedCharacterIterator aci = formats[0].formatToCharacterIterator(new Double(12.345D));
+                if (aci == null) {} // NOP - for resolving 'Unused local variable' warning.
+            }
+
             return formats;
         }
     }
