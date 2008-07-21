@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2006, International Business Machines
+ * Copyright (c) 2006-2008, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Created on 2006-7-24
@@ -80,14 +80,20 @@ public class StableAPI {
         t.parseArgs(args);
         Set full = new HashSet();
 
+        System.err.println("Reading C++...");
         Set setCpp = t.getFullList(t.dumpCppXslt);
         full.addAll(setCpp);
+        System.out.println("read "+setCpp.size() +" C++.  Reading C:");
         
         Set setC = t.getFullList(t.dumpCXslt);
         full.addAll(setC);
+
+        System.out.println("read "+setC.size() +" C. Setting node:");
         
         Node fullList = t.setToNode(full);
 //        t.dumpNode(fullList,"");
+        
+        System.out.println("Node set. Reporting:");
         
         t.reportSelectedFun(fullList);
         System.out.println("Done. Please check " + t.resultFile);
@@ -123,6 +129,100 @@ public class StableAPI {
                printUsage();
             } 
         }
+        
+        leftVer = trimICU(setVer(leftVer, "old", leftDir));
+        rightVer = trimICU(setVer(rightVer, "new", rightDir));
+    }
+    
+    private static String trimICU(String ver) {
+        final String ICU_ = "ICU ";
+        final String ICU = "ICU";
+        if(ver != null) { // trim everything before the 'ICU...'
+            ver = ver.trim();
+            int icuidx = ver.lastIndexOf(ICU_);
+            int icuidx1 = ver.lastIndexOf(ICU);
+            if(icuidx>=0) {
+                ver = ver.substring(icuidx+ICU_.length()).trim();
+            } else if(icuidx1>=0) {
+                System.err.println("Warning: SuperTrimming: '" + ver + "'");
+                ver = ver.substring(icuidx1+ICU.length()).trim();
+            } else {
+                int n;
+                for(n=ver.length()-1;n>0 && ((ver.charAt(n)=='.') || Character.isDigit(ver.charAt(n))) ;n--)
+                    ;
+                System.err.println("Warning: SuperDuperTrimming: '" + ver + "'");
+                if(n>0) {
+                    ver = ver.substring(n+1).trim();
+                }
+            }
+        } 
+        return ver;
+    }
+    
+    private String setVer(String prevVer, String whichVer, String dir) {
+        final String UVERSION = "uversion_8h.xml";
+        String result = null;
+        // looking for: <name>U_ICU_VERSION</name> in uversion_8h.xml:        <initializer>&quot;3.8.1&quot;</initializer>
+        try {
+            Document doc = getDocument(dir + UVERSION);
+            DOMSource uversion_h = new DOMSource(doc);
+            Node defines = XPathAPI.selectSingleNode(uversion_h.getNode(),"/doxygen/compounddef[@id='uversion_8h'][@kind='file']/sectiondef[@kind='define']");
+            NodeList nList = defines.getChildNodes();
+            for (int i = 0; result==null&& (i < nList.getLength()); i++) {
+                Node ln = nList.item(i);
+                if(!"memberdef".equals(ln.getNodeName())) {
+                    continue;
+                }
+                Node name = XPathAPI.selectSingleNode(ln, "name");
+                if(name==null) continue;
+                
+               // System.err.println("Gotta node: " + name);
+                
+                Node nameVal = name.getFirstChild();
+                if(nameVal==null) nameVal = name;
+                
+                String nameStr = nameVal.getNodeValue();
+                if(nameStr==null) continue;
+
+               // System.err.println("Gotta name: " + nameStr);
+                
+                if(nameStr.trim().equals("U_ICU_VERSION")) {
+                    Node initializer = XPathAPI.selectSingleNode(ln, "initializer");
+                    if(initializer==null) System.err.println("initializer with no value");
+                    Node initVal = initializer.getFirstChild();
+//                    if(initVal==null) initVal = initializer;
+                    String initStr = initVal.getNodeValue().trim().replaceAll("\"","");
+                    result = "ICU "+initStr;
+                    System.err.println("Detected "+whichVer + " version: " + result);
+                }
+                
+            }
+            //dumpNode(defines,"");
+        } catch(Throwable t) {
+            t.printStackTrace();
+            System.err.println("Warning: Couldn't get " + whichVer+  " version from "+ UVERSION + " - reverting to " + prevVer);
+            result = prevVer;
+        }
+        
+        if(prevVer != null) {
+            if(result != null) {
+                if(!result.equals(prevVer)) { 
+                    System.err.println("Note: Detected " + result + " version but we'll use your requested --"+whichVer+"ver "+prevVer);
+                    result = prevVer;
+                } else {
+                    System.err.println("Note: You don't need to use  '--"+whichVer+"ver "+result+"' anymore - we detected it correctly.");
+                }
+            }
+        }
+        
+        if(result == null) {
+            System.err.println("Error: You'll need to use the option  \"--"+whichVer+"ver\"  because we could not detect an ICU version in " + UVERSION );
+            throw new InternalError("Error: You'll need to use the option  \"--"+whichVer+"ver\"  because we could not detect an ICU version in " + UVERSION );
+        }
+        
+        
+        
+        return result;
     }
     
     private static void printUsage(){
@@ -130,9 +230,9 @@ public class StableAPI {
         System.out.println();
         System.out.println("Options:");
         System.out.println("    --help          Print this text");
-        System.out.println("    --oldver        Version of old version of ICU");
+        System.out.println("    --oldver        Version of old version of ICU (optional)");
         System.out.println("    --olddir        Directory that contains xml docs of old version");
-        System.out.println("    --newver        Version of new version of ICU");
+        System.out.println("    --newver        Version of new version of ICU (optional)");
         System.out.println("    --newdir        Directory that contains xml docs of new version");
         System.out.println("    --cxslt         XSLT file for C docs");
         System.out.println("    --cppxslt       XSLT file for C++ docs");
@@ -153,6 +253,7 @@ public class StableAPI {
         public String prototype;
         public String id;
         public String status;
+        public String version;
         public String file;
         public boolean equals(Fun right){
             return this.prototype.equals(right.prototype);
@@ -162,6 +263,7 @@ public class StableAPI {
             f.prototype = getAttr(n, "prototype");
             f.id = getAttr(n, "id");
             f.status = getAttr(n, "status");
+            f.version = trimICU(getAttr(n, "version"));
             f.file = getAttr(n, "file");
             f.purifyPrototype();
             f.purifyFile();
@@ -203,6 +305,8 @@ public class StableAPI {
         public String prototype;
         public String leftRefId;
         public String leftStatus;
+        public String leftVersion;
+        public String rightVersion;
         public String leftFile;
         public String rightRefId;
         public String rightStatus;
@@ -215,6 +319,8 @@ public class StableAPI {
             u.leftStatus = left.status;
             u.leftFile = left.file;
             u.rightRefId = nul;
+           // u.rightVersion = nul;
+            u.leftVersion = left.version;
             u.rightStatus = nul;
             u.rightFile = nul;
             return u;
@@ -226,6 +332,8 @@ public class StableAPI {
             u.leftRefId = nul;
             u.leftStatus = nul;
             u.leftFile = nul;
+           // u.leftVersion = nul;
+            u.rightVersion = right.version;
             u.rightRefId = right.id;
             u.rightStatus = right.status;
             u.rightFile = right.file;
@@ -241,6 +349,8 @@ public class StableAPI {
             u.leftFile = left.file;
             u.rightRefId = right.id;
             u.rightStatus = right.status;
+            u.leftVersion = left.version;
+            u.rightVersion = right.version;
             u.rightFile = right.file;
             return u;
         }
@@ -253,6 +363,9 @@ public class StableAPI {
             ele.setAttribute("leftStatus", leftStatus);
 //            ele.setAttribute("rightRefId", rightRefId);
             ele.setAttribute("rightStatus", rightStatus);
+            ele.setAttribute("leftVersion", leftVersion);
+//            ele.setAttribute("rightRefId", rightRefId);
+            ele.setAttribute("rightVersion", rightVersion);
             
             
 //            String f = rightRefId.equals(nul) ? leftRefId : rightRefId;
@@ -272,6 +385,7 @@ public class StableAPI {
 //        report.setParameter("leftStatus", leftStatus);
         report.setParameter("leftVer", leftVer);
 //        report.setParameter("rightStatus", rightStatus);
+        report.setParameter("ourYear", new Integer(new java.util.GregorianCalendar().get(java.util.Calendar.YEAR)));
         report.setParameter("rightVer", rightVer);
         report.setParameter("dateTime", new GregorianCalendar().getTime());
         report.setParameter("nul", nul);

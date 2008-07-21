@@ -1,3 +1,4 @@
+# Copyright (C) 2008 IBM and Others. All Rights Reserved
 
 A tool to generate a report of API status changes between two ICU releases
 
@@ -13,7 +14,7 @@ A tool to generate a report of API status changes between two ICU releases
             c) gerenate the XML files
         2. Build the tool
             ant doctools
-        3. Edit the api-report.properties and change the values of oldver, olddir,  newver,  newdir
+        3. Edit the api-report.properties and change the values of olddir,   newdir ( don't need to set oldver or newver)
         4. Run the tool to generate the report
             ant apireport
  
