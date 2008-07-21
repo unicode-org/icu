@@ -34,27 +34,27 @@ class UVector;
  * Note: The consumer of this class reading or writing VTIMEZONE data is responsible to
  * decode or encode Non-ASCII text.  Methods reading/writing VTIMEZONE data in this class
  * do nothing with MIME encoding.
- * @stable ICU 4.0
+ * @stable ICU 3.8
  */
 class U_I18N_API VTimeZone : public BasicTimeZone {
 public:
     /**
      * Copy constructor.
      * @param source    The <code>VTimeZone</code> object to be copied.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     VTimeZone(const VTimeZone& source);
 
     /**
      * Destructor.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual ~VTimeZone();
 
     /**
      * Assignment operator.
      * @param right The object to be copied.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     VTimeZone& operator=(const VTimeZone& right);
 
@@ -64,7 +64,7 @@ public:
      * @param that  The object to be compared with.
      * @return  true if the given <code>TimeZone</code> objects are
       *semantically equal.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual UBool operator==(const TimeZone& that) const;
 
@@ -74,7 +74,7 @@ public:
      * @param that  The object to be compared with.
      * @return  true if the given <code>TimeZone</code> objects are
      * semantically unequal.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual UBool operator!=(const TimeZone& that) const;
 
@@ -83,7 +83,7 @@ public:
      * @param ID The time zone ID, such as America/New_York
      * @return A <code>VTimeZone</code> object initialized by the time zone ID,
      * or NULL when the ID is unknown.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     static VTimeZone* createVTimeZoneByID(const UnicodeString& ID);
 
@@ -94,7 +94,7 @@ public:
      * @param status Output param to filled in with a success or an error.
      * @return A <code>VTimeZone</code> initialized by the VTIMEZONE data or
      * NULL if failed to load the rule from the VTIMEZONE data.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     static VTimeZone* createVTimeZone(const UnicodeString& vtzdata, UErrorCode& status);
 
@@ -104,14 +104,14 @@ public:
      * in the data.  Otherwise, the initial value is not set.
      * @param url Receives the RFC2445 TZURL property value.
      * @return TRUE if TZURL attribute is available and value is set.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     UBool getTZURL(UnicodeString& url) const;
 
     /**
      * Sets the RFC2445 TZURL property value.
      * @param url The TZURL property value.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     void setTZURL(const UnicodeString& url);
 
@@ -121,14 +121,14 @@ public:
      * value in the data.  Otherwise, the initial value is not set.
      * @param lastModified Receives the last modified date.
      * @return TRUE if lastModified attribute is available and value is set.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     UBool getLastModified(UDate& lastModified) const;
 
     /**
      * Sets the RFC2445 LAST-MODIFIED property value.
      * @param lastModified The LAST-MODIFIED date.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     void setLastModified(UDate lastModified);
 
@@ -136,7 +136,7 @@ public:
      * Writes RFC2445 VTIMEZONE data for this time zone
      * @param result Output param to filled in with the VTIMEZONE data.
      * @param status Output param to filled in with a success or an error.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     void write(UnicodeString& result, UErrorCode& status) const;
 
@@ -146,7 +146,7 @@ public:
      * @param start The start date.
      * @param result Output param to filled in with the VTIMEZONE data.
      * @param status Output param to filled in with a success or an error.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     void write(UDate start, UnicodeString& result, UErrorCode& status) /*const*/;
 
@@ -161,7 +161,7 @@ public:
      * @param time The date used for rule extraction.
      * @param result Output param to filled in with the VTIMEZONE data.
      * @param status Output param to filled in with a success or an error.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     void writeSimple(UDate time, UnicodeString& result, UErrorCode& status) /*const*/;
 
@@ -169,7 +169,7 @@ public:
      * Clones TimeZone objects polymorphically. Clients are responsible for deleting
      * the TimeZone object cloned.
      * @return   A new copy of this TimeZone object.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual TimeZone* clone(void) const;
 
@@ -195,7 +195,7 @@ public:
      * @param millis     The reference date's milliseconds in day, local standard time
      * @param status     Output param to filled in with a success or an error.
      * @return           The offset in milliseconds to add to GMT to get local time.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                               uint8_t dayOfWeek, int32_t millis, UErrorCode& status) const;
@@ -217,7 +217,7 @@ public:
      * @param monthLength The length of the given month in days.
      * @param status     Output param to filled in with a success or an error.
      * @return           The offset in milliseconds to add to GMT to get local time.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                            uint8_t dayOfWeek, int32_t millis,
@@ -243,7 +243,7 @@ public:
      * effect, this value is zero; otherwise it is a positive value,
      * typically one hour.
      * @param ec input-output error code
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual void getOffset(UDate date, UBool local, int32_t& rawOffset,
                            int32_t& dstOffset, UErrorCode& ec) const;
@@ -253,7 +253,7 @@ public:
      * to GMT to get local time, before taking daylight savings time into account).
      *
      * @param offsetMillis  The new raw GMT offset for this time zone.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual void setRawOffset(int32_t offsetMillis);
 
@@ -262,7 +262,7 @@ public:
      * to GMT to get local time, before taking daylight savings time into account).
      *
      * @return   The TimeZone's raw GMT offset.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual int32_t getRawOffset(void) const;
 
@@ -270,7 +270,7 @@ public:
      * Queries if this time zone uses daylight savings time.
      * @return true if this time zone uses daylight savings time,
      * false, otherwise.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual UBool useDaylightTime(void) const;
 
@@ -295,7 +295,7 @@ public:
      * @param other the <code>TimeZone</code> object to be compared with
      * @return true if the given zone is the same as this one,
      * with the possible exception of the ID
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual UBool hasSameRules(const TimeZone& other) const;
 
@@ -305,7 +305,7 @@ public:
      * @param inclusive Whether the base time is inclusive or not.
      * @param result    Receives the first transition after the base time.
      * @return  TRUE if the transition is found.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual UBool getNextTransition(UDate base, UBool inclusive, TimeZoneTransition& result) /*const*/;
 
@@ -315,7 +315,7 @@ public:
      * @param inclusive Whether the base time is inclusive or not.
      * @param result    Receives the most recent transition before the base time.
      * @return  TRUE if the transition is found.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual UBool getPreviousTransition(UDate base, UBool inclusive, TimeZoneTransition& result) /*const*/;
 
@@ -325,7 +325,7 @@ public:
      * <code>InitialTimeZoneRule</code>.  The return value range is 0 or any positive value.
      * @param status    Receives error status code.
      * @return The number of <code>TimeZoneRule</code>s representing time transitions.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual int32_t countTransitionRules(UErrorCode& status) /*const*/;
 
@@ -343,7 +343,7 @@ public:
      *                      the timezone transition rules.  On output, actual number of
      *                      rules filled in the array will be set.
      * @param status        Receives error status code.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual void getTimeZoneRules(const InitialTimeZoneRule*& initial,
         const TimeZoneRule* trsrules[], int32_t& trscount, UErrorCode& status) /*const*/;
@@ -417,7 +417,7 @@ public:
      * .       erived::getStaticClassID()) ...
      * </pre>
      * @return          The class ID for all objects of this class.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     static UClassID U_EXPORT2 getStaticClassID(void);
 
@@ -430,7 +430,7 @@ public:
      * @return          The class ID for this object. All objects of a
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual UClassID getDynamicClassID(void) const;
 };

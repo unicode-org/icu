@@ -277,7 +277,7 @@ typedef enum UDateTimeScale {
      * Similar to Unix time (linear value from 1970) and struct timeval
      * (microseconds resolution).
      *
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     UDTS_UNIX_MICROSECONDS_TIME,
 

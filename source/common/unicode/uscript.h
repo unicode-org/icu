@@ -161,7 +161,7 @@ typedef enum UScriptCode {
       USCRIPT_UNWRITTEN_LANGUAGES           = 102,/* Zxxx */
       USCRIPT_UNKNOWN                       = 103,/* Zzzz */ /* Unknown="Code for uncoded script", for unassigned code points */
 
-      /* New script codes from ISO 15924 @stable ICU 4.0 */
+      /* New script codes from ISO 15924 @stable ICU 3.8 */
       USCRIPT_CARIAN                        = 104,/* Cari */
       USCRIPT_JAPANESE                      = 105,/* Jpan */
       USCRIPT_LANNA                         = 106,/* Lana */

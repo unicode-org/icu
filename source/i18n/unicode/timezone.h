@@ -329,7 +329,7 @@ public:
      * Returns the timezone data version currently used by ICU.
      * @param status Output param to filled in with a success or an error.
      * @return the version string, such as "2007f"
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     static const char* U_EXPORT2 getTZDataVersion(UErrorCode& status);
 

@@ -707,7 +707,7 @@ public:
      * @param inclusive Whether the base time is inclusive or not.
      * @param result    Receives the first transition after the base time.
      * @return  TRUE if the transition is found.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual UBool getNextTransition(UDate base, UBool inclusive, TimeZoneTransition& result) /*const*/;
 
@@ -717,7 +717,7 @@ public:
      * @param inclusive Whether the base time is inclusive or not.
      * @param result    Receives the most recent transition before the base time.
      * @return  TRUE if the transition is found.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual UBool getPreviousTransition(UDate base, UBool inclusive, TimeZoneTransition& result) /*const*/;
 
@@ -727,7 +727,7 @@ public:
      * <code>InitialTimeZoneRule</code>.  The return value range is 0 or any positive value.
      * @param status    Receives error status code.
      * @return The number of <code>TimeZoneRule</code>s representing time transitions.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual int32_t countTransitionRules(UErrorCode& status) /*const*/;
 
@@ -745,7 +745,7 @@ public:
      *                      the timezone transition rules.  On output, actual number of
      *                      rules filled in the array will be set.
      * @param status        Receives error status code.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual void getTimeZoneRules(const InitialTimeZoneRule*& initial,
         const TimeZoneRule* trsrules[], int32_t& trscount, UErrorCode& status) /*const*/;
