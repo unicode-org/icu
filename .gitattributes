@@ -48,6 +48,7 @@ README text !eol
 *.spp -text
 *.tri2 -text
 
+/icu4c.css -text
 source/common/dtintrv.cpp -text
 source/common/mutex.cpp -text
 source/common/unicode/dtintrv.h -text
