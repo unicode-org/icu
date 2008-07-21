@@ -1,14 +1,14 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2006, International Business Machines Corporation and    *
+* Copyright (C) 2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-* This is the ant build file for ICU tools. 
+* This is an XSLT file. 
 */
 -->
 <!--
-  List all cpp pulbic functions generated from the 'index.xml'
+  List all cpp public functions generated from the 'index.xml'
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:param name="docFolder" />
@@ -23,6 +23,7 @@
           <cppfunc>
              <xsl:copy-of select="@id" />
              <xsl:attribute name="status"><xsl:value-of select="detaileddescription/para/xrefsect/xreftitle/text()"/></xsl:attribute>
+             <xsl:attribute name="version"><xsl:value-of select="detaileddescription/para/xrefsect/xrefdescription/para/text()"/></xsl:attribute>
              <xsl:attribute name="prototype"><xsl:value-of select="concat(definition/text(), argsstring/text())" /></xsl:attribute>
              <xsl:copy-of select="location/@file" />
           </cppfunc>

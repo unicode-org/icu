@@ -25,7 +25,7 @@
         <condition property="is.sun.jdk14">
             <and>
                 <equals arg1="${ant.java.version}" arg2="1.4"/>
-                <contains string="${java.vm.vendor}" substring="Sun Microsystems Inc"/>
+                <!--<contains string="${java.vm.vendor}" substring="Sun Microsystems Inc"/> -->
             </and>
         </condition>
         <fail unless="is.sun.jdk14" message="Sun JDK1.4 is required."/>
@@ -47,14 +47,20 @@
     <target name="apireport" depends="tools">    
         <java classname="com.ibm.icu.dev.tools.docs.StableAPI" fork="yes" failonerror="true">
             
-            <arg value = "--oldver"/>
+<!--
+	!! Only need these if you must override. Remove the DELETEME
+            <arg value = "-DELETEME-oldver"/>
             <arg value = "${oldver}"/>
+-->
             
             <arg value = "--olddir"/> 
             <arg value = "${olddir}"/>
             
-            <arg value = "--newver"/>
+<!--
+	!! Only need these if you must override. Remove the DELETEME
+            <arg value = "-DELETEME-newver"/>
             <arg value = "${newver}"/>
+-->
             
             <arg value = "--newdir"/>
             <arg value = "${newdir}"/>

@@ -368,6 +368,7 @@ icu4j/src/com/ibm/icu/impl/duration/impl/data/pfd_zh_Hant.xml -text
 icu4j/src/com/ibm/icu/impl/duration/impl/data/pfd_zh_Hant_HK.xml -text
 icu4j/src/com/ibm/richtext/textapps/resources/unicode.arabic.red -text
 icu4j/src/com/ibm/richtext/textapps/resources/unicode.hebrew.red -text
+tools/release/java/icu4c.css -text
 tools/unicodetools/com/ibm/rbm/docs/images/TitleLogo_transparent.gif -text
 tools/unicodetools/com/ibm/rbm/docs/images/arrow_bullet.gif -text
 tools/unicodetools/com/ibm/rbm/docs/images/diamond_bullet.gif -text
