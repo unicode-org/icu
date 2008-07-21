@@ -29,13 +29,13 @@ class UVector;
  * <code>BasicTimeZone</code> is an abstract class extending <code>TimeZone</code>.
  * This class provides some additional methods to access time zone transitions and rules.
  * All ICU <code>TimeZone</code> concrete subclasses extend this class.
- * @stable ICU 4.0
+ * @stable ICU 3.8
  */
 class U_I18N_API BasicTimeZone: public TimeZone {
 public:
     /**
      * Destructor.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual ~BasicTimeZone();
 
@@ -45,7 +45,7 @@ public:
      * @param inclusive Whether the base time is inclusive or not.
      * @param result    Receives the first transition after the base time.
      * @return  TRUE if the transition is found.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual UBool getNextTransition(UDate base, UBool inclusive, TimeZoneTransition& result) /*const*/ = 0;
 
@@ -55,7 +55,7 @@ public:
      * @param inclusive Whether the base time is inclusive or not.
      * @param result    Receives the most recent transition before the base time.
      * @return  TRUE if the transition is found.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual UBool getPreviousTransition(UDate base, UBool inclusive, TimeZoneTransition& result) /*const*/ = 0;
 
@@ -77,7 +77,7 @@ public:
      * @param ec    Output param to filled in with a success or an error.
      * @return      true if the other time zone has the equivalent transitions in the
      *              time range.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual UBool hasEquivalentTransitions(/*const*/ BasicTimeZone& tz, UDate start, UDate end,
         UBool ignoreDstAmount, UErrorCode& ec) /*const*/;
@@ -88,7 +88,7 @@ public:
      * <code>InitialTimeZoneRule</code>.  The return value range is 0 or any positive value.
      * @param status    Receives error status code.
      * @return The number of <code>TimeZoneRule</code>s representing time transitions.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual int32_t countTransitionRules(UErrorCode& status) /*const*/ = 0;
 
@@ -106,7 +106,7 @@ public:
      *                      the timezone transition rules.  On output, actual number of
      *                      rules filled in the array will be set.
      * @param status        Receives error status code.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual void getTimeZoneRules(const InitialTimeZoneRule*& initial,
         const TimeZoneRule* trsrules[], int32_t& trscount, UErrorCode& status) /*const*/ = 0;
@@ -135,7 +135,7 @@ public:
      *                  transitions.  When this time zone does not observer daylight saving times
      *                  around the specified date, NULL is set.
      * @param status    Receives error status code.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     virtual void getSimpleRulesNear(UDate date, InitialTimeZoneRule*& initial,
         AnnualTimeZoneRule*& std, AnnualTimeZoneRule*& dst, UErrorCode& status) /*const*/;
@@ -172,21 +172,21 @@ protected:
 
     /**
      * Default constructor.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     BasicTimeZone();
 
     /**
      * Construct a timezone with a given ID.
      * @param id a system time zone ID
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     BasicTimeZone(const UnicodeString &id);
 
     /**
      * Copy constructor.
      * @param source the object to be copied.
-     * @stable ICU 4.0
+     * @stable ICU 3.8
      */
     BasicTimeZone(const BasicTimeZone& source);
 

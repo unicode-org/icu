@@ -726,7 +726,7 @@ utext_extract(UText *ut,
   * If the index is out of range, it will be pinned to be within
   * the range of the input text.
   *
-  * @stable ICU 4.0
+  * @stable ICU 3.8
   */
 #define UTEXT_SETNATIVEINDEX(ut, ix)                       \
     { int64_t __offset = (ix) - (ut)->chunkNativeStart; \

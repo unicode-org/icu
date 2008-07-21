@@ -209,7 +209,7 @@ public:
      * Clone this object polymorphically.
      * The caller owns the result and should delete it when done.
      * @return   a copy of the object
-     * @draft    ICU4.0
+     * @draft    ICU 4.0
      */
     virtual DateIntervalInfo* clone(void) const;
 
