@@ -136,7 +136,7 @@ ucasemap_setOptions(UCaseMap *csm, uint32_t options, UErrorCode *pErrorCode);
  * @see ucasemap_toTitle
  * @see ucasemap_utf8ToTitle
  * @see UnicodeString::toTitle
- * @stable ICU 4.0
+ * @stable ICU 3.8
  */
 #define U_TITLECASE_NO_LOWERCASE 0x100
 
@@ -161,7 +161,7 @@ ucasemap_setOptions(UCaseMap *csm, uint32_t options, UErrorCode *pErrorCode);
  * @see ucasemap_utf8ToTitle
  * @see UnicodeString::toTitle
  * @see U_TITLECASE_NO_LOWERCASE
- * @stable ICU 4.0
+ * @stable ICU 3.8
  */
 #define U_TITLECASE_NO_BREAK_ADJUSTMENT 0x200
 
@@ -174,7 +174,7 @@ ucasemap_setOptions(UCaseMap *csm, uint32_t options, UErrorCode *pErrorCode);
  * Do not modify the returned break iterator.
  * @param csm UCaseMap service object.
  * @return titlecasing break iterator
- * @stable ICU 4.0
+ * @stable ICU 3.8
  */
 U_DRAFT const UBreakIterator * U_EXPORT2
 ucasemap_getBreakIterator(const UCaseMap *csm);
@@ -197,7 +197,7 @@ ucasemap_getBreakIterator(const UCaseMap *csm);
  *
  * @see ucasemap_toTitle
  * @see ucasemap_utf8ToTitle
- * @stable ICU 4.0
+ * @stable ICU 3.8
  */
 U_DRAFT void U_EXPORT2
 ucasemap_setBreakIterator(UCaseMap *csm, UBreakIterator *iterToAdopt, UErrorCode *pErrorCode);
@@ -241,7 +241,7 @@ ucasemap_setBreakIterator(UCaseMap *csm, UBreakIterator *iterToAdopt, UErrorCode
  *         in which case it will be greater than destCapacity.
  *
  * @see u_strToTitle
- * @stable ICU 4.0
+ * @stable ICU 3.8
  */
 U_DRAFT int32_t U_EXPORT2
 ucasemap_toTitle(UCaseMap *csm,
@@ -348,7 +348,7 @@ ucasemap_utf8ToUpper(const UCaseMap *csm,
  * @see u_strToTitle
  * @see U_TITLECASE_NO_LOWERCASE
  * @see U_TITLECASE_NO_BREAK_ADJUSTMENT
- * @stable ICU 4.0
+ * @stable ICU 3.8
  */
 U_DRAFT int32_t U_EXPORT2
 ucasemap_utf8ToTitle(UCaseMap *csm,
@@ -384,7 +384,7 @@ ucasemap_utf8ToTitle(UCaseMap *csm,
  * @see ucasemap_setOptions
  * @see U_FOLD_CASE_DEFAULT
  * @see U_FOLD_CASE_EXCLUDE_SPECIAL_I
- * @stable ICU 4.0
+ * @stable ICU 3.8
  */
 U_DRAFT int32_t U_EXPORT2
 ucasemap_utf8FoldCase(const UCaseMap *csm,

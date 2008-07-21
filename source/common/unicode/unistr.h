@@ -2501,7 +2501,7 @@ public:
    * @see U_TITLECASE_NO_LOWERCASE
    * @see U_TITLECASE_NO_BREAK_ADJUSTMENT
    * @see ucasemap_open
-   * @stable ICU 4.0
+   * @stable ICU 3.8
    */
   UnicodeString &toTitle(BreakIterator *titleIter, const Locale &locale, uint32_t options);
 

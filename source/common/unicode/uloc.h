@@ -957,7 +957,7 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
  * @param status an error is returned if the LCID is unrecognized or the output buffer
  *  is too small
  * @return actual the actual size of the locale ID, not including NUL-termination 
- * @stable ICU 4.0
+ * @stable ICU 3.8
  */
 U_DRAFT int32_t U_EXPORT2
 uloc_getLocaleForLCID(uint32_t hostID, char *locale, int32_t localeCapacity,
