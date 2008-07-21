@@ -133,6 +133,17 @@ public class StableAPI {
         leftVer = trimICU(setVer(leftVer, "old", leftDir));
         rightVer = trimICU(setVer(rightVer, "new", rightDir));
     }
+
+    private static Set warnSet = new HashSet(); // No Generics because we built with JDK 1.4 for now
+    private static void warn(String what) {
+        if(!warnSet.contains(what)) {
+               System.out.println("Warning: "+what);
+               if(warnSet.isEmpty()) {
+                      System.out.println(" (These warnings are only printed one time each.)");
+               }
+               warnSet.add(what);
+        }
+    } 
     
     private static String trimICU(String ver) {
         final String ICU_ = "ICU ";
@@ -144,13 +155,13 @@ public class StableAPI {
             if(icuidx>=0) {
                 ver = ver.substring(icuidx+ICU_.length()).trim();
             } else if(icuidx1>=0) {
-                System.err.println("Warning: SuperTrimming: '" + ver + "'");
+                warn("trimming: '" + ver + "'");
                 ver = ver.substring(icuidx1+ICU.length()).trim();
             } else {
                 int n;
                 for(n=ver.length()-1;n>0 && ((ver.charAt(n)=='.') || Character.isDigit(ver.charAt(n))) ;n--)
                     ;
-                System.err.println("Warning: SuperDuperTrimming: '" + ver + "'");
+                warn("super-trimming: '" + ver + "'");
                 if(n>0) {
                     ver = ver.substring(n+1).trim();
                 }
