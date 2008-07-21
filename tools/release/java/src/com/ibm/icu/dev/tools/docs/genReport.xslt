@@ -21,7 +21,9 @@
   
 
   <xsl:template match="/">
-	<!-- Copyright (C) 2008, International Business Machines Corporation, All Rights Reserved. -->
+	<xsl:comment>
+	 Copyright (C)  <xsl:value-of select="$ourYear" />, International Business Machines Corporation, All Rights Reserved. 
+	</xsl:comment>
     <html>
     <head>
     <title>ICU4C API Comparison: <xsl:value-of select="$leftVer"/> with <xsl:value-of select="$rightVer" /> </title>
