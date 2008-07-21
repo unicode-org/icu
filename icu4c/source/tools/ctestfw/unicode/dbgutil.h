@@ -22,6 +22,9 @@
 
 T_CTEST_API const UnicodeString&  T_CTEST_EXPORT2 udbg_enumString(UDebugEnumType type, int32_t field);
 
+/**
+ * @return enum offset, or UDBG_INVALID_ENUM on error
+ */ 
 T_CTEST_API int32_t  T_CTEST_EXPORT2 udbg_enumByString(UDebugEnumType type, const UnicodeString& string);
 
 /**
