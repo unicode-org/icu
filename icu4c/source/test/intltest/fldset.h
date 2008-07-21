@@ -1,6 +1,6 @@
 /*
 ************************************************************************
-* Copyright (c) 2007, International Business Machines
+* Copyright (c) 2007-2008, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ************************************************************************
 */
@@ -19,24 +19,38 @@
 
 #define U_FIELDS_SET_MAX  64
 
+/**
+ * This class represents a collection of integer values (fields), each designated by
+ * one of a particular set of enum values.  Each integer value (int32_t) is optional and
+ * may or may not be set. 
+ * 
+ * @internal ICU 3.8
+ */
 class FieldsSet {
     protected:
         /**
-         * subclass interface
-         * @param whichEnum which enumaration value goes with this set. Will be used to calculate str values and also enum size.
+         * subclass interface - construct the FieldsSet to reference one of the standard
+         * enumerations.
+         * @param whichEnum which enumaration value goes with this set. Will be used to calculate string
+         * values and also enum size.
+         * @see UDebugEnumType
          */
         FieldsSet(UDebugEnumType whichEnum);
         
         /**
-         * subclass interface - no enum tie-in
-         * @param fieldCount how many fields this can hold.
+         * subclass interface - construct the FieldsSet without using a standard enum type.
+         * @param fieldCount how many fields this object can hold.
          */
         FieldsSet(int32_t fieldsCount);
 
     public:
+    
       /**
-       * @param other "expected" set to match against
-       * @param status - will return invalid argument if sets are not the same size
+       * Compare two sets. In typical test usage, 'this' is the resul of 
+       * a tested operation, and 'other' is the predefined expected value.
+       * 
+       * @param other the set to compare against.
+       * @param status will return U_ILLEGAL_ARGUMENT_ERROR if sets are not the same size
        * @return a formatted string listing which fields are set in 
        *   this, with the comparison made agaainst those fields in other.
        */
@@ -44,14 +58,31 @@ class FieldsSet {
       
     public:
       /**
+       * Fill-in fields from a specified string, such as "NAME1=VALUE1,NAME2=VALUE2", etc. 
        * @param str string to parse
-       * @param status formatted string for status
+       * @param status status of parse
+       * @return the number of valid parsed fields on success, or a negative number on failure.
        */
       int32_t parseFrom(const UnicodeString& str, UErrorCode& status) { return parseFrom(str,NULL,status); }
       
-    public:
+      /**
+       * Fill-in fields from a specified string, such as "NAME1=VALUE1,NAME2=VALUE2", etc. 
+       * @param inheritFrom if a field's value is given as 0-length, such as NAME1 in "NAME1=,NAME2=VALUE2", 
+       * the specified FieldsSet's value for NAME1 will be copied into this.
+       * @param str string to parse
+       * @param status status of parse
+       * @return the number of valid parsed fields on success, or a negative number on failure.
+       */
       int32_t parseFrom(const UnicodeString& str, const FieldsSet& inheritFrom, UErrorCode& status) { return parseFrom(str, &inheritFrom, status); }
       
+      /**
+       * Fill-in fields from a specified string, such as "NAME1=VALUE1,NAME2=VALUE2", etc. 
+       * @param inheritFrom if a field's value is given as 0-length, such as NAME1 in "NAME1=,NAME2=VALUE2", 
+       * the specified FieldsSet's value for NAME1 will be copied into this.
+       * @param str string to parse
+       * @param status status of parse
+       * @return the number of valid parsed fields on success, or a negative number on failure.
+       */
       int32_t parseFrom(const UnicodeString& str, const 
               FieldsSet* inheritFrom, UErrorCode& status);
       
@@ -101,22 +132,60 @@ class FieldsSet {
       void parseValueEnum(UDebugEnumType type, const FieldsSet* inheritFrom, int32_t field, const UnicodeString& substr, UErrorCode& status);
 
     private:
+      /** 
+       * Not callable - construct a default FieldsSet
+       * @internal
+       */
       FieldsSet();
       
+      /**
+       * construct the object.
+       * @internal
+       */
       void construct(UDebugEnumType whichEnum, int32_t fieldCount);
 
     public:
+    /**
+     * destructor
+     */
      virtual ~FieldsSet();
-    
+
+    /**
+     * Mark all fields as unset
+     */
     void clear();
+    
+    /**
+     * Mark a specific field as unset
+     * @param field the field to unset
+     */
     void clear(int32_t field);
-    void set(int32_t field, int32_t amount);
+    
+    /**
+     * Set a specific field
+     * @param field the field to set (i.e. enum value)
+     * @param value the field's value
+     */
+    void set(int32_t field, int32_t value);
+    
     UBool isSet(int32_t field) const;
+
+    /**
+     * Return the field's value
+     * @param field which field
+     * @return field's value, or -1 if unset.
+     */
     int32_t get(int32_t field) const;
     
+    /**
+     * Return true if both FieldsSet objects either are based on the same enum, or have the same number of fields.
+     */
     UBool isSameType(const FieldsSet& other) const;
+
+    /**
+     * @return the number of fields 
+     */
     int32_t fieldCount() const;
-    
     
     protected:
        int32_t fValue[U_FIELDS_SET_MAX];
@@ -126,11 +195,14 @@ class FieldsSet {
        UDebugEnumType fEnum;
 };
 
-/** ------- Calendar Fields Set -------- **/
+/**
+ * A subclass of FieldsSet representing the fields in a Calendar
+ * @see Calendar
+ */
 class CalendarFieldsSet : public FieldsSet {
-    public:
-        CalendarFieldsSet();
-        virtual ~CalendarFieldsSet();
+public:
+    CalendarFieldsSet();
+    virtual ~CalendarFieldsSet();
 
 //        void clear(UCalendarDateFields field) { clear((int32_t)field); }
 //        void set(UCalendarDateFields field, int32_t amount) { set ((int32_t)field, amount); }
@@ -138,33 +210,39 @@ class CalendarFieldsSet : public FieldsSet {
 //        UBool isSet(UCalendarDateFields field) const { return isSet((int32_t)field); }
 //        int32_t get(UCalendarDateFields field) const { return get((int32_t)field); }
 
-        /**
-         * @param matches fillin to hold any fields different. Will have the calendar's value set on them.
-         * @return true if the calendar matches in these fields.
-         */
-        UBool matches(Calendar *cal, CalendarFieldsSet &diffSet,
-                UErrorCode& status) const;
+    /**
+     * @param matches fillin to hold any fields different. Will have the calendar's value set on them.
+     * @return true if the calendar matches in these fields.
+     */
+    UBool matches(Calendar *cal, CalendarFieldsSet &diffSet,
+            UErrorCode& status) const;
 
-        /**
-         * set the specified fields on this calendar. Doesn't clear first. Returns any errors the cale 
-         */
-        void setOnCalendar(Calendar *cal, UErrorCode& status) const;
-
+    /**
+     * For each set field, set the same field on this Calendar.
+     * Doesn't clear the Calendar first.
+     * @param cal Calendar to modify
+     * @param status Contains any errors propagated by the Calendar.
+     */
+    void setOnCalendar(Calendar *cal, UErrorCode& status) const;
         
-    protected:
-        void handleParseValue(const FieldsSet* inheritFrom, int32_t field, const UnicodeString& substr, UErrorCode& status);
+protected:
+    /**
+     * subclass override 
+     */
+    void handleParseValue(const FieldsSet* inheritFrom, int32_t field, const UnicodeString& substr, UErrorCode& status);
 };
 
 /**
  * This class simply implements a set of date and time styles
- * such as DATE=SHORT  or TIME=SHORT,DATE=LONG
+ * such as DATE=SHORT  or TIME=SHORT,DATE=LONG, such as would be passed
+ * to DateFormat::createInstance()
+ * @see DateFormat
  */
 class DateTimeStyleSet : public FieldsSet {
     public:
         DateTimeStyleSet();
         virtual ~DateTimeStyleSet();
 
-        
         /** 
          * @return the date style, or UDAT_NONE if not set
          */
@@ -174,8 +252,6 @@ class DateTimeStyleSet : public FieldsSet {
          * @return the time style, or UDAT_NONE if not set
          */
         UDateFormatStyle getTimeStyle() const;
-
-        
     protected:
         void handleParseValue(const FieldsSet* inheritFrom, int32_t field, const UnicodeString& substr, UErrorCode& status);
         int32_t handleParseName(const FieldsSet* inheritFrom, const UnicodeString& name, const UnicodeString& substr, UErrorCode& status);
