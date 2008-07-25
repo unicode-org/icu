@@ -109,20 +109,7 @@ public abstract class CharsetICU extends Charset{
     }
     private static final HashMap algorithmicCharsets = new HashMap();
     static{
-        /*
-        algorithmicCharsets.put("lmbcs1",                "com.ibm.icu.charset.CharsetLMBCS1" );
-        algorithmicCharsets.put("lmbcs11",               "com.ibm.icu.charset.CharsetLMBCS11" );
-        algorithmicCharsets.put("lmbcs16",               "com.ibm.icu.charset.CharsetLMBCS16" );
-        algorithmicCharsets.put("lmbcs17",               "com.ibm.icu.charset.CharsetLMBCS17" );
-        algorithmicCharsets.put("lmbcs18",               "com.ibm.icu.charset.CharsetLMBCS18" );
-        algorithmicCharsets.put("lmbcs19",               "com.ibm.icu.charset.CharsetLMBCS19" );
-        algorithmicCharsets.put("lmbcs2",                "com.ibm.icu.charset.CharsetLMBCS2" );
-        algorithmicCharsets.put("lmbcs3",                "com.ibm.icu.charset.CharsetLMBCS3" );
-        algorithmicCharsets.put("lmbcs4",                "com.ibm.icu.charset.CharsetLMBCS4" );
-        algorithmicCharsets.put("lmbcs5",                "com.ibm.icu.charset.CharsetLMBCS5" );
-        algorithmicCharsets.put("lmbcs6",                "com.ibm.icu.charset.CharsetLMBCS6" );
-        algorithmicCharsets.put("lmbcs8",                "com.ibm.icu.charset.CharsetLMBCS8" );
-        */
+        algorithmicCharsets.put("LMBCS-1",               "com.ibm.icu.charset.CharsetLMBCS");
         algorithmicCharsets.put("BOCU-1",                "com.ibm.icu.charset.CharsetBOCU1" );
         algorithmicCharsets.put("SCSU",                  "com.ibm.icu.charset.CharsetSCSU" ); 
         algorithmicCharsets.put("US-ASCII",              "com.ibm.icu.charset.CharsetASCII" );

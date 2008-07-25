@@ -1815,7 +1815,7 @@ class CharsetMBCS extends CharsetICU {
             ByteBuffer cx = sharedData.mbcs.extIndexes;
             IntBuffer toUTable, toUSection;
 
-            int value, matchValue, srcLength;
+            int value, matchValue, srcLength = 0;
             int i, j, index, length, matchLength;
             short b;
 
@@ -1829,7 +1829,9 @@ class CharsetMBCS extends CharsetICU {
 
             matchValue = 0;
             i = j = matchLength = 0;
-            srcLength = source.remaining();
+            if (source != null) { 
+                srcLength = source.remaining();
+            }
 
             if (sisoState == 0) {
                 /* SBCS state of an SI/SO stateful converter, look at only exactly 1 byte */
@@ -2735,6 +2737,7 @@ class CharsetMBCS extends CharsetICU {
             int entry;
             int c;
             int i = source.position();
+            int length = source.limit() - i;
 
             /* conversion loop */
             while (true) {
@@ -2821,6 +2824,10 @@ class CharsetMBCS extends CharsetICU {
             if (c == 0xfffe) {
                 /* try an extension mapping */
                 if (sharedData.mbcs.extIndexes != null) {
+                    /* Increase the limit for proper handling. Used in LMBCS. */
+                    if (source.capacity() >= source.position() + length) {
+                        source.limit(source.position() + length);
+                    }
                     return simpleMatchToU(source, useFallback);
                 }
             }
