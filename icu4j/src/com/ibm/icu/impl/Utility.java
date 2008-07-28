@@ -1358,9 +1358,9 @@ public final class Utility {
     public static StringBuffer trim(StringBuffer b) {
         // TODO update to handle surrogates
         int i;
-        for (i=0; i<b.length() && Character.isWhitespace(b.charAt(i)); ++i) {}
+        for (i=0; i<b.length() && UCharacter.isWhitespace(b.charAt(i)); ++i) {}
         b.delete(0, i);
-        for (i=b.length()-1; i>=0 && Character.isWhitespace(b.charAt(i)); --i) {}
+        for (i=b.length()-1; i>=0 && UCharacter.isWhitespace(b.charAt(i)); --i) {}
         return b.delete(i+1, b.length());
     }
 
