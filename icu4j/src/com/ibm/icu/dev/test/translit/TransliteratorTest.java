@@ -453,6 +453,10 @@ public class TransliteratorTest extends TestFmwk {
             expect(t, DATA[i+1], DATA[i+2]);
         }
     }
+    
+    public void TestVariableNames() {
+        Transliterator gl = Transliterator.createFromRules("foo", "$\u2DC0 = qy; a>b;", Transliterator.FORWARD);
+    }
 
     /**
      * Regression test for bugs found in Greek transliteration.
