@@ -9,14 +9,19 @@ package com.ibm.icu.text;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.LocaleData;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.impl.CollectionUtilities.MultiComparator;
 
 /**
  * A set of characters for use as a UI "index", that is, a
@@ -47,24 +52,27 @@ import com.ibm.icu.util.ULocale;
  * for those categories.</li>
  * <li>The use of the list requires that the target list be sorted according to
  * the locale that is used to create that list.</li>
+ * <li>For languages without widely accepted sorting methods (eg Chinese/Japanese)
+ * the results may appear arbitrary, and it may be best not to use these methods.</li>
+ * <li>In the initial version, an arbitrary limit of 100 is placed on these lists.</li>
  * </ul>
  * 
  * @author markdavis
  * @draft
  */
-// TODO(markdavis) return an additional character that is the "least greater" character than
-// the last character.
+//TODO(markdavis) return an additional character that is the "least greater" character than
+//the last character.
 public class IndexCharacters {
     public static final char CGJ = '\u034F';
-    private static final UnicodeSet ALPHABETIC = new UnicodeSet("[:alphabetic:]");
+    private static final UnicodeSet ALPHABETIC = new UnicodeSet("[[:alphabetic:]-[:mark:]]");
     private static final UnicodeSet HANGUL = new UnicodeSet("[\uAC00 \uB098 \uB2E4 \uB77C \uB9C8 \uBC14  \uC0AC  \uC544 \uC790  \uCC28 \uCE74 \uD0C0 \uD30C \uD558]");
     private static final UnicodeSet ETHIOPIC = new UnicodeSet("[[:Block=Ethiopic:]&[:Script=Ethiopic:]]");
-    private static final UnicodeSet CORE_LATIN = new UnicodeSet("[a-zA-Z]");
+    private static final UnicodeSet CORE_LATIN = new UnicodeSet("[a-z]");
 
     private ULocale locale;
     private Collator comparator;
     private Set indexCharacters;
-    private List alreadyIn = new ArrayList();
+    private LinkedHashMap alreadyIn = new LinkedHashMap();
     private List noDistinctSorting = new ArrayList();
     private List notAlphabetic = new ArrayList();
 
@@ -77,9 +85,11 @@ public class IndexCharacters {
         this.locale = locale;
         comparator = Collator.getInstance(locale);
         comparator.setStrength(Collator.PRIMARY);
+
+        // get the exemplars, and handle special cases
+
         UnicodeSet exemplars = LocaleData.getExemplarSet(locale, LocaleData.ES_STANDARD);
-        indexCharacters = new TreeSet(comparator);
-        // special cases
+        // question: should we add auxiliary exemplars?
         if (exemplars.containsSome(CORE_LATIN)) {
             exemplars.addAll(CORE_LATIN);
         }
@@ -89,6 +99,8 @@ public class IndexCharacters {
         }
         if (exemplars.containsSome(ETHIOPIC)) {
             // cut down to small list
+            // make use of the fact that Ethiopic is allocated in 8's, where
+            // the base is 0 mod 8.
             for (UnicodeSetIterator it = new UnicodeSetIterator(ETHIOPIC); it.next();) {
                 if ((it.codepoint & 0x7) != 0) {
                     exemplars.remove(it.codepoint);
@@ -96,15 +108,37 @@ public class IndexCharacters {
             }
         }
 
-        // We make a sorted array of elements, uppercased
+        // first sort them, with an "best" ordering among items that are the same according
+        // to the collator
+
+        Set preferenceSorting = new TreeSet(new MultiComparator(new Comparator[]{
+                comparator, new PreferenceComparator(Collator.getInstance(locale))}));
+        for (UnicodeSetIterator it = new UnicodeSetIterator(exemplars); it.next();) {
+            preferenceSorting.add(it.getString());
+        }
+
+        indexCharacters = new TreeSet(comparator);
+
+        // We nw make a sorted array of elements, uppercased
         // Some of the input may, however, be redundant.
         // That is, we might have c, ch, d, where "ch" sorts just like "c", "h"
         // So we make a pass through, filtering out those cases.
-        for (UnicodeSetIterator it = new UnicodeSetIterator(exemplars); it.next();) {
-            String item = it.getString();
+
+        for (Iterator it = preferenceSorting.iterator(); it.hasNext();) {
+            String item = (String) it.next();
             item = UCharacter.toUpperCase(locale, item);
             if (indexCharacters.contains(item)) {
-                alreadyIn.add(item);
+                for (Iterator it2 = indexCharacters.iterator(); it2.hasNext();) {
+                    Object itemAlreadyIn = it2.next();
+                    if (comparator.compare(item, itemAlreadyIn) == 0) {
+                        Set targets = (Set) alreadyIn.get(itemAlreadyIn);
+                        if (targets == null) {
+                            alreadyIn.put(itemAlreadyIn, targets = new LinkedHashSet());
+                        }
+                        targets.add(item);
+                        break;
+                    }
+                }
             } else if (UTF16.countCodePoint(item) > 1 && comparator.compare(item, separated(item)) == 0){
                 noDistinctSorting.add(item);
             } else if (!ALPHABETIC.containsSome(item)) {
@@ -113,7 +147,9 @@ public class IndexCharacters {
                 indexCharacters.add(item);
             }
         }
+
         // if the result is still too large, cut down to 100 elements
+
         final int size = indexCharacters.size() - 1;
         if (size > 99) {
             int count = 0;
@@ -177,7 +213,7 @@ public class IndexCharacters {
      * @return
      * @draft
      */
-    public List getAlreadyIn() {
+    public Map getAlreadyIn() {
         return alreadyIn;
     }
 
@@ -199,5 +235,37 @@ public class IndexCharacters {
      */
     public List getNotAlphabetic() {
         return notAlphabetic;
+    }
+
+    /**
+     * Comparator that returns "better" items first, where shorter NFKD is better,
+     * and otherwise NFKD binary order is better, and otherwise binary order is better.
+     */
+    private static class PreferenceComparator implements Comparator {
+        static final Comparator binary = new UTF16.StringComparator(true,false,0);
+        final Collator collator;
+
+        public PreferenceComparator(Collator collator) {
+            this.collator = collator;
+        }
+        
+        public int compare(Object o1, Object o2) {
+            if (o1 == o2) {
+                return 0;
+            }
+            String s1 = (String) o1;
+            String s2 = (String) o2;
+            String n1 = Normalizer.decompose(s1, true);
+            String n2 = Normalizer.decompose(s2, true);
+            int result = n1.length() - n2.length();
+            if (result != 0) {
+                return result;
+            }
+            result = collator.compare(n1, n2);
+            if (result != 0) {
+                return result;
+            }
+            return binary.compare(s1, s2);
+        }
     }
 }
