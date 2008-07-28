@@ -1,7 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2007,
- * International Business Machines Corporation and others. All Rights Reserved.
+ * Copyright (C) 2003-2008, International Business Machines Corporation and others. All Rights Reserved.
  *******************************************************************************
  */
  
@@ -387,7 +386,7 @@ class RBBIRuleScanner {
         // Just scanned a decimal digit that's part of a tag value
         {
             n = fNodeStack[fNodeStackPtr];
-            int v = Character.digit((char) fC.fChar, 10);
+            int v = UCharacter.digit((char) fC.fChar, 10);
             n.fVal = n.fVal * 10 + v;
             break;
         }
