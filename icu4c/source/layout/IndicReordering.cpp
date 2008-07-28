@@ -533,7 +533,7 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
             le_int32  baseLimit = prev;
 
             // Check for REPH at front of syllable
-            if (length > 2 && classTable->isReph(chars[prev]) && classTable->isVirama(chars[prev + 1])) {
+            if (length > 2 && classTable->isReph(chars[prev]) && classTable->isVirama(chars[prev + 1]) && chars[prev + 2] != C_SIGN_ZWNJ) {
                 baseLimit += 2;
 
                 // Check for eyelash RA, if the script supports it
