@@ -143,4 +143,9 @@
     <test-font name="arial.ttf"/>
     <test-text>ḤḤ</test-text>
   </test-case>
+
+  <test-case id="REPH ZWNJ Test" script="deva">
+    <test-font name="raghu.ttf"/>
+    <test-text>र्य र्‌य</test-text>
+  </test-case>
 </layout-tests>
