@@ -175,7 +175,7 @@ import com.ibm.icu.util.ULocale;
  * "01/11/12" would be interpreted as Jan 11, 2012 while the string "05/04/64"
  * would be interpreted as May 4, 1964.
  * During parsing, only strings consisting of exactly two digits, as defined by
- * {@link java.lang.Character#isDigit(char)}, will be parsed into the default
+ * {@link UCharacter#isDigit(char)}, will be parsed into the default
  * century.
  * Any other numeric string, such as a one digit string, a three or more digit
  * string, or a two digit string that isn't all digits (for example, "-1"), is
@@ -1978,8 +1978,8 @@ public class SimpleDateFormat extends DateFormat {
                 // is treated literally:  "2250", "-1", "1", "002".
                 /* 'yy' is the only special case, 'y' is interpreted as number. [Richard/GCL]*/
                 if (count == 2 && (pos.getIndex() - start) == 2
-                    && Character.isDigit(text.charAt(start))
-                    && Character.isDigit(text.charAt(start+1)))
+                    && UCharacter.isDigit(text.charAt(start))
+                    && UCharacter.isDigit(text.charAt(start+1)))
                     {
                         // Assume for example that the defaultCenturyStart is 6/18/1903.
                         // This means that two-digit years will be forced into the range
