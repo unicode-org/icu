@@ -1,7 +1,7 @@
 //##header J2SE15
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -851,6 +851,7 @@ public class TestFmwk extends AbstractTestLog {
         pw.println(" -t[ime][:<n>] Print elapsed time for each test.  if n is present\n"
                         + "       only print times >= n milliseconds.");
         pw.println(" -v[erbose] Show log messages");
+        pw.println(" -u[nicode] Don't escape error or log messages");
         pw.println(" -w[arning] Continue in presence of warnings, and disable missing test warnings.");
         pw.println(" -nodata | -nd Do not warn if resource data is not present.");
         pw.println();
@@ -1198,6 +1199,10 @@ public class TestFmwk extends AbstractTestLog {
                             filter = filter == null ? temp : filter + "," + temp;
                         } else if (arg.startsWith("-s")) {
                             params.log = new NullWriter();
+                        } else if (arg.startsWith("-u")) {
+                            if (params.log instanceof ASCIIWriter) {
+                                params.log = log;
+                            }
                         } else {
                             log.println("*** Error: unrecognized argument: "
                                         + args[i]);
