@@ -2215,13 +2215,18 @@ _getStringOrCopyKey(const char *path, const char *locale,
             ures_close(rb);
         }
     } else {
-        /* second-level item, use special fallback */
-        s=_res_getTableStringWithFallback(path, locale,
-                                           tableKey, 
-                                           subTableKey,
-                                           itemKey,
-                                           &length,
-                                           pErrorCode);
+        /* Language code should not be a number. If it is, set the error code. */
+        if (!uprv_strncmp(tableKey, "Languages", 9) && uprv_strtol(itemKey, NULL, 10)) {
+            *pErrorCode = U_MISSING_RESOURCE_ERROR;
+        } else {
+            /* second-level item, use special fallback */
+            s=_res_getTableStringWithFallback(path, locale,
+                                               tableKey, 
+                                               subTableKey,
+                                               itemKey,
+                                               &length,
+                                               pErrorCode);
+        }
     }
     if(U_SUCCESS(*pErrorCode)) {
         int32_t copyLength=uprv_min(length, destCapacity);
