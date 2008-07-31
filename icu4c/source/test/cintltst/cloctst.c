@@ -1065,12 +1065,14 @@ static void TestSimpleDisplayNames()
     int32_t i;
     int32_t localeIndex = 0;
     for (i = 0; i < 7; i++) {
-        if (i == 6) {
-            localeIndex = 1;
-        }
         UChar *testLang=0;
         UChar *expectedLang=0;
         int size=0;
+        
+        if (i == 6) {
+            localeIndex = 1; /* Use the second locale for the rest of the test. */
+        }
+        
         size=uloc_getDisplayLanguage(languageCodes[i], inLocale[localeIndex], NULL, size, &status);
         if(status==U_BUFFER_OVERFLOW_ERROR) {
             status=U_ZERO_ERROR;
