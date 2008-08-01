@@ -826,6 +826,11 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      * Stress test
      */
     public void testStress() {
+        if (getInclusion() <= 5) {
+            logln("INFO: Skipping test");
+            return;
+        }
+
         // test data.
         // The 1st is the format pattern,
         // Next are pairs in which the 1st in the pair is the earlier date
