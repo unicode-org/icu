@@ -1448,7 +1448,6 @@ static void TestNBSPInPattern(void) {
     {
 #define SPECIAL_PATTERN "\\u00A4\\u00A4'\\u062f.\\u0625.\\u200f\\u00a0'###0.00"
         UChar pat[200];
-        char testcase2[200];
         testcase = "ar_AE special pattern: " SPECIAL_PATTERN;
         u_unescape(SPECIAL_PATTERN, pat, sizeof(pat)/sizeof(pat[0]));
         unum_applyPattern(nf, FALSE, pat, -1, NULL, &status);
