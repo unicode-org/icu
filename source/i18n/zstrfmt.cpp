@@ -149,7 +149,8 @@ getTimeZoneTranslationType(TimeZoneTranslationTypeIndex typeIdx) {
         case ZSIDX_SHORT_DAYLIGHT:
             type = DAYLIGHT_SHORT;
             break;
-       
+        default:
+            break;
     }
     return type;
 }
@@ -1097,6 +1098,8 @@ ZoneStringFormat::getString(const UnicodeString &tzid, TimeZoneTranslationTypeIn
                         zstrings->getString(typeIdx, result);
                     }
                     break;
+                default:
+                    break;
             }
         }
     }
@@ -1121,6 +1124,8 @@ ZoneStringFormat::getString(const UnicodeString &tzid, TimeZoneTranslationTypeIn
                         if (!commonlyUsedOnly || mzstrings->isShortFormatCommonlyUsed()) {
                             mzstrings->getString(typeIdx, result);
                         }
+                        break;
+                    default:
                         break;
                 }
             }
