@@ -1416,6 +1416,63 @@ public class TimeZoneTest extends TestFmwk
             }
         }
     }
+
+    public void TestSetDefault() {
+        java.util.TimeZone save = java.util.TimeZone.getDefault();
+
+        /*
+         * America/Caracs (Venezuela) changed the base offset from -4:00 to
+         * -4:30 on Dec 9, 2007.
+         */
+
+        TimeZone icuCaracas = TimeZone.getTimeZone("America/Caracas", TimeZone.TIMEZONE_ICU);
+        java.util.TimeZone jdkCaracas = java.util.TimeZone.getTimeZone("America/Caracas");
+
+        // Set JDK America/Caracas as the default
+        java.util.TimeZone.setDefault(jdkCaracas);
+
+        java.util.Calendar jdkCal = java.util.Calendar.getInstance();
+        jdkCal.clear();
+        jdkCal.set(2007, java.util.Calendar.JANUARY, 1);
+
+        int rawOffset = jdkCal.get(java.util.Calendar.ZONE_OFFSET);
+        int dstSavings = jdkCal.get(java.util.Calendar.DST_OFFSET);
+
+        int[] offsets = new int[2];
+        icuCaracas.getOffset(jdkCal.getTimeInMillis(), false, offsets);
+
+        boolean isTimeZoneSynchronized = true;
+
+        if (rawOffset != offsets[0] || dstSavings != offsets[1]) {
+            // JDK time zone rule is out of sync...
+            logln("Rule for JDK America/Caracas is not same with ICU.  Skipping the rest.");
+            isTimeZoneSynchronized = false;
+        }
+
+        if (isTimeZoneSynchronized) {
+            // If JDK America/Caracas uses the same rule with ICU,
+            // the following code should work well.
+            TimeZone.setDefault(icuCaracas);
+
+            // Create a new JDK calendar instance again.
+            // This calendar should reflect the new default
+            // set by ICU TimeZone#setDefault.
+            jdkCal = java.util.Calendar.getInstance();
+            jdkCal.clear();
+            jdkCal.set(2007, java.util.Calendar.JANUARY, 1);
+
+            rawOffset = jdkCal.get(java.util.Calendar.ZONE_OFFSET);
+            dstSavings = jdkCal.get(java.util.Calendar.DST_OFFSET);
+
+            if (rawOffset != offsets[0] || dstSavings != offsets[1]) {
+                errln("ERROR: Got offset [raw:" + rawOffset + "/dst:" + dstSavings
+                          + "] Expected [raw:" + offsets[0] + "/dst:" + offsets[1] + "]");
+            }
+        }
+
+        // Restore the original JDK time zone
+        java.util.TimeZone.setDefault(save);
+    }
 }
 
 //eof

@@ -829,9 +829,27 @@ abstract public class TimeZone implements Serializable, Cloneable {
         } else {
             // Keep java.util.TimeZone default in sync so java.util.Date
             // can interoperate with com.ibm.icu.util classes.
-            jdkZone = null;
+
             if (tz != null) {
-                jdkZone = TimeZoneAdapter.wrap(tz);
+                if (tz instanceof com.ibm.icu.impl.OlsonTimeZone) {
+                    // Because of the lack of APIs supporting historic
+                    // zone offset/dst saving in JDK TimeZone,
+                    // wrapping ICU TimeZone with JDK TimeZone will
+                    // cause historic offset calculation in Calendar/Date.
+                    // JDK calendar implementation calls getRawOffset() and
+                    // getDSTSavings() when the instance of JDK TimeZone
+                    // is not an instance of JDK internal TimeZone subclass
+                    // (sun.util.calendar.ZoneInfo).  Ticket#6459
+                    String icuID = tz.getID();
+                    jdkZone = java.util.TimeZone.getTimeZone(icuID);
+                    if (!icuID.equals(jdkZone.getID())) {
+                        // JDK does not know the ID..
+                        jdkZone = null;
+                    }
+                }
+                if (jdkZone == null) {
+                    jdkZone = TimeZoneAdapter.wrap(tz);
+                }
             }
         }
         java.util.TimeZone.setDefault(jdkZone);
