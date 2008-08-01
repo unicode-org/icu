@@ -109,7 +109,7 @@ void BreakTransliterator::handleTransliterate(Replaceable& text, UTransPosition&
             if ((U_MASK(type) & (U_GC_L_MASK | U_GC_M_MASK)) == 0) continue;
 
             boundaries->addElement(boundary, status);
-            //System.out.println(boundary);
+            // printf("Boundary at %d\n", boundary);
         }
 
         int delta = 0;

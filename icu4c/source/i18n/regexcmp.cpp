@@ -1574,12 +1574,10 @@ UBool RegexCompile::doParseActions(int32_t action)
         // Have encountered the ']' that closes a set.
         //    Force the evaluation of any pending operations within this set,
         //    leave the completed set on the top of the set stack.
-        {
         setEval(setEnd);
-        int32_t setOp = fSetOpStack.popi();
-        U_ASSERT(setOp==setStart);
+        U_ASSERT(fSetOpStack.peeki()==setStart);
+        fSetOpStack.popi();
         break;
-      }
 
     case doSetFinish:
         {
