@@ -2574,7 +2574,7 @@ UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                     myData->isEmptySegment = FALSE;	/* we are handling it, reset to avoid future spurious errors */
                     *err = U_ILLEGAL_ESCAPE_SEQUENCE;
                     args->converter->toUCallbackReason = UCNV_IRREGULAR;
-                    args->converter->toUBytes[0] = mySourceChar;
+                    args->converter->toUBytes[0] = (uint8_t)mySourceChar;
                     args->converter->toULength = 1;
                     args->target = myTarget;
                     args->source = mySource;

@@ -217,7 +217,7 @@ _toTitle(UCaseMap *csm,
          UErrorCode *pErrorCode) {
     const UChar *s;
     UChar32 c;
-    int32_t prev, titleStart, titleLimit, titleLimitSave, index, indexSave, destIndex, length;
+    int32_t prev, titleStart, titleLimit, index, destIndex, length;
     UBool isFirstIndex;
 
     if(csm->iter!=NULL) {
