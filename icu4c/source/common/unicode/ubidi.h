@@ -1068,6 +1068,8 @@ ubidi_getReorderingOptions(UBiDi *pBiDi);
  *        must take care of the deallocation of the <code>embeddingLevels</code> array.<br><br>
  *        <strong>Note:</strong> the <code>embeddingLevels</code> array must be
  *        at least <code>length</code> long.
+ *        This pointer can be <code>NULL</code> if this
+ *        value is not necessary.
  *
  * @param pErrorCode must be a valid pointer to an error code value.
  * @stable ICU 2.0
