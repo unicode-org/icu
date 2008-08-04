@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999-2007, International Business Machines
+#   Copyright (C) 1999-2008, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -51,7 +51,7 @@ DEFS += -DU_TOOLUTIL_IMPLEMENTATION
 LDFLAGS += $(LDFLAGSICUTOOLUTIL)
 LIBS = $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS)
 
-OBJECTS = filestrm.o package.o pkgitems.o propsvec.o swapimpl.o toolutil.o unewdata.o \
+OBJECTS = filestrm.o package.o pkgitems.o swapimpl.o toolutil.o unewdata.o \
 ucm.o ucmstate.o uoptions.o uparse.o \
 ucbuf.o xmlparser.o writesrc.o
 

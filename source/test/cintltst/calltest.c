@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1996-2006, International Business Machines Corporation and
+ * Copyright (c) 1996-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -37,10 +37,11 @@ void addUTraceTest(TestNode** root);
 void addURegexTest(TestNode** root);
 void addUTextTest(TestNode** root);
 void addUCsdetTest(TestNode** root);
-
+void addCnvSelTest(TestNode** root);
 
 void addAllTests(TestNode** root)
 {
+    addCnvSelTest(root);
     addUDataTest(root);
     addHeapMutexTest(root);
     addPUtilTest(root);
@@ -74,5 +75,6 @@ void addAllTests(TestNode** root)
 #if !UCONFIG_NO_TRANSLITERATION
     addUTransTest(root);
 #endif
+
 }
 
