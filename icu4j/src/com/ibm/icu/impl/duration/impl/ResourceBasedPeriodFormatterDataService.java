@@ -74,6 +74,12 @@ public class ResourceBasedPeriodFormatterDataService
   }
 
   public PeriodFormatterData get(String localeName) {
+    // remove tag info including calendar, we don't use the calendar
+    int x = localeName.indexOf('@');
+    if (x != -1) {
+      localeName = localeName.substring(0, x);
+    }
+
     synchronized(this) {
       if (lastLocale != null && lastLocale.equals(localeName)) {
         return lastData;
