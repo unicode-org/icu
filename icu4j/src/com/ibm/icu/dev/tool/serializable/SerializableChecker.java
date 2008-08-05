@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -100,17 +100,19 @@ public class SerializableChecker implements URLHandler.URLVisitor
                     
                     System.out.print(className + " (" + Modifier.toString(m) + ") - ");
                     
-                    try {
-                        /* uid = */
-                        c.getDeclaredField("serialVersionUID");
-                    } catch (Exception e) {
-                        System.out.print("no serialVersionUID - ");
+                    if(!Modifier.isInterface(m)){ 
+                        try {
+                            /* uid = */
+                            c.getDeclaredField("serialVersionUID");
+                        } catch (Exception e) {
+                            System.out.print("no serialVersionUID - ");
+                        }
                     }
                     
                     if (Modifier.isPublic(m)) {
                         SerializableTest.Handler handler = SerializableTest.getHandler(className);
                         
-                        if (handler != null) {
+                        if (!Modifier.isInterface(m) && handler != null) {
                             Object objectsOut[] = handler.getTestObjects();
                             Object objectsIn[];
                             boolean passed = true;
