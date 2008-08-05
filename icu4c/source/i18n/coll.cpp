@@ -281,8 +281,8 @@ static UBool isAvailableLocaleListInitialized(UErrorCode &status) {
                 umtx_lock(NULL);
                 if (availableLocaleList == NULL)
                 {
-                    availableLocaleList = temp;
                     availableLocaleListCount = localeCount;
+                    availableLocaleList = temp;
                     temp = NULL;
                     ucln_i18n_registerCleanup(UCLN_I18N_COLLATOR, collator_cleanup);
                 } 

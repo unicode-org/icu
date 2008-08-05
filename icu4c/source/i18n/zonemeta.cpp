@@ -670,10 +670,10 @@ ZoneMeta::initialize(void) {
         delete tmpOlsonToMeta;
         delete tmpMetaToOlson;
     } else {
-        gZoneMetaInitialized = TRUE;
         gCanonicalMap = tmpCanonicalMap;
         gOlsonToMeta = tmpOlsonToMeta;
         gMetaToOlson = tmpMetaToOlson;
+        gZoneMetaInitialized = TRUE;
         ucln_i18n_registerCleanup(UCLN_I18N_ZONEMETA, zoneMeta_cleanup);
     }
     umtx_unlock(&gZoneMetaLock);

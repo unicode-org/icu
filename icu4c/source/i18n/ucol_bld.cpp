@@ -1358,8 +1358,8 @@ ucol_initInverseUCA(UErrorCode *status)
 
             umtx_lock(NULL);
             if(_staticInvUCA == NULL) {
-                _staticInvUCA = newInvUCA;
                 invUCA_DATA_MEM = result;
+                _staticInvUCA = newInvUCA;
                 result = NULL;
                 newInvUCA = NULL;
             }

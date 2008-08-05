@@ -2702,8 +2702,8 @@ static void _load_installedLocales()
                 umtx_lock(NULL);
                 if (_installedLocales == NULL)
                 {
-                    _installedLocales = temp;
                     _installedLocalesCount = localeCount;
+                    _installedLocales = temp;
                     temp = NULL;
                     ucln_common_registerCleanup(UCLN_COMMON_ULOC, uloc_cleanup);
                 } 
