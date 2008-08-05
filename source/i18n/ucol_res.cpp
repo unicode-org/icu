@@ -115,9 +115,9 @@ ucol_initUCA(UErrorCode *status) {
             if(U_SUCCESS(*status)){
                 umtx_lock(NULL);
                 if(_staticUCA == NULL) {
+                    UCA_DATA_MEM = result;
                     _staticUCA = newUCA;
                     newUCA = NULL;
-                    UCA_DATA_MEM = result;
                     result = NULL;
                 }
                 umtx_unlock(NULL);
