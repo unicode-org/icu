@@ -10,12 +10,12 @@
 
 #If no config, we default to debug
 !IF "$(CFG)" == ""
-CFG=x86\Debug
+CFG=Debug
 !MESSAGE No configuration specified. Defaulting to common - Win32 Debug.
 !ENDIF
 
 #Here we test if a valid configuration is given
-!IF "$(CFG)" != "x86\Release" && "$(CFG)" != "x86\Debug" && "$(CFG)" != "x64\Release" && "$(CFG)" != "x64\Debug"
+!IF "$(CFG)" != "Release" && "$(CFG)" != "release" && "$(CFG)" != "Debug" && "$(CFG)" != "debug"
 !MESSAGE Invalid configuration "$(CFG)" specified.
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
@@ -45,16 +45,12 @@ DLL_OUTPUT=.\$(CFG)
 # set the following to 'static' or 'dll' depending
 PKGMODE=static
 
+
 ICD=$(ICUDATA)^\
 DATA_PATH=$(ICUP)\data^\
-
-!IF "$(CFG)" == "x64\Release" || "$(CFG)" == "x64\Debug"
-ICUTOOLS=$(ICUP)\bin64
-PATH = $(ICUP)\bin64;$(PATH)
-!ELSE
 ICUTOOLS=$(ICUP)\bin
+
 PATH = $(ICUP)\bin;$(PATH)
-!ENDIF
 
 # Suffixes for data files
 .SUFFIXES : .ucm .cnv .dll .dat .res .txt .c

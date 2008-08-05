@@ -15,8 +15,8 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\x86\Release"
-			IntermediateDirectory=".\x86\Release"
+			OutputDirectory=".\Release"
+			IntermediateDirectory=".\Release"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -37,7 +37,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\x86\Release/cal.tlb"
+				TypeLibraryName=".\Release/cal.tlb"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -49,10 +49,10 @@
 				EnableFunctionLevelLinking="true"
 				TreatWChar_tAsBuiltInType="true"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\x86\Release/cal.pch"
-				AssemblerListingLocation=".\x86\Release/"
-				ObjectFile=".\x86\Release/"
-				ProgramDataBaseFileName=".\x86\Release/"
+				PrecompiledHeaderFile=".\Release/cal.pch"
+				AssemblerListingLocation=".\Release/"
+				ObjectFile=".\Release/"
+				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				CompileAs="0"
@@ -71,11 +71,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="icuuc.lib icuin.lib"
-				OutputFile=".\x86\Release/cal.exe"
+				OutputFile=".\Release/cal.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../../lib"
-				ProgramDatabaseFile=".\x86\Release/cal.pdb"
+				ProgramDatabaseFile=".\Release/cal.pdb"
 				SubSystem="1"
 			/>
 			<Tool
@@ -105,8 +105,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\x86\Debug"
-			IntermediateDirectory=".\x86\Debug"
+			OutputDirectory=".\Debug"
+			IntermediateDirectory=".\Debug"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -127,7 +127,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\x86\Debug/cal.tlb"
+				TypeLibraryName=".\Debug/cal.tlb"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -138,10 +138,10 @@
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="true"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\x86\Debug/cal.pch"
-				AssemblerListingLocation=".\x86\Debug/"
-				ObjectFile=".\x86\Debug/"
-				ProgramDataBaseFileName=".\x86\Debug/"
+				PrecompiledHeaderFile=".\Debug/cal.pch"
+				AssemblerListingLocation=".\Debug/"
+				ObjectFile=".\Debug/"
+				ProgramDataBaseFileName=".\Debug/"
 				BrowseInformation="1"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
@@ -162,12 +162,12 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="icuucd.lib icuind.lib"
-				OutputFile=".\x86\Debug/cal.exe"
+				OutputFile=".\Debug/cal.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../../lib"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\x86\Debug/cal.pdb"
+				ProgramDatabaseFile=".\Debug/cal.pdb"
 				SubSystem="1"
 			/>
 			<Tool

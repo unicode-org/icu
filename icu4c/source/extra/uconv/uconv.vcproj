@@ -15,8 +15,8 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\x86\Release"
-			IntermediateDirectory=".\x86\Release"
+			OutputDirectory=".\Release"
+			IntermediateDirectory=".\Release"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -39,7 +39,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\x86\Release/uconv.tlb"
+				TypeLibraryName=".\Release/uconv.tlb"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -50,10 +50,10 @@
 				EnableFunctionLevelLinking="true"
 				DisableLanguageExtensions="true"
 				TreatWChar_tAsBuiltInType="true"
-				PrecompiledHeaderFile=".\x86\Release/uconv.pch"
-				AssemblerListingLocation=".\x86\Release/"
-				ObjectFile=".\x86\Release/"
-				ProgramDataBaseFileName=".\x86\Release/"
+				PrecompiledHeaderFile=".\Release/uconv.pch"
+				AssemblerListingLocation=".\Release/"
+				ObjectFile=".\Release/"
+				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				CompileAs="0"
@@ -72,11 +72,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="uconvmsg.lib"
-				OutputFile=".\x86\Release/uconv.exe"
+				OutputFile=".\Release/uconv.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="x86\Release"
-				ProgramDatabaseFile=".\x86\Release/uconv.pdb"
+				AdditionalLibraryDirectories="Release"
+				ProgramDatabaseFile=".\Release/uconv.pdb"
 				SubSystem="1"
 			/>
 			<Tool
@@ -106,8 +106,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\x86\Debug"
-			IntermediateDirectory=".\x86\Debug"
+			OutputDirectory=".\Debug"
+			IntermediateDirectory=".\Debug"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -130,7 +130,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\x86\Debug/uconv.tlb"
+				TypeLibraryName=".\Debug/uconv.tlb"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -142,10 +142,10 @@
 				BufferSecurityCheck="true"
 				DisableLanguageExtensions="true"
 				TreatWChar_tAsBuiltInType="true"
-				PrecompiledHeaderFile=".\x86\Debug/uconv.pch"
-				AssemblerListingLocation=".\x86\Debug/"
-				ObjectFile=".\x86\Debug/"
-				ProgramDataBaseFileName=".\x86\Debug/"
+				PrecompiledHeaderFile=".\Debug/uconv.pch"
+				AssemblerListingLocation=".\Debug/"
+				ObjectFile=".\Debug/"
+				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
@@ -165,12 +165,12 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="uconvmsg.lib"
-				OutputFile=".\x86\Debug/uconv.exe"
+				OutputFile=".\Debug/uconv.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="x86\Debug"
+				AdditionalLibraryDirectories="Debug"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\x86\Debug/uconv.pdb"
+				ProgramDatabaseFile=".\Debug/uconv.pdb"
 				SubSystem="1"
 			/>
 			<Tool
@@ -250,8 +250,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="nmake /nologo /f $(InputName).mak icup=&quot;$(ProjectDir)..\..\..&quot; CFG=x86\Release&#x0D;&#x0A;"
-						Outputs="x86\Release/uconvmsg.lib"
+						CommandLine="nmake /nologo /f $(InputName).mak icup=&quot;$(ProjectDir)..\..\..&quot; CFG=Release&#x0D;&#x0A;"
+						Outputs="Release/uconvmsg.lib"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -259,8 +259,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="nmake /nologo /f $(InputName).mak icup=&quot;$(ProjectDir)..\..\..&quot; CFG=x86\Debug&#x0D;&#x0A;"
-						Outputs="x86\Debug/uconvmsg.lib"
+						CommandLine="nmake /nologo /f $(InputName).mak icup=&quot;$(ProjectDir)..\..\..&quot; CFG=Debug&#x0D;&#x0A;"
+						Outputs="Debug/uconvmsg.lib"
 					/>
 				</FileConfiguration>
 			</File>
