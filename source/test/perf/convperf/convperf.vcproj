@@ -15,8 +15,8 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\x86\Release"
-			IntermediateDirectory=".\x86\Release"
+			OutputDirectory=".\Release"
+			IntermediateDirectory=".\Release"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -37,7 +37,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\x86\Release/convperf.tlb"
+				TypeLibraryName=".\Release/convperf.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -50,10 +50,10 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\x86\Release/convperf.pch"
-				AssemblerListingLocation=".\x86\Release/"
-				ObjectFile=".\x86\Release/"
-				ProgramDataBaseFileName=".\x86\Release/"
+				PrecompiledHeaderFile=".\Release/convperf.pch"
+				AssemblerListingLocation=".\Release/"
+				ObjectFile=".\Release/"
+				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				CompileAs="0"
@@ -72,11 +72,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="icuuc.lib icutu.lib icutest.lib"
-				OutputFile=".\x86\Release/convperf.exe"
+				OutputFile=".\Release/convperf.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\..\..\lib\"
-				ProgramDatabaseFile=".\x86\Release/convperf.pdb"
+				ProgramDatabaseFile=".\Release/convperf.pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -107,8 +107,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\x86\Debug"
-			IntermediateDirectory=".\x86\Debug"
+			OutputDirectory=".\Debug"
+			IntermediateDirectory=".\Debug"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -129,7 +129,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\x86\Debug/convperf.tlb"
+				TypeLibraryName=".\Debug/convperf.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -140,10 +140,10 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\x86\Debug/convperf.pch"
-				AssemblerListingLocation=".\x86\Debug/"
-				ObjectFile=".\x86\Debug/"
-				ProgramDataBaseFileName=".\x86\Debug/"
+				PrecompiledHeaderFile=".\Debug/convperf.pch"
+				AssemblerListingLocation=".\Debug/"
+				ObjectFile=".\Debug/"
+				ProgramDataBaseFileName=".\Debug/"
 				BrowseInformation="1"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
@@ -164,12 +164,12 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="icuucd.lib icutud.lib icutestd.lib"
-				OutputFile=".\x86\Debug/convperf.exe"
+				OutputFile=".\Debug/convperf.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\..\..\lib\"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\x86\Debug/convperf.pdb"
+				ProgramDatabaseFile=".\Debug/convperf.pdb"
 				SubSystem="1"
 			/>
 			<Tool

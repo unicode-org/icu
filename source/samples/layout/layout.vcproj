@@ -15,8 +15,8 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\x86\Release"
-			IntermediateDirectory=".\x86\Release"
+			OutputDirectory=".\Release"
+			IntermediateDirectory=".\Release"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -37,7 +37,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\x86\Release/layout.tlb"
+				TypeLibraryName=".\Release/layout.tlb"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -49,10 +49,10 @@
 				EnableFunctionLevelLinking="true"
 				TreatWChar_tAsBuiltInType="true"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\x86\Release/layout.pch"
-				AssemblerListingLocation=".\x86\Release/"
-				ObjectFile=".\x86\Release/"
-				ProgramDataBaseFileName=".\x86\Release/"
+				PrecompiledHeaderFile=".\Release/layout.pch"
+				AssemblerListingLocation=".\Release/"
+				ObjectFile=".\Release/"
+				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				CompileAs="0"
@@ -71,10 +71,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="..\..\..\lib\iculx.lib ..\..\..\lib\icule.lib ..\..\..\lib\icuuc.lib ..\..\..\lib\icuin.lib odbc32.lib odbccp32.lib"
-				OutputFile=".\x86\Release/layout.exe"
+				OutputFile=".\Release/layout.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\x86\Release/layout.pdb"
+				ProgramDatabaseFile=".\Release/layout.pdb"
 				SubSystem="2"
 			/>
 			<Tool
@@ -104,8 +104,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\x86\Debug"
-			IntermediateDirectory=".\x86\Debug"
+			OutputDirectory=".\Debug"
+			IntermediateDirectory=".\Debug"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -126,7 +126,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\x86\Debug/layout.tlb"
+				TypeLibraryName=".\Debug/layout.tlb"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -137,10 +137,10 @@
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="true"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\x86\Debug/layout.pch"
-				AssemblerListingLocation=".\x86\Debug/"
-				ObjectFile=".\x86\Debug/"
-				ProgramDataBaseFileName=".\x86\Debug/"
+				PrecompiledHeaderFile=".\Debug/layout.pch"
+				AssemblerListingLocation=".\Debug/"
+				ObjectFile=".\Debug/"
+				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
@@ -160,11 +160,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="..\..\..\lib\iculxd.lib ..\..\..\lib\iculed.lib ..\..\..\lib\icuucd.lib ..\..\..\lib\icuind.lib odbc32.lib odbccp32.lib"
-				OutputFile=".\x86\Debug/layout.exe"
+				OutputFile=".\Debug/layout.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\x86\Debug/layout.pdb"
+				ProgramDatabaseFile=".\Debug/layout.pdb"
 				SubSystem="2"
 			/>
 			<Tool

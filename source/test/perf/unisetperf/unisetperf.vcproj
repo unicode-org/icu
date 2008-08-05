@@ -15,8 +15,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\x86\Debug"
-			IntermediateDirectory=".\x86\Debug"
+			OutputDirectory=".\Debug"
+			IntermediateDirectory=".\Debug"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -37,7 +37,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\x86\Debug/unisetperf.tlb"
+				TypeLibraryName=".\Debug/unisetperf.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -47,10 +47,10 @@
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				PrecompiledHeaderFile=".\x86\Debug/unisetperf.pch"
-				AssemblerListingLocation=".\x86\Debug/"
-				ObjectFile=".\x86\Debug/"
-				ProgramDataBaseFileName=".\x86\Debug/"
+				PrecompiledHeaderFile=".\Debug/unisetperf.pch"
+				AssemblerListingLocation=".\Debug/"
+				ObjectFile=".\Debug/"
+				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
@@ -70,12 +70,12 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="icuucd.lib icutud.lib winmm.lib icutestd.lib"
-				OutputFile=".\x86\Debug/unisetperf.exe"
+				OutputFile=".\Debug/unisetperf.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\..\..\lib\"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\x86\Debug/unisetperf.pdb"
+				ProgramDatabaseFile=".\Debug/unisetperf.pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -106,8 +106,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\x86\Release"
-			IntermediateDirectory=".\x86\Release"
+			OutputDirectory=".\Release"
+			IntermediateDirectory=".\Release"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -128,7 +128,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\x86\Release/unisetperf.tlb"
+				TypeLibraryName=".\Release/unisetperf.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -140,10 +140,10 @@
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
-				PrecompiledHeaderFile=".\x86\Release/unisetperf.pch"
-				AssemblerListingLocation=".\x86\Release/"
-				ObjectFile=".\x86\Release/"
-				ProgramDataBaseFileName=".\x86\Release/"
+				PrecompiledHeaderFile=".\Release/unisetperf.pch"
+				AssemblerListingLocation=".\Release/"
+				ObjectFile=".\Release/"
+				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				CompileAs="0"
@@ -162,11 +162,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="icuuc.lib icutu.lib icutest.lib winmm.lib"
-				OutputFile=".\x86\Release/unisetperf.exe"
+				OutputFile=".\Release/unisetperf.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\..\..\lib\"
-				ProgramDatabaseFile=".\x86\Release/unisetperf.pdb"
+				ProgramDatabaseFile=".\Release/unisetperf.pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
