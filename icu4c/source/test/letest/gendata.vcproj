@@ -15,8 +15,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\Debug"
-			IntermediateDirectory=".\Debug"
+			OutputDirectory=".\x86\Debug"
+			IntermediateDirectory=".\x86\Debug"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -37,7 +37,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Debug/gendata.tlb"
+				TypeLibraryName=".\x86\Debug/gendata.tlb"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -48,10 +48,10 @@
 				RuntimeLibrary="1"
 				TreatWChar_tAsBuiltInType="true"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\Debug/gendata.pch"
-				AssemblerListingLocation=".\Debug/"
-				ObjectFile=".\Debug/"
-				ProgramDataBaseFileName=".\Debug/"
+				PrecompiledHeaderFile=".\x86\Debug/gendata.pch"
+				AssemblerListingLocation=".\x86\Debug/"
+				ObjectFile=".\x86\Debug/"
+				ProgramDataBaseFileName=".\x86\Debug/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
@@ -71,11 +71,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="..\..\..\lib\iculed.lib ..\..\..\lib\icuucd.lib ..\..\..\lib\icutud.lib odbc32.lib odbccp32.lib"
-				OutputFile=".\Debug/gendata.exe"
+				OutputFile=".\x86\Debug/gendata.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Debug/gendata.pdb"
+				ProgramDatabaseFile=".\x86\Debug/gendata.pdb"
 				SubSystem="1"
 			/>
 			<Tool
@@ -105,8 +105,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\Release"
-			IntermediateDirectory=".\Release"
+			OutputDirectory=".\x86\Release"
+			IntermediateDirectory=".\x86\Release"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -127,7 +127,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Release/gendata.tlb"
+				TypeLibraryName=".\x86\Release/gendata.tlb"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -139,10 +139,10 @@
 				EnableFunctionLevelLinking="true"
 				TreatWChar_tAsBuiltInType="true"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\Release/gendata.pch"
-				AssemblerListingLocation=".\Release/"
-				ObjectFile=".\Release/"
-				ProgramDataBaseFileName=".\Release/"
+				PrecompiledHeaderFile=".\x86\Release/gendata.pch"
+				AssemblerListingLocation=".\x86\Release/"
+				ObjectFile=".\x86\Release/"
+				ProgramDataBaseFileName=".\x86\Release/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				CompileAs="0"
@@ -161,10 +161,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="..\..\..\lib\icule.lib ..\..\..\lib\icuuc.lib ..\..\..\lib\icutu.lib odbc32.lib odbccp32.lib"
-				OutputFile=".\Release/gendata.exe"
+				OutputFile=".\x86\Release/gendata.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\Release/gendata.pdb"
+				ProgramDatabaseFile=".\x86\Release/gendata.pdb"
 				SubSystem="1"
 			/>
 			<Tool

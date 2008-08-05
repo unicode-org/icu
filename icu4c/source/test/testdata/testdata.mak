@@ -1,5 +1,5 @@
 #**********************************************************************
-#* Copyright (C) 1999-2007, International Business Machines Corporation
+#* Copyright (C) 1999-2008, International Business Machines Corporation
 #* and others.  All Rights Reserved.
 #**********************************************************************
 #
@@ -33,7 +33,7 @@ TEST_RES_FILES = $(TEST_RES_SOURCE:.txt=.res)
 	@copy "$(TESTDATABLD)\te.res" "$(TESTDATAOUT)\$(TESTDT)\nam.typ"
 	@copy "$(TESTDATA)\icu26_testtypes.res" "$(TESTDATABLD)"
 	@copy "$(TESTDATA)\icu26e_testtypes.res" "$(TESTDATABLD)"
-	"$(ICUP)\bin\pkgdata" -f -v -m common -c -p"$(TESTPKG)" -d "$(TESTDATAOUT)" -T "$(TESTDATABLD)" -s "$(TESTDATABLD)" <<
+	"$(ICUPBIN)\pkgdata" -f -v -m common -c -p"$(TESTPKG)" -d "$(TESTDATAOUT)" -T "$(TESTDATABLD)" -s "$(TESTDATABLD)" <<
 casing.res
 conversion.res
 mc.res

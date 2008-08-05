@@ -15,8 +15,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\Debug"
-			IntermediateDirectory=".\Debug"
+			OutputDirectory=".\x86\Debug"
+			IntermediateDirectory=".\x86\Debug"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -37,7 +37,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Debug/collperf.tlb"
+				TypeLibraryName=".\x86\Debug/collperf.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -47,10 +47,10 @@
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				PrecompiledHeaderFile=".\Debug/collperf.pch"
-				AssemblerListingLocation=".\Debug/"
-				ObjectFile=".\Debug/"
-				ProgramDataBaseFileName=".\Debug/"
+				PrecompiledHeaderFile=".\x86\Debug/collperf.pch"
+				AssemblerListingLocation=".\x86\Debug/"
+				ObjectFile=".\x86\Debug/"
+				ProgramDataBaseFileName=".\x86\Debug/"
 				BrowseInformation="1"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
@@ -71,12 +71,12 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="icuucd.lib icuind.lib icutud.lib winmm.lib icutestd.lib"
-				OutputFile=".\Debug/collperf.exe"
+				OutputFile=".\x86\Debug/collperf.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\..\..\lib\"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Debug/collperf.pdb"
+				ProgramDatabaseFile=".\x86\Debug/collperf.pdb"
 				SubSystem="1"
 			/>
 			<Tool
@@ -106,8 +106,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\Release"
-			IntermediateDirectory=".\Release"
+			OutputDirectory=".\x86\Release"
+			IntermediateDirectory=".\x86\Release"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -128,7 +128,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Release/collperf.tlb"
+				TypeLibraryName=".\x86\Release/collperf.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -140,10 +140,10 @@
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
-				PrecompiledHeaderFile=".\Release/collperf.pch"
-				AssemblerListingLocation=".\Release/"
-				ObjectFile=".\Release/"
-				ProgramDataBaseFileName=".\Release/"
+				PrecompiledHeaderFile=".\x86\Release/collperf.pch"
+				AssemblerListingLocation=".\x86\Release/"
+				ObjectFile=".\x86\Release/"
+				ProgramDataBaseFileName=".\x86\Release/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				CompileAs="0"
@@ -162,11 +162,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="icuuc.lib icuin.lib icutest.lib icutu.lib winmm.lib"
-				OutputFile=".\Release/collperf.exe"
+				OutputFile=".\x86\Release/collperf.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\..\..\lib\"
-				ProgramDatabaseFile=".\Release/collperf.pdb"
+				ProgramDatabaseFile=".\x86\Release/collperf.pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>

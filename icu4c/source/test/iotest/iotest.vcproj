@@ -15,8 +15,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\Debug"
-			IntermediateDirectory=".\Debug"
+			OutputDirectory=".\x86\Debug"
+			IntermediateDirectory=".\x86\Debug"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -37,7 +37,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Debug/iotest.tlb"
+				TypeLibraryName=".\x86\Debug/iotest.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -50,10 +50,10 @@
 				BufferSecurityCheck="true"
 				DisableLanguageExtensions="true"
 				TreatWChar_tAsBuiltInType="true"
-				PrecompiledHeaderFile=".\Debug/iotest.pch"
-				AssemblerListingLocation=".\Debug/"
-				ObjectFile=".\Debug/"
-				ProgramDataBaseFileName=".\Debug/"
+				PrecompiledHeaderFile=".\x86\Debug/iotest.pch"
+				AssemblerListingLocation=".\x86\Debug/"
+				ObjectFile=".\x86\Debug/"
+				ProgramDataBaseFileName=".\x86\Debug/"
 				BrowseInformation="1"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
@@ -73,11 +73,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\Debug/iotest.exe"
+				OutputFile=".\x86\Debug/iotest.exe"
 				LinkIncremental="0"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Debug/iotest.pdb"
+				ProgramDatabaseFile=".\x86\Debug/iotest.pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -109,8 +109,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\Release"
-			IntermediateDirectory=".\Release"
+			OutputDirectory=".\x86\Release"
+			IntermediateDirectory=".\x86\Release"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -131,7 +131,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Release/iotest.tlb"
+				TypeLibraryName=".\x86\Release/iotest.tlb"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -141,10 +141,10 @@
 				RuntimeLibrary="2"
 				DisableLanguageExtensions="true"
 				TreatWChar_tAsBuiltInType="true"
-				PrecompiledHeaderFile=".\Release/iotest.pch"
-				AssemblerListingLocation=".\Release/"
-				ObjectFile=".\Release/"
-				ProgramDataBaseFileName=".\Release/"
+				PrecompiledHeaderFile=".\x86\Release/iotest.pch"
+				AssemblerListingLocation=".\x86\Release/"
+				ObjectFile=".\x86\Release/"
+				ProgramDataBaseFileName=".\x86\Release/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				CompileAs="0"
@@ -162,10 +162,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\Release/iotest.exe"
+				OutputFile=".\x86\Release/iotest.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\Release/iotest.pdb"
+				ProgramDatabaseFile=".\x86\Release/iotest.pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
