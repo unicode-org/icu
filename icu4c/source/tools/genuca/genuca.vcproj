@@ -15,8 +15,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\Debug"
-			IntermediateDirectory=".\Debug"
+			OutputDirectory=".\x86\Debug"
+			IntermediateDirectory=".\x86\Debug"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -39,7 +39,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Debug/genuca.tlb"
+				TypeLibraryName=".\x86\Debug/genuca.tlb"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -51,10 +51,10 @@
 				BufferSecurityCheck="true"
 				DisableLanguageExtensions="true"
 				TreatWChar_tAsBuiltInType="true"
-				PrecompiledHeaderFile=".\Debug/genuca.pch"
-				AssemblerListingLocation=".\Debug/"
-				ObjectFile=".\Debug/"
-				ProgramDataBaseFileName=".\Debug/"
+				PrecompiledHeaderFile=".\x86\Debug/genuca.pch"
+				AssemblerListingLocation=".\x86\Debug/"
+				ObjectFile=".\x86\Debug/"
+				ProgramDataBaseFileName=".\x86\Debug/"
 				BrowseInformation="1"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
@@ -74,11 +74,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\Debug/genuca.exe"
+				OutputFile=".\x86\Debug/genuca.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Debug/genuca.pdb"
+				ProgramDatabaseFile=".\x86\Debug/genuca.pdb"
 				SubSystem="1"
 			/>
 			<Tool
@@ -109,8 +109,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\Release"
-			IntermediateDirectory=".\Release"
+			OutputDirectory=".\x86\Release"
+			IntermediateDirectory=".\x86\Release"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -133,7 +133,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Release/genuca.tlb"
+				TypeLibraryName=".\x86\Release/genuca.tlb"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -144,10 +144,10 @@
 				EnableFunctionLevelLinking="true"
 				DisableLanguageExtensions="true"
 				TreatWChar_tAsBuiltInType="true"
-				PrecompiledHeaderFile=".\Release/genuca.pch"
-				AssemblerListingLocation=".\Release/"
-				ObjectFile=".\Release/"
-				ProgramDataBaseFileName=".\Release/"
+				PrecompiledHeaderFile=".\x86\Release/genuca.pch"
+				AssemblerListingLocation=".\x86\Release/"
+				ObjectFile=".\x86\Release/"
+				ProgramDataBaseFileName=".\x86\Release/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				CompileAs="0"
@@ -165,10 +165,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\Release/genuca.exe"
+				OutputFile=".\x86\Release/genuca.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\Release/genuca.pdb"
+				ProgramDatabaseFile=".\x86\Release/genuca.pdb"
 				SubSystem="1"
 			/>
 			<Tool

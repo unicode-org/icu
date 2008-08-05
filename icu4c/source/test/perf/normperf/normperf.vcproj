@@ -15,8 +15,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\Debug"
-			IntermediateDirectory=".\Debug"
+			OutputDirectory=".\x86\Debug"
+			IntermediateDirectory=".\x86\Debug"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -37,7 +37,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Debug/normperf.tlb"
+				TypeLibraryName=".\x86\Debug/normperf.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -48,10 +48,10 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\Debug/normperf.pch"
-				AssemblerListingLocation=".\Debug/"
-				ObjectFile=".\Debug/"
-				ProgramDataBaseFileName=".\Debug/"
+				PrecompiledHeaderFile=".\x86\Debug/normperf.pch"
+				AssemblerListingLocation=".\x86\Debug/"
+				ObjectFile=".\x86\Debug/"
+				ProgramDataBaseFileName=".\x86\Debug/"
 				BrowseInformation="1"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
@@ -72,12 +72,12 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="icuucd.lib icutud.lib icutestd.lib winmm.lib"
-				OutputFile=".\Debug/normperf.exe"
+				OutputFile=".\x86\Debug/normperf.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\..\..\lib\"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Debug/normperf.pdb"
+				ProgramDatabaseFile=".\x86\Debug/normperf.pdb"
 				SubSystem="1"
 			/>
 			<Tool
@@ -107,8 +107,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\Release"
-			IntermediateDirectory=".\Release"
+			OutputDirectory=".\x86\Release"
+			IntermediateDirectory=".\x86\Release"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -129,7 +129,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Release/normperf.tlb"
+				TypeLibraryName=".\x86\Release/normperf.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -142,10 +142,10 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\Release/normperf.pch"
-				AssemblerListingLocation=".\Release/"
-				ObjectFile=".\Release/"
-				ProgramDataBaseFileName=".\Release/"
+				PrecompiledHeaderFile=".\x86\Release/normperf.pch"
+				AssemblerListingLocation=".\x86\Release/"
+				ObjectFile=".\x86\Release/"
+				ProgramDataBaseFileName=".\x86\Release/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				CompileAs="0"
@@ -164,11 +164,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="icuuc.lib icutu.lib icutest.lib winmm.lib"
-				OutputFile=".\Release/normperf.exe"
+				OutputFile=".\x86\Release/normperf.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\..\..\lib\"
-				ProgramDatabaseFile=".\Release/normperf.pdb"
+				ProgramDatabaseFile=".\x86\Release/normperf.pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
