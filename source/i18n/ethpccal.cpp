@@ -178,8 +178,8 @@ EthiopicCalendar::initializeSystemDefaultCentury()
         int32_t  newYear  = calendar.get(UCAL_YEAR, status);
         {
             umtx_lock(NULL);
-            fgSystemDefaultCenturyStart = newStart;
             fgSystemDefaultCenturyStartYear = newYear;
+            fgSystemDefaultCenturyStart = newStart;
             umtx_unlock(NULL);
         }
     }
