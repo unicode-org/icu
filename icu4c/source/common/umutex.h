@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2006, International Business Machines
+*   Copyright (C) 1997-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -48,10 +48,17 @@
 
 /**
  * \def UMTX_CHECK
- * Encapsulates a safe check for an expression (usually a condition)
- * for lazy variable inititialization.
+ * Encapsulates a safe check of an expression 
+ * for use with double-checked lazy inititialization.
  * On CPUs with weak memory models, this must use memory fence instructions
  * or mutexes.
+ * The expression must involve only a  _single_ variable, typically
+ *    a possibly null pointer or a boolean that indicates whether some service
+ *    is initialized or not.
+ * The setting of the variable involved in the test must be the last step of
+ *    the initialization process.
+ *
+ * 
  * @internal
  */
 #if UMTX_STRONG_MEMORY_MODEL

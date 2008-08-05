@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -177,8 +177,8 @@ isDataLoaded(UErrorCode *pErrorCode) {
         {
             umtx_lock(NULL);
             if(uCharNames==NULL) {
-                uCharNames=names;
                 uCharNamesData=data;
+                uCharNames=names;
                 data=NULL;
                 names=NULL;
                 ucln_common_registerCleanup(UCLN_COMMON_UNAMES, unames_cleanup);
