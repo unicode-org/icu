@@ -208,13 +208,19 @@ static void TestConversionUTF8()
     sel = ucnvsel_open((const char**)encodings, testCaseIdx-prev, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_SET, &status);
     /* count how many bytes (Is there a portable function that is more efficient than this?) */
     f1 = fopen("../testdata/ConverterSelectorTestUTF8.txt","rb");
-      if(!f1) log_err("Couldn't find ConverterSelectorTestUTF8.txt");
+      if(!f1) {
+       log_err("FAIL: Couldn't find ConverterSelectorTestUTF8.txt\n");
+       return;
+      }
       counter = 0;
       while(fread(&c, sizeof(c), 1, f1) > 0) counter++;
     fclose(f1);
     text = (char*)uprv_malloc((counter+1));
     f1 = fopen("../testdata/ConverterSelectorTestUTF8.txt","rb");
-      if(!f1) log_err("Couldn't find ConverterSelectorTestUTF8.txt");
+      if(!f1) {
+        log_err("FAIL: Couldn't find ConverterSelectorTestUTF8.txt\n");
+        return;
+      }
       fread(text,1, counter,f1);
     fclose(f1);
 
@@ -299,13 +305,13 @@ static void TestConversionUTF8()
     sel = ucnvsel_open((const char**)encodings, testCaseIdx-prev, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_AND_FALLBACK_SET, &status);
     /* count how many bytes (Is there a portable function that is more efficient than this?) */
     f1 = fopen("../testdata/ConverterSelectorTestUTF8.txt","rb");
-      if(!f1) log_err("Couldn't find ConverterSelectorTestUTF8.txt"); 
+      if(!f1) { log_err("FAIL: Couldn't find ConverterSelectorTestUTF8.txt\n"); return; }
       counter = 0;
       while(fread(&c, sizeof(c), 1, f1) > 0) counter++;
     fclose(f1);
     text = (char*)uprv_malloc(counter+1);
     f1 = fopen("../testdata/ConverterSelectorTestUTF8.txt","rb");
-      if(!f1) log_err("Couldn't find ConverterSelectorTestUTF8.txt");
+      if(!f1) {log_err("FAIL: Couldn't find ConverterSelectorTestUTF8.txt\n"); return; }
       fread(text,1, counter,f1);
     fclose(f1);
 
@@ -485,13 +491,13 @@ static void TestConversionUTF16()
     sel = ucnvsel_open((const char**)encodings, testCaseIdx-prev, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_SET, &status);
     /* count how many bytes (Is there a portable function that is more efficient than this?) */
     f1 = fopen("../testdata/ConverterSelectorTestUTF16.txt","rb");
-      if(!f1) log_err("Couldn't find ConverterSelectorTestUTF16.txt");
+      if(!f1) { log_err("FAIL: Couldn't find ConverterSelectorTestUTF16.txt\n");  return; }
       counter = 0;
       while(fread(&c, sizeof(c), 1, f1) > 0) counter++;
     fclose(f1);
     text = (UChar*)uprv_malloc((counter+1)*sizeof(UChar));
     f1 = fopen("../testdata/ConverterSelectorTestUTF16.txt","rb");
-      if(!f1) log_err("Couldn't find ConverterSelectorTestUTF16.txt");
+      if(!f1) { log_err("FAIL: Couldn't find ConverterSelectorTestUTF16.txt\n"); return; }
       fread(text,sizeof(UChar), counter,f1);
     fclose(f1);
 
@@ -577,13 +583,13 @@ static void TestConversionUTF16()
     sel = ucnvsel_open((const char**)encodings, testCaseIdx-prev, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_AND_FALLBACK_SET, &status);
     /* count how many bytes (Is there a portable function that is more efficient than this?) */
     f1 = fopen("../testdata/ConverterSelectorTestUTF16.txt","rb");
-      if(!f1) log_err("Couldn't find ConverterSelectorTestUTF16.txt"); 
+    if(!f1) { log_err("FAIL: Couldn't find ConverterSelectorTestUTF16.txt\n"); return; } 
       counter = 0;
       while(fread(&c, sizeof(c), 1, f1) > 0) counter++;
     fclose(f1);
     text = (UChar*)uprv_malloc((counter+1)*sizeof(UChar));
     f1 = fopen("../testdata/ConverterSelectorTestUTF16.txt","rb");
-      if(!f1) log_err("Couldn't find ConverterSelectorTestUTF16.txt");
+    if(!f1) { log_err("FAIL: Couldn't find ConverterSelectorTestUTF16.txt\n"); return; }
       fread(text,sizeof(UChar), counter,f1);
     fclose(f1);
 
@@ -718,13 +724,13 @@ static void TestSerializationAndUnserialization()
 
     /* count how many bytes (Is there a portable function that is more efficient than this?) */
     f1 = fopen("../testdata/ConverterSelectorTestUTF16.txt","rb");
-      if(!f1) log_err("Couldn't find ConverterSelectorTestUTF16.txt");
+    if(!f1) { log_err("FAIL: Couldn't find ConverterSelectorTestUTF16.txt\n"); return; } 
       counter = 0;
       while(fread(&c, sizeof(c), 1, f1) > 0) counter++;
     fclose(f1);
     text = (UChar*)uprv_malloc((counter+1)*sizeof(UChar));
     f1 = fopen("../testdata/ConverterSelectorTestUTF16.txt","rb");
-      if(!f1) log_err("Couldn't find ConverterSelectorTestUTF16.txt");
+    if(!f1) { log_err("FAIL: Couldn't find ConverterSelectorTestUTF16.txt\n"); return; } 
       fread(text,sizeof(text[0]), counter,f1);
     fclose(f1);
 
@@ -820,13 +826,13 @@ static void TestSerializationAndUnserialization()
 
     /* count how many bytes (Is there a portable function that is more efficient than this?) */
     f1 = fopen("../testdata/ConverterSelectorTestUTF16.txt","rb");
-      if(!f1) log_err("Couldn't find ConverterSelectorTestUTF16.txt"); 
+    if(!f1) { log_err("FAIL: Couldn't find ConverterSelectorTestUTF16.txt\n"); return; } 
       counter = 0;
       while(fread(&c, sizeof(c), 1, f1) > 0) counter++;
     fclose(f1);
     text = (UChar*)uprv_malloc((counter+1)*sizeof(UChar));
     f1 = fopen("../testdata/ConverterSelectorTestUTF16.txt","rb");
-      if(!f1) log_err("Couldn't find ConverterSelectorTestUTF16.txt");
+    if(!f1) { log_err("FAIL: Couldn't find ConverterSelectorTestUTF16.txt\n"); return; } 
       fread(text,sizeof(text[0]), counter,f1);
     fclose(f1);
 
