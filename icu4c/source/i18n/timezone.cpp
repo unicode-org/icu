@@ -1430,7 +1430,7 @@ TimeZone::getTZDataVersion(UErrorCode& status)
             &len, &status);
 
         if (U_SUCCESS(status)) {
-            if (len >= sizeof(TZDATA_VERSION)) {
+            if (len >= (int32_t)sizeof(TZDATA_VERSION)) {
                 // Ensure that there is always space for a trailing nul in TZDATA_VERSION
                 len = sizeof(TZDATA_VERSION) - 1;
             }
