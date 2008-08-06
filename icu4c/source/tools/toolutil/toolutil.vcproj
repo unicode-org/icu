@@ -227,10 +227,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\propsvec.c"
-				>
-			</File>
-			<File
 				RelativePath=".\swapimpl.cpp"
 				>
 			</File>
@@ -301,10 +297,6 @@
 			</File>
 			<File
 				RelativePath=".\pkg_imp.h"
-				>
-			</File>
-			<File
-				RelativePath=".\propsvec.h"
 				>
 			</File>
 			<File
