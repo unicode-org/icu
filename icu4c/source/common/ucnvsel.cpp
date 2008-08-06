@@ -86,7 +86,7 @@ U_CAPI UConverterSelector* ucnvsel_open(const char* const*  converterList,
                                       UErrorCode* status ) {
   // allocate a new converter
   UConverterSelector* newSelector;
-  int i;  // for loop counter
+  int32_t i;  // for loop counter
 
   // the compiler should realize the tail recursion here and optimize 
   // accordingly. This call is to get around the constness of
@@ -127,7 +127,7 @@ U_CAPI UConverterSelector* ucnvsel_open(const char* const*  converterList,
     }
 
     char* allStrings = NULL;
-    int totalSize = 0;
+    int32_t totalSize = 0;
     for (i = 0 ; i < converterListSize ; i++) {
       totalSize += uprv_strlen(converterList[i])+1;
     }
@@ -148,7 +148,7 @@ U_CAPI UConverterSelector* ucnvsel_open(const char* const*  converterList,
         // cache the lengths!
     }
   } else {
-    int count = ucnv_countAvailable();
+    int32_t count = ucnv_countAvailable();
     newSelector->encodings =
       (char**)uprv_malloc(ucnv_countAvailable()*sizeof(char*));
     // out of memory. Give user back the 100 bytes or so
@@ -159,7 +159,7 @@ U_CAPI UConverterSelector* ucnvsel_open(const char* const*  converterList,
       return NULL;
     }
     char* allStrings = NULL;
-    int totalSize = 0;
+    int32_t totalSize = 0;
     for (i = 0 ; i < count ; i++) {
       const char* conv_moniker = ucnv_getAvailableName(i);
       totalSize += uprv_strlen(conv_moniker)+1;
@@ -228,7 +228,7 @@ U_CAPI UConverterSelector* ucnvsel_unserialize(const char* buffer,
   }
 
   UConverterSelector* sel;
-  int i = 0;  // for the for loop
+  int32_t i = 0;  // for the for loop
   // check length!
   if (length < sizeof(int32_t) * 3) {
     *status = U_INVALID_FORMAT_ERROR;
@@ -247,10 +247,10 @@ U_CAPI UConverterSelector* ucnvsel_unserialize(const char* buffer,
   // if the 2 are reversed. If they are, we send flags to udata_openSwapper()
   // to indicate we need endian swapping. Those params are not REALLY
   // the machine and data endianness
-  uint32_t dataEndianness= 0;
+  UBool dataEndianness = FALSE;
   //if endianness need to be reversed
   if (sig == 0x99887766) {
-    dataEndianness = 1;
+    dataEndianness = TRUE;
   } else if (sig != 0x66778899) {
     *status = U_INVALID_FORMAT_ERROR;
     return NULL;
@@ -269,7 +269,7 @@ U_CAPI UConverterSelector* ucnvsel_unserialize(const char* buffer,
     //construct a data swapper!
     UDataSwapper *ds;
 
-    ds=udata_openSwapper(dataEndianness, dataASCIIness, 0, machineASCIIness, status);
+    ds=udata_openSwapper(dataEndianness, dataASCIIness, FALSE, machineASCIIness, status);
     char* newBuffer = (char*)uprv_malloc(length);
     if(!newBuffer) {
       udata_closeSwapper(ds);
@@ -330,8 +330,8 @@ U_CAPI UConverterSelector* ucnvsel_unserialize(const char* buffer,
   tempEncodings[encodingsLength] = 0;
   buffer += encodingsLength;
   // count how many strings are there!
-  int numStrings = 0;
-  for (int i = 0 ; i < encodingsLength + 1 ; i++) {
+  int32_t numStrings = 0;
+  for (int32_t i = 0 ; i < encodingsLength + 1 ; i++) {
     if (tempEncodings[i] == 0) {
       numStrings++;
     }
@@ -346,7 +346,7 @@ U_CAPI UConverterSelector* ucnvsel_unserialize(const char* buffer,
     return NULL;
   }
 
-  int curString = 0;
+  int32_t curString = 0;
   sel->encodings[0] = tempEncodings;
   for (i = 0 ; i < encodingsLength ; i++) {
     if (tempEncodings[i] == 0) {
@@ -356,7 +356,6 @@ U_CAPI UConverterSelector* ucnvsel_unserialize(const char* buffer,
 
   // check length
   if (length < sizeof(uint32_t)) {
-    int j;
     uprv_free(sel->pv);
     uprv_free(tempEncodings);
     uprv_free(sel->encodings);
@@ -373,7 +372,6 @@ U_CAPI UConverterSelector* ucnvsel_unserialize(const char* buffer,
 
   // check length
   if (length < sel->serializedTrieSize) {
-    int j;
     uprv_free(sel->pv);
     uprv_free(tempEncodings);
     uprv_free(sel->encodings);
@@ -386,7 +384,6 @@ U_CAPI UConverterSelector* ucnvsel_unserialize(const char* buffer,
 
   sel->serializedTrie = (uint8_t*) uprv_malloc(sel->serializedTrieSize);
   if(!sel->serializedTrie) {
-    int j;
     uprv_free(sel->pv);
     uprv_free(tempEncodings);
     uprv_free(sel->encodings);
@@ -408,7 +405,7 @@ U_CAPI int32_t ucnvsel_serialize(const UConverterSelector* sel,
                                int32_t bufferCapacity,
                                UErrorCode* status) {
   // compute size and make sure it fits
-  int totalSize;
+  int32_t totalSize;
   int32_t encodingStrLength = 0;
 
   // check if already failed
@@ -469,9 +466,7 @@ void generateSelectorData(UConverterSelector* result,
                           const UConverterUnicodeSet   whichSet,
                           UErrorCode* status) {
   const uint32_t encodingsSize = result->encodingsCount;
-  uint32_t i;
-  uint32_t length;
-  UNewTrie* trie;
+
   // 66000 as suggested by Markus [I suggest something like 66000 which
   // exceeds the number of BMP code points. There will be fewer ranges of
   // combinations of encodings. (I believe there are no encodings that have
@@ -480,7 +475,7 @@ void generateSelectorData(UConverterSelector* result,
   result->pv = upvec_open((encodingsSize+31)/32, 66000);  // create for all
      // unicode codepoints, and have space for all those bits needed!
 
-  for (i = 0; i < encodingsSize; ++i) {
+  for (uint32_t i = 0; i < encodingsSize; ++i) {
     uint32_t mask;
     uint32_t column;
     int32_t item_count;
@@ -529,8 +524,7 @@ void generateSelectorData(UConverterSelector* result,
   // handle excluded encodings! Simply set their values to all 1's in the upvec
   if (excludedEncodings) {
     int32_t item_count = uset_getItemCount(excludedEncodings);
-    int32_t j;
-    for (j = 0; j < item_count; ++j) {
+    for (int32_t j = 0; j < item_count; ++j) {
       UChar32 start_char;
       UChar32 end_char;
 
@@ -539,7 +533,7 @@ void generateSelectorData(UConverterSelector* result,
       if (U_FAILURE(*status)) {
         return;
       } else {
-        for (int col = 0 ; col < (encodingsSize+31)/32 ; col++) {
+        for (uint32_t col = 0 ; col < (encodingsSize+31)/32 ; col++) {
           upvec_setValue(result->pv, start_char, end_char + 1, col, ~0, ~0,
                         status);
         }
@@ -549,10 +543,10 @@ void generateSelectorData(UConverterSelector* result,
 
   // alright. Now, let's put things in the same exact form you'd get when you
   // unserialize things.
-  trie = utrie_open(NULL, NULL, CAPACITY, 0, 0, TRUE);
+  UNewTrie* trie = utrie_open(NULL, NULL, CAPACITY, 0, 0, TRUE);
   result->pvCount = upvec_compact(result->pv, upvec_compactToTrieHandler,
                                   trie, status);
-  length = utrie_serialize(trie, NULL, 0, NULL, TRUE, status);
+  uint32_t length = utrie_serialize(trie, NULL, 0, NULL, TRUE, status);
   result->serializedTrie = (uint8_t*) uprv_malloc(length);
   length = utrie_serialize(trie, result->serializedTrie, length, NULL, TRUE,
                            status);
@@ -636,7 +630,7 @@ static const UEnumeration defaultEncodings = {
 // internal fn to intersect two sets of masks
 // returns whether the mask has reduced to all zeros
 UBool intersectMasks(uint32_t* dest, const uint32_t* source1, int32_t len) {
-  int i;
+  int32_t i;
   uint32_t oredDest = 0;
   for (i = 0 ; i < len ; ++i) {
     oredDest |= (dest[i] &= source1[i]);
@@ -647,7 +641,7 @@ UBool intersectMasks(uint32_t* dest, const uint32_t* source1, int32_t len) {
 // internal fn to count how many 1's are there in a mask
 // algorithm taken from  http://graphics.stanford.edu/~seander/bithacks.html
 int16_t countOnes(uint32_t* mask, int32_t len) {
-  int i, totalOnes = 0;
+  int32_t i, totalOnes = 0;
   for (i = 0 ; i < len ; ++i) {
     uint32_t ent = mask[i];
     for (; ent; totalOnes++)
@@ -668,8 +662,8 @@ int32_t length, UErrorCode *status, UBool isUTF16) {
   UEnumeration *en = NULL;
   uint32_t* mask;
   UChar32 next = 0;
-  int offset = 0;
-  int i, j;
+  int32_t offset = 0;
+  int32_t i, j;
 
   // check if already failed
   if (U_FAILURE(*status)) {
@@ -785,7 +779,7 @@ U_CAPI int32_t ucnvsel_swap(const UDataSwapper *ds,
                                  UErrorCode *status) {
   const char* inDataC = (const char*) inData;
   char * outDataC = (char*) outData;
-  int passedLength = length;
+  int32_t passedLength = length;
   //args check
   if(U_FAILURE(*status)) {
     return 0;
@@ -801,7 +795,7 @@ U_CAPI int32_t ucnvsel_swap(const UDataSwapper *ds,
   }
 
   ds->swapArray32(ds, inDataC, 3, outDataC, status);
-  int pvCount = ((int32_t*)outData)[2];
+  int32_t pvCount = ((int32_t*)outData)[2];
 
   if(((int32_t*)outData)[0] != 0x66778899)
     return 0;
@@ -825,7 +819,7 @@ U_CAPI int32_t ucnvsel_swap(const UDataSwapper *ds,
     return 0;
   }
   ds->swapArray32(ds, inDataC, 1, outDataC, status);
-  int encodingStrLength = ((int32_t*)outData)[0];
+  int32_t encodingStrLength = ((int32_t*)outData)[0];
   length -= sizeof(uint32_t);
   inDataC += sizeof(uint32_t);
   outDataC += sizeof(uint32_t);
@@ -844,7 +838,7 @@ U_CAPI int32_t ucnvsel_swap(const UDataSwapper *ds,
     return 0;
   }
   ds->swapArray32(ds, inDataC, 1, outDataC, status);
-  int trieSize = ((int32_t*)outData)[0];
+  int32_t trieSize = ((int32_t*)outData)[0];
   length -= sizeof(uint32_t);
   inDataC += sizeof(uint32_t);
   outDataC += sizeof(uint32_t);

@@ -503,6 +503,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\propsvec.c"
+				>
+			</File>
+			<File
+				RelativePath=".\propsvec.h"
+				>
+			</File>
+			<File
 				RelativePath=".\unicode\strenum.h"
 				>
 				<FileConfiguration
@@ -1210,6 +1218,14 @@
 			</File>
 			<File
 				RelativePath=".\ucnvscsu.c"
+				>
+			</File>
+			<File
+				RelativePath=".\ucnvsel.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\ucnvsel.h"
 				>
 			</File>
 		</Filter>
