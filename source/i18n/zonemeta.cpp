@@ -664,19 +664,21 @@ ZoneMeta::initialize(void) {
     Hashtable *tmpMetaToOlson = createMetaToOlsonMap();
 
     umtx_lock(&gZoneMetaLock);
-    if (gZoneMetaInitialized) {
-        // Another thread already created mappings
-        delete tmpCanonicalMap;
-        delete tmpOlsonToMeta;
-        delete tmpMetaToOlson;
-    } else {
+    if (!gZoneMetaInitialized) {
         gCanonicalMap = tmpCanonicalMap;
         gOlsonToMeta = tmpOlsonToMeta;
         gMetaToOlson = tmpMetaToOlson;
+        tmpCanonicalMap = NULL;
+        tmpOlsonToMeta = NULL;
+        tmpMetaToOlson = NULL;
         gZoneMetaInitialized = TRUE;
-        ucln_i18n_registerCleanup(UCLN_I18N_ZONEMETA, zoneMeta_cleanup);
     }
     umtx_unlock(&gZoneMetaLock);
+    
+    ucln_i18n_registerCleanup(UCLN_I18N_ZONEMETA, zoneMeta_cleanup);
+    delete tmpCanonicalMap;
+    delete tmpOlsonToMeta;
+    delete tmpMetaToOlson;
 }
 
 UnicodeString& U_EXPORT2
