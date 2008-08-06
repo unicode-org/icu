@@ -6,13 +6,15 @@
 *
 *******************************************************************************
 */
-// Author : eldawy@google.com (Mohamed Eldawy)
-// ucnvsel.h
-//
-// Purpose: To generate a list of encodings capable of handling
-// a given Unicode text
-//
-// Started 09-April-2008
+/*
+ * Author : eldawy@google.com (Mohamed Eldawy)
+ * ucnvsel.h
+ *
+ * Purpose: To generate a list of encodings capable of handling
+ * a given Unicode text
+ *
+ * Started 09-April-2008
+ */
 
 #ifndef __ICU_UCNV_SEL_H__
 #define __ICU_UCNV_SEL_H__
@@ -166,4 +168,4 @@ U_CAPI UEnumeration *ucnvsel_selectForUTF8(const UConverterSelector*,
                                  UErrorCode *status);
 
 
-#endif  // __ICU_UCNV_SEL_H__
+#endif  /* __ICU_UCNV_SEL_H__ */

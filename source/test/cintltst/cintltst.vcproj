@@ -435,6 +435,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ucnvseltst.c"
+				>
+			</File>
+			<File
+				RelativePath=".\ucnvseltst.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ucsdetst.c"
 				>
 			</File>
