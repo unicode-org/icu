@@ -113,6 +113,9 @@ ucol_initUCA(UErrorCode *status) {
         if(U_SUCCESS(*status)){
             UCollator *newUCA = ucol_initCollator((const UCATableHeader *)udata_getMemory(result), NULL, NULL, status);
             if(U_SUCCESS(*status)){
+                // Initalize variables for implicit generation
+                uprv_uca_initImplicitConstants(status);
+                
                 umtx_lock(NULL);
                 if(_staticUCA == NULL) {
                     UCA_DATA_MEM = result;
@@ -127,8 +130,6 @@ ucol_initUCA(UErrorCode *status) {
                     ucol_close(newUCA);
                     udata_close(result);
                 }
-                // Initalize variables for implicit generation
-                uprv_uca_initImplicitConstants(status);
             }else{
                 ucol_close(newUCA);
                 udata_close(result);
