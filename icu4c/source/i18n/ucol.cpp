@@ -907,7 +907,7 @@ static const UChar32
     UCOL_MAX_INPUT = 0x220001; // 2 * Unicode range + 2
 
 /**
- * Precomputed by constructor
+ * Precomputed by initImplicitConstants()
  */
 static int32_t
     final3Multiplier = 0,
@@ -1107,6 +1107,10 @@ static inline int32_t divideAndRoundUp(int a, int b) {
 
 /**
  * Set up to generate implicits.
+ * Maintenance Note:  this function may end up being called more than once, due
+ *                    to threading races during initialization.  Make sure that
+ *                    none of the Constants is ever transiently assigned an
+ *                    incorrect value.
  * @param minPrimary
  * @param maxPrimary
  * @param minTrail final byte
