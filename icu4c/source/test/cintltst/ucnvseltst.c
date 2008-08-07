@@ -916,5 +916,4 @@ static void TestSerializationAndUnserialization()
 
   for(i = 0 ; i < 3 ; i++)
     uset_close(excluded_sets[i]);
-
 }
