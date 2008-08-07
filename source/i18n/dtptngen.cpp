@@ -1457,7 +1457,7 @@ DateTimeMatcher::set(const UnicodeString& pattern, FormatParser* fp, PtnSkeleton
         if ( row->type > 0) {
             subTypeValue += field.length();
         }
-        skeletonResult.type[typeValue] = (int8_t)subTypeValue;
+        skeletonResult.type[typeValue] = subTypeValue;
     }
     copyFrom(skeletonResult);
 }
