@@ -297,7 +297,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "en", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "hhmmzz", "10:00 AM \\u2013 2:10 PM PST", 
             
             
-            "en", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "dMMMMMy", "J/10/2007", 
+            "en", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "dMMMMMy", "J 10, 2007", 
             
             "en", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "EEEEEdM", "W, 1/10", 
             

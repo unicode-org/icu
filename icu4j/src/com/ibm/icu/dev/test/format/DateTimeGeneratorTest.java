@@ -78,12 +78,13 @@ public class DateTimeGeneratorTest extends TestFmwk {
         enFormat.setTimeZone(enZone);
         String[][] tests = {
               {"yyyyMMMdd", "Oct 14, 1999"},
+              {"yMMMdd", "Oct 14, 1999"},
               {"EyyyyMMMdd", "Thu, Oct 14, 1999"},
               {"yyyyMMdd", "10/14/1999"},
               {"yyyyMMM", "Oct 1999"},
               {"yyyyMM", "10/1999"},
               {"yyMM", "10/99"},
-              {"yMMMMMd", "O/14/1999"},  // narrow format
+              {"yMMMMMd", "O 14, 1999"},  // narrow format
               {"EEEEEMMMMMd", "T, O 14"},  // narrow format
               {"MMMd", "Oct 14"},
               {"MMMdhmm", "Oct 14 6:58 AM"},
