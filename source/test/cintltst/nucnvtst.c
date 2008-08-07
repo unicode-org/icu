@@ -17,6 +17,7 @@
 #include "unicode/uloc.h"
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
+#include "unicode/ucnv_cb.h"
 #include "cintltst.h"
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
