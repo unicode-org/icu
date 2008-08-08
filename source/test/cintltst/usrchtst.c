@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include "usrchdat.c"
 #include "unicode/ubrk.h"
+#include <assert.h>
 
 static UBool      TOCLOSE_ = TRUE;
 static UCollator *EN_US_; 
@@ -2261,6 +2262,61 @@ exitTestForwardBackward :
     }
 }
 
+static void TestSearchForNull(void)
+{
+	UCollator *coll;
+	UErrorCode ec;
+	UStringSearch *search;
+	int pos;
+	int len;
+	int expectedPos;
+	int expectedLen;
+	int expectedNum;
+	int count = 0;
+	
+	/* static const UChar var[(length)+1]=U_DECLARE_UTF16(cs) */
+	U_STRING_DECL (pattern, "0", 1);
+	U_STRING_DECL (text, "0IS 0 OK?", 8);
+	expectedPos = 0;
+	expectedLen = 1;
+	expectedNum = 2;
+
+	ec=U_ZERO_ERROR;
+
+	/* create a US-English collator */
+	coll = ucol_open ("en-US", &ec);
+	
+	/* make sure we didn't fail. */
+	assert (U_SUCCESS (ec));
+
+	/* open a search looking for 0 */
+	search = usearch_openFromCollator (pattern, 1, text, 8, coll, NULL, &ec);
+	assert (U_SUCCESS (ec));
+
+	pos = usearch_first(search, &ec);
+	len = usearch_getMatchedLength(search);
+	if(pos != expectedPos)
+	{
+		log_err("Expected search result: %d; Got instead: %d\n", expectedPos, pos);
+	}
+		
+	if(len != expectedLen)
+	{
+		log_err("Expected search result length: %d; Got instead: %d\n", expectedLen, len);
+	}
+	
+	for(pos = usearch_first (search, &ec); pos != USEARCH_DONE; pos = usearch_next(search, &ec))
+	{
+		count += 1;
+	}
+
+	if(count != expectedNum)
+	{
+		log_err("Expected %d search hits, found %d\n", expectedNum, count);
+	}
+}
+
+
 void addSearchTest(TestNode** root)
 {
     addTest(root, &TestStart, "tscoll/usrchtst/TestStart");
@@ -2313,6 +2369,7 @@ void addSearchTest(TestNode** root)
     addTest(root, &TestNumeric, "tscoll/usrchtst/TestNumeric");
     addTest(root, &TestDiacriticMatch, "tscoll/usrchtst/TestDiacriticMatch");
     addTest(root, &TestForwardBackward, "tscoll/usrchtst/TestForwardBackward");
+	addTest(root, &TestSearchForNull, "tscoll/usrchtst/TestSearchForNull");
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
