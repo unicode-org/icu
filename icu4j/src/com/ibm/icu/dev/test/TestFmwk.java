@@ -394,6 +394,18 @@ public class TestFmwk extends AbstractTestLog {
                     handleException(e);
                 }
             }
+            // If non-exhaustive, check if the method target
+            // takes excessive time.
+            if (params.inclusion <= 5) {
+                double deltaSec = (double)(System.currentTimeMillis() - params.stack.millis)/1000;
+                if (deltaSec > params.maxTargetSec) {
+                    if (params.timeLog == null) {
+                        params.timeLog = new StringBuffer();
+                    }
+                    params.stack.appendPath(params.timeLog);
+                    params.timeLog.append(" (" + deltaSec + "s" + ")\n");
+                }
+            }
         }
 
         protected String getStackTrace(InvocationTargetException e) {
@@ -544,6 +556,12 @@ public class TestFmwk extends AbstractTestLog {
         if (localParams.errorSummary != null && localParams.errorSummary.length() > 0) {
             localParams.log.println("\nError summary:");
             localParams.log.println(localParams.errorSummary.toString());
+        }
+
+        if (localParams.timeLog != null && localParams.timeLog.length() > 0) {
+            localParams.log.println("\nTest cases taking excessive time (>" +
+                    localParams.maxTargetSec + "s):");
+            localParams.log.println(localParams.timeLog.toString());
         }
 
         if (prompt) {
@@ -1056,6 +1074,7 @@ public class TestFmwk extends AbstractTestLog {
         public State stack;
 
         public StringBuffer errorSummary;
+        private StringBuffer timeLog;
 
         public PrintWriter log;
         public int indentLevel;
@@ -1067,6 +1086,7 @@ public class TestFmwk extends AbstractTestLog {
         public int testCount;
         private NumberFormat tformat;
         public Random random;
+        public int maxTargetSec = 10;
 
         private TestParams() {
         }
@@ -1236,7 +1256,7 @@ public class TestFmwk extends AbstractTestLog {
         public String errorSummary() {
             return errorSummary == null ? "" : errorSummary.toString();
         }
-        
+
         public void init() {
             indentLevel = 0;
             needLineFeed = false;
@@ -1541,6 +1561,7 @@ public class TestFmwk extends AbstractTestLog {
                 }
                 log.print(")");
             }
+
             if (errorDelta != 0) {
                 log.println(" FAILED ("
                         + errorDelta
