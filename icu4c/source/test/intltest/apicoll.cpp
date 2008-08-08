@@ -104,7 +104,7 @@ CollationAPITest::TestProperty(/* char* par */)
       ICU 2.8 currVersionArray = {0x29, 0x80, 0x00, 0x04};
       ICU 3.4 currVersionArray = {0x31, 0xC0, 0x00, 0x04};
     */
-    UVersionInfo currVersionArray = {0x31, 0xC0, 0x00, 0x05};
+    UVersionInfo currVersionArray = {0x31, 0xC0, 0x00, 0x29};
     UVersionInfo versionArray;
     int i = 0;
 
