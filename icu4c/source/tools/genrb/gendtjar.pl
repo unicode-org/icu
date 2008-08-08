@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #  ********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2002-2007, International Business Machines Corporation and
+#  * Copyright (c) 2002-2008, International Business Machines Corporation and
 #  * others. All Rights Reserved.
 #  ********************************************************************
 
@@ -14,6 +14,9 @@
 
 # Ram Viswanadha
 # copied heavily from genrbjar.pl
+# 
+# 6/25/08 - Modified to better handle cygwin paths - Brian Rower
+#
 use File::Find;
 use File::Basename;
 use IO::File;
@@ -209,9 +212,21 @@ sub createJar{
     $command="";
     print "INFO: Creating $jarFile\n";
     if($platform eq "cygwin") {
-        $jar = `cygpath -au $jar`;
-        chop($jar);
-        $tempDir = `cygpath -aw $tempDir`;
+        #make sure the given path is a cygwin path not a windows path
+	$jar = `cygpath -au $jar`;
+	chop($jar);
+	
+	#added by Brian Rower 6/25/08
+	#The following code deals with spaces in the path
+	if(index($jar, "/ ") > 0)
+	{
+		$jar =~ s/[\/]\s/\\ /g;
+	}
+	elsif(index($jar, " ") > 0)
+	{
+		$jar =~ s/\s/\\ /g;
+	}
+	$tempDir = `cygpath -aw $tempDir`;
         chop($tempDir);
         $tempDir =~ s/\\/\\\\/g;
     }
