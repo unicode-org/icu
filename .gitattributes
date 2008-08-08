@@ -187,6 +187,7 @@ icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu/.settings/org.eclipse.jdt.
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu/META-INF/MANIFEST.MF -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu/build.properties -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu/plugin.properties -text
+icu4j/src/com/ibm/icu/dev/test/collator/CollationCreationMethodTest.java -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Asian.txt -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Chinese.txt -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Japanese.txt -text
