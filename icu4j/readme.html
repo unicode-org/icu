@@ -953,35 +953,7 @@ resources to once again be extracted. Extraction will
 overwrite any corresponding resource files already in that directory.
 </p>
 <h4><a name="resourcesICU4C">Building ICU4J Resources from ICU4C</a></h4>
-<h5>Requirements</h5>
-<ul>
-  <li><a
- href="http://www.icu-project.org/download/">ICU4C</a></li>
-  <li>Compilers and tools required for <a
- href="http://source.icu-project.org/repos/icu/icu/tags/release-3-8/readme.html#HowToBuild">building ICU4C</a>.</li>
-  <li>J2SE SDK version 1.4 or above (5.0 is recommended)</li>
-  <li>Perl version 5 or above.</li>
-</ul>
-<h5> Procedure</h5>
-<ol>
-  <li> Download and build ICU4C. For instructions on
-downloading and building ICU4C, please click <a
- href="http://source.icu-project.org/repos/icu/icu/tags/release-3-8/readme.html#HowToBuild">here</a>.</li>
-  <li> Change directory to <I>$icu4c_root</I>/source/tools/genrb.  <I>$icu4c_root</I>
-       is the root directory of ICU4C source package.</li>
-  <li> Run gendtjar.pl from that directory itself with the command <br>
-        <tt>&nbsp;&nbsp;&nbsp;./gendtjar.pl --icu-root=<I>$icu4c_root</I> --jar=<I>$jdk_home/bin</I> --icu4j-root=<I>$icu4j_root</I> </tt><br>
-        e.g. <br>
-        <tt>&nbsp;&nbsp;&nbsp;./gendtjar.pl --icu-root=$HOME/icu4c --jar=/usr/local/bin/java/bin/ --icu4j-root=$HOME/icu4j</tt><br>
-       Execution of gendtjar.pl script will create the required jar files in
-        the $icu4c_root/source/tools/genrb/temp directory and then copy them to their
-         final locations in the ICU4J structure,  
-         <tt>$icu4j_root/src/com/ibm/icu/impl/data</tt> and <tt>$icu4j_root/src/com/ibm/icu/dev/data</tt>.</li>
-   <li> Build resources target of ant to unpack the jar files with the following commands: <br>
-        <tt>&nbsp;&nbsp;&nbsp;cd <i>$icu4j_root</i></tt><br>
-        <tt>&nbsp;&nbsp;&nbsp;ant resources</tt></li>
-</ol>
-    Note:  if gendtjar.pl does not work, the --verbose option can help in debugging why it went wrong. 
+ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_root</I>/source/data for the procedures.
 <h5> Generating Data from CLDR </h5>
 <I> Note: This procedure assumes that all 3 sources are in sibling directories</I>
 <ol>
@@ -989,7 +961,7 @@ downloading and building ICU4C, please click <a
     the CLDR source files checked out.</li>
     <li>Update <I>$cldr_root</I>/common to 'release-1-6-0' tag</li>
     <li>Update <I>$cldr_root</I>/tools to 'release-1-6-0' tag</li>
-    <li>Checkout ICU with tag 'release-4-0'</li>
+    <li>Checkout ICU4C with tag 'release-4-0'</li>
     <li>Checkout ICU4J with tag 'release-4-0'</li>
     <li>Build ICU4J</li>
     <li>Build ICU4C</li>
@@ -997,9 +969,8 @@ downloading and building ICU4C, please click <a
     <li>Build CLDR using ant after pointing ICU4J_CLASSES env var to the newly build ICU4J</li>
     <li>cd to <I>$icu4c_root</I>/source/data directory</li>
     <li>Follow the instructions in the cldr-icu-readme.txt</li>
-    <li>Build ICU data from CLDR</li>
-    <li>cd to <I>$icu4c_root/source/tools/genrb</I></li>
-    <li>run gendtjar.pl as explained in the previous section.</li>
+    <li>Build ICU4C data from CLDR</li>
+    <li>Build ICU4J data from ICU4C data by following the procedures in <I>$icu4c_root</I>/source/data/icu4j-readme.txt</li>
     <li>cd to <I>$icu4j_root</I> dir</li>
     <li>Build and test icu4j</li>
 </ol>
