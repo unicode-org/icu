@@ -352,6 +352,7 @@ icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu/build.properties -text
 icu4j/src/com/ibm/icu/dev/eclipse/plugins/com.ibm.icu/plugin.properties -text
 icu4j/src/com/ibm/icu/dev/test/calendar/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/charsetdet/CharsetDetectionTests.xml svneol=native#text/xml
+icu4j/src/com/ibm/icu/dev/test/collator/CollationCreationMethodTest.java -text
 icu4j/src/com/ibm/icu/dev/test/compression/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/normalizer/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/package.html svneol=native#text/html

@@ -22,6 +22,7 @@ public class TestAll extends TestGroup {
                   "CollationTest",
                   "CollationAPITest",
                   "CollationCurrencyTest",
+                  "CollationCreationMethodTest",
                   //"CollationDanishTest", //Danish is already tested through data driven tests
                   "CollationDummyTest",
                   "CollationEnglishTest",
