@@ -15,6 +15,7 @@ icu4c/source/data/coll/ur.txt -text
 icu4c/source/data/coll/ur_IN.txt -text
 icu4c/source/data/coll/ur_PK.txt -text
 icu4c/source/data/icu-config.xml svneol=native#text/xml
+icu4c/source/data/icu4j-readme.txt -text
 icu4c/source/data/locales/fr_SN.txt -text
 icu4c/source/data/locales/ha.txt -text
 icu4c/source/data/locales/ha_Latn.txt -text
