@@ -7360,7 +7360,8 @@ ucol_getVersion(const UCollator* coll,
     versionInfo[1] = (uint8_t)cmbVersion;
     versionInfo[2] = coll->image->version[1];
     if(coll->UCA) {
-        versionInfo[3] = coll->UCA->image->UCAVersion[0];
+        /* Include the minor number when getting the UCA version. (major & 1f) << 3 | (minor & 7) */
+        versionInfo[3] = (coll->UCA->image->UCAVersion[0] & 0x1f) << 3 | (coll->UCA->image->UCAVersion[1] & 0x07);
     } else {
         versionInfo[3] = 0;
     }
