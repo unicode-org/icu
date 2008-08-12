@@ -1293,8 +1293,8 @@ const char *IntlTest::getSourceTestData(UErrorCode& /*err*/) {
         fclose(f);
     }
     else {
-        /* We're in icu/source/test/intltest/(Debug|Release) */
-        srcDataDir = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING;
+        /* We're in icu/source/test/intltest/Platform/(Debug|Release) */
+        srcDataDir = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING;
     }
 #endif
     return srcDataDir;
@@ -1358,7 +1358,7 @@ const char *  IntlTest::pathToDataDirectory()
                 fgDataDir = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING;
             }
             else {
-                fgDataDir = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING;
+                fgDataDir = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING;
             }
         }
     }
