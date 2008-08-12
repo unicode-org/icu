@@ -32,7 +32,7 @@ my $options = {
 
 # programs
 # tests will be done for all the programs. Results will be stored and connected
-my $p = $ICUPathLatest."/collperf/Release/collperf.exe";
+my $p = $ICUPathLatest."/collperf/$WindowsPlatform/Release/collperf.exe";
 
 my $tests = { 
 	     "Key Gen null",  ["$p TestIcu_KeyGen_null", "$p TestPosix_KeyGen_null", "$p TestWin_KeyGen_null"],

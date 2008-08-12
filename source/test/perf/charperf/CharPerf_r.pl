@@ -30,8 +30,8 @@ my $options = {
 my $p1; # Previous
 my $p2; # Latest
 if ($OnWindows) {
-	$p1 = $ICUPathPrevious."/charperf/Release/charperf.exe";
-	$p2 = $ICUPathLatest."/charperf/Release/charperf.exe";
+	$p1 = $ICUPathPrevious."/charperf/$WindowsPlatform/Release/charperf.exe";
+	$p2 = $ICUPathLatest."/charperf/$WindowsPlatform/Release/charperf.exe";
 } else {
 	$p1 = $ICUPathPrevious."/charperf/charperf";
     $p2 = $ICUPathLatest."/charperf/charperf";

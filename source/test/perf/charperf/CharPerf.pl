@@ -31,7 +31,7 @@ my $options = {
 # tests will be done for all the programs. Results will be stored and connected
 my $p;
 if ($OnWindows) {
-    $p = $ICUPathLatest."/charperf/Release/charperf.exe";
+    $p = $ICUPathLatest."/charperf/$WindowsPlatform/Release/charperf.exe";
 } else {
 	$p = $ICUPathLatest."/charperf/charperf";
 }

@@ -29,8 +29,8 @@ my $options = {
 my $p1, $p2;
 
 if ($OnWindows) {
-	$p1 = $ICUPathPrevious."/collperf/Release/collperf.exe";
-	$p2 = $ICUPathLatest."/collperf/Release/collperf.exe";
+	$p1 = $ICUPathPrevious."/collperf/$WindowsPlatform/Release/collperf.exe";
+	$p2 = $ICUPathLatest."/collperf/$WindowsPlatform/Release/collperf.exe";
 } else {
 	$p1 = $ICUPathPrevious."/collperf/collperf";
 	$p2 = $ICUPathLatest."/collperf/collperf";

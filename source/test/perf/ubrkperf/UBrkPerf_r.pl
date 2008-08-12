@@ -43,8 +43,8 @@ my $p1; # Previous
 my $p2; # Latest
 
 if ($OnWindows) {
-	$p1 = $ICUPathPrevious."/ubrkperf/Release/ubrkperf.exe";
-    $p2 = $ICUPathLatest."/ubrkperf/Release/ubrkperf.exe";
+	$p1 = $ICUPathPrevious."/ubrkperf/$WindowsPlatform/Release/ubrkperf.exe";
+    $p2 = $ICUPathLatest."/ubrkperf/$WindowsPlatform/Release/ubrkperf.exe";
 } else {
 	$p1 = $ICUPathPrevious."/ubrkperf/ubrkperf";
 	$p2 = $ICUPathLatest."/ubrkperf/ubrkperf";
