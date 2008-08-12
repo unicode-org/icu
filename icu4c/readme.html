@@ -799,8 +799,8 @@
       "#HowToBuildWindowsCommandLine">command line note below</a> if you want to
       build from the command line instead.</li>
 
-      <li>Set the active configuration to "Debug" or "Release" (See <a href=
-      "#HowToBuildWindowsConfig">Windows configuration note</a> below).</li>
+      <li>Set the active platform to "Win32" or "x64" (See <a href="#HowToBuildWindowsPlatform">Windows platform note</a> below) 
+      and configuration to "Debug" or "Release" (See <a href="#HowToBuildWindowsConfig">Windows configuration note</a> below).</li>
 
       <li>Choose the "Build" menu and select "Rebuild Solution". If you want to
       build the Debug and Release at the same time, see the <a href=
@@ -832,10 +832,24 @@
     Note:</strong></a> You can build ICU from the command line. Assuming that you
     have properly installed Microsoft Visual C++ to support command line
     execution, you can run the following command, 'devenv.com
-    <i>&lt;ICU&gt;</i>\source\allinone\allinone.sln /build Release'. You can also
+    <i>&lt;ICU&gt;</i>\source\allinone\allinone.sln /build "Win32|Release"'. You can also
     use Cygwin with this compiler to build ICU, and you can refer to the <a href=
     "#HowToBuildCygwin">How To Build And Install On Windows with Cygwin</a>
     section for more details.</p>
+    
+    <p><a name="HowToBuildWindowsPlatform" id=
+    "HowToBuildWindowsPlatform"><strong>Setting Active Platform
+    Note:</strong></a> Even though you are able to select "x64" as the active platform, if your operating system is 
+    not a 64 bit version of Windows, the build will fail. To set the active platform, two different possibilities are:</p>
+
+    <ul>
+      <li>Choose "Build" menu, select "Configuration Manager...", and select
+      "Win32" or "x64" for the Active Platform Solution.</li>
+
+      <li>Another way is to select the desired build configuration from "Solution
+      Platforms" dropdown menu from the standard toolbar. It will say
+      "Win32" or "x64" in the dropdown list.</li>
+    </ul>
 
     <p><a name="HowToBuildWindowsConfig" id=
     "HowToBuildWindowsConfig"><strong>Setting Active Configuration
@@ -852,8 +866,8 @@
     </ul>
 
     <p><a name="HowToBuildWindowsBatch" id="HowToBuildWindowsBatch"><strong>Batch
-    Configuration Note:</strong></a> If you want to build the Debug and Release
-    configurations at the same time, choose "Build" menu, and select "Batch
+    Configuration Note:</strong></a> If you want to build the Win32 and x64 platforms and 
+    Debug and Release configurations at the same time, choose "Build" menu, and select "Batch
     Build...". Click the "Select All" button, and then click the "Rebuild"
     button.</p>
 
