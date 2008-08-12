@@ -2369,7 +2369,7 @@ void addSearchTest(TestNode** root)
     addTest(root, &TestNumeric, "tscoll/usrchtst/TestNumeric");
     addTest(root, &TestDiacriticMatch, "tscoll/usrchtst/TestDiacriticMatch");
     addTest(root, &TestForwardBackward, "tscoll/usrchtst/TestForwardBackward");
-	//addTest(root, &TestSearchForNull, "tscoll/usrchtst/TestSearchForNull");
+	/*addTest(root, &TestSearchForNull, "tscoll/usrchtst/TestSearchForNull");*/
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
