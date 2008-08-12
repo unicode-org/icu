@@ -34,8 +34,8 @@ my $p1;    # Previous
 my $p2;    # Latest
 
 if ($OnWindows) {
-    $p1 = $ICUPathPrevious . "/strsrchperf/Release/strsrchperf.exe -b";
-    $p2 = $ICUPathLatest . "/strsrchperf/Release/strsrchperf.exe -b";
+    $p1 = $ICUPathPrevious . "/strsrchperf/$WindowsPlatform/Release/strsrchperf.exe -b";
+    $p2 = $ICUPathLatest . "/strsrchperf/$WindowsPlatform/Release/strsrchperf.exe -b";
 }
 else {
     $p1 = $ICUPathPrevious . "/strsrchperf/strsrchperf -b";

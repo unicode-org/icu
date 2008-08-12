@@ -11,7 +11,7 @@ use lib '../perldriver';
 
 my $p;
 if ($OnWindows) {
-    $p = $ICUPathLatest . "/collationperf/Release/collationperf.exe";
+    $p = $ICUPathLatest . "/collationperf/$WindowsPlatform/Release/collationperf.exe";
 }
 else {
     $p = $ICUPathLatest . "/collationperf/collperf";

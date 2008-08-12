@@ -30,8 +30,8 @@ my $options = {
 # tests will be done for all the programs. Results will be stored and connected
 my $p1, $p2;
 if ($OnWindows) {
-	$p1 = $ICUPathPrevious."/usetperf/Release/usetperf.exe";
-	$p2 = $ICUPathLatest."/usetperf/Release/usetperf.exe";
+	$p1 = $ICUPathPrevious."/usetperf/$WindowsPlatform/Release/usetperf.exe";
+	$p2 = $ICUPathLatest."/usetperf/$WindowsPlatform/Release/usetperf.exe";
 } else {
 	$p1 = $ICUPathPrevious."/usetperf/usetperf";
 	$p2 = $ICUPathLatest."/usetperf/usetperf";

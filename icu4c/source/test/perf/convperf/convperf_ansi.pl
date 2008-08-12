@@ -32,7 +32,7 @@ my $options = {
 
 # programs
 # tests will be done for all the programs. Results will be stored and connected
-my $p = $ICUPathLatest."/convperf/Release/convperf.exe";
+my $p = $ICUPathLatest."/convperf/$WindowsPlatform/Release/convperf.exe";
 
 my $tests = { 
 	     "UTF-8 From Unicode",          ["$p TestWinANSI_UTF8_FromUnicode"  ,    "$p TestICU_UTF8_FromUnicode" ],

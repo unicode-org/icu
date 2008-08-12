@@ -30,8 +30,8 @@ my $p1; # Previous
 my $p2; # Latest
 
 if ($OnWindows) {
-	$p1 = $ICUPathPrevious."/ustrperf/Release/stringperf.exe -b -u"; # Previous
-    $p2 = $ICUPathLatest."/ustrperf/Release/stringperf.exe -b -u"; # Latest
+	$p1 = $ICUPathPrevious."/ustrperf/$WindowsPlatform/Release/stringperf.exe -b -u"; # Previous
+    $p2 = $ICUPathLatest."/ustrperf/$WindowsPlatform/Release/stringperf.exe -b -u"; # Latest
 } else {
 	$p1 = $ICUPathPrevious."/ustrperf/stringperf -b -u"; # Previous
     $p2 = $ICUPathLatest."/ustrperf/stringperf -b -u"; # Latest

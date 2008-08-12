@@ -33,8 +33,8 @@ my $options = {
 
 # programs
 
-my $p1 = $ICUPathPrevious."/convperf/Release/convperf.exe"; # Previous
-my $p2 = $ICUPathLatest."/convperf/Release/convperf.exe"; # Latest
+my $p1 = $ICUPathPrevious."/convperf/$WindowsPlatform/Release/convperf.exe"; # Previous
+my $p2 = $ICUPathLatest."/convperf/$WindowsPlatform/Release/convperf.exe"; # Latest
 
 my $dataFiles = "";
 
