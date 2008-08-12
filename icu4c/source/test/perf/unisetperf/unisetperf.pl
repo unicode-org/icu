@@ -28,7 +28,7 @@ my $options = {
 # tests will be done for all the programs. Results will be stored and connected
 my $p;
 if ($OnWindows) {
-	$p = $ICUPathLatest."/unisetperf/Release/unisetperf.exe";
+	$p = $ICUPathLatest."/unisetperf/$WindowsPlatform/Release/unisetperf.exe";
 } else {
 	$p = $ICUPathLatest."/unisetperf/unisetperf";
 }

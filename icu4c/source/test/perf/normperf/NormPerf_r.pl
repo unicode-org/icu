@@ -31,8 +31,8 @@ my $p1; # Previous
 my $p2; # Latest
 
 if ($OnWindows) {
-	$p1 = $ICUPathPrevious."/normperf/Release/normperf.exe";
-	$p2 = $ICUPathLatest."/normperf/Release/normperf.exe";
+	$p1 = $ICUPathPrevious."/normperf/$WindowsPlatform/Release/normperf.exe";
+	$p2 = $ICUPathLatest."/normperf/$WindowsPlatform/Release/normperf.exe";
 } else {
 	$p1 = $ICUPathPrevious."/normperf/normperf";
     $p2 = $ICUPathLatest."/normperf/normperf";
