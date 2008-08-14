@@ -8,20 +8,19 @@
 package com.ibm.icu.util;
 
 import java.io.Serializable;
-import java.lang.ref.SoftReference;
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.TreeMap;
 
-import com.ibm.icu.impl.SimpleCache;
+import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.LocaleUtility;
+import com.ibm.icu.impl.SimpleCache;
 
 /**
  * A class analogous to {@link java.util.Locale} that provides additional
@@ -905,7 +904,7 @@ public final class ULocale implements Serializable {
         return locale;
     }
 
-    private static SoftReference nameCacheRef = new SoftReference(Collections.synchronizedMap(new HashMap()));
+    private static ICUCache nameCache = new SimpleCache();
     /**
      * Keep our own default ULocale.
      */
@@ -1176,15 +1175,10 @@ public final class ULocale implements Serializable {
      * @stable ICU 3.0
      */
     public static String getName(String localeID){
-        Map cache = (Map)nameCacheRef.get();
-        if (cache == null) {
-            cache = Collections.synchronizedMap(new HashMap());
-            nameCacheRef = new SoftReference(cache);
-        }
-        String name = (String)cache.get(localeID);
+        String name = (String)nameCache.get(localeID);
         if (name == null) {
             name = new IDParser(localeID).getName();
-            cache.put(localeID, name);
+            nameCache.put(localeID, name);
         }
         return name;
     }
