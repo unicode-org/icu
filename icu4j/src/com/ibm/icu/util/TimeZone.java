@@ -8,15 +8,15 @@
 package com.ibm.icu.util;
 
 import java.io.Serializable;
-import java.lang.ref.SoftReference;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.Grego;
+import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.JavaTimeZone;
+import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.TimeZoneAdapter;
 import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -160,7 +160,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
     /**
      * Cache to hold the SimpleDateFormat objects for a Locale.
      */
-    private static Hashtable cachedLocaleData = new Hashtable(3);
+    private static ICUCache cachedLocaleData = new SimpleCache();
 
     /**
      * Gets the time zone offset, for current date, modified in case of
@@ -395,6 +395,10 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @deprecated This API is ICU internal only.
      */
     private String _getDisplayName(boolean daylight, int style, ULocale locale) {
+        if (locale == null) {
+            throw new NullPointerException("locale is null");
+        }
+
         /* NOTES:
          * (1) We use SimpleDateFormat for simplicity; we could do this
          * more efficiently but it would duplicate the SimpleDateFormat code
@@ -408,12 +412,10 @@ abstract public class TimeZone implements Serializable, Cloneable {
 
         // We keep a cache, indexed by locale.  The cache contains a
         // SimpleDateFormat object, which we create on demand.
-        SoftReference data = (SoftReference)cachedLocaleData.get(locale);
-        SimpleDateFormat format;
-        if (data == null ||
-            (format = (SimpleDateFormat)data.get()) == null) {
+        SimpleDateFormat format = (SimpleDateFormat)cachedLocaleData.get(locale);
+        if (format == null) {
             format = new SimpleDateFormat(null, locale);
-            cachedLocaleData.put(locale, new SoftReference(format));
+            cachedLocaleData.put(locale, format);
         }
 
         String[] patterns = { "z", "zzzz", "v", "vvvv" };

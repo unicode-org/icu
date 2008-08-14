@@ -17,9 +17,11 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
+import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUResourceBundleReader;
 import com.ibm.icu.impl.ResourceBundleWrapper;
+import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.util.ULocale;
 
 //#if defined(FOUNDATION10) || defined(J2SE13) || defined(ECLIPSE_FRAGMENT)
@@ -302,18 +304,10 @@ public abstract class UResourceBundle extends ResourceBundle{
     }
 
     // Cache for ResourceBundle instantiation
-    private static SoftReference BUNDLE_CACHE;
+    private static ICUCache BUNDLE_CACHE = new SimpleCache();
 
     private static void addToCache(ResourceCacheKey key, UResourceBundle b) {
-        Map m = null;
-        if (BUNDLE_CACHE != null) {
-            m = (Map)BUNDLE_CACHE.get();
-        }
-        if (m == null) {
-            m = new HashMap();
-            BUNDLE_CACHE = new SoftReference(m);
-        }
-        m.put(key, b);
+        BUNDLE_CACHE.put(key, b);
     }
 
     /**
@@ -339,13 +333,7 @@ public abstract class UResourceBundle extends ResourceBundle{
         }
     }
     private static UResourceBundle loadFromCache(ResourceCacheKey key) {
-        if (BUNDLE_CACHE != null) {
-            Map m = (Map)BUNDLE_CACHE.get();
-            if (m != null) {
-                return (UResourceBundle)m.get(key);
-            }
-        }
-        return null;
+        return (UResourceBundle)BUNDLE_CACHE.get(key);
     }
 
     /**
