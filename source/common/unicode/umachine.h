@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -26,15 +26,15 @@
 
 /**
  * \file
- * \brief Basic types and constants for UTF 
- * 
+ * \brief Basic types and constants for UTF
+ *
  * <h2> Basic types and constants for UTF </h2>
  *   This file defines basic types and constants for utf.h to be
  *   platform-independent. umachine.h and utf.h are included into
  *   utypes.h to provide all the general definitions for ICU.
  *   All of these definitions used to be in utypes.h before
  *   the UTF-handling macros made this unmaintainable.
- * 
+ *
  */
 /*==========================================================================*/
 /* Include platform-dependent definitions                                   */
@@ -88,7 +88,7 @@
 
 /**
  * \def U_CDECL_END
- * This is used to end a declaration of a library private ICU C API 
+ * This is used to end a declaration of a library private ICU C API
  * @stable ICU 2.4
  */
 
@@ -102,11 +102,17 @@
 #   define U_CDECL_END
 #endif
 
+/** This is used for GCC specific attributes*/
+#ifdef GCC
+#    define U_GCC_ATTRIBUTE_DEPRECATED __attribute__ ((deprecated))
+#else
+#    define U_GCC_ATTRIBUTE_DEPRECATED
+#endif
 /** This is used to declare a function as a public ICU C API @stable ICU 2.0*/
 #define U_CAPI U_CFUNC U_EXPORT
 #define U_STABLE U_CAPI
 #define U_DRAFT  U_CAPI
-#define U_DEPRECATED U_CAPI
+#define U_DEPRECATED U_CAPI U_GCC_ATTRIBUTE_DEPRECATED
 #define U_OBSOLETE U_CAPI
 #define U_INTERNAL U_CAPI
 
@@ -243,7 +249,7 @@ typedef int8_t UBool;
  * @stable ICU 2.0
  */
 #if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32)
-#   ifdef __STDC_ISO_10646__ 
+#   ifdef __STDC_ISO_10646__
 #       if (U_SIZEOF_WCHAR_T==2)
 #           define U_WCHAR_IS_UTF16
 #       elif (U_SIZEOF_WCHAR_T==4)
@@ -258,7 +264,7 @@ typedef int8_t UBool;
 #           define U_WCHAR_IS_UTF32
 #       endif
 #   elif defined(U_WINDOWS)
-#       define U_WCHAR_IS_UTF16    
+#       define U_WCHAR_IS_UTF16
 #   endif
 #endif
 
