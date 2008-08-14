@@ -238,15 +238,12 @@ abstract public class TimeZone implements Serializable, Cloneable {
         // To support the behavior above, we need to call getOffset
         // (with 6 args) twice when local == true and DST is
         // detected in the initial call.
-        int fields[] = new int[4];
+        int fields[] = new int[6];
         for (int pass = 0; ; pass++) {
-            long day = floorDivide(date, Grego.MILLIS_PER_DAY, fields);
-            int millis = fields[0];
-
-            computeGregorianFields(day, fields);
+            Grego.timeToFields(date, fields);
             offsets[1] = getOffset(GregorianCalendar.AD,
                                     fields[0], fields[1], fields[2],
-                                    fields[3], millis) - offsets[0];
+                                    fields[3], fields[5]) - offsets[0];
 
             if (pass != 0 || !local || offsets[1] == 0) {
                 break;
@@ -255,128 +252,6 @@ abstract public class TimeZone implements Serializable, Cloneable {
             date -= offsets[1];
         }
     }
-
-    /**
-     * Divide two long integers, returning the floor of the quotient.
-     * <p>
-     * Unlike the built-in division, this is mathematically well-behaved.
-     * E.g., <code>-1/4</code> => 0
-     * but <code>floorDivide(-1,4)</code> => -1.
-     * TODO: This duplicates a method in Calendar; clean up and
-     * consolidate in ICU 3.0.
-     * @param numerator the numerator
-     * @param denominator a divisor which must be > 0
-     * @return the floor of the quotient.
-     */
-    static long floorDivide(long numerator, long denominator) {
-        // We do this computation in order to handle
-        // a numerator of Long.MIN_VALUE correctly
-        return (numerator >= 0) ?
-            numerator / denominator :
-            ((numerator + 1) / denominator) - 1;
-    }
-
-    /**
-     * Divide two integers, returning the floor of the quotient, and
-     * the modulus remainder.
-     * <p>
-     * Unlike the built-in division, this is mathematically well-behaved.
-     * E.g., <code>-1/4</code> => 0 and <code>-1%4</code> => -1,
-     * but <code>floorDivide(-1,4)</code> => -1 with <code>remainder[0]</code> => 3.
-     * TODO: This duplicates a method in Calendar; clean up and
-     * consolidate in ICU 3.0.
-     * @param numerator the numerator
-     * @param denominator a divisor which must be > 0
-     * @param remainder an array of at least one element in which the value
-     * <code>numerator mod denominator</code> is returned. Unlike <code>numerator
-     * % denominator</code>, this will always be non-negative.
-     * @return the floor of the quotient.
-     */
-    static int floorDivide(long numerator, int denominator, int[] remainder) {
-        if (numerator >= 0) {
-            remainder[0] = (int)(numerator % denominator);
-            return (int)(numerator / denominator);
-        }
-        int quotient = (int)(((numerator + 1) / denominator) - 1);
-        remainder[0] = (int)(numerator - (quotient * denominator));
-        return quotient;
-    }
-
-    /**
-     * Compute the Gregorian calendar year, month, and day of month
-     * from the epoch day, and return them in the given array.
-     * TODO: This duplicates a method in Calendar; clean up and
-     * consolidate in ICU 3.0.
-     */
-    static void computeGregorianFields(long day, int fields[]) {
-        int year, month, dayOfMonth, dayOfYear;
-
-        // Convert from 1970 CE epoch to 1 CE epoch (Gregorian calendar)
-        // JULIAN_1_CE    = 1721426; // January 1, 1 CE Gregorian
-        // JULIAN_1970_CE = 2440588; // January 1, 1970 CE Gregorian
-        day += (2440588 - 1721426);
-
-        // Here we convert from the day number to the multiple radix
-        // representation.  We use 400-year, 100-year, and 4-year cycles.
-        // For example, the 4-year cycle has 4 years + 1 leap day; giving
-        // 1461 == 365*4 + 1 days.
-        int[] rem = new int[1];
-        int n400 = floorDivide(day, 146097, rem); // 400-year cycle length
-        int n100 = floorDivide(rem[0], 36524, rem); // 100-year cycle length
-        int n4 = floorDivide(rem[0], 1461, rem); // 4-year cycle length
-        int n1 = floorDivide(rem[0], 365, rem);
-        year = 400*n400 + 100*n100 + 4*n4 + n1;
-        dayOfYear = rem[0]; // zero-based day of year
-        if (n100 == 4 || n1 == 4) {
-            dayOfYear = 365; // Dec 31 at end of 4- or 400-yr cycle
-        } else {
-            ++year;
-        }
-
-        boolean isLeap = ((year&0x3) == 0) && // equiv. to (year%4 == 0)
-            (year%100 != 0 || year%400 == 0);
-
-        int correction = 0;
-        int march1 = isLeap ? 60 : 59; // zero-based DOY for March 1
-        if (dayOfYear >= march1) correction = isLeap ? 1 : 2;
-        month = (12 * (dayOfYear + correction) + 6) / 367; // zero-based month
-        dayOfMonth = dayOfYear -
-            GREGORIAN_MONTH_COUNT[month][isLeap?1:0] + 1; // one-based DOM
-
-        // Jan 1 1 CE is Monday
-        int dayOfWeek = (int) ((day + Calendar.MONDAY) % 7);
-        if (dayOfWeek < Calendar.SUNDAY) {
-            dayOfWeek += 7;
-        }
-
-        fields[0] = year;
-        fields[1] = month; // 0-based already
-        fields[2] = dayOfMonth; // 1-based already
-        fields[3] = dayOfWeek; // 1-based already
-        //fields[4] = dayOfYear + 1; // Convert from 0-based to 1-based
-    }
-
-    /**
-     * For each month, the days in a non-leap year before the start
-     * the of month, and the days in a leap year before the start of
-     * the month.
-     * TODO: This duplicates data in Calendar.java; clean up and
-     * consolidate in ICU 3.0.
-     */
-    static final int[][] GREGORIAN_MONTH_COUNT = {
-        {   0,   0 }, // Jan
-        {  31,  31 }, // Feb
-        {  59,  60 }, // Mar
-        {  90,  91 }, // Apr
-        { 120, 121 }, // May
-        { 151, 152 }, // Jun
-        { 181, 182 }, // Jul
-        { 212, 213 }, // Aug
-        { 243, 244 }, // Sep
-        { 273, 274 }, // Oct
-        { 304, 305 }, // Nov
-        { 334, 335 }  // Dec
-    };
 
     /**
      * Sets the base time zone offset to GMT.
