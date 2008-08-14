@@ -1,6 +1,6 @@
  /*
   *******************************************************************************
-  * Copyright (C) 2005-2007, International Business Machines Corporation and         *
+  * Copyright (C) 2005-2008, International Business Machines Corporation and         *
   * others. All Rights Reserved.                                                *
   *******************************************************************************
   */
@@ -490,7 +490,7 @@ public class OlsonTimeZone extends BasicTimeZone {
     private void getHistoricalOffset(long date, boolean local,
             int NonExistingTimeOpt, int DuplicatedTimeOpt, int[] offsets) {
         if (transitionCount != 0) {
-            long sec = myFloorDivide(date, Grego.MILLIS_PER_SECOND);
+            long sec = Grego.floorDivide(date, Grego.MILLIS_PER_SECOND);
             // Linear search from the end is the fastest approach, since
             // most lookups will happen at/near the end.
             int i = 0;
@@ -678,25 +678,6 @@ public class OlsonTimeZone extends BasicTimeZone {
         UResourceBundle r = top.get("Rules");
         r = r.get(ruleid);
         return r;
-    }
-
-    /**
-     * Divide two long integers, returning the floor of the quotient.
-     * <p>
-     * Unlike the built-in division, this is mathematically well-behaved.
-     * E.g., <code>-1/4</code> => 0
-     * but <code>floorDivide(-1,4)</code> => -1.
-     * @param numerator the numerator
-     * @param denominator a divisor which must be > 0
-     * @return the floor of the quotient.
-     * @stable ICU 2.0
-     */
-    private static final long myFloorDivide(long numerator, long denominator) {
-        // We do this computation in order to handle
-        // a numerator of Long.MIN_VALUE correctly
-        return (numerator >= 0) ?
-            numerator / denominator :
-            ((numerator + 1) / denominator) - 1;
     }
 
     public boolean equals(Object obj){

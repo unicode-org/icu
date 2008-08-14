@@ -739,14 +739,11 @@ public class SimpleTimeZone extends BasicTimeZone {
     public void getOffsetFromLocal(long date,
             int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
         offsets[0] = getRawOffset();
-        int fields[] = new int[4];
-        long day = floorDivide(date, Grego.MILLIS_PER_DAY, fields);
-        int millis = fields[0];
-
-        computeGregorianFields(day, fields);
+        int fields[] = new int[6];
+        Grego.timeToFields(date, fields);
         offsets[1] = getOffset(GregorianCalendar.AD,
               fields[0], fields[1], fields[2],
-              fields[3], millis) - offsets[0];        
+              fields[3], fields[5]) - offsets[0];        
 
         boolean recalc = false;
 
@@ -766,12 +763,10 @@ public class SimpleTimeZone extends BasicTimeZone {
         }
 
         if (recalc) {
-            day = floorDivide(date, Grego.MILLIS_PER_DAY, fields);
-            millis = fields[0];
-            computeGregorianFields(day, fields);
+            Grego.timeToFields(date, fields);
             offsets[1] = getOffset(GregorianCalendar.AD,
                     fields[0], fields[1], fields[2],
-                    fields[3], millis) - offsets[0];        
+                    fields[3], fields[5]) - offsets[0];        
         }
     }
 

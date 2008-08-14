@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2003-2007, International Business Machines Corporation and
+ * Copyright (C) 2003-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  * Partial port from ICU4C's Grego class in i18n/gregoimp.h.
@@ -142,7 +142,9 @@ public class Grego {
         int month = (12 * (dayOfYear + correction) + 6) / 367;  // zero-based month
         int dayOfMonth = dayOfYear - DAYS_BEFORE[isLeap ? month + 12 : month] + 1; // one-based DOM
         int dayOfWeek = (int)((day + 2) % 7);  // day 0 is Monday(2)
-        dayOfWeek = (dayOfWeek == 0) ? 7 : dayOfWeek;
+        if (dayOfWeek < 1 /* Sunday */) {
+            dayOfWeek += 7;
+        }
         dayOfYear++; // 1-based day of year
 
         fields[0] = year;
@@ -175,7 +177,7 @@ public class Grego {
         return fields;
     }
 
-    private static long floorDivide(long numerator, long denominator) {
+    public static long floorDivide(long numerator, long denominator) {
         // We do this computation in order to handle
         // a numerator of Long.MIN_VALUE correctly
         return (numerator >= 0) ?
