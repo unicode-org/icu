@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Random;
@@ -809,6 +810,14 @@ public class TestFmwk extends AbstractTestLog {
         return params.errorCount;
     }
 
+    public String getProperty(String key) {
+        String val = null;
+        if (key != null && key.length() > 0 && params.props != null) {
+            val = (String)params.props.get(key.toLowerCase());
+        }
+        return val;
+    }
+
     protected TimeZone safeGetTimeZone(String id) {
         TimeZone tz = TimeZone.getTimeZone(id);
         if (tz == null) {
@@ -832,7 +841,7 @@ public class TestFmwk extends AbstractTestLog {
         pw.println("Usage: " + className + " option* target*");
         pw.println();
         pw.println("Options:");
-        pw.println(" -describe Print a short descriptive string for this test and all");
+        pw.println(" -d[escribe] Print a short descriptive string for this test and all");
         pw.println("       listed targets.");
         pw.println(" -e<n> Set exhaustiveness from 0..10.  Default is 0, fewest tests.\n"
                  + "       To run all tests, specify -e10.  Giving -e with no <n> is\n"
@@ -859,7 +868,8 @@ public class TestFmwk extends AbstractTestLog {
         //      pw.println(" -m[emory] print memory usage and force gc for
         // each test");
         pw.println(" -n[othrow] Message on test failure rather than exception");
-        pw.println(" -prompt Prompt before exiting");
+        pw.println(" -p[rompt] Prompt before exiting");
+        pw.println(" -prop:<key>=<value> Set optional property used by this test");
         pw.println(" -q[uiet] Do not show warnings");
         pw.println(" -r[andom][:<n>] If present, randomize targets.  If n is present,\n"
                         + "       use it as the seed.  If random is not set, targets will\n"
@@ -1087,6 +1097,7 @@ public class TestFmwk extends AbstractTestLog {
         private NumberFormat tformat;
         public Random random;
         public int maxTargetSec = 10;
+        public HashMap props;
 
         private TestParams() {
         }
@@ -1223,6 +1234,18 @@ public class TestFmwk extends AbstractTestLog {
                             if (params.log instanceof ASCIIWriter) {
                                 params.log = log;
                             }
+                        } else if (arg.startsWith("-prop:")) {
+                            String temp = arg.substring(6);
+                            int eql = temp.indexOf('=');
+                            if (eql <= 0) {
+                                log.println("*** Error: could not parse custom property '" + arg + "'");
+                                usageError = true;
+                                break;
+                            }
+                            if (params.props == null) {
+                                params.props = new HashMap();
+                            }
+                            params.props.put(temp.substring(0, eql), temp.substring(eql+1));
                         } else {
                             log.println("*** Error: unrecognized argument: "
                                         + args[i]);
