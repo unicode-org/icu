@@ -73,8 +73,14 @@ public class UnicodeSetTest extends TestFmwk {
   }
 
   public void TestPropertyAccess() {
+    int count = 0; 
     // test to see that all of the names work
     for (int propNum = UProperty.BINARY_START; propNum < UProperty.INT_LIMIT; ++propNum) {
+      count++;
+      //Skipping tests in the non-exhaustive mode to shorten the test time ticket#6475
+      if(getInclusion()<=5 && count%5!=0){
+          continue;
+      }
       if (propNum >= UProperty.BINARY_LIMIT && propNum < UProperty.INT_START) { // skip the gap
         propNum = UProperty.INT_START;
       }
@@ -144,7 +150,7 @@ public class UnicodeSetTest extends TestFmwk {
                 + "Differing values: " + collectedErrors.toPattern(true));
           }
         }
-      }
+      } 
     }
   }
   
