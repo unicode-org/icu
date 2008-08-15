@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## HP/UX-specific setup using aCC
-## Copyright (c) 1999-2007, International Business Machines Corporation and
+## Copyright (c) 1999-2008, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Commands to generate dependency files
@@ -24,7 +24,7 @@ THREADSCPPFLAGS = -D_REENTRANT -D_THREAD_SAFE
 #    823 Redundant preprocessing concatenation operation results in two valid
 #        preprocessing tokens. This comes from INT64_C in <inttypes.h>
 #   4232 conversion to a more strictly aligned type may cause misaligned access.
-CFLAGS += -Ae +ESlit
+CFLAGS += -Ae +Olit=all
 CXXFLAGS += +W740 +W749 +W823 +W4232
 
 # -Bhidden_def Hides all symbols defined in the module.
