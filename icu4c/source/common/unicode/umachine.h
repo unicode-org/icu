@@ -103,16 +103,19 @@
 #endif
 
 /** This is used for GCC specific attributes*/
-#if U_GCC
-#    define U_GCC_ATTRIBUTE_DEPRECATED __attribute__ ((deprecated))
+#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 2))
+#    define U_ATTRIBUTE_DEPRECATED __attribute__ ((deprecated))
+/** This is used for Visual C++ specific attributes */
+#elif defined(U_WINDOWS) && defined(_MSC_VER) && (_MSC_VER >= 1400)
+#    define U_ATTRIBUTE_DEPRECATED __declspec(deprecated)
 #else
-#    define U_GCC_ATTRIBUTE_DEPRECATED
+#    define U_ATTRIBUTE_DEPRECATED
 #endif
 /** This is used to declare a function as a public ICU C API @stable ICU 2.0*/
 #define U_CAPI U_CFUNC U_EXPORT
 #define U_STABLE U_CAPI
 #define U_DRAFT  U_CAPI
-#define U_DEPRECATED U_CAPI U_GCC_ATTRIBUTE_DEPRECATED
+#define U_DEPRECATED U_CAPI U_ATTRIBUTE_DEPRECATED
 #define U_OBSOLETE U_CAPI
 #define U_INTERNAL U_CAPI
 
