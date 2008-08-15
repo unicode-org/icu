@@ -313,7 +313,7 @@ typedef unsigned int uint32_t;
 /* Compiler information for attributes                                       */
 /*===========================================================================*/
 
-#define GCC 0
+#define U_GCC @U_GCC@
 
 /*===========================================================================*/
 /* Programs used by ICU code                                                 */
