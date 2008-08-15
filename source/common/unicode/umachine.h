@@ -103,7 +103,7 @@
 #endif
 
 /** This is used for GCC specific attributes*/
-#ifdef GCC
+#if U_GCC
 #    define U_GCC_ATTRIBUTE_DEPRECATED __attribute__ ((deprecated))
 #else
 #    define U_GCC_ATTRIBUTE_DEPRECATED
