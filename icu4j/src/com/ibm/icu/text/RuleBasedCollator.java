@@ -4261,6 +4261,20 @@ public final class RuleBasedCollator extends Collator
               } while(m_contractionIndex_[UCharOffset] != 0xFFFF);
             }
             break;
+          case CollationElementIterator.CE_SPEC_PROC_TAG_:
+            {
+              // 0xB7 is a precontext character defined in UCA5.1, a special
+              // handle is implemeted in order to save LatinOne table for
+              // most locales.
+              if (ch == 0xb7) {
+                  addLatinOneEntry(ch, CE, s);
+              }
+              else {
+                  latinOneFailed_ = true;
+                  return false;
+              }
+            }
+            break;
           default:
             latinOneFailed_ = true;
             return false;
