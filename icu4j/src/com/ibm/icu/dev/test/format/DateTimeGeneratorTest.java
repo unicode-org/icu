@@ -324,6 +324,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         ParsePosition parsePosition = new ParsePosition(0);
 
         ULocale[] locales = ULocale.getAvailableLocales();
+        int count = 0;
         for (int i = 0; i < locales.length; ++i) {
             // skip the country locales unless we are doing exhaustive tests
             if (getInclusion() < 6) {
@@ -331,10 +332,16 @@ public class DateTimeGeneratorTest extends TestFmwk {
                     continue;
                 }
             }
+            count++;
+            // Skipping some test case in the non-exhaustive mode to reduce the test time
+            //ticket#6503
+            if(params.inclusion<=5 && count%3!=0){
+                continue;
+            }
             logln(locales[i].toString());
             DateTimePatternGenerator dtpgen
             = DateTimePatternGenerator.getInstance(locales[i]);
-
+            
             for (int style1 = DateFormat.FULL; style1 <= DateFormat.SHORT; ++style1) {
                 final SimpleDateFormat oldFormat = (SimpleDateFormat) DateFormat.getTimeInstance(style1, locales[i]);
                 String pattern = oldFormat.toPattern();
