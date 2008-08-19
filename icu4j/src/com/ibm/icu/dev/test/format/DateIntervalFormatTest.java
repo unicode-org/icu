@@ -610,11 +610,13 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
     private void expect(String[] data, int data_length) {
         int i = 1;
+        int count = 0; 
         while (i<data_length) {
             String locName = data[i++];
             ULocale loc = new ULocale(locName);
             SimpleDateFormat ref = new SimpleDateFormat(data[0], loc);
             // 'f'
+            count++;
             String datestr = data[i++];
             String datestr_2 = data[i++];
             Date date, date_2;
@@ -629,7 +631,13 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                                                   date_2.getTime());
     
             String oneSkeleton = data[i++];
-    
+            // Skipping some test case in the non-exhaustive mode to reduce the test time
+            //ticket#6503
+            if(params.inclusion<=5 && count%3!=0){
+                i++;
+                continue;
+            } 
+            
             DateIntervalFormat dtitvfmt = DateIntervalFormat.getInstance(
                                               oneSkeleton, loc);
             String expected = data[i++];
