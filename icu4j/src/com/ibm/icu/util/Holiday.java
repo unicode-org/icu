@@ -56,7 +56,7 @@ public abstract class Holiday implements DateRule
     }
 
     /**
-     * Return the first occurrance of this holiday on or after the given date
+     * Return the first occurrence of this holiday on or after the given date
      *
      * @param start Only holidays on or after this date are returned.
      *
@@ -72,11 +72,11 @@ public abstract class Holiday implements DateRule
     }
 
     /**
-     * Return the first occurrance of this holiday that is on or after
+     * Return the first occurrence of this holiday that is on or after
      * the given start date and before the given end date.
      *
-     * @param start Only occurrances on or after this date are returned.
-     * @param end   Only occurrances before this date are returned.
+     * @param start Only occurrences on or after this date are returned.
+     * @param end   Only occurrences before this date are returned.
      *
      * @return      The date on which this event occurs, or null if it
      *              does not occur between the start and end dates.
@@ -123,7 +123,7 @@ public abstract class Holiday implements DateRule
      *              resource bundle object named HolidayBundle.
      *
      * @param rule  The date rules used for determining when this holiday
-     *              falls.  Holiday's implementation of the DateRule inteface
+     *              falls.  Holiday's implementation of the DateRule interface
      *              simply delegates to this DateRule object.
      * @draft ICU 2.8
      * @provisional This API might change or be removed in a future release.
@@ -135,7 +135,7 @@ public abstract class Holiday implements DateRule
     }
 
     /**
-     * Return the name of this holiday in the language of the default locale
+     * Return the name of this holiday in the language of the default locale.
      * @draft ICU 2.8
      * @provisional This API might change or be removed in a future release.
      */
@@ -144,7 +144,7 @@ public abstract class Holiday implements DateRule
     }
 
     /**
-     * Return the name of this holiday in the language of the specified locale
+     * Return the name of this holiday in the language of the specified locale.
      * The <code>name</code> parameter passed to this object's constructor is used
      * as a key to look up the holiday's localized name in a ResourceBundle object
      * named HolidayBundle.
@@ -177,11 +177,10 @@ public abstract class Holiday implements DateRule
         String dispName = name;
 
         try {
-            ResourceBundle bundle = UResourceBundle.getBundleInstance("HolidayBundle", locale);
+            ResourceBundle bundle = UResourceBundle.getBundleInstance("com.ibm.icu.impl.data.HolidayBundle", locale);
             dispName = bundle.getString(name);
         }
         catch (MissingResourceException e) {
-            //System.out.println("Using default display name for " + name);
         }
         return dispName;
     }
