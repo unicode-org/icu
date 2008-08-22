@@ -2276,7 +2276,10 @@ static void TestSearchForNull(void)
 	
 	/* static const UChar var[(length)+1]=U_DECLARE_UTF16(cs) */
 	U_STRING_DECL (pattern, "0", 1);
-	U_STRING_DECL (text, "0IS 0 OK?", 8);
+    U_STRING_DECL (text, "0IS 0 OK?", 9);
+    
+    U_STRING_INIT (pattern, "0", 1);
+    U_STRING_INIT (text, "0IS 0 OK?", 9);
 	expectedPos = 0;
 	expectedLen = 1;
 	expectedNum = 2;
@@ -2369,7 +2372,7 @@ void addSearchTest(TestNode** root)
     addTest(root, &TestNumeric, "tscoll/usrchtst/TestNumeric");
     addTest(root, &TestDiacriticMatch, "tscoll/usrchtst/TestDiacriticMatch");
     addTest(root, &TestForwardBackward, "tscoll/usrchtst/TestForwardBackward");
-	/*addTest(root, &TestSearchForNull, "tscoll/usrchtst/TestSearchForNull");*/
+	addTest(root, &TestSearchForNull, "tscoll/usrchtst/TestSearchForNull");
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
