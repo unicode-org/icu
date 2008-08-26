@@ -91,10 +91,10 @@ usage()
 ## Check the sanity of current variables
 sanity()
 {
-    if [ ! -f ${ICUUC_FILE} ];
+    if [ ! -f ${ICUUC_FILE} ] && [ ${IGNORE_ICUUC_FILE_CHECK} = "no" ];
     then
 	echo "### $ME: Can't find ${ICUUC_FILE} - ICU prefix is wrong."  1>&2
-	echo "###      Try the --prefix= or --exec-prefix= options " 1>&2
+	echo "###      Try the --prefix= option " 1>&2
 	echo "###      or --detect-prefix"
 	echo "### $ME: Exitting." 1>&2
 	exit 2
@@ -108,6 +108,13 @@ if [ $# -lt 1 ]; then
     exit 1
 fi
 
+# For certain options (e.g. --detect-prefix) don't check for icuuc library file.
+IGNORE_ICUUC_FILE_CHECK="no";
+case "$1" in 
+*prefix*)
+    IGNORE_ICUUC_FILE_CHECK="yes"
+    ;;
+esac
 
 # Load our variables from autoconf
 # ALWAYS load twice because of dependencies
@@ -256,7 +263,6 @@ do
 	    fi
 	    loaddefs
 	    loaddefs
-	    sanity
 	    ;;
 
 	--exec-prefix)
@@ -271,7 +277,6 @@ do
 	    prefix=$var
 	    loaddefs
 	    loaddefs
-	    sanity
 	    ;;
 
 	--sysconfdir)
@@ -351,6 +356,12 @@ do
             ;;
     esac
     shift
+    
+    # Reset the ignore icuuc file check flag
+    if [ $IGNORE_ICUUC_FILE_CHECK = "yes" ]; then
+        IGNORE_ICUUC_FILE_CHECK="no"
+        sanity
+    fi
 done
 echo
 # Check once before we quit (will check last used prefix)
