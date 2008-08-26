@@ -48,7 +48,7 @@
 #endif
 #endif
 
-/* Make sure things like readlink and such functions work. 
+/* Make sure things like readlink and such functions work.
 Poorly upgraded Solaris machines can't have this defined.
 Cleanly installed Solaris can use this #define.
 */
@@ -114,7 +114,7 @@ Cleanly installed Solaris can use this #define.
 #endif
 
 #ifndef U_WINDOWS
-#include <sys/time.h> 
+#include <sys/time.h>
 #endif
 
 /*
@@ -187,7 +187,7 @@ u_bottomNBytesOfDouble(double* d, int n)
 }
 
 #if defined (U_DEBUG_FAKETIME)
-/* Override the clock to test things without having to move the system clock. 
+/* Override the clock to test things without having to move the system clock.
  * Assumes POSIX gettimeofday() will function
  */
 UDate fakeClock_t0 = 0; /** Time to start the clock from **/
@@ -216,7 +216,7 @@ static UDate getUTCtime_fake() {
         fakeClock_set = TRUE;
     }
     umtx_unlock(&fakeClockMutex);
-    
+
     return getUTCtime_real() + fakeClock_dt;
 }
 #endif
@@ -530,17 +530,17 @@ uprv_maximumPtr(void * base)
 {
 #if defined(OS400)
     /*
-     * With the provided function we should never be out of range of a given segment 
+     * With the provided function we should never be out of range of a given segment
      * (a traditional/typical segment that is).  Our segments have 5 bytes for the
      * id and 3 bytes for the offset.  The key is that the casting takes care of
      * only retrieving the offset portion minus x1000.  Hence, the smallest offset
      * seen in a program is x001000 and when casted to an int would be 0.
      * That's why we can only add 0xffefff.  Otherwise, we would exceed the segment.
      *
-     * Currently, 16MB is the current addressing limitation on i5/OS if the activation is 
+     * Currently, 16MB is the current addressing limitation on i5/OS if the activation is
      * non-TERASPACE.  If it is TERASPACE it is 2GB - 4k(header information).
-     * This function determines the activation based on the pointer that is passed in and 
-     * calculates the appropriate maximum available size for 
+     * This function determines the activation based on the pointer that is passed in and
+     * calculates the appropriate maximum available size for
      * each pointer type (TERASPACE and non-TERASPACE)
      *
      * Unlike other operating systems, the pointer model isn't determined at
@@ -554,7 +554,7 @@ uprv_maximumPtr(void * base)
     return ((void *)(((char *)base)-((uint32_t)(base))+((uint32_t)0xffefff)));
 
 #else
-    return U_MAX_PTR(base); 
+    return U_MAX_PTR(base);
 #endif
 }
 
@@ -604,7 +604,7 @@ uprv_timezone()
 }
 
 /* Note that U_TZNAME does *not* have to be tzname, but if it is,
-   some platforms need to have it declared here. */ 
+   some platforms need to have it declared here. */
 
 #if defined(U_TZNAME) && (defined(U_IRIX) || defined(U_DARWIN) || defined(U_CYGWIN))
 /* RS6000 and others reject char **tzname.  */
@@ -915,10 +915,10 @@ u_setDataDirectory(const char *directory) {
 }
 
 U_CAPI UBool U_EXPORT2
-uprv_pathIsAbsolute(const char *path) 
+uprv_pathIsAbsolute(const char *path)
 {
-  if(!path || !*path) { 
-    return FALSE; 
+  if(!path || !*path) {
+    return FALSE;
   }
 
   if(*path == U_FILE_SEP_CHAR) {
@@ -1103,7 +1103,7 @@ static const char *uprv_getPOSIXID(void)
     static const char* posixID = NULL;
     if (posixID == 0) {
         /*
-        * On Solaris two different calls to setlocale can result in 
+        * On Solaris two different calls to setlocale can result in
         * different values. Only get this value once.
         *
         * We must check this first because an application can set this.
@@ -1116,7 +1116,7 @@ static const char *uprv_getPOSIXID(void)
         * Linux can return LC_CTYPE=C;LC_NUMERIC=C;...
         *
         * The default codepage detection also needs to use LC_CTYPE.
-        * 
+        *
         * Do not call setlocale(LC_*, "")! Using an empty string instead
         * of NULL, will modify the libc behavior.
         */
@@ -1188,7 +1188,7 @@ The leftmost codepage (.xxx) wins.
     */
 
     if (gCorrectedPOSIXLocale != NULL) {
-        return gCorrectedPOSIXLocale; 
+        return gCorrectedPOSIXLocale;
     }
 
     if ((p = uprv_strchr(posixID, '.')) != NULL) {
@@ -1272,7 +1272,7 @@ The leftmost codepage (.xxx) wins.
     }
 
     if (correctedPOSIXLocale != NULL) {  /* Was already set - clean up. */
-        uprv_free(correctedPOSIXLocale); 
+        uprv_free(correctedPOSIXLocale);
     }
 
     return posixID;
@@ -1465,7 +1465,7 @@ remapPlatformDependentCodepage(const char *locale, const char *name) {
     }
     else if (uprv_strcmp(name, "646") == 0) {
         /*
-         * The default codepage given by Solaris is 646 but the C library routines treat it as if it was 
+         * The default codepage given by Solaris is 646 but the C library routines treat it as if it was
          * ISO-8859-1 instead of US-ASCII(646).
          */
         name = "ISO-8859-1";
@@ -1520,7 +1520,7 @@ remapPlatformDependentCodepage(const char *locale, const char *name) {
     return name;
 }
 
-static const char*  
+static const char*
 getCodepageFromPOSIXID(const char *localeName, char * buffer, int32_t buffCapacity)
 {
     char localeBuf[100];
@@ -1542,7 +1542,7 @@ getCodepageFromPOSIXID(const char *localeName, char * buffer, int32_t buffCapaci
 }
 #endif
 
-static const char*  
+static const char*
 int_getDefaultCodepage()
 {
 #if defined(OS400)
@@ -1635,6 +1635,12 @@ uprv_getDefaultCodepage()
     umtx_lock(NULL);
     if (name == NULL) {
         name = int_getDefaultCodepage();
+        /* This remapping for default code page ensures the round trip mapping for \u005c.
+         * A better solution then this may be more propriate.
+         */
+        if (uprv_strcmp(name, "CP949") == 0) {
+            uprv_strcpy(name, "EUC_KR");
+        }
     }
     umtx_unlock(NULL);
     return name;
