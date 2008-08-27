@@ -1479,6 +1479,15 @@ remapPlatformDependentCodepage(const char *locale, const char *name) {
         */
         name = "UTF-8";
     }
+    else if (uprv_strcmp(name, "CP949") == 0) {
+        /* Remap CP949 to a similar codepage to avoid issues with backslash and won symbol. */
+        name = "EUC-KR";
+    }
+#elif defined(U_BSD)
+    if (uprv_strcmp(name, "CP949") == 0) {
+        /* Remap CP949 to a similar codepage to avoid issues with backslash and won symbol. */
+        name = "EUC-KR";
+    }
 #elif defined(U_HPUX)
     if (locale != NULL && uprv_strcmp(locale, "zh_HK") == 0 && uprv_strcmp(name, "big5") == 0) {
         /* HP decided to extend big5 as hkbig5 even though it's not compatible :-( */
@@ -1635,12 +1644,6 @@ uprv_getDefaultCodepage()
     umtx_lock(NULL);
     if (name == NULL) {
         name = int_getDefaultCodepage();
-        /* This remapping for default code page ensures the round trip mapping for \u005c.
-         * A better solution then this may be more propriate.
-         */
-        if (uprv_strcmp(name, "CP949") == 0) {
-            uprv_strcpy(name, "EUC_KR");
-        }
     }
     umtx_unlock(NULL);
     return name;
