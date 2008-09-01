@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2006, International Business Machines
+*   Copyright (C) 2001-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -745,6 +745,9 @@ setRanges2[]={
     {0x2f800,0x2fedc,    0x7a,   TRUE},
     {0x72,   0xdd,       3,      TRUE},
     {0xdd,   0xde,       4,      FALSE},
+    {0x201,  0x220,      6,      TRUE},  /* 3 consecutive blocks with the same pattern but discontiguous value ranges */
+    {0x221,  0x240,      6,      TRUE},
+    {0x241,  0x260,      6,      TRUE},
     {0x2f987,0x2fa98,    5,      TRUE},
     {0x2f777,0x2f833,    0,      TRUE},
     {0x2f900,0x2ffee,    1,      FALSE},
@@ -758,6 +761,12 @@ checkRanges2[]={
     {0x72,   0x5555},
     {0xdd,   3},
     {0xde,   4},
+    {0x201,  0},
+    {0x220,  6},
+    {0x221,  0},
+    {0x240,  6},
+    {0x241,  0},
+    {0x260,  6},
     {0x2f833,0},
     {0x2f987,0x7a},
     {0x2fa98,5},
