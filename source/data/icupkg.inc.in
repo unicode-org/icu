@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 2000-2007, International Business Machines
+#   Copyright (C) 2000-2008, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -20,6 +20,7 @@ prefix=@prefix@
 bindir=@bindir@
 sbindir=@sbindir@
 libexecdir=@libexecdir@
+datarootdir=@datarootdir@
 datadir=@datadir@
 sysconfdir=@sysconfdir@
 sharedstatedir=@sharedstatedir@
