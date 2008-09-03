@@ -26,6 +26,11 @@
 #define @platform@
 #endif
 
+/* Define whether dirent.h is available */
+#ifndef U_HAVE_DIRENT_H
+/* Remove for now until configure is updated. #define U_HAVE_DIRENT_H @U_HAVE_DIRENT_H@ */
+#endif
+
 /* Define whether inttypes.h is available */
 #ifndef U_HAVE_INTTYPES_H
 #define U_HAVE_INTTYPES_H @U_HAVE_INTTYPES_H@
