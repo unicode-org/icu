@@ -624,6 +624,10 @@ extern U_IMPORT char *U_TZNAME[];
 static char gTimeZoneBuffer[PATH_MAX];
 static char *gTimeZoneBufferPtr = NULL;
 #endif
+#if U_HAVE_DIRENT_H
+#define SEARCH_TZFILE
+#include <dirent.h>  /* Needed to search through system timezone files */
+#endif
 
 #ifndef U_WINDOWS
 #define isNonDigit(ch) (ch < '0' || '9' < ch)
@@ -752,6 +756,123 @@ static const char* remapShortTimeZone(const char *stdID, const char *dstID, int3
 }
 #endif
 
+#ifdef SEARCH_TZFILE
+#define MAX_PATH_SIZE PATH_MAX /* Set the limit for the size of the path. */
+/*
+ * This method compares the two files given to see if they are a match.
+ * It is currently use to compare two TZ files.
+ */
+UBool compareBinaryFiles(char* filename1, char* filename2) {
+    FILE* file1 = fopen(filename1, "r");
+    FILE* file2 = fopen(filename2, "r");
+
+    int64_t sizeFile1;
+    int64_t sizeFile2;
+
+    char* bufferFile1;
+    char* bufferFile2;
+
+    int32_t index;
+
+    UBool result = TRUE;
+
+    if (file1 != NULL && file2 != NULL) {
+        /* First check that the file size are equal. */
+        fseek(file1, 0, SEEK_END);
+        fseek(file2, 0, SEEK_END);
+        sizeFile1 = ftell(file1);
+        sizeFile2 = ftell(file2);
+
+        if (sizeFile1 != sizeFile2) {
+            result = FALSE;
+        } else {
+            /* Store the data from the files in seperate buffers and
+             * compare each byte to determine equality.
+             */
+            rewind(file1);
+            rewind(file2);
+
+            bufferFile1 = (char*)uprv_malloc(sizeof(char) * sizeFile1);
+            bufferFile2 = (char*)uprv_malloc(sizeof(char) * sizeFile2);
+
+            fread(bufferFile1, 1, sizeFile1, file1);
+            fread(bufferFile2, 1, sizeFile2, file2);
+
+            for (index = 0; index < sizeFile1; index++) {
+                if (bufferFile1[index] != bufferFile2[index]) {
+                    result = FALSE;
+                    break;
+                }
+            }
+            uprv_free(bufferFile1);
+            uprv_free(bufferFile2);
+        }
+    } else {
+        result = FALSE;
+    }
+
+    if (file1 != NULL) {
+        fclose(file1);
+    }
+    if (file2 != NULL) {
+        fclose(file2);
+    }
+
+    return result;
+}
+/*
+ * This method recursively traverses the directory given for a matching TZ file and returns the first match.
+ */
+/* dirent also lists two entries: "." and ".." that we can safely ignore. */
+#define SKIP1 "."
+#define SKIP2 ".."
+char* searchForTZFile(const char* path) {
+    DIR* dirp = opendir(path);
+    DIR* subDirp = NULL;
+    struct dirent* dirEntry = NULL;
+
+    char* result = NULL;
+
+    /* Save the current path and add a "/" at the end. */
+    char* curpath = (char*)uprv_malloc(MAX_PATH_SIZE);
+    uprv_memset(curpath, 0, MAX_PATH_SIZE);
+    uprv_strcpy(curpath, path);
+
+    /* Check each entry in the directory. */
+    while(dirEntry = readdir(dirp)) {
+        if (uprv_strcmp(dirEntry->d_name, SKIP1) != 0 && uprv_strcmp(dirEntry->d_name, SKIP2) != 0) {
+            /* Create a newpath with the new entry to test each entry in the directory. */
+            char* newpath = (char*)uprv_malloc(MAX_PATH_SIZE);
+            uprv_memset(newpath, 0, MAX_PATH_SIZE);
+            uprv_strcpy(newpath, curpath);
+            uprv_strcat(newpath, dirEntry->d_name);
+
+            if (subDirp = opendir(newpath)) {
+                /* If this new path is a directory, make a recursive call with the newpath. */
+                closedir(subDirp);
+                uprv_strcat(newpath, "/");
+                result = searchForTZFile(newpath);
+            } else {
+                if(compareBinaryFiles(TZDEFAULT, newpath)) {
+                    result = (char*)uprv_malloc(MAX_PATH_SIZE);
+                    uprv_strcpy(result, newpath + (sizeof(TZZONEINFO) - 1));
+                    /* Make sure clean up newpath to avoid memory leak. */
+                    uprv_free(newpath);
+                    break;
+                }
+            }
+            uprv_free(newpath);
+            if (result != NULL) {
+                /* Get out after the first one found. */
+                break;
+            }
+        }
+    }
+    uprv_free(curpath);
+    closedir(dirp);
+    return result;
+}
+#endif
 U_CAPI const char* U_EXPORT2
 uprv_tzname(int n)
 {
@@ -807,6 +928,13 @@ uprv_tzname(int n)
             {
                 return (gTimeZoneBufferPtr = gTimeZoneBuffer + tzZoneInfoLen);
             }
+        } else {
+#if defined(SEARCH_TZFILE)
+            gTimeZoneBufferPtr = searchForTZFile(TZZONEINFO);
+            if (gTimeZoneBufferPtr != NULL && isValidOlsonID(gTimeZoneBufferPtr)) {
+                return gTimeZoneBufferPtr;
+            }
+#endif
         }
     }
     else {
