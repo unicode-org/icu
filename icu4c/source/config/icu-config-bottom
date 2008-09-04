@@ -227,12 +227,12 @@ do
 	    ;;
 
 	--ldflags)
-	    echo $ECHO_N "${LDFLAGS $ICULIBS $LIBS}${ECHO_C} "
+	    echo $ECHO_N "${LDFLAGS} ${ICULIBS} ${LIBS}${ECHO_C} "
 # $RPATH_LDFLAGS
 	    ;;
 
 	--ldflags-libsonly)
-	    echo $ECHO_N "${ICULIBS_I18N $ICULIBS_COMMON $ICULIBS_DATA}${ECHO_C} "
+	    echo $ECHO_N "${ICULIBS_I18N} ${ICULIBS_COMMON} ${ICULIBS_DATA}${ECHO_C} "
 	    ;;
 
 	--ldflags-icuio)
@@ -248,7 +248,7 @@ do
 	    ;;
 
 	--ldflags-layout)
-	    echo $ECHO_N "${ICULIBS_LAYOUT $ICULIBS_LAYOUTEX}${ECHO_C} "
+	    echo $ECHO_N "${ICULIBS_LAYOUT} ${ICULIBS_LAYOUTEX}${ECHO_C} "
 	    ;;
 
 	--ldflags-searchpath)
