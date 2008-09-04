@@ -1009,7 +1009,11 @@ void DateIntervalFormatTest::expectUserDII(const char** data,
 
 
 void DateIntervalFormatTest::testStress() {
-    const char* DATA[] = {
+    if(quick){
+    	logln("Quick mode: Skipping test");
+    	return;
+    }
+	const char* DATA[] = {
         "yyyy MM dd HH:mm:ss",
         "2007 10 10 10:10:10", "2008 10 10 10:10:10", 
         "2007 10 10 10:10:10", "2007 11 10 10:10:10", 
