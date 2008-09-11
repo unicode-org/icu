@@ -1652,10 +1652,14 @@ void SSearchTest::monkeyTest(char *params)
         int32_t notFoundCount = 0;
 
         ucol_setStrength(coll, strengths[s]);
-
+        
+        int32_t i = 1000; //Reduce the number of iteration in non-exhaustive mode
+        if(!quick){
+        	i = 10000; 
+        }
         // TODO: try alternate prefix and suffix too?
         // TODO: alterntaes are only equal at primary strength. Is this OK?
-        for(int32_t t = 0; t < 10000; t += 1) {
+        for(int32_t t = 0; t < i; t += 1) {
             uint32_t seed = m_seed;
             int32_t  nmc = 0;
 
