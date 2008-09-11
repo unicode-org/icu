@@ -179,9 +179,9 @@ class CharsetLMBCS extends CharsetICU {
      * from a LMBCS character. This is decided on a process-by-process basis. The
      * group byte that is dropped is called the 'optimization group.'
      * 
-     * For Notes, the optimization gropu is always 0x1.
+     * For Notes, the optimization group is always 0x1.
      */
-    private static final short ULMBCS_DEFAULTOPTGROUP  = 0x01;
+    //private static final short ULMBCS_DEFAULTOPTGROUP  = 0x01;
     /* For 1-2-3 files, the optimization group is stored in the header of the 1-2-3
      * file.
      * In any case, when using ICU, you either pass in the
