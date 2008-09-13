@@ -307,11 +307,6 @@ public class DateIntervalFormat extends UFormat {
     private Calendar fToCalendar;
 
     /*
-     * DateTimePatternGenerator
-     */
-    private DateTimePatternGenerator fDtpng;
-
-    /*
      * Following are transient interval information
      * relavent (locale) to this formatter.
      */
@@ -354,8 +349,7 @@ public class DateIntervalFormat extends UFormat {
             DTPNG_CACHE.put(key, generator);
         } 
 
-        fDtpng = generator;
-        DateFormat dtfmt = DateFormat.getPatternInstance(skeleton,locale,fDtpng);
+        DateFormat dtfmt = DateFormat.getPatternInstance(skeleton,locale,generator);
         fDateFormat = (SimpleDateFormat)dtfmt;
         fFromCalendar = (Calendar) dtfmt.getCalendar().clone();
         fToCalendar = (Calendar) dtfmt.getCalendar().clone();
@@ -913,10 +907,12 @@ public class DateIntervalFormat extends UFormat {
      * @return             interval patterns' hash map
      */
     private HashMap initializeIntervalPattern(String fullPattern, ULocale locale) {
+        String localeKey = locale.toString();
+        DateTimePatternGenerator dtpng = (DateTimePatternGenerator)DTPNG_CACHE.get(localeKey);
         if ( fSkeleton == null ) {
             // fSkeleton is already set by getDateIntervalInstance()
             // or by getInstance(String skeleton, .... )
-            fSkeleton = fDtpng.getSkeleton(fullPattern);
+            fSkeleton = dtpng.getSkeleton(fullPattern);
         }
         String skeleton = fSkeleton;
 
@@ -964,7 +960,7 @@ public class DateIntervalFormat extends UFormat {
                 if ( date.length() == 0 ) {
                     // prefix with yMd
                     timeSkeleton = DateFormat.YEAR_NUM_MONTH_DAY + timeSkeleton;
-                    String pattern =fDtpng.getBestPattern(timeSkeleton);
+                    String pattern =dtpng.getBestPattern(timeSkeleton);
                     // for fall back interval patterns,
                     // the first part of the pattern is empty,
                     // the second part of the pattern is the full-pattern
@@ -1009,7 +1005,7 @@ public class DateIntervalFormat extends UFormat {
             */
             // prefix with yMd
             timeSkeleton = DateFormat.YEAR_NUM_MONTH_DAY + timeSkeleton;
-            String pattern =fDtpng.getBestPattern(timeSkeleton);
+            String pattern =dtpng.getBestPattern(timeSkeleton);
             // for fall back interval patterns,
             // the first part of the pattern is empty,
             // the second part of the pattern is the full-pattern
@@ -1038,19 +1034,19 @@ public class DateIntervalFormat extends UFormat {
                 // prefix skeleton with 'd'
                 skeleton = DateIntervalInfo.
                     CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.DATE] + skeleton;
-                genFallbackPattern(Calendar.DATE, skeleton, intervalPatterns);
+                genFallbackPattern(Calendar.DATE, skeleton, intervalPatterns, dtpng);
             }
             if ( !fieldExistsInSkeleton(Calendar.MONTH, dateSkeleton) ) {
                 // then prefix skeleton with 'M'
                 skeleton = DateIntervalInfo.
                     CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.MONTH] + skeleton;
-                genFallbackPattern(Calendar.MONTH, skeleton, intervalPatterns);
+                genFallbackPattern(Calendar.MONTH, skeleton, intervalPatterns, dtpng);
             }
             if ( !fieldExistsInSkeleton(Calendar.YEAR, dateSkeleton) ) {
                 // then prefix skeleton with 'y'
                 skeleton = DateIntervalInfo.
                     CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.YEAR] + skeleton;
-                genFallbackPattern(Calendar.YEAR, skeleton, intervalPatterns);
+                genFallbackPattern(Calendar.YEAR, skeleton, intervalPatterns, dtpng);
             }
             
             /*
@@ -1063,7 +1059,7 @@ public class DateIntervalFormat extends UFormat {
             // calendar, that is why need to get the CalendarData here.
             CalendarData calData = new CalendarData(locale, null);
             String[] patterns = calData.get("DateTimePatterns").getStringArray();
-            String datePattern =fDtpng.getBestPattern(dateSkeleton);
+            String datePattern =dtpng.getBestPattern(dateSkeleton);
             concatSingleDate2TimeInterval(patterns[8], datePattern, Calendar.AM_PM, intervalPatterns);
             concatSingleDate2TimeInterval(patterns[8], datePattern, Calendar.HOUR, intervalPatterns);
             concatSingleDate2TimeInterval(patterns[8], datePattern, Calendar.MINUTE, intervalPatterns);
@@ -1078,11 +1074,13 @@ public class DateIntervalFormat extends UFormat {
      * a skeleton, and a date time pattern generator
      * @param field      the largest different calendar field
      * @param skeleton   a skeleton
+     * @param dtpng      date time pattern generator
      * @param intervalPatterns interval patterns
      */
     private void genFallbackPattern(int field, String skeleton,
-                                    HashMap intervalPatterns) {
-        String pattern = fDtpng.getBestPattern(skeleton);
+                                    HashMap intervalPatterns,
+                                    DateTimePatternGenerator dtpng) {
+        String pattern = dtpng.getBestPattern(skeleton);
         // for fall back interval patterns,
         // the first part of the pattern is empty,
         // the second part of the pattern is the full-pattern
@@ -1106,7 +1104,7 @@ public class DateIntervalFormat extends UFormat {
             return;
         } else if ( skeleton.indexOf(field) == -1 ) {
             skeleton.insert(0,field);
-            genFallbackPattern(field, skeleton, fDtpng);
+            genFallbackPattern(field, skeleton, dtpng);
         }
     }
     */
