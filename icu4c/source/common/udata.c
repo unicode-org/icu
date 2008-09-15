@@ -1322,7 +1322,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
 
     /************************ Begin loop looking for ind. files ***************/
 #ifdef UDATA_DEBUG
-    fprintf(stderr, "IND: inBasename = %s, pkg=%s\n", inBasename, packageNameFromPath(path));
+    fprintf(stderr, "IND: inBasename = %s, pkg=%s\n", "(n/a)", packageNameFromPath(path));
 #endif
 
     /* End of dealing with a null basename */

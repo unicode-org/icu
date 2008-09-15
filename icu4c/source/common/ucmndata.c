@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************/
@@ -204,7 +204,7 @@ static const DataHeader *pointerTOCLookupFn(const UDataMemory *pData,
             else {
                 /* found it */
 #ifdef UDATA_DEBUG
-                fprintf(STDErr, "%s: Found.\n", toc->entry[number].entryName);
+                fprintf(stderr, "%s: Found.\n", toc->entry[number].entryName);
 #endif
                 *pLength=-1;
                 return UDataMemory_normalizeDataPointer(toc->entry[number].pHeader);
