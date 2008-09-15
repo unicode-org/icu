@@ -37,6 +37,7 @@
 U_NAMESPACE_BEGIN
 
 class TimeZone;
+class DateTimePatternGenerator;
 
 /**
  * DateFormat is an abstract class for a family of classes that convert dates and
@@ -430,6 +431,7 @@ public:
      *
      * @param skeleton  the skeleton on which date format based.
      * @param locale    the given locale.
+     * @param dtpng     the date time pattern generator.
      * @param status    Output param to be set to success/failure code.
      *                  If it is failure, the returned date formatter will
      *                  be NULL.
@@ -437,9 +439,10 @@ public:
      * @internal ICU 4.0
      */
     static DateFormat* U_EXPORT2 createPatternInstance(
-                                                const UnicodeString& skeleton,
-                                                const Locale& locale,
-                                                UErrorCode& status);
+                                        const UnicodeString& skeleton,
+                                        const Locale& locale,
+                                        DateTimePatternGenerator* dtpng,
+                                        UErrorCode& status);
 
     /**
      * Creates a time formatter with the given formatting style for the given
