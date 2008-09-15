@@ -497,8 +497,8 @@ TestLocaleStructure(void) {
             if(U_SUCCESS(errorCode)) {
                 /* It's installed, but there is no data.
                    It's installed for the g18n white paper [grhoten] */
-                log_err("ERROR: Locale %-5s not installed, and it should be!\n",
-                    uloc_getAvailable(locIndex));
+                log_err("ERROR: Locale %-5s not installed, and it should be, err %s\n",
+                    uloc_getAvailable(locIndex), u_errorName(errorCode));
             } else {
                 log_err("%%%%%%% Unexpected error %d in %s %%%%%%%",
                     u_errorName(errorCode),
