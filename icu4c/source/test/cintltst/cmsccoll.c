@@ -550,10 +550,9 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
   uint32_t tempLen;
   UChar *rulesCopy = NULL;
   UParseError parseError;
-  src.opts = &opts;
- 
   const char *colLoc;
-  
+
+  src.opts = &opts;
 
   rules = ucol_getRules(coll, &ruleLen);
   if(U_SUCCESS(*status) && ruleLen > 0) {
