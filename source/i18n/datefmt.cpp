@@ -279,26 +279,14 @@ DateFormat::createInstance()
 DateFormat* U_EXPORT2
 DateFormat::createPatternInstance(const UnicodeString& skeleton,
                                   const Locale& locale,
+                                  DateTimePatternGenerator* dtpng,
                                   UErrorCode& status) 
 {
     if ( U_FAILURE(status) ) {
         return NULL;
     }
 
-    DateTimePatternGenerator* dtptg = 
-               DateTimePatternGenerator::createInstance(locale, status);
-    if ( dtptg == NULL ) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        delete dtptg;
-        return NULL;
-    }
-    if ( U_FAILURE(status) ) {
-        delete dtptg;
-        return NULL;
-    }
-
-    const UnicodeString pattern = dtptg->getBestPattern(skeleton, status);
-    delete dtptg;
+    const UnicodeString pattern = dtpng->getBestPattern(skeleton, status);
     if ( U_FAILURE(status) ) {
         return NULL;
     }
