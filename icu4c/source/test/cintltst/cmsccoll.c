@@ -551,6 +551,9 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
   UChar *rulesCopy = NULL;
   UParseError parseError;
   src.opts = &opts;
+ 
+  const char *colLoc;
+  
 
   rules = ucol_getRules(coll, &ruleLen);
   if(U_SUCCESS(*status) && ruleLen > 0) {
@@ -1096,10 +1099,17 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
     UCAConstants *consts = NULL;
     uint32_t UCOL_RESET_TOP_VALUE, /*UCOL_RESET_TOP_CONT, */
         UCOL_NEXT_TOP_VALUE, UCOL_NEXT_TOP_CONT;
+    const char *colLoc;
     UCollator *UCA = ucol_open("root", status);
-
+    
     if (U_FAILURE(*status)) {
         log_err("Could not open root collator %s\n", u_errorName(*status));
+        return;
+    }
+    
+    colLoc = ucol_getLocaleByType(coll, ULOC_ACTUAL_LOCALE, status);
+    if (U_FAILURE(*status)) {
+        log_err("Could not get collator name: %s\n", u_errorName(*status));
         return;
     }
 
@@ -1217,7 +1227,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
                             log_verbose("Reset is tailored codepoint %04X, don't know how to continue, taking next test\n", *(rulesCopy+oldOffset));
                             return;
                         } else {
-                            log_err("couldn't find the CE\n");
+                            log_err("%s: couldn't find the CE\n", colLoc);
                             return;
                         }
                     }
@@ -1228,28 +1238,28 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
 
                 if(maxStrength == UCOL_IDENTICAL) {
                     if(baseCE != currCE || baseContCE != currContCE) {
-                        log_err("current CE  (initial strength UCOL_EQUAL)\n");
+                        log_err("%s: current CE  (initial strength UCOL_EQUAL)\n", colLoc);
                     }
                 } else {
                     if(strength == UCOL_IDENTICAL) {
                         if(lastCE != currCE || lastContCE != currContCE) {
-                            log_err("current CE  (initial strength UCOL_EQUAL)\n");
+                            log_err("%s: current CE  (initial strength UCOL_EQUAL)\n", colLoc);
                         }
                     } else {
                         if(compareCEs(currCE, currContCE, nextCE, nextContCE) > 0) {
                             /*if(currCE > nextCE || (currCE == nextCE && currContCE >= nextContCE)) {*/
-                            log_err("current CE is not less than base CE\n");
+                            log_err("%s: current CE is not less than base CE\n", colLoc);
                         }
                         if(!before) {
                             if(compareCEs(currCE, currContCE, lastCE, lastContCE) < 0) {
                                 /*if(currCE < lastCE || (currCE == lastCE && currContCE <= lastContCE)) {*/
-                                log_err("sequence of generated CEs is broken\n");
+                                log_err("%s: sequence of generated CEs is broken\n", colLoc);
                             }
                         } else {
                             before = FALSE;
                             if(compareCEs(currCE, currContCE, lastCE, lastContCE) > 0) {
                                 /*if(currCE < lastCE || (currCE == lastCE && currContCE <= lastContCE)) {*/
-                                log_err("sequence of generated CEs is broken\n");
+                                log_err("%s: sequence of generated CEs is broken\n", colLoc);
                             }
                         }
                     }
