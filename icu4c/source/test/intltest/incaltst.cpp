@@ -670,8 +670,6 @@ void IntlCalendarTest::TestJapanese3860()
         }
     }
     
-#if 0
-    // this will NOT work - *all the time*. If it is the 1st of the month, for example it will get Jan 1 heisei 1  => jan 1 showa 64,  wrong era.
     {
         // Test simple parse/format with adopt
         UDate aDate = 0; 
@@ -701,7 +699,7 @@ void IntlCalendarTest::TestJapanese3860()
             int32_t gotYear = cal2->get(UCAL_YEAR, s2);
             int32_t gotEra = cal2->get(UCAL_ERA, s2);
             int32_t expectYear = 1;
-            int32_t expectEra = JapaneseCalendar::kCurrentEra;
+            int32_t expectEra = 235; //JapaneseCalendar::kCurrentEra;
             if((gotYear!=1) || (gotEra != expectEra)) {
                 errln(UnicodeString("parse "+samplestr+" of 'y' as Japanese Calendar, expected year ") + expectYear + 
                     UnicodeString(" and era ") + expectEra +", but got year " + gotYear + " and era " + gotEra + " (Gregorian:" + str +")");
@@ -711,7 +709,7 @@ void IntlCalendarTest::TestJapanese3860()
             delete fmt;
         }
     }    
-#endif
+
     delete cal2;
     delete cal;
     delete fmt2;

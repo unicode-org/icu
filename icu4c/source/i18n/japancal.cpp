@@ -318,19 +318,17 @@ const char *JapaneseCalendar::getType() const
     return "japanese";
 }
 
-int32_t JapaneseCalendar::getDefaultMonthInYear() 
+int32_t JapaneseCalendar::getDefaultMonthInYear(int32_t eyear) 
 {
     UErrorCode status  = U_ZERO_ERROR;
     int32_t era = internalGetEra();
-    computeFields(status); // slow
-    int32_t year = getGregorianYear();
     // TODO do we assume we can trust 'era'?  What if it is denormalized?
 
-    int32_t month = GregorianCalendar::getDefaultMonthInYear();
+    int32_t month = 0;
 
     // Find out if we are at the edge of an era
 
-    if(year == kEraInfo[era].year) {
+    if(eyear == kEraInfo[era].year) {
         // Yes, we're in the first year of this era.
         return kEraInfo[era].month-1;
     }
@@ -338,15 +336,13 @@ int32_t JapaneseCalendar::getDefaultMonthInYear()
     return month;
 }
 
-int32_t JapaneseCalendar::getDefaultDayInMonth(int32_t month) 
+int32_t JapaneseCalendar::getDefaultDayInMonth(int32_t eyear, int32_t month) 
 {
     UErrorCode status  = U_ZERO_ERROR;
     int32_t era = internalGetEra();
-    computeFields(status); // slow
-    int32_t year = getGregorianYear();
-    int32_t day = GregorianCalendar::getDefaultDayInMonth(month);
+    int32_t day = 1;
 
-    if(year == kEraInfo[era].year) {
+    if(eyear == kEraInfo[era].year) {
         if(month == (kEraInfo[era].month-1)) {
             return kEraInfo[era].day;
         }
