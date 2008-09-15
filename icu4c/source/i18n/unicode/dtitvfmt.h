@@ -24,6 +24,7 @@
 #include "unicode/smpdtfmt.h"
 #include "unicode/dtintrv.h"
 #include "unicode/dtitvinf.h"
+#include "unicode/dtptngen.h"
 
 U_NAMESPACE_BEGIN
 
@@ -580,13 +581,13 @@ private:
      * DateFormat and DateIntervalInfo objects. 
      * Caller should not delete them.
      *
-     * @param dtfmt     the SimpleDateFormat object to be adopted.
+     * @param locale    the locale of this date interval formatter.
      * @param dtitvinf  the DateIntervalInfo object to be adopted.
      * @param skeleton  the skeleton of the date formatter
      * @param status    output param set to success/failure code on exit
      * @internal ICU 4.0
      */
-    DateIntervalFormat(DateFormat* dtfmt, DateIntervalInfo* dtItvInfo,
+    DateIntervalFormat(const Locale& locale, DateIntervalInfo* dtItvInfo,
                        const UnicodeString* skeleton, UErrorCode& status);
 
     
@@ -596,14 +597,14 @@ private:
      *
      * It is a wrapper of the constructor.
      *
-     * @param dtfmt     the DateFormat object to be adopted.
+     * @param locale    the locale of this date interval formatter.
      * @param dtitvinf  the DateIntervalInfo object to be adopted.
      * @param skeleton  the skeleton of this formatter.
      * @param status    Output param set to success/failure code.
      * @return          a date time interval formatter which the caller owns.
      * @internal ICU 4.0
      */
-    static DateIntervalFormat* U_EXPORT2 create(DateFormat* dtfmt,
+    static DateIntervalFormat* U_EXPORT2 create(const Locale& locale,
                                                 DateIntervalInfo* dtitvinf,
                                                 const UnicodeString* skeleton,
                                                 UErrorCode& status);
@@ -684,13 +685,11 @@ private:
      * a skeleton, and a date time pattern generator.
      * @param field      the largest different calendar field
      * @param skeleton   a skeleton
-     * @param dtpng      date time pattern generator
      * @param status     output param set to success/failure code on exit
      * @internal ICU 4.0 
      */
     void setFallbackPattern(UCalendarDateFields field, 
                             const UnicodeString& skeleton,
-                            DateTimePatternGenerator* dtpng,
                             UErrorCode& status);
                             
 
@@ -923,6 +922,11 @@ private:
      */
     Calendar* fFromCalendar;
     Calendar* fToCalendar;
+
+    /**
+     * Date time pattern generator
+     */
+    DateTimePatternGenerator* fDtpng;
 
     /**
      * Following are interval information relavent (locale) to this formatter.

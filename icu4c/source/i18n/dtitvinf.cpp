@@ -317,7 +317,8 @@ DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& err)
     ures_close(calBundle);
     ures_close(rb);
     status = U_ZERO_ERROR;
-    locNameLen = uloc_getParent(parentLocale, parentLocale,50,&status);
+    locNameLen = uloc_getParent(parentLocale, parentLocale,
+                                ULOC_FULLNAME_CAPACITY,&status);
   } while ( locNameLen > 0 );
 }
 
