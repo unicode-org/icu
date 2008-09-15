@@ -2511,7 +2511,7 @@ int32_t Calendar::handleComputeJulianDay(UCalendarDateFields bestField)  {
     if(isSet(UCAL_MONTH)) {
         month = internalGet(UCAL_MONTH);
     } else {
-        month = getDefaultMonthInYear();
+        month = getDefaultMonthInYear(year);
     }
 
     int32_t julianDay = handleComputeMonthStart(year, useMonth ? month : 0, useMonth);
@@ -2523,7 +2523,7 @@ int32_t Calendar::handleComputeJulianDay(UCalendarDateFields bestField)  {
         if(isSet(UCAL_DAY_OF_MONTH)) {
             dayOfMonth = internalGet(UCAL_DAY_OF_MONTH,1);
         } else {
-            dayOfMonth = getDefaultDayInMonth(month);
+            dayOfMonth = getDefaultDayInMonth(year, month);
         }
         return julianDay + dayOfMonth;
     }
@@ -2678,13 +2678,13 @@ int32_t Calendar::handleComputeJulianDay(UCalendarDateFields bestField)  {
 }
 
 int32_t
-Calendar::getDefaultMonthInYear() 
+Calendar::getDefaultMonthInYear(int32_t /*eyear*/) 
 {
     return 0;
 }
 
 int32_t
-Calendar::getDefaultDayInMonth(int32_t /*month*/) 
+Calendar::getDefaultDayInMonth(int32_t /*eyear*/, int32_t /*month*/) 
 {
     return 1;
 }
