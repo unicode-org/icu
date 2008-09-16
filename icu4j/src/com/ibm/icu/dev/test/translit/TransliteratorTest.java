@@ -456,6 +456,9 @@ public class TransliteratorTest extends TestFmwk {
     
     public void TestVariableNames() {
         Transliterator gl = Transliterator.createFromRules("foo", "$\u2DC0 = qy; a>b;", Transliterator.FORWARD);
+        if (gl == null) {
+            errln("FAIL: null Transliterator returned.");
+        }
     }
 
     /**
