@@ -621,12 +621,12 @@ extern U_IMPORT char *U_TZNAME[];
 #define TZDEFAULT       "/etc/localtime"
 #define TZZONEINFO      "/usr/share/zoneinfo/"
 #endif
-static char gTimeZoneBuffer[PATH_MAX];
-static char *gTimeZoneBufferPtr = NULL;
-#endif
 #if U_HAVE_DIRENT_H
 #define SEARCH_TZFILE
 #include <dirent.h>  /* Needed to search through system timezone files */
+#endif
+static char gTimeZoneBuffer[PATH_MAX];
+static char *gTimeZoneBufferPtr = NULL;
 #endif
 
 #ifndef U_WINDOWS
