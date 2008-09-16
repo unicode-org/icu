@@ -6,16 +6,17 @@
  */
 package com.ibm.icu.dev.test.calendar;
 
+import java.text.ParseException;
+import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Locale;
 
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.JapaneseCalendar;
 import com.ibm.icu.util.TimeZone;
-import java.text.ParsePosition;
-import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -164,6 +165,38 @@ public class JapaneseTest extends CalendarTest {
             errln("Expected year " + expectYear + ", era " + expectEra +", but got year " + gotYear + " and era " + gotEra + ", == " + inEn);
         } else {
             logln("Got year " + gotYear + " and era " + gotEra + ", == " + inEn);
+        }
+
+        // Test parse with missing era (should default to current era, heisei)
+        // Test parse with incomplete information
+        logln("Testing parse w/ just year...");
+        Calendar cal2 = new JapaneseCalendar(loc);
+        SimpleDateFormat fmt = new SimpleDateFormat("y", loc);
+        SimpleDateFormat fmt2 = new SimpleDateFormat("HH:mm:ss.S MMMM d, yyyy G", new ULocale("en_US@calendar=gregorian"));
+        cal2.clear();
+        String samplestr = "1";
+        logln("Test Year: " + samplestr);
+        try {
+            aDate = fmt.parse(samplestr);
+        } catch (ParseException pe) {
+            errln("Error parsing " + samplestr);
+        }
+        ParsePosition pp = new ParsePosition(0);
+        fmt.parse(samplestr, cal2, pp);
+        logln("cal2 after 1 parse:");
+        String str = fmt2.format(aDate);
+        logln("as Gregorian Calendar: " + str);
+
+        cal2.setTime(aDate);
+        gotYear = cal2.get(Calendar.YEAR);
+        gotEra = cal2.get(Calendar.ERA);
+        expectYear = 1;
+        expectEra = JapaneseCalendar.CURRENT_ERA;
+        if((gotYear != 1) || (gotEra != expectEra)) {
+            errln("parse "+ samplestr + " of 'y' as Japanese Calendar, expected year " + expectYear + 
+                " and era " + expectEra + ", but got year " + gotYear + " and era " + gotEra + " (Gregorian:" + str +")");
+        } else {            
+            logln(" year: " + gotYear + ", era: " + gotEra);
         }
     }
 
