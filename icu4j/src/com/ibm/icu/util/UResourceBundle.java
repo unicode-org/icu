@@ -318,7 +318,7 @@ public abstract class UResourceBundle extends ResourceBundle{
     public static void resetBundleCache()
     {
     	//TODO figure a way around this method(see method comment)
-    	BUNDLE_CACHE = null;
+    	BUNDLE_CACHE = new SimpleCache();
     }
     
     private static void addToCache(ResourceCacheKey key, UResourceBundle b) {
