@@ -463,6 +463,16 @@ fi
 
 AC_SUBST(U_HAVE_INTTYPES_H)
 
+AC_CHECK_HEADERS(dirent.h)
+if test $ac_cv_header_dirent_h = no; then
+ U_HAVE_DIRENT_H=0
+else
+ U_HAVE_DIRENT_H=1
+fi
+
+AC_SUBST(U_HAVE_DIRENT_H)
+
+
 AC_ARG_WITH(iostream,
 	[  --with-iostream=version specify the version of iostream to use (none, old, std, auto) [default=auto]],
 	[case "${withval}" in
