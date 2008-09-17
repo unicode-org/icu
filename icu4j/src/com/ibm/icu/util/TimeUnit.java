@@ -29,13 +29,13 @@ public class TimeUnit extends MeasureUnit {
      * @provisional This API might change or be removed in a future release.
      */
     public static TimeUnit
-    SECOND = new TimeUnit("SECOND"),
-    MINUTE = new TimeUnit("MINUTE"),
-    HOUR = new TimeUnit("HOUR"),
-    DAY = new TimeUnit("DAY"),
-    WEEK = new TimeUnit("WEEK"),
-    MONTH = new TimeUnit("MONTH"),
-    YEAR = new TimeUnit("YEAR");
+    SECOND = new TimeUnit("second"),
+    MINUTE = new TimeUnit("minute"),
+    HOUR = new TimeUnit("hour"),
+    DAY = new TimeUnit("day"),
+    WEEK = new TimeUnit("week"),
+    MONTH = new TimeUnit("month"),
+    YEAR = new TimeUnit("year");
 
     private TimeUnit(String name) {
         this.name = name;
@@ -53,6 +53,8 @@ public class TimeUnit extends MeasureUnit {
 
     /**
      * A string representation for debugging.
+     * It is for debugging purpose. The value might change.
+     * Please do not count on the value.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
