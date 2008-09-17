@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.Vector;
 
 import com.ibm.icu.impl.URLHandler.URLVisitor;
 import com.ibm.icu.util.StringTokenizer;
@@ -875,7 +876,7 @@ public  class ICUResourceBundle extends UResourceBundle {
 
                 // %%ALIAS is such a hack!
                 if (itemKey.equals("%%ALIAS")) {
-                    String locale = b.getString();
+                	String locale = b.getString();
                     UResourceBundle actual =  UResourceBundle.getBundleInstance(baseName, locale);
                     return (ICUResourceBundleImpl.ResourceTable) actual;
                 }else{
@@ -1225,5 +1226,198 @@ public  class ICUResourceBundle extends UResourceBundle {
     protected UResourceBundle handleGetImpl(int index, HashMap table, UResourceBundle requested,
             boolean[] isAlias) {
         return null;
+    }
+    
+    
+     // TODO Below is a set of workarounds created for org.unicode.cldr.icu.ICU2LDMLWriter
+     /* 
+      * Calling getKeys() on a table that has alias's can throw a NullPointerException if parent is not set, 
+      * see trac bug: 6514
+      * -Brian Rower - IBM - Sept. 2008
+      */
+    
+    /**
+     * Returns the resource handle for the given index within the calling resource table.
+     * 
+     * @internal
+     * @deprecated This API is ICU internal only and a workaround see ticket #6514.
+     * @author Brian Rower
+     */
+    private long getResourceHandle(int index)
+    {
+    	//TODO this is part of a workaround for ticket #6514
+    	//if it's out of range, return -1
+    	if(index > this.size)
+    	{
+    		return -1;
+    	}
+    	//get the offset of the calling tables resource
+    	int offset = RES_GET_OFFSET(resource);
+    	
+    	//move past the 2 byte count number
+    	offset += getCharOffset(1);
+    	//move past the array of 2 byte key string offsets
+    	offset += getCharOffset(size);
+    	//move past the padding if it exists...it's either 2 bytes or no bytes
+    	offset += getCharOffset(~size & 1);
+		
+    	//and then to the proper int in the array of resources
+    	offset += getIntOffset(index);
+		return (UNSIGNED_INT_MASK) & ICUResourceBundle.getInt(rawData, offset);
+    }
+    
+    /**
+     * Determines if the object at the specified index of the calling resource table
+     * is an alias. If it is, returns true
+     * 
+     * @param index The index of the resource to check
+     * @returns True if the resource at 'index' is an alias, false otherwise.
+     * 
+     * @internal
+     * @deprecated This API is ICU internal only and part of a work around see ticket #6514
+     * @author Brian Rower
+     */
+    public boolean isAlias(int index)
+    {
+    	//TODO this is part of a workaround for ticket #6514
+    	//if index is out of the resource, return false.
+    	if(index > size)
+    	{
+    		return false;
+    	}
+    	//parent resource must be a table to call this
+    	if(RES_GET_TYPE(this.resource) != TABLE)
+    	{
+    		return false;
+    	}
+    	long res = getResourceHandle(index);
+		return RES_GET_TYPE(res) == ALIAS ? true : false;
+    }
+    
+    /**
+     * 
+     * @internal
+     * @deprecated This API is ICU internal only and part of a workaround see ticket #6514.
+     * @author Brian Rower
+     */
+    public boolean isAlias()
+    {
+    	//TODO this is part of a workaround for ticket #6514
+    	return RES_GET_TYPE(this.resource) == ALIAS;
+    }
+    
+    /**
+     * Determines if the object with the specified key 
+     * is an alias. If it is, returns true
+     * 
+     * @param key The key of the resource to check
+     * @returns True if the resource with 'key' is an alias, false otherwise.
+     * 
+      * @internal
+     * @deprecated This API is ICU internal only and part of a workaround see ticket #6514.
+     * @author Brian Rower
+     */
+    public boolean isAlias(String k)
+    {
+    	//TODO this is part of a workaround for ticket #6514
+    	//this only applies to tables
+    	if(RES_GET_TYPE(this.resource) != TABLE)
+    	{
+    		return false;
+    	}
+    	int i = getIndexOfKey(k);
+    	if(i > size || i < 0)
+    	{
+    		return false;	
+    	}
+    	return isAlias(i);
+    }
+    
+    private int getIndexOfKey(String k)
+    {
+    	//TODO this is part of a workaround for ticket #6514
+    	if(RES_GET_TYPE(this.resource) != TABLE)
+    	{
+    		return -1;
+    	}
+    	int index;
+        for(index = 0; index < size; index++)
+        {
+        	String curKey = getKey(index); 
+			if(k.equals(curKey))
+			{
+				return index;
+			}
+        }
+        return -1;
+    }
+    
+    /**
+     * This method can be used to retrieve the underlying alias path (aka where the alias points to)
+     * This method was written to allow conversion from ICU back to LDML format.
+     * 
+     * @param index
+     * @return
+     * @author Brian Rower
+     * @internal
+     * @deprecated This API is ICU internal only.
+     * @author Brian Rower
+     */
+    public String getAliasPath(int index)
+    {
+    	//TODO cannot allow alias path to to end up in public API
+    	if(!isAlias(index) || index > this.size)
+    	{
+    		return "";
+    	}
+    	
+    	return getStringValue(getResourceHandle(index));
+    }
+    
+    
+    /**
+     * 
+     * @internal
+     * @deprecated This API is ICU internal only
+     * @author Brian Rower
+     */
+    public String getAliasPath()
+    {
+    	//TODO cannot allow alias path to to end up in public API
+    	return getStringValue(resource);
+    }
+    
+    /**
+     * 
+     * @internal
+     * @deprecated This API is ICU internal only
+     * @author Brian Rower
+     */
+    public String getAliasPath(String k)
+    {
+    	//TODO cannot allow alias path to to end up in public API
+    	return getAliasPath(getIndexOfKey(k));
+    }
+    
+    /*
+     * Helper method for getKeysSafe
+     */
+    private String getKey(int index)
+    {
+    	//TODO this is part of a workaround for ticket #6514
+    	if(index > this.size)
+    	{
+    		return "";
+    	}
+    	//the offset of the table
+    	int offset = RES_GET_OFFSET(resource);
+    	
+    	//move past the 2 byte number for the count
+    	offset += getCharOffset(1);
+    	
+    	//grab the key string offset from the array
+        offset = getOffset(offset, index);
+        
+        return RES_GET_KEY(rawData, offset).toString();
     }
 }
