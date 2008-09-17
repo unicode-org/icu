@@ -1420,4 +1420,32 @@ public  class ICUResourceBundle extends UResourceBundle {
         
         return RES_GET_KEY(rawData, offset).toString();
     }
+    
+    /**
+     * Returns an Enumeration of the keys belonging to this table or array.
+     * This method differs from the getKeys() method by not following alias paths. This method exposes 
+     * underlying alias's. For all general purposes of the ICU resource bundle please use getKeys().
+     * 
+     * @return Keys in this table or array.
+     * @internal
+     * @deprecated This API is ICU internal only and a workaround see ticket #6514.
+     * @author Brian Rower
+     */
+    public Enumeration getKeysSafe()
+    {
+    	//TODO this is part of a workaround for ticket #6514
+    	//the safeness only applies to tables, so use the other method if it's not a table
+    	if(RES_GET_TYPE(this.resource) != TABLE)
+    	{
+    		return getKeys();
+    	}
+    	Vector v = new Vector();
+    	int index;
+        for(index = 0; index < size; index++)
+        {
+        	String curKey = getKey(index); 
+			v.add(curKey);
+        }
+    	return v.elements();
+    }
 }
