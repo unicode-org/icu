@@ -1705,8 +1705,11 @@ int_getDefaultCodepage()
 
 #elif defined(OS390)
     static char codepage[64];
-    sprintf(codepage,"%63s" UCNV_SWAP_LFNL_OPTION_STRING, nl_langinfo(CODESET));
+
+    strncpy(codepage, nl_langinfo(CODESET),63-strlen(UCNV_SWAP_LFNL_OPTION_STRING));
+    strcat(codepage,UCNV_SWAP_LFNL_OPTION_STRING);
     codepage[63] = 0; /* NULL terminate */
+
     return codepage;
 
 #elif defined(XP_MAC)
