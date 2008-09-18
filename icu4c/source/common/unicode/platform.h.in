@@ -16,6 +16,9 @@
 ******************************************************************************
 */
 
+#ifndef _PLATFORM_H
+#define _PLATFORM_H
+
 /**
  * \file 
  * \brief Basic types for the platform 
@@ -229,10 +232,17 @@ typedef unsigned int uint32_t;
 /* Information about wchar support                                           */
 /*===========================================================================*/
 
+#ifndef U_HAVE_WCHAR_H
 #define U_HAVE_WCHAR_H      @U_HAVE_WCHAR_H@
-#define U_SIZEOF_WCHAR_T    @U_SIZEOF_WCHAR_T@
+#endif
 
+#ifndef U_SIZEOF_WCHAR_T
+#define U_SIZEOF_WCHAR_T    @U_SIZEOF_WCHAR_T@
+#endif
+
+#ifndef U_HAVE_WCSCPY
 #define U_HAVE_WCSCPY       @U_HAVE_WCSCPY@
+#endif
 
 /**
  * \def U_DECLARE_UTF16
@@ -259,8 +269,13 @@ typedef unsigned int uint32_t;
 /* Information about POSIX support                                           */
 /*===========================================================================*/
 
+#ifndef U_HAVE_NL_LANGINFO_CODESET
 #define U_HAVE_NL_LANGINFO_CODESET  @U_HAVE_NL_LANGINFO_CODESET@
+#endif
+
+#ifndef U_NL_LANGINFO_CODESET
 #define U_NL_LANGINFO_CODESET       @U_NL_LANGINFO_CODESET@
+#endif
 
 #if @U_HAVE_TZSET@
 #define U_TZSET         @U_TZSET@
@@ -312,10 +327,16 @@ typedef unsigned int uint32_t;
 #   endif
 #endif
 
+#ifndef U_ALIGN_CODE
 #define U_ALIGN_CODE(n) 
+#endif
 
 /*===========================================================================*/
 /* Programs used by ICU code                                                 */
 /*===========================================================================*/
 
+#ifndef U_MAKE
 #define U_MAKE  "@U_MAKE@"
+#endif
+
+#endif
