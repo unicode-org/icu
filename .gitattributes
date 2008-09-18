@@ -235,6 +235,8 @@ icu4c/source/i18n/dtitvfmt.cpp -text
 icu4c/source/i18n/dtitvinf.cpp -text
 icu4c/source/i18n/unicode/dtitvfmt.h -text
 icu4c/source/i18n/unicode/dtitvinf.h -text
+icu4c/source/i18n/wintzimpl.cpp -text
+icu4c/source/i18n/wintzimpl.h -text
 icu4c/source/samples/layout/cgnomelayout.c -text
 icu4c/source/samples/layout/readme.html svneol=native#text/html
 icu4c/source/samples/ucnv/data02.bin -text svneol=unset#application/octet-stream
