@@ -264,8 +264,8 @@ public class TimeUnitFormat extends MeasureFormat {
             Map countToPattern = (Map) timeUnitToCountToPatterns.get(timeUnit);
             for (Iterator it2 = countToPattern.keySet().iterator(); it2.hasNext();) {
               String count = (String) it2.next();
-              for (int style = FULL_NAME; style < TOTAL_STYLES; ++style) {
-                MessageFormat pattern = (MessageFormat)((Object[])countToPattern.get(count))[style];
+              for (int styl = FULL_NAME; styl < TOTAL_STYLES; ++styl) {
+                MessageFormat pattern = (MessageFormat)((Object[])countToPattern.get(count))[styl];
                 pos.setErrorIndex(-1);
                 pos.setIndex(oldPos);
                 // see if we can parse
@@ -453,7 +453,7 @@ public class TimeUnitFormat extends MeasureFormat {
     // if the pattern is not found even in root, fallback to 
     // using patterns of plural count "other", 
     // then, "other" is the searchPluralCount.
-    private void searchInTree(String resourceKey, int style,
+    private void searchInTree(String resourceKey, int styl,
                               TimeUnit timeUnit, String srcPluralCount,
                               String searchPluralCount, Map countToPatterns) {
         ULocale parentLocale=locale;
@@ -474,7 +474,7 @@ public class TimeUnitFormat extends MeasureFormat {
                     pair = new Object[2];
                     countToPatterns.put(srcPluralCount, pair);
                 }
-                pair[style] = messageFormat;
+                pair[styl] = messageFormat;
                 return;
             } catch ( MissingResourceException e ) {
             }
@@ -508,10 +508,10 @@ public class TimeUnitFormat extends MeasureFormat {
                 pair = new Object[2];
                 countToPatterns.put(srcPluralCount, pair);
             }
-            pair[style] = messageFormat;
+            pair[styl] = messageFormat;
         } else {
             // fall back to rule "other", and search in parents
-            searchInTree(resourceKey, style, timeUnit, srcPluralCount, "other", countToPatterns);
+            searchInTree(resourceKey, styl, timeUnit, srcPluralCount, "other", countToPatterns);
         }
     }
 }
