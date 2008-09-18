@@ -161,8 +161,10 @@ public class TimeUnitFormat extends MeasureFormat {
      * @provisional This API might change or be removed in a future release.
      */
     public TimeUnitFormat setLocale(ULocale locale) {
-        this.locale = locale;
-        isReady = false;
+        if ( locale != this.locale ) {
+            this.locale = locale;
+            isReady = false;
+        }
         return this;
     }
     
@@ -174,9 +176,7 @@ public class TimeUnitFormat extends MeasureFormat {
      * @provisional This API might change or be removed in a future release.
      */
     public TimeUnitFormat setLocale(Locale locale) {
-        this.locale = ULocale.forLocale(locale);
-        isReady = false;
-        return this;
+        return setLocale(ULocale.forLocale(locale));
     }
     
     /**
@@ -187,6 +187,9 @@ public class TimeUnitFormat extends MeasureFormat {
      * @provisional This API might change or be removed in a future release.
      */
     public TimeUnitFormat setNumberFormat(NumberFormat format) {
+        if (format == this.format) {
+            return this;
+        }
         if ( format == null ) {
             if ( locale == null ) {
                 isReady = false;
@@ -243,6 +246,7 @@ public class TimeUnitFormat extends MeasureFormat {
 
     /**
      * Parse a TimeUnitAmount.
+     * @see java.text.Format#parse(java.lang.String, java.text.FieldPosition)
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
@@ -315,9 +319,15 @@ public class TimeUnitFormat extends MeasureFormat {
                 resultNumber = new Integer(3);
             }
         }
-        pos.setIndex(newPos);
-        pos.setErrorIndex(-1);
-        return new TimeUnitAmount(resultNumber, resultTimeUnit);
+        if (longestParseDistance == 0) {
+            pos.setIndex(oldPos);
+            pos.setErrorIndex(0);
+            return null;
+        } else {
+            pos.setIndex(newPos);
+            pos.setErrorIndex(-1);
+            return new TimeUnitAmount(resultNumber, resultTimeUnit);
+        }
     }
     
     
