@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2006, International Business Machines
+*   Copyright (C) 2005-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -29,7 +29,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "locmap.h"
-#include "wintz.h"
+#include "wintzimpl.h"
 
 #   define WIN32_LEAN_AND_MEAN
 #   define VC_EXTRALEAN

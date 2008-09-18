@@ -19,6 +19,7 @@
 #include "cstring.h"
 
 #include "unicode/ustring.h"
+#include "unicode/ures.h"
 
 #   define WIN32_LEAN_AND_MEAN
 #   define VC_EXTRALEAN
@@ -28,22 +29,15 @@
 #   define NOMCX
 #include <windows.h>
 
+#if 0
+/* Note: The structs and the macro definitions here are deprecated due to the
+ * new implementation not using any static tables. 9/15/2008 Michael Ow
+ */
 #define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
 #define NEW_ARRAY(type,count) (type *) uprv_malloc((count) * sizeof(type))
 #define DELETE_ARRAY(array) uprv_free((void *) (array))
 
 #define ICUID_STACK_BUFFER_SIZE 32
-
-/* The layout of the Tzi value in the registry */
-typedef struct
-{
-    int32_t bias;
-    int32_t standardBias;
-    int32_t daylightBias;
-    SYSTEMTIME standardDate;
-    SYSTEMTIME daylightDate;
-} TZI;
-
 typedef struct
 {
     const char *icuid;
@@ -54,6 +48,17 @@ typedef struct {
     const char* winid;
     const char* altwinid;
 } WindowsZoneRemap;
+#endif
+
+/* The layout of the Tzi value in the registry */
+typedef struct
+{
+    int32_t bias;
+    int32_t standardBias;
+    int32_t daylightBias;
+    SYSTEMTIME standardDate;
+    SYSTEMTIME daylightDate;
+} TZI;
 
 /**
  * Various registry keys and key fragments.
@@ -104,6 +109,9 @@ enum {
 };
 
 # if 0
+/* Note: The static tables here are disabled and deprecated due to the new implementation
+ * using resource bundles instead. 9/15/2008 Michael Ow
+ */
 /*
  * ZONE_MAP from supplementalData.txt
  */
@@ -192,7 +200,6 @@ static const WindowsICUMap NEW_ZONE_MAP[] = {
     {"Pacific/Kwajalein",    "Dateline"},
     {"Pacific/Tongatapu",    "Tonga"}
 };
-#endif
 
 /* NOTE: Some Windows zone ids appear more than once. In such cases the
  * ICU zone id from the first one is the preferred match.
@@ -586,6 +593,7 @@ static const WindowsZoneRemap ZONE_REMAP[] = {
     "Central Standard Time (Mexico)",  "+Mexico",
     NULL,                   NULL,
 };
+#endif
 
 static int32_t gWinType = 0;
 
@@ -616,6 +624,8 @@ static int32_t detectWindowsType()
     return winType+1; // +1 to bring it inline with the enum
 }
 
+#if 0
+/* Note: This is method is deprecated and disabled. See uprv_getWindowsTimeZoneInfo() below. */
 /*
  * TODO: Binary search sorted ZONE_MAP...
  * (u_detectWindowsTimeZone() needs them sorted by offset...)
@@ -651,10 +661,11 @@ static const char *findWindowsZoneID(const UChar *icuid, int32_t length)
 
     return result;
 }
+#endif
 
 static LONG openTZRegKey(HKEY *hkey, const char *winid)
 {
-    char subKeyName[96]; /* TODO: why 96?? */
+    char subKeyName[110]; /* TODO: why 96?? */
     char *name;
     LONG result;
 
@@ -672,7 +683,7 @@ static LONG openTZRegKey(HKEY *hkey, const char *winid)
         (winid[strlen(winid) - 1] != ')') &&
         !(gWinType == WIN_NT_TYPE && strcmp(winid, "GMT") == 0))
     {
-        uprv_strcat(subKeyName, STANDARD_TIME_REGKEY);
+        /* uprv_strcat(subKeyName, STANDARD_TIME_REGKEY); */
     }
 
     result = RegOpenKeyExA(HKEY_LOCAL_MACHINE,
@@ -680,7 +691,14 @@ static LONG openTZRegKey(HKEY *hkey, const char *winid)
                             0,
                             KEY_QUERY_VALUE,
                             hkey);
-
+    return result;
+#if 0
+    /* Note: This portion of the code is deprecated due to the new implementation
+     * avoiding the use of static tables. Caution should be used in removing this 
+     * code completely because the fallback method being implemented here may be 
+     * actually be needed. Only after thorough testing should this code be removed. 
+     * 9/15/2008 Michael Ow
+     */
     if (result != ERROR_SUCCESS) {
         int i;
 
@@ -700,6 +718,7 @@ static LONG openTZRegKey(HKEY *hkey, const char *winid)
             }
         }
     }
+#endif
 
     return result;
 }
@@ -727,6 +746,8 @@ static LONG getTZI(const char *winid, TZI *tzi)
     return result;
 }
 
+#if 0
+/* This method is deprecated and the new implementation, not using static tables, is in i18n\wintzimpl.h */
 U_CAPI UBool U_EXPORT2
 uprv_getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid, int32_t length)
 {
@@ -752,6 +773,7 @@ uprv_getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid,
 
     return FALSE;
 }
+#endif
 
 /*
   This code attempts to detect the Windows time zone, as set in the
@@ -807,13 +829,16 @@ uprv_getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid,
  */
 U_CFUNC const char* U_EXPORT2
 uprv_detectWindowsTimeZone() {
+    UErrorCode status = U_ZERO_ERROR;
+    UResourceBundle* supplBundle = NULL;
+    UResourceBundle* mapTZBundle = NULL;
+    UResourceBundle* winTZBundle = NULL;
+    char* icuid = NULL;
+
     LONG result;
-    HKEY hkey;
     TZI tziKey;
     TZI tziReg;
     TIME_ZONE_INFORMATION apiTZI;
-    int firstMatch, lastMatch;
-    int j;
 
     /* Obtain TIME_ZONE_INFORMATION from the API, and then convert it
        to TZI.  We could also interrogate the registry directly; we do
@@ -828,6 +853,54 @@ uprv_detectWindowsTimeZone() {
     uprv_memcpy((char *)&tziKey.daylightDate, (char*)&apiTZI.DaylightDate,
            sizeof(apiTZI.DaylightDate));
 
+    supplBundle = ures_openDirect(NULL, "supplementalData", &status);
+    mapTZBundle = ures_getByKey(supplBundle, "mapTimezones", NULL, &status);
+    winTZBundle = ures_getByKey(mapTZBundle, "windows", NULL, &status);
+
+    /* Note: We get the winid not from static tables but from resource bundle. */
+    while (U_SUCCESS(status) && ures_hasNext(winTZBundle)) {
+        const char* winid;
+        int32_t len;
+        UResourceBundle* winTZ = ures_getNextResource(winTZBundle, NULL, &status);
+        if (U_FAILURE(status)) {
+            break;
+        }
+        winid = ures_getKey(winTZ);
+        result = getTZI(winid, &tziReg);
+
+        if (result == ERROR_SUCCESS) {
+            /* Windows alters the DaylightBias in some situations.
+               Using the bias and the rules suffices, so overwrite
+               these unreliable fields. */
+            tziKey.standardBias = tziReg.standardBias;
+            tziKey.daylightBias = tziReg.daylightBias;
+
+            if (uprv_memcmp((char *)&tziKey, (char*)&tziReg, sizeof(tziKey)) == 0) {
+                const UChar* icuTZ = ures_getString(winTZ, &len, &status);
+                if (U_SUCCESS(status)) {
+                    icuid = (char*)uprv_malloc(sizeof(char) * (len + 1));
+                    uprv_memset(icuid, 0, len + 1);
+                    u_austrncpy(icuid, icuTZ, len);
+                }
+            }
+        }
+        ures_close(winTZ);
+        if (icuid != NULL) {
+            break;
+        }
+    }
+
+    ures_close(winTZBundle);
+    ures_close(mapTZBundle);
+    ures_close(supplBundle);
+
+    return icuid;
+#if 0
+    /* Note: The following is the original implementation and can be safely removed. 9/15/2008 Michael Ow */
+    HKEY hkey;
+    int firstMatch, lastMatch;
+    int j;
+    
     /* For each zone that can be identified by Offset+Rules, see if we
        have a match.  Continue scanning after finding a match,
        recording the index of the first and the last match.  We have
@@ -836,13 +909,17 @@ uprv_detectWindowsTimeZone() {
     firstMatch = -1;
     lastMatch = -1;
     for (j=0; ZONE_MAP[j].icuid; j++) {
+        const char* winid;
+        int32_t len;
+        
+        winid = ures_getKey(winTZ);
         result = getTZI(ZONE_MAP[j].winid, &tziReg);
 
         if (result == ERROR_SUCCESS) {
             /* Assume that offsets are grouped together, and bail out
                when we've scanned everything with a matching
                offset. */
-            if (firstMatch >= 0 && tziKey.bias != tziReg.bias) {
+            if ( firstMatch >= 0 && tziKey.bias != tziReg.bias) {
                 break;
             }
 
@@ -928,6 +1005,7 @@ uprv_detectWindowsTimeZone() {
     }
 
     return ZONE_MAP[firstMatch].icuid;
+#endif
 }
 
 #endif /* #ifdef U_WINDOWS */
