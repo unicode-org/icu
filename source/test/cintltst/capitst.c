@@ -1,7 +1,6 @@
 /********************************************************************
- * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation and
- * others. All Rights Reserved.
+ * Copyright (c) 2001-2008 International Business Machines 
+ * Corporation and others. All Rights Reserved.
  ********************************************************************/
 /*****************************************************************************
 *
@@ -10,6 +9,7 @@
 * Modification History:
 *        Name                     Description            
 *     Madhu Katragadda             Ported for C API
+*     Brian Rower                  Added TestOpenVsOpenRules
 ******************************************************************************
 *//* C API TEST For COLLATOR */
 
@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "unicode/uloc.h"
+#include "unicode/ulocdata.h"
 #include "unicode/ustring.h"
 #include "unicode/ures.h"
 #include "unicode/ucoleitr.h"
@@ -127,6 +128,7 @@ void addCollAPITest(TestNode** root)
     addTest(root, &TestGetContractionsAndUnsafes, "tscoll/capitst/TestGetContractionsAndUnsafes");
     addTest(root, &TestOpenBinary, "tscoll/capitst/TestOpenBinary");
     addTest(root, &TestDefault, "tscoll/capitst/TestDefault");
+    addTest(root, &TestOpenVsOpenRules, "tscoll/capitst/TestOpenVsOpenRules");
 }
 
 void TestGetSetAttr(void) {
@@ -856,6 +858,124 @@ void TestCloneBinary(){
     free(buffer);
     ucol_close(c);
     ucol_close(col);
+}
+/*
+    TestOpenVsOpenRules ensures that collators from ucol_open and ucol_openRules 
+    will generate identical sort keys 
+*/
+void TestOpenVsOpenRules(){
+    
+    /* create an array of all the locales */
+    int x;
+    int32_t numLocales = uloc_countAvailable();
+    
+    UErrorCode err = U_ZERO_ERROR;
+
+    /* create a set of standard characters that aren't very interesting...
+    and then we can find some interesting ones later */
+
+    USet *stdSet = uset_open(0x61, 0x7A);
+    uset_addRange(stdSet, 0x41, 0x5A);
+    uset_addRange(stdSet, 0x30, 0x39);
+    int32_t sizeOfStdSet = uset_size(stdSet);
+
+    int adder = 1;
+    if(QUICK)
+    {
+        adder = 10;
+    }
+
+    for(x = 0; x < numLocales; x+=adder){
+        char* curLoc = uloc_getAvailable(x);
+        log_verbose("Processing %s\n", curLoc);
+        UChar *str;
+        UCollator * c1;
+        UCollator * c2;
+        const UChar* rules;
+        int32_t rulesLength;
+        int32_t sortKeyLen1, sortKeyLen2;
+        uint8_t *sortKey1 = NULL, *sortKey2 = NULL;
+        
+        /* create a collator the normal API way */
+        c1 = ucol_open(curLoc, &err);
+        if (U_FAILURE(err)) {
+            log_err("ERROR: Normal collation creation failed with locale: %s : %s\n", curLoc, myErrorName(err));
+            return;
+        }
+
+        /* grab the rules */
+        rules = ucol_getRules(c1, &rulesLength);
+
+        /* use those rules to create a collator from rules */
+        c2 = ucol_openRules(rules, rulesLength, UCOL_DEFAULT, UCOL_DEFAULT_STRENGTH, NULL, &err);
+        if (U_FAILURE(err)) {
+            log_err("ERROR: Creating collator from rules failed with locale: %s : %s\n", curLoc, myErrorName(err));
+            return;
+        }
+        
+        ULocaleData *uld = ulocdata_open(curLoc, &err);
+        
+        /*now that we have some collators, we get several strings */
+        int y;
+        for(y = 0; y < 5; y++){
+        
+            /* get a set of ALL the characters in this locale */
+            USet *eSet =  ulocdata_getExemplarSet(uld, NULL, 0, ULOCDATA_ES_STANDARD, &err);
+            int32_t eSize = uset_size(eSet);
+            
+            /* make a string with these characters in it */
+            int strSize = (rand()%40) + 1;
+            str = (UChar*)malloc(sizeof(UChar) * (strSize + 1));
+            int z;
+            for(z = 0; z < strSize; z++){
+                str[z] = uset_charAt(eSet, rand()%eSize);
+            }
+            
+            /* change the set to only include 'abnormal' characters (not A-Z, a-z, 0-9 */
+            uset_removeAll(eSet, stdSet);
+            eSize = uset_size(eSet);
+            
+            /* if there are some non-normal characters left, put a few into the string, just to make sure we have some */
+            if(eSize > 0){
+                str[2%strSize] = uset_charAt(eSet, rand()%eSize);
+                str[3%strSize] = uset_charAt(eSet, rand()%eSize);
+                str[5%strSize] = uset_charAt(eSet, rand()%eSize);
+                str[10%strSize] = uset_charAt(eSet, rand()%eSize);
+                str[13%strSize] = uset_charAt(eSet, rand()%eSize);
+            }
+            /* terminate the string */
+            str[strSize-1] = '\0';
+            log_verbose("String used: %S\n", str);
+           
+            /* get sort keys for both of them, and check that the keys are identicle */
+            sortKeyLen1 = ucol_getSortKey(c1, str, u_strlen(str),  NULL, 0);
+            sortKey1 = (uint8_t*)malloc(sizeof(uint8_t) * (sortKeyLen1 + 1));
+            /*memset(sortKey1, 0xFE, sortKeyLen1);*/
+            ucol_getSortKey(c1, str, u_strlen(str), sortKey1, sortKeyLen1 + 1);
+            
+            sortKeyLen2 = ucol_getSortKey(c2, str, u_strlen(str),  NULL, 0);
+            sortKey2 = (uint8_t*)malloc(sizeof(uint8_t) * (sortKeyLen2 + 1));
+            /*memset(sortKey2, 0xFE, sortKeyLen2);*/
+            ucol_getSortKey(c2, str, u_strlen(str), sortKey2, sortKeyLen2 + 1);
+
+            /* Check that the lengths are the same */
+            doAssert((sortKeyLen1 == sortKeyLen2), "Sort key lengths do not match.");
+            
+            /* check that the keys are the same */
+            doAssert((memcmp(sortKey1, sortKey2, sortKeyLen1) == 0), "Keys are not equivalent");
+
+
+
+            /* clean up after each string */
+            free(sortKey1);
+            free(sortKey2);    
+            uset_close(eSet);
+        }
+        /* clean up after each locale */
+        ulocdata_close(uld);
+        ucol_close(c1);
+        ucol_close(c2);
+    }
 }
 /*
 ----------------------------------------------------------------------------

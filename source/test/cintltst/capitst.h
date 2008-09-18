@@ -1,7 +1,6 @@
 /********************************************************************
- * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
- * others. All Rights Reserved.
+ * Copyright (c) 2001-2008 International Business Machines 
+ * Corporation and others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
 *
@@ -10,6 +9,7 @@
 * Modification History:
 *        Name                     Description            
 *     Madhu Katragadda            Converted to C
+*     Brian Rower                 Added TestOpenVsOpenRules
 *********************************************************************************
 *//* C API TEST For COLLATOR */
 
@@ -76,6 +76,11 @@
      * Test ucol_cloneBinary(), ucol_openBinary()
      **/
     void TestCloneBinary(void);
+
+    /**
+     * Test ucol_open() vs. ucol_openRules()
+     **/
+    void TestOpenVsOpenRules(void);
 
     /**
      * Test getting bounds for a sortkey
