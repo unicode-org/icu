@@ -29,7 +29,7 @@
 
 #include <windows.h>
 
-UBool getSystemTimeInformation(TimeZone *tz, SYSTEMTIME &daylightDate, SYSTEMTIME &standardDate, int32_t &bias, int32_t &daylightBias, int32_t &standardBias) {
+static UBool getSystemTimeInformation(TimeZone *tz, SYSTEMTIME &daylightDate, SYSTEMTIME &standardDate, int32_t &bias, int32_t &daylightBias, int32_t &standardBias) {
     UErrorCode status = U_ZERO_ERROR;
     UBool result = TRUE;
     BasicTimeZone *btz = NULL;
@@ -126,7 +126,7 @@ UBool getSystemTimeInformation(TimeZone *tz, SYSTEMTIME &daylightDate, SYSTEMTIM
     return result;
 }
 
-UBool getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid, int32_t length) {
+static UBool getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid, int32_t length) {
     UBool result = FALSE;
     UnicodeString id = UnicodeString(icuid, length);
     TimeZone *tz = TimeZone::createTimeZone(id);
