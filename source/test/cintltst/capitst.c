@@ -866,35 +866,43 @@ void TestCloneBinary(){
 void TestOpenVsOpenRules(){
     
     /* create an array of all the locales */
-    int x;
     int32_t numLocales = uloc_countAvailable();
-    
+    int32_t sizeOfStdSet;
+    uint32_t adder;
+    UChar *str;
+    USet *stdSet;
+    char* curLoc;
+    UCollator * c1;
+    UCollator * c2;
+    const UChar* rules;
+    int32_t rulesLength;
+    int32_t sortKeyLen1, sortKeyLen2;
+    uint8_t *sortKey1 = NULL, *sortKey2 = NULL;
+    ULocaleData *uld;
+    uint32_t x, y, z;
+    USet *eSet;
+    int32_t eSize;
+    int strSize;
+
     UErrorCode err = U_ZERO_ERROR;
 
     /* create a set of standard characters that aren't very interesting...
     and then we can find some interesting ones later */
 
-    USet *stdSet = uset_open(0x61, 0x7A);
+    stdSet = uset_open(0x61, 0x7A);
     uset_addRange(stdSet, 0x41, 0x5A);
     uset_addRange(stdSet, 0x30, 0x39);
-    int32_t sizeOfStdSet = uset_size(stdSet);
+    sizeOfStdSet = uset_size(stdSet);
 
-    int adder = 1;
+    adder = 1;
     if(QUICK)
     {
         adder = 10;
     }
 
     for(x = 0; x < numLocales; x+=adder){
-        char* curLoc = uloc_getAvailable(x);
+        curLoc = uloc_getAvailable(x);
         log_verbose("Processing %s\n", curLoc);
-        UChar *str;
-        UCollator * c1;
-        UCollator * c2;
-        const UChar* rules;
-        int32_t rulesLength;
-        int32_t sortKeyLen1, sortKeyLen2;
-        uint8_t *sortKey1 = NULL, *sortKey2 = NULL;
         
         /* create a collator the normal API way */
         c1 = ucol_open(curLoc, &err);
@@ -913,20 +921,20 @@ void TestOpenVsOpenRules(){
             return;
         }
         
-        ULocaleData *uld = ulocdata_open(curLoc, &err);
+        uld = ulocdata_open(curLoc, &err);
         
         /*now that we have some collators, we get several strings */
-        int y;
+        
         for(y = 0; y < 5; y++){
         
             /* get a set of ALL the characters in this locale */
-            USet *eSet =  ulocdata_getExemplarSet(uld, NULL, 0, ULOCDATA_ES_STANDARD, &err);
-            int32_t eSize = uset_size(eSet);
+            eSet =  ulocdata_getExemplarSet(uld, NULL, 0, ULOCDATA_ES_STANDARD, &err);
+            eSize = uset_size(eSet);
             
             /* make a string with these characters in it */
-            int strSize = (rand()%40) + 1;
+            strSize = (rand()%40) + 1;
             str = (UChar*)malloc(sizeof(UChar) * (strSize + 1));
-            int z;
+            
             for(z = 0; z < strSize; z++){
                 str[z] = uset_charAt(eSet, rand()%eSize);
             }
