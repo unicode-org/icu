@@ -351,6 +351,11 @@ static void initGlobalMutex() {
         }
         gMutexPoolInitialized = TRUE;
     }
+#elif defined (U_DARWIN)
+    /* PTHREAD_MUTEX_INITIALIZER works, don't need to call pthread_mutex_init
+     * as below (which is subject to a race condition)
+     */
+    gMutexPoolInitialized = TRUE;
 #elif defined (POSIX)
     /*  TODO:  experimental code.  Shouldn't need to explicitly init the mutexes. */
     if (gMutexPoolInitialized == FALSE) {
