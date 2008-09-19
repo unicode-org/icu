@@ -63,8 +63,8 @@
 #define PNJ_HA              0x0A39
 #define PNJ_RRA             0x0A5C
 
-USet* PNJ_BINDI_TIPPI_SET= NULL;
-USet* PNJ_CONSONANT_SET= NULL;
+static USet* PNJ_BINDI_TIPPI_SET= NULL;
+static USet* PNJ_CONSONANT_SET= NULL;
 
 typedef enum {
     DEVANAGARI =0,
@@ -151,7 +151,7 @@ static const LookupDataStruct lookupInitialData[]={
     { MALAYALAM,  MLM_MASK,  MLM }
 };
 
-void initializeSets() {
+static void initializeSets() {
     PNJ_CONSONANT_SET = uset_open(0,0);
     uset_clear(PNJ_CONSONANT_SET);
     
