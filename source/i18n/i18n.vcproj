@@ -2254,6 +2254,30 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\tmunit.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\tmunit.h"
+				>
+			</File>
+			<File
+				RelativePath=".\tmutamt.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\tmutamt.h"
+				>
+			</File>
+			<File
+				RelativePath=".\tmutfmt.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\tmutfmt.h"
+				>
+			</File>
+			<File
 				RelativePath=".\tzrule.cpp"
 				>
 			</File>

@@ -748,6 +748,19 @@ public:
      */
     UBool usesNamedArguments() const;
     
+
+    /**
+     * This API is for ICU internal use only.
+     * Please do not use it.
+     *
+     * Returns argument types count in the parsed pattern.
+     * Used to distinguish pattern "{0} d" and "d".
+     *
+     * @return           The number of formattable types in the pattern
+     * @internal
+     */
+    int32_t getArgTypeCount() const;
+
     /**
      * Returns a unique class ID POLYMORPHICALLY.  Pure virtual override.
      * This method is to implement a simple version of RTTI, since not all
