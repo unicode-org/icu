@@ -14,7 +14,7 @@ import java.util.HashMap;
  * @author synwee
  * @stable ICU 2.6
  */
-public final class VersionInfo
+public final class VersionInfo implements Comparable
 {
     // public data members -------------------------------------------------
 
@@ -398,6 +398,21 @@ public final class VersionInfo
         return m_version_ - other.m_version_;
     }
 
+    /**
+     * Compares other with this VersionInfo.
+     * @param other VersionInfo to be compared. Throws ClassCastException if not a VersionInfo.
+     * @return 0 if the argument is a VersionInfo object that has version
+     *           information equals to this object.
+     *           Less than 0 if the argument is a VersionInfo object that has
+     *           version information greater than this object.
+     *           Greater than 0 if the argument is a VersionInfo object that
+     *           has version information less than this object.
+     * @draft ICU 4.2
+     */
+    public int compareTo(Object other) {
+        return compareTo((VersionInfo)other);
+    }
+
     // private data members ----------------------------------------------
 
     /**
@@ -473,4 +488,5 @@ public final class VersionInfo
     {
         return (major << 24) | (minor << 16) | (milli << 8) | micro;
     }
+
 }
