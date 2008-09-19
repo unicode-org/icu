@@ -233,8 +233,14 @@ icu4c/source/extra/scrptrun/readme.html svneol=native#text/html
 icu4c/source/i18n/dtitv_impl.h -text
 icu4c/source/i18n/dtitvfmt.cpp -text
 icu4c/source/i18n/dtitvinf.cpp -text
+icu4c/source/i18n/tmunit.cpp -text
+icu4c/source/i18n/tmutamt.cpp -text
+icu4c/source/i18n/tmutfmt.cpp -text
 icu4c/source/i18n/unicode/dtitvfmt.h -text
 icu4c/source/i18n/unicode/dtitvinf.h -text
+icu4c/source/i18n/unicode/tmunit.h -text
+icu4c/source/i18n/unicode/tmutamt.h -text
+icu4c/source/i18n/unicode/tmutfmt.h -text
 icu4c/source/i18n/wintzimpl.cpp -text
 icu4c/source/i18n/wintzimpl.h -text
 icu4c/source/samples/layout/cgnomelayout.c -text
@@ -243,6 +249,8 @@ icu4c/source/samples/ucnv/data02.bin -text svneol=unset#application/octet-stream
 icu4c/source/test/compat/tzone.pl -text
 icu4c/source/test/intltest/dtifmtts.cpp -text
 icu4c/source/test/intltest/dtifmtts.h -text
+icu4c/source/test/intltest/tufmtts.cpp -text
+icu4c/source/test/intltest/tufmtts.h -text
 icu4c/source/test/letest/gendata.xml svneol=native#text/xml
 icu4c/source/test/letest/readme.html svneol=native#text/html
 icu4c/source/test/perf/Makefile.in -text

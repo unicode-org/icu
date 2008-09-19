@@ -1033,6 +1033,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\tufmtts.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\tufmtts.h"
+				>
+			</File>
+			<File
 				RelativePath=".\tzbdtest.cpp"
 				>
 			</File>
