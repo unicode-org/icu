@@ -1787,6 +1787,12 @@ MessageFormat::isLegalArgName(const UnicodeString& argName) const {
     return TRUE;
 }
 
+int32_t 
+MessageFormat::getArgTypeCount() const {
+        return argTypeCount; 
+}
+
+
 FormatNameEnumeration::FormatNameEnumeration(UVector *fNameList, UErrorCode& /*status*/) {
     pos=0;
     fFormatNames = fNameList;
@@ -1819,6 +1825,8 @@ FormatNameEnumeration::~FormatNameEnumeration() {
     }
     delete fFormatNames;
 }
+
+
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
