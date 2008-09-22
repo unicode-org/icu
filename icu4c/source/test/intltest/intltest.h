@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -145,6 +145,11 @@ public:
      */
     UBool isICUVersionAtLeast(const UVersionInfo x);
 
+    enum { kMaxProps = 16 };
+
+    virtual void setProperty(const char* propline);
+    virtual const char* getProperty(const char* prop);
+
 protected:
     /* JUnit-like assertions. Each returns TRUE if it succeeds. */
     UBool assertTrue(const char* message, UBool condition, UBool quiet=FALSE);
@@ -196,6 +201,9 @@ private:
 
     //FILE *testoutfp;
     void *testoutfp;
+
+    const char* proplines[kMaxProps];
+    int32_t     numProps;
 
 protected:
 
