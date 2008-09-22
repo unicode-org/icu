@@ -122,7 +122,7 @@ void TimeUnitTest::testAPI() {
     //
     //================= TimeUnitAmount =================
 
-    Formattable formattable(2);
+    Formattable formattable((int32_t)2);
     TimeUnitAmount tma_long(formattable, TimeUnit::UTIMEUNIT_DAY, status);
     if (!assertSuccess("TimeUnitAmount(formattable...)", status)) return;
 
