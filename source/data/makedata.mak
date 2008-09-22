@@ -378,7 +378,7 @@ uni-core-data: GODATA "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(IC
 #
 # testdata - nmake will invoke pkgdata, which will create testdata.dat
 #
-"$(TESTDATAOUT)\testdata.dat": "$(TESTDATA)\*" "$(ICUBLD_PKG)\ucadata.icu" $(TRANSLIT_RES_FILES) $(MISC_FILES) $(RB_FILES) {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe
+"$(TESTDATAOUT)\testdata.dat": "$(TESTDATA)\*" "$(ICUBLD_PKG)\$(ICUCOL)\ucadata.icu" $(TRANSLIT_RES_FILES) $(MISC_FILES) $(RB_FILES) {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe
 	@cd "$(TESTDATA)"
 	@echo building testdata...
 	nmake /nologo /f "$(TESTDATA)\testdata.mak" TESTDATA=. ICUTOOLS="$(ICUTOOLS)" ICUPBIN="$(ICUPBIN)" ICUP="$(ICUP)" CFG=$(CFG) TESTDATAOUT="$(TESTDATAOUT)" TESTDATABLD="$(TESTDATABLD)"
@@ -402,14 +402,14 @@ uni-core-data: GODATA "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(IC
 	copy "$(ICUTMP)\$(ICUPKG).dat" "$(ICUOUT)\$(U_ICUDATA_NAME)$(U_ICUDATA_ENDIAN_SUFFIX).dat"
 	-@erase "$(ICUTMP)\$(ICUPKG).dat"
 !ELSE
-"$(ICU_LIB_TARGET)" : $(COMMON_ICUDATA_DEPENDENCIES) $(CNV_FILES) "$(ICUBLD_PKG)\unames.icu" "$(ICUBLD_PKG)\pnames.icu" "$(ICUBLD_PKG)\cnvalias.icu" "$(ICUBLD_PKG)\ucadata.icu" "$(ICUBLD_PKG)\invuca.icu" "$(ICUBLD_PKG)\uidna.spp" $(BRK_FILES) $(BRK_CTD_FILES) $(BRK_RES_FILES) $(COL_COL_FILES) $(RBNF_RES_FILES) $(TRANSLIT_RES_FILES) $(ALL_RES)
+"$(ICU_LIB_TARGET)" : $(COMMON_ICUDATA_DEPENDENCIES) $(CNV_FILES) "$(ICUBLD_PKG)\unames.icu" "$(ICUBLD_PKG)\pnames.icu" "$(ICUBLD_PKG)\cnvalias.icu" "$(ICUBLD_PKG)\$(ICUCOL)\ucadata.icu" "$(ICUBLD_PKG)\$(ICUCOL)\invuca.icu" "$(ICUBLD_PKG)\uidna.spp" $(BRK_FILES) $(BRK_CTD_FILES) $(BRK_RES_FILES) $(COL_COL_FILES) $(RBNF_RES_FILES) $(TRANSLIT_RES_FILES) $(ALL_RES)
 	@echo Building icu data
 	cd "$(ICUBLD_PKG)"
 	"$(ICUPBIN)\pkgdata" $(COMMON_ICUDATA_ARGUMENTS) <<"$(ICUTMP)\icudata.lst"
 pnames.icu
 unames.icu
-ucadata.icu
-invuca.icu
+$(ICUCOL)\ucadata.icu
+$(ICUCOL)\invuca.icu
 uidna.spp
 cnvalias.icu
 $(CNV_FILES:.cnv =.cnv
@@ -643,9 +643,9 @@ res_index:table(nofallback) {
 # Targets for ucadata.icu & invuca.icu
 # used to depend on "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(ICUBLD_PKG)\unorm.icu"
 # see Jitterbug 4497
-"$(ICUBLD_PKG)\invuca.icu" "$(ICUBLD_PKG)\ucadata.icu": "$(ICUUNIDATA)\FractionalUCA.txt" "$(ICUTOOLS)\genuca\$(CFG)\genuca.exe"
+"$(ICUBLD_PKG)\$(ICUCOL)\invuca.icu" "$(ICUBLD_PKG)\$(ICUCOL)\ucadata.icu": "$(ICUUNIDATA)\FractionalUCA.txt" "$(ICUTOOLS)\genuca\$(CFG)\genuca.exe"
 	@echo Creating UCA data files
-	@"$(ICUTOOLS)\genuca\$(CFG)\genuca" -d "$(ICUBLD_PKG)" -i "$(ICUBLD_PKG)" -s "$(ICUUNIDATA)"
+	@"$(ICUTOOLS)\genuca\$(CFG)\genuca" -d "$(ICUBLD_PKG)\$(ICUCOL)" -i "$(ICUBLD_PKG)" -s "$(ICUUNIDATA)"
 
 # Targets for uidna.spp
 "$(ICUBLD_PKG)\uidna.spp" : "$(ICUUNIDATA)\*.txt" "$(ICUMISC)\NamePrepProfile.txt"
@@ -664,7 +664,7 @@ $(UCM_SOURCE) : {"$(ICUTOOLS)\makeconv\$(CFG)"}makeconv.exe
 # This used to depend on "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(ICUBLD_PKG)\ubidi.icu" "$(ICUBLD_PKG)\unorm.icu"
 # This data is now hard coded as a part of the library.
 # See Jitterbug 4497 for details.
-$(MISC_SOURCE) $(RB_FILES) $(COL_COL_FILES) $(RBNF_RES_FILES) $(BRK_RES_FILES) $(TRANSLIT_RES_FILES): {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe "$(ICUBLD_PKG)\ucadata.icu"
+$(MISC_SOURCE) $(RB_FILES) $(COL_COL_FILES) $(RBNF_RES_FILES) $(BRK_RES_FILES) $(TRANSLIT_RES_FILES): {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe "$(ICUBLD_PKG)\$(ICUCOL)\ucadata.icu"
 
 # This used to depend on "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(ICUBLD_PKG)\ubidi.icu" "$(ICUBLD_PKG)\unorm.icu"
 # This data is now hard coded as a part of the library.
