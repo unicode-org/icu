@@ -1335,7 +1335,7 @@ ucol_initInverseUCA(UErrorCode *status)
 
     if(needsInit) {
         InverseUCATableHeader *newInvUCA = NULL;
-        UDataMemory *result = udata_openChoice(NULL, INVC_DATA_TYPE, INVC_DATA_NAME, isAcceptableInvUCA, NULL, status);
+        UDataMemory *result = udata_openChoice(U_ICUDATA_COLL, INVC_DATA_TYPE, INVC_DATA_NAME, isAcceptableInvUCA, NULL, status);
 
         if(U_FAILURE(*status)) {
             if (result) {

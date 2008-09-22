@@ -16,7 +16,7 @@
     </identity>
     <special xmlns:icu="http://www.icu-project.org/">
         <icu:UCARules icu:uca_rules="../unidata/UCARules.txt"/>
-        <icu:depends icu:dependency="../ucadata.icu"/>
+        <icu:depends icu:dependency="ucadata.icu"/>
     </special>
 </ldml>
 

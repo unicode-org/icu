@@ -1,5 +1,5 @@
 ## Makefile.in for ICU data
-## Copyright (c) 1999-2007, International Business Machines Corporation and
+## Copyright (c) 1999-2008, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -201,7 +201,7 @@ package390: $(OUTTMPDIR)/icudata390.lst $(PKGDATA_LIST) ./icupkg.inc packagedata
 #  2005-may-05 Removed Unicode properties files (unorm.icu, uprops.icu, ucase.icu, ubidi.icu)
 #  from data build. See Jitterbug 4497. (makedata.mak revision 1.117)
 #
-DAT_FILES_SHORT=pnames.icu unames.icu cnvalias.icu ucadata.icu invuca.icu uidna.spp 
+DAT_FILES_SHORT=pnames.icu unames.icu cnvalias.icu coll/ucadata.icu coll/invuca.icu uidna.spp 
 DAT_FILES=$(DAT_FILES_SHORT:%=$(BUILDDIR)/%)
 
 ## BRK files
@@ -403,8 +403,8 @@ $(BUILDDIR)/unorm.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/Deriv
 # ucadata.icu
 # used to depend on $(BUILDDIR)/$(ICUDT)unorm.icu $(BUILDDIR)/$(ICUDT)ucase.icu
 # see Jitterbug 4497
-$(BUILDDIR)/ucadata.icu $(BUILDDIR)/$(ICUDT)invuca.icu: $(UNICODEDATADIR)/FractionalUCA.txt $(BINDIR)/genuca$(EXEEXT)
-	$(INVOKE) $(BINDIR)/genuca -s $(UNICODEDATADIR) -d $(BUILDDIR) -i $(BUILDDIR) 
+$(COLBLDDIR)/ucadata.icu $(COLBLDDIR)/invuca.icu: $(UNICODEDATADIR)/FractionalUCA.txt $(BINDIR)/genuca$(EXEEXT)
+	$(INVOKE) $(BINDIR)/genuca -s $(UNICODEDATADIR) -d $(COLBLDDIR) -i $(BUILDDIR) 
 
 # unames.icu
 $(BUILDDIR)/unames.icu: $(UNICODEDATADIR)/UnicodeData.txt $(BINDIR)/gennames$(EXEEXT)
