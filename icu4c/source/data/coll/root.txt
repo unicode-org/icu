@@ -19,5 +19,5 @@ root{
             Version{"1.6"}
         }
     }
-    depends:process(dependency){"../ucadata.icu"}
+    depends:process(dependency){"ucadata.icu"}
 }
