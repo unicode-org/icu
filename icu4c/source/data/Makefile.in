@@ -356,6 +356,8 @@ endif
 endif
 
 
+$(BUILD_DIRS): build-dir
+
 build-dir:
 	@list='$(BUILD_DIRS)'; \
 	for dir in $$list; do \
