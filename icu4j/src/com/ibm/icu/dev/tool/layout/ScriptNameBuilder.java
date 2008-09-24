@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1998-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1998-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -23,6 +23,8 @@ public class ScriptNameBuilder
         
         scriptIDModuleWriter.writeScriptHeader("LEScripts.h");
         scriptIDModuleWriter.writeLanguageHeader("LELanguages.h");
+        
+        scriptIDModuleWriter.updateScriptAndLanguages();
         
         ScriptTagModuleWriter scriptTagModuleWriter = new ScriptTagModuleWriter(scriptData, languageData);
         
