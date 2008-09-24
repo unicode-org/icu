@@ -4487,7 +4487,7 @@ public class DecimalFormat extends NumberFormat {
         return parseBigDecimal;
     }
 
-//#if defined(FOUNDATION10)
+//#if defined(FOUNDATION10) || defined(J2SE13)
 //#else
     private void writeObject(ObjectOutputStream stream) throws IOException {
 // Doug, do we need this anymore?

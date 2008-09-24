@@ -1100,7 +1100,8 @@ public class FormatTests
                 
                 formats[i] = getCannedDecimalFormat("#,##0.###", uloc);
             }
-
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
             if (formats[0] != null) {
                 // Ticket#6449
                 // Once formatToCharacterIterator is called, NumberFormat.Field
@@ -1113,7 +1114,7 @@ public class FormatTests
                 AttributedCharacterIterator aci = formats[0].formatToCharacterIterator(new Double(12.345D));
                 if (aci == null) {} // NOP - for resolving 'Unused local variable' warning.
             }
-
+//#endif
             return formats;
         }
     }

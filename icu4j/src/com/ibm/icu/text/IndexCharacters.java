@@ -1,3 +1,6 @@
+//##header J2SE15
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
 /*
  *******************************************************************************
  * Copyright (C) 2008, Google Inc, International Business Machines Corporation
@@ -58,7 +61,8 @@ import com.ibm.icu.impl.CollectionUtilities.MultiComparator;
  * </ul>
  * 
  * @author markdavis
- * @draft
+ * @draft ICU 4.2
+ * @provisional This API might change or be removed in a future release.
  */
 //TODO(markdavis) return an additional character that is the "least greater" character than
 //the last character.
@@ -79,7 +83,8 @@ public class IndexCharacters {
     /**
      * Create the index object.
      * @param locale
-     * @draft
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
      */
     public IndexCharacters(ULocale locale) {
         this.locale = locale;
@@ -168,13 +173,11 @@ public class IndexCharacters {
         indexCharacters = Collections.unmodifiableSet(indexCharacters);
     }
 
-    /**
+    /*
      * Return the string with interspersed CGJs. Input must have more than 2 codepoints.
-     * @param item
-     * @return
      */
     private String separated(String item) {
-        StringBuilder result = new StringBuilder();
+        StringBuffer result = new StringBuffer();
         // add a CGJ except within surrogates
         char last = item.charAt(0);
         result.append(last);
@@ -191,8 +194,9 @@ public class IndexCharacters {
 
     /**
      * Get the index characters.
-     * @return
-     * @draft
+     * @return A collection including the index characters
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
      */
     public Collection getIndexCharacters() {
         return indexCharacters;
@@ -200,8 +204,9 @@ public class IndexCharacters {
 
     /**
      * Get the locale
-     * @return
-     * @draft
+     * @return The locale.
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
      */
     public ULocale getLocale() {
         return locale;
@@ -210,8 +215,7 @@ public class IndexCharacters {
     /**
      * As the index is built, items may be discarded from the exemplars.
      * This contains some of the discards, and is intended for debugging.
-     * @return
-     * @draft
+     * @internal
      */
     public Map getAlreadyIn() {
         return alreadyIn;
@@ -220,8 +224,7 @@ public class IndexCharacters {
     /**
      * As the index is built, items may be discarded from the exemplars.
      * This contains some of the discards, and is intended for debugging.
-     * @return
-     * @draft
+     * @internal
      */
     public List getNoDistinctSorting() {
         return noDistinctSorting;
@@ -230,14 +233,13 @@ public class IndexCharacters {
     /**
      * As the index is built, items may be discarded from the exemplars.
      * This contains some of the discards, and is intended for debugging.
-     * @return
-     * @draft
+     * @internal
      */
     public List getNotAlphabetic() {
         return notAlphabetic;
     }
 
-    /**
+    /*
      * Comparator that returns "better" items first, where shorter NFKD is better,
      * and otherwise NFKD binary order is better, and otherwise binary order is better.
      */
@@ -269,3 +271,4 @@ public class IndexCharacters {
         }
     }
 }
+//#endif

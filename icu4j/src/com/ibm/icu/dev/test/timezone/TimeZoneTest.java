@@ -1439,7 +1439,7 @@ public class TimeZoneTest extends TestFmwk
         int dstSavings = jdkCal.get(java.util.Calendar.DST_OFFSET);
 
         int[] offsets = new int[2];
-        icuCaracas.getOffset(jdkCal.getTimeInMillis(), false, offsets);
+        icuCaracas.getOffset(jdkCal.getTime().getTime()/*jdkCal.getTimeInMillis()*/, false, offsets);
 
         boolean isTimeZoneSynchronized = true;
 

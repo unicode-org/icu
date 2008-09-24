@@ -246,7 +246,7 @@ public class TimeUnitFormat extends MeasureFormat {
 
     /**
      * Parse a TimeUnitAmount.
-     * @see java.text.Format#parse(java.lang.String, java.text.FieldPosition)
+     * @see java.text.Format#parseObject(java.lang.String, java.text.ParsePosition)
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */
