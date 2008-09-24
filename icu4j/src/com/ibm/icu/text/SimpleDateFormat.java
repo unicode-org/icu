@@ -175,7 +175,7 @@ import com.ibm.icu.util.ULocale;
  * "01/11/12" would be interpreted as Jan 11, 2012 while the string "05/04/64"
  * would be interpreted as May 4, 1964.
  * During parsing, only strings consisting of exactly two digits, as defined by
- * {@link UCharacter#isDigit(char)}, will be parsed into the default
+ * {@link com.ibm.icu.lang.UCharacter#isDigit(int)}, will be parsed into the default
  * century.
  * Any other numeric string, such as a one digit string, a three or more digit
  * string, or a two digit string that isn't all digits (for example, "-1"), is
