@@ -979,7 +979,7 @@ realParseTable(struct SResource *table, char *tag, uint32_t startline, UErrorCod
 
         if (U_FAILURE(*status))
         {
-            error(line, "parse error. Stopped parsing with %s", u_errorName(*status));
+            error(line, "parse error. Stopped parsing tokens with %s", u_errorName(*status));
             return NULL;
         }
 
@@ -987,7 +987,7 @@ realParseTable(struct SResource *table, char *tag, uint32_t startline, UErrorCod
 
         if (member == NULL || U_FAILURE(*status))
         {
-            error(line, "parse error. Stopped parsing with %s", u_errorName(*status));
+            error(line, "parse error. Stopped parsing resource with %s", u_errorName(*status));
             return NULL;
         }
 
@@ -995,7 +995,7 @@ realParseTable(struct SResource *table, char *tag, uint32_t startline, UErrorCod
 
         if (U_FAILURE(*status))
         {
-            error(line, "parse error. Stopped parsing with %s", u_errorName(*status));
+            error(line, "parse error. Stopped parsing table with %s", u_errorName(*status));
             return NULL;
         }
         readToken = TRUE;
