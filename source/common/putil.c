@@ -762,7 +762,7 @@ static const char* remapShortTimeZone(const char *stdID, const char *dstID, int3
  * This method compares the two files given to see if they are a match.
  * It is currently use to compare two TZ files.
  */
-UBool compareBinaryFiles(char* filename1, char* filename2) {
+static UBool compareBinaryFiles(char* filename1, char* filename2) {
     FILE* file1 = fopen(filename1, "r");
     FILE* file2 = fopen(filename2, "r");
 
@@ -826,7 +826,7 @@ UBool compareBinaryFiles(char* filename1, char* filename2) {
 /* dirent also lists two entries: "." and ".." that we can safely ignore. */
 #define SKIP1 "."
 #define SKIP2 ".."
-char* searchForTZFile(const char* path) {
+static char* searchForTZFile(const char* path) {
     DIR* dirp = opendir(path);
     DIR* subDirp = NULL;
     struct dirent* dirEntry = NULL;
