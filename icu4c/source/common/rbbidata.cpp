@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-*   Copyright (C) 1999-2007 International Business Machines Corporation   *
+*   Copyright (C) 1999-2008 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 */
@@ -49,6 +49,11 @@ RBBIDataWrapper::RBBIDataWrapper(const RBBIDataHeader *data, UErrorCode &status)
     init(data, status);
 }
 
+RBBIDataWrapper::RBBIDataWrapper(const RBBIDataHeader *data, enum EDontAdopt, UErrorCode &status) {
+    init(data, status);
+    fDontFreeData = TRUE;
+}
+
 RBBIDataWrapper::RBBIDataWrapper(UDataMemory* udm, UErrorCode &status) {
     const RBBIDataHeader *d = (const RBBIDataHeader *)
         // ((char *)&(udm->pHeader->info) + udm->pHeader->info.size);
@@ -77,6 +82,7 @@ void RBBIDataWrapper::init(const RBBIDataHeader *data, UErrorCode &status) {
         return;
     }
 
+    fDontFreeData = FALSE;
     fUDataMem     = NULL;
     fReverseTable = NULL;
     fSafeFwdTable = NULL;
@@ -130,7 +136,7 @@ RBBIDataWrapper::~RBBIDataWrapper() {
     U_ASSERT(fRefCount == 0);
     if (fUDataMem) {
         udata_close(fUDataMem);
-    } else {
+    } else if (!fDontFreeData) {
         uprv_free((void *)fHeader);
     }
 }
