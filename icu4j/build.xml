@@ -189,10 +189,10 @@
     </condition>
 
     <!-- JVM arguments for running test cases -->
-    <condition property="test.jvm.args" value="-Xms192m -Xmx224m">
+    <condition property="test.jvm.args" value="-Xms224m -Xmx256m">
         <isset property="before.java14" />
     </condition>
-    <condition property="test.jvm.args" value="-ea -Xms192m -Xmx224m -Xdisableexcessivegc">
+    <condition property="test.jvm.args" value="-ea -Xms224m -Xmx256m -Xdisableexcessivegc">
       <and>
         <not>
           <isset property="before.java15" />
@@ -200,12 +200,12 @@
         <equals arg1="${java.vm.vendor}" arg2="IBM Corporation"/>
       </and>
     </condition>
-    <condition property="test.jvm.args" value="-ea -Xms192m -Xmx224m -Djava.awt.headless=true">
+    <condition property="test.jvm.args" value="-ea -Xms224m -Xmx256m -Djava.awt.headless=true">
       <and>
         <equals arg1="${os.name}" arg2="Mac OS X"/>
       </and>
     </condition>
-    <condition property="test.jvm.args" value="-ea -Xms192m -Xmx224m">
+    <condition property="test.jvm.args" value="-ea -Xms224m -Xmx256m">
       <not>
         <isset property="test.jvm.args" />
       </not>
