@@ -1,0 +1,177 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/ha.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/ha.xml
+ */
+ha{
+    AuxExemplarCharacters{"[á à â é è ê í ì î ó ò ô p q {r̃} ú ù û v x ƴ]"}
+    Countries{
+        NG{"Nijeriya"}
+    }
+    Currencies{
+        NGN{
+            "₦",
+            "NGN",
+        }
+    }
+    ExemplarCharacters{"[a b ɓ c d ɗ e-k ƙ l-o r s {sh} t {ts} u w y z ʼ {ʼy}]"}
+    Languages{
+        ha{"Haoussa"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤ #,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.27"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d MMMM, yyyy",
+                "d MMMM, yyyy",
+                "d MMM, yyyy",
+                "d/M/yy",
+                "{1} {0}",
+            }
+            availableFormats{
+                Hm{"H:mm"}
+                M{"L"}
+                MEd{"E, d-M"}
+                MMM{"LLL"}
+                MMMEd{"E d MMM"}
+                MMMMEd{"E d MMMM"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                Md{"M-d"}
+                d{"d"}
+                ms{"mm:ss"}
+                y{"yyyy"}
+                yMEd{"EEE, d/M/yyyy"}
+                yMMMEd{"EEE, d MMM yyyy"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Lah",
+                        "Lit",
+                        "Tal",
+                        "Lar",
+                        "Alh",
+                        "Jum",
+                        "Asa",
+                    }
+                    wide{
+                        "Lahadi",
+                        "Litini",
+                        "Talata",
+                        "Laraba",
+                        "Alhamis",
+                        "Jumma'a",
+                        "Asabar",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "L",
+                        "L",
+                        "T",
+                        "L",
+                        "A",
+                        "J",
+                        "A",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Jan",
+                        "Fab",
+                        "Mar",
+                        "Afr",
+                        "May",
+                        "Yun",
+                        "Yul",
+                        "Aug",
+                        "Sat",
+                        "Okt",
+                        "Nuw",
+                        "Dis",
+                    }
+                    wide{
+                        "Janairu",
+                        "Fabrairu",
+                        "Maris",
+                        "Afrilu",
+                        "Mayu",
+                        "Yuni",
+                        "Yuli",
+                        "Augusta",
+                        "Satumba",
+                        "Oktoba",
+                        "Nuwamba",
+                        "Disamba",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "Y",
+                        "Y",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
+                }
+            }
+            quarters{
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                }
+            }
+        }
+    }
+}

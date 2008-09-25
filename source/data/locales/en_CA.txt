@@ -1,0 +1,130 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/en_CA.xml
+// *
+// ***************************************************************************
+en_CA{
+    Currencies{
+        CAD{
+            "$",
+            "Canadian Dollar",
+        }
+        USD{
+            "US$",
+            "US Dollar",
+        }
+    }
+    PaperSize:intvector{
+        279,
+        216,
+    }
+    Version{"1.60"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector{
+                1,
+                4,
+            }
+            DateTimePatterns{
+                "h:mm:ss a v",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, MMMM d, yyyy",
+                "MMMM d, yyyy",
+                "yyyy-MM-dd",
+                "yy-MM-dd",
+                "{1} {0}",
+            }
+            availableFormats{
+                MMdd{"MM-dd"}
+                yyMMM{"MMM-yy"}
+            }
+            intervalFormats{
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E, MM-dd - E, MM-dd"}
+                    d{"E, MM-dd - E, MM-dd"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"E, MMM d - E, MMM d"}
+                    d{"E, MMM d - E, MMM d"}
+                }
+                MMMd{
+                    M{"MMM d - MMM d"}
+                    d{"MMM d-d"}
+                }
+                Md{
+                    M{"MM-dd - MM-dd"}
+                    d{"MM-dd - MM-dd"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    a{"h a - h a"}
+                    h{"h-h a"}
+                }
+                hm{
+                    a{"h:mm a - h:mm a"}
+                    h{"h:mm-h:mm a"}
+                    m{"h:mm-h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a - h:mm a v"}
+                    h{"h:mm-h:mm a v"}
+                    m{"h:mm-h:mm a v"}
+                }
+                hv{
+                    a{"h a - h a v"}
+                    h{"h-h a v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"yy-MM - yy-MM"}
+                    y{"yy-MM - yy-MM"}
+                }
+                yMEd{
+                    M{"E, yy-MM-dd - E, yy-MM-dd"}
+                    d{"E, yy-MM-dd - E, yy-MM-dd"}
+                    y{"E, yy-MM-dd - E, yy-MM-dd"}
+                }
+                yMMM{
+                    M{"MMM-MMM yyyy"}
+                    y{"MMM yyyy - MMM yyyy"}
+                }
+                yMMMEd{
+                    M{"E, MMM d - E, MMM d, yyyy"}
+                    d{"E, MMM d - E, MMM d, yyyy"}
+                    y{"E, MMM d, yyyy - E, MMM d, yyyy"}
+                }
+                yMMMd{
+                    M{"MMM d - MMM d, yyyy"}
+                    d{"MMM d-d, yyyy"}
+                    y{"MMM d, yyyy - MMM d, yyyy"}
+                }
+                yMd{
+                    M{"yy-MM-dd - yy-MM-dd"}
+                    d{"yy-MM-dd - yy-MM-dd"}
+                    y{"yy-MM-dd - yy-MM-dd"}
+                }
+            }
+        }
+    }
+    zoneStrings{
+        "meta:Newfoundland"{
+            cu:int{1}
+        }
+    }
+}

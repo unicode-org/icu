@@ -1,0 +1,881 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/lv.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/lv.xml
+ */
+lv{
+    AuxExemplarCharacters{"[y q w x]"}
+    Countries{
+        001{"Pasaule"}
+        002{"Āfrika"}
+        003{"Ziemeļamerika"}
+        005{"Dienvidamerika"}
+        009{"Okeānija"}
+        011{"Rietumāfrika"}
+        013{"Centrālamerika"}
+        014{"Austrumāfrika"}
+        015{"Ziemeļāfrika"}
+        017{"Vidusāfrika"}
+        018{"Āfrikas dienvidi"}
+        019{"Amerikas"}
+        021{"Amerikas ziemeļi"}
+        029{"Karību jūras reģions"}
+        030{"Austrumāzija"}
+        034{"Āzijas dienvidi"}
+        035{"Centrālaustrumāzija"}
+        039{"Eiropas dienvidi"}
+        053{"Austrālija un Jaunzēlande"}
+        054{"Melanēzija"}
+        057{"Mikronēzijas reģions"}
+        061{"Polinēzija"}
+        062{"Centrāldienvidāzija"}
+        142{"Āzija"}
+        143{"Centrālāzija"}
+        145{"Rietumāzija"}
+        150{"Eiropa"}
+        151{"Austrumeiropa"}
+        154{"Eiropas ziemeļi"}
+        155{"Rietumeiropa"}
+        172{"Neatkarīgo Valstu Savienība"}
+        419{"Latīņamerika un Karību jūras reģions"}
+        AD{"Andora"}
+        AE{"Apvienotie Arābu Emirāti"}
+        AF{"Afganistāna"}
+        AG{"Antigva un Barbuda"}
+        AI{"Angilja"}
+        AL{"Albānija"}
+        AM{"Armēnija"}
+        AN{"Antiļas"}
+        AO{"Angola"}
+        AQ{"Antarktika"}
+        AR{"Argentīna"}
+        AS{"Amerikāņu Samoa"}
+        AT{"Austrija"}
+        AU{"Austrālija"}
+        AW{"Aruba"}
+        AX{"Olandes salas"}
+        AZ{"Azerbaidžāna"}
+        BA{"Bosnija un Hercegovina"}
+        BB{"Barbadosa"}
+        BD{"Bangladeša"}
+        BE{"Beļģija"}
+        BF{"Burkinafaso"}
+        BG{"Bulgārija"}
+        BH{"Bahreina"}
+        BI{"Burundi"}
+        BJ{"Benina"}
+        BM{"Bermudu salas"}
+        BN{"Bruneja"}
+        BO{"Bolīvija"}
+        BR{"Brazīlija"}
+        BS{"Bahamas"}
+        BT{"Butāna"}
+        BV{"Buvē sala"}
+        BW{"Botsvāna"}
+        BY{"Baltkrievija"}
+        BZ{"Beliza"}
+        CA{"Kanāda"}
+        CC{"Kokosu (Kīlinga) salas"}
+        CD{"Kongo Demokrātiskā Republika"}
+        CF{"Centrālāfrikas Republika"}
+        CG{"Kongo"}
+        CH{"Šveice"}
+        CI{"Kotdivuāra"}
+        CK{"Kuka salas"}
+        CL{"Čīle"}
+        CM{"Kamerūna"}
+        CN{"Ķīna"}
+        CO{"Kolumbija"}
+        CR{"Kostarika"}
+        CS{"Serbija un Melnkalne"}
+        CU{"Kuba"}
+        CV{"Kaboverde"}
+        CX{"Ziemsvētku sala"}
+        CY{"Kipra"}
+        CZ{"Čehija"}
+        DE{"Vācija"}
+        DJ{"Džibutija"}
+        DK{"Dānija"}
+        DM{"Dominika"}
+        DO{"Dominikānas Republika"}
+        DZ{"Alžīrija"}
+        EC{"Ekvadora"}
+        EE{"Igaunija"}
+        EG{"Ēģipte"}
+        EH{"Rietumsahāra"}
+        ER{"Eritreja"}
+        ES{"Spānija"}
+        ET{"Etiopija"}
+        FI{"Somija"}
+        FJ{"Fidži"}
+        FK{"Folklenda salas"}
+        FM{"Mikronēzijas Federatīvās Valstis"}
+        FO{"Farēru salas"}
+        FR{"Francija"}
+        GA{"Gabona"}
+        GB{"Lielbritānija"}
+        GD{"Grenāda"}
+        GE{"Gruzija"}
+        GF{"Franču Gviāna"}
+        GG{"Gērnsija"}
+        GH{"Gana"}
+        GI{"Gibraltārs"}
+        GL{"Grenlande"}
+        GM{"Gambija"}
+        GN{"Gvineja"}
+        GP{"Gvadelupa"}
+        GQ{"Ekvatoriālā Gvineja"}
+        GR{"Grieķija"}
+        GS{"Dienviddžordžija un Dienvidsendviču salas"}
+        GT{"Gvatemala"}
+        GU{"Guama"}
+        GW{"Gvineja-Bisava"}
+        GY{"Gajāna"}
+        HK{"Honkonga, Ķīnas īpašās pārvaldes apgabals"}
+        HM{"Hērda un Makdonalda salas"}
+        HN{"Hondurasa"}
+        HR{"Horvātija"}
+        HT{"Haiti"}
+        HU{"Ungārija"}
+        ID{"Indonēzija"}
+        IE{"Īrija"}
+        IL{"Izraēla"}
+        IM{"Mena"}
+        IN{"Indija"}
+        IO{"Britu Indijas okeāna teritorija"}
+        IQ{"Irāka"}
+        IR{"Irāna"}
+        IS{"Islande"}
+        IT{"Itālija"}
+        JE{"Džērsija"}
+        JM{"Jamaika"}
+        JO{"Jordānija"}
+        JP{"Japāna"}
+        KE{"Kenija"}
+        KG{"Kirgīzija"}
+        KH{"Kambodža"}
+        KI{"Kiribati"}
+        KM{"Komoru salas"}
+        KN{"Sentkitsa un Nevisa"}
+        KP{"Ziemeļkoreja"}
+        KR{"Dienvidkoreja"}
+        KW{"Kuveita"}
+        KY{"Kaimanu salas"}
+        KZ{"Kazahstāna"}
+        LA{"Laosa"}
+        LB{"Libāna"}
+        LC{"Sentlūsija"}
+        LI{"Lihtenšteina"}
+        LK{"Šrilanka"}
+        LR{"Libērija"}
+        LS{"Lesoto"}
+        LT{"Lietuva"}
+        LU{"Luksemburga"}
+        LV{"Latvija"}
+        LY{"Lībija"}
+        MA{"Maroka"}
+        MC{"Monako"}
+        MD{"Moldova"}
+        ME{"Melnkalne"}
+        MG{"Madagaskara"}
+        MH{"Māršala salas"}
+        MK{"Maķedonija"}
+        ML{"Mali"}
+        MM{"Mjanma"}
+        MN{"Mongolija"}
+        MO{"Makao, Ķīnas īpašās pārvaldes apgabals"}
+        MP{"Ziemeļu Marianas"}
+        MQ{"Martinika"}
+        MR{"Mauritānija"}
+        MS{"Montserrata"}
+        MT{"Malta"}
+        MU{"Maurīcija"}
+        MV{"Maldīvija"}
+        MW{"Malāvija"}
+        MX{"Meksika"}
+        MY{"Malaizija"}
+        MZ{"Mozambika"}
+        NA{"Namībija"}
+        NC{"Jaunkaledonija"}
+        NE{"Nigēra"}
+        NF{"Norfolka"}
+        NG{"Nigērija"}
+        NI{"Nikaragva"}
+        NL{"Nīderlande"}
+        NO{"Norvēģija"}
+        NP{"Nepāla"}
+        NR{"Nauru"}
+        NU{"Niue"}
+        NZ{"Jaunzēlande"}
+        OM{"Omāna"}
+        PA{"Panama"}
+        PE{"Peru"}
+        PF{"Franču Polinēzija"}
+        PG{"Papua-Jaungvineja"}
+        PH{"Filipīnas"}
+        PK{"Pakistāna"}
+        PL{"Polija"}
+        PM{"Senpjēra un Mikelona"}
+        PN{"Pitkērna"}
+        PR{"Puertoriko"}
+        PS{"Palestīniešu pašpārvaldes teritorija"}
+        PT{"Portugāle"}
+        PW{"Palau"}
+        PY{"Paragvaja"}
+        QA{"Katara"}
+        QO{"ASV Mazās Aizjūras salas"}
+        QU{"Eiropas Savienība"}
+        RE{"Reinjona"}
+        RO{"Rumānija"}
+        RS{"Serbija"}
+        RU{"Krievija"}
+        RW{"Ruanda"}
+        SA{"Saūda Arābija"}
+        SB{"Zālamana salas"}
+        SC{"Seišeļu salas"}
+        SD{"Sudāna"}
+        SE{"Zviedrija"}
+        SG{"Singapūra"}
+        SH{"Sv. Helēnas sala"}
+        SI{"Slovēnija"}
+        SJ{"Svalbāra un Jana Majena sala"}
+        SK{"Slovākija"}
+        SL{"Sjerraleone"}
+        SM{"Sanmarīno"}
+        SN{"Senegāla"}
+        SO{"Somālija"}
+        SR{"Surinama"}
+        ST{"Santome un Prinsipi"}
+        SV{"Salvadora"}
+        SY{"Sīrija"}
+        SZ{"Svazilenda"}
+        TC{"Tērksas un Kaikosas salas"}
+        TD{"Čada"}
+        TF{"Franču dienvidu teritorijas"}
+        TG{"Togo"}
+        TH{"Taizeme"}
+        TJ{"Tadžikistāna"}
+        TK{"Tokelau"}
+        TL{"Austrumtimora"}
+        TM{"Turkmenistāna"}
+        TN{"Tunisija"}
+        TO{"Tonga"}
+        TR{"Turcija"}
+        TT{"Trinidāda un Tobāgo"}
+        TV{"Tuvalu"}
+        TW{"Taivāna"}
+        TZ{"Tanzānija"}
+        UA{"Ukraina"}
+        UG{"Uganda"}
+        UM{"ASV mazās aizjūras teritorijas"}
+        US{"United States"}
+        UY{"Urugvaja"}
+        UZ{"Uzbekistāna"}
+        VA{"Vatikāns"}
+        VC{"Sentvinsenta un Grenadīnas"}
+        VE{"Venecuēla"}
+        VG{"Britu Virdžīnu salas"}
+        VI{"Amerikāņu Virdžīnu salas"}
+        VN{"Vjetnama"}
+        VU{"Vanuatu"}
+        WF{"Volisa un Futuna"}
+        WS{"Samoa"}
+        YE{"Jemena"}
+        YT{"Majota"}
+        ZA{"Dienvidāfrika"}
+        ZM{"Zambija"}
+        ZW{"Zimbabve"}
+        ZZ{"Nezināms vai nederīgs reģions"}
+    }
+    Currencies{
+        KZT{
+            "KZT",
+            "Kazahstānas tenge",
+        }
+        LVL{
+            "Ls",
+            "Latvijas lats",
+        }
+    }
+    CurrencyPlurals{
+        KZT{
+            zero{"Kazahstānas tenge"}
+        }
+    }
+    ExemplarCharacters{"[a ā b c č d e ē f g ģ h i ī j k ķ l ļ m n ņ o p r s š t u ū v z ž]"}
+    Keys{
+        calendar{"Kalendārs"}
+        currency{"Valūta"}
+    }
+    Languages{
+        ar{"arābu"}
+        bg{"bulgāru"}
+        bn{"bengāļu"}
+        cs{"čehu"}
+        da{"dāņu"}
+        de{"vācu"}
+        el{"grieķu"}
+        en{"angļu"}
+        es{"spāņu"}
+        et{"igauņu"}
+        fi{"somu"}
+        fr{"franču"}
+        ga{"īru"}
+        he{"ivrits"}
+        hi{"hindi"}
+        hr{"horvātu"}
+        hu{"ungāru"}
+        it{"itāliešu"}
+        ja{"japāņu"}
+        ko{"korejiešu"}
+        lt{"lietuviešu"}
+        lv{"latviešu"}
+        mt{"maltiešu"}
+        nl{"holandiešu"}
+        no{"norvēģu"}
+        pl{"poļu"}
+        pt{"portugāļu"}
+        ro{"rumāņu"}
+        ru{"krievu"}
+        sk{"slovāku"}
+        sl{"slovēņu"}
+        sv{"zviedru"}
+        th{"taju"}
+        tog{"Njasas tongu valoda"}
+        tr{"turku"}
+        und{"nezināma vai nederīga valoda"}
+        zh{"ķīniešu"}
+        zh_Hans{"ķīniešu vienkāršotā"}
+        zh_Hant{"ķīniešu tradicionālā"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        ",",
+        " ",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
+    Types{
+        calendar{
+            buddhist{"Budistu kalendārs"}
+            chinese{"Ķīniešu kalendārs"}
+            gregorian{"Gregora kalendārs"}
+            hebrew{"Ebreju kalendārs"}
+            indian{"Indijas nacionālais kalendārs"}
+            islamic{"Islāma kalendārs"}
+            islamic-civil{"Islāma pilsoņu kalendārs"}
+            japanese{"Japāņu kalendārs"}
+            roc{"Ķīnas Republikas kalendārs"}
+        }
+        collation{
+            big5han{"Tradicionālās ķīniešu valodas kārtošanas secība - Big5"}
+            direct{"Tiešā kārtošanas secība"}
+            gb2312han{"Vienkāršotās ķīniešu valodas kārtošanas secība - GB2312"}
+            phonebook{"Tālruņu grāmatas kārtošanas secība"}
+            pinyin{"Pinyin kārtošanas secība"}
+            stroke{"Stroke kārtošanas secība"}
+            traditional{"Tradicionālā kārtošanas secība"}
+        }
+    }
+    Version{"1.82"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy. 'gada' d. MMMM",
+                "yyyy. 'gada' d. MMMM",
+                "yyyy.d.M",
+                "yy.d.M",
+                "{1} {0}",
+            }
+            availableFormats{
+                Hm{"HH:mm"}
+                M{"L"}
+                MEd{"E, dd.MM"}
+                MMM{"LLL"}
+                MMMEd{"E, d. MMM"}
+                MMMMEd{"E, d. MMMM"}
+                MMMd{"d. MMM"}
+                d{"d"}
+                ms{"mm:ss"}
+                y{"yyyy"}
+                yM{"mm.yyyy"}
+                yMEd{"EEE, dd.mm.yyyy"}
+                yMMM{"yyyy. MMM"}
+                yMMMEd{"EEE, dd. MMM, yyyy"}
+                yMMMM{"yyyy. MMMM"}
+                yQ{"Q yyyy"}
+                yQQQ{"yyyy QQQ"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Sv",
+                        "P",
+                        "O",
+                        "T",
+                        "C",
+                        "Pk",
+                        "S",
+                    }
+                    wide{
+                        "svētdiena",
+                        "pirmdiena",
+                        "otrdiena",
+                        "trešdiena",
+                        "ceturtdiena",
+                        "piektdiena",
+                        "sestdiena",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "pmē",
+                    "mē",
+                }
+                narrow{
+                    "p.m.ē.",
+                    "m.ē.",
+                }
+                wide{
+                    "pirms mūsu ēras",
+                    "mūsu ērā",
+                }
+            }
+            fields{
+                day{
+                    relative{
+                        "-1"{"vakar"}
+                        "-2"{"aizvakar"}
+                        "0"{"šodien"}
+                        "1"{"rīt"}
+                        "2"{"parīt"}
+                        "3"{"aizparīt"}
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Jan",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "Mai",
+                        "Jūn",
+                        "Jūl",
+                        "Aug",
+                        "Sep",
+                        "Okt",
+                        "Nov",
+                        "Dec",
+                    }
+                    wide{
+                        "janvāris",
+                        "februāris",
+                        "marts",
+                        "aprīlis",
+                        "maijs",
+                        "jūnijs",
+                        "jūlijs",
+                        "augusts",
+                        "septembris",
+                        "oktobris",
+                        "novembris",
+                        "decembris",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "C1",
+                        "C2",
+                        "C3",
+                        "C4",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                }
+            }
+        }
+    }
+    delimiters{
+        quotationEnd{"”"}
+        quotationStart{"“"}
+    }
+    measurementSystemNames{
+        US{"britu"}
+        metric{"metriskā"}
+    }
+    zoneStrings{
+        "America:Adak"{
+            ec{"Adaka"}
+        }
+        "America:Argentina:La_Rioja"{
+            ec{"Larioha"}
+        }
+        "America:Argentina:Rio_Gallegos"{
+            ec{"Riogaljegosa"}
+        }
+        "America:Argentina:San_Juan"{
+            ec{"Sanhuana"}
+        }
+        "America:Argentina:San_Luis"{
+            ec{"Sanluisa"}
+        }
+        "America:Argentina:Tucuman"{
+            ec{"Tukumana"}
+        }
+        "America:Argentina:Ushuaia"{
+            ec{"Ušuaja"}
+        }
+        "America:Blanc-Sablon"{
+            ec{"Blanksablona"}
+        }
+        "America:Cambridge_Bay"{
+            ec{"Kembridžbeja"}
+        }
+        "America:Cancun"{
+            ec{"Kankūna"}
+        }
+        "America:Catamarca"{
+            ec{"Katamarka"}
+        }
+        "America:Chicago"{
+            ec{"Čikāga"}
+        }
+        "America:Chihuahua"{
+            ec{"Čihuahua"}
+        }
+        "America:Coral_Harbour"{
+            ec{"Koralharbora"}
+        }
+        "America:Cordoba"{
+            ec{"Kordoba"}
+        }
+        "America:Dawson"{
+            ec{"Dausona"}
+        }
+        "America:Dawson_Creek"{
+            ec{"Dousonkrīka"}
+        }
+        "America:Denver"{
+            ec{"Denvera"}
+        }
+        "America:Detroit"{
+            ec{"Detroita"}
+        }
+        "America:Edmonton"{
+            ec{"Edmontona"}
+        }
+        "America:Eirunepe"{
+            ec{"Eirenupe"}
+        }
+        "America:Fortaleza"{
+            ec{"Fortalesa"}
+        }
+        "America:Glace_Bay"{
+            ec{"Gleisbeja"}
+        }
+        "America:Goose_Bay"{
+            ec{"Gūsbeja"}
+        }
+        "America:Halifax"{
+            ec{"Halifaksa"}
+        }
+        "America:Hermosillo"{
+            ec{"Ermosiljo"}
+        }
+        "America:Indiana:Knox"{
+            ec{"Noksa"}
+        }
+        "America:Indiana:Petersburg"{
+            ec{"Pēterburga"}
+        }
+        "America:Indiana:Tell_City"{
+            ec{"Tellsitija"}
+        }
+        "America:Indiana:Vevay"{
+            ec{"Viveja"}
+        }
+        "America:Indiana:Vincennes"{
+            ec{"Vinsensa"}
+        }
+        "America:Indiana:Winamac"{
+            ec{"Vinimaka"}
+        }
+        "America:Indianapolis"{
+            ec{"Indianapolisa"}
+        }
+        "America:Inuvik"{
+            ec{"Inuvika"}
+        }
+        "America:Iqaluit"{
+            ec{"Ikaluita"}
+        }
+        "America:Jujuy"{
+            ec{"Žužuja"}
+        }
+        "America:Juneau"{
+            ec{"Džuno"}
+        }
+        "America:Kentucky:Monticello"{
+            ec{"Montiselo"}
+        }
+        "America:Los_Angeles"{
+            ec{"Losandželosa"}
+        }
+        "America:Louisville"{
+            ec{"Luisvilla"}
+        }
+        "America:Mazatlan"{
+            ec{"Masatlāna"}
+        }
+        "America:Mendoza"{
+            ec{"Mendosa"}
+        }
+        "America:Menominee"{
+            ec{"Menominī"}
+        }
+        "America:Mexico_City"{
+            ec{"Mehiko"}
+        }
+        "America:Moncton"{
+            ec{"Monktona"}
+        }
+        "America:Monterrey"{
+            ec{"Montereja"}
+        }
+        "America:Montreal"{
+            ec{"Monreāla"}
+        }
+        "America:New_York"{
+            ec{"Ņujorka"}
+        }
+        "America:Nipigon"{
+            ec{"Nipigona"}
+        }
+        "America:Nome"{
+            ec{"Noma"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"Centra Ziemeļdakotā"}
+        }
+        "America:North_Dakota:New_Salem"{
+            ec{"Ņūsalema"}
+        }
+        "America:Pangnirtung"{
+            ec{"Pangnirtanga"}
+        }
+        "America:Phoenix"{
+            ec{"Fīniksa"}
+        }
+        "America:Rainy_River"{
+            ec{"Reinirivera"}
+        }
+        "America:Rankin_Inlet"{
+            ec{"Rankininleta"}
+        }
+        "America:Regina"{
+            ec{"Regīna"}
+        }
+        "America:Resolute"{
+            ec{"Rezolūta"}
+        }
+        "America:Rio_Branco"{
+            ec{"Riobranko"}
+        }
+        "America:Sao_Paulo"{
+            ec{"Sanpaulu"}
+        }
+        "America:Shiprock"{
+            ec{"Šiproka"}
+        }
+        "America:St_Johns"{
+            ec{"Sentdžonsa"}
+        }
+        "America:Swift_Current"{
+            ec{"Sviftkarenta"}
+        }
+        "America:Thunder_Bay"{
+            ec{"Tanderbeja"}
+        }
+        "America:Tijuana"{
+            ec{"Tihuāna"}
+        }
+        "America:Vancouver"{
+            ec{"Vankūvera"}
+        }
+        "America:Whitehorse"{
+            ec{"Vaithorsa"}
+        }
+        "America:Winnipeg"{
+            ec{"Vinipega"}
+        }
+        "America:Yakutat"{
+            ec{"Jakutata"}
+        }
+        "America:Yellowknife"{
+            ec{"Jelounaifa"}
+        }
+        "Asia:Almaty"{
+            ec{"Almati"}
+        }
+        "Asia:Anadyr"{
+            ec{"Anadira"}
+        }
+        "Asia:Chongqing"{
+            ec{"Čuncina"}
+        }
+        "Asia:Harbin"{
+            ec{"Harbina"}
+        }
+        "Asia:Irkutsk"{
+            ec{"Irkutska"}
+        }
+        "Asia:Kamchatka"{
+            ec{"Kamčatka"}
+        }
+        "Asia:Kashgar"{
+            ec{"Kašgara"}
+        }
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnojarska"}
+        }
+        "Asia:Kuching"{
+            ec{"Kučinga"}
+        }
+        "Asia:Magadan"{
+            ec{"Magadāna"}
+        }
+        "Asia:Novosibirsk"{
+            ec{"Novosibirska"}
+        }
+        "Asia:Omsk"{
+            ec{"Omska"}
+        }
+        "Asia:Oral"{
+            ec{"Orāla"}
+        }
+        "Asia:Pontianak"{
+            ec{"Pontianaka"}
+        }
+        "Asia:Qyzylorda"{
+            ec{"Kizilorda"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Sahalīna"}
+        }
+        "Asia:Samarkand"{
+            ec{"Samarkanda"}
+        }
+        "Asia:Urumqi"{
+            ec{"Urumči"}
+        }
+        "Asia:Vladivostok"{
+            ec{"Vladivostoka"}
+        }
+        "Asia:Yakutsk"{
+            ec{"Jakutska"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"Jekaterinburga"}
+        }
+        "Australia:Adelaide"{
+            ec{"Adelaida"}
+        }
+        "Australia:Brisbane"{
+            ec{"Brisbena"}
+        }
+        "Australia:Broken_Hill"{
+            ec{"Brokenhila"}
+        }
+        "Australia:Currie"{
+            ec{"Kerija"}
+        }
+        "Australia:Darwin"{
+            ec{"Dārvina"}
+        }
+        "Australia:Eucla"{
+            ec{"Jūkla"}
+        }
+        "Australia:Hobart"{
+            ec{"Hobarta"}
+        }
+        "Australia:Lindeman"{
+            ec{"Lindemana"}
+        }
+        "Australia:Lord_Howe"{
+            ec{"Lordhova"}
+        }
+        "Australia:Melbourne"{
+            ec{"Melburna"}
+        }
+        "Australia:Perth"{
+            ec{"Pērta"}
+        }
+        "Etc:Unknown"{
+            ec{"Nezināma"}
+        }
+        "Europe:Kaliningrad"{
+            ec{"Kaļiņingrada"}
+        }
+        "Europe:Simferopol"{
+            ec{"Simferopole"}
+        }
+        "Europe:Uzhgorod"{
+            ec{"Užgoroda"}
+        }
+        "Europe:Volgograd"{
+            ec{"Volgograda"}
+        }
+        "Europe:Zaporozhye"{
+            ec{"Zaporožje"}
+        }
+        "Pacific:Auckland"{
+            ec{"Oklenda"}
+        }
+        "Pacific:Chatham"{
+            ec{"Četema"}
+        }
+        "Pacific:Kosrae"{
+            ec{"Kosraja"}
+        }
+        "Pacific:Kwajalein"{
+            ec{"Kvadžaleina"}
+        }
+    }
+}
