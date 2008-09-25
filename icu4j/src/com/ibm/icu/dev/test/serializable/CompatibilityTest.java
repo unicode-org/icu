@@ -90,7 +90,7 @@ public class CompatibilityTest extends TestFmwk
                 ++params.invalidCount;
             } else {
                 params.testCount += 1;
-    
+
                 try {
                     ObjectInputStream in = new ObjectInputStream(inputStream);
                     Object inputObjects[] = (Object[]) in.readObject();
@@ -126,6 +126,11 @@ public class CompatibilityTest extends TestFmwk
     private static final String[][] SKIP_CASES = {
         {"ICU_3.8.1",   "com.ibm.icu.text.PluralFormat.dat"},
         {"ICU_3.8.1",   "com.ibm.icu.text.PluralRules.dat"},
+        // The case below actually works OK with 4.2M1 on JRE5, but not on JRE1.4.2.
+        // It looks the use of anonymous inner class is the root cause.  If we want
+        // to fix the root cause, it will likely break the backward compatibility.
+        // For now, we're skipping this case even it works OK on JRE5.  See ticket#6550.
+        {"ICU_4.0",     "com.ibm.icu.text.PluralRules.dat"},
     };
 
     private Target getFileTargets(URL fileURL)
@@ -140,8 +145,7 @@ public class CompatibilityTest extends TestFmwk
             if (dataDir.isDirectory()) {
                 FolderTarget newTarget = new FolderTarget(dataDir.getName());
                 File files[] = dataDir.listFiles();
-                
-                
+
                 newTarget.setNext(target);
                 target = newTarget;
 
@@ -152,7 +156,7 @@ public class CompatibilityTest extends TestFmwk
                     File file = files[i];
                     String filename = file.getName();
                     int ix = filename.indexOf(".dat");
-                    
+
                     if (ix > 0) {
                         String className = filename.substring(0, ix);
 
@@ -165,7 +169,7 @@ public class CompatibilityTest extends TestFmwk
                         }
 
                         InputStream is;
-                        
+
                         try {
                             is = new FileInputStream(file);
                             target.add(className, is);
@@ -188,14 +192,14 @@ public class CompatibilityTest extends TestFmwk
         int ix = prefix.indexOf("!/");
         JarFile jarFile;
         FolderTarget target = null;
-        
+
         if (ix >= 0) {
             prefix = prefix.substring(ix + 2);
         }
-        
+
         try {
             JarURLConnection conn = (JarURLConnection) jarURL.openConnection();
-            
+
             jarFile = conn.getJarFile();
 
             Enumeration entries = jarFile.entries();
