@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-*   Copyright (C) 1999-2007 International Business Machines Corporation   *
+*   Copyright (C) 1999-2008 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 
@@ -171,6 +171,18 @@ protected:
     //=======================================================================
 
     /**
+     * Constant to be used in the constructor
+     * RuleBasedBreakIterator(RBBIDataHeader*, EDontAdopt, UErrorCode &);
+     * which does not adopt the memory indicated by the RBBIDataHeader*
+     * parameter.
+     *
+     * @internal
+     */
+    enum EDontAdopt {
+        kDontAdopt
+    };
+
+    /**
      * Constructor from a flattened set of RBBI data in malloced memory.
      *             RulesBasedBreakIterators built from a custom set of rules
      *             are created via this constructor; the rules are compiled
@@ -181,6 +193,16 @@ protected:
      * @internal
      */
     RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode &status);
+
+    /**
+     * Constructor from a flattened set of RBBI data in memory which need not
+     *             be malloced (e.g. it may be a memory-mapped file, etc.).
+     *
+     *             This version does not adopt the memory, and does not
+     *             free it when done.
+     * @internal
+     */
+    RuleBasedBreakIterator(const RBBIDataHeader* data, enum EDontAdopt dontAdopt, UErrorCode &status);
 
 
     friend class RBBIRuleBuilder;

@@ -21,6 +21,7 @@
 #include "ubrkimpl.h"
 #include "unicode/ustring.h"
 #include "unicode/utext.h"
+#include "cmemory.h"
 
 /**
  * API Test the RuleBasedBreakIterator class
@@ -1047,6 +1048,50 @@ void RBBIAPITest::TestRoundtripRules() {
     }
 }
 
+// Try out the RuleBasedBreakIterator constructors that take RBBIDataHeader*
+// (these are protected so we access them via a local class RBBIWithProtectedFunctions).
+// This is just a sanity check, not a thorough test (e.g. we don't check that the 
+// first delete actually frees rulesCopy).
+void RBBIAPITest::TestCreateFromRBBIData() {
+    // Get some handy RBBIData
+    const char *brkName = "word"; // or "sent", "line", "char", etc.
+    UErrorCode status = U_ZERO_ERROR;
+    UDataMemory * data = udata_open(U_ICUDATA_BRKITR, "brk", brkName, &status);
+    if ( U_SUCCESS(status) ) {
+        const RBBIDataHeader * builtRules = (const RBBIDataHeader *)udata_getMemory(data);
+        uint32_t length = builtRules->fLength;
+        RBBIWithProtectedFunctions * brkItr;
+
+        // Try the memory-adopting constructor, need to copy the data first
+        RBBIDataHeader * rulesCopy = (RBBIDataHeader *) uprv_malloc(length);
+        if ( rulesCopy ) {
+            uprv_memcpy( rulesCopy, builtRules, length );
+
+            brkItr = new RBBIWithProtectedFunctions(rulesCopy, status);
+            if ( U_SUCCESS(status) ) {
+                delete brkItr; // this should free rulesCopy
+            } else {
+                errln("create RuleBasedBreakIterator from RBBIData (adopted): ICU Error \"%s\"\n", u_errorName(status) );
+                status = U_ZERO_ERROR;// reset for the next test
+                uprv_free( rulesCopy );
+            }
+        }
+        
+        // Now try the non-adopting constructor
+        brkItr = new RBBIWithProtectedFunctions(builtRules, RBBIWithProtectedFunctions::kDontAdopt, status);
+        if ( U_SUCCESS(status) ) {
+            delete brkItr; // this should NOT attempt to free builtRules
+            if (builtRules->fLength != length) { // sanity check
+                errln("create RuleBasedBreakIterator from RBBIData (non-adopted): delete affects data\n" );
+            }
+        } else {
+            errln("create RuleBasedBreakIterator from RBBIData (non-adopted): ICU Error \"%s\"\n", u_errorName(status) );
+        }
+        
+        udata_close(data);
+    }
+}
+
 //---------------------------------------------
 // runIndexedTest
 //---------------------------------------------
@@ -1069,6 +1114,7 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
         case 10: name = "TestRegistration"; if (exec) TestRegistration(); break;
         case 11: name = "TestBoilerPlate"; if (exec) TestBoilerPlate(); break;
         case 12: name = "TestRoundtripRules"; if (exec) TestRoundtripRules(); break;
+        case 13: name = "TestCreateFromRBBIData"; if (exec) TestCreateFromRBBIData(); break;
 
         default: name = ""; break; // needed to end loop
     }
@@ -1113,6 +1159,20 @@ void RBBIAPITest::doTest(UnicodeString& testString, int32_t start, int32_t gotof
          errln(prettify((UnicodeString)"ERROR:****selected \"" + selected + "\" instead of \"" + expected + "\""));
     else
         logln(prettify("****selected \"" + selected + "\""));
+}
+
+//---------------------------------------------
+//RBBIWithProtectedFunctions class functions
+//---------------------------------------------
+
+RBBIWithProtectedFunctions::RBBIWithProtectedFunctions(RBBIDataHeader* data, UErrorCode &status)
+    : RuleBasedBreakIterator(data, status)
+{
+}
+
+RBBIWithProtectedFunctions::RBBIWithProtectedFunctions(const RBBIDataHeader* data, enum EDontAdopt, UErrorCode &status)
+    : RuleBasedBreakIterator(data, RuleBasedBreakIterator::kDontAdopt, status)
+{
 }
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
