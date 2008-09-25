@@ -194,7 +194,7 @@ UBool IslamicCalendar::civilLeapYear(int32_t year)
 */
 int32_t IslamicCalendar::yearStart(int32_t year) {
     if (civil == CIVIL) {
-        return (year-1)*354 + Math::floorDivide((3+11*year),30);
+        return (year-1)*354 + ClockMath::floorDivide((3+11*year),30);
     } else {
         return trueMonthStart(12*(year-1));
     }
@@ -210,7 +210,7 @@ int32_t IslamicCalendar::yearStart(int32_t year) {
 int32_t IslamicCalendar::monthStart(int32_t year, int32_t month) const {
     if (civil == CIVIL) {
         return (int32_t)uprv_ceil(29.5*month)
-            + (year-1)*354 + (int32_t)Math::floorDivide((3+11*year),30);
+            + (year-1)*354 + (int32_t)ClockMath::floorDivide((3+11*year),30);
     } else {
         return trueMonthStart(12*(year-1) + month);
     }
@@ -260,7 +260,7 @@ int32_t IslamicCalendar::trueMonthStart(int32_t month) const
                 }
             } while (age < 0);
         }
-        start = (int32_t)Math::floorDivide((origin - HIJRA_MILLIS), (double)kOneDay) + 1;
+        start = (int32_t)ClockMath::floorDivide((origin - HIJRA_MILLIS), (double)kOneDay) + 1;
         CalendarCache::put(&gMonthCache, month, start, status);
     }
 trueMonthStartEnd :
@@ -397,7 +397,7 @@ void IslamicCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status)
 
     if (civil == CIVIL) {
         // Use the civil calendar approximation, which is just arithmetic
-        year  = (int)Math::floorDivide( (double)(30 * days + 10646) , 10631.0 );
+        year  = (int)ClockMath::floorDivide( (double)(30 * days + 10646) , 10631.0 );
         month = (int32_t)uprv_ceil((days - 29 - yearStart(year)) / 29.5 );
         month = month<11?month:11;
         startDate = monthStart(year, month);

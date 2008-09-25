@@ -138,7 +138,7 @@ OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
           for(jj=0;jj<transitionCount;jj++) {
             int32_t year, month, dom, dow;
             double millis=0;
-            double days = Math::floorDivide(((double)transitionTimes[jj])*1000.0, (double)U_MILLIS_PER_DAY, millis);
+            double days = ClockMath::floorDivide(((double)transitionTimes[jj])*1000.0, (double)U_MILLIS_PER_DAY, millis);
             
             Grego::dayToFields(days, year, month, dom, dow);
             U_DEBUG_TZ_MSG(("   Transition %d:  time %d (%04d.%02d.%02d+%.1fh), typedata%d\n", jj, transitionTimes[jj],
@@ -385,7 +385,7 @@ int32_t OlsonTimeZone::getRawOffset() const {
 void printTime(double ms) {
             int32_t year, month, dom, dow;
             double millis=0;
-            double days = Math::floorDivide(((double)ms), (double)U_MILLIS_PER_DAY, millis);
+            double days = ClockMath::floorDivide(((double)ms), (double)U_MILLIS_PER_DAY, millis);
             
             Grego::dayToFields(days, year, month, dom, dow);
             U_DEBUG_TZ_MSG(("   getHistoricalOffset:  time %.1f (%04d.%02d.%02d+%.1fh)\n", ms,
@@ -505,7 +505,7 @@ UBool OlsonTimeZone::useDaylightTime() const {
     // DST is in use in the current year (at any point in the year)
     // and returns TRUE if so.
 
-    int32_t days = (int32_t)Math::floorDivide(uprv_getUTCtime(), (double)U_MILLIS_PER_DAY); // epoch days
+    int32_t days = (int32_t)ClockMath::floorDivide(uprv_getUTCtime(), (double)U_MILLIS_PER_DAY); // epoch days
 
     int32_t year, month, dom, dow;
     

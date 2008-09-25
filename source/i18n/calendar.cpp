@@ -1156,7 +1156,7 @@ void Calendar::computeFields(UErrorCode &ec)
     // JULIAN_DAY field and also removes some inelegant code. - Liu
     // 11/6/00
 
-    int32_t days =  (int32_t)Math::floorDivide(localMillis, (double)kOneDay);
+    int32_t days =  (int32_t)ClockMath::floorDivide(localMillis, (double)kOneDay);
 
     internalSet(UCAL_JULIAN_DAY,days + kEpochStartAsJulianDay);
 
@@ -2349,7 +2349,7 @@ void Calendar::computeTime(UErrorCode& status) {
     double millis = Grego::julianDayToMillis(julianDay);
 
 #if defined (U_DEBUG_CAL)
-    //  int32_t julianInsanityCheck =  (int32_t)Math::floorDivide(millis, kOneDay);
+    //  int32_t julianInsanityCheck =  (int32_t)ClockMath::floorDivide(millis, kOneDay);
     //  julianInsanityCheck += kEpochStartAsJulianDay;
     //  if(1 || julianInsanityCheck != julianDay) {
     //    fprintf(stderr, "%s:%d- D'oh- computed jules %d, to mills (%s)%.lf, recomputed %d\n",
