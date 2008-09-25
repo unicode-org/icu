@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2003-2007, International Business Machines
+ * Copyright (c) 2003-2008, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Alan Liu
@@ -24,12 +24,12 @@
 
 U_NAMESPACE_BEGIN
 
-int32_t Math::floorDivide(int32_t numerator, int32_t denominator) {
+int32_t ClockMath::floorDivide(int32_t numerator, int32_t denominator) {
     return (numerator >= 0) ?
         numerator / denominator : ((numerator + 1) / denominator) - 1;
 }
 
-int32_t Math::floorDivide(double numerator, int32_t denominator,
+int32_t ClockMath::floorDivide(double numerator, int32_t denominator,
                           int32_t& remainder) {
     double quotient;
     quotient = uprv_floor(numerator / denominator);
@@ -37,7 +37,7 @@ int32_t Math::floorDivide(double numerator, int32_t denominator,
     return (int32_t) quotient;
 }
 
-double Math::floorDivide(double dividend, double divisor,
+double ClockMath::floorDivide(double dividend, double divisor,
                          double& remainder) {
     // Only designed to work for positive divisors
     U_ASSERT(divisor > 0);
@@ -86,8 +86,8 @@ double Grego::fieldsToDay(int32_t year, int32_t month, int32_t dom) {
 
     int32_t y = year - 1;
 
-    double julian = 365 * y + Math::floorDivide(y, 4) + (JULIAN_1_CE - 3) + // Julian cal
-        Math::floorDivide(y, 400) - Math::floorDivide(y, 100) + 2 + // => Gregorian cal
+    double julian = 365 * y + ClockMath::floorDivide(y, 4) + (JULIAN_1_CE - 3) + // Julian cal
+        ClockMath::floorDivide(y, 400) - ClockMath::floorDivide(y, 100) + 2 + // => Gregorian cal
         DAYS_BEFORE[month + (isLeapYear(year) ? 12 : 0)] + dom; // => month/dom
 
     return julian - JULIAN_1970_CE; // JD => epoch day
@@ -103,10 +103,10 @@ void Grego::dayToFields(double day, int32_t& year, int32_t& month,
     // representation.  We use 400-year, 100-year, and 4-year cycles.
     // For example, the 4-year cycle has 4 years + 1 leap day; giving
     // 1461 == 365*4 + 1 days.
-    int32_t n400 = Math::floorDivide(day, 146097, doy); // 400-year cycle length
-    int32_t n100 = Math::floorDivide(doy, 36524, doy); // 100-year cycle length
-    int32_t n4   = Math::floorDivide(doy, 1461, doy); // 4-year cycle length
-    int32_t n1   = Math::floorDivide(doy, 365, doy);
+    int32_t n400 = ClockMath::floorDivide(day, 146097, doy); // 400-year cycle length
+    int32_t n100 = ClockMath::floorDivide(doy, 36524, doy); // 100-year cycle length
+    int32_t n4   = ClockMath::floorDivide(doy, 1461, doy); // 4-year cycle length
+    int32_t n1   = ClockMath::floorDivide(doy, 365, doy);
     year = 400*n400 + 100*n100 + 4*n4 + n1;
     if (n100 == 4 || n1 == 4) {
         doy = 365; // Dec 31 at end of 4- or 400-year cycle
@@ -134,14 +134,14 @@ void Grego::dayToFields(double day, int32_t& year, int32_t& month,
 void Grego::timeToFields(UDate time, int32_t& year, int32_t& month,
                         int32_t& dom, int32_t& dow, int32_t& doy, int32_t& mid) {
     double millisInDay;
-    double day = Math::floorDivide((double)time, (double)U_MILLIS_PER_DAY, millisInDay);
+    double day = ClockMath::floorDivide((double)time, (double)U_MILLIS_PER_DAY, millisInDay);
     mid = (int32_t)millisInDay;
     dayToFields(day, year, month, dom, dow, doy);
 }
 
 int32_t Grego::dayOfWeek(double day) {
     int32_t dow;
-    Math::floorDivide(day + UCAL_THURSDAY, 7, dow);
+    ClockMath::floorDivide(day + UCAL_THURSDAY, 7, dow);
     return (dow == 0) ? UCAL_SATURDAY : dow;
 }
 

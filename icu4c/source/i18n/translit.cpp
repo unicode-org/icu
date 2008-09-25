@@ -1631,7 +1631,7 @@ UBool Transliterator::initializeRegistry(UErrorCode &status) {
     _registerSpecialInverse(UNICODE_STRING_SIMPLE("Title"),
                             UNICODE_STRING_SIMPLE("Lower"), FALSE);
 
-    ucln_i18n_registerCleanup(UCLN_I18N_TRANSLITERATOR, transliterator_cleanup);
+    ucln_i18n_registerCleanup(UCLN_I18N_TRANSLITERATOR, utrans_transliterator_cleanup);
 
     return TRUE;
 }
@@ -1645,7 +1645,7 @@ U_NAMESPACE_END
  * necessarily invalidate any rule-based transliterators held by the
  * user, because RBTs hold pointers to common data objects.
  */
-U_CFUNC UBool transliterator_cleanup(void) {
+U_CFUNC UBool utrans_transliterator_cleanup(void) {
     U_NAMESPACE_USE
     TransliteratorIDParser::cleanup();
     if (registry) {

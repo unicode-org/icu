@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2003-2007, International Business Machines
+ * Copyright (c) 2003-2008, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Alan Liu
@@ -22,9 +22,10 @@ U_NAMESPACE_BEGIN
 
 /**
  * A utility class providing mathematical functions used by time zone
- * and calendar code.  Do not instantiate.
+ * and calendar code.  Do not instantiate.  Formerly just named 'Math'.
+ * @internal
  */
-class Math {
+class ClockMath {
  public:
     /**
      * Divide two integers, returning the floor of the quotient.
@@ -250,7 +251,7 @@ class Grego {
     static const int8_t MONTH_LENGTH[24];
 };
 
-inline double Math::floorDivide(double numerator, double denominator) {
+inline double ClockMath::floorDivide(double numerator, double denominator) {
     return uprv_floor(numerator / denominator);
 }
 
@@ -281,12 +282,12 @@ inline double Grego::julianDayToMillis(int32_t julian)
 }
 
 inline int32_t Grego::millisToJulianDay(double millis) {
-  return (int32_t) (kEpochStartAsJulianDay + Math::floorDivide(millis, (double)kOneDay));
+  return (int32_t) (kEpochStartAsJulianDay + ClockMath::floorDivide(millis, (double)kOneDay));
 }
 
 inline int32_t Grego::gregorianShift(int32_t eyear) {
   int32_t y = eyear-1;
-  int32_t gregShift = Math::floorDivide(y, 400) - Math::floorDivide(y, 100) + 2;
+  int32_t gregShift = ClockMath::floorDivide(y, 400) - ClockMath::floorDivide(y, 100) + 2;
   return gregShift;
 }
 

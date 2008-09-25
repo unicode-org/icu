@@ -291,7 +291,7 @@ int32_t ChineseCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, U
     // modify the extended year value accordingly.
     if (month < 0 || month > 11) {
         double m = month;
-        eyear += (int32_t)Math::floorDivide(m, 12.0, m);
+        eyear += (int32_t)ClockMath::floorDivide(m, 12.0, m);
         month = (int32_t)m;
     }
 
@@ -446,7 +446,7 @@ double ChineseCalendar::daysToMillis(double days) {
  * @return days after January 1, 1970 0:00 Asia/Shanghai
  */
 double ChineseCalendar::millisToDays(double millis) {
-    return Math::floorDivide(millis + CHINA_OFFSET, kOneDay);
+    return ClockMath::floorDivide(millis + CHINA_OFFSET, kOneDay);
 }
 
 //------------------------------------------------------------------
@@ -662,7 +662,7 @@ void ChineseCalendar::computeChineseFields(int32_t days, int32_t gyear, int32_t 
 
         // 0->0,60  1->1,1  60->1,60  61->2,1  etc.
         int32_t yearOfCycle;
-        int32_t cycle = Math::floorDivide(year - 1, 60, yearOfCycle);
+        int32_t cycle = ClockMath::floorDivide(year - 1, 60, yearOfCycle);
         internalSet(UCAL_ERA, cycle + 1);
         internalSet(UCAL_YEAR, yearOfCycle + 1);
 

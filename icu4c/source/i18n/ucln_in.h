@@ -53,6 +53,6 @@ typedef enum ECleanupI18NType {
 U_CFUNC void U_EXPORT2 ucln_i18n_registerCleanup(ECleanupI18NType type,
                                                  cleanupFunc *func);
 
-U_CFUNC UBool transliterator_cleanup(void);
+U_CFUNC UBool utrans_transliterator_cleanup(void);
 
 #endif
