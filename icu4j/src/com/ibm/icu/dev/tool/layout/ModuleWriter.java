@@ -11,13 +11,13 @@
 
 package com.ibm.icu.dev.tool.layout;
 
-import java.io.PrintStream;
+import java.io.BufferedReader;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.util.Date;
-import java.io.*;
-import java.util.Scanner;
+import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.ibm.icu.text.MessageFormat;
 
@@ -104,7 +104,6 @@ public class ModuleWriter
     protected PrintStream output;
     
     protected BufferedReader reader;
-    protected Scanner sc;
     protected PrintStream updateFile;
     protected int previousTotalScripts;
     protected int previousTotalLanguages;
@@ -128,16 +127,16 @@ public class ModuleWriter
            String inputText = "";
            String versionToAdd = "";
            while((inputText=reader.readLine())!=null){
-               if(what.equals("script") && inputText.contains("Script=")){
+               if(what.equals("script") && inputText.indexOf("Script=") >= 0){
                    previousTotalScripts = Integer.parseInt(inputText.substring(inputText.indexOf("=")+1));
-               }else if(what.equals("languages") && inputText.contains("Language=")){
+               }else if(what.equals("languages") && inputText.indexOf("Language=") >= 0){
                    previousTotalLanguages = Integer.parseInt(inputText.substring(inputText.indexOf("=")+1));
-               }else if(what.equals("script") && inputText.contains("Scripts={")){
-                   while(!(versionToAdd=reader.readLine()).contains("}")){
+               }else if(what.equals("script") && inputText.indexOf("Scripts={") >= 0){
+                   while((versionToAdd=reader.readLine()).indexOf("}") == -1){
                        scriptVersionNumber.add(versionToAdd);
                    }
-               }else if(what.equals("languages") && inputText.contains("Languages={")){
-                   while(!(versionToAdd=reader.readLine()).contains("}")){
+               }else if(what.equals("languages") && inputText.indexOf("Languages={") >= 0){
+                   while((versionToAdd=reader.readLine()).indexOf("}") == -1){
                        languageVersionNumber.add(versionToAdd);
                    }
                }
