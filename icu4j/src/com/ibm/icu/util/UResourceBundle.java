@@ -306,19 +306,23 @@ public abstract class UResourceBundle extends ResourceBundle{
     // Cache for ResourceBundle instantiation
     private static ICUCache BUNDLE_CACHE = new SimpleCache();
 
-    /*
-     * A HACK!!!!!
-     * Currently if a resourcebundle with fallback turned ON is added to the cache
-     * and then a getBundleInstance() is called for a bundle with fallback turned OFF
-     * it will actually search the cache for any bundle of the same locale
-     * regaurdless of fallback status. This method has been created so that if
-     * The calling method KNOWS that instances of the other fallback state may be in the 
-     * cache, the calling method may call this method to clear out the cache.
+    /**
+     * @internal
      */
     public static void resetBundleCache()
     {
-    	//TODO figure a way around this method(see method comment)
-    	BUNDLE_CACHE = new SimpleCache();
+        /*
+         * A HACK!!!!!
+         * Currently if a resourcebundle with fallback turned ON is added to the cache
+         * and then a getBundleInstance() is called for a bundle with fallback turned OFF
+         * it will actually search the cache for any bundle of the same locale
+         * regaurdless of fallback status. This method has been created so that if
+         * The calling method KNOWS that instances of the other fallback state may be in the 
+         * cache, the calling method may call this method to clear out the cache.
+         *
+         */
+        //TODO figure a way around this method(see method comment)
+        BUNDLE_CACHE = new SimpleCache();
     }
     
     private static void addToCache(ResourceCacheKey key, UResourceBundle b) {
