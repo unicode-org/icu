@@ -160,7 +160,6 @@
 #define res_getTableItemByKey res_getTableItemByKey_4_1
 #define res_load res_load_4_1
 #define res_unload res_unload_4_1
-#define transliterator_cleanup transliterator_cleanup_4_1
 #define triedict_swap triedict_swap_4_1
 #define u_UCharsToChars u_UCharsToChars_4_1
 #define u_austrcpy u_austrcpy_4_1
@@ -1346,6 +1345,7 @@
 #define utrans_transIncremental utrans_transIncremental_4_1
 #define utrans_transIncrementalUChars utrans_transIncrementalUChars_4_1
 #define utrans_transUChars utrans_transUChars_4_1
+#define utrans_transliterator_cleanup utrans_transliterator_cleanup_4_1
 #define utrans_unregister utrans_unregister_4_1
 #define utrans_unregisterID utrans_unregisterID_4_1
 #define utrie_clone utrie_clone_4_1
@@ -1460,6 +1460,7 @@
 #define ClassDefFormat1Table ClassDefFormat1Table_4_1
 #define ClassDefFormat2Table ClassDefFormat2Table_4_1
 #define ClassDefinitionTable ClassDefinitionTable_4_1
+#define ClockMath ClockMath_4_1
 #define CollationElementIterator CollationElementIterator_4_1
 #define CollationKey CollationKey_4_1
 #define CollationLocaleListEnumeration CollationLocaleListEnumeration_4_1
@@ -1500,7 +1501,6 @@
 #define DictionaryBreakEngine DictionaryBreakEngine_4_1
 #define DigitList DigitList_4_1
 #define DistanceInfo DistanceInfo_4_1
-#define Entry Entry_4_1
 #define EnumToOffset EnumToOffset_4_1
 #define EscapeTransliterator EscapeTransliterator_4_1
 #define EthiopicCalendar EthiopicCalendar_4_1
@@ -1594,7 +1594,6 @@
 #define MarkToBasePositioningSubtable MarkToBasePositioningSubtable_4_1
 #define MarkToLigaturePositioningSubtable MarkToLigaturePositioningSubtable_4_1
 #define MarkToMarkPositioningSubtable MarkToMarkPositioningSubtable_4_1
-#define Math Math_4_1
 #define Measure Measure_4_1
 #define MeasureFormat MeasureFormat_4_1
 #define MeasureUnit MeasureUnit_4_1
@@ -1701,7 +1700,6 @@
 #define SingleSubstitutionFormat2Subtable SingleSubstitutionFormat2Subtable_4_1
 #define SingleSubstitutionSubtable SingleSubstitutionSubtable_4_1
 #define SingleTableProcessor SingleTableProcessor_4_1
-#define Spec Spec_4_1
 #define StateTableProcessor StateTableProcessor_4_1
 #define StringCharacterIterator StringCharacterIterator_4_1
 #define StringEnumeration StringEnumeration_4_1
@@ -1739,9 +1737,11 @@
 #define TransliterationRuleSet TransliterationRuleSet_4_1
 #define Transliterator Transliterator_4_1
 #define TransliteratorAlias TransliteratorAlias_4_1
+#define TransliteratorEntry TransliteratorEntry_4_1
 #define TransliteratorIDParser TransliteratorIDParser_4_1
 #define TransliteratorParser TransliteratorParser_4_1
 #define TransliteratorRegistry TransliteratorRegistry_4_1
+#define TransliteratorSpec TransliteratorSpec_4_1
 #define TrieWordDictionary TrieWordDictionary_4_1
 #define TrimmedArrayProcessor TrimmedArrayProcessor_4_1
 #define UCharCharacterIterator UCharCharacterIterator_4_1

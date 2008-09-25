@@ -112,7 +112,7 @@ CECalendar::ceToJD(int32_t year, int32_t month, int32_t date, int32_t jdEpochOff
     return (int32_t) (
         (jdEpochOffset+365)             // difference from Julian epoch to 1,1,1
         + 365 * (year - 1)              // number of days from years
-        + Math::floorDivide(year, 4)    // extra day of leap year
+        + ClockMath::floorDivide(year, 4)    // extra day of leap year
         + 30 * (month + 1)              // number of days from months
         + date                          // number of days for present month
         - 31                            // slack?
@@ -125,7 +125,7 @@ CECalendar::jdToCE(int32_t julianDay, int32_t jdEpochOffset, int32_t& year, int3
     int32_t c4; // number of 4 year cycle (1461 days)
     int32_t r4; // remainder of 4 year cycle, always positive
 
-    c4 = Math::floorDivide(julianDay - jdEpochOffset, 1461, r4);
+    c4 = ClockMath::floorDivide(julianDay - jdEpochOffset, 1461, r4);
 
     year = 4 * c4 + (r4/365 - r4/1460); // 4 * <number of 4year cycle> + <years within the last cycle>
 

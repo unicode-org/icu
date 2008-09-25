@@ -185,11 +185,11 @@ void TransliteratorAlias::parse(TransliteratorParser& parser,
 }
 
 //----------------------------------------------------------------------
-// class Spec
+// class TransliteratorSpec
 //----------------------------------------------------------------------
 
 /**
- * A Spec is a string specifying either a source or a target.  In more
+ * A TransliteratorSpec is a string specifying either a source or a target.  In more
  * general terms, it may also specify a variant, but we only use the
  * Spec class for sources and targets.
  *
@@ -203,10 +203,10 @@ void TransliteratorAlias::parse(TransliteratorParser& parser,
  * canonical form, or the script is transformed from an abbreviation
  * to a full name.
  */
-class Spec : public UMemory {
+class TransliteratorSpec : public UMemory {
  public:
-    Spec(const UnicodeString& spec);
-    ~Spec();
+    TransliteratorSpec(const UnicodeString& spec);
+    ~TransliteratorSpec();
 
     const UnicodeString& get() const;
     UBool hasFallback() const;
@@ -230,11 +230,11 @@ class Spec : public UMemory {
     UBool isNextLocale; // TRUE if nextSpec is a locale
     ResourceBundle* res;
 
-    Spec(const Spec &other); // forbid copying of this class
-    Spec &operator=(const Spec &other); // forbid copying of this class
+    TransliteratorSpec(const TransliteratorSpec &other); // forbid copying of this class
+    TransliteratorSpec &operator=(const TransliteratorSpec &other); // forbid copying of this class
 };
 
-Spec::Spec(const UnicodeString& theSpec)
+TransliteratorSpec::TransliteratorSpec(const UnicodeString& theSpec)
 : top(theSpec),
   res(0)
 {
@@ -280,15 +280,15 @@ Spec::Spec(const UnicodeString& theSpec)
     reset();
 }
 
-Spec::~Spec() {
+TransliteratorSpec::~TransliteratorSpec() {
     delete res;
 }
 
-UBool Spec::hasFallback() const {
+UBool TransliteratorSpec::hasFallback() const {
     return nextSpec.length() != 0;
 }
 
-void Spec::reset() {
+void TransliteratorSpec::reset() {
     if (spec != top) {
         spec = top;
         isSpecLocale = (res != 0);
@@ -296,7 +296,7 @@ void Spec::reset() {
     }
 }
 
-void Spec::setupNext() {
+void TransliteratorSpec::setupNext() {
     isNextLocale = FALSE;
     if (isSpecLocale) {
         nextSpec = spec;
@@ -319,22 +319,22 @@ void Spec::setupNext() {
 // for(const UnicodeString& s(spec.get());
 //     spec.hasFallback(); s(spec.next())) { ...
 
-const UnicodeString& Spec::next() {
+const UnicodeString& TransliteratorSpec::next() {
     spec = nextSpec;
     isSpecLocale = isNextLocale;
     setupNext();
     return spec;
 }
 
-const UnicodeString& Spec::get() const {
+const UnicodeString& TransliteratorSpec::get() const {
     return spec;
 }
 
-UBool Spec::isLocale() const {
+UBool TransliteratorSpec::isLocale() const {
     return isSpecLocale;
 }
 
-ResourceBundle& Spec::getBundle() const {
+ResourceBundle& TransliteratorSpec::getBundle() const {
     return *res;
 }
 
@@ -354,9 +354,9 @@ static void DEBUG_setup() {
 
 // Caller must call DEBUG_setup first.  Return index of given Entry,
 // if it is in use (not deleted yet), or -1 if not found.
-static int DEBUG_findEntry(Entry* e) {
+static int DEBUG_findEntry(TransliteratorEntry* e) {
     for (int i=0; i<DEBUG_entries->size(); ++i) {
-        if (e == (Entry*) DEBUG_entries->elementAt(i)) {
+        if (e == (TransliteratorEntry*) DEBUG_entries->elementAt(i)) {
             return i;
         }
     }
@@ -364,7 +364,7 @@ static int DEBUG_findEntry(Entry* e) {
 }
 
 // Track object creation
-static void DEBUG_newEntry(Entry* e) {
+static void DEBUG_newEntry(TransliteratorEntry* e) {
     DEBUG_setup();
     if (DEBUG_findEntry(e) >= 0) {
         // This should really never happen unless the heap is broken
@@ -376,7 +376,7 @@ static void DEBUG_newEntry(Entry* e) {
 }
 
 // Track object deletion
-static void DEBUG_delEntry(Entry* e) {
+static void DEBUG_delEntry(TransliteratorEntry* e) {
     DEBUG_setup();
     int i = DEBUG_findEntry(e);
     if (i < 0) {
@@ -387,7 +387,7 @@ static void DEBUG_delEntry(Entry* e) {
 }
 
 // Track object usage
-static void DEBUG_useEntry(Entry* e) {
+static void DEBUG_useEntry(TransliteratorEntry* e) {
     if (e == NULL) return;
     DEBUG_setup();
     int i = DEBUG_findEntry(e);
@@ -417,7 +417,7 @@ static void DEBUG_useEntry(Entry* e) {
  * for it.  We could easily add this if there is a need for it in the
  * future.
  */
-class Entry : public UMemory {
+class TransliteratorEntry : public UMemory {
 public:
     enum Type {
         RULES_FORWARD,
@@ -444,26 +444,26 @@ public:
             Transliterator::Token   context;
         } factory; // For FACTORY
     } u;
-    Entry();
-    ~Entry();
+    TransliteratorEntry();
+    ~TransliteratorEntry();
     void adoptPrototype(Transliterator* adopted);
     void setFactory(Transliterator::Factory factory,
                     Transliterator::Token context);
 
 private:
 
-    Entry(const Entry &other); // forbid copying of this class
-    Entry &operator=(const Entry &other); // forbid copying of this class
+    TransliteratorEntry(const TransliteratorEntry &other); // forbid copying of this class
+    TransliteratorEntry &operator=(const TransliteratorEntry &other); // forbid copying of this class
 };
 
-Entry::Entry() {
+TransliteratorEntry::TransliteratorEntry() {
     u.prototype = 0;
     compoundFilter = NULL;
     entryType = NONE;
     DEBUG_newEntry(this);
 }
 
-Entry::~Entry() {
+TransliteratorEntry::~TransliteratorEntry() {
     DEBUG_delEntry(this);
     if (entryType == PROTOTYPE) {
         delete u.prototype;
@@ -481,7 +481,7 @@ Entry::~Entry() {
     delete compoundFilter;
 }
 
-void Entry::adoptPrototype(Transliterator* adopted) {
+void TransliteratorEntry::adoptPrototype(Transliterator* adopted) {
     if (entryType == PROTOTYPE) {
         delete u.prototype;
     }
@@ -489,7 +489,7 @@ void Entry::adoptPrototype(Transliterator* adopted) {
     u.prototype = adopted;
 }
 
-void Entry::setFactory(Transliterator::Factory factory,
+void TransliteratorEntry::setFactory(Transliterator::Factory factory,
                        Transliterator::Token context) {
     if (entryType == PROTOTYPE) {
         delete u.prototype;
@@ -503,7 +503,7 @@ void Entry::setFactory(Transliterator::Factory factory,
 U_CDECL_BEGIN
 static void U_CALLCONV
 deleteEntry(void* obj) {
-    delete (Entry*) obj;
+    delete (TransliteratorEntry*) obj;
 }
 U_CDECL_END
 
@@ -530,7 +530,7 @@ Transliterator* TransliteratorRegistry::get(const UnicodeString& ID,
                                             TransliteratorAlias*& aliasReturn,
                                             UErrorCode& status) {
     U_ASSERT(aliasReturn == NULL);
-    Entry *entry = find(ID);
+    TransliteratorEntry *entry = find(ID);
     return (entry == 0) ? 0
         : instantiateEntry(ID, entry, aliasReturn, status);
 }
@@ -540,7 +540,7 @@ Transliterator* TransliteratorRegistry::reget(const UnicodeString& ID,
                                               TransliteratorAlias*& aliasReturn,
                                               UErrorCode& status) {
     U_ASSERT(aliasReturn == NULL);
-    Entry *entry = find(ID);
+    TransliteratorEntry *entry = find(ID);
 
     if (entry == 0) {
         // We get to this point if there are two threads, one of which
@@ -561,26 +561,26 @@ Transliterator* TransliteratorRegistry::reget(const UnicodeString& ID,
     // We have to detect this so we don't stomp over existing entry
     // data members and potentially leak memory (u.data and compoundFilter).
 
-    if (entry->entryType == Entry::RULES_FORWARD ||
-        entry->entryType == Entry::RULES_REVERSE ||
-        entry->entryType == Entry::LOCALE_RULES) {
+    if (entry->entryType == TransliteratorEntry::RULES_FORWARD ||
+        entry->entryType == TransliteratorEntry::RULES_REVERSE ||
+        entry->entryType == TransliteratorEntry::LOCALE_RULES) {
         
         if (parser.idBlockVector.isEmpty() && parser.dataVector.isEmpty()) {
             entry->u.data = 0;
-            entry->entryType = Entry::ALIAS;
+            entry->entryType = TransliteratorEntry::ALIAS;
             entry->stringArg = UNICODE_STRING_SIMPLE("Any-NULL");
         }
         else if (parser.idBlockVector.isEmpty() && parser.dataVector.size() == 1) {
             entry->u.data = (TransliterationRuleData*)parser.dataVector.orphanElementAt(0);
-            entry->entryType = Entry::RBT_DATA;
+            entry->entryType = TransliteratorEntry::RBT_DATA;
         }
         else if (parser.idBlockVector.size() == 1 && parser.dataVector.isEmpty()) {
             entry->stringArg = *(UnicodeString*)(parser.idBlockVector.elementAt(0));
             entry->compoundFilter = parser.orphanCompoundFilter();
-            entry->entryType = Entry::ALIAS;
+            entry->entryType = TransliteratorEntry::ALIAS;
         }
         else {
-            entry->entryType = Entry::COMPOUND_RBT;
+            entry->entryType = TransliteratorEntry::COMPOUND_RBT;
             entry->compoundFilter = parser.orphanCompoundFilter();
             entry->u.dataVector = new UVector(status);
             entry->stringArg.remove();
@@ -613,7 +613,7 @@ void TransliteratorRegistry::put(Transliterator* adoptedProto,
                                  UBool visible,
                                  UErrorCode& ec)
 {
-    Entry *entry = new Entry();
+    TransliteratorEntry *entry = new TransliteratorEntry();
     if (entry == NULL) {
         ec = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -627,7 +627,7 @@ void TransliteratorRegistry::put(const UnicodeString& ID,
                                  Transliterator::Token context,
                                  UBool visible,
                                  UErrorCode& ec) {
-    Entry *entry = new Entry();
+    TransliteratorEntry *entry = new TransliteratorEntry();
     if (entry == NULL) {
         ec = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -642,13 +642,13 @@ void TransliteratorRegistry::put(const UnicodeString& ID,
                                  UBool readonlyResourceAlias,
                                  UBool visible,
                                  UErrorCode& ec) {
-    Entry *entry = new Entry();
+    TransliteratorEntry *entry = new TransliteratorEntry();
     if (entry == NULL) {
         ec = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    entry->entryType = (dir == UTRANS_FORWARD) ? Entry::RULES_FORWARD
-        : Entry::RULES_REVERSE;
+    entry->entryType = (dir == UTRANS_FORWARD) ? TransliteratorEntry::RULES_FORWARD
+        : TransliteratorEntry::RULES_REVERSE;
     if (readonlyResourceAlias) {
         entry->stringArg.setTo(TRUE, resourceName.getBuffer(), -1);
     }
@@ -663,10 +663,10 @@ void TransliteratorRegistry::put(const UnicodeString& ID,
                                  UBool readonlyAliasAlias,
                                  UBool visible,
                                  UErrorCode& /*ec*/) {
-    Entry *entry = new Entry();
+    TransliteratorEntry *entry = new TransliteratorEntry();
     // Null pointer check
     if (entry != NULL) {
-        entry->entryType = Entry::ALIAS;
+        entry->entryType = TransliteratorEntry::ALIAS;
         if (readonlyAliasAlias) {
             entry->stringArg.setTo(TRUE, alias.getBuffer(), -1);
         }
@@ -863,7 +863,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TransliteratorRegistry::Enumeration)
 void TransliteratorRegistry::registerEntry(const UnicodeString& source,
                                            const UnicodeString& target,
                                            const UnicodeString& variant,
-                                           Entry* adopted,
+                                           TransliteratorEntry* adopted,
                                            UBool visible) {
     UnicodeString ID;
     UnicodeString s(source);
@@ -878,7 +878,7 @@ void TransliteratorRegistry::registerEntry(const UnicodeString& source,
  * Convenience method.  Calls 6-arg registerEntry().
  */
 void TransliteratorRegistry::registerEntry(const UnicodeString& ID,
-                                           Entry* adopted,
+                                           TransliteratorEntry* adopted,
                                            UBool visible) {
     UnicodeString source, target, variant;
     UBool sawSource;
@@ -897,7 +897,7 @@ void TransliteratorRegistry::registerEntry(const UnicodeString& ID,
                                            const UnicodeString& source,
                                            const UnicodeString& target,
                                            const UnicodeString& variant,
-                                           Entry* adopted,
+                                           TransliteratorEntry* adopted,
                                            UBool visible) {
     UErrorCode status = U_ZERO_ERROR;
     registry.put(ID, adopted, status);
@@ -999,12 +999,12 @@ void TransliteratorRegistry::removeSTV(const UnicodeString& source,
  *
  * Caller does NOT own returned object.
  */
-Entry* TransliteratorRegistry::findInDynamicStore(const Spec& src,
-                                                  const Spec& trg,
+TransliteratorEntry* TransliteratorRegistry::findInDynamicStore(const TransliteratorSpec& src,
+                                                  const TransliteratorSpec& trg,
                                                   const UnicodeString& variant) const {
     UnicodeString ID;
     TransliteratorIDParser::STVtoID(src, trg, variant, ID);
-    Entry *e = (Entry*) registry.get(ID);
+    TransliteratorEntry *e = (TransliteratorEntry*) registry.get(ID);
     DEBUG_useEntry(e);
     return e;
 }
@@ -1020,10 +1020,10 @@ Entry* TransliteratorRegistry::findInDynamicStore(const Spec& src,
  *
  * Caller does NOT own returned object.
  */
-Entry* TransliteratorRegistry::findInStaticStore(const Spec& src,
-                                                 const Spec& trg,
+TransliteratorEntry* TransliteratorRegistry::findInStaticStore(const TransliteratorSpec& src,
+                                                 const TransliteratorSpec& trg,
                                                  const UnicodeString& variant) {
-    Entry* entry = 0;
+    TransliteratorEntry* entry = 0;
     if (src.isLocale()) {
         entry = findInBundle(src, trg, variant, UTRANS_FORWARD);
     } else if (trg.isLocale()) {
@@ -1056,8 +1056,8 @@ static const UChar TRANSLITERATE[] = {84,114,97,110,115,108,105,116,101,114,97,1
  * On success, create a new Entry object, populate it, and return it.
  * The caller owns the returned object.
  */
-Entry* TransliteratorRegistry::findInBundle(const Spec& specToOpen,
-                                            const Spec& specToFind,
+TransliteratorEntry* TransliteratorRegistry::findInBundle(const TransliteratorSpec& specToOpen,
+                                            const TransliteratorSpec& specToFind,
                                             const UnicodeString& variant,
                                             UTransDirection direction)
 {
@@ -1120,7 +1120,7 @@ Entry* TransliteratorRegistry::findInBundle(const Spec& specToOpen,
 
     // We have succeeded in loading a string from the locale
     // resources.  Create a new registry entry to hold it and return it.
-    Entry *entry = new Entry();
+    TransliteratorEntry *entry = new TransliteratorEntry();
     if (entry != 0) {
         // The direction is always forward for the
         // TransliterateTo_xxx and TransliterateFrom_xxx
@@ -1129,7 +1129,7 @@ Entry* TransliteratorRegistry::findInBundle(const Spec& specToOpen,
         // the direction is the value passed in to this
         // function.
         int32_t dir = (pass == 0) ? UTRANS_FORWARD : direction;
-        entry->entryType = Entry::LOCALE_RULES;
+        entry->entryType = TransliteratorEntry::LOCALE_RULES;
         entry->stringArg = resStr;
         entry->intArg = dir;
     }
@@ -1140,7 +1140,7 @@ Entry* TransliteratorRegistry::findInBundle(const Spec& specToOpen,
 /**
  * Convenience method.  Calls 3-arg find().
  */
-Entry* TransliteratorRegistry::find(const UnicodeString& ID) {
+TransliteratorEntry* TransliteratorRegistry::find(const UnicodeString& ID) {
     UnicodeString source, target, variant;
     UBool sawSource;
     TransliteratorIDParser::IDtoSTV(ID, source, target, variant, sawSource);
@@ -1168,13 +1168,13 @@ Entry* TransliteratorRegistry::find(const UnicodeString& ID) {
  *
  * Caller does NOT own returned object.  Return 0 on failure.
  */
-Entry* TransliteratorRegistry::find(UnicodeString& source,
+TransliteratorEntry* TransliteratorRegistry::find(UnicodeString& source,
                                     UnicodeString& target,
                                     UnicodeString& variant) {
     
-    Spec src(source);
-    Spec trg(target);
-    Entry* entry;
+    TransliteratorSpec src(source);
+    TransliteratorSpec trg(target);
+    TransliteratorEntry* entry;
 
     if (variant.length() != 0) {
         
@@ -1232,38 +1232,38 @@ Entry* TransliteratorRegistry::find(UnicodeString& source,
  * modified.
  */
 Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID,
-                                                         Entry *entry,
+                                                         TransliteratorEntry *entry,
                                                          TransliteratorAlias* &aliasReturn,
                                                          UErrorCode& status) {
     Transliterator *t = 0;
     U_ASSERT(aliasReturn == 0);
 
     switch (entry->entryType) {
-    case Entry::RBT_DATA:
+    case TransliteratorEntry::RBT_DATA:
         t = new RuleBasedTransliterator(ID, entry->u.data);
         if (t == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
         }
         return t;
-    case Entry::PROTOTYPE:
+    case TransliteratorEntry::PROTOTYPE:
         t = entry->u.prototype->clone();
         if (t == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
         }
         return t;
-    case Entry::ALIAS:
+    case TransliteratorEntry::ALIAS:
         aliasReturn = new TransliteratorAlias(entry->stringArg, entry->compoundFilter);
         if (aliasReturn == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
         }
         return 0;
-    case Entry::FACTORY:
+    case TransliteratorEntry::FACTORY:
         t = entry->u.factory.function(ID, entry->u.factory.context);
         if (t == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
         }
         return t;
-    case Entry::COMPOUND_RBT:
+    case TransliteratorEntry::COMPOUND_RBT:
         {
             UVector* rbts = new UVector(entry->u.dataVector->size(), status);
             // Check for null pointer
@@ -1290,15 +1290,15 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
             status = U_MEMORY_ALLOCATION_ERROR;
         }
         return 0;
-    case Entry::LOCALE_RULES:
+    case TransliteratorEntry::LOCALE_RULES:
         aliasReturn = new TransliteratorAlias(ID, entry->stringArg,
                                               (UTransDirection) entry->intArg);
         if (aliasReturn == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
         }
         return 0;
-    case Entry::RULES_FORWARD:
-    case Entry::RULES_REVERSE:
+    case TransliteratorEntry::RULES_FORWARD:
+    case TransliteratorEntry::RULES_REVERSE:
         // Process the rule data into a TransliteratorRuleData object,
         // and possibly also into an ::id header and/or footer.  Then
         // we modify the registry with the parsed data and retry.
@@ -1330,7 +1330,7 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
                 // transliterators; if it lists something that's not
                 // installed, we'll get an error from ResourceBundle.
                 aliasReturn = new TransliteratorAlias(ID, rules,
-                    ((entry->entryType == Entry::RULES_REVERSE) ?
+                    ((entry->entryType == TransliteratorEntry::RULES_REVERSE) ?
                      UTRANS_REVERSE : UTRANS_FORWARD));
                 if (aliasReturn == 0) {
                     status = U_MEMORY_ALLOCATION_ERROR;
