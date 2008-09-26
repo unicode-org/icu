@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+******************************************************************************
+* Copyright (C) 2007, International Business Machines Corporation and        *
+* others. All Rights Reserved.                                               *
+******************************************************************************
+-->
+<DataRecord>
+    <pl>NONE</pl>
+    <pluralNameTable>
+        <pluralNameList>
+            <pluralName>년</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>개월</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>주</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>일</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>시간</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>분</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>초</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>밀리세컨드</pluralName>
+        </pluralNameList>
+    </pluralNameTable>
+    <halvesList>
+        <halves>½</halves>
+        <halves>½</halves>
+    </halvesList>
+    <requiresDigitSeparator>false</requiresDigitSeparator>
+    <countSep></countSep>
+    <unitSepList>
+        <unitSep> </unitSep>
+        <unitSep> </unitSep>
+        <unitSep> </unitSep>
+        <unitSep> </unitSep>
+    </unitSepList>
+    <numberSystem>DEFAULT</numberSystem>
+    <zero>0</zero>
+    <decimalSep>.</decimalSep>
+    <omitSingularCount>false</omitSingularCount>
+    <omitDualCount>false</omitDualCount>
+    <decimalHandling>DPLURAL</decimalHandling>
+    <fractionHandling>FSINGULAR_PLURAL</fractionHandling>
+    <allowZero>true</allowZero>
+    <weeksAloneOnly>false</weeksAloneOnly>
+    <useMilliseconds>YES</useMilliseconds>
+    <ScopeDataList>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>전</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>지금부터</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>전</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>지금부터</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+            <suffix>전</suffix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>지금부터</prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+    </ScopeDataList>
+</DataRecord>
