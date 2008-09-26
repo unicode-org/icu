@@ -1,9 +1,9 @@
 /********************************************************************
- * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * COPYRIGHT:
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
- 
+
 #ifndef _NUMBERFORMATTEST_
 #define _NUMBERFORMATTEST_
 
@@ -12,7 +12,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/numfmt.h"
-#include "unicode/decimfmt.h" 
+#include "unicode/decimfmt.h"
 #include "caltztst.h"
 
 /**
@@ -26,7 +26,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
 
     /**
      * Test APIs (to increase code coverage)
-     */   
+     */
     void TestAPI(void);
 
     void TestCoverage(void);
@@ -51,7 +51,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
      * API coverage for DigitList
      **/
     //void TestDigitList(void);
-    
+
     /**
      * Test localized currency patterns.
      */
@@ -92,9 +92,9 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestSecondaryGrouping(void);
 
     void TestWhiteSpaceParsing(void);
-        
+
     void TestComplexCurrency(void);
-        
+
     void TestPad(void);
     void TestPatterns2(void);
 
@@ -116,7 +116,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestPerMill(void);
 
     void TestIllegalPatterns(void);
-    
+
     void TestCases(void);
 
     void TestJB3832(void);
@@ -126,7 +126,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestHostClone(void);
 
     void TestCurrencyFormat(void);
-    
+
     /* Port of ICU4J rounding test. */
     void TestRounding(void);
 
@@ -209,13 +209,13 @@ class NumberFormatTest: public CalendarTimeZoneTest {
 
     // internal subtest used by TestRounding487
     void roundingTest(NumberFormat& nf, double x, int32_t maxFractionDigits, const char* expected);
-    
+
     // internal rounding checking for TestRounding
     void checkRounding(DecimalFormat* df, double base, int iterations, double increment);
-    
+
     double checkRound(DecimalFormat* df, double iValue, double lastParsed);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
- 
+
 #endif // _NUMBERFORMATTEST_
