@@ -1,6 +1,6 @@
 /********************************************************************
- * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * COPYRIGHT:
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -169,7 +169,7 @@ void CollationRegressionTest::Test4054734(/* char* par */)
             "A\u0001",  ">",    "~\u0002",      // Ensure A and ~ are not compared bitwise
             "\u00C0",   "=",    "A\u0300"       // Decomp should make these equal
         };
- 
+
         String[] nodecomp = {
             "\u00C0",   ">",    "A\u0300"       // A-grave vs. A combining-grave
         };
@@ -183,7 +183,7 @@ void CollationRegressionTest::Test4054734(/* char* par */)
         {0x00c0, 0},      {0x3d, 0}, {0x41, 0x0300, 0}
     };
 
-    
+
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *c = (RuleBasedCollator *) en_us->clone();
 
@@ -219,16 +219,16 @@ void CollationRegressionTest::Test4054736(/* char* par */)
 
 // @bug 4058613
 //
-// Collator::createInstance() causes an ArrayIndexOutofBoundsException for Korean  
+// Collator::createInstance() causes an ArrayIndexOutofBoundsException for Korean
 //
 void CollationRegressionTest::Test4058613(/* char* par */)
 {
     // Creating a default collator doesn't work when Korean is the default
     // locale
-    
+
     Locale oldDefault = Locale::getDefault();
     UErrorCode status = U_ZERO_ERROR;
-    
+
     Locale::setDefault(Locale::getKorean(), status);
 
     if (U_FAILURE(status))
@@ -238,7 +238,7 @@ void CollationRegressionTest::Test4058613(/* char* par */)
     }
 
     Collator *c = NULL;
-    
+
     c = Collator::createInstance("en_US", status);
 
     if (c == NULL || U_FAILURE(status))
@@ -248,7 +248,7 @@ void CollationRegressionTest::Test4058613(/* char* par */)
         delete c;
         return;
     }
-    
+
     // Since the fix to this bug was to turn off decomposition for Korean collators,
     // ensure that's what we got
     if (c->getAttribute(UCOL_NORMALIZATION_MODE, status) != UCOL_OFF)
@@ -272,7 +272,7 @@ void CollationRegressionTest::Test4059820(/* char* par */)
 
     RuleBasedCollator *c = NULL;
     UnicodeString rules = "< a < b , c/a < d < z";
-    
+
     c = new RuleBasedCollator(rules, status);
 
     if (c == NULL || U_FAILURE(status))
@@ -307,7 +307,7 @@ void CollationRegressionTest::Test4060154(/* char* par */)
     rules += ", i, I";
 
     RuleBasedCollator *c = NULL;
-    
+
     c = new RuleBasedCollator(rules, status);
 
     if (c == NULL || U_FAILURE(status))
@@ -370,7 +370,7 @@ void CollationRegressionTest::Test4062418(/* char* par */)
     UErrorCode status = U_ZERO_ERROR;
 
     RuleBasedCollator *c = NULL;
-    
+
     c = (RuleBasedCollator *) Collator::createInstance(Locale::getFrance(), status);
 
     if (c == NULL || U_FAILURE(status))
@@ -450,7 +450,7 @@ void CollationRegressionTest::Test4066696(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *c = NULL;
-    
+
     c = (RuleBasedCollator *)Collator::createInstance(Locale::getFrance(), status);
 
     if (c == NULL || U_FAILURE(status))
@@ -576,7 +576,7 @@ void CollationRegressionTest::Test4081866(/* char* par */)
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *c = (RuleBasedCollator *) en_us->clone();
     c->setStrength(Collator::TERTIARY);
-    
+
     // Now that the default collators are set to NO_DECOMPOSITION
     // (as a result of fixing bug 4114077), we must set it explicitly
     // when we're testing reordering behavior.  -- lwerner, 5/5/98
@@ -599,7 +599,7 @@ void CollationRegressionTest::Test4087241(/* char* par */)
     UErrorCode status = U_ZERO_ERROR;
     Locale da_DK("da", "DK");
     RuleBasedCollator *c = NULL;
-    
+
     c = (RuleBasedCollator *) Collator::createInstance(da_DK, status);
 
     if (c == NULL || U_FAILURE(status))
@@ -652,7 +652,7 @@ void CollationRegressionTest::Test4092260(/* char* par */)
     UErrorCode status = U_ZERO_ERROR;
     Locale el("el", "");
     Collator *c = NULL;
-    
+
     c = Collator::createInstance(el, status);
 
     if (c == NULL || U_FAILURE(status))
@@ -711,7 +711,7 @@ void CollationRegressionTest::Test4101940(/* char* par */)
     RuleBasedCollator *c = NULL;
     UnicodeString rules = "< a < b";
     UnicodeString nothing = "";
-    
+
     c = new RuleBasedCollator(rules, status);
 
     if (c == NULL || U_FAILURE(status))
@@ -778,7 +778,7 @@ void CollationRegressionTest::Test4114076(/* char* par */)
 
     // From UTR #15:
     // *In earlier versions of Unicode, jamo characters like ksf
-    //  had compatibility mappings to kf + sf. These mappings were 
+    //  had compatibility mappings to kf + sf. These mappings were
     //  removed in Unicode 2.1.9 to ensure that Hangul syllables are maintained.)
     // That is, the following test is obsolete as of 2.1.9
 
@@ -805,9 +805,9 @@ void CollationRegressionTest::Test4124632(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
     Collator *coll = NULL;
-    
+
     coll = Collator::createInstance(Locale::getJapan(), status);
-    
+
     if (coll == NULL || U_FAILURE(status))
     {
         errln("Failed to create collator for Locale::JAPAN");
@@ -817,7 +817,7 @@ void CollationRegressionTest::Test4124632(/* char* par */)
 
     static const UChar test[] = {0x41, 0x0308, 0x62, 0x63, 0};
     CollationKey key;
-    
+
     coll->getCollationKey(test, key, status);
 
     if (key.isBogus() || U_FAILURE(status))
@@ -837,10 +837,10 @@ void CollationRegressionTest::Test4132736(/* char* par */)
     UErrorCode status = U_ZERO_ERROR;
 
     Collator *c = NULL;
-    
+
     c = Collator::createInstance(Locale::getFrance(), status);
     c->setStrength(Collator::TERTIARY);
-    
+
     if (c == NULL || U_FAILURE(status))
     {
         errln("Failed to create a collator for Locale::getFrance()");
@@ -877,17 +877,17 @@ void CollationRegressionTest::Test4133509(/* char* par */)
 
 // @bug 4114077
 //
-// Collation with decomposition off doesn't work for Europe 
+// Collation with decomposition off doesn't work for Europe
 //
 void CollationRegressionTest::Test4114077(/* char* par */)
 {
     // Ensure that we get the same results with decomposition off
     // as we do with it on....
-    
+
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *c = (RuleBasedCollator *) en_us->clone();
     c->setStrength(Collator::TERTIARY);
-    
+
     static const UChar test1[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
         {0x00C0, 0},                     {0x3d, 0}, {0x41, 0x0300, 0},            // Should be equivalent
@@ -914,7 +914,7 @@ void CollationRegressionTest::Test4114077(/* char* par */)
 
 // @bug 4141640
 //
-// Support for Swedish gone in 1.1.6 (Can't create Swedish collator) 
+// Support for Swedish gone in 1.1.6 (Can't create Swedish collator)
 //
 void CollationRegressionTest::Test4141640(/* char* par */)
 {
@@ -926,7 +926,7 @@ void CollationRegressionTest::Test4141640(/* char* par */)
     UErrorCode status = U_ZERO_ERROR;
     int32_t i, localeCount;
     const Locale *locales = Locale::getAvailableLocales(localeCount);
-    
+
     for (i = 0; i < localeCount; i += 1)
     {
         Collator *c = NULL;
@@ -950,7 +950,7 @@ void CollationRegressionTest::Test4141640(/* char* par */)
 
 // @bug 4139572
 //
-// getCollationKey throws exception for spanish text 
+// getCollationKey throws exception for spanish text
 // Cannot reproduce this bug on 1.2, however it DOES fail on 1.1.6
 //
 void CollationRegressionTest::Test4139572(/* char* par */)
@@ -963,7 +963,7 @@ void CollationRegressionTest::Test4139572(/* char* par */)
     UErrorCode status = U_ZERO_ERROR;
     Locale l("es", "es");
     Collator *col = NULL;
-    
+
     col = Collator::createInstance(l, status);
 
     if (col == NULL || U_FAILURE(status))
@@ -987,7 +987,7 @@ void CollationRegressionTest::Test4139572(/* char* par */)
 }
 /* HSYS : RuleBasedCollator::compare() performance enhancements
           compare() does not create CollationElementIterator() anymore.*/
-          
+
 class My4146160Collator : public RuleBasedCollator
 {
 public:
@@ -997,7 +997,7 @@ public:
     CollationElementIterator *createCollationElementIterator(const UnicodeString &text) const;
 
     CollationElementIterator *createCollationElementIterator(const CharacterIterator &text) const;
-    
+
     static int32_t count;
 };
 
@@ -1040,7 +1040,7 @@ void CollationRegressionTest::Test4146160(/* char* par */)
 
     My4146160Collator::count = 0;
     My4146160Collator *mc = NULL;
-    
+
     mc = new My4146160Collator(*en_us, status);
 
     if (mc == NULL || U_FAILURE(status))
@@ -1148,7 +1148,7 @@ void CollationRegressionTest::assertEqual(CollationElementIterator &i1, Collatio
         if (c1 != c2)
         {
             UnicodeString msg, msg1("    ");
-            
+
             msg += msg1 + count;
             msg += ": strength(0x";
             appendHex(c1, 8, msg);
