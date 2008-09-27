@@ -1234,9 +1234,6 @@ void Calendar::computeGregorianAndDOWFields(int32_t julianDay, UErrorCode &ec)
 * variables gregorianXxx.  They are used for time zone computations and by
 * subclasses that are Gregorian derivatives.  Subclasses may call this
 * method to perform a Gregorian calendar millis->fields computation.
-* To perform a Gregorian calendar fields->millis computation, call
-* computeGregorianMonthStart().
-* @see #computeGregorianMonthStart
 */
 void Calendar::computeGregorianFields(int32_t julianDay, UErrorCode & /* ec */) {
     int32_t gregorianDayOfWeekUnused;

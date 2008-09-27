@@ -37,11 +37,12 @@
 
 
 /**
+ * @{
  * The selector data structure
  */
 struct UConverterSelector;
 typedef struct UConverterSelector UConverterSelector;
-
+/** @} */
 
 /**
  * open a selector. If converterList is NULL, build for all converters. If excludedCodePoints 
@@ -57,7 +58,7 @@ typedef struct UConverterSelector UConverterSelector;
  *  the array.
  * @param excludedCodePoints a set of codepoints to be excluded from
  *  consideration. set to NULL to exclude nothing
- * @param whichset what converter set to use? use this to determine whether
+ * @param whichSet what converter set to use? use this to determine whether
  *                 to construct selector for fallback or for roundtrip only mappings
  * @param status an in/out ICU UErrorCode
  * @return a pointer to the created selector
@@ -142,7 +143,7 @@ U_CAPI int32_t ucnvsel_serialize(const UConverterSelector* sel,
  *
  * @draft ICU 4.2
  */
-U_CAPI UEnumeration *ucnvsel_selectForString(const UConverterSelector*, const UChar *s,
+U_CAPI UEnumeration *ucnvsel_selectForString(const UConverterSelector* sel, const UChar *s,
 int32_t length, UErrorCode *status);
 
 /**
@@ -162,7 +163,7 @@ int32_t length, UErrorCode *status);
  *
  * @draft ICU 4.2
  */
-U_CAPI UEnumeration *ucnvsel_selectForUTF8(const UConverterSelector*,
+U_CAPI UEnumeration *ucnvsel_selectForUTF8(const UConverterSelector* sel,
                                  const char *s,
                                  int32_t length,
                                  UErrorCode *status);

@@ -113,10 +113,15 @@
 #endif
 /** This is used to declare a function as a public ICU C API @stable ICU 2.0*/
 #define U_CAPI U_CFUNC U_EXPORT
+/** This is used to declare a function as a stable public ICU C API*/
 #define U_STABLE U_CAPI
+/** This is used to declare a function as a draft public ICU C API  */
 #define U_DRAFT  U_CAPI
+/** This is used to declare a function as a deprecated public ICU C API  */
 #define U_DEPRECATED U_CAPI U_ATTRIBUTE_DEPRECATED
+/** This is used to declare a function as an obsolete public ICU C API  */
 #define U_OBSOLETE U_CAPI
+/** This is used to declare a function as an internal ICU C API  */
 #define U_INTERNAL U_CAPI
 
 /*==========================================================================*/
@@ -334,6 +339,11 @@ typedef int32_t UChar32;
 
 #endif /* U_HIDE_INTERNAL_API */
 
+/**
+ * \def U_INLINE
+ * This is used to request inlining of a function, on platforms and languages which support it.
+ */
+ 
 #ifndef U_INLINE
 #   ifdef XP_CPLUSPLUS
 #       define U_INLINE inline
