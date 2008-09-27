@@ -173,6 +173,7 @@ typedef enum UDateFormatStyle {
 
 
 /**
+ * @{
  * Below are a set of pre-defined skeletons.
  *
  * <P>
@@ -210,7 +211,11 @@ typedef enum UDateFormatStyle {
 #define UDAT_ABBR_STANDALONE_MONTH      "LLL"
 #define UDAT_YEAR_QUARTER               "yQQQ"
 #define UDAT_YEAR_ABBR_QUARTER          "yQ"
+
+/** @} */
+
 /**
+ * @{
  * Below are a set of pre-defined skeletons that 
  * have pre-defined interval patterns in resource files.
  * Users are encouraged to use them in date interval format factory methods.
@@ -242,6 +247,8 @@ typedef enum UDateFormatStyle {
 #define UDAT_HOUR                       "h"
 #define UDAT_HOUR_GENERIC_TZ            "hv"
 #define UDAT_HOUR_TZ                    "hz"
+
+/** @} */
 
 
 /**

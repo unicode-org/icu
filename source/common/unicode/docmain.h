@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  *
  *  FILE NAME: DOCMAIN.h
@@ -199,4 +199,5 @@
  *     <td>ustream.h</td>
  *   </tr>
  * </table>
+ * <i>This main page is generated from docmain.h</i>
  */

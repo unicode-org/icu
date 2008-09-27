@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2005, International Business Machines
+*   Copyright (C) 2002-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -182,16 +182,18 @@ typedef int32_t UTextOffset;
 #undef UTF_STRICT
 
 /**
- * <p>UTF8_ERROR_VALUE_1 and UTF8_ERROR_VALUE_2 are special error values for UTF-8,
- * which need 1 or 2 bytes in UTF-8:<br>
- * U+0015 = NAK = Negative Acknowledge, C0 control character<br>
- * U+009f = highest C1 control character</p>
+ * UTF8_ERROR_VALUE_1 and UTF8_ERROR_VALUE_2 are special error values for UTF-8,
+ * which need 1 or 2 bytes in UTF-8:
+ * \code
+ * U+0015 = NAK = Negative Acknowledge, C0 control character
+ * U+009f = highest C1 control character
+ * \endcode
  *
- * <p>These are used by UTF8_..._SAFE macros so that they can return an error value
+ * These are used by UTF8_..._SAFE macros so that they can return an error value
  * that needs the same number of code units (bytes) as were seen by
- * a macro. They should be tested with UTF_IS_ERROR() or UTF_IS_VALID().</p>
+ * a macro. They should be tested with UTF_IS_ERROR() or UTF_IS_VALID().
  *
- * @deprecated ICU 2.4. Obsolete, see utf_old.h.
+ * @deprecated ICU W.4. Obsolete, see utf_old.h.
  */
 #define UTF8_ERROR_VALUE_1 0x15
 

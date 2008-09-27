@@ -68,7 +68,7 @@ typedef enum URegexpFlag{
       *  on matching when used in conjunction with this flag.
       *  The other flags become superfluous.
       *  TODO:  say which escapes are still handled; anything Java does
-      *         early (\u) we should still do.
+      *         early (\\u) we should still do.
       * @draft ICU 4.0
       */
     UREGEX_LITERAL = 16,
@@ -80,7 +80,7 @@ typedef enum URegexpFlag{
     UREGEX_MULTILINE        = 8,
     
     /**   Unix-only line endings.
-      *   When this mode is enabled, only \u000a is recognized as a line ending
+      *   When this mode is enabled, only \\u000a is recognized as a line ending
       *    in the behavior of ., ^, and $.
       *   @draft ICU 4.0
       */
