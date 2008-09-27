@@ -27,7 +27,7 @@ JAVADOC_AUTOBRIEF      = YES
 MULTILINE_CPP_IS_BRIEF = NO
 DETAILS_AT_TOP         = NO
 INHERIT_DOCS           = YES
-DISTRIBUTE_GROUP_DOC   = NO
+DISTRIBUTE_GROUP_DOC   = YES
 TAB_SIZE               = 8
 ALIASES                = "memo=\par Note:\n" \
                          "draft=\xrefitem draft \"Draft\" \"Draft List\"  This API may be changed in the future versions and was introduced in" \

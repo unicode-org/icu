@@ -326,9 +326,9 @@ public:
      *
      * @param number  a number for which the plural message should be formatted
      *                for. If no pattern has been applied to this
-     *                <code>PluralFormat</code> object yet, the formatted number
+     *                PluralFormat object yet, the formatted number
      *                will be returned.
-     * @param status  output param set to success/failure code on exit, which
+     * @param status  output param set to success or failure code on exit, which
      *                must not indicate a failure before the function call.
      * @return        the string containing the formatted plural message.
      * @draft ICU 4.0
@@ -383,7 +383,7 @@ public:
      *     i.e., a pattern that was applied previously will be removed,
      *     and the NumberFormat is set to the default number format for
      *     the locale.  The resulting format behaves the same as one
-     *     constructed from {@link #PluralFormat(locale)}.
+     *     constructed from {@link #PluralFormat(const Locale& locale, UErrorCode& status)}.
      * @param locale  the <code>locale</code> to use to configure the formatter.
      * @param status  output param set to success/failure code on exit, which
      *                must not indicate a failure before the function call.
