@@ -84,6 +84,23 @@ import com.ibm.icu.util.UResourceBundle;
  * 0.53 is displayed as 53%.
  *
  * <p>
+ * Starting from ICU 4.2, you can use getInstance() by passing in a 'style'
+ * as parameter to get the correct instance. 
+ * For example, 
+ * use getInstance(...NUMBERSTYLE) to get the normal number format,
+ * getInstance(...PERCENTSTYLE) to get a format for displaying percentage,
+ * getInstance(...SCIENTIFICSTYLE) to get a format for displaying scientific number,
+ * getInstance(...INTEGERSTYLE) to get an integer number format,
+ * getInstance(...CURRENCYSTYLE) to get the currency number format, 
+ * in which the currency is represented by its symbol, for example, "$3.00".
+ * getInstance(...ISOCURRENCYSTYLE)  to get the currency number format, 
+ * in which the currency is represented by its ISO code, for example "USD3.00".
+ * getInstance(...PLURALCURRENCYSTYLE) to get the currency number format,
+ * in which the currency is represented by its full name in plural format,
+ * for example, "3.00 US dollars" or "1.00 US dollar".
+ *
+ *
+ * <p>
  * You can also control the display of numbers with such methods as
  * <code>setMinimumFractionDigits</code>.
  * If you want even more control over the format or parsing,
@@ -152,12 +169,52 @@ import com.ibm.icu.util.UResourceBundle;
  */
 public abstract class NumberFormat extends UFormat {
 
-    // Constants used by factory methods to specify a style of format.
-    private static final int NUMBERSTYLE = 0;
-    private static final int CURRENCYSTYLE = 1;
-    private static final int PERCENTSTYLE = 2;
-    private static final int SCIENTIFICSTYLE = 3;
-    private static final int INTEGERSTYLE = 4;
+    /**
+     * Constants to specify normal number style of format.
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int NUMBERSTYLE = 0;
+    /**
+     * Constants to specify currency style of format which uses currency symbol
+     * to represent currency, for example: "$3.00".
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int CURRENCYSTYLE = 1;
+    /**
+     * Constants to specify a style of format to display percent.
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int PERCENTSTYLE = 2;
+    /**
+     * Constants to specify a style of format to display scientific number.
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int SCIENTIFICSTYLE = 3;
+    /**
+     * Constants to specify a integer number style format.
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int INTEGERSTYLE = 4;
+    /**
+     * Constants to specify currency style of format which uses currency 
+     * ISO code to represent currency, for example: "USD3.00".
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int ISOCURRENCYSTYLE = 5;
+    /**
+     * Constants to specify currency style of format which uses currency 
+     * long name with plural format to represent currency, for example,
+     * "3.00 US Dollars".
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int PLURALCURRENCYSTYLE = 6;
 
     /**
      * Field constant used to construct a FieldPosition object. Signifies that
@@ -500,6 +557,28 @@ public abstract class NumberFormat extends UFormat {
     public static NumberFormat getInstance(ULocale inLocale) {
         return getInstance(inLocale, NUMBERSTYLE);
     }
+
+    /**
+     * Returns a specific style number format for default locale.
+     * @param style  number format style
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public final static NumberFormat getInstance(int style) {
+        return getInstance(ULocale.getDefault(), style);
+    }
+
+    /**
+     * Returns a specific style number format for a specific locale.
+     * @param inLocale  the specific locale.
+     * @param style     number format style
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static NumberFormat getInstance(Locale inLocale, int style) {
+        return getInstance(ULocale.forLocale(inLocale), style);
+    }
+
 
     /**
      * Returns a general-purpose number format for the current default locale.
@@ -1184,10 +1263,23 @@ public abstract class NumberFormat extends UFormat {
         throw new UnsupportedOperationException("setRoundingMode must be implemented by the subclass implementation.");
     }
 
-    // =======================privates===============================
 
-    // Hook for service
-    private static NumberFormat getInstance(ULocale desiredLocale, int choice) {
+    /**
+     * Returns a specific style number format for a specific locale.
+     * @param desiredLocale  the specific locale.
+     * @param choice         number format style
+     * @throws IllegalArgumentException  if choice is not one of
+     *                                   NUMBERSTYLE, CURRENCYSTYLE, 
+     *                                   PERCENTSTYLE, SCIENTIFICSTYLE, 
+     *                                   INTEGERSTYLE, 
+     *                                   ISOCURRENCYSTYLE, PLURALCURRENCYSTYLE,
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static NumberFormat getInstance(ULocale desiredLocale, int choice) {
+        if (choice < NUMBERSTYLE || choice > PLURALCURRENCYSTYLE) {
+            throw new IllegalArgumentException("choice should be from NUMBERSTYLE to PLURALCURRENCYSTYLE");
+        }       
 //          if (shim == null) {
 //              return createInstance(desiredLocale, choice);
 //          } else {
@@ -1197,21 +1289,37 @@ public abstract class NumberFormat extends UFormat {
         return getShim().createInstance(desiredLocale, choice);
     }
 
+    // =======================privates===============================
+    // Hook for service
     // [NEW]
     static NumberFormat createInstance(ULocale desiredLocale, int choice) {
+        // If the choice is PLURALCURRENCYSTYLE, the pattern is not a single
+        // pattern, it is a pattern set, so we do not need to get them here.
+        // If the choice is ISOCURRENCYSTYLE, the pattern is the currrency
+        // pattern in the locale but by replacing the single currency sign 
+        // with double currency sign.
         String pattern = getPattern(desiredLocale, choice);
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(desiredLocale);
         
         // Here we assume that the locale passed in is in the canonical
         // form, e.g: pt_PT_@currency=PTE not pt_PT_PREEURO
-        if(choice == CURRENCYSTYLE){
+        // This style wont work for currency plural format.
+        // For currency plural fomrat, the pattern is get from 
+        // the locale (from CurrencyUnitPatterns) without override.
+        if(choice == CURRENCYSTYLE || choice == ISOCURRENCYSTYLE){
             String temp = symbols.getCurrencyPattern();
             if(temp!=null){
                 pattern = temp;
             }
         }
-        
-        DecimalFormat format = new DecimalFormat(pattern, symbols);
+
+        // replace single currency sign in the pattern with double currency sign
+        // if the choice is ISOCURRENCYSTYLE.
+        if (choice == ISOCURRENCYSTYLE) {
+            pattern = pattern.replaceAll("\\xA4", doubleCurrencyStr);
+        }
+
+        DecimalFormat format = new DecimalFormat(pattern, symbols, choice);
         // System.out.println("loc: " + desiredLocale + " choice: " + choice + " pat: " + pattern + " sym: " + symbols + " result: " + format);
                                  
         /*Bug 4408066
@@ -1311,7 +1419,14 @@ public abstract class NumberFormat extends UFormat {
         /*Bug 4408066
          Add codes for the new method getIntegerInstance() [Richard/GCL]
         */
-        int entry = (choice == INTEGERSTYLE) ? NUMBERSTYLE : choice; //[Richard/GCL]
+        /* for ISOCURRENCYSTYLE and PLURALCURRENCYSTYLE,
+         * the pattern is the same as the pattern of CURRENCYSTYLE
+         * but by replacing the single currency sign with
+         * double currency sign or triple currency sign.
+         */
+        int entry = (choice == INTEGERSTYLE) ? NUMBERSTYLE : 
+                ((choice == ISOCURRENCYSTYLE || choice == PLURALCURRENCYSTYLE)?
+                CURRENCYSTYLE : choice); //[Richard/GCL]
         return numberPatterns[entry]; //[Richard/GCL]
     }
 
@@ -1377,6 +1492,9 @@ public abstract class NumberFormat extends UFormat {
 //     * Cache to hold the NumberPatterns of a Locale.
 //     */
 //    private static final Hashtable cachedLocaleData = new Hashtable(3);
+
+      private static final char[] doubleCurrencySign = {0xA4, 0xA4};
+      private static final String doubleCurrencyStr = new String(doubleCurrencySign);
 
     /*Bug 4408066
       Add Field for the new method getIntegerInstance() [Richard/GCL]

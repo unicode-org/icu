@@ -12,6 +12,10 @@ import java.text.ParsePosition;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import com.ibm.icu.impl.ICUDebug;
@@ -59,6 +63,15 @@ public class Currency extends MeasureUnit implements Serializable {
      * @stable ICU 2.6
      */
     public static final int LONG_NAME = 1;
+   
+    /**
+     * Selector for getName() indicating the plural long name for a 
+     * currency, such as "US dollar" for USD in "1 US dollar", 
+     * and "US dollars" for USD in "2 US dollars".
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int PLURAL_LONG_NAME = 2;
 
     // begin registry stuff
 
@@ -421,17 +434,9 @@ public class Currency extends MeasureUnit implements Serializable {
 
     /**
      * Returns the display name for the given currency in the
-     * given locale.  For example, the display name for the USD
-     * currency object in the en_US locale is "$".
-     * @param locale locale in which to display currency
-     * @param nameStyle selector for which kind of name to return
-     * @param isChoiceFormat fill-in; isChoiceFormat[0] is set to true
-     * if the returned value is a ChoiceFormat pattern; otherwise it
-     * is set to false
-     * @return display string for this currency.  If the resource data
-     * contains no entry for this currency, then the ISO 4217 code is
-     * returned.  If isChoiceFormat[0] is true, then the result is a
-     * ChoiceFormat pattern.  Otherwise it is a static string.
+     * given locale.  
+     * This is a convenient method for 
+     * getName(ULocale, int, boolean[]); 
      * @stable ICU 3.2
      */
     public String getName(Locale locale,
@@ -445,7 +450,9 @@ public class Currency extends MeasureUnit implements Serializable {
      * given locale.  For example, the display name for the USD
      * currency object in the en_US locale is "$".
      * @param locale locale in which to display currency
-     * @param nameStyle selector for which kind of name to return
+     * @param nameStyle selector for which kind of name to return.
+     *                  The nameStyle should be either SYMBOL_NAME or 
+     *                  LONG_NAME. Otherwise, throw IllegalArgumentException.
      * @param isChoiceFormat fill-in; isChoiceFormat[0] is set to true
      * if the returned value is a ChoiceFormat pattern; otherwise it
      * is set to false
@@ -453,6 +460,8 @@ public class Currency extends MeasureUnit implements Serializable {
      * contains no entry for this currency, then the ISO 4217 code is
      * returned.  If isChoiceFormat[0] is true, then the result is a
      * ChoiceFormat pattern.  Otherwise it is a static string.
+     * @throws  IllegalArgumentException  if the nameStyle is not SYMBOL_NAME
+     *                                    or LONG_NAME.
      * @stable ICU 3.2
      */
     public String getName(ULocale locale,
@@ -510,6 +519,127 @@ public class Currency extends MeasureUnit implements Serializable {
     }
 
     /**
+     * Returns the display name for the given currency in the
+     * given locale.  
+     * This is a convenient method of 
+     * getName(ULocale, int, String, boolean[]);
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public String getName(Locale locale,
+                          int nameStyle,
+                          String pluralCount,
+                          boolean[] isChoiceFormat) {
+        return getName(ULocale.forLocale(locale), nameStyle, 
+                       pluralCount, isChoiceFormat);
+    }
+
+    /**
+     * Returns the display name for the given currency in the
+     * given locale.  For example, the SYMBOL_NAME for the USD
+     * currency object in the en_US locale is "$".
+     * The PLURAL_LONG_NAME for the USD currency object when the currency 
+     * amount is plural is "US dollars", such as in "3.00 US dollars";
+     * while the PLURAL_LONG_NAME for the USD currency object when the currency
+     * amount is singular is "US dollar", such as in "1.00 US dollar".
+     * @param locale locale in which to display currency
+     * @param nameStyle selector for which kind of name to return
+     * @param pluralCount plural count string for this locale
+     * @param isChoiceFormat fill-in; isChoiceFormat[0] is set to true
+     * if the returned value is a ChoiceFormat pattern; otherwise it
+     * is set to false
+     * @return display string for this currency.  If the resource data
+     * contains no entry for this currency, then the ISO 4217 code is
+     * returned.  If isChoiceFormat[0] is true, then the result is a
+     * ChoiceFormat pattern.  Otherwise it is a static string.
+     * @throws  IllegalArgumentException  if the nameStyle is not SYMBOL_NAME
+     *                                    or LONG_NAME, or PLURAL_LONG_NAME.
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public String getName(ULocale locale,
+                          int nameStyle,
+                          String pluralCount,
+                          boolean[] isChoiceFormat) {
+        if (nameStyle != PLURAL_LONG_NAME) {
+            return getName(locale, nameStyle, isChoiceFormat);
+        }
+
+        // Look up the CurrencyPlurals resource for the given locale.  The
+        // CurrencyPlurals locale data looks like this:
+        //|en {
+        //|  CurrencyPlurals {
+        //|    USD{
+        //|      one{"US dollar"}
+        //|      other{"US dollars"}
+        //|    }
+        //|    ...
+        //|  }
+        //|}
+        // 
+        // Algorithm detail: http://unicode.org/reports/tr35/#Currencies
+        // especially the fallback rule.
+        String s = null;
+        ICUResourceBundle isoCodeBundle;
+        // search at run time, not saved in initialization
+        try {
+            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
+            // get handles fallback
+            ICUResourceBundle currencies = (ICUResourceBundle)rb.get("CurrencyPlurals");
+
+            // Fetch resource with multi-level resource inheritance fallback
+            isoCodeBundle = currencies.getWithFallback(isoCode);
+        } catch (MissingResourceException e) {
+            // if there is no CurrencyPlurals defined or no plural long names
+            // defined in the locale chain, fall back to long name.
+            return getName(locale, LONG_NAME, isChoiceFormat);
+        }
+        try {
+            s = isoCodeBundle.getStringWithFallback(pluralCount);
+        } catch (MissingResourceException e1) {
+            try {
+                // if there is no name corresponding to 'pluralCount' defined,
+                // fall back to name corresponding to "other".
+                s = isoCodeBundle.getStringWithFallback("other");
+            } catch (MissingResourceException e) {
+                // if there is no name corresponding to plural count "other",
+                // fall back to long name.
+                return getName(locale, LONG_NAME, isChoiceFormat);
+            }
+        }
+        // No support for choice format for getting plural currency names.
+        if (s != null) {
+            return s;
+        }
+        // If we fail to find a match, use the ISO 4217 code
+        return isoCode;
+    }
+
+    /*
+     * Represent the match's ISO code and the maximum matching length
+     */
+    private static final class LongestMatchISOAndLength {
+        String ISO;
+        int length;
+        public LongestMatchISOAndLength(String isoCode, int maxLength) {
+            ISO = isoCode;
+            length = maxLength;
+        }
+        private void setISO(String isoCode) {
+            ISO = isoCode;
+        }
+        private void setLength(int maxLength) {
+            length = maxLength;
+        }
+        public String iso() {
+            return ISO;
+        }
+        public int length() {
+            return length;
+        }
+    }
+
+    /**
      * Attempt to parse the given string as a currency, either as a
      * display name in the given locale, or as a 3-letter ISO 4217
      * code.  If multiple display names match, then the longest one is
@@ -530,7 +660,49 @@ public class Currency extends MeasureUnit implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     public static String parse(ULocale locale, String text, ParsePosition pos) {
+        LongestMatchISOAndLength isoAndLen = new LongestMatchISOAndLength(null, 0);
+        // We support currency symbol name, ISO name,
+        // and plural name formatting.
+        // For parsing, we will go through all the related currency data 
+        // to find the longest match.
+        // TODO(xji): too bad for performance
+        // First, parse against all currency names in "CurrencyPlural".
+        parseCurrencyPlural(locale, text, isoAndLen, pos);
+        // Then, parse against all currency names in "Currencies" including
+        // long name. Need to parse against currency non plural long names
+        // for currencies without plural name data.
+        parseCurrency(locale, text, isoAndLen, pos);
 
+        int start = pos.getIndex();
+        if (isoAndLen.iso() == null || 
+            isoAndLen.length() < 3 && (text.length() - start) >= 3) {
+            // If display name parse fails or if it matches fewer than 3
+            // characters, try to parse 3-letter ISO.  Do this after the
+            // display name processing so 3-letter display names are
+            // preferred.  Consider /[A-Z]{3}/ to be valid ISO, and parse
+            // it manually--UnicodeSet/regex are too slow and heavy.
+            boolean valid = true;
+            for (int k=0; k<3; ++k) {
+                char ch = text.charAt(start + k); // 16-bit ok
+                if (ch < 'A' || ch > 'Z') {
+                    valid = false;
+                    break;
+                }
+            }
+            if (valid) {
+                pos.setIndex(pos.getIndex() + 3);
+                return text.substring(start, start+3);
+            }
+        }
+        pos.setIndex(start + isoAndLen.length());
+        return isoAndLen.iso();
+    }
+
+
+    // pass against all names (symbol, ISO code, long name) 
+    private static void parseCurrency(ULocale locale, String text, 
+                                      LongestMatchISOAndLength isoAndLen,
+                                      ParsePosition pos) {
         // TODO: There is a slight problem with the pseudo-multi-level
         // fallback implemented here.  More-specific locales don't
         // properly shield duplicate entries in less-specific locales.
@@ -541,9 +713,6 @@ public class Currency extends MeasureUnit implements Serializable {
 
         int start = pos.getIndex();
         String fragment = text.substring(start);
-
-        String iso = null;
-        int max = 0;
 
         // Look up the Currencies resource for the given locale.  The
         // Currencies locale data looks like this:
@@ -567,47 +736,6 @@ public class Currency extends MeasureUnit implements Serializable {
 
         // Multi-level resource inheritance fallback loop
 
-        while (locale != null) {
-            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
-            // We can't cast this to String[][]; the cast has to happen later
-
-            try {
-                UResourceBundle currencies = rb.get("Currencies");
-                // Do a linear search
-                for (int i=0; i<currencies.getSize(); ++i) {
-                    //String name = ((String[]) currencies[i][1])[0];
-                    UResourceBundle item = currencies.get(i);
-                    String name = item.getString(0);
-                    if (name.length() < 1) {
-                        // Ignore zero-length names -- later, change this
-                        // when zero-length is used to mean something.
-                        continue;
-                    } else if (name.charAt(0) == '=') {
-                        name = name.substring(1);
-                        if (name.length() > 0 && name.charAt(0) != '=') {
-                            ChoiceFormat choice = new ChoiceFormat(name);
-                            // Number n =
-                            choice.parse(text, pos);
-                            int len = pos.getIndex() - start;
-                            if (len > max) {
-                                iso = item.getKey();
-                                max = len;
-                            }
-                            pos.setIndex(start);
-                            continue;
-                        }
-                    }
-                    if (name.length() > max && fragment.startsWith(name)) {
-                        iso = item.getKey();
-                        max = name.length();
-                    }
-                }
-            }
-            catch (MissingResourceException e) {}
-
-            locale = locale.getFallback();
-        }
-
         /*
         1. Look at the Currencies array from the locale
             1a. Iterate through it, and check each row to see if row[1] matches
@@ -616,32 +744,118 @@ public class Currency extends MeasureUnit implements Serializable {
         2. If there is no match, fall back to "en" and try again
         3. If there is no match, fall back to root and try again
         4. If still no match, parse 3-letter ISO {this code is probably unchanged}.
-
-        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME, locale);
-        ICUResourceBundle currencies = rb.get("Currencies");
         */
-        // If display name parse fails or if it matches fewer than 3
-        // characters, try to parse 3-letter ISO.  Do this after the
-        // display name processing so 3-letter display names are
-        // preferred.  Consider /[A-Z]{3}/ to be valid ISO, and parse
-        // it manually--UnicodeSet/regex are too slow and heavy.
-        if (max < 3 && (text.length() - start) >= 3) {
-            boolean valid = true;
-            for (int k=0; k<3; ++k) {
-                char ch = text.charAt(start + k); // 16-bit ok
-                if (ch < 'A' || ch > 'Z') {
-                    valid = false;
-                    break;
+        HashSet visited = new HashSet();
+        while (locale != null) {
+            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
+            // We can't cast this to String[][]; the cast has to happen later
+            try {
+                UResourceBundle currencies = rb.get("Currencies");
+                // Do a linear search
+                for (int i=0; i<currencies.getSize(); ++i) {
+                    UResourceBundle item = currencies.get(i);
+                    String ISOCode = item.getKey();
+                    if (!visited.contains(ISOCode)) {
+                        parseOneName(item, text, fragment, isoAndLen, ISOCode, 
+                                     start, pos);
+                        parseOneName(item, text, fragment, isoAndLen, 
+                                     item.getString(0), start, pos);
+                        // parse against long name
+                        parseOneName(item, text, fragment, isoAndLen, 
+                                     item.getString(1), start, pos);
+                        visited.add(ISOCode);
+                    }
                 }
             }
-            if (valid) {
-                iso = text.substring(start, start+3);
-                max = 3;
+            catch (MissingResourceException e) {}
+
+            locale = locale.getFallback();
+        }
+    }
+
+    /*
+     * Parse currency against currency plural names.
+     */
+    private static void parseCurrencyPlural(ULocale locale, String text, 
+                                      LongestMatchISOAndLength isoAndLen,
+                                      ParsePosition pos) {
+        int start = pos.getIndex();
+        String fragment = text.substring(start);
+
+        // Look up the Currencies resource for the given locale.  The
+        // Currencies locale data looks like this:
+        //|en {
+        //|  CurrencyPlurals {
+        //|    USD { 
+        //|      one{"US Dollar"}  
+        //|      other{"US dollars"} 
+        //|    }
+        //|    //...
+        //|  }
+        //|}
+
+        HashMap visited = new HashMap();
+        // for simplicity, do *not* check the plural count match-ness.
+        while (locale != null) {
+            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
+            try {
+                UResourceBundle currencies;
+                currencies = rb.get("CurrencyPlurals");
+                // Do a linear search
+                for (int i=0; i<currencies.getSize(); ++i) {
+                    UResourceBundle item = currencies.get(i);
+                    String ISOCode = item.getKey();
+                    HashSet visitPluralCount = (HashSet)visited.get(ISOCode);
+                    if (visitPluralCount == null) {
+                        visitPluralCount = new HashSet();
+                        visited.put(ISOCode, visitPluralCount);
+                    }
+                    for (int j=0; j<item.getSize(); ++j) {
+                        String count = item.get(j).getKey();
+                        if (!visitPluralCount.contains(count)) {
+                            parseOneName(item, text, fragment, isoAndLen, 
+                                         item.get(j).getString(), start, pos);
+                            visitPluralCount.add(count);
+                        }
+                    }
+                }
+            }
+            catch (MissingResourceException e) {}
+
+            locale = locale.getFallback();
+        }
+    }
+
+    private static void parseOneName(UResourceBundle item,
+                                     String text, 
+                                     String fragment, 
+                                     LongestMatchISOAndLength isoAndLen,
+                                     String name,
+                                     int start,
+                                     ParsePosition pos) {
+        if (name.length() < 1) {
+            // Ignore zero-length names -- later, change this
+            // when zero-length is used to mean something.
+            return;
+        } else if (name.charAt(0) == '=') {
+            name = name.substring(1);
+            if (name.length() > 0 && name.charAt(0) != '=') {
+                ChoiceFormat choice = new ChoiceFormat(name);
+                // Number n =
+                choice.parse(text, pos);
+                int len = pos.getIndex() - start;
+                if (len > isoAndLen.length()) {
+                    isoAndLen.setISO(item.getKey());
+                    isoAndLen.setLength(len);
+                }
+                pos.setIndex(start);
+                return;
             }
         }
-
-        pos.setIndex(start + max);
-        return iso;
+        if (name.length() > isoAndLen.length() && fragment.startsWith(name)) {
+            isoAndLen.setISO(item.getKey());
+            isoAndLen.setLength(name.length());
+        }
     }
 
     /**

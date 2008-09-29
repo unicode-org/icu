@@ -13,6 +13,18 @@ import java.math.BigInteger;
 import java.text.ChoiceFormat;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.Set;
+
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
+
+
 
 //#if defined(FOUNDATION10)
 //#else
@@ -42,7 +54,7 @@ import com.ibm.icu.util.ULocale;
  * locale, including support for Western, Arabic, or Indic digits.  It also
  * supports different flavors of numbers, including integers ("123"),
  * fixed-point numbers ("123.4"), scientific notation ("1.23E4"), percentages
- * ("12%"), and currency amounts ("$123").  All of these flavors can be easily
+ * ("12%"), and currency amounts ("$123.00", "USD123.00", "123.00 US dollars").  All of these flavors can be easily
  * localized.
  *
  * 
@@ -93,6 +105,27 @@ import com.ibm.icu.util.ULocale;
  *             System.out.println(" -> " + format.parse(form.format(myNumber)));
  *         } catch (ParseException e) {}
  *     }
+ * }</pre></blockquote>
+ *
+ * <P>
+ * Another example use getInstance(style)
+ * <P>
+ * <pre>
+ * <strong>// Print out a number using the localized number, currency,
+ * // percent, scientific, integer, iso currency, and plural currency
+ * // format for each locale</strong>
+ * ULocale locale = new ULocale("en_US");
+ * double myNumber = 1234.56;
+ * for (int j=NumberFormat.NUMBERSTYLE; j<=NumberFormat.PLURALCURRENCYSTYLE; ++j) {
+ *     NumberFormat format = NumberFormat.getInstance(locale, j);
+ *     try {
+ *         // Assume format is a DecimalFormat
+ *         System.out.print(": " + ((DecimalFormat) format).toPattern()
+ *                          + " -> " + form.format(myNumber));
+ *     } catch (Exception e) {}
+ *     try {
+ *         System.out.println(" -> " + format.parse(form.format(myNumber)));
+ *     } catch (ParseException e) {}
  * }</pre></blockquote>
  *
  * <h4>Patterns</h4>
@@ -205,6 +238,8 @@ import com.ibm.icu.util.ULocale;
  *     <td>No
  *     <td>Currency sign, replaced by currency symbol.  If
  *         doubled, replaced by international currency symbol.
+ *         If tripled, replaced by currency plural names, for example,
+ *         "US dollar" or "US dollars" for America.
  *         If present in a pattern, the monetary decimal separator
  *         is used instead of the decimal separator.
  *   <tr valign=top bgcolor="#eeeeff">
@@ -322,6 +357,12 @@ import com.ibm.icu.util.ULocale;
  * {@link DecimalFormatSymbols}-based digits are output.
  *
  * <p>During parsing, grouping separators are ignored.
+ *
+ * <p>For currency parsing, the formatter is able to parse every currency
+ * style formats no matter which style the formatter is constructed with.
+ * For example, a formatter instance get from 
+ * NumberFormat.getInstance(ULocale, NumberFormat.CURRENCYSTYLE) can parse
+ * formats such as "USD1.00" and "3.00 US dollars".
  *
  * <p>If {@link #parse(String, ParsePosition)} fails to parse
  * a string, it returns <code>null</code> and leaves the parse position
@@ -629,7 +670,15 @@ public class DecimalFormat extends NumberFormat {
         // Always applyPattern after the symbols are set
         this.symbols = new DecimalFormatSymbols(def);
         setCurrency(Currency.getInstance(def));
-        applyPattern(pattern, false);
+        applyPatternWithoutExpandAffix(pattern, false);
+        if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) {
+            // plural rule is only needed for currency plural format.
+            pluralRules = PluralRules.forLocale(def);
+            // the exact pattern is not known until the plural count is known.
+            // so, no need to expand affix now.
+        } else {
+            expandAffixAdjustWidth(null);
+        }
     }
 
 
@@ -655,7 +704,13 @@ public class DecimalFormat extends NumberFormat {
         ULocale def = ULocale.getDefault();
         this.symbols = new DecimalFormatSymbols(def);
         setCurrency(Currency.getInstance(def));
-        applyPattern( pattern, false );
+        applyPatternWithoutExpandAffix( pattern, false );
+        if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) {
+            // plural rule is only needed for currency plural format.
+            pluralRules = PluralRules.forLocale(def);
+        } else {
+            expandAffixAdjustWidth(null);
+        }
     }
 
 
@@ -680,10 +735,87 @@ public class DecimalFormat extends NumberFormat {
      * @stable ICU 2.0
      */
     public DecimalFormat(String pattern, DecimalFormatSymbols symbols) {
+        createFromPatternAndSymbols(pattern, symbols);
+    }
+
+    private void createFromPatternAndSymbols(String pattern, DecimalFormatSymbols symbols) {
         // Always applyPattern after the symbols are set
         this.symbols = (DecimalFormatSymbols) symbols.clone();
         setCurrencyForSymbols();
-        applyPattern( pattern, false );
+        applyPatternWithoutExpandAffix(pattern, false);
+        if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) {
+            // plural rule is only needed for currency plural format.
+            ULocale uloc = getLocale(ULocale.VALID_LOCALE);
+            if (uloc == null) {
+                uloc = symbols.getLocale(ULocale.VALID_LOCALE);
+            }
+            pluralRules = PluralRules.forLocale(uloc);
+        } else {
+            expandAffixAdjustWidth(null);
+        }
+    }
+
+    /*
+     * Create a DecimalFormat for currency plural format 
+     * from the given pattern, symbols, and style.
+     */
+    DecimalFormat(String pattern, DecimalFormatSymbols symbols, int style) {
+        if (style != NumberFormat.PLURALCURRENCYSTYLE) {
+            createFromPatternAndSymbols(pattern, symbols);
+        } else {
+            // Always applyPattern after the symbols are set
+            this.symbols = (DecimalFormatSymbols) symbols.clone();
+            ULocale uloc = getLocale(ULocale.VALID_LOCALE);
+            if (uloc == null) {
+                uloc = symbols.getLocale(ULocale.VALID_LOCALE);
+            }
+            setupCurrencyPluralPattern(uloc);
+            // the pattern used in format is not fixed until formatting,
+            // in which, the number is known and 
+            // will be used to pick the right pattern based on plural count.
+            // Here, set the pattern as the pattern of plural count == "other".
+            // For most locale, the patterns are probably the same for all
+            // plural count. If not, the right pattern need to be re-applied
+            // during format.
+            String currencyPluralPatternForOther = (String)pluralCountToCurrencyUnitPattern.get("other");
+            if (currencyPluralPatternForOther == null) {
+                currencyPluralPatternForOther = defaultCurrencyPluralPattern;
+            }
+            applyPatternWithoutExpandAffix(currencyPluralPatternForOther,false);
+            setCurrencyForSymbols();
+            pluralRules = PluralRules.forLocale(uloc);
+        }
+        this.style = style;
+    }
+
+
+    private void setupCurrencyPluralPattern(ULocale uloc) {
+        pluralCountToCurrencyUnitPattern = new HashMap();
+        Set pluralCountSet = new HashSet();
+        ULocale parentLocale = uloc;
+        String numberStylePattern = getPattern(uloc, NumberFormat.NUMBERSTYLE);
+        while (parentLocale != null) {
+            try {
+                ICUResourceBundle resource = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, parentLocale);
+                ICUResourceBundle currencyRes = resource.getWithFallback("CurrencyUnitPatterns");
+                int size = currencyRes.getSize();
+                for (int index = 0; index < size; ++index) {
+                    String pluralCount = currencyRes.get(index).getKey();
+                    if (pluralCountSet.contains(pluralCount)) {
+                        continue;
+                    }
+                    String pattern = currencyRes.get(index).getString();
+                    // replace {0} with numberStylePattern
+                    // and {1} with triple currency sign
+                    String patternWithNumber = pattern.replace("{0}", numberStylePattern);
+                    String patternWithCurrencySign = patternWithNumber.replace("{1}", tripleCurrencyStr);
+                    pluralCountToCurrencyUnitPattern.put(pluralCount, patternWithCurrencySign);
+                    pluralCountSet.add(pluralCount);
+                }
+            } catch (MissingResourceException e) {
+            }
+            parentLocale = parentLocale.getFallback();
+        } 
     }
 
     /**
@@ -783,7 +915,7 @@ public class DecimalFormat extends NumberFormat {
         synchronized(digitList) {
             digitList.set(number, precision(false),
                           !useExponentialNotation && !areSignificantDigitsUsed());
-            return subformat(result, fieldPosition, isNegative, false,
+            return subformat(number, result, fieldPosition, isNegative, false,
                     parseAttr);
         }
     }
@@ -935,7 +1067,7 @@ public class DecimalFormat extends NumberFormat {
         number *= multiplier;
         synchronized(digitList) {
             digitList.set(number, precision(true));
-            return subformat(result, fieldPosition, isNegative, true, parseAttr);
+            return subformat(number, result, fieldPosition, isNegative, true, parseAttr);
         }
     }
 
@@ -967,7 +1099,7 @@ public class DecimalFormat extends NumberFormat {
         // number.
         synchronized(digitList) {
             digitList.set(number, precision(true));
-            return subformat(result, fieldPosition, number.signum() < 0, true, parseAttr);
+            return subformat(number.intValue(), result, fieldPosition, number.signum() < 0, true, parseAttr);
         }
     }
 
@@ -997,7 +1129,7 @@ public class DecimalFormat extends NumberFormat {
         synchronized(digitList) {
             digitList.set(number, precision(false),
                           !useExponentialNotation && !areSignificantDigitsUsed());
-            return subformat(result, fieldPosition, number.signum() < 0, false, parseAttr);
+            return subformat(number.doubleValue(), result, fieldPosition, number.signum() < 0, false, parseAttr);
         }        
     }
 //#endif
@@ -1027,7 +1159,7 @@ public class DecimalFormat extends NumberFormat {
         synchronized(digitList) {
             digitList.set(number, precision(false),
                           !useExponentialNotation && !areSignificantDigitsUsed());
-            return subformat(result, fieldPosition, number.signum() < 0, false);
+            return subformat(number.doubleValue(), result, fieldPosition, number.signum() < 0, false, false);
         }        
     }
 
@@ -1068,15 +1200,86 @@ public class DecimalFormat extends NumberFormat {
         }
     }
 
+    private StringBuffer subformat(int number, StringBuffer result, 
+                                   FieldPosition fieldPosition,
+                                   boolean isNegative, boolean isInteger, 
+                                   boolean parseAttr) {
+        if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) { 
+            return subformat(pluralRules.select(number), result, fieldPosition,
+                             isNegative, isInteger, parseAttr);
+        } else {
+            return subformat(result, fieldPosition, isNegative, isInteger, parseAttr);
+        }
+    }
+
+    private StringBuffer subformat(double number, StringBuffer result, 
+                                   FieldPosition fieldPosition,
+                                   boolean isNegative, boolean isInteger,
+                                   boolean parseAttr) {
+        if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) { 
+            return subformat(pluralRules.select(number), result, fieldPosition,
+                             isNegative, isInteger, parseAttr);
+        } else {
+            return subformat(result, fieldPosition, isNegative, isInteger, parseAttr);
+        }
+    }
+
+    private StringBuffer subformat(String pluralCount, 
+            StringBuffer result,
+            FieldPosition fieldPosition, boolean isNegative, boolean isInteger,
+            boolean parseAttr) 
+    {
+        // There are 2 ways to activate currency plural format:
+        // by applying a pattern with 3 currency sign directly,
+        // or by instantiate a decimal formatter using PLURALCURRENCYSTYLE.
+        // For both cases, the number of currency sign in the pattern is 3.
+        // Even if the number of currency sign in the pattern is 3, 
+        // it does not mean we need to reset the pattern.
+        // For 1st case, we do not need to reset pattern.
+        // For 2nd case, we might need to reset pattern,
+        // if the default pattern (corresponding to plural count 'other')
+        // we use is different from the pattern based on 'pluralCount'.
+        // 
+        // style is only valid when decimal formatter is constructed through
+        // DecimalFormat(pattern, symbol, style)
+        if (style == NumberFormat.PLURALCURRENCYSTYLE) {
+            // May need to reset pattern if the style is PLURALCURRENCYSTYLE.
+            String currencyPluralPattern = 
+                (String)pluralCountToCurrencyUnitPattern.get(pluralCount);
+            if (currencyPluralPattern == null) {
+                // fall back to "other"
+                currencyPluralPattern = 
+                    (String)pluralCountToCurrencyUnitPattern.get("other");
+                if (currencyPluralPattern == null) {
+                    // no currencyUnitPatterns defined, 
+                    // fallback to SYMBOL_NAME format.
+                    // This should never happen when ICU resource files are
+                    // available, since currencyUnitPattern of "other" is always
+                    // defined in root.
+                    currencyPluralPattern = defaultCurrencyPluralPattern;
+                }
+            }
+            if (pattern.equals(currencyPluralPattern) == false) {
+                applyPatternWithoutExpandAffix(currencyPluralPattern, false);
+            }
+        }
+        // Expand the affix to the right name according to
+        // the plural rule.
+        // This is only used for currency plural formatting.
+        // Currency plural name is not a fixed static one,
+        // it is a dynamic name based on the currency plural count.
+        // So, the affixes need to be expanded here.
+        // For other cases, the affix is a static one based on pattern alone,
+        // and it is already expanded during applying pattern,
+        // or setDecimalFormatSymbols, or setCurrency.
+        expandAffixAdjustWidth(pluralCount);
+        return subformat(result, fieldPosition, isNegative, isInteger, parseAttr);
+    }
+
     /**
      * Complete the formatting of a finite number.  On entry, the digitList must
      * be filled in with the correct digits.
      */
-    private StringBuffer subformat(StringBuffer result, FieldPosition fieldPosition,
-                                   boolean isNegative, boolean isInteger){
-        return subformat(result, fieldPosition, isNegative, isInteger, false);
-    }
-
     private StringBuffer subformat(StringBuffer result,
             FieldPosition fieldPosition, boolean isNegative, boolean isInteger,
             boolean parseAttr) 
@@ -1098,10 +1301,10 @@ public class DecimalFormat extends NumberFormat {
         int i;
         char zero = symbols.getZeroDigit();
         int zeroDelta = zero - '0'; // '0' is the DigitList representation of zero
-        char grouping = isCurrencyFormat ?
+        char grouping = currencySignCount > 0 ?
                     symbols.getMonetaryGroupingSeparator() :
                     symbols.getGroupingSeparator();
-        char decimal = isCurrencyFormat ?
+        char decimal =  currencySignCount > 0 ?
             symbols.getMonetaryDecimalSeparator() :
             symbols.getDecimalSeparator();
         boolean useSigDig = areSignificantDigitsUsed();
@@ -1717,6 +1920,10 @@ public class DecimalFormat extends NumberFormat {
                              : (Object) n;
     }
 
+    private static final int CURRENCY_SIGN_COUNT_IN_SYMBOL_FORMAT = 1;
+    private static final int CURRENCY_SIGN_COUNT_IN_ISO_FORMAT = 2;
+    private static final int CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT = 3;
+
     private static final int STATUS_INFINITE = 0;
     private static final int STATUS_POSITIVE = 1;
     private static final int STATUS_UNDERFLOW = 2;
@@ -1792,8 +1999,14 @@ public class DecimalFormat extends NumberFormat {
         } else if (negMatch >= 0) {
             position += negMatch;
         } else {
-            parsePosition.setErrorIndex(position);
-            return false;
+            if (currencySignCount <= 0) {
+                // For currency, need to parse against all currency patterns,
+                // including default, ISO, and plural patterns.
+                // So, do not set error status here,
+                // since it might be another currency style format.
+                parsePosition.setErrorIndex(position);
+                return false;
+            }
         }
 
         // Match padding after prefix
@@ -1818,7 +2031,7 @@ public class DecimalFormat extends NumberFormat {
 
             digits.decimalAt = digits.count = 0;
             char zero = symbols.getZeroDigit();
-            char decimal = isCurrencyFormat ?
+            char decimal = currencySignCount > 0 ?
             symbols.getMonetaryDecimalSeparator() : symbols.getDecimalSeparator();
             char grouping = symbols.getGroupingSeparator();
                         
@@ -2103,11 +2316,18 @@ public class DecimalFormat extends NumberFormat {
         }
 
         // Match positive and negative suffixes; prefer longest match.
-        if (posMatch >= 0) {
+        // special handling for currency parsing, since currency parsing
+        // could parse different kinds of style formats.
+        if (posMatch < 0 && negMatch < 0 && currencySignCount > 0) {
             posMatch = compareAffix(text, position, false, false, currency);
-        }
-        if (negMatch >= 0) {
             negMatch = compareAffix(text, position, true, false, currency);
+        } else {
+            if (posMatch >= 0) {
+                posMatch = compareAffix(text, position, false, false, currency);
+            }
+            if (negMatch >= 0) {
+                negMatch = compareAffix(text, position, true, false, currency);
+            }
         }
         if (posMatch >= 0 && negMatch >= 0) {
             if (posMatch > negMatch) {
@@ -2187,14 +2407,56 @@ public class DecimalFormat extends NumberFormat {
      */
     private int compareAffix(String text, int pos, boolean isNegative,
                              boolean isPrefix, Currency[] currency) {
-        if (currency != null || currencyChoice != null) {
-            if (isPrefix) {
-                return compareComplexAffix(isNegative ? negPrefixPattern : posPrefixPattern,
-                                           text, pos, currency);
-            } else {
-                return compareComplexAffix(isNegative ? negSuffixPattern : posSuffixPattern,
-                                           text, pos, currency);
+        if (currency != null || currencyChoice != null ||
+            currencySignCount > 0) {
+            // Need to parse against all possible currency format patterns,
+            // including default currency style pattern,
+            // ISO currency style pattern, plural currency style pattern.
+            // Try current pattern first.
+            // Since pattern can be reset by applyPattern.
+            // There is no way to know which style the current pattern is.
+            if (!isReadyForParsing) {
+                int savedCurrencySignCount = currencySignCount;
+                setupCurrencyAffixForAllPattern();
+                // reset pattern back
+                if (savedCurrencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) {
+                    applyPatternWithoutExpandAffix(pattern, false);
+                } else {
+                    applyPattern(pattern, false);
+                }
+                isReadyForParsing = true;
             }
+            int posAfterParsingAffix;
+            int tmpPos;
+            if (isPrefix) {
+                posAfterParsingAffix = compareComplexAffix(
+                    isNegative ? negPrefixPattern : posPrefixPattern,
+                    text, pos, currency);
+                tmpPos = comparePatternSet(
+                    isNegative ? negPrefixPatternForCurrency : 
+                    posPrefixPatternForCurrency, text, pos, currency);
+                posAfterParsingAffix = tmpPos > posAfterParsingAffix ?
+                                       tmpPos : posAfterParsingAffix;
+                // simple affix too to parse the case "-\u00A40,00"
+                tmpPos = compareSimpleAffix(
+                    isNegative ? negativePrefix : positivePrefix, text, pos);
+                posAfterParsingAffix = tmpPos > posAfterParsingAffix ?
+                                       tmpPos : posAfterParsingAffix;
+            } else {
+                posAfterParsingAffix = compareComplexAffix(
+                    isNegative ? negSuffixPattern : posSuffixPattern,
+                    text, pos, currency);
+                tmpPos = comparePatternSet(
+                    isNegative ? negSuffixPatternForCurrency : 
+                    posSuffixPatternForCurrency, text, pos, currency);
+                posAfterParsingAffix = tmpPos > posAfterParsingAffix ?
+                                       tmpPos : posAfterParsingAffix;
+                tmpPos = compareSimpleAffix(
+                    isNegative ? negativeSuffix : positiveSuffix, text, pos);
+                posAfterParsingAffix = tmpPos > posAfterParsingAffix ?
+                                       tmpPos : posAfterParsingAffix;
+            }
+            return posAfterParsingAffix;
         }
 
         if (isPrefix) {
@@ -2205,6 +2467,78 @@ public class DecimalFormat extends NumberFormat {
                                       text, pos);
         }
     }
+
+  
+    private int comparePatternSet(Set patternSet, String text, int pos, Currency[] currency) {
+        int posAfterParsing = pos;
+        Iterator iter = patternSet.iterator();
+        while (iter.hasNext()) {
+            posAfterParsing = compareComplexAffix((String)iter.next(), text, pos, currency);
+            if (posAfterParsing != -1) {
+                return posAfterParsing;
+            }
+        }
+        return posAfterParsing;
+    }
+
+
+    private void setupCurrencyAffixForAllPattern() {
+        ULocale uloc = getLocale(ULocale.VALID_LOCALE);
+        if (uloc == null) {
+            uloc = symbols.getLocale(ULocale.VALID_LOCALE);
+        }
+        if (pluralCountToCurrencyUnitPattern == null) {
+            setupCurrencyPluralPattern(uloc);
+        }
+              
+        // CURRENCYSTYLE and ISOCURRENCYSTYLE should have the same
+        // prefix and suffix, so, only need to save one of them.
+        // do not save the actualy pattern.
+        onlyApplyPatternWithoutExpandAffix(getPattern(uloc, NumberFormat.CURRENCYSTYLE), false);
+        // fill in those affixes
+        negPrefixPatternForCurrency = new HashSet();
+        posPrefixPatternForCurrency = new HashSet();
+        negSuffixPatternForCurrency = new HashSet();
+        posSuffixPatternForCurrency = new HashSet();
+        if (negPrefixPattern != null) {
+            negPrefixPatternForCurrency.add(negPrefixPattern);
+        }
+        if (posPrefixPattern != null) {
+            posPrefixPatternForCurrency.add(posPrefixPattern);
+        }
+        if (negSuffixPattern != null) {
+            negSuffixPatternForCurrency.add(negSuffixPattern);
+        }
+        if (posSuffixPattern != null) {
+            posSuffixPatternForCurrency.add(posSuffixPattern);
+        }
+        Iterator iter = pluralCountToCurrencyUnitPattern.keySet().iterator();
+        Set currencyUnitPatternSet = new HashSet();
+        while (iter.hasNext()) {
+            String pluralCount = (String)iter.next();
+            String currencyPattern = (String)pluralCountToCurrencyUnitPattern.get(pluralCount);
+            if (currencyPattern != null &&
+                currencyUnitPatternSet.contains(currencyPattern) == false) {
+                currencyUnitPatternSet.add(currencyPattern);
+                // do not save the pattern
+                onlyApplyPatternWithoutExpandAffix(currencyPattern, false);
+                // fill in those affixes
+                if (negPrefixPattern != null) {
+                    negPrefixPatternForCurrency.add(negPrefixPattern);
+                }
+                if (posPrefixPattern != null) {
+                    posPrefixPatternForCurrency.add(posPrefixPattern);
+                }
+                if (negSuffixPattern != null) {
+                    negSuffixPatternForCurrency.add(negSuffixPattern);
+                }
+                if (posSuffixPattern != null) {
+                    posSuffixPatternForCurrency.add(posSuffixPattern);
+                }
+            }   
+        }
+    }
+
 
     /**
      * Return the length matched by the given affix, or -1 if none.
@@ -2347,16 +2681,32 @@ public class DecimalFormat extends NumberFormat {
 
             switch (c) {
             case CURRENCY_SIGN:
-                // If currency != null, then perform generic currency matching.
-                // Otherwise, do currency choice parsing.
+                // do currency choice parsing when currency choice format
+                // is not null and it is the simple currency format style.
+                // otherwise, perform generic currency matching, which is 
+                // a mixed styled parsing.
                 //assert(currency != null ||
                 //       (getCurrency() != null && currencyChoice != null));
                 boolean intl = i<affixPat.length() &&
                     affixPat.charAt(i) == CURRENCY_SIGN;
-
-                // Parse generic currency -- anything for which we
-                // have a display name, or any 3-letter ISO code.
-                if (currency != null) {
+                if (intl) {
+                    ++i;
+                }
+                boolean plural = i<affixPat.length() &&
+                    affixPat.charAt(i) == CURRENCY_SIGN;
+                if (plural) {
+                    ++i;
+                    intl = false;
+                }
+                if (currency == null && currencyChoice != null &&
+                    !intl && !plural) {
+                    ParsePosition ppos = new ParsePosition(pos);
+                    // Number n = 
+                    currencyChoice.parse(text, ppos);
+                    pos = (ppos.getIndex() == pos) ? -1 : ppos.getIndex();
+                } else {
+                    // Parse generic currency -- anything for which we
+                    // have a display name, or any 3-letter ISO code.
                     // Try to parse display name for our locale; first
                     // determine our locale.
                     ULocale uloc = getLocale(ULocale.VALID_LOCALE);
@@ -2366,23 +2716,17 @@ public class DecimalFormat extends NumberFormat {
                     }
                     // Delegate parse of display name => ISO code to Currency
                     ParsePosition ppos = new ParsePosition(pos);
+                    // using Currency.parse to handle mixed style parsing.
                     String iso = Currency.parse(uloc, text, ppos);
-
+    
                     // If parse succeeds, populate currency[0]
                     if (iso != null) {
-                        currency[0] = Currency.getInstance(iso);
+                        if (currency != null) {
+                            currency[0] = Currency.getInstance(iso);
+                        }
                         pos = ppos.getIndex();
                     } else {
                         pos = -1;
-                    }
-                } else {
-                    if (intl) {
-                        ++i;
-                        pos = match(text, pos, getCurrency().getCurrencyCode());
-                    } else {
-                        ParsePosition ppos = new ParsePosition(pos);
-                        /* Number n = */currencyChoice.parse(text, ppos);
-                        pos = (ppos.getIndex() == pos) ? -1 : ppos.getIndex();
                     }
                 }
                 continue;
@@ -2411,6 +2755,9 @@ public class DecimalFormat extends NumberFormat {
      * isRuleWhiteSpace(ch) then match a run of white space in text.
      */
     static final int match(String text, int pos, int ch) {
+        if (pos >= text.length()) {
+            return -1;
+        }
         if (UCharacterProperty.isRuleWhiteSpace(ch)) {
             // Advance over run of white space in input text
             // Must see at least one white space char in input
@@ -2468,7 +2815,7 @@ public class DecimalFormat extends NumberFormat {
     public void setDecimalFormatSymbols(DecimalFormatSymbols newSymbols) {
         symbols = (DecimalFormatSymbols) newSymbols.clone();
         setCurrencyForSymbols();
-        expandAffixes();
+        expandAffixes(null);
     }
 
     /**
@@ -3107,14 +3454,21 @@ public class DecimalFormat extends NumberFormat {
          * posPrefixPattern, posSuffixPattern, negPrefixPattern, negSuffixPattern.
          * [Richard/GCL]
          */
-        return (posPrefixPattern != null &&
+        // following are added to accomodate changes for currency plural format.
+        return style == other.style 
+            && (pluralRules == null && other.pluralRules == null ||
+                pluralRules.equals(other.pluralRules)) 
+            && (style == NumberFormat.PLURALCURRENCYSTYLE)?
+                (pluralCountToCurrencyUnitPattern == 
+                 other.pluralCountToCurrencyUnitPattern):
+                ((posPrefixPattern != null &&
                     equals(posPrefixPattern, other.posPrefixPattern))
-            && (posSuffixPattern != null &&
+                && (posSuffixPattern != null &&
                     equals(posSuffixPattern, other.posSuffixPattern))
-            && (negPrefixPattern != null &&
+                && (negPrefixPattern != null &&
                     equals(negPrefixPattern, other.negPrefixPattern))
-            && (negSuffixPattern != null &&
-                    equals(negSuffixPattern, other.negSuffixPattern))
+                && (negSuffixPattern != null &&
+                    equals(negSuffixPattern, other.negSuffixPattern)))
             && multiplier == other.multiplier
             && groupingSize == other.groupingSize
             && groupingSize2 == other.groupingSize2
@@ -3128,6 +3482,7 @@ public class DecimalFormat extends NumberFormat {
                 maxSignificantDigits == other.maxSignificantDigits)
             && symbols.equals(other.symbols);
     }
+
     //method to unquote the strings and compare
     private boolean equals(String pat1, String pat2){
         //fast path
@@ -3184,6 +3539,15 @@ public class DecimalFormat extends NumberFormat {
      * @stable ICU 2.0
      */
     public String toPattern() {
+        if (style == NumberFormat.PLURALCURRENCYSTYLE) {
+            // the prefix or suffix pattern might not be defined yet,
+            // so they can not be synthesized,
+            // instead, get them directly.
+            // but it might not be the actual pattern used in formatting.
+            // the actual pattern used in formatting depends on the 
+            // formatted number's plural count.
+            return pattern;
+        }
         return toPattern( false );
     }
 
@@ -3194,6 +3558,9 @@ public class DecimalFormat extends NumberFormat {
      * @stable ICU 2.0
      */
     public String toLocalizedPattern() {
+        if (style == NumberFormat.PLURALCURRENCYSTYLE) {
+            return pattern;
+        }
         return toPattern( true );
     }
 
@@ -3202,9 +3569,17 @@ public class DecimalFormat extends NumberFormat {
      * affix pattern string is null, do not expand it.  This method should be
      * called any time the symbols or the affix patterns change in order to keep
      * the expanded affix strings up to date.
+     * This method also will be called before formatting if format currency
+     * plural names, since the plural name is not a static one, it is 
+     * based on the currency plural count, the affix will be known only
+     * after the currency plural count is know. 
+     * In which case, the parameter
+     * 'pluralCount' will be a non-null currency plural count.
+     * In all other cases, the 'pluralCount' is null, which means 
+     * it is not needed.
      */
     //Bug 4212072 [Richard/GCL]
-    private void expandAffixes() {
+    private void expandAffixes(String pluralCount) {
         // expandAffix() will set currencyChoice to a non-null value if
         // appropriate AND if it is null.
         currencyChoice = null;
@@ -3212,19 +3587,19 @@ public class DecimalFormat extends NumberFormat {
         // Reuse one StringBuffer for better performance
         StringBuffer buffer = new StringBuffer();
         if (posPrefixPattern != null) {
-            expandAffix(posPrefixPattern, buffer, false);
+            expandAffix(posPrefixPattern, pluralCount, buffer, false);
             positivePrefix = buffer.toString();
         }
         if (posSuffixPattern != null) {
-            expandAffix(posSuffixPattern, buffer, false);
+            expandAffix(posSuffixPattern, pluralCount, buffer, false);
             positiveSuffix = buffer.toString();
         }
         if (negPrefixPattern != null) {
-            expandAffix(negPrefixPattern, buffer, false);
+            expandAffix(negPrefixPattern, pluralCount, buffer, false);
             negativePrefix = buffer.toString();
         }
         if (negSuffixPattern != null) {
-            expandAffix(negSuffixPattern, buffer, false);
+            expandAffix(negSuffixPattern, pluralCount, buffer, false);
             negativeSuffix = buffer.toString();
         }
     }
@@ -3235,7 +3610,9 @@ public class DecimalFormat extends NumberFormat {
      * following characters outside QUOTE are recognized:
      * PATTERN_PERCENT, PATTERN_PER_MILLE, PATTERN_MINUS, and
      * CURRENCY_SIGN.  If CURRENCY_SIGN is doubled, it is interpreted as
-     * an international currency sign.  Any other character outside
+     * an international currency sign.  If CURRENCY_SIGN is tripled,
+     * it is interpreted as currency plural long names, such as "US Dollars".
+     * Any other character outside
      * QUOTE represents itself.  Quoted text must be well-formed.
      *
      * This method is used in two distinct ways.  First, it is used to expand
@@ -3251,6 +3628,12 @@ public class DecimalFormat extends NumberFormat {
      * if currencyChoice is null to start with.
      *
      * @param pattern the non-null, possibly empty pattern
+     * @param pluralCount the plural count. It is only used for currency
+     *                    plural format. In which case, it is the plural
+     *                    count of the currency amount. For example,
+     *                    in en_US, it is the singular "one", or the plural
+     *                    "other". For all other cases, it is null, and
+     *                    is not being used.
      * @param buffer a scratch StringBuffer; its contents will be lost
      * @param doFormat if false, then the pattern will be expanded, and if a
      * currency symbol is encountered that expands to a ChoiceFormat, the
@@ -3260,7 +3643,9 @@ public class DecimalFormat extends NumberFormat {
      * @return the expanded equivalent of pattern
      */
     //Bug 4212072 [Richard/GCL]
-    private void expandAffix(String pattern, StringBuffer buffer,
+    private void expandAffix(String pattern, 
+                             String pluralCount, 
+                             StringBuffer buffer,
                              boolean doFormat) {
         buffer.setLength(0);
         for (int i=0; i<pattern.length(); ) {
@@ -3301,13 +3686,31 @@ public class DecimalFormat extends NumberFormat {
                 // sets a custom DFS.
                 boolean intl = i<pattern.length() &&
                     pattern.charAt(i) == CURRENCY_SIGN;
+                boolean plural = false;
                 if (intl) {
                     ++i;
+                    if (i<pattern.length() &&
+                        pattern.charAt(i) == CURRENCY_SIGN) {
+                        plural = true;
+                        intl = false;
+                        ++i;
+                    }
                 }
                 String s = null;
                 Currency currency = getCurrency();
                 if (currency != null) {
-                    if (!intl) {
+                    // plural name is only needed when pluralCount != null,
+                    // which means when formatting currency plural names.
+                    // For other cases, pluralCount == null,
+                    // and plural names are not needed.
+                    if (plural && pluralCount != null) {
+                        boolean isChoiceFormat[] = new boolean[1];
+                        s = currency.getName(symbols.getULocale(), 
+                                             Currency.PLURAL_LONG_NAME, 
+                                             pluralCount, 
+                                             isChoiceFormat);
+                    }
+                    else if (!intl) {
                         boolean isChoiceFormat[] = new boolean[1];
                         s = currency.getName(symbols.getULocale(),
                                              Currency.SYMBOL_NAME,
@@ -3378,7 +3781,7 @@ public class DecimalFormat extends NumberFormat {
                 affixPat = isNegative ? negSuffixPattern : posSuffixPattern;
             }
             StringBuffer affixBuf = new StringBuffer();
-            expandAffix(affixPat, affixBuf, true);
+            expandAffix(affixPat, null, affixBuf, true);
             buf.append(affixBuf.toString());
             return affixBuf.length();
         }
@@ -3762,11 +4165,39 @@ public class DecimalFormat extends NumberFormat {
         applyPattern( pattern, true );
     }
 
+   
     /**
      * <strong><font face=helvetica color=red>CHANGED</font></strong>
      * Does the real work of applying a pattern.
      */
     private void applyPattern(String pattern, boolean localized) {
+        applyPatternWithoutExpandAffix(pattern, localized);
+        expandAffixAdjustWidth(null);
+    }
+
+    private void expandAffixAdjustWidth(String pluralCount) {
+        /*Bug 4212072
+          Update the affix strings accroding to symbols in order to keep
+          the affix strings up to date.
+          [Richard/GCL]
+        */
+        expandAffixes(pluralCount);
+
+        // Now that we have the actual prefix and suffix, fix up formatWidth
+        if (formatWidth > 0) {
+            formatWidth += positivePrefix.length() + positiveSuffix.length();
+        }
+    }
+
+    private void applyPatternWithoutExpandAffix(String pattern, boolean localized) {
+        onlyApplyPatternWithoutExpandAffix(pattern, localized);
+        this.pattern = pattern;
+    }
+
+    // only used when formatting currency plural format.
+    // in which, the right affix (based on the formatted number)
+    // is not known until formatting.
+    private void onlyApplyPatternWithoutExpandAffix(String pattern, boolean localized) {
         char zeroDigit         = PATTERN_ZERO_DIGIT; // '0'
         char sigDigit          = PATTERN_SIGNIFICANT_DIGIT; // '@'
         char groupingSeparator = PATTERN_GROUPING_SEPARATOR;
@@ -3827,7 +4258,6 @@ public class DecimalFormat extends NumberFormat {
             long incrementVal = 0;
             byte expDigits = -1;
             boolean expSignAlways = false;
-            boolean isCurrency = false;
 
             // The affix is either the prefix or the suffix.
             StringBuffer affix = prefix;
@@ -4017,8 +4447,17 @@ public class DecimalFormat extends NumberFormat {
                         if (doubled) {
                             ++pos; // Skip over the doubled character
                             affix.append(ch); // append two: one here, one below
+                            if ((pos + 1) < pattern.length() &&
+                                pattern.charAt(pos + 1) == CURRENCY_SIGN) {
+                                ++pos; // Skip over the tripled character
+                                affix.append(ch); // append again
+                                currencySignCount = CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT;
+                            } else {
+                                currencySignCount = CURRENCY_SIGN_COUNT_IN_ISO_FORMAT;
+                            } 
+                        } else {
+                            currencySignCount = CURRENCY_SIGN_COUNT_IN_SYMBOL_FORMAT;
                         }
-                        isCurrency = true;
                         // Fall through to append(ch)
                     } else if (ch == QUOTE) {
                         // A quote outside quotes indicates either the opening
@@ -4167,7 +4606,6 @@ public class DecimalFormat extends NumberFormat {
                     minExponentDigits = expDigits;
                     exponentSignAlwaysShown = expSignAlways;
                 }
-                isCurrencyFormat = isCurrency;
                 int digitTotalCount = digitLeftCount + zeroDigitCount + digitRightCount;
                 // The effectiveDecimalPos is the position the decimal is at or
                 // would be at if there is no decimal.  Note that if
@@ -4257,18 +4695,6 @@ public class DecimalFormat extends NumberFormat {
             negSuffixPattern = posSuffixPattern;
             negPrefixPattern = PATTERN_MINUS + posPrefixPattern;
         }
-        /*Bug 4212072
-          Update the affix strings accroding to symbols in order to keep
-          the affix strings up to date.
-          [Richard/GCL]
-        */
-        expandAffixes();
-
-        // Now that we have the actual prefix and suffix, fix up formatWidth
-        if (formatWidth > 0) {
-            formatWidth += positivePrefix.length() + positiveSuffix.length();
-        }
-        
         setLocale(null, null);
     }
 
@@ -4420,15 +4846,14 @@ public class DecimalFormat extends NumberFormat {
                 symbols.setInternationalCurrencySymbol(theCurrency.getCurrencyCode());
         }
 
-        if (isCurrencyFormat) {
+        if (currencySignCount > 0) {
             if (theCurrency != null) {
                 setRoundingIncrement(theCurrency.getRoundingIncrement());
-                
                 int d = theCurrency.getDefaultFractionDigits();
                 setMinimumFractionDigits(d);
                 setMaximumFractionDigits(d);
             }
-            expandAffixes();
+            expandAffixes(null);
         }
     }
 
@@ -4668,6 +5093,54 @@ public class DecimalFormat extends NumberFormat {
     //[Richard/GCL]
     private String negSuffixPattern;
 
+    /*
+     * Following are used in currency format
+     */
+    private static final char[] tripleCurrencySign = {0xA4, 0xA4, 0xA4};
+    private static final String tripleCurrencyStr = new String(tripleCurrencySign);
+    private static final char[] defaultCurrencyPluralPatternChar = {0, '.', '#', '#', ' ', 0xA4, 0xA4, 0xA4};
+    private static final String defaultCurrencyPluralPattern = new String(defaultCurrencyPluralPatternChar);
+
+    private Map pluralCountToCurrencyUnitPattern = null;
+    // pattern used in this formatter
+    private String pattern = "";
+    // style is only valid when decimal formatter is constructed by
+    // DecimalFormat(pattern, decimalFormatSymbol, style)
+    private int style = NumberFormat.NUMBERSTYLE;
+    /* For parsing purose,
+     * Need to remember all prefix patterns and suffix patterns of 
+     * every currency format pattern, 
+     * including the pattern of default currecny style, ISO currency style,
+     * and plural currency style. And the patterns are set through applyPattern.
+     * Following are used to represent the affix patterns in currency plural
+     * formats.
+     */
+    private Set negPrefixPatternForCurrency = null;
+    private Set posPrefixPatternForCurrency = null;
+    private Set negSuffixPatternForCurrency = null;
+    private Set posSuffixPatternForCurrency = null;
+    private boolean isReadyForParsing = false;
+    /*
+     * Represents whether this is a currency format, and which
+     * currency format style.
+     * 0: not currency format type;
+     * 1: currency style -- symbol name, such as "$" for US dollar.
+     * 2: currency style -- ISO name, such as USD for US dollar.
+     * 3: currency style -- plural long name, such as "US Dollar" for
+     *                      "1.00 US Dollar", or "US Dollars" for
+     *                      "3.00 US Dollars".
+     */
+    private transient int currencySignCount = 0;
+
+    /*
+     * The plural rule is used to format currency plural name,
+     * for example: "3.00 US Dollars".
+     * If there are 3 currency signs in the currency patttern,
+     * the 3 currency signs will be replaced by currency plural name.
+     */
+    private PluralRules pluralRules = null;
+
+
     /**
      * Formatter for ChoiceFormat-based currency names.  If this field
      * is not null, then delegate to it to format currency symbols.
@@ -4713,11 +5186,6 @@ public class DecimalFormat extends NumberFormat {
      */
     private boolean decimalSeparatorAlwaysShown = false;
     
-    /**
-     * True if this object represents a currency format.  This determines
-     * whether the monetary decimal separator is used instead of the normal one.
-     */
-    private transient boolean isCurrencyFormat = false;
     
     /**
      * The <code>DecimalFormatSymbols</code> object used by this format.
