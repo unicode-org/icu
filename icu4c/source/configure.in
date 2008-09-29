@@ -4,8 +4,12 @@ dnl Copyright (c) 1999-2008, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
+dnl Check for autoconf version
+AC_PREREQ(2.63)
+
 dnl Process this file with autoconf to produce a configure script
-AC_INIT(common/unicode/utypes.h)
+AC_INIT
+AC_CONFIG_SRCDIR([common/unicode/utypes.h])
 
 AC_CONFIG_HEADER(common/icucfg.h)
 PACKAGE="icu"
@@ -191,9 +195,8 @@ if test "$ac_cv_c_compiler_gnu" = yes; then
     LIBCXXFLAGS="-fvisibility=hidden"
     CFLAGS="${CFLAGS} ${LIBCFLAGS}"
     CXXFLAGS="${CXXFLAGS} ${LIBCXXFLAGS}"
-    AC_TRY_LINK([__attribute__ ((visibility ("default"))) void f(void);
-#include <stdlib.h>],[exit(0);],
-        [SHAREDLIBEXPORT=yes],[SHAREDLIBEXPORT=no])
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[__attribute__ ((visibility ("default"))) void f(void);
+#include <stdlib.h>]], [[exit(0);]])],[SHAREDLIBEXPORT=yes],[SHAREDLIBEXPORT=no])
     if test "$SHAREDLIBEXPORT" = no; then
         LIBCFLAGS=
         LIBCXXFLAGS=
@@ -207,9 +210,8 @@ else
         LIBCXXFLAGS="-xldscope=hidden"
         CFLAGS="${CFLAGS} ${LIBCFLAGS}"
         CXXFLAGS="${CXXFLAGS} ${LIBCXXFLAGS}"
-        AC_TRY_LINK([__global void f(void);
-#include <stdlib.h>],[exit(0);],
-            [SHAREDLIBEXPORT=yes],[SHAREDLIBEXPORT=no])
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[__global void f(void);
+#include <stdlib.h>]], [[exit(0);]])],[SHAREDLIBEXPORT=yes],[SHAREDLIBEXPORT=no])
         if test "$SHAREDLIBEXPORT" = no; then
             LIBCFLAGS=
             LIBCXXFLAGS=
@@ -281,7 +283,7 @@ dnl
 AC_CACHE_CHECK([for definition of U_INLINE for C], ac_cv_c_inline,
 [ac_cv_c_inline=no
 for ac_kw in inline __inline__ __inline; do
-  AC_TRY_COMPILE(, [return 0;} $ac_kw int foo() {], [ac_cv_c_inline=$ac_kw; break])
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[return 0;} $ac_kw int foo() {]])],[ac_cv_c_inline=$ac_kw; break],[])
   done
   ])
 case "$ac_cv_c_inline" in
@@ -347,7 +349,7 @@ if test $threads = true; then
   *-pc-cygwin*|*-pc-mingw*)
     dnl For gcc, the thread options are set by mh-mingw/mh-cygwin
     ICU_USE_THREADS=1
-    if test "$ac_cv_prog_gcc" = no; then
+    if test "$ac_cv_c_compiler_gnu" = no; then
       dnl We're using normal windows compilers. Threading is available.
       ICU_USE_THREADS=1
       if test $ENABLE_DEBUG = 1; then
@@ -396,18 +398,14 @@ dnl Check for mmap()
 HAVE_MMAP=0
 AC_MSG_CHECKING([for mmap])
 AC_CACHE_VAL(ac_cv_func_mmap_ok,
-    [AC_TRY_LINK(
-    changequote(<<, >>)dnl
+    [AC_LINK_IFELSE([AC_LANG_PROGRAM([[changequote(<<, >>)dnl
     <<
 #include <unistd.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-    >>,
-    changequote([, ])dnl
-    [mmap((void *)0, 0, PROT_READ, 0, 0, 0);],
-    ac_cv_func_mmap_ok=yes,
-    ac_cv_func_mmap_ok=no)] )
+    >>]], [[changequote(, )dnl
+    mmap((void *)0, 0, PROT_READ, 0, 0, 0);]])],[ac_cv_func_mmap_ok=yes],[ac_cv_func_mmap_ok=no])] )
 AC_MSG_RESULT($ac_cv_func_mmap_ok)
 if test $ac_cv_func_mmap_ok = yes
 then
@@ -487,8 +485,7 @@ AC_ARG_WITH(iostream,
 U_IOSTREAM_SOURCE=0
 if test x$streams != xnone
 then
-    AC_LANG_SAVE
-    AC_LANG_CPLUSPLUS
+    AC_LANG_PUSH(C++)
     OLD_CXXFLAGS="${CXXFLAGS}"
     case "${icu_cv_host_frag}" in
         mh-hpux-acc)
@@ -496,8 +493,7 @@ then
         ;;
     esac
     AC_MSG_CHECKING([for iostream usability])
-    AC_TRY_COMPILE([#include <iostream>],[],
-        [ac_cv_header_iostream=yes],[ac_cv_header_iostream=no])
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <iostream>]], [[]])],[ac_cv_header_iostream=yes],[ac_cv_header_iostream=no])
     if test $icu_cv_host_frag = mh-cygwin-msvc
     then
         dnl <iostream> is always there on Windows.
@@ -513,7 +509,7 @@ then
         CXXFLAGS="${OLD_CXXFLAGS}"
         AC_MSG_CHECKING([whether ostream in iostream.h is really defined])
         AC_CACHE_VAL(ac_cv_iostream_ok,
-            AC_TRY_LINK([#include <iostream.h>],[ostream &testout = cout; testout << "test" << endl;],ac_cv_iostream_ok=yes,ac_cv_iostream_ok=no))
+            AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <iostream.h>]], [[ostream &testout = cout; testout << "test" << endl;]])],[ac_cv_iostream_ok=yes],[ac_cv_iostream_ok=no]))
         AC_MSG_RESULT($ac_cv_iostream_ok)
         if test $ac_cv_iostream_ok = yes
         then
@@ -538,7 +534,7 @@ then
     fi
 fi
 AC_SUBST(U_IOSTREAM_SOURCE)
-AC_LANG_RESTORE
+AC_LANG_POP
 
 dnl Check for endianness
 AC_C_BIGENDIAN()
@@ -561,7 +557,7 @@ if test $U_HAVE_NL_LANGINFO -eq 1; then
   ac_cv_nl_langinfo_codeset,
   [ac_cv_nl_langinfo_codeset="unknown"
   for a in CODESET _NL_CTYPE_CODESET_NAME; do
-  AC_TRY_LINK([#include <langinfo.h>],[nl_langinfo($a);],[ac_cv_nl_langinfo_codeset="$a"; break])]
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <langinfo.h>]], [[nl_langinfo($a);]])],[ac_cv_nl_langinfo_codeset="$a"; break],[])]
   done)
   if test x$ac_cv_nl_langinfo_codeset != xunknown
   then
@@ -573,17 +569,15 @@ AC_SUBST(U_HAVE_NL_LANGINFO_CODESET)
 AC_SUBST(U_NL_LANGINFO_CODESET)
 
 dnl Namespace support checks
-AC_LANG_CPLUSPLUS
+AC_LANG(C++)
 AC_MSG_CHECKING([for namespace support])
 AC_CACHE_VAL(ac_cv_namespace_ok,
-    [AC_TRY_LINK(
-    changequote(<<, >>)dnl
+    [AC_LINK_IFELSE([AC_LANG_PROGRAM([[changequote(<<, >>)dnl
     <<namespace x_version {void f(){}}
     namespace x = x_version;
     using namespace x_version;
-    >>,
-    changequote([, ])dnl
-    [f();], ac_cv_namespace_ok=yes, ac_cv_namespace_ok=no)] )
+    >>]], [[changequote(, )dnl
+    f();]])],[ac_cv_namespace_ok=yes],[ac_cv_namespace_ok=no])] )
 AC_MSG_RESULT($ac_cv_namespace_ok)
 U_HAVE_NAMESPACE=1
 if test $ac_cv_namespace_ok = no
@@ -596,40 +590,36 @@ AC_MSG_CHECKING([for properly overriding new and delete])
 U_OVERRIDE_CXX_ALLOCATION=0
 U_HAVE_PLACEMENT_NEW=0
 AC_CACHE_VAL(ac_cv_override_cxx_allocation_ok,
-    [AC_TRY_LINK(
-    changequote(<<, >>)dnl
+    [AC_LINK_IFELSE([AC_LANG_PROGRAM([[changequote(<<, >>)dnl
     <<#include <stdlib.h>
     class UMemory {
     public:
     void *operator new(size_t size) {return malloc(size);}
-    void *operator new[](size_t size) {return malloc(size);}
+    void *operator new(size_t size) {return malloc(size);}
     void operator delete(void *p) {free(p);}
-    void operator delete[](void *p) {free(p);}
+    void operator delete(void *p) {free(p);}
     };
-    >>,
-    changequote([, ])dnl
-    [], ac_cv_override_cxx_allocation_ok=yes, ac_cv_override_cxx_allocation_ok=no)] )
+    >>]], [[changequote(, )dnl
+    ]])],[ac_cv_override_cxx_allocation_ok=yes],[ac_cv_override_cxx_allocation_ok=no])] )
 AC_MSG_RESULT($ac_cv_override_cxx_allocation_ok)
 if test $ac_cv_override_cxx_allocation_ok = yes
 then
     U_OVERRIDE_CXX_ALLOCATION=1
     AC_MSG_CHECKING([for placement new and delete])
     AC_CACHE_VAL(ac_cv_override_placement_new_ok,
-        [AC_TRY_LINK(
-        changequote(<<, >>)dnl
+        [AC_LINK_IFELSE([AC_LANG_PROGRAM([[changequote(<<, >>)dnl
         <<#include <stdlib.h>
         class UMemory {
         public:
         void *operator new(size_t size) {return malloc(size);}
-        void *operator new[](size_t size) {return malloc(size);}
+        void *operator new(size_t size) {return malloc(size);}
         void operator delete(void *p) {free(p);}
-        void operator delete[](void *p) {free(p);}
+        void operator delete(void *p) {free(p);}
         void * operator new(size_t, void *ptr) { return ptr; }
         void operator delete(void *, void *) {}
         };
-        >>,
-        changequote([, ])dnl
-        [], ac_cv_override_placement_new_ok=yes, ac_cv_override_placement_new_ok=no)] )
+        >>]], [[changequote(, )dnl
+        ]])],[ac_cv_override_placement_new_ok=yes],[ac_cv_override_placement_new_ok=no])] )
     AC_MSG_RESULT($ac_cv_override_placement_new_ok)
     if test $ac_cv_override_placement_new_ok = yes
     then
@@ -639,7 +629,7 @@ fi
 AC_SUBST(U_OVERRIDE_CXX_ALLOCATION)
 AC_SUBST(U_HAVE_PLACEMENT_NEW)
 
-AC_LANG_C
+AC_LANG(C)
 AC_CHECK_FUNC(popen)
 if test x$ac_cv_func_popen = xyes
 then
@@ -668,31 +658,27 @@ AC_SUBST(U_TZSET)
 
 U_HAVE_TZNAME=0
 AC_CACHE_CHECK(for tzname,ac_cv_var_tzname,
-[AC_TRY_LINK(
-changequote(<<, >>)dnl
+[AC_LINK_IFELSE([AC_LANG_PROGRAM([[changequote(<<, >>)dnl
 <<#ifndef __USE_POSIX
 #define __USE_POSIX
 #endif
 #include <stdlib.h>
 #include <time.h>
 #ifndef tzname /* For SGI.  */
-extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
-#endif>>,
-changequote([, ])dnl
-[atoi(*tzname);], ac_cv_var_tzname=yes, ac_cv_var_tzname=no)])
+extern char *tzname; /* RS6000 and others reject char **tzname.  */
+#endif>>]], [[changequote(, )dnl
+atoi(*tzname);]])],[ac_cv_var_tzname=yes],[ac_cv_var_tzname=no])])
 if test $ac_cv_var_tzname = yes; then
   U_TZNAME=tzname
   U_HAVE_TZNAME=1
 else
   AC_CACHE_CHECK(for _tzname,ac_cv_var__tzname,
-  [AC_TRY_LINK(
-  changequote(<<, >>)dnl
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([[changequote(<<, >>)dnl
   <<#include <stdlib.h>
   #include <time.h>
-  extern char *_tzname[];
-  >>,
-  changequote([, ])dnl
-  [atoi(*_tzname);], ac_cv_var__tzname=yes, ac_cv_var__tzname=no)])
+  extern char *_tzname;
+  >>]], [[changequote(, )dnl
+  atoi(*_tzname);]])],[ac_cv_var__tzname=yes],[ac_cv_var__tzname=no])])
     if test $ac_cv_var__tzname = yes; then
       U_TZNAME=_tzname
       U_HAVE_TZNAME=1
@@ -702,8 +688,7 @@ AC_SUBST(U_HAVE_TZNAME)
 AC_SUBST(U_TZNAME)
 
 AC_CACHE_CHECK(for timezone,ac_cv_var_timezone,
-[AC_TRY_LINK(
-changequote(<<, >>)dnl
+[AC_LINK_IFELSE([AC_LANG_PROGRAM([[changequote(<<, >>)dnl
 <<#ifndef __USE_POSIX
 #define __USE_POSIX
 #endif
@@ -711,24 +696,21 @@ changequote(<<, >>)dnl
 #define __USE_XOPEN
 #endif
 #include <time.h>
->>,
-changequote([, ])dnl
-[timezone = 1;], ac_cv_var_timezone=yes, ac_cv_var_timezone=no)])
+>>]], [[changequote(, )dnl
+timezone = 1;]])],[ac_cv_var_timezone=yes],[ac_cv_var_timezone=no])])
 U_HAVE_TIMEZONE=0
 if test $ac_cv_var_timezone = yes; then
   U_TIMEZONE=timezone
   U_HAVE_TIMEZONE=1
 else
   AC_CACHE_CHECK(for __timezone,ac_cv_var___timezone,
-  [AC_TRY_LINK([#include <time.h>], 
-  [__timezone = 1;], ac_cv_var___timezone=yes, ac_cv_var___timezone=no)])
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <time.h>]], [[__timezone = 1;]])],[ac_cv_var___timezone=yes],[ac_cv_var___timezone=no])])
   if test $ac_cv_var___timezone = yes; then
     U_TIMEZONE=__timezone
     U_HAVE_TIMEZONE=1
   else
     AC_CACHE_CHECK(for _timezone,ac_cv_var__timezone,
-    [AC_TRY_LINK([#include <time.h>],
-    [_timezone = 1;], ac_cv_var__timezone=yes, ac_cv_var__timezone=no)])
+    [AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <time.h>]], [[_timezone = 1;]])],[ac_cv_var__timezone=yes],[ac_cv_var__timezone=no])])
     if test $ac_cv_var__timezone = yes; then
       U_TIMEZONE=_timezone
       U_HAVE_TIMEZONE=1
@@ -847,13 +829,12 @@ U_CHECK_UTF16_STRING=1
 CHECK_UTF16_STRING_RESULT="unknown"
 case "${host}" in
 *-*-aix*|powerpc64-*-linux*)
-    if test "$ac_cv_prog_gcc" = no; then
+    if test "$ac_cv_c_compiler_gnu" = no; then
         OLD_CFLAGS="${CFLAGS}"
         OLD_CXXFLAGS="${CXXFLAGS}"
         CFLAGS="${CFLAGS} -qutf"
         CXXFLAGS="${CXXFLAGS} -qutf"
-        AC_TRY_COMPILE([const unsigned short hello[] = u"hello";],[],
-            [U_CHECK_UTF16_STRING=1],[U_CHECK_UTF16_STRING=0])
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[const unsigned short hello[] = u"hello";]], [[]])],[U_CHECK_UTF16_STRING=1],[U_CHECK_UTF16_STRING=0])
         if test "$U_CHECK_UTF16_STRING" = 0; then
             CFLAGS="${OLD_CFLAGS}"
             CXXFLAGS="${OLD_CXXFLAGS}"
@@ -863,13 +844,12 @@ case "${host}" in
     fi
     ;;
 *-*-solaris*)
-    if test "$ac_cv_prog_gcc" = no; then
+    if test "$ac_cv_c_compiler_gnu" = no; then
         OLD_CFLAGS="${CFLAGS}"
         OLD_CXXFLAGS="${CXXFLAGS}"
         CFLAGS="${CFLAGS} -xustr=ascii_utf16_ushort"
         CXXFLAGS="${CXXFLAGS} -xustr=ascii_utf16_ushort"
-        AC_TRY_COMPILE([const unsigned short hello[] = U"hello";],[],
-            [U_CHECK_UTF16_STRING=1],[U_CHECK_UTF16_STRING=0])
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[const unsigned short hello[] = U"hello";]], [[]])],[U_CHECK_UTF16_STRING=1],[U_CHECK_UTF16_STRING=0])
         if test "$U_CHECK_UTF16_STRING" = 0; then
             CFLAGS="${OLD_CFLAGS}"
             CXXFLAGS="${OLD_CXXFLAGS}"
@@ -887,7 +867,7 @@ case "${host}" in
     fi
     ;;
 *-*-hpux*)
-    if test "$ac_cv_prog_gcc" = no; then
+    if test "$ac_cv_c_compiler_gnu" = no; then
         dnl The option will be detected at compile time without additional compiler options.
         CHECK_UTF16_STRING_RESULT="available"
     fi
@@ -1078,7 +1058,7 @@ then
 fi
 
 dnl output the Makefiles
-AC_OUTPUT([icudefs.mk \
+AC_CONFIG_FILES([icudefs.mk \
 		Makefile \
 		data/icupkg.inc \
 		config/Makefile.inc \
@@ -1138,6 +1118,7 @@ AC_OUTPUT([icudefs.mk \
 		samples/Makefile samples/date/Makefile \
 		samples/cal/Makefile samples/layout/Makefile \
 		common/unicode/platform.h])
+AC_OUTPUT
 
 if test $ICU_USE_THREADS = 0; then
   echo  " *** Note: configuring the ICU without pthread support or testing. If this isn't what you want, then run configure with --enable-threads=yes or check the messages [above] to see why we couldn't find pthread_create()" 1>&6
