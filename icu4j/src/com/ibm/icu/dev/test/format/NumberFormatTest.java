@@ -20,8 +20,10 @@ import com.ibm.icu.util.*;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.data.ResourceReader;
 import com.ibm.icu.impl.data.TokenIterator;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.math.BigDecimal;
 
+import java.lang.Double;
 import java.math.BigInteger;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
@@ -238,6 +240,104 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
     }
 
+    public void TestMultiCurrencySign() {
+        Object[][] DATA = {
+            // US
+            {Locale.US, "#,##0.00;-", "#,##0.00", "1234.56", "$1,234.56", "USD1,234.56", "US dollars1,234.56"}, 
+            {Locale.US, "#,##0.00;-", "#,##0.00", "-1234.56", "-$1,234.56", "-USD1,234.56", "-US dollars1,234.56"}, 
+            {Locale.US, "#,##0.00;-", "#,##0.00", "1", "$1.00", "USD1.00", "US dollar1.00"}, 
+            // CHINA
+            {Locale.CHINA, "#,##0.00;(", "#,##0.00)", "1234.56", "\uFFE51,234.56", "CNY1,234.56", "\u4EBA\u6C11\u5E011,234.56"},
+            {Locale.CHINA, "#,##0.00;(", "#,##0.00)", "-1234.56", "(\uFFE51,234.56)", "(CNY1,234.56)", "(\u4EBA\u6C11\u5E011,234.56)"},
+            {Locale.CHINA, "#,##0.00;(", "#,##0.00)", "1", "\uFFE51.00", "CNY1.00", "\u4EBA\u6C11\u5E011.00"}
+        };
+
+        char currency = 0x00A4;
+        for (int i=0; i<DATA.length; ++i) {
+            // Locale.US
+            DecimalFormatSymbols sym = new DecimalFormatSymbols((Locale)DATA[i][0]);
+            for (int j=1; j<=3; ++j) {
+                // "\xA4#,##0.00;-\xA4#,##0.00"
+                StringBuffer pat = new StringBuffer("");
+                for (int k=1; k<=j; k++) {
+                    pat.append(currency);
+                }
+                pat.append((String)DATA[i][1]);
+                for (int k=1; k<=j; k++) {
+                    pat.append(currency);
+                }
+                pat.append((String)DATA[i][2]);
+                DecimalFormat fmt = new DecimalFormat(pat.toString(), sym);
+                String s = ((NumberFormat) fmt).format(new Double((String)DATA[i][3]));
+                if (!s.equals((String)DATA[i][3+j])) {
+                    errln("FAIL format: Expected " + (String)DATA[i][3+j]);
+                }
+                try {
+                    for (int k=4; k<=6; ++k) {
+                      if (fmt.parse((String)DATA[i][k]).doubleValue() != 
+                        (new Double((String)DATA[i][3])).doubleValue()) {
+                        errln("FAILED parse " + DATA[i][k]);
+                      }
+                    }
+                } catch (ParseException e) {
+                    errln("FAILED, DecimalFormat parse currency: " + e.toString());
+                }
+            }
+        }
+    }
+
+    public void TestCurrencyFormatForMixParsing() {
+        MeasureFormat curFmt = MeasureFormat.getCurrencyFormat(new ULocale("en_US"));
+        String[] formats = {
+            "$1,234.56",
+            "USD1,234.56",
+            "US dollars1,234.56",
+            "1,234.56 US dollars"
+        };
+        try {
+          for (int i = 0; i < formats.length; ++i) {
+            CurrencyAmount parsedVal = (CurrencyAmount)curFmt.parseObject(formats[i]);
+            Number val = parsedVal.getNumber();
+            if (!val.equals(new BigDecimal("1234.56"))) {
+                errln("FAIL: getCurrencyFormat of default locale (en_US) failed roundtripping the number. val=" + val);
+            }
+            if (!parsedVal.getCurrency().equals(Currency.getInstance("USD"))) {
+                errln("FAIL: getCurrencyFormat of default locale (en_US) failed roundtripping the currency");
+            }
+          }
+        } catch (ParseException e) {
+            errln("parse FAILED: " + e.toString());
+        };
+    }
+
+    public void TestDecimalFormatCurrencyParse() {
+        // Locale.US
+        DecimalFormatSymbols sym = new DecimalFormatSymbols(Locale.US);
+        StringBuffer pat = new StringBuffer("");
+        char currency = 0x00A4;
+        // "\xA4#,##0.00;-\xA4#,##0.00"
+        pat.append(currency).append(currency).append(currency).append("#,##0.00;-").append(currency).append(currency).append(currency).append("#,##0.00");
+        DecimalFormat fmt = new DecimalFormat(pat.toString(), sym);
+        String[] DATA = {
+            "$1.00", "1",    
+            "USD1.00", "1",    
+            "1.00 US dollar", "1",    
+            "$1,234.56", "1234.56",    
+            "USD1,234.56", "1234.56",    
+            "1,234.56 US dollar", "1234.56",    
+        };
+        try {
+            for (int i = 0; i < DATA.length; i +=2) {
+                Number num = fmt.parse(DATA[i]);
+                if (num.doubleValue() != (new Double(DATA[i+1])).doubleValue()){
+                    errln("FAIL parse: Expected " + DATA[i+1]);
+                }
+            }
+        } catch (ParseException e) {
+            errln("FAILED, DecimalFormat parse currency: " + e.toString());
+        }
+    } 
+
     /**
      * Test localized currency patterns.
      */
@@ -286,6 +386,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         ULocale.setDefault(ULocale.US);
         MeasureFormat curFmt = MeasureFormat.getCurrencyFormat();
         String strBuf = curFmt.format(new CurrencyAmount(new Float(1234.56), Currency.getInstance("USD")));
+
         try {
             CurrencyAmount parsedVal = (CurrencyAmount)curFmt.parseObject(strBuf);
             Number val = parsedVal.getNumber();
@@ -300,6 +401,55 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("FAIL: " + e.getMessage());
         }
         ULocale.setDefault(save);
+    }
+
+    public void TestCurrencyIsoPluralFormat() {
+        String[] DATA = {
+            //"sk", "1", "USD", "1.00 $", "1,00\u00A0USD", "1,00 US dol\u00E1r",
+            "en_US", "1", "USD", "$1.00", "USD1.00", "1.00 US dollar",
+            "en_US", "1234.56", "USD", "$1,234.56", "USD1,234.56", "1,234.56 US dollars",
+            "en_US", "-1234.56", "USD", "($1,234.56)", "(USD1,234.56)", "-1,234.56 US dollars",
+            "zh_CN", "1", "USD", "US$1.00", "USD1.00", "1.00 \u7F8E\u5143", 
+            "zh_CN", "1234.56", "USD", "US$1,234.56", "USD1,234.56", "1,234.56 \u7F8E\u5143",
+            "zh_CN", "1", "CHY", "CHY1.00", "CHY1.00", "1.00 CHY",
+            "zh_CN", "1234.56", "CHY", "CHY1,234.56", "CHY1,234.56", "1,234.56 CHY",
+            "zh_CN", "1", "CNY", "\uFFE51.00", "CNY1.00", "1.00 \u4EBA\u6C11\u5E01",
+            "zh_CN", "1234.56", "CNY", "\uFFE51,234.56", "CNY1,234.56", "1,234.56 \u4EBA\u6C11\u5E01", 
+        };
+        
+        for (int i=0; i<DATA.length; i+=6) {
+          for (int k = NumberFormat.CURRENCYSTYLE;
+               k <= NumberFormat.PLURALCURRENCYSTYLE;
+               ++k) {
+            if ( k != NumberFormat.CURRENCYSTYLE &&
+                 k != NumberFormat.ISOCURRENCYSTYLE &&
+                 k != NumberFormat.PLURALCURRENCYSTYLE ) {
+                continue;
+            }
+            NumberFormat numFmt = NumberFormat.getInstance(new ULocale(DATA[i]), k);
+            numFmt.setCurrency(Currency.getInstance(DATA[i+2]));
+            String strBuf = numFmt.format(new Double(DATA[i+1]));
+            int resultDataIndex = i+k-1;
+            if ( k == NumberFormat.CURRENCYSTYLE ) {
+                resultDataIndex = i+k+2;
+            }
+            if (!strBuf.equals(Utility.unescape(DATA[resultDataIndex]))) {
+                errln("FAIL: Expected " + DATA[resultDataIndex] + " actual: " + Utility.escape(strBuf));
+            }
+            try {
+                // test parsing, and test parsing for all currency formats.
+                for (int j = i+3; j < i+6; ++j) {
+                    Number val = numFmt.parse(DATA[j]);
+                    if (val.doubleValue() != ((new Double(DATA[i+1])).doubleValue())) {
+                        errln("FAIL: getCurrencyFormat of locale " + DATA[i] + " failed roundtripping the number. val=" + val + "; expected: " + DATA[i+1]);
+                    }
+                }
+            }
+            catch (ParseException e) {
+                errln("FAIL: " + e.getMessage());
+            }
+          }  
+        }
     }
 
     /**
