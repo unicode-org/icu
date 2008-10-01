@@ -605,10 +605,7 @@ TimeZone::initDefault()
         ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONE, timeZone_cleanup);
     }
     umtx_unlock(&LOCK);
-    // cleanup hostID from uprv_tzname()
-    if (hostID != NULL) {
-        uprv_free((char*)hostID);
-    }
+    
     delete default_zone;
 }
 
