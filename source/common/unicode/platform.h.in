@@ -24,9 +24,7 @@
  * \brief Basic types for the platform 
  */
 
-/** 
- * \def @platform@
- * Define the platform we're on. */
+/* Define the platform we're on. */
 #ifndef @platform@
 #define @platform@
 #endif
@@ -45,11 +43,11 @@
 
 /**
  * Define what support for C++ streams is available.
- *     If U_IOSTREAM_SOURCE is set to 199711, then <iostream> is available
+ *     If U_IOSTREAM_SOURCE is set to 199711, then &lt;iostream&gt; is available
  * (1997711 is the date the ISO/IEC C++ FDIS was published), and then
  * one should qualify streams using the std namespace in ICU header
  * files.
- *     If U_IOSTREAM_SOURCE is set to 198506, then <iostream.h> is
+ *     If U_IOSTREAM_SOURCE is set to 198506, then &lt;iostream.h&gt; is
  * available instead (198506 is the date when Stroustrup published
  * "An Extensible I/O Facility for C++" at the summer USENIX conference).
  *     If U_IOSTREAM_SOURCE is 0, then C++ streams are not available and
