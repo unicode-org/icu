@@ -758,64 +758,63 @@ static const char* remapShortTimeZone(const char *stdID, const char *dstID, int3
 
 #ifdef SEARCH_TZFILE
 #define MAX_PATH_SIZE PATH_MAX /* Set the limit for the size of the path. */
+static char* defaultTZBuffer = NULL;
+static int64_t defaultTZFileSize = 0;
+static FILE* defaultTZFilePtr = NULL;
 /*
  * This method compares the two files given to see if they are a match.
  * It is currently use to compare two TZ files.
  */
-static UBool compareBinaryFiles(char* filename1, char* filename2) {
-    FILE* file1 = fopen(filename1, "r");
-    FILE* file2 = fopen(filename2, "r");
+static UBool compareBinaryFiles(char* defaultTZFileName, char* TZFileName) {
+    if (defaultTZFilePtr == NULL) {
+        defaultTZFilePtr = fopen(defaultTZFileName, "r");
+    }
+    FILE* file = fopen(TZFileName, "r");
 
-    int64_t sizeFile1;
-    int64_t sizeFile2;
+    int64_t sizeFile;
 
-    char* bufferFile1;
-    char* bufferFile2;
+    char* bufferFile;
 
     int32_t index;
 
     UBool result = TRUE;
 
-    if (file1 != NULL && file2 != NULL) {
+    if (file != NULL && defaultTZFilePtr != NULL) {
         /* First check that the file size are equal. */
-        fseek(file1, 0, SEEK_END);
-        fseek(file2, 0, SEEK_END);
-        sizeFile1 = ftell(file1);
-        sizeFile2 = ftell(file2);
+        if (defaultTZFileSize == 0) {
+            fseek(defaultTZFilePtr, 0, SEEK_END);
+            defaultTZFileSize = ftell(defaultTZFilePtr);
+        }
+        fseek(file, 0, SEEK_END);
+        sizeFile = ftell(file);
 
-        if (sizeFile1 != sizeFile2) {
+        if (sizeFile != defaultTZFileSize) {
             result = FALSE;
         } else {
             /* Store the data from the files in seperate buffers and
              * compare each byte to determine equality.
              */
-            rewind(file1);
-            rewind(file2);
-
-            bufferFile1 = (char*)uprv_malloc(sizeof(char) * sizeFile1);
-            bufferFile2 = (char*)uprv_malloc(sizeof(char) * sizeFile2);
-
-            fread(bufferFile1, 1, sizeFile1, file1);
-            fread(bufferFile2, 1, sizeFile2, file2);
-
-            for (index = 0; index < sizeFile1; index++) {
-                if (bufferFile1[index] != bufferFile2[index]) {
-                    result = FALSE;
-                    break;
-                }
+            if (defaultTZBuffer == NULL) {
+                rewind(defaultTZFilePtr);
+                defaultTZBuffer = (char*)uprv_malloc(sizeof(char) * defaultTZFileSize);
+                fread(defaultTZBuffer, 1, defaultTZFileSize, defaultTZFilePtr);
             }
-            uprv_free(bufferFile1);
-            uprv_free(bufferFile2);
+            rewind(file);
+            bufferFile = (char*)uprv_malloc(sizeof(char) * sizeFile);
+            fread(bufferFile, 1, sizeFile, file);
+
+            if (memcmp(defaultTZBuffer, bufferFile, defaultTZFileSize) != 0) {
+                result = FALSE;
+            }
+
+            uprv_free(bufferFile);
         }
     } else {
         result = FALSE;
     }
 
-    if (file1 != NULL) {
-        fclose(file1);
-    }
-    if (file2 != NULL) {
-        fclose(file2);
+    if (file != NULL) {
+        fclose(file);
     }
 
     return result;
@@ -834,7 +833,7 @@ static char* searchForTZFile(const char* path) {
     char* result = NULL;
 
     /* Save the current path and add a "/" at the end. */
-    char* curpath = (char*)uprv_malloc(MAX_PATH_SIZE);
+    char curpath[MAX_PATH_SIZE];
     uprv_memset(curpath, 0, MAX_PATH_SIZE);
     uprv_strcpy(curpath, path);
 
@@ -842,7 +841,7 @@ static char* searchForTZFile(const char* path) {
     while(dirEntry = readdir(dirp)) {
         if (uprv_strcmp(dirEntry->d_name, SKIP1) != 0 && uprv_strcmp(dirEntry->d_name, SKIP2) != 0) {
             /* Create a newpath with the new entry to test each entry in the directory. */
-            char* newpath = (char*)uprv_malloc(MAX_PATH_SIZE);
+            char newpath[MAX_PATH_SIZE];
             uprv_memset(newpath, 0, MAX_PATH_SIZE);
             uprv_strcpy(newpath, curpath);
             uprv_strcat(newpath, dirEntry->d_name);
@@ -857,18 +856,15 @@ static char* searchForTZFile(const char* path) {
                     result = (char*)uprv_malloc(MAX_PATH_SIZE);
                     uprv_strcpy(result, newpath + (sizeof(TZZONEINFO) - 1));
                     /* Make sure clean up newpath to avoid memory leak. */
-                    uprv_free(newpath);
                     break;
                 }
             }
-            uprv_free(newpath);
             if (result != NULL) {
                 /* Get out after the first one found. */
                 break;
             }
         }
     }
-    uprv_free(curpath);
     closedir(dirp);
     return result;
 }
@@ -931,6 +927,17 @@ uprv_tzname(int n)
         } else {
 #if defined(SEARCH_TZFILE)
             gTimeZoneBufferPtr = searchForTZFile(TZZONEINFO);
+            /* Free and reset the static variables used in searchForTZFile. */
+            if (defaultTZBuffer != NULL) {
+                uprv_free(defaultTZBuffer);
+                defaultTZBuffer = NULL;
+            }
+            if (defaultTZFilePtr != NULL) {
+                fclose(defaultTZFilePtr);
+                defaultTZFilePtr = NULL;
+            }
+            defaultTZFileSize = 0;
+
             if (gTimeZoneBufferPtr != NULL && isValidOlsonID(gTimeZoneBufferPtr)) {
                 return gTimeZoneBufferPtr;
             }
