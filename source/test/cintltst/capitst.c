@@ -933,7 +933,7 @@ void TestOpenVsOpenRules(){
             
             /* make a string with these characters in it */
             strSize = (rand()%40) + 1;
-            str = (UChar*)malloc(sizeof(UChar) * (strSize + 1));
+            str = (UChar*)uprv_malloc(sizeof(UChar) * (strSize + 1));
             
             for(z = 0; z < strSize; z++){
                 str[z] = uset_charAt(eSet, rand()%eSize);
@@ -957,12 +957,12 @@ void TestOpenVsOpenRules(){
            
             /* get sort keys for both of them, and check that the keys are identicle */
             sortKeyLen1 = ucol_getSortKey(c1, str, u_strlen(str),  NULL, 0);
-            sortKey1 = (uint8_t*)malloc(sizeof(uint8_t) * (sortKeyLen1 + 1));
+            sortKey1 = (uint8_t*)uprv_malloc(sizeof(uint8_t) * (sortKeyLen1 + 1));
             /*memset(sortKey1, 0xFE, sortKeyLen1);*/
             ucol_getSortKey(c1, str, u_strlen(str), sortKey1, sortKeyLen1 + 1);
             
             sortKeyLen2 = ucol_getSortKey(c2, str, u_strlen(str),  NULL, 0);
-            sortKey2 = (uint8_t*)malloc(sizeof(uint8_t) * (sortKeyLen2 + 1));
+            sortKey2 = (uint8_t*)uprv_malloc(sizeof(uint8_t) * (sortKeyLen2 + 1));
             /*memset(sortKey2, 0xFE, sortKeyLen2);*/
             ucol_getSortKey(c2, str, u_strlen(str), sortKey2, sortKeyLen2 + 1);
 
@@ -975,8 +975,9 @@ void TestOpenVsOpenRules(){
 
 
             /* clean up after each string */
-            free(sortKey1);
-            free(sortKey2);    
+            uprv_free(str);
+            uprv_free(sortKey1);
+            uprv_free(sortKey2);    
             uset_close(eSet);
         }
         /* clean up after each locale */
@@ -984,6 +985,8 @@ void TestOpenVsOpenRules(){
         ucol_close(c1);
         ucol_close(c2);
     }
+    /* final clean up */
+    uset_close(stdSet);
 }
 /*
 ----------------------------------------------------------------------------
