@@ -232,7 +232,10 @@ U_CDECL_END
 
 /**
  * Converter option for specifying a version selector (0..9) for some converters.
- * For example, ucnv_open("UTF-7,version=1", &errorCode);
+ * For example, 
+ * \code
+ *   ucnv_open("UTF-7,version=1", &errorCode);
+ * \endcode
  * See convrtrs.txt.
  *
  * @see ucnv_open

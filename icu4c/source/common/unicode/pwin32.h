@@ -1,7 +1,7 @@
 /*
  ******************************************************************************
  *
- *   Copyright (C) 1997-2007, International Business Machines
+ *   Copyright (C) 1997-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ******************************************************************************
@@ -21,7 +21,7 @@
   * \brief Configuration constants for the Windows platform
   */
   
-/* Define the platform we're on. */
+/** Define the platform we're on. */
 #ifndef U_WINDOWS
 #define U_WINDOWS
 #endif
@@ -32,25 +32,25 @@
 #define __STDC_CONSTANT_MACROS
 #endif
 
-/* _MSC_VER is used to detect the Microsoft compiler. */
+/** _MSC_VER is used to detect the Microsoft compiler. */
 #if defined(_MSC_VER)
 #define U_INT64_IS_LONG_LONG 0
 #else
 #define U_INT64_IS_LONG_LONG 1
 #endif
 
-/* Define whether inttypes.h is available */
+/** Define whether inttypes.h is available */
 #ifndef U_HAVE_INTTYPES_H
 #define U_HAVE_INTTYPES_H 0
 #endif
 
-/*
+/**
  * Define what support for C++ streams is available.
- *     If U_IOSTREAM_SOURCE is set to 199711, then <iostream> is available
+ *     If U_IOSTREAM_SOURCE is set to 199711, then &lt;iostream&gt; is available
  * (1997711 is the date the ISO/IEC C++ FDIS was published), and then
  * one should qualify streams using the std namespace in ICU header
  * files.
- *     If U_IOSTREAM_SOURCE is set to 198506, then <iostream.h> is
+ *     If U_IOSTREAM_SOURCE is set to 198506, then &lt;iostream.h&gt; is
  * available instead (198506 is the date when Stroustrup published
  * "An Extensible I/O Facility for C++" at the summer USENIX conference).
  *     If U_IOSTREAM_SOURCE is 0, then C++ streams are not available and
@@ -62,7 +62,8 @@
 #define U_IOSTREAM_SOURCE 199711
 #endif
 
-/* Determines whether specific types are available */
+/** @{
+ * Determines whether specific types are available */
 #ifndef U_HAVE_INT8_T
 #define U_HAVE_INT8_T U_HAVE_INTTYPES_H
 #endif
@@ -95,7 +96,9 @@
 #define U_HAVE_UINT64_T U_HAVE_INTTYPES_H
 #endif
 
-/* Define 64 bit limits */
+/** @} */
+
+/** Define 64 bit limits */
 #if !U_INT64_IS_LONG_LONG
 # ifndef INT64_C
 #  define INT64_C(x) ((int64_t)x)
@@ -103,14 +106,15 @@
 # ifndef UINT64_C
 #  define UINT64_C(x) ((uint64_t)x)
 # endif
-/* else use the umachine.h definition */
+/** else use the umachine.h definition */
 #endif
 
 /*===========================================================================*/
-/* Generic data types                                                        */
+/** @{
+ * Generic data types                                                        */
 /*===========================================================================*/
 
-/* If your platform does not have the <inttypes.h> header, you may
+/** If your platform does not have the <inttypes.h> header, you may
    need to edit the typedefs below. */
 #if U_HAVE_INTTYPES_H
 #include <inttypes.h>
@@ -157,23 +161,27 @@ typedef unsigned int uint32_t;
 #endif
 #endif
 
+/**
+ * @}
+ */
+
 /*===========================================================================*/
-/* Compiler and environment features                                         */
+/** Compiler and environment features                                         */
 /*===========================================================================*/
 
-/* Define whether namespace is supported */
+/** Define whether namespace is supported */
 #ifndef U_HAVE_NAMESPACE
 #define U_HAVE_NAMESPACE 1
 #endif
 
-/* Determines the endianness of the platform */
+/** Determines the endianness of the platform */
 #define U_IS_BIG_ENDIAN 0
 
-/* 1 or 0 to enable or disable threads.  If undefined, default is: enable threads. */
+/** 1 or 0 to enable or disable threads.  If undefined, default is: enable threads. */
 #define ICU_USE_THREADS 1
 
 /* On strong memory model CPUs (e.g. x86 CPUs), we use a safe & quick double check mutex lock. */
-/*
+/**
 Microsoft can define _M_IX86, _M_AMD64 (before Visual Studio 8) or _M_X64 (starting in Visual Studio 8). 
 Intel can define _M_IX86 or _M_X64
 */
@@ -181,6 +189,7 @@ Intel can define _M_IX86 or _M_X64
 #define UMTX_STRONG_MEMORY_MODEL 1
 #endif
 
+/** Enable or disable debugging options **/
 #ifndef U_DEBUG
 #ifdef _DEBUG
 #define U_DEBUG 1
@@ -189,6 +198,7 @@ Intel can define _M_IX86 or _M_X64
 #endif
 #endif
 
+/** Enable or disable release options **/
 #ifndef U_RELEASE
 #ifdef NDEBUG
 #define U_RELEASE 1
@@ -197,48 +207,51 @@ Intel can define _M_IX86 or _M_X64
 #endif
 #endif
 
-/* Determine whether to disable renaming or not. This overrides the
+/** Determine whether to disable renaming or not. This overrides the
    setting in umachine.h which is for all platforms. */
 #ifndef U_DISABLE_RENAMING
 #define U_DISABLE_RENAMING 0
 #endif
 
-/* Determine whether to override new and delete. */
+/** Determine whether to override new and delete. */
 #ifndef U_OVERRIDE_CXX_ALLOCATION
 #define U_OVERRIDE_CXX_ALLOCATION 1
 #endif
-/* Determine whether to override placement new and delete for STL. */
+/** Determine whether to override placement new and delete for STL. */
 #ifndef U_HAVE_PLACEMENT_NEW
 #define U_HAVE_PLACEMENT_NEW 1
 #endif
-/* Determine whether to override new and delete for MFC. */
+/** Determine whether to override new and delete for MFC. */
 #if !defined(U_HAVE_DEBUG_LOCATION_NEW) && defined(_MSC_VER)
 #define U_HAVE_DEBUG_LOCATION_NEW 1
 #endif
 
-/* Determine whether to enable tracing. */
+/** Determine whether to enable tracing. */
 #ifndef U_ENABLE_TRACING
 #define U_ENABLE_TRACING 0
 #endif
 
-/* Do we allow ICU users to use the draft APIs by default? */
+/** Do we allow ICU users to use the draft APIs by default? */
 #ifndef U_DEFAULT_SHOW_DRAFT
 #define U_DEFAULT_SHOW_DRAFT 1
 #endif
 
-/* Define the library suffix in a C syntax. */
+/** @{ Define the library suffix in a C syntax. */
 #define U_HAVE_LIB_SUFFIX 0
 #define U_LIB_SUFFIX_C_NAME 
 #define U_LIB_SUFFIX_C_NAME_STRING ""
+/** @} */
 
 /*===========================================================================*/
-/* Information about wchar support                                           */
+/** @{ Information about wchar support                                           */
 /*===========================================================================*/
 
 #define U_HAVE_WCHAR_H 1
 #define U_SIZEOF_WCHAR_T 2
 
 #define U_HAVE_WCSCPY 1
+
+/** @} */
 
 /**
  * \def U_DECLARE_UTF16
@@ -251,7 +264,7 @@ Intel can define _M_IX86 or _M_X64
 #endif
 
 /*===========================================================================*/
-/* Information about POSIX support                                           */
+/** @{ Information about POSIX support                                           */
 /*===========================================================================*/
 
 #if 1
@@ -270,8 +283,10 @@ Intel can define _M_IX86 or _M_X64
 #define U_HAVE_MMAP 0
 #define U_HAVE_POPEN 0
 
+/** @} */
+
 /*===========================================================================*/
-/* Symbol import-export control                                              */
+/** @{ Symbol import-export control                                              */
 /*===========================================================================*/
 
 #ifdef U_STATIC_IMPLEMENTATION
@@ -281,9 +296,10 @@ Intel can define _M_IX86 or _M_X64
 #endif
 #define U_EXPORT2 __cdecl
 #define U_IMPORT __declspec(dllimport)
+/** @} */
 
 /*===========================================================================*/
-/* Code alignment and C function inlining                                    */
+/** @{ Code alignment and C function inlining                                    */
 /*===========================================================================*/
 
 #ifndef U_INLINE
@@ -301,11 +317,16 @@ Intel can define _M_IX86 or _M_X64
 #endif
 
 
+/** @} */
+
 /*===========================================================================*/
-/* Programs used by ICU code                                                 */
+/** @{ Programs used by ICU code                                                 */
 /*===========================================================================*/
 
 #ifndef U_MAKE
 #define U_MAKE  "nmake"
 #define U_MAKE_IS_NMAKE 1
 #endif
+
+/** @} */
+
