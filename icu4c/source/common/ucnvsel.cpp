@@ -572,6 +572,7 @@ static void U_CALLCONV
 ucnvsel_close_selector_iterator(UEnumeration *enumerator) {
   uprv_free(((Enumerator*)(enumerator->context))->index);
   uprv_free(enumerator->context);
+  uprv_free(enumerator);
 }
 
 static int32_t U_CALLCONV

@@ -271,10 +271,12 @@ static void TestConversionUTF8()
         res1 = ucnvsel_selectForUTF8(sel, text+i, -1, &status);
         /* make sure result is correct! */
         verifyResultUTF8(text+i, (const char**) encodings, num_rndm_encodings, res1, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_SET);
+        uenum_close(res1);
 
         res1 = ucnvsel_selectForUTF8(sel, text+i, uprv_strlen(text+i), &status);
         /* make sure result is correct! */
         verifyResultUTF8(text+i, (const char**)encodings, num_rndm_encodings, res1, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_SET);
+        uenum_close(res1);
       }
     }
     uprv_free(text);
@@ -366,12 +368,16 @@ static void TestConversionUTF8()
         res1 = ucnvsel_selectForUTF8(sel, text+i, -1, &status);
         /* make sure result is correct! */
         verifyResultUTF8(text+i, (const char**)encodings, num_rndm_encodings, res1,excluded_sets[excluded_set_id],  UCNV_ROUNDTRIP_AND_FALLBACK_SET);
+        uenum_close(res1);
 
         res1 = ucnvsel_selectForUTF8(sel, text+i, uprv_strlen(text+i), &status);
         /* make sure result is correct! */
         verifyResultUTF8(text+i, (const char**)encodings, num_rndm_encodings, res1,excluded_sets[excluded_set_id],  UCNV_ROUNDTRIP_AND_FALLBACK_SET);
+        uenum_close(res1);
       }
     }
+    uprv_free(encodings[0]);
+    uprv_free(encodings);
     uprv_free(text);
     ucnvsel_close(sel);
     prev = testCaseIdx + 1;
@@ -556,10 +562,12 @@ static void TestConversionUTF16()
         res1 = ucnvsel_selectForString(sel, text+i, -1, &status);
         /* make sure result is correct! */
         verifyResultUTF16(text+i, (const char**) encodings, num_rndm_encodings, res1, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_SET);
+        uenum_close(res1);
 
         res1 = ucnvsel_selectForString(sel, text+i, u_strlen(text+i), &status);
         /* make sure result is correct! */
         verifyResultUTF16(text+i, (const char**)encodings, num_rndm_encodings, res1, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_SET);
+        uenum_close(res1);
       }
     }
     uprv_free(text);
@@ -652,12 +660,16 @@ static void TestConversionUTF16()
         res1 = ucnvsel_selectForString(sel, text+i, -1, &status);
         /* make sure result is correct! */
         verifyResultUTF16(text+i, (const char**)encodings, num_rndm_encodings, res1,excluded_sets[excluded_set_id],  UCNV_ROUNDTRIP_AND_FALLBACK_SET);
+        uenum_close(res1);
 
         res1 = ucnvsel_selectForString(sel, text+i, u_strlen(text+i), &status);
         /* make sure result is correct! */
         verifyResultUTF16(text+i, (const char**)encodings, num_rndm_encodings, res1,excluded_sets[excluded_set_id],  UCNV_ROUNDTRIP_AND_FALLBACK_SET);
+        uenum_close(res1);
       }
     }
+    uprv_free(encodings[0]);
+    uprv_free(encodings);
     uprv_free(text);
     ucnvsel_close(sel);
     prev = testCaseIdx + 1;
@@ -796,10 +808,12 @@ static void TestSerializationAndUnserialization()
         res1 = ucnvsel_selectForString(sel, text+i, -1, &status);
         /* make sure result is correct! */
         verifyResultUTF16(text+i, (const char**) encodings, num_rndm_encodings, res1, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_SET);
+        uenum_close(res1);
 
         res1 = ucnvsel_selectForString(sel, text+i, u_strlen(text+i), &status);
         /* make sure result is correct! */
         verifyResultUTF16(text+i, (const char**)encodings, num_rndm_encodings, res1, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_SET);
+        uenum_close(res1);
       }
     }
     uprv_free(text);
@@ -902,12 +916,16 @@ static void TestSerializationAndUnserialization()
         res1 = ucnvsel_selectForString(sel, text+i, -1, &status);
         /* make sure result is correct! */
         verifyResultUTF16(text+i, (const char**)encodings, num_rndm_encodings, res1,excluded_sets[excluded_set_id],  UCNV_ROUNDTRIP_AND_FALLBACK_SET);
+        uenum_close(res1);
 
         res1 = ucnvsel_selectForString(sel, text+i, u_strlen(text+i), &status);
         /* make sure result is correct! */
         verifyResultUTF16(text+i, (const char**)encodings, num_rndm_encodings, res1,excluded_sets[excluded_set_id],  UCNV_ROUNDTRIP_AND_FALLBACK_SET);
+        uenum_close(res1);
       }
     }
+    uprv_free(encodings[0]);
+    uprv_free(encodings);
     uprv_free(text);
     ucnvsel_close(sel);
     prev = testCaseIdx + 1;
