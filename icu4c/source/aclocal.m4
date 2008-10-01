@@ -1,5 +1,5 @@
 dnl aclocal.m4 for ICU
-dnl Copyright (c) 1999-2007, International Business Machines Corporation and
+dnl Copyright (c) 1999-2008, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth
 
@@ -289,14 +289,14 @@ dnl Strict compilation options.
 AC_DEFUN(AC_CHECK_STRICT_COMPILE,
 [
     AC_MSG_CHECKING([whether strict compiling is on])
-    AC_ARG_ENABLE(strict,[  --enable-strict         compile with strict compiler options [default=no]], [
+    AC_ARG_ENABLE(strict,[  --enable-strict         compile with strict compiler options [default=yes]], [
         if test "$enableval" = no
         then
             ac_use_strict_options=no
         else
             ac_use_strict_options=yes
         fi
-      ], [ac_use_strict_options=no])
+      ], [ac_use_strict_options=yes])
     AC_MSG_RESULT($ac_use_strict_options)
 
     if test "$ac_use_strict_options" = yes
