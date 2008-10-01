@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2006, International Business Machines
+*   Copyright (C) 1997-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -210,6 +210,12 @@ U_INTERNAL int32_t  U_EXPORT2 uprv_timezone(void);
  * @internal
  */
 U_INTERNAL const char* U_EXPORT2 uprv_tzname(int n);
+
+/**
+ * If needed, frees the allocated pointer when tzname is called.
+ * @internal
+ */
+U_INTERNAL void  U_EXPORT2 uprv_free_tzname(void);
 
 /**
  * Get UTC (GMT) time measured in milliseconds since 0:00 on 1/1/1970.

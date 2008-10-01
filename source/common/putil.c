@@ -761,6 +761,7 @@ static const char* remapShortTimeZone(const char *stdID, const char *dstID, int3
 static char* defaultTZBuffer = NULL;
 static int64_t defaultTZFileSize = 0;
 static FILE* defaultTZFilePtr = NULL;
+static UBool defaultTZstatus = FALSE;
 /*
  * This method compares the two files given to see if they are a match.
  * It is currently use to compare two TZ files.
@@ -937,6 +938,7 @@ uprv_tzname(int n)
             defaultTZFileSize = 0;
 
             if (gTimeZoneBufferPtr != NULL && isValidOlsonID(gTimeZoneBufferPtr)) {
+                defaultTZstatus = TRUE;
                 return gTimeZoneBufferPtr;
             }
 #endif
@@ -979,6 +981,18 @@ uprv_tzname(int n)
     return "";
 #endif
 }
+
+U_CAPI void U_EXPORT2
+uprv_free_tzname(void)
+{
+    /* Only care if memory allocation due to searching for system timezone file. */
+    if (defaultTZstatus == TRUE) {
+        uprv_free(gTimeZoneBufferPtr);
+        gTimeZoneBufferPtr = NULL;
+        defaultTZstatus = FALSE;
+    }
+}
+
 
 /* Get and set the ICU data directory --------------------------------------- */
 

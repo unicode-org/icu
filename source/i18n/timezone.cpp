@@ -420,6 +420,10 @@ TimeZone::TimeZone(const UnicodeString &id)
 
 TimeZone::~TimeZone()
 {
+    /* When uprv_tzname() is called, memory might have been
+       allocated for the default timezone name. Release this
+       when the timezone object is deleted. */
+    uprv_free_tzname();
 }
 
 // -------------------------------------
