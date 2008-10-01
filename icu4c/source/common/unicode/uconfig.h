@@ -36,7 +36,6 @@
  */
 
 /**
- * \def UCONFIG_USE_LOCAL
  * If this switch is defined, ICU will attempt to load a header file named "uconfig_local.h"
  * prior to determining default settings for uconfig variables.
  * 

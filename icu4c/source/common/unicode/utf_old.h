@@ -193,7 +193,7 @@ typedef int32_t UTextOffset;
  * that needs the same number of code units (bytes) as were seen by
  * a macro. They should be tested with UTF_IS_ERROR() or UTF_IS_VALID().
  *
- * @deprecated ICU W.4. Obsolete, see utf_old.h.
+ * @deprecated ICU 2.4. Obsolete, see utf_old.h.
  */
 #define UTF8_ERROR_VALUE_1 0x15
 
