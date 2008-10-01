@@ -1429,7 +1429,7 @@ Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enable-strict         compile with strict compiler options default=no
+  --enable-strict         compile with strict compiler options default=yes
   --enable-64bit-libs     build 64-bit libraries default=yes
   --enable-shared         build shared libraries default=yes
   --enable-static         build static libraries default=no
@@ -3598,7 +3598,7 @@ if test "${enable_strict+set}" = set; then
         fi
 
 else
-  ac_use_strict_options=no
+  ac_use_strict_options=yes
 fi
 
     { $as_echo "$as_me:$LINENO: result: $ac_use_strict_options" >&5
