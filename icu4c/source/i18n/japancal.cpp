@@ -320,7 +320,6 @@ const char *JapaneseCalendar::getType() const
 
 int32_t JapaneseCalendar::getDefaultMonthInYear(int32_t eyear) 
 {
-    UErrorCode status  = U_ZERO_ERROR;
     int32_t era = internalGetEra();
     // TODO do we assume we can trust 'era'?  What if it is denormalized?
 
@@ -338,7 +337,6 @@ int32_t JapaneseCalendar::getDefaultMonthInYear(int32_t eyear)
 
 int32_t JapaneseCalendar::getDefaultDayInMonth(int32_t eyear, int32_t month) 
 {
-    UErrorCode status  = U_ZERO_ERROR;
     int32_t era = internalGetEra();
     int32_t day = 1;
 

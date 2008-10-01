@@ -33,7 +33,6 @@
 static FILE *fopenOrError(const char *filename) {
     int32_t needLen;
     FILE *f;
-    UErrorCode status = U_ZERO_ERROR;
     char fnbuf[FILENAME_BUFFER];
     const char* directory= ctest_dataSrcDir();
     needLen = uprv_strlen(directory)+uprv_strlen(TDSRCPATH)+uprv_strlen(filename)+1;
