@@ -775,8 +775,6 @@ static UBool compareBinaryFiles(char* defaultTZFileName, char* TZFileName) {
 
     char* bufferFile;
 
-    int32_t index;
-
     UBool result = TRUE;
 
     if (file != NULL && defaultTZFilePtr != NULL) {

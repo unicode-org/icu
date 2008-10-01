@@ -550,7 +550,6 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
   uint32_t tempLen;
   UChar *rulesCopy = NULL;
   UParseError parseError;
-  const char *colLoc;
 
   src.opts = &opts;
 
