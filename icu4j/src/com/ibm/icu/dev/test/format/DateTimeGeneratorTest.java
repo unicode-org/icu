@@ -213,11 +213,6 @@ public class DateTimeGeneratorTest extends TestFmwk {
                 if (GENERATE_TEST_DATA) {
                     logln("new String[] {\"" + testSkeleton + "\", \"" + Utility.escape(formatted) + "\"},");
                 } else if (!formatted.equals(testFormatted)) {
-                    if(skipIfBeforeICU(4,1,1)&& uLocale.equals("zh_Hans_CN") && testSkeleton.equals("HHmm")){
-                        logln(uLocale + "\tformatted string doesn't match test case: " + testSkeleton + "\t generated: " +  pattern + "\t expected: " + testFormatted + "\t got: " + formatted);
-                        continue;
-                    }
-                        
                     errln(uLocale + "\tformatted string doesn't match test case: " + testSkeleton + "\t generated: " +  pattern + "\t expected: " + testFormatted + "\t got: " + formatted);
                     if (true) { // debug
                         pattern = dtfg.getBestPattern(testSkeleton);
@@ -262,7 +257,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"MMMd", "01-13"},
         new String[] {"yQQQ", "1999\u5E741\u5B63"},
         new String[] {"hhmm", "\u4E0B\u534811:58"},
-        new String[] {"HHmm", "\u4E0B\u534811:58"},
+        new String[] {"HHmm", "23:58"},
         new String[] {"mmss", "58:59"},
         new ULocale("de_DE"),
         new String[] {"yM", "1999-1"},
@@ -399,7 +394,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         DateOrder order2 = getOrdering(style2, uLocale);
         if (!order1.hasSameOrderAs(order2)) {
             if (order1.monthLength == order2.monthLength) { // error if have same month length, different ordering
-                if (skipIfBeforeICU(4,1,1)) {
+                if (skipIfBeforeICU(4,1,2)) {
                     logln(showOrderComparison(uLocale, style1, style2, order1, order2));
                 } else {
                     errln(showOrderComparison(uLocale, style1, style2, order1, order2));
