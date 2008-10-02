@@ -985,12 +985,14 @@ uprv_tzname(int n)
 U_CAPI void U_EXPORT2
 uprv_free_tzname(void)
 {
+#ifdef SEARCH_TZFILE
     /* Only care if memory allocation due to searching for system timezone file. */
     if (defaultTZstatus == TRUE) {
         uprv_free(gTimeZoneBufferPtr);
         gTimeZoneBufferPtr = NULL;
         defaultTZstatus = FALSE;
     }
+#endif
 }
 
 
