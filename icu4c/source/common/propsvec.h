@@ -84,11 +84,15 @@ upvec_getRow(uint32_t *pv, int32_t rowIndex,
  * (Therefore, it starts at 0 increases in increments of the columns value.)
  */
 
+U_CDECL_BEGIN
+
 typedef void U_CALLCONV
 UPVecCompactHandler(void *context,
                     UChar32 start, UChar32 limit,
                     int32_t rowIndex, uint32_t *row, int32_t columns,
                     UErrorCode *pErrorCode);
+
+U_CDECL_END
 
 U_CAPI int32_t U_EXPORT2
 upvec_compact(uint32_t *pv, UPVecCompactHandler *handler, void *context, UErrorCode *pErrorCode);
