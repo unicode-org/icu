@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2002,2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -23,7 +23,7 @@
 #include "cintltst.h"
 
     /**
-     * DateFormat Regresstion tests
+     * DateFormat Regression tests
      **/
 
     void Test4029195(void); 
@@ -34,6 +34,7 @@
     void Test4073003(void); 
     void Test4162071(void); 
     void Test714(void);
+    void TestJ6072(void);
 
     /**
      * test subroutine

@@ -1046,9 +1046,11 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     switch (patternCharIndex) {
     
     // for any "G" symbol, write out the appropriate era string
-    // "GGGG" is wide era name, anything else is abbreviated name
+    // "GGGG" is wide era name, "GGGGG" is narrow era name, anything else is abbreviated name
     case UDAT_ERA_FIELD:
-        if (count >= 4)
+        if (count == 5)
+           _appendSymbol(appendTo, value, fSymbols->fNarrowEras, fSymbols->fNarrowErasCount);
+        else if (count == 4)
            _appendSymbol(appendTo, value, fSymbols->fEraNames, fSymbols->fEraNamesCount);
         else
            _appendSymbol(appendTo, value, fSymbols->fEras, fSymbols->fErasCount);
@@ -1925,6 +1927,9 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
 
     switch (patternCharIndex) {
     case UDAT_ERA_FIELD:
+        if (count == 5) {
+            return matchString(text, start, UCAL_ERA, fSymbols->fNarrowEras, fSymbols->fNarrowErasCount, cal);
+        }
         if (count == 4) {
             return matchString(text, start, UCAL_ERA, fSymbols->fEraNames, fSymbols->fEraNamesCount, cal);
         }
