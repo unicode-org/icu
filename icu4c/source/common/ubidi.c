@@ -1399,6 +1399,8 @@ resolveImplicitLevels(UBiDi *pBiDi,
     DirProp nextStrongProp=R;
     int32_t nextStrongPos=-1;
 
+    levState.startON = -1;  /* silence gcc flow analysis */
+
     /* check for RTL inverse BiDi mode */
     /* FOOD FOR THOUGHT: in case of RTL inverse BiDi, it would make sense to
      * loop on the text characters from end to start.

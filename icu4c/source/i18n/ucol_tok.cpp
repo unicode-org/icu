@@ -1751,7 +1751,7 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
     // like copy and remove...
     //const UChar *openBrace = rules;
     int32_t optionNumber = -1;
-    const UChar *setStart;
+    const UChar *setStart = NULL;
     uint32_t i = 0;
     while(i < rulesLength) {
         if(rules[i] == 0x005B) {
