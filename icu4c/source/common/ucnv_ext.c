@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2003-2007, International Business Machines
+*   Copyright (C) 2003-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -279,7 +279,7 @@ ucnv_extInitialMatchToU(UConverter *cnv, const int32_t *cx,
                         int32_t **offsets, int32_t srcIndex,
                         UBool flush,
                         UErrorCode *pErrorCode) {
-    uint32_t value;
+    uint32_t value = 0;  /* initialize output-only param to 0 to silence gcc */
     int32_t match;
 
     /* try to match */
@@ -329,7 +329,7 @@ U_CFUNC UChar32
 ucnv_extSimpleMatchToU(const int32_t *cx,
                        const char *source, int32_t length,
                        UBool useFallback) {
-    uint32_t value;
+    uint32_t value = 0;  /* initialize output-only param to 0 to silence gcc */
     int32_t match;
 
     if(length<=0) {
@@ -367,7 +367,7 @@ U_CFUNC void
 ucnv_extContinueMatchToU(UConverter *cnv,
                          UConverterToUnicodeArgs *pArgs, int32_t srcIndex,
                          UErrorCode *pErrorCode) {
-    uint32_t value;
+    uint32_t value = 0;  /* initialize output-only param to 0 to silence gcc */
     int32_t match, length;
 
     match=ucnv_extMatchToU(cnv->sharedData->mbcs.extIndexes, (int8_t)UCNV_SISO_STATE(cnv),
@@ -748,7 +748,7 @@ ucnv_extInitialMatchFromU(UConverter *cnv, const int32_t *cx,
                           int32_t **offsets, int32_t srcIndex,
                           UBool flush,
                           UErrorCode *pErrorCode) {
-    uint32_t value;
+    uint32_t value = 0;  /* initialize output-only param to 0 to silence gcc */
     int32_t match;
 
     /* try to match */
@@ -861,7 +861,7 @@ U_CFUNC void
 ucnv_extContinueMatchFromU(UConverter *cnv,
                            UConverterFromUnicodeArgs *pArgs, int32_t srcIndex,
                            UErrorCode *pErrorCode) {
-    uint32_t value;
+    uint32_t value = 0;  /* initialize output-only param to 0 to silence gcc */
     int32_t match;
 
     match=ucnv_extMatchFromU(cnv->sharedData->mbcs.extIndexes,
