@@ -1,11 +1,11 @@
-dnl aclocal.m4 for ICU
-dnl Copyright (c) 1999-2008, International Business Machines Corporation and
-dnl others. All Rights Reserved.
-dnl Stephen F. Booth
+# aclocal.m4 for ICU
+# Copyright (c) 1999-2008, International Business Machines Corporation and
+# others. All Rights Reserved.
+# Stephen F. Booth
 
-dnl @TOP@
+# @TOP@
 
-dnl ICU_CHECK_MH_FRAG
+# ICU_CHECK_MH_FRAG
 AC_DEFUN(ICU_CHECK_MH_FRAG, [
 	AC_CACHE_CHECK(
 		[which Makefile fragment to use],
@@ -70,7 +70,7 @@ esac
 	)
 ])
 
-dnl ICU_CONDITIONAL - similar example taken from Automake 1.4
+# ICU_CONDITIONAL - similar example taken from Automake 1.4
 AC_DEFUN(ICU_CONDITIONAL,
 [AC_SUBST($1_TRUE)
 if $2; then
@@ -79,7 +79,7 @@ else
   $1_TRUE='#'
 fi])
 
-dnl ICU_PROG_LINK - Make sure that the linker is usable
+# ICU_PROG_LINK - Make sure that the linker is usable
 AC_DEFUN(ICU_PROG_LINK,
 [
 case "${host}" in
@@ -91,9 +91,9 @@ case "${host}" in
     *);;
 esac])
 
-dnl AC_SEARCH_LIBS_FIRST(FUNCTION, SEARCH-LIBS [, ACTION-IF-FOUND
-dnl            [, ACTION-IF-NOT-FOUND [, OTHER-LIBRARIES]]])
-dnl Search for a library defining FUNC, then see if it's not already available.
+# AC_SEARCH_LIBS_FIRST(FUNCTION, SEARCH-LIBS [, ACTION-IF-FOUND
+#            [, ACTION-IF-NOT-FOUND [, OTHER-LIBRARIES]]])
+# Search for a library defining FUNC, then see if it's not already available.
 
 AC_DEFUN(AC_SEARCH_LIBS_FIRST,
 [AC_PREREQ([2.13])
@@ -117,7 +117,7 @@ else :
   $4
 fi])
 
-dnl Check if we can build and use 64-bit libraries
+# Check if we can build and use 64-bit libraries
 AC_DEFUN(AC_CHECK_64BIT_LIBS,
 [
     AC_ARG_ENABLE(64bit-libs,
@@ -125,16 +125,16 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
         [ENABLE_64BIT_LIBS=${enableval}],
         [ENABLE_64BIT_LIBS=yes]
     )
-    dnl These results can't be cached because is sets compiler flags.
+    # These results can't be cached because is sets compiler flags.
     AC_MSG_CHECKING([for 64-bit executable support])
     if test "$ENABLE_64BIT_LIBS" != no; then
         if test "$GCC" = yes; then
-            dnl First we check that gcc already compiles as 64-bit
+            # First we check that gcc already compiles as 64-bit
             if test -n "`$CXX -dumpspecs 2>&1 && $CC -dumpspecs 2>&1 | grep -v __LP64__`"; then
                 ENABLE_64BIT_LIBS=yes
             else
-                dnl Now we check a little more forcefully.
-                dnl Maybe the compiler builds as 32-bit on a 64-bit machine.
+                # Now we check a little more forcefully.
+                # Maybe the compiler builds as 32-bit on a 64-bit machine.
                 OLD_CFLAGS="${CFLAGS}"
                 OLD_CXXFLAGS="${CXXFLAGS}"
                 CFLAGS="${CFLAGS} -m64"
@@ -151,6 +151,7 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
             case "${host}" in
             sparc*-*-solaris*)
                 SPARCV9=`isainfo -n 2>&1 | grep sparcv9`
+                # "Warning: -xarch=v9 is deprecated, use -m64 to create 64-bit programs"
                 SOL64=`$CXX -xarch=v9 2>&1 && $CC -xarch=v9 2>&1 | grep -v usage:`
                 if test -z "$SOL64" && test -n "$SPARCV9"; then
                     CFLAGS="${CFLAGS} -xtarget=ultra -xarch=v9"
@@ -158,7 +159,15 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
                     LDFLAGS="${LDFLAGS} -xtarget=ultra -xarch=v9"
                     ENABLE_64BIT_LIBS=yes
                 else
-                    ENABLE_64BIT_LIBS=no
+                    SOL64=`$CXX -m64 2>&1 && $CC -m64 2>&1 | grep -v usage:`
+                    if test -z "$SOL64" && test -n "$SPARCV9"; then
+                        CFLAGS="${CFLAGS} -m64 "
+                        CXXFLAGS="${CXXFLAGS} -m64 "
+                        LDFLAGS="${LDFLAGS} -m64 "
+                        ENABLE_64BIT_LIBS=yes
+                    else
+                        ENABLE_64BIT_LIBS=no
+                    fi
                 fi
                 ;;
             i386-*-solaris*)
@@ -195,8 +204,8 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
                 fi
                 ;;
             *-*-cygwin)
-                dnl vcvarsamd64.bat should have been used to enable 64-bit builds.
-                dnl We only do this check to display the correct answer.
+                # vcvarsamd64.bat should have been used to enable 64-bit builds.
+                # We only do this check to display the correct answer.
                 if test -n "`$CXX -help 2>&1 | grep 'for x64'`"; then
                     ENABLE_64BIT_LIBS=yes
                 else
@@ -225,8 +234,8 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
                 fi
                 ;;
             *-*-hpux*)
-                dnl First we try the newer +DD64, if that doesn't work,
-                dnl try other options.
+                # First we try the newer +DD64, if that doesn't work,
+                # try other options.
 
                 OLD_CFLAGS="${CFLAGS}"
                 OLD_CXXFLAGS="${CXXFLAGS}"
@@ -281,11 +290,11 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
             fi
         fi
     fi
-    dnl Individual tests that fail should reset their own flags.
+    # Individual tests that fail should reset their own flags.
     AC_MSG_RESULT($ENABLE_64BIT_LIBS)
 ])
 
-dnl Strict compilation options.
+# Strict compilation options.
 AC_DEFUN(AC_CHECK_STRICT_COMPILE,
 [
     AC_MSG_CHECKING([whether strict compiling is on])
