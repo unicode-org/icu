@@ -21,7 +21,6 @@ import java.util.MissingResourceException;
 import java.util.Set;
 
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
 
@@ -738,16 +737,16 @@ public class DecimalFormat extends NumberFormat {
         createFromPatternAndSymbols(pattern, symbols);
     }
 
-    private void createFromPatternAndSymbols(String pattern, DecimalFormatSymbols symbols) {
+    private void createFromPatternAndSymbols(String pattern, DecimalFormatSymbols inputSymbols) {
         // Always applyPattern after the symbols are set
-        this.symbols = (DecimalFormatSymbols) symbols.clone();
+        this.symbols = (DecimalFormatSymbols) inputSymbols.clone();
         setCurrencyForSymbols();
         applyPatternWithoutExpandAffix(pattern, false);
         if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) {
             // plural rule is only needed for currency plural format.
             ULocale uloc = getLocale(ULocale.VALID_LOCALE);
             if (uloc == null) {
-                uloc = symbols.getLocale(ULocale.VALID_LOCALE);
+                uloc = inputSymbols.getLocale(ULocale.VALID_LOCALE);
             }
             pluralRules = PluralRules.forLocale(uloc);
         } else {
@@ -1259,7 +1258,7 @@ public class DecimalFormat extends NumberFormat {
                     currencyPluralPattern = defaultCurrencyPluralPattern;
                 }
             }
-            if (pattern.equals(currencyPluralPattern) == false) {
+            if (this.formatPattern.equals(currencyPluralPattern) == false) {
                 applyPatternWithoutExpandAffix(currencyPluralPattern, false);
             }
         }
@@ -2420,9 +2419,9 @@ public class DecimalFormat extends NumberFormat {
                 setupCurrencyAffixForAllPattern();
                 // reset pattern back
                 if (savedCurrencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) {
-                    applyPatternWithoutExpandAffix(pattern, false);
+                    applyPatternWithoutExpandAffix(this.formatPattern, false);
                 } else {
-                    applyPattern(pattern, false);
+                    applyPattern(this.formatPattern, false);
                 }
                 isReadyForParsing = true;
             }
@@ -2649,8 +2648,10 @@ public class DecimalFormat extends NumberFormat {
      */
     private int compareComplexAffix(String affixPat, String text, int pos,
                                     Currency[] currency) {
-
-        for (int i=0; i<affixPat.length() && pos >= 0; ) {
+        int start = pos;
+        for (int i=0; 
+             //i<affixPat.length() && pos >= 0 && pos < text.length(); ) {
+             i<affixPat.length() && pos >= 0; ) {
             char c = affixPat.charAt(i++);
             if (c == QUOTE) {
                 for (;;) {
@@ -2746,6 +2747,7 @@ public class DecimalFormat extends NumberFormat {
             }
         }
 
+        //return pos - start;
         return pos;
     }
 
@@ -3546,7 +3548,7 @@ public class DecimalFormat extends NumberFormat {
             // but it might not be the actual pattern used in formatting.
             // the actual pattern used in formatting depends on the 
             // formatted number's plural count.
-            return pattern;
+            return this.formatPattern;
         }
         return toPattern( false );
     }
@@ -3559,7 +3561,7 @@ public class DecimalFormat extends NumberFormat {
      */
     public String toLocalizedPattern() {
         if (style == NumberFormat.PLURALCURRENCYSTYLE) {
-            return pattern;
+            return this.formatPattern;
         }
         return toPattern( true );
     }
@@ -4191,7 +4193,7 @@ public class DecimalFormat extends NumberFormat {
 
     private void applyPatternWithoutExpandAffix(String pattern, boolean localized) {
         onlyApplyPatternWithoutExpandAffix(pattern, localized);
-        this.pattern = pattern;
+        this.formatPattern = pattern;
     }
 
     // only used when formatting currency plural format.
@@ -5103,7 +5105,7 @@ public class DecimalFormat extends NumberFormat {
 
     private Map pluralCountToCurrencyUnitPattern = null;
     // pattern used in this formatter
-    private String pattern = "";
+    private String formatPattern = "";
     // style is only valid when decimal formatter is constructed by
     // DecimalFormat(pattern, decimalFormatSymbol, style)
     private int style = NumberFormat.NUMBERSTYLE;
