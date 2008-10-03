@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2007, International Business Machines
+ * Copyright (c) 1997-2008, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 
@@ -159,8 +159,24 @@ void IntlTestDateFormatSymbols::TestSymbols(/* char *par */)
     int32_t count = 0;
     const UnicodeString *eras = en.getEras(count);
     if(count == 0) {
-      errln("ERROR: 0 english eras.. exitting..\n");
+      errln("ERROR: 0 english eras.. exiting..\n");
       return;
+    }
+    int32_t eraNamesCount = 0;
+    const UnicodeString *eraNames = en.getEraNames(eraNamesCount);
+    if(eraNamesCount == 0) {
+      errln("ERROR: 0 english eraNames\n");
+    } else if ( eraNames[0].length() <= eras[0].length() ) {
+      // At least for English we know a wide eraName should be longer than an abbrev era
+      errln("ERROR: english eraNames[0] not longer than eras[0]\n");
+    }
+    int32_t narrowErasCount = 0;
+    const UnicodeString *narrowEras = en.getNarrowEras(narrowErasCount);
+    if(narrowErasCount == 0) {
+      errln("ERROR: 0 english narrowEras\n");
+    } else if ( narrowEras[0].length() >= eras[0].length() ) {
+      // At least for English we know a narrowEra should be shorter than an abbrev era
+      errln("ERROR: english narrowEras[0] not shorter than eras[0]\n");
     }
 
     fr.setEras(eras, count);

@@ -1,6 +1,6 @@
 /*  
 ********************************************************************************
-*   Copyright (C) 1997-2007, International Business Machines
+*   Copyright (C) 1997-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -180,7 +180,7 @@ public:
     UBool operator!=(const DateFormatSymbols& other) const { return !operator==(other); }
 
     /**
-     * Gets era strings. For example: "AD" and "BC".
+     * Gets abbreviated era strings. For example: "AD" and "BC".
      *
      * @param count    Filled in with length of the array.
      * @return         the era strings.
@@ -189,7 +189,7 @@ public:
     const UnicodeString* getEras(int32_t& count) const;
 
     /**
-     * Sets era strings. For example: "AD" and "BC".
+     * Sets abbreviated era strings. For example: "AD" and "BC".
      * @param eras  Array of era strings (DateFormatSymbols retains ownership.)
      * @param count Filled in with length of the array.
      * @stable ICU 2.0
@@ -212,6 +212,23 @@ public:
      * @stable ICU 3.6
      */
     void setEraNames(const UnicodeString* eraNames, int32_t count);
+
+    /**
+     * Gets narrow era strings. For example: A" and "D".
+     *
+     * @param count    Filled in with length of the array.
+     * @return         the narrow era strings.
+     * @draft ICU 4.2
+     */
+    const UnicodeString* getNarrowEras(int32_t& count) const;
+
+    /**
+     * Sets narrow era strings. For example: "A" and "B".
+     * @param narrowEras  Array of narrow era strings (DateFormatSymbols retains ownership.)
+     * @param count Filled in with length of the array.
+     * @draft ICU 4.2
+     */
+    void setNarrowEras(const UnicodeString* narrowEras, int32_t count);
 
     /**
      * Gets month strings. For example: "January", "February", etc.
@@ -453,7 +470,7 @@ private:
     friend class DateFormatSymbolsSingleSetter; // see udat.cpp
 
     /**
-     * Era strings. For example: "AD" and "BC".
+     * Abbreviated era strings. For example: "AD" and "BC".
      */
     UnicodeString*  fEras;
     int32_t         fErasCount;
@@ -463,6 +480,12 @@ private:
      */
     UnicodeString*  fEraNames;
     int32_t         fEraNamesCount;
+
+    /**
+     * Narrow era strings. For example: "A" and "B".
+     */
+    UnicodeString*  fNarrowEras;
+    int32_t         fNarrowErasCount;
 
     /**
      * Month strings. For example: "January", "February", etc.
