@@ -177,7 +177,6 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DateFormatSymbols)
  * with a locale and calendar
  */
 static const char gErasTag[]="eras";
-static const char gAbbreviatedTag[] = "abbreviated";
 static const char gMonthNamesTag[]="monthNames";
 static const char gDayNamesTag[]="dayNames";
 static const char gNamesWideTag[]="wide";
@@ -310,6 +309,7 @@ void
 DateFormatSymbols::copyData(const DateFormatSymbols& other) {
     assignArray(fEras, fErasCount, other.fEras, other.fErasCount);
     assignArray(fEraNames, fEraNamesCount, other.fEraNames, other.fEraNamesCount);
+    assignArray(fNarrowEras, fNarrowErasCount, other.fNarrowEras, other.fNarrowErasCount);
     assignArray(fMonths, fMonthsCount, other.fMonths, other.fMonthsCount);
     assignArray(fShortMonths, fShortMonthsCount, other.fShortMonths, other.fShortMonthsCount);
     assignArray(fNarrowMonths, fNarrowMonthsCount, other.fNarrowMonths, other.fNarrowMonthsCount);
@@ -371,6 +371,7 @@ void DateFormatSymbols::dispose()
 {
     if (fEras)                     delete[] fEras;
     if (fEraNames)                 delete[] fEraNames;
+    if (fNarrowEras)               delete[] fNarrowEras;
     if (fMonths)                   delete[] fMonths;
     if (fShortMonths)              delete[] fShortMonths;
     if (fNarrowMonths)             delete[] fNarrowMonths;
@@ -447,6 +448,7 @@ DateFormatSymbols::operator==(const DateFormatSymbols& other) const
     }
     if (fErasCount == other.fErasCount &&
         fEraNamesCount == other.fEraNamesCount &&
+        fNarrowErasCount == other.fNarrowErasCount &&
         fMonthsCount == other.fMonthsCount &&
         fShortMonthsCount == other.fShortMonthsCount &&
         fNarrowMonthsCount == other.fNarrowMonthsCount &&
@@ -470,6 +472,7 @@ DateFormatSymbols::operator==(const DateFormatSymbols& other) const
         // Now compare the arrays themselves
         if (arrayCompare(fEras, other.fEras, fErasCount) &&
             arrayCompare(fEraNames, other.fEraNames, fEraNamesCount) &&
+            arrayCompare(fNarrowEras, other.fNarrowEras, fNarrowErasCount) &&
             arrayCompare(fMonths, other.fMonths, fMonthsCount) &&
             arrayCompare(fShortMonths, other.fShortMonths, fShortMonthsCount) &&
             arrayCompare(fNarrowMonths, other.fNarrowMonths, fNarrowMonthsCount) &&
@@ -524,6 +527,13 @@ DateFormatSymbols::getEraNames(int32_t &count) const
 {
     count = fEraNamesCount;
     return fEraNames;
+}
+
+const UnicodeString*
+DateFormatSymbols::getNarrowEras(int32_t &count) const
+{
+    count = fNarrowErasCount;
+    return fNarrowEras;
 }
 
 const UnicodeString*
@@ -732,6 +742,20 @@ DateFormatSymbols::setEraNames(const UnicodeString* eraNamesArray, int32_t count
     fEraNames = newUnicodeStringArray(count);
     uprv_arrayCopy(eraNamesArray,fEraNames,  count);
     fEraNamesCount = count;
+}
+
+void
+DateFormatSymbols::setNarrowEras(const UnicodeString* narrowErasArray, int32_t count)
+{
+    // delete the old list if we own it
+    if (fNarrowEras)
+        delete[] fNarrowEras;
+
+    // we always own the new list, which we create here (we duplicate rather
+    // than adopting the list passed in)
+    fNarrowEras = newUnicodeStringArray(count);
+    uprv_arrayCopy(narrowErasArray,fNarrowEras,  count);
+    fNarrowErasCount = count;
 }
 
 void
@@ -1167,6 +1191,8 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     fErasCount = 0;
     fEraNames = NULL;
     fEraNamesCount = 0;
+    fNarrowEras = NULL;
+    fNarrowErasCount = 0;
     fMonths = NULL;
     fMonthsCount=0;
     fShortMonths = NULL;
@@ -1235,12 +1261,19 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
 
     // load the first data item
     UResourceBundle *erasMain = calData.getByKey(gErasTag, status);
-    UResourceBundle *eras = ures_getByKeyWithFallback(erasMain, gAbbreviatedTag, NULL, &status);
+    UResourceBundle *eras = ures_getByKeyWithFallback(erasMain, gNamesAbbrTag, NULL, &status);
     UErrorCode oldStatus = status;
     UResourceBundle *eraNames = ures_getByKeyWithFallback(erasMain, gNamesWideTag, NULL, &status);
     if ( status == U_MISSING_RESOURCE_ERROR ) { // Workaround because eras/wide was omitted from CLDR 1.3
        status = oldStatus;
-       eraNames = ures_getByKeyWithFallback(erasMain, gAbbreviatedTag, NULL, &status);
+       eraNames = ures_getByKeyWithFallback(erasMain, gNamesAbbrTag, NULL, &status);
+    }
+	// current ICU4J falls back to abbreviated if narrow eras are missing, so we will too
+    oldStatus = status;
+    UResourceBundle *narrowEras = ures_getByKeyWithFallback(erasMain, gNamesNarrowTag, NULL, &status);
+    if ( status == U_MISSING_RESOURCE_ERROR ) {
+       status = oldStatus;
+       narrowEras = ures_getByKeyWithFallback(erasMain, gNamesAbbrTag, NULL, &status);
     }
 
     UResourceBundle *lsweekdaysData = NULL; // Data closed by calData
@@ -1264,6 +1297,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
 
             initField(&fEras, fErasCount, (const UChar *)gLastResortEras, kEraNum, kEraLen, status);
             initField(&fEraNames, fEraNamesCount, (const UChar *)gLastResortEras, kEraNum, kEraLen, status);
+            initField(&fNarrowEras, fNarrowErasCount, (const UChar *)gLastResortEras, kEraNum, kEraLen, status);
             initField(&fMonths, fMonthsCount, (const UChar *)gLastResortMonthNames, kMonthNum, kMonthLen,  status);
             initField(&fShortMonths, fShortMonthsCount, (const UChar *)gLastResortMonthNames, kMonthNum, kMonthLen, status);
             initField(&fNarrowMonths, fNarrowMonthsCount, (const UChar *)gLastResortMonthNames, kMonthNum, kMonthLen, status);
@@ -1296,6 +1330,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
 
     initField(&fEras, fErasCount, eras, status);
     initField(&fEraNames, fEraNamesCount, eraNames, status);
+    initField(&fNarrowEras, fNarrowErasCount, narrowEras, status);
 
     initField(&fMonths, fMonthsCount, calData.getByKey2(gMonthNamesTag, gNamesWideTag, status), status);
     initField(&fShortMonths, fShortMonthsCount, calData.getByKey2(gMonthNamesTag, gNamesAbbrTag, status), status);
@@ -1521,6 +1556,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
 cleanup:
     ures_close(eras);
     ures_close(eraNames);
+    ures_close(narrowEras);
     ures_close(zoneStringsArray);
     ures_close(localeBundle);
 }

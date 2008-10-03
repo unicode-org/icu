@@ -39,7 +39,8 @@ void addDateForRgrTest(TestNode** root)
     addTest(root, &Test4061287, "tsformat/cdtrgtst/Test4061287");
     addTest(root, &Test4073003, "tsformat/cdtrgtst/Test4073003");
     addTest(root, &Test4162071, "tsformat/cdtrgtst/Test4162071");
-    addTest(root, &Test714,   "tsformat/cdtrgtst/Test714");
+    addTest(root, &Test714,     "tsformat/cdtrgtst/Test714");
+    addTest(root, &TestJ6072,   "tsformat/cdtrgtst/TestJ6072");
 }
 
 /**
@@ -497,6 +498,61 @@ void Test714(void)
     udat_close(fmt);
 
     ctest_resetTimeZone();
+}
+
+static const UDate july022008 = 1.215e+12; /* 02 July 2008 5:00 AM PDT (approx ICU 4.0 release date :-) */
+static const UChar zonePST[] = { 'P','S','T',0 };
+static const UChar dmyGGGPattern[] = { 'd','d',' ','M','M','M',' ','y','y','y','y',' ','G','G','G',0 };
+static const UChar dmyGGGGGPattern[] = { 'd','d',' ','M','M','M',' ','y','y','y','y',' ','G','G','G','G','G',0 };
+static const UChar dmyGGGText[] = { '0','2',' ','J','u','l',' ','2','0','0','8',' ','A','D',0 };
+static const UChar dmyGGGGGText[] = { '0','2',' ','J','u','l',' ','2','0','0','8',' ','A',0 };
+static const double dayMillisec = 8.64e+07;
+enum { kdmyGnTextMaxChars = 64 };
+void TestJ6072(void)
+{
+    UErrorCode    status = U_ZERO_ERROR;
+    UDateFormat * dtfmt = udat_open(UDAT_LONG, UDAT_LONG, "en", zonePST, -1, NULL, 0, &status);
+    if ( U_SUCCESS(status) ) {
+        UChar   dmyGnText[kdmyGnTextMaxChars];
+        int32_t dmyGnTextLen;
+        UDate   dateResult;
+
+        udat_applyPattern(dtfmt, FALSE, dmyGGGPattern, -1);
+        dmyGnTextLen = udat_format(dtfmt, july022008, dmyGnText, kdmyGnTextMaxChars, NULL, &status);
+        if ( U_FAILURE(status) ) {
+            log_err("FAIL: udat_format with GGG: %s\n", myErrorName(status) );
+            status = U_ZERO_ERROR;
+        } else if ( u_strcmp(dmyGnText, dmyGGGText) != 0 ) {
+            log_err("FAIL: udat_format with GGG: wrong UChar[] result\n" );
+        }
+        dateResult = udat_parse(dtfmt, dmyGGGText, -1, NULL, &status); /* no time, dateResult != july022008 by some hours */
+        if ( U_FAILURE(status) ) {
+            log_err("FAIL: udat_parse with GGG: %s\n", myErrorName(status) );
+            status = U_ZERO_ERROR;
+        } else if ( july022008 - dateResult > dayMillisec ) {
+            log_err("FAIL: udat_parse with GGG: wrong UDate result\n" );
+        }
+        
+        udat_applyPattern(dtfmt, FALSE, dmyGGGGGPattern, -1);
+        dmyGnTextLen = udat_format(dtfmt, july022008, dmyGnText, kdmyGnTextMaxChars, NULL, &status);
+        if ( U_FAILURE(status) ) {
+            log_err("FAIL: udat_format with GGGGG: %s\n", myErrorName(status) );
+            status = U_ZERO_ERROR;
+        } else if ( u_strcmp(dmyGnText, dmyGGGGGText) != 0 ) {
+            log_err("FAIL: udat_format with GGGGG: wrong UChar[] result\n" );
+        }
+        dateResult = udat_parse(dtfmt, dmyGGGGGText, -1, NULL, &status); /* no time, dateResult != july022008 by some hours */
+        if ( U_FAILURE(status) ) {
+            log_err("FAIL: udat_parse with GGGGG: %s\n", myErrorName(status) );
+            status = U_ZERO_ERROR;
+        } else if ( july022008 - dateResult > dayMillisec ) {
+            log_err("FAIL: udat_parse with GGGGG: wrong UDate result\n" );
+        }
+        
+        udat_close(dtfmt);
+    } else {
+        log_err("FAIL: udat_open fails: %s\n", myErrorName(status));
+    }
 }
 
 /*INTERNAL FUNCTION USED */
