@@ -512,7 +512,8 @@ caseMap(const UCaseMap *csm,
             *pErrorCode=U_UNSUPPORTED_ERROR;
 #else
             /* UCaseMap is actually non-const in toTitle() APIs. */
-            destLength=_toTitle((UCaseMap *)csm, dest, destCapacity,
+            UCaseMap *tmp = (UCaseMap *)csm;
+            destLength=_toTitle(tmp, dest, destCapacity,
                                 src, &csc, srcLength,
                                 pErrorCode);
 #endif
