@@ -307,7 +307,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
           }
         } catch (ParseException e) {
             errln("parse FAILED: " + e.toString());
-        };
+        }
     }
 
     public void TestDecimalFormatCurrencyParse() {
