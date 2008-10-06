@@ -156,7 +156,14 @@ class CharsetMBCS extends CharsetICU {
     public CharsetMBCS(String icuCanonicalName, String javaCanonicalName, String[] aliases, String classPath,
             ClassLoader loader) throws InvalidFormatException {
         super(icuCanonicalName, javaCanonicalName, aliases);
-
+        
+        /* See if the icuCanonicalName contains certain option information. */
+        if (icuCanonicalName.contains(UConverterConstants.OPTION_SWAP_LFNL_STRING)) {
+            options = UConverterConstants.OPTION_SWAP_LFNL;
+            icuCanonicalName = icuCanonicalName.substring(0, icuCanonicalName.indexOf(UConverterConstants.OPTION_SWAP_LFNL_STRING));
+            super.icuCanonicalName = icuCanonicalName;
+        }
+        
         // now try to load the data
         sharedData = loadConverter(1, icuCanonicalName, classPath, loader);
 
@@ -169,9 +176,8 @@ class CharsetMBCS extends CharsetICU {
         subChar1 = sharedData.staticData.subChar1;
         fromUSubstitution = new byte[sharedData.staticData.subCharLen];
         System.arraycopy(sharedData.staticData.subChar, 0, fromUSubstitution, 0, sharedData.staticData.subCharLen);
-
-        // TODO: pass options
-        initializeConverter(0);
+        
+        initializeConverter(options);
     }
 
     public CharsetMBCS(String icuCanonicalName, String javaCanonicalName, String[] aliases)
@@ -881,14 +887,15 @@ class CharsetMBCS extends CharsetICU {
             // agljport:todo umtx_unlock(NULL);
 
             if (!isCached) {
-                // agljport:fix if(!_EBCDICSwapLFNL(cnv->sharedData, pErrorCode)) {
-                // agljport:fix if(U_FAILURE(*pErrorCode)) {
-                // agljport:fix return; /* something went wrong */
-                // agljport:fix }
-
-                /* the option does not apply, remove it */
-                // agljport:fix cnv->options=options&=~UCNV_OPTION_SWAP_LFNL;
-                // agljport:fix }
+                try {
+                    if (!EBCDICSwapLFNL()) {
+                        /* this option does not apply, remove it */
+                        this.options = myOptions &= ~UConverterConstants.OPTION_SWAP_LFNL;
+                    }
+                } catch (Exception e) {
+                    /* something went wrong. */
+                    return;
+                }
             }
         }
 
@@ -913,6 +920,150 @@ class CharsetMBCS extends CharsetICU {
                 maxBytesPerChar = maxBytesPerUChar;
             }
         }
+    }
+     /* EBCDIC swap LF<->NL--------------------------------------------------------------------------------*/
+     /*
+      * This code modifies a standard EBCDIC<->Unicode mappling table for
+      * OS/390 (z/OS) Unix System Services (Open Edition).
+      * The difference is in the mapping of Line Feed and New Line control codes:
+      * Standard EBDIC maps
+      * 
+      * <U000A> \x25 |0
+      * <U0085> \x15 |0
+      * 
+      * but OS/390 USS EBCDIC swaps the control codes for LF and NL,
+      * mapping
+      * 
+      * <U000A> \x15 |0
+      * <U0085> \x25 |0
+      * 
+      * This code modifies a loaded standard EBCDIC<->Unicode mapping table
+      * by copying it into allocated memory and swapping the LF and NL values.
+      * It allows to support the same EBCDIC charset in both version without
+      * duplicating the entire installed table.
+      */
+    /* standard EBCDIC codes */
+    private static final short EBCDIC_LF = 0x0025;
+    private static final short EBCDIC_NL = 0x0015;
+    
+    /* standard EBCDIC codes with roundtrip flag as stored in Unicode-to-single-byte tables */
+    private static final short EBCDIC_RT_LF = 0x0f25;
+    private static final short EBCDIC_RT_NL = 0x0f15;
+    
+    /* Unicode code points */
+    private static final short U_LF = 0x000A;
+    private static final short U_NL = 0x0085;
+    
+    private boolean EBCDICSwapLFNL() throws Exception {
+        UConverterMBCSTable mbcsTable;
+        
+        char[] table;
+        byte[] results;
+        byte[] bytes;
+        
+        int[][] newStateTable;
+        byte[] newResults;
+        String newName;
+        
+        int stage2Entry;
+        int size, sizeofFromUBytes;
+        
+        mbcsTable = sharedData.mbcs;
+        
+        table = mbcsTable.fromUnicodeTable;
+        bytes = mbcsTable.fromUnicodeBytes;
+        results = bytes;
+        
+        /*
+         * Check that this is an EBCDIC table with SBCS portion -
+         * SBCS or EBCDIC with standard EBCDIC LF and NL mappings.
+         * 
+         * If not, ignore the option Options are always ignored if they do not apply.
+         */
+        if (!((mbcsTable.outputType == MBCS_OUTPUT_1 || mbcsTable.outputType == MBCS_OUTPUT_2_SISO) &&
+              mbcsTable.stateTable[0][EBCDIC_LF] == MBCS_ENTRY_FINAL(0, MBCS_STATE_VALID_DIRECT_16, U_LF) &&
+              mbcsTable.stateTable[0][EBCDIC_NL] == MBCS_ENTRY_FINAL(0, MBCS_STATE_VALID_DIRECT_16, U_NL))) {
+            return false;
+        }
+        
+        if (mbcsTable.outputType == MBCS_OUTPUT_1) {
+            if (!(EBCDIC_RT_LF == MBCS_SINGLE_RESULT_FROM_U(table, results, U_LF) &&
+                  EBCDIC_RT_NL == MBCS_SINGLE_RESULT_FROM_U(table, results, U_NL))) {
+                return false;
+            }
+        } else /* MBCS_OUTPUT_2_SISO */ {
+            stage2Entry = MBCS_STAGE_2_FROM_U(table, U_LF);
+            if (!(MBCS_FROM_U_IS_ROUNDTRIP(stage2Entry, U_LF) &&
+                  EBCDIC_LF == MBCS_VALUE_2_FROM_STAGE_2(bytes, stage2Entry, U_LF))) {
+                return false;
+            }
+            
+            stage2Entry = MBCS_STAGE_2_FROM_U(table, U_NL);
+            if (!(MBCS_FROM_U_IS_ROUNDTRIP(stage2Entry, U_NL) &&
+                  EBCDIC_NL == MBCS_VALUE_2_FROM_STAGE_2(bytes, stage2Entry, U_NL))) {
+                return false;
+            }
+        }
+        
+        if (mbcsTable.fromUBytesLength > 0) {
+            /*
+             * We _know_ the number of bytes in the fromUnicodeBytes array
+             * starting with header.version 4.1.
+             */
+            sizeofFromUBytes = mbcsTable.fromUBytesLength;
+        } else {
+            /*
+             * Otherwise:
+             * There used to be code to enumerate the fromUnicode
+             * trie and find the highest entry, but it was removed in ICU 3.2
+             * because it was not tested and caused a low code coverage number.
+             */
+            throw new Exception("U_INVALID_FORMAT_ERROR");
+        }
+        
+        /*
+         * The table has an appropriate format.
+         * Allocate and build
+         * - a modified to-Unicode state table
+         * - a modified from-Unicode output array
+         * - a converter name string with the swap option appended
+         */
+        size = mbcsTable.countStates * 1024 + sizeofFromUBytes + UConverterConstants.MAX_CONVERTER_NAME_LENGTH + 20;
+        
+        /* copy and modify the to-Unicode state table */
+        newStateTable = new int[mbcsTable.stateTable.length][mbcsTable.stateTable[0].length];
+        for (int i = 0; i < newStateTable.length; i++) {
+            System.arraycopy(mbcsTable.stateTable[i], 0, newStateTable[i], 0, newStateTable[i].length);
+        }
+        
+        newStateTable[0][EBCDIC_LF] = MBCS_ENTRY_FINAL(0, MBCS_STATE_VALID_DIRECT_16, U_NL);
+        newStateTable[0][EBCDIC_NL] = MBCS_ENTRY_FINAL(0, MBCS_STATE_VALID_DIRECT_16, U_LF);
+        
+        /* copy and modify the from-Unicode result table */
+        newResults = new byte[sizeofFromUBytes];
+        System.arraycopy(bytes, 0, newResults, 0, sizeofFromUBytes);
+        /* conveniently, the table access macros work on the left side of expressions */
+        if (mbcsTable.outputType == MBCS_OUTPUT_1) {
+            MBCS_SINGLE_RESULT_FROM_U_SET(table, newResults, U_LF, EBCDIC_RT_NL);
+            MBCS_SINGLE_RESULT_FROM_U_SET(table, newResults, U_NL, EBCDIC_RT_LF);
+        } else /* MBCS_OUTPUT_2_SISO */ {
+            stage2Entry = MBCS_STAGE_2_FROM_U(table, U_LF);
+            MBCS_VALUE_2_FROM_STAGE_2_SET(newResults, stage2Entry, U_LF, EBCDIC_NL);
+            
+            stage2Entry = MBCS_STAGE_2_FROM_U(table, U_NL);
+            MBCS_VALUE_2_FROM_STAGE_2_SET(newResults, stage2Entry, U_NL, EBCDIC_LF);
+        }
+        
+        /* set the canonical converter name */
+        newName = new String(icuCanonicalName);
+        newName.concat(UConverterConstants.OPTION_SWAP_LFNL_STRING);
+        
+        if (mbcsTable.swapLFNLStateTable == null) {
+            mbcsTable.swapLFNLStateTable = newStateTable;
+            mbcsTable.swapLFNLFromUnicodeBytes = newResults;
+            mbcsTable.swapLFNLName = newName;
+        }
+        return true;
     }
 
     /**
@@ -1056,6 +1207,14 @@ class CharsetMBCS extends CharsetICU {
         int i = 2 * (table[i1] + (c & 0xf)); // used as index into byte[] array treated as char[] array
         return (char) (((results[i] & UConverterConstants.UNSIGNED_BYTE_MASK) << 8) | (results[i + 1] & UConverterConstants.UNSIGNED_BYTE_MASK));
     }
+    
+    /* single-byte fromUnicode: set the 16-bit result word with newValue*/
+    static void MBCS_SINGLE_RESULT_FROM_U_SET(char[] table, byte[] results, int c, int newValue) {
+        int i1 = table[c >>> 10] + ((c >>> 4) & 0x3f);
+        int i = 2 * (table[i1] + (c & 0xf)); // used as index into byte[] array treated as char[] array
+        results[i] = (byte)((newValue >> 8) & UConverterConstants.UNSIGNED_BYTE_MASK);
+        results[i + 1] =  (byte)(newValue & UConverterConstants.UNSIGNED_BYTE_MASK);
+    }
 
     /* multi-byte fromUnicode: get the 32-bit stage 2 entry */
     static int MBCS_STAGE_2_FROM_U(char[] table, int c) {
@@ -1072,6 +1231,12 @@ class CharsetMBCS extends CharsetICU {
     static char MBCS_VALUE_2_FROM_STAGE_2(byte[] bytes, int stage2Entry, int c) {
         int i = 2 * (16 * ((char) stage2Entry & UConverterConstants.UNSIGNED_SHORT_MASK) + (c & 0xf));
         return (char) (((bytes[i] & UConverterConstants.UNSIGNED_BYTE_MASK) << 8) | (bytes[i + 1] & UConverterConstants.UNSIGNED_BYTE_MASK));
+    }
+    
+    static void MBCS_VALUE_2_FROM_STAGE_2_SET(byte[] bytes, int stage2Entry, int c, int newValue) {
+        int i = 2 * (16 * ((char) stage2Entry & UConverterConstants.UNSIGNED_SHORT_MASK) + (c & 0xf));
+        bytes[i] = (byte)((newValue >> 8) & UConverterConstants.UNSIGNED_BYTE_MASK);
+        bytes[i + 1] = (byte)(newValue & UConverterConstants.UNSIGNED_BYTE_MASK);
     }
 
     private static int MBCS_VALUE_4_FROM_STAGE_2(byte[] bytes, int stage2Entry, int c) {

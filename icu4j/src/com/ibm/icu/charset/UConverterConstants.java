@@ -73,6 +73,8 @@ interface UConverterConstants {
     static final int OPTION_SWAP_LFNL   = 0x10;
     static final int OPTION_MAC   = 0x20; //agljport:comment added for Mac ISCII encodings
 
+    static final String OPTION_SWAP_LFNL_STRING = ",swaplfnl";
+
     /** values for the unicodeMask */
     static final int HAS_SUPPLEMENTARY = 1;
     static final int HAS_SURROGATES =   2;
