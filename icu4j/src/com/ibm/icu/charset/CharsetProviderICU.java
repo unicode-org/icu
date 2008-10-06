@@ -26,6 +26,8 @@ import com.ibm.icu.impl.InvalidFormatException;
  * @stable ICU 3.6
  */
 public final class CharsetProviderICU extends CharsetProvider{
+    private static String optionsString = null;
+    private static boolean gettingJavaCanonicalName = false;
     
     /**
      * Default constructor 
@@ -43,6 +45,8 @@ public final class CharsetProviderICU extends CharsetProvider{
      */
     public final Charset charsetForName(String charsetName){
         try{
+            // extract the options from the charset name
+            charsetName = processOptions(charsetName);
             // get the canonical name
             String icuCanonicalName = getICUCanonicalName(charsetName);      
     
@@ -142,7 +146,20 @@ public final class CharsetProviderICU extends CharsetProvider{
     private static final Charset getCharset(String icuCanonicalName) throws IOException{
        String[] aliases = (String[])getAliases(icuCanonicalName);    
        String canonicalName = getJavaCanonicalName(icuCanonicalName);
-       return (CharsetICU.getCharset(icuCanonicalName,canonicalName, aliases));  
+       
+       /* Concat the option string to the icuCanonicalName so that the options can be handled properly
+        * by the actual charset.
+        * Note: getJavaCanonicalName() may eventually call this method so skip the concatenation part
+        * during getJavaCanonicalName() call.
+        */
+       if (gettingJavaCanonicalName) {
+           gettingJavaCanonicalName = false;
+       } else if (optionsString != null) {
+           icuCanonicalName = icuCanonicalName.concat(optionsString);
+           optionsString = null;
+       }
+       
+       return (CharsetICU.getCharset(icuCanonicalName,canonicalName, aliases));
     }
     /**
      * Gets the canonical name of the converter as defined by Java
@@ -206,6 +223,7 @@ public final class CharsetProviderICU extends CharsetProvider{
              * we have to try to use a java compatible name.
              */
             if (cName != null) {
+                gettingJavaCanonicalName = true;
                 if (Charset.isSupported(cName)) {
                     cName = Charset.forName(cName).name();
                 }
@@ -299,5 +317,16 @@ public final class CharsetProviderICU extends CharsetProvider{
             names[i] = UConverterAlias.getAvailableName(i);
         }
         return names;
+    }
+    
+    private static final String processOptions(String charsetName) {
+        if (charsetName.contains(UConverterConstants.OPTION_SWAP_LFNL_STRING)) {
+            /* Remove and save the swap lfnl option string portion of the charset name. */
+            optionsString = UConverterConstants.OPTION_SWAP_LFNL_STRING;
+            
+            charsetName = charsetName.substring(0, charsetName.indexOf(UConverterConstants.OPTION_SWAP_LFNL_STRING));
+        }
+        
+        return charsetName;
     }
 }
