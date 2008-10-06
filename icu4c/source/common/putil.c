@@ -758,6 +758,7 @@ static const char* remapShortTimeZone(const char *stdID, const char *dstID, int3
 
 #ifdef SEARCH_TZFILE
 #define MAX_PATH_SIZE PATH_MAX /* Set the limit for the size of the path. */
+#define MAX_READ_SIZE 512
 static char* defaultTZBuffer = NULL;
 static int64_t defaultTZFileSize = 0;
 static FILE* defaultTZFilePtr = NULL;
@@ -773,8 +774,12 @@ static UBool compareBinaryFiles(char* defaultTZFileName, char* TZFileName) {
     FILE* file = fopen(TZFileName, "r");
 
     int64_t sizeFile;
+    int64_t sizeFileLeft;
+    int32_t sizeFileRead;
+    int32_t sizeFileToRead;
+    int32_t defaultTZPosition = 0;
 
-    char* bufferFile;
+    char bufferFile[MAX_READ_SIZE];
 
     UBool result = TRUE;
 
@@ -786,6 +791,7 @@ static UBool compareBinaryFiles(char* defaultTZFileName, char* TZFileName) {
         }
         fseek(file, 0, SEEK_END);
         sizeFile = ftell(file);
+        sizeFileLeft = sizeFile;
 
         if (sizeFile != defaultTZFileSize) {
             result = FALSE;
@@ -799,14 +805,18 @@ static UBool compareBinaryFiles(char* defaultTZFileName, char* TZFileName) {
                 fread(defaultTZBuffer, 1, defaultTZFileSize, defaultTZFilePtr);
             }
             rewind(file);
-            bufferFile = (char*)uprv_malloc(sizeof(char) * sizeFile);
-            fread(bufferFile, 1, sizeFile, file);
+            while(sizeFileLeft > 0) {
+                uprv_memset(bufferFile, 0, MAX_READ_SIZE);
+                sizeFileToRead = sizeFileLeft < MAX_READ_SIZE ? sizeFileLeft : MAX_READ_SIZE;
 
-            if (memcmp(defaultTZBuffer, bufferFile, defaultTZFileSize) != 0) {
-                result = FALSE;
+                sizeFileRead = fread(bufferFile, 1, sizeFileToRead, file);
+                if (memcmp(defaultTZBuffer + defaultTZPosition, bufferFile, sizeFileRead) != 0) {
+                    result = FALSE;
+                    break;
+                }
+                sizeFileLeft -= sizeFileRead;
+                defaultTZPosition += sizeFileRead;
             }
-
-            uprv_free(bufferFile);
         }
     } else {
         result = FALSE;
