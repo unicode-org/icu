@@ -2279,29 +2279,41 @@ static void TestSearchForNull(void)
 	int expectedNum;
 	int count = 0;
     const UChar zerodigit = 0x0030; /* 0 */
-    const UChar nulldigit = 0x0000; /* null */
+    const UChar nulldigit = 0x0001; /* null */
 	
 	/* static const UChar var[(length)+1]=U_DECLARE_UTF16(cs) */
-    const int patternlen = 1;
-    const int textlen = 10;
-	U_STRING_DECL (pattern, "0", patternlen);
-    U_STRING_DECL (text, "_0IS 0 OK?", textlen);
+#define PATTERN_LEN 4
+#define TEXT_LEN 10
+
+    U_STRING_DECL (_pattern, "IS 0", PATTERN_LEN);
+    U_STRING_DECL (_text, "_0IS 0 OK?", TEXT_LEN);
+    UChar pattern[PATTERN_LEN + 1], text[TEXT_LEN + 1];
     
-    U_STRING_INIT (pattern, "0", patternlen);
-    U_STRING_INIT (text, "_0IS 0 OK?", textlen);
-	expectedPos = 1;
-	expectedLen = 1;
-	expectedNum = 2;
+    U_STRING_INIT (_pattern, "IS 0", PATTERN_LEN);
+    U_STRING_INIT (_text, "_0IS 0 OK?", TEXT_LEN);
+	expectedPos = 2;
+	expectedLen = 4;
+	expectedNum = 1;
 
-    for(pos=0;pos<patternlen;pos++) {
-        if(pattern[pos]==zerodigit) pattern[pos] = nulldigit;
+    for(pos = 0; pos < PATTERN_LEN; pos++) {
+        if(_pattern[pos] == zerodigit) {
+            pattern[pos] = nulldigit;
+        } else {
+            pattern[pos] = _pattern[pos];
+        }
     }
-    for(pos=0;pos<textlen;pos++) {
-        if(text[pos]==zerodigit) text[pos] = nulldigit;
+    pattern[PATTERN_LEN] = 0x0000;
+
+    for(pos = 0; pos < TEXT_LEN; pos++) {
+        if(_text[pos] == zerodigit) {
+            text[pos] = nulldigit;
+        } else {
+            text[pos] = _text[pos];
+        }
     }
+    text[TEXT_LEN] = 0x0000;
 
-
-	ec=U_ZERO_ERROR;
+	ec = U_ZERO_ERROR;
 
 	/* create a US-English collator */
 	coll = ucol_open ("en_US", &ec);
@@ -2312,7 +2324,7 @@ static void TestSearchForNull(void)
     ucol_setStrength( coll, UCOL_IDENTICAL); 
 
 	/* open a search looking for 0 */
-	search = usearch_openFromCollator (pattern, 1, text, 9, coll, NULL, &ec);
+	search = usearch_openFromCollator (pattern, PATTERN_LEN, text, TEXT_LEN, coll, NULL, &ec);
 	TEST_ASSERT (U_SUCCESS (ec));
 
 	pos = usearch_first(search, &ec);
@@ -2340,6 +2352,60 @@ static void TestSearchForNull(void)
 #else
     log_info("Note: test disabled because it is known to fail (#4184).\n");
 #endif
+}
+
+static void TestStrengthIdentical(void)
+{
+	UCollator *coll;
+	UErrorCode ec = U_ZERO_ERROR;
+	UStringSearch *search;
+	
+    UChar pattern[] = {0x05E9, 0x0591, 0x05E9};
+    UChar text[]    = {0x05E9, 0x0592, 0x05E9};
+    int32_t pLen = sizeof (pattern) / sizeof(pattern[0]);
+    int32_t tLen = sizeof(text) / sizeof (text[0]);
+	int32_t expectedPos = 0;
+	int32_t expectedLen = 3;
+
+	int32_t pos;
+	int32_t len;
+
+    /* create a US-English collator */
+	coll = ucol_open ("en_US", &ec);
+
+	/* make sure we didn't fail. */
+	TEST_ASSERT (U_SUCCESS (ec));
+
+    ucol_setStrength( coll, UCOL_TERTIARY); 
+
+	/* open a search looking for 0 */
+	search = usearch_openFromCollator (pattern, pLen, text, tLen, coll, NULL, &ec);
+	TEST_ASSERT (U_SUCCESS (ec));
+
+	pos = usearch_first(search, &ec);
+	len = usearch_getMatchedLength(search);
+
+	if(pos != expectedPos) {
+		log_err("Expected search result: %d; Got instead: %d\n", expectedPos, pos);
+	}
+		
+	if(len != expectedLen) {
+		log_err("Expected search result length: %d; Got instead: %d\n", expectedLen, len);
+	}
+	
+    /* Now try it at strength == UCOL_IDENTICAL */
+    ucol_setStrength(coll, UCOL_IDENTICAL); 
+	usearch_reset(search);
+
+	pos = usearch_first(search, &ec);
+	len = usearch_getMatchedLength(search);
+
+	if(pos != -1) {
+		log_err("Expected failure for strentgh = UCOL_IDENTICAL: got %d instead.\n", pos);
+	}
+
+    usearch_close(search);
+    ucol_close(coll);
 }
 
 
@@ -2396,6 +2462,7 @@ void addSearchTest(TestNode** root)
     addTest(root, &TestDiacriticMatch, "tscoll/usrchtst/TestDiacriticMatch");
     addTest(root, &TestForwardBackward, "tscoll/usrchtst/TestForwardBackward");
 	addTest(root, &TestSearchForNull, "tscoll/usrchtst/TestSearchForNull");
+    addTest(root, &TestStrengthIdentical, "tscoll/usrchtst/TestStrengthIdentical");
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
