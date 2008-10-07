@@ -1073,7 +1073,6 @@ inline UBool isOutOfBounds(int32_t textlength, int32_t offset)
     return offset < 0 || offset > textlength;
 }
 
-#if BOYER_MOORE
 /**
 * Checks for identical match
 * @param strsrch string search data
@@ -1135,6 +1134,7 @@ inline UBool checkIdentical(const UStringSearch *strsrch, int32_t start,
     return U_SUCCESS(status) && result;
 }
 
+#if BOYER_MOORE
 /**
 * Checks to see if the match is repeated
 * @param strsrch string search data
@@ -3407,12 +3407,20 @@ U_CAPI void U_EXPORT2 usearch_reset(UStringSearch *strsrch)
         UBool      shift;
         uint32_t   varTop;
 
+        // **** hack to deal w/ how processed CEs encode quaternary ****
+        UCollationStrength newStrength = ucol_getStrength(strsrch->collator);
+        if ((strsrch->strength < UCOL_QUATERNARY && newStrength >= UCOL_QUATERNARY) ||
+            (strsrch->strength >= UCOL_QUATERNARY && newStrength < UCOL_QUATERNARY)) {
+                sameCollAttribute = FALSE;
+        }
+
         strsrch->strength    = ucol_getStrength(strsrch->collator);
         ceMask = getMask(strsrch->strength);
         if (strsrch->ceMask != ceMask) {
             strsrch->ceMask = ceMask;
             sameCollAttribute = FALSE;
         }
+
         // if status is a failure, ucol_getAttribute returns UCOL_DEFAULT
         shift = ucol_getAttribute(strsrch->collator, UCOL_ALTERNATE_HANDLING, 
                                   &status) == UCOL_SHIFTED;
@@ -3884,6 +3892,10 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
         }
 
         if (isBreakBoundary(strsrch, mLimit)) {
+            found = FALSE;
+        }
+
+        if (!checkIdentical(strsrch, mStart, mLimit)) {
             found = FALSE;
         }
 
