@@ -48,6 +48,77 @@ conversion:table(nofallback) {
     toUnicode {
       Headers { "charset", "bytes", "unicode", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidChars" }
       Cases {
+        // Test ticket 5691: consistent illegal sequences
+        // Unfortunately, we cannot use the Shift-JIS examples from the ticket
+        // comments because our Shift-JIS table is Windows-compatible and
+        // therefore has no illegal single bytes. Same for GBK.
+        // Instead, we use the stricter GB 18030 also for 2-byte examples.
+        // The byte sequences are generally slightly different from the ticket
+        // comment, simply using assigned characters rather than just
+        // theoretically valid sequences.
+        {
+          "gb18030",
+          :bin{ 618140813c81ff7a },
+          "a\u4e02\\x81<\\x81\\xFFz",
+          :intvector{ 0,1,3,3,3,3,4,5,5,5,5,5,5,5,5,7 },
+          :int{1}, :int{0}, "", "&C", :bin{""}
+        }
+        {
+          "EUC-JP",
+          :bin{ 618fb0a98fb03c8f3cb0a97a },
+          "a\u4e28\\x8F\\xB0<\\x8F<\u9022z",
+          :intvector{ 0,1,4,4,4,4,5,5,5,5,6,7,7,7,7,8,9,11 },
+          :int{1}, :int{0}, "", "&C", :bin{""}
+        }
+        {
+          "gb18030",
+          :bin{ 618130fc318130fc8181303c3e813cfc817a },
+          "a\u05ed\\x810\u9f07\\x810<>\\x81<\u9f07z",
+          :intvector{ 0,1,5,5,5,5,6,7,9,9,9,9,10,11,12,13,13,13,13,14,15,17 },
+          :int{1}, :int{0}, "", "&C", :bin{""}
+        }
+        {
+          "UTF-8",
+          :bin{ 61f1808182f180813cf18081fff180ff3cf1ff3c3e7a },
+          "a\U00040042\\xF1\\x80\\x81<\\xF1\\x80\\x81\\xFF\\xF1\\x80\\xFF<\\xF1\\xFF<>z",
+          :intvector{ 0,1,1,5,5,5,5,5,5,5,5,5,5,5,5,8,9,9,9,9,9,9,9,9,9,9,9,9,12,12,12,12,13,13,13,13,13,13,13,13,15,15,15,15,16,17,17,17,17,18,18,18,18,19,20,21 },
+          :int{1}, :int{0}, "", "&C", :bin{""}
+        }
+        {
+          "ISO-2022-JP-2",
+          :bin{ 1b24424141af4142affe41431b2842 },
+          "\u758f\\xAF\u758e\\xAF\\xFE\u790e",
+          :intvector{ 3,5,5,5,5,6,8,8,8,8,8,8,8,8,10 },
+          :int{1}, :int{0}, "", "&C", :bin{""}
+        }
+        {
+          "ibm-25546",
+          :bin{ 411b242943420e4141af4142affe41430f5a },
+          "AB\uc88b\\xAF\uc88c\\xAF\\xFE\uc88dZ",
+          :intvector{ 0,5,7,9,9,9,9,10,12,12,12,12,12,12,12,12,14,17 },
+          :int{1}, :int{0}, "", "&C", :bin{""}
+        }
+        {
+          "ISO-2022-KR",
+          :bin{ 411b242943420e4141af4142affe41430f5a },
+          "AB\uc88b\\xAF\uc88c\\xAF\\xFE\uc88dZ",
+          :intvector{ 0,5,7,9,9,9,9,10,12,12,12,12,12,12,12,12,14,17 },
+          :int{1}, :int{0}, "", "&C", :bin{""}
+        }
+        {
+          "ISO-2022-CN",
+          :bin{ 411b242941420e4141af4142affe41430f5a },
+          "AB\u4eae\\xAF\u8c05\\xAF\\xFE\u64a9Z",
+          :intvector{ 0,5,7,9,9,9,9,10,12,12,12,12,12,12,12,12,14,17 },
+          :int{1}, :int{0}, "", "&C", :bin{""}
+        }
+        {
+          "HZ",
+          :bin{ 417e7b4141af4142affe41437e7d5a },
+          "A\u4eae\\xAF\u8c05\\xAF\\xFE\u64a9Z",
+          :intvector{ 0,3,5,5,5,5,6,8,8,8,8,8,8,8,8,10,14 },
+          :int{1}, :int{0}, "", "&C", :bin{""}
+        }
         // Test bug 6071 (2:1 Unicode:charset SBCS mapping).
         {
           "*test1bmp",
@@ -60,8 +131,8 @@ conversion:table(nofallback) {
         {
           "HZ",
           :bin{ 7e7b21212120217e217f772100007e217e7d207e7e807e0a2b },
-          "\u3000\ufffd\u3013\ufffd\u9ccc\ufffd\ufffd ~\ufffd+",
-          :intvector{ 2,4,6,8,10,12,14,18,19,21,24 },
+          "\u3000\ufffd\ufffd\u3013\ufffd\ufffd\u9ccc\ufffd\ufffd ~\ufffd+",
+          :intvector{ 2,4,5,6,8,9,10,12,14,18,19,21,24 },
           :int{1}, :int{1}, "", "?", :bin{""}
         }
         // improve coverage of ISO-2022-JP converter with hardcoded JIS X 0201 and
@@ -69,8 +140,8 @@ conversion:table(nofallback) {
         {
           "ISO-2022-JP",
           :bin{ 1b284a7d7e801b2442306c20217f7e21202160217f22202225227f5f211b2842 },
-          "}\u203e\ufffd\u4e00\ufffd\ufffd\ufffd\xf7\ufffd\ufffd\u25b2\ufffd\u6f3e",
-          :intvector{ 3,4,5,9,11,13,15,17,19,21,23,25,27 },
+          "}\u203e\ufffd\u4e00\ufffd\ufffd\ufffd\ufffd\ufffd\xf7\ufffd\ufffd\ufffd\ufffd\u25b2\ufffd\ufffd\u6f3e",
+          :intvector{ 3,4,5,9,11,12,13,14,16,17,19,20,21,22,23,25,26,27 },
           :int{1}, :int{1}, "", "?", :bin{""}
         }
         // improve coverage of ISO-2022-JP converter by simulating erroneous input
