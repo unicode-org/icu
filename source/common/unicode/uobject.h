@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002-2007, International Business Machines
+*   Copyright (C) 2002-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -59,6 +59,21 @@ U_NAMESPACE_BEGIN
 #define U_HAVE_DEBUG_LOCATION_NEW 0
 #endif
 
+/**  U_NO_THROW - Define this to define the throw() specification so
+                  certain functions do not throw any exceptions
+ *
+ *         UMemory operator new methods should have the throw() specification 
+ *         appended to them, so that the compiler adds the additional NULL check 
+ *         before calling constructors. Without, if operator new returns NULL the 
+ *         constructor is still called, and if the constructor references member 
+ *         data, (which it typically does), the result is a segmentation violation.
+ *
+ * @new ICU 4.2
+ */                              
+#ifndef U_NO_THROW
+#define U_NO_THROW throw()
+#endif
+
 /**
  * UMemory is the common ICU base class.
  * All other ICU C++ classes are derived from UMemory (starting with ICU 2.4).
@@ -86,14 +101,14 @@ public:
      * for ICU4C C++ classes
      * @stable ICU 2.4
      */
-    static void * U_EXPORT2 operator new(size_t size);
+    static void * U_EXPORT2 operator new(size_t size) U_NO_THROW;
 
     /**
      * Override for ICU4C C++ memory management.
      * See new().
      * @stable ICU 2.4
      */
-    static void * U_EXPORT2 operator new[](size_t size);
+    static void * U_EXPORT2 operator new[](size_t size) U_NO_THROW;
 
     /**
      * Override for ICU4C C++ memory management.
@@ -103,14 +118,14 @@ public:
      * for ICU4C C++ classes
      * @stable ICU 2.4
      */
-    static void U_EXPORT2 operator delete(void *p);
+    static void U_EXPORT2 operator delete(void *p) U_NO_THROW;
 
     /**
      * Override for ICU4C C++ memory management.
      * See delete().
      * @stable ICU 2.4
      */
-    static void U_EXPORT2 operator delete[](void *p);
+    static void U_EXPORT2 operator delete[](void *p) U_NO_THROW;
 
 #if U_HAVE_PLACEMENT_NEW
     /**
@@ -118,14 +133,14 @@ public:
      * See new().
      * @stable ICU 2.6
      */
-    static inline void * U_EXPORT2 operator new(size_t, void *ptr) { return ptr; }
+    static inline void * U_EXPORT2 operator new(size_t, void *ptr) U_NO_THROW { return ptr; }
 
     /**
      * Override for ICU4C C++ memory management for STL.
      * See delete().
      * @stable ICU 2.6
      */
-    static inline void U_EXPORT2 operator delete(void *, void *) {}
+    static inline void U_EXPORT2 operator delete(void *, void *) U_NO_THROW {}
 #endif /* U_HAVE_PLACEMENT_NEW */
 #if U_HAVE_DEBUG_LOCATION_NEW
     /**
@@ -135,7 +150,7 @@ public:
       * @param file   The file where the allocation was requested
       * @param line   The line where the allocation was requested 
       */ 
-    static void * U_EXPORT2 operator new(size_t size, const char* file, int line);
+    static void * U_EXPORT2 operator new(size_t size, const char* file, int line) U_NO_THROW;
     /**
       * This method provides a matching delete for the MFC debug new
       * 
@@ -143,7 +158,7 @@ public:
       * @param file   The file where the allocation was requested
       * @param line   The line where the allocation was requested 
       */ 
-    static void U_EXPORT2 operator delete(void* p, const char* file, int line);
+    static void U_EXPORT2 operator delete(void* p, const char* file, int line) U_NO_THROW;
 #endif /* U_HAVE_DEBUG_LOCATION_NEW */
 #endif /* U_OVERRIDE_CXX_ALLOCATION */
 
