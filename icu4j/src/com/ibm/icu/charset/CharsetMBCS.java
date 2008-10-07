@@ -158,7 +158,7 @@ class CharsetMBCS extends CharsetICU {
         super(icuCanonicalName, javaCanonicalName, aliases);
         
         /* See if the icuCanonicalName contains certain option information. */
-        if (icuCanonicalName.contains(UConverterConstants.OPTION_SWAP_LFNL_STRING)) {
+        if (icuCanonicalName.indexOf(UConverterConstants.OPTION_SWAP_LFNL_STRING) > -1) {
             options = UConverterConstants.OPTION_SWAP_LFNL;
             icuCanonicalName = icuCanonicalName.substring(0, icuCanonicalName.indexOf(UConverterConstants.OPTION_SWAP_LFNL_STRING));
             super.icuCanonicalName = icuCanonicalName;

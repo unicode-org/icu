@@ -320,7 +320,7 @@ public final class CharsetProviderICU extends CharsetProvider{
     }
     
     private static final String processOptions(String charsetName) {
-        if (charsetName.contains(UConverterConstants.OPTION_SWAP_LFNL_STRING)) {
+        if (charsetName.indexOf(UConverterConstants.OPTION_SWAP_LFNL_STRING) > -1) {
             /* Remove and save the swap lfnl option string portion of the charset name. */
             optionsString = UConverterConstants.OPTION_SWAP_LFNL_STRING;
             

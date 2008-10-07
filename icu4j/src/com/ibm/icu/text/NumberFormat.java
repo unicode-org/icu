@@ -26,6 +26,7 @@ import java.text.Format;
 //#endif
 
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
@@ -1316,7 +1317,7 @@ public abstract class NumberFormat extends UFormat {
         // replace single currency sign in the pattern with double currency sign
         // if the choice is ISOCURRENCYSTYLE.
         if (choice == ISOCURRENCYSTYLE) {
-            pattern = pattern.replaceAll("\\xA4", doubleCurrencyStr);
+            pattern = Utility.replace(pattern, "\u00A4", doubleCurrencyStr);
         }
 
         DecimalFormat format = new DecimalFormat(pattern, symbols, choice);

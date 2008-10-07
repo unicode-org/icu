@@ -1837,10 +1837,10 @@ public final class Utility {
         return buf.lastIndexOf(s, i);
 //#endif
     }
-   
-   // !!! 1.3 compatibility
-   public static String replaceAll(String src, String target, String replacement) {
-//#if defined(FOUNDATION10) || defined(J2SE13)
+
+   // !!! 1.3/1.4 compatibility
+   public static String replace(String src, String target, String replacement) {
+//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14)
 //##       int i = src.indexOf(target);
 //##       if (i == -1) {
 //##           return src;
@@ -1857,6 +1857,15 @@ public final class Utility {
 //##           buf.append(src.substring(n));
 //##       }
 //##       return buf.toString();
+//#else
+       return src.replace(target, replacement);
+//#endif
+   }
+
+   // !!! 1.3 compatibility
+   public static String replaceAll(String src, String target, String replacement) {
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//##       return replace(src, target, replacement);
 //#else
        return src.replaceAll(target, replacement);
 //#endif
