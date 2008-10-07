@@ -966,7 +966,8 @@ class CharsetMBCS extends CharsetICU {
         String newName;
         
         int stage2Entry;
-        int size, sizeofFromUBytes;
+//        int size;
+        int sizeofFromUBytes;
         
         mbcsTable = sharedData.mbcs;
         
@@ -1028,7 +1029,7 @@ class CharsetMBCS extends CharsetICU {
          * - a modified from-Unicode output array
          * - a converter name string with the swap option appended
          */
-        size = mbcsTable.countStates * 1024 + sizeofFromUBytes + UConverterConstants.MAX_CONVERTER_NAME_LENGTH + 20;
+//        size = mbcsTable.countStates * 1024 + sizeofFromUBytes + UConverterConstants.MAX_CONVERTER_NAME_LENGTH + 20;
         
         /* copy and modify the to-Unicode state table */
         newStateTable = new int[mbcsTable.stateTable.length][mbcsTable.stateTable[0].length];
