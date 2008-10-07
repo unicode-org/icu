@@ -20,11 +20,6 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
 
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.util.UResourceBundle;
-
-
-
 //#if defined(FOUNDATION10)
 //#else
 import java.io.ObjectOutputStream;
@@ -38,12 +33,15 @@ import java.text.Format;
 import java.util.ArrayList;
 //#endif
 
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 
 //This is an enhanced version of DecimalFormat that is based on the standard version in the JDK. 
 /**
@@ -806,8 +804,8 @@ public class DecimalFormat extends NumberFormat {
                     String pattern = currencyRes.get(index).getString();
                     // replace {0} with numberStylePattern
                     // and {1} with triple currency sign
-                    String patternWithNumber = pattern.replace("{0}", numberStylePattern);
-                    String patternWithCurrencySign = patternWithNumber.replace("{1}", tripleCurrencyStr);
+                    String patternWithNumber = Utility.replace(pattern, "{0}", numberStylePattern);
+                    String patternWithCurrencySign = Utility.replace(patternWithNumber, "{1}", tripleCurrencyStr);
                     pluralCountToCurrencyUnitPattern.put(pluralCount, patternWithCurrencySign);
                     pluralCountSet.add(pluralCount);
                 }
