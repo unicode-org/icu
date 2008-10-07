@@ -1256,7 +1256,7 @@ public class DecimalFormat extends NumberFormat {
                     currencyPluralPattern = defaultCurrencyPluralPattern;
                 }
             }
-            if (this.formatPattern.equals(currencyPluralPattern) == false) {
+            if (formatPattern.equals(currencyPluralPattern) == false) {
                 applyPatternWithoutExpandAffix(currencyPluralPattern, false);
             }
         }
@@ -2417,9 +2417,9 @@ public class DecimalFormat extends NumberFormat {
                 setupCurrencyAffixForAllPattern();
                 // reset pattern back
                 if (savedCurrencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) {
-                    applyPatternWithoutExpandAffix(this.formatPattern, false);
+                    applyPatternWithoutExpandAffix(formatPattern, false);
                 } else {
-                    applyPattern(this.formatPattern, false);
+                    applyPattern(formatPattern, false);
                 }
                 isReadyForParsing = true;
             }
@@ -2633,7 +2633,7 @@ public class DecimalFormat extends NumberFormat {
         return pos;
     }
 
-    /**
+    /*
      * Return the length matched by the given affix, or -1 if none.
      * @param affixPat pattern string
      * @param text input text
@@ -2642,11 +2642,10 @@ public class DecimalFormat extends NumberFormat {
      * currency parsing mode, or null for normal parsing. In generic
      * currency parsing mode, any currency is parsed, not just the
      * currency that this formatter is set to.
-     * @return length of input that matches, or -1 if match failure
+     * @return position after the matched text, or -1 if match failure
      */
     private int compareComplexAffix(String affixPat, String text, int pos,
                                     Currency[] currency) {
-        int start = pos;
         for (int i=0; 
              //i<affixPat.length() && pos >= 0 && pos < text.length(); ) {
              i<affixPat.length() && pos >= 0; ) {
@@ -2745,7 +2744,6 @@ public class DecimalFormat extends NumberFormat {
             }
         }
 
-        //return pos - start;
         return pos;
     }
 
@@ -3546,7 +3544,7 @@ public class DecimalFormat extends NumberFormat {
             // but it might not be the actual pattern used in formatting.
             // the actual pattern used in formatting depends on the 
             // formatted number's plural count.
-            return this.formatPattern;
+            return formatPattern;
         }
         return toPattern( false );
     }
@@ -3559,7 +3557,7 @@ public class DecimalFormat extends NumberFormat {
      */
     public String toLocalizedPattern() {
         if (style == NumberFormat.PLURALCURRENCYSTYLE) {
-            return this.formatPattern;
+            return formatPattern;
         }
         return toPattern( true );
     }
@@ -4191,7 +4189,7 @@ public class DecimalFormat extends NumberFormat {
 
     private void applyPatternWithoutExpandAffix(String pattern, boolean localized) {
         onlyApplyPatternWithoutExpandAffix(pattern, localized);
-        this.formatPattern = pattern;
+        formatPattern = pattern;
     }
 
     // only used when formatting currency plural format.
