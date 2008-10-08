@@ -2356,9 +2356,29 @@ wp = ecpyalloc(_("no POSIX environment variable for zone"));
                                      * we may see unexpected offset shift at the
                                      * begining of the year when the final rule takes
                                      * effect. */
+
+                                    /* ICU currently can support signed int32 transition
+                                     * times.  Thus, the transitions in year 2038 may be
+                                     * truncated.  At this moment (tzdata2008g), only
+                                     * Rule Brazil is impacted by this limitation, because
+                                     * the final set of rules are starting in 2038.  Although
+                                     * this code put the first couple of transitions populated
+                                     * by the final rules, they will be dropped off when
+                                     * collecting transition times.  So, we need to keep
+                                     * the start year of the final rule in 2038, not 2039.
+                                     * Fortunately, the Brazil rules in 2038 and beyond use
+                                     * the same base offset/dst saving amount.  Thus, even
+                                     * we skip the first couple of transitions, the final
+                                     * rule set for 2038 works properly.  So for now,
+                                     * we do not increment the final rule start year only when
+                                     * it falls into year 2038. We need to revisit this code
+                                     * in future to fix the root cause of this problem (ICU
+                                     * resource type limitation - signed int32).
+                                     * Oct 7, 2008 - Yoshito */
+                                    int finalStartYear = (year == 2038) ? year : year + 1;
                                     emit_icu_zone(icuFile,
                                                   zpfirst->z_name, zp->z_gmtoff,
-                                                  rp, finalRuleIndex, year + 1);
+                                                  rp, finalRuleIndex, finalStartYear);
                                     /* only emit this for the first year */
                                     finalRule1 = NULL;
                                 }
