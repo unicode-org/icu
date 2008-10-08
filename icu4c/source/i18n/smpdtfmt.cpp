@@ -1135,9 +1135,22 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         }
         break;
 
-    // for "EEE", write out the abbreviated day-of-the-week name
-    // for "EEEE", write out the wide day-of-the-week name
-    // for "EEEEE", use the narrow day-of-the-week name
+    // for "ee" or "e", use local numeric day-of-the-week
+    // for "EEEEE" or "eeeee", write out the narrow day-of-the-week name
+    // for "EEEE" or "eeee", write out the wide day-of-the-week name
+    // for "EEE" or "EE" or "E" or "eee", write out the abbreviated day-of-the-week name
+    case UDAT_DOW_LOCAL_FIELD:
+        if ( count < 3 ) {
+            zeroPaddingNumber(appendTo, value, 1, maxIntCount);
+            break;
+        }
+        // fall through to EEEEE-EEE handling, but for that we don't want local day-of-week,
+        // we want standard day-of-week, so first fix value to work for EEEEE-EEE.
+        value = cal.get(UCAL_DAY_OF_WEEK, status);
+        if (U_FAILURE(status)) {
+            return;
+        }
+        // fall through, do not break here
     case UDAT_DAY_OF_WEEK_FIELD:
         if (count == 5) 
             _appendSymbol(appendTo, value, fSymbols->fNarrowWeekdays,

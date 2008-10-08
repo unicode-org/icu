@@ -41,6 +41,7 @@ void addDateForRgrTest(TestNode** root)
     addTest(root, &Test4162071, "tsformat/cdtrgtst/Test4162071");
     addTest(root, &Test714,     "tsformat/cdtrgtst/Test714");
     addTest(root, &TestJ6072,   "tsformat/cdtrgtst/TestJ6072");
+    addTest(root, &TestJ5726,   "tsformat/cdtrgtst/TestJ5726");
 }
 
 /**
@@ -501,24 +502,24 @@ void Test714(void)
 }
 
 static const UDate july022008 = 1.215e+12; /* 02 July 2008 5:00 AM PDT (approx ICU 4.0 release date :-) */
-static const UChar zonePST[] = { 'P','S','T',0 };
-static const UChar dmyGGGPattern[] = { 'd','d',' ','M','M','M',' ','y','y','y','y',' ','G','G','G',0 };
-static const UChar dmyGGGGGPattern[] = { 'd','d',' ','M','M','M',' ','y','y','y','y',' ','G','G','G','G','G',0 };
-static const UChar dmyGGGText[] = { '0','2',' ','J','u','l',' ','2','0','0','8',' ','A','D',0 };
-static const UChar dmyGGGGGText[] = { '0','2',' ','J','u','l',' ','2','0','0','8',' ','A',0 };
+static const UChar zonePST[] = { 0x50,0x53,0x54,0 }; /* "PST" */
+static const UChar dmyGGGPattern[] = { 0x64,0x64,0x20,0x4D,0x4D,0x4D,0x20,0x79,0x79,0x79,0x79,0x20,0x47,0x47,0x47,0 }; /* "dd MMM yyyy GGG" */
+static const UChar dmyGGGGGPattern[] = { 0x64,0x64,0x20,0x4D,0x4D,0x4D,0x20,0x79,0x79,0x79,0x79,0x20,0x47,0x47,0x47,0x47,0x47,0 }; /* "dd MMM yyyy GGGGG" */
+static const UChar dmyGGGText[] = { 0x30,0x32,0x20,0x4A,0x75,0x6C,0x20,0x32,0x30,0x30,0x38,0x20,0x41,0x44,0 }; /* "02 Jul 2008 AD" */
+static const UChar dmyGGGGGText[] = { 0x30,0x32,0x20,0x4A,0x75,0x6C,0x20,0x32,0x30,0x30,0x38,0x20,0x41,0 }; /* "02 Jul 2008 A" */
 static const double dayMillisec = 8.64e+07;
-enum { kdmyGnTextMaxChars = 64 };
+enum { DATE_TEXT_MAX_CHARS = 64 };
 void TestJ6072(void)
 {
     UErrorCode    status = U_ZERO_ERROR;
     UDateFormat * dtfmt = udat_open(UDAT_LONG, UDAT_LONG, "en", zonePST, -1, NULL, 0, &status);
     if ( U_SUCCESS(status) ) {
-        UChar   dmyGnText[kdmyGnTextMaxChars];
+        UChar   dmyGnText[DATE_TEXT_MAX_CHARS];
         int32_t dmyGnTextLen;
         UDate   dateResult;
 
         udat_applyPattern(dtfmt, FALSE, dmyGGGPattern, -1);
-        dmyGnTextLen = udat_format(dtfmt, july022008, dmyGnText, kdmyGnTextMaxChars, NULL, &status);
+        dmyGnTextLen = udat_format(dtfmt, july022008, dmyGnText, DATE_TEXT_MAX_CHARS, NULL, &status);
         if ( U_FAILURE(status) ) {
             log_err("FAIL: udat_format with GGG: %s\n", myErrorName(status) );
             status = U_ZERO_ERROR;
@@ -534,7 +535,7 @@ void TestJ6072(void)
         }
         
         udat_applyPattern(dtfmt, FALSE, dmyGGGGGPattern, -1);
-        dmyGnTextLen = udat_format(dtfmt, july022008, dmyGnText, kdmyGnTextMaxChars, NULL, &status);
+        dmyGnTextLen = udat_format(dtfmt, july022008, dmyGnText, DATE_TEXT_MAX_CHARS, NULL, &status);
         if ( U_FAILURE(status) ) {
             log_err("FAIL: udat_format with GGGGG: %s\n", myErrorName(status) );
             status = U_ZERO_ERROR;
@@ -549,6 +550,58 @@ void TestJ6072(void)
             log_err("FAIL: udat_parse with GGGGG: wrong UDate result\n" );
         }
         
+        udat_close(dtfmt);
+    } else {
+        log_err("FAIL: udat_open fails: %s\n", myErrorName(status));
+    }
+}
+
+typedef struct {
+    const UChar * pattern;
+    const UChar * text;
+    const char *  label;
+} DatePatternAndText;
+static const UChar eMyPattern[]     = { 0x65,0x20,0x4D,0x4D,0x4D,0x20,0x79,0x79,0x79,0x79,0 };                /* "e MMM yyyy" */
+static const UChar eeMyPattern[]    = { 0x65,0x65,0x20,0x4D,0x4D,0x4D,0x20,0x79,0x79,0x79,0x79,0 };           /* "ee MMM yyyy" */
+static const UChar eMyText[]        = { 0x33,0x20,0x4A,0x75,0x6C,0x20,0x32,0x30,0x30,0x38,0 };                /* "3 Jul 2008" */
+static const UChar eeeMyPattern[]   = { 0x65,0x65,0x65,0x20,0x4D,0x4D,0x4D,0x20,0x79,0x79,0x79,0x79,0 };      /* "eee MMM yyyy" */
+static const UChar EEEMyPattern[]   = { 0x45,0x45,0x45,0x20,0x4D,0x4D,0x4D,0x20,0x79,0x79,0x79,0x79,0 };      /* "EEE MMM yyyy" */
+static const UChar EEMyPattern[]    = { 0x45,0x45,0x20,0x4D,0x4D,0x4D,0x20,0x79,0x79,0x79,0x79,0 };           /* "EE MMM yyyy" */
+static const UChar eeeMyText[]      = { 0x57,0x65,0x64,0x20,0x4A,0x75,0x6C,0x20,0x32,0x30,0x30,0x38,0 };      /* "Wed Jul 2008" */
+static const UChar eeeeMyPattern[]  = { 0x65,0x65,0x65,0x65,0x20,0x4D,0x4D,0x4D,0x20,0x79,0x79,0x79,0x79,0 }; /* "eeee MMM yyyy" */
+static const UChar eeeeMyText[]     = { 0x57,0x65,0x64,0x6E,0x65,0x73,0x64,0x61,0x79,0x20,0x4A,0x75,0x6C,0x20,0x32,0x30,0x30,0x38,0 }; /* "Wednesday Jul 2008" */
+static const UChar eeeeeMyPattern[] = { 0x65,0x65,0x65,0x65,0x65,0x20,0x4D,0x4D,0x4D,0x20,0x79,0x79,0x79,0x79,0 }; /* "eeeee MMM yyyy" */
+static const UChar eeeeeMyText[]    = { 0x57,0x20,0x4A,0x75,0x6C,0x20,0x32,0x30,0x30,0x38,0 };                /* "W Jul 2008" */
+
+static const DatePatternAndText datePatternsAndText[] = {
+    { eMyPattern,     eMyText,     "e"     },
+    { eeMyPattern,    eMyText,     "ee"    },
+    { eeeMyPattern,   eeeMyText,   "eee"   },
+    { EEEMyPattern,   eeeMyText,   "EEE"   },
+    { EEMyPattern,    eeeMyText,   "EE"    },
+    { eeeeMyPattern,  eeeeMyText,  "eeee"  },
+    { eeeeeMyPattern, eeeeeMyText, "eeeee" },
+    { NULL,           NULL,        NULL    }
+};
+void TestJ5726(void)
+{
+    UErrorCode    status = U_ZERO_ERROR;
+    UDateFormat * dtfmt = udat_open(UDAT_LONG, UDAT_LONG, "en", zonePST, -1, NULL, 0, &status);
+    if ( U_SUCCESS(status) ) {
+        const DatePatternAndText *patTextPtr;
+        for (patTextPtr = datePatternsAndText; patTextPtr->pattern != NULL; ++patTextPtr) {
+            UChar   dmyGnText[DATE_TEXT_MAX_CHARS];
+            int32_t dmyGnTextLen;
+
+            udat_applyPattern(dtfmt, FALSE, patTextPtr->pattern, -1);
+            dmyGnTextLen = udat_format(dtfmt, july022008, dmyGnText, DATE_TEXT_MAX_CHARS, NULL, &status);
+            if ( U_FAILURE(status) ) {
+                log_err("FAIL: udat_format with %s: %s\n", patTextPtr->label, myErrorName(status) );
+                status = U_ZERO_ERROR;
+            } else if ( u_strcmp(dmyGnText, patTextPtr->text) != 0 ) {
+                log_err("FAIL: udat_format with %s: wrong UChar[] result\n", patTextPtr->label );
+            }
+        }
         udat_close(dtfmt);
     } else {
         log_err("FAIL: udat_open fails: %s\n", myErrorName(status));
