@@ -1,7 +1,7 @@
 
 /*
 **********************************************************************
-* Copyright (c) 2003-2007, International Business Machines
+* Copyright (c) 2003-2008, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -59,6 +59,7 @@ using namespace std;
 const int64_t SECS_PER_YEAR      = 31536000; // 365 days
 const int64_t SECS_PER_LEAP_YEAR = 31622400; // 366 days
 const int64_t LOWEST_TIME32    = (int64_t)((int32_t)0x80000000);
+const int64_t HIGHEST_TIME32    = (int64_t)((int32_t)0x7fffffff);
 
 bool isLeap(int32_t y) {
     return (y%4 == 0) && ((y%100 != 0) || (y%400 == 0)); // Gregorian
@@ -368,6 +369,11 @@ void readzoneinfo(ifstream& file, ZoneInfo& info, bool is64bitData=false) {
                         // Preserve the latest transition before the 32bit minimum time
                         minidx = i;
                     }
+                } else if (transitionTimes[i] > HIGHEST_TIME32) {
+                    // Skipping the rest of the transition data.  We cannot put such
+                    // transitions into zoneinfo.res, because data is limited to singed
+                    // 32bit int by the ICU resource bundle.
+                    break;
                 } else {
                     info.transitions.push_back(Transition(transitionTimes[i], transitionTypes[i]));
                 }
