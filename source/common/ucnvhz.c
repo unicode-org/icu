@@ -198,10 +198,30 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                      /* if the first byte is equal to TILDE and the trail byte
                      * is not a valid byte then it is an error condition
                      */
-                    mySourceChar = 0x7e00 | mySourceChar;
-                    targetUniChar = 0xffff;
+                    /*
+                     * Ticket 5691: consistent illegal sequences:
+                     * - We include at least the first byte in the illegal sequence.
+                     * - If any of the non-initial bytes could be the start of a character,
+                     *   we stop the illegal sequence before the first one of those.
+                     */
                     myData->isEmptySegment = FALSE; /* different error here, reset this to avoid spurious future error */
-                    break;
+                    *err = U_ILLEGAL_ESCAPE_SEQUENCE;
+                    args->converter->toUBytes[0] = UCNV_TILDE;
+                    if( myData->isStateDBCS ?
+                            (0x21 <= mySourceChar && mySourceChar <= 0x7e) :
+                            mySourceChar <= 0x7f
+                    ) {
+                        /* The current byte could be the start of a character: Back it out. */
+                        args->converter->toULength = 1;
+                        --mySource;
+                    } else {
+                        /* Include the current byte in the illegal sequence. */
+                        args->converter->toUBytes[1] = mySourceChar;
+                        args->converter->toULength = 2;
+                    }
+                    args->target = myTarget;
+                    args->source = mySource;
+                    return;
                 }
             } else if(myData->isStateDBCS) {
                 if(args->converter->toUnicodeStatus == 0x00){
