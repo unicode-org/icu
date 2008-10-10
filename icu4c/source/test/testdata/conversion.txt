@@ -162,6 +162,16 @@ conversion:table(nofallback) {
           :intvector{ 0,1,1,1,1,2,3,8,11,13,14,14,14,14,15,16 },
           :int{1}, :int{0}, "", "&C", :bin{""}
         }
+        // HZ with illegal tilde sequences.
+        {
+          "HZ",
+          :bin{ 417e20427e21437e80447e7b41417e207e41427e7f41437e7d5a },
+          "A\\x7E B\\x7E!C\\x7E\\x80D\u4eae\\x7E\\x20\\x7E\u8c05\\x7E\\x7F\u64a9Z",
+          :intvector{ 0,1,1,1,1,2,3,4,4,4,4,5,6,7,7,7,7,7,7,7,7,9,                          // SBCS
+                      12,14,14,14,14,14,14,14,14,16,16,16,16,17,19,19,19,19,19,19,19,19,21, // DBCS
+                      25 },                                                                 // SBCS
+          :int{1}, :int{0}, "", "&C", :bin{""}
+        }
         // Test bug 6071 (2:1 Unicode:charset SBCS mapping).
         {
           "*test1bmp",
@@ -173,9 +183,9 @@ conversion:table(nofallback) {
         // test that HZ limits its byte values to lead bytes 21..7d and trail bytes 21..7e
         {
           "HZ",
-          :bin{ 7e7b21212120217e217f772100007e217e7d207e7e807e0a2b },
-          "\u3000\ufffd\ufffd\u3013\ufffd\ufffd\u9ccc\ufffd\ufffd ~\ufffd+",
-          :intvector{ 2,4,5,6,8,9,10,12,14,18,19,21,24 },
+          :bin{ 7e7b21212120217e217f772100007e217e7e7d207e7e807e0a2b },
+          "\u3000\ufffd\ufffd\u3013\ufffd\ufffd\u9ccc\ufffd\ufffd\u3013 ~\ufffd+",
+          :intvector{ 2,4,5,6,8,9,10,12,14,15,19,20,22,25 },
           :int{1}, :int{1}, "", "?", :bin{""}
         }
         // improve coverage of ISO-2022-JP converter with hardcoded JIS X 0201 and
