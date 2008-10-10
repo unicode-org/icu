@@ -1147,6 +1147,7 @@ _2022FromGR94DBCS(uint32_t value) {
     }
 }
 
+#if 0 /* 5691: Call sites now check for validity. They can just += 0x8080 after that. */
 /*
  * This method does the reverse of _2022FromGR94DBCS(). Given the 2022 code point, it returns the
  * 2 byte value that is in the range A1..FE for each byte. Otherwise it returns the 2022 code point
@@ -1162,6 +1163,7 @@ _2022ToGR94DBCS(uint32_t value) {
         return value;
     }
 }
+#endif
 
 #ifdef U_ENABLE_GENERIC_ISO_2022
 
@@ -2177,7 +2179,7 @@ getTrailByte:
                                     /* Copy before we modify tmpSourceChar so toUnicodeCallback() sees the correct bytes. */
                                     mySourceChar = tmpSourceChar;
                                     if (cs == KSC5601) {
-                                        tmpSourceChar = _2022ToGR94DBCS(tmpSourceChar);
+                                        tmpSourceChar += 0x8080;  /* = _2022ToGR94DBCS(tmpSourceChar) */
                                     }
                                     tempBuf[0] = (char)(tmpSourceChar >> 8);
                                     tempBuf[1] = (char)(tmpSourceChar);
