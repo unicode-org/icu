@@ -2603,8 +2603,7 @@ ucnv_MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                               &offsets, sourceIndex,
                               pArgs->flush,
                               pErrorCode);
-            /* TODO: nextSourceIndex+=diff instead of nextSourceIndex+diff ?? */
-            sourceIndex=nextSourceIndex+(int32_t)(source-(const uint8_t *)pArgs->source);
+            sourceIndex=nextSourceIndex+=(int32_t)(source-(const uint8_t *)pArgs->source);
 
             if(U_FAILURE(*pErrorCode)) {
                 /* not mappable or buffer overflow */
