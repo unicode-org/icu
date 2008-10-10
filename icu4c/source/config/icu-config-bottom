@@ -120,6 +120,14 @@ esac
 # ALWAYS load twice because of dependencies
 loaddefs
 loaddefs
+
+if [ $1 = "--selfcheck" ];
+then
+	echo "passed"
+	exit 
+	# EXIT for self check
+fi
+
 sanity
 
 while [ $# -gt 0 ];
@@ -320,11 +328,11 @@ do
 	    ;;
 
 	--version)
-        echo $VERSION
+        echo $ECHO_N $VERSION
         ;;
 
     --unicode-version)
-        echo $UNICODE_VERSION
+        echo $ECHO_N $UNICODE_VERSION
         ;;
 
 	--help)

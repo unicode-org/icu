@@ -273,6 +273,13 @@ GENCCODE_ASSEMBLY = @GENCCODE_ASSEMBLY@
 # The mh- file ("make fragment") for the platform is included here. 
 # It may override the above settings.
 # It is put last so that the mh-file can override anything.
+# The selfcheck is just a sanity check that this makefile is
+# parseable. The mh fragment is only included if this does not occur.
 
+ifeq (selfcheck,$(MAKECMDGOALS)) #M#
+selfcheck: #M#
+	@echo passed #M#
+else #M#
 include $(pkgdatadir)/config/@platform_make_fragment_name@
+endif #M#
 

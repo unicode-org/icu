@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2000-2007, International Business Machines
+ *   Copyright (C) 2000-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  *   file name:  pkgdata.c
@@ -486,6 +486,9 @@ static int executeMakefile(const UPKGOptions *o)
         o->rebuild ? "rebuild"    : "",
         o->install ? "install"    : "",
         o->makeArgs);
+#endif
+#ifdef U_MAKE_IS_NMAKE
+    strcat(cmd, " /NOLOGO");
 #endif
     if(o->verbose) {
         puts(cmd);

@@ -198,7 +198,7 @@ SKIP_FUNCTION_MACROS   = YES
 # Configuration::additions related to external references   
 #---------------------------------------------------------------------------
 TAGFILES               = 
-GENERATE_TAGFILE       =  "@srcdir@/doc/html/icudocs.tag"
+GENERATE_TAGFILE       =  "@builddir@/doc/html/icudocs.tag"
 ALLEXTERNALS           = NO
 EXTERNAL_GROUPS        = YES
 PERL_PATH              = /usr/bin/perl
