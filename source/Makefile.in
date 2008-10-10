@@ -71,7 +71,7 @@ install: install-recursive install-local
 clean: clean-recursive-with-twist clean-local
 distclean : distclean-recursive distclean-local
 dist: dist-recursive dist-local
-check: all check-recursive check-local
+check: all check-recursive
 check-recursive: all
 
 ifeq ($(DOXYGEN),)
@@ -165,7 +165,12 @@ distclean-local: clean-local
 	$(RMV) config.cache config.log config.status
 	$(RMV) Makefile config/Makefile icudefs.mk $(LIBDIR) $(BINDIR)
 
-check-local:
+check-local: $(top_builddir)/config/icu-config $(top_builddir)/config/Makefile.inc
+	@echo verifying that icu-config --selfcheck can operate
+	@test "passed" = "$(shell $(top_builddir)/config/icu-config --selfcheck 2>&1)" || (echo "FAIL: icu-config could not run properly." ; exit 1)
+	@echo verifying that $(MAKE) -f Makefile.inc selfcheck can operate
+	@test "passed" = "$(shell $(MAKE) --no-print-directory -f $(top_builddir)/config/Makefile.inc SELFCHECK=1 selfcheck)" || (echo "FAIL: Makefile.inc could not run properly." ; exit 1 )
+	@echo "PASS: config selfcheck OK"
 
 #$(srcdir)/configure : $(srcdir)/configure.in $(top_srcdir)/aclocal.m4
 #	cd $(srcdir) && $(AUTOCONF)

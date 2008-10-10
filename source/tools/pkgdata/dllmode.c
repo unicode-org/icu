@@ -1,6 +1,6 @@
 /******************************************************************************
 *
-*   Copyright (C) 2000-2006, International Business Machines
+*   Copyright (C) 2000-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -257,7 +257,11 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
                                      "\t$(INSTALL-L) $(TARGETDIR)/$(FINAL_SO_TARGET) $(INSTALLTO)/$(FINAL_SO_TARGET)\n");
     
     T_FileStream_writeLine(makefile, "ifneq ($(IMPORT_LIB_EXT),)\n");
+#ifdef __CYGWIN__
+    T_FileStream_writeLine(makefile, "\t$(INSTALL-L) $(TARGETDIR)/$(basename $(FINAL_IMPORT_LIB)).a $(INSTALLTO)/$(basename $(FINAL_IMPORT_LIB)).a\n");
+#else
     T_FileStream_writeLine(makefile, "\t$(INSTALL-L) $(TARGETDIR)/$(basename $(FINAL_SO_TARGET))$(IMPORT_LIB_EXT) $(INSTALLTO)/$(basename( $(FINAL_SO_TARGET))$(IMPORT_LIB_EXT)\n");
+#endif
     T_FileStream_writeLine(makefile, "endif\n");
     if (o->version) {
         T_FileStream_writeLine(makefile, "ifneq ($(FINAL_SO_TARGET),$(SO_TARGET))\n");
