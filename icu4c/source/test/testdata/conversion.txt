@@ -49,6 +49,8 @@ conversion:table(nofallback) {
       Headers { "charset", "bytes", "unicode", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidChars" }
       Cases {
         // Test ticket 5691: consistent illegal sequences
+        // The following test cases are for illegal character byte sequences.
+        //
         // Unfortunately, we cannot use the Shift-JIS examples from the ticket
         // comments because our Shift-JIS table is Windows-compatible and
         // therefore has no illegal single bytes. Same for GBK.
@@ -85,7 +87,7 @@ conversion:table(nofallback) {
           :int{1}, :int{0}, "", "&C", :bin{""}
         }
         {
-          "ISO-2022-JP-2",
+          "ISO-2022-JP",
           :bin{ 1b24424141af4142affe41431b2842 },
           "\u758f\\xAF\u758e\\xAF\\xFE\u790e",
           :intvector{ 3,5,5,5,5,6,8,8,8,8,8,8,8,8,10 },
@@ -117,6 +119,47 @@ conversion:table(nofallback) {
           :bin{ 417e7b4141af4142affe41437e7d5a },
           "A\u4eae\\xAF\u8c05\\xAF\\xFE\u64a9Z",
           :intvector{ 0,3,5,5,5,5,6,8,8,8,8,8,8,8,8,10,14 },
+          :int{1}, :int{0}, "", "&C", :bin{""}
+        }
+        // Test ticket 5691: consistent illegal sequences
+        // The following test cases are for illegal escape/designator/shift sequences.
+        //
+        // ISO-2022-JP and -CN with illegal escape sequences.
+        {
+          "ISO-2022-JP",
+          :bin{ 611b24201b244241411b283f1b28427a },
+          "a\\x1B$ \u758f\\x1B\u2538z",
+          :intvector{ 0,1,1,1,1,2,3,7,9,9,9,9,10,15 },
+          :int{1}, :int{0}, "", "&C", :bin{""}
+        }
+        {
+          "ISO-2022-CN",
+          :bin{ 611b2429201b2429410e41410f7a },
+          "a\\x1B$) \u4eaez",
+          :intvector{ 0,1,1,1,1,2,3,4,10,13 },
+          :int{1}, :int{0}, "", "&C", :bin{""}
+        }
+        // ISO-2022-JP-2 with illegal single-shift SS2 and SS3 sequences.
+        // The first ESC N comes before its designator sequence, the last sequence is ESC+space.
+        {
+          "ISO-2022-JP-2",
+          :bin{ 4e1b4e4e1b2e414e1b4e4e4e1b204e },
+          "N\\x1BNNN\xceN\\x1B N",
+          :intvector{ 0,1,1,1,1,2,3,7,10,11,12,12,12,12,13,14 },
+          :int{1}, :int{0}, "", "&C", :bin{""}
+        }
+        {
+          "ISO-2022-CN-EXT",
+          :bin{ 4e1b4e4e1b242a484e1b4e4e4e4e1b204e },
+          "N\\x1BNNN\u8f0eN\\x1B N",
+          :intvector{ 0,1,1,1,1,2,3,8,11,13,14,14,14,14,15,16 },
+          :int{1}, :int{0}, "", "&C", :bin{""}
+        }
+        {
+          "ISO-2022-CN-EXT",
+          :bin{ 4f1b4f4f1b242b494f1b4f4f4f4f1b204f },
+          "O\\x1BOOO\u492bO\\x1B O",
+          :intvector{ 0,1,1,1,1,2,3,8,11,13,14,14,14,14,15,16 },
           :int{1}, :int{0}, "", "&C", :bin{""}
         }
         // Test bug 6071 (2:1 Unicode:charset SBCS mapping).
@@ -436,7 +479,7 @@ conversion:table(nofallback) {
         {
           "ISO-2022-CN-EXT",
           :bin{ 411b4e2121 }, "\x41", :intvector{ 0 },
-          :int{1}, :int{1}, "illesc", ".", :bin{ 1b4e }
+          :int{1}, :int{1}, "illesc", ".", :bin{ 1b }
         }
         // G3 designator: recognized, but not supported for -CN (only for -CN-EXT)
         {
