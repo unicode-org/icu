@@ -163,9 +163,9 @@ U_INTERNAL double  U_EXPORT2 uprv_round(double x);
  * Time zone utilities
  *
  * Wrappers for C runtime library functions relating to timezones.
- * The t_tzset() function (similar to tzset) uses the current setting 
- * of the environment variable TZ to assign values to three global 
- * variables: daylight, timezone, and tzname. These variables have the 
+ * The t_tzset() function (similar to tzset) uses the current setting
+ * of the environment variable TZ to assign values to three global
+ * variables: daylight, timezone, and tzname. These variables have the
  * following meanings, and are declared in &lt;time.h&gt;.
  *
  *   daylight   Nonzero if daylight-saving-time zone (DST) is specified
@@ -212,14 +212,8 @@ U_INTERNAL int32_t  U_EXPORT2 uprv_timezone(void);
 U_INTERNAL const char* U_EXPORT2 uprv_tzname(int n);
 
 /**
- * If needed, frees the allocated pointer when tzname is called.
- * @internal
- */
-U_INTERNAL void  U_EXPORT2 uprv_free_tzname(void);
-
-/**
  * Get UTC (GMT) time measured in milliseconds since 0:00 on 1/1/1970.
- * @return the UTC time measured in milliseconds 
+ * @return the UTC time measured in milliseconds
  * @internal
  */
 U_INTERNAL UDate U_EXPORT2 uprv_getUTCtime(void);
