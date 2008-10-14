@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2006, International Business Machines
+* Copyright (c) 2002-2008, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -26,7 +26,7 @@ class UnicodeString;
  * UnicodeSetIterator iterates over the contents of a UnicodeSet.  It
  * iterates over either code points or code point ranges.  After all
  * code points or ranges have been returned, it returns the
- * multicharacter strings of the UnicodSet, if any.
+ * multicharacter strings of the UnicodeSet, if any.
  *
  * This class is not intended to be subclassed.  Consider any fields
  *  or methods declared as "protected" to be private.  The use of
@@ -35,8 +35,8 @@ class UnicodeString;
  * <p>To iterate over code points and strings, use a loop like this:
  * <pre>
  * UnicodeSetIterator it(set);
- * while (set.next()) {
- *     processItem(set.getString());
+ * while (it.next()) {
+ *     processItem(it.getString());
  * }
  * </pre>
  * <p>Each item in the set is accessed as a string.  Set elements
