@@ -241,3 +241,5 @@ ifneq ($(ENABLE_SHARED),YES)
 LINK.c = $(LINK.cc)
 endif
 
+# optional include at top
+-include $(top_builddir)/icudefs.local
