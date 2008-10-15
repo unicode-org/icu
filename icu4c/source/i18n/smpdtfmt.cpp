@@ -1907,6 +1907,8 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     // the parsed value.
     if (patternCharIndex == UDAT_HOUR_OF_DAY1_FIELD ||
         patternCharIndex == UDAT_HOUR1_FIELD ||
+        (patternCharIndex == UDAT_DOW_LOCAL_FIELD && count <= 2) ||
+        (patternCharIndex == UDAT_STANDALONE_DAY_FIELD && count <= 2) ||
         (patternCharIndex == UDAT_MONTH_FIELD && count <= 2) ||
         (patternCharIndex == UDAT_STANDALONE_MONTH_FIELD && count <= 2) ||
         (patternCharIndex == UDAT_QUARTER_FIELD && count <= 2) ||
@@ -2063,28 +2065,48 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         cal.set(UCAL_MILLISECOND, value);
         return pos.getIndex();
 
+    case UDAT_DOW_LOCAL_FIELD:
+        if (count <= 2) // i.e., e or ee
+        {
+            // [We computed 'value' above.]
+            cal.set(UCAL_DOW_LOCAL, value);
+            return pos.getIndex();
+        }
+        // else for eee-eeeee fall through to handling of EEE-EEEEE
+        // fall through, do not break here
     case UDAT_DAY_OF_WEEK_FIELD:
         {
             // Want to be able to parse both short and long forms.
-            // Try count == 4 (DDDD) first:
+            // Try count == 4 (EEEE) first:
             int32_t newStart = 0;
             if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
                                       fSymbols->fWeekdays, fSymbols->fWeekdaysCount, cal)) > 0)
                 return newStart;
-            else // DDDD failed, now try DDD
+            // EEEE failed, now try EEE
+            else if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
+                                   fSymbols->fShortWeekdays, fSymbols->fShortWeekdaysCount, cal)) > 0)
+                return newStart;
+            // EEE failed, now try EEEEE
+            else
                 return matchString(text, start, UCAL_DAY_OF_WEEK,
-                                   fSymbols->fShortWeekdays, fSymbols->fShortWeekdaysCount, cal);
+                                   fSymbols->fNarrowWeekdays, fSymbols->fNarrowWeekdaysCount, cal);
         }
 
     case UDAT_STANDALONE_DAY_FIELD:
         {
+            if (count <= 2) // c or cc
+            {
+                // [We computed 'value' above.]
+                cal.set(UCAL_DAY_OF_WEEK, value);
+                return pos.getIndex();
+            }
             // Want to be able to parse both short and long forms.
-            // Try count == 4 (DDDD) first:
+            // Try count == 4 (cccc) first:
             int32_t newStart = 0;
             if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
                                       fSymbols->fStandaloneWeekdays, fSymbols->fStandaloneWeekdaysCount, cal)) > 0)
                 return newStart;
-            else // DDDD failed, now try DDD
+            else // cccc failed, now try ccc
                 return matchString(text, start, UCAL_DAY_OF_WEEK,
                                    fSymbols->fStandaloneShortWeekdays, fSymbols->fStandaloneShortWeekdaysCount, cal);
         }
