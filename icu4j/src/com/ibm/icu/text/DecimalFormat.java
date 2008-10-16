@@ -51,8 +51,8 @@ import com.ibm.icu.util.UResourceBundle;
  * locale, including support for Western, Arabic, or Indic digits.  It also
  * supports different flavors of numbers, including integers ("123"),
  * fixed-point numbers ("123.4"), scientific notation ("1.23E4"), percentages
- * ("12%"), and currency amounts ("$123.00", "USD123.00", "123.00 US dollars").  All of these flavors can be easily
- * localized.
+ * ("12%"), and currency amounts ("$123.00", "USD123.00", "123.00 US dollars").
+ * All of these flavors can be easily localized.
  *
  * 
  * <p>To obtain a {@link NumberFormat} for a specific locale (including the
@@ -357,7 +357,7 @@ import com.ibm.icu.util.UResourceBundle;
  *
  * <p>For currency parsing, the formatter is able to parse every currency
  * style formats no matter which style the formatter is constructed with.
- * For example, a formatter instance get from 
+ * For example, a formatter instance gotten from 
  * NumberFormat.getInstance(ULocale, NumberFormat.CURRENCYSTYLE) can parse
  * formats such as "USD1.00" and "3.00 US dollars".
  *
@@ -1844,9 +1844,18 @@ public class DecimalFormat extends NumberFormat {
 
         boolean[] status = new boolean[STATUS_LENGTH];
         Currency[] currency = parseCurrency ? new Currency[1] : null;
-        if (!subparse(text, parsePosition, digitList, false, status, currency)) {
-            parsePosition.setIndex(backup);
-            return null;
+        if (currencySignCount > 0) {
+            if (!parseForCurrency(text, parsePosition, parseCurrency, 
+                                  currency, status)) {
+                return null;
+            }
+        } else {
+            if (!subparse(text, parsePosition, digitList, false, status, 
+                          currency, negPrefixPattern, negSuffixPattern,
+                          posPrefixPattern, posSuffixPattern)) {
+                parsePosition.setIndex(backup);
+                return null;
+            }
         }
 
         Number n = null;
@@ -1917,6 +1926,159 @@ public class DecimalFormat extends NumberFormat {
                              : (Object) n;
     }
 
+
+    private boolean parseForCurrency(String text, ParsePosition parsePosition, 
+                                     boolean parseCurrency, Currency[] currency,
+                                     boolean[] status) {
+        int origPos = parsePosition.getIndex();
+        if (!isReadyForParsing) {
+            int savedCurrencySignCount = currencySignCount;
+            setupCurrencyAffixForAllPatterns();
+            // reset pattern back
+            if (savedCurrencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) {
+                applyPatternWithoutExpandAffix(formatPattern, false);
+            } else {
+                applyPattern(formatPattern, false);
+            }
+            isReadyForParsing = true;
+        }
+        int maxPosIndex = origPos;
+        int maxErrorPos = -1;
+        boolean[] savedStatus = null;
+        // First, parse against current pattern.
+        // Since current pattern could be set by applyPattern(),
+        // it could be an arbitrary pattern, and it may not be the one
+        // defined in current locale.
+        boolean[] tmpStatus = new boolean[STATUS_LENGTH];
+        ParsePosition tmpPos = new ParsePosition(origPos);
+        DigitList tmpDigitList = new DigitList();
+        boolean found = subparse(text, tmpPos, tmpDigitList, false, 
+                  tmpStatus, currency, negPrefixPattern, negSuffixPattern,
+                  posPrefixPattern, posSuffixPattern);
+        if (found) {
+            if (tmpPos.getIndex() > maxPosIndex) {
+                maxPosIndex = tmpPos.getIndex();
+                savedStatus = tmpStatus;
+                digitList = tmpDigitList;
+            }
+        } else {
+            maxErrorPos = tmpPos.getErrorIndex();
+        }
+        // Then, parse against affix patterns.
+        // Those are currency patterns and currency plural patterns
+        // defined in the locale.
+        Iterator  iter = affixPatternsForCurrency.iterator();
+        while (iter.hasNext()) {
+            AffixForCurrency affix = (AffixForCurrency)iter.next();
+
+            tmpStatus = new boolean[STATUS_LENGTH];
+            tmpPos = new ParsePosition(origPos); 
+            tmpDigitList = new DigitList();
+            boolean result = subparse(text, tmpPos, tmpDigitList, false, 
+                               tmpStatus, currency, affix.getNegPrefix(),
+                               affix.getNegSuffix(), affix.getPosPrefix(), 
+                               affix.getPosSuffix());
+            if (result) {
+                found = true;
+                if (tmpPos.getIndex() > maxPosIndex) {
+                    maxPosIndex = tmpPos.getIndex();
+                    savedStatus = tmpStatus;
+                    digitList = tmpDigitList;
+                }
+            } else {
+                maxErrorPos = (tmpPos.getErrorIndex() > maxErrorPos) ?
+                              tmpPos.getErrorIndex() : maxErrorPos;
+            }
+        }
+        // Finally, parse against simple affix to find the match.
+        // For example, in TestMonster suite,
+        // if the to-be-parsed text is "-\u00A40,00".
+        // complexAffixCompare will not find match,
+        // since there is no ISO code matches "\u00A4",
+        // and the parse stops at "\u00A4".
+        // We will just use simple affix comparison (look for exact match)
+        // to pass it.
+        tmpStatus = new boolean[STATUS_LENGTH];
+        tmpPos = new ParsePosition(origPos); 
+        tmpDigitList = new DigitList();
+        int savedCurrencySignCount = currencySignCount;
+        // set currencySignCount to 0 so that compareAffix function will
+        // fall to compareSimpleAffix path, not compareComplexAffix path.
+        currencySignCount = 0;
+        boolean result = subparse(text, tmpPos, tmpDigitList, false, 
+                  tmpStatus, currency, negativePrefix, negativeSuffix,
+                  positivePrefix, positiveSuffix);
+        currencySignCount = savedCurrencySignCount;
+        if (result) {
+            if (tmpPos.getIndex() > maxPosIndex) {
+                maxPosIndex = tmpPos.getIndex();
+                savedStatus = tmpStatus;
+                digitList = tmpDigitList;
+            }
+            found = true;
+        } else {
+                maxErrorPos = (tmpPos.getErrorIndex() > maxErrorPos) ?
+                              tmpPos.getErrorIndex() : maxErrorPos;
+        }
+
+        if (!found) {
+            //parsePosition.setIndex(origPos);
+            parsePosition.setErrorIndex(maxErrorPos);
+        } else {
+            parsePosition.setIndex(maxPosIndex);
+            parsePosition.setErrorIndex(-1);
+            for (int index = 0; index < STATUS_LENGTH; ++index) {
+                status[index] = savedStatus[index];
+            }
+        }
+        return found;
+    }
+
+
+    // Get affix patterns used in locale's currency pattern
+    // (NumberPatterns[1]) and currency plural pattern (CurrencyUnitPatterns).
+    private void setupCurrencyAffixForAllPatterns() {
+        ULocale uloc = getLocale(ULocale.VALID_LOCALE);
+        if (uloc == null) {
+            uloc = symbols.getLocale(ULocale.VALID_LOCALE);
+        }
+        if (pluralCountToCurrencyUnitPattern == null) {
+            setupCurrencyPluralPattern(uloc);
+        }
+        affixPatternsForCurrency = new HashSet();
+
+        // CURRENCYSTYLE and ISOCURRENCYSTYLE should have the same
+        // prefix and suffix, so, only need to save one of them.
+        // Here, chose onlyApplyPatternWithoutExpandAffix without
+        // saving the actualy pattern in 'pattern' data member.
+        onlyApplyPatternWithoutExpandAffix(getPattern(uloc, NumberFormat.CURRENCYSTYLE), false);
+        AffixForCurrency affixes = new AffixForCurrency(negPrefixPattern,
+                                                        negSuffixPattern,
+                                                        posPrefixPattern,
+                                                        posSuffixPattern);
+        affixPatternsForCurrency.add(affixes);
+        
+        // add plural pattern
+        Iterator iter = pluralCountToCurrencyUnitPattern.keySet().iterator();
+        Set currencyUnitPatternSet = new HashSet();
+        while (iter.hasNext()) {
+            String pluralCount = (String)iter.next();
+            String currencyPattern = (String)pluralCountToCurrencyUnitPattern.get(pluralCount);
+            if (currencyPattern != null &&
+                currencyUnitPatternSet.contains(currencyPattern) == false) {
+                currencyUnitPatternSet.add(currencyPattern);
+                // Here, chose onlyApplyPatternWithoutExpandAffix without
+                // saving the actualy pattern in 'pattern' data member.
+                onlyApplyPatternWithoutExpandAffix(currencyPattern, false);
+                affixes = new AffixForCurrency(negPrefixPattern,
+                                               negSuffixPattern,
+                                               posPrefixPattern,
+                                               posSuffixPattern);
+                affixPatternsForCurrency.add(affixes);
+            }   
+        }
+    }
+
     private static final int CURRENCY_SIGN_COUNT_IN_SYMBOL_FORMAT = 1;
     private static final int CURRENCY_SIGN_COUNT_IN_ISO_FORMAT = 2;
     private static final int CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT = 3;
@@ -1968,10 +2130,16 @@ public class DecimalFormat extends NumberFormat {
      * currency parsing mode, or null for normal parsing. In generic
      * currency parsing mode, any currency is parsed, not just the
      * currency that this formatter is set to.
+     * @param negPrefix negative prefix pattern
+     * @param negSuffix negative suffix pattern
+     * @param posPrefix positive prefix pattern
+     * @param negSuffix negative suffix pattern
      */
     private final boolean subparse(String text, ParsePosition parsePosition,
                    DigitList digits, boolean isExponent,
-                   boolean status[], Currency currency[])
+                   boolean status[], Currency currency[],
+                   String negPrefix, String negSuffix,
+                   String posPrefix, String posSuffix)
     {
         int position = parsePosition.getIndex();
         int oldStart = parsePosition.getIndex();
@@ -1982,8 +2150,8 @@ public class DecimalFormat extends NumberFormat {
         }
 
         // Match positive and negative prefixes; prefer longest match.
-        int posMatch = compareAffix(text, position, false, true, currency);
-        int negMatch = compareAffix(text, position, true, true, currency);
+        int posMatch = compareAffix(text, position, false, true, posPrefix, currency);
+        int negMatch = compareAffix(text, position, true, true, negPrefix, currency);
         if (posMatch >= 0 && negMatch >= 0) {
             if (posMatch > negMatch) {
                 negMatch = -1;
@@ -1996,14 +2164,8 @@ public class DecimalFormat extends NumberFormat {
         } else if (negMatch >= 0) {
             position += negMatch;
         } else {
-            if (currencySignCount <= 0) {
-                // For currency, need to parse against all currency patterns,
-                // including default, ISO, and plural patterns.
-                // So, do not set error status here,
-                // since it might be another currency style format.
-                parsePosition.setErrorIndex(position);
-                return false;
-            }
+            parsePosition.setErrorIndex(position);
+            return false;
         }
 
         // Match padding after prefix
@@ -2313,18 +2475,11 @@ public class DecimalFormat extends NumberFormat {
         }
 
         // Match positive and negative suffixes; prefer longest match.
-        // special handling for currency parsing, since currency parsing
-        // could parse different kinds of style formats.
-        if (posMatch < 0 && negMatch < 0 && currencySignCount > 0) {
-            posMatch = compareAffix(text, position, false, false, currency);
-            negMatch = compareAffix(text, position, true, false, currency);
-        } else {
-            if (posMatch >= 0) {
-                posMatch = compareAffix(text, position, false, false, currency);
-            }
-            if (negMatch >= 0) {
-                negMatch = compareAffix(text, position, true, false, currency);
-            }
+        if (posMatch >= 0) {
+            posMatch = compareAffix(text, position, false, false, posSuffix, currency);
+        }
+        if (negMatch >= 0) {
+            negMatch = compareAffix(text, position, true, false, negSuffix, currency);
         }
         if (posMatch >= 0 && negMatch >= 0) {
             if (posMatch > negMatch) {
@@ -2387,7 +2542,7 @@ public class DecimalFormat extends NumberFormat {
         return position;
     }
 
-    /**
+    /*
      * Return the length matched by the given affix, or -1 if none.
      * Runs of white space in the affix, match runs of white space in
      * the input.  Pattern white space and input white space are
@@ -2396,66 +2551,21 @@ public class DecimalFormat extends NumberFormat {
      * @param pos offset into input at which to begin matching
      * @param isNegative
      * @param isPrefix
+     * @param affixPat affix pattern used for currency affix comparison
      * @param currency return value for parsed currency, for generic
      * currency parsing mode, or null for normal parsing. In generic
      * currency parsing mode, any currency is parsed, not just the
      * currency that this formatter is set to.
      * @return length of input that matches, or -1 if match failure
      */
-    private int compareAffix(String text, int pos, boolean isNegative,
-                             boolean isPrefix, Currency[] currency) {
+    private int compareAffix(String text, int pos, 
+                             boolean isNegative, boolean isPrefix,
+                             String affixPat,
+                             Currency[] currency) {
         if (currency != null || currencyChoice != null ||
             currencySignCount > 0) {
-            // Need to parse against all possible currency format patterns,
-            // including default currency style pattern,
-            // ISO currency style pattern, plural currency style pattern.
-            // Try current pattern first.
-            // Since pattern can be reset by applyPattern.
-            // There is no way to know which style the current pattern is.
-            if (!isReadyForParsing) {
-                int savedCurrencySignCount = currencySignCount;
-                setupCurrencyAffixForAllPattern();
-                // reset pattern back
-                if (savedCurrencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) {
-                    applyPatternWithoutExpandAffix(formatPattern, false);
-                } else {
-                    applyPattern(formatPattern, false);
-                }
-                isReadyForParsing = true;
-            }
-            int posAfterParsingAffix;
-            int tmpPos;
-            if (isPrefix) {
-                posAfterParsingAffix = compareComplexAffix(
-                    isNegative ? negPrefixPattern : posPrefixPattern,
-                    text, pos, currency);
-                tmpPos = comparePatternSet(
-                    isNegative ? negPrefixPatternForCurrency : 
-                    posPrefixPatternForCurrency, text, pos, currency);
-                posAfterParsingAffix = tmpPos > posAfterParsingAffix ?
-                                       tmpPos : posAfterParsingAffix;
-                // simple affix too to parse the case "-\u00A40,00"
-                tmpPos = compareSimpleAffix(
-                    isNegative ? negativePrefix : positivePrefix, text, pos);
-                posAfterParsingAffix = tmpPos > posAfterParsingAffix ?
-                                       tmpPos : posAfterParsingAffix;
-            } else {
-                posAfterParsingAffix = compareComplexAffix(
-                    isNegative ? negSuffixPattern : posSuffixPattern,
-                    text, pos, currency);
-                tmpPos = comparePatternSet(
-                    isNegative ? negSuffixPatternForCurrency : 
-                    posSuffixPatternForCurrency, text, pos, currency);
-                posAfterParsingAffix = tmpPos > posAfterParsingAffix ?
-                                       tmpPos : posAfterParsingAffix;
-                tmpPos = compareSimpleAffix(
-                    isNegative ? negativeSuffix : positiveSuffix, text, pos);
-                posAfterParsingAffix = tmpPos > posAfterParsingAffix ?
-                                       tmpPos : posAfterParsingAffix;
-            }
-            return posAfterParsingAffix;
+                return compareComplexAffix(affixPat, text, pos, currency);
         }
-
         if (isPrefix) {
             return compareSimpleAffix(isNegative ? negativePrefix : positivePrefix,
                                       text, pos);
@@ -2463,78 +2573,9 @@ public class DecimalFormat extends NumberFormat {
             return compareSimpleAffix(isNegative ? negativeSuffix : positiveSuffix,
                                       text, pos);
         }
+
     }
 
-  
-    private int comparePatternSet(Set patternSet, String text, int pos, Currency[] currency) {
-        int posAfterParsing = pos;
-        Iterator iter = patternSet.iterator();
-        while (iter.hasNext()) {
-            posAfterParsing = compareComplexAffix((String)iter.next(), text, pos, currency);
-            if (posAfterParsing != -1) {
-                return posAfterParsing;
-            }
-        }
-        return posAfterParsing;
-    }
-
-
-    private void setupCurrencyAffixForAllPattern() {
-        ULocale uloc = getLocale(ULocale.VALID_LOCALE);
-        if (uloc == null) {
-            uloc = symbols.getLocale(ULocale.VALID_LOCALE);
-        }
-        if (pluralCountToCurrencyUnitPattern == null) {
-            setupCurrencyPluralPattern(uloc);
-        }
-              
-        // CURRENCYSTYLE and ISOCURRENCYSTYLE should have the same
-        // prefix and suffix, so, only need to save one of them.
-        // do not save the actualy pattern.
-        onlyApplyPatternWithoutExpandAffix(getPattern(uloc, NumberFormat.CURRENCYSTYLE), false);
-        // fill in those affixes
-        negPrefixPatternForCurrency = new HashSet();
-        posPrefixPatternForCurrency = new HashSet();
-        negSuffixPatternForCurrency = new HashSet();
-        posSuffixPatternForCurrency = new HashSet();
-        if (negPrefixPattern != null) {
-            negPrefixPatternForCurrency.add(negPrefixPattern);
-        }
-        if (posPrefixPattern != null) {
-            posPrefixPatternForCurrency.add(posPrefixPattern);
-        }
-        if (negSuffixPattern != null) {
-            negSuffixPatternForCurrency.add(negSuffixPattern);
-        }
-        if (posSuffixPattern != null) {
-            posSuffixPatternForCurrency.add(posSuffixPattern);
-        }
-        Iterator iter = pluralCountToCurrencyUnitPattern.keySet().iterator();
-        Set currencyUnitPatternSet = new HashSet();
-        while (iter.hasNext()) {
-            String pluralCount = (String)iter.next();
-            String currencyPattern = (String)pluralCountToCurrencyUnitPattern.get(pluralCount);
-            if (currencyPattern != null &&
-                currencyUnitPatternSet.contains(currencyPattern) == false) {
-                currencyUnitPatternSet.add(currencyPattern);
-                // do not save the pattern
-                onlyApplyPatternWithoutExpandAffix(currencyPattern, false);
-                // fill in those affixes
-                if (negPrefixPattern != null) {
-                    negPrefixPatternForCurrency.add(negPrefixPattern);
-                }
-                if (posPrefixPattern != null) {
-                    posPrefixPatternForCurrency.add(posPrefixPattern);
-                }
-                if (negSuffixPattern != null) {
-                    negSuffixPatternForCurrency.add(negSuffixPattern);
-                }
-                if (posSuffixPattern != null) {
-                    posSuffixPatternForCurrency.add(posSuffixPattern);
-                }
-            }   
-        }
-    }
 
 
     /**
@@ -2646,9 +2687,9 @@ public class DecimalFormat extends NumberFormat {
      */
     private int compareComplexAffix(String affixPat, String text, int pos,
                                     Currency[] currency) {
+        int start = pos;
         for (int i=0; 
-             //i<affixPat.length() && pos >= 0 && pos < text.length(); ) {
-             i<affixPat.length() && pos >= 0; ) {
+             i < affixPat.length() && pos >= 0 && pos < text.length(); ) {
             char c = affixPat.charAt(i++);
             if (c == QUOTE) {
                 for (;;) {
@@ -2679,10 +2720,11 @@ public class DecimalFormat extends NumberFormat {
 
             switch (c) {
             case CURRENCY_SIGN:
-                // do currency choice parsing when currency choice format
-                // is not null and it is the simple currency format style.
-                // otherwise, perform generic currency matching, which is 
-                // a mixed styled parsing.
+                // since the currency names in choice format is saved
+                // the same way as other currency names, 
+                // do not need to do currency choice parsing here.
+                // the general currency parsing parse against all names,
+                // including names in choice format.
                 //assert(currency != null ||
                 //       (getCurrency() != null && currencyChoice != null));
                 boolean intl = i<affixPat.length() &&
@@ -2696,36 +2738,28 @@ public class DecimalFormat extends NumberFormat {
                     ++i;
                     intl = false;
                 }
-                if (currency == null && currencyChoice != null &&
-                    !intl && !plural) {
-                    ParsePosition ppos = new ParsePosition(pos);
-                    // Number n = 
-                    currencyChoice.parse(text, ppos);
-                    pos = (ppos.getIndex() == pos) ? -1 : ppos.getIndex();
+                // Parse generic currency -- anything for which we
+                // have a display name, or any 3-letter ISO code.
+                // Try to parse display name for our locale; first
+                // determine our locale.
+                ULocale uloc = getLocale(ULocale.VALID_LOCALE);
+                if (uloc == null) {
+                    // applyPattern has been called; use the symbols
+                    uloc = symbols.getLocale(ULocale.VALID_LOCALE);
+                }
+                // Delegate parse of display name => ISO code to Currency
+                ParsePosition ppos = new ParsePosition(pos);
+                // using Currency.parse to handle mixed style parsing.
+                String iso = Currency.parse(uloc, text, ppos);
+
+                // If parse succeeds, populate currency[0]
+                if (iso != null) {
+                    if (currency != null) {
+                        currency[0] = Currency.getInstance(iso);
+                    }
+                    pos = ppos.getIndex();
                 } else {
-                    // Parse generic currency -- anything for which we
-                    // have a display name, or any 3-letter ISO code.
-                    // Try to parse display name for our locale; first
-                    // determine our locale.
-                    ULocale uloc = getLocale(ULocale.VALID_LOCALE);
-                    if (uloc == null) {
-                        // applyPattern has been called; use the symbols
-                        uloc = symbols.getLocale(ULocale.VALID_LOCALE);
-                    }
-                    // Delegate parse of display name => ISO code to Currency
-                    ParsePosition ppos = new ParsePosition(pos);
-                    // using Currency.parse to handle mixed style parsing.
-                    String iso = Currency.parse(uloc, text, ppos);
-    
-                    // If parse succeeds, populate currency[0]
-                    if (iso != null) {
-                        if (currency != null) {
-                            currency[0] = Currency.getInstance(iso);
-                        }
-                        pos = ppos.getIndex();
-                    } else {
-                        pos = -1;
-                    }
+                    pos = -1;
                 }
                 continue;
             case PATTERN_PERCENT:
@@ -2744,7 +2778,7 @@ public class DecimalFormat extends NumberFormat {
             }
         }
 
-        return pos;
+        return pos - start;
     }
 
     /**
@@ -2753,9 +2787,6 @@ public class DecimalFormat extends NumberFormat {
      * isRuleWhiteSpace(ch) then match a run of white space in text.
      */
     static final int match(String text, int pos, int ch) {
-        if (pos >= text.length()) {
-            return -1;
-        }
         if (UCharacterProperty.isRuleWhiteSpace(ch)) {
             // Advance over run of white space in input text
             // Must see at least one white space char in input
@@ -2823,7 +2854,7 @@ public class DecimalFormat extends NumberFormat {
      */
     private void setCurrencyForSymbols() {
         /*Bug 4212072
-          Update the affix strings accroding to symbols in order to keep
+          Update the affix strings according to symbols in order to keep
           the affix strings up to date.
           [Richard/GCL]
         */
@@ -4175,7 +4206,7 @@ public class DecimalFormat extends NumberFormat {
 
     private void expandAffixAdjustWidth(String pluralCount) {
         /*Bug 4212072
-          Update the affix strings accroding to symbols in order to keep
+          Update the affix strings according to symbols in order to keep
           the affix strings up to date.
           [Richard/GCL]
         */
@@ -5113,11 +5144,43 @@ public class DecimalFormat extends NumberFormat {
      * Following are used to represent the affix patterns in currency plural
      * formats.
      */
-    private Set negPrefixPatternForCurrency = null;
-    private Set posPrefixPatternForCurrency = null;
-    private Set negSuffixPatternForCurrency = null;
-    private Set posSuffixPatternForCurrency = null;
+    
+    private static final class AffixForCurrency {
+        private String negPrefixPatternForCurrency = null; 
+        private String negSuffixPatternForCurrency = null; 
+        private String posPrefixPatternForCurrency = null; 
+        private String posSuffixPatternForCurrency = null; 
+        
+        public AffixForCurrency() {}
+        public AffixForCurrency(String negPrefix, String negSuffix,
+                                String posPrefix, String posSuffix) {
+            negPrefixPatternForCurrency = negPrefix;
+            negSuffixPatternForCurrency = negSuffix;
+            posPrefixPatternForCurrency = posPrefix;
+            posSuffixPatternForCurrency = posSuffix;
+        }
+
+        public String getNegPrefix() {
+            return negPrefixPatternForCurrency;
+        }
+
+        public String getNegSuffix() {
+            return negSuffixPatternForCurrency;
+        }
+
+        public String getPosPrefix() {
+            return posPrefixPatternForCurrency;
+        }
+
+        public String getPosSuffix() {
+            return posSuffixPatternForCurrency;
+        }
+    }
+
+    private Set affixPatternsForCurrency = null;
+
     private boolean isReadyForParsing = false;
+
     /*
      * Represents whether this is a currency format, and which
      * currency format style.

@@ -240,42 +240,80 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
     }
 
+    public void TestSpaceParsing() {
+        // the data are:
+        // the string to be parsed, parsed position, parsed error index
+        String[][] DATA = {
+            {"$124", "4", "-1"},
+            {"$124 $124", "4", "-1"},
+            {"$124 ", "4", "-1"},
+            {"$ 124 ", "5", "-1"},
+            {"$\u00A0124 ", "5", "-1"},
+            {" $ 124 ", "0", "0"}, // TODO: need to handle space correctly
+            {"124$", "0", "3"}, // TODO: need to handle space correctly
+            {"124 $", "5", "-1"},
+        };
+        NumberFormat foo = NumberFormat.getCurrencyInstance();
+        for (int i = 0; i < DATA.length; ++i) {
+            ParsePosition parsePosition = new ParsePosition(0);
+            Number result = foo.parse(DATA[i][0], parsePosition);
+            if (parsePosition.getIndex() != 
+                new Integer(DATA[i][1]).intValue() ||
+                parsePosition.getErrorIndex() !=
+                new Integer(DATA[i][2]).intValue()) {
+                errln("FAILED parse " + DATA[i][0]);
+            }
+            if (parsePosition.getErrorIndex() == -1 &&
+                result.doubleValue() != 124) {
+                errln("FAILED parse " + DATA[i][0]);
+            }
+        }
+    }
+
+
     public void TestMultiCurrencySign() {
         Object[][] DATA = {
-            // US
-            {Locale.US, "#,##0.00;-", "#,##0.00", "1234.56", "$1,234.56", "USD1,234.56", "US dollars1,234.56"}, 
-            {Locale.US, "#,##0.00;-", "#,##0.00", "-1234.56", "-$1,234.56", "-USD1,234.56", "-US dollars1,234.56"}, 
-            {Locale.US, "#,##0.00;-", "#,##0.00", "1", "$1.00", "USD1.00", "US dollar1.00"}, 
-            // CHINA
-            {Locale.CHINA, "#,##0.00;(", "#,##0.00)", "1234.56", "\uFFE51,234.56", "CNY1,234.56", "\u4EBA\u6C11\u5E011,234.56"},
-            {Locale.CHINA, "#,##0.00;(", "#,##0.00)", "-1234.56", "(\uFFE51,234.56)", "(CNY1,234.56)", "(\u4EBA\u6C11\u5E011,234.56)"},
-            {Locale.CHINA, "#,##0.00;(", "#,##0.00)", "1", "\uFFE51.00", "CNY1.00", "\u4EBA\u6C11\u5E011.00"}
+            // the fields in the following test are:
+            // locale, 
+            // currency pattern (with negative pattern), 
+            // currency number to be formatted,
+            // currency format using currency symbol name, such as "$" for USD,
+            // currency format using currency ISO name, such as "USD",
+            // currency format using plural name, such as "US dollars".
+            // for US locale
+            {Locale.US, "\u00A4#,##0.00;-\u00A4#,##0.00", "1234.56", "$1,234.56", "USD1,234.56", "US dollars1,234.56"}, 
+            {Locale.US, "\u00A4#,##0.00;-\u00A4#,##0.00", "-1234.56", "-$1,234.56", "-USD1,234.56", "-US dollars1,234.56"}, 
+            {Locale.US, "\u00A4#,##0.00;-\u00A4#,##0.00", "1", "$1.00", "USD1.00", "US dollar1.00"}, 
+            // for CHINA locale
+            {Locale.CHINA, "\u00A4#,##0.00;(\u00A4#,##0.00)", "1234.56", "\uFFE51,234.56", "CNY1,234.56", "\u4EBA\u6C11\u5E011,234.56"},
+            {Locale.CHINA, "\u00A4#,##0.00;(\u00A4#,##0.00)", "-1234.56", "(\uFFE51,234.56)", "(CNY1,234.56)", "(\u4EBA\u6C11\u5E011,234.56)"},
+            {Locale.CHINA, "\u00A4#,##0.00;(\u00A4#,##0.00)", "1", "\uFFE51.00", "CNY1.00", "\u4EBA\u6C11\u5E011.00"}
         };
 
-        char currency = 0x00A4;
+        char[] doubleCurrencySign = {0xA4, 0xA4};
+        String doubleCurrencyStr = new String(doubleCurrencySign);
+        char[] tripleCurrencySign = {0xA4, 0xA4, 0xA4};
+        String tripleCurrencyStr = new String(tripleCurrencySign);
+
         for (int i=0; i<DATA.length; ++i) {
             // Locale.US
             DecimalFormatSymbols sym = new DecimalFormatSymbols((Locale)DATA[i][0]);
+            String pat = Utility.unescape((String)DATA[i][1]);
             for (int j=1; j<=3; ++j) {
-                // "\xA4#,##0.00;-\xA4#,##0.00"
-                StringBuffer pat = new StringBuffer("");
-                for (int k=1; k<=j; k++) {
-                    pat.append(currency);
+                if (j == 2) {
+                    pat = pat.replaceAll("\\xA4", doubleCurrencyStr);
+                } else if (j == 3) {
+                    pat = pat.replaceAll("\\xA4\\xA4", tripleCurrencyStr);
                 }
-                pat.append((String)DATA[i][1]);
-                for (int k=1; k<=j; k++) {
-                    pat.append(currency);
-                }
-                pat.append((String)DATA[i][2]);
-                DecimalFormat fmt = new DecimalFormat(pat.toString(), sym);
-                String s = ((NumberFormat) fmt).format(new Double((String)DATA[i][3]));
-                if (!s.equals((String)DATA[i][3+j])) {
-                    errln("FAIL format: Expected " + (String)DATA[i][3+j]);
+                DecimalFormat fmt = new DecimalFormat(pat, sym);
+                String s = ((NumberFormat) fmt).format(new Double((String)DATA[i][2]));
+                if (!s.equals((String)DATA[i][2+j])) {
+                    errln("FAIL format: Expected " + (String)DATA[i][2+j]);
                 }
                 try {
-                    for (int k=4; k<=6; ++k) {
+                    for (int k=3; k<=5; ++k) {
                       if (fmt.parse((String)DATA[i][k]).doubleValue() != 
-                        (new Double((String)DATA[i][3])).doubleValue()) {
+                        (new Double((String)DATA[i][2])).doubleValue()) {
                         errln("FAILED parse " + DATA[i][k]);
                       }
                     }
@@ -405,7 +443,6 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
     public void TestCurrencyIsoPluralFormat() {
         String[] DATA = {
-            //"sk", "1", "USD", "1.00 $", "1,00\u00A0USD", "1,00 US dol\u00E1r",
             "en_US", "1", "USD", "$1.00", "USD1.00", "1.00 US dollar",
             "en_US", "1234.56", "USD", "$1,234.56", "USD1,234.56", "1,234.56 US dollars",
             "en_US", "-1234.56", "USD", "($1,234.56)", "(USD1,234.56)", "-1,234.56 US dollars",
@@ -415,6 +452,13 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             "zh_CN", "1234.56", "CHY", "CHY1,234.56", "CHY1,234.56", "1,234.56 CHY",
             "zh_CN", "1", "CNY", "\uFFE51.00", "CNY1.00", "1.00 \u4EBA\u6C11\u5E01",
             "zh_CN", "1234.56", "CNY", "\uFFE51,234.56", "CNY1,234.56", "1,234.56 \u4EBA\u6C11\u5E01", 
+            "ru_RU", "1", "RUB", "1,00\u00A0\u0440\u0443\u0431.", "1,00\u00A0RUB", "1,00 \u0420\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0439 \u0440\u0443\u0431\u043B\u044C",
+            "ru_RU", "2", "RUB", "2,00\u00A0\u0440\u0443\u0431.", "2,00\u00A0RUB", "2,00 \u0420\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0445 \u0440\u0443\u0431\u043B\u044F",
+            "ru_RU", "5", "RUB", "5,00\u00A0\u0440\u0443\u0431.", "5,00\u00A0RUB", "5,00 \u0420\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0445 \u0440\u0443\u0431\u043B\u0435\u0439",
+            // test locale without currency information
+            "ti_ET", "-1.23", "USD", "-US$1.23", "-USD1.23", "-1.23 USD",
+            // test choice format
+            "es_AR", "1", "INR", "Re.\u00A01,00", "INR\u00A01,00", "1,00 rupia india",
         };
         
         for (int i=0; i<DATA.length; i+=6) {

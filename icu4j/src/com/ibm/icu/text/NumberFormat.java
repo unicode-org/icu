@@ -1305,7 +1305,7 @@ public abstract class NumberFormat extends UFormat {
         // Here we assume that the locale passed in is in the canonical
         // form, e.g: pt_PT_@currency=PTE not pt_PT_PREEURO
         // This style wont work for currency plural format.
-        // For currency plural fomrat, the pattern is get from 
+        // For currency plural format, the pattern is get from 
         // the locale (from CurrencyUnitPatterns) without override.
         if(choice == CURRENCYSTYLE || choice == ISOCURRENCYSTYLE){
             String temp = symbols.getCurrencyPattern();
