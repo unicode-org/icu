@@ -139,15 +139,7 @@ conversion:table(nofallback) {
           :intvector{ 0,1,1,1,1,2,3,4,10,13 },
           :int{1}, :int{0}, "", "&C", :bin{""}
         }
-        // Test ticket 5691: Example from Peter Edberg.
-        {
-          "ISO-2022-JP",
-          :bin{ 1b244230212f7e742630801b284a621b2458631b2842648061 },
-          "\u4e9c\ufffd\u7199\ufffdb\ufffd$Xcd\ufffda",
-          :intvector{ 3,5,7,9,14,15,16,17,18,22,23,24 },
-          :int{1}, :int{0}, "", "?", :bin{""}
-        }
-        // ISO-2022-JP-2 with illegal single-shift SS2 and SS3 sequences.
+        // Test ticket 5691: ISO-2022-JP-2 with illegal single-shift SS2 and SS3 sequences.
         // The first ESC N comes before its designator sequence, the last sequence is ESC+space.
         {
           "ISO-2022-JP-2",
@@ -170,7 +162,7 @@ conversion:table(nofallback) {
           :intvector{ 0,1,1,1,1,2,3,8,11,13,14,14,14,14,15,16 },
           :int{1}, :int{0}, "", "&C", :bin{""}
         }
-        // HZ with illegal tilde sequences.
+        // Test ticket 5691: HZ with illegal tilde sequences.
         {
           "HZ",
           :bin{ 417e20427e21437e80447e7b41417e207e41427e7f41437e7d5a },
@@ -179,6 +171,14 @@ conversion:table(nofallback) {
                       12,14,14,14,14,14,14,14,14,16,16,16,16,17,19,19,19,19,19,19,19,19,21, // DBCS
                       25 },                                                                 // SBCS
           :int{1}, :int{0}, "", "&C", :bin{""}
+        }
+        // Test ticket 5691: Example from Peter Edberg.
+        {
+          "ISO-2022-JP",
+          :bin{ 1b244230212f7e742630801b284a621b2458631b2842648061 },
+          "\u4e9c\ufffd\u7199\ufffdb\ufffd$Xcd\ufffda",
+          :intvector{ 3,5,7,9,14,15,16,17,18,22,23,24 },
+          :int{1}, :int{0}, "", "?", :bin{""}
         }
         // Test bug 6071 (2:1 Unicode:charset SBCS mapping).
         {
