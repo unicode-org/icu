@@ -246,25 +246,26 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                      * - If any of the non-initial bytes could be the start of a character,
                      *   we stop the illegal sequence before the first one of those.
                      *
-                     * In HZ DBCS, if both bytes are valid or both bytes are outside
-                     * the 21..7d/7e range, then we treat them as a pair.
-                     * Otherwise (valid lead byte + illegal trail byte, or vice versa)
+                     * In HZ DBCS, if the second byte is in the 21..7e range,
                      * we report only the first byte as the illegal sequence.
+                     * Otherwise we convert or report the pair of bytes.
                      */
                     leadIsOk = (uint8_t)(leadByte - 0x21) <= (0x7d - 0x21);
                     trailIsOk = (uint8_t)(mySourceChar - 0x21) <= (0x7e - 0x21);
-                    if (leadIsOk == trailIsOk) {
-                        if (leadIsOk) {
-                            tempBuf[0] = (char) (leadByte+0x80) ;
-                            tempBuf[1] = (char) (mySourceChar+0x80);
-                            targetUniChar = ucnv_MBCSSimpleGetNextUChar(myData->gbConverter->sharedData,
-                                tempBuf, 2, args->converter->useFallback);
-                        }
-                        /* add another bit so that the code below writes 2 bytes in case of error */
-                        mySourceChar= 0x10000 | (leadByte << 8) | mySourceChar;
-                    } else {
+                    if (leadIsOk && trailIsOk) {
+                        tempBuf[0] = (char) (leadByte+0x80) ;
+                        tempBuf[1] = (char) (mySourceChar+0x80);
+                        targetUniChar = ucnv_MBCSSimpleGetNextUChar(myData->gbConverter->sharedData,
+                            tempBuf, 2, args->converter->useFallback);
+                        mySourceChar= (leadByte << 8) | mySourceChar;
+                    } else if (trailIsOk) {
+                        /* report a single illegal byte and continue with the following DBCS starter byte */
                         --mySource;
                         mySourceChar = (int32_t)leadByte;
+                    } else {
+                        /* report a pair of illegal bytes if the second byte is not a DBCS starter */
+                        /* add another bit so that the code below writes 2 bytes in case of error */
+                        mySourceChar= 0x10000 | (leadByte << 8) | mySourceChar;
                     }
                     args->converter->toUnicodeStatus =0x00;
                 }

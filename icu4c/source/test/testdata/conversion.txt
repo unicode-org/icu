@@ -139,6 +139,14 @@ conversion:table(nofallback) {
           :intvector{ 0,1,1,1,1,2,3,4,10,13 },
           :int{1}, :int{0}, "", "&C", :bin{""}
         }
+        // Test ticket 5691: Example from Peter Edberg.
+        {
+          "ISO-2022-JP",
+          :bin{ 1b244230212f7e742630801b284a621b2458631b2842648061 },
+          "\u4e9c\ufffd\u7199\ufffdb\ufffd$Xcd\ufffda",
+          :intvector{ 3,5,7,9,14,15,16,17,18,22,23,24 },
+          :int{1}, :int{0}, "", "?", :bin{""}
+        }
         // ISO-2022-JP-2 with illegal single-shift SS2 and SS3 sequences.
         // The first ESC N comes before its designator sequence, the last sequence is ESC+space.
         {
@@ -184,8 +192,8 @@ conversion:table(nofallback) {
         {
           "HZ",
           :bin{ 7e7b21212120217e217f772100007e217e7e7d207e7e807e0a2b },
-          "\u3000\ufffd\ufffd\u3013\ufffd\ufffd\u9ccc\ufffd\ufffd\u3013 ~\ufffd+",
-          :intvector{ 2,4,5,6,8,9,10,12,14,15,19,20,22,25 },
+          "\u3000\ufffd\u3013\ufffd\u9ccc\ufffd\ufffd\u3013 ~\ufffd+",
+          :intvector{ 2,4,6,8,10,12,14,15,19,20,22,25 },
           :int{1}, :int{1}, "", "?", :bin{""}
         }
         // improve coverage of ISO-2022-JP converter with hardcoded JIS X 0201 and
@@ -193,8 +201,8 @@ conversion:table(nofallback) {
         {
           "ISO-2022-JP",
           :bin{ 1b284a7d7e801b2442306c20217f7e21202160217f22202225227f5f211b2842 },
-          "}\u203e\ufffd\u4e00\ufffd\ufffd\ufffd\ufffd\ufffd\xf7\ufffd\ufffd\ufffd\ufffd\u25b2\ufffd\ufffd\u6f3e",
-          :intvector{ 3,4,5,9,11,12,13,14,16,17,19,20,21,22,23,25,26,27 },
+          "}\u203e\ufffd\u4e00\ufffd\ufffd\ufffd\ufffd\xf7\ufffd\ufffd\u25b2\ufffd\u6f3e",
+          :intvector{ 3,4,5,9,11,12,14,16,17,19,21,23,25,27 },
           :int{1}, :int{1}, "", "?", :bin{""}
         }
         // improve coverage of ISO-2022-JP converter by simulating erroneous input
