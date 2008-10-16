@@ -61,14 +61,14 @@ public class TimeUnitFormat extends MeasureFormat {
     /**
      * Constant for full name style format. 
      * For example, the full name for "hour" in English is "hour" or "hours".
-     * @draft ICU 4.1.1
+     * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
     public static final int FULL_NAME = 0;
     /**
      * Constant for abbreviated name style format. 
      * For example, the abbreviated name for "hour" in English is "hr" or "hrs".
-     * @draft ICU 4.1.1
+     * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
     public static final int ABBREVIATED_NAME = 1;
@@ -131,7 +131,7 @@ public class TimeUnitFormat extends MeasureFormat {
      * @param style    format style, either FULL_NAME or ABBREVIATED_NAME style.
      * @throws IllegalArgumentException if the style is not FULL_NAME or
      *                                  ABBREVIATED_NAME style.
-     * @draft ICU 4.1.1
+     * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
     public TimeUnitFormat(ULocale locale, int style) {
@@ -146,7 +146,7 @@ public class TimeUnitFormat extends MeasureFormat {
     /**
      * Create TimeUnitFormat given a Locale and a formatting style: full or
      * abbreviated.
-     * @draft ICU 4.1.1
+     * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
     public TimeUnitFormat(Locale locale, int style) {
