@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2006, International Business Machines
+*   Copyright (C) 2002-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  iotest.cpp
@@ -168,10 +168,10 @@ printBits(const iostream&  stream)
 
 void
 testString(
-            UnicodeString&        str,
+            UnicodeString&  str,
             const char*     testString,
-            const char* expectedString,
-            int32_t expectedStatus)
+            const UChar*    expectedString,
+            int32_t         expectedStatus)
 {
 #ifdef USE_SSTREAM
     stringstream sstrm;
@@ -191,12 +191,24 @@ testString(
 
     if (getBitStatus(sstrm) != expectedStatus) {
         printBits(sstrm);
-        log_err("Expected status %d, Got %d. See verbose output for details\n", getBitStatus(sstrm), expectedStatus);
+        log_err("Expected status %d, Got %d. See verbose output for details\n", expectedStatus, getBitStatus(sstrm));
     }
     if (str != UnicodeString(expectedString)) {
         log_err("Did not get expected results from \"%s\", expected \"%s\"\n", testString, expectedString);
     }
 }
+
+#define EOF_TESTCASE_1 ""
+#define EOF_TESTCASE_2 "foo"
+#define EOF_TESTCASE_3 "   "
+#define EOF_TESTCASE_4 "   bar"
+#define EOF_TESTCASE_5 "bar   "
+#define EOF_TESTCASE_6 "   bar   "
+
+#define EOF_RESULT_EXPECTED_A ""
+#define EOF_RESULT_EXPECTED_B "foo"
+#define EOF_RESULT_EXPECTED_C "unchanged"
+#define EOF_RESULT_EXPECTED_D "bar"
 
 static void U_CALLCONV TestStreamEOF(void)
 {
@@ -228,15 +240,42 @@ static void U_CALLCONV TestStreamEOF(void)
     fs.close();
 
     log_verbose("Testing operator >> for UnicodeString...\n");
-
+    
+    /* The test cases needs to be converted to the default codepage.  However, the stream operator needs char* so u_austrcpy is called. */
+    U_STRING_DECL(testCase1, EOF_TESTCASE_1, 0);
+    U_STRING_DECL(testCase2, EOF_TESTCASE_2, 3);
+    U_STRING_DECL(testCase3, EOF_TESTCASE_3, 3);
+    U_STRING_DECL(testCase4, EOF_TESTCASE_4, 6);
+    U_STRING_DECL(testCase5, EOF_TESTCASE_5, 6);
+    U_STRING_DECL(testCase6, EOF_TESTCASE_6, 9);
+    
+    U_STRING_INIT(testCase1, EOF_TESTCASE_1, 0);
+    U_STRING_INIT(testCase2, EOF_TESTCASE_2, 3);
+    U_STRING_INIT(testCase3, EOF_TESTCASE_3, 3);
+    U_STRING_INIT(testCase4, EOF_TESTCASE_4, 6);
+    U_STRING_INIT(testCase5, EOF_TESTCASE_5, 6);
+    U_STRING_INIT(testCase6, EOF_TESTCASE_6, 9);
+    
+    U_STRING_DECL(expectedResultA, EOF_RESULT_EXPECTED_A, 0);
+    U_STRING_DECL(expectedResultB, EOF_RESULT_EXPECTED_B, 3);
+    U_STRING_DECL(expectedResultC, EOF_RESULT_EXPECTED_C, 9);
+    U_STRING_DECL(expectedResultD, EOF_RESULT_EXPECTED_D, 3);
+    
+    U_STRING_INIT(expectedResultA, EOF_RESULT_EXPECTED_A, 0);
+    U_STRING_INIT(expectedResultB, EOF_RESULT_EXPECTED_B, 3);
+    U_STRING_INIT(expectedResultC, EOF_RESULT_EXPECTED_C, 9);
+    U_STRING_INIT(expectedResultD, EOF_RESULT_EXPECTED_D, 3);
+    
     UnicodeString UStr;
-    testString(UStr, "", "", IOSTREAM_EOF|IOSTREAM_FAIL);
-    testString(UStr, "foo", "foo", IOSTREAM_EOF);
-    UStr = "unchanged";
-    testString(UStr, "   ", "unchanged", IOSTREAM_EOF|IOSTREAM_FAIL);
-    testString(UStr, "   bar", "bar", IOSTREAM_EOF);
-    testString(UStr, "bar   ", "bar", IOSTREAM_GOOD);
-    testString(UStr, "   bar   ", "bar", IOSTREAM_GOOD);
+    UnicodeString expectedResults;
+    char testcase[10];
+    testString(UStr, u_austrcpy(testcase, testCase1), expectedResultA, IOSTREAM_EOF|IOSTREAM_FAIL);
+    testString(UStr, u_austrcpy(testcase, testCase2), expectedResultB, IOSTREAM_EOF);
+    UStr = UnicodeString(expectedResultC);
+    testString(UStr, u_austrcpy(testcase, testCase3), expectedResultC, IOSTREAM_EOF|IOSTREAM_FAIL);
+    testString(UStr, u_austrcpy(testcase, testCase4), expectedResultD, IOSTREAM_EOF);
+    testString(UStr, u_austrcpy(testcase, testCase5), expectedResultD, IOSTREAM_GOOD);
+    testString(UStr, u_austrcpy(testcase, testCase6), expectedResultD, IOSTREAM_GOOD);
 }
 U_CDECL_END
 
