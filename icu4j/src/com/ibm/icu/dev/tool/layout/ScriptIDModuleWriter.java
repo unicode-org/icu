@@ -34,96 +34,58 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
         String checkICUVersion, previousVersion;
         int previousMajor, previousMinor, arrayListIndex=0, numberOfScripts;
         boolean initialheader = false;
-        if(totalScript==previousTotalScripts){ // No new scripts have been added
-           MessageFormat format = new MessageFormat(scriptPreamble); 
-           for(int script=minScript;script<=maxScript;){
-                checkICUVersion = (String)scriptVersionNumber.get(arrayListIndex);
-                checkICUVersion = checkICUVersion.substring(checkICUVersion.indexOf("_")+1);
-                previousVersion = checkICUVersion.substring(0, checkICUVersion.indexOf("="));
-                previousMajor = Integer.parseInt(previousVersion.substring(0,previousVersion.indexOf(".")));
-                previousMinor = Integer.parseInt(previousVersion.substring(previousVersion.indexOf(".")+1));
-                numberOfScripts = Integer.parseInt(checkICUVersion.substring(checkICUVersion.indexOf("=")+1));
-                
-                Object args[] = {new Integer(previousMajor), new Integer(previousMinor)};
-                //Check for the initial header. It should be written only one time
-                if(!initialheader){
-                    output.println(format.format(args));
-                    initialheader = true;
-                }else{
-                    if((verMajor-previousMajor)>=1){
-                        format = new MessageFormat(scriptPreambleStable); 
-                        output.println(format.format(args));
-                    }else{
-                        format = new MessageFormat(scriptPreambleDraft); 
-                        output.println(format.format(args));
-                    }
-                }
-                
-                for(int i=0;i<numberOfScripts;i++){
-                    output.print("    ");
-                    output.print(scriptData.getTagLabel(script));
-                    output.print("ScriptCode = ");
-                    
-                    if (script < 10) {
-                        output.print(" ");
-                    }
-                    
-                    output.print(script);
-                    output.println(",");
-                    script++;
-                }
-                arrayListIndex++;
-           }
-        }else{ 
-            // New scripts have been added
-            MessageFormat format = new MessageFormat(scriptPreamble); 
-            //Processing old scripts
-            for(int script=minScript;script<=previousTotalScripts;){
-                checkICUVersion = (String)scriptVersionNumber.get(arrayListIndex);
-                checkICUVersion = checkICUVersion.substring(checkICUVersion.indexOf("_")+1);
-                previousVersion = checkICUVersion.substring(0, checkICUVersion.indexOf("="));
-                previousMajor = Integer.parseInt(previousVersion.substring(0,previousVersion.indexOf(".")));
-                previousMinor = Integer.parseInt(previousVersion.substring(previousVersion.indexOf(".")+1));
-                numberOfScripts = Integer.parseInt(checkICUVersion.substring(checkICUVersion.indexOf("=")+1));
-                
-                Object args[] = {new Integer(previousMajor), new Integer(previousMinor)};
-                
-                //Check for the initial header. It should be written only one time
-                if(!initialheader){
-                    output.println(format.format(args));
-                    initialheader = true;
-                }else{
-                    if((verMajor-previousMajor)>=1){
-                        format = new MessageFormat(scriptPreambleStable); 
-                        output.println(format.format(args));
-                    }else{
-                        format = new MessageFormat(scriptPreambleDraft); 
-                        output.println(format.format(args));
-                    }
-                }
-                
-                for(int i=0;i<numberOfScripts;i++){
-                    output.print("    ");
-                    output.print(scriptData.getTagLabel(script));
-                    output.print("ScriptCode = ");
-                    
-                    if (script < 10) {
-                        output.print(" ");
-                    }
-                    
-                    output.print(script);
-                    output.println(",");
-                    script++;
-                }
-                arrayListIndex++;
-           }
-          
-            //Processing newly added scripts
+        boolean newScripts = false;
+        
+        if(totalScript>previousTotalScripts){
+            newScripts = true;
+        }
+        //Processing old scripts
+        MessageFormat format = new MessageFormat(scriptPreamble); 
+        for(int script=minScript;script<=previousTotalScripts;){
+             checkICUVersion = (String)scriptVersionNumber.get(arrayListIndex);
+             checkICUVersion = checkICUVersion.substring(checkICUVersion.indexOf("_")+1);
+             previousVersion = checkICUVersion.substring(0, checkICUVersion.indexOf("="));
+             previousMajor = Integer.parseInt(previousVersion.substring(0,previousVersion.indexOf(".")));
+             previousMinor = Integer.parseInt(previousVersion.substring(previousVersion.indexOf(".")+1));
+             numberOfScripts = Integer.parseInt(checkICUVersion.substring(checkICUVersion.indexOf("=")+1));
+             
+             Object args[] = {new Integer(previousMajor), new Integer(previousMinor)};
+             //Check for the initial header. It should be written only one time
+             if(!initialheader){
+                 output.println(format.format(args));
+                 initialheader = true;
+             }else{
+                 if((verMajor-previousMajor)>=1){
+                     format = new MessageFormat(scriptPreambleStable); 
+                     output.println(format.format(args));
+                 }else{
+                     format = new MessageFormat(scriptPreambleDraft); 
+                     output.println(format.format(args));
+                 }
+             }
+             
+             for(int i=0;i<numberOfScripts;i++){
+                 output.print("    ");
+                 output.print(scriptData.getTagLabel(script));
+                 output.print("ScriptCode = ");
+                 
+                 if (script < 10) {
+                     output.print(" ");
+                 }
+                 
+                 output.print(script);
+                 output.println(",");
+                 script++;
+             }
+             arrayListIndex++;
+        }
+        
+        if(newScripts){//Processing newly added scripts
             format = new MessageFormat(scriptPreambleDraft); 
             Object args[] = {new Integer(verMajor), new Integer(verMinor)};
             output.println(format.format(args));
             
-            for (int script = previousTotalScripts+1; script <= maxScript; script += 1) {
+            for (int script = previousTotalScripts+1; script <= totalScript; script += 1) {
                 output.print("    ");
                 output.print(scriptData.getTagLabel(script));
                 output.print("ScriptCode = ");
@@ -162,98 +124,59 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
         String checkICUVersion, previousVersion;
         int previousMajor, previousMinor, arrayListIndex=0, numberOfLanguages;
         boolean initialheader = false;
-        if(totalLanguage==previousTotalLanguages){ // No new language have been added
-           MessageFormat format = new MessageFormat(languagePreamble); 
-           for(int language=minLanguage;language<=maxLanguage;){
-                checkICUVersion = (String)languageVersionNumber.get(arrayListIndex);
-                checkICUVersion = checkICUVersion.substring(checkICUVersion.indexOf("_")+1);
-                previousVersion = checkICUVersion.substring(0, checkICUVersion.indexOf("="));
-                previousMajor = Integer.parseInt(previousVersion.substring(0,previousVersion.indexOf(".")));
-                previousMinor = Integer.parseInt(previousVersion.substring(previousVersion.indexOf(".")+1));
-                numberOfLanguages = Integer.parseInt(checkICUVersion.substring(checkICUVersion.indexOf("=")+1));
-                
-                Object args[] = {new Integer(previousMajor), new Integer(previousMinor)};
-               
-                //Check for the initial header. It should be written only one time
-                if(!initialheader){
-                    output.println(format.format(args));
-                    initialheader = true;
-                }else{
-                    if((verMajor-previousMajor)>=1){
-                        format = new MessageFormat(languagePreambleStable); 
-                        output.println(format.format(args));
-                    }else{
-                        format = new MessageFormat(languagePreambleDraft); 
-                        output.println(format.format(args));
-                    }
-                }
-                
-                for(int i=0;i<numberOfLanguages;i++){
-                    output.print("    ");
-                    output.print(languageData.getTagLabel(language).toLowerCase());
-                    output.print("LanguageCode = ");
-                    
-                    if (language < 10) {
-                        output.print(" ");
-                    }
-                    
-                    output.print(language);
-                    output.println(",");
-                    language++;
-                }
-                arrayListIndex++;
-           }
-        }else{ 
-            // New languages have been added
-            MessageFormat format = new MessageFormat(languagePreamble); 
+        boolean newLanguage = false;
+        
+        if(totalLanguage>previousTotalLanguages){
+            newLanguage = true;
+        }
+        //Processing old languages
+        MessageFormat format = new MessageFormat(languagePreamble); 
+        for(int language=minLanguage;language<=previousTotalLanguages;){
+             checkICUVersion = (String)languageVersionNumber.get(arrayListIndex);
+             checkICUVersion = checkICUVersion.substring(checkICUVersion.indexOf("_")+1);
+             previousVersion = checkICUVersion.substring(0, checkICUVersion.indexOf("="));
+             previousMajor = Integer.parseInt(previousVersion.substring(0,previousVersion.indexOf(".")));
+             previousMinor = Integer.parseInt(previousVersion.substring(previousVersion.indexOf(".")+1));
+             numberOfLanguages = Integer.parseInt(checkICUVersion.substring(checkICUVersion.indexOf("=")+1));
+             
+             Object args[] = {new Integer(previousMajor), new Integer(previousMinor)};
             
-            //Processing old language
-            for(int language=minLanguage;language<=previousTotalLanguages;){
-                checkICUVersion = (String)languageVersionNumber.get(arrayListIndex);
-                checkICUVersion = checkICUVersion.substring(checkICUVersion.indexOf("_")+1);
-                previousVersion = checkICUVersion.substring(0, checkICUVersion.indexOf("="));
-                previousMajor = Integer.parseInt(previousVersion.substring(0,previousVersion.indexOf(".")));
-                previousMinor = Integer.parseInt(previousVersion.substring(previousVersion.indexOf(".")+1));
-                numberOfLanguages = Integer.parseInt(checkICUVersion.substring(checkICUVersion.indexOf("=")+1));
-                
-                Object args[] = {new Integer(previousMajor), new Integer(previousMinor)};
-               
-                //Check for the initial header. It should be written only one time
-                if(!initialheader){
-                    output.println(format.format(args));
-                    initialheader = true;
-                }else{
-                    if((verMajor-previousMajor)>=1){
-                        format = new MessageFormat(languagePreambleStable); 
-                        output.println(format.format(args));
-                    }else{
-                        format = new MessageFormat(languagePreambleDraft); 
-                        output.println(format.format(args));
-                    }
-                }
-                
-                for(int i=0;i<=numberOfLanguages;i++){
-                    output.print("    ");
-                    output.print(languageData.getTagLabel(language).toLowerCase());
-                    output.print("LanguageCode = ");
-                    
-                    if (language < 10) {
-                        output.print(" ");
-                    }
-                    
-                    output.print(language);
-                    output.println(",");
-                    language++;
-                }
-                arrayListIndex++;
-           }
-            
-          //Processing newly added languages
+             //Check for the initial header. It should be written only one time
+             if(!initialheader){
+                 output.println(format.format(args));
+                 initialheader = true;
+             }else{
+                 if((verMajor-previousMajor)>=1){
+                     format = new MessageFormat(languagePreambleStable); 
+                     output.println(format.format(args));
+                 }else{
+                     format = new MessageFormat(languagePreambleDraft); 
+                     output.println(format.format(args));
+                 }
+             }
+             
+             for(int i=0;i<numberOfLanguages;i++){
+                 output.print("    ");
+                 output.print(languageData.getTagLabel(language).toLowerCase());
+                 output.print("LanguageCode = ");
+                 
+                 if (language < 10) {
+                     output.print(" ");
+                 }
+                 
+                 output.print(language);
+                 output.println(",");
+                 language++;
+             }
+             arrayListIndex++;
+        }
+        if(newLanguage){
+            //Processing newly added languages
             format = new MessageFormat(languagePreambleDraft); 
             Object args[] = {new Integer(verMajor), new Integer(verMinor)};
             output.println(format.format(args));
             
-            for (int langauge = previousTotalLanguages+1; langauge <= maxLanguage; langauge += 1) {
+            for (int langauge = previousTotalLanguages+1; langauge <= totalLanguage; langauge += 1) {
                 output.print("    ");
                 output.print(languageData.getTagLabel(langauge).toLowerCase());
                 output.print("ScriptCode = ");
