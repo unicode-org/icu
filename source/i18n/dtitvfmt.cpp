@@ -12,7 +12,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-//FIXME: put in compilation
+//TODO: put in compilation
 //#define DTITVFMT_DEBUG 1
 
 #include "cstring.h"
@@ -775,7 +775,6 @@ DateIntervalFormat::getDateTimeSkeleton(const UnicodeString& skeleton,
             ++vCount;
             timeSkeleton.append(ch);
             break;
-          // FIXME: what is the difference between CAP_V/Z and LOW_V/Z
           case CAP_V:
           case CAP_Z:
           case LOW_K:
