@@ -406,6 +406,9 @@ utrie_fold(UNewTrie *trie, UNewTrieGetFoldedValue *getFoldedValue, UErrorCode *p
     uint32_t value;
     UChar32 c;
     int32_t indexLength, block;
+#ifdef UTRIE_DEBUG
+    int countLeadCUWithData=0;
+#endif
 
     index=trie->index;
 
@@ -455,7 +458,8 @@ utrie_fold(UNewTrie *trie, UNewTrieGetFoldedValue *getFoldedValue, UErrorCode *p
             c&=~0x3ff;
 
 #ifdef UTRIE_DEBUG
-            printf("supplementary data for lead surrogate U+%04lx\n", (long)(0xd7c0+(c>>10)));
+            ++countLeadCUWithData;
+            /* printf("supplementary data for lead surrogate U+%04lx\n", (long)(0xd7c0+(c>>10))); */
 #endif
 
             /* is there an identical index block? */
@@ -488,6 +492,11 @@ utrie_fold(UNewTrie *trie, UNewTrieGetFoldedValue *getFoldedValue, UErrorCode *p
             c+=UTRIE_DATA_BLOCK_LENGTH;
         }
     }
+#ifdef UTRIE_DEBUG
+    if(countLeadCUWithData>0) {
+        printf("supplementary data for %d lead surrogates\n", countLeadCUWithData);
+    }
+#endif
 
     /*
      * index array overflow?
@@ -784,6 +793,11 @@ utrie_serialize(UNewTrie *trie, void *dt, int32_t capacity,
     if(length>capacity) {
         return length; /* preflighting */
     }
+
+#ifdef UTRIE_DEBUG
+    printf("**UTrieLengths(serialize)** index:%6ld  data:%6ld  serialized:%6ld\n",
+           (long)trie->indexLength, (long)trie->dataLength, (long)length);
+#endif
 
     /* set the header fields */
     header=(UTrieHeader *)data;

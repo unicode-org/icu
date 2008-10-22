@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2006, International Business Machines
+*   Copyright (C) 2001-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -168,7 +168,9 @@ struct UTrie {
     UBool isLatin1Linear;
 };
 
+#ifndef __UTRIE2_H__
 typedef struct UTrie UTrie;
+#endif
 
 /** Internal trie getter from an offset (0 if c16 is a BMP/lead units) and a 16-bit unit */
 #define _UTRIE_GET_RAW(trie, data, offset, c16) \

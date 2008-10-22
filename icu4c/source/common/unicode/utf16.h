@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -81,6 +81,15 @@
  * @stable ICU 2.4
  */
 #define U16_IS_SURROGATE_LEAD(c) (((c)&0x400)==0)
+
+/**
+ * Assuming c is a surrogate code point (U16_IS_SURROGATE(c)),
+ * is it a trail surrogate?
+ * @param c 16-bit code unit
+ * @return TRUE or FALSE
+ * @draft ICU 4.2
+ */
+#define U16_IS_SURROGATE_TRAIL(c) (((c)&0x400)!=0)
 
 /**
  * Helper constant for U16_GET_SUPPLEMENTARY.

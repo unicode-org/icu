@@ -1096,6 +1096,7 @@ AC_CONFIG_FILES([icudefs.mk \
 		test/perf/usetperf/Makefile \
 		test/perf/ustrperf/Makefile \
 		test/perf/utfperf/Makefile \
+		test/perf/utrie2perf/Makefile \
 		samples/Makefile samples/date/Makefile \
 		samples/cal/Makefile samples/layout/Makefile \
 		common/unicode/platform.h])

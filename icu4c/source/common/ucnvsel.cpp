@@ -33,7 +33,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/ustring.h"
 #include "unicode/uchriter.h"
-#include "utrie.h"
+#include "utrie2.h"
 #include "propsvec.h"
 #include "uenumimp.h"
 #include "cmemory.h"
@@ -53,9 +53,7 @@ U_NAMESPACE_USE
 
 
 struct UConverterSelector {
-  uint8_t* serializedTrie;
-  uint32_t serializedTrieSize;
-  UTrie constructedTrie;     // 16 bit trie containing offsets into pv
+  UTrie2 *trie;              // 16 bit trie containing offsets into pv
   uint32_t* pv;              // table of bits!
   int32_t pvCount;
   char** encodings;          // which encodings did user ask to use?
@@ -64,10 +62,10 @@ struct UConverterSelector {
 
 
 /* internal function */
-void generateSelectorData(UConverterSelector* result,
-                          const USet* excludedEncodings,
-                          const UConverterUnicodeSet whichSet,
-                          UErrorCode* status);
+static void generateSelectorData(UConverterSelector* result,
+                                 const USet* excludedCodePoints,
+                                 const UConverterUnicodeSet whichSet,
+                                 UErrorCode* status);
 
 
 U_CAPI int32_t ucnvsel_swap(const UDataSwapper *ds,
@@ -116,6 +114,7 @@ U_CAPI UConverterSelector* ucnvsel_open(const char* const*  converterList,
 
   // make a backup copy of the list of converters
   if (converterList != NULL && converterListSize > 0) {
+    // TODO: reduce code duplication, combine the explicit-list and all-converters handling
     newSelector->encodings =
       (char**)uprv_malloc(converterListSize*sizeof(char*));
     // out of memory. Give user back the 100 bytes or so
@@ -131,6 +130,12 @@ U_CAPI UConverterSelector* ucnvsel_open(const char* const*  converterList,
     for (i = 0 ; i < converterListSize ; i++) {
       totalSize += uprv_strlen(converterList[i])+1;
     }
+    // 4-align the totalSize to 4-align the trie in the serialized form
+    int32_t encodingStrPadding = totalSize & 3;
+    if (encodingStrPadding != 0) {
+      encodingStrPadding = 4 - encodingStrPadding;
+    }
+    totalSize += encodingStrPadding;
     allStrings = (char*) uprv_malloc(totalSize);
     //out of memory :(
     if (!allStrings) {
@@ -146,6 +151,10 @@ U_CAPI UConverterSelector* ucnvsel_open(const char* const*  converterList,
       allStrings += uprv_strlen(newSelector->encodings[i]) + 1;  // calling strlen
         // twice per string is probably faster than allocating memory to
         // cache the lengths!
+    }
+    while (encodingStrPadding > 0) {
+      *allStrings++ = (char)0xff;
+      --encodingStrPadding;
     }
   } else {
     int32_t count = ucnv_countAvailable();
@@ -164,6 +173,12 @@ U_CAPI UConverterSelector* ucnvsel_open(const char* const*  converterList,
       const char* conv_moniker = ucnv_getAvailableName(i);
       totalSize += uprv_strlen(conv_moniker)+1;
     }
+    // 4-align the totalSize to 4-align the trie in the serialized form
+    int32_t encodingStrPadding = totalSize & 3;
+    if (encodingStrPadding != 0) {
+      encodingStrPadding = 4 - encodingStrPadding;
+    }
+    totalSize += encodingStrPadding;
     allStrings = (char*) uprv_malloc(totalSize);
     //out of memory :(
     if (!allStrings) {
@@ -179,6 +194,10 @@ U_CAPI UConverterSelector* ucnvsel_open(const char* const*  converterList,
       allStrings += uprv_strlen(conv_moniker) + 1;  // calling strlen twice per
         // string is probably faster than allocating memory to cache the
         // lengths!
+    }
+    while (encodingStrPadding > 0) {
+      *allStrings++ = (char)0xff;
+      --encodingStrPadding;
     }
     converterListSize = ucnv_countAvailable();
   }
@@ -205,11 +224,7 @@ U_CAPI void ucnvsel_close(UConverterSelector *sel) {
   uprv_free(sel->encodings[0]);
   uprv_free(sel->encodings);
   upvec_close(sel->pv);
-  if (sel->serializedTrie) {  // this can be reached when
-    // generateSelectorData() has failed, and
-    // the trie is not serialized yet!
-    uprv_free(sel->serializedTrie);
-  }
+  utrie2_close(sel->trie);
   uprv_free(sel);
 }
 
@@ -227,6 +242,10 @@ U_CAPI UConverterSelector* ucnvsel_unserialize(const char* buffer,
     return NULL;
   }
 
+  // TODO: check and document data alignment as usual
+  // TODO: require that the input memory remains valid while this selector
+  //       is in use, and don't copy the memory?
+  // TODO: propose renaming to ucnvsel_openFromSerialized()
   UConverterSelector* sel;
   int32_t i = 0;  // for the for loop
   // check length!
@@ -284,6 +303,8 @@ U_CAPI UConverterSelector* ucnvsel_unserialize(const char* buffer,
 
   length -= 3 * sizeof(int32_t); //sig, Asciiness, and pvCount
   // end of check length!
+  // TODO: fix screwed-up length counting and checking --
+  //       at the end, the trie size should be exactly the remaining length
 
   sel = (UConverterSelector*)uprv_malloc(sizeof(UConverterSelector));
   //out of memory :(
@@ -297,7 +318,7 @@ U_CAPI UConverterSelector* ucnvsel_unserialize(const char* buffer,
   buffer+=sizeof(int32_t);
 
   // check length
-  if (length < (sel->pvCount+1)*sizeof(uint32_t)) {
+  if (length < (int32_t)((sel->pvCount+1)*sizeof(uint32_t))) {
     uprv_free(sel);
     *status = U_INVALID_FORMAT_ERROR;
     return NULL;
@@ -318,7 +339,7 @@ U_CAPI UConverterSelector* ucnvsel_unserialize(const char* buffer,
   int32_t encodingsLength;
   memcpy(&encodingsLength, buffer, sizeof(int32_t));
   buffer += sizeof(int32_t);
-  char* tempEncodings = (char*) uprv_malloc(encodingsLength+1);
+  char* tempEncodings = (char*) uprv_malloc(encodingsLength);
   if(!tempEncodings) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     uprv_free(sel);
@@ -327,11 +348,10 @@ U_CAPI UConverterSelector* ucnvsel_unserialize(const char* buffer,
   }
 
   memcpy(tempEncodings, buffer, encodingsLength);
-  tempEncodings[encodingsLength] = 0;
   buffer += encodingsLength;
   // count how many strings are there!
   int32_t numStrings = 0;
-  for (int32_t i = 0 ; i < encodingsLength + 1 ; i++) {
+  for (int32_t i = 0 ; i < encodingsLength; i++) {
     if (tempEncodings[i] == 0) {
       numStrings++;
     }
@@ -346,11 +366,11 @@ U_CAPI UConverterSelector* ucnvsel_unserialize(const char* buffer,
     return NULL;
   }
 
-  int32_t curString = 0;
   sel->encodings[0] = tempEncodings;
-  for (i = 0 ; i < encodingsLength ; i++) {
+  int32_t curString = 1;
+  for (i = 0; curString < numStrings; i++) {
     if (tempEncodings[i] == 0) {
-      sel->encodings[++curString] = tempEncodings+i+1;
+      sel->encodings[curString++] = tempEncodings+i+1;
     }
   }
 
@@ -367,11 +387,12 @@ U_CAPI UConverterSelector* ucnvsel_unserialize(const char* buffer,
   // end of check length
 
   // the trie
-  memcpy(&sel->serializedTrieSize, buffer, sizeof(uint32_t));
-  buffer += sizeof(uint32_t);
+  int32_t serializedTrieSize;
+  memcpy(&serializedTrieSize, buffer, sizeof(int32_t));
+  buffer += sizeof(int32_t);
 
   // check length
-  if (length < sel->serializedTrieSize) {
+  if (length < serializedTrieSize) {
     uprv_free(sel->pv);
     uprv_free(tempEncodings);
     uprv_free(sel->encodings);
@@ -382,20 +403,14 @@ U_CAPI UConverterSelector* ucnvsel_unserialize(const char* buffer,
   length -= sizeof(uint32_t);
   // end of check length
 
-  sel->serializedTrie = (uint8_t*) uprv_malloc(sel->serializedTrieSize);
-  if(!sel->serializedTrie) {
-    uprv_free(sel->pv);
-    uprv_free(tempEncodings);
-    uprv_free(sel->encodings);
-    uprv_free(sel);
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    return NULL;
-  }
-  memcpy(sel->serializedTrie, buffer, sel->serializedTrieSize);
   // unserialize!
-  utrie_unserialize(&sel->constructedTrie, sel->serializedTrie,
-    sel->serializedTrieSize, status);
-
+  sel->trie = utrie2_openFromSerialized(UTRIE2_16_VALUE_BITS,
+                                        buffer, serializedTrieSize, NULL,
+                                        status);
+  if (U_FAILURE(*status)) {
+    ucnvsel_close(sel);
+    sel = NULL;
+  }
   return sel;
 }
 
@@ -417,20 +432,23 @@ U_CAPI int32_t ucnvsel_serialize(const UConverterSelector* sel,
     *status = U_ILLEGAL_ARGUMENT_ERROR;
     return 0;
   }
-//utrie_swap(ds, inDa
+  // TODO: call utrie2_swap()?
+  // TODO: rethink this serialization; use UDataHeader?! require alignment as usual
+  UErrorCode localStatus = U_ZERO_ERROR;
+  int32_t serializedTrieSize = utrie2_serialize(sel->trie, NULL, 0, &localStatus);
   totalSize = sizeof(uint32_t) /*signature*/+sizeof(uint32_t) /*ASCIIness*/+
     sizeof(uint32_t)*sel->pvCount /*pv*/+ sizeof(uint32_t) /*pvCount*/+
-    sizeof(uint32_t) /*serializedTrieSize*/+ sel->serializedTrieSize /*trie*/;
+    sizeof(uint32_t) /*serializedTrieSize*/+ serializedTrieSize /*trie*/;
 
   // this is a multi-string! strlen() will stop at the first one
   encodingStrLength =
-    uprv_strlen(sel->encodings[sel->encodingsCount-1]) +
+    uprv_strlen(sel->encodings[sel->encodingsCount-1]) + 1 +
     (sel->encodings[sel->encodingsCount-1] - sel->encodings[0]);
-
+  encodingStrLength = (encodingStrLength + 3) & ~3;  // round up to 4-alignment
   totalSize += encodingStrLength + sizeof(uint32_t);
 
   if (totalSize > bufferCapacity) {
-    *status = U_INDEX_OUTOFBOUNDS_ERROR;
+    *status = U_BUFFER_OVERFLOW_ERROR;
     return totalSize;
   }
   // ok, save!
@@ -454,28 +472,33 @@ U_CAPI int32_t ucnvsel_serialize(const UConverterSelector* sel,
   buffer += encodingStrLength;
 
   // the trie
-  memcpy(buffer, &sel->serializedTrieSize, sizeof(uint32_t));
+  memcpy(buffer, &serializedTrieSize, sizeof(uint32_t));
   buffer+=sizeof(uint32_t);
-  memcpy(buffer, sel->serializedTrie, sel->serializedTrieSize);
+  utrie2_serialize(sel->trie, buffer, serializedTrieSize, status);
   return totalSize;
 }
 
 /* internal function! */
-void generateSelectorData(UConverterSelector* result,
-                          const USet* excludedEncodings,
-                          const UConverterUnicodeSet   whichSet,
-                          UErrorCode* status) {
-  const uint32_t encodingsSize = result->encodingsCount;
+static void generateSelectorData(UConverterSelector* result,
+                                 const USet* excludedCodePoints,
+                                 const UConverterUnicodeSet   whichSet,
+                                 UErrorCode* status) {
+  int32_t columns = (result->encodingsCount+31)/32;
 
   // 66000 as suggested by Markus [I suggest something like 66000 which
   // exceeds the number of BMP code points. There will be fewer ranges of
   // combinations of encodings. (I believe there are no encodings that have
   // interesting mappings for supplementary code points. All encodings either
   // support all of them or none of them.)]
-  result->pv = upvec_open((encodingsSize+31)/32, 66000);  // create for all
+  result->pv = upvec_open(columns, 66000);  // create for all
      // unicode codepoints, and have space for all those bits needed!
+  // set errorValue to all-ones
+  for (int32_t col = 0 ; col < columns; col++) {
+    upvec_setValue(result->pv, UPVEC_ERROR_VALUE_CP, UPVEC_ERROR_VALUE_CP,
+                   col, ~0, ~0, status);
+  }
 
-  for (uint32_t i = 0; i < encodingsSize; ++i) {
+  for (int32_t i = 0; i < result->encodingsCount; ++i) {
     uint32_t mask;
     uint32_t column;
     int32_t item_count;
@@ -506,10 +529,7 @@ void generateSelectorData(UConverterSelector* result,
         // this will be reached for the converters that fill the set with
         // strings. Those should be ignored by our system
       } else {
-        // IMPORTANT: the intervals for usets are INCLUSIVE. However, the
-        // intervals for upvec are NOT INCLUSIVE. This is why we need
-        // end_char+1 here!
-        upvec_setValue(result->pv, start_char, end_char + 1, column, ~0, mask,
+        upvec_setValue(result->pv, start_char, end_char, column, ~0, mask,
                        status);
         if (U_FAILURE(*status)) {
            return;
@@ -522,19 +542,19 @@ void generateSelectorData(UConverterSelector* result,
 
 
   // handle excluded encodings! Simply set their values to all 1's in the upvec
-  if (excludedEncodings) {
-    int32_t item_count = uset_getItemCount(excludedEncodings);
+  if (excludedCodePoints) {
+    int32_t item_count = uset_getItemCount(excludedCodePoints);
     for (int32_t j = 0; j < item_count; ++j) {
       UChar32 start_char;
       UChar32 end_char;
 
-      uset_getItem(excludedEncodings, j, &start_char, &end_char, NULL, 0,
+      uset_getItem(excludedCodePoints, j, &start_char, &end_char, NULL, 0,
                    status);
       if (U_FAILURE(*status)) {
         return;
       } else {
-        for (uint32_t col = 0 ; col < (encodingsSize+31)/32 ; col++) {
-          upvec_setValue(result->pv, start_char, end_char + 1, col, ~0, ~0,
+        for (int32_t col = 0 ; col < columns; col++) {
+          upvec_setValue(result->pv, start_char, end_char, col, ~0, ~0,
                         status);
         }
       }
@@ -543,17 +563,13 @@ void generateSelectorData(UConverterSelector* result,
 
   // alright. Now, let's put things in the same exact form you'd get when you
   // unserialize things.
-  UNewTrie* trie = utrie_open(NULL, NULL, CAPACITY, 0, 0, TRUE);
-  result->pvCount = upvec_compact(result->pv, upvec_compactToTrieHandler,
-                                  trie, status);
-  uint32_t length = utrie_serialize(trie, NULL, 0, NULL, TRUE, status);
-  result->serializedTrie = (uint8_t*) uprv_malloc(length);
-  length = utrie_serialize(trie, result->serializedTrie, length, NULL, TRUE,
-                           status);
-  result->serializedTrieSize = length;
-  utrie_unserialize(&result->constructedTrie, result->serializedTrie, length,
-                    status);
-  utrie_close(trie);
+  UPVecToUTrie2Context toUTrie2={ NULL };
+  result->pvCount = upvec_compact(result->pv, upvec_compactToUTrie2Handler,
+                                  &toUTrie2, status);
+  if (U_SUCCESS(*status)) {
+    result->trie = toUTrie2.trie;
+    utrie2_freeze(result->trie, UTRIE2_16_VALUE_BITS, status);
+  }
 }
 
 
@@ -660,17 +676,59 @@ int16_t countOnes(uint32_t* mask, int32_t len) {
 
 
 /* internal function! */
-UEnumeration *ucnvsel_select(const UConverterSelector* sel, const void *s,
-int32_t length, UErrorCode *status, UBool isUTF16) {
-  const UChar* utf16buffer = (UChar*) s;
-  const char* utf8buffer = (char*) s;
+static UEnumeration *selectForMask(const UConverterSelector* sel,
+                                   uint32_t *mask, UErrorCode *status) {
+  // this is the context we will use. Store a table of indices to which
+  // encodings are legit.
+  struct Enumerator* result = (Enumerator*)uprv_malloc(sizeof(Enumerator));
+  if (result == NULL) {
+    uprv_free(mask);
+    *status = U_MEMORY_ALLOCATION_ERROR;
+    return NULL;
+  }
+  result->index = NULL;  // this will be allocated later!
+  result->length = result->cur = 0;
+  result->sel = sel;
 
-  UEnumeration *en = NULL;
-  uint32_t* mask;
-  UChar32 next = 0;
-  int32_t offset = 0;
-  int32_t i, j;
+  UEnumeration *en = (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
+  if (en == NULL) {
+    // TODO(markus): Combine Enumerator and UEnumeration into one struct.
+    uprv_free(mask);
+    uprv_free(result);
+    *status = U_MEMORY_ALLOCATION_ERROR;
+    return NULL;
+  }
+  memcpy(en, &defaultEncodings, sizeof(UEnumeration));
+  en->context = result;
 
+  int32_t columns = (sel->encodingsCount+31)/32;
+  int16_t numOnes = countOnes(mask, columns);
+  // now, we know the exact space we need for index
+  if (numOnes > 0) {
+    result->index = (int16_t*) uprv_malloc(numOnes * sizeof(int16_t));
+
+    int32_t i, j;
+    int16_t k = 0;
+    for (j = 0 ; j < columns; j++) {
+      uint32_t v = mask[j];
+      for (i = 0 ; i < 32 && k < sel->encodingsCount; i++, k++) {
+        if ((v & 1) != 0) {
+          result->index[result->length++] = k;
+        }
+        v >>= 1;
+      }
+    }
+  } //otherwise, index will remain NULL (and will never be touched by
+    //the enumerator code anyway)
+  uprv_free(mask);
+  return en;
+}
+
+/* check a string against the selector - UTF16 version */
+U_CAPI UEnumeration *ucnvsel_selectForString(const UConverterSelector* sel,
+                                   const UChar *s,
+                                   int32_t length,
+                                   UErrorCode *status) {
   // check if already failed
   if (U_FAILURE(*status)) {
     return NULL;
@@ -681,80 +739,68 @@ int32_t length, UErrorCode *status, UBool isUTF16) {
     return NULL;
   }
 
-  // this is the context we will use. Store a table of indices to which
-  // encodings are legit.
-  struct Enumerator* result = (Enumerator*)uprv_malloc(sizeof(Enumerator));
-  result->index = NULL;  // this will be allocated later!
-  result->length = result->cur = 0;
-  result->sel = sel;
+  int32_t columns = (sel->encodingsCount+31)/32;
+  uint32_t* mask = (uint32_t*) uprv_malloc(columns * 4);
+  if (mask == NULL) {
+    *status = U_MEMORY_ALLOCATION_ERROR;
+    return NULL;
+  }
+  uprv_memset(mask, ~0, columns *4);
 
-  en =  (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
-  memcpy(en, &defaultEncodings, sizeof(UEnumeration));
-  en->context = result;
-
-  mask = (uint32_t*) uprv_malloc((sel->encodingsCount+31)/32 *
-                                 sizeof(uint32_t));
-  uprv_memset(mask, ~0, (sel->encodingsCount+31)/32 * sizeof(uint32_t));
-
-  if(length == -1) {
-    if(isUTF16)
-      length = u_strlen(utf16buffer);
-    else
-      length = uprv_strlen(utf8buffer);
+  const UChar *limit;
+  if (length >= 0) {
+    limit = s + length;
+  } else {
+    limit = NULL;
   }
 
-  if(s) {
-    while (offset < length) {
-       uint16_t result = 0;
-       if (isUTF16)
-         U16_NEXT(utf16buffer, offset, length, next)
-       else
-         U8_NEXT(utf8buffer, offset, length, next)
-
-       if (next != -1) {
-         UTRIE_GET16((&sel->constructedTrie), next, result)
-
-         if (intersectMasks(mask, sel->pv+result, (sel->encodingsCount+31)/32)) {
-           break;
-         }
-       }
+  while (limit == NULL ? *s != 0 : s != limit) {
+    UChar32 c;
+    uint16_t pvIndex;
+    UTRIE2_U16_NEXT16(sel->trie, s, limit, c, pvIndex);
+    if (intersectMasks(mask, sel->pv+pvIndex, columns)) {
+      break;
     }
   }
-
-  int16_t numOnes = countOnes(mask, (sel->encodingsCount+31)/32);
-  // now, we know the exact space we need for index
-  if (numOnes > 0) {
-    result->index = (int16_t*) uprv_malloc(numOnes * sizeof(int16_t));
-  } //otherwise, index will remain NULL (and will never be touched by
-    //the enumerator code anyway)
-
-  for (j = 0 ; j < (sel->encodingsCount+31)/32 ; j++) {
-    for (i = 0 ; i < 32 ; i++) {
-      uint32_t v = mask[j] & 1;
-      if (v && j*32+i < sel->encodingsCount) {
-        result->index[result->length++] = j*32+i;
-      }
-      mask[j] >>= 1;
-    }
-  }
-  uprv_free(mask);
-  return en;
-}
-
-/* check a string against the selector - UTF16 version */
-U_CAPI UEnumeration *ucnvsel_selectForString(const UConverterSelector* sel,
-                                   const UChar *s,
-                                   int32_t length,
-                                   UErrorCode *status) {
-  return ucnvsel_select(sel, s, length, status, TRUE);
+  return selectForMask(sel, mask, status);
 }
 
 /* check a string against the selector - UTF8 version */
 U_CAPI UEnumeration *ucnvsel_selectForUTF8(const UConverterSelector* sel,
-                                 const char *utf8str,
+                                 const char *s,
                                  int32_t length,
                                  UErrorCode *status) {
-  return ucnvsel_select(sel, utf8str, length, status, FALSE);
+  // check if already failed
+  if (U_FAILURE(*status)) {
+    return NULL;
+  }
+  // ensure args make sense!
+  if (sel == NULL || (s == NULL && length != 0)) {
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return NULL;
+  }
+
+  int32_t columns = (sel->encodingsCount+31)/32;
+  uint32_t* mask = (uint32_t*) uprv_malloc(columns * 4);
+  if (mask == NULL) {
+    *status = U_MEMORY_ALLOCATION_ERROR;
+    return NULL;
+  }
+  uprv_memset(mask, ~0, columns *4);
+
+  if (length < 0) {
+    length = uprv_strlen(s);
+  }
+  const char *limit = s + length;
+
+  while (s != limit) {
+    uint16_t pvIndex;
+    UTRIE2_U8_NEXT16(sel->trie, s, limit, pvIndex);
+    if (intersectMasks(mask, sel->pv+pvIndex, columns)) {
+      break;
+    }
+  }
+  return selectForMask(sel, mask, status);
 }
 
 
@@ -811,7 +857,7 @@ U_CAPI int32_t ucnvsel_swap(const UDataSwapper *ds,
   outDataC += 3 * sizeof(uint32_t);
 
 
-  if(length < pvCount * sizeof(uint32_t)) {
+  if(length < (int32_t)(pvCount * sizeof(uint32_t))) {
     * status = U_INDEX_OUTOFBOUNDS_ERROR;
     return 0;
   }
@@ -853,7 +899,7 @@ U_CAPI int32_t ucnvsel_swap(const UDataSwapper *ds,
     * status = U_INDEX_OUTOFBOUNDS_ERROR;
     return 0;
   }
-  utrie_swap(ds, inDataC, trieSize, outDataC, status);
+  utrie2_swap(ds, inDataC, trieSize, outDataC, status);
   length -= trieSize;
   return passedLength - length;
 }

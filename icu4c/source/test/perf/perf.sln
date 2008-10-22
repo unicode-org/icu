@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+# Visual C++ Express 2005
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "charperf", "charperf\charperf.vcproj", "{D850A4B6-7D94-476E-9392-E9272DA4EAAF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "normperf", "normperf\normperf.vcproj", "{56CCC661-8D33-4F0A-B62F-C619CE843C68}"
@@ -19,6 +19,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "unisetperf", "unisetperf\unisetperf.vcproj", "{E7728E98-0469-AF37-43F4-4529A3D52C6B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "strsrchperf", "strsrchperf\strsrchperf.vcproj", "{241DED26-1635-45E6-9564-7742AC8043B5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "utrie2perf", "utrie2perf\utrie2perf.vcproj", "{B9458CB3-9B09-402A-8C4C-43B6D0EA9691}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -108,6 +110,12 @@ Global
 		{241DED26-1635-45E6-9564-7742AC8043B5}.Release|Win32.Build.0 = Release|Win32
 		{241DED26-1635-45E6-9564-7742AC8043B5}.Release|x64.ActiveCfg = Release|x64
 		{241DED26-1635-45E6-9564-7742AC8043B5}.Release|x64.Build.0 = Release|x64
+		{B9458CB3-9B09-402A-8C4C-43B6D0EA9691}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B9458CB3-9B09-402A-8C4C-43B6D0EA9691}.Debug|Win32.Build.0 = Debug|Win32
+		{B9458CB3-9B09-402A-8C4C-43B6D0EA9691}.Debug|x64.ActiveCfg = Debug|Win32
+		{B9458CB3-9B09-402A-8C4C-43B6D0EA9691}.Release|Win32.ActiveCfg = Release|Win32
+		{B9458CB3-9B09-402A-8C4C-43B6D0EA9691}.Release|Win32.Build.0 = Release|Win32
+		{B9458CB3-9B09-402A-8C4C-43B6D0EA9691}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -26,7 +26,7 @@
 #include "umutex.h"
 #include "cmemory.h"
 #include "ucln_cmn.h"
-#include "utrie.h"
+#include "utrie2.h"
 #include "udataswp.h"
 #include "unormimp.h" /* JAMO_L_BASE etc. */
 #include "uprops.h"
@@ -225,7 +225,7 @@ loadPropsData(void) {
 /* getting a uint32_t properties word from the data */
 #if UCHAR_HARDCODE_DATA
 
-#define GET_PROPS(c, result) UTRIE_GET16(&propsTrie, c, result);
+#define GET_PROPS(c, result) ((result)=UTRIE2_GET16(&propsTrie, c));
 
 #else
 
@@ -280,11 +280,11 @@ _enumTypeValue(const void *context, uint32_t value) {
 }
 
 static UBool U_CALLCONV
-_enumTypeRange(const void *context, UChar32 start, UChar32 limit, uint32_t value) {
+_enumTypeRange(const void *context, UChar32 start, UChar32 end, uint32_t value) {
     /* just cast the value to UCharCategory */
     return ((struct _EnumTypeCallback *)context)->
         enumRange(((struct _EnumTypeCallback *)context)->context,
-                  start, limit, (UCharCategory)value);
+                  start, end+1, (UCharCategory)value);
 }
 
 U_CAPI void U_EXPORT2
@@ -301,7 +301,7 @@ u_enumCharTypes(UCharEnumTypeRange *enumRange, const void *context) {
 
     callback.enumRange=enumRange;
     callback.context=context;
-    utrie_enum(&propsTrie, _enumTypeValue, _enumTypeRange, &callback);
+    utrie2_enum(&propsTrie, _enumTypeValue, _enumTypeRange, &callback);
 }
 
 /* Checks if ch is a lower case letter.*/
@@ -724,7 +724,7 @@ u_getUnicodeProperties(UChar32 c, int32_t column) {
     ) {
         return 0;
     } else {
-        UTRIE_GET16(&propsVectorsTrie, c, vecIndex);
+        vecIndex=UTRIE2_GET16(&propsVectorsTrie, c);
         return propsVectors[vecIndex+column];
     }
 }
@@ -882,7 +882,7 @@ uhst_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
 }
 
 static UBool U_CALLCONV
-_enumPropertyStartsRange(const void *context, UChar32 start, UChar32 limit, uint32_t value) {
+_enumPropertyStartsRange(const void *context, UChar32 start, UChar32 end, uint32_t value) {
     /* add the start code point to the USet */
     const USetAdder *sa=(const USetAdder *)context;
     sa->add(sa->set, start);
@@ -905,7 +905,7 @@ uchar_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
 #endif
 
     /* add the start code point of each same-value range of the main trie */
-    utrie_enum(&propsTrie, NULL, _enumPropertyStartsRange, sa);
+    utrie2_enum(&propsTrie, NULL, _enumPropertyStartsRange, sa);
 
     /* add code points with hardcoded properties, plus the ones following them */
 
@@ -974,6 +974,6 @@ upropsvec_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
     /* add the start code point of each same-value range of the properties vectors trie */
     if(propsVectorsColumns>0) {
         /* if propsVectorsColumns==0 then the properties vectors trie may not be there at all */
-        utrie_enum(&propsVectorsTrie, NULL, _enumPropertyStartsRange, sa);
+        utrie2_enum(&propsVectorsTrie, NULL, _enumPropertyStartsRange, sa);
     }
 }

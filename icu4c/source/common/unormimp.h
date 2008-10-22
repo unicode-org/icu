@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2007, International Business Machines
+*   Copyright (C) 2001-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -28,7 +28,7 @@
 #include "unicode/uiter.h"
 #include "unicode/unorm.h"
 #include "unicode/uset.h"
-#include "utrie.h"
+#include "utrie2.h"
 #include "ustr_imp.h"
 #include "udataswp.h"
 
@@ -313,18 +313,19 @@ unorm_internalQuickCheck(const UChar *src,
 U_CFUNC uint16_t U_EXPORT2
 unorm_getFCD16FromCodePoint(UChar32 c);
 
+#ifdef XP_CPLUSPLUS
+
 /**
  * Internal API, used by collation code.
  * Get access to the internal FCD trie table to be able to perform
  * incremental, per-code unit, FCD checks in collation.
  * One pointer is sufficient because the trie index values are offset
  * by the index size, so that the same pointer is used to access the trie data.
+ * Code points at fcdHighStart and above have a zero FCD value.
  * @internal
  */
 U_CAPI const uint16_t * U_EXPORT2
-unorm_getFCDTrie(UErrorCode *pErrorCode);
-
-#ifdef XP_CPLUSPLUS
+unorm_getFCDTrieIndex(UChar32 &fcdHighStart, UErrorCode *pErrorCode);
 
 /**
  * Internal API, used by collation code.
@@ -333,45 +334,76 @@ unorm_getFCDTrie(UErrorCode *pErrorCode);
  * bits  7..0   trail combining class
  *
  * If c is a lead surrogate and the value is not 0,
- * then instead of combining classes the value
- * is used in unorm_getFCD16FromSurrogatePair() to get the real value
- * of the supplementary code point.
+ * then some of c's associated supplementary code points have a non-zero FCD value.
  *
  * @internal
  */
 static inline uint16_t
 unorm_getFCD16(const uint16_t *fcdTrieIndex, UChar c) {
-    return
-        fcdTrieIndex[
-            (fcdTrieIndex[
-                c>>UTRIE_SHIFT
-            ]<<UTRIE_INDEX_SHIFT)+
-            (c&UTRIE_MASK)
-        ];
+    return fcdTrieIndex[_UTRIE2_INDEX_FROM_U16_SINGLE_LEAD(fcdTrieIndex, c)];
 }
 
 /**
  * Internal API, used by collation code.
- * Get the FCD value for a supplementary code point, with
+ * Get the FCD value of the next code point (post-increment), with
  * bits 15..8   lead combining class
  * bits  7..0   trail combining class
- *
- * @param fcd16  The FCD value for the lead surrogate, not 0.
- * @param c2     The trail surrogate code unit.
  *
  * @internal
  */
 static inline uint16_t
-unorm_getFCD16FromSurrogatePair(const uint16_t *fcdTrieIndex, uint16_t fcd16, UChar c2) {
-    return
-        fcdTrieIndex[
-            (fcdTrieIndex[
-                (int32_t)fcd16+((c2&0x3ff)>>UTRIE_SHIFT)
-            ]<<UTRIE_INDEX_SHIFT)+
-            (c2&UTRIE_MASK)
-        ];
+unorm_nextFCD16(const uint16_t *fcdTrieIndex, UChar32 fcdHighStart,
+                const UChar *&s, const UChar *limit) {
+    UChar32 c=*s++;
+    uint16_t fcd=fcdTrieIndex[_UTRIE2_INDEX_FROM_U16_SINGLE_LEAD(fcdTrieIndex, c)];
+    if(fcd!=0 && U16_IS_LEAD(c)) {
+        UChar c2;
+        if(s!=limit && U16_IS_TRAIL(c2=*s)) {
+            ++s;
+            c=U16_GET_SUPPLEMENTARY(c, c2);
+            if(c<fcdHighStart) {
+                fcd=fcdTrieIndex[_UTRIE2_INDEX_FROM_SUPP(fcdTrieIndex, c)];
+            } else {
+                fcd=0;
+            }
+        } else /* unpaired lead surrogate */ {
+            fcd=0;
+        }
+    }
+    return fcd;
 }
 
+/**
+ * Internal API, used by collation code.
+ * Get the FCD value of the previous code point (pre-decrement), with
+ * bits 15..8   lead combining class
+ * bits  7..0   trail combining class
+ *
+ * @internal
+ */
+static inline uint16_t
+unorm_prevFCD16(const uint16_t *fcdTrieIndex, UChar32 fcdHighStart,
+                const UChar *start, const UChar *&s) {
+    UChar32 c=*--s;
+    uint16_t fcd;
+    if(!U16_IS_SURROGATE(c)) {
+        fcd=fcdTrieIndex[_UTRIE2_INDEX_FROM_U16_SINGLE_LEAD(fcdTrieIndex, c)];
+    } else {
+        UChar c2;
+        if(U16_IS_SURROGATE_TRAIL(c) && s!=start && U16_IS_LEAD(c2=*(s-1))) {
+            --s;
+            c=U16_GET_SUPPLEMENTARY(c2, c);
+            if(c<fcdHighStart) {
+                fcd=fcdTrieIndex[_UTRIE2_INDEX_FROM_SUPP(fcdTrieIndex, c)];
+            } else {
+                fcd=0;
+            }
+        } else /* unpaired surrogate */ {
+            fcd=0;
+        }
+    }
+    return fcd;
+}
 
 #endif
 
