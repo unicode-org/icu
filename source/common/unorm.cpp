@@ -833,7 +833,7 @@ _getNextCC(const UChar *&p, const UChar *limit, UChar &c, UChar &c2) {
  */
 static inline uint32_t
 _getPrevNorm32(const UChar *start, const UChar *&src,
-               uint32_t minC, uint32_t mask,
+               uint32_t minC,
                UChar &c, UChar &c2) {
     c=*--src;
     c2=0;
@@ -861,7 +861,7 @@ static inline uint8_t
 _getPrevCC(const UChar *start, const UChar *&p) {
     UChar c, c2;
 
-    return (uint8_t)(_getPrevNorm32(start, p, _NORM_MIN_WITH_LEAD_CC, _NORM_CC_MASK, c, c2)>>_NORM_CC_SHIFT);
+    return (uint8_t)(_getPrevNorm32(start, p, _NORM_MIN_WITH_LEAD_CC, c, c2)>>_NORM_CC_SHIFT);
 }
 
 /*
@@ -1399,7 +1399,7 @@ _findPreviousStarter(const UChar *start, const UChar *src,
     UChar c, c2;
 
     while(start<src) {
-        norm32=_getPrevNorm32(start, src, minNoMaybe, ccOrQCMask|decompQCMask, c, c2);
+        norm32=_getPrevNorm32(start, src, minNoMaybe, c, c2);
         if(_isTrueStarter(norm32, ccOrQCMask, decompQCMask)) {
             break;
         }
@@ -3410,7 +3410,7 @@ unorm_normalize(const UChar *src, int32_t srcLength,
  * if c2!=0 then (c2, c) is a surrogate pair (reversed - c2 is first surrogate but read second!)
  */
 static inline uint32_t
-_getPrevNorm32(UCharIterator &src, uint32_t minC, uint32_t mask, UChar &c, UChar &c2) {
+_getPrevNorm32(UCharIterator &src, uint32_t minC, UChar &c, UChar &c2) {
     uint32_t norm32;
 
     /* need src.hasPrevious() */
@@ -3426,14 +3426,7 @@ _getPrevNorm32(UCharIterator &src, uint32_t minC, uint32_t mask, UChar &c, UChar
         /* unpaired surrogate */
         return 0;
     } else if(UTF_IS_FIRST_SURROGATE(c2=(UChar)src.previous(&src))) {
-        norm32=_getNorm32(c2);
-        if((norm32&mask)==0) {
-            /* all surrogate pairs with this lead surrogate have irrelevant data */
-            return 0;
-        } else {
-            /* norm32 must be a surrogate special */
-            return _getNorm32FromSurrogatePair(c2, c);
-        }
+        return _getNorm32FromSurrogatePair(c2, c);
     } else {
         /* unpaired second surrogate, undo the c2=src.previous() movement */
         src.move(&src, 1, UITER_CURRENT);
@@ -3456,7 +3449,7 @@ IsPrevBoundaryFn(UCharIterator &src, uint32_t minC, uint32_t mask, UChar &c, UCh
  */
 static UBool
 _isPrevNFDSafe(UCharIterator &src, uint32_t minC, uint32_t ccOrQCMask, UChar &c, UChar &c2) {
-    return _isNFDSafe(_getPrevNorm32(src, minC, ccOrQCMask, c, c2), ccOrQCMask, ccOrQCMask&_NORM_QC_MASK);
+    return _isNFDSafe(_getPrevNorm32(src, minC, c, c2), ccOrQCMask, ccOrQCMask&_NORM_QC_MASK);
 }
 
 /*
@@ -3469,7 +3462,7 @@ _isPrevTrueStarter(UCharIterator &src, uint32_t minC, uint32_t ccOrQCMask, UChar
     uint32_t norm32, decompQCMask;
     
     decompQCMask=(ccOrQCMask<<2)&0xf; /* decomposition quick check mask */
-    norm32=_getPrevNorm32(src, minC, ccOrQCMask|decompQCMask, c, c2);
+    norm32=_getPrevNorm32(src, minC, c, c2);
     return _isTrueStarter(norm32, ccOrQCMask, decompQCMask);
 }
 
