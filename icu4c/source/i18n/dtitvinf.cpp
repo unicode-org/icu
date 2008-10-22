@@ -13,7 +13,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-//FIXME: define it in compiler time
+//TODO: define it in compiler time
 //#define DTITVINF_DEBUG 1
 
 

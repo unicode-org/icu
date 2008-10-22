@@ -13,7 +13,7 @@
 #include "tufmtts.h"
 
 
-//FIXME
+//TODO: put as compilation flag
 //#define TUFMTTS_DEBUG 1
 
 #ifdef TUFMTTS_DEBUG
