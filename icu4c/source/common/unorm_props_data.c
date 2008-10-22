@@ -791,6 +791,7 @@ static const UTrie2 normTrie={
     0x0,
     0x30000,
     0x25dc,
+    NULL, 0, FALSE, FALSE, 0, NULL
 };
 
 static const uint16_t extraData[15955]={
@@ -2316,6 +2317,7 @@ static const UTrie2 fcdTrie={
     0x0,
     0x1d800,
     0x17c8,
+    NULL, 0, FALSE, FALSE, 0, NULL
 };
 
 static const uint16_t auxTrie_index[6256]={
@@ -2724,6 +2726,7 @@ static const UTrie2 auxTrie={
     0x0,
     0x30000,
     0x186c,
+    NULL, 0, FALSE, FALSE, 0, NULL
 };
 
 static const uint16_t canonStartSets[7726]={
