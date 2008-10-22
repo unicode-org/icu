@@ -26,6 +26,7 @@
 #include "cstring.h"
 #include "filestrm.h"
 #include "utrie.h"
+#include "utrie2.h"
 #include "uarrsort.h"
 #include "unicode/udata.h"
 #include "unewdata.h"
@@ -408,7 +409,7 @@ setProps(Props *p) {
 
     errorCode=U_ZERO_ERROR;
     if( value!=oldValue &&
-        !upvec_setValue(pv, p->code, p->code+1, 0, value, 0xffffffff, &errorCode)
+        !upvec_setValue(pv, p->code, p->code, 0, value, 0xffffffff, &errorCode)
     ) {
         fprintf(stderr, "gencase error: unable to set case mapping values, code: %s\n",
                         u_errorName(errorCode));
@@ -427,7 +428,7 @@ setProps(Props *p) {
 extern void
 addCaseSensitive(UChar32 first, UChar32 last) {
     UErrorCode errorCode=U_ZERO_ERROR;
-    if(!upvec_setValue(pv, first, last+1, 0, UCASE_SENSITIVE, UCASE_SENSITIVE, &errorCode)) {
+    if(!upvec_setValue(pv, first, last, 0, UCASE_SENSITIVE, UCASE_SENSITIVE, &errorCode)) {
         fprintf(stderr, "gencase error: unable to set UCASE_SENSITIVE, code: %s\n",
                         u_errorName(errorCode));
         exit(errorCode);
@@ -572,7 +573,7 @@ addClosureMapping(UChar32 src, UChar32 dest) {
         }
 
         errorCode=U_ZERO_ERROR;
-        if(!upvec_setValue(pv, src, src+1, 0, value, 0xffffffff, &errorCode)) {
+        if(!upvec_setValue(pv, src, src, 0, value, 0xffffffff, &errorCode)) {
             fprintf(stderr, "gencase error: unable to set case mapping values, code: %s\n",
                             u_errorName(errorCode));
             exit(errorCode);
@@ -717,7 +718,7 @@ makeCaseClosure() {
     UChar *p;
     uint32_t *row;
     uint32_t value;
-    UChar32 start, limit, c, c2;
+    UChar32 start, end, c, c2;
     int32_t i, j;
     UBool someMappingsAdded;
 
@@ -751,10 +752,10 @@ makeCaseClosure() {
         someMappingsAdded=FALSE;
 
         i=0;
-        while((row=upvec_getRow(pv, i, &start, &limit))!=NULL) {
+        while((row=upvec_getRow(pv, i, &start, &end))!=NULL && start<UPVEC_FIRST_SPECIAL_CP) {
             value=*row;
             if(value!=0) {
-                while(start<limit) {
+                while(start<=end) {
                     if(addClosure(start, U_SENTINEL, U_SENTINEL, start, value)) {
                         someMappingsAdded=TRUE;
 
@@ -762,7 +763,7 @@ makeCaseClosure() {
                          * stop this loop because pv was changed and row is not valid any more
                          * skip all rows below the current start
                          */
-                        while((row=upvec_getRow(pv, i, NULL, &limit))!=NULL && start>=limit) {
+                        while((row=upvec_getRow(pv, i, NULL, &end))!=NULL && start>end) {
                             ++i;
                         }
                         row=NULL; /* signal to continue with outer loop, without further ++i */
@@ -1038,7 +1039,7 @@ generateData(const char *dataDir, UBool csource) {
     static uint8_t trieBlock[40000];
 
     const uint32_t *row;
-    UChar32 start, limit;
+    UChar32 start, end;
     int32_t i;
 
     UNewDataMemory *pData;
@@ -1053,8 +1054,8 @@ generateData(const char *dataDir, UBool csource) {
         exit(U_MEMORY_ALLOCATION_ERROR);
     }
 
-    for(i=0; (row=upvec_getRow(pv, i, &start, &limit))!=NULL; ++i) {
-        if(!utrie_setRange32(pTrie, start, limit, *row, TRUE)) {
+    for(i=0; (row=upvec_getRow(pv, i, &start, &end))!=NULL; ++i) {
+        if(start<UPVEC_FIRST_SPECIAL_CP && !utrie_setRange32(pTrie, start, end+1, *row, TRUE)) {
             fprintf(stderr, "gencase error: unable to set trie value (overflow)\n");
             exit(U_BUFFER_OVERFLOW_ERROR);
         }
@@ -1084,6 +1085,7 @@ generateData(const char *dataDir, UBool csource) {
     if(csource) {
         /* write .c file for hardcoded data */
         UTrie trie={ NULL };
+        UTrie2 *trie2;
         FILE *f;
 
         utrie_unserialize(&trie, trieBlock, trieSize, &errorCode);
@@ -1092,7 +1094,36 @@ generateData(const char *dataDir, UBool csource) {
                 stderr,
                 "gencase error: failed to utrie_unserialize(ucase.icu trie) - %s\n",
                 u_errorName(errorCode));
-            return;
+            exit(errorCode);
+        }
+
+        /* use UTrie2 */
+        dataInfo.formatVersion[0]=2;
+        dataInfo.formatVersion[2]=0;
+        dataInfo.formatVersion[3]=0;
+        trie2=utrie2_fromUTrie(&trie, 0, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            fprintf(
+                stderr,
+                "gencase error: utrie2_fromUTrie() failed - %s\n",
+                u_errorName(errorCode));
+            exit(errorCode);
+        }
+        {
+            /* delete lead surrogate code unit values */
+            UChar lead;
+            trie2=utrie2_cloneAsThawed(trie2, &errorCode);
+            for(lead=0xd800; lead<0xdc00; ++lead) {
+                utrie2_set32ForLeadSurrogateCodeUnit(trie2, lead, trie2->initialValue, &errorCode);
+            }
+            utrie2_freeze(trie2, UTRIE2_16_VALUE_BITS, &errorCode);
+            if(U_FAILURE(errorCode)) {
+                fprintf(
+                    stderr,
+                    "gencase error: deleting lead surrogate code unit values failed - %s\n",
+                    u_errorName(errorCode));
+                exit(errorCode);
+            }
         }
 
         f=usrc_create(dataDir, "ucase_props_data.c");
@@ -1105,9 +1136,9 @@ generateData(const char *dataDir, UBool csource) {
                 "static const int32_t ucase_props_indexes[UCASE_IX_TOP]={",
                 indexes, 32, UCASE_IX_TOP,
                 "};\n\n");
-            usrc_writeUTrieArrays(f,
+            usrc_writeUTrie2Arrays(f,
                 "static const uint16_t ucase_props_trieIndex[%ld]={\n", NULL,
-                &trie,
+                trie2,
                 "\n};\n\n");
             usrc_writeArray(f,
                 "static const uint16_t ucase_props_exceptions[%ld]={\n",
@@ -1124,14 +1155,15 @@ generateData(const char *dataDir, UBool csource) {
                 "  ucase_props_exceptions,\n"
                 "  ucase_props_unfold,\n",
                 f);
-            usrc_writeUTrieStruct(f,
+            usrc_writeUTrie2Struct(f,
                 "  {\n",
-                &trie, "ucase_props_trieIndex", NULL, NULL,
+                trie2, "ucase_props_trieIndex", NULL,
                 "  },\n");
             usrc_writeArray(f, "  { ", dataInfo.formatVersion, 8, 4, " }\n");
             fputs("};\n", f);
             fclose(f);
         }
+        utrie2_close(trie2);
     } else {
         /* write the data */
         pData=udata_create(dataDir, UCASE_DATA_TYPE, UCASE_DATA_NAME, &dataInfo,

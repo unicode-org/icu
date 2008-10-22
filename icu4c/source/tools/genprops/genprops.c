@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -339,7 +339,7 @@ unicodeDataLineFn(void *context,
                 exit(U_PARSE_ERROR);
             }
         }
-        if(!upvec_setValue(pv, p.code, p.code+1, 2, (uint32_t)i, UPROPS_DT_MASK, pErrorCode)) {
+        if(!upvec_setValue(pv, p.code, p.code, 2, (uint32_t)i, UPROPS_DT_MASK, pErrorCode)) {
             fprintf(stderr, "genprops error: unable to set decomposition type: %s\n", u_errorName(*pErrorCode));
             exit(*pErrorCode);
         }
@@ -544,7 +544,7 @@ repeatAreaProps() {
 
     /* Hangul have canonical decompositions */
     errorCode=U_ZERO_ERROR;
-    if(!upvec_setValue(pv, 0xac00, 0xd7a4, 2, (uint32_t)U_DT_CANONICAL, UPROPS_DT_MASK, &errorCode)) {
+    if(!upvec_setValue(pv, 0xac00, 0xd7a3, 2, (uint32_t)U_DT_CANONICAL, UPROPS_DT_MASK, &errorCode)) {
         fprintf(stderr, "genprops error: unable to set decomposition type: %s\n", u_errorName(errorCode));
         exit(errorCode);
     }

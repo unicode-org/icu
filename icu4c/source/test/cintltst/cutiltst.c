@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -24,6 +24,7 @@ void addNEWResourceBundleTest(TestNode**);
 void addHashtableTest(TestNode** root);
 void addCStringTest(TestNode** root);
 void addTrieTest(TestNode** root);
+void addTrie2Test(TestNode** root);
 void addEnumerationTest(TestNode** root);
 void addPosixTest(TestNode** root);
 void addSortTest(TestNode** root);
@@ -34,6 +35,7 @@ void addUtility(TestNode** root)
 {
     addCStringTest(root);
     addTrieTest(root);
+    addTrie2Test(root);
     addLocaleTest(root);
     addCLDRTest(root);
     addUnicodeTest(root);

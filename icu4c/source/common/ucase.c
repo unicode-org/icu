@@ -25,7 +25,7 @@
 #include "umutex.h"
 #include "uassert.h"
 #include "cmemory.h"
-#include "utrie.h"
+#include "utrie2.h"
 #include "ucase.h"
 #include "ucln_cmn.h"
 
@@ -35,7 +35,7 @@ struct UCaseProps {
     const uint16_t *exceptions;
     const UChar *unfold;
 
-    UTrie trie;
+    UTrie2 trie;
     uint8_t formatVersion[4];
 };
 
@@ -327,7 +327,7 @@ ucase_getDummy(UErrorCode *pErrorCode) {
 /* set of property starts for UnicodeSet ------------------------------------ */
 
 static UBool U_CALLCONV
-_enumPropertyStartsRange(const void *context, UChar32 start, UChar32 limit, uint32_t value) {
+_enumPropertyStartsRange(const void *context, UChar32 start, UChar32 end, uint32_t value) {
     /* add the start code point to the USet */
     const USetAdder *sa=(const USetAdder *)context;
     sa->add(sa->set, start);
@@ -341,7 +341,7 @@ ucase_addPropertyStarts(const UCaseProps *csp, const USetAdder *sa, UErrorCode *
     }
 
     /* add the start code point of each same-value range of the trie */
-    utrie_enum(&csp->trie, NULL, _enumPropertyStartsRange, sa);
+    utrie2_enum(&csp->trie, NULL, _enumPropertyStartsRange, sa);
 
     /* add code points with hardcoded properties, plus the ones following them */
 
@@ -354,10 +354,6 @@ ucase_addPropertyStarts(const UCaseProps *csp, const USetAdder *sa, UErrorCode *
 }
 
 /* data access primitives --------------------------------------------------- */
-
-/* UTRIE_GET16() itself validates c */
-#define GET_PROPS(csp, c, result) \
-    UTRIE_GET16(&(csp)->trie, c, result);
 
 #define GET_EXCEPTIONS(csp, props) ((csp)->exceptions+((props)>>UCASE_EXC_SHIFT))
 
@@ -409,8 +405,7 @@ static const uint8_t flagsOffset[256]={
 
 U_CAPI UChar32 U_EXPORT2
 ucase_tolower(const UCaseProps *csp, UChar32 c) {
-    uint16_t props;
-    GET_PROPS(csp, c, props);
+    uint16_t props=UTRIE2_GET16(&csp->trie, c);
     if(!PROPS_HAS_EXCEPTION(props)) {
         if(UCASE_GET_TYPE(props)>=UCASE_UPPER) {
             c+=UCASE_GET_DELTA(props);
@@ -427,8 +422,7 @@ ucase_tolower(const UCaseProps *csp, UChar32 c) {
 
 U_CAPI UChar32 U_EXPORT2
 ucase_toupper(const UCaseProps *csp, UChar32 c) {
-    uint16_t props;
-    GET_PROPS(csp, c, props);
+    uint16_t props=UTRIE2_GET16(&csp->trie, c);
     if(!PROPS_HAS_EXCEPTION(props)) {
         if(UCASE_GET_TYPE(props)==UCASE_LOWER) {
             c+=UCASE_GET_DELTA(props);
@@ -445,8 +439,7 @@ ucase_toupper(const UCaseProps *csp, UChar32 c) {
 
 U_CAPI UChar32 U_EXPORT2
 ucase_totitle(const UCaseProps *csp, UChar32 c) {
-    uint16_t props;
-    GET_PROPS(csp, c, props);
+    uint16_t props=UTRIE2_GET16(&csp->trie, c);
     if(!PROPS_HAS_EXCEPTION(props)) {
         if(UCASE_GET_TYPE(props)==UCASE_LOWER) {
             c+=UCASE_GET_DELTA(props);
@@ -507,7 +500,7 @@ ucase_addCaseClosure(const UCaseProps *csp, UChar32 c, const USetAdder *sa) {
         break;
     }
 
-    GET_PROPS(csp, c, props);
+    props=UTRIE2_GET16(&csp->trie, c);
     if(!PROPS_HAS_EXCEPTION(props)) {
         if(UCASE_GET_TYPE(props)!=UCASE_NONE) {
             /* add the one simple case mapping, no matter what type it is */
@@ -676,18 +669,15 @@ ucase_addStringCaseClosure(const UCaseProps *csp, const UChar *s, int32_t length
 /** @return UCASE_NONE, UCASE_LOWER, UCASE_UPPER, UCASE_TITLE */
 U_CAPI int32_t U_EXPORT2
 ucase_getType(const UCaseProps *csp, UChar32 c) {
-    uint16_t props;
-    GET_PROPS(csp, c, props);
+    uint16_t props=UTRIE2_GET16(&csp->trie, c);
     return UCASE_GET_TYPE(props);
 }
 
 /** @return same as ucase_getType(), or <0 if c is case-ignorable */
 U_CAPI int32_t U_EXPORT2
 ucase_getTypeOrIgnorable(const UCaseProps *csp, UChar32 c) {
-    int32_t type;
-    uint16_t props;
-    GET_PROPS(csp, c, props);
-    type=UCASE_GET_TYPE(props);
+    uint16_t props=UTRIE2_GET16(&csp->trie, c);
+    int32_t type=UCASE_GET_TYPE(props);
     if(type!=UCASE_NONE) {
         return type;
     } else if(
@@ -703,8 +693,7 @@ ucase_getTypeOrIgnorable(const UCaseProps *csp, UChar32 c) {
 /** @return UCASE_NO_DOT, UCASE_SOFT_DOTTED, UCASE_ABOVE, UCASE_OTHER_ACCENT */
 static U_INLINE int32_t
 getDotType(const UCaseProps *csp, UChar32 c) {
-    uint16_t props;
-    GET_PROPS(csp, c, props);
+    uint16_t props=UTRIE2_GET16(&csp->trie, c);
     if(!PROPS_HAS_EXCEPTION(props)) {
         return props&UCASE_DOT_MASK;
     } else {
@@ -720,8 +709,7 @@ ucase_isSoftDotted(const UCaseProps *csp, UChar32 c) {
 
 U_CAPI UBool U_EXPORT2
 ucase_isCaseSensitive(const UCaseProps *csp, UChar32 c) {
-    uint16_t props;
-    GET_PROPS(csp, c, props);
+    uint16_t props=UTRIE2_GET16(&csp->trie, c);
     return (UBool)((props&UCASE_SENSITIVE)!=0);
 }
 
@@ -912,7 +900,7 @@ isFollowedByCasedLetter(const UCaseProps *csp, UCaseContextIterator *iter, void 
     }
 
     for(/* dir!=0 sets direction */; (c=iter(context, dir))>=0; dir=0) {
-        GET_PROPS(csp, c, props);
+        props=UTRIE2_GET16(&csp->trie, c);
         if(UCASE_GET_TYPE(props)!=UCASE_NONE) {
             return TRUE; /* followed by cased letter */
         } else if(c==0x307 || (props&(UCASE_EXCEPTION|UCASE_CASE_IGNORABLE))==UCASE_CASE_IGNORABLE) {
@@ -1059,11 +1047,8 @@ ucase_toFullLower(const UCaseProps *csp, UChar32 c,
                   const UChar **pString,
                   const char *locale, int32_t *locCache)
 {
-    UChar32 result;
-    uint16_t props;
-
-    result=c;
-    GET_PROPS(csp, c, props);
+    UChar32 result=c;
+    uint16_t props=UTRIE2_GET16(&csp->trie, c);
     if(!PROPS_HAS_EXCEPTION(props)) {
         if(UCASE_GET_TYPE(props)>=UCASE_UPPER) {
             result=c+UCASE_GET_DELTA(props);
@@ -1206,11 +1191,8 @@ toUpperOrTitle(const UCaseProps *csp, UChar32 c,
                const UChar **pString,
                const char *locale, int32_t *locCache,
                UBool upperNotTitle) {
-    UChar32 result;
-    uint16_t props;
-
-    result=c;
-    GET_PROPS(csp, c, props);
+    UChar32 result=c;
+    uint16_t props=UTRIE2_GET16(&csp->trie, c);
     if(!PROPS_HAS_EXCEPTION(props)) {
         if(UCASE_GET_TYPE(props)==UCASE_LOWER) {
             result=c+UCASE_GET_DELTA(props);
@@ -1356,8 +1338,7 @@ ucase_toFullTitle(const UCaseProps *csp, UChar32 c,
 /* return the simple case folding mapping for c */
 U_CAPI UChar32 U_EXPORT2
 ucase_fold(const UCaseProps *csp, UChar32 c, uint32_t options) {
-    uint16_t props;
-    GET_PROPS(csp, c, props);
+    uint16_t props=UTRIE2_GET16(&csp->trie, c);
     if(!PROPS_HAS_EXCEPTION(props)) {
         if(UCASE_GET_TYPE(props)>=UCASE_UPPER) {
             c+=UCASE_GET_DELTA(props);
@@ -1420,11 +1401,8 @@ ucase_toFullFolding(const UCaseProps *csp, UChar32 c,
                     const UChar **pString,
                     uint32_t options)
 {
-    UChar32 result;
-    uint16_t props;
-
-    result=c;
-    GET_PROPS(csp, c, props);
+    UChar32 result=c;
+    uint16_t props=UTRIE2_GET16(&csp->trie, c);
     if(!PROPS_HAS_EXCEPTION(props)) {
         if(UCASE_GET_TYPE(props)>=UCASE_UPPER) {
             result=c+UCASE_GET_DELTA(props);

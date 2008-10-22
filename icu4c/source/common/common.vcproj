@@ -954,6 +954,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\utrie2.c"
+				>
+			</File>
+			<File
+				RelativePath=".\utrie2.h"
+				>
+			</File>
+			<File
+				RelativePath=".\utrie2_builder.c"
+				>
+			</File>
+			<File
+				RelativePath=".\utrie2_impl.h"
+				>
+			</File>
+			<File
 				RelativePath=".\uvector.cpp"
 				>
 			</File>

@@ -44,11 +44,6 @@
 
 U_NAMESPACE_USE
 
-/* added by synwee for trie manipulation*/
-#define STAGE_1_SHIFT_            10
-#define STAGE_2_SHIFT_            4
-#define STAGE_2_MASK_AFTER_SHIFT_ 0x3F
-#define STAGE_3_MASK_             0xF
 #define LAST_BYTE_MASK_           0xFF
 #define SECOND_LAST_BYTE_SHIFT_   8
 
@@ -59,6 +54,8 @@ U_NAMESPACE_USE
 // and therefore writing to it is not synchronized.
 // It is cleaned in ucol_cleanup
 static const uint16_t *fcdTrieIndex=NULL;
+// Code points at fcdHighStart and above have a zero FCD value.
+static UChar32 fcdHighStart = 0;
 
 // These are values from UCA required for
 // implicit generation and supressing sort key compression
@@ -753,7 +750,7 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, con
     // init FCD data
     if (fcdTrieIndex == NULL) {
         // The result is constant, until the library is reloaded.
-        fcdTrieIndex = unorm_getFCDTrie(status);
+        fcdTrieIndex = unorm_getFCDTrieIndex(fcdHighStart, status);
         ucln_i18n_registerCleanup(UCLN_I18N_UCOL, ucol_cleanup);
     }
 
@@ -1291,7 +1288,6 @@ inline void normalizeIterator(collIterate *collationSource) {
 /*          that way, and we get called for every char where cc might be non-zero.        */
 static
 inline UBool collIterFCD(collIterate *collationSource) {
-    UChar       c, c2;
     const UChar *srcP, *endP;
     uint8_t     leadingCC;
     uint8_t     prevTrailingCC = 0;
@@ -1308,19 +1304,9 @@ inline UBool collIterFCD(collIterate *collationSource) {
 
     // Get the trailing combining class of the current character.  If it's zero,
     //   we are OK.
-    c = *srcP++;
     /* trie access */
-    fcd = unorm_getFCD16(fcdTrieIndex, c);
+    fcd = unorm_nextFCD16(fcdTrieIndex, fcdHighStart, srcP, endP);
     if (fcd != 0) {
-        if (U16_IS_LEAD(c)) {
-            if ((endP == NULL || srcP != endP) && U16_IS_TRAIL(c2=*srcP)) {
-                ++srcP;
-                fcd = unorm_getFCD16FromSurrogatePair(fcdTrieIndex, fcd, c2);
-            } else {
-                fcd = 0;
-            }
-        }
-
         prevTrailingCC = (uint8_t)(fcd & LAST_BYTE_MASK_);
 
         if (prevTrailingCC != 0) {
@@ -1330,17 +1316,8 @@ inline UBool collIterFCD(collIterate *collationSource) {
             {
                 const UChar *savedSrcP = srcP;
 
-                c = *srcP++;
                 /* trie access */
-                fcd = unorm_getFCD16(fcdTrieIndex, c);
-                if (fcd != 0 && U16_IS_LEAD(c)) {
-                    if ((endP == NULL || srcP != endP) && U16_IS_TRAIL(c2=*srcP)) {
-                        ++srcP;
-                        fcd = unorm_getFCD16FromSurrogatePair(fcdTrieIndex, fcd, c2);
-                    } else {
-                        fcd = 0;
-                    }
-                }
+                fcd = unorm_nextFCD16(fcdTrieIndex, fcdHighStart, srcP, endP);
                 leadingCC = (uint8_t)(fcd >> SECOND_LAST_BYTE_SHIFT_);
                 if (leadingCC == 0) {
                     srcP = savedSrcP;      // Hit char that is not part of combining sequence.
@@ -1699,7 +1676,6 @@ static
 inline UBool collPrevIterFCD(collIterate *data)
 {
     const UChar *src, *start;
-    UChar       c, c2;
     uint8_t     leadingCC;
     uint8_t     trailingCC = 0;
     uint16_t    fcd;
@@ -1709,18 +1685,7 @@ inline UBool collPrevIterFCD(collIterate *data)
     src = data->pos + 1;
 
     /* Get the trailing combining class of the current character. */
-    c = *--src;
-    if (!U16_IS_SURROGATE(c)) {
-        fcd = unorm_getFCD16(fcdTrieIndex, c);
-    } else if (U16_IS_TRAIL(c) && start < src && U16_IS_LEAD(c2 = *(src - 1))) {
-        --src;
-        fcd = unorm_getFCD16(fcdTrieIndex, c2);
-        if (fcd != 0) {
-            fcd = unorm_getFCD16FromSurrogatePair(fcdTrieIndex, fcd, c);
-        }
-    } else /* unpaired surrogate */ {
-        fcd = 0;
-    }
+    fcd = unorm_prevFCD16(fcdTrieIndex, fcdHighStart, start, src);
 
     leadingCC = (uint8_t)(fcd >> SECOND_LAST_BYTE_SHIFT_);
 
@@ -1736,18 +1701,7 @@ inline UBool collPrevIterFCD(collIterate *data)
                 return result;
             }
 
-            c = *--src;
-            if (!U16_IS_SURROGATE(c)) {
-                fcd = unorm_getFCD16(fcdTrieIndex, c);
-            } else if (U16_IS_TRAIL(c) && start < src && U16_IS_LEAD(c2 = *(src - 1))) {
-                --src;
-                fcd = unorm_getFCD16(fcdTrieIndex, c2);
-                if (fcd != 0) {
-                    fcd = unorm_getFCD16FromSurrogatePair(fcdTrieIndex, fcd, c);
-                }
-            } else /* unpaired surrogate */ {
-                fcd = 0;
-            }
+            fcd = unorm_prevFCD16(fcdTrieIndex, fcdHighStart, start, src);
 
             trailingCC = (uint8_t)(fcd & LAST_BYTE_MASK_);
 
