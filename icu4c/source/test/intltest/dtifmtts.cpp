@@ -10,7 +10,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 
-//FIXME: define it in compiler flag
+//TODO: define it in compiler flag
 //#define DTIFMTTS_DEBUG 1
 
 
@@ -252,7 +252,7 @@ void DateIntervalFormatTest::testAPI() {
 
     Formattable fmttable;
     status = U_ZERO_ERROR;
-    // FIXME: why do I need cast?
+    // TODO: why do I need cast?
     ((Format*)dtitvfmt)->parseObject(res, fmttable, status);
     if ( status != U_INVALID_FORMAT_ERROR ) {
         dataerrln("ERROR: parse should set U_INVALID_FORMAT_ERROR - exitting");

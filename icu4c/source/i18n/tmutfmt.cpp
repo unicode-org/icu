@@ -36,7 +36,7 @@
 #define LOW_T             ((UChar)0x0074)
 
 
-//FIXME
+//TODO: define in compile time
 //#define TMUTFMT_DEBUG 1
 
 #ifdef TMUTFMT_DEBUG
