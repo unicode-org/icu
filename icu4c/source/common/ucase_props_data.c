@@ -678,6 +678,7 @@ static const UCaseProps ucase_props_singleton={
     0x0,
     0xe0800,
     0x218c,
+    NULL, 0, FALSE, FALSE, 0, NULL
   },
   { 2,1,0,0 }
 };

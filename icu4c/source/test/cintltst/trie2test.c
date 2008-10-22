@@ -25,6 +25,8 @@
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
+void addTrie2Test(TestNode** root);
+
 /* Values for setting possibly overlapping, out-of-order ranges of values */
 typedef struct SetRange {
     UChar32 start, limit;
@@ -460,16 +462,16 @@ testTrieUTF8(const char *testName,
         } else {
             UTRIE2_U8_PREV32(trie, s, p, value);
         }
-        if(value!=values[i]) {
-            log_err("error: wrong value from UTRIE2_U8_PREV(%s)(%lx->U+%04lx): 0x%lx instead of 0x%lx\n",
-                    testName, (unsigned long)bytes, (long)c, (long)value, (long)values[i]);
-        }
         bytes=0;
         if(value!=values[i] || i8!=(p-s)) {
             int32_t k=i8;
             while(k<prev8) {
                 bytes=(bytes<<8)|s[k++];
             }
+        }
+        if(value!=values[i]) {
+            log_err("error: wrong value from UTRIE2_U8_PREV(%s)(%lx->U+%04lx): 0x%lx instead of 0x%lx\n",
+                    testName, (unsigned long)bytes, (long)c, (long)value, (long)values[i]);
         }
         if(i8!=(p-s)) {
             log_err("error: wrong end index from UTRIE2_U8_PREV(%s)(%lx->U+%04lx): %ld != %ld\n",

@@ -623,6 +623,7 @@ static const UBiDiProps ubidi_props_singleton={
     0x0,
     0x110000,
     0x2318,
+    NULL, 0, FALSE, FALSE, 0, NULL
   },
   { 2,0,0,0 }
 };
