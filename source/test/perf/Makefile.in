@@ -18,7 +18,7 @@ subdir = test
 ## Files to remove for 'make clean'
 CLEANFILES = *~
 
-SUBDIRS = collationperf charperf normperf ubrkperf unisetperf usetperf ustrperf utfperf
+SUBDIRS = collationperf charperf normperf ubrkperf unisetperf usetperf ustrperf utfperf utrie2perf
 
 ## List of phony targets
 .PHONY : everything all all-local all-recursive install install-local		\

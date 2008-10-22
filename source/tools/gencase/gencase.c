@@ -126,17 +126,16 @@ binariesLineFn(void *context,
                UErrorCode *pErrorCode) {
     const Binaries *bin;
     char *s;
-    uint32_t start, limit;
+    uint32_t start, end;
     int32_t i;
 
     bin=(const Binaries *)context;
 
-    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
+    u_parseCodePointRange(fields[0][0], &start, &end, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
         fprintf(stderr, "gencase: syntax error in %s.txt field 0 at %s\n", bin->ucdFile, fields[0][0]);
         exit(*pErrorCode);
     }
-    ++limit;
 
     /* parse binary property name */
     s=(char *)u_skipWhitespace(fields[1][0]);
@@ -156,7 +155,7 @@ binariesLineFn(void *context,
         exit(U_INTERNAL_PROGRAM_ERROR);
     }
 
-    if(!upvec_setValue(pv, start, limit, bin->binaries[i].vecWord, bin->binaries[i].vecValue, bin->binaries[i].vecMask, pErrorCode)) {
+    if(!upvec_setValue(pv, start, end, bin->binaries[i].vecWord, bin->binaries[i].vecValue, bin->binaries[i].vecMask, pErrorCode)) {
         fprintf(stderr, "gencase error: unable to set %s, code: %s\n",
                         bin->binaries[i].propName, u_errorName(*pErrorCode));
         exit(*pErrorCode);

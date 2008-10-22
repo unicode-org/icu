@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -215,6 +215,15 @@
  * @stable ICU 2.4
  */
 #define U_IS_SURROGATE_LEAD(c) (((c)&0x400)==0)
+
+/**
+ * Assuming c is a surrogate code point (U_IS_SURROGATE(c)),
+ * is it a trail surrogate?
+ * @param c 32-bit code point
+ * @return TRUE or FALSE
+ * @draft ICU 4.2
+ */
+#define U_IS_SURROGATE_TRAIL(c) (((c)&0x400)!=0)
 
 /* include the utfXX.h ------------------------------------------------------ */
 

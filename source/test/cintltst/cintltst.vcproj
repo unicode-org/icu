@@ -556,6 +556,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\trie2test.c"
+				>
+			</File>
+			<File
 				RelativePath=".\trietest.c"
 				>
 			</File>

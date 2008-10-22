@@ -765,15 +765,41 @@ static void TestSerializationAndUnserialization()
     /* first time */
     status = U_ZERO_ERROR;
     sel = ucnvsel_open((const char**)encodings, testCaseIdx-prev, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_SET, &status);
+    if (U_FAILURE(status)) {
+      log_err("ucnvsel_open(test case %d) failed: %s\n", curCase, u_errorName(status));
+      uprv_free(encodings);
+      uprv_free(names);
+      return;
+    }
 
     buffer = NULL;
     ser_len = ucnvsel_serialize(sel, NULL, 0, &status);
-    status = U_ZERO_ERROR;
+    if (status != U_BUFFER_OVERFLOW_ERROR) {
+      log_err("ucnvsel_serialize(test case %d preflighting) failed: %s\n", curCase, u_errorName(status));
+      ucnvsel_close(sel);
+      uprv_free(encodings);
+      uprv_free(names);
+      return;
+    }
     buffer = uprv_malloc(ser_len);
+    status = U_ZERO_ERROR;
     ucnvsel_serialize(sel, buffer, ser_len, &status);
-
     ucnvsel_close(sel);
+    if (U_FAILURE(status)) {
+      log_err("ucnvsel_serialize(test case %d) failed: %s\n", curCase, u_errorName(status));
+      uprv_free(encodings);
+      uprv_free(names);
+      uprv_free(buffer);
+      return;
+    }
     sel = ucnvsel_unserialize( buffer,  ser_len,&status);
+    if (U_FAILURE(status)) {
+      log_err("ucnvsel_unserialize(test case %d) failed: %s\n", curCase, u_errorName(status));
+      uprv_free(encodings);
+      uprv_free(names);
+      uprv_free(buffer);
+      return;
+    }
 
     /* count how many bytes (Is there a portable function that is more efficient than this?) */
     f1 = fopenOrError("ConverterSelectorTestUTF16.txt");
@@ -805,11 +831,21 @@ static void TestSerializationAndUnserialization()
           break;
         /* test, both with length, and NULL terminated */
         res1 = ucnvsel_selectForString(sel, text+i, -1, &status);
+        if (U_FAILURE(status)) {
+          log_err("ucnvsel_selectForString(test case %d, string %d with NUL) failed: %s\n",
+                  curCase, curTestCase, u_errorName(status));
+          continue;
+        }
         /* make sure result is correct! */
         verifyResultUTF16(text+i, (const char**) encodings, num_rndm_encodings, res1, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_SET);
         uenum_close(res1);
 
         res1 = ucnvsel_selectForString(sel, text+i, u_strlen(text+i), &status);
+        if (U_FAILURE(status)) {
+          log_err("ucnvsel_selectForString(test case %d, string %d with length) failed: %s\n",
+                  curCase, curTestCase, u_errorName(status));
+          continue;
+        }
         /* make sure result is correct! */
         verifyResultUTF16(text+i, (const char**)encodings, num_rndm_encodings, res1, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_SET);
         uenum_close(res1);

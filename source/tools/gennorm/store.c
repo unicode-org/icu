@@ -26,6 +26,7 @@
 #include "filestrm.h"
 #include "unicode/udata.h"
 #include "utrie.h"
+#include "utrie2.h"
 #include "unicode/uset.h"
 #include "toolutil.h"
 #include "unewdata.h"
@@ -1787,6 +1788,31 @@ processData() {
     }
 }
 
+/* is this a norm32 with a special index for a lead surrogate? */
+static U_INLINE UBool
+isNorm32LeadSurrogate(uint32_t norm32) {
+    return _NORM_MIN_SPECIAL<=norm32 && norm32<_NORM_SURROGATES_TOP;
+}
+
+/* normTrie: 32-bit trie result may contain a special extraData index with the folding offset */
+static int32_t U_CALLCONV
+getFoldingNormOffset(uint32_t norm32) {
+    if(isNorm32LeadSurrogate(norm32)) {
+        return
+            UTRIE_BMP_INDEX_LENGTH+
+                (((int32_t)norm32>>(_NORM_EXTRA_SHIFT-UTRIE_SURROGATE_BLOCK_BITS))&
+                 (0x3ff<<UTRIE_SURROGATE_BLOCK_BITS));
+    } else {
+        return 0;
+    }
+}
+
+/* auxTrie: the folding offset is in bits 9..0 of the 16-bit trie result */
+static int32_t U_CALLCONV
+getFoldingAuxOffset(uint32_t data) {
+    return (int32_t)(data&_NORM_AUX_FNC_MASK)<<UTRIE_SURROGATE_BLOCK_BITS;
+}
+
 #endif /* #if !UCONFIG_NO_NORMALIZATION */
 
 extern void
@@ -1953,20 +1979,23 @@ generateData(const char *dataDir, UBool csource) {
 
     if(csource) {
 #if UCONFIG_NO_NORMALIZATION
-    /* no csource for dummy mode..? */
-    fprintf(stderr, "gennorm error: UCONFIG_NO_NORMALIZATION is on in csource mode.\n");
-    exit(1);
+        /* no csource for dummy mode..? */
+        fprintf(stderr, "gennorm error: UCONFIG_NO_NORMALIZATION is on in csource mode.\n");
+        exit(1);
 #else
         /* write .c file for hardcoded data */
-        UTrie normTrie2={ NULL }, fcdTrie2={ NULL }, auxTrie2={ NULL };
+        UTrie normRuntimeTrie={ NULL }, fcdRuntimeTrie={ NULL }, auxRuntimeTrie={ NULL };
+        UTrie2 *normRuntimeTrie2, *fcdRuntimeTrie2=NULL, *auxRuntimeTrie2=NULL;
         FILE *f;
 
-        utrie_unserialize(&normTrie2, normTrieBlock, normTrieSize, &errorCode);
+        utrie_unserialize(&normRuntimeTrie, normTrieBlock, normTrieSize, &errorCode);
+        normRuntimeTrie.getFoldingOffset=getFoldingNormOffset;
         if(fcdTrieSize>0) {
-            utrie_unserialize(&fcdTrie2, fcdTrieBlock, fcdTrieSize, &errorCode);
+            utrie_unserialize(&fcdRuntimeTrie, fcdTrieBlock, fcdTrieSize, &errorCode);
         }
         if(auxTrieSize>0) {
-            utrie_unserialize(&auxTrie2, auxTrieBlock, auxTrieSize, &errorCode);
+            utrie_unserialize(&auxRuntimeTrie, auxTrieBlock, auxTrieSize, &errorCode);
+            auxRuntimeTrie.getFoldingOffset=getFoldingAuxOffset;
         }
         if(U_FAILURE(errorCode)) {
             fprintf(
@@ -1974,6 +2003,41 @@ generateData(const char *dataDir, UBool csource) {
                 "gennorm error: failed to utrie_unserialize() one of the tries - %s\n",
                 u_errorName(errorCode));
             exit(errorCode);
+        }
+
+        /* use UTrie2 */
+        dataInfo.formatVersion[0]=3;
+        dataInfo.formatVersion[2]=0;
+        dataInfo.formatVersion[3]=0;
+        normRuntimeTrie2=utrie2_fromUTrie(&normRuntimeTrie, 0, &errorCode);
+        if(fcdTrieSize>0) {
+            fcdRuntimeTrie2=utrie2_fromUTrie(&fcdRuntimeTrie, 0, &errorCode);
+        }
+        if(auxTrieSize>0) {
+            auxRuntimeTrie2=utrie2_fromUTrie(&auxRuntimeTrie, 0, &errorCode);
+        }
+        if(U_FAILURE(errorCode)) {
+            fprintf(
+                stderr,
+                "gennorm error: utrie2_fromUTrie() failed - %s\n",
+                u_errorName(errorCode));
+            exit(errorCode);
+        }
+        if(auxTrieSize>0) {
+            /* delete lead surrogate code unit values */
+            UChar lead;
+            auxRuntimeTrie2=utrie2_cloneAsThawed(auxRuntimeTrie2, &errorCode);
+            for(lead=0xd800; lead<0xdc00; ++lead) {
+                utrie2_set32ForLeadSurrogateCodeUnit(auxRuntimeTrie2, lead, auxRuntimeTrie2->initialValue, &errorCode);
+            }
+            utrie2_freeze(auxRuntimeTrie2, UTRIE2_16_VALUE_BITS, &errorCode);
+            if(U_FAILURE(errorCode)) {
+                fprintf(
+                    stderr,
+                    "gennorm error: deleting lead surrogate code unit values failed - %s\n",
+                    u_errorName(errorCode));
+                exit(errorCode);
+            }
         }
 
         f=usrc_create(dataDir, "unorm_props_data.c");
@@ -1990,14 +2054,14 @@ generateData(const char *dataDir, UBool csource) {
                 "static const int32_t indexes[_NORM_INDEX_TOP]={\n",
                 indexes, 32, _NORM_INDEX_TOP,
                 "\n};\n\n");
-            usrc_writeUTrieArrays(f,
+            usrc_writeUTrie2Arrays(f,
                 "static const uint16_t normTrie_index[%ld]={\n",
                 "static const uint32_t normTrie_data32[%ld]={\n",
-                &normTrie2,
+                normRuntimeTrie2,
                 "\n};\n\n");
-            usrc_writeUTrieStruct(f,
-                "static const UTrie normTrie={\n",
-                &normTrie2, "normTrie_index", "normTrie_data32", "getFoldingNormOffset",
+            usrc_writeUTrie2Struct(f,
+                "static const UTrie2 normTrie={\n",
+                normRuntimeTrie2, "normTrie_index", "normTrie_data32",
                 "};\n\n");
             usrc_writeArray(f,
                 "static const uint16_t extraData[%ld]={\n",
@@ -2008,28 +2072,28 @@ generateData(const char *dataDir, UBool csource) {
                 combiningTable, 16, combiningTableTop,
                 "\n};\n\n");
             if(fcdTrieSize>0) {
-                usrc_writeUTrieArrays(f,
+                usrc_writeUTrie2Arrays(f,
                     "static const uint16_t fcdTrie_index[%ld]={\n", NULL,
-                    &fcdTrie2,
+                    fcdRuntimeTrie2,
                     "\n};\n\n");
-                usrc_writeUTrieStruct(f,
-                    "static const UTrie fcdTrie={\n",
-                    &fcdTrie2, "fcdTrie_index", NULL, NULL,
+                usrc_writeUTrie2Struct(f,
+                    "static const UTrie2 fcdTrie={\n",
+                    fcdRuntimeTrie2, "fcdTrie_index", NULL,
                     "};\n\n");
             } else {
-                fputs( "static const UTrie fcdTrie={ NULL };\n\n", f);
+                fputs( "static const UTrie2 fcdTrie={ NULL };\n\n", f);
             }
             if(auxTrieSize>0) {
-                usrc_writeUTrieArrays(f,
+                usrc_writeUTrie2Arrays(f,
                     "static const uint16_t auxTrie_index[%ld]={\n", NULL,
-                    &auxTrie2,
+                    auxRuntimeTrie2,
                     "\n};\n\n");
-                usrc_writeUTrieStruct(f,
-                    "static const UTrie auxTrie={\n",
-                    &auxTrie2, "auxTrie_index", NULL, "getFoldingAuxOffset",
+                usrc_writeUTrie2Struct(f,
+                    "static const UTrie2 auxTrie={\n",
+                    auxRuntimeTrie2, "auxTrie_index", NULL,
                     "};\n\n");
             } else {
-                fputs( "static const UTrie auxTrie={ NULL };\n\n", f);
+                fputs( "static const UTrie2 auxTrie={ NULL };\n\n", f);
             }
             usrc_writeArray(f,
                 "static const uint16_t canonStartSets[%ld]={\n",
@@ -2037,6 +2101,9 @@ generateData(const char *dataDir, UBool csource) {
                 "\n};\n\n");
             fclose(f);
         }
+        utrie2_close(normRuntimeTrie2);
+        utrie2_close(fcdRuntimeTrie2);
+        utrie2_close(auxRuntimeTrie2);
 #endif
     } else {
         /* write the data */

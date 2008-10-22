@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2006, International Business Machines
+*   Copyright (C) 2004-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -131,17 +131,16 @@ singleEnumLineFn(void *context,
                  UErrorCode *pErrorCode) {
     const SingleEnum *sen;
     char *s;
-    uint32_t start, limit, uv;
+    uint32_t start, end, uv;
     int32_t value;
 
     sen=(const SingleEnum *)context;
 
-    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
+    u_parseCodePointRange(fields[0][0], &start, &end, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
         fprintf(stderr, "genbidi: syntax error in %s.txt field 0 at %s\n", sen->ucdFile, fields[0][0]);
         exit(*pErrorCode);
     }
-    ++limit;
 
     /* parse property alias */
     s=trimTerminateField(fields[1][0], fields[1][1]);
@@ -170,7 +169,7 @@ singleEnumLineFn(void *context,
         exit(U_INTERNAL_PROGRAM_ERROR);
     }
 
-    if(!upvec_setValue(pv, start, limit, sen->vecWord, uv, sen->vecMask, pErrorCode)) {
+    if(!upvec_setValue(pv, start, end, sen->vecWord, uv, sen->vecMask, pErrorCode)) {
         fprintf(stderr, "genbidi error: unable to set %s code: %s\n",
                         sen->propName, u_errorName(*pErrorCode));
         exit(*pErrorCode);
@@ -232,17 +231,16 @@ binariesLineFn(void *context,
                UErrorCode *pErrorCode) {
     const Binaries *bin;
     char *s;
-    uint32_t start, limit;
+    uint32_t start, end;
     int32_t i;
 
     bin=(const Binaries *)context;
 
-    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
+    u_parseCodePointRange(fields[0][0], &start, &end, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
         fprintf(stderr, "genbidi: syntax error in %s.txt field 0 at %s\n", bin->ucdFile, fields[0][0]);
         exit(*pErrorCode);
     }
-    ++limit;
 
     /* parse binary property name */
     s=(char *)u_skipWhitespace(fields[1][0]);
@@ -262,7 +260,7 @@ binariesLineFn(void *context,
         exit(U_INTERNAL_PROGRAM_ERROR);
     }
 
-    if(!upvec_setValue(pv, start, limit, bin->binaries[i].vecWord, bin->binaries[i].vecValue, bin->binaries[i].vecMask, pErrorCode)) {
+    if(!upvec_setValue(pv, start, end, bin->binaries[i].vecWord, bin->binaries[i].vecValue, bin->binaries[i].vecMask, pErrorCode)) {
         fprintf(stderr, "genbidi error: unable to set %s, code: %s\n",
                         bin->binaries[i].propName, u_errorName(*pErrorCode));
         exit(*pErrorCode);
@@ -524,7 +522,7 @@ unicodeDataLineFn(void *context,
 
     /* get Mirrored flag, field 9 */
     if(*fields[9][0]=='Y') {
-        if(!upvec_setValue(pv, c, c+1, 0, U_MASK(UBIDI_IS_MIRRORED_SHIFT), U_MASK(UBIDI_IS_MIRRORED_SHIFT), &errorCode)) {
+        if(!upvec_setValue(pv, c, c, 0, U_MASK(UBIDI_IS_MIRRORED_SHIFT), U_MASK(UBIDI_IS_MIRRORED_SHIFT), &errorCode)) {
             fprintf(stderr, "genbidi error: unable to set 'is mirrored' for U+%04lx, code: %s\n",
                             (long)c, u_errorName(errorCode));
             exit(errorCode);
@@ -578,7 +576,7 @@ parseDB(const char *filename, UErrorCode *pErrorCode) {
     for(i=0; i<LENGTHOF(defaultBidi); ++i) {
         start=defaultBidi[i][0];
         end=defaultBidi[i][1];
-        if(!upvec_setValue(pv, start, end+1, 0, (uint32_t)defaultBidi[i][2], UBIDI_CLASS_MASK, pErrorCode)) {
+        if(!upvec_setValue(pv, start, end, 0, (uint32_t)defaultBidi[i][2], UBIDI_CLASS_MASK, pErrorCode)) {
             fprintf(stderr, "genbidi error: unable to set default bidi class for U+%04lx..U+%04lx, code: %s\n",
                             (long)start, (long)end, u_errorName(*pErrorCode));
             exit(*pErrorCode);
@@ -599,15 +597,14 @@ bidiClassLineFn(void *context,
                 char *fields[][2], int32_t fieldCount,
                 UErrorCode *pErrorCode) {
     char *s;
-    uint32_t start, limit, value;
+    uint32_t start, end, value;
 
     /* get the code point range */
-    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
+    u_parseCodePointRange(fields[0][0], &start, &end, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
         fprintf(stderr, "genbidi: syntax error in DerivedBidiClass.txt field 0 at %s\n", fields[0][0]);
         exit(*pErrorCode);
     }
-    ++limit;
 
     /* parse bidi class */
     s=trimTerminateField(fields[1][0], fields[1][1]);
@@ -617,9 +614,9 @@ bidiClassLineFn(void *context,
         exit(U_PARSE_ERROR);
     }
 
-    if(!upvec_setValue(pv, start, limit, 0, value, UBIDI_CLASS_MASK, pErrorCode)) {
+    if(!upvec_setValue(pv, start, end, 0, value, UBIDI_CLASS_MASK, pErrorCode)) {
         fprintf(stderr, "genbidi error: unable to set derived bidi class for U+%04x..U+%04x - %s\n",
-                (int)start, (int)limit-1, u_errorName(*pErrorCode));
+                (int)start, (int)end, u_errorName(*pErrorCode));
         exit(*pErrorCode);
     }
 }
