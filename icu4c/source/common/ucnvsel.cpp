@@ -63,6 +63,7 @@ struct UConverterSelector {
 
 /* internal function */
 static void generateSelectorData(UConverterSelector* result,
+                                 UPropsVectors *upvec,
                                  const USet* excludedCodePoints,
                                  const UConverterUnicodeSet whichSet,
                                  UErrorCode* status);
@@ -203,7 +204,9 @@ U_CAPI UConverterSelector* ucnvsel_open(const char* const*  converterList,
   }
 
   newSelector->encodingsCount = converterListSize;
-  generateSelectorData(newSelector, excludedCodePoints, whichSet, status);
+  UPropsVectors *upvec = upvec_open((converterListSize+31)/32, status);
+  generateSelectorData(newSelector, upvec, excludedCodePoints, whichSet, status);
+  upvec_close(upvec);
 
   if (U_FAILURE(*status)) {
     // at this point, we know pv and encodings have been allocated. No harm in
@@ -223,7 +226,7 @@ U_CAPI void ucnvsel_close(UConverterSelector *sel) {
   }
   uprv_free(sel->encodings[0]);
   uprv_free(sel->encodings);
-  upvec_close(sel->pv);
+  uprv_free(sel->pv);
   utrie2_close(sel->trie);
   uprv_free(sel);
 }
@@ -480,21 +483,19 @@ U_CAPI int32_t ucnvsel_serialize(const UConverterSelector* sel,
 
 /* internal function! */
 static void generateSelectorData(UConverterSelector* result,
+                                 UPropsVectors *upvec,
                                  const USet* excludedCodePoints,
                                  const UConverterUnicodeSet   whichSet,
                                  UErrorCode* status) {
+  if (U_FAILURE(*status)) {
+    return;
+  }
+
   int32_t columns = (result->encodingsCount+31)/32;
 
-  // 66000 as suggested by Markus [I suggest something like 66000 which
-  // exceeds the number of BMP code points. There will be fewer ranges of
-  // combinations of encodings. (I believe there are no encodings that have
-  // interesting mappings for supplementary code points. All encodings either
-  // support all of them or none of them.)]
-  result->pv = upvec_open(columns, 66000);  // create for all
-     // unicode codepoints, and have space for all those bits needed!
   // set errorValue to all-ones
   for (int32_t col = 0 ; col < columns; col++) {
-    upvec_setValue(result->pv, UPVEC_ERROR_VALUE_CP, UPVEC_ERROR_VALUE_CP,
+    upvec_setValue(upvec, UPVEC_ERROR_VALUE_CP, UPVEC_ERROR_VALUE_CP,
                    col, ~0, ~0, status);
   }
 
@@ -505,7 +506,6 @@ static void generateSelectorData(UConverterSelector* result,
     int32_t j;
     UConverter* test_converter = ucnv_open(result->encodings[i], status);
     if (U_FAILURE(*status)) {
-      // status will propagate back to user
       return;
     }
     USet* unicode_point_set;
@@ -513,6 +513,10 @@ static void generateSelectorData(UConverterSelector* result,
 
     ucnv_getUnicodeSet(test_converter, unicode_point_set,
                        whichSet, status);
+    if (U_FAILURE(*status)) {
+      ucnv_close(test_converter);
+      return;
+    }
 
     column = i / 32;
     mask = 1 << (i%32);
@@ -529,17 +533,16 @@ static void generateSelectorData(UConverterSelector* result,
         // this will be reached for the converters that fill the set with
         // strings. Those should be ignored by our system
       } else {
-        upvec_setValue(result->pv, start_char, end_char, column, ~0, mask,
+        upvec_setValue(upvec, start_char, end_char, column, ~0, mask,
                        status);
-        if (U_FAILURE(*status)) {
-           return;
-        }
       }
     }
     ucnv_close(test_converter);
     uset_close(unicode_point_set);
+    if (U_FAILURE(*status)) {
+      return;
+    }
   }
-
 
   // handle excluded encodings! Simply set their values to all 1's in the upvec
   if (excludedCodePoints) {
@@ -550,28 +553,27 @@ static void generateSelectorData(UConverterSelector* result,
 
       uset_getItem(excludedCodePoints, j, &start_char, &end_char, NULL, 0,
                    status);
-      if (U_FAILURE(*status)) {
-        return;
-      } else {
-        for (int32_t col = 0 ; col < columns; col++) {
-          upvec_setValue(result->pv, start_char, end_char, col, ~0, ~0,
-                        status);
-        }
+      for (int32_t col = 0 ; col < columns; col++) {
+        upvec_setValue(upvec, start_char, end_char, col, ~0, ~0,
+                      status);
       }
     }
   }
 
   // alright. Now, let's put things in the same exact form you'd get when you
   // unserialize things.
-  UPVecToUTrie2Context toUTrie2={ NULL };
-  result->pvCount = upvec_compact(result->pv, upvec_compactToUTrie2Handler,
-                                  &toUTrie2, status);
+  result->trie = upvec_compactToUTrie2WithRowIndexes(upvec, status);
   if (U_SUCCESS(*status)) {
-    result->trie = toUTrie2.trie;
-    utrie2_freeze(result->trie, UTRIE2_16_VALUE_BITS, status);
+    uint32_t *memory = upvec_getArray(upvec, &result->pvCount, NULL);
+    result->pvCount *= columns;
+    result->pv = (uint32_t *)uprv_malloc(result->pvCount * 4);
+    if (result->pv == NULL) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      return;
+    }
+    uprv_memcpy(result->pv, memory, result->pvCount * 4);
   }
 }
-
 
 
 // a bunch of functions for the enumeration thingie! Nothing fancy here. Just

@@ -339,7 +339,8 @@ unicodeDataLineFn(void *context,
                 exit(U_PARSE_ERROR);
             }
         }
-        if(!upvec_setValue(pv, p.code, p.code, 2, (uint32_t)i, UPROPS_DT_MASK, pErrorCode)) {
+        upvec_setValue(pv, p.code, p.code, 2, (uint32_t)i, UPROPS_DT_MASK, pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
             fprintf(stderr, "genprops error: unable to set decomposition type: %s\n", u_errorName(*pErrorCode));
             exit(*pErrorCode);
         }
@@ -544,7 +545,8 @@ repeatAreaProps() {
 
     /* Hangul have canonical decompositions */
     errorCode=U_ZERO_ERROR;
-    if(!upvec_setValue(pv, 0xac00, 0xd7a3, 2, (uint32_t)U_DT_CANONICAL, UPROPS_DT_MASK, &errorCode)) {
+    upvec_setValue(pv, 0xac00, 0xd7a3, 2, (uint32_t)U_DT_CANONICAL, UPROPS_DT_MASK, &errorCode);
+    if(U_FAILURE(errorCode)) {
         fprintf(stderr, "genprops error: unable to set decomposition type: %s\n", u_errorName(errorCode));
         exit(errorCode);
     }

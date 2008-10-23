@@ -183,12 +183,11 @@ addMirror(UChar32 src, UChar32 mirror) {
     }
 
     errorCode=U_ZERO_ERROR;
-    if(
-        !upvec_setValue(
+    upvec_setValue(
             pv, src, src, 0,
             (uint32_t)delta<<UBIDI_MIRROR_DELTA_SHIFT, (uint32_t)(-1)<<UBIDI_MIRROR_DELTA_SHIFT,
-            &errorCode)
-    ) {
+            &errorCode);
+    if(U_FAILURE(errorCode)) {
         fprintf(stderr, "genbidi error: unable to set mirroring delta, code: %s\n",
                         u_errorName(errorCode));
         exit(errorCode);
