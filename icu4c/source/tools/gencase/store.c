@@ -408,12 +408,13 @@ setProps(Props *p) {
     }
 
     errorCode=U_ZERO_ERROR;
-    if( value!=oldValue &&
-        !upvec_setValue(pv, p->code, p->code, 0, value, 0xffffffff, &errorCode)
-    ) {
-        fprintf(stderr, "gencase error: unable to set case mapping values, code: %s\n",
-                        u_errorName(errorCode));
-        exit(errorCode);
+    if(value!=oldValue) {
+        upvec_setValue(pv, p->code, p->code, 0, value, 0xffffffff, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            fprintf(stderr, "gencase error: unable to set case mapping values, code: %s\n",
+                            u_errorName(errorCode));
+            exit(errorCode);
+        }
     }
 
     /* add the multi-character case folding to the "unfold" data */
@@ -428,7 +429,8 @@ setProps(Props *p) {
 extern void
 addCaseSensitive(UChar32 first, UChar32 last) {
     UErrorCode errorCode=U_ZERO_ERROR;
-    if(!upvec_setValue(pv, first, last, 0, UCASE_SENSITIVE, UCASE_SENSITIVE, &errorCode)) {
+    upvec_setValue(pv, first, last, 0, UCASE_SENSITIVE, UCASE_SENSITIVE, &errorCode);
+    if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gencase error: unable to set UCASE_SENSITIVE, code: %s\n",
                         u_errorName(errorCode));
         exit(errorCode);
@@ -573,7 +575,8 @@ addClosureMapping(UChar32 src, UChar32 dest) {
         }
 
         errorCode=U_ZERO_ERROR;
-        if(!upvec_setValue(pv, src, src, 0, value, 0xffffffff, &errorCode)) {
+        upvec_setValue(pv, src, src, 0, value, 0xffffffff, &errorCode);
+        if(U_FAILURE(errorCode)) {
             fprintf(stderr, "gencase error: unable to set case mapping values, code: %s\n",
                             u_errorName(errorCode));
             exit(errorCode);

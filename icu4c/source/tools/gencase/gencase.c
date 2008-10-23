@@ -40,7 +40,7 @@
 
 /* data --------------------------------------------------------------------- */
 
-uint32_t *pv;
+UPropsVectors *pv;
 
 UBool beVerbose=FALSE, haveCopyright=TRUE;
 
@@ -155,7 +155,8 @@ binariesLineFn(void *context,
         exit(U_INTERNAL_PROGRAM_ERROR);
     }
 
-    if(!upvec_setValue(pv, start, end, bin->binaries[i].vecWord, bin->binaries[i].vecValue, bin->binaries[i].vecMask, pErrorCode)) {
+    upvec_setValue(pv, start, end, bin->binaries[i].vecWord, bin->binaries[i].vecValue, bin->binaries[i].vecMask, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
         fprintf(stderr, "gencase error: unable to set %s, code: %s\n",
                         bin->binaries[i].propName, u_errorName(*pErrorCode));
         exit(*pErrorCode);
@@ -290,7 +291,7 @@ main(int argc, char* argv[]) {
     }
 
     /* initialize */
-    pv=upvec_open(2, 10000);
+    pv=upvec_open(2, &errorCode);
     caseSensitive=uset_open(1, 0); /* empty set (start>end) */
 
     /* process SpecialCasing.txt */
