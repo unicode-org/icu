@@ -19,6 +19,7 @@
 
 #include "unicode/utypes.h"
 #include "utrie.h"
+#include "propsvec.h"
 #include "ucase.h"
 
 U_CDECL_BEGIN
@@ -92,7 +93,7 @@ typedef struct {
 extern UBool beVerbose, haveCopyright;
 
 /* properties vectors in gencase.c */
-extern uint32_t *pv;
+extern UPropsVectors *pv;
 
 /* prototypes */
 U_CFUNC void

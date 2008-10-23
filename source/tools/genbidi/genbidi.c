@@ -39,7 +39,7 @@
 
 /* data --------------------------------------------------------------------- */
 
-uint32_t *pv;
+UPropsVectors *pv;
 
 UBool beVerbose=FALSE, haveCopyright=TRUE;
 
@@ -169,7 +169,8 @@ singleEnumLineFn(void *context,
         exit(U_INTERNAL_PROGRAM_ERROR);
     }
 
-    if(!upvec_setValue(pv, start, end, sen->vecWord, uv, sen->vecMask, pErrorCode)) {
+    upvec_setValue(pv, start, end, sen->vecWord, uv, sen->vecMask, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
         fprintf(stderr, "genbidi error: unable to set %s code: %s\n",
                         sen->propName, u_errorName(*pErrorCode));
         exit(*pErrorCode);
@@ -260,7 +261,8 @@ binariesLineFn(void *context,
         exit(U_INTERNAL_PROGRAM_ERROR);
     }
 
-    if(!upvec_setValue(pv, start, end, bin->binaries[i].vecWord, bin->binaries[i].vecValue, bin->binaries[i].vecMask, pErrorCode)) {
+    upvec_setValue(pv, start, end, bin->binaries[i].vecWord, bin->binaries[i].vecValue, bin->binaries[i].vecMask, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
         fprintf(stderr, "genbidi error: unable to set %s, code: %s\n",
                         bin->binaries[i].propName, u_errorName(*pErrorCode));
         exit(*pErrorCode);
@@ -394,7 +396,7 @@ main(int argc, char* argv[]) {
     }
 
     /* initialize */
-    pv=upvec_open(2, 10000);
+    pv=upvec_open(2, &errorCode);
 
     /* process BidiMirroring.txt */
     writeUCDFilename(basename, "BidiMirroring", suffix);
@@ -522,7 +524,8 @@ unicodeDataLineFn(void *context,
 
     /* get Mirrored flag, field 9 */
     if(*fields[9][0]=='Y') {
-        if(!upvec_setValue(pv, c, c, 0, U_MASK(UBIDI_IS_MIRRORED_SHIFT), U_MASK(UBIDI_IS_MIRRORED_SHIFT), &errorCode)) {
+        upvec_setValue(pv, c, c, 0, U_MASK(UBIDI_IS_MIRRORED_SHIFT), U_MASK(UBIDI_IS_MIRRORED_SHIFT), &errorCode);
+        if(U_FAILURE(*pErrorCode)) {
             fprintf(stderr, "genbidi error: unable to set 'is mirrored' for U+%04lx, code: %s\n",
                             (long)c, u_errorName(errorCode));
             exit(errorCode);
@@ -576,7 +579,8 @@ parseDB(const char *filename, UErrorCode *pErrorCode) {
     for(i=0; i<LENGTHOF(defaultBidi); ++i) {
         start=defaultBidi[i][0];
         end=defaultBidi[i][1];
-        if(!upvec_setValue(pv, start, end, 0, (uint32_t)defaultBidi[i][2], UBIDI_CLASS_MASK, pErrorCode)) {
+        upvec_setValue(pv, start, end, 0, (uint32_t)defaultBidi[i][2], UBIDI_CLASS_MASK, pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
             fprintf(stderr, "genbidi error: unable to set default bidi class for U+%04lx..U+%04lx, code: %s\n",
                             (long)start, (long)end, u_errorName(*pErrorCode));
             exit(*pErrorCode);
@@ -614,7 +618,8 @@ bidiClassLineFn(void *context,
         exit(U_PARSE_ERROR);
     }
 
-    if(!upvec_setValue(pv, start, end, 0, value, UBIDI_CLASS_MASK, pErrorCode)) {
+    upvec_setValue(pv, start, end, 0, value, UBIDI_CLASS_MASK, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
         fprintf(stderr, "genbidi error: unable to set derived bidi class for U+%04x..U+%04x - %s\n",
                 (int)start, (int)end, u_errorName(*pErrorCode));
         exit(*pErrorCode);

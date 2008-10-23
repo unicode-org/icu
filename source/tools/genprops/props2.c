@@ -35,8 +35,7 @@
 /* data --------------------------------------------------------------------- */
 
 static UNewTrie *newTrie;
-uint32_t *pv;
-static int32_t pvCount;
+UPropsVectors *pv;
 
 /* miscellaneous ------------------------------------------------------------ */
 
@@ -208,7 +207,8 @@ singleEnumLineFn(void *context,
         /* Also set bits for initialValue and errorValue. */
         end=UPVEC_MAX_CP;
     }
-    if(!upvec_setValue(pv, start, end, sen->vecWord, uv, sen->vecMask, pErrorCode)) {
+    upvec_setValue(pv, start, end, sen->vecWord, uv, sen->vecMask, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
         fprintf(stderr, "genprops error: unable to set %s code: %s\n",
                         sen->propName, u_errorName(*pErrorCode));
         exit(*pErrorCode);
@@ -370,7 +370,8 @@ binariesLineFn(void *context,
         /* Also set bits for initialValue and errorValue. */
         end=UPVEC_MAX_CP;
     }
-    if(!upvec_setValue(pv, start, end, bin->binaries[i].vecWord, uv, uv, pErrorCode)) {
+    upvec_setValue(pv, start, end, bin->binaries[i].vecWord, uv, uv, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
         fprintf(stderr, "genprops error: unable to set %s code: %s\n",
                         bin->binaries[i].propName, u_errorName(*pErrorCode));
         exit(*pErrorCode);
@@ -408,7 +409,12 @@ parseBinariesFile(char *filename, char *basename, const char *suffix,
 
 U_CFUNC void
 initAdditionalProperties() {
-    pv=upvec_open(UPROPS_VECTOR_WORDS, 20000);
+    UErrorCode errorCode=U_ZERO_ERROR;
+    pv=upvec_open(UPROPS_VECTOR_WORDS, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "error: upvec_open() failed - %s\n", u_errorName(errorCode));
+        exit(errorCode);
+    }
 }
 
 U_CFUNC void
@@ -484,11 +490,11 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
      * W for plane 2
      */
     *pErrorCode=U_ZERO_ERROR;
-    if( !upvec_setValue(pv, 0xe000, 0xf8ff, 0, (uint32_t)(U_EA_AMBIGUOUS<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode) ||
-        !upvec_setValue(pv, 0xf0000, 0xffffd, 0, (uint32_t)(U_EA_AMBIGUOUS<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode) ||
-        !upvec_setValue(pv, 0x100000, 0x10fffd, 0, (uint32_t)(U_EA_AMBIGUOUS<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode) ||
-        !upvec_setValue(pv, 0x20000, 0x2fffd, 0, (uint32_t)(U_EA_WIDE<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode)
-    ) {
+    upvec_setValue(pv, 0xe000, 0xf8ff, 0, (uint32_t)(U_EA_AMBIGUOUS<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode);
+    upvec_setValue(pv, 0xf0000, 0xffffd, 0, (uint32_t)(U_EA_AMBIGUOUS<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode);
+    upvec_setValue(pv, 0x100000, 0x10fffd, 0, (uint32_t)(U_EA_AMBIGUOUS<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode);
+    upvec_setValue(pv, 0x20000, 0x2fffd, 0, (uint32_t)(U_EA_WIDE<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
         fprintf(stderr, "genprops: unable to set default East Asian Widths: %s\n", u_errorName(*pErrorCode));
         exit(*pErrorCode);
     }
@@ -498,7 +504,7 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
 
     {
         UPVecToUTrieContext toUTrie={ NULL, 50000 /* capacity */, 0, TRUE /* latin1Linear */ };
-        pvCount=upvec_compact(pv, upvec_compactToUTrieHandler, &toUTrie, pErrorCode);
+        upvec_compact(pv, upvec_compactToUTrieHandler, &toUTrie, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
             fprintf(stderr, "genprops error: unable to build trie for additional properties: %s\n",
                     u_errorName(*pErrorCode));
@@ -554,7 +560,8 @@ ageLineFn(void *context,
         /* Also set bits for initialValue and errorValue. */
         end=UPVEC_MAX_CP;
     }
-    if(!upvec_setValue(pv, start, end, 0, version<<UPROPS_AGE_SHIFT, UPROPS_AGE_MASK, pErrorCode)) {
+    upvec_setValue(pv, start, end, 0, version<<UPROPS_AGE_SHIFT, UPROPS_AGE_MASK, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
         fprintf(stderr, "genprops error: unable to set character age: %s\n", u_errorName(*pErrorCode));
         exit(*pErrorCode);
     }
@@ -693,8 +700,13 @@ numericLineFn(void *context,
 
 U_CFUNC int32_t
 writeAdditionalData(FILE *f, uint8_t *p, int32_t capacity, int32_t indexes[UPROPS_INDEX_COUNT]) {
+    uint32_t *pvArray;
+    int32_t pvRows, pvCount;
     int32_t length;
     UErrorCode errorCode;
+
+    pvArray=upvec_getArray(pv, &pvRows, NULL);
+    pvCount=pvRows*UPROPS_VECTOR_WORDS;
 
     errorCode=U_ZERO_ERROR;
     length=utrie_serialize(newTrie, p, capacity, NULL, TRUE, &errorCode);
@@ -783,15 +795,15 @@ writeAdditionalData(FILE *f, uint8_t *p, int32_t capacity, int32_t indexes[UPROP
         if(f!=NULL) {
             usrc_writeArray(f,
                 "static const uint32_t propsVectors[%ld]={\n",
-                pv, 32, pvCount,
+                pvArray, 32, pvCount,
                 "};\n\n");
             fprintf(f, "static const int32_t countPropsVectors=%ld;\n", (long)pvCount);
             fprintf(f, "static const int32_t propsVectorsColumns=%ld;\n", (long)indexes[UPROPS_ADDITIONAL_VECTORS_COLUMNS_INDEX]);
         } else {
-            uprv_memcpy(p, pv, pvCount*4);
+            uprv_memcpy(p, pvArray, pvCount*4);
         }
         if(beVerbose) {
-            printf("number of additional props vectors:    %5u\n", (int)pvCount/UPROPS_VECTOR_WORDS);
+            printf("number of additional props vectors:    %5u\n", (int)pvRows);
             printf("number of 32-bit words per vector:     %5u\n", UPROPS_VECTOR_WORDS);
         }
     }

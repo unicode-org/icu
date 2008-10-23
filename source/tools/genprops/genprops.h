@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2005, International Business Machines
+*   Copyright (C) 1999-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -19,6 +19,7 @@
 
 #include "unicode/utypes.h"
 #include "utrie.h"
+#include "propsvec.h"
 
 /* file definitions */
 #define DATA_NAME "uprops"
@@ -39,7 +40,7 @@ extern const char *const
 genCategoryNames[];
 
 /* properties vectors in props2.c */
-extern uint32_t *pv;
+extern UPropsVectors *pv;
 
 /* prototypes */
 U_CFUNC void
