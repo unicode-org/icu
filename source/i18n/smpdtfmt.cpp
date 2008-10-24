@@ -632,7 +632,7 @@ SimpleDateFormat::fgPatternIndexToCalendarField[] =
     /*Yeu*/ UCAL_YEAR_WOY, UCAL_DOW_LOCAL, UCAL_EXTENDED_YEAR,
     /*gAZ*/ UCAL_JULIAN_DAY, UCAL_MILLISECONDS_IN_DAY, UCAL_ZONE_OFFSET,
     /*v*/   UCAL_ZONE_OFFSET,
-    /*c*/   UCAL_DAY_OF_WEEK,
+    /*c*/   UCAL_DOW_LOCAL,
     /*L*/   UCAL_MONTH,
     /*Q*/   UCAL_MONTH,
     /*q*/   UCAL_MONTH,
@@ -1141,7 +1141,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     // for "EEE" or "EE" or "E" or "eee", write out the abbreviated day-of-the-week name
     case UDAT_DOW_LOCAL_FIELD:
         if ( count < 3 ) {
-            zeroPaddingNumber(appendTo, value, 1, maxIntCount);
+            zeroPaddingNumber(appendTo, value, count, maxIntCount);
             break;
         }
         // fall through to EEEEE-EEE handling, but for that we don't want local day-of-week,
@@ -1167,17 +1167,25 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     // for "cccc", write out the wide day-of-the-week name
     // for "ccccc", use the narrow day-of-the-week name
     case UDAT_STANDALONE_DAY_FIELD:
+        if ( count < 3 ) {
+            zeroPaddingNumber(appendTo, value, 1, maxIntCount);
+            break;
+        }
+        // fall through to alpha DOW handling, but for that we don't want local day-of-week,
+        // we want standard day-of-week, so first fix value.
+        value = cal.get(UCAL_DAY_OF_WEEK, status);
+        if (U_FAILURE(status)) {
+            return;
+        }
         if (count == 5) 
             _appendSymbol(appendTo, value, fSymbols->fStandaloneNarrowWeekdays,
                           fSymbols->fStandaloneNarrowWeekdaysCount);
         else if (count == 4) 
             _appendSymbol(appendTo, value, fSymbols->fStandaloneWeekdays,
                           fSymbols->fStandaloneWeekdaysCount);
-        else if (count == 3)
+        else // count == 3
             _appendSymbol(appendTo, value, fSymbols->fStandaloneShortWeekdays,
                           fSymbols->fStandaloneShortWeekdaysCount);
-        else
-            zeroPaddingNumber(appendTo, value, 1, maxIntCount);
         break;
 
     // for and "a" symbol, write out the whole AM/PM string
@@ -2097,7 +2105,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             if (count <= 2) // c or cc
             {
                 // [We computed 'value' above.]
-                cal.set(UCAL_DAY_OF_WEEK, value);
+                cal.set(UCAL_DOW_LOCAL, value);
                 return pos.getIndex();
             }
             // Want to be able to parse both short and long forms.
