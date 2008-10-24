@@ -34,8 +34,7 @@
     void Test4073003(void); 
     void Test4162071(void); 
     void Test714(void);
-    void TestJ6072(void);
-    void TestJ5726(void);
+    void Test_GEec(void);
 
     /**
      * test subroutine
