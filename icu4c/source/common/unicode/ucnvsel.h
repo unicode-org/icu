@@ -25,16 +25,16 @@
 #include "unicode/uenum.h"
 #include "unicode/ucnv.h"
 
-
 /**
  * \file
  *
- * This is the declarations for the encoding selector.
- * The goal is, given a unicode string, find the encodings
- * this string can be mapped to. 
+ * A converter selector is built with a set of encoding/charset names
+ * and given an input string returns the set of names of the
+ * corresponding converters which can convert the string.
  *
+ * A converter selector can be serialized into a buffer and reopened
+ * from the serialized form.
  */
-
 
 /**
  * @{
@@ -45,38 +45,37 @@ typedef struct UConverterSelector UConverterSelector;
 /** @} */
 
 /**
- * open a selector. If converterList is NULL, build for all converters. If excludedCodePoints 
- * is NULL, don't exclude any codepoints
- *
+ * Open a selector.
+ * If converterListSize is 0, build for all available converters.
+ * If excludedCodePoints is NULL, don't exclude any code points.
  *
  * @param converterList a pointer to encoding names needed to be involved. 
- *  NULL means build a selector for all possible converters
- * @param converterListSize number of encodings in above list. 
- *  Setting converterListSize to 0, builds a selector for all
- *  converters. ucnvsel_open() does not transfer ownership to this
- *  array. Once uncvsel_open() returns, the caller is free to reuse/destroy
- *  the array.
- * @param excludedCodePoints a set of codepoints to be excluded from
- *  consideration. set to NULL to exclude nothing
- * @param whichSet what converter set to use? use this to determine whether
- *                 to construct selector for fallback or for roundtrip only mappings
+ *                      Can be NULL if converterListSize==0.
+ *                      The list and the names will be cloned, and the caller
+ *                      retains ownership of the original.
+ * @param converterListSize number of encodings in above list.
+ *                          If 0, builds a selector for all available converters.
+ * @param excludedCodePoints a set of code points to be excluded from consideration.
+ *                           That is, excluded code points in a string do not change
+ *                           the selection result. (They might be handled by a callback.)
+ *                           Use NULL to exclude nothing.
+ * @param whichSet what converter set to use? Use this to determine whether
+ *                 to consider only roundtrip mappings or also fallbacks.
  * @param status an in/out ICU UErrorCode
- * @return a pointer to the created selector
+ * @return the new selector
  *
  * @draft ICU 4.2
  */
-U_CAPI UConverterSelector* ucnvsel_open(const char* const*  converterList,
-                                      int32_t converterListSize,
-                                      const USet* excludedCodePoints,
-                                      const UConverterUnicodeSet   whichSet,
-                                      UErrorCode* status);
+U_CAPI UConverterSelector* U_EXPORT2
+ucnvsel_open(const char* const*  converterList, int32_t converterListSize,
+             const USet* excludedCodePoints,
+             const UConverterUnicodeSet whichSet, UErrorCode* status);
 
-/* close opened selector */
 /**
- * closes a selector. and releases allocated memory
- * if any Enumerations were returned by ucnv_select*, they become invalid.
+ * Closes a selector.
+ * If any Enumerations were returned by ucnv_select*, they become invalid.
  * They can be closed before or after calling ucnv_closeSelector,
- * but should never be used after selector is closed
+ * but should never be used after the selector is closed.
  *
  * @see ucnv_selectForString
  * @see ucnv_selectForUTF8
@@ -85,88 +84,79 @@ U_CAPI UConverterSelector* ucnvsel_open(const char* const*  converterList,
  *
  * @draft ICU 4.2
  */
-U_CAPI void ucnvsel_close(UConverterSelector *sel);
+U_CAPI void U_EXPORT2
+ucnvsel_close(UConverterSelector *sel);
 
 /**
- * unserialize a selector from a linear buffer. No alignment necessary.
- * the function does NOT take ownership of the given buffer. Caller is free
- * to reuse/destroy buffer immediately after calling this function
- * Unserializing a selector is much faster than creating it from scratch
- * and is nicer on the heap (not as many allocations and frees)
- * ucnvsel_open() is expensive. Therefore, it is desirable to unserialize the data structre
- * rather than building it from scratch.
+ * Open a selector from its serialized form.
+ * The buffer must remain valid and unchanged for the lifetime of the selector.
+ * This is much faster than creating a selector from scratch.
+ * Using a serialized form from a different machine (endianness/charset) is supported.
  *
- * @param buffer pointer to a linear buffer containing serialized data
+ * @param buffer pointer to the serialized form of a converter selector;
+ *               must be 32-bit-aligned
  * @param length the capacity of this buffer (can be equal to or larger than
-                 the actual data length)
+ *               the actual data length)
  * @param status an in/out ICU UErrorCode
- * @return a pointer to the created selector
+ * @return the new selector
  *
  * @draft ICU 4.2
  */
-U_CAPI UConverterSelector* ucnvsel_unserialize(const char* buffer,
-                                             int32_t length,
-                                             UErrorCode* status);
+U_CAPI UConverterSelector* U_EXPORT2
+ucnvsel_openFromSerialized(const void* buffer, int32_t length, UErrorCode* status);
 
 /**
- * serialize a selector into a linear buffer. No alignment necessary
- * The current serialized form is portable to different Endianness, and can
- * travel between ASCII and EBCDIC systems
+ * Serialize a selector into a linear buffer.
+ * The serialized form is portable to different machines.
  *
  * @param sel selector to consider
- * @param buffer pointer to a linear buffer to receive data
+ * @param buffer pointer to 32-bit-aligned memory to be filled with the
+ *               serialized form of this converter selector
  * @param bufferCapacity the capacity of this buffer
  * @param status an in/out ICU UErrorCode
  * @return the required buffer capacity to hold serialize data (even if the call fails
-           with a U_BUFFER_OVERFLOW_ERROR, it will return the required capacity)
+ *         with a U_BUFFER_OVERFLOW_ERROR, it will return the required capacity)
  *
  * @draft ICU 4.2
  */
-U_CAPI int32_t ucnvsel_serialize(const UConverterSelector* sel,
-                               char* buffer,
-                               int32_t bufferCapacity,
-                               UErrorCode* status);
+U_CAPI int32_t U_EXPORT2
+ucnvsel_serialize(const UConverterSelector* sel,
+                  void* buffer, int32_t bufferCapacity, UErrorCode* status);
 
 /**
- * check a UTF16 string using the selector. Find out what encodings it can be mapped to
+ * Select converters that can map all characters in a UTF-16 string,
+ * ignoring the excluded code points.
  *
- *
- * @param sel built selector
- * @param s pointer to UTF16 string
- * @param length length of UTF16 string in UChars, or -1 if NULL terminated
+ * @param sel a selector
+ * @param s UTF-16 string
+ * @param length length of the string, or -1 if NUL-terminated
  * @param status an in/out ICU UErrorCode
- * @return an enumeration containing encoding names. Returned encoding names
- *  will be the same as supplied to ucnv_openSelector, or will be the 
- *  canonical names if selector was built for all encodings.
- *  The order of encodings will be the same as supplied by the call to
- *  ucnv_openSelector (if encodings were supplied)
+ * @return an enumeration containing encoding names.
+ *         The returned encoding names and their order will be the same as
+ *         supplied when building the selector.
  *
  * @draft ICU 4.2
  */
-U_CAPI UEnumeration *ucnvsel_selectForString(const UConverterSelector* sel, const UChar *s,
-int32_t length, UErrorCode *status);
+U_CAPI UEnumeration * U_EXPORT2
+ucnvsel_selectForString(const UConverterSelector* sel,
+                        const UChar *s, int32_t length, UErrorCode *status);
 
 /**
- * check a UTF8 string using the selector. Find out what encodings it can be
- * mapped to illegal codepoints will be ignored by this function! Only legal
- *  codepoints will be considered for conversion
+ * Select converters that can map all characters in a UTF-8 string,
+ * ignoring the excluded code points.
  *
- * @param sel built selector
- * @param s pointer to UTF8 string
- * @param length length of UTF8 string (in chars), or -1 if NULL terminated
+ * @param sel a selector
+ * @param s UTF-8 string
+ * @param length length of the string, or -1 if NUL-terminated
  * @param status an in/out ICU UErrorCode
- * @return an enumeration containing encoding names. Returned encoding names
- *  will be the same as supplied to ucnv_openSelector, or will be the canonical
- *  names if selector was built for all encodings.
- *  The order of encodings will be the same as supplied by the call to
- *  ucnv_openSelector (if encodings were supplied)
+ * @return an enumeration containing encoding names.
+ *         The returned encoding names and their order will be the same as
+ *         supplied when building the selector.
  *
  * @draft ICU 4.2
  */
-U_CAPI UEnumeration *ucnvsel_selectForUTF8(const UConverterSelector* sel,
-                                 const char *s,
-                                 int32_t length,
-                                 UErrorCode *status);
-
+U_CAPI UEnumeration * U_EXPORT2
+ucnvsel_selectForUTF8(const UConverterSelector* sel,
+                      const char *s, int32_t length, UErrorCode *status);
 
 #endif  /* __ICU_UCNV_SEL_H__ */
