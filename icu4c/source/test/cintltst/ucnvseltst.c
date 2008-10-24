@@ -26,9 +26,6 @@
 #define FILENAME_BUFFER 1024
 
 #define TDSRCPATH  ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING
-        
-
-
 
 static FILE *fopenOrError(const char *filename) {
     int32_t needLen;
@@ -56,13 +53,10 @@ static FILE *fopenOrError(const char *filename) {
 
 void addCnvSelTest(TestNode** root)
 {
-    addTest(root, &TestConversionUTF16, "ucnv/ucnvseltst/TestConversionUTF16");
-    addTest(root, &TestConversionUTF8, "ucnv/ucnvseltst/TestConversionUTF8");
-    addTest(root, &TestSerializationAndUnserialization, "ucnv/ucnvseltst/TestSerializationAndUnserialization");
+    addTest(root, &TestConversionUTF16, "tsconv/ucnvseltst/TestConversionUTF16");
+    addTest(root, &TestConversionUTF8, "tsconv/ucnvseltst/TestConversionUTF8");
+    addTest(root, &TestSerializationAndUnserialization, "tsconv/ucnvseltst/TestSerializationAndUnserialization");
 }
-
-
-
 
 /*
  * there doesn't seem to be a fn in ucnv to get the index of a converter
@@ -792,9 +786,9 @@ static void TestSerializationAndUnserialization()
       uprv_free(buffer);
       return;
     }
-    sel = ucnvsel_unserialize( buffer,  ser_len,&status);
+    sel = ucnvsel_openFromSerialized( buffer,  ser_len,&status);
     if (U_FAILURE(status)) {
-      log_err("ucnvsel_unserialize(test case %d) failed: %s\n", curCase, u_errorName(status));
+      log_err("ucnvsel_openFromSerialized(test case %d) failed: %s\n", curCase, u_errorName(status));
       uprv_free(encodings);
       uprv_free(names);
       uprv_free(buffer);
@@ -917,7 +911,7 @@ static void TestSerializationAndUnserialization()
     ucnvsel_serialize(sel, buffer, ser_len, &status);
 
     ucnvsel_close(sel);
-    sel = ucnvsel_unserialize( buffer,  ser_len,&status);
+    sel = ucnvsel_openFromSerialized( buffer,  ser_len,&status);
 
     /* count how many bytes (Is there a portable function that is more efficient than this?) */
     f1 = fopenOrError("ConverterSelectorTestUTF16.txt");

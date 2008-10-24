@@ -123,10 +123,20 @@ upvec_compact(UPropsVectors *pv, UPVecCompactHandler *handler, void *context, UE
 
 /*
  * Get the vectors array after calling upvec_compact().
+ * The caller must not modify nor release the returned array.
+ * Returns NULL if called before upvec_compact().
+ */
+U_CAPI const uint32_t * U_EXPORT2
+upvec_getArray(const UPropsVectors *pv, int32_t *pRows, int32_t *pColumns);
+
+/*
+ * Get a clone of the vectors array after calling upvec_compact().
+ * The caller owns the returned array and must uprv_free() it.
  * Returns NULL if called before upvec_compact().
  */
 U_CAPI uint32_t * U_EXPORT2
-upvec_getArray(const UPropsVectors *pv, int32_t *pRows, int32_t *pColumns);
+upvec_cloneArray(const UPropsVectors *pv,
+                 int32_t *pRows, int32_t *pColumns, UErrorCode *pErrorCode);
 
 /*
  * Call upvec_compact(), create a 16-bit UTrie2 with indexes into the compacted
