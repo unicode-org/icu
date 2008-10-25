@@ -415,36 +415,6 @@ public:
     static DateFormat* U_EXPORT2 createInstance(void);
 
     /**
-     * This is for ICU internal use only. Please do not use.
-     * Create a date/time formatter from skeleton and a given locale.
-     *
-     * Users are encouraged to use the skeleton macros defined in udat.h.
-     * For example, MONTH_WEEKDAY_DAY, which is "MMMMEEEEd",
-     * and which means the pattern should have day, month, and day-of-week 
-     * fields, and follow the long date format defined in date time pattern.
-     * For example, for English, the full pattern should be 
-     * "EEEE, MMMM d".
-     * 
-     * Temporarily, this is an internal API, used by DateIntevalFormat only.
-     * There will be a new set of APIs for the same purpose coming soon.
-     * After which, this API will be replaced.
-     *
-     * @param skeleton  the skeleton on which date format based.
-     * @param locale    the given locale.
-     * @param dtpng     the date time pattern generator.
-     * @param status    Output param to be set to success/failure code.
-     *                  If it is failure, the returned date formatter will
-     *                  be NULL.
-     * @return          a simple date formatter which the caller owns.
-     * @internal ICU 4.0
-     */
-    static DateFormat* U_EXPORT2 createPatternInstance(
-                                        const UnicodeString& skeleton,
-                                        const Locale& locale,
-                                        DateTimePatternGenerator* dtpng,
-                                        UErrorCode& status);
-
-    /**
      * Creates a time formatter with the given formatting style for the given
      * locale.
      *

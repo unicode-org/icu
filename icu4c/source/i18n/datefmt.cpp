@@ -276,29 +276,6 @@ DateFormat::createInstance()
 }
 
 //----------------------------------------------------------------------
-DateFormat* U_EXPORT2
-DateFormat::createPatternInstance(const UnicodeString& skeleton,
-                                  const Locale& locale,
-                                  DateTimePatternGenerator* dtpng,
-                                  UErrorCode& status) 
-{
-    if ( U_FAILURE(status) ) {
-        return NULL;
-    }
-
-    const UnicodeString pattern = dtpng->getBestPattern(skeleton, status);
-    if ( U_FAILURE(status) ) {
-        return NULL;
-    }
-    SimpleDateFormat* dtfmt = new SimpleDateFormat(pattern, locale, status);
-    if ( U_FAILURE(status) ) {
-        delete dtfmt;
-        return NULL;
-    }
-    return dtfmt;
-}
-
-//----------------------------------------------------------------------
 
 DateFormat* U_EXPORT2
 DateFormat::create(EStyle timeStyle, EStyle dateStyle, const Locale& locale)

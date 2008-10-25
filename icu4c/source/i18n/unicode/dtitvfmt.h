@@ -609,9 +609,28 @@ private:
                                                 const UnicodeString* skeleton,
                                                 UErrorCode& status);
 
+    /**
+     * Create a simple date/time formatter from skeleton, given locale,
+     * and date time pattern generator.
+     *
+     * @param skeleton  the skeleton on which date format based.
+     * @param locale    the given locale.
+     * @param dtpng     the date time pattern generator.
+     * @param status    Output param to be set to success/failure code.
+     *                  If it is failure, the returned date formatter will
+     *                  be NULL.
+     * @return          a simple date formatter which the caller owns.
+     * @internal ICU 4.0
+     */
+    static SimpleDateFormat* U_EXPORT2 createSDFPatternInstance(
+                                        const UnicodeString& skeleton,
+                                        const Locale& locale,
+                                        DateTimePatternGenerator* dtpng,
+                                        UErrorCode& status);
+
 
     /**
-     *  Below are for generating interval patterns locale to the formatter 
+     *  Below are for generating interval patterns local to the formatter 
      */
 
 
