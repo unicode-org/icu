@@ -285,8 +285,6 @@ public class DateIntervalFormat extends UFormat {
 
     // Cache for the locale interval pattern
     private static ICUCache LOCAL_PATTERN_CACHE = new SimpleCache();
-    // Cache for DateTimePatternGenerator
-    private static ICUCache DTPNG_CACHE = new SimpleCache();
     
     /*
      * The interval patterns for this locale.
@@ -342,17 +340,11 @@ public class DateIntervalFormat extends UFormat {
         fSkeleton = skeleton;
         fInfo = dtItvInfo;
 
-        String key = locale.toString();
-        DateTimePatternGenerator generator = (DateTimePatternGenerator)DTPNG_CACHE.get(key);
-        if ( generator == null ) {
-            generator = DateTimePatternGenerator.getInstance(locale);
-            DTPNG_CACHE.put(key, generator);
-        } 
-
-        DateFormat dtfmt = DateFormat.getPatternInstance(skeleton,locale,generator);
-        fDateFormat = (SimpleDateFormat)dtfmt;
-        fFromCalendar = (Calendar) dtfmt.getCalendar().clone();
-        fToCalendar = (Calendar) dtfmt.getCalendar().clone();
+        DateTimePatternGenerator generator = DateTimePatternGenerator.getInstance(locale);
+        final String bestPattern = generator.getBestPattern(skeleton);
+        fDateFormat = new SimpleDateFormat(bestPattern, locale);
+        fFromCalendar = (Calendar) fDateFormat.getCalendar().clone();
+        fToCalendar = (Calendar) fDateFormat.getCalendar().clone();
         initializePattern();
     }
 
@@ -907,8 +899,7 @@ public class DateIntervalFormat extends UFormat {
      * @return             interval patterns' hash map
      */
     private HashMap initializeIntervalPattern(String fullPattern, ULocale locale) {
-        String localeKey = locale.toString();
-        DateTimePatternGenerator dtpng = (DateTimePatternGenerator)DTPNG_CACHE.get(localeKey);
+        DateTimePatternGenerator dtpng = DateTimePatternGenerator.getInstance(locale);
         if ( fSkeleton == null ) {
             // fSkeleton is already set by getDateIntervalInstance()
             // or by getInstance(String skeleton, .... )
@@ -1207,7 +1198,6 @@ public class DateIntervalFormat extends UFormat {
                 ++vCount;
                 timeSkeleton.append(ch);
                 break;
-              // FIXME: what is the difference between CAP_V/Z and LOW_V/Z
               case 'V':
               case 'Z':
               case 'k':
