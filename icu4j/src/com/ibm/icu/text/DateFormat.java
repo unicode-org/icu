@@ -1539,17 +1539,6 @@ public abstract class DateFormat extends UFormat {
         return new SimpleDateFormat(bestPattern, locale);
     }
 
-    /*
-     * Package accessible.
-     * Used by DateIntervalFormat
-     * @internal ICU 4.1.1
-     */
-    final static DateFormat getPatternInstance(String pattern, ULocale locale,
-                                           DateTimePatternGenerator generator) {
-        final String bestPattern = generator.getBestPattern(pattern);
-        return new SimpleDateFormat(bestPattern, locale);
-    }
-
     /**
      * Convenience overload
      * @draft ICU 4.0
