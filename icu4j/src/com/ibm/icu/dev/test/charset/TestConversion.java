@@ -1087,8 +1087,8 @@ public class TestConversion extends ModuleTest {
         output.limit(output.position());
         output.rewind();
 
-//TODO: Fix Me!  After Ticket#6581 is completed, this code should be removed.
-        boolean ignoreError = (0 <= cc.caseNr && cc.caseNr <= 14) || cc.caseNr == 16 || cc.caseNr == 17;
+//TODO: Fix Me!  After Ticket#6583 is completed, this code should be removed.
+        boolean ignoreError = (0 <= cc.caseNr && cc.caseNr <= 15) || cc.caseNr == 17 || cc.caseNr == 18;
 //TODO: End
 
         // test to see if the conversion matches actual results
