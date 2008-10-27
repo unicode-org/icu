@@ -10791,8 +10791,10 @@ $debug ||
 if test -n "$CONFIG_FILES"; then
 
 
-ac_cr='
-'
+ac_cr=`echo X |tr X '\015'` 
+#ac_cr='
+#'
+
 ac_cs_awk_cr=`$AWK 'BEGIN { print "a\rb" }' </dev/null 2>/dev/null`
 if test "$ac_cs_awk_cr" = "a${ac_cr}b"; then
   ac_cs_awk_cr='\\r'
