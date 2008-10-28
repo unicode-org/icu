@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
  *
  */
 
@@ -17,13 +17,23 @@
 
 U_NAMESPACE_BEGIN
 
-le_int32 GlyphSubstitutionTableHeader::process(LEGlyphStorage &glyphStorage, le_bool rightToLeft, LETag scriptTag, LETag languageTag,
-                                           const GlyphDefinitionTableHeader *glyphDefinitionTableHeader,
-                                           const LEGlyphFilter *filter, const FeatureMap *featureMap, le_int32 featureMapCount, le_bool featureOrder) const
+le_int32 GlyphSubstitutionTableHeader::process(LEGlyphStorage &glyphStorage,
+                                               le_bool rightToLeft, 
+                                               LETag scriptTag, 
+                                               LETag languageTag,
+                                               const GlyphDefinitionTableHeader *glyphDefinitionTableHeader, 
+                                               const LEGlyphFilter *filter, 
+                                               const FeatureMap *featureMap, 
+                                               le_int32 featureMapCount, 
+                                               le_bool featureOrder,
+                                               LEErrorCode &success) const
 {
-    GlyphSubstitutionLookupProcessor processor(this, scriptTag, languageTag, filter, featureMap, featureMapCount, featureOrder);
+    if (LE_FAILURE(success)) {
+        return 0;
+    } 
 
-    return processor.process(glyphStorage, NULL, rightToLeft, glyphDefinitionTableHeader, NULL);
+    GlyphSubstitutionLookupProcessor processor(this, scriptTag, languageTag, filter, featureMap, featureMapCount, featureOrder);
+    return processor.process(glyphStorage, NULL, rightToLeft, glyphDefinitionTableHeader, NULL, success);
 }
 
 U_NAMESPACE_END

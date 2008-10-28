@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998 - 2005 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998 - 2008 - All Rights Reserved
  *
  */
 
@@ -50,8 +50,13 @@ GlyphPositioningLookupProcessor::GlyphPositioningLookupProcessor()
 
 le_uint32 GlyphPositioningLookupProcessor::applySubtable(const LookupSubtable *lookupSubtable, le_uint16 lookupType,
                                                        GlyphIterator *glyphIterator,
-                                                       const LEFontInstance *fontInstance) const
+                                                       const LEFontInstance *fontInstance,
+                                                       LEErrorCode& success) const
 {
+    if (LE_FAILURE(success)) { 
+        return 0;
+    } 
+
     le_uint32 delta = 0;
 
     switch(lookupType)
@@ -111,7 +116,7 @@ le_uint32 GlyphPositioningLookupProcessor::applySubtable(const LookupSubtable *l
     {
         const ContextualPositioningSubtable *subtable = (const ContextualPositioningSubtable *) lookupSubtable;
 
-        delta = subtable->process(this, glyphIterator, fontInstance);
+        delta = subtable->process(this, glyphIterator, fontInstance, success);
         break;
     }
 
@@ -119,7 +124,7 @@ le_uint32 GlyphPositioningLookupProcessor::applySubtable(const LookupSubtable *l
     {
         const ChainingContextualPositioningSubtable *subtable = (const ChainingContextualPositioningSubtable *) lookupSubtable;
 
-        delta = subtable->process(this, glyphIterator, fontInstance);
+        delta = subtable->process(this, glyphIterator, fontInstance, success);
         break;
     }
 
@@ -127,7 +132,7 @@ le_uint32 GlyphPositioningLookupProcessor::applySubtable(const LookupSubtable *l
     {
         const ExtensionSubtable *subtable = (const ExtensionSubtable *) lookupSubtable;
 
-        delta = subtable->process(this, lookupType, glyphIterator, fontInstance);
+        delta = subtable->process(this, lookupType, glyphIterator, fontInstance, success);
         break;
     }
 

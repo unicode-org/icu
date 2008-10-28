@@ -418,13 +418,21 @@ le_int32 IndicReordering::findSyllable(const IndicClassTable *classTable, const 
 
 le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le_int32 scriptCode,
                                   LEUnicode *outChars, LEGlyphStorage &glyphStorage,
-                                  MPreFixups **outMPreFixups)
+                                  MPreFixups **outMPreFixups, LEErrorCode& success)
 {
+    if (LE_FAILURE(success)) {
+        return 0;
+    }
+
     MPreFixups *mpreFixups = NULL;
     const IndicClassTable *classTable = IndicClassTable::getScriptClassTable(scriptCode);
 
     if (classTable->scriptFlags & SF_MPRE_FIXUP) {
         mpreFixups = new MPreFixups(charCount);
+        if (mpreFixups == NULL) { 
+            success = LE_MEMORY_ALLOCATION_ERROR;
+            return 0;
+        }
     }
 
     IndicReorderingOutput output(outChars, glyphStorage, mpreFixups);
@@ -752,10 +760,10 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
     return output.getOutputIndex();
 }
 
-void IndicReordering::adjustMPres(MPreFixups *mpreFixups, LEGlyphStorage &glyphStorage)
+void IndicReordering::adjustMPres(MPreFixups *mpreFixups, LEGlyphStorage &glyphStorage, LEErrorCode& success)
 {
     if (mpreFixups != NULL) {
-        mpreFixups->apply(glyphStorage);
+        mpreFixups->apply(glyphStorage, success);
         
         delete mpreFixups;
     }

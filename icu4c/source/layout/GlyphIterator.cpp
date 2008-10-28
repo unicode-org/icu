@@ -107,9 +107,9 @@ void GlyphIterator::reset(le_uint16 newLookupFlags, FeatureMask newFeatureMask)
     lookupFlags  = newLookupFlags;
 }
 
-LEGlyphID *GlyphIterator::insertGlyphs(le_int32 count)
+LEGlyphID *GlyphIterator::insertGlyphs(le_int32 count, LEErrorCode& success)
 {
-    return glyphStorage.insertGlyphs(position, count);
+    return glyphStorage.insertGlyphs(position, count, success);
 }
 
 le_int32 GlyphIterator::applyInsertions()

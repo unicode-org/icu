@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
  *
  */
 
@@ -69,7 +69,7 @@ public:
     void setCursiveExitPoint(LEPoint &exitPoint);
     void setCursiveGlyph();
 
-    LEGlyphID *insertGlyphs(le_int32 count);
+    LEGlyphID *insertGlyphs(le_int32 count, LEErrorCode& success);
     le_int32 applyInsertions();
 
 private:

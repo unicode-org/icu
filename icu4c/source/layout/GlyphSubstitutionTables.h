@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
  *
  */
 
@@ -25,9 +25,16 @@ struct GlyphDefinitionTableHeader;
 
 struct GlyphSubstitutionTableHeader : public GlyphLookupTableHeader
 {
-    le_int32    process(LEGlyphStorage &glyphStorage, le_bool rightToLeft, LETag scriptTag, LETag languageTag,
-                        const GlyphDefinitionTableHeader *glyphDefinitionTableHeader, const LEGlyphFilter *filter,
-                        const FeatureMap *featureMap, le_int32 featureMapCount, le_bool featureOrder) const;
+    le_int32    process(LEGlyphStorage &glyphStorage, 
+                        le_bool rightToLeft, 
+                        LETag scriptTag, 
+                        LETag languageTag,
+                        const GlyphDefinitionTableHeader *glyphDefinitionTableHeader, 
+                        const LEGlyphFilter *filter,
+                        const FeatureMap *featureMap, 
+                        le_int32 featureMapCount, 
+                        le_bool featureOrder,
+                        LEErrorCode &success) const;
 };
 
 enum GlyphSubstitutionSubtableTypes
