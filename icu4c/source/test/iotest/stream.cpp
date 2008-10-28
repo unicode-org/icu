@@ -31,6 +31,7 @@
 #include <fstream>
 using namespace std;
 #elif U_IOSTREAM_SOURCE >= 198506
+#define USE_OLD_IOSTREAM 1
 #include <strstream.h>
 #include <fstream.h>
 #endif
@@ -191,7 +192,12 @@ testString(
 
     if (getBitStatus(sstrm) != expectedStatus) {
         printBits(sstrm);
+#ifdef USE_OLD_IOSTREAM
+        log_info("Warning. Expected status %d, Got %d. This maybe caused by the fact that the non-standardized iostream is being used.\n", expectedStatus, getBitStatus(sstrm));
+        log_info("See verbose output for details.\n");
+#else
         log_err("Expected status %d, Got %d. See verbose output for details\n", expectedStatus, getBitStatus(sstrm));
+#endif
     }
     if (str != UnicodeString(expectedString)) {
         log_err("Did not get expected results from \"%s\", expected \"%s\"\n", testString, expectedString);
@@ -218,6 +224,11 @@ static void U_CALLCONV TestStreamEOF(void)
     stringstream ss;
 #else
     strstream ss;
+#endif
+
+#ifdef USE_OLD_IOSTREAM
+    log_info("Old non-standardized iostream being used. This may result in inconsistent state flag settings. (e.g. failbit may not be set properly)\n");
+    log_info("In such a case, warnings will be issued instead of errors.\n");
 #endif
 
     fs << "EXAMPLE";
