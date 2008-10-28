@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1998-2006, International Business Machines
+ *   Copyright (C) 1998-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -109,6 +109,16 @@ void LEGlyphStorage::allocateGlyphArray(le_int32 initialGlyphCount, le_bool righ
     if (fInsertionList == NULL) {
         // FIXME: check this for failure?
         fInsertionList = new LEInsertionList(rightToLeft);
+        if (fInsertionList == NULL) { 
+            LE_DELETE_ARRAY(fCharIndices);
+            fCharIndices = NULL;
+
+            LE_DELETE_ARRAY(fGlyphs);
+            fGlyphs = NULL;
+
+            success = LE_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
     }
 }
 
@@ -501,9 +511,9 @@ void LEGlyphStorage::adoptGlyphCount(le_int32 newGlyphCount)
 }
 
 // FIXME: add error checking?
-LEGlyphID *LEGlyphStorage::insertGlyphs(le_int32  atIndex, le_int32 insertCount)
+LEGlyphID *LEGlyphStorage::insertGlyphs(le_int32  atIndex, le_int32 insertCount, LEErrorCode& success)
 {
-    return fInsertionList->insert(atIndex, insertCount);
+    return fInsertionList->insert(atIndex, insertCount, success);
 }
 
 le_int32 LEGlyphStorage::applyInsertions()
@@ -516,12 +526,30 @@ le_int32 LEGlyphStorage::applyInsertions()
 
     le_int32 newGlyphCount = fGlyphCount + growAmount;
 
-    fGlyphs      = (LEGlyphID *) LE_GROW_ARRAY(fGlyphs,      newGlyphCount);
-    fCharIndices = (le_int32 *)  LE_GROW_ARRAY(fCharIndices, newGlyphCount);
+    LEGlyphID *newGlyphs = (LEGlyphID *) LE_GROW_ARRAY(fGlyphs, newGlyphCount); 
+    if (newGlyphs == NULL) { 
+        // Could not grow the glyph array 
+        return fGlyphCount; 
+    } 
 
-    if (fAuxData != NULL) {
-        fAuxData = (le_uint32 *) LE_GROW_ARRAY(fAuxData,     newGlyphCount);
+    le_int32 *newCharIndices = (le_int32 *) LE_GROW_ARRAY(fCharIndices, newGlyphCount);
+    if (newCharIndices == NULL) { 
+        // Could not grow the glyph array 
+        return fGlyphCount; 
+    } 
+
+    if (fAuxData != NULL) {	
+        le_uint32 *newAuxData = (le_uint32 *) LE_GROW_ARRAY(fAuxData, newGlyphCount); 
+        if (newAuxData == NULL) { 
+            // could not grow the aux data array 
+            return fGlyphCount; 
+        } 
+        fAuxData = (le_uint32 *)newAuxData;
     }
+
+	// Set grown arrays
+    fGlyphs = newGlyphs; 
+    fCharIndices = newCharIndices;
 
     fSrcIndex  = fGlyphCount - 1;
     fDestIndex = newGlyphCount - 1;

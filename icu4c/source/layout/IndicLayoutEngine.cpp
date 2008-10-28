@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
  *
  */
 
@@ -66,7 +66,7 @@ le_int32 IndicOpenTypeLayoutEngine::glyphProcessing(const LEUnicode chars[], le_
         return 0;
     }
 
-    IndicReordering::adjustMPres(fMPreFixups, glyphStorage);
+    IndicReordering::adjustMPres(fMPreFixups, glyphStorage, success);
 
     return retCount;
 }
@@ -105,7 +105,12 @@ le_int32 IndicOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[],
 
     // NOTE: assumes this allocates featureTags...
     // (probably better than doing the worst case stuff here...)
-    le_int32 outCharCount = IndicReordering::reorder(&chars[offset], count, fScriptCode, outChars, glyphStorage, &fMPreFixups);
+    le_int32 outCharCount = IndicReordering::reorder(&chars[offset], count, fScriptCode, outChars, glyphStorage, &fMPreFixups, success);
+
+    if (LE_FAILURE(success)) {
+        LE_DELETE_ARRAY(outChars);
+        return 0;
+    }
 
     glyphStorage.adoptGlyphCount(outCharCount);
     return outCharCount;

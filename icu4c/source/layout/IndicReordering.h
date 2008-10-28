@@ -135,9 +135,9 @@ public:
 
     static le_int32 reorder(const LEUnicode *theChars, le_int32 charCount, le_int32 scriptCode,
         LEUnicode *outChars, LEGlyphStorage &glyphStorage,
-        MPreFixups **outMPreFixups);
+        MPreFixups **outMPreFixups, LEErrorCode& success);
 
-    static void adjustMPres(MPreFixups *mpreFixups, LEGlyphStorage &glyphStorage);
+    static void adjustMPres(MPreFixups *mpreFixups, LEGlyphStorage &glyphStorage, LEErrorCode& success);
 
     static const FeatureMap *getFeatureMap(le_int32 &count);
 

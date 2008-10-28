@@ -366,9 +366,17 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
 
         fStyleRunInfo[run].engine = LayoutEngine::layoutEngineFactory(fStyleRunInfo[run].font,
             fStyleRunInfo[run].script, getLanguageCode(fStyleRunInfo[run].locale), layoutStatus);
+        if (LE_FAILURE(layoutStatus)) {
+            status = layoutStatus;
+            return;
+        }
 
         fStyleRunInfo[run].glyphCount = fStyleRunInfo[run].engine->layoutChars(fChars, runStart, fStyleRunLimits[run] - runStart, fCharCount,
             fStyleRunInfo[run].level & 1, 0, 0, layoutStatus);
+        if (LE_FAILURE(layoutStatus)) {
+            status = layoutStatus;
+            return;
+        }
 
         runStart = fStyleRunLimits[run];
         styleIndices += styleCount;

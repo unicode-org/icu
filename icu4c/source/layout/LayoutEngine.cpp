@@ -141,6 +141,11 @@ LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCo
     fGlyphStorage = new LEGlyphStorage();
 }
 
+le_bool LayoutEngine::isBogus() 
+{ 
+    return fGlyphStorage == NULL; 
+}
+
 le_int32 LayoutEngine::getGlyphCount() const
 {
     return fGlyphStorage->getGlyphCount();
@@ -197,6 +202,11 @@ le_int32 LayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 off
 
     if (canonGSUBTable->coversScript(scriptTag)) {
         CharSubstitutionFilter *substitutionFilter = new CharSubstitutionFilter(fFontInstance);
+        if (substitutionFilter == NULL) { 
+            success = LE_MEMORY_ALLOCATION_ERROR;
+            return 0;
+        }
+
 		const LEUnicode *inChars = &chars[offset];
 		LEUnicode *reordered = NULL;
         LEGlyphStorage fakeGlyphStorage;
@@ -204,6 +214,7 @@ le_int32 LayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 off
         fakeGlyphStorage.allocateGlyphArray(count, rightToLeft, success);
 
         if (LE_FAILURE(success)) {
+            delete substitutionFilter;
             return 0;
         }
 
@@ -214,6 +225,7 @@ le_int32 LayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 off
 			reordered = LE_NEW_ARRAY(LEUnicode, count);
 
 			if (reordered == NULL) {
+                delete substitutionFilter;
 				success = LE_MEMORY_ALLOCATION_ERROR;
 				return 0;
 			}
@@ -225,6 +237,7 @@ le_int32 LayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 off
         fakeGlyphStorage.allocateAuxData(success);
 
         if (LE_FAILURE(success)) {
+            delete substitutionFilter;
             return 0;
         }
 
@@ -242,7 +255,12 @@ le_int32 LayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 off
 			LE_DELETE_ARRAY(reordered);
 		}
 
-        outCharCount = canonGSUBTable->process(fakeGlyphStorage, rightToLeft, scriptTag, langSysTag, NULL, substitutionFilter, canonFeatureMap, canonFeatureMapCount, FALSE);
+        outCharCount = canonGSUBTable->process(fakeGlyphStorage, rightToLeft, scriptTag, langSysTag, NULL, substitutionFilter, canonFeatureMap, canonFeatureMapCount, FALSE, success);
+
+        if (LE_FAILURE(success)) {
+            delete substitutionFilter;
+            return 0;
+        }
 
         out = (rightToLeft? outCharCount - 1 : 0);
 
@@ -255,6 +273,13 @@ le_int32 LayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 off
         glyphStorage.adoptCharIndicesArray(fakeGlyphStorage);
 
         outChars = LE_NEW_ARRAY(LEUnicode, outCharCount);
+
+        if (outChars == NULL) {
+            delete substitutionFilter;
+            success = LE_MEMORY_ALLOCATION_ERROR;
+            return 0;
+        }
+
         for (i = 0; i < outCharCount; i += 1, out += dir) {
             outChars[out] = (LEUnicode) LE_GET_GLYPH(fakeGlyphStorage[i]);
         }
@@ -597,6 +622,11 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
             }
         }
     }
+
+	if (result && result->isBogus()) {
+		delete result;
+		result = NULL;
+	}
 
     if (result == NULL) {
         success = LE_MEMORY_ALLOCATION_ERROR;

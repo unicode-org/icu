@@ -92,6 +92,13 @@ U_NAMESPACE_BEGIN
 class U_COMMON_API UMemory {
 public:
 
+/* test versions for debugging shaper heap memory problems */
+#ifdef SHAPER_MEMORY_DEBUG  
+    static void * NewArray(int size, int count);
+    static void * GrowArray(void * array, int newSize );
+    static void   FreeArray(void * array );
+#endif
+
 #if U_OVERRIDE_CXX_ALLOCATION
     /**
      * Override for ICU4C C++ memory management.

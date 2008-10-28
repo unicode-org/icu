@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
  *
  */
 
@@ -32,7 +32,7 @@ public:
     virtual ~GlyphPositioningLookupProcessor();
 
     virtual le_uint32 applySubtable(const LookupSubtable *lookupSubtable, le_uint16 lookupType, GlyphIterator *glyphIterator,
-        const LEFontInstance *fontInstance) const;
+        const LEFontInstance *fontInstance, LEErrorCode& success) const;
 
 protected:
     GlyphPositioningLookupProcessor();
