@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1998-2007, International Business Machines
+ *   Copyright (C) 1998-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -321,6 +321,7 @@ public:
      *
      * @param atIndex the index of the glyph to be replaced
      * @param insertCount the number of glyphs to replace it with
+     * @param success set to an error code if the auxillary data cannot be retrieved.
      *
      * @return the address at which to store the replacement glyphs.
      *
@@ -328,7 +329,7 @@ public:
      *
      * @stable ICU 3.0
      */
-    LEGlyphID *insertGlyphs(le_int32 atIndex, le_int32 insertCount);
+    LEGlyphID *insertGlyphs(le_int32 atIndex, le_int32 insertCount, LEErrorCode& success);
 
     /**
      * This method causes all of the glyph insertions recorded by

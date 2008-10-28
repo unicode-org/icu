@@ -212,7 +212,7 @@ le_int32 OpenTypeLayoutEngine::glyphProcessing(const LEUnicode chars[], le_int32
 
     if (fGSUBTable != NULL) {
         count = fGSUBTable->process(glyphStorage, rightToLeft, fScriptTag, fLangSysTag, fGDEFTable, fSubstitutionFilter,
-                                    fFeatureMap, fFeatureMapCount, fFeatureOrder);
+                                    fFeatureMap, fFeatureMapCount, fFeatureOrder, success);
     }
 
     return count;
@@ -309,7 +309,7 @@ void OpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int3
         }
 #endif
 
-        fGPOSTable->process(glyphStorage, adjustments, reverse, fScriptTag, fLangSysTag, fGDEFTable, fFontInstance,
+        fGPOSTable->process(glyphStorage, adjustments, reverse, fScriptTag, fLangSysTag, fGDEFTable, success, fFontInstance,
                             fFeatureMap, fFeatureMapCount, fFeatureOrder);
 
         float xAdjust = 0, yAdjust = 0;

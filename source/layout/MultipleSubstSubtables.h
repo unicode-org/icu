@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
  *
  */
 
@@ -31,7 +31,7 @@ struct MultipleSubstitutionSubtable : GlyphSubstitutionSubtable
     le_uint16 sequenceCount;
     Offset    sequenceTableOffsetArray[ANY_NUMBER];
 
-    le_uint32 process(GlyphIterator *glyphIterator, const LEGlyphFilter *filter = NULL) const;
+    le_uint32 process(GlyphIterator *glyphIterator, LEErrorCode& success, const LEGlyphFilter *filter = NULL) const;
 };
 
 U_NAMESPACE_END
