@@ -1432,7 +1432,7 @@ utrie2_serialize(UTrie2 *trie,
     }
 
     if( trie==NULL || trie->memory==NULL || trie->newTrie!=NULL ||
-        capacity<0 || (capacity>0 && (data==NULL || (((int32_t)data&3)!=0)))
+        capacity<0 || (capacity>0 && (data==NULL || (U_POINTER_MASK_LSB(data, 3)!=0)))
     ) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;

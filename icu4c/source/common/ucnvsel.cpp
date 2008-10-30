@@ -287,7 +287,7 @@ ucnvsel_serialize(const UConverterSelector* sel,
   // ensure args make sense!
   uint8_t *p = (uint8_t *)buffer;
   if (bufferCapacity < 0 ||
-      (bufferCapacity > 0 && (p == NULL || (((int32_t)p & 3) != 0)))
+      (bufferCapacity > 0 && (p == NULL || (U_POINTER_MASK_LSB(p, 3) != 0)))
   ) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
     return 0;
@@ -469,7 +469,7 @@ ucnvsel_openFromSerialized(const void* buffer, int32_t length, UErrorCode* statu
   // ensure args make sense!
   const uint8_t *p = (const uint8_t *)buffer;
   if (length <= 0 ||
-      (length > 0 && (p == NULL || (((int32_t)p & 3) != 0)))
+      (length > 0 && (p == NULL || (U_POINTER_MASK_LSB(p, 3) != 0)))
   ) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
     return NULL;
