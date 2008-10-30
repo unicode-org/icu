@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2003, International Business Machines
+*   Copyright (C) 1997-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -25,6 +25,7 @@
 #define CMEMORY_H
 
 #include "unicode/utypes.h"
+#include <stddef.h>
 #include <string.h>
 
 
@@ -53,14 +54,25 @@ typedef union {
 } UAlignedMemory;
 
 /**
- * Get the amount of bytes that a pointer is off by from
- * the previous aligned pointer
+ * Get the least significant bits of a pointer (a memory address).
+ * For example, with a mask of 3, the macro gets the 2 least significant bits,
+ * which will be 0 if the pointer is 32-bit (4-byte) aligned.
+ *
+ * ptrdiff_t is the most appropriate integer type to cast to.
+ * size_t should work too, since on most (or all?) platforms it has the same
+ * width as ptrdiff_t.
  */
-#define U_ALIGNMENT_OFFSET(ptr) (((size_t)ptr) & (sizeof(UAlignedMemory) - 1))
+#define U_POINTER_MASK_LSB(ptr, mask) (((ptrdiff_t)(char *)(ptr)) & (mask))
+
+/**
+ * Get the amount of bytes that a pointer is off by from
+ * the previous UAlignedMemory-aligned pointer.
+ */
+#define U_ALIGNMENT_OFFSET(ptr) U_POINTER_MASK_LSB(ptr, sizeof(UAlignedMemory) - 1)
 
 /**
  * Get the amount of bytes to add to a pointer
- * in order to get the next aligned address
+ * in order to get the next UAlignedMemory-aligned address.
  */
 #define U_ALIGNMENT_OFFSET_UP(ptr) (sizeof(UAlignedMemory) - U_ALIGNMENT_OFFSET(ptr))
 

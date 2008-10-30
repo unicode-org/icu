@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2004, International Business Machines
+*   Copyright (C) 2003-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -557,13 +557,15 @@ unorm_openIter(void *stackMem, int32_t stackMemSize, UErrorCode *pErrorCode) {
     /* allocate */
     uni=NULL;
     if(stackMem!=NULL && stackMemSize>=sizeof(UNormIterator)) {
-        size_t align=U_ALIGNMENT_OFFSET(stackMem);
-        if(align==0) {
+        if(U_ALIGNMENT_OFFSET(stackMem)==0) {
             /* already aligned */
             uni=(UNormIterator *)stackMem;
-        } else if((stackMemSize-=(int32_t)align)>=(int32_t)sizeof(UNormIterator)) {
-            /* needs alignment */
-            uni=(UNormIterator *)((char *)stackMem+align);
+        } else {
+            int32_t align=(int32_t)U_ALIGNMENT_OFFSET_UP(stackMem);
+            if((stackMemSize-=align)>=(int32_t)sizeof(UNormIterator)) {
+                /* needs alignment */
+                uni=(UNormIterator *)((char *)stackMem+align);
+            }
         }
         /* else does not fit */
     }
