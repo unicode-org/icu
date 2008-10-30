@@ -3411,8 +3411,6 @@ unorm_normalize(const UChar *src, int32_t srcLength,
  */
 static inline uint32_t
 _getPrevNorm32(UCharIterator &src, uint32_t minC, UChar &c, UChar &c2) {
-    uint32_t norm32;
-
     /* need src.hasPrevious() */
     c=(UChar)src.previous(&src);
     c2=0;
