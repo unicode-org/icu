@@ -917,6 +917,20 @@ u_memrchr32(const UChar *s, UChar32 c, int32_t count);
  *        return u_strcmp(ustringVar1, ustringVar2);
  *    }
  * </pre>
+ * 
+ * Note that the macros will NOT consistently work if their argument is another
+ * #define.  The following will not work on all platforms, don't use it.
+ * 
+ * <pre>
+ *     #define GLUCK "Mr. Gluck"
+ *     U_STRING_DECL(var, GLUCK, 9)
+ *     U_STRING_INIT(var, GLUCK, 9)
+ * </pre>
+ * 
+ * Instead, use the string literal "Mr. Gluck"  as the argument to both macro
+ * calls.
+ *
+ *
  * @stable ICU 2.0
  */
 #if defined(U_DECLARE_UTF16)
