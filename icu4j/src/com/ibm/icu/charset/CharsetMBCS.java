@@ -2684,7 +2684,7 @@ class CharsetMBCS extends CharsetICU {
                 }
             }
 
-            if (!cr[0].isError() && sourceArrayIndex < source.capacity() && !target.hasRemaining()) {
+            if (!cr[0].isError() && sourceArrayIndex < source.limit() && !target.hasRemaining()) {
                 /* target is full */
                 cr[0] = CoderResult.OVERFLOW;
             }
@@ -2991,7 +2991,7 @@ class CharsetMBCS extends CharsetICU {
                 /* try an extension mapping */
                 if (sharedData.mbcs.extIndexes != null) {
                     /* Increase the limit for proper handling. Used in LMBCS. */
-                    if (source.capacity() >= source.position() + length) {
+                    if (source.limit() >= source.position() + length) {
                         source.limit(source.position() + length);
                     }
                     return simpleMatchToU(source, useFallback);
