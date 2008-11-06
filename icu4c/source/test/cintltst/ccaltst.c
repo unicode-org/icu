@@ -388,14 +388,35 @@ static void TestCalendar()
     else
         log_err("FAIL: It is not in daylight saving's time\n");
 
-    
-    
     /*closing the UCalendar*/
     ucal_close(caldef);
     ucal_close(caldef2);
     ucal_close(calfr);
     ucal_close(calit);
     ucal_close(calfrclone);
+
+    /*testing ucal_getType*/
+    status = U_ZERO_ERROR;
+    caldef = ucal_open(NULL, 0, "en_US", UCAL_GREGORIAN, &status);
+    if ( U_SUCCESS(status) ) {
+        if ( strcmp( ucal_getType(caldef), "gregorian" ) != 0 ) {
+            log_err("FAIL: ucal_open UCAL_GREGORIAN does not return gregorian calendar\n");
+        }
+        ucal_close(caldef);
+    } else {
+        log_err("FAIL: ucal_open UCAL_GREGORIAN fails\n");
+    }
+    status = U_ZERO_ERROR;
+    caldef = ucal_open(NULL, 0, "ja_JP@calendar=japanese", UCAL_TRADITIONAL, &status);
+    if ( U_SUCCESS(status) ) {
+        if ( strcmp( ucal_getType(caldef), "japanese" ) != 0 ) {
+            log_err("FAIL: ucal_open calendar=japanese does not return japanese calendar\n");
+        }
+        ucal_close(caldef);
+    } else {
+        log_err("FAIL: ucal_open calendar=japanese fails\n");
+    }
+
     /*closing the UDateFormat used */
     udat_close(datdef);
     free(result);

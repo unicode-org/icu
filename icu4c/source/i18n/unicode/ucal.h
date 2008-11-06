@@ -1123,6 +1123,15 @@ ucal_getTZDataVersion(UErrorCode* status);
 U_DRAFT int32_t U_EXPORT2
 ucal_getCanonicalTimeZoneID(const UChar* id, int32_t len,
                             UChar* result, int32_t resultCapacity, UBool *isSystemID, UErrorCode* status);
+/**
+ * Get the resource keyword value string designating the calendar type for the UCalendar.
+ * @param cal The UCalendar to query.
+ * @return The resource keyword value string.
+ * @draft ICU 4.2
+ */
+U_DRAFT const char * U_EXPORT2
+ucal_getType(const UCalendar *cal);
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif
