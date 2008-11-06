@@ -511,4 +511,10 @@ ucal_getCanonicalTimeZoneID(const UChar* id, int32_t len,
     return reslen;
 }
 
+U_CAPI const char * U_EXPORT2
+ucal_getType(const UCalendar *cal)
+{
+	return ((Calendar*)cal)->getType();
+}
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
