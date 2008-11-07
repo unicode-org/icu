@@ -18,6 +18,7 @@
 #include "unicode/ustring.h"
 #include "unicode/strenum.h"
 #include "cmemory.h"
+#include "cstring.h"
 #include "ustrenum.h"
 
 U_NAMESPACE_USE
@@ -111,13 +112,14 @@ ucal_getNow()
   return Calendar::getNow();
 }
 
-// ignore type until we add more subclasses
+#define ULOC_LOCALE_IDENTIFIER_CAPACITY (ULOC_FULLNAME_CAPACITY + 1 + ULOC_KEYWORD_AND_VALUES_CAPACITY)
+
 U_CAPI UCalendar*  U_EXPORT2
-ucal_open(    const    UChar*          zoneID,
-            int32_t        len,
-        const    char*       locale,
-            UCalendarType     /*type*/,
-            UErrorCode*    status)
+ucal_open(  const UChar*  zoneID,
+            int32_t       len,
+            const char*   locale,
+            UCalendarType caltype,
+            UErrorCode*   status)
 {
 
   if(U_FAILURE(*status)) return 0;
@@ -128,7 +130,16 @@ ucal_open(    const    UChar*          zoneID,
   if (U_FAILURE(*status)) {
       return NULL;
   }
-  
+
+  if ( caltype == UCAL_GREGORIAN ) {
+      char  localeBuf[ULOC_LOCALE_IDENTIFIER_CAPACITY];
+      uprv_strncpy(localeBuf, locale, ULOC_LOCALE_IDENTIFIER_CAPACITY);
+      uloc_setKeywordValue("calendar", "gregorian", localeBuf, ULOC_LOCALE_IDENTIFIER_CAPACITY, status);
+      if (U_FAILURE(*status)) {
+          return NULL;
+      }
+      return (UCalendar*)Calendar::createInstance(zone, Locale(localeBuf), *status);
+  }
   return (UCalendar*)Calendar::createInstance(zone, Locale(locale), *status);
 }
 
@@ -514,7 +525,7 @@ ucal_getCanonicalTimeZoneID(const UChar* id, int32_t len,
 U_CAPI const char * U_EXPORT2
 ucal_getType(const UCalendar *cal)
 {
-	return ((Calendar*)cal)->getType();
+    return ((Calendar*)cal)->getType();
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

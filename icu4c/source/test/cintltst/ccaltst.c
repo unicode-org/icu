@@ -18,6 +18,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "unicode/uloc.h"
 #include "unicode/ucal.h"
@@ -395,26 +396,36 @@ static void TestCalendar()
     ucal_close(calit);
     ucal_close(calfrclone);
 
-    /*testing ucal_getType*/
+    /*testing ucal_getType, and ucal_open with UCAL_GREGORIAN*/
     status = U_ZERO_ERROR;
     caldef = ucal_open(NULL, 0, "en_US", UCAL_GREGORIAN, &status);
     if ( U_SUCCESS(status) ) {
         if ( strcmp( ucal_getType(caldef), "gregorian" ) != 0 ) {
-            log_err("FAIL: ucal_open UCAL_GREGORIAN does not return gregorian calendar\n");
+            log_err("FAIL: ucal_open en_US + UCAL_GREGORIAN does not return gregorian calendar\n");
         }
         ucal_close(caldef);
     } else {
-        log_err("FAIL: ucal_open UCAL_GREGORIAN fails\n");
+        log_err("FAIL: ucal_open en_US + UCAL_GREGORIAN fails\n");
     }
     status = U_ZERO_ERROR;
-    caldef = ucal_open(NULL, 0, "ja_JP@calendar=japanese", UCAL_TRADITIONAL, &status);
+    caldef = ucal_open(NULL, 0, "ja_JP@calendar=japanese", UCAL_DEFAULT, &status);
     if ( U_SUCCESS(status) ) {
         if ( strcmp( ucal_getType(caldef), "japanese" ) != 0 ) {
-            log_err("FAIL: ucal_open calendar=japanese does not return japanese calendar\n");
+            log_err("FAIL: ucal_open ja_JP@calendar=japanese does not return japanese calendar\n");
         }
         ucal_close(caldef);
     } else {
-        log_err("FAIL: ucal_open calendar=japanese fails\n");
+        log_err("FAIL: ucal_open ja_JP@calendar=japanese fails\n");
+    }
+    status = U_ZERO_ERROR;
+    caldef = ucal_open(NULL, 0, "th_TH", UCAL_GREGORIAN, &status);
+    if ( U_SUCCESS(status) ) {
+        if ( strcmp( ucal_getType(caldef), "gregorian" ) != 0 ) {
+            log_err("FAIL: ucal_open th_TH + UCAL_GREGORIAN does not return gregorian calendar\n");
+        }
+        ucal_close(caldef);
+    } else {
+        log_err("FAIL: ucal_open th_TH + UCAL_GREGORIAN fails\n");
     }
 
     /*closing the UDateFormat used */
