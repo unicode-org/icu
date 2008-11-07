@@ -149,8 +149,9 @@ typedef void* UCalendar;
  * @stable ICU 2.0
  */
 enum UCalendarType {
-  /** A traditional calendar for the locale */
-  UCAL_TRADITIONAL,
+  /** The default calendar for the locale, which might be the Gregorian calendar */
+  UCAL_DEFAULT,
+  UCAL_TRADITIONAL = UCAL_DEFAULT,
   /** The Gregorian calendar */
   UCAL_GREGORIAN
 };
@@ -601,7 +602,11 @@ ucal_getNow(void);
  * @param zoneID The desired TimeZone ID.  If 0, use the default time zone.
  * @param len The length of zoneID, or -1 if null-terminated.
  * @param locale The desired locale
- * @param type The type of UCalendar to open.
+ * @param type The type of UCalendar to open. This can be UCAL_GREGORIAN to open the Gregorian
+ * calendar for the locale, or UCAL_DEFAULT to open the default calendar for the locale (the
+ * default calendar may also be Gregorian). To open a specific non-Gregorian calendar for the
+ * locale, use uloc_setKeywordValue to set the value of the calendar keyword for the locale
+ * and then pass the locale to ucal_open with UCAL_DEFAULT as the type.
  * @param status A pointer to an UErrorCode to receive any errors
  * @return A pointer to a UCalendar, or 0 if an error occurred.
  * @stable ICU 2.0
