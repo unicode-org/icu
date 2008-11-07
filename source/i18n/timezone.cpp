@@ -1235,6 +1235,8 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
                 return result.remove();
             }
             format.adoptTimeZone(tz);
+        } else {
+            format.setTimeZone(*this);
         }
     } else {
         // The display name for standard time was requested, but currently in DST
