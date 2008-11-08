@@ -4407,7 +4407,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 *-*-os400*)	icu_cv_host_frag=mh-os400 ;;
 *-apple-rhapsody*)	icu_cv_host_frag=mh-darwin ;;
 *-apple-darwin*)	icu_cv_host_frag=mh-darwin ;;
-*-*-beos)	icu_cv_host_frag=mh-beos ;;
+*-*-beos|*-*-haiku)	icu_cv_host_frag=mh-beos ;;
 *-*-irix*)	icu_cv_host_frag=mh-irix ;;
 *-dec-osf*) icu_cv_host_frag=mh-alpha-osf ;;
 *-*-nto*)	icu_cv_host_frag=mh-qnx ;;
@@ -10791,10 +10791,7 @@ $debug ||
 if test -n "$CONFIG_FILES"; then
 
 
-ac_cr=`echo X |tr X '\015'` 
-#ac_cr='
-#'
-
+ac_cr=`echo X |tr X '\015'`
 ac_cs_awk_cr=`$AWK 'BEGIN { print "a\rb" }' </dev/null 2>/dev/null`
 if test "$ac_cs_awk_cr" = "a${ac_cr}b"; then
   ac_cs_awk_cr='\\r'
