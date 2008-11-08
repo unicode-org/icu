@@ -1641,7 +1641,8 @@ void UnicodeSetTest::TestSurrogate() {
     for (int i=0; DATA[i] != 0; ++i) {
         UErrorCode ec = U_ZERO_ERROR;
         logln((UnicodeString)"Test pattern " + i + " :" + UnicodeString(DATA[i], -1, US_INV));
-        UnicodeSet set(UnicodeString(DATA[i], -1, US_INV), ec);
+        UnicodeString str = UnicodeString(DATA[i], -1, US_INV);
+        UnicodeSet set(str, ec);
         if (U_FAILURE(ec)) {
             errln("FAIL: UnicodeSet constructor");
             continue;

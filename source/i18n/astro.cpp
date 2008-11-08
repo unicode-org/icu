@@ -19,6 +19,10 @@
 #include "putilimp.h"
 #include <stdio.h>  // for toString()
 
+#if defined (PI) 
+#undef PI
+#endif
+
 #ifdef U_DEBUG_ASTRO
 # include "uresimp.h" // for debugging
 
