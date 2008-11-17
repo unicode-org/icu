@@ -32,6 +32,7 @@
 
 static void TestAttribute(void);
 static void TestDefault(void);
+static void TestDefaultKeyword(void);
         int TestBufferSize();    /* defined in "colutil.c" */
 
 
@@ -128,6 +129,7 @@ void addCollAPITest(TestNode** root)
     addTest(root, &TestGetContractionsAndUnsafes, "tscoll/capitst/TestGetContractionsAndUnsafes");
     addTest(root, &TestOpenBinary, "tscoll/capitst/TestOpenBinary");
     addTest(root, &TestDefault, "tscoll/capitst/TestDefault");
+    addTest(root, &TestDefaultKeyword, "tscoll/capitst/TestDefaultKeyword");
     addTest(root, &TestOpenVsOpenRules, "tscoll/capitst/TestOpenVsOpenRules");
 }
 
@@ -2253,5 +2255,20 @@ static void TestDefault(void) {
         log_err("ucol_getKeywordValues should not work when given a bad status.\n");
     }
 }
+
+static void TestDefaultKeyword(void) {
+    /* Tests for code coverage. */
+    UErrorCode status = U_ZERO_ERROR;
+    const char *loc = "zh_TW@collation=default";
+    UCollator *coll = ucol_open(loc, &status);
+    if(U_FAILURE(status)) {
+        log_info("Warning: ucol_open(%s, ...) returned %s, at least it didn't crash.\n", loc, u_errorName(status));
+    } else if (status != U_USING_DEFAULT_WARNING) {
+        /* What do you mean that you know about using pinyin collation in Spanish!? This should be in the zh locale. */
+        log_err("ucol_open(%s, ...) should return an error or some sort of U_USING_DEFAULT_WARNING, but returned %s\n", loc, u_errorName(status));
+    }
+    ucol_close(coll);
+}
+
 
 #endif /* #if !UCONFIG_NO_COLLATION */
