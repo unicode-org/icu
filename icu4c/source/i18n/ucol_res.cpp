@@ -183,7 +183,8 @@ ucol_open_internal(const char *loc,
     UResourceBundle *collElem = NULL;
     char keyBuffer[256];
     // if there is a keyword, we pick it up and try to get elements
-    if(!uloc_getKeywordValue(loc, "collation", keyBuffer, 256, status)) {
+    if(!uloc_getKeywordValue(loc, "collation", keyBuffer, 256, status) ||
+        !uprv_strcmp(keyBuffer,"default")) { /* Treat 'zz@collation=default' as 'zz'. */
         // no keyword. we try to find the default setting, which will give us the keyword value
         intStatus = U_ZERO_ERROR;
         // finding default value does not affect collation fallback status
