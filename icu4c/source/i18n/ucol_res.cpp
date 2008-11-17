@@ -230,9 +230,12 @@ ucol_open_internal(const char *loc,
             if(U_FAILURE(*status)) {
                 goto clean;
             }
-        } else if(U_SUCCESS(*status)) { /* otherwise, we'll pick a collation data that exists */
+        } else if(U_SUCCESS(intStatus)) { /* otherwise, we'll pick a collation data that exists */
             int32_t len = 0;
             const uint8_t *inData = ures_getBinary(binary, &len, status);
+            if(U_FAILURE(*status)) {
+                goto clean;
+            }
             UCATableHeader *colData = (UCATableHeader *)inData;
             if(uprv_memcmp(colData->UCAVersion, UCA->image->UCAVersion, sizeof(UVersionInfo)) != 0 ||
                 uprv_memcmp(colData->UCDVersion, UCA->image->UCDVersion, sizeof(UVersionInfo)) != 0 ||
@@ -260,6 +263,11 @@ ucol_open_internal(const char *loc,
                 }
                 result->freeImageOnClose = FALSE;
             }
+        } else { // !U_SUCCESS(binaryStatus)
+            if(U_SUCCESS(*status)) {
+                *status = intStatus; // propagate underlying error
+            }
+            goto clean;
         }
         intStatus = U_ZERO_ERROR;
         result->rules = ures_getStringByKey(collElem, "Sequence", &result->rulesLength, &intStatus);
