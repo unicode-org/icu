@@ -2263,9 +2263,8 @@ static void TestDefaultKeyword(void) {
     UCollator *coll = ucol_open(loc, &status);
     if(U_FAILURE(status)) {
         log_info("Warning: ucol_open(%s, ...) returned %s, at least it didn't crash.\n", loc, u_errorName(status));
-    } else if (status != U_USING_DEFAULT_WARNING) {
-        /* What do you mean that you know about using pinyin collation in Spanish!? This should be in the zh locale. */
-        log_err("ucol_open(%s, ...) should return an error or some sort of U_USING_DEFAULT_WARNING, but returned %s\n", loc, u_errorName(status));
+    } else if (status != U_USING_FALLBACK_WARNING) {
+        log_err("ucol_open(%s, ...) should return an error or some sort of U_USING_FALLBACK_WARNING, but returned %s\n", loc, u_errorName(status));
     }
     ucol_close(coll);
 }
