@@ -2089,8 +2089,10 @@ ja{
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"y/M"}
+                yMd{"y/M/d"}
                 yMEd{"y/M/d(EEE)"}
                 yMMM{"y年M月"}
+                yMMMd{"y年M月d日"}
                 yMMMEd{"y年M月d日(EEE)"}
                 yMMMM{"y年M月"}
                 yQ{"y/Q"}
