@@ -32,7 +32,7 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
     }
 }
 
-#define MAX_LOCALE   4  
+#define MAX_LOCALE   5  
 
 /**
  * Test various generic API methods of DateTimePatternGenerator for API coverage.
@@ -58,6 +58,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         {"zh", "Hans", "CN"},
         {"de", "DE", ""},
         {"fi", "", ""},
+        {"ja", "", ""},
      };
      
     UnicodeString patternResults[] = {
@@ -71,12 +72,12 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("11:58 PM"),
         UnicodeString("23:58"),
         UnicodeString("58:59"),
-        UnicodeString("1999-1", -1, US_INV),  // zh_Hans_CN
-        UnicodeString("1999-01", -1, US_INV),
+        UnicodeString("1999-1", -1, US_INV),                  // zh_Hans_CN: yM
+        CharsToUnicodeString("1999\\u5E741\\u6708"),          // zh_Hans_CN: yMMM  -> yyyy\u5E74MMM (fixed expected result per ticket:6626:)
         CharsToUnicodeString("1999\\u5E741\\u670813\\u65E5"),
-        CharsToUnicodeString("1999\\u5E7401\\u670813\\u65E5"),
+        CharsToUnicodeString("1999\\u5E741\\u670813\\u65E5"), // zh_Hans_CN: yMMMd -> yyyy\u5E74MMMd\u65E5 (fixed expected result per ticket:6626:)
         UnicodeString("1-13"),
-        UnicodeString("01-13"),
+        CharsToUnicodeString("1\\u670813\\u65E5"),            // zh_Hans_CN: MMMd  -> MMMd\u65E5 (fixed expected result per ticket:6626:)
         CharsToUnicodeString("1999\\u5E741\\u5B63"),
         CharsToUnicodeString("\\u4E0B\\u534811:58"),
         CharsToUnicodeString("23:58"),
@@ -91,7 +92,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("23:58"),
         UnicodeString("23:58"),
         UnicodeString("58:59"),
-        UnicodeString("1/1999"),  // fi
+        UnicodeString("1.1999"),                             // fi: yM (fixed expected result per ticket:6626:)
         UnicodeString("tammi 1999"),
         UnicodeString("13.1.1999"),
         UnicodeString("13. tammi 1999"),
@@ -101,6 +102,16 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("23.58"),
         UnicodeString("23.58"),
         UnicodeString("58.59"),
+        UnicodeString("1999/1"),                              // ja 0: yM    -> y/M
+        CharsToUnicodeString("1999\\u5E741\\u6708"),          // ja 1: yMMM  -> y\u5E74M\u6708
+        UnicodeString("1999/1/13"),                           // ja 2: yMd   -> y/M/d
+        CharsToUnicodeString("1999\\u5E741\\u670813\\u65E5"), // ja 3: yMMMd -> y\u5E74M\u6708d\u65E5
+        UnicodeString("1/13"),                                // ja 4: Md    -> M/d
+        CharsToUnicodeString("1\\u670813\\u65E5"),            // ja 5: MMMd  -> M\u6708d\u65E5
+        UnicodeString("1999Q1"),                              // ja 6: yQQQ  -> yQQQ
+        UnicodeString("23:58"),                               // ja 7: hhmm
+        UnicodeString("23:58"),                               // ja 8: HHmm  -> HH:mm
+        UnicodeString("58:59"),                               // ja 9: mmss  -> mm:ss
         UnicodeString(),
     };
 
@@ -350,7 +361,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         // Trac# 6104
         status = U_ZERO_ERROR;
         pattern = UnicodeString("YYYYMMM");
-        UnicodeString expR = CharsToUnicodeString("1999/01");
+        UnicodeString expR = CharsToUnicodeString("1999\\u5E741\\u6708"); // fixed expected result per ticket:6626:
         Locale loc("ja");
         UDate testDate1= LocaleTest::date(99, 0, 13, 23, 58, 59);
         DateTimePatternGenerator *patGen=DateTimePatternGenerator::createInstance(loc, status);
@@ -376,7 +387,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     }
     {   // Trac# 6104
         Locale loc("zh");
-        UnicodeString expR = UnicodeString("1999-01", -1, US_INV);
+        UnicodeString expR = CharsToUnicodeString("1999\\u5E741\\u6708"); // fixed expected result per ticket:6626:
         UDate testDate1= LocaleTest::date(99, 0, 13, 23, 58, 59);
         DateTimePatternGenerator *patGen=DateTimePatternGenerator::createInstance(loc, status);
         if(U_FAILURE(status)) {
@@ -402,7 +413,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
          // Trac# 6172 duplicate time pattern
          status = U_ZERO_ERROR;
          pattern = UnicodeString("hmv");
-         UnicodeString expR = UnicodeString("h:m a v");
+         UnicodeString expR = UnicodeString("h:mm a v"); // avail formats has hm -> "h:mm a" (fixed expected result per ticket:6626:)
          Locale loc("en");
          DateTimePatternGenerator *patGen=DateTimePatternGenerator::createInstance(loc, status);
          if(U_FAILURE(status)) {
@@ -450,8 +461,8 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
             resultDate.remove();
             resultDate = sdf.format(testDate, resultDate);
             if ( resultDate != patternResults[resultIndex] ) {
-                errln(UnicodeString("\nERROR: Test various skeletons[") + (dataIndex-1)
-                    + UnicodeString("]. Got: ") + resultDate + UnicodeString(" Expected: ") + patternResults[resultIndex] );
+                errln(UnicodeString("\nERROR: Test various skeletons[") + (dataIndex-1) + UnicodeString("], localeIndex ") + localeIndex +
+                      UnicodeString(". Got: ") + resultDate + UnicodeString(" Expected: ") + patternResults[resultIndex] );
             }
             
             resultIndex++;

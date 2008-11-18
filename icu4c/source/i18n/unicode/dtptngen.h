@@ -30,6 +30,7 @@ class FormatParser;
 class DateTimeMatcher;
 class DistanceInfo;
 class PatternMap;
+class PtnSkeleton;
 
 /**
  * This class provides flexible generation of date format patterns, like "yy-MM-dd". 
@@ -392,23 +393,22 @@ private:
     Hashtable *fAvailableFormatKeyHash;
     UnicodeString hackPattern;
     UnicodeString emptyString;
-    UBool chineseMonthHack;
 
     void initData(const Locale &locale, UErrorCode &status);
     void addCanonicalItems();
     void addICUPatterns(const Locale& locale, UErrorCode& status);
     void hackTimes(const UnicodeString& hackPattern, UErrorCode& status);
     void addCLDRData(const Locale& locale);
+    UDateTimePatternConflict addPatternWithSkeleton(const UnicodeString& pattern, const UnicodeString * skeletonToUse, UBool override, UnicodeString& conflictingPattern, UErrorCode& status);
     void initHashtable(UErrorCode& status);
     void setDateTimeFromCalendar(const Locale& locale, UErrorCode& status);
     void setDecimalSymbols(const Locale& locale, UErrorCode& status);
-    UnicodeString getCJKPattern(const UnicodeString& patternForm);
     UDateTimePatternField getAppendFormatNumber(const char* field) const;
     UDateTimePatternField getAppendNameNumber(const char* field) const;
     void getAppendName(UDateTimePatternField field, UnicodeString& value);
     int32_t getCanonicalIndex(const UnicodeString& field);
-    const UnicodeString* getBestRaw(DateTimeMatcher& source, int32_t includeMask, DistanceInfo* missingFields);
-    UnicodeString adjustFieldTypes(const UnicodeString& pattern, UBool fixFractionalSeconds);
+    const UnicodeString* getBestRaw(DateTimeMatcher& source, int32_t includeMask, DistanceInfo* missingFields, const PtnSkeleton** specifiedSkeletonPtr = 0);
+    UnicodeString adjustFieldTypes(const UnicodeString& pattern, const PtnSkeleton* specifiedSkeleton, UBool fixFractionalSeconds);
     UnicodeString getBestAppending(int32_t missingFields);
     int32_t getTopBitNumber(int32_t foundMask);
     void setAvailableFormat(const UnicodeString &key, UErrorCode& status);
