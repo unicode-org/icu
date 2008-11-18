@@ -2148,6 +2148,7 @@ zh{
                 yM{"yyyy-M"}
                 yMEd{"yyyy年M月d日，E"}
                 yMMM{"yyyy年MMM"}
+                yMMMd{"yyyy年MMMd日"}
                 yMMMEd{"yyyy年MMMd日EEE"}
                 yMMMM{"yyyy年MMMM"}
                 yQ{"yyyy年QQQ"}
