@@ -21,6 +21,7 @@
 #include "unicode/udat.h"
 #include "unicode/udatpg.h"
 #include "unicode/uniset.h"
+#include "unicode/uloc.h"
 #include "unicode/ures.h"
 #include "unicode/rep.h"
 #include "cpputils.h"
@@ -476,6 +477,8 @@ DateTimePatternGenerator::hackTimes(const UnicodeString& hackPattern, UErrorCode
     }
 }
 
+#define ULOC_LOCALE_IDENTIFIER_CAPACITY (ULOC_FULLNAME_CAPACITY + 1 + ULOC_KEYWORD_AND_VALUES_CAPACITY)
+
 void
 DateTimePatternGenerator::addCLDRData(const Locale& locale) {
     UErrorCode err = U_ZERO_ERROR;
@@ -503,8 +506,23 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
     }
 
     rb = ures_open(NULL, locale.getName(), &err);
+    const char * calendarTypeToUse = DT_DateTimeGregorianTag; // initial default
+    char         calendarType[ULOC_KEYWORDS_CAPACITY]; // to be filled in with the type to use, if all goes well
+    if ( U_SUCCESS(err) ) {
+        char    localeWithCalendarKey[ULOC_LOCALE_IDENTIFIER_CAPACITY];
+        // obtain a locale that always has the calendar key value that should be used
+        (void)ures_getFunctionalEquivalent(localeWithCalendarKey, ULOC_LOCALE_IDENTIFIER_CAPACITY, NULL,
+                                            "calendar", "calendar", locale.getName(), NULL, FALSE, &err);
+        localeWithCalendarKey[ULOC_LOCALE_IDENTIFIER_CAPACITY-1] = 0; // ensure null termination
+        // now get the calendar key value from that locale
+        int32_t calendarTypeLen = uloc_getKeywordValue(localeWithCalendarKey, "calendar", calendarType, ULOC_KEYWORDS_CAPACITY, &err);
+        if (U_SUCCESS(err) && calendarTypeLen < ULOC_KEYWORDS_CAPACITY) {
+            calendarTypeToUse = calendarType;
+        }
+        err = U_ZERO_ERROR;
+    }
     calBundle = ures_getByKey(rb, DT_DateTimeCalendarTag, NULL, &err);
-    gregorianBundle = ures_getByKey(calBundle, DT_DateTimeGregorianTag, NULL, &err);
+    gregorianBundle = ures_getByKey(calBundle, calendarTypeToUse, NULL, &err);
 
     key=NULL;
     int32_t dtCount=0;
@@ -600,7 +618,7 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
     while((localeNameLen=uloc_getParent(parentLocale, parentLocale, 50, &err))>=0 ) {
         rb = ures_open(NULL, parentLocale, &err);
         calBundle = ures_getByKey(rb, DT_DateTimeCalendarTag, NULL, &err);
-        gregorianBundle = ures_getByKey(calBundle, DT_DateTimeGregorianTag, NULL, &err);
+        gregorianBundle = ures_getByKey(calBundle, calendarTypeToUse, NULL, &err);
         patBundle = ures_getByKeyWithFallback(gregorianBundle, DT_DateTimeAvailableFormatsTag, NULL, &err);
         if (U_SUCCESS(err)) {
             int32_t numberKeys = ures_getSize(patBundle);

@@ -2373,9 +2373,13 @@ ja{
             availableFormats{
                 Ed{"d日(EEE)"}
                 MMMEd{"M月d日(EEE)"}
+                MMMd{"M月d日"}
+                Md{"M/d"}
                 y{"Gy年"}
                 yyMM{"Gyy/MM"}
                 yyMMM{"Gy年M月"}
+                yMd{"Gy/M/d"}
+                yMMMd{"Gy年M月d日"}
                 yyQ{"Gyy/Q"}
                 yyyy{"Gy年"}
             }
