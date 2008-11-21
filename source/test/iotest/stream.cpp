@@ -50,6 +50,7 @@ const char C_NEW_LINE[] = {'\n',0};
 #endif
 U_CDECL_END
 
+#if U_IOSTREAM_SOURCE
 U_CDECL_BEGIN
 static void U_CALLCONV TestStream(void)
 {
@@ -240,7 +241,7 @@ static void U_CALLCONV TestStreamEOF(void)
     fs.close();
 
     log_verbose("Testing operator >> for UnicodeString...\n");
-    
+
     /* The test cases needs to be converted to the default codepage.  However, the stream operator needs char* so U_STRING_* is called. */
     U_STRING_DECL(testCase1, "", 0);
     U_STRING_INIT(testCase1, "", 0);
@@ -254,8 +255,8 @@ static void U_CALLCONV TestStreamEOF(void)
     U_STRING_INIT(testCase5, "bar   ", 6);
     U_STRING_DECL(testCase6, "   bar   ", 9);
     U_STRING_INIT(testCase6, "   bar   ", 9);
-    
-    
+
+
     U_STRING_DECL(expectedResultA, "", 0);
     U_STRING_INIT(expectedResultA, "", 0);
     U_STRING_DECL(expectedResultB, "foo", 3);
@@ -264,8 +265,8 @@ static void U_CALLCONV TestStreamEOF(void)
     U_STRING_INIT(expectedResultC, "unchanged", 9);
     U_STRING_DECL(expectedResultD, "bar", 3);
     U_STRING_INIT(expectedResultD, "bar", 3);
-    
-    
+
+
     UnicodeString UStr;
     UnicodeString expectedResults;
     char testcase[10];
@@ -283,4 +284,4 @@ U_CFUNC void addStreamTests(TestNode** root) {
     addTest(root, &TestStream, "stream/TestStream");
     addTest(root, &TestStreamEOF, "stream/TestStreamEOF");
 }
-
+#endif
