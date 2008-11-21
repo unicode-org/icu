@@ -688,7 +688,9 @@ static void addAllTests(TestNode** root) {
     addTest(root, &DataDrivenPrintfPrecision, "datadriv/DataDrivenPrintfPrecision");
     addTest(root, &DataDrivenScanf, "datadriv/DataDrivenScanf");
 #endif
+#if U_IOSTREAM_SOURCE
     addStreamTests(root);
+#endif
 }
 
 /* returns the path to icu/source/data/out */
@@ -831,7 +833,7 @@ int main(int argc, char* argv[])
     u_init(&errorCode);
     if (U_FAILURE(errorCode)) {
         fprintf(stderr,
-            "#### ERROR! %s: u_init() failed with status = \"%s\".\n" 
+            "#### ERROR! %s: u_init() failed with status = \"%s\".\n"
             "*** Check the ICU_DATA environment variable and \n"
             "*** check that the data files are present.\n", argv[0], u_errorName(errorCode));
         return 1;
