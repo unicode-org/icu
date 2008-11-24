@@ -36,7 +36,7 @@ ICUPKGDATA_OUTDIR = $(OUTDIR)
 endif
 
 CURDIR:=$(CURR_FULL_DIR)
-PKGDATA = $(BINDIR)/pkgdata $(PKGDATA_OPTS) -q -c -s $(CURDIR)/out/build/$(ICUDATA_PLATFORM_NAME) -d $(ICUPKGDATA_OUTDIR) -M'PKGDATA_LDFLAGS="$(LDFLAGSICUDT)"'
+PKGDATA = $(BINDIR)/pkgdata $(PKGDATA_OPTS) -q -c -s $(CURDIR)/out/build/$(ICUDATA_PLATFORM_NAME) -d $(ICUPKGDATA_OUTDIR)
 
 ifeq ($(OS390_STUBDATA),1)
 OS390PKG=package390
@@ -574,9 +574,8 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-icupkg.inc: $(srcdir)/icupkg.inc.in  $(top_builddir)/config.status
-	cd $(top_builddir) \
-	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+icupkg.inc:
+	$(MAKE) -f pkgdataMakefile
 
 ###########
 ########### 390 (z/OS) support

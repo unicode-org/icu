@@ -10078,7 +10078,7 @@ then
 fi
 
 # output the Makefiles
-ac_config_files="$ac_config_files icudefs.mk Makefile data/icupkg.inc config/Makefile.inc data/Makefile stubdata/Makefile common/Makefile i18n/Makefile layout/Makefile layoutex/Makefile io/Makefile extra/Makefile extra/uconv/Makefile extra/scrptrun/Makefile tools/Makefile tools/ctestfw/Makefile tools/toolutil/Makefile tools/makeconv/Makefile tools/genrb/Makefile tools/genuca/Makefile tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/genctd/Makefile tools/gennames/Makefile tools/gentest/Makefile tools/gennorm/Makefile tools/genprops/Makefile tools/gencase/Makefile tools/genbidi/Makefile tools/genpname/Makefile tools/genbrk/Makefile tools/gensprep/Makefile tools/icupkg/Makefile tools/icuswap/Makefile tools/pkgdata/Makefile tools/tzcode/Makefile test/Makefile test/compat/Makefile test/testdata/Makefile test/testdata/pkgdata.inc test/hdrtst/Makefile test/intltest/Makefile test/cintltst/Makefile test/iotest/Makefile test/letest/Makefile test/perf/Makefile test/perf/collationperf/Makefile test/perf/ubrkperf/Makefile test/perf/charperf/Makefile test/perf/convperf/Makefile test/perf/normperf/Makefile test/perf/strsrchperf/Makefile test/perf/unisetperf/Makefile test/perf/usetperf/Makefile test/perf/ustrperf/Makefile test/perf/utfperf/Makefile test/perf/utrie2perf/Makefile samples/Makefile samples/date/Makefile samples/cal/Makefile samples/layout/Makefile common/unicode/platform.h"
+ac_config_files="$ac_config_files icudefs.mk Makefile data/pkgdataMakefile config/Makefile.inc data/Makefile stubdata/Makefile common/Makefile i18n/Makefile layout/Makefile layoutex/Makefile io/Makefile extra/Makefile extra/uconv/Makefile extra/uconv/pkgdataMakefile extra/scrptrun/Makefile tools/Makefile tools/ctestfw/Makefile tools/toolutil/Makefile tools/makeconv/Makefile tools/genrb/Makefile tools/genuca/Makefile tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/genctd/Makefile tools/gennames/Makefile tools/gentest/Makefile tools/gennorm/Makefile tools/genprops/Makefile tools/gencase/Makefile tools/genbidi/Makefile tools/genpname/Makefile tools/genbrk/Makefile tools/gensprep/Makefile tools/icupkg/Makefile tools/icuswap/Makefile tools/pkgdata/Makefile tools/tzcode/Makefile test/Makefile test/compat/Makefile test/testdata/Makefile test/testdata/pkgdataMakefile test/hdrtst/Makefile test/intltest/Makefile test/cintltst/Makefile test/iotest/Makefile test/letest/Makefile test/perf/Makefile test/perf/collationperf/Makefile test/perf/ubrkperf/Makefile test/perf/charperf/Makefile test/perf/convperf/Makefile test/perf/normperf/Makefile test/perf/strsrchperf/Makefile test/perf/unisetperf/Makefile test/perf/usetperf/Makefile test/perf/ustrperf/Makefile test/perf/utfperf/Makefile test/perf/utrie2perf/Makefile samples/Makefile samples/date/Makefile samples/cal/Makefile samples/layout/Makefile common/unicode/platform.h"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -10678,7 +10678,7 @@ do
     "common/icucfg.h") CONFIG_HEADERS="$CONFIG_HEADERS common/icucfg.h" ;;
     "icudefs.mk") CONFIG_FILES="$CONFIG_FILES icudefs.mk" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-    "data/icupkg.inc") CONFIG_FILES="$CONFIG_FILES data/icupkg.inc" ;;
+    "data/pkgdataMakefile") CONFIG_FILES="$CONFIG_FILES data/pkgdataMakefile" ;;
     "config/Makefile.inc") CONFIG_FILES="$CONFIG_FILES config/Makefile.inc" ;;
     "data/Makefile") CONFIG_FILES="$CONFIG_FILES data/Makefile" ;;
     "stubdata/Makefile") CONFIG_FILES="$CONFIG_FILES stubdata/Makefile" ;;
@@ -10689,6 +10689,7 @@ do
     "io/Makefile") CONFIG_FILES="$CONFIG_FILES io/Makefile" ;;
     "extra/Makefile") CONFIG_FILES="$CONFIG_FILES extra/Makefile" ;;
     "extra/uconv/Makefile") CONFIG_FILES="$CONFIG_FILES extra/uconv/Makefile" ;;
+    "extra/uconv/pkgdataMakefile") CONFIG_FILES="$CONFIG_FILES extra/uconv/pkgdataMakefile" ;;
     "extra/scrptrun/Makefile") CONFIG_FILES="$CONFIG_FILES extra/scrptrun/Makefile" ;;
     "tools/Makefile") CONFIG_FILES="$CONFIG_FILES tools/Makefile" ;;
     "tools/ctestfw/Makefile") CONFIG_FILES="$CONFIG_FILES tools/ctestfw/Makefile" ;;
@@ -10716,7 +10717,7 @@ do
     "test/Makefile") CONFIG_FILES="$CONFIG_FILES test/Makefile" ;;
     "test/compat/Makefile") CONFIG_FILES="$CONFIG_FILES test/compat/Makefile" ;;
     "test/testdata/Makefile") CONFIG_FILES="$CONFIG_FILES test/testdata/Makefile" ;;
-    "test/testdata/pkgdata.inc") CONFIG_FILES="$CONFIG_FILES test/testdata/pkgdata.inc" ;;
+    "test/testdata/pkgdataMakefile") CONFIG_FILES="$CONFIG_FILES test/testdata/pkgdataMakefile" ;;
     "test/hdrtst/Makefile") CONFIG_FILES="$CONFIG_FILES test/hdrtst/Makefile" ;;
     "test/intltest/Makefile") CONFIG_FILES="$CONFIG_FILES test/intltest/Makefile" ;;
     "test/cintltst/Makefile") CONFIG_FILES="$CONFIG_FILES test/cintltst/Makefile" ;;

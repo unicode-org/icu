@@ -421,6 +421,82 @@
 				>
 			</File>
 			<File
+				RelativePath=".\pkg_genc.c"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						DisableLanguageExtensions="false"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						DisableLanguageExtensions="false"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						DisableLanguageExtensions="false"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						DisableLanguageExtensions="false"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\pkg_gencmn.c"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						DisableLanguageExtensions="false"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						DisableLanguageExtensions="false"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						DisableLanguageExtensions="false"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						DisableLanguageExtensions="false"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\pkg_icu.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\pkgitems.cpp"
 				>
 			</File>
@@ -507,6 +583,18 @@
 			</File>
 			<File
 				RelativePath=".\package.h"
+				>
+			</File>
+			<File
+				RelativePath=".\pkg_genc.h"
+				>
+			</File>
+			<File
+				RelativePath=".\pkg_gencmn.h"
+				>
+			</File>
+			<File
+				RelativePath=".\pkg_icu.h"
 				>
 			</File>
 			<File
