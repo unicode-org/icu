@@ -49,6 +49,7 @@ CFLAGS+=/GF /nologo
 CXXFLAGS+=/GF /nologo /EHsc /Zc:wchar_t
 CPPFLAGS+=-D_CRT_SECURE_NO_DEPRECATE
 DEFS+=-DWIN32
+DEFS+=-DCYGWINMSVC
 LDFLAGS+=/nologo
 
 # Commands to compile

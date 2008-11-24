@@ -56,12 +56,28 @@ U_CAPI int32_t U_EXPORT2
 getCurrentYear(void);
 
 /*
- * Creates a diretory with pathname.
+ * Creates a directory with pathname.
  *
  * @param status Set to an error code when mkdir failed.
  */
 U_CAPI void U_EXPORT2
 uprv_mkdir(const char *pathname, UErrorCode *status);
+
+/**
+ * Return the modification date for the specified file or directory.
+ * Return value is undefined if there was an error.
+ */
+/*U_CAPI UDate U_EXPORT2
+uprv_getModificationDate(const char *pathname, UErrorCode *status);
+*/
+/*
+ * Returns the modification
+ *
+ * @param status Set to an error code when mkdir failed.
+ */
+U_CAPI void U_EXPORT2
+uprv_mkdir(const char *pathname, UErrorCode *status);
+
 
 /*
  * UToolMemory is used for generic, custom memory management.

@@ -1,6 +1,6 @@
 /**************************************************************************
 *
-*   Copyright (C) 2000-2007, International Business Machines
+*   Copyright (C) 2000-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ***************************************************************************
@@ -103,7 +103,7 @@ const char *pkg_writeCharList(FileStream *s, CharList *l, const char *delim, int
             }
             T_FileStream_write(s, buffer, (int32_t)uprv_strlen(buffer));
         }
-        
+
         if(l->next && delim)
         {
             T_FileStream_write(s, delim, (int32_t)uprv_strlen(delim));
@@ -129,7 +129,7 @@ uint32_t pkg_countCharList(CharList *l)
   return c;
 }
 
-/* 
+/*
  * Prepend string to CharList
  */
 CharList *pkg_prependToList(CharList *l, const char *str)
@@ -147,8 +147,8 @@ CharList *pkg_prependToList(CharList *l, const char *str)
   return newList;
 }
 
-/* 
- * append string to CharList. *end or even end can be null if you don't 
+/*
+ * append string to CharList. *end or even end can be null if you don't
  * know it.[slow]
  * Str is adopted!
  */
@@ -160,7 +160,7 @@ CharList *pkg_appendToList(CharList *l, CharList** end, const char *str)
   {
     end = &endptr;
   }
-  
+
   /* FIND the end */
   if((*end == NULL) && (l != NULL))
   {
@@ -208,7 +208,7 @@ char * convertToNativePathSeparators(char *path) {
 
 CharList *pkg_appendUniqueDirToList(CharList *l, CharList** end, const char *strAlias) {
     char aBuf[1024];
-    char *rPtr; 
+    char *rPtr;
     rPtr = uprv_strrchr(strAlias, U_FILE_SEP_CHAR);
 #if (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR)
     {
@@ -254,7 +254,7 @@ pkg_appendFromStrings(CharList *l, CharList** end, const char *s, int32_t len)
     len = uprv_strlen(s);
   }
   targ = s+len;
-  
+
   while(*s && s<targ) {
     while(s<targ&&isspace(*s)) s++;
     for(p=s;s<targ&&!isspace(*p);p++);
@@ -267,22 +267,24 @@ pkg_appendFromStrings(CharList *l, CharList** end, const char *s, int32_t len)
     }
     s=p;
   }
-  
+
   return l;
 }
 #endif
 
 
 /*
- * Delete list 
+ * Delete list
  */
 void pkg_deleteList(CharList *l)
 {
-  
+  CharList *tmp;
   while(l != NULL)
   {
     uprv_free((void*)l->str);
+    tmp = l;
     l = l->next;
+    uprv_free(tmp);
   }
 }
 

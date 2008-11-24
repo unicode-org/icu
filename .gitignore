@@ -41,6 +41,7 @@ icu4c/source/data/icupkg.inc
 icu4c/source/data/in
 icu4c/source/data/makedata.vcproj.*.*.user
 icu4c/source/data/out
+icu4c/source/data/pkgdataMakefile
 icu4c/source/doc
 icu4c/source/extra/Makefile
 icu4c/source/extra/scrptrun/Makefile
@@ -51,6 +52,7 @@ icu4c/source/extra/uconv/Makefile
 icu4c/source/extra/uconv/Release
 icu4c/source/extra/uconv/debug
 icu4c/source/extra/uconv/pkgdata.inc
+icu4c/source/extra/uconv/pkgdataMakefile
 icu4c/source/extra/uconv/pkgdatain.txt
 icu4c/source/extra/uconv/release
 icu4c/source/extra/uconv/resources/*.res
@@ -362,6 +364,7 @@ icu4c/source/test/perf/utfperf/utfperf.vcproj.*.*.user
 icu4c/source/test/testdata/Makefile
 icu4c/source/test/testdata/out
 icu4c/source/test/testdata/pkgdata.inc
+icu4c/source/test/testdata/pkgdataMakefile
 icu4c/source/test/testmap/*.d
 icu4c/source/test/testmap/Debug
 icu4c/source/test/testmap/Makefile
