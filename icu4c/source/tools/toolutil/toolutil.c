@@ -130,6 +130,24 @@ uprv_mkdir(const char *pathname, UErrorCode *status) {
     }
 }
 
+/*U_CAPI UDate U_EXPORT2
+uprv_getModificationDate(const char *pathname, UErrorCode *status)
+{
+    if(U_FAILURE(*status)) {
+        return;
+    }
+    //  TODO: handle case where stat is not available
+    struct stat st;
+    
+    if(stat(pathname,&st) != 0)
+    {
+        *status = U_FILE_ACCESS_ERROR;
+    } else {
+        return st.st_mtime;
+    }
+}
+*/
+
 /* tool memory helper ------------------------------------------------------- */
 
 struct UToolMemory {

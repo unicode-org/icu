@@ -38,6 +38,7 @@ icu4c/source/data/locales/zh_Hans_MO.txt -text
 icu4c/source/data/misc/likelySubtags.txt -text
 icu4c/source/data/misc/metazoneInfo.txt svneol=native#text/plain
 icu4c/source/data/misc/plurals.txt -text
+icu4c/source/data/pkgdataMakefile.in -text
 icu4c/source/data/xml/brkitr/en.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/en_US.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/en_US_POSIX.xml svneol=native#text/xml
@@ -230,6 +231,7 @@ icu4c/source/data/xml/main/zh_Hans.xml svneol=native#text/xml
 icu4c/source/data/xml/main/zh_Hant.xml svneol=native#text/xml
 icu4c/source/data/xml/main/zu.xml -text
 icu4c/source/extra/scrptrun/readme.html svneol=native#text/html
+icu4c/source/extra/uconv/pkgdataMakefile.in -text
 icu4c/source/i18n/dtitv_impl.h -text
 icu4c/source/i18n/dtitvfmt.cpp -text
 icu4c/source/i18n/dtitvinf.cpp -text
@@ -261,6 +263,7 @@ icu4c/source/test/perf/strsrchperf/StrSrchPerf_r.pl -text
 icu4c/source/test/perf/strsrchperf/strsrchperf.cpp -text
 icu4c/source/test/perf/strsrchperf/strsrchperf.h -text
 icu4c/source/test/perf/strsrchperf/strsrchperf.vcproj -text
+icu4c/source/test/perf/utrie2perf/Makefile -text
 icu4c/source/test/testdata/ConverterSelectorTestUTF16.txt -text svneol=unset#text/plain
 icu4c/source/test/testdata/ConverterSelectorTestUTF8.txt svneol=native#text/plain
 icu4c/source/test/testdata/LineBreakTest.txt svneol=native#text/plain
@@ -271,7 +274,15 @@ icu4c/source/test/testdata/icu26_testtypes.res -text
 icu4c/source/test/testdata/icu26e_testtypes.res -text
 icu4c/source/test/testdata/importtest.bin -text
 icu4c/source/test/testdata/letest.xml svneol=native#text/xml
+icu4c/source/test/testdata/pkgdataMakefile.in -text
 icu4c/source/test/testdata/uni-text.bin -text
+icu4c/source/tools/pkgdata/pkgdata.cpp -text
+icu4c/source/tools/toolutil/pkg_genc.c -text
+icu4c/source/tools/toolutil/pkg_genc.h -text
+icu4c/source/tools/toolutil/pkg_gencmn.c -text
+icu4c/source/tools/toolutil/pkg_gencmn.h -text
+icu4c/source/tools/toolutil/pkg_icu.cpp -text
+icu4c/source/tools/toolutil/pkg_icu.h -text
 icu4j/.classpath -text
 icu4j/.externalToolBuilders/icu4j_Resources.launch svneol=native#text/xml
 icu4j/.project -text
