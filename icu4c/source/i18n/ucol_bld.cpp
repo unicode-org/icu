@@ -637,7 +637,7 @@ uint8_t ucol_uprv_getCaseBits(const UCollator *UCA, const UChar *src, uint32_t l
             } else {
                 if(u_islower(n[i])) {
                     lCount++;
-                } else {
+                } else if(U_SUCCESS(*status)) {
                     UChar sk[1], lk[1];
                     u_toSmallKana(&n[i], 1, sk, 1, status);
                     u_toLargeKana(&n[i], 1, lk, 1, status);
