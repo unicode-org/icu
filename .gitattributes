@@ -263,7 +263,6 @@ icu4c/source/test/perf/strsrchperf/StrSrchPerf_r.pl -text
 icu4c/source/test/perf/strsrchperf/strsrchperf.cpp -text
 icu4c/source/test/perf/strsrchperf/strsrchperf.h -text
 icu4c/source/test/perf/strsrchperf/strsrchperf.vcproj -text
-icu4c/source/test/perf/utrie2perf/Makefile -text
 icu4c/source/test/testdata/ConverterSelectorTestUTF16.txt -text svneol=unset#text/plain
 icu4c/source/test/testdata/ConverterSelectorTestUTF8.txt svneol=native#text/plain
 icu4c/source/test/testdata/LineBreakTest.txt svneol=native#text/plain

@@ -361,6 +361,7 @@ icu4c/source/test/perf/utfperf/debug
 icu4c/source/test/perf/utfperf/release
 icu4c/source/test/perf/utfperf/utfperf
 icu4c/source/test/perf/utfperf/utfperf.vcproj.*.*.user
+icu4c/source/test/perf/utrie2perf/Makefile
 icu4c/source/test/testdata/Makefile
 icu4c/source/test/testdata/out
 icu4c/source/test/testdata/pkgdata.inc
