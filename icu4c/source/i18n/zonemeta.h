@@ -71,7 +71,9 @@ private:
     ZoneMeta(); // Prevent construction.
     static const CanonicalMapEntry* U_EXPORT2 getCanonicalInfo(const UnicodeString &tzid);
 
-    static void initialize(void);
+    static void initializeCanonicalMap(void);
+    static void initializeOlsonToMeta(void);
+    static void initializeMetaToOlson(void);
     static Hashtable* createCanonicalMap(void);
     static Hashtable* createOlsonToMetaMap(void);
     static Hashtable* createMetaToOlsonMap(void);
