@@ -543,6 +543,13 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * filled in if the rule set never uses a DecimalFormat pattern.
      */
     private transient DecimalFormatSymbols decimalFormatSymbols = null;
+    
+    /**
+     * The NumberFormat used when lenient parsing numbers.  This needs to reflect
+     * the locale.  This is lazy-evaluated, like decimalFormatSymbols.  It is
+     * here so it can be shared by different NFSubstitutions.
+     */
+    private transient DecimalFormat decimalFormat = null;
 
     /**
      * Flag specifying whether lenient parse mode is on or off.  Off by default.
@@ -873,6 +880,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         defaultRuleSet = temp.defaultRuleSet;
         publicRuleSetNames = temp.publicRuleSetNames;
         decimalFormatSymbols = temp.decimalFormatSymbols;
+        decimalFormat = temp.decimalFormat;
         locale = temp.locale;
     }
 
@@ -1340,6 +1348,13 @@ public class RuleBasedNumberFormat extends NumberFormat {
             decimalFormatSymbols = new DecimalFormatSymbols(locale);
         }
         return decimalFormatSymbols;
+    }
+    
+    DecimalFormat getDecimalFormat() {
+        if (decimalFormat == null) {
+            decimalFormat = (DecimalFormat)NumberFormat.getInstance(locale);
+        }
+        return decimalFormat;
     }
 
     //-----------------------------------------------------------------------
