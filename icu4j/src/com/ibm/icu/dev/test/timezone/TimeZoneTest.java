@@ -1473,6 +1473,77 @@ public class TimeZoneTest extends TestFmwk
         // Restore the original JDK time zone
         java.util.TimeZone.setDefault(save);
     }
+
+    /*
+     * Test Display Names, choosing zones and lcoales where there are multiple
+     * meta-zones defined.
+     */
+    public void TestDisplayNamesMeta() {
+        final Integer TZSHORT = new Integer(TimeZone.SHORT);
+        final Integer TZLONG = new Integer(TimeZone.LONG);
+
+        final Object[][] zoneDisplayTestData = {
+            //  zone id             locale  summer          format      expected display name
+            {"Europe/London",       "en",   Boolean.FALSE,  TZSHORT,    "GMT"},
+            {"Europe/London",       "en",   Boolean.FALSE,  TZLONG,     "Greenwich Mean Time"},
+            {"Europe/London",       "en",   Boolean.TRUE,   TZSHORT,    "GMT+01:00" /*"BST"*/},
+            {"Europe/London",       "en",   Boolean.TRUE,   TZLONG,     "British Summer Time"},
+
+            {"America/Anchorage",   "en",   Boolean.FALSE,  TZSHORT,    "AKST"},
+            {"America/Anchorage",   "en",   Boolean.FALSE,  TZLONG,     "Alaska Standard Time"},
+            {"America/Anchorage",   "en",   Boolean.TRUE,   TZSHORT,    "AKDT"},
+            {"America/Anchorage",   "en",   Boolean.TRUE,   TZLONG,     "Alaska Daylight Time"},
+
+            // Southern Hemisphere, all data from meta:Australia_Western
+            {"Australia/Perth",     "en",   Boolean.FALSE,  TZSHORT,    "GMT+08:00"/*"AWST"*/},
+            {"Australia/Perth",     "en",   Boolean.FALSE,  TZLONG,     "Australian Western Standard Time"},
+            {"Australia/Perth",     "en",   Boolean.TRUE,   TZSHORT,    "GMT+09:00"/*"AWDT"*/},
+            {"Australia/Perth",     "en",   Boolean.TRUE,   TZLONG,     "Australian Western Daylight Time"},
+
+            {"America/Sao_Paulo",   "en",   Boolean.FALSE,  TZSHORT,    "GMT-03:00"/*"BRT"*/},
+            {"America/Sao_Paulo",   "en",   Boolean.FALSE,  TZLONG,     "Brasilia Time"},
+            {"America/Sao_Paulo",   "en",   Boolean.TRUE,   TZSHORT,    "GMT-02:00"/*"BRST"*/},
+            {"America/Sao_Paulo",   "en",   Boolean.TRUE,   TZLONG,     "Brasilia Summer Time"},
+
+            // No Summer Time, but had it before 1983.
+            {"Pacific/Honolulu",    "en",   Boolean.FALSE,  TZSHORT,    "HST"},
+            {"Pacific/Honolulu",    "en",   Boolean.FALSE,  TZLONG,     "Hawaii-Aleutian Standard Time"},
+            {"Pacific/Honolulu",    "en",   Boolean.TRUE,   TZSHORT,    "HST"},
+            {"Pacific/Honolulu",    "en",   Boolean.TRUE,   TZLONG,     "Hawaii-Aleutian Standard Time"},
+
+            // Northern, has Summer, not commonly used.
+            {"Europe/Helsinki",     "en",   Boolean.FALSE,  TZSHORT,    "GMT+02:00"/*"EET"*/},
+            {"Europe/Helsinki",     "en",   Boolean.FALSE,  TZLONG,     "Eastern European Time"},
+            {"Europe/Helsinki",     "en",   Boolean.TRUE,   TZSHORT,    "GMT+03:00"/*"EEST"*/},
+            {"Europe/Helsinki",     "en",   Boolean.TRUE,   TZLONG,     "Eastern European Summer Time"},
+
+            // Repeating the test data for DST.  The test data below trigger the problem reported
+            // by Ticket#6644
+            {"Europe/London",       "en",   Boolean.TRUE,   TZSHORT,    "GMT+01:00" /*"BST"*/},
+            {"Europe/London",       "en",   Boolean.TRUE,   TZLONG,     "British Summer Time"},
+        };
+
+        boolean sawAnError = false;
+        for (int testNum = 0; testNum < zoneDisplayTestData.length; testNum++) {
+            ULocale locale = new ULocale((String)zoneDisplayTestData[testNum][1]);
+            TimeZone zone = TimeZone.getTimeZone((String)zoneDisplayTestData[testNum][0]);
+            String displayName = zone.getDisplayName(((Boolean)zoneDisplayTestData[testNum][2]).booleanValue(),
+                    ((Integer)zoneDisplayTestData[testNum][3]).intValue());
+            if (!displayName.equals(zoneDisplayTestData[testNum][4])) {
+                sawAnError = true;
+                errln("Incorrect time zone display name.  zone = "
+                        + zoneDisplayTestData[testNum][0] + ",\n"
+                        + "   locale = " + locale
+                        + ",   style = " + (zoneDisplayTestData[testNum][3] == TZSHORT ? "SHORT" : "LONG")
+                        + ",   Summertime = " + zoneDisplayTestData[testNum][2] + "\n"
+                        + "   Expected " + zoneDisplayTestData[testNum][4]
+                        + ",   Got " + displayName);
+            }
+        }
+        if (sawAnError) {
+            errln("Note: Errors could be the result of changes to zoneStrings locale data");
+        }
+    }
 }
 
 //eof
