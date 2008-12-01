@@ -58,7 +58,8 @@ allflags()
     echo "  --sysconfdir           Print system config (etc) path"
     echo "  --unicode-version      Print version of Unicode data used in ICU ($UNICODE_VERSION)"
     echo "  --version              Print ICU version ($VERSION)"
-    echo "  --incfile              Print path to Makefile.inc (for -O option of pkgdata)"
+    echo "  --incfile              Print path to Makefile.inc"
+    echo "  --incpkgdatafile       Print path to pkgdata.inc (for -O option of pkgdata)"
     echo "  --install              Print path to install-sh"
     echo "  --mkinstalldirs              Print path to mkinstalldirs"
 }
@@ -301,6 +302,10 @@ do
 
         --incfile)
 	    echo $ECHO_N "${pkglibdir}/Makefile.inc${ECHO_C} "
+	    ;;
+
+	--incpkgdatafile)
+	    echo $ECHO_N "${pkglibdir}/pkgdata.inc${ECHO_C} "
 	    ;;
 
 	--icudata)
