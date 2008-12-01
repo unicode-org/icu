@@ -1326,6 +1326,14 @@ static int32_t pkg_getOptionsFromICUConfig(UOption *option) {
         return -1;
     }
 
+    for (int32_t length = strlen(buf) - 1; length >= 0; length--) {
+        if (buf[length] == '\n' || buf[length] == ' ') {
+            buf[length] = 0;
+        } else {
+            break;
+        }
+    }
+
     if(buf[strlen(buf)-1]=='\n')
     {
         buf[strlen(buf)-1]=0;
