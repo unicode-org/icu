@@ -71,6 +71,7 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
 static int32_t pkg_archiveLibrary(const char *targetDir, const char *version, UBool reverseExt);
 static void createFileNames(const char *version_major, const char *version, const char *libName, const UBool reverseExt);
 
+static int32_t pkg_getOptionsFromICUConfig(UOption *option);
 /* always have this fcn, just might not do anything */
 static void fillInMakefileFromICUConfig(UOption *option);
 
@@ -249,9 +250,11 @@ main(int argc, char* argv[]) {
 
 #ifndef U_WINDOWS
         if(!options[BLDOPT].doesOccur) {
-            fprintf(stderr, " required parameter is missing: -O is required \n");
-            fprintf(stderr, "Run '%s --help' for help.\n", progname);
-            return 1;
+            if (pkg_getOptionsFromICUConfig(&options[BLDOPT]) != 0) {
+                fprintf(stderr, " required parameter is missing: -O is required \n");
+                fprintf(stderr, "Run '%s --help' for help.\n", progname);
+                return 1;
+            }
         }
 #else
         if(options[BLDOPT].doesOccur) {
@@ -1297,6 +1300,50 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
     } /* for each file list file */
 }
 
+/* Try calling icu-config directly to get the option file. */
+static int32_t pkg_getOptionsFromICUConfig(UOption *option) {
+#if U_HAVE_POPEN
+    FILE *p;
+    size_t n;
+    static char buf[512] = "";
+    const char cmd[] = "icu-config --incpkgdatafile";
+
+    p = popen(cmd, "r");
+
+    if(p == NULL)
+    {
+        fprintf(stderr, "%s: icu-config: No icu-config found. (fix PATH or use -O option)\n", progname);
+        return -1;
+    }
+
+    n = fread(buf, 1, 511, p);
+
+    pclose(p);
+
+    if(n<=0)
+    {
+        fprintf(stderr,"%s: icu-config: Could not read from icu-config. (fix PATH or use -O option)\n", progname);
+        return -1;
+    }
+
+    if(buf[strlen(buf)-1]=='\n')
+    {
+        buf[strlen(buf)-1]=0;
+    }
+
+    if(buf[0] == 0)
+    {
+        fprintf(stderr, "%s: icu-config: invalid response from icu-config (fix PATH or use -O option)\n", progname);
+        return -1;
+    }
+
+    option->value = buf;
+    option->doesOccur = TRUE;
+
+    return 0;
+#endif
+    return -1;
+}
 /* Try calling icu-config directly to get information */
 static void fillInMakefileFromICUConfig(UOption *option)
 {

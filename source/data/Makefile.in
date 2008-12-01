@@ -574,8 +574,12 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-icupkg.inc:
+icupkg.inc: pkgdataMakefile
 	$(MAKE) -f pkgdataMakefile
+
+pkgdataMakefile:
+	cd $(top_builddir) \
+	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 ###########
 ########### 390 (z/OS) support

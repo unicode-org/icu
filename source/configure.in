@@ -1043,6 +1043,7 @@ AC_CONFIG_FILES([icudefs.mk \
 		Makefile \
 		data/pkgdataMakefile \
 		config/Makefile.inc \
+		config/pkgdataMakefile \
 		data/Makefile \
 		stubdata/Makefile \
 		common/Makefile \
