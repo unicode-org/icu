@@ -50,6 +50,7 @@ upvec_open(int32_t columns, UErrorCode *pErrorCode) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
+    columns+=2; /* count range start and limit columns */
 
     pv=(UPropsVectors *)uprv_malloc(sizeof(UPropsVectors));
     v=(uint32_t *)uprv_malloc(UPVEC_INITIAL_ROWS*columns*4);
@@ -61,7 +62,7 @@ upvec_open(int32_t columns, UErrorCode *pErrorCode) {
     }
     uprv_memset(pv, 0, sizeof(UPropsVectors));
     pv->v=v;
-    pv->columns=columns+=2; /* count range start and limit columns */
+    pv->columns=columns;
     pv->maxRows=UPVEC_INITIAL_ROWS;
     pv->rows=2+(UPVEC_MAX_CP-UPVEC_FIRST_SPECIAL_CP);
 
