@@ -33,7 +33,7 @@ all : clean
 	@echo AR=$(AR) >> $(OUTPUTFILE)
 	@echo ARFLAGS=$(ARFLAGS) >> $(OUTPUTFILE)
 	@echo RANLIB=$(RANLIB) >> $(OUTPUTFILE)
-
+	@echo INSTALL_CMD=$(INSTALL-L) >> $(OUTPUTFILE)
 
 clean : 
 	$(RMV) $(OUTPUTFILE)
