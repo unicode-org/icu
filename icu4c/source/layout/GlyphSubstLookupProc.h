@@ -28,7 +28,13 @@ class GlyphSubstitutionLookupProcessor : public LookupProcessor
 {
 public:
     GlyphSubstitutionLookupProcessor(const GlyphSubstitutionTableHeader *glyphSubstitutionTableHeader,
-        LETag scriptTag, LETag languageTag, const LEGlyphFilter *filter, const FeatureMap *featureMap, le_int32 featureMapCount, le_bool featureOrder);
+        LETag scriptTag, 
+        LETag languageTag, 
+        const LEGlyphFilter *filter, 
+        const FeatureMap *featureMap, 
+        le_int32 featureMapCount, 
+        le_bool featureOrder,
+        LEErrorCode& success);
 
     virtual ~GlyphSubstitutionLookupProcessor();
 

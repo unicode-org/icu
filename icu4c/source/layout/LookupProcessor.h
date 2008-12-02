@@ -33,8 +33,6 @@ struct LookupTable;
 
 class LookupProcessor : public UMemory {
 public:
-    le_bool isBogus();
-
     le_int32 process(LEGlyphStorage &glyphStorage, GlyphPositionAdjustments *glyphPositionAdjustments,
                  le_bool rightToLeft, const GlyphDefinitionTableHeader *glyphDefinitionTableHeader, const LEFontInstance *fontInstance, LEErrorCode& success) const;
 
@@ -48,11 +46,18 @@ public:
     virtual ~LookupProcessor();
 
 protected:
-     LookupProcessor(const char *baseAddress,
-        Offset scriptListOffset, Offset featureListOffset, Offset lookupListOffset,
-        LETag scriptTag, LETag languageTag, const FeatureMap *featureMap, le_int32 featureMapCount, le_bool orderFeatures);
+    LookupProcessor(const char *baseAddress,
+        Offset scriptListOffset, 
+        Offset featureListOffset, 
+        Offset lookupListOffset,
+        LETag scriptTag, 
+        LETag languageTag, 
+        const FeatureMap *featureMap, 
+        le_int32 featureMapCount, 
+        le_bool orderFeatures, 
+        LEErrorCode& success);
 
-   LookupProcessor();
+    LookupProcessor();
 
     le_int32 selectLookups(const FeatureTable *featureTable, FeatureMask featureMask, le_int32 order);
 
