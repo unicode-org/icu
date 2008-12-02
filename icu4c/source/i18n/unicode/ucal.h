@@ -149,11 +149,22 @@ typedef void* UCalendar;
  * @stable ICU 2.0
  */
 enum UCalendarType {
-  /** The default calendar for the locale, which might be the Gregorian calendar */
-  UCAL_DEFAULT,
-  UCAL_TRADITIONAL = UCAL_DEFAULT,
-  /** The Gregorian calendar */
-  UCAL_GREGORIAN
+  /**
+   * Despite the name, UCAL_TRADITIONAL designates the locale's default calendar,
+   * which may be the Gregorian calendar or some other calendar.
+   * @stable ICU 2.0
+   */
+  UCAL_TRADITIONAL,
+  /**
+   * Unambiguously designates the Gregorian calendar for the locale.
+   * @stable ICU 2.0
+   */
+  UCAL_GREGORIAN,
+  /**
+   * A better name for UCAL_TRADITIONAL.
+   * @draft ICU 4.2
+   */
+  UCAL_DEFAULT = UCAL_TRADITIONAL
 };
 
 /** @stable ICU 2.0 */
@@ -1131,11 +1142,12 @@ ucal_getCanonicalTimeZoneID(const UChar* id, int32_t len,
 /**
  * Get the resource keyword value string designating the calendar type for the UCalendar.
  * @param cal The UCalendar to query.
+ * @param status The error code for the operation.
  * @return The resource keyword value string.
  * @draft ICU 4.2
  */
 U_DRAFT const char * U_EXPORT2
-ucal_getType(const UCalendar *cal);
+ucal_getType(const UCalendar *cal, UErrorCode* status);
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
