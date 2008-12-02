@@ -25,12 +25,11 @@ void GlyphPositioningTableHeader::process(LEGlyphStorage &glyphStorage, GlyphPos
         return;
     } 
 
-    GlyphPositioningLookupProcessor processor(this, scriptTag, languageTag, featureMap, featureMapCount, featureOrder);
-    if (processor.isBogus()) {
-        success = LE_MEMORY_ALLOCATION_ERROR;
+    GlyphPositioningLookupProcessor processor(this, scriptTag, languageTag, featureMap, featureMapCount, featureOrder, success);
+    if (LE_FAILURE(success)) {
         return;
-    }
-	
+    } 
+
     processor.process(glyphStorage, glyphPositionAdjustments, rightToLeft, glyphDefinitionTableHeader, fontInstance, success);
 
     glyphPositionAdjustments->applyCursiveAdjustments(glyphStorage, rightToLeft, fontInstance);

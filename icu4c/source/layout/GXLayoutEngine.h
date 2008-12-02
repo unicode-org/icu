@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
  *
  */
 
@@ -42,13 +42,14 @@ public:
      * @param scriptCode - the script
      * @param langaugeCode - the language
      * @param morphTable - the 'mort' table
+     * @param success - set to an error code if the operation fails
      *
      * @see LayoutEngine::layoutEngineFactory
      * @see ScriptAndLangaugeTags.h for script and language codes
      *
      * @internal
      */
-    GXLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, const MorphTableHeader *morphTable);
+    GXLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, const MorphTableHeader *morphTable, LEErrorCode &success);
 
     /**
      * The destructor, virtual for correct polymorphic invocation.
