@@ -523,8 +523,11 @@ ucal_getCanonicalTimeZoneID(const UChar* id, int32_t len,
 }
 
 U_CAPI const char * U_EXPORT2
-ucal_getType(const UCalendar *cal)
+ucal_getType(const UCalendar *cal, UErrorCode* status)
 {
+    if (U_FAILURE(*status)) {
+        return NULL;
+    }
     return ((Calendar*)cal)->getType();
 }
 
