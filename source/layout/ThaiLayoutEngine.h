@@ -37,13 +37,14 @@ public:
      * @param fontInstance - the font
      * @param scriptCode - the script
      * @param languageCode - the language
+     * @param success - set to an error code if the operation fails
      *
      * @see LEFontInstance
      * @see ScriptAndLanguageTags.h for script and language codes
      *
      * @internal
      */
-    ThaiLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, le_int32 typoFlags);
+    ThaiLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, le_int32 typoFlags, LEErrorCode &success);
 
     /**
      * The destructor, virtual for correct polymorphic invocation.

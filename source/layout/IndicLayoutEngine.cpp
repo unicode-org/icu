@@ -25,8 +25,8 @@ U_NAMESPACE_BEGIN
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(IndicOpenTypeLayoutEngine)
 
 IndicOpenTypeLayoutEngine::IndicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
-                    le_int32 typoFlags, const GlyphSubstitutionTableHeader *gsubTable)
-    : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable), fMPreFixups(NULL)
+                    le_int32 typoFlags, const GlyphSubstitutionTableHeader *gsubTable, LEErrorCode &success)
+    : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable, success), fMPreFixups(NULL)
 {
     fFeatureMap = IndicReordering::getFeatureMap(fFeatureMapCount);
     fFeatureOrder = TRUE;
@@ -34,8 +34,8 @@ IndicOpenTypeLayoutEngine::IndicOpenTypeLayoutEngine(const LEFontInstance *fontI
     fFilterZeroWidth = IndicReordering::getFilterZeroWidth(fScriptCode);
 }
 
-IndicOpenTypeLayoutEngine::IndicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, le_int32 typoFlags)
-    : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags), fMPreFixups(NULL)
+IndicOpenTypeLayoutEngine::IndicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, le_int32 typoFlags, LEErrorCode &success)
+    : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, success), fMPreFixups(NULL)
 {
     fFeatureMap = IndicReordering::getFeatureMap(fFeatureMapCount);
     fFeatureOrder = TRUE;

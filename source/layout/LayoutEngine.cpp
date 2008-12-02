@@ -134,16 +134,22 @@ static const FeatureMap canonFeatureMap[] =
 
 static const le_int32 canonFeatureMapCount = LE_ARRAY_SIZE(canonFeatureMap);
 
-LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, le_int32 typoFlags)
+LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance, 
+                           le_int32 scriptCode, 
+                           le_int32 languageCode, 
+                           le_int32 typoFlags,
+                           LEErrorCode &success)
   : fGlyphStorage(NULL), fFontInstance(fontInstance), fScriptCode(scriptCode), fLanguageCode(languageCode),
     fTypoFlags(typoFlags), fFilterZeroWidth(TRUE)
 {
-    fGlyphStorage = new LEGlyphStorage();
-}
+    if (LE_FAILURE(success)) {
+        return;
+    } 
 
-le_bool LayoutEngine::isBogus() 
-{ 
-    return fGlyphStorage == NULL; 
+    fGlyphStorage = new LEGlyphStorage();
+    if (fGlyphStorage == NULL) {
+        success = LE_MEMORY_ALLOCATION_ERROR;
+    }
 }
 
 le_int32 LayoutEngine::getGlyphCount() const
@@ -534,15 +540,15 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
         case tamlScriptCode:
         case teluScriptCode:
         case sinhScriptCode:
-            result = new IndicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable);
+            result = new IndicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable, success);
             break;
 
         case arabScriptCode:
-            result = new ArabicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable);
+            result = new ArabicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable, success);
             break;
 
         case hangScriptCode:
-            result = new HangulOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable);
+            result = new HangulOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable, success);
             break;
 
         case haniScriptCode:
@@ -554,35 +560,35 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
             case zhtLanguageCode:
             case zhsLanguageCode:
                 if (gsubTable->coversScriptAndLanguage(scriptTag, languageTag, TRUE)) {
-                    result = new HanOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable);
+                    result = new HanOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable, success);
                     break;
                 }
 
                 // note: falling through to default case.
             default:
-                result = new OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable);
+                result = new OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable, success);
                 break;
             }
 
             break;
 
         case tibtScriptCode:
-            result = new TibetanOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable);
+            result = new TibetanOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable, success);
             break;
 
         case khmrScriptCode:
-            result = new KhmerOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable);
+            result = new KhmerOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable, success);
             break;
 
         default:
-            result = new OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable);
+            result = new OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable, success);
             break;
         }
     } else {
         const MorphTableHeader *morphTable = (MorphTableHeader *) fontInstance->getFontTable(mortTableTag);
 
         if (morphTable != NULL) {
-            result = new GXLayoutEngine(fontInstance, scriptCode, languageCode, morphTable);
+            result = new GXLayoutEngine(fontInstance, scriptCode, languageCode, morphTable, success);
         } else {
             switch (scriptCode) {
             case bengScriptCode:
@@ -596,34 +602,34 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
             case teluScriptCode:
             case sinhScriptCode:
             {
-                result = new IndicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags);
+                result = new IndicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, success);
                 break;
             }
 
             case arabScriptCode:
             //case hebrScriptCode:
-                result = new UnicodeArabicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags);
+                result = new UnicodeArabicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, success);
                 break;
 
             //case hebrScriptCode:
             //    return new HebrewOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags);
 
             case thaiScriptCode:
-                result = new ThaiLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags);
+                result = new ThaiLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, success);
                 break;
 
             case hangScriptCode:
-                result = new HangulOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags);
+                result = new HangulOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, success);
                 break;
 
             default:
-                result = new LayoutEngine(fontInstance, scriptCode, languageCode, typoFlags);
+                result = new LayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, success);
                 break;
             }
         }
     }
 
-	if (result && result->isBogus()) {
+    if (result && LE_FAILURE(success)) {
 		delete result;
 		result = NULL;
 	}

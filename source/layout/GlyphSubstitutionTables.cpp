@@ -32,7 +32,7 @@ le_int32 GlyphSubstitutionTableHeader::process(LEGlyphStorage &glyphStorage,
         return 0;
     } 
 
-    GlyphSubstitutionLookupProcessor processor(this, scriptTag, languageTag, filter, featureMap, featureMapCount, featureOrder);
+    GlyphSubstitutionLookupProcessor processor(this, scriptTag, languageTag, filter, featureMap, featureMapCount, featureOrder, success);
     return processor.process(glyphStorage, NULL, rightToLeft, glyphDefinitionTableHeader, NULL, success);
 }
 

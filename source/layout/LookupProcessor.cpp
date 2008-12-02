@@ -120,7 +120,8 @@ le_int32 LookupProcessor::selectLookups(const FeatureTable *featureTable, Featur
 
 LookupProcessor::LookupProcessor(const char *baseAddress,
         Offset scriptListOffset, Offset featureListOffset, Offset lookupListOffset,
-        LETag scriptTag, LETag languageTag, const FeatureMap *featureMap, le_int32 featureMapCount, le_bool orderFeatures)
+        LETag scriptTag, LETag languageTag, const FeatureMap *featureMap, le_int32 featureMapCount, le_bool orderFeatures, 
+        LEErrorCode& success)
     : lookupListTable(NULL), featureListTable(NULL), lookupSelectArray(NULL),
       lookupOrderArray(NULL), lookupOrderCount(0)
 {
@@ -129,6 +130,10 @@ LookupProcessor::LookupProcessor(const char *baseAddress,
     le_uint16 featureCount = 0;
     le_uint16 lookupListCount = 0;
     le_uint16 requiredFeatureIndex;
+
+    if (LE_FAILURE(success)) {
+        return;
+    } 
 
     if (scriptListOffset != 0) {
         scriptListTable = (const ScriptListTable *) (baseAddress + scriptListOffset);
@@ -157,6 +162,7 @@ LookupProcessor::LookupProcessor(const char *baseAddress,
 
     lookupSelectArray = LE_NEW_ARRAY(FeatureMask, lookupListCount);
     if (lookupSelectArray == NULL) {
+        success = LE_MEMORY_ALLOCATION_ERROR;
         return;
     }
 
@@ -190,6 +196,7 @@ LookupProcessor::LookupProcessor(const char *baseAddress,
 
     lookupOrderArray = LE_NEW_ARRAY(le_uint16, featureReferences);
     if (lookupOrderArray == NULL) {
+        success = LE_MEMORY_ALLOCATION_ERROR;
         return;
     }
 
@@ -283,11 +290,6 @@ LookupProcessor::LookupProcessor()
 {
 	lookupOrderArray = NULL;
 	lookupSelectArray = NULL;
-}
-
-le_bool LookupProcessor::isBogus() 
-{ 
-    return lookupOrderArray && lookupSelectArray;
 }
 
 LookupProcessor::~LookupProcessor()

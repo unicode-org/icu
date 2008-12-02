@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2007 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
  *
  */
 
@@ -41,6 +41,7 @@ public:
      * @param scriptCode - the script
      * @param langaugeCode - the language
      * @param gsubTable - the GSUB table
+     * @param success - set to an error code if the operation fails
      *
      * @see LayoutEngine::layoutEngineFactory
      * @see OpenTypeLayoutEngine
@@ -49,7 +50,7 @@ public:
      * @internal
      */
     ArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
-                            le_int32 typoFlags, const GlyphSubstitutionTableHeader *gsubTable);
+                            le_int32 typoFlags, const GlyphSubstitutionTableHeader *gsubTable, LEErrorCode &success);
 
     /**
      * This constructor is used when the font requires a "canned" GSUB table which can't be known
@@ -58,6 +59,7 @@ public:
      * @param fontInstance - the font
      * @param scriptCode - the script
      * @param langaugeCode - the language
+     * @param success - set to an error code if the operation fails
      *
      * @see OpenTypeLayoutEngine
      * @see ScriptAndLanguageTags.h for script and language codes
@@ -65,7 +67,7 @@ public:
      * @internal
      */
     ArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
-			       le_int32 typoFlags);
+			       le_int32 typoFlags, LEErrorCode &success);
 
     /**
      * The destructor, virtual for correct polymorphic invocation.
@@ -159,6 +161,7 @@ public:
      * @param fontInstance - the font
      * @param scriptCode - the script
      * @param languageCode - the language
+     * @param success - set to an error code if the operation fails
      *
      * @see LEFontInstance
      * @see ScriptAndLanguageTags.h for script and language codes
@@ -166,7 +169,7 @@ public:
      * @internal
      */
     UnicodeArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
-		le_int32 typoFlags);
+		le_int32 typoFlags, LEErrorCode &success);
 
     /**
      * The destructor, virtual for correct polymorphic invocation.
