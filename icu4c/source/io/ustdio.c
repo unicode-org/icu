@@ -300,6 +300,7 @@ u_file_write_flush(const UChar *chars,
     /* Set up conversion parameters */
     UErrorCode  status       = U_ZERO_ERROR;
     const UChar *mySource    = chars;
+    const UChar *mySourceBegin; 
     const UChar *mySourceEnd;
     char        charBuffer[UFILE_CHARBUFFER_SIZE];
     char        *myTarget   = charBuffer;
@@ -334,6 +335,7 @@ u_file_write_flush(const UChar *chars,
 
     /* Perform the conversion in a loop */
     do {
+        mySourceBegin = mySource; /* beginning location for this loop */
         status     = U_ZERO_ERROR;
         if(f->fConverter != NULL) { /* We have a valid converter */
             ucnv_fromUnicode(f->fConverter,
@@ -345,8 +347,14 @@ u_file_write_flush(const UChar *chars,
                 flushIO,
                 &status);
         } else { /*weiv: do the invariant conversion */
-            u_UCharsToChars(mySource, myTarget, count);
-            myTarget += count;
+            int32_t convertChars = (int32_t) (mySourceEnd - mySource); 
+            if (convertChars > UFILE_CHARBUFFER_SIZE) { 
+                convertChars = UFILE_CHARBUFFER_SIZE; 
+                status = U_BUFFER_OVERFLOW_ERROR; 
+            } 
+            u_UCharsToChars(mySource, myTarget, convertChars); 
+            mySource += convertChars; 
+            myTarget += convertChars; 
         }
         numConverted = (int32_t)(myTarget - charBuffer);
 
@@ -357,7 +365,7 @@ u_file_write_flush(const UChar *chars,
                 numConverted,
                 f->fFile);
 
-            written     += numConverted;
+            written     += (int32_t) (mySource - mySourceBegin);
         }
         myTarget     = charBuffer;
     }
