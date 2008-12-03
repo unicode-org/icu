@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright (c) 2007 International Business Machines Corporation and others.
+# Copyright (c) 2007-2008 International Business Machines Corporation and others.
 # All rights reserved
 
 MissingICUTZUJAR() {
