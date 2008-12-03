@@ -1,6 +1,6 @@
 @echo off
 rem *******************************************************************************
-rem * Copyright (C) 2007, International Business Machines Corporation and         *
+rem * Copyright (C) 2007-2008 International Business Machines Corporation and         *
 rem * others. All Rights Reserved.                                                *
 rem *******************************************************************************
 
