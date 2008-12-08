@@ -53,8 +53,12 @@ U_CDECL_BEGIN
 #include "makefile.h"
 U_CDECL_END
 
-#if defined(U_WINDOWS) && !defined(__GNUC__)
+#ifdef U_WINDOWS
+#ifdef __GNUC__
+#define WINDOWS_WITH_GNUC
+#else
 #define WINDOWS_WITH_MSVC
+#endif
 #endif
 #if !defined(WINDOWS_WITH_MSVC) && !defined(U_LINUX)
 #define BUILD_DATA_WITHOUT_ASSEMBLY
@@ -491,10 +495,20 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
         return result;
     } else /* if (mode == MODE_COMMON || mode == MODE_STATIC || mode == MODE_DLL) */ {
         uprv_strcpy(targetDir, o->targetDir);
+#ifdef WINDOWS_WITH_GNUC
+        /* Need to fix the file seperator character when using MinGW. */
+        uprv_strcat(targetDir, "/");
+#else
         uprv_strcat(targetDir, U_FILE_SEP_STRING);
+#endif
 
         uprv_strcpy(tmpDir, o->tmpDir);
+#ifdef WINDOWS_WITH_GNUC
+        /* Need to fix the file seperator character when using MinGW. */
+        uprv_strcat(tmpDir, "/");
+#else
         uprv_strcat(tmpDir, U_FILE_SEP_STRING);
+#endif
 
         uprv_strcpy(datFileNamePath, tmpDir);
 
@@ -572,6 +586,13 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                 if (checkAssemblyHeaderName(genccodeAssembly+3)) {
                     writeAssemblyCode(datFileNamePath, o->tmpDir, o->entryName, NULL, gencFilePath);
 
+#ifdef WINDOWS_WITH_GNUC
+                    /* Need to fix the file seperator character when using MinGW. */
+                    for (int32_t i = 0, size = uprv_strlen(gencFilePath); i < size; i++) {
+                        gencFilePath[i] = (gencFilePath[i] ==U_FILE_SEP_CHAR ) ? '/' : gencFilePath[i];
+                    }
+#endif
+
                     result = pkg_createWithAssemblyCode(targetDir, mode, gencFilePath);
                     if (result != 0) {
                         fprintf(stderr, "Error generating assembly code for data.\n");
@@ -599,7 +620,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                     return result;
                 }
             }
-#ifndef WINDOWS_WITH_MSVC
+#ifndef U_WINDOWS
             /* Certain platforms uses archive library. (e.g. AIX) */
             result = pkg_archiveLibrary(targetDir, o->version, reverseExt);
             if (result != 0) {
