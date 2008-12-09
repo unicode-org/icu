@@ -781,7 +781,7 @@ ibm-1257_P100-1995 { UTR22* }   ibm-1257 { IBM* }               # Old Windows Ba
 ibm-5353_P100-1998 { UTR22* }   ibm-5353 { IBM* } windows-1257  # Somewhat old Windows Baltic (w/ euro update)
 ibm-1258_P100-1997 { UTR22* }   ibm-1258 { IBM* } windows-1258  # Old Windows Vietnamese (w/o euro update)
 
-macos-0_2-10.2 { UTR22* }       macintosh { IANA* MIME* WINDOWS } mac { IANA } csMacintosh { IANA } windows-10000 { WINDOWS* } macroman # Apple latin 1
+macos-0_2-10.2 { UTR22* }       macintosh { IANA* MIME* WINDOWS } mac { IANA } csMacintosh { IANA } windows-10000 { WINDOWS* } macroman {JAVA} x-macroman({JAVA*} # Apple latin 1
 macos-6_2-10.4 { UTR22* }       x-mac-greek { MIME* WINDOWS } windows-10006 { WINDOWS* } macgr           # Apple Greek
 macos-7_3-10.2 { UTR22* }       x-mac-cyrillic { MIME* WINDOWS } windows-10007 { WINDOWS* } mac-cyrillic maccy # Apple Cyrillic
 macos-29-10.2 { UTR22* }        x-mac-centraleurroman { MIME* } windows-10029 { WINDOWS* } x-mac-ce { WINDOWS } macce maccentraleurope  # Apple Central Europe
