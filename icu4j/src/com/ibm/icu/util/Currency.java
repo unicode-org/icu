@@ -11,6 +11,7 @@ import java.text.ChoiceFormat;
 import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -1067,6 +1068,67 @@ public class Currency extends MeasureUnit implements Serializable {
     private ULocale actualLocale;
 
     // -------- END ULocale boilerplate --------
+    
+    /**
+     * Given a keyword and a locale, returns an array of string values in a preferred order that would make a difference. 
+     * These are all and only those values where the open (creation) of the service with the locale
+     * formed from the input locale plus input keyword and that value has different behavior than
+     * creation with the input locale alone. For example, calling this with "de", "collation" returns {"phonebook","standard"}
+     * @param keyword one of the keyword {"collation", "calendar", "currency"}
+     * @param locLD input ULocale
+     * @param commonlyUsed if set to true it will return commonly used values with the given locale else all the available values
+     * @return an array of string values for a given keyword and locale
+     * @draft ICU 4.2
+     */
+    public static final String[] getKeywordValues(String keyword, ULocale locID, boolean commonlyUsed) {
+        ICUResourceBundle r = null;
+        String baseName,resName;
+        baseName = ICUResourceBundle.ICU_BASE_NAME;
+        resName = "CurrencyMap";
+        String kwVal = locID.getKeywordValue(keyword);
+        Enumeration e, key;
+        HashSet set = new HashSet();
+        
+        if(commonlyUsed && kwVal != null){
+            set.add(kwVal);
+            return (String[]) set.toArray(new String[set.size()]);
+        }
+        
+        String countryName = locID.getCountry();
+        if(commonlyUsed && countryName.equals("")){
+            ULocale newLoc = ULocale.addLikelySubtags(locID);
+            countryName = newLoc.getCountry();
+        }
+        
+        r = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(baseName, "supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        ICUResourceBundle irb = (ICUResourceBundle)r.get(resName);
+        e= irb.getKeys();
+        while(e.hasMoreElements()){
+            String country = (String)e.nextElement();
+            if(commonlyUsed && !country.equals(countryName)){
+                continue;
+            }
+            ICUResourceBundle countryBundle = (ICUResourceBundle) irb.get(country);
+            for(int i=0;i<countryBundle.getSize();i++){
+                ICUResourceBundle currency = (ICUResourceBundle) countryBundle.get(i);
+                boolean current = true;
+                key = currency.getKeys();
+                while(key.hasMoreElements()){
+                    if(key.nextElement().equals("to")){
+                        current = false;
+                    }
+                }
+                if(current){
+                   for(int j=0;j<currency.getSize();j++){
+                        String currVal = currency.getString("id");
+                        set.add(currVal);
+                    }
+                }
+            }
+        }
+        return (String[]) set.toArray(new String[set.size()]);
+    }
+  
 }
 
 //eof
