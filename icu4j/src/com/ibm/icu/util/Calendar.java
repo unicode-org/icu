@@ -9,8 +9,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Set;
@@ -5286,5 +5289,79 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
     private ULocale actualLocale;
 
     // -------- END ULocale boilerplate --------
+    
+    private static final String calendarValues[][]={
+        {"japanese","JP"},
+        {"islamic-civil","AE", "BH", "DJ", "DZ", "EG", "EH", "ER", "IL", "IQ", "JO", "KM", "KW",
+            "LB", "LY", "MA", "MR", "OM", "PS", "QA", "SA", "SD", "SY", "TD", "TN", "YE", "AF", "IR"},
+        {"islamic","AE", "BH", "DJ", "DZ", "EG", "EH", "ER", "IL", "IQ", "JO", "KM", "KW",
+            "LB", "LY", "MA", "MR", "OM", "PS", "QA", "SA", "SD", "SY", "TD", "TN", "YE", "AF", "IR"},
+        {"chinese","CN", "CX", "HK", "MO", "SG", "TW"},
+        {"hebrew","IL"},
+        {"buddhist","TH"},
+        {"coptic","EG"},
+        {"persian","AF", "IR"},
+        {"ethiopic","ET"},
+        {"indian","IN"},
+        {"roc","TW"}
+    };
+    
+    /**
+     * Given a keyword and a locale, returns an array of string values in a preferred order that would make a difference. 
+     * These are all and only those values where the open (creation) of the service with the locale
+     * formed from the input locale plus input keyword and that value has different behavior than
+     * creation with the input locale alone. For example, calling this with "de", "collation" returns {"phonebook","standard"}
+     * @param keyword one of the keyword {"collation", "calendar", "currency"}
+     * @param locLD input ULocale
+     * @param commonlyUsed if set to true it will return commonly used values with the given locale else all the available values
+     * @return an array of string values for a given keyword and locale
+     * @draft ICU 4.2
+     */
+    public static final String[] getKeywordValues(String keyword, ULocale locID, boolean commonlyUsed) {
+        ICUResourceBundle r = null;
+        String baseName,resName;
+        baseName = ICUResourceBundle.ICU_BASE_NAME;
+        resName = "calendarData";
+        String kwVal = locID.getKeywordValue(keyword);
+        Enumeration e;
+        //HashSet set = new HashSet();
+        LinkedList set = new LinkedList();
+        String gregorian = "gregorian"; 
+        ArrayList countryCodes = new ArrayList();
+        
+        if(commonlyUsed && kwVal != null){
+            set.add(kwVal);
+            return (String[]) set.toArray(new String[set.size()]);
+        }
+        
+        String countryName = locID.getCountry();
+        if(commonlyUsed && countryName.equals("")){
+            ULocale newLoc = ULocale.addLikelySubtags(locID);
+            countryName = newLoc.getCountry();
+        }
+        
+        if(commonlyUsed){
+            set.add(gregorian); // Gregorian should always be added
+            for(int i=0;i<calendarValues.length;i++){
+                for(int j=1;j<calendarValues[i].length;j++){
+                    countryCodes.add(calendarValues[i][j]);
+                }
+                if(countryCodes.contains(countryName)){
+                    set.add(calendarValues[i][0]);
+                    countryCodes.clear();
+                }
+            }
+            return (String[]) set.toArray(new String[set.size()]);
+        }
+        
+        r = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(baseName, "supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        ICUResourceBundle irb = (ICUResourceBundle)r.get(resName);
+        e= irb.getKeys();
+        while(e.hasMoreElements()){
+            set.add(e.nextElement());
+        }
+        
+        return (String[]) set.toArray(new String[set.size()]);
+    }
 }
 
