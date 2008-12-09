@@ -7,6 +7,8 @@
 package com.ibm.icu.text;
 
 import java.util.Comparator;
+import java.util.Enumeration;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Set;
@@ -14,6 +16,7 @@ import java.util.Set;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
 
 /**
@@ -1026,4 +1029,74 @@ public abstract class Collator implements Comparator, Cloneable
     private ULocale actualLocale;
 
     // -------- END ULocale boilerplate --------
+    
+    /**
+     * Given a keyword and a locale, returns an array of string values in a preferred order that would make a difference. 
+     * These are all and only those values where the open (creation) of the service with the locale
+     * formed from the input locale plus input keyword and that value has different behavior than
+     * creation with the input locale alone. For example, calling this with "de", "collation" returns {"phonebook","standard"}
+     * @param keyword one of the keyword {"collation", "calendar", "currency"}
+     * @param locLD input ULocale
+     * @param commonlyUsed if set to true it will return commonly used values with the given locale else all the available values
+     * @return an array of string values for a given keyword and locale
+     * @draft ICU 4.2
+     */
+    public static final String[] getKeywordValues(String keyword, ULocale locID, boolean commonlyUsed) {
+        ICUResourceBundle r = null;
+        Enumeration e;
+        LinkedHashSet set = new LinkedHashSet();
+        String baseLoc = locID.getBaseName();
+        String kwVal = locID.getKeywordValue(keyword);
+        String baseName,resName;
+        String defStr = null;
+        baseName = ICUResourceBundle.ICU_BASE_NAME+"/coll";
+        resName = "collations";
+        
+        if(!locID.getBaseName().equals(locID.getName())){
+            ULocale parent = new ULocale(baseLoc);
+            r = (ICUResourceBundle) UResourceBundle.getBundleInstance(baseName, parent);
+        }else{
+            r = (ICUResourceBundle) UResourceBundle.getBundleInstance(baseName, locID);
+        }
+        
+        do {
+            if ((kwVal == null) || (kwVal.length() == 0)
+                    || kwVal.equals("default")) {
+                kwVal = ""; // default tag is treated as no keyword
+            }else{
+                set.add(kwVal);
+                break;
+            }
+            String canonicalLoc;
+            if(((canonicalLoc=ULocale.canonicalize(baseLoc)).indexOf("@"))>=0){
+                set.add(canonicalLoc.substring(canonicalLoc.indexOf("=")+1).toLowerCase());
+                break;
+            }
+            
+            ICUResourceBundle irb = (ICUResourceBundle) r.get(resName);
+
+            if(irb.containsKey(resName) || irb.getULocale().getBaseName().equals("root")){
+                e = irb.getKeys();
+                while(e.hasMoreElements()){
+                    Object o;
+                    if((o = e.nextElement()).equals("default")){
+                        try {
+                            defStr = irb.getString("default");
+                            if(defStr!=null){
+                                set.add(defStr);
+                            }
+                        } catch (MissingResourceException t) {
+                            // Ignore error and continue search.
+                        }
+                    }else{
+                        set.add(o);    
+                    }
+                    //v.add(e.nextElement());
+                }
+            }
+            r = (ICUResourceBundle) r.getParent();
+        } while ((r != null));
+        //return values
+        return (String[]) set.toArray(new String[set.size()]);
+    }
 }
