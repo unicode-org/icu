@@ -1075,25 +1075,24 @@ public abstract class Collator implements Comparator, Cloneable
             
             ICUResourceBundle irb = (ICUResourceBundle) r.get(resName);
 
-            if(irb.containsKey(resName) || irb.getULocale().getBaseName().equals("root")){
-                e = irb.getKeys();
-                while(e.hasMoreElements()){
-                    Object o;
-                    if((o = e.nextElement()).equals("default")){
-                        try {
-                            defStr = irb.getString("default");
-                            if(defStr!=null){
-                                set.add(defStr);
-                            }
-                        } catch (MissingResourceException t) {
-                            // Ignore error and continue search.
+            e = irb.getKeys();
+            while(e.hasMoreElements()){
+                Object o;
+                if((o = e.nextElement()).equals("default")){
+                    try {
+                        defStr = irb.getString("default");
+                        if(defStr!=null){
+                            set.add(defStr);
                         }
-                    }else{
-                        set.add(o);    
+                    } catch (MissingResourceException t) {
+                        // Ignore error and continue search.
                     }
-                    //v.add(e.nextElement());
+                }else{
+                    set.add(o);    
                 }
+                //v.add(e.nextElement());
             }
+
             r = (ICUResourceBundle) r.getParent();
         } while ((r != null));
         //return values
