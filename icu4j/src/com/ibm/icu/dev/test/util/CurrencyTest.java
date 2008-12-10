@@ -14,6 +14,8 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Locale;
 import java.util.Date;
 
@@ -418,5 +420,103 @@ public class CurrencyTest extends TestFmwk {
         } else {
             logln("for " + locale + " expected " + expectSym+"/"+expectCur + " and got " + symbol+"/"+currency);
         }
+    }
+    
+    public void TestGetKeywordValues(){
+        ArrayList got = new ArrayList();
+        ArrayList expected = new ArrayList();
+        
+        String expectedResult = "";
+        String gotResult = "";
+        
+        String inputLocale[] = {
+            "zh__PINYIN",
+            "zh_TW_STROKE",
+            "zh_MO",
+            "zh",
+            "zh_Hant_MO",
+            "uk_UA",
+            "sr_Latn_ME",
+            "sr_Latn",
+            "sr",
+            "de",
+            "de__PHONEBOOK",
+            "no_NO",
+            "pa_Guru_IN",
+            "es",
+            "es__TRADITIONAL",
+            "ko_KR",
+            "kok",
+            "ms_MY",
+            "ab_AA_jdhdj@collation=xyz",
+            "de__PHONEBOOK@calendar=japanese",
+        };
+        
+        String currency[][]={
+                {"CNY"},
+                {"TWD"},
+                {"MOP"},
+                {"CNY"},
+                {"MOP"},
+                {"UAH"},
+                {"EUR"},
+                {"RSD"},
+                {"RSD"},
+                {"EUR"},
+                {"EUR"},
+                {"NOK"},
+                {"INR"},
+                {"EUR"},
+                {"EUR"},
+                {"KRW"},
+                {"INR"},
+                {"MYR"},
+                {},
+                {"EUR"}
+        };
+        
+        logln("Starting preferred currency keyword value test");
+        
+        for(int i=0;i<inputLocale.length;i++){
+            ULocale loc = new ULocale(inputLocale[i]);
+            for(int j=0;j<currency[i].length;j++){
+                expected.add(currency[i][j]);
+                expectedResult += currency[i][j]+" ";
+               
+            }
+            String[] s = Currency.getKeywordValues("currency", loc, true);
+            String s1;
+            for(int j=0;j<s.length;j++){
+                got.add((s1=s[j]));
+                gotResult +=s1+" ";
+            }
+            Collections.sort(got);
+            Collections.sort(expected);
+            if(got.equals(expected)){
+                logln("PASS: Locale :"+inputLocale[i]);
+                logln("EXPECTED :"+expectedResult);
+                logln("GOT      :"+gotResult);
+            }else{
+                errln("FAIL: Locale :"+inputLocale[i]+" EXPECTED :"+expectedResult+" GOT :"+gotResult);
+            }
+            gotResult=expectedResult="";
+            got.clear();
+            expected.clear();
+            
+        } 
+        
+        logln("Starting all available currency keyword value test");
+        
+        for(int i=0;i<inputLocale.length;i++){
+            ULocale loc = new ULocale(inputLocale[i]);
+            
+            String[] s = Currency.getKeywordValues("currency", loc, false);
+            if(s.length==160){
+                logln("PASS: Locale :"+inputLocale[i]);
+            }else{
+                errln("FAIL: Locale :"+inputLocale[i]);
+            }
+            
+        } 
     }
 }
