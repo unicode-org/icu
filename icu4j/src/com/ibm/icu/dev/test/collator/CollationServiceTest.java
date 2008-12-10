@@ -1,12 +1,13 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 
 package com.ibm.icu.dev.test.collator;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.HashMap;
@@ -439,4 +440,87 @@ public class CollationServiceTest extends TestFmwk {
 //                }
 //        }
 //    }
+    
+    public void TestGetKeywordValues(){
+        ArrayList got = new ArrayList();
+        ArrayList expected = new ArrayList();
+        
+        String expectedResult = "";
+        String gotResult = "";
+        
+        String inputLocale[] = {
+            "zh__PINYIN",
+            "zh_TW_STROKE",
+            "zh_MO",
+            "zh",
+            "zh_Hant_MO",
+            "uk_UA",
+            "sr_Latn_ME",
+            "sr_Latn",
+            "sr",
+            "de",
+            "de__PHONEBOOK",
+            "no_NO",
+            "pa_Guru_IN",
+            "es",
+            "es__TRADITIONAL",
+            "ko_KR",
+            "kok",
+            "ms_MY",
+            "ab_AA_jdhdj@collation=xyz",
+            "de__PHONEBOOK@calendar=japanese",
+        };
+        
+        String expectedCollationValues[][] = {
+                {"pinyin"},
+                {"stroke"},
+                {"big5han","pinyin","gb2312han","standard","stroke","unihan"},
+                {"big5han","pinyin","gb2312han","standard","stroke","unihan"},
+                {"big5han","pinyin","gb2312han","standard","stroke","unihan"},
+                {"standard"},
+                {"standard"},
+                {"standard"},
+                {"standard"},
+                {"phonebook","standard"},
+                {"phonebook"},
+                {"standard"},
+                {"standard"},
+                {"standard","traditional"},
+                {"traditional"},
+                {"standard","unihan"},
+                {"standard"},
+                {"standard"},
+                {"xyz"},
+                {"phonebook"},
+        };
+        
+        logln("Starting collation keyword value test");
+        for(int i=0;i<inputLocale.length;i++){
+            ULocale loc = new ULocale(inputLocale[i]);
+            for(int j=0;j<expectedCollationValues[i].length;j++){
+                expected.add(expectedCollationValues[i][j]);
+                expectedResult += expectedCollationValues[i][j]+" ";
+               
+            }
+            Collections.sort(expected);
+            String[] s = Collator.getKeywordValues("collation", loc, true);
+            String s1;
+            for(int j=0;j<s.length;j++){
+                got.add((s1=s[j]));
+                gotResult +=s1+" ";
+            }
+            
+            Collections.sort(got);
+            if(got.equals(expected)){
+                logln("PASS: Locale :"+inputLocale[i]);
+                logln("EXPECTED :"+expectedResult);
+                logln("GOT      :"+gotResult);
+            }else{
+                errln("FAIL: Locale :"+inputLocale[i]+" EXPECTED :"+expectedResult+" GOT :"+gotResult);
+            }
+            gotResult=expectedResult="";
+            got.clear();
+            expected.clear();
+        }
+    }
 }
