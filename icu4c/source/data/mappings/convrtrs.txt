@@ -563,6 +563,8 @@ windows-950-2000 { UTR22* }
                         csBig5 { IANA WINDOWS }
                         windows-950 { WINDOWS* }
                         x-big5
+                        x-x-big5
+                        cnbig5
 ibm-950_P110-1999 { UTR22* }                # Taiwan Big-5 (w/o euro update)
                         ibm-950 { IBM* JAVA }
                         cp950 { JAVA* }
@@ -589,6 +591,7 @@ ibm-1386_P100-2001  { UTR22* }
                         ibm-1386_VSUB_VPUA
 windows-936-2000 { UTR22* }
                         GBK { IANA* WINDOWS JAVA* }
+                        x-GBK
                         CP936 { IANA JAVA }
                         MS936 { IANA }  # In JDK 1.5, this goes to x-mswin-936. This is an IANA name split.
                         windows-936 { IANA WINDOWS* JAVA }
@@ -601,6 +604,7 @@ ibm-1383_P110-1999 { UTR22* }       # China EUC.
                         cp1383 { JAVA* }
                         1383 { JAVA }
                         EUC-CN  # According to other platforms, windows-20936 looks more like euc-cn. x-euc-cn is also a MIME name
+			x-EUC-CN
                         ibm-eucCN
                         hp15CN  # From HP-UX?
                         ibm-1383_VPUA
@@ -781,7 +785,7 @@ ibm-1257_P100-1995 { UTR22* }   ibm-1257 { IBM* }               # Old Windows Ba
 ibm-5353_P100-1998 { UTR22* }   ibm-5353 { IBM* } windows-1257  # Somewhat old Windows Baltic (w/ euro update)
 ibm-1258_P100-1997 { UTR22* }   ibm-1258 { IBM* } windows-1258  # Old Windows Vietnamese (w/o euro update)
 
-macos-0_2-10.2 { UTR22* }       macintosh { IANA* MIME* WINDOWS } mac { IANA } csMacintosh { IANA } windows-10000 { WINDOWS* } macroman {JAVA} x-macroman({JAVA*} # Apple latin 1
+macos-0_2-10.2 { UTR22* }       macintosh { IANA* MIME* WINDOWS } mac { IANA } csMacintosh { IANA } windows-10000 { WINDOWS* } macroman { JAVA } x-macroman { JAVA* } # Apple latin 1
 macos-6_2-10.4 { UTR22* }       x-mac-greek { MIME* WINDOWS } windows-10006 { WINDOWS* } macgr           # Apple Greek
 macos-7_3-10.2 { UTR22* }       x-mac-cyrillic { MIME* WINDOWS } windows-10007 { WINDOWS* } mac-cyrillic maccy # Apple Cyrillic
 macos-29-10.2 { UTR22* }        x-mac-centraleurroman { MIME* } windows-10029 { WINDOWS* } x-mac-ce { WINDOWS } macce maccentraleurope  # Apple Central Europe
