@@ -412,7 +412,6 @@ ibm-5012_P100-1999 { UTR22* }
                         ISO-8859-8-E { IANA MIME } # IANA and Windows considers this alias different and BiDi needs to be applied.
                         8859_8 { JAVA }
                         windows-28598 { WINDOWS* } # Hebrew (ISO-Visual). A hybrid between ibm-5012 and ibm-916 with extra PUA mappings.
-                        hebrew8 # Reflect HP-UX code page update
 
 # Unfortunately, the Java aliases are split across ibm-916 and ibm-5012
 # Also many platforms are a combination between ibm-916 and ibm-5012 behaviors
@@ -435,8 +434,6 @@ ibm-920_P100-1995 { UTR22* }
                         920 { JAVA }
                         windows-28599 { WINDOWS* }
                         ECMA-128    # IANA doesn't have this alias 6/24/2002
-                        turkish8    # Reflect HP-UX codepage update 8/1/2008
-                        turkish     # Reflect HP-UX codepage update 8/1/2008
 
 # Nordic languages
 iso-8859_10-1998 { UTR22* } ISO-8859-10 { MIME* IANA* }
