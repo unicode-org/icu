@@ -563,8 +563,6 @@ windows-950-2000 { UTR22* }
                         csBig5 { IANA WINDOWS }
                         windows-950 { WINDOWS* }
                         x-big5
-                        x-x-big5
-                        cnbig5
 ibm-950_P110-1999 { UTR22* }                # Taiwan Big-5 (w/o euro update)
                         ibm-950 { IBM* JAVA }
                         cp950 { JAVA* }
@@ -591,7 +589,6 @@ ibm-1386_P100-2001  { UTR22* }
                         ibm-1386_VSUB_VPUA
 windows-936-2000 { UTR22* }
                         GBK { IANA* WINDOWS JAVA* }
-                        x-GBK
                         CP936 { IANA JAVA }
                         MS936 { IANA }  # In JDK 1.5, this goes to x-mswin-936. This is an IANA name split.
                         windows-936 { IANA WINDOWS* JAVA }
@@ -604,7 +601,6 @@ ibm-1383_P110-1999 { UTR22* }       # China EUC.
                         cp1383 { JAVA* }
                         1383 { JAVA }
                         EUC-CN  # According to other platforms, windows-20936 looks more like euc-cn. x-euc-cn is also a MIME name
-			x-EUC-CN
                         ibm-eucCN
                         hp15CN  # From HP-UX?
                         ibm-1383_VPUA
