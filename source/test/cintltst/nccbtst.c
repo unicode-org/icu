@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2008, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -2530,13 +2530,13 @@ static void TestLegalAndOthers(int32_t inputsize, int32_t outputsize)
 
 
     static const uint8_t text943[] = {
-        0x82, 0xa9, 0x82, 0x20, /*0xc8,*/  0x61, 0x8a, 0xbf, 0x8e, 0x9a };
-    static const UChar toUnicode943sub[] = { 0x304b, 0xfffd, /*0xff88,*/ 0x0061, 0x6f22,  0x5b57};
-    static const UChar toUnicode943skip[]= { 0x304b, /*0xff88,*/ 0x0061, 0x6f22,  0x5b57};
+        0x82, 0xa9, 0x82, 0x20, 0x61, 0x8a, 0xbf, 0x8e, 0x9a };
+    static const UChar toUnicode943sub[] = { 0x304b, 0x1a, 0x20, 0x0061, 0x6f22,  0x5b57 };
+    static const UChar toUnicode943skip[]= { 0x304b, 0x20, 0x0061, 0x6f22,  0x5b57 };
     static const UChar toUnicode943stop[]= { 0x304b};
 
-    static const int32_t  fromIBM943Offssub[]  = {0, 2, 4, 5, 7};
-    static const int32_t  fromIBM943Offsskip[] = { 0, 4, 5, 7};
+    static const int32_t  fromIBM943Offssub[]  = { 0, 2, 3, 4, 5, 7 };
+    static const int32_t  fromIBM943Offsskip[] = { 0, 3, 4, 5, 7 };
     static const int32_t  fromIBM943Offsstop[] = { 0};
 
     gInBufferSize = inputsize;
@@ -2570,9 +2570,9 @@ static void TestSingleByte(int32_t inputsize, int32_t outputsize)
 {
     static const uint8_t sampleText[] = {
         0x82, 0xa9, 0x61, 0x62, 0x63 , 0x82,
-        0xff, /*0x82, 0xa9,*/ 0x32, 0x33};
-    static const UChar toUnicode943sub[] = {0x304b, 0x0061, 0x0062, 0x0063,  0xfffd,/*0x304b,*/ 0x0032, 0x0033};
-    static const int32_t  fromIBM943Offssub[]  = {0, 2, 3, 4, 5, 7, 8};
+        0xff, 0x32, 0x33};
+    static const UChar toUnicode943sub[] = { 0x304b, 0x0061, 0x0062, 0x0063, 0x1a, 0x1a, 0x0032, 0x0033 };
+    static const int32_t fromIBM943Offssub[] = { 0, 2, 3, 4, 5, 6, 7, 8 };
     /*checking illegal value for ibm-943 with substitute*/ 
     gInBufferSize = inputsize;
     gOutBufferSize = outputsize;

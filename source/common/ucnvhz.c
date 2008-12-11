@@ -198,10 +198,30 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                      /* if the first byte is equal to TILDE and the trail byte
                      * is not a valid byte then it is an error condition
                      */
-                    mySourceChar = 0x7e00 | mySourceChar;
-                    targetUniChar = 0xffff;
+                    /*
+                     * Ticket 5691: consistent illegal sequences:
+                     * - We include at least the first byte in the illegal sequence.
+                     * - If any of the non-initial bytes could be the start of a character,
+                     *   we stop the illegal sequence before the first one of those.
+                     */
                     myData->isEmptySegment = FALSE; /* different error here, reset this to avoid spurious future error */
-                    break;
+                    *err = U_ILLEGAL_ESCAPE_SEQUENCE;
+                    args->converter->toUBytes[0] = UCNV_TILDE;
+                    if( myData->isStateDBCS ?
+                            (0x21 <= mySourceChar && mySourceChar <= 0x7e) :
+                            mySourceChar <= 0x7f
+                    ) {
+                        /* The current byte could be the start of a character: Back it out. */
+                        args->converter->toULength = 1;
+                        --mySource;
+                    } else {
+                        /* Include the current byte in the illegal sequence. */
+                        args->converter->toUBytes[1] = mySourceChar;
+                        args->converter->toULength = 2;
+                    }
+                    args->target = myTarget;
+                    args->source = mySource;
+                    return;
                 }
             } else if(myData->isStateDBCS) {
                 if(args->converter->toUnicodeStatus == 0x00){
@@ -217,19 +237,36 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                 }
                 else{
                     /* trail byte */
+                    int leadIsOk, trailIsOk;
                     uint32_t leadByte = args->converter->toUnicodeStatus & 0xff;
-                    if( (uint8_t)(leadByte - 0x21) <= (0x7d - 0x21) &&
-                        (uint8_t)(mySourceChar - 0x21) <= (0x7e - 0x21)
-                    ) {
+                    targetUniChar = 0xffff;
+                    /*
+                     * Ticket 5691: consistent illegal sequences:
+                     * - We include at least the first byte in the illegal sequence.
+                     * - If any of the non-initial bytes could be the start of a character,
+                     *   we stop the illegal sequence before the first one of those.
+                     *
+                     * In HZ DBCS, if the second byte is in the 21..7e range,
+                     * we report only the first byte as the illegal sequence.
+                     * Otherwise we convert or report the pair of bytes.
+                     */
+                    leadIsOk = (uint8_t)(leadByte - 0x21) <= (0x7d - 0x21);
+                    trailIsOk = (uint8_t)(mySourceChar - 0x21) <= (0x7e - 0x21);
+                    if (leadIsOk && trailIsOk) {
                         tempBuf[0] = (char) (leadByte+0x80) ;
                         tempBuf[1] = (char) (mySourceChar+0x80);
                         targetUniChar = ucnv_MBCSSimpleGetNextUChar(myData->gbConverter->sharedData,
                             tempBuf, 2, args->converter->useFallback);
+                        mySourceChar= (leadByte << 8) | mySourceChar;
+                    } else if (trailIsOk) {
+                        /* report a single illegal byte and continue with the following DBCS starter byte */
+                        --mySource;
+                        mySourceChar = (int32_t)leadByte;
                     } else {
-                        targetUniChar = 0xffff;
+                        /* report a pair of illegal bytes if the second byte is not a DBCS starter */
+                        /* add another bit so that the code below writes 2 bytes in case of error */
+                        mySourceChar= 0x10000 | (leadByte << 8) | mySourceChar;
                     }
-                    /* add another bit so that the code below writes 2 bytes in case of error */
-                    mySourceChar= 0x10000 | (leadByte << 8) | mySourceChar;
                     args->converter->toUnicodeStatus =0x00;
                 }
             }
