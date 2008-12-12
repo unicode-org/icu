@@ -4395,7 +4395,7 @@ supplementalData:table(nofallback){
             "TW",
         }
     }
-    cldrVersion{"1.6"}
+    cldrVersion{"1.6.1"}  // ICU 4.0 and 4.0.1 used CLDR 1.6.1 data, but CLDR's supplementalData.xml was not updated properly.
     languageData{
         aa{
             primary{
