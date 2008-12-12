@@ -173,7 +173,20 @@ IntlTestRBNF::TestAPI() {
       errln("Unable to access resource bundle with data!");
     } else {
       int32_t ruleLen = 0;
-      const UChar *spelloutRules = ures_getStringByKey(en, "SpelloutRules", &ruleLen, &status);
+      int32_t len = 0;
+      UResourceBundle *rbnfRules = ures_getByKey(en, "RBNFRules", NULL, &status);
+      UResourceBundle *ruleSets = ures_getByKey(rbnfRules, "SpelloutRules", NULL, &status);
+      UnicodeString desc;
+      while (ures_hasNext(ruleSets)) {
+           const UChar* currentString = ures_getNextString(ruleSets,&len,NULL,&status);
+           ruleLen += len;
+           desc.append(currentString);
+      }
+      ures_close(ruleSets);
+      ures_close(rbnfRules);
+
+      const UChar *spelloutRules = desc.getTerminatedBuffer();
+
       if(U_FAILURE(status) || ruleLen == 0 || spelloutRules == NULL) {
         errln("Unable to access the rules string!");
       } else {
@@ -1057,18 +1070,18 @@ IntlTestRBNF::TestEnglishSpellout()
             { "73", "seventy-three" },
             { "88", "eighty-eight" },
             { "100", "one hundred" },
-            { "106", "one hundred and six" },
-            { "127", "one hundred and twenty-seven" },
+            { "106", "one hundred six" },
+            { "127", "one hundred twenty-seven" },
             { "200", "two hundred" },
-            { "579", "five hundred and seventy-nine" },
+            { "579", "five hundred seventy-nine" },
             { "1,000", "one thousand" },
             { "2,000", "two thousand" },
-            { "3,004", "three thousand and four" },
-            { "4,567", "four thousand five hundred and sixty-seven" },
-            { "15,943", "fifteen thousand nine hundred and forty-three" },
-            { "2,345,678", "two million, three hundred and forty-five thousand, six hundred and seventy-eight" },
+            { "3,004", "three thousand four" },
+            { "4,567", "four thousand five hundred sixty-seven" },
+            { "15,943", "fifteen thousand nine hundred forty-three" },
+            { "2,345,678", "two million three hundred forty-five thousand six hundred seventy-eight" },
             { "-36", "minus thirty-six" },
-            { "234.567", "two hundred and thirty-four point five six seven" },
+            { "234.567", "two hundred thirty-four point five six seven" },
             { NULL, NULL}
         };
 
@@ -1195,9 +1208,9 @@ IntlTestRBNF::TestSpanishSpellout()
             { "3,004", "tres mil cuatro" },
             { "4,567", "cuatro mil quinientos sesenta y siete" },
             { "15,943", "quince mil novecientos cuarenta y tres" },
-            { "2,345,678", "dos mill\\u00f3n trescientos cuarenta y cinco mil seiscientos setenta y ocho"},
+            { "2,345,678", "dos millones trescientos cuarenta y cinco mil seiscientos setenta y ocho"},
             { "-36", "menos treinta y seis" },
-            { "234.567", "doscientos treinta y cuatro punto cinco seis siete" },
+            { "234.567", "doscientos treinta y cuatro coma cinco seis siete" },
             { NULL, NULL}
         };
         
@@ -1220,7 +1233,7 @@ IntlTestRBNF::TestFrenchSpellout()
             { "1", "un" },
             { "15", "quinze" },
             { "20", "vingt" },
-            { "21", "vingt-et-un" },
+            { "21", "vingt et un" },
             { "23", "vingt-trois" },
             { "62", "soixante-deux" },
             { "70", "soixante-dix" },
@@ -1232,17 +1245,17 @@ IntlTestRBNF::TestFrenchSpellout()
             { "106", "cent six" },
             { "127", "cent vingt-sept" },
             { "200", "deux cents" },
-            { "579", "cinq cents soixante-dix-neuf" },
+            { "579", "cinq cent soixante-dix-neuf" },
             { "1,000", "mille" },
-            { "1,123", "onze cents vingt-trois" },
-            { "1,594", "mille cinq cents quatre-vingt-quatorze" },
+            { "1,123", "mille cent vingt-trois" },
+            { "1,594", "mille cinq cent quatre-vingt-quatorze" },
             { "2,000", "deux mille" },
             { "3,004", "trois mille quatre" },
-            { "4,567", "quatre mille cinq cents soixante-sept" },
-            { "15,943", "quinze mille neuf cents quarante-trois" },
-            { "2,345,678", "deux million trois cents quarante-cinq mille six cents soixante-dix-huit" },
+            { "4,567", "quatre mille cinq cent soixante-sept" },
+            { "15,943", "quinze mille neuf cent quarante-trois" },
+            { "2,345,678", "deux millions trois cent quarante-cinq mille six cent soixante-dix-huit" },
             { "-36", "moins trente-six" },
-            { "234.567", "deux cents trente-quatre virgule cinq six sept" },
+            { "234.567", "deux cent trente-quatre virgule cinq six sept" },
             { NULL, NULL}
         };
         
@@ -1251,8 +1264,8 @@ IntlTestRBNF::TestFrenchSpellout()
 #if !UCONFIG_NO_COLLATION
         formatter->setLenient(TRUE);
         static const char* lpTestData[][2] = {
-            { "trente-un", "31" },
-            { "un cents quatre vingt dix huit", "198" },
+            { "trente-et-un", "31" },
+            { "un cent quatre vingt dix huit", "198" },
             { NULL, NULL}
         };
         doLenientParseTest(formatter, lpTestData);
@@ -1265,11 +1278,11 @@ static const char* const swissFrenchTestData[][2] = {
     { "1", "un" },
     { "15", "quinze" },
     { "20", "vingt" },
-    { "21", "vingt-et-un" },
+    { "21", "vingt et un" },
     { "23", "vingt-trois" },
     { "62", "soixante-deux" },
     { "70", "septante" },
-    { "71", "septante-et-un" },
+    { "71", "septante et un" },
     { "73", "septante-trois" },
     { "80", "huitante" },
     { "88", "huitante-huit" },
@@ -1277,17 +1290,17 @@ static const char* const swissFrenchTestData[][2] = {
     { "106", "cent six" },
     { "127", "cent vingt-sept" },
     { "200", "deux cents" },
-    { "579", "cinq cents septante-neuf" },
+    { "579", "cinq cent septante-neuf" },
     { "1,000", "mille" },
-    { "1,123", "onze cents vingt-trois" },
-    { "1,594", "mille cinq cents nonante-quatre" },
+    { "1,123", "mille cent vingt-trois" },
+    { "1,594", "mille cinq cent nonante-quatre" },
     { "2,000", "deux mille" },
     { "3,004", "trois mille quatre" },
-    { "4,567", "quatre mille cinq cents soixante-sept" },
-    { "15,943", "quinze mille neuf cents quarante-trois" },
-    { "2,345,678", "deux million trois cents quarante-cinq mille six cents septante-huit" },
+    { "4,567", "quatre mille cinq cent soixante-sept" },
+    { "15,943", "quinze mille neuf cent quarante-trois" },
+    { "2,345,678", "deux millions trois cent quarante-cinq mille six cent septante-huit" },
     { "-36", "moins trente-six" },
-    { "234.567", "deux cents trente-quatre virgule cinq six sept" },
+    { "234.567", "deux cent trente-quatre virgule cinq six sept" },
     { NULL, NULL}
 };
 
@@ -1306,6 +1319,40 @@ IntlTestRBNF::TestSwissFrenchSpellout()
     delete formatter;
 }
 
+static const char* const belgianFrenchTestData[][2] = {
+    { "1", "un" },
+    { "15", "quinze" },
+    { "20", "vingt" },
+    { "21", "vingt et un" },
+    { "23", "vingt-trois" },
+    { "62", "soixante-deux" },
+    { "70", "septante" },
+    { "71", "septante et un" },
+    { "73", "septante-trois" },
+    { "80", "quatre-vingts" },
+    { "88", "quatre-vingt-huit" },
+    { "90", "nonante" },
+    { "91", "nonante et un" },
+    { "95", "nonante-cinq" },
+    { "100", "cent" },
+    { "106", "cent six" },
+    { "127", "cent vingt-sept" },
+    { "200", "deux cents" },
+    { "579", "cinq cent septante-neuf" },
+    { "1,000", "mille" },
+    { "1,123", "mille cent vingt-trois" },
+    { "1,594", "mille cinq cent nonante-quatre" },
+    { "2,000", "deux mille" },
+    { "3,004", "trois mille quatre" },
+    { "4,567", "quatre mille cinq cent soixante-sept" },
+    { "15,943", "quinze mille neuf cent quarante-trois" },
+    { "2,345,678", "deux millions trois cent quarante-cinq mille six cent septante-huit" },
+    { "-36", "moins trente-six" },
+    { "234.567", "deux cent trente-quatre virgule cinq six sept" },
+    { NULL, NULL}
+};
+
+
 void 
 IntlTestRBNF::TestBelgianFrenchSpellout() 
 {
@@ -1318,7 +1365,7 @@ IntlTestRBNF::TestBelgianFrenchSpellout()
         errln("FAIL: could not construct formatter");
     } else {
         // Belgian french should match Swiss french.
-        doTest(formatter, swissFrenchTestData, TRUE);
+        doTest(formatter, belgianFrenchTestData, TRUE);
     }
     delete formatter;
 }
@@ -1392,7 +1439,7 @@ IntlTestRBNF::TestPortugueseSpellout()
             { "4,567", "quatro mil quinhentos e sessenta e sete" },
             { "15,943", "quinze mil novecentos e quarenta e tr\\u00EAs" },
             { "-36", "menos trinta e seis" },
-            { "234.567", "duzcentos e trinta e quatro ponto cinco seis sete" },
+            { "234.567", "duzcentos e trinta e quatro v\\u00EDrgula cinco seis sete" },
             { NULL, NULL}
         };
         
@@ -1482,56 +1529,57 @@ IntlTestRBNF::TestSwedishSpellout()
         errln("FAIL: could not construct formatter");
     } else {
         static const char* testDataDefault[][2] = {
-            { "101", "etthundra\\u00aden" },
-            { "123", "etthundra\\u00adtjugotre" },
-            { "1,001", "ettusen en" },
-            { "1,100", "ettusen etthundra" },
-            { "1,101", "ettusen etthundra\\u00aden" },
-            { "1,234", "ettusen tv\\u00e5hundra\\u00adtrettiofyra" },
-            { "10,001", "tio\\u00adtusen en" },
-            { "11,000", "elva\\u00adtusen" },
-            { "12,000", "tolv\\u00adtusen" },
-            { "20,000", "tjugo\\u00adtusen" },
-            { "21,000", "tjugoen\\u00adtusen" },
-            { "21,001", "tjugoen\\u00adtusen en" },
-            { "200,000", "tv\\u00e5hundra\\u00adtusen" },
-            { "201,000", "tv\\u00e5hundra\\u00aden\\u00adtusen" },
-            { "200,200", "tv\\u00e5hundra\\u00adtusen tv\\u00e5hundra" },
-            { "2,002,000", "tv\\u00e5 miljoner tv\\u00e5\\u00adtusen" },
-            { "12,345,678", "tolv miljoner trehundra\\u00adfyrtiofem\\u00adtusen sexhundra\\u00adsjuttio\\u00e5tta" },
-            { "123,456.789", "etthundra\\u00adtjugotre\\u00adtusen fyrahundra\\u00adfemtiosex komma sju \\u00e5tta nio" },
-            { "-12,345.678", "minus tolv\\u00adtusen trehundra\\u00adfyrtiofem komma sex sju \\u00e5tta" },
+            { "101", "etthundraett" },
+            { "123", "etthundratjugotre" },
+            { "1,001", "ettusenett" },
+            { "1,100", "ettusenetthundra" },
+            { "1,101", "ettusenetthundraett" },
+            { "1,234", "ettusentv\\u00e5hundratrettiofyra" },
+            { "10,001", "tiotusenett" },
+            { "11,000", "elvatusen" },
+            { "12,000", "tolvtusen" },
+            { "20,000", "tjugotusen" },
+            { "21,000", "tjugoetttusen" },
+            { "21,001", "tjugoetttusenett" },
+            { "200,000", "tv\\u00e5hundratusen" },
+            { "201,000", "tv\\u00e5hundraetttusen" },
+            { "200,200", "tv\\u00e5hundratusentv\\u00e5hundra" },
+            { "2,002,000", "tv\\u00e5 miljoner tv\\u00e5tusen" },
+            { "12,345,678", "tolv miljoner trehundrafyrtiofemtusensexhundrasjuttio\\u00e5tta" },
+            { "123,456.789", "etthundratjugotretusenfyrahundrafemtiosex komma sju \\u00e5tta nio" },
+            { "-12,345.678", "minus tolvtusentrehundrafyrtiofem komma sex sju \\u00e5tta" },
             { NULL, NULL }
         };
         doTest(formatter, testDataDefault, TRUE);
 
-        static const char* testDataNeutrum[][2] = {
-            { "101", "etthundra\\u00adett" },
-            { "1,001", "ettusen ett" },
-            { "1,101", "ettusen etthundra\\u00adett" },
-            { "10,001", "tio\\u00adtusen ett" },
-            { "21,001", "tjugoen\\u00adtusen ett" },
-            { NULL, NULL }
-        };
-
-        formatter->setDefaultRuleSet("%neutrum", status);
-        if (U_SUCCESS(status)) {
-            logln("testing neutrum rules");
-            doTest(formatter, testDataNeutrum, TRUE);
-        }
-        else {
-            errln("Can't test neutrum rules");
-        }
+//  These tests no longer valid - neutrum rules not in CLDR
+//        static const char* testDataNeutrum[][2] = {
+//            { "101", "etthundra\\u00adett" },
+//            { "1,001", "ettusen ett" },
+//            { "1,101", "ettusen etthundra\\u00adett" },
+//            { "10,001", "tio\\u00adtusen ett" },
+//            { "21,001", "tjugoen\\u00adtusen ett" },
+//            { NULL, NULL }
+//        };
+//
+//        formatter->setDefaultRuleSet("%neutrum", status);
+//        if (U_SUCCESS(status)) {
+//        logln("        testing neutrum rules");
+//        doTest(formatter, testDataNeutrum, TRUE);
+//        }
+//        else {
+//        errln("Can't test neutrum rules");
+//        }
 
         static const char* testDataYear[][2] = {
-            { "101", "etthundra\\u00adett" },
+            { "101", "etthundraett" },
             { "900", "niohundra" },
-            { "1,001", "tiohundra\\u00adett" },
+            { "1,001", "tusenett" },
             { "1,100", "elvahundra" },
-            { "1,101", "elvahundra\\u00adett" },
-            { "1,234", "tolvhundra\\u00adtrettiofyra" },
-            { "2,001", "tjugohundra\\u00adett" },
-            { "10,001", "tio\\u00adtusen ett" },
+            { "1,101", "elvahundraett" },
+            { "1,234", "tolvhundratrettiofyra" },
+            { "2,001", "tjugohundraett" },
+            { "10,001", "tiotusenett" },
             { NULL, NULL }
         };
 
@@ -1583,11 +1631,11 @@ IntlTestRBNF::TestSmallValues()
 //        { "1,234,567,890.0987654", "one billion, two hundred and thirty-four million, five hundred and sixty-seven thousand, eight hundred and ninety point zero nine eight seven six five four" },
 //        { "123,456,789.9876543", "one hundred and twenty-three million, four hundred and fifty-six thousand, seven hundred and eighty-nine point nine eight seven six five four three" },
 //        { "12,345,678.87654321", "twelve million, three hundred and forty-five thousand, six hundred and seventy-eight point eight seven six five four three two one" },
-        { "1,234,567.7654321", "one million, two hundred and thirty-four thousand, five hundred and sixty-seven point seven six five four three two one" },
-        { "123,456.654321", "one hundred and twenty-three thousand, four hundred and fifty-six point six five four three two one" },
-        { "12,345.54321", "twelve thousand three hundred and forty-five point five four three two one" },
-        { "1,234.4321", "one thousand two hundred and thirty-four point four three two one" },
-        { "123.321", "one hundred and twenty-three point three two one" },
+        { "1,234,567.7654321", "one million two hundred thirty-four thousand five hundred sixty-seven point seven six five four three two one" },
+        { "123,456.654321", "one hundred twenty-three thousand four hundred fifty-six point six five four three two one" },
+        { "12,345.54321", "twelve thousand three hundred forty-five point five four three two one" },
+        { "1,234.4321", "one thousand two hundred thirty-four point four three two one" },
+        { "123.321", "one hundred twenty-three point three two one" },
         { "0.0000000011754944", "zero point zero zero zero zero zero zero zero zero one one seven five four nine four four" },
         { "0.000001175494351", "zero point zero zero zero zero zero one one seven five four nine four three five one" },
         { NULL, NULL }
