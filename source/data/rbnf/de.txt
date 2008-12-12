@@ -1,59 +1,61 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 2004, 2007 International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/de.xml
 // *
 // ***************************************************************************
-// 
-
-de {
-    // * RuleBasedNumberFormat data for German
-
-    // again, I'm not 100% sure of these rules.  I think both "hundert" and
-    // "einhundert" are correct or 100, but I'm not sure which is preferable
-    // in situations where this framework is likely to be used.  Also, is it
-    // really true that numbers are run together into compound words all the
-    // time?
-    SpelloutRules {
-        // 1 is "eins" when by itself, but turns into "ein" in most
-        // combinations
-        "%alt-ones:\n"
-            "-x: minus >>;\n"
-            "x.x: << komma >>;\n"
-            "null; eins; =%%main=;\n"
-        "%%main:\n"
-               // words for numbers from 0 to 12.  Notice that the values
-               // from 13 to 19 can derived algorithmically, unlike in most
-               // other languages
-            "null; ein; zwei; drei; vier; f\u00fcnf; sechs; sieben; acht; neun;\n"
-            "zehn; elf; zw\u00f6lf; >>zehn;\n"
-               // rules for the multiples of 10.  Notice that the ones digit
-               // goes on the front
-            "20: [>>und]zwanzig;\n"
-            "30: [>>und]drei\u00dfig;\n"
-            "40: [>>und]vierzig;\n"
-            "50: [>>und]f\u00fcnfzig;\n"
-            "60: [>>und]sechzig;\n"
-            "70: [>>und]siebzig;\n"
-            "80: [>>und]achtzig;\n"
-            "90: [>>und]neunzig;\n"
-            "100: hundert[>%alt-ones>];\n"
-            "200: <<hundert[>%alt-ones>];\n"
-            "1000: tausend[>%alt-ones>];\n"
-            "1100: tausendein[>%alt-ones>];\n"
-            "1200: tausend[>%alt-ones>];\n"
-            "2000: <<tausend[>%alt-ones>];\n"
-            "1,000,000: eine Million[ >%alt-ones>];\n"
-            "2,000,000: << Millionen[ >%alt-ones>];\n"
-            "1,000,000,000: eine Milliarde[ >%alt-ones>];\n"
-            "2,000,000,000: << Milliarden[ >%alt-ones>];\n"
-            "1,000,000,000,000: eine Billion[ >%alt-ones>];\n"
-            "2,000,000,000,000: << Billionen[ >%alt-ones>];\n"
-            "1,000,000,000,000,000: =#,##0=;"
-        "%%lenient-parse:\n"
-            "&\u0000 << ' ' << '-'\n"
-            "& ae , \u00e4 & ae , \u00c4\n"
-            "& oe , \u00f6 & oe , \u00d6\n"
-            "& ue , \u00fc & ue , \u00dc\n"
+/**
+ *  ICU <specials> source: <path>/xml/rbnf/de.xml
+ */
+de{
+    RBNFRules{
+        OrdinalRules{
+            "%%ordabbrev:\n",
+            "0: '.;\n",
+            "%ordinal:\n",
+            "0: =#,##0==%%ordabbrev=;\n",
+        }
+        SpelloutRules{
+            "%%lenient-parse:\n",
+            "&ue=\u00FC&ae=\u00E4&oe=\u00F6&[last primary ignorable ] << ' ' << ',' << '-';\n",
+            "%%main:\n",
+            "0: null; ein; zwei; drei; vier; f\u00FCnf; sechs; sieben; acht; neun;\n",
+            "10: zehn; elf; zw\u00F6lf; >>zehn;\n",
+            "20: [>>und]zwanzig;\n",
+            "30: [>>und]drei\u00DFig;\n",
+            "40: [>>und]vierzig;\n",
+            "50: [>>und]f\u00FCnfzig;\n",
+            "60: [>>und]sechzig;\n",
+            "70: [>>und]siebzig;\n",
+            "80: [>>und]achtzig;\n",
+            "90: [>>und]neunzig;\n",
+            "100: hundert[>%spellout>];\n",
+            "200: <<hundert[>%spellout>];\n",
+            "1000: tausend[>%spellout>];\n",
+            "1100: tausendein[>%spellout>];\n",
+            "1200: tausend[>%spellout>];\n",
+            "2000: <<tausend[>%spellout>];\n",
+            "1000000: eine Million[ >%spellout>];\n",
+            "2000000: << Millionen[ >%spellout>];\n",
+            "1000000000: eine Milliarde[ >%spellout>];\n",
+            "2000000000: << Milliarden[ >%spellout>];\n",
+            "1000000000000: eine Billion[ >%spellout>];\n",
+            "2000000000000: << Billionen[ >%spellout>];\n",
+            "1000000000000000: eine Billiarde[ >%spellout>];\n",
+            "2000000000000000: << Billiarden[ >%spellout>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "%spellout:\n",
+            "0: null;eins; =%%main=;\n",
+            "-x: minus >>;\n",
+            "x.x: << Komma >>;\n",
+            "%year:\n",
+            "0: =%spellout=;\n",
+            "1100/100: <<hundert[>%spellout>];\n",
+            "10000: =%spellout=;\n",
+            "-x: minus >>;\n",
+        }
     }
+    Version{"1.5"}
 }

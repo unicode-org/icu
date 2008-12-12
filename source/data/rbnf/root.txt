@@ -1,27 +1,116 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/root.xml
 // *
 // ***************************************************************************
-// 
-
-root {
-    //------------------------------------------------------------
-    // Rule Based Number Format Support
-    //------------------------------------------------------------
-
-    /*
-     * Default used to be English (US) rules, but now default just formats
-     * like DecimalFormat.  The former default rules are now the _en rules.
-     */
-    SpelloutRules {
-        "=#,##0.######=;\n"
+/**
+ *  ICU <specials> source: <path>/xml/rbnf/root.xml
+ */
+root{
+    RBNFRules{
+        DurationRules{
+            "%duration:\n",
+            "0: =#,##0=;\n",
+        }
+        NumberingSystemRules{
+            "%hebrew:\n",
+            "0: \u05D0\u05E4\u05E1\n",
+            "1: \u05D0\n",
+            "2: \u05D1\n",
+            "3: \u05D2\n",
+            "4: \u05D3\n",
+            "5: \u05D4\n",
+            "6: \u05D5\n",
+            "7: \u05D6\n",
+            "8: \u05D7\n",
+            "9: \u05D8\n",
+            "10: \u05D9[>>];\n",
+            "20: \u05DB[>>];\n",
+            "30: \u05DC[>>];\n",
+            "40: \u05DE[>>];\n",
+            "50: \u05E0[>>];\n",
+            "60: \u05E1[>>];\n",
+            "70: \u05E2[>>];\n",
+            "80: \u05E4[>>];\n",
+            "90: \u05E6[>>];\n",
+            "100: \u05E7[>>];\n",
+            "200: \u05E8[>>];\n",
+            "300: \u05E9[>>];\n",
+            "400: \u05EA[>>];\n",
+            "500: \u05EA\u05E7[>>];\n",
+            "600: \u05EA\u05E8[>>];\n",
+            "700: \u05EA\u05E9[>>];\n",
+            "800: \u05EA\u05EA[>>];\n",
+            "900: \u05EA\u05EA\u05E7[>>];\n",
+            "1000: \u05D0\u05DC\u05E4\u05D9;<< [>>]\n",
+            "2000: \u05DC\u05E4\u05D9\u05D9\u05DD<<;<< [>>]\n",
+            "1000000: \u05D0\u05DC\u05E3 \u05D0\u05DC\u05E4\u05D9\u05DD;<< [>>]\n",
+            "1000000000: =#,##0=;\n",
+            "-x: =#,##0=;\n",
+            "%lower-roman:\n",
+            "0: n; i; ii; iii; iv; v; vi; vii; viii; ix;\n",
+            "10: x[>>];\n",
+            "20: xx[>>];\n",
+            "30: xxx[>>];\n",
+            "40: xl[>>];\n",
+            "50: l[>>];\n",
+            "60: lx[>>];\n",
+            "70: lxx[>>];\n",
+            "80: lxxx[>>];\n",
+            "90: xc[>>];\n",
+            "100: c[>>];\n",
+            "200: cc[>>];\n",
+            "300: ccc[>>];\n",
+            "400: cd[>>];\n",
+            "500: d[>>];\n",
+            "600: dc[>>];\n",
+            "700: dcc[>>];\n",
+            "800: dccc[>>];\n",
+            "900: cm[>>];\n",
+            "1000: m[>>];\n",
+            "2000: mm[>>];\n",
+            "3000: mmm[>>];\n",
+            "4000: mmmm[>>];\n",
+            "5000: =#,##0=;\n",
+            "-x: >>n;\n",
+            "%upper-roman:\n",
+            "0: N; I; II; III; IV; V; VI; VII; VIII; IX;\n",
+            "10: X[>>];\n",
+            "20: XX[>>];\n",
+            "30: XXX[>>];\n",
+            "40: XL[>>];\n",
+            "50: L[>>];\n",
+            "60: LX[>>];\n",
+            "70: LXX[>>];\n",
+            "80: LXXX[>>];\n",
+            "90: XC[>>];\n",
+            "100: C[>>];\n",
+            "200: CC[>>];\n",
+            "300: CCC[>>];\n",
+            "400: CD[>>];\n",
+            "500: D[>>];\n",
+            "600: DC[>>];\n",
+            "700: DCC[>>];\n",
+            "800: DCCC[>>];\n",
+            "900: CM[>>];\n",
+            "1000: M[>>];\n",
+            "2000: MM[>>];\n",
+            "3000: MMM[>>];\n",
+            "4000: MMMM[>>];\n",
+            "5000: =#,##0=;\n",
+            "-x: >>N;\n",
+        }
+        OrdinalRules{
+            "%ordinal:\n",
+            "0: =#,##0=;\n",
+        }
+        SpelloutRules{
+            "%spellout:\n",
+            "0: =#,##0.#=;\n",
+        }
     }
-    OrdinalRules {
-        "=#,##0=;\n"
-    }
-    DurationRules {
-        "=#,##0=;\n"
-    }
+    Version{"1.4"}
 }
