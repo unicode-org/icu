@@ -11,6 +11,7 @@
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "unicode/ucol.h"
+#include "unicode/bmsearch.h"
 
 #include "intltest.h"
 
@@ -34,9 +35,18 @@ public:
     virtual void offsetTest();
     virtual void monkeyTest(char *params);
 
+    virtual void bmMonkeyTest(char *params);
+    virtual void boyerMooreTest();
+    virtual void goodSuffixTest();
+    virtual void searchTime();
+
 private:
     virtual const char   *getPath(char buffer[2048], const char *filename);
     virtual       int32_t monkeyTestCase(UCollator *coll, const UnicodeString &testCase, const UnicodeString &pattern, const UnicodeString &altPattern,
+                                         const char *name, const char *strength, uint32_t seed);
+
+    virtual       int32_t bmMonkeyTestCase(UCollator *coll, const UnicodeString &testCase, const UnicodeString &pattern, const UnicodeString &altPattern,
+                                         BoyerMooreSearch *bms, BoyerMooreSearch *abms,
                                          const char *name, const char *strength, uint32_t seed);
 #endif
                                          

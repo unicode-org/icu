@@ -3721,7 +3721,12 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                     }
                 }
 
-                rawOffset = temp.pos - temp.string;
+                if ((temp.flags & UCOL_ITER_INNORMBUF) != 0) {
+                    rawOffset = temp.fcdPosition - temp.string;
+                } else {
+                    rawOffset = temp.pos - temp.string;
+                }
+
                 CE = ucol_IGetNextCE(coll, &temp, status);
             }
 
