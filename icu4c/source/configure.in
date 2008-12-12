@@ -47,7 +47,7 @@ AC_CANONICAL_HOST
 AC_SUBST(CPPFLAGS)
 
 # This variable is needed on z/OS because the C++ compiler only recognizes .C
-_CXX_CXXSUFFIX=cc
+_CXX_CXXSUFFIX=cpp
 export _CXX_CXXSUFFIX
 # Checks for programs
 AC_PROG_CC
