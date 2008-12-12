@@ -1,0 +1,63 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/nn.xml
+// *
+// ***************************************************************************
+nn{
+    RBNFRules{
+        OrdinalRules{
+            "%%ordabbrev:\n",
+            "0: '.;\n",
+            "%ordinal:\n",
+            "0: =#,##0==%%ordabbrev=;\n",
+        }
+        SpelloutRules{
+            "%%neuter:\n",
+            "0: null; eitt; =%spellout=;\n",
+            "%spellout:\n",
+            "0: null; \u00E9in; to; tre; fire; fem; seks; sju; \u00E5tte; ni;\n",
+            "10: ti; elleve; tolv; tretten; fjorten; femten; seksten; sytten; atten; nitten;\n",
+            "20: tjue[\u00AD>>];\n",
+            "30: tretti[\u00AD>>];\n",
+            "40: f\u00F8rti[\u00AD>>];\n",
+            "50: femti[\u00AD>>];\n",
+            "60: seksti[\u00AD>>];\n",
+            "70: s\u00F8tti[\u00AD>>];\n",
+            "80: \u00E5tti[\u00AD>>];\n",
+            "90: nitti[\u00AD>>];\n",
+            "100: <%%neuter< hundre[ og >>];\n",
+            "1000: <%%neuter< tusen[ og >>];\n",
+            "1000000: \u00E9in miljon[ >>];\n",
+            "2000000: << miljoner[ >>];\n",
+            "1000000000: \u00E9in miljard[ >>];\n",
+            "2000000000: << miljarder[ >>];\n",
+            "1000000000000: \u00E9in biljon[ >>];\n",
+            "2000000000000: << biljoner[ >>];\n",
+            "1000000000000000: \u00E9in biljard[ >>];\n",
+            "2000000000000000: << biljarder[ >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: minus >>;\n",
+            "x.x: << komma >>;\n",
+            "%year:\n",
+            "0: null; \u00E9in; to; tre; fire; fem; seks; sju; \u00E5tte; ni;\n",
+            "10: ti; elleve; tolv; tretten; fjorten; femten; seksten; sytten; atten; nitten;\n",
+            "20: tjue[\u00AD>>];\n",
+            "30: tretti[\u00AD>>];\n",
+            "40: f\u00F8rti[\u00AD>>];\n",
+            "50: femti[\u00AD>>];\n",
+            "60: seksti[\u00AD>>];\n",
+            "70: s\u00F8tti[\u00AD>>];\n",
+            "80: \u00E5tti[\u00AD>>];\n",
+            "90: nitti[\u00AD>>];\n",
+            "100: << hundre[ og >>];\n",
+            "1000: tusen[ og >>];\n",
+            "1100/100: << hundre[ og >>];\n",
+            "10000: =%spellout=;\n",
+            "-x: minus >>;\n",
+        }
+    }
+    Version{"1.4"}
+}

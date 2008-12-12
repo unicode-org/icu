@@ -1,0 +1,35 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/vi.xml
+// *
+// ***************************************************************************
+vi{
+    RBNFRules{
+        SpelloutRules{
+            "%spellout:\n",
+            "0: kh\u00F4ng;\n",
+            "1: m\u1ED9t;\n",
+            "2: hai;\n",
+            "3: ba;\n",
+            "4: b\u1ED1n;\n",
+            "5: n\u0103m;\n",
+            "6: s\u00E1u;\n",
+            "7: b\u1EA3y;\n",
+            "8: t\u00E1m;\n",
+            "9: ch\u00EDn;\n",
+            "10: m\u01B0\u1EDDi[ >>];\n",
+            "20: << m\u01B0\u01A1i[ >>];\n",
+            "100: << tr\u0103m[ >>];\n",
+            "1000: << ngh\u00ECn[ >>];\n",
+            "1000000: << tri\u1EC7u[ >>];\n",
+            "1000000000: << t\u1EF7[ >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: tr\u1EEB >>;\n",
+            "x.x: << ph\u1EA9y >>;\n",
+        }
+    }
+    Version{"1.3"}
+}

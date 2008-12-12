@@ -14,8 +14,8 @@
 //#define DTIFMTTS_DEBUG 1
 
 
-#include <iostream>
 #ifdef DTIFMTTS_DEBUG 
+#include <iostream>
 #endif
 
 

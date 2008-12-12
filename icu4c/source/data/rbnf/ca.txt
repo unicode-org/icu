@@ -1,0 +1,48 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/ca.xml
+// *
+// ***************************************************************************
+ca{
+    RBNFRules{
+        SpelloutRules{
+            "%spellout:\n",
+            "0: zero; u; dos; tres; quatre; cinc; sis; set; vuit; nou;\n",
+            "10: deu; onze; dotze; tretze; catorze; quinze; setze; disset; divuit; dinou;\n",
+            "20: vint[-i->>];\n",
+            "30: trenta[->>];\n",
+            "40: quaranta[->>];\n",
+            "50: cinquanta[->>];\n",
+            "60: seixanta[->>];\n",
+            "70: setanta[->>];\n",
+            "80: vuitanta[->>];\n",
+            "90: noranta[->>];\n",
+            "100: cent[->>];\n",
+            "200: <<-cents; <<-cent >>;\n",
+            "300: <<-cents; <<-cent >>;\n",
+            "400: <<-cents; <<-cent >>;\n",
+            "500: <<-cents; <<-cent >>;\n",
+            "600: <<-cents; <<-cent >>;\n",
+            "700: <<-cents; <<-cent >>;\n",
+            "800: <<-cents; <<-cent >>;\n",
+            "900: <<-cents; <<-cent >>;\n",
+            "1000: mil[ >>];\n",
+            "2000: << mil[ >>];\n",
+            "1000000: un mili\u00F3[ >>];\n",
+            "2000000: << milions[ >>];\n",
+            "1000000000: un miliard[ >>];\n",
+            "2000000000: << miliards[ >>];\n",
+            "1000000000000: un bili\u00F3[ >>];\n",
+            "2000000000000: << bilions[ >>];\n",
+            "1000000000000000: un biliard[ >>];\n",
+            "2000000000000000: << biliards[ >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: menys >>;\n",
+            "x.x: << coma >>;\n",
+        }
+    }
+    Version{"1.4"}
+}

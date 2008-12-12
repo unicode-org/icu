@@ -1,0 +1,35 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/tr.xml
+// *
+// ***************************************************************************
+tr{
+    RBNFRules{
+        SpelloutRules{
+            "%spellout:\n",
+            "0: s\u0131f\u0131r; bir; iki; \u00FC\u00E7; d\u00F6rt; be\u015F; alt\u0131; yedi; sekiz; dokuz;\n",
+            "10: on[\u00AD>>];\n",
+            "20: yirmi[\u00AD>>];\n",
+            "30: otuz[\u00AD>>];\n",
+            "40: k\u0131rk[\u00AD>>];\n",
+            "50: elli[\u00AD>>];\n",
+            "60: altm\u0131\u015F[\u00AD>>];\n",
+            "70: yetmi\u015F[\u00AD>>];\n",
+            "80: seksen[\u00AD>>];\n",
+            "90: doksan[\u00AD>>];\n",
+            "100: <<\u00ADy\u00FCz[\u00AD>>];\n",
+            "1000: <<\u00ADbin[ >>];\n",
+            "1000000: << milyon[ >>];\n",
+            "1000000000: << milyar[ >>];\n",
+            "1000000000000: << bilyon[ >>];\n",
+            "1000000000000000: << bilyar[ >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: eks\u0131 >>;\n",
+            "x.x: << virg\u00FCl >>;\n",
+        }
+    }
+    Version{"1.3"}
+}
