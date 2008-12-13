@@ -895,14 +895,14 @@ void SSearchTest::boyerMooreTest()
         
         longPattern.setTargetString(&target);
         if (longPattern.search(0, start, end)) {
-            infoln("Test %d: found long pattern at [%d, %d].", t, start, end);
+            logln("Test %d: found long pattern at [%d, %d].", t, start, end);
         } else {
             errln("Test %d: did not find long pattern.", t);
         }
 
         shortPattern.setTargetString(&target);
         if (shortPattern.search(0, start, end)) {
-            infoln("Test %d: found short pattern at [%d, %d].", t, start, end);
+            logln("Test %d: found short pattern at [%d, %d].", t, start, end);
         } else {
             errln("Test %d: did not find short pattern.", t);
         }
@@ -923,7 +923,7 @@ void SSearchTest::goodSuffixTest()
     int32_t start = -1, end = -1;
 
     if (pattern.search(0, start, end)) {
-        infoln("Found pattern at [%d, %d].", start, end);
+        logln("Found pattern at [%d, %d].", start, end);
     } else {
         errln("Did not find pattern.");
     }
