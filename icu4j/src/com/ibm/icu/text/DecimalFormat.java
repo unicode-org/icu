@@ -5413,7 +5413,7 @@ public class DecimalFormat extends NumberFormat {
      * arithmetic with unlimited precision, as defined for the original BigDecimal 
      * class in Java 1.1 and Java 1.2
      */
-	private com.ibm.icu.math.MathContext mathContext = new com.ibm.icu.math.MathContext(0, com.ibm.icu.math.MathContext.PLAIN); // context for plain unlimited math
+    private com.ibm.icu.math.MathContext mathContext = new com.ibm.icu.math.MathContext(0, com.ibm.icu.math.MathContext.PLAIN); // context for plain unlimited math
 
     // [NEW]
     /**
