@@ -131,6 +131,9 @@ public class CompatibilityTest extends TestFmwk
         // to fix the root cause, it will likely break the backward compatibility.
         // For now, we're skipping this case even it works OK on JRE5.  See ticket#6550.
         {"ICU_4.0",     "com.ibm.icu.text.PluralRules.dat"},
+        {"ICU_3.6",     "com.ibm.icu.text.RuleBasedNumberFormat.dat"},
+        {"ICU_3.8.1",     "com.ibm.icu.text.RuleBasedNumberFormat.dat"},
+        {"ICU_4.0",     "com.ibm.icu.text.RuleBasedNumberFormat.dat"},
     };
 
     private Target getFileTargets(URL fileURL)

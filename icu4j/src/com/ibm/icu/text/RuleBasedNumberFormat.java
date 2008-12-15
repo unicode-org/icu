@@ -14,6 +14,7 @@ import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.UResourceBundleIterator;
 
 import java.math.BigInteger;
 import java.text.FieldPosition;
@@ -740,7 +741,22 @@ public class RuleBasedNumberFormat extends NumberFormat {
         String[][] localizations = null;
 
         try {
+            // For backwards compatability - If we have a pre-4.2 style RBNF resource, attempt to read it.
             description = bundle.getString(rulenames[format-1]);
+        }
+        catch (MissingResourceException e) {
+            try {
+                ICUResourceBundle rules = bundle.getWithFallback("RBNFRules/"+rulenames[format-1]);
+                UResourceBundleIterator it = rules.getIterator(); 
+                while (it.hasNext()) {
+                   description = description.concat(it.nextString());
+                }
+            }
+            catch (MissingResourceException e1) {
+            } 
+        }
+
+        try {
             UResourceBundle locb = bundle.get(locnames[format-1]);
             localizations = new String[locb.getSize()][];
             for (int i = 0; i < localizations.length; ++i) {
@@ -1256,14 +1272,23 @@ public class RuleBasedNumberFormat extends NumberFormat {
             if (publicRuleSetNames.length > 0) {
                 defaultRuleSet = findRuleSet(publicRuleSetNames[0]);
             } else {
-            defaultRuleSet = null;
-            int n = ruleSets.length;
-        while (--n >= 0) {
-          if (ruleSets[n].isPublic()) {
-            defaultRuleSet = ruleSets[n];
-            break;
-          }
-        }
+                defaultRuleSet = null;
+                int n = ruleSets.length;
+                while (--n >= 0) {
+                   String currentName = ruleSets[n].getName();
+                   if (currentName.equals("%spellout") || currentName.equals("%ordinal") || currentName.equals("%duration")) {
+                       defaultRuleSet = ruleSets[n];
+                       return;
+                   } 
+                }
+
+                n = ruleSets.length;
+                while (--n >= 0) {
+                    if (ruleSets[n].isPublic()) {
+                        defaultRuleSet = ruleSets[n];
+                        break;
+                    }
+                }
             }
         } else if (ruleSetName.startsWith("%%")) {
             throw new IllegalArgumentException("cannot use private rule set: " + ruleSetName);
@@ -1472,11 +1497,29 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // {dlf} Initialization of a fraction rule set requires the default rule
         // set to be known.  For purposes of initialization, this is always the
         // last public rule set, no matter what the localization data says.
+
+        // Set the default ruleset to the last public ruleset, unless one of the predefined
+        // ruleset names %spellout, %ordinal, or %duration is found
+
+        boolean defaultNameFound = false;                  
+        int n = ruleSets.length;
         defaultRuleSet = ruleSets[ruleSets.length - 1];
-        for (int i = ruleSets.length - 1; i >= 0; --i) {
-            if (!ruleSets[i].getName().startsWith("%%")) {
-                defaultRuleSet = ruleSets[i];
+
+        while (--n >= 0) {
+            String currentName = ruleSets[n].getName();
+            if (currentName.equals("%spellout") || currentName.equals("%ordinal") || currentName.equals("%duration")) {
+                defaultRuleSet = ruleSets[n];
+                defaultNameFound = true;                  
                 break;
+            } 
+        }
+
+        if ( !defaultNameFound ) {
+            for (int i = ruleSets.length - 1; i >= 0; --i) {
+                if (!ruleSets[i].getName().startsWith("%%")) {
+                    defaultRuleSet = ruleSets[i];
+                    break;
+                }
             }
         }
 
