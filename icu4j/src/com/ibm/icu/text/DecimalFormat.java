@@ -1145,12 +1145,12 @@ public class DecimalFormat extends NumberFormat {
          * to just one flavor of BigDecimal.
          */
         if (multiplier != 1) {
-            number = number.multiply(BigDecimal.valueOf(multiplier));
+			number = number.multiply(BigDecimal.valueOf(multiplier), mathContext);
         }
 
         if (roundingIncrementICU != null) {
             number = number.divide(roundingIncrementICU, 0, roundingMode)
-                    .multiply(roundingIncrementICU);
+					.multiply(roundingIncrementICU, mathContext);
         }
 
         synchronized(digitList) {
@@ -1915,8 +1915,7 @@ public class DecimalFormat extends NumberFormat {
                 BigDecimal big = digitList.getBigDecimalICU(status[STATUS_POSITIVE]);
                 n = big;
                 if (mult != 1) {
-                    n = big.divide(BigDecimal.valueOf(mult),
-                            BigDecimal.ROUND_HALF_EVEN);
+                    n = big.divide(BigDecimal.valueOf(mult), mathContext);
                 }
             }
         }
@@ -3419,6 +3418,32 @@ public class DecimalFormat extends NumberFormat {
     public void setSecondaryGroupingSize (int newValue) {
         groupingSize2 = (byte)newValue;
     }
+
+	/**
+	 * Operations on <code>BigDecimal</code> numbers are controlled by a
+	 * {@link MathContext} object, which provides the context (precision and
+	 * other information) for the operation.
+	 * @see #mathContext
+	 * @see #getMathContext
+	 * @new ICU 4.2
+	 */
+	public void setMathContext(com.ibm.icu.math.MathContext newValue)
+	{
+		mathContext = newValue;
+	}
+
+	/**
+	 * Operations on <code>BigDecimal</code> numbers are controlled by a
+	 * {@link MathContext} object, which provides the context (precision and
+	 * other information) for the operation.
+	 * @see #mathContext
+	 * @see #setMathContext
+	 * @new ICU 4.2
+	 */
+	public com.ibm.icu.math.MathContext getMathContext()
+	{
+		return mathContext;
+	}
 
     /**
      * Allows you to get the behavior of the decimal separator with integers.
@@ -5377,6 +5402,18 @@ public class DecimalFormat extends NumberFormat {
      * @since AlphaWorks NumberFormat
      */
     private int roundingMode = BigDecimal.ROUND_HALF_EVEN;
+
+	// [NEW]
+	/**
+     * Operations on <code>BigDecimal</code> numbers are controlled by a
+     * {@link MathContext} object, which provides the context (precision and
+     * other information) for the operation. The default <code>MathContext</code> 
+     * settings are <code>digits=0, form=PLAIN, lostDigits=false, 
+     * roundingMode=ROUND_HALF_UP</code>; these settings perform fixed point 
+     * arithmetic with unlimited precision, as defined for the original BigDecimal 
+     * class in Java 1.1 and Java 1.2
+     */
+	private com.ibm.icu.math.MathContext mathContext = new com.ibm.icu.math.MathContext(0, com.ibm.icu.math.MathContext.PLAIN); // context for plain unlimited math
 
     // [NEW]
     /**
