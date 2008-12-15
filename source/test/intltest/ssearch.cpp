@@ -215,7 +215,7 @@ void SSearchTest::searchTest()
         int32_t        expectedMatchStart = -1;
         int32_t        expectedMatchLimit = -1;
         const UXMLElement  *n;
-        int                nodeCount = 0;
+        int32_t                nodeCount = 0;
 
         n = testCase->getChildElement("pattern");
         TEST_ASSERT(n != NULL);
@@ -1069,9 +1069,9 @@ const char *cPattern = "maketh houndes ete hem";
     // Find the match position usgin strstr
     const char *pm = strstr(longishText, cPattern);
     TEST_ASSERT_M(pm!=NULL, "No pattern match with strstr");
-    int  refMatchPos = (int)(pm - longishText);
-    int  icuMatchPos;
-    int  icuMatchEnd;
+    int32_t  refMatchPos = (int32_t)(pm - longishText);
+    int32_t  icuMatchPos;
+    int32_t  icuMatchEnd;
 #ifndef TEST_BOYER_MOORE
     usearch_search(uss, 0, &icuMatchPos, &icuMatchEnd, &status);
     TEST_ASSERT_SUCCESS(status);
@@ -1080,8 +1080,8 @@ const char *cPattern = "maketh houndes ete hem";
 #endif
     TEST_ASSERT_M(refMatchPos == icuMatchPos, "strstr and icu give different match positions.");
 
-    int i;
-    int j=0;
+    int32_t i;
+    int32_t j=0;
 
     // Try loopcounts around 100000 to some millions, depending on the operation,
     //   to get runtimes of at least several seconds.
