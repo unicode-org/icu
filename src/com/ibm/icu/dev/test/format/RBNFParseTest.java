@@ -1,12 +1,13 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004, International Business Machines Corporation and         *
+ * Copyright (C) 2004-2008, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.text.RuleBasedNumberFormat;
+import com.ibm.icu.util.ULocale;
 import com.ibm.icu.dev.test.TestFmwk;
 
 import java.util.Locale;
@@ -97,5 +98,60 @@ public class RBNFParseTest extends TestFmwk {
     }
       }
     }
+  }
+  
+  private void parseFormat(RuleBasedNumberFormat rbnf, String s, String target) {
+      try {
+          Number n = rbnf.parse(s);
+          String t = rbnf.format(n);
+          assertEquals(rbnf.getLocale(ULocale.ACTUAL_LOCALE) + ": " + s + " : " + n, target, t);
+      } catch (java.text.ParseException e){
+          fail("exception:" + e);
+      }
+  }
+  
+  private void parseList(RuleBasedNumberFormat rbnf_en, RuleBasedNumberFormat rbnf_fr, String[][] lists) {
+      for (int i = 0; i < lists.length; ++i) {
+          String[] list = lists[i];
+          String s = list[0];
+          String target_en = list[1];
+          String target_fr = list[2];
+          
+          parseFormat(rbnf_en, s, target_en);
+          parseFormat(rbnf_fr, s, target_fr);
+      }
+  }
+
+  public void TestLenientParse() throws Exception {
+      RuleBasedNumberFormat rbnf_en, rbnf_fr;
+
+      rbnf_en = new RuleBasedNumberFormat(Locale.ENGLISH, RuleBasedNumberFormat.SPELLOUT);
+      rbnf_en.setLenientParseMode(true);
+      rbnf_fr = new RuleBasedNumberFormat(Locale.FRENCH, RuleBasedNumberFormat.SPELLOUT);
+      rbnf_fr.setLenientParseMode(true);
+
+      Number n = rbnf_en.parse("1,2 million");
+      logln(n.toString());
+      
+      String[][] lists = {
+          { "1,2", "twelve", "un virgule deux" },
+          { "1,2 million", "twelve million", "un million deux cents mille" },
+          { "1.2", "one point two", "douze" },
+// TODO: We'll update the English RBNF rule later
+//          { "1.2 million", "one million two hundred thousand", "douze million" },
+          { "1.2 million", "one million, two hundred thousand, zero", "douze million" },
+      };
+
+      Locale.setDefault(Locale.FRANCE);
+      logln("Default locale:" + Locale.getDefault());
+      logln("rbnf_en:" + rbnf_en.getDefaultRuleSetName());
+      logln("rbnf_fr:" + rbnf_en.getDefaultRuleSetName());
+      parseList(rbnf_en, rbnf_fr, lists);
+      
+      Locale.setDefault(Locale.US);
+      logln("Default locale:" + Locale.getDefault());
+      logln("rbnf_en:" + rbnf_en.getDefaultRuleSetName());
+      logln("rbnf_fr:" + rbnf_en.getDefaultRuleSetName());
+      parseList(rbnf_en, rbnf_fr, lists);
   }
 }

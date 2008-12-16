@@ -39,6 +39,11 @@ abstract class NFSubstitution {
      * or null.  (Either this or ruleSet has to be non-null.)
      */
     DecimalFormat numberFormat = null;
+    
+    /**
+     * Link to the RBNF so that we can access its decimalFormat if need be.
+     */
+    RuleBasedNumberFormat rbnf = null;
 
     //-----------------------------------------------------------------------
     // construction
@@ -158,6 +163,7 @@ abstract class NFSubstitution {
                    String description) {
         // initialize the substitution's position in its parent rule
         this.pos = pos;
+        this.rbnf = formatter;
 
         // the description should begin and end with the same character.
         // If it doesn't that's a syntax error.  Otherwise,
@@ -405,7 +411,7 @@ abstract class NFSubstitution {
         if (ruleSet != null) {
             tempResult = ruleSet.parse(text, parsePosition, upperBound);
             if (lenientParse && !ruleSet.isFractionSet() && parsePosition.getIndex() == 0) {
-                tempResult = NumberFormat.getInstance().parse(text, parsePosition);
+                tempResult = rbnf.getDecimalFormat().parse(text, parsePosition);
             }
 
             // ...or use our DecimalFormat to parse the text
@@ -1327,7 +1333,7 @@ class FractionalPartSubstitution extends NFSubstitution {
                 workPos.setIndex(0);
                 digit = ruleSet.parse(workText, workPos, 10).intValue();
                 if (lenientParse && workPos.getIndex() == 0) {
-                    digit = NumberFormat.getInstance().parse(workText, workPos).intValue();
+                    digit = rbnf.getDecimalFormat().parse(workText, workPos).intValue();
                 }
 
                 if (workPos.getIndex() != 0) {
