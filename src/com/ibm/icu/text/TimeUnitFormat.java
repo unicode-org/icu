@@ -248,7 +248,7 @@ public class TimeUnitFormat extends MeasureFormat {
                 resultNumber = new Integer(2);
             } else {
                 // should not happen.
-                // FIXME: how to handle?
+                // TODO: how to handle?
                 resultNumber = new Integer(3);
             }
         }
