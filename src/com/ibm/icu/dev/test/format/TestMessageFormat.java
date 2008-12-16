@@ -1293,6 +1293,27 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    // Test case for null arguments.
+    // Ticket#6361
+    public void TestNullArgs() {
+        MessageFormat msgfmt = new MessageFormat("{0} - {1}");
+        Object[][] TEST_CASES = {
+            {null,                          "{0} - {1}"},
+            {new Object[] {null},           "null - {1}"},
+            {new Object[] {null, null},     "null - null"},
+            {new Object[] {"one"},          "one - {1}"},
+            {new Object[] {"one", null},    "one - null"},
+            {new Object[] {null, "two"},    "null - two"},
+        };
+
+        for (int i = 0; i < TEST_CASES.length; i++) {
+            String text = msgfmt.format(TEST_CASES[i][0]);
+            if (!text.equals(TEST_CASES[i][1])) {
+                errln("FAIL: Returned[" + text + "] Expected[" + TEST_CASES[i][1] + "]");
+            }
+        }
+    }
+
 //#if defined(FOUNDATION10) || defined(J2SE13)
 //#else
     // Test case for formatToCharacterIterator
