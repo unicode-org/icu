@@ -516,16 +516,14 @@ abstract public class TimeZone implements Serializable, Cloneable {
     /**
      * The public version of this API only accepts LONG/SHORT, the
      * internal version (which this calls) also accepts LONG_GENERIC/SHORT_GENERIC.
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
-    private String _getDisplayName(boolean daylight, int style, ULocale locale) {
+    private synchronized String _getDisplayName(boolean daylight, int style, ULocale locale) {
         /* NOTES:
          * (1) We use SimpleDateFormat for simplicity; we could do this
          * more efficiently but it would duplicate the SimpleDateFormat code
          * here, which is undesirable.
          * (2) Attempts to move the code from SimpleDateFormat to here also run
-         * aground because this requires SimpleDateFormat to keep a Locale
+         * around because this requires SimpleDateFormat to keep a Locale
          * object around, which it currently doesn't; to synthesize such a
          * locale upon resurrection; and to somehow handle the special case of
          * construction from a DateFormatSymbols object.
@@ -543,17 +541,16 @@ abstract public class TimeZone implements Serializable, Cloneable {
 
         String[] patterns = { "z", "zzzz", "v", "vvvv" };
         format.applyPattern(patterns[style]);
+        format.setTimeZone(this);
         Date d = new Date();
         if (style >= 2) {
             // Generic names may change time to time even for a single time zone.
             // This method returns the one used for the zone now.
-            format.setTimeZone(this);
             return format.format(d);
         } else {
             int[] offsets = new int[2];
             getOffset(d.getTime(), false, offsets);
             if ((daylight && offsets[1] != 0) || (!daylight && offsets[1] == 0)) {
-                format.setTimeZone(this);
                 return format.format(d);
             }
 
