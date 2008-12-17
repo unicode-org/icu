@@ -6,10 +6,10 @@ Bundle-Version: @BUILD_VERSION@
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-Copyright: @COPYRIGHT@
-Export-Package: com.ibm.icu.lang;version="@IMPL_VERSION@",
- com.ibm.icu.math;version="@IMPL_VERSION@",
- com.ibm.icu.text;version="@IMPL_VERSION@",
- com.ibm.icu.util;version="@IMPL_VERSION@",
+Export-Package: com.ibm.icu.lang;base=true;full=true;version="@IMPL_VERSION@",
+ com.ibm.icu.math;base=true;full=true;version="@IMPL_VERSION@",
+ com.ibm.icu.text;base=true;full=true;version="@IMPL_VERSION@",
+ com.ibm.icu.util;base=true;full=true;version="@IMPL_VERSION@",
  com.ibm.icu.impl;x-internal:=true,
  com.ibm.icu.impl.data;x-internal:=true,
  com.ibm.icu.impl.data.icudt@DATA_VERSION_NUMBER@b;x-internal:=true,
