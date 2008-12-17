@@ -6,8 +6,8 @@ Bundle-Version: @BUILD_VERSION@
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-Copyright: @COPYRIGHT@
-Export-Package: com.ibm.icu.text;version="@IMPL_VERSION@",
- com.ibm.icu.util;version="@IMPL_VERSION@"
+Export-Package: com.ibm.icu.text;base=true;version="@IMPL_VERSION@",
+ com.ibm.icu.util;base=true;version="@IMPL_VERSION@"
 Eclipse-LazyStart: true
 Bundle-RequiredExecutionEnvironment: CDC-1.0/Foundation-1.0,
  J2SE-1.3
