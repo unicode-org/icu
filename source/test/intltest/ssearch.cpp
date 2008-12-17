@@ -86,7 +86,7 @@ void SSearchTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
             break;
 
         case 3: name = "bmMonkeyTest";
-            if (exec) monkeyTest(params);
+            if (exec) bmMonkeyTest(params);
             break;
 
         case 4: name = "boyerMooreTest";
