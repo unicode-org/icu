@@ -260,6 +260,8 @@ minimum number for special Jamo
                               /* by index */
 #define UCOL_USE_ITERATOR   64
 
+#define UCOL_FORCE_HAN_IMPLICIT 128
+
 #define NFC_ZERO_CC_BLOCK_LIMIT_  0x300
 
 typedef struct collIterate {

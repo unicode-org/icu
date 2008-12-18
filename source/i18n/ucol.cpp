@@ -126,7 +126,6 @@ uprv_init_collIterate(const UCollator *collator, const UChar *sourceString,
     IInit_collIterate(collator, sourceString, sourceLen, s);
 }
 
-
 /**
 * Backup the state of the collIterate struct data
 * @param data collIterate to backup
@@ -1518,10 +1517,16 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
     }
     else
     {
-        order = UTRIE_GET32_FROM_LEAD(&coll->mapping, ch);
-        if(order > UCOL_NOT_FOUND) {                                       /* if a CE is special                */
-            order = ucol_prv_getSpecialCE(coll, ch, order, collationSource, status);    /* and try to get the special CE     */
+        if (((ch >= 0x3400 && ch <= 0x9FFF) || (ch >= 0xAC00 && ch <= 0xD7AF)) &&
+            (collationSource->flags & UCOL_FORCE_HAN_IMPLICIT)) {
+            order = UCOL_NOT_FOUND;
+        } else {
+            order = UTRIE_GET32_FROM_LEAD(&coll->mapping, ch);
+            if(order > UCOL_NOT_FOUND) {                                       /* if a CE is special                */
+                order = ucol_prv_getSpecialCE(coll, ch, order, collationSource, status);    /* and try to get the special CE     */
+            }
         }
+
         if(order == UCOL_NOT_FOUND && coll->UCA) {   /* We couldn't find a good CE in the tailoring */
             /* if we got here, the codepoint MUST be over 0xFF - so we look directly in the trie */
             order = UTRIE_GET32_FROM_LEAD(&coll->UCA->mapping, ch);
@@ -1981,7 +1986,11 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                 result = coll->latinOneMapping[ch];
             }
             else {
-                result = UTRIE_GET32_FROM_LEAD(&coll->mapping, ch);
+                if (ch >= 0x3400 && ch <= 0x9FFF) {
+                    result = UCOL_NOT_FOUND;
+                } else {
+                    result = UTRIE_GET32_FROM_LEAD(&coll->mapping, ch);
+                }
             }
             if (result > UCOL_NOT_FOUND) {
                 result = ucol_prv_getSpecialPrevCE(coll, ch, result, data, status);
@@ -3629,6 +3638,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
             //IInit_collIterate(coll, UCharOffset, -1, &temp);
             IInit_collIterate(coll, UCharOffset, noChars, &temp);
             temp.flags &= ~UCOL_ITER_NORM;
+            temp.flags |= source->flags & UCOL_FORCE_HAN_IMPLICIT;
 
             rawOffset = temp.pos - temp.string; // should always be zero?
             CE = ucol_IGetNextCE(coll, &temp, status);

@@ -379,6 +379,14 @@ private:
     char *key;
 
     static CollDataCache *collDataCache;
+
+    uint32_t minHan;
+    uint32_t maxHan;
+
+    uint32_t firstL;
+    uint32_t firstV;
+    uint32_t firstT;
+    uint32_t lastT;
 };
 
 U_NAMESPACE_END

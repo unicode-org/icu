@@ -332,6 +332,7 @@ ucol_openElements(const UCollator  *coll,
     return result;
 }
 
+
 U_CAPI void U_EXPORT2
 ucol_closeElements(UCollationElements *elems)
 {
@@ -375,7 +376,7 @@ ucol_reset(UCollationElements *elems)
         ci->endp      = ci->string + u_strlen(ci->string);
     }
     ci->CEpos       = ci->toReturn = ci->CEs;
-    ci->flags       = UCOL_ITER_HASLEN;
+    ci->flags       = (ci->flags & ~UCOL_FORCE_HAN_IMPLICIT) | UCOL_ITER_HASLEN;
     if (ci->coll->normalizationMode == UCOL_ON) {
         ci->flags |= UCOL_ITER_NORM;
     }
@@ -389,6 +390,21 @@ ucol_reset(UCollationElements *elems)
 
   //ci->offsetReturn = ci->offsetStore = NULL;
 	ci->offsetRepeatCount = ci->offsetRepeatValue = 0;
+}
+
+U_CAPI void U_EXPORT2
+ucol_forceHanImplicit(UCollationElements *elems, UErrorCode *status)
+{
+    if (U_FAILURE(*status)) {
+        return;
+    }
+
+    if (elems == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    elems->iteratordata_.flags |= UCOL_FORCE_HAN_IMPLICIT;
 }
 
 U_CAPI int32_t U_EXPORT2

@@ -138,6 +138,7 @@ void Target::setTargetString(const UnicodeString *target)
         UErrorCode status = U_ZERO_ERROR;
 
         elements = ucol_openElements(coll, target->getBuffer(), target->length(), &status);
+        ucol_forceHanImplicit(elements, &status);
 
         charBreakIterator = ubrk_open(UBRK_CHARACTER, ucol_getLocale(coll, ULOC_VALID_LOCALE, &status),
                                       target->getBuffer(), target->length(), &status);

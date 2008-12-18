@@ -34,6 +34,7 @@
 
 U_NAMESPACE_BEGIN
 
+#define ARRAY_SIZE(array) (sizeof(array)/sizeof(array[0]))
 #define NEW_ARRAY(type, count) (type *) uprv_malloc((count) * sizeof(type))
 #define DELETE_ARRAY(array) uprv_free((void *) (array))
 #define ARRAY_COPY(dst, src, count) uprv_memcpy((void *) (dst), (void *) (src), (count) * sizeof (src)[0])
@@ -57,6 +58,8 @@ CEList::CEList(UCollator *coll, const UnicodeString &string)
     UCollationElements *elems = ucol_openElements(coll, string.getBuffer(), string.length(), &status);
     uint32_t strengthMask = 0;
     int32_t order;
+
+    ucol_forceHanImplicit(elems, &status);
 
     switch (ucol_getStrength(coll)) 
     {
@@ -548,7 +551,7 @@ CollData::CollData(UCollator *collator, char *cacheKey, int32_t cacheKeyLength)
 {
     UErrorCode status = U_ZERO_ERROR;
 
-#if 0
+#if 1
     U_STRING_DECL(test_pattern, "[[:assigned:]-[:ideographic:]-[:hangul:]-[:c:]]", 47);
     U_STRING_INIT(test_pattern, "[[:assigned:]-[:ideographic:]-[:hangul:]-[:c:]]", 47);
     USet *charsToTest  = uset_openPattern(test_pattern, 47, &status);
@@ -628,6 +631,61 @@ CollData::CollData(UCollator *collator, char *cacheKey, int32_t cacheKeyLength)
     uset_close(contractions);
     uset_close(expansions);
     uset_close(charsToTest);
+
+    /*
+     * A:    4E00..9FFF;  CJK Unified Ideographs
+     *       FA0E..FA2F;  CJK Compatibility Ideographs (used)
+     * B:    3400..4DBF;  CJK Unified Ideographs Extension A
+     *      20000..2A6DF; CJK Unified Ideographs Extension B (and others later on)
+     */
+
+     UChar   hanRanges[] = {0x4E00, 0x9FFF, 0xFA0E, 0xFA2F, 0x3400, 0x4DBF, 0xD840, 0xDC00, 0xD869, 0xDEDF};
+     UChar  jamoRanges[] = {0x1100, 0x1161, 0x11A8, 0x11F9};
+     UnicodeString hanString(hanRanges, ARRAY_SIZE(hanRanges));
+     UnicodeString jamoString(jamoRanges, ARRAY_SIZE(jamoRanges));
+     CEList hanList(coll, hanString);
+     CEList jamoList(coll, jamoString);
+     
+     minHan = 0xFFFFFFFF;
+     maxHan = 0;
+     
+     firstL = jamoList[0];
+     firstV = jamoList[1];
+     firstT = jamoList[2];
+     lastT  = jamoList[3] + 0x10000;
+
+     UBool longL = FALSE, longV = FALSE, longT = FALSE;
+
+     for(int32_t h = 0; h < hanList.size(); h += 2) {
+         if (hanList[h] < minHan) {
+             minHan = hanList[h];
+         }
+
+         if (hanList[h] > maxHan) {
+             maxHan = hanList[h];
+         }
+     }
+
+     maxHan += 0x10000;
+
+     switch (jamoList.size())
+     {
+     case 8:
+     case 7:
+         longL = TRUE;
+         // fall-through
+
+     case 6:
+         longV = TRUE;
+         // fall-through
+
+     case 5:
+         longT = TRUE;
+         break;
+
+     default:
+         longL = longV = longT = FALSE;
+     }
 }
 
 CollData::~CollData()
@@ -721,6 +779,49 @@ int32_t CollData::minLengthInChars(const CEList *ceList, int32_t offset, int32_t
 #ifndef CACHE_CELISTS
             delete ceList2;
 #endif
+        }
+    } else {
+        if (ce >= minHan && ce < maxHan) {
+            int32_t roffset = offset + 2;
+            int32_t rlength = 0;
+
+          //history[roffset++] = -1;
+          //history[roffset++] = 1;
+
+            if (roffset < maxOffset) {
+                rlength = minLengthInChars(ceList, roffset, history);
+            }
+
+            shortestLength = 1 + rlength;
+        } else if (ce >= firstL && ce < lastT) {
+            uint32_t limits[] = {firstL, firstV, firstT, lastT};
+            int32_t roffset = offset;
+            int32_t rlength = 0;
+
+            for (int32_t j = 0; j < 4; j += 1) {
+                ce = ceList->get(roffset++);
+
+                if (ce < limits[j] || ce >= limits[j + 1]) {
+                    break;
+                }
+            }
+
+#if 0
+            // **** this doesn't work ****
+            // looking for the 2nd CE of a long primary which will
+            // have only the top 8 primary bits set and the continuation
+            // bits. Unfortunately, the continuation bits are masked off
+            // for strengths primary and secondary...
+            if ((ce & 0xFF000000) != 0 && (ce & 0x00FF0000) == 0) {
+                roffset += 1;
+            }
+#endif
+
+            if (roffset < maxOffset) {
+                rlength = minLengthInChars(ceList, roffset, history);
+            }
+
+            shortestLength = 1 + rlength;
         }
     }
 
