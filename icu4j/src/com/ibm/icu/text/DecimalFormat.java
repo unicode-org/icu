@@ -836,6 +836,12 @@ public class DecimalFormat extends NumberFormat {
             if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
                 fieldPosition.setBeginIndex(result.length());
             }
+//#if defined(FOUNDATION10) || defined(J2SE13) 
+//#else 
+			else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+				fieldPosition.setBeginIndex(result.length());
+			}
+//#endif 
 
             result.append(symbols.getNaN());
             // [Spark/CDL] Add attribute for NaN here.
@@ -850,6 +856,12 @@ public class DecimalFormat extends NumberFormat {
             if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
                 fieldPosition.setEndIndex(result.length());
             }
+//#if defined(FOUNDATION10) || defined(J2SE13) 
+//#else 
+			else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+				fieldPosition.setEndIndex(result.length());
+			}
+//#endif 
 
             addPadding(result, fieldPosition, 0, 0);
             return result;
@@ -887,6 +899,12 @@ public class DecimalFormat extends NumberFormat {
             if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
                 fieldPosition.setBeginIndex(result.length());
             }
+//#if defined(FOUNDATION10) || defined(J2SE13) 
+//#else 
+			else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+				fieldPosition.setBeginIndex(result.length());
+			}
+//#endif 
 
             // [Spark/CDL] Add attribute for infinity here.
             result.append(symbols.getInfinity());
@@ -900,6 +918,12 @@ public class DecimalFormat extends NumberFormat {
             if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
                 fieldPosition.setEndIndex(result.length());
             }
+//#if defined(FOUNDATION10) || defined(J2SE13) 
+//#else 
+			else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+				fieldPosition.setEndIndex(result.length());
+			}
+//#endif 
 
             int suffixLen = appendAffix(result, isNegative, false, parseAttr);
 
@@ -1330,6 +1354,15 @@ public class DecimalFormat extends NumberFormat {
             } else if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
                 fieldPosition.setBeginIndex(-1);
             }
+//#if defined(FOUNDATION10) || defined(J2SE13) 
+//#else 
+			else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+                fieldPosition.setBeginIndex(result.length());
+                fieldPosition.setEndIndex(-1);
+			} else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
+                fieldPosition.setBeginIndex(-1);
+			} 
+//#endif 
 
 //#if defined(FOUNDATION10) || defined(J2SE13)
 //#else
@@ -1405,6 +1438,13 @@ public class DecimalFormat extends NumberFormat {
                     if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
                         fieldPosition.setEndIndex(result.length());
                     }
+//#if defined(FOUNDATION10) || defined(J2SE13) 
+//#else 
+					else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+						fieldPosition.setEndIndex(result.length());
+					}
+//#endif 
+
 //#if defined(FOUNDATION10) || defined(J2SE13)
 //#else
                     // [Spark/CDL] Add attribute for integer part
@@ -1429,6 +1469,13 @@ public class DecimalFormat extends NumberFormat {
                     if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
                         fieldPosition.setBeginIndex(result.length());
                     }
+//#if defined(FOUNDATION10) || defined(J2SE13) 
+//#else 
+					else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
+						fieldPosition.setBeginIndex(result.length());
+					}
+//#endif 
+
                 }
                 result.append((i < digitList.count) ?
                           (char)(digitList.digits[i] + zeroDelta) :
@@ -1451,6 +1498,20 @@ public class DecimalFormat extends NumberFormat {
                 }
                 fieldPosition.setEndIndex(result.length());
             }
+//#if defined(FOUNDATION10) || defined(J2SE13) 
+//#else 
+			else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+				if (fieldPosition.getEndIndex() < 0) {
+					fieldPosition.setEndIndex(result.length());
+				}
+			} else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
+				if (fieldPosition.getBeginIndex() < 0) {
+					fieldPosition.setBeginIndex(result.length());
+				}
+				fieldPosition.setEndIndex(result.length());
+			}
+//#endif 
+
 //#if defined(FOUNDATION10) || defined(J2SE13)
 //#else
             // [Spark/CDL] Calcuate the end index of integer part and fractional
@@ -1547,6 +1608,12 @@ public class DecimalFormat extends NumberFormat {
             if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
                 fieldPosition.setBeginIndex(result.length());
             }
+//#if defined(FOUNDATION10) || defined(J2SE13) 
+//#else 
+			else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+				fieldPosition.setBeginIndex(result.length());
+			}
+//#endif 
 
             int sigCount = 0;
             int minSigDig = getMinimumSignificantDigits();
@@ -1615,6 +1682,12 @@ public class DecimalFormat extends NumberFormat {
             if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
                 fieldPosition.setEndIndex(result.length());
             }
+//#if defined(FOUNDATION10) || defined(J2SE13) 
+//#else 
+			else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+				fieldPosition.setEndIndex(result.length());
+			}
+//#endif 
 
             // Determine whether or not there are any printable fractional
             // digits.  If we've used up the digits we know there aren't.
@@ -1651,6 +1724,12 @@ public class DecimalFormat extends NumberFormat {
             if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
                 fieldPosition.setBeginIndex(result.length());
             }
+//#if defined(FOUNDATION10) || defined(J2SE13) 
+//#else 
+			else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
+				fieldPosition.setBeginIndex(result.length());
+			}
+//#endif 
 
 //#if defined(FOUNDATION10) || defined(J2SE13)
 //#else
@@ -1708,6 +1787,13 @@ public class DecimalFormat extends NumberFormat {
             if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
                 fieldPosition.setEndIndex(result.length());
             }
+//#if defined(FOUNDATION10) || defined(J2SE13) 
+//#else 
+			else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
+				fieldPosition.setEndIndex(result.length());
+			}
+//#endif 
+
 //#if defined(FOUNDATION10) || defined(J2SE13)
 //#else
             // [Spark/CDL] Add attribute information if necessary.
