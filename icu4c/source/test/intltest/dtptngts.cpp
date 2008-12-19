@@ -32,7 +32,7 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
     }
 }
 
-#define MAX_LOCALE   6  
+#define MAX_LOCALE   7  
 
 /**
  * Test various generic API methods of DateTimePatternGenerator for API coverage.
@@ -56,6 +56,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
      
     const char* testLocale[MAX_LOCALE][4] = {
         {"en", "US", "", ""},
+        {"en", "US", "", "calendar=japanese"},
         {"zh", "Hans", "CN", ""},
         {"de", "DE", "", ""},
         {"fi", "", "", ""},
@@ -75,6 +76,21 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("23:58"),
         UnicodeString("58:59"),
         UnicodeString("January 1999"),                        // en_US 10: yyyyMMMM
+
+        // currently the following for en_US@calendar=japanese just verify the correct fallback behavior for ticket:5702;
+        // however some are not the "correct" results. To fix that, root needs better DateTimePatterns/availableFormats
+        // data; cldrbug #1994 is for that.
+        UnicodeString("H 11-01"),                             // en_US@calendar=japanese  0: yM
+        UnicodeString("H 11 Jan"),                            // en_US@calendar=japanese  1: yMMM
+        UnicodeString("1/13/11"),                             // en_US@calendar=japanese  2: yMd (fix root's DateTimePatterns/availableFormats, then fix this)
+        UnicodeString("Jan/13/11"),                           // en_US@calendar=japanese  3: yMMMd (fix root's DateTimePatterns/availableFormats, then fix this)
+        UnicodeString("1-13"),                                // en_US@calendar=japanese  4: Md
+        UnicodeString("Jan 13"),                              // en_US@calendar=japanese  5: MMMd
+        UnicodeString("H 11 Q1"),                             // en_US@calendar=japanese  6: yQQQ
+        UnicodeString("23:58"),                               // en_US@calendar=japanese  7: hhmm
+        UnicodeString("23:58"),                               // en_US@calendar=japanese  8: HHmm
+        UnicodeString("58:59"),                               // en_US@calendar=japanese  9: mmss
+        UnicodeString("H 0011 January"),                      // en_US@calendar=japanese 10: yyyyMMMM (fix root's DateTimePatterns/availableFormats, then fix this)
 
         UnicodeString("1999-1", -1, US_INV),                  // zh_Hans_CN: yM
         CharsToUnicodeString("1999\\u5E741\\u6708"),          // zh_Hans_CN: yMMM  -> yyyy\u5E74MMM (fixed expected result per ticket:6626:)
