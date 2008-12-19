@@ -1,6 +1,6 @@
 /*****************************************************************************************
  *
- *   Copyright (C) 1996-2004, International Business Machines
+ *   Copyright (C) 1996-2008, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **/
 
@@ -264,6 +264,26 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
             errln("ERROR: toLocalizedPattern() result did not match pattern applied");
         }
     }
+
+	public void testJB6134()
+	{
+		DecimalFormat decfmt = new DecimalFormat();
+		StringBuffer buf = new StringBuffer();
+
+		FieldPosition fposByInt = new FieldPosition(NumberFormat.INTEGER_FIELD);
+		decfmt.format(123, buf, fposByInt);
+
+		buf.setLength(0);
+		FieldPosition fposByField = new FieldPosition(NumberFormat.Field.INTEGER);
+		decfmt.format(123, buf, fposByField);
+
+		if (fposByInt.getEndIndex() != fposByField.getEndIndex())
+		{
+			errln("ERROR: End index for integer field - fposByInt:" + fposByInt.getEndIndex() +
+				" / fposByField: " + fposByField.getEndIndex());
+		}
+	}
+
 }
 
 
