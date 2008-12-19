@@ -515,7 +515,7 @@ backAndForth(UCollationElements *iter)
           }
 
           if (o != orders[index].order) {
-              log_err("Mismatched order at index %d: 0x%0:8X vs. 0x%0:8X\n", index,
+              log_err("Mismatched order at index %d: 0x%8.8X vs. 0x%8.8X\n", index,
                 orders[index].order, o);
             goto bail;
           }
