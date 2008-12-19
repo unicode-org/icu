@@ -94,7 +94,7 @@ public:
      *
      * @internal ICU 4.0.1 technology preview
      */
-    int32_t get(int32_t index) const;
+    uint32_t get(int32_t index) const;
 
     /**
      * Check if the CEs in another <code>CEList</code> match the
@@ -118,7 +118,7 @@ public:
      *
      * @internal ICU 4.0.1 technology preview
      */
-    int32_t &operator[](int32_t index) const;
+    uint32_t &operator[](int32_t index) const;
 
     /*
      * UObject glue...
@@ -127,10 +127,10 @@ public:
     static UClassID getStaticClassID();
 
 private:
-    void add(int32_t ce);
+    void add(uint32_t ce);
 
-    int32_t ceBuffer[CELIST_BUFFER_SIZE];
-    int32_t *ces;
+    uint32_t ceBuffer[CELIST_BUFFER_SIZE];
+    uint32_t *ces;
     int32_t listMax;
     int32_t listSize;
 
@@ -383,10 +383,7 @@ private:
     uint32_t minHan;
     uint32_t maxHan;
 
-    uint32_t firstL;
-    uint32_t firstV;
-    uint32_t firstT;
-    uint32_t lastT;
+    uint32_t jamoLimits[4];
 };
 
 U_NAMESPACE_END

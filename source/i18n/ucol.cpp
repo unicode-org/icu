@@ -1517,14 +1517,31 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
     }
     else
     {
-        if (((ch >= 0x3400 && ch <= 0x9FFF) || (ch >= 0xAC00 && ch <= 0xD7AF)) &&
-            (collationSource->flags & UCOL_FORCE_HAN_IMPLICIT)) {
+        // Always use UCA for [3400..9FFF], [AC00..D7AF]
+        // **** [FA0E..FA2F] ?? ****
+        if ((collationSource->flags & UCOL_FORCE_HAN_IMPLICIT) != 0 &&
+            (ch >= 0x3400 && ch <= 0xD7AF)) {
+#if 0
+            if (ch > 0x9FFF && ch < 0xAC00) {
+                // between the two target ranges; do normal lookup
+                // **** this range is YI, Modifier tone letters, ****
+                // **** Latin-D, Syloti Nagari, Phagas-pa. It's  ****
+                // **** unlikely that these are tailored so it's ****
+                // **** probably OK to use UCA for them too.     ****
+                order = UTRIE_GET32_FROM_LEAD(&coll->mapping, ch);
+            } else {
+                // in one of the target ranges; use UCA
+                order = UCOL_NOT_FOUND;
+            }
+#else
             order = UCOL_NOT_FOUND;
+#endif
         } else {
             order = UTRIE_GET32_FROM_LEAD(&coll->mapping, ch);
-            if(order > UCOL_NOT_FOUND) {                                       /* if a CE is special                */
-                order = ucol_prv_getSpecialCE(coll, ch, order, collationSource, status);    /* and try to get the special CE     */
-            }
+        }
+
+        if(order > UCOL_NOT_FOUND) {                                       /* if a CE is special                */
+            order = ucol_prv_getSpecialCE(coll, ch, order, collationSource, status);    /* and try to get the special CE     */
         }
 
         if(order == UCOL_NOT_FOUND && coll->UCA) {   /* We couldn't find a good CE in the tailoring */
@@ -1986,8 +2003,24 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                 result = coll->latinOneMapping[ch];
             }
             else {
-                if (ch >= 0x3400 && ch <= 0x9FFF) {
+                // Always use UCA for [3400..9FFF], [AC00..D7AF]
+                // **** [FA0E..FA2F] ?? ****
+                if ((data->flags & UCOL_FORCE_HAN_IMPLICIT) != 0 &&
+                    (ch >= 0x3400 && ch <= 0xD7AF)) {
+#if 0
+                    if (ch > 0x9FFF && ch < 0xAC00) {
+                        // between the two target ranges; do normal lookup
+                        // **** this range is YI, Modifier tone letters, ****
+                        // **** Latin-D, Syloti Nagari, Phagas-pa. It's  ****
+                        // **** unlikely that these are tailored so it's ****
+                        // **** probably OK to use UCA for them too.     ****
+                         result = UTRIE_GET32_FROM_LEAD(&coll->mapping, ch);
+                    } else {
+                        result = UCOL_NOT_FOUND;
+                    }
+#else
                     result = UCOL_NOT_FOUND;
+#endif
                 } else {
                     result = UTRIE_GET32_FROM_LEAD(&coll->mapping, ch);
                 }

@@ -59,6 +59,7 @@ CEList::CEList(UCollator *coll, const UnicodeString &string)
     uint32_t strengthMask = 0;
     int32_t order;
 
+    // **** only set flag if string has Han(gul) ****
     ucol_forceHanImplicit(elems, &status);
 
     switch (ucol_getStrength(coll)) 
@@ -83,10 +84,16 @@ CEList::CEList(UCollator *coll, const UnicodeString &string)
     ces = ceBuffer;
 
     while ((order = ucol_next(elems, &status)) != UCOL_NULLORDER) {
+        UBool cont = isContinuation(order);
+
         order &= strengthMask;
 
         if (order == UCOL_IGNORABLE) {
             continue;
+        }
+
+        if (cont) {
+            order |= UCOL_CONTINUATION_MARKER;
         }
 
         add(order);
@@ -106,7 +113,7 @@ CEList::~CEList()
     }
 }
 
-void CEList::add(int32_t ce)
+void CEList::add(uint32_t ce)
 {
     if (listSize >= listMax) {
       //listMax *= 2;
@@ -116,9 +123,9 @@ void CEList::add(int32_t ce)
         _histogram[listSize / CELIST_BUFFER_SIZE] += 1;
 #endif
 
-        int32_t *newCEs = NEW_ARRAY(int32_t, listMax);
+        uint32_t *newCEs = NEW_ARRAY(uint32_t, listMax);
 
-        uprv_memcpy(newCEs, ces, listSize * sizeof(int32_t));
+        uprv_memcpy(newCEs, ces, listSize * sizeof(uint32_t));
 
         if (ces != ceBuffer) {
             DELETE_ARRAY(ces);
@@ -130,16 +137,16 @@ void CEList::add(int32_t ce)
     ces[listSize++] = ce;
 }
 
-int32_t CEList::get(int32_t index) const
+uint32_t CEList::get(int32_t index) const
 {
     if (index >= 0 && index < listSize) {
         return ces[index];
     }
 
-    return -1;
+    return UCOL_NULLORDER;
 }
 
-int32_t &CEList::operator[](int32_t index) const
+uint32_t &CEList::operator[](int32_t index) const
 {
     return ces[index];
 }
@@ -151,7 +158,7 @@ UBool CEList::matchesAt(int32_t offset, const CEList *other) const
     }
 
     for (int32_t i = offset, j = 0; j < other->size(); i += 1, j += 1) {
-        if (ces[i] != other->get(j)) {
+        if (ces[i] != (*other)[j]) {
             return FALSE;
         }
     }
@@ -252,12 +259,12 @@ public:
     CEToStringsMap();
     ~CEToStringsMap();
 
-    void put(int32_t ce, UnicodeString *string);
-    StringList *getStringList(int32_t ce) const;
+    void put(uint32_t ce, UnicodeString *string);
+    StringList *getStringList(uint32_t ce) const;
 
 private:
  
-    void putStringList(int32_t ce, StringList *stringList);
+    void putStringList(uint32_t ce, StringList *stringList);
     UHashtable *map;
 };
 
@@ -277,7 +284,7 @@ CEToStringsMap::~CEToStringsMap()
     uhash_close(map);
 }
 
-void CEToStringsMap::put(int32_t ce, UnicodeString *string)
+void CEToStringsMap::put(uint32_t ce, UnicodeString *string)
 {
     StringList *strings = getStringList(ce);
 
@@ -289,12 +296,12 @@ void CEToStringsMap::put(int32_t ce, UnicodeString *string)
     strings->add(string);
 }
 
-StringList *CEToStringsMap::getStringList(int32_t ce) const
+StringList *CEToStringsMap::getStringList(uint32_t ce) const
 {
     return (StringList *) uhash_iget(map, ce);
 }
 
-void CEToStringsMap::putStringList(int32_t ce, StringList *stringList)
+void CEToStringsMap::putStringList(uint32_t ce, StringList *stringList)
 {
     UErrorCode status = U_ZERO_ERROR;
 
@@ -645,47 +652,34 @@ CollData::CollData(UCollator *collator, char *cacheKey, int32_t cacheKeyLength)
      UnicodeString jamoString(jamoRanges, ARRAY_SIZE(jamoRanges));
      CEList hanList(coll, hanString);
      CEList jamoList(coll, jamoString);
-     
+     int32_t j = 0;
+
+     for (int32_t c = 0; c < jamoList.size(); c += 1) {
+         uint32_t jce = jamoList[c];
+
+         if (! isContinuation(jce)) {
+             jamoLimits[j++] = jce;
+         }
+     }
+
+     jamoLimits[3] += (1 << UCOL_PRIMARYORDERSHIFT);
+
      minHan = 0xFFFFFFFF;
      maxHan = 0;
      
-     firstL = jamoList[0];
-     firstV = jamoList[1];
-     firstT = jamoList[2];
-     lastT  = jamoList[3] + 0x10000;
-
-     UBool longL = FALSE, longV = FALSE, longT = FALSE;
-
      for(int32_t h = 0; h < hanList.size(); h += 2) {
-         if (hanList[h] < minHan) {
-             minHan = hanList[h];
+         uint32_t han = (uint32_t) hanList[h];
+
+         if (han < minHan) {
+             minHan = han;
          }
 
-         if (hanList[h] > maxHan) {
-             maxHan = hanList[h];
+         if (han > maxHan) {
+             maxHan = han;
          }
      }
 
-     maxHan += 0x10000;
-
-     switch (jamoList.size())
-     {
-     case 8:
-     case 7:
-         longL = TRUE;
-         // fall-through
-
-     case 6:
-         longV = TRUE;
-         // fall-through
-
-     case 5:
-         longT = TRUE;
-         break;
-
-     default:
-         longL = longV = longT = FALSE;
-     }
+     maxHan += (1 << UCOL_PRIMARYORDERSHIFT);
 }
 
 CollData::~CollData()
@@ -740,7 +734,7 @@ int32_t CollData::minLengthInChars(const CEList *ceList, int32_t offset, int32_t
         return history[offset];
     }
 
-    int32_t ce = ceList->get(offset);
+    uint32_t ce = ceList->get(offset);
     int32_t maxOffset = ceList->size();
     int32_t shortestLength = INT32_MAX;
     const StringList *strings = ceToCharsStartingWith->getStringList(ce);
@@ -782,6 +776,8 @@ int32_t CollData::minLengthInChars(const CEList *ceList, int32_t offset, int32_t
         }
     } else {
         if (ce >= minHan && ce < maxHan) {
+            // all han have implicit orders which
+            // generate two CEs.
             int32_t roffset = offset + 2;
             int32_t rlength = 0;
 
@@ -793,29 +789,30 @@ int32_t CollData::minLengthInChars(const CEList *ceList, int32_t offset, int32_t
             }
 
             shortestLength = 1 + rlength;
-        } else if (ce >= firstL && ce < lastT) {
-            uint32_t limits[] = {firstL, firstV, firstT, lastT};
+        } else if (ce >= jamoLimits[0] && ce < jamoLimits[3]) {
             int32_t roffset = offset;
             int32_t rlength = 0;
 
-            for (int32_t j = 0; j < 4; j += 1) {
-                ce = ceList->get(roffset++);
+            for (int32_t j = 0; roffset < maxOffset && j < 4; j += 1, roffset += 1) {
+                uint32_t jce = ceList->get(roffset);
 
-                if (ce < limits[j] || ce >= limits[j + 1]) {
+                // Some Jamo have 24-bit primary order; skip the
+                // 2nd CE. This should always be OK because if
+                // we're still in the loop all we've seen are
+                // a series of Jamo in LVT order.
+                if (isContinuation(jce)) {
+                    continue;
+                }
+
+                if (j >= 3 || jce < jamoLimits[j] || jce >= jamoLimits[j + 1]) {
                     break;
                 }
             }
 
-#if 0
-            // **** this doesn't work ****
-            // looking for the 2nd CE of a long primary which will
-            // have only the top 8 primary bits set and the continuation
-            // bits. Unfortunately, the continuation bits are masked off
-            // for strengths primary and secondary...
-            if ((ce & 0xFF000000) != 0 && (ce & 0x00FF0000) == 0) {
-                roffset += 1;
+            if (roffset == offset) {
+                // we started with a non-L Jamo...
+                return -1;
             }
-#endif
 
             if (roffset < maxOffset) {
                 rlength = minLengthInChars(ceList, roffset, history);

@@ -150,6 +150,7 @@ const CEI *Target::nextCE(int32_t offset)
     UErrorCode status = U_ZERO_ERROR;
     int32_t low = -1, high = -1;
     uint32_t order;
+    UBool cont = FALSE;
 
     if (offset >= bufferMin && offset < bufferMax) {
         return &ceb[offset];
@@ -169,8 +170,13 @@ const CEI *Target::nextCE(int32_t offset)
             break;
         }
 
+        cont = isContinuation(order);
         order &= strengthMask;
     } while (order == UCOL_IGNORABLE);
+
+    if (cont) {
+        order |= UCOL_CONTINUATION_MARKER;
+    }
 
     ceb[offset].order = order;
     ceb[offset].lowOffset = low;
@@ -186,6 +192,7 @@ const CEI *Target::prevCE(int32_t offset)
     UErrorCode status = U_ZERO_ERROR;
     int32_t low = -1, high = -1;
     uint32_t order;
+    UBool cont = FALSE;
 
     if (offset >= bufferMin && offset < bufferMax) {
         return &ceb[offset];
@@ -204,10 +211,15 @@ const CEI *Target::prevCE(int32_t offset)
             break;
         }
 
+        cont = isContinuation(order);
         order &= strengthMask;
     } while (order == UCOL_IGNORABLE);
 
     bufferMax += 1;
+
+    if (cont) {
+        order |= UCOL_CONTINUATION_MARKER;
+    }
 
     ceb[offset].order       = order;
     ceb[offset].lowOffset   = low;
