@@ -376,7 +376,7 @@ ucol_reset(UCollationElements *elems)
         ci->endp      = ci->string + u_strlen(ci->string);
     }
     ci->CEpos       = ci->toReturn = ci->CEs;
-    ci->flags       = (ci->flags & ~UCOL_FORCE_HAN_IMPLICIT) | UCOL_ITER_HASLEN;
+    ci->flags       = (ci->flags & UCOL_FORCE_HAN_IMPLICIT) | UCOL_ITER_HASLEN;
     if (ci->coll->normalizationMode == UCOL_ON) {
         ci->flags |= UCOL_ITER_NORM;
     }
