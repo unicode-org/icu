@@ -1521,7 +1521,7 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
         // **** [FA0E..FA2F] ?? ****
         if ((collationSource->flags & UCOL_FORCE_HAN_IMPLICIT) != 0 &&
             (ch >= 0x3400 && ch <= 0xD7AF)) {
-#if 0
+#if 1
             if (ch > 0x9FFF && ch < 0xAC00) {
                 // between the two target ranges; do normal lookup
                 // **** this range is YI, Modifier tone letters, ****
@@ -2007,7 +2007,7 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                 // **** [FA0E..FA2F] ?? ****
                 if ((data->flags & UCOL_FORCE_HAN_IMPLICIT) != 0 &&
                     (ch >= 0x3400 && ch <= 0xD7AF)) {
-#if 0
+#if 1
                     if (ch > 0x9FFF && ch < 0xAC00) {
                         // between the two target ranges; do normal lookup
                         // **** this range is YI, Modifier tone letters, ****

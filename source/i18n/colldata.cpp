@@ -553,20 +553,18 @@ CollData::CollData()
 }
 
 #define CLONE_COLLATOR
+
 //#define CACHE_CELISTS
 CollData::CollData(UCollator *collator, char *cacheKey, int32_t cacheKeyLength)
 {
     UErrorCode status = U_ZERO_ERROR;
-
-#if 1
-    U_STRING_DECL(test_pattern, "[[:assigned:]-[:ideographic:]-[:hangul:]-[:c:]]", 47);
-    U_STRING_INIT(test_pattern, "[[:assigned:]-[:ideographic:]-[:hangul:]-[:c:]]", 47);
-    USet *charsToTest  = uset_openPattern(test_pattern, 47, &status);
-#else
     U_STRING_DECL(test_pattern, "[[:assigned:]-[:c:]]", 20);
     U_STRING_INIT(test_pattern, "[[:assigned:]-[:c:]]", 20);
-    USet *charsToTest  = uset_openPattern(test_pattern, 20, &status);
-#endif
+    USet *charsToTest = uset_openPattern(test_pattern, 20, &status);
+
+    U_STRING_DECL(remove_pattern, "[[\\u3400-\\u9FFF][\\u1100-\\u11F9][\\uAC00-\\uD7AF][\\U00020000-\\U0002A6DF]]", 70);
+    U_STRING_INIT(remove_pattern, "[[\\u3400-\\u9FFF][\\u1100-\\u11F9][\\uAC00-\\uD7AF][\\U00020000-\\U0002A6DF]]", 70);
+    USet *charsToRemove = uset_openPattern(remove_pattern, 70, &status);
 
     USet *expansions   = uset_openEmpty();
     USet *contractions = uset_openEmpty();
@@ -598,6 +596,7 @@ CollData::CollData(UCollator *collator, char *cacheKey, int32_t cacheKeyLength)
 
     uset_addAll(charsToTest, contractions);
     uset_addAll(charsToTest, expansions);
+    uset_removeAll(charsToTest, charsToRemove);
 
     itemCount = uset_getItemCount(charsToTest);
     for(int32_t item = 0; item < itemCount; item += 1) {
@@ -637,6 +636,7 @@ CollData::CollData(UCollator *collator, char *cacheKey, int32_t cacheKeyLength)
 
     uset_close(contractions);
     uset_close(expansions);
+    uset_close(charsToRemove);
     uset_close(charsToTest);
 
     /*
@@ -774,7 +774,11 @@ int32_t CollData::minLengthInChars(const CEList *ceList, int32_t offset, int32_t
             delete ceList2;
 #endif
         }
-    } else {
+    }
+
+    if (shortestLength == INT32_MAX) {
+        // No matching strings at this offset. See if 
+        // the CE is in a range we cah handle manually.
         if (ce >= minHan && ce < maxHan) {
             // all han have implicit orders which
             // generate two CEs.
@@ -789,10 +793,12 @@ int32_t CollData::minLengthInChars(const CEList *ceList, int32_t offset, int32_t
             }
 
             shortestLength = 1 + rlength;
+            goto have_shortest;
         } else if (ce >= jamoLimits[0] && ce < jamoLimits[3]) {
             int32_t roffset = offset;
             int32_t rlength = 0;
 
+            // **** this loop may not handle archaic Hangul correctly ****
             for (int32_t j = 0; roffset < maxOffset && j < 4; j += 1, roffset += 1) {
                 uint32_t jce = ceList->get(roffset);
 
@@ -811,7 +817,13 @@ int32_t CollData::minLengthInChars(const CEList *ceList, int32_t offset, int32_t
 
             if (roffset == offset) {
                 // we started with a non-L Jamo...
-                return -1;
+                // just say it comes from a single character
+                roffset += 1;
+
+                // See if the single Jamo has a 24-bit order.
+                if (roffset < maxOffset && isContinuation(ceList->get(roffset))) {
+                    roffset += 1;
+                }
             }
 
             if (roffset < maxOffset) {
@@ -819,15 +831,14 @@ int32_t CollData::minLengthInChars(const CEList *ceList, int32_t offset, int32_t
             }
 
             shortestLength = 1 + rlength;
+            goto have_shortest;
         }
-    }
 
-    if (shortestLength == INT32_MAX) {
-        // no matching strings at this offset - just move on.
-      //shortestLength = offset < (maxOffset - 1)? minLengthInChars(ceList, offset + 1, history) : 0;
+        // Can't handle it manually either. Just move on.
         return -1;
     }
 
+have_shortest:
     history[offset] = shortestLength;
 
     return shortestLength;
