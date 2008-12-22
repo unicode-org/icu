@@ -1409,7 +1409,8 @@ static UBool simpleSearch(UCollator *coll, const UnicodeString &target, int32_t 
         									      target.getBuffer(), target.length(), &status);
 
     if (patternSize == 0) {
-        matchStart = matchEnd = 0;
+        // Searching for an empty pattern always fails
+        matchStart = matchEnd = -1;
         return FALSE;
     }
 
@@ -1857,10 +1858,12 @@ void SSearchTest::bmMonkeyTest(char *params)
             BoyerMooreSearch alt(data, altPattern, NULL);
 
             // **** need a better way to deal with this ****
+#if 0
             if (pat.empty() ||
                 alt.empty()) {
                     continue;
             }
+#endif
 
             // pattern
             notFoundCount += bmMonkeyTestCase(coll, pattern, pattern, altPattern, &pat, &alt, "pattern", strengthNames[s], seed);

@@ -568,6 +568,12 @@ UBool BoyerMooreSearch::search(int32_t offset, int32_t &start, int32_t &end)
     int32_t maxSkip = badCharacterTable->getMaxSkip();
     int32_t tOffset = offset + maxSkip;
 
+    if (plen <= 0) {
+        // Searching for a zero length pattern always fails.
+        start = end = -1;
+        return FALSE;
+    }
+
     while (tOffset <= tlen) {
         int32_t pIndex = plen - 1;
         int32_t tIndex = 0;
