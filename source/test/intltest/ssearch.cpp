@@ -34,6 +34,7 @@
 
 #include "unicode/colldata.h"
 #include "unicode/bmsearch.h"
+#include "unicode/bms.h"
 
 #include "xmlparser.h"
 
@@ -99,6 +100,10 @@ void SSearchTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
 
         case 6: name = "searchTime";
             if (exec) searchTime();
+            break;
+
+        case 7: name = "bmsTest";
+            if (exec) bmsTest();
             break;
 #endif
         default: name = "";
@@ -909,6 +914,47 @@ void SSearchTest::boyerMooreTest()
     }
 
     CollData::close(data);
+    ucol_close(coll);
+}
+
+void SSearchTest::bmsTest()
+{
+    UErrorCode status = U_ZERO_ERROR;
+ //UCollator *coll = ucol_open(NULL, &status);
+    UCollator *coll = ucol_openFromShortString("S1", FALSE, NULL, &status);
+    UCD *data = ucd_open(coll);
+    UnicodeString lp  = "fuss";
+    UnicodeString lpu = lp.unescape();
+    UnicodeString sp  = "fu\\u00DF";
+    UnicodeString spu = sp.unescape();
+    BMS *longPattern = bms_open(data, lpu.getBuffer(), lpu.length(), NULL, 0);
+    BMS *shortPattern = bms_open(data, spu.getBuffer(), spu.length(), NULL, 0);
+    UnicodeString targets[]  = {"fu\\u00DF", "fu\\u00DFball", "1fu\\u00DFball", "12fu\\u00DFball", "123fu\\u00DFball", "1234fu\\u00DFball",
+                                "ffu\\u00DF", "fufu\\u00DF", "fusfu\\u00DF",
+                                "fuss", "ffuss", "fufuss", "fusfuss", "1fuss", "12fuss", "123fuss", "1234fuss", "fu\\u00DF", "1fu\\u00DF", "12fu\\u00DF", "123fu\\u00DF", "1234fu\\u00DF"};
+    int32_t start = -1, end = -1;
+
+    for (int32_t t = 0; t < (sizeof(targets)/sizeof(targets[0])); t += 1) {
+        UnicodeString target = targets[t].unescape();
+        
+        bms_setTargetString(longPattern, target.getBuffer(), target.length());
+        if (bms_search(longPattern, 0, &start, &end)) {
+            logln("Test %d: found long pattern at [%d, %d].", t, start, end);
+        } else {
+            errln("Test %d: did not find long pattern.", t);
+        }
+
+        bms_setTargetString(shortPattern, target.getBuffer(), target.length());
+        if (bms_search(shortPattern, 0, &start, &end)) {
+            logln("Test %d: found short pattern at [%d, %d].", t, start, end);
+        } else {
+            errln("Test %d: did not find short pattern.", t);
+        }
+    }
+
+    bms_close(shortPattern);
+    bms_close(longPattern);
+    ucd_close(data);
     ucol_close(coll);
 }
 

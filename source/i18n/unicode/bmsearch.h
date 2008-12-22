@@ -29,7 +29,7 @@ class BadCharacterTable;
 class GoodSuffixTable;
 class Target;
 
-/*
+/**
  * BoyerMooreSearch
  *
  * This object holds the information needed to do a Collation sensitive Boyer-Moore search. It encapulates

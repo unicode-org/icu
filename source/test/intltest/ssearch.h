@@ -39,6 +39,8 @@ public:
     virtual void boyerMooreTest();
     virtual void goodSuffixTest();
     virtual void searchTime();
+    
+    virtual void bmsTest();
 
 private:
     virtual const char   *getPath(char buffer[2048], const char *filename);
