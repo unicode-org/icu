@@ -49,13 +49,25 @@ ucd_close(UCD *ucd);
  * may be cached. This routine will free the cached objects and delete
  * the cache.
  *
- * WARNING: Don't call this until you are have called <code>ucd_close</code>
- * for each <code>UCD</code> object that you have used.
+ * WARNING: Don't call this until you are have called <code>close</code>
+ * for each <code>UCD</code> object that you have used. also,
+ * DO NOT call this if another thread may be calling <code>ucd_flushCache</code>
+ * at the same time.
  *
  * @internal ICU 4.0.1 technology preview
  */
 U_CAPI void U_EXPORT2
 ucd_freeCache();
+
+/**
+ * <code>UCD</code> objects are expensive to compute, and so
+ * may be cached. This routine will remove any unused <code>UCD</code>
+ * objects from the cache.
+ *
+ * @internal 4.0.1 technology preview
+ */
+U_CAPI void U_EXPORT2
+ucd_flushCache();
 
 /**
  * BMS

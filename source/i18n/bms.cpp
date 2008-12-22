@@ -30,6 +30,12 @@ ucd_freeCache()
     CollData::freeCollDataCache();
 }
 
+U_CAPI void U_EXPORT2
+ucd_flushCache()
+{
+    CollData::flushCollDataCache();
+}
+
 struct BMS
 {
     BoyerMooreSearch *bms;

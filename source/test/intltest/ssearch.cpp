@@ -105,6 +105,10 @@ void SSearchTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
         case 7: name = "bmsTest";
             if (exec) bmsTest();
             break;
+
+        case 8: name = "bmSearchTest";
+            if (exec) bmSearchTest();
+            break;
 #endif
         default: name = "";
             break; //needed to end loop
@@ -334,6 +338,185 @@ void SSearchTest::searchTest()
         ucol_close(collator);
     }
 
+    delete root;
+    delete parser;
+#endif
+}
+
+void SSearchTest::bmSearchTest()
+{
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+    UErrorCode status = U_ZERO_ERROR;
+    char path[PATH_BUFFER_SIZE];
+    const char *testFilePath = getPath(path, "ssearch.xml");
+
+    if (testFilePath == NULL) {
+        return; /* Couldn't get path: error message already output. */
+    }
+
+    UXMLParser  *parser = UXMLParser::createParser(status);
+    TEST_ASSERT_SUCCESS(status);
+    UXMLElement *root   = parser->parseFile(testFilePath, status);
+    TEST_ASSERT_SUCCESS(status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    const UnicodeString *debugTestCase = root->getAttribute("debug");
+    if (debugTestCase != NULL) {
+//       setenv("USEARCH_DEBUG", "1", 1);
+    }
+
+
+    const UXMLElement *testCase;
+    int32_t tc = 0;
+
+    while((testCase = root->nextChildElement(tc)) != NULL) {
+
+        if (testCase->getTagName().compare("test-case") != 0) {
+            errln("ssearch, unrecognized XML Element in test file");
+            continue;
+        }
+        const UnicodeString *id       = testCase->getAttribute("id");
+        *testId = 0;
+        if (id != NULL) {
+            id->extract(0, id->length(), testId,  sizeof(testId), US_INV);
+        }
+
+        // If debugging test case has been specified and this is not it, skip to next.
+        if (id!=NULL && debugTestCase!=NULL && *id != *debugTestCase) {
+            continue;
+        }
+        //
+        //  Get the requested collation strength.
+        //    Default is tertiary if the XML attribute is missing from the test case.
+        //
+        const UnicodeString *strength = testCase->getAttribute("strength");
+        UColAttributeValue collatorStrength;
+        if      (strength==NULL)          { collatorStrength = UCOL_TERTIARY;}
+        else if (*strength=="PRIMARY")    { collatorStrength = UCOL_PRIMARY;}
+        else if (*strength=="SECONDARY")  { collatorStrength = UCOL_SECONDARY;}
+        else if (*strength=="TERTIARY")   { collatorStrength = UCOL_TERTIARY;}
+        else if (*strength=="QUATERNARY") { collatorStrength = UCOL_QUATERNARY;}
+        else if (*strength=="IDENTICAL")  { collatorStrength = UCOL_IDENTICAL;}
+        else {
+            // Bogus value supplied for strength.  Shouldn't happen, even from
+            //  typos, if the  XML source has been validated.
+            //  This assert is a little deceiving in that strength can be
+            //   any of the allowed values, not just TERTIARY, but it will
+            //   do the job of getting the error output.
+            TEST_ASSERT(*strength=="TERTIARY")
+        }
+
+        //
+        // Get the collator normalization flag.  Default is UCOL_OFF.
+        //
+        UColAttributeValue normalize = UCOL_OFF;
+        const UnicodeString *norm = testCase->getAttribute("norm");
+        TEST_ASSERT (norm==NULL || *norm=="ON" || *norm=="OFF");
+        if (norm!=NULL && *norm=="ON") {
+            normalize = UCOL_ON;
+        }
+
+        const UnicodeString defLocale("en");
+        char  clocale[100];
+        const UnicodeString *locale   = testCase->getAttribute("locale");
+        if (locale == NULL || locale->length()==0) {
+            locale = &defLocale;
+        };
+        locale->extract(0, locale->length(), clocale, sizeof(clocale), NULL);
+
+
+        UnicodeString  text;
+        UnicodeString  target;
+        UnicodeString  pattern;
+        int32_t        expectedMatchStart = -1;
+        int32_t        expectedMatchLimit = -1;
+        const UXMLElement  *n;
+        int32_t                nodeCount = 0;
+
+        n = testCase->getChildElement("pattern");
+        TEST_ASSERT(n != NULL);
+        if (n==NULL) {
+            continue;
+        }
+        text = n->getText(FALSE);
+        text = text.unescape();
+        pattern.append(text);
+        nodeCount++;
+
+        n = testCase->getChildElement("pre");
+        if (n!=NULL) {
+            text = n->getText(FALSE);
+            text = text.unescape();
+            target.append(text);
+            nodeCount++;
+        }
+        
+        n = testCase->getChildElement("m");
+        if (n!=NULL) {
+            expectedMatchStart = target.length();
+            text = n->getText(FALSE);
+            text = text.unescape();
+            target.append(text);
+            expectedMatchLimit = target.length();
+            nodeCount++;
+        }
+
+        n = testCase->getChildElement("post");
+        if (n!=NULL) {
+            text = n->getText(FALSE);
+            text = text.unescape();
+            target.append(text);
+            nodeCount++;
+        }
+
+        //  Check that there weren't extra things in the XML
+        TEST_ASSERT(nodeCount == testCase->countChildren());
+
+        // Open a collotor and StringSearch based on the parameters
+        //   obtained from the XML.
+        //
+        status = U_ZERO_ERROR;
+        UCollator *collator = ucol_open(clocale, &status);
+        ucol_setStrength(collator, collatorStrength);
+        ucol_setAttribute(collator, UCOL_NORMALIZATION_MODE, normalize, &status);
+        UCD *ucd = ucd_open(collator);
+        BMS *bms = bms_open(ucd, pattern.getBuffer(), pattern.length(), target.getBuffer(), target.length());
+
+#if 0
+        TEST_ASSERT_SUCCESS(status);
+        if (U_FAILURE(status)) {
+            usearch_close(uss);
+            ucol_close(collator);
+            continue;
+        }
+#endif
+
+        int32_t foundStart = 0;
+        int32_t foundLimit = 0;
+        UBool   foundMatch;
+
+        //
+        // Do the search, check the match result against the expected results.
+        //
+        foundMatch = bms_search(bms, 0, &foundStart, &foundLimit);
+      //TEST_ASSERT_SUCCESS(status);
+        if (foundMatch && expectedMatchStart < 0 ||
+            foundStart != expectedMatchStart   ||
+            foundLimit != expectedMatchLimit) {
+                TEST_ASSERT(FALSE);   //  ouput generic error position
+                infoln("Found, expected match start = %d, %d \n"
+                       "Found, expected match limit = %d, %d",
+                foundStart, expectedMatchStart, foundLimit, expectedMatchLimit);
+        }
+
+        bms_close(bms);
+        ucd_close(ucd);
+        ucol_close(collator);
+    }
+
+    ucd_flushCache();
     delete root;
     delete parser;
 #endif

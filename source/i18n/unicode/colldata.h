@@ -352,11 +352,22 @@ public:
      * the cache.
      *
      * WARNING: Don't call this until you are have called <code>close</code>
-     * for each <code>CollData</code> object that you have used.
+     * for each <code>CollData</code> object that you have used. also,
+     * DO NOT call this if another thread may be calling <code>flushCollDataCache</code>
+     * at the same time.
      *
-     * @internal
+     * @internal 4.0.1 technology preview
      */
     static void freeCollDataCache();
+
+    /**
+     * <code>CollData</code> objects are expensive to compute, and so
+     * may be cached. This routine will remove any unused <code>CollData</code>
+     * objects from the cache.
+     *
+     * @internal 4.0.1 technology preview
+     */
+    static void flushCollDataCache();
 
 private:
     friend class CollDataCache;

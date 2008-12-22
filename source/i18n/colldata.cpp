@@ -409,6 +409,8 @@ public:
     CollData *get(UCollator *collator);
     void unref(CollData *collData);
 
+    void flush();
+
 private:
     static char *getKey(UCollator *collator, char *keyBuffer, int32_t *charBufferLength);
     static void deleteKey(char *key);
@@ -531,6 +533,22 @@ char *CollDataCache::getKey(UCollator *collator, char *keyBuffer, int32_t *keyBu
     keyBuffer[len] = '\0';
 
     return keyBuffer;
+}
+
+void CollDataCache::flush()
+{
+    const UHashElement *element;
+    int32_t pos = -1;
+
+    umtx_lock(&lock);
+    while ((element = uhash_nextElement(cache, &pos)) != NULL) {
+        CollDataCacheEntry *entry = (CollDataCacheEntry *) element->value.pointer;
+
+        if (entry->refCount <= 0) {
+            uhash_removeElement(cache, element);
+        }
+    }
+    umtx_unlock(&lock);
 }
 
 void CollDataCache::deleteKey(char *key)
@@ -917,6 +935,19 @@ void CollData::freeCollDataCache()
         umtx_unlock(NULL);
 
         delete cache;
+    }
+}
+
+void CollData::flushCollDataCache()
+{
+    CollDataCache *cache = NULL;
+
+    UMTX_CHECK(NULL, collDataCache, cache);
+
+    // **** this will fail if the another ****
+    // **** thread deletes the cache here ****
+    if (cache != NULL) {
+        cache->flush();
     }
 }
 
