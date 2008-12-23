@@ -37,6 +37,7 @@
 #include "unicode/bms.h"
 
 #include "xmlparser.h"
+#include "ucbuf.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -55,6 +56,8 @@ char testId[100];
           __FILE__, __LINE__, testId, u_errorName(errcode));}}
 
 #define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
+#define NEW_ARRAY(type, count) (type *) uprv_malloc((count) * sizeof(type))
+#define DELETE_ARRAY(array) uprv_free((void *) (array))
 
 //---------------------------------------------------------------------------
 //
@@ -108,6 +111,10 @@ void SSearchTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
 
         case 8: name = "bmSearchTest";
             if (exec) bmSearchTest();
+            break;
+
+        case 9: name = "udhrTest";
+            if (exec) udhrTest();
             break;
 #endif
         default: name = "";
@@ -265,7 +272,7 @@ void SSearchTest::searchTest()
         //  Check that there weren't extra things in the XML
         TEST_ASSERT(nodeCount == testCase->countChildren());
 
-        // Open a collotor and StringSearch based on the parameters
+        // Open a collator and StringSearch based on the parameters
         //   obtained from the XML.
         //
         status = U_ZERO_ERROR;
@@ -341,6 +348,105 @@ void SSearchTest::searchTest()
     delete root;
     delete parser;
 #endif
+}
+
+struct UdhrTestCase
+{
+    char *locale;
+    char *file;
+};
+
+void SSearchTest::udhrTest()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    char path[PATH_BUFFER_SIZE];
+    const char *udhrPath = getPath(path, "udhr");
+
+    if (udhrPath == NULL) {
+        // couldn't get path: error message already output...
+        return;
+    }
+
+    UdhrTestCase testCases[] = {
+        {"en", "udhr_eng.txt"},
+        {"de", "udhr_deu_1996.txt"},
+        {"fr", "udhr_fra.txt"},
+        {"ru", "udhr_rus.txt"},
+        {"th", "udhr_tha.txt"},
+        {"ja", "udhr_jpn.txt"},
+        {"ko", "udhr_kor.txt"},
+        {"zh", "udhr_cmn_hans.txt"},
+        {"zh_Hant", "udhr_cmn_hant.txt"}
+    };
+
+    int32_t testCount = ARRAY_SIZE(testCases);
+
+    for (int32_t t = 0; t < testCount; t += 1) {
+        int32_t len = 0;
+        char *resolvedFileName = NULL;
+        const char *encoding = NULL;
+        UCHARBUF *ucharBuf = NULL;
+
+        ucbuf_resolveFileName(udhrPath, testCases[t].file, NULL, &len, &status);
+        resolvedFileName = NEW_ARRAY(char, len);
+
+        if(resolvedFileName == NULL){
+            continue;
+        }
+
+        if(status == U_BUFFER_OVERFLOW_ERROR){
+            status = U_ZERO_ERROR;
+        }
+
+        ucbuf_resolveFileName(udhrPath, testCases[t].file, resolvedFileName, &len, &status);
+        ucharBuf = ucbuf_open(resolvedFileName, &encoding, TRUE, FALSE, &status);
+
+        if(U_FAILURE(status)){
+            infoln("Could not open the input file %s. Test skipped\n", testCases[t].file);
+            continue;
+        }
+
+        int32_t targetLen = 0;
+        const UChar *target = ucbuf_getBuffer(ucharBuf, &targetLen, &status);
+
+        /* The first line of the file contains the pattern */
+        int32_t start = 0, end = 0, plen = 0;
+
+        for(end = start; ; end += 1) {
+            UChar ch = target[end];
+
+            if (ch == 0x000A || ch == 0x000D || ch == 0x2028) {
+                break;
+            }
+        }
+
+        plen = end - start;
+
+        UChar *pattern = NEW_ARRAY(UChar, plen);
+        for (int32_t i = 0; i < plen; i += 1) {
+            pattern[i] =  target[start++];
+        }
+
+        UCollator *coll = ucol_open(testCases[t].locale, &status);
+        UCD *ucd = ucd_open(coll);
+        BMS *bms = bms_open(ucd, pattern, plen, target, targetLen);
+
+        int32_t offset = 0;
+        
+        start = end = -1;
+        while (bms_search(bms, offset, &start, &end)) {
+            offset = end;
+        }
+
+        if (offset == 0) {
+            errln("Could not find pattern - locale: %s, file: %s ", testCases[t].locale, testCases[t].file);
+        }
+
+        bms_close(bms);
+        ucd_close(ucd);
+        ucol_close(coll);
+        ucbuf_close(ucharBuf);
+    }
 }
 
 void SSearchTest::bmSearchTest()
@@ -474,7 +580,7 @@ void SSearchTest::bmSearchTest()
         //  Check that there weren't extra things in the XML
         TEST_ASSERT(nodeCount == testCase->countChildren());
 
-        // Open a collotor and StringSearch based on the parameters
+        // Open a collator and StringSearch based on the parameters
         //   obtained from the XML.
         //
         status = U_ZERO_ERROR;
