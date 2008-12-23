@@ -20,7 +20,7 @@
 <!ELEMENT post (#PCDATA)>
 ]>
 
-<stringsearch-tests debug="test60">
+<stringsearch-tests>
   <!-- debug="test11"     (for copying into the above element)  -->
     
     <!-- Very simple match  -->

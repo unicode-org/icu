@@ -810,7 +810,10 @@ int32_t CollData::minLengthInChars(const CEList *ceList, int32_t offset, int32_t
                 rlength = minLengthInChars(ceList, roffset, history);
             }
 
-            shortestLength = 1 + rlength;
+            if (rlength > 0) {
+                shortestLength = 1 + rlength;
+            }
+
             goto have_shortest;
         } else if (ce >= jamoLimits[0] && ce < jamoLimits[3]) {
             int32_t roffset = offset;
@@ -848,7 +851,10 @@ int32_t CollData::minLengthInChars(const CEList *ceList, int32_t offset, int32_t
                 rlength = minLengthInChars(ceList, roffset, history);
             }
 
-            shortestLength = 1 + rlength;
+            if (rlength > 0) {
+                shortestLength = 1 + rlength;
+            }
+
             goto have_shortest;
         }
 
