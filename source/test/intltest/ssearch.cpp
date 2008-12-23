@@ -401,6 +401,8 @@ void SSearchTest::udhrTest()
         ucbuf_resolveFileName(udhrPath, testCases[t].file, resolvedFileName, &len, &status);
         ucharBuf = ucbuf_open(resolvedFileName, &encoding, TRUE, FALSE, &status);
 
+        DELETE_ARRAY(resolvedFileName);
+
         if(U_FAILURE(status)){
             infoln("Could not open the input file %s. Test skipped\n", testCases[t].file);
             continue;
@@ -445,6 +447,8 @@ void SSearchTest::udhrTest()
         bms_close(bms);
         ucd_close(ucd);
         ucol_close(coll);
+
+        DELETE_ARRAY(pattern);
         ucbuf_close(ucharBuf);
     }
 }
