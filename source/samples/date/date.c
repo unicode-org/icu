@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-2007, International Business Machines
+*   Copyright (C) 1998-2008, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -160,9 +160,31 @@ usage()
 static void
 version()
 {
-  printf("icudate version %s (ICU version %s), created by Stephen F. Booth.\n", 
-	 DATE_VERSION, U_ICU_VERSION);
+  UErrorCode status = U_ZERO_ERROR;
+  const char *tzVer;
+  int len = 256;
+  UChar tzName[256];
+  printf("icudate version %s, created by Stephen F. Booth.\n", 
+	 DATE_VERSION);
   puts(U_COPYRIGHT_STRING);
+  tzVer = ucal_getTZDataVersion(&status);
+  if(U_FAILURE(status)) {  
+      tzVer = u_errorName(status);  
+  }
+  printf("\n");
+  printf("ICU Version:               %s\n", U_ICU_VERSION);
+  printf("ICU Data (major+min):      %s\n", U_ICUDATA_NAME);
+  printf("Default Locale:            %s\n", uloc_getDefault());
+  printf("Time Zone Data Version:    %s\n", tzVer);
+  printf("Default Time Zone:         ");
+  status = U_ZERO_ERROR;
+  u_init(&status);
+  len = ucal_getDefaultTimeZone(tzName, len, &status);
+  if(U_FAILURE(status)) {
+    printf(" ** Error getting default zone: %s\n", u_errorName(status));
+  }
+  uprint(tzName, stdout, &status);
+  printf("\n\n");
 }
 
 /* Format the date */
