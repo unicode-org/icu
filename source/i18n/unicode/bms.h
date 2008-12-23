@@ -45,6 +45,22 @@ U_CAPI void U_EXPORT2
 ucd_close(UCD *ucd);
 
 /**
+ * Get the <code>UCollator</code> object used to create a <code>UCD</code> object.
+ * The <code>UCollator</code> object returned may not be the exact
+ * object that was used to create this object, but it will have the
+ * same behavior.
+ *
+ * @param ucd - the <code>UCD</code> object
+ *
+ * @return the <code>UCollator</code> used to create the given
+ *         <code>UCD</code> object.
+ *
+ * @internal ICU 4.0.1 technology preview
+ */
+U_CAPI UCollator * U_EXPORT2
+ucd_getCollator(UCD *ucd);
+
+/**
  * <code>UCD</code> objects are expensive to compute, and so
  * may be cached. This routine will free the cached objects and delete
  * the cache.
@@ -119,6 +135,20 @@ bms_close(BMS *bms);
  */
 U_CAPI UBool U_EXPORT2
 bms_empty(BMS *bms);
+
+/**
+ * Get the <code>UCD</code> object used to create
+ * a given <code>BMS</code> object.
+ *
+ * @param bms - the <code>BMS</code> object
+ *
+ * @return - the <code>UCD</code> object used to create
+ *           the given <code>BMS</code> object.
+ *
+ * @internal ICU 4.0.1 technology preview
+ */
+U_CAPI UCD * U_EXPORT2
+bms_getData(BMS *bms);
 
 /**
  * Search for the pattern string in the target string.

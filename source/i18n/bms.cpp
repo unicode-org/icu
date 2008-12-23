@@ -24,6 +24,14 @@ ucd_close(UCD *ucd)
     CollData::close(data);
 }
 
+U_CAPI UCollator * U_EXPORT2
+ucd_getCollator(UCD *ucd)
+{
+    CollData *data = (CollData *) ucd;
+
+    return data->getCollator();
+}
+
 U_CAPI void U_EXPORT2
 ucd_freeCache()
 {
@@ -77,6 +85,12 @@ U_CAPI UBool U_EXPORT2
 bms_empty(BMS *bms)
 {
     return bms->bms->empty();
+}
+
+U_CAPI UCD * U_EXPORT2
+bms_getData(BMS *bms)
+{
+    return (UCD *) bms->bms->getData();
 }
 
 U_CAPI UBool U_EXPORT2
