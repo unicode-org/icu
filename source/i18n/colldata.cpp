@@ -810,7 +810,7 @@ int32_t CollData::minLengthInChars(const CEList *ceList, int32_t offset, int32_t
                 rlength = minLengthInChars(ceList, roffset, history);
             }
 
-            if (rlength <= 0) {
+            if (rlength < 0) {
                 return -1;
             }
 
@@ -852,7 +852,7 @@ int32_t CollData::minLengthInChars(const CEList *ceList, int32_t offset, int32_t
                 rlength = minLengthInChars(ceList, roffset, history);
             }
 
-            if (rlength <= 0) {
+            if (rlength < 0) {
                 return -1;
             }
 
