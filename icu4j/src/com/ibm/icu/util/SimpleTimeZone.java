@@ -1,5 +1,5 @@
  /*
-*   Copyright (C) 1996-2008, International Business Machines
+*   Copyright (C) 1996-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -1182,7 +1182,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @stable ICU 3.8
      */
     public TimeZoneTransition getNextTransition(long base, boolean inclusive) {
-        if (startMonth == 0) {
+        if (!useDaylight) {
             return null;
         }
 
@@ -1207,7 +1207,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @stable ICU 3.8
      */
     public TimeZoneTransition getPreviousTransition(long base, boolean inclusive) {
-        if (startMonth == 0) {
+        if (!useDaylight) {
             return null;
         }
 
@@ -1234,10 +1234,10 @@ public class SimpleTimeZone extends BasicTimeZone {
     public TimeZoneRule[] getTimeZoneRules() {
         initTransitionRules();
 
-        int size = (startMonth == 0) ? 1 : 3;
+        int size = useDaylight ? 3 : 1;
         TimeZoneRule[] rules = new TimeZoneRule[size];
         rules[0] = initialRule;
-        if (startMonth != 0) {
+        if (useDaylight) {
             rules[1] = stdRule;
             rules[2] = dstRule;
         }
@@ -1254,7 +1254,7 @@ public class SimpleTimeZone extends BasicTimeZone {
         if (transitionRulesInitialized) {
             return;
         }
-        if (startMonth != 0) {
+        if (useDaylight) {
             DateTimeRule dtRule = null;
             int timeRuleType;
             long firstStdStart, firstDstStart;
