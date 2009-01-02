@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1394,6 +1394,35 @@ public class TimeZoneRuleTest extends TestFmwk {
             } catch (Exception e) {
                 errln("FAIL: Failed to calculate the offset for VTIMEZONE data " + i);
             }
+        }
+    }
+
+    public void TestT6669() {
+        // getNext/PreviousTransition implementation in SimpleTimeZone
+        // used to use a bad condition for detecting if DST is enabled or not.
+
+        SimpleTimeZone stz = new SimpleTimeZone(0, "CustomID",
+                Calendar.JANUARY, 1, Calendar.SUNDAY, 0,
+                Calendar.JULY, 1, Calendar.SUNDAY, 0);
+
+        long t = 1230681600000L; //2008-12-31T00:00:00
+        long expectedNext = 1231027200000L; //2009-01-04T00:00:00
+        long expectedPrev = 1215298800000L; //2008-07-06T00:00:00
+
+        TimeZoneTransition tzt = stz.getNextTransition(t, false);
+        if (tzt == null) {
+            errln("FAIL: No transition returned by getNextTransition.");
+        } else if (tzt.getTime() != expectedNext){
+            errln("FAIL: Wrong transition time returned by getNextTransition - "
+                    + tzt.getTime() + " Expected: " + expectedNext);
+        }
+
+        tzt = stz.getPreviousTransition(t, true);
+        if (tzt == null) {
+            errln("FAIL: No transition returned by getPreviousTransition.");
+        } else if (tzt.getTime() != expectedPrev){
+            errln("FAIL: Wrong transition time returned by getPreviousTransition - "
+                    + tzt.getTime() + " Expected: " + expectedPrev);
         }
     }
 
