@@ -1,6 +1,6 @@
  /*
   *******************************************************************************
-  * Copyright (C) 2005-2008, International Business Machines Corporation and         *
+  * Copyright (C) 2005-2009, International Business Machines Corporation and         *
   * others. All Rights Reserved.                                                *
   *******************************************************************************
   */
@@ -19,7 +19,6 @@ import com.ibm.icu.util.TimeArrayTimeZoneRule;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.TimeZoneRule;
 import com.ibm.icu.util.TimeZoneTransition;
-import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
 /**
@@ -173,21 +172,19 @@ public class OlsonTimeZone extends BasicTimeZone {
         if (getRawOffset() == offsetMillis) {
             return;
         }
-        GregorianCalendar cal = new GregorianCalendar(ULocale.ROOT);
-        cal.setTimeZone(this);
-        int tmpFinalYear = cal.get(Calendar.YEAR) - 1;
-
-        // Apply the raw offset starting current year and beyond
-        if (finalYear > tmpFinalYear) {
-            finalYear = tmpFinalYear;
-            finalMillis = Grego.fieldsToDay(tmpFinalYear, 0, 1) * Grego.MILLIS_PER_DAY;
+        long current = System.currentTimeMillis();
+        if (current < finalMillis) {
+            int[] fields = Grego.timeToFields(current, null);
+            finalYear = fields[0] - 1; // finalYear is (year of finalMillis) - 1
+            finalMillis = Grego.fieldsToDay(fields[0], 0, 1);
         }
+
         if (finalZone == null) {
             // Create SimpleTimeZone instance to store the offset
             finalZone = new SimpleTimeZone(offsetMillis, getID());
         } else {
             finalZone.setRawOffset(offsetMillis);
-            finalZone.setStartYear(finalYear);
+            finalZone.setStartYear(finalYear); // finalYear is (year of finalMillis) - 1
         }
 
         transitionRulesInitialized = false;
