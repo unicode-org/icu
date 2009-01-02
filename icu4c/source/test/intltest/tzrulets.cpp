@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and    *
+* Copyright (C) 2007-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -126,6 +126,7 @@ void TimeZoneRuleTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(12, TestVTimeZoneCoverage);
         CASE(13, TestVTimeZoneParse);
         CASE(14, TestT6216);
+        CASE(15, TestT6669);
         default: name = ""; break;
     }
 }
@@ -2066,6 +2067,37 @@ TimeZoneRuleTest::TestT6216(void) {
             }
         }
         delete vtz;
+    }
+}
+
+void
+TimeZoneRuleTest::TestT6669(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    SimpleTimeZone stz(0, "CustomID", UCAL_JANUARY, 1, UCAL_SUNDAY, 0, UCAL_JULY, 1, UCAL_SUNDAY, 0, status);
+    if (U_FAILURE(status)) {
+        errln("FAIL: Failed to creat a SimpleTimeZone");
+        return;
+    }
+
+    UDate t = 1230681600000.0; //2008-12-31T00:00:00
+    UDate expectedNext = 1231027200000.0; //2009-01-04T00:00:00
+    UDate expectedPrev = 1215298800000.0; //2008-07-06T00:00:00
+
+    TimeZoneTransition tzt;
+    UBool avail = stz.getNextTransition(t, FALSE, tzt);
+    if (!avail) {
+        errln("FAIL: No transition returned by getNextTransition.");
+    } else if (tzt.getTime() != expectedNext) {
+        errln((UnicodeString)"FAIL: Wrong transition time returned by getNextTransition - "
+            + tzt.getTime() + " Expected: " + expectedNext);
+    }
+
+    avail = stz.getPreviousTransition(t, TRUE, tzt);
+    if (!avail) {
+        errln("FAIL: No transition returned by getPreviousTransition.");
+    } else if (tzt.getTime() != expectedPrev) {
+        errln((UnicodeString)"FAIL: Wrong transition time returned by getPreviousTransition - "
+            + tzt.getTime() + " Expected: " + expectedPrev);
     }
 }
 
