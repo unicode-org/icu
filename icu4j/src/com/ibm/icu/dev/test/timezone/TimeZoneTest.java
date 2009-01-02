@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -337,7 +337,7 @@ public class TimeZoneTest extends TestFmwk
         //    so the behavior of the timezone doesn't matter
         SimpleTimeZone zone2 = new SimpleTimeZone(0, "PST");
         zone2.setStartRule(Calendar.JANUARY, 1, 0);
-        zone2.setEndRule(Calendar.DECEMBER, 31, 0);
+        zone2.setEndRule(Calendar.DECEMBER, 31, 86399999);
         logln("Modified PST inDaylightTime->" + zone2.inDaylightTime(new Date()));
         name = zone2.getDisplayName(Locale.ENGLISH);
         logln("Modified PST->" + name);
