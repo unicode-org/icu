@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2008, International Business Machines Corporation and   *
+* Copyright (C) 2003-2009, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -918,7 +918,7 @@ public final class ULocale implements Serializable {
     public static ULocale getDefault() {
         synchronized (ULocale.class) {
             Locale currentDefault = Locale.getDefault();
-            if (defaultLocale != currentDefault) {
+            if (!defaultLocale.equals(currentDefault)) {
                 defaultLocale = currentDefault;
                 defaultULocale = new ULocale(defaultLocale);
             }

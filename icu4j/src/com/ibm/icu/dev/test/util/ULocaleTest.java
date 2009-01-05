@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2008, International Business Machines
+* Copyright (c) 2004-2009, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -231,10 +231,23 @@ public class ULocaleTest extends TestFmwk {
         Locale.setDefault(backupDefault);
 
         // Set default via ULocale
-        ULocale.setDefault(new ULocale("ja_JP@calendar=japanese"));
+        ULocale ujaJP_calJP = new ULocale("ja_JP@calendar=japanese");
+        ULocale.setDefault(ujaJP_calJP);
         if (!Locale.getDefault().equals(jaJPJP)) {
             errln("FAIL: ULocale#setDefault failed to set Java Locale ja_JP_JP /actual: " + Locale.getDefault());
         }
+        // Ticket#6672 - missing keywords
+        defUloc = ULocale.getDefault();
+        if (!defUloc.equals(ujaJP_calJP)) {
+            errln("FAIL: ULocale#getDefault returned " + defUloc + " /expected: ja_JP@calendar=japanese");
+        }
+        // Set a incompatible base locale via Locale#setDefault
+        Locale.setDefault(Locale.US);
+        defUloc = ULocale.getDefault();
+        if (defUloc.equals(ujaJP_calJP)) {
+            errln("FAIL: ULocale#getDefault returned " + defUloc + " /expected: " + ULocale.forLocale(Locale.US));
+        }
+
         Locale.setDefault(backupDefault);
 
         // We also want to map ICU locale ja@calendar=japanese to Java ja_JP_JP
