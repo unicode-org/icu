@@ -353,6 +353,7 @@ icu4j/src/com/ibm/icu/dev/demo/rbnf/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/demo/translit/Test_Instructions.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/demo/translit/demo.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/demo/translit/package.html svneol=native#text/html
+icu4j/src/com/ibm/icu/dev/eclipse/misc/ICUConfig.properties -text
 icu4j/src/com/ibm/icu/dev/eclipse/misc/about_icu.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/eclipse/misc/about_icu_base.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/calendar/package.html svneol=native#text/html
