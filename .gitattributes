@@ -81,6 +81,7 @@ icu4c/source/data/locales/si_LK.txt -text
 icu4c/source/data/locales/zh_Hans_HK.txt -text
 icu4c/source/data/locales/zh_Hans_MO.txt -text
 icu4c/source/data/misc/likelySubtags.txt -text
+icu4c/source/data/misc/numberingSystems.txt -text
 icu4c/source/data/misc/plurals.txt -text
 icu4c/source/data/pkgdataMakefile.in -text
 icu4c/source/data/rbnf/af.txt -text
