@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation
+ * Copyright (c) 1997-2009, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -579,6 +579,42 @@ TimeZoneTest::TestGetAvailableIDs913()
  */
 void TimeZoneTest::TestShortZoneIDs()
 {
+    // TODO: This test case is tzdata sensitive.
+    // We should actually put the data version in this test code
+    // at build time.  For now, we just hardcode the version string
+    // and display warning instead of error if non-reference tzdata
+    // version is used.
+    const char *REFERENCE_DATA_VERSION = "2008i";
+
+    UErrorCode status = U_ZERO_ERROR;
+    UBool isNonReferenceTzdataVersion = FALSE;
+    const char *tzdataVer = TimeZone::getTZDataVersion(status);
+    if (failure(status, "getTZDataVersion")) return;
+    if (uprv_strcmp(tzdataVer, REFERENCE_DATA_VERSION) != 0) {
+        // Note: We want to display a warning message here if
+        // REFERENCE_DATA_VERSION is out of date - so we
+        // do not forget to update the value before GA.
+        isNonReferenceTzdataVersion = TRUE;
+        logln(UnicodeString("Warning: Active tzdata version (") + tzdataVer +
+            ") does not match the reference tzdata version ("
+            + REFERENCE_DATA_VERSION + ") for this test case data.");
+    }
+
+    // Note: useDaylightTime returns true if DST is observed
+    // in the time zone in the current calendar year.  The test
+    // data is valid for the date after the reference year below.
+    // If system clock is before the year, some test cases may fail.
+    const int32_t REFERENCE_YEAR = 2009;
+    GregorianCalendar cal(*TimeZone::getGMT(), status);
+    if (failure(status, "GregorianCalendar")) return;
+    cal.set(REFERENCE_YEAR, UCAL_JANUARY, 2); // day 2 in GMT
+
+    UBool isDateBeforeReferenceYear = ucal_getNow() < cal.getTime(status);
+    if (failure(status, "Calendar::getTime")) return;
+    if (isDateBeforeReferenceYear) {
+        logln("Warning: Past time is set to the system clock.  Some test cases may not return expected results.");
+    }
+
     int32_t i;
     // Create a small struct to hold the array
     struct
@@ -602,18 +638,16 @@ void TimeZoneTest::TestShortZoneIDs()
         {"CNT", -210, TRUE},
         {"AGT", -180, TRUE}, // updated by tzdata2007k
         {"BET", -180, TRUE},
-        // "CAT", -60, FALSE, // Wrong:
-        // As of bug 4130885, fix CAT (Central Africa)
-        {"CAT", 120, FALSE}, // Africa/Harare
         {"GMT", 0, FALSE},
         {"UTC", 0, FALSE}, // ** srl: seems broken in C++
         {"ECT", 60, TRUE},
+        {"MET", 60, TRUE}, // updated 12/3/99 aliu
         {"ART", 120, TRUE},
         {"EET", 120, TRUE},
+        {"CAT", 120, FALSE}, // Africa/Harare
         {"EAT", 180, FALSE},
-        {"MET", 60, TRUE}, // updated 12/3/99 aliu
         {"NET", 240, TRUE}, // updated 12/3/99 aliu
-        {"PLT", 300, TRUE}, // updated by 2008c
+        {"PLT", 300, FALSE}, // updated by 2008c - no DST after 2008
         {"IST", 330, FALSE},
         {"BST", 360, FALSE},
         {"VST", 420, FALSE},
@@ -622,8 +656,6 @@ void TimeZoneTest::TestShortZoneIDs()
         {"ACT", 570, FALSE}, // updated Aug 2003 aliu
         {"AET", 600, TRUE},
         {"SST", 660, FALSE},
-        // "NST", 720, FALSE,
-        // As of bug 4130885, fix NST (New Zealand)
         {"NST", 720, TRUE}, // Pacific/Auckland
 
         // From icuzones:
@@ -646,7 +678,6 @@ void TimeZoneTest::TestShortZoneIDs()
         {"",0,FALSE}
     };
 
-
     for(i=0;kReferenceList[i].id[0];i++) {
         UnicodeString itsID(kReferenceList[i].id);
         UBool ok = TRUE;
@@ -660,19 +691,32 @@ void TimeZoneTest::TestShortZoneIDs()
         // Check daylight usage.
         UBool usesDaylight = tz->useDaylightTime();
         if (usesDaylight != kReferenceList[i].daylight) {
-            errln("FAIL: Time Zone " + itsID + " use daylight is " +
-                  (usesDaylight?"TRUE":"FALSE") +
-                  " but it should be " +
-                  ((kReferenceList[i].daylight)?"TRUE":"FALSE"));
+            if (isNonReferenceTzdataVersion || isDateBeforeReferenceYear) {
+                logln("Warning: Time Zone " + itsID + " use daylight is " +
+                      (usesDaylight?"TRUE":"FALSE") +
+                      " but it should be " +
+                      ((kReferenceList[i].daylight)?"TRUE":"FALSE"));
+            } else {
+                errln("FAIL: Time Zone " + itsID + " use daylight is " +
+                      (usesDaylight?"TRUE":"FALSE") +
+                      " but it should be " +
+                      ((kReferenceList[i].daylight)?"TRUE":"FALSE"));
+            }
             ok = FALSE;
         }
 
         // Check offset
         int32_t offsetInMinutes = tz->getRawOffset()/60000;
         if (offsetInMinutes != kReferenceList[i].offset) {
-            errln("FAIL: Time Zone " + itsID + " raw offset is " +
-                  offsetInMinutes +
-                  " but it should be " + kReferenceList[i].offset);
+            if (isNonReferenceTzdataVersion || isDateBeforeReferenceYear) {
+                logln("FAIL: Time Zone " + itsID + " raw offset is " +
+                      offsetInMinutes +
+                      " but it should be " + kReferenceList[i].offset);
+            } else {
+                errln("FAIL: Time Zone " + itsID + " raw offset is " +
+                      offsetInMinutes +
+                      " but it should be " + kReferenceList[i].offset);
+            }
             ok = FALSE;
         }
 
