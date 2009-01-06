@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1996-2008, International Business Machines Corporation and Others.
+ * Copyright (C) 1996-2009, International Business Machines Corporation and Others.
  * All rights reserved.
  */
 
@@ -25,6 +25,7 @@ typedef void UCD;
  * Open a <code>UCD</code> object.
  *
  * @param collator - the collator
+ * @param status - will be set if any errors occur. 
  *
  * @return the <code>UCD</code> object. You must call
  *         <code>ucd_close</code> when you are done using the object.
@@ -32,7 +33,7 @@ typedef void UCD;
  * @internal ICU 4.0.1 technology preview
  */
 U_CAPI UCD * U_EXPORT2
-ucd_open(UCollator *coll);
+ucd_open(UCollator *coll, UErrorCode *status);
 
 /**
  * Release a <code>UCD</code> object.
@@ -107,6 +108,7 @@ typedef struct BMS BMS;
  * @param latternLength - the length of the string for which to search
  * @param target - the string in which to search
  * @param targetLength - the length of the string in which to search
+ * @param status - will be set if any errors occur. 
  *
  * @return the <code>BMS</code> object.
  *
@@ -115,7 +117,8 @@ typedef struct BMS BMS;
 U_CAPI BMS * U_EXPORT2
 bms_open(UCD *ucd,
          const UChar *pattern, int32_t patternLength,
-         const UChar *target,  int32_t targetLength);
+         const UChar *target,  int32_t targetLength,
+         UErrorCode  *status);
 
 /**
  * Close a <code>BMS</code> object and release all the
@@ -169,10 +172,11 @@ bms_search(BMS *bms, int32_t offset, int32_t *start, int32_t *end);
  *
  * @param target - the new target string
  * @param targetLength - the length of the new target string
+ * @param status - will be set if any errors occur. 
  *
  * @internal ICU 4.0.1 technology preview
  */
 U_CAPI void U_EXPORT2
-bms_setTargetString(BMS *bms, const UChar *target, int32_t targetLength);
+bms_setTargetString(BMS *bms, const UChar *target, int32_t targetLength, UErrorCode *status);
 
 #endif /* _BMS_H */

@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- *   Copyright (C) 1996-2008, International Business Machines                 *
+ *   Copyright (C) 1996-2009, International Business Machines                 *
  *   Corporation and others.  All Rights Reserved.                            *
  ******************************************************************************
  */
@@ -51,13 +51,16 @@ int32_t CEList::_active = 0;
 int32_t CEList::_histogram[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 #endif
 
-CEList::CEList(UCollator *coll, const UnicodeString &string)
+CEList::CEList(UCollator *coll, const UnicodeString &string, UErrorCode &status)
     : ces(NULL), listMax(CELIST_BUFFER_SIZE), listSize(0)
 {
-    UErrorCode status = U_ZERO_ERROR;
     UCollationElements *elems = ucol_openElements(coll, string.getBuffer(), string.length(), &status);
     uint32_t strengthMask = 0;
     int32_t order;
+
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     // **** only set flag if string has Han(gul) ****
     ucol_forceHanImplicit(elems, &status);
@@ -96,7 +99,7 @@ CEList::CEList(UCollator *coll, const UnicodeString &string)
             order |= UCOL_CONTINUATION_MARKER;
         }
 
-        add(order);
+        add(order, status);
     }
 
     ucol_closeElements(elems);
@@ -113,17 +116,25 @@ CEList::~CEList()
     }
 }
 
-void CEList::add(uint32_t ce)
+void CEList::add(uint32_t ce, UErrorCode &status)
 {
+    if (U_FAILURE(status)) {
+        return;
+    }
+
     if (listSize >= listMax) {
-      //listMax *= 2;
-        listMax += CELIST_BUFFER_SIZE;
+        int32_t newMax = listMax + CELIST_BUFFER_SIZE;
 
 #ifdef INSTRUMENT_CELIST
         _histogram[listSize / CELIST_BUFFER_SIZE] += 1;
 #endif
 
-        uint32_t *newCEs = NEW_ARRAY(uint32_t, listMax);
+        uint32_t *newCEs = NEW_ARRAY(uint32_t, newMax);
+
+        if (newCEs == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
 
         uprv_memcpy(newCEs, ces, listSize * sizeof(uint32_t));
 
@@ -132,6 +143,7 @@ void CEList::add(uint32_t ce)
         }
 
         ces = newCEs;
+        listMax = newMax;
     }
 
     ces[listSize++] = ce;
@@ -153,7 +165,7 @@ uint32_t &CEList::operator[](int32_t index) const
 
 UBool CEList::matchesAt(int32_t offset, const CEList *other) const
 {
-    if (listSize - offset < other->size()) {
+    if (other == NULL || listSize - offset < other->size()) {
         return FALSE;
     }
 
@@ -179,10 +191,19 @@ int32_t StringList::_strings = 0;
 int32_t StringList::_histogram[101] = {0};
 #endif
 
-StringList::StringList()
+StringList::StringList(UErrorCode &status)
     : strings(NULL), listMax(STRING_LIST_BUFFER_SIZE), listSize(0)
 {
+    if (U_FAILURE(status)) {
+        return;
+    }
+
     strings = new UnicodeString [listMax];
+
+    if (strings == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
 
 #ifdef INSTRUMENT_STRING_LIST
     _lists += 1;
@@ -195,16 +216,20 @@ StringList::~StringList()
     delete[] strings;
 }
 
-void StringList::add(const UnicodeString *string)
+void StringList::add(const UnicodeString *string, UErrorCode &status)
 {
+    if (U_FAILURE(status)) {
+        return;
+    }
+
 #ifdef INSTRUMENT_STRING_LIST
     _strings += 1;
 #endif
 
     if (listSize >= listMax) {
-        listMax += STRING_LIST_BUFFER_SIZE;
+        int32_t newMax = listMax + STRING_LIST_BUFFER_SIZE;
 
-        UnicodeString *newStrings = new UnicodeString[listMax];
+        UnicodeString *newStrings = new UnicodeString[newMax];
 
         uprv_memcpy(newStrings, strings, listSize * sizeof(UnicodeString));
 
@@ -220,6 +245,7 @@ void StringList::add(const UnicodeString *string)
 
         delete[] strings;
         strings = newStrings;
+        listMax = newMax;
     }
 
     // The ctor initialized all the strings in
@@ -228,11 +254,11 @@ void StringList::add(const UnicodeString *string)
     strings[listSize++].append(*string);
 }
 
-void StringList::add(const UChar *chars, int32_t count)
+void StringList::add(const UChar *chars, int32_t count, UErrorCode &status)
 {
     const UnicodeString string(chars, count);
 
-    add(&string);
+    add(&string, status);
 }
 
 const UnicodeString *StringList::get(int32_t index) const
@@ -256,25 +282,32 @@ class CEToStringsMap : public UMemory
 {
 public:
 
-    CEToStringsMap();
+    CEToStringsMap(UErrorCode &status);
     ~CEToStringsMap();
 
-    void put(uint32_t ce, UnicodeString *string);
+    void put(uint32_t ce, UnicodeString *string, UErrorCode &status);
     StringList *getStringList(uint32_t ce) const;
 
 private:
  
-    void putStringList(uint32_t ce, StringList *stringList);
+    void putStringList(uint32_t ce, StringList *stringList, UErrorCode &status);
     UHashtable *map;
 };
 
-CEToStringsMap::CEToStringsMap()
+CEToStringsMap::CEToStringsMap(UErrorCode &status)
+    : map(NULL)
 {
-    UErrorCode status = U_ZERO_ERROR;
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     map = uhash_open(uhash_hashLong, uhash_compareLong,
                      uhash_compareCaselessUnicodeString,
                      &status);
+
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     uhash_setValueDeleter(map, deleteStringList);
 }
@@ -284,16 +317,22 @@ CEToStringsMap::~CEToStringsMap()
     uhash_close(map);
 }
 
-void CEToStringsMap::put(uint32_t ce, UnicodeString *string)
+void CEToStringsMap::put(uint32_t ce, UnicodeString *string, UErrorCode &status)
 {
     StringList *strings = getStringList(ce);
 
     if (strings == NULL) {
-        strings = new StringList();
-        putStringList(ce, strings);
+        strings = new StringList(status);
+
+        if (strings == NULL || U_FAILURE(status)) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+
+        putStringList(ce, strings, status);
     }
 
-    strings->add(string);
+    strings->add(string, status);
 }
 
 StringList *CEToStringsMap::getStringList(uint32_t ce) const
@@ -301,10 +340,8 @@ StringList *CEToStringsMap::getStringList(uint32_t ce) const
     return (StringList *) uhash_iget(map, ce);
 }
 
-void CEToStringsMap::putStringList(uint32_t ce, StringList *stringList)
+void CEToStringsMap::putStringList(uint32_t ce, StringList *stringList, UErrorCode &status)
 {
-    UErrorCode status = U_ZERO_ERROR;
-
     uhash_iput(map, ce, (void *) stringList, &status);
 }
 
@@ -321,10 +358,10 @@ U_CFUNC void deleteUnicodeStringKey(void *obj);
 class StringToCEsMap : public UMemory
 {
 public:
-    StringToCEsMap();
+    StringToCEsMap(UErrorCode &status);
     ~StringToCEsMap();
 
-    void put(const UnicodeString *string, const CEList *ces);
+    void put(const UnicodeString *string, const CEList *ces, UErrorCode &status);
     const CEList *get(const UnicodeString *string);
     void free(const CEList *list);
 
@@ -334,14 +371,21 @@ private:
     UHashtable *map;
 };
 
-StringToCEsMap::StringToCEsMap()
+StringToCEsMap::StringToCEsMap(UErrorCode &status)
+    : map(NULL)
 {
-    UErrorCode status = U_ZERO_ERROR;
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     map = uhash_open(uhash_hashUnicodeString,
                      uhash_compareUnicodeString,
                      uhash_compareLong,
                      &status);
+
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     uhash_setValueDeleter(map, deleteCEList);
     uhash_setKeyDeleter(map, deleteUnicodeStringKey);
@@ -352,10 +396,8 @@ StringToCEsMap::~StringToCEsMap()
     uhash_close(map);
 }
 
-void StringToCEsMap::put(const UnicodeString *string, const CEList *ces)
+void StringToCEsMap::put(const UnicodeString *string, const CEList *ces, UErrorCode &status)
 {
-    UErrorCode status = U_ZERO_ERROR;
-
     uhash_put(map, (void *) string, (void *) ces, &status);
 }
 
@@ -403,10 +445,10 @@ CollDataCacheEntry::~CollDataCacheEntry()
 class CollDataCache : public UMemory
 {
 public:
-    CollDataCache();
+    CollDataCache(UErrorCode &status);
     ~CollDataCache();
 
-    CollData *get(UCollator *collator);
+    CollData *get(UCollator *collator, UErrorCode &status);
     void unref(CollData *collData);
 
     void flush();
@@ -436,14 +478,20 @@ U_CFUNC void deleteCollDataCacheEntry(void *obj)
     delete entry;
 }
 
-CollDataCache::CollDataCache()
+CollDataCache::CollDataCache(UErrorCode &status)
     : lock(0), cache(NULL)
 {
-    UErrorCode status = U_ZERO_ERROR;
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     umtx_init(&lock);
 
     cache = uhash_open(uhash_hashChars, uhash_compareChars, uhash_compareLong, &status);
+
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     uhash_setValueDeleter(cache, deleteCollDataCacheEntry);
     uhash_setKeyDeleter(cache, deleteChars);
@@ -459,9 +507,8 @@ CollDataCache::~CollDataCache()
     umtx_destroy(&lock);
 }
 
-CollData *CollDataCache::get(UCollator *collator)
+CollData *CollDataCache::get(UCollator *collator, UErrorCode &status)
 {
-    UErrorCode status = U_ZERO_ERROR;
     char keyBuffer[KEY_BUFFER_SIZE];
     int32_t keyLength = KEY_BUFFER_SIZE;
     char *key = getKey(collator, keyBuffer, &keyLength);
@@ -474,8 +521,13 @@ CollData *CollDataCache::get(UCollator *collator)
     if (entry == NULL) {
         umtx_unlock(&lock);
 
-        newData = new CollData(collator, key, keyLength);
+        newData = new CollData(collator, key, keyLength, status);
         newEntry = new CollDataCacheEntry(newData);
+
+        if (U_FAILURE(status) || newData == NULL || newEntry == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
 
         umtx_lock(&lock);
         entry = (CollDataCacheEntry *) uhash_get(cache, key);
@@ -483,6 +535,13 @@ CollData *CollDataCache::get(UCollator *collator)
         if (entry == NULL) {
             uhash_put(cache, newData->key, newEntry, &status);
             umtx_unlock(&lock);
+
+            if (U_FAILURE(status)) {
+                delete newEntry;
+                delete newData;
+
+                return NULL;
+            }
 
             return newData;
         }
@@ -573,9 +632,9 @@ CollData::CollData()
 #define CLONE_COLLATOR
 
 //#define CACHE_CELISTS
-CollData::CollData(UCollator *collator, char *cacheKey, int32_t cacheKeyLength)
+CollData::CollData(UCollator *collator, char *cacheKey, int32_t cacheKeyLength, UErrorCode &status)
+    : coll(NULL), charsToCEList(NULL), ceToCharsStartingWith(NULL), key(NULL)
 {
-    UErrorCode status = U_ZERO_ERROR;
     U_STRING_DECL(test_pattern, "[[:assigned:]-[:c:]]", 20);
     U_STRING_INIT(test_pattern, "[[:assigned:]-[:c:]]", 20);
     USet *charsToTest = uset_openPattern(test_pattern, 20, &status);
@@ -584,20 +643,37 @@ CollData::CollData(UCollator *collator, char *cacheKey, int32_t cacheKeyLength)
     U_STRING_INIT(remove_pattern, "[[\\u3400-\\u9FFF][\\u1100-\\u11F9][\\uAC00-\\uD7AF][\\U00020000-\\U0002A6DF]]", 70);
     USet *charsToRemove = uset_openPattern(remove_pattern, 70, &status);
 
+    if (U_FAILURE(status)) {
+        return;
+    }
+
     USet *expansions   = uset_openEmpty();
     USet *contractions = uset_openEmpty();
     int32_t itemCount;
 
 #ifdef CACHE_CELISTS
-    charsToCEList = new StringToCEsMap();
+    charsToCEList = new StringToCEsMap(status);
+
+    if (U_FAILURE(status)) {
+        goto bail;
+    }
 #else
     charsToCEList = NULL;
 #endif
 
-    ceToCharsStartingWith = new CEToStringsMap();
+    ceToCharsStartingWith = new CEToStringsMap(status);
+
+    if (U_FAILURE(status)) {
+        goto bail;
+    }
     
     if (cacheKeyLength > KEY_BUFFER_SIZE) {
         key = NEW_ARRAY(char, cacheKeyLength);
+
+        if (key == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            goto bail;
+        }
     } else {
         key = keyBuffer;
     }
@@ -606,6 +682,10 @@ CollData::CollData(UCollator *collator, char *cacheKey, int32_t cacheKeyLength)
 
 #ifdef CLONE_COLLATOR
     coll = ucol_safeClone(collator, NULL, NULL, &status);
+
+    if (U_FAILURE(status)) {
+        goto bail;
+    }
 #else
     coll = collator;
 #endif
@@ -626,36 +706,57 @@ CollData::CollData(UCollator *collator, char *cacheKey, int32_t cacheKeyLength)
         if (len == 0) {
             for (UChar32 ch = start; ch <= end; ch += 1) {
                 UnicodeString *st = new UnicodeString(ch);
-                CEList *ceList = new CEList(coll, *st);
 
-                ceToCharsStartingWith->put(ceList->get(0), st);
+                if (st == NULL) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                    break;
+                }
+
+                CEList *ceList = new CEList(coll, *st, status);
+
+                ceToCharsStartingWith->put(ceList->get(0), st, status);
 
 #ifdef CACHE_CELISTS
-                charsToCEList->put(st, ceList);
+                charsToCEList->put(st, ceList, status);
 #else
                 delete ceList;
 #endif
             }
         } else if (len > 0) {
             UnicodeString *st = new UnicodeString(buffer, len);
-            CEList *ceList = new CEList(coll, *st);
 
-            ceToCharsStartingWith->put(ceList->get(0), st);
+            if (st == NULL) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                break;
+            }
+
+            CEList *ceList = new CEList(coll, *st, status);
+
+            ceToCharsStartingWith->put(ceList->get(0), st, status);
 
 #ifdef CACHE_CELISTS
-            charsToCEList->put(st, ceList);
+            charsToCEList->put(st, ceList, status);
 #else
             delete ceList;
 #endif
         } else {
             // shouldn't happen...
         }
+
+        if (U_FAILURE(status)) {
+             break;
+        }
     }
 
+bail:
     uset_close(contractions);
     uset_close(expansions);
     uset_close(charsToRemove);
     uset_close(charsToTest);
+
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     /*
      * A:    4E00..9FFF;  CJK Unified Ideographs
@@ -668,9 +769,13 @@ CollData::CollData(UCollator *collator, char *cacheKey, int32_t cacheKeyLength)
      UChar  jamoRanges[] = {0x1100, 0x1161, 0x11A8, 0x11F9};
      UnicodeString hanString(hanRanges, ARRAY_SIZE(hanRanges));
      UnicodeString jamoString(jamoRanges, ARRAY_SIZE(jamoRanges));
-     CEList hanList(coll, hanString);
-     CEList jamoList(coll, jamoString);
+     CEList hanList(coll, hanString, status);
+     CEList jamoList(coll, jamoString, status);
      int32_t j = 0;
+
+     if (U_FAILURE(status)) {
+         return;
+     }
 
      for (int32_t c = 0; c < jamoList.size(); c += 1) {
          uint32_t jce = jamoList[c];
@@ -732,7 +837,15 @@ const CEList *CollData::getCEList(const UnicodeString *string) const
 #ifdef CACHE_CELISTS
     return charsToCEList->get(string);
 #else
-    return new CEList(coll, *string);
+    UErrorCode status = U_ZERO_ERROR;
+    const CEList *list = new CEList(coll, *string, status);
+    
+    if (U_FAILURE(status)) {
+        delete list;
+        list = NULL;
+    }
+
+    return list;
 #endif
 }
 
@@ -765,7 +878,13 @@ int32_t CollData::minLengthInChars(const CEList *ceList, int32_t offset, int32_t
 #ifdef CACHE_CELISTS
             const CEList *ceList2 = charsToCEList->get(string);
 #else
-            const CEList *ceList2 = new CEList(coll, *string);
+            UErrorCode status = U_ZERO_ERROR;
+            const CEList *ceList2 = new CEList(coll, *string, status);
+
+            if (U_FAILURE(status)) {
+                delete ceList2;
+                ceList2 = NULL;
+            }
 #endif
 
             if (ceList->matchesAt(offset, ceList2)) {
@@ -886,12 +1005,15 @@ int32_t CollData::minLengthInChars(const CEList *ceList, int32_t offset) const
     return minLength;
 }
 
-CollData *CollData::open(UCollator *collator)
+CollData *CollData::open(UCollator *collator, UErrorCode &status)
 {
-    UErrorCode status = U_ZERO_ERROR;
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+
     CollDataCache *cache = getCollDataCache();
         
-    return cache->get(collator);
+    return cache->get(collator, status);
 }
 
 void CollData::close(CollData *collData)
@@ -905,12 +1027,19 @@ CollDataCache *CollData::collDataCache = NULL;
 
 CollDataCache *CollData::getCollDataCache()
 {
+    UErrorCode status = U_ZERO_ERROR;
     CollDataCache *cache = NULL;
 
     UMTX_CHECK(NULL, collDataCache, cache);
 
     if (cache == NULL) {
-        cache = new CollDataCache();
+        cache = new CollDataCache(status);
+
+        if (U_FAILURE(status)) {
+            delete cache;
+            return NULL;
+        }
+
         umtx_lock(NULL);
         if (collDataCache == NULL) {
             collDataCache = cache;

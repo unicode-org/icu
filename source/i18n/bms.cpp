@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008, International Business Machines Corporation and Others.
+ * Copyright (C) 2008-2009, International Business Machines Corporation and Others.
  * All rights reserved.
  */
 
@@ -11,9 +11,9 @@
 #include "unicode/bmsearch.h"
 
 U_CAPI UCD * U_EXPORT2
-ucd_open(UCollator *coll)
+ucd_open(UCollator *coll, UErrorCode *status)
 {
-    return (UCD *) CollData::open(coll);
+    return (UCD *) CollData::open(coll, *status);
 }
 
 U_CAPI void U_EXPORT2
@@ -53,20 +53,36 @@ struct BMS
 U_CAPI BMS * U_EXPORT2
 bms_open(UCD *ucd,
          const UChar *pattern, int32_t patternLength,
-         const UChar *target,  int32_t targetLength)
+         const UChar *target,  int32_t targetLength,
+         UErrorCode  *status)
 {
     BMS *bms = (BMS *) uprv_malloc(sizeof(BMS));
+
+    if (bms == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
 
     CollData *data = (CollData *) ucd;
     UnicodeString patternString(pattern, patternLength);
 
     if (target != NULL) {
         bms->targetString = new UnicodeString(target, targetLength);
+        
+        if (bms->targetString == NULL) {
+            bms->bms = NULL;
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return bms;
+        }
     } else {
         bms->targetString = NULL;
     }
 
-    bms->bms = new BoyerMooreSearch(data, patternString, bms->targetString);
+    bms->bms = new BoyerMooreSearch(data, patternString, bms->targetString, *status);
+
+    if (bms->bms == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+    }
 
     return bms;
 }
@@ -100,8 +116,12 @@ bms_search(BMS *bms, int32_t offset, int32_t *start, int32_t *end)
 }
 
 U_CAPI void U_EXPORT2
-bms_setTargetString(BMS *bms, const UChar *target, int32_t targetLength)
+bms_setTargetString(BMS *bms, const UChar *target, int32_t targetLength, UErrorCode *status)
 {
+    if (U_FAILURE(*status)) {
+        return;
+    }
+
     if (bms->targetString != NULL) {
         delete bms->targetString;
     }
@@ -112,5 +132,5 @@ bms_setTargetString(BMS *bms, const UChar *target, int32_t targetLength)
         bms->targetString = NULL;
     }
 
-    bms->bms->setTargetString(bms->targetString);
+    bms->bms->setTargetString(bms->targetString, *status);
 }

@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2008, International Business Machines
+ *   Copyright (C) 2005-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -429,11 +429,29 @@ void SSearchTest::udhrTest()
             pattern[i] =  target[start++];
         }
 
-        UCollator *coll = ucol_open(testCases[t].locale, &status);
-        UCD *ucd = ucd_open(coll);
-        BMS *bms = bms_open(ucd, pattern, plen, target, targetLen);
-
         int32_t offset = 0;
+        UCollator *coll = ucol_open(testCases[t].locale, &status);
+        UCD *ucd = NULL;
+        BMS *bms = NULL;
+
+        if (U_FAILURE(status)) {
+            errln("Could not open collator for %s", testCases[t].locale);
+            goto delete_collator;
+        }
+
+        ucd = ucd_open(coll, &status);
+
+        if (U_FAILURE(status)) {
+            errln("Could not open CollData object for %s", testCases[t].locale);
+            goto delete_ucd;
+        }
+
+        bms = bms_open(ucd, pattern, plen, target, targetLen, &status);
+
+        if (U_FAILURE(status)) {
+            errln("Could not open search object for %s", testCases[t].locale);
+            goto delete_bms;
+        }
         
         start = end = -1;
         while (bms_search(bms, offset, &start, &end)) {
@@ -444,8 +462,13 @@ void SSearchTest::udhrTest()
             errln("Could not find pattern - locale: %s, file: %s ", testCases[t].locale, testCases[t].file);
         }
 
+delete_bms:
         bms_close(bms);
+
+delete_ucd:
         ucd_close(ucd);
+
+delete_collator:
         ucol_close(coll);
 
         DELETE_ARRAY(pattern);
@@ -591,17 +614,16 @@ void SSearchTest::bmSearchTest()
         UCollator *collator = ucol_open(clocale, &status);
         ucol_setStrength(collator, collatorStrength);
         ucol_setAttribute(collator, UCOL_NORMALIZATION_MODE, normalize, &status);
-        UCD *ucd = ucd_open(collator);
-        BMS *bms = bms_open(ucd, pattern.getBuffer(), pattern.length(), target.getBuffer(), target.length());
+        UCD *ucd = ucd_open(collator, &status);
+        BMS *bms = bms_open(ucd, pattern.getBuffer(), pattern.length(), target.getBuffer(), target.length(), &status);
 
-#if 0
         TEST_ASSERT_SUCCESS(status);
         if (U_FAILURE(status)) {
-            usearch_close(uss);
+            bms_close(bms);
+            ucd_close(ucd);
             ucol_close(collator);
             continue;
         }
-#endif
 
         int32_t foundStart = 0;
         int32_t foundLimit = 0;
@@ -1176,36 +1198,60 @@ uint64_t PCEList::operator[](int32_t index) const
 void SSearchTest::boyerMooreTest()
 {
     UErrorCode status = U_ZERO_ERROR;
- //UCollator *coll = ucol_open(NULL, &status);
     UCollator *coll = ucol_openFromShortString("S1", FALSE, NULL, &status);
-    CollData *data = CollData::open(coll);
+    CollData *data = NULL;
     UnicodeString lp  = "fuss";
     UnicodeString sp = "fu\\u00DF";
-    BoyerMooreSearch longPattern(data, lp.unescape(), NULL);
-    BoyerMooreSearch shortPattern(data, sp.unescape(), NULL);
+    BoyerMooreSearch *longPattern = NULL;
+    BoyerMooreSearch *shortPattern = NULL;
     UnicodeString targets[]  = {"fu\\u00DF", "fu\\u00DFball", "1fu\\u00DFball", "12fu\\u00DFball", "123fu\\u00DFball", "1234fu\\u00DFball",
                                 "ffu\\u00DF", "fufu\\u00DF", "fusfu\\u00DF",
                                 "fuss", "ffuss", "fufuss", "fusfuss", "1fuss", "12fuss", "123fuss", "1234fuss", "fu\\u00DF", "1fu\\u00DF", "12fu\\u00DF", "123fu\\u00DF", "1234fu\\u00DF"};
     int32_t start = -1, end = -1;
 
+    coll = ucol_openFromShortString("S1", FALSE, NULL, &status);
+    if (U_FAILURE(status)) {
+        errln("Could not open collator.");
+        return;
+    }
+
+    data = CollData::open(coll, status);
+    if (U_FAILURE(status)) {
+        errln("Could not open CollData object.");
+        goto close_data;
+    }
+
+
+    longPattern = new BoyerMooreSearch(data, lp.unescape(), NULL, status);
+    shortPattern = new BoyerMooreSearch(data, sp.unescape(), NULL, status);
+    if (U_FAILURE(status)) {
+        errln("Could not create pattern objects.");
+        goto close_patterns;
+    }
+
     for (int32_t t = 0; t < (sizeof(targets)/sizeof(targets[0])); t += 1) {
         UnicodeString target = targets[t].unescape();
         
-        longPattern.setTargetString(&target);
-        if (longPattern.search(0, start, end)) {
+        longPattern->setTargetString(&target, status);
+        if (longPattern->search(0, start, end)) {
             logln("Test %d: found long pattern at [%d, %d].", t, start, end);
         } else {
             errln("Test %d: did not find long pattern.", t);
         }
 
-        shortPattern.setTargetString(&target);
-        if (shortPattern.search(0, start, end)) {
+        shortPattern->setTargetString(&target, status);
+        if (shortPattern->search(0, start, end)) {
             logln("Test %d: found short pattern at [%d, %d].", t, start, end);
         } else {
             errln("Test %d: did not find short pattern.", t);
         }
     }
 
+close_patterns:
+    delete shortPattern;
+    delete longPattern;
+
+close_data:
     CollData::close(data);
     ucol_close(coll);
 }
@@ -1213,31 +1259,49 @@ void SSearchTest::boyerMooreTest()
 void SSearchTest::bmsTest()
 {
     UErrorCode status = U_ZERO_ERROR;
- //UCollator *coll = ucol_open(NULL, &status);
-    UCollator *coll = ucol_openFromShortString("S1", FALSE, NULL, &status);
-    UCD *data = ucd_open(coll);
+    UCollator *coll = NULL;
+    UCD *data = NULL;
     UnicodeString lp  = "fuss";
     UnicodeString lpu = lp.unescape();
     UnicodeString sp  = "fu\\u00DF";
     UnicodeString spu = sp.unescape();
-    BMS *longPattern = bms_open(data, lpu.getBuffer(), lpu.length(), NULL, 0);
-    BMS *shortPattern = bms_open(data, spu.getBuffer(), spu.length(), NULL, 0);
+    BMS *longPattern = NULL;
+    BMS *shortPattern = NULL;
     UnicodeString targets[]  = {"fu\\u00DF", "fu\\u00DFball", "1fu\\u00DFball", "12fu\\u00DFball", "123fu\\u00DFball", "1234fu\\u00DFball",
                                 "ffu\\u00DF", "fufu\\u00DF", "fusfu\\u00DF",
                                 "fuss", "ffuss", "fufuss", "fusfuss", "1fuss", "12fuss", "123fuss", "1234fuss", "fu\\u00DF", "1fu\\u00DF", "12fu\\u00DF", "123fu\\u00DF", "1234fu\\u00DF"};
     int32_t start = -1, end = -1;
 
+    coll = ucol_openFromShortString("S1", FALSE, NULL, &status);
+    if (U_FAILURE(status)) {
+        errln("Could not open collator.");
+        return;
+    }
+
+    data = ucd_open(coll, &status);
+    if (U_FAILURE(status)) {
+        errln("Could not open CollData object.");
+        goto close_data;
+    }
+
+    longPattern = bms_open(data, lpu.getBuffer(), lpu.length(), NULL, 0, &status);
+    shortPattern = bms_open(data, spu.getBuffer(), spu.length(), NULL, 0, &status);
+    if (U_FAILURE(status)) {
+        errln("Couldn't open pattern objects.");
+        goto close_patterns;
+    }
+
     for (int32_t t = 0; t < (sizeof(targets)/sizeof(targets[0])); t += 1) {
         UnicodeString target = targets[t].unescape();
         
-        bms_setTargetString(longPattern, target.getBuffer(), target.length());
+        bms_setTargetString(longPattern, target.getBuffer(), target.length(), &status);
         if (bms_search(longPattern, 0, &start, &end)) {
             logln("Test %d: found long pattern at [%d, %d].", t, start, end);
         } else {
             errln("Test %d: did not find long pattern.", t);
         }
 
-        bms_setTargetString(shortPattern, target.getBuffer(), target.length());
+        bms_setTargetString(shortPattern, target.getBuffer(), target.length(), &status);
         if (bms_search(shortPattern, 0, &start, &end)) {
             logln("Test %d: found short pattern at [%d, %d].", t, start, end);
         } else {
@@ -1245,8 +1309,11 @@ void SSearchTest::bmsTest()
         }
     }
 
+close_patterns:
     bms_close(shortPattern);
     bms_close(longPattern);
+
+close_data:
     ucd_close(data);
     ucol_close(coll);
 }
@@ -1254,19 +1321,41 @@ void SSearchTest::bmsTest()
 void SSearchTest::goodSuffixTest()
 {
     UErrorCode status = U_ZERO_ERROR;
-    UCollator *coll = ucol_open(NULL, &status);
-    CollData *data = CollData::open(coll);
+    UCollator *coll = NULL;
+    CollData *data = NULL;
     UnicodeString pat = /*"gcagagag"*/ "fxeld";
     UnicodeString target = /*"gcatcgcagagagtatacagtacg"*/ "cloveldfxeld";
-    BoyerMooreSearch pattern(data, pat, &target);
+    BoyerMooreSearch *pattern = NULL;
     int32_t start = -1, end = -1;
 
-    if (pattern.search(0, start, end)) {
+    coll = ucol_open(NULL, &status);
+    if (U_FAILURE(status)) {
+        errln("Couldn't open collator.");
+        return;
+    }
+
+    data = CollData::open(coll, status);
+    if (U_FAILURE(status)) {
+        errln("Couldn't open CollData object.");
+        goto close_data;
+    }
+
+    pattern = new BoyerMooreSearch(data, pat, &target, status);
+    if (U_FAILURE(status)) {
+        errln("Couldn't open pattern object.");
+        goto close_pattern;
+    }
+
+    if (pattern->search(0, start, end)) {
         logln("Found pattern at [%d, %d].", start, end);
     } else {
         errln("Did not find pattern.");
     }
 
+close_pattern:
+    delete pattern;
+
+close_data:
     CollData::close(data);
     ucol_close(coll);
 }
@@ -1385,7 +1474,7 @@ const char *cPattern = "maketh houndes ete hem";
 
 
     UCollator *collator = ucol_open("en", &status);
-    CollData *data = CollData::open(collator);
+    CollData *data = CollData::open(collator, status);
     TEST_ASSERT_SUCCESS(status);
     //ucol_setStrength(collator, collatorStrength);
     //ucol_setAttribute(collator, UCOL_NORMALIZATION_MODE, normalize, &status);
@@ -1398,7 +1487,8 @@ const char *cPattern = "maketh houndes ete hem";
                                         &status);
     TEST_ASSERT_SUCCESS(status);
 #else
-    BoyerMooreSearch bms(data, uPattern, &target);
+    BoyerMooreSearch bms(data, uPattern, &target, status);
+    TEST_ASSERT_SUCCESS(status);
 #endif
     
 //  int32_t foundStart;
@@ -1581,7 +1671,8 @@ UnicodeString &StringSetMonkey::generateAlternative(const UnicodeString &testCas
 {
     // find out shortest string for the longest sequence of ces.
     // needs to be refined to use dynamic programming, but will be roughly right
-    CEList ceList(coll, testCase);
+    UErrorCode status = U_ZERO_ERROR;
+    CEList ceList(coll, testCase, status);
     UnicodeString alt;
     int32_t offset = 0;
 
@@ -1627,7 +1718,7 @@ UnicodeString &StringSetMonkey::generateAlternative(const UnicodeString &testCas
         collData->freeCEList(ceList2);
     }
 
-    const CEList altCEs(coll, alt);
+    const CEList altCEs(coll, alt, status);
 
     if (ceList.matchesAt(0, &altCEs)) {
         return alternate.append(alt);
@@ -1639,6 +1730,7 @@ UnicodeString &StringSetMonkey::generateAlternative(const UnicodeString &testCas
 static void generateTestCase(UCollator *coll, Monkey *monkeys[], int32_t monkeyCount, UnicodeString &testCase, UnicodeString &alternate)
 {
     int32_t pieces = (m_rand() % 4) + 1;
+    UErrorCode status = U_ZERO_ERROR;
     UBool matches;
 
     do {
@@ -1652,8 +1744,8 @@ static void generateTestCase(UCollator *coll, Monkey *monkeys[], int32_t monkeyC
             monkeys[monkey]->append(testCase, alternate);
         }
 
-        const CEList ceTest(coll, testCase);
-        const CEList ceAlt(coll, alternate);
+        const CEList ceTest(coll, testCase, status);
+        const CEList ceAlt(coll, alternate, status);
 
         matches = ceTest.matchesAt(0, &ceAlt);
     } while (! matches);
@@ -1917,7 +2009,7 @@ int32_t SSearchTest::bmMonkeyTestCase(UCollator *coll, const UnicodeString &test
     // **** TODO: find *all* matches, not just first one ****
     simpleSearch(coll, testCase, 0, pattern, expectedStart, expectedEnd);
 
-    bms->setTargetString(&testCase);
+    bms->setTargetString(&testCase, status);
     bms->search(0, actualStart, actualEnd);
 
     if (expectedStart >= 0 && (actualStart != expectedStart || actualEnd != expectedEnd)) {
@@ -1933,7 +2025,7 @@ int32_t SSearchTest::bmMonkeyTestCase(UCollator *coll, const UnicodeString &test
     // **** TODO: find *all* matches, not just first one ****
     simpleSearch(coll, testCase, 0, altPattern, expectedStart, expectedEnd);
 
-    abms->setTargetString(&testCase);
+    abms->setTargetString(&testCase, status);
     abms->search(0, actualStart, actualEnd);
 
     if (expectedStart >= 0 && (actualStart != expectedStart || actualEnd != expectedEnd)) {
@@ -1963,7 +2055,7 @@ void SSearchTest::monkeyTest(char *params)
         return;
     }
 
-    CollData  *monkeyData = CollData::open(coll);
+    CollData  *monkeyData = CollData::open(coll, status);
 
     USet *expansions   = uset_openEmpty();
     USet *contractions = uset_openEmpty();
@@ -2100,7 +2192,7 @@ void SSearchTest::bmMonkeyTest(char *params)
         return;
     }
 
-    CollData  *monkeyData = CollData::open(coll);
+    CollData  *monkeyData = CollData::open(coll, status);
 
     USet *expansions   = uset_openEmpty();
     USet *contractions = uset_openEmpty();
@@ -2181,7 +2273,7 @@ void SSearchTest::bmMonkeyTest(char *params)
         logln("Setting strength to %s.", strengthNames[s]);
         ucol_setStrength(coll, strengths[s]);
 
-        CollData *data = CollData::open(coll);
+        CollData *data = CollData::open(coll, status);
         
         // TODO: try alternate prefix and suffix too?
         // TODO: alterntaes are only equal at primary strength. Is this OK?
@@ -2193,8 +2285,8 @@ void SSearchTest::bmMonkeyTest(char *params)
             generateTestCase(coll, monkeys, monkeyCount, prefix,  altPrefix);
             generateTestCase(coll, monkeys, monkeyCount, suffix,  altSuffix);
 
-            BoyerMooreSearch pat(data, pattern, NULL);
-            BoyerMooreSearch alt(data, altPattern, NULL);
+            BoyerMooreSearch pat(data, pattern, NULL, status);
+            BoyerMooreSearch alt(data, altPattern, NULL, status);
 
             // **** need a better way to deal with this ****
 #if 0

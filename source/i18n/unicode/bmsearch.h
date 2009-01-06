@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- *   Copyright (C) 1996-2008, International Business Machines                 *
+ *   Copyright (C) 1996-2009, International Business Machines                 *
  *   Corporation and others.  All Rights Reserved.                            *
  ******************************************************************************
  */
@@ -49,10 +49,11 @@ public:
      * @param theData - A <code>CollData</code> object holding the Collator-sensitive data
      * @param patternString - the string for which to search
      * @param targetString - the string in which to search
+     * @param status - will be set if any errors occur. 
      *
      * @internal ICU 4.0.1 technology preview
      */
-    BoyerMooreSearch(CollData *theData, const UnicodeString &patternString, const UnicodeString *targetString);
+    BoyerMooreSearch(CollData *theData, const UnicodeString &patternString, const UnicodeString *targetString, UErrorCode &status);
 
     /**
      * The desstructor
@@ -87,10 +88,11 @@ public:
      * Set the target string for the match.
      *
      * @param targetString - the new target string
+     * @param status - will be set if any errors occur. 
      *
      * @internal ICU 4.0.1 technology preview
      */
-    void setTargetString(const UnicodeString *targetString);
+    void setTargetString(const UnicodeString *targetString, UErrorCode &status);
 
     // **** no longer need these? ****
     /**

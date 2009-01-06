@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- *   Copyright (C) 1996-2008, International Business Machines                 *
+ *   Copyright (C) 1996-2009, International Business Machines                 *
  *   Corporation and others.  All Rights Reserved.                            *
  ******************************************************************************
  */
@@ -47,7 +47,7 @@ struct CEI
 class Target : public UMemory
 {
 public:
-    Target(UCollator *theCollator, const UnicodeString *target, int32_t patternLength);
+    Target(UCollator *theCollator, const UnicodeString *target, int32_t patternLength, UErrorCode &status);
     ~Target();
 
     void setTargetString(const UnicodeString *target);
@@ -81,13 +81,16 @@ private:
 
 // **** need a better pad than 40    ****
 // **** twice the longest expansion? ****
-Target::Target(UCollator *theCollator, const UnicodeString *target, int32_t patternLength)
+Target::Target(UCollator *theCollator, const UnicodeString *target, int32_t patternLength, UErrorCode &status)
     : bufferSize(patternLength + 40), bufferMin(0), bufferMax(0),
-      strengthMask(0), coll(theCollator), targetString(target), elements(NULL), charBreakIterator(NULL)
+      strengthMask(0), coll(theCollator), targetString(NULL), elements(NULL), charBreakIterator(NULL)
 {
-    UErrorCode status = U_ZERO_ERROR;
-
     ceb = NEW_ARRAY(CEI, bufferSize);
+
+    if (ceb == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
 
 #if 0
     // This shouldn't be necessary...
@@ -307,7 +310,7 @@ int32_t Target::nextSafeBoundary(int32_t offset)
 class BadCharacterTable : public UMemory
 {
 public:
-    BadCharacterTable(CEList &patternCEs, CollData *data);
+    BadCharacterTable(CEList &patternCEs, CollData *data, UErrorCode &status);
     ~BadCharacterTable();
 
     int32_t operator[](uint32_t ce) const;
@@ -323,23 +326,34 @@ private:
     int32_t *minLengthCache;
 };
 
-BadCharacterTable::BadCharacterTable(CEList &patternCEs, CollData *data)
+BadCharacterTable::BadCharacterTable(CEList &patternCEs, CollData *data, UErrorCode &status)
     : minLengthCache(NULL)
 {
     int32_t plen = patternCEs.size();
 
     // **** need a better way to deal with this ****
-    if (plen == 0) {
+    if (U_FAILURE(status) || plen == 0) {
         return;
     }
 
     int32_t *history = NEW_ARRAY(int32_t, plen);
+
+    if (history == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
 
     for (int32_t i = 0; i < plen; i += 1) {
         history[i] = -1;
     }
 
     minLengthCache = NEW_ARRAY(int32_t, plen + 1);
+
+    if (minLengthCache == NULL) {
+        DELETE_ARRAY(history);
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
 
     maxSkip = minLengthCache[0] = data->minLengthInChars(&patternCEs, 0, history);
 
@@ -394,7 +408,7 @@ int32_t BadCharacterTable::hash(uint32_t ce)
 class GoodSuffixTable : public UMemory
 {
 public:
-    GoodSuffixTable(CEList &patternCEs, BadCharacterTable &badCharacterTable);
+    GoodSuffixTable(CEList &patternCEs, BadCharacterTable &badCharacterTable, UErrorCode &status);
     ~GoodSuffixTable();
 
     int32_t operator[](int32_t offset) const;
@@ -403,19 +417,24 @@ private:
     int32_t *goodSuffixTable;
 };
 
-GoodSuffixTable::GoodSuffixTable(CEList &patternCEs, BadCharacterTable &badCharacterTable)
+GoodSuffixTable::GoodSuffixTable(CEList &patternCEs, BadCharacterTable &badCharacterTable, UErrorCode &status)
     : goodSuffixTable(NULL)
 {
     int32_t patlen = patternCEs.size();
 
     // **** need a better way to deal with this ****
-    if (patlen <= 0) {
+    if (U_FAILURE(status) || patlen <= 0) {
         return;
     }
 
     int32_t *suff  = NEW_ARRAY(int32_t, patlen);
     int32_t start = patlen - 1, end = - 1;
     int32_t maxSkip = badCharacterTable.getMaxSkip();
+
+    if (suff == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
 
     // initialze suff
     suff[patlen - 1] = patlen;
@@ -444,6 +463,13 @@ GoodSuffixTable::GoodSuffixTable(CEList &patternCEs, BadCharacterTable &badChara
 
     // now build goodSuffixTable
     goodSuffixTable  = NEW_ARRAY(int32_t, patlen);
+
+    if (goodSuffixTable == NULL) {
+        DELETE_ARRAY(suff);
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+
 
     // initialize entries to minLengthInChars of the pattern
     for (int32_t i = 0; i < patlen; i += 1) {
@@ -517,17 +543,33 @@ GoodSuffixTable *BoyerMooreSearch::getGoodSuffixTable()
     return goodSuffixTable;
 }
 
-BoyerMooreSearch::BoyerMooreSearch(CollData *theData, const UnicodeString &patternString, const UnicodeString *targetString)
-    : ownData(FALSE), data(theData), target(NULL)
+BoyerMooreSearch::BoyerMooreSearch(CollData *theData, const UnicodeString &patternString, const UnicodeString *targetString,
+                                   UErrorCode &status)
+    : ownData(FALSE), data(theData), patCEs(NULL), badCharacterTable(NULL), goodSuffixTable(NULL), target(NULL)
 {
+
+    if (U_FAILURE(status)) {
+        return;
+    }
+
     UCollator *collator = data->getCollator();
 
-    patCEs = new CEList(collator, patternString);
-    badCharacterTable = new BadCharacterTable(*patCEs, data);
-    goodSuffixTable = new GoodSuffixTable(*patCEs, *badCharacterTable);
+    patCEs = new CEList(collator, patternString, status);
+
+    if (patCEs == NULL || U_FAILURE(status)) {
+        return;
+    }
+
+    badCharacterTable = new BadCharacterTable(*patCEs, data, status);
+
+    if (badCharacterTable == NULL || U_FAILURE(status)) {
+        return;
+    }
+
+    goodSuffixTable = new GoodSuffixTable(*patCEs, *badCharacterTable, status);
 
     if (targetString != NULL) {
-        target = new Target(collator, targetString, patCEs->size());
+        target = new Target(collator, targetString, patCEs->size(), status);
     }
 }
 
@@ -545,10 +587,14 @@ BoyerMooreSearch::~BoyerMooreSearch()
 #endif
 }
 
-void BoyerMooreSearch::setTargetString(const UnicodeString *targetString)
+void BoyerMooreSearch::setTargetString(const UnicodeString *targetString, UErrorCode &status)
 {
+    if (U_FAILURE(status)) {
+        return;
+    }
+
     if (target == NULL) {
-        target = new Target(data->getCollator(), targetString, patCEs->size());
+        target = new Target(data->getCollator(), targetString, patCEs->size(), status);
     } else {
         target->setTargetString(targetString);
     }

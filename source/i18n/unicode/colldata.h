@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- *   Copyright (C) 1996-2008, International Business Machines                 *
+ *   Copyright (C) 1996-2009, International Business Machines                 *
  *   Corporation and others.  All Rights Reserved.                            *
  ******************************************************************************
  */
@@ -66,10 +66,11 @@ public:
      *
      * @param coll - the Collator used to collect the CEs.
      * @param string - the string for which to collect the CEs.
+     * @param status - will be set if any errors occur. 
      *
      * @internal ICU 4.0.1 technology preview
      */
-    CEList(UCollator *coll, const UnicodeString &string);
+    CEList(UCollator *coll, const UnicodeString &string, UErrorCode &status);
 
     /**
      * The destructor.
@@ -127,7 +128,7 @@ public:
     static UClassID getStaticClassID();
 
 private:
-    void add(uint32_t ce);
+    void add(uint32_t ce, UErrorCode &status);
 
     uint32_t ceBuffer[CELIST_BUFFER_SIZE];
     uint32_t *ces;
@@ -153,9 +154,11 @@ public:
     /**
      * Construct an empty <code>StringList</code>
      *
+     * @param status - will be set if any errors occur. 
+     *
      * @internal ICU 4.0.1 technology preview
      */
-    StringList();
+    StringList(UErrorCode &status);
 
     /**
      * The destructor.
@@ -168,20 +171,22 @@ public:
      * Add a string to the list.
      *
      * @param string - the string to add
+     * @param status - will be set if any errors occur. 
      *
      * @internal ICU 4.0.1 technology preview
      */
-    void add(const UnicodeString *string);
+    void add(const UnicodeString *string, UErrorCode &status);
 
     /**
      * Add an array of Unicode code points to the list.
      *
      * @param chars - the address of the array of code points
      * @param count - the number of code points in the array
+     * @param status - will be set if any errors occur. 
      *
      * @internal ICU 4.0.1 technology preview
      */
-    void add(const UChar *chars, int32_t count);
+    void add(const UChar *chars, int32_t count, UErrorCode &status);
 
     /**
      * Get a particular string from the list.
@@ -245,13 +250,14 @@ public:
      * Construct a <code>CollData</code> object.
      *
      * @param collator - the collator
+     * @param status - will be set if any errors occur. 
      *
      * @return the <code>CollData</code> object. You must call
      *         <code>close</code> when you are done using the object.
      *
      * @internal ICU 4.0.1 technology preview
      */
-    static CollData *open(UCollator *collator);
+    static CollData *open(UCollator *collator, UErrorCode &status);
 
     /**
      * Release a <code>CollData</code> object.
@@ -373,7 +379,7 @@ private:
     friend class CollDataCache;
     friend class CollDataCacheEntry;
 
-    CollData(UCollator *collator, char *cacheKey, int32_t cachekeyLength);
+    CollData(UCollator *collator, char *cacheKey, int32_t cachekeyLength, UErrorCode &status);
     ~CollData();
 
     CollData();
