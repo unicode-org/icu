@@ -15,7 +15,6 @@ import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 
@@ -105,7 +104,50 @@ public class TimeZoneTest extends TestFmwk
      */
     public void TestShortZoneIDs() throws Exception {
 
-        ZoneDescriptor[] JDK_116_REFERENCE_LIST = {
+        // TODO: This test case is tzdata sensitive.
+        // We should actually put the data version in this test code
+        // at build time.  For now, we just hardcode the version string
+        // and display warning instead of error if non-reference tzdata
+        // version is used.
+        final String REFERENCE_DATA_VERSION = "2008i";
+
+        boolean isNonReferenceTzdataVersion = false;
+        String tzdataVer = TimeZone.getTZDataVersion();
+        if (!tzdataVer.equals(REFERENCE_DATA_VERSION)) {
+            // Note: We want to display a warning message here if
+            // REFERENCE_DATA_VERSION is out of date - so we
+            // do not forget to update the value before GA.
+            isNonReferenceTzdataVersion = true;
+            logln("Warning: Active tzdata version (" + tzdataVer +
+                    ") does not match the reference tzdata version ("
+                    + REFERENCE_DATA_VERSION + ") for this test case data.");
+        }
+
+        // Note: If the default TimeZone type is JDK, some time zones
+        // may differ from the test data below.  For example, "MST" on
+        // IBM JRE is an alias of "America/Denver" for supporting Java 1.1
+        // backward compatibility, while Olson tzdata (and ICU) treat it
+        // as -7hour fixed offset/no DST.
+        boolean isJDKTimeZone = (TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK);
+        if (isJDKTimeZone) {
+            logln("Warning: Using JDK TimeZone.  Some test cases may not return expected results.");
+        }
+
+        // Note: useDaylightTime returns true if DST is observed
+        // in the time zone in the current calendar year.  The test
+        // data is valid for the date after the reference year below.
+        // If system clock is before the year, some test cases may
+        // fail.
+        final int REFERENCE_YEAR = 2009;
+        GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("Etc/GMT"));
+        cal.set(REFERENCE_YEAR, Calendar.JANUARY, 2); // day 2 in GMT
+
+        boolean isDateBeforeReferenceYear = System.currentTimeMillis() < cal.getTimeInMillis();
+        if (isDateBeforeReferenceYear) {
+            logln("Warning: Past time is set to the system clock.  Some test cases may not return expected results.");
+        }
+
+        ZoneDescriptor[] REFERENCE_LIST = {
             new ZoneDescriptor("MIT", -660, false),
             new ZoneDescriptor("HST", -600, false),
             new ZoneDescriptor("AST", -540, true),
@@ -119,22 +161,16 @@ public class TimeZoneTest extends TestFmwk
             new ZoneDescriptor("CNT", -210, true),
             new ZoneDescriptor("AGT", -180, true), // updated by tzdata 2007k
             new ZoneDescriptor("BET", -180, true),
-            // new ZoneDescriptor("CAT", -60, false), // Wrong:
-            // As of bug 4130885, fix CAT (Central Africa)
-            new ZoneDescriptor("CAT", 120, false), // Africa/Harare
             new ZoneDescriptor("GMT", 0, false),
             new ZoneDescriptor("UTC", 0, false),
             new ZoneDescriptor("ECT", 60, true),
+            new ZoneDescriptor("MET", 60, true),
+            new ZoneDescriptor("CAT", 120, false), // Africa/Harare
             new ZoneDescriptor("ART", 120, true),
             new ZoneDescriptor("EET", 120, true),
             new ZoneDescriptor("EAT", 180, false),
-            // new ZoneDescriptor("MET", 210, true),
-            // This is a standard Unix zone, so don't remap it - Liu 3Jan01
-            // new ZoneDescriptor("NET", 240, false);
-            // As of bug 4191164, fix NET
             new ZoneDescriptor("NET", 240, true),
-            // PLT behaves differently under different JDKs, so we don't check it
-            // new ZoneDescriptor("PLT", 300, true), // updated by tzdata 2008c
+            new ZoneDescriptor("PLT", 300, false), // updated by tzdata 2008c - no DST after 2008
             new ZoneDescriptor("IST", 330, false),
             new ZoneDescriptor("BST", 360, false),
             new ZoneDescriptor("VST", 420, false),
@@ -143,37 +179,39 @@ public class TimeZoneTest extends TestFmwk
             new ZoneDescriptor("ACT", 570, false), // updated Oct 2003 aliu
             new ZoneDescriptor("AET", 600, true),
             new ZoneDescriptor("SST", 660, false),
-            // new ZoneDescriptor("NST", 720, false),
-            // As of bug 4130885, fix NST (New Zealand)
             new ZoneDescriptor("NST", 720, true), // Pacific/Auckland
 
-            // [3Jan01 Liu] Three of these zones have been updated.
-            // The CTT and ACT zones just remap to Asia/Shanghai
-            // and Australia/Darwin.  Since those zones have changed,
-            // I have updated the table.  The MET zone used to be mapped
-            // to Asia/Tehran but since MET is a standard Unix zone named
-            // in the source data we no longer do this in icu or icu4j.
+            new ZoneDescriptor("Etc/Unknown", 0, false),
+            new ZoneDescriptor("SystemV/AST4ADT", -240, true),
+            new ZoneDescriptor("SystemV/EST5EDT", -300, true),
+            new ZoneDescriptor("SystemV/CST6CDT", -360, true),
+            new ZoneDescriptor("SystemV/MST7MDT", -420, true),
+            new ZoneDescriptor("SystemV/PST8PDT", -480, true),
+            new ZoneDescriptor("SystemV/YST9YDT", -540, true),
+            new ZoneDescriptor("SystemV/AST4", -240, false),
+            new ZoneDescriptor("SystemV/EST5", -300, false),
+            new ZoneDescriptor("SystemV/CST6", -360, false),
+            new ZoneDescriptor("SystemV/MST7", -420, false),
+            new ZoneDescriptor("SystemV/PST8", -480, false),
+            new ZoneDescriptor("SystemV/YST9", -540, false),
+            new ZoneDescriptor("SystemV/HST10", -600, false),
         };
 
-        Hashtable hash = new Hashtable();
-
-        String[] ids = TimeZone.getAvailableIDs();
-        for (int i=0; i<ids.length; ++i) {
-            String id = ids[i];
-            if (id.length() == 3) {
-                hash.put(id, new ZoneDescriptor(TimeZone.getTimeZone(id)));
-            }
-        }
-
-        for (int i=0; i<JDK_116_REFERENCE_LIST.length; ++i) {
-            ZoneDescriptor referenceZone = JDK_116_REFERENCE_LIST[i];
-            ZoneDescriptor currentZone = (ZoneDescriptor)hash.get(referenceZone.getID());
+        for (int i=0; i<REFERENCE_LIST.length; ++i) {
+            ZoneDescriptor referenceZone = REFERENCE_LIST[i];
+            ZoneDescriptor currentZone = new ZoneDescriptor(TimeZone.getTimeZone(referenceZone.getID()));
             if (referenceZone.equals(currentZone)) {
                 logln("ok " + referenceZone);
             }
             else {
-                warnln("Fail: Expected " + referenceZone +
-                      "; got " + currentZone);
+                if (isNonReferenceTzdataVersion
+                        || isJDKTimeZone || isDateBeforeReferenceYear) {
+                    logln("Warning: Expected " + referenceZone +
+                            "; got " + currentZone);
+                } else {
+                    errln("Fail: Expected " + referenceZone +
+                            "; got " + currentZone);
+                }
             }
         }
     }
