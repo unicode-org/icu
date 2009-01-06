@@ -87,6 +87,7 @@ src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.jse4/feature.xml -text
 src/com/ibm/icu/dev/eclipse/features/com.ibm.icu/.project -text
 src/com/ibm/icu/dev/eclipse/features/com.ibm.icu/build.properties -text
 src/com/ibm/icu/dev/eclipse/features/com.ibm.icu/feature.xml -text
+src/com/ibm/icu/dev/eclipse/misc/ICUConfig.properties -text
 src/com/ibm/icu/dev/eclipse/pdebuild/allElements.xml -text
 src/com/ibm/icu/dev/eclipse/pdebuild/build.properties -text
 src/com/ibm/icu/dev/eclipse/pdebuild/customTargets.xml -text
