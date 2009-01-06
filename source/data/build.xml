@@ -4,7 +4,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2005-2008, International Business Machines Corporation and    *
+* Copyright (C) 2005-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -70,7 +70,7 @@
         </taskdef>
     </target>
     <!-- target for generating ICU data -->
-    <target name="all" depends="locales, resfiles, collation, colfiles, rbnf, rbnffiles, supplementalData, metazoneInfo, likelySubtags, plurals, translit, brkitr, brkfiles" />
+    <target name="all" depends="locales, resfiles, collation, colfiles, rbnf, rbnffiles, supplementalData, metazoneInfo, likelySubtags, plurals, numberingSystems, translit, brkitr, brkfiles" />
     <!-- parallel target -->
     <target name="pall" depends="init">
         <parallel threadsPerProcessor ="1">
@@ -315,6 +315,20 @@
             </run>
         </cldr-build>
     </target>
+    <target name="numberingSystems" depends="init,setup" description="builds numberingSystems.txt from numberingSystems.xml">
+        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" destFile="numberingSystems.txt" noArgs="true">
+            <!-- launch the tool and generate the data after reading the config file -->
+            <run>
+                <args>
+                    <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
+                    <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
+                    <arg name="-n"/>
+                    <arg name="-f"/>
+                    <arg name="-m" value="${env.CLDR_DIR}/common/supplemental" />
+                </args>
+            </run>
+        </cldr-build>
+    </target>
     <target name="brkitr" depends="init,setup" description="builds break iterator files in ICU text format">
         <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" srcFile=".*xml" destFile=".*txt">
             <run>
@@ -406,6 +420,9 @@
             </fileset>
             <fileset id="plurals" dir="${env.ICU4C_DIR}/source/data/misc">
                 <include name="plurals.txt" />
+            </fileset>
+            <fileset id="numberingSystems" dir="${env.ICU4C_DIR}/source/data/misc">
+                <include name="numberingSystems.txt" />
             </fileset>
         </delete>
     </target>
