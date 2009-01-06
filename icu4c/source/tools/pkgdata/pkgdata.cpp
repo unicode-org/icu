@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2000-2008, International Business Machines
+ *   Copyright (C) 2000-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  *   file name:  pkgdata.c
@@ -26,7 +26,16 @@
 #endif
 #endif
 
+
 #include "unicode/utypes.h"
+
+#if U_HAVE_POPEN
+#if defined(U_CYGWIN) && defined(__STRICT_ANSI__)
+/* popen/pclose aren't defined in strict ANSI on Cygwin */
+#undef __STRICT_ANSI__
+#endif
+#endif
+
 #include "unicode/putil.h"
 #include "cmemory.h"
 #include "cstring.h"
