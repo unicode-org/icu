@@ -4,25 +4,28 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="Content-Style-Type" content="text/css2">
   <title>ReadMe for ICU4J</title>
-  <meta name="COPYRIGHT" content="Copyright 2000-2008, International Business Machines Corporation and others. All Rights Reserved.">
+  <meta name="COPYRIGHT" content="Copyright 2000-2009, International Business Machines Corporation and others. All Rights Reserved.">
   <style type="text/css">
 h3.doc { background: #CCCCFF }
+h4.doc { text-decoration: underline }
   </style>
 </head>
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 4.0</h3>
+<h3>Read Me for ICU4J 4.0.1</h3>
 <hr size="2" width="100%">
 <p><b>Release Date</b><br>
-July 2, 2008<br>
+January 9, 2009<br>
 </p>
 <!-- <p><b>Note:</b> This is major release of ICU4J.  It contains bug fixes
 and adds implementations of inherited API and introduces new API
 or functionality. -->
 
-<p><b>Note:</b> This is major release of ICU4J. It contains bug fixes and adds
-implementations of inherited API and introduces new API or functionality. 
+<p><b>Note:</b> This is an update release of ICU4J 4.0.  It contains bug fixes
+and adds implementations of inherited API, but does not introduce any new
+API or functionality.  These changes will be rolled into the next major release
+of ICU4J.
 </p>
 
 <p>For the most recent release, see the <a
@@ -131,7 +134,7 @@ current and complete version is always found in ICU4J.</p>
 </blockquote>
 
 <h3 class="doc"><a name="news"></a>What Is New In This Release?</h3>
-
+<h4 class="doc">4.0 (July 2, 2008)</h4>
 <p><b>Status of ICU4J charset converter</b></p>
 <p>The ICU4J implementation of java.nio.charset.Charset was included in ICU4J 3.8 as
 a Technology Preview.  In this release, all functionality from the java.nio.Charset
@@ -151,6 +154,28 @@ for more details.
 See the <a href="http://www.icu-project.org/download/">ICU 4.0 download page</a> about other
 new features in this release.
 </p>
+
+<h4 class="doc">4.0.1 (January 9, 2009)</h4>
+<p><b>Time zone data update</b></p>
+<p>ICU4J 4.0.1 updates the time zone data to version 2008i
+from the Olson tz database.</p>
+
+<p><b>Bug fixes</b></p>
+<p>This release contains following bug fixes (not a complete list)
+<ul>
+<li><a href="http://bugs.icu-project.org/trac/ticket/6361">#6361</a> Invalid behavor in MessageFormat for null values</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/6422">#6422</a> DurationFormat.getInstance(ULocale) throws MissingResourcesException</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/6459">#6459</a> ICU4J TimeZone#setDefault messes up historic time zone rules in JDK Calendar</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/6502">#6502</a> Holiday.getDisplayName(); doesn't work</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/6503">#6503</a> DateIntervalFormat creation is too slow</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/6612">#6612</a> ICU4J charset converter should not read source data beyond Buffer.limit()</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/6620">#6620</a> Default locale always taken for lenient parse of RuleBasedNumberFormat</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/6644">#6644</a> getDisplayName problem in ICU4J</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/6672">#6672</a> ULocale#getDefault() strips off keywords</li>
+<li><a href="http://bugs.icu-project.org/trac/ticket/6670">#6670</a> Test failure in format/TimeZoneTest/TestShortZoneIDs</li>
+</ul>
+</p>
+
 <h3 class="doc"><a name="license"></a>License Information</h3>
 <p>
 The ICU projects (ICU4C and ICU4J) use the X license. The X
