@@ -10,16 +10,25 @@
 #include "unicode/colldata.h"
 #include "unicode/bmsearch.h"
 
+//#define USE_SAFE_CASTS
+#ifdef USE_SAFE_CASTS
+#define STATIC_CAST(type,value) static_cast<type>(value)
+#define CONST_CAST(type,value) const_cast<type>(value)
+#else
+#define STATIC_CAST(type,value) (type) (value)
+#define CONST_CAST(type,value) (type) (value)
+#endif
+
 U_CAPI UCD * U_EXPORT2
 ucd_open(UCollator *coll, UErrorCode *status)
 {
-    return (UCD *) CollData::open(coll, *status);
+    return STATIC_CAST(UCD *, CollData::open(coll, *status));
 }
 
 U_CAPI void U_EXPORT2
 ucd_close(UCD *ucd)
 {
-    CollData *data = (CollData *) ucd;
+    CollData *data = STATIC_CAST(CollData *, ucd);
 
     CollData::close(data);
 }
@@ -27,7 +36,7 @@ ucd_close(UCD *ucd)
 U_CAPI UCollator * U_EXPORT2
 ucd_getCollator(UCD *ucd)
 {
-    CollData *data = (CollData *) ucd;
+    CollData *data = STATIC_CAST(CollData *, ucd);
 
     return data->getCollator();
 }
@@ -56,7 +65,7 @@ bms_open(UCD *ucd,
          const UChar *target,  int32_t targetLength,
          UErrorCode  *status)
 {
-    BMS *bms = (BMS *) uprv_malloc(sizeof(BMS));
+    BMS *bms = STATIC_CAST(BMS *, uprv_malloc(sizeof(BMS)));
 
     if (bms == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
@@ -106,7 +115,7 @@ bms_empty(BMS *bms)
 U_CAPI UCD * U_EXPORT2
 bms_getData(BMS *bms)
 {
-    return (UCD *) bms->bms->getData();
+    return STATIC_CAST(UCD *, bms->bms->getData());
 }
 
 U_CAPI UBool U_EXPORT2
