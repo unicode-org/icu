@@ -1,0 +1,901 @@
+<?xml version="1.0" encoding="UTF-8"?> <!--
+	 Copyright (C)  2009, International Business Machines Corporation, All Rights Reserved. 
+	-->
+<html>
+	<head>
+		<title>
+			ICU4C API Comparison: 4.0 with 4.0.1
+		</title>
+		<link type="text/css" rel="stylesheet" href="icu4c.css"/>
+	</head>
+	<body>
+		<h1>
+			ICU4C API Comparison: 4.0 with 4.0.1
+		</h1>
+		<hr/>
+		<h2>
+			Removed from 4.0
+		</h2>
+<!--		<table BORDER="1">
+			<THEAD>
+			<tr>
+				<th>
+					File
+				</th>
+				<th>
+					API
+				</th>
+				<th>
+					4.0
+				</th>
+				<th>
+					4.0.1
+				</th>
+			</tr>
+			</THEAD>
+		</table>
+-->		<P/><hr/>
+		<h2>
+			Deprecated or Obsoleted in 4.0.1
+		</h2>
+<!--		<table BORDER="1">
+			<THEAD>
+			<tr>
+				<th>
+					File
+				</th>
+				<th>
+					API
+				</th>
+				<th>
+					4.0
+				</th>
+				<th>
+					4.0.1
+				</th>
+			</tr>
+			</THEAD>
+		</table>
+-->		<P/><hr/>
+		<h2>
+			Changed in 4.0.1 (old, new)
+		</h2>
+<!--		<table BORDER="1">
+			<THEAD>
+			<tr>
+				<th>
+					File
+				</th>
+				<th>
+					API
+				</th>
+				<th>
+					4.0
+				</th>
+				<th>
+					4.0.1
+				</th>
+			</tr>
+			</THEAD>
+		</table>
+-->		<P/><hr/>
+		<h2>
+			Promoted to stable in 4.0.1
+		</h2>
+<!--		Spurious: these items are stable 2.2 in the *base* class. 
+    		<table BORDER="1">
+			<THEAD>
+			<tr>
+				<th>
+					File
+				</th>
+				<th>
+					API
+				</th>
+				<th>
+					4.0
+				</th>
+				<th>
+					4.0.1
+				</th>
+			</tr>
+			</THEAD>
+			<tr class="row1">
+				<td>
+					bmsearch.h
+				</td>
+				<td>
+					UClassID BoyerMooreSearch::getDynamicClassID() const
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					UClassID CollData::getDynamicClassID() const
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					UClassID CEList::getDynamicClassID() const
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					UClassID StringList::getDynamicClassID() const
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+		</table>
+-->		<P/><hr/>
+		<h2>
+			Added in 4.0.1
+		</h2>
+		<table BORDER="1">
+			<THEAD>
+			<tr>
+				<th>
+					File
+				</th>
+				<th>
+					API
+				</th>
+				<th>
+					4.0
+				</th>
+				<th>
+					4.0.1
+				</th>
+			</tr>
+			</THEAD>
+			<tr class="row1">
+				<td>
+					bms.h
+				</td>
+				<td>
+					UBool bms_search(BMS *bms, int32_t offset, int32_t *start, int32_t *end)
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					bms.h
+				</td>
+				<td>
+					void bms_setTargetString(BMS *bms, const UChar *target, int32_t targetLength, UErrorCode *status)
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					bms.h
+				</td>
+				<td>
+					void ucd_freeCache()
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					bms.h
+				</td>
+				<td>
+					UBool bms_empty(BMS *bms)
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					bms.h
+				</td>
+				<td>
+					UCollator* ucd_getCollator(UCD *ucd)
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					bms.h
+				</td>
+				<td>
+					void bms_close(BMS *bms)
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					<br/><span class=""><span/></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					bms.h
+				</td>
+				<td>
+					UCD* ucd_open(UCollator *coll, UErrorCode *status)
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					bms.h
+				</td>
+				<td>
+					void ucd_flushCache()
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span/></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					bms.h
+				</td>
+				<td>
+					UCD* bms_getData(BMS *bms)
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					bms.h
+				</td>
+				<td>
+					void ucd_close(UCD *ucd)
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					bms.h
+				</td>
+				<td>
+					BMS* bms_open(UCD *ucd, const UChar *pattern, int32_t patternLength, const UChar *target, int32_t targetLength, UErrorCode *status)
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					bmsearch.h
+				</td>
+				<td>
+					BoyerMooreSearch::BoyerMooreSearch(CollData *theData, const UnicodeString &amp;patternString, const UnicodeString *targetString, UErrorCode &amp;status)
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					bmsearch.h
+				</td>
+				<td>
+					GoodSuffixTable* BoyerMooreSearch::getGoodSuffixTable()
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					bmsearch.h
+				</td>
+				<td>
+					BadCharacterTable* BoyerMooreSearch::getBadCharacterTable()
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					bmsearch.h
+				</td>
+				<td>
+					UClassID BoyerMooreSearch::getDynamicClassID() const
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview<!-- incorrectly: stable 2.2 --></span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					bmsearch.h
+				</td>
+				<td>
+					void BoyerMooreSearch::setTargetString(const UnicodeString *targetString, UErrorCode &amp;status)
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					bmsearch.h
+				</td>
+				<td>
+					UBool BoyerMooreSearch::empty()
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					bmsearch.h
+				</td>
+				<td>
+					CollData* BoyerMooreSearch::getData()
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					bmsearch.h
+				</td>
+				<td>
+					CEList* BoyerMooreSearch::getPatternCEs()
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					bmsearch.h
+				</td>
+				<td>
+					BoyerMooreSearch::~BoyerMooreSearch()
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					bmsearch.h
+				</td>
+				<td>
+					UBool BoyerMooreSearch::search(int32_t offset, int32_t &amp;start, int32_t &amp;end)
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					bmsearch.h
+				</td>
+				<td>
+					static UClassID BoyerMooreSearch::getStaticClassID()
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					<br/><span class=""><span/></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					void CollData::freeCEList(const CEList *list)
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					StringList::StringList(UErrorCode &amp;status)
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					static void CollData::flushCollDataCache()
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span/></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					static void CollData::freeCollDataCache()
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span/></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					static void CollData::close(CollData *collData)
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					UClassID CollData::getDynamicClassID() const
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview<!-- incorrectly: stable 2.2 --></span></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					int32_t StringList::size() const
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					void StringList::add(const UChar *chars, int32_t count, UErrorCode &amp;status)
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					UCollator* CollData::getCollator() const
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					<br/><span class=""><span/></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					CEList::~CEList()
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					<br/><span class=""><span/></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					int32_t CEList::size() const
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					int32_t CollData::minLengthInChars(const CEList *ces, int32_t offset, int32_t *history) const
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					static UClassID StringList::getStaticClassID()
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					<br/><span class=""><span/></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					uint32_t&amp; CEList::operator[](int32_t index) const
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					StringList::~StringList()
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					static UClassID CollData::getStaticClassID()
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					<br/><span class=""><span/></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					const CEList* CollData::getCEList(const UnicodeString *string) const
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview.</span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					const UnicodeString* StringList::get(int32_t index) const
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					static UClassID CEList::getStaticClassID()
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					<br/><span class=""><span/></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					UClassID CEList::getDynamicClassID() const
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview<!-- incorrectly: stable 2.2 --></span></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					void StringList::add(const UnicodeString *string, UErrorCode &amp;status)
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					UClassID StringList::getDynamicClassID() const
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview<!-- incorrectly: stable 2.2 --></span></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					uint32_t CEList::get(int32_t index) const
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					CEList::CEList(UCollator *coll, const UnicodeString &amp;string, UErrorCode &amp;status)
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					static CollData* CollData::open(UCollator *collator, UErrorCode &amp;status)
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					UBool CEList::matchesAt(int32_t offset, const CEList *other) const
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					const StringList* CollData::getStringList(int32_t ce) const
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview.</span></span>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td>
+					colldata.h
+				</td>
+				<td>
+					int32_t CollData::minLengthInChars(const CEList *ces, int32_t offset) const
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>4.0.1 technology preview</span></span>
+				</td>
+			</tr>
+			<tr class="row1">
+				<td>
+					ucoleitr.h
+				</td>
+				<td>
+					void ucol_forceHanImplicit(UCollationElements *elems, UErrorCode *status)
+				</td>
+				<td class="">
+					None<br/>
+				</td>
+				<td>
+					Internal<br/><span class=""><span>.</span></span>
+				</td>
+			</tr>
+		</table>
+		<P/><hr/>
+		<p>
+			<i><font size="-1">Contents generated by StableAPI tool on Wed Jan 07 00:21:49 PST 2009<br/>Copyright (C) 2009, International Business Machines Corporation, All Rights Reserved.</font></i>
+		</p>
+	</body>
+</html>

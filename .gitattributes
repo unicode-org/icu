@@ -48,6 +48,7 @@ README text !eol
 *.spp -text
 *.tri2 -text
 
+/APIChangeReport_401.html -text
 /icu4c.css -text
 source/common/dtintrv.cpp -text
 source/common/mutex.cpp -text
