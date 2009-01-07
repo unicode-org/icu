@@ -7,7 +7,7 @@
 
 /**
  * \file 
- * \brief C++ API: Boyer-Moore StringSearch prototype
+ * \brief C++ API: Boyer-Moore StringSearch technology preview
  * \internal ICU 4.0.1 technology preview
  */
  
