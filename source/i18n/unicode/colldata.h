@@ -37,7 +37,7 @@ U_NAMESPACE_BEGIN
  * Define this to enable the <code>CEList</code> objects to collect
  * statistics.
  */
-#define INSTRUMENT_CELIST
+//#define INSTRUMENT_CELIST
 
  /*
   * The size of the initial list in a <code>StringList</code> object.
@@ -48,7 +48,7 @@ U_NAMESPACE_BEGIN
  * Define this to enable the <code>StringList</code> objects to
  * collect statistics.
  */
-#define INSTRUMENT_STRING_LIST
+//#define INSTRUMENT_STRING_LIST
 
  /**
   * CEList
