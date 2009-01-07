@@ -79,12 +79,22 @@ private:
     UBreakIterator *charBreakIterator;
 };
 
-// **** need a better pad than 40    ****
-// **** twice the longest expansion? ****
 Target::Target(UCollator *theCollator, const UnicodeString *target, int32_t patternLength, UErrorCode &status)
-    : bufferSize(patternLength + 40), bufferMin(0), bufferMax(0),
+    : bufferSize(0), bufferMin(0), bufferMax(0),
       strengthMask(0), coll(theCollator), targetString(NULL), elements(NULL), charBreakIterator(NULL)
 {
+    uint8_t maxExpansion = 0;
+
+    // find the largest expansion
+    for (const uint8_t *expansion = coll->expansionCESize; *expansion != 0; expansion += 1) {
+        if (*expansion > maxExpansion) {
+            maxExpansion = *expansion;
+        }
+    }
+
+    // room for an extra character on each end, plus 4 for safety
+    bufferSize = patternLength + (2 * maxExpansion) + 4;
+
     ceb = NEW_ARRAY(CEI, bufferSize);
 
     if (ceb == NULL) {
