@@ -474,6 +474,8 @@ delete_collator:
         DELETE_ARRAY(pattern);
         ucbuf_close(ucharBuf);
     }
+
+    ucd_flushCache();
 }
 
 void SSearchTest::bmSearchTest()

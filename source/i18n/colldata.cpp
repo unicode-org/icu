@@ -724,6 +724,7 @@ CollData::CollData(UCollator *collator, char *cacheKey, int32_t cacheKeyLength, 
                 charsToCEList->put(st, ceList, status);
 #else
                 delete ceList;
+                delete st;
 #endif
             }
         } else if (len > 0) {
@@ -742,6 +743,7 @@ CollData::CollData(UCollator *collator, char *cacheKey, int32_t cacheKeyLength, 
             charsToCEList->put(st, ceList, status);
 #else
             delete ceList;
+            delete st;
 #endif
         } else {
             // shouldn't happen...
