@@ -635,10 +635,14 @@ CollData::CollData()
 CollData::CollData(UCollator *collator, char *cacheKey, int32_t cacheKeyLength, UErrorCode &status)
     : coll(NULL), charsToCEList(NULL), ceToCharsStartingWith(NULL), key(NULL)
 {
+    // [:c:] == [[:cn:][:cc:][:co:][:cf:][:cs:]]
+    // i.e. other, control, private use, format, surrogate
     U_STRING_DECL(test_pattern, "[[:assigned:]-[:c:]]", 20);
     U_STRING_INIT(test_pattern, "[[:assigned:]-[:c:]]", 20);
     USet *charsToTest = uset_openPattern(test_pattern, 20, &status);
 
+    // Han ext. A, Han, Jamo, Hangul, Han Ext. B
+    // i.e. all the characers we handle implicitly
     U_STRING_DECL(remove_pattern, "[[\\u3400-\\u9FFF][\\u1100-\\u11F9][\\uAC00-\\uD7AF][\\U00020000-\\U0002A6DF]]", 70);
     U_STRING_INIT(remove_pattern, "[[\\u3400-\\u9FFF][\\u1100-\\u11F9][\\uAC00-\\uD7AF][\\U00020000-\\U0002A6DF]]", 70);
     USet *charsToRemove = uset_openPattern(remove_pattern, 70, &status);
@@ -758,15 +762,9 @@ bail:
         return;
     }
 
-    /*
-     * A:    4E00..9FFF;  CJK Unified Ideographs
-     *       FA0E..FA2F;  CJK Compatibility Ideographs (used)
-     * B:    3400..4DBF;  CJK Unified Ideographs Extension A
-     *      20000..2A6DF; CJK Unified Ideographs Extension B (and others later on)
-     */
-
-     UChar   hanRanges[] = {0x4E00, 0x9FFF, 0xFA0E, 0xFA2F, 0x3400, 0x4DBF, 0xD840, 0xDC00, 0xD869, 0xDEDF};
-     UChar  jamoRanges[] = {0x1100, 0x1161, 0x11A8, 0x11F9};
+     UChar   hanRanges[] = {UCOL_FIRST_HAN, UCOL_LAST_HAN, UCOL_FIRST_HAN_COMPAT, UCOL_LAST_HAN_COMPAT, UCOL_FIRST_HAN_A, UCOL_LAST_HAN_A,
+                            UCOL_FIRST_HAN_B_LEAD, UCOL_FIRST_HAN_B_TRAIL, UCOL_LAST_HAN_B_LEAD, UCOL_LAST_HAN_B_TRAIL};
+     UChar  jamoRanges[] = {UCOL_FIRST_L_JAMO, UCOL_FIRST_V_JAMO, UCOL_FIRST_T_JAMO, UCOL_LAST_T_JAMO};
      UnicodeString hanString(hanRanges, ARRAY_SIZE(hanRanges));
      UnicodeString jamoString(jamoRanges, ARRAY_SIZE(jamoRanges));
      CEList hanList(coll, hanString, status);
@@ -915,7 +913,7 @@ int32_t CollData::minLengthInChars(const CEList *ceList, int32_t offset, int32_t
 
     if (shortestLength == INT32_MAX) {
         // No matching strings at this offset. See if 
-        // the CE is in a range we cah handle manually.
+        // the CE is in a range we can handle manually.
         if (ce >= minHan && ce < maxHan) {
             // all han have implicit orders which
             // generate two CEs.

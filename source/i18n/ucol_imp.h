@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2008, International Business Machines
+*   Copyright (C) 1998-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -392,6 +392,29 @@ uprv_init_pce(const struct UCollationElements *elems);
                          (((uint32_t)(ch) - 0x1161) <= (0x1175 - 0x1161)) || \
                          (((uint32_t)(ch) - 0x11A8) <= (0x11C2 - 0x11A8)))
 
+/* Han character ranges */
+#define UCOL_FIRST_HAN 0x4E00
+#define UCOL_LAST_HAN  0x9FFF
+#define UCOL_FIRST_HAN_A 0x3400
+#define UCOL_LAST_HAN_A  0x4DBF
+#define UCOL_FIRST_HAN_COMPAT 0xFAE0
+#define UCOL_LAST_HAN_COMPAT  0xFA2F
+
+/* Han extension B is in plane 2 */
+#define UCOL_FIRST_HAN_B_LEAD  0xD840
+#define UCOL_FIRST_HAN_B_TRAIL 0xDC00
+#define UCOL_LAST_HAN_B_LEAD   0xD869
+#define UCOL_LAST_HAN_B_TRAIL  0xDEDF
+
+/* Hangul range */
+#define UCOL_FIRST_HANGUL 0xAC00
+#define UCOL_LAST_HANGUL  0xD7AF
+
+/* Jamo ranges */
+#define UCOL_FIRST_L_JAMO 0x1100
+#define UCOL_FIRST_V_JAMO 0x1161
+#define UCOL_FIRST_T_JAMO 0x11A8
+#define UCOL_LAST_T_JAMO  0x11F9
 
 
 #if 0

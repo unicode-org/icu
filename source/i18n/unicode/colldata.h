@@ -68,6 +68,10 @@ public:
      * @param string - the string for which to collect the CEs.
      * @param status - will be set if any errors occur. 
      *
+     * Note: if on return, status is set to an error code,
+     * the only safe thing to do with this object is to call
+     * the destructor.
+     *
      * @internal ICU 4.0.1 technology preview
      */
     CEList(UCollator *coll, const UnicodeString &string, UErrorCode &status);
@@ -155,6 +159,10 @@ public:
      * Construct an empty <code>StringList</code>
      *
      * @param status - will be set if any errors occur. 
+     *
+     * Note: if on return, status is set to an error code,
+     * the only safe thing to do with this object is to call
+     * the destructor.
      *
      * @internal ICU 4.0.1 technology preview
      */
@@ -254,6 +262,10 @@ public:
      *
      * @return the <code>CollData</code> object. You must call
      *         <code>close</code> when you are done using the object.
+     *
+     * Note: if on return, status is set to an error code,
+     * the only safe thing to do with this object is to call
+     * the destructor.
      *
      * @internal ICU 4.0.1 technology preview
      */

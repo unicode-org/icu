@@ -30,6 +30,8 @@ typedef void UCD;
  * @return the <code>UCD</code> object. You must call
  *         <code>ucd_close</code> when you are done using the object.
  *
+ * Note: if on return status is set to an error, the only safe
+ * thing to do with the returned object is to call <code>ucd_close</code>.
  * @internal ICU 4.0.1 technology preview
  */
 U_CAPI UCD * U_EXPORT2
@@ -111,6 +113,10 @@ typedef struct BMS BMS;
  * @param status - will be set if any errors occur. 
  *
  * @return the <code>BMS</code> object.
+ *
+ * Note: if on return status is set to an error, the only safe
+ * thing to do with the returned object is to call
+ * <code>bms_close</code>.
  *
  * @internal ICU 4.0.1 technology preview
  */

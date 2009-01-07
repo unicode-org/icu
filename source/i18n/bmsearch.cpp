@@ -92,15 +92,6 @@ Target::Target(UCollator *theCollator, const UnicodeString *target, int32_t patt
         return;
     }
 
-#if 0
-    // This shouldn't be necessary...
-    for (int32_t i = 0; i < bufferSize; i += 1) {
-        ceb[i].order = 0;
-        ceb[i].lowOffset = 0;
-        ceb[i].highOffset = 0;
-    }
-#endif
-
     if (target != NULL) {
         setTargetString(target);
     }
@@ -545,7 +536,7 @@ GoodSuffixTable *BoyerMooreSearch::getGoodSuffixTable()
 
 BoyerMooreSearch::BoyerMooreSearch(CollData *theData, const UnicodeString &patternString, const UnicodeString *targetString,
                                    UErrorCode &status)
-    : ownData(FALSE), data(theData), patCEs(NULL), badCharacterTable(NULL), goodSuffixTable(NULL), target(NULL)
+    : data(theData), patCEs(NULL), badCharacterTable(NULL), goodSuffixTable(NULL), target(NULL)
 {
 
     if (U_FAILURE(status)) {
@@ -579,12 +570,6 @@ BoyerMooreSearch::~BoyerMooreSearch()
     delete goodSuffixTable;
     delete badCharacterTable;
     delete patCEs;
-
-#if 0
-    if (ownData) {
-        delete data;
-    }
-#endif
 }
 
 void BoyerMooreSearch::setTargetString(const UnicodeString *targetString, UErrorCode &status)
@@ -625,42 +610,10 @@ UBool BoyerMooreSearch::search(int32_t offset, int32_t &start, int32_t &end)
         int32_t tIndex = 0;
         int32_t lIndex = 0;
 
-#if 0
-        // **** figure out how to do this w/o the interator ****
-        if (! target->isBreakBoundary(tOffset)) {
-            // **** Do we really want the *previous* boundary? ****
-            tOffset = target->nextBreakBoundary(tOffset);
-        }
-
         if (tOffset < tlen) {
             // **** we really want to skip ahead enough to  ****
             // **** be sure we get at least 1 non-ignorable ****
             // **** CE after the end of the pattern.        ****
-            // **** figure out how do this w/o the iterator ****
-            int32_t next = target->nextBreakBoundary(tOffset);
-
-            target->setOffset(next);
-
-            for (lIndex = 0; ; lIndex += 1) {
-                const CEI *cei = target->prevCE(lIndex);
-                int32_t low = cei->lowOffset;
-                int32_t high = cei->highOffset;
-
-                if ((high == low && low == tOffset) || low < tOffset) {
-                    break;
-                }
-            }
-        } else {
-          //target->setOffset(tOffset);
-            target->setLast(tOffset);
-            lIndex = 1;
-        }
-#else
-        if (tOffset < tlen) {
-            // **** we really want to skip ahead enough to  ****
-            // **** be sure we get at least 1 non-ignorable ****
-            // **** CE after the end of the pattern.        ****
-            // **** figure out how do this w/o the iterator ****
             int32_t next = target->nextSafeBoundary(tOffset + 1);
 
             target->setOffset(next);
@@ -685,11 +638,9 @@ UBool BoyerMooreSearch::search(int32_t offset, int32_t &start, int32_t &end)
                 }
             }
         } else {
-          //target->setOffset(tOffset);
             target->setLast(tOffset);
             lIndex = 0;
         }
-#endif
 
         tIndex = ++lIndex;
 
@@ -705,7 +656,6 @@ UBool BoyerMooreSearch::search(int32_t offset, int32_t &start, int32_t &end)
                 int32_t gsOffset = tOffset + (*goodSuffixTable)[pIndex];
                 int32_t old = tOffset;
 
-              //tOffset  = /*tcei->highOffset*/ /*tOffset*/ target->getOffset() + (*badCharacterTable)[tcei->order] /*+ 1*/;
                 tOffset += (*badCharacterTable)[tcei->order] - badCharacterTable->minLengthInChars(pIndex + 1);
 
                 if (gsOffset > tOffset && gsOffset <= tlen) {

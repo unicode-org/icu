@@ -51,6 +51,10 @@ public:
      * @param targetString - the string in which to search
      * @param status - will be set if any errors occur. 
      *
+     * Note: if on return, status is set to an error code,
+     * the only safe thing to do with this object is to call
+     * the destructor.
+     *
      * @internal ICU 4.0.1 technology preview
      */
     BoyerMooreSearch(CollData *theData, const UnicodeString &patternString, const UnicodeString *targetString, UErrorCode &status);
@@ -138,7 +142,6 @@ public:
     static UClassID getStaticClassID();
     
 private:
-    UBool ownData;
     CollData *data;
     CEList *patCEs;
     BadCharacterTable *badCharacterTable;
