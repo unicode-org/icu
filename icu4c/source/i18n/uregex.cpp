@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2004-2008, International Business Machines
+*   Copyright (C) 2004-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  regex.cpp
@@ -749,12 +749,27 @@ uregex_replaceAll(URegularExpression    *regexp,
     }
 
     int32_t   len = 0;
+
     uregex_reset(regexp, 0, status);
-    while (uregex_findNext(regexp, status)) {
-        len += uregex_appendReplacement(regexp, replacementText, replacementLength, 
+
+    // Note: Seperate error code variables for findNext() and appendReplacement()
+    //       are used so that destination buffer overflow errors
+    //       in appendReplacement won't stop findNext() from working.
+    //       appendReplacement() and appendTail() special case incoming buffer
+    //       overflow errors, continuing to return the correct length.
+    UErrorCode  findStatus = *status;
+    while (uregex_findNext(regexp, &findStatus)) {
+        len += uregex_appendReplacement(regexp, replacementText, replacementLength,
                                         &destBuf, &destCapacity, status);
     }
     len += uregex_appendTail(regexp, &destBuf, &destCapacity, status);
+    
+    if (U_FAILURE(findStatus)) {
+        // If anything went wrong with the findNext(), make that error trump
+        //   whatever may have happened with the append() operations.
+        //   Errors in findNext() are not expected.
+        *status = findStatus;
+    }
 
     return len;
 }
@@ -868,7 +883,7 @@ int32_t RegexCImpl::appendReplacement(URegularExpression    *regexp,
     //  A series of appendReplacements, appendTail need to correctly preflight
     //  the buffer size when an overflow happens somewhere in the middle.
     UBool pendingBufferOverflow = FALSE;
-    if (*status == U_BUFFER_OVERFLOW_ERROR && destCapacity == 0) {
+    if (*status == U_BUFFER_OVERFLOW_ERROR && *destCapacity == 0) {
         pendingBufferOverflow = TRUE;
         *status = U_ZERO_ERROR;
     }
@@ -1078,19 +1093,11 @@ int32_t RegexCImpl::appendTail(URegularExpression    *regexp,
                   UErrorCode            *status)
 {
 
-    if (destCapacity == NULL || destBuf == NULL || 
-        *destBuf == NULL && *destCapacity > 0 ||
-        *destCapacity < 0)
-    {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-    
     // If we come in with a buffer overflow error, don't suppress the operation.
     //  A series of appendReplacements, appendTail need to correctly preflight
     //  the buffer size when an overflow happens somewhere in the middle.
     UBool pendingBufferOverflow = FALSE;
-    if (*status == U_BUFFER_OVERFLOW_ERROR && *destCapacity == 0) {
+    if (*status == U_BUFFER_OVERFLOW_ERROR && destCapacity != NULL && *destCapacity == 0) {
         pendingBufferOverflow = TRUE;
         *status = U_ZERO_ERROR;
     }
@@ -1098,6 +1105,15 @@ int32_t RegexCImpl::appendTail(URegularExpression    *regexp,
     if (validateRE(regexp, status) == FALSE) {
         return 0;
     }
+    
+    if (destCapacity == NULL || destBuf == NULL || 
+        *destBuf == NULL && *destCapacity > 0 ||
+        *destCapacity < 0)
+    {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
     RegexMatcher *m = regexp->fMatcher;
 
     int32_t  srcIdx;

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2004-2008, International Business Machines Corporation and
+ * Copyright (c) 2004-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -807,64 +807,71 @@ static void TestRegexCAPI(void) {
      *  replaceAll()
      */
     {
-        UChar    text1[80];
-        UChar    text2[80];
-        UChar    replText[80];
+        UChar    text1[80];          /*  "Replace xaax x1x x...x." */
+        UChar    text2[80];          /*  "No match Here"           */
+        UChar    replText[80];       /*  "<$1>"                    */
+        UChar    replText2[80];      /*  "<<$1>>"                  */
+        const char * pattern = "x(.*?)x";
+        const char * expectedResult = "Replace <aa> <1> <...>.";
+        const char * expectedResult2 = "Replace <<aa>> <<1>> <<...>>.";
         UChar    buf[80];
-        int32_t  resultSz;
+        int32_t  resultSize;
         int32_t  expectedResultSize;
+        int32_t  expectedResultSize2;
         int32_t  i;
 
         u_uastrncpy(text1, "Replace xaax x1x x...x.",  sizeof(text1)/2);
         u_uastrncpy(text2, "No match here.",  sizeof(text2)/2);
         u_uastrncpy(replText, "<$1>", sizeof(replText)/2);
-        expectedResultSize = u_strlen(text1);
+        u_uastrncpy(replText2, "<<$1>>", sizeof(replText2)/2);
+        expectedResultSize = strlen(expectedResult);
+        expectedResultSize2 = strlen(expectedResult2);
 
         status = U_ZERO_ERROR;
-        re = uregex_openC("x(.*?)x", 0, NULL, &status);
+        re = uregex_openC(pattern, 0, NULL, &status);
         TEST_ASSERT_SUCCESS(status);
 
         /*  Normal case, with match */
         uregex_setText(re, text1, -1, &status);
-        resultSz = uregex_replaceAll(re, replText, -1, buf, sizeof(buf)/2, &status);
+        resultSize = uregex_replaceAll(re, replText, -1, buf, sizeof(buf)/2, &status);
         TEST_ASSERT_SUCCESS(status);
-        TEST_ASSERT_STRING("Replace <aa> <1> <...>.", buf, TRUE);
-        TEST_ASSERT(resultSz == (int32_t)strlen("Replace xaax x1x x...x."));
+        TEST_ASSERT_STRING(expectedResult, buf, TRUE);
+        TEST_ASSERT(resultSize == expectedResultSize);
 
         /* No match.  Text should copy to output with no changes.  */
         status = U_ZERO_ERROR;
         uregex_setText(re, text2, -1, &status);
-        resultSz = uregex_replaceAll(re, replText, -1, buf, sizeof(buf)/2, &status);
+        resultSize = uregex_replaceAll(re, replText, -1, buf, sizeof(buf)/2, &status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_STRING("No match here.", buf, TRUE);
-        TEST_ASSERT(resultSz == (int32_t)strlen("No match here."));
+        TEST_ASSERT(resultSize == u_strlen(text2));
 
         /*  Match, output just fills buffer, no termination warning. */
         status = U_ZERO_ERROR;
         uregex_setText(re, text1, -1, &status);
         memset(buf, -1, sizeof(buf));
-        resultSz = uregex_replaceAll(re, replText, -1, buf, strlen("Replace xaax x1x x...x."), &status);
+        resultSize = uregex_replaceAll(re, replText, -1, buf, expectedResultSize, &status);
         TEST_ASSERT(status == U_STRING_NOT_TERMINATED_WARNING);
-        TEST_ASSERT_STRING("Replace <aa> <1> <...>.", buf, FALSE);
-        TEST_ASSERT(resultSz == (int32_t)strlen("Replace <aa> <1> <...>."));
-        TEST_ASSERT(buf[resultSz] == (UChar)0xffff);
+        TEST_ASSERT_STRING(expectedResult, buf, FALSE);
+        TEST_ASSERT(resultSize == expectedResultSize);
+        TEST_ASSERT(buf[resultSize] == (UChar)0xffff);
 
         /* Do the replaceFirst again, without first resetting anything.
          *  Should give the same results.
          */
         status = U_ZERO_ERROR;
         memset(buf, -1, sizeof(buf));
-        resultSz = uregex_replaceAll(re, replText, -1, buf, strlen("Replace xaax x1x x...x."), &status);
+        resultSize = uregex_replaceAll(re, replText, -1, buf, strlen("Replace xaax x1x x...x."), &status);
         TEST_ASSERT(status == U_STRING_NOT_TERMINATED_WARNING);
         TEST_ASSERT_STRING("Replace <aa> <1> <...>.", buf, FALSE);
-        TEST_ASSERT(resultSz == (int32_t)strlen("Replace <aa> <1> <...>."));
-        TEST_ASSERT(buf[resultSz] == (UChar)0xffff);
+        TEST_ASSERT(resultSize == (int32_t)strlen("Replace <aa> <1> <...>."));
+        TEST_ASSERT(buf[resultSize] == (UChar)0xffff);
 
         /* NULL buffer, zero buffer length */
         status = U_ZERO_ERROR;
-        resultSz = uregex_replaceAll(re, replText, -1, NULL, 0, &status);
+        resultSize = uregex_replaceAll(re, replText, -1, NULL, 0, &status);
         TEST_ASSERT(status == U_BUFFER_OVERFLOW_ERROR);
-        TEST_ASSERT(resultSz == (int32_t)strlen("Replace <aa> <1> <...>."));
+        TEST_ASSERT(resultSize == (int32_t)strlen("Replace <aa> <1> <...>."));
 
         /* Buffer too small.  Try every size, which will tickle edge cases
          * in uregex_appendReplacement (used by replaceAll)   */
@@ -872,14 +879,32 @@ static void TestRegexCAPI(void) {
             char  expected[80];
             status = U_ZERO_ERROR;
             memset(buf, -1, sizeof(buf));
-            resultSz = uregex_replaceAll(re, replText, -1, buf, i, &status);
+            resultSize = uregex_replaceAll(re, replText, -1, buf, i, &status);
             TEST_ASSERT(status == U_BUFFER_OVERFLOW_ERROR);
-            strcpy(expected, "Replace <aa> <1> <...>.");
+            strcpy(expected, expectedResult);
             expected[i] = 0;
             TEST_ASSERT_STRING(expected, buf, FALSE);
-            TEST_ASSERT(resultSz == expectedResultSize);
+            TEST_ASSERT(resultSize == expectedResultSize);
             TEST_ASSERT(buf[i] == (UChar)0xffff);
         }
+
+        /* Buffer too small.  Same as previous test, except this time the replacement
+         * text is longer than the match capture group, making the length of the complete
+         * replacement longer than the original string.
+         */
+        for (i=0; i<expectedResultSize2; i++) {
+            char  expected[80];
+            status = U_ZERO_ERROR;
+            memset(buf, -1, sizeof(buf));
+            resultSize = uregex_replaceAll(re, replText2, -1, buf, i, &status);
+            TEST_ASSERT(status == U_BUFFER_OVERFLOW_ERROR);
+            strcpy(expected, expectedResult2);
+            expected[i] = 0;
+            TEST_ASSERT_STRING(expected, buf, FALSE);
+            TEST_ASSERT(resultSize == expectedResultSize2);
+            TEST_ASSERT(buf[i] == (UChar)0xffff);
+        }
+
 
         uregex_close(re);
     }
