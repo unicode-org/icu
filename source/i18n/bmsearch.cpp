@@ -664,7 +664,9 @@ UBool BoyerMooreSearch::search(int32_t offset, int32_t &start, int32_t &end)
                 // There is a mismatch at this position.  Decide how far
                 // over to shift the pattern, then try again.
                 int32_t gsOffset = tOffset + (*goodSuffixTable)[pIndex];
+#ifdef EXTRA_CAUTIOUS
                 int32_t old = tOffset;
+#endif
 
                 tOffset += (*badCharacterTable)[tcei->order] - badCharacterTable->minLengthInChars(pIndex + 1);
 
@@ -672,10 +674,12 @@ UBool BoyerMooreSearch::search(int32_t offset, int32_t &start, int32_t &end)
                     tOffset = gsOffset;
                 }
 
-                // **** is this still necessary? ****
+#ifdef EXTRA_CAUTIONS
+                // Make sure we don't skip backwards...
                 if (tOffset <= old) {
                     tOffset = old + 1;
                 }
+#endif
 
                 break;
             }
