@@ -19,6 +19,7 @@ import com.ibm.icu.util.Holiday;
 import com.ibm.icu.util.RangeDateRule;
 import com.ibm.icu.util.SimpleDateRule;
 import com.ibm.icu.util.SimpleHoliday;
+import com.ibm.icu.util.ULocale;
 
 /**
  * Tests for the <code>Holiday</code> class.
@@ -206,6 +207,21 @@ public class HolidayTest extends TestFmwk {
             }
             Date h = sh.firstAfter(d);
             logln("firstAfter: " + h);
+        }
+    }
+    
+    public void TestDisplayName() {
+        Holiday[] holidays = Holiday.getHolidays(ULocale.US);
+        for (int i = 0; i < holidays.length; ++i) {
+            Holiday h = holidays[i];
+            // only need to test one
+            // if the display names differ, we're using our data.  We know these names
+            // should differ for this holiday (not all will).
+            if ("Christmas".equals(h.getDisplayName(ULocale.US))) {
+                if ("Christmas".equals(h.getDisplayName(ULocale.GERMANY))) {
+                    errln("Using default name for holidays");
+                }
+            }
         }
     }
 }

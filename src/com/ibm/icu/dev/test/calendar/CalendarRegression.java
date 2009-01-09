@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -770,13 +770,13 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
     public void Test4108764() {
         java.util.Calendar tempcal = java.util.Calendar.getInstance();
         tempcal.clear();
-        tempcal.set(1997, Calendar.MARCH, 15, 12, 00, 00);
+        tempcal.set(1997, Calendar.FEBRUARY, 15, 12, 00, 00);
         Date d00 = tempcal.getTime();
-        tempcal.set(1997, Calendar.MARCH, 15, 12, 00, 56);
+        tempcal.set(1997, Calendar.FEBRUARY, 15, 12, 00, 56);
         Date d01 = tempcal.getTime();
-        tempcal.set(1997, Calendar.MARCH, 15, 12, 34, 00);
+        tempcal.set(1997, Calendar.FEBRUARY, 15, 12, 34, 00);
         Date d10 = tempcal.getTime();
-        tempcal.set(1997, Calendar.MARCH, 15, 12, 34, 56);
+        tempcal.set(1997, Calendar.FEBRUARY, 15, 12, 34, 56);
         Date d11 = tempcal.getTime();
         tempcal.set(1997, Calendar.JANUARY, 15, 12, 34, 56);
         Date dM  = tempcal.getTime();

@@ -1653,7 +1653,7 @@ public class MessageFormat extends UFormat {
             result.append(pattern.substring(lastOffset, offsets[i]));
             lastOffset = offsets[i];
             String argumentName = argumentNames[i];
-            if (arguments == null || arguments.get(argumentName) == null) {
+            if (arguments == null || !arguments.containsKey(argumentName)) {
                 result.append("{" + argumentName + "}");
                 continue;
             }

@@ -8,8 +8,10 @@
 package com.ibm.icu.text;
 
 import com.ibm.icu.impl.CalendarData;
+import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.PatternTokenizer;
+import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Freezable;
@@ -123,7 +125,12 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
      * @stable ICU 3.6
      */
     public static DateTimePatternGenerator getInstance(ULocale uLocale) {
-        DateTimePatternGenerator result = new DateTimePatternGenerator();
+        String localeKey = uLocale.toString();
+        DateTimePatternGenerator result = (DateTimePatternGenerator)DTPNG_CACHE.get(localeKey);
+        if (result != null) {
+            return result;
+        }
+        result = new DateTimePatternGenerator();
         String lang = uLocale.getLanguage();
         if (lang.equals("zh") || lang.equals("ko") || lang.equals("ja")) {
           result.chineseMonthHack = true;
@@ -221,6 +228,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         // decimal point for seconds
         DecimalFormatSymbols dfs = new DecimalFormatSymbols(uLocale);
         result.setDecimal(String.valueOf(dfs.getDecimalSeparator()));
+        DTPNG_CACHE.put(localeKey, result);
         return result;
     }
     
@@ -1290,6 +1298,9 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     
     private static final int FRACTIONAL_MASK = 1<<FRACTIONAL_SECOND;
     private static final int SECOND_AND_FRACTIONAL_MASK = (1<<SECOND) | (1<<FRACTIONAL_SECOND);
+
+    // Cache for DateTimePatternGenerator
+    private static ICUCache DTPNG_CACHE = new SimpleCache();
     
     private void checkFrozen() {
         if (isFrozen()) {

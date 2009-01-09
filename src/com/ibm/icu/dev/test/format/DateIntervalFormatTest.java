@@ -627,9 +627,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
             DateInterval dtitv = new DateInterval(date.getTime(), 
                                                   date_2.getTime());
-    
             String oneSkeleton = data[i++];
-    
             DateIntervalFormat dtitvfmt = DateIntervalFormat.getInstance(
                                               oneSkeleton, loc);
             String expected = data[i++];

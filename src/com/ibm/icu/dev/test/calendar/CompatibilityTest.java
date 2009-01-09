@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -339,9 +339,9 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
         }
 
         cal.clear();
-        cal.set(1985, 3, 2, 11, 49);
+        cal.set(1985, 2, 2, 11, 49);
         tempcal.clear();
-        tempcal.set(1985, 3, 2, 11, 49);
+        tempcal.set(1985, 2, 2, 11, 49);
         if (cal.getTime().getTime() != tempcal.getTime().getTime()) {
             errln("FAIL: Calendar.set(5 args) failed");
             logln(" Got: " + cal.getTime() + "  Expected: " + tempcal.getTime());

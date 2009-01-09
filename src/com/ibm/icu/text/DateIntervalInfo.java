@@ -333,7 +333,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
         if ( dii == null ) {
             // initialize data from scratch
             setup(locale);
-            // FIXME: should put a clone in cache?
+            // TODO: should put a clone in cache?
             // or put itself in cache?
             // DIICACHE.put(key, this);
             dii = (DateIntervalInfo)this.clone();
@@ -371,7 +371,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
             // loop through all locales to get all available skeletons'
             // interval format
             ULocale parentLocale = locale;
-            // FIXME: how to check for root
+            // TODO: how to check for root
             //while ( !parentLocale.equals(ULocale.ROOT) ) {
             while (parentLocale != null && !parentLocale.equals(ULocale.ROOT)) {
                 String name = parentLocale.getName();
@@ -881,7 +881,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
         final int STRING_NUMERIC_DIFFERENCE = 0x100;
         final int BASE = 0x41;
 
-        // FIXME: hack for 'v' and 'z'
+        // TODO: this is a hack for 'v' and 'z'
         // resource bundle only have time skeletons ending with 'v',
         // but not for time skeletons ending with 'z'.
         boolean replaceZWithV = false;

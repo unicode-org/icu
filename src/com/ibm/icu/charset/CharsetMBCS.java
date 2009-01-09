@@ -2516,7 +2516,7 @@ class CharsetMBCS extends CharsetICU {
                 }
             }
 
-            if (!cr[0].isError() && sourceArrayIndex < source.capacity() && !target.hasRemaining()) {
+            if (!cr[0].isError() && sourceArrayIndex < source.limit() && !target.hasRemaining()) {
                 /* target is full */
                 cr[0] = CoderResult.OVERFLOW;
             }

@@ -87,6 +87,7 @@ src/com/ibm/icu/dev/eclipse/features/com.ibm.icu.jse4/feature.xml -text
 src/com/ibm/icu/dev/eclipse/features/com.ibm.icu/.project -text
 src/com/ibm/icu/dev/eclipse/features/com.ibm.icu/build.properties -text
 src/com/ibm/icu/dev/eclipse/features/com.ibm.icu/feature.xml -text
+src/com/ibm/icu/dev/eclipse/misc/ICUConfig.properties -text
 src/com/ibm/icu/dev/eclipse/pdebuild/allElements.xml -text
 src/com/ibm/icu/dev/eclipse/pdebuild/build.properties -text
 src/com/ibm/icu/dev/eclipse/pdebuild/customTargets.xml -text
@@ -261,6 +262,7 @@ src/com/ibm/icu/dev/tool/docs/icu4j343.api.gz -text
 src/com/ibm/icu/dev/tool/docs/icu4j36.api.gz -text
 src/com/ibm/icu/dev/tool/docs/icu4j38.api.gz -text
 src/com/ibm/icu/dev/tool/docs/icu4j381.api.gz -text
+src/com/ibm/icu/dev/tool/docs/icu4j400.api.gz -text
 src/com/ibm/icu/dev/tool/tzu/icu.gif -text
 src/com/ibm/icu/dev/tool/tzu/runicutzu.bat -text
 src/com/ibm/icu/dev/tool/tzu/runicutzu.cmd -text

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -430,7 +430,13 @@ public class TimeZoneBoundaryTest extends TestFmwk
             TimeZone.setDefault(save);
         }
 
-        if (true)
+        // We no longer use ICU TimeZone implementation for Java
+        // default TimeZone.  Java 1.3 or older version do not
+        // support historic transitions, therefore, the test below
+        // will fail on such environment (with the latest TimeZone
+        // patch for US 2007+ rule).
+        String javaver = System.getProperty("java.version", "1.3");
+        if (!javaver.startsWith("1.3"))
         {
             // This only works in PST/PDT
             TimeZone.setDefault(safeGetTimeZone("PST"));
