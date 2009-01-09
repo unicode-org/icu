@@ -87,8 +87,8 @@ static int32_t whichFileModTimeIsLater(const char *file1, const char *file2) {
         time_t modtime1, modtime2;
         double diff;
 
-        modtime1 = stbuf1.st_mtim.tv_sec;
-        modtime2 = stbuf2.st_mtim.tv_sec;
+        modtime1 = stbuf1.st_mtime;
+        modtime2 = stbuf2.st_mtime;
 
         diff = difftime(modtime1, modtime2);
         if (diff < 0.0) {
