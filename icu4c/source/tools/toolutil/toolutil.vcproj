@@ -421,7 +421,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\flagparser.cpp"
+				RelativePath=".\flagparser.c"
 				>
 			</File>
 			<File
