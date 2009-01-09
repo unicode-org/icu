@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2001-2008 International Business Machines 
+ * Copyright (c) 2001-2009 International Business Machines 
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  * File usrchtst.c
@@ -2261,6 +2261,64 @@ exitTestForwardBackward :
     }
 }
 
+#define TEST_ASSERT(x) \
+   {if ((x)==FALSE) {log_err("%s:%d: FAIL: test assertion failure \"%s\"\n", __FILE__, __LINE__, #x);\
+   }}
+
+static void TestStrengthIdentical(void)
+{
+	UCollator *coll;
+	UErrorCode ec = U_ZERO_ERROR;
+	UStringSearch *search;
+	
+    UChar pattern[] = {0x05E9, 0x0591, 0x05E9};
+    UChar text[]    = {0x05E9, 0x0592, 0x05E9};
+    int32_t pLen = sizeof (pattern) / sizeof(pattern[0]);
+    int32_t tLen = sizeof(text) / sizeof (text[0]);
+	int32_t expectedPos = 0;
+	int32_t expectedLen = 3;
+
+	int32_t pos;
+	int32_t len;
+
+    /* create a US-English collator */
+	coll = ucol_open ("en_US", &ec);
+
+	/* make sure we didn't fail. */
+	TEST_ASSERT (U_SUCCESS (ec));
+
+    ucol_setStrength( coll, UCOL_TERTIARY); 
+
+	/* open a search looking for 0 */
+	search = usearch_openFromCollator (pattern, pLen, text, tLen, coll, NULL, &ec);
+	TEST_ASSERT (U_SUCCESS (ec));
+
+	pos = usearch_first(search, &ec);
+	len = usearch_getMatchedLength(search);
+
+	if(pos != expectedPos) {
+		log_err("Expected search result: %d; Got instead: %d\n", expectedPos, pos);
+	}
+		
+	if(len != expectedLen) {
+		log_err("Expected search result length: %d; Got instead: %d\n", expectedLen, len);
+	}
+	
+    /* Now try it at strength == UCOL_IDENTICAL */
+    ucol_setStrength(coll, UCOL_IDENTICAL); 
+	usearch_reset(search);
+
+	pos = usearch_first(search, &ec);
+	len = usearch_getMatchedLength(search);
+
+	if(pos != -1) {
+		log_err("Expected failure for strentgh = UCOL_IDENTICAL: got %d instead.\n", pos);
+	}
+
+    usearch_close(search);
+    ucol_close(coll);
+}
+
 void addSearchTest(TestNode** root)
 {
     addTest(root, &TestStart, "tscoll/usrchtst/TestStart");
@@ -2313,6 +2371,7 @@ void addSearchTest(TestNode** root)
     addTest(root, &TestNumeric, "tscoll/usrchtst/TestNumeric");
     addTest(root, &TestDiacriticMatch, "tscoll/usrchtst/TestDiacriticMatch");
     addTest(root, &TestForwardBackward, "tscoll/usrchtst/TestForwardBackward");
+    addTest(root, &TestStrengthIdentical, "tscoll/usrchtst/TestStrengthIdentical");
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */

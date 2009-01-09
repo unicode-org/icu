@@ -146,6 +146,7 @@ private:
     CEList *patCEs;
     BadCharacterTable *badCharacterTable;
     GoodSuffixTable   *goodSuffixTable;
+    UnicodeString pattern;
     Target *target;
 };
 

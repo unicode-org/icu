@@ -55,6 +55,9 @@ CEList::CEList(UCollator *coll, const UnicodeString &string, UErrorCode &status)
     : ces(NULL), listMax(CELIST_BUFFER_SIZE), listSize(0)
 {
     UCollationElements *elems = ucol_openElements(coll, string.getBuffer(), string.length(), &status);
+    UCollationStrength strength = ucol_getStrength(coll);
+    UBool toShift = ucol_getAttribute(coll, UCOL_ALTERNATE_HANDLING, &status) ==  UCOL_SHIFTED;
+    uint32_t variableTop = ucol_getVariableTop(coll, &status);
     uint32_t strengthMask = 0;
     int32_t order;
 
@@ -65,7 +68,7 @@ CEList::CEList(UCollator *coll, const UnicodeString &string, UErrorCode &status)
     // **** only set flag if string has Han(gul) ****
     ucol_forceHanImplicit(elems, &status);
 
-    switch (ucol_getStrength(coll)) 
+    switch (strength) 
     {
     default:
         strengthMask |= UCOL_TERTIARYORDERMASK;
@@ -90,6 +93,14 @@ CEList::CEList(UCollator *coll, const UnicodeString &string, UErrorCode &status)
         UBool cont = isContinuation(order);
 
         order &= strengthMask;
+
+        if (toShift && variableTop > order && (order & UCOL_PRIMARYORDERMASK) != 0) {
+            if (strength >= UCOL_QUATERNARY) {
+                order &= UCOL_PRIMARYORDERMASK;
+            } else {
+                order = UCOL_IGNORABLE;
+            }
+        }
 
         if (order == UCOL_IGNORABLE) {
             continue;
