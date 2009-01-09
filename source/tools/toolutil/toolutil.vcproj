@@ -413,7 +413,15 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
+				RelativePath=".\filestat.c"
+				>
+			</File>
+			<File
 				RelativePath=".\filestrm.c"
+				>
+			</File>
+			<File
+				RelativePath=".\flagparser.cpp"
 				>
 			</File>
 			<File
@@ -578,7 +586,15 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
+				RelativePath=".\filestat.h"
+				>
+			</File>
+			<File
 				RelativePath=".\filestrm.h"
+				>
+			</File>
+			<File
+				RelativePath=".\flagparser.h"
 				>
 			</File>
 			<File
