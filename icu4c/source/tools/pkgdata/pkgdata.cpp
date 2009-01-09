@@ -49,6 +49,8 @@
 #include "pkg_icu.h"
 #include "pkg_genc.h"
 #include "pkg_gencmn.h"
+#include "flagparser.h"
+#include "filestat.h"
 
 
 #if U_HAVE_POPEN
@@ -71,6 +73,9 @@ U_CDECL_END
 #endif
 #if !defined(WINDOWS_WITH_MSVC) && !defined(U_LINUX)
 #define BUILD_DATA_WITHOUT_ASSEMBLY
+#endif
+#if defined(WINDOWS_WITH_MSVC) || defined(U_LINUX)
+#define CAN_WRITE_OBJ_CODE
 #endif
 
 #define LARGE_BUFFER_MAX_SIZE 2048
@@ -185,7 +190,7 @@ enum {
     INSTALL_CMD,
     PKGDATA_FLAGS_SIZE
 };
-static char pkgDataFlags[PKGDATA_FLAGS_SIZE][SMALL_BUFFER_MAX_SIZE];
+static char **pkgDataFlags = NULL;
 
 enum {
     LIB_FILE,
@@ -198,8 +203,6 @@ enum {
     LIB_FILENAMES_SIZE
 };
 static char libFileNames[LIB_FILENAMES_SIZE][256];
-
-static int32_t pkg_readInFlags(const char* fileName);
 
 static void pkg_checkFlag(UPKGOptions *o);
 
@@ -464,6 +467,15 @@ main(int argc, char* argv[]) {
 
     result = pkg_executeOptions(&o);
 
+    if (pkgDataFlags != NULL) {
+        for (int32_t i = 0; i < PKGDATA_FLAGS_SIZE; i++) {
+            if (pkgDataFlags[i] != NULL) {
+                uprv_free(pkgDataFlags[i]);
+            }
+        }
+        uprv_free(pkgDataFlags);
+    }
+
     if (o.cShortName != NULL) {
         uprv_free((char *)o.cShortName);
     }
@@ -491,6 +503,7 @@ main(int argc, char* argv[]) {
 #define MODE_FILES  'f'
 
 static int32_t pkg_executeOptions(UPKGOptions *o) {
+    UErrorCode status = U_ZERO_ERROR;
     int32_t result = 0;
     const char mode = o->mode[0];
     char targetDir[SMALL_BUFFER_MAX_SIZE] = "";
@@ -546,12 +559,32 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
             char version_major[10] = "";
             UBool reverseExt = FALSE;
 
-            if (pkg_readInFlags(o->options) != 0) {
-                fprintf(stderr,"Unable to open or read \"%s\" option file.\n", o->options);
+            UBool failedFlagsAllocation = FALSE;
+            /* Allocate memory for pkgDataFlags and initialize it. */
+            pkgDataFlags = (char **)uprv_malloc(sizeof(char *) * PKGDATA_FLAGS_SIZE);
+            if (pkgDataFlags != NULL) {
+                for (int32_t i = 0; i < PKGDATA_FLAGS_SIZE; i++) {
+                    pkgDataFlags[i] = (char *)uprv_malloc(sizeof(char) * SMALL_BUFFER_MAX_SIZE);
+                    if (pkgDataFlags[i] == NULL) {
+                        fprintf(stderr,"Unable to allocated memory for pkgDataFlags.\n");
+                        failedFlagsAllocation = TRUE;
+                    } else {
+                        pkgDataFlags[i][0] = 0;
+                    }
+                }
+            }
+            if (pkgDataFlags == NULL || failedFlagsAllocation) {
+                fprintf(stderr,"Unable to allocated memory for pkgDataFlags.\n");
                 return -1;
             }
 
 #ifndef WINDOWS_WITH_MSVC
+            parseFlagsFile(o->options, pkgDataFlags, SMALL_BUFFER_MAX_SIZE, (int32_t)PKGDATA_FLAGS_SIZE, &status);
+            if (U_FAILURE(status)) {
+                fprintf(stderr,"Unable to open or read \"%s\" option file.\n", o->options);
+                return -1;
+            }
+
             /* Get the version major number. */
             if (o->version != NULL) {
                 for (uint32_t i = 0;i < sizeof(version_major);i++) {
@@ -574,14 +607,16 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
             createFileNames(version_major, o->version, o->libName, reverseExt);
 
             if (o->version != NULL) {
-                /* Check to see if a previous built data library file exists */
+                /* Check to see if a previous built data library file exists and check if it is the latest. */
                 sprintf(checkLibFile, "%s%s", targetDir, libFileNames[LIB_FILE_VERSION_TMP]);
                 if (T_FileStream_file_exists(checkLibFile)) {
-                    if (o->install != NULL) {
-                        uprv_strcpy(libFileNames[LIB_FILE_VERSION], libFileNames[LIB_FILE_VERSION_TMP]);
-                        result = pkg_installLibrary(o->install, targetDir);
+                    if (isFileModTimeLater(checkLibFile, o->srcDir)) {
+                        if (o->install != NULL) {
+                            uprv_strcpy(libFileNames[LIB_FILE_VERSION], libFileNames[LIB_FILE_VERSION_TMP]);
+                            result = pkg_installLibrary(o->install, targetDir);
+                        }
+                        return result;
                     }
-                    return result;
                 }
             }
 
@@ -614,11 +649,11 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                     return -1;
                 }
             } else {
-#if defined(WINDOWS_WITH_MSVC) || defined(U_LINUX)
+#ifdef CAN_WRITE_OBJ_CODE
                 writeObjectCode(datFileNamePath, o->tmpDir, o->entryName, NULL, NULL, gencFilePath);
 #ifdef U_LINUX
                 result = pkg_generateLibraryFile(targetDir, mode, gencFilePath, NULL);
-#else /* WINDOWS_WITH_MSVC */
+#elif defined(WINDOWS_WITH_MSVC)
                 return pkg_createWindowsDLL(mode, gencFilePath, o);
 #endif
 #elif defined(BUILD_DATA_WITHOUT_ASSEMBLY)
@@ -906,6 +941,13 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
     char gencmnFile[SMALL_BUFFER_MAX_SIZE] = "";
     char tempObjectFile[SMALL_BUFFER_MAX_SIZE] = "";
 
+    if (list == NULL || listNames == NULL) {
+        /* list and listNames should never be NULL since we are looping through the CharList with
+         * the given size.
+         */
+        return -1;
+    }
+
     cmd = (char *)uprv_malloc((listSize + 2) * SMALL_BUFFER_MAX_SIZE);
     buffer = (char *)uprv_malloc((listSize + 1) * SMALL_BUFFER_MAX_SIZE);
 
@@ -913,13 +955,6 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
         const char *file ;
         const char *name;
 
-        if (list == NULL || listNames == NULL) {
-            /* list and listNames should never be NULL since we are looping through the CharList with
-             * the given size.
-             */
-            result = -1;
-            break;
-        }
         if (i == 0) {
             /* The first iteration calls the gencmn function and initailizes the buffer. */
             createCommonDataFile(o->tmpDir, o->shortName, o->entryName, NULL, o->srcDir, o->comment, o->fileListFiles->str, 0, TRUE, o->verbose, gencmnFile);
@@ -1058,56 +1093,6 @@ static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, U
 }
 #endif
 
-/*
- * Get the position after the '=' character.
- */
-static int32_t flagOffset(const char *buffer, int32_t bufferSize) {
-    int32_t offset = 0;
-
-    for (offset = 0; offset < bufferSize;offset++) {
-        if (buffer[offset] == '=') {
-            offset++;
-            break;
-        }
-    }
-
-    if (offset == bufferSize || (offset - 1) == bufferSize) {
-        offset = 0;
-    }
-
-    return offset;
-}
-/*
- * Extract the setting after the '=' and store it in flag excluding the newline character.
- */
-static void extractFlag(char* buffer, int32_t bufferSize, char* flag) {
-    char *pBuffer;
-    int32_t offset;
-    UBool bufferWritten = FALSE;
-
-    if (buffer[0] != 0) {
-        /* Get the offset (i.e. position after the '=') */
-        offset = flagOffset(buffer, bufferSize);
-        pBuffer = buffer+offset;
-        for(int32_t i = 0;;i++) {
-            if (pBuffer[i+1] == 0) {
-                /* Indicates a new line character. End here. */
-                flag[i] = 0;
-                break;
-            }
-
-            flag[i] = pBuffer[i];
-            if (i == 0) {
-                bufferWritten = TRUE;
-            }
-        }
-    }
-
-    if (!bufferWritten) {
-        flag[0] = 0;
-    }
-}
-
 static void pkg_checkFlag(UPKGOptions *o) {
 #ifdef U_AIX
     char *flag = NULL;
@@ -1192,41 +1177,6 @@ static void pkg_checkFlag(UPKGOptions *o) {
 
     uprv_memset(flag + position, 0, length - position);
 #endif
-}
-
-/*
- * Opens the given fileName and reads in the information storing the data in pkgDataFlags.
- */
-static int32_t pkg_readInFlags(const char *fileName) {
-    int32_t result = 0;
-
-#ifdef WINDOWS_WITH_MSVC
-    /* Zero out the flags since it is not being used. */
-    for (int32_t i = 0; i < PKGDATA_FLAGS_SIZE; i++) {
-        pkgDataFlags[i][0] = 0;
-    }
-
-#else
-    char buffer[LARGE_BUFFER_MAX_SIZE];
-
-    FileStream *f = T_FileStream_open(fileName, "r");
-    if (f == NULL) {
-        return -1;
-    }
-
-    for (int32_t i = 0; i < PKGDATA_FLAGS_SIZE; i++) {
-        if (T_FileStream_readLine(f, buffer, LARGE_BUFFER_MAX_SIZE) == NULL) {
-            result = -1;
-            break;
-        }
-
-        extractFlag(buffer, LARGE_BUFFER_MAX_SIZE, pkgDataFlags[i]);
-    }
-
-    T_FileStream_close(f);
-#endif
-
-    return result;
 }
 
 #if 0
