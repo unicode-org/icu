@@ -18,8 +18,7 @@
 #include <dirent.h>
 typedef struct dirent DIRENT;
 
-#define MAX_PATH_SIZE PATH_MAX /* Set the limit for the size of the path. */
-#define MAX_READ_SIZE 512
+#define MAX_PATH_SIZE 4096 /* Set the limit for the size of the path. */
 
 #define SKIP1 "."
 #define SKIP2 ".."
