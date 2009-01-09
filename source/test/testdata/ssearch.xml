@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- Copyright (c) 2007-2008 IBM Corporation and others. All rights reserved -->
+<!-- Copyright (c) 2007-2009 IBM Corporation and others. All rights reserved -->
 
 <!-- Test data file for string search  -->
 <!DOCTYPE stringsearch-tests [
@@ -12,6 +12,7 @@
           locale CDATA "en" 
           strength (PRIMARY | SECONDARY | TERTIARY | QUATERNARY | IDENTICAL) "TERTIARY" 
           norm (ON | OFF) "OFF"
+          alternate_handling (NON_IGNORABLE | SHIFTED) "NON_IGNORABLE"
           >
 
 <!ELEMENT pattern (#PCDATA)>
@@ -174,8 +175,15 @@
       <pattern>A\u0300</pattern>
       <pre>At IDENTICAL, shoud this match?  </pre><m>\u00c0</m><post></post>
     </test-case>
-    
-    <test-case id="test25" strength="SECONDARY" locale="en">
+
+  <test-case id="test24b" strength="IDENTICAL" alternate_handling="SHIFTED" locale="en">
+    <pattern>A\u0300</pattern>
+    <pre>At IDENTICAL, shoud this match?  </pre>
+    <m>\u00c0</m>
+    <post></post>
+  </test-case>
+
+  <test-case id="test25" strength="SECONDARY" locale="en">
       <pattern>Ű</pattern>
       <pre>12</pre><m>ű</m><post> Ű</post>
     </test-case>
@@ -410,6 +418,11 @@
   <test-case id="test82" strength="SECONDARY">
     <pattern>VII</pattern>
     <m>\u2166</m>
+  </test-case>
+
+  <test-case id="test83" strength="IDENTICAL" alternate_handling="SHIFTED" locale="en">
+    <pattern>Universal Declaration of Human Rights</pattern>
+    <pre>Proclaims this </pre><m>Universal Declaration of Human Rights</m><post> as a common standard of achievement for all peoples and all nations</post>
   </test-case>
 </stringsearch-tests>
   

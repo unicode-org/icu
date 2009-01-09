@@ -216,6 +216,16 @@ void SSearchTest::searchTest()
             normalize = UCOL_ON;
         }
 
+        //
+        // Get the alternate_handling flag. Default is UCOL_NON_IGNORABLE.
+        //
+        UColAttributeValue alternateHandling = UCOL_NON_IGNORABLE;
+        const UnicodeString *alt = testCase->getAttribute("alternate_handling");
+        TEST_ASSERT (alt == NULL || *alt == "SHIFTED" || *alt == "NON_IGNORABLE");
+        if (alt != NULL && *alt == "SHIFTED") {
+            alternateHandling = UCOL_SHIFTED;
+        }
+
         const UnicodeString defLocale("en");
         char  clocale[100];
         const UnicodeString *locale   = testCase->getAttribute("locale");
@@ -279,6 +289,7 @@ void SSearchTest::searchTest()
         UCollator *collator = ucol_open(clocale, &status);
         ucol_setStrength(collator, collatorStrength);
         ucol_setAttribute(collator, UCOL_NORMALIZATION_MODE, normalize, &status);
+        ucol_setAttribute(collator, UCOL_ALTERNATE_HANDLING, alternateHandling, &status);
         UStringSearch *uss = usearch_openFromCollator(pattern.getBuffer(), pattern.length(),
                                          target.getBuffer(), target.length(),
                                          collator,
@@ -553,6 +564,16 @@ void SSearchTest::bmSearchTest()
             normalize = UCOL_ON;
         }
 
+        //
+        // Get the alternate_handling flag. Default is UCOL_NON_IGNORABLE.
+        //
+        UColAttributeValue alternateHandling = UCOL_NON_IGNORABLE;
+        const UnicodeString *alt = testCase->getAttribute("alternate_handling");
+        TEST_ASSERT (alt == NULL || *alt == "SHIFTED" || *alt == "NON_IGNORABLE");
+        if (alt != NULL && *alt == "SHIFTED") {
+            alternateHandling = UCOL_SHIFTED;
+        }
+
         const UnicodeString defLocale("en");
         char  clocale[100];
         const UnicodeString *locale   = testCase->getAttribute("locale");
@@ -616,6 +637,7 @@ void SSearchTest::bmSearchTest()
         UCollator *collator = ucol_open(clocale, &status);
         ucol_setStrength(collator, collatorStrength);
         ucol_setAttribute(collator, UCOL_NORMALIZATION_MODE, normalize, &status);
+        ucol_setAttribute(collator, UCOL_ALTERNATE_HANDLING, alternateHandling, &status);
         UCD *ucd = ucd_open(collator, &status);
         BMS *bms = bms_open(ucd, pattern.getBuffer(), pattern.length(), target.getBuffer(), target.length(), &status);
 
