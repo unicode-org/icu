@@ -413,11 +413,11 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath=".\filestat.cpp"
+				RelativePath=".\filestrm.c"
 				>
 			</File>
 			<File
-				RelativePath=".\filestrm.c"
+				RelativePath=".\filetools.cpp"
 				>
 			</File>
 			<File
@@ -586,11 +586,11 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath=".\filestat.h"
+				RelativePath=".\filestrm.h"
 				>
 			</File>
 			<File
-				RelativePath=".\filestrm.h"
+				RelativePath=".\filetools.h"
 				>
 			</File>
 			<File
