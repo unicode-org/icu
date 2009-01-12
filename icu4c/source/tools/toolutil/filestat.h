@@ -25,6 +25,6 @@
 #include "unicode/utypes.h"
 
 U_CAPI UBool U_EXPORT2
-isFileModTimeLater(const char *filePath, const char *dirToCheckAgainst);
+isFileModTimeLater(const char *filePath, const char *checkAgainst, UBool isDir=FALSE);
 
 #endif
