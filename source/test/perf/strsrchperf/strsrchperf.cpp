@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (C) 2008 IBM, Inc.   All Rights Reserved.
+ * Copyright (C) 2008-2009 IBM, Inc.   All Rights Reserved.
  *
  ********************************************************************/
 /** 
@@ -68,18 +68,19 @@ StringSearchPerformanceTest::StringSearchPerformanceTest(int32_t argc, const cha
 #ifdef TEST_BOYER_MOORE_SEARCH
     UnicodeString patternString(pttrn, pttrnLen);
     UCollator *coll = ucol_open(locale, &status);
-    CollData *data = CollData::open(coll);
+    CollData *data = CollData::open(coll, status);
 
     targetString = new UnicodeString(src, srcLen);
-    bms = new BoyerMooreSearch(data, patternString, targetString);
+    bms = new BoyerMooreSearch(data, patternString, targetString, status);
 #else
     /* Create the StringSearch object to be use in performance test. */
     srch = usearch_open(pttrn, pttrnLen, src, srcLen, locale, NULL, &status);
+#endif
+
     if(U_FAILURE(status)){
         fprintf(stderr, "FAILED to create UPerfTest object. Error: %s\n", u_errorName(status));
         return;
     }
-#endif
     
 }
 
