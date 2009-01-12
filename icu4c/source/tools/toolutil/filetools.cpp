@@ -4,7 +4,7 @@
  *******************************************************************************
  */
 
-#include "filestat.h"
+#include "filetools.h"
 #include "filestrm.h"
 #include "cstring.h"
 #include "unicode/putil.h"
@@ -115,4 +115,12 @@ static int32_t whichFileModTimeIsLater(const char *file1, const char *file2) {
     }
 
     return result;
+}
+
+/* Swap the file separater character given with the new one in the file path. */
+U_CAPI void U_EXPORT2
+swapFileSepChar(char *filePath, const char oldFileSepChar, const char newFileSepChar) {
+    for (int32_t i = 0, length = uprv_strlen(filePath); i < length; i++) {
+        filePath[i] = (filePath[i] == oldFileSepChar ) ? newFileSepChar : filePath[i];
+    }
 }

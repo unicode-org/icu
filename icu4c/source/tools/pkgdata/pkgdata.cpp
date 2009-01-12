@@ -50,7 +50,7 @@
 #include "pkg_genc.h"
 #include "pkg_gencmn.h"
 #include "flagparser.h"
-#include "filestat.h"
+#include "filetools.h"
 
 
 #if U_HAVE_POPEN
@@ -632,9 +632,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
 
 #ifdef WINDOWS_WITH_GNUC
                     /* Need to fix the file seperator character when using MinGW. */
-                    for (int32_t i = 0, size = uprv_strlen(gencFilePath); i < size; i++) {
-                        gencFilePath[i] = (gencFilePath[i] ==U_FILE_SEP_CHAR ) ? '/' : gencFilePath[i];
-                    }
+                    swapFileSepChar(gencFilePath, U_FILE_SEP_CHAR, '/');
 #endif
 
                     result = pkg_createWithAssemblyCode(targetDir, mode, gencFilePath);
