@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -23,7 +23,7 @@ import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
 /**
- * @author yumaoka
+ * @author yoshito
  *
  */
 public class ZoneStringFormat {
@@ -268,7 +268,23 @@ public class ZoneStringFormat {
                     zstrarray[ZSIDX_LOCATION] = fallbackFmt.format(new Object[] {city, country});
                 }
             } else {
-                zstrarray[ZSIDX_LOCATION] = null;
+                if (tzid.startsWith("Etc/")) {
+                    // "Etc/xxx" is not associated with a location, so localized GMT format
+                    // is always used as generic location format.
+                    zstrarray[ZSIDX_LOCATION] = null;
+                } else {
+                    // When a new time zone ID, which is actually associated with a region,
+                    // is added in tzdata, but the current CLDR data does not have the
+                    // information yet, ICU creates a generic location string based on 
+                    // the ID.  This implementation supports canonical time zone round trip
+                    // with format pattern "VVVV".  See #6602 for the details.
+                    String location = tzid;
+                    int slashIdx = location.lastIndexOf('/');
+                    if (slashIdx != -1) {
+                        location = tzid.substring(slashIdx + 1);
+                    }
+                    zstrarray[ZSIDX_LOCATION] = regionFmt.format(new Object[] {location});
+                }
             }
 
             boolean commonlyUsed = isCommonlyUsed(zoneStringsBundle, zoneKey);
@@ -387,7 +403,7 @@ public class ZoneStringFormat {
             }
         }
     }
-    
+
     // Name types, these bit flag are used for zone string lookup
     private static final int LOCATION = 0x0001;
     private static final int GENERIC_LONG = 0x0002;

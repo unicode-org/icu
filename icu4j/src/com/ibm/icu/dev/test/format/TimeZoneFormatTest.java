@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- * Copyright (C) 2007-2008, Google, International Business Machines Corporation *
+ * Copyright (C) 2007-2009, Google, International Business Machines Corporation *
  * and others. All Rights Reserved.                                             *
  ********************************************************************************
  */
@@ -108,34 +108,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                         tz.getOffset(DATES[datidx].getTime(), false, inOffsets);
                         outtz.getOffset(DATES[datidx].getTime(), false, outOffsets);
 
-                        // Check if localized GMT format or RFC format is used.
-                        int numDigits = 0;
-                        for (int n = 0; n < tzstr.length(); n++) {
-                            if (UCharacter.isDigit(tzstr.charAt(n))) {
-                                numDigits++;
-                            }
-                        }
-                        if (numDigits >= 3) {
-                            // Localized GMT or RFC: total offset (raw + dst) must be preserved.
-                            int inOffset = inOffsets[0] + inOffsets[1];
-                            int outOffset = outOffsets[0] + outOffsets[1];
-                            if (inOffset != outOffset) {
-                                errln("Offset round trip failed; tz=" + tzids[tzidx]
-                                    + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
-                                    + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
-                                    + ", inOffset=" + inOffset + ", outOffset=" + outOffset);
-                            }
-                        } else if (PATTERNS[patidx].equals("z") || PATTERNS[patidx].equals("zzzz")
-                                || PATTERNS[patidx].equals("v") || PATTERNS[patidx].equals("vvvv")
-                                || PATTERNS[patidx].equals("V")) {
-                            // Specific or generic: raw offset must be preserved.
-                            if (inOffsets[0] != outOffsets[0]) {
-                                errln("Raw offset round trip failed; tz=" + tzids[tzidx]
-                                    + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
-                                    + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
-                                    + ", inRawOffset=" + inOffsets[0] + ", outRawOffset=" + outOffsets[0]);
-                            }
-                        } else { // "VVVV"
+                        if (PATTERNS[patidx].equals("VVVV")) {
                             // Location: time zone rule must be preserved.
                             String canonicalID = TimeZone.getCanonicalID(tzids[tzidx]);
                             if (canonicalID != null && !outtz.getID().equals(canonicalID)) {
@@ -147,8 +120,35 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                                         + ", outtz=" + outtz.getID());
                                 }
                             }
+                        } else {
+                            // Check if localized GMT format or RFC format is used.
+                            int numDigits = 0;
+                            for (int n = 0; n < tzstr.length(); n++) {
+                                if (UCharacter.isDigit(tzstr.charAt(n))) {
+                                    numDigits++;
+                                }
+                            }
+
+                            if (numDigits >= 3) {
+                                // Localized GMT or RFC: total offset (raw + dst) must be preserved.
+                                int inOffset = inOffsets[0] + inOffsets[1];
+                                int outOffset = outOffsets[0] + outOffsets[1];
+                                if (inOffset != outOffset) {
+                                    errln("Offset round trip failed; tz=" + tzids[tzidx]
+                                        + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
+                                        + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
+                                        + ", inOffset=" + inOffset + ", outOffset=" + outOffset);
+                                }
+                            } else {
+                                // Specific or generic: raw offset must be preserved.
+                                if (inOffsets[0] != outOffsets[0]) {
+                                    errln("Raw offset round trip failed; tz=" + tzids[tzidx]
+                                        + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
+                                        + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
+                                        + ", inRawOffset=" + inOffsets[0] + ", outRawOffset=" + outOffsets[0]);
+                                }
+                            }
                         }
-                        
                     }
                 }
             }
