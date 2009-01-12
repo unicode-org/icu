@@ -610,7 +610,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                 /* Check to see if a previous built data library file exists and check if it is the latest. */
                 sprintf(checkLibFile, "%s%s", targetDir, libFileNames[LIB_FILE_VERSION_TMP]);
                 if (T_FileStream_file_exists(checkLibFile)) {
-                    if (isFileModTimeLater(checkLibFile, o->srcDir)) {
+                    if (isFileModTimeLater(checkLibFile, o->srcDir, TRUE) && isFileModTimeLater(checkLibFile, o->options)) {
                         if (o->install != NULL) {
                             uprv_strcpy(libFileNames[LIB_FILE_VERSION], libFileNames[LIB_FILE_VERSION_TMP]);
                             result = pkg_installLibrary(o->install, targetDir);
