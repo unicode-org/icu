@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and    *
+* Copyright (C) 2007-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -630,9 +630,7 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
         UnicodeString city;
         UnicodeString countryCode;
         ZoneMeta::getCanonicalCountry(utzid, countryCode);
-        if (countryCode.isEmpty()) {
-            zstrarray[ZSIDX_LOCATION] = NULL;
-        } else {
+        if (!countryCode.isEmpty()) {
             const UChar* tmpCity = getZoneStringFromBundle(zoneItem, gExemplarCityTag);
             if (tmpCity != NULL) {
                 city.setTo(TRUE, tmpCity, -1);
@@ -672,6 +670,42 @@ ZoneStringFormat::ZoneStringFormat(const Locale &locale, UErrorCode &status)
             location.append((UChar)0).truncate(locLen);
 
             zstrarray[ZSIDX_LOCATION] = location.getTerminatedBuffer();
+        } else {
+            if (uprv_strlen(tzid) > 4 && uprv_strncmp(tzid, "Etc/", 4) == 0) {
+                // "Etc/xxx" is not associated with a specific location, so localized
+                // GMT format is always used as generic location format.
+                zstrarray[ZSIDX_LOCATION] = NULL;
+            } else {
+                // When a new time zone ID, which is actually associated with a specific
+                // location, is added in tzdata, but the current CLDR data does not have
+                // the information yet, ICU creates a generic location string based on
+                // the ID.  This implementation supports canonical time zone round trip
+                // with format pattern "VVVV".  See #6602 for the details.
+                UnicodeString loc(utzid);
+                int32_t slashIdx = loc.lastIndexOf((UChar)0x2f);
+                if (slashIdx == -1) {
+                    // A time zone ID without slash in the tz database is not
+                    // associated with a specific location.  For instances,
+                    // MET, CET, EET and WET fall into this category.
+                    // In this case, we still use GMT format as fallback.
+                    zstrarray[ZSIDX_LOCATION] = NULL;
+                } else {
+                    FieldPosition fpos;
+                    Formattable params[] = {
+                        Formattable(loc)
+                    };
+                    regionFmt->format(params, 1, location, fpos, status);
+                    if (U_FAILURE(status)) {
+                        goto error_cleanup;
+                    }
+                    // Workaround for reducing UMR warning in Purify.
+                    // Append NULL before calling getTerminatedBuffer()
+                    int32_t locLen = location.length();
+                    location.append((UChar)0).truncate(locLen);
+
+                    zstrarray[ZSIDX_LOCATION] = location.getTerminatedBuffer();
+                }
+            }
         }
 
         UBool commonlyUsed = isCommonlyUsed(zoneItem);
