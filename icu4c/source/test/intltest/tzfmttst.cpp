@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and    *
+* Copyright (C) 2007-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -113,9 +113,6 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
     for (int32_t locidx = 0; locidx < nLocales; locidx++) {
         for (int32_t patidx = 0; patidx < NUM_PATTERNS; patidx++) {
 
-            //DEBUG static const char* PATTERNS[] = {"z", "zzzz", "Z", "ZZZZ", "v", "vvvv", "V", "VVVV"};
-            //if (patidx != 1) continue;
-
             SimpleDateFormat *sdf = new SimpleDateFormat((UnicodeString)PATTERNS[patidx], LOCALES[locidx], status);
             if (U_FAILURE(status)) {
                 errln((UnicodeString)"new SimpleDateFormat failed for pattern " +
@@ -170,35 +167,10 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
                         status = U_ZERO_ERROR;
                     }
 
-                    // Check if localized GMT format or RFC format is used.
-                    int32_t numDigits = 0;
-                    for (int n = 0; n < tzstr.length(); n++) {
-                        if (u_isdigit(tzstr.charAt(n))) {
-                            numDigits++;
-                        }
-                    }
-                    if (numDigits >= 3) {
-                        // Localized GMT or RFC: total offset (raw + dst) must be preserved.
-                        int32_t inOffset = inRaw + inDst;
-                        int32_t outOffset = outRaw + outDst;
-                        if (inOffset != outOffset) {
-                            errln((UnicodeString)"Offset round trip failed; tz=" + *tzid
-                                + ", locale=" + LOCALES[locidx].getName() + ", pattern=" + PATTERNS[patidx]
-                                + ", time=" + DATES[datidx] + ", str=" + tzstr
-                                + ", inOffset=" + inOffset + ", outOffset=" + outOffset);
-                        }
-                    } else if (uprv_strcmp(PATTERNS[patidx], "z") == 0 || uprv_strcmp(PATTERNS[patidx], "zzzz") == 0
-                            || uprv_strcmp(PATTERNS[patidx], "v") == 0 || uprv_strcmp(PATTERNS[patidx], "vvvv") == 0
-                            || uprv_strcmp(PATTERNS[patidx], "V") == 0) {
-                        // Specific or generic: raw offset must be preserved.
-                        if (inRaw != outRaw) {
-                            errln((UnicodeString)"Raw offset round trip failed; tz=" + *tzid
-                                + ", locale=" + LOCALES[locidx].getName() + ", pattern=" + PATTERNS[patidx]
-                                + ", time=" + DATES[datidx] + ", str=" + tzstr
-                                + ", inRawOffset=" + inRaw + ", outRawOffset=" + outRaw);
-                        }
-                    } else { // "VVVV"
-                        // Location: time zone rule must be preserved.
+                    if (uprv_strcmp(PATTERNS[patidx], "VVVV") == 0) {
+                        // Location: time zone rule must be preserved except
+                        // zones not actually associated with a specific location.
+                        // Time zones in this category do not have "/" in its ID.
                         UnicodeString canonical;
                         TimeZone::getCanonicalID(*tzid, canonical, status);
                         if (U_FAILURE(status)) {
@@ -208,14 +180,50 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
                         } else if (outtzid != canonical) {
                             // Canonical ID did not match - check the rules
                             if (!((BasicTimeZone*)&outtz)->hasEquivalentTransitions((BasicTimeZone&)*tz, low, high, TRUE, status)) {
-                                errln("Canonical round trip failed; tz=" + *tzid
+                                if (canonical.indexOf((UChar)0x27 /*'/'*/) == -1) {
+                                    // Exceptional cases, such as CET, EET, MET and WET
+                                    logln("Canonical round trip failed (as expected); tz=" + *tzid
+                                            + ", locale=" + LOCALES[locidx].getName() + ", pattern=" + PATTERNS[patidx]
+                                            + ", time=" + DATES[datidx] + ", str=" + tzstr
+                                            + ", outtz=" + outtzid);
+                                } else {
+                                    errln("Canonical round trip failed; tz=" + *tzid
+                                        + ", locale=" + LOCALES[locidx].getName() + ", pattern=" + PATTERNS[patidx]
+                                        + ", time=" + DATES[datidx] + ", str=" + tzstr
+                                        + ", outtz=" + outtzid);
+                                }
+                                if (U_FAILURE(status)) {
+                                    errln("hasEquivalentTransitions failed");
+                                    status = U_ZERO_ERROR;
+                                }
+                            }
+                        }
+
+                    } else {
+                        // Check if localized GMT format or RFC format is used.
+                        int32_t numDigits = 0;
+                        for (int n = 0; n < tzstr.length(); n++) {
+                            if (u_isdigit(tzstr.charAt(n))) {
+                                numDigits++;
+                            }
+                        }
+                        if (numDigits >= 3) {
+                            // Localized GMT or RFC: total offset (raw + dst) must be preserved.
+                            int32_t inOffset = inRaw + inDst;
+                            int32_t outOffset = outRaw + outDst;
+                            if (inOffset != outOffset) {
+                                errln((UnicodeString)"Offset round trip failed; tz=" + *tzid
                                     + ", locale=" + LOCALES[locidx].getName() + ", pattern=" + PATTERNS[patidx]
                                     + ", time=" + DATES[datidx] + ", str=" + tzstr
-                                    + ", outtz=" + outtzid);
+                                    + ", inOffset=" + inOffset + ", outOffset=" + outOffset);
                             }
-                            if (U_FAILURE(status)) {
-                                errln("hasEquivalentTransitions failed");
-                                status = U_ZERO_ERROR;
+                        } else {
+                            // Specific or generic: raw offset must be preserved.
+                            if (inRaw != outRaw) {
+                                errln((UnicodeString)"Raw offset round trip failed; tz=" + *tzid
+                                    + ", locale=" + LOCALES[locidx].getName() + ", pattern=" + PATTERNS[patidx]
+                                    + ", time=" + DATES[datidx] + ", str=" + tzstr
+                                    + ", inRawOffset=" + inRaw + ", outRawOffset=" + outRaw);
                             }
                         }
                     }
