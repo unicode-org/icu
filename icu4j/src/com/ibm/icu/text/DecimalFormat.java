@@ -1,7 +1,7 @@
 //##header J2SE15
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -3211,7 +3211,12 @@ public class DecimalFormat extends NumberFormat {
             throw new IllegalArgumentException("Invalid rounding mode: "
                                                + roundingMode);
         }
+
         this.roundingMode = roundingMode;
+
+		if (getRoundingIncrement() == null) {
+			setRoundingIncrement(Math.pow(10.0,(double)-getMaximumFractionDigits()));
+		}
     }
 
     // [NEW]
