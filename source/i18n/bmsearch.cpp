@@ -81,14 +81,19 @@ private:
     uint32_t variableTop;
     UBool toShift;
     UCollator *coll;
+
     const UnicodeString *targetString;
+    const UChar *targetBuffer;
+    int32_t targetLength;
+
     UCollationElements *elements;
     UBreakIterator *charBreakIterator;
 };
 
 Target::Target(UCollator *theCollator, const UnicodeString *target, int32_t patternLength, UErrorCode &status)
     : bufferSize(0), bufferMin(0), bufferMax(0),
-      strengthMask(0), strength(UCOL_PRIMARY), variableTop(0), toShift(FALSE), coll(theCollator), targetString(NULL), elements(NULL), charBreakIterator(NULL)
+      strengthMask(0), strength(UCOL_PRIMARY), variableTop(0), toShift(FALSE), coll(theCollator),
+      targetString(NULL), targetBuffer(NULL), targetLength(0), elements(NULL), charBreakIterator(NULL)
 {
     strength = ucol_getStrength(coll);
     toShift = ucol_getAttribute(coll, UCOL_ALTERNATE_HANDLING, &status) ==  UCOL_SHIFTED;
@@ -151,11 +156,17 @@ void Target::setTargetString(const UnicodeString *target)
     if (targetString != NULL) {
         UErrorCode status = U_ZERO_ERROR;
 
+        targetBuffer = targetString->getBuffer();
+        targetLength = targetString->length();
+
         elements = ucol_openElements(coll, target->getBuffer(), target->length(), &status);
         ucol_forceHanImplicit(elements, &status);
 
         charBreakIterator = ubrk_open(UBRK_CHARACTER, ucol_getLocale(coll, ULOC_VALID_LOCALE, &status),
-                                      target->getBuffer(), target->length(), &status);
+                                      targetBuffer, targetLength, &status);
+    } else {
+        targetBuffer = NULL;
+        targetLength = 0;
     }
 }
 
@@ -261,7 +272,7 @@ const CEI *Target::prevCE(int32_t offset)
 int32_t Target::stringLength()
 {
     if (targetString != NULL) {
-        return targetString->length();
+        return targetLength;
     }
 
     return 0;
@@ -270,7 +281,7 @@ int32_t Target::stringLength()
 UChar Target::charAt(int32_t offset)
 {
     if (targetString != NULL) {
-        return targetString->charAt(offset);
+        return targetBuffer[offset];
     }
 
     return 0x0000;
@@ -317,10 +328,9 @@ int32_t Target::nextBreakBoundary(int32_t offset)
 
 int32_t Target::nextSafeBoundary(int32_t offset)
 {
-    int32_t tlen = targetString->length();
-
-    while (offset < tlen) {
-        UChar ch = charAt(offset);
+    while (offset < targetLength) {
+      //UChar ch = charAt(offset);
+        UChar ch = targetBuffer[offset];
 
         if (U_IS_LEAD(ch) || ! ucol_unsafeCP(ch, coll)) {
             return offset;
@@ -329,7 +339,7 @@ int32_t Target::nextSafeBoundary(int32_t offset)
         offset += 1;
     }
 
-    return tlen;
+    return targetLength;
 }
 
 UBool Target::isIdentical(UnicodeString &pattern, int32_t start, int32_t end)
@@ -339,16 +349,14 @@ UBool Target::isIdentical(UnicodeString &pattern, int32_t start, int32_t end)
     }
 
     UChar t2[32], p2[32];
-    const UChar *tBuffer = targetString->getBuffer();
     const UChar *pBuffer = pattern.getBuffer();
-    int32_t length = end - start;
-    int32_t tLength = targetString->length();
     int32_t pLength = pattern.length();
+    int32_t length = end - start;
 
     UErrorCode status = U_ZERO_ERROR, status2 = U_ZERO_ERROR;
 
     int32_t decomplength = unorm_decompose(t2, ARRAY_SIZE(t2), 
-                                       tBuffer + start, length, 
+                                       targetBuffer + start, length, 
                                        FALSE, 0, &status);
 
     // use separate status2 in case of buffer overflow
@@ -377,7 +385,7 @@ UBool Target::isIdentical(UnicodeString &pattern, int32_t start, int32_t end)
 
         pat = text + decomplength;
 
-        unorm_decompose(text, decomplength, tBuffer + start, 
+        unorm_decompose(text, decomplength, targetBuffer + start, 
                         length, FALSE, 0, &status);
 
         unorm_decompose(pat, decomplength, pBuffer, 
