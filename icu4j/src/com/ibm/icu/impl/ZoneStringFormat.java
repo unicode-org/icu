@@ -269,21 +269,26 @@ public class ZoneStringFormat {
                 }
             } else {
                 if (tzid.startsWith("Etc/")) {
-                    // "Etc/xxx" is not associated with a location, so localized GMT format
-                    // is always used as generic location format.
+                    // "Etc/xxx" is not associated with a specific location, so localized
+                    // GMT format is always used as generic location format.
                     zstrarray[ZSIDX_LOCATION] = null;
                 } else {
-                    // When a new time zone ID, which is actually associated with a region,
-                    // is added in tzdata, but the current CLDR data does not have the
-                    // information yet, ICU creates a generic location string based on 
+                    // When a new time zone ID, which is actually associated with a specific
+                    // location, is added in tzdata, but the current CLDR data does not have
+                    // the information yet, ICU creates a generic location string based on 
                     // the ID.  This implementation supports canonical time zone round trip
                     // with format pattern "VVVV".  See #6602 for the details.
                     String location = tzid;
                     int slashIdx = location.lastIndexOf('/');
-                    if (slashIdx != -1) {
+                    if (slashIdx == -1) {
+                        // A time zone ID without slash in the tz database is not
+                        // associated with a specific location.  For instances,
+                        // MET, CET, EET and WET fall into this catetory.
+                        zstrarray[ZSIDX_LOCATION] = null;
+                    } else {
                         location = tzid.substring(slashIdx + 1);
+                        zstrarray[ZSIDX_LOCATION] = regionFmt.format(new Object[] {location});
                     }
-                    zstrarray[ZSIDX_LOCATION] = regionFmt.format(new Object[] {location});
                 }
             }
 

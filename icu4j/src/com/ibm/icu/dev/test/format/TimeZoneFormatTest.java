@@ -109,15 +109,24 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                         outtz.getOffset(DATES[datidx].getTime(), false, outOffsets);
 
                         if (PATTERNS[patidx].equals("VVVV")) {
-                            // Location: time zone rule must be preserved.
+                            // Location: time zone rule must be preserved except
+                            // zones not actually associated with a specific location.
+                            // Time zones in this category do not have "/" in its ID.
                             String canonicalID = TimeZone.getCanonicalID(tzids[tzidx]);
                             if (canonicalID != null && !outtz.getID().equals(canonicalID)) {
                                 // Canonical ID did not match - check the rules
                                 if (!((BasicTimeZone)outtz).hasEquivalentTransitions(tz, low, high)) {
-                                    errln("Canonical round trip failed; tz=" + tzids[tzidx]
-                                        + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
-                                        + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
-                                        + ", outtz=" + outtz.getID());
+                                    if (canonicalID.indexOf('/') == -1) {
+                                        logln("Canonical round trip failed (as expected); tz=" + tzids[tzidx]
+                                            + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
+                                            + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
+                                            + ", outtz=" + outtz.getID());
+                                    } else {
+                                        errln("Canonical round trip failed; tz=" + tzids[tzidx]
+                                            + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
+                                            + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
+                                            + ", outtz=" + outtz.getID());
+                                    }
                                 }
                             }
                         } else {
