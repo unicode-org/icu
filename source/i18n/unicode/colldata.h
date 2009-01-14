@@ -249,6 +249,15 @@ class CollDataCache;
  * compute the length of the shortest string that can
  * generate a partcular list of CEs.
  *
+ * <code>CollData</code> objects are quite expensive to compute. Because
+ * of this, they are cached. When you call <code>CollData::open</code> it
+ * returns a reference counted cached object. When you call <code>CollData::close</code>
+ * the reference count on the object is decremented but the object is not deleted.
+ *
+ * If you do not need to reuse any unreferenced objects in the cache, you can call
+ * <code>CollData::flushCollDataCache</code>. If you no longer need any <code>CollData</code>
+ * objects, you can call <code>CollData::freeCollDataCache</code>
+ *
  * @internal ICU 4.0.1 technology preview
  */
 class U_I18N_API CollData : public UObject
@@ -265,7 +274,7 @@ public:
      *
      * Note: if on return, status is set to an error code,
      * the only safe thing to do with this object is to call
-     * the destructor.
+     * <code>CollData::close</code>.
      *
      * @internal ICU 4.0.1 technology preview
      */

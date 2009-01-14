@@ -16,8 +16,18 @@
 #include "unicode/ucol.h"
 
 /**
- * A reference to the data used to compute skip distnaces for the
- * Boyer-Moore search algorithm.
+ * A <code>UCD</code> object holds the Collator-specific data needed to
+ * compute the length of the shortest string that can
+ * generate a partcular list of CEs.
+ *
+ * <code>UCD</code> objects are quite expensive to compute. Because
+ * of this, they are cached. When you call <code>ucd_open</code> it
+ * returns a reference counted cached object. When you call <code>ucd_close</code>
+ * the reference count on the object is decremented but the object is not deleted.
+ *
+ * If you do not need to reuse any unreferenced objects in the cache, you can call
+ * <code>ucd_flushCCache</code>. If you no longer need any <code>UCD</code>
+ * objects, you can call <code>ucd_freeCache</code>
  */
 typedef void UCD;
 
@@ -32,6 +42,7 @@ typedef void UCD;
  *
  * Note: if on return status is set to an error, the only safe
  * thing to do with the returned object is to call <code>ucd_close</code>.
+ *
  * @internal ICU 4.0.1 technology preview
  */
 U_CAPI UCD * U_EXPORT2
@@ -92,8 +103,69 @@ ucd_flushCache();
  * BMS
  *
  * This object holds the information needed to do a Collation sensitive Boyer-Moore search. It encapulates
- * the "bad character" and "good suffix" tables, the Collator-based data needed to compute them, and a reference
- * to the text being searched.
+ * the pattern, the "bad character" and "good suffix" tables, the Collator-based data needed to compute them,
+ * and a reference to the text being searched.
+ *
+ * To do a search, you fist need to get a <code>UCD</code> object by calling <code>ucd_open</code>.
+ * Then you construct a <code>BMS</code> object from the <code>UCD</code> object, the pattern
+ * string and the target string. Then you call the <code>search</code> method. Here's a code sample:
+ *
+ * <pre>
+ * void boyerMooreExample(UCollator *collator, UChar *pattern, int32_t patternLen, UChar *target, int32_t targetLength)
+ * {
+ *     UErrorCode status = U_ZERO_ERROR;
+ *     UCD *ucd = ucd_open(collator, &status);
+ *
+ *     if (U_FAILURE(status)) {
+ *         // could not create a UCD object
+ *         return;
+ *     }
+ *
+ *     BMS *bms = bms_open(ucd, pattern, patternLength, target, targetlength, status);
+ *
+ *     if (U_FAILURE(status)) {
+ *         // could not create a BMS object
+ *         ucd_close(ucd);
+ *         return;
+ *     }
+ *
+ *     int32_t offset = 0, start = -1, end = -1;
+ *
+ *     // Find all matches
+ *     while (bms_search(bms, offset, start, end)) {
+ *         // process the match between start and end
+ *         ...
+ *         // advance past the match
+ *         offset = end; 
+ *     }
+ *
+ *     // at this point, if offset == 0, there were no matches
+ *
+ *     bms_close(bms);
+ *     ucd_close(ucd);
+ *
+ *     // CollData objects are cached, so the call to
+ *     // CollData::close doesn't delete the object.
+ *     // Call this if you don't need the object any more.
+ *     ucd_flushCache();
+ * }
+ * </pre>
+ *
+ * NOTE: This is a technology preview. The final version of this API may not bear any resenblence to this API.
+ *
+ * Knows linitations:
+ *   1) Backwards searching has not been implemented.
+ *
+ *   2) For Han and Hangul characters, this code ignores any Collation tailorings. In general,
+ *      this isn't a problem, but in Korean locals, at strength 1, Hangul characters are tailored
+ *      to be equal to Han characters with the same pronounciation. Because this code ignroes
+ *      tailorings, searching for a Hangul character will not find a Han character and visa-versa.
+ *
+ *   3) In some cases, searching for a pattern that needs to be normalized and ends
+ *      in a discontiguous contraction may fail. The only known cases of this are with
+ *      the Tibetan script. For example searching for the pattern
+ *      "\u0F7F\u0F80\u0F81\u0F82\u0F83\u0F84\u0F85" will fail. (This case is artificial. We've
+ *      been unable to find a pratical, real-world example of this failure.)  
  *
  * NOTE: This is a technology preview. The final version of this API may not bear any resenblence to this API.
  *

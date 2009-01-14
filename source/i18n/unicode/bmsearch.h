@@ -33,12 +33,73 @@ class Target;
  * BoyerMooreSearch
  *
  * This object holds the information needed to do a Collation sensitive Boyer-Moore search. It encapulates
- * the "bad character" and "good suffix" tables, the Collator-based data needed to compute them, and a reference
- * to the text being searched.
+ * the pattern, the "bad character" and "good suffix" tables, the Collator-based data needed to compute them,
+ * and a reference to the text being searched.
+ *
+ * To do a search, you fist need to get a <code>CollData</code> object by calling <code>CollData::open</code>.
+ * Then you construct a <code>BoyerMooreSearch</code> object from the <code>CollData</code> object, the pattern
+ * string and the target string. Then you call the <code>search</code> method. Here's a code sample:
+ *
+ * <pre>
+ * void boyerMooreExample(UCollator *collator, UnicodeString *pattern, UnicodeString *target)
+ * {
+ *     UErrorCode status = U_ZERO_ERROR;
+ *     CollData *collData = CollData::open(collator, status);
+ *
+ *     if (U_FAILURE(status)) {
+ *         // could not create a CollData object
+ *         return;
+ *     }
+ *
+ *     BoyerMooreSearch *search = new BoyerMooreSearch(collData, *patternString, target, status);
+ *
+ *     if (U_FAILURE(status)) {
+ *         // could not create a BoyerMooreSearch object
+ *         CollData::close(collData);
+ *         return;
+ *     }
+ *
+ *     int32_t offset = 0, start = -1, end = -1;
+ *
+ *     // Find all matches
+ *     while (search->search(offset, start, end)) {
+ *         // process the match between start and end
+ *         ...
+ *         // advance past the match
+ *         offset = end; 
+ *     }
+ *
+ *     // at this point, if offset == 0, there were no matches
+ *
+ *     delete search;
+ *     CollData::close(collData);
+ *
+ *     // CollData objects are cached, so the call to
+ *     // CollData::close doesn't delete the object.
+ *     // Call this if you don't need the object any more.
+ *     CollData::flushCollDataCache();
+ * }
+ * </pre>
  *
  * NOTE: This is a technology preview. The final version of this API may not bear any resenblence to this API.
  *
+ * Knows linitations:
+ *   1) Backwards searching has not been implemented.
+ *
+ *   2) For Han and Hangul characters, this code ignores any Collation tailorings. In general,
+ *      this isn't a problem, but in Korean locals, at strength 1, Hangul characters are tailored
+ *      to be equal to Han characters with the same pronounciation. Because this code ignroes
+ *      tailorings, searching for a Hangul character will not find a Han character and visa-versa.
+ *
+ *   3) In some cases, searching for a pattern that needs to be normalized and ends
+ *      in a discontiguous contraction may fail. The only known cases of this are with
+ *      the Tibetan script. For example searching for the pattern
+ *      "\u0F7F\u0F80\u0F81\u0F82\u0F83\u0F84\u0F85" will fail. (This case is artificial. We've
+ *      been unable to find a pratical, real-world example of this failure.)  
+ *
  * @internal ICU 4.0.1 technology preview
+ *
+ * @see CollData
  */
 class U_I18N_API BoyerMooreSearch : public UObject
 {
@@ -48,7 +109,8 @@ public:
      *
      * @param theData - A <code>CollData</code> object holding the Collator-sensitive data
      * @param patternString - the string for which to search
-     * @param targetString - the string in which to search
+     * @param targetString - the string in which to search or <code>NULL</code> if youu will
+     *                       set it later by calling <code>setTargetString</code>.
      * @param status - will be set if any errors occur. 
      *
      * Note: if on return, status is set to an error code,
