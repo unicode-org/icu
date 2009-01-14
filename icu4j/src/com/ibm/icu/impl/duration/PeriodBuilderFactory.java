@@ -1,11 +1,13 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and   *
+* Copyright (C) 2007-2009, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
 
 package com.ibm.icu.impl.duration;
+
+import java.util.TimeZone;
 
 /**
  */
@@ -55,12 +57,25 @@ public interface PeriodBuilderFactory {
   PeriodBuilderFactory setAllowZero(boolean allow);
 
   /**
-   * Set whether weeks are used with other units, or only when
+   * Sets whether weeks are used with other units, or only when
    * weeks are the only unit.  For example '3 weeks and 2 days'
    * versus '23 days'.  Default is to use them alone only.
    */
   PeriodBuilderFactory setWeeksAloneOnly(boolean aloneOnly);
 
+  /**
+   * Sets whether milliseconds are allowed.  This is only examined
+   * when milliseconds are an available field. The default is to allow 
+   * milliseconds to display normally.
+   * <p>
+   * This is intended to be used to set locale-specific behavior.  Typically clients will
+   * not call this API and instead call {@link #setLocale}.
+   *
+   * @param allow whether milliseconds should be allowed.
+   * @return a builder
+   */
+   PeriodBuilderFactory setAllowMilliseconds(boolean allow);
+   
   /**
    * Sets the locale for the factory.  Setting the locale can adjust
    * the values for some or all of the other properties to reflect
@@ -70,6 +85,13 @@ public interface PeriodBuilderFactory {
   PeriodBuilderFactory setLocale(String localeName);
 
   /**
+   * Sets the time zone for the factory.  This can affect the timezone
+   * used for date computations.
+   * @param timeZone the timeZone
+   * @return a builder
+   */
+  PeriodBuilderFactory setTimeZone(TimeZone timeZone);
+ /**
    * Returns a builder that represents durations in terms of the single
    * given TimeUnit.  If the factory settings don't make the given unit
    * available, this will return null.
