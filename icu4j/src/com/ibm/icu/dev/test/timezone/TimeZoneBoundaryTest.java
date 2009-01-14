@@ -1,7 +1,6 @@
-//##header J2SE15
 /**
  *******************************************************************************
- * Copyright (C) 2000-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -431,13 +430,13 @@ public class TimeZoneBoundaryTest extends TestFmwk
             TimeZone.setDefault(save);
         }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##        // This test case does not work well with JRE1.3 with
-//##        // the timezone update for US 2007 rule.  Java 1.3 only
-//##        // supports single DST rule for all years.  Thus, the
-//##        // new rule is also applied to year 1997 incorrectly.
-//#else
-        if (true)
+        // We no longer use ICU TimeZone implementation for Java
+        // default TimeZone.  Java 1.3 or older version do not
+        // support historic transitions, therefore, the test below
+        // will fail on such environment (with the latest TimeZone
+        // patch for US 2007+ rule).
+        String javaver = System.getProperty("java.version", "1.3");
+        if (!javaver.startsWith("1.3"))
         {
             // This only works in PST/PDT
             TimeZone.setDefault(safeGetTimeZone("PST"));
@@ -448,7 +447,6 @@ public class TimeZoneBoundaryTest extends TestFmwk
             tempcal.set(1997, 6, 1);
             findDaylightBoundaryUsingDate(tempcal.getTime(), "PDT", PST_1997_END);
         }
-//#endif
 
         //  if (true)
         //  {
