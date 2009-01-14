@@ -194,6 +194,7 @@ icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict -text
 icu4j/src/com/ibm/icu/dev/data/testdata.jar -text
 icu4j/src/com/ibm/icu/dev/data/thai6.ucs -text
 icu4j/src/com/ibm/icu/dev/eclipse/misc/ICUConfig.properties -text
+icu4j/src/com/ibm/icu/dev/test/duration/RegressionTest.java -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Asian.txt -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Chinese.txt -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Japanese.txt -text
