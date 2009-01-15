@@ -70,6 +70,9 @@ class Target;
  *     }
  *
  *     // at this point, if offset == 0, there were no matches
+ *     if (offset == 0) {
+ *         // handle the case of no matches
+ *     }
  *
  *     delete search;
  *     CollData::close(collData);
