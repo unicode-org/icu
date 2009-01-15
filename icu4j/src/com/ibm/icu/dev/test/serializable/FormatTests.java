@@ -1,7 +1,7 @@
 //##header J2SE15
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -22,6 +22,7 @@ import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.DateIntervalFormat;
 import com.ibm.icu.text.DateIntervalInfo;
 import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.DurationFormat;
 import com.ibm.icu.text.MessageFormat;
@@ -1688,6 +1689,24 @@ public class FormatTests
             char chars_b[] = getCharSymbols(dfs_b);
 
             return SerializableTest.compareStrings(strings_a, strings_b) && SerializableTest.compareChars(chars_a, chars_b);
+        }
+    }
+    
+    public static class CurrencyPluralInfoHandler implements SerializableTest.Handler
+    {
+        public Object[] getTestObjects()
+        {
+            CurrencyPluralInfo currencyPluralInfo[] = {
+                new CurrencyPluralInfo()
+            };
+            currencyPluralInfo[0].setPluralRules("one: n is 1; few: n in 2..4");
+            currencyPluralInfo[0].setCurrencyPluralPattern("few", "few currency");
+            return currencyPluralInfo;
+        }
+        
+        public boolean hasSameBehavior(Object a, Object b)
+        {
+            return a.equals(b);
         }
     }
     

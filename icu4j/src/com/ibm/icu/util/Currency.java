@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -852,6 +852,7 @@ public class Currency extends MeasureUnit implements Serializable {
                         if (matchLength > tmp.getCurrencyString().length()) {
                             resultList.set(i, item);
                         }
+                        break;
                     }
                 }
                 if (i == resultList.size()) {

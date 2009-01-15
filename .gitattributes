@@ -354,6 +354,7 @@ icu4j/src/com/ibm/icu/dev/tool/docs/icu4j400.api.gz -text
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j401.api.gz -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/icu.gif -text
 icu4j/src/com/ibm/icu/impl/data/icudata.jar -text
+icu4j/src/com/ibm/icu/text/CurrencyPluralInfo.java -text
 icu4j/src/com/ibm/richtext/textapps/resources/unicode.arabic.red -text
 icu4j/src/com/ibm/richtext/textapps/resources/unicode.hebrew.red -text
 tools/release/java/icu4c.css -text
