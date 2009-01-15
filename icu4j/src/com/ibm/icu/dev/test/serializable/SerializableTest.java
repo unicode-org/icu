@@ -1,7 +1,7 @@
 //##header J2SE15
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -656,6 +656,7 @@ public class SerializableTest extends TestFmwk.TestGroup
         map.put("com.ibm.icu.text.NumberFormat", new FormatTests.NumberFormatHandler());
         map.put("com.ibm.icu.text.DecimalFormat", new FormatTests.DecimalFormatHandler());
         map.put("com.ibm.icu.text.RuleBasedNumberFormat", new FormatTests.RuleBasedNumberFormatHandler());
+        map.put("com.ibm.icu.text.CurrencyPluralInfo", new FormatTests.CurrencyPluralInfoHandler());
         map.put("com.ibm.icu.text.DecimalFormatSymbols", new FormatTests.DecimalFormatSymbolsHandler());
         map.put("com.ibm.icu.text.MessageFormat", new FormatTests.MessageFormatHandler());
         map.put("com.ibm.icu.text.DateFormat", new FormatTests.DateFormatHandler());

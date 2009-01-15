@@ -13,11 +13,8 @@ import java.math.BigInteger;
 import java.text.ChoiceFormat;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.MissingResourceException;
 import java.util.Set;
 
 //#if defined(FOUNDATION10)
@@ -33,15 +30,12 @@ import java.text.Format;
 import java.util.ArrayList;
 //#endif
 
-import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UCharacterProperty;
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
 
 //This is an enhanced version of DecimalFormat that is based on the standard version in the JDK. 
 /**
@@ -669,8 +663,7 @@ public class DecimalFormat extends NumberFormat {
         setCurrency(Currency.getInstance(def));
         applyPatternWithoutExpandAffix(pattern, false);
         if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) {
-            // plural rule is only needed for currency plural format.
-            pluralRules = PluralRules.forLocale(def);
+            currencyPluralInfo = new CurrencyPluralInfo(def);
             // the exact pattern is not known until the plural count is known.
             // so, no need to expand affix now.
         } else {
@@ -703,8 +696,7 @@ public class DecimalFormat extends NumberFormat {
         setCurrency(Currency.getInstance(def));
         applyPatternWithoutExpandAffix( pattern, false );
         if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) {
-            // plural rule is only needed for currency plural format.
-            pluralRules = PluralRules.forLocale(def);
+            currencyPluralInfo = new CurrencyPluralInfo(def);
         } else {
             expandAffixAdjustWidth(null);
         }
@@ -737,36 +729,72 @@ public class DecimalFormat extends NumberFormat {
 
     private void createFromPatternAndSymbols(String pattern, DecimalFormatSymbols inputSymbols) {
         // Always applyPattern after the symbols are set
-        this.symbols = (DecimalFormatSymbols) inputSymbols.clone();
+        symbols = (DecimalFormatSymbols) inputSymbols.clone();
         setCurrencyForSymbols();
         applyPatternWithoutExpandAffix(pattern, false);
         if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) {
-            // plural rule is only needed for currency plural format.
-            ULocale uloc = getLocale(ULocale.VALID_LOCALE);
-            if (uloc == null) {
-                uloc = inputSymbols.getLocale(ULocale.VALID_LOCALE);
-            }
-            pluralRules = PluralRules.forLocale(uloc);
+            currencyPluralInfo = new CurrencyPluralInfo(symbols.getLocale());
         } else {
             expandAffixAdjustWidth(null);
         }
     }
 
-    /*
-     * Create a DecimalFormat for currency plural format 
-     * from the given pattern, symbols, and style.
+
+    /**
+     * Create a DecimalFormat from the given pattern, symbols,
+     * information used for currency plural format, and format style.
+     * Use this constructor when you need to completely customize the
+     * behavior of the format.
+     * <p>
+     * To obtain standard formats for a given
+     * locale, use the factory methods on NumberFormat such as
+     * getInstance or getCurrencyInstance. 
+     * <p>
+     * If you need only minor adjustments to a standard format, 
+     * you can modify the format returned by
+     * a NumberFormat factory method using the setters.
+     * <p>
+     * If you want to completely customize a decimal format,
+     * using your own DecimalFormatSymbols (such as group separators) and
+     * your own information for currency plural formatting (such as
+     * plural rule and currency plural patterns), you can use this constructor.
+     * <p> 
+     * @param pattern a non-localized pattern string
+     * @param symbols the set of symbols to be used
+     * @param infoInput the information used for currency plural format, 
+     *                  including currency plural patterns and plural rules.
+     * @param style the decimal formatting style, 
+     *              it is one of the following values:
+     *              NumberFormat.NUMBERSTYLE;
+     *              NumberFormat.CURRENCYSTYLE;
+     *              NumberFormat.PERCENTSTYLE;
+     *              NumberFormat.SCIENTIFICSTYLE;
+     *              NumberFormat.INTEGERSTYLE;
+     *              NumberFormat.ISOCURRENCYSTYLE;
+     *              NumberFormat.PLURALCURRENCYSTYLE;
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
      */
-    DecimalFormat(String pattern, DecimalFormatSymbols symbols, int style) {
-        if (style != NumberFormat.PLURALCURRENCYSTYLE) {
-            createFromPatternAndSymbols(pattern, symbols);
+    public DecimalFormat(String pattern, DecimalFormatSymbols symbols,
+                         CurrencyPluralInfo infoInput,
+                         int style) {
+        CurrencyPluralInfo info = infoInput;
+        if (style == NumberFormat.PLURALCURRENCYSTYLE) {
+            info = (CurrencyPluralInfo)infoInput.clone();
+        }
+        create(pattern, symbols, info, style);
+    }
+
+
+    private void create(String pattern, DecimalFormatSymbols inputSymbols,
+                        CurrencyPluralInfo info,
+                        int inputStyle) {
+        if (inputStyle != NumberFormat.PLURALCURRENCYSTYLE) {
+            createFromPatternAndSymbols(pattern, inputSymbols);
         } else {
             // Always applyPattern after the symbols are set
-            this.symbols = (DecimalFormatSymbols) symbols.clone();
-            ULocale uloc = getLocale(ULocale.VALID_LOCALE);
-            if (uloc == null) {
-                uloc = symbols.getLocale(ULocale.VALID_LOCALE);
-            }
-            setupCurrencyPluralPattern(uloc);
+            symbols = (DecimalFormatSymbols) inputSymbols.clone();
+            currencyPluralInfo = info;
             // the pattern used in format is not fixed until formatting,
             // in which, the number is known and 
             // will be used to pick the right pattern based on plural count.
@@ -774,45 +802,24 @@ public class DecimalFormat extends NumberFormat {
             // For most locale, the patterns are probably the same for all
             // plural count. If not, the right pattern need to be re-applied
             // during format.
-            String currencyPluralPatternForOther = (String)pluralCountToCurrencyUnitPattern.get("other");
-            if (currencyPluralPatternForOther == null) {
-                currencyPluralPatternForOther = defaultCurrencyPluralPattern;
-            }
+            String currencyPluralPatternForOther = currencyPluralInfo.getCurrencyPluralPattern("other");
             applyPatternWithoutExpandAffix(currencyPluralPatternForOther,false);
             setCurrencyForSymbols();
-            pluralRules = PluralRules.forLocale(uloc);
         }
-        this.style = style;
+        style = inputStyle;
     }
 
 
-    private void setupCurrencyPluralPattern(ULocale uloc) {
-        pluralCountToCurrencyUnitPattern = new HashMap();
-        Set pluralCountSet = new HashSet();
-        ULocale parentLocale = uloc;
-        String numberStylePattern = getPattern(uloc, NumberFormat.NUMBERSTYLE);
-        while (parentLocale != null) {
-            try {
-                ICUResourceBundle resource = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, parentLocale);
-                ICUResourceBundle currencyRes = resource.getWithFallback("CurrencyUnitPatterns");
-                int size = currencyRes.getSize();
-                for (int index = 0; index < size; ++index) {
-                    String pluralCount = currencyRes.get(index).getKey();
-                    if (pluralCountSet.contains(pluralCount)) {
-                        continue;
-                    }
-                    String pattern = currencyRes.get(index).getString();
-                    // replace {0} with numberStylePattern
-                    // and {1} with triple currency sign
-                    String patternWithNumber = Utility.replace(pattern, "{0}", numberStylePattern);
-                    String patternWithCurrencySign = Utility.replace(patternWithNumber, "{1}", tripleCurrencyStr);
-                    pluralCountToCurrencyUnitPattern.put(pluralCount, patternWithCurrencySign);
-                    pluralCountSet.add(pluralCount);
-                }
-            } catch (MissingResourceException e) {
-            }
-            parentLocale = parentLocale.getFallback();
-        } 
+    /*
+     * Create a DecimalFormat for currency plural format 
+     * from the given pattern, symbols, and style.
+     */
+    DecimalFormat(String pattern, DecimalFormatSymbols inputSymbols, int style) {
+        CurrencyPluralInfo info = null;
+        if (style == NumberFormat.PLURALCURRENCYSTYLE) {
+            info = new CurrencyPluralInfo(inputSymbols.getLocale());
+        }
+        create(pattern, inputSymbols, info, style);
     }
 
     /**
@@ -1226,7 +1233,7 @@ public class DecimalFormat extends NumberFormat {
                                    boolean isNegative, boolean isInteger, 
                                    boolean parseAttr) {
         if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) { 
-            return subformat(pluralRules.select(number), result, fieldPosition,
+            return subformat(currencyPluralInfo.select(number), result, fieldPosition,
                              isNegative, isInteger, parseAttr);
         } else {
             return subformat(result, fieldPosition, isNegative, isInteger, parseAttr);
@@ -1238,7 +1245,7 @@ public class DecimalFormat extends NumberFormat {
                                    boolean isNegative, boolean isInteger,
                                    boolean parseAttr) {
         if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) { 
-            return subformat(pluralRules.select(number), result, fieldPosition,
+            return subformat(currencyPluralInfo.select(number), result, fieldPosition,
                              isNegative, isInteger, parseAttr);
         } else {
             return subformat(result, fieldPosition, isNegative, isInteger, parseAttr);
@@ -1265,21 +1272,7 @@ public class DecimalFormat extends NumberFormat {
         // DecimalFormat(pattern, symbol, style)
         if (style == NumberFormat.PLURALCURRENCYSTYLE) {
             // May need to reset pattern if the style is PLURALCURRENCYSTYLE.
-            String currencyPluralPattern = 
-                (String)pluralCountToCurrencyUnitPattern.get(pluralCount);
-            if (currencyPluralPattern == null) {
-                // fall back to "other"
-                currencyPluralPattern = 
-                    (String)pluralCountToCurrencyUnitPattern.get("other");
-                if (currencyPluralPattern == null) {
-                    // no currencyUnitPatterns defined, 
-                    // fallback to SYMBOL_NAME format.
-                    // This should never happen when ICU resource files are
-                    // available, since currencyUnitPattern of "other" is always
-                    // defined in root.
-                    currencyPluralPattern = defaultCurrencyPluralPattern;
-                }
-            }
+            String currencyPluralPattern = currencyPluralInfo.getCurrencyPluralPattern(pluralCount);
             if (formatPattern.equals(currencyPluralPattern) == false) {
                 applyPatternWithoutExpandAffix(currencyPluralPattern, false);
             }
@@ -2123,20 +2116,21 @@ public class DecimalFormat extends NumberFormat {
     // Get affix patterns used in locale's currency pattern
     // (NumberPatterns[1]) and currency plural pattern (CurrencyUnitPatterns).
     private void setupCurrencyAffixForAllPatterns() {
-        ULocale uloc = getLocale(ULocale.VALID_LOCALE);
-        if (uloc == null) {
-            uloc = symbols.getLocale(ULocale.VALID_LOCALE);
-        }
-        if (pluralCountToCurrencyUnitPattern == null) {
-            setupCurrencyPluralPattern(uloc);
+        if (currencyPluralInfo == null) {
+            currencyPluralInfo = new CurrencyPluralInfo(symbols.getLocale());
         }
         affixPatternsForCurrency = new HashSet();
 
+        // save the current pattern, since it will be changed by
+        // applyPatternWithoutExpandAffix
+        String savedFormatPattern = formatPattern;
+        
         // CURRENCYSTYLE and ISOCURRENCYSTYLE should have the same
         // prefix and suffix, so, only need to save one of them.
         // Here, chose onlyApplyPatternWithoutExpandAffix without
         // saving the actualy pattern in 'pattern' data member.
-        onlyApplyPatternWithoutExpandAffix(getPattern(uloc, NumberFormat.CURRENCYSTYLE), false);
+        // TODO: is it uloc?
+        applyPatternWithoutExpandAffix(getPattern(symbols.getLocale(), NumberFormat.CURRENCYSTYLE), false);
         AffixForCurrency affixes = new AffixForCurrency(negPrefixPattern,
                                                         negSuffixPattern,
                                                         posPrefixPattern,
@@ -2144,17 +2138,15 @@ public class DecimalFormat extends NumberFormat {
         affixPatternsForCurrency.add(affixes);
         
         // add plural pattern
-        Iterator iter = pluralCountToCurrencyUnitPattern.keySet().iterator();
+        Iterator iter = currencyPluralInfo.pluralPatternIterator();
         Set currencyUnitPatternSet = new HashSet();
         while (iter.hasNext()) {
             String pluralCount = (String)iter.next();
-            String currencyPattern = (String)pluralCountToCurrencyUnitPattern.get(pluralCount);
+            String currencyPattern = (String)currencyPluralInfo.getCurrencyPluralPattern(pluralCount);
             if (currencyPattern != null &&
                 currencyUnitPatternSet.contains(currencyPattern) == false) {
                 currencyUnitPatternSet.add(currencyPattern);
-                // Here, chose onlyApplyPatternWithoutExpandAffix without
-                // saving the actualy pattern in 'pattern' data member.
-                onlyApplyPatternWithoutExpandAffix(currencyPattern, false);
+                applyPatternWithoutExpandAffix(currencyPattern, false);
                 affixes = new AffixForCurrency(negPrefixPattern,
                                                negSuffixPattern,
                                                posPrefixPattern,
@@ -2162,6 +2154,8 @@ public class DecimalFormat extends NumberFormat {
                 affixPatternsForCurrency.add(affixes);
             }   
         }
+        // reset pattern back
+        formatPattern = savedFormatPattern;
     }
 
     private static final int CURRENCY_SIGN_COUNT_IN_SYMBOL_FORMAT = 1;
@@ -2827,6 +2821,7 @@ public class DecimalFormat extends NumberFormat {
                 // have a display name, or any 3-letter ISO code.
                 // Try to parse display name for our locale; first
                 // determine our locale.
+                // TODO: use locale in CurrencyPluralInfo
                 ULocale uloc = getLocale(ULocale.VALID_LOCALE);
                 if (uloc == null) {
                     // applyPattern has been called; use the symbols
@@ -3565,6 +3560,44 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
+     * Returns a copy of the CurrencyPluralInfo 
+     * used by this format. 
+     * It might return null if the decimal format is not a plural type 
+     * currency decimal format.
+     * Plural type currency decimal format means either
+     * the pattern in the decimal format contains 3 currency signs,
+     * or the decimal format is initialized with PLURALCURRENCYSTYLE.
+     * @return desired CurrencyPluralInfo
+     * @see CurrencyPluralInfo
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public CurrencyPluralInfo getCurrencyPluralInfo() {
+        try {
+            // don't allow multiple references
+            return currencyPluralInfo == null ? 
+                   null :
+                   (CurrencyPluralInfo) currencyPluralInfo.clone();
+        } catch (Exception foo) {
+            return null; // should never happen
+        }
+    }
+
+
+    /**
+     * Sets the CurrencyPluralInfo used by this format.  The
+     * format uses a copy of the provided information.
+     * @param newInfo desired CurrencyPluralInfo
+     * @see CurrencyPluralInfo
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public void setCurrencyPluralInfo(CurrencyPluralInfo newInfo) {
+        currencyPluralInfo = (CurrencyPluralInfo) newInfo.clone();
+        isReadyForParsing = false;
+    }
+
+    /**
      * Standard override; no change in semantics.
      * @stable ICU 2.0
      */
@@ -3573,6 +3606,9 @@ public class DecimalFormat extends NumberFormat {
             DecimalFormat other = (DecimalFormat) super.clone();
             other.symbols = (DecimalFormatSymbols) symbols.clone();
             other.digitList = new DigitList(); // fix for JB#5358
+            if (currencyPluralInfo != null) {
+                other.currencyPluralInfo = (CurrencyPluralInfo)currencyPluralInfo.clone();
+            }
             /*
              * TODO: We need to figure out whether we share a single copy
              * of DigitList by multiple cloned copies.  format/subformat
@@ -3600,12 +3636,8 @@ public class DecimalFormat extends NumberFormat {
          * [Richard/GCL]
          */
         // following are added to accomodate changes for currency plural format.
-        return style == other.style 
-            && (pluralRules == null && other.pluralRules == null ||
-                pluralRules.equals(other.pluralRules)) 
-            && (style == NumberFormat.PLURALCURRENCYSTYLE)?
-                (pluralCountToCurrencyUnitPattern == 
-                 other.pluralCountToCurrencyUnitPattern):
+        return currencySignCount == other.currencySignCount && 
+               (style == NumberFormat.PLURALCURRENCYSTYLE)? true :
                 ((posPrefixPattern != null &&
                     equals(posPrefixPattern, other.posPrefixPattern))
                 && (posSuffixPattern != null &&
@@ -3625,7 +3657,9 @@ public class DecimalFormat extends NumberFormat {
             && (!useSignificantDigits ||
                 minSignificantDigits == other.minSignificantDigits &&
                 maxSignificantDigits == other.maxSignificantDigits)
-            && symbols.equals(other.symbols);
+            && symbols.equals(other.symbols) 
+            && (currencyPluralInfo == null 
+                || currencyPluralInfo.equals(other.currencyPluralInfo));
     }
 
     //method to unquote the strings and compare
@@ -4335,14 +4369,6 @@ public class DecimalFormat extends NumberFormat {
     }
 
     private void applyPatternWithoutExpandAffix(String pattern, boolean localized) {
-        onlyApplyPatternWithoutExpandAffix(pattern, localized);
-        formatPattern = pattern;
-    }
-
-    // only used when formatting currency plural format.
-    // in which, the right affix (based on the formatted number)
-    // is not known until formatting.
-    private void onlyApplyPatternWithoutExpandAffix(String pattern, boolean localized) {
         char zeroDigit         = PATTERN_ZERO_DIGIT; // '0'
         char sigDigit          = PATTERN_SIGNIFICANT_DIGIT; // '@'
         char groupingSeparator = PATTERN_GROUPING_SEPARATOR;
@@ -4841,6 +4867,13 @@ public class DecimalFormat extends NumberFormat {
             negPrefixPattern = PATTERN_MINUS + posPrefixPattern;
         }
         setLocale(null, null);
+        // save the pattern
+        formatPattern = pattern;
+        // initialize currencyPluralInfo if needed 
+        if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT &&
+            currencyPluralInfo == null) { 
+            currencyPluralInfo = new CurrencyPluralInfo(symbols.getLocale());
+        }
     }
 
     /**
@@ -5238,84 +5271,6 @@ public class DecimalFormat extends NumberFormat {
     //[Richard/GCL]
     private String negSuffixPattern;
 
-    /*
-     * Following are used in currency format
-     */
-    private static final char[] tripleCurrencySign = {0xA4, 0xA4, 0xA4};
-    private static final String tripleCurrencyStr = new String(tripleCurrencySign);
-    private static final char[] defaultCurrencyPluralPatternChar = {0, '.', '#', '#', ' ', 0xA4, 0xA4, 0xA4};
-    private static final String defaultCurrencyPluralPattern = new String(defaultCurrencyPluralPatternChar);
-
-    private Map pluralCountToCurrencyUnitPattern = null;
-    // pattern used in this formatter
-    private String formatPattern = "";
-    // style is only valid when decimal formatter is constructed by
-    // DecimalFormat(pattern, decimalFormatSymbol, style)
-    private int style = NumberFormat.NUMBERSTYLE;
-    /* For parsing purose,
-     * Need to remember all prefix patterns and suffix patterns of 
-     * every currency format pattern, 
-     * including the pattern of default currecny style, ISO currency style,
-     * and plural currency style. And the patterns are set through applyPattern.
-     * Following are used to represent the affix patterns in currency plural
-     * formats.
-     */
-    
-    private static final class AffixForCurrency {
-        private String negPrefixPatternForCurrency = null; 
-        private String negSuffixPatternForCurrency = null; 
-        private String posPrefixPatternForCurrency = null; 
-        private String posSuffixPatternForCurrency = null; 
-        
-        public AffixForCurrency() {}
-        public AffixForCurrency(String negPrefix, String negSuffix,
-                                String posPrefix, String posSuffix) {
-            negPrefixPatternForCurrency = negPrefix;
-            negSuffixPatternForCurrency = negSuffix;
-            posPrefixPatternForCurrency = posPrefix;
-            posSuffixPatternForCurrency = posSuffix;
-        }
-
-        public String getNegPrefix() {
-            return negPrefixPatternForCurrency;
-        }
-
-        public String getNegSuffix() {
-            return negSuffixPatternForCurrency;
-        }
-
-        public String getPosPrefix() {
-            return posPrefixPatternForCurrency;
-        }
-
-        public String getPosSuffix() {
-            return posSuffixPatternForCurrency;
-        }
-    }
-
-    private Set affixPatternsForCurrency = null;
-
-    private boolean isReadyForParsing = false;
-
-    /*
-     * Represents whether this is a currency format, and which
-     * currency format style.
-     * 0: not currency format type;
-     * 1: currency style -- symbol name, such as "$" for US dollar.
-     * 2: currency style -- ISO name, such as USD for US dollar.
-     * 3: currency style -- plural long name, such as "US Dollar" for
-     *                      "1.00 US Dollar", or "US Dollars" for
-     *                      "3.00 US Dollars".
-     */
-    private transient int currencySignCount = 0;
-
-    /*
-     * The plural rule is used to format currency plural name,
-     * for example: "3.00 US Dollars".
-     * If there are 3 currency signs in the currency patttern,
-     * the 3 currency signs will be replaced by currency plural name.
-     */
-    private PluralRules pluralRules = null;
 
 
     /**
@@ -5691,6 +5646,97 @@ public class DecimalFormat extends NumberFormat {
 //#else
     private ArrayList attributes = new ArrayList();
 //#endif
+
+    /*
+     * Following are used in currency format
+     */
+/*
+    // triple currency sign char array
+    private static final char[] tripleCurrencySign = {0xA4, 0xA4, 0xA4};
+    // triple currency sign string
+    private static final String tripleCurrencyStr = new String(tripleCurrencySign);
+
+    // default currency plural pattern char array
+    private static final char[] defaultCurrencyPluralPatternChar = {0, '.', '#', '#', ' ', 0xA4, 0xA4, 0xA4};
+    // default currency plural pattern string
+    private static final String defaultCurrencyPluralPattern = new String(defaultCurrencyPluralPatternChar);
+*/
+
+    // pattern used in this formatter
+    private String formatPattern = "";
+    // style is only valid when decimal formatter is constructed by
+    // DecimalFormat(pattern, decimalFormatSymbol, style)
+    private int style = NumberFormat.NUMBERSTYLE;
+    /*
+     * Represents whether this is a currency format, and which
+     * currency format style.
+     * 0: not currency format type;
+     * 1: currency style -- symbol name, such as "$" for US dollar.
+     * 2: currency style -- ISO name, such as USD for US dollar.
+     * 3: currency style -- plural long name, such as "US Dollar" for
+     *                      "1.00 US Dollar", or "US Dollars" for
+     *                      "3.00 US Dollars".
+     */
+    private int currencySignCount = 0;
+
+
+    /* For parsing purose,
+     * Need to remember all prefix patterns and suffix patterns of 
+     * every currency format pattern, 
+     * including the pattern of default currecny style, ISO currency style,
+     * and plural currency style. And the patterns are set through applyPattern.
+     * Following are used to represent the affix patterns in currency plural
+     * formats.
+     */
+    private static final class AffixForCurrency {
+        // negative prefix pattern
+        private String negPrefixPatternForCurrency = null; 
+        // negative suffix pattern
+        private String negSuffixPatternForCurrency = null; 
+        // positive prefix pattern
+        private String posPrefixPatternForCurrency = null; 
+        // positive suffix pattern
+        private String posSuffixPatternForCurrency = null; 
+        
+        public AffixForCurrency() {}
+        public AffixForCurrency(String negPrefix, String negSuffix,
+                                String posPrefix, String posSuffix) {
+            negPrefixPatternForCurrency = negPrefix;
+            negSuffixPatternForCurrency = negSuffix;
+            posPrefixPatternForCurrency = posPrefix;
+            posSuffixPatternForCurrency = posSuffix;
+        }
+
+        public String getNegPrefix() {
+            return negPrefixPatternForCurrency;
+        }
+
+        public String getNegSuffix() {
+            return negSuffixPatternForCurrency;
+        }
+
+        public String getPosPrefix() {
+            return posPrefixPatternForCurrency;
+        }
+
+        public String getPosSuffix() {
+            return posSuffixPatternForCurrency;
+        }
+    }
+    // Affix patter set for currency.
+    // It is a set of AffixForCurrency,
+    // each element of the set saves the negative prefix,
+    // negative suffix, positive prefix, and positive suffix of a pattern.
+    private transient Set affixPatternsForCurrency = null;
+
+    // For currency parsing, since currency parsing need to parse
+    // against all currency patterns, before the parsing, need to set up 
+    // the affix patterns for currency.
+    private transient boolean isReadyForParsing = false;
+
+    // Information needed for DecimalFormat to format/parse currency plural.
+    private CurrencyPluralInfo currencyPluralInfo = null;
+
 }
 
 //eof
