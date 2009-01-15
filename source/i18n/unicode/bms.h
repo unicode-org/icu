@@ -114,38 +114,43 @@ ucd_flushCache();
  * void boyerMooreExample(UCollator *collator, UChar *pattern, int32_t patternLen, UChar *target, int32_t targetLength)
  * {
  *     UErrorCode status = U_ZERO_ERROR;
- *     UCD *ucd = ucd_open(collator, &status);
+ *     int32_t offset = 0, start = -1, end = -1;
+ *     UCD *ucd = NULL);
+ *     BMS *bms = NULL;
  *
+ *     ucd = ucd_open(collator, &status);
  *     if (U_FAILURE(status)) {
  *         // could not create a UCD object
  *         return;
  *     }
  *
- *     BMS *bms = bms_open(ucd, pattern, patternLength, target, targetlength, status);
- *
+ *     BMS *bms = bms_open(ucd, pattern, patternLength, target, targetlength, &status);
  *     if (U_FAILURE(status)) {
  *         // could not create a BMS object
  *         ucd_close(ucd);
  *         return;
  *     }
  *
- *     int32_t offset = 0, start = -1, end = -1;
  *
  *     // Find all matches
- *     while (bms_search(bms, offset, start, end)) {
+ *     while (bms_search(bms, offset, &start, &end)) {
  *         // process the match between start and end
  *         ...
+ *
  *         // advance past the match
  *         offset = end; 
  *     }
  *
  *     // at this point, if offset == 0, there were no matches
+ *     if (offset == 0) {
+ *         // handle the case of no matches
+ *     }
  *
  *     bms_close(bms);
  *     ucd_close(ucd);
  *
- *     // CollData objects are cached, so the call to
- *     // CollData::close doesn't delete the object.
+ *     // UCD objects are cached, so the call to
+ *     // ucd_close doesn't delete the object.
  *     // Call this if you don't need the object any more.
  *     ucd_flushCache();
  * }
