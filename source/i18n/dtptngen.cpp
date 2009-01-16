@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and
+* Copyright (C) 2007-2009, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -506,6 +506,7 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
     }
 
     rb = ures_open(NULL, locale.getName(), &err);
+    const char *curLocaleName=ures_getLocale(rb, &err);
     const char * calendarTypeToUse = DT_DateTimeGregorianTag; // initial default
     char         calendarType[ULOC_KEYWORDS_CAPACITY]; // to be filled in with the type to use, if all goes well
     if ( U_SUCCESS(err) ) {
@@ -612,11 +613,12 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
     
     err = U_ZERO_ERROR;
     char parentLocale[50];
-    const char *curLocaleName=locale.getName();
     int32_t localeNameLen=0;
     uprv_strcpy(parentLocale, curLocaleName);
     while((localeNameLen=uloc_getParent(parentLocale, parentLocale, 50, &err))>=0 ) {
         rb = ures_open(NULL, parentLocale, &err);
+        curLocaleName=ures_getLocale(rb, &err);
+        uprv_strcpy(parentLocale, curLocaleName);
         calBundle = ures_getByKey(rb, DT_DateTimeCalendarTag, NULL, &err);
         calTypeBundle = ures_getByKey(calBundle, calendarTypeToUse, NULL, &err);
         patBundle = ures_getByKeyWithFallback(calTypeBundle, DT_DateTimeAvailableFormatsTag, NULL, &err);

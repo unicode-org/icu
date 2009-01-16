@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2008-2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh_Hant.xml
@@ -2037,6 +2037,21 @@ zh_Hant{
                 "Gy/M/d",
                 "Gy/M/d",
                 "{1} {0}",
+            }
+            availableFormats{
+                MEd{"M/d EEE"}
+                MMMEd{"M月d日EEE"}
+                MMMd{"M月d日"}
+                Md{"M/d"}
+                yyyy{"Gy"}
+                yyyyM{"Gy/M"}
+                yyyyMd{"Gy/M/d"}
+                yyyyMEd{"Gy/M/d EEE"}
+                yyyyMMM{"Gy年M月"}
+                yyyyMMMd{"Gy年M月d日"}
+                yyyyMMMEd{"Gy年M月d日EEE"}
+                yyyyQ{"Gy Q"}
+                yyyyQQQ{"Gy QQQ"}
             }
             eras{
                 abbreviated{

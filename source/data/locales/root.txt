@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2008-2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/root.xml
@@ -1331,6 +1331,34 @@ root{
                 "MMM d, G y",
                 "G y/M/d",
                 "{1} {0}",
+            }
+            appendItems{
+                Day{"{0} ({2}: {1})"}
+                Day-Of-Week{"{0} {1}"}
+                Era{"{0} {1}"}
+                Hour{"{0} ({2}: {1})"}
+                Minute{"{0} ({2}: {1})"}
+                Month{"{0} ({2}: {1})"}
+                Quarter{"{0} ({2}: {1})"}
+                Second{"{0} ({2}: {1})"}
+                Timezone{"{0} {1}"}
+                Week{"{0} ({2}: {1})"}
+                Year{"{0} {1}"}
+            }
+            availableFormats{
+                Hm{"HH:mm"}
+                MEd{"E, M/d"}
+                MMMEd{"E, MMM d"}
+                MMMd{"MMM d"}
+                Md{"M/d"}
+                ms{"mm:ss"}
+                yyyy{"G y"}
+                yyyyM{"G y/M"}
+                yyyyMEd{"EEE, G y/M/d"}
+                yyyyMMM{"MMM, G y"}
+                yyyyMMMEd{"EEE, MMM d, G y"}
+                yyyyQ{"Q G y"}
+                yyyyQQQ{"QQQ G y"}
             }
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
