@@ -1,14 +1,15 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and    *
+* Copyright (C) 1996-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
 package com.ibm.icu.text;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Enumeration;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Set;
@@ -1035,67 +1036,64 @@ public abstract class Collator implements Comparator, Cloneable
      * These are all and only those values where the open (creation) of the service with the locale
      * formed from the input locale plus input keyword and that value has different behavior than
      * creation with the input locale alone. For example, calling this with "de", "collation" returns {"phonebook","standard"}
-     * @param keyword one of the keyword {"collation", "calendar", "currency"}
+     * @param keyword A keyword which makes a difference in the Collator for the given locale.
+     * For now, only a keyword "collation" is used.
      * @param locLD input ULocale
-     * @param commonlyUsed if set to true it will return commonly used values with the given locale else all the available values
-     * @return an array of string values for a given keyword and locale
+     * @param commonlyUsed if set to true it will return commonly used values with the given locale else all the available values.
+     * In this API, this parameter does not affect the results for now.
+     * @return An array of string values for a given keyword and locale
      * @draft ICU 4.2
      */
     public static final String[] getKeywordValues(String keyword, ULocale locID, boolean commonlyUsed) {
         ICUResourceBundle r = null;
-        Enumeration e;
-        LinkedHashSet set = new LinkedHashSet();
+        List list = new ArrayList();
         String baseLoc = locID.getBaseName();
         String kwVal = locID.getKeywordValue(keyword);
-        String baseName,resName;
-        String defStr = null;
-        baseName = ICUResourceBundle.ICU_BASE_NAME+"/coll";
-        resName = "collations";
-        
+        String baseName = ICUResourceBundle.ICU_BASE_NAME + "/coll";
+        String resName = "collations";
+
         if(!locID.getBaseName().equals(locID.getName())){
             ULocale parent = new ULocale(baseLoc);
             r = (ICUResourceBundle) UResourceBundle.getBundleInstance(baseName, parent);
         }else{
             r = (ICUResourceBundle) UResourceBundle.getBundleInstance(baseName, locID);
         }
-        
+
         do {
             if ((kwVal == null) || (kwVal.length() == 0)
                     || kwVal.equals("default")) {
                 kwVal = ""; // default tag is treated as no keyword
-            }else{
-                set.add(kwVal);
+            } else {
+                list.add(kwVal);
                 break;
             }
-            String canonicalLoc;
-            if(((canonicalLoc=ULocale.canonicalize(baseLoc)).indexOf("@"))>=0){
-                set.add(canonicalLoc.substring(canonicalLoc.indexOf("=")+1).toLowerCase());
+            String canonicalLoc = ULocale.canonicalize(baseLoc);
+            if(canonicalLoc.indexOf("@") >= 0){
+                list.add(canonicalLoc.substring(canonicalLoc.indexOf("=") + 1).toLowerCase());
                 break;
             }
-            
+
             ICUResourceBundle irb = (ICUResourceBundle) r.get(resName);
 
-            e = irb.getKeys();
+            Enumeration e = irb.getKeys();
             while(e.hasMoreElements()){
-                Object o;
-                if((o = e.nextElement()).equals("default")){
+                String key = (String)e.nextElement();
+                if (key.equals("default")){
                     try {
-                        defStr = irb.getString("default");
-                        if(defStr!=null){
-                            set.add(defStr);
+                        String defVal = irb.getString(key /*"default"*/);
+                        if (defVal != null && !list.contains(defVal)){
+                            list.add(defVal);
                         }
                     } catch (MissingResourceException t) {
                         // Ignore error and continue search.
                     }
-                }else{
-                    set.add(o);    
+                } else if (!list.contains(key)) {
+                    list.add(key);
                 }
-                //v.add(e.nextElement());
             }
-
             r = (ICUResourceBundle) r.getParent();
         } while ((r != null));
         //return values
-        return (String[]) set.toArray(new String[set.size()]);
+        return (String[]) list.toArray(new String[list.size()]);
     }
 }
