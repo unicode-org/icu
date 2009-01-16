@@ -291,22 +291,20 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             {"zh_CN", "\u00A4#,##0.00;(\u00A4#,##0.00)", "1", "\uFFE51.00", "CNY1.00", "\u4EBA\u6C11\u5E011.00"}
         };
 
-        char[] doubleCurrencySign = {0xA4, 0xA4};
-        String doubleCurrencyStr = new String(doubleCurrencySign);
-        char[] tripleCurrencySign = {0xA4, 0xA4, 0xA4};
-        String tripleCurrencyStr = new String(tripleCurrencySign);
+        String doubleCurrencyStr = "\u00A4\u00A4";
+        String tripleCurrencyStr = "\u00A4\u00A4\u00A4";
 
         for (int i=0; i<DATA.length; ++i) {
             String locale = DATA[i][0];
-            String pat = Utility.unescape(DATA[i][1]);
+            String pat = DATA[i][1];
             Double numberToBeFormat = new Double(DATA[i][2]);
-            DecimalFormatSymbols sym = new DecimalFormatSymbols(new Locale(locale));
+            DecimalFormatSymbols sym = new DecimalFormatSymbols(new ULocale(locale));
             for (int j=1; j<=3; ++j) {
                 // j represents the number of currency sign in the pattern.
                 if (j == 2) {
-                    pat = pat.replaceAll("\\xA4", doubleCurrencyStr);
+                    pat = Utility.replaceAll(pat, "\u00A4", doubleCurrencyStr);
                 } else if (j == 3) {
-                    pat = pat.replaceAll("\\xA4\\xA4", tripleCurrencyStr);
+                    pat = Utility.replaceAll(pat, "\u00A4\u00A4", tripleCurrencyStr);
                 }
                 DecimalFormat fmt = new DecimalFormat(pat, sym);
                 String s = ((NumberFormat) fmt).format(numberToBeFormat);
@@ -517,7 +515,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             // DATA[i][resultDataIndex] is the currency format result
             // using 'k' currency style.
             String formatResult = DATA[i][resultDataIndex];
-            if (!strBuf.equals(Utility.unescape(formatResult))) {
+            if (!strBuf.equals(formatResult)) {
                 errln("FAIL: Expected " + formatResult + " actual: " + Utility.escape(strBuf));
             }
             try {
