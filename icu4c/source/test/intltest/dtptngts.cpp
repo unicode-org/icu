@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2008, International Business Machines Corporation and
+ * Copyright (c) 2008-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -32,7 +32,7 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
     }
 }
 
-#define MAX_LOCALE   7  
+#define MAX_LOCALE   8  
 
 /**
  * Test various generic API methods of DateTimePatternGenerator for API coverage.
@@ -62,6 +62,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         {"fi", "", "", ""},
         {"ja", "", "", ""},
         {"ja", "", "", "calendar=japanese"},
+        {"zh", "TW", "", "calendar=roc"},
      };
      
     UnicodeString patternResults[] = {
@@ -151,6 +152,18 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("23:58"),                                           // ja@japanese 8: HHmm  -> HH:mm          (as for ja)
         UnicodeString("58:59"),                                           // ja@japanese 9: mmss  -> mm:ss          (as for ja)
         CharsToUnicodeString("\\u5E73\\u62100011\\u5E741\\u6708"),        // ja@japanese 10: yyyyMMMM  -> Gyyyy\u5E74M\u6708
+
+        CharsToUnicodeString("\\u6C11\\u570B88/1"),                       // zh_TW@roc 0: yM    -> Gy/M
+        CharsToUnicodeString("\\u6C11\\u570B88\\u5E741\\u6708"),          // zh_TW@roc 1: yMMM  -> Gy\u5E74M\u6708
+        CharsToUnicodeString("\\u6C11\\u570B88/1/13"),                    // zh_TW@roc 2: yMd   -> Gy/M/d
+        CharsToUnicodeString("\\u6C11\\u570B88\\u5E741\\u670813\\u65E5"), // zh_TW@roc 3: yMMMd -> Gy\u5E74M\u6708d\u65E5
+        UnicodeString("1/13"),                                            // zh_TW@roc 4: Md    -> M/d
+        CharsToUnicodeString("1\\u670813\\u65E5"),                        // zh_TW@roc 5: MMMd  ->M\u6708d\u65E5
+        CharsToUnicodeString("\\u6C11\\u570B88 1\\u5B63"),                // zh_TW@roc 6: yQQQ  -> Gy QQQ
+        CharsToUnicodeString("\\u4E0B\\u534811:58"),                      // zh_TW@roc 7: hhmm  ->
+        CharsToUnicodeString("23:58"),                                    // zh_TW@roc 8: HHmm  ->
+        UnicodeString("58:59"),                                           // zh_TW@roc 9: mmss  ->
+        CharsToUnicodeString("\\u6C11\\u570B88\\u5E741\\u6708"),          // zh_TW@roc 10: yyyyMMMM  -> Gy\u5E74M\u670
 
         UnicodeString(),
     };
