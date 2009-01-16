@@ -41,6 +41,7 @@ src/com/ibm/icu/dev/test/collator/RandomCollator.java
 src/com/ibm/icu/dev/test/duration/ICUDurationTest.java
 src/com/ibm/icu/dev/test/format/BigNumberFormatTest.java
 src/com/ibm/icu/dev/test/format/DateFormatTest.java
+src/com/ibm/icu/dev/test/format/IntlTestDecimalFormatAPI.java
 src/com/ibm/icu/dev/test/format/IntlTestDecimalFormatAPIC.java
 src/com/ibm/icu/dev/test/format/IntlTestNumberFormatAPI.java
 src/com/ibm/icu/dev/test/format/NumberFormatRegressionTest.java
