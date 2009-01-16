@@ -1,6 +1,7 @@
+//##header J2SE15
 /*****************************************************************************************
  *
- *   Copyright (C) 1996-2008, International Business Machines
+ *   Copyright (C) 1996-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **/
 
@@ -265,25 +266,27 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
         }
     }
 
-	public void testJB6134()
-	{
-		DecimalFormat decfmt = new DecimalFormat();
-		StringBuffer buf = new StringBuffer();
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
+    public void testJB6134()
+    {
+        DecimalFormat decfmt = new DecimalFormat();
+        StringBuffer buf = new StringBuffer();
 
-		FieldPosition fposByInt = new FieldPosition(NumberFormat.INTEGER_FIELD);
-		decfmt.format(123, buf, fposByInt);
+        FieldPosition fposByInt = new FieldPosition(NumberFormat.INTEGER_FIELD);
+        decfmt.format(123, buf, fposByInt);
 
-		buf.setLength(0);
-		FieldPosition fposByField = new FieldPosition(NumberFormat.Field.INTEGER);
-		decfmt.format(123, buf, fposByField);
+        buf.setLength(0);
+        FieldPosition fposByField = new FieldPosition(NumberFormat.Field.INTEGER);
+        decfmt.format(123, buf, fposByField);
 
-		if (fposByInt.getEndIndex() != fposByField.getEndIndex())
-		{
-			errln("ERROR: End index for integer field - fposByInt:" + fposByInt.getEndIndex() +
-				" / fposByField: " + fposByField.getEndIndex());
-		}
-	}
-
+        if (fposByInt.getEndIndex() != fposByField.getEndIndex())
+        {
+            errln("ERROR: End index for integer field - fposByInt:" + fposByInt.getEndIndex() +
+                " / fposByField: " + fposByField.getEndIndex());
+        }
+    }
+//#endif
 }
 
 
