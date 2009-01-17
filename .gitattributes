@@ -554,6 +554,7 @@ icu4j/src/com/ibm/richtext/textapps/resources/unicode.hebrew.red -text
 icu4j/src/com/ibm/richtext/textformat/package.html svneol=native#text/html
 icu4j/src/com/ibm/richtext/textlayout/attributes/package.html svneol=native#text/html
 icu4j/src/com/ibm/richtext/textpanel/package.html svneol=native#text/html
+tools/release/java/Makefile -text
 tools/release/java/build.xml svneol=native#text/xml
 tools/release/java/icu4c.css -text
 tools/unicodetools/com/ibm/rbm/docs/RBReporter.html svneol=native#text/html
