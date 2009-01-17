@@ -1,7 +1,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2006-2008, International Business Machines Corporation and    *
+* Copyright (C) 2006-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 * This is the ant build file for ICU tools. 
@@ -11,6 +11,7 @@
     <target name="init">
         <tstamp/>
         <property name="src.dir" value="src"/>
+        <property name="lib.dir" value="lib"/>
         <property name="build.dir" value="classes"/>
         <property file="api-report.properties" />
 
@@ -21,21 +22,13 @@
         <echo message="ant java version: ${ant.java.version}"/>
         <echo message="${ant.version}"/>
         <echo message="${basedir}"/>
-
-        <condition property="is.sun.jdk14">
-            <and>
-                <equals arg1="${ant.java.version}" arg2="1.4"/>
-                <!--<contains string="${java.vm.vendor}" substring="Sun Microsystems Inc"/> -->
-            </and>
-        </condition>
-        <fail unless="is.sun.jdk14" message="Sun JDK1.4 is required."/>
     </target>
 
     <target name="tools"  depends="init" description="compile release tools">
         <javac includes="**/*.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
-            source="1.4"
+            source="1.5"
             debug="on" deprecation="off"
             encoding="ascii"/>
     </target>             
@@ -46,12 +39,12 @@
 
     <target name="apireport" depends="tools">    
         <java classname="com.ibm.icu.dev.tools.docs.StableAPI" fork="yes" failonerror="true">
-            
-<!--
-	!! Only need these if you must override. Remove the DELETEME
-            <arg value = "-DELETEME-oldver"/>
-            <arg value = "${oldver}"/>
+           
+<!-- 
+            <arg value = "-DELETEME-newver"/>
+            <arg value = "4.2"/>
 -->
+
             
             <arg value = "--olddir"/> 
             <arg value = "${olddir}"/>
@@ -80,6 +73,8 @@
             <classpath>
                 <pathelement location="${build.dir}"/>
                 <pathelement path="${java.class.path}/"/>
+                <pathelement location="${lib.dir}/xalan.jar"/>
+                <pathelement location="${lib.dir}/xercesImpl.jar"/>
                 <pathelement path="."/>
             </classpath>
         </java>

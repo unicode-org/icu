@@ -1,7 +1,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2008, International Business Machines Corporation and    *
+* Copyright (C) 2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 * This is an XSLT file. 
@@ -17,7 +17,7 @@
   <list>
       <xsl:variable name="files_node" select="/doxygenindex/compound[@kind='class']/@refid" />
       <xsl:for-each select="$files_node">
-        <xsl:variable name="file" select="concat($docFolder, . , '.xml')" />
+        <xsl:variable name="file" select="concat($docFolder, '/', . , '.xml')" />
         <xsl:variable name="funcs_node" select="document($file)/doxygen/compounddef/sectiondef/memberdef[@prot='public'][@kind='function']" />
         <xsl:for-each select="$funcs_node">
           <cppfunc>

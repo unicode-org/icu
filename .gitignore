@@ -747,4 +747,8 @@ icu4j/.clover
 icu4j/classes
 icu4j/classes.wrapper
 icu4j/doc
+tools/release/java/APIChangeReport.html
+tools/release/java/Makefile.local
+tools/release/java/classes
+tools/release/java/lib
 tools/unicodetools/com/ibm/rbm/lib

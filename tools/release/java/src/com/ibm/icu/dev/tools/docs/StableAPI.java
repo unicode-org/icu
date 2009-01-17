@@ -1,15 +1,17 @@
 /*
  **********************************************************************
- * Copyright (c) 2006-2008, International Business Machines
+ * Copyright (c) 2006-2009, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
- * Created on 2006-7-24
+ * Created on 2006-7-24 ?
+ * Moved from Java 1.4 to 1.5? API by srl 2009-01-16
  */
 package com.ibm.icu.dev.tools.docs;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
@@ -26,15 +28,21 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.crimson.jaxp.DocumentBuilderFactoryImpl;
-import org.apache.xerces.parsers.DOMParser;
-import org.apache.xpath.XPathAPI;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
 
 /**
  A utility to report the status change between two ICU releases
@@ -59,44 +67,57 @@ To use the utility
  */
 public class StableAPI {
 
-    private String leftVer;
-    private String leftDir;
+    private static final String DOC_FOLDER = "docFolder";
+	private static final String INDEX_XML = "index.xml";
+	private static final String ICU_SPACE_PREFIX = "ICU ";
+	private static final String INITIALIZER_XPATH = "initializer";
+	private static final String NAME_XPATH = "name";
+	private static final String UVERSION = "uversion_8h.xml";
+    private static final String U_ICU_VERSION = "U_ICU_VERSION";
+	private static final String ICU_VERSION_XPATH = "/doxygen/compounddef[@id='uversion_8h'][@kind='file']/sectiondef[@kind='define']";
+
+	private String leftVer;
+    private File leftDir = null;
 //    private String leftStatus;
     
     private String rightVer;
-    private String rightDir;
+    private File rightDir = null;
 //    private String rightStatus;
     
-    private String dumpCppXslt;
-    private String dumpCXslt;
-    private String reportXsl;
-    private String resultFile;
+    private File dumpCppXslt;
+    private File dumpCXslt;
+    private File reportXsl;
+    private File resultFile;
     
     final private static String nul = "None"; 
 
-    public static void main(String[] args) throws FileNotFoundException, TransformerException, ParserConfigurationException {
+    public static void main(String[] args) throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         
         StableAPI t = new StableAPI();
-        t.parseArgs(args);
+        t.run(args); 
+    }
+    
+    private void run(String[] args) throws XPathExpressionException, TransformerException, ParserConfigurationException, SAXException, IOException {
+        this.parseArgs(args);
         Set full = new HashSet();
 
         System.err.println("Reading C++...");
-        Set setCpp = t.getFullList(t.dumpCppXslt);
+        Set setCpp = this.getFullList(this.dumpCppXslt);
         full.addAll(setCpp);
         System.out.println("read "+setCpp.size() +" C++.  Reading C:");
         
-        Set setC = t.getFullList(t.dumpCXslt);
+        Set setC = this.getFullList(this.dumpCXslt);
         full.addAll(setC);
 
         System.out.println("read "+setC.size() +" C. Setting node:");
         
-        Node fullList = t.setToNode(full);
+        Node fullList = this.setToNode(full);
 //        t.dumpNode(fullList,"");
         
         System.out.println("Node set. Reporting:");
         
-        t.reportSelectedFun(fullList);
-        System.out.println("Done. Please check " + t.resultFile);
+        this.reportSelectedFun(fullList);
+        System.out.println("Done. Please check " + this.resultFile);
     }
 
 
@@ -111,25 +132,25 @@ public class StableAPI {
             } else if (arg.equals("--oldver") ) {
                 leftVer = args[++i];
             } else if (arg.equals("--olddir") ) {
-                leftDir = args[++i];
+                leftDir = new File(args[++i]);
             } else if (arg.equals("--newver")) {
                 rightVer = args[++i];
             } else if (arg.equals("--newdir")) {
-                rightDir = args[++i];
+                rightDir = new File(args[++i]);
             } else if (arg.equals("--cxslt") ) {
-                dumpCXslt = args[++i];
+                dumpCXslt = new File(args[++i]);
             } else if (arg.equals("--cppxslt") ) {
-                dumpCppXslt = args[++i];
+                dumpCppXslt = new File(args[++i]);
             } else if (arg.equals("--reportxslt") ) {
-                reportXsl = args[++i];
+                reportXsl = new File(args[++i]);
             } else if (arg.equals("--resultfile")) {
-                resultFile = args[++i];
+                resultFile = new File(args[++i]);
             } else {
                 System.out.println("Unknown option: "+arg);
                printUsage();
             } 
         }
-        
+                
         leftVer = trimICU(setVer(leftVer, "old", leftDir));
         rightVer = trimICU(setVer(rightVer, "new", rightDir));
     }
@@ -146,7 +167,7 @@ public class StableAPI {
     } 
     
     private static String trimICU(String ver) {
-        final String ICU_ = "ICU ";
+        final String ICU_ = ICU_SPACE_PREFIX;
         final String ICU = "ICU";
         if(ver != null) { // trim everything before the 'ICU...'
             ver = ver.trim();
@@ -170,21 +191,31 @@ public class StableAPI {
         return ver;
     }
     
-    private String setVer(String prevVer, String whichVer, String dir) {
-        final String UVERSION = "uversion_8h.xml";
+    private String setVer(String prevVer, String whichVer, File dir) {
+    	if(dir==null) {
+    		System.out.println("--"+whichVer+"dir not set.");
+    		printUsage(); /* exits */
+    	} else if(!dir.exists()||!dir.isDirectory()) {
+    		System.out.println("--"+whichVer+"dir="+dir.getName()+" does not exist or is not a directory.");
+    		printUsage(); /* exits */
+    	}
         String result = null;
         // looking for: <name>U_ICU_VERSION</name> in uversion_8h.xml:        <initializer>&quot;3.8.1&quot;</initializer>
         try {
-            Document doc = getDocument(dir + UVERSION);
+        	File verFile = new File(dir, UVERSION);
+            Document doc = getDocument(verFile);
             DOMSource uversion_h = new DOMSource(doc);
-            Node defines = XPathAPI.selectSingleNode(uversion_h.getNode(),"/doxygen/compounddef[@id='uversion_8h'][@kind='file']/sectiondef[@kind='define']");
+            XPath xpath = XPathFactory.newInstance().newXPath();
+
+            Node defines = (Node)xpath.evaluate(ICU_VERSION_XPATH, uversion_h.getNode(), XPathConstants.NODE);
+
             NodeList nList = defines.getChildNodes();
             for (int i = 0; result==null&& (i < nList.getLength()); i++) {
                 Node ln = nList.item(i);
                 if(!"memberdef".equals(ln.getNodeName())) {
                     continue;
                 }
-                Node name = XPathAPI.selectSingleNode(ln, "name");
+                Node name = (Node)xpath.evaluate(NAME_XPATH, ln, XPathConstants.NODE);
                 if(name==null) continue;
                 
                // System.err.println("Gotta node: " + name);
@@ -197,13 +228,13 @@ public class StableAPI {
 
                // System.err.println("Gotta name: " + nameStr);
                 
-                if(nameStr.trim().equals("U_ICU_VERSION")) {
-                    Node initializer = XPathAPI.selectSingleNode(ln, "initializer");
+                if(nameStr.trim().equals(U_ICU_VERSION)) {
+                    Node initializer = (Node)xpath.evaluate(INITIALIZER_XPATH, ln, XPathConstants.NODE);
                     if(initializer==null) System.err.println("initializer with no value");
                     Node initVal = initializer.getFirstChild();
 //                    if(initVal==null) initVal = initializer;
                     String initStr = initVal.getNodeValue().trim().replaceAll("\"","");
-                    result = "ICU "+initStr;
+                    result = ICU_SPACE_PREFIX+initStr;
                     System.err.println("Detected "+whichVer + " version: " + result);
                 }
                 
@@ -260,30 +291,36 @@ public class StableAPI {
         return attrList.getNamedItem(attrName).getNodeValue();
     }
     
-    static class Fun {
+    static class Function {
         public String prototype;
         public String id;
         public String status;
         public String version;
         public String file;
-        public boolean equals(Fun right){
+        public boolean equals(Function right){
             return this.prototype.equals(right.prototype);
         }
-        static Fun fromXml(Node n){
-            Fun f = new Fun();
+        static Function fromXml(Node n){
+            Function f = new Function();
             f.prototype = getAttr(n, "prototype");
             f.id = getAttr(n, "id");
             f.status = getAttr(n, "status");
             f.version = trimICU(getAttr(n, "version"));
             f.file = getAttr(n, "file");
             f.purifyPrototype();
-            f.purifyFile();
+            f.file = Function.getBasename(f.file);
             return f;
         }
         
-        private void purifyFile(){
-            int i = file.lastIndexOf("/");
-            file = i == -1 ? file : file.substring(i+1);
+        /**
+         * Convert string to basename.
+         * @param str
+         * @return
+         */
+        private static String getBasename(String str){
+            int i = str.lastIndexOf("/");
+            str = i == -1 ? str : str.substring(i+1);
+            return str;
         }
         
         /**
@@ -312,7 +349,7 @@ public class StableAPI {
 //        }
     }
     
-    static class JoinedFun {
+    static class JoinedFunction {
         public String prototype;
         public String leftRefId;
         public String leftStatus;
@@ -323,8 +360,8 @@ public class StableAPI {
         public String rightStatus;
         public String rightFile;
         
-        static JoinedFun fromLeftFun(Fun left){
-            JoinedFun u = new JoinedFun();
+        static JoinedFunction fromLeftFun(Function left){
+            JoinedFunction u = new JoinedFunction();
             u.prototype = left.prototype;
             u.leftRefId = left.id;
             u.leftStatus = left.status;
@@ -337,8 +374,8 @@ public class StableAPI {
             return u;
         }
     
-        static JoinedFun fromRightFun(Fun right){
-            JoinedFun u = new JoinedFun();
+        static JoinedFunction fromRightFun(Function right){
+            JoinedFunction u = new JoinedFunction();
             u.prototype = right.prototype;
             u.leftRefId = nul;
             u.leftStatus = nul;
@@ -351,9 +388,9 @@ public class StableAPI {
             return u;
         }
         
-        static JoinedFun fromTwoFun(Fun left, Fun right){
+        static JoinedFunction fromTwoFun(Function left, Function right){
             if (!left.equals(right)) throw new Error();
-            JoinedFun u = new JoinedFun();
+            JoinedFunction u = new JoinedFunction();
             u.prototype = left.prototype;
             u.leftRefId = left.id;
             u.leftStatus = left.status;
@@ -391,8 +428,8 @@ public class StableAPI {
 
     TransformerFactory transFac = TransformerFactory.newInstance();
 
-    private void reportSelectedFun(Node joinedNode) throws FileNotFoundException, TransformerException{
-        Transformer report = transFac.newTransformer(new DOMSource(getDocument(reportXsl)));
+    private void reportSelectedFun(Node joinedNode) throws TransformerException, ParserConfigurationException, SAXException, IOException{
+        Transformer report = transFac.newTransformer(new javax.xml.transform.stream.StreamSource(reportXsl));
 //        report.setParameter("leftStatus", leftStatus);
         report.setParameter("leftVer", leftVer);
 //        report.setParameter("rightStatus", rightStatus);
@@ -403,29 +440,45 @@ public class StableAPI {
         
         DOMSource src = new DOMSource(joinedNode);
 
-        Result res = new StreamResult(new File(resultFile));
+        Result res = new StreamResult(resultFile);
 //        DOMResult res = new DOMResult();
         report.transform(src, res);
 //        dumpNode(res.getNode(),"");
     }
     
-    private Set getFullList(String dumpXsltFile) throws FileNotFoundException, TransformerException, ParserConfigurationException{
+    private Set getFullList(File dumpXsltFile) throws TransformerException, ParserConfigurationException, XPathExpressionException, SAXException, IOException{
         // prepare transformer
-        Transformer transformer = transFac.newTransformer(new DOMSource(getDocument(dumpXsltFile)));
-//        Node joinedNode = null;
+        XPath xpath = XPathFactory.newInstance().newXPath();
+        String expression = "/list";
+        Transformer transformer = transFac.newTransformer(new javax.xml.transform.stream.StreamSource(dumpXsltFile));
 
-        DOMSource leftIndex = new DOMSource(getDocument(leftDir + "index.xml"));
+        //        InputSource leftSource = new InputSource(leftDir + "index.xml");
+        DOMSource leftIndex = new DOMSource(getDocument(new File(leftDir,INDEX_XML)));
         DOMResult leftResult = new DOMResult();
-        transformer.setParameter("docFolder", leftDir);
+        transformer.setParameter(DOC_FOLDER, leftDir);
         transformer.transform(leftIndex, leftResult);
-        Node leftList = XPathAPI.selectSingleNode(leftResult.getNode(),"/list");
-//        dumpNode(leftList,"");
+
+//        Node leftList = XPathAPI.selectSingleNode(leftResult.getNode(),"/list");
+        Node leftList = (Node)xpath.evaluate(expression, leftResult.getNode(), XPathConstants.NODE);
+        if(leftList==null) {
+           	//dumpNode(xsltSource.getNode());
+          	dumpNode(leftResult.getNode());
+//        	dumpNode(leftIndex.getNode());
+        	System.out.flush();
+        	System.err.flush();
+        	throw new InternalError("getFullList("+dumpXsltFile.getName()+") returned a null left "+expression);
+        }
         
-        DOMSource rightIndex = new DOMSource(getDocument(rightDir + "index.xml"));
-        DOMResult rightResutl = new DOMResult();
-        transformer.setParameter("docFolder", rightDir);
-        transformer.transform(rightIndex, rightResutl);
-        Node rightList = XPathAPI.selectSingleNode(rightResutl.getNode(),"/list");
+        xpath.reset(); // reuse
+        
+        DOMSource rightIndex = new DOMSource(getDocument(new File(rightDir,INDEX_XML)));
+        DOMResult rightResult = new DOMResult();
+        transformer.setParameter(DOC_FOLDER, rightDir);
+        transformer.transform(rightIndex, rightResult);
+        Node rightList = (Node)xpath.evaluate(expression, rightResult.getNode(), XPathConstants.NODE);
+        if(rightList==null) {
+        	throw new InternalError("getFullList("+dumpXsltFile.getName()+") returned a null right "+expression);
+        }
 //        dumpNode(rightList,"");
         
         
@@ -447,7 +500,7 @@ public class StableAPI {
         NodeList list = node.getChildNodes();
         for (int i = 0; i < list.getLength(); i++) {
             Node n = list.item(i);
-            s.add(Fun.fromXml(n));
+            s.add(Function.fromXml(n));
         }
         return s;
     }
@@ -458,12 +511,12 @@ public class StableAPI {
      * @throws ParserConfigurationException
      */
     private Node setToNode(Set set) throws ParserConfigurationException{
-        DocumentBuilderFactory dbf = DocumentBuilderFactoryImpl.newInstance();
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         Document doc  = dbf.newDocumentBuilder().newDocument();
         Element root = doc.createElement("list");
         doc.appendChild(root);
         for (Iterator iter = set.iterator(); iter.hasNext();) {
-            JoinedFun fun = (JoinedFun) iter.next();
+            JoinedFunction fun = (JoinedFunction) iter.next();
             root.appendChild(fun.toXml(doc));
         }
         return doc;
@@ -481,13 +534,13 @@ public class StableAPI {
         Set joined = new HashSet(); //Set<JoinedFun>
         Set common = new HashSet(); //Set<Fun>
         for (Iterator iter1 = left.iterator(); iter1.hasNext();) {
-            Fun f1 = (Fun) iter1.next();
+            Function f1 = (Function) iter1.next();
 //            if (f1.prototype.matches(".*Transliterator::.*")){
 //                System.err.println("left: " + f1.prototype);
 //                System.err.println("left: " + f1.status);
 //            }
             for (Iterator iter2 = right.iterator(); iter2.hasNext();) {
-                Fun f2 = (Fun) iter2.next();
+                Function f2 = (Function) iter2.next();
 //                if ( f1.prototype.matches(".*filteredTransliterate.*")
 //                  && f2.prototype.matches(".*filteredTransliterate.*")){
 //                    System.err.println("right: " + f2.prototype);
@@ -500,7 +553,7 @@ public class StableAPI {
                     // should add left item to common set
                     // since we will remove common items with left set later
                     common.add(f1);
-                    joined.add(JoinedFun.fromTwoFun(f1, f2));
+                    joined.add(JoinedFunction.fromTwoFun(f1, f2));
                     right.remove(f2);
                     break;
                 } 
@@ -508,59 +561,71 @@ public class StableAPI {
         }
 
         for (Iterator iter = common.iterator(); iter.hasNext();) {
-            Fun f = (Fun) iter.next();
+            Function f = (Function) iter.next();
             left.remove(f);
         }
         
         for (Iterator iter = left.iterator(); iter.hasNext();) {
-            Fun f = (Fun) iter.next();
-            joined.add(JoinedFun.fromLeftFun(f));
+            Function f = (Function) iter.next();
+            joined.add(JoinedFunction.fromLeftFun(f));
         }
         
         for (Iterator iter = right.iterator(); iter.hasNext();) {
-            Fun f = (Fun) iter.next();
-            joined.add(JoinedFun.fromRightFun(f));
+            Function f = (Function) iter.next();
+            joined.add(JoinedFunction.fromRightFun(f));
         }
         return joined;
     }
     
-    private static void dumpNode(Node n, String pre){
-        pre += " ";
-        System.out.println(pre + "<" + n.getNodeName() + ">");
-        //dump attribute
-        NamedNodeMap attr = n.getAttributes();
-        if (attr!=null){
-        for (int i = 0; i < attr.getLength(); i++) {
-            System.out.println(attr.item(i));
-        }
-        }
-        
-        // dump value
-        String v = pre + n.getNodeValue();
-//      if (n.getNodeType() == Node.TEXT_NODE) 
-          System.out.println(v);
-        
-        // dump sub nodes
-        NodeList nList = n.getChildNodes();
-        for (int i = 0; i < nList.getLength(); i++) {
-            Node ln = nList.item(i);
-            dumpNode(ln, pre + " ");
-        }
-        System.out.println(pre + "</" + n.getNodeName() + ">");
+    private static void dumpNode(Node n) {
+    	dumpNode(n,"");
+    }
+    /**
+     * Dump out a node for debugging. Recursive fcn
+     * @param n
+     * @param pre
+     */
+    private static void dumpNode(Node n, String pre) {
+    	String opre = pre;
+		pre += " ";
+		System.out.print(opre + "<" + n.getNodeName() );
+		// dump attribute
+		NamedNodeMap attr = n.getAttributes();
+		if (attr != null) {
+			for (int i = 0; i < attr.getLength(); i++) {
+				System.out.print("\n"+pre+"   "+attr.item(i).getNodeName()+"=\"" + attr.item(i).getNodeValue()+"\"");
+			}
+		}
+		System.out.println(">");
+
+		// dump value
+		String v = pre + n.getNodeValue();
+		if (n.getNodeType() == Node.TEXT_NODE)
+			System.out.println(v);
+
+		// dump sub nodes
+		NodeList nList = n.getChildNodes();
+		for (int i = 0; i < nList.getLength(); i++) {
+			Node ln = nList.item(i);
+			dumpNode(ln, pre + " ");
+		}
+		System.out.println(opre + "</" + n.getNodeName() + ">");
+	}
+    
+    private static DocumentBuilder theBuilder = null;
+    private static DocumentBuilderFactory dbf  = null;
+    private synchronized static DocumentBuilder getDocumentBuilder() throws ParserConfigurationException {
+    	if(theBuilder == null) {
+            dbf = DocumentBuilderFactory.newInstance();
+            theBuilder = dbf.newDocumentBuilder();
+    	}
+    	return theBuilder;
     }
     
-    private static Document getDocument(String name) throws FileNotFoundException{
-        FileInputStream fis = new FileInputStream(name);
+    private static Document getDocument(File file) throws ParserConfigurationException, SAXException, IOException{
+        FileInputStream fis = new FileInputStream(file);
         InputSource inputSource = new InputSource(fis);
-        DOMParser parser = new DOMParser();
-        //convert it into DOM
-        try {
-            parser.parse(inputSource);
-          //  fis.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } 
-        Document doc = parser.getDocument();
+        Document doc = getDocumentBuilder().parse(inputSource);
         return doc;
     }
 
