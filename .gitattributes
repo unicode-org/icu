@@ -357,6 +357,8 @@ icu4j/src/com/ibm/icu/impl/data/icudata.jar -text
 icu4j/src/com/ibm/icu/text/CurrencyPluralInfo.java -text
 icu4j/src/com/ibm/richtext/textapps/resources/unicode.arabic.red -text
 icu4j/src/com/ibm/richtext/textapps/resources/unicode.hebrew.red -text
+tools/release/java/.classpath -text
+tools/release/java/.project -text
 tools/release/java/Makefile -text
 tools/release/java/icu4c.css -text
 tools/unicodetools/com/ibm/rbm/docs/images/TitleLogo_transparent.gif -text
