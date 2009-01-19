@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -183,7 +183,12 @@ public class CoverageTest extends CompatibilityTest implements URLHandler.URLVis
         
         if (System.getSecurityManager() != null) {
             // This test won't run under a security manager
-            return new CoverageTarget("Skipped Due To Security Manager", Modifier.ABSTRACT, null);
+
+            // TODO: Is the above statement really true?
+            // We probably need to set up the security policy properly
+            // for writing/reading serialized data.
+
+            return null;
         }
         
         if(serializable==null){
