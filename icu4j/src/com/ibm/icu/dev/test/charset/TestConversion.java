@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -200,7 +200,8 @@ public class TestConversion extends ModuleTest {
         try {
             // if cc.charset starts with '*', obtain it from com/ibm/icu/dev/data/testdata
             charset = (cc.charset != null && cc.charset.length() > 0 && cc.charset.charAt(0) == '*')
-                    ? (Charset) provider.charsetForName(cc.charset.substring(1), "../dev/data/testdata")
+                    ? (Charset) provider.charsetForName(cc.charset.substring(1),
+                        "com/ibm/icu/dev/data/testdata", this.getClass().getClassLoader())
                     : (Charset) provider.charsetForName(cc.charset);
             encoder = (CharsetEncoder) charset.newEncoder();
             encoder.onMalformedInput(CodingErrorAction.REPLACE);
@@ -482,7 +483,8 @@ public class TestConversion extends ModuleTest {
         try {
             // if cc.charset starts with '*', obtain it from com/ibm/icu/dev/data/testdata
             charset = (cc.charset != null && cc.charset.length() > 0 && cc.charset.charAt(0) == '*')
-                    ? (Charset) provider.charsetForName(cc.charset.substring(1), "../dev/data/testdata")
+                    ? (Charset) provider.charsetForName(cc.charset.substring(1),
+                        "com/ibm/icu/dev/data/testdata", this.getClass().getClassLoader())
                     : (Charset) provider.charsetForName(cc.charset);
             decoder = (CharsetDecoder) charset.newDecoder();
             decoder.onMalformedInput(CodingErrorAction.REPLACE);
@@ -861,8 +863,9 @@ public class TestConversion extends ModuleTest {
         try{
            // if cc.charset starts with '*', obtain it from com/ibm/icu/dev/data/testdata
            charset = (cc.charset != null && cc.charset.length() > 0 && cc.charset.charAt(0) == '*')
-                   ? (CharsetICU) provider.charsetForName(cc.charset.substring(1), "../dev/data/testdata")
-                   : (CharsetICU) provider.charsetForName(cc.charset);
+                    ? (CharsetICU) provider.charsetForName(cc.charset.substring(1),
+                        "com/ibm/icu/dev/data/testdata", this.getClass().getClassLoader())
+                    : (CharsetICU) provider.charsetForName(cc.charset);
            
            //checking for converter that are not supported at this point        
            try{
