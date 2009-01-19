@@ -1,6 +1,6 @@
 //#
 //#*******************************************************************************
-//#* Copyright (C) 1997-2007, International Business Machines Corporation and    *
+//#* Copyright (C) 1997-2009, International Business Machines Corporation and    *
 //#* others. All Rights Reserved.                                                *
 //#*******************************************************************************
 //#* This is the ant build file for ICU4J.  See readme.html for more information.
@@ -28,6 +28,9 @@ grant // codebase "file:${user.dir}/icu4jtests.jar"
     //for charsets
     permission java.lang.RuntimePermission "charsetProvider", "read";
 
+    // IBM 1.6 on Windows does not allow to use reflection to access
+    // getDSTSavings in TimeZone implementation class in sun.util.clanedar.
+    permission java.lang.RuntimePermission "accessClassInPackage.sun.util.calendar";
 };
 
 // there must be a way for code in one jar file to call code in another jar
