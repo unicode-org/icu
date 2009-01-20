@@ -1,0 +1,55 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/el.xml
+// *
+// ***************************************************************************
+el{
+    RBNFRules{
+        SpelloutRules{
+            "%spellout:\n",
+            "0: \u03BC\u03B7\u03B4\u03AD\u03BD; \u03AD\u03BD\u03B1; \u03B4\u03CD\u03BF;\n",
+            "3: \u03C4\u03C1\u03AF\u03B1; \u03C4\u03AD\u03C3\u03C3\u03B5\u03C1\u03B1;\n",
+            "5: \u03C0\u03AD\u03BD\u03C4\u03B5; \u03AD\u03BE\u03B9;\n",
+            "7: \u03B5\u03C0\u03C4\u03AC; \u03BF\u03BA\u03C4\u03CE;\n",
+            "9: \u03B5\u03BD\u03BD\u03AD\u03B1;\n",
+            "10: \u03B4\u03AD\u03BA\u03B1; \u03AD\u03BD\u03C4\u03B5\u03BA\u03B1;\n",
+            "12: \u03B4\u03CE\u03B4\u03B5\u03BA\u03B1; \u03B4\u03B5\u03BA\u03B1\u00AD>>;\n",
+            "20: \u03B5\u03AF\u03BA\u03BF\u03C3\u03B9; \u03B5\u03B9\u03BA\u03BF\u03C3\u03B9 >>;\n",
+            "30: \u03C4\u03C1\u03B9\u03AC\u03BD\u03C4\u03B1; \u03C4\u03C1\u03B9\u03B1\u03BD\u03C4\u03B1 >>;\n",
+            "40: \u03C3\u03B1\u03C1\u03AC\u03BD\u03C4\u03B1; \u03C3\u03B1\u03C1\u03B1\u03BD\u03C4\u03B1 >>;\n",
+            "50: \u03C0\u03B5\u03BD\u03AE\u03BD\u03C4\u03B1; \u03C0\u03B5\u03BD\u03B7\u03BD\u03C4\u03B1 >>;\n",
+            "60: \u03B5\u03BE\u03AE\u03BD\u03C4\u03B1; \u03B5\u03BE\u03B7\u03BD\u03C4\u03B1 >>;\n",
+            "70: \u03B5\u03B2\u03B4\u03BF\u03BC\u03AE\u03BD\u03C4\u03B1;\n",
+            "71: \u03B5\u03B2\u03B4\u03BF\u03BC\u03B7\u03BD\u03C4\u03B1 >>;\n",
+            "80: \u03BF\u03B3\u03B4\u03CC\u03BD\u03C4\u03B1; \u03BF\u03B3\u03B4\u03BF\u03BD\u03C4\u03B1\u00AD >>;\n",
+            "90: \u03B5\u03BD\u03BD\u03B5\u03BD\u03AE\u03BD\u03C4\u03B1;\n",
+            "91: \u03B5\u03BD\u03BD\u03B5\u03BD\u03B7\u03BD\u03C4\u03B1 >>;\n",
+            "100: \u03B5\u03BA\u03B1\u03C4\u03CC[\u03BD >>];\n",
+            "200: \u03B4\u03B9\u03B1\u00AD\u03BA\u03CC\u03C3\u03B9\u03B1[ >>];\n",
+            "300: \u03C4\u03C1\u03B9\u03B1\u00AD\u03BA\u03CC\u03C3\u03B9\u03B1[ >>];\n",
+            "400: \u03C4\u03B5\u03C4\u03C1\u03B1\u00AD\u03BA\u03CC\u03C3\u03B9\u03B1[ >>];\n",
+            "500: \u03C0\u03B5\u03BD\u03C4\u03B1\u00AD\u03BA\u03CC\u03C3\u03B9\u03B1[ >>];\n",
+            "600: \u03B5\u03BE\u03B1\u00AD\u03BA\u03CC\u03C3\u03B9\u03B1[ >>];\n",
+            "700: \u03B5\u03C0\u03C4\u03B1\u00AD\u03BA\u03CC\u03C3\u03B9\u03B1[ >>];\n",
+            "800: \u03BF\u03BA\u03C4\u03B1\u00AD\u03BA\u03CC\u03C3\u03B9\u03B1[ >>];\n",
+            "900: \u03B5\u03BD\u03BD\u03B9\u03B1\u00AD\u03BA\u03CC\u03C3\u03B9\u03B1[ >>];\n",
+            "1000: \u03C7\u03AF\u03BB\u03B9\u03B1[ >>];\n",
+            "2000: << \u03C7\u03AF\u03BB\u03B9\u03AC\u03B4\u03B5\u03C2[ >>];\n",
+            "1000000: << \u03B5\u03BA\u03B1\u03C4\u03BF\u03BC\u03BC\u03CD\u03C1\u03B9\u03BF[ >>];\n",
+            "2000000: << \u03B5\u03BA\u03B1\u03C4\u03BF\u03BC\u03BC\u03CD\u03C1\u03B9\u03B1[ >>];\n",
+            "1000000000: << \u03B4\u03B9\u03C3\u03B5\u03BA\u03B1\u03C4\u03BF\u03BC\u03BC\u03CD\u03C1\u03B9\u03BF[ >>];\n",
+            "2000000000: << \u03B4\u03B9\u03C3\u03B5\u03BA\u03B1\u03C4\u03BF\u03BC\u03BC\u03CD\u03C1\u03B9\u03B1[ >>];\n",
+            "1000000000000: << \u03C4\u03C1\u03B9\u03C3\u03B5\u03BA\u03B1\u03C4\u03BF\u03BC\u03BC\u03CD\u03C1\u03B9\u03BF[ >>];\n",
+            "2000000000000: << \u03C4\u03C1\u03B9\u03C3\u03B5\u03BA\u03B1\u03C4\u03BF\u03BC\u03BC\u03CD\u03C1\u03B9\u03B1[ >>];\n",
+            "1000000000000000: << \u03C4\u03AD\u03C4\u03B1\u03C1\u03AC\u03BA\u03B9\u03C2 \u03B5\u03BA\u03B1\u03C4\u03BF\u03BC\u03BC\u03CD\u03C1\u03B9\u03BF[ >>];\n",
+            "2000000000000000: << \u03C4\u03AD\u03C4\u03B1\u03C1\u03AC\u03BA\u03B9\u03C2 \u03B5\u03BA\u03B1\u03C4\u03BF\u03BC\u03BC\u03CD\u03C1\u03B9\u03B1[ >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: \u03BC\u03B5\u03AF\u03BF\u03BD >>;\n",
+            "x.x: << \u03BA\u03CC\u03BC\u03BC\u03B1 >>;\n",
+        }
+    }
+    Version{"1.4"}
+}

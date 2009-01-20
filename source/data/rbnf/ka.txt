@@ -1,0 +1,53 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/ka.xml
+// *
+// ***************************************************************************
+ka{
+    RBNFRules{
+        SpelloutRules{
+            "%spellout:\n",
+            "0: \u10DC\u10E3\u10DA\u10D8;\n",
+            "1: \u10D4\u10E0\u10D7\u10D8;\n",
+            "2: \u10DD\u10E0\u10D8;\n",
+            "3: \u10E1\u10D0\u10DB\u10D8;\n",
+            "4: \u10DD\u10D7\u10EE\u10D8;\n",
+            "5: \u10EE\u10E3\u10D7\u10D8;\n",
+            "6: \u10D4\u10E5\u10D5\u10E1\u10D8;\n",
+            "7: \u10E8\u10D5\u10D8\u10D3\u10D8;\n",
+            "8: \u10E0\u10D5\u10D0;\n",
+            "9: \u10EA\u10EE\u10E0\u10D0;\n",
+            "10: \u10D0\u10D7\u10D8;\n",
+            "11: \u10D7\u10D4\u10E0\u10D7\u00AD\u10DB\u10D4\u10E2\u10D8;\n",
+            "12: \u10D7\u10DD\u10E0\u00AD\u10DB\u10D4\u10E2\u10D8;\n",
+            "13: \u10EA\u10D0\u00AD\u10DB\u10D4\u10E2\u10D8;\n",
+            "14: \u10D7\u10DD\u10D7\u10EE\u00AD\u10DB\u10D4\u10E2\u10D8;\n",
+            "15: \u10D7\u10EE\u10E3\u10D7\u00AD\u10DB\u10D4\u10E2\u10D8;\n",
+            "16: \u10D7\u10D4\u10E5\u10D5\u10E1\u00AD\u10DB\u10D4\u10E2\u10D8;\n",
+            "17: \u10E9\u10D5\u10D8\u10D3\u00AD\u10DB\u10D4\u10E2\u10D8;\n",
+            "18: \u10D7\u10E0\u10D5\u10D0\u00AD\u10DB\u10D4\u10E2\u10D8;\n",
+            "19: \u10EA\u10EE\u10E0\u10D0\u00AD\u10DB\u10D4\u10E2\u10D8;\n",
+            "20: \u10DD\u10EA\u10D8;\n",
+            "21/20: \u10DD\u10EA\u10D3\u10D0->>;\n",
+            "40: \u10DD\u10E0\u10DB\u00AD\u10DD\u10EA\u10D8;\n",
+            "41/20: \u10DD\u10E0\u10DB\u10DD\u10EA\u10D0\u00AD>>;\n",
+            "60: \u10E1\u10D0\u10DB\u00AD\u10DD\u10EA\u10D8;\n",
+            "61/20: \u10E1\u10D0\u10DB\u10DD\u10EA\u10D0\u00AD>>;\n",
+            "80: \u10DD\u10D7\u10EE\u10DB\u00AD\u10DD\u10EA\u10D8;\n",
+            "81/20: \u10DD\u10D7\u10EE\u10DB\u10DD\u10EA\u10D0\u00AD>>;\n",
+            "100: <<\u00AD\u10D0\u10E1\u10D8[\u00AD>>];\n",
+            "1000: <<\u00AD\u10D0\u10D7\u10D0\u10E1\u10D8[ >>];\n",
+            "1000000: << \u10DB\u10D8\u10DA\u10D8\u10DD\u10DC\u10D8[ >>];\n",
+            "1000000000: << \u10DB\u10D8\u10DA\u10D8\u10D0\u10E0\u10D3\u10D8[ >>];\n",
+            "1000000000000: << \u10D1\u10D8\u10DA\u10D8\u10DD\u10DC\u10D8[ >>];\n",
+            "1000000000000000: << \u10D1\u10D8\u10DA\u10D8\u10D0\u10E0\u10D3\u10D8[ >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: --- >>;\n",
+            "x.x: << ... >>;\n",
+        }
+    }
+    Version{"1.4"}
+}

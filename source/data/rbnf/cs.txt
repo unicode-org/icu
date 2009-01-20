@@ -1,0 +1,64 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/cs.xml
+// *
+// ***************************************************************************
+cs{
+    RBNFRules{
+        SpelloutRules{
+            "%spellout:\n",
+            "0: nula;\n",
+            "1: jeden;\n",
+            "2: dva;\n",
+            "3: t\u0159i;\n",
+            "4: \u010Dty\u0159i;\n",
+            "5: p\u011Bt;\n",
+            "6: \u0161est;\n",
+            "7: sedm;\n",
+            "8: osm;\n",
+            "9: dev\u011Bt;\n",
+            "10: deset;\n",
+            "11: jeden\u00E1ct;\n",
+            "12: dvan\u00E1ct;\n",
+            "13: t\u0159in\u00E1ct;\n",
+            "14: \u010Dtrn\u00E1ct;\n",
+            "15: patn\u00E1ct;\n",
+            "16: \u0161estn\u00E1ct;\n",
+            "17: sedmn\u00E1ct;\n",
+            "18: osmn\u00E1ct;\n",
+            "19: devaten\u00E1ct;\n",
+            "20: <<cet[ >>];\n",
+            "50: pades\u00E1t[ >>];\n",
+            "60: \u0161edes\u00E1t[ >>];\n",
+            "70: sedmdes\u00E1t[ >>];\n",
+            "80: osmdes\u00E1t[ >>];\n",
+            "90: devades\u00E1t[ >>];\n",
+            "100: sto[ >>];\n",
+            "200: << st\u011B[ >>];\n",
+            "300: << sta[ >>];\n",
+            "500: << set[ >>];\n",
+            "1000: << tis\u00EDc[ >>];\n",
+            "2000: << tis\u00EDce[ >>];\n",
+            "5000: << tis\u00EDc[ >>];\n",
+            "1000000: << mili\u00F3n[ >>];\n",
+            "2000000: << mili\u00F3ny[ >>];\n",
+            "5000000: << mili\u00F3n\u016F[ >>];\n",
+            "1000000000: << miliarda[ >>];\n",
+            "2000000000: << miliardy[ >>];\n",
+            "5000000000: << miliard\u016F[ >>];\n",
+            "1000000000000: << bili\u00F3n[ >>];\n",
+            "2000000000000: << bili\u00F3ny[ >>];\n",
+            "5000000000000: << bili\u00F3n\u016F[ >>];\n",
+            "1000000000000000: << biliarda[ >>];\n",
+            "2000000000000000: << biliardy[ >>];\n",
+            "5000000000000000: << biliard\u016F[ >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: minus >>;\n",
+            "x.x: << \u010D\u00E1rka >>;\n",
+        }
+    }
+    Version{"1.4"}
+}

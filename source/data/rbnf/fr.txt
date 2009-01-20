@@ -1,0 +1,62 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/fr.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/rbnf/fr.xml
+ */
+fr{
+    RBNFRules{
+        OrdinalRules{
+            "%%ord_mascabbrev:\n",
+            "0: e; er; e;\n",
+            "%ordinal:\n",
+            "0: =#,##0==%%ord_mascabbrev=;\n",
+        }
+        SpelloutRules{
+            "%%et-un:\n",
+            "0: ; ' et un; -deux; -trois; -quatre; -cinq; -six; -sept; -huit; -neuf; -dix; ' et onze; -=%spellout=;\n",
+            "%%lenient-parse:\n",
+            "&[last primary ignorable ] << ' ' << ',' << '-';\n",
+            "%spellout:\n",
+            "0: z\u00E9ro; un; deux; trois; quatre; cinq; six; sept; huit; neuf;\n",
+            "10: dix; onze; douze; treize; quatorze; quinze; seize; dix->>;\n",
+            "20: vingt[>%%et-un>];\n",
+            "30: trente[>%%et-un>];\n",
+            "40: quarante[>%%et-un>];\n",
+            "50: cinquante[>%%et-un>];\n",
+            "60/20: soixante[>%%et-un>];\n",
+            "80: quatre-vingts;\n",
+            "81/20: quatre-vingt->>;\n",
+            "100: cent[ >>];\n",
+            "200: << cents; << cent >>;\n",
+            "300: << cents; << cent >>;\n",
+            "400: << cents; << cent >>;\n",
+            "500: << cents; << cent >>;\n",
+            "600: << cents; << cent >>;\n",
+            "700: << cents; << cent >>;\n",
+            "800: << cents; << cent >>;\n",
+            "900: << cents; << cent >>;\n",
+            "1000: mille[ >>];\n",
+            "2000: << mille[ >>];\n",
+            "1000000: un million[ >>];\n",
+            "2000000: << millions[ >>];\n",
+            "1000000000: un milliard[ >>];\n",
+            "2000000000: << milliards[ >>];\n",
+            "1000000000000: un billion[ >>];\n",
+            "2000000000000: << billions[ >>];\n",
+            "1000000000000000: un billiard[ >>];\n",
+            "2000000000000000: << billiards[ >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: moins >>;\n",
+            "x.x: << virgule >>;\n",
+            "%year:\n",
+            "0: =%spellout=;\n",
+        }
+    }
+    Version{"1.5"}
+}

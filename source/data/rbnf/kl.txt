@@ -1,0 +1,75 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/kl.xml
+// *
+// ***************************************************************************
+kl{
+    RBNFRules{
+        SpelloutRules{
+            "%%numbertimes:\n",
+            "1: ataaseq;\n",
+            "2: marlunnik;\n",
+            "3: pingasunik;\n",
+            "4: sisamanik;\n",
+            "5: tallimanik;\n",
+            "6: arfinilinnik;\n",
+            "7: arfineq-marlunnik;\n",
+            "8: arfineq-pingasunik;\n",
+            "9: qulingiluanik;\n",
+            "10: qulinik;\n",
+            "11: aqqanilinik;\n",
+            "12: aqqaneq-marlunnik;\n",
+            "13: aqqaneq-pingasunik;\n",
+            "14: aqqaneq-sisamanik;\n",
+            "15: aqqaneq-tallimanik;\n",
+            "16: arfersanilinnik;\n",
+            "17: arfersaneq-marlunnik;\n",
+            "18: arfersaneq-pingasunik;\n",
+            "19: arfersaneq-sisamanik;\n",
+            "20: <%%numbertimes< qulillit[ >>];\n",
+            "100: uutritit[ >>];\n",
+            "200: <%%numbertimes< uutritillit[ >>];\n",
+            "%spellout:\n",
+            "0: nuulu;\n",
+            "1: ataaseq;\n",
+            "2: marluk;\n",
+            "3: pingasut;\n",
+            "4: sisamat;\n",
+            "5: tallimat;\n",
+            "6: arfinillit;\n",
+            "7: arfineq-marluk;\n",
+            "8: arfineq-pingasut;\n",
+            "9: qulingiluat;\n",
+            "10: qulit;\n",
+            "11: aqqanilit;\n",
+            "12: aqqaneq-marluk;\n",
+            "13: aqqaneq-pingasut;\n",
+            "14: aqqaneq-sisamat;\n",
+            "15: aqqaneq-tallimat;\n",
+            "16: arfersanillit;\n",
+            "17: arfersaneq-marluk;\n",
+            "18: arfersaneq-pingasut;\n",
+            "19: arfersaneq-sisamat;\n",
+            "20: <%%numbertimes< qulillit[ >>];\n",
+            "100: uutritit[ >>];\n",
+            "200: <%%numbertimes< uutritillit[ >>];\n",
+            "1000: tuusintit[ >>];\n",
+            "2000: <%%numbertimes< tuusintillit[ >>];\n",
+            "1000000: millionit[ >>];\n",
+            "2000000: <%%numbertimes< millionit[ >>];\n",
+            "1000000000: milliardit[ >>];\n",
+            "2000000000: <%%numbertimes< milliardit[ >>];\n",
+            "1000000000000: billionit[ >>];\n",
+            "2000000000000: <%%numbertimes< billionit[ >>];\n",
+            "1000000000000000: billiardit[ >>];\n",
+            "2000000000000000: <%%numbertimes< billiardit[ >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: minus >>;\n",
+            "x.x: << komma >>;\n",
+        }
+    }
+    Version{"1.3"}
+}

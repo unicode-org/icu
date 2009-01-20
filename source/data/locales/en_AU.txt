@@ -1,0 +1,145 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/en_AU.xml
+// *
+// ***************************************************************************
+en_AU{
+    Currencies{
+        AUD{
+            "$",
+            "Australian Dollar",
+        }
+        USD{
+            "US$",
+            "US Dollar",
+        }
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.53"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "h:mm:ss a v",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, d MMMM yyyy",
+                "d MMMM yyyy",
+                "dd/MM/yyyy",
+                "d/MM/yy",
+                "{1} {0}",
+            }
+            availableFormats{
+                MMMMd{"d MMMM"}
+                MMdd{"dd/MM"}
+                yyyyMM{"MM/yyyy"}
+                yyyyMMMM{"MMMM yyyy"}
+            }
+            intervalFormats{
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E, d/MM - E, d/MM"}
+                    d{"E, d/MM - E, d/MM"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"E, d MMM - E, d MMM"}
+                    d{"E, d - E, d MMM"}
+                }
+                MMMd{
+                    M{"d MMM - d MMM"}
+                    d{"d-d MMM"}
+                }
+                Md{
+                    M{"d/MM - d/MM"}
+                    d{"d/MM - d/MM"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    a{"h a - h a"}
+                    h{"h-h a"}
+                }
+                hm{
+                    a{"h:mm a - h:mm a"}
+                    h{"h:mm-h:mm a"}
+                    m{"h:mm-h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a - h:mm a v"}
+                    h{"h:mm-h:mm a v"}
+                    m{"h:mm-h:mm a v"}
+                }
+                hv{
+                    a{"h a - h a v"}
+                    h{"h-h a v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"MM/yy - MM/yy"}
+                    y{"MM/yy - MM/yy"}
+                }
+                yMEd{
+                    M{"E, d/MM/yy - E, d/MM/yy"}
+                    d{"E, d/MM/yy - E, d/MM/yy"}
+                    y{"E, d/MM/yy - E, d/MM/yy"}
+                }
+                yMMM{
+                    M{"MMM-MMM yyyy"}
+                    y{"MMM yyyy - MMM yyyy"}
+                }
+                yMMMEd{
+                    M{"E, d MMM - E, d MMM yyyy"}
+                    d{"E, d - E, d MMM yyyy"}
+                    y{"E, d MMM yyyy - E, d MMM yyyy"}
+                }
+                yMMMd{
+                    M{"d MMM - d MMM yyyy"}
+                    d{"d-d MMM yyyy"}
+                    y{"d MMM yyyy - d MMM yyyy"}
+                }
+                yMd{
+                    M{"d/MM/yy - d/MM/yy"}
+                    d{"d/MM/yy - d/MM/yy"}
+                    y{"d/MM/yy - d/MM/yy"}
+                }
+            }
+        }
+    }
+    zoneStrings{
+        "meta:Atlantic"{
+            cu:int{0}
+        }
+        "meta:Australia_Central"{
+            cu:int{1}
+        }
+        "meta:Australia_CentralWestern"{
+            cu:int{1}
+        }
+        "meta:Australia_Eastern"{
+            cu:int{1}
+        }
+        "meta:Australia_Western"{
+            cu:int{1}
+        }
+        "meta:New_Zealand"{
+            cu:int{1}
+        }
+    }
+}

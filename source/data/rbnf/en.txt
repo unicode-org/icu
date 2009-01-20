@@ -1,0 +1,89 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/en.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/rbnf/en.xml
+ */
+en{
+    RBNFRules{
+        DurationRules{
+            "%duration:\n",
+            "0: =%in-numerals=;\n",
+            "%%hr:\n",
+            "0: 0 hours; 1 hour; =0= hours;\n",
+            "%%hr-min-sec:\n",
+            "0: :=00=;\n",
+            "60/60: <00<>>;\n",
+            "3600/60: <#,##0<:>>>;\n",
+            "%in-numerals:\n",
+            "0: =0= sec.;\n",
+            "60: =%%min-sec=;\n",
+            "3600: =%%hr-min-sec=;\n",
+            "%%lenient-parse:\n",
+            "& ':' = '.' = ' ' = '-';\n",
+            "%%min:\n",
+            "0: 0 minutes; 1 minute; =0= minutes;\n",
+            "%%min-sec:\n",
+            "0: :=00=;\n",
+            "60/60: <0<>>;\n",
+            "%with-words:\n",
+            "0: 0 seconds; 1 second; =0= seconds;\n",
+            "60/60: <%%min<[, >>];\n",
+            "3600/60: <%%hr<[, >>>];\n",
+        }
+        OrdinalRules{
+            "%%ordabbrev:\n",
+            "0: th; st; nd; rd; th;\n",
+            "20: >>;\n",
+            "100: >>;\n",
+            "%ordinal:\n",
+            "0: =#,##0==%%ordabbrev=;\n",
+        }
+        SpelloutRules{
+            "%%lenient-parse:\n",
+            "&[last primary ignorable ] << ' ' << ',' << '-';\n",
+            "%spellout:\n",
+            "0: zero; one; two; three; four; five; six; seven; eight; nine;\n",
+            "10: ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen; seventeen; eighteen; nineteen;\n",
+            "20: twenty[->>];\n",
+            "30: thirty[->>];\n",
+            "40: forty[->>];\n",
+            "50: fifty[->>];\n",
+            "60: sixty[->>];\n",
+            "70: seventy[->>];\n",
+            "80: eighty[->>];\n",
+            "90: ninety[->>];\n",
+            "100: << hundred[ >>];\n",
+            "1000: << thousand[ >>];\n",
+            "1000000: << million[ >>];\n",
+            "1000000000: << billion[ >>];\n",
+            "1000000000000: << trillion[ >>];\n",
+            "1000000000000000: << quadrillion[ >>];\n",
+            "1000000000000000000: =#,##0=;\n",
+            "-x: minus >>;\n",
+            "x.x: << point >>;\n",
+            "%year:\n",
+            "0: zero; one; two; three; four; five; six; seven; eigth; nine;\n",
+            "10: ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen; seventeen; eighteen; nineteen;\n",
+            "20: twenty[->>];\n",
+            "30: thirty[->>];\n",
+            "40: forty[->>];\n",
+            "50: fifty[->>];\n",
+            "60: sixty[->>];\n",
+            "70: seventy[->>];\n",
+            "80: eighty[->>];\n",
+            "90: ninety[->>];\n",
+            "100: << hundred[ and >>];\n",
+            "1000: thousand[ and >>];\n",
+            "1100/100: << hundred[ and >>];\n",
+            "10000: =%spellout=;\n",
+            "-x: minus >>;\n",
+        }
+    }
+    Version{"1.4"}
+}
