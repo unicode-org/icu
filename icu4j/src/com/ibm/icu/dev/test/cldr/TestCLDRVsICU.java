@@ -1,9 +1,9 @@
-//##header J2SE15
+//##header
 //#if defined(FOUNDATION10) || defined(J2SE13)
 //#else
 /*
 **********************************************************************
-* Copyright (c) 2002-2008, International Business Machines
+* Copyright (c) 2002-2009, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Mark Davis

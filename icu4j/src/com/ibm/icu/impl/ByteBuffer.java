@@ -1,8 +1,8 @@
-//##header J2SE15
+//##header
 //#if defined(FOUNDATION10) || defined(J2SE13) || defined(ECLIPSE_FRAGMENT)
 //##/*
 //## * *****************************************************************************
-//## * Copyright (C) 2006-2007, International Business Machines
+//## * Copyright (C) 2006-2009, International Business Machines
 //## * Corporation and others. All Rights Reserved.
 //## * *****************************************************************************
 //## */
