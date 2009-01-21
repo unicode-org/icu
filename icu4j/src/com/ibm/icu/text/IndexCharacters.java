@@ -1,9 +1,9 @@
-//##header J2SE15
+//##header
 //#if defined(FOUNDATION10) || defined(J2SE13)
 //#else
 /*
  *******************************************************************************
- * Copyright (C) 2008, Google Inc, International Business Machines Corporation
+ * Copyright (C) 2008-2009, Google Inc, International Business Machines Corporation
  * and others. All Rights Reserved.
  *******************************************************************************
  */

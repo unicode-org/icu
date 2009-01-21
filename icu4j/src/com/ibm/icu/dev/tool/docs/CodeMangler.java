@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2004-2007, International Business Machines Corporation and    *
+* Copyright (C) 2004-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -38,6 +38,7 @@ public class CodeMangler {
     private boolean force;     // true if force reprocess of files
     private boolean clean;     // true if output is to be cleaned
     private boolean timestamp; // true if we read/write timestamp
+    private boolean nonames;   // true if no names in header
     private HashMap map;       // defines
     private ArrayList names;   // files/directories to process
     private String header;     // sorted list of defines passed in
@@ -62,6 +63,7 @@ public class CodeMangler {
         "-t[imestamp]           - expect/write timestamp in header\n" +
         "-dNAME[=VALUE]         - define NAME with optional value VALUE\n" +
         "  (or -d NAME[=VALUE])\n" +
+        "-n                     - do not put NAME/VALUE in header\n" +
         "-help                  - print this usage message and exit.\n" +
         "\n" +
         "For file arguments, output '.java' files using the same path/name under the output directory.\n" +
@@ -125,6 +127,8 @@ public class CodeMangler {
                         break; // stop before processing arguments, so we will do nothing
                     } else if (arg.startsWith("-v")) {
                         verbose = true;
+                    } else if (arg.startsWith("-n")) {
+                        nonames = true;
                     } else {
                         System.err.println("Error: unrecognized argument '" + arg + "'");
                         System.err.println(usage);
@@ -225,16 +229,18 @@ public class CodeMangler {
         sort.putAll(map);
         Iterator iter = sort.entrySet().iterator();
         StringBuffer buf = new StringBuffer();
-        while (iter.hasNext()) {
-            Map.Entry e = (Map.Entry)iter.next();
-            if (buf.length() > 0) {
-                buf.append(", ");
-            }
-            buf.append(e.getKey());
-            String v = (String)e.getValue();
-            if (v != null && v.length() > 0) {
-                buf.append('=');
-                buf.append(v);
+        if (!nonames) {
+            while (iter.hasNext()) {
+                Map.Entry e = (Map.Entry)iter.next();
+                if (buf.length() > 0) {
+                    buf.append(", ");
+                }
+                buf.append(e.getKey());
+                String v = (String)e.getValue();
+                if (v != null && v.length() > 0) {
+                    buf.append('=');
+                    buf.append(v);
+                }
             }
         }
         header = buf.toString();
@@ -350,9 +356,15 @@ public class CodeMangler {
                     boolean hasHeader = line.startsWith(HEADER_PREFIX);
                     if (hasHeader && !force) {
                         long expectLastModified = ((infile.lastModified() + 999)/1000)*1000;
-                        String headerline = HEADER_PREFIX + ' ' + header + ' ' +
-                            (timestamp ? String.valueOf(expectLastModified) : ""); 
-                        headerline = headerline.trim();
+                        String headerline = HEADER_PREFIX;
+                        if (header.length() > 0) {
+                            headerline += " ";
+                            headerline += header;
+                        }
+                        if (timestamp) {
+                            headerline += " ";
+                            headerline += String.valueOf(expectLastModified);
+                        }
                         if (line.equals(headerline)) {
                             if (verbose) System.out.println("no changes necessary to " + infile.getCanonicalPath());
                             instream.close();
@@ -388,9 +400,15 @@ public class CodeMangler {
 
                     outModTime = ((outfile.lastModified()+999)/1000)*1000; // round up
                     outstream = new PrintStream(new FileOutputStream(outfile));
-                    String headerline = HEADER_PREFIX + ' ' + header + ' ' +
-                        (timestamp ? String.valueOf(outModTime) : "");
-                    headerline = headerline.trim();
+                    String headerline = HEADER_PREFIX;
+                    if (header.length() > 0) {
+                        headerline += " ";
+                        headerline += header;
+                    }
+                    if (timestamp) {
+                        headerline += " ";
+                        headerline += String.valueOf(outModTime);
+                    }
                     outstream.println(headerline);
                     if (verbose) System.out.println("header: " + headerline);
 

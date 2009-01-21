@@ -1,4 +1,4 @@
-//##header J2SE15
+//##header
 /* Generated from 'BigDecimal.nrx' 8 Sep 2000 11:10:50 [v2.00] */
 /* Options: Binary Comments Crossref Format Java Logo Strictargs Strictcase Trace2 Verbose3 */
 package com.ibm.icu.math;
@@ -9,7 +9,7 @@ import com.ibm.icu.lang.UCharacter;
 /* ------------------------------------------------------------------ */
 /* BigDecimal -- Decimal arithmetic for Java                          */
 /* ------------------------------------------------------------------ */
-/* Copyright IBM Corporation, 1996-2008.  All Rights Reserved.       */
+/* Copyright IBM Corporation, 1996-2009.  All Rights Reserved.       */
 /*                                                                    */
 /* The BigDecimal class provides immutable arbitrary-precision        */
 /* floating point (including integer) decimal numbers.                */

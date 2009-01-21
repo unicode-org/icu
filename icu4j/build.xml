@@ -251,8 +251,7 @@
     </javac>
     <!-- Run CodeMangler -->
     <antcall target="doMangle">
-      <param name="target.defs" value="${target.rt.version}" />
-      <param name="input.file" value="@preprocessor.txt" />
+      <param name="mangler.args" value="-d${target.rt.version} @preprocessor.txt"/>
     </antcall>
   </target>
 
@@ -260,8 +259,7 @@
           depends="buildMangle"
           description="Run the preprocessor to normalize Java sources to the ICU source repository target JDK version">
     <antcall target="doMangle">
-      <param name="target.defs" value="${default.target.rt.version}" />
-      <param name="input.file" value="@preprocessor.txt" />
+      <param name="mangler.args" value="-d${default.target.rt.version} -n -f @preprocessor.txt"/>
     </antcall>
   </target>
 
@@ -272,10 +270,9 @@
   </target>
 
   <target name="doMangle" unless="dontMangle">
-    <echo message="Running source code preprocessor for [${target.defs}]"/>
+    <echo message="Running source code preprocessor [java com.ibm.icu.dev.tool.docs.CodeMangler ${mangler.args}]"/>
     <java classname="com.ibm.icu.dev.tool.docs.CodeMangler" classpath="${build.dir}" logError="true" fork="true" dir="${basedir}">
-      <arg value="-d${target.defs}" />
-      <arg value="${input.file}" />
+      <arg line="${mangler.args}"/>
     </java>
   </target>
 
@@ -1652,8 +1649,7 @@
 
   <target name="eclipseMangle" depends="buildMangle">
     <antcall target="doMangle">
-      <param name="target.defs" value="FOUNDATION10" />
-      <param name="input.file" value="@preprocessor.txt" />
+      <param name="mangler.args" value="-dFOUNDATION10 @preprocessor.txt"/>
     </antcall>
   </target>
 
@@ -1875,8 +1871,7 @@
   <target name="eclipseFragmentMangle" depends="buildMangle">
     <antcall target="initSrc"/>
     <antcall target="doMangle">
-      <param name="target.defs" value="ECLIPSE_FRAGMENT" />
-      <param name="input.file" value="@eclipseFragment.txt" />
+      <param name="mangler.args" value="-dECLIPSE_FRAGMENT @eclipseFragment.txt"/>
     </antcall>
   </target>
 

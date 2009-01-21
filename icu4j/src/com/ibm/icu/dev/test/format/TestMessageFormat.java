@@ -1,7 +1,7 @@
-//##header J2SE15
+//##header
 /*
 **********************************************************************
-* Copyright (c) 2004-2008, International Business Machines
+* Copyright (c) 2004-2009, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu

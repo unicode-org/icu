@@ -1,7 +1,7 @@
-//##header J2SE15
+//##header
 /*
 **********************************************************************
-* Copyright (c) 2002-2007, International Business Machines           *
+* Copyright (c) 2002-2009, International Business Machines           *
 * Corporation and others.  All Rights Reserved.                      *
 **********************************************************************
 */
@@ -694,13 +694,13 @@ public class NormalizerPerformanceTest extends PerfTest {
 
     void normalizerTest(String line, boolean compose) {
 //#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14) || defined(J2SE15)
- sun.text.Normalizer.normalize(line, compose
-      ? sun.text.Normalizer.COMPOSE
-      : sun.text.Normalizer.DECOMP, 0);
+//## sun.text.Normalizer.normalize(line, compose
+//##      ? sun.text.Normalizer.COMPOSE
+//##      : sun.text.Normalizer.DECOMP, 0);
 //#else
-//## java.text.Normalizer.normalize(line, compose
-//##      ? java.text.Normalizer.Form.NFC
-//##      : java.text.Normalizer.Form.NFD);
+ java.text.Normalizer.normalize(line, compose
+      ? java.text.Normalizer.Form.NFC
+      : java.text.Normalizer.Form.NFD);
 //#endif
     }
 }
