@@ -3,7 +3,7 @@
 ** 2006-07-17 by Arthur David Olson.
 */
 
-static char	elsieid[] = "@(#)zic.c	8.7";
+static char	elsieid[] = "@(#)zic.c	8.18";
 
 #include "private.h"
 #include "locale.h"
@@ -113,76 +113,80 @@ struct zone {
 	zic_t		z_untiltime;
 };
 
-extern int	getopt P((int argc, char * const argv[],
-			const char * options));
-extern int	link P((const char * fromname, const char * toname));
+extern int	getopt(int argc, char * const argv[],
+			const char * options);
+extern int	link(const char * fromname, const char * toname);
 extern char *	optarg;
 extern int	optind;
 
-static void	addtt P((zic_t starttime, int type));
+static void	addtt(zic_t starttime, int type);
 #ifdef ICU
-static int	addtype P((long gmtoff, long rawoff, long dstoff,
+static int	addtype(long gmtoff, long rawoff, long dstoff,
 				const char * abbr, int isdst,
-				int ttisstd, int ttisgmt));
+				int ttisstd, int ttisgmt);
 #else
-static int	addtype P((long gmtoff, const char * abbr, int isdst,
-				int ttisstd, int ttisgmt));
+static int	addtype(long gmtoff, const char * abbr, int isdst,
+				int ttisstd, int ttisgmt);
 #endif
-static void	leapadd P((zic_t t, int positive, int rolling, int count));
-static void	adjleap P((void));
-static void	associate P((void));
-static int	ciequal P((const char * ap, const char * bp));
-static void	convert P((long val, char * buf));
-static void	convert64 P((zic_t val, char * buf));
-static void	dolink P((const char * fromfile, const char * tofile));
-static void	doabbr P((char * abbr, const char * format,
-			const char * letters, int isdst, int doquotes));
-static void	eat P((const char * name, int num));
-static void	eats P((const char * name, int num,
-			const char * rname, int rnum));
-static long	eitol P((int i));
-static void	error P((const char * message));
-static char **	getfields P((char * buf));
-static long	gethms P((const char * string, const char * errstrng,
-			int signable));
-static void	infile P((const char * filename));
-static void	inleap P((char ** fields, int nfields));
-static void	inlink P((char ** fields, int nfields));
-static void	inrule P((char ** fields, int nfields));
-static int	inzcont P((char ** fields, int nfields));
-static int	inzone P((char ** fields, int nfields));
-static int	inzsub P((char ** fields, int nfields, int iscont));
-static int	is32 P((zic_t x));
-static int	itsabbr P((const char * abbr, const char * word));
-static int	itsdir P((const char * name));
-static int	lowerit P((int c));
-static char *	memcheck P((char * tocheck));
-static int	mkdirs P((char * filename));
-static void	newabbr P((const char * abbr));
-static long	oadd P((long t1, long t2));
-static void	outzone P((const struct zone * zp, int ntzones));
-static void	puttzcode P((long code, FILE * fp));
-static void	puttzcode64 P((zic_t code, FILE * fp));
-static int	rcomp P((const void * leftp, const void * rightp));
-static zic_t	rpytime P((const struct rule * rp, int wantedy));
-static void	rulesub P((struct rule * rp,
+static void	leapadd(zic_t t, int positive, int rolling, int count);
+static void	adjleap(void);
+static void	associate(void);
+static int	ciequal(const char * ap, const char * bp);
+static void	convert(long val, char * buf);
+static void	convert64(zic_t val, char * buf);
+static void	dolink(const char * fromfield, const char * tofield);
+static void	doabbr(char * abbr, const char * format,
+			const char * letters, int isdst, int doquotes);
+static void	eat(const char * name, int num);
+static void	eats(const char * name, int num,
+			const char * rname, int rnum);
+static long	eitol(int i);
+static void	error(const char * message);
+static char **	getfields(char * buf);
+static long	gethms(const char * string, const char * errstrng,
+			int signable);
+static void	infile(const char * filename);
+static void	inleap(char ** fields, int nfields);
+static void	inlink(char ** fields, int nfields);
+static void	inrule(char ** fields, int nfields);
+static int	inzcont(char ** fields, int nfields);
+static int	inzone(char ** fields, int nfields);
+static int	inzsub(char ** fields, int nfields, int iscont);
+static int	is32(zic_t x);
+static int	itsabbr(const char * abbr, const char * word);
+static int	itsdir(const char * name);
+static int	lowerit(int c);
+static char *	memcheck(char * tocheck);
+static int	mkdirs(char * filename);
+static void	newabbr(const char * abbr);
+static long	oadd(long t1, long t2);
+static void	outzone(const struct zone * zp, int ntzones);
+static void	puttzcode(long code, FILE * fp);
+static void	puttzcode64(zic_t code, FILE * fp);
+static int	rcomp(const void * leftp, const void * rightp);
+static zic_t	rpytime(const struct rule * rp, int wantedy);
+static void	rulesub(struct rule * rp,
 			const char * loyearp, const char * hiyearp,
 			const char * typep, const char * monthp,
-			const char * dayp, const char * timep));
-static int 	stringoffset P((char * result, long offset));
-static int	stringrule P((char * result, const struct rule * rp,
-			long dstoff, long gmtoff));
-static void 	stringzone P((char * result,
-			const struct zone * zp, int ntzones));
-static void	setboundaries P((void));
-static zic_t	tadd P((zic_t t1, long t2));
-static void	usage P((void));
-static void	writezone P((const char * name, const char * string));
-static int	yearistype P((int year, const char * type));
-
-#if !HAVE_STRERROR
-static char *	strerror P((int));
-#endif /* !HAVE_STRERROR */
+			const char * dayp, const char * timep);
+static int 	stringoffset(char * result, long offset);
+static int	stringrule(char * result, const struct rule * rp,
+			long dstoff, long gmtoff);
+static void 	stringzone(char * result,
+			const struct zone * zp, int ntzones);
+static void	setboundaries(void);
+static zic_t	tadd(zic_t t1, long t2);
+static void	usage(FILE *stream, int status);
+static void	writezone(const char * name, const char * string);
+static int	yearistype(int year, const char * type);
+#ifdef ICU
+static void	emit_icu_zone(FILE* f, const char* zoneName, int zoneOffset,
+					const struct rule* rule,
+					int ruleIndex, int startYear);
+static void	emit_icu_link(FILE* f, const char* from, const char* to);
+static void	emit_icu_rule(FILE* f, const struct rule* r, int ruleIndex);
+static int	add_icu_final_rules(const struct rule* r1, const struct rule* r2);
+#endif
 
 static int		charcnt;
 static int		errors;
@@ -308,19 +312,16 @@ struct lookup {
 };
 
 #ifdef ICU
-
 /* Indices into rules[] for final rules.  They will occur in pairs,
  * with finalRules[i] occurring before finalRules[i+1] in the year.
  * Each zone need only store a start year, a standard offset, and an
  * index into finalRules[].  FinalRules[] are aliases into rules[]. */
-
-static const struct rule **   finalRules;
-static int                    finalRulesCount;
-
+static const struct rule **	finalRules;
+static int					finalRulesCount;
 #endif
 
-static struct lookup const *	byword P((const char * string,
-					const struct lookup * lp));
+static struct lookup const *	byword(const char * string,
+					const struct lookup * lp);
 
 static struct lookup const	line_codes[] = {
 	{ "Rule",	LC_RULE },
@@ -442,19 +443,6 @@ char * const	ptr;
 ** Error handling.
 */
 
-#if !HAVE_STRERROR
-static char *
-strerror(errnum)
-int	errnum;
-{
-	extern char *	sys_errlist[];
-	extern int	sys_nerr;
-
-	return (errnum > 0 && errnum <= sys_nerr) ?
-		sys_errlist[errnum] : _("Unknown system error");
-}
-#endif /* !HAVE_STRERROR */
-
 static void
 eats(name, num, rname, rnum)
 const char * const	name;
@@ -508,69 +496,87 @@ const char * const	string;
 }
 
 static void
-usage P((void))
+usage(FILE *stream, int status)
 {
-	(void) fprintf(stderr, _("%s: usage is %s \
-[ --version ] [ -v ] [ -l localtime ] [ -p posixrules ] \\\n\
-\t[ -d directory ] [ -L leapseconds ] [ -y yearistype ] [ filename ... ]\n"),
-		progname, progname);
-	exit(EXIT_FAILURE);
+	(void) fprintf(stream, _("%s: usage is %s \
+[ --version ] [ --help ] [ -v ] [ -l localtime ] [ -p posixrules ] \\\n\
+\t[ -d directory ] [ -L leapseconds ] [ -y yearistype ] [ filename ... ]\n\
+\n\
+Report bugs to tz@elsie.nci.nih.gov.\n"),
+		       progname, progname);
+	exit(status);
 }
 
 #ifdef ICU
-
 /* File into which we will write supplemental ICU data. */
-static FILE *                 icuFile;
+static FILE *	icuFile;
 
-void emit_icu_zone(FILE* f, const char* zoneName, int zoneOffset,
-                   const struct rule* rule,
-                   int ruleIndex, int startYear) {
-    /* machine-readable section */
-    fprintf(f, "zone %s %d %d %s", zoneName, zoneOffset, startYear, rule->r_name);
+static void
+emit_icu_zone(FILE* f, const char* zoneName, int zoneOffset,
+					const struct rule* rule,
+					int ruleIndex, int startYear) {
+	/* machine-readable section */
+	fprintf(f, "zone %s %d %d %s", zoneName, zoneOffset, startYear, rule->r_name);
 
-    /* human-readable section */
-    fprintf(f, " # zone %s, offset %d, year >= %d, rule %s (%d)\n",
-            zoneName, zoneOffset, startYear,
-            rule->r_name, ruleIndex);
+	/* human-readable section */
+	fprintf(f, " # zone %s, offset %d, year >= %d, rule %s (%d)\n",
+			zoneName, zoneOffset, startYear,
+			rule->r_name, ruleIndex);
 }
 
-void emit_icu_link(FILE* f, const char* from, const char* to) {
-    /* machine-readable section */
-    fprintf(f, "link %s %s\n", from, to);
+static void
+emit_icu_link(FILE* f, const char* from, const char* to) {
+	/* machine-readable section */
+	fprintf(f, "link %s %s\n", from, to);
 }
 
 static const char* DYCODE[] = {"DOM", "DOWGEQ", "DOWLEQ"};
 
-void emit_icu_rule(FILE* f, const struct rule* r, int ruleIndex) {
-    if (r->r_yrtype != NULL) {
-        warning("year types not supported by ICU");
-        fprintf(stderr, "rule %s, file %s, line %d\n",
-                r->r_name, r->r_filename, r->r_linenum);
+static void
+emit_icu_rule(FILE* f, const struct rule* r, int ruleIndex) {
+	if (r->r_yrtype != NULL) {
+		warning("year types not supported by ICU");
+		fprintf(stderr, "rule %s, file %s, line %d\n",
+				r->r_name, r->r_filename, r->r_linenum);
     }
 
-    /* machine-readable section */
-    fprintf(f, "rule %s %s %d %d %d %d %d %d %d",
-            r->r_name, DYCODE[r->r_dycode],
-            r->r_month, r->r_dayofmonth,
-            (r->r_dycode == DC_DOM ? -1 : r->r_wday),
-            r->r_tod, r->r_todisstd, r->r_todisgmt, r->r_stdoff
-            );
+	/* machine-readable section */
+	fprintf(f, "rule %s %s %d %d %d %ld %d %d %ld",
+			r->r_name, DYCODE[r->r_dycode],
+			r->r_month, r->r_dayofmonth,
+			(r->r_dycode == DC_DOM ? -1 : r->r_wday),
+			r->r_tod, r->r_todisstd, r->r_todisgmt, r->r_stdoff
+			);
 
-    /* human-readable section */
-    fprintf(f, " # %d: %s, file %s, line %d",
-            ruleIndex, r->r_name, r->r_filename, r->r_linenum);
-    fprintf(f, ", mode %s", DYCODE[r->r_dycode]);
-    fprintf(f, ", %s, dom %d", mon_names[r->r_month].l_word, r->r_dayofmonth);
-    if (r->r_dycode != DC_DOM) {
-        fprintf(f, ", %s", wday_names[r->r_wday].l_word);
-    }
-    fprintf(f, ", time %d", r->r_tod);
-    fprintf(f, ", isstd %d", r->r_todisstd);
-    fprintf(f, ", isgmt %d", r->r_todisgmt);
-    fprintf(f, ", offset %ld", r->r_stdoff);
-    fprintf(f, "\n");
+	/* human-readable section */
+	fprintf(f, " # %d: %s, file %s, line %d",
+			ruleIndex, r->r_name, r->r_filename, r->r_linenum);
+	fprintf(f, ", mode %s", DYCODE[r->r_dycode]);
+	fprintf(f, ", %s, dom %d", mon_names[r->r_month].l_word, r->r_dayofmonth);
+	if (r->r_dycode != DC_DOM) {
+		fprintf(f, ", %s", wday_names[r->r_wday].l_word);
+	}
+	fprintf(f, ", time %ld", r->r_tod);
+	fprintf(f, ", isstd %d", r->r_todisstd);
+	fprintf(f, ", isgmt %d", r->r_todisgmt);
+	fprintf(f, ", offset %ld", r->r_stdoff);
+	fprintf(f, "\n");
 }
 
+static int
+add_icu_final_rules(const struct rule* r1, const struct rule* r2) {
+	int i;
+
+	for (i=0; i<finalRulesCount; ++i) { /* i+=2 should work too */
+		if (r1==finalRules[i]) return i; /* [sic] pointer comparison */
+	}
+
+	finalRules = (const struct rule**) (void*) erealloc((char *) finalRules,
+				(finalRulesCount + 2) * sizeof(*finalRules));
+	finalRules[finalRulesCount++] = r1;
+	finalRules[finalRulesCount++] = r2;
+	return finalRulesCount - 2;
+}
 #endif
 
 static const char *	psxrules;
@@ -608,11 +614,13 @@ char *	argv[];
 		if (strcmp(argv[i], "--version") == 0) {
 			(void) printf("%s\n", elsieid);
 			exit(EXIT_SUCCESS);
+		} else if (strcmp(argv[i], "--help") == 0) {
+			usage(stdout, EXIT_SUCCESS);
 		}
 	while ((c = getopt(argc, argv, "d:l:p:L:vsy:")) != EOF && c != -1)
 		switch (c) {
 			default:
-				usage();
+				usage(stderr, EXIT_FAILURE);
 			case 'd':
 				if (directory == NULL)
 					directory = optarg;
@@ -671,7 +679,7 @@ _("%s: More than one -L option specified\n"),
 				break;
 		}
 	if (optind == argc - 1 && strcmp(argv[optind], "=") == 0)
-		usage();	/* usage message by request */
+		usage(stderr, EXIT_FAILURE);	/* usage message by request */
 	if (directory == NULL)
 		directory = TZDIR;
 	if (yitcommand == NULL)
@@ -686,11 +694,11 @@ _("%s: More than one -L option specified\n"),
 
 #ifdef ICU
 	if ((icuFile = fopen(ICU_ZONE_FILE, "w")) == NULL) {
-            const char *e = strerror(errno);
-            (void) fprintf(stderr, _("%s: Can't open %s: %s\n"),
-                           progname, ICU_ZONE_FILE, e);
-            (void) exit(EXIT_FAILURE);
-        }
+		const char *e = strerror(errno);
+		(void) fprintf(stderr, _("%s: Can't open %s: %s\n"),
+						progname, ICU_ZONE_FILE, e);
+		(void) exit(EXIT_FAILURE);
+	}
 #endif
 	for (i = optind; i < argc; ++i)
 		infile(argv[i]);
@@ -712,7 +720,7 @@ _("%s: More than one -L option specified\n"),
 		eat(links[i].l_filename, links[i].l_linenum);
 		dolink(links[i].l_from, links[i].l_to);
 #ifdef ICU
-                emit_icu_link(icuFile, links[i].l_from, links[i].l_to);
+		emit_icu_link(icuFile, links[i].l_from, links[i].l_to);
 #endif
 		if (noise)
 			for (j = 0; j < nlinks; ++j)
@@ -729,34 +737,34 @@ _("%s: More than one -L option specified\n"),
 		dolink(psxrules, TZDEFRULES);
 	}
 #ifdef ICU
-        for (i=0; i<finalRulesCount; ++i) {
-            emit_icu_rule(icuFile, finalRules[i], i);
-        }
+	for (i=0; i<finalRulesCount; ++i) {
+		emit_icu_rule(icuFile, finalRules[i], i);
+	}
 #endif /*ICU*/
 	return (errors == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
 static void
-dolink(fromfile, tofile)
-const char * const	fromfile;
-const char * const	tofile;
+dolink(fromfield, tofield)
+const char * const	fromfield;
+const char * const	tofield;
 {
 	register char *	fromname;
 	register char *	toname;
 
-	if (fromfile[0] == '/')
-		fromname = ecpyalloc(fromfile);
+	if (fromfield[0] == '/')
+		fromname = ecpyalloc(fromfield);
 	else {
 		fromname = ecpyalloc(directory);
 		fromname = ecatalloc(fromname, "/");
-		fromname = ecatalloc(fromname, fromfile);
+		fromname = ecatalloc(fromname, fromfield);
 	}
-	if (tofile[0] == '/')
-		toname = ecpyalloc(tofile);
+	if (tofield[0] == '/')
+		toname = ecpyalloc(tofield);
 	else {
 		toname = ecpyalloc(directory);
 		toname = ecatalloc(toname, "/");
-		toname = ecatalloc(toname, tofile);
+		toname = ecatalloc(toname, tofield);
 	}
 	/*
 	** We get to be careful here since
@@ -775,7 +783,7 @@ const char * const	tofile;
 		if (result != 0 &&
 			access(fromname, F_OK) == 0 &&
 			!itsdir(fromname)) {
-				const char *s = tofile;
+				const char *s = tofield;
 				register char * symlinkcontents = NULL;
 
 				while ((s = strchr(s+1, '/')) != NULL)
@@ -784,7 +792,7 @@ const char * const	tofile;
 						"../");
 				symlinkcontents =
 					ecatalloc(symlinkcontents,
-					fromfile);
+					fromname);
 				result = symlink(symlinkcontents,
 					toname);
 				if (result == 0)
@@ -810,7 +818,7 @@ warning(_("hard link failed, symbolic link used"));
 #define TIME_T_BITS_IN_FILE	64
 
 static void
-setboundaries P((void))
+setboundaries(void)
 {
 	register int	i;
 
@@ -852,7 +860,7 @@ const void *	cp2;
 }
 
 static void
-associate P((void))
+associate(void)
 {
 	register struct zone *	zp;
 	register struct rule *	rp;
@@ -1037,7 +1045,8 @@ const char *		string;
 const char * const	errstring;
 const int		signable;
 {
-	int	hh, mm, ss, sign;
+	long	hh;
+	int	mm, ss, sign;
 
 	if (string == NULL || *string == '\0')
 		return 0;
@@ -1047,27 +1056,32 @@ const int		signable;
 		sign = -1;
 		++string;
 	} else	sign = 1;
-	if (sscanf(string, scheck(string, "%d"), &hh) == 1)
+	if (sscanf(string, scheck(string, "%ld"), &hh) == 1)
 		mm = ss = 0;
-	else if (sscanf(string, scheck(string, "%d:%d"), &hh, &mm) == 2)
+	else if (sscanf(string, scheck(string, "%ld:%d"), &hh, &mm) == 2)
 		ss = 0;
-	else if (sscanf(string, scheck(string, "%d:%d:%d"),
+	else if (sscanf(string, scheck(string, "%ld:%d:%d"),
 		&hh, &mm, &ss) != 3) {
 			error(errstring);
 			return 0;
 	}
-	if ((hh < 0 || hh >= HOURSPERDAY ||
+	if (hh < 0 ||
 		mm < 0 || mm >= MINSPERHOUR ||
-		ss < 0 || ss > SECSPERMIN) &&
-		!(hh == HOURSPERDAY && mm == 0 && ss == 0)) {
+		ss < 0 || ss > SECSPERMIN) {
 			error(errstring);
 			return 0;
 	}
-	if (noise && hh == HOURSPERDAY)
+	if (LONG_MAX / SECSPERHOUR < hh) {
+		error(_("time overflow"));
+		return 0;
+	}
+	if (noise && hh == HOURSPERDAY && mm == 0 && ss == 0)
 		warning(_("24:00 not handled by pre-1998 versions of zic"));
-	return eitol(sign) *
-		(eitol(hh * MINSPERHOUR + mm) *
-		eitol(SECSPERMIN) + eitol(ss));
+	if (noise && (hh > HOURSPERDAY ||
+		(hh == HOURSPERDAY && (mm != 0 || ss != 0))))
+warning(_("values over 24 hours not handled by pre-2007 versions of zic"));
+	return oadd(eitol(sign) * hh * eitol(SECSPERHOUR),
+		    eitol(sign) * (eitol(mm) * eitol(SECSPERMIN) + eitol(ss)));
 }
 
 static void
@@ -1767,8 +1781,8 @@ const char * const	string;
 				(size_t) sizeof tzh.field, (size_t) 1, fp)
 		tzh = tzh0;
 #ifdef ICU
-                * (ICUZoneinfoVersion*) &tzh.tzh_reserved = TZ_ICU_VERSION;
-                (void) strncpy(tzh.tzh_magic, TZ_ICU_MAGIC, sizeof tzh.tzh_magic);
+		* (ICUZoneinfoVersion*) &tzh.tzh_reserved = TZ_ICU_VERSION;
+		(void) strncpy(tzh.tzh_magic, TZ_ICU_MAGIC, sizeof tzh.tzh_magic);
 #else
 		(void) strncpy(tzh.tzh_magic, TZ_MAGIC, sizeof tzh.tzh_magic);
 #endif
@@ -1805,10 +1819,10 @@ const char * const	string;
 		for (i = 0; i < typecnt; ++i)
 			if (writetype[i]) {
 #ifdef ICU
-                                puttzcode((long) rawoffs[i], fp);
-                                puttzcode((long) dstoffs[i], fp);
+				puttzcode((long) rawoffs[i], fp);
+				puttzcode((long) dstoffs[i], fp);
 #else
-                                puttzcode((long) gmtoffs[i], fp);
+				puttzcode(gmtoffs[i], fp);
 #endif
 				(void) putc(isdsts[i], fp);
 				(void) putc((unsigned char) indmap[abbrinds[i]], fp);
@@ -2078,24 +2092,6 @@ const int			zonecount;
 	}
 }
 
-#ifdef ICU
-
-int add_icu_final_rules(const struct rule* r1, const struct rule* r2) {
-    int i;
-
-    for (i=0; i<finalRulesCount; ++i) { /* i+=2 should work too */
-        if (r1==finalRules[i]) return i; /* [sic] pointer comparison */
-    }
-
-    finalRules = (const struct rule**) (void*) erealloc((char *) finalRules,
-                 (finalRulesCount + 2) * sizeof(*finalRules));
-    finalRules[finalRulesCount++] = r1;
-    finalRules[finalRulesCount++] = r2;
-    return finalRulesCount - 2;
-}
-
-#endif /*ICU*/
-
 static void
 outzone(zpfirst, zonecount)
 const struct zone * const	zpfirst;
@@ -2119,9 +2115,9 @@ const int			zonecount;
 	register int			max_abbr_len;
 	register int			max_envvar_len;
 #ifdef ICU
-        int                  finalRuleYear, finalRuleIndex;
-        const struct rule*   finalRule1;
-        const struct rule*   finalRule2;
+	int						finalRuleYear, finalRuleIndex;
+	const struct rule*		finalRule1;
+	const struct rule*		finalRule2;
 #endif
 
 	max_abbr_len = 2 + max_format_len + max_abbrvar_len;
@@ -2150,7 +2146,8 @@ const int			zonecount;
 	}
 	for (i = 0; i < zonecount; ++i) {
 		zp = &zpfirst[i];
-		updateminmax(zp->z_untilrule.r_loyear);
+		if (i < zonecount - 1)
+			updateminmax(zp->z_untilrule.r_loyear);
 		for (j = 0; j < zp->z_nrules; ++j) {
 			rp = &zp->z_rules[j];
 			if (rp->r_lowasnum)
@@ -2168,7 +2165,7 @@ const int			zonecount;
 
 wp = ecpyalloc(_("no POSIX environment variable for zone"));
 		wp = ecatalloc(wp, " ");
-		wp = ecatalloc(wp, zpfirst->z_name); 
+		wp = ecatalloc(wp, zpfirst->z_name);
 		warning(wp);
 		ifree(wp);
 	}
@@ -2181,8 +2178,11 @@ wp = ecpyalloc(_("no POSIX environment variable for zone"));
 		else	max_year = INT_MAX;
 	}
 	/*
-	** For the benefit of older systems, generate data through 2037.
+	** For the benefit of older systems,
+	** generate data from 1900 through 2037.
 	*/
+	if (min_year > 1900)
+		min_year = 1900;
 	if (max_year < 2037)
 		max_year = 2037;
 	for (i = 0; i < zonecount; ++i) {
@@ -2200,45 +2200,53 @@ wp = ecpyalloc(_("no POSIX environment variable for zone"));
 		*startbuf = '\0';
 		startoff = zp->z_gmtoff;
 #ifdef ICU
-                finalRuleYear = finalRuleIndex = -1;
-                finalRule1 = finalRule2 = NULL;
-                if (i == (zonecount - 1)) { /* !useuntil */
-                    /* Look for exactly 2 rules that end at 'max' and
-                     * note them. Determine max(r_loyear) for the 2 of
-                     * them. */
-                    for (j=0; j<zp->z_nrules; ++j) {
-                        rp = &zp->z_rules[j];
-                        if (rp->r_hiyear == INT_MAX) {
-                            if (finalRule1 == NULL) {
-                                finalRule1 = rp;
-                                finalRuleYear = rp->r_loyear;
-                            } else if (finalRule2 == NULL) {
-                                finalRule2 = rp;
-                                if (rp->r_loyear > finalRuleYear) {
-                                    finalRuleYear = rp->r_loyear;
-                                }
-                            } else {
-                                error("more than two max rules found (ICU)");
-                                exit(EXIT_FAILURE);
-                            }
-                        }
-                    }
-                    if (finalRule1 != NULL && finalRule2 == NULL) {
-                        error("only one max rule found (ICU)");
-                        exit(EXIT_FAILURE);
-                    }
-                    if (finalRule1 != NULL) {
-                        /* Swap if necessary so finalRule1 occurs before
-                         * finalRule2 */
-                        if (finalRule1->r_month > finalRule2->r_month) {
-                            const struct rule* t = finalRule1;
-                            finalRule1 = finalRule2;
-                            finalRule2 = t;
-                        }
-                        /* Add final rule to our list */
-                        finalRuleIndex = add_icu_final_rules(finalRule1, finalRule2);
-                    }
-                }
+		finalRuleYear = finalRuleIndex = -1;
+		finalRule1 = finalRule2 = NULL;
+		if (i == (zonecount - 1)) { /* !useuntil */
+			/* Look for exactly 2 rules that end at 'max' and
+			 * note them. Determine max(r_loyear) for the 2 of
+			 * them. */
+			for (j=0; j<zp->z_nrules; ++j) {
+				rp = &zp->z_rules[j];
+				if (rp->r_hiyear == INT_MAX) {
+					if (finalRule1 == NULL) {
+						finalRule1 = rp;
+						finalRuleYear = rp->r_loyear;
+			    	} else if (finalRule2 == NULL) {
+						finalRule2 = rp;
+						if (rp->r_loyear > finalRuleYear) {
+							finalRuleYear = rp->r_loyear;
+						}
+					} else {
+						error("more than two max rules found (ICU)");
+						exit(EXIT_FAILURE);
+					}
+				}
+			}
+			if (finalRule1 != NULL && finalRule2 == NULL) {
+				error("only one max rule found (ICU)");
+				exit(EXIT_FAILURE);
+			}
+			if (finalRule1 != NULL) {
+				if (finalRule1->r_stdoff == finalRule2->r_stdoff) {
+					/* America/Resolute in 2009a uses a pair of rules
+					 * which does not change the offset.  ICU ignores
+					 * such rules without actual time transitions. */
+					finalRuleYear = finalRuleIndex = -1;
+					finalRule1 = finalRule2 = NULL; 
+				} else {
+					/* Swap if necessary so finalRule1 occurs before
+					 * finalRule2 */
+					if (finalRule1->r_month > finalRule2->r_month) {
+						const struct rule* t = finalRule1;
+						finalRule1 = finalRule2;
+						finalRule2 = t;
+					}
+					/* Add final rule to our list */
+					finalRuleIndex = add_icu_final_rules(finalRule1, finalRule2);
+				}
+			}
+		}
 #endif
 
 		if (zp->z_nrules == 0) {
@@ -2247,7 +2255,7 @@ wp = ecpyalloc(_("no POSIX environment variable for zone"));
 				(char *) NULL, stdoff != 0, FALSE);
 			type = addtype(oadd(zp->z_gmtoff, stdoff),
 #ifdef ICU
-                                zp->z_gmtoff, stdoff,
+				zp->z_gmtoff, stdoff,
 #endif
 				startbuf, stdoff != 0, startttisstd,
 				startttisgmt);
@@ -2348,40 +2356,40 @@ wp = ecpyalloc(_("no POSIX environment variable for zone"));
 					}
 				}
 #ifdef ICU
-                                if (year >= finalRuleYear && rp == finalRule1) {
-                                    /* We want to shift final year 1 year after
-                                     * the actual final rule takes effect (year + 1),
-                                     * because the previous type is valid until the first
-                                     * transition defined by the final rule.  Otherwise
-                                     * we may see unexpected offset shift at the
-                                     * begining of the year when the final rule takes
-                                     * effect. */
+				if (year >= finalRuleYear && rp == finalRule1) {
+					/* We want to shift final year 1 year after
+					 * the actual final rule takes effect (year + 1),
+					 * because the previous type is valid until the first
+					 * transition defined by the final rule.  Otherwise
+					 * we may see unexpected offset shift at the
+					 * begining of the year when the final rule takes
+					 * effect. */
 
-                                    /* ICU currently can support signed int32 transition
-                                     * times.  Thus, the transitions in year 2038 may be
-                                     * truncated.  At this moment (tzdata2008g), only
-                                     * Rule Brazil is impacted by this limitation, because
-                                     * the final set of rules are starting in 2038.  Although
-                                     * this code put the first couple of transitions populated
-                                     * by the final rules, they will be dropped off when
-                                     * collecting transition times.  So, we need to keep
-                                     * the start year of the final rule in 2038, not 2039.
-                                     * Fortunately, the Brazil rules in 2038 and beyond use
-                                     * the same base offset/dst saving amount.  Thus, even
-                                     * we skip the first couple of transitions, the final
-                                     * rule set for 2038 works properly.  So for now,
-                                     * we do not increment the final rule start year only when
-                                     * it falls into year 2038. We need to revisit this code
-                                     * in future to fix the root cause of this problem (ICU
-                                     * resource type limitation - signed int32).
-                                     * Oct 7, 2008 - Yoshito */
-                                    int finalStartYear = (year == 2038) ? year : year + 1;
-                                    emit_icu_zone(icuFile,
-                                                  zpfirst->z_name, zp->z_gmtoff,
-                                                  rp, finalRuleIndex, finalStartYear);
-                                    /* only emit this for the first year */
-                                    finalRule1 = NULL;
-                                }
+					/* ICU currently can support signed int32 transition
+					 * times.  Thus, the transitions in year 2038 may be
+					 * truncated.  At this moment (tzdata2008g), only
+					 * Rule Brazil is impacted by this limitation, because
+					 * the final set of rules are starting in 2038.  Although
+					 * this code put the first couple of transitions populated
+					 * by the final rules, they will be dropped off when
+					 * collecting transition times.  So, we need to keep
+					 * the start year of the final rule in 2038, not 2039.
+					 * Fortunately, the Brazil rules in 2038 and beyond use
+					 * the same base offset/dst saving amount.  Thus, even
+					 * we skip the first couple of transitions, the final
+					 * rule set for 2038 works properly.  So for now,
+					 * we do not increment the final rule start year only when
+					 * it falls into year 2038. We need to revisit this code
+					 * in future to fix the root cause of this problem (ICU
+					 * resource type limitation - signed int32).
+					 * Oct 7, 2008 - Yoshito */
+					int finalStartYear = (year == 2038) ? year : year + 1;
+					emit_icu_zone(icuFile,
+							zpfirst->z_name, zp->z_gmtoff,
+							rp, finalRuleIndex, finalStartYear);
+					/* only emit this for the first year */
+					finalRule1 = NULL;
+				}
 #endif
 				eats(zp->z_filename, zp->z_linenum,
 					rp->r_filename, rp->r_linenum);
@@ -2390,7 +2398,7 @@ wp = ecpyalloc(_("no POSIX environment variable for zone"));
 				offset = oadd(zp->z_gmtoff, rp->r_stdoff);
 #ifdef ICU
 				type = addtype(offset, zp->z_gmtoff, rp->r_stdoff,
-                                        ab, rp->r_stdoff != 0,
+					ab, rp->r_stdoff != 0,
 					rp->r_todisstd, rp->r_todisgmt);
 #else
 				type = addtype(offset, ab, rp->r_stdoff != 0,
@@ -2411,8 +2419,8 @@ error(_("can't determine time zone abbreviation to use just after until time"));
 			else	addtt(starttime,
 #ifdef ICU
 					addtype(startoff,
-                                                zp->z_gmtoff, startoff - zp->z_gmtoff,
-                                                startbuf,
+						zp->z_gmtoff, startoff - zp->z_gmtoff,
+						startbuf,
 						startoff != zp->z_gmtoff,
 						startttisstd,
 						startttisgmt));
@@ -2508,10 +2516,10 @@ const int		ttisgmt;
 		error(_("internal error - addtype called with bad isdst/dstoff"));
 		(void) exit(EXIT_FAILURE);
 	}
-        if (gmtoff != (rawoff + dstoff)) {
+	if (gmtoff != (rawoff + dstoff)) {
 		error(_("internal error - addtype called with bad gmt/raw/dstoff"));
 		(void) exit(EXIT_FAILURE);
-        }
+	}
 #endif
 	/*
 	** See if there's already an entry for this zone type.
@@ -2520,7 +2528,7 @@ const int		ttisgmt;
 	for (i = 0; i < typecnt; ++i) {
 		if (gmtoff == gmtoffs[i] && isdst == isdsts[i] &&
 #ifdef ICU
-                        rawoff == rawoffs[i] && dstoff == dstoffs[i] &&
+			rawoff == rawoffs[i] && dstoff == dstoffs[i] &&
 #endif
 			strcmp(abbr, &chars[abbrinds[i]]) == 0 &&
 			ttisstd == ttisstds[i] &&
@@ -2535,10 +2543,14 @@ const int		ttisgmt;
 		error(_("too many local time types"));
 		exit(EXIT_FAILURE);
 	}
+	if (! (-1L - 2147483647L <= gmtoff && gmtoff <= 2147483647L)) {
+		error(_("UTC offset out of range"));
+		exit(EXIT_FAILURE);
+	}
 	gmtoffs[i] = gmtoff;
 #ifdef ICU
-        rawoffs[i] = rawoff;
-        dstoffs[i] = dstoff;
+	rawoffs[i] = rawoff;
+	dstoffs[i] = dstoff;
 #endif
 	isdsts[i] = isdst;
 	ttisstds[i] = ttisstd;
@@ -2589,7 +2601,7 @@ int		count;
 }
 
 static void
-adjleap P((void))
+adjleap(void)
 {
 	register int	i;
 	register long	last = 0;
@@ -2719,9 +2731,12 @@ register char *	cp;
 			else while ((*dp = *cp++) != '"')
 				if (*dp != '\0')
 					++dp;
-				else	error(_(
+				else {
+					error(_(
 						"Odd number of quotation marks"
 						));
+					exit(1);
+				}
 		} while (*cp != '\0' && *cp != '#' &&
 			(!isascii(*cp) || !isspace((unsigned char) *cp)));
 		if (isascii(*cp) && isspace((unsigned char) *cp))
@@ -2909,7 +2924,7 @@ wp = _("time zone abbreviation differs from POSIX standard");
 
 static int
 mkdirs(argname)
-char * const	argname;
+char *		argname;
 {
 	register char *	name;
 	register char *	cp;

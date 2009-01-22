@@ -1,4 +1,4 @@
-static char	elsieid[] = "@(#)zdump.c	8.3";
+static char	elsieid[] = "@(#)zdump.c	8.8";
 
 /*
 ** This code has been made independent of the rest of the time
@@ -104,6 +104,9 @@ static char	elsieid[] = "@(#)zdump.c	8.3";
 #define SECSPERNYEAR	(SECSPERDAY * DAYSPERNYEAR)
 #define SECSPERLYEAR	(SECSPERNYEAR + SECSPERDAY)
 
+#ifndef HAVE_GETTEXT
+#define HAVE_GETTEXT 0
+#endif
 #if HAVE_GETTEXT
 #include "locale.h"	/* for setlocale */
 #include "libintl.h"
@@ -145,13 +148,9 @@ static char	elsieid[] = "@(#)zdump.c	8.3";
 #define TZ_DOMAIN "tz"
 #endif /* !defined TZ_DOMAIN */
 
-#ifndef P
-#define P(x)	x
-#endif /* !defined P */
-
 extern char **	environ;
-extern int	getopt P((int argc, char * const argv[],
-			const char * options));
+extern int	getopt(int argc, char * const argv[],
+			const char * options);
 extern char *	optarg;
 extern int	optind;
 extern char *	tzname[2];
@@ -162,26 +161,26 @@ static size_t	longest;
 static char *	progname;
 static int	warned;
 
-static char *	abbr P((struct tm * tmp));
-static void	abbrok P((const char * abbrp, const char * zone));
-static long	delta P((struct tm * newp, struct tm * oldp));
-static void	dumptime P((const struct tm * tmp));
-static time_t	hunt P((char * name, time_t lot, time_t	hit));
-static void	setabsolutes P((void));
-static void	show P((char * zone, time_t t, int v));
-static const char *	tformat P((void));
-static time_t	yeartot P((long y));
+static char *	abbr(struct tm * tmp);
+static void	abbrok(const char * abbrp, const char * zone);
+static long	delta(struct tm * newp, struct tm * oldp);
+static void	dumptime(const struct tm * tmp);
+static time_t	hunt(char * name, time_t lot, time_t	hit);
+static void	setabsolutes(void);
+static void	show(char * zone, time_t t, int v);
+static const char *	tformat(void);
+static time_t	yeartot(long y);
 #ifdef ICU
 typedef struct listentry {
 	char *		name;
 	struct listentry *	next;
 } listentry;
 
-static time_t	huntICU P((char * name, time_t lot, time_t	hit, FILE *fp));
-static void	dumptimeICU P((FILE * fp, time_t t));
-static void	showICU P((FILE * fp, char * zone, time_t t1, time_t t2));
-static int	getall P((struct listentry ** namelist));
-static void getzones P((char * basedir, char * subdir, struct listentry ** last, int * count));
+static time_t	huntICU(char * name, time_t lot, time_t	hit, FILE *fp);
+static void	dumptimeICU(FILE * fp, time_t t);
+static void	showICU(FILE * fp, char * zone, time_t t1, time_t t2);
+static int	getall(struct listentry ** namelist);
+static void getzones(char * basedir, char * subdir, struct listentry ** last, int * count);
 #endif
 
 #ifndef TYPECHECK
@@ -259,6 +258,17 @@ const char * const	zone;
 	warned = TRUE;
 }
 
+static void
+usage(const char *progname, FILE *stream, int status)
+{
+	(void) fprintf(stream,
+_("%s: usage is %s [ --version ] [ --help ] [ -v ] [ -c [loyear,]hiyear ] zonename ...\n\
+\n\
+Report bugs to tz@elsie.nci.nih.gov.\n"),
+		       progname, progname);
+	exit(status);
+}
+
 int
 main(argc, argv)
 int	argc;
@@ -303,6 +313,8 @@ char *	argv[];
 		if (strcmp(argv[i], "--version") == 0) {
 			(void) printf("%s\n", elsieid);
 			exit(EXIT_SUCCESS);
+		} else if (strcmp(argv[i], "--help") == 0) {
+			usage(progname, stdout, EXIT_SUCCESS);
 		}
 	vflag = 0;
 	cutarg = NULL;
@@ -359,10 +371,7 @@ char *	argv[];
 		else	cutarg = optarg;
 	if ((c != EOF && c != -1) ||
 		(optind == argc - 1 && strcmp(argv[optind], "=") == 0)) {
-			(void) fprintf(stderr,
-_("%s: usage is %s [ --version ] [ -v ] [ -c [loyear,]hiyear ] zonename ...\n"),
-				progname, progname);
-			exit(EXIT_FAILURE);
+			usage(progname, stderr, EXIT_FAILURE);
 	}
 #endif
 	if (vflag) {
@@ -498,13 +507,9 @@ _("%s: usage is %s [ --version ] [ -v ] [ -c [loyear,]hiyear ] zonename ...\n"),
 			(void) strncpy(buf, abbr(&tm), (sizeof buf) - 1);
 		}
 		for ( ; ; ) {
-			if (t >= cuthitime)
+			if (t >= cuthitime || t >= cuthitime - SECSPERHOUR * 12)
 				break;
 			newt = t + SECSPERHOUR * 12;
-			if (newt >= cuthitime)
-				break;
-			if (newt <= t)
-				break;
 			newtmp = localtime(&newt);
 			if (newtmp != NULL)
 				newtm = *newtmp;
@@ -588,7 +593,7 @@ _("%s: usage is %s [ --version ] [ -v ] [ -c [loyear,]hiyear ] zonename ...\n"),
 }
 
 static void
-setabsolutes()
+setabsolutes(void)
 {
 	if (0.5 == (time_t) 0.5) {
 		/*
@@ -617,7 +622,7 @@ _("%s: use of -v on system with floating time_t other than float or double\n"),
 			t = t1;
 			t1 = 2 * t1 + 1;
 		}
-		  
+
 		absolute_max_time = t;
 		t = -t;
 		absolute_min_time = t - 1;
@@ -786,7 +791,7 @@ struct tm *	tmp;
 */
 
 static const char *
-tformat()
+tformat(void)
 {
 	if (0.5 == (time_t) 0.5) {	/* floating */
 		if (sizeof (time_t) > sizeof (double))
