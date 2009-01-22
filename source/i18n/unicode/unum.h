@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2008, International Business Machines Corporation and others.
+* Copyright (C) 1997-2009, International Business Machines Corporation and others.
 * All Rights Reserved.
 * Modification History:
 *
@@ -157,6 +157,11 @@ typedef enum UNumberFormatStyle {
      * @stable ICU 3.0
      */
     UNUM_DURATION,
+    /** 
+     * Numbering system rule-based format 
+     * @draft ICU 4.2
+     */
+    UNUM_NUMBERING_SYSTEM,
     /** 
      * Rule-based format defined by pattern 
      * @stable ICU 3.0

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /* Modification History:
@@ -86,6 +86,8 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(34,TestCurrencyFormat);
         CASE(35,TestRounding);
         CASE(36,TestNonpositiveMultiplier);
+        CASE(37,TestNumberingSystems);
+
         default: name = ""; break;
     }
 }
@@ -2475,5 +2477,44 @@ void NumberFormatTest::TestNonpositiveMultiplier() {
 }
 
 
+/**
+ * Test using various numbering systems and numbering system keyword.
+ */
+
+void NumberFormatTest::TestNumberingSystems() {
+    UErrorCode ec = U_ZERO_ERROR;
+
+    Locale loc1("en", "US", "", "numbers=thai");
+    Locale loc2("en", "US", "", "numbers=hebrew");
+    Locale loc3("en", "US", "", "numbers=persian");
+    Locale loc4("en", "US", "", "numbers=foobar");
+
+    NumberFormat* fmt1= NumberFormat::createInstance(loc1, ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: getInstance(en_US@numbers=thai)");
+    }
+    NumberFormat* fmt2= NumberFormat::createInstance(loc2, ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: getInstance(en_US@numbers=hebrew)");
+    }
+    NumberFormat* fmt3= NumberFormat::createInstance(loc3, ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: getInstance(en_US@numbers=persian)");
+    }
+
+    expect2(*fmt1, 1234.567, CharsToUnicodeString("\\u0E51,\\u0E52\\u0E53\\u0E54.\\u0E55\\u0E56\\u0E57"));
+    expect2(*fmt2, 5678.0, CharsToUnicodeString("\\u05D4\\u05F3\\u05EA\\u05E8\\u05E2\\u05F4\\u05D7"));
+    expect2(*fmt3, 1234.567, CharsToUnicodeString("\\u06F1,\\u06F2\\u06F3\\u06F4.\\u06F5\\u06F6\\u06F7"));
+
+    // Test bogus keyword value
+    NumberFormat* fmt4= NumberFormat::createInstance(loc4, ec);
+    if ( ec != U_UNSUPPORTED_ERROR ) {
+        errln("FAIL: getInstance(en_US@numbers=foobar) should have returned U_UNSUPPORTED_ERROR");
+    }
+
+    delete fmt1;
+    delete fmt2;
+    delete fmt3;
+}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
