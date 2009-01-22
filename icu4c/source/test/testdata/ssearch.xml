@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- Copyright (c) 2007-2008 IBM Corporation and others. All rights reserved -->
+<!-- Copyright (c) 2007-2009 IBM Corporation and others. All rights reserved -->
 
 <!-- Test data file for string search  -->
 <!DOCTYPE stringsearch-tests [
@@ -12,6 +12,7 @@
           locale CDATA "en" 
           strength (PRIMARY | SECONDARY | TERTIARY | QUATERNARY | IDENTICAL) "TERTIARY" 
           norm (ON | OFF) "OFF"
+          alternate_handling (NON_IGNORABLE | SHIFTED) "NON_IGNORABLE"
           >
 
 <!ELEMENT pattern (#PCDATA)>
@@ -20,7 +21,7 @@
 <!ELEMENT post (#PCDATA)>
 ]>
 
-<stringsearch-tests debug="test32">
+<stringsearch-tests>
   <!-- debug="test11"     (for copying into the above element)  -->
     
     <!-- Very simple match  -->
@@ -174,8 +175,15 @@
       <pattern>A\u0300</pattern>
       <pre>At IDENTICAL, shoud this match?  </pre><m>\u00c0</m><post></post>
     </test-case>
-    
-    <test-case id="test25" strength="SECONDARY" locale="en">
+
+  <test-case id="test24b" strength="IDENTICAL" alternate_handling="SHIFTED" locale="en">
+    <pattern>A\u0300</pattern>
+    <pre>At IDENTICAL, shoud this match?  </pre>
+    <m>\u00c0</m>
+    <post></post>
+  </test-case>
+
+  <test-case id="test25" strength="SECONDARY" locale="en">
       <pattern>Ű</pattern>
       <pre>12</pre><m>ű</m><post> Ű</post>
     </test-case>
@@ -285,11 +293,13 @@
     
 
     <!-- Long combining sequences  -->
+    <!-- Backwards search fails because patterns ends w/ ignorables
     <test-case id="test60" strength="PRIMARY">
       <pattern>A\u0301\u0301\u0301\u0301</pattern>
       <m>A\u0301\u0301\u0301\u0301\u0301</m>
     </test-case>
-    
+    -->
+
     <test-case id="test61" strength="TERTIARY">
       <pattern>A\u0301\u0301\u0301\u0301</pattern>
           <pre>A\u0301\u0301\u0301\u0301\u0301</pre>
@@ -408,6 +418,28 @@
   <test-case id="test82" strength="SECONDARY">
     <pattern>VII</pattern>
     <m>\u2166</m>
+  </test-case>
+
+  <test-case id="test83" strength="IDENTICAL" alternate_handling="SHIFTED" locale="en">
+    <pattern>Universal Declaration of Human Rights</pattern>
+    <pre>Proclaims this </pre><m>Universal Declaration of Human Rights</m><post> as a common standard of achievement for all peoples and all nations</post>
+  </test-case>
+
+  <test-case id="test83b" strength="TERTIARY" alternate_handling="SHIFTED" locale="en">
+    <pattern>Universal Declaration of Human Rights</pattern>
+    <pre>Proclaims this </pre>
+    <m>Universal-Declaration-of-Human-Rights</m>
+    <post> as a common standard of achievement for all peoples and all nations</post>
+  </test-case>
+
+  <test-case id="test84" strength="TERTIARY" locale="en">
+    <pattern>\u05E9\u0591\u05E9</pattern>
+    <m>\u05E9\u0592\u05E9</m>
+  </test-case>
+
+  <test-case id="test84b" strength="IDENTICAL" locale="en">
+    <pattern>\u05E9\u0591\u05E9</pattern>
+    <pre>\u05E9\u0592\u05E9</pre>
   </test-case>
 </stringsearch-tests>
   

@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2008, International Business Machines
+ *   Copyright (C) 2005-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -32,7 +32,12 @@
 #include "intltest.h"
 #include "ssearch.h"
 
+#include "unicode/colldata.h"
+#include "unicode/bmsearch.h"
+#include "unicode/bms.h"
+
 #include "xmlparser.h"
+#include "ucbuf.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -51,6 +56,8 @@ char testId[100];
           __FILE__, __LINE__, testId, u_errorName(errcode));}}
 
 #define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
+#define NEW_ARRAY(type, count) (type *) uprv_malloc((count) * sizeof(type))
+#define DELETE_ARRAY(array) uprv_free((void *) (array))
 
 //---------------------------------------------------------------------------
 //
@@ -80,6 +87,34 @@ void SSearchTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
 
         case 2: name = "monkeyTest";
             if (exec) monkeyTest(params);
+            break;
+
+        case 3: name = "bmMonkeyTest";
+            if (exec) bmMonkeyTest(params);
+            break;
+
+        case 4: name = "boyerMooreTest";
+            if (exec) boyerMooreTest();
+            break;
+
+        case 5: name = "goodSuffixTest";
+            if (exec) goodSuffixTest();
+            break;
+
+        case 6: name = "searchTime";
+            if (exec) searchTime();
+            break;
+
+        case 7: name = "bmsTest";
+            if (exec) bmsTest();
+            break;
+
+        case 8: name = "bmSearchTest";
+            if (exec) bmSearchTest();
+            break;
+
+        case 9: name = "udhrTest";
+            if (exec) udhrTest();
             break;
 #endif
         default: name = "";
@@ -181,6 +216,16 @@ void SSearchTest::searchTest()
             normalize = UCOL_ON;
         }
 
+        //
+        // Get the alternate_handling flag. Default is UCOL_NON_IGNORABLE.
+        //
+        UColAttributeValue alternateHandling = UCOL_NON_IGNORABLE;
+        const UnicodeString *alt = testCase->getAttribute("alternate_handling");
+        TEST_ASSERT (alt == NULL || *alt == "SHIFTED" || *alt == "NON_IGNORABLE");
+        if (alt != NULL && *alt == "SHIFTED") {
+            alternateHandling = UCOL_SHIFTED;
+        }
+
         const UnicodeString defLocale("en");
         char  clocale[100];
         const UnicodeString *locale   = testCase->getAttribute("locale");
@@ -196,7 +241,7 @@ void SSearchTest::searchTest()
         int32_t        expectedMatchStart = -1;
         int32_t        expectedMatchLimit = -1;
         const UXMLElement  *n;
-        int                nodeCount = 0;
+        int32_t                nodeCount = 0;
 
         n = testCase->getChildElement("pattern");
         TEST_ASSERT(n != NULL);
@@ -237,13 +282,14 @@ void SSearchTest::searchTest()
         //  Check that there weren't extra things in the XML
         TEST_ASSERT(nodeCount == testCase->countChildren());
 
-        // Open a collotor and StringSearch based on the parameters
+        // Open a collator and StringSearch based on the parameters
         //   obtained from the XML.
         //
         status = U_ZERO_ERROR;
         UCollator *collator = ucol_open(clocale, &status);
         ucol_setStrength(collator, collatorStrength);
         ucol_setAttribute(collator, UCOL_NORMALIZATION_MODE, normalize, &status);
+        ucol_setAttribute(collator, UCOL_ALTERNATE_HANDLING, alternateHandling, &status);
         UStringSearch *uss = usearch_openFromCollator(pattern.getBuffer(), pattern.length(),
                                          target.getBuffer(), target.length(),
                                          collator,
@@ -310,6 +356,323 @@ void SSearchTest::searchTest()
         ucol_close(collator);
     }
 
+    delete root;
+    delete parser;
+#endif
+}
+
+struct UdhrTestCase
+{
+    char *locale;
+    char *file;
+};
+
+void SSearchTest::udhrTest()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    char path[PATH_BUFFER_SIZE];
+    const char *udhrPath = getPath(path, "udhr");
+
+    if (udhrPath == NULL) {
+        // couldn't get path: error message already output...
+        return;
+    }
+
+    UdhrTestCase testCases[] = {
+        {"en", "udhr_eng.txt"},
+        {"de", "udhr_deu_1996.txt"},
+        {"fr", "udhr_fra.txt"},
+        {"ru", "udhr_rus.txt"},
+        {"th", "udhr_tha.txt"},
+        {"ja", "udhr_jpn.txt"},
+        {"ko", "udhr_kor.txt"},
+        {"zh", "udhr_cmn_hans.txt"},
+        {"zh_Hant", "udhr_cmn_hant.txt"}
+    };
+
+    int32_t testCount = ARRAY_SIZE(testCases);
+
+    for (int32_t t = 0; t < testCount; t += 1) {
+        int32_t len = 0;
+        char *resolvedFileName = NULL;
+        const char *encoding = NULL;
+        UCHARBUF *ucharBuf = NULL;
+
+        ucbuf_resolveFileName(udhrPath, testCases[t].file, NULL, &len, &status);
+        resolvedFileName = NEW_ARRAY(char, len);
+
+        if(resolvedFileName == NULL){
+            continue;
+        }
+
+        if(status == U_BUFFER_OVERFLOW_ERROR){
+            status = U_ZERO_ERROR;
+        }
+
+        ucbuf_resolveFileName(udhrPath, testCases[t].file, resolvedFileName, &len, &status);
+        ucharBuf = ucbuf_open(resolvedFileName, &encoding, TRUE, FALSE, &status);
+
+        DELETE_ARRAY(resolvedFileName);
+
+        if(U_FAILURE(status)){
+            infoln("Could not open the input file %s. Test skipped\n", testCases[t].file);
+            continue;
+        }
+
+        int32_t targetLen = 0;
+        const UChar *target = ucbuf_getBuffer(ucharBuf, &targetLen, &status);
+
+        /* The first line of the file contains the pattern */
+        int32_t start = 0, end = 0, plen = 0;
+
+        for(end = start; ; end += 1) {
+            UChar ch = target[end];
+
+            if (ch == 0x000A || ch == 0x000D || ch == 0x2028) {
+                break;
+            }
+        }
+
+        plen = end - start;
+
+        UChar *pattern = NEW_ARRAY(UChar, plen);
+        for (int32_t i = 0; i < plen; i += 1) {
+            pattern[i] =  target[start++];
+        }
+
+        int32_t offset = 0;
+        UCollator *coll = ucol_open(testCases[t].locale, &status);
+        UCD *ucd = NULL;
+        BMS *bms = NULL;
+
+        if (U_FAILURE(status)) {
+            errln("Could not open collator for %s", testCases[t].locale);
+            goto delete_collator;
+        }
+
+        ucd = ucd_open(coll, &status);
+
+        if (U_FAILURE(status)) {
+            errln("Could not open CollData object for %s", testCases[t].locale);
+            goto delete_ucd;
+        }
+
+        bms = bms_open(ucd, pattern, plen, target, targetLen, &status);
+
+        if (U_FAILURE(status)) {
+            errln("Could not open search object for %s", testCases[t].locale);
+            goto delete_bms;
+        }
+        
+        start = end = -1;
+        while (bms_search(bms, offset, &start, &end)) {
+            offset = end;
+        }
+
+        if (offset == 0) {
+            errln("Could not find pattern - locale: %s, file: %s ", testCases[t].locale, testCases[t].file);
+        }
+
+delete_bms:
+        bms_close(bms);
+
+delete_ucd:
+        ucd_close(ucd);
+
+delete_collator:
+        ucol_close(coll);
+
+        DELETE_ARRAY(pattern);
+        ucbuf_close(ucharBuf);
+    }
+
+    ucd_flushCache();
+}
+
+void SSearchTest::bmSearchTest()
+{
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+    UErrorCode status = U_ZERO_ERROR;
+    char path[PATH_BUFFER_SIZE];
+    const char *testFilePath = getPath(path, "ssearch.xml");
+
+    if (testFilePath == NULL) {
+        return; /* Couldn't get path: error message already output. */
+    }
+
+    UXMLParser  *parser = UXMLParser::createParser(status);
+    TEST_ASSERT_SUCCESS(status);
+    UXMLElement *root   = parser->parseFile(testFilePath, status);
+    TEST_ASSERT_SUCCESS(status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    const UnicodeString *debugTestCase = root->getAttribute("debug");
+    if (debugTestCase != NULL) {
+//       setenv("USEARCH_DEBUG", "1", 1);
+    }
+
+
+    const UXMLElement *testCase;
+    int32_t tc = 0;
+
+    while((testCase = root->nextChildElement(tc)) != NULL) {
+
+        if (testCase->getTagName().compare("test-case") != 0) {
+            errln("ssearch, unrecognized XML Element in test file");
+            continue;
+        }
+        const UnicodeString *id       = testCase->getAttribute("id");
+        *testId = 0;
+        if (id != NULL) {
+            id->extract(0, id->length(), testId,  sizeof(testId), US_INV);
+        }
+
+        // If debugging test case has been specified and this is not it, skip to next.
+        if (id!=NULL && debugTestCase!=NULL && *id != *debugTestCase) {
+            continue;
+        }
+        //
+        //  Get the requested collation strength.
+        //    Default is tertiary if the XML attribute is missing from the test case.
+        //
+        const UnicodeString *strength = testCase->getAttribute("strength");
+        UColAttributeValue collatorStrength;
+        if      (strength==NULL)          { collatorStrength = UCOL_TERTIARY;}
+        else if (*strength=="PRIMARY")    { collatorStrength = UCOL_PRIMARY;}
+        else if (*strength=="SECONDARY")  { collatorStrength = UCOL_SECONDARY;}
+        else if (*strength=="TERTIARY")   { collatorStrength = UCOL_TERTIARY;}
+        else if (*strength=="QUATERNARY") { collatorStrength = UCOL_QUATERNARY;}
+        else if (*strength=="IDENTICAL")  { collatorStrength = UCOL_IDENTICAL;}
+        else {
+            // Bogus value supplied for strength.  Shouldn't happen, even from
+            //  typos, if the  XML source has been validated.
+            //  This assert is a little deceiving in that strength can be
+            //   any of the allowed values, not just TERTIARY, but it will
+            //   do the job of getting the error output.
+            TEST_ASSERT(*strength=="TERTIARY")
+        }
+
+        //
+        // Get the collator normalization flag.  Default is UCOL_OFF.
+        //
+        UColAttributeValue normalize = UCOL_OFF;
+        const UnicodeString *norm = testCase->getAttribute("norm");
+        TEST_ASSERT (norm==NULL || *norm=="ON" || *norm=="OFF");
+        if (norm!=NULL && *norm=="ON") {
+            normalize = UCOL_ON;
+        }
+
+        //
+        // Get the alternate_handling flag. Default is UCOL_NON_IGNORABLE.
+        //
+        UColAttributeValue alternateHandling = UCOL_NON_IGNORABLE;
+        const UnicodeString *alt = testCase->getAttribute("alternate_handling");
+        TEST_ASSERT (alt == NULL || *alt == "SHIFTED" || *alt == "NON_IGNORABLE");
+        if (alt != NULL && *alt == "SHIFTED") {
+            alternateHandling = UCOL_SHIFTED;
+        }
+
+        const UnicodeString defLocale("en");
+        char  clocale[100];
+        const UnicodeString *locale   = testCase->getAttribute("locale");
+        if (locale == NULL || locale->length()==0) {
+            locale = &defLocale;
+        };
+        locale->extract(0, locale->length(), clocale, sizeof(clocale), NULL);
+
+
+        UnicodeString  text;
+        UnicodeString  target;
+        UnicodeString  pattern;
+        int32_t        expectedMatchStart = -1;
+        int32_t        expectedMatchLimit = -1;
+        const UXMLElement  *n;
+        int32_t                nodeCount = 0;
+
+        n = testCase->getChildElement("pattern");
+        TEST_ASSERT(n != NULL);
+        if (n==NULL) {
+            continue;
+        }
+        text = n->getText(FALSE);
+        text = text.unescape();
+        pattern.append(text);
+        nodeCount++;
+
+        n = testCase->getChildElement("pre");
+        if (n!=NULL) {
+            text = n->getText(FALSE);
+            text = text.unescape();
+            target.append(text);
+            nodeCount++;
+        }
+        
+        n = testCase->getChildElement("m");
+        if (n!=NULL) {
+            expectedMatchStart = target.length();
+            text = n->getText(FALSE);
+            text = text.unescape();
+            target.append(text);
+            expectedMatchLimit = target.length();
+            nodeCount++;
+        }
+
+        n = testCase->getChildElement("post");
+        if (n!=NULL) {
+            text = n->getText(FALSE);
+            text = text.unescape();
+            target.append(text);
+            nodeCount++;
+        }
+
+        //  Check that there weren't extra things in the XML
+        TEST_ASSERT(nodeCount == testCase->countChildren());
+
+        // Open a collator and StringSearch based on the parameters
+        //   obtained from the XML.
+        //
+        status = U_ZERO_ERROR;
+        UCollator *collator = ucol_open(clocale, &status);
+        ucol_setStrength(collator, collatorStrength);
+        ucol_setAttribute(collator, UCOL_NORMALIZATION_MODE, normalize, &status);
+        ucol_setAttribute(collator, UCOL_ALTERNATE_HANDLING, alternateHandling, &status);
+        UCD *ucd = ucd_open(collator, &status);
+        BMS *bms = bms_open(ucd, pattern.getBuffer(), pattern.length(), target.getBuffer(), target.length(), &status);
+
+        TEST_ASSERT_SUCCESS(status);
+        if (U_FAILURE(status)) {
+            bms_close(bms);
+            ucd_close(ucd);
+            ucol_close(collator);
+            continue;
+        }
+
+        int32_t foundStart = 0;
+        int32_t foundLimit = 0;
+        UBool   foundMatch;
+
+        //
+        // Do the search, check the match result against the expected results.
+        //
+        foundMatch = bms_search(bms, 0, &foundStart, &foundLimit);
+      //TEST_ASSERT_SUCCESS(status);
+        if (foundMatch && expectedMatchStart < 0 ||
+            foundStart != expectedMatchStart   ||
+            foundLimit != expectedMatchLimit) {
+                TEST_ASSERT(FALSE);   //  ouput generic error position
+                infoln("Found, expected match start = %d, %d \n"
+                       "Found, expected match limit = %d, %d",
+                foundStart, expectedMatchStart, foundLimit, expectedMatchLimit);
+        }
+
+        bms_close(bms);
+        ucd_close(ucd);
+        ucol_close(collator);
+    }
+
+    ucd_flushCache();
     delete root;
     delete parser;
 #endif
@@ -549,6 +912,10 @@ static char *printOrders(char *buffer, OrderList &list)
 void SSearchTest::offsetTest()
 {
     const char *test[] = {
+        // The sequence \u0FB3\u0F71\u0F71\u0F80 contains a discontiguous
+        // contraction (\u0FB3\u0F71\u0F80) logically followed by \u0F71.
+        "\\u1E33\\u0FB3\\u0F71\\u0F71\\u0F80\\uD835\\uDF6C\\u01B0",
+
         "\\ua191\\u16ef\\u2036\\u017a",
 
 #if 0
@@ -673,341 +1040,6 @@ void SSearchTest::offsetTest()
     delete col;
 }
 
-class CEList
-{
-public:
-    CEList(UCollator *coll, const UnicodeString &string);
-    ~CEList();
-
-    int32_t size() const;
-    int32_t get(int32_t index) const;
-    UBool matchesAt(int32_t offset, const CEList *other) const; 
-
-private:
-    void add(int32_t ce);
-
-    int32_t *ces;
-    int32_t listMax;
-    int32_t listSize;
-};
-
-CEList::CEList(UCollator *coll, const UnicodeString &string)
-    : ces(NULL), listMax(8), listSize(0)
-{
-    UErrorCode status = U_ZERO_ERROR;
-    UCollationElements *elems = ucol_openElements(coll, string.getBuffer(), string.length(), &status);
-    uint32_t strengthMask = 0;
-    int32_t order;
-
-#if 0
-    switch (ucol_getStrength(coll)) 
-    {
-    default:
-        strengthMask |= UCOL_TERTIARYORDERMASK;
-        /* fall through */
-
-    case UCOL_SECONDARY:
-        strengthMask |= UCOL_SECONDARYORDERMASK;
-        /* fall through */
-
-    case UCOL_PRIMARY:
-        strengthMask |= UCOL_PRIMARYORDERMASK;
-    }
-#else
-    strengthMask = UCOL_PRIMARYORDERMASK;
-#endif
-
-    ces = new int32_t[listMax];
-
-    while ((order = ucol_next(elems, &status)) != UCOL_NULLORDER) {
-        order &= strengthMask;
-
-        if (order == UCOL_IGNORABLE) {
-            continue;
-        }
-
-        add(order);
-    }
-
-    ucol_closeElements(elems);
-}
-
-CEList::~CEList()
-{
-    delete[] ces;
-}
-
-void CEList::add(int32_t ce)
-{
-    if (listSize >= listMax) {
-        listMax *= 2;
-
-        int32_t *newCEs = new int32_t[listMax];
-
-        uprv_memcpy(newCEs, ces, listSize * sizeof(int32_t));
-        delete[] ces;
-        ces = newCEs;
-    }
-
-    ces[listSize++] = ce;
-}
-
-int32_t CEList::get(int32_t index) const
-{
-    if (index >= 0 && index < listSize) {
-        return ces[index];
-    }
-
-    return -1;
-}
-
-UBool CEList::matchesAt(int32_t offset, const CEList *other) const
-{
-    if (listSize - offset < other->size()) {
-        return FALSE;
-    }
-
-    for (int32_t i = offset, j = 0; j < other->size(); i += 1, j += 1) {
-        if (ces[i] != other->get(j)) {
-            return FALSE;
-        }
-    }
-
-    return TRUE;
-}
-
-int32_t CEList::size() const
-{
-    return listSize;
-}
-
-class StringList
-{
-public:
-    StringList();
-    ~StringList();
-
-    void add(const UnicodeString *string);
-    void add(const UChar *chars, int32_t count);
-    const UnicodeString *get(int32_t index) const;
-    int32_t size() const;
-
-private:
-    UnicodeString *strings;
-    int32_t listMax;
-    int32_t listSize;
-};
-
-StringList::StringList()
-    : strings(NULL), listMax(16), listSize(0)
-{
-    strings = new UnicodeString [listMax];
-}
-
-StringList::~StringList()
-{
-    delete[] strings;
-}
-
-void StringList::add(const UnicodeString *string)
-{
-    if (listSize >= listMax) {
-        listMax *= 2;
-
-        UnicodeString *newStrings = new UnicodeString[listMax];
-
-        uprv_memcpy(newStrings, strings, listSize * sizeof(UnicodeString));
-
-        delete[] strings;
-        strings = newStrings;
-    }
-
-    // The ctor initialized all the strings in
-    // the array to empty strings, so this
-    // is the same as copying the source string.
-    strings[listSize++].append(*string);
-}
-
-void StringList::add(const UChar *chars, int32_t count)
-{
-    const UnicodeString string(chars, count);
-
-    add(&string);
-}
-
-const UnicodeString *StringList::get(int32_t index) const
-{
-    if (index >= 0 && index < listSize) {
-        return &strings[index];
-    }
-
-    return NULL;
-}
-
-int32_t StringList::size() const
-{
-    return listSize;
-}
-
-
-U_CFUNC void deleteStringList(void *obj);
-
-class CEToStringsMap
-{
-public:
-
-    CEToStringsMap();
-    ~CEToStringsMap();
-
-    void put(int32_t ce, UnicodeString *string);
-    StringList *getStringList(int32_t ce) const;
-
-private:
- 
-    void putStringList(int32_t ce, StringList *stringList);
-    UHashtable *map;
-};
-
-CEToStringsMap::CEToStringsMap()
-{
-    UErrorCode status = U_ZERO_ERROR;
-
-    map = uhash_open(uhash_hashLong, uhash_compareLong,
-                     uhash_compareCaselessUnicodeString,
-                     &status);
-
-    uhash_setValueDeleter(map, deleteStringList);
-}
-
-CEToStringsMap::~CEToStringsMap()
-{
-    uhash_close(map);
-}
-
-void CEToStringsMap::put(int32_t ce, UnicodeString *string)
-{
-    StringList *strings = getStringList(ce);
-
-    if (strings == NULL) {
-        strings = new StringList();
-        putStringList(ce, strings);
-    }
-
-    strings->add(string);
-}
-
-StringList *CEToStringsMap::getStringList(int32_t ce) const
-{
-    return (StringList *) uhash_iget(map, ce);
-}
-
-void CEToStringsMap::putStringList(int32_t ce, StringList *stringList)
-{
-    UErrorCode status = U_ZERO_ERROR;
-
-    uhash_iput(map, ce, (void *) stringList, &status);
-}
-
-U_CFUNC void deleteStringList(void *obj)
-{
-    StringList *strings = (StringList *) obj;
-
-    delete strings;
-}
-
-U_CFUNC void deleteCEList(void *obj);
-U_CFUNC void deleteUnicodeStringKey(void *obj);
-
-class StringToCEsMap
-{
-public:
-    StringToCEsMap();
-    ~StringToCEsMap();
-
-    void put(const UnicodeString *string, const CEList *ces);
-    const CEList *get(const UnicodeString *string);
-
-private:
-
-
-    UHashtable *map;
-};
-
-StringToCEsMap::StringToCEsMap()
-{
-    UErrorCode status = U_ZERO_ERROR;
-
-    map = uhash_open(uhash_hashCaselessUnicodeString,
-                     uhash_compareCaselessUnicodeString,
-                     uhash_compareLong,
-                     &status);
-
-    uhash_setValueDeleter(map, deleteCEList);
-    uhash_setKeyDeleter(map, deleteUnicodeStringKey);
-}
-
-StringToCEsMap::~StringToCEsMap()
-{
-    uhash_close(map);
-}
-
-void StringToCEsMap::put(const UnicodeString *string, const CEList *ces)
-{
-    UErrorCode status = U_ZERO_ERROR;
-
-    uhash_put(map, (void *) string, (void *) ces, &status);
-}
-
-const CEList *StringToCEsMap::get(const UnicodeString *string)
-{
-    return (const CEList *) uhash_get(map, string);
-}
-
-U_CFUNC void deleteCEList(void *obj)
-{
-    CEList *list = (CEList *) obj;
-
-    delete list;
-}
-
-U_CFUNC void deleteUnicodeStringKey(void *obj)
-{
-    UnicodeString *key = (UnicodeString *) obj;
-
-    delete key;
-}
-
-static void buildData(UCollator *coll, USet *charsToTest, StringToCEsMap *charsToCEList, CEToStringsMap *ceToCharsStartingWith)
-{
-    int32_t itemCount = uset_getItemCount(charsToTest);
-    UErrorCode status = U_ZERO_ERROR;
-
-    for(int32_t item = 0; item < itemCount; item += 1) {
-        UChar32 start = 0, end = 0;
-        UChar buffer[16];
-        int32_t len = uset_getItem(charsToTest, item, &start, &end,
-                                   buffer, 16, &status);
-
-        if (len == 0) {
-            for (UChar32 ch = start; ch <= end; ch += 1) {
-                UnicodeString *st = new UnicodeString(ch);
-                CEList *ceList = new CEList(coll, *st);
-
-                charsToCEList->put(st, ceList);
-                ceToCharsStartingWith->put(ceList->get(0), st);
-            }
-        } else if (len > 0) {
-            UnicodeString *st = new UnicodeString(buffer, len);
-            CEList *ceList = new CEList(coll, *st);
-
-            charsToCEList->put(st, ceList);
-            ceToCharsStartingWith->put(ceList->get(0), st);
-        } else {
-            // shouldn't happen...
-        }
-    }
-}
-
 static UnicodeString &escape(const UnicodeString &string, UnicodeString &buffer)
 {
     for(int32_t i = 0; i < string.length(); i += 1) {
@@ -1038,68 +1070,501 @@ static UnicodeString &escape(const UnicodeString &string, UnicodeString &buffer)
 
     return buffer;
 }
+static USet *uset_openEmpty();
+#if 1
 
-static int32_t minLengthInChars(const CEList *ceList, int32_t offset, StringToCEsMap *charsToCEList, CEToStringsMap *ceToCharsStartingWith,
-                                UnicodeString &debug)
+struct PCE
 {
-    // find out shortest string for the longest sequence of ces.
-    // needs to be refined to use dynamic programming, but will be roughly right
-	int32_t totalStringLength = 0;
-	
-    while (offset < ceList->size()) {
-        int32_t ce = ceList->get(offset);
-        int32_t bestLength = INT32_MIN;
-        const UnicodeString *bestString = NULL;
-        int32_t bestCeLength = 0;
-        const StringList *strings = ceToCharsStartingWith->getStringList(ce);
-        int32_t stringCount = strings->size();
-      
-        for (int32_t s = 0; s < stringCount; s += 1) {
-            const UnicodeString *string = strings->get(s);
-            const CEList *ceList2 = charsToCEList->get(string);
+    uint64_t ce;
+    int32_t  lowOffset;
+    int32_t  highOffset;
+};
 
-            if (ceList->matchesAt(offset, ceList2)) {
-                int32_t length = ceList2->size() - string->length();
+class PCEList
+{
+public:
+    PCEList(UCollator *coll, const UnicodeString &string);
+    ~PCEList();
 
-                if (bestLength < length) {
-                    bestLength = length;
-                    bestCeLength = ceList2->size();
-                    bestString = string;
-                }
-            }
-        }
-      
-        totalStringLength += bestString->length();
-        escape(*bestString, debug).append("/");
-        offset += bestCeLength;
-    }
+    int32_t size() const;
 
-    debug.append((UChar)0x0000);
-    return totalStringLength;
+    const PCE *get(int32_t index) const;
+
+    int32_t getLowOffset(int32_t index) const;
+    int32_t getHighOffset(int32_t index) const;
+    uint64_t getOrder(int32_t index) const;
+
+    UBool matchesAt(int32_t offset, const PCEList &other) const;
+
+    uint64_t operator[](int32_t index) const;
+
+private:
+    void add(uint64_t ce, int32_t low, int32_t high);
+
+    PCE *list;
+    int32_t listMax;
+    int32_t listSize;
+};
+
+PCEList::PCEList(UCollator *coll, const UnicodeString &string)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UCollationElements *elems = ucol_openElements(coll, string.getBuffer(), string.length(), &status);
+    uint64_t order;
+    int32_t low, high;
+
+    list = new PCE[listMax];
+
+    ucol_setOffset(elems, 0, &status);
+
+    do {
+        order = ucol_nextProcessed(elems, &low, &high, &status);
+        add(order, low, high);
+    } while (order != UCOL_PROCESSED_NULLORDER);
+
+    ucol_closeElements(elems);
 }
 
-static void minLengthTest(UCollator *coll, StringToCEsMap *charsToCEList, CEToStringsMap *ceToCharsStartingWith)
+PCEList::~PCEList()
 {
-    UnicodeString examples[] = {"fuss", "fiss", "affliss", "VII"};
-    UnicodeString debug;
-    int32_t nExamples = sizeof(examples) / sizeof(examples[0]);
+    delete[] list;
+}
 
-    for (int32_t s = 0; s < nExamples; s += 1) {
-        CEList *ceList = new CEList(coll, examples[s]);
+void PCEList::add(uint64_t order, int32_t low, int32_t high)
+{
+    if (listSize >= listMax) {
+        listMax *= 2;
 
-      //infoln("%S:", examples[s].getTerminatedBuffer());
+        PCE *newList = new PCE[listMax];
 
-        for(int32_t i = 0; i < examples[s].length(); i += 1) {
-            debug.remove();
+        uprv_memcpy(newList, list, listSize * sizeof(Order));
+        delete[] list;
+        list = newList;
+    }
 
-            int32_t minLength = minLengthInChars(ceList, i, charsToCEList, ceToCharsStartingWith, debug);
-          //infoln("\t%d\t%S", minLength, debug.getTerminatedBuffer());
+    list[listSize].ce         = order;
+    list[listSize].lowOffset  = low;
+    list[listSize].highOffset = high;
+
+    listSize += 1;
+}
+
+const PCE *PCEList::get(int32_t index) const
+{
+    if (index >= listSize) {
+        return NULL;
+    }
+
+    return &list[index];
+}
+
+int32_t PCEList::getLowOffset(int32_t index) const
+{
+    const PCE *pce = get(index);
+
+    if (pce != NULL) {
+        return pce->lowOffset;
+    }
+
+    return -1;
+}
+
+int32_t PCEList::getHighOffset(int32_t index) const
+{
+    const PCE *pce = get(index);
+
+    if (pce != NULL) {
+        return pce->highOffset;
+    }
+
+    return -1;
+}
+
+uint64_t PCEList::getOrder(int32_t index) const
+{
+    const PCE *pce = get(index);
+
+    if (pce != NULL) {
+        return pce->ce;
+    }
+
+    return UCOL_PROCESSED_NULLORDER;
+}
+
+int32_t PCEList::size() const
+{
+    return listSize;
+}
+
+UBool PCEList::matchesAt(int32_t offset, const PCEList &other) const
+{
+    // NOTE: sizes include the NULLORDER, which we don't want to compare.
+    int32_t otherSize = other.size() - 1;
+
+    if (listSize - 1 - offset < otherSize) {
+        return FALSE;
+    }
+
+    for (int32_t i = offset, j = 0; j < otherSize; i += 1, j += 1) {
+        if (getOrder(i) != other.getOrder(j)) {
+            return FALSE;
+        }
+    }
+
+    return TRUE;
+}
+
+uint64_t PCEList::operator[](int32_t index) const
+{
+    return getOrder(index);
+}
+
+void SSearchTest::boyerMooreTest()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator *coll = ucol_openFromShortString("S1", FALSE, NULL, &status);
+    CollData *data = NULL;
+    UnicodeString lp  = "fuss";
+    UnicodeString sp = "fu\\u00DF";
+    BoyerMooreSearch *longPattern = NULL;
+    BoyerMooreSearch *shortPattern = NULL;
+    UnicodeString targets[]  = {"fu\\u00DF", "fu\\u00DFball", "1fu\\u00DFball", "12fu\\u00DFball", "123fu\\u00DFball", "1234fu\\u00DFball",
+                                "ffu\\u00DF", "fufu\\u00DF", "fusfu\\u00DF",
+                                "fuss", "ffuss", "fufuss", "fusfuss", "1fuss", "12fuss", "123fuss", "1234fuss", "fu\\u00DF", "1fu\\u00DF", "12fu\\u00DF", "123fu\\u00DF", "1234fu\\u00DF"};
+    int32_t start = -1, end = -1;
+
+    coll = ucol_openFromShortString("S1", FALSE, NULL, &status);
+    if (U_FAILURE(status)) {
+        errln("Could not open collator.");
+        return;
+    }
+
+    data = CollData::open(coll, status);
+    if (U_FAILURE(status)) {
+        errln("Could not open CollData object.");
+        goto close_data;
+    }
+
+
+    longPattern = new BoyerMooreSearch(data, lp.unescape(), NULL, status);
+    shortPattern = new BoyerMooreSearch(data, sp.unescape(), NULL, status);
+    if (U_FAILURE(status)) {
+        errln("Could not create pattern objects.");
+        goto close_patterns;
+    }
+
+    for (int32_t t = 0; t < (sizeof(targets)/sizeof(targets[0])); t += 1) {
+        UnicodeString target = targets[t].unescape();
+        
+        longPattern->setTargetString(&target, status);
+        if (longPattern->search(0, start, end)) {
+            logln("Test %d: found long pattern at [%d, %d].", t, start, end);
+        } else {
+            errln("Test %d: did not find long pattern.", t);
         }
 
-      //infoln();
-        delete ceList;
+        shortPattern->setTargetString(&target, status);
+        if (shortPattern->search(0, start, end)) {
+            logln("Test %d: found short pattern at [%d, %d].", t, start, end);
+        } else {
+            errln("Test %d: did not find short pattern.", t);
+        }
     }
+
+close_patterns:
+    delete shortPattern;
+    delete longPattern;
+
+close_data:
+    CollData::close(data);
+    ucol_close(coll);
 }
+
+void SSearchTest::bmsTest()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator *coll = NULL;
+    UCD *data = NULL;
+    UnicodeString lp  = "fuss";
+    UnicodeString lpu = lp.unescape();
+    UnicodeString sp  = "fu\\u00DF";
+    UnicodeString spu = sp.unescape();
+    BMS *longPattern = NULL;
+    BMS *shortPattern = NULL;
+    UnicodeString targets[]  = {"fu\\u00DF", "fu\\u00DFball", "1fu\\u00DFball", "12fu\\u00DFball", "123fu\\u00DFball", "1234fu\\u00DFball",
+                                "ffu\\u00DF", "fufu\\u00DF", "fusfu\\u00DF",
+                                "fuss", "ffuss", "fufuss", "fusfuss", "1fuss", "12fuss", "123fuss", "1234fuss", "fu\\u00DF", "1fu\\u00DF", "12fu\\u00DF", "123fu\\u00DF", "1234fu\\u00DF"};
+    int32_t start = -1, end = -1;
+
+    coll = ucol_openFromShortString("S1", FALSE, NULL, &status);
+    if (U_FAILURE(status)) {
+        errln("Could not open collator.");
+        return;
+    }
+
+    data = ucd_open(coll, &status);
+    if (U_FAILURE(status)) {
+        errln("Could not open CollData object.");
+        goto close_data;
+    }
+
+    longPattern = bms_open(data, lpu.getBuffer(), lpu.length(), NULL, 0, &status);
+    shortPattern = bms_open(data, spu.getBuffer(), spu.length(), NULL, 0, &status);
+    if (U_FAILURE(status)) {
+        errln("Couldn't open pattern objects.");
+        goto close_patterns;
+    }
+
+    for (int32_t t = 0; t < (sizeof(targets)/sizeof(targets[0])); t += 1) {
+        UnicodeString target = targets[t].unescape();
+        
+        bms_setTargetString(longPattern, target.getBuffer(), target.length(), &status);
+        if (bms_search(longPattern, 0, &start, &end)) {
+            logln("Test %d: found long pattern at [%d, %d].", t, start, end);
+        } else {
+            errln("Test %d: did not find long pattern.", t);
+        }
+
+        bms_setTargetString(shortPattern, target.getBuffer(), target.length(), &status);
+        if (bms_search(shortPattern, 0, &start, &end)) {
+            logln("Test %d: found short pattern at [%d, %d].", t, start, end);
+        } else {
+            errln("Test %d: did not find short pattern.", t);
+        }
+    }
+
+close_patterns:
+    bms_close(shortPattern);
+    bms_close(longPattern);
+
+close_data:
+    ucd_close(data);
+    ucol_close(coll);
+}
+
+void SSearchTest::goodSuffixTest()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator *coll = NULL;
+    CollData *data = NULL;
+    UnicodeString pat = /*"gcagagag"*/ "fxeld";
+    UnicodeString target = /*"gcatcgcagagagtatacagtacg"*/ "cloveldfxeld";
+    BoyerMooreSearch *pattern = NULL;
+    int32_t start = -1, end = -1;
+
+    coll = ucol_open(NULL, &status);
+    if (U_FAILURE(status)) {
+        errln("Couldn't open collator.");
+        return;
+    }
+
+    data = CollData::open(coll, status);
+    if (U_FAILURE(status)) {
+        errln("Couldn't open CollData object.");
+        goto close_data;
+    }
+
+    pattern = new BoyerMooreSearch(data, pat, &target, status);
+    if (U_FAILURE(status)) {
+        errln("Couldn't open pattern object.");
+        goto close_pattern;
+    }
+
+    if (pattern->search(0, start, end)) {
+        logln("Found pattern at [%d, %d].", start, end);
+    } else {
+        errln("Did not find pattern.");
+    }
+
+close_pattern:
+    delete pattern;
+
+close_data:
+    CollData::close(data);
+    ucol_close(coll);
+}
+
+//
+//  searchTime()    A quick and dirty performance test for string search.
+//                  Probably  doesn't really belong as part of intltest, but it
+//                  does check that the search succeeds, and gets the right result,
+//                  so it serves as a functionality test also.
+//
+//                  To run as a perf test, up the loop count, select by commenting
+//                  and uncommenting in the code the operation to be measured,
+//                  rebuild, and measure the running time of this test alone.
+//
+//                     time LD_LIBRARY_PATH=whatever  ./intltest  collate/SSearchTest/searchTime
+//
+void SSearchTest::searchTime() {
+    static const char *longishText =
+"Whylom, as olde stories tellen us,\n"
+"Ther was a duk that highte Theseus:\n"
+"Of Athenes he was lord and governour,\n"
+"And in his tyme swich a conquerour,\n"
+"That gretter was ther noon under the sonne.\n"
+"Ful many a riche contree hadde he wonne;\n"
+"What with his wisdom and his chivalrye,\n"
+"He conquered al the regne of Femenye,\n"
+"That whylom was y-cleped Scithia;\n"
+"And weddede the quene Ipolita,\n"
+"And broghte hir hoom with him in his contree\n"
+"With muchel glorie and greet solempnitee,\n"
+"And eek hir yonge suster Emelye.\n"
+"And thus with victorie and with melodye\n"
+"Lete I this noble duk to Athenes ryde,\n"
+"And al his hoost, in armes, him bisyde.\n"
+"And certes, if it nere to long to here,\n"
+"I wolde han told yow fully the manere,\n"
+"How wonnen was the regne of Femenye\n"
+"By Theseus, and by his chivalrye;\n"
+"And of the grete bataille for the nones\n"
+"Bitwixen Athen's and Amazones;\n"
+"And how asseged was Ipolita,\n"
+"The faire hardy quene of Scithia;\n"
+"And of the feste that was at hir weddinge,\n"
+"And of the tempest at hir hoom-cominge;\n"
+"But al that thing I moot as now forbere.\n"
+"I have, God woot, a large feeld to ere,\n"
+"And wayke been the oxen in my plough.\n"
+"The remenant of the tale is long y-nough.\n"
+"I wol nat letten eek noon of this route;\n"
+"Lat every felawe telle his tale aboute,\n"
+"And lat see now who shal the soper winne;\n"
+"And ther I lefte, I wol ageyn biginne.\n"
+"This duk, of whom I make mencioun,\n"
+"When he was come almost unto the toun,\n"
+"In al his wele and in his moste pryde,\n"
+"He was war, as he caste his eye asyde,\n"
+"Wher that ther kneled in the hye weye\n"
+"A companye of ladies, tweye and tweye,\n"
+"Ech after other, clad in clothes blake; \n"
+"But swich a cry and swich a wo they make,\n"
+"That in this world nis creature livinge,\n"
+"That herde swich another weymentinge;\n"
+"And of this cry they nolde never stenten,\n"
+"Til they the reynes of his brydel henten.\n"
+"'What folk ben ye, that at myn hoomcominge\n"
+"Perturben so my feste with cryinge'?\n"
+"Quod Theseus, 'have ye so greet envye\n"
+"Of myn honour, that thus compleyne and crye? \n"
+"Or who hath yow misboden, or offended?\n"
+"And telleth me if it may been amended;\n"
+"And why that ye ben clothed thus in blak'?\n"
+"The eldest lady of hem alle spak,\n"
+"When she hadde swowned with a deedly chere,\n"
+"That it was routhe for to seen and here,\n"
+"And seyde: 'Lord, to whom Fortune hath yiven\n"
+"Victorie, and as a conquerour to liven,\n"
+"Noght greveth us your glorie and your honour;\n"
+"But we biseken mercy and socour.\n"
+"Have mercy on our wo and our distresse.\n"
+"Som drope of pitee, thurgh thy gentilesse,\n"
+"Up-on us wrecched wommen lat thou falle.\n"
+"For certes, lord, ther nis noon of us alle,\n"
+"That she nath been a duchesse or a quene;\n"
+"Now be we caitifs, as it is wel sene:\n"
+"Thanked be Fortune, and hir false wheel,\n"
+"That noon estat assureth to be weel.\n"
+"And certes, lord, t'abyden your presence,\n"
+"Here in the temple of the goddesse Clemence\n"
+"We han ben waytinge al this fourtenight;\n"
+"Now help us, lord, sith it is in thy might.\n"
+"I wrecche, which that wepe and waille thus,\n"
+"Was whylom wyf to king Capaneus,\n"
+"That starf at Thebes, cursed be that day!\n"
+"And alle we, that been in this array,\n"
+"And maken al this lamentacioun,\n"
+"We losten alle our housbondes at that toun,\n"
+"Whyl that the sege ther-aboute lay.\n"
+"And yet now th'olde Creon, weylaway!\n"
+"The lord is now of Thebes the citee, \n"
+"Fulfild of ire and of iniquitee,\n"
+"He, for despyt, and for his tirannye,\n"
+"To do the dede bodyes vileinye,\n"
+"Of alle our lordes, whiche that ben slawe,\n"
+"Hath alle the bodyes on an heep y-drawe,\n"
+"And wol nat suffren hem, by noon assent,\n"
+"Neither to been y-buried nor y-brent,\n"
+"But maketh houndes ete hem in despyt. zet'\n";
+
+#define TEST_BOYER_MOORE 1
+const char *cPattern = "maketh houndes ete hem";
+//const char *cPattern = "Whylom";
+//const char *cPattern = "zet";
+    const char *testId = "searchTime()";   // for error macros.
+    UnicodeString target = longishText;
+    UErrorCode status = U_ZERO_ERROR;
+
+
+    UCollator *collator = ucol_open("en", &status);
+    CollData *data = CollData::open(collator, status);
+    TEST_ASSERT_SUCCESS(status);
+    //ucol_setStrength(collator, collatorStrength);
+    //ucol_setAttribute(collator, UCOL_NORMALIZATION_MODE, normalize, &status);
+    UnicodeString uPattern = cPattern;
+#ifndef TEST_BOYER_MOORE
+    UStringSearch *uss = usearch_openFromCollator(uPattern.getBuffer(), uPattern.length(),
+                                        target.getBuffer(), target.length(),
+                                        collator,
+                                        NULL,     // the break iterator
+                                        &status);
+    TEST_ASSERT_SUCCESS(status);
+#else
+    BoyerMooreSearch bms(data, uPattern, &target, status);
+    TEST_ASSERT_SUCCESS(status);
+#endif
+    
+//  int32_t foundStart;
+//  int32_t foundEnd;
+    UBool   found;
+    
+    // Find the match position usgin strstr
+    const char *pm = strstr(longishText, cPattern);
+    TEST_ASSERT_M(pm!=NULL, "No pattern match with strstr");
+    int32_t  refMatchPos = (int32_t)(pm - longishText);
+    int32_t  icuMatchPos;
+    int32_t  icuMatchEnd;
+#ifndef TEST_BOYER_MOORE
+    usearch_search(uss, 0, &icuMatchPos, &icuMatchEnd, &status);
+    TEST_ASSERT_SUCCESS(status);
+#else
+    found = bms.search(0, icuMatchPos, icuMatchEnd);
+#endif
+    TEST_ASSERT_M(refMatchPos == icuMatchPos, "strstr and icu give different match positions.");
+
+    int32_t i;
+    int32_t j=0;
+
+    // Try loopcounts around 100000 to some millions, depending on the operation,
+    //   to get runtimes of at least several seconds.
+    for (i=0; i<10000; i++) {
+#ifndef TEST_BOYER_MOORE
+        found = usearch_search(uss, 0, &icuMatchPos, &icuMatchEnd, &status);
+#else
+        found = bms.search(0, icuMatchPos, icuMatchEnd);
+#endif
+        //TEST_ASSERT_SUCCESS(status);
+        //TEST_ASSERT(found);
+
+        // usearch_setOffset(uss, 0, &status);
+        // icuMatchPos = usearch_next(uss, &status);
+
+         // The i+j stuff is to confuse the optimizer and get it to actually leave the
+         //   call to strstr in place.
+         //pm = strstr(longishText+j, cPattern);
+         //j = (j + i)%5;
+    }
+
+    printf("%d\n", pm-longishText, j);
+#ifndef TEST_BOYER_MOORE
+    usearch_close(uss);
+#else
+    CollData::close(data);
+#endif
+    ucol_close(collator);
+}
+#endif
 
 //----------------------------------------------------------------------------------------
 //
@@ -1174,7 +1639,7 @@ void SetMonkey::append(UnicodeString &test, UnicodeString &alternate)
 class StringSetMonkey : public Monkey
 {
 public:
-    StringSetMonkey(const USet *theSet, UCollator *theCollator, StringToCEsMap *theCharsToCEList, CEToStringsMap *theCeToCharsStartingWith);
+    StringSetMonkey(const USet *theSet, UCollator *theCollator, CollData *theCollData);
     ~StringSetMonkey();
 
     void append(UnicodeString &testCase, UnicodeString &alternate);
@@ -1183,13 +1648,12 @@ private:
     UnicodeString &generateAlternative(const UnicodeString &testCase, UnicodeString &alternate);
 
     const USet *set;
-    UCollator      *coll;
-    StringToCEsMap *charsToCEList;
-    CEToStringsMap *ceToCharsStartingWith;
+    UCollator  *coll;
+    CollData   *collData;
 };
 
-StringSetMonkey::StringSetMonkey(const USet *theSet, UCollator *theCollator, StringToCEsMap *theCharsToCEList, CEToStringsMap *theCeToCharsStartingWith)
-: Monkey(), set(theSet), coll(theCollator), charsToCEList(theCharsToCEList), ceToCharsStartingWith(theCeToCharsStartingWith)
+StringSetMonkey::StringSetMonkey(const USet *theSet, UCollator *theCollator, CollData *theCollData)
+: Monkey(), set(theSet), coll(theCollator), collData(theCollData)
 {
     // ook.
 }
@@ -1231,7 +1695,8 @@ UnicodeString &StringSetMonkey::generateAlternative(const UnicodeString &testCas
 {
     // find out shortest string for the longest sequence of ces.
     // needs to be refined to use dynamic programming, but will be roughly right
-    CEList ceList(coll, testCase);
+    UErrorCode status = U_ZERO_ERROR;
+    CEList ceList(coll, testCase, status);
     UnicodeString alt;
     int32_t offset = 0;
 
@@ -1241,7 +1706,7 @@ UnicodeString &StringSetMonkey::generateAlternative(const UnicodeString &testCas
 
     while (offset < ceList.size()) {
         int32_t ce = ceList.get(offset);
-        const StringList *strings = ceToCharsStartingWith->getStringList(ce);
+        const StringList *strings = collData->getStringList(ce);
 
         if (strings == NULL) {
             return alternate.append(testCase);
@@ -1251,8 +1716,9 @@ UnicodeString &StringSetMonkey::generateAlternative(const UnicodeString &testCas
         int32_t tries = 0;
       
         // find random string that generates the same CEList
-        const CEList *ceList2;
-        const UnicodeString *string;
+        const CEList *ceList2 = NULL;
+        const UnicodeString *string = NULL;
+              UBool matches = FALSE;
 
         do {
             int32_t s = m_rand() % stringCount;
@@ -1263,14 +1729,20 @@ UnicodeString &StringSetMonkey::generateAlternative(const UnicodeString &testCas
             }
 
             string = strings->get(s);
-            ceList2 = charsToCEList->get(string);
-        } while (! ceList.matchesAt(offset, ceList2));
+            ceList2 = collData->getCEList(string);
+            matches = ceList.matchesAt(offset, ceList2);
+
+            if (! matches) {
+                collData->freeCEList((CEList *) ceList2);
+            }
+        } while (! matches);
 
         alt.append(*string);
         offset += ceList2->size();
+        collData->freeCEList(ceList2);
     }
 
-    const CEList altCEs(coll, alt);
+    const CEList altCEs(coll, alt, status);
 
     if (ceList.matchesAt(0, &altCEs)) {
         return alternate.append(alt);
@@ -1282,6 +1754,7 @@ UnicodeString &StringSetMonkey::generateAlternative(const UnicodeString &testCas
 static void generateTestCase(UCollator *coll, Monkey *monkeys[], int32_t monkeyCount, UnicodeString &testCase, UnicodeString &alternate)
 {
     int32_t pieces = (m_rand() % 4) + 1;
+    UErrorCode status = U_ZERO_ERROR;
     UBool matches;
 
     do {
@@ -1295,8 +1768,8 @@ static void generateTestCase(UCollator *coll, Monkey *monkeys[], int32_t monkeyC
             monkeys[monkey]->append(testCase, alternate);
         }
 
-        const CEList ceTest(coll, testCase);
-        const CEList ceAlt(coll, alternate);
+        const CEList ceTest(coll, testCase, status);
+        const CEList ceAlt(coll, alternate, status);
 
         matches = ceTest.matchesAt(0, &ceAlt);
     } while (! matches);
@@ -1391,7 +1864,8 @@ static UBool simpleSearch(UCollator *coll, const UnicodeString &target, int32_t 
         									      target.getBuffer(), target.length(), &status);
 
     if (patternSize == 0) {
-        matchStart = matchEnd = 0;
+        // Searching for an empty pattern always fails
+        matchStart = matchEnd = -1;
         return FALSE;
     }
 
@@ -1512,14 +1986,9 @@ int32_t SSearchTest::monkeyTestCase(UCollator *coll, const UnicodeString &testCa
     // **** TODO: find *all* matches, not just first one ****
     simpleSearch(coll, testCase, 0, pattern, expectedStart, expectedEnd);
 
-#if 0
     usearch_search(uss, 0, &actualStart, &actualEnd, &status);
-#else
-    actualStart = usearch_next(uss, &status);
-    actualEnd   = actualStart + usearch_getMatchedLength(uss);
-#endif
 
-    if (actualStart != expectedStart || actualEnd != expectedEnd) {
+    if (expectedStart >= 0 && (actualStart != expectedStart || actualEnd != expectedEnd)) {
         errln("Search for <pattern> in <%s> failed: expected [%d, %d], got [%d, %d]\n"
               "    strength=%s seed=%d",
               name, expectedStart, expectedEnd, actualStart, actualEnd, strength, seed);
@@ -1534,15 +2003,9 @@ int32_t SSearchTest::monkeyTestCase(UCollator *coll, const UnicodeString &testCa
 
     usearch_setPattern(uss, altPattern.getBuffer(), altPattern.length(), &status);
 
-#if 0
     usearch_search(uss, 0, &actualStart, &actualEnd, &status);
-#else
-    usearch_reset(uss);
-    actualStart = usearch_next(uss, &status);
-    actualEnd   = actualStart + usearch_getMatchedLength(uss);
-#endif
 
-    if (actualStart != expectedStart || actualEnd != expectedEnd) {
+    if (expectedStart >= 0 && (actualStart != expectedStart || actualEnd != expectedEnd)) {
         errln("Search for <alt_pattern> in <%s> failed: expected [%d, %d], got [%d, %d]\n"
               "    strength=%s seed=%d",
               name, expectedStart, expectedEnd, actualStart, actualEnd, strength, seed);
@@ -1556,39 +2019,79 @@ int32_t SSearchTest::monkeyTestCase(UCollator *coll, const UnicodeString &testCa
 
     return notFoundCount;
 }
+
+int32_t SSearchTest::bmMonkeyTestCase(UCollator *coll, const UnicodeString &testCase, const UnicodeString &pattern, const UnicodeString &altPattern,
+                                    BoyerMooreSearch *bms, BoyerMooreSearch *abms,
+                                    const char *name, const char *strength, uint32_t seed)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t actualStart = -1, actualEnd = -1;
+  //int32_t expectedStart = prefix.length(), expectedEnd = prefix.length() + altPattern.length();
+    int32_t expectedStart = -1, expectedEnd = -1;
+    int32_t notFoundCount = 0;
+
+    // **** TODO: find *all* matches, not just first one ****
+    simpleSearch(coll, testCase, 0, pattern, expectedStart, expectedEnd);
+
+    bms->setTargetString(&testCase, status);
+    bms->search(0, actualStart, actualEnd);
+
+    if (expectedStart >= 0 && (actualStart != expectedStart || actualEnd != expectedEnd)) {
+        errln("Boyer-Moore Search for <pattern> in <%s> failed: expected [%d, %d], got [%d, %d]\n"
+              "    strength=%s seed=%d",
+              name, expectedStart, expectedEnd, actualStart, actualEnd, strength, seed);
+    }
+
+    if (expectedStart == -1 && actualStart == -1) {
+        notFoundCount += 1;
+    }
+
+    // **** TODO: find *all* matches, not just first one ****
+    simpleSearch(coll, testCase, 0, altPattern, expectedStart, expectedEnd);
+
+    abms->setTargetString(&testCase, status);
+    abms->search(0, actualStart, actualEnd);
+
+    if (expectedStart >= 0 && (actualStart != expectedStart || actualEnd != expectedEnd)) {
+        errln("Boyer-Moore Search for <alt_pattern> in <%s> failed: expected [%d, %d], got [%d, %d]\n"
+              "    strength=%s seed=%d",
+              name, expectedStart, expectedEnd, actualStart, actualEnd, strength, seed);
+    }
+
+    if (expectedStart == -1 && actualStart == -1) {
+        notFoundCount += 1;
+    }
+
+
+    return notFoundCount;
+}
 #endif
 
 void SSearchTest::monkeyTest(char *params)
 {
     // ook!
     UErrorCode status = U_ZERO_ERROR;
-    U_STRING_DECL(test_pattern, "[[:assigned:]-[:ideographic:]-[:hangul:]-[:c:]]", 47);
-    U_STRING_INIT(test_pattern, "[[:assigned:]-[:ideographic:]-[:hangul:]-[:c:]]", 47);
-    UCollator *coll = ucol_open(NULL, &status);
+  //UCollator *coll = ucol_open(NULL, &status);
+    UCollator *coll = ucol_openFromShortString("S1", FALSE, NULL, &status);
+
     if (U_FAILURE(status)) {
         errln("Failed to create collator in MonkeyTest!");
         return;
     }
-    USet *charsToTest  = uset_openPattern(test_pattern, 47, &status);
+
+    CollData  *monkeyData = CollData::open(coll, status);
+
     USet *expansions   = uset_openEmpty();
     USet *contractions = uset_openEmpty();
-    StringToCEsMap *charsToCEList = new StringToCEsMap();
-    CEToStringsMap *ceToCharsStartingWith = new CEToStringsMap();
 
     ucol_getContractionsAndExpansions(coll, contractions, expansions, FALSE, &status);
-
-    uset_addAll(charsToTest, contractions);
-    uset_addAll(charsToTest, expansions);
-
-    // TODO: set strength to UCOL_PRIMARY, change CEList to use strength?
-    buildData(coll, charsToTest, charsToCEList, ceToCharsStartingWith);
 
     U_STRING_DECL(letter_pattern, "[[:letter:]-[:ideographic:]-[:hangul:]]", 39);
     U_STRING_INIT(letter_pattern, "[[:letter:]-[:ideographic:]-[:hangul:]]", 39);
     USet *letters = uset_openPattern(letter_pattern, 39, &status);
     SetMonkey letterMonkey(letters);
-    StringSetMonkey contractionMonkey(contractions, coll, charsToCEList, ceToCharsStartingWith);
-    StringSetMonkey expansionMonkey(expansions, coll, charsToCEList, ceToCharsStartingWith);
+    StringSetMonkey contractionMonkey(contractions, coll, monkeyData);
+    StringSetMonkey expansionMonkey(expansions, coll, monkeyData);
     UnicodeString testCase;
     UnicodeString alternate;
     UnicodeString pattern, altPattern;
@@ -1613,7 +2116,7 @@ void SSearchTest::monkeyTest(char *params)
     int32_t strengthCount = sizeof(strengths) / sizeof(strengths[0]);
     int32_t loopCount = quick? 1000 : 10000;
     int32_t firstStrength = 0;
-    int32_t lastStrength  = strengthCount - 1;
+    int32_t lastStrength  = strengthCount - 1; //*/ 0;
 
     if (params != NULL) {
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
@@ -1654,15 +2157,12 @@ void SSearchTest::monkeyTest(char *params)
     for(int32_t s = firstStrength; s <= lastStrength; s += 1) {
         int32_t notFoundCount = 0;
 
+        logln("Setting strength to %s.", strengthNames[s]);
         ucol_setStrength(coll, strengths[s]);
-        
-        int32_t i = 1000; //Reduce the number of iteration in non-exhaustive mode
-        if(!quick){
-        	i = 10000; 
-        }
+
         // TODO: try alternate prefix and suffix too?
         // TODO: alterntaes are only equal at primary strength. Is this OK?
-        for(int32_t t = 0; t < i; t += 1) {
+        for(int32_t t = 0; t < loopCount; t += 1) {
             uint32_t seed = m_seed;
             int32_t  nmc = 0;
 
@@ -1693,16 +2193,166 @@ void SSearchTest::monkeyTest(char *params)
             notFoundCount += monkeyTestCase(coll, testCase, pattern, altPattern, "pattern + suffix", strengthNames[s], seed);
         }
 
-        logln("For strength %s the not found count is %d.", strengthNames[s], notFoundCount);
+       logln("For strength %s the not found count is %d.", strengthNames[s], notFoundCount);
     }
-
-    delete ceToCharsStartingWith;
-    delete charsToCEList;
 
     uset_close(contractions);
     uset_close(expansions);
-    uset_close(charsToTest);
     uset_close(letters);
+
+    CollData::close(monkeyData);
+    
+    ucol_close(coll);
+}
+
+void SSearchTest::bmMonkeyTest(char *params)
+{
+    // ook!
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator *coll = ucol_openFromShortString("S1", FALSE, NULL, &status);
+
+    if (U_FAILURE(status)) {
+        errln("Failed to create collator in MonkeyTest!");
+        return;
+    }
+
+    CollData  *monkeyData = CollData::open(coll, status);
+
+    USet *expansions   = uset_openEmpty();
+    USet *contractions = uset_openEmpty();
+
+    ucol_getContractionsAndExpansions(coll, contractions, expansions, FALSE, &status);
+
+    U_STRING_DECL(letter_pattern, "[[:letter:]-[:ideographic:]-[:hangul:]]", 39);
+    U_STRING_INIT(letter_pattern, "[[:letter:]-[:ideographic:]-[:hangul:]]", 39);
+    USet *letters = uset_openPattern(letter_pattern, 39, &status);
+    SetMonkey letterMonkey(letters);
+    StringSetMonkey contractionMonkey(contractions, coll, monkeyData);
+    StringSetMonkey expansionMonkey(expansions, coll, monkeyData);
+    UnicodeString testCase;
+    UnicodeString alternate;
+    UnicodeString pattern, altPattern;
+    UnicodeString prefix, altPrefix;
+    UnicodeString suffix, altSuffix;
+
+    Monkey *monkeys[] = {
+        &letterMonkey,
+        &contractionMonkey,
+        &expansionMonkey,
+        &contractionMonkey,
+        &expansionMonkey,
+        &contractionMonkey,
+        &expansionMonkey,
+        &contractionMonkey,
+        &expansionMonkey};
+    int32_t monkeyCount = sizeof(monkeys) / sizeof(monkeys[0]);
+    int32_t nonMatchCount = 0;
+
+    UCollationStrength strengths[] = {UCOL_PRIMARY, UCOL_SECONDARY, UCOL_TERTIARY};
+    const char *strengthNames[] = {"primary", "secondary", "tertiary"};
+    int32_t strengthCount = sizeof(strengths) / sizeof(strengths[0]);
+    int32_t loopCount = quick? 1000 : 10000;
+    int32_t firstStrength = 0;
+    int32_t lastStrength  = strengthCount - 1; //*/ 0;
+
+    if (params != NULL) {
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+        UnicodeString p(params);
+
+        loopCount = getIntParam("loop", p, loopCount);
+        m_seed    = getIntParam("seed", p, m_seed);
+
+        RegexMatcher m(" *strength *= *(primary|secondary|tertiary) *", p, 0, status);
+        if (m.find()) {
+            UnicodeString breakType = m.group(1, status);
+
+            for (int32_t s = 0; s < strengthCount; s += 1) {
+                if (breakType == strengthNames[s]) {
+                    firstStrength = lastStrength = s;
+                    break;
+                }
+            }
+
+            m.reset();
+            p = m.replaceFirst("", status);
+        }
+
+        if (RegexMatcher("\\S", p, 0, status).find()) {
+            // Each option is stripped out of the option string as it is processed.
+            // All options have been checked.  The option string should have been completely emptied..
+            char buf[100];
+            p.extract(buf, sizeof(buf), NULL, status);
+            buf[sizeof(buf)-1] = 0;
+            errln("Unrecognized or extra parameter:  %s\n", buf);
+            return;
+        }
+#else
+        infoln("SSearchTest built with UCONFIG_NO_REGULAR_EXPRESSIONS: ignoring parameters.");
+#endif
+    }
+
+    for(int32_t s = firstStrength; s <= lastStrength; s += 1) {
+        int32_t notFoundCount = 0;
+
+        logln("Setting strength to %s.", strengthNames[s]);
+        ucol_setStrength(coll, strengths[s]);
+
+        CollData *data = CollData::open(coll, status);
+        
+        // TODO: try alternate prefix and suffix too?
+        // TODO: alterntaes are only equal at primary strength. Is this OK?
+        for(int32_t t = 0; t < loopCount; t += 1) {
+            uint32_t seed = m_seed;
+            int32_t  nmc = 0;
+
+            generateTestCase(coll, monkeys, monkeyCount, pattern, altPattern);
+            generateTestCase(coll, monkeys, monkeyCount, prefix,  altPrefix);
+            generateTestCase(coll, monkeys, monkeyCount, suffix,  altSuffix);
+
+            BoyerMooreSearch pat(data, pattern, NULL, status);
+            BoyerMooreSearch alt(data, altPattern, NULL, status);
+
+            // **** need a better way to deal with this ****
+#if 0
+            if (pat.empty() ||
+                alt.empty()) {
+                    continue;
+            }
+#endif
+
+            // pattern
+            notFoundCount += bmMonkeyTestCase(coll, pattern, pattern, altPattern, &pat, &alt, "pattern", strengthNames[s], seed);
+
+            testCase.remove();
+            testCase.append(prefix);
+            testCase.append(/*alt*/pattern);
+
+            // prefix + pattern
+            notFoundCount += bmMonkeyTestCase(coll, testCase, pattern, altPattern, &pat, &alt, "prefix + pattern", strengthNames[s], seed);
+
+            testCase.append(suffix);
+
+            // prefix + pattern + suffix
+            notFoundCount += bmMonkeyTestCase(coll, testCase, pattern, altPattern, &pat, &alt, "prefix + pattern + suffix", strengthNames[s], seed);
+
+            testCase.remove();
+            testCase.append(pattern);
+            testCase.append(suffix);
+            
+            // pattern + suffix
+            notFoundCount += bmMonkeyTestCase(coll, testCase, pattern, altPattern, &pat, &alt, "pattern + suffix", strengthNames[s], seed);
+        }
+
+        CollData::close(data);
+
+        logln("For strength %s the not found count is %d.", strengthNames[s], notFoundCount);
+    }
+
+    uset_close(contractions);
+    uset_close(expansions);
+    uset_close(letters);
+
+    CollData::close(monkeyData);
     
     ucol_close(coll);
 }

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2008, International Business Machines
+*   Copyright (C) 2001-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
@@ -121,6 +121,7 @@ ucol_openElements(const UCollator  *coll,
                         int32_t    textLength,
                         UErrorCode *status);
 
+
 /**
  * get a hash code for a key... Not very useful!
  * @param key    the given key.
@@ -151,6 +152,20 @@ ucol_closeElements(UCollationElements *elems);
  */
 U_STABLE void U_EXPORT2 
 ucol_reset(UCollationElements *elems);
+
+/**
+ * Set the collation elements to use implicit ordering for Han
+ * even if they've been tailored. This will also force Hangul
+ * syllables to be ordered by decomposing them to their component
+ * Jamo.
+ *
+ * @param elems The UCollationElements containing the text.
+ * @param status A pointer to a UErrorCode to reveive any errors.
+ *
+ * @internal
+ */
+U_INTERNAL void U_EXPORT2
+ucol_forceHanImplicit(UCollationElements *elems, UErrorCode *status);
 
 /**
  * Get the ordering priority of the next collation element in the text.
