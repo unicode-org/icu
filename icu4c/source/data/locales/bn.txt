@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/bn.xml
@@ -3134,4 +3134,5 @@ bn{
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} সময়"}
     }
+    defaultNumberingSystem{"bengali"}
 }

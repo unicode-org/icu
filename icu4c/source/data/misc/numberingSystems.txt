@@ -1,4 +1,4 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
 // * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
@@ -9,70 +9,87 @@
 numberingSystems:table(nofallback){
     numberingSystems{
         arabic-indic{
+            algorithmic:int{0}
             desc{"٠١٢٣٤٥٦٧٨٩"}
             radix:int{10}
         }
         bengali{
+            algorithmic:int{0}
             desc{"০১২৩৪৫৬৭৮৯"}
             radix:int{10}
         }
         cambodian{
+            algorithmic:int{0}
             desc{"០១២៣៤៥៦៧៨៩"}
             radix:int{10}
         }
         decimal{
+            algorithmic:int{0}
             desc{"0123456789"}
             radix:int{10}
         }
         devanagari{
+            algorithmic:int{0}
             desc{"०१२३४५६७८९"}
             radix:int{10}
         }
         gujarati{
+            algorithmic:int{0}
             desc{"૦૧૨૩૪૫૬૭૮૯"}
             radix:int{10}
         }
         gurmukhi{
+            algorithmic:int{0}
             desc{"੦੧੨੩੪੫੬੭੮੯"}
             radix:int{10}
         }
         hebrew{
-            desc{"hebrew"}
-            radix:int{0}
+            algorithmic:int{1}
+            desc{"%hebrew"}
+            radix:int{10}
         }
         kannada{
+            algorithmic:int{0}
             desc{"೦೧೨೩೪೫೬೭೮೯"}
             radix:int{10}
         }
         lao{
+            algorithmic:int{0}
             desc{"໐໑໒໓໔໕໖໗໘໙"}
             radix:int{10}
         }
         malayalam{
+            algorithmic:int{0}
             desc{"൦൧൨൩൪൬൭൮൯"}
             radix:int{10}
         }
         mongolian{
+            algorithmic:int{0}
             desc{"᠐᠑᠒᠓᠔᠕᠖᠗᠘᠙"}
             radix:int{10}
         }
         myanmar{
+            algorithmic:int{0}
             desc{"၀၁၂၃၄၅၆၇၈၉"}
             radix:int{10}
         }
         oriya{
+            algorithmic:int{0}
             desc{"୦୧୨୩୪୫୬୭୮୯"}
             radix:int{10}
         }
         persian{
+            algorithmic:int{0}
             desc{"۰۱۲۳۴۵۶۷۸۹"}
             radix:int{10}
         }
         telugu{
+            algorithmic:int{0}
             desc{"౦౧౨౩౪౫౬౭౮౯"}
             radix:int{10}
         }
         thai{
+            algorithmic:int{0}
             desc{"๐๑๒๓๔๕๖๗๘๙"}
             radix:int{10}
         }

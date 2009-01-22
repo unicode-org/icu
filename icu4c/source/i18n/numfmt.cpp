@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2008, International Business Machines Corporation and    *
+* Copyright (C) 1997-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -33,6 +33,8 @@
 #include "unicode/ustring.h"
 #include "unicode/ucurr.h"
 #include "unicode/curramt.h"
+#include "unicode/numsys.h"
+#include "unicode/rbnf.h"
 #include "winnmfmt.h"
 #include "uresimp.h"
 #include "uhash.h"
@@ -896,13 +898,29 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
             pattern.setTo(currPattern, u_strlen(currPattern));
         }
     }
-    f = new DecimalFormat(pattern, symbolsToAdopt, status);
-    if (U_FAILURE(status) || f == NULL) {
+
+    NumberingSystem *ns = NumberingSystem::createInstance(desiredLocale,status);
+    
+    if (U_FAILURE(status)) {
         goto cleanup;
+    }
+
+    if (ns->isAlgorithmic()) {
+        RuleBasedNumberFormat *r = new RuleBasedNumberFormat(URBNF_NUMBERING_SYSTEM,desiredLocale,status);
+        if (U_FAILURE(status) || r == NULL) {
+            goto cleanup;
+        }
+        r->setDefaultRuleSet(ns->getDescription(),status);
+        f = (NumberFormat *) r;
+    } else {
+        UnicodeString zeroDigit(ns->getDescription(),0,1);
+	symbolsToAdopt->setSymbol(DecimalFormatSymbols::kZeroDigitSymbol,zeroDigit);
+        f = new DecimalFormat(pattern, symbolsToAdopt, status);
     }
 
     f->setLocaleIDs(ures_getLocaleByType(numberPatterns, ULOC_VALID_LOCALE, &status),
                     ures_getLocaleByType(numberPatterns, ULOC_ACTUAL_LOCALE, &status));
+
 cleanup:
     ures_close(numberPatterns);
     ures_close(resource);

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2008, International Business Machines Corporation
+* Copyright (C) 1997-2009, International Business Machines Corporation
 * and others. All Rights Reserved.
 *******************************************************************************
 */
@@ -739,6 +739,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& 
     case URBNF_SPELLOUT: fmt_tag = "SpelloutRules"; break;
     case URBNF_ORDINAL: fmt_tag = "OrdinalRules"; break;
     case URBNF_DURATION: fmt_tag = "DurationRules"; break;
+    case URBNF_NUMBERING_SYSTEM: fmt_tag = "NumberingSystemRules"; break;
     default: status = U_ILLEGAL_ARGUMENT_ERROR; return;
     }
 

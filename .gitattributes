@@ -267,11 +267,13 @@ icu4c/source/extra/uconv/pkgdataMakefile.in -text
 icu4c/source/i18n/dtitv_impl.h -text
 icu4c/source/i18n/dtitvfmt.cpp -text
 icu4c/source/i18n/dtitvinf.cpp -text
+icu4c/source/i18n/numsys.cpp -text
 icu4c/source/i18n/tmunit.cpp -text
 icu4c/source/i18n/tmutamt.cpp -text
 icu4c/source/i18n/tmutfmt.cpp -text
 icu4c/source/i18n/unicode/dtitvfmt.h -text
 icu4c/source/i18n/unicode/dtitvinf.h -text
+icu4c/source/i18n/unicode/numsys.h -text
 icu4c/source/i18n/unicode/tmunit.h -text
 icu4c/source/i18n/unicode/tmutamt.h -text
 icu4c/source/i18n/unicode/tmutfmt.h -text

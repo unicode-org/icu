@@ -1,6 +1,6 @@
 // ***************************************************************************
 // *
-// * Copyright (C) 2004-2008 International Business Machines
+// * Copyright (C) 2004-2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
@@ -3586,6 +3586,7 @@ structLocale:table(nofallback){
         script{""}
         territory{""}
     }
+    defaultNumberingSystem{""}
     delimiters{
         quotationStart{""}
         quotationEnd{""}
@@ -6515,10 +6516,69 @@ structLocale:table(nofallback){
             other{""}
         }
     }
+    unitsShort{
+        day{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        hour{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        minute{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        month{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        second{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        week{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        year{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+    }
     zoneStrings{
         hoursFormat{""}
         hourFormat{""}
         gmtFormat{""}
+        gmtZeroFormat{""}
         regionFormat{""}
         fallbackFormat{""}
         abbreviationFallback{""}

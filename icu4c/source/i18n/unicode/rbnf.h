@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2006, International Business Machines Corporation and others.
+* Copyright (C) 1997-2009, International Business Machines Corporation and others.
 * All Rights Reserved.
 *******************************************************************************
 */
@@ -49,6 +49,7 @@ enum URBNFRuleSetTag {
     URBNF_SPELLOUT,
     URBNF_ORDINAL,
     URBNF_DURATION,
+    URBNF_NUMBERING_SYSTEM,
     URBNF_COUNT
 };
 
@@ -596,10 +597,12 @@ public:
    * code choosed among three possible predefined formats: spellout, ordinal,
    * and duration.
    * @param tag A selector code specifying which kind of formatter to create for that
-   * locale.  There are three legal values: URBNF_SPELLOUT, which creates a formatter that
+   * locale.  There are four legal values: URBNF_SPELLOUT, which creates a formatter that
    * spells out a value in words in the desired language, URBNF_ORDINAL, which attaches
    * an ordinal suffix from the desired language to the end of a number (e.g. "123rd"),
-   * and URBNF_DURATION, which formats a duration in seconds as hours, minutes, and seconds.
+   * URBNF_DURATION, which formats a duration in seconds as hours, minutes, and seconds,
+   * and URBNF_NUMBERING_SYSTEM, which is used to invoke rules for alternate numbering
+   * systems such as the Hebrew numbering system, or for Roman Numerals, etc.
    * @param locale The locale for the formatter.
    * @param status The status indicating whether the constructor succeeded.
    * @stable ICU 2.0
