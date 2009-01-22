@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2004-2008, International Business Machines
+*   Copyright (C) 2004-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  ucol_sit.cpp
@@ -578,15 +578,15 @@ ucol_getShortDefinitionString(const UCollator *coll,
     if(elementSize) {
         // we should probably canonicalize here...
         elementSize = uloc_getLanguage(locBuff, tempbuff, internalBufferSize, status);
-        appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, capacity, languageArg);
+        appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, /*capacity*/internalBufferSize, languageArg);
         elementSize = uloc_getCountry(locBuff, tempbuff, internalBufferSize, status);
-        appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, capacity, regionArg);
+        appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, /*capacity*/internalBufferSize, regionArg);
         elementSize = uloc_getScript(locBuff, tempbuff, internalBufferSize, status);
-        appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, capacity, scriptArg);
+        appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, /*capacity*/internalBufferSize, scriptArg);
         elementSize = uloc_getVariant(locBuff, tempbuff, internalBufferSize, status);
-        appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, capacity, variantArg);
+        appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, /*capacity*/internalBufferSize, variantArg);
         elementSize = uloc_getKeywordValue(locBuff, "collation", tempbuff, internalBufferSize, status);
-        appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, capacity, keywordArg);
+        appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, /*capacity*/internalBufferSize, keywordArg);
     } 
 
     int32_t i = 0;
@@ -597,7 +597,7 @@ ucol_getShortDefinitionString(const UCollator *coll,
             if(attribute != UCOL_DEFAULT) {
                 char letter = ucol_sit_attributeValueToLetter(attribute, status);
                 appendShortStringElement(&letter, 1, 
-                    buffer, &resultSize, capacity, options[i].optionStart);
+                    buffer, &resultSize, /*capacity*/internalBufferSize, options[i].optionStart);
             }
         }
     }

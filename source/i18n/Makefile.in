@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1998-2008, International Business Machines
+#   Copyright (C) 1998-2009, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -81,7 +81,7 @@ ulocdata.o measfmt.o currfmt.o curramt.o currunit.o measure.o utmscale.o \
 csdetect.o csmatch.o csr2022.o csrecog.o csrmbcs.o csrsbcs.o csrucode.o csrutf8.o inputext.o \
 wintzimpl.o windtfmt.o winnmfmt.o basictz.o dtrule.o rbtz.o tzrule.o tztrans.o vtzone.o \
 zonemeta.o zstrfmt.o plurrule.o plurfmt.o dtitvfmt.o dtitvinf.o \
-tmunit.o tmutamt.o tmutfmt.o
+tmunit.o tmutamt.o tmutfmt.o colldata.o bmsearch.o bms.o
 
 ## Header files to install
 HEADERS = $(srcdir)/unicode/*.h
