@@ -863,6 +863,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
     UnicodeString pattern;
     UResourceBundle *resource = ures_open((char *)0, desiredLocale.getName(), &status);
     UResourceBundle *numberPatterns = ures_getByKey(resource, DecimalFormat::fgNumberPatterns, NULL, &status);
+    NumberingSystem *ns = NULL;
 
     if (U_FAILURE(status)) {
         // We don't appear to have resource data available -- use the last-resort data
@@ -899,7 +900,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         }
     }
 
-    NumberingSystem *ns = NumberingSystem::createInstance(desiredLocale,status);
+    ns = NumberingSystem::createInstance(desiredLocale,status);
     
     if (U_FAILURE(status)) {
         goto cleanup;
