@@ -500,7 +500,7 @@ static void TestConversionUTF16()
     if(encodingsTestCases[testCaseIdx] != -1) continue;
     curCase++;
 
-    if(QUICK && curCase > 137052384)
+    if(QUICK && curCase > 2)
       break;
 
     status = U_ZERO_ERROR;
@@ -736,7 +736,7 @@ static void TestSerializationAndUnserialization()
 
     curCase++;
 
-    if(QUICK && curCase > 146587872)
+    if(QUICK && curCase > 2)
       break;
 
     status = U_ZERO_ERROR;
