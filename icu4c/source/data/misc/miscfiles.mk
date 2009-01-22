@@ -1,4 +1,4 @@
-# *   Copyright (C) 2003-2008, International Business Machines
+# *   Copyright (C) 2003-2009, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # A list of txt's to build
 # Note: 
@@ -23,4 +23,4 @@
 #
 
 MISC_SOURCE = \
-zoneinfo.txt supplementalData.txt metazoneInfo.txt likelySubtags.txt plurals.txt
+zoneinfo.txt supplementalData.txt metazoneInfo.txt likelySubtags.txt plurals.txt numberingSystems.txt

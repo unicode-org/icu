@@ -1378,6 +1378,7 @@ root{
         script{"{0}"}
         territory{"{0}"}
     }
+    defaultNumberingSystem{"decimal"}
     delimiters{
         alternateQuotationEnd{"’"}
         alternateQuotationStart{"‘"}
