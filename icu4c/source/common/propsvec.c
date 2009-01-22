@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2008, International Business Machines
+*   Copyright (C) 2002-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -212,12 +212,13 @@ upvec_setValue(UPropsVectors *pv,
                 *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
                 return;
             }
-            newVectors=(uint32_t *)uprv_malloc(newMaxRows*columns*4);
+            newVectors=(uint32_t *)uprv_realloc(pv->v, newMaxRows*columns*4);
             if(newVectors==NULL) {
                 *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
                 return;
             }
-            uprv_free(pv->v);
+            firstRow = newVectors+(firstRow-pv->v);
+            lastRow = newVectors+(lastRow-pv->v);
             pv->v=newVectors;
             pv->maxRows=newMaxRows;
         }
