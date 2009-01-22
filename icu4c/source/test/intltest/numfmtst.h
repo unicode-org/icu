@@ -140,6 +140,8 @@ class NumberFormatTest: public CalendarTimeZoneTest {
 
     void expect2(NumberFormat& fmt, const Formattable& n, const UnicodeString& str);
 
+    void expect3(NumberFormat& fmt, const Formattable& n, const UnicodeString& str);
+
     void expect2(NumberFormat& fmt, const Formattable& n, const char* str) {
         expect2(fmt, n, UnicodeString(str, ""));
     }
@@ -204,6 +206,11 @@ class NumberFormatTest: public CalendarTimeZoneTest {
                    int32_t pos) {
         expectPad(fmt, pat, pos, 0, (UChar)0);
     }
+
+    void expect_rbnf(NumberFormat& fmt, const UnicodeString& str, const Formattable& n);
+
+    void expect_rbnf(NumberFormat& fmt, const Formattable& n,
+                const UnicodeString& exp, UBool rt=TRUE);
 
     // internal utility routine
     static UnicodeString& escape(UnicodeString& s);
