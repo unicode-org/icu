@@ -250,8 +250,14 @@
       <include name="com/ibm/icu/dev/tool/docs/CodeMangler.java" />
     </javac>
     <!-- Run CodeMangler -->
+    <condition property="mangler.cmd.args" value="-d${default.target.rt.version} -n @preprocessor.txt">
+      <equals arg1="${default.target.rt.version}" arg2="${target.rt.version}"/>
+    </condition>
+
+    <property name="mangler.cmd.args" value="-d${target.rt.version} @preprocessor.txt"/>
+
     <antcall target="doMangle">
-      <param name="mangler.args" value="-d${target.rt.version} @preprocessor.txt"/>
+      <param name="mangler.args" value="${mangler.cmd.args}"/>
     </antcall>
   </target>
 
