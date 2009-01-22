@@ -156,6 +156,9 @@
     <condition property="target.rt.version" value="JAVASE6">
       <contains string="${java.version}" substring="1.6." />
     </condition>
+    <condition property="target.rt.version" value="JAVASE7">
+      <contains string="${java.version}" substring="1.7." />
+    </condition>
 
     <fail message="Failed to detect Java runtime library version used for building ICU4J"
           unless="target.rt.version" />
