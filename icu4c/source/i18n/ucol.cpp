@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2008, International Business Machines
+*   Copyright (C) 1996-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  ucol.cpp
@@ -122,7 +122,6 @@ uprv_init_collIterate(const UCollator *collator, const UChar *sourceString,
     /* Out-of-line version for use from other files. */
     IInit_collIterate(collator, sourceString, sourceLen, s);
 }
-
 
 /**
 * Backup the state of the collIterate struct data
@@ -1499,10 +1498,30 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
     }
     else
     {
-        order = UTRIE_GET32_FROM_LEAD(&coll->mapping, ch);
+        // Always use UCA for Han, Hangul
+        // (Han extension A is before main Han block)
+        // **** Han compatibility chars ?? ****
+        if ((collationSource->flags & UCOL_FORCE_HAN_IMPLICIT) != 0 &&
+            (ch >= UCOL_FIRST_HAN_A && ch <= UCOL_LAST_HANGUL)) {
+            if (ch > UCOL_LAST_HAN && ch < UCOL_FIRST_HANGUL) {
+                // between the two target ranges; do normal lookup
+                // **** this range is YI, Modifier tone letters, ****
+                // **** Latin-D, Syloti Nagari, Phagas-pa.       ****
+                // **** Latin-D might be tailored, so we need to ****
+                // **** do the normal lookup for these guys.     ****
+                order = UTRIE_GET32_FROM_LEAD(&coll->mapping, ch);
+            } else {
+                // in one of the target ranges; use UCA
+                order = UCOL_NOT_FOUND;
+            }
+        } else {
+            order = UTRIE_GET32_FROM_LEAD(&coll->mapping, ch);
+        }
+
         if(order > UCOL_NOT_FOUND) {                                       /* if a CE is special                */
             order = ucol_prv_getSpecialCE(coll, ch, order, collationSource, status);    /* and try to get the special CE     */
         }
+
         if(order == UCOL_NOT_FOUND && coll->UCA) {   /* We couldn't find a good CE in the tailoring */
             /* if we got here, the codepoint MUST be over 0xFF - so we look directly in the trie */
             order = UTRIE_GET32_FROM_LEAD(&coll->UCA->mapping, ch);
@@ -1939,7 +1958,23 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                 result = coll->latinOneMapping[ch];
             }
             else {
-                result = UTRIE_GET32_FROM_LEAD(&coll->mapping, ch);
+                // Always use UCA for [3400..9FFF], [AC00..D7AF]
+                // **** [FA0E..FA2F] ?? ****
+                if ((data->flags & UCOL_FORCE_HAN_IMPLICIT) != 0 &&
+                    (ch >= 0x3400 && ch <= 0xD7AF)) {
+                    if (ch > 0x9FFF && ch < 0xAC00) {
+                        // between the two target ranges; do normal lookup
+                        // **** this range is YI, Modifier tone letters, ****
+                        // **** Latin-D, Syloti Nagari, Phagas-pa.       ****
+                        // **** Latin-D might be tailored, so we need to ****
+                        // **** do the normal lookup for these guys.     ****
+                         result = UTRIE_GET32_FROM_LEAD(&coll->mapping, ch);
+                    } else {
+                        result = UCOL_NOT_FOUND;
+                    }
+                } else {
+                    result = UTRIE_GET32_FROM_LEAD(&coll->mapping, ch);
+                }
             }
             if (result > UCOL_NOT_FOUND) {
                 result = ucol_prv_getSpecialPrevCE(coll, ch, result, data, status);
@@ -3545,38 +3580,12 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
 
             int32_t offsetBias;
 
-#if 0
-            if (source->offsetReturn != NULL) {
-                source->offsetStore = source->offsetReturn - noChars;
-            }
-
             // **** doesn't work if using iterator ****
             if (source->flags & UCOL_ITER_INNORMBUF) {
-                if (source->fcdPosition == NULL) {
-                    offsetBias = 0;
-                } else {
-                    offsetBias = (int32_t)(source->fcdPosition - source->string);
-                }
-            } else {
-                offsetBias = (int32_t)(source->pos - source->string);
-            }
-
-#else
-            // **** doesn't work if using iterator ****
-            if (source->flags & UCOL_ITER_INNORMBUF) {
-#if 1
                 offsetBias = -1;
-#else
-              if (source->fcdPosition == NULL) {
-                  offsetBias = 0;
-              } else {
-                  offsetBias = (int32_t)(source->fcdPosition - source->string);
-              }
-#endif
             } else {
                 offsetBias = (int32_t)(source->pos - source->string);
             }
-#endif
 
             /* a new collIterate is used to simplify things, since using the current
             collIterate will mean that the forward and backwards iteration will
@@ -3584,9 +3593,9 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
             collIterate temp;
             int32_t rawOffset;
 
-            //IInit_collIterate(coll, UCharOffset, -1, &temp);
             IInit_collIterate(coll, UCharOffset, noChars, &temp);
             temp.flags &= ~UCOL_ITER_NORM;
+            temp.flags |= source->flags & UCOL_FORCE_HAN_IMPLICIT;
 
             rawOffset = temp.pos - temp.string; // should always be zero?
             CE = ucol_IGetNextCE(coll, &temp, status);
@@ -3679,7 +3688,12 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                     }
                 }
 
-                rawOffset = temp.pos - temp.string;
+                if ((temp.flags & UCOL_ITER_INNORMBUF) != 0) {
+                    rawOffset = temp.fcdPosition - temp.string;
+                } else {
+                    rawOffset = temp.pos - temp.string;
+                }
+
                 CE = ucol_IGetNextCE(coll, &temp, status);
             }
 
@@ -4136,29 +4150,6 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
             }
 
         case IMPLICIT_TAG:        /* everything that is not defined otherwise */
-#if 0
-			if (source->offsetBuffer == NULL) {
-				source->offsetBufferSize = UCOL_EXPAND_CE_BUFFER_SIZE;
-				source->offsetBuffer = (int32_t *) uprv_malloc(sizeof(int32_t) * UCOL_EXPAND_CE_BUFFER_SIZE);
-				source->offsetStore = source->offsetBuffer;
-			}
-
-			// **** doesn't work if using iterator ****
-			if (source->flags & UCOL_ITER_INNORMBUF) {
-			  source->offsetRepeatCount = 1;
-			} else {
-			  int32_t firstOffset = (int32_t)(source->pos - source->string);
-
-			  *(source->offsetStore++) = firstOffset;
-			  *(source->offsetStore++) = firstOffset + 1;
-
-				source->offsetReturn = source->offsetStore - 1;
-				if (source->offsetReturn == source->offsetBuffer) {
-					source->offsetStore = source->offsetBuffer;
-				}
-			}
-#endif
-
             return getPrevImplicit(ch, source);
 
             // TODO: Remove CJK implicits as they are handled by the getImplicitPrimary function

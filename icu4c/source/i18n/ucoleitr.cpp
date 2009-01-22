@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 2001-2008, International Business Machines
+*   Copyright (C) 2001-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *
@@ -263,7 +263,14 @@ inline uint64_t processCE(UCollationElements *elems, uint32_t ce)
         primary = ucol_primaryOrder(ce);
     }
 
-    // Continuation?
+    // **** This should probably handle continuations too.  ****
+    // **** That means that we need 24 bits for the primary ****
+    // **** instead of the 16 that we're currently using.   ****
+    // **** So we can lay out the 64 bits as: 24.12.12.16.  ****
+    // **** Another complication with continuations is that ****
+    // **** the *second* CE is marked as a continuation, so ****
+    // **** we always have to peek ahead to know how long   ****
+    // **** the primary is...                               ****
     if (elems->pce->toShift && (elems->pce->variableTop > ce && primary != 0)
                 || (elems->pce->isShifted && primary == 0)) {
 
@@ -284,7 +291,6 @@ inline uint64_t processCE(UCollationElements *elems, uint32_t ce)
 
         elems->pce->isShifted = FALSE;
     }
-
 
     return primary << 48 | secondary << 32 | tertiary << 16 | quaternary;
 }
@@ -332,6 +338,7 @@ ucol_openElements(const UCollator  *coll,
     return result;
 }
 
+
 U_CAPI void U_EXPORT2
 ucol_closeElements(UCollationElements *elems)
 {
@@ -375,7 +382,7 @@ ucol_reset(UCollationElements *elems)
         ci->endp      = ci->string + u_strlen(ci->string);
     }
     ci->CEpos       = ci->toReturn = ci->CEs;
-    ci->flags       = UCOL_ITER_HASLEN;
+    ci->flags       = (ci->flags & UCOL_FORCE_HAN_IMPLICIT) | UCOL_ITER_HASLEN;
     if (ci->coll->normalizationMode == UCOL_ON) {
         ci->flags |= UCOL_ITER_NORM;
     }
@@ -389,6 +396,21 @@ ucol_reset(UCollationElements *elems)
 
   //ci->offsetReturn = ci->offsetStore = NULL;
 	ci->offsetRepeatCount = ci->offsetRepeatValue = 0;
+}
+
+U_CAPI void U_EXPORT2
+ucol_forceHanImplicit(UCollationElements *elems, UErrorCode *status)
+{
+    if (U_FAILURE(*status)) {
+        return;
+    }
+
+    if (elems == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    elems->iteratordata_.flags |= UCOL_FORCE_HAN_IMPLICIT;
 }
 
 U_CAPI int32_t U_EXPORT2
