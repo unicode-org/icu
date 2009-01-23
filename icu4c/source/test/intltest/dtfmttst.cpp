@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
  
@@ -74,9 +74,10 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(34,TestRelativeClone);
         TESTCASE(35,TestHostClone);
         TESTCASE(36,TestTimeZoneDisplayName);
+        TESTCASE(37,TestRoundtripWithCalendar);
         /*
-        TESTCASE(37,TestRelativeError);
-        TESTCASE(38,TestRelativeOther);
+        TESTCASE(38,TestRelativeError);
+        TESTCASE(39,TestRelativeOther);
         */
         default: name = ""; break;
     }
@@ -2896,6 +2897,128 @@ void DateFormatTest::TestTimeZoneDisplayName()
         }
     }
     delete cal;
+}
+
+void DateFormatTest::TestRoundtripWithCalendar(void) {
+    UErrorCode status = U_ZERO_ERROR;
+
+    TimeZone *tz = TimeZone::createTimeZone("Europe/Paris");
+    TimeZone *gmt = TimeZone::createTimeZone("Etc/GMT");
+
+    Calendar *calendars[] = {
+        Calendar::createInstance(*tz, Locale("und@calendar=gregorian"), status),
+        Calendar::createInstance(*tz, Locale("und@calendar=buddhist"), status),
+//        Calendar::createInstance(*tz, Locale("und@calendar=hebrew"), status),
+        Calendar::createInstance(*tz, Locale("und@calendar=islamic"), status),
+        Calendar::createInstance(*tz, Locale("und@calendar=japanese"), status),
+        NULL
+    };
+    if (U_FAILURE(status)) {
+        errln("Failed to initialize calendars");
+        for (int i = 0; calendars[i] != NULL; i++) {
+            delete calendars[i];
+        }
+        return;
+    }
+
+    //FIXME The formatters commented out below are currently failing because of
+    // the calendar calculation problem reported by #6691
+
+    // The order of test formatters must match the order of calendars above.
+    DateFormat *formatters[] = {
+        DateFormat::createDateTimeInstance(DateFormat::kFull, DateFormat::kFull, Locale("en_US")), //calendar=gregorian
+        DateFormat::createDateTimeInstance(DateFormat::kFull, DateFormat::kFull, Locale("th_TH")), //calendar=buddhist
+//        DateFormat::createDateTimeInstance(DateFormat::kFull, DateFormat::kFull, Locale("he_IL@calendar=hebrew")),
+        DateFormat::createDateTimeInstance(DateFormat::kFull, DateFormat::kFull, Locale("ar_EG@calendar=islamic")),
+//        DateFormat::createDateTimeInstance(DateFormat::kFull, DateFormat::kFull, Locale("ja_JP@calendar=japanese")),
+        NULL
+    };
+
+    UDate d = Calendar::getNow();
+    UnicodeString buf;
+    FieldPosition fpos;
+    ParsePosition ppos;
+
+    for (int i = 0; formatters[i] != NULL; i++) {
+        buf.remove();
+        fpos.setBeginIndex(0);
+        fpos.setEndIndex(0);
+        calendars[i]->setTime(d, status);
+
+        // Normal case output - the given calendar matches the calendar
+        // used by the formatter
+        formatters[i]->format(*calendars[i], buf, fpos);
+        UnicodeString refStr(buf);
+
+        for (int j = 0; calendars[j] != NULL; j++) {
+            if (j == i) {
+                continue;
+            }
+            buf.remove();
+            fpos.setBeginIndex(0);
+            fpos.setEndIndex(0);
+            calendars[j]->setTime(d, status);
+
+            // Even the different calendar type is specified,
+            // we should get the same result.
+            formatters[i]->format(*calendars[j], buf, fpos);
+            if (refStr != buf) {
+                errln((UnicodeString)"FAIL: Different format result with a different calendar for the same time -"
+                        + "\n Reference calendar type=" + calendars[i]->getType()
+                        + "\n Another calendar type=" + calendars[j]->getType()
+                        + "\n Expected result=" + refStr
+                        + "\n Actual result=" + buf);
+            }
+        }
+
+        calendars[i]->setTimeZone(*gmt);
+        calendars[i]->clear();
+        ppos.setErrorIndex(-1);
+        ppos.setIndex(0);
+
+        // Normal case parse result - the given calendar matches the calendar
+        // used by the formatter
+        formatters[i]->parse(refStr, *calendars[i], ppos);
+
+        for (int j = 0; calendars[j] != NULL; j++) {
+            if (j == i) {
+                continue;
+            }
+            calendars[j]->setTimeZone(*gmt);
+            calendars[j]->clear();
+            ppos.setErrorIndex(-1);
+            ppos.setIndex(0);
+
+            // Even the different calendar type is specified,
+            // we should get the same time and time zone.
+            formatters[i]->parse(refStr, *calendars[j], ppos);
+            if (calendars[i]->getTime(status) != calendars[j]->getTime(status)
+                || calendars[i]->getTimeZone() != calendars[j]->getTimeZone()) {
+                UnicodeString tzid;
+                errln((UnicodeString)"FAIL: Different parse result with a different calendar for the same string -"
+                        + "\n Reference calendar type=" + calendars[i]->getType()
+                        + "\n Another calendar type=" + calendars[j]->getType()
+                        + "\n Date string=" + refStr
+                        + "\n Expected time=" + calendars[i]->getTime(status)
+                        + "\n Expected time zone=" + calendars[i]->getTimeZone().getID(tzid)
+                        + "\n Actual time=" + calendars[j]->getTime(status)
+                        + "\n Actual time zone=" + calendars[j]->getTimeZone().getID(tzid));
+            }
+        }
+        if (U_FAILURE(status)) {
+            errln((UnicodeString)"FAIL: " + u_errorName(status));
+            break;
+        }
+    }
+
+    delete tz;
+    delete gmt;
+    for (int i = 0; calendars[i] != NULL; i++) {
+        delete calendars[i];
+    }
+    for (int i = 0; formatters[i] != NULL; i++) {
+        delete formatters[i];
+    }
 }
 
 /*

@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- *   Copyright (C) 1997-2008, International Business Machines
+ *   Copyright (C) 1997-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  ********************************************************************************
  *
@@ -245,7 +245,11 @@ public:
      * occurence of the timezone pattern character 'z'.
      *
      * @param cal           Calendar set to the date and time to be formatted
-     *                      into a date/time string.
+     *                      into a date/time string.  When the calendar type is
+     *                      different from the internal calendar held by this
+     *                      DateFormat instance, the date and the time zone will
+     *                      be inherited from the input calendar, but other calendar
+     *                      field values will be calculated by the internal calendar.
      * @param appendTo      Output parameter to receive result.
      *                      Result is appended to existing contents.
      * @param fieldPosition On input: an alignment field, if desired (see examples above)
@@ -342,7 +346,12 @@ public:
      *
      * @param text  The date/time string to be parsed
      * @param cal   a Calendar set to the date and time to be formatted
-     *              into a date/time string.
+     *              into a date/time string.  When the calendar type
+     *              is different from the internal calendar held by this
+     *              DateFormat instance, calendar field values will be
+     *              parsed based on the internal calendar, then the result
+     *              (time in milliseconds and time zone) will be set in
+     *              this calendar.
      * @param pos   On input, the position at which to start parsing; on
      *              output, the position at which parsing terminated, or the
      *              start position if the parse failed.
