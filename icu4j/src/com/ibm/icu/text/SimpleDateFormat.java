@@ -581,7 +581,22 @@ public class SimpleDateFormat extends DateFormat {
      */
     public StringBuffer format(Calendar cal, StringBuffer toAppendTo,
                                FieldPosition pos) {
-        return format(cal, toAppendTo, pos, null);
+        TimeZone backupTZ = null;
+        if (cal != calendar && !cal.getType().equals(calendar.getType())) {
+            // Different calendar type
+            // We use the time and time zone from the input calendar, but
+            // do not use the input calendar for field calculation.
+            calendar.setTimeInMillis(cal.getTimeInMillis());
+            backupTZ = calendar.getTimeZone();
+            calendar.setTimeZone(cal.getTimeZone());
+            cal = calendar;
+        }
+        StringBuffer result = format(cal, toAppendTo, pos, null);
+        if (backupTZ != null) {
+            // Restore the original time zone
+            calendar.setTimeZone(backupTZ);
+        }
+        return result;
     }
 
     // The actual method to format date. If List attributes is not null,
@@ -1515,6 +1530,19 @@ public class SimpleDateFormat extends DateFormat {
      */
     public void parse(String text, Calendar cal, ParsePosition parsePos)
     {
+        TimeZone backupTZ = null;
+        Calendar resultCal = null;
+        if (cal != calendar && !cal.getType().equals(calendar.getType())) {
+            // Different calendar type
+            // We use the time/zone from the input calendar, but
+            // do not use the input calendar for field calculation.
+            calendar.setTimeInMillis(cal.getTimeInMillis());
+            backupTZ = calendar.getTimeZone();
+            calendar.setTimeZone(cal.getTimeZone());
+            resultCal = cal;
+            cal = calendar;
+        }
+
         int pos = parsePos.getIndex();
         int start = pos;
 
@@ -1575,6 +1603,9 @@ public class SimpleDateFormat extends DateFormat {
                             // can not make shorter any more
                             parsePos.setIndex(start);
                             parsePos.setErrorIndex(pos);
+                            if (backupTZ != null) {
+                                calendar.setTimeZone(backupTZ);
+                            }
                             return;
                         }
                         i = numericFieldStart;
@@ -1592,6 +1623,9 @@ public class SimpleDateFormat extends DateFormat {
                     if (pos < 0) {
                         parsePos.setIndex(start);
                         parsePos.setErrorIndex(s);
+                        if (backupTZ != null) {
+                            calendar.setTimeZone(backupTZ);
+                        }
                         return;
                     }
                 }
@@ -1627,6 +1661,9 @@ public class SimpleDateFormat extends DateFormat {
                     // Set the position of mismatch
                     parsePos.setIndex(start);
                     parsePos.setErrorIndex(pos);
+                    if (backupTZ != null) {
+                        calendar.setTimeZone(backupTZ);
+                    }
                     return;
                 }
             }
@@ -1787,6 +1824,20 @@ public class SimpleDateFormat extends DateFormat {
         catch (IllegalArgumentException e) {
             parsePos.setErrorIndex(pos);
             parsePos.setIndex(start);
+            if (backupTZ != null) {
+                calendar.setTimeZone(backupTZ);
+            }
+            return;
+        }
+        // Set the parsed result if local calendar is used
+        // instead of the input calendar
+        if (resultCal != null) {
+            resultCal.setTimeZone(cal.getTimeZone());
+            resultCal.setTimeInMillis(cal.getTimeInMillis());
+        }
+        // Restore the original time zone if required
+        if (backupTZ != null) {
+            calendar.setTimeZone(backupTZ);
         }
     }
 
