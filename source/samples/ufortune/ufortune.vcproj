@@ -421,7 +421,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="cd resources&#x0D;&#x0A;nmake -f fortune_resources.mak&#x0D;&#x0A;copy Fortune_Resources.DLL &quot;$(TargetDir)&quot;&#x0D;&#x0A;"
+						CommandLine="cd resources&#x0D;&#x0A;nmake -f fortune_resources.mak CFG=x86\Debug&#x0D;&#x0A;copy Fortune_Resources.DLL &quot;$(TargetDir)&quot;&#x0D;&#x0A;"
 						Outputs="resources\fortune_resources.DLL"
 					/>
 				</FileConfiguration>
@@ -430,7 +430,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="cd resources&#x0D;&#x0A;nmake -f fortune_resources.mak&#x0D;&#x0A;copy Fortune_Resources.DLL &quot;$(TargetDir)&quot;&#x0D;&#x0A;"
+						CommandLine="cd resources&#x0D;&#x0A;nmake -f fortune_resources.mak CFG=x64\Debug&#x0D;&#x0A;copy Fortune_Resources.DLL &quot;$(TargetDir)&quot;&#x0D;&#x0A;"
 						Outputs="resources\fortune_resources.DLL"
 					/>
 				</FileConfiguration>
@@ -439,7 +439,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="cd resources&#x0D;&#x0A;nmake -f fortune_resources.mak&#x0D;&#x0A;copy Fortune_Resources.DLL &quot;$(TargetDir)&quot;&#x0D;&#x0A;"
+						CommandLine="cd resources&#x0D;&#x0A;nmake -f fortune_resources.mak CFG=x86\Release&#x0D;&#x0A;copy Fortune_Resources.DLL &quot;$(TargetDir)&quot;&#x0D;&#x0A;"
 						Outputs="resources\fortune_resources.DLL"
 					/>
 				</FileConfiguration>
@@ -448,7 +448,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="cd resources&#x0D;&#x0A;nmake -f fortune_resources.mak&#x0D;&#x0A;copy Fortune_Resources.DLL &quot;$(TargetDir)&quot;&#x0D;&#x0A;"
+						CommandLine="cd resources&#x0D;&#x0A;nmake -f fortune_resources.mak CFG=x64\Release&#x0D;&#x0A;copy Fortune_Resources.DLL &quot;$(TargetDir)&quot;&#x0D;&#x0A;"
 						Outputs="resources\fortune_resources.DLL"
 					/>
 				</FileConfiguration>
