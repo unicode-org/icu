@@ -1,5 +1,5 @@
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual C++ Express 2005
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "charperf", "charperf\charperf.vcproj", "{D850A4B6-7D94-476E-9392-E9272DA4EAAF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "normperf", "normperf\normperf.vcproj", "{56CCC661-8D33-4F0A-B62F-C619CE843C68}"
