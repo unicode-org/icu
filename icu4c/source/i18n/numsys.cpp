@@ -128,25 +128,29 @@ NumberingSystem* U_EXPORT2
 NumberingSystem::createInstanceByName(const char *name, UErrorCode& status) {
     
      UResourceBundle *numberingSystemsInfo = NULL;
-     UResourceBundle *nsCurrent = NULL;
+     UResourceBundle *nsTop, *nsCurrent;
      const UChar* description = NULL;
      int32_t radix = 10;
      int32_t algorithmic = 0;
      int32_t len;
 
      numberingSystemsInfo = ures_openDirect(NULL,gNumberingSystems, &status);
-     numberingSystemsInfo = ures_getByKey(numberingSystemsInfo,gNumberingSystems,numberingSystemsInfo,&status);
-     numberingSystemsInfo = ures_getByKey(numberingSystemsInfo,name,numberingSystemsInfo,&status);
-     description = ures_getStringByKey(numberingSystemsInfo,gDesc,&len,&status);
-     nsCurrent = ures_getByKey(numberingSystemsInfo,gRadix,nsCurrent,&status);
+     nsCurrent = ures_getByKey(numberingSystemsInfo,gNumberingSystems,NULL,&status);
+     nsTop = ures_getByKey(nsCurrent,name,NULL,&status);
+     description = ures_getStringByKey(nsTop,gDesc,&len,&status);
+
+	 ures_getByKey(nsTop,gRadix,nsCurrent,&status);
      radix = ures_getInt(nsCurrent,&status);
-     nsCurrent = ures_getByKey(numberingSystemsInfo,gAlgorithmic,nsCurrent,&status);
+
+     ures_getByKey(nsTop,gAlgorithmic,nsCurrent,&status);
      algorithmic = ures_getInt(nsCurrent,&status);
 
      UBool isAlgorithmic = ( algorithmic == 1 );
      UnicodeString nsd;
      nsd.setTo(description);
 
+	 ures_close(nsCurrent);
+	 ures_close(nsTop);
      ures_close(numberingSystemsInfo);
 
      if (U_FAILURE(status)) {
