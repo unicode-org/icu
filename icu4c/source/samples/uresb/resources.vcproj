@@ -27,9 +27,9 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="nmake /f &quot;resources.mak&quot;"
-				ReBuildCommandLine="nmake /f &quot;resources.mak&quot; /a"
-				CleanCommandLine="nmake /f &quot;resources.mak&quot; clean"
+				BuildCommandLine="nmake /f &quot;resources.mak&quot; CFG=x86\Debug"
+				ReBuildCommandLine="nmake /f &quot;resources.mak&quot; /a CFG=x86\Debug"
+				CleanCommandLine="nmake /f &quot;resources.mak&quot; clean CFG=x86\Debug"
 				Output="uresb_root.res"
 				PreprocessorDefinitions=""
 				IncludeSearchPath=""
@@ -48,9 +48,9 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="nmake /f &quot;resources.mak&quot;"
-				ReBuildCommandLine="nmake /f &quot;resources.mak&quot; /a"
-				CleanCommandLine="nmake /f &quot;resources.mak&quot; clean"
+				BuildCommandLine="nmake /f &quot;resources.mak&quot; CFG=x64\Debug"
+				ReBuildCommandLine="nmake /f &quot;resources.mak&quot; /a CFG=x64\Debug"
+				CleanCommandLine="nmake /f &quot;resources.mak&quot; clean CFG=x64\Debug"
 				Output="uresb_root.res"
 				PreprocessorDefinitions=""
 				IncludeSearchPath=""
@@ -69,9 +69,9 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="nmake /f &quot;resources.mak&quot;"
-				ReBuildCommandLine="nmake /f &quot;resources.mak&quot; /a"
-				CleanCommandLine="nmake /f &quot;resources.mak&quot; clean"
+				BuildCommandLine="nmake /f &quot;resources.mak&quot; CFG=x86\Release"
+				ReBuildCommandLine="nmake /f &quot;resources.mak&quot; /a CFG=x86\Release"
+				CleanCommandLine="nmake /f &quot;resources.mak&quot; clean CFG=x86\Release"
 				Output="uresb_root.res"
 				PreprocessorDefinitions=""
 				IncludeSearchPath=""
@@ -90,9 +90,9 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="nmake /f &quot;resources.mak&quot;"
-				ReBuildCommandLine="nmake /f &quot;resources.mak&quot; /a"
-				CleanCommandLine="nmake /f &quot;resources.mak&quot; clean"
+				BuildCommandLine="nmake /f &quot;resources.mak&quot; CFG=x64\Release"
+				ReBuildCommandLine="nmake /f &quot;resources.mak&quot; /a CFG=x64\Release"
+				CleanCommandLine="nmake /f &quot;resources.mak&quot; clean CFG=x64\Release"
 				Output="uresb_root.res"
 				PreprocessorDefinitions=""
 				IncludeSearchPath=""
