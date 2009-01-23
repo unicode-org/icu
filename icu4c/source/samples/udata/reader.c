@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2004, International Business Machines
+ *   Copyright (C) 1999-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -31,7 +31,7 @@
 #include "unicode/putil.h"
 #include "unicode/udata.h"
 
-#define DATA_NAME "example"
+#define DATA_NAME "mypkg_example"
 #define DATA_TYPE "dat"
 
 /* UDataInfo cf. udata.h */
@@ -90,10 +90,8 @@ main(int argc, const char *argv[]) {
     char *currdir = getcwd(NULL, 0);
 #endif
 
-    /* need to put  "current/dir/pkgname" as path */
+    /* need to put  "current/dir" as path */
     strcpy(curPathBuffer, currdir);
-    strcat(curPathBuffer, U_FILE_SEP_STRING);
-    strcat(curPathBuffer, "mypkg"); /* package name */
 
     result=udata_openChoice(curPathBuffer, DATA_TYPE, DATA_NAME, isAcceptable, NULL, &status);
 
