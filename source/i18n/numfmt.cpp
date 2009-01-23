@@ -923,6 +923,9 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
 cleanup:
     ures_close(numberPatterns);
     ures_close(resource);
+    if (ns) {
+       delete ns;
+    }
     if (U_FAILURE(status)) {
         /* If f exists, then it will delete the symbols */
         if (f==NULL) {

@@ -169,6 +169,9 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
                     UnicodeString zeroDigit(ns->getDescription(),0,1);
                     setSymbol(kZeroDigitSymbol,zeroDigit);
                 }
+                if (ns) {
+                    delete ns;
+                }
                 
                 // Obtain currency data from the currency API.  This is strictly
                 // for backward compatibility; we don't use DecimalFormatSymbols
