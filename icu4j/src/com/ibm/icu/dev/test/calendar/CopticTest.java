@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -171,14 +171,16 @@ public class CopticTest extends CalendarTest
     // eventually should modify to use locale strings and formatter appropriate to coptic calendar
     public void TestEraStart() {
         SimpleDateFormat fmt = new SimpleDateFormat("EEE MMM dd, yyyy GG");
+        SimpleDateFormat copticFmt = new SimpleDateFormat("EEE MMM dd, yyyy GG");
+        copticFmt.setCalendar(new CopticCalendar());
 
         CopticCalendar cal = new CopticCalendar(1, 0, 1);
-        assertEquals("Coptic Date", "Fri Jan 01, 0001 AD", fmt.format(cal));
+        assertEquals("Coptic Date", "Fri Jan 01, 0001 AD", copticFmt.format(cal));
         assertEquals("Gregorian Date", "Fri Aug 29, 0284 AD", fmt.format(cal.getTime()));
 
         cal.set(Calendar.ERA, 0);
         cal.set(Calendar.YEAR, 1);
-        assertEquals("Coptic Date", "Thu Jan 01, 0001 BC", fmt.format(cal));
+        assertEquals("Coptic Date", "Thu Jan 01, 0001 BC", copticFmt.format(cal));
         assertEquals("Gregorian Date", "Thu Aug 30, 0283 AD", fmt.format(cal.getTime()));
     }
 

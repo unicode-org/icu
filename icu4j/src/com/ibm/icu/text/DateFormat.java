@@ -37,7 +37,7 @@ import com.ibm.icu.util.ULocale;
  * as the milliseconds since January 1, 1970, 00:00:00 GMT.
  *
  * <p>DateFormat provides many class methods for obtaining default date/time
- * formatters based on the default or a given loacle and a number of formatting
+ * formatters based on the default or a given locale and a number of formatting
  * styles. The formatting styles include FULL, LONG, MEDIUM, and SHORT. More
  * detail and examples of using these styles are provided in the method
  * descriptions.
@@ -400,11 +400,11 @@ public abstract class DateFormat extends UFormat {
      * 0 and 4, respectively.
      * Notice that if the same time field appears
      * more than once in a pattern, the fieldPosition will be set for the first
-     * occurence of that time field. For instance, formatting a Date to
+     * occurrence of that time field. For instance, formatting a Date to
      * the time string "1 PM PDT (Pacific Daylight Time)" using the pattern
      * "h a z (zzzz)" and the alignment field DateFormat.TIMEZONE_FIELD,
      * the begin index and end index of fieldPosition will be set to
-     * 5 and 8, respectively, for the first occurence of the timezone
+     * 5 and 8, respectively, for the first occurrence of the timezone
      * pattern character 'z'.
      * @see java.text.Format
      * @stable ICU 2.0
@@ -426,7 +426,10 @@ public abstract class DateFormat extends UFormat {
     /**
      * Formats a date into a date/time string.
      * @param cal a Calendar set to the date and time to be formatted
-     * into a date/time string.
+     * into a date/time string.  When the calendar type is different from
+     * the internal calendar held by this DateFormat instance, the date
+     * and the time zone will be inherited from the input calendar, but
+     * other calendar field values will be calculated by the internal calendar.
      * @param toAppendTo the string buffer for the returning date/time string.
      * @param fieldPosition keeps track of the position of the field
      * within the returned string.
@@ -438,11 +441,11 @@ public abstract class DateFormat extends UFormat {
      * 0 and 4, respectively.
      * Notice that if the same time field appears
      * more than once in a pattern, the fieldPosition will be set for the first
-     * occurence of that time field. For instance, formatting a Date to
+     * occurrence of that time field. For instance, formatting a Date to
      * the time string "1 PM PDT (Pacific Daylight Time)" using the pattern
      * "h a z (zzzz)" and the alignment field DateFormat.TIMEZONE_FIELD,
      * the begin index and end index of fieldPosition will be set to
-     * 5 and 8, respectively, for the first occurence of the timezone
+     * 5 and 8, respectively, for the first occurrence of the timezone
      * pattern character 'z'.
      * @return the formatted date/time string.
      * @stable ICU 2.0
@@ -464,11 +467,11 @@ public abstract class DateFormat extends UFormat {
      * 0 and 4, respectively.
      * Notice that if the same time field appears
      * more than once in a pattern, the fieldPosition will be set for the first
-     * occurence of that time field. For instance, formatting a Date to
+     * occurrence of that time field. For instance, formatting a Date to
      * the time string "1 PM PDT (Pacific Daylight Time)" using the pattern
      * "h a z (zzzz)" and the alignment field DateFormat.TIMEZONE_FIELD,
      * the begin index and end index of fieldPosition will be set to
-     * 5 and 8, respectively, for the first occurence of the timezone
+     * 5 and 8, respectively, for the first occurrence of the timezone
      * pattern character 'z'.
      * @return the formatted date/time string.
      * @stable ICU 2.0
@@ -532,7 +535,13 @@ public abstract class DateFormat extends UFormat {
      * @param cal   The calendar into which parsed data will be stored.
      *              In general, this should be cleared before calling this
      *              method.  If this parse fails, the calendar may still
-     *              have been modified.
+     *              have been modified.  When the calendar type is different
+     *              from the internal calendar held by this DateFormat
+     *              instance, calendar field values will be parsed based
+     *              on the internal calendar initialized with the time and
+     *              the time zone taken from this calendar, then the
+     *              parse result (time in milliseconds and time zone) will
+     *              be set back to this calendar.
      *
      * @param pos   On input, the position at which to start parsing; on
      *              output, the position at which parsing terminated, or the
@@ -760,7 +769,7 @@ public abstract class DateFormat extends UFormat {
      * Users are encouraged to use them in date interval format factory methods.
      */
     /** 
-     * Constant for date pattern with hour and miunte.
+     * Constant for date pattern with hour and minute.
      * @draft ICU 4.0
      * @provisional This API might change or be removed in a future release.
      */

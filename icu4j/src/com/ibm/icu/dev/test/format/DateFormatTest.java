@@ -32,9 +32,13 @@ import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.BuddhistCalendar;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ChineseCalendar;
 import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.HebrewCalendar;
+import com.ibm.icu.util.IslamicCalendar;
+import com.ibm.icu.util.JapaneseCalendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
@@ -3406,6 +3410,109 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                         errln("FAIL: formatter[" + j + "] returned \"" + tmp + "\" in locale " +
                                 testLocales[i] + " - expected: " + expected);
                     }
+                }
+            }
+        }
+    }
+
+    /*
+     * Test for format/parse method with calendar which is different
+     * from what DateFormat instance internally use.  See ticket#6420.
+     */
+    public void TestRoundtripWithCalendar() {
+        TimeZone tz = TimeZone.getTimeZone("Europe/Paris");
+        TimeZone gmt = TimeZone.getTimeZone("Etc/GMT");
+
+        final Calendar[] calendars = {
+            new GregorianCalendar(tz),
+            new BuddhistCalendar(tz),
+            new HebrewCalendar(tz),
+            new IslamicCalendar(tz),
+            new JapaneseCalendar(tz),
+        };
+
+        final String pattern = "GyMMMMdEEEEHHmmssVVVV";
+
+        //FIXME The formatters commented out below are currently failing because of
+        // the calendar calculation problem reported by #6691
+
+        // The order of test formatters mus match the order of calendars above.
+        final DateFormat[] formatters = {
+            DateFormat.getPatternInstance(pattern, new ULocale("en_US")), //calendar=gregorian
+            DateFormat.getPatternInstance(pattern, new ULocale("th_TH")), //calendar=buddhist
+            DateFormat.getPatternInstance(pattern, new ULocale("he_IL@calendar=hebrew")),
+//            DateFormat.getPatternInstance(pattern, new ULocale("ar_EG@calendar=islamic")),
+//            DateFormat.getPatternInstance(pattern, new ULocale("ja_JP@calendar=japanese")),
+        };
+
+        Date d = new Date();
+        StringBuffer buf = new StringBuffer();
+        FieldPosition fpos = new FieldPosition(0);
+        ParsePosition ppos = new ParsePosition(0);
+
+        for (int i = 0; i < formatters.length; i++) {
+            buf.setLength(0);
+            fpos.setBeginIndex(0);
+            fpos.setEndIndex(0);
+            calendars[i].setTime(d);
+
+            // Normal case output - the given calendar matches the calendar
+            // used by the formatter
+            formatters[i].format(calendars[i], buf, fpos);
+            String refStr = buf.toString();
+
+            for (int j = 0; j < calendars.length; j++) {
+                if (j == i) {
+                    continue;
+                }
+                buf.setLength(0);
+                fpos.setBeginIndex(0);
+                fpos.setEndIndex(0);
+                calendars[j].setTime(d);
+
+                // Even the different calendar type is specified,
+                // we should get the same result.
+                formatters[i].format(calendars[j], buf, fpos);
+                if (!refStr.equals(buf.toString())) {
+                    errln("FAIL: Different format result with a different calendar for the same time -"
+                            + "\n Reference calendar type=" + calendars[i].getType()
+                            + "\n Another calendar type=" + calendars[j].getType()
+                            + "\n Expected result=" + refStr
+                            + "\n Actual result=" + buf.toString());
+                }
+            }
+
+            calendars[i].setTimeZone(gmt);
+            calendars[i].clear();
+            ppos.setErrorIndex(-1);
+            ppos.setIndex(0);
+
+            // Normal case parse result - the given calendar matches the calendar
+            // used by the formatter
+            formatters[i].parse(refStr, calendars[i], ppos);
+
+            for (int j = 0; j < calendars.length; j++) {
+                if (j == i) {
+                    continue;
+                }
+                calendars[j].setTimeZone(gmt);
+                calendars[j].clear();
+                ppos.setErrorIndex(-1);
+                ppos.setIndex(0);
+
+                // Even the different calendar type is specified,
+                // we should get the same time and time zone.
+                formatters[i].parse(refStr, calendars[j], ppos);
+                if (calendars[i].getTimeInMillis() != calendars[j].getTimeInMillis()
+                        || !calendars[i].getTimeZone().equals(calendars[j].getTimeZone())) {
+                    errln("FAIL: Different parse result with a different calendar for the same string -"
+                            + "\n Reference calendar type=" + calendars[i].getType()
+                            + "\n Another calendar type=" + calendars[j].getType()
+                            + "\n Date string=" + refStr
+                            + "\n Expected time=" + calendars[i].getTimeInMillis()
+                            + "\n Expected time zone=" + calendars[i].getTimeZone().getID()
+                            + "\n Actual time=" + calendars[j].getTimeInMillis()
+                            + "\n Actual time zone=" + calendars[j].getTimeZone().getID());
                 }
             }
         }

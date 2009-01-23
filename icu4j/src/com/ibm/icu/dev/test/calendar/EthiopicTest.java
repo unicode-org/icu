@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -231,6 +231,8 @@ public class EthiopicTest extends CalendarTest
     // eventually should modify to use locale strings and formatter appropriate to coptic calendar
     public void TestEraStart() {
         SimpleDateFormat fmt = new SimpleDateFormat("EEE MMM dd, yyyy GG");
+        fmt.setCalendar(new EthiopicCalendar());
+
         EthiopicCalendar cal = new EthiopicCalendar(1, 0, 1);
         assertEquals("Ethiopic Date", "Wed Jan 01, 0001 AD", fmt.format(cal));
 
@@ -247,6 +249,7 @@ public class EthiopicTest extends CalendarTest
         GregorianCalendar gc = new GregorianCalendar();
         gc.setGregorianChange(new Date(Long.MIN_VALUE)); // act like proleptic Gregorian
         gc.setTime(cal.getTime());
+        fmt.setCalendar(new GregorianCalendar());
         assertEquals("Gregorian Date", "Tue Aug 28, 0007 AD", fmt.format(gc));
     }
 
