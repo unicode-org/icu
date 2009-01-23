@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2008, International Business Machines Corporation and    *
+* Copyright (C) 1997-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -514,6 +514,19 @@ SimpleDateFormat::format(Calendar& cal, UnicodeString& appendTo, FieldPosition& 
     pos.setBeginIndex(0);
     pos.setEndIndex(0);
 
+    Calendar *workCal = &cal;
+    TimeZone *backupTZ = NULL;
+    if (&cal != fCalendar && uprv_strcmp(cal.getType(), fCalendar->getType()) != 0) {
+        // Different calendar type
+        // We use the time and time zone from the input calendar, but
+        // do not use the input calendar for field calculation.
+        UDate t = cal.getTime(status);
+        fCalendar->setTime(t, status);
+        backupTZ = fCalendar->getTimeZone().clone();
+        fCalendar->setTimeZone(cal.getTimeZone());
+        workCal = fCalendar;
+    }
+
     UBool inQuote = FALSE;
     UChar prevCh = 0;
     int32_t count = 0;
@@ -525,7 +538,7 @@ SimpleDateFormat::format(Calendar& cal, UnicodeString& appendTo, FieldPosition& 
         // Use subFormat() to format a repeated pattern character
         // when a different pattern or non-pattern character is seen
         if (ch != prevCh && count > 0) {
-            subFormat(appendTo, prevCh, count, pos, cal, status);
+            subFormat(appendTo, prevCh, count, pos, *workCal, status);
             count = 0;
         }
         if (ch == QUOTE) {
@@ -553,7 +566,12 @@ SimpleDateFormat::format(Calendar& cal, UnicodeString& appendTo, FieldPosition& 
 
     // Format the last item in the pattern, if any
     if (count > 0) {
-        subFormat(appendTo, prevCh, count, pos, cal, status);
+        subFormat(appendTo, prevCh, count, pos, *workCal, status);
+    }
+
+    if (backupTZ != NULL) {
+        // Restore the original time zone
+        fCalendar->adoptTimeZone(backupTZ);
     }
 
     // and if something failed (e.g., an invalid format character), reset our FieldPosition
@@ -1337,8 +1355,10 @@ UBool SimpleDateFormat::isNumeric(UChar formatChar, int32_t count) {
 void
 SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition& parsePos) const
 {
+    UErrorCode status = U_ZERO_ERROR;
     int32_t pos = parsePos.getIndex();
     int32_t start = pos;
+
     UBool ambiguousYear[] = { FALSE };
     int32_t count = 0;
 
@@ -1356,6 +1376,21 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
     UBool inQuote = FALSE;
 
     const UnicodeString numericFormatChars(NUMERIC_FORMAT_CHARS);
+
+    TimeZone *backupTZ = NULL;
+    Calendar *workCal = &cal;
+    if (&cal != fCalendar && uprv_strcmp(cal.getType(), fCalendar->getType()) != 0) {
+        // Different calendar type
+        // We use the time/zone from the input calendar, but
+        // do not use the input calendar for field calculation.
+        fCalendar->setTime(cal.getTime(status),status);
+        if (U_FAILURE(status)) {
+            goto ExitParse;
+        }
+        backupTZ = fCalendar->getTimeZone().clone();
+        fCalendar->setTimeZone(cal.getTimeZone());
+        workCal = fCalendar;
+    }
 
     for (int32_t i=0; i<fPattern.length(); ++i) {
         UChar ch = fPattern.charAt(i);
@@ -1422,14 +1457,13 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
                 if (fieldPat == abutPat) {
                     count -= abutPass++;
                     if (count == 0) {
-                        parsePos.setIndex(start);
-                        parsePos.setErrorIndex(pos);
-                        return;
+                        status = U_PARSE_ERROR;
+                        goto ExitParse;
                     }
                 }
 
                 pos = subParse(text, pos, ch, count,
-                               TRUE, FALSE, ambiguousYear, cal);
+                               TRUE, FALSE, ambiguousYear, *workCal);
 
                 // If the parse fails anywhere in the run, back up to the
                 // start of the run and retry.
@@ -1443,15 +1477,14 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
             // Handle non-numeric fields and non-abutting numeric
             // fields.
             else {
-                int32_t s = pos;
-                pos = subParse(text, pos, ch, count,
-                               FALSE, TRUE, ambiguousYear, cal);
+                int32_t s = subParse(text, pos, ch, count,
+                               FALSE, TRUE, ambiguousYear, *workCal);
 
-                if (pos < 0) {
-                    parsePos.setErrorIndex(s);
-                    parsePos.setIndex(start);
-                    return;
+                if (s < 0) {
+                    status = U_PARSE_ERROR;
+                    goto ExitParse;
                 }
+                pos = s;
             }
         }
 
@@ -1504,9 +1537,8 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
             }
 
             // We fall through to this point if the match fails
-            parsePos.setIndex(start);
-            parsePos.setErrorIndex(pos);
-            return;
+            status = U_PARSE_ERROR;
+            goto ExitParse;
         }
     }
 
@@ -1538,7 +1570,6 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
     // when the two-digit year is equal to the start year, and thus might fall at the
     // front or the back of the default century.  This only works because we adjust
     // the year correctly to start with in other cases -- see subParse().
-    UErrorCode status = U_ZERO_ERROR;
     if (ambiguousYear[0] || tztype != TZTYPE_UNK) // If this is true then the two-digit year == the default start year
     {
         // We need a copy of the fields, and we need to avoid triggering a call to
@@ -1671,13 +1702,25 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
             delete copy;
         }
     }
-ExitParse: 
+ExitParse:
+    // Set the parsed result if local calendar is used
+    // instead of the input calendar
+    if (U_SUCCESS(status) && workCal != &cal) {
+        cal.setTimeZone(workCal->getTimeZone());
+        cal.setTime(workCal->getTime(status), status);
+    }
+
+    // Restore the original time zone if required
+    if (backupTZ != NULL) {
+        fCalendar->adoptTimeZone(backupTZ);
+    }
+
     // If any Calendar calls failed, we pretend that we
     // couldn't parse the string, when in reality this isn't quite accurate--
     // we did parse it; the Calendar calls just failed.
     if (U_FAILURE(status)) { 
         parsePos.setErrorIndex(pos);
-        parsePos.setIndex(start); 
+        parsePos.setIndex(start);
     }
 }
 
