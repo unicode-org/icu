@@ -147,12 +147,12 @@ NumberingSystem::createInstanceByName(const char *name, UErrorCode& status) {
      UnicodeString nsd;
      nsd.setTo(description);
 
+     ures_close(numberingSystemsInfo);
+
      if (U_FAILURE(status)) {
          status = U_UNSUPPORTED_ERROR;
          return NULL;
      }
-     
-     ures_close(numberingSystemsInfo);
 
      return NumberingSystem::createInstance(radix,isAlgorithmic,nsd,status);
 
