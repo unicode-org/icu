@@ -914,8 +914,6 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         r->setDefaultRuleSet(ns->getDescription(),status);
         f = (NumberFormat *) r;
     } else {
-        UnicodeString zeroDigit(ns->getDescription(),0,1);
-	symbolsToAdopt->setSymbol(DecimalFormatSymbols::kZeroDigitSymbol,zeroDigit);
         f = new DecimalFormat(pattern, symbolsToAdopt, status);
     }
 
