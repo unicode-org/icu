@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2008, International Business Machines Corporation and    *
+* Copyright (C) 1997-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -26,6 +26,8 @@
 #include "unicode/decimfmt.h"
 #include "unicode/ucurr.h"
 #include "unicode/choicfmt.h"
+#include "unicode/unistr.h"
+#include "unicode/numsys.h"
 #include "ucurrimp.h"
 #include "cstring.h"
 #include "locbased.h"
@@ -160,6 +162,14 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
             if (U_SUCCESS(status)) {
                 initialize(numberElements, numberElementsStrLen, numberElementsLength);
 
+                // Attempt to set the zero digit based on the numbering system for the locale requested
+                //
+                NumberingSystem* ns = NumberingSystem::createInstance(loc,status);
+                if (U_SUCCESS(status) && ns->getRadix() == 10 && !ns->isAlgorithmic()) {
+                    UnicodeString zeroDigit(ns->getDescription(),0,1);
+                    setSymbol(kZeroDigitSymbol,zeroDigit);
+                }
+                
                 // Obtain currency data from the currency API.  This is strictly
                 // for backward compatibility; we don't use DecimalFormatSymbols
                 // for currency data anymore.
