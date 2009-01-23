@@ -1,8 +1,14 @@
-## Copyright (c) 2001-2005 International Business Machines
+## Copyright (c) 2001-2009 International Business Machines
 ## Corporation and others. All Rights Reserved.
 PACKAGE_NAME = uresb
 TARGETS = en.res root.res sr.res
+
+!IF "$(CFG)" == "x64\Release" || "$(CFG)" == "x64\Debug"
+GENRB = ..\..\..\bin64\genrb.exe
+!ELSE
 GENRB = ..\..\..\bin\genrb.exe
+!ENDIF
+
 GENRBOPT = -s . -d .
 
 all : $(TARGETS)
