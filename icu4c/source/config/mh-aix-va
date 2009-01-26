@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## Aix-specific setup (for Visual Age 5+)
-## Copyright (c) 1999-2005, International Business Machines Corporation and
+## Copyright (c) 1999-2009, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Commands to generate dependency files
@@ -70,9 +70,9 @@ SHARED_OBJECT = $(notdir $(FINAL_SO_TARGET:.$(SO)=.$(SOBJ)))
 
 ## Build archive from shared object
 %.a : %.so
-	$(AR) $(ARFLAGS) $@ $<
+	$(AIX_PREDELETE) $(AR) $(ARFLAGS) $@ $<
 $(LIBDIR)/%.a : %.so
-	$(AR) $(ARFLAGS) $@ $<
+	$(AIX_PREDELETE) $(AR) $(ARFLAGS) $@ $<
 
 ## Build import list from export list
 %.e : %.exp
