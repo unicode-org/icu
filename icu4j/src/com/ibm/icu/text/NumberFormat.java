@@ -1320,20 +1320,33 @@ public abstract class NumberFormat extends UFormat {
             pattern = Utility.replace(pattern, "\u00A4", doubleCurrencyStr);
         }
 
-        DecimalFormat format = new DecimalFormat(pattern, symbols, choice);
-        // System.out.println("loc: " + desiredLocale + " choice: " + choice + " pat: " + pattern + " sym: " + symbols + " result: " + format);
-                                 
-        /*Bug 4408066
-         Add codes for the new method getIntegerInstance() [Richard/GCL]
-        */
-        // TODO: revisit this -- this is almost certainly not the way we want
-        // to do this.  aliu 1/6/2004
-        if (choice == INTEGERSTYLE) {
-            format.setMaximumFractionDigits(0);
-            format.setDecimalSeparatorAlwaysShown(false);
-            format.setParseIntegerOnly(true);
+        NumberingSystem ns = NumberingSystem.getInstance(desiredLocale);
+        if ( ns == null ) {
+            return null;
         }
-        
+
+        NumberFormat format;
+
+        if ( ns != null && ns.isAlgorithmic()) {
+            RuleBasedNumberFormat r = new RuleBasedNumberFormat(desiredLocale,RuleBasedNumberFormat.NUMBERING_SYSTEM);
+            r.setDefaultRuleSet(ns.getDescription());
+            format = r;
+        } else {
+            DecimalFormat f = new DecimalFormat(pattern, symbols, choice);
+            // System.out.println("loc: " + desiredLocale + " choice: " + choice + " pat: " + pattern + " sym: " + symbols + " result: " + format);
+                                 
+            /*Bug 4408066
+             Add codes for the new method getIntegerInstance() [Richard/GCL]
+            */
+            // TODO: revisit this -- this is almost certainly not the way we want
+            // to do this.  aliu 1/6/2004
+            if (choice == INTEGERSTYLE) {
+                f.setMaximumFractionDigits(0);
+                f.setDecimalSeparatorAlwaysShown(false);
+                f.setParseIntegerOnly(true);
+            }
+            format = f;
+       } 
         // TODO: the actual locale of the *pattern* may differ from that
         // for the *symbols*.  For now, we use the data for the symbols.
         // Revisit this.

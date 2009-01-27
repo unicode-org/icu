@@ -1211,6 +1211,28 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     }
     }
 
+    /**
+     * Test alternate numbering systems
+     */
+    public void TestNumberingSystems() {
+
+        ULocale loc1 = new ULocale("en_US@numbers=thai");
+        ULocale loc2 = new ULocale("en_US@numbers=hebrew");
+        ULocale loc3 = new ULocale("en_US@numbers=persian");
+        ULocale loc4 = new ULocale("hi_IN@numbers=foobar");
+        
+        NumberFormat fmt1 = NumberFormat.getInstance(loc1);
+        NumberFormat fmt2 = NumberFormat.getInstance(loc2);
+        NumberFormat fmt3 = NumberFormat.getInstance(loc3);
+        NumberFormat fmt4 = NumberFormat.getInstance(loc4);
+
+        expect2(fmt1,1234.567,"\u0e51,\u0e52\u0e53\u0e54.\u0e55\u0e56\u0e57");
+        expect3(fmt2,5678.0,"\u05d4\u05f3\u05ea\u05e8\u05e2\u05f4\u05d7");
+        expect2(fmt3,1234.567,"\u06f1,\u06f2\u06f3\u06f4.\u06f5\u06f6\u06f7");
+        expect2(fmt4,1234.567,"\u0967,\u0968\u0969\u096a.\u096b\u096c\u096d");
+
+    }
+
     public void TestThreadedFormat() {
 
         class FormatTask implements Runnable {
@@ -1647,15 +1669,29 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         expect(fmt, n, exp, false);
         expect(fmt, exp, n);
     }
+    // Format-Parse test
+    public void expect3(NumberFormat fmt, Number n, String exp) {
+        // Don't round-trip format test, since we explicitly do it
+        expect_rbnf(fmt, n, exp, false);
+        expect_rbnf(fmt, exp, n);
+    }
 
     // Format-Parse test (convenience)
     public void expect2(NumberFormat fmt, double n, String exp) {
         expect2(fmt, new Double(n), exp);
     }
+    // Format-Parse test (convenience)
+    public void expect3(NumberFormat fmt, double n, String exp) {
+        expect3(fmt, new Double(n), exp);
+    }
 
     // Format-Parse test (convenience)
     public void expect2(NumberFormat fmt, long n, String exp) {
         expect2(fmt, new Long(n), exp);
+    }
+    // Format-Parse test (convenience)
+    public void expect3(NumberFormat fmt, long n, String exp) {
+        expect3(fmt, new Long(n), exp);
     }
 
     // Format test
@@ -1688,6 +1724,36 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         } else {
             errln("FAIL " + n + " x " +
                   pat + " = \"" +
+                  saw + "\", expected \"" + exp + "\"");
+        }
+    }
+    // Format test
+    public void expect_rbnf(NumberFormat fmt, Number n, String exp, boolean rt) {
+        StringBuffer saw = new StringBuffer();
+        FieldPosition pos = new FieldPosition(0);
+        fmt.format(n, saw, pos);
+        if (saw.toString().equals(exp)) {
+            logln("Ok   " + n + " = \"" +
+                  saw + "\"");
+            // We should be able to round-trip the formatted string =>
+            // number => string (but not the other way around: number
+            // => string => number2, might have number2 != number):
+            if (rt) {
+                try {
+                    Number n2 = fmt.parse(exp);
+                    StringBuffer saw2 = new StringBuffer();
+                    fmt.format(n2, saw2, pos);
+                    if (!saw2.toString().equals(exp)) {
+                        errln("FAIL \"" + exp + "\" => " + n2 +
+                              " => \"" + saw2 + '"');
+                    }
+                } catch (ParseException e) {
+                    errln(e.getMessage());
+                    return;
+                }
+            }
+        } else {
+            errln("FAIL " + n + " = \"" +
                   saw + "\", expected \"" + exp + "\"");
         }
     }
@@ -1726,6 +1792,26 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         } else {
             errln("FAIL \"" + str + "\" x " +
                   pat + " = " +
+                  num + ", expected " + n);
+        }
+    }
+
+    // Parse test
+    public void expect_rbnf(NumberFormat fmt, String str, Number n) {
+        Number num = null;
+        try {
+            num = (Number) fmt.parse(str);
+        } catch (ParseException e) {
+            errln(e.getMessage());
+            return;
+        }
+        // A little tricky here -- make sure Double(12345.0) and
+        // Long(12345) match.
+        if (num.equals(n) || num.doubleValue() == n.doubleValue()) {
+            logln("Ok   \"" + str + " = " +
+                  num);
+        } else {
+            errln("FAIL \"" + str + " = " +
                   num + ", expected " + n);
         }
     }
