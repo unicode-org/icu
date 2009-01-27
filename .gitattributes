@@ -7,11 +7,18 @@ icu4c/source/common/mutex.cpp -text
 icu4c/source/common/unicode/dtintrv.h -text
 icu4c/source/config/pkgdataMakefile.in -text
 icu4c/source/data/build.xml svneol=native#text/xml
+icu4c/source/data/coll/af.txt -text
+icu4c/source/data/coll/af_NA.txt -text
+icu4c/source/data/coll/af_ZA.txt -text
+icu4c/source/data/coll/az.txt -text
+icu4c/source/data/coll/az_Latn_AZ.txt -text
 icu4c/source/data/coll/bn_IN.txt -text
 icu4c/source/data/coll/pa_Arab.txt -text
 icu4c/source/data/coll/pa_Arab_PK.txt -text
 icu4c/source/data/coll/pa_Guru.txt -text
 icu4c/source/data/coll/pa_Guru_IN.txt -text
+icu4c/source/data/coll/si.txt -text
+icu4c/source/data/coll/si_LK.txt -text
 icu4c/source/data/coll/ur.txt -text
 icu4c/source/data/coll/ur_IN.txt -text
 icu4c/source/data/coll/ur_PK.txt -text
@@ -70,8 +77,10 @@ icu4c/source/data/xml/brkitr/en_US.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/en_US_POSIX.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/ja.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/root.xml svneol=native#text/xml
+icu4c/source/data/xml/collation/af.xml -text
 icu4c/source/data/xml/collation/ar.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/as.xml svneol=native#text/xml
+icu4c/source/data/xml/collation/az.xml -text
 icu4c/source/data/xml/collation/be.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/bg.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/bn.xml svneol=native#text/xml
@@ -124,6 +133,7 @@ icu4c/source/data/xml/collation/ps.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/ro.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/root.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/ru.xml svneol=native#text/xml
+icu4c/source/data/xml/collation/si.xml -text
 icu4c/source/data/xml/collation/sk.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/sl.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/sq.xml svneol=native#text/xml
