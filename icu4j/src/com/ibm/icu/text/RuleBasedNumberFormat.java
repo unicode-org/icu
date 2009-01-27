@@ -509,6 +509,12 @@ public class RuleBasedNumberFormat extends NumberFormat {
      */
     public static final int DURATION = 3;
 
+    /**
+     * Selector code that tells the constructor to create a numbering system formatter
+     * @draft ICU 4.2
+     */
+    public static final int NUMBERING_SYSTEM = 4;
+
     //-----------------------------------------------------------------------
     // data members
     //-----------------------------------------------------------------------
@@ -719,10 +725,12 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * and duration.
      * @param locale The locale for the formatter.
      * @param format A selector code specifying which kind of formatter to create for that
-     * locale.  There are three legal values: SPELLOUT, which creates a formatter that
+     * locale.  There are four legal values: SPELLOUT, which creates a formatter that
      * spells out a value in words in the desired language, ORDINAL, which attaches
      * an ordinal suffix from the desired language to the end of a number (e.g. "123rd"),
-     * and DURATION, which formats a duration in seconds as hours, minutes, and seconds.
+     * DURATION, which formats a duration in seconds as hours, minutes, and seconds, and
+     * NUMBERING_SYSTEM, which is used to invoke rules for alternate numbering
+     * systems such as the Hebrew numbering system, or for Roman numerals, etc..
      * @stable ICU 3.2
      */
     public RuleBasedNumberFormat(ULocale locale, int format) {
@@ -771,10 +779,10 @@ public class RuleBasedNumberFormat extends NumberFormat {
     }
 
     private static final String[] rulenames = {
-        "SpelloutRules", "OrdinalRules", "DurationRules",
+        "SpelloutRules", "OrdinalRules", "DurationRules", "NumberingSystemRules",
     };
     private static final String[] locnames = {
-        "SpelloutLocalizations", "OrdinalLocalizations", "DurationLocalizations",
+        "SpelloutLocalizations", "OrdinalLocalizations", "DurationLocalizations", "NumberingSystemLocalizations",
     };
 
     /**
@@ -785,6 +793,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * out a value in words in the default locale's langyage, ORDINAL, which attaches
      * an ordinal suffix from the default locale's language to a numeral, and
      * DURATION, which formats a duration in seconds as hours, minutes, and seconds.
+     * or NUMBERING_SYSTEM, which is used for alternate numbering systems such as Hebrew.
      * @stable ICU 2.0
      */
     public RuleBasedNumberFormat(int format) {

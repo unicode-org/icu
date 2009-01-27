@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -154,6 +154,18 @@ public class RbnfRoundTripTest extends TestFmwk {
                         = new RuleBasedNumberFormat(new Locale("el", "GR",
                         ""), RuleBasedNumberFormat.SPELLOUT);
 
+        doTest(formatter, 0, 12345678);
+    }
+
+    /**
+     * Perform an exhaustive round-trip test on the Greek spellout rules
+     */
+    public void TestHebrewNumberingRT() {
+        RuleBasedNumberFormat formatter
+                        = new RuleBasedNumberFormat(new Locale("he", "IL",
+                        ""), RuleBasedNumberFormat.NUMBERING_SYSTEM);
+
+        formatter.setDefaultRuleSet("%hebrew");
         doTest(formatter, 0, 12345678);
     }
 

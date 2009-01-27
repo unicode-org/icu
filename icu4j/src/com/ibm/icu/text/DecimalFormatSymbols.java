@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -701,6 +701,13 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         padEscape = DecimalFormat.PATTERN_PAD_ESCAPE;
         sigDigit  = DecimalFormat.PATTERN_SIGNIFICANT_DIGIT;
         
+        // Attempt to set the zero digit based on the numbering system for the locale requested
+        //
+        NumberingSystem ns = NumberingSystem.getInstance(locale);
+        if ( ns != null && ns.getRadix() == 10 && !ns.isAlgorithmic()) {
+            zeroDigit = ns.getDescription().charAt(0);
+        }
+
         // Obtain currency data from the currency API.  This is strictly
         // for backward compatibility; we don't use DecimalFormatSymbols
         // for currency data anymore.
