@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2008, International Business Machines Corporation and
+ * Copyright (c) 2001-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -1377,6 +1377,8 @@ static void RamsRulesTest(void) {
             }
             if (uprv_strcmp("km", locName)==0 ||
                 uprv_strcmp("km_KH", locName)==0 ||
+                uprv_strcmp("si", locName)==0 ||
+                uprv_strcmp("si_LK", locName)==0 ||
                 uprv_strcmp("zh", locName)==0 ||
                 uprv_strcmp("zh_Hant", locName)==0 ) {
                     continue;  /* TODO: enable these locale tests after trac#6040 is fixed. */
