@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2008, International Business Machines
+ *   Copyright (C) 2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  */
@@ -14,6 +14,9 @@
 #   define NOMCX
 #include <windows.h>
 #include <time.h>
+#   ifdef __GNUC__
+#       define WINDOWS_WITH_GNUC
+#   endif
 #endif
 
 #ifdef U_LINUX
@@ -237,6 +240,11 @@ writeAssemblyCode(const char *filename, const char *destdir, const char *optEntr
     if (outFilePath != NULL) {
         uprv_strcpy(outFilePath, bufferStr);
     }
+
+#ifdef WINDOWS_WITH_GNUC
+    /* Need to fix the file seperator character when using MinGW. */
+    swapFileSepChar(outFilePath, U_FILE_SEP_CHAR, '/');
+#endif
 
     if(optEntryPoint != NULL) {
         uprv_strcpy(entry, optEntryPoint);

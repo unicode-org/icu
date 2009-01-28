@@ -630,11 +630,6 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                 if (checkAssemblyHeaderName(genccodeAssembly+3)) {
                     writeAssemblyCode(datFileNamePath, o->tmpDir, o->entryName, NULL, gencFilePath);
 
-#ifdef WINDOWS_WITH_GNUC
-                    /* Need to fix the file seperator character when using MinGW. */
-                    swapFileSepChar(gencFilePath, U_FILE_SEP_CHAR, '/');
-#endif
-
                     result = pkg_createWithAssemblyCode(targetDir, mode, gencFilePath);
                     if (result != 0) {
                         fprintf(stderr, "Error generating assembly code for data.\n");
@@ -1075,6 +1070,12 @@ static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, U
 
         if (!T_FileStream_file_exists(resFilePath)) {
             uprv_memset(resFilePath, 0, sizeof(resFilePath));
+        }
+
+        /* Check if dll file and lib file exists and that it is not newer than genc file. */
+        if ((T_FileStream_file_exists(dllFilePath) && isFileModTimeLater(dllFilePath, gencFilePath)) &&
+            (T_FileStream_file_exists(libFilePath) && isFileModTimeLater(libFilePath, gencFilePath))) {
+            return 0;
         }
 
         sprintf(cmd, "%s\"%s\" %s\"%s\" \"%s\" \"%s\"",
