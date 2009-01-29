@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2008, International Business Machines
+*   Copyright (C) 1997-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -1042,5 +1042,14 @@ uloc_minimizeSubtags(const char*    localeID,
          char* minimizedLocaleID,
          int32_t minimizedLocaleIDCapacity,
          UErrorCode* err);
+
+/**
+ * Return the current CLDR version used by the library.
+ * @param versionArray fillin that will recieve the version number
+ * @param status error code - could be U_MISSING_RESOURCE_ERROR if the version was not found.
+ * @draft ICU 4.2
+ */
+U_DRAFT void U_EXPORT2
+uloc_getCLDRVersion(UVersionInfo versionArray, UErrorCode *status);
 
 #endif /*_ULOC*/
