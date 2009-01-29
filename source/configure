@@ -9943,16 +9943,39 @@ if test x"$datapackaging" = x -o x"$datapackaging" = xauto; then
 	datapackaging=library
 fi
 
+datapackaging_dir=`eval echo $thedatadir`"/icu/${VERSION}"
+
+datapackaging_msg="(No explaination for mode $datapackaging.)"
+
+datapackaging_msg_path="ICU will look in $datapackaging_dir which is the installation location. Call u_setDataDirectory() or use the ICU_DATA environment variable to override."
+datapackaging_msg_set="ICU will use the linked data library. If linked with the stub library located in stubdata/, the application can use udata_setCommonData() or set a data path to override."
+datapackaging_howfound="(unknown)"
+
 case "$datapackaging" in
     files)
-	DATA_PACKAGING_MODE=files
-	;;
+    DATA_PACKAGING_MODE=files
+    datapackaging_msg="ICU data will be stored in individual files."
+    datapackaging_howfound="$datapackaging_msg_path"
+    ;;
     archive)
-	DATA_PACKAGING_MODE=common
-	;;
+    DATA_PACKAGING_MODE=common
+    datapackaging_msg="ICU data will be stored in a single .dat file."
+    datapackaging_howfound="$datapackaging_msg_path"
+    ;;
     library)
-	DATA_PACKAGING_MODE=dll
-	;;
+    DATA_PACKAGING_MODE=dll
+    datapackaging_msg="ICU data will be linked with ICU."
+    if test "$ENABLE_STATIC" = "YES"; then
+        datapackaging_msg="$datapackaging_msg A static data library will be built. "
+    fi
+    if test "$ENABLE_SHARED" = "YES"; then
+        datapackaging_msg="$datapackaging_msg A shared data library will be built. "
+    fi
+    datapackaging_howfound="$datapackaging_msg_set"
+    ;;
+#    static)
+#	DATA_PACKAGING_MODE=static
+#	;;
 esac
 
 
@@ -11390,16 +11413,36 @@ $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
 
 
+echo
+echo "ICU for C/C++ $VERSION is ready to be built."
+echo "=== Important Notes: ==="
+
 if test $ICU_USE_THREADS = 0; then
-  echo  " *** Note: configuring the ICU without pthread support or testing. If this isn't what you want, then run configure with --enable-threads=yes or check the messages above to see why we couldn't find pthread_create()" 1>&6
+  echo
+  echo  "** ICU was configured without mutex or thread support. Multithread-safe operation will not be tested. If this is unexpected, then run configure with --enable-threads=yes or check the messages above to see why thread support was not found." 1>&6
+  echo
 fi
 
+echo "Data Packaging: $datapackaging"
+echo " This means: $datapackaging_msg"
+echo " To locate data: $datapackaging_howfound"
+
 if test -n "`$U_MAKE -v 2>&1 | grep '^GNU Make'`"; then
-echo "You must use $U_MAKE to build ICU."
+echo "Building ICU: Use a GNU make such as $U_MAKE to build ICU."
 else
-echo "WARNING: $U_MAKE may not be GNU make."
+echo "** WARNING: $U_MAKE may not be GNU make."
 echo "This may cause ICU to fail to build. Please make sure that GNU make"
-echo "is in your PATH so that this configure script can detect its location."
+echo "is in your PATH so that the configure script can detect its location."
+fi
+
+{ $as_echo "$as_me:$LINENO: checking the version of \"$U_MAKE\"" >&5
+$as_echo_n "checking the version of \"$U_MAKE\"... " >&6; }
+if "$U_MAKE" -f "$srcdir/config/gmakever.mk"; then
+{ $as_echo "$as_me:$LINENO: result: ok" >&5
+$as_echo "ok" >&6; }
+else
+{ $as_echo "$as_me:$LINENO: result: too old or test failed - try upgrading GNU Make" >&5
+$as_echo "too old or test failed - try upgrading GNU Make" >&6; }
 fi
 
 $as_unset _CXX_CXXSUFFIX
