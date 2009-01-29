@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2008, International Business Machines
+*   Copyright (C) 2002-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -50,22 +50,28 @@ const char* const* ISOCountries;
 const char* textExt = ".txt";
 const char* xliffExt = ".xlf";
 
-static void write_utf8_file(UnicodeString outString, FileStream * outFile, UErrorCode *status){
+static int32_t write_utf8_file(FileStream* fileStream, UnicodeString outString)
+{
     char* dest = (char*)uprv_malloc((outString.length() * 3 /2));
     int32_t len = 0;
-    u_strToUTF8(dest,outString.length() * 3 /2,&len,outString.getBuffer(),outString.length(),status);    
+    UErrorCode status = U_ZERO_ERROR;
 
-    T_FileStream_write(outFile, dest, len);
+    u_strToUTF8(dest,outString.length() * 3 /2,
+                &len,
+                outString.getBuffer(),
+                outString.length(),
+                &status);
+
+    int32_t ret = T_FileStream_write(fileStream, dest, len);
     uprv_free(dest);
+    return (ret);
 }
 
-
 /*write indentation for formatting*/
-static void write_tabs(UnicodeString *Accumulator){
+static void write_tabs(FileStream* os){
     int i=0;
     for(;i<=tabCount;i++){
-        Accumulator->append(UnicodeString("    "));
-        //FileStream_write(os,"    ",4);
+        write_utf8_file(os,UnicodeString("    "));
     }
 }
 
@@ -169,7 +175,7 @@ static char* parseFilename(const char* id, char* lang) {
     }
     uprv_memcpy(localeID, id, pos);
     localeID[pos]=0; /* NUL terminate the string */
-    
+
     canonCapacity =pos*3;
     canon = (char*) uprv_malloc(canonCapacity);
     canonLen = uloc_canonicalize(localeID, canon, canonCapacity, &status);
@@ -196,7 +202,7 @@ static const char* bundleStart = "<xliff version = \"1.1\" "
 #endif
 static const char* bundleEnd   = "</xliff>\n";
 
-void res_write_xml(UnicodeString *Accumulator, struct SResource *res, const char* id, const char* language, UBool isTopLevel, UErrorCode *status);
+void res_write_xml(struct SResource *res, const char* id, const char* language, UBool isTopLevel, UErrorCode *status);
 
 static char* convertAndEscape(char** pDest, int32_t destCap, int32_t* destLength,
                               const UChar* src, int32_t srcLen, UErrorCode* status){
@@ -362,7 +368,7 @@ trim(char **src, int32_t *len){
 }
 
 static void
-print(UnicodeString *Accumulator, UChar* src, int32_t srcLen,const char *tagStart,const char *tagEnd,  UErrorCode *status){
+print(UChar* src, int32_t srcLen,const char *tagStart,const char *tagEnd,  UErrorCode *status){
     int32_t bufCapacity   = srcLen*4;
     char *buf       = NULL;
     int32_t bufLen = 0;
@@ -379,19 +385,15 @@ print(UnicodeString *Accumulator, UChar* src, int32_t srcLen,const char *tagStar
     buf = convertAndEscape(&buf, bufCapacity, &bufLen, src, srcLen,status);
     if(U_SUCCESS(*status)){
         trim(&buf,&bufLen);
-        Accumulator->append(UnicodeString(tagStart));
-        Accumulator->append(UnicodeString(buf, bufLen, "UTF-8")); 
-        Accumulator->append(UnicodeString(tagEnd));
-        Accumulator->append(UnicodeString("\n")); 
-        //T_FileStream_write(out,tagStart, (int32_t)uprv_strlen(tagStart));
-        //T_FileStream_write(out, buf, bufLen);
-        //T_FileStream_write(out,tagEnd, (int32_t)uprv_strlen(tagEnd));
-        //T_FileStream_write(out,"\n",1);
+        write_utf8_file(out,UnicodeString(tagStart));
+        write_utf8_file(out,UnicodeString(buf, bufLen, "UTF-8"));
+        write_utf8_file(out,UnicodeString(tagEnd));
+        write_utf8_file(out,UnicodeString("\n"));
 
     }
 }
 static void
-printNoteElements(UnicodeString *Accumulator, struct UString *src, UErrorCode *status){
+printNoteElements(struct UString *src, UErrorCode *status){
 
 #if UCONFIG_NO_REGULAR_EXPRESSIONS==0 /* donot compile when no RegularExpressions are available */
 
@@ -419,49 +421,39 @@ printNoteElements(UnicodeString *Accumulator, struct UString *src, UErrorCode *s
             return;
         }
         if(noteLen > 0){
-            write_tabs(Accumulator);
-            print(Accumulator, note, noteLen,"<note>", "</note>", status);
+            write_tabs(out);
+            print(note, noteLen,"<note>", "</note>", status);
         }
     }
     uprv_free(note);
 #else
-    
+
     fprintf(stderr, "Warning: Could not output comments to XLIFF file. ICU has been built without RegularExpression support.\n");
 
 #endif /* UCONFIG_NO_REGULAR_EXPRESSIONS */
 
 }
 
-static void printAttribute(UnicodeString *Accumulator, const char *name, const char *value, int32_t len)
+static void printAttribute(const char *name, const char *value, int32_t len)
 {
-    Accumulator->append(UnicodeString(" "));
-    Accumulator->append(UnicodeString(name));
-    Accumulator->append(UnicodeString(" = \""));
-    Accumulator->append(UnicodeString(value));
-    Accumulator->append(UnicodeString("\"")); 
-    //T_FileStream_write(out, " ", 1);
-    //T_FileStream_write(out, name, (int32_t) uprv_strlen(name));
-    //T_FileStream_write(out, " = \"", 4);
-    //T_FileStream_write(out, value, (int32_t) len);
-    //T_FileStream_write(out, "\"", 1);
+    write_utf8_file(out, UnicodeString(" "));
+    write_utf8_file(out, UnicodeString(name));
+    write_utf8_file(out, UnicodeString(" = \""));
+    write_utf8_file(out, UnicodeString(value));
+    write_utf8_file(out, UnicodeString("\""));
 }
 
-static void printAttribute(UnicodeString *Accumulator, const char *name, const UnicodeString value, int32_t len)
+static void printAttribute(const char *name, const UnicodeString value, int32_t len)
 {
-    Accumulator->append(UnicodeString(" "));
-    Accumulator->append(UnicodeString(name));
-    Accumulator->append(UnicodeString(" = \""));
-    Accumulator->append(value);
-    Accumulator->append(UnicodeString("\"")); 
-    //T_FileStream_write(out, " ", 1);
-    //T_FileStream_write(out, name, (int32_t) uprv_strlen(name));
-    //T_FileStream_write(out, " = \"", 4);
-    //T_FileStream_write(out, value, (int32_t) len);
-    //T_FileStream_write(out, "\"", 1);
+    write_utf8_file(out, UnicodeString(" "));
+    write_utf8_file(out, UnicodeString(name));
+    write_utf8_file(out, UnicodeString(" = \""));
+    write_utf8_file(out, value);
+    write_utf8_file(out, UnicodeString("\""));
 }
 
 static void
-printComments(UnicodeString *Accumulator, struct UString *src, const char *resName, UBool printTranslate, UErrorCode *status){
+printComments(struct UString *src, const char *resName, UBool printTranslate, UErrorCode *status){
 
 #if UCONFIG_NO_REGULAR_EXPRESSIONS==0 /* donot compile when no RegularExpressions are available */
 
@@ -492,25 +484,22 @@ printComments(UnicodeString *Accumulator, struct UString *src, const char *resNa
             /* print translate attribute */
             buf = convertAndEscape(&buf, 0, &bufLen, trans, transLen, status);
             if(U_SUCCESS(*status)){
-                printAttribute(Accumulator, "translate", UnicodeString(buf, bufLen, "UTF-8"), bufLen);
-                Accumulator->append(UnicodeString(">\n")); 
-                //T_FileStream_write(out,">\n", 2);
+                printAttribute("translate", UnicodeString(buf, bufLen, "UTF-8"), bufLen);
+                write_utf8_file(out,UnicodeString(">\n"));
             }
         }else if(getShowWarning()){
             fprintf(stderr, "Warning: Tranlate attribute for resource %s cannot be set. XLIFF prohibits it.\n", resName);
             /* no translate attribute .. just close the tag */
-            Accumulator->append(UnicodeString(">\n")); 
-            //T_FileStream_write(out,">\n", 2);
+            write_utf8_file(out,UnicodeString(">\n"));
         }
     }else{
         /* no translate attribute .. just close the tag */
-        Accumulator->append(UnicodeString(">\n")); 
-        //T_FileStream_write(out,">\n", 2);
+        write_utf8_file(out,UnicodeString(">\n"));
     }
 
     if(descLen > 0){
-        write_tabs(Accumulator);
-        print(Accumulator, desc, descLen, "<!--", "-->", status);
+        write_tabs(out);
+        print(desc, descLen, "<!--", "-->", status);
     }
 
     uprv_free(desc);
@@ -528,12 +517,12 @@ printComments(UnicodeString *Accumulator, struct UString *src, const char *resNa
  * <trans-unit id = "blah" resname = "blah" restype = "x-id-alias" translate = "no">
  * <group id "calendar_gregorian" resname = "gregorian" restype = "x-icu-array">
  */
-static char *printContainer(UnicodeString *Accumulator, struct SResource *res, const char *container, const char *restype, const char *mimetype, const char *id, UErrorCode *status)
+static char *printContainer(struct SResource *res, const char *container, const char *restype, const char *mimetype, const char *id, UErrorCode *status)
 {
     char *resname = NULL;
     char *sid = NULL;
 
-    write_tabs(Accumulator);
+    write_tabs(out);
 
     if (res->fKey >= 0 && uprv_strcmp(srBundle->fKeys + res->fKey, "") != 0) {
         resname = srBundle->fKeys + res->fKey;
@@ -542,31 +531,28 @@ static char *printContainer(UnicodeString *Accumulator, struct SResource *res, c
         sid = getID(id, NULL, sid);
     }
 
-    Accumulator->append(UnicodeString("<"));
-    Accumulator->append(UnicodeString(container)); 
-    //T_FileStream_write(out, "<", 1);
-    //T_FileStream_write(out, container, (int32_t) uprv_strlen(container));
-    printAttribute(Accumulator, "id", sid, (int32_t) uprv_strlen(sid));
+    write_utf8_file(out, UnicodeString("<"));
+    write_utf8_file(out, UnicodeString(container));
+    printAttribute("id", sid, (int32_t) uprv_strlen(sid));
 
     if (resname != NULL) {
-        printAttribute(Accumulator,"resname", resname, (int32_t) uprv_strlen(resname));
+        printAttribute("resname", resname, (int32_t) uprv_strlen(resname));
     }
 
     if (mimetype != NULL) {
-        printAttribute(Accumulator,"mime-type", mimetype, (int32_t) uprv_strlen(mimetype));
+        printAttribute("mime-type", mimetype, (int32_t) uprv_strlen(mimetype));
     }
 
     if (restype != NULL) {
-        printAttribute(Accumulator,"restype", restype, (int32_t) uprv_strlen(restype));
+        printAttribute("restype", restype, (int32_t) uprv_strlen(restype));
     }
 
     tabCount += 1;
     if (res->fComment.fLength > 0) {
         /* printComments will print the closing ">\n" */
-        printComments(Accumulator, &res->fComment, resname, TRUE, status);
+        printComments(&res->fComment, resname, TRUE, status);
     } else {
-        Accumulator->append(UnicodeString(">\n"));
-        //T_FileStream_write(out, ">\n", 2);
+        write_utf8_file(out, UnicodeString(">\n"));
     }
 
     return sid;
@@ -600,7 +586,7 @@ static const char *intvector_restype = "x-icu-intvector";
 static const char *table_restype     = "x-icu-table";
 
 static void
-string_write_xml(UnicodeString *Accumulator, struct SResource *res, const char* id, const char* language, UErrorCode *status) {
+string_write_xml(struct SResource *res, const char* id, const char* language, UErrorCode *status) {
 
     char *sid = NULL;
     char* buf = NULL;
@@ -610,12 +596,11 @@ string_write_xml(UnicodeString *Accumulator, struct SResource *res, const char* 
         return;
     }
 
-    sid = printContainer(Accumulator, res, trans_unit, NULL, NULL, id, status);
+    sid = printContainer(res, trans_unit, NULL, NULL, id, status);
 
-    write_tabs(Accumulator);
+    write_tabs(out);
 
-    Accumulator->append(UnicodeString(source)); 
-    //T_FileStream_write(out, source, (int32_t) uprv_strlen(source));
+    write_utf8_file(out, UnicodeString(source));
 
     buf = convertAndEscape(&buf, 0, &bufLen, res->u.fString.fChars, res->u.fString.fLength, status);
 
@@ -623,67 +608,60 @@ string_write_xml(UnicodeString *Accumulator, struct SResource *res, const char* 
         return;
     }
 
-    Accumulator->append(UnicodeString(buf, bufLen, "UTF-8"));
-    Accumulator->append(UnicodeString(close_source)); 
-    //T_FileStream_write(out, buf, bufLen);
-    //T_FileStream_write(out, close_source, (int32_t) uprv_strlen(close_source));
+    write_utf8_file(out, UnicodeString(buf, bufLen, "UTF-8"));
+    write_utf8_file(out, UnicodeString(close_source));
 
-    printNoteElements(Accumulator, &res->fComment, status);
+    printNoteElements(&res->fComment, status);
 
     tabCount -= 1;
-    write_tabs(Accumulator);
+    write_tabs(out);
 
-    Accumulator->append(UnicodeString(close_trans_unit)); 
-    //T_FileStream_write(out, close_trans_unit, (int32_t) uprv_strlen(close_trans_unit));
+    write_utf8_file(out, UnicodeString(close_trans_unit));
 
     uprv_free(buf);
     uprv_free(sid);
 }
 
 static void
-alias_write_xml(UnicodeString *Accumulator, struct SResource *res, const char* id, const char* language, UErrorCode *status) {
+alias_write_xml(struct SResource *res, const char* id, const char* language, UErrorCode *status) {
     char *sid = NULL;
     char* buf = NULL;
     int32_t bufLen=0;
 
-    sid = printContainer(Accumulator, res, trans_unit, alias_restype, NULL, id, status);
+    sid = printContainer(res, trans_unit, alias_restype, NULL, id, status);
 
-    write_tabs(Accumulator);
+    write_tabs(out);
 
-    Accumulator->append(UnicodeString(source)); 
-    //T_FileStream_write(out, source, (int32_t) uprv_strlen(source));
+    write_utf8_file(out, UnicodeString(source));
 
     buf = convertAndEscape(&buf, 0, &bufLen, res->u.fString.fChars, res->u.fString.fLength, status);
- 
+
     if(U_FAILURE(*status)){
         return;
     }
-    Accumulator->append(UnicodeString(buf, bufLen, "UTF-8")); 
-    //T_FileStream_write(out, buf, bufLen);
-    Accumulator->append(UnicodeString(close_source));
-    //T_FileStream_write(out, close_source, (int32_t)uprv_strlen(close_source));
+    write_utf8_file(out, UnicodeString(buf, bufLen, "UTF-8"));
+    write_utf8_file(out, UnicodeString(close_source));
 
-    printNoteElements(Accumulator, &res->fComment, status);
+    printNoteElements(&res->fComment, status);
 
     tabCount -= 1;
-    write_tabs(Accumulator);
+    write_tabs(out);
 
-    Accumulator->append(UnicodeString(close_trans_unit));
-    //T_FileStream_write(out, close_trans_unit, (int32_t)uprv_strlen(close_trans_unit));
+    write_utf8_file(out, UnicodeString(close_trans_unit));
 
     uprv_free(buf);
     uprv_free(sid);
 }
 
 static void
-array_write_xml(UnicodeString *Accumulator, struct SResource *res, const char* id, const char* language, UErrorCode *status) {
+array_write_xml(struct SResource *res, const char* id, const char* language, UErrorCode *status) {
     char* sid = NULL;
     int index = 0;
 
     struct SResource *current = NULL;
     struct SResource *first =NULL;
 
-    sid = printContainer(Accumulator, res, group, array_restype, NULL, id, status);
+    sid = printContainer(res, group, array_restype, NULL, id, status);
 
     current = res->u.fArray.fFirst;
     first=current;
@@ -696,7 +674,7 @@ array_write_xml(UnicodeString *Accumulator, struct SResource *res, const char* i
         index += 1;
         subId = getID(sid, c, subId);
 
-        res_write_xml(Accumulator, current, subId, language, FALSE, status);
+        res_write_xml(current, subId, language, FALSE, status);
         uprv_free(subId);
         subId = NULL;
 
@@ -708,22 +686,21 @@ array_write_xml(UnicodeString *Accumulator, struct SResource *res, const char* i
     }
 
     tabCount -= 1;
-    write_tabs(Accumulator);
-    Accumulator->append(UnicodeString(close_group)); 
-    //T_FileStream_write(out, close_group, (int32_t) uprv_strlen(close_group));
+    write_tabs(out);
+    write_utf8_file(out, UnicodeString(close_group));
 
     uprv_free(sid);
 }
 
 static void
-intvector_write_xml(UnicodeString *Accumulator, struct SResource *res, const char* id, const char* language, UErrorCode *status) {
+intvector_write_xml(struct SResource *res, const char* id, const char* language, UErrorCode *status) {
     char* sid = NULL;
     char* ivd = NULL;
     uint32_t i=0;
     uint32_t len=0;
     char buf[256] = {'0'};
 
-    sid = printContainer(Accumulator, res, group, intvector_restype, NULL, id, status);
+    sid = printContainer(res, group, intvector_restype, NULL, id, status);
 
     for(i = 0; i < res->u.fIntVector.fCount; i += 1) {
         char c[256] = {0};
@@ -732,80 +709,68 @@ intvector_write_xml(UnicodeString *Accumulator, struct SResource *res, const cha
         ivd = getID(sid, c, ivd);
         len = itostr(buf, res->u.fIntVector.fArray[i], 10, 0);
 
-        write_tabs(Accumulator);
-        Accumulator->append(UnicodeString("<")); 
-        //T_FileStream_write(out, "<", 1);
-        Accumulator->append(UnicodeString(trans_unit)); 
-        //T_FileStream_write(out, trans_unit, (int32_t)uprv_strlen(trans_unit));
+        write_tabs(out);
+        write_utf8_file(out, UnicodeString("<"));
+        write_utf8_file(out, UnicodeString(trans_unit));
 
-        printAttribute(Accumulator, "id", ivd, (int32_t)uprv_strlen(ivd));
-        printAttribute(Accumulator, "restype", integer_restype, (int32_t) strlen(integer_restype));
+        printAttribute("id", ivd, (int32_t)uprv_strlen(ivd));
+        printAttribute("restype", integer_restype, (int32_t) strlen(integer_restype));
 
-        Accumulator->append(UnicodeString(">\n")); 
-        //T_FileStream_write(out,">\n", 2);
+        write_utf8_file(out, UnicodeString(">\n"));
 
         tabCount += 1;
-        write_tabs(Accumulator);
-        Accumulator->append(UnicodeString(source)); 
-        //T_FileStream_write(out, source, (int32_t)uprv_strlen(source));
+        write_tabs(out);
+        write_utf8_file(out, UnicodeString(source));
 
-        Accumulator->append(UnicodeString(buf, len));
-        //T_FileStream_write(out, buf, len);
+        write_utf8_file(out, UnicodeString(buf, len));
 
-        Accumulator->append(UnicodeString(close_source)); 
-        //T_FileStream_write(out, close_source, (int32_t)uprv_strlen(close_source));
+        write_utf8_file(out, UnicodeString(close_source));
         tabCount -= 1;
-        write_tabs(Accumulator);
-        Accumulator->append(UnicodeString(close_trans_unit)); 
-        //T_FileStream_write(out, close_trans_unit, (int32_t)uprv_strlen(close_trans_unit));
+        write_tabs(out);
+        write_utf8_file(out, UnicodeString(close_trans_unit));
 
         uprv_free(ivd);
         ivd = NULL;
     }
 
     tabCount -= 1;
-    write_tabs(Accumulator);
+    write_tabs(out);
 
-    Accumulator->append(UnicodeString(close_group)); 
-    //T_FileStream_write(out, close_group, (int32_t)uprv_strlen(close_group));
+    write_utf8_file(out, UnicodeString(close_group));
     uprv_free(sid);
     sid = NULL;
 }
 
 static void
-int_write_xml(UnicodeString *Accumulator, struct SResource *res, const char* id, const char* language, UErrorCode *status) {
+int_write_xml(struct SResource *res, const char* id, const char* language, UErrorCode *status) {
     char* sid = NULL;
     char buf[256] = {0};
     uint32_t len = 0;
 
-    sid = printContainer(Accumulator, res, trans_unit, integer_restype, NULL, id, status);
+    sid = printContainer(res, trans_unit, integer_restype, NULL, id, status);
 
-    write_tabs(Accumulator);
+    write_tabs(out);
 
-    Accumulator->append(UnicodeString(source)); 
-    //T_FileStream_write(out, source, (int32_t) uprv_strlen(source));
+    write_utf8_file(out, UnicodeString(source));
 
     len = itostr(buf, res->u.fIntValue.fValue, 10, 0);
-    Accumulator->append(UnicodeString(buf, len));
-    //T_FileStream_write(out, buf, len);
+    write_utf8_file(out, UnicodeString(buf, len));
 
-    Accumulator->append(UnicodeString(close_source));
-    //T_FileStream_write(out, close_source, (int32_t)uprv_strlen(close_source));
+    write_utf8_file(out, UnicodeString(close_source));
 
-    printNoteElements(Accumulator, &res->fComment, status);
+    printNoteElements(&res->fComment, status);
 
     tabCount -= 1;
-    write_tabs(Accumulator);
+    write_tabs(out);
 
-    Accumulator->append(UnicodeString(close_trans_unit));
-    //T_FileStream_write(out, close_trans_unit, (int32_t)uprv_strlen(close_trans_unit));
+    write_utf8_file(out, UnicodeString(close_trans_unit));
 
     uprv_free(sid);
     sid = NULL;
 }
 
 static void
-bin_write_xml(UnicodeString *Accumulator, struct SResource *res, const char* id, const char* language, UErrorCode *status) {
+bin_write_xml(struct SResource *res, const char* id, const char* language, UErrorCode *status) {
     const char* m_type = application_mimetype;
     char* sid = NULL;
     uint32_t crc = 0xFFFFFFFF;
@@ -848,49 +813,42 @@ bin_write_xml(UnicodeString *Accumulator, struct SResource *res, const char* id,
             m_type = "text";
         }
 
-        sid = printContainer(Accumulator, res, bin_unit, binary_restype, m_type, id, status);
+        sid = printContainer(res, bin_unit, binary_restype, m_type, id, status);
 
-        write_tabs(Accumulator);
+        write_tabs(out);
 
-        Accumulator->append(UnicodeString(bin_source));
-        //T_FileStream_write(out, bin_source, (int32_t)uprv_strlen(bin_source));
+        write_utf8_file(out, UnicodeString(bin_source));
 
         tabCount+= 1;
-        write_tabs(Accumulator);
+        write_tabs(out);
 
-        Accumulator->append(UnicodeString(external_file)); 
-        //T_FileStream_write(out, external_file, (int32_t)uprv_strlen(external_file));
-        printAttribute(Accumulator, "href", f, (int32_t)uprv_strlen(f));
-        Accumulator->append(UnicodeString("/>\n")); 
-        //T_FileStream_write(out, "/>\n", 3);
+        write_utf8_file(out, UnicodeString(external_file));
+        printAttribute("href", f, (int32_t)uprv_strlen(f));
+        write_utf8_file(out, UnicodeString("/>\n"));
         tabCount -= 1;
-        write_tabs(Accumulator);
+        write_tabs(out);
 
-        Accumulator->append(UnicodeString(close_bin_source));
-        //T_FileStream_write(out, close_bin_source, (int32_t)uprv_strlen(close_bin_source));
+        write_utf8_file(out, UnicodeString(close_bin_source));
 
-        printNoteElements(Accumulator, &res->fComment, status);
+        printNoteElements(&res->fComment, status);
         tabCount -= 1;
-        write_tabs(Accumulator);
-        Accumulator->append(UnicodeString(close_bin_unit));
-        //T_FileStream_write(out, close_bin_unit, (int32_t)uprv_strlen(close_bin_unit));
+        write_tabs(out);
+        write_utf8_file(out, UnicodeString(close_bin_unit));
     } else {
         char temp[256] = {0};
         uint32_t i = 0;
         int32_t len=0;
 
-        sid = printContainer(Accumulator, res, bin_unit, binary_restype, m_type, id, status);
+        sid = printContainer(res, bin_unit, binary_restype, m_type, id, status);
 
-        write_tabs(Accumulator);
-        Accumulator->append(UnicodeString(bin_source));
-        //T_FileStream_write(out, bin_source, (int32_t)uprv_strlen(bin_source));
+        write_tabs(out);
+        write_utf8_file(out, UnicodeString(bin_source));
 
         tabCount += 1;
-        write_tabs(Accumulator);
+        write_tabs(out);
 
-        Accumulator->append(UnicodeString(internal_file));
-        //T_FileStream_write(out, internal_file, (int32_t)uprv_strlen(internal_file));
-        printAttribute(Accumulator, "form", application_mimetype, (int32_t) uprv_strlen(application_mimetype)); 
+        write_utf8_file(out, UnicodeString(internal_file));
+        printAttribute("form", application_mimetype, (int32_t) uprv_strlen(application_mimetype));
 
         while(i <res->u.fBinaryValue.fLength){
             len = itostr(temp, res->u.fBinaryValue.fData[i], 16, 2);
@@ -899,33 +857,28 @@ bin_write_xml(UnicodeString *Accumulator, struct SResource *res, const char* id,
         }
 
         len = itostr(temp, crc, 10, 0);
-        printAttribute(Accumulator, "crc", temp, len);
+        printAttribute("crc", temp, len);
 
-        Accumulator->append(UnicodeString(">"));
-        //T_FileStream_write(out, ">", 1);
+        write_utf8_file(out, UnicodeString(">"));
 
         i = 0;
         while(i <res->u.fBinaryValue.fLength){
             len = itostr(temp, res->u.fBinaryValue.fData[i], 16, 2);
-            Accumulator->append(UnicodeString(temp));
-            //T_FileStream_write(out ,temp ,len);
+            write_utf8_file(out, UnicodeString(temp));
             i += 1;
         }
 
-        Accumulator->append(UnicodeString(close_internal_file));
-        //T_FileStream_write(out, close_internal_file, (int32_t)uprv_strlen(close_internal_file));
+        write_utf8_file(out, UnicodeString(close_internal_file));
 
         tabCount -= 2;
-        write_tabs(Accumulator);
+        write_tabs(out);
 
-        Accumulator->append(UnicodeString(close_bin_source));
-        //T_FileStream_write(out, close_bin_source, (int32_t)uprv_strlen(close_bin_source));
-        printNoteElements(Accumulator, &res->fComment, status);
+        write_utf8_file(out, UnicodeString(close_bin_source));
+        printNoteElements(&res->fComment, status);
 
         tabCount -= 1;
-        write_tabs(Accumulator);
-        Accumulator->append(UnicodeString(close_bin_unit)); 
-        //T_FileStream_write(out, close_bin_unit, (int32_t)uprv_strlen(close_bin_unit));
+        write_tabs(out);
+        write_utf8_file(out, UnicodeString(close_bin_unit));
 
         uprv_free(sid);
         sid = NULL;
@@ -937,7 +890,7 @@ bin_write_xml(UnicodeString *Accumulator, struct SResource *res, const char* id,
 
 
 static void
-table_write_xml(UnicodeString *Accumulator, struct SResource *res, const char* id, const char* language, UBool isTopLevel, UErrorCode *status) {
+table_write_xml(struct SResource *res, const char* id, const char* language, UBool isTopLevel, UErrorCode *status) {
 
     uint32_t  i         = 0;
 
@@ -949,7 +902,7 @@ table_write_xml(UnicodeString *Accumulator, struct SResource *res, const char* i
         return ;
     }
 
-    sid = printContainer(Accumulator, res, group, table_restype, NULL, id, status);
+    sid = printContainer(res, group, table_restype, NULL, id, status);
 
     if(isTopLevel) {
         sid[0] = '\0';
@@ -959,7 +912,7 @@ table_write_xml(UnicodeString *Accumulator, struct SResource *res, const char* i
     i = 0;
 
     while (current != NULL) {
-        res_write_xml(Accumulator, current, sid, language, FALSE, status);
+        res_write_xml(current, sid, language, FALSE, status);
 
         if(U_FAILURE(*status)){
             return;
@@ -970,17 +923,16 @@ table_write_xml(UnicodeString *Accumulator, struct SResource *res, const char* i
     }
 
     tabCount -= 1;
-    write_tabs(Accumulator);
+    write_tabs(out);
 
-    Accumulator->append(UnicodeString(close_group));
-    //T_FileStream_write(out, close_group,(int32_t)uprv_strlen(close_group));
+    write_utf8_file(out, UnicodeString(close_group));
 
     uprv_free(sid);
     sid = NULL;
 }
 
 void
-res_write_xml(UnicodeString *Accumulator, struct SResource *res, const char* id,  const char* language, UBool isTopLevel, UErrorCode *status) {
+res_write_xml(struct SResource *res, const char* id,  const char* language, UBool isTopLevel, UErrorCode *status) {
 
     if (U_FAILURE(*status)) {
         return ;
@@ -989,32 +941,32 @@ res_write_xml(UnicodeString *Accumulator, struct SResource *res, const char* id,
     if (res != NULL) {
         switch (res->fType) {
         case URES_STRING:
-             string_write_xml    (Accumulator, res, id, language, status);
+             string_write_xml    (res, id, language, status);
              return;
 
         case URES_ALIAS:
-             alias_write_xml     (Accumulator, res, id, language, status);
+             alias_write_xml     (res, id, language, status);
              return;
 
         case URES_INT_VECTOR:
-             intvector_write_xml (Accumulator, res, id, language, status);
+             intvector_write_xml (res, id, language, status);
              return;
 
         case URES_BINARY:
-             bin_write_xml       (Accumulator, res, id, language, status);
+             bin_write_xml       (res, id, language, status);
              return;
 
         case URES_INT:
-             int_write_xml       (Accumulator, res, id, language, status);
+             int_write_xml       (res, id, language, status);
              return;
 
         case URES_ARRAY:
-             array_write_xml     (Accumulator, res, id, language, status);
+             array_write_xml     (res, id, language, status);
              return;
 
         case URES_TABLE:
         case URES_TABLE32:
-             table_write_xml     (Accumulator, res, id, language, isTopLevel, status);
+             table_write_xml     (res, id, language, isTopLevel, status);
              return;
 
         default:
@@ -1030,7 +982,6 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
                   char *writtenFilename, int writtenFilenameLen,
                   const char* language, const char* outFileName, UErrorCode *status) {
 
-    UnicodeString Accumulator; 
     char* xmlfileName = NULL;
     char* outputFileName = NULL;
     char* originalFileName = NULL;
@@ -1157,8 +1108,7 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
         *status = U_FILE_ACCESS_ERROR;
         goto cleanup_bundle_write_xml;
     }
-    Accumulator.append(xmlHeader); 
-    //T_FileStream_write(out,xmlHeader, (int32_t)uprv_strlen(xmlHeader));
+    write_utf8_file(out, xmlHeader);
 
     if(outputEnc && *outputEnc!='\0'){
         /* store the output encoding */
@@ -1168,82 +1118,59 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
             goto cleanup_bundle_write_xml;
         }
     }
-    Accumulator.append(bundleStart); 
-    //T_FileStream_write(out,bundleStart, (int32_t)uprv_strlen(bundleStart));
-    write_tabs(&Accumulator);
-    Accumulator.append(fileStart); 
-    //T_FileStream_write(out, fileStart, (int32_t)uprv_strlen(fileStart));
+    write_utf8_file(out, bundleStart);
+    write_tabs(out);
+    write_utf8_file(out, fileStart);
     /* check if lang and language are the same */
     if(language != NULL && uprv_strcmp(lang, srBundle->fLocale)!=0){
         fprintf(stderr,"Warning: The top level tag in the resource and language specified are not the same. Please check the input.\n");
     }
-    Accumulator.append(UnicodeString(lang)); 
-    //T_FileStream_write(out,lang, (int32_t)uprv_strlen(lang));
-    Accumulator.append(UnicodeString(file1)); 
-    //T_FileStream_write(out,file1, (int32_t)uprv_strlen(file1));
-    Accumulator.append(UnicodeString(file2)); 
-    //T_FileStream_write(out,file2, (int32_t)uprv_strlen(file2));
-    Accumulator.append(UnicodeString(originalFileName)); 
-    //T_FileStream_write(out,originalFileName, (int32_t)uprv_strlen(originalFileName));  
-    Accumulator.append(UnicodeString(file4)); 
-    //T_FileStream_write(out,file4, (int32_t)uprv_strlen(file4));
+    write_utf8_file(out, UnicodeString(lang));
+    write_utf8_file(out, UnicodeString(file1));
+    write_utf8_file(out, UnicodeString(file2));
+    write_utf8_file(out, UnicodeString(originalFileName));
+    write_utf8_file(out, UnicodeString(file4));
 
     time(&currTime);
     strftime(timeBuf, sizeof(timeBuf), "%Y-%m-%dT%H:%M:%SZ", gmtime(&currTime));
-
-    Accumulator.append(UnicodeString(timeBuf)); 
-    Accumulator.append(UnicodeString("\">\n"));
-    //T_FileStream_write(out,timeBuf, (int32_t)uprv_strlen(timeBuf));
-
-    //T_FileStream_write(out,"\">\n", 3);
+    write_utf8_file(out, UnicodeString(timeBuf));
+    write_utf8_file(out, UnicodeString("\">\n"));
 
     tabCount += 1;
-    write_tabs(&Accumulator);
-    Accumulator.append(headerStart); 
-    //T_FileStream_write(out,headerStart, (int32_t)uprv_strlen(headerStart));
+    write_tabs(out);
+    write_utf8_file(out, headerStart);
 
     tabCount += 1;
-    write_tabs(&Accumulator);
+    write_tabs(out);
 
-    Accumulator.append(tool_start); 
-    //T_FileStream_write(out, tool_start, (int32_t) uprv_strlen(tool_start));
-    printAttribute(&Accumulator, "tool-id", tool_id, (int32_t) uprv_strlen(tool_id));
-    printAttribute(&Accumulator, "tool-name", tool_name, (int32_t) uprv_strlen(tool_name));
-
-    Accumulator.append(UnicodeString("/>\n")); 
-    //T_FileStream_write(out, "/>\n", 3);
+    write_utf8_file(out, tool_start);
+    printAttribute("tool-id", tool_id, (int32_t) uprv_strlen(tool_id));
+    printAttribute("tool-name", tool_name, (int32_t) uprv_strlen(tool_name));
+    write_utf8_file(out, UnicodeString("/>\n"));
 
     tabCount -= 1;
-    write_tabs(&Accumulator);
+    write_tabs(out);
 
-    Accumulator.append(UnicodeString(headerEnd)); 
-    //T_FileStream_write(out,headerEnd, (int32_t)uprv_strlen(headerEnd));
+    write_utf8_file(out, UnicodeString(headerEnd));
 
-    write_tabs(&Accumulator);
+    write_tabs(out);
     tabCount += 1;
 
-    Accumulator.append(UnicodeString(bodyStart));
-    //T_FileStream_write(out,bodyStart, (int32_t)uprv_strlen(bodyStart));
+    write_utf8_file(out, UnicodeString(bodyStart));
 
 
-    res_write_xml(&Accumulator, bundle->fRoot, bundle->fLocale, lang, TRUE, status);
+    res_write_xml(bundle->fRoot, bundle->fLocale, lang, TRUE, status);
 
     tabCount -= 1;
-    write_tabs(&Accumulator);
+    write_tabs(out);
 
-    Accumulator.append(UnicodeString(bodyEnd)); 
-    //T_FileStream_write(out,bodyEnd, (int32_t)uprv_strlen(bodyEnd));
+    write_utf8_file(out, UnicodeString(bodyEnd));
     tabCount--;
-    write_tabs(&Accumulator);
-
-    Accumulator.append(UnicodeString(fileEnd));
-    //T_FileStream_write(out,fileEnd, (int32_t)uprv_strlen(fileEnd));
+    write_tabs(out);
+    write_utf8_file(out, UnicodeString(fileEnd));
     tabCount--;
-    write_tabs(&Accumulator);
-    Accumulator.append(UnicodeString(bundleEnd));
-    //T_FileStream_write(out,bundleEnd,(int32_t)uprv_strlen(bundleEnd));
-
-    write_utf8_file(Accumulator, out, status); 
+    write_tabs(out);
+    write_utf8_file(out, UnicodeString(bundleEnd));
     T_FileStream_close(out);
 
     ucnv_close(conv);
@@ -1258,4 +1185,3 @@ cleanup_bundle_write_xml:
         uprv_free(outputFileName);
     }
 }
-
