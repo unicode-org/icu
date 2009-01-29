@@ -7,20 +7,11 @@
 
 package com.ibm.icu.text;
 
-import java.io.IOException;
-import java.io.InvalidObjectException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.text.FieldPosition;
-import java.text.ParseException;
-import java.text.ParsePosition;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.MissingResourceException;
-import java.text.Format;
 
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
@@ -128,21 +119,15 @@ public class NumberingSystem {
             UResourceBundle nsCurrent = numberingSystemsInfo.get("numberingSystems");
             UResourceBundle temp;
 
-            StringBuffer availableNamesString = new StringBuffer(256);
             String nsName;
-            int count = 0;
-
+            ArrayList output = new ArrayList();
             UResourceBundleIterator it = nsCurrent.getIterator();
             while (it.hasNext()) {
                 temp = it.next();
                 nsName = temp.getKey();
-                if (count > 0) {
-                    availableNamesString.append(":");
-                }
-                availableNamesString.append(nsName);
-                count++;
+                output.add(nsName);
             }
-            return availableNamesString.toString().split(":");
+            return (String[]) output.toArray(new String[output.size()]);
     }
 
     public static boolean isValidDigitString(String str) {
