@@ -75,9 +75,10 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(35,TestHostClone);
         TESTCASE(36,TestTimeZoneDisplayName);
         TESTCASE(37,TestRoundtripWithCalendar);
+        TESTCASE(38,Test6338);
         /*
-        TESTCASE(38,TestRelativeError);
-        TESTCASE(39,TestRelativeOther);
+        TESTCASE(39,TestRelativeError);
+        TESTCASE(40,TestRelativeOther);
         */
         default: name = ""; break;
     }
@@ -3042,7 +3043,104 @@ void DateFormatTest::TestRelativeOther(void)
 }
 */
 
+void DateFormatTest::Test6338(void)
+{
+    UErrorCode status = U_ZERO_ERROR;
 
+    SimpleDateFormat *fmt1 = new SimpleDateFormat(UnicodeString("y-M-d"), Locale("ar"), status);
+    failure(status, "new SimpleDateFormat");
+
+    UDate dt1 = date(2008-1900, UCAL_JUNE, 10, 12, 00);
+    UnicodeString str1;
+    str1 = fmt1->format(dt1, str1);
+    logln(str1);
+
+    UDate dt11 = fmt1->parse(str1, status);
+    failure(status, "fmt->parse");
+
+    UnicodeString str11;
+    str11 = fmt1->format(dt11, str11);
+    logln(str11);
+
+    if (str1 != str11) {
+        errln((UnicodeString)"FAIL: Different dates str1:" + str1
+            + " str2:" + str11);
+    }
+    delete fmt1;
+
+    /////////////////
+
+    status = U_ZERO_ERROR;
+    SimpleDateFormat *fmt2 = new SimpleDateFormat(UnicodeString("y M d"), Locale("ar"), status);
+    failure(status, "new SimpleDateFormat");
+
+    UDate dt2 = date(2008-1900, UCAL_JUNE, 10, 12, 00);
+    UnicodeString str2;
+    str2 = fmt2->format(dt2, str2);
+    logln(str2);
+
+    UDate dt22 = fmt2->parse(str2, status);
+    failure(status, "fmt->parse");
+
+    UnicodeString str22;
+    str22 = fmt2->format(dt22, str22);
+    logln(str22);
+
+    if (str2 != str22) {
+        errln((UnicodeString)"FAIL: Different dates str1:" + str2
+            + " str2:" + str22);
+    }
+    delete fmt2;
+
+    /////////////////
+
+    status = U_ZERO_ERROR;
+    SimpleDateFormat *fmt3 = new SimpleDateFormat(UnicodeString("y-M-d"), Locale("en-us"), status);
+    failure(status, "new SimpleDateFormat");
+
+    UDate dt3 = date(2008-1900, UCAL_JUNE, 10, 12, 00);
+    UnicodeString str3;
+    str3 = fmt3->format(dt3, str3);
+    logln(str3);
+
+    UDate dt33 = fmt3->parse(str3, status);
+    failure(status, "fmt->parse");
+
+    UnicodeString str33;
+    str33 = fmt3->format(dt33, str33);
+    logln(str33);
+
+    if (str3 != str33) {
+        errln((UnicodeString)"FAIL: Different dates str1:" + str3
+            + " str2:" + str33);
+    }
+    delete fmt3;
+
+    /////////////////
+
+    status = U_ZERO_ERROR;
+    SimpleDateFormat *fmt4 = new SimpleDateFormat(UnicodeString("y M  d"), Locale("en-us"), status);
+    failure(status, "new SimpleDateFormat");
+
+    UDate dt4 = date(2008-1900, UCAL_JUNE, 10, 12, 00);
+    UnicodeString str4;
+    str4 = fmt4->format(dt4, str4);
+    logln(str4);
+
+    UDate dt44 = fmt4->parse(str4, status);
+    failure(status, "fmt->parse");
+
+    UnicodeString str44;
+    str44 = fmt4->format(dt44, str44);
+    logln(str44);
+
+    if (str4 != str44) {
+        errln((UnicodeString)"FAIL: Different dates str1:" + str4
+            + " str2:" + str44);
+    }
+    delete fmt4;
+
+}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
