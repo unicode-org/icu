@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 1997-2008, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1997-2009, International Business Machines Corporation and others. All Rights Reserved.
 *******************************************************************************
 *
 * File SMPDTFMT.H
@@ -800,7 +800,8 @@ private:
      * indicating matching failure, otherwise.
      */
     int32_t subParse(const UnicodeString& text, int32_t& start, UChar ch, int32_t count,
-                     UBool obeyCount, UBool allowNegative, UBool ambiguousYear[], Calendar& cal) const;
+                     UBool obeyCount, UBool allowNegative, UBool ambiguousYear[], Calendar& cal,
+                     int32_t patLoc) const;
 
     void parseInt(const UnicodeString& text,
                   Formattable& number,
@@ -812,6 +813,9 @@ private:
                   int32_t maxDigits,
                   ParsePosition& pos,
                   UBool allowNegative) const;
+
+    int32_t checkIntSuffix(const UnicodeString& text, int32_t start,
+                           int32_t patLoc, UBool isNegative) const;
 
     /**
      * Translate a pattern, mapping each character in the from string to the
@@ -839,7 +843,32 @@ private:
      *                  if the operation succeeds.
      */
     void         parseAmbiguousDatesAsAfter(UDate startDate, UErrorCode& status);
-    
+
+    /**
+     * Return the length matched by the given affix, or -1 if none.
+     * Runs of white space in the affix, match runs of white space in
+     * the input.
+     * @param affix pattern string, taken as a literal
+     * @param input input text
+     * @param pos offset into input at which to begin matching
+     * @return length of input that matches, or -1 if match failure
+     */
+    int32_t compareSimpleAffix(const UnicodeString& affix, 
+                   const UnicodeString& input, 
+                   int32_t pos) const;
+
+    /**
+     * Skip over a run of zero or more isRuleWhiteSpace() characters at
+     * pos in text.
+     */
+    int32_t skipRuleWhiteSpace(const UnicodeString& text, int32_t pos) const;
+
+    /**
+     * Skip over a run of zero or more isUWhiteSpace() characters at pos
+     * in text.
+     */
+    int32_t skipUWhiteSpace(const UnicodeString& text, int32_t pos) const;
+
     /**
      * Private methods for formatting/parsing GMT string
      */
