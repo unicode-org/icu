@@ -29,6 +29,7 @@
 #define RESTEST_HEAP_CHECK 0
 
 #include "unicode/uloc.h"
+#include "unicode/ulocdata.h"
 #include "uresimp.h"
 #include "creststn.h"
 #include "unicode/ctest.h"
@@ -2967,14 +2968,14 @@ void TestCLDRVersion() {
   u_versionFromString(zeroVersion, "0.0.0.0");
 
   /* test CLDR value from API */
-  uloc_getCLDRVersion(cldrVersion, &status);
+  ulocdata_getCLDRVersion(cldrVersion, &status);
   if(U_FAILURE(status)) {
     /* the show is pretty much over at this point */
-    log_err("FAIL: uloc_getCLDRVersion() returned %s\n", u_errorName(status));
+    log_err("FAIL: ulocdata_getCLDRVersion() returned %s\n", u_errorName(status));
     return;
   } else {
     u_versionToString(cldrVersion, tmp);
-    log_info("uloc_getCLDRVersion() returned: '%s'\n", tmp);
+    log_info("ulocdata_getCLDRVersion() returned: '%s'\n", tmp);
   }
 
   

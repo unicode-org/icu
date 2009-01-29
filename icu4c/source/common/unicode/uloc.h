@@ -1043,13 +1043,4 @@ uloc_minimizeSubtags(const char*    localeID,
          int32_t minimizedLocaleIDCapacity,
          UErrorCode* err);
 
-/**
- * Return the current CLDR version used by the library.
- * @param versionArray fillin that will recieve the version number
- * @param status error code - could be U_MISSING_RESOURCE_ERROR if the version was not found.
- * @draft ICU 4.2
- */
-U_DRAFT void U_EXPORT2
-uloc_getCLDRVersion(UVersionInfo versionArray, UErrorCode *status);
-
 #endif /*_ULOC*/
