@@ -991,6 +991,23 @@ public final class ULocale implements Serializable {
     public static ULocale[] getAvailableLocales() {
         return ICUResourceBundle.getAvailableULocales();
     }
+    
+    private static VersionInfo gCLDRVersion = null;
+    
+    /**
+     * Returns the current CLDR version
+     * @draft ICU 4.2
+     */
+    public static VersionInfo getCLDRVersion() {
+        // fetching this data should be idempotent.
+        if(gCLDRVersion == null) {
+            // from ZoneMeta.java
+            UResourceBundle supplementalDataBundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            UResourceBundle cldrVersionBundle = supplementalDataBundle.get("cldrVersion");
+            gCLDRVersion = VersionInfo.getInstance(cldrVersionBundle.getString());
+        }
+        return gCLDRVersion;
+    }
 
     /**
      * Returns a list of all 2-letter country codes defined in ISO 3166.
