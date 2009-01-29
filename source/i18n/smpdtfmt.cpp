@@ -1463,7 +1463,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
                 }
 
                 pos = subParse(text, pos, ch, count,
-                               TRUE, FALSE, ambiguousYear, *workCal);
+                               TRUE, FALSE, ambiguousYear, *workCal, i);
 
                 // If the parse fails anywhere in the run, back up to the
                 // start of the run and retry.
@@ -1478,7 +1478,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
             // fields.
             else {
                 int32_t s = subParse(text, pos, ch, count,
-                               FALSE, TRUE, ambiguousYear, *workCal);
+                               FALSE, TRUE, ambiguousYear, *workCal, i);
 
                 if (s < 0) {
                     status = U_PARSE_ERROR;
@@ -1916,7 +1916,8 @@ SimpleDateFormat::set2DigitYearStart(UDate d, UErrorCode& status)
  * indicating matching failure, otherwise.
  */
 int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UChar ch, int32_t count,
-                           UBool obeyCount, UBool allowNegative, UBool ambiguousYear[], Calendar& cal) const
+                           UBool obeyCount, UBool allowNegative, UBool ambiguousYear[], Calendar& cal,
+                           int32_t patLoc) const
 {
     Formattable number;
     int32_t value = 0;
@@ -1989,6 +1990,20 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         if (pos.getIndex() == parseStart)
             return -start;
         value = number.getLong();
+
+        // suffix processing
+        int32_t txtLoc = pos.getIndex();
+        if (value <0 ) {
+            txtLoc = checkIntSuffix(text, txtLoc, patLoc+1, TRUE);
+            if (txtLoc != pos.getIndex()) {
+                value *= -1;
+            }
+        }
+        else {
+            txtLoc = checkIntSuffix(text, txtLoc, patLoc+1, FALSE);
+        }
+        pos.setIndex(txtLoc);
+
     }
 
     switch (patternCharIndex) {
@@ -2612,14 +2627,158 @@ SimpleDateFormat::isFieldUnitIgnored(const UnicodeString& pattern,
     return TRUE;
 }
 
-
+//----------------------------------------------------------------------
 
 const Locale&
 SimpleDateFormat::getSmpFmtLocale(void) const {
     return fLocale;
 }
 
+//----------------------------------------------------------------------
 
+int32_t 
+SimpleDateFormat::checkIntSuffix(const UnicodeString& text, int32_t start,
+                                 int32_t patLoc, UBool isNegative) const {
+    // local variables
+    UnicodeString suf;
+    int32_t patternMatch;
+    int32_t textPreMatch;
+    int32_t textPostMatch;
+
+    // check that we are still in range
+    if ( (start > text.length()) ||
+         (start < 0) ||
+         (patLoc < 0) ||
+         (patLoc > fPattern.length())) {
+        // out of range, don't advance location in text
+        return start;
+    }
+
+    // get the suffix
+    if (fNumberFormat->getDynamicClassID() == DecimalFormat::getStaticClassID()) {    
+        if (isNegative) {
+            suf = ((DecimalFormat*)fNumberFormat)->getNegativeSuffix(suf);
+        }
+        else {
+            suf = ((DecimalFormat*)fNumberFormat)->getPositiveSuffix(suf);
+        }
+    }
+    
+    // check for suffix
+    if (suf.length() <= 0) {
+        return start;
+    }
+
+    // check suffix will be encountered in the pattern
+    patternMatch = compareSimpleAffix(suf,fPattern,patLoc);
+
+    // check if a suffix will be encountered in the text
+    textPreMatch = compareSimpleAffix(suf,text,start);
+
+    // check if a suffix was encountered in the text
+    textPostMatch = compareSimpleAffix(suf,text,start-suf.length());
+
+    // check for suffix match
+    if ((textPreMatch >= 0) && (patternMatch >= 0) && (textPreMatch == patternMatch)) {
+        return start;
+    }
+    else if ((textPostMatch >= 0) && (patternMatch >= 0) && (textPostMatch == patternMatch)) {
+        return  start - suf.length();
+    }
+
+    // should not get here
+    return start;
+}
+
+//----------------------------------------------------------------------
+
+int32_t
+SimpleDateFormat::compareSimpleAffix(const UnicodeString& affix, 
+                   const UnicodeString& input, 
+                   int32_t pos) const {
+    int32_t start = pos;
+    for (int32_t i=0; i<affix.length(); ) {
+        UChar32 c = affix.char32At(i);
+        int32_t len = U16_LENGTH(c);
+        if (uprv_isRuleWhiteSpace(c)) {
+            // We may have a pattern like: \u200F \u0020
+            //        and input text like: \u200F \u0020
+            // Note that U+200F and U+0020 are RuleWhiteSpace but only
+            // U+0020 is UWhiteSpace.  So we have to first do a direct
+            // match of the run of RULE whitespace in the pattern,
+            // then match any extra characters.
+            UBool literalMatch = FALSE;
+            while (pos < input.length() &&
+                   input.char32At(pos) == c) {
+                literalMatch = TRUE;
+                i += len;
+                pos += len;
+                if (i == affix.length()) {
+                    break;
+                }
+                c = affix.char32At(i);
+                len = U16_LENGTH(c);
+                if (!uprv_isRuleWhiteSpace(c)) {
+                    break;
+                }
+            }
+
+            // Advance over run in pattern
+            i = skipRuleWhiteSpace(affix, i);
+
+            // Advance over run in input text
+            // Must see at least one white space char in input,
+            // unless we've already matched some characters literally.
+            int32_t s = pos;
+            pos = skipUWhiteSpace(input, pos);
+            if (pos == s && !literalMatch) {
+                return -1;
+            }
+
+            // If we skip UWhiteSpace in the input text, we need to skip it in the pattern.
+            // Otherwise, the previous lines may have skipped over text (such as U+00A0) that
+            // is also in the affix.
+            i = skipUWhiteSpace(affix, i);
+        } else {
+            if (pos < input.length() &&
+                input.char32At(pos) == c) {
+                i += len;
+                pos += len;
+            } else {
+                return -1;
+            }
+        }
+    }
+    return pos - start;
+}
+
+//----------------------------------------------------------------------
+
+int32_t 
+SimpleDateFormat::skipRuleWhiteSpace(const UnicodeString& text, int32_t pos) const {
+    while (pos < text.length()) {
+        UChar32 c = text.char32At(pos);
+        if (!uprv_isRuleWhiteSpace(c)) {
+            break;
+        }
+        pos += U16_LENGTH(c);
+    }
+    return pos;
+}
+
+//----------------------------------------------------------------------
+
+int32_t 
+SimpleDateFormat::skipUWhiteSpace(const UnicodeString& text, int32_t pos) const {
+    while (pos < text.length()) {
+        UChar32 c = text.char32At(pos);
+        if (!u_isUWhiteSpace(c)) {
+            break;
+        }
+        pos += U16_LENGTH(c);
+    }
+    return pos;
+}
 
 U_NAMESPACE_END
 
