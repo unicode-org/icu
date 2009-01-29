@@ -28,6 +28,8 @@ import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.text.NumberFormat.SimpleNumberFormatFactory;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.VersionInfo;
 
 public class ULocaleTest extends TestFmwk {
 
@@ -3695,4 +3697,36 @@ public class ULocaleTest extends TestFmwk {
             }
         }
     }
+    public void TestCLDRVersion() {
+        //VersionInfo zeroVersion = VersionInfo.getInstance(0, 0, 0, 0);
+        VersionInfo testExpect;
+        VersionInfo testCurrent;
+        VersionInfo cldrVersion;
+ 
+        cldrVersion = ULocale.getCLDRVersion();
+        
+        this.logln("uloc_getCLDRVersion() returned: '"+cldrVersion+"'");
+        
+        // why isn't this public for tests somewhere?
+        final ClassLoader testLoader = ICUResourceBundleTest.class.getClassLoader();
+        UResourceBundle bundle = (UResourceBundle) UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", ULocale.ROOT, testLoader);
+        
+        testExpect = VersionInfo.getInstance(bundle.getString("ExpectCLDRVersionAtLeast"));
+        testCurrent = VersionInfo.getInstance(bundle.getString("CurrentCLDRVersion"));
+
+        
+        logln("(data) ExpectCLDRVersionAtLeast { "+testExpect+""); 
+        if(cldrVersion.compareTo(testExpect)<0) {
+            errln("CLDR version is too old, expect at least "+testExpect+".");
+        }
+
+        int r = cldrVersion.compareTo(testCurrent);
+        if ( r < 0 ) {
+            logln("CLDR version is behind 'current' (for testdata/root.txt) "+testCurrent+". Some things may fail.\n");
+        } else if ( r > 0) {
+            logln("CLDR version is ahead of 'current' (for testdata/root.txt) "+testCurrent+". Some things may fail.\n");
+        } else {
+            // CLDR version is OK.
+        }
+  }
 }
