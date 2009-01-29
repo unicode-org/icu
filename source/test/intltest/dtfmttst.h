@@ -159,6 +159,8 @@ public: // package
 
     void TestGenericTimeZoneOrder(void);
 
+    void Test6338(void);
+
 public:
     /**
      * Test host-specific formatting.
