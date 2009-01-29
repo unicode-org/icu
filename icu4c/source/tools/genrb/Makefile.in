@@ -1,6 +1,6 @@
 #################################################################################
 ## Makefile.in for ICU - tools/genrb						#
-## Copyright (c) 1999-2008, International Business Machines Corporation and	#
+## Copyright (c) 1999-2009, International Business Machines Corporation and	#
 ## others. All Rights Reserved.							#
 #################################################################################
 #
@@ -65,7 +65,10 @@ endif
 ##Added by Brian Rower 6/25/08
 ##if JAVA_HOME was not set, try to set it by finding jar
 ifeq (,$(JAVA_HOME))
-JAVA_HOME=$(shell dirname `which jar`)
+JAVA_HOME=$(shell dirname `which jar`)/..
+ifeq (,$(GENDTJAR_JARHOME))
+GENDTJAR_JARHOME=$(shell dirname `which jar`)
+endif
 endif
 
 ##if GENDTJAR_JARHOME (the directory that "jar" lives in) is not set
