@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2000-2008, International Business Machines
+*   Copyright (C) 2000-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -212,4 +212,20 @@ ures_getStringByKeyWithFallback(const UResourceBundle *resB,
                           const char* inKey,  
                           int32_t* len,
                           UErrorCode *status);
+
+/**
+ * Get a version number by key
+ * @param resB bundle containing version number
+ * @param key the key for the version number
+ * @param ver fillin for the version number
+ * @param status error code
+ * @internal ICU 4.2
+ */
+U_INTERNAL void U_EXPORT2
+ures_getVersionByKey(const UResourceBundle *resB,
+                     const char *key,
+                     UVersionInfo ver,
+                     UErrorCode *status);
+
+
 #endif /*URESIMP_H*/

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1998-2006, International Business Machines Corporation and
+ * Copyright (c) 1998-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -28,8 +28,6 @@ static void TestPUtilAPI(void){
 
     double  n1=0.0, y1=0.0, expn1, expy1;
     double  value1 = 0.021;
-    UVersionInfo versionArray = {0x01, 0x00, 0x02, 0x02};
-    char versionString[17]; /* xxx.xxx.xxx.xxx\0 */
     char *str=0;
     UBool isTrue=FALSE;
 
@@ -119,6 +117,76 @@ static void TestPUtilAPI(void){
     doAssert(uprv_digitsAfterDecimal(0.022223333321), 9, "uprv_digitsAfterDecimal(0.022223333321) failed.");
 #endif
 
+    log_verbose("Testing the API u_errorName()...\n");
+    str=(char*)u_errorName((UErrorCode)0);
+    if(strcmp(str, "U_ZERO_ERROR") != 0){
+        log_err("ERROR: u_getVersion() failed. Expected: U_ZERO_ERROR Got=%s\n",  str);
+    }
+    log_verbose("Testing the API u_errorName()...\n");
+    str=(char*)u_errorName((UErrorCode)-127);
+    if(strcmp(str, "U_USING_DEFAULT_WARNING") != 0){
+        log_err("ERROR: u_getVersion() failed. Expected: U_USING_DEFAULT_WARNING Got=%s\n",  str);
+    }
+    log_verbose("Testing the API u_errorName().. with BOGUS ERRORCODE...\n");
+    str=(char*)u_errorName((UErrorCode)200);
+    if(strcmp(str, "[BOGUS UErrorCode]") != 0){
+        log_err("ERROR: u_getVersion() failed. Expected: [BOGUS UErrorCode] Got=%s\n",  str);
+    }
+
+    {
+        const char* dataDirectory;
+        int32_t dataDirectoryLen;
+        UChar *udataDir=0;
+        UChar temp[100];
+        char *charvalue=0;
+        log_verbose("Testing chars to UChars\n");
+        
+         /* This cannot really work on a japanese system. u_uastrcpy will have different results than */
+        /* u_charsToUChars when there is a backslash in the string! */
+        /*dataDirectory=u_getDataDirectory();*/
+
+        dataDirectory="directory1";  /*no backslashes*/
+        dataDirectoryLen=(int32_t)strlen(dataDirectory);
+        udataDir=(UChar*)malloc(sizeof(UChar) * (dataDirectoryLen + 1));
+        u_charsToUChars(dataDirectory, udataDir, (dataDirectoryLen + 1));
+        u_uastrcpy(temp, dataDirectory);
+       
+        if(u_strcmp(temp, udataDir) != 0){
+            log_err("ERROR: u_charsToUChars failed. Expected %s, Got %s\n", austrdup(temp), austrdup(udataDir));
+        }
+        log_verbose("Testing UChars to chars\n");
+        charvalue=(char*)malloc(sizeof(char) * (u_strlen(udataDir) + 1));
+
+        u_UCharsToChars(udataDir, charvalue, (u_strlen(udataDir)+1));
+        if(strcmp(charvalue, dataDirectory) != 0){
+            log_err("ERROR: u_UCharsToChars failed. Expected %s, Got %s\n", charvalue, dataDirectory);
+        }
+        free(charvalue);
+        free(udataDir);
+    }
+   
+    log_verbose("Testing uprv_timezone()....\n");
+    {
+        int32_t tzoffset = uprv_timezone();
+        log_verbose("Value returned from uprv_timezone = %d\n",  tzoffset);
+        if (tzoffset != 28800) {
+            log_verbose("***** WARNING: If testing in the PST timezone, t_timezone should return 28800! *****");
+        }
+        if ((tzoffset % 1800 != 0)) {
+            log_err("FAIL: t_timezone may be incorrect. It is not a multiple of 30min.");
+        }
+        /*tzoffset=uprv_getUTCtime();*/
+
+    }
+}
+
+static void TestVersion()
+{
+    UVersionInfo versionArray = {0x01, 0x00, 0x02, 0x02};
+    UVersionInfo versionArray2 = {0x01, 0x00, 0x02, 0x02};
+    char versionString[17]; /* xxx.xxx.xxx.xxx\0 */
+    UChar versionUString[] = { 0x0031, 0x002E, 0x0030, 0x002E,
+                               0x0032, 0x002E, 0x0038, 0x0000 }; /* 1.0.2.8 */
 
     log_verbose("Testing the API u_versionToString().....\n");
     u_versionToString(versionArray, versionString);
@@ -183,68 +251,74 @@ static void TestPUtilAPI(void){
     if(strcmp(versionString, U_ICU_VERSION) != 0){
         log_err("ERROR: u_getVersion() failed. Got=%s, expected %s\n",  versionString, U_ICU_VERSION);
     }
-    log_verbose("Testing the API u_errorName()...\n");
-    str=(char*)u_errorName((UErrorCode)0);
-    if(strcmp(str, "U_ZERO_ERROR") != 0){
-        log_err("ERROR: u_getVersion() failed. Expected: U_ZERO_ERROR Got=%s\n",  str);
-    }
-    log_verbose("Testing the API u_errorName()...\n");
-    str=(char*)u_errorName((UErrorCode)-127);
-    if(strcmp(str, "U_USING_DEFAULT_WARNING") != 0){
-        log_err("ERROR: u_getVersion() failed. Expected: U_USING_DEFAULT_WARNING Got=%s\n",  str);
-    }
-    log_verbose("Testing the API u_errorName().. with BOGUS ERRORCODE...\n");
-    str=(char*)u_errorName((UErrorCode)200);
-    if(strcmp(str, "[BOGUS UErrorCode]") != 0){
-        log_err("ERROR: u_getVersion() failed. Expected: [BOGUS UErrorCode] Got=%s\n",  str);
-    }
-
-    {
-        const char* dataDirectory;
-        int32_t dataDirectoryLen;
-        UChar *udataDir=0;
-        UChar temp[100];
-        char *charvalue=0;
-        log_verbose("Testing chars to UChars\n");
-        
-         /* This cannot really work on a japanese system. u_uastrcpy will have different results than */
-        /* u_charsToUChars when there is a backslash in the string! */
-        /*dataDirectory=u_getDataDirectory();*/
-
-        dataDirectory="directory1";  /*no backslashes*/
-        dataDirectoryLen=(int32_t)strlen(dataDirectory);
-        udataDir=(UChar*)malloc(sizeof(UChar) * (dataDirectoryLen + 1));
-        u_charsToUChars(dataDirectory, udataDir, (dataDirectoryLen + 1));
-        u_uastrcpy(temp, dataDirectory);
-       
-        if(u_strcmp(temp, udataDir) != 0){
-            log_err("ERROR: u_charsToUChars failed. Expected %s, Got %s\n", austrdup(temp), austrdup(udataDir));
-        }
-        log_verbose("Testing UChars to chars\n");
-        charvalue=(char*)malloc(sizeof(char) * (u_strlen(udataDir) + 1));
-
-        u_UCharsToChars(udataDir, charvalue, (u_strlen(udataDir)+1));
-        if(strcmp(charvalue, dataDirectory) != 0){
-            log_err("ERROR: u_UCharsToChars failed. Expected %s, Got %s\n", charvalue, dataDirectory);
-        }
-        free(charvalue);
-        free(udataDir);
-    }
-   
-    log_verbose("Testing uprv_timezone()....\n");
-    {
-        int32_t tzoffset = uprv_timezone();
-        log_verbose("Value returned from uprv_timezone = %d\n",  tzoffset);
-        if (tzoffset != 28800) {
-            log_verbose("***** WARNING: If testing in the PST timezone, t_timezone should return 28800! *****");
-        }
-        if ((tzoffset % 1800 != 0)) {
-            log_err("FAIL: t_timezone may be incorrect. It is not a multiple of 30min.");
-        }
-        /*tzoffset=uprv_getUTCtime();*/
-
+    /* test unicode */
+    log_verbose("Testing u_versionFromUString...\n");
+    u_versionFromString(versionArray,"1.0.2.8");
+    u_versionFromUString(versionArray2, versionUString);
+    u_versionToString(versionArray2, versionString); 
+    if(memcmp(versionArray, versionArray2, sizeof(UVersionInfo))) {
+       log_err("FAIL: u_versionFromUString produced a different result - not 1.0.2.8 but %s [%x.%x.%x.%x]\n", 
+          versionString,
+        (int)versionArray2[0],
+        (int)versionArray2[1],
+        (int)versionArray2[2],
+        (int)versionArray2[3]);
+    } 
+    else {
+       log_verbose(" from UString: %s\n", versionString);
     }
 }
+
+static void TestCompareVersions()
+{
+   /* use a 1d array to be palatable to java */
+   const char *testCases[] = {
+      /*  v1          <|=|>       v2  */
+    "0.0.0.0",    "=",        "0.0.0.0",
+    "3.1.2.0",    ">",        "3.0.9.0",
+    "3.2.8.6",    "<",        "3.4",
+    "4.0",        ">",        "3.2",
+    NULL,        NULL,        NULL
+   };
+   const char *v1str;
+   const char *opstr;
+   const char *v2str;
+   int32_t op, invop, got, invgot; 
+   UVersionInfo v1, v2;
+   int32_t j;
+   log_verbose("Testing u_compareVersions()\n");
+   for(j=0;testCases[j]!=NULL;j+=3) {
+    v1str = testCases[j+0];
+    opstr = testCases[j+1];
+    v2str = testCases[j+2];
+    switch(opstr[0]) {
+        case '-':
+        case '<': op = -1; break;
+        case '0':
+        case '=': op = 0; break;
+        case '+':
+        case '>': op = 1; break;
+        default:  log_err("Bad operator at j/3=%d\n", (j/3)); return;
+    }
+    invop = 0-op; /* inverse operation: with v1 and v2 switched */
+    u_versionFromString(v1, v1str);
+    u_versionFromString(v2, v2str);
+    got = u_compareVersions(v1,v2);
+    invgot = u_compareVersions(v2,v1); /* oppsite */
+    if(got==op) {
+        log_verbose("%d: %s %s %s, OK\n", (j/3), v1str, opstr, v2str);
+    } else {
+        log_err("%d: %s %s %s: wanted %d got %d\n", (j/3), v1str, opstr, v2str, op, got);
+    }
+    if(invgot==invop) {
+        log_verbose("%d: %s (%d) %s, OK (inverse)\n", (j/3), v2str, invop, v1str);
+    } else {
+        log_err("%d: %s (%d) %s: wanted %d got %d\n", (j/3), v2str, invop, v1str, invop, invgot);
+    }
+   }
+}
+
+
 
 #if 0
 static void testIEEEremainder()
@@ -365,6 +439,8 @@ void
 addPUtilTest(TestNode** root)
 {
     addTest(root, &TestPUtilAPI,       "putiltst/TestPUtilAPI");
+    addTest(root, &TestVersion,       "putiltst/TestVersion");
+    addTest(root, &TestCompareVersions,       "putiltst/TestCompareVersions");
 /*    addTest(root, &testIEEEremainder,  "putiltst/testIEEEremainder"); */
     addTest(root, &TestErrorName, "putiltst/TestErrorName");
 }
