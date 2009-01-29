@@ -4371,13 +4371,4 @@ uloc_minimizeSubtags(const char*    localeID,
     }    
 }
 
-U_DRAFT void U_EXPORT2
-uloc_getCLDRVersion(UVersionInfo versionArray, UErrorCode *status) {
-    UResourceBundle *rb = NULL;
-    rb = ures_openDirect(NULL, "supplementalData", status);
-    ures_getVersionByKey(rb, "cldrVersion", versionArray, status);
-    ures_close(rb);
-}
-
-
 /*eof*/
