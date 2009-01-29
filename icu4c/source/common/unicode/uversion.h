@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2000-2008, International Business Machines
+*   Copyright (C) 2000-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
@@ -206,6 +206,20 @@ U_STABLE void U_EXPORT2
 u_versionFromString(UVersionInfo versionArray, const char *versionString);
 
 /**
+ * Parse a Unicode string with dotted-decimal version information and
+ * fill in a UVersionInfo structure with the result.
+ * Definition of this function lives in putil.c
+ *
+ * @param versionArray The destination structure for the version information.
+ * @param versionString A Unicode string with dotted-decimal version
+ *                      information, with up to four non-negative number
+ *                      fields with values of up to 255 each.
+ * @draft ICU 4.2
+ */
+U_STABLE void U_EXPORT2
+u_versionFromUString(UVersionInfo versionArray, const UChar *versionString);
+
+/**
  * Write a string with dotted-decimal version information according
  * to the input UVersionInfo.
  * Definition of this function lives in putil.c
@@ -230,6 +244,19 @@ u_versionToString(UVersionInfo versionArray, char *versionString);
  */
 U_STABLE void U_EXPORT2
 u_getVersion(UVersionInfo versionArray);
+
+/**
+ * Compare two version numbers, v1 and v2, numerically.
+ * Returns 0 if v1 == v2
+ * Returns -1 if v1 < v2  (v1 is older, v2 is newer)
+ * Returns +1 if v1 > v2  (v1 is newer, v2 is older)
+ * @param v1 version to compare
+ * @param v2 version to compare
+ * @return comparison result
+ * @draft ICU 4.2
+ */
+U_STABLE int32_t U_EXPORT2
+u_compareVersions(UVersionInfo v1, UVersionInfo v2);
 
 
 /*===========================================================================

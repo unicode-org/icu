@@ -1,6 +1,6 @@
 //*******************************************************************************
 //*
-//*   Copyright (C) 1998-2005, International Business Machines
+//*   Copyright (C) 1998-2009, International Business Machines
 //*   Corporation and others.  All Rights Reserved.
 //*
 //*******************************************************************************
@@ -11,6 +11,8 @@
 root
 {
     Version { 44.0 }
+    ExpectCLDRVersionAtLeast { 1.6 } // 'base' cldr version. Allow up to version =.=.* of this
+    CurrentCLDRVersion { 1.7 } // Current CLDR version as of the test update. Warn if not an exact match.
 
     ShortLanguage { xxx }
 
@@ -53,7 +55,7 @@ root
         tag4 { ROOT4 } 
         tag9 { ROOT9 } 
         tag12 { ROOT12 } 
-	tag1 { ROOT1 }
+    tag1 { ROOT1 }
     }
 
     string_in_Root_te { ROOT }
@@ -99,10 +101,10 @@ root
         destination { "correct" }
     }
     a {
-	a1{"ar1"}
-	a2{"ar2"}
+        a1{"ar1"}
+        a2{"ar2"}
         a3{"ar3"}
-	a4{"ar4"}
+        a4{"ar4"}
     }    
 }
 

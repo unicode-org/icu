@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1997-2008, International Business Machines Corporation and   *
+* Copyright (C) 1997-2009, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 *
@@ -2677,5 +2677,15 @@ ures_getParentBundle(const UResourceBundle* res){
     return res->fParentRes;
 }
 #endif
+
+U_INTERNAL void U_EXPORT2
+ures_getVersionByKey(const UResourceBundle* res, const char *key, UVersionInfo ver, UErrorCode *status) {
+  const UChar *str;
+  int32_t len;
+  str = ures_getStringByKey(res, key, &len, status);
+  if(U_SUCCESS(*status)) {
+    u_versionFromUString(ver, str);
+  } 
+}
 
 /* eof */

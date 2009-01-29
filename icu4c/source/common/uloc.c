@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2008, International Business Machines
+*   Copyright (C) 1997-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -4370,5 +4370,14 @@ uloc_minimizeSubtags(const char*    localeID,
                     err);
     }    
 }
+
+U_DRAFT void U_EXPORT2
+uloc_getCLDRVersion(UVersionInfo versionArray, UErrorCode *status) {
+    UResourceBundle *rb = NULL;
+    rb = ures_openDirect(NULL, "supplementalData", status);
+    ures_getVersionByKey(rb, "cldrVersion", versionArray, status);
+    ures_close(rb);
+}
+
 
 /*eof*/

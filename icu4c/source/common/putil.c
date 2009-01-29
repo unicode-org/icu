@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2008, International Business Machines
+*   Copyright (C) 1997-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -1835,6 +1835,35 @@ u_versionFromString(UVersionInfo versionArray, const char *versionString) {
         versionArray[part++]=0;
     }
 }
+
+U_CAPI void U_EXPORT2
+u_versionFromUString(UVersionInfo versionArray, const UChar *versionString) {
+    if(versionArray!=NULL && versionString!=NULL) {
+        char versionChars[U_MAX_VERSION_STRING_LENGTH+1];
+        int32_t len = u_strlen(versionString);
+        if(len>U_MAX_VERSION_LENGTH) {
+            len = U_MAX_VERSION_STRING_LENGTH;
+        }
+        u_UCharsToChars(versionString, versionChars, U_MAX_VERSION_STRING_LENGTH);
+        versionChars[U_MAX_VERSION_STRING_LENGTH]=0;
+        u_versionFromString(versionArray, versionChars);
+    }
+}
+
+U_CAPI int32_t U_EXPORT2
+u_compareVersions(UVersionInfo v1, UVersionInfo v2) {
+    int n;
+    if(v1==NULL||v2==NULL) return NULL;
+    for(n=0;n<U_MAX_VERSION_LENGTH;n++) {
+      if(v1[n]<v2[n]) {
+        return -1;
+      } else if(v1[n]>v2[n]) {
+        return  1;
+      }
+    }
+    return 0; /* no difference */
+}
+
 
 U_CAPI void U_EXPORT2
 u_versionToString(UVersionInfo versionArray, char *versionString) {
