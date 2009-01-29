@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 #*
 #*******************************************************************************
-#*   Copyright (C) 2001-2008, International Business Machines
+#*   Copyright (C) 2001-2009, International Business Machines
 #*   Corporation and others.  All Rights Reserved.
 #*******************************************************************************
 #*
@@ -15,6 +15,8 @@
 #*
 #*  Used to generate renaming headers.
 #*  Run on UNIX platforms (linux) in order to catch all the exports
+
+use POSIX qw(strftime);
 
 $headername = 'urename.h';
 
@@ -65,10 +67,14 @@ $HEADERDEF =~ s/\./_/;
     open HEADER, ">$headername"; # opening a header file
 
 #We will print our copyright here + warnings
+
+
+$YEAR = strftime "%Y",localtime;
+
 print HEADER <<"EndOfHeaderComment";
 /*
 *******************************************************************************
-*   Copyright (C) 2002-2008, International Business Machines
+*   Copyright (C) 2002-$YEAR, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
