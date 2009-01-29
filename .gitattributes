@@ -5,6 +5,7 @@ icu4c/readme.html svneol=native#text/html
 icu4c/source/common/dtintrv.cpp -text
 icu4c/source/common/mutex.cpp -text
 icu4c/source/common/unicode/dtintrv.h -text
+icu4c/source/config/gmakever.mk -text
 icu4c/source/config/pkgdataMakefile.in -text
 icu4c/source/data/build.xml svneol=native#text/xml
 icu4c/source/data/coll/af.txt -text
