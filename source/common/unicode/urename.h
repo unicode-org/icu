@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2002-2008, International Business Machines
+*   Copyright (C) 2002-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
@@ -80,8 +80,19 @@
 #define _UTF32LEData _UTF32LEData_4_1
 #define _UTF7Data _UTF7Data_4_1
 #define _UTF8Data _UTF8Data_4_1
+#define bms_close bms_close_4_1
+#define bms_empty bms_empty_4_1
+#define bms_getData bms_getData_4_1
+#define bms_open bms_open_4_1
+#define bms_search bms_search_4_1
+#define bms_setTargetString bms_setTargetString_4_1
 #define cmemory_cleanup cmemory_cleanup_4_1
 #define cmemory_inUse cmemory_inUse_4_1
+#define deleteCEList deleteCEList_4_1
+#define deleteChars deleteChars_4_1
+#define deleteCollDataCacheEntry deleteCollDataCacheEntry_4_1
+#define deleteStringList deleteStringList_4_1
+#define deleteUnicodeStringKey deleteUnicodeStringKey_4_1
 #define le_close le_close_4_1
 #define le_create le_create_4_1
 #define le_getCharIndices le_getCharIndices_4_1
@@ -176,6 +187,7 @@
 #define u_charType u_charType_4_1
 #define u_charsToUChars u_charsToUChars_4_1
 #define u_cleanup u_cleanup_4_1
+#define u_compareVersions u_compareVersions_4_1
 #define u_countChar32 u_countChar32_4_1
 #define u_digit u_digit_4_1
 #define u_enumCharNames u_enumCharNames_4_1
@@ -347,6 +359,7 @@
 #define u_unescape u_unescape_4_1
 #define u_unescapeAt u_unescapeAt_4_1
 #define u_versionFromString u_versionFromString_4_1
+#define u_versionFromUString u_versionFromUString_4_1
 #define u_versionToString u_versionToString_4_1
 #define u_vformatMessage u_vformatMessage_4_1
 #define u_vformatMessageWithError u_vformatMessageWithError_4_1
@@ -458,6 +471,7 @@
 #define ucal_getNow ucal_getNow_4_1
 #define ucal_getTZDataVersion ucal_getTZDataVersion_4_1
 #define ucal_getTimeZoneDisplayName ucal_getTimeZoneDisplayName_4_1
+#define ucal_getType ucal_getType_4_1
 #define ucal_inDaylightTime ucal_inDaylightTime_4_1
 #define ucal_isSet ucal_isSet_4_1
 #define ucal_open ucal_open_4_1
@@ -504,6 +518,11 @@
 #define ucasemap_utf8ToLower ucasemap_utf8ToLower_4_1
 #define ucasemap_utf8ToTitle ucasemap_utf8ToTitle_4_1
 #define ucasemap_utf8ToUpper ucasemap_utf8ToUpper_4_1
+#define ucd_close ucd_close_4_1
+#define ucd_flushCache ucd_flushCache_4_1
+#define ucd_freeCache ucd_freeCache_4_1
+#define ucd_getCollator ucd_getCollator_4_1
+#define ucd_open ucd_open_4_1
 #define uchar_addPropertyStarts uchar_addPropertyStarts_4_1
 #define uchar_getHST uchar_getHST_4_1
 #define uchar_swapNames uchar_swapNames_4_1
@@ -616,11 +635,10 @@
 #define ucnv_usesFallback ucnv_usesFallback_4_1
 #define ucnvsel_close ucnvsel_close_4_1
 #define ucnvsel_open ucnvsel_open_4_1
+#define ucnvsel_openFromSerialized ucnvsel_openFromSerialized_4_1
 #define ucnvsel_selectForString ucnvsel_selectForString_4_1
 #define ucnvsel_selectForUTF8 ucnvsel_selectForUTF8_4_1
 #define ucnvsel_serialize ucnvsel_serialize_4_1
-#define ucnvsel_swap ucnvsel_swap_4_1
-#define ucnvsel_unserialize ucnvsel_unserialize_4_1
 #define ucol_allocWeights ucol_allocWeights_4_1
 #define ucol_assembleTailoringTable ucol_assembleTailoringTable_4_1
 #define ucol_calcSortKey ucol_calcSortKey_4_1
@@ -634,6 +652,7 @@
 #define ucol_doCE ucol_doCE_4_1
 #define ucol_equal ucol_equal_4_1
 #define ucol_equals ucol_equals_4_1
+#define ucol_forceHanImplicit ucol_forceHanImplicit_4_1
 #define ucol_forgetUCA ucol_forgetUCA_4_1
 #define ucol_getAttribute ucol_getAttribute_4_1
 #define ucol_getAttributeOrDefault ucol_getAttributeOrDefault_4_1
@@ -891,6 +910,7 @@
 #define uloc_countAvailable uloc_countAvailable_4_1
 #define uloc_getAvailable uloc_getAvailable_4_1
 #define uloc_getBaseName uloc_getBaseName_4_1
+#define uloc_getCLDRVersion uloc_getCLDRVersion_4_1
 #define uloc_getCharacterOrientation uloc_getCharacterOrientation_4_1
 #define uloc_getCountry uloc_getCountry_4_1
 #define uloc_getDefault uloc_getDefault_4_1
@@ -956,7 +976,7 @@
 #define unorm_getCanonicalDecomposition unorm_getCanonicalDecomposition_4_1
 #define unorm_getDecomposition unorm_getDecomposition_4_1
 #define unorm_getFCD16FromCodePoint unorm_getFCD16FromCodePoint_4_1
-#define unorm_getFCDTrie unorm_getFCDTrie_4_1
+#define unorm_getFCDTrieIndex unorm_getFCDTrieIndex_4_1
 #define unorm_getNX unorm_getNX_4_1
 #define unorm_getQuickCheck unorm_getQuickCheck_4_1
 #define unorm_getUnicodeVersion unorm_getUnicodeVersion_4_1
@@ -1094,9 +1114,13 @@
 #define uprv_uint16Comparator uprv_uint16Comparator_4_1
 #define uprv_uint32Comparator uprv_uint32Comparator_4_1
 #define uprv_unmapFile uprv_unmapFile_4_1
+#define upvec_cloneArray upvec_cloneArray_4_1
 #define upvec_close upvec_close_4_1
 #define upvec_compact upvec_compact_4_1
-#define upvec_compactToTrieHandler upvec_compactToTrieHandler_4_1
+#define upvec_compactToUTrie2Handler upvec_compactToUTrie2Handler_4_1
+#define upvec_compactToUTrie2WithRowIndexes upvec_compactToUTrie2WithRowIndexes_4_1
+#define upvec_compactToUTrieHandler upvec_compactToUTrieHandler_4_1
+#define upvec_getArray upvec_getArray_4_1
 #define upvec_getRow upvec_getRow_4_1
 #define upvec_getValue upvec_getValue_4_1
 #define upvec_open upvec_open_4_1
@@ -1168,6 +1192,7 @@
 #define ures_getUTF8StringByIndex ures_getUTF8StringByIndex_4_1
 #define ures_getUTF8StringByKey ures_getUTF8StringByKey_4_1
 #define ures_getVersion ures_getVersion_4_1
+#define ures_getVersionByKey ures_getVersionByKey_4_1
 #define ures_getVersionNumber ures_getVersionNumber_4_1
 #define ures_hasNext ures_hasNext_4_1
 #define ures_initStackObject ures_initStackObject_4_1
@@ -1348,6 +1373,27 @@
 #define utrans_transliterator_cleanup utrans_transliterator_cleanup_4_1
 #define utrans_unregister utrans_unregister_4_1
 #define utrans_unregisterID utrans_unregisterID_4_1
+#define utrie2_clone utrie2_clone_4_1
+#define utrie2_cloneAsThawed utrie2_cloneAsThawed_4_1
+#define utrie2_close utrie2_close_4_1
+#define utrie2_enum utrie2_enum_4_1
+#define utrie2_enumForLeadSurrogate utrie2_enumForLeadSurrogate_4_1
+#define utrie2_freeze utrie2_freeze_4_1
+#define utrie2_fromUTrie utrie2_fromUTrie_4_1
+#define utrie2_get32 utrie2_get32_4_1
+#define utrie2_get32FromLeadSurrogateCodeUnit utrie2_get32FromLeadSurrogateCodeUnit_4_1
+#define utrie2_getVersion utrie2_getVersion_4_1
+#define utrie2_internalU8NextIndex utrie2_internalU8NextIndex_4_1
+#define utrie2_internalU8PrevIndex utrie2_internalU8PrevIndex_4_1
+#define utrie2_isFrozen utrie2_isFrozen_4_1
+#define utrie2_open utrie2_open_4_1
+#define utrie2_openDummy utrie2_openDummy_4_1
+#define utrie2_openFromSerialized utrie2_openFromSerialized_4_1
+#define utrie2_serialize utrie2_serialize_4_1
+#define utrie2_set32 utrie2_set32_4_1
+#define utrie2_set32ForLeadSurrogateCodeUnit utrie2_set32ForLeadSurrogateCodeUnit_4_1
+#define utrie2_setRange32 utrie2_setRange32_4_1
+#define utrie2_swap utrie2_swap_4_1
 #define utrie_clone utrie_clone_4_1
 #define utrie_close utrie_close_4_1
 #define utrie_defaultGetFoldingOffset utrie_defaultGetFoldingOffset_4_1
@@ -1375,9 +1421,11 @@
 #define ArabicOpenTypeLayoutEngine ArabicOpenTypeLayoutEngine_4_1
 #define ArabicShaping ArabicShaping_4_1
 #define BMPSet BMPSet_4_1
+#define BadCharacterTable BadCharacterTable_4_1
 #define BasicCalendarFactory BasicCalendarFactory_4_1
 #define BasicTimeZone BasicTimeZone_4_1
 #define BinarySearchLookupTable BinarySearchLookupTable_4_1
+#define BoyerMooreSearch BoyerMooreSearch_4_1
 #define BreakIterator BreakIterator_4_1
 #define BreakTransliterator BreakTransliterator_4_1
 #define BuddhistCalendar BuddhistCalendar_4_1
@@ -1386,6 +1434,8 @@
 #define BuildCompactTrieVerticalNode BuildCompactTrieVerticalNode_4_1
 #define CEBuffer CEBuffer_4_1
 #define CECalendar CECalendar_4_1
+#define CEList CEList_4_1
+#define CEToStringsMap CEToStringsMap_4_1
 #define CFactory CFactory_4_1
 #define Calendar Calendar_4_1
 #define CalendarAstronomer CalendarAstronomer_4_1
@@ -1461,6 +1511,9 @@
 #define ClassDefFormat2Table ClassDefFormat2Table_4_1
 #define ClassDefinitionTable ClassDefinitionTable_4_1
 #define ClockMath ClockMath_4_1
+#define CollData CollData_4_1
+#define CollDataCache CollDataCache_4_1
+#define CollDataCacheEntry CollDataCacheEntry_4_1
 #define CollationElementIterator CollationElementIterator_4_1
 #define CollationKey CollationKey_4_1
 #define CollationLocaleListEnumeration CollationLocaleListEnumeration_4_1
@@ -1529,6 +1582,7 @@
 #define GlyphPositioningTableHeader GlyphPositioningTableHeader_4_1
 #define GlyphSubstitutionLookupProcessor GlyphSubstitutionLookupProcessor_4_1
 #define GlyphSubstitutionTableHeader GlyphSubstitutionTableHeader_4_1
+#define GoodSuffixTable GoodSuffixTable_4_1
 #define Grego Grego_4_1
 #define GregorianCalendar GregorianCalendar_4_1
 #define HanOpenTypeLayoutEngine HanOpenTypeLayoutEngine_4_1
@@ -1623,6 +1677,7 @@
 #define NullTransliterator NullTransliterator_4_1
 #define NumberFormat NumberFormat_4_1
 #define NumberFormatFactory NumberFormatFactory_4_1
+#define NumberingSystem NumberingSystem_4_1
 #define NumeratorSubstitution NumeratorSubstitution_4_1
 #define OlsonTimeZone OlsonTimeZone_4_1
 #define OpenTypeLayoutEngine OpenTypeLayoutEngine_4_1
@@ -1703,11 +1758,13 @@
 #define StateTableProcessor StateTableProcessor_4_1
 #define StringCharacterIterator StringCharacterIterator_4_1
 #define StringEnumeration StringEnumeration_4_1
+#define StringList StringList_4_1
 #define StringLocalizationInfo StringLocalizationInfo_4_1
 #define StringMatcher StringMatcher_4_1
 #define StringPair StringPair_4_1
 #define StringReplacer StringReplacer_4_1
 #define StringSearch StringSearch_4_1
+#define StringToCEsMap StringToCEsMap_4_1
 #define StyleRuns StyleRuns_4_1
 #define SubstitutionLookup SubstitutionLookup_4_1
 #define SubtableProcessor SubtableProcessor_4_1
@@ -1715,6 +1772,7 @@
 #define SymbolTable SymbolTable_4_1
 #define TZEnumeration TZEnumeration_4_1
 #define TaiwanCalendar TaiwanCalendar_4_1
+#define Target Target_4_1
 #define TernaryNode TernaryNode_4_1
 #define TextTrieMap TextTrieMap_4_1
 #define TextTrieMapSearchResultHandler TextTrieMapSearchResultHandler_4_1

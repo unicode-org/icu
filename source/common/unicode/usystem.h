@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2004-2008, International Business Machines
+*   Copyright (C) 2004-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
@@ -32,13 +32,13 @@
 #        define uloc_getDefault uloc_getDefault_SYSTEM_API_DO_NOT_USE
 #        define uloc_setDefault uloc_setDefault_SYSTEM_API_DO_NOT_USE
 #    else
-#        define u_cleanup_4_0 u_cleanup_SYSTEM_API_DO_NOT_USE
-#        define u_setAtomicIncDecFunctions_4_0 u_setAtomicIncDecFunctions_SYSTEM_API_DO_NOT_USE
-#        define u_setMemoryFunctions_4_0 u_setMemoryFunctions_SYSTEM_API_DO_NOT_USE
-#        define u_setMutexFunctions_4_0 u_setMutexFunctions_SYSTEM_API_DO_NOT_USE
-#        define ucnv_setDefaultName_4_0 ucnv_setDefaultName_SYSTEM_API_DO_NOT_USE
-#        define uloc_getDefault_4_0 uloc_getDefault_SYSTEM_API_DO_NOT_USE
-#        define uloc_setDefault_4_0 uloc_setDefault_SYSTEM_API_DO_NOT_USE
+#        define u_cleanup_4_1.2 u_cleanup_SYSTEM_API_DO_NOT_USE
+#        define u_setAtomicIncDecFunctions_4_1.2 u_setAtomicIncDecFunctions_SYSTEM_API_DO_NOT_USE
+#        define u_setMemoryFunctions_4_1.2 u_setMemoryFunctions_SYSTEM_API_DO_NOT_USE
+#        define u_setMutexFunctions_4_1.2 u_setMutexFunctions_SYSTEM_API_DO_NOT_USE
+#        define ucnv_setDefaultName_4_1.2 ucnv_setDefaultName_SYSTEM_API_DO_NOT_USE
+#        define uloc_getDefault_4_1.2 uloc_getDefault_SYSTEM_API_DO_NOT_USE
+#        define uloc_setDefault_4_1.2 uloc_setDefault_SYSTEM_API_DO_NOT_USE
 #    endif /* U_DISABLE_RENAMING */
 
 #endif /* U_HIDE_SYSTEM_API */
