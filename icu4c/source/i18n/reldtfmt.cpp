@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and    *
+* Copyright (C) 2007-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -31,6 +31,8 @@ struct URelativeString {
     int32_t len;            /** length of the string **/
     const UChar* string;    /** string, or NULL if not set **/
 };
+
+static const char DT_DateTimePatternsTag[]="DateTimePatterns";
 
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RelativeDateFormat)
@@ -73,8 +75,10 @@ fDateStyle(dateStyle), fTimeStyle(timeStyle), fLocale(locale), fDatesLen(0), fDa
         // Create a DateFormat in the non-relative style requested.
         fDateFormat = createDateInstance(newStyle, locale);
     }
-    if(fTimeStyle != UDAT_NONE) {
-        // don't support time style, for now
+    if(fTimeStyle >= UDAT_FULL && fTimeStyle <= UDAT_SHORT) {
+        fTimeFormat = createTimeInstance((EStyle)fTimeStyle, locale);
+    } else if(fTimeStyle != UDAT_NONE) {
+        // don't support other time styles (e.g. relative styles), for now
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -112,6 +116,8 @@ UnicodeString& RelativeDateFormat::format(  Calendar& cal,
                                 FieldPosition& pos) const {
                                 
     UErrorCode status = U_ZERO_ERROR;
+    UChar emptyStr = 0;
+    UnicodeString dateString(&emptyStr);
     
     // calculate the difference, in days, between 'cal' and now.
     int dayDiff = dayDifference(cal, status);
@@ -119,18 +125,39 @@ UnicodeString& RelativeDateFormat::format(  Calendar& cal,
     // look up string
     int32_t len;
     const UChar *theString = getStringForDay(dayDiff, len, status);
+    if(U_SUCCESS(status) && (theString!=NULL)) {
+        // found a relative string
+        dateString.setTo(theString, len);
+    }
     
-    if(U_FAILURE(status) || (theString==NULL)) {
-        // didn't find it. Fall through to the fDateFormat 
-        if(fDateFormat != NULL) {
-            return fDateFormat->format(cal,appendTo,pos);
-        } else {
-            return appendTo; // no op
+    if(fTimeFormat == NULL || fCombinedFormat == 0) {
+        if (dateString.length() > 0) {
+            appendTo.append(dateString);
+        } else if(fDateFormat != NULL) {
+            fDateFormat->format(cal,appendTo,pos);
         }
     } else {
-        // found a relative string
-        return appendTo.append(theString, len);
+        if (dateString.length() == 0 && fDateFormat != NULL) {
+            fDateFormat->format(cal,dateString,pos);
     }
+        UnicodeString timeString(&emptyStr);
+        FieldPosition timepos = pos;
+        fTimeFormat->format(cal,timeString,timepos);
+        Formattable timeDateStrings[] = { timeString, dateString };
+        fCombinedFormat->format(timeDateStrings, 2, appendTo, pos, status); // pos is ignored by this
+        int32_t offset;
+        if (pos.getEndIndex() > 0 && (offset = appendTo.indexOf(dateString)) >= 0) {
+            // pos.field was found in dateString, offset start & end based on final position of dateString
+            pos.setBeginIndex( pos.getBeginIndex() + offset );
+            pos.setEndIndex( pos.getEndIndex() + offset );
+        } else if (timepos.getEndIndex() > 0 && (offset = appendTo.indexOf(timeString)) >= 0) {
+            // pos.field was found in timeString, offset start & end based on final position of timeString
+            pos.setBeginIndex( timepos.getBeginIndex() + offset );
+            pos.setEndIndex( timepos.getEndIndex() + offset );
+        }
+    }
+    
+    return appendTo;
 }
 
 
@@ -229,6 +256,15 @@ const UChar *RelativeDateFormat::getStringForDay(int32_t day, int32_t &len, UErr
 
 void RelativeDateFormat::loadDates(UErrorCode &status) {
     CalendarData calData(fLocale, "gregorian", status);
+    
+    UErrorCode tempStatus = status;
+    UResourceBundle *dateTimePatterns = calData.getByKey(DT_DateTimePatternsTag, tempStatus);
+    if(U_SUCCESS(tempStatus) && ures_getSize(dateTimePatterns) > DateFormat::kDateTime) {
+        int32_t resStrLen = 0;
+        const UChar *resStr = ures_getStringByIndex(dateTimePatterns, (int32_t)DateFormat::kDateTime, &resStrLen, &tempStatus);
+        fCombinedFormat = new MessageFormat(UnicodeString(TRUE, resStr, resStrLen), fLocale, tempStatus);
+    }
+    
     UResourceBundle *strings = calData.getByKey3("fields", "day", "relative", status);
     // set up min/max 
     fDayMin=-1;
