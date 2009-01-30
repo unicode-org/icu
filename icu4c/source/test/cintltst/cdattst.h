@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -23,9 +23,10 @@
 #include "cintltst.h"
 
     /**
-     * The function used to test the Date format API
+     * The functions used to test the Date format API
      **/
     static void TestDateFormat(void);
+    static void TestRelativeDateFormat(void);
 
     /**
      * The function used to test API  udat_getSymbols(), udat_setSymbols() and udat_countSymbols()

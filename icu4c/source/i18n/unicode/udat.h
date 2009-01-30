@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines
+ * Copyright (C) 1996-2009, International Business Machines
  * Corporation and others. All Rights Reserved.
  *******************************************************************************
 */
@@ -499,9 +499,11 @@ typedef enum UDateFormatField {
  * A UDateFormat may be used to format dates in calls to {@link #udat_format },
  * and to parse dates in calls to {@link #udat_parse }.
  * @param timeStyle The style used to format times; one of UDAT_FULL, UDAT_LONG,
- * UDAT_MEDIUM, UDAT_SHORT, or UDAT_DEFAULT
+ * UDAT_MEDIUM, UDAT_SHORT, UDAT_DEFAULT, or UDAT_NONE (relative time styles
+ * are not currently supported)
  * @param dateStyle The style used to format dates; one of UDAT_FULL, UDAT_LONG,
- * UDAT_MEDIUM, UDAT_SHORT, or UDAT_DEFAULT
+ * UDAT_MEDIUM, UDAT_SHORT, UDAT_DEFAULT, UDAT_FULL_RELATIVE, UDAT_LONG_RELATIVE,
+ * UDAT_MEDIUM_RELATIVE, UDAT_SHORT_RELATIVE, or UDAT_NONE
  * @param locale The locale specifying the formatting conventions
  * @param tzID A timezone ID specifying the timezone to use.  If 0, use
  * the default timezone.
