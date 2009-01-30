@@ -137,6 +137,7 @@ icu4c/source/data/xml/rbnf/ga.xml -text
 icu4c/source/data/xml/rbnf/mt.xml -text
 icu4c/source/data/xml/rbnf/root.xml -text
 icu4c/source/extra/uconv/pkgdataMakefile.in -text
+icu4c/source/extra/uconv/samples/ibm-37-test.txt -text
 icu4c/source/i18n/dtitv_impl.h -text
 icu4c/source/i18n/dtitvfmt.cpp -text
 icu4c/source/i18n/dtitvinf.cpp -text
