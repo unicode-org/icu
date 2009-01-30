@@ -440,8 +440,22 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
         }
 
         engine->getGlyphs(fStyleRunInfo[run].glyphs, layoutStatus);
+        if (LE_FAILURE(layoutStatus)) {
+            status = layoutStatus;
+            return;
+        }
+
         engine->getGlyphPositions(fStyleRunInfo[run].positions, layoutStatus);
+        if (LE_FAILURE(layoutStatus)) {
+            status = layoutStatus;
+            return;
+        }
+
         engine->getCharIndices(&fGlyphToCharMap[glyphBase], runStart, layoutStatus);
+        if (LE_FAILURE(layoutStatus)) {
+            status = layoutStatus;
+            return;
+        }
 
         for (glyph = 0; glyph < glyphCount; glyph += 1) {
             fGlyphWidths[glyphBase + glyph] = fStyleRunInfo[run].positions[glyph * 2 + 2] - fStyleRunInfo[run].positions[glyph * 2];
