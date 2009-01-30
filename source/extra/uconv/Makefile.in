@@ -1,6 +1,6 @@
 ## ******************************************************************************
 ## *
-## *   Copyright (C) 1999-2008, International Business Machines
+## *   Copyright (C) 1999-2009, International Business Machines
 ## *   Corporation and others.  All Rights Reserved.
 ## *
 ## *******************************************************************************
@@ -112,7 +112,8 @@ resclean:
 distclean-local: clean-local
 	$(RMV) Makefile $(DEPS)
 
-check-local:
+check-local: $(TARGET)
+	$(INVOKE) ./$(TARGET) -f ibm-37 $(srcdir)/samples/ibm-37-test.txt
 
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
