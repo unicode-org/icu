@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2008, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -962,7 +962,7 @@ udata_setAppData(const char *path, const void *data, UErrorCode *err)
     }
 
     UDataMemory_init(&udm);
-    udm.pHeader = data;
+    UDataMemory_setData(&udm, data);
     udata_checkCommonData(&udm, err);
     udata_cacheDataItem(path, &udm, err);
 }
