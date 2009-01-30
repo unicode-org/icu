@@ -428,7 +428,8 @@ public:
      * locale.
      *
      * @param style     The given formatting style. For example,
-     *                  SHORT for "h:mm a" in the US locale.
+     *                  SHORT for "h:mm a" in the US locale. Relative
+     *                  time styles are not currently supported.
      * @param aLocale   The given locale.
      * @return          A time formatter which the caller owns.
      * @stable ICU 2.0
@@ -456,7 +457,8 @@ public:
      * @param dateStyle The given formatting style for the date portion of the result.
      *                  For example, SHORT for "M/d/yy" in the US locale.
      * @param timeStyle The given formatting style for the time portion of the result.
-     *                  For example, SHORT for "h:mm a" in the US locale.
+     *                  For example, SHORT for "h:mm a" in the US locale. Relative
+     *                  time styles are not currently supported.
      * @param aLocale   The given locale.
      * @return          A date/time formatter which the caller owns.
      * @stable ICU 2.0
