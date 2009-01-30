@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2002-2008, International Business Machines
+ *   Copyright (C) 2002-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -345,7 +345,11 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
 
     fStyleRunLimits = LE_NEW_ARRAY(le_int32, fStyleRunCount);
     fStyleIndices   = LE_NEW_ARRAY(le_int32, fStyleRunCount * styleCount);
-    
+    if ((fStyleRunLimits == NULL) || (fStyleIndices == NULL)) {
+        status = LE_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+
     styleRuns.getRuns(fStyleRunLimits, fStyleIndices);
 
     // now build a LayoutEngine for each style run...
@@ -353,6 +357,26 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
     le_int32 run, runStart;
 
     fStyleRunInfo = LE_NEW_ARRAY(StyleRunInfo, fStyleRunCount);
+    if (fStyleRunInfo == NULL) {
+        status = LE_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    else {
+        // initialize
+        for (runStart = 0, run = 0; run < fStyleRunCount; run += 1) {
+            fStyleRunInfo[run].font = NULL;
+            fStyleRunInfo[run].runBase = 0;
+            fStyleRunInfo[run].runLimit = 0;
+            fStyleRunInfo[run].script = (UScriptCode)0;
+            fStyleRunInfo[run].locale = NULL;
+            fStyleRunInfo[run].level = 0;
+            fStyleRunInfo[run].glyphBase = 0;
+            fStyleRunInfo[run].engine = NULL;
+            fStyleRunInfo[run].glyphCount = 0;
+            fStyleRunInfo[run].glyphs = NULL;
+            fStyleRunInfo[run].positions = NULL;
+        }
+    }
 
     fGlyphCount = 0;
     for (runStart = 0, run = 0; run < fStyleRunCount; run += 1) {
@@ -394,6 +418,11 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
     fGlyphToCharMap    = LE_NEW_ARRAY(le_int32, fGlyphCount + 1);
     fCharToMinGlyphMap = LE_NEW_ARRAY(le_int32, fCharCount + 1);
     fCharToMaxGlyphMap = LE_NEW_ARRAY(le_int32, fCharCount + 1);
+    if ((fGlyphWidths == NULL) || (fGlyphToCharMap == NULL) || 
+        (fCharToMinGlyphMap == NULL) || (fCharToMaxGlyphMap == NULL)) {
+        status = LE_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
 
     le_int32 glyph;
 
@@ -404,6 +433,11 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
 
         fStyleRunInfo[run].glyphs = LE_NEW_ARRAY(LEGlyphID, glyphCount);
         fStyleRunInfo[run].positions = LE_NEW_ARRAY(float, glyphCount * 2 + 2);
+        if ((fStyleRunInfo[run].glyphs == NULL) || 
+            (fStyleRunInfo[run].positions == NULL)) {
+            status = LE_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
 
         engine->getGlyphs(fStyleRunInfo[run].glyphs, layoutStatus);
         engine->getGlyphPositions(fStyleRunInfo[run].positions, layoutStatus);
