@@ -36,6 +36,7 @@ import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.math.MathContext;
 
 //This is an enhanced version of DecimalFormat that is based on the standard version in the JDK. 
 /**
@@ -1176,12 +1177,12 @@ public class DecimalFormat extends NumberFormat {
          * to just one flavor of BigDecimal.
          */
         if (multiplier != 1) {
-			number = number.multiply(BigDecimal.valueOf(multiplier), mathContext);
+            number = number.multiply(BigDecimal.valueOf(multiplier), mathContext);
         }
 
         if (roundingIncrementICU != null) {
             number = number.divide(roundingIncrementICU, 0, roundingMode)
-					.multiply(roundingIncrementICU, mathContext);
+                .multiply(roundingIncrementICU, mathContext);
         }
 
         synchronized(digitList) {
@@ -3505,31 +3506,39 @@ public class DecimalFormat extends NumberFormat {
         groupingSize2 = (byte)newValue;
     }
 
-	/**
-	 * Operations on <code>BigDecimal</code> numbers are controlled by a
-	 * {@link MathContext} object, which provides the context (precision and
-	 * other information) for the operation.
-	 * @see #mathContext
-	 * @see #getMathContext
-	 * @new ICU 4.2
-	 */
-	public void setMathContext(com.ibm.icu.math.MathContext newValue)
-	{
-		mathContext = newValue;
-	}
+    // [NEW]
+    /**
+     * Returns the MathContext
+     * used by this format. 
+     * @return desired MathContext
+     * @see #mathContext
+     * @see #getMathContext
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public MathContext getMathContext() {
+        try {
+            // don't allow multiple references
+            return mathContext == null ?
+                   null :
+                   mathContext;
+        } catch (Exception foo) {
+            return null; // should never happen
+        }
+    }
 
-	/**
-	 * Operations on <code>BigDecimal</code> numbers are controlled by a
-	 * {@link MathContext} object, which provides the context (precision and
-	 * other information) for the operation.
-	 * @see #mathContext
-	 * @see #setMathContext
-	 * @new ICU 4.2
-	 */
-	public com.ibm.icu.math.MathContext getMathContext()
-	{
-		return mathContext;
-	}
+    // [NEW]
+    /**
+     * Sets the MathContext used by this format.
+     * @param newValue desired MathContext
+     * @see #mathContext
+     * @see #getMathContext
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public void setMathContext(MathContext newValue) {
+        mathContext = newValue;
+    }
 
     /**
      * Allows you to get the behavior of the decimal separator with integers.
@@ -5459,7 +5468,7 @@ public class DecimalFormat extends NumberFormat {
      * arithmetic with unlimited precision, as defined for the original BigDecimal 
      * class in Java 1.1 and Java 1.2
      */
-    private com.ibm.icu.math.MathContext mathContext = new com.ibm.icu.math.MathContext(0, com.ibm.icu.math.MathContext.PLAIN); // context for plain unlimited math
+    private MathContext mathContext = new MathContext(0, MathContext.PLAIN); // context for plain unlimited math
 
     // [NEW]
     /**
