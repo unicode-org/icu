@@ -1,18 +1,13 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 
 package com.ibm.icu.text;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.MissingResourceException;
-
-import com.ibm.icu.impl.ICUData;
-import com.ibm.icu.impl.ICUResourceBundle;
+import java.text.ParseException;
 
 /**
  *
@@ -84,13 +79,7 @@ public final class IDNA {
     
     /* private constructor to prevent construction of the object */
     private IDNA(){
-        try{
-           InputStream stream = ICUData.getRequiredStream(ICUResourceBundle.ICU_BUNDLE+"/uidna.spp");
-           namePrep = new StringPrep(stream);
-           stream.close();
-        }catch (IOException e){
-            throw new MissingResourceException(e.toString(),"","");
-        }
+        namePrep = StringPrep.getInstance(StringPrep.RFC3491_NAMEPREP);
     }
     
     private static boolean startsWithPrefix(StringBuffer src){
@@ -222,7 +211,7 @@ public final class IDNA {
      *  - IDNA.DEFAULT              Use default options, i.e., do not process unassigned code points
      *                              and do not use STD3 ASCII rules
      *                              If unassigned code points are found the operation fails with 
-     *                              ParseException.
+     *                              StringPrepParseException.
      *
      *  - IDNA.ALLOW_UNASSIGNED     Unassigned values can be converted to ASCII for query operations
      *                              If this option is set, the unassigned code points are in the input 
@@ -232,7 +221,7 @@ public final class IDNA {
      *                              If this option is set and the input does not satisfy STD3 rules,  
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
-     * @throws ParseException
+     * @throws StringPrepParseException
      * @stable ICU 2.8
      */    
     public static StringBuffer convertToASCII(String src, int options)

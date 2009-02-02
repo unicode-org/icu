@@ -1,23 +1,20 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
 package com.ibm.icu.dev.test.stringprep;
 
-import java.io.InputStream;
 import java.util.Random;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.IDNA;
-import com.ibm.icu.text.StringPrepParseException;
 import com.ibm.icu.text.StringPrep;
+import com.ibm.icu.text.StringPrepParseException;
 import com.ibm.icu.text.UCharacterIterator;
 import com.ibm.icu.text.UTF16;
-import com.ibm.icu.impl.ICUData;
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.Utility;
 
 /**
  * @author ram
@@ -289,8 +286,7 @@ public class TestIDNA extends TestFmwk {
         }
     }
     public void TestNamePrepConformance() throws Exception{
-        InputStream stream = ICUData.getRequiredStream(ICUResourceBundle.ICU_BUNDLE+"/uidna.spp");
-        StringPrep namePrep = new StringPrep(stream);
+        StringPrep namePrep = StringPrep.getInstance(StringPrep.RFC3491_NAMEPREP);
         for(int i=0; i<TestData.conformanceTestCases.length;i++){
             TestData.ConformanceTestCase testCase = TestData.conformanceTestCases[i];
             UCharacterIterator iter = UCharacterIterator.getInstance(testCase.input);

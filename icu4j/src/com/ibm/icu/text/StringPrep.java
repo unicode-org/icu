@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -10,15 +10,16 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 
 import com.ibm.icu.impl.CharTrie;
-import com.ibm.icu.impl.StringPrepDataReader;
+import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.NormalizerImpl;
+import com.ibm.icu.impl.StringPrepDataReader;
 import com.ibm.icu.impl.UBiDiProps;
-
-import com.ibm.icu.util.VersionInfo;
-
 import com.ibm.icu.lang.UCharacterDirection;
+import com.ibm.icu.util.VersionInfo;
 
 /**
  * StringPrep API implements the StingPrep framework as described by 
@@ -69,7 +70,143 @@ public final class StringPrep {
      * @stable ICU 2.8
      */
     public static final int ALLOW_UNASSIGNED = 0x0001;
-    
+
+    /**
+     * Profile type: RFC3491 Nameprep
+     * @see #getInstance(int)
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int RFC3491_NAMEPREP = 0;
+
+    /**
+     * Profile type: RFC3530 nfs4_cs_prep
+     * @see #getInstance(int)
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int RFC3530_NFS4_CS_PREP = 1;
+
+    /**
+     * Profile type: RFC3530 nfs4_cs_prep with case insensitive option
+     * @see #getInstance(int)
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int RFC3530_NFS4_CS_PREP_CI = 2;
+
+    /**
+     * Profile type: RFC3530 nfs4_cis_prep
+     * @see #getInstance(int)
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int RFC3530_NSF4_CIS_PREP = 3;
+
+    /**
+     * Profile type: RFC3530 nfs4_mixed_prep for prefix
+     * @see #getInstance(int)
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int RFC3530_NSF4_MIXED_PREP_PREFIX = 4;
+
+    /**
+     * Profile type: RFC3530 nfs4_mixed_prep for suffix
+     * @see #getInstance(int)
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int RFC3530_NSF4_MIXED_PREP_SUFFIX = 5;
+
+    /**
+     * Profile type: RFC3722 iSCSI
+     * @see #getInstance(int)
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int RFC3722_ISCSI = 6;
+
+    /**
+     * Profile type: RFC3920 XMPP Nodeprep
+     * @see #getInstance(int)
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int RFC3920_NODEPREP = 7;
+
+    /**
+     * Profile type: RFC3920 XMPP Resourceprep
+     * @see #getInstance(int)
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int RFC3920_RESOURCEPREP = 8;
+
+    /**
+     * Profile type: RFC4011 Policy MIB Stringprep
+     * @see #getInstance(int)
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int RFC4011_MIB = 9;
+
+    /**
+     * Profile type: RFC4013 SASLprep
+     * @see #getInstance(int)
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int RFC4013_SASLPREP = 10;
+
+    /**
+     * Profile type: RFC4505 trace
+     * @see #getInstance(int)
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int RFC4505_TRACE = 11;
+
+    /**
+     * Profile type: RFC4518 LDAP
+     * @see #getInstance(int)
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int RFC4518_LDAP = 12;
+
+    /**
+     * Profile type: RFC4518 LDAP for case ignore, numeric and stored prefix
+     * matching rules
+     * @see #getInstance(int)
+     * @provisional This API might change or be removed in a future release.
+     * @draft ICU 4.2
+     */
+    public static final int RFC4518_LDAP_CI = 13;
+
+    // Last available profile
+    private static final int MAX_PROFILE = RFC4518_LDAP_CI;
+
+    // Profile names must be aligned to profile type definitions 
+    private static final String[] PROFILE_NAMES = {
+        "rfc3491",      /* RFC3491_NAMEPREP */
+        "rfc3530cs",    /* RFC3530_NFS4_CS_PREP */
+        "rfc3530csci",  /* RFC3530_NFS4_CS_PREP_CI */
+        "rfc3491",      /* RFC3530_NSF4_CIS_PREP */
+        "rfc3530mixp",  /* RFC3530_NSF4_MIXED_PREP_PREFIX */
+        "rfc3491",      /* RFC3530_NSF4_MIXED_PREP_SUFFIX */
+        "rfc3722",      /* RFC3722_ISCSI */
+        "rfc3920node",  /* RFC3920_NODEPREP */
+        "rfc3920res",   /* RFC3920_RESOURCEPREP */
+        "rfc4011",      /* RFC4011_MIB */
+        "rfc4013",      /* RFC4013_SASLPREP */
+        "rfc4505",      /* RFC4505_TRACE */
+        "rfc4518",      /* RFC4518_LDAP */
+        "rfc4518ci",    /* RFC4518_LDAP_CI */
+    };
+
+    private static final WeakReference[] CACHE = new WeakReference[MAX_PROFILE];
+
     private static final int UNASSIGNED        = 0x0000; 
     private static final int MAP               = 0x0001; 
     private static final int PROHIBITED        = 0x0002; 
@@ -186,6 +323,50 @@ public final class StringPrep {
         if(checkBiDi) {
             bdp=UBiDiProps.getSingleton();
         }
+    }
+ 
+    /**
+     * Gets a StringPrep instance for the specified profile
+     * 
+     * @param profile 
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static StringPrep getInstance(int profile) {
+        if (profile < 0 || profile > MAX_PROFILE) {
+            throw new IllegalArgumentException("Bad profile type");
+        }
+
+        StringPrep instance = null;
+
+        // A StringPrep instance is immutable.  We use a single instance
+        // per type and store it in the internal cache.
+        synchronized (CACHE) {
+            WeakReference ref = CACHE[profile];
+            if (ref != null) {
+                instance = (StringPrep)ref.get();
+            }
+
+            if (instance == null) {
+                InputStream stream = ICUData.getRequiredStream(ICUResourceBundle.ICU_BUNDLE + "/"
+                        + PROFILE_NAMES[profile] + ".spp");
+                if (stream != null) {
+                    try {
+                        try {
+                            instance = new StringPrep(stream);
+                        } finally {
+                            stream.close();
+                        }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e.toString());
+                    }
+                }
+                if (instance != null) {
+                    CACHE[profile] = new WeakReference(instance);
+                }
+            }            
+        }
+        return instance;
     }
  
     private static final class Values{
@@ -357,7 +538,7 @@ public final class StringPrep {
     */
     /**
      * Prepare the input buffer for use in applications with the given profile. This operation maps, normalizes(NFKC),
-     * checks for prohited and BiDi characters in the order defined by RFC 3454
+     * checks for prohibited and BiDi characters in the order defined by RFC 3454
      * depending on the options specified in the profile.
      *
      * @param src           A UCharacterIterator object containing the source string
@@ -369,7 +550,7 @@ public final class StringPrep {
      *                                  as normal Unicode code points.
      *
      * @return StringBuffer A StringBuffer containing the output
-     * @throws ParseException
+     * @throws StringPrepParseException
      * @stable ICU 2.8
      */
     public StringBuffer prepare(UCharacterIterator src, int options)
@@ -438,4 +619,28 @@ public final class StringPrep {
         return normOut;
 
       }
+
+    /**
+     * Prepare the input String for use in applications with the given profile. This operation maps, normalizes(NFKC),
+     * checks for prohibited and BiDi characters in the order defined by RFC 3454
+     * depending on the options specified in the profile.
+     *
+     * @param src           A string
+     * @param options       A bit set of options:
+     *
+     *  - StringPrep.NONE               Prohibit processing of unassigned code points in the input
+     *
+     *  - StringPrep.ALLOW_UNASSIGNED   Treat the unassigned code points are in the input 
+     *                                  as normal Unicode code points.
+     *
+     * @return String A String containing the output
+     * @throws StringPrepParseException
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public String prepare(String src, int options)
+        throws StringPrepParseException{
+        StringBuffer result = prepare(UCharacterIterator.getInstance(src), options);
+        return result.toString();
+    }
 }
