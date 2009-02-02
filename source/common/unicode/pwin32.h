@@ -1,7 +1,7 @@
 /*
  ******************************************************************************
  *
- *   Copyright (C) 1997-2008, International Business Machines
+ *   Copyright (C) 1997-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ******************************************************************************
@@ -314,6 +314,13 @@ Intel can define _M_IX86 or _M_X64
 #define U_ALIGN_CODE(val)    __asm      align val
 #else
 #define U_ALIGN_CODE(val)
+#endif
+
+/**
+ * Flag for workaround of MSVC 2003 optimization bugs
+ */
+#if defined(_MSC_VER) && (_MSC_VER < 1400)
+#define U_HAVE_MSVC_2003_OR_EARLIER
 #endif
 
 

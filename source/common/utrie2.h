@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2008, International Business Machines
+*   Copyright (C) 2001-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -917,5 +917,12 @@ utrie2_internalU8PrevIndex(const UTrie2 *trie, UChar32 c,
 }
 
 U_CDECL_END
+
+/**
+ * Work around MSVC 2003 optimization bugs.
+ */
+#if defined (U_HAVE_MSVC_2003_OR_EARLIER)
+#pragma optimize("", off)
+#endif
 
 #endif
