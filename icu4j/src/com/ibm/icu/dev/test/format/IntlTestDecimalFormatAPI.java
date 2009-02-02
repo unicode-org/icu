@@ -19,6 +19,7 @@ package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.text.*;
 import com.ibm.icu.math.BigDecimal;
+import com.ibm.icu.math.MathContext;
 import java.util.Locale;
 import java.text.ParsePosition;
 import java.text.Format;
@@ -287,6 +288,34 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
         }
     }
 //#endif
+
+    public void testJB4971()
+    {
+        DecimalFormat decfmt = new DecimalFormat();
+        MathContext result;
+
+        MathContext comp1 = new MathContext(0, MathContext.PLAIN);
+        result = decfmt.getMathContext();
+        if ((comp1.getDigits() != result.getDigits()) ||
+            (comp1.getForm() != result.getForm()) ||
+            (comp1.getLostDigits() != result.getLostDigits()) ||
+            (comp1.getRoundingMode() != result.getRoundingMode()))
+        {
+            errln("ERROR: Math context 1 not equal - result: " + result.toString() +
+                " / expected: " + comp1.toString());
+        }
+
+        MathContext comp2 = new MathContext(5, MathContext.ENGINEERING);
+        decfmt.setMathContext(comp2);
+        result = decfmt.getMathContext();
+        if ((comp2.getDigits() != result.getDigits()) ||
+            (comp2.getForm() != result.getForm()) ||
+            (comp2.getLostDigits() != result.getLostDigits()) ||
+            (comp2.getRoundingMode() != result.getRoundingMode()))
+        {
+            errln("ERROR: Math context 2 not equal - result: " + result.toString() +
+                " / expected: " + comp2.toString());
+        }
+
+    }
 }
-
-
