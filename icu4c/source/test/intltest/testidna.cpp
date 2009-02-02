@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2008, International Business Machines
+ *   Copyright (C) 2003-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -417,7 +417,7 @@ void TestIDNA::debug(const UChar* src, int32_t srcLength, int32_t options){
     UErrorCode prepStatus  = U_ZERO_ERROR;
     NamePrepTransform* trans = NamePrepTransform::createInstance(parseError,transStatus);
     int32_t prepOptions = (((options & UIDNA_ALLOW_UNASSIGNED) != 0) ? USPREP_ALLOW_UNASSIGNED: 0);
-    UStringPrepProfile* prep = usprep_open(NULL,"uidna",&prepStatus);
+    UStringPrepProfile* prep = usprep_openByType(USPREP_RFC3491_NAMEPREP,&prepStatus);
     UChar *transOut=NULL, *prepOut=NULL;
     int32_t transOutLength=0, prepOutLength=0;
     

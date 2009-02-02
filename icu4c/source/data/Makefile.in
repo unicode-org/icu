@@ -1,5 +1,5 @@
 ## Makefile.in for ICU data
-## Copyright (c) 1999-2008, International Business Machines Corporation and
+## Copyright (c) 1999-2009, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -76,6 +76,7 @@ BRKSRCDIR=$(SRCDATADIR)/brkitr
 BRKBLDDIR=$(BUILDDIR)/brkitr
 MISCSRCDIR=$(SRCDATADIR)/misc
 UCMSRCDIR=$(SRCDATADIR)/mappings
+SPREPSRCDIR=$(SRCDATADIR)/sprep
 COMINCDIR=$(top_srcdir)/common/unicode
 SRCLISTDEPS=Makefile $(srcdir)/Makefile.in
 BUILD_DIRS=$(OUTDIR) $(MAINBUILDDIR) $(BUILDDIR) $(BRKBLDDIR) $(COLBLDDIR) $(RBNFBLDDIR) $(TRANSLITBLDDIR) $(OUTTMPDIR) $(OUTTMPDIR_390STUB) $(OUTTMPDIR)/$(COLLATION_TREE) $(OUTTMPDIR)/$(RBNF_TREE) $(OUTTMPDIR)/$(TRANSLIT_TREE) $(OUTTMPDIR)/$(BREAK_TREE)
@@ -201,7 +202,7 @@ package390: $(OUTTMPDIR)/icudata390.lst $(PKGDATA_LIST) ./icupkg.inc packagedata
 #  2005-may-05 Removed Unicode properties files (unorm.icu, uprops.icu, ucase.icu, ubidi.icu)
 #  from data build. See Jitterbug 4497. (makedata.mak revision 1.117)
 #
-DAT_FILES_SHORT=pnames.icu unames.icu cnvalias.icu coll/ucadata.icu coll/invuca.icu uidna.spp 
+DAT_FILES_SHORT=pnames.icu unames.icu cnvalias.icu coll/ucadata.icu coll/invuca.icu 
 DAT_FILES=$(DAT_FILES_SHORT:%=$(BUILDDIR)/%)
 
 ## BRK files
@@ -315,11 +316,18 @@ TRANSLIT_TREE=translit
 TRANSLIT_FILES = $(TRANSLIT_SRC:%.txt=$(TRANSLITBLDDIR)/%.res)
 TRANSLIT_FILES_SHORT = $(TRANSLIT_SRC:%.txt=$(TRANSLIT_TREE)/%.res)
 
+## SPP files
+-include $(SPREPSRCDIR)/sprepfiles.mk
+-include $(SPREPSRCDIR)/spreplocal.mk
+ALL_SPREP_SOURCE=$(SPREP_SOURCE) $(SPREP_SOURCE_LOCAL)
+SPREP_FILES = $(ALL_SPREP_SOURCE:%.txt=$(BUILDDIR)/%.spp)
+SPREP_FILES_SHORT = $(ALL_SPREP_SOURCE:%.txt=%.spp)
+
 ## All generated files
-ALL_FILES = $(DAT_FILES) $(CNV_FILES) $(BRK_FILES) $(CTD_FILES) $(RES_FILES) $(INDEX_RES_FILE) $(COLLATION_FILES) $(BRK_RES_FILES) $(RBNF_FILES) $(TRANSLIT_FILES)
+ALL_FILES = $(DAT_FILES) $(CNV_FILES) $(BRK_FILES) $(CTD_FILES) $(RES_FILES) $(INDEX_RES_FILE) $(COLLATION_FILES) $(BRK_RES_FILES) $(RBNF_FILES) $(TRANSLIT_FILES) $(SPREP_FILES)
 ALL_INDEX_SRC_FILES = $(PKGDATA_LIST) $(INDEX_FILE) $(COLLATION_INDEX_FILE) $(BRK_RES_INDEX_FILE) $(RBNF_INDEX_FILE)
 # a list to use in the .lst files (package-relative)
-ALL_FILES_LIST = $(DAT_FILES_SHORT) $(CNV_FILES_SHORT) $(BRK_FILES_SHORT) $(CTD_FILES_SHORT) $(RES_FILES_SHORT) $(INDEX_RES_FILE_SHORT) $(COLLATION_FILES_SHORT) $(COLLATION_INDEX_RES_SHORT) $(BRK_RES_FILES_SHORT) $(BRK_RES_INDEX_RES_SHORT) $(RBNF_FILES_SHORT) $(RBNF_INDEX_RES_SHORT) $(TRANSLIT_FILES_SHORT)
+ALL_FILES_LIST = $(DAT_FILES_SHORT) $(CNV_FILES_SHORT) $(BRK_FILES_SHORT) $(CTD_FILES_SHORT) $(RES_FILES_SHORT) $(INDEX_RES_FILE_SHORT) $(COLLATION_FILES_SHORT) $(COLLATION_INDEX_RES_SHORT) $(BRK_RES_FILES_SHORT) $(BRK_RES_INDEX_RES_SHORT) $(RBNF_FILES_SHORT) $(RBNF_INDEX_RES_SHORT) $(TRANSLIT_FILES_SHORT) $(SPREP_FILES_SHORT)
 
 UNI_CORE_DATA=uprops.icu ucase.icu ubidi.icu unorm.icu
 UNI_CORE_TARGET_DATA=$(UNI_CORE_DATA:%=$(BUILDDIR)/%)
@@ -416,9 +424,11 @@ $(BUILDDIR)/unames.icu: $(UNICODEDATADIR)/UnicodeData.txt $(BINDIR)/gennames$(EX
 $(BUILDDIR)/cnvalias.icu: $(UCMSRCDIR)/convrtrs.txt $(BINDIR)/gencnval$(EXEEXT)
 	$(INVOKE) $(BINDIR)/gencnval -d $(BUILDDIR) $(UCMSRCDIR)/convrtrs.txt
 
-# uidna.spp
-$(BUILDDIR)/uidna.spp: $(MISCSRCDIR)/NamePrepProfile.txt $(BINDIR)/gensprep$(EXEEXT) $(BUILDDIR)/unames.icu $(BUILDDIR)/pnames.icu
-	$(INVOKE) $(BINDIR)/gensprep -d $(BUILDDIR) -i $(BUILDDIR) -s $(MISCSRCDIR) -b uidna -n $(UNICODEDATADIR) -u 3.2.0 -k NamePrepProfile.txt
+####################################################    SPP
+# SPP FILES
+
+$(BUILDDIR)/%.spp: $(SPREPSRCDIR)/%.txt $(BINDIR)/gensprep$(EXEEXT) $(BUILDDIR)/unames.icu $(BUILDDIR)/pnames.icu
+	$(INVOKE) $(BINDIR)/gensprep -d $(BUILDDIR) -i $(BUILDDIR) -s $(SPREPSRCDIR) -b $(@F:%.spp=%) -m $(UNICODEDATADIR) -u 3.2.0 $(<F)
 
 ####################################################    BRK
 # BRK FILES
