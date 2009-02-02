@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1998-2008, International Business Machines Corporation and
+ * Copyright (c) 1998-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -1292,7 +1292,7 @@ static const struct {
 #endif
 
 #if !UCONFIG_NO_IDNA
-    {"uidna",                    "spp", usprep_swap},
+    {"rfc3491",                    "spp", usprep_swap},
 #endif
 
 #if !UCONFIG_NO_BREAK_ITERATION
