@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2008, International Business Machines
+ *   Copyright (C) 2003-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -49,6 +49,24 @@ static uint8_t formatVersion[4]={ 0, 0, 0, 0 };
 
 /* the Unicode version of the sprep data */
 static UVersionInfo dataVersion={ 0, 0, 0, 0 };
+
+/* Profile names must be aligned to UStringPrepProfileType */
+static const char *PROFILE_NAMES[] = {
+    "rfc3491",      /* USPREP_RFC3491_NAMEPREP */
+    "rfc3530cs",    /* USPREP_RFC3530_NFS4_CS_PREP */
+    "rfc3530csci",  /* USPREP_RFC3530_NFS4_CS_PREP_CI */
+    "rfc3491",      /* USPREP_RFC3530_NSF4_CIS_PREP */
+    "rfc3530mixp",  /* USPREP_RFC3530_NSF4_MIXED_PREP_PREFIX */
+    "rfc3491",      /* USPREP_RFC3530_NSF4_MIXED_PREP_SUFFIX */
+    "rfc3722",      /* USPREP_RFC3722_ISCSI */
+    "rfc3920node",  /* USPREP_RFC3920_NODEPREP */
+    "rfc3920res",   /* USPREP_RFC3920_RESOURCEPREP */
+    "rfc4011",      /* USPREP_RFC4011_MIB */
+    "rfc4013",      /* USPREP_RFC4013_SASLPREP */
+    "rfc4505",      /* USPREP_RFC4505_TRACE */
+    "rfc4518",      /* USPREP_RFC4518_LDAP */
+    "rfc4518ci",    /* USPREP_RFC4518_LDAP_CI */
+};
 
 static UBool U_CALLCONV
 isSPrepAcceptable(void * /* context */,
@@ -416,6 +434,20 @@ usprep_open(const char* path,
        
     /* initialize the profile struct members */
     return usprep_getProfile(path,name,status);
+}
+
+U_CAPI UStringPrepProfile* U_EXPORT2
+usprep_openByType(UStringPrepProfileType type,
+				  UErrorCode* status) {
+    if(status == NULL || U_FAILURE(*status)){
+        return NULL;
+    }
+    int32_t index = (int32_t)type;
+    if (index < 0 || index >= sizeof(PROFILE_NAMES)/sizeof(PROFILE_NAMES[0])) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+    return usprep_open(NULL, PROFILE_NAMES[index], status);
 }
 
 U_CAPI void U_EXPORT2

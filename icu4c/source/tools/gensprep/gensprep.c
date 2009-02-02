@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2006, International Business Machines
+*   Copyright (C) 2003-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -44,6 +44,11 @@ UBool beVerbose=FALSE, haveCopyright=TRUE;
 
 #define NORM_CORRECTIONS_FILE_NAME "NormalizationCorrections.txt"
 
+#define NORMALIZE_DIRECTIVE "normalize"
+#define NORMALIZE_DIRECTIVE_LEN 9
+#define CHECK_BIDI_DIRECTIVE "check-bidi"
+#define CHECK_BIDI_DIRECTIVE_LEN 10
+
 /* prototypes --------------------------------------------------------------- */
 
 static void
@@ -65,6 +70,7 @@ static UOption options[]={
     UOPTION_ICUDATADIR,
     UOPTION_BUNDLE_NAME,
     { "normalization", NULL, NULL, NULL, 'n', UOPT_REQUIRES_ARG, 0 },
+    { "norm-correction", NULL, NULL, NULL, 'm', UOPT_REQUIRES_ARG, 0 },
     { "check-bidi", NULL, NULL, NULL,  'k', UOPT_NO_ARG, 0},
     { "unicode", NULL, NULL, NULL, 'u', UOPT_REQUIRES_ARG, 0 },
 };
@@ -79,6 +85,7 @@ enum{
     ICUDATADIR,
     BUNDLE_NAME,
     NORMALIZE,
+    NORM_CORRECTION_DIR,
     CHECK_BIDI,
     UNICODE_VERSION
 };
@@ -110,7 +117,13 @@ static int printHelp(int argc, char* argv[]){
     fprintf(stderr,
         "\t-n or --normalize        turn on the option for normalization and include mappings\n"
         "\t                         from NormalizationCorrections.txt from the given path,\n"
-        "\t                         e.g: /test/icu/source/data/unidata\n"
+        "\t                         e.g: /test/icu/source/data/unidata\n");
+    fprintf(stderr,
+        "\t-m or --norm-correction  use NormalizationCorrections.txt from the given path\n"
+        "\t                         when the input file contains a normalization directive.\n"
+        "\t                         unlike -n/--normalize, this option does not force the\n"
+        "\t                         normalization.\n");
+    fprintf(stderr,
         "\t-k or --check-bidi       turn on the option for checking for BiDi in the profile\n"
         "\t-u or --unicode          version of Unicode to be used with this profile followed by the version\n"
         );
@@ -158,7 +171,11 @@ main(int argc, char* argv[]) {
     srcDir=options[SOURCEDIR].value;
     destDir=options[DESTDIR].value;
     bundleName = options[BUNDLE_NAME].value;
-    icuUniDataDir = options[NORMALIZE].value;
+    if(options[NORMALIZE].doesOccur) {
+        icuUniDataDir = options[NORMALIZE].value;
+    } else {
+        icuUniDataDir = options[NORM_CORRECTION_DIR].value;
+    }
 
     if(argc<2) {
         /* print the help message */
@@ -210,7 +227,7 @@ main(int argc, char* argv[]) {
         return errorCode;
     }
     
-    if(options[NORMALIZE].doesOccur){
+    if(options[NORMALIZE].doesOccur){ /* this option might be set by @normalize;; in the source file */
         /* set up directory for NormalizationCorrections.txt */
         uprv_strcpy(filename,icuUniDataDir);
         basename=filename+uprv_strlen(filename);
@@ -229,7 +246,7 @@ main(int argc, char* argv[]) {
         sprepOptions |= _SPREP_NORMALIZATION_ON;
     }
     
-    if(options[CHECK_BIDI].doesOccur){
+    if(options[CHECK_BIDI].doesOccur){ /* this option might be set by @check-bidi;; in the source file */
         sprepOptions |= _SPREP_CHECK_BIDI_ON;
     }
 
@@ -327,13 +344,34 @@ strprepProfileLineFn(void *context,
     const char* typeName;
     uint32_t rangeStart=0,rangeEnd =0;
     const char* filename = (const char*) context;
- 
+    const char *s;
+
+    s = u_skipWhitespace(fields[0][0]);
+    if (*s == '@') {
+        /* special directive */
+        s++;
+        length = fields[0][1] - s;
+        if (length >= NORMALIZE_DIRECTIVE_LEN
+            && uprv_strncmp(s, NORMALIZE_DIRECTIVE, NORMALIZE_DIRECTIVE_LEN) == 0) {
+            options[NORMALIZE].doesOccur = TRUE;
+            return;
+        }
+        else if (length >= CHECK_BIDI_DIRECTIVE_LEN
+            && uprv_strncmp(s, CHECK_BIDI_DIRECTIVE, CHECK_BIDI_DIRECTIVE_LEN) == 0) {
+            options[CHECK_BIDI].doesOccur = TRUE;
+            return;
+        }
+        else {
+            fprintf(stderr, "gensprep error parsing a directive %s.", fields[0][0]);
+        }
+    }
+
     typeName = fields[2][0];
     map = fields[1][0];
 
     if(uprv_strstr(typeName, usprepTypeNames[USPREP_UNASSIGNED])!=NULL){
 
-        u_parseCodePointRange(fields[0][0], &rangeStart,&rangeEnd, pErrorCode);
+        u_parseCodePointRange(s, &rangeStart,&rangeEnd, pErrorCode);
         if(U_FAILURE(*pErrorCode)){
             fprintf(stderr, "Could not parse code point range. Error: %s\n",u_errorName(*pErrorCode));
             return;
@@ -344,7 +382,7 @@ strprepProfileLineFn(void *context,
 
     }else if(uprv_strstr(typeName, usprepTypeNames[USPREP_PROHIBITED])!=NULL){
 
-        u_parseCodePointRange(fields[0][0], &rangeStart,&rangeEnd, pErrorCode);
+        u_parseCodePointRange(s, &rangeStart,&rangeEnd, pErrorCode);
         if(U_FAILURE(*pErrorCode)){
             fprintf(stderr, "Could not parse code point range. Error: %s\n",u_errorName(*pErrorCode));
             return;
@@ -356,8 +394,8 @@ strprepProfileLineFn(void *context,
     }else if(uprv_strstr(typeName, usprepTypeNames[USPREP_MAP])!=NULL){
 
         /* get the character code, field 0 */
-        code=(uint32_t)uprv_strtoul(fields[0][0], &end, 16);
-        if(end<=fields[0][0] || end!=fields[0][1]) {
+        code=(uint32_t)uprv_strtoul(s, &end, 16);
+        if(end<=s || end!=fields[0][1]) {
             fprintf(stderr, "gensprep: syntax error in field 0 at %s\n", fields[0][0]);
             *pErrorCode=U_PARSE_ERROR;
             exit(U_PARSE_ERROR);

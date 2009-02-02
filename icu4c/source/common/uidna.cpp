@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2007, International Business Machines
+ *   Copyright (C) 2003-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -44,8 +44,6 @@ static const UChar ACE_PREFIX[] ={ 0x0078,0x006E,0x002d,0x002d } ;
 #define FULL_STOP        0x002E
 #define CAPITAL_A        0x0041
 #define CAPITAL_Z        0x005A
-
-#define DATA_FILE_NAME   "uidna"
 
 inline static UChar 
 toASCIILower(UChar ch){
@@ -624,7 +622,7 @@ uidna_toASCII(const UChar* src, int32_t srcLength,
         return 0;
     }
 
-    UStringPrepProfile* nameprep = usprep_open(NULL,DATA_FILE_NAME, status);
+    UStringPrepProfile* nameprep = usprep_openByType(USPREP_RFC3491_NAMEPREP, status);
     
     if(U_FAILURE(*status)){
         return -1;
@@ -653,7 +651,7 @@ uidna_toUnicode(const UChar* src, int32_t srcLength,
         return 0;
     }  
 
-    UStringPrepProfile* nameprep = usprep_open(NULL, DATA_FILE_NAME, status);
+    UStringPrepProfile* nameprep = usprep_openByType(USPREP_RFC3491_NAMEPREP, status);
     
     if(U_FAILURE(*status)){
         return -1;
@@ -684,7 +682,7 @@ uidna_IDNToASCII(  const UChar *src, int32_t srcLength,
 
     int32_t reqLength = 0;
 
-    UStringPrepProfile* nameprep = usprep_open(NULL, DATA_FILE_NAME, status);
+    UStringPrepProfile* nameprep = usprep_openByType(USPREP_RFC3491_NAMEPREP, status);
     
     if(U_FAILURE(*status)){
         return 0;
@@ -777,7 +775,7 @@ uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
 
     int32_t reqLength = 0;
 
-    UStringPrepProfile* nameprep = usprep_open(NULL, DATA_FILE_NAME, status);
+    UStringPrepProfile* nameprep = usprep_openByType(USPREP_RFC3491_NAMEPREP, status);
     
     if(U_FAILURE(*status)){
         return 0;

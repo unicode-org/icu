@@ -1,5 +1,5 @@
 #**********************************************************************
-#* Copyright (C) 1999-2008, International Business Machines Corporation
+#* Copyright (C) 1999-2009, International Business Machines Corporation
 #* and others.  All Rights Reserved.
 #**********************************************************************
 # nmake file for creating data files on win32
@@ -99,6 +99,11 @@ ICUUNIDATA=$(ICUP)\source\data\unidata
 #
 ICUMISC=$(ICUP)\source\data\misc
 ICUMISC2=misc
+
+#  ICUBRK
+#       The directory that contains sprepfiles.mk files along with *.txt stringprep files
+#
+ICUSPREP=sprep
 
 #
 #  ICUDATA
@@ -348,6 +353,21 @@ MISC_FILES = $(MISC_SOURCE:.txt=.res)
 ALL_RES = $(ALL_RES) $(RB_FILES) $(MISC_FILES)
 !ENDIF
 
+# Read list of stringprep profile files
+!IF EXISTS("$(ICUSRCDATA)\$(ICUSPREP)\sprepfiles.mk")
+!INCLUDE "$(ICUSRCDATA)\$(ICUSPREP)\sprepfiles.mk"
+!IF EXISTS("$(ICUSRCDATA)\$(ICUSPREP)\spreplocal.mk")
+!INCLUDE "$(ICUSRCDATA)\$(ICUSPREP)\spreplocal.mk"
+SPREP_SOURCE=$(SPREP_SOURCE) $(SPREP_SOURCE_LOCAL)
+!ELSE
+!MESSAGE Information: cannot find "spreplocal.mk". Not building user-additional stringprep files.
+!ENDIF
+!ELSE
+!MESSAGE Warning: cannot find "sprepfiles.mk"
+!ENDIF
+
+SPREP_FILES = $(SPREP_SOURCE:.txt=.spp)
+
 # Common defines for both ways of building ICU's data library.
 COMMON_ICUDATA_DEPENDENCIES="$(ICUPBIN)\pkgdata.exe" "$(ICUTMP)\icudata.res" "$(ICUP)\source\stubdata\stubdatabuilt.txt"
 COMMON_ICUDATA_ARGUMENTS=-f -e $(U_ICUDATA_NAME) -v $(ICU_PACKAGE_MODE) -c -p $(ICUPKG) -T "$(ICUTMP)" -L $(U_ICUDATA_NAME) -d "$(ICUBLD_PKG)" -s .
@@ -402,7 +422,7 @@ uni-core-data: GODATA "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(IC
 	copy "$(ICUTMP)\$(ICUPKG).dat" "$(ICUOUT)\$(U_ICUDATA_NAME)$(U_ICUDATA_ENDIAN_SUFFIX).dat"
 	-@erase "$(ICUTMP)\$(ICUPKG).dat"
 !ELSE
-"$(ICU_LIB_TARGET)" : $(COMMON_ICUDATA_DEPENDENCIES) $(CNV_FILES) "$(ICUBLD_PKG)\unames.icu" "$(ICUBLD_PKG)\pnames.icu" "$(ICUBLD_PKG)\cnvalias.icu" "$(ICUBLD_PKG)\$(ICUCOL)\ucadata.icu" "$(ICUBLD_PKG)\$(ICUCOL)\invuca.icu" "$(ICUBLD_PKG)\uidna.spp" $(BRK_FILES) $(BRK_CTD_FILES) $(BRK_RES_FILES) $(COL_COL_FILES) $(RBNF_RES_FILES) $(TRANSLIT_RES_FILES) $(ALL_RES)
+"$(ICU_LIB_TARGET)" : $(COMMON_ICUDATA_DEPENDENCIES) $(CNV_FILES) "$(ICUBLD_PKG)\unames.icu" "$(ICUBLD_PKG)\pnames.icu" "$(ICUBLD_PKG)\cnvalias.icu" "$(ICUBLD_PKG)\$(ICUCOL)\ucadata.icu" "$(ICUBLD_PKG)\$(ICUCOL)\invuca.icu" $(BRK_FILES) $(BRK_CTD_FILES) $(BRK_RES_FILES) $(COL_COL_FILES) $(RBNF_RES_FILES) $(TRANSLIT_RES_FILES) $(ALL_RES) $(SPREP_FILES)
 	@echo Building icu data
 	cd "$(ICUBLD_PKG)"
 	"$(ICUPBIN)\pkgdata" $(COMMON_ICUDATA_ARGUMENTS) <<"$(ICUTMP)\icudata.lst"
@@ -410,7 +430,6 @@ pnames.icu
 unames.icu
 $(ICUCOL)\ucadata.icu
 $(ICUCOL)\invuca.icu
-uidna.spp
 cnvalias.icu
 $(CNV_FILES:.cnv =.cnv
 )
@@ -427,6 +446,8 @@ $(BRK_FILES:.brk =.brk
 $(BRK_CTD_FILES:.ctd =.ctd
 )
 $(BRK_RES_FILES:.res =.res
+)
+$(SPREP_FILES:.spp=.spp
 )
 <<KEEP
 	-@erase "$(ICU_LIB_TARGET)"
@@ -647,9 +668,10 @@ res_index:table(nofallback) {
 	@echo Creating UCA data files
 	@"$(ICUTOOLS)\genuca\$(CFG)\genuca" -d "$(ICUBLD_PKG)\$(ICUCOL)" -i "$(ICUBLD_PKG)" -s "$(ICUUNIDATA)"
 
-# Targets for uidna.spp
-"$(ICUBLD_PKG)\uidna.spp" : "$(ICUUNIDATA)\*.txt" "$(ICUMISC)\NamePrepProfile.txt"
-	"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(ICUMISC)" -d "$(ICUBLD_PKG)\\" -b uidna -n "$(ICUUNIDATA)" -k -u 3.2.0 NamePrepProfile.txt
+# Stringprep .spp file generation.
+{$(ICUSRCDATA_RELATIVE_PATH)\$(ICUSPREP)}.txt.spp:
+	@echo Creating $@
+	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s $(<D) -d "$(ICUBLD_PKG)" -b $(@B) -m "$(ICUUNIDATA)" -u 3.2.0 $(<F)
 
 !IFDEF ICUDATA_ARCHIVE
 "$(ICUDATA_SOURCE_ARCHIVE)": CREATE_DIRS $(ICUDATA_ARCHIVE) "$(ICUTOOLS)\icupkg\$(CFG)\icupkg.exe"

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -240,14 +240,19 @@ storeMappingData(){
     const UHashElement* element = NULL;
     ValueStruct* value  = NULL;
     int32_t codepoint = 0;
-    int32_t elementCount = uhash_count(hashTable);
+    int32_t elementCount = 0;
     int32_t writtenElementCount = 0;
     int32_t mappingLength = 1; /* minimum mapping length */
     int32_t oldMappingLength = 0;
     uint16_t trieWord =0;
     int32_t limitIndex = 0;
 
-    /*initialize the mapping data */
+    if (hashTable == NULL) {
+        return;
+    }
+    elementCount = uhash_count(hashTable);
+
+	/*initialize the mapping data */
     mappingData = (uint16_t*) uprv_malloc(U_SIZEOF_UCHAR * (mappingDataCapacity));
 
     uprv_memset(mappingData,0,U_SIZEOF_UCHAR * mappingDataCapacity);
@@ -647,7 +652,9 @@ generateData(const char *dataDir, const char* bundleName) {
 
 #if !UCONFIG_NO_IDNA
     /* done with writing the data .. close the hashtable */
-    uhash_close(hashTable);
+    if (hashTable != NULL) {
+        uhash_close(hashTable);
+    }
 #endif
 }
 
