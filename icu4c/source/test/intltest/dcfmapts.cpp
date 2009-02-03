@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -41,7 +41,12 @@ void IntlTestDecimalFormatAPI::runIndexedTest( int32_t index, UBool exec, const 
                testRounding(/*par*/);
             }
             break;
-
+        case 2: name = "Test6354";
+            if(exec) {
+               logln((UnicodeString)"DecimalFormat Rounding Increment test---");
+               testRoundingInc(/*par*/);
+            }
+            break;
         default: name = ""; break;
     }
 }
@@ -414,6 +419,32 @@ void IntlTestDecimalFormatAPI::verify(const UnicodeString& message, const Unicod
     if(got != expectedStr ) {
             errln((UnicodeString)"ERROR: Round() failed:  " + message + got + (UnicodeString)"  Expected : " + expectedStr);
         }
+}
+
+void IntlTestDecimalFormatAPI::testRoundingInc(/*char *par*/)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormat pat(UnicodeString("#,##0.00"),status);
+    if(U_FAILURE(status)) {
+      errln((UnicodeString)"ERROR: Could not create DecimalFormat (default)");
+      return;
+    }
+
+    // get default rounding increment
+    double roundingInc = pat.getRoundingIncrement();
+    if (roundingInc != 0.0) {
+      errln((UnicodeString)"ERROR: Rounding increment not zero");
+      return;
+    }
+
+    // set rounding mode with zero increment.  Rounding 
+    // increment should be set by this operation
+    pat.setRoundingMode(DecimalFormat.kRoundUp);
+    roundingInc = pat.getRoundingIncrement();
+    if (roundingInc == 0.0) {
+      errln((UnicodeString)"ERROR: Rounding increment zero");
+      return;
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
