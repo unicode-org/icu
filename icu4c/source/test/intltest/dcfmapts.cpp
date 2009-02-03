@@ -439,7 +439,7 @@ void IntlTestDecimalFormatAPI::testRoundingInc(/*char *par*/)
 
     // set rounding mode with zero increment.  Rounding 
     // increment should be set by this operation
-    pat.setRoundingMode(DecimalFormat.kRoundUp);
+    pat.setRoundingMode((DecimalFormat::ERoundingMode)0);
     roundingInc = pat.getRoundingIncrement();
     if (roundingInc == 0.0) {
       errln((UnicodeString)"ERROR: Rounding increment zero");
