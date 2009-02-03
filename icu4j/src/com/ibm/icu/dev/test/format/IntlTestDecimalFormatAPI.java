@@ -318,4 +318,34 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
         }
 
     }
+
+    public void testJB6354()
+    {
+        DecimalFormat pat = new DecimalFormat("#,##0.00");
+
+        // get default rounding increment
+        //#if defined(FOUNDATION10)
+        //##        com.ibm.icu.math.BigDecimal r1 = pat.getRoundingIncrement();
+        //#else
+        java.math.BigDecimal r1 = pat.getRoundingIncrement();
+        //#endif
+
+        // set rounding mode with zero increment.  Rounding 
+        // increment should be set by this operation
+        pat.setRoundingMode(BigDecimal.ROUND_UP);
+        //#if defined(FOUNDATION10)
+        //##        com.ibm.icu.math.BigDecimal r2 = pat.getRoundingIncrement();
+        //#else
+        java.math.BigDecimal r2 = pat.getRoundingIncrement();
+        //#endif
+
+        // check for different values
+        if ((r1 != null) && (r2 != null))
+        {
+            if (r1.compareTo(r2) == 0)
+            {
+                errln("ERROR: Rounding increment did not change");
+            }
+        }
+    }
 }
