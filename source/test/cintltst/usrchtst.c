@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2001-2008 International Business Machines 
+ * Copyright (c) 2001-2009 International Business Machines 
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  * File usrchtst.c
@@ -2268,7 +2268,6 @@ exitTestForwardBackward :
 
 static void TestSearchForNull(void)
 {
-#if 0
 	UCollator *coll;
 	UErrorCode ec;
 	UStringSearch *search;
@@ -2279,7 +2278,7 @@ static void TestSearchForNull(void)
 	int expectedNum;
 	int count = 0;
     const UChar zerodigit = 0x0030; /* 0 */
-    const UChar nulldigit = 0x0001; /* null */
+    const UChar nulldigit = 0x0000; /* null */
 	
 	/* static const UChar var[(length)+1]=U_DECLARE_UTF16(cs) */
 #define PATTERN_LEN 4
@@ -2349,9 +2348,6 @@ static void TestSearchForNull(void)
 	{
 		log_err("Expected %d search hits, found %d\n", expectedNum, count);
 	}
-#else
-    log_info("Note: test disabled because it is known to fail (#4184).\n");
-#endif
 }
 
 static void TestStrengthIdentical(void)

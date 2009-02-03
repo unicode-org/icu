@@ -162,13 +162,15 @@ inline int32_t getCE(const UStringSearch *strsrch, uint32_t sourcece)
         // no shifting to quartenary is required since all primary values
         // less than variabletop will need to be masked off anyway.
         if (strsrch->variableTop > sourcece) {
-            if (strsrch->strength == UCOL_QUATERNARY) {
+            if (strsrch->strength >= UCOL_QUATERNARY) {
                 sourcece &= UCOL_PRIMARYORDERMASK;
             }
             else { 
                 sourcece = UCOL_IGNORABLE;
             }
         }
+    } else if (strsrch->strength >= UCOL_QUATERNARY && sourcece == UCOL_IGNORABLE) {
+        sourcece = 0xFFFF;
     }
 
     return sourcece;
