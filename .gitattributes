@@ -12,6 +12,7 @@ icu4c/source/data/coll/af.txt -text
 icu4c/source/data/coll/af_NA.txt -text
 icu4c/source/data/coll/af_ZA.txt -text
 icu4c/source/data/coll/az.txt -text
+icu4c/source/data/coll/az_Latn.txt -text
 icu4c/source/data/coll/az_Latn_AZ.txt -text
 icu4c/source/data/coll/bn_IN.txt -text
 icu4c/source/data/coll/pa_Arab.txt -text
