@@ -1841,10 +1841,10 @@ u_versionFromUString(UVersionInfo versionArray, const UChar *versionString) {
     if(versionArray!=NULL && versionString!=NULL) {
         char versionChars[U_MAX_VERSION_STRING_LENGTH+1];
         int32_t len = u_strlen(versionString);
-        if(len>U_MAX_VERSION_LENGTH) {
+        if(len>U_MAX_VERSION_STRING_LENGTH) {
             len = U_MAX_VERSION_STRING_LENGTH;
         }
-        u_UCharsToChars(versionString, versionChars, U_MAX_VERSION_STRING_LENGTH);
+        u_UCharsToChars(versionString, versionChars, len);
         versionChars[U_MAX_VERSION_STRING_LENGTH]=0;
         u_versionFromString(versionArray, versionChars);
     }
