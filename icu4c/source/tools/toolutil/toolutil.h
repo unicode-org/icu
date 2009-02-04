@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2008, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -75,9 +75,6 @@ uprv_getModificationDate(const char *pathname, UErrorCode *status);
  *
  * @param status Set to an error code when mkdir failed.
  */
-U_CAPI void U_EXPORT2
-uprv_mkdir(const char *pathname, UErrorCode *status);
-
 
 /*
  * UToolMemory is used for generic, custom memory management.
