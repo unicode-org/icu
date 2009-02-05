@@ -3516,16 +3516,48 @@ public class DecimalFormat extends NumberFormat {
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
-    public MathContext getMathContext() {
+    public MathContext getMathContextICU() {
         try {
             // don't allow multiple references
             return mathContext == null ?
                    null :
-                   mathContext;
+                   new MathContext(mathContext.getDigits(),
+                                   mathContext.getForm(),
+                                   mathContext.getLostDigits(),
+                                   mathContext.getRoundingMode());
         } catch (Exception foo) {
             return null; // should never happen
         }
     }
+
+//#if defined(FOUNDATION10)
+//#else
+    // [NEW]
+    /**
+     * Returns the MathContext
+     * used by this format. 
+     * @return desired MathContext
+     * @see #mathContext
+     * @see #getMathContext
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public java.math.MathContext getMathContext()
+    {
+        try
+        {
+            // don't allow multiple references
+            return mathContext == null ?
+                   null :
+                   new java.math.MathContext(mathContext.getDigits(),
+                                             java.math.RoundingMode.valueOf(mathContext.getRoundingMode()));
+        }
+        catch (Exception foo)
+        {
+            return null; // should never happen
+        }
+    }
+//#endif
 
     // [NEW]
     /**
@@ -3536,9 +3568,30 @@ public class DecimalFormat extends NumberFormat {
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
-    public void setMathContext(MathContext newValue) {
+    public void setMathContextICU(MathContext newValue) {
         mathContext = newValue;
     }
+
+//#if defined(FOUNDATION10)
+//#else
+    // [NEW]
+    /**
+     * Sets the MathContext used by this format.
+     * @param newValue desired MathContext
+     * @see #mathContext
+     * @see #getMathContext
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public void setMathContext(java.math.MathContext newValue)
+    {
+        mathContext = new MathContext(newValue.getPrecision(),
+                                      MathContext.SCIENTIFIC,
+                                      false,
+                                      (newValue.getRoundingMode()).ordinal()
+                                      );
+    }
+//#endif
 
     /**
      * Allows you to get the behavior of the decimal separator with integers.

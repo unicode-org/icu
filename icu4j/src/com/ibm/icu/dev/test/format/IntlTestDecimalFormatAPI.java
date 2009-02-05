@@ -292,30 +292,47 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
     public void testJB4971()
     {
         DecimalFormat decfmt = new DecimalFormat();
-        MathContext result;
+        MathContext resultICU;
 
         MathContext comp1 = new MathContext(0, MathContext.PLAIN);
-        result = decfmt.getMathContext();
-        if ((comp1.getDigits() != result.getDigits()) ||
-            (comp1.getForm() != result.getForm()) ||
-            (comp1.getLostDigits() != result.getLostDigits()) ||
-            (comp1.getRoundingMode() != result.getRoundingMode()))
+        resultICU = decfmt.getMathContextICU();
+        if ((comp1.getDigits() != resultICU.getDigits()) ||
+            (comp1.getForm() != resultICU.getForm()) ||
+            (comp1.getLostDigits() != resultICU.getLostDigits()) ||
+            (comp1.getRoundingMode() != resultICU.getRoundingMode()))
         {
-            errln("ERROR: Math context 1 not equal - result: " + result.toString() +
+            errln("ERROR: Math context 1 not equal - result: " + resultICU.toString() +
                 " / expected: " + comp1.toString());
         }
 
         MathContext comp2 = new MathContext(5, MathContext.ENGINEERING);
-        decfmt.setMathContext(comp2);
-        result = decfmt.getMathContext();
-        if ((comp2.getDigits() != result.getDigits()) ||
-            (comp2.getForm() != result.getForm()) ||
-            (comp2.getLostDigits() != result.getLostDigits()) ||
-            (comp2.getRoundingMode() != result.getRoundingMode()))
+        decfmt.setMathContextICU(comp2);
+        resultICU = decfmt.getMathContextICU();
+        if ((comp2.getDigits() != resultICU.getDigits()) ||
+            (comp2.getForm() != resultICU.getForm()) ||
+            (comp2.getLostDigits() != resultICU.getLostDigits()) ||
+            (comp2.getRoundingMode() != resultICU.getRoundingMode()))
         {
-            errln("ERROR: Math context 2 not equal - result: " + result.toString() +
+            errln("ERROR: Math context 2 not equal - result: " + resultICU.toString() +
                 " / expected: " + comp2.toString());
         }
+
+//#if defined(FOUNDATION10)
+//#else
+
+        java.math.MathContext result;
+
+        java.math.MathContext comp3 = new java.math.MathContext(3, java.math.RoundingMode.DOWN);
+        decfmt.setMathContext(comp3);
+        result = decfmt.getMathContext();
+        if ((comp3.getPrecision() != result.getPrecision()) ||
+            (comp3.getRoundingMode() != result.getRoundingMode()))
+        {
+            errln("ERROR: Math context 3 not equal - result: " + result.toString() +
+                " / expected: " + comp3.toString());
+        }
+
+//#endif
 
     }
 
@@ -324,20 +341,20 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
         DecimalFormat pat = new DecimalFormat("#,##0.00");
 
         // get default rounding increment
-        //#if defined(FOUNDATION10)
-        //##        com.ibm.icu.math.BigDecimal r1 = pat.getRoundingIncrement();
-        //#else
+//#if defined(FOUNDATION10)
+//##        com.ibm.icu.math.BigDecimal r1 = pat.getRoundingIncrement();
+//#else
         java.math.BigDecimal r1 = pat.getRoundingIncrement();
-        //#endif
+//#endif
 
         // set rounding mode with zero increment.  Rounding 
         // increment should be set by this operation
         pat.setRoundingMode(BigDecimal.ROUND_UP);
-        //#if defined(FOUNDATION10)
-        //##        com.ibm.icu.math.BigDecimal r2 = pat.getRoundingIncrement();
-        //#else
+//#if defined(FOUNDATION10)
+//##        com.ibm.icu.math.BigDecimal r2 = pat.getRoundingIncrement();
+//#else
         java.math.BigDecimal r2 = pat.getRoundingIncrement();
-        //#endif
+//#endif
 
         // check for different values
         if ((r1 != null) && (r2 != null))
