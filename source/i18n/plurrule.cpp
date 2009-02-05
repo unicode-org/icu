@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and
+* Copyright (C) 2007-2009, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -60,9 +60,12 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralKeywordEnumeration)
 
 PluralRules::PluralRules(UErrorCode& status)
 :   UObject(),
-    mRules(NULL),
-    mParser(new RuleParser())
+    mRules(NULL)
 {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    mParser = new RuleParser();
     if (mParser==NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
     }
@@ -107,6 +110,9 @@ PluralRules* U_EXPORT2
 PluralRules::createRules(const UnicodeString& description, UErrorCode& status) {
     RuleChain   rules;
 
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
     PluralRules *newRules = new PluralRules(status);
     if ( (newRules != NULL)&& U_SUCCESS(status) ) {
         newRules->parseDescription((UnicodeString &)description, rules, status);
@@ -131,9 +137,11 @@ PluralRules::createDefaultRules(UErrorCode& status) {
 PluralRules* U_EXPORT2
 PluralRules::forLocale(const Locale& locale, UErrorCode& status) {
     RuleChain   rChain;
-    status = U_ZERO_ERROR;
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
     PluralRules *newObj = new PluralRules(status);
-    if (newObj==NULL) {
+    if (newObj==NULL || U_FAILURE(status)) {
         return NULL;
     }
     UnicodeString locRule = newObj->getRuleFromResource(locale, status);
@@ -178,6 +186,8 @@ StringEnumeration*
 PluralRules::getKeywords(UErrorCode& status) const {
     if (U_FAILURE(status))  return NULL;
     StringEnumeration* nameEnumerator = new PluralKeywordEnumeration(mRules, status);
+    if (U_FAILURE(status))  return NULL;
+
     return nameEnumerator;
 }
 
@@ -213,20 +223,36 @@ PluralRules::operator==(const PluralRules& other) const  {
         return TRUE;
     }
     StringEnumeration* myKeywordList = getKeywords(status);
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
     StringEnumeration* otherKeywordList =other.getKeywords(status);
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
 
-    if (myKeywordList->count(status)!=otherKeywordList->count(status)) {
+    if (myKeywordList->count(status)!=otherKeywordList->count(status) ||
+        U_FAILURE(status)) {
         sameList = FALSE;
     }
     else {
         myKeywordList->reset(status);
+        if (U_FAILURE(status)) {
+            return FALSE;
+        }
         while (sameList && (ptrKeyword=myKeywordList->snext(status))!=NULL) {
-            if (!other.isKeyword(*ptrKeyword)) {
+            if (U_FAILURE(status) || !other.isKeyword(*ptrKeyword)) {
                 sameList = FALSE;
             }
         }
         otherKeywordList->reset(status);
+        if (U_FAILURE(status)) {
+            return FALSE;
+        }
         while (sameList && (ptrKeyword=otherKeywordList->snext(status))!=NULL) {
+            if (U_FAILURE(status)) {
+                return FALSE;
+            }
             if (!this->isKeyword(*ptrKeyword))  {
                 sameList = FALSE;
             }
@@ -264,6 +290,9 @@ PluralRules::parseDescription(UnicodeString& data, RuleChain& rules, UErrorCode 
     OrConstraint *orNode=NULL;
     RuleChain *lastChain=NULL;
 
+    if (U_FAILURE(status)) {
+        return;
+    }
     UnicodeString ruleData = data.toLower();
     while (ruleIndex< ruleData.length()) {
         mParser->getNextToken(ruleData, &ruleIndex, token, type, status);
@@ -399,7 +428,9 @@ UnicodeString
 PluralRules::getRuleFromResource(const Locale& locale, UErrorCode& errCode) {
     UnicodeString emptyStr;
     
-    errCode = U_ZERO_ERROR;
+    if (U_FAILURE(errCode)) {
+        return emptyStr;
+    }
     UResourceBundle *rb=ures_openDirect(NULL, "plurals", &errCode);
     if(U_FAILURE(errCode)) {
         /* total failure, not even root could be opened */
@@ -937,6 +968,9 @@ RuleParser::getNextToken(const UnicodeString& ruleData,
     UChar ch;
     tokenType prevType=none;
 
+    if (U_FAILURE(status)) {
+        return;
+    }
     while (curIndex<ruleData.length()) {
         ch = ruleData.charAt(curIndex);
         if ( !inRange(ch, type) ) {
@@ -1013,6 +1047,9 @@ RuleParser::getNextToken(const UnicodeString& ruleData,
         if ( (type == tLetter)||(type == tNumber) ) {
             token=UnicodeString(ruleData, *ruleIndex, curIndex-*ruleIndex);
             getKeyType(token, type, status);
+            if (U_FAILURE(status)) {
+                return;
+            }
         }
         *ruleIndex = ruleData.length();
     }
@@ -1055,6 +1092,9 @@ RuleParser::inRange(UChar ch, tokenType& type) {
 void
 RuleParser::getKeyType(const UnicodeString& token, tokenType& keyType, UErrorCode &status)
 {
+    if (U_FAILURE(status)) {
+        return;
+    }
     if ( keyType==tNumber) {
     }
     else if (token==PK_VAR_N) {
@@ -1113,11 +1153,17 @@ fKeywordNames(status)
 {
     RuleChain *node=header;
     UBool  addKeywordOther=true;
-    
+
+    if (U_FAILURE(status)) {
+        return;
+    }
     pos=0;
     fKeywordNames.removeAllElements();
     while(node!=NULL) {
         fKeywordNames.addElement(new UnicodeString(node->keyword), status);
+        if (U_FAILURE(status)) {
+            return;
+        }
         if (node->keyword == PLURAL_KEYWORD_OTHER) {
             addKeywordOther= false;
         }
@@ -1126,6 +1172,9 @@ fKeywordNames(status)
     
     if (addKeywordOther) {
         fKeywordNames.addElement(new UnicodeString(PLURAL_KEYWORD_OTHER), status);
+        if (U_FAILURE(status)) {
+            return;
+        }
     }
 }
 
