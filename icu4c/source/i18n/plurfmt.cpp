@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2008, International Business Machines Corporation and
+* Copyright (C) 2009, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -75,7 +75,19 @@ PluralFormat::PluralFormat(const PluralFormat& other) : Format(other) {
     pluralRules = other.pluralRules->clone();
     pattern = other.pattern;
     copyHashtable(other.fParsedValuesHash, status);
+    if (U_FAILURE(status)) {
+        delete pluralRules;
+        pluralRules = NULL; 
+        return;
+    }
     numberFormat=NumberFormat::createInstance(locale, status);
+    if (U_FAILURE(status)) {
+        delete pluralRules;
+        pluralRules = NULL; 
+        delete fParsedValuesHash;
+        fParsedValuesHash = NULL;
+        return;
+    }
     replacedNumberFormat=other.replacedNumberFormat;
 }
 
@@ -87,9 +99,15 @@ PluralFormat::~PluralFormat() {
 
 void
 PluralFormat::init(const PluralRules* rules, const Locale& curLocale, UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
     locale = curLocale;
     if ( rules==NULL) {
         pluralRules = PluralRules::forLocale(locale, status);
+        if (U_FAILURE(status)) {
+            return;
+        }
     }
     else {
         pluralRules = rules->clone();
@@ -97,11 +115,19 @@ PluralFormat::init(const PluralRules* rules, const Locale& curLocale, UErrorCode
     fParsedValuesHash=NULL;
     pattern.remove();
     numberFormat= NumberFormat::createInstance(curLocale, status);
+    if (U_FAILURE(status)) {
+        delete pluralRules;
+        pluralRules = NULL; 
+        return;
+    }
     replacedNumberFormat=NULL;
 }
 
 void
 PluralFormat::applyPattern(const UnicodeString& newPattern, UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
     this->pattern = newPattern;
     UnicodeString token;
     int32_t braceCount=0;
@@ -184,6 +210,9 @@ PluralFormat::applyPattern(const UnicodeString& newPattern, UErrorCode& status) 
                 else  {
                     hashPattern = new UnicodeString(token);
                     fParsedValuesHash->put(hashKeyword, hashPattern, status);
+                    if (U_FAILURE(status)) {
+                        return;
+                    }
                     braceCount--;
                     if ( braceCount==0 ) {
                         getKeyword=TRUE;
@@ -245,6 +274,9 @@ PluralFormat::format(const Formattable& obj,
 
 UnicodeString
 PluralFormat::format(int32_t number, UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return UnicodeString();
+    }
     FieldPosition fpos(0);
     UnicodeString result;
     
@@ -253,6 +285,9 @@ PluralFormat::format(int32_t number, UErrorCode& status) const {
 
 UnicodeString
 PluralFormat::format(double number, UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return UnicodeString();
+    }
     FieldPosition fpos(0);
     UnicodeString result;
     
@@ -341,6 +376,9 @@ PluralFormat::checkSufficientDefinition() {
 
 void
 PluralFormat::setLocale(const Locale& loc, UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
     if (pluralRules!=NULL) {
         delete pluralRules;
         pluralRules=NULL;
@@ -381,7 +419,22 @@ PluralFormat::operator=(const PluralFormat& other) {
         pluralRules = other.pluralRules->clone();
         pattern = other.pattern;
         copyHashtable(other.fParsedValuesHash, status);
+        if (U_FAILURE(status)) {
+            delete pluralRules;  
+            pluralRules = NULL;
+            fParsedValuesHash = NULL;
+            numberFormat = NULL;
+            return *this;
+        }
         numberFormat=NumberFormat::createInstance(locale, status);
+        if (U_FAILURE(status)) {
+            delete pluralRules;   
+            delete fParsedValuesHash; 
+            pluralRules = NULL;
+            fParsedValuesHash = NULL;
+            numberFormat = NULL;
+            return *this;
+        }
         replacedNumberFormat=other.replacedNumberFormat;
     }
 
@@ -451,7 +504,7 @@ PluralFormat::insertFormattedNumber(double number,
 
 void
 PluralFormat::copyHashtable(Hashtable *other, UErrorCode& status) {
-    if (other == NULL) {
+    if (other == NULL || U_FAILURE(status)) {
         fParsedValuesHash = NULL;
         return;
     }
