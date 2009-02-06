@@ -358,6 +358,7 @@ icu4j/localespi/src/META-INF/services/java.util.spi.TimeZoneNameProvider -text
 icu4j/localespi/src/com/ibm/icu/impl/javaspi/ICULocaleServiceProviderConfig.properties -text
 icu4j/preprocessor.txt -text
 icu4j/readme.html svneol=native#text/html
+icu4j/src/com/ibm/icu/charset/CharsetSelector.java -text
 icu4j/src/com/ibm/icu/charset/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict -text svneol=native#application/octet-stream
 icu4j/src/com/ibm/icu/dev/data/testdata.jar -text
@@ -373,6 +374,7 @@ icu4j/src/com/ibm/icu/dev/eclipse/misc/ICUConfig.properties -text
 icu4j/src/com/ibm/icu/dev/eclipse/misc/about_icu.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/eclipse/misc/about_icu_base.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/calendar/package.html svneol=native#text/html
+icu4j/src/com/ibm/icu/dev/test/charset/TestSelection.java -text
 icu4j/src/com/ibm/icu/dev/test/charsetdet/CharsetDetectionTests.xml svneol=native#text/xml
 icu4j/src/com/ibm/icu/dev/test/compression/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/duration/RegressionTest.java -text svneol=unset#text/plain
@@ -552,6 +554,8 @@ icu4j/src/com/ibm/icu/dev/tool/rbbi/readme.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/tool/tzu/icu.css svneol=native#text/css
 icu4j/src/com/ibm/icu/dev/tool/tzu/icu.gif -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/readme.html svneol=native#text/html
+icu4j/src/com/ibm/icu/impl/PVecToTrieCompactHandler.java -text
+icu4j/src/com/ibm/icu/impl/PropsVectors.java -text
 icu4j/src/com/ibm/icu/impl/data/icudata.jar -text svneol=unset#application/java-archive
 icu4j/src/com/ibm/icu/impl/data/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/lang/package.html svneol=native#text/html
