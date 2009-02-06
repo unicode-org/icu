@@ -205,10 +205,12 @@ icu4j/localespi/src/META-INF/services/java.util.spi.LocaleNameProvider -text
 icu4j/localespi/src/META-INF/services/java.util.spi.TimeZoneNameProvider -text
 icu4j/localespi/src/com/ibm/icu/impl/javaspi/ICULocaleServiceProviderConfig.properties -text
 icu4j/preprocessor.txt -text
+icu4j/src/com/ibm/icu/charset/CharsetSelector.java -text
 icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict -text
 icu4j/src/com/ibm/icu/dev/data/testdata.jar -text
 icu4j/src/com/ibm/icu/dev/data/thai6.ucs -text
 icu4j/src/com/ibm/icu/dev/eclipse/misc/ICUConfig.properties -text
+icu4j/src/com/ibm/icu/dev/test/charset/TestSelection.java -text
 icu4j/src/com/ibm/icu/dev/test/duration/RegressionTest.java -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Asian.txt -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Chinese.txt -text
@@ -368,6 +370,8 @@ icu4j/src/com/ibm/icu/dev/tool/docs/icu4j381.api.gz -text
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j400.api.gz -text
 icu4j/src/com/ibm/icu/dev/tool/docs/icu4j401.api.gz -text
 icu4j/src/com/ibm/icu/dev/tool/tzu/icu.gif -text
+icu4j/src/com/ibm/icu/impl/PVecToTrieCompactHandler.java -text
+icu4j/src/com/ibm/icu/impl/PropsVectors.java -text
 icu4j/src/com/ibm/icu/impl/data/icudata.jar -text
 icu4j/src/com/ibm/icu/text/CurrencyPluralInfo.java -text
 icu4j/src/com/ibm/icu/text/NumberingSystem.java -text
