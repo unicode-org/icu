@@ -531,10 +531,13 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
             uprv_strcpy(targetFileNamePath, targetDir);
             uprv_strcat(targetFileNamePath, datFileName);
 
-            /* Install the dat file created to the target directory. */
-            sprintf(cmd, "%s %s %s", pkgDataFlags[INSTALL_CMD], datFileNamePath, targetFileNamePath);
+            /* Move the dat file created to the target directory. */
+            result = rename(datFileNamePath, targetFileNamePath);
+            if (result != 0) {
+                fprintf(stderr, "Unable to move dat file (%s) to target location (%s).\n", datFileNamePath, targetFileNamePath);
+            }
 
-            return system(cmd);
+            return result;
         } else /* if (mode[0] == MODE_STATIC || mode[0] == MODE_DLL) */ {
             char gencFilePath[SMALL_BUFFER_MAX_SIZE] = "";
             char version_major[10] = "";
