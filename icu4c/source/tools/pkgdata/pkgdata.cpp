@@ -531,6 +531,13 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
             uprv_strcpy(targetFileNamePath, targetDir);
             uprv_strcat(targetFileNamePath, datFileName);
 
+            if (T_FileStream_file_exists(targetFileNamePath)) {
+                if ((result = remove(targetFileNamePath)) != 0) {
+                    fprintf(stderr, "Unable to remove old dat file: %s\n", targetFileNamePath);
+                    return result;
+                }
+            }
+
             /* Move the dat file created to the target directory. */
             result = rename(datFileNamePath, targetFileNamePath);
             if (result != 0) {
