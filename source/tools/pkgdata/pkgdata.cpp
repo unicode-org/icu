@@ -103,7 +103,7 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
 #endif
 
 static int32_t pkg_createWithAssemblyCode(const char *targetDir, const char mode, const char *gencFilePath);
-static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, const char *objectFile);
+static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, const char *objectFile, char *command = NULL);
 static int32_t pkg_archiveLibrary(const char *targetDir, const char *version, UBool reverseExt);
 static void createFileNames(const char *version_major, const char *version, const char *libName, const UBool reverseExt);
 
@@ -846,9 +846,24 @@ static int32_t pkg_archiveLibrary(const char *targetDir, const char *version, UB
  * Using the compiler information from the configuration file set by -O option, generate the library file.
  * command may be given to allow for a larger buffer for cmd.
  */
-static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, const char *objectFile) {
+static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, const char *objectFile, char *command) {
     int32_t result = 0;
-    char cmd[LARGE_BUFFER_MAX_SIZE] = "";;
+    char *cmd = NULL;
+    UBool freeCmd = FALSE;
+
+    /* This is necessary because if packaging is done without assembly code, objectFile might be extremely large
+     * containing many object files and so the calling function should supply a command buffer that is large
+     * enough to handle this. Otherwise, use the default size.
+     */
+    if (command != NULL) {
+        cmd = command;
+    } else {
+        if ((cmd = (char *)uprv_malloc(sizeof(char) * LARGE_BUFFER_MAX_SIZE)) == NULL) {
+            fprintf(stderr, "Unable to allocate memory for command.\n");
+            return -1;
+        }
+        freeCmd = TRUE;
+    }
 
     if (mode == MODE_STATIC) {
         sprintf(cmd, "%s %s %s%s.%s %s",
@@ -883,6 +898,10 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
 
         /* Generate the library file. */
         result = system(cmd);
+    }
+
+    if (freeCmd) {
+        uprv_free(cmd);
     }
 
     return result;
@@ -924,7 +943,7 @@ enum {
     DATA_PREFIX_TRANSLIT,
     DATA_PREFIX_LENGTH
 };
-const static char DATA_PREFIX[DATA_PREFIX_LENGTH][] = {
+const static char DATA_PREFIX[DATA_PREFIX_LENGTH][10] = {
         "brkitr",
         "coll",
         "rbnf",
@@ -947,8 +966,14 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
         return -1;
     }
 
-    cmd = (char *)uprv_malloc((listSize + 2) * SMALL_BUFFER_MAX_SIZE);
-    buffer = (char *)uprv_malloc((listSize + 1) * SMALL_BUFFER_MAX_SIZE);
+    if ((cmd = (char *)uprv_malloc((listSize + 2) * SMALL_BUFFER_MAX_SIZE)) == NULL) {
+        fprintf(stderr, "Unable to allocate memory for cmd.\n");
+        return -1;
+    } else if ((buffer = (char *)uprv_malloc((listSize + 1) * SMALL_BUFFER_MAX_SIZE)) == NULL) {
+        fprintf(stderr, "Unable to allocate memory for buffer.\n");
+        uprv_free(cmd);
+        return -1;
+    }
 
     for (int32_t i = 0; i < (listSize + 1); i++) {
         const char *file ;
