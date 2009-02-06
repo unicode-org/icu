@@ -2,12 +2,12 @@
 .\"
 .\" pkgdata.1: manual page for the pkgdata utility
 .\"
-.\" Copyright (C) 2000-2003 IBM, Inc. and others.
+.\" Copyright (C) 2000-2009 IBM, Inc. and others.
 .\"
 .\" Manual page by Yves Arrouye <yves@realnames.com>.
-.\" Modified by Steven R. Loomis <srl@jtcsv.com>.
+.\" Modified by Michael Ow <mow@us.ibm.com>.
 .\"
-.TH PKGDATA 1 "16 April 2002" "ICU MANPAGE" "ICU @VERSION@ Manual"
+.TH PKGDATA 1 "6 February 2009" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
 .B pkgdata
 \- package data for use by ICU
@@ -36,22 +36,10 @@
 .BI "\-r\fP, \fB\-\-revision" " version"
 ]
 [
-.BI "\-M" " arg"
-]
-[
 .BI "\-F\fP, \fB\-\-rebuild"
 ]
 [
-.BI "\-k\fP, \fB\-\-clean"
-]
-[
 .BI "\-I\fP, \fB\-\-install"
-]
-[
-.BI "\-n\fP, \fB\-\-nooutput"
-]
-[
-.BI "\-N\fP, \fB\-\-numaric"
 ]
 [
 .BI "\-s\fP, \fB\-\-sourcedir" " source"
@@ -154,10 +142,10 @@ the ICU source distribution for further information on the use of this
 mode.
 .PP
 .B pkgdata
-relies on GNU
-.BR make (1)
-to do the packaging, and generates a makefile with rules to build,
-package, install, or clean the appropriate data.
+builds, packages, installs, or cleans the appropriate data based on the options given
+without the need to call GNU
+.BR make
+anymore.
 .SH OPTIONS
 .TP
 .BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
@@ -231,17 +219,8 @@ assumed to be
 .IR major .0
 for versioning purposes.
 .TP
-.BI "\-M" " arg"
-Pass
-.I arg
-to 
-.BR make (1).
-.TP
 .BI "\-F\fP, \fB\-\-rebuild"
 Force the rebuilding of all data and their repackaging.
-.TP
-.BI "\-k\fP, \fB\-\-clean"
-Clean temporary files and other build residues.
 .TP
 .BI "\-I\fP, \fB\-\-install"
 Install the packaged file (or all the files in the
@@ -249,15 +228,6 @@ Install the packaged file (or all the files in the
 mode). If the variable
 .B DESTDIR
 is set it will be used for installation.
-.TP
-.BI "\-n\fP, \fB\-\-nooutput"
-Do not produce any output but simply a list of affected files.
-.TP
-.BI "\-N\fP, \fB\-\-numeric"
-Instead of using temporary filenames similar to the input symbols, use numeric filenames such
-as t0002.c, etc.  May be needed for systems which don't allow many similar long filenames, or 
-for systems that tend to run out of argument space.  Note, using this option 
-implies "\-F\fP, \fB\-\-rebuild" - all packaging will be rebuilt every time pkgdata is run.
 .TP
 .BI "\-s\fP, \fB\-\-sourcedir" " source"
 Set the source directory to
@@ -284,5 +254,5 @@ Yves Arrouye
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
-Copyright (C) 2000-2003 IBM, Inc. and others.
+Copyright (C) 2000-2009 IBM, Inc. and others.
 

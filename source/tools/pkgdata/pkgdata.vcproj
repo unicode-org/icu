@@ -394,14 +394,6 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath=".\filemode.c"
-				>
-			</File>
-			<File
-				RelativePath=".\make.c"
-				>
-			</File>
-			<File
 				RelativePath=".\pkgdata.cpp"
 				>
 			</File>
@@ -409,23 +401,11 @@
 				RelativePath=".\pkgtypes.c"
 				>
 			</File>
-			<File
-				RelativePath=".\sttcmode.c"
-				>
-			</File>
-			<File
-				RelativePath=".\winmode.c"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl"
 			>
-			<File
-				RelativePath=".\makefile.h"
-				>
-			</File>
 			<File
 				RelativePath=".\pkgtypes.h"
 				>

@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - tools/pkgdata
-## Copyright (c) 1999-2008, International Business Machines Corporation and
+## Copyright (c) 1999-2009, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ## Steven R. Loomis
 
@@ -37,7 +37,7 @@ CPPFLAGS += -I$(top_srcdir)/common -I$(srcdir)/../toolutil
 DEFS += -DUDATA_SO_SUFFIX=\".$(SO)\" -DSTATIC_O=\"$(STATIC_O)\"
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
-OBJECTS = pkgdata.o pkgtypes.o make.o dllmode.o cmnmode.o filemode.o sttcmode.o winmode.o
+OBJECTS = pkgdata.o pkgtypes.o
 
 DEPS = $(OBJECTS:.o=.d)
 
