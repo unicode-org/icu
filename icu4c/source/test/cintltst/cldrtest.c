@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -76,7 +76,7 @@ static void
 TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
                        UResourceBundle *currentBundle, const char *locale) {
     UErrorCode errorCode = U_ZERO_ERROR;
-    UResourceBundle *subRootBundle = NULL, *subBundle = NULL;
+    UResourceBundle *subRootBundle = NULL, *subBundle = NULL, *arr = NULL;
 
     ures_resetIterator(root);
     ures_resetIterator(currentBundle);
@@ -205,12 +205,47 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
                         }
                     }
                     else {
-                        log_err("Got a NULL string with key \"%s\" in \"%s\" at index %d for root or locale \"%s\"\n",
+                        if ( rootStrLen > 1 && rootStr[0] == 0x41 && rootStr[1] >= 0x30 && rootStr[1] <= 0x39 ) {
+                           /* A2 or A4 in the root string indicates that the resource can optionally be an array instead of a */
+                           /* string.  Attempt to read it as an array. */
+                          errorCode = U_ZERO_ERROR;
+                          arr = ures_getByIndex(subBundle,idx,NULL,&errorCode);
+                          if (U_FAILURE(errorCode)) {
+                              log_err("Got a NULL string with key \"%s\" in \"%s\" at index %d for root or locale \"%s\"\n",
+                                      subBundleKey,
+                                      ures_getKey(currentBundle),
+                                      idx,
+                                      locale);
+                              continue;
+                          }
+                          if (ures_getType(arr) != URES_ARRAY || ures_getSize(arr) != (int32_t)rootStr[1] - 0x30) {
+                              log_err("Got something other than a string or array of size %d for key \"%s\" in \"%s\" at index %d for root or locale \"%s\"\n",
+                                      rootStr[1] - 0x30,
+                                      subBundleKey,
+                                      ures_getKey(currentBundle),
+                                      idx,
+                                      locale);
+                              ures_close(arr);
+                              continue;
+                          }
+                          localeStr = ures_getStringByIndex(arr,0,&localeStrLen,&errorCode);
+                          ures_close(arr);
+                          if (U_FAILURE(errorCode)) {
+                              log_err("Got something other than a string or array for key \"%s\" in \"%s\" at index %d for root or locale \"%s\"\n",
+                                      subBundleKey,
+                                      ures_getKey(currentBundle),
+                                      idx,
+                                      locale);
+                              continue;
+                          }
+                        } else {
+                            log_err("Got a NULL string with key \"%s\" in \"%s\" at index %d for root or locale \"%s\"\n",
                                 subBundleKey,
                                 ures_getKey(currentBundle),
                                 idx,
                                 locale);
-                        continue;
+                            continue;
+                        }
                     }
                     if (localeStr[0] == (UChar)0x20) {
                         log_err("key \"%s\" at index %d in \"%s\" starts with a space in locale \"%s\"\n",
