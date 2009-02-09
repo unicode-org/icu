@@ -81,6 +81,7 @@ static const UChar gDefGmtNegHmsPat[] = {0x002D, 0x0048, 0x0048, 0x003A, 0x006D,
 static const UChar gDefGmtNegHmPat[]  = {0x002D, 0x0048, 0x0048, 0x003A, 0x006D, 0x006D, 0x0000}; /* -HH:mm */
 static const UChar gDefGmtPosHmsPat[] = {0x002B, 0x0048, 0x0048, 0x003A, 0x006D, 0x006D, 0x003A, 0x0073, 0x0073, 0x0000}; /* +HH:mm:ss */
 static const UChar gDefGmtPosHmPat[]  = {0x002B, 0x0048, 0x0048, 0x003A, 0x006D, 0x006D, 0x0000}; /* +HH:mm */
+
 typedef enum GmtPatSize {
     kGmtLen = 3,
     kGmtPatLen = 6,
@@ -89,6 +90,44 @@ typedef enum GmtPatSize {
     kPosHmsLen = 9,
     kPosHmLen = 6
 } GmtPatSize;
+
+// Stuff needed for numbering system overrides
+
+typedef enum OvrStrType {
+    kOvrStrDate = 0,
+    kOvrStrTime = 1,
+    kOvrStrBoth = 2
+} OvrStrType;
+
+static const UDateFormatField kDateFields[] = {
+    UDAT_YEAR_FIELD,
+    UDAT_MONTH_FIELD,
+    UDAT_DATE_FIELD,
+    UDAT_DAY_OF_YEAR_FIELD,
+    UDAT_DAY_OF_WEEK_IN_MONTH_FIELD,
+    UDAT_WEEK_OF_YEAR_FIELD,
+    UDAT_WEEK_OF_MONTH_FIELD,
+    UDAT_YEAR_WOY_FIELD,
+    UDAT_EXTENDED_YEAR_FIELD,
+    UDAT_JULIAN_DAY_FIELD,
+    UDAT_STANDALONE_DAY_FIELD,
+    UDAT_STANDALONE_MONTH_FIELD,
+    UDAT_QUARTER_FIELD,
+    UDAT_STANDALONE_QUARTER_FIELD };
+static const int8_t kDateFieldsCount = 13;
+
+static const UDateFormatField kTimeFields[] = {
+    UDAT_HOUR_OF_DAY1_FIELD,
+    UDAT_HOUR_OF_DAY1_FIELD,       
+    UDAT_MINUTE_FIELD,
+    UDAT_SECOND_FIELD,
+    UDAT_FRACTIONAL_SECOND_FIELD,
+    UDAT_HOUR1_FIELD,
+    UDAT_HOUR0_FIELD,
+    UDAT_MILLISECONDS_IN_DAY_FIELD,
+    UDAT_TIMEZONE_RFC_FIELD };
+static const int8_t kTimeFieldsCount = 9;
+
 
 // This is a pattern-of-last-resort used when we can't load a usable pattern out
 // of a resource.
@@ -135,6 +174,17 @@ SimpleDateFormat::~SimpleDateFormat()
             }
         }
         uprv_free(fGMTFormatters);
+
+    }
+    if (fNumberFormatters) {
+        uprv_free(fNumberFormatters);
+    }
+
+    while (fOverrideList) {
+        NSOverride *cur = fOverrideList;
+        fOverrideList = cur->next;
+        delete cur->nf;
+        uprv_free(cur);
     }
 }
 
@@ -143,7 +193,9 @@ SimpleDateFormat::~SimpleDateFormat()
 SimpleDateFormat::SimpleDateFormat(UErrorCode& status)
   :   fLocale(Locale::getDefault()),
       fSymbols(NULL),
-      fGMTFormatters(NULL)
+      fGMTFormatters(NULL),
+      fNumberFormatters(NULL),
+      fOverrideList(NULL)
 {
     construct(kShort, (EStyle) (kShort + kDateOffset), fLocale, status);
     initializeDefaultCentury();
@@ -156,8 +208,12 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 :   fPattern(pattern),
     fLocale(Locale::getDefault()),
     fSymbols(NULL),
-    fGMTFormatters(NULL)
+    fGMTFormatters(NULL),
+    fNumberFormatters(NULL),
+    fOverrideList(NULL)
 {
+    fDateOverride.setToBogus();
+    fTimeOverride.setToBogus();
     initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
     initialize(fLocale, status);
     initializeDefaultCentury();
@@ -170,8 +226,14 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
                                    UErrorCode& status)
 :   fPattern(pattern),
     fLocale(locale),
-    fGMTFormatters(NULL)
+    fGMTFormatters(NULL),
+    fNumberFormatters(NULL),
+    fOverrideList(NULL)
 {
+
+    fDateOverride.setToBogus();
+    fTimeOverride.setToBogus();
+
     initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
     initialize(fLocale, status);
     initializeDefaultCentury();
@@ -185,8 +247,14 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 :   fPattern(pattern),
     fLocale(Locale::getDefault()),
     fSymbols(symbolsToAdopt),
-    fGMTFormatters(NULL)
+    fGMTFormatters(NULL),
+    fNumberFormatters(NULL),
+    fOverrideList(NULL)
 {
+
+    fDateOverride.setToBogus();
+    fTimeOverride.setToBogus();
+
     initializeCalendar(NULL,fLocale,status);
     initialize(fLocale, status);
     initializeDefaultCentury();
@@ -200,8 +268,14 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 :   fPattern(pattern),
     fLocale(Locale::getDefault()),
     fSymbols(new DateFormatSymbols(symbols)),
-    fGMTFormatters(NULL)
+    fGMTFormatters(NULL),
+    fNumberFormatters(NULL),
+    fOverrideList(NULL)
 {
+
+    fDateOverride.setToBogus();
+    fTimeOverride.setToBogus();
+
     initializeCalendar(NULL, fLocale, status);
     initialize(fLocale, status);
     initializeDefaultCentury();
@@ -216,7 +290,9 @@ SimpleDateFormat::SimpleDateFormat(EStyle timeStyle,
                                    UErrorCode& status)
 :   fLocale(locale),
     fSymbols(NULL),
-    fGMTFormatters(NULL)
+    fGMTFormatters(NULL),
+    fNumberFormatters(NULL),
+    fOverrideList(NULL)
 {
     construct(timeStyle, dateStyle, fLocale, status);
     if(U_SUCCESS(status)) {
@@ -236,7 +312,9 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
 :   fPattern(gDefaultPattern),
     fLocale(locale),
     fSymbols(NULL),
-    fGMTFormatters(NULL)
+    fGMTFormatters(NULL),
+    fNumberFormatters(NULL),
+    fOverrideList(NULL)
 {
     if (U_FAILURE(status)) return;
     initializeSymbols(fLocale, initializeCalendar(NULL, fLocale, status),status);
@@ -253,6 +331,9 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
         }
     }
 
+    fDateOverride.setToBogus();
+    fTimeOverride.setToBogus();
+
     initialize(fLocale, status);
     if(U_SUCCESS(status)) {
       initializeDefaultCentury();
@@ -264,7 +345,9 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
 SimpleDateFormat::SimpleDateFormat(const SimpleDateFormat& other)
 :   DateFormat(other),
     fSymbols(NULL),
-    fGMTFormatters(NULL)
+    fGMTFormatters(NULL),
+    fNumberFormatters(NULL),
+    fOverrideList(NULL)
 {
     *this = other;
 }
@@ -335,6 +418,8 @@ void SimpleDateFormat::construct(EStyle timeStyle,
 
     CalendarData calData(locale, fCalendar?fCalendar->getType():NULL, status);
     UResourceBundle *dateTimePatterns = calData.getByKey(gDateTimePatternsTag, status);
+    UResourceBundle *currentBundle;
+
     if (U_FAILURE(status)) return;
 
     if (ures_getSize(dateTimePatterns) <= kDateTime)
@@ -355,8 +440,10 @@ void SimpleDateFormat::construct(EStyle timeStyle,
         return;
     }
 
-    const UChar *resStr;
-    int32_t resStrLen = 0;
+    const UChar *resStr,*ovrStr;
+    int32_t resStrLen,ovrStrLen = 0;
+    fDateOverride.setToBogus();
+    fTimeOverride.setToBogus();
 
     // if the pattern should include both date and time information, use the date/time
     // pattern string as a guide to tell use how to glue together the appropriate date
@@ -369,7 +456,31 @@ void SimpleDateFormat::construct(EStyle timeStyle,
         // use Formattable::adoptString() so that we can use fastCopyFrom()
         // instead of Formattable::setString()'s unaware, safe, deep string clone
         // see Jitterbug 2296
-        resStr = ures_getStringByIndex(dateTimePatterns, (int32_t)timeStyle, &resStrLen, &status);
+        
+        currentBundle = ures_getByIndex(dateTimePatterns, (int32_t)timeStyle, NULL, &status);
+        if (U_FAILURE(status)) {
+           status = U_INVALID_FORMAT_ERROR;
+           return;
+        }
+        switch (ures_getType(currentBundle)) {
+            case URES_STRING: {
+               resStr = ures_getString(currentBundle, &resStrLen, &status);
+               break;
+            }
+            case URES_ARRAY: {
+               resStr = ures_getStringByIndex(currentBundle, 0, &resStrLen, &status);
+               ovrStr = ures_getStringByIndex(currentBundle, 1, &ovrStrLen, &status);
+               fTimeOverride.setTo(TRUE, ovrStr, ovrStrLen);
+               break;
+            }
+            default: {
+               status = U_INVALID_FORMAT_ERROR;
+               ures_close(currentBundle);
+               return;
+            }
+        } 
+        ures_close(currentBundle);
+ 
         UnicodeString *tempus1 = new UnicodeString(TRUE, resStr, resStrLen);
         // NULL pointer check
         if (tempus1 == NULL) {
@@ -378,7 +489,30 @@ void SimpleDateFormat::construct(EStyle timeStyle,
         }
         timeDateArray[0].adoptString(tempus1);
         
-        resStr = ures_getStringByIndex(dateTimePatterns, (int32_t)dateStyle, &resStrLen, &status);
+        currentBundle = ures_getByIndex(dateTimePatterns, (int32_t)dateStyle, NULL, &status);
+        if (U_FAILURE(status)) {
+           status = U_INVALID_FORMAT_ERROR;
+           return;
+        }
+        switch (ures_getType(currentBundle)) {
+            case URES_STRING: {
+               resStr = ures_getString(currentBundle, &resStrLen, &status);
+               break; 
+            }
+            case URES_ARRAY: {
+               resStr = ures_getStringByIndex(currentBundle, 0, &resStrLen, &status);
+               ovrStr = ures_getStringByIndex(currentBundle, 1, &ovrStrLen, &status);
+               fDateOverride.setTo(TRUE, ovrStr, ovrStrLen);
+               break; 
+            }
+            default: {
+               status = U_INVALID_FORMAT_ERROR;
+               ures_close(currentBundle);
+               return;
+            }
+        } 
+        ures_close(currentBundle);
+
         UnicodeString *tempus2 = new UnicodeString(TRUE, resStr, resStrLen);
         // Null pointer check
         if (tempus2 == NULL) {
@@ -394,12 +528,56 @@ void SimpleDateFormat::construct(EStyle timeStyle,
     // pattern string from the resources
     // setTo() - see DateFormatSymbols::assignArray comments
     else if (timeStyle != kNone) {
-        resStr = ures_getStringByIndex(dateTimePatterns, (int32_t)timeStyle, &resStrLen, &status);
+        currentBundle = ures_getByIndex(dateTimePatterns, (int32_t)timeStyle, NULL, &status);
+        if (U_FAILURE(status)) {
+           status = U_INVALID_FORMAT_ERROR;
+           return;
+        }
+        switch (ures_getType(currentBundle)) {
+            case URES_STRING: {
+               resStr = ures_getString(currentBundle, &resStrLen, &status);
+               break; 
+            }
+            case URES_ARRAY: {
+               resStr = ures_getStringByIndex(currentBundle, 0, &resStrLen, &status);
+               ovrStr = ures_getStringByIndex(currentBundle, 1, &ovrStrLen, &status);
+               fDateOverride.setTo(TRUE, ovrStr, ovrStrLen);
+               break; 
+            }
+            default: {
+               status = U_INVALID_FORMAT_ERROR;
+                ures_close(currentBundle);
+               return;
+            }
+        } 
         fPattern.setTo(TRUE, resStr, resStrLen);
+        ures_close(currentBundle);
     }
     else if (dateStyle != kNone) {
-        resStr = ures_getStringByIndex(dateTimePatterns, (int32_t)dateStyle, &resStrLen, &status);
+        currentBundle = ures_getByIndex(dateTimePatterns, (int32_t)dateStyle, NULL, &status);
+        if (U_FAILURE(status)) {
+           status = U_INVALID_FORMAT_ERROR;
+           return;
+        }
+        switch (ures_getType(currentBundle)) {
+            case URES_STRING: {
+               resStr = ures_getString(currentBundle, &resStrLen, &status);
+               break; 
+            }
+            case URES_ARRAY: {
+               resStr = ures_getStringByIndex(currentBundle, 0, &resStrLen, &status);
+               ovrStr = ures_getStringByIndex(currentBundle, 1, &ovrStrLen, &status);
+               fDateOverride.setTo(TRUE, ovrStr, ovrStrLen);
+               break; 
+            }
+            default: {
+               status = U_INVALID_FORMAT_ERROR;
+               ures_close(currentBundle);
+               return;
+            }
+        } 
         fPattern.setTo(TRUE, resStr, resStrLen);
+        ures_close(currentBundle);
     }
     
     // and if it includes _neither_, that's an error
@@ -460,6 +638,9 @@ SimpleDateFormat::initialize(const Locale& locale,
             ((DecimalFormat*)fNumberFormat)->setDecimalSeparatorAlwaysShown(FALSE);
         fNumberFormat->setParseIntegerOnly(TRUE);
         fNumberFormat->setMinimumFractionDigits(0); // To prevent "Jan 1.00, 1997.00"
+
+        initNumberFormatters(locale,status);
+    
     }
     else if (U_SUCCESS(status))
     {
@@ -695,13 +876,13 @@ _appendSymbol(UnicodeString& dst,
 
 //---------------------------------------------------------------------
 void
-SimpleDateFormat::appendGMT(UnicodeString &appendTo, Calendar& cal, UErrorCode& status) const{
+SimpleDateFormat::appendGMT(NumberFormat *currentNumberFormat,UnicodeString &appendTo, Calendar& cal, UErrorCode& status) const{
     int32_t offset = cal.get(UCAL_ZONE_OFFSET, status) + cal.get(UCAL_DST_OFFSET, status);
     if (U_FAILURE(status)) {
         return;
     }
     if (isDefaultGMTFormat()) {
-        formatGMTDefault(appendTo, offset);
+        formatGMTDefault(currentNumberFormat,appendTo, offset);
     } else {
         ((SimpleDateFormat*)this)->initGMTFormatters(status);
         if (U_SUCCESS(status)) {
@@ -797,7 +978,7 @@ SimpleDateFormat::parseGMT(const UnicodeString &text, ParsePosition &pos) const 
 }
 
 void
-SimpleDateFormat::formatGMTDefault(UnicodeString &appendTo, int32_t offset) const {
+SimpleDateFormat::formatGMTDefault(NumberFormat *currentNumberFormat,UnicodeString &appendTo, int32_t offset) const {
     if (offset < 0) {
         appendTo += gGmtMinus;
         offset = -offset; // suppress the '-' sign for text display.
@@ -812,18 +993,19 @@ SimpleDateFormat::formatGMTDefault(UnicodeString &appendTo, int32_t offset) cons
     int32_t hour = offset / 60;
 
 
-    zeroPaddingNumber(appendTo, hour, 2, 2);
+    zeroPaddingNumber(currentNumberFormat,appendTo, hour, 2, 2);
     appendTo += (UChar)0x003A /*':'*/;
-    zeroPaddingNumber(appendTo, min, 2, 2);
+    zeroPaddingNumber(currentNumberFormat,appendTo, min, 2, 2);
     if (sec != 0) {
         appendTo += (UChar)0x003A /*':'*/;
-        zeroPaddingNumber(appendTo, sec, 2, 2);
+        zeroPaddingNumber(currentNumberFormat,appendTo, sec, 2, 2);
     }
 }
 
 int32_t
 SimpleDateFormat::parseGMTDefault(const UnicodeString &text, ParsePosition &pos) const {
     int32_t start = pos.getIndex();
+    NumberFormat *currentNumberFormat = getNumberFormat(UDAT_TIMEZONE_RFC_FIELD);
 
     if (start + kGmtLen + 1 >= text.length()) {
         pos.setErrorIndex(start);
@@ -852,7 +1034,7 @@ SimpleDateFormat::parseGMTDefault(const UnicodeString &text, ParsePosition &pos)
     pos.setIndex(cur);
 
     Formattable number;
-    parseInt(text, number, 6, pos, FALSE);
+    parseInt(text, number, 6, pos, FALSE,currentNumberFormat);
     numLen = pos.getIndex() - cur;
 
     if (numLen <= 0) {
@@ -874,7 +1056,7 @@ SimpleDateFormat::parseGMTDefault(const UnicodeString &text, ParsePosition &pos)
         if (cur + 2 < text.length() && text.charAt(cur) == (UChar)0x003A /* colon */) {
             cur++;
             pos.setIndex(cur);
-            parseInt(text, number, 2, pos, FALSE);
+            parseInt(text, number, 2, pos, FALSE,currentNumberFormat);
             numLen = pos.getIndex() - cur;
             if (numLen == 2) {
                 // got minute field
@@ -883,7 +1065,7 @@ SimpleDateFormat::parseGMTDefault(const UnicodeString &text, ParsePosition &pos)
                 if (cur + 2 < text.length() && text.charAt(cur) == (UChar)0x003A /* colon */) {
                     cur++;
                     pos.setIndex(cur);
-                    parseInt(text, number, 2, pos, FALSE);
+                    parseInt(text, number, 2, pos, FALSE,currentNumberFormat);
                     numLen = pos.getIndex() - cur;
                     if (numLen == 2) {
                         // got second field
@@ -1026,6 +1208,145 @@ SimpleDateFormat::initGMTFormatters(UErrorCode &status) {
     umtx_unlock(&LOCK);
 }
 
+void
+SimpleDateFormat::initNumberFormatters(const Locale &locale,UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    if ( fDateOverride.isBogus() && fTimeOverride.isBogus() ) {
+        return;
+    }
+    umtx_lock(&LOCK);
+    if (fNumberFormatters == NULL) {
+        fNumberFormatters = (NumberFormat**)uprv_malloc(UDAT_FIELD_COUNT * sizeof(NumberFormat*));
+        if (fNumberFormatters) {
+            for (int32_t i = 0; i < UDAT_FIELD_COUNT; i++) {
+                fNumberFormatters[i] = fNumberFormat;
+            }
+        } else {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
+    }
+    umtx_unlock(&LOCK);
+    
+    processOverrideString(locale,fDateOverride,kOvrStrDate,status);
+    processOverrideString(locale,fTimeOverride,kOvrStrTime,status);
+
+}
+
+void
+SimpleDateFormat::processOverrideString(const Locale &locale, UnicodeString &str, int8_t type, UErrorCode &status) {
+
+    if (str.isBogus()) {
+        return;
+    }
+    int32_t start = 0;
+    int32_t len;
+    UnicodeString nsName;
+    UnicodeString ovrField;
+    UBool moreToProcess = TRUE;
+
+    while (moreToProcess) {
+        int32_t delimiterPosition = str.indexOf((UChar)ULOC_KEYWORD_ITEM_SEPARATOR,start);
+        if (delimiterPosition == -1) {
+            moreToProcess = FALSE;
+            len = str.length() - start;
+        } else {
+            len = delimiterPosition - start;
+        }
+        UnicodeString currentString(str,start,len);
+        int32_t equalSignPosition = currentString.indexOf((UChar)ULOC_KEYWORD_ASSIGN,0);
+        if (equalSignPosition == -1) { // Simple override string such as "hebrew"
+            nsName.setTo(currentString);
+            ovrField.setToBogus();
+        } else { // Field specific override string such as "y=hebrew"
+            nsName.setTo(currentString,equalSignPosition+1);
+            ovrField.setTo(currentString,0,1); // We just need the first character.
+        }
+
+        int32_t nsNameHash = nsName.hashCode();
+        // See if the numbering system is in the override list, if not, then add it.
+        NSOverride *cur = fOverrideList;
+        NumberFormat *nf;
+        UBool found = FALSE;
+        while ( cur && !found ) {
+            if ( cur->hash == nsNameHash ) {
+                nf = cur->nf;
+                found = TRUE;
+            }
+            cur = cur->next;
+        }
+
+        if (!found) {
+           cur = (NSOverride *)uprv_malloc(sizeof(NSOverride));
+           if (cur) {
+               char kw[ULOC_KEYWORD_AND_VALUES_CAPACITY];
+               uprv_strcpy(kw,"numbers=");
+               nsName.extract(0,len,kw+8,ULOC_KEYWORD_AND_VALUES_CAPACITY-8,US_INV);
+
+               Locale ovrLoc(locale.getLanguage(),locale.getCountry(),locale.getVariant(),kw);
+               nf = NumberFormat::createInstance(ovrLoc,status);
+
+               // no matter what the locale's default number format looked like, we want
+               // to modify it so that it doesn't use thousands separators, doesn't always
+               // show the decimal point, and recognizes integers only when parsing
+
+               nf->setGroupingUsed(FALSE);
+               if (nf->getDynamicClassID() == DecimalFormat::getStaticClassID())
+                   ((DecimalFormat*)nf)->setDecimalSeparatorAlwaysShown(FALSE);
+               nf->setParseIntegerOnly(TRUE);
+               nf->setMinimumFractionDigits(0); // To prevent "Jan 1.00, 1997.00"
+
+               cur->nf = nf;
+               cur->hash = nsNameHash;
+               cur->next = fOverrideList;
+               fOverrideList = cur;
+           } else {
+               status = U_MEMORY_ALLOCATION_ERROR;
+               return;
+           }
+        }
+        
+        // Now that we have an appropriate number formatter, fill in the appropriate spaces in the
+        // number formatters table.
+
+        if (ovrField.isBogus()) {
+            switch (type) {
+                case kOvrStrDate:
+                case kOvrStrBoth: {
+                    for ( int8_t i=0 ; i<kDateFieldsCount; i++ ) {
+                        fNumberFormatters[kDateFields[i]] = nf;
+                    }
+                    if (type==kOvrStrDate) {
+                        break;
+                    }
+                }
+                case kOvrStrTime : {
+                    for ( int8_t i=0 ; i<kTimeFieldsCount; i++ ) {
+                        fNumberFormatters[kTimeFields[i]] = nf;
+                    }
+                    break;
+                }
+            }
+        } else {
+           UChar ch = ovrField.charAt(0);
+           UChar *patternCharPtr = u_strchr(DateFormatSymbols::getPatternUChars(), ch);
+           UDateFormatField patternCharIndex;
+
+           // if the pattern character is unrecognized, signal an error and bail out
+           if (patternCharPtr == NULL) {
+               status = U_INVALID_FORMAT_ERROR;
+               return;
+           }
+           patternCharIndex = (UDateFormatField)(patternCharPtr - DateFormatSymbols::getPatternUChars());
+
+           // Set the number formatter in the table
+           fNumberFormatters[patternCharIndex] = nf;
+        }
+
+        start = delimiterPosition + 1;
+    }
+} 
 //---------------------------------------------------------------------
 void
 SimpleDateFormat::subFormat(UnicodeString &appendTo,
@@ -1046,6 +1367,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     UDateFormatField patternCharIndex;
     const int32_t maxIntCount = 10;
     int32_t beginOffset = appendTo.length();
+    NumberFormat *currentNumberFormat;
 
     // if the pattern character is unrecognized, signal an error and dump out
     if (patternCharPtr == NULL)
@@ -1061,6 +1383,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         return;
     }
 
+    currentNumberFormat = getNumberFormat(patternCharIndex);
     switch (patternCharIndex) {
     
     // for any "G" symbol, write out the appropriate era string
@@ -1085,9 +1408,9 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     case UDAT_YEAR_FIELD:
     case UDAT_YEAR_WOY_FIELD:
         if(count == 2)
-            zeroPaddingNumber(appendTo, value, 2, 2);
+            zeroPaddingNumber(currentNumberFormat,appendTo, value, 2, 2);
         else 
-            zeroPaddingNumber(appendTo, value, count, maxIntCount);
+            zeroPaddingNumber(currentNumberFormat,appendTo, value, count, maxIntCount);
         break; 
 
     // for "MMMM", write out the whole month name, for "MMM", write out the month
@@ -1105,7 +1428,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             _appendSymbol(appendTo, value, fSymbols->fShortMonths,
                           fSymbols->fShortMonthsCount);
         else 
-            zeroPaddingNumber(appendTo, value + 1, count, maxIntCount);
+            zeroPaddingNumber(currentNumberFormat,appendTo, value + 1, count, maxIntCount);
         break;
 
     // for "LLLL", write out the whole month name, for "LLL", write out the month
@@ -1123,32 +1446,32 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             _appendSymbol(appendTo, value, fSymbols->fStandaloneShortMonths,
                           fSymbols->fStandaloneShortMonthsCount);
         else 
-            zeroPaddingNumber(appendTo, value + 1, count, maxIntCount);
+            zeroPaddingNumber(currentNumberFormat,appendTo, value + 1, count, maxIntCount);
         break;
 
     // for "k" and "kk", write out the hour, adjusting midnight to appear as "24"
     case UDAT_HOUR_OF_DAY1_FIELD:
         if (value == 0) 
-            zeroPaddingNumber(appendTo, cal.getMaximum(UCAL_HOUR_OF_DAY) + 1, count, maxIntCount);
+            zeroPaddingNumber(currentNumberFormat,appendTo, cal.getMaximum(UCAL_HOUR_OF_DAY) + 1, count, maxIntCount);
         else 
-            zeroPaddingNumber(appendTo, value, count, maxIntCount);
+            zeroPaddingNumber(currentNumberFormat,appendTo, value, count, maxIntCount);
         break;
 
     case UDAT_FRACTIONAL_SECOND_FIELD:
         // Fractional seconds left-justify
         {
-            fNumberFormat->setMinimumIntegerDigits((count > 3) ? 3 : count);
-            fNumberFormat->setMaximumIntegerDigits(maxIntCount);
+            currentNumberFormat->setMinimumIntegerDigits((count > 3) ? 3 : count);
+            currentNumberFormat->setMaximumIntegerDigits(maxIntCount);
             if (count == 1) {
                 value = (value + 50) / 100;
             } else if (count == 2) {
                 value = (value + 5) / 10;
             }
             FieldPosition p(0);
-            fNumberFormat->format(value, appendTo, p);
+            currentNumberFormat->format(value, appendTo, p);
             if (count > 3) {
-                fNumberFormat->setMinimumIntegerDigits(count - 3);
-                fNumberFormat->format((int32_t)0, appendTo, p);
+                currentNumberFormat->setMinimumIntegerDigits(count - 3);
+                currentNumberFormat->format((int32_t)0, appendTo, p);
             }
         }
         break;
@@ -1159,7 +1482,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     // for "EEE" or "EE" or "E" or "eee", write out the abbreviated day-of-the-week name
     case UDAT_DOW_LOCAL_FIELD:
         if ( count < 3 ) {
-            zeroPaddingNumber(appendTo, value, count, maxIntCount);
+            zeroPaddingNumber(currentNumberFormat,appendTo, value, count, maxIntCount);
             break;
         }
         // fall through to EEEEE-EEE handling, but for that we don't want local day-of-week,
@@ -1186,7 +1509,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     // for "ccccc", use the narrow day-of-the-week name
     case UDAT_STANDALONE_DAY_FIELD:
         if ( count < 3 ) {
-            zeroPaddingNumber(appendTo, value, 1, maxIntCount);
+            zeroPaddingNumber(currentNumberFormat,appendTo, value, 1, maxIntCount);
             break;
         }
         // fall through to alpha DOW handling, but for that we don't want local day-of-week,
@@ -1216,9 +1539,9 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     // as "12"
     case UDAT_HOUR1_FIELD:
         if (value == 0) 
-            zeroPaddingNumber(appendTo, cal.getLeastMaximum(UCAL_HOUR) + 1, count, maxIntCount);
+            zeroPaddingNumber(currentNumberFormat,appendTo, cal.getLeastMaximum(UCAL_HOUR) + 1, count, maxIntCount);
         else 
-            zeroPaddingNumber(appendTo, value, count, maxIntCount);
+            zeroPaddingNumber(currentNumberFormat,appendTo, value, count, maxIntCount);
         break;
 
     // for the "z" symbols, we have to check our time zone data first.  If we have a
@@ -1264,7 +1587,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
                 }
             }
             if (zoneString.isEmpty()) {
-                appendGMT(appendTo, cal, status);
+                appendGMT(currentNumberFormat,appendTo, cal, status);
             } else {
                 appendTo += zoneString;
             }
@@ -1278,7 +1601,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             formatRFC822TZ(appendTo, value);
         } else {
             // long form, localized GMT pattern
-            appendGMT(appendTo, cal, status);
+            appendGMT(currentNumberFormat,appendTo, cal, status);
         }
         break;
 
@@ -1290,7 +1613,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             _appendSymbol(appendTo, value/3, fSymbols->fShortQuarters,
                           fSymbols->fShortQuartersCount);
         else 
-            zeroPaddingNumber(appendTo, (value/3) + 1, count, maxIntCount);
+            zeroPaddingNumber(currentNumberFormat,appendTo, (value/3) + 1, count, maxIntCount);
         break;
 
     case UDAT_STANDALONE_QUARTER_FIELD:
@@ -1301,14 +1624,14 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             _appendSymbol(appendTo, value/3, fSymbols->fStandaloneShortQuarters,
                           fSymbols->fStandaloneShortQuartersCount);
         else 
-            zeroPaddingNumber(appendTo, (value/3) + 1, count, maxIntCount);
+            zeroPaddingNumber(currentNumberFormat,appendTo, (value/3) + 1, count, maxIntCount);
         break;
 
 
     // all of the other pattern symbols can be formatted as simple numbers with
     // appropriate zero padding
     default:
-        zeroPaddingNumber(appendTo, value, count, maxIntCount);
+        zeroPaddingNumber(currentNumberFormat,appendTo, value, count, maxIntCount);
         break;
     }
 
@@ -1320,17 +1643,27 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         pos.setEndIndex(appendTo.length());
     }
 }
+//----------------------------------------------------------------------
+
+NumberFormat *
+SimpleDateFormat::getNumberFormat(UDateFormatField index) const {
+    if (fNumberFormatters != NULL) {
+        return fNumberFormatters[index];
+    } else {
+        return fNumberFormat;
+    }
+}
 
 //----------------------------------------------------------------------
 void
-SimpleDateFormat::zeroPaddingNumber(UnicodeString &appendTo, int32_t value, int32_t minDigits, int32_t maxDigits) const
+SimpleDateFormat::zeroPaddingNumber(NumberFormat *currentNumberFormat,UnicodeString &appendTo, int32_t value, int32_t minDigits, int32_t maxDigits) const
 {
-    if (fNumberFormat!=NULL) {
+    if (currentNumberFormat!=NULL) {
         FieldPosition pos(0);
 
-        fNumberFormat->setMinimumIntegerDigits(minDigits);
-        fNumberFormat->setMaximumIntegerDigits(maxDigits);
-        fNumberFormat->format(value, appendTo, pos);  // 3rd arg is there to speed up processing
+        currentNumberFormat->setMinimumIntegerDigits(minDigits);
+        currentNumberFormat->setMaximumIntegerDigits(maxDigits);
+        currentNumberFormat->format(value, appendTo, pos);  // 3rd arg is there to speed up processing
     }
 }
 
@@ -1923,7 +2256,8 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     int32_t value = 0;
     int32_t i;
     ParsePosition pos(0);
-    int32_t patternCharIndex;
+    UDateFormatField patternCharIndex;
+    NumberFormat *currentNumberFormat;
     UnicodeString temp;
     UChar *patternCharPtr = u_strchr(DateFormatSymbols::getPatternUChars(), ch);
 
@@ -1936,7 +2270,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     }
 
     patternCharIndex = (UDateFormatField)(patternCharPtr - DateFormatSymbols::getPatternUChars());
-
+    currentNumberFormat = getNumberFormat(patternCharIndex);
     UCalendarDateFields field = fgPatternIndexToCalendarField[patternCharIndex];
 
     // If there are any spaces here, skip over them.  If we hit the end
@@ -1985,7 +2319,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             src = &text;
         }
 
-        parseInt(*src, number, pos, allowNegative);
+        parseInt(*src, number, pos, allowNegative,currentNumberFormat);
 
         if (pos.getIndex() == parseStart)
             return -start;
@@ -2265,7 +2599,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                     // Parse digits
                     int32_t orgPos = start + 1;
                     pos.setIndex(orgPos);
-                    parseInt(text, number, 6, pos, FALSE);
+                    parseInt(text, number, 6, pos, FALSE,currentNumberFormat);
                     int32_t numLen = pos.getIndex() - orgPos;
                     if (numLen <= 0) {
                         break;
@@ -2394,7 +2728,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         } else {
             src = &text;
         }
-        parseInt(*src, number, pos, allowNegative);
+        parseInt(*src, number, pos, allowNegative,currentNumberFormat);
         if (pos.getIndex() != parseStart) {
             cal.set(field, number.getLong());
             return pos.getIndex();
@@ -2410,8 +2744,9 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
 void SimpleDateFormat::parseInt(const UnicodeString& text,
                                 Formattable& number,
                                 ParsePosition& pos,
-                                UBool allowNegative) const {
-    parseInt(text, number, -1, pos, allowNegative);
+                                UBool allowNegative,
+                                NumberFormat *fmt) const {
+    parseInt(text, number, -1, pos, allowNegative,fmt);
 }
 
 /**
@@ -2421,17 +2756,18 @@ void SimpleDateFormat::parseInt(const UnicodeString& text,
                                 Formattable& number,
                                 int32_t maxDigits,
                                 ParsePosition& pos,
-                                UBool allowNegative) const {
+                                UBool allowNegative,
+                                NumberFormat *fmt) const {
     UnicodeString oldPrefix;
     DecimalFormat* df = NULL;
     if (!allowNegative &&
-        fNumberFormat->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
-        df = (DecimalFormat*)fNumberFormat;
+        fmt->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
+        df = (DecimalFormat*)fmt;
         df->getNegativePrefix(oldPrefix);
         df->setNegativePrefix(SUPPRESS_NEGATIVE_PREFIX);
     }
     int32_t oldPos = pos.getIndex();
-    fNumberFormat->parse(text, number, pos);
+    fmt->parse(text, number, pos);
     if (df != NULL) {
         df->setNegativePrefix(oldPrefix);
     }
