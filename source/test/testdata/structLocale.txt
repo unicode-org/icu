@@ -5100,6 +5100,17 @@ structLocale:table(nofallback){
                 "",
                 "",
             }
+            DateTimePatterns{
+                "A2",
+                "A2",
+                "A2",
+                "A2",
+                "A2",
+                "A2",
+                "A2",
+                "A2",
+                "",
+            }
             availableFormats{
                 HHmm{""}
                 HHmmss{""}

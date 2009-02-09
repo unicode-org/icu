@@ -708,7 +708,8 @@ private:
      * @param minDigits Minimum number of digits the result should have
      * @param maxDigits Maximum number of digits the result should have
      */
-    void zeroPaddingNumber(          UnicodeString &appendTo,
+    void zeroPaddingNumber(          NumberFormat *currentNumberFormat,
+                                     UnicodeString &appendTo,
                                      int32_t value,
                                      int32_t minDigits,
                                      int32_t maxDigits) const;
@@ -806,13 +807,15 @@ private:
     void parseInt(const UnicodeString& text,
                   Formattable& number,
                   ParsePosition& pos,
-                  UBool allowNegative) const;
+                  UBool allowNegative,
+                  NumberFormat *fmt) const;
 
     void parseInt(const UnicodeString& text,
                   Formattable& number,
                   int32_t maxDigits,
                   ParsePosition& pos,
-                  UBool allowNegative) const;
+                  UBool allowNegative,
+                  NumberFormat *fmt) const;
 
     int32_t checkIntSuffix(const UnicodeString& text, int32_t start,
                            int32_t patLoc, UBool isNegative) const;
@@ -872,8 +875,8 @@ private:
     /**
      * Private methods for formatting/parsing GMT string
      */
-    void appendGMT(UnicodeString &appendTo, Calendar& cal, UErrorCode& status) const;
-    void formatGMTDefault(UnicodeString &appendTo, int32_t offset) const;
+    void appendGMT(NumberFormat *currentNumberFormat,UnicodeString &appendTo, Calendar& cal, UErrorCode& status) const;
+    void formatGMTDefault(NumberFormat *currentNumberFormat,UnicodeString &appendTo, int32_t offset) const;
     int32_t parseGMT(const UnicodeString &text, ParsePosition &pos) const;
     int32_t parseGMTDefault(const UnicodeString &text, ParsePosition &pos) const;
     UBool isDefaultGMTFormat() const;
@@ -884,6 +887,21 @@ private:
      * Initialize MessageFormat instances used for GMT formatting/parsing
      */
     void initGMTFormatters(UErrorCode &status);
+
+    /**
+     * Initialize NumberFormat instances used for numbering system overrides.
+     */
+    void initNumberFormatters(const Locale &locale,UErrorCode &status);
+
+    /**
+     * Get the numbering system to be used for a particular field.
+     */
+    NumberFormat * getNumberFormat(UDateFormatField index) const;
+
+    /**
+     * Parse the given override string and set up structures for number formats
+     */
+    void processOverrideString(const Locale &locale, UnicodeString &str, int8_t type, UErrorCode &status);
 
     /**
      * Used to map pattern characters to Calendar field identifiers.
@@ -909,6 +927,17 @@ private:
      */
     UnicodeString       fPattern;
 
+    /**
+     * The numbering system override for dates.
+     */
+    UnicodeString       fDateOverride;
+
+    /**
+     * The numbering system override for times.
+     */
+    UnicodeString       fTimeOverride;
+
+   
     /**
      * The original locale used (for reloading symbols)
      */
@@ -943,11 +972,21 @@ private:
 
     ParsedTZType tztype; // here to avoid api change
 
+    typedef struct NSOverride {
+        NumberFormat *nf;
+        int32_t hash;
+        NSOverride *next;
+    } NSOverride;
+
     /*
      * MessageFormat instances used for localized GMT format
      */
     MessageFormat   **fGMTFormatters;
 
+    NumberFormat    **fNumberFormatters;
+
+    NSOverride      *fOverrideList;
+    
     UBool fHaveDefaultCentury;
 };
 

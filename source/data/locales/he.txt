@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/he.xml
@@ -1685,6 +1685,17 @@ he{
             AmPmMarkers{
                 "לפנה\"צ",
                 "אחה\"צ",
+            }
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                { "EEEE d MMMM yyyy", "hebrew" },
+                { "d MMMM yyyy", "hebrew" },
+                { "dd/MM/yyyy", "hebrew" },
+                { "dd/MM/yyyy", "hebrew" },
+                "{1} {0}",
             }
             eras{
                 abbreviated{
