@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (C) 2001-2008 IBM, Inc.   All Rights Reserved.
+ * Copyright (C) 2001-2009 IBM, Inc.   All Rights Reserved.
  *
  ********************************************************************/
 /********************************************************************************
@@ -81,7 +81,7 @@ const char gUsageString[] =
 //  Stubs for Windows API functions when building on UNIXes.
 //
 typedef int DWORD;
-inline int CompareStringW(DWORD, DWORD, UChar *, int, UChar *, int) {return 0;};
+inline int CompareStringW(DWORD, DWORD, UChar *, int, UChar *, int) {return 0;}
 #include <sys/time.h>
 unsigned long timeGetTime() {
     struct timeval t;
@@ -89,8 +89,8 @@ unsigned long timeGetTime() {
     unsigned long val = t.tv_sec * 1000;  // Let it overflow.  Who cares.
     val += t.tv_usec / 1000;
     return val;
-};
-inline int LCMapStringW(DWORD, DWORD, UChar *, int, UChar *, int) {return 0;};
+}
+inline int LCMapStringW(DWORD, DWORD, UChar *, int, UChar *, int) {return 0;}
 const int LCMAP_SORTKEY = 0;
 #define MAKELCID(a,b) 0
 const int SORT_DEFAULT = 0;
@@ -103,7 +103,7 @@ const int SORT_DEFAULT = 0;
 //     These global variables are set according to the options specified
 //     on the command line by the user.
 char * opt_fName      = 0;
-char * opt_locale     = "en_US";
+const char * opt_locale     = "en_US";
 int    opt_langid     = 0;         // Defaults to value corresponding to opt_locale.
 char * opt_rules      = 0;
 UBool  opt_help       = FALSE;
@@ -368,7 +368,7 @@ int ICURandomCmp(const void *a, const void *b) {
 void doKeyGen()
 {
     int  line;
-    int  loops;
+    int  loops = 0;
     int  iLoop;
     int  t;
     int  len=-1;
@@ -465,9 +465,9 @@ void doBinarySearch()
 
     gCount = 0;
     int  line;
-    int  loops;
-    int  iLoop;
-    unsigned long elapsedTime;
+    int  loops = 0;
+    int  iLoop = 0;
+    unsigned long elapsedTime = 0;
 
     // Adjust loop count to compensate for file size.   Should be order n (lookups) * log n  (compares/lookup)
     // Accurate timings do not depend on this being perfect.  The correction is just to try to
@@ -490,7 +490,7 @@ void doBinarySearch()
             //if (opt_strcmp && opt_win) {pf = (PF)wcscmp;}   // Damn the difference between int32_t and int
                                                             //   which forces the use of a cast here.
             
-            int r;
+            int r = 0;
             for (loops=0; loops<adj_loopCount; loops++) {
                 
                 for (line=0; line < gNumFileLines; line++) {
@@ -523,7 +523,7 @@ void doBinarySearch()
         if (opt_icu)
         {
             unsigned long startTime = timeGetTime();
-            UCollationResult  r;
+            UCollationResult  r = UCOL_EQUAL;
             for (loops=0; loops<adj_loopCount; loops++) {
                 
                 for (line=0; line < gNumFileLines; line++) {
@@ -540,7 +540,7 @@ void doBinarySearch()
                         if (newGuess == guess)
                             break;
                         guess = newGuess;
-                        int ri;
+                        int ri = 0;
                         if (opt_usekeys) {
                             for (iLoop=0; iLoop < opt_iLoopCount; iLoop++) {
                                 ri = strcmp((gSortedLines[line])->icuSortKey, (gSortedLines[guess])->icuSortKey);
@@ -574,7 +574,7 @@ void doBinarySearch()
         if (opt_win)
         {
             unsigned long startTime = timeGetTime();
-            int r;
+            int r = 0;
             for (loops=0; loops<adj_loopCount; loops++) {
                 
                 for (line=0; line < gNumFileLines; line++) {
@@ -630,7 +630,7 @@ void doBinarySearch()
         if (opt_unix)
         {
             unsigned long startTime = timeGetTime();
-            int r;
+            int r = 0;
             for (loops=0; loops<adj_loopCount; loops++) {
                 
                 for (line=0; line < gNumFileLines; line++) {
@@ -766,7 +766,7 @@ void doQSort() {
     } else {
         printf("%d, ", ns);
     }
-};
+}
 
 
 
@@ -851,7 +851,7 @@ void doForwardIterTest(UBool haslen) {
         count ++;
     }
     unsigned long elapsedTime = timeGetTime() - startTime;
-    printf("elapsedTime %d\n", elapsedTime);
+    printf("elapsedTime %ld\n", elapsedTime);
 
     // empty loop recalculation
     count = 0;
@@ -867,7 +867,7 @@ void doForwardIterTest(UBool haslen) {
         count ++;
     }
     elapsedTime -= (timeGetTime() - startTime);
-    printf("elapsedTime %d\n", elapsedTime);
+    printf("elapsedTime %ld\n", elapsedTime);
 
     ucol_closeElements(iter);
 
@@ -939,7 +939,7 @@ void doForwardIterTest(UBool haslen) {
     }
 
     elapsedTime = timeGetTime() - startTime;
-    printf("elapsedTime %d\n", elapsedTime);
+    printf("elapsedTime %ld\n", elapsedTime);
     
     // empty loop recalculation
     int tempgCount = 0;
@@ -964,7 +964,7 @@ void doForwardIterTest(UBool haslen) {
         count ++;
     }
     elapsedTime -= (timeGetTime() - startTime);
-    printf("elapsedTime %d\n", elapsedTime);
+    printf("elapsedTime %ld\n", elapsedTime);
 
     ucol_closeElements(iter);
 
@@ -1015,7 +1015,7 @@ void doBackwardIterTest(UBool haslen) {
     }
     unsigned long elapsedTime = timeGetTime() - startTime;
 
-    printf("elapsedTime %d\n", elapsedTime);
+    printf("elapsedTime %ld\n", elapsedTime);
 
     // empty loop recalculation
     count = 0;
@@ -1032,7 +1032,7 @@ void doBackwardIterTest(UBool haslen) {
     }
     elapsedTime -= (timeGetTime() - startTime);
 
-    printf("elapsedTime %d\n", elapsedTime);
+    printf("elapsedTime %ld\n", elapsedTime);
     ucol_closeElements(iter);
 
     int ns = (int)(float(1000000) * (float)elapsedTime / (float)gCount);
@@ -1102,7 +1102,7 @@ void doBackwardIterTest(UBool haslen) {
     }
 
     elapsedTime = timeGetTime() - startTime;
-    printf("elapsedTime %d\n", elapsedTime);
+    printf("elapsedTime %ld\n", elapsedTime);
     
     // empty loop recalculation
     count = 0;
@@ -1127,7 +1127,7 @@ void doBackwardIterTest(UBool haslen) {
         count ++;
     }
     elapsedTime -= (timeGetTime() - startTime);
-    printf("elapsedTime %d\n", elapsedTime);
+    printf("elapsedTime %ld\n", elapsedTime);
     ucol_closeElements(iter);
 
     printf("gCount %d\n", gCount);
@@ -1163,7 +1163,7 @@ void  UnixConvert() {
 
     cvrtr = ucnv_open("utf-8", &status);    // we are just doing UTF-8 locales for now.
     if (U_FAILURE(status)) {
-        fprintf(stderr, "ICU Converter open failed.: %d\n", &status);
+        fprintf(stderr, "ICU Converter open failed.: %s\n", u_errorName(status));
         exit(-1);
     }
 
@@ -1211,8 +1211,8 @@ public:
     UBool   error() {return fError;};
     
 private:
-    UCharFile (const UCharFile &other) {};                         // No copy constructor.
-    UCharFile & operator = (const UCharFile &other) {return *this;};   // No assignment op
+    UCharFile (const UCharFile & /*other*/) {};                         // No copy constructor.
+    UCharFile & operator = (const UCharFile &/*other*/) {return *this;};   // No assignment op
 
     FILE         *fFile;
     const char   *fName;
@@ -1353,6 +1353,10 @@ UChar UCharFile::get() {
             }
             break;
         };
+    default:
+        c = 0xFFFD; /* Error, unspecified codepage*/
+        fprintf(stderr, "UCharFile: Error: unknown fEncoding\n");
+        exit(1);
     }
     return c;
 }
@@ -1597,13 +1601,13 @@ int main(int argc, const char** argv) {
     //  Pre-compute ICU sort keys for the lines of the file.
     //
     int line;
-    int t;
+    int32_t t;
 
     for (line=0; line<gNumFileLines; line++) {
          t = ucol_getSortKey(gCol, gFileLines[line].name, -1, (unsigned char *)buf, sizeof(buf));
          gFileLines[line].icuSortKey  = new char[t];
 
-         if (t > sizeof(buf)) {
+         if (t > (int32_t)sizeof(buf)) {
              t = ucol_getSortKey(gCol, gFileLines[line].name, -1, (unsigned char *)gFileLines[line].icuSortKey , t);
          }
          else
@@ -1620,7 +1624,7 @@ int main(int argc, const char** argv) {
     for (line=0; line<gNumFileLines; line++) {
          t=LCMapStringW(gWinLCID, LCMAP_SORTKEY, gFileLines[line].name, -1, buf, sizeof(buf));
          gFileLines[line].winSortKey  = new char[t];
-         if (t > sizeof(buf)) {
+         if (t > (int32_t)sizeof(buf)) {
              t = LCMapStringW(gWinLCID, LCMAP_SORTKEY, gFileLines[line].name, -1, (unsigned short *)(gFileLines[line].winSortKey), t);
          }
          else
@@ -1636,7 +1640,7 @@ int main(int argc, const char** argv) {
         for (line=0; line<gNumFileLines; line++) {
             t=strxfrm((char *)buf,  gFileLines[line].unixName,  sizeof(buf));
             gFileLines[line].unixSortKey  = new char[t];
-            if (t > sizeof(buf)) {
+            if (t > (int32_t)sizeof(buf)) {
                 t = strxfrm(gFileLines[line].unixSortKey,  gFileLines[line].unixName,  sizeof(buf));
             }
             else
