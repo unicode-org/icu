@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - test/perf/collationperf
-## Copyright (c) 2001-2008, International Business Machines Corporation and
+## Copyright (c) 2001-2009, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -55,6 +55,7 @@ distclean-local: clean-local
 	$(RMV) Makefile
 
 check-local: all-local
+	$(INVOKE) ./$(TARGET) -loop 200 -file $(top_srcdir)/extra/uconv/samples/utf8/utf-8-demo.txt -keygen -shifted
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
