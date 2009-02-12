@@ -1223,6 +1223,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\currpinf.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\currpinf.h"
+				>
+			</File>
+			<File
 				RelativePath=".\currunit.cpp"
 				>
 			</File>

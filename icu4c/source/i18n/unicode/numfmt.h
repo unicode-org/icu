@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-* Copyright (C) 1997-2006, International Business Machines Corporation and others.
+* Copyright (C) 1997-2009, International Business Machines Corporation and others.
 * All Rights Reserved.
 ********************************************************************************
 *
@@ -107,6 +107,22 @@ class StringEnumeration;
  * to get a format for displaying percentages. With this format, a
  * fraction from 0.53 is displayed as 53%.
  * <P>
+ * Starting from ICU 4.2, you can use createInstance() by passing in a 'style'
+ * as parameter to get the correct instance. 
+ * For example, 
+ * use createInstance(...kNumberStyle...) to get the normal number format,
+ * createInstance(...kPercentStyle...) to get a format for displaying 
+ * percentage,
+ * createInstance(...kScientificStyle...) to get a format for displaying 
+ * scientific number,
+ * createInstance(...kCurrencyStyle...) to get the currency number format, 
+ * in which the currency is represented by its symbol, for example, "$3.00".
+ * createInstance(...kIsoCurrencyStyle...)  to get the currency number format, 
+ * in which the currency is represented by its ISO code, for example "USD3.00".
+ * createInstance(...kPluralCurrencyStyle...) to get the currency number format,
+ * in which the currency is represented by its full name in plural format,
+ * for example, "3.00 US dollars" or "1.00 US dollar".
+ * <P>
  * You can also control the display of numbers with such methods as
  * getMinimumFractionDigits.  If you want even more control over the
  * format or parsing, or want to give your users more control, you can
@@ -145,6 +161,29 @@ class StringEnumeration;
  */
 class U_I18N_API NumberFormat : public Format {
 public:
+
+    /**
+     * Constants for various number format styles.
+     * kNumberStyle specifies a normal number style of format.
+     * kCurrencyStyle specifies a currency format using currency symbol name,
+     * such as in "$1.00".
+     * kPercentStyle specifies a style of format to display percent.
+     * kScientificStyle specifies a style of format to display scientific number.
+     * kISOCurrencyStyle specifies a currency format using ISO currency code,
+     * such as in "USD1.00".
+     * kPluralCurrencyStyle specifies a currency format using currency plural
+     * names, such as in "1.00 US dollar" and "3.00 US dollars".
+     * @draft ICU 4.2
+     */
+    enum EStyles {
+        kNumberStyle,
+        kCurrencyStyle,
+        kPercentStyle,
+        kScientificStyle,
+        kIsoCurrencyStyle,
+        kPluralCurrencyStyle,
+        kStyleCount // ALWAYS LAST ENUM: number of styles
+    };
 
     /**
      * Alignment Field constants used to construct a FieldPosition object.
@@ -445,6 +484,17 @@ public:
                                         UErrorCode&);
 
     /**
+     * Creates the specified decimal format style of the desired locale.
+     * @param desiredLocale    the given locale.
+     * @param choice           the given style.
+     * @param success          Output param filled with success/failure status.
+     * @return                 A new NumberFormat instance.
+     * @draft ICU 4.2
+     */
+    static NumberFormat* U_EXPORT2 createInstance(const Locale& desiredLocale, EStyles choice, UErrorCode& success);
+
+
+    /**
      * Returns a currency format for the current default locale.
      * @stable ICU 2.0
      */
@@ -711,25 +761,6 @@ protected:
     virtual void getEffectiveCurrency(UChar* result, UErrorCode& ec) const;
 
 private:
-
-    enum EStyles {
-        kNumberStyle,
-        kCurrencyStyle,
-        kPercentStyle,
-        kScientificStyle,
-        kStyleCount // ALWAYS LAST ENUM: number of styles
-    };
-
-    /**
-     * Creates the specified decimal format style of the desired locale.
-     * Hook for service registration, uses makeInstance directly if no services
-     * registered.
-     * @param desiredLocale    the given locale.
-     * @param choice           the given style.
-     * @param success          Output param filled with success/failure status.
-     * @return                 A new NumberFormat instance.
-     */
-    static NumberFormat* U_EXPORT2 createInstance(const Locale& desiredLocale, EStyles choice, UErrorCode& success);
 
     /**
      * Creates the specified decimal format style of the desired locale.

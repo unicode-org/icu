@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2008, International Business Machines
+* Copyright (c) 2002-2009, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -137,6 +137,30 @@ ucurr_getName(const UChar* currency,
               UBool* isChoiceFormat,
               int32_t* len,
               UErrorCode* ec);
+
+/**
+ * Returns the plural name for the given currency in the
+ * given locale.  For example, the plural name for the USD
+ * currency object in the en_US locale is "US dollar" or "US dollars".
+ * @param currency null-terminated 3-letter ISO 4217 code
+ * @param locale locale in which to display currency
+ * @param isChoiceFormat fill-in set to TRUE if the returned value
+ * is a ChoiceFormat pattern; otherwise it is a static string
+ * @param pluralCount plural count
+ * @param len fill-in parameter to receive length of result
+ * @param ec error code
+ * @return pointer to display string of 'len' UChars.  If the resource
+ * data contains no entry for 'currency', then 'currency' itself is
+ * returned.  
+ * @draft ICU 4.2
+ */
+U_STABLE const UChar* U_EXPORT2
+ucurr_getPluralName(const UChar* currency,
+                    const char* locale,
+                    UBool* isChoiceFormat,
+                    const char* pluralCount,
+                    int32_t* len,
+                    UErrorCode* ec);
 
 /**
  * Returns the number of the number of fraction digits that should
