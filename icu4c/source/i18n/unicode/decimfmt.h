@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2008, International Business Machines
+*   Copyright (C) 1997-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -36,10 +36,29 @@
 #include "unicode/numfmt.h"
 #include "unicode/locid.h"
 
+union UHashTok;
+
 U_NAMESPACE_BEGIN
+
+
+U_CDECL_BEGIN
+
+/**
+ * @internal ICU 4.2
+ */
+static UBool U_CALLCONV AffixValueComparator(UHashTok val1, UHashTok val2) ;
+
+/**
+ * @internal ICU 4.2
+ */
+static UBool U_CALLCONV AffixPatternValueComparator(UHashTok val1, UHashTok val2) ;
+
+U_CDECL_END
 
 class DigitList;
 class ChoiceFormat;
+class CurrencyPluralInfo;
+class Hashtable;
 
 /**
  * DecimalFormat is a concrete subclass of NumberFormat that formats decimal
@@ -47,8 +66,8 @@ class ChoiceFormat;
  * and format numbers in any locale, including support for Western, Arabic, or
  * Indic digits.  It also supports different flavors of numbers, including
  * integers ("123"), fixed-point numbers ("123.4"), scientific notation
- * ("1.23E4"), percentages ("12%"), and currency amounts ("$123").  All of these
- * flavors can be easily localized.
+ * ("1.23E4"), percentages ("12%"), and currency amounts ("$123", "USD123",
+ * "123 US dollars").  All of these flavors can be easily localized.
  *
  * <p>To obtain a NumberFormat for a specific locale (including the default
  * locale) call one of NumberFormat's factory methods such as
@@ -100,6 +119,27 @@ class ChoiceFormat;
  *         }
  *     }
  * \endcode
+ * <P>
+ * Another example use createInstance(style)
+ * <P>
+ * <pre>
+ * <strong>// Print out a number using the localized number, currency,
+ * // percent, scientific, integer, iso currency, and plural currency
+ * // format for each locale</strong>
+ * Locale* locale = new Locale("en", "US");
+ * double myNumber = 1234.56;
+ * UErrorCode success = U_ZERO_ERROR;
+ * UnicodeString str;
+ * Formattable fmtable;
+ * for (int j=NumberFormat::kNumberStyle; 
+ *      j<=NumberFormat::kPluralCurrencyStyle; 
+ *      ++j) {
+ *     NumberFormat* format = NumberFormat::createInstance(locale, j, success);
+ *     str.remove();
+ *     cout << "format result " << form->format(myNumber, str) << endl;
+ *     format->parse(form->format(myNumber, str), fmtable, success);
+ * }</pre></blockquote>
+ *
  *
  * <p><strong>Patterns</strong>
  *
@@ -208,6 +248,8 @@ class ChoiceFormat;
  *     <td>No
  *     <td>Currency sign, replaced by currency symbol.  If
  *         doubled, replaced by international currency symbol.
+ *         If tripled, replaced by currency plural names, for example,
+ *         "US dollar" or "US dollars" for America.
  *         If present in a pattern, the monetary decimal separator
  *         is used instead of the decimal separator.
  *   <tr valign=top bgcolor="#eeeeff">
@@ -321,6 +363,12 @@ class ChoiceFormat;
  * DecimalFormatSymbols-based digits are output.
  *
  * <p>During parsing, grouping separators are ignored.
+ *
+ * <p>For currency parsing, the formatter is able to parse every currency
+ * style formats no matter which style the formatter is constructed with.
+ * For example, a formatter instance gotten from 
+ * NumberFormat.getInstance(ULocale, NumberFormat.CURRENCYSTYLE) can parse
+ * formats such as "USD1.00" and "3.00 US dollars".
  *
  * <p>If parse(UnicodeString&,Formattable&,ParsePosition&)
  * fails to parse a string, it leaves the parse position unchanged.
@@ -685,6 +733,23 @@ public:
                     DecimalFormatSymbols* symbolsToAdopt,
                     UErrorCode& status);
 
+    /*
+     * This API is for ICU use only.
+     * Create a DecimalFormat from the given pattern, symbols, and style.
+     *
+     * @param pattern           a non-localized pattern string
+     * @param symbolsToAdopt    the set of symbols to be used.  The caller should not
+     *                          delete this object after making this call.
+     * @param style             style of decimal format, kNumberStyle etc.
+     * @param status            Output param set to success/failure code. If the
+     *                          pattern is invalid this will be set to a failure code.
+     * @internal ICU 4.2
+     */
+    DecimalFormat(  const UnicodeString& pattern,
+                    DecimalFormatSymbols* symbolsToAdopt,
+                    NumberFormat::EStyles style,
+                    UErrorCode& status);
+
     /**
      * Create a DecimalFormat from the given pattern and symbols.
      * Use this constructor when you need to completely customize the
@@ -968,6 +1033,31 @@ public:
      * @stable ICU 2.0
      */
     virtual void setDecimalFormatSymbols(const DecimalFormatSymbols& symbols);
+
+
+    /**
+     * Returns the currency plural format information, 
+     * which is generally not changed by the programmer or user.
+     * @return desired CurrencyPluralInfo
+     * @draft ICU 4.2
+     */
+    virtual const CurrencyPluralInfo* getCurrencyPluralInfo(void) const;
+
+    /**
+     * Sets the currency plural format information, 
+     * which is generally not changed by the programmer or user.
+     * @param toAdopt CurrencyPluralInfo to be adopted.
+     * @draft ICU 4.2
+     */
+    virtual void adoptCurrencyPluralInfo(CurrencyPluralInfo* toAdopt);
+
+    /**
+     * Sets the currency plural format information, 
+     * which is generally not changed by the programmer or user.
+     * @param info Currency Plural Info.
+     * @draft ICU 4.2
+     */
+    virtual void setCurrencyPluralInfo(const CurrencyPluralInfo& info);
 
 
     /**
@@ -1645,6 +1735,9 @@ public:
     virtual UClassID getDynamicClassID(void) const;
 
 private:
+    friend UBool U_CALLCONV AffixValueComparator(UHashTok val1, UHashTok val2);
+    friend UBool U_CALLCONV AffixPatternValueComparator(UHashTok val1, UHashTok val2);
+
     DecimalFormat(); // default constructor not implemented
 
     int32_t precision(UBool isIntegral) const;
@@ -1682,6 +1775,31 @@ private:
                             UBool localized,
                             UParseError& parseError,
                             UErrorCode& status);
+
+    /* 
+     * similar to applyPattern, but without re-gen affix for currency 
+     */
+    void applyPatternInternally(const UnicodeString& pluralCount,
+                                const UnicodeString& pattern,
+                                UBool localized,
+                                UParseError& parseError,
+                                UErrorCode& status);
+
+    /*
+     * only apply pattern without expand affixes
+     */
+    void applyPatternWithoutExpandAffix(const UnicodeString& pattern,
+                                        UBool localized,
+                                        UParseError& parseError,
+                                        UErrorCode& status);
+
+
+    /*
+     * expand affixes (after apply patter) and re-compute fFormatWidth
+     */
+    void expandAffixAdjustWidth(const UnicodeString* pluralCount);
+
+    
     /**
      * Do the work of formatting a number, either a double or a long.
      *
@@ -1698,6 +1816,7 @@ private:
                              DigitList& digits,
                              UBool         isInteger) const;
 
+
     void parse(const UnicodeString& text,
                Formattable& result,
                ParsePosition& pos,
@@ -1708,9 +1827,26 @@ private:
         fgStatusLength      // Leave last in list.
     } StatusFlags;
 
-    UBool subparse(const UnicodeString& text, ParsePosition& parsePosition,
+    UBool subparse(const UnicodeString& text, 
+                   const UnicodeString* negPrefix,
+                   const UnicodeString* negSuffix,
+                   const UnicodeString* posPrefix,
+                   const UnicodeString* posSuffix,
+                   UBool currencyParsing,
+                   ParsePosition& parsePosition,
                    DigitList& digits, UBool* status,
                    UChar* currency) const;
+
+    // Mixed style parsing for currency.
+    // It parses against the current currency pattern 
+    // using complex affix comparison
+    // parses against the currency plural patterns using complex affix comparison,
+    // and parses against the current pattern using simple affix comparison.
+    UBool parseForCurrency(const UnicodeString& text, 
+                           ParsePosition& parsePosition,
+                           DigitList& digits,
+                           UBool* status,
+                           UChar* currency) const;
 
     int32_t skipPadding(const UnicodeString& text, int32_t position) const;
 
@@ -1718,6 +1854,8 @@ private:
                          int32_t pos,
                          UBool isNegative,
                          UBool isPrefix,
+                         const UnicodeString* affixPat,
+                         UBool currencyParsing,
                          UChar* currency) const;
     
     static int32_t compareSimpleAffix(const UnicodeString& affix,
@@ -1752,7 +1890,7 @@ private:
      * there are special characters.  Single quotes themselves must be
      * escaped in either case.
      */
-    void appendAffixPattern(UnicodeString& appendTo, const UnicodeString& affix, 
+    void appendAffixPattern(UnicodeString& appendTo, const UnicodeString& affix,
                             UBool localized) const;
 
     void appendAffixPattern(UnicodeString& appendTo,
@@ -1762,9 +1900,10 @@ private:
     void expandAffix(const UnicodeString& pattern,
                      UnicodeString& affix,
                      double number,
-                     UBool doFormat) const;
+                     UBool doFormat,
+                     const UnicodeString* pluralCount) const;
 
-    void expandAffixes();
+    void expandAffixes(const UnicodeString* pluralCount);
     
     static double round(double a, ERoundingMode mode, UBool isNegative);
 
@@ -1775,6 +1914,47 @@ private:
     UBool isGroupingPosition(int32_t pos) const;
 
     void setCurrencyForSymbols();
+
+    // similar to setCurrency without re-compute the affixes for currency.
+    // If currency changes, the affix pattern for currency is not changed,
+    // but the affix will be changed. So, affixes need to be 
+    // re-computed in setCurrency(), but not in setCurrencyInternally().
+    virtual void setCurrencyInternally(const UChar* theCurrency, UErrorCode& ec);
+
+    // set up currency affix patterns for mix parsing.
+    // The patterns saved here are the affix patterns of default currency
+    // pattern and the unique affix patterns of the plural currency patterns.
+    // Those patterns are used by parseForCurrency().
+    void setupCurrencyAffixPatterns(UErrorCode& status);
+
+    // set up the currency affixes used in currency plural formatting.
+    // It sets up both fAffixesForCurrency for currency pattern if the current
+    // pattern contains 3 currency signs, 
+    // and it sets up fPluralAffixesForCurrency for currency plural patterns.
+    void setupCurrencyAffixes(const UnicodeString& pattern, 
+                              UBool setupForCurrentPattern,
+                              UBool setupForPluralPattern,
+                              UErrorCode& status);
+   
+    // hashtable operations
+    Hashtable* initHashForAffixPattern(UErrorCode& status);
+    Hashtable* initHashForAffix(UErrorCode& status);
+
+    void deleteHashForAffixPattern();
+    void deleteHashForAffix(Hashtable*& table);
+
+    void copyHashForAffixPattern(const Hashtable* source,
+                                 Hashtable* target, UErrorCode& status);
+    void copyHashForAffix(const Hashtable* source,
+                          Hashtable* target, UErrorCode& status);
+
+    // currency sign count
+    enum {
+        fgCurrencySignCountZero,
+        fgCurrencySignCountInSymbolFormat,
+        fgCurrencySignCountInISOFormat,
+        fgCurrencySignCountInPluralFormat
+    } CurrencySignCount;
 
     /**
      * Constants.
@@ -1803,7 +1983,6 @@ private:
     int32_t                 fGroupingSize;
     int32_t                 fGroupingSize2;
     UBool                   fDecimalSeparatorAlwaysShown;
-    /*transient*/ UBool     fIsCurrencyFormat;
     DecimalFormatSymbols*   fSymbols;
 
     UBool                   fUseSignificantDigits;
@@ -1825,6 +2004,110 @@ private:
     UChar32                 fPad;
     int32_t                 fFormatWidth;
     EPadPosition            fPadPosition;
+
+    /*
+     * Following are used for currency format
+     */
+    // pattern used in this formatter
+    UnicodeString fFormatPattern;
+    // style is only valid when decimal formatter is constructed by
+    // DecimalFormat(pattern, decimalFormatSymbol, style)
+    int fStyle;
+    /*
+     * Represents whether this is a currency format, and which
+     * currency format style.
+     * 0: not currency format type;
+     * 1: currency style -- symbol name, such as "$" for US dollar.
+     * 2: currency style -- ISO name, such as USD for US dollar.
+     * 3: currency style -- plural long name, such as "US Dollar" for
+     *                      "1.00 US Dollar", or "US Dollars" for
+     *                      "3.00 US Dollars".
+     */
+    int fCurrencySignCount;
+
+
+    /* For currency parsing purose,
+     * Need to remember all prefix patterns and suffix patterns of 
+     * every currency format pattern, 
+     * including the pattern of default currecny style
+     * and plural currency style. And the patterns are set through applyPattern.
+     */
+    // TODO: innerclass?
+    struct AffixPatternsForCurrency : public UMemory {
+        // negative prefix pattern
+        UnicodeString negPrefixPatternForCurrency;
+        // negative suffix pattern
+        UnicodeString negSuffixPatternForCurrency;
+        // positive prefix pattern
+        UnicodeString posPrefixPatternForCurrency;
+        // positive suffix pattern
+        UnicodeString posSuffixPatternForCurrency;
+        
+        AffixPatternsForCurrency(const UnicodeString& negPrefix, 
+                                 const UnicodeString& negSuffix,
+                                 const UnicodeString& posPrefix,
+                                 const UnicodeString& posSuffix) {
+            negPrefixPatternForCurrency = negPrefix;
+            negSuffixPatternForCurrency = negSuffix;
+            posPrefixPatternForCurrency = posPrefix;
+            posSuffixPatternForCurrency = posSuffix;
+        }
+    };
+        
+    /* affix for currency formatting when the currency sign in the pattern
+     * equals to 3, such as the pattern contains 3 currency sign or 
+     * the formatter style is currency plural format style.
+     */
+    struct AffixesForCurrency : public UMemory {
+        // negative prefix
+        UnicodeString negPrefixForCurrency;
+        // negative suffix
+        UnicodeString negSuffixForCurrency;
+        // positive prefix
+        UnicodeString posPrefixForCurrency;
+        // positive suffix
+        UnicodeString posSuffixForCurrency;
+        
+        int32_t formatWidth;
+
+        AffixesForCurrency(const UnicodeString& negPrefix,
+                           const UnicodeString& negSuffix,
+                           const UnicodeString& posPrefix,
+                           const UnicodeString& posSuffix) {
+            negPrefixForCurrency = negPrefix;
+            negSuffixForCurrency = negSuffix;
+            posPrefixForCurrency = posPrefix;
+            posSuffixForCurrency = posSuffix;
+        }
+    };
+
+    // Affix pattern set for currency.
+    // It is a set of AffixPatternsForCurrency,
+    // each element of the set saves the negative prefix pattern,
+    // negative suffix pattern, positive prefix pattern, 
+    // and positive suffix  pattern of a pattern.
+    // It is used for currency mixed style parsing.
+    // It is actually is a set.
+    // The set contains the default currency pattern from the locale,
+    // and the currency plural patterns.
+    // Since it is a set, it does not contain duplicated items.
+    // For example, if 2 currency plural patterns are the same, only one pattern
+    // is included in the set. When parsing, we do not check whether the plural
+    // count match or not.
+    Hashtable* fAffixPatternsForCurrency;
+
+    // Following 2 are affixes for currency.
+    // It is a hash map from plural count to AffixesForCurrency.
+    // AffixesForCurrency saves the negative prefix,
+    // negative suffix, positive prefix, and positive suffix of a pattern.
+    // It is used during currency formatting only when the currency sign count
+    // is 3. In which case, the affixes are getting from here, not
+    // from the fNegativePrefix etc.
+    Hashtable* fAffixesForCurrency;  // for current pattern
+    Hashtable* fPluralAffixesForCurrency;  // for plural pattern
+
+    // Information needed for DecimalFormat to format/parse currency plural.
+    CurrencyPluralInfo* fCurrencyPluralInfo;
 
 protected:
 

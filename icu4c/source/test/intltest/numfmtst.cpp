@@ -27,8 +27,11 @@
 #include "winnmtst.h"
 #include <float.h>
 #include <string.h>
+#include <stdlib.h>
+#include "cstring.h"
 
 static const UChar EUR[] = {69,85,82,0}; // "EUR"
+static const UChar ISO_CURRENCY_USD[] = {0x55, 0x53, 0x44, 0}; // "USD"
  
 // *****************************************************************************
 // class NumberFormatTest
@@ -87,7 +90,11 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(35,TestRounding);
         CASE(36,TestNonpositiveMultiplier);
         CASE(37,TestNumberingSystems);
-
+        CASE(38,TestSpaceParsing);
+        CASE(39,TestMultiCurrencySign);
+        CASE(40,TestCurrencyFormatForMixParsing);
+        CASE(41,TestDecimalFormatCurrencyParse);
+        CASE(42,TestCurrencyIsoPluralFormat);
         default: name = ""; break;
     }
 }
@@ -2309,6 +2316,29 @@ void NumberFormatTest::TestHost()
 #ifdef U_WINDOWS
     Win32NumberTest::testLocales(this);
 #endif
+    for (NumberFormat::EStyles k = NumberFormat::kNumberStyle;
+         k < NumberFormat::kStyleCount; k = (NumberFormat::EStyles)(k+1)) {
+        UErrorCode status = U_ZERO_ERROR;
+        Locale loc("en_US@compat=host");
+        NumberFormat *full = NumberFormat::createInstance(loc, status);
+        if (full == NULL || U_FAILURE(status)) {
+            errln("FAIL: Can't create number instance for host");
+            return;
+        }
+        UnicodeString result1;
+        Formattable number(10.00);
+        full->format(number, result1, status);
+        if (U_FAILURE(status)) {
+            errln("FAIL: Can't format for host");
+            return;
+        }
+        Formattable formattable;
+        full->parse(result1, formattable, status);
+        if (U_FAILURE(status)) {
+            errln("FAIL: Can't parse for host");
+            return;
+        }
+    }
 }
 
 void NumberFormatTest::TestHostClone()
@@ -2536,10 +2566,51 @@ void NumberFormatTest::TestNonpositiveMultiplier() {
 }
 
 
+void 
+NumberFormatTest::TestSpaceParsing() {
+    // the data are:
+    // the string to be parsed, parsed position, parsed error index
+    const char* DATA[][3] = {
+        {"$124", "4", "-1"},
+        {"$124 $124", "4", "-1"},
+        {"$124 ", "4", "-1"},
+        //{"$ 124 ", "5", "-1"}, // TODO: need to handle space correctly
+        //{"$\\u00A0124 ", "5", "-1"}, // TODO: need to handle space correctly
+        {"$ 124 ", "0", "0"}, 
+        {"$\\u00A0124 ", "0", "0"},
+        {" $ 124 ", "0", "0"}, // TODO: need to handle space correctly
+        {"124$", "0", "3"}, // TODO: need to handle space correctly
+        {"124 $", "5", "-1"},
+    };
+    UErrorCode status = U_ZERO_ERROR;
+    NumberFormat* foo = NumberFormat::createCurrencyInstance(status);
+    if (U_FAILURE(status)) {
+        delete foo;
+        return;
+    }
+    for (uint32_t i = 0; i < sizeof(DATA)/sizeof(DATA[0]); ++i) {
+        ParsePosition parsePosition(0);
+        UnicodeString stringToBeParsed = ctou(DATA[i][0]);
+        int parsedPosition = atoi(DATA[i][1]);
+        int errorIndex = atoi(DATA[i][2]);
+        Formattable result;
+        foo->parse(stringToBeParsed, result, parsePosition);
+        if (parsePosition.getIndex() != parsedPosition ||
+            parsePosition.getErrorIndex() != errorIndex) {
+            errln("FAILED parse " + stringToBeParsed + "; wrong position, expected: (" + parsedPosition + ", " + errorIndex + "); got (" + parsePosition.getIndex() + ", " + parsePosition.getErrorIndex() + ")");
+        }
+        if (parsePosition.getErrorIndex() == -1 &&
+            result.getType() == Formattable::kLong && 
+            result.getLong() != 124) {
+            errln("FAILED parse " + stringToBeParsed + "; wrong number, expect: 124, got " + result.getLong());
+        }
+    }
+    delete foo;
+}
+
 /**
  * Test using various numbering systems and numbering system keyword.
  */
-
 void NumberFormatTest::TestNumberingSystems() {
     UErrorCode ec = U_ZERO_ERROR;
 
@@ -2574,6 +2645,288 @@ void NumberFormatTest::TestNumberingSystems() {
     delete fmt1;
     delete fmt2;
     delete fmt3;
+}
+
+
+void 
+NumberFormatTest::TestMultiCurrencySign() {
+    const char* DATA[][6] = {
+        // the fields in the following test are:
+        // locale, 
+        // currency pattern (with negative pattern), 
+        // currency number to be formatted,
+        // currency format using currency symbol name, such as "$" for USD,
+        // currency format using currency ISO name, such as "USD",
+        // currency format using plural name, such as "US dollars".
+        // for US locale
+        {"en_US", "\\u00A4#,##0.00;-\\u00A4#,##0.00", "1234.56", "$1,234.56", "USD1,234.56", "US dollars1,234.56"}, 
+        {"en_US", "\\u00A4#,##0.00;-\\u00A4#,##0.00", "-1234.56", "-$1,234.56", "-USD1,234.56", "-US dollars1,234.56"}, 
+        {"en_US", "\\u00A4#,##0.00;-\\u00A4#,##0.00", "1", "$1.00", "USD1.00", "US dollar1.00"}, 
+        // for CHINA locale
+        {"zh_CN", "\\u00A4#,##0.00;(\\u00A4#,##0.00)", "1234.56", "\\uFFE51,234.56", "CNY1,234.56", "\\u4EBA\\u6C11\\u5E011,234.56"},
+        {"zh_CN", "\\u00A4#,##0.00;(\\u00A4#,##0.00)", "-1234.56", "(\\uFFE51,234.56)", "(CNY1,234.56)", "(\\u4EBA\\u6C11\\u5E011,234.56)"},
+        {"zh_CN", "\\u00A4#,##0.00;(\\u00A4#,##0.00)", "1", "\\uFFE51.00", "CNY1.00", "\\u4EBA\\u6C11\\u5E011.00"}
+    };
+
+    const UChar doubleCurrencySign[] = {0xA4, 0xA4, 0};
+    UnicodeString doubleCurrencyStr(doubleCurrencySign);
+    const UChar tripleCurrencySign[] = {0xA4, 0xA4, 0xA4, 0};
+    UnicodeString tripleCurrencyStr(tripleCurrencySign);
+
+    for (uint32_t i=0; i<sizeof(DATA)/sizeof(DATA[0]); ++i) {
+        const char* locale = DATA[i][0];
+        UnicodeString pat = ctou(DATA[i][1]);
+        double numberToBeFormat = atof(DATA[i][2]);
+        UErrorCode status = U_ZERO_ERROR;
+        DecimalFormatSymbols* sym = new DecimalFormatSymbols(Locale(locale), status);
+        if (U_FAILURE(status)) {
+            delete sym;
+            continue;
+        }
+        for (int j=1; j<=3; ++j) {
+            // j represents the number of currency sign in the pattern.
+            if (j == 2) {
+                pat = pat.findAndReplace(ctou("\\u00A4"), doubleCurrencyStr);
+            } else if (j == 3) {
+                pat = pat.findAndReplace(ctou("\\u00A4\\u00A4"), tripleCurrencyStr);
+            }
+
+            DecimalFormat* fmt = new DecimalFormat(pat, new DecimalFormatSymbols(*sym), status);
+            if (U_FAILURE(status)) {
+                errln("FAILED init DecimalFormat ");
+                delete fmt;
+                continue;
+            }
+            UnicodeString s;
+            ((NumberFormat*) fmt)->format(numberToBeFormat, s);
+            // DATA[i][3] is the currency format result using a
+            // single currency sign.
+            // DATA[i][4] is the currency format result using
+            // double currency sign.
+            // DATA[i][5] is the currency format result using
+            // triple currency sign.
+            // DATA[i][j+2] is the currency format result using
+            // 'j' number of currency sign.
+            UnicodeString currencyFormatResult = ctou(DATA[i][2+j]);
+            if (s.compare(currencyFormatResult)) {
+                errln("FAIL format: Expected " + currencyFormatResult + "; Got " + s);
+            }
+            // mix style parsing
+            for (int k=3; k<=5; ++k) {
+              // DATA[i][3] is the currency format result using a
+              // single currency sign.
+              // DATA[i][4] is the currency format result using
+              // double currency sign.
+              // DATA[i][5] is the currency format result using
+              // triple currency sign.
+              UnicodeString oneCurrencyFormat = ctou(DATA[i][k]);
+              UErrorCode status = U_ZERO_ERROR;
+              Formattable parseRes;
+              fmt->parse(oneCurrencyFormat, parseRes, status);
+              if (U_FAILURE(status) ||
+                  (parseRes.getType() == Formattable::kDouble &&
+                   parseRes.getDouble() != numberToBeFormat) || 
+                  (parseRes.getType() == Formattable::kLong &&
+                   parseRes.getLong() != numberToBeFormat)) {
+                  errln("FAILED parse " + oneCurrencyFormat);
+              }
+            }
+            delete fmt;
+        }
+        delete sym;
+    }
+}
+
+
+void 
+NumberFormatTest::TestCurrencyFormatForMixParsing() {
+    UErrorCode status = U_ZERO_ERROR;
+    MeasureFormat* curFmt = MeasureFormat::createCurrencyFormat(Locale("en_US"), status);
+    if (U_FAILURE(status)) {
+        delete curFmt;
+        return;
+    }
+    const char* formats[] = {
+        "$1,234.56",  // string to be parsed
+        "USD1,234.56",
+        "US dollars1,234.56",
+        "1,234.56 US dollars"
+    };
+    for (uint32_t i = 0; i < sizeof(formats)/sizeof(formats[0]); ++i) {
+        UnicodeString stringToBeParsed = ctou(formats[i]);
+        Formattable result;
+        UErrorCode status = U_ZERO_ERROR;
+        curFmt->parseObject(stringToBeParsed, result, status);
+        if (U_FAILURE(status)) {
+            errln("FAIL: measure format parsing");
+        } 
+        if (result.getType() != Formattable::kObject || 
+            result.getObject()->getDynamicClassID() != CurrencyAmount::getStaticClassID() ||
+            ((CurrencyAmount*)result.getObject())->getNumber().getDouble() != 1234.56 ||
+            UnicodeString(((CurrencyAmount*)result.getObject())->getISOCurrency()).compare(ISO_CURRENCY_USD)) {
+            errln("FAIL: getCurrencyFormat of default locale (en_US) failed roundtripping the number ");
+            if (((CurrencyAmount*)result.getObject())->getNumber().getDouble() != 1234.56) {
+                errln((UnicodeString)"wong number, expect: 1234.56" + ", got: " + ((CurrencyAmount*)result.getObject())->getNumber().getDouble());
+            }
+            if (((CurrencyAmount*)result.getObject())->getISOCurrency() != ISO_CURRENCY_USD) {
+                errln((UnicodeString)"wong currency, expect: USD" + ", got: " + ((CurrencyAmount*)result.getObject())->getISOCurrency());
+            }
+        }
+    }
+    delete curFmt;
+}
+
+
+void 
+NumberFormatTest::TestDecimalFormatCurrencyParse() {
+    // Locale.US
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormatSymbols* sym = new DecimalFormatSymbols(Locale("en_US"), status);
+    if (U_FAILURE(status)) {
+        delete sym;
+        return;
+    }
+    UnicodeString pat;
+    UChar currency = 0x00A4;
+    // "\xA4#,##0.00;-\xA4#,##0.00"
+    pat.append(currency).append(currency).append(currency).append("#,##0.00;-").append(currency).append(currency).append(currency).append("#,##0.00");
+    DecimalFormat* fmt = new DecimalFormat(pat, sym, status);
+    if (U_FAILURE(status)) {
+        delete fmt;
+        errln("failed to new DecimalFormat in TestDecimalFormatCurrencyParse");
+        return;
+    }
+    const char* DATA[][2] = {
+        // the data are:
+        // string to be parsed, the parsed result (number)
+        {"$1.00", "1"},    
+        {"USD1.00", "1"},    
+        {"1.00 US dollar", "1"},    
+        {"$1,234.56", "1234.56"},    
+        {"USD1,234.56", "1234.56"},    
+        {"1,234.56 US dollar", "1234.56"},    
+    };
+    for (uint32_t i = 0; i < sizeof(DATA)/sizeof(DATA[0]); ++i) {
+        UnicodeString stringToBeParsed = ctou(DATA[i][0]);
+        double parsedResult = atof(DATA[i][1]);
+        UErrorCode status = U_ZERO_ERROR;
+        Formattable result;
+        fmt->parse(stringToBeParsed, result, status);
+        if (U_FAILURE(status) ||
+            (result.getType() == Formattable::kDouble &&
+            result.getDouble() != parsedResult) ||
+            (result.getType() == Formattable::kLong &&
+            result.getLong() != parsedResult)) {
+            errln((UnicodeString)"FAIL parse: Expected " + parsedResult);
+        }
+    }
+    delete fmt;
+} 
+
+
+void 
+NumberFormatTest::TestCurrencyIsoPluralFormat() {
+    const char* DATA[][6] = {
+        // the data are:
+        // locale, 
+        // currency amount to be formatted,
+        // currency ISO code to be formatted,
+        // format result using CURRENCYSTYLE,
+        // format result using ISOCURRENCYSTYLE,
+        // format result using PLURALCURRENCYSTYLE,
+        {"en_US", "1", "USD", "$1.00", "USD1.00", "1.00 US dollar"},
+        {"en_US", "1234.56", "USD", "$1,234.56", "USD1,234.56", "1,234.56 US dollars"},
+        {"en_US", "-1234.56", "USD", "($1,234.56)", "(USD1,234.56)", "-1,234.56 US dollars"},
+        {"zh_CN", "1", "USD", "US$1.00", "USD1.00", "1.00 \\u7F8E\\u5143"}, 
+        {"zh_CN", "1234.56", "USD", "US$1,234.56", "USD1,234.56", "1,234.56 \\u7F8E\\u5143"},
+        {"zh_CN", "1", "CHY", "CHY1.00", "CHY1.00", "1.00 CHY"},
+        {"zh_CN", "1234.56", "CHY", "CHY1,234.56", "CHY1,234.56", "1,234.56 CHY"},
+        {"zh_CN", "1", "CNY", "\\uFFE51.00", "CNY1.00", "1.00 \\u4EBA\\u6C11\\u5E01"},
+        {"zh_CN", "1234.56", "CNY", "\\uFFE51,234.56", "CNY1,234.56", "1,234.56 \\u4EBA\\u6C11\\u5E01"}, 
+        {"ru_RU", "1", "RUB", "1,00\\u00A0\\u0440\\u0443\\u0431.", "1,00\\u00A0RUB", "1,00 \\u0420\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u0438\\u0439 \\u0440\\u0443\\u0431\\u043B\\u044C"},
+        {"ru_RU", "2", "RUB", "2,00\\u00A0\\u0440\\u0443\\u0431.", "2,00\\u00A0RUB", "2,00 \\u0420\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u0438\\u0445 \\u0440\\u0443\\u0431\\u043B\\u044F"},
+        {"ru_RU", "5", "RUB", "5,00\\u00A0\\u0440\\u0443\\u0431.", "5,00\\u00A0RUB", "5,00 \\u0420\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u0438\\u0445 \\u0440\\u0443\\u0431\\u043B\\u0435\\u0439"},
+        // test locale without currency information
+        {"ti_ET", "-1.23", "USD", "-US$1.23", "-USD1.23", "-1.23 USD"},
+        // test choice format
+        {"es_AR", "1", "INR", "Re.\\u00A01,00", "INR\\u00A01,00", "1,00 rupia india"},
+    };
+    
+    for (uint32_t i=0; i<sizeof(DATA)/sizeof(DATA[0]); ++i) {
+      for (NumberFormat::EStyles k = NumberFormat::kCurrencyStyle;
+           k <= NumberFormat::kPluralCurrencyStyle;
+           k = (NumberFormat::EStyles)(k+1)) {
+        // k represents currency format style.
+        if ( k != NumberFormat::kCurrencyStyle &&
+             k != NumberFormat::kIsoCurrencyStyle &&
+             k != NumberFormat::kPluralCurrencyStyle ) {
+            continue;
+        }
+        const char* localeString = DATA[i][0];
+        double numberToBeFormat = atof(DATA[i][1]);
+        const char* currencyISOCode = DATA[i][2];
+        Locale locale(localeString);
+        UErrorCode status = U_ZERO_ERROR;
+        NumberFormat* numFmt = NumberFormat::createInstance(locale, k, status);
+        if (U_FAILURE(status)) {
+            delete numFmt;
+            errln((UnicodeString)"can not create instance, locale:" + localeString + ", style: " + k);
+            continue;
+        }
+        // TODO: need to be UChar*
+        UChar currencyCode[4];
+        currencyCode[0] = currencyISOCode[0];
+        currencyCode[1] = currencyISOCode[1];
+        currencyCode[2] = currencyISOCode[2];
+        currencyCode[3] = currencyISOCode[3];
+        numFmt->setCurrency(currencyCode, status);
+        if (U_FAILURE(status)) {
+            delete numFmt;
+            errln((UnicodeString)"can not set currency:" + currencyISOCode);
+            continue;
+        }
+       
+        UnicodeString strBuf;
+        numFmt->format(numberToBeFormat, strBuf);
+        int resultDataIndex = k;
+        if ( k == NumberFormat::kCurrencyStyle ) {
+            resultDataIndex = k+2;
+        }
+        // DATA[i][resultDataIndex] is the currency format result
+        // using 'k' currency style.
+        UnicodeString formatResult = ctou(DATA[i][resultDataIndex]);
+        if (strBuf.compare(formatResult)) {
+            errln("FAIL: Expected " + formatResult + " actual: " + strBuf);
+        }
+        // test parsing, and test parsing for all currency formats.
+        for (int j = 3; j < 6; ++j) {
+            // DATA[i][3] is the currency format result using 
+            // CURRENCYSTYLE formatter.
+            // DATA[i][4] is the currency format result using
+            // ISOCURRENCYSTYLE formatter.
+            // DATA[i][5] is the currency format result using
+            // PLURALCURRENCYSTYLE formatter.
+            UnicodeString oneCurrencyFormatResult = ctou(DATA[i][j]);
+            UErrorCode status = U_ZERO_ERROR;
+            Formattable parseResult;
+            numFmt->parse(oneCurrencyFormatResult, parseResult, status);
+            if (U_FAILURE(status) ||
+                (parseResult.getType() == Formattable::kDouble &&
+                 parseResult.getDouble() != numberToBeFormat) ||
+                (parseResult.getType() == Formattable::kLong &&
+                 parseResult.getLong() != numberToBeFormat)) {
+                errln((UnicodeString)"FAIL: getCurrencyFormat of locale " + 
+                      localeString + " failed roundtripping the number");
+                if (parseResult.getType() == Formattable::kDouble) {
+                    errln((UnicodeString)"expected: " + numberToBeFormat + "; actual: " +parseResult.getDouble());
+                } else {
+                    errln((UnicodeString)"expected: " + numberToBeFormat + "; actual: " +parseResult.getLong());
+                }
+            }
+        }
+        delete numFmt;
+      }  
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

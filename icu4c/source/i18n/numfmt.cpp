@@ -74,6 +74,15 @@ static const UChar gLastResortPercentPat[] = {
 static const UChar gLastResortScientificPat[] = {
     0x23, 0x45, 0x30, 0 /* "#E0" */
 };
+static const UChar gLastResortIsoCurrencyPat[] = {
+    0xA4, 0xA4, 0x23, 0x30, 0x2E, 0x30, 0x30, 0x3B, 0x28, 0xA4, 0xA4, 0x23, 0x30, 0x2E, 0x30, 0x30, 0x29, 0 /* "\u00A4\u00A4#0.00;(\u00A4\u00A4#0.00)" */
+};
+static const UChar gLastResortPluralCurrencyPat[] = {
+    0x23, 0x30, 0x2E, 0x30, 0x30, 0xA0, 0xA4, 0xA4, 0xA4, 0 /* "#0.00\u00A0\u00A4\u00A4\u00A4*/
+};
+
+static const UChar gSingleCurrencySign[] = {0xA4, 0};
+static const UChar gDoubleCurrencySign[] = {0xA4, 0xA4, 0};
 
 // If the maximum base 10 exponent were 4, then the largest number would
 // be 99,999 which has 5 digits.
@@ -86,7 +95,9 @@ static const UChar * const gLastResortNumberPatterns[] =
     gLastResortDecimalPat,
     gLastResortCurrencyPat,
     gLastResortPercentPat,
-    gLastResortScientificPat
+    gLastResortScientificPat,
+    gLastResortIsoCurrencyPat,
+    gLastResortPluralCurrencyPat,
 };
 
 // *****************************************************************************
@@ -843,6 +854,8 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
             // fall-through
 
         case kCurrencyStyle:
+        case kIsoCurrencyStyle: // do not support plural formatting here
+        case kPluralCurrencyStyle: 
             f = new Win32NumberFormat(desiredLocale, curr, status);
 
             if (U_SUCCESS(status)) {
@@ -877,7 +890,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
     else {
         // If not all the styled patterns exists for the NumberFormat in this locale,
         // sets the status code to failure and returns nil.
-        if (ures_getSize(numberPatterns) < (int32_t)(sizeof(gLastResortNumberPatterns)/sizeof(gLastResortNumberPatterns[0]))) {
+        if (ures_getSize(numberPatterns) < (int32_t)(sizeof(gLastResortNumberPatterns)/sizeof(gLastResortNumberPatterns[0])) -2 ) { //minus 2: ISO and plural 
             status = U_INVALID_FORMAT_ERROR;
             goto cleanup;
         }
@@ -886,14 +899,25 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         symbolsToAdopt = new DecimalFormatSymbols(desiredLocale, status);
 
         int32_t patLen = 0;
-        const UChar *patResStr = ures_getStringByIndex(numberPatterns, (int32_t)style, &patLen, &status);
+        
+        /* for ISOCURRENCYSTYLE and PLURALCURRENCYSTYLE,
+         * the pattern is the same as the pattern of CURRENCYSTYLE
+         * but by replacing the single currency sign with
+         * double currency sign or triple currency sign.
+         */
+        int styleInNumberPattern = ((style == kIsoCurrencyStyle || 
+                                     style == kPluralCurrencyStyle) ?
+                                    kCurrencyStyle : style);
+
+        const UChar *patResStr = ures_getStringByIndex(numberPatterns, (int32_t)styleInNumberPattern, &patLen, &status);
+       
         // Creates the specified decimal format style of the desired locale.
         pattern.setTo(TRUE, patResStr, patLen);
     }
     if (U_FAILURE(status) || symbolsToAdopt == NULL) {
         goto cleanup;
     }
-    if(style==kCurrencyStyle){
+    if(style==kCurrencyStyle || style == kIsoCurrencyStyle){
         const UChar* currPattern = symbolsToAdopt->getCurrencyPattern();
         if(currPattern!=NULL){
             pattern.setTo(currPattern, u_strlen(currPattern));
@@ -914,7 +938,16 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         r->setDefaultRuleSet(ns->getDescription(),status);
         f = (NumberFormat *) r;
     } else {
-        f = new DecimalFormat(pattern, symbolsToAdopt, status);
+        // replace single currency sign in the pattern with double currency sign
+        // if the style is kIsoCurrencyStyle
+        if (style == kIsoCurrencyStyle) {
+            pattern.findAndReplace(gSingleCurrencySign, gDoubleCurrencySign);
+        }
+
+        f = new DecimalFormat(pattern, symbolsToAdopt, style, status);
+        if (U_FAILURE(status) || f == NULL) {
+            goto cleanup;
+        }
     }
 
     f->setLocaleIDs(ures_getLocaleByType(numberPatterns, ULOC_VALID_LOCALE, &status),

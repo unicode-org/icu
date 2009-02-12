@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2008, International Business Machines
+* Copyright (c) 2002-2009, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -74,6 +74,7 @@ static const char VAR_DELIM_STR[] = "_";
 
 // Tag for localized display names (symbols) of currencies
 static const char CURRENCIES[] = "Currencies";
+static const char CURRENCYPLURALS[] = "CurrencyPlurals";
 
 // Marker character indicating that a display name is a ChoiceFormat
 // pattern.  Strings that start with one mark are ChoiceFormat
@@ -544,6 +545,82 @@ ucurr_getName(const UChar* currency,
     return currency;
 }
 
+U_CAPI const UChar* U_EXPORT2
+ucurr_getPluralName(const UChar* currency,
+                    const char* locale,
+                    UBool* isChoiceFormat,
+                    const char* pluralCount,
+                    int32_t* len, // fillin
+                    UErrorCode* ec) {
+    // Look up the Currencies resource for the given locale.  The
+    // Currencies locale data looks like this:
+    //|en {
+    //|  CurrencyPlurals {
+    //|    USD{
+    //|      one{"US dollar"}
+    //|      other{"US dollars"}
+    //|    }
+    //|  }
+    //|}
+
+    if (U_FAILURE(*ec)) {
+        return 0;
+    }
+
+    // Use a separate UErrorCode here that does not propagate out of
+    // this function.
+    UErrorCode ec2 = U_ZERO_ERROR;
+
+    char loc[ULOC_FULLNAME_CAPACITY];
+    uloc_getName(locale, loc, sizeof(loc), &ec2);
+    if (U_FAILURE(ec2) || ec2 == U_STRING_NOT_TERMINATED_WARNING) {
+        *ec = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    char buf[ISO_COUNTRY_CODE_LENGTH+1];
+    myUCharsToChars(buf, currency);
+
+    const UChar* s = NULL;
+    ec2 = U_ZERO_ERROR;
+    UResourceBundle* rb = ures_open(NULL, loc, &ec2);
+
+    rb = ures_getByKey(rb, CURRENCYPLURALS, rb, &ec2);
+
+    // Fetch resource with multi-level resource inheritance fallback
+    rb = ures_getByKeyWithFallback(rb, buf, rb, &ec2);
+
+    s = ures_getStringByKeyWithFallback(rb, pluralCount, len, &ec2);
+    if (U_FAILURE(ec2)) {
+        //  fall back to "other"
+        ec2 = U_ZERO_ERROR;
+        s = ures_getStringByKeyWithFallback(rb, "other", len, &ec2);     
+        if (U_FAILURE(ec2)) {
+            ures_close(rb);
+            // fall back to long name in Currencies
+            return ucurr_getName(currency, locale, UCURR_LONG_NAME, 
+                                 isChoiceFormat, len, ec);
+        }
+    }
+    ures_close(rb);
+
+    // If we've succeeded we're done.  Otherwise, try to fallback.
+    // If that fails (because we are already at root) then exit.
+    if (U_SUCCESS(ec2)) {
+        if (ec2 == U_USING_DEFAULT_WARNING
+            || (ec2 == U_USING_FALLBACK_WARNING && *ec != U_USING_DEFAULT_WARNING)) {
+            *ec = ec2;
+        }
+        U_ASSERT(s != NULL);
+        return s;
+    }
+
+    // If we fail to find a match, use the ISO 4217 code
+    *len = u_strlen(currency); // Should == ISO_COUNTRY_CODE_LENGTH, but maybe not...?
+    *ec = U_USING_DEFAULT_WARNING;
+    return currency;
+}
+
 U_CFUNC void
 uprv_parseCurrency(const char* locale,
                    const U_NAMESPACE_QUALIFIER UnicodeString& text,
@@ -634,8 +711,39 @@ uprv_parseCurrency(const char* locale,
                 iso = ures_getKey(names);
                 max = len;
             }
+
+            // TODO: TextTrie
+            s = ures_getStringByIndex(names, UCURR_LONG_NAME, &len, &ec2);
+            if (len > max && text.compare(pos.getIndex(), len, s) == 0) {
+                iso = ures_getKey(names);
+                max = len;
+            }
+
+            if (3 > max && text.compare(pos.getIndex(), 3, ures_getKey(names)) == 0) {
+                iso = ures_getKey(names);
+                max = 3;
+            }
             ures_close(names);
         }
+
+        // try currency plurals
+        UErrorCode ec3 = U_ZERO_ERROR;
+        UResourceBundle* curr_p = ures_getByKey(rb, CURRENCYPLURALS, NULL, &ec3);
+        n = ures_getSize(curr_p);
+        for (int32_t i=0; i<n; ++i) {
+            UResourceBundle* names = ures_getByIndex(curr_p, i, NULL, &ec3);
+            int32_t num = ures_getSize(names);
+            int32_t len;
+            for (int32_t j = 0; j < num; ++j) {
+                s = ures_getStringByIndex(names, j, &len, &ec3);
+                if (len > max && text.compare(pos.getIndex(), len, s) == 0) {
+                    iso = ures_getKey(names);
+                    max = len;
+                }
+            }
+            ures_close(names);
+        }
+        ures_close(curr_p);
         ures_close(curr);
         ures_close(rb);
 
@@ -1136,9 +1244,9 @@ ucurr_countCurrencies(const char* locale,
         UErrorCode localStatus = U_ZERO_ERROR;
         char id[ULOC_FULLNAME_CAPACITY];
         resLen = uloc_getKeywordValue(locale, "currency", id, ULOC_FULLNAME_CAPACITY, &localStatus);
-
 		// get country or country_variant in `id'
 		uint32_t variantType = idForLocale(locale, id, sizeof(id), ec);
+
 		if (U_FAILURE(*ec)) 
 		{
 			return 0;
@@ -1253,8 +1361,8 @@ ucurr_forLocaleAndDate(const char* locale,
             char id[ULOC_FULLNAME_CAPACITY];
             resLen = uloc_getKeywordValue(locale, "currency", id, ULOC_FULLNAME_CAPACITY, &localStatus);
 
-			// get country or country_variant in `id'
-			uint32_t variantType = idForLocale(locale, id, sizeof(id), ec);
+		       // get country or country_variant in `id'
+		       uint32_t variantType = idForLocale(locale, id, sizeof(id), ec);
 			if (U_FAILURE(*ec)) 
 			{
 				return 0;

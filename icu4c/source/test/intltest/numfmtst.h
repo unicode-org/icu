@@ -134,6 +134,13 @@ class NumberFormatTest: public CalendarTimeZoneTest {
 
     void TestNumberingSystems();
 
+
+    void TestSpaceParsing();
+    void TestMultiCurrencySign();
+    void TestCurrencyFormatForMixParsing();
+    void TestDecimalFormatCurrencyParse();
+    void TestCurrencyIsoPluralFormat();
+
  private:
 
     static UBool equalValue(const Formattable& a, const Formattable& b);
