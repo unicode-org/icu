@@ -6,10 +6,10 @@
 */
 package com.ibm.icu.text;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Enumeration;
-import java.util.List;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Set;
@@ -1030,70 +1030,62 @@ public abstract class Collator implements Comparator, Cloneable
     private ULocale actualLocale;
 
     // -------- END ULocale boilerplate --------
-    
     /**
-     * Given a keyword and a locale, returns an array of string values in a preferred order that would make a difference. 
-     * These are all and only those values where the open (creation) of the service with the locale
-     * formed from the input locale plus input keyword and that value has different behavior than
-     * creation with the input locale alone. For example, calling this with "de", "collation" returns {"phonebook","standard"}
-     * @param keyword A keyword which makes a difference in the Collator for the given locale.
-     * For now, only a keyword "collation" is used.
-     * @param locLD input ULocale
-     * @param commonlyUsed if set to true it will return commonly used values with the given locale else all the available values.
-     * In this API, this parameter does not affect the results for now.
-     * @return An array of string values for a given keyword and locale
+     * Given a key and a locale, returns an array of string values in a preferred
+     * order that would make a difference. These are all and only those values where
+     * the open (creation) of the service with the locale formed from the input locale
+     * plus input keyword and that value has different behavior than creation with the
+     * input locale alone.
+     * @param key           one of the keys supported by this service.  For now, only
+     *                      "collation" is supported.
+     * @param locale        the locale
+     * @param commonlyUsed  if set to true it will return only commonly used values
+     *                      with the given locale in preferred order.  Otherwise,
+     *                      it will return all the available values for the locale.
+     * @return an array of string values for the given key and the locale.
      * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
      */
-    public static final String[] getKeywordValues(String keyword, ULocale locID, boolean commonlyUsed) {
-        ICUResourceBundle r = null;
-        List list = new ArrayList();
-        String baseLoc = locID.getBaseName();
-        String kwVal = locID.getKeywordValue(keyword);
-        String baseName = ICUResourceBundle.ICU_BASE_NAME + "/coll";
-        String resName = "collations";
+    public static final String[] getKeywordValues(String key, ULocale locale, boolean commonlyUsed) {
+        // Note: The parameter commonlyUsed is actually not used.
+        // The switch is in the method signature for consistency
+        // with other locale services.
 
-        if(!locID.getBaseName().equals(locID.getName())){
-            ULocale parent = new ULocale(baseLoc);
-            r = (ICUResourceBundle) UResourceBundle.getBundleInstance(baseName, parent);
-        }else{
-            r = (ICUResourceBundle) UResourceBundle.getBundleInstance(baseName, locID);
-        }
+        // Read available collation values from collation bundles
+        String baseLoc = locale.getBaseName();
+        LinkedList values = new LinkedList();
 
-        do {
-            if ((kwVal == null) || (kwVal.length() == 0)
-                    || kwVal.equals("default")) {
-                kwVal = ""; // default tag is treated as no keyword
-            } else {
-                list.add(kwVal);
-                break;
-            }
-            String canonicalLoc = ULocale.canonicalize(baseLoc);
-            if(canonicalLoc.indexOf("@") >= 0){
-                list.add(canonicalLoc.substring(canonicalLoc.indexOf("=") + 1).toLowerCase());
-                break;
-            }
+        UResourceBundle bundle = UResourceBundle.getBundleInstance(
+                ICUResourceBundle.ICU_BASE_NAME + "/coll", baseLoc);
 
-            ICUResourceBundle irb = (ICUResourceBundle) r.get(resName);
-
-            Enumeration e = irb.getKeys();
-            while(e.hasMoreElements()){
-                String key = (String)e.nextElement();
-                if (key.equals("default")){
-                    try {
-                        String defVal = irb.getString(key /*"default"*/);
-                        if (defVal != null && !list.contains(defVal)){
-                            list.add(defVal);
-                        }
-                    } catch (MissingResourceException t) {
-                        // Ignore error and continue search.
+        String defcoll = null;
+        while (bundle != null) {
+            UResourceBundle collations = bundle.get("collations");
+            Enumeration collEnum = collations.getKeys();
+            while (collEnum.hasMoreElements()) {
+                String collkey = (String)collEnum.nextElement();
+                if (collkey.equals("default")) {
+                    if (defcoll == null) {
+                        // Keep the default
+                        defcoll = collations.getString("default");
                     }
-                } else if (!list.contains(key)) {
-                    list.add(key);
+                } else if (!values.contains(collkey)) {
+                    values.add(collkey);
                 }
             }
-            r = (ICUResourceBundle) r.getParent();
-        } while ((r != null));
-        //return values
-        return (String[]) list.toArray(new String[list.size()]);
+            bundle = ((ICUResourceBundle)bundle).getParent();
+        }
+        // Reordering
+        Iterator itr = values.iterator();
+        String[] result = new String[values.size()];
+        result[0] = defcoll;
+        int idx = 1;
+        while (itr.hasNext()) {
+            String collKey = (String)itr.next();
+            if (!collKey.equals(defcoll)) {
+                result[idx++] = collKey;
+            }
+        }
+        return result;
     }
 }

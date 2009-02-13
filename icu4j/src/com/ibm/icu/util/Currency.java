@@ -15,6 +15,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -1071,65 +1072,80 @@ public class Currency extends MeasureUnit implements Serializable {
     // -------- END ULocale boilerplate --------
     
     /**
-     * Given a keyword and a locale, returns an array of string values in a preferred order that would make a difference. 
-     * These are all and only those values where the open (creation) of the service with the locale
-     * formed from the input locale plus input keyword and that value has different behavior than
-     * creation with the input locale alone. For example, calling this with "de", "collation" returns {"phonebook","standard"}
-     * @param keyword one of the keyword {"collation", "calendar", "currency"}
-     * @param locLD input ULocale
-     * @param commonlyUsed if set to true it will return commonly used values with the given locale else all the available values
-     * @return an array of string values for a given keyword and locale
+     * Given a key and a locale, returns an array of string values in a preferred
+     * order that would make a difference. These are all and only those values where
+     * the open (creation) of the service with the locale formed from the input locale
+     * plus input keyword and that value has different behavior than creation with the
+     * input locale alone.
+     * @param key           one of the keys supported by this service.  For now, only
+     *                      "currency" is supported.
+     * @param locale        the locale
+     * @param commonlyUsed  if set to true it will return only commonly used values
+     *                      with the given locale in preferred order.  Otherwise,
+     *                      it will return all the available values for the locale.
+     * @return an array of string values for the given key and the locale.
      * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
      */
-    public static final String[] getKeywordValues(String keyword, ULocale locID, boolean commonlyUsed) {
-        ICUResourceBundle r = null;
-        String baseName,resName;
-        baseName = ICUResourceBundle.ICU_BASE_NAME;
-        resName = "CurrencyMap";
-        String kwVal = locID.getKeywordValue(keyword);
-        Enumeration e, key;
-        HashSet set = new HashSet();
-        
-        if(commonlyUsed && kwVal != null){
-            set.add(kwVal);
-            return (String[]) set.toArray(new String[set.size()]);
+    public static final String[] getKeywordValues(String key, ULocale locale, boolean commonlyUsed) {
+        // Resolve region
+        String prefRegion = locale.getCountry();
+        if (prefRegion.length() == 0){
+            ULocale loc = ULocale.addLikelySubtags(locale);
+            prefRegion = loc.getCountry();
         }
-        
-        String countryName = locID.getCountry();
-        if(commonlyUsed && countryName.equals("")){
-            ULocale newLoc = ULocale.addLikelySubtags(locID);
-            countryName = newLoc.getCountry();
-        }
-        
-        r = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(baseName, "supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        ICUResourceBundle irb = (ICUResourceBundle)r.get(resName);
-        e= irb.getKeys();
-        while(e.hasMoreElements()){
-            String country = (String)e.nextElement();
-            if(commonlyUsed && !country.equals(countryName)){
+
+        // Read values from supplementalData
+        LinkedList values = new LinkedList();
+        LinkedList otherValues = new LinkedList();
+
+        UResourceBundle bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "supplementalData");
+        bundle = bundle.get("CurrencyMap");
+        Enumeration keyEnum = bundle.getKeys();
+        boolean done = false;
+        while (keyEnum.hasMoreElements() && !done) {
+            String region = (String)keyEnum.nextElement();
+            boolean isPrefRegion = prefRegion.equals(region);
+            if (!isPrefRegion && commonlyUsed) {
+                // With commonlyUsed=true, we do not put
+                // currencies for other regions in the
+                // result list.
                 continue;
             }
-            ICUResourceBundle countryBundle = (ICUResourceBundle) irb.get(country);
-            for(int i=0;i<countryBundle.getSize();i++){
-                ICUResourceBundle currency = (ICUResourceBundle) countryBundle.get(i);
-                boolean current = true;
-                key = currency.getKeys();
-                while(key.hasMoreElements()){
-                    if(key.nextElement().equals("to")){
-                        current = false;
-                    }
+            UResourceBundle regbndl = bundle.get(region);
+            for (int i = 0; i < regbndl.getSize(); i++) {
+                UResourceBundle curbndl = regbndl.get(i);
+                if (curbndl.getType() != UResourceBundle.TABLE) {
+                    // Currently, an empty ARRAY is mixed in..
+                    continue;
                 }
-                if(current){
-                   for(int j=0;j<currency.getSize();j++){
-                        String currVal = currency.getString("id");
-                        set.add(currVal);
-                    }
+                String curID = curbndl.getString("id");
+                if (isPrefRegion && !curbndl.containsKey("to") && !values.contains(curID)) {
+                    // Currently active currency for the target country
+                    values.add(curID);
+                } else if (!otherValues.contains(curID) && !commonlyUsed){
+                    otherValues.add(curID);
                 }
             }
         }
-        return (String[]) set.toArray(new String[set.size()]);
+        if (commonlyUsed) {
+            if (values.size() == 0) {
+                // This could happen if no valid region is supplied in the input
+                // locale.  In this case, we use the CLDR's default.
+                return getKeywordValues(key, new ULocale("und"), true);
+            }
+        } else {
+            // Consolidate the list
+            Iterator itr = otherValues.iterator();
+            while (itr.hasNext()) {
+                String curID = (String)itr.next();
+                if (!values.contains(curID)) {
+                    values.add(curID);
+                }
+            }
+        }
+        return (String[]) values.toArray(new String[values.size()]);
     }
-  
 }
 
 //eof
