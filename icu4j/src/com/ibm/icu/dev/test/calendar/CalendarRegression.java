@@ -6,20 +6,25 @@
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
-import com.ibm.icu.util.*;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
-import com.ibm.icu.text.*;
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.SimpleTimeZone;
+import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
 
 /**
  * @test 1.32 99/11/14
@@ -2089,136 +2094,69 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
             logln("Year remained " + year2 + " - PASS.");
         }
     }
-    
+
     public void TestGetKeywordValues(){
-        ArrayList got = new ArrayList();
-        ArrayList expected = new ArrayList();
-        
-        String expectedResult = "";
-        String gotResult = "";
-        
-        String inputLocale[] = {
-                "zh__PINYIN",
-                "zh_TW_STROKE",
-                "zh_MO",
-                "zh",
-                "zh_Hant_MO",
-                "uk_UA",
-                "sr_Latn_ME",
-                "sr_Latn",
-                "sr",
-                "de",
-                "de__PHONEBOOK",
-                "no_NO",
-                "pa_Guru_IN",
-                "es",
-                "es__TRADITIONAL",
-                "ko_KR",
-                "kok",
-                "ms_MY",
-                "ab_AA_jdhdj@collation=xyz",
-                "de__PHONEBOOK@calendar=japanese",
-            };
-        
-        String commonlyUsedCalendar[][] = {
-                {"gregorian","chinese"},
-                {"gregorian","chinese","roc"},
-                {"gregorian","chinese"},
-                {"gregorian","chinese"},
-                {"gregorian","chinese"},
-                {"gregorian"},
-                {"gregorian"},
-                {"gregorian"},
-                {"gregorian"},
-                {"gregorian"},
-                {"gregorian"},
-                {"gregorian"},
-                {"gregorian","indian"},
-                {"gregorian"},
-                {"gregorian"},
-                {"gregorian"},
-                {"gregorian","indian"},
-                {"gregorian"},
-                {"gregorian"},
-                {"japanese"}
+
+        final String[][] PREFERRED = {
+            {"root",        "gregorian"},
+            {"und",         "gregorian"},
+            {"en_US",       "gregorian"},
+            {"en_029",      "gregorian"},
+            {"th_TH",       "buddhist", "gregorian"},
+            {"und_TH",      "buddhist", "gregorian"},
+            {"en_TH",       "buddhist", "gregorian"},
+            {"he_IL",       "gregorian", "hebrew"},
+            {"ar_EG",       "gregorian", "islamic", "islamic-civil", "coptic"},
+            {"ja",          "gregorian", "japanese"},
+            {"ps_Guru_IN",  "gregorian", "indian"},
+            {"th@calendar=gregorian",   "buddhist", "gregorian"},
+            {"en@calendar=islamic",     "gregorian"},
         };
-        
-        String calendar[]={
-                "roc",
-                "persian",
-                "islamic-civil",
-                "islamic",
-                "hebrew",
-                "buddhist",
-                "indian",
-                "japanese",
-                "gregorian",
-                "ethiopic",
-                "chinese",
-                "coptic",
-        };
-        
-        logln("Starting all available calendar keyword value test");
-        
-        for(int i=0;i<inputLocale.length;i++){
-            ULocale loc = new ULocale(inputLocale[i]);
-            for(int j=0;j<calendar.length;j++){
-                expected.add(calendar[j]);
-                expectedResult += calendar[j]+" ";
-            }
-            String[] s = Calendar.getKeywordValues("calendar", loc, false);
-            String s1;
-            for(int j=0;j<s.length;j++){
-                got.add((s1=s[j]));
-                gotResult +=s1+" ";
-            }
-            
-            Collections.sort(got);
-            Collections.sort(expected);
-            if(got.equals(expected)){
-                logln("PASS: Locale :"+inputLocale[i]);
-                logln("EXPECTED :"+expectedResult);
-                logln("GOT      :"+gotResult);
-            }else{
-                errln("FAIL: Locale :"+inputLocale[i]+" EXPECTED :"+expectedResult+" GOT :"+gotResult);
-            }
-            gotResult=expectedResult="";
-            got.clear();
-            expected.clear();
+
+        String[] ALL = Calendar.getKeywordValues("calendar", ULocale.getDefault(), false);
+        HashSet ALLSET = new HashSet();
+        for (int i = 0; i < ALL.length; i++) {
+            ALLSET.add(ALL[i]);
         }
-        
-        logln("Starting preferred calendar keyword value test");
-        
-        for(int i=0;i<inputLocale.length;i++){
-            ULocale loc = new ULocale(inputLocale[i]);
-            for(int j=0;j<commonlyUsedCalendar[i].length;j++){
-                expected.add(commonlyUsedCalendar[i][j]);
-                expectedResult += commonlyUsedCalendar[i][j]+" ";
-               
+
+        for (int i = 0; i < PREFERRED.length; i++) {
+            ULocale loc = new ULocale(PREFERRED[i][0]);
+            String[] expected = new String[PREFERRED[i].length - 1];
+            System.arraycopy(PREFERRED[i], 1, expected, 0, expected.length);
+
+            String[] pref = Calendar.getKeywordValues("calendar", loc, true);
+            boolean matchPref = false;
+            if (pref.length == expected.length) {
+                matchPref = true;
+                for (int j = 0; j < pref.length; j++) {
+                    if (!pref[j].equals(expected[j])) {
+                        matchPref = false;
+                    }
+                }
             }
-            String[] s = Calendar.getKeywordValues("calendar", loc, true);
-            String s1;
-            for(int j=0;j<s.length;j++){
-                got.add((s1=s[j]));
-                gotResult +=s1+" ";
+            if (!matchPref) {
+                errln("FAIL: Preferred values for locale " + loc 
+                        + " got:" + Arrays.toString(pref) + " expected:" + Arrays.toString(expected));
             }
-            Collections.sort(got);
-            Collections.sort(expected);
-            if(got.equals(expected)){
-                logln("PASS: Locale :"+inputLocale[i]);
-                logln("EXPECTED :"+expectedResult);
-                logln("GOT      :"+gotResult);
-            }else{
-                errln("FAIL: Locale :"+inputLocale[i]+" EXPECTED :"+expectedResult+" GOT :"+gotResult);
+
+            String[] all = Calendar.getKeywordValues("calendar", loc, false);
+            boolean matchAll = false;
+            if (all.length == ALLSET.size()) {
+                matchAll = true;
+                for (int j = 0; j < all.length; j++) {
+                    if (!ALLSET.contains(all[j])) {
+                        matchAll = false;
+                        break;
+                    }
+                }
             }
-            gotResult=expectedResult="";
-            got.clear();
-            expected.clear();
-            
-        } 
+            if (!matchAll) {
+                errln("FAIL: All values for locale " + loc
+                        + " got:" + Arrays.toString(all)); 
+            }
+        }
     }
 
-   
 }
 
 //eof

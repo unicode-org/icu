@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2002-2008, International Business Machines
+ * Copyright (c) 2002-2009, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Alan Liu
@@ -10,14 +10,15 @@
  */
 
 package com.ibm.icu.dev.test.util;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Locale;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DecimalFormatSymbols;
-import com.ibm.icu.util.*;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Locale;
-import java.util.Date;
+import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.ULocale;
 
 /**
  * @test
@@ -423,100 +424,64 @@ public class CurrencyTest extends TestFmwk {
     }
     
     public void TestGetKeywordValues(){
-        ArrayList got = new ArrayList();
-        ArrayList expected = new ArrayList();
-        
-        String expectedResult = "";
-        String gotResult = "";
-        
-        String inputLocale[] = {
-            "zh__PINYIN",
-            "zh_TW_STROKE",
-            "zh_MO",
-            "zh",
-            "zh_Hant_MO",
-            "uk_UA",
-            "sr_Latn_ME",
-            "sr_Latn",
-            "sr",
-            "de",
-            "de__PHONEBOOK",
-            "no_NO",
-            "pa_Guru_IN",
-            "es",
-            "es__TRADITIONAL",
-            "ko_KR",
-            "kok",
-            "ms_MY",
-            "ab_AA_jdhdj@collation=xyz",
-            "de__PHONEBOOK@calendar=japanese",
+
+        final String[][] PREFERRED = {
+            {"root",            "USD"},
+            {"und",             "USD"},
+            {"und_ZZ",          "USD"},
+            {"en_US",           "USD"},
+            {"en_029",          "USD"},
+            {"en_TH",           "THB"},
+            {"de",              "EUR"},
+            {"de_DE",           "EUR"},
+            {"ar",              "EGP"},
+            {"ar_PS",           "JOD", "ILS"},
+            {"en@currency=CAD",     "USD"},
+            {"fr@currency=ZZZ",     "EUR"},
+            {"de_DE@currency=DEM",  "EUR"},
         };
-        
-        String currency[][]={
-                {"CNY"},
-                {"TWD"},
-                {"MOP"},
-                {"CNY"},
-                {"MOP"},
-                {"UAH"},
-                {"EUR"},
-                {"RSD"},
-                {"RSD"},
-                {"EUR"},
-                {"EUR"},
-                {"NOK"},
-                {"INR"},
-                {"EUR"},
-                {"EUR"},
-                {"KRW"},
-                {"INR"},
-                {"MYR"},
-                {},
-                {"EUR"}
-        };
-        
-        logln("Starting preferred currency keyword value test");
-        
-        for(int i=0;i<inputLocale.length;i++){
-            ULocale loc = new ULocale(inputLocale[i]);
-            for(int j=0;j<currency[i].length;j++){
-                expected.add(currency[i][j]);
-                expectedResult += currency[i][j]+" ";
-               
+
+        String[] ALL = Currency.getKeywordValues("currency", ULocale.getDefault(), false);
+        HashSet ALLSET = new HashSet();
+        for (int i = 0; i < ALL.length; i++) {
+            ALLSET.add(ALL[i]);
+        }
+
+        for (int i = 0; i < PREFERRED.length; i++) {
+            ULocale loc = new ULocale(PREFERRED[i][0]);
+            String[] expected = new String[PREFERRED[i].length - 1];
+            System.arraycopy(PREFERRED[i], 1, expected, 0, expected.length);
+
+            String[] pref = Currency.getKeywordValues("currency", loc, true);
+            boolean matchPref = false;
+            if (pref.length == expected.length) {
+                matchPref = true;
+                for (int j = 0; j < pref.length; j++) {
+                    if (!pref[j].equals(expected[j])) {
+                        matchPref = false;
+                    }
+                }
             }
-            String[] s = Currency.getKeywordValues("currency", loc, true);
-            String s1;
-            for(int j=0;j<s.length;j++){
-                got.add((s1=s[j]));
-                gotResult +=s1+" ";
+            if (!matchPref) {
+                errln("FAIL: Preferred values for locale " + loc 
+                        + " got:" + Arrays.toString(pref) + " expected:" + Arrays.toString(expected));
             }
-            Collections.sort(got);
-            Collections.sort(expected);
-            if(got.equals(expected)){
-                logln("PASS: Locale :"+inputLocale[i]);
-                logln("EXPECTED :"+expectedResult);
-                logln("GOT      :"+gotResult);
-            }else{
-                errln("FAIL: Locale :"+inputLocale[i]+" EXPECTED :"+expectedResult+" GOT :"+gotResult);
+
+            String[] all = Currency.getKeywordValues("currency", loc, false);
+            boolean matchAll = false;
+            if (all.length == ALLSET.size()) {
+                matchAll = true;
+                for (int j = 0; j < all.length; j++) {
+                    if (!ALLSET.contains(all[j])) {
+                        matchAll = false;
+                        break;
+                    }
+                }
             }
-            gotResult=expectedResult="";
-            got.clear();
-            expected.clear();
-            
-        } 
-        
-        logln("Starting all available currency keyword value test");
-        
-        for(int i=0;i<inputLocale.length;i++){
-            ULocale loc = new ULocale(inputLocale[i]);
-            
-            String[] s = Currency.getKeywordValues("currency", loc, false);
-            if(s.length==160){
-                logln("PASS: Locale :"+inputLocale[i]);
-            }else{
-                errln("FAIL: Locale :"+inputLocale[i]);
+            if (!matchAll) {
+                errln("FAIL: All values for locale " + loc
+                        + " got:" + Arrays.toString(all)); 
             }
-            
-        } 
+        }
     }
 }

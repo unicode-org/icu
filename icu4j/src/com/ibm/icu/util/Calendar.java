@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 1996-2008, International Business Machines
+*   Copyright (C) 1996-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -9,9 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -5290,78 +5288,100 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
 
     // -------- END ULocale boilerplate --------
     
-    private static final String calendarValues[][]={
-        {"japanese","JP"},
-        {"islamic-civil","AE", "BH", "DJ", "DZ", "EG", "EH", "ER", "IL", "IQ", "JO", "KM", "KW",
-            "LB", "LY", "MA", "MR", "OM", "PS", "QA", "SA", "SD", "SY", "TD", "TN", "YE", "AF", "IR"},
-        {"islamic","AE", "BH", "DJ", "DZ", "EG", "EH", "ER", "IL", "IQ", "JO", "KM", "KW",
-            "LB", "LY", "MA", "MR", "OM", "PS", "QA", "SA", "SD", "SY", "TD", "TN", "YE", "AF", "IR"},
-        {"chinese","CN", "CX", "HK", "MO", "SG", "TW"},
-        {"hebrew","IL"},
-        {"buddhist","TH"},
-        {"coptic","EG"},
-        {"persian","AF", "IR"},
-        {"ethiopic","ET"},
-        {"indian","IN"},
-        {"roc","TW"}
+    //TODO: The table below should be retrieved from ICU resource when CLDR supplementalData
+    // is fully updated.
+    private static final String[][] CALPREF = {
+        {"001", "gregorian"},
+        {"AE", "gregorian", "islamic", "islamic-civil"},
+        {"AF", "gregorian", "islamic", "islamic-civil", "persian"},
+        {"BH", "gregorian", "islamic", "islamic-civil"},
+        {"CN", "gregorian", "chinese"},
+        {"CX", "gregorian", "chinese"},
+        {"DJ", "gregorian", "islamic", "islamic-civil"},
+        {"DZ", "gregorian", "islamic", "islamic-civil"},
+        {"EG", "gregorian", "islamic", "islamic-civil", "coptic"},
+        {"EH", "gregorian", "islamic", "islamic-civil"},
+        {"ER", "gregorian", "islamic", "islamic-civil"},
+        {"ET", "gregorian", "ethiopic", "ethiopic-amete-alem"},
+        {"HK", "gregorian", "chinese"},
+        {"IL", "gregorian", "hebrew"},
+        {"IL", "gregorian", "islamic", "islamic-civil"},
+        {"IN", "gregorian", "indian"},
+        {"IQ", "gregorian", "islamic", "islamic-civil"},
+        {"IR", "gregorian", "islamic", "islamic-civil", "persian"},
+        {"JO", "gregorian", "islamic", "islamic-civil"},
+        {"JP", "gregorian", "japanese"},
+        {"KM", "gregorian", "islamic", "islamic-civil"},
+        {"KW", "gregorian", "islamic", "islamic-civil"},
+        {"LB", "gregorian", "islamic", "islamic-civil"},
+        {"LY", "gregorian", "islamic", "islamic-civil"},
+        {"MA", "gregorian", "islamic", "islamic-civil"},
+        {"MO", "gregorian", "chinese"},
+        {"MR", "gregorian", "islamic", "islamic-civil"},
+        {"OM", "gregorian", "islamic", "islamic-civil"},
+        {"PS", "gregorian", "islamic", "islamic-civil"},
+        {"QA", "gregorian", "islamic", "islamic-civil"},
+        {"SA", "gregorian", "islamic", "islamic-civil"},
+        {"SD", "gregorian", "islamic", "islamic-civil"},
+        {"SG", "gregorian", "chinese"},
+        {"SY", "gregorian", "islamic", "islamic-civil"},
+        {"TD", "gregorian", "islamic", "islamic-civil"},
+        {"TH", "buddhist", "gregorian"},
+        {"TN", "gregorian", "islamic", "islamic-civil"},
+        {"TW", "gregorian", "roc", "chinese"},
+        {"YE", "gregorian", "islamic", "islamic-civil"},
     };
-    
+
     /**
-     * Given a keyword and a locale, returns an array of string values in a preferred order that would make a difference. 
-     * These are all and only those values where the open (creation) of the service with the locale
-     * formed from the input locale plus input keyword and that value has different behavior than
-     * creation with the input locale alone. For example, calling this with "de", "collation" returns {"phonebook","standard"}
-     * @param keyword one of the keyword {"collation", "calendar", "currency"}
-     * @param locLD input ULocale
-     * @param commonlyUsed if set to true it will return commonly used values with the given locale else all the available values
-     * @return an array of string values for a given keyword and locale
+     * Given a key and a locale, returns an array of string values in a preferred
+     * order that would make a difference. These are all and only those values where
+     * the open (creation) of the service with the locale formed from the input locale
+     * plus input keyword and that value has different behavior than creation with the
+     * input locale alone.
+     * @param key           one of the keys supported by this service.  For now, only
+     *                      "calendar" is supported.
+     * @param locale        the locale
+     * @param commonlyUsed  if set to true it will return only commonly used values
+     *                      with the given locale in preferred order.  Otherwise,
+     *                      it will return all the available values for the locale.
+     * @return an array of string values for the given key and the locale.
      * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
      */
-    public static final String[] getKeywordValues(String keyword, ULocale locID, boolean commonlyUsed) {
-        ICUResourceBundle r = null;
-        String baseName,resName;
-        baseName = ICUResourceBundle.ICU_BASE_NAME;
-        resName = "calendarData";
-        String kwVal = locID.getKeywordValue(keyword);
-        Enumeration e;
-        //HashSet set = new HashSet();
-        LinkedList set = new LinkedList();
-        String gregorian = "gregorian"; 
-        ArrayList countryCodes = new ArrayList();
-        
-        if(commonlyUsed && kwVal != null){
-            set.add(kwVal);
-            return (String[]) set.toArray(new String[set.size()]);
+    public static final String[] getKeywordValues(String key, ULocale locale, boolean commonlyUsed) {
+        // Resolve region
+        String prefRegion = locale.getCountry();
+        if (prefRegion.length() == 0){
+            ULocale loc = ULocale.addLikelySubtags(locale);
+            prefRegion = loc.getCountry();
         }
-        
-        String countryName = locID.getCountry();
-        if(commonlyUsed && countryName.equals("")){
-            ULocale newLoc = ULocale.addLikelySubtags(locID);
-            countryName = newLoc.getCountry();
+
+        // Read preferred calendar values from supplementalData calendarPreferences
+        LinkedList values = new LinkedList();
+        //TODO: START
+        String[] preferences = CALPREF[0];
+        for (int i = 0; i < CALPREF.length; i++) {
+            if (prefRegion.equals(CALPREF[i][0])) {
+                preferences = CALPREF[i];
+                break;
+            }
         }
-        
-        if(commonlyUsed){
-            set.add(gregorian); // Gregorian should always be added
-            for(int i=0;i<calendarValues.length;i++){
-                for(int j=1;j<calendarValues[i].length;j++){
-                    countryCodes.add(calendarValues[i][j]);
-                }
-                if(countryCodes.contains(countryName)){
-                    set.add(calendarValues[i][0]);
-                    countryCodes.clear();
+        for (int i = 1; i < preferences.length; i++) {
+            if (!values.contains(preferences[i])) {
+                values.add(preferences[i]);
+            }
+        }
+        //TODO: END
+
+        if (!commonlyUsed) {
+            // if not commonlyUsed, add other available values
+            for (int i = 0; i < calTypes.length; i++) {
+                if (!values.contains(calTypes[i])) {
+                    values.add(calTypes[i]);
                 }
             }
-            return (String[]) set.toArray(new String[set.size()]);
         }
-        
-        r = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(baseName, "supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        ICUResourceBundle irb = (ICUResourceBundle)r.get(resName);
-        e= irb.getKeys();
-        while(e.hasMoreElements()){
-            set.add(e.nextElement());
-        }
-        
-        return (String[]) set.toArray(new String[set.size()]);
+        return (String[])values.toArray(new String[values.size()]);
     }
 }
 
