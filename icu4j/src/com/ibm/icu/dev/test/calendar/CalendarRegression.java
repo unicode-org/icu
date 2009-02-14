@@ -2113,7 +2113,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
             {"en@calendar=islamic",     "gregorian"},
         };
 
-        String[] ALL = Calendar.getKeywordValues("calendar", ULocale.getDefault(), false);
+        String[] ALL = Calendar.getKeywordValuesForLocale("calendar", ULocale.getDefault(), false);
         HashSet ALLSET = new HashSet();
         for (int i = 0; i < ALL.length; i++) {
             ALLSET.add(ALL[i]);
@@ -2124,7 +2124,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
             String[] expected = new String[PREFERRED[i].length - 1];
             System.arraycopy(PREFERRED[i], 1, expected, 0, expected.length);
 
-            String[] pref = Calendar.getKeywordValues("calendar", loc, true);
+            String[] pref = Calendar.getKeywordValuesForLocale("calendar", loc, true);
             boolean matchPref = false;
             if (pref.length == expected.length) {
                 matchPref = true;
@@ -2139,7 +2139,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
                         + " got:" + Arrays.toString(pref) + " expected:" + Arrays.toString(expected));
             }
 
-            String[] all = Calendar.getKeywordValues("calendar", loc, false);
+            String[] all = Calendar.getKeywordValuesForLocale("calendar", loc, false);
             boolean matchAll = false;
             if (all.length == ALLSET.size()) {
                 matchAll = true;
