@@ -6,6 +6,7 @@
  *******************************************************************************
  */
 package com.ibm.icu.impl;
+
 import java.util.ArrayList;
 
 import com.ibm.icu.lang.*;
@@ -1949,5 +1950,23 @@ public final class Utility {
            return INT_CONST[val];
        }
        return new Integer(val);
+   }
+
+   // !!! 1.3/1.4 compatibility
+   // Arrays.toString(Object[])
+   public static String arrayToString(Object[] a) {
+       StringBuffer buf = new StringBuffer("[");
+       for (int i = 0; i < a.length; i++) {
+           if (i != 0) {
+               buf.append(", ");
+           }
+           if (a[i] == null) {
+               buf.append("null");
+           } else {
+               buf.append(a[i].toString());
+           }
+       }
+       buf.append("]");
+       return buf.toString();
    }
 }

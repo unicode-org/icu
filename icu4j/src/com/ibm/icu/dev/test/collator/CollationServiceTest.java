@@ -7,7 +7,6 @@
 
 package com.ibm.icu.dev.test.collator;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,6 +17,7 @@ import java.util.MissingResourceException;
 import java.util.Set;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.Collator.CollatorFactory;
 import com.ibm.icu.util.ULocale;
@@ -479,7 +479,7 @@ public class CollationServiceTest extends TestFmwk {
             }
             if (!matchPref) {
                 errln("FAIL: Preferred values for locale " + loc 
-                        + " got:" + Arrays.toString(pref) + " expected:" + Arrays.toString(expected));
+                        + " got:" + Utility.arrayToString(pref) + " expected:" + Utility.arrayToString(expected));
             }
  
             String[] all = Collator.getKeywordValuesForLocale("collation", loc, true);
@@ -505,7 +505,7 @@ public class CollationServiceTest extends TestFmwk {
             }
             if (!matchAll) {
                 errln("FAIL: All values for locale " + loc
-                        + " got:" + Arrays.toString(all) + " expected:" + Arrays.toString(pref));
+                        + " got:" + Utility.arrayToString(all) + " expected:" + Utility.arrayToString(pref));
             }
         }
     }
