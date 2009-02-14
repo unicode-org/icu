@@ -317,7 +317,7 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
                 " / expected: " + comp2.toString());
         }
 
-//#if defined(FOUNDATION10)
+//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14)
 //#else
 
         java.math.MathContext result;
