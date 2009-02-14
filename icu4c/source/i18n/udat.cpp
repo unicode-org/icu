@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2006, International Business Machines
+*   Copyright (C) 1996-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -24,6 +24,18 @@
 #include "cpputils.h"
 
 U_NAMESPACE_USE
+
+/**
+ * Verify that fmt is a SimpleDateFormat. Invalid error if not.
+ * @param fmt the UDateFormat, definitely a DateFormat, maybe something else
+ * @param status error code, will be set to failure if there is a familure or the fmt is NULL.
+ */
+static void verifyIsSimpleDateFormat(const UDateFormat* fmt, UErrorCode *status) {
+   if(!U_FAILURE(*status) && 
+       ((DateFormat*)fmt)->getDynamicClassID()!=SimpleDateFormat::getStaticClassID()) {
+       *status = U_ILLEGAL_ARGUMENT_ERROR;
+   }
+}
 
 U_CAPI UDateFormat* U_EXPORT2
 udat_open(UDateFormatStyle  timeStyle,
@@ -92,7 +104,7 @@ udat_clone(const UDateFormat *fmt,
 {
     if(U_FAILURE(*status)) return 0;
 
-    Format *res = ((SimpleDateFormat*)fmt)->clone();
+    Format *res = ((DateFormat*)fmt)->clone();
 
     if(res == 0) {
         *status = U_MEMORY_ALLOCATION_ERROR;
@@ -249,6 +261,7 @@ U_CAPI UDate U_EXPORT2
 udat_get2DigitYearStart(    const   UDateFormat     *fmt,
                         UErrorCode      *status)
 {
+    verifyIsSimpleDateFormat(fmt, status);
     if(U_FAILURE(*status)) return (UDate)0;
     return ((SimpleDateFormat*)fmt)->get2DigitYearStart(*status);
 }
@@ -258,6 +271,7 @@ udat_set2DigitYearStart(    UDateFormat     *fmt,
                         UDate           d,
                         UErrorCode      *status)
 {
+    verifyIsSimpleDateFormat(fmt, status);
     if(U_FAILURE(*status)) return;
     ((SimpleDateFormat*)fmt)->set2DigitYearStart(d, *status);
 }
@@ -269,6 +283,7 @@ udat_toPattern(    const   UDateFormat     *fmt,
         int32_t         resultLength,
         UErrorCode      *status)
 {
+    verifyIsSimpleDateFormat(fmt, status);
     if(U_FAILURE(*status)) return -1;
 
     UnicodeString res;
@@ -286,7 +301,8 @@ udat_toPattern(    const   UDateFormat     *fmt,
     return res.extract(result, resultLength, *status);
 }
 
-// TBD: should this take an UErrorCode?
+// TODO: should this take an UErrorCode?
+// A: Yes. Of course.
 U_CAPI void U_EXPORT2
 udat_applyPattern(  UDateFormat     *format,
                     UBool          localized,
@@ -296,6 +312,11 @@ udat_applyPattern(  UDateFormat     *format,
     const UnicodeString pat((UBool)(patternLength == -1), pattern, patternLength);
     UErrorCode status = U_ZERO_ERROR;
 
+    verifyIsSimpleDateFormat(format, &status);
+    if(U_FAILURE(status)) {
+        return;
+    }
+    
     if(localized)
         ((SimpleDateFormat*)format)->applyLocalizedPattern(pat, status);
     else
@@ -310,6 +331,7 @@ udat_getSymbols(const   UDateFormat     *fmt,
                 int32_t                 resultLength,
                 UErrorCode              *status)
 {
+    verifyIsSimpleDateFormat(fmt, status);
     if(U_FAILURE(*status)) return -1;
 
     const DateFormatSymbols *syms = 
@@ -414,10 +436,18 @@ udat_getSymbols(const   UDateFormat     *fmt,
     return 0;
 }
 
+// TODO: also needs an errorCode.
 U_CAPI int32_t U_EXPORT2
 udat_countSymbols(    const    UDateFormat                *fmt,
             UDateFormatSymbolType    type)
 {
+    UErrorCode status = U_ZERO_ERROR;
+    
+    verifyIsSimpleDateFormat(fmt, &status);
+    if(U_FAILURE(status)) {
+        return 0;
+    }
+
     const DateFormatSymbols *syms = 
         ((SimpleDateFormat*)fmt)->getDateFormatSymbols();
     int32_t count = 0;
