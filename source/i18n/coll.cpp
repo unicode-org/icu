@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and   *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
@@ -778,6 +778,19 @@ StringEnumeration* U_EXPORT2
 Collator::getKeywordValues(const char *keyword, UErrorCode& status) {
     // This is a wrapper over ucol_getKeywordValues
     UEnumeration* uenum = ucol_getKeywordValues(keyword, &status);
+    if (U_FAILURE(status)) {
+        uenum_close(uenum);
+        return NULL;
+    }
+    return new UStringEnumeration(uenum);
+}
+
+StringEnumeration* U_EXPORT2
+Collator::getKeywordValuesForLocale(const char* key, const Locale& locale,
+                                    UBool commonlyUsed, UErrorCode& status) {
+    // This is a wrapper over ucol_getKeywordValuesForLocale
+    UEnumeration *uenum = ucol_getKeywordValuesForLocale(key, locale.getName(),
+                                                        commonlyUsed, &status);
     if (U_FAILURE(status)) {
         uenum_close(uenum);
         return NULL;

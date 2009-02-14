@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2008, International Business Machines
+*   Copyright (C) 1996-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  ucol_res.cpp
@@ -740,6 +740,13 @@ ucol_getKeywordValues(const char *keyword, UErrorCode *status) {
         return NULL;
     }
     return ures_getKeywordValues(U_ICUDATA_COLL, RESOURCE_NAME, status);
+}
+
+U_CAPI UEnumeration* U_EXPORT2
+ucol_getKeywordValuesForLocale(const char* key, const char* locale,
+                               UBool commonlyUsed, UErrorCode* status) {
+    //TODO: provide actual implementation!
+    return NULL;
 }
 
 U_CAPI int32_t U_EXPORT2

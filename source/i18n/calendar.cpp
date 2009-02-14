@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2008, International Business Machines Corporation and    *
+* Copyright (C) 1997-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -47,6 +47,7 @@
 #include "cstring.h"
 #include "locbased.h"
 #include "uresimp.h"
+#include "ustrenum.h"
 
 #if !UCONFIG_NO_SERVICE
 static U_NAMESPACE_QUALIFIER ICULocaleService* gService = NULL;
@@ -883,6 +884,21 @@ const Locale* U_EXPORT2
 Calendar::getAvailableLocales(int32_t& count)
 {
     return Locale::getAvailableLocales(count);
+}
+
+// -------------------------------------
+
+StringEnumeration* U_EXPORT2 getKeywordValuesForLocale(const char* key,
+                    const Locale& locale, UBool commonlyUsed, UErrorCode& status)
+{
+    // This is a wrapper over ucal_getKeywordValuesForLocale
+    UEnumeration *uenum = ucal_getKeywordValuesForLocale(key, locale.getName(),
+                                                        commonlyUsed, &status);
+    if (U_FAILURE(status)) {
+        uenum_close(uenum);
+        return NULL;
+    }
+    return new UStringEnumeration(uenum);
 }
 
 // -------------------------------------

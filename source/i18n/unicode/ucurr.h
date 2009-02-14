@@ -289,6 +289,27 @@ ucurr_forLocaleAndDate(const char* locale,
                 int32_t buffCapacity, 
                 UErrorCode* ec); 
 
+/**
+ * Given a key and a locale, returns an array of string values in a preferred
+ * order that would make a difference. These are all and only those values where
+ * the open (creation) of the service with the locale formed from the input locale
+ * plus input keyword and that value has different behavior than creation with the
+ * input locale alone.
+ * @param key           one of the keys supported by this service.  For now, only
+ *                      "currency" is supported.
+ * @param locale        the locale
+ * @param commonlyUsed  if set to true it will return only commonly used values
+ *                      with the given locale in preferred order.  Otherwise,
+ *                      it will return all the available values for the locale.
+ * @return a string enumeration over keyword values for the given key and the locale.
+ * @draft ICU 4.2
+ */
+U_DRAFT UEnumeration* U_EXPORT2
+ucurr_getKeywordValuesForLocale(const char* key,
+                                const char* locale,
+                                UBool commonlyUsed,
+                                UErrorCode* status);
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif
