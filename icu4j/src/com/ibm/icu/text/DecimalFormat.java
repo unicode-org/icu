@@ -846,9 +846,9 @@ public class DecimalFormat extends NumberFormat {
             }
 //#if defined(FOUNDATION10) || defined(J2SE13) 
 //#else 
-			else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
-				fieldPosition.setBeginIndex(result.length());
-			}
+            else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+                fieldPosition.setBeginIndex(result.length());
+            }
 //#endif 
 
             result.append(symbols.getNaN());
@@ -866,9 +866,9 @@ public class DecimalFormat extends NumberFormat {
             }
 //#if defined(FOUNDATION10) || defined(J2SE13) 
 //#else 
-			else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
-				fieldPosition.setEndIndex(result.length());
-			}
+            else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+                fieldPosition.setEndIndex(result.length());
+            }
 //#endif 
 
             addPadding(result, fieldPosition, 0, 0);
@@ -909,9 +909,9 @@ public class DecimalFormat extends NumberFormat {
             }
 //#if defined(FOUNDATION10) || defined(J2SE13) 
 //#else 
-			else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
-				fieldPosition.setBeginIndex(result.length());
-			}
+            else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+                fieldPosition.setBeginIndex(result.length());
+            }
 //#endif 
 
             // [Spark/CDL] Add attribute for infinity here.
@@ -928,9 +928,9 @@ public class DecimalFormat extends NumberFormat {
             }
 //#if defined(FOUNDATION10) || defined(J2SE13) 
 //#else 
-			else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
-				fieldPosition.setEndIndex(result.length());
-			}
+            else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+                fieldPosition.setEndIndex(result.length());
+            }
 //#endif 
 
             int suffixLen = appendAffix(result, isNegative, false, parseAttr);
@@ -1350,12 +1350,12 @@ public class DecimalFormat extends NumberFormat {
             }
 //#if defined(FOUNDATION10) || defined(J2SE13) 
 //#else 
-			else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+            else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
                 fieldPosition.setBeginIndex(result.length());
                 fieldPosition.setEndIndex(-1);
-			} else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
+            } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
                 fieldPosition.setBeginIndex(-1);
-			} 
+            } 
 //#endif 
 
 //#if defined(FOUNDATION10) || defined(J2SE13)
@@ -1434,9 +1434,9 @@ public class DecimalFormat extends NumberFormat {
                     }
 //#if defined(FOUNDATION10) || defined(J2SE13) 
 //#else 
-					else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
-						fieldPosition.setEndIndex(result.length());
-					}
+                    else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+                        fieldPosition.setEndIndex(result.length());
+                    }
 //#endif 
 
 //#if defined(FOUNDATION10) || defined(J2SE13)
@@ -1465,9 +1465,9 @@ public class DecimalFormat extends NumberFormat {
                     }
 //#if defined(FOUNDATION10) || defined(J2SE13) 
 //#else 
-					else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
-						fieldPosition.setBeginIndex(result.length());
-					}
+                    else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
+                        fieldPosition.setBeginIndex(result.length());
+                    }
 //#endif 
 
                 }
@@ -1494,16 +1494,16 @@ public class DecimalFormat extends NumberFormat {
             }
 //#if defined(FOUNDATION10) || defined(J2SE13) 
 //#else 
-			else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
-				if (fieldPosition.getEndIndex() < 0) {
-					fieldPosition.setEndIndex(result.length());
-				}
-			} else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
-				if (fieldPosition.getBeginIndex() < 0) {
-					fieldPosition.setBeginIndex(result.length());
-				}
-				fieldPosition.setEndIndex(result.length());
-			}
+            else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+                if (fieldPosition.getEndIndex() < 0) {
+                    fieldPosition.setEndIndex(result.length());
+                }
+            } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
+                if (fieldPosition.getBeginIndex() < 0) {
+                    fieldPosition.setBeginIndex(result.length());
+                }
+                fieldPosition.setEndIndex(result.length());
+            }
 //#endif 
 
 //#if defined(FOUNDATION10) || defined(J2SE13)
@@ -1604,9 +1604,9 @@ public class DecimalFormat extends NumberFormat {
             }
 //#if defined(FOUNDATION10) || defined(J2SE13) 
 //#else 
-			else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
-				fieldPosition.setBeginIndex(result.length());
-			}
+            else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+                fieldPosition.setBeginIndex(result.length());
+            }
 //#endif 
 
             int sigCount = 0;
@@ -1678,9 +1678,9 @@ public class DecimalFormat extends NumberFormat {
             }
 //#if defined(FOUNDATION10) || defined(J2SE13) 
 //#else 
-			else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
-				fieldPosition.setEndIndex(result.length());
-			}
+            else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+                fieldPosition.setEndIndex(result.length());
+            }
 //#endif 
 
             // Determine whether or not there are any printable fractional
@@ -1720,9 +1720,9 @@ public class DecimalFormat extends NumberFormat {
             }
 //#if defined(FOUNDATION10) || defined(J2SE13) 
 //#else 
-			else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
-				fieldPosition.setBeginIndex(result.length());
-			}
+            else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
+                fieldPosition.setBeginIndex(result.length());
+            }
 //#endif 
 
 //#if defined(FOUNDATION10) || defined(J2SE13)
@@ -1783,9 +1783,9 @@ public class DecimalFormat extends NumberFormat {
             }
 //#if defined(FOUNDATION10) || defined(J2SE13) 
 //#else 
-			else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
-				fieldPosition.setEndIndex(result.length());
-			}
+            else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
+                fieldPosition.setEndIndex(result.length());
+            }
 //#endif 
 
 //#if defined(FOUNDATION10) || defined(J2SE13)
@@ -3210,9 +3210,9 @@ public class DecimalFormat extends NumberFormat {
 
         this.roundingMode = roundingMode;
 
-		if (getRoundingIncrement() == null) {
-			setRoundingIncrement(Math.pow(10.0,(double)-getMaximumFractionDigits()));
-		}
+        if (getRoundingIncrement() == null) {
+            setRoundingIncrement(Math.pow(10.0,(double)-getMaximumFractionDigits()));
+        }
     }
 
     // [NEW]
@@ -5511,7 +5511,7 @@ public class DecimalFormat extends NumberFormat {
      */
     private int roundingMode = BigDecimal.ROUND_HALF_EVEN;
 
-	// [NEW]
+    // [NEW]
     /**
      * Operations on <code>BigDecimal</code> numbers are controlled by a
      * {@link MathContext} object, which provides the context (precision and

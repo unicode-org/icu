@@ -1,6 +1,6 @@
 /*
  * *****************************************************************************
- * Copyright (C) 2005-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  * *****************************************************************************
  */
@@ -876,7 +876,7 @@ public  class ICUResourceBundle extends UResourceBundle {
 
                 // %%ALIAS is such a hack!
                 if (itemKey.equals("%%ALIAS")) {
-                	String locale = b.getString();
+                    String locale = b.getString();
                     UResourceBundle actual =  UResourceBundle.getBundleInstance(baseName, locale);
                     return (ICUResourceBundleImpl.ResourceTable) actual;
                 }else{
@@ -1245,25 +1245,25 @@ public  class ICUResourceBundle extends UResourceBundle {
      */
     private long getResourceHandle(int index)
     {
-    	//TODO this is part of a workaround for ticket #6514
-    	//if it's out of range, return -1
-    	if(index > this.size)
-    	{
-    		return -1;
-    	}
-    	//get the offset of the calling tables resource
-    	int offset = RES_GET_OFFSET(resource);
-    	
-    	//move past the 2 byte count number
-    	offset += getCharOffset(1);
-    	//move past the array of 2 byte key string offsets
-    	offset += getCharOffset(size);
-    	//move past the padding if it exists...it's either 2 bytes or no bytes
-    	offset += getCharOffset(~size & 1);
-		
-    	//and then to the proper int in the array of resources
-    	offset += getIntOffset(index);
-		return (UNSIGNED_INT_MASK) & ICUResourceBundle.getInt(rawData, offset);
+        //TODO this is part of a workaround for ticket #6514
+        //if it's out of range, return -1
+        if(index > this.size)
+        {
+            return -1;
+        }
+        //get the offset of the calling tables resource
+        int offset = RES_GET_OFFSET(resource);
+
+        //move past the 2 byte count number
+        offset += getCharOffset(1);
+        //move past the array of 2 byte key string offsets
+        offset += getCharOffset(size);
+        //move past the padding if it exists...it's either 2 bytes or no bytes
+        offset += getCharOffset(~size & 1);
+
+        //and then to the proper int in the array of resources
+        offset += getIntOffset(index);
+        return (UNSIGNED_INT_MASK) & ICUResourceBundle.getInt(rawData, offset);
     }
     
     /**
@@ -1279,19 +1279,19 @@ public  class ICUResourceBundle extends UResourceBundle {
      */
     public boolean isAlias(int index)
     {
-    	//TODO this is part of a workaround for ticket #6514
-    	//if index is out of the resource, return false.
-    	if(index > size)
-    	{
-    		return false;
-    	}
-    	//parent resource must be a table to call this
-    	if(RES_GET_TYPE(this.resource) != TABLE)
-    	{
-    		return false;
-    	}
-    	long res = getResourceHandle(index);
-		return RES_GET_TYPE(res) == ALIAS ? true : false;
+        //TODO this is part of a workaround for ticket #6514
+        //if index is out of the resource, return false.
+        if(index > size)
+        {
+            return false;
+        }
+        //parent resource must be a table to call this
+        if(RES_GET_TYPE(this.resource) != TABLE)
+        {
+            return false;
+        }
+        long res = getResourceHandle(index);
+        return RES_GET_TYPE(res) == ALIAS ? true : false;
     }
     
     /**
@@ -1302,8 +1302,8 @@ public  class ICUResourceBundle extends UResourceBundle {
      */
     public boolean isAlias()
     {
-    	//TODO this is part of a workaround for ticket #6514
-    	return RES_GET_TYPE(this.resource) == ALIAS;
+        //TODO this is part of a workaround for ticket #6514
+        return RES_GET_TYPE(this.resource) == ALIAS;
     }
     
     /**
@@ -1319,35 +1319,35 @@ public  class ICUResourceBundle extends UResourceBundle {
      */
     public boolean isAlias(String k)
     {
-    	//TODO this is part of a workaround for ticket #6514
-    	//this only applies to tables
-    	if(RES_GET_TYPE(this.resource) != TABLE)
-    	{
-    		return false;
-    	}
-    	int i = getIndexOfKey(k);
-    	if(i > size || i < 0)
-    	{
-    		return false;	
-    	}
-    	return isAlias(i);
+        //TODO this is part of a workaround for ticket #6514
+        //this only applies to tables
+        if(RES_GET_TYPE(this.resource) != TABLE)
+        {
+            return false;
+        }
+        int i = getIndexOfKey(k);
+        if(i > size || i < 0)
+        {
+            return false;
+        }
+        return isAlias(i);
     }
     
     private int getIndexOfKey(String k)
     {
-    	//TODO this is part of a workaround for ticket #6514
-    	if(RES_GET_TYPE(this.resource) != TABLE)
-    	{
-    		return -1;
-    	}
-    	int index;
+        //TODO this is part of a workaround for ticket #6514
+        if(RES_GET_TYPE(this.resource) != TABLE)
+        {
+            return -1;
+        }
+        int index;
         for(index = 0; index < size; index++)
         {
-        	String curKey = getKey(index); 
-			if(k.equals(curKey))
-			{
-				return index;
-			}
+            String curKey = getKey(index); 
+            if(k.equals(curKey))
+            {
+                return index;
+            }
         }
         return -1;
     }
@@ -1365,13 +1365,13 @@ public  class ICUResourceBundle extends UResourceBundle {
      */
     public String getAliasPath(int index)
     {
-    	//TODO cannot allow alias path to to end up in public API
-    	if(!isAlias(index) || index > this.size)
-    	{
-    		return "";
-    	}
-    	
-    	return getStringValue(getResourceHandle(index));
+        //TODO cannot allow alias path to to end up in public API
+        if(!isAlias(index) || index > this.size)
+        {
+            return "";
+        }
+        
+        return getStringValue(getResourceHandle(index));
     }
     
     
@@ -1383,8 +1383,8 @@ public  class ICUResourceBundle extends UResourceBundle {
      */
     public String getAliasPath()
     {
-    	//TODO cannot allow alias path to to end up in public API
-    	return getStringValue(resource);
+        //TODO cannot allow alias path to to end up in public API
+        return getStringValue(resource);
     }
     
     /**
@@ -1395,8 +1395,8 @@ public  class ICUResourceBundle extends UResourceBundle {
      */
     public String getAliasPath(String k)
     {
-    	//TODO cannot allow alias path to to end up in public API
-    	return getAliasPath(getIndexOfKey(k));
+        //TODO cannot allow alias path to to end up in public API
+        return getAliasPath(getIndexOfKey(k));
     }
     
     /*
@@ -1404,18 +1404,18 @@ public  class ICUResourceBundle extends UResourceBundle {
      */
     private String getKey(int index)
     {
-    	//TODO this is part of a workaround for ticket #6514
-    	if(index > this.size)
-    	{
-    		return "";
-    	}
-    	//the offset of the table
-    	int offset = RES_GET_OFFSET(resource);
-    	
-    	//move past the 2 byte number for the count
-    	offset += getCharOffset(1);
-    	
-    	//grab the key string offset from the array
+        //TODO this is part of a workaround for ticket #6514
+        if(index > this.size)
+        {
+            return "";
+        }
+        //the offset of the table
+        int offset = RES_GET_OFFSET(resource);
+
+        //move past the 2 byte number for the count
+        offset += getCharOffset(1);
+
+        //grab the key string offset from the array
         offset = getOffset(offset, index);
         
         return RES_GET_KEY(rawData, offset).toString();
@@ -1433,19 +1433,19 @@ public  class ICUResourceBundle extends UResourceBundle {
      */
     public Enumeration getKeysSafe()
     {
-    	//TODO this is part of a workaround for ticket #6514
-    	//the safeness only applies to tables, so use the other method if it's not a table
-    	if(RES_GET_TYPE(this.resource) != TABLE)
-    	{
-    		return getKeys();
-    	}
-    	Vector v = new Vector();
-    	int index;
+        //TODO this is part of a workaround for ticket #6514
+        //the safeness only applies to tables, so use the other method if it's not a table
+        if(RES_GET_TYPE(this.resource) != TABLE)
+        {
+            return getKeys();
+        }
+        Vector v = new Vector();
+        int index;
         for(index = 0; index < size; index++)
         {
-        	String curKey = getKey(index); 
-			v.add(curKey);
+            String curKey = getKey(index); 
+            v.add(curKey);
         }
-    	return v.elements();
+        return v.elements();
     }
 }
