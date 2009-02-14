@@ -1,0 +1,43 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/ar_MA.xml
+// *
+// ***************************************************************************
+ar_MA{
+    NumberElements{
+        "٫",
+        "٬",
+        "؛",
+        "٪",
+        "0",
+        "#",
+        "-",
+        "اس",
+        "‰",
+        "∞",
+        "ليس رقم",
+        "+",
+    }
+    Scripts{
+        Ital{"اللأيطالية القديمة"}
+    }
+    Version{"1.46"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector{
+                7,
+                1,
+            }
+            weekend:intvector{
+                6,
+                0,
+                7,
+                86400000,
+            }
+        }
+    }
+    defaultNumberingSystem{"decimal"}
+}

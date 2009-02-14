@@ -1,0 +1,141 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/gu.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/gu.xml
+ */
+gu{
+    AuxExemplarCharacters{"[\u200C \u200D]"}
+    Countries{
+        CN{"ચીન"}
+        DE{"જમિની"}
+        EG{"મિસર"}
+        GE{"જ્યોર્જીયા"}
+        IN{"ભારત"}
+        NP{"નેપાળ"}
+        PK{"કરાંચી"}
+        TM{"તુર્ક્મનિસ્તાન"}
+        TR{"તુર્કસ્તાન"}
+        US{"સંયુકત રાજ્ય અમેરિકા"}
+    }
+    Currencies{
+        INR{
+            "રુ",
+            "INR",
+        }
+    }
+    ExemplarCharacters{"[૦-૯ ૐ અ-ઋ ૠ ઍ એ-ઑ ઓ-ન પ-ર લ ળ વ-હ ઼ ઁ-ઃ ઽ ્ ા-ૅ ે-ૉ ો ૌ]"}
+    Keys{
+        calendar{"કેલેન્ડર"}
+        collation{"ક્રમ"}
+        currency{"ચલણ"}
+    }
+    Languages{
+        bho{"ભોજપુરી"}
+        gu{"ગુજરાતી"}
+        ta{"તમિલ"}
+    }
+    LocaleScript{
+        "Gujr",
+    }
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "૦",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##,##0.###",
+        "¤ #,##,##0.00",
+        "#,##,##0%",
+        "#E0",
+    }
+    Scripts{
+        Arab{"અરેબી"}
+        Armn{"અર્મેનિયાઈ"}
+        Beng{"બંગાળી"}
+    }
+    Version{"1.59"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "પૂર્વ મધ્યાહ્ન",
+                "ઉત્તર મધ્યાહ્ન",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "રવિ",
+                        "સોમ",
+                        "મંગળ",
+                        "બુધ",
+                        "ગુરુ",
+                        "શુક્ર",
+                        "શનિ",
+                    }
+                    wide{
+                        "રવિવાર",
+                        "સોમવાર",
+                        "મંગળવાર",
+                        "બુધવાર",
+                        "ગુરુવાર",
+                        "શુક્રવાર",
+                        "શનિવાર",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "જાન્યુ",
+                        "ફેબ્રુ",
+                        "માર્ચ",
+                        "એપ્રિલ",
+                        "મે",
+                        "જૂન",
+                        "જુલાઈ",
+                        "ઑગસ્ટ",
+                        "સપ્ટે",
+                        "ઑક્ટો",
+                        "નવે",
+                        "ડિસે",
+                    }
+                    wide{
+                        "જાન્યુઆરી",
+                        "ફેબ્રુઆરી",
+                        "માર્ચ",
+                        "એપ્રિલ",
+                        "મે",
+                        "જૂન",
+                        "જુલાઈ",
+                        "ઑગસ્ટ",
+                        "સપ્ટેમ્બર",
+                        "ઑક્ટ્બર",
+                        "નવેમ્બર",
+                        "ડિસેમ્બર",
+                    }
+                }
+            }
+        }
+    }
+    defaultNumberingSystem{"gujarati"}
+    delimiters{
+        alternateQuotationEnd{"\""}
+        alternateQuotationStart{"\""}
+        quotationEnd{"'"}
+        quotationStart{"'"}
+    }
+}

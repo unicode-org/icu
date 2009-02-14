@@ -1,0 +1,43 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/lv.xml
+// *
+// ***************************************************************************
+lv{
+    RBNFRules{
+        SpelloutRules{
+            "%spellout:\n",
+            "0: nulle; viens; divi; tr\u012Bs; \u010Detri; pieci;\n",
+            "6: se\u0161i; septi\u0146i; asto\u0146i; devi\u0146i;\n",
+            "10: desmit; vienpadsmit; divpadsmit; tr\u012Bspadsmit; \u010Detrpadsmit; piecpadsmit;\n",
+            "16: se\u0161padsmit; septi\u0146padsmit; asto\u0146padsmit; devi\u0146padsmit;\n",
+            "20: divdesmit[ >>];\n",
+            "30: tr\u012Bsdesmit[ >>];\n",
+            "40: \u010Detrdesmit[ >>];\n",
+            "50: piecdesmit[ >>];\n",
+            "60: se\u0161desmit[ >>];\n",
+            "70: septi\u0146desmit[ >>];\n",
+            "80: asto\u0146desmit[ >>];\n",
+            "90: devi\u0146desmit[ >>];\n",
+            "100: simts[ >>];\n",
+            "200: << simti[ >>];\n",
+            "1000: t\u016Bkstotis[ >>];\n",
+            "2000: << t\u016Bksto\u0161i[ >>];\n",
+            "1000000: << miljons[ >>];\n",
+            "2000000: << miljoni[ >>];\n",
+            "1000000000: << miljards[ >>];\n",
+            "2000000000: << miljardi[ >>];\n",
+            "1000000000000: << biljons[ >>];\n",
+            "2000000000000: << biljoni[ >>];\n",
+            "1000000000000000: << biljards[ >>];\n",
+            "2000000000000000: << biljardi[ >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: m\u012Bnuss >>;\n",
+            "x.x: << komats >>;\n",
+        }
+    }
+    Version{"1.3"}
+}

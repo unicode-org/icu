@@ -1,0 +1,68 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/mt.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/rbnf/mt.xml
+ */
+mt{
+    RBNFRules{
+        DurationRules{
+            "%duration:\n",
+            "0: =%in-numerals=;\n",
+            "%%hr:\n",
+            "0: 0 sieg\u0127at; 1 sieg\u0127a; =0= sieg\u0127at;\n",
+            "%%hr-min-sec:\n",
+            "0: :=00=;\n",
+            "60/60: <00<>>;\n",
+            "3600/60: <#,##0<:>>>;\n",
+            "%in-numerals:\n",
+            "0: =0= sek.;\n",
+            "60: =%%min-sec=;\n",
+            "3600: =%%hr-min-sec=;\n",
+            "%%lenient-parse:\n",
+            "& ':' = '.' = ' ' = '-';\n",
+            "%%min:\n",
+            "0: 0 minuti; 1 minuta; =0= minuti;\n",
+            "%%min-sec:\n",
+            "0: :=00=;\n",
+            "60/60: <0<>>;\n",
+            "%with-words:\n",
+            "0: 0 sekondi; 1 sekonda; =0= sekondi;\n",
+            "60/60: <%%min<[, >>];\n",
+            "3600/60: <%%hr<[, >>>];\n",
+        }
+        SpelloutRules{
+            "%%lenient-parse:\n",
+            "&[last primary ignorable ] << ' ' << ',' << '-';\n",
+            "%spellout:\n",
+            "0: \u017Cero; wie\u0127ed; tnejn; tlieta; erbg\u0127a; \u0127amsa; sitta; sebg\u0127a; tmienja; disg\u0127a;\n",
+            "10: g\u0127axra; \u0127dax; tnax; tlettax; erbatax; \u0127mistax; sittax;\n",
+            "17: sbatax; tmintax; dsatax;\n",
+            "20: [>> u ]g\u0127oxrin;\n",
+            "30: [>> u ]tletin;\n",
+            "40: [>> u ]erbg\u0127in;\n",
+            "50: [>> u ]\u0127amsin;\n",
+            "60: [>> u ]sittin;\n",
+            "70: [>> u ]sebg\u0127in;\n",
+            "80: [>> u ]tmenin;\n",
+            "90: [>> u ]disg\u0127in;\n",
+            "100: mija[ u >>];\n",
+            "200: mitejn[ u >>];\n",
+            "1000: << elf[ u >>];\n",
+            "2000: << elfejn[ u >>];\n",
+            "3000: tliet elef [ u >>];\n",
+            "1000000: << miljun[ u >>];\n",
+            "1000000000: << biljun[ >>];\n",
+            "1000000000000: << triljun[ >>];\n",
+            "1000000000000000: =#,##0=;\n",
+            "-x: minus >>;\n",
+            "x.x: << punt >>;\n",
+        }
+    }
+    Version{"1.3"}
+}

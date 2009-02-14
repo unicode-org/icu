@@ -1,0 +1,55 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/es.xml
+// *
+// ***************************************************************************
+es{
+    RBNFRules{
+        OrdinalRules{
+            "%ordinal:\n",
+            "0: =#,##0==%%ordinal_mascabbrev=;\n",
+            "%%ordinal_mascabbrev:\n",
+            "0: \u00BA;\n",
+        }
+        SpelloutRules{
+            "%spellout:\n",
+            "0: cero; uno; dos; tres; cuatro; cinco; seis; siete; ocho; nueve;\n",
+            "10: diez; once; doce; trece; catorce; quince; diecis\u00E9is; dieci>>;\n",
+            "20: veinte; veintiuno; veintid\u00F3s; veintitr\u00E9s; veinticuatro;\n",
+            "25: veinticinco; veintis\u00E9is; veinti>>;\n",
+            "30: treinta[ y >>];\n",
+            "40: cuarenta[ y >>];\n",
+            "50: cincuenta[ y >>];\n",
+            "60: sesenta[ y >>];\n",
+            "70: setenta[ y >>];\n",
+            "80: ochenta[ y >>];\n",
+            "90: noventa[ y >>];\n",
+            "100: cien; ciento >>;\n",
+            "200: doscientos[ >>];\n",
+            "300: trescientos[ >>];\n",
+            "400: cuatrocientos[ >>];\n",
+            "500: quinientos[ >>];\n",
+            "600: seiscientos[ >>];\n",
+            "700: setecientos[ >>];\n",
+            "800: ochocientos[ >>];\n",
+            "900: novecientos[ >>];\n",
+            "1000: mil[ >>];\n",
+            "2000: << mil[ >>];\n",
+            "1000000: un mill\u00F3n[ >>];\n",
+            "2000000: << millones[ >>];\n",
+            "1000000000: un millardo[ >>];\n",
+            "2000000000: << millardos[ >>];\n",
+            "1000000000000: un bill\u00F3n[ >>];\n",
+            "2000000000000: << billones[ >>];\n",
+            "1000000000000000: un billardo[ >>];\n",
+            "2000000000000000: << billardos[ >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: menos >>;\n",
+            "x.x: << coma >>;\n",
+        }
+    }
+    Version{"1.5"}
+}

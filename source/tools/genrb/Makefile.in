@@ -1,0 +1,165 @@
+#################################################################################
+## Makefile.in for ICU - tools/genrb						#
+## Copyright (c) 1999-2009, International Business Machines Corporation and	#
+## others. All Rights Reserved.							#
+#################################################################################
+#
+#
+# For Help with this Makefile and the procedures for generating ICU4J data, please see
+# "icu4j-readme.txt" in $icu4c_root/source/data
+#
+#
+
+
+## Source directory information
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+
+top_builddir = ../..
+
+include $(top_builddir)/icudefs.mk
+
+## Build directory information
+subdir = tools/genrb
+
+TARGET_STUB_NAME = genrb
+DERB_STUB_NAME = derb
+
+SECTION = 1
+
+MAN_FILES = $(TARGET_STUB_NAME).$(SECTION) $(DERB_STUB_NAME).$(SECTION)
+
+
+## Extra files to remove for 'make clean'
+CLEANFILES = *~ $(MAN_FILES) $(DEPS) $(DERB_DEPS)
+
+## Target information
+TARGET = $(BINDIR)/$(TARGET_STUB_NAME)$(EXEEXT)
+DERB = $(BINDIR)/$(DERB_STUB_NAME)$(EXEEXT)
+
+ifneq ($(top_builddir),$(top_srcdir))
+CPPFLAGS += -I$(top_builddir)/common
+endif
+CPPFLAGS += -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
+LIBS = $(LIBICUTOOLUTIL) $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
+
+OBJECTS = errmsg.o genrb.o parse.o read.o reslist.o ustr.o rbutil.o \
+wrtjava.o rle.o wrtxml.o prscmnts.o
+DERB_OBJ = derb.o
+
+DEPS = $(OBJECTS:.o=.d)
+DERB_DEPS = $(DERB_OBJ:.o=.d)
+
+# build-icu4j  variables
+GENDTJAR_ICUHOME=$(shell pwd)/../../..
+GENDTJAR_OPTS=--icu-root="$(GENDTJAR_ICUHOME)" --jar="$(GENDTJAR_JARHOME)" --icu4j-root="$(ICU4J_HOME)" --verbose
+GENDTJAR_TEMP=./temp/
+GENDTJAR=$(srcdir)/gendtjar.pl
+
+-include Makefile.local
+
+ifeq (,$(ICU4J_HOME))
+ICU4J_HOME=$(shell pwd)/icu4j
+endif
+
+##Added by Brian Rower 6/25/08
+##if JAVA_HOME was not set, try to set it by finding jar
+ifeq (,$(JAVA_HOME))
+JAVA_HOME=$(shell dirname `which jar`)/..
+ifeq (,$(GENDTJAR_JARHOME))
+GENDTJAR_JARHOME=$(shell dirname `which jar`)
+endif
+endif
+
+##if GENDTJAR_JARHOME (the directory that "jar" lives in) is not set
+##set it equal to $JAVA_HOME/bin
+ifeq (,$(GENDTJAR_JARHOME))
+GENDTJAR_JARHOME=""$(JAVA_HOME)"/bin"
+endif
+
+
+
+## List of phony targets
+.PHONY : all all-local install install-local clean clean-local	\
+distclean distclean-local dist dist-local check check-local install-man \
+build-icu4j
+
+## Clear suffix list
+.SUFFIXES :
+
+## List of standard targets
+all: all-local
+install: install-local
+clean: clean-local
+distclean : distclean-local
+dist: dist-local
+check: all check-local
+
+all-local: $(TARGET) $(DERB) $(MAN_FILES) 
+
+install-local: all-local install-man
+	$(MKINSTALLDIRS) $(DESTDIR)$(bindir)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(bindir)
+	$(INSTALL) $(DERB) $(DESTDIR)$(bindir)
+
+install-man: $(MAN_FILES)
+	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
+	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
+
+dist-local:
+
+clean-local:
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
+	$(RMV) $(TARGET) $(DERB) $(OBJECTS) $(DERB_OBJ) $(GENDTJAR_TEMP)
+
+distclean-local: clean-local
+	$(RMV) Makefile
+
+check-local: all-local
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+$(TARGET) : $(OBJECTS)
+	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS) 
+	$(POST_BUILD_STEP)
+
+$(DERB) : $(DERB_OBJ)
+	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS)
+	$(POST_BUILD_STEP)
+
+#$(GENDTJAR_JARHOME)/jar:
+#	@echo $@ not found - make sure GENDTJAR_JARHOME is set. See Makefile.in
+#	exit 1
+
+$(ICU4J_HOME)/build.xml:
+	@echo warning: $@ not found - make sure ICU4J_HOME is set.
+
+
+#Removed GENDTJAR_JARHOME dependancy. If the file path happens to contain a space in it, 
+#having it as a target will cause it to error out when it thinks that there are TWO targets. - Brian Rower 6/25/08
+build-icu4j:	$(GENDTJAR) $(ICU4J_HOME)/build.xml #$(GENDTJAR_JARHOME)/jar
+	# clean up old temp files
+	-$(RMV) $(GENDTJAR_TEMP)
+	perl $(GENDTJAR) $(GENDTJAR_OPTS)
+	@echo Finished building to $(ICU4J_HOME)
+
+
+# This line is needed to serialize builds when the gmake -j option is used.
+$(TARGET_STUB_NAME).$(SECTION): $(DERB_STUB_NAME).$(SECTION)
+
+%.$(SECTION): $(srcdir)/%.$(SECTION).in
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+
+ifeq (,$(MAKECMDGOALS))
+-include $(DEPS)
+-include $(DERB_DEPS)
+else
+ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
+-include $(DEPS)
+endif
+endif
+

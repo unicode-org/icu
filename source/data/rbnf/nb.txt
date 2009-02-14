@@ -1,0 +1,65 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/nb.xml
+// *
+// ***************************************************************************
+nb{
+    RBNFRules{
+        OrdinalRules{
+            "%%ordabbrev:\n",
+            "0: '.;\n",
+            "%ordinal:\n",
+            "0: =#,##0==%%ordabbrev=;\n",
+        }
+        SpelloutRules{
+            "%%neuter:\n",
+            "0: null; et; =%spellout=;\n",
+            "%spellout:\n",
+            "0: null; \u00E9n; to; tre; fire; fem; seks; syv; \u00E5tte; ni;\n",
+            "10: ti; elve; tolv; tretten; fjorten; femten; seksten; sytten; atten; nitten;\n",
+            "20: [>>\u00ADog\u00AD]tyve;\n",
+            "30: [>>\u00ADog\u00AD]tredve;\n",
+            "40: [>>\u00ADog\u00AD]f\u00F8rr;\n",
+            "50: [>>\u00ADog\u00AD]femti;\n",
+            "60: [>>\u00ADog\u00AD]seksti;\n",
+            "70: [>>\u00ADog\u00AD]s\u00F8tti;\n",
+            "80: [>>\u00ADog\u00AD]\u00E5tti;\n",
+            "90: [>>\u00ADog\u00AD]nitti;\n",
+            "100: ett\u00ADhundre[ og >>];\n",
+            "200: <%%neuter<\u00ADhundre[ og >>];\n",
+            "1000: <%%neuter< tusen[ og >>];\n",
+            "1000000: \u00E9n million[ >>];\n",
+            "2000000: << millioner[ >>];\n",
+            "1000000000: \u00E9n milliard[ >>];\n",
+            "2000000000: << milliarder[ >>];\n",
+            "1000000000000: \u00E9n billion[ >>];\n",
+            "2000000000000: << billioner[ >>];\n",
+            "1000000000000000: \u00E9n billiard[ >>];\n",
+            "2000000000000000: << billiarder[ >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: minus >>;\n",
+            "x.x: << komma >>;\n",
+            "%year:\n",
+            "0: null; \u00E9n; to; tre; fire; fem; seks; syv; \u00E5tte; ni;\n",
+            "10: ti; elve; tolv; tretten; fjorten; femten; seksten; sytten; atten; nitten;\n",
+            "20: [>>\u00ADog\u00AD]tyve;\n",
+            "30: [>>\u00ADog\u00AD]tredve;\n",
+            "40: [>>\u00ADog\u00AD]f\u00F8rr;\n",
+            "50: [>>\u00ADog\u00AD]femti;\n",
+            "60: [>>\u00ADog\u00AD]seksti;\n",
+            "70: [>>\u00ADog\u00AD]s\u00F8tti;\n",
+            "80: [>>\u00ADog\u00AD]\u00E5tti;\n",
+            "90: [>>\u00ADog\u00AD]nitti;\n",
+            "100: ett\u00ADhundre[ og >>];\n",
+            "200: <<\u00ADhundre[ og >>];\n",
+            "1000: tusen[ og >>];\n",
+            "1100/100: <<\u00ADhundre[ og >>];\n",
+            "10000: =%spellout=;\n",
+            "-x: minus >>;\n",
+        }
+    }
+    Version{"1.4"}
+}

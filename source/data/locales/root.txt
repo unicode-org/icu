@@ -1,0 +1,2130 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008-2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/root.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/root.xml
+ */
+root{
+    AuxExemplarCharacters{"[]"}
+    Currencies{
+        BRL{
+            "R$",
+            "BRL",
+        }
+        EUR{
+            "€",
+            "EUR",
+        }
+        GBP{
+            "UK£",
+            "GBP",
+        }
+        INR{
+            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
+            "INR",
+        }
+        ITL{
+            "IT₤",
+            "ITL",
+        }
+        JPY{
+            "JP¥",
+            "JPY",
+        }
+        USD{
+            "US$",
+            "USD",
+        }
+    }
+    CurrencyUnitPatterns{
+        other{"{0} {1}"}
+    }
+    ExemplarCharacters{"[]"}
+    LocaleScript{
+        "Zyyy",
+    }
+    MeasurementSystem:int{0}
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤ #,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    PaperSize:intvector{
+        297,
+        210,
+    }
+    Version{"1.162"}
+    calendar{
+        buddhist{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, MMMM d, yyyy G",
+                "MMMM d, yyyy G",
+                "MMM d, yyyy G",
+                "M/d/yyyy",
+                "{1} {0}",
+            }
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras{
+                abbreviated{
+                    "BE",
+                }
+                narrow:alias{"/LOCALE/calendar/buddhist/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/buddhist/eras/abbreviated"}
+            }
+            monthNames:alias{"/LOCALE/calendar/gregorian/monthNames"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
+        chinese{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE y'x'G-Ml-d",
+                "y'x'G-Ml-d",
+                "y'x'G-Ml-d",
+                "y'x'G-Ml-d",
+                "{1} {0}",
+            }
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            isLeapMonth{
+                "",
+                "*",
+            }
+            monthNames{
+                default{"format"}
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/chinese/monthNames/format/wide"}
+                    default{"wide"}
+                    narrow:alias{"/LOCALE/calendar/chinese/monthNames/stand-alone/narrow"}
+                    wide{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/chinese/monthNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide:alias{"/LOCALE/calendar/chinese/monthNames/format/wide"}
+                }
+            }
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
+        coptic{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras{
+                abbreviated{
+                    "ERA0",
+                    "ERA1",
+                }
+                narrow:alias{"/LOCALE/calendar/coptic/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/coptic/eras/abbreviated"}
+            }
+            monthNames{
+                default{"format"}
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/coptic/monthNames/format/wide"}
+                    default{"wide"}
+                    narrow:alias{"/LOCALE/calendar/coptic/monthNames/stand-alone/narrow"}
+                    wide{
+                        "Tout",
+                        "Baba",
+                        "Hator",
+                        "Kiahk",
+                        "Toba",
+                        "Amshir",
+                        "Baramhat",
+                        "Baramouda",
+                        "Bashans",
+                        "Paona",
+                        "Epep",
+                        "Mesra",
+                        "Nasie",
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/coptic/monthNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                    }
+                    wide:alias{"/LOCALE/calendar/coptic/monthNames/format/wide"}
+                }
+            }
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
+        default{"gregorian"}
+        ethiopic{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras{
+                abbreviated{
+                    "ERA0",
+                    "ERA1",
+                }
+                narrow:alias{"/LOCALE/calendar/ethiopic/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/ethiopic/eras/abbreviated"}
+            }
+            monthNames{
+                default{"format"}
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/ethiopic/monthNames/format/wide"}
+                    default{"wide"}
+                    narrow:alias{"/LOCALE/calendar/ethiopic/monthNames/stand-alone/narrow"}
+                    wide{
+                        "Meskerem",
+                        "Tekemt",
+                        "Hedar",
+                        "Tahsas",
+                        "Ter",
+                        "Yekatit",
+                        "Megabit",
+                        "Miazia",
+                        "Genbot",
+                        "Sene",
+                        "Hamle",
+                        "Nehasse",
+                        "Pagumen",
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/ethiopic/monthNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                    }
+                    wide:alias{"/LOCALE/calendar/ethiopic/monthNames/format/wide"}
+                }
+            }
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
+        gregorian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            DateTimeElements:intvector{
+                2,
+                1,
+            }
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yyyy-MM-dd",
+                "{1} {0}",
+            }
+            appendItems{
+                Day{"{0} ({2}: {1})"}
+                Day-Of-Week{"{0} {1}"}
+                Era{"{0} {1}"}
+                Hour{"{0} ({2}: {1})"}
+                Minute{"{0} ({2}: {1})"}
+                Month{"{0} ({2}: {1})"}
+                Quarter{"{0} ({2}: {1})"}
+                Second{"{0} ({2}: {1})"}
+                Timezone{"{0} {1}"}
+                Week{"{0} ({2}: {1})"}
+                Year{"{0} {1}"}
+            }
+            availableFormats{
+                Hm{"H:mm"}
+                M{"L"}
+                MEd{"E, M-d"}
+                MMM{"LLL"}
+                MMMEd{"E MMM d"}
+                MMMMEd{"E MMMM d"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"M-d"}
+                d{"d"}
+                ms{"mm:ss"}
+                y{"yyyy"}
+                yM{"yyyy-M"}
+                yMEd{"EEE, yyyy-M-d"}
+                yMMM{"yyyy MMM"}
+                yMMMEd{"EEE, yyyy MMM d"}
+                yMMMM{"yyyy MMMM"}
+                yQ{"yyyy Q"}
+                yQQQ{"yyyy QQQ"}
+            }
+            dayNames{
+                default{"format"}
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/gregorian/dayNames/format/wide"}
+                    default{"wide"}
+                    narrow:alias{"/LOCALE/calendar/gregorian/dayNames/stand-alone/narrow"}
+                    wide{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/gregorian/dayNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                    }
+                    wide:alias{"/LOCALE/calendar/gregorian/dayNames/format/wide"}
+                }
+            }
+            eras{
+                abbreviated{
+                    "BCE",
+                    "CE",
+                }
+                narrow:alias{"/LOCALE/calendar/gregorian/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/gregorian/eras/abbreviated"}
+            }
+            fields{
+                day{
+                    dn{"Day"}
+                    relative{
+                        "-1"{"Yesterday"}
+                        "0"{"Today"}
+                        "1"{"Tomorrow"}
+                    }
+                }
+                dayperiod{
+                    dn{"Dayperiod"}
+                }
+                era{
+                    dn{"Era"}
+                }
+                hour{
+                    dn{"Hour"}
+                }
+                minute{
+                    dn{"Minute"}
+                }
+                month{
+                    dn{"Month"}
+                }
+                second{
+                    dn{"Second"}
+                }
+                week{
+                    dn{"Week"}
+                }
+                weekday{
+                    dn{"Day of the Week"}
+                }
+                year{
+                    dn{"Year"}
+                }
+                zone{
+                    dn{"Zone"}
+                }
+            }
+            intervalFormats{
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E, MM-dd – E, MM-dd"}
+                    d{"E, MM-dd – E, MM-dd"}
+                }
+                MMM{
+                    M{"LLL-LLL"}
+                }
+                MMMEd{
+                    M{"E, MM-d – E, MM-d"}
+                    d{"E, MM-d – E, MM-d"}
+                }
+                MMMM{
+                    M{"LLLL-LLLL"}
+                }
+                MMMd{
+                    M{"MM-d – MM-d"}
+                    d{"MM-d – d"}
+                }
+                Md{
+                    M{"MM-dd – MM-dd"}
+                    d{"MM-dd – dd"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} – {1}"}
+                h{
+                    a{"HH-HH"}
+                    h{"HH-HH"}
+                }
+                hm{
+                    a{"HH:mm-HH:mm"}
+                    h{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                hmv{
+                    a{"HH:mm-HH:mm v"}
+                    h{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                hv{
+                    a{"HH-HH v"}
+                    h{"HH-HH v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"yyyy-MM – MM"}
+                    y{"yyyy-MM – yyyy-MM"}
+                }
+                yMEd{
+                    M{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                    d{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                    y{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                }
+                yMMM{
+                    M{"yyyy-MM – MM"}
+                    y{"yyyy-MM – yyyy-MM"}
+                }
+                yMMMEd{
+                    M{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                    d{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                    y{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                }
+                yMMMM{
+                    M{"yyyy-MM – MM"}
+                    y{"yyyy-MM – yyyy-MM"}
+                }
+                yMMMd{
+                    M{"yyyy-MM-dd – MM-d"}
+                    d{"yyyy-MM-d – d"}
+                    y{"yyyy-MM-dd – yyyy-MM-dd"}
+                }
+                yMd{
+                    M{"yyyy-MM-dd – MM-dd"}
+                    d{"yyyy-MM-dd – dd"}
+                    y{"yyyy-MM-dd – yyyy-MM-dd"}
+                }
+            }
+            monthNames{
+                default{"format"}
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/gregorian/monthNames/format/wide"}
+                    default{"wide"}
+                    narrow:alias{"/LOCALE/calendar/gregorian/monthNames/stand-alone/narrow"}
+                    wide{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/gregorian/monthNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide:alias{"/LOCALE/calendar/gregorian/monthNames/format/wide"}
+                }
+            }
+            quarters{
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/gregorian/quarters/format/wide"}
+                    narrow:alias{"/LOCALE/calendar/gregorian/quarters/stand-alone/narrow"}
+                    wide{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/gregorian/quarters/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                    wide:alias{"/LOCALE/calendar/gregorian/quarters/format/wide"}
+                }
+            }
+            weekend:intvector{
+                7,
+                0,
+                1,
+                86400000,
+            }
+        }
+        hebrew{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras{
+                abbreviated{
+                    "AM",
+                }
+                narrow:alias{"/LOCALE/calendar/hebrew/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/hebrew/eras/abbreviated"}
+            }
+            monthNames{
+                default{"format"}
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/hebrew/monthNames/format/wide"}
+                    default{"wide"}
+                    narrow:alias{"/LOCALE/calendar/hebrew/monthNames/stand-alone/narrow"}
+                    wide{
+                        "Tishri",
+                        "Heshvan",
+                        "Kislev",
+                        "Tevet",
+                        "Shevat",
+                        "Adar I",
+                        "Adar",
+                        "Nisan",
+                        "Iyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/hebrew/monthNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                    }
+                    wide:alias{"/LOCALE/calendar/hebrew/monthNames/format/wide"}
+                }
+            }
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
+        indian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras{
+                abbreviated{
+                    "SAKA",
+                }
+                narrow:alias{"/LOCALE/calendar/indian/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/indian/eras/abbreviated"}
+            }
+            monthNames{
+                default{"format"}
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/indian/monthNames/format/wide"}
+                    default{"wide"}
+                    narrow:alias{"/LOCALE/calendar/indian/monthNames/stand-alone/narrow"}
+                    wide{
+                        "Chaitra",
+                        "Vaisakha",
+                        "Jyaistha",
+                        "Asadha",
+                        "Sravana",
+                        "Bhadra",
+                        "Asvina",
+                        "Kartika",
+                        "Agrahayana",
+                        "Pausa",
+                        "Magha",
+                        "Phalguna",
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/indian/monthNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide:alias{"/LOCALE/calendar/indian/monthNames/format/wide"}
+                }
+            }
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
+        islamic{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras{
+                abbreviated{
+                    "AH",
+                }
+                narrow:alias{"/LOCALE/calendar/islamic/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/islamic/eras/abbreviated"}
+            }
+            monthNames{
+                default{"format"}
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
+                    default{"wide"}
+                    narrow:alias{"/LOCALE/calendar/islamic/monthNames/stand-alone/narrow"}
+                    wide{
+                        "Muharram",
+                        "Safar",
+                        "Rabiʻ I",
+                        "Rabiʻ II",
+                        "Jumada I",
+                        "Jumada II",
+                        "Rajab",
+                        "Shaʻban",
+                        "Ramadan",
+                        "Shawwal",
+                        "Dhuʻl-Qiʻdah",
+                        "Dhuʻl-Hijjah",
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/islamic/monthNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
+                }
+            }
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
+        islamic-civil:alias{"/LOCALE/calendar/islamic"}
+        japanese{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, MMMM d, y G",
+                "MMMM d, y G",
+                "MMM d, y G",
+                "M/d/yy",
+                "{1} {0}",
+            }
+            appendItems{
+                Day{"{0} ({2}: {1})"}
+                Day-Of-Week{"{0} {1}"}
+                Era{"{0} {1}"}
+                Hour{"{0} ({2}: {1})"}
+                Minute{"{0} ({2}: {1})"}
+                Month{"{0} ({2}: {1})"}
+                Quarter{"{0} ({2}: {1})"}
+                Second{"{0} ({2}: {1})"}
+                Timezone{"{0} {1}"}
+                Week{"{0} ({2}: {1})"}
+                Year{"{0} {1}"}
+            }
+            availableFormats{
+                Ed{"E d"}
+                H{"H"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                MMMEd{"E MMM d"}
+                MMMMd{"MMMM d"}
+                Md{"M-d"}
+                ms{"mm:ss"}
+                y{"yyyy GGG"}
+                yM{"GGGGG yy-MM"}
+                yMMM{"GGGGG yy MMM"}
+                yQ{"GGGGG yy Q"}
+            }
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras{
+                abbreviated{
+                    "Taika",
+                    "Hakuchi",
+                    "Hakuhō",
+                    "Shuchō",
+                    "Taihō",
+                    "Keiun",
+                    "Wadō",
+                    "Reiki",
+                    "Yōrō",
+                    "Jinki",
+                    "Tempyō",
+                    "Tempyō-kampō",
+                    "Tempyō-shōhō",
+                    "Tempyō-hōji",
+                    "Temphō-jingo",
+                    "Jingo-keiun",
+                    "Hōki",
+                    "Ten-ō",
+                    "Enryaku",
+                    "Daidō",
+                    "Kōnin",
+                    "Tenchō",
+                    "Shōwa",
+                    "Kajō",
+                    "Ninju",
+                    "Saiko",
+                    "Tennan",
+                    "Jōgan",
+                    "Genkei",
+                    "Ninna",
+                    "Kampyō",
+                    "Shōtai",
+                    "Engi",
+                    "Enchō",
+                    "Shōhei",
+                    "Tengyō",
+                    "Tenryaku",
+                    "Tentoku",
+                    "Ōwa",
+                    "Kōhō",
+                    "Anna",
+                    "Tenroku",
+                    "Ten-en",
+                    "Jōgen",
+                    "Tengen",
+                    "Eikan",
+                    "Kanna",
+                    "Ei-en",
+                    "Eiso",
+                    "Shōryaku",
+                    "Chōtoku",
+                    "Chōhō",
+                    "Kankō",
+                    "Chōwa",
+                    "Kannin",
+                    "Jian",
+                    "Manju",
+                    "Chōgen",
+                    "Chōryaku",
+                    "Chōkyū",
+                    "Kantoku",
+                    "Eishō",
+                    "Tengi",
+                    "Kōhei",
+                    "Jiryaku",
+                    "Enkyū",
+                    "Shōho",
+                    "Shōryaku",
+                    "Eiho",
+                    "Ōtoku",
+                    "Kanji",
+                    "Kaho",
+                    "Eichō",
+                    "Shōtoku",
+                    "Kōwa",
+                    "Chōji",
+                    "Kashō",
+                    "Tennin",
+                    "Ten-ei",
+                    "Eikyū",
+                    "Gen-ei",
+                    "Hoan",
+                    "Tenji",
+                    "Daiji",
+                    "Tenshō",
+                    "Chōshō",
+                    "Hoen",
+                    "Eiji",
+                    "Kōji",
+                    "Tenyō",
+                    "Kyūan",
+                    "Ninpei",
+                    "Kyūju",
+                    "Hogen",
+                    "Heiji",
+                    "Eiryaku",
+                    "Ōho",
+                    "Chōkan",
+                    "Eiman",
+                    "Nin-an",
+                    "Kaō",
+                    "Shōan",
+                    "Angen",
+                    "Jishō",
+                    "Yōwa",
+                    "Juei",
+                    "Genryuku",
+                    "Bunji",
+                    "Kenkyū",
+                    "Shōji",
+                    "Kennin",
+                    "Genkyū",
+                    "Ken-ei",
+                    "Shōgen",
+                    "Kenryaku",
+                    "Kenpō",
+                    "Shōkyū",
+                    "Jōō",
+                    "Gennin",
+                    "Karoku",
+                    "Antei",
+                    "Kanki",
+                    "Jōei",
+                    "Tempuku",
+                    "Bunryaku",
+                    "Katei",
+                    "Ryakunin",
+                    "En-ō",
+                    "Ninji",
+                    "Kangen",
+                    "Hōji",
+                    "Kenchō",
+                    "Kōgen",
+                    "Shōka",
+                    "Shōgen",
+                    "Bun-ō",
+                    "Kōchō",
+                    "Bun-ei",
+                    "Kenji",
+                    "Kōan",
+                    "Shōō",
+                    "Einin",
+                    "Shōan",
+                    "Kengen",
+                    "Kagen",
+                    "Tokuji",
+                    "Enkei",
+                    "Ōchō",
+                    "Shōwa",
+                    "Bunpō",
+                    "Genō",
+                    "Genkyō",
+                    "Shōchū",
+                    "Kareki",
+                    "Gentoku",
+                    "Genkō",
+                    "Kemmu",
+                    "Engen",
+                    "Kōkoku",
+                    "Shōhei",
+                    "Kentoku",
+                    "Bunchũ",
+                    "Tenju",
+                    "Kōryaku",
+                    "Kōwa",
+                    "Genchũ",
+                    "Meitoku",
+                    "Kakei",
+                    "Kōō",
+                    "Meitoku",
+                    "Ōei",
+                    "Shōchō",
+                    "Eikyō",
+                    "Kakitsu",
+                    "Bun-an",
+                    "Hōtoku",
+                    "Kyōtoku",
+                    "Kōshō",
+                    "Chōroku",
+                    "Kanshō",
+                    "Bunshō",
+                    "Ōnin",
+                    "Bunmei",
+                    "Chōkyō",
+                    "Entoku",
+                    "Meiō",
+                    "Bunki",
+                    "Eishō",
+                    "Taiei",
+                    "Kyōroku",
+                    "Tenmon",
+                    "Kōji",
+                    "Eiroku",
+                    "Genki",
+                    "Tenshō",
+                    "Bunroku",
+                    "Keichō",
+                    "Genwa",
+                    "Kan-ei",
+                    "Shōho",
+                    "Keian",
+                    "Shōō",
+                    "Meiryaku",
+                    "Manji",
+                    "Kanbun",
+                    "Enpō",
+                    "Tenwa",
+                    "Jōkyō",
+                    "Genroku",
+                    "Hōei",
+                    "Shōtoku",
+                    "Kyōhō",
+                    "Genbun",
+                    "Kanpō",
+                    "Enkyō",
+                    "Kan-en",
+                    "Hōryaku",
+                    "Meiwa",
+                    "An-ei",
+                    "Tenmei",
+                    "Kansei",
+                    "Kyōwa",
+                    "Bunka",
+                    "Bunsei",
+                    "Tenpō",
+                    "Kōka",
+                    "Kaei",
+                    "Ansei",
+                    "Man-en",
+                    "Bunkyū",
+                    "Genji",
+                    "Keiō",
+                    "Meiji",
+                    "Taishō",
+                    "Shōwa",
+                    "Heisei",
+                }
+                narrow{
+                    "Taika" /** (abbr.)  */,
+                    "Hakuchi" /** (abbr.)  */,
+                    "Hakuhō" /** (abbr.)  */,
+                    "Shuchō" /** (abbr.)  */,
+                    "Taihō" /** (abbr.)  */,
+                    "Keiun" /** (abbr.)  */,
+                    "Wadō" /** (abbr.)  */,
+                    "Reiki" /** (abbr.)  */,
+                    "Yōrō" /** (abbr.)  */,
+                    "Jinki" /** (abbr.)  */,
+                    "Tempyō" /** (abbr.)  */,
+                    "Tempyō-kampō" /** (abbr.)  */,
+                    "Tempyō-shōhō" /** (abbr.)  */,
+                    "Tempyō-hōji" /** (abbr.)  */,
+                    "Temphō-jingo" /** (abbr.)  */,
+                    "Jingo-keiun" /** (abbr.)  */,
+                    "Hōki" /** (abbr.)  */,
+                    "Ten-ō" /** (abbr.)  */,
+                    "Enryaku" /** (abbr.)  */,
+                    "Daidō" /** (abbr.)  */,
+                    "Kōnin" /** (abbr.)  */,
+                    "Tenchō" /** (abbr.)  */,
+                    "Shōwa" /** (abbr.)  */,
+                    "Kajō" /** (abbr.)  */,
+                    "Ninju" /** (abbr.)  */,
+                    "Saiko" /** (abbr.)  */,
+                    "Tennan" /** (abbr.)  */,
+                    "Jōgan" /** (abbr.)  */,
+                    "Genkei" /** (abbr.)  */,
+                    "Ninna" /** (abbr.)  */,
+                    "Kampyō" /** (abbr.)  */,
+                    "Shōtai" /** (abbr.)  */,
+                    "Engi" /** (abbr.)  */,
+                    "Enchō" /** (abbr.)  */,
+                    "Shōhei" /** (abbr.)  */,
+                    "Tengyō" /** (abbr.)  */,
+                    "Tenryaku" /** (abbr.)  */,
+                    "Tentoku" /** (abbr.)  */,
+                    "Ōwa" /** (abbr.)  */,
+                    "Kōhō" /** (abbr.)  */,
+                    "Anna" /** (abbr.)  */,
+                    "Tenroku" /** (abbr.)  */,
+                    "Ten-en" /** (abbr.)  */,
+                    "Jōgen" /** (abbr.)  */,
+                    "Tengen" /** (abbr.)  */,
+                    "Eikan" /** (abbr.)  */,
+                    "Kanna" /** (abbr.)  */,
+                    "Ei-en" /** (abbr.)  */,
+                    "Eiso" /** (abbr.)  */,
+                    "Shōryaku" /** (abbr.)  */,
+                    "Chōtoku" /** (abbr.)  */,
+                    "Chōhō" /** (abbr.)  */,
+                    "Kankō" /** (abbr.)  */,
+                    "Chōwa" /** (abbr.)  */,
+                    "Kannin" /** (abbr.)  */,
+                    "Jian" /** (abbr.)  */,
+                    "Manju" /** (abbr.)  */,
+                    "Chōgen" /** (abbr.)  */,
+                    "Chōryaku" /** (abbr.)  */,
+                    "Chōkyū" /** (abbr.)  */,
+                    "Kantoku" /** (abbr.)  */,
+                    "Eishō" /** (abbr.)  */,
+                    "Tengi" /** (abbr.)  */,
+                    "Kōhei" /** (abbr.)  */,
+                    "Jiryaku" /** (abbr.)  */,
+                    "Enkyū" /** (abbr.)  */,
+                    "Shōho" /** (abbr.)  */,
+                    "Shōryaku" /** (abbr.)  */,
+                    "Eiho" /** (abbr.)  */,
+                    "Ōtoku" /** (abbr.)  */,
+                    "Kanji" /** (abbr.)  */,
+                    "Kaho" /** (abbr.)  */,
+                    "Eichō" /** (abbr.)  */,
+                    "Shōtoku" /** (abbr.)  */,
+                    "Kōwa" /** (abbr.)  */,
+                    "Chōji" /** (abbr.)  */,
+                    "Kashō" /** (abbr.)  */,
+                    "Tennin" /** (abbr.)  */,
+                    "Ten-ei" /** (abbr.)  */,
+                    "Eikyū" /** (abbr.)  */,
+                    "Gen-ei" /** (abbr.)  */,
+                    "Hoan" /** (abbr.)  */,
+                    "Tenji" /** (abbr.)  */,
+                    "Daiji" /** (abbr.)  */,
+                    "Tenshō" /** (abbr.)  */,
+                    "Chōshō" /** (abbr.)  */,
+                    "Hoen" /** (abbr.)  */,
+                    "Eiji" /** (abbr.)  */,
+                    "Kōji" /** (abbr.)  */,
+                    "Tenyō" /** (abbr.)  */,
+                    "Kyūan" /** (abbr.)  */,
+                    "Ninpei" /** (abbr.)  */,
+                    "Kyūju" /** (abbr.)  */,
+                    "Hogen" /** (abbr.)  */,
+                    "Heiji" /** (abbr.)  */,
+                    "Eiryaku" /** (abbr.)  */,
+                    "Ōho" /** (abbr.)  */,
+                    "Chōkan" /** (abbr.)  */,
+                    "Eiman" /** (abbr.)  */,
+                    "Nin-an" /** (abbr.)  */,
+                    "Kaō" /** (abbr.)  */,
+                    "Shōan" /** (abbr.)  */,
+                    "Angen" /** (abbr.)  */,
+                    "Jishō" /** (abbr.)  */,
+                    "Yōwa" /** (abbr.)  */,
+                    "Juei" /** (abbr.)  */,
+                    "Genryuku" /** (abbr.)  */,
+                    "Bunji" /** (abbr.)  */,
+                    "Kenkyū" /** (abbr.)  */,
+                    "Shōji" /** (abbr.)  */,
+                    "Kennin" /** (abbr.)  */,
+                    "Genkyū" /** (abbr.)  */,
+                    "Ken-ei" /** (abbr.)  */,
+                    "Shōgen" /** (abbr.)  */,
+                    "Kenryaku" /** (abbr.)  */,
+                    "Kenpō" /** (abbr.)  */,
+                    "Shōkyū" /** (abbr.)  */,
+                    "Jōō" /** (abbr.)  */,
+                    "Gennin" /** (abbr.)  */,
+                    "Karoku" /** (abbr.)  */,
+                    "Antei" /** (abbr.)  */,
+                    "Kanki" /** (abbr.)  */,
+                    "Jōei" /** (abbr.)  */,
+                    "Tempuku" /** (abbr.)  */,
+                    "Bunryaku" /** (abbr.)  */,
+                    "Katei" /** (abbr.)  */,
+                    "Ryakunin" /** (abbr.)  */,
+                    "En-ō" /** (abbr.)  */,
+                    "Ninji" /** (abbr.)  */,
+                    "Kangen" /** (abbr.)  */,
+                    "Hōji" /** (abbr.)  */,
+                    "Kenchō" /** (abbr.)  */,
+                    "Kōgen" /** (abbr.)  */,
+                    "Shōka" /** (abbr.)  */,
+                    "Shōgen" /** (abbr.)  */,
+                    "Bun-ō" /** (abbr.)  */,
+                    "Kōchō" /** (abbr.)  */,
+                    "Bun-ei" /** (abbr.)  */,
+                    "Kenji" /** (abbr.)  */,
+                    "Kōan" /** (abbr.)  */,
+                    "Shōō" /** (abbr.)  */,
+                    "Einin" /** (abbr.)  */,
+                    "Shōan" /** (abbr.)  */,
+                    "Kengen" /** (abbr.)  */,
+                    "Kagen" /** (abbr.)  */,
+                    "Tokuji" /** (abbr.)  */,
+                    "Enkei" /** (abbr.)  */,
+                    "Ōchō" /** (abbr.)  */,
+                    "Shōwa" /** (abbr.)  */,
+                    "Bunpō" /** (abbr.)  */,
+                    "Genō" /** (abbr.)  */,
+                    "Genkyō" /** (abbr.)  */,
+                    "Shōchū" /** (abbr.)  */,
+                    "Kareki" /** (abbr.)  */,
+                    "Gentoku" /** (abbr.)  */,
+                    "Genkō" /** (abbr.)  */,
+                    "Kemmu" /** (abbr.)  */,
+                    "Engen" /** (abbr.)  */,
+                    "Kōkoku" /** (abbr.)  */,
+                    "Shōhei" /** (abbr.)  */,
+                    "Kentoku" /** (abbr.)  */,
+                    "Bunchũ" /** (abbr.)  */,
+                    "Tenju" /** (abbr.)  */,
+                    "Kōryaku" /** (abbr.)  */,
+                    "Kōwa" /** (abbr.)  */,
+                    "Genchũ" /** (abbr.)  */,
+                    "Meitoku" /** (abbr.)  */,
+                    "Kakei" /** (abbr.)  */,
+                    "Kōō" /** (abbr.)  */,
+                    "Meitoku" /** (abbr.)  */,
+                    "Ōei" /** (abbr.)  */,
+                    "Shōchō" /** (abbr.)  */,
+                    "Eikyō" /** (abbr.)  */,
+                    "Kakitsu" /** (abbr.)  */,
+                    "Bun-an" /** (abbr.)  */,
+                    "Hōtoku" /** (abbr.)  */,
+                    "Kyōtoku" /** (abbr.)  */,
+                    "Kōshō" /** (abbr.)  */,
+                    "Chōroku" /** (abbr.)  */,
+                    "Kanshō" /** (abbr.)  */,
+                    "Bunshō" /** (abbr.)  */,
+                    "Ōnin" /** (abbr.)  */,
+                    "Bunmei" /** (abbr.)  */,
+                    "Chōkyō" /** (abbr.)  */,
+                    "Entoku" /** (abbr.)  */,
+                    "Meiō" /** (abbr.)  */,
+                    "Bunki" /** (abbr.)  */,
+                    "Eishō" /** (abbr.)  */,
+                    "Taiei" /** (abbr.)  */,
+                    "Kyōroku" /** (abbr.)  */,
+                    "Tenmon" /** (abbr.)  */,
+                    "Kōji" /** (abbr.)  */,
+                    "Eiroku" /** (abbr.)  */,
+                    "Genki" /** (abbr.)  */,
+                    "Tenshō" /** (abbr.)  */,
+                    "Bunroku" /** (abbr.)  */,
+                    "Keichō" /** (abbr.)  */,
+                    "Genwa" /** (abbr.)  */,
+                    "Kan-ei" /** (abbr.)  */,
+                    "Shōho" /** (abbr.)  */,
+                    "Keian" /** (abbr.)  */,
+                    "Shōō" /** (abbr.)  */,
+                    "Meiryaku" /** (abbr.)  */,
+                    "Manji" /** (abbr.)  */,
+                    "Kanbun" /** (abbr.)  */,
+                    "Enpō" /** (abbr.)  */,
+                    "Tenwa" /** (abbr.)  */,
+                    "Jōkyō" /** (abbr.)  */,
+                    "Genroku" /** (abbr.)  */,
+                    "Hōei" /** (abbr.)  */,
+                    "Shōtoku" /** (abbr.)  */,
+                    "Kyōhō" /** (abbr.)  */,
+                    "Genbun" /** (abbr.)  */,
+                    "Kanpō" /** (abbr.)  */,
+                    "Enkyō" /** (abbr.)  */,
+                    "Kan-en" /** (abbr.)  */,
+                    "Hōryaku" /** (abbr.)  */,
+                    "Meiwa" /** (abbr.)  */,
+                    "An-ei" /** (abbr.)  */,
+                    "Tenmei" /** (abbr.)  */,
+                    "Kansei" /** (abbr.)  */,
+                    "Kyōwa" /** (abbr.)  */,
+                    "Bunka" /** (abbr.)  */,
+                    "Bunsei" /** (abbr.)  */,
+                    "Tenpō" /** (abbr.)  */,
+                    "Kōka" /** (abbr.)  */,
+                    "Kaei" /** (abbr.)  */,
+                    "Ansei" /** (abbr.)  */,
+                    "Man-en" /** (abbr.)  */,
+                    "Bunkyū" /** (abbr.)  */,
+                    "Genji" /** (abbr.)  */,
+                    "Keiō" /** (abbr.)  */,
+                    "M",
+                    "T",
+                    "S",
+                    "H",
+                }
+                wide:alias{"/LOCALE/calendar/japanese/eras/abbreviated"}
+            }
+            monthNames:alias{"/LOCALE/calendar/gregorian/monthNames"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
+        persian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras{
+                abbreviated{
+                    "AP",
+                }
+                narrow:alias{"/LOCALE/calendar/persian/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/persian/eras/abbreviated"}
+            }
+            monthNames{
+                default{"format"}
+                format{
+                    abbreviated:alias{"/LOCALE/calendar/persian/monthNames/format/wide"}
+                    default{"wide"}
+                    narrow:alias{"/LOCALE/calendar/persian/monthNames/stand-alone/narrow"}
+                    wide{
+                        "Farvardin",
+                        "Ordibehesht",
+                        "Khordad",
+                        "Tir",
+                        "Mordad",
+                        "Shahrivar",
+                        "Mehr",
+                        "Aban",
+                        "Azar",
+                        "Dey",
+                        "Bahman",
+                        "Esfand",
+                    }
+                }
+                stand-alone{
+                    abbreviated:alias{"/LOCALE/calendar/persian/monthNames/format/abbreviated"}
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide:alias{"/LOCALE/calendar/persian/monthNames/format/wide"}
+                }
+            }
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
+        roc{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, MMMM d, G y",
+                "MMMM d, G y",
+                "MMM d, G y",
+                "G y/M/d",
+                "{1} {0}",
+            }
+            appendItems{
+                Day{"{0} ({2}: {1})"}
+                Day-Of-Week{"{0} {1}"}
+                Era{"{0} {1}"}
+                Hour{"{0} ({2}: {1})"}
+                Minute{"{0} ({2}: {1})"}
+                Month{"{0} ({2}: {1})"}
+                Quarter{"{0} ({2}: {1})"}
+                Second{"{0} ({2}: {1})"}
+                Timezone{"{0} {1}"}
+                Week{"{0} ({2}: {1})"}
+                Year{"{0} {1}"}
+            }
+            availableFormats{
+                Hm{"HH:mm"}
+                MEd{"E, M/d"}
+                MMMEd{"E, MMM d"}
+                MMMd{"MMM d"}
+                Md{"M/d"}
+                ms{"mm:ss"}
+                yyyy{"G y"}
+                yyyyM{"G y/M"}
+                yyyyMEd{"EEE, G y/M/d"}
+                yyyyMMM{"MMM, G y"}
+                yyyyMMMEd{"EEE, MMM d, G y"}
+                yyyyQ{"Q G y"}
+                yyyyQQQ{"QQQ G y"}
+            }
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras{
+                abbreviated{
+                    "Before R.O.C.",
+                    "R.O.C.",
+                }
+                narrow:alias{"/LOCALE/calendar/roc/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/roc/eras/abbreviated"}
+            }
+            monthNames:alias{"/LOCALE/calendar/gregorian/monthNames"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
+    }
+    codePatterns{
+        language{"{0}"}
+        script{"{0}"}
+        territory{"{0}"}
+    }
+    defaultNumberingSystem{"decimal"}
+    delimiters{
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
+    }
+    layout{
+        characters{"left-to-right"}
+        lines{"top-to-bottom"}
+    }
+    localeDisplayPattern{
+        pattern{"{0} ({1})"}
+        separator{", "}
+    }
+    measurementSystemNames{
+        US{"US"}
+        metric{"Metric"}
+    }
+    units{
+        day{
+            other{"{0} d"}
+        }
+        hour{
+            other{"{0} h"}
+        }
+        minute{
+            other{"{0} min"}
+        }
+        month{
+            other{"{0} m"}
+        }
+        second{
+            other{"{0} s"}
+        }
+        week{
+            other{"{0} w"}
+        }
+        year{
+            other{"{0} y"}
+        }
+    }
+    zoneStrings{
+        ""{
+            ec{""}
+            ld{""}
+            ls{""}
+            sd{""}
+            ss{""}
+        }
+        "America:Indiana:Knox"{
+            ec{"Knox, Indiana"}
+        }
+        "America:Indiana:Marengo"{
+            ec{"Marengo, Indiana"}
+        }
+        "America:Indiana:Petersburg"{
+            ec{"Petersburg, Indiana"}
+        }
+        "America:Indiana:Tell_City"{
+            ec{"Tell City, Indiana"}
+        }
+        "America:Indiana:Vevay"{
+            ec{"Vevay, Indiana"}
+        }
+        "America:Indiana:Vincennes"{
+            ec{"Vincennes, Indiana"}
+        }
+        "America:Indiana:Winamac"{
+            ec{"Winamac, Indiana"}
+        }
+        "America:Kentucky:Monticello"{
+            ec{"Monticello, Kentucky"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"Center, North Dakota"}
+        }
+        "America:North_Dakota:New_Salem"{
+            ec{"New Salem, North Dakota"}
+        }
+        "America:St_Johns"{
+            ec{"St. John's"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont d'Urville"}
+        }
+        "Etc:Unknown"{
+            ec{"Unknown"}
+        }
+        "meta:Acre"{
+            sd{"ACST (Acre)"}
+            ss{"ACT (Acre)"}
+        }
+        "meta:Afghanistan"{
+            ss{"AFT"}
+        }
+        "meta:Africa_Central"{
+            ss{"CAT"}
+        }
+        "meta:Africa_Eastern"{
+            ss{"EAT"}
+        }
+        "meta:Africa_Southern"{
+            ss{"SAST"}
+        }
+        "meta:Africa_Western"{
+            sd{"WAST"}
+            ss{"WAT"}
+        }
+        "meta:Aktyubinsk"{
+            sd{"AKTST"}
+            ss{"AKTT"}
+        }
+        "meta:Alaska"{
+            sd{"AKDT"}
+            ss{"AKST"}
+        }
+        "meta:Alaska_Hawaii"{
+            sd{"AHDT"}
+            ss{"AHST"}
+        }
+        "meta:Almaty"{
+            sd{"ALMST"}
+            ss{"ALMT"}
+        }
+        "meta:Amazon"{
+            sd{"AMST"}
+            ss{"AMT"}
+        }
+        "meta:America_Central"{
+            sd{"CDT"}
+            ss{"CST"}
+        }
+        "meta:America_Eastern"{
+            sd{"EDT"}
+            ss{"EST"}
+        }
+        "meta:America_Mountain"{
+            sd{"MDT"}
+            ss{"MST"}
+        }
+        "meta:America_Pacific"{
+            sd{"PDT"}
+            ss{"PST"}
+        }
+        "meta:Anadyr"{
+            sd{"ANAST"}
+            ss{"ANAT"}
+        }
+        "meta:Aqtau"{
+            sd{"AQTST (Aqtau)"}
+            ss{"AQTT (Aqtau)"}
+        }
+        "meta:Aqtobe"{
+            sd{"AQTST (Aqtobe)"}
+            ss{"AQTT (Aqtobe)"}
+        }
+        "meta:Arabian"{
+            sd{"ADT (SA)"}
+            ss{"AST (SA)"}
+        }
+        "meta:Argentina"{
+            sd{"ARST"}
+            ss{"ART"}
+        }
+        "meta:Argentina_Western"{
+            ss{"WART"}
+        }
+        "meta:Armenia"{
+            sd{"AMST (AM)"}
+            ss{"AMT (AM)"}
+        }
+        "meta:Ashkhabad"{
+            sd{"ASHST"}
+            ss{"ASHT"}
+        }
+        "meta:Atlantic"{
+            sd{"ADT"}
+            ss{"AST"}
+        }
+        "meta:Australia_Central"{
+            sd{"ACDT"}
+            ss{"ACST"}
+        }
+        "meta:Australia_CentralWestern"{
+            sd{"ACWDT"}
+            ss{"ACWST"}
+        }
+        "meta:Australia_Eastern"{
+            sd{"AEDT"}
+            ss{"AEST"}
+        }
+        "meta:Australia_Western"{
+            sd{"AWDT"}
+            ss{"AWST"}
+        }
+        "meta:Azerbaijan"{
+            sd{"AZST"}
+            ss{"AZT"}
+        }
+        "meta:Azores"{
+            sd{"AZOST"}
+            ss{"AZOT"}
+        }
+        "meta:Baku"{
+            sd{"BAKST"}
+            ss{"BAKT"}
+        }
+        "meta:Bangladesh"{
+            ss{"BDT"}
+        }
+        "meta:Bering"{
+            sd{"BDT (Bering)"}
+            ss{"BST (Bering)"}
+        }
+        "meta:Bhutan"{
+            ss{"BTT"}
+        }
+        "meta:Bolivia"{
+            ss{"BOT"}
+        }
+        "meta:Borneo"{
+            sd{"BORST"}
+            ss{"BORT"}
+        }
+        "meta:Brasilia"{
+            sd{"BRST"}
+            ss{"BRT"}
+        }
+        "meta:Brunei"{
+            ss{"BNT"}
+        }
+        "meta:Cape_Verde"{
+            sd{"CVST"}
+            ss{"CVT"}
+        }
+        "meta:Chamorro"{
+            ss{"ChST"}
+        }
+        "meta:Changbai"{
+            ss{"CHAT"}
+        }
+        "meta:Chatham"{
+            sd{"CHADT"}
+            ss{"CHAST"}
+        }
+        "meta:Chile"{
+            sd{"CLST"}
+            ss{"CLT"}
+        }
+        "meta:China"{
+            sd{"CDT (CN)"}
+            ss{"CST (CN)"}
+        }
+        "meta:Choibalsan"{
+            sd{"CHOST"}
+            ss{"CHOT"}
+        }
+        "meta:Christmas"{
+            ss{"CXT"}
+        }
+        "meta:Cocos"{
+            ss{"CCT"}
+        }
+        "meta:Colombia"{
+            sd{"COST"}
+            ss{"COT"}
+        }
+        "meta:Cook"{
+            sd{"CKHST"}
+            ss{"CKT"}
+        }
+        "meta:Cuba"{
+            sd{"CDT (CU)"}
+            ss{"CST (CU)"}
+        }
+        "meta:Dacca"{
+            ss{"DACT"}
+        }
+        "meta:Davis"{
+            ss{"DAVT"}
+        }
+        "meta:DumontDUrville"{
+            ss{"DDUT"}
+        }
+        "meta:Dushanbe"{
+            sd{"DUSST"}
+            ss{"DUST"}
+        }
+        "meta:Dutch_Guiana"{
+            ss{"NEGT"}
+        }
+        "meta:East_Timor"{
+            ss{"TLT"}
+        }
+        "meta:Easter"{
+            sd{"EASST"}
+            ss{"EAST"}
+        }
+        "meta:Ecuador"{
+            ss{"ECT"}
+        }
+        "meta:Europe_Central"{
+            sd{"CEST"}
+            ss{"CET"}
+        }
+        "meta:Europe_Eastern"{
+            sd{"EEST"}
+            ss{"EET"}
+        }
+        "meta:Europe_Western"{
+            sd{"WEST"}
+            ss{"WET"}
+        }
+        "meta:Falkland"{
+            sd{"FKST"}
+            ss{"FKT"}
+        }
+        "meta:Fiji"{
+            sd{"FJST"}
+            ss{"FJT"}
+        }
+        "meta:French_Guiana"{
+            ss{"GFT"}
+        }
+        "meta:French_Southern"{
+            ss{"TFT"}
+        }
+        "meta:Frunze"{
+            sd{"FRUST"}
+            ss{"FRUT"}
+        }
+        "meta:GMT"{
+            ss{"GMT"}
+        }
+        "meta:Galapagos"{
+            ss{"GALT"}
+        }
+        "meta:Gambier"{
+            ss{"GAMT"}
+        }
+        "meta:Georgia"{
+            sd{"GEST"}
+            ss{"GET"}
+        }
+        "meta:Gilbert_Islands"{
+            ss{"GILT"}
+        }
+        "meta:Greenland_Central"{
+            sd{"CGST"}
+            ss{"CGT"}
+        }
+        "meta:Greenland_Eastern"{
+            sd{"EGST"}
+            ss{"EGT"}
+        }
+        "meta:Greenland_Western"{
+            sd{"WGST"}
+            ss{"WGT"}
+        }
+        "meta:Guam"{
+            ss{"GST (GU)"}
+        }
+        "meta:Gulf"{
+            ss{"GST"}
+        }
+        "meta:Guyana"{
+            ss{"GYT"}
+        }
+        "meta:Hawaii_Aleutian"{
+            ss{"HST"}
+        }
+        "meta:Hong_Kong"{
+            sd{"HKST"}
+            ss{"HKT"}
+        }
+        "meta:Hovd"{
+            sd{"HOVST"}
+            ss{"HOVT"}
+        }
+        "meta:India"{
+            ss{"IST"}
+        }
+        "meta:Indian_Ocean"{
+            ss{"IOT"}
+        }
+        "meta:Indochina"{
+            ss{"ICT"}
+        }
+        "meta:Indonesia_Central"{
+            ss{"CIT"}
+        }
+        "meta:Indonesia_Eastern"{
+            ss{"EIT"}
+        }
+        "meta:Indonesia_Western"{
+            ss{"WIT"}
+        }
+        "meta:Iran"{
+            sd{"IRDT"}
+            ss{"IRST"}
+        }
+        "meta:Irkutsk"{
+            sd{"IRKST"}
+            ss{"IRKT"}
+        }
+        "meta:Israel"{
+            sd{"IDT"}
+            ss{"IST (IL)"}
+        }
+        "meta:Japan"{
+            sd{"JDT"}
+            ss{"JST"}
+        }
+        "meta:Kamchatka"{
+            sd{"PETST"}
+            ss{"PETT"}
+        }
+        "meta:Karachi"{
+            ss{"KART"}
+        }
+        "meta:Kashgar"{
+            ss{"KAST"}
+        }
+        "meta:Kazakhstan_Eastern"{
+            ss{"EKST"}
+        }
+        "meta:Kazakhstan_Western"{
+            ss{"WKST"}
+        }
+        "meta:Kizilorda"{
+            sd{"KIZST"}
+            ss{"KIZT"}
+        }
+        "meta:Korea"{
+            sd{"KDT"}
+            ss{"KST"}
+        }
+        "meta:Kosrae"{
+            ss{"KOST"}
+        }
+        "meta:Krasnoyarsk"{
+            sd{"KRAST"}
+            ss{"KRAT"}
+        }
+        "meta:Kuybyshev"{
+            sd{"KUYST"}
+            ss{"KUYT"}
+        }
+        "meta:Kwajalein"{
+            ss{"KWAT"}
+        }
+        "meta:Kyrgystan"{
+            ss{"KGT"}
+        }
+        "meta:Lanka"{
+            ss{"LKT"}
+        }
+        "meta:Line_Islands"{
+            ss{"LINT"}
+        }
+        "meta:Long_Shu"{
+            ss{"LONT"}
+        }
+        "meta:Lord_Howe"{
+            sd{"LHDT"}
+            ss{"LHST"}
+        }
+        "meta:Macau"{
+            sd{"MOST"}
+            ss{"MOT"}
+        }
+        "meta:Magadan"{
+            sd{"MAGST"}
+            ss{"MAGT"}
+        }
+        "meta:Malaya"{
+            ss{"MALT"}
+        }
+        "meta:Malaysia"{
+            ss{"MYT"}
+        }
+        "meta:Maldives"{
+            ss{"MVT"}
+        }
+        "meta:Marquesas"{
+            ss{"MART"}
+        }
+        "meta:Marshall_Islands"{
+            ss{"MHT"}
+        }
+        "meta:Mauritius"{
+            sd{"MUST"}
+            ss{"MUT"}
+        }
+        "meta:Mawson"{
+            ss{"MAWT"}
+        }
+        "meta:Mongolia"{
+            sd{"ULAST"}
+            ss{"ULAT"}
+        }
+        "meta:Moscow"{
+            sd{"MSKS"}
+            ss{"MSK"}
+        }
+        "meta:Myanmar"{
+            ss{"MMT"}
+        }
+        "meta:Nauru"{
+            ss{"NRT"}
+        }
+        "meta:Nepal"{
+            ss{"NPT"}
+        }
+        "meta:New_Caledonia"{
+            sd{"NCST"}
+            ss{"NCT"}
+        }
+        "meta:New_Zealand"{
+            sd{"NZDT"}
+            ss{"NZST"}
+        }
+        "meta:Newfoundland"{
+            sd{"NDT"}
+            ss{"NST"}
+        }
+        "meta:Niue"{
+            ss{"NUT"}
+        }
+        "meta:Norfolk"{
+            ss{"NFT"}
+        }
+        "meta:Noronha"{
+            sd{"FNST"}
+            ss{"FNT"}
+        }
+        "meta:North_Mariana"{
+            ss{"MPT"}
+        }
+        "meta:Novosibirsk"{
+            sd{"NOVST"}
+            ss{"NOVT"}
+        }
+        "meta:Omsk"{
+            sd{"OMSST"}
+            ss{"OMST"}
+        }
+        "meta:Pakistan"{
+            sd{"PKST"}
+            ss{"PKT"}
+        }
+        "meta:Palau"{
+            ss{"PWT"}
+        }
+        "meta:Papua_New_Guinea"{
+            ss{"PGT"}
+        }
+        "meta:Paraguay"{
+            sd{"PYST"}
+            ss{"PYT"}
+        }
+        "meta:Peru"{
+            sd{"PEST"}
+            ss{"PET"}
+        }
+        "meta:Philippines"{
+            sd{"PHST"}
+            ss{"PHT"}
+        }
+        "meta:Phoenix_Islands"{
+            ss{"PHOT"}
+        }
+        "meta:Pierre_Miquelon"{
+            sd{"PMDT"}
+            ss{"PMST"}
+        }
+        "meta:Pitcairn"{
+            ss{"PNT"}
+        }
+        "meta:Ponape"{
+            ss{"PONT"}
+        }
+        "meta:Qyzylorda"{
+            sd{"QYZST"}
+            ss{"QYZT"}
+        }
+        "meta:Reunion"{
+            ss{"RET"}
+        }
+        "meta:Rothera"{
+            ss{"ROTT"}
+        }
+        "meta:Sakhalin"{
+            sd{"SAKST"}
+            ss{"SAKT"}
+        }
+        "meta:Samara"{
+            sd{"SAMST"}
+            ss{"SAMT"}
+        }
+        "meta:Samarkand"{
+            sd{"SAMST (Samarkand)"}
+            ss{"SAMT (Samarkand)"}
+        }
+        "meta:Samoa"{
+            ss{"SST"}
+        }
+        "meta:Seychelles"{
+            ss{"SCT"}
+        }
+        "meta:Shevchenko"{
+            sd{"SHEST"}
+            ss{"SHET"}
+        }
+        "meta:Singapore"{
+            ss{"SGT"}
+        }
+        "meta:Solomon"{
+            ss{"SBT"}
+        }
+        "meta:South_Georgia"{
+            ss{"GST (GS)"}
+        }
+        "meta:Suriname"{
+            ss{"SRT"}
+        }
+        "meta:Sverdlovsk"{
+            sd{"SVEST"}
+            ss{"SVET"}
+        }
+        "meta:Syowa"{
+            ss{"SYOT"}
+        }
+        "meta:Tahiti"{
+            ss{"TAHT"}
+        }
+        "meta:Tajikistan"{
+            ss{"TJT"}
+        }
+        "meta:Tashkent"{
+            sd{"TASST"}
+            ss{"TAST"}
+        }
+        "meta:Tbilisi"{
+            sd{"TBIST"}
+            ss{"TBIT"}
+        }
+        "meta:Tokelau"{
+            ss{"TKT"}
+        }
+        "meta:Tonga"{
+            sd{"TOST"}
+            ss{"TOT"}
+        }
+        "meta:Truk"{
+            ss{"TRUT"}
+        }
+        "meta:Turkey"{
+            sd{"TRST"}
+            ss{"TRT"}
+        }
+        "meta:Turkmenistan"{
+            sd{"TMST"}
+            ss{"TMT"}
+        }
+        "meta:Tuvalu"{
+            ss{"TVT"}
+        }
+        "meta:Uralsk"{
+            sd{"URAST"}
+            ss{"URAT"}
+        }
+        "meta:Uruguay"{
+            sd{"UYST"}
+            ss{"UYT"}
+        }
+        "meta:Urumqi"{
+            ss{"URUT"}
+        }
+        "meta:Uzbekistan"{
+            sd{"UZST"}
+            ss{"UZT"}
+        }
+        "meta:Vanuatu"{
+            sd{"VUST"}
+            ss{"VUT"}
+        }
+        "meta:Venezuela"{
+            ss{"VET"}
+        }
+        "meta:Vladivostok"{
+            sd{"VLAST"}
+            ss{"VLAT"}
+        }
+        "meta:Volgograd"{
+            sd{"VOLST"}
+            ss{"VOLT"}
+        }
+        "meta:Vostok"{
+            ss{"VOST"}
+        }
+        "meta:Wake"{
+            ss{"WAKT"}
+        }
+        "meta:Wallis"{
+            ss{"WFT"}
+        }
+        "meta:Yakutsk"{
+            sd{"YAKST"}
+            ss{"YAKT"}
+        }
+        "meta:Yekaterinburg"{
+            sd{"YEKST"}
+            ss{"YEKT"}
+        }
+        "meta:Yerevan"{
+            sd{"YERST"}
+            ss{"YERT"}
+        }
+        "meta:Yukon"{
+            sd{"YDT"}
+            ss{"YST"}
+        }
+        fallbackFormat{"{1} ({0})"}
+        gmtFormat{"GMT{0}"}
+        hourFormat{"+HH:mm;-HH:mm"}
+        hoursFormat{"{0}/{1}"}
+        preferenceOrdering{
+            "",
+        }
+        regionFormat{"{0}"}
+        singleCountries{
+            "Europe/Kiev",
+            "Pacific/Majuro",
+            "Africa/Bamako",
+            "America/Godthab",
+            "America/Santiago",
+            "America/Guayaquil",
+            "Asia/Shanghai",
+            "Asia/Tashkent",
+            "Asia/Kuala_Lumpur",
+            "Europe/Madrid",
+            "Europe/Lisbon",
+            "Europe/London",
+            "Pacific/Auckland",
+            "Pacific/Tahiti",
+        }
+    }
+}

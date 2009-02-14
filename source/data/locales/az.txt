@@ -1,0 +1,3413 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/az.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/az.xml
+ */
+az{
+    AuxExemplarCharacters{"[w]"}
+    Countries{
+        001{"Dünya"}
+        002{"Afrika"}
+        003{"Şimal Amerika"}
+        005{"Cənub Amerika"}
+        009{"Okeyaniya"}
+        011{"Qərb afrika"}
+        013{"Orta Amerika"}
+        014{"Şərq Afrika"}
+        015{"Şimal Afrika"}
+        017{"Orta Afrika"}
+        018{"018"}
+        019{"Amerikalar"}
+        021{"021"}
+        029{"Kariyıplar"}
+        030{"Şərq Asiya"}
+        034{"Cənub Asiya"}
+        035{"Cənub Şərq Asiya"}
+        039{"Cənub Avropa"}
+        053{"Avstraliya və Yeni Zelandiya"}
+        054{"Melanesya"}
+        057{"Mikronesiya reqionu"}
+        061{"Polineziya"}
+        062{"Cənub Orta Asiya"}
+        142{"Aziya"}
+        143{"Orta Aziya"}
+        145{"Qərb Asiya"}
+        150{"Avropa"}
+        151{"Şərq Avropa"}
+        154{"Şimal Avropa"}
+        155{"Qərb Avropa"}
+        172{"172"}
+        419{"Latın Amerikası və Kariblər"}
+        AD{"Andorra"}
+        AE{"Birləşmiş Ərəb Emiratları"}
+        AF{"Əfqənistan"}
+        AG{"Antiqua və Barbuda"}
+        AI{"Anquila"}
+        AL{"Albaniya"}
+        AM{"Ermənistan"}
+        AN{"Hollandiya antilleri"}
+        AO{"Angola"}
+        AQ{"Antarktika"}
+        AR{"Arqentina"}
+        AS{"Amerika Samoası"}
+        AT{"Avstriya"}
+        AU{"Avstraliya"}
+        AW{"Aruba"}
+        AX{"Aland Adaları"}
+        AZ{"Azərbaycan"}
+        BA{"Bosniya və Herzokovina"}
+        BB{"Barbados"}
+        BD{"Banqladeş"}
+        BE{"Belçika"}
+        BF{"Burkina Faso"}
+        BG{"Bolqariya"}
+        BH{"Bahreyn"}
+        BI{"Burundi"}
+        BJ{"Benin"}
+        BL{"Seynt Bartelemey"}
+        BM{"Bermuda"}
+        BN{"Bruney"}
+        BO{"Boliviya"}
+        BR{"Braziliya"}
+        BS{"Bahamalar"}
+        BT{"Butan"}
+        BV{"Bove Adası"}
+        BW{"Botsvana"}
+        BY{"Belarus"}
+        BZ{"Beliz"}
+        CA{"Kanada"}
+        CC{"Kokos Adaları"}
+        CD{"Konqo - Kinşasa"}
+        CF{"Orta Afrika respublikası"}
+        CG{"Konqo - Brazavil"}
+        CH{"isveçriya"}
+        CI{"İvori Sahili"}
+        CK{"Kuk Adaları"}
+        CL{"Çile"}
+        CM{"Kamerun"}
+        CN{"Çin"}
+        CO{"Kolumbiya"}
+        CR{"Kosta Rika"}
+        CU{"Kuba"}
+        CV{"Kape Verde"}
+        CX{"Çristmas Adası"}
+        CY{"Kipr"}
+        CZ{"Çex respublikası"}
+        DE{"Almaniya"}
+        DJ{"Ciboti"}
+        DK{"Danemarka"}
+        DM{"Dominika"}
+        DO{"Dominik Respublikası"}
+        DZ{"Cezayır"}
+        EC{"Ekvador"}
+        EE{"Estoniya"}
+        EG{"Misir"}
+        EH{"Qərb Sahara"}
+        ER{"Eritreya"}
+        ES{"İspaniya"}
+        ET{"Efiopiya"}
+        FI{"Finlandiya"}
+        FJ{"Fici"}
+        FK{"Folkland Adaları"}
+        FM{"Mikronesiya"}
+        FO{"Faro Adaları"}
+        FR{"Fransa"}
+        GA{"Qabon"}
+        GB{"Birləşmiş Krallıq"}
+        GD{"Qrenada"}
+        GE{"Gürcüstan"}
+        GF{"Fransız Quyanası"}
+        GG{"Görnsey"}
+        GH{"Qana"}
+        GI{"Gibraltar"}
+        GL{"Qrinland"}
+        GM{"Qambiya"}
+        GN{"Qvineya"}
+        GP{"Qvadalup"}
+        GQ{"Ekvator Qineya"}
+        GR{"Yunanıstan"}
+        GS{"Cənub Gürcüstan və Cənub Sandvilç Adaları"}
+        GT{"Qvatemala"}
+        GU{"Quam"}
+        GW{"Qvineya-Bisau"}
+        GY{"Quyana"}
+        HK{"Honk Konq çina"}
+        HM{"Hörd və Makdonald Adaları"}
+        HN{"Qonduras"}
+        HR{"Xorvatiya"}
+        HT{"Haiti"}
+        HU{"Macaristan"}
+        ID{"İndoneziya"}
+        IE{"İrlandiya"}
+        IL{"İzrail"}
+        IM{"Man Adası"}
+        IN{"Hindistan"}
+        IO{"Britaniya-Hindistan Okeanik territoriyası"}
+        IQ{"İrak"}
+        IR{"İran"}
+        IS{"İslandiya"}
+        IT{"İtaliya"}
+        JE{"Cörsi"}
+        JM{"Yamayka"}
+        JO{"Ürdün"}
+        JP{"Yaponiya"}
+        KE{"Kenya"}
+        KG{"Kırqızstan"}
+        KH{"Kambodiya"}
+        KI{"Kiribati"}
+        KM{"Komoros"}
+        KN{"Seynt Kits və Nevis"}
+        KP{"Şimal Koreya"}
+        KR{"Cənub Koreya"}
+        KW{"Kuveyt"}
+        KY{"Kayman Adaları"}
+        KZ{"Kazaxstan"}
+        LA{"Laos"}
+        LB{"Lebanon"}
+        LC{"Seynt Lusiya"}
+        LI{"Lixtenşteyn"}
+        LK{"Şri Lanka"}
+        LR{"Liberiya"}
+        LS{"Lesoto"}
+        LT{"Litva"}
+        LU{"Lüksemburq"}
+        LV{"Latviya"}
+        LY{"Libya"}
+        MA{"Morokko"}
+        MC{"Monako"}
+        MD{"Moldova"}
+        ME{"Monteneqro"}
+        MF{"Seynt Martin"}
+        MG{"Madaqaskar"}
+        MH{"Marşal Adaları"}
+        MK{"Masedoniya"}
+        ML{"Mali"}
+        MM{"Myanmar"}
+        MN{"Monqoliya"}
+        MO{"Makao Çina"}
+        MP{"Şimal Mariana Adaları"}
+        MQ{"Martiniqu"}
+        MR{"Mavritaniya"}
+        MS{"Montserat"}
+        MT{"Malta"}
+        MU{"Mavritis"}
+        MV{"Maldiv"}
+        MW{"Malavi"}
+        MX{"Meksika"}
+        MY{"Malaysiya"}
+        MZ{"Mazambik"}
+        NA{"Namibiya"}
+        NC{"Yeni Kaledoniya"}
+        NE{"nijer"}
+        NF{"Norfolk Adası"}
+        NG{"Nijeriya"}
+        NI{"Nikaraqua"}
+        NL{"Hollandiya"}
+        NO{"Norvec"}
+        NP{"Nepal"}
+        NR{"Nauru"}
+        NU{"Niye"}
+        NZ{"Yeni Zelandiya"}
+        OM{"Oman"}
+        PA{"Panama"}
+        PE{"Peru"}
+        PF{"Fransız Polineziya"}
+        PG{"Papua Yeni Qvineya"}
+        PH{"Filipin"}
+        PK{"Pakistan"}
+        PL{"Polşa"}
+        PM{"Seynt Piyer və Mikelon"}
+        PN{"Pitkarn"}
+        PR{"Puerto Riko"}
+        PS{"Fələstin Bölqüsü"}
+        PT{"Portuqal"}
+        PW{"Palav"}
+        PY{"Paraqvay"}
+        QA{"Qatar"}
+        QO{"Uzak Okeyaniya"}
+        QU{"Avropa Birləşliyi"}
+        RE{"Reyunion"}
+        RO{"Romaniya"}
+        RS{"Serbiya"}
+        RU{"Rusiya"}
+        RW{"Rvanda"}
+        SA{"Saudi Ərəbistan"}
+        SB{"Solomon Adaları"}
+        SC{"Seyçels"}
+        SD{"sudan"}
+        SE{"isveç"}
+        SG{"Sinqapur"}
+        SH{"Seynt Elena"}
+        SI{"Sloveniya"}
+        SJ{"svalbard və yan mayen"}
+        SK{"Slovakiya"}
+        SL{"Siyera Leon"}
+        SM{"San Marino"}
+        SN{"Seneqal"}
+        SO{"Somaliya"}
+        SR{"surinamə"}
+        ST{"Sao Tom və Prinsip"}
+        SV{"El Salvador"}
+        SY{"siriya"}
+        SZ{"svazilənd"}
+        TC{"Türk və Kaykos Adaları"}
+        TD{"Çad"}
+        TF{"Fransız Cənub teritoriyası"}
+        TG{"Toqo"}
+        TH{"tayland"}
+        TJ{"tacikistan"}
+        TK{"Tokelau"}
+        TL{"Şərq Timor"}
+        TM{"Türkmənistan"}
+        TN{"Tunisiya"}
+        TO{"Tonqa"}
+        TR{"Türkiya"}
+        TT{"Trinidan və Tobaqo"}
+        TV{"Tuvalu"}
+        TW{"tayvan"}
+        TZ{"tanzaniya"}
+        UA{"Ukraina"}
+        UG{"Uqanda"}
+        UM{"Birləşmiş Ştatların uzaq adaları"}
+        US{"Amerika Birləşmiş Ştatları"}
+        UY{"Uruqvay"}
+        UZ{"Özbəkistan"}
+        VA{"Vatikan"}
+        VC{"Seynt Vinsent və Qrenada"}
+        VE{"Venesuela"}
+        VG{"Britaniya Virgin Adaları"}
+        VI{"ABŞ Virqin Adaları"}
+        VN{"Vyetnam"}
+        VU{"Vanuatu"}
+        WF{"Valis və Futuna"}
+        WS{"Samoa"}
+        YE{"Yemen"}
+        YT{"Mayot"}
+        ZA{"Cənub Afrika"}
+        ZM{"Zambiya"}
+        ZW{"Zimbabve"}
+        ZZ{"bilinmir"}
+    }
+    Currencies{
+        ADP{
+            "ADP",
+            "Andora pesetası",
+        }
+        AED{
+            "AED",
+            "Birləşmiş ərəb emiratlar dirhamı",
+        }
+        AFA{
+            "AFA",
+            "Əfgəni (AFA)",
+        }
+        AFN{
+            "AFN",
+            "Əfgəni",
+        }
+        ALL{
+            "lek",
+            "Alban leki",
+        }
+        AMD{
+            "dram",
+            "Erməni dramı",
+        }
+        ANG{
+            "ANG",
+            "Hollandiya antila gilderi",
+        }
+        AOA{
+            "AOA",
+            "Anqola kvanzası",
+        }
+        AOK{
+            "AOK",
+            "Anqola kvanzasi (1977-1990)",
+        }
+        AON{
+            "AON",
+            "Anqola yeni kvanzası (1990-2000)",
+        }
+        AOR{
+            "AOR",
+            "Anqola kvanzası (1995-1999)",
+        }
+        ARA{
+            "ARA",
+            "Argentina avstralı",
+        }
+        ARP{
+            "ARP",
+            "Argentina pesosu (1983-1985)",
+        }
+        ARS{
+            "ARS",
+            "Argentina pesosu",
+        }
+        ATS{
+            "ATS",
+            "Avstriya şilingi",
+        }
+        AUD{
+            "AUD",
+            "Avstraliya dolları",
+        }
+        AWG{
+            "AWG",
+            "Aruba qilderi",
+        }
+        AZM{
+            "man.",
+            "Manat",
+        }
+        AZN{
+            "AZN",
+            "Azərbaycan manatı",
+        }
+        BAD{
+            "BAD",
+            "Bosniya-Herzeqovina dinarı",
+        }
+        BAM{
+            "BAM",
+            "Bosniya-Herzeqovina markası",
+        }
+        BBD{
+            "BBD",
+            "Barbados dolları",
+        }
+        BDT{
+            "BDT",
+            "Banqladeş takası",
+        }
+        BEC{
+            "BEC",
+            "Belçika frankı (deyşirik)",
+        }
+        BEF{
+            "BEF",
+            "Belçika frankı",
+        }
+        BEL{
+            "BEL",
+            "Belçika frankı (finans)",
+        }
+        BGL{
+            "BGL",
+            "Bolqariya levası",
+        }
+        BGN{
+            "BGN",
+            "Bolqariya yeni levası",
+        }
+        BHD{
+            "BHD",
+            "Bahreyn dinarı",
+        }
+        BIF{
+            "BIF",
+            "Burundi frankası",
+        }
+        BMD{
+            "BMD",
+            "Bermuda dolları",
+        }
+        BND{
+            "BND",
+            "Bruney dolları",
+        }
+        BOB{
+            "BOB",
+            "Boliviano",
+        }
+        BOP{
+            "BOP",
+            "Boliviya pesosu",
+        }
+        BOV{
+            "BOV",
+            "Boliviya mvdolı",
+        }
+        BRB{
+            "BRB",
+            "Braziliya kruzeyro novası",
+        }
+        BRC{
+            "BRC",
+            "Braziliya kruzadosu",
+        }
+        BRE{
+            "BRE",
+            "Braziliya kruzeyrosu (1990-1993)",
+        }
+        BRL{
+            "R$",
+            "Braziliya realı",
+        }
+        BRN{
+            "BRN",
+            "Braziliya kruzado novası",
+        }
+        BRR{
+            "BRR",
+            "Braziliya kruzeyrosu",
+        }
+        BSD{
+            "BSD",
+            "Bahama dolları",
+        }
+        BTN{
+            "BTN",
+            "Butan ngultrumu",
+        }
+        BUK{
+            "BUK",
+            "Burmis kyatı",
+        }
+        BWP{
+            "BWP",
+            "Botsvana pulası",
+        }
+        BYB{
+            "BYB",
+            "Belarusiya yeni rublu",
+        }
+        BYR{
+            "BYR",
+            "Belarusiya rublu",
+        }
+        BZD{
+            "BZD",
+            "Beliz dolları",
+        }
+        CAD{
+            "CAD",
+            "Kanadiya dolları",
+        }
+        CDF{
+            "CDF",
+            "Konqoliz frank konqolaysı",
+        }
+        CHE{
+            "CHE",
+            "WIR Yevrosu",
+        }
+        CHF{
+            "CHF",
+            "İsveçriya frankası",
+        }
+        CHW{
+            "CHW",
+            "WIR frankası",
+        }
+        CLP{
+            "CLP",
+            "Çili pesosu",
+        }
+        CNY{
+            "CNY",
+            "Çin yuan renminbi",
+        }
+        COP{
+            "COP",
+            "Kolombiya pesosu",
+        }
+        CRC{
+            "CRC",
+            "Kosta rika kolonu",
+        }
+        CSD{
+            "CSD",
+            "Qədimi Serb dinarı",
+        }
+        CSK{
+            "CSK",
+            "Çexoslavakiya korunası",
+        }
+        CUP{
+            "CUP",
+            "Kuba pesosu",
+        }
+        CVE{
+            "CVE",
+            "Kape Verde eskudosu",
+        }
+        CYP{
+            "CYP",
+            "Kipr paundu",
+        }
+        CZK{
+            "CZK",
+            "Çex respublikası korunası",
+        }
+        DDM{
+            "DDM",
+            "şərq almaniya ostmarkı",
+        }
+        DEM{
+            "DEM",
+            "alman markası",
+        }
+        DJF{
+            "DJF",
+            "jibouti frankası",
+        }
+        DKK{
+            "DKK",
+            "Danemarka kronası",
+        }
+        DOP{
+            "DOP",
+            "dominika pesosu",
+        }
+        DZD{
+            "DZD",
+            "Alcəzir dinarı",
+        }
+        ECS{
+            "ECS",
+            "ekvador sukresi",
+        }
+        EEK{
+            "EEK",
+            "Estoniya krunu",
+        }
+        EGP{
+            "EGP",
+            "misir paundu",
+        }
+        EQE{
+            "EQE",
+            "ekvele",
+        }
+        ERN{
+            "ERN",
+            "Eirtreya nakfası",
+        }
+        ESA{
+            "ESA",
+            "İspan pesetası (A)",
+        }
+        ESB{
+            "ESB",
+            "İspan pesetası (dəyşirik)",
+        }
+        ESP{
+            "ESP",
+            "İspan pesetası",
+        }
+        ETB{
+            "ETB",
+            "Efiopiya birası",
+        }
+        EUR{
+            "€",
+            "Yevro",
+        }
+        FIM{
+            "FIM",
+            "Fin markası",
+        }
+        FJD{
+            "FJD",
+            "Fici dolları",
+        }
+        FKP{
+            "FKP",
+            "Folkland Adası paundu",
+        }
+        FRF{
+            "FRF",
+            "Fransız markası",
+        }
+        GBP{
+            "UK£",
+            "Britaniya paund sterlingi",
+        }
+        GEK{
+            "GEK",
+            "Gürcüstan kupon lariti",
+        }
+        GEL{
+            "lari",
+            "Gürcüstan larisi",
+        }
+        GHC{
+            "GHC",
+            "Qana sedisi (1979-2007)",
+        }
+        GHS{
+            "GHS",
+            "Qana sedisi",
+        }
+        GIP{
+            "GIP",
+            "Gibraltar paundu",
+        }
+        GMD{
+            "GMD",
+            "Qambiya dalasi",
+        }
+        GNF{
+            "GNF",
+            "Qvineya frankası",
+        }
+        GNS{
+            "GNS",
+            "Qvineya sulisi",
+        }
+        GQE{
+            "GQE",
+            "Ekvatoriya Gvineya ekvele quneanası",
+        }
+        GRD{
+            "GRD",
+            "Yunan draçması",
+        }
+        GTQ{
+            "GTQ",
+            "Qvatemala küetzalı",
+        }
+        GWE{
+            "GWE",
+            "Portugal Qvineya eskudosu",
+        }
+        GWP{
+            "GWP",
+            "Qvineya-Bisau pesosu",
+        }
+        GYD{
+            "GYD",
+            "Quyana dolları",
+        }
+        HKD{
+            "HKD",
+            "Honk Konq dolları",
+        }
+        HNL{
+            "HNL",
+            "Honduras lempirası",
+        }
+        HRD{
+            "HRD",
+            "Xorvatiya dinarı",
+        }
+        HRK{
+            "HRK",
+            "Xorvatiya kunu",
+        }
+        HTG{
+            "HTG",
+            "Haiti qourdu",
+        }
+        HUF{
+            "HUF",
+            "Macarıstan forinti",
+        }
+        IDR{
+            "IDR",
+            "İndoneziya rupisi",
+        }
+        IEP{
+            "IEP",
+            "İrlandiya paundu",
+        }
+        ILP{
+            "ILP",
+            "İzrail paundu",
+        }
+        ILS{
+            "ILS",
+            "İzrail yeni şekeli",
+        }
+        INR{
+            "0≤Rs.|1≤Re.|1<Rs.",
+            "Hindistan rupisi",
+        }
+        IQD{
+            "IQD",
+            "İraq dinarı",
+        }
+        IRR{
+            "IRR",
+            "İran rialı",
+        }
+        ISK{
+            "ISK",
+            "Aysland kronası",
+        }
+        ITL{
+            "IT₤",
+            "İtaliya lirası",
+        }
+        JMD{
+            "JMD",
+            "Yamayka dolları",
+        }
+        JOD{
+            "JOD",
+            "İordaniya dinarı",
+        }
+        JPY{
+            "JP¥",
+            "Yapon yeni",
+        }
+        KES{
+            "KES",
+            "Kenya şillingi",
+        }
+        KGS{
+            "KGS",
+            "Kırğızstan somu",
+        }
+        KHR{
+            "KHR",
+            "Kambodiya riyeli",
+        }
+        KMF{
+            "KMF",
+            "Komoro frankı",
+        }
+        KPW{
+            "KPW",
+            "Şimal koreya vonu",
+        }
+        KRW{
+            "KRW",
+            "Cənub koreya vonu",
+        }
+        KWD{
+            "KWD",
+            "Kuveyt dinarı",
+        }
+        KYD{
+            "KYD",
+            "Keyman Adaları dolları",
+        }
+        KZT{
+            "KZT",
+            "Kazaxstan tenqesi",
+        }
+        LAK{
+            "LAK",
+            "Laotiya kipi",
+        }
+        LBP{
+            "LBP",
+            "Lebanon paundu",
+        }
+        LKR{
+            "LKR",
+            "Şri Lanka rupisi",
+        }
+        LRD{
+            "LRD",
+            "Liberiya dolları",
+        }
+        LSL{
+            "LSL",
+            "Lesoto lotisi",
+        }
+        LSM{
+            "LSM",
+            "Maloti",
+        }
+        LTL{
+            "LTL",
+            "Litva litası",
+        }
+        LTT{
+            "LTT",
+            "Litva talonası",
+        }
+        LUC{
+            "LUC",
+            "Luksemburq frankası (dəyişik)",
+        }
+        LUF{
+            "LUF",
+            "Luksemburq frankası",
+        }
+        LUL{
+            "LUL",
+            "Luksemburq frankası (finans)",
+        }
+        LVL{
+            "LVL",
+            "Latviya latsı",
+        }
+        LVR{
+            "LVR",
+            "Latviya rublu",
+        }
+        LYD{
+            "LYD",
+            "Liviya dinarı",
+        }
+        MAD{
+            "MAD",
+            "Morokko dirhamı",
+        }
+        MAF{
+            "MAF",
+            "Morokko frankası",
+        }
+        MDL{
+            "MDL",
+            "Moldova leyusu",
+        }
+        MGA{
+            "MGA",
+            "Madaqaskar ariarisi",
+        }
+        MGF{
+            "MGF",
+            "Madaqaskar frankası",
+        }
+        MKD{
+            "MKD",
+            "Masedoniya denarı",
+        }
+        MLF{
+            "MLF",
+            "Mali frankı",
+        }
+        MMK{
+            "MMK",
+            "Myanmar kiyatı",
+        }
+        MNT{
+            "MNT",
+            "Monqoliya tuqriki",
+        }
+        MOP{
+            "MOP",
+            "Makao patakası",
+        }
+        MRO{
+            "MRO",
+            "Mavritaniya oyuquyası",
+        }
+        MTP{
+            "MTP",
+            "Maltiz paundu",
+        }
+        MUR{
+            "MUR",
+            "Mavritis rupiyi",
+        }
+        MVR{
+            "MVR",
+            "Maldiv Adaları rufiyi",
+        }
+        MWK{
+            "MWK",
+            "Malavi kvaçası",
+        }
+        MXN{
+            "MXN",
+            "Meksika pesosu",
+        }
+        MXP{
+            "MXP",
+            "Meksika gümüş pesosu",
+        }
+        MYR{
+            "MYR",
+            "Malaysiya rinqiti",
+        }
+        MZE{
+            "MZE",
+            "Mozambik eskudosu",
+        }
+        MZM{
+            "MZM",
+            "Qədim Mozambik metikalı",
+        }
+        MZN{
+            "MZN",
+            "Mozambik metikalı",
+        }
+        NAD{
+            "NAD",
+            "Namibiya dolları",
+        }
+        NGN{
+            "NGN",
+            "Nigeriya nairi",
+        }
+        NIC{
+            "NIC",
+            "Nikaraqua kordobu",
+        }
+        NLG{
+            "NLG",
+            "Hollandiya gilderi",
+        }
+        NOK{
+            "NOK",
+            "Norveç kronu",
+        }
+        NPR{
+            "NPR",
+            "Nepal rupiyi",
+        }
+        NZD{
+            "NZD",
+            "Yeni Zelandiya dolları",
+        }
+        OMR{
+            "OMR",
+            "Mman rialı",
+        }
+        PAB{
+            "PAB",
+            "Panamaniya balboa",
+        }
+        PEI{
+            "PEI",
+            "Peru inti",
+        }
+        PEN{
+            "PEN",
+            "Peru sol nuyevosu",
+        }
+        PES{
+            "PES",
+            "Peru solu",
+        }
+        PGK{
+            "PGK",
+            "Papua Yeni Qvineya kini",
+        }
+        PHP{
+            "PHP",
+            "Filipin pesosu",
+        }
+        PKR{
+            "PKR",
+            "Pakistan rupiyi",
+        }
+        PLN{
+            "PLN",
+            "Polsha zlotisi",
+        }
+        PLZ{
+            "PLZ",
+            "Polsha zlotisi (1950-1995)",
+        }
+        PTE{
+            "PTE",
+            "Portuqal eskudosu",
+        }
+        PYG{
+            "PYG",
+            "Paraqvay quarani",
+        }
+        QAR{
+            "QAR",
+            "Qatar rialı",
+        }
+        RHD{
+            "RHD",
+            "Rodezian dolları",
+        }
+        ROL{
+            "ROL",
+            "Qədim Roman leyu",
+        }
+        RON{
+            "RON",
+            "Roman leyu",
+        }
+        RSD{
+            "RSD",
+            "Serbiya dinarı",
+        }
+        RUB{
+            "RUB",
+            "Rusiya rublu",
+        }
+        RUR{
+            "RUR",
+            "Rusiya rublu (1991-1998)",
+        }
+        RWF{
+            "RWF",
+            "Rvanda frankı",
+        }
+        SAR{
+            "SAR",
+            "Saudi riyalı",
+        }
+        SBD{
+            "SBD",
+            "Solomon Adaları dolları",
+        }
+        SCR{
+            "SCR",
+            "Seyçel rupiyi",
+        }
+        SDG{
+            "SDG",
+            "Sudan paundu",
+        }
+        SEK{
+            "SEK",
+            "İsveç kronu",
+        }
+        SGD{
+            "SGD",
+            "Sinqapur dolları",
+        }
+        SIT{
+            "SIT",
+            "Sloveniya toları",
+        }
+        SKK{
+            "SKK",
+            "Slovak korunası",
+        }
+        SOS{
+            "SOS",
+            "Somaliya şillingi",
+        }
+        SRD{
+            "SRD",
+            "Surinam dolları",
+        }
+        SUR{
+            "SUR",
+            "Sovet rublu",
+        }
+        SVC{
+            "SVC",
+            "el salvador kolonu",
+        }
+        SYP{
+            "SYP",
+            "Siriya paundu",
+        }
+        SZL{
+            "SZL",
+            "Svazilənd lilangeni",
+        }
+        THB{
+            "THB",
+            "tay bahtı",
+        }
+        TJR{
+            "TJR",
+            "Tacikistan rublu",
+        }
+        TJS{
+            "TJS",
+            "Tacikistan somoni",
+        }
+        TMM{
+            "TMM",
+            "Türkmənistan manatı",
+        }
+        TND{
+            "TND",
+            "Tunis dinarı",
+        }
+        TOP{
+            "TOP",
+            "Tonqa panqası",
+        }
+        TPE{
+            "TPE",
+            "Timor eskudu",
+        }
+        TRL{
+            "TRL",
+            "Türk köhnə lirası",
+        }
+        TRY{
+            "TRY",
+            "Türk lirası",
+        }
+        TWD{
+            "TWD",
+            "Tayvan yeni dolları",
+        }
+        TZS{
+            "TZS",
+            "Tanzaniya şilingi",
+        }
+        UAH{
+            "UAH",
+            "Ukraina hrivnyası",
+        }
+        UAK{
+            "UAK",
+            "Ukraina karbovenesası",
+        }
+        UGS{
+            "UGS",
+            "Uqanda şelingi (1966-1987)",
+        }
+        UGX{
+            "UGX",
+            "Uqanda şelingi",
+        }
+        USD{
+            "US$",
+            "ABŞ dolları",
+        }
+        USN{
+            "USN",
+            "ABŞ dolları (yeni gün)",
+        }
+        USS{
+            "USS",
+            "ABŞ dolları (həmin gün)",
+        }
+        UYI{
+            "UYI",
+            "Uruqvay pesosu Unidades Indexadas",
+        }
+        UYP{
+            "UYP",
+            "Uruqvay pesosu (1975-1993)",
+        }
+        UYU{
+            "UYU",
+            "Uruqvay pesosu (Uruguayo)",
+        }
+        UZS{
+            "UZS",
+            "özbəkistan sumu",
+        }
+        VEB{
+            "VEB",
+            "venesuela bolivarı",
+        }
+        VEF{
+            "VEF",
+            "venesuela bolivar fuerti",
+        }
+        VND{
+            "VND",
+            "vyetnam donqu",
+        }
+        WST{
+            "WST",
+            "qərb samoa talası",
+        }
+        XAG{
+            "XAG",
+            "gümüş",
+        }
+        XAU{
+            "XAU",
+            "qızıl",
+        }
+        XCD{
+            "XCD",
+            "şərq karib dolları",
+        }
+        XFO{
+            "XFO",
+            "Fransız gızıl frankı",
+        }
+        XFU{
+            "XFU",
+            "Fransız UİC frankı",
+        }
+        XOF{
+            "XOF",
+            "CFA franka BCEAO",
+        }
+        XPD{
+            "XPD",
+            "Palladium",
+        }
+        XPF{
+            "XPF",
+            "CFP frankı",
+        }
+        XPT{
+            "XPT",
+            "platinum",
+        }
+        XXX{
+            "XXX",
+            "bilinməyən vəya gəcərsiz",
+        }
+        YDD{
+            "YDD",
+            "yemen dinarı",
+        }
+        YER{
+            "YER",
+            "yemen rialı",
+        }
+        YUD{
+            "YUD",
+            "Yuqoslaviya dinarı (hard)",
+        }
+        YUM{
+            "YUM",
+            "Yuqoslaviya yeni dinarı (hard)",
+        }
+        YUN{
+            "YUN",
+            "Yuqoslaviya dinarı (dəyişik)",
+        }
+        ZAL{
+            "ZAL",
+            "Cənub afrika randı (finans)",
+        }
+        ZAR{
+            "ZAR",
+            "Cənub afrika randı",
+        }
+        ZMK{
+            "ZMK",
+            "Zambiya kvaçı",
+        }
+        ZRN{
+            "ZRN",
+            "Zair yeni zairi",
+        }
+        ZRZ{
+            "ZRZ",
+            "Zair zairi",
+        }
+        ZWD{
+            "ZWD",
+            "Zimbabve dolları",
+        }
+    }
+    CurrencyPlurals{
+        ADP{
+            other{"Andora pesetası"}
+        }
+        AED{
+            other{"BƏE dirhamı"}
+        }
+        AFA{
+            other{"Əfgən (AFA)"}
+        }
+        AFN{
+            other{"Əfgən"}
+        }
+        ALL{
+            other{"Alban leki"}
+        }
+        AMD{
+            other{"Erməni dramı"}
+        }
+        ANG{
+            other{"Hollandiya Antila gilderi"}
+        }
+        AOA{
+            other{"Anqola kvanzasi"}
+        }
+        AOK{
+            other{"Anqola kvanzasi (AOK)"}
+        }
+        AON{
+            other{"Anqola yeni kvanzasi (AON)"}
+        }
+        AOR{
+            other{"Anqola kvanzasi (AOR)"}
+        }
+        ARA{
+            other{"Argentina avstralı"}
+        }
+        ARP{
+            other{"Argentina pesosu (ARP)"}
+        }
+        ARS{
+            other{"Argentina pesosu"}
+        }
+        ATS{
+            other{"Avstriya şilingi"}
+        }
+        AUD{
+            other{"Avstraliya dolları"}
+        }
+        AWG{
+            other{"Aruba qilderi"}
+        }
+        AZM{
+            other{"Azərbaycan manatı (AZM)"}
+        }
+        AZN{
+            other{"Azərbaycan manatı"}
+        }
+        BAD{
+            other{"Bosniya-Herzeqovina dinarı"}
+        }
+        BAM{
+            other{"Bosniya-Herzeqovina markası"}
+        }
+        BBD{
+            other{"Barbados dolları"}
+        }
+        BDT{
+            other{"Banqladeş takası"}
+        }
+        BEC{
+            other{"Belçika frankı (deyşirik)"}
+        }
+        BEF{
+            other{"Belçika frankı"}
+        }
+        BEL{
+            other{"Belçika frankı (finans)"}
+        }
+        BGL{
+            other{"Bolqariya levası"}
+        }
+        BGN{
+            other{"Bolqariya yeni levası"}
+        }
+        BHD{
+            other{"Bahreyn dinarı"}
+        }
+        BIF{
+            other{"Burundi frankası"}
+        }
+        BMD{
+            other{"Bermuda dolları"}
+        }
+        BND{
+            other{"Bruney dolları"}
+        }
+        BOB{
+            other{"Boliviano"}
+        }
+        BOP{
+            other{"Boliviya pesosu"}
+        }
+        BOV{
+            other{"Boliviya mvdolı"}
+        }
+        BRB{
+            other{"Braziliya kruzeyro novası"}
+        }
+        BRC{
+            other{"Braziliya kruzadosu"}
+        }
+        BRE{
+            other{"Braziliya kruzeyrosu (BRE)"}
+        }
+        BRL{
+            other{"Braziliya realı"}
+        }
+        BRN{
+            other{"Braziliya kruzado novası"}
+        }
+        BRR{
+            other{"Braziliya kruzeyrosu"}
+        }
+        BSD{
+            other{"Bahama dolları"}
+        }
+        BTN{
+            other{"Butan ngultrumu"}
+        }
+        BUK{
+            other{"Burmis kyatı"}
+        }
+        BWP{
+            other{"Botsvana pulası"}
+        }
+        BYB{
+            other{"Belarusiya yeni rublu"}
+        }
+        BYR{
+            other{"Belarusiya rublu"}
+        }
+        BZD{
+            other{"Beliz dolları"}
+        }
+        CAD{
+            other{"Kanada dolları"}
+        }
+        CDF{
+            other{"Konqoliz frank konqolaysı"}
+        }
+        CHE{
+            other{"WIR Yevrosu"}
+        }
+        CHF{
+            other{"İsveçriya frankası"}
+        }
+        CHW{
+            other{"WIR frankası"}
+        }
+        CLP{
+            other{"Çili pesosu"}
+        }
+        CNY{
+            other{"Çin yuanı"}
+        }
+        COP{
+            other{"Kolombiya pesosu"}
+        }
+        CRC{
+            other{"Kosta Rika kolonu"}
+        }
+        CSD{
+            other{"Qədimi serb dinarı"}
+        }
+        CSK{
+            other{"Çexoslavakiya korunası"}
+        }
+        CUP{
+            other{"Kuba pesosu"}
+        }
+        CVE{
+            other{"Kape Verde eskudosu"}
+        }
+        CYP{
+            other{"Kipr paundu"}
+        }
+        CZK{
+            other{"Cex respublika korunası"}
+        }
+        DDM{
+            other{"Şərq Almaniya ostmarkı"}
+        }
+        DEM{
+            other{"Alman markası"}
+        }
+        DJF{
+            other{"Jibouti frankası"}
+        }
+        DKK{
+            other{"Danemarka kronası"}
+        }
+        DOP{
+            other{"Dominika pesosu"}
+        }
+        DZD{
+            other{"Alcəzir dinarı"}
+        }
+        ECS{
+            other{"Ekvador sukresi"}
+        }
+        EEK{
+            other{"Estoniya krunu"}
+        }
+        EGP{
+            other{"Misir paundu"}
+        }
+        EQE{
+            other{"Ekvele"}
+        }
+        ERN{
+            other{"Eritreya nakfası"}
+        }
+        ESA{
+            other{"İspan pesetası (A account)"}
+        }
+        ESB{
+            other{"İspan pesetası (dəyşirik)"}
+        }
+        ESP{
+            other{"İspan pesetası"}
+        }
+        ETB{
+            other{"Efiopiya birası"}
+        }
+        EUR{
+            other{"yevro"}
+        }
+        FIM{
+            other{"Fin markası"}
+        }
+        FJD{
+            other{"Fici dolları"}
+        }
+        FKP{
+            other{"Folkland adası paundu"}
+        }
+        FRF{
+            other{"Fransız markası"}
+        }
+        GBP{
+            other{"Britaniya paund sterlingi"}
+        }
+        GEK{
+            other{"Gürcüstan kupon lariti"}
+        }
+        GEL{
+            other{"Gürcüstan larisi"}
+        }
+        GHC{
+            other{"Qana sedisi (GHC)"}
+        }
+        GHS{
+            other{"Qana sedisi"}
+        }
+        GIP{
+            other{"Gibraltar paundu"}
+        }
+        GMD{
+            other{"Qambiya dalasi"}
+        }
+        GNF{
+            other{"qvineya frankası"}
+        }
+        GNS{
+            other{"Gineya sulisi"}
+        }
+        GQE{
+            other{"Ekvatoriya Gvineya ekvele quneanası"}
+        }
+        GRD{
+            other{"Yunan draxması"}
+        }
+        GTQ{
+            other{"Qvatemala küetzalı"}
+        }
+        GWE{
+            other{"Portugal Qvineya eskudosu"}
+        }
+        GWP{
+            other{"Qvineya-Bisau pesosu"}
+        }
+        GYD{
+            other{"Quyana dolları"}
+        }
+        HKD{
+            other{"Honk Konq dolları"}
+        }
+        HNL{
+            other{"Honduras lempirası"}
+        }
+        HRD{
+            other{"Xorvatiya dinarı"}
+        }
+        HRK{
+            other{"Xorvatiya kunu"}
+        }
+        HTG{
+            other{"Haiti qourdu"}
+        }
+        HUF{
+            other{"Macarıstan forinti"}
+        }
+        IDR{
+            other{"İndoneziya rupisi"}
+        }
+        IEP{
+            other{"İrlandiya paundu"}
+        }
+        ILP{
+            other{"İzrail paundu"}
+        }
+        ILS{
+            other{"İzrail ail yeni şekeli"}
+        }
+        INR{
+            other{"Hindistan rupisi"}
+        }
+        IQD{
+            other{"İraq dinarı"}
+        }
+        IRR{
+            other{"İran rialı"}
+        }
+        ISK{
+            other{"Aysland kronası"}
+        }
+        ITL{
+            other{"İtaliya lirası"}
+        }
+        JMD{
+            other{"Yamayka dolları"}
+        }
+        JOD{
+            other{"İordaniya dinarı"}
+        }
+        JPY{
+            other{"Yapon yeni"}
+        }
+        KES{
+            other{"Kenya şillingi"}
+        }
+        KGS{
+            other{"Kırğızstan somu"}
+        }
+        KHR{
+            other{"Kambodiya riyeli"}
+        }
+        KMF{
+            other{"Komoro frankı"}
+        }
+        KPW{
+            other{"Şimal Koreya vonu"}
+        }
+        KRW{
+            other{"Cənub Koreya vonu"}
+        }
+        KWD{
+            other{"Kuveyt dinarı"}
+        }
+        KYD{
+            other{"Keyman Adaları dolları"}
+        }
+        KZT{
+            other{"Kazaxstan tenqesi"}
+        }
+        LAK{
+            other{"Laotiya kipi"}
+        }
+        LBP{
+            other{"Lebanon paundu"}
+        }
+        LKR{
+            other{"Şri Lanka rupisi"}
+        }
+        LRD{
+            other{"Liberiya dolları"}
+        }
+        LSL{
+            other{"Lesoto lotisi"}
+        }
+        LSM{
+            other{"Maloti"}
+        }
+        LTL{
+            other{"Litva litası"}
+        }
+        LTT{
+            other{"Litva talonası"}
+        }
+        LUC{
+            other{"Luksemburq dəyişik frankası"}
+        }
+        LUF{
+            other{"Luksemburq frankası"}
+        }
+        LUL{
+            other{"Luksemburq finans frankası"}
+        }
+        LVL{
+            other{"Latviya latsı"}
+        }
+        LVR{
+            other{"Latviya rublu"}
+        }
+        LYD{
+            other{"Liviya dinarı"}
+        }
+        MAD{
+            other{"Morokko dirhamı"}
+        }
+        MAF{
+            other{"Morokko frankası"}
+        }
+        MDL{
+            other{"Moldova leyusu"}
+        }
+        MGA{
+            other{"Madaqaskar ariarisi"}
+        }
+        MGF{
+            other{"Madaqaskar frankası"}
+        }
+        MKD{
+            other{"Masedoniya denarı"}
+        }
+        MLF{
+            other{"Mali frankı"}
+        }
+        MMK{
+            other{"Myanmar kiyatı"}
+        }
+        MNT{
+            other{"Monqoliya tuqriki"}
+        }
+        MOP{
+            other{"Makao patakası"}
+        }
+        MRO{
+            other{"Mavritaniya oyuquyası"}
+        }
+        MTP{
+            other{"Maltiz paundu"}
+        }
+        MUR{
+            other{"Mavritis rupiyi"}
+        }
+        MVR{
+            other{"Maldiv adaları rufiyi"}
+        }
+        MWK{
+            other{"Malavi kvaçası"}
+        }
+        MXN{
+            other{"Meksika pesosu"}
+        }
+        MXP{
+            other{"Meksika gümüş pesosu"}
+        }
+        MYR{
+            other{"Malaysiya rinqiti"}
+        }
+        MZE{
+            other{"Mozambik eskudosu"}
+        }
+        MZM{
+            other{"Qədim mozambik metikalı"}
+        }
+        MZN{
+            other{"Mozambik metikalı"}
+        }
+        NAD{
+            other{"Namibiya dolları"}
+        }
+        NGN{
+            other{"Nigeriya nairi"}
+        }
+        NIC{
+            other{"Nikaraqua kordobu"}
+        }
+        NLG{
+            other{"Hollandiya gilderi"}
+        }
+        NOK{
+            other{"Norveç kronu"}
+        }
+        NPR{
+            other{"Nepal rupiyi"}
+        }
+        NZD{
+            other{"Yeni Zelandiya dolları"}
+        }
+        OMR{
+            other{"Oman rialı"}
+        }
+        PAB{
+            other{"Panamaniya balboa"}
+        }
+        PEI{
+            other{"Peru inti"}
+        }
+        PEN{
+            other{"Peru sol nuyevosu"}
+        }
+        PES{
+            other{"Peru solu"}
+        }
+        PGK{
+            other{"Papua Yeni Qvineya kini"}
+        }
+        PHP{
+            other{"Filipin pesosu"}
+        }
+        PKR{
+            other{"Pakistan rupiyi"}
+        }
+        PLN{
+            other{"Polsha zlotisi"}
+        }
+        PLZ{
+            other{"Polsha zlotisi (PLZ)"}
+        }
+        PTE{
+            other{"Portuqal eskudosu"}
+        }
+        PYG{
+            other{"Paraqvay quarani"}
+        }
+        QAR{
+            other{"Qatar rialı"}
+        }
+        RHD{
+            other{"Rodezian dolları"}
+        }
+        ROL{
+            other{"Roman qədimi leyu"}
+        }
+        RON{
+            other{"Roman leyu"}
+        }
+        RSD{
+            other{"Serbiya dinarı"}
+        }
+        RUB{
+            other{"Rusiya rublu"}
+        }
+        RUR{
+            other{"Rusiya rublu (RUR)"}
+        }
+        RWF{
+            other{"Rvanda frankı"}
+        }
+        SAR{
+            other{"Saudi riyalı"}
+        }
+        SBD{
+            other{"Solomon Adaları dolları"}
+        }
+        SCR{
+            other{"Seyçel rupiyi"}
+        }
+        SDG{
+            other{"Sudan paundu"}
+        }
+        SEK{
+            other{"İsveç kronu"}
+        }
+        SGD{
+            other{"Sinqapur dolları"}
+        }
+        SIT{
+            other{"Sloveniya toları"}
+        }
+        SKK{
+            other{"Slovak korunası"}
+        }
+        SOS{
+            other{"Somaliya şillingi"}
+        }
+        SRD{
+            other{"Surinam dolları"}
+        }
+        SUR{
+            other{"Sovet rublu"}
+        }
+        SVC{
+            other{"El Salvador kolonu"}
+        }
+        SYP{
+            other{"Siriya paundu"}
+        }
+        SZL{
+            other{"Svazilənd lilangeni"}
+        }
+        THB{
+            other{"Tay bahtı"}
+        }
+        TJR{
+            other{"Tacikistan rublu"}
+        }
+        TJS{
+            other{"Tacikistan somoni"}
+        }
+        TMM{
+            other{"Türkmənistan manatı"}
+        }
+        TND{
+            other{"Tunis dinarı"}
+        }
+        TOP{
+            other{"Tonqa panqası"}
+        }
+        TPE{
+            other{"Timor eskudu"}
+        }
+        TRL{
+            other{"Türk köhnə lirası"}
+        }
+        TRY{
+            other{"Türk lira"}
+        }
+        TWD{
+            other{"Tayvan yeni dolları"}
+        }
+        TZS{
+            other{"Tanzaniya şilingi"}
+        }
+        UAH{
+            other{"Ukraina hrivnyası"}
+        }
+        UAK{
+            other{"Ukraina karbovenesası"}
+        }
+        UGS{
+            other{"Uqanda şelingi (UGS)"}
+        }
+        UGX{
+            other{"Uqanda şelingi"}
+        }
+        USD{
+            other{"ABŞ dolları"}
+        }
+        USN{
+            other{"ABŞ dolları (yeni gün)"}
+        }
+        USS{
+            other{"ABŞ dolları (həmin gün)"}
+        }
+        UYI{
+            other{"Uruqvay pesosu unidades indexadas"}
+        }
+        UYP{
+            other{"Uruqvay pesosu (UYP)"}
+        }
+        UYU{
+            other{"Uruqvay pesosu"}
+        }
+        UZS{
+            other{"Özbəkistan sumu"}
+        }
+        VEB{
+            other{"Venesuela bolivarı"}
+        }
+        VEF{
+            other{"Venesuela Bolivar fuerti"}
+        }
+        VND{
+            other{"Vyetnam donqu"}
+        }
+        WST{
+            other{"Qərb Samoa talası"}
+        }
+        XAG{
+            other{"gümüş"}
+        }
+        XAU{
+            other{"qızıl"}
+        }
+        XCD{
+            other{"Şərq karib dolları"}
+        }
+        XFO{
+            other{"Fransız gızıl frankı"}
+        }
+        XFU{
+            other{"Fransız UİC frankı"}
+        }
+        XOF{
+            other{"CFA franka BCEAO"}
+        }
+        XPD{
+            other{"Palladium"}
+        }
+        XPF{
+            other{"CFP frankı"}
+        }
+        XPT{
+            other{"platinum"}
+        }
+        XXX{
+            other{"bilinməyən vəya gəcərsiz"}
+        }
+        YDD{
+            other{"Yemen dinarı"}
+        }
+        YER{
+            other{"Yemen rialı"}
+        }
+        YUD{
+            other{"Yuqoslaviya dinarı (hard)"}
+        }
+        YUM{
+            other{"Yuqoslaviya yeni  dinarı (hard)"}
+        }
+        YUN{
+            other{"Yuqoslaviya dinarı (dəyişik)"}
+        }
+        ZAL{
+            other{"Cənub Afrika randı (finans)"}
+        }
+        ZAR{
+            other{"Cənub Afrika randı"}
+        }
+        ZMK{
+            other{"Zambiya kvaçı"}
+        }
+        ZRN{
+            other{"Zair yeni zairi"}
+        }
+        ZRZ{
+            other{"Zair zairi"}
+        }
+        ZWD{
+            other{"Zimbabve dolları"}
+        }
+    }
+    ExemplarCharacters{"[a-c ç d e ə f g ğ h i {i̇} İ ı j-o ö p-s ş t u ü v x-z]"}
+    Languages{
+        aa{"afarca"}
+        ab{"abxazca"}
+        ace{"akin dili"}
+        ach{"akoli dili"}
+        ada{"adangme dili"}
+        ady{"aduge dili"}
+        ae{"avestanca"}
+        af{"Afrikaanca"}
+        afa{"afro-aziat dili"}
+        afh{"afrihili dili"}
+        ain{"aynuca"}
+        ak{"akanca"}
+        akk{"akadianca"}
+        ale{"aleutca"}
+        alg{"algonguyan dili"}
+        alt{"cənub altay dili"}
+        am{"amarikcə"}
+        an{"aragonca"}
+        ang{"qədimi ingiliscə"}
+        anp{"angikə dili"}
+        apa{"apaçi dili"}
+        ar{"Ərəbcə"}
+        arc{"aramik dili"}
+        arn{"araukanca"}
+        arp{"arapaho dili"}
+        art{"suni dil"}
+        arw{"aravakça"}
+        as{"as"}
+        ast{"asturicə"}
+        ath{"atapaskanca"}
+        aus{"avstraliyca"}
+        av{"avarikcə"}
+        awa{"avadicə"}
+        ay{"aymarca"}
+        az{"azərbaycanca"}
+        ba{"başkir dili"}
+        bad{"banda dili"}
+        bai{"bamilek dili"}
+        bal{"baluc dili"}
+        ban{"balincə"}
+        bas{"basa dili"}
+        bat{"baltik dili"}
+        be{"belarusca"}
+        bej{"beja dili"}
+        bem{"bemba dili"}
+        ber{"berber dili"}
+        bg{"bolqarca"}
+        bh{"biharicə"}
+        bho{"bxoçpuri dili"}
+        bi{"bislama dili"}
+        bik{"bikolca"}
+        bin{"bini dili"}
+        bla{"siksikə dili"}
+        bm{"bambara dili"}
+        bn{"Benqal dili"}
+        bnt{"bantu dili"}
+        bo{"tibet dili"}
+        br{"Bretonca"}
+        bra{"braj dili"}
+        btk{"batak dili"}
+        bua{"buryat dili"}
+        bug{"bugin dili"}
+        byn{"bilincə"}
+        ca{"katalanca"}
+        cad{"kado dili"}
+        cai{"mərkəzi amerika indus dili"}
+        car{"karib dili"}
+        cau{"qavqaz dili"}
+        cch{"atsamca"}
+        ce{"çeçen dili"}
+        ceb{"kebuano dili"}
+        cel{"kelt dili"}
+        ch{"çamoro dili"}
+        chb{"çibçə dili"}
+        chg{"çağatay dili"}
+        chk{"çukiz dili"}
+        chm{"mari dili"}
+        chn{"çinuk ləhçəsi"}
+        cho{"çoktau dili"}
+        chp{"çipevyan dili"}
+        chr{"çiroki dili"}
+        chy{"çeyen dili"}
+        cmc{"çamik dili"}
+        co{"korsikan dili"}
+        cop{"kopt dili"}
+        cpe{"inglis kreol dili"}
+        cpf{"fransız kreol dili"}
+        cpp{"portugal kreol dili"}
+        cr{"kri dili"}
+        crh{"krım türkçə"}
+        crp{"kreol dili"}
+        cs{"çex dili"}
+        csb{"kaşubyan dili"}
+        cu{"kilsə slav dili"}
+        cus{"kuşitik dili"}
+        cv{"çuvaş dili"}
+        cy{"uelscə"}
+        da{"danimarka dili"}
+        dak{"dakota dili"}
+        dar{"darqva dili"}
+        day{"dayak dili"}
+        de{"almanca"}
+        de_AT{"almanca (AT)"}
+        de_CH{"isveç yüksək almancası"}
+        del{"delaver dili"}
+        den{"slavey"}
+        dgr{"doqrib dili"}
+        din{"dinka dili"}
+        doi{"doqri dili"}
+        dra{"dravid dili"}
+        dsb{"aşağı sorbca"}
+        dua{"duala dili"}
+        dum{"ortacaq hollandca"}
+        dv{"diveh dili"}
+        dyu{"dyula dili"}
+        dz{"dzonqa dili"}
+        ee{"eve dili"}
+        efi{"efik dili"}
+        egy{"qədimi misir dili"}
+        eka{"ekacuk dili"}
+        el{"yunanca"}
+        elx{"elamit dili"}
+        en{"ingiliscə"}
+        en_AU{"ingiliscə (AU)"}
+        en_CA{"ingiliscə (CA)"}
+        en_GB{"ingiliscə (GB)"}
+        en_US{"ingiliscə (ABŞ)"}
+        enm{"ortacaq ingiliscə"}
+        eo{"esperanto dili"}
+        es{"ispanca"}
+        es_419{"latın amerika ispancası"}
+        es_ES{"iber-ispanca"}
+        et{"estonca"}
+        eu{"bask dili"}
+        ewo{"evondo dili"}
+        fa{"farsca"}
+        fan{"fang dili"}
+        fat{"fanti dili"}
+        ff{"fula dili"}
+        fi{"fincə"}
+        fil{"taqaloqca"}
+        fiu{"fin-uğri dili"}
+        fj{"fiji dili"}
+        fo{"farer dili"}
+        fon{"fon dili"}
+        fr{"fransızca"}
+        fr_CA{"fransızca (CA)"}
+        fr_CH{"isveç fransızca"}
+        frm{"ortacaq fransızca"}
+        fro{"qədimi fransızca"}
+        frr{"şimal fris dili"}
+        fur{"friul dili"}
+        fy{"frisk dili"}
+        ga{"irlandca"}
+        gaa{"qa dili"}
+        gay{"qayo dili"}
+        gba{"qabaya dili"}
+        gd{"skot gaelik dili"}
+        gem{"Alman dili"}
+        gez{"qez dili"}
+        gil{"qilbert gili"}
+        gl{"qalisian dili"}
+        gmh{"ortacaq yüksək almanca"}
+        gn{"quaranicə"}
+        goh{"qədimi almanca"}
+        gon{"qondi dili"}
+        gor{"qorontalo dili"}
+        got{"gotça"}
+        grb{"qrebo dili"}
+        grc{"qədimi yunanca"}
+        gsw{"isveç almanca"}
+        gu{"gujarati dili"}
+        gv{"manks dili"}
+        gwi{"qviçin dili"}
+        ha{"Hausa dili"}
+        hai{"hayda dili"}
+        haw{"Qavayca"}
+        he{"ivritcə"}
+        hi{"hindi dili"}
+        hil{"hiliqaynon dili"}
+        him{"himaçali dili"}
+        hit{"hittit dili"}
+        hmn{"monq dili"}
+        ho{"hiri motu dili"}
+        hr{"xorvatca"}
+        hsb{"yuxarı sorbca"}
+        ht{"haiti dili"}
+        hu{"macarca"}
+        hup{"hupa dili"}
+        hy{"Ermənicə"}
+        hz{"Herer dili"}
+        ia{"interlingua dili"}
+        iba{"iban dili"}
+        id{"indoneziya dili"}
+        ie{"interlingue dili"}
+        ig{"iqbo dili"}
+        ii{"siçuan yi dili"}
+        ijo{"ico dili"}
+        ik{"inupiaq dili"}
+        ilo{"iloko dili"}
+        inc{"diqər hint dili"}
+        ine{"hint-yevropa dili"}
+        inh{"inquş dili"}
+        io{"ido dili"}
+        ira{"iranca"}
+        iro{"irokuay dili"}
+        is{"isləndcə"}
+        it{"italyanca"}
+        iu{"inuktikut dili"}
+        ja{"yaponca"}
+        jbo{"loğban dili"}
+        jpr{"judo-farsca"}
+        jrb{"jude-ərəbcə"}
+        jv{"yavaca dili"}
+        ka{"gürcü dili"}
+        kaa{"qara-qalpaq dili"}
+        kab{"kabule dili"}
+        kac{"kaçinca"}
+        kaj{"ju dili"}
+        kam{"kamba dili"}
+        kar{"karen dili"}
+        kaw{"kavi dili"}
+        kbd{"kabardca"}
+        kcg{"tiyap dili"}
+        kfo{"koro dili"}
+        kg{"konqo dili"}
+        kha{"xazi dili"}
+        khi{"xoyzan dili"}
+        kho{"xotan dili"}
+        ki{"kikuyu dili"}
+        kj{"kuanyama dili"}
+        kk{"qazax dili"}
+        kl{"kalalisut dili"}
+        km{"kambodiya dili"}
+        kmb{"kimbundu dili"}
+        kn{"kannada dili"}
+        ko{"koreya dili"}
+        kok{"konkan dili"}
+        kos{"kosreyan dili"}
+        kpe{"kpelle dili"}
+        kr{"kanur dili"}
+        krc{"qaraçay-balkar dili"}
+        krl{"karelyan dili"}
+        kro{"kru dili"}
+        kru{"kurux dili"}
+        ks{"kəşmir dili"}
+        ku{"kürdcə"}
+        kum{"kumuk dili"}
+        kut{"kutenay dili"}
+        kv{"komi dili"}
+        kw{"korniş dili"}
+        ky{"qırğızca"}
+        la{"latınca"}
+        lad{"ladin dili"}
+        lah{"laxnda dili"}
+        lam{"lamba dili"}
+        lb{"luksemburq dili"}
+        lez{"ləzqi dili"}
+        lg{"qanda dili"}
+        li{"limburqiş dili"}
+        ln{"Linqala dili"}
+        lo{"laos dili"}
+        lol{"monqo dili"}
+        loz{"lozi dili"}
+        lt{"litva dili"}
+        lu{"luba-katanqa dili"}
+        lua{"luba-lulua dili"}
+        lui{"luyseno dili"}
+        lun{"lunda dili"}
+        luo{"luo dili"}
+        lus{"lushayca"}
+        lv{"latışca"}
+        mad{"maduriz dili"}
+        mag{"maqahi dili"}
+        mai{"maitili dili"}
+        mak{"makasar dili"}
+        man{"məndinqo dili"}
+        map{"avstronezicə"}
+        mas{"masay dili"}
+        mdf{"mokşa dili"}
+        mdr{"mandar dili"}
+        men{"mende dili"}
+        mg{"malaqas dili"}
+        mga{"ortacaq irlandca"}
+        mh{"marşal dili"}
+        mi{"maori dili"}
+        mic{"mikmak dili"}
+        min{"minanqkaban dili"}
+        mis{"çeşitli diller"}
+        mk{"makedoniya dili"}
+        mkh{"mon-xmer dili"}
+        ml{"malayalamca"}
+        mn{"monqolca"}
+        mnc{"mançu dili"}
+        mni{"manipüri dili"}
+        mno{"manobo dili"}
+        mo{"moldavca"}
+        moh{"moxak dili"}
+        mos{"mosi dili"}
+        mr{"marati dili"}
+        ms{"malayca"}
+        mt{"malta dili"}
+        mul{"digər dillər"}
+        mun{"munda dili"}
+        mus{"krik dili"}
+        mwl{"mirand dili"}
+        mwr{"maruari dili"}
+        my{"burmis dili"}
+        myn{"maya dili"}
+        myv{"erzya dili"}
+        na{"nauru dili"}
+        nah{"nahuatl dili"}
+        nai{"şimal amerika yerli dili"}
+        nap{"neapolital dili"}
+        nb{"norvec bokmal dili"}
+        nd{"şimal ndebele dili"}
+        nds{"aşağı almanca"}
+        ne{"nepalca"}
+        new{"nevari dili"}
+        ng{"nqonka dili"}
+        nia{"nyas dili"}
+        nic{"niger-kordofyan dili"}
+        niu{"niyuan dili"}
+        nl{"hollandca"}
+        nl_BE{"flem dili"}
+        nn{"norveç ninorsk dili"}
+        no{"norveç dili"}
+        nog{"noqay dili"}
+        non{"qədimi norsca"}
+        nqo{"nqo dili"}
+        nr{"cənub ndebele dili"}
+        nso{"şimal soto dili"}
+        nub{"nubiy dili"}
+        nv{"navayo dili"}
+        ny{"nyanca dili"}
+        nym{"nyamvezi dili"}
+        nyn{"nyankol dili"}
+        nyo{"niyoro dili"}
+        nzi{"nizima dili"}
+        oc{"oksitanca"}
+        oj{"ocibva dili"}
+        om{"oromo dili"}
+        or{"Oriyə dili"}
+        os{"osetik dili"}
+        osa{"osage dili"}
+        ota{"osman dili"}
+        oto{"otomian dili"}
+        pa{"puncab dili"}
+        paa{"papua dili"}
+        pag{"panqasinan dili"}
+        pal{"paxlavi dili"}
+        pam{"pampanqa dili"}
+        pap{"papyamento dili"}
+        pau{"palayanca"}
+        peo{"qədimi farsca"}
+        phi{"filipin dili"}
+        phn{"foyenik dili"}
+        pi{"pali dili"}
+        pl{"Polish dili"}
+        pon{"ponpeyan dili"}
+        pra{"prakrit dili"}
+        pro{"qədimi provensialca"}
+        ps{"Puştu dili"}
+        pt{"portuqalca"}
+        pt_PT{"İber portuqalca"}
+        qu{"kuechya dili"}
+        raj{"racastan dili"}
+        rap{"rapanu dili"}
+        rar{"rarotonqan dili"}
+        rn{"rundi dili"}
+        ro{"rumın"}
+        rom{"roman dili"}
+        root{"rut dili"}
+        ru{"rusca"}
+        rup{"aromanca"}
+        rw{"kinyarvanda dili"}
+        sa{"Sanskrit dili"}
+        sad{"sandave dili"}
+        sah{"yakut dili"}
+        sai{"cənub amerika yerli dili"}
+        sal{"salişan dili"}
+        sam{"samaritan dili"}
+        sas{"sasak dili"}
+        sat{"santal dili"}
+        sc{"sardin dili"}
+        scn{"sisili dili"}
+        sco{"skots dili"}
+        sd{"sindhi dili"}
+        se{"şimal sami dili"}
+        sel{"selkup dili"}
+        sem{"ivrit dili"}
+        sg{"sanqo dili"}
+        sga{"qədimi irlandca"}
+        sgn{"işarət dili"}
+        sh{"serb-xorvatca"}
+        shn{"şan dili"}
+        si{"sinhaliscə"}
+        sid{"sidamo dili"}
+        sio{"sioyan dili"}
+        sit{"sino-tibet dili"}
+        sk{"slovakca"}
+        sl{"slovencə"}
+        sla{"slav dili"}
+        sm{"samoa dili"}
+        sma{"cənub sami dili"}
+        smi{"səmi dili"}
+        smj{"lule sami dili"}
+        smn{"inari sami"}
+        sms{"skolt dili"}
+        sn{"şona dili"}
+        snk{"soninke dili"}
+        so{"somali dili"}
+        sog{"soqdiyen dili"}
+        son{"sonqay dili"}
+        sq{"Albanca"}
+        sr{"serb dili"}
+        srn{"sranan tonqo dili"}
+        srr{"serer dilii"}
+        ss{"svati dili"}
+        ssa{"nilo-sahara dili"}
+        st{"Sesoto dili"}
+        su{"sundanca"}
+        suk{"sukuma dili"}
+        sus{"susu dili"}
+        sux{"sumeryan dili"}
+        sv{"isveçcə"}
+        sw{"suahilicə"}
+        syr{"siryak dili"}
+        ta{"tamilcə"}
+        tai{"tay dili"}
+        te{"teluqu dili"}
+        tem{"timne dili"}
+        ter{"tereno dili"}
+        tet{"tetum dili"}
+        tg{"tacik dili"}
+        th{"tayca"}
+        ti{"tiqrin dili"}
+        tig{"tiqre dili"}
+        tiv{"tiv dili"}
+        tk{"türkməncə"}
+        tkl{"tokelay dili"}
+        tl{"taqaloq dili"}
+        tlh{"klinqon"}
+        tli{"tlinqit dili"}
+        tmh{"tamaşek dili"}
+        tn{"svana dili"}
+        to{"tonqa dili"}
+        tog{"niyasa tonga dili"}
+        tpi{"tok pisin dili"}
+        tr{"türkcə"}
+        ts{"sonqa dili"}
+        tsi{"simşyan dili"}
+        tt{"tatarca"}
+        tum{"tumbuka dili"}
+        tup{"tupi dili"}
+        tut{"altaik dili"}
+        tvl{"tuvalu dili"}
+        tw{"Tvi dili"}
+        ty{"taxiti dili"}
+        tyv{"tuvinyan dili"}
+        udm{"udmurt dili"}
+        ug{"uyğurca"}
+        uga{"uqaritik dili"}
+        uk{"ukraynaca"}
+        umb{"umbundu dili"}
+        und{"bilinməyən vəya gəcərsiz dil"}
+        ur{"urduca"}
+        uz{"özbəkcə"}
+        vai{"vay dili"}
+        ve{"venda dili"}
+        vi{"vyetnamca"}
+        vo{"volapük dili"}
+        vot{"votik dili"}
+        wa{"valun dili"}
+        wak{"vakaşan dili"}
+        wal{"valamo dili"}
+        war{"varay dili"}
+        was{"vaşo dili"}
+        wen{"sorb dili"}
+        wo{"volof dili"}
+        xal{"kalmıqca"}
+        xh{"xosa dili"}
+        yao{"yao dili"}
+        yap{"yapiz dili"}
+        yi{"Yahudi dili"}
+        yo{"yoruba dili"}
+        ypk{"yupik dili"}
+        za{"juənq dili"}
+        zap{"zapotek dili"}
+        zbl{"blisimbols dili"}
+        zen{"zenaqa dili"}
+        zh{"çincə"}
+        zh_Hans{"adi çincə"}
+        zh_Hant{"gələnəksəl çincə"}
+        znd{"zande dili"}
+        zu{"zulu dili"}
+        zun{"zuni dili"}
+        zza{"zaza dili"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤ #,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Scripts{
+        Arab{"ərəb"}
+        Armi{"armi"}
+        Armn{"erməni"}
+        Avst{"avestan"}
+        Bali{"bali"}
+        Batk{"batak"}
+        Beng{"benqal"}
+        Blis{"blissymbols"}
+        Bopo{"Bopomofo"}
+        Brah{"brahmi"}
+        Brai{"kor yazısı"}
+        Bugi{"buqin"}
+        Buhd{"buhid"}
+        Cakm{"kakm"}
+        Cans{"birləşmiş kanada yerli yazısı"}
+        Cari{"kariyan"}
+        Cham{"çam"}
+        Cher{"çiroki"}
+        Cirt{"sirt"}
+        Copt{"koptik"}
+        Cprt{"kipr"}
+        Cyrl{"kiril"}
+        Cyrs{"qədimi kilsa kirili"}
+        Deva{"devanagari"}
+        Dsrt{"deseret"}
+        Egyd{"misir demotik"}
+        Egyh{"misir hiyeratik"}
+        Egyp{"misir hiyeroqlif"}
+        Ethi{"efiopiya"}
+        Geok{"gürcü xutsuri"}
+        Geor{"gürcü"}
+        Glag{"qlaqolitik"}
+        Goth{"qotik"}
+        Grek{"yunan"}
+        Gujr{"qucarat"}
+        Guru{"qurmuxi"}
+        Hang{"hanqul"}
+        Hani{"han"}
+        Hano{"hanunu"}
+        Hans{"basitləştirilmiş han"}
+        Hant{"qədimi han"}
+        Hebr{"yahudi"}
+        Hira{"iragana"}
+        Hmng{"pahav monq"}
+        Hrkt{"katakana vəya hiraqana"}
+        Hung{"qədimi macar"}
+        Inds{"hindistan"}
+        Ital{"qədimi italyalı"}
+        Java{"cava"}
+        Jpan{"yapon"}
+        Kali{"kayax li"}
+        Kana{"katakana"}
+        Khar{"xaroşti"}
+        Khmr{"xmer"}
+        Knda{"kannada"}
+        Kore{"korean"}
+        Kthi{"kti"}
+        Lana{"lanna"}
+        Laoo{"lao"}
+        Latf{"fraktur latını"}
+        Latg{"gael latını"}
+        Latn{"latın"}
+        Lepc{"lepçə"}
+        Limb{"limbu"}
+        Lyci{"lusian"}
+        Lydi{"ludian"}
+        Mand{"mandayen"}
+        Mani{"maniçayen"}
+        Maya{"maya hiyeroqlifi"}
+        Mero{"meroytik"}
+        Mlym{"malayalam"}
+        Mong{"monqol"}
+        Moon{"mun"}
+        Mtei{"meytey mayek"}
+        Mymr{"miyanmar"}
+        Nkoo{"nko"}
+        Ogam{"oğam"}
+        Olck{"ol çiki"}
+        Orkh{"orxon"}
+        Orya{"oriya"}
+        Osma{"osmanya"}
+        Perm{"qədimi permik"}
+        Phag{"faqs-pa"}
+        Phli{"fli"}
+        Phlp{"flp"}
+        Phlv{"kitab paxlavi"}
+        Phnx{"foenik"}
+        Plrd{"polard fonetik"}
+        Prti{"prti"}
+        Rjng{"recəng"}
+        Roro{"ronqoronqo"}
+        Runr{"runik"}
+        Samr{"samaritan"}
+        Sara{"sarati"}
+        Saur{"saurastra"}
+        Sgnw{"işarət yazısı"}
+        Shaw{"şavyan"}
+        Sinh{"sinhala"}
+        Sund{"sundan"}
+        Sylo{"siloti nəqri"}
+        Syrc{"siryak"}
+        Syre{"estrangela süryanice"}
+        Syrn{"Syrn"}
+        Tagb{"taqbanva"}
+        Tale{"tay le"}
+        Talu{"təzə tay lu"}
+        Taml{"tamil"}
+        Tavt{"tavt"}
+        Telu{"telugu"}
+        Teng{"tengvar"}
+        Tfng{"tifinaq"}
+        Tglg{"taqaloq"}
+        Thaa{"txana"}
+        Thai{"tay"}
+        Tibt{"tibet"}
+        Ugar{"uqarit"}
+        Vaii{"vay"}
+        Visp{"danışma səsləri"}
+        Xpeo{"qədimi fars"}
+        Xsux{"sumer-akadyan kuneyform"}
+        Yiii{"yi"}
+        Zmth{"zmth"}
+        Zsym{"zsym"}
+        Zxxx{"yazısız"}
+        Zyyy{"adi yazi"}
+        Zzzz{"bilinməyən veya gəcərsiz"}
+    }
+    Types{
+        calendar{
+            buddhist{"Budist təqvimi"}
+            chinese{"Çin təqvimi"}
+            gregorian{"Qreqoriy təqvimi"}
+            hebrew{"Yahudi təqvimi"}
+            indian{"Hindi təqvimi"}
+            islamic{"Müsəlman təqvimi"}
+            islamic-civil{"Ivrit təqvimi"}
+            japanese{"Yapon təqvimi"}
+            roc{"Çin respublikası təqvimi"}
+        }
+        collation{
+            pinyin{"Pinyin təqvimi"}
+        }
+    }
+    Version{"1.63"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd",
+                "yyyy MMMM d",
+                "yyyy MMM d",
+                "yyyy-MM-dd",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "B.",
+                        "B.E.",
+                        "Ç.A.",
+                        "Ç.",
+                        "C.A.",
+                        "C",
+                        "Ş.",
+                    }
+                    wide{
+                        "bazar",
+                        "bazar ertəsi",
+                        "çərşənbə axşamı",
+                        "çərşənbə",
+                        "cümə axşamı",
+                        "cümə",
+                        "şənbə",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "7",
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                    }
+                }
+            }
+            eras{
+                wide{
+                    "eramızdan əvvəl",
+                    "bizim eramızın",
+                }
+            }
+            fields{
+                day{
+                    dn{"bu gün"}
+                    relative{
+                        "-1"{"dünən"}
+                        "0"{"bu gün"}
+                        "1"{"sabah"}
+                    }
+                }
+                era{
+                    dn{"era"}
+                }
+                hour{
+                    dn{"saat"}
+                }
+                minute{
+                    dn{"dəqiqə"}
+                }
+                month{
+                    dn{"ay"}
+                }
+                second{
+                    dn{"saniyə"}
+                }
+                week{
+                    dn{"həftə"}
+                }
+                weekday{
+                    dn{"həftə günü"}
+                }
+                year{
+                    dn{"il"}
+                }
+                zone{
+                    dn{"zona"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "yan",
+                        "fev",
+                        "mar",
+                        "apr",
+                        "may",
+                        "iyn",
+                        "iyl",
+                        "avq",
+                        "sen",
+                        "okt",
+                        "noy",
+                        "dek",
+                    }
+                    wide{
+                        "Yanvar",
+                        "Fevral",
+                        "Mart",
+                        "Aprel",
+                        "May",
+                        "İyun",
+                        "İyul",
+                        "Avqust",
+                        "Sentyabr",
+                        "Oktyabr",
+                        "Noyabr",
+                        "Dekabr",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "1-ci kv.",
+                        "2-ci kv.",
+                        "3-cü kv.",
+                        "4-cü kv.",
+                    }
+                    wide{
+                        "1-ci kvartal",
+                        "2-ci kvartal",
+                        "3-cü kvartal",
+                        "4-cü kvartal",
+                    }
+                }
+            }
+        }
+    }
+    codePatterns{
+        language{"Dil: {0}"}
+        script{"Yazı: {0}"}
+        territory{"Rayon: {0}"}
+    }
+    delimiters{
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
+    }
+    measurementSystemNames{
+        US{"ABŞ"}
+        metric{"metr"}
+    }
+    units{
+        day{
+            other{"{0} gün"}
+        }
+        hour{
+            other{"{0} saat"}
+        }
+        minute{
+            other{"{0} dəqiqə"}
+        }
+        month{
+            other{"{0} ay"}
+        }
+        second{
+            other{"{0} saniyə"}
+        }
+        week{
+            other{"{0} həftə"}
+        }
+        year{
+            other{"{0} il"}
+        }
+    }
+    zoneStrings{
+        "Africa:Ceuta"{
+            ec{"Seuta"}
+        }
+        "Africa:Kinshasa"{
+            ec{"Kinşasa"}
+        }
+        "Africa:Lubumbashi"{
+            ec{"Lubumbaşi"}
+        }
+        "America:Anchorage"{
+            ec{"Ankorac"}
+        }
+        "America:Araguaina"{
+            ec{"Araguayna"}
+        }
+        "America:Argentina:La_Rioja"{
+            ec{"La Rioha"}
+        }
+        "America:Argentina:Rio_Gallegos"{
+            ec{"rio qayegos"}
+        }
+        "America:Argentina:San_Juan"{
+            ec{"san xuan"}
+        }
+        "America:Argentina:San_Luis"{
+            ec{"san luis"}
+        }
+        "America:Argentina:Tucuman"{
+            ec{"tukuman"}
+        }
+        "America:Argentina:Ushuaia"{
+            ec{"uşuya"}
+        }
+        "America:Bahia"{
+            ec{"Bahiya"}
+        }
+        "America:Blanc-Sablon"{
+            ec{"Blank-Sablon"}
+        }
+        "America:Boise"{
+            ec{"Boyse"}
+        }
+        "America:Buenos_Aires"{
+            ec{"Buenos Ayres"}
+        }
+        "America:Cambridge_Bay"{
+            ec{"Kəmbric Bey"}
+        }
+        "America:Campo_Grande"{
+            ec{"Kampo Qrande"}
+        }
+        "America:Cancun"{
+            ec{"Kankun"}
+        }
+        "America:Catamarca"{
+            ec{"Katamarka"}
+        }
+        "America:Chicago"{
+            ec{"Cikaqo"}
+        }
+        "America:Chihuahua"{
+            ec{"Cihuvava"}
+        }
+        "America:Coral_Harbour"{
+            ec{"Koral Harbor"}
+        }
+        "America:Cordoba"{
+            ec{"Kordoba"}
+        }
+        "America:Cuiaba"{
+            ec{"Kuyaba"}
+        }
+        "America:Danmarkshavn"{
+            ec{"Danmarkşavn"}
+        }
+        "America:Dawson"{
+            ec{"Douson"}
+        }
+        "America:Dawson_Creek"{
+            ec{"Douson Krik"}
+        }
+        "America:Detroit"{
+            ec{"Detroyt"}
+        }
+        "America:Edmonton"{
+            ec{"Edmondton"}
+        }
+        "America:Eirunepe"{
+            ec{"İrunepe"}
+        }
+        "America:Glace_Bay"{
+            ec{"Qleys Bey"}
+        }
+        "America:Goose_Bay"{
+            ec{"Qus Bey"}
+        }
+        "America:Halifax"{
+            ec{"Halifaks"}
+        }
+        "America:Hermosillo"{
+            ec{"Hermosilo"}
+        }
+        "America:Indiana:Knox"{
+            ec{"Noks"}
+        }
+        "America:Indiana:Marengo"{
+            ec{"Marenqo"}
+        }
+        "America:Indiana:Petersburg"{
+            ec{"pitersburq"}
+        }
+        "America:Indiana:Tell_City"{
+            ec{"tell şəhəri"}
+        }
+        "America:Indiana:Vevay"{
+            ec{"vevey"}
+        }
+        "America:Indiana:Vincennes"{
+            ec{"vinsenes"}
+        }
+        "America:Indiana:Winamac"{
+            ec{"vinamak"}
+        }
+        "America:Indianapolis"{
+            ec{"İndianapolis"}
+        }
+        "America:Inuvik"{
+            ec{"İnuvik"}
+        }
+        "America:Iqaluit"{
+            ec{"İqalut"}
+        }
+        "America:Jujuy"{
+            ec{"Cucuy"}
+        }
+        "America:Juneau"{
+            ec{"Cüneau"}
+        }
+        "America:Kentucky:Monticello"{
+            ec{"montiçelo"}
+        }
+        "America:Los_Angeles"{
+            ec{"Los Anceles"}
+        }
+        "America:Louisville"{
+            ec{"Luisvil"}
+        }
+        "America:Maceio"{
+            ec{"Maseyo"}
+        }
+        "America:Mazatlan"{
+            ec{"mazaltan"}
+        }
+        "America:Mendoza"{
+            ec{"mendoza"}
+        }
+        "America:Menominee"{
+            ec{"menomini"}
+        }
+        "America:Mexico_City"{
+            ec{"mexiko"}
+        }
+        "America:Moncton"{
+            ec{"monkton"}
+        }
+        "America:Monterrey"{
+            ec{"monterey"}
+        }
+        "America:Montreal"{
+            ec{"montreal"}
+        }
+        "America:New_York"{
+            ec{"nyu york"}
+        }
+        "America:Nipigon"{
+            ec{"nipiqon"}
+        }
+        "America:Nome"{
+            ec{"nom"}
+        }
+        "America:Noronha"{
+            ec{"noronha"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"Orta, Şimal Dakota"}
+        }
+        "America:North_Dakota:New_Salem"{
+            ec{"nyu salem"}
+        }
+        "America:Pangnirtung"{
+            ec{"panqnirtanq"}
+        }
+        "America:Phoenix"{
+            ec{"finiks"}
+        }
+        "America:Porto_Velho"{
+            ec{"porto velo"}
+        }
+        "America:Rainy_River"{
+            ec{"reyni river"}
+        }
+        "America:Rankin_Inlet"{
+            ec{"rankin inlet"}
+        }
+        "America:Recife"{
+            ec{"resif"}
+        }
+        "America:Regina"{
+            ec{"recina"}
+        }
+        "America:Resolute"{
+            ec{"resolut"}
+        }
+        "America:Rio_Branco"{
+            ec{"Rio Branko"}
+        }
+        "America:Sao_Paulo"{
+            ec{"sao paulo"}
+        }
+        "America:Scoresbysund"{
+            ec{"skoresbisund"}
+        }
+        "America:Shiprock"{
+            ec{"şiprok"}
+        }
+        "America:St_Johns"{
+            ec{"St Johns"}
+        }
+        "America:Swift_Current"{
+            ec{"svift kurent"}
+        }
+        "America:Thule"{
+            ec{"tul"}
+        }
+        "America:Thunder_Bay"{
+            ec{"funder bey"}
+        }
+        "America:Tijuana"{
+            ec{"tixuana"}
+        }
+        "America:Toronto"{
+            ec{"toronto"}
+        }
+        "America:Vancouver"{
+            ec{"vənkuver"}
+        }
+        "America:Whitehorse"{
+            ec{"vaythors"}
+        }
+        "America:Winnipeg"{
+            ec{"vinipeq"}
+        }
+        "America:Yakutat"{
+            ec{"yakutat"}
+        }
+        "America:Yellowknife"{
+            ec{"yelounayf"}
+        }
+        "Antarctica:Casey"{
+            ec{"Keysi"}
+        }
+        "Antarctica:Davis"{
+            ec{"Deyvis"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont de Urvile"}
+        }
+        "Antarctica:Mawson"{
+            ec{"moson"}
+        }
+        "Antarctica:McMurdo"{
+            ec{"makmurdo"}
+        }
+        "Antarctica:Rothera"{
+            ec{"rofera"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"çənub polus"}
+        }
+        "Antarctica:Syowa"{
+            ec{"syova"}
+        }
+        "Antarctica:Vostok"{
+            ec{"vostok"}
+        }
+        "Asia:Almaty"{
+            ec{"Almati"}
+        }
+        "Asia:Anadyr"{
+            ec{"Anadır"}
+        }
+        "Asia:Aqtau"{
+            ec{"Aktau"}
+        }
+        "Asia:Choibalsan"{
+            ec{"Coybalsan"}
+        }
+        "Asia:Chongqing"{
+            ec{"Conqinq"}
+        }
+        "Asia:Irkutsk"{
+            ec{"İrkutsk"}
+        }
+        "Asia:Jakarta"{
+            ec{"Cakarta"}
+        }
+        "Asia:Jayapura"{
+            ec{"Cayapura"}
+        }
+        "Asia:Kamchatka"{
+            ec{"Kamçatka"}
+        }
+        "Asia:Kashgar"{
+            ec{"Kaşqar"}
+        }
+        "Asia:Kuching"{
+            ec{"Kuçinq"}
+        }
+        "Asia:Magadan"{
+            ec{"Maqadan"}
+        }
+        "Asia:Makassar"{
+            ec{"Makasar"}
+        }
+        "Asia:Novosibirsk"{
+            ec{"novosibirsk"}
+        }
+        "Asia:Pontianak"{
+            ec{"pontiyanak"}
+        }
+        "Asia:Qyzylorda"{
+            ec{"qüzülorda"}
+        }
+        "Asia:Sakhalin"{
+            ec{"saxalin"}
+        }
+        "Asia:Samarkand"{
+            ec{"səmərkənd"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"ulanbatar"}
+        }
+        "Asia:Urumqi"{
+            ec{"urumçi"}
+        }
+        "Asia:Vladivostok"{
+            ec{"vladivostok"}
+        }
+        "Asia:Yakutsk"{
+            ec{"yakutsk"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"yekaterinburq"}
+        }
+        "Atlantic:Canary"{
+            ec{"Kanari"}
+        }
+        "Atlantic:Madeira"{
+            ec{"Madeyra"}
+        }
+        "Australia:Adelaide"{
+            ec{"Adelayd"}
+        }
+        "Australia:Brisbane"{
+            ec{"Brisbeyn"}
+        }
+        "Australia:Broken_Hill"{
+            ec{"Broken Hil"}
+        }
+        "Australia:Currie"{
+            ec{"Kuriye"}
+        }
+        "Australia:Darwin"{
+            ec{"Darvin"}
+        }
+        "Australia:Eucla"{
+            ec{"Yukla"}
+        }
+        "Australia:Lord_Howe"{
+            ec{"Lord Hove"}
+        }
+        "Australia:Melbourne"{
+            ec{"melburn"}
+        }
+        "Australia:Perth"{
+            ec{"perf"}
+        }
+        "Australia:Sydney"{
+            ec{"sidney"}
+        }
+        "Etc:Unknown"{
+            ec{"Bilinmir"}
+        }
+        "Europe:Kaliningrad"{
+            ec{"Kalininqrad"}
+        }
+        "Europe:Kiev"{
+            ec{"Kiyev"}
+        }
+        "Europe:Moscow"{
+            ec{"moskva"}
+        }
+        "Europe:Samara"{
+            ec{"samara"}
+        }
+        "Europe:Simferopol"{
+            ec{"simferopol"}
+        }
+        "Europe:Uzhgorod"{
+            ec{"ujgorod"}
+        }
+        "Europe:Volgograd"{
+            ec{"volqoqrad"}
+        }
+        "Europe:Zaporozhye"{
+            ec{"zaporojye"}
+        }
+        "Pacific:Chatham"{
+            ec{"Çatam"}
+        }
+        "Pacific:Easter"{
+            ec{"İster"}
+        }
+        "Pacific:Enderbury"{
+            ec{"Enderböri"}
+        }
+        "Pacific:Galapagos"{
+            ec{"Qalapaqos"}
+        }
+        "Pacific:Gambier"{
+            ec{"Qambiyer"}
+        }
+        "Pacific:Johnston"{
+            ec{"Conston"}
+        }
+        "Pacific:Kiritimati"{
+            ec{"Kirimati"}
+        }
+        "Pacific:Kosrae"{
+            ec{"Kosraye"}
+        }
+        "Pacific:Kwajalein"{
+            ec{"Kvajaleyn"}
+        }
+        "Pacific:Majuro"{
+            ec{"Maxiro"}
+        }
+        "Pacific:Marquesas"{
+            ec{"Markuyesas"}
+        }
+        "Pacific:Midway"{
+            ec{"midvey"}
+        }
+        "Pacific:Ponape"{
+            ec{"ponape"}
+        }
+        "Pacific:Tarawa"{
+            ec{"tarava"}
+        }
+        "Pacific:Wake"{
+            ec{"veyk"}
+        }
+        "meta:British"{
+            cu:int{0}
+        }
+        "meta:Europe_Central"{
+            cu:int{0}
+            ld{"Orta Avropa/yay"}
+            ls{"Orta Avropa"}
+            sd{"Orta Avropa/yaz"}
+            ss{"Orta Avropa/standart"}
+        }
+        "meta:Europe_Eastern"{
+            cu:int{1}
+            ld{"Şərq Avropa/yay"}
+            ls{"Şərq Avropa"}
+            sd{"Şərq Avropa/yaz"}
+            ss{"Şərq Avropa/standart"}
+        }
+        "meta:Irish"{
+            cu:int{0}
+        }
+        "meta:Kuybyshev"{
+            cu:int{0}
+            ld{"Kuybuşev/yay"}
+            ls{"Kuybuşev"}
+        }
+        "meta:Moscow"{
+            cu:int{1}
+            ld{"Moskva/yay"}
+            lg{"Moskva"}
+            ls{"Moskva/standart"}
+        }
+        "meta:Samara"{
+            cu:int{0}
+            ld{"Samara/yay"}
+            ls{"Samara"}
+        }
+        "meta:Turkey"{
+            cu:int{1}
+            ld{"Türkiya/yay"}
+            ls{"Türkiya"}
+        }
+        "meta:Volgograd"{
+            cu:int{0}
+            ld{"Volqoqrad/yay"}
+            ls{"Volqoqrad"}
+        }
+        fallbackFormat{"{1} ({0})"}
+        gmtFormat{"GMT{0}"}
+        hourFormat{"+HH:mm;-HH:mm"}
+        regionFormat{"{0}"}
+    }
+}

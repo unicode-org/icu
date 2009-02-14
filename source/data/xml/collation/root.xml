@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ Copyright (c) 2002-2008 International Business Machines Corporation and others. All rights reserved.
+-->
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.6/ldml.dtd"
+[
+   <!ENTITY % icu SYSTEM " http://www.unicode.org/cldr/dtd/1.6/ldmlICU.dtd">
+   %icu;
+]
+>
+<ldml>
+    <identity>
+        <version number="$Revision: 1.5 $"/>
+        <generation date="$Date: 2007/06/04 01:05:48 $"/>
+        <language type="root"/> 
+    </identity>
+    <special xmlns:icu="http://www.icu-project.org/">
+        <icu:UCARules icu:uca_rules="../unidata/UCARules.txt"/>
+        <icu:depends icu:dependency="ucadata.icu"/>
+    </special>
+</ldml>
+
