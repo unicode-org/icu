@@ -11,12 +11,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -2136,7 +2136,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
             }
             if (!matchPref) {
                 errln("FAIL: Preferred values for locale " + loc 
-                        + " got:" + Arrays.toString(pref) + " expected:" + Arrays.toString(expected));
+                        + " got:" + Utility.arrayToString(pref) + " expected:" + Utility.arrayToString(expected));
             }
 
             String[] all = Calendar.getKeywordValuesForLocale("calendar", loc, false);
@@ -2152,7 +2152,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
             }
             if (!matchAll) {
                 errln("FAIL: All values for locale " + loc
-                        + " got:" + Arrays.toString(all)); 
+                        + " got:" + Utility.arrayToString(all)); 
             }
         }
     }

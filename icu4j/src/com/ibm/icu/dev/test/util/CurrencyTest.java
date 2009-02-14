@@ -10,12 +10,12 @@
  */
 
 package com.ibm.icu.dev.test.util;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
@@ -464,7 +464,7 @@ public class CurrencyTest extends TestFmwk {
             }
             if (!matchPref) {
                 errln("FAIL: Preferred values for locale " + loc 
-                        + " got:" + Arrays.toString(pref) + " expected:" + Arrays.toString(expected));
+                        + " got:" + Utility.arrayToString(pref) + " expected:" + Utility.arrayToString(expected));
             }
 
             String[] all = Currency.getKeywordValuesForLocale("currency", loc, false);
@@ -480,7 +480,7 @@ public class CurrencyTest extends TestFmwk {
             }
             if (!matchAll) {
                 errln("FAIL: All values for locale " + loc
-                        + " got:" + Arrays.toString(all)); 
+                        + " got:" + Utility.arrayToString(all)); 
             }
         }
     }
