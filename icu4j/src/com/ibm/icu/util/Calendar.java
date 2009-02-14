@@ -1824,6 +1824,102 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
     ///CLOVER:ON
     // ==== End of factory Stuff ====
 
+    //TODO: The table below should be retrieved from ICU resource when CLDR supplementalData
+    // is fully updated.
+    private static final String[][] CALPREF = {
+        {"001", "gregorian"},
+        {"AE", "gregorian", "islamic", "islamic-civil"},
+        {"AF", "gregorian", "islamic", "islamic-civil", "persian"},
+        {"BH", "gregorian", "islamic", "islamic-civil"},
+        {"CN", "gregorian", "chinese"},
+        {"CX", "gregorian", "chinese"},
+        {"DJ", "gregorian", "islamic", "islamic-civil"},
+        {"DZ", "gregorian", "islamic", "islamic-civil"},
+        {"EG", "gregorian", "islamic", "islamic-civil", "coptic"},
+        {"EH", "gregorian", "islamic", "islamic-civil"},
+        {"ER", "gregorian", "islamic", "islamic-civil"},
+        {"ET", "gregorian", "ethiopic", "ethiopic-amete-alem"},
+        {"HK", "gregorian", "chinese"},
+        {"IL", "gregorian", "hebrew"},
+        {"IL", "gregorian", "islamic", "islamic-civil"},
+        {"IN", "gregorian", "indian"},
+        {"IQ", "gregorian", "islamic", "islamic-civil"},
+        {"IR", "gregorian", "islamic", "islamic-civil", "persian"},
+        {"JO", "gregorian", "islamic", "islamic-civil"},
+        {"JP", "gregorian", "japanese"},
+        {"KM", "gregorian", "islamic", "islamic-civil"},
+        {"KW", "gregorian", "islamic", "islamic-civil"},
+        {"LB", "gregorian", "islamic", "islamic-civil"},
+        {"LY", "gregorian", "islamic", "islamic-civil"},
+        {"MA", "gregorian", "islamic", "islamic-civil"},
+        {"MO", "gregorian", "chinese"},
+        {"MR", "gregorian", "islamic", "islamic-civil"},
+        {"OM", "gregorian", "islamic", "islamic-civil"},
+        {"PS", "gregorian", "islamic", "islamic-civil"},
+        {"QA", "gregorian", "islamic", "islamic-civil"},
+        {"SA", "gregorian", "islamic", "islamic-civil"},
+        {"SD", "gregorian", "islamic", "islamic-civil"},
+        {"SG", "gregorian", "chinese"},
+        {"SY", "gregorian", "islamic", "islamic-civil"},
+        {"TD", "gregorian", "islamic", "islamic-civil"},
+        {"TH", "buddhist", "gregorian"},
+        {"TN", "gregorian", "islamic", "islamic-civil"},
+        {"TW", "gregorian", "roc", "chinese"},
+        {"YE", "gregorian", "islamic", "islamic-civil"},
+    };
+
+    /**
+     * Given a key and a locale, returns an array of string values in a preferred
+     * order that would make a difference. These are all and only those values where
+     * the open (creation) of the service with the locale formed from the input locale
+     * plus input keyword and that value has different behavior than creation with the
+     * input locale alone.
+     * @param key           one of the keys supported by this service.  For now, only
+     *                      "calendar" is supported.
+     * @param locale        the locale
+     * @param commonlyUsed  if set to true it will return only commonly used values
+     *                      with the given locale in preferred order.  Otherwise,
+     *                      it will return all the available values for the locale.
+     * @return an array of string values for the given key and the locale.
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final String[] getKeywordValuesForLocale(String key, ULocale locale, boolean commonlyUsed) {
+        // Resolve region
+        String prefRegion = locale.getCountry();
+        if (prefRegion.length() == 0){
+            ULocale loc = ULocale.addLikelySubtags(locale);
+            prefRegion = loc.getCountry();
+        }
+
+        // Read preferred calendar values from supplementalData calendarPreferences
+        LinkedList values = new LinkedList();
+        //TODO: START
+        String[] preferences = CALPREF[0];
+        for (int i = 0; i < CALPREF.length; i++) {
+            if (prefRegion.equals(CALPREF[i][0])) {
+                preferences = CALPREF[i];
+                break;
+            }
+        }
+        for (int i = 1; i < preferences.length; i++) {
+            if (!values.contains(preferences[i])) {
+                values.add(preferences[i]);
+            }
+        }
+        //TODO: END
+
+        if (!commonlyUsed) {
+            // if not commonlyUsed, add other available values
+            for (int i = 0; i < calTypes.length; i++) {
+                if (!values.contains(calTypes[i])) {
+                    values.add(calTypes[i]);
+                }
+            }
+        }
+        return (String[])values.toArray(new String[values.size()]);
+    }
+
     /**
      * Gets this Calendar's current time.
      * @return the current time.
@@ -5287,101 +5383,5 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
     private ULocale actualLocale;
 
     // -------- END ULocale boilerplate --------
-    
-    //TODO: The table below should be retrieved from ICU resource when CLDR supplementalData
-    // is fully updated.
-    private static final String[][] CALPREF = {
-        {"001", "gregorian"},
-        {"AE", "gregorian", "islamic", "islamic-civil"},
-        {"AF", "gregorian", "islamic", "islamic-civil", "persian"},
-        {"BH", "gregorian", "islamic", "islamic-civil"},
-        {"CN", "gregorian", "chinese"},
-        {"CX", "gregorian", "chinese"},
-        {"DJ", "gregorian", "islamic", "islamic-civil"},
-        {"DZ", "gregorian", "islamic", "islamic-civil"},
-        {"EG", "gregorian", "islamic", "islamic-civil", "coptic"},
-        {"EH", "gregorian", "islamic", "islamic-civil"},
-        {"ER", "gregorian", "islamic", "islamic-civil"},
-        {"ET", "gregorian", "ethiopic", "ethiopic-amete-alem"},
-        {"HK", "gregorian", "chinese"},
-        {"IL", "gregorian", "hebrew"},
-        {"IL", "gregorian", "islamic", "islamic-civil"},
-        {"IN", "gregorian", "indian"},
-        {"IQ", "gregorian", "islamic", "islamic-civil"},
-        {"IR", "gregorian", "islamic", "islamic-civil", "persian"},
-        {"JO", "gregorian", "islamic", "islamic-civil"},
-        {"JP", "gregorian", "japanese"},
-        {"KM", "gregorian", "islamic", "islamic-civil"},
-        {"KW", "gregorian", "islamic", "islamic-civil"},
-        {"LB", "gregorian", "islamic", "islamic-civil"},
-        {"LY", "gregorian", "islamic", "islamic-civil"},
-        {"MA", "gregorian", "islamic", "islamic-civil"},
-        {"MO", "gregorian", "chinese"},
-        {"MR", "gregorian", "islamic", "islamic-civil"},
-        {"OM", "gregorian", "islamic", "islamic-civil"},
-        {"PS", "gregorian", "islamic", "islamic-civil"},
-        {"QA", "gregorian", "islamic", "islamic-civil"},
-        {"SA", "gregorian", "islamic", "islamic-civil"},
-        {"SD", "gregorian", "islamic", "islamic-civil"},
-        {"SG", "gregorian", "chinese"},
-        {"SY", "gregorian", "islamic", "islamic-civil"},
-        {"TD", "gregorian", "islamic", "islamic-civil"},
-        {"TH", "buddhist", "gregorian"},
-        {"TN", "gregorian", "islamic", "islamic-civil"},
-        {"TW", "gregorian", "roc", "chinese"},
-        {"YE", "gregorian", "islamic", "islamic-civil"},
-    };
-
-    /**
-     * Given a key and a locale, returns an array of string values in a preferred
-     * order that would make a difference. These are all and only those values where
-     * the open (creation) of the service with the locale formed from the input locale
-     * plus input keyword and that value has different behavior than creation with the
-     * input locale alone.
-     * @param key           one of the keys supported by this service.  For now, only
-     *                      "calendar" is supported.
-     * @param locale        the locale
-     * @param commonlyUsed  if set to true it will return only commonly used values
-     *                      with the given locale in preferred order.  Otherwise,
-     *                      it will return all the available values for the locale.
-     * @return an array of string values for the given key and the locale.
-     * @draft ICU 4.2
-     * @provisional This API might change or be removed in a future release.
-     */
-    public static final String[] getKeywordValues(String key, ULocale locale, boolean commonlyUsed) {
-        // Resolve region
-        String prefRegion = locale.getCountry();
-        if (prefRegion.length() == 0){
-            ULocale loc = ULocale.addLikelySubtags(locale);
-            prefRegion = loc.getCountry();
-        }
-
-        // Read preferred calendar values from supplementalData calendarPreferences
-        LinkedList values = new LinkedList();
-        //TODO: START
-        String[] preferences = CALPREF[0];
-        for (int i = 0; i < CALPREF.length; i++) {
-            if (prefRegion.equals(CALPREF[i][0])) {
-                preferences = CALPREF[i];
-                break;
-            }
-        }
-        for (int i = 1; i < preferences.length; i++) {
-            if (!values.contains(preferences[i])) {
-                values.add(preferences[i]);
-            }
-        }
-        //TODO: END
-
-        if (!commonlyUsed) {
-            // if not commonlyUsed, add other available values
-            for (int i = 0; i < calTypes.length; i++) {
-                if (!values.contains(calTypes[i])) {
-                    values.add(calTypes[i]);
-                }
-            }
-        }
-        return (String[])values.toArray(new String[values.size()]);
-    }
 }
 

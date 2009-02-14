@@ -467,7 +467,7 @@ public class CollationServiceTest extends TestFmwk {
             String[] expected = new String[PREFERRED[i].length - 1];
             System.arraycopy(PREFERRED[i], 1, expected, 0, expected.length);
 
-            String[] pref = Collator.getKeywordValues("collation", loc, true);
+            String[] pref = Collator.getKeywordValuesForLocale("collation", loc, true);
             boolean matchPref = false;
             if (pref.length == expected.length) {
                 matchPref = true;
@@ -482,7 +482,7 @@ public class CollationServiceTest extends TestFmwk {
                         + " got:" + Arrays.toString(pref) + " expected:" + Arrays.toString(expected));
             }
  
-            String[] all = Collator.getKeywordValues("collation", loc, true);
+            String[] all = Collator.getKeywordValuesForLocale("collation", loc, true);
 
             // Collator.getKeywordValues return the same contents for both commonlyUsed
             // true and false.

@@ -441,7 +441,7 @@ public class CurrencyTest extends TestFmwk {
             {"de_DE@currency=DEM",  "EUR"},
         };
 
-        String[] ALL = Currency.getKeywordValues("currency", ULocale.getDefault(), false);
+        String[] ALL = Currency.getKeywordValuesForLocale("currency", ULocale.getDefault(), false);
         HashSet ALLSET = new HashSet();
         for (int i = 0; i < ALL.length; i++) {
             ALLSET.add(ALL[i]);
@@ -452,7 +452,7 @@ public class CurrencyTest extends TestFmwk {
             String[] expected = new String[PREFERRED[i].length - 1];
             System.arraycopy(PREFERRED[i], 1, expected, 0, expected.length);
 
-            String[] pref = Currency.getKeywordValues("currency", loc, true);
+            String[] pref = Currency.getKeywordValuesForLocale("currency", loc, true);
             boolean matchPref = false;
             if (pref.length == expected.length) {
                 matchPref = true;
@@ -467,7 +467,7 @@ public class CurrencyTest extends TestFmwk {
                         + " got:" + Arrays.toString(pref) + " expected:" + Arrays.toString(expected));
             }
 
-            String[] all = Currency.getKeywordValues("currency", loc, false);
+            String[] all = Currency.getKeywordValuesForLocale("currency", loc, false);
             boolean matchAll = false;
             if (all.length == ALLSET.size()) {
                 matchAll = true;
