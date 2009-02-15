@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.text.StringCharacterIterator;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -3113,7 +3115,37 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * @stable ICU 2.0
      */
     protected DateFormat handleGetDateFormat(String pattern, Locale locale) {
-        return handleGetDateFormat(pattern, ULocale.forLocale(locale));
+        return handleGetDateFormat(pattern, null, ULocale.forLocale(locale));
+    }
+
+    /**
+     * Create a <code>DateFormat</code> appropriate to this calendar.
+     * This is a framework method for subclasses to override.  This method
+     * is responsible for creating the calendar-specific DateFormat and
+     * DateFormatSymbols objects as needed.
+     * @param pattern the pattern, specific to the <code>DateFormat</code>
+     * subclass
+     * @param locale the locale for which the symbols should be drawn
+     * @return a <code>DateFormat</code> appropriate to this calendar
+     * @stable ICU 2.0
+     */
+    protected DateFormat handleGetDateFormat(String pattern, String override, Locale locale) {
+        return handleGetDateFormat(pattern, override, ULocale.forLocale(locale));
+    }
+
+    /**
+     * Create a <code>DateFormat</code> appropriate to this calendar.
+     * This is a framework method for subclasses to override.  This method
+     * is responsible for creating the calendar-specific DateFormat and
+     * DateFormatSymbols objects as needed.
+     * @param pattern the pattern, specific to the <code>DateFormat</code>
+     * subclass
+     * @param locale the locale for which the symbols should be drawn
+     * @return a <code>DateFormat</code> appropriate to this calendar
+     * @stable ICU 2.0
+     */
+    protected DateFormat handleGetDateFormat(String pattern, ULocale locale) {
+        return handleGetDateFormat(pattern, null, locale);
     }
 
     /**
@@ -3128,9 +3160,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * @draft ICU 3.2
      * @provisional This API might change or be removed in a future release.
      */
-    protected DateFormat handleGetDateFormat(String pattern, ULocale locale) {
+    protected DateFormat handleGetDateFormat(String pattern, String override, ULocale locale) {
         FormatConfiguration fmtConfig = new FormatConfiguration();
         fmtConfig.pattern = pattern;
+        fmtConfig.override = override;
         fmtConfig.formatData = new DateFormatSymbols(this, locale);
         fmtConfig.loc = locale;
         fmtConfig.cal = this;
@@ -3157,33 +3190,102 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
         // First, try to get a pattern from PATTERN_CACHE
         String key = loc.toString() + cal.getType();
         String[] patterns = (String[])PATTERN_CACHE.get(key);
+        String[] overrides = null;
+        String override = null;
         if (patterns == null) {
             // Cache missed.  Get one from bundle
             try {
                 CalendarData calData = new CalendarData(loc, cal.getType());
-                patterns = calData.get("DateTimePatterns").getStringArray();
+                overrides = calData.getOverrides();
+                patterns = calData.getDateTimePatterns();
             } catch (MissingResourceException e) {
                 patterns = DEFAULT_PATTERNS;
             }
             PATTERN_CACHE.put(key, patterns);
-        }
+        } 
+
         // Resolve a pattern for the date/time style
         String pattern = null;
         if ((timeStyle >= 0) && (dateStyle >= 0)) {
             pattern = MessageFormat.format(patterns[8],
                     new Object[] {patterns[timeStyle], patterns[dateStyle + 4]});
+            // Might need to merge the overrides from the date and time into a single override string
+            // TODO: Right now we are forcing the date's override into the time style.
+            if ( overrides != null ) {
+                String dateOverride = overrides[dateStyle + 4];
+                String timeOverride = overrides[timeStyle];
+                override = mergeOverrideStrings(patterns[dateStyle+4],patterns[timeStyle],dateOverride,timeOverride);
+            }
         } else if (timeStyle >= 0) {
             pattern = patterns[timeStyle];
+            if ( overrides != null ) {
+                override = overrides[timeStyle];
+            }
         } else if (dateStyle >= 0) {
             pattern = patterns[dateStyle + 4];
+            if ( overrides != null ) {
+                override = overrides[dateStyle + 4];
+            }
         } else {
             throw new IllegalArgumentException("No date or time style specified");
         }
-        DateFormat result = cal.handleGetDateFormat(pattern, loc);
+        DateFormat result = cal.handleGetDateFormat(pattern, override, loc);
         result.setCalendar(cal);
         return result;
     }
 
+    private static String mergeOverrideStrings( String datePattern, String timePattern, String dateOverride, String timeOverride ) {
+
+        if ( dateOverride == null && timeOverride == null ) {
+            return null;
+        }
+
+        if ( dateOverride == null ) {
+            return expandOverride(timePattern,timeOverride);
+        };
+
+        if ( timeOverride == null ) {
+            return expandOverride(datePattern,dateOverride);
+        };
+        
+        if ( dateOverride.equals(timeOverride) ) {
+            return dateOverride;
+        }
+
+        return (expandOverride(datePattern,dateOverride)+";"+expandOverride(timePattern,timeOverride));
+
+    }
+
+    private static final char QUOTE = '\'';
+    private static String expandOverride(String pattern, String override) {
+
+        if (override.indexOf('=') >= 0) {
+            return override;
+        }
+        boolean inQuotes = false;
+        char prevChar = ' ';
+        StringBuffer result = new StringBuffer();
+
+        StringCharacterIterator it = new StringCharacterIterator(pattern);
+
+        for (char c = it.first(); c!= StringCharacterIterator.DONE; c = it.next()) {
+            if ( c == QUOTE ) {
+               inQuotes = !inQuotes;
+               prevChar = c;
+               continue;
+            }
+            if ( !inQuotes && c != prevChar ) {
+                if (result.length() > 0) {
+                    result.append(";");
+                }
+                result.append(c);
+                result.append("=");
+                result.append(override);
+            }  
+            prevChar = c;
+        } 
+        return result.toString();
+    }
     /**
      * An instance of FormatConfiguration represents calendar specific
      * date format configuration and used for calling the ICU private
@@ -3194,6 +3296,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      */
     public static class FormatConfiguration {
         private String pattern;
+        private String override;
         private DateFormatSymbols formatData;
         private Calendar cal;
         private ULocale loc;
@@ -3210,6 +3313,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
          */
         public String getPatternString() {
             return pattern;
+        }
+
+        public String getOverrideString() {
+            return override;
         }
 
         /**

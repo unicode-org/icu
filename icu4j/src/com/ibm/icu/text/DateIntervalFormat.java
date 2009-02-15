@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 2008, International Business Machines
+*   Copyright (C) 2008-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -1049,7 +1049,7 @@ public class DateIntervalFormat extends UFormat {
             // The date/time pattern ( such as {0} {1} ) is saved in
             // calendar, that is why need to get the CalendarData here.
             CalendarData calData = new CalendarData(locale, null);
-            String[] patterns = calData.get("DateTimePatterns").getStringArray();
+            String[] patterns = calData.getDateTimePatterns();
             String datePattern =dtpng.getBestPattern(dateSkeleton);
             concatSingleDate2TimeInterval(patterns[8], datePattern, Calendar.AM_PM, intervalPatterns);
             concatSingleDate2TimeInterval(patterns[8], datePattern, Calendar.HOUR, intervalPatterns);

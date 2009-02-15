@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2008, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2009, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -219,7 +219,7 @@ public class RelativeDateFormat extends DateFormat {
         String pattern = "{1} {0}";
         try {
             CalendarData calData = new CalendarData(locale, cal.getType());
-            String[] patterns = calData.get("DateTimePatterns").getStringArray();
+            String[] patterns = calData.getDateTimePatterns();
             if (patterns != null && patterns.length >= 9) {
                 pattern = patterns[8];
             }
