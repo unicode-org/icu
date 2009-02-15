@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (C) 2000-2008, International Business Machines
+ * Copyright (C) 2000-2009, International Business Machines
  * Corporation and others. All Rights Reserved.
  *********************************************************************
  */
@@ -426,8 +426,8 @@ public class ChineseCalendar extends Calendar {
      * objects as needed.
      * @stable ICU 2.8
      */
-    protected DateFormat handleGetDateFormat(String pattern, ULocale locale) {
-        return new ChineseDateFormat(pattern, locale);
+    protected DateFormat handleGetDateFormat(String pattern, String override, ULocale locale) {
+        return new ChineseDateFormat(pattern, override, locale);
     }
 
     /**

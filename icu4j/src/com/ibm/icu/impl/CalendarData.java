@@ -1,16 +1,18 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2005, International Business Machines Corporation and         *
+ * Copyright (C) 2004-2009, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 
 package com.ibm.icu.impl;
 
+import java.util.ArrayList;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.UResourceBundleIterator;
 
 
 
@@ -117,6 +119,47 @@ public class CalendarData {
         ICUResourceBundle bundle = get("eras/"+subkey);
         return bundle.getStringArray();
     }
+    public String[] getDateTimePatterns(){
+        ICUResourceBundle bundle = get("DateTimePatterns");
+	ArrayList list = new ArrayList();
+        UResourceBundleIterator iter = bundle.getIterator();
+        while (iter.hasNext()) {
+            UResourceBundle patResource = iter.next();
+            int resourceType = patResource.getType();
+            switch (resourceType) {
+                case UResourceBundle.STRING:
+                    list.add(patResource.getString());
+                    break;
+                case UResourceBundle.ARRAY:
+                    String[] items = patResource.getStringArray();
+                    list.add(items[0]);
+                    break;
+            }
+        }
+
+        return (String[]) list.toArray(new String[list.size()]);
+    }
+
+    public String[] getOverrides(){
+        ICUResourceBundle bundle = get("DateTimePatterns");
+	ArrayList list = new ArrayList();
+        UResourceBundleIterator iter = bundle.getIterator();
+        while (iter.hasNext()) {
+            UResourceBundle patResource = iter.next();
+            int resourceType = patResource.getType();
+            switch (resourceType) {
+                case UResourceBundle.STRING:
+                    list.add(null);
+                    break;
+                case UResourceBundle.ARRAY:
+                    String[] items = patResource.getStringArray();
+                    list.add(items[1]);
+                    break;
+            }
+        }
+        return (String[]) list.toArray(new String[list.size()]);
+    }
+
     public ULocale getULocale() {
         return fBundle.getULocale();
     }

@@ -222,7 +222,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         // set the datetime pattern. This is ugly code -- there should be a public interface for this
         Calendar cal = Calendar.getInstance(uLocale);
         CalendarData calData = new CalendarData(uLocale, cal.getType());
-        String[] patterns = calData.get("DateTimePatterns").getStringArray();
+        String[] patterns = calData.getDateTimePatterns();
         result.setDateTimeFormat(patterns[8]);
         
         // decimal point for seconds
