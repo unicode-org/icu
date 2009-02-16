@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -13,6 +13,7 @@ import java.util.Locale;
 import com.ibm.icu.impl.InvalidFormatException;
 import com.ibm.icu.text.ArabicShapingException;
 import com.ibm.icu.text.StringPrepParseException;
+import com.ibm.icu.util.InvalidLocaleException;
 import com.ibm.icu.util.UResourceTypeMismatchException;
 
 /**
@@ -91,6 +92,21 @@ public class ExceptionTests
             
             for (int i = 0; i < locales.length; i += 1) {
                 exceptions[i] = new InvalidFormatException(locales[i].toString());
+            }
+            
+            return exceptions;
+        }
+    }
+
+    static class InvalidLocaleExceptionHandler extends ExceptionHandler
+    {
+        public Object[] getTestObjects()
+        {
+            Locale locales[] = SerializableTest.getLocales();
+            InvalidLocaleException exceptions[] = new InvalidLocaleException[locales.length];
+            
+            for (int i = 0; i < locales.length; i += 1) {
+                exceptions[i] = new InvalidLocaleException(locales[i].toString());
             }
             
             return exceptions;
