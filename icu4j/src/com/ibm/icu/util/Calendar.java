@@ -10,7 +10,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.text.StringCharacterIterator;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -3242,11 +3241,11 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
 
         if ( dateOverride == null ) {
             return expandOverride(timePattern,timeOverride);
-        };
+        }
 
         if ( timeOverride == null ) {
             return expandOverride(datePattern,dateOverride);
-        };
+        }
         
         if ( dateOverride.equals(timeOverride) ) {
             return dateOverride;
