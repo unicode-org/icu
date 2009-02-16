@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+******************************************************************************
+* Copyright (C) 2007-2008 International Business Machines Corporation and        *
+* others. All Rights Reserved.                                               *
+******************************************************************************
+-->
+<DataRecord>
+    <pl>PLURAL</pl>
+    <pluralNameTable>
+        <pluralNameList>
+            <pluralName>años</pluralName>
+            <pluralName>año</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>meses</pluralName>
+            <pluralName>mes</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>semanas</pluralName>
+            <pluralName>semana</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>días</pluralName>
+            <pluralName>día</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>horas</pluralName>
+            <pluralName>hora</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>minutos</pluralName>
+            <pluralName>minuto</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>segundos</pluralName>
+            <pluralName>segundo</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>milisegundos</pluralName>
+            <pluralName>milisegundo</pluralName>
+        </pluralNameList>
+    </pluralNameTable>
+    <genderList>
+        <gender>M</gender>
+        <gender>M</gender>
+        <gender>F</gender>
+        <gender>M</gender>
+        <gender>F</gender>
+        <gender>M</gender>
+        <gender>M</gender>
+        <gender>M</gender>
+    </genderList>
+    <singularNameList>
+        <singularName>un año</singularName>
+        <singularName>un mes</singularName>
+        <singularName>una semana</singularName>
+        <singularName>un día</singularName>
+        <singularName>una hora</singularName>
+        <singularName>un minuto</singularName>
+        <singularName>un segundo</singularName>
+        <singularName>un milisegundo</singularName>
+    </singularNameList>
+    <mediumNameList>
+        <mediumName>Null</mediumName>
+        <mediumName>Null</mediumName>
+        <mediumName>Null</mediumName>
+        <mediumName>d</mediumName>
+        <mediumName>hr</mediumName>
+        <mediumName>min</mediumName>
+        <mediumName>seg</mediumName>
+        <mediumName>mseg</mediumName>
+    </mediumNameList>
+    <shortNameList>
+        <shortName>a</shortName>
+        <shortName>m</shortName>
+        <shortName>s</shortName>
+        <shortName>d</shortName>
+        <shortName>h</shortName>
+        <shortName>m</shortName>
+        <shortName>s</shortName>
+        <shortName>ms</shortName>
+    </shortNameList>
+    <halvesList>
+        <halves>medio </halves>
+        <halves> y medio</halves>
+        <halves>media </halves>
+        <halves> y media</halves>
+    </halvesList>
+    <halfPlacementList>
+        <halfPlacement>PREFIX</halfPlacement>
+        <halfPlacement>LAST</halfPlacement>
+    </halfPlacementList>
+    <requiresDigitSeparator>false</requiresDigitSeparator>
+    <countSep> </countSep>
+    <shortUnitSep> </shortUnitSep>
+    <unitSepList>
+        <unitSep>, </unitSep>
+        <unitSep> y </unitSep>
+        <unitSep>, </unitSep>
+        <unitSep> y </unitSep>
+    </unitSepList>
+    <numberSystem>DEFAULT</numberSystem>
+    <zero>0</zero>
+    <decimalSep>,</decimalSep>
+    <omitSingularCount>false</omitSingularCount>
+    <omitDualCount>false</omitDualCount>
+    <decimalHandling>DPLURAL</decimalHandling>
+    <fractionHandling>FSINGULAR_PLURAL_ANDAHALF</fractionHandling>
+    <allowZero>true</allowZero>
+    <weeksAloneOnly>false</weeksAloneOnly>
+    <useMilliseconds>YES</useMilliseconds>
+    <ScopeDataList>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>hace </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>dentro de </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>menos de </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>hace menos de </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>dentro de menos de </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>más de </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>hace más de </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>dentro más de </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+    </ScopeDataList>
+</DataRecord>
