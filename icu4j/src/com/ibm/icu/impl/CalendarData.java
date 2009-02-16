@@ -121,7 +121,7 @@ public class CalendarData {
     }
     public String[] getDateTimePatterns(){
         ICUResourceBundle bundle = get("DateTimePatterns");
-	ArrayList list = new ArrayList();
+        ArrayList list = new ArrayList();
         UResourceBundleIterator iter = bundle.getIterator();
         while (iter.hasNext()) {
             UResourceBundle patResource = iter.next();
@@ -142,7 +142,7 @@ public class CalendarData {
 
     public String[] getOverrides(){
         ICUResourceBundle bundle = get("DateTimePatterns");
-	ArrayList list = new ArrayList();
+        ArrayList list = new ArrayList();
         UResourceBundleIterator iter = bundle.getIterator();
         while (iter.hasNext()) {
             UResourceBundle patResource = iter.next();
