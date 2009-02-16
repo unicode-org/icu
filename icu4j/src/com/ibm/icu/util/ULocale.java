@@ -15,12 +15,19 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.Set;
 import java.util.TreeMap;
 
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.SimpleCache;
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.locale.AsciiUtil;
+import com.ibm.icu.impl.locale.BaseLocale;
+import com.ibm.icu.impl.locale.InternalLocaleBuilder;
+import com.ibm.icu.impl.locale.LanguageTag;
+import com.ibm.icu.impl.locale.LocaleExtension;
 
 /**
  * A class analogous to {@link java.util.Locale} that provides additional
@@ -3755,5 +3762,445 @@ public final class ULocale implements Serializable {
         }
     
         return null;
+    }
+
+    /** 
+     * Returns an instance of ULocale for the BCP47 language tag.
+     * When the given language tag does not satisfy the locale syntax
+     * requirement, this method stop parsing at the problematic subtag and
+     * create a locale instance with the valid substring.
+     * 
+     * @param languageTag BCP47 language tag 
+     * @return A locale for the given language tag.
+     * 
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */ 
+    public static ULocale forLanguageTag(String languageTag) {
+        //TODO temporary implementation
+        ULocale loc;
+        while (true) {
+            try {
+                loc = forLanguageTagStrict(languageTag);
+                break;
+            } catch (InvalidLocaleException e) {
+                // remove the last subtag and try it again
+                int idx = languageTag.lastIndexOf('-');
+                if (idx == -1) {
+                    // no more subtags
+                    loc = ULocale.ROOT;
+                    break;
+                }
+                languageTag = languageTag.substring(0, idx);
+            }
+        }
+        return loc;
+    }
+
+    /**
+     * Returns an instance of ULocale for the BCP47 language tag.
+     * When the given language tag does not satisfy the locale syntax
+     * requirement, this method throws InvalidLocaleException.
+     * 
+     * @param languageTag BCP47 language tag 
+     * @return A locale for the given language tag.
+     * @throws InvalidLocaleException if the language tag contains invalid subtags.
+     * 
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static ULocale forLanguageTagStrict(String languageTag) throws InvalidLocaleException {
+        //TODO temporary implementation
+        LanguageTag tag = LanguageTag.parse(languageTag);
+        String language = tag.getLanguage();
+        String script = tag.getScript();
+        String region = tag.getRegion();
+        String variant = tag.getVariant();
+        String privuse = tag.getPrivateUse();
+
+        boolean hasRegion = false;
+        StringBuffer buf = new StringBuffer();
+        if (language != null && language.length() > 0) {
+            if (!language.equals("und")) {
+                buf.append(language);
+            }
+        }
+        if (script != null && script.length() > 0) {
+            buf.append("_");
+            buf.append(script);
+        }
+        if (region != null && region.length() > 0) {
+            buf.append("_");
+            buf.append(region);
+            hasRegion = true;
+        }
+        if (variant != null && variant.length() > 0) {
+            if (hasRegion) {
+                buf.append("_");
+            }
+            buf.append("_");
+            buf.append(region);
+        }
+
+        if (privuse != null && privuse.length() > 0) {
+            privuse = AsciiUtil.toLowerString(privuse);
+            if (privuse.startsWith("ldml-")) {
+                String[] subtags = Utility.split(privuse, '-');
+                if ((subtags.length - 1)%3 != 0) {
+                    throw new InvalidLocaleException("Invalid ldml keyword sequence: " + privuse);
+                }
+                boolean insertSep = false;
+                buf.append("@");
+                int idx = 1;
+                while (idx < subtags.length) {
+                    String k = subtags[idx++];
+                    if (!k.equals("k")) {
+                        throw new InvalidLocaleException("Invalid ldml keyword sequence: " + privuse);
+                    }
+                    String key = subtags[idx++];
+                    String type = subtags[idx++];
+                    if (insertSep) {
+                        buf.append(";");
+                    } else {
+                        insertSep = true;
+                    }
+                    buf.append(key);
+                    buf.append("=");
+                    buf.append(type);
+                }
+            }
+        }
+        String locID = buf.toString();
+        return new ULocale(locID);
+    }
+
+    /** 
+     * Returns the BCP47 language tag string for this locale. 
+     * 
+     * @return BCP47 language tag string for the locale.
+     * 
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */ 
+    public String toLanguageTag() {
+        //TODO temporary implementation
+        String language = getLanguage();
+        String script = getScript();
+        String region = getCountry();
+        String variant = getVariant();
+
+        StringBuffer buf = new StringBuffer();
+        if (language.length() == 0) {
+            buf.append("und");
+        } else {
+            buf.append(language);
+        }
+        if (script.length() > 0) {
+            buf.append("-");
+            buf.append(script);
+        }
+        if (region.length() > 0) {
+            buf.append("-");
+            buf.append(region);
+        }
+        if (variant.length() > 0) {
+            buf.append("-");
+            buf.append(variant);
+        }
+
+        Iterator itr = getKeywords();
+        if (itr != null) {
+            boolean first = true;
+            while (itr.hasNext()) {
+                String key = (String)itr.next();
+                String type = getKeywordValue(key);
+                if (first) {
+                    buf.append("-x-ldml-k-");
+                    first = false;
+                } else {
+                    buf.append("-k-");
+                }
+                buf.append(key);
+                buf.append("-");
+                buf.append(type);
+            }
+        }
+
+        return buf.toString();
+    }
+
+    /**
+     * Returns an extension value for the specified extension key in this
+     * locale instance.
+     * 
+     * @param key
+     * @return The extension value for the specified extension key, or null
+     * if the extension is not available.
+     * 
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public String getExtensionValue(String key) {
+        //TODO not implemented
+        return null;
+    }
+
+    /**
+     * Returns an iterator over extension singleton letters.
+     * 
+     * @return An iterator over extension singleton letters, or null ff no
+     * extensions are set in this locale instance.
+     * 
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public Iterator getExtensionKeys() {
+        //TODO not implemented
+        return null;
+    }
+
+    /**
+     * Returns a private use string.
+     * 
+     * @return A private use string, or null if no private use value is available.
+     * 
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public String getPrivateUse() {
+        //TODO not implemented
+        return null;
+    }
+
+    /**
+     * This class provides APIs to build an instance of ULocale.
+     * 
+     * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static class LocaleBuilder {
+
+        private InternalLocaleBuilder _locbld = new InternalLocaleBuilder();
+
+        /**
+         * Constructs an empty LocaleBuilder.
+         * @draft ICU 4.2
+         * @provisional This API might change or be removed in a future release.
+         */
+        public LocaleBuilder() {
+        }
+
+        /**
+         * Sets the locale to this builder.
+         * 
+         * @param loc the locale
+         * @return this builder
+         * @throws InvalidLocaleException
+         * 
+         * @draft ICU 4.2
+         * @provisional This API might change or be removed in a future release.
+         */
+        public LocaleBuilder setLocale(ULocale loc) throws InvalidLocaleException {
+            setLanguage(loc.getLanguage()).setScript(loc.getScript())
+                .setRegion(loc.getCountry()).setVariant(loc.getVariant());
+
+            Iterator itr = loc.getKeywords();
+            if (itr != null) {
+                while (itr.hasNext()) {
+                    String key = (String)itr.next();
+                    setLocaleKeyword(key, loc.getKeywordValue(key));
+                }
+            }
+            return this;
+        }
+
+        /**
+         * Sets the language to this builder.  If the specified language is empty or null,
+         * this method clears the language value previously set.
+         * 
+         * @param language the language
+         * @return this builder
+         * 
+         * @throws InvalidLocaleException
+         * @draft ICU 4.2
+         * @provisional This API might change or be removed in a future release.
+         */
+        public LocaleBuilder setLanguage(String language) throws InvalidLocaleException {
+            String newval = _locbld.setLanguage(language);
+            if (newval == null) {
+                throw new InvalidLocaleException("Invalid language: " + language);
+            }
+            return this;
+        }
+
+        /**
+         * Sets the language to this builder.  If the specified script is empty or null,
+         * this method clears the script value previously set.
+         * 
+         * @param script the script
+         * @return this builder
+         * 
+         * @throws InvalidLocaleException
+         * @draft ICU 4.2
+         * @provisional This API might change or be removed in a future release.
+         */
+        public LocaleBuilder setScript(String script) throws InvalidLocaleException {
+            String newval = _locbld.setScript(script);
+            if (newval == null) {
+                throw new InvalidLocaleException("Invalid script: " + script);
+            }
+            return this;
+        }
+
+        /**
+         * Sets the region to this builder.  If the specified region is empty or null,
+         * this method clears the region value previously set.
+         * 
+         * @param region the region
+         * @return this builder
+         * @throws InvalidLocaleException
+         * 
+         * @draft ICU 4.2
+         * @provisional This API might change or be removed in a future release.
+         */
+        public LocaleBuilder setRegion(String region) throws InvalidLocaleException {
+            String newval = _locbld.setRegion(region);
+            if (newval == null) {
+                throw new InvalidLocaleException("Invalid region: " + region);
+            }
+            return this;
+        }
+
+        /**
+         * Sets the variant to this builder.  If the specified variant is empty or null,
+         * this method clears the variant value previously set.
+         * 
+         * @param variant the variant
+         * @return this builder
+         * @throws InvalidLocaleException
+         * 
+         * @draft ICU 4.2
+         * @provisional This API might change or be removed in a future release.
+         */
+        public LocaleBuilder setVariant(String variant) throws InvalidLocaleException {
+            String newval = _locbld.setVariant(variant);
+            if (newval == null) {
+                throw new InvalidLocaleException("Invalid variant: " + variant);
+            }
+            return this;
+        }
+
+        /**
+         * Sets the locale keyword to this builder.  If the specified type is empty or null,
+         * this method clears the type previously set for the key.
+         * 
+         * @param key the locale keyword key
+         * @param type the locake keyword type
+         * @return this builder
+         * @throws InvalidLocaleException
+         * 
+         * @draft ICU 4.2
+         * @provisional This API might change or be removed in a future release.
+         */
+        public LocaleBuilder setLocaleKeyword(String key, String type) throws InvalidLocaleException {
+            boolean set = _locbld.setLocaleKeyword(key, type);
+            if (!set) {
+                throw new InvalidLocaleException("Invalid locale keyword key/type pairs: key=" + key + "/type=" + type);
+            }
+            return this;
+        }
+
+        /**
+         * Sets the locale extension to this builder.  If the specified value is empty or null,
+         * this method clears the value previously set for the key.
+         * 
+         * @param key the extension character key
+         * @param value the extension value
+         * @return this builder
+         * @throws InvalidLocaleException
+         * 
+         * @draft ICU 4.2
+         * @provisional This API might change or be removed in a future release.
+         */
+        public LocaleBuilder setExtension(char key, String value) throws InvalidLocaleException {
+            boolean set = _locbld.setExtension(key, value);
+            if (!set) {
+                throw new InvalidLocaleException("Invalid extension key/value pairs: key=" + key + "/value=" + value);
+            }
+            return this;
+        }
+
+        /**
+         * Sets the private use value to this builder.  If the specified private use value
+         * is empty or null, this method clears the private use value previously set.
+         * 
+         * @param privuse the private use value
+         * @return this builder
+         * @throws InvalidLocaleException
+         * 
+         * @draft ICU 4.2
+         * @provisional This API might change or be removed in a future release.
+         */
+        public LocaleBuilder setPrivateUse(String privuse) throws InvalidLocaleException {
+            String newval = _locbld.setPrivateUse(privuse);
+            if (newval == null) {
+                throw new InvalidLocaleException("Invalid private use value: " + privuse);
+            }
+            return this;
+        }
+
+        /**
+         * Returns an instance of locale created from locale fields configured by
+         * the setters in this locale builder instance.
+         * 
+         * @return a locale
+         * 
+         * @draft ICU 4.2
+         * @provisional This API might change or be removed in a future release.
+         */
+        public ULocale get() {
+            //TODO Make ULocale to store locale identifier in BaseLocale and LocaleExtension
+            //Tentative implementation below -
+            BaseLocale base = _locbld.getBaseLocale();
+            LocaleExtension extension = _locbld.getLocaleExtension();
+
+            StringBuffer buf = new StringBuffer(base.getLanguage());
+            if (base.getScript().length() > 0) {
+                buf.append("_");
+                buf.append(base.getScript());
+            }
+            if (base.getRegion().length() > 0) {
+                buf.append("_");
+                buf.append(base.getRegion());
+            }
+            if (base.getVariant().length() > 0) {
+                if (base.getRegion().length() == 0) {
+                    buf.append("_");
+                }
+                buf.append("_");
+                buf.append(base.getVariant());
+            }
+
+            Set keys = extension.getLocaleKeywordKeys();
+            if (keys != null && keys.size() > 0) {
+                buf.append("@");
+                boolean insertSep = false;
+                Iterator itr = keys.iterator();
+                while (itr.hasNext()) {
+                    String key = (String)itr.next();
+                    String type = extension.getLocaleKeywordType(key);
+                    if (insertSep) {
+                        buf.append(";");
+                    } else {
+                        insertSep = true;
+                    }
+                    buf.append(key);
+                    buf.append("=");
+                    buf.append(type);
+                }
+            }
+            String locID = buf.toString();
+            return new ULocale(locID);
+        }
     }
 }
