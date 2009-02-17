@@ -3517,17 +3517,7 @@ public class DecimalFormat extends NumberFormat {
      * @provisional This API might change or be removed in a future release.
      */
     public MathContext getMathContextICU() {
-        try {
-            // don't allow multiple references
-            return mathContext == null ?
-                   null :
-                   new MathContext(mathContext.getDigits(),
-                                   mathContext.getForm(),
-                                   mathContext.getLostDigits(),
-                                   mathContext.getRoundingMode());
-        } catch (Exception foo) {
-            return null; // should never happen
-        }
+        return mathContext;
     }
 
 //#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14)
