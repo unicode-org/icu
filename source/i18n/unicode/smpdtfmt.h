@@ -238,6 +238,31 @@ public:
                      UErrorCode& status);
 
     /**
+     * Construct a SimpleDateFormat using the given pattern, numbering system override, and the default locale.
+     * The locale is used to obtain the symbols used in formatting (e.g., the
+     * names of the months), but not to provide the pattern.
+     * <P>
+     * A numbering system override is a string containing either the name of a known numbering system,
+     * or a set of field and numbering system pairs that specify which fields are to be formattied with
+     * the alternate numbering system.  For example, to specify that all numeric fields in the specified
+     * date or time pattern are to be rendered using Thai digits, simply specify the numbering system override
+     * as "thai".  To specify that just the year portion of the date be formatted using Hebrew numbering,
+     * use the override string "y=hebrew".  Numbering system overrides can be combined using a semi-colon
+     * character in the override string, such as "d=decimal;M=arabic;y=hebrew", etc.
+     *
+     * <P>
+     * [Note:] Not all locales support SimpleDateFormat; for full generality,
+     * use the factory methods in the DateFormat class.
+     * @param pattern    the pattern for the format.
+     * @param override   the override string.
+     * @param status     Output param set to success/failure code.
+     * @draft ICU 4.2
+     */
+    SimpleDateFormat(const UnicodeString& pattern,
+                     const UnicodeString& override,
+                     UErrorCode& status);
+
+    /**
      * Construct a SimpleDateFormat using the given pattern and locale.
      * The locale is used to obtain the symbols used in formatting (e.g., the
      * names of the months), but not to provide the pattern.
@@ -250,6 +275,32 @@ public:
      * @stable ICU 2.0
      */
     SimpleDateFormat(const UnicodeString& pattern,
+                     const Locale& locale,
+                     UErrorCode& status);
+
+    /**
+     * Construct a SimpleDateFormat using the given pattern, numbering system override, and locale.
+     * The locale is used to obtain the symbols used in formatting (e.g., the
+     * names of the months), but not to provide the pattern.
+     * <P>
+     * A numbering system override is a string containing either the name of a known numbering system,
+     * or a set of field and numbering system pairs that specify which fields are to be formattied with
+     * the alternate numbering system.  For example, to specify that all numeric fields in the specified
+     * date or time pattern are to be rendered using Thai digits, simply specify the numbering system override
+     * as "thai".  To specify that just the year portion of the date be formatted using Hebrew numbering,
+     * use the override string "y=hebrew".  Numbering system overrides can be combined using a semi-colon
+     * character in the override string, such as "d=decimal;M=arabic;y=hebrew", etc.
+     * <P>
+     * [Note:] Not all locales support SimpleDateFormat; for full generality,
+     * use the factory methods in the DateFormat class.
+     * @param pattern    the pattern for the format.
+     * @param override   the numbering system override.
+     * @param locale     the given locale.
+     * @param status     Output param set to success/failure code.
+     * @draft ICU 4.2
+     */
+    SimpleDateFormat(const UnicodeString& pattern,
+                     const UnicodeString& override,
                      const Locale& locale,
                      UErrorCode& status);
 
@@ -901,7 +952,7 @@ private:
     /**
      * Parse the given override string and set up structures for number formats
      */
-    void processOverrideString(const Locale &locale, UnicodeString &str, int8_t type, UErrorCode &status);
+    void processOverrideString(const Locale &locale, const UnicodeString &str, int8_t type, UErrorCode &status);
 
     /**
      * Used to map pattern characters to Calendar field identifiers.
