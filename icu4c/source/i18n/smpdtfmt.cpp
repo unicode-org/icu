@@ -217,6 +217,28 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
     initialize(fLocale, status);
     initializeDefaultCentury();
+
+}
+//----------------------------------------------------------------------
+
+SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
+                                   const UnicodeString& override,
+                                   UErrorCode &status)
+:   fPattern(pattern),
+    fLocale(Locale::getDefault()),
+    fSymbols(NULL),
+    fGMTFormatters(NULL),
+    fNumberFormatters(NULL),
+    fOverrideList(NULL)
+{
+    fDateOverride.setTo(override);
+    fTimeOverride.setToBogus();
+    initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
+    initialize(fLocale, status);
+    initializeDefaultCentury();
+
+    processOverrideString(fLocale,override,kOvrStrBoth,status);
+
 }
 
 //----------------------------------------------------------------------
@@ -237,6 +259,30 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
     initialize(fLocale, status);
     initializeDefaultCentury();
+}
+
+//----------------------------------------------------------------------
+
+SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
+                                   const UnicodeString& override,
+                                   const Locale& locale,
+                                   UErrorCode& status)
+:   fPattern(pattern),
+    fLocale(locale),
+    fGMTFormatters(NULL),
+    fNumberFormatters(NULL),
+    fOverrideList(NULL)
+{
+
+    fDateOverride.setTo(override);
+    fTimeOverride.setToBogus();
+
+    initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
+    initialize(fLocale, status);
+    initializeDefaultCentury();
+
+    processOverrideString(locale,override,kOvrStrBoth,status);
+
 }
 
 //----------------------------------------------------------------------
@@ -1235,8 +1281,7 @@ SimpleDateFormat::initNumberFormatters(const Locale &locale,UErrorCode &status) 
 }
 
 void
-SimpleDateFormat::processOverrideString(const Locale &locale, UnicodeString &str, int8_t type, UErrorCode &status) {
-
+SimpleDateFormat::processOverrideString(const Locale &locale, const UnicodeString &str, int8_t type, UErrorCode &status) {
     if (str.isBogus()) {
         return;
     }
