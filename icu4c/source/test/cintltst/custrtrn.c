@@ -32,6 +32,7 @@ void addUCharTransformTest(TestNode** root);
 
 static void Test_strToUTF32(void);
 static void Test_strFromUTF32(void);
+static void Test_strFromUTF32_surrogates(void);
 static void Test_UChar_UTF8_API(void);
 static void Test_FromUTF8(void);
 static void Test_FromUTF8Lenient(void);
@@ -44,6 +45,7 @@ addUCharTransformTest(TestNode** root)
 {
    addTest(root, &Test_strToUTF32, "custrtrn/Test_strToUTF32");
    addTest(root, &Test_strFromUTF32, "custrtrn/Test_strFromUTF32");
+   addTest(root, &Test_strFromUTF32_surrogates, "custrtrn/Test_strFromUTF32_surrogates");
    addTest(root, &Test_UChar_UTF8_API, "custrtrn/Test_UChar_UTF8_API");
    addTest(root, &Test_FromUTF8, "custrtrn/Test_FromUTF8");
    addTest(root, &Test_FromUTF8Lenient, "custrtrn/Test_FromUTF8Lenient");
@@ -259,6 +261,82 @@ static void Test_strFromUTF32(void){
     }
 }
 
+/* test surrogate code points */
+static void Test_strFromUTF32_surrogates() {
+    UErrorCode err = U_ZERO_ERROR;
+    UChar uTarget[400];
+    int32_t len32, uDestLen;
+    int i;
+
+    static const UChar32 surr32[] = { 0x41, 0xd900, 0x61, 0xdc00, -1, 0x110000, 0x5a, 0x50000, 0x7a, 0 };
+    static const UChar expected[] = { 0x5a, 0xd900, 0xdc00, 0x7a, 0 };
+    len32 = LENGTHOF(surr32);
+    for(i = 0; i < 6; ++i) {
+        err = U_ZERO_ERROR;
+        u_strFromUTF32(uTarget, 0, &uDestLen, surr32+i, len32-i, &err);
+        if(err != U_INVALID_CHAR_FOUND) {
+            log_err("u_strFromUTF32(preflight surr32+%ld) sets %s != U_INVALID_CHAR_FOUND\n",
+                    (long)i, u_errorName(err));
+            return;
+        }
+
+        err = U_ZERO_ERROR;
+        u_strFromUTF32(uTarget, LENGTHOF(uTarget), &uDestLen, surr32+i, len32-i, &err);
+        if(err != U_INVALID_CHAR_FOUND) {
+            log_err("u_strFromUTF32(surr32+%ld) sets %s != U_INVALID_CHAR_FOUND\n",
+                    (long)i, u_errorName(err));
+            return;
+        }
+
+        err = U_ZERO_ERROR;
+        u_strFromUTF32(NULL, 0, &uDestLen, surr32+i, -1, &err);
+        if(err != U_INVALID_CHAR_FOUND) {
+            log_err("u_strFromUTF32(preflight surr32+%ld/NUL) sets %s != U_INVALID_CHAR_FOUND\n",
+                    (long)i, u_errorName(err));
+            return;
+        }
+
+        err = U_ZERO_ERROR;
+        u_strFromUTF32(uTarget, LENGTHOF(uTarget), &uDestLen, surr32+i, -1, &err);
+        if(err != U_INVALID_CHAR_FOUND) {
+            log_err("u_strFromUTF32(surr32+%ld/NUL) sets %s != U_INVALID_CHAR_FOUND\n",
+                    (long)i, u_errorName(err));
+            return;
+        }
+    }
+
+    err = U_ZERO_ERROR;
+    u_strFromUTF32(uTarget, 0, &uDestLen, surr32+6, len32-6-1, &err);
+    if(err != U_BUFFER_OVERFLOW_ERROR || uDestLen != 4) {
+        log_err("u_strFromUTF32(preflight surr32+6) sets %s != U_BUFFER_OVERFLOW_ERROR or an unexpected length\n",
+                u_errorName(err));
+        return;
+    }
+
+    err = U_ZERO_ERROR;
+    u_strFromUTF32(uTarget, LENGTHOF(uTarget), &uDestLen, surr32+6, len32-6-1, &err);
+    if(err != U_ZERO_ERROR || uDestLen != 4 || u_memcmp(uTarget, expected, 5)) {
+        log_err("u_strFromUTF32(surr32+6) sets %s != U_ZERO_ERROR or does not produce the expected string\n",
+                u_errorName(err));
+        return;
+    }
+
+    err = U_ZERO_ERROR;
+    u_strFromUTF32(NULL, 0, &uDestLen, surr32+6, -1, &err);
+    if(err != U_BUFFER_OVERFLOW_ERROR || uDestLen != 4) {
+        log_err("u_strFromUTF32(preflight surr32+6/NUL) sets %s != U_BUFFER_OVERFLOW_ERROR or an unexpected length\n",
+                u_errorName(err));
+        return;
+    }
+
+    err = U_ZERO_ERROR;
+    u_strFromUTF32(uTarget, LENGTHOF(uTarget), &uDestLen, surr32+6, -1, &err);
+    if(err != U_ZERO_ERROR || uDestLen != 4 || u_memcmp(uTarget, expected, 5)) {
+        log_err("u_strFromUTF32(surr32+6/NUL) sets %s != U_ZERO_ERROR or does not produce the expected string\n",
+                u_errorName(err));
+        return;
+    }
+}
 
 static void Test_UChar_UTF8_API(void){
 
