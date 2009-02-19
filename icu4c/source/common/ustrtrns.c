@@ -31,38 +31,50 @@
 #include "ustr_imp.h"
 
 U_CAPI UChar* U_EXPORT2 
-u_strFromUTF32(UChar *dest,
-               int32_t destCapacity, 
+u_strFromUTF32WithSub(UChar *dest,
+               int32_t destCapacity,
                int32_t *pDestLength,
                const UChar32 *src,
                int32_t srcLength,
+               UChar32 subchar, int32_t *pNumSubstitutions,
                UErrorCode *pErrorCode) {
     const UChar32 *srcLimit;
     UChar32 ch;
     UChar *destLimit;
     UChar *pDest;
     int32_t reqLength;
+    int32_t numSubstitutions;
 
     /* args check */
     if(U_FAILURE(*pErrorCode)){
         return NULL;
     }
-    if((src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)) {
+    if( (src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0) ||
+        subchar > 0x10ffff || U_IS_SURROGATE(subchar)
+    ) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
+    }
+
+    if(pNumSubstitutions != NULL) {
+        *pNumSubstitutions = 0;
     }
 
     pDest = dest;
     destLimit = dest + destCapacity;
     reqLength = 0;
+    numSubstitutions = 0;
 
     if(srcLength < 0) {
         /* simple loop for conversion of a NUL-terminated BMP string */
         while((ch=*src) != 0 &&
-              ((uint32_t)ch < 0xd800 || (0xe000 <= ch && ch <= 0xffff)) &&
-              pDest < destLimit) {
+              ((uint32_t)ch < 0xd800 || (0xe000 <= ch && ch <= 0xffff))) {
             ++src;
-            *pDest++ = (UChar)ch;
+            if(pDest < destLimit) {
+                *pDest++ = (UChar)ch;
+            } else {
+                ++reqLength;
+            }
         }
         srcLimit = src;
         if(ch != 0) {
@@ -74,42 +86,41 @@ u_strFromUTF32(UChar *dest,
     }
 
     /* convert with length */
-    while(src < srcLimit && pDest < destLimit) {
-        ch = *src++;
-        if((uint32_t)ch < 0xd800 || (0xe000 <= ch && ch <= 0xffff)) {
-            *pDest++ = (UChar)ch;
-        } else if(0x10000 <= ch && ch <= 0x10ffff) {
-            *pDest++ = U16_LEAD(ch);
-            if(pDest < destLimit) {
-                *pDest++ = U16_TRAIL(ch);
-            } else {
-                reqLength = 1;
-                break;
-            }
-        } else {
-            /* surrogate code point, or not a Unicode code point at all */
-            *pErrorCode = U_INVALID_CHAR_FOUND;
-            return NULL;
-        }
-    }
-
-    /* preflight the remaining string */
     while(src < srcLimit) {
         ch = *src++;
-        if((uint32_t)ch < 0xd800 || (0xe000 <= ch && ch <= 0xffff)) {
-            ++reqLength;
-        } else if(0x10000 <= ch && ch <= 0x10ffff) {
-            reqLength += 2;
-        } else {
-            /* surrogate code point, or not a Unicode code point at all */
-            *pErrorCode = U_INVALID_CHAR_FOUND;
-            return NULL;
-        }
+        do {
+            /* usually "loops" once; twice only for writing subchar */
+            if((uint32_t)ch < 0xd800 || (0xe000 <= ch && ch <= 0xffff)) {
+                if(pDest < destLimit) {
+                    *pDest++ = (UChar)ch;
+                } else {
+                    ++reqLength;
+                }
+                break;
+            } else if(0x10000 <= ch && ch <= 0x10ffff) {
+                if((pDest + 2) <= destLimit) {
+                    *pDest++ = U16_LEAD(ch);
+                    *pDest++ = U16_TRAIL(ch);
+                } else {
+                    reqLength += 2;
+                }
+                break;
+            } else if((ch = subchar) < 0) {
+                /* surrogate code point, or not a Unicode code point at all */
+                *pErrorCode = U_INVALID_CHAR_FOUND;
+                return NULL;
+            } else {
+                ++numSubstitutions;
+            }
+        } while(TRUE);
     }
 
     reqLength += (int32_t)(pDest - dest);
     if(pDestLength) {
         *pDestLength = reqLength;
+    }
+    if(pNumSubstitutions != NULL) {
+        *pNumSubstitutions = numSubstitutions;
     }
 
     /* Terminate the buffer */
@@ -118,13 +129,27 @@ u_strFromUTF32(UChar *dest,
     return dest;
 }
 
+U_CAPI UChar* U_EXPORT2 
+u_strFromUTF32(UChar *dest,
+               int32_t destCapacity, 
+               int32_t *pDestLength,
+               const UChar32 *src,
+               int32_t srcLength,
+               UErrorCode *pErrorCode) {
+    return u_strFromUTF32WithSub(
+            dest, destCapacity, pDestLength,
+            src, srcLength,
+            U_SENTINEL, NULL,
+            pErrorCode);
+}
 
 U_CAPI UChar32* U_EXPORT2 
-u_strToUTF32(UChar32 *dest, 
+u_strToUTF32WithSub(UChar32 *dest,
              int32_t destCapacity,
              int32_t *pDestLength,
-             const UChar *src, 
+             const UChar *src,
              int32_t srcLength,
+             UChar32 subchar, int32_t *pNumSubstitutions,
              UErrorCode *pErrorCode) {
     const UChar *srcLimit;
     UChar32 ch;
@@ -132,25 +157,37 @@ u_strToUTF32(UChar32 *dest,
     UChar32 *destLimit;
     UChar32 *pDest;
     int32_t reqLength;
+    int32_t numSubstitutions;
 
     /* args check */
     if(U_FAILURE(*pErrorCode)){
         return NULL;
     }
-    if((src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)) {
+    if( (src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0) ||
+        subchar > 0x10ffff || U_IS_SURROGATE(subchar)
+    ) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
+    }
+
+    if(pNumSubstitutions != NULL) {
+        *pNumSubstitutions = 0;
     }
 
     pDest = dest;
     destLimit = dest + destCapacity;
     reqLength = 0;
+    numSubstitutions = 0;
 
     if(srcLength < 0) {
         /* simple loop for conversion of a NUL-terminated BMP string */
-        while((ch=*src) != 0 && !U16_IS_SURROGATE(ch) && pDest < destLimit) {
+        while((ch=*src) != 0 && !U16_IS_SURROGATE(ch)) {
             ++src;
-            *pDest++ = ch;
+            if(pDest < destLimit) {
+                *pDest++ = ch;
+            } else {
+                ++reqLength;
+            }
         }
         srcLimit = src;
         if(ch != 0) {
@@ -162,45 +199,53 @@ u_strToUTF32(UChar32 *dest,
     }
 
     /* convert with length */
-    while(src < srcLimit && pDest < destLimit) {
-        ch = *src++;
-        if(!U16_IS_SURROGATE(ch)) {
-            /* write ch below */
-        } else if(U16_IS_SURROGATE_LEAD(ch) && src < srcLimit && U16_IS_TRAIL(ch2 = *src)) {
-            ++src;
-            ch = U16_GET_SUPPLEMENTARY(ch, ch2);
-        } else {
-            /* unpaired surrogate */
-            *pErrorCode = U_INVALID_CHAR_FOUND;
-            return NULL;
-        }
-        *pDest++ = ch;
-    }
-
-    /* preflight the remaining string */
     while(src < srcLimit) {
         ch = *src++;
         if(!U16_IS_SURROGATE(ch)) {
-            /* ++reqLength below */
-        } else if(U16_IS_SURROGATE_LEAD(ch) && src < srcLimit && U16_IS_TRAIL(*src)) {
+            /* write or count ch below */
+        } else if(U16_IS_SURROGATE_LEAD(ch) && src < srcLimit && U16_IS_TRAIL(ch2 = *src)) {
             ++src;
-        } else {
+            ch = U16_GET_SUPPLEMENTARY(ch, ch2);
+        } else if((ch = subchar) < 0) {
             /* unpaired surrogate */
             *pErrorCode = U_INVALID_CHAR_FOUND;
             return NULL;
+        } else {
+            ++numSubstitutions;
         }
-        ++reqLength;
+        if(pDest < destLimit) {
+            *pDest++ = ch;
+        } else {
+            ++reqLength;
+        }
     }
 
     reqLength += (int32_t)(pDest - dest);
     if(pDestLength) {
         *pDestLength = reqLength;
     }
+    if(pNumSubstitutions != NULL) {
+        *pNumSubstitutions = numSubstitutions;
+    }
 
     /* Terminate the buffer */
     u_terminateUChar32s(dest, destCapacity, reqLength, pErrorCode);
-    
+
     return dest;
+}
+
+U_CAPI UChar32* U_EXPORT2 
+u_strToUTF32(UChar32 *dest, 
+             int32_t destCapacity,
+             int32_t *pDestLength,
+             const UChar *src, 
+             int32_t srcLength,
+             UErrorCode *pErrorCode) {
+    return u_strToUTF32WithSub(
+            dest, destCapacity, pDestLength,
+            src, srcLength,
+            U_SENTINEL, NULL,
+            pErrorCode);
 }
 
 /* for utf8_nextCharSafeBodyTerminated() */
@@ -372,6 +417,9 @@ u_strFromUTF8WithSub(UChar *dest,
         return NULL;
     }
 
+    if(pNumSubstitutions!=NULL) {
+        *pNumSubstitutions=0;
+    }
     numSubstitutions=0;
 
     /*
@@ -948,6 +996,9 @@ u_strToUTF8WithSub(char *dest,
         return NULL;
     }
 
+    if(pNumSubstitutions!=NULL) {
+        *pNumSubstitutions=0;
+    }
     numSubstitutions=0;
 
     if(srcLength==-1) {
