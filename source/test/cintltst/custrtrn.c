@@ -31,6 +31,7 @@
 void addUCharTransformTest(TestNode** root);
 
 static void Test_strToUTF32(void);
+static void Test_strToUTF32_surrogates(void);
 static void Test_strFromUTF32(void);
 static void Test_strFromUTF32_surrogates(void);
 static void Test_UChar_UTF8_API(void);
@@ -44,6 +45,7 @@ void
 addUCharTransformTest(TestNode** root)
 {
    addTest(root, &Test_strToUTF32, "custrtrn/Test_strToUTF32");
+   addTest(root, &Test_strToUTF32_surrogates, "custrtrn/Test_strToUTF32_surrogates");
    addTest(root, &Test_strFromUTF32, "custrtrn/Test_strFromUTF32");
    addTest(root, &Test_strFromUTF32_surrogates, "custrtrn/Test_strFromUTF32_surrogates");
    addTest(root, &Test_UChar_UTF8_API, "custrtrn/Test_UChar_UTF8_API");
@@ -192,6 +194,83 @@ static void Test_strToUTF32(void){
         if(u32Target[i] != src32[i]){
             log_verbose("u_strToUTF32(NUL-termination) failed expected: %04X got: %04X \n", src32[i], u32Target[i]);
         }
+    }
+}
+
+/* test unpaired surrogates */
+static void Test_strToUTF32_surrogates() {
+    UErrorCode err = U_ZERO_ERROR;
+    UChar32 u32Target[400];
+    int32_t len16, u32DestLen;
+    int i;
+
+    static const UChar surr16[] = { 0x41, 0xd900, 0x61, 0xdc00, 0x5a, 0xd900, 0xdc00, 0x7a, 0 };
+    static const UChar32 expected[] = { 0x5a, 0x50000, 0x7a, 0 };
+    len16 = LENGTHOF(surr16);
+    for(i = 0; i < 4; ++i) {
+        err = U_ZERO_ERROR;
+        u_strToUTF32(u32Target, 0, &u32DestLen, surr16+i, len16-i, &err);
+        if(err != U_INVALID_CHAR_FOUND) {
+            log_err("u_strToUTF32(preflight surr16+%ld) sets %s != U_INVALID_CHAR_FOUND\n",
+                    (long)i, u_errorName(err));
+            return;
+        }
+
+        err = U_ZERO_ERROR;
+        u_strToUTF32(u32Target, LENGTHOF(u32Target), &u32DestLen, surr16+i, len16-i, &err);
+        if(err != U_INVALID_CHAR_FOUND) {
+            log_err("u_strToUTF32(surr16+%ld) sets %s != U_INVALID_CHAR_FOUND\n",
+                    (long)i, u_errorName(err));
+            return;
+        }
+
+        err = U_ZERO_ERROR;
+        u_strToUTF32(NULL, 0, &u32DestLen, surr16+i, -1, &err);
+        if(err != U_INVALID_CHAR_FOUND) {
+            log_err("u_strToUTF32(preflight surr16+%ld/NUL) sets %s != U_INVALID_CHAR_FOUND\n",
+                    (long)i, u_errorName(err));
+            return;
+        }
+
+        err = U_ZERO_ERROR;
+        u_strToUTF32(u32Target, LENGTHOF(u32Target), &u32DestLen, surr16+i, -1, &err);
+        if(err != U_INVALID_CHAR_FOUND) {
+            log_err("u_strToUTF32(surr16+%ld/NUL) sets %s != U_INVALID_CHAR_FOUND\n",
+                    (long)i, u_errorName(err));
+            return;
+        }
+    }
+
+    err = U_ZERO_ERROR;
+    u_strToUTF32(u32Target, 0, &u32DestLen, surr16+4, len16-4-1, &err);
+    if(err != U_BUFFER_OVERFLOW_ERROR || u32DestLen != 3) {
+        log_err("u_strToUTF32(preflight surr16+4) sets %s != U_BUFFER_OVERFLOW_ERROR or an unexpected length\n",
+                u_errorName(err));
+        return;
+    }
+
+    err = U_ZERO_ERROR;
+    u_strToUTF32(u32Target, LENGTHOF(u32Target), &u32DestLen, surr16+4, len16-4-1, &err);
+    if(err != U_ZERO_ERROR || u32DestLen != 3 || uprv_memcmp(u32Target, expected, 4*4)) {
+        log_err("u_strToUTF32(surr16+4) sets %s != U_ZERO_ERROR or does not produce the expected string\n",
+                u_errorName(err));
+        return;
+    }
+
+    err = U_ZERO_ERROR;
+    u_strToUTF32(NULL, 0, &u32DestLen, surr16+4, -1, &err);
+    if(err != U_BUFFER_OVERFLOW_ERROR || u32DestLen != 3) {
+        log_err("u_strToUTF32(preflight surr16+4/NUL) sets %s != U_BUFFER_OVERFLOW_ERROR or an unexpected length\n",
+                u_errorName(err));
+        return;
+    }
+
+    err = U_ZERO_ERROR;
+    u_strToUTF32(u32Target, LENGTHOF(u32Target), &u32DestLen, surr16+4, -1, &err);
+    if(err != U_ZERO_ERROR || u32DestLen != 3 || uprv_memcmp(u32Target, expected, 4*4)) {
+        log_err("u_strToUTF32(surr16+4/NUL) sets %s != U_ZERO_ERROR or does not produce the expected string\n",
+                u_errorName(err));
+        return;
     }
 }
 
