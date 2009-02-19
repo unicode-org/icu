@@ -775,11 +775,11 @@ bail:
         return;
     }
 
-     UChar   hanRanges[] = {UCOL_FIRST_HAN, UCOL_LAST_HAN, UCOL_FIRST_HAN_COMPAT, UCOL_LAST_HAN_COMPAT, UCOL_FIRST_HAN_A, UCOL_LAST_HAN_A,
-                            UCOL_FIRST_HAN_B_LEAD, UCOL_FIRST_HAN_B_TRAIL, UCOL_LAST_HAN_B_LEAD, UCOL_LAST_HAN_B_TRAIL};
+     UChar32 hanRanges[] = {UCOL_FIRST_HAN, UCOL_LAST_HAN, UCOL_FIRST_HAN_COMPAT, UCOL_LAST_HAN_COMPAT, UCOL_FIRST_HAN_A, UCOL_LAST_HAN_A,
+                            UCOL_FIRST_HAN_B, UCOL_LAST_HAN_B};
      UChar  jamoRanges[] = {UCOL_FIRST_L_JAMO, UCOL_FIRST_V_JAMO, UCOL_FIRST_T_JAMO, UCOL_LAST_T_JAMO};
-     UnicodeString hanString(hanRanges, ARRAY_SIZE(hanRanges));
-     UnicodeString jamoString(jamoRanges, ARRAY_SIZE(jamoRanges));
+     UnicodeString hanString = UnicodeString::fromUTF32(hanRanges, ARRAY_SIZE(hanRanges));
+     UnicodeString jamoString(FALSE, jamoRanges, ARRAY_SIZE(jamoRanges));
      CEList hanList(coll, hanString, status);
      CEList jamoList(coll, jamoString, status);
      int32_t j = 0;
