@@ -401,10 +401,8 @@ uprv_init_pce(const struct UCollationElements *elems);
 #define UCOL_LAST_HAN_COMPAT  0xFA2F
 
 /* Han extension B is in plane 2 */
-#define UCOL_FIRST_HAN_B_LEAD  0xD840
-#define UCOL_FIRST_HAN_B_TRAIL 0xDC00
-#define UCOL_LAST_HAN_B_LEAD   0xD869
-#define UCOL_LAST_HAN_B_TRAIL  0xDEDF
+#define UCOL_FIRST_HAN_B       0x20000
+#define UCOL_LAST_HAN_B        0x2A6DF
 
 /* Hangul range */
 #define UCOL_FIRST_HANGUL 0xAC00
