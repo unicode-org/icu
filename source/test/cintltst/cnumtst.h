@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -27,6 +27,11 @@
  * The function used to test the Number format API
  **/
 static void TestNumberFormat(void);
+
+/**
+ * The function used to test parsing of numbers in UNUM_SPELLOUT style
+ **/
+static void TestSpelloutNumberParse(void);
 
 /**
  * The function used to test significant digits in the Number format API
