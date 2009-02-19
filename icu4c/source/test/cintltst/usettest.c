@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2008, International Business Machines
+* Copyright (c) 2002-2009, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -84,6 +84,14 @@ static void TestAPI() {
     UErrorCode ec;
     
     /* [] */
+    set = uset_openEmpty();
+    expect(set, "", "abc{ab}", NULL);
+    uset_close(set);
+
+    set = uset_open(1, 0);
+    expect(set, "", "abc{ab}", NULL);
+    uset_close(set);
+
     set = uset_open(1, 1);
     uset_clear(set);
     expect(set, "", "abc{ab}", NULL);
