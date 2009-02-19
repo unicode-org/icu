@@ -202,10 +202,13 @@ static void Test_strToUTF32_surrogates() {
     UErrorCode err = U_ZERO_ERROR;
     UChar32 u32Target[400];
     int32_t len16, u32DestLen;
+    int32_t numSubstitutions;
     int i;
 
     static const UChar surr16[] = { 0x41, 0xd900, 0x61, 0xdc00, 0x5a, 0xd900, 0xdc00, 0x7a, 0 };
     static const UChar32 expected[] = { 0x5a, 0x50000, 0x7a, 0 };
+    static const UChar32 expected_FFFD[] = { 0x41, 0xfffd, 0x61, 0xfffd, 0x5a, 0x50000, 0x7a, 0 };
+    static const UChar32 expected_12345[] = { 0x41, 0x12345, 0x61, 0x12345, 0x5a, 0x50000, 0x7a, 0 };
     len16 = LENGTHOF(surr16);
     for(i = 0; i < 4; ++i) {
         err = U_ZERO_ERROR;
@@ -269,6 +272,40 @@ static void Test_strToUTF32_surrogates() {
     u_strToUTF32(u32Target, LENGTHOF(u32Target), &u32DestLen, surr16+4, -1, &err);
     if(err != U_ZERO_ERROR || u32DestLen != 3 || uprv_memcmp(u32Target, expected, 4*4)) {
         log_err("u_strToUTF32(surr16+4/NUL) sets %s != U_ZERO_ERROR or does not produce the expected string\n",
+                u_errorName(err));
+        return;
+    }
+
+    /* with substitution character */
+    numSubstitutions = -1;
+    err = U_ZERO_ERROR;
+    u_strToUTF32WithSub(u32Target, 0, &u32DestLen, surr16, len16-1, 0xfffd, &numSubstitutions, &err);
+    if(err != U_BUFFER_OVERFLOW_ERROR || u32DestLen != 7 || numSubstitutions != 2) {
+        log_err("u_strToUTF32WithSub(preflight surr16) sets %s != U_BUFFER_OVERFLOW_ERROR or an unexpected length\n",
+                u_errorName(err));
+        return;
+    }
+
+    err = U_ZERO_ERROR;
+    u_strToUTF32WithSub(u32Target, LENGTHOF(u32Target), &u32DestLen, surr16, len16-1, 0xfffd, &numSubstitutions, &err);
+    if(err != U_ZERO_ERROR || u32DestLen != 7 || numSubstitutions != 2 || uprv_memcmp(u32Target, expected_FFFD, 8*4)) {
+        log_err("u_strToUTF32WithSub(surr16) sets %s != U_ZERO_ERROR or does not produce the expected string\n",
+                u_errorName(err));
+        return;
+    }
+
+    err = U_ZERO_ERROR;
+    u_strToUTF32WithSub(NULL, 0, &u32DestLen, surr16, -1, 0x12345, &numSubstitutions, &err);
+    if(err != U_BUFFER_OVERFLOW_ERROR || u32DestLen != 7 || numSubstitutions != 2) {
+        log_err("u_strToUTF32WithSub(preflight surr16/NUL) sets %s != U_BUFFER_OVERFLOW_ERROR or an unexpected length\n",
+                u_errorName(err));
+        return;
+    }
+
+    err = U_ZERO_ERROR;
+    u_strToUTF32WithSub(u32Target, LENGTHOF(u32Target), &u32DestLen, surr16, -1, 0x12345, &numSubstitutions, &err);
+    if(err != U_ZERO_ERROR || u32DestLen != 7 || numSubstitutions != 2 || uprv_memcmp(u32Target, expected_12345, 8*4)) {
+        log_err("u_strToUTF32WithSub(surr16/NUL) sets %s != U_ZERO_ERROR or does not produce the expected string\n",
                 u_errorName(err));
         return;
     }
@@ -345,10 +382,14 @@ static void Test_strFromUTF32_surrogates() {
     UErrorCode err = U_ZERO_ERROR;
     UChar uTarget[400];
     int32_t len32, uDestLen;
+    int32_t numSubstitutions;
     int i;
 
     static const UChar32 surr32[] = { 0x41, 0xd900, 0x61, 0xdc00, -1, 0x110000, 0x5a, 0x50000, 0x7a, 0 };
     static const UChar expected[] = { 0x5a, 0xd900, 0xdc00, 0x7a, 0 };
+    static const UChar expected_FFFD[] = { 0x41, 0xfffd, 0x61, 0xfffd, 0xfffd, 0xfffd, 0x5a, 0xd900, 0xdc00, 0x7a, 0 };
+    static const UChar expected_12345[] = { 0x41, 0xd808, 0xdf45, 0x61, 0xd808, 0xdf45, 0xd808, 0xdf45, 0xd808, 0xdf45,
+                                            0x5a, 0xd900, 0xdc00, 0x7a, 0 };
     len32 = LENGTHOF(surr32);
     for(i = 0; i < 6; ++i) {
         err = U_ZERO_ERROR;
@@ -412,6 +453,40 @@ static void Test_strFromUTF32_surrogates() {
     u_strFromUTF32(uTarget, LENGTHOF(uTarget), &uDestLen, surr32+6, -1, &err);
     if(err != U_ZERO_ERROR || uDestLen != 4 || u_memcmp(uTarget, expected, 5)) {
         log_err("u_strFromUTF32(surr32+6/NUL) sets %s != U_ZERO_ERROR or does not produce the expected string\n",
+                u_errorName(err));
+        return;
+    }
+
+    /* with substitution character */
+    numSubstitutions = -1;
+    err = U_ZERO_ERROR;
+    u_strFromUTF32WithSub(uTarget, 0, &uDestLen, surr32, len32-1, 0xfffd, &numSubstitutions, &err);
+    if(err != U_BUFFER_OVERFLOW_ERROR || uDestLen != 10 || numSubstitutions != 4) {
+        log_err("u_strFromUTF32WithSub(preflight surr32) sets %s != U_BUFFER_OVERFLOW_ERROR or an unexpected length\n",
+                u_errorName(err));
+        return;
+    }
+
+    err = U_ZERO_ERROR;
+    u_strFromUTF32WithSub(uTarget, LENGTHOF(uTarget), &uDestLen, surr32, len32-1, 0xfffd, &numSubstitutions, &err);
+    if(err != U_ZERO_ERROR || uDestLen != 10 || numSubstitutions != 4 || u_memcmp(uTarget, expected_FFFD, 11)) {
+        log_err("u_strFromUTF32WithSub(surr32) sets %s != U_ZERO_ERROR or does not produce the expected string\n",
+                u_errorName(err));
+        return;
+    }
+
+    err = U_ZERO_ERROR;
+    u_strFromUTF32WithSub(NULL, 0, &uDestLen, surr32, -1, 0x12345, &numSubstitutions, &err);
+    if(err != U_BUFFER_OVERFLOW_ERROR || uDestLen != 14 || numSubstitutions != 4) {
+        log_err("u_strFromUTF32WithSub(preflight surr32/NUL) sets %s != U_BUFFER_OVERFLOW_ERROR or an unexpected length\n",
+                u_errorName(err));
+        return;
+    }
+
+    err = U_ZERO_ERROR;
+    u_strFromUTF32WithSub(uTarget, LENGTHOF(uTarget), &uDestLen, surr32, -1, 0x12345, &numSubstitutions, &err);
+    if(err != U_ZERO_ERROR || uDestLen != 14 || numSubstitutions != 4 || u_memcmp(uTarget, expected_12345, 15)) {
+        log_err("u_strFromUTF32WithSub(surr32/NUL) sets %s != U_ZERO_ERROR or does not produce the expected string\n",
                 u_errorName(err));
         return;
     }
