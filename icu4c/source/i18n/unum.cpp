@@ -317,13 +317,13 @@ parseRes(Formattable& res,
         ((const NumberFormat*)fmt)->parse(src, res, pp);
     }
     
-    if(parsePos != 0) {
-        if(pp.getErrorIndex() == -1)
-            *parsePos = pp.getIndex();
-        else {
+    if(pp.getErrorIndex() != -1) {
+        *status = U_PARSE_ERROR;
+        if(parsePos != 0) {
             *parsePos = pp.getErrorIndex();
-            *status = U_PARSE_ERROR;
         }
+    } else if(parsePos != 0) {
+        *parsePos = pp.getIndex();
     }
 }
 

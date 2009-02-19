@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -42,6 +42,7 @@ static void TestNBSPInPattern(void);
 void addNumForTest(TestNode** root)
 {
     TESTCASE(TestNumberFormat);
+    TESTCASE(TestSpelloutNumberParse);
     TESTCASE(TestSignificantDigits);
     TESTCASE(TestNumberFormatPadding);
     TESTCASE(TestInt64Format);
@@ -761,6 +762,65 @@ free(result);
     unum_close(cur_frpattern);
     unum_close(myclone);
 
+}
+
+typedef struct {
+    const char *  testname;
+    const char *  locale;
+    const UChar * source;
+    int32_t       startPos;
+    int32_t       value;
+    int32_t       endPos;
+    UErrorCode    status;
+} SpelloutParseTest;
+
+static const UChar ustr_en0[]   = {0x7A, 0x65, 0x72, 0x6F, 0}; /* zero */
+static const UChar ustr_123[]   = {0x31, 0x32, 0x33, 0};       /* 123 */
+static const UChar ustr_en123[] = {0x6f, 0x6e, 0x65, 0x20, 0x68, 0x75, 0x6e, 0x64, 0x72, 0x65, 0x64,
+                                   0x20, 0x61, 0x6e, 0x64, 0x20, 0x74, 0x77, 0x65, 0x6e, 0x74, 0x79,
+                                   0x2d, 0x74, 0x68, 0x72, 0x65, 0x65, 0}; /* one hundred and twenty-three */
+static const UChar ustr_fr123[] = {0x63, 0x65, 0x6e, 0x74, 0x20, 0x76, 0x69, 0x6e, 0x67, 0x74, 0x2d,
+                                   0x74, 0x72, 0x6f, 0x69, 0x73, 0};       /* cent vingt-trois */
+static const UChar ustr_ja123[] = {0x767e, 0x4e8c, 0x5341, 0x4e09, 0};     /* kanji 100(+)2(*)10(+)3 */
+
+static const SpelloutParseTest spelloutParseTests[] = {
+    /* name    loc   src       start val  end status */
+    { "en0",   "en", ustr_en0,    0,   0,  4, U_ZERO_ERROR },
+    { "en0",   "en", ustr_en0,    2,   0,  2, U_PARSE_ERROR },
+    { "en0",   "ja", ustr_en0,    0,   0,  0, U_PARSE_ERROR },
+    { "123",   "en", ustr_123,    0,   0,  0, U_PARSE_ERROR },
+    { "en123", "en", ustr_en123,  0, 123, 28, U_ZERO_ERROR },
+    { "en123", "en", ustr_en123, 16,  23, 28, U_ZERO_ERROR },
+    { "en123", "fr", ustr_en123, 16,   0, 16, U_PARSE_ERROR },
+    { "fr123", "fr", ustr_fr123,  0, 123, 16, U_ZERO_ERROR },
+    { "fr123", "fr", ustr_fr123,  5,  23, 16, U_ZERO_ERROR },
+    { "fr123", "en", ustr_fr123,  0,   0,  0, U_PARSE_ERROR },
+    { "ja123", "ja", ustr_ja123,  0, 123,  4, U_ZERO_ERROR },
+    { "ja123", "ja", ustr_ja123,  1,  23,  4, U_ZERO_ERROR },
+    { "ja123", "fr", ustr_ja123,  0,   0,  0, U_PARSE_ERROR },
+    { NULL,    NULL, NULL,        0,   0,  0, 0 } /* terminator */
+};
+
+static void TestSpelloutNumberParse()
+{
+    const SpelloutParseTest * testPtr;
+    for (testPtr = spelloutParseTests; testPtr->testname != NULL; ++testPtr) {
+        UErrorCode status = U_ZERO_ERROR;
+        int32_t	value, position = testPtr->startPos;
+        UNumberFormat *nf = unum_open(UNUM_SPELLOUT, NULL, 0, testPtr->locale, NULL, &status);
+        if (U_FAILURE(status)) {
+            log_err("unum_open fails for UNUM_SPELLOUT with locale %s, status %s\n", testPtr->locale, myErrorName(status));
+            continue;
+        }
+        value = unum_parse(nf, testPtr->source, -1, &position, &status);
+        if ( value != testPtr->value || position != testPtr->endPos || status != testPtr->status ) {
+            log_err("unum_parse SPELLOUT, locale %s, testname %s, startPos %d: for value / endPos / status, expected %d / %d / %s, got %d / %d / %s\n",
+                    testPtr->locale, testPtr->testname, testPtr->startPos,
+                    testPtr->value, testPtr->endPos, myErrorName(testPtr->status),
+                    value, position, myErrorName(status) );
+        }
+        unum_close(nf);
+    }
 }
 
 static void TestSignificantDigits()

@@ -1152,9 +1152,13 @@ RuleBasedNumberFormat::parse(const UnicodeString& text,
         }
     }
 
-    parsePosition.setIndex(parsePosition.getIndex() + high_pp.getIndex());
+    int32_t startIndex = parsePosition.getIndex();
+    parsePosition.setIndex(startIndex + high_pp.getIndex());
     if (high_pp.getIndex() > 0) {
         parsePosition.setErrorIndex(-1);
+    } else {
+        int32_t errorIndex = (high_pp.getErrorIndex()>0)? high_pp.getErrorIndex(): 0;
+        parsePosition.setErrorIndex(startIndex + errorIndex);
     }
     result = high_result;
     if (result.getType() == Formattable::kDouble) {
