@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-2008, International Business Machines
+*   Copyright (C) 1998-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -1183,7 +1183,10 @@ u_strFoldCase(UChar *dest, int32_t destCapacity,
 
 #if defined(U_WCHAR_IS_UTF16) || defined(U_WCHAR_IS_UTF32) || !UCONFIG_NO_CONVERSION
 /**
- * Converts a sequence of UChars to wchar_t units.
+ * Convert a UTF-16 string to a wchar_t string.
+ * If it is known at compile time that wchar_t strings are in UTF-16 or UTF-32, then
+ * this function simply calls the fast, dedicated function for that.
+ * Otherwise, two conversions UTF-16 -> default charset -> wchar_t* are performed.
  *
  * @param dest          A buffer for the result string. The result will be zero-terminated if
  *                      the buffer is large enough.
@@ -1209,7 +1212,10 @@ u_strToWCS(wchar_t *dest,
            int32_t srcLength,
            UErrorCode *pErrorCode);
 /**
- * Converts a sequence of wchar_t units to UChars
+ * Convert a wchar_t string to UTF-16.
+ * If it is known at compile time that wchar_t strings are in UTF-16 or UTF-32, then
+ * this function simply calls the fast, dedicated function for that.
+ * Otherwise, two conversions wchar_t* -> default charset -> UTF-16 are performed.
  *
  * @param dest          A buffer for the result string. The result will be zero-terminated if
  *                      the buffer is large enough.
@@ -1237,7 +1243,8 @@ u_strFromWCS(UChar   *dest,
 #endif /* defined(U_WCHAR_IS_UTF16) || defined(U_WCHAR_IS_UTF32) || !UCONFIG_NO_CONVERSION */
 
 /**
- * Converts a sequence of UChars (UTF-16) to UTF-8 bytes
+ * Convert a UTF-16 string to UTF-8.
+ * If the input string is not well-formed, then the U_INVALID_CHAR_FOUND error code is set.
  *
  * @param dest          A buffer for the result string. The result will be zero-terminated if
  *                      the buffer is large enough.
@@ -1266,7 +1273,8 @@ u_strToUTF8(char *dest,
             UErrorCode *pErrorCode);
 
 /**
- * Converts a sequence of UTF-8 bytes to UChars (UTF-16).
+ * Convert a UTF-8 string to UTF-16.
+ * If the input string is not well-formed, then the U_INVALID_CHAR_FOUND error code is set.
  *
  * @param dest          A buffer for the result string. The result will be zero-terminated if
  *                      the buffer is large enough.
@@ -1295,7 +1303,9 @@ u_strFromUTF8(UChar *dest,
               UErrorCode *pErrorCode);
 
 /**
- * Converts a sequence of UChars (UTF-16) to UTF-8 bytes.
+ * Convert a UTF-16 string to UTF-8.
+ * If the input string is not well-formed, then the U_INVALID_CHAR_FOUND error code is set.
+ *
  * Same as u_strToUTF8() except for the additional subchar which is output for
  * illegal input sequences, instead of stopping with the U_INVALID_CHAR_FOUND error code.
  * With subchar==U_SENTINEL, this function behaves exactly like u_strToUTF8().
@@ -1338,7 +1348,9 @@ u_strToUTF8WithSub(char *dest,
             UErrorCode *pErrorCode);
 
 /**
- * Converts a sequence of UTF-8 bytes to UChars (UTF-16).
+ * Convert a UTF-8 string to UTF-16.
+ * If the input string is not well-formed, then the U_INVALID_CHAR_FOUND error code is set.
+ *
  * Same as u_strFromUTF8() except for the additional subchar which is output for
  * illegal input sequences, instead of stopping with the U_INVALID_CHAR_FOUND error code.
  * With subchar==U_SENTINEL, this function behaves exactly like u_strFromUTF8().
@@ -1382,7 +1394,8 @@ u_strFromUTF8WithSub(UChar *dest,
               UErrorCode *pErrorCode);
 
 /**
- * Converts a sequence of UTF-8 bytes to UChars (UTF-16).
+ * Convert a UTF-8 string to UTF-16.
+ *
  * Same as u_strFromUTF8() except that this function is designed to be very fast,
  * which it achieves by being lenient about malformed UTF-8 sequences.
  * This function is intended for use in environments where UTF-8 text is
@@ -1400,6 +1413,9 @@ u_strFromUTF8WithSub(UChar *dest,
  *
  * For further performance improvement, if srcLength is given (>=0),
  * then it must be destCapacity>=srcLength.
+ *
+ * There is no inverse u_strToUTF8Lenient() function because there is practically
+ * no performance gain from not checking that a UTF-16 string is well-formed.
  *
  * @param dest          A buffer for the result string. The result will be zero-terminated if
  *                      the buffer is large enough.
@@ -1437,7 +1453,8 @@ u_strFromUTF8Lenient(UChar *dest,
                      UErrorCode *pErrorCode);
 
 /**
- * Converts a sequence of UChars (UTF-16) to UTF32 units.
+ * Convert a UTF-16 string to UTF-32.
+ * If the input string is not well-formed, then the U_INVALID_CHAR_FOUND error code is set.
  *
  * @param dest          A buffer for the result string. The result will be zero-terminated if
  *                      the buffer is large enough.
@@ -1453,6 +1470,8 @@ u_strFromUTF8Lenient(UChar *dest,
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
  * @return The pointer to destination buffer.
+ * @see u_strToUTF32WithSub
+ * @see u_strFromUTF32
  * @stable ICU 2.0
  */
 U_STABLE UChar32* U_EXPORT2 
@@ -1464,7 +1483,8 @@ u_strToUTF32(UChar32 *dest,
              UErrorCode *pErrorCode);
 
 /**
- * Converts a sequence of UTF32 units to UChars (UTF-16)
+ * Convert a UTF-32 string to UTF-16.
+ * If the input string is not well-formed, then the U_INVALID_CHAR_FOUND error code is set.
  *
  * @param dest          A buffer for the result string. The result will be zero-terminated if
  *                      the buffer is large enough.
@@ -1480,6 +1500,8 @@ u_strToUTF32(UChar32 *dest,
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
  * @return The pointer to destination buffer.
+ * @see u_strFromUTF32WithSub
+ * @see u_strToUTF32
  * @stable ICU 2.0
  */
 U_STABLE UChar* U_EXPORT2 
@@ -1488,6 +1510,96 @@ u_strFromUTF32(UChar   *dest,
                int32_t *pDestLength,
                const UChar32 *src,
                int32_t srcLength,
+               UErrorCode *pErrorCode);
+
+/**
+ * Convert a UTF-16 string to UTF-32.
+ * If the input string is not well-formed, then the U_INVALID_CHAR_FOUND error code is set.
+ *
+ * Same as u_strToUTF32() except for the additional subchar which is output for
+ * illegal input sequences, instead of stopping with the U_INVALID_CHAR_FOUND error code.
+ * With subchar==U_SENTINEL, this function behaves exactly like u_strToUTF32().
+ *
+ * @param dest          A buffer for the result string. The result will be zero-terminated if
+ *                      the buffer is large enough.
+ * @param destCapacity  The size of the buffer (number of UChar32s). If it is 0, then
+ *                      dest may be NULL and the function will only return the length of the
+ *                      result without writing any of the result string (pre-flighting).
+ * @param pDestLength   A pointer to receive the number of units written to the destination. If
+ *                      pDestLength!=NULL then *pDestLength is always set to the
+ *                      number of output units corresponding to the transformation of
+ *                      all the input units, even in case of a buffer overflow.
+ * @param src           The original source string
+ * @param srcLength     The length of the original string. If -1, then src must be zero-terminated.
+ * @param subchar       The substitution character to use in place of an illegal input sequence,
+ *                      or U_SENTINEL if the function is to return with U_INVALID_CHAR_FOUND instead.
+ *                      A substitution character can be any valid Unicode code point (up to U+10FFFF)
+ *                      except for surrogate code points (U+D800..U+DFFF).
+ *                      The recommended value is U+FFFD "REPLACEMENT CHARACTER".
+ * @param pNumSubstitutions Output parameter receiving the number of substitutions if subchar>=0.
+ *                      Set to 0 if no substitutions occur or subchar<0.
+ *                      pNumSubstitutions can be NULL.
+ * @param pErrorCode    Pointer to a standard ICU error code. Its input value must
+ *                      pass the U_SUCCESS() test, or else the function returns
+ *                      immediately. Check for U_FAILURE() on output or use with
+ *                      function chaining. (See User Guide for details.)
+ * @return The pointer to destination buffer.
+ * @see u_strToUTF32
+ * @see u_strFromUTF32WithSub
+ * @draft ICU 4.2
+ */
+U_DRAFT UChar32* U_EXPORT2
+u_strToUTF32WithSub(UChar32 *dest,
+             int32_t destCapacity,
+             int32_t *pDestLength,
+             const UChar *src,
+             int32_t srcLength,
+             UChar32 subchar, int32_t *pNumSubstitutions,
+             UErrorCode *pErrorCode);
+
+/**
+ * Convert a UTF-32 string to UTF-16.
+ * If the input string is not well-formed, then the U_INVALID_CHAR_FOUND error code is set.
+ *
+ * Same as u_strFromUTF32() except for the additional subchar which is output for
+ * illegal input sequences, instead of stopping with the U_INVALID_CHAR_FOUND error code.
+ * With subchar==U_SENTINEL, this function behaves exactly like u_strFromUTF32().
+ *
+ * @param dest          A buffer for the result string. The result will be zero-terminated if
+ *                      the buffer is large enough.
+ * @param destCapacity  The size of the buffer (number of UChars). If it is 0, then
+ *                      dest may be NULL and the function will only return the length of the
+ *                      result without writing any of the result string (pre-flighting).
+ * @param pDestLength   A pointer to receive the number of units written to the destination. If
+ *                      pDestLength!=NULL then *pDestLength is always set to the
+ *                      number of output units corresponding to the transformation of
+ *                      all the input units, even in case of a buffer overflow.
+ * @param src           The original source string
+ * @param srcLength     The length of the original string. If -1, then src must be zero-terminated.
+ * @param subchar       The substitution character to use in place of an illegal input sequence,
+ *                      or U_SENTINEL if the function is to return with U_INVALID_CHAR_FOUND instead.
+ *                      A substitution character can be any valid Unicode code point (up to U+10FFFF)
+ *                      except for surrogate code points (U+D800..U+DFFF).
+ *                      The recommended value is U+FFFD "REPLACEMENT CHARACTER".
+ * @param pNumSubstitutions Output parameter receiving the number of substitutions if subchar>=0.
+ *                      Set to 0 if no substitutions occur or subchar<0.
+ *                      pNumSubstitutions can be NULL.
+ * @param pErrorCode    Pointer to a standard ICU error code. Its input value must
+ *                      pass the U_SUCCESS() test, or else the function returns
+ *                      immediately. Check for U_FAILURE() on output or use with
+ *                      function chaining. (See User Guide for details.)
+ * @return The pointer to destination buffer.
+ * @see u_strFromUTF32
+ * @see u_strToUTF32WithSub
+ * @draft ICU 4.2
+ */
+U_DRAFT UChar* U_EXPORT2
+u_strFromUTF32WithSub(UChar *dest,
+               int32_t destCapacity,
+               int32_t *pDestLength,
+               const UChar32 *src,
+               int32_t srcLength,
+               UChar32 subchar, int32_t *pNumSubstitutions,
                UErrorCode *pErrorCode);
 
 #endif
