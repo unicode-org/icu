@@ -31,7 +31,7 @@
 #include "ustr_imp.h"
 
 U_CAPI UChar* U_EXPORT2 
-u_strFromUTF32(UChar   *dest,
+u_strFromUTF32(UChar *dest,
                int32_t destCapacity, 
                int32_t *pDestLength,
                const UChar32 *src,
@@ -47,7 +47,7 @@ u_strFromUTF32(UChar   *dest,
     if(U_FAILURE(*pErrorCode)){
         return NULL;
     }
-    if((src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
+    if((src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
@@ -64,19 +64,16 @@ u_strFromUTF32(UChar   *dest,
             ++src;
             *pDest++ = (UChar)ch;
         }
-        if(ch == 0) {
-            srcLength = 0;
-        } else {
-            /* "complicated" case, get the remaining string length */
-            const UChar32 *src0 = src;
-            while(*++src != 0) {}
-            srcLength = (int32_t)(src - src0);
-            src = src0;
+        srcLimit = src;
+        if(ch != 0) {
+            /* "complicated" case, find the end of the remaining string */
+            while(*++srcLimit != 0) {}
         }
+    } else {
+        srcLimit = src + srcLength;
     }
 
     /* convert with length */
-    srcLimit = src + srcLength;
     while(src < srcLimit && pDest < destLimit) {
         ch = *src++;
         if((uint32_t)ch < 0xd800 || (0xe000 <= ch && ch <= 0xffff)) {
@@ -124,74 +121,85 @@ u_strFromUTF32(UChar   *dest,
 
 U_CAPI UChar32* U_EXPORT2 
 u_strToUTF32(UChar32 *dest, 
-             int32_t  destCapacity,
-             int32_t  *pDestLength,
+             int32_t destCapacity,
+             int32_t *pDestLength,
              const UChar *src, 
-             int32_t  srcLength,
-             UErrorCode *pErrorCode)
-{
-    const UChar* pSrc = src;
-    const UChar* pSrcLimit;
-    int32_t reqLength=0;
-    uint32_t ch=0;
-    uint32_t *pDest = (uint32_t *)dest;
-    uint32_t *destLimit = pDest + destCapacity;
-    UChar ch2=0;
+             int32_t srcLength,
+             UErrorCode *pErrorCode) {
+    const UChar *srcLimit;
+    UChar32 ch;
+    UChar ch2;
+    UChar32 *destLimit;
+    UChar32 *pDest;
+    int32_t reqLength;
 
     /* args check */
     if(U_FAILURE(*pErrorCode)){
         return NULL;
     }
-    
-    
-    if((src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
+    if((src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
 
-    if(srcLength==-1) {
-        while((ch=*pSrc)!=0 && pDest!=destLimit) {
-            ++pSrc;
-            /*need not check for NUL because NUL fails UTF_IS_TRAIL() anyway*/
-            if(UTF_IS_LEAD(ch) && UTF_IS_TRAIL(ch2=*pSrc)) { 
-                ++pSrc;
-                ch=UTF16_GET_PAIR_VALUE(ch, ch2);
-            }
-            *(pDest++)= ch;
+    pDest = dest;
+    destLimit = dest + destCapacity;
+    reqLength = 0;
+
+    if(srcLength < 0) {
+        /* simple loop for conversion of a NUL-terminated BMP string */
+        while((ch=*src) != 0 && !U16_IS_SURROGATE(ch) && pDest < destLimit) {
+            ++src;
+            *pDest++ = ch;
         }
-        while((ch=*pSrc++)!=0) {
-            if(UTF_IS_LEAD(ch) && UTF_IS_TRAIL(ch2=*pSrc)) {
-                ++pSrc;
-            }
-            ++reqLength; 
+        srcLimit = src;
+        if(ch != 0) {
+            /* "complicated" case, find the end of the remaining string */
+            while(*++srcLimit != 0) {}
         }
     } else {
-        pSrcLimit = pSrc+srcLength;
-        while(pSrc<pSrcLimit && pDest<destLimit) {
-            ch=*pSrc++;
-            if(UTF_IS_LEAD(ch) && pSrc<pSrcLimit && UTF_IS_TRAIL(ch2=*pSrc)) {
-                ++pSrc;
-                ch=UTF16_GET_PAIR_VALUE(ch, ch2);
-            }
-            *(pDest++)= ch;
-        }
-        while(pSrc!=pSrcLimit) {
-            ch=*pSrc++;
-            if(UTF_IS_LEAD(ch) && pSrc<pSrcLimit && UTF_IS_TRAIL(ch2=*pSrc)) {
-                ++pSrc;
-            }
-            ++reqLength;
-        }
+        srcLimit = src + srcLength;
     }
 
-    reqLength+=(int32_t)(pDest - (uint32_t *)dest);
-    if(pDestLength){
+    /* convert with length */
+    while(src < srcLimit && pDest < destLimit) {
+        ch = *src++;
+        if(!U16_IS_SURROGATE(ch)) {
+            /* write ch below */
+        } else if(U16_IS_SURROGATE_LEAD(ch) && src < srcLimit && U16_IS_TRAIL(ch2 = *src)) {
+            ++src;
+            ch = U16_GET_SUPPLEMENTARY(ch, ch2);
+        } else {
+            /* unpaired surrogate */
+            *pErrorCode = U_INVALID_CHAR_FOUND;
+            return NULL;
+        }
+        *pDest++ = ch;
+    }
+
+    /* preflight the remaining string */
+    while(src < srcLimit) {
+        ch = *src++;
+        if(!U16_IS_SURROGATE(ch)) {
+            /* ++reqLength below */
+        } else if(U16_IS_SURROGATE_LEAD(ch) && src < srcLimit && U16_IS_TRAIL(*src)) {
+            ++src;
+        } else {
+            /* unpaired surrogate */
+            *pErrorCode = U_INVALID_CHAR_FOUND;
+            return NULL;
+        }
+        ++reqLength;
+    }
+
+    reqLength += (int32_t)(pDest - dest);
+    if(pDestLength) {
         *pDestLength = reqLength;
     }
 
     /* Terminate the buffer */
-    u_terminateUChar32s(dest,destCapacity,reqLength,pErrorCode);
-
+    u_terminateUChar32s(dest, destCapacity, reqLength, pErrorCode);
+    
     return dest;
 }
 
