@@ -1070,7 +1070,7 @@ static UnicodeString &escape(const UnicodeString &string, UnicodeString &buffer)
 
     return buffer;
 }
-static USet *uset_openEmpty();
+
 #if 1
 
 struct PCE
@@ -1773,11 +1773,6 @@ static void generateTestCase(UCollator *coll, Monkey *monkeys[], int32_t monkeyC
 
         matches = ceTest.matchesAt(0, &ceAlt);
     } while (! matches);
-}
-
-static inline USet *uset_openEmpty()
-{
-    return uset_open(1, 0);
 }
 
 //

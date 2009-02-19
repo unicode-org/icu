@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2008, International Business Machines
+*   Copyright (C) 2002-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -243,9 +243,19 @@ typedef struct USerializedSet {
  *********************************************************************/
 
 /**
+ * Create an empty USet object.
+ * Equivalent to uset_open(1, 0).
+ * @return a newly created USet.  The caller must call uset_close() on
+ * it when done.
+ * @draft ICU 4.2
+ */
+U_DRAFT USet* U_EXPORT2
+uset_openEmpty();
+
+/**
  * Creates a USet object that contains the range of characters
  * start..end, inclusive.  If <code>start > end</code> 
- * then an empty set is created.
+ * then an empty set is created (same as using uset_openEmpty()).
  * @param start first character of the range, inclusive
  * @param end last character of the range, inclusive
  * @return a newly created USet.  The caller must call uset_close() on

@@ -39,11 +39,6 @@ U_NAMESPACE_BEGIN
 #define DELETE_ARRAY(array) uprv_free((void *) (array))
 #define ARRAY_COPY(dst, src, count) uprv_memcpy((void *) (dst), (void *) (src), (count) * sizeof (src)[0])
 
-static inline USet *uset_openEmpty()
-{
-    return uset_open(1, 0);
-}
-
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CEList)
 
 #ifdef INSTRUMENT_CELIST
