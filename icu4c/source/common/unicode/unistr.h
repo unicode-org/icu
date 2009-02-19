@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-2008, International Business Machines
+*   Copyright (C) 1998-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -1534,6 +1534,23 @@ public:
 
 #endif
 
+  /**
+   * Convert the UnicodeString to UTF-32.
+   * Unpaired surrogates are replaced with U+FFFD.
+   * Calls u_strToUTF32WithSub().
+   *
+   * @param utf32 destination string buffer, can be NULL if capacity==0
+   * @param capacity the number of UChar32s available at utf32
+   * @param errorCode Standard ICU error code. Its input value must
+   *                  pass the U_SUCCESS() test, or else the function returns
+   *                  immediately. Check for U_FAILURE() on output or use with
+   *                  function chaining. (See User Guide for details.)
+   * @return The length of the UTF-32 string.
+   * @see fromUTF32
+   * @draft ICU 4.2
+   */
+  int32_t toUTF32(UChar32 *utf32, int32_t capacity, UErrorCode &errorCode) const;
+
   /* Length operations */
 
   /**
@@ -2900,6 +2917,18 @@ public:
    */
   virtual ~UnicodeString();
 
+  /**
+   * Create a UnicodeString from a UTF-32 string.
+   * Illegal input is replaced with U+FFFD. Otherwise, errors result in a bogus string.
+   * Calls u_strFromUTF32WithSub().
+   *
+   * @param utf32 UTF-32 input string. Must not be NULL.
+   * @param length Length of the input string, or -1 if NUL-terminated.
+   * @return A UnicodeString with equivalent UTF-16 contents.
+   * @see toUTF32
+   * @draft ICU 4.2
+   */
+  static UnicodeString fromUTF32(const UChar32 *utf32, int32_t length);
 
   /* Miscellaneous operations */
 
