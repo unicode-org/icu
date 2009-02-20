@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -280,5 +280,17 @@ public class LocaleDataTest extends TestFmwk{
         logln(ld.getDelimiter(LocaleData.QUOTATION_END));
         logln(ld.getDelimiter(LocaleData.ALT_QUOTATION_START));
         logln(ld.getDelimiter(LocaleData.ALT_QUOTATION_END));
+    }
+
+    public void TestLocaleDisplayPattern(){
+        LocaleData ld = LocaleData.getInstance();
+        logln("Default locale "+ " LocaleDisplayPattern:" + ld.getLocaleDisplayPattern());
+        logln("Default locale "+ " LocaleSeparator:" + ld.getLocaleSeparator());
+        for(int i = 0; i < availableLocales.length; i++){
+          ULocale locale = availableLocales[i];
+          ld = LocaleData.getInstance(locale);
+          logln(locale.toString() + " LocaleDisplayPattern:" + ld.getLocaleDisplayPattern());
+          logln(locale.toString() + " LocaleSeparator:" + ld.getLocaleSeparator());
+        }
     }
 }

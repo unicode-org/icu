@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -21,6 +21,9 @@ public final class LocaleData {
     private static final String EXEMPLAR_CHARS      = "ExemplarCharacters";
     private static final String MEASUREMENT_SYSTEM  = "MeasurementSystem";
     private static final String PAPER_SIZE          = "PaperSize";
+    private static final String LOCALE_DISPLAY_PATTERN  = "localeDisplayPattern";
+    private static final String PATTERN             = "pattern";
+    private static final String SEPARATOR           = "separator";
     private boolean noSubstitute;
     private ICUResourceBundle bundle;
 
@@ -299,5 +302,35 @@ public final class LocaleData {
         UResourceBundle obj = bundle.get(PAPER_SIZE);
         int[] size = obj.getIntVector();
         return new PaperSize(size[0], size[1]);
+    }
+    
+    /**
+     * Returns LocaleDisplayPattern for this locale, e.g., {0}({1})
+     * @return locale display pattern as a String.
+     * @draft ICU 4.2
+     */ 
+    public String getLocaleDisplayPattern() {
+      if (bundle == null) {
+        bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(
+                        ICUResourceBundle.ICU_BASE_NAME, ULocale.getDefault());
+      }
+      ICUResourceBundle locDispBundle = (ICUResourceBundle) bundle.get(LOCALE_DISPLAY_PATTERN);
+      String localeDisplayPattern = locDispBundle.getStringWithFallback(PATTERN);
+      return localeDisplayPattern;
+    }
+    
+    /**
+     * Returns LocaleDisplaySeparator for this locale.
+     * @return locale display separator as a char.
+     * @draft ICU 4.2
+     */ 
+    public String getLocaleSeparator() {
+      if (bundle == null) {
+        bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(
+                        ICUResourceBundle.ICU_BASE_NAME, ULocale.getDefault());
+      }
+      ICUResourceBundle locDispBundle = (ICUResourceBundle) bundle.get(LOCALE_DISPLAY_PATTERN);
+      String  localeSeparator = locDispBundle.getStringWithFallback(SEPARATOR);
+      return localeSeparator;
     }
 }
