@@ -1336,16 +1336,22 @@ SimpleDateFormat::processOverrideString(const Locale &locale, const UnicodeStrin
                // to modify it so that it doesn't use thousands separators, doesn't always
                // show the decimal point, and recognizes integers only when parsing
 
-               nf->setGroupingUsed(FALSE);
-               if (nf->getDynamicClassID() == DecimalFormat::getStaticClassID())
-                   ((DecimalFormat*)nf)->setDecimalSeparatorAlwaysShown(FALSE);
-               nf->setParseIntegerOnly(TRUE);
-               nf->setMinimumFractionDigits(0); // To prevent "Jan 1.00, 1997.00"
+               if (U_SUCCESS(status)) {
+                   nf->setGroupingUsed(FALSE);
+                   if (nf->getDynamicClassID() == DecimalFormat::getStaticClassID())
+                       ((DecimalFormat*)nf)->setDecimalSeparatorAlwaysShown(FALSE);
+                   nf->setParseIntegerOnly(TRUE);
+                   nf->setMinimumFractionDigits(0); // To prevent "Jan 1.00, 1997.00"
 
-               cur->nf = nf;
-               cur->hash = nsNameHash;
-               cur->next = fOverrideList;
-               fOverrideList = cur;
+                   cur->nf = nf;
+                   cur->hash = nsNameHash;
+                   cur->next = fOverrideList;
+                   fOverrideList = cur;
+               }
+               else {
+                  return;
+               }
+
            } else {
                status = U_MEMORY_ALLOCATION_ERROR;
                return;
