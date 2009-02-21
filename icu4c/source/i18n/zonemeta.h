@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and    *
+* Copyright (C) 2007-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -74,9 +74,9 @@ private:
     static void initializeCanonicalMap(void);
     static void initializeOlsonToMeta(void);
     static void initializeMetaToOlson(void);
-    static Hashtable* createCanonicalMap(void);
-    static Hashtable* createOlsonToMetaMap(void);
-    static Hashtable* createMetaToOlsonMap(void);
+    static UHashtable* createCanonicalMap(void);
+    static UHashtable* createOlsonToMetaMap(void);
+    static UHashtable* createMetaToOlsonMap(void);
 };
 
 U_NAMESPACE_END
