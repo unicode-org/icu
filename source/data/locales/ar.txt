@@ -2677,5 +2677,5 @@ ar{
             ec{"واك"}
         }
     }
-    defaultNumberingSystem{"arabic-indic"}
+    defaultNumberingSystem{"arabic"}
 }
