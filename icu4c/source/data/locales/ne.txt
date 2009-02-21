@@ -655,7 +655,7 @@ ne{
             }
         }
     }
-    defaultNumberingSystem{"devanagari"}
+    defaultNumberingSystem{"deva"}
     delimiters{
         alternateQuotationEnd{"\""}
         alternateQuotationStart{"\""}
