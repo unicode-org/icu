@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation
+ * Copyright (c) 1997-2009, International Business Machines Corporation
  * and others. All Rights Reserved.
  ********************************************************************/
  
@@ -82,6 +82,7 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(43,TestTimeZoneTransitionAdd);
         CASE(44,TestDeprecates);
         CASE(45,TestT5555);
+        CASE(46,TestT6745);
     default: name = ""; break;
     }
 }
@@ -2307,6 +2308,80 @@ void CalendarRegressionTest::TestT5555()
         errln("FAIL: got date %4d/%02d/%02d, expected 210/02/24: ", yy, mm + 1, dd);
     }
     delete cal;
+}
+
+typedef struct {
+    int32_t             startYear;
+    int32_t             startMonth; // 0-based
+    int32_t             startDay;   // 1-based
+    UCalendarDateFields fieldToChange;
+    int32_t             fieldDelta;
+    int32_t             endYear;
+    int32_t             endMonth;   // 0-based
+    int32_t             endDay;     // 1-based
+} CoptEthCalTestItem;
+
+// year 1724 in coptic calendar =
+// year 2000 in ethiopic calendar (276 more than coptic) =
+// year 7500 in ethiopic-amete-alem calendar (5776 more than coptic)
+// (2007-2008 in gregorian calendar depending on month)
+static const CoptEthCalTestItem coptEthCalTestItems[] = {
+    { 1724, 12, 1, UCAL_MONTH, +1, 1725,  0, 1 },
+    { 1724, 12, 1, UCAL_MONTH, +9, 1725,  8, 1 },
+    { 1723, 12, 2, UCAL_MONTH, +1, 1724,  0, 2 }, // 1723 is a leap year
+    { 1723, 12, 2, UCAL_MONTH, +9, 1724,  8, 2 },
+    { 1725,  0, 1, UCAL_MONTH, -1, 1724, 12, 1 },
+    { 1725,  0, 1, UCAL_MONTH, -6, 1724,  7, 1 },
+    { 1724, 12, 1, UCAL_DATE,  +8, 1725,  0, 4 },
+    { 1723, 12, 1, UCAL_DATE,  +8, 1724,  0, 3 }, // 1723 is a leap year
+    { 1724,  0, 1, UCAL_DATE,  -1, 1723, 12, 6 }, // 1723 is a leap year
+    { 0, 0, 0, (UCalendarDateFields)0, 0, 0, 0, 0 } // terminator
+};
+
+typedef struct {
+    const char * locale;
+    int32_t      yearOffset;
+} CoptEthCalLocale;
+
+static const CoptEthCalLocale copEthCalLocales[] = {
+    { "en@calendar=coptic",   0    },
+    { "en@calendar=ethiopic", 276  },
+    { NULL,                   0    } // terminator
+};
+
+void CalendarRegressionTest::TestT6745()
+{
+    const CoptEthCalLocale * testLocalePtr;
+    for ( testLocalePtr = copEthCalLocales; testLocalePtr->locale != NULL; ++testLocalePtr) {
+        UErrorCode status = U_ZERO_ERROR;
+        Calendar *cal = Calendar::createInstance(Locale(testLocalePtr->locale), status);
+        if ( U_FAILURE(status) ) {
+            errln((UnicodeString)"FAIL: Calendar::createInstance, locale " + testLocalePtr->locale + ", status " + u_errorName(status));
+            continue;
+        }
+        const CoptEthCalTestItem * testItemPtr;
+        for (testItemPtr = coptEthCalTestItems; testItemPtr->fieldDelta != 0; ++testItemPtr) {
+            status = U_ZERO_ERROR;
+            cal->set( testItemPtr->startYear + testLocalePtr->yearOffset, testItemPtr->startMonth, testItemPtr->startDay, 9, 0 );
+            cal->add( testItemPtr->fieldToChange, testItemPtr->fieldDelta, status );
+            if ( U_FAILURE(status) ) {
+                errln((UnicodeString)"FAIL: Calendar::add, locale " + testLocalePtr->locale + ", field/delta " +
+                        testItemPtr->fieldToChange + "/" + testItemPtr->fieldDelta + ", status " + u_errorName(status));
+                continue;
+            }
+            int32_t endYear = testItemPtr->endYear + testLocalePtr->yearOffset;
+            int32_t year  = cal->get(UCAL_YEAR, status);
+            int32_t month = cal->get(UCAL_MONTH, status);
+            int32_t day   = cal->get(UCAL_DATE, status);
+            if ( U_FAILURE(status) || year != endYear || month != testItemPtr->endMonth || day != testItemPtr->endDay ) {
+                errln((UnicodeString)"ERROR: Calendar::add, locale " + testLocalePtr->locale + ", field/delta " +
+                        testItemPtr->fieldToChange + "/" + testItemPtr->fieldDelta + ", status " + u_errorName(status) +
+                        ", expected " + endYear + "/" + testItemPtr->endMonth + "/" + testItemPtr->endDay +
+                        ", got " + year + "/" + month + "/" + day );
+            }
+        }
+        delete cal;
+    }
 }
 
 /**
