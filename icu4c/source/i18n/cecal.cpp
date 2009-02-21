@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2003 - 2008, International Business Machines Corporation and  *
+* Copyright (C) 2003 - 2009, International Business Machines Corporation and  *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -109,13 +109,21 @@ CECalendar::haveDefaultCentury() const
 int32_t
 CECalendar::ceToJD(int32_t year, int32_t month, int32_t date, int32_t jdEpochOffset)
 {
+    // handle month > 12, < 0 (e.g. from add/set)
+    if ( month >= 0 ) {
+        year += month/13;
+        month %= 13;
+    } else {
+        ++month;
+        year += month/13 - 1;
+        month = month%13 + 12;
+    }
     return (int32_t) (
-        (jdEpochOffset+365)             // difference from Julian epoch to 1,1,1
-        + 365 * (year - 1)              // number of days from years
+        jdEpochOffset                   // difference from Julian epoch to 1,1,1
+        + 365 * year                    // number of days from years
         + ClockMath::floorDivide(year, 4)    // extra day of leap year
-        + 30 * (month + 1)              // number of days from months
-        + date                          // number of days for present month
-        - 31                            // slack?
+        + 30 * month                    // number of days from months (months are 0-based)
+        + date - 1                      // number of days for present month (1 based)
         );
 }
 
