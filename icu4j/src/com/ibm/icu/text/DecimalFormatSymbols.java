@@ -571,7 +571,67 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     public void setPadEscape(char c) {
         padEscape = c;
     }
+    
+    public static final int CURRENCY_SPC_CURRENCY_MATCH = 0;
+    public static final int CURRENCT_SPC_SURROUNDING_MATCH = 1;
+    public static final int CURRENCY_SPC_INSERT = 2;
+    private static final String CURRENCY_FORMATS = "currencyFomats";
+    private static final String CURRENCY_SPACING = "currencySpacing";
+    private static final String BEFORE_CURRENCY = "beforeCurrency";
+    private static final String AFTER_CURRENCY = "afterCurrency";
+    private static final String[] CURRENCY_SPACING_KEYS = 
+        { "currencyMatch", "surroundingMatch" ,"insertBetween"};
+    private String[] currencySpcBeforeSym; // before currency symbol.
+    private String[] currencySpcAfterSym; // after currency symbol.
+    /**
+     * Get pattern string for 'CurrencySpacing' that can be applied to
+     * currency format.
+     * This API gets the CurrencySpacing data from ResourceBundle. The pattern can
+     * be null if there is no data from current locale and its parent locales.
+     *
+     * @param itemType : CURRENCY_SPC_CURRENCY_MATCH, CURRENCY_SPC_SURROUNDING_MATCH
+     *                   or CURRENCY_SPC_INSERT
+     * @param beforeCurrency : true if the pattern is for before currency symbol.
+     *                         false if the pattern is for after currency symbol.
+     * @return  pattern string for currencyMatch, surroundingMatch or spaceInsert.
+     *     Return null of there is no data for this locale and its parent locales.
+     */
+    public String getPatternForCurrencySpacing(int itemType, boolean beforeCurrency)  {
+        if (itemType < CURRENCY_SPC_CURRENCY_MATCH ||
+            itemType > CURRENCY_SPC_INSERT ) {
+            return null;  // invalid itemType.
+        }
+        if (beforeCurrency) {
+            return currencySpcBeforeSym[itemType];
+        } else {
+            return currencySpcAfterSym[itemType];
+        }
+    }
 
+    
+    /**
+     * Set pattern string for 'CurrencySpacing' that can be applied to
+     * CurrencyFormat.
+     * 
+     * @param itemType : CURRENCY_SPC_CURRENCY_MATCH, CURRENCY_SPC_SURROUNDING_MATCH
+     *                   or CURRENCY_SPC_INSERT
+     * @param beforeCurrency : true if the pattern is for before currency symbol.
+     *                         false if the pattern is for after currency symbol.
+     * @param  pattern string to override current setting.
+     */
+    public void setPatternForCurrencySpacing(int itemType, boolean beforeCurrency, String pattern) {
+
+        if (itemType < CURRENCY_SPC_CURRENCY_MATCH ||
+            itemType > CURRENCY_SPC_INSERT ) {
+            return;  // invalid itemType.
+        }
+        if (beforeCurrency) {
+            currencySpcBeforeSym[itemType] = pattern;
+        } else {
+            currencySpcAfterSym[itemType] = pattern;
+        }
+    }
+    
     /**
      * Returns the locale for which this object was constructed.
      * @return the locale for which this object was constructed
@@ -613,6 +673,12 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         if (obj == null) return false;
         if (this == obj) return true;
         DecimalFormatSymbols other = (DecimalFormatSymbols) obj;
+        /*
+        for (int i = 0; i <= CURRENCY_SPC_INSERT; i++) {
+            if (currencySpcBeforeSym[i] != other.currencySpcBeforeSym[i]) return false;
+            if (currencySpcAfterSym[i] != other.currencySpcAfterSym[i]) return false;
+        }
+        */
         return (zeroDigit == other.zeroDigit &&
         groupingSeparator == other.groupingSeparator &&
         decimalSeparator == other.decimalSeparator &&
@@ -754,6 +820,19 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             /* else no currency keyword used. */
         }
         //monetarySeparator = numberElements[11].charAt(0);
+        
+        // Get Currency Spacing data.   
+        /*
+        currencySpcBeforeSym = new String[CURRENCY_SPC_INSERT+1];
+        currencySpcAfterSym = new String[CURRENCY_SPC_INSERT+1];
+        ICUResourceBundle curSpcBundle = (ICUResourceBundle)r.get(CURRENCY_FORMATS).get(CURRENCY_SPACING);
+        ICUResourceBundle beforeCurBundle = (ICUResourceBundle)curSpcBundle.get(BEFORE_CURRENCY);
+        ICUResourceBundle afterCurBundle = (ICUResourceBundle)curSpcBundle.get(AFTER_CURRENCY);
+        for (int i = 0; i <= CURRENCY_SPC_INSERT; i++) {
+            currencySpcBeforeSym[i] = beforeCurBundle.getStringWithFallback(CURRENCY_SPACING_KEYS[i]);
+            currencySpcAfterSym[i] = afterCurBundle.getStringWithFallback(CURRENCY_SPACING_KEYS[i]);
+        }
+        */
     }
 
     /**
