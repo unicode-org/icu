@@ -60,6 +60,7 @@ void IntlTestSimpleDateFormatAPI::testAPI(/*char *par*/)
     status = U_ZERO_ERROR;
     const UnicodeString pattern("yyyy.MM.dd G 'at' hh:mm:ss z");
     const UnicodeString override("y=hebrew;d=thai;s=arabic");
+    const UnicodeString override_bogus("y=hebrew;d=thai;s=bogus");
 
     SimpleDateFormat pat(pattern, status);
     if(U_FAILURE(status)) {
@@ -101,6 +102,12 @@ void IntlTestSimpleDateFormatAPI::testAPI(/*char *par*/)
     SimpleDateFormat ovr2(pattern, override, Locale::getGerman(), status);
     if(U_FAILURE(status)) {
         errln("ERROR: Could not create SimpleDateFormat (pattern, override, locale)");
+    }
+
+    status = U_ZERO_ERROR;
+    SimpleDateFormat ovr3(pattern, override_bogus, Locale::getGerman(), status);
+    if(U_SUCCESS(status)) {
+        errln("ERROR: Should not have been able to create SimpleDateFormat (pattern, override, locale) with a bogus override");
     }
 
 
