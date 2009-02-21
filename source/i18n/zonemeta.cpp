@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and    *
+* Copyright (C) 2007-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -24,9 +24,9 @@
 
 // Metazone mapping tables
 static UMTX gZoneMetaLock = NULL;
-static U_NAMESPACE_QUALIFIER Hashtable *gCanonicalMap = NULL;
-static U_NAMESPACE_QUALIFIER Hashtable *gOlsonToMeta = NULL;
-static U_NAMESPACE_QUALIFIER Hashtable *gMetaToOlson = NULL;
+static UHashtable *gCanonicalMap = NULL;
+static UHashtable *gOlsonToMeta = NULL;
+static UHashtable *gMetaToOlson = NULL;
 static UBool gCanonicalMapInitialized = FALSE;
 static UBool gOlsonToMetaInitialized = FALSE;
 static UBool gMetaToOlsonInitialized = FALSE;
@@ -40,24 +40,33 @@ static UBool U_CALLCONV zoneMeta_cleanup(void)
      umtx_destroy(&gZoneMetaLock);
 
     if (gCanonicalMap != NULL) {
-        delete gCanonicalMap;
+        uhash_close(gCanonicalMap);
         gCanonicalMap = NULL;
     }
     gCanonicalMapInitialized = FALSE;
 
     if (gOlsonToMeta != NULL) {
-        delete gOlsonToMeta;
+        uhash_close(gOlsonToMeta);
         gOlsonToMeta = NULL;
     }
     gOlsonToMetaInitialized = FALSE;
 
     if (gMetaToOlson != NULL) {
-        delete gMetaToOlson;
+        uhash_close(gMetaToOlson);
         gMetaToOlson = NULL;
     }
     gMetaToOlsonInitialized = FALSE;
 
     return TRUE;
+}
+
+/**
+ * Deleter for UChar* string
+ */
+static void U_CALLCONV
+deleteUCharString(void *obj) {
+    UChar *entry = (UChar*)obj;
+    uprv_free(entry);
 }
 
 /**
@@ -197,11 +206,11 @@ parseDate (const UChar *text, UErrorCode &status) {
     return 0;
 }
 
-Hashtable*
+UHashtable*
 ZoneMeta::createCanonicalMap(void) {
     UErrorCode status = U_ZERO_ERROR;
 
-    Hashtable *canonicalMap = NULL;
+    UHashtable *canonicalMap = NULL;
     UResourceBundle *zoneFormatting = NULL;
     UResourceBundle *tzitem = NULL;
     UResourceBundle *aliases = NULL;
@@ -209,11 +218,12 @@ ZoneMeta::createCanonicalMap(void) {
     StringEnumeration* tzenum = NULL;
     int32_t numZones;
 
-    canonicalMap = new Hashtable(uhash_compareUnicodeString, NULL, status);
+    canonicalMap = uhash_open(uhash_hashUChars, uhash_compareUChars, NULL, &status);
     if (U_FAILURE(status)) {
         return NULL;
     }
-    canonicalMap->setValueDeleter(deleteCanonicalMapEntry);
+    uhash_setKeyDeleter(canonicalMap, deleteUCharString);
+    uhash_setValueDeleter(canonicalMap, deleteCanonicalMapEntry);
 
     zoneFormatting = ures_openDirect(NULL, gSupplementalData, &status);
     zoneFormatting = ures_getByKey(zoneFormatting, gZoneFormattingTag, zoneFormatting, &status);
@@ -251,6 +261,7 @@ ZoneMeta::createCanonicalMap(void) {
             p++;
             tzidLen++;
         }
+        tzidLen++; // Add one for NUL terminator
 
         // Create canonical map entry
         CanonicalMapEntry *entry = (CanonicalMapEntry*)uprv_malloc(sizeof(CanonicalMapEntry));
@@ -258,13 +269,13 @@ ZoneMeta::createCanonicalMap(void) {
             status = U_MEMORY_ALLOCATION_ERROR;
             goto error_cleanup;
         }
-        entry->id = (UChar*)uprv_malloc((tzidLen + 1) * sizeof(UChar));
+        entry->id = (UChar*)uprv_malloc(tzidLen * sizeof(UChar));
         if (entry->id == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
             uprv_free(entry);
             goto error_cleanup;
         }
-        u_charsToUChars(tzid, entry->id, tzidLen + 1);
+        u_charsToUChars(tzid, entry->id, tzidLen);
 
         if (territory == NULL || u_strcmp(territory, gWorld) == 0) {
             entry->country = NULL;
@@ -272,8 +283,15 @@ ZoneMeta::createCanonicalMap(void) {
             entry->country = territory;
         }
 
-        // Put this entry to the table
-        canonicalMap->put(UnicodeString(entry->id), entry, status);
+        // Put this entry in the hashtable
+        UChar *key = (UChar*)uprv_malloc(tzidLen * sizeof(UChar));
+        if (key == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            deleteCanonicalMapEntry(entry);
+            goto error_cleanup;
+        }
+        u_strncpy(key, entry->id, tzidLen);
+        uhash_put(canonicalMap, key, entry, &status);
         if (U_FAILURE(status)) {
             goto error_cleanup;
         }
@@ -298,20 +316,30 @@ ZoneMeta::createCanonicalMap(void) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 goto error_cleanup;
             }
-            entry->id = (UChar*)uprv_malloc((tzidLen + 1) * sizeof(UChar));
+            entry->id = (UChar*)uprv_malloc(tzidLen * sizeof(UChar));
             if (entry->id == NULL) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 uprv_free(entry);
                 goto error_cleanup;
             }
-            u_charsToUChars(tzid, entry->id, tzidLen + 1);
+            u_charsToUChars(tzid, entry->id, tzidLen);
 
             if (territory  == NULL || u_strcmp(territory, gWorld) == 0) {
                 entry->country = NULL;
             } else {
                 entry->country = territory;
             }
-            canonicalMap->put(UnicodeString(alias), entry, status);
+
+            // Put this entry in the hashtable
+            int32_t aliasLen = u_strlen(alias) + 1; // Add one for NUL terminator
+            key = (UChar*)uprv_malloc(aliasLen * sizeof(UChar));
+            if (key == NULL) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                deleteCanonicalMapEntry(entry);
+                goto error_cleanup;
+            }
+            u_strncpy(key, alias, aliasLen);
+            uhash_put(canonicalMap, key, entry, &status);
             if (U_FAILURE(status)) {
                 goto error_cleanup;
             }
@@ -333,7 +361,13 @@ ZoneMeta::createCanonicalMap(void) {
                 status = U_ZERO_ERROR;
                 continue;
             }
-            CanonicalMapEntry *entry = (CanonicalMapEntry*)canonicalMap->get(*zone);
+            UChar zoneUChars[ZID_KEY_MAX];
+            int32_t zoneUCharsLen = zone->extract(zoneUChars, ZID_KEY_MAX, status) + 1; // Add one for NUL termination
+            if (U_FAILURE(status) || status==U_STRING_NOT_TERMINATED_WARNING) {
+                status = U_ZERO_ERROR;
+                continue; // zone id is too long to extract
+            }
+            CanonicalMapEntry *entry = (CanonicalMapEntry*)uhash_get(canonicalMap, zoneUChars);
             if (entry) {
                 // Already included in CLDR data
                 continue;
@@ -347,7 +381,13 @@ ZoneMeta::createCanonicalMap(void) {
                 if (alias == *zone) {
                     continue;
                 }
-                entry = (CanonicalMapEntry*)canonicalMap->get(alias);
+                UChar aliasUChars[ZID_KEY_MAX];
+                alias.extract(aliasUChars, ZID_KEY_MAX, status);
+                if (U_FAILURE(status) || status==U_STRING_NOT_TERMINATED_WARNING) {
+                    status = U_ZERO_ERROR;
+                    continue; // zone id is too long to extract
+                }
+                entry = (CanonicalMapEntry*)uhash_get(canonicalMap, aliasUChars);
                 if (entry != NULL) {
                     break;
                 }
@@ -396,7 +436,16 @@ ZoneMeta::createCanonicalMap(void) {
                 u_strcpy(newEntry->id, entry->id);
                 newEntry->country = entry->country;
             }
-            canonicalMap->put(*zone, newEntry, status);
+
+            // Put this entry in the hashtable
+            UChar *key = (UChar*)uprv_malloc(zoneUCharsLen * sizeof(UChar));
+            if (key == NULL) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                deleteCanonicalMapEntry(newEntry);
+                goto error_cleanup;
+            }
+            u_strncpy(key, zoneUChars, zoneUCharsLen);
+            uhash_put(canonicalMap, key, newEntry, &status);
             if (U_FAILURE(status)) {
                 goto error_cleanup;
             }
@@ -411,30 +460,32 @@ normal_cleanup:
     return canonicalMap;
 
 error_cleanup:
-    delete canonicalMap;
-    canonicalMap = NULL;
-
+    if (canonicalMap != NULL) {
+        uhash_close(canonicalMap);
+        canonicalMap = NULL;
+    }
     goto normal_cleanup;
 }
 
 /*
  * Creating Olson tzid to metazone mappings from resource (3.8.1 and beyond)
  */
-Hashtable*
+UHashtable*
 ZoneMeta::createOlsonToMetaMap(void) {
     UErrorCode status = U_ZERO_ERROR;
 
-    Hashtable *olsonToMeta = NULL;
+    UHashtable *olsonToMeta = NULL;
     UResourceBundle *metazoneMappings = NULL;
     UResourceBundle *zoneItem = NULL;
     UResourceBundle *mz = NULL;
     StringEnumeration *tzids = NULL;
 
-    olsonToMeta = new Hashtable(uhash_compareUnicodeString, NULL, status);
+    olsonToMeta = uhash_open(uhash_hashUChars, uhash_compareUChars, NULL, &status);
     if (U_FAILURE(status)) {
         return NULL;
     }
-    olsonToMeta->setValueDeleter(deleteUVector);
+    uhash_setKeyDeleter(olsonToMeta, deleteUCharString);
+    uhash_setValueDeleter(olsonToMeta, deleteUVector);
 
     // Read metazone mappings from metazoneInfo bundle
     metazoneMappings = ures_openDirect(NULL, gMetazoneInfo, &status);
@@ -532,7 +583,16 @@ ZoneMeta::createOlsonToMetaMap(void) {
             goto error_cleanup;
         }
         if (mzMappings != NULL) {
-            olsonToMeta->put(*tzid, mzMappings, status);
+            // Add to hashtable
+            int32_t tzidLen = tzid->length() + 1; // Add one for NUL terminator
+            UChar *key = (UChar*)uprv_malloc(tzidLen * sizeof(UChar));
+            if (key == NULL) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                delete mzMappings;
+                goto error_cleanup;
+            }
+            tzid->extract(key, tzidLen, status);
+            uhash_put(olsonToMeta, key, mzMappings, &status);
             if (U_FAILURE(status)) {
                 goto error_cleanup;
             }
@@ -550,25 +610,26 @@ normal_cleanup:
 
 error_cleanup:
     if (olsonToMeta != NULL) {
-        delete olsonToMeta;
+        uhash_close(olsonToMeta);
         olsonToMeta = NULL;
     }
     goto normal_cleanup;
 }
 
-Hashtable*
+UHashtable*
 ZoneMeta::createMetaToOlsonMap(void) {
     UErrorCode status = U_ZERO_ERROR;
 
-    Hashtable *metaToOlson = NULL;
+    UHashtable *metaToOlson = NULL;
     UResourceBundle *metazones = NULL;
     UResourceBundle *mz = NULL;
 
-    metaToOlson = new Hashtable(uhash_compareUnicodeString, NULL, status);
+    metaToOlson = uhash_open(uhash_hashUChars, uhash_compareUChars, NULL, &status);
     if (U_FAILURE(status)) {
         return NULL;
     }
-    metaToOlson->setValueDeleter(deleteUVector);
+    uhash_setKeyDeleter(metaToOlson, deleteUCharString);
+    uhash_setValueDeleter(metaToOlson, deleteUVector);
 
     metazones = ures_openDirect(NULL, gSupplementalData, &status);
     metazones = ures_getByKey(metazones, gMapTimezonesTag, metazones, &status);
@@ -614,20 +675,37 @@ ZoneMeta::createMetaToOlsonMap(void) {
                     u_charsToUChars(territory, entry->territory, territoryLen + 1);
 
                     // Check if mapping entries for metazone is already available
-                    UnicodeString mzidStr(mzid, mzidLen, US_INV);
-                    UVector *tzMappings = (UVector*)metaToOlson->get(mzidStr);
-                    if (tzMappings == NULL) {
-                        // Create new UVector and put it into the hashtable
-                        tzMappings = new UVector(deleteMetaToOlsonMappingEntry, NULL, status);
-                        metaToOlson->put(mzidStr, tzMappings, status);
+                    if (mzidLen < ZID_KEY_MAX) {
+                        UChar mzidUChars[ZID_KEY_MAX];
+                        u_charsToUChars(mzid, mzidUChars, mzidLen);
+                        mzidUChars[mzidLen++] = 0; // Add NUL terminator
+                        UVector *tzMappings = (UVector*)uhash_get(metaToOlson, mzidUChars);
+                        if (tzMappings == NULL) {
+                            // Create new UVector and put it into the hashtable
+                            tzMappings = new UVector(deleteMetaToOlsonMappingEntry, NULL, status);
+                            if (U_FAILURE(status)) {
+                                deleteMetaToOlsonMappingEntry(entry);
+                                goto error_cleanup;
+                            }
+                            UChar *key = (UChar*)uprv_malloc(mzidLen * sizeof(UChar));
+                            if (key == NULL) {
+                                status = U_MEMORY_ALLOCATION_ERROR;
+                                delete tzMappings;
+                                deleteMetaToOlsonMappingEntry(entry);
+                                goto error_cleanup;
+                            }
+                            u_strncpy(key, mzidUChars, mzidLen);
+                            uhash_put(metaToOlson, key, tzMappings, &status);
+                            if (U_FAILURE(status)) {
+                                goto error_cleanup;
+                            }
+                        }
+                        tzMappings->addElement(entry, status);
                         if (U_FAILURE(status)) {
-                            deleteMetaToOlsonMappingEntry(entry);
                             goto error_cleanup;
                         }
-                    }
-                    tzMappings->addElement(entry, status);
-                    if (U_FAILURE(status)) {
-                        goto error_cleanup;
+                    } else {
+                        deleteMetaToOlsonMappingEntry(entry);
                     }
                 } else {
                     status = U_ZERO_ERROR;
@@ -643,9 +721,9 @@ normal_cleanup:
 
 error_cleanup:
     if (metaToOlson != NULL) {
-        delete metaToOlson;
+        uhash_close(metaToOlson);
+        metaToOlson = NULL;
     }
-    metaToOlson = NULL;
     goto normal_cleanup;
 }
 
@@ -660,7 +738,7 @@ ZoneMeta::initializeCanonicalMap(void) {
         return;
     }
     // Initialize hash table
-    Hashtable *tmpCanonicalMap = createCanonicalMap();
+    UHashtable *tmpCanonicalMap = createCanonicalMap();
 
     umtx_lock(&gZoneMetaLock);
     if (!gCanonicalMapInitialized) {
@@ -672,7 +750,9 @@ ZoneMeta::initializeCanonicalMap(void) {
 
     // OK to call the following multiple times with the same function
     ucln_i18n_registerCleanup(UCLN_I18N_ZONEMETA, zoneMeta_cleanup);
-    delete tmpCanonicalMap;
+    if (tmpCanonicalMap != NULL) {
+        uhash_close(tmpCanonicalMap);
+    }
 }
 
 void
@@ -683,7 +763,7 @@ ZoneMeta::initializeOlsonToMeta(void) {
         return;
     }
     // Initialize hash tables
-    Hashtable *tmpOlsonToMeta = createOlsonToMetaMap();
+    UHashtable *tmpOlsonToMeta = createOlsonToMetaMap();
 
     umtx_lock(&gZoneMetaLock);
     if (!gOlsonToMetaInitialized) {
@@ -695,7 +775,9 @@ ZoneMeta::initializeOlsonToMeta(void) {
     
     // OK to call the following multiple times with the same function
     ucln_i18n_registerCleanup(UCLN_I18N_ZONEMETA, zoneMeta_cleanup);
-    delete tmpOlsonToMeta;
+    if (tmpOlsonToMeta != NULL) {
+        uhash_close(tmpOlsonToMeta);
+    }
 }
 
 void
@@ -706,7 +788,7 @@ ZoneMeta::initializeMetaToOlson(void) {
         return;
     }
     // Initialize hash table
-    Hashtable *tmpMetaToOlson = createMetaToOlsonMap();
+    UHashtable *tmpMetaToOlson = createMetaToOlsonMap();
 
     umtx_lock(&gZoneMetaLock);
     if (!gMetaToOlsonInitialized) {
@@ -718,7 +800,9 @@ ZoneMeta::initializeMetaToOlson(void) {
     
     // OK to call the following multiple times with the same function
     ucln_i18n_registerCleanup(UCLN_I18N_ZONEMETA, zoneMeta_cleanup);
-    delete tmpMetaToOlson;
+    if (tmpMetaToOlson != NULL) {
+        uhash_close(tmpMetaToOlson);
+    }
 }
 
 UnicodeString& U_EXPORT2
@@ -749,7 +833,12 @@ ZoneMeta::getCanonicalInfo(const UnicodeString &tzid) {
     initializeCanonicalMap();
     CanonicalMapEntry *entry = NULL;
     if (gCanonicalMap != NULL) {
-        entry = (CanonicalMapEntry*)gCanonicalMap->get(tzid);
+        UErrorCode status = U_ZERO_ERROR;
+        UChar tzidUChars[ZID_KEY_MAX];
+        tzid.extract(tzidUChars, ZID_KEY_MAX, status);
+        if (U_SUCCESS(status) && status!=U_STRING_NOT_TERMINATED_WARNING) {
+            entry = (CanonicalMapEntry*)uhash_get(gCanonicalMap, tzidUChars);
+        }
     }
     return entry;
 }
@@ -811,7 +900,12 @@ ZoneMeta::getMetazoneMappings(const UnicodeString &tzid) {
     initializeOlsonToMeta();
     const UVector *result = NULL;
     if (gOlsonToMeta != NULL) {
-        result = (UVector*)gOlsonToMeta->get(tzid);
+        UErrorCode status = U_ZERO_ERROR;
+        UChar tzidUChars[ZID_KEY_MAX];
+        tzid.extract(tzidUChars, ZID_KEY_MAX, status);
+        if (U_SUCCESS(status) && status!=U_STRING_NOT_TERMINATED_WARNING) {
+            result = (UVector*)uhash_get(gOlsonToMeta, tzidUChars);
+        }
     }
     return result;
 }
@@ -821,18 +915,23 @@ ZoneMeta::getZoneIdByMetazone(const UnicodeString &mzid, const UnicodeString &re
     initializeMetaToOlson();
     UBool isSet = FALSE;
     if (gMetaToOlson != NULL) {
-        UVector *mappings = (UVector*)gMetaToOlson->get(mzid);
-        if (mappings != NULL) {
-            // Find a preferred time zone for the given region.
-            for (int32_t i = 0; i < mappings->size(); i++) {
-                MetaToOlsonMappingEntry *olsonmap = (MetaToOlsonMappingEntry*)mappings->elementAt(i);
-                if (region.compare(olsonmap->territory, -1) == 0) {
-                    result.setTo(olsonmap->id);
-                    isSet = TRUE;
-                    break;
-                } else if (u_strcmp(olsonmap->territory, gWorld) == 0) {
-                    result.setTo(olsonmap->id);
-                    isSet = TRUE;
+        UErrorCode status = U_ZERO_ERROR;
+        UChar mzidUChars[ZID_KEY_MAX];
+        mzid.extract(mzidUChars, ZID_KEY_MAX, status);
+        if (U_SUCCESS(status) && status!=U_STRING_NOT_TERMINATED_WARNING) {
+            UVector *mappings = (UVector*)uhash_get(gMetaToOlson, mzidUChars);
+            if (mappings != NULL) {
+                // Find a preferred time zone for the given region.
+                for (int32_t i = 0; i < mappings->size(); i++) {
+                    MetaToOlsonMappingEntry *olsonmap = (MetaToOlsonMappingEntry*)mappings->elementAt(i);
+                    if (region.compare(olsonmap->territory, -1) == 0) {
+                        result.setTo(olsonmap->id);
+                        isSet = TRUE;
+                        break;
+                    } else if (u_strcmp(olsonmap->territory, gWorld) == 0) {
+                        result.setTo(olsonmap->id);
+                        isSet = TRUE;
+                    }
                 }
             }
         }
