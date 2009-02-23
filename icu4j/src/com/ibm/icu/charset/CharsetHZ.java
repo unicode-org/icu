@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2009, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -58,6 +58,7 @@ class CharsetHZ extends CharsetICU {
         }
 
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
+            CoderResult err = CoderResult.UNDERFLOW;
             byte[] tempBuf = new byte[2];
             int targetUniChar = 0;
             int mySourceChar = 0;
@@ -104,10 +105,25 @@ class CharsetHZ extends CharsetICU {
                              * if the first byte is equal to TILDE and the trail byte is not a valid byte then it is an
                              * error condition
                              */
-                            mySourceChar |= 0x7e00;
-                            targetUniChar = 0xffff;
-                            isEmptySegment = false; /* different error here, reset this to avoid spurious future error */ 
-                            break;
+                            /*
+                             * Ticket 5691: consistent illegal sequences:
+                             * - We include at least the first byte in the illegal sequence.
+                             * - If any of the non-initial bytes could be the start of a character,
+                             *   we stop the illegal sequence before the first one of those.
+                             */
+                            isEmptySegment = false; /* different error here, reset this to avoid spurious furture error */
+                            err = CoderResult.malformedForLength(1);
+                            toUBytesArray[0] = UCNV_TILDE;
+                            if (isStateDBCS ? (0x21 <= mySourceChar && mySourceChar <= 0x7e) : mySourceChar <= 0x7f) {
+                                /* The current byte could be the start of a character: Back it out. */
+                                toULength = 1;
+                                source.position(source.position() - 1);
+                            } else {
+                                /* Include the current byte in the illegal sequence. */
+                                toUBytesArray[1] = (byte)mySourceChar;
+                                toULength = 2;
+                            }
+                            return err;
                         }
                     } else if (isStateDBCS) {
                         if (toUnicodeStatus == 0) {
@@ -124,19 +140,36 @@ class CharsetHZ extends CharsetICU {
                             continue;
                         } else {
                             /* trail byte */
+                            boolean leadIsOk, trailIsOk;
                             int leadByte = toUnicodeStatus & 0xff;
-                            if (0x21 <= leadByte && leadByte <= 0x7d && 0x21 <= mySourceChar && mySourceChar <= 0x7e) {
-                                tempBuf[0] = (byte) (leadByte + 0x80);
-                                tempBuf[1] = (byte) (mySourceChar + 0x80);
-                                targetUniChar = gbDecoder.simpleGetNextUChar(ByteBuffer.wrap(tempBuf), super.isFallbackUsed());
-                            } else {
-                                targetUniChar = 0xffff;
-                            }
+                            targetUniChar = 0xffff;
                             /*
-                             * add another bit so that the code below writes 2 bytes in case of error
+                             * Ticket 5691: consistent illegal sequence
+                             * - We include at least the first byte in the illegal sequence.
+                             * - If any of the non-initial bytes could be the start of a character,
+                             *   we stop the illegal sequence before the first one of those
+                             * 
+                             * In HZ DBCS, if the second byte is in the 21..7e range,
+                             * we report ony the first byte as the illegal sequence.
+                             * Otherwise we convert of report the pair of bytes.
                              */
-                            mySourceChar |= 0x10000 | (leadByte << 8);
-                            toUnicodeStatus = 0;
+                            leadIsOk = (short)(UConverterConstants.UNSIGNED_BYTE_MASK & (leadByte - 0x21)) <= (0x7d - 0x21);
+                            trailIsOk = (short)(UConverterConstants.UNSIGNED_BYTE_MASK & (mySourceChar - 0x21)) <= (0x7e - 0x21);
+                            if (leadIsOk && trailIsOk) {
+                                tempBuf[0] = (byte)(leadByte + 0x80);
+                                tempBuf[1] = (byte)(mySourceChar + 0x80);
+                                targetUniChar = gbDecoder.simpleGetNextUChar(ByteBuffer.wrap(tempBuf), super.isFallbackUsed());
+                                mySourceChar = (leadByte << 8) | mySourceChar;
+                            } else if (trailIsOk) {
+                                /* report a single illegal byte and continue with the following DBCS starter byte */
+                                source.position(source.position() - 1);
+                                mySourceChar = (int)leadByte;
+                            } else {
+                                /* report a pair of illegal bytes if the second byte is not a DBCS starter */
+                                /* add another bit so that the code below writes 2 bytes in case of error */
+                                mySourceChar = 0x10000 | (leadByte << 8) | mySourceChar;
+                            }
+                            toUnicodeStatus = 0x00;
                         }
                     } else {
                         if (mySourceChar == UCNV_TILDE) {
@@ -177,7 +210,7 @@ class CharsetHZ extends CharsetICU {
                 }
             }
 
-            return CoderResult.UNDERFLOW;
+            return err;
         }
     }
 
