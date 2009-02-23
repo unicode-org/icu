@@ -1328,8 +1328,32 @@ public abstract class NumberFormat extends UFormat {
         NumberFormat format;
 
         if ( ns != null && ns.isAlgorithmic()) {
-            RuleBasedNumberFormat r = new RuleBasedNumberFormat(desiredLocale,RuleBasedNumberFormat.NUMBERING_SYSTEM);
-            r.setDefaultRuleSet(ns.getDescription());
+            String nsDesc;
+            String nsRuleSetGroup;
+            String nsRuleSetName;
+            ULocale nsLoc;
+            int desiredRulesType = RuleBasedNumberFormat.NUMBERING_SYSTEM;
+
+            nsDesc = ns.getDescription();
+            int firstSlash = nsDesc.indexOf("/");
+            int lastSlash = nsDesc.lastIndexOf("/");
+
+            if ( lastSlash > firstSlash ) {
+               String nsLocID = nsDesc.substring(0,firstSlash);
+               nsRuleSetGroup = nsDesc.substring(firstSlash+1,lastSlash);
+               nsRuleSetName = nsDesc.substring(lastSlash+1);
+
+               nsLoc = new ULocale(nsLocID);
+               if ( nsRuleSetGroup.equals("SpelloutRules")) {
+                   desiredRulesType = RuleBasedNumberFormat.SPELLOUT;
+               }
+            } else {
+                nsLoc = desiredLocale;
+                nsRuleSetName = nsDesc;
+            }
+
+            RuleBasedNumberFormat r = new RuleBasedNumberFormat(nsLoc,desiredRulesType);
+            r.setDefaultRuleSet(nsRuleSetName);
             format = r;
         } else {
             DecimalFormat f = new DecimalFormat(pattern, symbols, choice);
