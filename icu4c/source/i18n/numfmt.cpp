@@ -84,6 +84,8 @@ static const UChar gLastResortPluralCurrencyPat[] = {
 static const UChar gSingleCurrencySign[] = {0xA4, 0};
 static const UChar gDoubleCurrencySign[] = {0xA4, 0xA4, 0};
 
+static const UChar gSlash = 0x2f;
+
 // If the maximum base 10 exponent were 4, then the largest number would
 // be 99,999 which has 5 digits.
 // On IEEE754 systems gMaxIntegerDigits is 308 + possible denormalized 15 digits + rounding digit
@@ -931,12 +933,41 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
     }
 
     if (ns->isAlgorithmic()) {
-        RuleBasedNumberFormat *r = new RuleBasedNumberFormat(URBNF_NUMBERING_SYSTEM,desiredLocale,status);
+        UnicodeString nsDesc;
+        UnicodeString nsRuleSetGroup;
+        UnicodeString nsRuleSetName;
+        Locale nsLoc;
+        URBNFRuleSetTag desiredRulesType = URBNF_NUMBERING_SYSTEM;
+        
+        nsDesc.setTo(ns->getDescription());
+        int32_t firstSlash = nsDesc.indexOf(gSlash);
+        int32_t lastSlash = nsDesc.lastIndexOf(gSlash);
+        if ( lastSlash > firstSlash ) {
+            char nsLocID[ULOC_FULLNAME_CAPACITY];
+
+            nsDesc.extract(0,firstSlash,nsLocID,ULOC_FULLNAME_CAPACITY,US_INV);
+            nsRuleSetGroup.setTo(nsDesc,firstSlash+1,lastSlash-firstSlash-1);
+            nsRuleSetName.setTo(nsDesc,lastSlash+1);
+                      
+            nsLoc = Locale::createFromName(nsLocID);
+
+            UnicodeString SpelloutRules = UNICODE_STRING_SIMPLE("SpelloutRules");
+            if ( nsRuleSetGroup.compare(SpelloutRules) == 0 ) {
+                desiredRulesType = URBNF_SPELLOUT;
+            }
+        } else {
+            nsLoc = desiredLocale;
+            nsRuleSetName.setTo(nsDesc);
+        }
+
+        RuleBasedNumberFormat *r = new RuleBasedNumberFormat(desiredRulesType,nsLoc,status);
+
         if (U_FAILURE(status) || r == NULL) {
             goto cleanup;
         }
-        r->setDefaultRuleSet(ns->getDescription(),status);
+        r->setDefaultRuleSet(nsRuleSetName,status);
         f = (NumberFormat *) r;
+
     } else {
         // replace single currency sign in the pattern with double currency sign
         // if the style is kIsoCurrencyStyle

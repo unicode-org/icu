@@ -55,32 +55,32 @@ numberingSystems:table(nofallback){
         }
         hanjfin{
             algorithmic:int{1}
-            desc{"%ja/SpelloutRules/financial"}
+            desc{"ja/SpelloutRules/%financial"}
             radix:int{10}
         }
         hanjstd{
             algorithmic:int{1}
-            desc{"%ja/SpelloutRules/spellout"}
+            desc{"ja/SpelloutRules/%spellout"}
             radix:int{10}
         }
         hansfin{
             algorithmic:int{1}
-            desc{"%zh/SpelloutRules/financial"}
+            desc{"zh/SpelloutRules/%financial"}
             radix:int{10}
         }
         hansstd{
             algorithmic:int{1}
-            desc{"%zh/SpelloutRules/spellout"}
+            desc{"zh/SpelloutRules/%spellout"}
             radix:int{10}
         }
         hantfin{
             algorithmic:int{1}
-            desc{"%zh_Hant/SpelloutRules/financial"}
+            desc{"zh_Hant/SpelloutRules/%financial"}
             radix:int{10}
         }
         hantstd{
             algorithmic:int{1}
-            desc{"%zh_Hant/SpelloutRules/spellout"}
+            desc{"zh_Hant/SpelloutRules/%spellout"}
             radix:int{10}
         }
         hebrew{
