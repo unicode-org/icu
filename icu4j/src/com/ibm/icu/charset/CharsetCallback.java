@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2008, International Business Machines Corporation and    *
+* Copyright (C) 2006-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -332,10 +332,7 @@ public class CharsetCallback {
                     }
                 }
             }
-            
-            /* reset the error */
-            cr = CoderResult.UNDERFLOW;
-            
+
             cr = encoder.cbFromUWriteUChars(encoder, CharBuffer.wrap(valueString, 0, valueStringLength), target, offsets);
             return cr;
         }
@@ -356,7 +353,7 @@ public class CharsetCallback {
             if (context == null || !(context instanceof String)) {
                 while (i < length) {
                     uniValueString[valueStringLength++] = UNICODE_PERCENT_SIGN_CODEPOINT;   /* adding % */
-                    uniValueString[valueStringLength++] = UNICODE_X_CODEPOINT;              /* adding X */
+                    uniValueString[valueStringLength++] = UNICODE_X_CODEPOINT;              /* adding U */
                     valueStringLength += itou(uniValueString, valueStringLength, buffer[i++] & UConverterConstants.UNSIGNED_BYTE_MASK, 16, 2);
                 }
             } else {
@@ -376,9 +373,11 @@ public class CharsetCallback {
                         uniValueString[valueStringLength++] = UNICODE_SEMICOLON_CODEPOINT;  /* adding ; */
                     }
                 } else if (((String)context).equals(ESCAPE_C)) {
-                    uniValueString[valueStringLength++] = UNICODE_PERCENT_SIGN_CODEPOINT;   /* adding % */
-                    uniValueString[valueStringLength++] = UNICODE_X_CODEPOINT;              /* adding X */
-                    valueStringLength += itou(uniValueString, valueStringLength, buffer[i++] & UConverterConstants.UNSIGNED_BYTE_MASK, 16, 2);
+                    while (i < length) {
+                        uniValueString[valueStringLength++] = UNICODE_RS_CODEPOINT;         /* adding \ */
+                        uniValueString[valueStringLength++] = UNICODE_X_LOW_CODEPOINT;      /* adding x */
+                        valueStringLength += itou(uniValueString, valueStringLength, buffer[i++] & UConverterConstants.UNSIGNED_BYTE_MASK, 16, 2);
+                    }
                 } else {
                     while (i < length) {
                         uniValueString[valueStringLength++] = UNICODE_PERCENT_SIGN_CODEPOINT;   /* adding % */
@@ -388,10 +387,8 @@ public class CharsetCallback {
                     }
                 }
             }
-            /* reset the error */
-            cr = CoderResult.UNDERFLOW;
             
-            CharsetDecoderICU.toUWriteUChars(decoder, uniValueString, 0, valueStringLength, target, offsets, 0);
+            cr = CharsetDecoderICU.toUWriteUChars(decoder, uniValueString, 0, valueStringLength, target, offsets, 0);
             
             return cr;
         }

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2009, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -200,10 +200,12 @@ class CharsetISO2022 extends CharsetICU {
     }
     
     /*
+     * Commented out because Ticket 5691: Call sites now check for validity. They can just += 0x8080 after that. 
+     * 
      * This method does the reverse of _2022FromGR94DBCS(). Given the 2022 code point, it returns the
      * 2 byte value that is in the range A1..FE for each byte. Otherwise it returns the 2022 code point
      * unchanged. 
-     */
+     * 
     private static int _2022ToGR94DBCS(int value) {
         int returnValue = value + 0x8080;
         
@@ -213,7 +215,7 @@ class CharsetISO2022 extends CharsetICU {
         } else {
             return value;
         }
-    }
+    }*/
     
     /* is the StateEnum charset value for a DBCS charset? */
     private static boolean IS_JP_DBCS(byte cs) {
@@ -528,6 +530,7 @@ class CharsetISO2022 extends CharsetICU {
         byte value;
         int key[] = {myConverterData.key};
         int offset[] = {0};
+        int initialToULength = decoder.toULength;
         byte c;
         int malformLength = 0;
         
@@ -571,7 +574,7 @@ class CharsetISO2022 extends CharsetICU {
             /* indicate that the escape sequence is incomplete: key !=0 */
             return err;
         } else if (value == INVALID_2022) {
-            return CoderResult.malformedForLength(malformLength);
+            err = CoderResult.malformedForLength(malformLength);
         } else /* value == VALID_TERMINAL_2022 */ {
             switch (var) {
             case ISO_2022_JP: {
@@ -679,7 +682,39 @@ class CharsetISO2022 extends CharsetICU {
         }
         if (!err.isError()) {
             decoder.toULength = 0;
+        } else if (err.isMalformed()) {
+            if (decoder.toULength > 1) {
+                /*
+                 * Ticket 5691: consistent illegal sequences:
+                 * - We include at least the first byte (ESC) in the illegal sequence.
+                 * - If any of the non-initial bytes could be the start of a character,
+                 *   we stop the illegal sequece before the first one of those.
+                 *   In escape sequences, all following bytes are "printable", that is,
+                 *   unless they are completely illegal (>7f in SBCS, outside 21..7e in DBCS),
+                 *   they are valid single/lead bytes.
+                 *   For simplicity, we always only report the initial ESC byte as the
+                 *   illegal sequence and back out all other bytes we looked at.
+                 */
+                /* Back out some bytes. */
+                int backOutDistance = decoder.toULength - 1;
+                int bytesFromThisBuffer = decoder.toULength - initialToULength;
+                if (backOutDistance <= bytesFromThisBuffer) {
+                    /* same as initialToULength<=1 */
+                    source.position(source.position() - backOutDistance);
+                } else {
+                    /* Back out bytes from the previous buffer: Need to replay them. */
+                    decoder.preToULength = (byte)(bytesFromThisBuffer - backOutDistance);
+                    /* same as -(initalToULength-1) */
+                    /* preToULength is negative! */
+                    for (int i = 0; i < -(decoder.preToULength); i++) {
+                        decoder.preToUArray[i] = decoder.toUBytesArray[i+1];
+                    }
+                    source.position(source.position() - bytesFromThisBuffer);
+                }
+                decoder.toULength = 1;
+            }
         }
+        
         return err;
     }
     
@@ -820,7 +855,7 @@ class CharsetISO2022 extends CharsetICU {
                 gotoEscape = true;
             } else if (toULength == 1 && source.hasRemaining() && target.hasRemaining()) {
                 /* continue with a partial double-byte character */
-                mySourceChar = toUBytesArray[0];
+                mySourceChar = (toUBytesArray[0] & UConverterConstants.UNSIGNED_BYTE_MASK);
                 toULength = 0;
                 cs = myConverterData.toU2022State.cs[myConverterData.toU2022State.g];
                 // goto getTrailByte;
@@ -838,7 +873,7 @@ class CharsetISO2022 extends CharsetICU {
                 
                 if (gotoEscape || gotoGetTrail || target.hasRemaining()) {
                     if (!gotoEscape && !gotoGetTrail) {
-                        mySourceChar = UConverterConstants.UNSIGNED_BYTE_MASK & source.get();
+                        mySourceChar = source.get() & UConverterConstants.UNSIGNED_BYTE_MASK;
                         mySourceCharTemp = mySourceChar;
                     }
                     
@@ -963,26 +998,48 @@ class CharsetISO2022 extends CharsetICU {
 // getTrailByte:
                                     int tmpSourceChar;
                                     gotoGetTrail = false;
-                                    byte trailByte;
-                                    trailByte = source.get();
-                                    tmpSourceChar = (mySourceChar << 8) | (short)(UConverterConstants.UNSIGNED_BYTE_MASK & trailByte);
-                                    if (cs == JISX208) {
-                                        _2022ToSJIS((char)(UConverterConstants.UNSIGNED_BYTE_MASK & mySourceChar), 
-                                                (char)(UConverterConstants.UNSIGNED_BYTE_MASK & trailByte), tempBuf);
-                                    } else {
-                                        if (cs == KSC5601) {
-                                            tmpSourceChar = _2022ToGR94DBCS(tmpSourceChar);
+                                    short trailByte;
+                                    boolean leadIsOk, trailIsOk;
+                                    
+                                    trailByte = (short)(source.get(source.position()) & UConverterConstants.UNSIGNED_BYTE_MASK);
+                                    /*
+                                     * Ticket 5691: consistent illegal sequences:
+                                     * - We include at least the first byte in the illegal sequence.
+                                     * - If any of the non-initial bytes could be the start of a character,
+                                     *   we stop the illegal sequence before the first one of those.
+                                     * 
+                                     * In ISO-2022 DBCS, if the second byte is in the 21..7e range or is
+                                     * an ESC/SO/SI, we report only the first byte as the illegal sequence.
+                                     * Otherwise we convert or report the pair of bytes.
+                                     */
+                                    leadIsOk = (short)(UConverterConstants.UNSIGNED_BYTE_MASK & (mySourceChar - 0x21)) <= (0x7e - 0x21);
+                                    trailIsOk = (short)(UConverterConstants.UNSIGNED_BYTE_MASK & (trailByte - 0x21)) <= (0x7e - 0x21);
+                                    if (leadIsOk && trailIsOk) {
+                                        source.get();
+                                        tmpSourceChar = (mySourceChar << 8) | trailByte;
+                                        if (cs == JISX208) {
+                                            _2022ToSJIS((char)mySourceChar, (char)trailByte, tempBuf);
+                                            mySourceChar = tmpSourceChar;
+                                        } else {
+                                            /* Copy before we modify tmpSourceChar so toUnicodeCallback() sees the correct bytes. */
+                                            mySourceChar = tmpSourceChar;
+                                            if (cs == KSC5601) {
+                                                tmpSourceChar += 0x8080; /* = _2022ToGR94DBCS(tmpSourceChar) */
+                                            }
+                                            tempBuf[0] = (byte)(UConverterConstants.UNSIGNED_BYTE_MASK & (tmpSourceChar >> 8));
+                                            tempBuf[1] = (byte)(UConverterConstants.UNSIGNED_BYTE_MASK & tmpSourceChar);
                                         }
-                                        tempBuf[0] = (byte)(UConverterConstants.UNSIGNED_BYTE_MASK & (tmpSourceChar >> 8));
-                                        tempBuf[1] = (byte)(UConverterConstants.UNSIGNED_BYTE_MASK & tmpSourceChar);
+                                        targetUniChar = MBCSSimpleGetNextUChar(myConverterData.myConverterArray[cs], ByteBuffer.wrap(tempBuf), false);
+                                    } else if (!(trailIsOk || IS_2022_CONTROL(trailByte))) {
+                                        /* report a pair of illegal bytes if the second byte is not a DBCS starter */
+                                        source.get();
+                                        /* add another bit so that the code below writes 2 bytes in case of error */
+                                        mySourceChar = 0x10000 | (mySourceChar << 8) | trailByte;
                                     }
-                                    ByteBuffer tempByteBuf = ByteBuffer.wrap(tempBuf);
-                                    targetUniChar = MBCSSimpleGetNextUChar(myConverterData.myConverterArray[cs], tempByteBuf, false);
-                                    mySourceChar = tmpSourceChar;
                                 } else {
                                     toUBytesArray[0] = (byte)mySourceChar;
                                     toULength = 1;
-                                    // goto endloop;
+                                    // goto endloop
                                     return err;
                                 }
                             } /* end of inner switch */
@@ -1056,8 +1113,9 @@ class CharsetISO2022 extends CharsetICU {
                 gotoEscape = true;
             } else if (toULength == 1 && source.hasRemaining() && target.hasRemaining()) {
                 /* continue with a partial double-byte character */
-                mySourceChar = toUBytesArray[0];
+                mySourceChar = (toUBytesArray[0] & UConverterConstants.UNSIGNED_BYTE_MASK);
                 toULength = 0;
+                targetUniChar = UConverterConstants.missingCharMarker;
                 // goto getTrailByte
                 gotoGetTrailByte = true;
             }
@@ -1139,36 +1197,58 @@ class CharsetISO2022 extends CharsetICU {
                                 UConverterSharedData cnv;
                                 byte tempState;
                                 int tempBufLen;
-                                byte trailByte;
+                                boolean leadIsOk, trailIsOk;
+                                short trailByte;
 // getTrailByte: label
                                 gotoGetTrailByte = false; // reset gotoGetTrailByte
                                 
-                                trailByte = source.get();
-                                tempState = myConverterData.toU2022State.cs[myConverterData.toU2022State.g];
-                                if (tempState > CNS_11643_0) {
-                                    cnv = myConverterData.myConverterArray[CNS_11643];
-                                    tempBuf[0] = (byte)(0x80 + (tempState - CNS_11643_0));
-                                    tempBuf[1] = (byte)(mySourceChar);
-                                    tempBuf[2] = trailByte;
-                                    tempBufLen = 3;
-                                } else {
-                                    cnv = myConverterData.myConverterArray[tempState];
-                                    tempBuf[0] = (byte)(mySourceChar);
-                                    tempBuf[1] = trailByte;
-                                    tempBufLen = 2;
+                                trailByte = (short)(source.get(source.position()) & UConverterConstants.UNSIGNED_BYTE_MASK);
+                                /*
+                                 * Ticket 5691: consistent illegal sequences:
+                                 * - We include at least the first byte in the illegal sequence.
+                                 * - If any of the non-initial bytes could be the start of a character,
+                                 *   we stop the illegal sequence before the first one of those.
+                                 * 
+                                 * In ISO-2022 DBCS, if the second byte is in the range 21..7e range or is
+                                 * an ESC/SO/SI, we report only the first byte as the illegal sequence.
+                                 * Otherwise we convert or report the pair of bytes.
+                                 */
+                                leadIsOk = (short)(UConverterConstants.UNSIGNED_BYTE_MASK & (mySourceChar - 0x21)) <= (0x7e - 0x21);
+                                trailIsOk = (short)(UConverterConstants.UNSIGNED_BYTE_MASK & (trailByte - 0x21)) <= (0x7e - 0x21);
+                                if (leadIsOk && trailIsOk) {
+                                    source.get();
+                                    tempState = myConverterData.toU2022State.cs[myConverterData.toU2022State.g];
+                                    if (tempState > CNS_11643_0) {
+                                        cnv = myConverterData.myConverterArray[CNS_11643];
+                                        tempBuf[0] = (byte)(0x80 + (tempState - CNS_11643_0));
+                                        tempBuf[1] = (byte)mySourceChar;
+                                        tempBuf[2] = (byte)trailByte;
+                                        tempBufLen = 3;
+                                    } else {
+                                        cnv = myConverterData.myConverterArray[tempState];
+                                        tempBuf[0] = (byte)mySourceChar;
+                                        tempBuf[1] = (byte)trailByte;
+                                        tempBufLen = 2;
+                                    }
+                                    ByteBuffer tempBuffer = ByteBuffer.wrap(tempBuf);
+                                    tempBuffer.limit(tempBufLen);
+                                    targetUniChar = MBCSSimpleGetNextUChar(cnv, tempBuffer, false);
+                                    mySourceChar = (mySourceChar << 8) | trailByte;
+                                    
+                                } else if (!(trailIsOk || IS_2022_CONTROL(trailByte))) {
+                                    /* report a pair of illegal bytes if the second byte is not a DBCS starter */
+                                    source.get();
+                                    /* add another bit so that the code below writes 2 bytes in case of error */
+                                    mySourceChar = 0x10000 | (mySourceChar << 8) | trailByte;
                                 }
-                                mySourceChar = (mySourceChar << 8) | (UConverterConstants.UNSIGNED_BYTE_MASK & trailByte);
                                 if (myConverterData.toU2022State.g >= 2) {
                                     /* return from a single-shift state to the previous one */
                                     myConverterData.toU2022State.g = myConverterData.toU2022State.prevG;
                                 }
-                                ByteBuffer tempBuffer = ByteBuffer.wrap(tempBuf);
-                                tempBuffer.limit(tempBufLen);
-                                tempBuffer.position(0);
-                                targetUniChar = MBCSSimpleGetNextUChar(cnv, tempBuffer, false);
                             } else {
                                 toUBytesArray[0] = (byte)mySourceChar;
                                 toULength = 1;
+                                // goto endloop;
                                 return err;
                             }
                         } else {
@@ -1228,7 +1308,7 @@ class CharsetISO2022 extends CharsetICU {
         
         protected CoderResult decodeLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
             CoderResult err = CoderResult.UNDERFLOW;
-            char mySourceChar = 0x0000;
+            int mySourceChar = 0x0000;
             int targetUniChar = 0x0000;
             byte[] tempBuf = new byte[2];
             boolean usingFallback;
@@ -1247,7 +1327,7 @@ class CharsetISO2022 extends CharsetICU {
                 gotoEscape = true;
             } else if (toULength == 1 && source.hasRemaining() && target.hasRemaining()) {
                 /* continue with a partial double-byte character */
-                mySourceChar = (char)toUBytesArray[0];
+                mySourceChar = (toUBytesArray[0] & UConverterConstants.UNSIGNED_BYTE_MASK);
                 toULength = 0;
                 gotoGetTrailByte = true;
             }
@@ -1255,7 +1335,7 @@ class CharsetISO2022 extends CharsetICU {
             while (source.hasRemaining() || gotoGetTrailByte || gotoEscape) {
                 if (target.hasRemaining() || gotoGetTrailByte || gotoEscape) {
                     if (!gotoGetTrailByte && !gotoEscape) {
-                        mySourceChar = (char)(source.get()&UConverterConstants.UNSIGNED_BYTE_MASK);
+                        mySourceChar = (char)(source.get() & UConverterConstants.UNSIGNED_BYTE_MASK);
                     }
                     
                     if (!gotoGetTrailByte && !gotoEscape && mySourceChar == UConverterConstants.SI) {
@@ -1290,31 +1370,52 @@ class CharsetISO2022 extends CharsetICU {
                     myConverterData.isEmptySegment = false; /* Any invalid char errors will be detected separately, so just reset this */
                     if (myConverterData.toU2022State.g == 1 || gotoGetTrailByte) {
                         if (source.hasRemaining() || gotoGetTrailByte) {
+                            boolean leadIsOk, trailIsOk;
+                            short trailByte;
 // getTrailByte label
                             gotoGetTrailByte = false; // reset gotoGetTrailByte flag
                             
-                            byte trailByte;
-                            trailByte = source.get();
-                            tempBuf[0] = (byte)(mySourceChar + 0x80);
-                            tempBuf[1] = (byte)(trailByte + 0x80);
-                            mySourceChar = (char)((mySourceChar << 8) | (short)(trailByte&UConverterConstants.UNSIGNED_BYTE_MASK));
-                            if ((mySourceChar & 0x8080) == 0) {
+                            trailByte = (short)(source.get(source.position()) & UConverterConstants.UNSIGNED_BYTE_MASK);
+                            targetUniChar = UConverterConstants.missingCharMarker;
+                            /*
+                             * Ticket 5691: consistent illegal sequences:
+                             * - We include at least the first byte in the illegal sequence.
+                             * - If any of the non-initial bytes could be the start of a character,
+                             *   we stop the illegal sequence before the first one of those.
+                             * 
+                             * In ISO-2022 DBCS, if the second byte is in the 21..7e range or is
+                             * an ESC/SO/SI, we report only the first byte as the illegal sequence.
+                             * Otherwise we convert or report the pair of bytes.
+                             */
+                            leadIsOk = (short)(UConverterConstants.UNSIGNED_BYTE_MASK & (mySourceChar - 0x21)) <= (0x7e - 0x21);
+                            trailIsOk = (short)(UConverterConstants.UNSIGNED_BYTE_MASK & (trailByte - 0x21)) <= (0x7e - 0x21);
+                            if (leadIsOk && trailIsOk) {
+                                source.get();
+                                tempBuf[0] = (byte)(mySourceChar + 0x80);
+                                tempBuf[1] = (byte)(trailByte + 0x80);
                                 targetUniChar = MBCSSimpleGetNextUChar(myConverterData.currentConverter.sharedData, ByteBuffer.wrap(tempBuf), usingFallback);
-                            } else {
-                                /* illegal bytes > 0x7f */
-                                targetUniChar = UConverterConstants.missingCharMarker;
+                                mySourceChar = (char)((mySourceChar << 8) | trailByte);
+                            } else if (!(trailIsOk || IS_2022_CONTROL(trailByte))) {
+                                /* report a pair of illegal bytes if the second byte is not a DBCS starter */
+                                source.get();
+                                /* add another bit so that the code below writes 2 bytes in case of error */
+                                mySourceChar = (char)(0x10000 | (mySourceChar << 8) | trailByte);
                             }
                         } else {
                             toUBytesArray[0] = (byte)mySourceChar;
                             toULength = 1;
                             break;
                         }
-                    } else {
-                        int oldSourceLimit = source.limit();
+                    } else if (mySourceChar <= 0x7f) {
+                        int savedSourceLimit = source.limit();
+                        int savedSourcePosition = source.position();
                         source.limit(source.position());
                         source.position(source.position()-1); 
                         targetUniChar = MBCSSimpleGetNextUChar(myConverterData.currentConverter.sharedData, source, usingFallback);
-                        source.limit(oldSourceLimit);
+                        source.limit(savedSourceLimit);
+                        source.position(savedSourcePosition);
+                    } else {
+                        targetUniChar = 0xffff;
                     }
                     if (targetUniChar < 0xfffe) {
                         target.put((char)targetUniChar);
@@ -1412,7 +1513,7 @@ class CharsetISO2022 extends CharsetICU {
                         }
                     }
                     
-                    if (err.isError() || (source.position() == source.limit())) {
+                    if (err.isError() || err.isOverflow() || (source.position() == source.limit())) {
                         return err;
                     }
                 }
@@ -2580,7 +2681,11 @@ class CharsetISO2022 extends CharsetICU {
                         }
                         /* only DBCS or SBCS characters are expected */
                         /* DB characters with high bit set to 1 are expected */
-                        if (length > 2 || length == 0 || (((targetByteUnit[0] & 0x8080) != 0x8080) && length == 2)) {
+                        if (length > 2 || length == 0 ||
+                                (length == 1 && targetByteUnit[0] > 0x7f) ||
+                                (length ==2 &&
+                                        ((char)(targetByteUnit[0] - 0xa1a1) > (0xfefe - 0xa1a1) ||
+                                        ((targetByteUnit[0] - 0xa1) & UConverterConstants.UNSIGNED_BYTE_MASK) > (0xfe - 0xa1)))) {
                             targetByteUnit[0] = UConverterConstants.missingCharMarker;
                         }
                     }

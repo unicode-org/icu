@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2008, International Business Machines Corporation and    *
+* Copyright (C) 2006-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -502,6 +502,8 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
     
                         //UConverterUtility.uprv_memcpy(replayArray, replayBegin, preToUArray, preToUBegin, -preToULength);
                         replayArray.put(preToUArray,0, -preToULength);
+                        // reset position
+                        replayArray.position(0);
 
                         source=replayArray;
                         source.limit(replayArrayIndex-preToULength);
@@ -649,7 +651,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
 
     private void copy(byte[] src, int srcOffset, char[] dst, int dstOffset, int length) {
         for(int i=srcOffset; i<length; i++){
-            dst[dstOffset++]=(char)src[srcOffset++];
+            dst[dstOffset++]=(char)(src[srcOffset++] & UConverterConstants.UNSIGNED_BYTE_MASK);
         }
     }
     /*
