@@ -1169,6 +1169,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\unicode\std_string.h"
+				>
+			</File>
+			<File
 				RelativePath=".\uassert.h"
 				>
 			</File>

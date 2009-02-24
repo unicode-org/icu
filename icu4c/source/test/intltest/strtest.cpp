@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*   file name:  strtest.cpp
@@ -185,8 +185,52 @@ void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, ch
 #endif
         }
         break;
+    case 8:
+        name="TestStdNamespaceQualifier";
+        if(exec) {
+            TestStdNamespaceQualifier();
+        }
+        break;
+    case 9:
+        name="TestUsingStdNamespace";
+        if(exec) {
+            TestUsingStdNamespace();
+        }
+        break;
     default:
         name="";
         break;
     }
+}
+
+// Syntax check for the correct namespace qualifier for the standard string class.
+void
+StringTest::TestStdNamespaceQualifier() {
+#if U_HAVE_STD_STRING
+    U_STD_NSQ string s="abc xyz";
+    U_STD_NSQ string t="abc";
+    t.append(" ");
+    t.append("xyz");
+    if(s!=t) {
+        errln("standard string concatenation error: %s != %s", s.c_str(), t.c_str());
+    }
+#endif
+}
+
+#if U_HAVE_STD_STRING
+// Now test that "using namespace std;" is defined correctly.
+U_STD_NS_USE
+#endif
+
+void
+StringTest::TestUsingStdNamespace() {
+#if U_HAVE_STD_STRING
+    string s="abc xyz";
+    string t="abc";
+    t.append(" ");
+    t.append("xyz");
+    if(s!=t) {
+        errln("standard string concatenation error: %s != %s", s.c_str(), t.c_str());
+    }
+#endif
 }
