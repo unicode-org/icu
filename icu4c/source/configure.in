@@ -1,5 +1,5 @@
 # -*-autoconf-*-
-AC_COPYRIGHT([ Copyright (c) 1999-2008, International Business Machines Corporation and others. All Rights Reserved. ])
+AC_COPYRIGHT([ Copyright (c) 1999-2009, International Business Machines Corporation and others. All Rights Reserved. ])
 # configure.in for ICU
 # Stephen F. Booth, heavily modified by Yves and others
 
@@ -292,6 +292,21 @@ case "$ac_cv_c_inline" in
 	    *)       U_INLINE=$ac_cv_c_inline ;;
 esac
 AC_SUBST(U_INLINE)
+
+# set up U_HAVE_STD_STRING.
+# Copy the definition of AC_C_INLINE, with slight mods.
+#
+U_HAVE_STD_STRING=0
+AC_LANG_PUSH([C++])
+AC_MSG_CHECKING([[if #include <string> works]])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <string>]], [[]])], [ac_cv_header_stdstring=yes], [ac_cv_header_stdstring=no])
+AC_MSG_RESULT($ac_cv_header_stdstring)
+if test $ac_cv_header_stdstring = yes
+then
+	U_HAVE_STD_STRING=1
+fi
+AC_SUBST(U_HAVE_STD_STRING)
+AC_LANG_POP([C++])
 
 threads=true
 
