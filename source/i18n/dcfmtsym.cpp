@@ -16,7 +16,7 @@
 *   07/20/98    stephen     Slightly modified initialization of monetarySeparator
 ********************************************************************************
 */
- 
+
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
@@ -35,35 +35,39 @@
 // *****************************************************************************
 // class DecimalFormatSymbols
 // *****************************************************************************
- 
+
 U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DecimalFormatSymbols)
 
 static const char gNumberElements[] = "NumberElements";
+static const char gCurrencyFormatsTag[] = "currencyFormats";
+static const char gCurrencySpacingTag[] = "currencySpacing";
+static const char gBeforeCurrencyTag[] = "beforeCurrency";
+static const char gAfterCurrencyTag[] = "afterCurrency";
 
 static const UChar INTL_CURRENCY_SYMBOL_STR[] = {0xa4, 0xa4, 0};
 
 // -------------------------------------
 // Initializes this with the decimal format symbols in the default locale.
- 
+
 DecimalFormatSymbols::DecimalFormatSymbols(UErrorCode& status)
     : UObject(),
     locale()
 {
     initialize(locale, status, TRUE);
 }
- 
+
 // -------------------------------------
 // Initializes this with the decimal format symbols in the desired locale.
- 
+
 DecimalFormatSymbols::DecimalFormatSymbols(const Locale& loc, UErrorCode& status)
     : UObject(),
     locale(loc)
 {
     initialize(locale, status);
 }
- 
+
 // -------------------------------------
 
 DecimalFormatSymbols::~DecimalFormatSymbols()
@@ -90,6 +94,12 @@ DecimalFormatSymbols::operator=(const DecimalFormatSymbols& rhs)
             // fastCopyFrom is safe, see docs on fSymbols
             fSymbols[(ENumberFormatSymbol)i].fastCopyFrom(rhs.fSymbols[(ENumberFormatSymbol)i]);
         }
+        /*
+        for(int32_t i = 0; i < (int32_t)kCurrencySpacingCount; ++i) {
+            currencySpcBeforeSym[i].fastCopyFrom(rhs.currencySpcBeforeSym[i]);
+            currencySpcAfterSym[i].fastCopyFrom(rhs.currencySpcAfterSym[i]);
+        }
+        */
         locale = rhs.locale;
         uprv_strcpy(validLocale, rhs.validLocale);
         uprv_strcpy(actualLocale, rhs.actualLocale);
@@ -110,13 +120,23 @@ DecimalFormatSymbols::operator==(const DecimalFormatSymbols& that) const
             return FALSE;
         }
     }
+    /*
+    for(int32_t i = 0; i < (int32_t)kCurrencySpacingCount; ++i) {
+        if(currencySpcBeforeSym[i] != that.currencySpcBeforeSym[i]) {
+            return FALSE;
+        }
+        if(currencySpcAfterSym[i] != that.currencySpcAfterSym[i]) {
+            return FALSE;
+        }
+    }
+    */
     return locale == that.locale &&
         uprv_strcmp(validLocale, that.validLocale) == 0 &&
         uprv_strcmp(actualLocale, that.actualLocale) == 0;
 }
- 
+
 // -------------------------------------
- 
+
 void
 DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
                                  UBool useLastResortData)
@@ -125,7 +145,7 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
     currPattern = NULL;
     if (U_FAILURE(status))
         return;
-    
+
     const char* locStr = loc.getName();
     UResourceBundle *resource = ures_open((char *)0, locStr, &status);
     UResourceBundle *numberElementsRes = ures_getByKey(resource, gNumberElements, NULL, &status);
@@ -172,7 +192,7 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
                 if (ns) {
                     delete ns;
                 }
-                
+
                 // Obtain currency data from the currency API.  This is strictly
                 // for backward compatibility; we don't use DecimalFormatSymbols
                 // for currency data anymore.
@@ -197,7 +217,7 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
                                        ULOC_ACTUAL_LOCALE, &status));
         }
         //load the currency data
-        UChar ucc[4]={0}; //Currency Codes are always 3 chars long 
+        UChar ucc[4]={0}; //Currency Codes are always 3 chars long
         int32_t uccLen = 4;
         const char* locName = loc.getName();
         UErrorCode localStatus = U_ZERO_ERROR;
@@ -227,8 +247,46 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
         }
         // else ignore the error if no currency
     }
-    ures_close(resource);
     ures_close(numberElementsRes);
+
+    // Currency Spacing.
+    /*
+    UErrorCode localStatus = U_ZERO_ERROR;
+    UResourceBundle *currencyFormRes = ures_getByKeyWithFallback(resource,
+                                    gCurrencyFormatsTag, NULL, &localStatus);
+    if (localStatus == U_USING_FALLBACK_WARNING || U_SUCCESS(localStatus)) {
+        localStatus = U_ZERO_ERROR;
+        UResourceBundle *currencySpcRes = ures_getByKeyWithFallback(currencyFormRes,
+                                       gCurrencySpacingTag, NULL, &localStatus);
+
+        if (localStatus == U_USING_FALLBACK_WARNING || U_SUCCESS(localStatus)) {
+            localStatus = U_ZERO_ERROR;
+            UResourceBundle *dataRes = ures_getByKeyWithFallback(currencySpcRes,
+                                       gBeforeCurrencyTag, NULL, &localStatus);
+            if (localStatus == U_USING_FALLBACK_WARNING || U_SUCCESS(localStatus)) {
+                localStatus = U_ZERO_ERROR;
+                for (int32_t i = 0; i < kCurrencySpacingCount; i++) {
+                  currencySpcBeforeSym[i] = ures_getStringByIndex(dataRes, i,
+                                                            NULL, &localStatus);
+                }
+                ures_close(dataRes);
+            }
+            dataRes = ures_getByKeyWithFallback(currencySpcRes,
+                                      gAfterCurrencyTag, NULL, &localStatus);
+            if (localStatus == U_USING_FALLBACK_WARNING || U_SUCCESS(localStatus)) {
+                localStatus = U_ZERO_ERROR;
+                for (int32_t i = 0; i < kCurrencySpacingCount; i++) {
+                  currencySpcAfterSym[i] = ures_getStringByIndex(dataRes, i,
+                                                            NULL, &localStatus);
+                }
+                ures_close(dataRes);
+            }
+            ures_close(currencySpcRes);
+        }
+        ures_close(currencyFormRes);
+    }
+    */
+    ures_close(resource);
 }
 
 // Initializes the DecimalFormatSymbol instance with the data obtained
@@ -296,12 +354,36 @@ DecimalFormatSymbols::initialize() {
     fSymbols[kSignificantDigitSymbol] = (UChar)0x0040;  // '@' significant digit
 }
 
-Locale 
+Locale
 DecimalFormatSymbols::getLocale(ULocDataLocaleType type, UErrorCode& status) const {
     U_LOCALE_BASED(locBased, *this);
     return locBased.getLocale(type, status);
 }
 
+const UnicodeString&
+DecimalFormatSymbols::getPatternForCurrencySpacing(ECurrencySpacing type,
+                                                 UBool beforeCurrency,
+                                                 UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+      return fNoSymbol;  // always empty.
+    }
+    if (beforeCurrency) {
+      return currencySpcBeforeSym[(int32_t)type];
+    } else {
+      return currencySpcAfterSym[(int32_t)type];
+    }
+}
+
+void
+DecimalFormatSymbols::setPatternForCurrencySpacing(ECurrencySpacing type,
+                                                   UBool beforeCurrency,
+                                             const UnicodeString& pattern) {
+  if (beforeCurrency) {
+    currencySpcBeforeSym[(int32_t)type] = pattern;
+  } else {
+    currencySpcAfterSym[(int32_t)type] =  pattern;
+  }
+}
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

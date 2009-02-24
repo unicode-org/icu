@@ -1,19 +1,19 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2007, International Business Machines
+*   Copyright (C) 1997-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
 * File DCFMTSYM.H
 *
 * Modification History:
-* 
+*
 *   Date        Name        Description
 *   02/19/97    aliu        Converted from java.
 *   03/18/97    clhuang     Updated per C++ implementation.
 *   03/27/97    helena      Updated to pass the simple test after code review.
 *   08/26/97    aliu        Added currency/intl currency symbol support.
-*   07/22/98    stephen     Changed to match C++ style 
+*   07/22/98    stephen     Changed to match C++ style
 *                            currencySymbol -> fCurrencySymbol
 *                            Constants changed from CAPS to kCaps
 *   06/24/99    helena      Integrated Alan's NF enhancements and Java2 bug fixes
@@ -21,10 +21,10 @@
 *                            functions.
 ********************************************************************************
 */
- 
+
 #ifndef DCFMTSYM_H
 #define DCFMTSYM_H
- 
+
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
@@ -33,7 +33,7 @@
 #include "unicode/locid.h"
 
 /**
- * \file 
+ * \file
  * \brief C++ API: Symbols for formatting numbers.
  */
 
@@ -121,13 +121,24 @@ public:
         /** Significant digit symbol
          * @stable ICU 3.0 */
         kSignificantDigitSymbol,
-        /** The monetary grouping separator 
+        /** The monetary grouping separator
          * @stable ICU 3.6
          */
         kMonetaryGroupingSeparatorSymbol,
         /** count symbol constants */
         kFormatSymbolCount
     };
+
+    /**
+      * Constants for specifying currency spacing
+      * @draft ICU 4.2
+      */
+     enum ECurrencySpacing {
+       kCurrencyMatch,
+       kSurroundingMatch,
+       kInsert,
+       kCurrencySpacingCount
+     };
 
     /**
      * Create a DecimalFormatSymbols object for the given locale.
@@ -223,6 +234,37 @@ public:
     Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
 
     /**
+      * Get pattern string for 'CurrencySpacing' that can be applied to
+      * currency format.
+      * This API gets the CurrencySpacing data from ResourceBundle. The pattern can
+      * be empty if there is no data from current locale and its parent locales.
+      *
+      * @param type :  kCurrencyMatch, kSurroundingMatch or kInsert.
+      * @param beforeCurrency : true if the pattern is for before currency symbol.
+      *                         false if the pattern is for after currency symbol.
+      * @param status: Input/output parameter, set to success or
+      *                  failure code upon return.
+      * @return pattern string for currencyMatch, surroundingMatch or spaceInsert.
+      *     Return empty string if there is no data for this locale and its parent
+      *     locales.
+      */
+     const UnicodeString& getPatternForCurrencySpacing(ECurrencySpacing type,
+                                                 UBool beforeCurrency,
+                                                 UErrorCode& status) const;
+     /**
+       * Set pattern string for 'CurrencySpacing' that can be applied to
+       * currency format.
+       *
+       * @param type : kCurrencyMatch, kSurroundingMatch or kInsert.
+       * @param beforeCurrency : true if the pattern is for before currency symbol.
+       *                         false if the pattern is for after currency symbol.
+       * @param pattern : pattern string to override current setting.
+       */
+     void setPatternForCurrencySpacing(ECurrencySpacing type,
+                                       UBool beforeCurrency,
+                                       const UnicodeString& pattern);
+
+    /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
      * @stable ICU 2.2
@@ -254,7 +296,7 @@ private:
     /**
      * Initialize the symbols from the given array of UnicodeStrings.
      * The array must be of the correct size.
-     * 
+     *
      * @param numberElements    the number format symbols
      * @param numberElementsLength length of numberElements
      */
@@ -316,6 +358,9 @@ private:
     char actualLocale[ULOC_FULLNAME_CAPACITY];
     char validLocale[ULOC_FULLNAME_CAPACITY];
     const UChar* currPattern;
+
+    UnicodeString currencySpcBeforeSym[kCurrencySpacingCount];
+    UnicodeString currencySpcAfterSym[kCurrencySpacingCount];
 };
 
 // -------------------------------------
