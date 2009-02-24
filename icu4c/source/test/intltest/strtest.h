@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*   file name:  strtest.h
@@ -15,6 +15,7 @@
 /*
  * Test character- and string- related settings in utypes.h,
  * macros in putil.h, and constructors in unistr.h .
+ * Also basic tests for std_string.h .
  */
 
 #ifndef __STRTEST_H__
@@ -33,6 +34,8 @@ private:
     void TestEndian(void);
     void TestSizeofTypes(void);
     void TestCharsetFamily(void);
+    void TestStdNamespaceQualifier();
+    void TestUsingStdNamespace();
 };
 
 #endif
