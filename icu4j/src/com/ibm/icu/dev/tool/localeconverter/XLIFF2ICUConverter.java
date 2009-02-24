@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 2003-2007, International Business Machines Corporation and   *
+ * Copyright (C) 2003-2009, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
@@ -379,6 +379,12 @@ public final class XLIFF2ICUConverter {
                 dfactory.setSchema(schema);
             } catch (SAXException e) {
                 System.err.println("Can't create the schema...");
+                System.exit(-1);
+            } catch (UnsupportedOperationException e) {
+                System.err.println("ERROR:\tOne of the schema operations is not supported with this JVM.");
+                System.err.println("\tIf you are using GNU Java, you should try using the latest Sun JVM.");
+                System.err.println("\n*Here is the stack trace:");
+                e.printStackTrace();
                 System.exit(-1);
             }
             
