@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2008, International Business Machines
+*   Copyright (C) 2002-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -251,7 +251,7 @@ u_isprintPOSIX(UChar32 c);
 #define _Ll     FLAG(U_LOWERCASE_LETTER)
 #define _Lt     FLAG(U_TITLECASE_LETTER)
 #define _Lm     FLAG(U_MODIFIER_LETTER)
-#define _Lo     FLAG(U_OTHER_LETTER)
+/* #define _Lo     FLAG(U_OTHER_LETTER) -- conflicts with MS Visual Studio 9.0 xiosbase */
 #define _Mn     FLAG(U_NON_SPACING_MARK)
 #define _Me     FLAG(U_ENCLOSING_MARK)
 #define _Mc     FLAG(U_COMBINING_SPACING_MARK)
@@ -267,15 +267,15 @@ u_isprintPOSIX(UChar32 c);
 #define _Cs     FLAG(U_SURROGATE)
 #define _Pd     FLAG(U_DASH_PUNCTUATION)
 #define _Ps     FLAG(U_START_PUNCTUATION)
-#define _Pe     FLAG(U_END_PUNCTUATION)
-#define _Pc     FLAG(U_CONNECTOR_PUNCTUATION)
+/* #define _Pe     FLAG(U_END_PUNCTUATION) -- conflicts with MS Visual Studio 9.0 xlocnum */
+/* #define _Pc     FLAG(U_CONNECTOR_PUNCTUATION) -- conflicts with MS Visual Studio 9.0 streambuf */
 #define _Po     FLAG(U_OTHER_PUNCTUATION)
 #define _Sm     FLAG(U_MATH_SYMBOL)
 #define _Sc     FLAG(U_CURRENCY_SYMBOL)
 #define _Sk     FLAG(U_MODIFIER_SYMBOL)
 #define _So     FLAG(U_OTHER_SYMBOL)
 #define _Pi     FLAG(U_INITIAL_PUNCTUATION)
-#define _Pf     FLAG(U_FINAL_PUNCTUATION)
+/* #define _Pf     FLAG(U_FINAL_PUNCTUATION) -- conflicts with MS Visual Studio 9.0 streambuf */
 
 /** Some code points. @internal */
 enum {
