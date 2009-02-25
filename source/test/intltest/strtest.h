@@ -36,6 +36,7 @@ private:
     void TestCharsetFamily(void);
     void TestStdNamespaceQualifier();
     void TestUsingStdNamespace();
+    void TestSTLCompatibility();
 };
 
 #endif
