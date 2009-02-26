@@ -1,10 +1,13 @@
 ## -*-makefile-*-
-## Copyright (c) 2003-2007 IBM, Ken Foskey, and others. All rights reserved.
+## Copyright (c) 2003-2009 IBM, Ken Foskey, and others. All rights reserved.
 ##
 ## Aix-specific setup (for gcc)
 ##
 ## Please note: AIX does NOT have library versioning per se (there is no 'SONAME' capability). 
 ## So, we are using 'windows' style library names, that is, libicuuc20.1.so instead of libicuuc.so.20.1
+
+# Certain files don't compile in -ansi mode (e.g. umutex.c, toolutil.c, and cdatatst.c)
+CFLAGS += -D_ALL_SOURCE
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
