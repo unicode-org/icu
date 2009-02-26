@@ -275,6 +275,13 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
         Set pluralCountSet = new HashSet();
         ULocale parentLocale = uloc;
         String numberStylePattern = NumberFormat.getPattern(uloc, NumberFormat.NUMBERSTYLE);
+        // Split the number style pattern into pos and neg if applicable
+        int separatorIndex = numberStylePattern.indexOf(";");
+        String negNumberPattern = null;
+        if (separatorIndex != -1) {
+            negNumberPattern = numberStylePattern.substring(separatorIndex + 1);
+            numberStylePattern = numberStylePattern.substring(0, separatorIndex);
+        }
         while (parentLocale != null) {
             try {
                 ICUResourceBundle resource = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, parentLocale);
@@ -290,6 +297,16 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
                     // and {1} with triple currency sign
                     String patternWithNumber = Utility.replace(pattern, "{0}", numberStylePattern);
                     String patternWithCurrencySign = Utility.replace(patternWithNumber, "{1}", tripleCurrencyStr);
+                    if (separatorIndex != -1) {
+                        String negPattern = pattern;
+                        String negWithNumber = Utility.replace(negPattern, "{0}", negNumberPattern); 
+                        String negWithCurrSign = Utility.replace(negPattern, "{1}", tripleCurrencyStr); 
+                        StringBuffer posNegPatterns = new StringBuffer(patternWithCurrencySign);
+                        posNegPatterns.append(";");
+                        posNegPatterns.append(negWithCurrSign);
+                        patternWithCurrencySign = posNegPatterns.toString();
+                        
+                    } 
                     pluralCountToCurrencyUnitPattern.put(pluralCount, patternWithCurrencySign);
                     pluralCountSet.add(pluralCount);
                 }

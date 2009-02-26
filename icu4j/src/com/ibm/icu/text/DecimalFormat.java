@@ -2769,7 +2769,7 @@ public class DecimalFormat extends NumberFormat {
                                     Currency[] currency) {
         int start = pos;
         for (int i=0; 
-             i < affixPat.length() && pos >= 0 && pos < text.length(); ) {
+             i < affixPat.length() && pos >= 0; ) {
             char c = affixPat.charAt(i++);
             if (c == QUOTE) {
                 for (;;) {
@@ -2868,6 +2868,9 @@ public class DecimalFormat extends NumberFormat {
      * isRuleWhiteSpace(ch) then match a run of white space in text.
      */
     static final int match(String text, int pos, int ch) {
+        if (pos >= text.length()) { 
+            return -1; 
+        } 
         if (UCharacterProperty.isRuleWhiteSpace(ch)) {
             // Advance over run of white space in input text
             // Must see at least one white space char in input

@@ -489,6 +489,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             {"ti_ET", "-1.23", "USD", "-US$1.23", "-USD1.23", "-1.23 USD"},
             // test choice format
             {"es_AR", "1", "INR", "Re.\u00A01,00", "INR\u00A01,00", "1,00 rupia india"},
+            {"ar_EG", "1", "USD", "US$\u00A0\u0661\u066B\u0660\u0660", "USD\u00a0\u0661\u066b\u0660\u0660", "\u0661\u066b\u0660\u0660 \u062f\u0648\u0644\u0627\u0631 \u0623\u0645\u0631\u064a\u0643\u064a"},
         };
         
         for (int i=0; i<DATA.length; ++i) {
