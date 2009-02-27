@@ -1,5 +1,5 @@
 ######################################################################
-# Copyright (c) 2004, 2008 International Business Machines
+# Copyright (c) 2004, 2009 International Business Machines
 # Corporation and others.  All Rights Reserved.
 ######################################################################
 # Author: Alan Liu
@@ -75,7 +75,8 @@ rt:  ""       -123.456    "-123.456"
 fpc: "en_US"        1234.56/USD  "$1,234.56"    1234.56/USD
 fpc: -              1234.56/JPY  "¥1,235"  1235/JPY
 # ISO codes that overlap display names (QQQ vs. Q)
-fpc: -              123/QQQ      "QQQ123.00"    123/QQQ   # QQQ is fake
+# fake ISO code is not longer supported
+# fpc: -              123/QQQ      "QQQ123.00"    123/QQQ   # QQQ is fake
 fpc: -              123/GTQ      "Q123.00"      123/GTQ
 # ChoiceFormat-based display names
 fpc: -              1/INR        "₨1.00"      1/INR

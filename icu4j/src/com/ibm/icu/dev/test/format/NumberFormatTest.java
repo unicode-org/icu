@@ -478,8 +478,8 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             {"en_US", "-1234.56", "USD", "($1,234.56)", "(USD1,234.56)", "-1,234.56 US dollars"},
             {"zh_CN", "1", "USD", "US$1.00", "USD1.00", "1.00 \u7F8E\u5143"}, 
             {"zh_CN", "1234.56", "USD", "US$1,234.56", "USD1,234.56", "1,234.56 \u7F8E\u5143"},
-            {"zh_CN", "1", "CHY", "CHY1.00", "CHY1.00", "1.00 CHY"},
-            {"zh_CN", "1234.56", "CHY", "CHY1,234.56", "CHY1,234.56", "1,234.56 CHY"},
+            //{"zh_CN", "1", "CHY", "CHY1.00", "CHY1.00", "1.00 CHY"},
+            //{"zh_CN", "1234.56", "CHY", "CHY1,234.56", "CHY1,234.56", "1,234.56 CHY"},
             {"zh_CN", "1", "CNY", "\uFFE51.00", "CNY1.00", "1.00 \u4EBA\u6C11\u5E01"},
             {"zh_CN", "1234.56", "CNY", "\uFFE51,234.56", "CNY1,234.56", "1,234.56 \u4EBA\u6C11\u5E01"}, 
             {"ru_RU", "1", "RUB", "1,00\u00A0\u0440\u0443\u0431.", "1,00\u00A0RUB", "1,00 \u0420\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0439 \u0440\u0443\u0431\u043B\u044C"},
@@ -541,6 +541,37 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
           }  
         }
     }
+
+
+    public void TestMiscCurrencyParsing() {
+        String[][] DATA = {
+            // each has: string to be parsed, parsed position, error position
+            {"1.00 ", "0", "4"},
+            {"1.00 UAE dirha", "0", "4"},
+            {"1.00 us dollar", "14", "-1"},
+            {"1.00 US DOLLAR", "14", "-1"},
+            {"1.00 usd", "8", "-1"},
+        };
+        ULocale locale = new ULocale("en_US");
+        for (int i=0; i<DATA.length; ++i) {
+            String stringToBeParsed = DATA[i][0];
+            int parsedPosition = Integer.parseInt(DATA[i][1]);
+            int errorIndex = Integer.parseInt(DATA[i][2]);
+            NumberFormat numFmt = NumberFormat.getInstance(locale, NumberFormat.CURRENCYSTYLE);
+            ParsePosition parsePosition = new ParsePosition(0);
+            Number val = numFmt.parse(stringToBeParsed, parsePosition);
+            if (parsePosition.getIndex() != parsedPosition ||
+                parsePosition.getErrorIndex() != errorIndex) {
+                errln("FAIL: parse failed. expected position: " + parsedPosition +"; actual: " + parsePosition.getIndex());
+                errln("FAIL: parse failed. expected error position: " + errorIndex + "; actual: " + parsePosition.getErrorIndex());
+            }
+            if (parsePosition.getErrorIndex() == -1 &&
+                val.doubleValue() != 1.00) {
+                errln("FAIL: parse failed. expected 1.00, actual:" + val);
+            }
+        }
+    }
+
 
     /**
      * Test the Currency object handling, new as of ICU 2.2.

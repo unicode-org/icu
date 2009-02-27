@@ -758,26 +758,6 @@ public class Currency extends MeasureUnit implements Serializable {
         }
 
         int start = pos.getIndex();
-        if (isoResult == null || 
-            maxLength < 3 && (text.length() - start) >= 3) {
-            // If display name parse fails or if it matches fewer than 3
-            // characters, try to parse 3-letter ISO.  Do this after the
-            // display name processing so 3-letter display names are
-            // preferred.  Consider /[A-Z]{3}/ to be valid ISO, and parse
-            // it manually--UnicodeSet/regex are too slow and heavy.
-            boolean valid = true;
-            for (int k=0; k<3; ++k) {
-                char ch = text.charAt(start + k); // 16-bit ok
-                if (ch < 'A' || ch > 'Z') {
-                    valid = false;
-                    break;
-                }
-            }
-            if (valid) {
-                pos.setIndex(pos.getIndex() + 3);
-                return text.substring(start, start+3);
-            }
-        }
         pos.setIndex(start + maxLength);
         return isoResult;
     }
