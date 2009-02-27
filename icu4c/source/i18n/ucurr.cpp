@@ -1234,108 +1234,108 @@ ucurr_countCurrencies(const char* locale,
                  UDate date, 
                  UErrorCode* ec)
 {
-	int32_t currCount = 0;
+    int32_t currCount = 0;
     int32_t resLen = 0;
     const UChar* s = NULL;
 
     if (ec != NULL && U_SUCCESS(*ec)) 
-	{
-		// local variables
+    {
+        // local variables
         UErrorCode localStatus = U_ZERO_ERROR;
         char id[ULOC_FULLNAME_CAPACITY];
         resLen = uloc_getKeywordValue(locale, "currency", id, ULOC_FULLNAME_CAPACITY, &localStatus);
-		// get country or country_variant in `id'
-		uint32_t variantType = idForLocale(locale, id, sizeof(id), ec);
+        // get country or country_variant in `id'
+        uint32_t variantType = idForLocale(locale, id, sizeof(id), ec);
 
-		if (U_FAILURE(*ec)) 
-		{
-			return 0;
-		}
+        if (U_FAILURE(*ec))
+        {
+            return 0;
+        }
 
-		// Remove variants, which is only needed for registration.
-		char *idDelim = strchr(id, VAR_DELIM);
-		if (idDelim) 
-		{
-			idDelim[0] = 0;
-		}
-	                
-		// Look up the CurrencyMap element in the root bundle.
-		UResourceBundle *rb = ures_openDirect(NULL, CURRENCY_DATA, &localStatus);
-		UResourceBundle *cm = ures_getByKey(rb, CURRENCY_MAP, rb, &localStatus);
+        // Remove variants, which is only needed for registration.
+        char *idDelim = strchr(id, VAR_DELIM);
+        if (idDelim)
+        {
+            idDelim[0] = 0;
+        }
 
-		// Using the id derived from the local, get the currency data
-		UResourceBundle *countryArray = ures_getByKey(rb, id, cm, &localStatus);
+        // Look up the CurrencyMap element in the root bundle.
+        UResourceBundle *rb = ures_openDirect(NULL, CURRENCY_DATA, &localStatus);
+        UResourceBundle *cm = ures_getByKey(rb, CURRENCY_MAP, rb, &localStatus);
 
-		// process each currency to see which one is valid for the given date
-		if (U_SUCCESS(localStatus))
-		{
-			for (int32_t i=0; i<ures_getSize(countryArray); i++)
-			{
-				// get the currency resource
-				UResourceBundle *currencyRes = ures_getByIndex(countryArray, i, NULL, &localStatus);
-				s = ures_getStringByKey(currencyRes, "id", &resLen, &localStatus);
+        // Using the id derived from the local, get the currency data
+        UResourceBundle *countryArray = ures_getByKey(rb, id, cm, &localStatus);
 
-				// get the from date
-				int32_t fromLength = 0;
-				UResourceBundle *fromRes = ures_getByKey(currencyRes, "from", NULL, &localStatus);
-				const int32_t *fromArray = ures_getIntVector(fromRes, &fromLength, &localStatus);
+        // process each currency to see which one is valid for the given date
+        if (U_SUCCESS(localStatus))
+        {
+            for (int32_t i=0; i<ures_getSize(countryArray); i++)
+            {
+                // get the currency resource
+                UResourceBundle *currencyRes = ures_getByIndex(countryArray, i, NULL, &localStatus);
+                s = ures_getStringByKey(currencyRes, "id", &resLen, &localStatus);
 
-				int64_t currDate64 = (int64_t)fromArray[0] << 32;			
-				currDate64 |= ((int64_t)fromArray[1] & (int64_t)INT64_C(0x00000000FFFFFFFF));
-				UDate fromDate = (UDate)currDate64;
-					
-				if (ures_getSize(currencyRes) > 2)
-				{
-					int32_t toLength = 0;
-					UResourceBundle *toRes = ures_getByKey(currencyRes, "to", NULL, &localStatus);
-					const int32_t *toArray = ures_getIntVector(toRes, &toLength, &localStatus);
-							
-					currDate64 = (int64_t)toArray[0] << 32;			
-					currDate64 |= ((int64_t)toArray[1] & (int64_t)INT64_C(0x00000000FFFFFFFF));
-					UDate toDate = (UDate)currDate64;			
+                // get the from date
+                int32_t fromLength = 0;
+                UResourceBundle *fromRes = ures_getByKey(currencyRes, "from", NULL, &localStatus);
+                const int32_t *fromArray = ures_getIntVector(fromRes, &fromLength, &localStatus);
 
-					if ((fromDate <= date) && (date < toDate))
-					{
-						currCount++;
-					}
+                int64_t currDate64 = (int64_t)fromArray[0] << 32;
+                currDate64 |= ((int64_t)fromArray[1] & (int64_t)INT64_C(0x00000000FFFFFFFF));
+                UDate fromDate = (UDate)currDate64;
 
-					ures_close(toRes);
-				}
-				else
-				{
-					if (fromDate <= date)
-					{
-						currCount++;
-					}
-				}
+                if (ures_getSize(currencyRes)> 2)
+                {
+                    int32_t toLength = 0;
+                    UResourceBundle *toRes = ures_getByKey(currencyRes, "to", NULL, &localStatus);
+                    const int32_t *toArray = ures_getIntVector(toRes, &toLength, &localStatus);
 
-				// close open resources
-				ures_close(currencyRes);
-				ures_close(fromRes);
+                    currDate64 = (int64_t)toArray[0] << 32;
+                    currDate64 |= ((int64_t)toArray[1] & (int64_t)INT64_C(0x00000000FFFFFFFF));
+                    UDate toDate = (UDate)currDate64;
 
-			} // end For loop
-		} // end if (U_SUCCESS(localStatus))
+                    if ((fromDate <= date) && (date < toDate))
+                    {
+                        currCount++;
+                    }
 
-		ures_close(countryArray);
+                    ures_close(toRes);
+                }
+                else
+                {
+                    if (fromDate <= date)
+                    {
+                        currCount++;
+                    }
+                }
 
-		// Check for errors
-        if (*ec == U_ZERO_ERROR || localStatus != U_ZERO_ERROR) 
-		{
-			// There is nothing to fallback to. 
-			// Report the failure/warning if possible.
-			*ec = localStatus;
-		}
+                // close open resources
+                ures_close(currencyRes);
+                ures_close(fromRes);
 
-		if (U_SUCCESS(*ec)) 
-		{
-			// no errors
-			return currCount;
-		}
+            } // end For loop
+        } // end if (U_SUCCESS(localStatus))
+
+        ures_close(countryArray);
+
+        // Check for errors
+        if (*ec == U_ZERO_ERROR || localStatus != U_ZERO_ERROR)
+        {
+            // There is nothing to fallback to. 
+            // Report the failure/warning if possible.
+            *ec = localStatus;
+        }
+
+        if (U_SUCCESS(*ec))
+        {
+            // no errors
+            return currCount;
+        }
 
     }
 
-	// If we got here, either error code is invalid or
-	// some argument passed is no good.
+    // If we got here, either error code is invalid or
+    // some argument passed is no good.
     return 0;
 }
 
@@ -1351,146 +1351,146 @@ ucurr_forLocaleAndDate(const char* locale,
 	int32_t currIndex = 0;
     const UChar* s = NULL;
 
-    if (ec != NULL && U_SUCCESS(*ec)) 
-	{
-		// check the arguments passed
-        if ((buff && buffCapacity) || !buffCapacity ) 
-		{
-			// local variables
+    if (ec != NULL && U_SUCCESS(*ec))
+    {
+        // check the arguments passed
+        if ((buff && buffCapacity) || !buffCapacity )
+        {
+            // local variables
             UErrorCode localStatus = U_ZERO_ERROR;
             char id[ULOC_FULLNAME_CAPACITY];
             resLen = uloc_getKeywordValue(locale, "currency", id, ULOC_FULLNAME_CAPACITY, &localStatus);
 
-		       // get country or country_variant in `id'
-		       uint32_t variantType = idForLocale(locale, id, sizeof(id), ec);
-			if (U_FAILURE(*ec)) 
-			{
-				return 0;
-			}
+            // get country or country_variant in `id'
+            uint32_t variantType = idForLocale(locale, id, sizeof(id), ec);
+            if (U_FAILURE(*ec))
+            {
+                return 0;
+            }
 
-			// Remove variants, which is only needed for registration.
-			char *idDelim = strchr(id, VAR_DELIM);
-			if (idDelim) 
-			{
-				idDelim[0] = 0;
-			}
-	                
-			// Look up the CurrencyMap element in the root bundle.
-			UResourceBundle *rb = ures_openDirect(NULL, CURRENCY_DATA, &localStatus);
-			UResourceBundle *cm = ures_getByKey(rb, CURRENCY_MAP, rb, &localStatus);
+            // Remove variants, which is only needed for registration.
+            char *idDelim = strchr(id, VAR_DELIM);
+            if (idDelim)
+            {
+                idDelim[0] = 0;
+            }
 
-			// Using the id derived from the local, get the currency data
-			UResourceBundle *countryArray = ures_getByKey(rb, id, cm, &localStatus);
+            // Look up the CurrencyMap element in the root bundle.
+            UResourceBundle *rb = ures_openDirect(NULL, CURRENCY_DATA, &localStatus);
+            UResourceBundle *cm = ures_getByKey(rb, CURRENCY_MAP, rb, &localStatus);
 
-			// process each currency to see which one is valid for the given date
-			bool matchFound = false;
-			if (U_SUCCESS(localStatus))
-			{
-                if ((index <= 0) || (index > ures_getSize(countryArray)))
-				{
+            // Using the id derived from the local, get the currency data
+            UResourceBundle *countryArray = ures_getByKey(rb, id, cm, &localStatus);
+
+            // process each currency to see which one is valid for the given date
+            bool matchFound = false;
+            if (U_SUCCESS(localStatus))
+            {
+                if ((index <= 0) || (index> ures_getSize(countryArray)))
+                {
                     // requested index is out of bounds
                     ures_close(countryArray);
-					return 0;
-				}
+                    return 0;
+                }
 
-				for (int32_t i=0; i<ures_getSize(countryArray); i++)
-				{
-					// get the currency resource
-					UResourceBundle *currencyRes = ures_getByIndex(countryArray, i, NULL, &localStatus);
-					s = ures_getStringByKey(currencyRes, "id", &resLen, &localStatus);
+                for (int32_t i=0; i<ures_getSize(countryArray); i++)
+                {
+                    // get the currency resource
+                    UResourceBundle *currencyRes = ures_getByIndex(countryArray, i, NULL, &localStatus);
+                    s = ures_getStringByKey(currencyRes, "id", &resLen, &localStatus);
 
-					// get the from date
-					int32_t fromLength = 0;
-					UResourceBundle *fromRes = ures_getByKey(currencyRes, "from", NULL, &localStatus);
-					const int32_t *fromArray = ures_getIntVector(fromRes, &fromLength, &localStatus);
+                    // get the from date
+                    int32_t fromLength = 0;
+                    UResourceBundle *fromRes = ures_getByKey(currencyRes, "from", NULL, &localStatus);
+                    const int32_t *fromArray = ures_getIntVector(fromRes, &fromLength, &localStatus);
 
-					int64_t currDate64 = (int64_t)fromArray[0] << 32;			
-					currDate64 |= ((int64_t)fromArray[1] & (int64_t)INT64_C(0x00000000FFFFFFFF));
-					UDate fromDate = (UDate)currDate64;
-					
-					if (ures_getSize(currencyRes) > 2)
-					{
-						int32_t toLength = 0;
-						UResourceBundle *toRes = ures_getByKey(currencyRes, "to", NULL, &localStatus);
-						const int32_t *toArray = ures_getIntVector(toRes, &toLength, &localStatus);
-							
-						currDate64 = (int64_t)toArray[0] << 32;			
-						currDate64 |= ((int64_t)toArray[1] & (int64_t)INT64_C(0x00000000FFFFFFFF));
-						UDate toDate = (UDate)currDate64;			
+                    int64_t currDate64 = (int64_t)fromArray[0] << 32;
+                    currDate64 |= ((int64_t)fromArray[1] & (int64_t)INT64_C(0x00000000FFFFFFFF));
+                    UDate fromDate = (UDate)currDate64;
 
-						if ((fromDate <= date) && (date < toDate))
-						{
-							currIndex++;
-							if (currIndex == index)
-							{
-							    matchFound = true;
-							}
-						}
+                    if (ures_getSize(currencyRes)> 2)
+                    {
+                        int32_t toLength = 0;
+                        UResourceBundle *toRes = ures_getByKey(currencyRes, "to", NULL, &localStatus);
+                        const int32_t *toArray = ures_getIntVector(toRes, &toLength, &localStatus);
 
-						ures_close(toRes);
-					}
-					else
-					{
-						if (fromDate <= date)
-						{
-							currIndex++;
-							if (currIndex == index)
-							{
-							    matchFound = true;
-							}
-						}
-					}
+                        currDate64 = (int64_t)toArray[0] << 32;
+                        currDate64 |= ((int64_t)toArray[1] & (int64_t)INT64_C(0x00000000FFFFFFFF));
+                        UDate toDate = (UDate)currDate64;
 
-					// close open resources
-					ures_close(currencyRes);
-					ures_close(fromRes);
-				        
-					// check for loop exit
-					if (matchFound)
-					{
-						break;
-					}
+                        if ((fromDate <= date) && (date < toDate))
+                        {
+                            currIndex++;
+                            if (currIndex == index)
+                            {
+                                matchFound = true;
+                            }
+                        }
 
-				} // end For loop
-			}
+                        ures_close(toRes);
+                    }
+                    else
+                    {
+                        if (fromDate <= date)
+                        {
+                            currIndex++;
+                            if (currIndex == index)
+                            {
+                                matchFound = true;
+                            }
+                        }
+                    }
 
-			ures_close(countryArray);
+                    // close open resources
+                    ures_close(currencyRes);
+                    ures_close(fromRes);
 
-			// Check for errors
-            if (*ec == U_ZERO_ERROR || localStatus != U_ZERO_ERROR) 
-			{
-				// There is nothing to fallback to. 
-				// Report the failure/warning if possible.
-				*ec = localStatus;
-			}
+                    // check for loop exit
+                    if (matchFound)
+                    {
+                        break;
+                    }
 
-			if (U_SUCCESS(*ec)) 
-			{
-				// no errors
-				if((buffCapacity > resLen) && matchFound)
-				{
-					// write out the currency value
-					u_strcpy(buff, s);
-				}
-				else
-				{
-					return 0;
-				}
-			}
+                } // end For loop
+            }
 
-			// return null terminated currency string
+            ures_close(countryArray);
+
+            // Check for errors
+            if (*ec == U_ZERO_ERROR || localStatus != U_ZERO_ERROR)
+            {
+                // There is nothing to fallback to. 
+                // Report the failure/warning if possible.
+                *ec = localStatus;
+            }
+
+            if (U_SUCCESS(*ec))
+            {
+                // no errors
+                if((buffCapacity> resLen) && matchFound)
+                {
+                    // write out the currency value
+                    u_strcpy(buff, s);
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+
+            // return null terminated currency string
             return u_terminateUChars(buff, buffCapacity, resLen, ec);
-		}
-        else 
-		{
-			// illegal argument encountered
+        }
+        else
+        {
+            // illegal argument encountered
             *ec = U_ILLEGAL_ARGUMENT_ERROR;
         }
 
     }
 
-	// If we got here, either error code is invalid or
-	// some argument passed is no good.
+    // If we got here, either error code is invalid or
+    // some argument passed is no good.
     return resLen;
 }
 
