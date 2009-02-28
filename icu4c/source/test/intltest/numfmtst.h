@@ -140,6 +140,8 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestCurrencyFormatForMixParsing();
     void TestDecimalFormatCurrencyParse();
     void TestCurrencyIsoPluralFormat();
+    void TestCurrencyParsing();
+    void TestParseCurrencyInUCurr();
 
  private:
 

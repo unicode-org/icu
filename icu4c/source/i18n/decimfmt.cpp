@@ -2287,7 +2287,7 @@ int32_t DecimalFormat::compareComplexAffix(const UnicodeString& affixPat,
              fCurrencySignCount > fgCurrencySignCountZero);
 
     for (int32_t i=0; 
-         i<affixPat.length() && pos >= 0 && pos < text.length(); ) {
+         i<affixPat.length() && pos >= 0; ) {
         UChar32 c = affixPat.char32At(i);
         i += U16_LENGTH(c);
 

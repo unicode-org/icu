@@ -25,6 +25,9 @@
 
 U_NAMESPACE_BEGIN
 
+
+static const UChar gNumberPatternSeparator = 0x3B; // ;
+
 U_CDECL_BEGIN
 
 /**
@@ -41,11 +44,7 @@ U_CALLCONV ValueComparator(UHashTok val1, UHashTok val2) {
     return  *affix_1 == *affix_2;
 }
 
-//#define CURRPINF_DEBUG
 
-#ifdef CURRPINF_DEBUG
-#include "stdio.h"
-#endif
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CurrencyPluralInfo)
 
@@ -235,6 +234,21 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
     // TODO: 0 to be NumberFormat::fNumberStyle
     const UChar* numberStylePattern = ures_getStringByIndex(numberPatterns, 0, 
                                                             &ptnLen, &ec);
+    int32_t numberStylePatternLen = ptnLen;
+    const UChar* negNumberStylePattern = NULL;
+    int32_t negNumberStylePatternLen = 0;
+    // TODO: Java
+    // parse to check whether there is ";" separator in the numberStylePattern
+    UBool hasSeparator = false;
+    for (int32_t styleCharIndex = 0; styleCharIndex < ptnLen; ++styleCharIndex) {
+        if (numberStylePattern[styleCharIndex] == gNumberPatternSeparator) {
+            hasSeparator = true;
+            // split the number style pattern into positive and negative
+            negNumberStylePattern = numberStylePattern + styleCharIndex + 1;
+            negNumberStylePatternLen = ptnLen - styleCharIndex - 1;
+            numberStylePatternLen = styleCharIndex;
+        }
+    }
     ures_close(numberPatterns);
 
     if (U_FAILURE(ec)) {
@@ -244,6 +258,9 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
 
     UResourceBundle *currencyRes = ures_getByKeyWithFallback(rb, gCurrUnitPtnTag, NULL, &ec);
     
+#ifdef CURRENCY_PLURAL_INFO_DEBUG
+    std::cout << "in set up\n";
+#endif
     StringEnumeration* keywords = fPluralRules->getKeywords(ec);
     if (U_SUCCESS(ec)) {
         const char* pluralCount;
@@ -255,17 +272,26 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
                     currencyRes, pluralCount, &ptnLen, &err);
                 if (U_SUCCESS(err) && ptnLen > 0) {
                     UnicodeString* pattern = new UnicodeString(patternChars, ptnLen);
-#ifdef CURRPINF_DEBUG
+#ifdef CURRENCY_PLURAL_INFO_DEBUG
                     char result_1[1000];
                     pattern->extract(0, pattern->length(), result_1, "UTF-8");
-                    printf("pluralCount: %s; pattern: %s\n", pluralCount, result_1);
+                    std::cout << "pluralCount: " << pluralCount << "; pattern: " << result_1 << "\n";
 #endif
-                    pattern->findAndReplace(gPart0, numberStylePattern);
+                    pattern->findAndReplace(gPart0, 
+                      UnicodeString(numberStylePattern, numberStylePatternLen));
                     pattern->findAndReplace(gPart1, gTripleCurrencySign);
 
-#ifdef CURRPINF_DEBUG
+                    if (hasSeparator) {
+                        UnicodeString negPattern(patternChars, ptnLen);
+                        negPattern.findAndReplace(gPart0, 
+                          UnicodeString(negNumberStylePattern, negNumberStylePatternLen));
+                        negPattern.findAndReplace(gPart1, gTripleCurrencySign);
+                        pattern->append(gNumberPatternSeparator);
+                        pattern->append(negPattern);
+                    }
+#ifdef CURRENCY_PLURAL_INFO_DEBUG
                     pattern->extract(0, pattern->length(), result_1, "UTF-8");
-                    printf("pluralCount: %s; pattern: %s\n", pluralCount, result_1);
+                    std::cout << "pluralCount: " << pluralCount << "; pattern: " << result_1 << "\n";
 #endif
 
                     fPluralCountToCurrencyUnitPattern->put(UnicodeString(pluralCount), pattern, status);
