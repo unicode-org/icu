@@ -22,7 +22,13 @@
 #include "umutex.h"
 #include "ucln_in.h"
 #include "uenumimp.h"
+#include "uhash.h"
 #include "uresimp.h"
+
+//#define UCURR_DEBUG 1
+#ifdef UCURR_DEBUG
+#include "stdio.h"
+#endif
 
 //------------------------------------------------------------
 // Constants
@@ -621,68 +627,63 @@ ucurr_getPluralName(const UChar* currency,
     return currency;
 }
 
-U_CFUNC void
-uprv_parseCurrency(const char* locale,
-                   const U_NAMESPACE_QUALIFIER UnicodeString& text,
-                   U_NAMESPACE_QUALIFIER ParsePosition& pos,
-                   UChar* result,
-                   UErrorCode& ec)
-{
-    U_NAMESPACE_USE
 
-    // TODO: There is a slight problem with the pseudo-multi-level
-    // fallback implemented here.  More-specific locales don't
-    // properly shield duplicate entries in less-specific locales.
-    // This problem will go away when real multi-level fallback is
-    // implemented.  We could also fix this by recording (in a
-    // hash) which codes are used at each level of fallback, but
-    // this doesn't seem warranted.
+//========================================================================
+// Following are structure and function for parsing currency names
 
-    if (U_FAILURE(ec)) {
-        return;
+#define NEED_TO_BE_DELETED 0x1
+
+typedef struct {
+    const char* IsoCode;  // key
+    UChar* currencyName;  // value
+    int32_t currencyNameLen;  // value length
+    int32_t flag;  // flags
+} CurrencyNameStruct;
+
+
+#define MIN(a,b) (((a)<(b)) ? (a) : (b))
+
+// Comparason function used in quick sort.
+static int currencyNameComparator(const void* a, const void* b) {
+    const CurrencyNameStruct* currName_1 = (const CurrencyNameStruct*)a;
+    const CurrencyNameStruct* currName_2 = (const CurrencyNameStruct*)b;
+    for (int32_t i = 0; 
+         i < MIN(currName_1->currencyNameLen, currName_2->currencyNameLen);
+         ++i) {
+        if (currName_1->currencyName[i] < currName_2->currencyName[i]) {
+            return -1;
+        }
+        if (currName_1->currencyName[i] > currName_2->currencyName[i]) {
+            return 1;
+        }
     }
-
-    // Look up the Currencies resource for the given locale.  The
-    // Currencies locale data looks like this:
-    //|en {
-    //|  Currencies {
-    //|    USD { "US$", "US Dollar" }
-    //|    CHF { "Sw F", "Swiss Franc" }
-    //|    INR { "=0#Rs|1#Re|1<Rs", "=0#Rupees|1#Rupee|1<Rupees" }
-    //|    //...
-    //|  }
-    //|}
-
-    // In the future, resource bundles may implement multi-level
-    // fallback.  That is, if a currency is not found in the en_US
-    // Currencies data, then the en Currencies data will be searched.
-    // Currently, if a Currencies datum exists in en_US and en, the
-    // en_US entry hides that in en.
-
-    // We want multi-level fallback for this resource, so we implement
-    // it manually.
-
-    // Use a separate UErrorCode here that does not propagate out of
-    // this function.
-    UErrorCode ec2 = U_ZERO_ERROR;
-
-    char loc[ULOC_FULLNAME_CAPACITY];
-    uloc_getName(locale, loc, sizeof(loc), &ec2);
-    if (U_FAILURE(ec2) || ec2 == U_STRING_NOT_TERMINATED_WARNING) {
-        ec = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
+    if (currName_1->currencyNameLen < currName_2->currencyNameLen) {
+        return -1;
+    } else if (currName_1->currencyNameLen > currName_2->currencyNameLen) {
+        return 1;
     }
+    return 0;
+}
 
-    int32_t start = pos.getIndex();
+
+// Give a locale, return the maximum number of currency names associated with
+// this locale.
+// It gets currency names from resource bundles using fallback.
+// It is the maximum number because in the fallback chain, some of the 
+// currency names are duplicated.
+// For example, given locale as "en_US", the currency names get from resource
+// bundle in "en_US" and "en" are duplicated. The fallback mechanism will count
+// all currency names in "en_US" and "en".
+static int32_t
+getCurrencyNameCount(const char* loc) {
+    int32_t total_currency_count = 0;
     const UChar* s = NULL;
-
-    const char* iso = NULL;
-    int32_t max = 0;
-
-    // Multi-level resource inheritance fallback loop
+    char locale[ULOC_FULLNAME_CAPACITY];
+    uprv_strcpy(locale, loc);
     for (;;) {
-        ec2 = U_ZERO_ERROR;
-        UResourceBundle* rb = ures_open(NULL, loc, &ec2);
+        UErrorCode ec2 = U_ZERO_ERROR;
+        // TODO: ures_openDirect?
+        UResourceBundle* rb = ures_open(NULL, locale, &ec2);
         UResourceBundle* curr = ures_getByKey(rb, CURRENCIES, NULL, &ec2);
         int32_t n = ures_getSize(curr);
         for (int32_t i=0; i<n; ++i) {
@@ -698,48 +699,175 @@ uprv_parseCurrency(const char* locale,
                 }
             }
             if (isChoice) {
-                Formattable temp;
                 ChoiceFormat fmt(s, ec2);
-                fmt.parse(text, temp, pos);
-                len = pos.getIndex() - start;
-                pos.setIndex(start);
-            } else if (len > max &&
-                       text.compare(pos.getIndex(), len, s) != 0) {
-                len = 0;
-            }
-            if (len > max) {
-                iso = ures_getKey(names);
-                max = len;
+                int32_t fmt_count;
+                fmt.getFormats(fmt_count);
+                total_currency_count += fmt_count;
+            } else {
+                ++total_currency_count;  // currency symbol
             }
 
-            // TODO: TextTrie
-            s = ures_getStringByIndex(names, UCURR_LONG_NAME, &len, &ec2);
-            if (len > max && text.compare(pos.getIndex(), len, s) == 0) {
-                iso = ures_getKey(names);
-                max = len;
-            }
-
-            if (3 > max && text.compare(pos.getIndex(), 3, ures_getKey(names)) == 0) {
-                iso = ures_getKey(names);
-                max = 3;
-            }
+            total_currency_count += 2; // long name and iso code
             ures_close(names);
         }
 
-        // try currency plurals
+        // currency plurals
         UErrorCode ec3 = U_ZERO_ERROR;
         UResourceBundle* curr_p = ures_getByKey(rb, CURRENCYPLURALS, NULL, &ec3);
         n = ures_getSize(curr_p);
         for (int32_t i=0; i<n; ++i) {
             UResourceBundle* names = ures_getByIndex(curr_p, i, NULL, &ec3);
+            total_currency_count += ures_getSize(names);
+            ures_close(names);
+        }
+        ures_close(curr_p);
+        ures_close(curr);
+        ures_close(rb);
+
+        if (!fallback(locale)) {
+            break;
+        }
+    }
+    return total_currency_count;
+}
+
+
+// Collect all available currency names associated with the give locale
+// (enable fallback chain).
+// Read currenc names defined in resource bundle "Currencies" and
+// "CurrencyPlural", enable fallback chain.
+// return the malloc-ed currency name arrays and the total number of currency
+// names in the array.
+static CurrencyNameStruct*
+collectCurrencyNames(const char* locale, int32_t* total_currency_count, 
+                     UErrorCode& ec) {
+    // Look up the Currencies resource for the given locale.
+    UErrorCode ec2 = U_ZERO_ERROR;
+
+    char loc[ULOC_FULLNAME_CAPACITY];
+    uloc_getName(locale, loc, sizeof(loc), &ec2);
+    if (U_FAILURE(ec2) || ec2 == U_STRING_NOT_TERMINATED_WARNING) {
+        ec = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+
+    // Get maximum currency name count first.
+    int32_t max_currency_count = getCurrencyNameCount(loc);
+
+    CurrencyNameStruct* currencyNames = (CurrencyNameStruct*)uprv_malloc
+        (sizeof(CurrencyNameStruct) * (max_currency_count));
+
+    const UChar* s = NULL;  // currency name
+    char* iso = NULL;  // currency ISO code
+
+    *total_currency_count = 0;
+
+    UErrorCode ec3 = U_ZERO_ERROR;
+    UErrorCode ec4 = U_ZERO_ERROR;
+
+    // Using hash to remove duplicates caused by locale fallback
+    UHashtable* currencyIsoCodes = uhash_open(uhash_hashChars, uhash_compareChars, NULL, &ec3);
+    UHashtable* currencyPluralIsoCodes = uhash_open(uhash_hashChars, uhash_compareChars, NULL, &ec4);
+    for (int32_t localeLevel = 0; ; ++localeLevel) {
+        ec2 = U_ZERO_ERROR;
+        // TODO: ures_openDirect
+        UResourceBundle* rb = ures_open(NULL, loc, &ec2);
+        UResourceBundle* curr = ures_getByKey(rb, CURRENCIES, NULL, &ec2);
+        int32_t n = ures_getSize(curr);
+        for (int32_t i=0; i<n; ++i) {
+            UResourceBundle* names = ures_getByIndex(curr, i, NULL, &ec2);
+            int32_t len;
+            s = ures_getStringByIndex(names, UCURR_SYMBOL_NAME, &len, &ec2);
+            // TODO: uhash_put wont change key/value?
+            iso = (char*)ures_getKey(names);
+            if (localeLevel == 0) {
+                uhash_put(currencyIsoCodes, iso, iso, &ec3); 
+            } else {
+                if (uhash_get(currencyIsoCodes, iso) != NULL) {
+                    ures_close(names);
+                    continue;
+                } else {
+                    uhash_put(currencyIsoCodes, iso, iso, &ec3); 
+                }
+            }
+            UBool isChoice = FALSE;
+            if (len > 0 && s[0] == CHOICE_FORMAT_MARK) {
+                ++s;
+                --len;
+                if (len > 0 && s[0] != CHOICE_FORMAT_MARK) {
+                    isChoice = TRUE;
+                }
+            }
+            if (isChoice) {
+                ChoiceFormat fmt(s, ec2);
+                int32_t fmt_count;
+                const UnicodeString* formats = fmt.getFormats(fmt_count);
+                for (int i = 0; i < fmt_count; ++i) {
+                    // put iso, formats[i]; into array
+                    int32_t length = formats[i].length();
+                    UChar* name = (UChar*)uprv_malloc(sizeof(UChar)*length);
+                    formats[i].extract(0, length, name);
+                    currencyNames[*total_currency_count].IsoCode = iso;
+                    currencyNames[*total_currency_count].currencyName = name;
+                    currencyNames[*total_currency_count].flag = NEED_TO_BE_DELETED;
+                    currencyNames[(*total_currency_count)++].currencyNameLen = length;
+                }
+            } else {
+                // Add currency symbol.
+                currencyNames[*total_currency_count].IsoCode = iso;
+                currencyNames[*total_currency_count].currencyName = (UChar*)s;
+                currencyNames[*total_currency_count].flag = 0;
+                currencyNames[(*total_currency_count)++].currencyNameLen = len;
+            }
+
+            // Add currency long name.
+            s = ures_getStringByIndex(names, UCURR_LONG_NAME, &len, &ec2);
+            currencyNames[*total_currency_count].IsoCode = iso;
+            currencyNames[*total_currency_count].currencyName = (UChar*)s;
+            currencyNames[*total_currency_count].flag = 0;
+            currencyNames[(*total_currency_count)++].currencyNameLen = len;
+
+            // put (iso, 3, and iso) in to array
+            // Add currency ISO code.
+            currencyNames[*total_currency_count].IsoCode = iso;
+            currencyNames[*total_currency_count].currencyName = (UChar*)uprv_malloc(sizeof(UChar)*3);
+            currencyNames[*total_currency_count].currencyName[0] = iso[0];
+            currencyNames[*total_currency_count].currencyName[1] = iso[1];
+            currencyNames[*total_currency_count].currencyName[2] = iso[2];
+            currencyNames[*total_currency_count].flag = NEED_TO_BE_DELETED;
+            currencyNames[(*total_currency_count)++].currencyNameLen = 3;
+
+            ures_close(names);
+        }
+
+        // currency plurals
+        UErrorCode ec3 = U_ZERO_ERROR;
+        UResourceBundle* curr_p = ures_getByKey(rb, CURRENCYPLURALS, NULL, &ec3);
+        n = ures_getSize(curr_p);
+        for (int32_t i=0; i<n; ++i) {
+            UResourceBundle* names = ures_getByIndex(curr_p, i, NULL, &ec3);
+            iso = (char*)ures_getKey(names);
+            // Using hash to remove duplicated ISO codes in fallback chain.
+            if (localeLevel == 0) {
+                uhash_put(currencyPluralIsoCodes, iso, iso, &ec4); 
+            } else {
+                if (uhash_get(currencyPluralIsoCodes, iso) != NULL) {
+                    ures_close(names);
+                    continue;
+                } else {
+                    uhash_put(currencyPluralIsoCodes, iso, iso, &ec4); 
+                }
+            }
             int32_t num = ures_getSize(names);
             int32_t len;
             for (int32_t j = 0; j < num; ++j) {
+                // TODO: remove duplicates between singular name and 
+                // currency long name?
                 s = ures_getStringByIndex(names, j, &len, &ec3);
-                if (len > max && text.compare(pos.getIndex(), len, s) == 0) {
-                    iso = ures_getKey(names);
-                    max = len;
-                }
+                currencyNames[*total_currency_count].IsoCode = iso;
+                currencyNames[*total_currency_count].currencyName = (UChar*)s;
+                currencyNames[*total_currency_count].flag = 0;
+                currencyNames[(*total_currency_count)++].currencyNameLen = len;
             }
             ures_close(names);
         }
@@ -747,40 +875,394 @@ uprv_parseCurrency(const char* locale,
         ures_close(curr);
         ures_close(rb);
 
-        // Try to fallback.  If that fails (because we are already at
-        // root) then exit.
         if (!fallback(loc)) {
             break;
         }
     }
 
-    if (iso != NULL) {
-        u_charsToUChars(iso, result, 4);
+    uhash_close(currencyIsoCodes);
+    uhash_close(currencyPluralIsoCodes);
+
+    // quick sort the struct
+    qsort(currencyNames, *total_currency_count, sizeof(CurrencyNameStruct),
+          currencyNameComparator);
+
+#ifdef UCURR_DEBUG
+    for (int32_t index = 0; index < *total_currency_count; ++index) {
+        printf("index: %d\n", index);
+        printf("iso: %s\n", currencyNames[index].IsoCode);
+        printf("currencyName:");
+        for (int32_t i = 0; i < currencyNames[index].currencyNameLen; ++i) {
+            printf("%c", (unsigned char)currencyNames[index].currencyName[i]);
+        }
+        printf("\n");
+        printf("len: %d\n", currencyNames[index].currencyNameLen);
+    }
+    printf("currency count: %d\n", *total_currency_count);
+#endif
+
+    return currencyNames;
+}
+
+// @param  currencyNames: currency names array
+// @param  indexInCurrencyNames: the index of the character in currency names 
+//         array against which the comparison is done
+// @param  text: input text to compare against
+// @param  pos: the position of character in input text to compare against
+// @param  begin(IN/OUT): the begin index of matching range in currency names array
+// @param  end(IN/OUT): the end index of matching range in currency names array.
+static int32_t
+binarySearch(const CurrencyNameStruct* currencyNames, 
+             int32_t indexInCurrencyNames,
+             const UnicodeString* text, int32_t pos,
+             int32_t* begin, int32_t* end) {
+#ifdef UCURR_DEBUG
+    printf("pos = %d\n", pos);
+#endif
+   UChar key = text->charAt(pos); 
+   int32_t first = *begin;
+   int32_t last = *end;
+   while (first <= last) {
+       int32_t mid = (first + last) / 2;  // compute mid point.
+       if (indexInCurrencyNames >= currencyNames[mid].currencyNameLen) {
+           first = mid + 1;
+       } else {
+           if (key > currencyNames[mid].currencyName[indexInCurrencyNames]) {
+               first = mid + 1;
+           }
+           else if (key < currencyNames[mid].currencyName[indexInCurrencyNames]) {
+               last = mid - 1;
+           }
+           else {
+                // Find a match, and looking for ranges
+                // Now do two more binary searches. First, on the left side for
+                // the greatest L such that CurrencyNameStruct[L] < key.
+                int32_t L = *begin;
+                int32_t R = mid;
+
+#ifdef UCURR_DEBUG
+                printf("mid = %d\n", mid);
+#endif
+                while (L < R) {
+                    int32_t M = (L + R) / 2;
+#ifdef UCURR_DEBUG
+                    printf("L = %d, R = %d, M = %d\n", L, R, M);
+#endif
+                    if (indexInCurrencyNames >= currencyNames[M].currencyNameLen) {
+                        L = M + 1;
+                    } else {
+                        if (currencyNames[M].currencyName[indexInCurrencyNames] < key) {
+                            L = M + 1;
+                        } else {
+#ifdef UCURR_DEBUG
+                            U_ASSERT(currencyNames[M].currencyName[indexInCurrencyNames] == key);
+#endif
+                            R = M;
+                        }
+                    }
+                }
+#ifdef UCURR_DEBUG
+                U_ASSERT(L == R);
+#endif
+                *begin = L;
+#ifdef UCURR_DEBUG
+                printf("begin = %d\n", *begin);
+                U_ASSERT(currencyNames[*begin].currencyName[indexInCurrencyNames] == key);
+#endif
+
+                // Now for the second search, finding the least R such that
+                // key < CurrencyNameStruct[R].
+                L = mid;
+                R = *end;
+                while (L < R) {
+                    int32_t M = (L + R) / 2;
+#ifdef UCURR_DEBUG
+                    printf("L = %d, R = %d, M = %d\n", L, R, M);
+#endif
+                    if (currencyNames[M].currencyNameLen < indexInCurrencyNames) {
+                        L = M + 1;
+                    } else {
+                        if (currencyNames[M].currencyName[indexInCurrencyNames] > key) {
+                            R = M;
+                        } else {
+#ifdef UCURR_DEBUG
+                            U_ASSERT(currencyNames[M].currencyName[indexInCurrencyNames] == key);
+#endif
+                            L = M + 1;
+                        }
+                    }
+                }
+#ifdef UCURR_DEBUG
+                U_ASSERT(L == R);
+#endif
+                if (currencyNames[R].currencyName[indexInCurrencyNames] > key) {
+                    *end = R - 1;
+                } else {
+                    *end = R;
+                }
+#ifdef UCURR_DEBUG
+                printf("end = %d\n", *end);
+#endif
+
+                // now, found the range. check whether there is exact match
+                if (currencyNames[*begin].currencyNameLen == indexInCurrencyNames + 1) {
+                    return *begin;  // find range and exact match.
+                }
+                return -1;  // find range, but no exact match.
+           }
+       }
+   }
+   *begin = -1;
+   *end = -1;
+   return -1;    // failed to find range.
+}
+
+
+// Linear search "text" in "currencyNames".
+// @param  begin, end: the begin and end index in currencyNames, within which
+//         range should the search be performed.
+// @param  startPos: the comparison start position in text
+// @param  maxMatchLen(IN/OUT): passing in the computed max matching length
+//                              pass out the new max  matching length
+// @param  maxMatchIndex: the index in currencyName which has the longest
+//                        match with input text.
+static void
+linearSearch(const CurrencyNameStruct* currencyNames, 
+             int32_t begin, int32_t end,
+             const UnicodeString* text, int32_t startPos,
+             int32_t *maxMatchLen, int32_t* maxMatchIndex) {
+    for (int32_t index = begin; index <= end; ++index) {
+        int32_t len = currencyNames[index].currencyNameLen;
+        // TODO: case in-sensitve? but case-sensitive for ISO code /symbol?
+        if (len > *maxMatchLen &&
+            text->compare(startPos, len, currencyNames[index].currencyName) == 0) {
+            *maxMatchIndex = index;
+            *maxMatchLen = len;
+#ifdef UCURR_DEBUG
+            printf("maxMatchIndex = %d, maxMatchLen = %d\n",
+                   *maxMatchIndex, *maxMatchLen);
+#endif
+        }
+    }
+}
+
+#define LINEAR_SEARCH_THRESHOLD 10
+
+// Find longest match between "text" and currency names in "currencyNames".
+// @param  total_currency_count: total number of currency names in CurrencyNames.
+// @param  start: the comparison start position in text
+// @param  maxMatchLen: passing in the computed max matching length
+//                              pass out the new max  matching length
+// @param  maxMatchIndex: the index in currencyName which has the longest
+//                        match with input text.
+static void
+searchCurrencyName(const CurrencyNameStruct* currencyNames, 
+                   int32_t total_currency_count,
+                   const UnicodeString* text, int32_t start, 
+                   int32_t* maxMatchLen, int32_t* maxMatchIndex) {
+    *maxMatchIndex = -1;
+    *maxMatchLen = 0;
+    int32_t matchIndex = -1;
+    int32_t binarySearchBegin = 0;
+    int32_t binarySearchEnd = total_currency_count - 1;
+    // It is a variant of binary search.
+    // For example, given the currency names in currencyNames array are:
+    // A AB ABC AD AZ B BB BBEX BBEXYZ BS C D E....
+    // and the input text is BBEXST
+    // The first round binary search search "B" in the text against
+    // the first char in currency names, and find the first char matching range
+    // to be "B BB BBEX BBEXYZ BS" (and the maximum matching "B").
+    // The 2nd round binary search search the second "B" in the text against
+    // the 2nd char in currency names, and narrow the matching range to
+    // "BB BBEX BBEXYZ" (and the maximum matching "BB").
+    // The 3rd round returnes the range as "BBEX BBEXYZ" (without changing
+    // maximum matching).
+    // The 4th round returns the same range (the maximum matching is "BBEX").
+    // The 5th round returns no matching range.
+    for (int32_t index = start; index < text->length(); ++index) {
+        // matchIndex saves the one with exact match till the current point.
+        // [binarySearchBegin, binarySearchEnd] saves the matching range.
+        matchIndex = binarySearch(currencyNames, index - start,
+                                  text, index,
+                                  &binarySearchBegin, &binarySearchEnd);
+        if (binarySearchBegin == -1) { // did not find the range
+            break;
+        }
+        if (matchIndex != -1) { 
+            // find an exact match for text from text[start] to text[index] 
+            // in currencyNames array.
+            *maxMatchLen = index - start + 1;
+            *maxMatchIndex = matchIndex;
+        }
+        if (binarySearchEnd - binarySearchBegin < LINEAR_SEARCH_THRESHOLD) {
+            // linear search if within threshold.
+            linearSearch(currencyNames, binarySearchBegin, binarySearchEnd,
+                         text, start,
+                         maxMatchLen, maxMatchIndex);
+            break;
+        }
+    }
+    return;
+}
+
+//========================= currency name cache =====================
+typedef struct {
+    char locale[ULOC_FULLNAME_CAPACITY];  //key
+    CurrencyNameStruct* currencyNames;  // value
+    int32_t totalCurrencyNameCount;  // currency name count
+    // reference count.
+    // reference count is set to 1 when an entry is put to cache.
+    // it increases by 1 before accessing, and decreased by 1 after accessing.
+    // The entry is deleted when ref count is zero, which means 
+    // the entry is replaced out of cache and no process is accessing it.
+    int32_t refCount;
+} CurrencyNameCacheEntry;
+
+
+#define CURRENCY_NAME_CACHE_NUM 10
+
+// Reserve 10 cache entries.
+static CurrencyNameCacheEntry* currCache[CURRENCY_NAME_CACHE_NUM] = {NULL};
+// Using an index to indicate which entry to be replaced when cache is full.
+// It is a simple round-robin replacement strategy.
+static int8_t currentCacheEntryIndex = 0;
+
+// Cache deletion
+static void
+deleteCurrencyNames(CurrencyNameStruct* currencyNames, int32_t count) {
+    for (int32_t index = 0; index < count; ++index) {
+        if ( (currencyNames[index].flag & NEED_TO_BE_DELETED) ) {
+            uprv_free(currencyNames[index].currencyName);
+        }
+    }
+    uprv_free(currencyNames);
+}
+
+
+static void
+deleteCacheEntry(CurrencyNameCacheEntry* entry) {
+    deleteCurrencyNames(entry->currencyNames, entry->totalCurrencyNameCount);
+    uprv_free(entry);
+}
+
+
+// Cache clean up
+static UBool U_CALLCONV
+currency_cache_cleanup(void) {
+    for (int32_t i = 0; i < CURRENCY_NAME_CACHE_NUM; ++i) {
+        if (currCache[i]) {
+            deleteCacheEntry(currCache[i]);
+            currCache[i] = 0;
+        }
+    }
+    return TRUE;
+}
+
+
+U_CFUNC void
+uprv_parseCurrency(const char* locale,
+                   const U_NAMESPACE_QUALIFIER UnicodeString& text,
+                   U_NAMESPACE_QUALIFIER ParsePosition& pos,
+                   UChar* result,
+                   UErrorCode& ec)
+{
+    U_NAMESPACE_USE
+
+    if (U_FAILURE(ec)) {
+        return;
     }
 
-    // If display name parse fails or if it matches fewer than 3
-    // characters, try to parse 3-letter ISO.  Do this after the
-    // display name processing so 3-letter display names are
-    // preferred.  Consider /[A-Z]{3}/ to be valid ISO, and parse
-    // it manually--UnicodeSet/regex are too slow and heavy.
-    if (max < 3 && (text.length() - start) >= 3) {
-        UBool valid = TRUE;
-        for (int32_t k=0; k<3; ++k) {
-            UChar ch = text.charAt(start + k); // 16-bit ok
-            if (ch < 0x41/*'A'*/ || ch > 0x5A/*'Z'*/) {
-                valid = FALSE;
+    int32_t total_currency_count = 0;
+    CurrencyNameStruct* currencyNames = NULL;
+    CurrencyNameCacheEntry* cacheEntry = NULL;
+
+    umtx_lock(NULL);
+    // in order to handle racing correctly,
+    // not putting 'search' in a separate function and using UMTX.
+    int8_t  found = -1;
+    for (int8_t i = 0; i < CURRENCY_NAME_CACHE_NUM; ++i) {
+        if (currCache[i]!= NULL &&
+            uprv_strcmp(locale, currCache[i]->locale) == 0) {
+            found = i;
+            break;
+        }
+    }
+    if (found != -1) {
+        cacheEntry = currCache[found];
+        currencyNames = cacheEntry->currencyNames;
+        total_currency_count = cacheEntry->totalCurrencyNameCount;
+        ++(cacheEntry->refCount);
+    }
+    umtx_unlock(NULL);
+    if (found == -1) {
+        currencyNames = collectCurrencyNames(locale, &total_currency_count, ec);
+        if (U_FAILURE(ec)) {
+            return;
+        }
+        umtx_lock(NULL);
+        // check again.
+        int8_t  found = -1;
+        for (int8_t i = 0; i < CURRENCY_NAME_CACHE_NUM; ++i) {
+            if (currCache[i]!= NULL &&
+                uprv_strcmp(locale, currCache[i]->locale) == 0) {
+                found = i;
                 break;
             }
         }
-        if (valid) {
-            text.extract(start, 3, result);
-            result[3] = 0;
-            max = 3;
+        if (found == -1) {
+            // insert new entry to 
+            // currentCacheEntryIndex % CURRENCY_NAME_CACHE_NUM
+            // and remove the existing entry 
+            // currentCacheEntryIndex % CURRENCY_NAME_CACHE_NUM
+            // from cache.
+            cacheEntry = currCache[currentCacheEntryIndex];
+            if (cacheEntry) {
+                --(cacheEntry->refCount);
+                // delete if the ref count is zero
+                if (cacheEntry->refCount == 0) {
+                    deleteCacheEntry(cacheEntry);
+                }
+            }
+            cacheEntry = (CurrencyNameCacheEntry*)uprv_malloc(sizeof(CurrencyNameCacheEntry));
+            currCache[currentCacheEntryIndex] = cacheEntry;
+            uprv_strcpy(cacheEntry->locale, locale);
+            cacheEntry->currencyNames = currencyNames;
+            cacheEntry->totalCurrencyNameCount = total_currency_count;
+            cacheEntry->refCount = 2; // one for cache, one for reference
+            currentCacheEntryIndex = (currentCacheEntryIndex + 1) % CURRENCY_NAME_CACHE_NUM;
+            ucln_i18n_registerCleanup(UCLN_I18N_CURRENCY, currency_cache_cleanup);
+            
+        } else {
+            uprv_free(currencyNames);
+            cacheEntry = currCache[found];
+            currencyNames = cacheEntry->currencyNames;
+            total_currency_count = cacheEntry->totalCurrencyNameCount;
+            ++(cacheEntry->refCount);
         }
+        umtx_unlock(NULL);
     }
 
+    int32_t max = 0;
+    int32_t matchIndex = -1;
+    int32_t start = pos.getIndex();
+    searchCurrencyName(currencyNames, total_currency_count, 
+                       &text, start, &max, &matchIndex);
+
+    if (matchIndex != -1) {
+        u_charsToUChars(currencyNames[matchIndex].IsoCode, result, 4);
+    }
+
+    // decrease reference count
+    umtx_lock(NULL);
+    --(cacheEntry->refCount);
+    if (cacheEntry->refCount == 0) {  // remove 
+        deleteCacheEntry(cacheEntry);
+    }
+    umtx_unlock(NULL);
+    
     pos.setIndex(start + max);
 }
+
 
 /**
  * Internal method.  Given a currency ISO code and a locale, return
