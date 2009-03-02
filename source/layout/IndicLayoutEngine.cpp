@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2009 - All Rights Reserved
  *
  */
 
@@ -25,12 +25,16 @@ U_NAMESPACE_BEGIN
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(IndicOpenTypeLayoutEngine)
 
 IndicOpenTypeLayoutEngine::IndicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
-                    le_int32 typoFlags, const GlyphSubstitutionTableHeader *gsubTable, LEErrorCode &success)
+                    le_int32 typoFlags, le_bool version2, const GlyphSubstitutionTableHeader *gsubTable, LEErrorCode &success)
     : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable, success), fMPreFixups(NULL)
 {
-    fFeatureMap = IndicReordering::getFeatureMap(fFeatureMapCount);
-    fFeatureOrder = TRUE;
-
+	if ( version2 ) {
+		fFeatureMap = IndicReordering::getv2FeatureMap(fFeatureMapCount);
+	} else {
+        fFeatureMap = IndicReordering::getFeatureMap(fFeatureMapCount);
+	}
+	fFeatureOrder = TRUE;
+    fVersion2 = version2;
     fFilterZeroWidth = IndicReordering::getFilterZeroWidth(fScriptCode);
 }
 
@@ -39,6 +43,7 @@ IndicOpenTypeLayoutEngine::IndicOpenTypeLayoutEngine(const LEFontInstance *fontI
 {
     fFeatureMap = IndicReordering::getFeatureMap(fFeatureMapCount);
     fFeatureOrder = TRUE;
+	fVersion2 =  FALSE;
 }
 
 IndicOpenTypeLayoutEngine::~IndicOpenTypeLayoutEngine()
@@ -66,8 +71,13 @@ le_int32 IndicOpenTypeLayoutEngine::glyphProcessing(const LEUnicode chars[], le_
         return 0;
     }
 
-    IndicReordering::adjustMPres(fMPreFixups, glyphStorage, success);
-
+    if (fVersion2) {
+        IndicReordering::finalReordering(glyphStorage,retCount);
+        IndicReordering::applyPresentationForms(glyphStorage,retCount);
+        OpenTypeLayoutEngine::glyphSubstitution(count,max, rightToLeft, glyphStorage, success);
+    } else {
+        IndicReordering::adjustMPres(fMPreFixups, glyphStorage, success);
+    }
     return retCount;
 }
 
@@ -105,7 +115,13 @@ le_int32 IndicOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[],
 
     // NOTE: assumes this allocates featureTags...
     // (probably better than doing the worst case stuff here...)
-    le_int32 outCharCount = IndicReordering::reorder(&chars[offset], count, fScriptCode, outChars, glyphStorage, &fMPreFixups, success);
+
+    le_int32 outCharCount;
+    if (fVersion2) {
+        outCharCount = IndicReordering::v2process(&chars[offset], count, fScriptCode, outChars, glyphStorage);
+    } else {
+        outCharCount = IndicReordering::reorder(&chars[offset], count, fScriptCode, outChars, glyphStorage, &fMPreFixups, success);
+    }
 
     if (LE_FAILURE(success)) {
         LE_DELETE_ARRAY(outChars);
