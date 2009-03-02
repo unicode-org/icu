@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2009 - All Rights Reserved
  *
  */
 
@@ -527,8 +527,15 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
     LayoutEngine *result = NULL;
     LETag scriptTag   = 0x00000000;
     LETag languageTag = 0x00000000;
+	LETag v2ScriptTag = OpenTypeLayoutEngine::getV2ScriptTag(scriptCode);
 
-    if (gsubTable != NULL && gsubTable->coversScript(scriptTag = OpenTypeLayoutEngine::getScriptTag(scriptCode))) {
+    // Right now, only invoke V2 processing for Devanagari.  TODO: Allow more V2 scripts as they are
+    // properly tested.
+
+	if ( v2ScriptTag == dev2ScriptTag && gsubTable != NULL && gsubTable->coversScript( v2ScriptTag )) {
+		result = new IndicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, TRUE, gsubTable, success);
+	}
+    else if (gsubTable != NULL && gsubTable->coversScript(scriptTag = OpenTypeLayoutEngine::getScriptTag(scriptCode))) {
         switch (scriptCode) {
         case bengScriptCode:
         case devaScriptCode:
@@ -540,7 +547,7 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
         case tamlScriptCode:
         case teluScriptCode:
         case sinhScriptCode:
-            result = new IndicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable, success);
+            result = new IndicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, FALSE, gsubTable, success);
             break;
 
         case arabScriptCode:

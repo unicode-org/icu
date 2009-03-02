@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2009 - All Rights Reserved
  *
  */
 
@@ -133,8 +133,23 @@ LETag OpenTypeLayoutEngine::getScriptTag(le_int32 scriptCode)
     if (scriptCode < 0 || scriptCode >= scriptCodeCount) {
         return 0xFFFFFFFF;
     }
-
     return scriptTags[scriptCode];
+}
+
+LETag OpenTypeLayoutEngine::getV2ScriptTag(le_int32 scriptCode)
+{
+	switch (scriptCode) { 
+		case bengScriptCode :    return bng2ScriptTag;
+		case devaScriptCode :    return dev2ScriptTag;
+		case gujrScriptCode :    return gjr2ScriptTag;
+		case guruScriptCode :    return gur2ScriptTag;
+		case kndaScriptCode :    return knd2ScriptTag;
+		case mlymScriptCode :    return mlm2ScriptTag;
+		case oryaScriptCode :    return ory2ScriptTag;
+		case tamlScriptCode :    return tml2ScriptTag;
+		case teluScriptCode :    return tel2ScriptTag;
+		default:                 return nullScriptTag;
+	}
 }
 
 LETag OpenTypeLayoutEngine::getLangSysTag(le_int32 languageCode)
@@ -149,6 +164,7 @@ LETag OpenTypeLayoutEngine::getLangSysTag(le_int32 languageCode)
 void OpenTypeLayoutEngine::setScriptAndLanguageTags()
 {
     fScriptTag  = getScriptTag(fScriptCode);
+    fScriptTagV2 = getV2ScriptTag(fScriptCode);
     fLangSysTag = getLangSysTag(fLanguageCode);
 }
 
@@ -209,15 +225,47 @@ le_int32 OpenTypeLayoutEngine::glyphProcessing(const LEUnicode chars[], le_int32
     if (LE_FAILURE(success)) {
         return 0;
     }
-
+    
     if (fGSUBTable != NULL) {
+        if (fScriptTagV2 != nullScriptTag && fGSUBTable->coversScriptAndLanguage(fScriptTagV2,fLangSysTag)) { 
+            count = fGSUBTable->process(glyphStorage, rightToLeft, fScriptTagV2, fLangSysTag, fGDEFTable, fSubstitutionFilter,
+                                    fFeatureMap, fFeatureMapCount, fFeatureOrder, success);
+
+        } else {
         count = fGSUBTable->process(glyphStorage, rightToLeft, fScriptTag, fLangSysTag, fGDEFTable, fSubstitutionFilter,
                                     fFeatureMap, fFeatureMapCount, fFeatureOrder, success);
+        }
     }
 
     return count;
 }
+// Input: characters, tags
+// Output: glyphs, char indices
+le_int32 OpenTypeLayoutEngine::glyphSubstitution(le_int32 count, le_int32 max, le_bool rightToLeft,
+                                               LEGlyphStorage &glyphStorage, LEErrorCode &success)
+{
+    if (LE_FAILURE(success)) {
+        return 0;
+    }
 
+    if ( count < 0 || max < 0 ) {
+        success = LE_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+   
+    if (fGSUBTable != NULL) {
+        if (fScriptTagV2 != nullScriptTag && fGSUBTable->coversScriptAndLanguage(fScriptTagV2,fLangSysTag)) { 
+            count = fGSUBTable->process(glyphStorage, rightToLeft, fScriptTagV2, fLangSysTag, fGDEFTable, fSubstitutionFilter,
+                                    fFeatureMap, fFeatureMapCount, fFeatureOrder, success);
+
+        } else {
+        count = fGSUBTable->process(glyphStorage, rightToLeft, fScriptTag, fLangSysTag, fGDEFTable, fSubstitutionFilter,
+                                    fFeatureMap, fFeatureMapCount, fFeatureOrder, success);
+        }
+    }
+
+    return count;
+}
 le_int32 OpenTypeLayoutEngine::glyphPostProcessing(LEGlyphStorage &tempGlyphStorage, LEGlyphStorage &glyphStorage, LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {
@@ -309,8 +357,16 @@ void OpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int3
         }
 #endif
 
-        fGPOSTable->process(glyphStorage, adjustments, reverse, fScriptTag, fLangSysTag, fGDEFTable, success, fFontInstance,
-                            fFeatureMap, fFeatureMapCount, fFeatureOrder);
+        if (fGPOSTable != NULL) {
+            if (fScriptTagV2 != nullScriptTag && fGPOSTable->coversScriptAndLanguage(fScriptTagV2,fLangSysTag)) { 
+                fGPOSTable->process(glyphStorage, adjustments, reverse, fScriptTagV2, fLangSysTag, fGDEFTable, success, fFontInstance,
+                                fFeatureMap, fFeatureMapCount, fFeatureOrder);
+ 
+            } else {
+                fGPOSTable->process(glyphStorage, adjustments, reverse, fScriptTag, fLangSysTag, fGDEFTable, success, fFontInstance,
+                                fFeatureMap, fFeatureMapCount, fFeatureOrder);
+            }
+        }
 
         float xAdjust = 0, yAdjust = 0;
 

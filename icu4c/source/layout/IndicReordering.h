@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2009 - All Rights Reserved
  *
  */
 
@@ -75,11 +75,20 @@ typedef LEUnicode SplitMatra[3];
 class MPreFixups;
 class LEGlyphStorage;
 
+// Dynamic Properties ( v2 fonts only )
+typedef le_uint32 DynamicProperties;
+
+#define DP_REPH               0x80000000U
+#define DP_HALF               0x40000000U
+#define DP_PREF               0x20000000U
+#define DP_BLWF               0x10000000U
+#define DP_PSTF               0x08000000U
+
 struct IndicClassTable
 {
     typedef le_uint32 CharClass;
     typedef le_uint32 ScriptFlags;
-
+    
     LEUnicode firstChar;
     LEUnicode lastChar;
     le_int32 worstCaseExpansion;
@@ -108,6 +117,7 @@ struct IndicClassTable
     inline le_bool hasPostOrBelowBaseForm(LEUnicode ch) const;
     inline le_bool hasPostBaseForm(LEUnicode ch) const;
     inline le_bool hasBelowBaseForm(LEUnicode ch) const;
+    inline le_bool hasAboveBaseForm(LEUnicode ch) const;
 
     inline static le_bool isVowelModifier(CharClass charClass);
     inline static le_bool isStressMark(CharClass charClass);
@@ -123,6 +133,7 @@ struct IndicClassTable
     inline static le_bool hasPostOrBelowBaseForm(CharClass charClass);
     inline static le_bool hasPostBaseForm(CharClass charClass);
     inline static le_bool hasBelowBaseForm(CharClass charClass);
+    inline static le_bool hasAboveBaseForm(CharClass charClass);
 
     static const IndicClassTable *getScriptClassTable(le_int32 scriptCode);
 };
@@ -139,7 +150,18 @@ public:
 
     static void adjustMPres(MPreFixups *mpreFixups, LEGlyphStorage &glyphStorage, LEErrorCode& success);
 
+    static le_int32 v2process(const LEUnicode *theChars, le_int32 charCount, le_int32 scriptCode,
+        LEUnicode *outChars, LEGlyphStorage &glyphStorage);
+
     static const FeatureMap *getFeatureMap(le_int32 &count);
+
+	static const FeatureMap *getv2FeatureMap(le_int32 &count);
+
+    static void applyPresentationForms(LEGlyphStorage &glyphStorage, le_int32 count);
+
+    static void finalReordering(LEGlyphStorage &glyphStorage, le_int32 count);
+
+    static void getDynamicProperties(DynamicProperties *dProps, const IndicClassTable *classTable);
 
 private:
     // do not instantiate
@@ -238,6 +260,11 @@ inline le_bool IndicClassTable::hasBelowBaseForm(CharClass charClass)
     return (charClass & CF_BELOW_BASE) != 0;
 }
 
+inline le_bool IndicClassTable::hasAboveBaseForm(CharClass charClass)
+{
+    return ((charClass & CF_POS_MASK) == CF_POS_ABOVE);
+}
+
 inline le_bool IndicClassTable::isVowelModifier(LEUnicode ch) const
 {
     return isVowelModifier(getCharClass(ch));
@@ -308,5 +335,9 @@ inline le_bool IndicClassTable::hasBelowBaseForm(LEUnicode ch) const
     return hasBelowBaseForm(getCharClass(ch));
 }
 
+inline le_bool IndicClassTable::hasAboveBaseForm(LEUnicode ch) const
+{
+    return hasAboveBaseForm(getCharClass(ch));
+}
 U_NAMESPACE_END
 #endif
