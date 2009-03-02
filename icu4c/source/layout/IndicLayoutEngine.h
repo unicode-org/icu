@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2009 - All Rights Reserved
  *
  */
 
@@ -56,7 +56,7 @@ public:
      * @internal
      */
     IndicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
-                            le_int32 typoFlags, const GlyphSubstitutionTableHeader *gsubTable, LEErrorCode &success);
+                            le_int32 typoFlags, le_bool version2, const GlyphSubstitutionTableHeader *gsubTable, LEErrorCode &success);
 
     /**
      * This constructor is used when the font requires a "canned" GSUB table which can't be known
@@ -154,9 +154,12 @@ protected:
     virtual le_int32 glyphProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
             LEGlyphStorage &glyphStorage, LEErrorCode &success);
 
+    le_bool fVersion2;
+
 private:
 
     MPreFixups *fMPreFixups;
+
 };
 
 U_NAMESPACE_END

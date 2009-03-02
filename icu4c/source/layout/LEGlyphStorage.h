@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1998-2008, International Business Machines
+ *   Copyright (C) 1998-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -330,6 +330,20 @@ public:
      * @stable ICU 3.0
      */
     LEGlyphID *insertGlyphs(le_int32 atIndex, le_int32 insertCount, LEErrorCode& success);
+
+    /**
+     * This method is used to reposition glyphs during Indic v2 processing.  It moves 
+     * all of the relevant glyph information ( glyph, indices, positions, and auxData ), 
+     * from the source position to the target position, and also allows for a marker bit
+     * to be set in the target glyph's auxData so that it won't be reprocessed later in the
+     * cycle.
+     *
+     * @param fromPosition - position of the glyph to be moved
+     * @param toPosition - target position of the glyph
+     *
+     * @draft ICU 4.2
+     */
+    void moveGlyph(le_int32 fromPosition, le_int32 toPosition, le_uint32 marker);
 
     /**
      * This method causes all of the glyph insertions recorded by

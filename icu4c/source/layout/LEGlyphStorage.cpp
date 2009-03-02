@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1998-2008, International Business Machines
+ *   Copyright (C) 1998-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -509,6 +509,39 @@ void LEGlyphStorage::adoptGlyphCount(le_int32 newGlyphCount)
 {
     fGlyphCount = newGlyphCount;
 }
+
+// Move a glyph to a different position in the LEGlyphStorage ( used for Indic v2 processing )
+
+void LEGlyphStorage::moveGlyph(le_int32 fromPosition, le_int32 toPosition, le_uint32 marker )
+{
+
+    LEErrorCode success = LE_NO_ERROR;
+
+    LEGlyphID holdGlyph = getGlyphID(fromPosition,success);
+    le_int32 holdCharIndex = getCharIndex(fromPosition,success);
+    le_uint32 holdAuxData = getAuxData(fromPosition,success);
+
+    if ( fromPosition < toPosition ) {
+        for ( le_int32 i = fromPosition ; i < toPosition ; i++ ) {
+            setGlyphID(i,getGlyphID(i+1,success),success);
+            setCharIndex(i,getCharIndex(i+1,success),success);
+            setAuxData(i,getAuxData(i+1,success),success);
+        }
+    } else {
+        for ( le_int32 i = toPosition ; i > fromPosition ; i-- ) {
+            setGlyphID(i,getGlyphID(i-1,success),success);
+            setCharIndex(i,getCharIndex(i-1,success),success);
+            setAuxData(i,getAuxData(i-1,success),success);
+
+        }
+    }
+
+    setGlyphID(toPosition,holdGlyph,success);
+    setCharIndex(toPosition,holdCharIndex,success);
+    setAuxData(toPosition,holdAuxData | marker,success);
+
+}
+
 
 // FIXME: add error checking?
 LEGlyphID *LEGlyphStorage::insertGlyphs(le_int32  atIndex, le_int32 insertCount, LEErrorCode& success)
