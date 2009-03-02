@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005-2008, International Business Machines
+*   Copyright (C) 2005-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -225,7 +225,7 @@ _caseMap(const UCaseMap *csm, UCaseMapFull *map,
          int32_t srcStart, int32_t srcLimit,
          UErrorCode *pErrorCode) {
     const UChar *s;
-    UChar32 c, c2;
+    UChar32 c, c2 = 0;
     int32_t srcIndex, destIndex;
     int32_t locCache;
 
