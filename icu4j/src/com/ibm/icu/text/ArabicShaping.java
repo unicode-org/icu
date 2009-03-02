@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2008, International Business Machines
+*   Copyright (C) 2001-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -59,6 +59,8 @@ import com.ibm.icu.lang.*;
 public final class ArabicShaping {
     private final int options;
     private boolean isLogical; // convenience
+    private boolean spacesRelativeToTextBeginEnd;
+    private char tailChar;
 
     /**
      * Convert a range of text in the source array, putting the result 
@@ -104,8 +106,29 @@ public final class ArabicShaping {
                                                ") or size (" + destSize + 
                                                ") for buffer of length " + dest.length);
         }
+        /* Validate input options */
+        if ( ((options&TASHKEEL_MASK) > 0) &&
+             !(((options & TASHKEEL_MASK)==TASHKEEL_BEGIN)  ||
+               ((options & TASHKEEL_MASK)==TASHKEEL_END )   ||
+               ((options & TASHKEEL_MASK)==TASHKEEL_RESIZE )||
+               ((options & TASHKEEL_MASK)==TASHKEEL_REPLACE_BY_TATWEEL)) ){
+            throw new IllegalArgumentException("Wrong Tashkeel argument");
+        }
 
-        return internalShape(source, sourceStart, sourceLength, dest, destStart, destSize);
+       if(((options&LAMALEF_MASK) > 0)&&
+              !(((options & LAMALEF_MASK)==LAMALEF_BEGIN)  ||
+                ((options & LAMALEF_MASK)==LAMALEF_END )   ||
+                ((options & LAMALEF_MASK)==LAMALEF_RESIZE )||
+                 ((options & LAMALEF_MASK)==LAMALEF_AUTO)  ||
+                 ((options & LAMALEF_MASK)==LAMALEF_NEAR))){
+           
+           throw new IllegalArgumentException("Wrong Lam Alef argument");
+       }
+       /* Validate Tashkeel (Tashkeel replacement options should be enabled in shaping mode only)*/
+       if(((options&TASHKEEL_MASK) > 0) && (options&LETTERS_MASK) == LETTERS_UNSHAPE) {
+            throw new IllegalArgumentException("Tashkeel replacement should not be enabled in deshaping mode ");
+       }
+       return internalShape(source, sourceStart, sourceLength, dest, destStart, destSize);
     }
 
     /**
@@ -119,8 +142,8 @@ public final class ArabicShaping {
      * @stable ICU 2.0
      */
     public void shape(char[] source, int start, int length) throws ArabicShapingException {
-        if ((options & LENGTH_MASK) == LENGTH_GROW_SHRINK) {
-            throw new ArabicShapingException("Cannot shape in place with length option grow/shrink.");
+        if ((options & LAMALEF_MASK) == LAMALEF_RESIZE) {
+            throw new ArabicShapingException("Cannot shape in place with length option resize.");
         }
         shape(source, start, length, source, start, length);
     }
@@ -136,7 +159,7 @@ public final class ArabicShaping {
     public String shape(String text) throws ArabicShapingException {
         char[] src = text.toCharArray();
         char[] dest = src;
-        if (((options & LENGTH_MASK) == LENGTH_GROW_SHRINK) &&
+        if (((options & LAMALEF_MASK) == LAMALEF_RESIZE) &&
             ((options & LETTERS_MASK) == LETTERS_UNSHAPE)) {
 
             dest = new char[src.length * 2]; // max
@@ -167,8 +190,132 @@ public final class ArabicShaping {
         if ((options & DIGITS_MASK) > 0x80) {
             throw new IllegalArgumentException("bad DIGITS options");
         }
-        isLogical = (options & TEXT_DIRECTION_MASK) == TEXT_DIRECTION_LOGICAL;
+        
+        isLogical = ( (options & TEXT_DIRECTION_MASK) == TEXT_DIRECTION_LOGICAL );
+        /* Validate options */
+        spacesRelativeToTextBeginEnd = ( (options & SPACES_RELATIVE_TO_TEXT_MASK) == SPACES_RELATIVE_TO_TEXT_BEGIN_END );
+        if ( (options&SHAPE_TAIL_TYPE_MASK) == SHAPE_TAIL_NEW_UNICODE){
+            tailChar = NEW_TAIL_CHAR;
+        } else {
+            tailChar = OLD_TAIL_CHAR;
+        }
     }
+    
+    /* Seen Tail options */ 
+    /**
+     * Memory option: the result must have the same length as the source.
+     * Shaping mode: The SEEN family character will expand into two characters using space near 
+     *               the SEEN family character(i.e. the space after the character).
+     *               if there are no spaces found, ArabicShapingException will be thrown
+     *
+     * De-shaping mode: Any Seen character followed by Tail character will be
+     *                  replaced by one cell Seen and a space will replace the Tail.
+     * Affects: Seen options
+     */
+    public static final int SEEN_TWOCELL_NEAR = 0x200000;
+
+    /** Bit mask for Seen memory options. */
+    public static final int SEEN_MASK = 0x700000;
+
+    /* YehHamza options */ 
+    /**
+     * Memory option: the result must have the same length as the source.
+     * Shaping mode: The YEHHAMZA character will expand into two characters using space near it 
+     *              (i.e. the space after the character)
+     *               if there are no spaces found, ArabicShapingException will be thrown
+     *
+     * De-shaping mode: Any Yeh (final or isolated) character followed by Hamza character will be
+     *                  replaced by one cell YehHamza and space will replace the Hamza.
+     * Affects: YehHamza options
+     */
+    public static final int YEHHAMZA_TWOCELL_NEAR  = 0x1000000;
+
+
+    /** Bit mask for YehHamza memory options. */
+    public static final int YEHHAMZA_MASK = 0x3800000;
+
+    /* New Tashkeel options */ 
+    /**
+     * Memory option: the result must have the same length as the source.
+     * Shaping mode: Tashkeel characters will be replaced by spaces. 
+     *               Spaces will be placed at beginning of the buffer
+     *
+     * De-shaping mode: N/A
+     * Affects: Tashkeel options
+     */
+    public static final int TASHKEEL_BEGIN = 0x40000;
+
+    /**
+     * Memory option: the result must have the same length as the source.
+     * Shaping mode: Tashkeel characters will be replaced by spaces. 
+     *               Spaces will be placed at end of the buffer
+     *
+     * De-shaping mode: N/A
+     * Affects: Tashkeel options
+     */
+    public static final int TASHKEEL_END = 0x60000;
+
+    /**
+     * Memory option: allow the result to have a different length than the source.
+     * Shaping mode: Tashkeel characters will be removed, buffer length will shrink. 
+     * De-shaping mode: N/A 
+     *
+     * Affects: Tashkeel options
+     */
+    public static final int TASHKEEL_RESIZE = 0x80000;
+
+    /**
+     * Memory option: the result must have the same length as the source.
+     * Shaping mode: Tashkeel characters will be replaced by Tatweel if it is connected to adjacent
+     *               characters (i.e. shaped on Tatweel) or replaced by space if it is not connected.
+     *
+     * De-shaping mode: N/A
+     * Affects: YehHamza options
+     */
+    public static final int TASHKEEL_REPLACE_BY_TATWEEL = 0xC0000;
+
+    /** Bit mask for Tashkeel replacement with Space or Tatweel memory options. */
+    public static final int TASHKEEL_MASK  = 0xE0000;
+    
+    /* Space location Control options */ 
+    /**
+     * This option effects the meaning of BEGIN and END options. if this option is not used the default
+     * for BEGIN and END will be as following: 
+     * The Default (for both Visual LTR, Visual RTL and Logical Text)
+     *           1. BEGIN always refers to the start address of physical memory.
+     *           2. END always refers to the end address of physical memory.
+     *
+     * If this option is used it will swap the meaning of BEGIN and END only for Visual LTR text. 
+     *
+     * The affect on BEGIN and END Memory Options will be as following:
+     *    A. BEGIN For Visual LTR text: This will be the beginning (right side) of the visual text 
+     *       (corresponding to the physical memory address end, same as END in default behavior)
+     *    B. BEGIN For Logical text: Same as BEGIN in default behavior. 
+     *    C. END For Visual LTR text: This will be the end (left side) of the visual text. (corresponding to  
+     *      the physical memory address beginning, same as BEGIN in default behavior) 
+     *    D. END For Logical text: Same as END in default behavior. 
+     * Affects: All LamAlef BEGIN, END and AUTO options.
+     */
+    public static final int SPACES_RELATIVE_TO_TEXT_BEGIN_END = 0x4000000;
+
+    /** Bit mask for swapping BEGIN and END for Visual LTR text */
+    public static final int SPACES_RELATIVE_TO_TEXT_MASK = 0x4000000;
+    
+    /**
+     * If this option is used, shaping will use the new Unicode code point for TAIL (i.e. 0xFE73). 
+     * If this option is not specified (Default), old unofficial Unicode TAIL code point is used (i.e. 0x200B)
+     * De-shaping will not use this option as it will always search for both the new Unicode code point for the 
+     * TAIL (i.e. 0xFE73) or the old unofficial Unicode TAIL code point (i.e. 0x200B) and de-shape the
+     * Seen-Family letter accordingly.
+     *
+     * Shaping Mode: Only shaping.
+     * De-shaping Mode: N/A.
+     * Affects: All Seen options
+     */
+    public static final int SHAPE_TAIL_NEW_UNICODE = 0x8000000;
+
+    /** Bit mask for new Unicode Tail option */
+    public static final int SHAPE_TAIL_TYPE_MASK = 0x8000000;
 
     /**
      * Memory option: allow the result to have a different length than the source.
@@ -176,6 +323,13 @@ public final class ArabicShaping {
      */
     public static final int LENGTH_GROW_SHRINK = 0;
 
+    /**
+     * Memory option: allow the result to have a different length than the source.
+     * Affects: LamAlef options
+     * This option is an alias to LENGTH_GROW_SHRINK
+     */
+    public static final int LAMALEF_RESIZE   = 0;
+    
     /**
      * Memory option: the result must have the same length as the source.
      * If more room is necessary, then try to consume spaces next to modified characters.
@@ -185,11 +339,28 @@ public final class ArabicShaping {
 
     /**
      * Memory option: the result must have the same length as the source.
+     * If more room is necessary, then try to consume spaces next to modified characters.
+     * Affects: LamAlef options
+     * This option is an alias to LENGTH_FIXED_SPACES_NEAR
+     */
+    public static final int LAMALEF_NEAR = 1 ;
+        
+    /**
+     * Memory option: the result must have the same length as the source.
      * If more room is necessary, then try to consume spaces at the end of the text.
      * @stable ICU 2.0
      */
     public static final int LENGTH_FIXED_SPACES_AT_END = 2;
 
+
+    /**
+     * Memory option: the result must have the same length as the source.
+     * If more room is necessary, then try to consume spaces at the end of the text.
+     * Affects: LamAlef options
+     * This option is an alias to LENGTH_FIXED_SPACES_AT_END
+     */
+    public static final int LAMALEF_END = 2;
+    
     /**
      * Memory option: the result must have the same length as the source.
      * If more room is necessary, then try to consume spaces at the beginning of the text.
@@ -197,12 +368,35 @@ public final class ArabicShaping {
      */
     public static final int LENGTH_FIXED_SPACES_AT_BEGINNING = 3;
 
+    /**
+     * Memory option: the result must have the same length as the source.
+     * If more room is necessary, then try to consume spaces at the beginning of the text.
+     * Affects: LamAlef options
+     * This option is an alias to LENGTH_FIXED_SPACES_AT_BEGINNING
+     */
+    public static final int LAMALEF_BEGIN = 3; 
+
+    /**
+     * Memory option: the result must have the same length as the source.
+     * Shaping Mode: For each LAMALEF character found, expand LAMALEF using space at end.
+     *               If there is no space at end, use spaces at beginning of the buffer. If there
+     *               is no space at beginning of the buffer, use spaces at the near (i.e. the space
+     *               after the LAMALEF character).
+     *
+     * Deshaping Mode: Perform the same function as the flag equals LAMALEF_END. 
+     * Affects: LamAlef options
+     */
+    public static final int LAMALEF_AUTO  = 0x10000; 
+    
     /** 
      * Bit mask for memory options. 
      * @stable ICU 2.0
      */
-    public static final int LENGTH_MASK = 3;
+    public static final int LENGTH_MASK = 0x10003;
 
+    /** Bit mask for LamAlef memory options. */
+
+    public static final int LAMALEF_MASK  = 0x10003;
 
     /** 
      * Direction indicator: the source is in logical (keyboard) order. 
@@ -210,6 +404,13 @@ public final class ArabicShaping {
      */
     public static final int TEXT_DIRECTION_LOGICAL = 0;
 
+    /**
+     * Direction indicator:the source is in visual RTL order,
+     * the rightmost displayed character stored first.
+     * This option is an alias to U_SHAPE_TEXT_DIRECTION_LOGICAL
+     */
+    public static final int TEXT_DIRECTION_VISUAL_RTL = 0;
+    
     /** 
      * Direction indicator: the source is in visual (display) order, that is,
      * the leftmost displayed character is stored first.
@@ -332,6 +533,25 @@ public final class ArabicShaping {
     public static final int DIGIT_TYPE_MASK = 0x0100; // 0x3f00?
 
     /**
+     * some constants
+     */
+    private static final char HAMZAFE_CHAR       = '\ufe80';
+    private static final char HAMZA06_CHAR       = '\u0621';
+    private static final char YEH_HAMZA_CHAR     = '\u0626';
+    private static final char YEH_HAMZAFE_CHAR   = '\uFE89';
+    private static final char LAMALEF_SPACE_SUB  = '\uffff';
+    private static final char TASHKEEL_SPACE_SUB = '\ufffe';
+    private static final char LAM_CHAR      = '\u0644';
+    private static final char SPACE_CHAR    = '\u0020';
+    private static final char SHADDA_CHAR   = '\uFE7C';
+    private static final char TATWEEL_CHAR  = '\u0640';
+    private static final char SHADDA_TATWEEL_CHAR = '\uFE7D';
+    private static final char NEW_TAIL_CHAR = '\uFE73';
+    private static final char OLD_TAIL_CHAR = '\u200B';
+    private static final int SHAPE_MODE      = 0;
+    private static final int DESHAPE_MODE    = 1;
+
+    /**
      * @stable ICU 2.0
      */
     public boolean equals(Object rhs) {
@@ -354,11 +574,13 @@ public final class ArabicShaping {
     public String toString() {
         StringBuffer buf = new StringBuffer(super.toString());
         buf.append('[');
-        switch (options & LENGTH_MASK) {
-        case LENGTH_GROW_SHRINK: buf.append("grow/shrink"); break;
-        case LENGTH_FIXED_SPACES_NEAR: buf.append("spaces near"); break;
-        case LENGTH_FIXED_SPACES_AT_END: buf.append("spaces at end"); break;
-        case LENGTH_FIXED_SPACES_AT_BEGINNING: buf.append("spaces at beginning"); break;
+
+        switch (options & LAMALEF_MASK) {
+        case LAMALEF_RESIZE: buf.append("LamAlef resize"); break;
+        case LAMALEF_NEAR: buf.append("LamAlef spaces at near"); break;
+        case LAMALEF_BEGIN: buf.append("LamAlef spaces at begin"); break;
+        case LAMALEF_END: buf.append("LamAlef spaces at end"); break;
+        case LAMALEF_AUTO: buf.append("lamAlef auto"); break;
         }
         switch (options & TEXT_DIRECTION_MASK) {
         case TEXT_DIRECTION_LOGICAL: buf.append(", logical"); break;
@@ -370,6 +592,19 @@ public final class ArabicShaping {
         case LETTERS_SHAPE_TASHKEEL_ISOLATED: buf.append(", shape letters tashkeel isolated"); break;
         case LETTERS_UNSHAPE: buf.append(", unshape letters"); break;
         }
+        switch (options & SEEN_MASK) {
+        case SEEN_TWOCELL_NEAR: buf.append(", Seen at near"); break;
+        }
+        switch (options & YEHHAMZA_MASK) {
+        case YEHHAMZA_TWOCELL_NEAR: buf.append(", Yeh Hamza at near"); break;
+        }
+        switch (options & TASHKEEL_MASK) {
+        case TASHKEEL_BEGIN: buf.append(", Tashkeel at begin"); break;
+        case TASHKEEL_END: buf.append(", Tashkeel at end"); break;
+        case TASHKEEL_REPLACE_BY_TATWEEL: buf.append(", Tashkeel replace with tatweel"); break;
+        case TASHKEEL_RESIZE: buf.append(", Tashkeel resize"); break;
+        }
+
         switch (options & DIGITS_MASK) {
         case DIGITS_NOOP: buf.append(", no digit shaping"); break;
         case DIGITS_EN2AN: buf.append(", shape digits to AN"); break;
@@ -415,6 +650,48 @@ public final class ArabicShaping {
         '\u0627'  // FEFC 
     };
 */
+    
+    private static final int tailFamilyIsolatedFinal[] = {
+        /* FEB1 */ 1,
+        /* FEB2 */ 1,
+        /* FEB3 */ 0,
+        /* FEB4 */ 0,
+        /* FEB5 */ 1,
+        /* FEB6 */ 1,
+        /* FEB7 */ 0,
+        /* FEB8 */ 0,
+        /* FEB9 */ 1,
+        /* FEBA */ 1,
+        /* FEBB */ 0,
+        /* FEBC */ 0,
+        /* FEBD */ 1,
+        /* FEBE */ 1
+    };
+
+    private static final int tashkeelMedial[] = {
+        /* FE70 */ 0,
+        /* FE71 */ 1,
+        /* FE72 */ 0,
+        /* FE73 */ 0,
+        /* FE74 */ 0,
+        /* FE75 */ 0,
+        /* FE76 */ 0,
+        /* FE77 */ 1,
+        /* FE78 */ 0,
+        /* FE79 */ 1,
+        /* FE7A */ 0,
+        /* FE7B */ 1,
+        /* FE7C */ 0,
+        /* FE7D */ 1,
+        /* FE7E */ 0,
+        /* FE7F */ 1
+    };
+
+    private static final char yehHamzaToYeh[] =
+    {
+    /* isolated*/ 0xFEEF,
+    /* final   */ 0xFEF0
+    };
 
     private static final char convertNormalizedLamAlef[] = {
         '\u0622', // 065C
@@ -688,7 +965,7 @@ public final class ArabicShaping {
                                        int start,
                                        int count) {
         for (int i = start, e = start + count; i < e; ++i) {
-            if (dest[i] != '\u0020') {
+            if (dest[i] != SPACE_CHAR) {
                 return i - start;
             }
         }
@@ -700,7 +977,7 @@ public final class ArabicShaping {
                                         int count) {
 
         for (int i = start + count; --i >= start;) {
-            if (dest[i] != '\u0020') {
+            if (dest[i] != SPACE_CHAR) {
                 return start + count - 1 - i;
             }
         }
@@ -709,12 +986,119 @@ public final class ArabicShaping {
 
     /*
      * Name    : isTashkeelChar
-     * Function: Returns 1 for Tashkeel characters else return 0
+     * Function: Returns true for Tashkeel characters else return false
      */
     private static boolean isTashkeelChar(char ch) {
-        return ch >='\u064B' && ch <= '\u0652';
+        return ( ch >='\u064B' && ch <= '\u0652' );
     }
 
+    /*
+     *Name     : isSeenTailFamilyChar
+     *Function : returns 1 if the character is a seen family isolated character 
+     *           in the FE range otherwise returns 0
+     */
+
+    private static int isSeenTailFamilyChar(char ch) {
+        if (ch >= 0xfeb1 && ch < 0xfebf){
+             return tailFamilyIsolatedFinal [ch - 0xFEB1];
+        } else {
+             return 0;
+        }
+    }
+
+     /* Name     : isSeenFamilyChar
+      * Function : returns 1 if the character is a seen family character in the Unicode
+      *            06 range otherwise returns 0
+     */
+
+    private static int isSeenFamilyChar(char  ch){
+        if (ch >= 0x633 && ch <= 0x636){
+            return 1;
+        }else {
+            return 0;
+        }
+    }
+
+    /*
+     *Name     : isTailChar
+     *Function : returns true if the character matches one of the tail characters 
+     *           (0xfe73 or 0x200b) otherwise returns false
+     */
+
+    private static boolean isTailChar(char ch) {
+        if(ch == OLD_TAIL_CHAR || ch == NEW_TAIL_CHAR){
+                return true;
+        }else{
+                return false;
+        }
+    }
+    
+    /*
+     *Name     : isAlefMaksouraChar
+     *Function : returns true if the character is a Alef Maksoura Final or isolated 
+     *           otherwise returns false
+     */
+    private static boolean isAlefMaksouraChar(char ch) {
+        return ( (ch == 0xFEEF) || ( ch == 0xFEF0) || (ch == 0x0649));
+    } 
+
+    /*
+     * Name     : isYehHamzaChar
+     * Function : returns true if the character is a yehHamza isolated or yehhamza
+     *            final is found otherwise returns false
+     */
+    private static boolean isYehHamzaChar(char ch) {
+        if((ch==0xFE89)||(ch==0xFE8A)){
+            return true;
+        }else{
+            return false;
+        }
+    } 
+
+    /*
+     *Name     : isTashkeelCharFE
+     *Function : Returns true for Tashkeel characters in FE range else return false
+     */
+        
+    private static boolean isTashkeelCharFE(char ch) {
+        return ( ch!=0xFE75 &&(ch>=0xFE70 && ch<= 0xFE7F) );
+    }
+
+    /* 
+     * Name: isTashkeelOnTatweelChar
+     * Function: Checks if the Tashkeel Character is on Tatweel or not,if the 
+     *           Tashkeel on tatweel (FE range), it returns 1 else if the 
+     *           Tashkeel with shadda on tatweel (FC range)return 2 otherwise 
+     *           returns 0
+     */
+    private static int isTashkeelOnTatweelChar(char ch){
+        if (ch >= 0xfe70 && ch <= 0xfe7f && ch != NEW_TAIL_CHAR && ch != 0xFE75 && ch != SHADDA_TATWEEL_CHAR)
+        {
+            return tashkeelMedial [ch - 0xFE70];
+        } else if( (ch >= 0xfcf2 && ch <= 0xfcf4) || (ch == SHADDA_TATWEEL_CHAR)) {
+            return 2;
+        } else {
+            return 0;
+        }
+    }
+    
+    /*
+     * Name: isIsolatedTashkeelChar
+     * Function: Checks if the Tashkeel Character is in the isolated form 
+     *           (i.e. Unicode FE range) returns 1 else if the Tashkeel 
+     *           with shadda is in the isolated form (i.e. Unicode FC range)
+     *           returns 1 otherwise returns 0
+     */
+    private static int isIsolatedTashkeelChar(char ch){
+        if (ch >= 0xfe70 && ch <= 0xfe7f && ch != NEW_TAIL_CHAR && ch != 0xFE75){
+            return (1 - tashkeelMedial [ch - 0xFE70]);
+        } else if(ch >= 0xfc5e && ch <= 0xfc63){
+            return 1;
+        } else{
+            return 0;
+        }
+    }
+   
     /*
      * Name    : isAlefChar
      * Function: Returns 1 for Alef characters else return 0
@@ -722,10 +1106,10 @@ public final class ArabicShaping {
     private static boolean isAlefChar(char ch) {
         return ch == '\u0622' || ch == '\u0623' || ch == '\u0625' || ch == '\u0627';
     }
-
+     
     /*
      * Name    : isLamAlefChar
-     * Function: Returns 1 for LamAlef characters else return 0
+     * Function: Returns true for LamAlef characters else return false
      */
     private static boolean isLamAlefChar(char ch) {
         return ch >= '\uFEF5' && ch <= '\uFEFC';
@@ -745,19 +1129,19 @@ public final class ArabicShaping {
                               int sourceLength) {
     
         int destSize = sourceLength;
-
+        
         switch (options & LETTERS_MASK) {
         case LETTERS_SHAPE:
         case LETTERS_SHAPE_TASHKEEL_ISOLATED:
             if (isLogical) {
                 for (int i = sourceStart, e = sourceStart + sourceLength - 1; i < e; ++i) {
-                    if (source[i] == '\u0644' && isAlefChar(source[i+1])) {
+                    if ((source[i] == LAM_CHAR && isAlefChar(source[i+1])) || isTashkeelCharFE(source[i])){
                         --destSize;
                     }
                 }
             } else { // visual
                 for(int i = sourceStart + 1, e = sourceStart + sourceLength; i < e; ++i) {
-                    if (source[i] == '\u0644' && isAlefChar(source[i-1])) {
+                    if ((source[i] == LAM_CHAR && isAlefChar(source[i-1])) || isTashkeelCharFE(source[i])) {
                         --destSize;
                     }
                 }
@@ -778,77 +1162,325 @@ public final class ArabicShaping {
 
         return destSize;
     }
+    
+    
+    /*
+     * Name    : countSpaceSub
+     * Function: Counts number of times the subChar appears in the array
+     */
+    public static int countSpaceSub(char [] dest,int length, char subChar){
+        int i = 0;
+        int count = 0;
+        while (i < length) {
+          if (dest[i] == subChar) {
+              count++;
+              }
+          i++;
+        } 
+        return count;  
+    }
+    
+    /*
+     * Name    : shiftArray
+     * Function: Shifts characters to replace space sub characters
+     */
+    public static void shiftArray(char [] dest,int start, int e, char subChar){
+        int w = e;
+        int r = e;
+        while (--r >= start) {
+          char ch = dest[r];
+          if (ch != subChar) {
+            --w;
+            if (w != r) {
+              dest[w] = ch;
+            }
+          }
+        }
+   }
 
     /*
-     * Name    : removeLamAlefSpaces
-     * Function: The shapeUnicode function converts Lam + Alef into LamAlef + space,
-     *           this function removes the spaces behind the LamAlefs according to
-     *           the options the user specifies, the spaces are removed to the end
-     *           of the buffer, or shrink the buffer and remove spaces for good
-     *           or leave the buffer as it is LamAlef + space.
+     * Name    : flipArray
+     * Function: inverts array, so that start becomes end and vice versa
      */
-    private int removeLamAlefSpaces(char[] dest, 
-                                    int start,
-                                    int length) {
+      public static int flipArray(char [] dest, int start, int e, int w){
+        int r;
+        if (w > start) {
+        // shift, assume small buffer size so don't use arraycopy
+          r = w;
+          w = start;
+          while (r < e) {
+            dest[w++] = dest[r++];
+           }
+         } else {
+             w = e;
+         }
+        return w;
+      }
     
-        int lenOptions = options & LENGTH_MASK;
-        if (!isLogical) {
-            switch (lenOptions) {
-            case LENGTH_FIXED_SPACES_AT_BEGINNING: lenOptions = LENGTH_FIXED_SPACES_AT_END; break;
-            case LENGTH_FIXED_SPACES_AT_END: lenOptions = LENGTH_FIXED_SPACES_AT_BEGINNING; break;
-            default: break;
-            }
-        }
-
-        if (lenOptions == LENGTH_FIXED_SPACES_NEAR) {
-            for (int i = start, e = i + length; i < e; ++i) {
-                if (dest[i] == '\uffff') {
-                    dest[i] = '\u0020';
-                }
-            }
-        } else {
-            final int e = start + length;
-            int w = e;
-            int r = e;
-            while (--r >= start) {
-                char ch = dest[r];
-                if (ch != '\uffff') {
-                    --w;
-                    if (w != r) {
-                        dest[w] = ch;
-                    }
-                }
-            }
-
-            if (lenOptions == LENGTH_FIXED_SPACES_AT_END) {
-                while (w > start) {
-                    dest[--w] = '\u0020';
-                }
-            } else {
-                if (w > start) {
-                    // shift, assume small buffer size so don't use arraycopy
-                    r = w;
-                    w = start;
-                    while (r < e) {
-                        dest[w++] = dest[r++];
-                    }
-                } else {
-                    w = e;
-                }
-                if (lenOptions == LENGTH_GROW_SHRINK) {
-                    length = w - start;
-                } else { // spaces at beginning
-                    while (w < e) {
-                        dest[w++] = '\u0020';
-                    }
-                }
-            }
-        }
-        return length;
+    /*
+     * Name     : handleTashkeelWithTatweel
+     * Function : Replaces Tashkeel as following: 
+     *            Case 1 :if the Tashkeel on tatweel, replace it with Tatweel.   
+     *            Case 2 :if the Tashkeel aggregated with Shadda on Tatweel, replace 
+     *                   it with Shadda on Tatweel.
+     *            Case 3: if the Tashkeel is isolated replace it with Space.
+     *
+     */
+    private static int handleTashkeelWithTatweel(char[] dest, int sourceLength) {
+                     int i;
+                     for(i = 0; i < sourceLength; i++){
+                         if((isTashkeelOnTatweelChar(dest[i]) == 1)){
+                             dest[i] = TATWEEL_CHAR;
+                        }else if((isTashkeelOnTatweelChar(dest[i]) == 2)){
+                             dest[i] = SHADDA_TATWEEL_CHAR;
+                        }else if((isIsolatedTashkeelChar(dest[i])==1) && dest[i] != SHADDA_CHAR){
+                             dest[i] = SPACE_CHAR;
+                        }
+                     }
+                     return sourceLength;
     }
 
     /*
-     * Name    : expandLamAlef
+     *Name     : handleGeneratedSpaces
+     *Function : The shapeUnicode function converts Lam + Alef into LamAlef + space,
+     *           and Tashkeel to space. 
+     *           handleGeneratedSpaces function puts these generated spaces 
+     *           according to the options the user specifies. LamAlef and Tashkeel
+     *           spaces can be replaced at begin, at end, at near or decrease the 
+     *           buffer size.
+     *
+     *           There is also Auto option for LamAlef and tashkeel, which will put
+     *           the spaces at end of the buffer (or end of text if the user used 
+     *           the option SPACES_RELATIVE_TO_TEXT_BEGIN_END).
+     *
+     *           If the text type was visual_LTR and the option 
+     *           SPACES_RELATIVE_TO_TEXT_BEGIN_END was selected the END 
+     *           option will place the space at the beginning of the buffer and
+     *           BEGIN will place the space at the end of the buffer. 
+     */
+  private int handleGeneratedSpaces(char[] dest, 
+            int start,
+            int length) {
+      
+      int lenOptionsLamAlef = options & LAMALEF_MASK;
+      int lenOptionsTashkeel = options & TASHKEEL_MASK;
+      boolean lamAlefOn = false;
+      boolean tashkeelOn = false;
+      
+      if (!isLogical & !spacesRelativeToTextBeginEnd) {
+          switch (lenOptionsLamAlef) {
+          case LAMALEF_BEGIN: lenOptionsLamAlef = LAMALEF_END; break;
+          case LAMALEF_END: lenOptionsLamAlef = LAMALEF_BEGIN; break;
+          default: break;
+         }   
+          switch (lenOptionsTashkeel){
+          case TASHKEEL_BEGIN: lenOptionsTashkeel = TASHKEEL_END; break;
+          case TASHKEEL_END: lenOptionsTashkeel = TASHKEEL_BEGIN; break;
+          default: break;
+          }
+        }
+      
+     
+      if (lenOptionsLamAlef == LAMALEF_NEAR) {
+          for (int i = start, e = i + length; i < e; ++i) {
+              if (dest[i] == LAMALEF_SPACE_SUB) {
+                  dest[i] = SPACE_CHAR;
+              }
+          }
+          
+      } else {
+          
+          final int e = start + length;
+          int wL = countSpaceSub(dest, length, LAMALEF_SPACE_SUB);
+          int wT = countSpaceSub(dest, length, TASHKEEL_SPACE_SUB);
+
+          if (lenOptionsLamAlef == LAMALEF_END){
+            lamAlefOn = true;
+          }
+          if (lenOptionsTashkeel == TASHKEEL_END){
+            tashkeelOn = true;
+          }
+
+
+          if (lamAlefOn && (lenOptionsLamAlef == LAMALEF_END)) { 
+            shiftArray(dest, start, e, LAMALEF_SPACE_SUB);
+            while (wL > start) {
+                dest[--wL] = SPACE_CHAR;
+            } 
+          }
+
+          if (tashkeelOn && (lenOptionsTashkeel == TASHKEEL_END)){
+            shiftArray(dest, start, e, TASHKEEL_SPACE_SUB);
+            while (wT > start) {
+                 dest[--wT] = SPACE_CHAR;
+            }
+          }
+            
+          lamAlefOn = false; 
+          tashkeelOn = false;
+        
+          if (lenOptionsLamAlef == LAMALEF_RESIZE){
+            lamAlefOn = true;
+          }
+          if (lenOptionsTashkeel == TASHKEEL_RESIZE){
+            tashkeelOn = true;
+          }
+        
+          if (lamAlefOn && (lenOptionsLamAlef == LAMALEF_RESIZE)){
+              shiftArray(dest, start, e, LAMALEF_SPACE_SUB);
+              wL = flipArray(dest,start,e, wL);
+              length = wL - start;
+          }
+          if (tashkeelOn && (lenOptionsTashkeel == TASHKEEL_RESIZE)) { 
+              shiftArray(dest, start, e, TASHKEEL_SPACE_SUB);
+              wT = flipArray(dest,start,e, wT);
+              length = wT - start;
+          } 
+
+          lamAlefOn = false; 
+          tashkeelOn = false;          
+        
+          if ((lenOptionsLamAlef == LAMALEF_BEGIN) || 
+              (lenOptionsLamAlef == LAMALEF_AUTO)){
+                lamAlefOn = true;
+          }
+          if (lenOptionsTashkeel == TASHKEEL_BEGIN){
+                tashkeelOn = true;
+          }
+
+          if (lamAlefOn && ((lenOptionsLamAlef == LAMALEF_BEGIN)||
+                            (lenOptionsLamAlef == LAMALEF_AUTO))) { // spaces at beginning
+              shiftArray(dest, start, e, LAMALEF_SPACE_SUB);
+               wL = flipArray(dest,start,e, wL);
+                  while (wL < e) {
+                      dest[wL++] = SPACE_CHAR;
+                  }
+              }
+              if(tashkeelOn && (lenOptionsTashkeel == TASHKEEL_BEGIN)){
+               shiftArray(dest, start, e, TASHKEEL_SPACE_SUB);
+               wT = flipArray(dest,start,e, wT);
+                  while (wT < e) {
+                      dest[wT++] = SPACE_CHAR;
+                  }
+              }
+           }
+      
+      return length;
+  }
+  
+  
+  /*
+   *Name     :expandCompositCharAtBegin
+   *Function :Expands the LamAlef character to Lam and Alef consuming the required
+   *         space from beginning of the buffer. If the text type was visual_LTR 
+   *         and the option SPACES_RELATIVE_TO_TEXT_BEGIN_END was selected
+   *         the spaces will be located at end of buffer.
+   *         If there are no spaces to expand the LamAlef, an exception is thrown.
+*/
+ private boolean expandCompositCharAtBegin(char[] dest,int start, int length,
+                            int lacount) {
+     boolean spaceNotFound = false;
+     
+     if (lacount > countSpacesRight(dest, start, length)) {
+         spaceNotFound = true;
+         return spaceNotFound;
+     }
+     for (int r = start + length - lacount, w = start + length; --r >= start;) {
+         char ch = dest[r];
+         if (isNormalizedLamAlefChar(ch)) {
+             dest[--w] = LAM_CHAR;
+             dest[--w] = convertNormalizedLamAlef[ch - '\u065C'];
+         } else {
+             dest[--w] = ch;
+         }
+     }
+     return spaceNotFound;
+ 
+  }
+
+  /*
+   *Name     : expandCompositCharAtEnd
+   *Function : Expands the LamAlef character to Lam and Alef consuming the 
+   *           required space from end of the buffer. If the text type was
+   *           Visual LTR and the option SPACES_RELATIVE_TO_TEXT_BEGIN_END
+   *           was used, the spaces will be consumed from begin of buffer. If 
+   *           there are no spaces to expand the LamAlef, an exception is thrown. 
+   */
+
+  private boolean  expandCompositCharAtEnd(char[] dest,int start, int length,
+                          int lacount){
+      boolean spaceNotFound = false;
+      
+      if (lacount > countSpacesLeft(dest, start, length)) {
+          spaceNotFound = true;
+          return spaceNotFound;
+      }
+      for (int r = start + lacount, w = start, e = start + length; r < e; ++r) {
+          char ch = dest[r];
+          if (isNormalizedLamAlefChar(ch)) {
+              dest[w++] = convertNormalizedLamAlef[ch - '\u065C'];
+              dest[w++] = LAM_CHAR;
+          } else {
+              dest[w++] = ch;
+          }
+      }
+      return spaceNotFound;
+  }
+
+  /*
+   *Name     : expandCompositCharAtNear
+   *Function : Expands the LamAlef character into Lam + Alef, YehHamza character
+   *           into Yeh + Hamza, SeenFamily character into SeenFamily character 
+   *           + Tail, while consuming the space next to the character. 
+   */
+
+  private boolean expandCompositCharAtNear(char[] dest,int start, int length,
+                                       int yehHamzaOption, int seenTailOption, int lamAlefOption){
+      
+      boolean spaceNotFound = false;
+      
+      
+      
+      if (isNormalizedLamAlefChar(dest[start])) {
+          spaceNotFound = true;
+          return spaceNotFound;
+      }
+      for (int i = start + length; --i >=start;) { 
+          char ch = dest[i];
+          if (lamAlefOption == 1 && isNormalizedLamAlefChar(ch)) {
+              if (i>start &&dest[i-1] == SPACE_CHAR) {
+                  dest[i] = LAM_CHAR;
+                  dest[--i] = convertNormalizedLamAlef[ch - '\u065C'];
+              } else {
+                  spaceNotFound = true;
+                  return spaceNotFound;
+              }
+          }else if(seenTailOption == 1 && isSeenTailFamilyChar(ch) == 1){
+              if(i>start &&dest[i-1] == SPACE_CHAR){
+                  dest[i-1] = tailChar;
+              } else{
+                  spaceNotFound = true;
+                  return spaceNotFound;
+              }
+          }else if(yehHamzaOption == 1 && isYehHamzaChar(ch)){
+              
+               if(i>start &&dest[i-1] == SPACE_CHAR){
+                  dest[i] = yehHamzaToYeh[ch - YEH_HAMZAFE_CHAR];
+                  dest[i-1] = HAMZAFE_CHAR;
+              }else{
+                  spaceNotFound = true;
+                  return spaceNotFound;
+                }
+              
+              
+          }
+      }
+      return false;
+
+  }
+    
+    /*
+     * Name    : expandCompositChar
      * Function: LamAlef needs special handling as the LamAlef is
      *           one character while expanding it will give two
      *           characters Lam + Alef, so we need to expand the LamAlef
@@ -857,23 +1489,66 @@ public final class ArabicShaping {
      *           Dest has enough room for the expansion if we are growing.
      *           lamalef are normalized to the 'special characters'
      */
-    private int expandLamAlef(char[] dest,
+    private int expandCompositChar(char[] dest,
                               int start,
                               int length,
-                              int lacount) throws ArabicShapingException {
+                              int lacount,
+                              int shapingMode) throws ArabicShapingException {
 
-        int lenOptions = options & LENGTH_MASK;
-        if (!isLogical) {
-            switch (lenOptions) {
-            case LENGTH_FIXED_SPACES_AT_BEGINNING: lenOptions = LENGTH_FIXED_SPACES_AT_END; break;
-            case LENGTH_FIXED_SPACES_AT_END: lenOptions = LENGTH_FIXED_SPACES_AT_BEGINNING; break;
+        int lenOptionsLamAlef = options & LAMALEF_MASK;
+        int lenOptionsSeen = options & SEEN_MASK;
+        int lenOptionsYehHamza = options & YEHHAMZA_MASK; 
+        boolean spaceNotFound = false;
+        
+        if (!isLogical && !spacesRelativeToTextBeginEnd) {
+            switch (lenOptionsLamAlef) {
+            case LAMALEF_BEGIN: lenOptionsLamAlef = LAMALEF_END; break;
+            case LAMALEF_END: lenOptionsLamAlef = LAMALEF_BEGIN; break;
             default: break;
             }
         }
-
-        switch (lenOptions) {
-        case LENGTH_GROW_SHRINK: 
-            {
+        
+        if(shapingMode == 1){
+            if(lenOptionsLamAlef == LAMALEF_AUTO){
+                if(isLogical){
+                    spaceNotFound = expandCompositCharAtEnd(dest, start, length, lacount);
+                    if(spaceNotFound){
+                        spaceNotFound = expandCompositCharAtBegin(dest, start, length, lacount);
+                    }
+                    if(spaceNotFound){
+                        spaceNotFound = expandCompositCharAtNear(dest, start, length,0,0,1);
+                    }
+                    if(spaceNotFound){
+                        throw new ArabicShapingException("No spacefor lamalef");
+                    }
+                }else{
+                    spaceNotFound = expandCompositCharAtBegin(dest, start, length, lacount);
+                    if(spaceNotFound){
+                        spaceNotFound = expandCompositCharAtEnd(dest, start, length, lacount);
+                    }
+                    if(spaceNotFound){
+                        spaceNotFound = expandCompositCharAtNear(dest, start, length,0,0,1);
+                    }
+                    if(spaceNotFound){
+                        throw new ArabicShapingException("No spacefor lamalef");
+                    }
+                }
+            }else if(lenOptionsLamAlef == LAMALEF_END){
+                spaceNotFound = expandCompositCharAtEnd(dest, start, length, lacount);
+                if(spaceNotFound){
+                    throw new ArabicShapingException("No spacefor lamalef");
+                }
+            }else if(lenOptionsLamAlef == LAMALEF_BEGIN){
+                spaceNotFound = expandCompositCharAtBegin(dest, start, length, lacount);
+                if(spaceNotFound){
+                    throw new ArabicShapingException("No spacefor lamalef");
+                }                
+            }else if(lenOptionsLamAlef == LAMALEF_NEAR){
+                spaceNotFound = expandCompositCharAtNear(dest, start, length,0,0,1);
+                if(spaceNotFound){
+                    throw new ArabicShapingException("No spacefor lamalef");                
+            }
+            }else if(lenOptionsLamAlef == LAMALEF_RESIZE){
                 for (int r = start + length, w = r + lacount; --r >= start;) {
                     char ch = dest[r];
                     if (isNormalizedLamAlefChar(ch)) {
@@ -883,67 +1558,26 @@ public final class ArabicShaping {
                         dest[--w] = ch;
                     }
                 }
+                length += lacount;
             }
-            length += lacount;
-            break;
-
-        case LENGTH_FIXED_SPACES_NEAR: 
-            {
-                if (isNormalizedLamAlefChar(dest[start])) {
-                    throw new ArabicShapingException("no space for lamalef");
-                }
-                for (int i = start + length; --i > start;) { // don't check start, already checked
-                    char ch = dest[i];
-                    if (isNormalizedLamAlefChar(ch)) {
-                        if (dest[i-1] == '\u0020') {
-                            dest[i] = '\u0644';
-                            dest[--i] = convertNormalizedLamAlef[ch - '\u065C'];
-                        } else {
-                            throw new ArabicShapingException("no space for lamalef");
-                        }
-                    }
+            }else{
+                if(lenOptionsSeen == SEEN_TWOCELL_NEAR){
+                spaceNotFound = expandCompositCharAtNear(dest, start, length,0,1,0);
+                if(spaceNotFound){
+                    throw new ArabicShapingException("No space for Seen tail expansion"); 
                 }
             }
-            break;
-
-        case LENGTH_FIXED_SPACES_AT_END: 
-            {
-                if (lacount > countSpacesLeft(dest, start, length)) {
-                    throw new ArabicShapingException("no space for lamalef");
+            if(lenOptionsYehHamza == YEHHAMZA_TWOCELL_NEAR){
+                spaceNotFound = expandCompositCharAtNear(dest, start, length,1,0,0);
+                if(spaceNotFound){
+                    throw new ArabicShapingException("No space for YehHamza expansion"); 
                 }
-                for (int r = start + lacount, w = start, e = start + length; r < e; ++r) {
-                    char ch = dest[r];
-                    if (isNormalizedLamAlefChar(ch)) {
-                        dest[w++] = convertNormalizedLamAlef[ch - '\u065C'];
-                        dest[w++] = '\u0644';
-                    } else {
-                        dest[w++] = ch;
-                    }
-                }
+            }   
             }
-            break;
-                
-        case LENGTH_FIXED_SPACES_AT_BEGINNING: 
-            {
-                if (lacount > countSpacesRight(dest, start, length)) {
-                    throw new ArabicShapingException("no space for lamalef");
-                }
-                for (int r = start + length - lacount, w = start + length; --r >= start;) {
-                    char ch = dest[r];
-                    if (isNormalizedLamAlefChar(ch)) {
-                        dest[--w] = '\u0644';
-                        dest[--w] = convertNormalizedLamAlef[ch - '\u065C'];
-                    } else {
-                        dest[--w] = ch;
-                    }
-                }
-            }
-            break;
-        }
-
         return length;
     }
 
+    
     /* Convert the input buffer from FExx Range into 06xx Range
      * to put all characters into the 06xx range
      * even the lamalef is converted to the special region in
@@ -964,6 +1598,44 @@ public final class ArabicShaping {
     }
 
     /*
+     * Name    : deshapeNormalize
+     * Function: Convert the input buffer from FExx Range into 06xx Range
+     *           even the lamalef is converted to the special region in the 06xx range.  
+     *           According to the options the user enters, all seen family characters 
+     *           followed by a tail character are merged to seen tail family character and 
+     *           any yeh followed by a hamza character are merged to yehhamza character.
+     *           Method returns the number of lamalef chars found.
+     */
+    private int deshapeNormalize(char[] dest, int start, int length) {
+        int lacount = 0;
+        int yehHamzaComposeEnabled = 0;
+        int seenComposeEnabled = 0;
+
+        yehHamzaComposeEnabled = ((options&YEHHAMZA_MASK) == YEHHAMZA_TWOCELL_NEAR) ? 1 : 0;
+        seenComposeEnabled = ((options&SEEN_MASK) == SEEN_TWOCELL_NEAR)? 1 : 0;
+    
+        for (int i = start, e = i + length; i < e; ++i) {
+            char ch = dest[i];
+        
+        if( (yehHamzaComposeEnabled == 1) && ((ch == HAMZA06_CHAR) || (ch == HAMZAFE_CHAR)) 
+               && (i < (length - 1)) && isAlefMaksouraChar(dest[i+1] )) {
+                dest[i] = SPACE_CHAR;
+                dest[i+1] = YEH_HAMZA_CHAR;
+       } else if ( (seenComposeEnabled == 1) && (isTailChar(ch)) && (i< (length - 1)) 
+                       && (isSeenTailFamilyChar(dest[i+1])==1) ) {
+               dest[i] = SPACE_CHAR;
+       }
+       else if (ch >= '\uFE70' && ch <= '\uFEFC') {
+                if (isLamAlefChar(ch)) {
+                    ++lacount;
+                }
+                dest[i] = (char)convertFEto06[ch - '\uFE70'];
+            }
+        }
+        return lacount;
+    }
+
+    /*
      * Name    : shapeUnicode
      * Function: Converts an Arabic Unicode buffer in 06xx Range into a shaped
      *           arabic Unicode buffer in FExx Range
@@ -972,17 +1644,17 @@ public final class ArabicShaping {
                              int start,
                              int length,
                              int destSize,
-                             int tashkeelFlag) {
-
-
-        normalize(dest, start, length);
+                             int tashkeelFlag)throws ArabicShapingException {
+        
+        int lamalef_count = normalize(dest, start, length);
 
         // resolve the link between the characters.
         // Arabic characters have four forms: Isolated, Initial, Medial and Final.
         // Tashkeel characters have two, isolated or medial, and sometimes only isolated.
         // tashkeelFlag == 0: shape normally, 1: shape isolated, 2: don't shape
 
-        boolean lamalef_found = false;
+        boolean lamalef_found = false, seenfam_found = false;
+        boolean yehhamza_found = false, tashkeel_found = false;
         int i = start + length - 1;
         int currLink = getLink(dest[i]);
         int nextLink = 0;
@@ -1025,6 +1697,22 @@ public final class ArabicShaping {
                     lastLink = prevLink;
                     currLink = getLink(wLamalef); // requires '\u0000', unfortunately
                 }
+                if ((i > 0) && (dest[i-1] == SPACE_CHAR))
+                { 
+                    if ( isSeenFamilyChar(dest[i]) == 1){
+                        seenfam_found = true;
+                    } else if (dest[i] == YEH_HAMZA_CHAR) {
+                        yehhamza_found = true;
+                    }
+                }
+                else if(i==0){
+                    if ( isSeenFamilyChar(dest[i]) == 1){
+                        seenfam_found = true;
+                    } else if (dest[i] == YEH_HAMZA_CHAR) {
+                        yehhamza_found = true;
+                    }
+                }
+
 
                 // get the proper shape according to link ability of neighbors
                 // and of character; depends on the order of the shapes
@@ -1052,11 +1740,15 @@ public final class ArabicShaping {
                         shape = 0;
                     }
                 }
-
                 if (flag == 2) {
-                    if (tashkeelFlag < 2) {
+                    if (tashkeelFlag == 2) {
+                        dest[i] = TASHKEEL_SPACE_SUB;
+                        tashkeel_found = true;
+                    }
+                    else{
                         dest[i] = (char)('\uFE70' + irrelevantPos[dest[i] - '\u064B'] + shape);
-                    } // else leave tashkeel alone                    
+                    }
+                    // else leave tashkeel alone                    
                 } else {
                     dest[i] = (char)('\uFE70' + (currLink >> 8) + shape);
                 }
@@ -1080,14 +1772,15 @@ public final class ArabicShaping {
         }
 
         // If we found a lam/alef pair in the buffer 
-        // call removeLamAlefSpaces to remove the spaces that were added
+        // call handleGeneratedSpaces to remove the spaces that were added
 
-        if (lamalef_found) {
-            destSize = removeLamAlefSpaces(dest, start, length);
-        } else {
-            destSize = length;
+        destSize = length;
+        if (lamalef_found || tashkeel_found) {
+            destSize = handleGeneratedSpaces(dest, start, length);
         }
-        
+        if (seenfam_found || yehhamza_found){
+            destSize = expandCompositChar(dest, start, destSize, lamalef_count, SHAPE_MODE);
+        }
         return destSize;
     }
 
@@ -1101,12 +1794,12 @@ public final class ArabicShaping {
                                int length,
                                int destSize) throws ArabicShapingException {
 
-        int lamalef_count = normalize(dest, start, length);
+        int lamalef_count = deshapeNormalize(dest, start, length); 
 
         // If there was a lamalef in the buffer call expandLamAlef
         if (lamalef_count != 0) {
             // need to adjust dest to fit expanded buffer... !!!
-            destSize = expandLamAlef(dest, start, length, lamalef_count);
+            destSize = expandCompositChar(dest, start, length, lamalef_count,DESHAPE_MODE); 
         } else {
             destSize = length;
         }
@@ -1127,7 +1820,7 @@ public final class ArabicShaping {
 
         if (destSize == 0) {
             if (((options & LETTERS_MASK) != LETTERS_NOOP) &&
-                ((options & LENGTH_MASK) == LENGTH_GROW_SHRINK)) {
+                ((options & LAMALEF_MASK) == LAMALEF_RESIZE)) {
     
                 return calculateSize(source, sourceStart, sourceLength);
             } else {
@@ -1151,7 +1844,19 @@ public final class ArabicShaping {
             break;
 
         case LETTERS_SHAPE:
-            outputSize = shapeUnicode(temp, 0, sourceLength, destSize, 0);
+            if( ((options&TASHKEEL_MASK)> 0) && 
+                ((options&TASHKEEL_MASK) !=TASHKEEL_REPLACE_BY_TATWEEL)) {
+                   /* Call the shaping function with tashkeel flag == 2 for removal of tashkeel */
+                outputSize = shapeUnicode(temp, 0, sourceLength, destSize, 2);
+                }else {
+                   //default Call the shaping function with tashkeel flag == 1 */
+                    outputSize = shapeUnicode(temp, 0, sourceLength, destSize, 0);
+
+                   /*After shaping text check if user wants to remove tashkeel and replace it with tatweel*/
+                   if( (options&TASHKEEL_MASK) == TASHKEEL_REPLACE_BY_TATWEEL){
+                       outputSize = handleTashkeelWithTatweel(temp,sourceLength);
+                   }
+               }
             break;
 
         case LETTERS_UNSHAPE:
