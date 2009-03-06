@@ -26,7 +26,11 @@
  * \brief C++ API: Unicode String 
  */
 
+#include "unicode/utypes.h"
 #include "unicode/rep.h"
+#include "unicode/std_string.h"
+#include "unicode/stringpiece.h"
+#include "unicode/bytestream.h"
 
 struct UConverter;          // unicode/ucnv.h
 class  StringThreadTest;
@@ -1535,6 +1539,40 @@ public:
 #endif
 
   /**
+   * Convert the UnicodeString to UTF-8 and write the result
+   * to a ByteSink. This is called by toUTF8String().
+   * Unpaired surrogates are replaced with U+FFFD.
+   * Calls u_strToUTF8WithSub().
+   *
+   * @param A ByteSink to which the UTF-8 version of the string is written.
+   * @draft ICU 4.2
+   * @see toUTF8String
+   */
+  void toUTF8(ByteSink &sink) const;
+
+#if U_HAVE_STD_STRING
+
+  /**
+   * Convert the UnicodeString to UTF-8 and append the result
+   * to a standard string.
+   * Unpaired surrogates are replaced with U+FFFD.
+   * Calls toUTF8().
+   *
+   * @param A standard string (or a compatible object)
+   *        to which the UTF-8 version of the string is appended.
+   * @return The string object.
+   * @draft ICU 4.2
+   * @see toUTF8
+   */
+  template<typename StringClass>
+  StringClass &toUTF8String(StringClass &result) const {
+    toUTF8(StringByteSink<StringClass>(&result));
+    return result;
+  }
+
+#endif
+
+  /**
    * Convert the UnicodeString to UTF-32.
    * Unpaired surrogates are replaced with U+FFFD.
    * Calls u_strToUTF32WithSub().
@@ -2916,6 +2954,21 @@ public:
    * @stable ICU 2.0
    */
   virtual ~UnicodeString();
+
+  /**
+   * Create a UnicodeString from a UTF-8 string.
+   * Illegal input is replaced with U+FFFD. Otherwise, errors result in a bogus string.
+   * Calls u_strFromUTF8WithSub().
+   *
+   * @param utf8 UTF-8 input string.
+   *             Note that a StringPiece can be implicitly constructed
+   *             from a std::string or a NUL-terminated const char * string.
+   * @return A UnicodeString with equivalent UTF-16 contents.
+   * @see toUTF8
+   * @see toUTF8String
+   * @draft ICU 4.2
+   */
+  static UnicodeString fromUTF8(const StringPiece &utf8);
 
   /**
    * Create a UnicodeString from a UTF-32 string.
