@@ -3402,6 +3402,50 @@
 			Name="strings"
 			>
 			<File
+				RelativePath=".\bytestream.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\bytestream.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\chariter.cpp"
 				>
 			</File>
@@ -3511,6 +3555,50 @@
 			</File>
 			<File
 				RelativePath=".\unicode\schriter.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode&#x0D;&#x0A;"
+						Outputs="..\..\include\unicode\$(InputFileName)"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\stringpiece.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\unicode\stringpiece.h"
 				>
 				<FileConfiguration
 					Name="Release|Win32"

@@ -379,9 +379,34 @@ UnicodeString::~UnicodeString()
 // Factory methods
 //========================================
 
+UnicodeString UnicodeString::fromUTF8(const StringPiece &utf8) {
+  UnicodeString result;
+  int32_t length = utf8.length();
+  int32_t capacity;
+  // The UTF-16 string will be at most as long as the UTF-8 string.
+  if(length <= US_STACKBUF_SIZE) {
+    capacity = US_STACKBUF_SIZE;
+  } else {
+    capacity = length + 1;  // +1 for the terminating NUL.
+  }
+  UChar *utf16 = result.getBuffer(capacity);
+  int32_t length16;
+  UErrorCode errorCode = U_ZERO_ERROR;
+  u_strFromUTF8WithSub(utf16, result.getCapacity(), &length16,
+      utf8.data(), length,
+      0xfffd,  // Substitution character.
+      NULL,    // Don't care about number of substitutions.
+      &errorCode);
+  result.releaseBuffer(length16);
+  if(U_FAILURE(errorCode)) {
+    result.setToBogus();
+  }
+  return result;
+}
+
 UnicodeString UnicodeString::fromUTF32(const UChar32 *utf32, int32_t length) {
   UnicodeString result;
-  int32_t capacity = length;
+  int32_t capacity;
   // Most UTF-32 strings will be BMP-only and result in a same-length
   // UTF-16 string. We overestimate the capacity just slightly,
   // just in case there are a few supplementary characters.
@@ -754,6 +779,51 @@ UnicodeString::extractBetween(int32_t start,
   pinIndex(start);
   pinIndex(limit);
   doExtract(start, limit - start, target);
+}
+
+// When converting from UTF-16 to UTF-8, the result will have at most 3 times
+// as many bytes as the source has UChars.
+// The "worst cases" are writing systems like Indic, Thai and CJK with
+// 3:1 bytes:UChars.
+void
+UnicodeString::toUTF8(ByteSink &sink) const {
+  int32_t length16 = length();
+  if(length16 != 0) {
+    char stackBuffer[1024];
+    int32_t capacity = (int32_t)sizeof(stackBuffer);
+    UBool utf8IsOwned = FALSE;
+    char *utf8 = sink.GetAppendBuffer(length16 < capacity ? length16 : capacity,
+                                      3*length16,
+                                      stackBuffer, capacity,
+                                      &capacity);
+    int32_t length8 = 0;
+    UErrorCode errorCode = U_ZERO_ERROR;
+    u_strToUTF8WithSub(utf8, capacity, &length8,
+                       getBuffer(), length16,
+                       0xFFFD,  // Standard substitution character.
+                       NULL,    // Don't care about number of substitutions.
+                       &errorCode);
+    if(errorCode == U_BUFFER_OVERFLOW_ERROR) {
+      utf8 = (char *)uprv_malloc(length8);
+      if(utf8 != NULL) {
+        utf8IsOwned = TRUE;
+        errorCode = U_ZERO_ERROR;
+        u_strToUTF8WithSub(utf8, length8, &length8,
+                           getBuffer(), length16,
+                           0xFFFD,  // Standard substitution character.
+                           NULL,    // Don't care about number of substitutions.
+                           &errorCode);
+      } else {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+      }
+    }
+    if(U_SUCCESS(errorCode)) {
+      sink.Append(utf8, length8);
+    }
+    if(utf8IsOwned) {
+      uprv_free(utf8);
+    }
+  }
 }
 
 int32_t
