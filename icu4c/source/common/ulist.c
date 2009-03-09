@@ -30,6 +30,8 @@ struct UList {
     int32_t currentIndex;
 };
 
+static void ulist_addFirstItem(UList *list, UListNode *newItem);
+
 U_CAPI UList *U_EXPORT2 ulist_createEmptyList(UErrorCode *status) {
     UList *newList = NULL;
     
@@ -56,7 +58,7 @@ U_CAPI UList *U_EXPORT2 ulist_createEmptyList(UErrorCode *status) {
  * Function called by addItemEndList or addItemBeginList when the first item is added to the list.
  * This function properly sets the pointers for the first item added.
  */
-void ulist_addFirstItem(UList *list, UListNode *newItem) {
+static void ulist_addFirstItem(UList *list, UListNode *newItem) {
     newItem->next = NULL;
     newItem->previous = NULL;
     list->head = newItem;
@@ -193,10 +195,10 @@ U_CAPI void U_EXPORT2 ulist_deleteList(UList *list) {
 }
 
 U_CAPI void U_EXPORT2 ulist_close_keyword_values_iterator(UEnumeration *en) {
-    UList *list = (UList *)(en->context);
-    
-    ulist_deleteList(list);
-    uprv_free(en);
+    if (en != NULL) {
+        ulist_deleteList((UList *)(en->context));
+        uprv_free(en);
+    }
 }
 
 U_CAPI int32_t U_EXPORT2 ulist_count_keyword_values(UEnumeration *en, UErrorCode *status) {
@@ -204,9 +206,7 @@ U_CAPI int32_t U_EXPORT2 ulist_count_keyword_values(UEnumeration *en, UErrorCode
         return -1;
     }
     
-    UList *list = (UList *)(en->context);
-    
-    return ulist_getListSize(list);
+    return ulist_getListSize((UList *)(en->context));
 }
 
 U_CAPI const char * U_EXPORT2 ulist_next_keyword_value(UEnumeration *en, int32_t *resultLength, UErrorCode *status) {
@@ -214,23 +214,17 @@ U_CAPI const char * U_EXPORT2 ulist_next_keyword_value(UEnumeration *en, int32_t
         return NULL;
     }
     
-    const char *result;
-    
-    UList *list = (UList *)(en->context);
-    
-    result = (const char *)ulist_getNext(list);
     /* TODO: resultLength; */
     
-    return result;
+    return (const char *)ulist_getNext((UList *)(en->context));
 }
 
 U_CAPI void U_EXPORT2 ulist_reset_keyword_values_iterator(UEnumeration *en, UErrorCode *status) {
     if (U_FAILURE(*status)) {
         return ;
     }
-    UList *list = (UList *)(en->context);
-
-    ulist_resetList(list);
+    
+    ulist_resetList((UList *)(en->context));
 }
 
 U_CAPI UList * U_EXPORT2 ulist_getListFromEnum(UEnumeration *en) {
