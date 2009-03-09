@@ -1566,7 +1566,8 @@ public:
    */
   template<typename StringClass>
   StringClass &toUTF8String(StringClass &result) const {
-    toUTF8(StringByteSink<StringClass>(&result));
+    StringByteSink<StringClass> sbs(&result);
+    toUTF8(sbs);
     return result;
   }
 
