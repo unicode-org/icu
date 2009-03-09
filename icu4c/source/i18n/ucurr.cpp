@@ -24,6 +24,7 @@
 #include "uenumimp.h"
 #include "uhash.h"
 #include "uresimp.h"
+#include "ulist.h"
 
 //#define UCURR_DEBUG 1
 #ifdef UCURR_DEBUG
@@ -1974,6 +1975,151 @@ ucurr_forLocaleAndDate(const char* locale,
     // If we got here, either error code is invalid or
     // some argument passed is no good.
     return resLen;
+}
+
+static const UEnumeration defaultKeywordValues = {
+    NULL,
+    NULL,
+    ulist_close_keyword_values_iterator,
+    ulist_count_keyword_values,
+    uenum_unextDefault,
+    ulist_next_keyword_value, 
+    ulist_reset_keyword_values_iterator
+};
+
+#define MAX_LOC_SIZE_KEYWORD_VALUES 64
+#define MAX_LENGTH_KEYWORD_VALUE 64
+
+U_CAPI UEnumeration *U_EXPORT2 ucurr_getKeywordValuesForLocale(const char *key, const char *locale, UBool commonlyUsed, UErrorCode* status) {
+    // Resolve region
+    char prefRegion[MAX_LOC_SIZE_KEYWORD_VALUES];
+    int32_t prefRegionLength = 0;
+    prefRegionLength = uloc_getCountry(locale, prefRegion, MAX_LOC_SIZE_KEYWORD_VALUES, status);
+    if (prefRegionLength == 0) {
+        char loc[MAX_LOC_SIZE_KEYWORD_VALUES];
+        int32_t locLength = 0;
+        locLength = uloc_addLikelySubtags(locale, loc, MAX_LOC_SIZE_KEYWORD_VALUES, status);
+        
+        prefRegionLength = uloc_getCountry(loc, prefRegion, MAX_LOC_SIZE_KEYWORD_VALUES, status);
+    }
+    
+    // Read value from supplementalData
+    UList *values = ulist_createEmptyList(status);
+    UList *otherValues = ulist_createEmptyList(status);
+    UEnumeration *en = (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
+    if (U_FAILURE(*status) || en == NULL) {
+        if (en == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+        } else {
+            uprv_free(en);
+        }
+        ulist_deleteList(values);
+        ulist_deleteList(otherValues);
+        return NULL;
+    }
+    memcpy(en, &defaultKeywordValues, sizeof(UEnumeration));
+    en->context = values;
+    
+    UResourceBundle *bundle = ures_openDirect(NULL, "supplementalData", status);
+    ures_getByKey(bundle, "CurrencyMap", bundle, status);
+    UResourceBundle bundlekey, regbndl, curbndl, to;
+    ures_initStackObject(&bundlekey);
+    ures_initStackObject(&regbndl);
+    ures_initStackObject(&curbndl);
+    ures_initStackObject(&to);
+    
+    while (U_SUCCESS(*status) && ures_hasNext(bundle)) {
+        ures_getNextResource(bundle, &bundlekey, status);
+        if (U_FAILURE(*status)) {
+            break;
+        }
+        const char *region = ures_getKey(&bundlekey);
+        UBool isPrefRegion = uprv_strcmp(region, prefRegion) == 0 ? TRUE : FALSE;
+        if (!isPrefRegion && commonlyUsed) {
+            // With commonlyUsed=true, we do not put
+            // currencies for other regionsin the
+            // result list.
+            continue;
+        }
+        ures_getByKey(bundle, region, &regbndl, status);
+        if (U_FAILURE(*status)) {
+            break;
+        }
+        while (U_SUCCESS(*status) && ures_hasNext(&regbndl)) {
+            ures_getNextResource(&regbndl, &curbndl, status);
+            if (ures_getType(&curbndl) != URES_TABLE) {
+                // Currently, an empty ARRAY is mixed in.
+                continue;
+            }
+            char *curID = (char *)uprv_malloc(sizeof(char) * MAX_LENGTH_KEYWORD_VALUE);
+            int32_t curIDLength = MAX_LENGTH_KEYWORD_VALUE;
+            if (curID == NULL) {
+                *status = U_MEMORY_ALLOCATION_ERROR;
+                break;
+            }
+            ures_getUTF8StringByKey(&curbndl, "id", curID, &curIDLength, TRUE, status);
+            if (U_FAILURE(*status)) {
+                break;
+            }
+            UBool hasTo = FALSE;
+            ures_getByKey(&curbndl, "to", &to, status);
+            if (U_FAILURE(*status)) {
+                // Do nothing here...
+                *status = U_ZERO_ERROR;
+            } else {
+                hasTo = TRUE;
+            }
+            if (isPrefRegion && !hasTo && !ulist_containsString(values, curID, uprv_strlen(curID))) {
+                // Currently active currency for the target country
+                ulist_addItemEndList(values, curID, TRUE, status);
+            } else if (!ulist_containsString(otherValues, curID, uprv_strlen(curID)) && !commonlyUsed) {
+                ulist_addItemEndList(otherValues, curID, TRUE, status);
+            } else {
+                uprv_free(curID);
+            }
+        }
+        
+    }
+    if (U_SUCCESS(*status)) {
+        if (commonlyUsed) {
+            if (ulist_getListSize(values) == 0) {
+                // This could happen if no valid region is supplied in the input
+                // locale. In this case, we use the CLDR's default.
+                uenum_close(en);
+                en = ucurr_getKeywordValuesForLocale(key, "und", TRUE, status);
+            }
+        } else {
+            // Consolidate the list
+            char *value = NULL;
+            ulist_resetList(otherValues);
+            while ((value = (char *)ulist_getNext(otherValues)) != NULL) {
+                if (!ulist_containsString(values, value, uprv_strlen(value))) {
+                    char *tmpValue = (char *)uprv_malloc(sizeof(char) * MAX_LENGTH_KEYWORD_VALUE);
+                    uprv_memcpy(tmpValue, value, uprv_strlen(value) + 1);
+                    ulist_addItemEndList(values, tmpValue, TRUE, status);
+                    if (U_FAILURE(*status)) {
+                        break;
+                    }
+                }
+            }
+        }
+        
+        ulist_resetList((UList *)(en->context));
+    } else {
+        ulist_deleteList(values);
+        uprv_free(en);
+        values = NULL;
+        en = NULL;
+    }
+    ures_close(&to);
+    ures_close(&curbndl);
+    ures_close(&regbndl);
+    ures_close(&bundlekey);
+    ures_close(bundle);
+    
+    ulist_deleteList(otherValues);
+    
+    return en;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

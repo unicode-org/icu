@@ -933,6 +933,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ulist.c"
+				>
+			</File>
+			<File
+				RelativePath=".\ulist.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ustack.cpp"
 				>
 			</File>

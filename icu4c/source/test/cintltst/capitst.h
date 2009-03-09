@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2008 International Business Machines 
+ * Copyright (c) 1997-2009 International Business Machines 
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -124,6 +124,11 @@
      * Test funny stuff with open binary
      */
     static void TestOpenBinary(void);
+
+    /**
+     * Test getKeywordValuesForLocale API
+     */
+    static void TestGetKeywordValuesForLocale(void);
 #endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, 2007 International Business Machines Corporation and
+ * Copyright (c) 1997-2003, 2007-2009 International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -54,6 +54,8 @@ static void roundingTest(UNumberFormat*, double,  int32_t, const char*);
 static void roundingTest2(UNumberFormat*, double, int32_t, const char*);
 
 static void TestCurrencyKeywords(void);
+
+static void TestGetKeywordValuesForLocale(void);
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
