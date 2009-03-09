@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -244,6 +244,20 @@ public:
      * be sorted already.
      */
     void sortedInsert(int32_t obj, USortComparator *compare, UErrorCode& ec);
+
+    /**
+     * Sort the contents of the vector, assuming that the contents of the
+     * vector are of type int32_t.
+     */
+    void sorti(UErrorCode &ec);
+
+    /**
+      * Sort the contents of this vector, using a caller-supplied function
+      * to do the comparisons.  (It's confusing that
+      *  UVector's USortComparator function is different from the
+      *  UComparator function type defined in uarrsort.h)
+      */
+    void sort(USortComparator *compare, UErrorCode &ec);
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.

@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2008, International Business Machines
+*   Copyright (C) 1997-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   Date        Name        Description
@@ -569,7 +569,9 @@ uhash_init(UHashtable *fillinResult,
 
 U_CAPI void U_EXPORT2
 uhash_close(UHashtable *hash) {
-    U_ASSERT(hash != NULL);
+    if (hash == NULL) {
+        return;
+    }
     if (hash->elements != NULL) {
         if (hash->keyDeleter != NULL || hash->valueDeleter != NULL) {
             int32_t pos=-1;

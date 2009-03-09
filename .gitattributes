@@ -74,6 +74,7 @@ icu4c/source/data/rbnf/tr.txt -text
 icu4c/source/data/rbnf/vi.txt -text
 icu4c/source/data/rbnf/zh.txt -text
 icu4c/source/data/rbnf/zh_Hant.txt -text
+icu4c/source/data/unidata/confusablesWholeScript.txt svneol=native#text/plain
 icu4c/source/data/xml/brkitr/en.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/en_US.xml svneol=native#text/xml
 icu4c/source/data/xml/brkitr/en_US_POSIX.xml svneol=native#text/xml

@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2007, International Business Machines
+*   Copyright (C) 1997-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   Date        Name        Description
@@ -246,7 +246,7 @@ uhash_init(UHashtable *hash,
 
 /**
  * Close a UHashtable, releasing the memory used.
- * @param hash The UHashtable to close.
+ * @param hash The UHashtable to close. If hash is NULL no operation is performed.
  */
 U_CAPI void U_EXPORT2 
 uhash_close(UHashtable *hash);

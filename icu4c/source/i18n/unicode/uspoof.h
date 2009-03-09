@@ -29,6 +29,8 @@
 #ifdef XP_CPLUSPLUS
 #include "unicode/unistr.h"
 #include "unicode/uniset.h"
+
+U_NAMESPACE_USE
 #endif
 
 
@@ -133,8 +135,8 @@ typedef enum USpoofChecks {
     USPOOF_WHOLE_SCRIPT_CONFUSABLE  =   4,
     
     /** Modifier for single, mixed & whole script checks.
-        Selects between Lower Case Confusable (0) and
-        Any Case Confusable (1).  */
+        Selects between Lower Case Confusable and
+        Any Case Confusable.   */
     USPOOF_ANY_CASE                 =   8,
 
     /** Check that an identifer contains only characters from a
@@ -146,15 +148,13 @@ typedef enum USpoofChecks {
     /** Check that an identifier for the presence of invisble characters,
       * characters, such as zero-width spaces, or character sequences that are
       * likely not to display, such as multiple occurences of the same
-      * non-spacing mark.  This does not test the input string as a whole
+      * non-spacing mark.  This check does not test the input string as a whole
       * for conformance to any particular syntax for identifiers.
       */
     USPOOF_INVISIBLE                =  32,
-    
-    USPOOF_LOCALE_LIMIT             =  64,
-    USPOOF_CHAR_LIMIT               = 128,
+    USPOOF_CHAR_LIMIT               =  64,
     USPOOF_ALL_CHECKS               = 0x7f
-    };
+    } USpoofChecks;
     
     
 /**
@@ -298,9 +298,19 @@ uspoof_getChecks(const USpoofChecker *sc, UErrorCode *status);
  * Supplying an empty string removes all restrictions;
  * characters from any script will be allowed.
  *
- * The USPOOF_LOCALE_LIMIT test is automatically enabled for this
+ * The USPOOF_CHAR_LIMIT test is automatically enabled for this
  * USpoofChecker when calling this function with a non-empty set
  * of locales.
+ *
+ * The Unicode Set of characters that will be allowed is accessible
+ * via the uspoof_getAllowedChars() function.  uspoof_setAllowedLocales()
+ * will <i>replace</i> any previously applied set of allowed characters.
+ *
+ * Adjustments, such as additions or deletions of certain classes of characters,
+ * can be made to the result of uspoof_setAllowedLocales() by
+ * fetching the resulting set with uspoof_getAllowedChars(),
+ * manipulating it with the Unicode Set API, then resetting the
+ * spoof detectors limits with uspoof_setAllowedChars()
  *
  * @param sc           The USpoofChecker 
  * @param localesList  A list list of locales, from which the language
@@ -317,6 +327,8 @@ uspoof_setAllowedLocales(USpoofChecker *sc, const char *localesList, UErrorCode 
  * Get a list of locales for the scripts that are acceptable in strings
  *  to be checked.  If no limitations on scripts have been specified,
  *  an empty string will be returned.
+ *
+ *  uspoof_setAllowedChars() will reset the list of allowed to be empty.
  *
  *  The format of the returned list is that of an HTTP Accept-Language
  *  header field, but it may not be identical to the original string passed
@@ -339,7 +351,8 @@ uspoof_getAllowedLocales(USpoofChecker *sc, UErrorCode *status);
 /**
  * Limit the acceptable characters to those specified by a Unicode Set.
  *   Any previously specified character limit is
- *   is replaced by the new settings.
+ *   is replaced by the new settings.  This includes limits on
+ *   characters that were set with the uspoof_setAllowedLocales() function.
  *
  * The USPOOF_CHAR_LIMIT test is automatically enabled for this
  * USpoofChecker by this function.
@@ -381,14 +394,15 @@ uspoof_setAllowedChars(USpoofChecker *sc, const USet *chars, UErrorCode *status)
  *                 the USPOOF_CHAR_LIMIT test.
  */
 U_DRAFT const USet * U_EXPORT2
-uspoof_getAllowedChars(USpoofChecker *sc, UErrorCode *status);
+uspoof_getAllowedChars(const USpoofChecker *sc, UErrorCode *status);
 
 
 #ifdef XP_CPLUSPLUS
 /**
  * Limit the acceptable characters to those specified by a Unicode Set.
  *   Any previously specified character limit is
- *   is replaced by the new settings.
+ *   is replaced by the new settings.    This includes limits on
+ *   characters that were set with the uspoof_setAllowedLocales() function.
  *
  * The USPOOF_CHAR_LIMIT test is automatically enabled for this
  * USoofChecker by this function.
@@ -425,7 +439,7 @@ uspoof_setAllowedUnicodeSet(USpoofChecker *sc, const UnicodeSet *chars, UErrorCo
  *                 the USPOOF_CHAR_LIMIT test.
  */
 U_DRAFT const UnicodeSet * U_EXPORT2
-uspoof_getAllowedUnicodeSet(USpoofChecker *sc, UErrorCode *status);
+uspoof_getAllowedUnicodeSet(const USpoofChecker *sc, UErrorCode *status);
 #endif
 
 
@@ -441,10 +455,11 @@ uspoof_getAllowedUnicodeSet(USpoofChecker *sc, UErrorCode *status);
  *                16 bit UTF-16 code units, or -1 if the string is 
  *                zero terminated.
  * @position      An out parameter that receives the index of the
- *                first string position that fails one of the checks.
+ *                first string position that fails the allowed character
+ *                limitation checks.
  *                This parameter may be null if the position information
  *                is not needed.
- *                If the string passes all of the requested checks the 
+ *                If the string passes the requested checks the
  *                parameter value will not be set.
  * @param status  The error code, set if an error occured while attempting to
  *                perform the check.
@@ -473,15 +488,18 @@ uspoof_check(const USpoofChecker *sc,
  * @param length  the length of the string to be checked, or -1 if the string is 
  *                zero terminated.
  * @position      An out parameter that receives the index of the
- *                first string position that fails one of the checks.
+ *                first string position that fails the allowed character
+ *                limitation checks.
  *                This parameter may be null if the position information
  *                is not needed.
- *                If the string passes all of the requested checks the 
+ *                If the string passes the requested checks the
  *                parameter value will not be set.
  * @param status  The error code, set if an error occured while attempting to
  *                perform the check.
  *                Spoofing or security issues detected with the input string are
  *                not reported here, but through the function's return value.
+ *                If the input contains invalid UTF-8 sequences,
+ *                a status of U_INVALID_CHAR_FOUND will be returned.
  * @return        An integer value with bits set for any potential security
  *                or spoofing issues detected.  The bits are defined by
  *                enum USpoofChecks.  Zero is returned if no issues
@@ -504,10 +522,11 @@ uspoof_checkUTF8(const USpoofChecker *sc,
  * @param sc      The USpoofChecker 
  * @param text    A UnicodeString to be checked for possible security issues.
  * @position      An out parameter that receives the index of the
- *                first string position that fails one of the checks.
+ *                first string position that fails the allowed character
+ *                limitation checks.
  *                This parameter may be null if the position information
  *                is not needed.
- *                If the string passes all of the requested checks the 
+ *                If the string passes the requested checks the
  *                parameter value will not be set.
  * @param status  The error code, set if an error occured while attempting to
  *                perform the check.
@@ -645,7 +664,7 @@ U_DRAFT int32_t U_EXPORT2
 uspoof_areConfusableUnicodeString(const USpoofChecker *sc,
                                   const U_NAMESPACE_QUALIFIER UnicodeString &s1,
                                   const U_NAMESPACE_QUALIFIER UnicodeString &s2,
-								  int32_t *position,
+                                  int32_t *position,
                                   UErrorCode *status);
 #endif
 
@@ -684,7 +703,7 @@ uspoof_areConfusableUnicodeString(const USpoofChecker *sc,
   */
 U_DRAFT int32_t U_EXPORT2
 uspoof_getSkeleton(const USpoofChecker *sc,
-                   USpoofChecks type,
+                   uint32_t type,
                    const UChar *s,  int32_t length,
                    UChar *dest, int32_t destCapacity,
                    UErrorCode *status);
@@ -726,7 +745,7 @@ uspoof_getSkeleton(const USpoofChecker *sc,
   */   
 U_DRAFT int32_t U_EXPORT2
 uspoof_getSkeletonUTF8(const USpoofChecker *sc,
-                       USpoofChecks type,
+                       uint32_t type,
                        const char *s,  int32_t length,
                        char *dest, int32_t destCapacity,
                        UErrorCode *status);
@@ -762,7 +781,7 @@ uspoof_getSkeletonUTF8(const USpoofChecker *sc,
   */   
 U_DRAFT UnicodeString & U_EXPORT2
 uspoof_getSkeletonUnicodeString(const USpoofChecker *sc,
-                                USpoofChecks type,
+                                uint32_t type,
                                 const UnicodeString &s,
                                 UnicodeString &dest,
                                 UErrorCode *status);
