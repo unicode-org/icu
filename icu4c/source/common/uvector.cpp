@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1999-2004, International Business Machines Corporation and   *
+* Copyright (C) 1999-2009, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 *   Date        Name        Description
@@ -10,6 +10,7 @@
 
 #include "uvector.h"
 #include "cmemory.h"
+#include "uarrsort.h"
 
 U_NAMESPACE_BEGIN
 
@@ -463,6 +464,75 @@ void UVector::sortedInsert(UHashTok tok, USortComparator *compare, UErrorCode& e
         }
         elements[min] = tok;
         ++count;
+    }
+}
+
+/**
+  *  Array sort comparator function.
+  *  Used from UVector::sort()
+  *  Conforms to function signature required for uprv_sortArray().
+  *  This function is essentially just a wrapper, to make a
+  *  UVector style comparator function usable with uprv_sortArray().
+  *
+  *  The context pointer to this function is a pointer back
+  *  (with some extra indirection) to the user supplied comparator.
+  *  
+  */
+static int32_t U_CALLCONV
+sortComparator(const void *context, const void *left, const void *right) {
+    USortComparator *compare = *static_cast<USortComparator * const *>(context);
+    UHashTok tok1 = *static_cast<const UHashTok *>(left);
+    UHashTok tok2 = *static_cast<const UHashTok *>(right);
+    int32_t result = (*compare)(tok1, tok2);
+    return result;
+}
+
+
+/**
+  *  Array sort comparison function for use from UVector::sorti()
+  *  Compares int32_t vector elements.
+  */
+static int32_t U_CALLCONV
+sortiComparator(const void * /*context */, const void *left, const void *right) {
+    const UHashTok *tok1 = static_cast<const UHashTok *>(left);
+    const UHashTok *tok2 = static_cast<const UHashTok *>(right);
+    int32_t result = tok1->integer < tok2->integer? -1 :
+                     tok1->integer == tok2->integer? 0 : 1;
+    return result;
+}
+
+/**
+  * Sort the vector, assuming it constains ints.
+  *     (A more general sort would take a comparison function, but it's
+  *     not clear whether UVector's USortComparator or
+  *     UComparator from uprv_sortAray would be more appropriate.)
+  */
+void UVector::sorti(UErrorCode &ec) {
+    if (U_SUCCESS(ec)) {
+        uprv_sortArray(elements, count, sizeof(UHashTok),
+                       sortiComparator, NULL,  FALSE, &ec);
+    }
+}
+
+
+/**
+ *  Sort with a user supplied comparator.
+ *
+ *    The comparator function handling is confusing because the function type
+ *    for UVector  (as defined for sortedInsert()) is different from the signature
+ *    required by uprv_sortArray().  This is handled by passing the
+ *    the UVector sort function pointer via the context pointer to a
+ *    sortArray() comparator function, which can then call back to
+ *    the original user functtion.
+ *
+ *    An additional twist is that it's not safe to pass a pointer-to-function
+ *    as  a (void *) data pointer, so instead we pass a (data) pointer to a
+ *    pointer-to-function variable.
+ */
+void UVector::sort(USortComparator *compare, UErrorCode &ec) {
+    if (U_SUCCESS(ec)) {
+        uprv_sortArray(elements, count, sizeof(UHashTok),
+                       sortComparator, &compare, FALSE, &ec);
     }
 }
 

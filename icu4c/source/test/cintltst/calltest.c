@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1996-2008, International Business Machines Corporation and
+ * Copyright (c) 1996-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -38,6 +38,7 @@ void addURegexTest(TestNode** root);
 void addUTextTest(TestNode** root);
 void addUCsdetTest(TestNode** root);
 void addCnvSelTest(TestNode** root);
+void addUSpoofTest(TestNode** root);
 
 void addAllTests(TestNode** root)
 {
@@ -75,6 +76,7 @@ void addAllTests(TestNode** root)
 #if !UCONFIG_NO_TRANSLITERATION
     addUTransTest(root);
 #endif
+    addUSpoofTest(root);
 
 }
 
