@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999-2008, International Business Machines
+#   Copyright (C) 1999-2009, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -52,7 +52,7 @@ ncnvfbts.o ncnvtst.o putiltst.o cstrtest.o udatpg_test.o utf8tst.o \
 stdnmtst.o usrchtst.o custrtrn.o sorttest.o trietest.o trie2test.o usettest.o \
 uenumtst.o utmstest.o currtest.o \
 idnatest.o nfsprep.o spreptst.o sprpdata.o \
-hpmufn.o tracetst.o reapits.o utexttst.o ucsdetst.o
+hpmufn.o tracetst.o reapits.o utexttst.o ucsdetst.o spooftest.o
 
 DEPS = $(OBJECTS:.o=.d)
 

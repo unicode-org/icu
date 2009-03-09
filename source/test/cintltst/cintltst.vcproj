@@ -931,6 +931,14 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="spoof"
+			>
+			<File
+				RelativePath=".\spooftest.c"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

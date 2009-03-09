@@ -239,6 +239,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "letest", "..\test\letest\le
 		{37FC2C7F-1904-4811-8955-2F478830EAD1} = {37FC2C7F-1904-4811-8955-2F478830EAD1}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gencfu", "..\tools\gencfu\gencfu.vcproj", "{691EE0C0-DC57-4A48-8AEE-8ED75EB3A057}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0178B127-6269-407D-B112-93877BB62776} = {0178B127-6269-407D-B112-93877BB62776}
+		{6B231032-3CB5-4EED-9210-810D666A23A0} = {6B231032-3CB5-4EED-9210-810D666A23A0}
+		{73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D} = {73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -511,6 +518,12 @@ Global
 		{67351485-4D18-4245-BE39-A7EF0675ACD2}.Release|Win32.Build.0 = Release|Win32
 		{67351485-4D18-4245-BE39-A7EF0675ACD2}.Release|x64.ActiveCfg = Release|x64
 		{67351485-4D18-4245-BE39-A7EF0675ACD2}.Release|x64.Build.0 = Release|x64
+		{691EE0C0-DC57-4A48-8AEE-8ED75EB3A057}.Debug|Win32.ActiveCfg = Debug|Win32
+		{691EE0C0-DC57-4A48-8AEE-8ED75EB3A057}.Debug|Win32.Build.0 = Debug|Win32
+		{691EE0C0-DC57-4A48-8AEE-8ED75EB3A057}.Debug|x64.ActiveCfg = Debug|Win32
+		{691EE0C0-DC57-4A48-8AEE-8ED75EB3A057}.Release|Win32.ActiveCfg = Release|Win32
+		{691EE0C0-DC57-4A48-8AEE-8ED75EB3A057}.Release|Win32.Build.0 = Release|Win32
+		{691EE0C0-DC57-4A48-8AEE-8ED75EB3A057}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

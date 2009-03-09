@@ -422,12 +422,13 @@ uni-core-data: GODATA "$(ICUBLD_PKG)\uprops.icu" "$(ICUBLD_PKG)\ucase.icu" "$(IC
 	copy "$(ICUTMP)\$(ICUPKG).dat" "$(ICUOUT)\$(U_ICUDATA_NAME)$(U_ICUDATA_ENDIAN_SUFFIX).dat"
 	-@erase "$(ICUTMP)\$(ICUPKG).dat"
 !ELSE
-"$(ICU_LIB_TARGET)" : $(COMMON_ICUDATA_DEPENDENCIES) $(CNV_FILES) "$(ICUBLD_PKG)\unames.icu" "$(ICUBLD_PKG)\pnames.icu" "$(ICUBLD_PKG)\cnvalias.icu" "$(ICUBLD_PKG)\$(ICUCOL)\ucadata.icu" "$(ICUBLD_PKG)\$(ICUCOL)\invuca.icu" $(BRK_FILES) $(BRK_CTD_FILES) $(BRK_RES_FILES) $(COL_COL_FILES) $(RBNF_RES_FILES) $(TRANSLIT_RES_FILES) $(ALL_RES) $(SPREP_FILES)
+"$(ICU_LIB_TARGET)" : $(COMMON_ICUDATA_DEPENDENCIES) $(CNV_FILES) "$(ICUBLD_PKG)\unames.icu" "$(ICUBLD_PKG)\pnames.icu" "$(ICUBLD_PKG)\cnvalias.icu" "$(ICUBLD_PKG)\$(ICUCOL)\ucadata.icu" "$(ICUBLD_PKG)\$(ICUCOL)\invuca.icu" $(BRK_FILES) $(BRK_CTD_FILES) $(BRK_RES_FILES) $(COL_COL_FILES) $(RBNF_RES_FILES) $(TRANSLIT_RES_FILES) $(ALL_RES) $(SPREP_FILES) "$(ICUBLD_PKG)\confusables.cfu"
 	@echo Building icu data
 	cd "$(ICUBLD_PKG)"
 	"$(ICUPBIN)\pkgdata" $(COMMON_ICUDATA_ARGUMENTS) <<"$(ICUTMP)\icudata.lst"
 pnames.icu
 unames.icu
+confusables.cfu
 $(ICUCOL)\ucadata.icu
 $(ICUCOL)\invuca.icu
 cnvalias.icu
@@ -486,6 +487,7 @@ CLEAN : GODATA
 	-@erase "*.res"
 	-@erase "*.spp"
 	-@erase "*.txt"
+	-@erase "*.cfu"
 	@cd "$(ICUBLD_PKG)\$(ICUBRK)"
 	-@erase "*.brk"
 	-@erase "*.ctd"
@@ -497,7 +499,7 @@ CLEAN : GODATA
 	@cd "$(ICUBLD_PKG)\$(ICURBNF)"
 	-@erase "*.res"
 	-@erase "*.txt"
-    @cd "$(ICUBLD_PKG)\$(ICUTRNS)"
+	@cd "$(ICUBLD_PKG)\$(ICUTRNS)"
 	-@erase "*.res"
 	@cd "$(ICUOUT)"
 	-@erase "*.dat"
@@ -672,6 +674,12 @@ res_index:table(nofallback) {
 {$(ICUSRCDATA_RELATIVE_PATH)\$(ICUSPREP)}.txt.spp:
 	@echo Creating $@
 	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s $(<D) -d "$(ICUBLD_PKG)" -b $(@B) -m "$(ICUUNIDATA)" -u 3.2.0 $(<F)
+
+# Confusables .cfu file generation
+#     Can't use an inference rule because two .txt source files combine to produce a single .cfu output file
+"$(ICUBLD_PKG)\confusables.cfu": "$(ICUUNIDATA)\confusables.txt" "$(ICUUNIDATA)\confusablesWholeScript.txt" "$(ICUTOOLS)\gencfu\$(CFG)\gencfu.exe"
+	@echo Creating $@
+	@"$(ICUTOOLS)\gencfu\$(CFG)\gencfu" -c -r "$(ICUUNIDATA)\confusables.txt" -w "$(ICUUNIDATA)\confusablesWholeScript.txt" -o $@ -i "$(ICUBLD_PKG)"
 
 !IFDEF ICUDATA_ARCHIVE
 "$(ICUDATA_SOURCE_ARCHIVE)": CREATE_DIRS $(ICUDATA_ARCHIVE) "$(ICUTOOLS)\icupkg\$(CFG)\icupkg.exe"

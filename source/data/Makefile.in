@@ -230,6 +230,11 @@ BRS_SRC_FILES = $(BRS_SRC:%=$(BRKSRCDIR)/%)
 INSTALLED_BRS_FILES = $(BRK_RES_SOURCE:%.txt=%)  $(BRK_RES_SOURCE_LOCAL:%.txt=%)
 endif
 
+## Confusables (Spoofing) files
+ALL_CFU_SOURCE=$(UNICODEDATADIR)/confusables.txt $(UNICODEDATADIR)/confusablesWholeScript.txt
+CFU_FILES_SHORT=confusables.cfu
+CFU_FILES=$(BUILDDIR)/$(CFU_FILES_SHORT)
+
 ## UCM files
 -include $(UCMSRCDIR)/ucmcore.mk
 -include $(UCMSRCDIR)/ucmfiles.mk
@@ -331,10 +336,10 @@ SPREP_FILES = $(ALL_SPREP_SOURCE:%.txt=$(BUILDDIR)/%.spp)
 SPREP_FILES_SHORT = $(ALL_SPREP_SOURCE:%.txt=%.spp)
 
 ## All generated files
-ALL_FILES = $(DAT_FILES) $(CNV_FILES) $(BRK_FILES) $(CTD_FILES) $(RES_FILES) $(INDEX_RES_FILE) $(COLLATION_FILES) $(BRK_RES_FILES) $(RBNF_FILES) $(TRANSLIT_FILES) $(SPREP_FILES)
+ALL_FILES = $(DAT_FILES) $(CNV_FILES) $(BRK_FILES) $(CTD_FILES) $(RES_FILES) $(INDEX_RES_FILE) $(COLLATION_FILES) $(BRK_RES_FILES) $(RBNF_FILES) $(TRANSLIT_FILES) $(SPREP_FILES) $(CFU_FILES)
 ALL_INDEX_SRC_FILES = $(PKGDATA_LIST) $(INDEX_FILE) $(COLLATION_INDEX_FILE) $(BRK_RES_INDEX_FILE) $(RBNF_INDEX_FILE)
 # a list to use in the .lst files (package-relative)
-ALL_FILES_LIST = $(DAT_FILES_SHORT) $(CNV_FILES_SHORT) $(BRK_FILES_SHORT) $(CTD_FILES_SHORT) $(RES_FILES_SHORT) $(INDEX_RES_FILE_SHORT) $(COLLATION_FILES_SHORT) $(COLLATION_INDEX_RES_SHORT) $(BRK_RES_FILES_SHORT) $(BRK_RES_INDEX_RES_SHORT) $(RBNF_FILES_SHORT) $(RBNF_INDEX_RES_SHORT) $(TRANSLIT_FILES_SHORT) $(SPREP_FILES_SHORT)
+ALL_FILES_LIST = $(DAT_FILES_SHORT) $(CNV_FILES_SHORT) $(BRK_FILES_SHORT) $(CTD_FILES_SHORT) $(RES_FILES_SHORT) $(INDEX_RES_FILE_SHORT) $(COLLATION_FILES_SHORT) $(COLLATION_INDEX_RES_SHORT) $(BRK_RES_FILES_SHORT) $(BRK_RES_INDEX_RES_SHORT) $(RBNF_FILES_SHORT) $(RBNF_INDEX_RES_SHORT) $(TRANSLIT_FILES_SHORT) $(SPREP_FILES_SHORT) $(CFU_FILES_SHORT)
 
 UNI_CORE_DATA=uprops.icu ucase.icu ubidi.icu unorm.icu
 UNI_CORE_TARGET_DATA=$(UNI_CORE_DATA:%=$(BUILDDIR)/%)
@@ -451,6 +456,20 @@ $(BRKBLDDIR)/%.brk: $(BRKSRCDIR)/%.txt $(BINDIR)/genbrk$(EXEEXT) $(DAT_FILES)
 
 $(BRKBLDDIR)/%.ctd: $(BRKSRCDIR)/%.txt $(BINDIR)/genctd$(EXEEXT) $(DAT_FILES)
 	$(INVOKE) $(BINDIR)/genctd -c -i $(BUILDDIR) -o $@ $<
+
+####################################################    CFU
+# CFU FILES
+#    Note: gencfu requires two input files to produce a single output file.
+#          There will be exactly one target file and two source files.
+#          The $(word n, ...) selects the nth word from the following stuff.
+#          There must be a nicer way to do this.
+
+$(CFU_FILES): $(ALL_CFU_SOURCE) $(BINDIR)/gencfu$(EXEEXT) $(DAT_FILES)
+	$(INVOKE) echo ALL_CFU_SOURCE: $(ALL_CFU_SOURCE)
+	$(INVOKE) echo CFU_FILES: $(CFU_FILES)
+	$(INVOKE) echo CFU_FILES_SHORT: $(CFU_FILES_SHORT)
+	$(INVOKE) $(BINDIR)/gencfu -c -i $(BUILDDIR) -r $(word 1,$(ALL_CFU_SOURCE)) -w $(word 2,$(ALL_CFU_SOURCE)) -o $@
+
 
 ####################################################    CNV
 # CNV FILES
