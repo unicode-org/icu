@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2008 International Business Machines 
+ * Copyright (c) 1997-2009 International Business Machines 
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 /*****************************************************************************
@@ -29,6 +29,7 @@
 #include "capitst.h"
 #include "ccolltst.h"
 #include "putilimp.h"
+#include "cstring.h"
 
 static void TestAttribute(void);
 static void TestDefault(void);
@@ -131,6 +132,7 @@ void addCollAPITest(TestNode** root)
     addTest(root, &TestDefault, "tscoll/capitst/TestDefault");
     addTest(root, &TestDefaultKeyword, "tscoll/capitst/TestDefaultKeyword");
     addTest(root, &TestOpenVsOpenRules, "tscoll/capitst/TestOpenVsOpenRules");
+    addTest(root, &TestGetKeywordValuesForLocale, "tscoll/capitst/TestGetKeywordValuesForLocale");
 }
 
 void TestGetSetAttr(void) {
@@ -2267,6 +2269,77 @@ static void TestDefaultKeyword(void) {
         log_err("ucol_open(%s, ...) should return an error or some sort of U_USING_FALLBACK_WARNING, but returned %s\n", loc, u_errorName(status));
     }
     ucol_close(coll);
+}
+
+static void TestGetKeywordValuesForLocale(void) {
+#define PREFERRED_SIZE 16
+#define MAX_NUMBER_OF_KEYWORDS 6
+    const char *PREFERRED[PREFERRED_SIZE][MAX_NUMBER_OF_KEYWORDS+1] = {
+            { "und",            "standard", NULL, NULL, NULL, NULL, NULL },
+            { "en_US",          "standard", NULL, NULL, NULL, NULL, NULL },
+            { "en_029",         "standard", NULL, NULL, NULL, NULL, NULL },
+            { "de_DE",          "standard", "phonebook", NULL, NULL, NULL, NULL },
+            { "de_Latn_DE",     "standard", "phonebook", NULL, NULL, NULL, NULL },
+            { "zh",             "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan" },
+            { "zh_Hans",        "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan" },
+            { "zh_CN",          "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan" },
+            { "zh_Hant",        "stroke", "big5han", "gb2312han", "pinyin", "standard", "unihan" },
+            { "zh_TW",          "stroke", "big5han", "gb2312han", "pinyin", "standard", "unihan" },
+            { "zh__PINYIN",     "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan" },
+            { "es_ES",          "standard", "traditional", NULL, NULL, NULL, NULL },
+            { "es__TRADITIONAL","traditional", "standard", NULL, NULL, NULL, NULL },
+            { "und@collation=phonebook",    "standard", NULL, NULL, NULL, NULL, NULL },
+            { "de_DE@collation=big5han",    "standard", "phonebook", NULL, NULL, NULL, NULL },
+            { "zzz@collation=xxx",          "standard", NULL, NULL, NULL, NULL, NULL }
+    };
+    const int32_t expectedLength[PREFERRED_SIZE] = { 1, 1, 1, 2, 2, 6, 6, 6, 6, 6, 6, 2, 2, 1, 2, 1 };
+    
+    UErrorCode status = U_ZERO_ERROR;
+    UEnumeration *keywordValues = NULL;
+    int32_t i, n;
+    UBool errorOccurred = FALSE;
+    
+    for (i = 0; i < PREFERRED_SIZE; i++) {
+        const char *locale = PREFERRED[i][0];
+        const char *value = NULL;
+        int32_t valueLength = 0;
+        int32_t size = 0;
+        
+        keywordValues = ucol_getKeywordValuesForLocale("collation", locale, TRUE, &status);
+        if (keywordValues == NULL || U_FAILURE(status)) {
+            log_err("Error getting keyword values: %s\n", u_errorName(status));
+            break;
+        }
+        size = uenum_count(keywordValues, &status);
+        
+        if (size == expectedLength[i]) {
+            for (n = 0; n < expectedLength[i]; n++) {
+                if ((value = uenum_next(keywordValues, valueLength, &status)) != NULL && U_SUCCESS(status)) {
+                    if (uprv_strcmp(value, PREFERRED[i][n+1]) != 0) {
+                        log_err("Keyword values differ: Got [%s] Expected [%s] for locale: %s\n", value, PREFERRED[i][n+1], locale);
+                        errorOccurred = TRUE;
+                        break;
+                    }
+                    
+                } else {
+                    log_err("While getting keyword value from locale: %s got this error: %s\n", locale, u_errorName(status));
+                    errorOccurred = TRUE;
+                    break;
+                }
+            }
+            if (errorOccurred) {
+                break;
+            }
+        } else {
+            log_err("Number of keywords (%d) does not match expected size (%d) for locale: %s\n", size, expectedLength[i], locale);
+            break;
+        }
+        uenum_close(keywordValues);
+        keywordValues = NULL;
+    }
+    if (keywordValues != NULL) {
+        uenum_close(keywordValues);
+    }
 }
 
 

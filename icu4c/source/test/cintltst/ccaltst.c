@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2008, International Business Machines
+ * Copyright (c) 1997-2009, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  *
@@ -28,6 +28,7 @@
 #include "ccaltst.h"
 #include "cformtst.h"
 #include "cstring.h"
+#include "ulist.h"
 
 void TestGregorianChange(void);
 
@@ -44,6 +45,7 @@ void addCalTest(TestNode** root)
     addTest(root, &TestDOWProgression, "tsformat/ccaltst/TestDOWProgression");
     addTest(root, &TestGMTvsLocal, "tsformat/ccaltst/TestGMTvsLocal");
     addTest(root, &TestGregorianChange, "tsformat/ccaltst/TestGregorianChange");
+    addTest(root, &TestGetKeywordValuesForLocale, "tsformat/ccaltst/TestGetKeywordValuesForLocale");
 }
 
 /* "GMT" */
@@ -1382,6 +1384,96 @@ void TestGregorianChange() {
                 u_errorName(errorCode));
     }
     ucal_close(cal);
+}
+
+static void TestGetKeywordValuesForLocale() {
+#define PREFERRED_SIZE 13
+#define MAX_NUMBER_OF_KEYWORDS 4
+    const char *PREFERRED[PREFERRED_SIZE][MAX_NUMBER_OF_KEYWORDS+1] = {
+            { "root",        "gregorian", NULL, NULL, NULL },
+            { "und",         "gregorian", NULL, NULL, NULL },
+            { "en_US",       "gregorian", NULL, NULL, NULL },
+            { "en_029",      "gregorian", NULL, NULL, NULL },
+            { "th_TH",       "buddhist", "gregorian", NULL, NULL },
+            { "und_TH",      "buddhist", "gregorian", NULL, NULL },
+            { "en_TH",       "buddhist", "gregorian", NULL, NULL },
+            { "he_IL",       "gregorian", "hebrew", NULL, NULL },
+            { "ar_EG",       "gregorian", "islamic", "islamic-civil", "coptic" },
+            { "ja",          "gregorian", "japanese", NULL, NULL },
+            { "ps_Guru_IN",  "gregorian", "indian", NULL, NULL },
+            { "th@calendar=gregorian", "buddhist", "gregorian", NULL, NULL },
+            { "en@calendar=islamic",   "gregorian", NULL, NULL, NULL },
+    };
+    const int32_t EXPECTED_SIZE[PREFERRED_SIZE] = { 1, 1, 1, 1, 2, 2, 2, 2, 4, 2, 2, 2, 1 };
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t i;
+    
+    UEnumeration *ALL = ucal_getKeywordValuesForLocale("calendar", uloc_getDefault(), FALSE, &status);
+    if (U_SUCCESS(status)) {
+        for (i = 0; i < PREFERRED_SIZE; i++) {
+            UEnumeration *pref = NULL;
+            UEnumeration *all = NULL;
+            const char *loc = PREFERRED[i][0];
+            pref = ucal_getKeywordValuesForLocale("calendar", loc, TRUE, &status);
+            UBool matchPref = FALSE;
+            UBool matchAll = FALSE;
+            int32_t size, j;
+            const char *value = NULL;
+            int32_t valueLength = 0;
+            
+            if (U_SUCCESS(status) && uenum_count(pref, &status) == EXPECTED_SIZE[i]) {
+                matchPref = TRUE;
+                for (j = 0; j < EXPECTED_SIZE[i]; j++) {
+                    if ((value = uenum_next(pref, &valueLength, &status)) != NULL && U_SUCCESS(status)) {
+                        if (uprv_strcmp(value, PREFERRED[i][j+1]) != 0) {
+                            matchPref = FALSE;
+                            break;
+                        }
+                    } else {
+                        matchPref = FALSE;
+                        log_err("ERROR getting keyword value for locale \"%s\"\n", loc);
+                        break;
+                    }
+                }
+            }
+            
+            if (!matchPref) {
+                log_err("FAIL: Preferred values for locale \"%s\" does not match expected.\n", loc);
+                break;
+            }
+            uenum_close(pref);
+            
+            all = ucal_getKeywordValuesForLocale("calendar", loc, FALSE, &status);
+            
+            size = uenum_count(all, &status);
+            
+            if (U_SUCCESS(status) && size == uenum_count(ALL, &status)) {
+                matchAll = TRUE;
+                UList *ALLList = ulist_getListFromEnum(ALL);
+                for (j = 0; j < size; j++) {
+                    if ((value = uenum_next(all, &valueLength, &status)) != NULL && U_SUCCESS(status)) {
+                        if (!ulist_containsString(ALLList, value, uprv_strlen(value))) {
+                            log_err("Locale %s have %s not in ALL\n", loc, value);
+                            matchAll = FALSE;
+                            break;
+                        }
+                    } else {
+                        matchAll = FALSE;
+                        log_err("ERROR getting \"all\" keyword value for locale \"%s\"\n", loc);
+                        break;
+                    }
+                }
+            }
+            if (!matchAll) {
+                log_err("FAIL: All values for locale \"%s\" does not match expected.\n", loc);
+            }
+            
+            uenum_close(all);
+        }
+    } else {
+        log_err("Failed to get ALL keyword values for default locale.\n");
+    }
+    uenum_close(ALL);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -43,6 +43,8 @@
 #include "putilimp.h"
 #include "utracimp.h"
 #include "cmemory.h"
+#include "uenumimp.h"
+#include "ulist.h"
 
 U_NAMESPACE_USE
 
@@ -742,11 +744,117 @@ ucol_getKeywordValues(const char *keyword, UErrorCode *status) {
     return ures_getKeywordValues(U_ICUDATA_COLL, RESOURCE_NAME, status);
 }
 
+static const UEnumeration defaultKeywordValues = {
+    NULL,
+    NULL,
+    ulist_close_keyword_values_iterator,
+    ulist_count_keyword_values,
+    uenum_unextDefault,
+    ulist_next_keyword_value, 
+    ulist_reset_keyword_values_iterator
+};
+
+#define DEFAULT_KEYWORD_VALUE_MAX_SIZE 20
+#define MAX_LOCALE_SIZE 20
+
 U_CAPI UEnumeration* U_EXPORT2
 ucol_getKeywordValuesForLocale(const char* key, const char* locale,
                                UBool commonlyUsed, UErrorCode* status) {
-    //TODO: provide actual implementation!
-    return NULL;
+    /* Get the locale base name. */
+    char localeBuffer[MAX_LOCALE_SIZE] = "";
+    uloc_getBaseName(locale, localeBuffer, MAX_LOCALE_SIZE, status);
+    
+    /* Create the 2 lists
+     * -values is the temp location for the keyword values
+     * -results hold the actual list used by the UEnumeration object
+     */
+    UList *values = ulist_createEmptyList(status);
+    UList *results = ulist_createEmptyList(status);
+    UEnumeration *en = (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
+    if (U_FAILURE(*status) || en == NULL) {
+        if (en == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+        } else {
+            uprv_free(en);
+        }
+        ulist_deleteList(values);
+        ulist_deleteList(results);
+        return NULL;
+    }
+    
+    memcpy(en, &defaultKeywordValues, sizeof(UEnumeration));
+    en->context = results;
+    
+    /* Open the resource bundle for collation with the given locale. */
+    UResourceBundle bundle, collations, collres, defres;
+    ures_initStackObject(&bundle);
+    ures_initStackObject(&collations);
+    ures_initStackObject(&collres);
+    ures_initStackObject(&defres);
+    
+    ures_openFillIn(&bundle, U_ICUDATA_COLL, localeBuffer, status);
+    
+    while (U_SUCCESS(*status)) {
+        ures_getByKey(&bundle, RESOURCE_NAME, &collations, status);
+        ures_resetIterator(&collations);
+        while (U_SUCCESS(*status) && ures_hasNext(&collations)) {
+            ures_getNextResource(&collations, &collres, status);
+            const char *key = ures_getKey(&collres);
+            /* If the key is default, get the string and store it in results list only
+             * if results list is empty.
+             */
+            if (uprv_strcmp(key, "default") == 0) {
+                if (ulist_getListSize(results) == 0) {
+                    char *defcoll = (char *)uprv_malloc(sizeof(char) * DEFAULT_KEYWORD_VALUE_MAX_SIZE);
+                    int32_t defcollLength = DEFAULT_KEYWORD_VALUE_MAX_SIZE;
+                    
+                    ures_getNextResource(&collres, &defres, status);
+                    ures_getUTF8String(&defres, defcoll, &defcollLength, TRUE, status);
+                    
+                    ulist_addItemBeginList(results, defcoll, TRUE, status);
+                }
+            } else {
+                ulist_addItemEndList(values, key, FALSE, status);
+            }
+        }
+        
+        /* If the locale is "" this is root so exit. */
+        if (uprv_strlen(localeBuffer) == 0) {
+            break;
+        }
+        /* Get the parent locale and open a new resource bundle. */
+        uloc_getParent(localeBuffer, localeBuffer, MAX_LOCALE_SIZE, status);
+        ures_openFillIn(&bundle, U_ICUDATA_COLL, localeBuffer, status);
+    }
+    
+    ures_close(&defres);
+    ures_close(&collres);
+    ures_close(&collations);
+    ures_close(&bundle);
+    
+    if (U_SUCCESS(*status)) {
+        char *value = NULL;
+        ulist_resetList(values);
+        while ((value = (char *)ulist_getNext(values)) != NULL) {
+            if (!ulist_containsString(results, value, uprv_strlen(value))) {
+                ulist_addItemEndList(results, value, FALSE, status);
+                if (U_FAILURE(*status)) {
+                    break;
+                }
+            }
+        }
+    }
+    
+    ulist_deleteList(values);
+    
+    if (U_FAILURE(*status)){
+        uenum_close(en);
+        en = NULL;
+    } else {
+        ulist_resetList(results);
+    }
+    
+    return en;
 }
 
 U_CAPI int32_t U_EXPORT2
