@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2008, International Business Machines Corporation
+ * Copyright (c) 1997-2009, International Business Machines Corporation
  * and others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -29,6 +29,7 @@
 #include "cnmdptst.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "ulist.h"
 
 #define CHECK(status,str) if (U_FAILURE(status)) { log_err("FAIL: %s\n", str); return; }
 
@@ -50,6 +51,7 @@ void addNumFrDepTest(TestNode** root)
   addTest(root, &TestSecondaryGrouping, "tsformat/cnmdptst/TestSecondaryGrouping");
   addTest(root, &TestCurrencyKeywords, "tsformat/cnmdptst/TestCurrencyKeywords");
   addTest(root, &TestRounding5350, "tsformat/cnmdptst/TestRounding5350");
+  addTest(root, &TestGetKeywordValuesForLocale, "tsformat/cnmdptst/TestGetKeywordValuesForLocale");
 }
 
 /*Test Various format patterns*/
@@ -860,6 +862,103 @@ static void TestCurrencyKeywords(void)
         }
 
     }
+}
+
+static void TestGetKeywordValuesForLocale(void) {
+#define PREFERRED_SIZE 13
+#define MAX_NUMBER_OF_KEYWORDS 3
+    const char *PREFERRED[PREFERRED_SIZE][MAX_NUMBER_OF_KEYWORDS] = {
+            { "root",               "USD", NULL },
+            { "und",                "USD", NULL },
+            { "und_ZZ",             "USD", NULL },
+            { "en_US",              "USD", NULL },
+            { "en_029",             "USD", NULL },
+            { "en_TH",              "THB", NULL },
+            { "de",                 "EUR", NULL },
+            { "de_DE",              "EUR", NULL },
+            { "ar",                 "EGP", NULL },
+            { "ar_PS",              "JOD", "ILS" },
+            { "en@currency=CAD",    "USD", NULL },
+            { "fr@currency=zzz",    "EUR", NULL },
+            { "de_DE@currency=DEM", "EUR", NULL },
+    };
+    const int32_t EXPECTED_SIZE[PREFERRED_SIZE] = {
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1
+    };
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t i;
+    
+    UEnumeration *ALL = ucurr_getKeywordValuesForLocale("currency", uloc_getDefault(), FALSE, &status);
+    if (ALL == NULL) {
+        log_err("ERROR getting keyword value for default locale.\n");
+        return;
+    }
+    
+    for (i = 0; i < PREFERRED_SIZE; i++) {
+        UEnumeration *pref = NULL;
+        UEnumeration *all = NULL;
+        const char *loc = PREFERRED[i][0];
+        pref = ucurr_getKeywordValuesForLocale("currency", loc, TRUE, &status);
+        UBool matchPref = FALSE;
+        UBool matchAll = FALSE;
+        int32_t size = 0, j;
+        const char *value = NULL, *allValue = NULL;
+        int32_t valueLength = 0, allValueLength = 0;
+        
+        size = uenum_count(pref, &status);
+        
+        if (size == EXPECTED_SIZE[i]) {
+            matchPref = TRUE;
+            for (j = 0; j < size; j++) {
+                if ((value = uenum_next(pref, &valueLength, &status)) != NULL && U_SUCCESS(status)) {
+                    if (uprv_strcmp(value, PREFERRED[i][j+1]) != 0) {
+                        matchPref = FALSE;
+                        break;
+                    }
+                } else {
+                    matchPref = FALSE;
+                    log_err("ERROR getting keyword value for locale \"%s\"\n", loc);
+                    break;
+                }
+            }
+        }
+        
+        if (!matchPref) {
+            log_err("FAIL: Preferred values for locale \"%s\" does not match expected.\n", loc);
+            break;
+        }
+        uenum_close(pref);
+        
+        all = ucurr_getKeywordValuesForLocale("currency", loc, FALSE, &status);
+        
+        size = uenum_count(all, &status);
+        
+        if (U_SUCCESS(status) && size == uenum_count(ALL, &status)) {
+            matchAll = TRUE;
+            UList *ALLList = ulist_getListFromEnum(ALL);
+            for (j = 0; j < size; j++) {
+                if ((value = uenum_next(all, &valueLength, &status)) != NULL && U_SUCCESS(status)) {
+                    if (!ulist_containsString(ALLList, value, uprv_strlen(value))) {
+                        log_err("Locale %s have %s not in ALL\n", loc, value);
+                        matchAll = FALSE;
+                        break;
+                    }
+                } else {
+                    matchAll = FALSE;
+                    log_err("ERROR getting \"all\" keyword value for locale \"%s\"\n", loc);
+                    break;
+                }
+            }
+        }
+        if (!matchAll) {
+            log_err("FAIL: All values for locale \"%s\" does not match expected.\n", loc);
+        }
+        
+        uenum_close(all);
+    }
+    
+    uenum_close(ALL);
+    
 }
 
 /**

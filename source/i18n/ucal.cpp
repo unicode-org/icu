@@ -20,6 +20,8 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "ustrenum.h"
+#include "uenumimp.h"
+#include "ulist.h"
 
 U_NAMESPACE_USE
 
@@ -531,10 +533,146 @@ ucal_getType(const UCalendar *cal, UErrorCode* status)
     return ((Calendar*)cal)->getType();
 }
 
+static const UEnumeration defaultKeywordValues = {
+    NULL,
+    NULL,
+    ulist_close_keyword_values_iterator,
+    ulist_count_keyword_values,
+    uenum_unextDefault,
+    ulist_next_keyword_value, 
+    ulist_reset_keyword_values_iterator
+};
+
+static const char * const CAL_TYPES[] = {
+        "gregorian",
+        "japanese",
+        "buddhist",
+        "roc",
+        "persian",
+        "islamic-civil",
+        "islamic",
+        "hebrew",
+        "chinese",
+        "indian",
+        "coptic",
+        "ethiopic",
+        "ethiopic-amete-alem",
+        NULL
+};
+
+#define CALPREF_LENGTH 39
+#define CALPREF_MAX_NUM_KEYWORDS 4
+
+static const char * const CALPREF[CALPREF_LENGTH][CALPREF_MAX_NUM_KEYWORDS+1] = {
+        { "001",    "gregorian", NULL, NULL, NULL },
+        { "AE",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "AF",     "gregorian", "islamic", "islamic-civil", "persian" },
+        { "BH",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "CN",     "gregorian", "chinese", NULL, NULL },
+        { "CX",     "gregorian", "chinese", NULL, NULL },
+        { "DJ",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "DZ",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "EG",     "gregorian", "islamic", "islamic-civil", "coptic" },
+        { "EH",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "ER",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "ET",     "gregorian", "ethiopic", "ethiopic-amete-alem", NULL },
+        { "HK",     "gregorian", "chinese", NULL, NULL },
+        { "IL",     "gregorian", "hebrew", NULL, NULL },
+        { "IL",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "IN",     "gregorian", "indian", NULL, NULL },
+        { "IQ",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "IR",     "gregorian", "islamic", "islamic-civil", "persian" },
+        { "JO",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "JP",     "gregorian", "japanese", NULL, NULL },
+        { "KM",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "KW",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "LB",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "LY",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "MA",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "MO",     "gregorian", "chinese", NULL, NULL },
+        { "MR",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "OM",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "PS",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "QA",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "SA",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "SD",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "SG",     "gregorian", "chinese", NULL, NULL },
+        { "SY",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "TD",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "TH",     "buddhist", "gregorian", NULL, NULL },
+        { "TN",     "gregorian", "islamic", "islamic-civil", NULL },
+        { "TW",     "gregorian", "roc", "chinese", NULL },
+        { "YE",     "gregorian", "islamic", "islamic-civl", NULL }
+};
+
+#define MAX_LOC_SIZE_KEYWORD_VALUES 64
+#define MAX_LENGTH_KEYWORD_VALUE 64
+
 U_CAPI UEnumeration* U_EXPORT2
 ucal_getKeywordValuesForLocale(const char *key, const char* locale, UBool commonlyUsed, UErrorCode *status) {
-    //TODO: provide actual implementation!
-    return NULL;
+    // Resolve region
+    char prefRegion[MAX_LOC_SIZE_KEYWORD_VALUES];
+    int32_t prefRegionLength = 0;
+    prefRegionLength = uloc_getCountry(locale, prefRegion, MAX_LOC_SIZE_KEYWORD_VALUES, status);
+    if (prefRegionLength == 0) {
+        char loc[MAX_LOC_SIZE_KEYWORD_VALUES];
+        int32_t locLength = 0;
+        locLength = uloc_addLikelySubtags(locale, loc, MAX_LOC_SIZE_KEYWORD_VALUES, status);
+        
+        prefRegionLength = uloc_getCountry(loc, prefRegion, MAX_LOC_SIZE_KEYWORD_VALUES, status);
+    }
+    
+    // Read preferred calendar values from supplementalData calendarPreference
+    UList *values = ulist_createEmptyList(status);
+    UEnumeration *en = (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
+    if (U_FAILURE(*status) || en == NULL) {
+        if (en == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+        } else {
+            uprv_free(en);
+        }
+        ulist_deleteList(values);
+        return NULL;
+    }
+    memcpy(en, &defaultKeywordValues, sizeof(UEnumeration));
+    en->context = values;
+    
+    int32_t preferences = 0;
+    for (int32_t i = 0; i < CALPREF_LENGTH; i++) {
+        if (uprv_strcmp(prefRegion, CALPREF[i][0]) == 0) {
+            preferences = i;
+            break;
+        }
+    }
+    for (int32_t i = 1; CALPREF[preferences][i] != NULL && i <= CALPREF_MAX_NUM_KEYWORDS; i++) {
+        if (!ulist_containsString(values, CALPREF[preferences][i], uprv_strlen(CALPREF[preferences][i]))) {
+            ulist_addItemEndList(values, CALPREF[preferences][i], FALSE, status);
+            if (U_FAILURE(*status)) {
+                break;
+            }
+        }
+    }
+    
+    if (U_SUCCESS(*status) && !commonlyUsed) {
+        // If not commonlyUsed, add other available values
+        for (int32_t i = 0; CAL_TYPES[i] != NULL; i++) {
+            if (!ulist_containsString(values, CAL_TYPES[i], uprv_strlen(CAL_TYPES[i]))) {
+                ulist_addItemEndList(values, CAL_TYPES[i], FALSE, status);
+                if (U_FAILURE(*status)) {
+                    break;
+                }
+            }
+        }
+    }
+    
+    if (U_FAILURE(*status)) {
+        uenum_close(en);
+        return NULL;
+    }
+    
+    ulist_resetList(values);
+    
+    return en;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
