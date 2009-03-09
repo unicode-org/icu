@@ -6,6 +6,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/bytestream.h"
+#include "cmemory.h"
 
 U_NAMESPACE_BEGIN
 
@@ -37,7 +38,7 @@ void CheckedArrayByteSink::Append(const char* bytes, int32_t n) {
     overflowed_ = true;
   }
   if (n > 0 && bytes != (outbuf_ + size_)) {
-    memcpy(outbuf_ + size_, bytes, n);
+    uprv_memcpy(outbuf_ + size_, bytes, n);
   }
   size_ += n;
 }
