@@ -1406,20 +1406,26 @@ static void TestGetKeywordValuesForLocale() {
     };
     const int32_t EXPECTED_SIZE[PREFERRED_SIZE] = { 1, 1, 1, 1, 2, 2, 2, 2, 4, 2, 2, 2, 1 };
     UErrorCode status = U_ZERO_ERROR;
-    int32_t i;
+    int32_t i, size, j;
+    UEnumeration *all, *pref;
+    const char *loc = NULL;
+    UBool matchPref, matchAll;
+    const char *value;
+    int32_t valueLength;
+    UList *ALLList = NULL;
     
     UEnumeration *ALL = ucal_getKeywordValuesForLocale("calendar", uloc_getDefault(), FALSE, &status);
     if (U_SUCCESS(status)) {
         for (i = 0; i < PREFERRED_SIZE; i++) {
-            UEnumeration *pref = NULL;
-            UEnumeration *all = NULL;
-            const char *loc = PREFERRED[i][0];
+            pref = NULL;
+            all = NULL;
+            loc = PREFERRED[i][0];
             pref = ucal_getKeywordValuesForLocale("calendar", loc, TRUE, &status);
-            UBool matchPref = FALSE;
-            UBool matchAll = FALSE;
-            int32_t size, j;
-            const char *value = NULL;
-            int32_t valueLength = 0;
+            matchPref = FALSE;
+            matchAll = FALSE;
+            
+            value = NULL;
+            valueLength = 0;
             
             if (U_SUCCESS(status) && uenum_count(pref, &status) == EXPECTED_SIZE[i]) {
                 matchPref = TRUE;
@@ -1449,7 +1455,7 @@ static void TestGetKeywordValuesForLocale() {
             
             if (U_SUCCESS(status) && size == uenum_count(ALL, &status)) {
                 matchAll = TRUE;
-                UList *ALLList = ulist_getListFromEnum(ALL);
+                ALLList = ulist_getListFromEnum(ALL);
                 for (j = 0; j < size; j++) {
                     if ((value = uenum_next(all, &valueLength, &status)) != NULL && U_SUCCESS(status)) {
                         if (!ulist_containsString(ALLList, value, uprv_strlen(value))) {
