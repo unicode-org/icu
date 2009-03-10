@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2008, International Business Machines
+* Copyright (c) 2002-2009, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -40,6 +40,7 @@ uprv_getStaticCurrencyName(const UChar* iso, const char* loc,
  * text to match; must have 0 <= pos.getIndex() < text.length();
  * on output, the position after the last matched character. If
  * the parse fails, the position in unchanged upon output.
+ * @param type currency type to parse against, LONG_NAME only or not
  * @return the ISO 4217 code, as a string, of the best match, or
  * null if there is no match
  *
@@ -49,6 +50,7 @@ U_CFUNC void
 uprv_parseCurrency(const char* locale,
                    const U_NAMESPACE_QUALIFIER UnicodeString& text,
                    U_NAMESPACE_QUALIFIER ParsePosition& pos,
+                   int8_t type,
                    UChar* result,
                    UErrorCode& ec);
 
