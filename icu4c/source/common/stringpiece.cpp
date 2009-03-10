@@ -40,6 +40,4 @@ StringPiece::StringPiece(const StringPiece& x, int32_t pos, int32_t len) {
   length_ = len;
 }
 
-const int32_t StringPiece::npos;
-
 U_NAMESPACE_END
