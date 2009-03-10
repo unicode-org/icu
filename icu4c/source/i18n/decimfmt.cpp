@@ -106,7 +106,8 @@ U_CALLCONV AffixPatternValueComparator(UHashTok val1, UHashTok val2) {
            affix_1->posPrefixPatternForCurrency == 
            affix_2->posPrefixPatternForCurrency &&
            affix_1->posSuffixPatternForCurrency == 
-           affix_2->posSuffixPatternForCurrency;
+           affix_2->posSuffixPatternForCurrency &&
+           affix_1->patternType == affix_2->patternType;
 }
 
 
@@ -534,7 +535,8 @@ DecimalFormat::setupCurrencyAffixPatterns(UErrorCode& status) {
                                                     *fNegPrefixPattern,
                                                     *fNegSuffixPattern,
                                                     *fPosPrefixPattern,
-                                                    *fPosSuffixPattern);
+                                                    *fPosSuffixPattern,
+                                                    UCURR_SYMBOL_NAME);
         fAffixPatternsForCurrency->put("default", affixPtn, status);
     }
     
@@ -555,7 +557,8 @@ DecimalFormat::setupCurrencyAffixPatterns(UErrorCode& status) {
                                                     *fNegPrefixPattern,
                                                     *fNegSuffixPattern,
                                                     *fPosPrefixPattern,
-                                                    *fPosSuffixPattern);
+                                                    *fPosSuffixPattern,
+                                                    UCURR_LONG_NAME);
             fAffixPatternsForCurrency->put(*key, affixPtn, status);
         }
     }
@@ -1626,7 +1629,7 @@ void DecimalFormat::parse(const UnicodeString& text,
         if (!subparse(text, 
                       fNegPrefixPattern, fNegSuffixPattern,
                       fPosPrefixPattern, fPosSuffixPattern,
-                      FALSE,
+                      FALSE, UCURR_SYMBOL_NAME,
                       parsePosition, digits, status, currency)) {
             parsePosition.setIndex(backup);
             return;
@@ -1706,11 +1709,20 @@ DecimalFormat::parseForCurrency(const UnicodeString& text,
     UBool tmpStatus[fgStatusLength];
     ParsePosition tmpPos(origPos);
     DigitList tmpDigitList;
-    UBool found = subparse(text, 
-                           fNegPrefixPattern, fNegSuffixPattern,
-                           fPosPrefixPattern, fPosSuffixPattern,
-                           TRUE,
-                           tmpPos, tmpDigitList, tmpStatus, currency);
+    UBool found;
+    if (fStyle == NumberFormat::kPluralCurrencyStyle) {
+        found = subparse(text, 
+                         fNegPrefixPattern, fNegSuffixPattern,
+                         fPosPrefixPattern, fPosSuffixPattern,
+                         TRUE, UCURR_LONG_NAME,
+                         tmpPos, tmpDigitList, tmpStatus, currency);
+    } else {
+        found = subparse(text, 
+                         fNegPrefixPattern, fNegSuffixPattern,
+                         fPosPrefixPattern, fPosSuffixPattern,
+                         TRUE, UCURR_SYMBOL_NAME,
+                         tmpPos, tmpDigitList, tmpStatus, currency);
+    }
     if (found) {
         if (tmpPos.getIndex() > maxPosIndex) {
             maxPosIndex = tmpPos.getIndex();
@@ -1738,7 +1750,7 @@ DecimalFormat::parseForCurrency(const UnicodeString& text,
                                 &affixPtn->negSuffixPatternForCurrency, 
                                 &affixPtn->posPrefixPatternForCurrency, 
                                 &affixPtn->posSuffixPatternForCurrency,
-                                TRUE,
+                                TRUE, affixPtn->patternType,
                                 tmpPos, tmpDigitList, tmpStatus, currency);
         if (result) {
             found = true;
@@ -1771,7 +1783,7 @@ DecimalFormat::parseForCurrency(const UnicodeString& text,
     UBool result = subparse(text, 
                             &fNegativePrefix, &fNegativeSuffix,
                             &fPositivePrefix, &fPositiveSuffix,
-                            FALSE,
+                            FALSE, UCURR_SYMBOL_NAME,
                             tmpPos_2, tmpDigitList_2, tmpStatus_2, 
                             currency);
     if (result) {
@@ -1816,6 +1828,7 @@ is here if we change our minds.
  * @param posPrefix positive prefix.
  * @param posSuffix positive suffix.
  * @param currencyParsing whether it is currency parsing or not.
+ * @param type the currency type to parse against, LONG_NAME only or not.
  * @param parsePosition The position at which to being parsing.  Upon
  * return, the first unparsed character.
  * @param digits the DigitList to set to the parsed value.
@@ -1832,6 +1845,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
                               const UnicodeString* posPrefix,
                               const UnicodeString* posSuffix,
                               UBool currencyParsing,
+                              int8_t type,
                               ParsePosition& parsePosition,
                               DigitList& digits, UBool* status,
                               UChar* currency) const
@@ -1845,8 +1859,8 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
     }
 
     // Match positive and negative prefixes; prefer longest match.
-    int32_t posMatch = compareAffix(text, position, FALSE, TRUE, posPrefix, currencyParsing, currency);
-    int32_t negMatch = compareAffix(text, position, TRUE, TRUE, negPrefix,currencyParsing,  currency);
+    int32_t posMatch = compareAffix(text, position, FALSE, TRUE, posPrefix, currencyParsing, type, currency);
+    int32_t negMatch = compareAffix(text, position, TRUE, TRUE, negPrefix,currencyParsing,  type, currency);
     if (posMatch >= 0 && negMatch >= 0) {
         if (posMatch > negMatch) {
             negMatch = -1;
@@ -2061,10 +2075,10 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
 
     // Match positive and negative suffixes; prefer longest match.
     if (posMatch >= 0) {
-        posMatch = compareAffix(text, position, FALSE, FALSE, posSuffix, currencyParsing, currency);
+        posMatch = compareAffix(text, position, FALSE, FALSE, posSuffix, currencyParsing, type, currency);
     }
     if (negMatch >= 0) {
-        negMatch = compareAffix(text, position, TRUE, FALSE, negSuffix, currencyParsing, currency);
+        negMatch = compareAffix(text, position, TRUE, FALSE, negSuffix, currencyParsing, type, currency);
     }
     if (posMatch >= 0 && negMatch >= 0) {
         if (posMatch > negMatch) {
@@ -2124,6 +2138,7 @@ int32_t DecimalFormat::skipPadding(const UnicodeString& text, int32_t position) 
  * @param isPrefix
  * @param affixPat affix pattern used for currency affix comparison.
  * @param currencyParsing whether it is currency parsing or not
+ * @param type the currency type to parse against, LONG_NAME only or not.
  * @param currency return value for parsed currency, for generic
  * currency parsing mode, or null for normal parsing. In generic
  * currency parsing mode, any currency is parsed, not just the
@@ -2136,6 +2151,7 @@ int32_t DecimalFormat::compareAffix(const UnicodeString& text,
                                     UBool isPrefix,
                                     const UnicodeString* affixPat,
                                     UBool currencyParsing,
+                                    int8_t type,
                                     UChar* currency) const
 {
     const UnicodeString *patternToCompare;
@@ -2143,7 +2159,7 @@ int32_t DecimalFormat::compareAffix(const UnicodeString& text,
         (fCurrencySignCount > fgCurrencySignCountZero && currencyParsing)) {
         
         if (affixPat != NULL) {
-            return compareComplexAffix(*affixPat, text, pos, currency);
+            return compareComplexAffix(*affixPat, text, pos, type, currency);
         }
     }
     
@@ -2270,6 +2286,7 @@ int32_t DecimalFormat::skipUWhiteSpace(const UnicodeString& text, int32_t pos) {
  * @param affixPat pattern string
  * @param input input text
  * @param pos offset into input at which to begin matching
+ * @param type the currency type to parse against, LONG_NAME only or not.
  * @param currency return value for parsed currency, for generic
  * currency parsing mode, or null for normal parsing. In generic
  * currency parsing mode, any currency is parsed, not just the
@@ -2279,6 +2296,7 @@ int32_t DecimalFormat::skipUWhiteSpace(const UnicodeString& text, int32_t pos) {
 int32_t DecimalFormat::compareComplexAffix(const UnicodeString& affixPat,
                                            const UnicodeString& text,
                                            int32_t pos,
+                                           int8_t type,
                                            UChar* currency) const
 {
     int32_t start = pos;
@@ -2325,7 +2343,7 @@ int32_t DecimalFormat::compareComplexAffix(const UnicodeString& affixPat,
                 UChar curr[4];
                 UErrorCode ec = U_ZERO_ERROR;
                 // Delegate parse of display name => ISO code to Currency
-                uprv_parseCurrency(loc, text, ppos, curr, ec);
+                uprv_parseCurrency(loc, text, ppos, type, curr, ec);
 
                 // If parse succeeds, populate currency[0]
                 if (U_SUCCESS(ec) && ppos.getIndex() != pos) {
@@ -4509,7 +4527,8 @@ DecimalFormat::copyHashForAffixPattern(const Hashtable* source,
                 value->negPrefixPatternForCurrency,
                 value->negSuffixPatternForCurrency,
                 value->posPrefixPatternForCurrency,
-                value->posSuffixPatternForCurrency);
+                value->posSuffixPatternForCurrency,
+                value->patternType);
             target->put(UnicodeString(*key), copy, status);
             if ( U_FAILURE(status) ) {
                 return;
