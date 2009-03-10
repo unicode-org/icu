@@ -886,7 +886,14 @@ static void TestGetKeywordValuesForLocale(void) {
             1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1
     };
     UErrorCode status = U_ZERO_ERROR;
-    int32_t i;
+    int32_t i, j, size;
+    UEnumeration *pref, *all;
+    const char *loc = NULL;
+    UBool matchPref, matchAll;
+    const char *value = NULL;
+    int32_t valueLength = 0;
+    
+    UList *ALLList = NULL;
     
     UEnumeration *ALL = ucurr_getKeywordValuesForLocale("currency", uloc_getDefault(), FALSE, &status);
     if (ALL == NULL) {
@@ -895,15 +902,12 @@ static void TestGetKeywordValuesForLocale(void) {
     }
     
     for (i = 0; i < PREFERRED_SIZE; i++) {
-        UEnumeration *pref = NULL;
-        UEnumeration *all = NULL;
-        const char *loc = PREFERRED[i][0];
+        pref = NULL;
+        all = NULL;
+        loc = PREFERRED[i][0];
         pref = ucurr_getKeywordValuesForLocale("currency", loc, TRUE, &status);
-        UBool matchPref = FALSE;
-        UBool matchAll = FALSE;
-        int32_t size = 0, j;
-        const char *value = NULL, *allValue = NULL;
-        int32_t valueLength = 0, allValueLength = 0;
+        matchPref = FALSE;
+        matchAll = FALSE;
         
         size = uenum_count(pref, &status);
         
@@ -935,7 +939,7 @@ static void TestGetKeywordValuesForLocale(void) {
         
         if (U_SUCCESS(status) && size == uenum_count(ALL, &status)) {
             matchAll = TRUE;
-            UList *ALLList = ulist_getListFromEnum(ALL);
+            ALLList = ulist_getListFromEnum(ALL);
             for (j = 0; j < size; j++) {
                 if ((value = uenum_next(all, &valueLength, &status)) != NULL && U_SUCCESS(status)) {
                     if (!ulist_containsString(ALLList, value, uprv_strlen(value))) {
