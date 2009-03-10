@@ -1833,6 +1833,7 @@ private:
                    const UnicodeString* posPrefix,
                    const UnicodeString* posSuffix,
                    UBool currencyParsing,
+                   int8_t type,
                    ParsePosition& parsePosition,
                    DigitList& digits, UBool* status,
                    UChar* currency) const;
@@ -1856,6 +1857,7 @@ private:
                          UBool isPrefix,
                          const UnicodeString* affixPat,
                          UBool currencyParsing,
+                         int8_t type,
                          UChar* currency) const;
     
     static int32_t compareSimpleAffix(const UnicodeString& affix,
@@ -1869,6 +1871,7 @@ private:
     int32_t compareComplexAffix(const UnicodeString& affixPat,
                                 const UnicodeString& input,
                                 int32_t pos,
+                                int8_t type,
                                 UChar* currency) const;
 
     static int32_t match(const UnicodeString& text, int32_t pos, UChar32 ch);
@@ -2042,15 +2045,18 @@ private:
         UnicodeString posPrefixPatternForCurrency;
         // positive suffix pattern
         UnicodeString posSuffixPatternForCurrency;
+        int8_t patternType;
         
         AffixPatternsForCurrency(const UnicodeString& negPrefix, 
                                  const UnicodeString& negSuffix,
                                  const UnicodeString& posPrefix,
-                                 const UnicodeString& posSuffix) {
+                                 const UnicodeString& posSuffix,
+                                 int8_t type) {
             negPrefixPatternForCurrency = negPrefix;
             negSuffixPatternForCurrency = negSuffix;
             posPrefixPatternForCurrency = posPrefix;
             posSuffixPatternForCurrency = posSuffix;
+            patternType = type;
         }
     };
         
