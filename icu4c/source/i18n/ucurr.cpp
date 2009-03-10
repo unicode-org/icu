@@ -642,7 +642,9 @@ typedef struct {
 } CurrencyNameStruct;
 
 
+#ifndef MIN
 #define MIN(a,b) (((a)<(b)) ? (a) : (b))
+#endif
 
 // Comparason function used in quick sort.
 static int currencyNameComparator(const void* a, const void* b) {
