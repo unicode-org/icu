@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2008-2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/supplementalData.xml
@@ -11365,51 +11365,64 @@ supplementalData:table(nofallback){
     }
     zoneFormatting{
         "Africa:Abidjan"{
+            canonical{"Africa/Abidjan"}
             territory{"CI"}
         }
         "Africa:Accra"{
+            canonical{"Africa/Accra"}
             territory{"GH"}
         }
         "Africa:Addis_Ababa"{
+            canonical{"Africa/Addis_Ababa"}
             territory{"ET"}
             aliases{
                 "EAT",
             }
         }
         "Africa:Algiers"{
+            canonical{"Africa/Algiers"}
             territory{"DZ"}
         }
         "Africa:Asmera"{
+            canonical{"Africa/Asmera"}
             territory{"ER"}
             aliases{
                 "Africa/Asmara",
             }
         }
         "Africa:Bamako"{
+            canonical{"Africa/Bamako"}
             territory{"ML"}
             aliases{
                 "Africa/Timbuktu",
             }
         }
         "Africa:Bangui"{
+            canonical{"Africa/Bangui"}
             territory{"CF"}
         }
         "Africa:Banjul"{
+            canonical{"Africa/Banjul"}
             territory{"GM"}
         }
         "Africa:Bissau"{
+            canonical{"Africa/Bissau"}
             territory{"GW"}
         }
         "Africa:Blantyre"{
+            canonical{"Africa/Blantyre"}
             territory{"MW"}
         }
         "Africa:Brazzaville"{
+            canonical{"Africa/Brazzaville"}
             territory{"CG"}
         }
         "Africa:Bujumbura"{
+            canonical{"Africa/Bujumbura"}
             territory{"BI"}
         }
         "Africa:Cairo"{
+            canonical{"Africa/Cairo"}
             territory{"EG"}
             aliases{
                 "Egypt",
@@ -11417,126 +11430,165 @@ supplementalData:table(nofallback){
             }
         }
         "Africa:Casablanca"{
+            canonical{"Africa/Casablanca"}
             territory{"MA"}
         }
         "Africa:Ceuta"{
+            canonical{"Africa/Ceuta"}
             territory{"ES"}
         }
         "Africa:Conakry"{
+            canonical{"Africa/Conakry"}
             territory{"GN"}
         }
         "Africa:Dakar"{
+            canonical{"Africa/Dakar"}
             territory{"SN"}
         }
         "Africa:Dar_es_Salaam"{
+            canonical{"Africa/Dar_es_Salaam"}
             territory{"TZ"}
         }
         "Africa:Djibouti"{
+            canonical{"Africa/Djibouti"}
             territory{"DJ"}
         }
         "Africa:Douala"{
+            canonical{"Africa/Douala"}
             territory{"CM"}
         }
         "Africa:El_Aaiun"{
+            canonical{"Africa/El_Aaiun"}
             territory{"EH"}
         }
         "Africa:Freetown"{
+            canonical{"Africa/Freetown"}
             territory{"SL"}
         }
         "Africa:Gaborone"{
+            canonical{"Africa/Gaborone"}
             territory{"BW"}
         }
         "Africa:Harare"{
+            canonical{"Africa/Harare"}
             territory{"ZW"}
             aliases{
                 "CAT",
             }
         }
         "Africa:Johannesburg"{
+            canonical{"Africa/Johannesburg"}
             territory{"ZA"}
         }
         "Africa:Kampala"{
+            canonical{"Africa/Kampala"}
             territory{"UG"}
         }
         "Africa:Khartoum"{
+            canonical{"Africa/Khartoum"}
             territory{"SD"}
         }
         "Africa:Kigali"{
+            canonical{"Africa/Kigali"}
             territory{"RW"}
         }
         "Africa:Kinshasa"{
+            canonical{"Africa/Kinshasa"}
             territory{"CD"}
         }
         "Africa:Lagos"{
+            canonical{"Africa/Lagos"}
             territory{"NG"}
         }
         "Africa:Libreville"{
+            canonical{"Africa/Libreville"}
             territory{"GA"}
         }
         "Africa:Lome"{
+            canonical{"Africa/Lome"}
             territory{"TG"}
         }
         "Africa:Luanda"{
+            canonical{"Africa/Luanda"}
             territory{"AO"}
         }
         "Africa:Lubumbashi"{
+            canonical{"Africa/Lubumbashi"}
             territory{"CD"}
         }
         "Africa:Lusaka"{
+            canonical{"Africa/Lusaka"}
             territory{"ZM"}
         }
         "Africa:Malabo"{
+            canonical{"Africa/Malabo"}
             territory{"GQ"}
         }
         "Africa:Maputo"{
+            canonical{"Africa/Maputo"}
             territory{"MZ"}
         }
         "Africa:Maseru"{
+            canonical{"Africa/Maseru"}
             territory{"LS"}
         }
         "Africa:Mbabane"{
+            canonical{"Africa/Mbabane"}
             territory{"SZ"}
         }
         "Africa:Mogadishu"{
+            canonical{"Africa/Mogadishu"}
             territory{"SO"}
         }
         "Africa:Monrovia"{
+            canonical{"Africa/Monrovia"}
             territory{"LR"}
         }
         "Africa:Nairobi"{
+            canonical{"Africa/Nairobi"}
             territory{"KE"}
         }
         "Africa:Ndjamena"{
+            canonical{"Africa/Ndjamena"}
             territory{"TD"}
         }
         "Africa:Niamey"{
+            canonical{"Africa/Niamey"}
             territory{"NE"}
         }
         "Africa:Nouakchott"{
+            canonical{"Africa/Nouakchott"}
             territory{"MR"}
         }
         "Africa:Ouagadougou"{
+            canonical{"Africa/Ouagadougou"}
             territory{"BF"}
         }
         "Africa:Porto-Novo"{
+            canonical{"Africa/Porto-Novo"}
             territory{"BJ"}
         }
         "Africa:Sao_Tome"{
+            canonical{"Africa/Sao_Tome"}
             territory{"ST"}
         }
         "Africa:Tripoli"{
+            canonical{"Africa/Tripoli"}
             territory{"LY"}
             aliases{
                 "Libya",
             }
         }
         "Africa:Tunis"{
+            canonical{"Africa/Tunis"}
             territory{"TN"}
         }
         "Africa:Windhoek"{
+            canonical{"Africa/Windhoek"}
             territory{"NA"}
         }
         "America:Adak"{
+            canonical{"America/Adak"}
             territory{"US"}
             aliases{
                 "America/Atka",
@@ -11544,6 +11596,7 @@ supplementalData:table(nofallback){
             }
         }
         "America:Anchorage"{
+            canonical{"America/Anchorage"}
             territory{"US"}
             aliases{
                 "SystemV/YST9YDT",
@@ -11552,81 +11605,106 @@ supplementalData:table(nofallback){
             }
         }
         "America:Anguilla"{
+            canonical{"America/Anguilla"}
             territory{"AI"}
         }
         "America:Antigua"{
+            canonical{"America/Antigua"}
             territory{"AG"}
         }
         "America:Araguaina"{
+            canonical{"America/Araguaina"}
             territory{"BR"}
         }
         "America:Argentina:La_Rioja"{
+            canonical{"America/Argentina/La_Rioja"}
             territory{"AR"}
         }
         "America:Argentina:Rio_Gallegos"{
+            canonical{"America/Argentina/Rio_Gallegos"}
             territory{"AR"}
         }
         "America:Argentina:San_Juan"{
+            canonical{"America/Argentina/San_Juan"}
             territory{"AR"}
         }
         "America:Argentina:San_Luis"{
+            canonical{"America/Argentina/San_Luis"}
             territory{"AR"}
         }
         "America:Argentina:Tucuman"{
+            canonical{"America/Argentina/Tucuman"}
             territory{"AR"}
         }
         "America:Argentina:Ushuaia"{
+            canonical{"America/Argentina/Ushuaia"}
             territory{"AR"}
         }
         "America:Aruba"{
+            canonical{"America/Aruba"}
             territory{"AW"}
         }
         "America:Asuncion"{
+            canonical{"America/Asuncion"}
             territory{"PY"}
         }
         "America:Bahia"{
+            canonical{"America/Bahia"}
             territory{"BR"}
         }
         "America:Barbados"{
+            canonical{"America/Barbados"}
             territory{"BB"}
         }
         "America:Belem"{
+            canonical{"America/Belem"}
             territory{"BR"}
         }
         "America:Belize"{
+            canonical{"America/Belize"}
             territory{"BZ"}
         }
         "America:Blanc-Sablon"{
+            canonical{"America/Blanc-Sablon"}
             territory{"CA"}
         }
         "America:Boa_Vista"{
+            canonical{"America/Boa_Vista"}
             territory{"BR"}
         }
         "America:Bogota"{
+            canonical{"America/Bogota"}
             territory{"CO"}
         }
         "America:Boise"{
+            canonical{"America/Boise"}
             territory{"US"}
         }
         "America:Buenos_Aires"{
+            canonical{"America/Buenos_Aires"}
             territory{"AR"}
             aliases{
                 "America/Argentina/Buenos_Aires",
             }
         }
         "America:Cambridge_Bay"{
+            canonical{"America/Cambridge_Bay"}
             territory{"CA"}
         }
         "America:Campo_Grande"{
+            canonical{"America/Campo_Grande"}
             territory{"BR"}
         }
         "America:Cancun"{
+            canonical{"America/Cancun"}
             territory{"MX"}
         }
         "America:Caracas"{
+            canonical{"America/Caracas"}
             territory{"VE"}
         }
         "America:Catamarca"{
+            canonical{"America/Catamarca"}
             territory{"AR"}
             aliases{
                 "America/Argentina/Catamarca",
@@ -11634,12 +11712,15 @@ supplementalData:table(nofallback){
             }
         }
         "America:Cayenne"{
+            canonical{"America/Cayenne"}
             territory{"GF"}
         }
         "America:Cayman"{
+            canonical{"America/Cayman"}
             territory{"KY"}
         }
         "America:Chicago"{
+            canonical{"America/Chicago"}
             territory{"US"}
             aliases{
                 "CST6CDT",
@@ -11649,15 +11730,18 @@ supplementalData:table(nofallback){
             }
         }
         "America:Chihuahua"{
+            canonical{"America/Chihuahua"}
             territory{"MX"}
         }
         "America:Coral_Harbour"{
+            canonical{"America/Coral_Harbour"}
             territory{"CA"}
             aliases{
                 "America/Atikokan",
             }
         }
         "America:Cordoba"{
+            canonical{"America/Cordoba"}
             territory{"AR"}
             aliases{
                 "America/Argentina/Cordoba",
@@ -11665,24 +11749,31 @@ supplementalData:table(nofallback){
             }
         }
         "America:Costa_Rica"{
+            canonical{"America/Costa_Rica"}
             territory{"CR"}
         }
         "America:Cuiaba"{
+            canonical{"America/Cuiaba"}
             territory{"BR"}
         }
         "America:Curacao"{
+            canonical{"America/Curacao"}
             territory{"AN"}
         }
         "America:Danmarkshavn"{
+            canonical{"America/Danmarkshavn"}
             territory{"GL"}
         }
         "America:Dawson"{
+            canonical{"America/Dawson"}
             territory{"CA"}
         }
         "America:Dawson_Creek"{
+            canonical{"America/Dawson_Creek"}
             territory{"CA"}
         }
         "America:Denver"{
+            canonical{"America/Denver"}
             territory{"US"}
             aliases{
                 "MST7MDT",
@@ -11691,57 +11782,73 @@ supplementalData:table(nofallback){
             }
         }
         "America:Detroit"{
+            canonical{"America/Detroit"}
             territory{"US"}
             aliases{
                 "US/Michigan",
             }
         }
         "America:Dominica"{
+            canonical{"America/Dominica"}
             territory{"DM"}
         }
         "America:Edmonton"{
+            canonical{"America/Edmonton"}
             territory{"CA"}
             aliases{
                 "Canada/Mountain",
             }
         }
         "America:Eirunepe"{
+            canonical{"America/Eirunepe"}
             territory{"BR"}
         }
         "America:El_Salvador"{
+            canonical{"America/El_Salvador"}
             territory{"SV"}
         }
         "America:Fortaleza"{
+            canonical{"America/Fortaleza"}
             territory{"BR"}
         }
         "America:Glace_Bay"{
+            canonical{"America/Glace_Bay"}
             territory{"CA"}
         }
         "America:Godthab"{
+            canonical{"America/Godthab"}
             territory{"GL"}
         }
         "America:Goose_Bay"{
+            canonical{"America/Goose_Bay"}
             territory{"CA"}
         }
         "America:Grand_Turk"{
+            canonical{"America/Grand_Turk"}
             territory{"TC"}
         }
         "America:Grenada"{
+            canonical{"America/Grenada"}
             territory{"GD"}
         }
         "America:Guadeloupe"{
+            canonical{"America/Guadeloupe"}
             territory{"GP"}
         }
         "America:Guatemala"{
+            canonical{"America/Guatemala"}
             territory{"GT"}
         }
         "America:Guayaquil"{
+            canonical{"America/Guayaquil"}
             territory{"EC"}
         }
         "America:Guyana"{
+            canonical{"America/Guyana"}
             territory{"GY"}
         }
         "America:Halifax"{
+            canonical{"America/Halifax"}
             territory{"CA"}
             aliases{
                 "Canada/Atlantic",
@@ -11749,15 +11856,18 @@ supplementalData:table(nofallback){
             }
         }
         "America:Havana"{
+            canonical{"America/Havana"}
             territory{"CU"}
             aliases{
                 "Cuba",
             }
         }
         "America:Hermosillo"{
+            canonical{"America/Hermosillo"}
             territory{"MX"}
         }
         "America:Indiana:Knox"{
+            canonical{"America/Indiana/Knox"}
             territory{"US"}
             aliases{
                 "America/Knox_IN",
@@ -11765,24 +11875,31 @@ supplementalData:table(nofallback){
             }
         }
         "America:Indiana:Marengo"{
+            canonical{"America/Indiana/Marengo"}
             territory{"US"}
         }
         "America:Indiana:Petersburg"{
+            canonical{"America/Indiana/Petersburg"}
             territory{"US"}
         }
         "America:Indiana:Tell_City"{
+            canonical{"America/Indiana/Tell_City"}
             territory{"US"}
         }
         "America:Indiana:Vevay"{
+            canonical{"America/Indiana/Vevay"}
             territory{"US"}
         }
         "America:Indiana:Vincennes"{
+            canonical{"America/Indiana/Vincennes"}
             territory{"US"}
         }
         "America:Indiana:Winamac"{
+            canonical{"America/Indiana/Winamac"}
             territory{"US"}
         }
         "America:Indianapolis"{
+            canonical{"America/Indianapolis"}
             territory{"US"}
             aliases{
                 "America/Fort_Wayne",
@@ -11792,36 +11909,45 @@ supplementalData:table(nofallback){
             }
         }
         "America:Inuvik"{
+            canonical{"America/Inuvik"}
             territory{"CA"}
         }
         "America:Iqaluit"{
+            canonical{"America/Iqaluit"}
             territory{"CA"}
         }
         "America:Jamaica"{
+            canonical{"America/Jamaica"}
             territory{"JM"}
             aliases{
                 "Jamaica",
             }
         }
         "America:Jujuy"{
+            canonical{"America/Jujuy"}
             territory{"AR"}
             aliases{
                 "America/Argentina/Jujuy",
             }
         }
         "America:Juneau"{
+            canonical{"America/Juneau"}
             territory{"US"}
         }
         "America:Kentucky:Monticello"{
+            canonical{"America/Kentucky/Monticello"}
             territory{"US"}
         }
         "America:La_Paz"{
+            canonical{"America/La_Paz"}
             territory{"BO"}
         }
         "America:Lima"{
+            canonical{"America/Lima"}
             territory{"PE"}
         }
         "America:Los_Angeles"{
+            canonical{"America/Los_Angeles"}
             territory{"US"}
             aliases{
                 "PST8PDT",
@@ -11832,75 +11958,94 @@ supplementalData:table(nofallback){
             }
         }
         "America:Louisville"{
+            canonical{"America/Louisville"}
             territory{"US"}
             aliases{
                 "America/Kentucky/Louisville",
             }
         }
         "America:Maceio"{
+            canonical{"America/Maceio"}
             territory{"BR"}
         }
         "America:Managua"{
+            canonical{"America/Managua"}
             territory{"NI"}
         }
         "America:Manaus"{
+            canonical{"America/Manaus"}
             territory{"BR"}
             aliases{
                 "Brazil/West",
             }
         }
         "America:Marigot"{
+            canonical{"America/Marigot"}
             territory{"MF"}
         }
         "America:Martinique"{
+            canonical{"America/Martinique"}
             territory{"MQ"}
         }
         "America:Mazatlan"{
+            canonical{"America/Mazatlan"}
             territory{"MX"}
             aliases{
                 "Mexico/BajaSur",
             }
         }
         "America:Mendoza"{
+            canonical{"America/Mendoza"}
             territory{"AR"}
             aliases{
                 "America/Argentina/Mendoza",
             }
         }
         "America:Menominee"{
+            canonical{"America/Menominee"}
             territory{"US"}
         }
         "America:Merida"{
+            canonical{"America/Merida"}
             territory{"MX"}
         }
         "America:Mexico_City"{
+            canonical{"America/Mexico_City"}
             territory{"MX"}
             aliases{
                 "Mexico/General",
             }
         }
         "America:Miquelon"{
+            canonical{"America/Miquelon"}
             territory{"PM"}
         }
         "America:Moncton"{
+            canonical{"America/Moncton"}
             territory{"CA"}
         }
         "America:Monterrey"{
+            canonical{"America/Monterrey"}
             territory{"MX"}
         }
         "America:Montevideo"{
+            canonical{"America/Montevideo"}
             territory{"UY"}
         }
         "America:Montreal"{
+            canonical{"America/Montreal"}
             territory{"CA"}
         }
         "America:Montserrat"{
+            canonical{"America/Montserrat"}
             territory{"MS"}
         }
         "America:Nassau"{
+            canonical{"America/Nassau"}
             territory{"BS"}
         }
         "America:New_York"{
+            canonical{"America/New_York"}
             territory{"US"}
             aliases{
                 "EST5EDT",
@@ -11909,33 +12054,42 @@ supplementalData:table(nofallback){
             }
         }
         "America:Nipigon"{
+            canonical{"America/Nipigon"}
             territory{"CA"}
         }
         "America:Nome"{
+            canonical{"America/Nome"}
             territory{"US"}
         }
         "America:Noronha"{
+            canonical{"America/Noronha"}
             territory{"BR"}
             aliases{
                 "Brazil/DeNoronha",
             }
         }
         "America:North_Dakota:Center"{
+            canonical{"America/North_Dakota/Center"}
             territory{"US"}
         }
         "America:North_Dakota:New_Salem"{
+            canonical{"America/North_Dakota/New_Salem"}
             territory{"US"}
         }
         "America:Panama"{
+            canonical{"America/Panama"}
             territory{"PA"}
         }
         "America:Pangnirtung"{
+            canonical{"America/Pangnirtung"}
             territory{"CA"}
         }
         "America:Paramaribo"{
+            canonical{"America/Paramaribo"}
             territory{"SR"}
         }
         "America:Phoenix"{
+            canonical{"America/Phoenix"}
             territory{"US"}
             aliases{
                 "US/Arizona",
@@ -11943,30 +12097,38 @@ supplementalData:table(nofallback){
             }
         }
         "America:Port_of_Spain"{
+            canonical{"America/Port_of_Spain"}
             territory{"TT"}
         }
         "America:Port-au-Prince"{
+            canonical{"America/Port-au-Prince"}
             territory{"HT"}
         }
         "America:Porto_Velho"{
+            canonical{"America/Porto_Velho"}
             territory{"BR"}
         }
         "America:Puerto_Rico"{
+            canonical{"America/Puerto_Rico"}
             territory{"PR"}
             aliases{
                 "PRT",
             }
         }
         "America:Rainy_River"{
+            canonical{"America/Rainy_River"}
             territory{"CA"}
         }
         "America:Rankin_Inlet"{
+            canonical{"America/Rankin_Inlet"}
             territory{"CA"}
         }
         "America:Recife"{
+            canonical{"America/Recife"}
             territory{"BR"}
         }
         "America:Regina"{
+            canonical{"America/Regina"}
             territory{"CA"}
             aliases{
                 "Canada/East-Saskatchewan",
@@ -11974,9 +12136,11 @@ supplementalData:table(nofallback){
             }
         }
         "America:Resolute"{
+            canonical{"America/Resolute"}
             territory{"CA"}
         }
         "America:Rio_Branco"{
+            canonical{"America/Rio_Branco"}
             territory{"BR"}
             aliases{
                 "America/Porto_Acre",
@@ -11984,18 +12148,22 @@ supplementalData:table(nofallback){
             }
         }
         "America:Santarem"{
+            canonical{"America/Santarem"}
             territory{"BR"}
         }
         "America:Santiago"{
+            canonical{"America/Santiago"}
             territory{"CL"}
             aliases{
                 "Chile/Continental",
             }
         }
         "America:Santo_Domingo"{
+            canonical{"America/Santo_Domingo"}
             territory{"DO"}
         }
         "America:Sao_Paulo"{
+            canonical{"America/Sao_Paulo"}
             territory{"BR"}
             aliases{
                 "Brazil/East",
@@ -12003,18 +12171,22 @@ supplementalData:table(nofallback){
             }
         }
         "America:Scoresbysund"{
+            canonical{"America/Scoresbysund"}
             territory{"GL"}
         }
         "America:Shiprock"{
+            canonical{"America/Shiprock"}
             territory{"US"}
             aliases{
                 "Navajo",
             }
         }
         "America:St_Barthelemy"{
+            canonical{"America/St_Barthelemy"}
             territory{"BL"}
         }
         "America:St_Johns"{
+            canonical{"America/St_Johns"}
             territory{"CA"}
             aliases{
                 "Canada/Newfoundland",
@@ -12022,33 +12194,42 @@ supplementalData:table(nofallback){
             }
         }
         "America:St_Kitts"{
+            canonical{"America/St_Kitts"}
             territory{"KN"}
         }
         "America:St_Lucia"{
+            canonical{"America/St_Lucia"}
             territory{"LC"}
         }
         "America:St_Thomas"{
+            canonical{"America/St_Thomas"}
             territory{"VI"}
             aliases{
                 "America/Virgin",
             }
         }
         "America:St_Vincent"{
+            canonical{"America/St_Vincent"}
             territory{"VC"}
         }
         "America:Swift_Current"{
+            canonical{"America/Swift_Current"}
             territory{"CA"}
         }
         "America:Tegucigalpa"{
+            canonical{"America/Tegucigalpa"}
             territory{"HN"}
         }
         "America:Thule"{
+            canonical{"America/Thule"}
             territory{"GL"}
         }
         "America:Thunder_Bay"{
+            canonical{"America/Thunder_Bay"}
             territory{"CA"}
         }
         "America:Tijuana"{
+            canonical{"America/Tijuana"}
             territory{"MX"}
             aliases{
                 "America/Ensenada",
@@ -12056,120 +12237,153 @@ supplementalData:table(nofallback){
             }
         }
         "America:Toronto"{
+            canonical{"America/Toronto"}
             territory{"CA"}
             aliases{
                 "Canada/Eastern",
             }
         }
         "America:Tortola"{
+            canonical{"America/Tortola"}
             territory{"VG"}
         }
         "America:Vancouver"{
+            canonical{"America/Vancouver"}
             territory{"CA"}
             aliases{
                 "Canada/Pacific",
             }
         }
         "America:Whitehorse"{
+            canonical{"America/Whitehorse"}
             territory{"CA"}
             aliases{
                 "Canada/Yukon",
             }
         }
         "America:Winnipeg"{
+            canonical{"America/Winnipeg"}
             territory{"CA"}
             aliases{
                 "Canada/Central",
             }
         }
         "America:Yakutat"{
+            canonical{"America/Yakutat"}
             territory{"US"}
         }
         "America:Yellowknife"{
+            canonical{"America/Yellowknife"}
             territory{"CA"}
         }
         "Antarctica:Casey"{
+            canonical{"Antarctica/Casey"}
             territory{"AQ"}
         }
         "Antarctica:Davis"{
+            canonical{"Antarctica/Davis"}
             territory{"AQ"}
         }
         "Antarctica:DumontDUrville"{
+            canonical{"Antarctica/DumontDUrville"}
             territory{"AQ"}
         }
         "Antarctica:Mawson"{
+            canonical{"Antarctica/Mawson"}
             territory{"AQ"}
         }
         "Antarctica:McMurdo"{
+            canonical{"Antarctica/McMurdo"}
             territory{"AQ"}
         }
         "Antarctica:Palmer"{
+            canonical{"Antarctica/Palmer"}
             territory{"AQ"}
         }
         "Antarctica:Rothera"{
+            canonical{"Antarctica/Rothera"}
             territory{"AQ"}
         }
         "Antarctica:South_Pole"{
+            canonical{"Antarctica/South_Pole"}
             territory{"AQ"}
         }
         "Antarctica:Syowa"{
+            canonical{"Antarctica/Syowa"}
             territory{"AQ"}
         }
         "Antarctica:Vostok"{
+            canonical{"Antarctica/Vostok"}
             territory{"AQ"}
         }
         "Arctic:Longyearbyen"{
+            canonical{"Arctic/Longyearbyen"}
             territory{"SJ"}
             aliases{
                 "Atlantic/Jan_Mayen",
             }
         }
         "Asia:Aden"{
+            canonical{"Asia/Aden"}
             territory{"YE"}
         }
         "Asia:Almaty"{
+            canonical{"Asia/Almaty"}
             territory{"KZ"}
         }
         "Asia:Amman"{
+            canonical{"Asia/Amman"}
             territory{"JO"}
         }
         "Asia:Anadyr"{
+            canonical{"Asia/Anadyr"}
             territory{"RU"}
         }
         "Asia:Aqtau"{
+            canonical{"Asia/Aqtau"}
             territory{"KZ"}
         }
         "Asia:Aqtobe"{
+            canonical{"Asia/Aqtobe"}
             territory{"KZ"}
         }
         "Asia:Ashgabat"{
+            canonical{"Asia/Ashgabat"}
             territory{"TM"}
             aliases{
                 "Asia/Ashkhabad",
             }
         }
         "Asia:Baghdad"{
+            canonical{"Asia/Baghdad"}
             territory{"IQ"}
         }
         "Asia:Bahrain"{
+            canonical{"Asia/Bahrain"}
             territory{"BH"}
         }
         "Asia:Baku"{
+            canonical{"Asia/Baku"}
             territory{"AZ"}
         }
         "Asia:Bangkok"{
+            canonical{"Asia/Bangkok"}
             territory{"TH"}
         }
         "Asia:Beirut"{
+            canonical{"Asia/Beirut"}
             territory{"LB"}
         }
         "Asia:Bishkek"{
+            canonical{"Asia/Bishkek"}
             territory{"KG"}
         }
         "Asia:Brunei"{
+            canonical{"Asia/Brunei"}
             territory{"BN"}
         }
         "Asia:Calcutta"{
+            canonical{"Asia/Calcutta"}
             territory{"IN"}
             aliases{
                 "Asia/Kolkata",
@@ -12177,21 +12391,26 @@ supplementalData:table(nofallback){
             }
         }
         "Asia:Choibalsan"{
+            canonical{"Asia/Choibalsan"}
             territory{"MN"}
         }
         "Asia:Chongqing"{
+            canonical{"Asia/Chongqing"}
             territory{"CN"}
             aliases{
                 "Asia/Chungking",
             }
         }
         "Asia:Colombo"{
+            canonical{"Asia/Colombo"}
             territory{"LK"}
         }
         "Asia:Damascus"{
+            canonical{"Asia/Damascus"}
             territory{"SY"}
         }
         "Asia:Dhaka"{
+            canonical{"Asia/Dhaka"}
             territory{"BD"}
             aliases{
                 "Asia/Dacca",
@@ -12199,39 +12418,50 @@ supplementalData:table(nofallback){
             }
         }
         "Asia:Dili"{
+            canonical{"Asia/Dili"}
             territory{"TL"}
         }
         "Asia:Dubai"{
+            canonical{"Asia/Dubai"}
             territory{"AE"}
         }
         "Asia:Dushanbe"{
+            canonical{"Asia/Dushanbe"}
             territory{"TJ"}
         }
         "Asia:Gaza"{
+            canonical{"Asia/Gaza"}
             territory{"PS"}
         }
         "Asia:Harbin"{
+            canonical{"Asia/Harbin"}
             territory{"CN"}
         }
         "Asia:Hong_Kong"{
+            canonical{"Asia/Hong_Kong"}
             territory{"HK"}
             aliases{
                 "Hongkong",
             }
         }
         "Asia:Hovd"{
+            canonical{"Asia/Hovd"}
             territory{"MN"}
         }
         "Asia:Irkutsk"{
+            canonical{"Asia/Irkutsk"}
             territory{"RU"}
         }
         "Asia:Jakarta"{
+            canonical{"Asia/Jakarta"}
             territory{"ID"}
         }
         "Asia:Jayapura"{
+            canonical{"Asia/Jayapura"}
             territory{"ID"}
         }
         "Asia:Jerusalem"{
+            canonical{"Asia/Jerusalem"}
             territory{"IL"}
             aliases{
                 "Asia/Tel_Aviv",
@@ -12239,93 +12469,119 @@ supplementalData:table(nofallback){
             }
         }
         "Asia:Kabul"{
+            canonical{"Asia/Kabul"}
             territory{"AF"}
         }
         "Asia:Kamchatka"{
+            canonical{"Asia/Kamchatka"}
             territory{"RU"}
         }
         "Asia:Karachi"{
+            canonical{"Asia/Karachi"}
             territory{"PK"}
             aliases{
                 "PLT",
             }
         }
         "Asia:Kashgar"{
+            canonical{"Asia/Kashgar"}
             territory{"CN"}
         }
         "Asia:Katmandu"{
+            canonical{"Asia/Katmandu"}
             territory{"NP"}
         }
         "Asia:Krasnoyarsk"{
+            canonical{"Asia/Krasnoyarsk"}
             territory{"RU"}
         }
         "Asia:Kuala_Lumpur"{
+            canonical{"Asia/Kuala_Lumpur"}
             territory{"MY"}
         }
         "Asia:Kuching"{
+            canonical{"Asia/Kuching"}
             territory{"MY"}
         }
         "Asia:Kuwait"{
+            canonical{"Asia/Kuwait"}
             territory{"KW"}
         }
         "Asia:Macau"{
+            canonical{"Asia/Macau"}
             territory{"MO"}
             aliases{
                 "Asia/Macao",
             }
         }
         "Asia:Magadan"{
+            canonical{"Asia/Magadan"}
             territory{"RU"}
         }
         "Asia:Makassar"{
+            canonical{"Asia/Makassar"}
             territory{"ID"}
             aliases{
                 "Asia/Ujung_Pandang",
             }
         }
         "Asia:Manila"{
+            canonical{"Asia/Manila"}
             territory{"PH"}
         }
         "Asia:Muscat"{
+            canonical{"Asia/Muscat"}
             territory{"OM"}
         }
         "Asia:Nicosia"{
+            canonical{"Asia/Nicosia"}
             territory{"CY"}
             aliases{
                 "Europe/Nicosia",
             }
         }
         "Asia:Novosibirsk"{
+            canonical{"Asia/Novosibirsk"}
             territory{"RU"}
         }
         "Asia:Omsk"{
+            canonical{"Asia/Omsk"}
             territory{"RU"}
         }
         "Asia:Oral"{
+            canonical{"Asia/Oral"}
             territory{"KZ"}
         }
         "Asia:Phnom_Penh"{
+            canonical{"Asia/Phnom_Penh"}
             territory{"KH"}
         }
         "Asia:Pontianak"{
+            canonical{"Asia/Pontianak"}
             territory{"ID"}
         }
         "Asia:Pyongyang"{
+            canonical{"Asia/Pyongyang"}
             territory{"KP"}
         }
         "Asia:Qatar"{
+            canonical{"Asia/Qatar"}
             territory{"QA"}
         }
         "Asia:Qyzylorda"{
+            canonical{"Asia/Qyzylorda"}
             territory{"KZ"}
         }
         "Asia:Rangoon"{
+            canonical{"Asia/Rangoon"}
             territory{"MM"}
         }
         "Asia:Riyadh"{
+            canonical{"Asia/Riyadh"}
             territory{"SA"}
         }
         "Asia:Saigon"{
+            canonical{"Asia/Saigon"}
             territory{"VN"}
             aliases{
                 "Asia/Ho_Chi_Minh",
@@ -12333,18 +12589,22 @@ supplementalData:table(nofallback){
             }
         }
         "Asia:Sakhalin"{
+            canonical{"Asia/Sakhalin"}
             territory{"RU"}
         }
         "Asia:Samarkand"{
+            canonical{"Asia/Samarkand"}
             territory{"UZ"}
         }
         "Asia:Seoul"{
+            canonical{"Asia/Seoul"}
             territory{"KR"}
             aliases{
                 "ROK",
             }
         }
         "Asia:Shanghai"{
+            canonical{"Asia/Shanghai"}
             territory{"CN"}
             aliases{
                 "PRC",
@@ -12352,36 +12612,43 @@ supplementalData:table(nofallback){
             }
         }
         "Asia:Singapore"{
+            canonical{"Asia/Singapore"}
             territory{"SG"}
             aliases{
                 "Singapore",
             }
         }
         "Asia:Taipei"{
+            canonical{"Asia/Taipei"}
             territory{"TW"}
             aliases{
                 "ROC",
             }
         }
         "Asia:Tashkent"{
+            canonical{"Asia/Tashkent"}
             territory{"UZ"}
         }
         "Asia:Tbilisi"{
+            canonical{"Asia/Tbilisi"}
             territory{"GE"}
         }
         "Asia:Tehran"{
+            canonical{"Asia/Tehran"}
             territory{"IR"}
             aliases{
                 "Iran",
             }
         }
         "Asia:Thimphu"{
+            canonical{"Asia/Thimphu"}
             territory{"BT"}
             aliases{
                 "Asia/Thimbu",
             }
         }
         "Asia:Tokyo"{
+            canonical{"Asia/Tokyo"}
             territory{"JP"}
             aliases{
                 "Japan",
@@ -12389,90 +12656,112 @@ supplementalData:table(nofallback){
             }
         }
         "Asia:Ulaanbaatar"{
+            canonical{"Asia/Ulaanbaatar"}
             territory{"MN"}
             aliases{
                 "Asia/Ulan_Bator",
             }
         }
         "Asia:Urumqi"{
+            canonical{"Asia/Urumqi"}
             territory{"CN"}
         }
         "Asia:Vientiane"{
+            canonical{"Asia/Vientiane"}
             territory{"LA"}
         }
         "Asia:Vladivostok"{
+            canonical{"Asia/Vladivostok"}
             territory{"RU"}
         }
         "Asia:Yakutsk"{
+            canonical{"Asia/Yakutsk"}
             territory{"RU"}
         }
         "Asia:Yekaterinburg"{
+            canonical{"Asia/Yekaterinburg"}
             territory{"RU"}
         }
         "Asia:Yerevan"{
+            canonical{"Asia/Yerevan"}
             territory{"AM"}
             aliases{
                 "NET",
             }
         }
         "Atlantic:Azores"{
+            canonical{"Atlantic/Azores"}
             territory{"PT"}
         }
         "Atlantic:Bermuda"{
+            canonical{"Atlantic/Bermuda"}
             territory{"BM"}
         }
         "Atlantic:Canary"{
+            canonical{"Atlantic/Canary"}
             territory{"ES"}
         }
         "Atlantic:Cape_Verde"{
+            canonical{"Atlantic/Cape_Verde"}
             territory{"CV"}
         }
         "Atlantic:Faeroe"{
+            canonical{"Atlantic/Faeroe"}
             territory{"FO"}
             aliases{
                 "Atlantic/Faroe",
             }
         }
         "Atlantic:Madeira"{
+            canonical{"Atlantic/Madeira"}
             territory{"PT"}
         }
         "Atlantic:Reykjavik"{
+            canonical{"Atlantic/Reykjavik"}
             territory{"IS"}
             aliases{
                 "Iceland",
             }
         }
         "Atlantic:South_Georgia"{
+            canonical{"Atlantic/South_Georgia"}
             territory{"GS"}
         }
         "Atlantic:St_Helena"{
+            canonical{"Atlantic/St_Helena"}
             territory{"SH"}
         }
         "Atlantic:Stanley"{
+            canonical{"Atlantic/Stanley"}
             territory{"FK"}
         }
         "Australia:Adelaide"{
+            canonical{"Australia/Adelaide"}
             territory{"AU"}
             aliases{
                 "Australia/South",
             }
         }
         "Australia:Brisbane"{
+            canonical{"Australia/Brisbane"}
             territory{"AU"}
             aliases{
                 "Australia/Queensland",
             }
         }
         "Australia:Broken_Hill"{
+            canonical{"Australia/Broken_Hill"}
             territory{"AU"}
             aliases{
                 "Australia/Yancowinna",
             }
         }
         "Australia:Currie"{
+            canonical{"Australia/Currie"}
             territory{"AU"}
         }
         "Australia:Darwin"{
+            canonical{"Australia/Darwin"}
             territory{"AU"}
             aliases{
                 "Australia/North",
@@ -12480,36 +12769,43 @@ supplementalData:table(nofallback){
             }
         }
         "Australia:Eucla"{
+            canonical{"Australia/Eucla"}
             territory{"AU"}
         }
         "Australia:Hobart"{
+            canonical{"Australia/Hobart"}
             territory{"AU"}
             aliases{
                 "Australia/Tasmania",
             }
         }
         "Australia:Lindeman"{
+            canonical{"Australia/Lindeman"}
             territory{"AU"}
         }
         "Australia:Lord_Howe"{
+            canonical{"Australia/Lord_Howe"}
             territory{"AU"}
             aliases{
                 "Australia/LHI",
             }
         }
         "Australia:Melbourne"{
+            canonical{"Australia/Melbourne"}
             territory{"AU"}
             aliases{
                 "Australia/Victoria",
             }
         }
         "Australia:Perth"{
+            canonical{"Australia/Perth"}
             territory{"AU"}
             aliases{
                 "Australia/West",
             }
         }
         "Australia:Sydney"{
+            canonical{"Australia/Sydney"}
             territory{"AU"}
             aliases{
                 "Australia/ACT",
@@ -12519,6 +12815,7 @@ supplementalData:table(nofallback){
             }
         }
         "Etc:GMT"{
+            canonical{"Etc/GMT"}
             territory{"001"}
             aliases{
                 "Etc/GMT+0",
@@ -12541,63 +12838,82 @@ supplementalData:table(nofallback){
             }
         }
         "Etc:GMT-1"{
+            canonical{"Etc/GMT-1"}
             territory{"001"}
         }
         "Etc:GMT-2"{
+            canonical{"Etc/GMT-2"}
             territory{"001"}
         }
         "Etc:GMT-3"{
+            canonical{"Etc/GMT-3"}
             territory{"001"}
         }
         "Etc:GMT-4"{
+            canonical{"Etc/GMT-4"}
             territory{"001"}
         }
         "Etc:GMT-5"{
+            canonical{"Etc/GMT-5"}
             territory{"001"}
         }
         "Etc:GMT-6"{
+            canonical{"Etc/GMT-6"}
             territory{"001"}
         }
         "Etc:GMT-7"{
+            canonical{"Etc/GMT-7"}
             territory{"001"}
         }
         "Etc:GMT-8"{
+            canonical{"Etc/GMT-8"}
             territory{"001"}
         }
         "Etc:GMT-9"{
+            canonical{"Etc/GMT-9"}
             territory{"001"}
         }
         "Etc:GMT-10"{
+            canonical{"Etc/GMT-10"}
             territory{"001"}
         }
         "Etc:GMT-11"{
+            canonical{"Etc/GMT-11"}
             territory{"001"}
         }
         "Etc:GMT-12"{
+            canonical{"Etc/GMT-12"}
             territory{"001"}
         }
         "Etc:GMT-13"{
+            canonical{"Etc/GMT-13"}
             territory{"001"}
         }
         "Etc:GMT-14"{
+            canonical{"Etc/GMT-14"}
             territory{"001"}
         }
         "Etc:GMT+1"{
+            canonical{"Etc/GMT+1"}
             territory{"001"}
         }
         "Etc:GMT+2"{
+            canonical{"Etc/GMT+2"}
             territory{"001"}
         }
         "Etc:GMT+3"{
+            canonical{"Etc/GMT+3"}
             territory{"001"}
         }
         "Etc:GMT+4"{
+            canonical{"Etc/GMT+4"}
             territory{"001"}
             aliases{
                 "SystemV/AST4",
             }
         }
         "Etc:GMT+5"{
+            canonical{"Etc/GMT+5"}
             territory{"001"}
             aliases{
                 "EST",
@@ -12605,12 +12921,14 @@ supplementalData:table(nofallback){
             }
         }
         "Etc:GMT+6"{
+            canonical{"Etc/GMT+6"}
             territory{"001"}
             aliases{
                 "SystemV/CST6",
             }
         }
         "Etc:GMT+7"{
+            canonical{"Etc/GMT+7"}
             territory{"001"}
             aliases{
                 "MST",
@@ -12618,18 +12936,21 @@ supplementalData:table(nofallback){
             }
         }
         "Etc:GMT+8"{
+            canonical{"Etc/GMT+8"}
             territory{"001"}
             aliases{
                 "SystemV/PST8",
             }
         }
         "Etc:GMT+9"{
+            canonical{"Etc/GMT+9"}
             territory{"001"}
             aliases{
                 "SystemV/YST9",
             }
         }
         "Etc:GMT+10"{
+            canonical{"Etc/GMT+10"}
             territory{"001"}
             aliases{
                 "HST",
@@ -12637,69 +12958,89 @@ supplementalData:table(nofallback){
             }
         }
         "Etc:GMT+11"{
+            canonical{"Etc/GMT+11"}
             territory{"001"}
         }
         "Etc:GMT+12"{
+            canonical{"Etc/GMT+12"}
             territory{"001"}
         }
         "Etc:Unknown"{
+            canonical{"Etc/Unknown"}
             territory{"001"}
         }
         "Europe:Amsterdam"{
+            canonical{"Europe/Amsterdam"}
             territory{"NL"}
         }
         "Europe:Andorra"{
+            canonical{"Europe/Andorra"}
             territory{"AD"}
         }
         "Europe:Athens"{
+            canonical{"Europe/Athens"}
             territory{"GR"}
         }
         "Europe:Belgrade"{
+            canonical{"Europe/Belgrade"}
             territory{"RS"}
         }
         "Europe:Berlin"{
+            canonical{"Europe/Berlin"}
             territory{"DE"}
         }
         "Europe:Bratislava"{
+            canonical{"Europe/Bratislava"}
             territory{"SK"}
         }
         "Europe:Brussels"{
+            canonical{"Europe/Brussels"}
             territory{"BE"}
         }
         "Europe:Bucharest"{
+            canonical{"Europe/Bucharest"}
             territory{"RO"}
         }
         "Europe:Budapest"{
+            canonical{"Europe/Budapest"}
             territory{"HU"}
         }
         "Europe:Chisinau"{
+            canonical{"Europe/Chisinau"}
             territory{"MD"}
             aliases{
                 "Europe/Tiraspol",
             }
         }
         "Europe:Copenhagen"{
+            canonical{"Europe/Copenhagen"}
             territory{"DK"}
         }
         "Europe:Dublin"{
+            canonical{"Europe/Dublin"}
             territory{"IE"}
             aliases{
                 "Eire",
             }
         }
         "Europe:Gibraltar"{
+            canonical{"Europe/Gibraltar"}
             territory{"GI"}
         }
         "Europe:Guernsey"{
+            canonical{"Europe/Guernsey"}
             territory{"GG"}
         }
         "Europe:Helsinki"{
+            canonical{"Europe/Helsinki"}
             territory{"FI"}
         }
         "Europe:Isle_of_Man"{
+            canonical{"Europe/Isle_of_Man"}
             territory{"IM"}
         }
         "Europe:Istanbul"{
+            canonical{"Europe/Istanbul"}
             territory{"TR"}
             aliases{
                 "Asia/Istanbul",
@@ -12707,24 +13048,30 @@ supplementalData:table(nofallback){
             }
         }
         "Europe:Jersey"{
+            canonical{"Europe/Jersey"}
             territory{"JE"}
         }
         "Europe:Kaliningrad"{
+            canonical{"Europe/Kaliningrad"}
             territory{"RU"}
         }
         "Europe:Kiev"{
+            canonical{"Europe/Kiev"}
             territory{"UA"}
         }
         "Europe:Lisbon"{
+            canonical{"Europe/Lisbon"}
             territory{"PT"}
             aliases{
                 "Portugal",
             }
         }
         "Europe:Ljubljana"{
+            canonical{"Europe/Ljubljana"}
             territory{"SI"}
         }
         "Europe:London"{
+            canonical{"Europe/London"}
             territory{"GB"}
             aliases{
                 "Europe/Belfast",
@@ -12733,150 +13080,195 @@ supplementalData:table(nofallback){
             }
         }
         "Europe:Luxembourg"{
+            canonical{"Europe/Luxembourg"}
             territory{"LU"}
         }
         "Europe:Madrid"{
+            canonical{"Europe/Madrid"}
             territory{"ES"}
         }
         "Europe:Malta"{
+            canonical{"Europe/Malta"}
             territory{"MT"}
         }
         "Europe:Mariehamn"{
+            canonical{"Europe/Mariehamn"}
             territory{"AX"}
         }
         "Europe:Minsk"{
+            canonical{"Europe/Minsk"}
             territory{"BY"}
         }
         "Europe:Monaco"{
+            canonical{"Europe/Monaco"}
             territory{"MC"}
         }
         "Europe:Moscow"{
+            canonical{"Europe/Moscow"}
             territory{"RU"}
             aliases{
                 "W-SU",
             }
         }
         "Europe:Oslo"{
+            canonical{"Europe/Oslo"}
             territory{"NO"}
         }
         "Europe:Paris"{
+            canonical{"Europe/Paris"}
             territory{"FR"}
             aliases{
                 "ECT",
             }
         }
         "Europe:Podgorica"{
+            canonical{"Europe/Podgorica"}
             territory{"ME"}
         }
         "Europe:Prague"{
+            canonical{"Europe/Prague"}
             territory{"CZ"}
         }
         "Europe:Riga"{
+            canonical{"Europe/Riga"}
             territory{"LV"}
         }
         "Europe:Rome"{
+            canonical{"Europe/Rome"}
             territory{"IT"}
         }
         "Europe:Samara"{
+            canonical{"Europe/Samara"}
             territory{"RU"}
         }
         "Europe:San_Marino"{
+            canonical{"Europe/San_Marino"}
             territory{"SM"}
         }
         "Europe:Sarajevo"{
+            canonical{"Europe/Sarajevo"}
             territory{"BA"}
         }
         "Europe:Simferopol"{
+            canonical{"Europe/Simferopol"}
             territory{"UA"}
         }
         "Europe:Skopje"{
+            canonical{"Europe/Skopje"}
             territory{"MK"}
         }
         "Europe:Sofia"{
+            canonical{"Europe/Sofia"}
             territory{"BG"}
         }
         "Europe:Stockholm"{
+            canonical{"Europe/Stockholm"}
             territory{"SE"}
         }
         "Europe:Tallinn"{
+            canonical{"Europe/Tallinn"}
             territory{"EE"}
         }
         "Europe:Tirane"{
+            canonical{"Europe/Tirane"}
             territory{"AL"}
         }
         "Europe:Uzhgorod"{
+            canonical{"Europe/Uzhgorod"}
             territory{"UA"}
         }
         "Europe:Vaduz"{
+            canonical{"Europe/Vaduz"}
             territory{"LI"}
         }
         "Europe:Vatican"{
+            canonical{"Europe/Vatican"}
             territory{"VA"}
         }
         "Europe:Vienna"{
+            canonical{"Europe/Vienna"}
             territory{"AT"}
         }
         "Europe:Vilnius"{
+            canonical{"Europe/Vilnius"}
             territory{"LT"}
         }
         "Europe:Volgograd"{
+            canonical{"Europe/Volgograd"}
             territory{"RU"}
         }
         "Europe:Warsaw"{
+            canonical{"Europe/Warsaw"}
             territory{"PL"}
             aliases{
                 "Poland",
             }
         }
         "Europe:Zagreb"{
+            canonical{"Europe/Zagreb"}
             territory{"HR"}
         }
         "Europe:Zaporozhye"{
+            canonical{"Europe/Zaporozhye"}
             territory{"UA"}
         }
         "Europe:Zurich"{
+            canonical{"Europe/Zurich"}
             territory{"CH"}
         }
         "Indian:Antananarivo"{
+            canonical{"Indian/Antananarivo"}
             territory{"MG"}
         }
         "Indian:Chagos"{
+            canonical{"Indian/Chagos"}
             territory{"IO"}
         }
         "Indian:Christmas"{
+            canonical{"Indian/Christmas"}
             territory{"CX"}
         }
         "Indian:Cocos"{
+            canonical{"Indian/Cocos"}
             territory{"CC"}
         }
         "Indian:Comoro"{
+            canonical{"Indian/Comoro"}
             territory{"KM"}
         }
         "Indian:Kerguelen"{
+            canonical{"Indian/Kerguelen"}
             territory{"TF"}
         }
         "Indian:Mahe"{
+            canonical{"Indian/Mahe"}
             territory{"SC"}
         }
         "Indian:Maldives"{
+            canonical{"Indian/Maldives"}
             territory{"MV"}
         }
         "Indian:Mauritius"{
+            canonical{"Indian/Mauritius"}
             territory{"MU"}
         }
         "Indian:Mayotte"{
+            canonical{"Indian/Mayotte"}
             territory{"YT"}
         }
         "Indian:Reunion"{
+            canonical{"Indian/Reunion"}
             territory{"RE"}
         }
         "Pacific:Apia"{
+            canonical{"Pacific/Apia"}
             territory{"WS"}
             aliases{
                 "MIT",
             }
         }
         "Pacific:Auckland"{
+            canonical{"Pacific/Auckland"}
             territory{"NZ"}
             aliases{
                 "NZ",
@@ -12884,90 +13276,114 @@ supplementalData:table(nofallback){
             }
         }
         "Pacific:Chatham"{
+            canonical{"Pacific/Chatham"}
             territory{"NZ"}
             aliases{
                 "NZ-CHAT",
             }
         }
         "Pacific:Easter"{
+            canonical{"Pacific/Easter"}
             territory{"CL"}
             aliases{
                 "Chile/EasterIsland",
             }
         }
         "Pacific:Efate"{
+            canonical{"Pacific/Efate"}
             territory{"VU"}
         }
         "Pacific:Enderbury"{
+            canonical{"Pacific/Enderbury"}
             territory{"KI"}
         }
         "Pacific:Fakaofo"{
+            canonical{"Pacific/Fakaofo"}
             territory{"TK"}
         }
         "Pacific:Fiji"{
+            canonical{"Pacific/Fiji"}
             territory{"FJ"}
         }
         "Pacific:Funafuti"{
+            canonical{"Pacific/Funafuti"}
             territory{"TV"}
         }
         "Pacific:Galapagos"{
+            canonical{"Pacific/Galapagos"}
             territory{"EC"}
         }
         "Pacific:Gambier"{
+            canonical{"Pacific/Gambier"}
             territory{"PF"}
         }
         "Pacific:Guadalcanal"{
+            canonical{"Pacific/Guadalcanal"}
             territory{"SB"}
             aliases{
                 "SST",
             }
         }
         "Pacific:Guam"{
+            canonical{"Pacific/Guam"}
             territory{"GU"}
         }
         "Pacific:Honolulu"{
+            canonical{"Pacific/Honolulu"}
             territory{"US"}
             aliases{
                 "US/Hawaii",
             }
         }
         "Pacific:Johnston"{
+            canonical{"Pacific/Johnston"}
             territory{"UM"}
         }
         "Pacific:Kiritimati"{
+            canonical{"Pacific/Kiritimati"}
             territory{"KI"}
         }
         "Pacific:Kosrae"{
+            canonical{"Pacific/Kosrae"}
             territory{"FM"}
         }
         "Pacific:Kwajalein"{
+            canonical{"Pacific/Kwajalein"}
             territory{"MH"}
             aliases{
                 "Kwajalein",
             }
         }
         "Pacific:Majuro"{
+            canonical{"Pacific/Majuro"}
             territory{"MH"}
         }
         "Pacific:Marquesas"{
+            canonical{"Pacific/Marquesas"}
             territory{"PF"}
         }
         "Pacific:Midway"{
+            canonical{"Pacific/Midway"}
             territory{"UM"}
         }
         "Pacific:Nauru"{
+            canonical{"Pacific/Nauru"}
             territory{"NR"}
         }
         "Pacific:Niue"{
+            canonical{"Pacific/Niue"}
             territory{"NU"}
         }
         "Pacific:Norfolk"{
+            canonical{"Pacific/Norfolk"}
             territory{"NF"}
         }
         "Pacific:Noumea"{
+            canonical{"Pacific/Noumea"}
             territory{"NC"}
         }
         "Pacific:Pago_Pago"{
+            canonical{"Pacific/Pago_Pago"}
             territory{"AS"}
             aliases{
                 "Pacific/Samoa",
@@ -12975,42 +13391,54 @@ supplementalData:table(nofallback){
             }
         }
         "Pacific:Palau"{
+            canonical{"Pacific/Palau"}
             territory{"PW"}
         }
         "Pacific:Pitcairn"{
+            canonical{"Pacific/Pitcairn"}
             territory{"PN"}
         }
         "Pacific:Ponape"{
+            canonical{"Pacific/Ponape"}
             territory{"FM"}
         }
         "Pacific:Port_Moresby"{
+            canonical{"Pacific/Port_Moresby"}
             territory{"PG"}
         }
         "Pacific:Rarotonga"{
+            canonical{"Pacific/Rarotonga"}
             territory{"CK"}
         }
         "Pacific:Saipan"{
+            canonical{"Pacific/Saipan"}
             territory{"MP"}
         }
         "Pacific:Tahiti"{
+            canonical{"Pacific/Tahiti"}
             territory{"PF"}
         }
         "Pacific:Tarawa"{
+            canonical{"Pacific/Tarawa"}
             territory{"KI"}
         }
         "Pacific:Tongatapu"{
+            canonical{"Pacific/Tongatapu"}
             territory{"TO"}
         }
         "Pacific:Truk"{
+            canonical{"Pacific/Truk"}
             territory{"FM"}
             aliases{
                 "Pacific/Yap",
             }
         }
         "Pacific:Wake"{
+            canonical{"Pacific/Wake"}
             territory{"UM"}
         }
         "Pacific:Wallis"{
+            canonical{"Pacific/Wallis"}
             territory{"WF"}
         }
         multizone{

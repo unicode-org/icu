@@ -17,7 +17,7 @@
 U_NAMESPACE_BEGIN
 
 typedef struct CanonicalMapEntry {
-    UChar *id;
+    const UChar *id; // const because it's a reference to a resource bundle string.
     const UChar *country; // const because it's a reference to a resource bundle string.
 } CanonicalMapEntry;
 
