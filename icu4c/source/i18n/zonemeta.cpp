@@ -30,8 +30,76 @@ static UHashtable *gMetaToOlson = NULL;
 static UBool gCanonicalMapInitialized = FALSE;
 static UBool gOlsonToMetaInitialized = FALSE;
 static UBool gMetaToOlsonInitialized = FALSE;
+static UChar **gUStringTable = NULL;
+static int32_t gUStringCount = 0;
+static int32_t gUStringAlloc = 0;
+
+#define USTRING_ALLOC_START 24
+#define USTRING_ALLOC_INCR 12
 
 U_CDECL_BEGIN
+
+// We have switched CanonicalMap to use const UChar* strings for the key and for the id field of
+// CanonicalMapEntry; that is because for the most part these now point into UChar strings in the
+// shared data file, in order to reduce process-specific dynamically-allocated memory. Consequently,
+// there is no longer a deleter for the key field, and the deleter for CanonicalMapEntry
+// no longer frees the id field. However, for the few strings that are obtained from the
+// TimeZone::createEnumeration() enumerator or from TimeZone::dereferOlsonLink instead of the
+// data file, we do need to allocate copies. In order to ensure that these strings are freed by
+// zoneMeta_cleanup(), we need to create a little memory manager for them; this is in the form of
+// a table that tracks the strings allocated for this purpose. The following three functions
+// (along with the gUStringXxxxx statics) are used to allocate and free such strings.
+
+// The following allocs space for a UChar* string of the specified length, puts a pointer to the string
+// in gUStringTable, and returns either a pointer to the allocated string space, or NULL for failure.
+static UChar * allocUStringInTable(int32_t uStringLen) {
+    UChar * uStringSpace = NULL;
+    // initialize the table if necessary
+    if (gUStringTable == NULL) {
+        gUStringTable = (UChar**)uprv_malloc(USTRING_ALLOC_START*sizeof(UChar*));
+        if (gUStringTable != NULL) {
+            gUStringAlloc = USTRING_ALLOC_START;
+        }
+    }
+    if (gUStringTable != NULL) {
+        // expand the table if necessary
+        if (gUStringCount == gUStringAlloc) {
+            UChar ** newTable = (UChar**)uprv_realloc(gUStringTable, (gUStringAlloc+USTRING_ALLOC_INCR)*sizeof(UChar*));
+            if (newTable != NULL) {
+                gUStringTable = newTable;
+                gUStringAlloc += USTRING_ALLOC_INCR;
+            }
+        }
+        // add the string if possible
+        if (gUStringCount < gUStringAlloc) {
+            uStringSpace = (UChar*)uprv_malloc(uStringLen*sizeof(UChar));
+            if (uStringSpace != NULL) {
+                gUStringTable[gUStringCount++] = uStringSpace;
+            }
+        }
+    }
+    return uStringSpace;
+}
+
+static void removeLastUStringFromTable(void) {
+    if (gUStringCount > 0) {
+        free(gUStringTable[--gUStringCount]);
+    }
+}
+
+static void freeUStringTable(void) {
+    int32_t uStringCount = gUStringCount;
+    gUStringCount = 0;
+    gUStringAlloc = 0;
+    if (gUStringTable != NULL) {
+        while (uStringCount > 0) {
+            free(gUStringTable[--uStringCount]);
+        }
+        free(gUStringTable);
+        gUStringTable = NULL;
+    }
+}
+
 /**
  * Cleanup callback func
  */
@@ -56,6 +124,8 @@ static UBool U_CALLCONV zoneMeta_cleanup(void)
         gMetaToOlson = NULL;
     }
     gMetaToOlsonInitialized = FALSE;
+    
+    freeUStringTable();
 
     return TRUE;
 }
@@ -83,7 +153,6 @@ deleteUVector(void *obj) {
 static void U_CALLCONV
 deleteCanonicalMapEntry(void *obj) {
     U_NAMESPACE_QUALIFIER CanonicalMapEntry *entry = (U_NAMESPACE_QUALIFIER CanonicalMapEntry*)obj;
-    uprv_free(entry->id);
     uprv_free(entry);
 }
 
@@ -117,6 +186,7 @@ static const char gSupplementalData[]   = "supplementalData";
 static const char gMapTimezonesTag[]    = "mapTimezones";
 static const char gMetazonesTag[]       = "metazones";
 static const char gZoneFormattingTag[]  = "zoneFormatting";
+static const char gCanonicalTag[]       = "canonical";
 static const char gTerritoryTag[]       = "territory";
 static const char gAliasesTag[]         = "aliases";
 static const char gMultizoneTag[]       = "multizone";
@@ -222,7 +292,7 @@ ZoneMeta::createCanonicalMap(void) {
     if (U_FAILURE(status)) {
         return NULL;
     }
-    uhash_setKeyDeleter(canonicalMap, deleteUCharString);
+    // no key deleter
     uhash_setValueDeleter(canonicalMap, deleteCanonicalMapEntry);
 
     zoneFormatting = ures_openDirect(NULL, gSupplementalData, &status);
@@ -241,6 +311,13 @@ ZoneMeta::createCanonicalMap(void) {
             continue;
         }
 
+        int32_t canonicalLen;
+        const UChar *canonical = ures_getStringByKey(tzitem, gCanonicalTag, &canonicalLen, &status);
+        if (U_FAILURE(status)) {
+            status = U_ZERO_ERROR;
+            continue;
+        }
+
         int32_t territoryLen;
         const UChar *territory = ures_getStringByKey(tzitem, gTerritoryTag, &territoryLen, &status);
         if (U_FAILURE(status)) {
@@ -248,50 +325,22 @@ ZoneMeta::createCanonicalMap(void) {
             status = U_ZERO_ERROR;
         }
 
-        int32_t tzidLen = 0;
-        char tzid[ZID_KEY_MAX];
-        const char *tzkey = ures_getKey(tzitem);
-        uprv_strcpy(tzid, tzkey);
-        // Replace ':' with '/'
-        char *p = tzid;
-        while (*p) {
-            if (*p == ':') {
-                *p = '/';
-            }
-            p++;
-            tzidLen++;
-        }
-        tzidLen++; // Add one for NUL terminator
-
         // Create canonical map entry
         CanonicalMapEntry *entry = (CanonicalMapEntry*)uprv_malloc(sizeof(CanonicalMapEntry));
         if (entry == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
             goto error_cleanup;
         }
-        entry->id = (UChar*)uprv_malloc(tzidLen * sizeof(UChar));
-        if (entry->id == NULL) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            uprv_free(entry);
-            goto error_cleanup;
-        }
-        u_charsToUChars(tzid, entry->id, tzidLen);
-
+        entry->id = canonical;
         if (territory == NULL || u_strcmp(territory, gWorld) == 0) {
             entry->country = NULL;
         } else {
             entry->country = territory;
         }
 
-        // Put this entry in the hashtable
-        UChar *key = (UChar*)uprv_malloc(tzidLen * sizeof(UChar));
-        if (key == NULL) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            deleteCanonicalMapEntry(entry);
-            goto error_cleanup;
-        }
-        u_strncpy(key, entry->id, tzidLen);
-        uhash_put(canonicalMap, key, entry, &status);
+        // Put this entry in the hashtable. Since this hashtable has no key deleter,
+        // key is treated as const, but must be passed as non-const.
+        uhash_put(canonicalMap, (UChar*)canonical, entry, &status);
         if (U_FAILURE(status)) {
             goto error_cleanup;
         }
@@ -316,30 +365,16 @@ ZoneMeta::createCanonicalMap(void) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 goto error_cleanup;
             }
-            entry->id = (UChar*)uprv_malloc(tzidLen * sizeof(UChar));
-            if (entry->id == NULL) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                uprv_free(entry);
-                goto error_cleanup;
-            }
-            u_charsToUChars(tzid, entry->id, tzidLen);
-
+            entry->id = canonical;
             if (territory  == NULL || u_strcmp(territory, gWorld) == 0) {
                 entry->country = NULL;
             } else {
                 entry->country = territory;
             }
 
-            // Put this entry in the hashtable
-            int32_t aliasLen = u_strlen(alias) + 1; // Add one for NUL terminator
-            key = (UChar*)uprv_malloc(aliasLen * sizeof(UChar));
-            if (key == NULL) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                deleteCanonicalMapEntry(entry);
-                goto error_cleanup;
-            }
-            u_strncpy(key, alias, aliasLen);
-            uhash_put(canonicalMap, key, entry, &status);
+            // Put this entry in the hashtable. Since this hashtable has no key deleter,
+            // key is treated as const, but must be passed as non-const.
+            uhash_put(canonicalMap, (UChar*)alias, entry, &status);
             if (U_FAILURE(status)) {
                 goto error_cleanup;
             }
@@ -408,37 +443,29 @@ ZoneMeta::createCanonicalMap(void) {
                     derefZone = *zone;
                 }
                 idLen = derefZone.length() + 1;
-                newEntry->id = (UChar*)uprv_malloc(idLen * sizeof(UChar));
+                newEntry->id = allocUStringInTable(idLen);
                 if (newEntry->id == NULL) {
                     status = U_MEMORY_ALLOCATION_ERROR;
                     uprv_free(newEntry);
                     goto error_cleanup;
                 }
                 // Copy NULL terminated string
-                derefZone.extract(newEntry->id, idLen, status);
+                derefZone.extract((UChar*)(newEntry->id), idLen, status);
                 if (U_FAILURE(status)) {
-                    uprv_free(newEntry->id);
+                    removeLastUStringFromTable();
                     uprv_free(newEntry);
                     goto error_cleanup;
                 }
                 // No territory information available
                 newEntry->country = NULL;
             } else {
-                // Use the canonical ID in the existing entry
-                idLen = u_strlen(entry->id) + 1;
-                newEntry->id = (UChar*)uprv_malloc(idLen * sizeof(UChar));
-                if (newEntry->id == NULL) {
-                    status = U_MEMORY_ALLOCATION_ERROR;
-                    uprv_free(newEntry);
-                    goto error_cleanup;
-                }
                 // Duplicate the entry
-                u_strcpy(newEntry->id, entry->id);
+                newEntry->id = entry->id;
                 newEntry->country = entry->country;
             }
 
             // Put this entry in the hashtable
-            UChar *key = (UChar*)uprv_malloc(zoneUCharsLen * sizeof(UChar));
+            UChar *key = allocUStringInTable(zoneUCharsLen);
             if (key == NULL) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 deleteCanonicalMapEntry(newEntry);
