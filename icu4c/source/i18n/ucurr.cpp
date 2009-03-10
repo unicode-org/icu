@@ -686,7 +686,7 @@ static int currencyNameComparator(const void* a, const void* b) {
 // bundle in "en_US" and "en" are duplicated. The fallback mechanism will count
 // all currency names in "en_US" and "en".
 static void
-getCurrencyNameCount(const char* loc, int* total_currency_name_count, int* total_currency_symbol_count) {
+getCurrencyNameCount(const char* loc, int32_t* total_currency_name_count, int32_t* total_currency_symbol_count) {
     *total_currency_name_count = 0;
     *total_currency_symbol_count = 0;
     const UChar* s = NULL;
