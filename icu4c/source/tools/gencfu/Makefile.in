@@ -58,8 +58,8 @@ install-local: all-local install-man
 	$(INSTALL) $(TARGET) $(DESTDIR)$(bindir)
 
 install-man: $(MAN_FILES)
-	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
-	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
+#	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
+#	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
 
 dist-local:
 
