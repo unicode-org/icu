@@ -720,6 +720,7 @@ public class Currency extends MeasureUnit implements Serializable {
      *
      * @param locale the locale of the display names to match
      * @param text the text to parse
+     * @param type parse against currency type: LONG_NAME only or not
      * @param pos input-output position; on input, the position within
      * text to match; must have 0 <= pos.getIndex() < text.length();
      * on output, the position after the last matched character. If
@@ -730,20 +731,27 @@ public class Currency extends MeasureUnit implements Serializable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public static String parse(ULocale locale, String text, ParsePosition pos) {
-        TextTrieMap currencyNameTrie = (TextTrieMap)CURRENCY_NAME_CACHE.get(locale);
-        if (currencyNameTrie == null) {
-            currencyNameTrie = new TextTrieMap(true);
-            setupCurrencyNameTrie(locale, currencyNameTrie);
-            CURRENCY_NAME_CACHE.put(locale, currencyNameTrie);
+    public static String parse(ULocale locale, String text, int type, ParsePosition pos) {
+        //TextTrieMap currencyNameTrie = (TextTrieMap)CURRENCY_NAME_CACHE.get(locale);
+        Vector currencyTrieVec = (Vector)CURRENCY_NAME_CACHE.get(locale);
+        if (currencyTrieVec == null) {
+            TextTrieMap currencyNameTrie = new TextTrieMap(true);
+            TextTrieMap currencySymbolTrie = new TextTrieMap(false);
+            currencyTrieVec = new Vector();
+            currencyTrieVec.addElement(currencySymbolTrie);
+            currencyTrieVec.addElement(currencyNameTrie);
+            setupCurrencyTrieVec(locale, currencyTrieVec);
+            CURRENCY_NAME_CACHE.put(locale, currencyTrieVec);
         }
         
-        // look for the names
+        int maxLength = 0;
+        String isoResult = null;
+
+          // look for the names
+        TextTrieMap currencyNameTrie = (TextTrieMap)currencyTrieVec.elementAt(1);
         CurrencyNameResultHandler handler = new CurrencyNameResultHandler();
         currencyNameTrie.find(text, pos.getIndex(), handler);
         List list = handler.getMatchedCurrencyNames();
-        int maxLength = 0;
-        String isoResult = null;
         if (list != null && list.size() != 0) {
             Iterator it = list.iterator();
             while (it.hasNext()) {
@@ -757,12 +765,31 @@ public class Currency extends MeasureUnit implements Serializable {
             }
         }
 
+        if (type != Currency.LONG_NAME) {  // not long name only
+          TextTrieMap currencySymbolTrie = (TextTrieMap)currencyTrieVec.elementAt(0);
+          handler = new CurrencyNameResultHandler();
+          currencySymbolTrie.find(text, pos.getIndex(), handler);
+          list = handler.getMatchedCurrencyNames();
+          if (list != null && list.size() != 0) {
+            Iterator it = list.iterator();
+            while (it.hasNext()) {
+                CurrencyStringInfo info = (CurrencyStringInfo)it.next();
+                String isoCode = info.getISOCode();
+                String currencyString = info.getCurrencyString();
+                if (currencyString.length() > maxLength) {
+                    maxLength = currencyString.length();
+                    isoResult = isoCode;
+                }
+            }
+          }
+        }
+
         int start = pos.getIndex();
         pos.setIndex(start + maxLength);
         return isoResult;
     }
 
-    private static void setupCurrencyNameTrie(ULocale locale, TextTrieMap trie) {
+    private static void setupCurrencyTrieVec(ULocale locale, Vector trieVec) {
         // Look up the Currencies resource for the given locale.  The
         // Currencies locale data looks like this:
         //|en {
@@ -794,6 +821,10 @@ public class Currency extends MeasureUnit implements Serializable {
         3. If there is no match, fall back to root and try again
         4. If still no match, parse 3-letter ISO {this code is probably unchanged}.
         */
+
+        TextTrieMap symTrie = (TextTrieMap)trieVec.elementAt(0);
+        TextTrieMap trie = (TextTrieMap)trieVec.elementAt(1);
+
         HashSet visited = new HashSet();
         ULocale parentLocale = locale;
         while (parentLocale != null) {
@@ -807,7 +838,7 @@ public class Currency extends MeasureUnit implements Serializable {
                     String ISOCode = item.getKey();
                     if (!visited.contains(ISOCode)) {
                         CurrencyStringInfo info = new CurrencyStringInfo(ISOCode, ISOCode);
-                        trie.put(ISOCode, info);
+                        symTrie.put(ISOCode, info);
 
                         String name = item.getString(0);
                         if (name.length() > 1 && name.charAt(0) == '=' &&
@@ -820,11 +851,11 @@ public class Currency extends MeasureUnit implements Serializable {
                                  ++nameIndex) {
                                 info = new CurrencyStringInfo(ISOCode, 
                                                       (String)names[nameIndex]);
-                                trie.put((String)names[nameIndex], info);
+                                symTrie.put((String)names[nameIndex], info);
                             }
                         } else {
                             info = new CurrencyStringInfo(ISOCode, name);
-                            trie.put(name, info);
+                            symTrie.put(name, info);
                         }
 
                         info = new CurrencyStringInfo(ISOCode, item.getString(1));
