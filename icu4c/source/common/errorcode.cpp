@@ -19,17 +19,6 @@
 
 U_NAMESPACE_BEGIN
 
-ErrorCode::~ErrorCode() {}
-/*  Logically
-        if(isFailure()) {
-            handleFailure(kDestructor);
-        }
-    but in the destructor, even if it's virtual, this does not call
-    the subclass' handleFailure(), and our own handleFailure()
-    does not do anything.
-    The subclass must have this code.
-*/
-
 UErrorCode ErrorCode::reset() {
     UErrorCode code = errorCode;
     errorCode = U_ZERO_ERROR;
@@ -37,7 +26,9 @@ UErrorCode ErrorCode::reset() {
 }
 
 void ErrorCode::check() const {
-    if(isFailure()) { handleFailure(kCheck); }
+    if(isFailure()) {
+        handleFailure();
+    }
 }
 
 U_NAMESPACE_END
