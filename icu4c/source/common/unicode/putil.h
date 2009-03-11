@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2008, International Business Machines
+*   Copyright (C) 1997-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -29,7 +29,7 @@
   * \file
   * \brief C API: Platform Utilities
   */
-  
+
 /** Define this to 1 if your platform supports IEEE 754 floating point,
    to 0 if it does not. */
 #ifndef IEEE_754
@@ -93,6 +93,7 @@ U_STABLE const char* U_EXPORT2 u_getDataDirectory(void);
  */
 U_STABLE void U_EXPORT2 u_setDataDirectory(const char *directory);
 
+#if !U_CHARSET_IS_UTF8
 /**
  * Please use ucnv_getDefaultName() instead.
  * Return the default codepage for this platform and locale.
@@ -102,6 +103,7 @@ U_STABLE void U_EXPORT2 u_setDataDirectory(const char *directory);
  * @internal
  */
 U_INTERNAL const char*  U_EXPORT2 uprv_getDefaultCodepage(void);
+#endif
 
 /**
  * Please use uloc_getDefault() instead.
