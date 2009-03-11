@@ -40,4 +40,14 @@ StringPiece::StringPiece(const StringPiece& x, int32_t pos, int32_t len) {
   length_ = len;
 }
 
+/* Microsft Visual Studios <= 8.0 complains about redefinition of this
+ * static const class variable. However, the C++ standard states that this 
+ * definition is correct. Perhaps there is a bug in the Microsoft compiler. 
+ * This is not an issue on any other compilers (that we know of) including 
+ * Visual Studios 9.0.
+ */
+#if !defined(_MSC_VER) || (_MSC_VER >= 1500)
+const int32_t StringPiece::npos;
+#endif
+
 U_NAMESPACE_END
