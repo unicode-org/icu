@@ -1572,6 +1572,7 @@ The leftmost codepage (.xxx) wins.
 
 }
 
+#if !U_CHARSET_IS_UTF8
 #if U_POSIX_LOCALE
 /*
 Due to various platform differences, one platform may specify a charset,
@@ -1806,6 +1807,7 @@ uprv_getDefaultCodepage()
     umtx_unlock(NULL);
     return name;
 }
+#endif  /* !U_CHARSET_IS_UTF8 */
 
 
 /* end of platform-specific implementation -------------- */

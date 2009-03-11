@@ -1,7 +1,7 @@
 /*
  ********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1996-2008, International Business Machines Corporation and
+ * Copyright (c) 1996-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  *
@@ -158,6 +158,8 @@ static UMTX        cnvCacheMutex = NULL;  /* Mutex for synchronizing cnv cache a
 static const char **gAvailableConverters = NULL;
 static uint16_t gAvailableConverterCount = 0;
 
+#if !U_CHARSET_IS_UTF8
+
 /* This contains the resolved converter name. So no further alias lookup is needed again. */
 static char gDefaultConverterNameBuffer[UCNV_MAX_CONVERTER_NAME_LENGTH + 1]; /* +1 for NULL */
 static const char *gDefaultConverterName = NULL;
@@ -173,6 +175,7 @@ static const UConverterSharedData *gDefaultAlgorithmicSharedData = NULL;
 /* Does gDefaultConverterName have a converter option and require extra parsing? */
 static UBool gDefaultConverterContainsOption;
 
+#endif  /* !U_CHARSET_IS_UTF8 */
 
 static const char DATA_TYPE[] = "cnv";
 
@@ -201,10 +204,12 @@ static UBool U_CALLCONV ucnv_cleanup(void) {
     /* Isn't called from flushCache because other threads may have preexisting references to the table. */
     ucnv_flushAvailableConverterCache();
 
+#if !U_CHARSET_IS_UTF8
     gDefaultConverterName = NULL;
     gDefaultConverterNameBuffer[0] = 0;
     gDefaultConverterContainsOption = FALSE;
     gDefaultAlgorithmicSharedData = NULL;
+#endif
 
     umtx_destroy(&cnvCacheMutex);    /* Don't worry about destroying the mutex even  */
                                      /*  if the hash table still exists.  The mutex  */
@@ -707,6 +712,9 @@ ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UEr
 
     /* In case "name" is NULL we want to open the default converter. */
     if (converterName == NULL) {
+#if U_CHARSET_IS_UTF8
+        return (UConverterSharedData *)converterData[UCNV_UTF8];
+#else
         /* Call ucnv_getDefaultName first to query the name from the OS. */
         lookup->realName = ucnv_getDefaultName();
         if (lookup->realName == NULL) {
@@ -717,6 +725,7 @@ ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UEr
         checkForAlgorithmic = FALSE;
         mayContainOption = gDefaultConverterContainsOption;
         /* the default converter name is already canonical */
+#endif
     }
     else if((converterName[0] == 'U' ?
             (                           converterName[1] == 'T' && converterName[2] == 'F') :
@@ -1113,6 +1122,7 @@ ucnv_bld_getAvailableConverter(uint16_t n, UErrorCode *pErrorCode) {
 
 /* default converter name --------------------------------------------------- */
 
+#if !U_CHARSET_IS_UTF8
 /*
 Copy the canonical converter name.
 ucnv_getDefaultName must be thread safe, which can call this function.
@@ -1147,7 +1157,7 @@ internalSetName(const char *name, UErrorCode *status) {
     gDefaultConverterContainsOption = containsOption;
     uprv_memcpy(gDefaultConverterNameBuffer, name, length);
     gDefaultConverterNameBuffer[length]=0;
-    
+
     /* gDefaultConverterName MUST be the last global var set by this function.  */
     /*    It is the variable checked in ucnv_getDefaultName() to see if initialization is required. */
     gDefaultConverterName = gDefaultConverterNameBuffer;
@@ -1156,6 +1166,7 @@ internalSetName(const char *name, UErrorCode *status) {
 
     umtx_unlock(&cnvCacheMutex);
 }
+#endif
 
 /*
  * In order to be really thread-safe, the get function would have to take
@@ -1167,6 +1178,9 @@ internalSetName(const char *name, UErrorCode *status) {
 
 U_CAPI const char*  U_EXPORT2
 ucnv_getDefaultName() {
+#if U_CHARSET_IS_UTF8
+    return "UTF-8";
+#else
     /* local variable to be thread-safe */
     const char *name;
 
@@ -1211,6 +1225,7 @@ ucnv_getDefaultName() {
     }
 
     return name;
+#endif
 }
 
 /*
@@ -1219,6 +1234,7 @@ See internalSetName or the API reference for details.
 */
 U_CAPI void U_EXPORT2
 ucnv_setDefaultName(const char *converterName) {
+#if !U_CHARSET_IS_UTF8
     if(converterName==NULL) {
         /* reset to the default codepage */
         gDefaultConverterName=NULL;
@@ -1241,6 +1257,7 @@ ucnv_setDefaultName(const char *converterName) {
         /* The close may make the current name go away. */
         ucnv_close(cnv);
     }
+#endif
 }
 
 /* data swapping ------------------------------------------------------------ */

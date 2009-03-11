@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*****************************************************************************
@@ -3335,11 +3335,11 @@ TestToUCountPending(){
 #endif
 }
 
-static void TestOneDefaultNameChange(const char *name) {
+static void TestOneDefaultNameChange(const char *name, const char *expected) {
     UErrorCode status = U_ZERO_ERROR;
     UConverter *cnv;
     ucnv_setDefaultName(name);
-    if(strcmp(ucnv_getDefaultName(), name)==0)
+    if(strcmp(ucnv_getDefaultName(), expected)==0)
         log_verbose("setDefaultName of %s works.\n", name);
     else
         log_err("setDefaultName of %s failed\n", name);
@@ -3348,7 +3348,7 @@ static void TestOneDefaultNameChange(const char *name) {
         log_err("opening the default converter of %s failed\n", name);
         return;
     }
-    if(strcmp(ucnv_getName(cnv, &status), name)==0)
+    if(strcmp(ucnv_getName(cnv, &status), expected)==0)
         log_verbose("ucnv_getName of %s works.\n", name);
     else
         log_err("ucnv_getName of %s failed\n", name);
@@ -3363,12 +3363,18 @@ static void TestDefaultName(void) {
     log_verbose("getDefaultName returned %s\n", defaultName);
 
     /*change the default name by setting it */
-    TestOneDefaultNameChange("UTF-8");
-#if !UCONFIG_NO_LEGACY_CONVERSION
-    TestOneDefaultNameChange("ISCII,version=1");
-    TestOneDefaultNameChange("ISCII,version=2");
+    TestOneDefaultNameChange("UTF-8", "UTF-8");
+#if U_CHARSET_IS_UTF8
+    TestOneDefaultNameChange("ISCII,version=1", "UTF-8");
+    TestOneDefaultNameChange("ISCII,version=2", "UTF-8");
+    TestOneDefaultNameChange("ISO-8859-1", "UTF-8");
+#else
+# if !UCONFIG_NO_LEGACY_CONVERSION
+    TestOneDefaultNameChange("ISCII,version=1", "ISCII,version=1");
+    TestOneDefaultNameChange("ISCII,version=2", "ISCII,version=2");
+# endif
+    TestOneDefaultNameChange("ISO-8859-1", "ISO-8859-1");
 #endif
-    TestOneDefaultNameChange("ISO-8859-1");
 
     /*set the default name back*/
     ucnv_setDefaultName(defaultName);
