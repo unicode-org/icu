@@ -1448,6 +1448,34 @@ public:
            int32_t targetCapacity,
            enum EInvariant inv) const;
 
+#if U_CHARSET_IS_UTF8 || !UCONFIG_NO_CONVERSION
+
+  /**
+   * Copy the characters in the range
+   * [<tt>start</TT>, <tt>start + length</TT>) into an array of characters
+   * in the platform's default codepage.
+   * This function does not write any more than <code>targetLength</code>
+   * characters but returns the length of the entire output string
+   * so that one can allocate a larger buffer and call the function again
+   * if necessary.
+   * The output string is NUL-terminated if possible.
+   *
+   * @param start offset of first character which will be copied
+   * @param startLength the number of characters to extract
+   * @param target the target buffer for extraction
+   * @param targetLength the length of the target buffer
+   * If <TT>target</TT> is NULL, then the number of bytes required for
+   * <TT>target</TT> is returned.
+   * @return the output string length, not including the terminating NUL
+   * @stable ICU 2.0
+   */
+  int32_t extract(int32_t start,
+           int32_t startLength,
+           char *target,
+           uint32_t targetLength) const;
+
+#endif
+
 #if !UCONFIG_NO_CONVERSION
 
   /**
@@ -1513,7 +1541,7 @@ public:
            int32_t startLength,
            char *target,
            uint32_t targetLength,
-           const char *codepage = 0) const;
+           const char *codepage) const;
 
   /**
    * Convert the UnicodeString into a codepage string using an existing UConverter.
@@ -2811,6 +2839,26 @@ public:
    */
   UnicodeString(UChar *buffer, int32_t buffLength, int32_t buffCapacity);
 
+#if U_CHARSET_IS_UTF8 || !UCONFIG_NO_CONVERSION
+
+  /**
+   * char* constructor.
+   * @param codepageData an array of bytes, null-terminated,
+   *                     in the platform's default codepage.
+   * @stable ICU 2.0
+   */
+  UnicodeString(const char *codepageData);
+
+  /**
+   * char* constructor.
+   * @param codepageData an array of bytes in the platform's default codepage.
+   * @param dataLength The number of bytes in <TT>codepageData</TT>.
+   * @stable ICU 2.0
+   */
+  UnicodeString(const char *codepageData, int32_t dataLength);
+
+#endif
+
 #if !UCONFIG_NO_CONVERSION
 
   /**
@@ -2830,8 +2878,7 @@ public:
    *
    * @stable ICU 2.0
    */
-  UnicodeString(const char *codepageData,
-        const char *codepage = 0);
+  UnicodeString(const char *codepageData, const char *codepage);
 
   /**
    * char* constructor.
@@ -2850,9 +2897,7 @@ public:
    *
    * @stable ICU 2.0
    */
-  UnicodeString(const char *codepageData,
-        int32_t dataLength,
-        const char *codepage = 0);
+  UnicodeString(const char *codepageData, int32_t dataLength, const char *codepage);
 
   /**
    * char * / UConverter constructor.
