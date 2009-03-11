@@ -1,4 +1,4 @@
-#/usr/bin/perl
+#!/usr/bin/perl
 # Copyright (c) 2001-2009 International Business Machines
 # Corporation and others. All Rights Reserved.
 
