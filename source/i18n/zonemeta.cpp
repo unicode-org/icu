@@ -34,6 +34,12 @@ static UChar **gUStringTable = NULL;
 static int32_t gUStringCount = 0;
 static int32_t gUStringAlloc = 0;
 
+// Currently (ICU 4.1.3+), gUStringTable only contains strings allocated in the section of
+// createCanonicalMap that iterates over the enumerator created with TimeZone::createEnumeration.
+// And currently, that allocates a total of 22 strings. So USTRING_ALLOC_START is defined to
+// be adequate for that set, and USTRING_ALLOC_INCR is a reasonable expansion increment. In
+// future versions of ICU, these numbers may need adjusting to avoid excessive reallocs, or to
+// avoid allocating unused memory (but in any case the effects are small).
 #define USTRING_ALLOC_START 24
 #define USTRING_ALLOC_INCR 12
 
