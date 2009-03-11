@@ -215,7 +215,7 @@
 			<Tool
 				Name="VCMIDLTool"
 				TargetEnvironment="3"
-				TypeLibraryName=".\x64\Release/genbrk.tlb"
+				TypeLibraryName=".\x64\Release/gencfu.tlb"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -226,7 +226,7 @@
 				EnableFunctionLevelLinking="true"
 				DisableLanguageExtensions="true"
 				TreatWChar_tAsBuiltInType="true"
-				PrecompiledHeaderFile=".\x64\Release/genbrk.pch"
+				PrecompiledHeaderFile=".\x64\Release/gencfu.pch"
 				AssemblerListingLocation=".\x64\Release/"
 				ObjectFile=".\x64\Release/"
 				ProgramDataBaseFileName=".\x64\Release/"
@@ -247,10 +247,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile=".\x64\Release/genbrk.exe"
+				OutputFile=".\x64\Release/gencfu.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\x64\Release/genbrk.pdb"
+				ProgramDatabaseFile=".\x64\Release/gencfu.pdb"
 				SubSystem="1"
 				TargetMachine="17"
 			/>
