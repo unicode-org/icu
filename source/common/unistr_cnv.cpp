@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -26,6 +26,7 @@
 #include "unicode/ustring.h"
 #include "unicode/unistr.h"
 #include "unicode/ucnv.h"
+#include "ucnv_imp.h"
 #include "putilimp.h"
 #include "ustr_cnv.h"
 #include "ustr_imp.h"
@@ -36,6 +37,25 @@ U_NAMESPACE_BEGIN
 // Constructors
 //========================================
 
+UnicodeString::UnicodeString(const char *codepageData)
+  : fShortLength(0),
+    fFlags(kShortString)
+{
+    if(codepageData != 0) {
+        doCodepageCreate(codepageData, (int32_t)uprv_strlen(codepageData), 0);
+    }
+}
+
+UnicodeString::UnicodeString(const char *codepageData,
+                             int32_t dataLength)
+  : fShortLength(0),
+    fFlags(kShortString)
+{
+    if(codepageData != 0) {
+        doCodepageCreate(codepageData, dataLength, 0);
+    }
+}
+
 UnicodeString::UnicodeString(const char *codepageData,
                              const char *codepage)
   : fShortLength(0),
@@ -45,7 +65,6 @@ UnicodeString::UnicodeString(const char *codepageData,
         doCodepageCreate(codepageData, (int32_t)uprv_strlen(codepageData), codepage);
     }
 }
-
 
 UnicodeString::UnicodeString(const char *codepageData,
                              int32_t dataLength,
@@ -98,6 +117,14 @@ UnicodeString::UnicodeString(const char *src, int32_t srcLength,
 //========================================
 // Codeset conversion
 //========================================
+int32_t
+UnicodeString::extract(int32_t start,
+                       int32_t length,
+                       char *target,
+                       uint32_t dstSize) const {
+    return extract(start, length, target, dstSize, 0);
+}
+
 int32_t
 UnicodeString::extract(int32_t start,
                        int32_t length,
