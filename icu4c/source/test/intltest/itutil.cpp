@@ -106,21 +106,12 @@ public:
         : checks(countChecks), dests(countDests) {}
     ~MyErrorCode() {
         if(isFailure()) {
-            handleFailure(kDestructor);
+            ++dests;
         }
     }
 private:
-    virtual void handleFailure(EOrigin origin) const {
-        switch(origin) {
-        case kCheck:
-            ++checks;
-            break;
-        case kDestructor:
-            ++dests;
-            break;
-        default:
-            break;
-        }
+    virtual void handleFailure() const {
+        ++checks;
     }
     int32_t &checks;
     int32_t &dests;
