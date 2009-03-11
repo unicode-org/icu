@@ -1056,9 +1056,13 @@
     configure are --disable-64bit-libs to create 32-bit libraries, and --srcdir
     to do out of source builds (build the libraries in the current location).
     HP-UX user's, please see this <a href="#ImportantNotesHPUX">note regarding
-    HP-UX multithreaded build issues</a> with newer compilers. Solaris user's,
+    HP-UX multithreaded build issues</a> with newer compilers. Solaris users,
     please see this <a href="#ImportantNotesSolaris">note regarding Solaris
     multithreaded build issues</a>.</p>
+
+    <p>ICU is built with strict compiler warnings enabled by default.  If this
+    causes excessive numbers of warnings on your platform, use the --disable-strict
+    option to configure to reduce the warning level.</p>
 
     <p><a name="HowToTestWithoutGmake" id="HowToTestWithoutGmake"><strong>Running
     The Tests From The Command Line NOTE:</strong></a> You may have to set
