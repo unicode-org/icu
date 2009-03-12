@@ -3023,7 +3023,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
 
                     UBool nonZeroValReached = FALSE;
 
-                    uint8_t numTempBuf[UCOL_MAX_DIGITS_FOR_NUMBER/2 + 2]; // I just need a temporary place to store my generated CEs.
+                    uint8_t numTempBuf[UCOL_MAX_DIGITS_FOR_NUMBER/2 + 3]; // I just need a temporary place to store my generated CEs.
                     /*
                          We parse the source string until we hit a char that's NOT a digit.
                         Use this u_charDigitValue. This might be slow because we have to
@@ -3060,7 +3060,8 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
                     for(;;){
                         // Make sure we have enough space. No longer needed;
                         // at this point digIndx now has a max value of UCOL_MAX_DIGITS_FOR_NUMBER
-                        // so we just ensure that numTempBuf is big enough.
+                        // (it has been pre-incremented) so we just ensure that numTempBuf is big enough
+                        // (UCOL_MAX_DIGITS_FOR_NUMBER/2 + 3).
 
                         // Skipping over leading zeroes.
                         if (digVal != 0) {
@@ -3866,8 +3867,9 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
 
                         for(;;) {
                             // Make sure we have enough space. No longer needed;
-                            // at this point digIndx now has a max value of UCOL_MAX_DIGITS_FOR_NUMBER
-                            // so we just ensure that numTempBuf is big enough.
+                            // at this point the largest value of digIndx when we need to save data in numTempBuf
+                            // is UCOL_MAX_DIGITS_FOR_NUMBER-1 (digIndx is post-incremented) so we just ensure
+                            // that numTempBuf is big enough (UCOL_MAX_DIGITS_FOR_NUMBER/2 + 2).
 
                             // Skip over trailing zeroes, and keep a count of them.
                             if (digVal != 0)
