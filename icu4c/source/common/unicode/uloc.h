@@ -1043,4 +1043,62 @@ uloc_minimizeSubtags(const char*    localeID,
          int32_t minimizedLocaleIDCapacity,
          UErrorCode* err);
 
+/** 
+ * Returns a locale ID for the specified BCP47 language tag string.
+ * If the specified language tag contains any ill-formed subtags,
+ * the first such subtag and all following subtags are ignored.
+ * <p> 
+ * This implements the 'Language-Tag' production of BCP47, and so
+ * supports grandfathered (regular and irregular) as well as private
+ * use language tags.  Private use tags are represented as 'x-whatever',
+ * and grandfathered tags are converted to their canonical replacements
+ * where they exist.  Note that a few grandfathered tags have no modern
+ * replacement, these will be converted using the fallback described in
+ * the first paragraph, so some information might be lost.
+ * @param langtag   the input BCP47 language tag.
+ * @param localeID  the output buffer receiving a locale ID for the
+ *                  specified BCP47 language tag.
+ * @param localeIDCapacity  the size of the locale ID output buffer.
+ * @param parsedLength  if not NULL, succsessfully parsed length
+ *                      for the input language tag is set.
+ * @param err       error information if receiving the locald ID
+ *                  failed.
+ * @return          the length of the locale ID.
+ * @draft ICU 4.2
+ */
+U_DRAFT int32_t U_EXPORT2
+uloc_forLanguageTag(const char* langtag,
+                    char* localeID,
+                    int32_t localeIDCapacity,
+                    int32_t* parsedLength,
+                    UErrorCode* err);
+
+/** 
+ * Returns a well-formed language tag for this locale ID. 
+ * <p> 
+ * <b>Note</b>: When <code>strict</code> is FALSE, any locale
+ * fields which do not satisfy the BCP47 syntax requirement will
+ * be omitted from the result.  When <code>strict</code> is
+ * TRUE, this function sets U_ILLEGAL_ARGUMENT_ERROR to the
+ * <code>err</code> if any locale fields do not satisfy the
+ * BCP47 syntax requirement.
+ * @param localeID  the input lcoale ID
+ * @param langtag   the output buffer receiving BCP47 language
+ *                  tag for the locale ID.
+ * @param langtagCapacity   the size of the BCP47 language tag
+ *                          output buffer.
+ * @param strict    boolean value indicating if the function returns
+ *                  an error for an ill-formed input locale ID.
+ * @param err       error information if receiving the language
+ *                  tag failed.
+ * @return          The length of the BCP47 language tag.
+ * @draft ICU 4.2
+ */
+U_DRAFT int32_t U_EXPORT2
+uloc_toLanguageTag(const char* localeID,
+                   char* langtag,
+                   int32_t langtagCapacity,
+                   UBool strict,
+                   UErrorCode* err);
+
 #endif /*_ULOC*/
