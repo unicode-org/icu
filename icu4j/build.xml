@@ -857,7 +857,7 @@
   <target name="checktags" depends="_requires14,_checktags" description="check API tags before release" />
 
   <target name="gatherapi" depends="tools" unless="before.java14" description="run API database generator tool">
-    <javadoc classpath="${build.dir}" sourcepath="${src.dir}" packagenames="com.ibm.icu.lang,com.ibm.icu.math,com.ibm.icu.text,com.ibm.icu.util" source="1.4">
+    <javadoc classpath="${build.dir}" sourcepath="${src.dir}" packagenames="com.ibm.icu.lang,com.ibm.icu.math,com.ibm.icu.text,com.ibm.icu.util,com.ibm.icu.charset" source="1.4">
       <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData" path="${build.dir}">
         <param name="-name" value="ICU4J ${icu4j.impl.version.string}" />
         <param name="-output" value="${api.dir}/icu4j${icu4j.version.number}.api" />
@@ -868,7 +868,7 @@
   </target>
 
   <target name="gatherapi.with.version" depends="tools" unless="before.java14" description="run API database generator tool">
-    <javadoc classpath="${build.dir}" sourcepath="${src.dir}" packagenames="com.ibm.icu.lang,com.ibm.icu.math,com.ibm.icu.text,com.ibm.icu.util" source="1.4">
+    <javadoc classpath="${build.dir}" sourcepath="${src.dir}" packagenames="com.ibm.icu.lang,com.ibm.icu.math,com.ibm.icu.text,com.ibm.icu.util,com.ibm.icu.charset" source="1.4">
       <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData" path="${build.dir}">
         <param name="-name" value="ICU4J ${icu4j.impl.version.string}" />
         <param name="-output" value="${api.dir}/icu4j${icu4j.version.number}.stver.api" />
