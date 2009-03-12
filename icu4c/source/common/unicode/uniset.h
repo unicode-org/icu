@@ -1293,7 +1293,7 @@ public:
      * Currently only the USET_CASE bit is supported.  Any undefined bits
      * are ignored.
      * @return a reference to this set.
-     * @internal
+     * @draft ICU 4.2
      */
     UnicodeSet& closeOver(int32_t attribute);
 
