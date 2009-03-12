@@ -795,7 +795,7 @@
     <target name="gatherapi" depends="tools" if="version.1.4" description="run API database generator tool">
         <javadoc classpath="${build.dir}"
             sourcepath="${src.dir}"
-            packagenames="com.ibm.icu.lang,com.ibm.icu.math,com.ibm.icu.text,com.ibm.icu.util"
+            packagenames="com.ibm.icu.lang,com.ibm.icu.math,com.ibm.icu.text,com.ibm.icu.util,com.ibm.icu.charset"
             source="1.4">
             <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData"
                 path="${build.dir}">
