@@ -26,6 +26,7 @@
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "unicode/udata.h"
+#include "unicode/std_string.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "uinvchar.h"
