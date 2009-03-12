@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2005, International Business Machines
+*   Copyright (C) 2002-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -18,6 +18,10 @@
 #define __UENUM_H
 
 #include "unicode/utypes.h"
+
+#ifdef XP_CPLUSPLUS
+#include "unicode/strenum.h"
+#endif
 
 /**
  * \file
@@ -130,5 +134,21 @@ uenum_next(UEnumeration* en,
  */
 U_STABLE void U_EXPORT2
 uenum_reset(UEnumeration* en, UErrorCode* status);
+
+#ifdef XP_CPLUSPLUS
+
+/**
+ * Given a StringEnumeration, wrap it in a UEnumeration.  The
+ * StringEnumeration is adopted; after this call, the caller must not
+ * delete it (regardless of error status).
+ * @param adopted the C++ StringEnumeration to be wrapped in a UEnumeration.
+ * @param ec the error code.
+ * @return a UEnumeration wrapping the adopted StringEnumeration.
+ * @draft ICU 4.2
+ */
+U_CAPI UEnumeration* U_EXPORT2
+uenum_openStringEnumeration(U_NAMESPACE_QUALIFIER StringEnumeration* adopted, UErrorCode* ec);
+
+#endif
 
 #endif
