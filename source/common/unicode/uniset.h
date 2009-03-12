@@ -495,6 +495,7 @@ public:
      * USet is the plain C type for UnicodeSet
      *
      * @return a USet pointer for this UnicodeSet
+     * @draft ICU 4.2
      */
     inline USet *toUSet();
 
@@ -504,6 +505,7 @@ public:
      * USet is the plain C type for UnicodeSet
      *
      * @return a const USet pointer for this UnicodeSet
+     * @draft ICU 4.2
      */
     inline const USet * toUSet() const;
 
