@@ -1299,7 +1299,7 @@ public:
      * Remove all strings from this set.
      *
      * @return a reference to this set.
-     * @internal
+     * @draft ICU 4.2
      */
     virtual UnicodeSet &removeAllStrings();
 
