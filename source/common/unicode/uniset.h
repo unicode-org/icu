@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-* Copyright (C) 1999-2008, International Business Machines Corporation
+* Copyright (C) 1999-2009, International Business Machines Corporation
 * and others. All Rights Reserved.
 ***************************************************************************
 *   Date        Name        Description
@@ -469,6 +469,44 @@ public:
      * @stable ICU 2.0
      */
     virtual int32_t hashCode(void) const;
+
+    /**
+     * Get a UnicodeSet pointer from a USet
+     *
+     * @param uset a USet (the ICU plain C type for UnicodeSet)
+     * @return the corresponding UnicodeSet pointer.
+     *
+     * @draft ICU 4.2
+     */
+    inline static UnicodeSet *fromUSet(USet *uset);
+
+    /**
+     * Get a UnicodeSet pointer from a const USet
+     *
+     * @param uset a const USet (the ICU plain C type for UnicodeSet)
+     * @return the corresponding UnicodeSet pointer.
+     *
+     * @draft ICU 4.2
+     */
+    inline static const UnicodeSet *fromUSet(const USet *uset);
+    
+    /**
+     * Produce a USet * pointer for this UnicodeSet.
+     * USet is the plain C type for UnicodeSet
+     *
+     * @return a USet pointer for this UnicodeSet
+     */
+    inline USet *toUSet();
+
+
+    /**
+     * Produce a const USet * pointer for this UnicodeSet.
+     * USet is the plain C type for UnicodeSet
+     *
+     * @return a const USet pointer for this UnicodeSet
+     */
+    inline const USet * toUSet() const;
+
 
     //----------------------------------------------------------------
     // Freezable API
@@ -1537,6 +1575,8 @@ private:
     friend class UnicodeSetIterator;
 };
 
+
+
 inline UBool UnicodeSet::operator!=(const UnicodeSet& o) const {
     return !operator==(o);
 }
@@ -1559,6 +1599,22 @@ inline UBool UnicodeSet::containsSome(const UnicodeString& s) const {
 
 inline UBool UnicodeSet::isBogus() const {
     return (UBool)(fFlags & kIsBogus);
+}
+
+inline UnicodeSet *UnicodeSet::fromUSet(USet *uset) {
+    return reinterpret_cast<UnicodeSet *>(uset);
+}
+
+inline const UnicodeSet *UnicodeSet::fromUSet(const USet *uset) {
+    return reinterpret_cast<const UnicodeSet *>(uset);
+}
+
+inline USet *UnicodeSet::toUSet() {
+    return reinterpret_cast<USet *>(this);
+}
+
+inline const USet *UnicodeSet::toUSet() const {
+    return reinterpret_cast<const USet *>(this);
 }
 
 U_NAMESPACE_END
