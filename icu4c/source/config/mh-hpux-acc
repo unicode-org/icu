@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## HP/UX-specific setup using aCC
-## Copyright (c) 1999-2008, International Business Machines Corporation and
+## Copyright (c) 1999-2009, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Commands to generate dependency files
@@ -8,8 +8,8 @@ GEN_DEPS.c=	:
 GEN_DEPS.cc= 	:
 
 ## Flags for position independent code
-SHAREDLIBCFLAGS = +z
-SHAREDLIBCXXFLAGS = +z
+SHAREDLIBCFLAGS = +Z
+SHAREDLIBCXXFLAGS = +Z
 
 ## Additional flags when building libraries with threads
 ## We use this instead of -mt, which isn't available in all versions of aCC
