@@ -232,6 +232,29 @@ UnicodeStringTest::TestBasicManipulation()
             errln("UnicodeString(const char *, length, cnv, errorCode) does not work with length==-1");
         }
     }
+
+#if U_CHARSET_IS_UTF8
+    {
+        // Test the hardcoded-UTF-8 UnicodeString optimizations.
+        static const uint8_t utf8[]={ 0x61, 0xC3, 0xA4, 0xC3, 0x9F, 0xE4, 0xB8, 0x80, 0 };
+        static const UChar utf16[]={ 0x61, 0xE4, 0xDF, 0x4E00 };
+        UnicodeString from8a = UnicodeString((const char *)utf8);
+        UnicodeString from8b = UnicodeString((const char *)utf8, (int32_t)sizeof(utf8)-1);
+        UnicodeString from16(FALSE, utf16, LENGTHOF(utf16));
+        if(from8a != from16 || from8b != from16) {
+            errln("UnicodeString(const char * U_CHARSET_IS_UTF8) failed");
+        }
+        char buffer[16];
+        int32_t length8=from16.extract(0, 0x7fffffff, buffer, (uint32_t)sizeof(buffer));
+        if(length8!=((int32_t)sizeof(utf8)-1) || 0!=uprv_memcmp(buffer, utf8, sizeof(utf8))) {
+            errln("UnicodeString::extract(char * U_CHARSET_IS_UTF8) failed");
+        }
+        length8=from16.extract(1, 2, buffer, (uint32_t)sizeof(buffer));
+        if(length8!=4 || buffer[length8]!=0 || 0!=uprv_memcmp(buffer, utf8+1, length8)) {
+            errln("UnicodeString::extract(substring to char * U_CHARSET_IS_UTF8) failed");
+        }
+    }
+#endif
 }
 
 void

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -26,6 +26,21 @@
 
 #include "unicode/uloc.h"
 #include "ucnv_bld.h"
+
+/*
+ * Fast check for whether a charset name is "UTF-8".
+ * This does not recognize all of the variations that ucnv_open()
+ * and other functions recognize, but it covers most cases.
+ * @param name const char * charset name
+ * @return
+ */
+#define UCNV_FAST_IS_UTF8(name) \
+    (((name[0]=='U' ? \
+      (                name[1]=='T' && name[2]=='F') : \
+      (name[0]=='u' && name[1]=='t' && name[2]=='f'))) \
+  && (name[3]=='-' ? \
+     (name[4]=='8' && name[5]==0) : \
+     (name[3]=='8' && name[4]==0)))
 
 /* figures out if we need to go to file to read in the data tables.
  * @param converterName The name of the converter

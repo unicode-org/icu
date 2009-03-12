@@ -727,14 +727,7 @@ ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UEr
         /* the default converter name is already canonical */
 #endif
     }
-    else if((converterName[0] == 'U' ?
-            (                           converterName[1] == 'T' && converterName[2] == 'F') :
-            (converterName[0] == 'u' && converterName[1] == 't' && converterName[2] == 'f'))
-        &&
-        (converterName[3] == '-' ?
-            (converterName[4] == '8' && converterName[5] == 0) :
-            (converterName[3] == '8' && converterName[4] == 0)))
-    {
+    else if(UCNV_FAST_IS_UTF8(converterName)) {
         /* fastpath for UTF-8 */
         return (UConverterSharedData *)converterData[UCNV_UTF8];
     }
