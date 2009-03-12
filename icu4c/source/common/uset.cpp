@@ -149,6 +149,11 @@ uset_clear(USet* set) {
     ((UnicodeSet*) set)->UnicodeSet::clear();
 }
 
+U_CAPI void U_EXPORT2
+uset_removeAllStrings(USet* set) {
+    ((UnicodeSet*) set)->UnicodeSet::removeAllStrings();
+}
+
 U_CAPI UBool U_EXPORT2
 uset_isEmpty(const USet* set) {
     return ((const UnicodeSet*) set)->UnicodeSet::isEmpty();

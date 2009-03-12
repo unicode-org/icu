@@ -688,6 +688,15 @@ U_STABLE void U_EXPORT2
 uset_clear(USet* set);
 
 /**
+ * Remove all strings from this set.
+ *
+ * @param set the set
+ * @draft ICU 4.2
+ */
+U_DRAFT void U_EXPORT2
+uset_removeAllStrings(USet* set);
+
+/**
  * Returns TRUE if the given USet contains no characters and no
  * strings.
  * @param set the set
