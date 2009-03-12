@@ -3128,6 +3128,17 @@ protected:
   virtual UChar32 getChar32At(int32_t offset) const;
 
 private:
+  // For char* constructors. Could be made public.
+  UnicodeString &setToUTF8(const StringPiece &utf8);
+  // For extract(char*).
+  // We could make a toUTF8(target, capacity, errorCode) public but not
+  // this version: New API will be cleaner if we make callers create substrings
+  // rather than having start+length on every method,
+  // and it should take a UErrorCode&.
+  int32_t
+  toUTF8(int32_t start, int32_t len,
+         char *target, int32_t capacity) const;
+
 
   inline int8_t
   doCompare(int32_t start,

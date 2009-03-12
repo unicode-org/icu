@@ -37,6 +37,8 @@ U_NAMESPACE_BEGIN
 // Constructors
 //========================================
 
+#if !U_CHARSET_IS_UTF8
+
 UnicodeString::UnicodeString(const char *codepageData)
   : fShortLength(0),
     fFlags(kShortString)
@@ -55,6 +57,9 @@ UnicodeString::UnicodeString(const char *codepageData,
         doCodepageCreate(codepageData, dataLength, 0);
     }
 }
+
+// else see unistr.cpp
+#endif
 
 UnicodeString::UnicodeString(const char *codepageData,
                              const char *codepage)
@@ -117,6 +122,9 @@ UnicodeString::UnicodeString(const char *src, int32_t srcLength,
 //========================================
 // Codeset conversion
 //========================================
+
+#if !U_CHARSET_IS_UTF8
+
 int32_t
 UnicodeString::extract(int32_t start,
                        int32_t length,
@@ -124,6 +132,9 @@ UnicodeString::extract(int32_t start,
                        uint32_t dstSize) const {
     return extract(start, length, target, dstSize, 0);
 }
+
+// else see unistr.cpp
+#endif
 
 int32_t
 UnicodeString::extract(int32_t start,
@@ -140,44 +151,59 @@ UnicodeString::extract(int32_t start,
     // pin the indices to legal values
     pinIndices(start, length);
 
+    // We need to cast dstSize to int32_t for all subsequent code.
+    // I don't know why the API was defined with uint32_t but we are stuck with it.
+    // Also, dstSize==0xffffffff means "unlimited" but if we use target+dstSize
+    // as a limit in some functions, it may wrap around and yield a pointer
+    // that compares less-than target.
+    int32_t capacity;
+    if(dstSize < 0x7fffffff) {
+        // Assume that the capacity is real and a limit pointer won't wrap around.
+        capacity = (int32_t)dstSize;
+    } else {
+        char *targetLimit = target + 0x7fffffff;
+        if(targetLimit < target) {
+            // Pin the capacity so that a limit pointer does not wrap around.
+            targetLimit = (char *)U_MAX_PTR(target);
+            capacity = (int32_t)(targetLimit - target);
+        } else {
+            // Pin the capacity to the maximum int32_t value.
+            capacity = 0x7fffffff;
+        }
+    }
+
     // create the converter
     UConverter *converter;
     UErrorCode status = U_ZERO_ERROR;
 
     // just write the NUL if the string length is 0
     if(length == 0) {
-        if(dstSize >= 0x80000000) {  
-            // careful: dstSize is unsigned! (0xffffffff means "unlimited")
-            // make sure that the NUL-termination works (takes int32_t)
-            dstSize=0x7fffffff;
-        }
-        return u_terminateChars(target, dstSize, 0, &status);
+        return u_terminateChars(target, capacity, 0, &status);
     }
 
     // if the codepage is the default, use our cache
     // if it is an empty string, then use the "invariant character" conversion
     if (codepage == 0) {
+        const char *defaultName = ucnv_getDefaultName();
+        if(UCNV_FAST_IS_UTF8(defaultName)) {
+            return toUTF8(start, length, target, capacity);
+        }
         converter = u_getDefaultConverter(&status);
     } else if (*codepage == 0) {
         // use the "invariant characters" conversion
         int32_t destLength;
-        // careful: dstSize is unsigned! (0xffffffff means "unlimited")
-        if(dstSize >= 0x80000000) {
-            destLength = length;
-            // make sure that the NUL-termination works (takes int32_t)
-            dstSize=0x7fffffff;
-        } else if(length <= (int32_t)dstSize) {
+        if(length <= capacity) {
             destLength = length;
         } else {
-            destLength = (int32_t)dstSize;
+            destLength = capacity;
         }
         u_UCharsToChars(getArrayStart() + start, target, destLength);
-        return u_terminateChars(target, (int32_t)dstSize, length, &status);
+        return u_terminateChars(target, capacity, length, &status);
     } else {
         converter = ucnv_open(codepage, &status);
     }
 
-    length = doExtract(start, length, target, (int32_t)dstSize, converter, status);
+    length = doExtract(start, length, target, capacity, converter, status);
 
     // close the converter
     if (codepage == 0) {
@@ -298,20 +324,15 @@ UnicodeString::doCodepageCreate(const char *codepageData,
     // create the converter
     // if the codepage is the default, use our cache
     // if it is an empty string, then use the "invariant character" conversion
-    UConverter *converter = (codepage == 0 ?
-                             u_getDefaultConverter(&status) :
-                             *codepage == 0 ?
-                               0 :
-                               ucnv_open(codepage, &status));
-
-    // if we failed, set the appropriate flags and return
-    if(U_FAILURE(status)) {
-        setToBogus();
-        return;
-    }
-
-    // perform the conversion
-    if(converter == 0) {
+    UConverter *converter;
+    if (codepage == 0) {
+        const char *defaultName = ucnv_getDefaultName();
+        if(UCNV_FAST_IS_UTF8(defaultName)) {
+            setToUTF8(StringPiece(codepageData, dataLength));
+            return;
+        }
+        converter = u_getDefaultConverter(&status);
+    } else if(*codepage == 0) {
         // use the "invariant characters" conversion
         if(cloneArrayIfNeeded(dataLength, dataLength, FALSE)) {
             u_charsToUChars(codepageData, getArrayStart(), dataLength);
@@ -320,9 +341,17 @@ UnicodeString::doCodepageCreate(const char *codepageData,
             setToBogus();
         }
         return;
+    } else {
+        converter = ucnv_open(codepage, &status);
     }
 
-    // convert using the real converter
+    // if we failed, set the appropriate flags and return
+    if(U_FAILURE(status)) {
+        setToBogus();
+        return;
+    }
+
+    // perform the conversion
     doCodepageCreate(codepageData, dataLength, converter, status);
     if(U_FAILURE(status)) {
         setToBogus();
