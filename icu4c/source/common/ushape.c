@@ -932,6 +932,9 @@ expandCompositCharAtBegin(UChar *dest, int32_t sourceLength, int32_t destSize,UE
             j--;
         }
         uprv_memcpy(dest, tempbuffer, sourceLength*U_SIZEOF_UCHAR);
+        
+        uprv_free(tempbuffer);
+        
         destSize = sourceLength;
         return destSize;
 }
@@ -998,6 +1001,8 @@ expandCompositCharAtEnd(UChar *dest, int32_t sourceLength, int32_t destSize,UErr
     }
     uprv_memcpy(dest, tempbuffer, sourceLength*U_SIZEOF_UCHAR);
 
+    uprv_free(tempbuffer);
+    
     destSize = sourceLength;
     return destSize;
 }
