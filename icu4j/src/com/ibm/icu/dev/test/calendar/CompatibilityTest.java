@@ -930,6 +930,7 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
         }
         else {
             c.setTime(d);
+            c.setMinimalDaysInFirstWeek(1);
             for (int i=0; i<Calendar.ZONE_OFFSET; ++i) {
                 if (c.get(i) != EPOCH_FIELDS[i])
                     errln("Expected field " + i + " to have value " + EPOCH_FIELDS[i] +

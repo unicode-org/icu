@@ -77,14 +77,14 @@ fpc: -              1234.56/JPY  "¥1,235"  1235/JPY
 # ISO codes that overlap display names (QQQ vs. Q)
 # fake ISO code is not longer supported
 # fpc: -              123/QQQ      "QQQ123.00"    123/QQQ   # QQQ is fake
-fpc: -              123/GTQ      "Q123.00"      123/GTQ
+fpc: -              123/GTQ      "GTQ123.00"      123/GTQ
 # ChoiceFormat-based display names
 fpc: -              1/INR        "₨1.00"      1/INR
 
 fpc: -              2/INR        "₨2.00"      2/INR
 # Display names with shared prefix (YDD vs. Y)
 fpc: -              100/YDD      "YDD100.00"    100/YDD
-fpc: -              100/CNY      "RMB100.00"      100/CNY
+fpc: -              100/CNY      "CN¥100.00"      100/CNY
 
 # Lenient Tests
 

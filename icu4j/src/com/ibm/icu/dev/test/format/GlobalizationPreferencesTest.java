@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -1202,22 +1202,22 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         // Date - full
         df = gp.getDateFormat(GlobalizationPreferences.DF_FULL, GlobalizationPreferences.DF_NONE);
         pattern = ((SimpleDateFormat)df).toPattern();
-        if (!pattern.equals("EEEE, d MMMM yyyy")) {
-            errln("FAIL: FULL date pattern is " + pattern + " Expected: EEEE, d MMMM yyyy");
+        if (!pattern.equals("EEEE, d MMMM y")) {
+            errln("FAIL: FULL date pattern is " + pattern + " Expected: EEEE, d MMMM y");
         }
 
         // Date - long
         df = gp.getDateFormat(GlobalizationPreferences.DF_LONG, GlobalizationPreferences.DF_NONE);
         pattern = ((SimpleDateFormat)df).toPattern();
-        if (!pattern.equals("d MMMM yyyy")) {
-            errln("FAIL: LONG date pattern is " + pattern + " Expected: d MMMM yyyy");
+        if (!pattern.equals("d MMMM y")) {
+            errln("FAIL: LONG date pattern is " + pattern + " Expected: d MMMM y");
         }
 
         // Date - medium
         df = gp.getDateFormat(GlobalizationPreferences.DF_MEDIUM, GlobalizationPreferences.DF_NONE);
         pattern = ((SimpleDateFormat)df).toPattern();
-        if (!pattern.equals("d MMM yyyy")) {
-            errln("FAIL: MEDIUM date pattern is " + pattern + " Expected: d MMM yyyy");
+        if (!pattern.equals("d MMM y")) {
+            errln("FAIL: MEDIUM date pattern is " + pattern + " Expected: d MMM y");
         }
 
         // Date - short
@@ -1258,8 +1258,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         // Date/Time - full
         df = gp.getDateFormat(GlobalizationPreferences.DF_FULL, GlobalizationPreferences.DF_FULL);
         pattern = ((SimpleDateFormat)df).toPattern();
-        if (!pattern.equals("EEEE, d MMMM yyyy HH:mm:ss v")) {
-            errln("FAIL: FULL date/time pattern is " + pattern + " Expected: EEEE, d MMMM yyyy HH:mm:ss v");
+        if (!pattern.equals("EEEE, d MMMM y HH:mm:ss v")) {
+            errln("FAIL: FULL date/time pattern is " + pattern + " Expected: EEEE, d MMMM y HH:mm:ss v");
         }
 
         // Invalid style
@@ -1384,8 +1384,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setLocale(new ULocale("ang_KR"));
         nf = gp.getNumberFormat(GlobalizationPreferences.NF_CURRENCY);
         numStr = nf.format(num);
-        if (!numStr.equals("KRW\u00a0123,457")) {
-            errln("FAIL: Number string is " + numStr + " Expected: KRW\u00a0123,457");
+        if (!numStr.equals("\u20a9\u00a0123,457")) {
+            errln("FAIL: Number string is " + numStr + " Expected: \u20a9\u00a0123,457");
         }
         
         // Set locale - de_DE
