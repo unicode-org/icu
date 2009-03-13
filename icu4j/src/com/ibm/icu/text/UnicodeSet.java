@@ -1280,6 +1280,20 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
     }
 
     /**
+     * Remove all strings from this UnicodeSet
+     * @return this object, for chaining
+     * @draft ICU 4.2
+     */
+    public final UnicodeSet removeAllStrings() {
+        checkFrozen();
+        if (strings.size() != 0) {
+            strings.clear();
+            pat = null;
+        }
+        return this;
+    }
+        
+    /**
      * Makes a set from a multicharacter string. Thus "ch" => {"ch"}
      * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
      * @param s the source string
