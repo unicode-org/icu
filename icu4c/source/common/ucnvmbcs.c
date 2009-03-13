@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2000-2008, International Business Machines
+*   Copyright (C) 2000-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -1400,6 +1400,8 @@ ucnv_MBCSLoad(UConverterSharedData *sharedData,
         /* TODO parse package name out of the prefix of the base name in the extension .cnv file? */
         args.size=sizeof(UConverterLoadArgs);
         args.nestedLoads=2;
+        args.onlyTestIsLoadable=pArgs->onlyTestIsLoadable;
+        args.isLoadable=pArgs->isLoadable;
         args.reserved=pArgs->reserved;
         args.options=pArgs->options;
         args.pkg=pArgs->pkg;
@@ -1413,6 +1415,15 @@ ucnv_MBCSLoad(UConverterSharedData *sharedData,
         ) {
             ucnv_unload(baseSharedData);
             *pErrorCode=U_INVALID_TABLE_FORMAT;
+            return;
+        }
+        if(pArgs->onlyTestIsLoadable) {
+            /*
+             * Exit as soon as we know that we can load the converter
+             * and the format is valid and supported.
+             * The worst that can happen in the following code is a memory
+             * allocation error.
+             */
             return;
         }
 
@@ -1527,6 +1538,15 @@ ucnv_MBCSLoad(UConverterSharedData *sharedData,
             break;
         default:
             *pErrorCode=U_INVALID_TABLE_FORMAT;
+            return;
+        }
+        if(pArgs->onlyTestIsLoadable) {
+            /*
+             * Exit as soon as we know that we can load the converter
+             * and the format is valid and supported.
+             * The worst that can happen in the following code is a memory
+             * allocation error.
+             */
             return;
         }
 
@@ -1660,24 +1680,27 @@ ucnv_MBCSUnload(UConverterSharedData *sharedData) {
 
 static void
 ucnv_MBCSOpen(UConverter *cnv,
-          const char *name,
-          const char *locale,
-          uint32_t options,
-          UErrorCode *pErrorCode) {
+              UConverterLoadArgs *pArgs,
+              UErrorCode *pErrorCode) {
     UConverterMBCSTable *mbcsTable;
     const int32_t *extIndexes;
     uint8_t outputType;
     int8_t maxBytesPerUChar;
+
+    if(pArgs->onlyTestIsLoadable) {
+        pArgs->isLoadable=TRUE;
+        return;
+    }
 
     mbcsTable=&cnv->sharedData->mbcs;
     outputType=mbcsTable->outputType;
 
     if(outputType==MBCS_OUTPUT_DBCS_ONLY) {
         /* the swaplfnl option does not apply, remove it */
-        cnv->options=options&=~UCNV_OPTION_SWAP_LFNL;
+        cnv->options=pArgs->options&=~UCNV_OPTION_SWAP_LFNL;
     }
 
-    if((options&UCNV_OPTION_SWAP_LFNL)!=0) {
+    if((pArgs->options&UCNV_OPTION_SWAP_LFNL)!=0) {
         /* do this because double-checked locking is broken */
         UBool isCached;
 
@@ -1692,13 +1715,13 @@ ucnv_MBCSOpen(UConverter *cnv,
                 }
 
                 /* the option does not apply, remove it */
-                cnv->options=options&=~UCNV_OPTION_SWAP_LFNL;
+                cnv->options=pArgs->options&=~UCNV_OPTION_SWAP_LFNL;
             }
         }
     }
 
-    if(uprv_strstr(name, "18030")!=NULL) {
-        if(uprv_strstr(name, "gb18030")!=NULL || uprv_strstr(name, "GB18030")!=NULL) {
+    if(uprv_strstr(pArgs->name, "18030")!=NULL) {
+        if(uprv_strstr(pArgs->name, "gb18030")!=NULL || uprv_strstr(pArgs->name, "GB18030")!=NULL) {
             /* set a flag for GB 18030 mode, which changes the callback behavior */
             cnv->options|=_MBCS_OPTION_GB18030;
         }

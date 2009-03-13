@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2000-2007, International Business Machines
+*   Copyright (C) 2000-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_lmb.cpp
@@ -519,6 +519,7 @@ typedef struct
   }
 UConverterDataLMBCS;
 
+static void _LMBCSClose(UConverter * _this);
 
 #define DECLARE_LMBCS_DATA(n) \
 static const UConverterImpl _LMBCSImpl##n={\
@@ -556,53 +557,53 @@ optimization group. So, we put the common stuff into a worker function,
 and set up another macro to stamp out the 12 open functions:*/
 #define DEFINE_LMBCS_OPEN(n) \
 static void \
-   _LMBCSOpen##n(UConverter*  _this,const char* name,const char* locale,uint32_t options,UErrorCode*  err) \
-{ _LMBCSOpenWorker(_this, name,locale,options, err, n);} 
+   _LMBCSOpen##n(UConverter* _this, UConverterLoadArgs* pArgs, UErrorCode* err) \
+{ _LMBCSOpenWorker(_this, pArgs, err, n); }
 
 
 
 /* Here's the open worker & the common close function */
 static void 
-_LMBCSOpenWorker(UConverter*  _this, 
-                       const char*  name, 
-                       const char*  locale,
-                       uint32_t options,
-                       UErrorCode*  err,
-                       ulmbcs_byte_t OptGroup
-                       )
+_LMBCSOpenWorker(UConverter*  _this,
+                 UConverterLoadArgs *pArgs,
+                 UErrorCode*  err,
+                 ulmbcs_byte_t OptGroup)
 {
-    UConverterDataLMBCS * extraInfo = (UConverterDataLMBCS*)uprv_malloc (sizeof (UConverterDataLMBCS));
+    UConverterDataLMBCS * extraInfo = _this->extraInfo =
+        (UConverterDataLMBCS*)uprv_malloc (sizeof (UConverterDataLMBCS));
     if(extraInfo != NULL)
     {
+        UConverterNamePieces stackPieces;
+        UConverterLoadArgs stackArgs={ (int32_t)sizeof(UConverterLoadArgs) };
         ulmbcs_byte_t i;
 
         uprv_memset(extraInfo, 0, sizeof(UConverterDataLMBCS));
 
+        stackArgs.onlyTestIsLoadable = pArgs->onlyTestIsLoadable;
+
         for (i=0; i <= ULMBCS_GRP_LAST && U_SUCCESS(*err); i++)         
         {
             if(OptGroupByteToCPName[i] != NULL) {
-                extraInfo->OptGrpConverter[i] = ucnv_loadSharedData(OptGroupByteToCPName[i], NULL, err);
+                extraInfo->OptGrpConverter[i] = ucnv_loadSharedData(OptGroupByteToCPName[i], &stackPieces, &stackArgs, err);
             }
         }
 
-        if(U_SUCCESS(*err)) {
-            extraInfo->OptGroup = OptGroup;
-            extraInfo->localeConverterIndex = FindLMBCSLocale(locale);
-        } else {
-            /* one of the subconverters could not be loaded, unload the previous ones */
-            while(i > 0) {
-                if(extraInfo->OptGrpConverter[--i] != NULL) {
-                    ucnv_unloadSharedDataIfReady(extraInfo->OptGrpConverter[i]);
-                    extraInfo->OptGrpConverter[i] = NULL;
-                }
-            }
+        if(U_FAILURE(*err)) {
+            _LMBCSClose(_this);
+            return;
         }
+        if(pArgs->onlyTestIsLoadable) {
+            _LMBCSClose(_this);
+            pArgs->isLoadable=TRUE;
+            return;
+        }
+        extraInfo->OptGroup = OptGroup;
+        extraInfo->localeConverterIndex = FindLMBCSLocale(pArgs->locale);
    } 
    else
    {
        *err = U_MEMORY_ALLOCATION_ERROR;
    }
-   _this->extraInfo = extraInfo;
 }
 
 static void 
@@ -620,6 +621,7 @@ _LMBCSClose(UConverter *   _this)
         }
         if (!_this->isExtraLocal) {
             uprv_free (_this->extraInfo);
+            _this->extraInfo = NULL;
         }
     }
 }

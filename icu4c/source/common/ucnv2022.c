@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2000-2008, International Business Machines
+*   Copyright (C) 2000-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv2022.c
@@ -165,7 +165,8 @@ typedef enum  {
  *   all versions, not just JIS7 and JIS8.
  * - ICU does not distinguish between different versions of JIS X 0208.
  */
-static const uint16_t jpCharsetMasks[5]={
+enum { MAX_JA_VERSION=4 };
+static const uint16_t jpCharsetMasks[MAX_JA_VERSION+1]={
     CSM(ASCII)|CSM(JISX201)|CSM(JISX208)|CSM(HWKANA_7BIT),
     CSM(ASCII)|CSM(JISX201)|CSM(JISX208)|CSM(HWKANA_7BIT)|CSM(JISX212),
     CSM(ASCII)|CSM(JISX201)|CSM(JISX208)|CSM(HWKANA_7BIT)|CSM(JISX212)|CSM(GB2312)|CSM(KSC5601)|CSM(ISO8859_1)|CSM(ISO8859_7),
@@ -370,7 +371,7 @@ typedef enum{
 
 /*********** ISO 2022 Converter Protos ***********/
 static void
-_ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t options, UErrorCode *errorCode);
+_ISO2022Open(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode);
 
 static void
  _ISO2022Close(UConverter *converter);
@@ -448,40 +449,53 @@ setInitialStateFromUnicodeKR(UConverter* converter,UConverterDataISO2022 *myConv
 }
 
 static void
-_ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t options, UErrorCode *errorCode){
+_ISO2022Open(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
 
     char myLocale[6]={' ',' ',' ',' ',' ',' '};
 
     cnv->extraInfo = uprv_malloc (sizeof (UConverterDataISO2022));
     if(cnv->extraInfo != NULL) {
+        UConverterNamePieces stackPieces;
+        UConverterLoadArgs stackArgs={ (int32_t)sizeof(UConverterLoadArgs) };
         UConverterDataISO2022 *myConverterData=(UConverterDataISO2022 *) cnv->extraInfo;
         uint32_t version;
+
+        stackArgs.onlyTestIsLoadable = pArgs->onlyTestIsLoadable;
 
         uprv_memset(myConverterData, 0, sizeof(UConverterDataISO2022));
         myConverterData->currentType = ASCII1;
         cnv->fromUnicodeStatus =FALSE;
-        if(locale){
-            uprv_strncpy(myLocale, locale, sizeof(myLocale));
+        if(pArgs->locale){
+            uprv_strncpy(myLocale, pArgs->locale, sizeof(myLocale));
         }
-        version = options & UCNV_OPTIONS_VERSION_MASK;
+        version = pArgs->options & UCNV_OPTIONS_VERSION_MASK;
         myConverterData->version = version;
         if(myLocale[0]=='j' && (myLocale[1]=='a'|| myLocale[1]=='p') &&
             (myLocale[2]=='_' || myLocale[2]=='\0'))
         {
             size_t len=0;
             /* open the required converters and cache them */
-            if(jpCharsetMasks[version]&CSM(ISO8859_7)) {
-                myConverterData->myConverterArray[ISO8859_7]= ucnv_loadSharedData("ISO8859_7", NULL, errorCode);
+            if(version>MAX_JA_VERSION) {
+                /* prevent indexing beyond jpCharsetMasks[] */
+                myConverterData->version = version = 0;
             }
-            myConverterData->myConverterArray[JISX208]      = ucnv_loadSharedData("Shift-JIS", NULL, errorCode);
+            if(jpCharsetMasks[version]&CSM(ISO8859_7)) {
+                myConverterData->myConverterArray[ISO8859_7] =
+                    ucnv_loadSharedData("ISO8859_7", &stackPieces, &stackArgs, errorCode);
+            }
+            myConverterData->myConverterArray[JISX208] =
+                ucnv_loadSharedData("Shift-JIS", &stackPieces, &stackArgs, errorCode);
             if(jpCharsetMasks[version]&CSM(JISX212)) {
-                myConverterData->myConverterArray[JISX212]  = ucnv_loadSharedData("jisx-212", NULL, errorCode);
+                myConverterData->myConverterArray[JISX212] =
+                    ucnv_loadSharedData("jisx-212", &stackPieces, &stackArgs, errorCode);
             }
             if(jpCharsetMasks[version]&CSM(GB2312)) {
-                myConverterData->myConverterArray[GB2312]   = ucnv_loadSharedData("ibm-5478", NULL, errorCode);   /* gb_2312_80-1 */
+                myConverterData->myConverterArray[GB2312] =
+                    ucnv_loadSharedData("ibm-5478", &stackPieces, &stackArgs, errorCode);   /* gb_2312_80-1 */
             }
             if(jpCharsetMasks[version]&CSM(KSC5601)) {
-                myConverterData->myConverterArray[KSC5601]  = ucnv_loadSharedData("ksc_5601", NULL, errorCode);
+                myConverterData->myConverterArray[KSC5601] =
+                    ucnv_loadSharedData("ksc_5601", &stackPieces, &stackArgs, errorCode);
             }
 
             /* set the function pointers to appropriate funtions */
@@ -496,48 +510,56 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
         else if(myLocale[0]=='k' && (myLocale[1]=='o'|| myLocale[1]=='r') &&
             (myLocale[2]=='_' || myLocale[2]=='\0'))
         {
-            if (version==1){
-                myConverterData->currentConverter=
-                    ucnv_open("icu-internal-25546",errorCode);
-
-                if (U_FAILURE(*errorCode)) {
-                    _ISO2022Close(cnv);
-                    return;
-                }
-
-                (void)uprv_strcpy(myConverterData->name,"ISO_2022,locale=ko,version=1");
-                uprv_memcpy(cnv->subChars, myConverterData->currentConverter->subChars, 4);
-                cnv->subCharLen = myConverterData->currentConverter->subCharLen;
-            }else{
-                myConverterData->currentConverter=ucnv_open("ibm-949",errorCode);
-
-                if (U_FAILURE(*errorCode)) {
-                    _ISO2022Close(cnv);
-                    return;
-                }
-
-                myConverterData->version = 0;
-                (void)uprv_strcpy(myConverterData->name,"ISO_2022,locale=ko,version=0");
+            const char *cnvName;
+            if(version==1) {
+                cnvName="icu-internal-25546";
+            } else {
+                cnvName="ibm-949";
+                myConverterData->version=version=0;
             }
+            if(pArgs->onlyTestIsLoadable) {
+                UErrorCode localStatus=U_ZERO_ERROR;
+                pArgs->isLoadable=ucnv_canCreateConverter(cnvName, &localStatus);
+                uprv_free(cnv->extraInfo);
+                cnv->extraInfo=NULL;
+                return;
+            } else {
+                myConverterData->currentConverter=ucnv_open(cnvName, errorCode);
+                if (U_FAILURE(*errorCode)) {
+                    _ISO2022Close(cnv);
+                    return;
+                }
 
-            /* initialize the state variables */
-            setInitialStateToUnicodeKR(cnv, myConverterData);
-            setInitialStateFromUnicodeKR(cnv, myConverterData);
+                if(version==1) {
+                    (void)uprv_strcpy(myConverterData->name,"ISO_2022,locale=ko,version=1");
+                    uprv_memcpy(cnv->subChars, myConverterData->currentConverter->subChars, 4);
+                    cnv->subCharLen = myConverterData->currentConverter->subCharLen;
+                }else{
+                    (void)uprv_strcpy(myConverterData->name,"ISO_2022,locale=ko,version=0");
+                }
 
-            /* set the function pointers to appropriate funtions */
-            cnv->sharedData=(UConverterSharedData*)&_ISO2022KRData;
-            uprv_strcpy(myConverterData->locale,"ko");
+                /* initialize the state variables */
+                setInitialStateToUnicodeKR(cnv, myConverterData);
+                setInitialStateFromUnicodeKR(cnv, myConverterData);
+
+                /* set the function pointers to appropriate funtions */
+                cnv->sharedData=(UConverterSharedData*)&_ISO2022KRData;
+                uprv_strcpy(myConverterData->locale,"ko");
+            }
         }
         else if(((myLocale[0]=='z' && myLocale[1]=='h') || (myLocale[0]=='c'&& myLocale[1]=='n'))&&
             (myLocale[2]=='_' || myLocale[2]=='\0'))
         {
 
             /* open the required converters and cache them */
-            myConverterData->myConverterArray[GB2312_1]         = ucnv_loadSharedData("ibm-5478", NULL, errorCode);
+            myConverterData->myConverterArray[GB2312_1] =
+                ucnv_loadSharedData("ibm-5478", &stackPieces, &stackArgs, errorCode);
             if(version==1) {
-                myConverterData->myConverterArray[ISO_IR_165]   = ucnv_loadSharedData("iso-ir-165", NULL, errorCode);
+                myConverterData->myConverterArray[ISO_IR_165] =
+                    ucnv_loadSharedData("iso-ir-165", &stackPieces, &stackArgs, errorCode);
             }
-            myConverterData->myConverterArray[CNS_11643]        = ucnv_loadSharedData("cns-11643-1992", NULL, errorCode);
+            myConverterData->myConverterArray[CNS_11643] =
+                ucnv_loadSharedData("cns-11643-1992", &stackPieces, &stackArgs, errorCode);
 
 
             /* set the function pointers to appropriate funtions */
@@ -574,6 +596,10 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
 
         if(U_FAILURE(*errorCode)) {
             _ISO2022Close(cnv);
+        }
+        if(pArgs->onlyTestIsLoadable) {
+            _ISO2022Close(cnv);
+            pArgs->isLoadable=TRUE;
         }
     } else {
         *errorCode = U_MEMORY_ALLOCATION_ERROR;

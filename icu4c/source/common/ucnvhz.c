@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2000-2008, International Business Machines
+*   Copyright (C) 2000-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnvhz.c
@@ -24,6 +24,7 @@
 #include "unicode/uset.h"
 #include "ucnv_bld.h"
 #include "ucnv_cnv.h"
+#include "ucnv_imp.h"
 
 #define UCNV_TILDE 0x7E          /* ~ */
 #define UCNV_OPEN_BRACE 0x7B     /* { */
@@ -65,7 +66,17 @@ typedef struct{
 
 
 static void 
-_HZOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options, UErrorCode *errorCode){
+_HZOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
+    UConverter *gbConverter;
+    if(pArgs->onlyTestIsLoadable) {
+        UErrorCode localStatus = U_ZERO_ERROR;
+        pArgs->isLoadable = ucnv_canCreateConverter("GBK", &localStatus);
+        return;
+    }
+    gbConverter = ucnv_open("GBK", errorCode);
+    if(U_FAILURE(*errorCode)) {
+        return;
+    }
     cnv->toUnicodeStatus = 0;
     cnv->fromUnicodeStatus= 0;
     cnv->mode=0;
@@ -73,9 +84,10 @@ _HZOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options, U
     cnv->extraInfo = uprv_malloc(sizeof(UConverterDataHZ));
     if(cnv->extraInfo != NULL){
         uprv_memset(cnv->extraInfo, 0, sizeof(UConverterDataHZ));
-        ((UConverterDataHZ*)cnv->extraInfo)->gbConverter = ucnv_open("GBK",errorCode);
+        ((UConverterDataHZ*)cnv->extraInfo)->gbConverter = gbConverter;
     }
     else {
+        ucnv_close(gbConverter);
         *errorCode = U_MEMORY_ALLOCATION_ERROR;
         return;
     }

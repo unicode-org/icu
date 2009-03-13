@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -49,9 +49,11 @@ typedef struct UConverterSharedData UConverterSharedData;
 typedef struct {
     int32_t size;               /* sizeof(UConverterLoadArgs) */
     int32_t nestedLoads;        /* count nested ucnv_load() calls */
-    int32_t reserved;           /* reserved - for good alignment of the pointers */
+    UBool onlyTestIsLoadable;   /* input: don't actually load */
+    UBool isLoadable;           /* output, if onlyTestIsLoadable is set */
+    int16_t reserved;           /* reserved - for good alignment of the pointers */
     uint32_t options;
-    const char *pkg, *name;
+    const char *pkg, *name, *locale;
 } UConverterLoadArgs;
 
 typedef void (*UConverterLoad) (UConverterSharedData *sharedData,
@@ -59,7 +61,7 @@ typedef void (*UConverterLoad) (UConverterSharedData *sharedData,
                                 const uint8_t *raw, UErrorCode *pErrorCode);
 typedef void (*UConverterUnload) (UConverterSharedData *sharedData);
 
-typedef void (*UConverterOpen) (UConverter *cnv, const char *name, const char *locale,uint32_t options, UErrorCode *pErrorCode);
+typedef void (*UConverterOpen) (UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *pErrorCode);
 typedef void (*UConverterClose) (UConverter *cnv);
 
 typedef enum UConverterResetChoice {

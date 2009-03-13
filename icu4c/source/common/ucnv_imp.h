@@ -42,6 +42,15 @@
      (name[4]=='8' && name[5]==0) : \
      (name[3]=='8' && name[4]==0)))
 
+typedef struct {
+    char cnvName[UCNV_MAX_CONVERTER_NAME_LENGTH];
+    char locale[ULOC_FULLNAME_CAPACITY];
+    uint32_t options;
+} UConverterNamePieces;
+
+U_CFUNC UBool
+ucnv_canCreateConverter(const char *converterName, UErrorCode *err);
+
 /* figures out if we need to go to file to read in the data tables.
  * @param converterName The name of the converter
  * @param err The error code
@@ -66,28 +75,41 @@ ucnv_createAlgorithmicConverter(UConverter *myUConverter,
                                 const char *locale, uint32_t options,
                                 UErrorCode *err);
 
-/* Creates a converter from shared data 
+/*
+ * Creates a converter from shared data.
+ * Adopts mySharedConverterData: No matter what happens, the caller must not
+ * unload mySharedConverterData, except via ucnv_close(return value)
+ * if this function is successful.
  */
 UConverter*
-ucnv_createConverterFromSharedData(UConverter *myUConverter, UConverterSharedData *mySharedConverterData, const char *realName, const char *locale, uint32_t options, UErrorCode *err);
+ucnv_createConverterFromSharedData(UConverter *myUConverter,
+                                   UConverterSharedData *mySharedConverterData,
+                                   UConverterLoadArgs *pArgs,
+                                   UErrorCode *err);
 
 UConverter* ucnv_createConverterFromPackage(const char *packageName, const char *converterName,  
                                             UErrorCode *err);
-
-typedef struct {
-    char cnvName[UCNV_MAX_CONVERTER_NAME_LENGTH], locale[ULOC_FULLNAME_CAPACITY];
-    const char *realName;
-    uint32_t options;
-} UConverterLookupData;
 
 /**
  * Load a converter but do not create a UConverter object.
  * Simply return the UConverterSharedData.
  * Performs alias lookup etc.
+ * The UConverterNamePieces need not be initialized
+ * before calling this function.
+ * The UConverterLoadArgs must be initialized
+ * before calling this function.
+ * If the args are passed in, then the pieces must be passed in too.
+ * In other words, the following combinations are allowed:
+ * - pieces==NULL && args==NULL
+ * - pieces!=NULL && args==NULL
+ * - pieces!=NULL && args!=NULL
  * @internal
  */
 UConverterSharedData *
-ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UErrorCode * err);
+ucnv_loadSharedData(const char *converterName,
+                    UConverterNamePieces *pieces,
+                    UConverterLoadArgs *pArgs,
+                    UErrorCode * err);
 
 /**
  * This may unload the shared data in a thread safe manner.
