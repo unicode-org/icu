@@ -1090,7 +1090,15 @@ UnicodeStringTest::TestMiscellaneous()
 
     test1.setTo(TRUE, u, -1);
     q=test1.getTerminatedBuffer();
-    if(q!=u || test1.length()!=4 || q[3]!=8 || q[4]!=0) {
+#ifndef U_VALGRIND
+    // The VALGRIND option always copies the buffer for getTerminatedBuffer(),
+    //    to avoid reading uninitialized memory when checking for the termination.
+    if(q!=u) {
+        errln("UnicodeString(u[-1]).getTerminatedBuffer() returns a bad buffer");
+    }
+#endif
+
+    if(test1.length()!=4 || q[3]!=8 || q[4]!=0) {
         errln("UnicodeString(u[-1]).getTerminatedBuffer() returns a bad buffer");
     }
 
