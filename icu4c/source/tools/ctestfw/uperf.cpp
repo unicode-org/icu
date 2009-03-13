@@ -1,12 +1,19 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2002-2008, International Business Machines Corporation and
+ * Copyright (c) 2002-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
 /* z/OS needs this definition for timeval */
 #if !defined(_XOPEN_SOURCE_EXTENDED)
 #define _XOPEN_SOURCE_EXTENDED 1
+#endif
+
+/* Turn off standard c++ string class.  This is an issue when _XOPEN_SOURCE_EXTENDED is turned on. 
+ * Platforms affected: AIX/VACPP and Solaris/GCC 
+ */
+#ifndef U_HAVE_STD_STRING
+#define U_HAVE_STD_STRING 0
 #endif
 
 #include "unicode/uperf.h"
