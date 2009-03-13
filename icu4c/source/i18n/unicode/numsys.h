@@ -123,7 +123,7 @@ public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
-     * @draft ICU 4.0
+     * @draft ICU 4.2
      *
     */
     static UClassID U_EXPORT2 getStaticClassID(void);
@@ -131,7 +131,7 @@ public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @draft ICU 4.0
+     * @draft ICU 4.2
      */
     virtual UClassID getDynamicClassID() const;
 
