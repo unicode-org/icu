@@ -1,40 +1,242 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/en_HK.xml
 // *
 // ***************************************************************************
 en_HK{
-    Currencies{
-        HKD{
-            "$",
-            "Hong Kong Dollar",
-        }
-        USD{
-            "US$",
-            "USD",
+    Countries{
+        HR{"Croatia"}
+        KN{"Saint Kitts and Nevis"}
+        KR{"South Korea"}
+    }
+    Keys{
+        calendar{"calendar"}
+    }
+    Languages{
+        ale{"Aleut"}
+        bej{"Beja"}
+        dra{"Dravidian Language"}
+        ilo{"Iloko"}
+        nds{"Low German"}
+        pra{"Prakrit Language"}
+        tpi{"Tok Pisin"}
+        yi{"Yiddish"}
+    }
+    LanguagesShort{
+        az{"Azeri"}
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤#,##0.00;(¤#,##0.00)",
+        "#,##0%",
+        "#E0",
+    }
+    Scripts{
+        Goth{"Gothic"}
+        Hant{"Traditional Han"}
+        Ital{"Old Italic"}
+        Ogam{"Ogham"}
+        Sgnw{"SignWriting"}
+        Tagb{"Tagbanwa"}
+        Thai{"Thai"}
+    }
+    Types{
+        calendar{
+            ethiopic-amete-alem{"Ethiopic Amete Alem Calendar"}
         }
     }
-    Version{"1.48"}
+    Variants{
+        BOONT{"Boontling"}
+    }
+    Version{"1.139"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
                 1,
-                1,
+                4,
             }
             DateTimePatterns{
                 "h:mm:ss a v",
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
-                "EEEE, d MMMM yyyy",
-                "d MMMM yyyy",
-                "d MMM yyyy",
+                "EEEE, d MMMM y",
+                "d MMMM y",
+                "d MMM y",
                 "dd/MM/yyyy",
                 "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
+            availableFormats{
+                MMM{"LLL"}
+            }
+            intervalFormats{
+                M{
+                    M{"M-M"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    a{"h a - h a"}
+                    h{"h-h a"}
+                }
+                hm{
+                    a{"h:mm a - h:mm a"}
+                    h{"h:mm-h:mm a"}
+                    m{"h:mm-h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a - h:mm a v"}
+                    h{"h:mm-h:mm a v"}
+                    m{"h:mm-h:mm a v"}
+                }
+                hv{
+                    a{"h a - h a v"}
+                    h{"h-h a v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yMEd{
+                    M{"E, M/d/yy – E, M/d/yy"}
+                }
+                yMMM{
+                    M{"MMM-MMM y"}
+                    y{"MMM y - MMM y"}
+                }
+            }
+        }
+    }
+    codePatterns{
+        language{"Language: {0}"}
+    }
+    delimiters{
+        alternateQuotationEnd{"’"}
+    }
+    localeDisplayPattern{
+        separator{", "}
+    }
+    measurementSystemNames{
+        US{"US"}
+    }
+    unitsShort{
+        day{
+            one{"{0} day"}
+            other{"{0} days"}
+        }
+        hour{
+            one{"{0} hr"}
+            other{"{0} hrs"}
+        }
+        minute{
+            one{"{0} min"}
+            other{"{0} mins"}
+        }
+        month{
+            one{"{0} mth"}
+            other{"{0} mths"}
+        }
+        second{
+            one{"{0} sec"}
+            other{"{0} secs"}
+        }
+        week{
+            one{"{0} wk"}
+            other{"{0} wks"}
+        }
+        year{
+            one{"{0} yr"}
+            other{"{0} yrs"}
+        }
+    }
+    zoneStrings{
+        "America:Dawson"{
+            ec{"Dawson"}
+        }
+        "America:Menominee"{
+            ec{"Menominee"}
+        }
+        "Antarctica:Vostok"{
+            ec{"Vostok"}
+        }
+        "meta:Africa_Eastern"{
+            ss{"EAT"}
+        }
+        "meta:Alaska_Hawaii"{
+            sg{"AHT"}
+        }
+        "meta:Atlantic"{
+            ld{"Atlantic Daylight Time"}
+        }
+        "meta:Australia_Western"{
+            ss{"AWST"}
+        }
+        "meta:Bhutan"{
+            ls{"Bhutan Time"}
+        }
+        "meta:Cape_Verde"{
+            ld{"Cape Verde Summer Time"}
+        }
+        "meta:Cocos"{
+            ss{"CCT"}
+        }
+        "meta:DumontDUrville"{
+            ss{"DDUT"}
+        }
+        "meta:Gulf"{
+            lg{"Gulf Time"}
+        }
+        "meta:Korea"{
+            lg{"Korean Time"}
+        }
+        "meta:Kwajalein"{
+            ls{"Kwajalein Time"}
+        }
+        "meta:Mongolia"{
+            ls{"Ulan Bator Time"}
+        }
+        "meta:Noronha"{
+            ld{"Fernando de Noronha Summer Time"}
+        }
+        "meta:Pakistan"{
+            sd{"PKST"}
+        }
+        "meta:Ponape"{
+            ls{"Ponape Time"}
+        }
+        "meta:Shevchenko"{
+            ld{"Shevchenko Summer Time"}
+        }
+        "meta:Suriname"{
+            ls{"Suriname Time"}
+        }
+        "meta:Turkey"{
+            sd{"TRST"}
+        }
+        "meta:Uralsk"{
+            sd{"URAST"}
+        }
+        "meta:Vanuatu"{
+            ss{"VUT"}
+        }
+        "meta:Wake"{
+            ls{"Wake Island Time"}
+        }
+        "meta:Yerevan"{
+            ld{"Yerevan Summer Time"}
+        }
+        "meta:Yukon"{
+            ld{"Yukon Daylight Time"}
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/gl.xml
@@ -303,7 +303,7 @@ gl{
             "Peso arxentino (1983-1985)",
         }
         ARS{
-            "ARS",
+            "AR$",
             "Peso arxentino",
         }
         BEC{
@@ -311,7 +311,7 @@ gl{
             "Franco belga (convertible)",
         }
         BEF{
-            "BEF",
+            "BF",
             "Franco belga",
         }
         BEL{
@@ -319,11 +319,11 @@ gl{
             "Franco belga (financeiro)",
         }
         BOB{
-            "BOB",
+            "Bs",
             "Boliviano",
         }
         BOP{
-            "BOP",
+            "$b.",
             "Peso boliviano",
         }
         BOV{
@@ -331,15 +331,15 @@ gl{
             "MVDOL boliviano",
         }
         BRB{
-            "BRB",
+            "NCr",
             "Cruzeiro novo brasileiro (1967-1986)",
         }
         BRC{
-            "BRC",
+            "Cz$",
             "Cruzado brasileiro",
         }
         BRE{
-            "BRE",
+            "Cr$",
             "Cruzeiro brasileiro (1990-1993)",
         }
         BRL{
@@ -347,19 +347,19 @@ gl{
             "Real brasileiro",
         }
         BRN{
-            "BRN",
+            "NCz$",
             "Cruzado novo brasileiro",
         }
         BRR{
-            "BRR",
+            "CR$",
             "Cruzeiro brasileiro",
         }
         CAD{
-            "CAD",
+            "CA$",
             "Dólar canadiano",
         }
         CHF{
-            "CHF",
+            "Fr.",
             "Franco suizo",
         }
         CLF{
@@ -367,35 +367,35 @@ gl{
             "Unidades de fomento chilenas",
         }
         CLP{
-            "CLP",
+            "CL$",
             "Peso chileno",
         }
         CNY{
-            "CNY",
+            "CN¥",
             "Iuan renminbi chinés",
         }
         COP{
-            "COP",
+            "CO$",
             "Peso colombiano",
         }
         CRC{
-            "CRC",
+            "₡",
             "Colón costarricense",
         }
         CUP{
-            "CUP",
+            "CU$",
             "Peso cubano",
         }
         DEM{
-            "DEM",
+            "DM",
             "Marco alemán",
         }
         DKK{
-            "DKK",
+            "Dkr",
             "Coroa dinamarquesa",
         }
         DOP{
-            "DOP",
+            "RD$",
             "Peso dominicano",
         }
         ECS{
@@ -431,19 +431,19 @@ gl{
             "Euro",
         }
         FRF{
-            "FRF",
+            "₣",
             "Franco francés",
         }
         GBP{
-            "UK£",
+            "£",
             "Libra esterlina",
         }
         GIP{
-            "GIP",
+            "GI£",
             "Libra de Xibraltar",
         }
         GNF{
-            "GNF",
+            "FG",
             "Franco guineano",
         }
         GNS{
@@ -455,7 +455,7 @@ gl{
             "Ekwele guineana",
         }
         GRD{
-            "GRD",
+            "₯",
             "Dracma grego",
         }
         GTQ{
@@ -467,19 +467,19 @@ gl{
             "Lempira hondureño",
         }
         HUF{
-            "HUF",
+            "Ft",
             "Florín húngaro",
         }
         IEP{
-            "IEP",
+            "IR£",
             "Libra irlandesa",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
+            "₨",
             "Rupia india",
         }
         ISK{
-            "ISK",
+            "Ikr",
             "Coroa islandesa",
         }
         ITL{
@@ -515,7 +515,7 @@ gl{
             "Peso mexicano",
         }
         MXP{
-            "MXP",
+            "MX$",
             "Peso de prata mexicano (1861-1992)",
         }
         MXV{
@@ -527,27 +527,27 @@ gl{
             "Córdoba nicaragüense",
         }
         NIO{
-            "NIO",
+            "C$",
             "Córdoba de ouro nicaragüense",
         }
         NLG{
-            "NLG",
+            "fl",
             "Florín holandés",
         }
         NOK{
-            "NOK",
+            "Nkr",
             "Coroa norueguesa",
         }
         PAB{
-            "PAB",
+            "B/.",
             "Balboa panameño",
         }
         PEI{
-            "PEI",
+            "I/.",
             "Inti peruano",
         }
         PEN{
-            "PEN",
+            "S/.",
             "Sol novo peruano",
         }
         PES{
@@ -555,15 +555,15 @@ gl{
             "Sol peruano",
         }
         PHP{
-            "PHP",
+            "₱",
             "Peso filipino",
         }
         PTE{
-            "PTE",
+            "Esc",
             "Escudo portugués",
         }
         PYG{
-            "PYG",
+            "₲",
             "Guaraní paraguaio",
         }
         RUB{
@@ -575,7 +575,7 @@ gl{
             "Rublo ruso (1991-1998)",
         }
         SEK{
-            "SEK",
+            "Skr",
             "Coroa sueca",
         }
         SUR{
@@ -583,7 +583,7 @@ gl{
             "Rublo soviético",
         }
         SVC{
-            "SVC",
+            "SV₡",
             "Colón salvadoreño",
         }
         USD{
@@ -599,15 +599,15 @@ gl{
             "Peso uruguaio (1975-1993)",
         }
         UYU{
-            "UYU",
+            "$U",
             "Peso uruguaio",
         }
         VEB{
-            "VEB",
+            "Bs.",
             "Bolívar venezolano",
         }
         VEF{
-            "VEF",
+            "Bs.F.",
             "Bolívar forte venezolano",
         }
         XAG{
@@ -631,7 +631,7 @@ gl{
             "Unidade monetaria descoñecida ou non válida",
         }
         ZAR{
-            "ZAR",
+            "R",
             "Rand sudafricano",
         }
     }
@@ -1003,7 +1003,7 @@ gl{
             traditional{"orde tradicional"}
         }
     }
-    Version{"1.60"}
+    Version{"1.139"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1015,10 +1015,13 @@ gl{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE dd MMMM yyyy",
-                "dd MMMM yyyy",
-                "d MMM, yyyy",
+                "EEEE dd MMMM y",
+                "dd MMMM y",
+                "d MMM, y",
                 "dd/MM/yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1} {0}",
             }
             availableFormats{
@@ -1035,17 +1038,17 @@ gl{
                 Md{"d-M"}
                 d{"d"}
                 ms{"mm:ss"}
-                y{"yyyy"}
+                y{"y"}
                 yM{"M-yyyy"}
                 yMEd{"EEE, d-M-yyyy"}
-                yMMM{"MMM yyyy"}
-                yMMMEd{"EEE, d MMM yyyy"}
-                yMMMM{"MMMM yyyy"}
+                yMMM{"MMM y"}
+                yMMMEd{"EEE, d MMM y"}
+                yMMMM{"MMMM y"}
                 yQ{"Q yyyy"}
-                yQQQ{"QQQ yyyy"}
+                yQQQ{"QQQ y"}
                 yyMM{"MM/yy"}
                 yyQ{"Q yy"}
-                yyyyMMMM{"MMMM yyyy"}
+                yyyyMMMM{"MMMM y"}
             }
             dayNames{
                 format{

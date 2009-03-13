@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fo.xml
@@ -170,7 +170,7 @@ fo{
         "#,##0%",
         "#E0",
     }
-    Version{"1.61"}
+    Version{"1.139"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -178,10 +178,13 @@ fo{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE dd MMMM yyyy",
-                "d. MMM yyyy",
+                "EEEE dd MMMM y",
+                "d. MMM y",
                 "dd-MM-yyyy",
                 "dd-MM-yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1} {0}",
             }
             dayNames{

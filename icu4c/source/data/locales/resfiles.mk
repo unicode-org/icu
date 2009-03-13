@@ -1,6 +1,6 @@
-# *   Copyright (C) 1998-2008, International Business Machines
+# *   Copyright (C) 1998-2009, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
-GENRB_CLDR_VERSION = 1.6
+GENRB_CLDR_VERSION = 1.7
 # A list of txt's to build
 # Note: 
 #

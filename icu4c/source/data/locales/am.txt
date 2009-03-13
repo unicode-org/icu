@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/am.xml
@@ -283,7 +283,7 @@ am{
     LocaleScript{
         "Ethi",
     }
-    Version{"1.77"}
+    Version{"1.139"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -291,10 +291,13 @@ am{
                 "hh:mm:ss a z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, yyyy MMMM dd",
-                "yyyy MMMM d",
-                "yyyy MMM d",
+                "EEEE, y MMMM dd",
+                "y MMMM d",
+                "y MMM d",
                 "yyyy-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1} {0}",
             }
             dayNames{

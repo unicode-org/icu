@@ -24,12 +24,33 @@ ar_MA{
     Scripts{
         Ital{"اللأيطالية القديمة"}
     }
-    Version{"1.46"}
+    Version{"1.139"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
                 7,
-                1,
+                4,
+            }
+            availableFormats{
+                yM{"M‏/yyyy"}
+                yyyyMMMM{"MMMM، y"}
+            }
+            intervalFormats{
+                MMMd{
+                    d{"d‏-d MMM"}
+                }
+                d{
+                    d{"d‏-d"}
+                }
+                y{
+                    y{"y‏-y"}
+                }
+                yMMMM{
+                    M{"MM ‏- MM ‏–yyyy"}
+                }
+                yMMMd{
+                    d{"d‏–d MMM، y"}
+                }
             }
             weekend:intvector{
                 6,

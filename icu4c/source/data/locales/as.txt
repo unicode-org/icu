@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/as.xml
@@ -82,7 +82,7 @@ as{
             traditional{"পৰম্পৰাগতভাবে শৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম"}
         }
     }
-    Version{"1.49"}
+    Version{"1.139"}
     calendar{
         gregorian{
             AmPmMarkers{

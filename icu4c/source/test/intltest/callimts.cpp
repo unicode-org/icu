@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation
+ * Copyright (c) 1997-2009, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -337,6 +337,7 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
             mark += 5000; // 5 sec
         }
         cal.setTime(greg.getTime(status), status);
+        cal.setMinimalDaysInFirstWeek(1);
         if (failure(status, "Calendar set/getTime")) {
             return;
         }

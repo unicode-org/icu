@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh.xml
@@ -134,7 +134,7 @@ zh{
         GP{"瓜德罗普岛"}
         GQ{"赤道几内亚"}
         GR{"希腊"}
-        GS{"南佐治亚和南三明治群岛"}
+        GS{"南乔治亚岛和南桑威齐群岛"}
         GT{"危地马拉"}
         GU{"关岛"}
         GW{"几内亚比绍"}
@@ -310,7 +310,7 @@ zh{
             "阿富汗尼 (1927-2002)",
         }
         AFN{
-            "AFN",
+            "Af",
             "阿富汗尼",
         }
         ALL{
@@ -322,11 +322,11 @@ zh{
             "亚美尼亚德拉姆",
         }
         ANG{
-            "ANG",
+            "NAf.",
             "荷兰安替兰盾",
         }
         AOA{
-            "AOA",
+            "Kz",
             "安哥拉宽扎",
         }
         AOK{
@@ -342,7 +342,7 @@ zh{
             "安哥拉宽扎 Reajustado (1995-1999)",
         }
         ARA{
-            "ARA",
+            "₳",
             "阿根廷奥斯特",
         }
         ARP{
@@ -350,7 +350,7 @@ zh{
             "阿根廷比索 (1983-1985)",
         }
         ARS{
-            "ARS",
+            "AR$",
             "阿根廷比索",
         }
         ATS{
@@ -358,11 +358,11 @@ zh{
             "奥地利先令",
         }
         AUD{
-            "AUD",
+            "AU$",
             "澳大利亚元",
         }
         AWG{
-            "AWG",
+            "Afl.",
             "阿鲁巴基尔德元",
         }
         AZM{
@@ -370,7 +370,7 @@ zh{
             "阿塞拜疆马纳特 (1993-2006)",
         }
         AZN{
-            "AZN",
+            "man.",
             "阿塞拜疆马纳特",
         }
         BAD{
@@ -378,15 +378,15 @@ zh{
             "波士尼亚-赫塞哥维纳第纳尔",
         }
         BAM{
-            "BAM",
+            "KM",
             "波士尼亚-赫塞哥维纳兑换券",
         }
         BBD{
-            "BBD",
+            "Bds$",
             "巴巴多斯元",
         }
         BDT{
-            "BDT",
+            "Tk",
             "孟加拉塔卡",
         }
         BEC{
@@ -394,7 +394,7 @@ zh{
             "比利时法郎兑换券",
         }
         BEF{
-            "BEF",
+            "BF",
             "比利时法郎",
         }
         BEL{
@@ -410,27 +410,27 @@ zh{
             "保加利亚新列弗",
         }
         BHD{
-            "BHD",
+            "BD",
             "巴林第纳尔",
         }
         BIF{
-            "BIF",
+            "FBu",
             "布隆迪法郎",
         }
         BMD{
-            "BMD",
+            "BD$",
             "百慕大元",
         }
         BND{
-            "BND",
+            "BN$",
             "文莱元",
         }
         BOB{
-            "BOB",
+            "Bs",
             "玻利维亚诺",
         }
         BOP{
-            "BOP",
+            "$b.",
             "玻利维亚比索",
         }
         BOV{
@@ -438,15 +438,15 @@ zh{
             "玻利维亚 Mvdol（资金）",
         }
         BRB{
-            "BRB",
+            "NCr",
             "巴西克鲁赛罗 Novo (1967-1986)",
         }
         BRC{
-            "BRC",
+            "Cz$",
             "巴西克鲁扎多",
         }
         BRE{
-            "BRE",
+            "Cr$",
             "巴西克鲁塞罗 (1990-1993)",
         }
         BRL{
@@ -454,19 +454,19 @@ zh{
             "巴西雷亚尔",
         }
         BRN{
-            "BRN",
+            "NCz$",
             "巴西克鲁扎多 Novo",
         }
         BRR{
-            "BRR",
+            "CR$",
             "巴西克鲁塞罗",
         }
         BSD{
-            "BSD",
+            "BS$",
             "巴哈马元",
         }
         BTN{
-            "BTN",
+            "Nu.",
             "不丹努扎姆",
         }
         BUK{
@@ -486,11 +486,11 @@ zh{
             "白俄罗斯卢布",
         }
         BZD{
-            "BZD",
+            "BZ$",
             "伯利兹元",
         }
         CAD{
-            "CAD",
+            "CA$",
             "加拿大元",
         }
         CDF{
@@ -498,7 +498,7 @@ zh{
             "刚果法郎",
         }
         CHF{
-            "CHF",
+            "Fr.",
             "瑞士法郎",
         }
         CLF{
@@ -506,7 +506,7 @@ zh{
             "智利 Unidades de Fomento（资金）",
         }
         CLP{
-            "CLP",
+            "CL$",
             "智利比索",
         }
         CNY{
@@ -514,11 +514,11 @@ zh{
             "人民币",
         }
         COP{
-            "COP",
+            "CO$",
             "哥伦比亚比索",
         }
         CRC{
-            "CRC",
+            "₡",
             "哥斯达黎加科朗",
         }
         CSD{
@@ -530,19 +530,19 @@ zh{
             "捷克硬克郎",
         }
         CUP{
-            "CUP",
+            "CU$",
             "古巴比索",
         }
         CVE{
-            "CVE",
+            "CV$",
             "佛得角埃斯库多",
         }
         CYP{
-            "CYP",
+            "CY£",
             "塞浦路斯镑",
         }
         CZK{
-            "CZK",
+            "Kč",
             "捷克克郎",
         }
         DDM{
@@ -550,23 +550,23 @@ zh{
             "东德奥斯特马克",
         }
         DEM{
-            "DEM",
+            "DM",
             "德国马克",
         }
         DJF{
-            "DJF",
+            "Fdj",
             "吉布提法郎",
         }
         DKK{
-            "DKK",
+            "Dkr",
             "丹麦克朗",
         }
         DOP{
-            "DOP",
+            "RD$",
             "多米尼加比索",
         }
         DZD{
-            "DZD",
+            "DA",
             "阿尔及利亚第纳尔",
         }
         ECS{
@@ -578,19 +578,15 @@ zh{
             "厄瓜多尔 Unidad de Valor Constante (UVC)",
         }
         EEK{
-            "EEK",
+            "Ekr",
             "爱沙尼亚克朗",
         }
         EGP{
-            "EGP",
+            "EG£",
             "埃及镑",
         }
-        EQE{
-            "EQE",
-            "埃奎勒",
-        }
         ERN{
-            "ERN",
+            "Nfk",
             "厄立特里亚纳克法",
         }
         ESA{
@@ -602,11 +598,11 @@ zh{
             "西班牙比塞塔（兑换帐户）",
         }
         ESP{
-            "ESP",
+            "Pts",
             "西班牙比塞塔",
         }
         ETB{
-            "ETB",
+            "Br",
             "埃塞俄比亚比尔",
         }
         EUR{
@@ -614,23 +610,23 @@ zh{
             "欧元",
         }
         FIM{
-            "FIM",
+            "mk",
             "芬兰马克",
         }
         FJD{
-            "FJD",
+            "FJ$",
             "斐济元",
         }
         FKP{
-            "FKP",
+            "FK£",
             "福克兰镑",
         }
         FRF{
-            "FRF",
+            "₣",
             "法国法郎",
         }
         GBP{
-            "UK£",
+            "£",
             "英镑",
         }
         GEK{
@@ -642,15 +638,15 @@ zh{
             "乔治亚拉瑞",
         }
         GHC{
-            "GHC",
+            "₵",
             "加纳塞第",
         }
         GHS{
-            "GHS",
+            "GH₵",
             "加纳塞迪",
         }
         GIP{
-            "GIP",
+            "GI£",
             "直布罗陀镑",
         }
         GMD{
@@ -658,7 +654,7 @@ zh{
             "冈比亚达拉西",
         }
         GNF{
-            "GNF",
+            "FG",
             "几内亚法郎",
         }
         GNS{
@@ -670,7 +666,7 @@ zh{
             "赤道几内亚埃奎勒",
         }
         GRD{
-            "GRD",
+            "₯",
             "希腊德拉克马",
         }
         GTQ{
@@ -686,7 +682,7 @@ zh{
             "几内亚比绍比索",
         }
         GYD{
-            "GYD",
+            "GY$",
             "圭亚那元",
         }
         HKD{
@@ -702,7 +698,7 @@ zh{
             "克罗地亚第纳尔",
         }
         HRK{
-            "HRK",
+            "kn",
             "克罗地亚库纳",
         }
         HTG{
@@ -710,27 +706,27 @@ zh{
             "海地古德",
         }
         HUF{
-            "HUF",
+            "Ft",
             "匈牙利福林",
         }
         IDR{
-            "IDR",
+            "Rp",
             "印度尼西亚盾",
         }
         IEP{
-            "IEP",
+            "IR£",
             "爱尔兰镑",
         }
         ILP{
-            "ILP",
+            "I£",
             "以色列镑",
         }
         ILS{
-            "ILS",
+            "₪",
             "以色列新谢克尔",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
+            "₨",
             "印度卢比",
         }
         IQD{
@@ -742,7 +738,7 @@ zh{
             "伊朗里亚尔",
         }
         ISK{
-            "ISK",
+            "Ikr",
             "冰岛克朗",
         }
         ITL{
@@ -750,11 +746,11 @@ zh{
             "意大利里拉",
         }
         JMD{
-            "JMD",
+            "J$",
             "牙买加元",
         }
         JOD{
-            "JOD",
+            "JD",
             "约旦第纳尔",
         }
         JPY{
@@ -762,7 +758,7 @@ zh{
             "日元",
         }
         KES{
-            "KES",
+            "Ksh",
             "肯尼亚先令",
         }
         KGS{
@@ -774,11 +770,11 @@ zh{
             "柬埔寨瑞尔",
         }
         KMF{
-            "KMF",
+            "CF",
             "科摩罗法郎",
         }
         KPW{
-            "KPW",
+            "KP₩",
             "朝鲜圆",
         }
         KRW{
@@ -786,11 +782,11 @@ zh{
             "韩圆",
         }
         KWD{
-            "KWD",
+            "KD",
             "科威特第纳尔",
         }
         KYD{
-            "KYD",
+            "KY$",
             "开曼元",
         }
         KZT{
@@ -798,31 +794,27 @@ zh{
             "哈萨克斯坦坚戈",
         }
         LAK{
-            "LAK",
+            "₭",
             "老挝基普",
         }
         LBP{
-            "LBP",
+            "LB£",
             "黎巴嫩镑",
         }
         LKR{
-            "LKR",
+            "SLRs",
             "斯里兰卡卢比",
         }
         LRD{
-            "LRD",
+            "L$",
             "利比亚元",
         }
         LSL{
             "LSL",
             "莱索托洛蒂",
         }
-        LSM{
-            "LSM",
-            "马洛蒂",
-        }
         LTL{
-            "LTL",
+            "Lt",
             "立陶宛立特",
         }
         LTT{
@@ -842,7 +834,7 @@ zh{
             "卢森堡金融法郎",
         }
         LVL{
-            "LVL",
+            "Ls",
             "拉脱维亚拉特",
         }
         LVR{
@@ -850,7 +842,7 @@ zh{
             "拉脱维亚卢布",
         }
         LYD{
-            "LYD",
+            "LD",
             "利比亚第纳尔",
         }
         MAD{
@@ -886,7 +878,7 @@ zh{
             "缅甸开亚特",
         }
         MNT{
-            "MNT",
+            "₮",
             "蒙古图格里克",
         }
         MOP{
@@ -894,27 +886,27 @@ zh{
             "澳门元",
         }
         MRO{
-            "MRO",
+            "UM",
             "毛里塔尼亚乌吉亚",
         }
         MTL{
-            "MTL",
+            "Lm",
             "马耳他里拉",
         }
         MTP{
-            "MTP",
+            "MT£",
             "马耳他镑",
         }
         MUR{
-            "MUR",
+            "MURs",
             "毛里求斯卢比",
         }
         MVR{
-            "MVR",
+            "Rf",
             "马尔代夫拉菲亚",
         }
         MWK{
-            "MWK",
+            "MK",
             "马拉维克瓦查",
         }
         MXN{
@@ -922,7 +914,7 @@ zh{
             "墨西哥比索",
         }
         MXP{
-            "MXP",
+            "MX$",
             "墨西哥银比索 (1861-1992)",
         }
         MXV{
@@ -930,7 +922,7 @@ zh{
             "墨西哥 Unidad de Inversion (UDI)（资金）",
         }
         MYR{
-            "MYR",
+            "RM",
             "马来西亚林吉特",
         }
         MZE{
@@ -938,19 +930,19 @@ zh{
             "莫桑比克埃斯库多",
         }
         MZM{
-            "MZM",
+            "Mt",
             "莫桑比克梅蒂卡尔",
         }
         MZN{
-            "MZN",
+            "MTn",
             "莫桑比克美提卡",
         }
         NAD{
-            "NAD",
+            "N$",
             "纳米比亚元",
         }
         NGN{
-            "NGN",
+            "₦",
             "尼日利亚奈拉",
         }
         NIC{
@@ -958,23 +950,23 @@ zh{
             "尼加拉瓜科多巴",
         }
         NIO{
-            "NIO",
+            "C$",
             "尼加拉瓜金科多巴",
         }
         NLG{
-            "NLG",
+            "fl",
             "荷兰盾",
         }
         NOK{
-            "NOK",
+            "Nkr",
             "挪威克朗",
         }
         NPR{
-            "NPR",
+            "NPRs",
             "尼泊尔卢比",
         }
         NZD{
-            "NZD",
+            "NZ$",
             "新西兰元",
         }
         OMR{
@@ -982,15 +974,15 @@ zh{
             "阿曼里亚尔",
         }
         PAB{
-            "PAB",
+            "B/.",
             "巴拿马巴波亚",
         }
         PEI{
-            "PEI",
+            "I/.",
             "秘鲁印锑",
         }
         PEN{
-            "PEN",
+            "S/.",
             "秘鲁新索尔",
         }
         PES{
@@ -1002,15 +994,15 @@ zh{
             "巴布亚新几内亚基那",
         }
         PHP{
-            "PHP",
+            "₱",
             "菲律宾比索",
         }
         PKR{
-            "PKR",
+            "PKRs",
             "巴基斯坦卢比",
         }
         PLN{
-            "PLN",
+            "zł",
             "波兰兹罗提",
         }
         PLZ{
@@ -1018,19 +1010,19 @@ zh{
             "波兰兹罗提 (1950-1995)",
         }
         PTE{
-            "PTE",
+            "Esc",
             "葡萄牙埃斯库多",
         }
         PYG{
-            "PYG",
+            "₲",
             "巴拉圭瓜拉尼",
         }
         QAR{
-            "QAR",
+            "QR",
             "卡塔尔里亚尔",
         }
         RHD{
-            "RHD",
+            "RH$",
             "罗得西亚元",
         }
         ROL{
@@ -1042,7 +1034,7 @@ zh{
             "罗马尼亚列伊",
         }
         RSD{
-            "RSD",
+            "din.",
             "塞尔维亚第纳尔",
         }
         RUB{
@@ -1054,7 +1046,7 @@ zh{
             "俄国卢布 (1991-1998)",
         }
         RWF{
-            "RWF",
+            "RF",
             "卢旺达法郎",
         }
         SAR{
@@ -1062,15 +1054,15 @@ zh{
             "沙特里亚尔",
         }
         SBD{
-            "SBD",
+            "SI$",
             "所罗门群岛元",
         }
         SCR{
-            "SCR",
+            "SRe",
             "塞舌尔卢比",
         }
         SDD{
-            "SDD",
+            "LSd",
             "苏丹第纳尔",
         }
         SDG{
@@ -1082,7 +1074,7 @@ zh{
             "旧苏丹镑",
         }
         SEK{
-            "SEK",
+            "Skr",
             "瑞典克朗",
         }
         SGD{
@@ -1090,7 +1082,7 @@ zh{
             "新加坡元",
         }
         SHP{
-            "SHP",
+            "SH£",
             "圣赫勒拿镑",
         }
         SIT{
@@ -1098,27 +1090,27 @@ zh{
             "斯洛文尼亚托拉尔",
         }
         SKK{
-            "SKK",
+            "Sk",
             "斯洛伐克克朗",
         }
         SLL{
-            "SLL",
+            "Le",
             "塞拉利昂利昂",
         }
         SOS{
-            "SOS",
+            "Ssh",
             "索马里先令",
         }
         SRD{
-            "SRD",
+            "SR$",
             "苏里南元",
         }
         SRG{
-            "SRG",
+            "Sf",
             "苏里南盾",
         }
         STD{
-            "STD",
+            "Db",
             "圣多美和普林西比多布拉",
         }
         SUR{
@@ -1126,11 +1118,11 @@ zh{
             "苏联卢布",
         }
         SVC{
-            "SVC",
+            "SV₡",
             "萨尔瓦多科朗",
         }
         SYP{
-            "SYP",
+            "SY£",
             "叙利亚镑",
         }
         SZL{
@@ -1138,7 +1130,7 @@ zh{
             "斯威士兰里兰吉尼",
         }
         THB{
-            "THB",
+            "฿",
             "泰铢",
         }
         TJR{
@@ -1154,11 +1146,11 @@ zh{
             "土库曼斯坦马纳特",
         }
         TND{
-            "TND",
+            "DT",
             "突尼斯第纳尔",
         }
         TOP{
-            "TOP",
+            "T$",
             "汤加潘加",
         }
         TPE{
@@ -1166,15 +1158,15 @@ zh{
             "帝汶埃斯库多",
         }
         TRL{
-            "TRL",
+            "TL",
             "土耳其里拉",
         }
         TRY{
-            "TRY",
+            "YTL",
             "新土耳其里拉",
         }
         TTD{
-            "TTD",
+            "TT$",
             "特立尼达和多巴哥元",
         }
         TWD{
@@ -1182,11 +1174,11 @@ zh{
             "新台币元",
         }
         TZS{
-            "TZS",
+            "TSh",
             "坦桑尼亚先令",
         }
         UAH{
-            "UAH",
+            "₴",
             "乌克兰格里夫尼亚",
         }
         UAK{
@@ -1198,7 +1190,7 @@ zh{
             "乌干达先令 (1966-1987)",
         }
         UGX{
-            "UGX",
+            "USh",
             "乌干达先令",
         }
         USD{
@@ -1218,7 +1210,7 @@ zh{
             "乌拉圭新比索 (1975-1993)",
         }
         UYU{
-            "UYU",
+            "$U",
             "乌拉圭比索",
         }
         UZS{
@@ -1226,27 +1218,27 @@ zh{
             "乌兹别克斯苏姆",
         }
         VEB{
-            "VEB",
+            "Bs.",
             "委内瑞拉博利瓦",
         }
         VEF{
-            "VEF",
-            "Venezuelan Bolivar Fuerte",
+            "Bs.F.",
+            "委内瑞拉强势玻利瓦",
         }
         VND{
-            "VND",
+            "₫",
             "越南盾",
         }
         VUV{
-            "VUV",
+            "VT",
             "瓦努阿图瓦图",
         }
         WST{
-            "WST",
+            "WS$",
             "西萨摩亚塔拉",
         }
         XAF{
-            "XAF",
+            "FCFA",
             "中非金融合作法郎",
         }
         XAG{
@@ -1274,7 +1266,7 @@ zh{
             "欧洲计算单位 (XBD)",
         }
         XCD{
-            "XCD",
+            "EC$",
             "东加勒比元",
         }
         XDR{
@@ -1294,7 +1286,7 @@ zh{
             "法国 UIC 法郎",
         }
         XOF{
-            "XOF",
+            "CFA",
             "非洲金融共同体法郎",
         }
         XPD{
@@ -1302,7 +1294,7 @@ zh{
             "钯",
         }
         XPF{
-            "XPF",
+            "CFPF",
             "太平洋法郎",
         }
         XPT{
@@ -1326,7 +1318,7 @@ zh{
             "也门第纳尔",
         }
         YER{
-            "YER",
+            "YR",
             "也门里亚尔",
         }
         YUD{
@@ -1346,15 +1338,15 @@ zh{
             "南非兰特 (金融)",
         }
         ZAR{
-            "ZAR",
+            "R",
             "南非兰特",
         }
         ZMK{
-            "ZMK",
+            "ZK",
             "赞比亚克瓦查",
         }
         ZRN{
-            "ZRN",
+            "NZ",
             "新扎伊尔",
         }
         ZRZ{
@@ -1362,7 +1354,7 @@ zh{
             "扎伊尔",
         }
         ZWD{
-            "ZWD",
+            "Z$",
             "津巴布韦元",
         }
     }
@@ -2099,10 +2091,11 @@ zh{
         AREVMDA{"西亚美尼亚语"}
         FONIPA{"国际音标"}
         POLYTON{"多音"}
+        POSIX{"电脑"}
         REVISED{"已修订的拼字学"}
         SAAHO{"萨霍"}
     }
-    Version{"1.134"}
+    Version{"1.139"}
     calendar{
         chinese{
             availableFormats{
@@ -2119,10 +2112,13 @@ zh{
                 "ahh时mm分ss秒z",
                 "ahh:mm:ss",
                 "ah:mm",
-                "yyyy年M月d日EEEE",
-                "yyyy年M月d日",
+                "y年M月d日EEEE",
+                "y年M月d日",
                 "yyyy-M-d",
                 "yy-M-d",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1} {0}",
             }
             availableFormats{
@@ -2144,21 +2140,21 @@ zh{
                 d{"d日"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
-                y{"yyyy年"}
+                y{"y年"}
                 yM{"yyyy-M"}
-                yMEd{"yyyy年M月d日，E"}
-                yMMM{"yyyy年MMM"}
-                yMMMd{"yyyy年MMMd日"}
-                yMMMEd{"yyyy年MMMd日EEE"}
-                yMMMM{"yyyy年MMMM"}
-                yQ{"yyyy年QQQ"}
+                yMEd{"y年M月d日，E"}
+                yMMM{"y年MMM"}
+                yMMMEd{"y年MMMd日EEE"}
+                yMMMM{"y年MMMM"}
+                yMMMd{"y年MMMd日"}
+                yQ{"y年QQQ"}
                 yQQQ{"y年QQQ"}
                 yyMM{"yy-MM"}
                 yyMMM{"yy年MMM"}
                 yyQ{"yy年第Q季度"}
-                yyyy{"yyyy年"}
-                yyyyM{"yyyy年M月"}
-                yyyyMMMM{"yyyy年MMMM"}
+                yyyy{"y年"}
+                yyyyM{"y年M月"}
+                yyyyMMMM{"y年MMMM"}
             }
             dayNames{
                 format{
@@ -2303,18 +2299,18 @@ zh{
                     y{"yy-M-dE至yy-M-dE"}
                 }
                 yMMM{
-                    M{"yyyy年M月至M月"}
-                    y{"yyyy年M月至yyyy年M月"}
+                    M{"y年M月至M月"}
+                    y{"y年M月至y年M月"}
                 }
                 yMMMEd{
-                    M{"yyyy年M月d日E至M月d日E"}
-                    d{"yyyy年M月d日E至d日E"}
-                    y{"yyyy年M月d日E至yyyy年M月d日E"}
+                    M{"y年M月d日E至M月d日E"}
+                    d{"y年M月d日E至d日E"}
+                    y{"y年M月d日E至y年M月d日E"}
                 }
                 yMMMd{
-                    M{"yyyy年M月d日至M月d日"}
-                    d{"yyyy年M月d日至d日"}
-                    y{"yyyy年M月d日至yyyy年M月d日"}
+                    M{"y年M月d日至M月d日"}
+                    d{"y年M月d日至d日"}
+                    y{"y年M月d日至y年M月d日"}
                 }
                 yMd{
                     M{"yy-M-d至yy-M-d"}
@@ -2337,6 +2333,20 @@ zh{
                         "10月",
                         "11月",
                         "12月",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6月",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
                     }
                     wide{
                         "1月",
@@ -2369,18 +2379,18 @@ zh{
                         "十二月",
                     }
                     narrow{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
                         "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
                     }
                     wide{
                         "一月",
@@ -2438,7 +2448,10 @@ zh{
                 "Gy年M月d日",
                 "Gy-M-d",
                 "Gy-M-d",
-                "{1} {0}",
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
             }
             eras{
                 abbreviated{
@@ -2472,7 +2485,30 @@ zh{
             other{"{0}日"}
         }
         hour{
-            other{"{0}时"}
+            other{"{0}小时"}
+        }
+        minute{
+            other{"{0}分"}
+        }
+        month{
+            other{"{0}月"}
+        }
+        second{
+            other{"{0}秒"}
+        }
+        week{
+            other{"{0}周"}
+        }
+        year{
+            other{"{0}年"}
+        }
+    }
+    unitsShort{
+        day{
+            other{"{0}日"}
+        }
+        hour{
+            other{"{0}小时"}
         }
         minute{
             other{"{0}分"}
@@ -4231,7 +4267,8 @@ zh{
             ls{"育空标准时间"}
         }
         gmtFormat{"格林尼治标准时间{0}"}
+        gmtZeroFormat{"格林尼治标准时间"}
         hourFormat{"+HHmm;-HHmm"}
-        regionFormat{"{0}"}
+        regionFormat{"{0}时间"}
     }
 }

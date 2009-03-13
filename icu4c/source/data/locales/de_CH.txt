@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/de_CH.xml
@@ -11,14 +11,19 @@ de_CH{
         BD{"Bangladesh"}
         BN{"Brunei"}
         BW{"Botswana"}
+        BY{"Weissrussland"}
         CV{"Kapverden"}
         DJ{"Djibouti"}
         GB{"Grossbritannien"}
         MH{"Marshall-Inseln"}
+        QO{"Äusseres Ozeanien"}
         RW{"Rwanda"}
         SB{"Salomon-Inseln"}
         ST{"Sao Tomé und Principe"}
         ZW{"Zimbabwe"}
+    }
+    Languages{
+        be{"Weissrussisch"}
     }
     NumberElements{
         ".",
@@ -40,7 +45,7 @@ de_CH{
         "#,##0 %",
         "#E0",
     }
-    Version{"1.53"}
+    Version{"1.139"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

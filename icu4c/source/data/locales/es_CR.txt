@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/es_CR.xml
@@ -13,5 +13,5 @@ es_CR{
             "colón costarricense",
         }
     }
-    Version{"1.52"}
+    Version{"1.139"}
 }

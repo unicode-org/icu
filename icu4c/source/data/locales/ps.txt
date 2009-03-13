@@ -146,7 +146,7 @@ ps{
     Scripts{
         Arab{"عربي"}
     }
-    Version{"1.53"}
+    Version{"1.139"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -158,10 +158,13 @@ ps{
                 "H:mm:ss (z)",
                 "H:mm:ss",
                 "H:mm",
-                "EEEE د yyyy د MMMM d",
-                "د yyyy د MMMM d",
-                "d MMM yyyy",
+                "EEEE د y د MMMM d",
+                "د y د MMMM d",
+                "d MMM y",
                 "yyyy/M/d",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1} {0}",
             }
             dayNames{

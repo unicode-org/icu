@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008-2009 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh_Hant.xml
@@ -270,7 +270,7 @@ zh_Hant{
             "荷屬安地列斯盾",
         }
         AOA{
-            "AOA",
+            "Kz",
             "安哥拉寬扎",
         }
         AOK{
@@ -286,7 +286,7 @@ zh_Hant{
             "安哥拉新寬扎 Reajustado (1995-1999)",
         }
         ARA{
-            "ARA",
+            "₳",
             "阿根廷奧斯特納爾",
         }
         ARP{
@@ -306,7 +306,7 @@ zh_Hant{
             "澳幣",
         }
         AWG{
-            "AWG",
+            "Afl.",
             "阿魯巴盾",
         }
         AZM{
@@ -314,7 +314,7 @@ zh_Hant{
             "阿塞拜彊馬特納",
         }
         AZN{
-            "AZN",
+            "man.",
             "亞塞拜然蒙納特",
         }
         BAD{
@@ -362,11 +362,11 @@ zh_Hant{
             "蒲隆地法郎",
         }
         BMD{
-            "Ber$",
+            "BD$",
             "百慕達幣",
         }
         BND{
-            "BND",
+            "BN$",
             "汶萊元",
         }
         BOB{
@@ -374,7 +374,7 @@ zh_Hant{
             "玻利維亞貨幣單位",
         }
         BOP{
-            "BOP",
+            "$b.",
             "玻利維亞披索",
         }
         BOV{
@@ -382,15 +382,15 @@ zh_Hant{
             "玻利維亞幕多",
         }
         BRB{
-            "BRB",
+            "NCr",
             "巴西克魯薩多農瓦（1967-1986）",
         }
         BRC{
-            "BRC",
+            "Cz$",
             "巴西克魯賽羅 (1986-1989)",
         }
         BRE{
-            "BRE",
+            "Cr$",
             "巴西克魯賽羅 (1990-1993)",
         }
         BRL{
@@ -398,15 +398,15 @@ zh_Hant{
             "巴西里拉",
         }
         BRN{
-            "BRN",
+            "NCz$",
             "巴西克如爾達農瓦",
         }
         BRR{
-            "BRR",
+            "CR$",
             "巴西克魯賽羅",
         }
         BSD{
-            "BSD",
+            "BS$",
             "巴哈馬元",
         }
         BTN{
@@ -478,7 +478,7 @@ zh_Hant{
             "捷克斯洛伐克硬克朗",
         }
         CUP{
-            "CUP",
+            "CU$",
             "古巴披索",
         }
         CVE{
@@ -490,11 +490,11 @@ zh_Hant{
             "賽浦路斯鎊",
         }
         CZK{
-            "CZK",
+            "Kč",
             "捷克克朗",
         }
         DEM{
-            "DEM",
+            "DM",
             "德國馬克",
         }
         DJF{
@@ -522,19 +522,15 @@ zh_Hant{
             "厄瓜多爾由里達瓦康斯坦 (UVC)",
         }
         EEK{
-            "EEK",
+            "Ekr",
             "愛沙尼亞克朗",
         }
         EGP{
-            "EGP",
+            "EG£",
             "埃及鎊",
         }
-        EQE{
-            "EQE",
-            "埃奎維勒",
-        }
         ERN{
-            "ERN",
+            "Nfk",
             "厄立特里亞納克法",
         }
         ESP{
@@ -550,7 +546,7 @@ zh_Hant{
             "歐元",
         }
         FIM{
-            "FIM",
+            "mk",
             "芬蘭馬克",
         }
         FJD{
@@ -558,11 +554,11 @@ zh_Hant{
             "斐濟元",
         }
         FKP{
-            "FKP",
+            "FK£",
             "福克蘭群島鎊",
         }
         FRF{
-            "FRF",
+            "₣",
             "法國法郎",
         }
         GBP{
@@ -574,7 +570,7 @@ zh_Hant{
             "喬治拉里",
         }
         GHC{
-            "GHC",
+            "₵",
             "迦納仙蔕",
         }
         GHS{
@@ -582,7 +578,7 @@ zh_Hant{
             "加纳塞迪",
         }
         GIP{
-            "GIP",
+            "GI£",
             "直布羅陀鎊",
         }
         GMD{
@@ -602,7 +598,7 @@ zh_Hant{
             "赤道幾內亞埃奎勒",
         }
         GRD{
-            "GRD",
+            "₯",
             "希臘德拉克馬",
         }
         GTQ{
@@ -634,7 +630,7 @@ zh_Hant{
             "克羅地亞第納爾",
         }
         HRK{
-            "HRK",
+            "kn",
             "克羅地亞庫納",
         }
         HUF{
@@ -650,15 +646,15 @@ zh_Hant{
             "愛爾蘭鎊",
         }
         ILP{
-            "ILP",
+            "I£",
             "以色列鎊",
         }
         ILS{
-            "ILS",
+            "₪",
             "以色列新謝克爾",
         }
         INR{
-            "0≤Rs.|1≤Re.|1<Rs.",
+            "₨",
             "印度盧布",
         }
         IQD{
@@ -670,7 +666,7 @@ zh_Hant{
             "伊朗里亞爾",
         }
         ISK{
-            "ISK",
+            "Ikr",
             "冰島克朗",
         }
         ITL{
@@ -686,7 +682,7 @@ zh_Hant{
             "約旦第納爾",
         }
         JPY{
-            "JP¥",
+            "￥",
             "日圓",
         }
         KES{
@@ -706,7 +702,7 @@ zh_Hant{
             "科摩羅法郎",
         }
         KPW{
-            "KPW",
+            "KP₩",
             "北朝鮮幣",
         }
         KRW{
@@ -718,7 +714,7 @@ zh_Hant{
             "科威特第納爾",
         }
         KYD{
-            "KYD",
+            "KY$",
             "開曼群島美元",
         }
         KZT{
@@ -726,7 +722,7 @@ zh_Hant{
             "卡扎克斯坦坦吉",
         }
         LAK{
-            "LAK",
+            "₭",
             "寮國基普",
         }
         LBP{
@@ -738,19 +734,15 @@ zh_Hant{
             "斯里蘭卡盧布",
         }
         LRD{
-            "LRD",
+            "L$",
             "賴比瑞亞元",
         }
         LSL{
             "M",
             "賴索托羅蒂",
         }
-        LSM{
-            "LSM",
-            "馬洛蒂",
-        }
         LTL{
-            "LTL",
+            "Lt",
             "立陶宛里塔",
         }
         LTT{
@@ -770,7 +762,7 @@ zh_Hant{
             "盧森堡金融法郎",
         }
         LVL{
-            "LVL",
+            "Ls",
             "拉脫維亞拉特銀幣",
         }
         LVR{
@@ -794,7 +786,7 @@ zh_Hant{
             "馬達加斯加法郎",
         }
         MKD{
-            "MDen",
+            "MKD",
             "馬其頓第納爾",
         }
         MLF{
@@ -822,15 +814,15 @@ zh_Hant{
             "馬爾他里拉",
         }
         MTP{
-            "MTP",
+            "MT£",
             "馬爾他鎊",
         }
         MUR{
-            "MUR",
+            "MURs",
             "模里西斯盧布",
         }
         MVR{
-            "MVR",
+            "Rf",
             "馬爾地夫海島盧非亞",
         }
         MWK{
@@ -842,7 +834,7 @@ zh_Hant{
             "墨西哥 - 披索",
         }
         MXP{
-            "MXP",
+            "MX$",
             "墨西哥銀披索 (1861-1992)",
         }
         MYR{
@@ -866,11 +858,11 @@ zh_Hant{
             "納米比亞元",
         }
         NGN{
-            "NGN",
+            "₦",
             "奈及利亞奈拉",
         }
         NLG{
-            "NLG",
+            "fl",
             "荷蘭盾",
         }
         NOK{
@@ -890,15 +882,15 @@ zh_Hant{
             "阿曼里奧",
         }
         PAB{
-            "PAB",
+            "B/.",
             "巴拿馬巴波亞",
         }
         PEI{
-            "PEI",
+            "I/.",
             "祕魯因蒂",
         }
         PEN{
-            "PEN",
+            "S/.",
             "秘魯新太陽幣",
         }
         PES{
@@ -910,7 +902,7 @@ zh_Hant{
             "巴布亞紐幾內亞基那",
         }
         PHP{
-            "Php",
+            "₱",
             "菲律賓披索",
         }
         PKR{
@@ -926,20 +918,28 @@ zh_Hant{
             "波蘭茲羅提 (1950-1995)",
         }
         PTE{
-            "PTE",
+            "Esc",
             "葡萄牙埃斯庫多",
         }
         PYG{
-            "PYG",
+            "₲",
             "巴拉圭瓜拉尼",
         }
         QAR{
             "QR",
             "卡達爾里亞爾",
         }
+        ROL{
+            "ROL",
+            "旧罗马尼亚列伊",
+        }
         RON{
-            "0≤lei|1≤leu|1",
+            "RON",
             "羅馬尼亞列伊",
+        }
+        RSD{
+            "din.",
+            "塞爾維亞戴納",
         }
         RUB{
             "RUB",
@@ -950,7 +950,7 @@ zh_Hant{
             "俄羅斯盧布 (1991-1998)",
         }
         RWF{
-            "RWF",
+            "RF",
             "盧安達法郎",
         }
         SAR{
@@ -966,8 +966,12 @@ zh_Hant{
             "塞舌爾群島盧布",
         }
         SDD{
-            "SDD",
+            "LSd",
             "蘇丹第納爾",
+        }
+        SDG{
+            "SDG",
+            "蘇丹鎊",
         }
         SDP{
             "SDP",
@@ -982,7 +986,7 @@ zh_Hant{
             "新加坡幣",
         }
         SHP{
-            "SHP",
+            "SH£",
             "聖赫勒拿鎊",
         }
         SIT{
@@ -994,7 +998,7 @@ zh_Hant{
             "斯洛伐克克朗",
         }
         SLL{
-            "SLL",
+            "Le",
             "獅子山利昂",
         }
         SOS{
@@ -1002,7 +1006,7 @@ zh_Hant{
             "索馬利亞先令",
         }
         SRD{
-            "SRD",
+            "SR$",
             "蘇利南元",
         }
         SRG{
@@ -1018,7 +1022,7 @@ zh_Hant{
             "蘇聯盧布",
         }
         SVC{
-            "SVC",
+            "SV₡",
             "薩爾瓦多科郎",
         }
         SYP{
@@ -1030,7 +1034,7 @@ zh_Hant{
             "史瓦濟蘭里朗吉尼",
         }
         THB{
-            "THB",
+            "฿",
             "泰銖",
         }
         TJR{
@@ -1046,7 +1050,7 @@ zh_Hant{
             "土庫曼馬納特",
         }
         TND{
-            "TND",
+            "DT",
             "突尼西亞第納爾",
         }
         TOP{
@@ -1061,6 +1065,10 @@ zh_Hant{
             "TL",
             "土耳其里拉",
         }
+        TRY{
+            "YTL",
+            "新土耳其里拉",
+        }
         TTD{
             "TT$",
             "千里達及托巴哥元",
@@ -1074,7 +1082,7 @@ zh_Hant{
             "坦尚尼亞先令",
         }
         UAH{
-            "UAH",
+            "₴",
             "烏克蘭格里夫那",
         }
         UAK{
@@ -1109,24 +1117,28 @@ zh_Hant{
             "Ur$",
             "烏拉圭披索",
         }
+        UZS{
+            "UZS",
+            "烏茲別克索姆",
+        }
         VEB{
             "Be",
             "委內瑞拉博利瓦",
         }
         VEF{
-            "BsF",
-            "Venezuelan Bolivar Fuerte",
+            "Bs.F.",
+            "委内瑞拉强势玻利瓦",
         }
         VUV{
             "VT",
             "萬那杜萬杜",
         }
         WST{
-            "WST",
+            "WS$",
             "西薩摩亞塔拉",
         }
         XAF{
-            "XAF",
+            "FCFA",
             "西非法郎 BEAC",
         }
         XAG{
@@ -1174,7 +1186,7 @@ zh_Hant{
             "法國 UIC 法郎",
         }
         XOF{
-            "XOF",
+            "CFA",
             "西非法郎 BCEAO",
         }
         XPF{
@@ -1198,7 +1210,7 @@ zh_Hant{
             "葉門第納爾",
         }
         YER{
-            "YRl",
+            "YR",
             "也門里亞爾",
         }
         YUD{
@@ -1222,11 +1234,11 @@ zh_Hant{
             "南非蘭特",
         }
         ZMK{
-            "ZMK",
+            "ZK",
             "尚比亞克瓦查",
         }
         ZRN{
-            "ZRN",
+            "NZ",
             "薩伊新扎伊爾",
         }
         ZRZ{
@@ -1713,12 +1725,19 @@ zh_Hant{
     }
     Scripts{
         Arab{"阿拉伯文"}
+        Armi{"皇室亞美尼亞文"}
         Armn{"亞美尼亞文"}
         Avst{"阿維斯陀文"}
         Bali{"峇里文"}
+        Batk{"巴塔克文"}
         Beng{"孟加拉文"}
+        Blis{"布列斯文"}
         Bopo{"注音符號"}
+        Brah{"婆羅米文"}
         Brai{"盲人用點字法"}
+        Bugi{"布吉斯文"}
+        Buhd{"布希德文"}
+        Cakm{"查克馬文"}
         Cans{"加拿大原住民通用字符"}
         Cari{"卡里亞文"}
         Cham{"占文"}
@@ -1726,13 +1745,18 @@ zh_Hant{
         Copt{"科普特文"}
         Cprt{"塞浦路斯文"}
         Cyrl{"斯拉夫語系"}
+        Cyrs{"西里爾文（古教會斯拉夫文變體）"}
         Dsrt{"德瑟雷特文"}
         Egyd{"古埃及世俗體"}
         Egyh{"古埃及僧侶體"}
+        Egyp{"古埃及象形文字"}
         Ethi{"衣索匹亞文"}
+        Geok{"格魯吉亞語系（阿索他路里和努斯克胡里文）"}
         Geor{"喬治亞文"}
+        Glag{"格拉哥里文"}
         Goth{"歌德文"}
         Grek{"希臘文"}
+        Gujr{"古吉拉特文"}
         Guru{"古爾穆奇文"}
         Hang{"韓文"}
         Hani{"漢語"}
@@ -1740,22 +1764,32 @@ zh_Hant{
         Hans{"簡體中文"}
         Hant{"繁體中文"}
         Hebr{"希伯來文"}
+        Hira{"平假名"}
         Hmng{"楊松錄苗文"}
         Hung{"古匈牙利文"}
         Inds{"印度河流域（哈拉帕文）"}
         Ital{"古意大利文"}
         Java{"爪哇文"}
         Jpan{"日文"}
+        Kali{"克耶李文"}
+        Khar{"卡羅須提文"}
         Khmr{"高棉文"}
         Knda{"坎那達文"}
+        Kore{"韓文"}
         Lana{"藍拿文"}
         Laoo{"寮國文"}
         Latf{"拉丁文（尖角體活字變體）"}
         Latg{"拉丁文（蓋爾語變體）"}
         Latn{"拉丁文"}
+        Lepc{"雷布查文"}
         Limb{"林佈文"}
         Lina{"線性文字 A"}
         Linb{"線性文字 B"}
+        Lyci{"呂西亞語"}
+        Lydi{"里底亞語"}
+        Mand{"曼安底文"}
+        Maya{"瑪雅象形文字"}
+        Mero{"麥羅埃文"}
         Mlym{"馬來亞拉姆文"}
         Mong{"蒙古文"}
         Moon{"Moon"}
@@ -1763,25 +1797,33 @@ zh_Hant{
         Mymr{"緬甸文"}
         Nkoo{"Nkoo"}
         Ogam{"歐甘文"}
-        Olck{"Olck"}
+        Olck{"桑塔利文"}
         Orkh{"鄂爾渾文"}
         Orya{"歐利亞文"}
         Osma{"歐斯曼亞文"}
         Perm{"古彼爾姆諸文"}
         Phnx{"腓尼基文"}
+        Plrd{"柏格理拼音符"}
         Qaai{"Qaai"}
         Rjng{"拉讓文"}
+        Roro{"朗格朗格象形文"}
         Runr{"古北歐文字"}
         Saur{"索拉什特拉文"}
         Sgnw{"手語書寫符號"}
         Shaw{"簫柏納字符"}
         Sinh{"錫蘭文"}
+        Sylo{"希洛弟納格里文"}
         Syrc{"敍利亞文"}
+        Syre{"敘利亞文（福音體文字變體）"}
+        Syrj{"敘利亞文（西方文字變體）"}
         Syrn{"敘利亞文（東方文字變體）"}
         Tagb{"南島文"}
+        Tale{"傣哪文"}
         Talu{"新彝族文"}
         Taml{"坦米爾文"}
         Telu{"泰魯古文"}
+        Teng{"談格瓦文"}
+        Tfng{"提非納（柏柏爾文）"}
         Tglg{"塔加拉文"}
         Thaa{"塔安那文"}
         Thai{"泰文"}
@@ -1792,6 +1834,7 @@ zh_Hant{
         Xsux{"蘇米魯亞甲文楔形文字"}
         Yiii{"彞文"}
         Zxxx{"非書寫語言碼"}
+        Zyyy{"一般文字"}
         Zzzz{"未編碼工序指令碼"}
     }
     Types{
@@ -1827,7 +1870,7 @@ zh_Hant{
         REVISED{"已修訂"}
         SAAHO{"SAAHO"}
     }
-    Version{"1.116"}
+    Version{"1.139"}
     calendar{
         chinese{
             AmPmMarkers{
@@ -1844,6 +1887,9 @@ zh_Hant{
                 "y'x'G-Ml-d",
                 "y'x'G-Ml-d",
                 "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
         }
         gregorian{
@@ -1852,14 +1898,18 @@ zh_Hant{
                 "ahh時mm分ss秒z",
                 "ah:mm:ss",
                 "ah:mm",
-                "yyyy年M月d日EEEE",
-                "yyyy年M月d日",
+                "y年M月d日EEEE",
+                "y年M月d日",
                 "yyyy/M/d",
                 "yyyy/M/d",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1} {0}",
             }
             availableFormats{
                 Ed{"d日（E）"}
+                H{"H時"}
                 HHmm{"H:mm"}
                 HHmmss{"H:mm:ss"}
                 MEd{"M-d（E）"}
@@ -1867,8 +1917,8 @@ zh_Hant{
                 Md{"M/d"}
                 yM{"yyyy/M"}
                 yMEd{"yyyy/M/d（EEE）"}
-                yMMM{"yyyy年M月"}
-                yMMMM{"yyyy年M月"}
+                yMMM{"y年M月"}
+                yMMMM{"y年M月"}
                 yyMM{"yyyy/MM"}
             }
             dayNames{
@@ -1881,6 +1931,17 @@ zh_Hant{
                         "週四",
                         "週五",
                         "週六",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "日",
+                        "一",
+                        "二",
+                        "三",
+                        "四",
+                        "五",
+                        "六",
                     }
                 }
             }
@@ -1897,6 +1958,9 @@ zh_Hant{
                         "2"{"後天"}
                         "3"{"大後天"}
                     }
+                }
+                dayperiod{
+                    dn{"上午/下午"}
                 }
                 era{
                     dn{"年代"}
@@ -1956,8 +2020,8 @@ zh_Hant{
                     y{"yyyy/M/dE至yyyy/M/dE"}
                 }
                 yMMMM{
-                    M{"yyyy年M月至M月"}
-                    y{"yyyy/M至yyyy/M"}
+                    M{"y年M月至M月"}
+                    y{"y/M至y/M"}
                 }
                 yMd{
                     M{"yyyy/M/d至yyyy/M/d"}
@@ -2036,20 +2100,30 @@ zh_Hant{
                 "Gy年M月d日",
                 "Gy/M/d",
                 "Gy/M/d",
-                "{1} {0}",
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
             }
             availableFormats{
                 MEd{"M/d EEE"}
                 MMMEd{"M月d日EEE"}
                 MMMd{"M月d日"}
                 Md{"M/d"}
+                yM{"Gy/M"}
+                yMEd{"Gy/M/d（EEE）"}
+                yMMMM{"Gy年M月"}
+                yyMM{"Gy/MM"}
+                yyMMM{"Gy年MMM"}
+                yyQ{"Gy年第Q季度"}
                 yyyy{"Gy"}
                 yyyyM{"Gy/M"}
-                yyyyMd{"Gy/M/d"}
                 yyyyMEd{"Gy/M/d EEE"}
                 yyyyMMM{"Gy年M月"}
-                yyyyMMMd{"Gy年M月d日"}
                 yyyyMMMEd{"Gy年M月d日EEE"}
+                yyyyMMMM{"Gy年M月"}
+                yyyyMMMd{"Gy年M月d日"}
+                yyyyMd{"Gy/M/d"}
                 yyyyQ{"Gy Q"}
                 yyyyQQQ{"Gy QQQ"}
             }
@@ -2074,6 +2148,19 @@ zh_Hant{
     }
     localeDisplayPattern{
         separator{"，"}
+    }
+    measurementSystemNames{
+        US{"美制"}
+    }
+    units{
+        hour{
+            other{"{0}小時"}
+        }
+    }
+    unitsShort{
+        hour{
+            other{"{0}小時"}
+        }
     }
     zoneStrings{
         "Africa:Bamako"{
@@ -2774,6 +2861,7 @@ zh_Hant{
         "meta:Almaty"{
             ld{"阿拉木圖夏令時間"}
             ls{"阿拉木圖時間"}
+            sd{"ALMST"}
         }
         "meta:Amazon"{
             ld{"亞馬遜夏令時間"}
@@ -2841,21 +2929,6 @@ zh_Hant{
             lg{"大西洋時間"}
             ls{"大西洋標準時間"}
         }
-        "meta:Australia_Central"{
-            ld{"澳洲中部夏令時間"}
-            lg{"澳洲中部時間"}
-            ls{"澳洲中部標準時間"}
-        }
-        "meta:Australia_Eastern"{
-            ld{"澳洲東部夏令時間"}
-            lg{"澳洲東部時間"}
-            ls{"澳洲東部標準時間"}
-        }
-        "meta:Australia_Western"{
-            ld{"澳洲西部夏令時間"}
-            lg{"澳洲西部時間"}
-            ls{"澳洲西部標準時間"}
-        }
         "meta:Azerbaijan"{
             ld{"亞塞拜然夏令時間"}
             ls{"亞塞拜然時間"}
@@ -2863,9 +2936,12 @@ zh_Hant{
         "meta:Baku"{
             ld{"巴庫夏令時間"}
             ls{"巴庫時間"}
+            sd{"BAKST"}
+            ss{"BAKT"}
         }
         "meta:Bangladesh"{
             ls{"孟加拉時間"}
+            ss{"BDT"}
         }
         "meta:Bering"{
             sd{"BDT（白令）"}
@@ -2874,10 +2950,12 @@ zh_Hant{
         }
         "meta:Bhutan"{
             ls{"不丹時間"}
+            ss{"BTT"}
         }
         "meta:Borneo"{
             ld{"婆羅洲夏令時間"}
             ls{"婆羅洲時間"}
+            sd{"BORST"}
         }
         "meta:Brasilia"{
             lg{"巴西利亞時間"}
@@ -2938,12 +3016,19 @@ zh_Hant{
         "meta:Georgia"{
             ld{"喬治亞夏令時間"}
             ls{"喬治亞時間"}
+            ss{"GET"}
         }
         "meta:Greenland_Eastern"{
             lg{"格陵蘭東部時間"}
         }
         "meta:Greenland_Western"{
             lg{"格陵蘭西部時間"}
+        }
+        "meta:Gulf"{
+            sg{"GT"}
+        }
+        "meta:Hovd"{
+            sd{"HOVST"}
         }
         "meta:India"{
             ls{"印度標準時間"}
@@ -2957,6 +3042,7 @@ zh_Hant{
         "meta:Japan"{
             ld{"日本夏令時間"}
             ls{"日本標準時間"}
+            sg{"JT"}
         }
         "meta:Karachi"{
             ls{"喀拉蚩時間"}
@@ -2976,6 +3062,10 @@ zh_Hant{
             ld{"韓國夏令時間"}
             lg{"韓國時間"}
             ls{"韓國標準時間"}
+            sg{"KT"}
+        }
+        "meta:Krasnoyarsk"{
+            ss{"KRAT"}
         }
         "meta:Kyrgystan"{
             ls{"吉爾吉斯時間"}
@@ -3002,6 +3092,7 @@ zh_Hant{
         "meta:Pakistan"{
             ld{"巴基斯坦夏令時間"}
             ls{"巴基斯坦時間"}
+            sd{"PKST"}
         }
         "meta:Pierre_Miquelon"{
             ld{"聖彼德與密啟崙夏令時間"}
@@ -3013,6 +3104,9 @@ zh_Hant{
             ls{"撒馬爾罕時間"}
             sd{"SAMST（撒馬爾罕）"}
             ss{"SAMT（撒馬爾罕）"}
+        }
+        "meta:Shevchenko"{
+            sd{"SHEST"}
         }
         "meta:Suriname"{
             lg{"蘇利南時間"}
@@ -3032,6 +3126,9 @@ zh_Hant{
         "meta:Turkmenistan"{
             ld{"土庫曼夏令時間"}
             ls{"土庫曼時間"}
+        }
+        "meta:Uralsk"{
+            sd{"URAST"}
         }
         "meta:Urumqi"{
             ls{"烏魯木齊時間"}
@@ -3054,7 +3151,8 @@ zh_Hant{
             ls{"育空標準時間"}
         }
         fallbackFormat{"{1}({0})"}
-        gmtFormat{"格林威治標準時間{0}"}
+        gmtFormat{"GMT{0}"}
+        gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0}時間"}
     }

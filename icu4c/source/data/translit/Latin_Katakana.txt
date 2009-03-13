@@ -1,6 +1,6 @@
 ﻿# ***************************************************************************
 # *
-# *  Copyright (C) 2004-2008, International Business Machines
+# *  Copyright (C) 2004-2009, International Business Machines
 # *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 # *
 # ***************************************************************************
@@ -29,6 +29,7 @@ $y_start = [ヤユヨやゆよ] ;
 $r_start = [ラリルレロらりるれろ] ;
 $w_start = [ワヰヱヲわゐゑを] ;
 $v_start = [ワヰヱヲ]\u3099 ;
+$voweled_basekana = [ァ-オカキクケコサシスセソタチッツテトナ-ノハヒフヘホマ-ヲヵヶ] ;
 $n_quoter  =  [ア イ ウ エ オ ナ ニ ヌ ネ ノ ヤ ユ ヨ ン] ;
 $small_y = [ャィュェョ] ;
 $iteration = ゝ ;
@@ -229,7 +230,7 @@ dz $1 < dz (y* $vowel) {ヽ$voice ;
 $1 < ($consonant y* $vowel) {ヽ$voice? ;
 $1 < (.) {ヽ $voice? ; # otherwise repeat last character
 < ヽ $voice? ; # delete if no characters found
-[aeiou] } h > ー ;
+$voweled_basekana [\u3099 \u309A]? { h > ー ;
 cy > セィ ;
 dy > テ\u3099ィ ;
 hy > ヒ ;

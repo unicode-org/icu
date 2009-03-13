@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/es_AR.xml
@@ -13,14 +13,14 @@ es_AR{
             "Peso Argentino",
         }
         TRY{
-            "TRY",
+            "YTL",
             "nueva lira turca",
         }
     }
     Variants{
         REVISED{"Ortografía revisada"}
     }
-    Version{"1.57"}
+    Version{"1.139"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -32,10 +32,13 @@ es_AR{
                 "H:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE d 'de' MMMM 'de' yyyy",
-                "d 'de' MMMM 'de' yyyy",
+                "EEEE d 'de' MMMM 'de' y",
+                "d 'de' MMMM 'de' y",
                 "dd/MM/yyyy",
                 "dd/MM/yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1} {0}",
             }
             availableFormats{

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/km.xml
@@ -324,7 +324,7 @@ km{
         "#,##0%",
         "#E0",
     }
-    Version{"1.63"}
+    Version{"1.139"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -336,11 +336,14 @@ km{
                 "H ម៉ោង m នាទី ss វិនាទី​z",
                 "H:mm:ss",
                 "H:mm",
-                "EEEE, yyyy MMMM dd",
-                "yyyy MMMM d",
-                "d MMM yyyy",
+                "EEEE, y MMMM dd",
+                "y MMMM d",
+                "d MMM y",
                 "d/M/yyyy",
+                "{1} {0}",
+                "{1} {0}",
                 "{1}, {0}",
+                "{1} {0}",
             }
             dayNames{
                 format{

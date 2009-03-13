@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ca.xml
@@ -70,6 +70,7 @@ ca{
         BH{"Bahrain"}
         BI{"Burundi"}
         BJ{"Benin"}
+        BL{"Saint Barthélemy"}
         BM{"Bermudes"}
         BN{"Brunei"}
         BO{"Bolívia"}
@@ -162,7 +163,7 @@ ca{
         KH{"Cambodja"}
         KI{"Kiribati"}
         KM{"Comores"}
-        KN{"Saint Kitts i Nevis"}
+        KN{"Saint Christopher i Nevis"}
         KP{"Corea del Nord"}
         KR{"Corea del Sud"}
         KW{"Kuwait"}
@@ -298,8 +299,12 @@ ca{
             "ADP",
             "Pesseta d'Andorra",
         }
+        ANG{
+            "NAf.",
+            "florí de les Antilles Neerlandeses",
+        }
         ARS{
-            "ARS",
+            "AR$",
             "Peso argentí",
         }
         ATS{
@@ -307,19 +312,23 @@ ca{
             "Xíling austríac",
         }
         BEF{
-            "BEF",
+            "BF",
             "Franc belga",
+        }
+        BRB{
+            "NCr",
+            "cruzeiro novo brasiler (1967-1986)",
         }
         BRL{
             "R$",
             "Real brasiler",
         }
         CHF{
-            "CHF",
+            "Fr.",
             "Franc suís",
         }
         CNY{
-            "CNY",
+            "CN¥",
             "Iuan renmimbi xinès",
         }
         CYP{
@@ -327,8 +336,8 @@ ca{
             "Lliura xipriota",
         }
         DEM{
-            "DEM",
-            "Marc alemany",
+            "DM",
+            "marc alemany",
         }
         ESP{
             "₧",
@@ -347,27 +356,31 @@ ca{
             "Euro",
         }
         FIM{
-            "FIM",
+            "mk",
             "Marc finlandès",
         }
         FRF{
-            "FRF",
+            "₣",
             "Franc francès",
         }
         GBP{
-            "UK£",
+            "£",
             "Lliura esterlina britànica",
         }
         GRD{
-            "GRD",
+            "₯",
             "Dracma grega",
+        }
+        HUF{
+            "Ft",
+            "HUF",
         }
         IEP{
             "IR£",
             "Lliura irlandesa",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
+            "Rs",
             "Rupia índia",
         }
         ITL{
@@ -383,40 +396,68 @@ ca{
             "Franc luxemburguès",
         }
         LVL{
-            "LVL",
+            "Ls",
             "Lats",
         }
+        MMK{
+            "MMK",
+            "MMK",
+        }
         MTL{
-            "MTL",
+            "Lm",
             "Lira maltesa",
         }
+        MWK{
+            "MK",
+            "kwacha malawià",
+        }
         NLG{
-            "NLG",
+            "fl",
             "Florí neerlandès",
         }
+        NOK{
+            "Nkr",
+            "Corona noruega",
+        }
         PTE{
-            "PTE",
+            "Esc",
             "Escut portuguès",
         }
         RUB{
             "RUB",
             "Ruble rus",
         }
+        SCR{
+            "SRe",
+            "SCR",
+        }
         SIT{
             "SIT",
             "Tolar eslovè",
         }
+        SRG{
+            "Sf",
+            "florí de Surinam",
+        }
         TRL{
-            "TRL",
+            "TL",
             "Lira turca (vella)",
         }
         TRY{
-            "TRY",
+            "YTL",
             "Nova lira turca",
+        }
+        UGS{
+            "UGS",
+            "UGS",
         }
         USD{
             "US$",
             "Dòlar EUA",
+        }
+        XAG{
+            "XAG",
+            "XAG",
         }
         XEU{
             "XEU",
@@ -426,11 +467,23 @@ ca{
             "XXX",
             "sense moneda",
         }
+        YUN{
+            "YUN",
+            "dinar convertible iugoslau",
+        }
+        ZWD{
+            "Z$",
+            "dòlar zimbabuès",
+        }
     }
     CurrencyPlurals{
         ADP{
             one{"Pesseta andorrana"}
             other{"Pessetes andorranes"}
+        }
+        ANG{
+            one{"florí de les Antilles Neerlandeses"}
+            other{"florins de les Antilles Neerlandeses"}
         }
         ATS{
             one{"Xíling austríac"}
@@ -465,7 +518,7 @@ ca{
             other{"Marcs finlandèsos"}
         }
         FRF{
-            one{"Franc francès"}
+            one{"franc francès"}
             other{"Francs francèsos"}
         }
         GBP{
@@ -488,6 +541,9 @@ ca{
             one{"Franc luxemburguès"}
             other{"Francs luxemburguèsos"}
         }
+        MMK{
+            one{"kyat de Myanmar"}
+        }
         MTL{
             one{"Lira maltesa"}
             other{"Lires malteses"}
@@ -496,6 +552,9 @@ ca{
             one{"Florí neerlandès"}
             other{"Florís neerlandèsos"}
         }
+        NOK{
+            one{"corona noruega"}
+        }
         PTE{
             one{"Escut portuguès"}
             other{"Escuts portuguèsos"}
@@ -503,6 +562,10 @@ ca{
         SIT{
             one{"Tolar eslovè"}
             other{"Tolars eslovens"}
+        }
+        SRG{
+            one{"florí de Surinam"}
+            other{"florins de Surinam"}
         }
         USD{
             one{"Dòlar EUA"}
@@ -516,6 +579,13 @@ ca{
             one{"sense moneda"}
             other{"sense moneda"}
         }
+        YUN{
+            one{"dinar convertible iugoslau"}
+            other{"dinars convertibles iugoslaus"}
+        }
+    }
+    CurrencyUnitPatterns{
+        other{"{0} {1}"}
     }
     ExemplarCharacters{"[a à b c ç d e é è f-i í ï j-l ŀ m-o ó ò p-u ú ü v-z]"}
     Keys{
@@ -608,10 +678,10 @@ ca{
         day{"daiak"}
         de{"alemany"}
         de_AT{"alemany austriac"}
-        de_CH{"alemany suís"}
+        de_CH{"alt alemany suís"}
         del{"delaware"}
         din{"dinka"}
-        dra{"llengua dravidiana"}
+        dra{"llengua dravídica"}
         dsb{"baix sòrab"}
         dum{"neerlandès mitjà"}
         dv{"divehi"}
@@ -622,11 +692,13 @@ ca{
         elx{"elamita"}
         en{"anglès"}
         en_AU{"anglès australià"}
+        en_CA{"anglès canadenc"}
         en_GB{"anglès britànic"}
         en_US{"anglès americà"}
         enm{"anglès mitjà"}
         eo{"esperanto"}
         es{"espanyol"}
+        es_419{"espanyol d'Hispanoamèrica"}
         et{"estonià"}
         eu{"basc"}
         fa{"persa"}
@@ -647,6 +719,7 @@ ca{
         fur{"friülà"}
         fy{"frisó"}
         ga{"irlandès"}
+        gaa{"ga"}
         gd{"escocès"}
         gem{"llengua germànica"}
         gez{"gueez"}
@@ -695,7 +768,7 @@ ca{
         kab{"cabilenc"}
         kar{"karen"}
         kbd{"kabardí"}
-        khi{"llengua khoisana"}
+        khi{"llengua khoisan"}
         kho{"khotanès"}
         ki{"kikuiu"}
         kk{"kazakh"}
@@ -724,6 +797,7 @@ ca{
         luo{"luo"}
         lv{"letó"}
         mad{"madurès"}
+        man{"mandinga"}
         map{"llengua autronèsia"}
         mas{"massai"}
         mdf{"mordovià moksha"}
@@ -837,6 +911,7 @@ ca{
         snk{"soninke"}
         so{"somali"}
         sog{"sogdià"}
+        son{"songhai"}
         sq{"albanès"}
         sr{"serbi"}
         ss{"siswati"}
@@ -865,6 +940,7 @@ ca{
         tpi{"tok pisin"}
         tr{"turc"}
         ts{"tsonga"}
+        tsi{"tsimshià"}
         tt{"tàtar"}
         tup{"llengua tupí"}
         tut{"llengua altaïca"}
@@ -875,6 +951,7 @@ ca{
         ug{"uigur"}
         uga{"ugarític"}
         uk{"ucraïnès"}
+        umb{"umbundu"}
         und{"idioma desconegut o no vàlid"}
         ur{"urdú"}
         uz{"uzbek"}
@@ -934,10 +1011,12 @@ ca{
         Copt{"Copte"}
         Cyrl{"Ciríl·lic"}
         Deva{"Devanagari"}
+        Goth{"gòtic"}
         Grek{"Grec"}
         Hans{"Xinès Simplificat (Han)"}
         Hant{"Xinès Tradicional (Han)"}
         Hebr{"Hebreu"}
+        Ital{"cursiva antiga"}
         Jpan{"Japonès"}
         Kana{"Katakana"}
         Latn{"Llatí"}
@@ -945,6 +1024,7 @@ ca{
         Linb{"Lineal B"}
         Mong{"Mongol"}
         Runr{"Rúnic"}
+        Tagb{"tagbanwa"}
         Taml{"Tàmil"}
         Zxxx{"Sense escriptura"}
         Zyyy{"Comú"}
@@ -960,18 +1040,23 @@ ca{
             islamic{"calendari musulmà"}
             japanese{"calendari japonès"}
         }
+        collation{
+            direct{"ordre directe"}
+        }
     }
     Variants{
         1901{"ortografia alemana tradicional"}
         1996{"ortografia alemana de 1996"}
+        BOONT{"Boontling"}
         FONIPA{"alfabet fonètic internacional"}
         POSIX{"ordenador"}
+        VALENCIA{"valencià"}
     }
-    Version{"1.90"}
+    Version{"1.139"}
     calendar{
         gregorian{
             AmPmMarkers{
-                "AM",
+                "a.m.",
                 "PM",
             }
             DateTimePatterns{
@@ -979,35 +1064,39 @@ ca{
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
-                "EEEE d 'de' MMMM 'de' yyyy",
-                "d 'de' MMMM 'de' yyyy",
+                "EEEE d 'de' MMMM 'de' y",
+                "d 'de' MMMM 'de' y",
                 "dd/MM/yyyy",
                 "dd/MM/yy",
                 "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
             availableFormats{
+                EEEd{"EEE d"}
                 Hm{"H:mm"}
                 M{"L"}
                 MEd{"E d/M"}
                 MMM{"LLL"}
-                MMMEd{"E MMM d"}
+                MMMEd{"E d MMM"}
                 MMMMEd{"E d MMMM"}
-                MMMMd{"d MMMM"}
-                MMMd{"MMM d"}
+                MMMMd{"d 'de' MMMM"}
+                MMMd{"d MMM"}
                 Md{"d/M"}
                 d{"d"}
-                hhmm{"hh:mm a"}
-                hhmmss{"hh:mm:ss a"}
+                hhmm{"HH:mm"}
+                hhmmss{"HH:mm:ss"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
-                y{"yyyy"}
+                y{"y"}
                 yM{"M/yyyy"}
                 yMEd{"E d/M/yyyy"}
-                yMMM{"MMM yyyy"}
-                yMMMEd{"EEE d MMM yyyy"}
-                yMMMM{"LLLL 'del' yyyy"}
+                yMMM{"MMM y"}
+                yMMMEd{"EEE d MMM y"}
+                yMMMM{"LLLL 'del' y"}
                 yQ{"Q yyyy"}
-                yQQQ{"QQQ yyyy"}
+                yQQQ{"QQQ y"}
                 yyQ{"Q yy"}
                 yyyyMM{"MM/yyyy"}
             }
@@ -1073,7 +1162,7 @@ ca{
                     }
                 }
                 dayperiod{
-                    dn{"AM/PM"}
+                    dn{"a.m./p.m."}
                 }
                 era{
                     dn{"era"}
@@ -1104,7 +1193,76 @@ ca{
                 }
             }
             intervalFormats{
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E dd/MM - E dd/MM"}
+                    d{"E dd/MM - E dd/MM"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"E d 'de' MMM - E d 'de' MMM"}
+                    d{"E d - E d 'de' MMM"}
+                }
+                MMMd{
+                    M{"d 'de' MMM - d 'de' MMM"}
+                    d{"d-d 'de' MMM"}
+                }
+                Md{
+                    M{"dd/MM - dd/MM"}
+                    d{"dd/MM - dd/MM"}
+                }
+                d{
+                    d{"d-d"}
+                }
                 fallback{"{0} - {1}"}
+                h{
+                    h{"H-H"}
+                }
+                hm{
+                    h{"HH:mm-HH:mm"}
+                }
+                hv{
+                    h{"H-H v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"MM/yy - MM/yy"}
+                    y{"MM/yy - MM/yy"}
+                }
+                yMEd{
+                    M{"E dd/MM/yy - E dd/MM/yy"}
+                    d{"E dd/MM/yy - E dd/MM/yy"}
+                    y{"E dd/MM/yy - E dd/MM/yy"}
+                }
+                yMMM{
+                    M{"MMM-MMM 'de' y"}
+                    y{"MMM 'de' y - MMM 'de' y"}
+                }
+                yMMMEd{
+                    M{"E d 'de' MMM - E d 'de' MMM 'de' y"}
+                    d{"E d - E d 'de' MMM 'de' y"}
+                    y{"E d 'de' MMM 'de' y - E d 'de' MMM 'de' y"}
+                }
+                yMMMM{
+                    M{"MM – MM-yyyy"}
+                    y{"MM-yyyy – MM-yyyy"}
+                }
+                yMMMd{
+                    M{"d 'de' MMM - d 'de' MMM 'de' y"}
+                    d{"d-d 'de' MMM 'de' y"}
+                    y{"d 'de' MMM 'de' y - d 'de' MMM 'de' y"}
+                }
+                yMd{
+                    M{"dd/MM/yy - dd/MM/yy"}
+                    d{"dd/MM/yy - dd/MM/yy"}
+                    y{"dd/MM/yy - dd/MM/yy"}
+                }
             }
             monthNames{
                 format{
@@ -1229,9 +1387,42 @@ ca{
             other{"{0} anys"}
         }
     }
+    unitsShort{
+        day{
+            one{"{0} dia"}
+            other{"{0} dies"}
+        }
+        hour{
+            one{"{0} h"}
+            other{"{0} h"}
+        }
+        minute{
+            one{"{0} m"}
+            other{"{0} m"}
+        }
+        month{
+            one{"{0} mes"}
+            other{"{0} mesos"}
+        }
+        second{
+            one{"{0} s"}
+            other{"{0} s"}
+        }
+        week{
+            one{"{0} setmana"}
+            other{"{0} setmanes"}
+        }
+        year{
+            one{"{0} any"}
+            other{"{0} anys"}
+        }
+    }
     zoneStrings{
         "America:Anchorage"{
             ec{"Hora d'Alaska"}
+        }
+        "America:Menominee"{
+            ec{"Menominee"}
         }
         "America:Mexico_City"{
             ec{"Mèxic Districte Federal"}
@@ -1241,6 +1432,9 @@ ca{
         }
         "Antarctica:South_Pole"{
             ec{"Pol sud"}
+        }
+        "Antarctica:Vostok"{
+            ec{"Vostok"}
         }
         "Asia:Jakarta"{
             ec{"Djakarta"}
@@ -1263,11 +1457,36 @@ ca{
         "Pacific:Galapagos"{
             ec{"Galápagos"}
         }
+        "Pacific:Kosrae"{
+            ec{"Kosrae"}
+        }
+        "meta:Africa_Eastern"{
+            ss{"EAT"}
+        }
+        "meta:Africa_Western"{
+            ld{"Hora d'estiu d'Àfrica Occidental"}
+        }
+        "meta:Arabian"{
+            ls{"Hora estàndard d'Aràbia"}
+        }
+        "meta:Atlantic"{
+            ld{"Hora d'estiu de l'Atlàntic"}
+        }
         "meta:Europe_Central"{
             ld{"Hora Central Europea de l'estiu"}
             lg{"Hora d'Espanya"}
             ls{"Hora Central Europea"}
             sg{"Hora d'Espanya"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"Hora d'estiu d'Europa de l'Est"}
+            sd{"EEST"}
+        }
+        "meta:Europe_Western"{
+            ls{"Hora d'Europa Occidental"}
+        }
+        "meta:Samara"{
+            ls{"Hora de Samara"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

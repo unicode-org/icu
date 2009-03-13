@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/en_CA.xml
@@ -21,7 +21,7 @@ en_CA{
         279,
         216,
     }
-    Version{"1.60"}
+    Version{"1.139"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -33,10 +33,13 @@ en_CA{
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
-                "EEEE, MMMM d, yyyy",
-                "MMMM d, yyyy",
+                "EEEE, MMMM d, y",
+                "MMMM d, y",
                 "yyyy-MM-dd",
                 "yy-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1} {0}",
             }
             availableFormats{
@@ -101,18 +104,18 @@ en_CA{
                     y{"E, yy-MM-dd - E, yy-MM-dd"}
                 }
                 yMMM{
-                    M{"MMM-MMM yyyy"}
-                    y{"MMM yyyy - MMM yyyy"}
+                    M{"MMM-MMM y"}
+                    y{"MMM y - MMM y"}
                 }
                 yMMMEd{
-                    M{"E, MMM d - E, MMM d, yyyy"}
-                    d{"E, MMM d - E, MMM d, yyyy"}
-                    y{"E, MMM d, yyyy - E, MMM d, yyyy"}
+                    M{"E, MMM d - E, MMM d, y"}
+                    d{"E, MMM d - E, MMM d, y"}
+                    y{"E, MMM d, y - E, MMM d, y"}
                 }
                 yMMMd{
-                    M{"MMM d - MMM d, yyyy"}
-                    d{"MMM d-d, yyyy"}
-                    y{"MMM d, yyyy - MMM d, yyyy"}
+                    M{"MMM d - MMM d, y"}
+                    d{"MMM d-d, y"}
+                    y{"MMM d, y - MMM d, y"}
                 }
                 yMd{
                     M{"yy-MM-dd - yy-MM-dd"}

@@ -1,21 +1,33 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/en_SG.xml
 // *
 // ***************************************************************************
 en_SG{
-    Currencies{
-        SGD{
-            "$",
-            "Singapore Dollar",
-        }
-        USD{
-            "US$",
-            "USD",
-        }
+    Countries{
+        001{"World"}
+        KP{"North Korea"}
+        SA{"Saudi Arabia"}
+        TK{"Tokelau"}
+    }
+    Keys{
+        calendar{"calendar"}
+    }
+    Languages{
+        bej{"Beja"}
+        dra{"Dravidian Language"}
+        ilo{"Iloko"}
+        kro{"Kru"}
+        nds{"Low German"}
+        pra{"Prakrit Language"}
+        tpi{"Tok Pisin"}
+        yi{"Yiddish"}
+    }
+    LanguagesShort{
+        az{"Azeri"}
     }
     NumberPatterns{
         "#,##0.###",
@@ -23,24 +35,181 @@ en_SG{
         "#,##0%",
         "#E0",
     }
-    Version{"1.54"}
+    Scripts{
+        Goth{"Gothic"}
+        Tagb{"Tagbanwa"}
+    }
+    Types{
+        calendar{
+            ethiopic-amete-alem{"Ethiopic Amete Alem Calendar"}
+        }
+    }
+    Variants{
+        BOONT{"Boontling"}
+    }
+    Version{"1.139"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
                 1,
-                1,
+                4,
             }
             DateTimePatterns{
                 "a hh:mm:ss v",
                 "a hh:mm:ss z",
                 "a hh:mm:ss",
                 "h:mm a",
-                "EEEE, MMMM d, yyyy",
-                "MMMM d, yyyy",
-                "dd-MMM-yyyy",
+                "EEEE, MMMM d, y",
+                "MMMM d, y",
+                "dd-MMM-y",
                 "M/d/yy",
                 "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
+            availableFormats{
+                Hms{"HH:mm:ss"}
+                MMM{"LLL"}
+                MMdd{"dd/MM"}
+                yyyyMMMM{"MMMM y"}
+            }
+            intervalFormats{
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E, M/d - E, M/d"}
+                    d{"E, M/d - E, M/d"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"E, MMM d - E, MMM d"}
+                    d{"E, MMM d - E, MMM d"}
+                }
+                MMMd{
+                    M{"MMM d - MMM d"}
+                    d{"MMM d-d"}
+                }
+                Md{
+                    M{"M/d - M/d"}
+                    d{"M/d - M/d"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    a{"h a - h a"}
+                    h{"h-h a"}
+                }
+                hm{
+                    a{"h:mm a - h:mm a"}
+                    h{"h:mm-h:mm a"}
+                    m{"h:mm-h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a - h:mm a v"}
+                    h{"h:mm-h:mm a v"}
+                    m{"h:mm-h:mm a v"}
+                }
+                hv{
+                    a{"h a - h a v"}
+                    h{"h-h a v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"M/yy - M/yy"}
+                    y{"M/yy - M/yy"}
+                }
+                yMEd{
+                    M{"E, M/d/yy - E, M/d/yy"}
+                    d{"E, M/d/yy - E, M/d/yy"}
+                    y{"E, M/d/yy - E, M/d/yy"}
+                }
+                yMMM{
+                    M{"MMM-MMM y"}
+                    y{"MMM y - MMM y"}
+                }
+                yMMMEd{
+                    M{"E, MMM d - E, MMM d, y"}
+                    d{"E, MMM d - E, MMM d, y"}
+                    y{"E, MMM d, y - E, MMM d, y"}
+                }
+                yMMMd{
+                    M{"MMM d - MMM d, y"}
+                    d{"MMM d-d, y"}
+                    y{"MMM d, y - MMM d, y"}
+                }
+                yMd{
+                    M{"M/d/yy - M/d/yy"}
+                    d{"M/d/yy - M/d/yy"}
+                    y{"M/d/yy - M/d/yy"}
+                }
+            }
+        }
+    }
+    codePatterns{
+        language{"Language: {0}"}
+    }
+    delimiters{
+        alternateQuotationEnd{"’"}
+    }
+    localeDisplayPattern{
+        separator{", "}
+    }
+    measurementSystemNames{
+        US{"US"}
+    }
+    zoneStrings{
+        "America:Dawson"{
+            ec{"Dawson"}
+        }
+        "America:Menominee"{
+            ec{"Menominee"}
+        }
+        "Antarctica:Vostok"{
+            ec{"Vostok"}
+        }
+        "meta:Africa_Eastern"{
+            ss{"EAT"}
+        }
+        "meta:Alaska_Hawaii"{
+            sg{"AHT"}
+        }
+        "meta:Atlantic"{
+            ld{"Atlantic Daylight Time"}
+        }
+        "meta:Australia_Western"{
+            ss{"AWST"}
+        }
+        "meta:Baku"{
+            sd{"BAKST"}
+        }
+        "meta:Cape_Verde"{
+            ld{"Cape Verde Summer Time"}
+        }
+        "meta:Cocos"{
+            ss{"CCT"}
+        }
+        "meta:Cuba"{
+            ss{"CST (Cuba)"}
+        }
+        "meta:DumontDUrville"{
+            ss{"DDUT"}
+        }
+        "meta:Gilbert_Islands"{
+            ss{"GILT"}
+        }
+        "meta:Suriname"{
+            ss{"SRT"}
+        }
+        "meta:Turkey"{
+            sd{"TRST"}
         }
     }
 }

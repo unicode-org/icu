@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/eo.xml
@@ -401,7 +401,7 @@ eo{
         "NaN",
         "+",
     }
-    Version{"1.66"}
+    Version{"1.139"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -413,10 +413,13 @@ eo{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, d-'a' 'de' MMMM yyyy",
-                "yyyy-MMMM-dd",
-                "yyyy-MMM-dd",
+                "EEEE, d-'a' 'de' MMMM y",
+                "y-MMMM-dd",
+                "y-MMM-dd",
                 "yy-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1} {0}",
             }
             dayNames{

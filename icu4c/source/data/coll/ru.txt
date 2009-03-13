@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/collation/ru.xml
@@ -10,10 +10,10 @@
  *  ICU <specials> source: <path>/xml/collation/ru.xml
  */
 ru{
-    Version{"1.22"}
+    Version{"1.24"}
     collations{
         standard{
-            Sequence{"[suppressContractions [Ѐ-џ] ]"}
+            Sequence{"[suppressContractions [Ѐ-ЗК-зк-џ] ]"}
             Version{"1.6"}
         }
     }

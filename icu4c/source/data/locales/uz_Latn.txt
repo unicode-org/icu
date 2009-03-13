@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/uz_Latn.xml
@@ -30,7 +30,7 @@ uz_Latn{
             "Brazil reali",
         }
         CNY{
-            "CNY",
+            "CN¥",
             "Xitoy yuani",
         }
         EUR{
@@ -38,11 +38,11 @@ uz_Latn{
             "Evro",
         }
         GBP{
-            "UK£",
+            "£",
             "Ingliz funt sterlingi",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
+            "₨",
             "Hind rupiyasi",
         }
         JPY{
@@ -84,7 +84,7 @@ uz_Latn{
         Cyrl{"Kiril"}
         Latn{"Lotin"}
     }
-    Version{"1.19"}
+    Version{"1.139"}
     calendar{
         gregorian{
             dayNames{
