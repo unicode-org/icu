@@ -697,6 +697,11 @@ static int32_t pkg_createSymLinks(const char *targetDir) {
     char cmd[LARGE_BUFFER_MAX_SIZE];
 
 #ifndef U_CYGWIN
+    /* No symbolic link to make. */
+    if (uprv_strlen(libFileNames[LIB_FILE_VERSION]) == 0 || uprv_strlen(libFileNames[LIB_FILE_VERSION_MAJOR]) == 0) {
+        return result;
+    }
+    
     sprintf(cmd, "cd %s && %s %s && %s %s %s",
             targetDir,
             RM_CMD,
