@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2008, International Business Machines Corporation and    *
+* Copyright (C) 1997-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -53,6 +53,10 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ChoiceFormat)
 #define LESS_EQUAL2  ((UChar)0x2264)
 #define VERTICAL_BAR ((UChar)0x007C)   /*|*/
 #define MINUS        ((UChar)0x002D)   /*-*/
+
+#ifdef INFINITY
+#undef INFINITY
+#endif
 #define INFINITY     ((UChar)0x221E)
 
 static const UChar gPositiveInfinity[] = {INFINITY, 0};
