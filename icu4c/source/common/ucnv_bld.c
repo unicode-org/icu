@@ -219,8 +219,8 @@ static UBool U_CALLCONV ucnv_cleanup(void) {
 
 static UBool U_CALLCONV
 isCnvAcceptable(void *context,
-             const char *type, const char *name,
-             const UDataInfo *pInfo) {
+                const char *type, const char *name,
+                const UDataInfo *pInfo) {
     return (UBool)(
         pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
@@ -551,7 +551,7 @@ ucnv_load(UConverterLoadArgs *pArgs, UErrorCode *err) {
         {
             return NULL;
         }
-        else
+        else if (!pArgs->onlyTestIsLoadable)
         {
             /* share it with other library clients */
             ucnv_shareConverterData(mySharedConverterData);
@@ -603,6 +603,11 @@ ucnv_unloadSharedDataIfReady(UConverterSharedData *sharedData)
 void
 ucnv_incrementRefCount(UConverterSharedData *sharedData)
 {
+    /*
+    Checking whether it's an algorithic converter is okay
+    in multithreaded applications because the value never changes.
+    Don't check referenceCounter for any other value.
+    */
     if(sharedData != NULL && sharedData->referenceCounter != ~0) {
         umtx_lock(&cnvCacheMutex);
         sharedData->referenceCounter++;
@@ -610,27 +615,39 @@ ucnv_incrementRefCount(UConverterSharedData *sharedData)
     }
 }
 
+/*
+ * *pPieces must be initialized.
+ * The name without options will be copied to pPieces->cnvName.
+ * The locale and options will be copied to pPieces only if present in inName,
+ * otherwise the existing values in pPieces remain.
+ * *pArgs will be set to the pPieces values.
+ */
 static void
 parseConverterOptions(const char *inName,
-                      char *cnvName,
-                      char *locale,
-                      uint32_t *pFlags,
+                      UConverterNamePieces *pPieces,
+                      UConverterLoadArgs *pArgs,
                       UErrorCode *err)
 {
+    char *cnvName = pPieces->cnvName;
     char c;
     int32_t len = 0;
+
+    pArgs->name=inName;
+    pArgs->locale=pPieces->locale;
+    pArgs->options=pPieces->options;
 
     /* copy the converter name itself to cnvName */
     while((c=*inName)!=0 && c!=UCNV_OPTION_SEP_CHAR) {
         if (++len>=UCNV_MAX_CONVERTER_NAME_LENGTH) {
             *err = U_ILLEGAL_ARGUMENT_ERROR;    /* bad name */
-            *cnvName=0;
+            pPieces->cnvName[0]=0;
             return;
         }
         *cnvName++=c;
         inName++;
     }
     *cnvName=0;
+    pArgs->name=pPieces->cnvName;
 
     /* parse options. No more name copying should occur. */
     while((c=*inName)!=0) {
@@ -641,7 +658,7 @@ parseConverterOptions(const char *inName,
         /* inName is behind an option separator */
         if(uprv_strncmp(inName, "locale=", 7)==0) {
             /* do not modify locale itself in case we have multiple locale options */
-            char *dest=locale;
+            char *dest=pPieces->locale;
 
             /* copy the locale option value */
             inName+=7;
@@ -651,7 +668,7 @@ parseConverterOptions(const char *inName,
 
                 if(++len>=ULOC_FULLNAME_CAPACITY) {
                     *err=U_ILLEGAL_ARGUMENT_ERROR;    /* bad name */
-                    *locale=0;
+                    pPieces->locale[0]=0;
                     return;
                 }
 
@@ -659,19 +676,19 @@ parseConverterOptions(const char *inName,
             }
             *dest=0;
         } else if(uprv_strncmp(inName, "version=", 8)==0) {
-            /* copy the version option value into bits 3..0 of *pFlags */
+            /* copy the version option value into bits 3..0 of pPieces->options */
             inName+=8;
             c=*inName;
             if(c==0) {
-                *pFlags&=~UCNV_OPTION_VERSION;
+                pArgs->options=(pPieces->options&=~UCNV_OPTION_VERSION);
                 return;
             } else if((uint8_t)(c-'0')<10) {
-                *pFlags=(*pFlags&~UCNV_OPTION_VERSION)|(uint32_t)(c-'0');
+                pArgs->options=pPieces->options=(pPieces->options&~UCNV_OPTION_VERSION)|(uint32_t)(c-'0');
                 ++inName;
             }
         } else if(uprv_strncmp(inName, "swaplfnl", 8)==0) {
             inName+=8;
-            *pFlags|=UCNV_OPTION_SWAP_LFNL;
+            pArgs->options=(pPieces->options|=UCNV_OPTION_SWAP_LFNL);
         /* add processing for new options here with another } else if(uprv_strncmp(inName, "option-name=", XX)==0) { */
         } else {
             /* ignore any other options until we define some */
@@ -692,8 +709,12 @@ parseConverterOptions(const char *inName,
  * -Call AlgorithmicConverter initializer (Data=FALSE, Cached=TRUE)
  */
 UConverterSharedData *
-ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UErrorCode * err) {
-    UConverterLookupData stackLookup;
+ucnv_loadSharedData(const char *converterName,
+                    UConverterNamePieces *pPieces,
+                    UConverterLoadArgs *pArgs,
+                    UErrorCode * err) {
+    UConverterNamePieces stackPieces;
+    UConverterLoadArgs stackArgs;
     UConverterSharedData *mySharedConverterData = NULL;
     UErrorCode internalErrorCode = U_ZERO_ERROR;
     UBool mayContainOption = TRUE;
@@ -703,21 +724,40 @@ ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UEr
         return NULL;
     }
 
-    if(lookup == NULL) {
-        lookup = &stackLookup;
+    if(pPieces == NULL) {
+        if(pArgs != NULL) {
+            /*
+             * Bad: We may set pArgs pointers to stackPieces fields
+             * which will be invalid after this function returns.
+             */
+            *err = U_INTERNAL_PROGRAM_ERROR;
+            return NULL;
+        }
+        pPieces = &stackPieces;
+    }
+    if(pArgs == NULL) {
+        uprv_memset(&stackArgs, 0, sizeof(stackArgs));
+        stackArgs.size = (int32_t)sizeof(stackArgs);
+        pArgs = &stackArgs;
     }
 
-    lookup->locale[0] = 0;
-    lookup->options = 0;
+    pPieces->cnvName[0] = 0;
+    pPieces->locale[0] = 0;
+    pPieces->options = 0;
+
+    pArgs->name = converterName;
+    pArgs->locale = pPieces->locale;
+    pArgs->options = pPieces->options;
 
     /* In case "name" is NULL we want to open the default converter. */
     if (converterName == NULL) {
 #if U_CHARSET_IS_UTF8
+        pArgs->name = "UTF-8";
         return (UConverterSharedData *)converterData[UCNV_UTF8];
 #else
         /* Call ucnv_getDefaultName first to query the name from the OS. */
-        lookup->realName = ucnv_getDefaultName();
-        if (lookup->realName == NULL) {
+        pArgs->name = ucnv_getDefaultName();
+        if (pArgs->name == NULL) {
             *err = U_MISSING_RESOURCE_ERROR;
             return NULL;
         }
@@ -729,36 +769,36 @@ ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UEr
     }
     else if(UCNV_FAST_IS_UTF8(converterName)) {
         /* fastpath for UTF-8 */
+        pArgs->name = "UTF-8";
         return (UConverterSharedData *)converterData[UCNV_UTF8];
     }
     else {
         /* separate the converter name from the options */
-        parseConverterOptions(converterName, lookup->cnvName, lookup->locale, &lookup->options, err);
+        parseConverterOptions(converterName, pPieces, pArgs, err);
         if (U_FAILURE(*err)) {
             /* Very bad name used. */
             return NULL;
         }
 
         /* get the canonical converter name */
-        lookup->realName = ucnv_io_getConverterName(lookup->cnvName, &mayContainOption, &internalErrorCode);
-        if (U_FAILURE(internalErrorCode) || lookup->realName == NULL) {
+        pArgs->name = ucnv_io_getConverterName(pArgs->name, &mayContainOption, &internalErrorCode);
+        if (U_FAILURE(internalErrorCode) || pArgs->name == NULL) {
             /*
             * set the input name in case the converter was added
             * without updating the alias table, or when there is no alias table
             */
-            lookup->realName = lookup->cnvName;
+            pArgs->name = pPieces->cnvName;
         }
     }
 
     /* separate the converter name from the options */
-    if(mayContainOption && lookup->realName != lookup->cnvName) {
-        parseConverterOptions(lookup->realName, lookup->cnvName, lookup->locale, &lookup->options, err);
-        lookup->realName = lookup->cnvName;
+    if(mayContainOption && pArgs->name != pPieces->cnvName) {
+        parseConverterOptions(pArgs->name, pPieces, pArgs, err);
     }
 
     /* get the shared data for an algorithmic converter, if it is one */
     if (checkForAlgorithmic) {
-        mySharedConverterData = (UConverterSharedData *)getAlgorithmicTypeFromName(lookup->realName);
+        mySharedConverterData = (UConverterSharedData *)getAlgorithmicTypeFromName(pArgs->name);
     }
     if (mySharedConverterData == NULL)
     {
@@ -767,16 +807,11 @@ ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UEr
         /*   converter data cache, and adding new entries to the cache      */
         /*   to prevent other threads from modifying the cache during the   */
         /*   process.                                                       */
-        UConverterLoadArgs args={ 0 };
-
-        args.size=sizeof(UConverterLoadArgs);
-        args.nestedLoads=1;
-        args.options=lookup->options;
-        args.pkg=NULL;
-        args.name=lookup->realName;
+        pArgs->nestedLoads=1;
+        pArgs->pkg=NULL;
 
         umtx_lock(&cnvCacheMutex);
-        mySharedConverterData = ucnv_load(&args, err);
+        mySharedConverterData = ucnv_load(pArgs, err);
         umtx_unlock(&cnvCacheMutex);
         if (U_FAILURE (*err) || (mySharedConverterData == NULL))
         {
@@ -790,7 +825,8 @@ ucnv_loadSharedData(const char *converterName, UConverterLookupData *lookup, UEr
 UConverter *
 ucnv_createConverter(UConverter *myUConverter, const char *converterName, UErrorCode * err)
 {
-    UConverterLookupData stackLookup;
+    UConverterNamePieces stackPieces;
+    UConverterLoadArgs stackArgs={ (int32_t)sizeof(UConverterLoadArgs) };
     UConverterSharedData *mySharedConverterData;
 
     UTRACE_ENTRY_OC(UTRACE_UCNV_OPEN);
@@ -798,31 +834,47 @@ ucnv_createConverter(UConverter *myUConverter, const char *converterName, UError
     if(U_SUCCESS(*err)) {
         UTRACE_DATA1(UTRACE_OPEN_CLOSE, "open converter %s", converterName);
 
-        mySharedConverterData = ucnv_loadSharedData(converterName, &stackLookup, err);
+        mySharedConverterData = ucnv_loadSharedData(converterName, &stackPieces, &stackArgs, err);
+
+        myUConverter = ucnv_createConverterFromSharedData(
+            myUConverter, mySharedConverterData,
+            &stackArgs,
+            err);
 
         if(U_SUCCESS(*err)) {
-            myUConverter = ucnv_createConverterFromSharedData(
-                myUConverter, mySharedConverterData,
-                stackLookup.realName, stackLookup.locale, stackLookup.options,
-                err);
-
-            if(U_SUCCESS(*err)) {
-                UTRACE_EXIT_PTR_STATUS(myUConverter, *err);
-                return myUConverter;
-            }
-            /*
-            else mySharedConverterData was already cleaned up by
-            ucnv_createConverterFromSharedData.
-            */
-            /*else {
-                ucnv_unloadSharedDataIfReady(mySharedConverterData);
-            }*/
+            UTRACE_EXIT_PTR_STATUS(myUConverter, *err);
+            return myUConverter;
         }
     }
 
     /* exit with error */
     UTRACE_EXIT_STATUS(*err);
     return NULL;
+}
+
+U_CFUNC UBool
+ucnv_canCreateConverter(const char *converterName, UErrorCode *err) {
+    UConverter myUConverter;
+    UConverterNamePieces stackPieces;
+    UConverterLoadArgs stackArgs={ (int32_t)sizeof(UConverterLoadArgs) };
+    UConverterSharedData *mySharedConverterData;
+
+    UTRACE_ENTRY_OC(UTRACE_UCNV_OPEN);
+
+    if(U_SUCCESS(*err)) {
+        UTRACE_DATA1(UTRACE_OPEN_CLOSE, "test if can open converter %s", converterName);
+
+        stackArgs.onlyTestIsLoadable=TRUE;
+        mySharedConverterData = ucnv_loadSharedData(converterName, &stackPieces, &stackArgs, err);
+        ucnv_createConverterFromSharedData(
+            &myUConverter, mySharedConverterData,
+            &stackArgs,
+            err);
+        ucnv_unloadSharedDataIfReady(mySharedConverterData);
+    }
+
+    UTRACE_EXIT_STATUS(*err);
+    return U_SUCCESS(*err) && stackArgs.isLoadable;
 }
 
 UConverter *
@@ -832,7 +884,7 @@ ucnv_createAlgorithmicConverter(UConverter *myUConverter,
                                 UErrorCode *err) {
     UConverter *cnv;
     const UConverterSharedData *sharedData;
-    UBool isAlgorithmicConverter;
+    UConverterLoadArgs stackArgs={ (int32_t)sizeof(UConverterLoadArgs) };
 
     UTRACE_ENTRY_OC(UTRACE_UCNV_OPEN_ALGORITHMIC);
     UTRACE_DATA1(UTRACE_OPEN_CLOSE, "open algorithmic converter type %d", (int32_t)type);
@@ -844,18 +896,24 @@ ucnv_createAlgorithmicConverter(UConverter *myUConverter,
     }
 
     sharedData = converterData[type];
-    umtx_lock(&cnvCacheMutex);
-    isAlgorithmicConverter = (UBool)(sharedData == NULL || sharedData->referenceCounter != ~0);
-    umtx_unlock(&cnvCacheMutex);
-    if (isAlgorithmicConverter) {
+    /*
+    Checking whether it's an algorithic converter is okay
+    in multithreaded applications because the value never changes.
+    Don't check referenceCounter for any other value.
+    */
+    if(sharedData == NULL || sharedData->referenceCounter != ~0) {
         /* not a valid type, or not an algorithmic converter */
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         UTRACE_EXIT_STATUS(U_ILLEGAL_ARGUMENT_ERROR);
         return NULL;
     }
 
-    cnv = ucnv_createConverterFromSharedData(myUConverter, (UConverterSharedData *)sharedData, "",
-                locale != NULL ? locale : "", options, err);
+    stackArgs.name = "";
+    stackArgs.options = options;
+    stackArgs.locale=locale;
+    cnv = ucnv_createConverterFromSharedData(
+            myUConverter, (UConverterSharedData *)sharedData,
+            &stackArgs, err);
 
     UTRACE_EXIT_PTR_STATUS(cnv, *err);
     return cnv;
@@ -864,11 +922,10 @@ ucnv_createAlgorithmicConverter(UConverter *myUConverter,
 UConverter*
 ucnv_createConverterFromPackage(const char *packageName, const char *converterName, UErrorCode * err)
 {
-    char cnvName[UCNV_MAX_CONVERTER_NAME_LENGTH], locale[ULOC_FULLNAME_CAPACITY];
     UConverter *myUConverter;
     UConverterSharedData *mySharedConverterData;
-
-    UConverterLoadArgs args={ 0 };
+    UConverterNamePieces stackPieces;
+    UConverterLoadArgs stackArgs={ (int32_t)sizeof(UConverterLoadArgs) };
 
     UTRACE_ENTRY_OC(UTRACE_UCNV_OPEN_PACKAGE);
 
@@ -879,21 +936,21 @@ ucnv_createConverterFromPackage(const char *packageName, const char *converterNa
 
     UTRACE_DATA2(UTRACE_OPEN_CLOSE, "open converter %s from package %s", converterName, packageName);
 
-    args.size=sizeof(UConverterLoadArgs);
-    args.nestedLoads=1;
-    args.pkg=packageName;
-
     /* first, get the options out of the converterName string */
-    parseConverterOptions(converterName, cnvName, locale, &args.options, err);
+    stackPieces.cnvName[0] = 0;
+    stackPieces.locale[0] = 0;
+    stackPieces.options = 0;
+    parseConverterOptions(converterName, &stackPieces, &stackArgs, err);
     if (U_FAILURE(*err)) {
         /* Very bad name used. */
         UTRACE_EXIT_STATUS(*err);
         return NULL;
     }
-    args.name=cnvName;
+    stackArgs.nestedLoads=1;
+    stackArgs.pkg=packageName;
 
     /* open the data, unflatten the shared structure */
-    mySharedConverterData = createConverterFromFile(&args, err);
+    mySharedConverterData = createConverterFromFile(&stackArgs, err);
 
     if (U_FAILURE(*err)) {
         UTRACE_EXIT_STATUS(*err);
@@ -901,7 +958,7 @@ ucnv_createConverterFromPackage(const char *packageName, const char *converterNa
     }
 
     /* create the actual converter */
-    myUConverter = ucnv_createConverterFromSharedData(NULL, mySharedConverterData, cnvName, locale, args.options, err);
+    myUConverter = ucnv_createConverterFromSharedData(NULL, mySharedConverterData, &stackArgs, err);
 
     if (U_FAILURE(*err)) {
         ucnv_close(myUConverter);
@@ -917,17 +974,22 @@ ucnv_createConverterFromPackage(const char *packageName, const char *converterNa
 UConverter*
 ucnv_createConverterFromSharedData(UConverter *myUConverter,
                                    UConverterSharedData *mySharedConverterData,
-                                   const char *realName, const char *locale, uint32_t options,
+                                   UConverterLoadArgs *pArgs,
                                    UErrorCode *err)
 {
     UBool isCopyLocal;
 
+    if(U_FAILURE(*err)) {
+        ucnv_unloadSharedDataIfReady(mySharedConverterData);
+        return myUConverter;
+    }
     if(myUConverter == NULL)
     {
         myUConverter = (UConverter *) uprv_malloc (sizeof (UConverter));
         if(myUConverter == NULL)
         {
             *err = U_MEMORY_ALLOCATION_ERROR;
+            ucnv_unloadSharedDataIfReady(mySharedConverterData);
             return NULL;
         }
         isCopyLocal = FALSE;
@@ -940,20 +1002,24 @@ ucnv_createConverterFromSharedData(UConverter *myUConverter,
     myUConverter->isCopyLocal = isCopyLocal;
     /*myUConverter->isExtraLocal = FALSE;*/ /* Set by the memset call */
     myUConverter->sharedData = mySharedConverterData;
-    myUConverter->options = options;
-    myUConverter->preFromUFirstCP = U_SENTINEL;
-    myUConverter->fromCharErrorBehaviour = UCNV_TO_U_DEFAULT_CALLBACK;
-    myUConverter->fromUCharErrorBehaviour = UCNV_FROM_U_DEFAULT_CALLBACK;
-    myUConverter->toUnicodeStatus = mySharedConverterData->toUnicodeStatus;
-    myUConverter->maxBytesPerUChar = mySharedConverterData->staticData->maxBytesPerChar;
-    myUConverter->subChar1 = mySharedConverterData->staticData->subChar1;
-    myUConverter->subCharLen = mySharedConverterData->staticData->subCharLen;
-    myUConverter->subChars = (uint8_t *)myUConverter->subUChars;
-    uprv_memcpy(myUConverter->subChars, mySharedConverterData->staticData->subChar, myUConverter->subCharLen);
-    myUConverter->toUCallbackReason = UCNV_ILLEGAL; /* default reason to invoke (*fromCharErrorBehaviour) */
+    myUConverter->options = pArgs->options;
+    if(!pArgs->onlyTestIsLoadable) {
+        myUConverter->preFromUFirstCP = U_SENTINEL;
+        myUConverter->fromCharErrorBehaviour = UCNV_TO_U_DEFAULT_CALLBACK;
+        myUConverter->fromUCharErrorBehaviour = UCNV_FROM_U_DEFAULT_CALLBACK;
+        myUConverter->toUnicodeStatus = mySharedConverterData->toUnicodeStatus;
+        myUConverter->maxBytesPerUChar = mySharedConverterData->staticData->maxBytesPerChar;
+        myUConverter->subChar1 = mySharedConverterData->staticData->subChar1;
+        myUConverter->subCharLen = mySharedConverterData->staticData->subCharLen;
+        myUConverter->subChars = (uint8_t *)myUConverter->subUChars;
+        uprv_memcpy(myUConverter->subChars, mySharedConverterData->staticData->subChar, myUConverter->subCharLen);
+        myUConverter->toUCallbackReason = UCNV_ILLEGAL; /* default reason to invoke (*fromCharErrorBehaviour) */
+    }
 
-    if(mySharedConverterData->impl->open != NULL) {
-        mySharedConverterData->impl->open(myUConverter, realName, locale, options, err);
+    if(mySharedConverterData->impl->open == NULL) {
+        pArgs->isLoadable = pArgs->onlyTestIsLoadable;
+    } else {
+        mySharedConverterData->impl->open(myUConverter, pArgs, err);
         if(U_FAILURE(*err)) {
             ucnv_close(myUConverter);
             return NULL;
@@ -1073,8 +1139,7 @@ static UBool haveAvailableConverterList(UErrorCode *pErrorCode) {
         for (idx = 0; idx < allConverterCount; idx++) {
             localStatus = U_ZERO_ERROR;
             converterName = uenum_next(allConvEnum, NULL, &localStatus);
-            ucnv_close(ucnv_createConverter(&tempConverter, converterName, &localStatus));
-            if (U_SUCCESS(localStatus)) {
+            if (ucnv_canCreateConverter(converterName, &localStatus)) {
                 localConverterList[localConverterCount++] = converterName;
             }
         }
@@ -1130,19 +1195,23 @@ you shouldn't be modifying or deleting the string from a separate thread.
 */
 static U_INLINE void
 internalSetName(const char *name, UErrorCode *status) {
-    UConverterLookupData lookup;
+    UConverterNamePieces stackPieces;
+    UConverterLoadArgs stackArgs={ (int32_t)sizeof(UConverterLoadArgs) };
     int32_t length=(int32_t)(uprv_strlen(name));
     UBool containsOption = (UBool)(uprv_strchr(name, UCNV_OPTION_SEP_CHAR) != NULL);
     const UConverterSharedData *algorithmicSharedData;
 
-    lookup.locale[0] = 0;
-    lookup.options = 0;
-    lookup.realName = name;
+    stackArgs.name = name;
     if(containsOption) {
-        parseConverterOptions(lookup.realName, lookup.cnvName, lookup.locale, &lookup.options, status);
-        lookup.realName = lookup.cnvName;
+        stackPieces.cnvName[0] = 0;
+        stackPieces.locale[0] = 0;
+        stackPieces.options = 0;
+        parseConverterOptions(name, &stackPieces, &stackArgs, status);
+        if(U_FAILURE(*status)) {
+            return;
+        }
     }
-    algorithmicSharedData = getAlgorithmicTypeFromName(lookup.realName);
+    algorithmicSharedData = getAlgorithmicTypeFromName(stackArgs.name);
 
     umtx_lock(&cnvCacheMutex);
 

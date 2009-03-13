@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2000-2008, International Business Machines
+*   Copyright (C) 2000-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnvisci.c
@@ -152,9 +152,10 @@ static const LookupDataStruct lookupInitialData[]={
 };
 
 static void initializeSets() {
+    /* TODO: Replace the following two lines with PNJ_CONSONANT_SET = uset_openEmpty(); */
     PNJ_CONSONANT_SET = uset_open(0,0);
     uset_clear(PNJ_CONSONANT_SET);
-    
+
     uset_addRange(PNJ_CONSONANT_SET, 0x0A15, 0x0A28);
     uset_addRange(PNJ_CONSONANT_SET, 0x0A2A, 0x0A30);
     uset_addRange(PNJ_CONSONANT_SET, 0x0A35, 0x0A36);
@@ -170,8 +171,12 @@ static void initializeSets() {
     uset_compact(PNJ_BINDI_TIPPI_SET);
 }
 
-static void _ISCIIOpen(UConverter *cnv, const char *name, const char *locale,
-        uint32_t options, UErrorCode *errorCode) {
+static void _ISCIIOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode) {
+    if(pArgs->onlyTestIsLoadable) {
+        pArgs->isLoadable=TRUE;
+        return;
+    }
+
     /* Ensure that the sets used in special handling of certain Gurmukhi characters are initialized. */
     initializeSets();
     
@@ -186,20 +191,20 @@ static void _ISCIIOpen(UConverter *cnv, const char *name, const char *locale,
         converterData->contextCharFromUnicode=0x0000;
         converterData->resetToDefaultToUnicode=FALSE;
         /* check if the version requested is supported */
-        if ((options & UCNV_OPTIONS_VERSION_MASK) < 9) {
+        if ((pArgs->options & UCNV_OPTIONS_VERSION_MASK) < 9) {
             /* initialize state variables */
             converterData->currentDeltaFromUnicode
                     = converterData->currentDeltaToUnicode
-                            = converterData->defDeltaToUnicode = (uint16_t)(lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].uniLang * DELTA);
+                            = converterData->defDeltaToUnicode = (uint16_t)(lookupInitialData[pArgs->options & UCNV_OPTIONS_VERSION_MASK].uniLang * DELTA);
 
             converterData->currentMaskFromUnicode
                     = converterData->currentMaskToUnicode
-                            = converterData->defMaskToUnicode = lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK].maskEnum;
+                            = converterData->defMaskToUnicode = lookupInitialData[pArgs->options & UCNV_OPTIONS_VERSION_MASK].maskEnum;
             
             converterData->isFirstBuffer=TRUE;
             (void)uprv_strcpy(converterData->name, ISCII_CNV_PREFIX);
             len = (int32_t)uprv_strlen(converterData->name);
-            converterData->name[len]= (char)((options & UCNV_OPTIONS_VERSION_MASK) + '0');
+            converterData->name[len]= (char)((pArgs->options & UCNV_OPTIONS_VERSION_MASK) + '0');
             converterData->name[len+1]=0;
             
             converterData->prevToUnicodeStatus = 0x0000;
