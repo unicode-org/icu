@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and   *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
@@ -389,6 +389,16 @@ UCollationResult RuleBasedCollator::compare(
     if(U_SUCCESS(status)) {
         return ucol_strcoll(ucollator, source.getBuffer(), source.length(),
                                        target.getBuffer(), target.length());
+    } else {
+        return UCOL_EQUAL;
+    }
+}
+
+UCollationResult RuleBasedCollator::compare(UCharIterator &sIter,
+                                            UCharIterator &tIter,
+                                            UErrorCode &status) const {
+    if(U_SUCCESS(status)) {
+        return ucol_strcollIter(ucollator, &sIter, &tIter, &status);
     } else {
         return UCOL_EQUAL;
     }
