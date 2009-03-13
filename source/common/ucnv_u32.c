@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002-2006, International Business Machines
+*   Copyright (C) 2002-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_u32.c
@@ -1033,11 +1033,13 @@ _UTF32Reset(UConverter *cnv, UConverterResetChoice choice) {
 
 static void
 _UTF32Open(UConverter *cnv,
-           const char *name,
-           const char *locale,
-           uint32_t options,
+           UConverterLoadArgs *pArgs,
            UErrorCode *pErrorCode) {
-    _UTF32Reset(cnv, UCNV_RESET_BOTH);
+    if(pArgs->onlyTestIsLoadable) {
+        pArgs->isLoadable=TRUE;
+    } else {
+        _UTF32Reset(cnv, UCNV_RESET_BOTH);
+    }
 }
 
 static const char utf32BOM[8]={ 0, 0, (char)0xfe, (char)0xff,    (char)0xff, (char)0xfe, 0, 0 };

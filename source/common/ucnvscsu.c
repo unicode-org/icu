@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2000-2006, International Business Machines
+*   Copyright (C) 2000-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -190,10 +190,13 @@ _SCSUReset(UConverter *cnv, UConverterResetChoice choice) {
 
 static void
 _SCSUOpen(UConverter *cnv,
-          const char *name,
-          const char *locale,
-          uint32_t options,
+          UConverterLoadArgs *pArgs,
           UErrorCode *pErrorCode) {
+    const char *locale=pArgs->locale;
+    if(pArgs->onlyTestIsLoadable) {
+        pArgs->isLoadable=TRUE;
+        return;
+    }
     cnv->extraInfo=uprv_malloc(sizeof(SCSUData));
     if(cnv->extraInfo!=NULL) {
         if(locale!=NULL && locale[0]=='j' && locale[1]=='a' && (locale[2]==0 || locale[2]=='_')) {
