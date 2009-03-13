@@ -905,7 +905,7 @@ void TestOpenVsOpenRules(){
     }
 
     for(x = 0; x < numLocales; x+=adder){
-        curLoc = uloc_getAvailable(x);
+        curLoc = (char *)uloc_getAvailable(x);
         log_verbose("Processing %s\n", curLoc);
         
         /* create a collator the normal API way */
@@ -2315,7 +2315,7 @@ static void TestGetKeywordValuesForLocale(void) {
         
         if (size == expectedLength[i]) {
             for (n = 0; n < expectedLength[i]; n++) {
-                if ((value = uenum_next(keywordValues, valueLength, &status)) != NULL && U_SUCCESS(status)) {
+                if ((value = uenum_next(keywordValues, &valueLength, &status)) != NULL && U_SUCCESS(status)) {
                     if (uprv_strcmp(value, PREFERRED[i][n+1]) != 0) {
                         log_err("Keyword values differ: Got [%s] Expected [%s] for locale: %s\n", value, PREFERRED[i][n+1], locale);
                         errorOccurred = TRUE;
