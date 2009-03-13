@@ -19,6 +19,7 @@ icu4c/source/data/coll/pa_Arab.txt -text
 icu4c/source/data/coll/pa_Arab_PK.txt -text
 icu4c/source/data/coll/pa_Guru.txt -text
 icu4c/source/data/coll/pa_Guru_IN.txt -text
+icu4c/source/data/coll/pa_IN.txt -text
 icu4c/source/data/coll/si.txt -text
 icu4c/source/data/coll/si_LK.txt -text
 icu4c/source/data/coll/ur.txt -text
