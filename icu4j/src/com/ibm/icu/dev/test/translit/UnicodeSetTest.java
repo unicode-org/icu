@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -219,6 +219,13 @@ public class UnicodeSetTest extends TestFmwk {
     s.clear();
     s.applyPropertyAlias("gc", "Lu");
     // TODO expectToPattern(s, what?)
+
+    // RemoveAllStrings()
+    s.clear();
+    s.applyPattern("[a-z{abc}{def}]");
+    expectToPattern(s, "[a-z{abc}{def}]", null);
+    s.removeAllStrings();
+    expectToPattern(s, "[a-z]", null);
   }
   
   static String[] OTHER_TOPATTERN_TESTS = {
