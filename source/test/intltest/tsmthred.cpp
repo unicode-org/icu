@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1999-2008, International Business Machines Corporation and
+ * Copyright (c) 1999-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -13,6 +13,13 @@
 /* Needed by z/OS to get usleep */
 #if !defined(_XOPEN_SOURCE_EXTENDED)
 #define _XOPEN_SOURCE_EXTENDED 1
+#endif
+
+/* Turn off standard c++ string class. This is an issue when _XOPEN_SOURCE_EXTENDED is turned on. 
+ * Platforms affected: AIX/VACPP and Solaris/GCC 
+ */
+#ifndef U_HAVE_STD_STRING
+#define U_HAVE_STD_STRING 0
 #endif
 
 #include "unicode/utypes.h"
