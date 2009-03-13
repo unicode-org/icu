@@ -1368,6 +1368,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
                         cal.set(fields[0], fields[1], fields[2],
                                 fields[3], fields[4], fields[5]);
                         cal.set(Calendar.MILLISECOND, fields[6]);
+                        cal.setMinimalDaysInFirstWeek(1);
                         for (int i = 0; i < 2*limit; i++) {
                             if (op == 0) {
                                 cal.add(field, i < limit ? 1 : -1);
