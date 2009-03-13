@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 //===============================================================================
@@ -133,6 +133,7 @@ CollationAPITest::TestProperty(/* char* par */)
     doAssert((col->compare("black bird", "black-bird") == Collator::LESS), "black bird > black-bird comparison failed");
     doAssert((col->compare("Hello", "hello") == Collator::GREATER), "Hello > hello comparison failed");
 
+    doAssert((col->compareUTF8("ab\xc3\xa4", "ab\xc3\x9f", success) == Collator::LESS), "ab a-umlaut < ab sharp-s UTF-8 comparison failed");
 
     /*start of update [Bertrand A. D. 02/10/98]*/
     doAssert((col->compare("ab", "abc", 2) == Collator::EQUAL), "ab = abc with length 2 comparison failed");
