@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/zh_Hant_HK.xml
@@ -8,7 +8,7 @@
 // ***************************************************************************
 zh_Hant_HK{
     Countries{
-        IT{"意大利"}
+        IT{"義大利"}
         TW{"台灣"}
     }
     Currencies{
@@ -41,7 +41,7 @@ zh_Hant_HK{
             "紐西蘭元",
         }
         RSD{
-            "RSD",
+            "din.",
             "塞爾維亞第納爾",
         }
         SGD{
@@ -59,8 +59,8 @@ zh_Hant_HK{
     }
     NumberElements{
         ".",
-        "，",
-        "；",
+        ",",
+        ";",
         "%",
         "0",
         "#",
@@ -81,6 +81,11 @@ zh_Hant_HK{
         Hang{"韓文字母"}
         Kore{"韓文"}
     }
+    Types{
+        collation{
+            big5han{"繁體中文順序 - Big5"}
+        }
+    }
     Variants{
         1901{"傳統德國拼字法"}
         1996{"1996 德國拼字法"}
@@ -91,29 +96,32 @@ zh_Hant_HK{
         SCOTLAND{"蘇格蘭標準英語"}
         SOLBA{"Stolvizza/Solbica 方言"}
     }
-    Version{"1.67"}
+    Version{"1.139"}
     calendar{
         chinese{
             availableFormats{
                 MMMMEd{"M月d日E"}
-                yMEd{"yyyy年M月d日，E"}
+                yMEd{"y年M月d日，E"}
             }
         }
         gregorian{
             DateTimeElements:intvector{
                 1,
-                1,
+                4,
             }
             DateTimePatterns{
                 "ahh時mm分ss秒v",
                 "ahh時mm分ss秒z",
                 "ahh:mm:ss",
                 "ah:mm",
-                "yyyy年M月d日EEEE",
-                "yyyy年M月d日",
-                "yyyy年M月d日",
+                "y年M月d日EEEE",
+                "y年M月d日",
+                "y年M月d日",
                 "yy年M月d日",
+                "{1} {0}",
+                "{1} {0}",
                 "{1}{0}",
+                "{1} {0}",
             }
         }
     }

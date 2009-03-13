@@ -30,12 +30,15 @@ ar_TN{
     Scripts{
         Ital{"اللأيطالية القديمة"}
     }
-    Version{"1.48"}
+    Version{"1.139"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
                 7,
-                1,
+                4,
+            }
+            availableFormats{
+                yyyyMMMM{"MMMM، y"}
             }
             dayNames{
                 format{
@@ -48,6 +51,30 @@ ar_TN{
                         "الجمعة",
                         "السبت",
                     }
+                }
+            }
+            fields{
+                day{
+                    relative{
+                        "1"{"غدًا"}
+                    }
+                }
+            }
+            intervalFormats{
+                M{
+                    M{"M‏-M"}
+                }
+                MMMd{
+                    d{"d‏-d MMM"}
+                }
+                d{
+                    d{"d‏-d"}
+                }
+                y{
+                    y{"y‏-y"}
+                }
+                yMMMd{
+                    d{"d‏-d MMM، y"}
                 }
             }
             weekend:intvector{

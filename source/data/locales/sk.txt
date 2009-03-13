@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/sk.xml
@@ -318,7 +318,7 @@ sk{
             "Nizozemský Antilský guilder",
         }
         AOA{
-            "AOA",
+            "Kz",
             "Angolská kwanza",
         }
         AOK{
@@ -334,7 +334,7 @@ sk{
             "Angolská kwanza Reajustado (1995-1999)",
         }
         ARA{
-            "ARA",
+            "₳",
             "Argentinský austral",
         }
         ARP{
@@ -354,7 +354,7 @@ sk{
             "Austrálsky dolár",
         }
         AWG{
-            "AWG",
+            "Afl.",
             "Arubský guilder",
         }
         AZM{
@@ -410,11 +410,11 @@ sk{
             "Bermudský dolár",
         }
         BND{
-            "BND",
+            "BN$",
             "Bruneiský dolár",
         }
         BOP{
-            "BOP",
+            "$b.",
             "Bolivíjske peso",
         }
         BOV{
@@ -422,15 +422,15 @@ sk{
             "Bolivíjske mvdol",
         }
         BRB{
-            "BRB",
+            "NCr",
             "Bolivíjske Cruzeiro Novo (1967-1986)",
         }
         BRC{
-            "BRC",
+            "Cz$",
             "Bolivíjske cruzado",
         }
         BRE{
-            "BRE",
+            "Cr$",
             "Bolivíjske cruzeiro (1990-1993)",
         }
         BRL{
@@ -438,15 +438,15 @@ sk{
             "Bolivíjsky real",
         }
         BRN{
-            "BRN",
+            "NCz$",
             "Brazílske Cruzado Novo",
         }
         BRR{
-            "BRR",
+            "CR$",
             "Brazílske cruzeiro",
         }
         BSD{
-            "BSD",
+            "BS$",
             "Bahamský dolár",
         }
         BTN{
@@ -510,7 +510,7 @@ sk{
             "Československá koruna",
         }
         CUP{
-            "CUP",
+            "CU$",
             "Kubánske peso",
         }
         CVE{
@@ -522,7 +522,7 @@ sk{
             "Cypruská libra",
         }
         CZK{
-            "CZK",
+            "Kč",
             "Česká koruna",
         }
         DDM{
@@ -530,7 +530,7 @@ sk{
             "Východonemecká marka",
         }
         DEM{
-            "DEM",
+            "DM",
             "Nemecká marka",
         }
         DJF{
@@ -558,19 +558,19 @@ sk{
             "Ekuadorský Unidad de Valor Constante (UVC)",
         }
         EEK{
-            "EEK",
+            "Ekr",
             "Estónska kroon",
         }
         EGP{
-            "EGP",
+            "EG£",
             "Egyptská libra",
         }
         ERN{
-            "ERN",
+            "Nfk",
             "Eritrejská nakfa",
         }
         ESP{
-            "ESP",
+            "Pts",
             "Španielská peseta",
         }
         ETB{
@@ -582,7 +582,7 @@ sk{
             "Euro",
         }
         FIM{
-            "FIM",
+            "mk",
             "Finská marka",
         }
         FJD{
@@ -590,15 +590,15 @@ sk{
             "Fiji dolár",
         }
         FKP{
-            "FKP",
+            "FK£",
             "Falklandská libra",
         }
         FRF{
-            "FRF",
+            "₣",
             "Francúzsky frank",
         }
         GBP{
-            "UK£",
+            "£",
             "Britská libra",
         }
         GEK{
@@ -610,11 +610,11 @@ sk{
             "Gruzínsky lari",
         }
         GHC{
-            "GHC",
+            "₵",
             "Ghanský cedi",
         }
         GIP{
-            "GIP",
+            "GI£",
             "Gibraltarská libra",
         }
         GMD{
@@ -634,7 +634,7 @@ sk{
             "Rovníková Guinea Ekwele Guineana",
         }
         GRD{
-            "GRD",
+            "₯",
             "Grécka drachma",
         }
         GTQ{
@@ -666,7 +666,7 @@ sk{
             "Chorvátsky dinár",
         }
         HRK{
-            "HRK",
+            "kn",
             "Chorvátska kuna",
         }
         HTG{
@@ -686,11 +686,11 @@ sk{
             "Írska libra",
         }
         ILP{
-            "ILP",
+            "I£",
             "Izraelská libra",
         }
         ILS{
-            "ILS",
+            "₪",
             "Izraelský šekel",
         }
         INR{
@@ -706,7 +706,7 @@ sk{
             "Iránsky rial",
         }
         ISK{
-            "ISK",
+            "Ikr",
             "Islandská krona",
         }
         ITL{
@@ -742,11 +742,11 @@ sk{
             "Comoro frank",
         }
         KPW{
-            "KPW",
+            "KP₩",
             "Severokórejský won",
         }
         KRW{
-            "KRW",
+            "₩",
             "Juhokórejský won",
         }
         KWD{
@@ -754,7 +754,7 @@ sk{
             "Kuvaitský dinár",
         }
         KYD{
-            "KYD",
+            "KY$",
             "Kajmanský dolár",
         }
         KZT{
@@ -762,7 +762,7 @@ sk{
             "Kazažský tenge",
         }
         LAK{
-            "LAK",
+            "₭",
             "Laoský kip",
         }
         LBP{
@@ -774,7 +774,7 @@ sk{
             "Šrilanská rupia",
         }
         LRD{
-            "LRD",
+            "L$",
             "Libérský dolár",
         }
         LSL{
@@ -782,7 +782,7 @@ sk{
             "Lesothský loti",
         }
         LTL{
-            "LTL",
+            "Lt",
             "Litevská lita",
         }
         LTT{
@@ -794,7 +794,7 @@ sk{
             "Luxemburský frank",
         }
         LVL{
-            "LVL",
+            "Ls",
             "Lotyšský lats",
         }
         LVR{
@@ -842,7 +842,7 @@ sk{
             "Mongolský tugrik",
         }
         MOP{
-            "MOP",
+            "MOP$",
             "Macao Pataca",
         }
         MRO{
@@ -854,15 +854,15 @@ sk{
             "Maltská lira",
         }
         MTP{
-            "MTP",
+            "MT£",
             "Maltská libra",
         }
         MUR{
-            "MUR",
+            "MURs",
             "Mauritská rupia",
         }
         MVR{
-            "MVR",
+            "Rf",
             "Maldivská rufiyaa",
         }
         MWK{
@@ -874,7 +874,7 @@ sk{
             "Mexické peso",
         }
         MXP{
-            "MXP",
+            "MX$",
             "Mexické striborné peso (1861-1992)",
         }
         MXV{
@@ -898,7 +898,7 @@ sk{
             "Namibský dolár",
         }
         NGN{
-            "NGN",
+            "₦",
             "Nigerská naira",
         }
         NIC{
@@ -906,11 +906,11 @@ sk{
             "Nikaragujská cordoba",
         }
         NIO{
-            "NIO",
+            "C$",
             "Nikaragujská Cordoba Oro",
         }
         NLG{
-            "NLG",
+            "fl",
             "Nizozemský guilder",
         }
         NOK{
@@ -930,15 +930,15 @@ sk{
             "Ománský rial",
         }
         PAB{
-            "PAB",
+            "B/.",
             "Panamská balboa",
         }
         PEI{
-            "PEI",
+            "I/.",
             "Peruvský inti",
         }
         PEN{
-            "PEN",
+            "S/.",
             "Peruvský sol Nuevo",
         }
         PES{
@@ -950,7 +950,7 @@ sk{
             "Papua Nová Guinea kina",
         }
         PHP{
-            "PHP",
+            "₱",
             "Filipínske peso",
         }
         PKR{
@@ -966,11 +966,11 @@ sk{
             "Polský zloty (1950-1995)",
         }
         PTE{
-            "PTE",
+            "Esc",
             "Portugalské eskudo",
         }
         PYG{
-            "PYG",
+            "₲",
             "Paraguayské guarani",
         }
         QAR{
@@ -990,7 +990,7 @@ sk{
             "Ruský rubeľ (1991-1998)",
         }
         RWF{
-            "RWF",
+            "RF",
             "Rwandský frank",
         }
         SAR{
@@ -1006,7 +1006,7 @@ sk{
             "Sejšelská rupia",
         }
         SDD{
-            "SDD",
+            "LSd",
             "Sudánsky dinár",
         }
         SDP{
@@ -1022,7 +1022,7 @@ sk{
             "Singapúrsky dolár",
         }
         SHP{
-            "SHP",
+            "SH£",
             "Libra",
         }
         SIT{
@@ -1034,7 +1034,7 @@ sk{
             "Slovenská koruna",
         }
         SLL{
-            "SLL",
+            "Le",
             "Sierra Leone Leone",
         }
         SOS{
@@ -1054,7 +1054,7 @@ sk{
             "Sovietský rubeľ",
         }
         SVC{
-            "SVC",
+            "SV₡",
             "El Salvadorský colon",
         }
         SYP{
@@ -1066,7 +1066,7 @@ sk{
             "Swaziland lilangeni",
         }
         THB{
-            "THB",
+            "฿",
             "Thajský bát",
         }
         TJR{
@@ -1082,7 +1082,7 @@ sk{
             "Turkménsky manat",
         }
         TND{
-            "TND",
+            "DT",
             "Tuniský dinár",
         }
         TOP{
@@ -1110,7 +1110,7 @@ sk{
             "Tanzanský šiling",
         }
         UAH{
-            "UAH",
+            "₴",
             "Ukrainská hrivna",
         }
         UAK{
@@ -1154,7 +1154,7 @@ sk{
             "Venezuelský bolivar",
         }
         VND{
-            "VND",
+            "₫",
             "Vietnamský dong",
         }
         VUV{
@@ -1162,11 +1162,11 @@ sk{
             "Vanuatu vatu",
         }
         WST{
-            "WST",
+            "WS$",
             "Západná Samoa tala",
         }
         XAF{
-            "XAF",
+            "FCFA",
             "CFA frank BEAC",
         }
         XAU{
@@ -1190,7 +1190,7 @@ sk{
             "Francúzsky UIC-frank",
         }
         XOF{
-            "XOF",
+            "CFA",
             "CFA frank BCEAO",
         }
         XPF{
@@ -1226,11 +1226,11 @@ sk{
             "Juhoafrický rand",
         }
         ZMK{
-            "ZMK",
+            "ZK",
             "Zambská kwacha",
         }
         ZRN{
-            "ZRN",
+            "NZ",
             "Zairský nový zaire",
         }
         ZRZ{
@@ -1256,6 +1256,7 @@ sk{
         af{"africký"}
         ain{"ainský"}
         akk{"akadský"}
+        ale{"aleutčina"}
         am{"amharský"}
         ar{"arabský"}
         art{"umelý jazyk"}
@@ -1267,9 +1268,11 @@ sk{
         ban{"balijský"}
         bat{"baltský jazyk"}
         be{"bieloruský"}
-        ber{"berberský"}
+        bej{"bedža"}
+        ber{"berberské jazyky"}
         bg{"bulharský"}
         bh{"biharský"}
+        bm{"bambarčina"}
         bn{"bengálsky"}
         bo{"tibetský"}
         br{"bretónsky"}
@@ -1280,13 +1283,17 @@ sk{
         cau{"kaukazský jazyk"}
         ce{"čečenský"}
         cel{"keltský jazyk"}
+        co{"korzičtina"}
         cs{"český"}
         cy{"walesky"}
         da{"dánsky"}
         dak{"dakotský"}
         de{"nemecký"}
+        den{"slovančina"}
+        dra{"drávidské jazyky"}
         egy{"staroegyptský"}
         el{"grécky"}
+        elx{"elamčina"}
         en{"anglický"}
         en_GB{"anglický (Veľká Británia)"}
         en_US{"anglický (USA)"}
@@ -1300,16 +1307,18 @@ sk{
         fiu{"ugrofínsky jazyk"}
         fo{"faersky"}
         fr{"francúzsky"}
-        fy{"frizijsky"}
-        ga{"írsky"}
+        fy{"západná frízština"}
+        ga{"írčina"}
         gd{"škótskou gaelštinou"}
         gem{"germánsky jazyk"}
-        gl{"galicijsky"}
+        gl{"galícijčina"}
         gn{"guaransky"}
         got{"gotický"}
         grc{"starogrécky"}
         gsw{"nemecký (Švajčiarsko)"}
         gu{"gudžaratsky"}
+        gv{"mančina"}
+        ha{"hauština"}
         haw{"havajský"}
         he{"hebrejský"}
         hi{"hindština"}
@@ -1320,7 +1329,7 @@ sk{
         ia{"interlingua"}
         id{"indonézsky"}
         ie{"interlingue"}
-        ine{"indoeurópsky jazyk"}
+        ine{"indoeurópske jazyky"}
         ira{"iránsky jazyk"}
         is{"islandský"}
         it{"taliansky"}
@@ -1328,13 +1337,14 @@ sk{
         jv{"javanský"}
         ka{"gruzínsky"}
         kg{"konžský"}
+        kj{"kuaňama"}
         km{"kambodžský"}
         kn{"kanadský"}
         ko{"kórejský"}
         ku{"kurdský"}
         ky{"kyrgyzský"}
         la{"latinský"}
-        lb{"luxemburgský"}
+        lb{"luxemburčina"}
         ln{"lingalsky"}
         lo{"laoský"}
         lt{"litovský"}
@@ -1350,10 +1360,12 @@ sk{
         nai{"jazyk severoamerických indiánov"}
         ne{"nepálsky"}
         nl{"holandský"}
+        nn{"nórsky nynorsk"}
         no{"nórsky"}
         nv{"jazyk navajov"}
         oc{"okcitánsky"}
         or{"urijský"}
+        os{"osetčina"}
         pa{"pandžábsky"}
         paa{"papuánsky"}
         pl{"poľský"}
@@ -1375,6 +1387,7 @@ sk{
         so{"somálsky"}
         sq{"albánsky"}
         sr{"srbský"}
+        ss{"svazijčina"}
         st{"sesothsky"}
         su{"sundsky"}
         sux{"sumerský"}
@@ -1402,7 +1415,8 @@ sk{
         wa{"valónsky"}
         wo{"wolof"}
         xh{"xhosky"}
-        yi{"jidišsky"}
+        yi{"jidiš"}
+        yo{"jorubčina"}
         zh{"čínsky"}
         zh_Hans{"čínština (zjednodušená)"}
         zh_Hant{"čínština (tradičná)"}
@@ -1481,19 +1495,44 @@ sk{
             traditional{"Tradičné"}
         }
     }
-    Version{"1.84"}
+    Version{"1.139"}
     calendar{
         gregorian{
+            AmPmMarkers{
+                "dopoludnia",
+                "PM",
+            }
             DateTimePatterns{
                 "H:mm:ss v",
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
-                "EEEE, d. MMMM yyyy",
-                "d. MMMM yyyy",
+                "EEEE, d. MMMM y",
+                "d. MMMM y",
                 "d.M.yyyy",
                 "d.M.yyyy",
                 "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                EEEd{"EEE, d."}
+                Hm{"HH:mm"}
+                MEd{"E, d.M."}
+                MMMEd{"E, d. MMM"}
+                MMMMEd{"E, d. MMMM"}
+                MMMd{"d. MMM"}
+                Md{"d.M."}
+                d{"d."}
+                ms{"mm:ss"}
+                yM{"MM/yyyy"}
+                yMEd{"EEE, d.M.yyyy"}
+                yMMM{"MMM y"}
+                yMMMEd{"EEE, d. MMM y"}
+                yMMMM{"MMMM y"}
+                yQ{"Q yyyy"}
+                yQQQ{"QQQ y"}
             }
             dayNames{
                 format{
@@ -1536,43 +1575,46 @@ sk{
             }
             fields{
                 day{
-                    dn{"deň"}
+                    dn{"Deň"}
                     relative{
-                        "-1"{"včera"}
-                        "-2"{"predvčerom"}
-                        "-3"{"pred tromi dňami"}
-                        "0"{"dnes"}
-                        "1"{"zajtra"}
-                        "2"{"pozajtra"}
-                        "3"{"o tri dni"}
+                        "-1"{"Včera"}
+                        "-2"{"Predvčerom"}
+                        "-3"{"Pred tromi dňami"}
+                        "0"{"Dnes"}
+                        "1"{"Zajtra"}
+                        "2"{"Pozajtra"}
+                        "3"{"O tri dni"}
                     }
                 }
+                dayperiod{
+                    dn{"Časť dňa"}
+                }
                 era{
-                    dn{"éra"}
+                    dn{"Éra"}
                 }
                 hour{
-                    dn{"hodina"}
+                    dn{"Hodina"}
                 }
                 minute{
-                    dn{"minúta"}
+                    dn{"Minúta"}
                 }
                 month{
-                    dn{"mesiac"}
+                    dn{"Mesiac"}
                 }
                 second{
-                    dn{"sekunda"}
+                    dn{"Sekunda"}
                 }
                 week{
-                    dn{"týždeň"}
+                    dn{"Týždeň"}
                 }
                 weekday{
-                    dn{"deň v týždni"}
+                    dn{"Deň v týždni"}
                 }
                 year{
-                    dn{"rok"}
+                    dn{"Rok"}
                 }
                 zone{
-                    dn{"zóna"}
+                    dn{"Pásmo"}
                 }
             }
             intervalFormats{
@@ -1583,13 +1625,20 @@ sk{
                     a{"HH-HH"}
                 }
                 hm{
-                    a{"HH:mm-HH:mm"}
+                    a{"HH:mm - HH:mm"}
                 }
                 hmv{
                     a{"HH:mm-HH:mm v"}
+                    h{"HH:mm - HH:mm v"}
                 }
                 hv{
                     a{"HH-HH v"}
+                }
+                yMEd{
+                    d{"E, d.M.yy - E, d.M.yy"}
+                }
+                yMMMM{
+                    y{"MM-yyyy – MM-yyyy"}
                 }
             }
             monthNames{
@@ -1666,6 +1715,80 @@ sk{
     measurementSystemNames{
         US{"Americký"}
         metric{"Metrický"}
+    }
+    units{
+        day{
+            few{"{0} dni"}
+            one{"{0} deň"}
+            other{"{0} dní"}
+        }
+        hour{
+            few{"{0} hodiny"}
+            one{"{0} hodina"}
+            other{"{0} hodín"}
+        }
+        minute{
+            few{"{0} minúty"}
+            one{"{0} minúta"}
+            other{"{0} minút"}
+        }
+        month{
+            few{"{0} mesiace"}
+            one{"{0} mesiac"}
+            other{"{0} mesiacov"}
+        }
+        second{
+            few{"{0} sekundy"}
+            one{"{0} sekunda"}
+            other{"{0} sekúnd"}
+        }
+        week{
+            few{"{0} týždne"}
+            one{"{0} týždeň"}
+            other{"{0} týždňov"}
+        }
+        year{
+            few{"{0} roky"}
+            one{"{0} rok"}
+            other{"{0} rokov"}
+        }
+    }
+    unitsShort{
+        day{
+            few{"{0} d."}
+            one{"{0} d."}
+            other{"{0} d."}
+        }
+        hour{
+            few{"{0} h"}
+            one{"{0} h"}
+            other{"{0} h"}
+        }
+        minute{
+            few{"{0} min"}
+            one{"{0} min"}
+            other{"{0} min"}
+        }
+        month{
+            few{"{0} mes."}
+            one{"{0} mes."}
+            other{"{0} mes."}
+        }
+        second{
+            few{"{0} s"}
+            one{"{0} s"}
+            other{"{0} s"}
+        }
+        week{
+            few{"{0} týžd."}
+            one{"{0} týžd."}
+            other{"{0} týžd."}
+        }
+        year{
+            few{"{0} r."}
+            one{"{0} r."}
+            other{"{0} r."}
+        }
     }
     zoneStrings{
         "America:Anchorage"{

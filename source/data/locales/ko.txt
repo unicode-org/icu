@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ko.xml
@@ -330,7 +330,7 @@ ko{
             "아프가니 (1927-2002)",
         }
         AFN{
-            "AFN",
+            "Af",
             "아프가니",
         }
         ALL{
@@ -342,11 +342,11 @@ ko{
             "아르메니아 드람",
         }
         ANG{
-            "ANG",
+            "NAf.",
             "네덜란드령 안틸레스 길더",
         }
         AOA{
-            "AOA",
+            "Kz",
             "앙골라 콴자",
         }
         AOK{
@@ -362,7 +362,7 @@ ko{
             "앙골라 콴자 Reajustado (1995-1999)",
         }
         ARA{
-            "ARA",
+            "₳",
             "아르헨티나 오스트랄",
         }
         ARP{
@@ -370,7 +370,7 @@ ko{
             "아르헨티나 페소 (1983-1985)",
         }
         ARS{
-            "ARS",
+            "AR$",
             "아르헨티나 페소",
         }
         ATS{
@@ -382,7 +382,7 @@ ko{
             "호주 달러",
         }
         AWG{
-            "AWG",
+            "Afl.",
             "아루바 길더",
         }
         AZM{
@@ -390,7 +390,7 @@ ko{
             "아제르바이젠 마나트",
         }
         AZN{
-            "AZN",
+            "man.",
             "아제르바이잔 마나트",
         }
         BAD{
@@ -398,7 +398,7 @@ ko{
             "보스니아-헤르체고비나 디나르",
         }
         BAM{
-            "BAM",
+            "KM",
             "보스니아-헤르체고비나 태환 마르크",
         }
         BBD{
@@ -406,7 +406,7 @@ ko{
             "바베이도스 달러",
         }
         BDT{
-            "BDT",
+            "Tk",
             "방글라데시 타카",
         }
         BEC{
@@ -414,7 +414,7 @@ ko{
             "벨기에 프랑 (태환)",
         }
         BEF{
-            "BEF",
+            "BF",
             "벨기에 프랑",
         }
         BEL{
@@ -430,11 +430,11 @@ ko{
             "불가리아 신권 렛",
         }
         BHD{
-            "BHD",
+            "BD",
             "바레인 디나르",
         }
         BIF{
-            "BIF",
+            "FBu",
             "부룬디 프랑",
         }
         BMD{
@@ -446,23 +446,27 @@ ko{
             "부루나이 달러",
         }
         BOB{
-            "BOB",
+            "Bs",
             "볼리비아노",
         }
         BOP{
-            "BOP",
+            "$b.",
             "볼리비아노 페소",
         }
+        BOV{
+            "BOV",
+            "볼리비아노 Mvdol(기금)",
+        }
         BRB{
-            "BRB",
+            "NCr",
             "볼리비아노 크루제이루 노보 (1967-1986)",
         }
         BRC{
-            "BRC",
+            "Cz$",
             "브라질 크루자두",
         }
         BRE{
-            "BRE",
+            "Cr$",
             "브라질 크루제이루 (1990-1993)",
         }
         BRL{
@@ -470,19 +474,19 @@ ko{
             "브라질 레알",
         }
         BRN{
-            "BRN",
+            "NCz$",
             "브라질 크루자두 노보",
         }
         BRR{
-            "BRR",
+            "CR$",
             "브라질 크루제이루",
         }
         BSD{
-            "BSD",
+            "BS$",
             "바하마 달러",
         }
         BTN{
-            "BTN",
+            "Nu.",
             "부탄 눌투눔",
         }
         BUK{
@@ -518,12 +522,16 @@ ko{
             "WIR 유로",
         }
         CHF{
-            "CHF",
+            "Fr.",
             "스위스 프랑",
         }
         CHW{
             "CHW",
             "WIR 프랑",
+        }
+        CLF{
+            "CLF",
+            "칠레 UF (Unidades de Fomento)",
         }
         CLP{
             "Ch$",
@@ -538,7 +546,7 @@ ko{
             "콜롬비아 페소",
         }
         CRC{
-            "CRC",
+            "₡",
             "코스타리카 콜론",
         }
         CSD{
@@ -550,11 +558,11 @@ ko{
             "체코슬로바키아 동전 코루나",
         }
         CUP{
-            "CUP",
+            "CU$",
             "쿠바 페소",
         }
         CVE{
-            "CVE",
+            "CV$",
             "카보베르데 에스쿠도",
         }
         CYP{
@@ -562,7 +570,7 @@ ko{
             "싸이프러스 파운드",
         }
         CZK{
-            "CZK",
+            "Kč",
             "체코 공화국 코루나",
         }
         DDM{
@@ -570,15 +578,15 @@ ko{
             "동독 오스트마르크",
         }
         DEM{
-            "DEM",
+            "DM",
             "독일 마르크",
         }
         DJF{
-            "DJF",
+            "Fdj",
             "지부티 프랑",
         }
         DKK{
-            "DKK",
+            "Dkr",
             "덴마크 크로네",
         }
         DOP{
@@ -586,23 +594,27 @@ ko{
             "도미니카 페소",
         }
         DZD{
-            "DZD",
+            "DA",
             "알제리 디나르",
         }
         ECS{
             "ECS",
             "에쿠아도르 수크레",
         }
+        ECV{
+            "ECV",
+            "에콰도르 UVC(Unidad de Valor Constante)",
+        }
         EEK{
-            "EEK",
+            "Ekr",
             "에스토니아 크룬",
         }
         EGP{
-            "EGP",
+            "EG£",
             "이집트 파운드",
         }
         ERN{
-            "ERN",
+            "Nfk",
             "에리트리아 나크파",
         }
         ESA{
@@ -614,11 +626,11 @@ ko{
             "스페인 페세타(변환 예금)",
         }
         ESP{
-            "ESP",
+            "Pts",
             "스페인 페세타",
         }
         ETB{
-            "ETB",
+            "Br",
             "이디오피아 비르",
         }
         EUR{
@@ -626,7 +638,7 @@ ko{
             "유로화",
         }
         FIM{
-            "FIM",
+            "mk",
             "핀란드 마르카",
         }
         FJD{
@@ -634,7 +646,7 @@ ko{
             "피지 달러",
         }
         FKP{
-            "FKP",
+            "FK£",
             "포클랜드제도 파운드",
         }
         FRF{
@@ -642,7 +654,7 @@ ko{
             "프랑스 프랑",
         }
         GBP{
-            "UK£",
+            "£",
             "영국령 파운드 스털링",
         }
         GEK{
@@ -654,11 +666,11 @@ ko{
             "그루지야 라리",
         }
         GHC{
-            "GHC",
+            "₵",
             "가나 시디",
         }
         GIP{
-            "GIP",
+            "GI£",
             "지브롤터 파운드",
         }
         GMD{
@@ -666,15 +678,19 @@ ko{
             "감비아 달라시",
         }
         GNF{
-            "GNF",
+            "FG",
             "기니 프랑",
         }
         GNS{
             "GNS",
             "기니 시리",
         }
+        GQE{
+            "GQE",
+            "적도 기니 에쿨 (Ekwele)",
+        }
         GRD{
-            "GRD",
+            "₯",
             "그리스 드라크마",
         }
         GTQ{
@@ -706,7 +722,7 @@ ko{
             "크로아티아 디나르",
         }
         HRK{
-            "HRK",
+            "kn",
             "크로아티아 쿠나",
         }
         HTG{
@@ -714,11 +730,11 @@ ko{
             "하이티 구르드",
         }
         HUF{
-            "HUF",
+            "Ft",
             "헝가리 포린트",
         }
         IDR{
-            "IDR",
+            "Rp",
             "인도네시아 루피아",
         }
         IEP{
@@ -726,15 +742,15 @@ ko{
             "아일랜드 파운드",
         }
         ILP{
-            "ILP",
+            "I£",
             "이스라엘 파운드",
         }
         ILS{
-            "ILS",
+            "₪",
             "이스라엘 신권 세켈",
         }
         INR{
-            "0≤Rs.|1≤Re.|1<Rs.",
+            "₨",
             "인도 루피",
         }
         IQD{
@@ -746,7 +762,7 @@ ko{
             "이란 리얄",
         }
         ISK{
-            "ISK",
+            "Ikr",
             "아이슬란드 크로나",
         }
         ITL{
@@ -754,11 +770,11 @@ ko{
             "이탈리아 리라",
         }
         JMD{
-            "JMD",
+            "J$",
             "자메이카 달러",
         }
         JOD{
-            "JOD",
+            "JD",
             "요르단 디나르",
         }
         JPY{
@@ -766,7 +782,7 @@ ko{
             "일본 엔",
         }
         KES{
-            "KES",
+            "Ksh",
             "케냐 실링",
         }
         KGS{
@@ -778,7 +794,7 @@ ko{
             "캄보디아 리얄",
         }
         KMF{
-            "KMF",
+            "CF",
             "코모르 프랑",
         }
         KPW{
@@ -790,11 +806,11 @@ ko{
             "대한민국 원",
         }
         KWD{
-            "KWD",
+            "KD",
             "쿠웨이트 디나르",
         }
         KYD{
-            "KYD",
+            "KY$",
             "케이맨 제도 달러",
         }
         KZT{
@@ -802,31 +818,27 @@ ko{
             "카자흐스탄 텐게",
         }
         LAK{
-            "LAK",
+            "₭",
             "라오스 키프",
         }
         LBP{
-            "LBP",
+            "LB£",
             "레바논 파운드",
         }
         LKR{
-            "LKR",
+            "SLRs",
             "스리랑카 루피",
         }
         LRD{
-            "LRD",
+            "L$",
             "라이베리아 달러",
         }
         LSL{
             "LSL",
             "레소토 로티",
         }
-        LSM{
-            "LSM",
-            "로티",
-        }
         LTL{
-            "LTL",
+            "Lt",
             "리투아니아 리타",
         }
         LTT{
@@ -846,7 +858,7 @@ ko{
             "룩셈부르크 재정 프랑",
         }
         LVL{
-            "LVL",
+            "Ls",
             "라트비아 라트",
         }
         LVR{
@@ -854,7 +866,7 @@ ko{
             "라트비아 루블",
         }
         LYD{
-            "LYD",
+            "LD",
             "리비아 디나르",
         }
         MAD{
@@ -890,11 +902,11 @@ ko{
             "미얀마 키얏",
         }
         MNT{
-            "MNT",
+            "₮",
             "몽골 투그릭",
         }
         MOP{
-            "MOP",
+            "MOP$",
             "마카오 파타카",
         }
         MRO{
@@ -902,23 +914,23 @@ ko{
             "모리타니 우기야",
         }
         MTL{
-            "MTL",
+            "Lm",
             "몰타 리라",
         }
         MTP{
-            "MTP",
+            "MT£",
             "몰타 파운드",
         }
         MUR{
-            "MUR",
+            "MURs",
             "모리셔스 루피",
         }
         MVR{
-            "MVR",
+            "Rf",
             "몰디브 제도 루피아",
         }
         MWK{
-            "MWK",
+            "MK",
             "말라위 콰쳐",
         }
         MXN{
@@ -926,7 +938,7 @@ ko{
             "멕시코 페소",
         }
         MXP{
-            "MXP",
+            "MX$",
             "멕시코 실버 페소 (1861-1992)",
         }
         MXV{
@@ -934,7 +946,7 @@ ko{
             "멕시코 UDI(Unidad de Inversion)",
         }
         MYR{
-            "MYR",
+            "RM",
             "말레이시아 링깃",
         }
         MZE{
@@ -942,19 +954,19 @@ ko{
             "모잠비크 에스쿠도",
         }
         MZM{
-            "MZM",
+            "Mt",
             "고 모잠비크 메티칼",
         }
         MZN{
-            "MZN",
+            "MTn",
             "모잠비크 메티칼",
         }
         NAD{
-            "NAD",
+            "N$",
             "나미비아 달러",
         }
         NGN{
-            "NGN",
+            "₦",
             "니제르 나이라",
         }
         NIC{
@@ -962,23 +974,23 @@ ko{
             "니카라과 코르도바",
         }
         NIO{
-            "NIO",
+            "C$",
             "니카라과 코르도바 오로",
         }
         NLG{
-            "NLG",
+            "fl",
             "네델란드 길더",
         }
         NOK{
-            "NOK",
+            "Nkr",
             "노르웨이 크로네",
         }
         NPR{
-            "NPR",
+            "NPRs",
             "네팔 루피",
         }
         NZD{
-            "NZD",
+            "NZ$",
             "뉴질랜드 달러",
         }
         OMR{
@@ -986,15 +998,15 @@ ko{
             "오만 리얄",
         }
         PAB{
-            "PAB",
+            "B/.",
             "파나마 발보아",
         }
         PEI{
-            "PEI",
+            "I/.",
             "페루 인티",
         }
         PEN{
-            "PEN",
+            "S/.",
             "페루 솔 누에보",
         }
         PES{
@@ -1006,15 +1018,15 @@ ko{
             "파푸아뉴기니 키나",
         }
         PHP{
-            "PHP",
+            "₱",
             "필리핀 페소",
         }
         PKR{
-            "PKR",
+            "PKRs",
             "파키스탄 루피",
         }
         PLN{
-            "PLN",
+            "zł",
             "폴란드 즐로티",
         }
         PLZ{
@@ -1022,19 +1034,19 @@ ko{
             "폴란드 즐로티 (1950-1995)",
         }
         PTE{
-            "PTE",
+            "Esc",
             "포르투갈 에스쿠도",
         }
         PYG{
-            "PYG",
+            "₲",
             "파라과이 과라니",
         }
         QAR{
-            "QAR",
+            "QR",
             "카타르 리얄",
         }
         RHD{
-            "RHD",
+            "RH$",
             "로디지아 달러",
         }
         ROL{
@@ -1046,7 +1058,7 @@ ko{
             "루마니아 레우",
         }
         RSD{
-            "RSD",
+            "din.",
             "세르비아 디나르",
         }
         RUB{
@@ -1058,31 +1070,35 @@ ko{
             "러시아 루블 (1991-1998)",
         }
         RWF{
-            "RWF",
+            "RF",
             "르완다 프랑",
         }
         SAR{
-            "SAR",
+            "SR",
             "사우디아라비아 리얄",
         }
         SBD{
-            "SBD",
+            "SI$",
             "솔로몬 제도 달러",
         }
         SCR{
-            "SCR",
+            "SRe",
             "세이쉴 루피",
         }
         SDD{
-            "SDD",
+            "LSd",
             "수단 디나르",
+        }
+        SDG{
+            "SDG",
+            "수단 파운드",
         }
         SDP{
             "SDP",
             "수단 파운드",
         }
         SEK{
-            "SEK",
+            "Skr",
             "스웨덴 크로나",
         }
         SGD{
@@ -1090,7 +1106,7 @@ ko{
             "싱가폴 달러",
         }
         SHP{
-            "SHP",
+            "SH£",
             "세인트헬레나 파운드",
         }
         SIT{
@@ -1098,27 +1114,27 @@ ko{
             "슬로베니아 톨라르",
         }
         SKK{
-            "SKK",
+            "Sk",
             "슬로바키아 코루나",
         }
         SLL{
-            "SLL",
+            "Le",
             "시에라리온 리온",
         }
         SOS{
-            "SOS",
+            "Ssh",
             "소말리아 실링",
         }
         SRD{
-            "SRD",
+            "SR$",
             "수리남 달러",
         }
         SRG{
-            "SRG",
+            "Sf",
             "수리남 길더",
         }
         STD{
-            "STD",
+            "Db",
             "상투메 프린시페 도브라",
         }
         SUR{
@@ -1126,11 +1142,11 @@ ko{
             "소련 루블",
         }
         SVC{
-            "SVC",
+            "SV₡",
             "엘살바도르 콜론",
         }
         SYP{
-            "SYP",
+            "SY£",
             "시리아 파운드",
         }
         SZL{
@@ -1138,7 +1154,7 @@ ko{
             "스와질란드 릴랑게니",
         }
         THB{
-            "THB",
+            "฿",
             "태국 바트",
         }
         TJR{
@@ -1154,11 +1170,11 @@ ko{
             "투르크메니스탄 마나트",
         }
         TND{
-            "TND",
+            "DT",
             "튀니지 디나르",
         }
         TOP{
-            "TOP",
+            "T$",
             "통가 파앙가",
         }
         TPE{
@@ -1166,15 +1182,15 @@ ko{
             "티모르 에스쿠도",
         }
         TRL{
-            "TRL",
+            "TL",
             "터키 리라",
         }
         TRY{
-            "TRY",
+            "YTL",
             "새로운 터키 리라",
         }
         TTD{
-            "TTD",
+            "TT$",
             "트리니다드 토바고 달러",
         }
         TWD{
@@ -1182,11 +1198,11 @@ ko{
             "대만 신권 달러",
         }
         TZS{
-            "TZS",
+            "TSh",
             "탄자니아 실링",
         }
         UAH{
-            "UAH",
+            "₴",
             "우크라이나 그리브나",
         }
         UAK{
@@ -1198,7 +1214,7 @@ ko{
             "우간다 실링 (1966-1987)",
         }
         UGX{
-            "UGX",
+            "USh",
             "우간다 실링",
         }
         USD{
@@ -1213,12 +1229,16 @@ ko{
             "USS",
             "미국 달러(당일)",
         }
+        UYI{
+            "UYI",
+            "우루과이 페소 UI (Unidades Indexadas)",
+        }
         UYP{
             "UYP",
             "우루과이 페소 (1975-1993)",
         }
         UYU{
-            "UYU",
+            "$U",
             "우루과이 페소 우루과요",
         }
         UZS{
@@ -1226,23 +1246,27 @@ ko{
             "우즈베키스탄 숨",
         }
         VEB{
-            "VEB",
+            "Bs.",
             "베네주엘라 볼리바르",
         }
+        VEF{
+            "Bs.F.",
+            "베네주엘라 볼리바르 푸에르떼",
+        }
         VND{
-            "VND",
+            "₫",
             "베트남 동",
         }
         VUV{
-            "VUV",
+            "VT",
             "바누아투 바투",
         }
         WST{
-            "WST",
+            "WS$",
             "서 사모아 탈라",
         }
         XAF{
-            "XAF",
+            "FCFA",
             "CFA 프랑 BEAC",
         }
         XAG{
@@ -1270,7 +1294,7 @@ ko{
             "유럽 계산 단위 (XBD)",
         }
         XCD{
-            "XCD",
+            "EC$",
             "동카리브 달러",
         }
         XDR{
@@ -1290,7 +1314,7 @@ ko{
             "프랑스 UIC-프랑",
         }
         XOF{
-            "XOF",
+            "CFA",
             "CFA 프랑 BCEAO",
         }
         XPD{
@@ -1298,7 +1322,7 @@ ko{
             "팔라듐",
         }
         XPF{
-            "XPF",
+            "CFPF",
             "CFP 프랑",
         }
         XPT{
@@ -1322,7 +1346,7 @@ ko{
             "예멘 디나르",
         }
         YER{
-            "YER",
+            "YR",
             "예멘 리알",
         }
         YUD{
@@ -1342,15 +1366,15 @@ ko{
             "남아프리카 랜드 (금융)",
         }
         ZAR{
-            "ZAR",
+            "R",
             "남아프리카 랜드",
         }
         ZMK{
-            "ZMK",
+            "ZK",
             "쟘비아 콰쳐",
         }
         ZRN{
-            "ZRN",
+            "NZ",
             "자이르 신권 자이르",
         }
         ZRZ{
@@ -1358,7 +1382,7 @@ ko{
             "자이르 자이르",
         }
         ZWD{
-            "ZWD",
+            "Z$",
             "짐비브웨 달러",
         }
     }
@@ -1555,6 +1579,7 @@ ko{
         elx{"엘람어"}
         en{"영어"}
         en_AU{"영어(호주)"}
+        en_CA{"영어 (캐나다)"}
         en_GB{"영어 (영국식)"}
         en_US{"영어 (미국식)"}
         enm{"영어, 중세 (1100-1500)"}
@@ -1792,6 +1817,7 @@ ko{
         ps{"파시토어 (푸시토)"}
         pt{"포르투갈어"}
         pt_BR{"포르투갈어 (브라질)"}
+        pt_PT{"포르투갈어 (이베리아)"}
         qu{"케추아어"}
         raj{"라자스탄어"}
         rap{"라파뉴이"}
@@ -2000,10 +2026,13 @@ ko{
         Ital{"고이탈리아어"}
         Java{"자바 문자"}
         Jpan{"일본 문자"}
+        Kali{"카야 리 문자"}
         Kana{"가타카나"}
+        Khar{"카로슈티"}
         Khmr{"크메르어"}
         Knda{"칸나다"}
         Kore{"한국어"}
+        Lana{"란나 문자"}
         Laoo{"라오어"}
         Latf{"독일식 로마자"}
         Latg{"아일랜드식 로마자"}
@@ -2046,6 +2075,7 @@ ko{
         Syrn{"동부 시리아 문자"}
         Tagb{"타반와어"}
         Tale{"타이 레어"}
+        Talu{"신 타이 루에"}
         Taml{"타밀어"}
         Telu{"탤루그어"}
         Teng{"텡과르"}
@@ -2061,6 +2091,7 @@ ko{
         Xsux{"수메르-아카드어 설형문자"}
         Yiii{"이어"}
         Zxxx{"구전"}
+        Zyyy{"일반 문자"}
         Zzzz{"기록되지 않은 문자(구전)"}
     }
     Types{
@@ -2069,6 +2100,7 @@ ko{
             chinese{"중국력"}
             gregorian{"태양력"}
             hebrew{"히브리력"}
+            indian{"인도력"}
             islamic{"이슬람력"}
             islamic-civil{"이슬람 상용력"}
             japanese{"일본력"}
@@ -2086,12 +2118,26 @@ ko{
     Variants{
         REVISED{"개정"}
     }
-    Version{"1.117"}
+    Version{"1.139"}
     calendar{
         buddhist{
             AmPmMarkers{
                 "오전",
                 "오후",
+            }
+            DateTimePatterns{
+                "a hh시 mm분 ss초 v",
+                "a hh시 mm분 ss초 z",
+                "a h:mm:ss",
+                "a h:mm",
+                "G y년 MMMM d일 EEEE",
+                "G y년 MMMM d일",
+                "MMM d, y G",
+                "M/d/yyyy",
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
             }
             eras{
                 abbreviated{
@@ -2121,13 +2167,17 @@ ko{
                 "a hh시 mm분 ss초 z",
                 "a h:mm:ss",
                 "a h:mm",
-                "yyyy년 M월 d일 EEEE",
-                "yyyy년 M월 d일",
+                "y년 M월 d일 EEEE",
+                "y년 M월 d일",
                 "yyyy. M. d.",
                 "yy. M. d.",
                 "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
             availableFormats{
+                EEEd{"d일 EEE"}
                 Ed{"d일 (E)"}
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
@@ -2145,14 +2195,14 @@ ko{
                 d{"d"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
-                y{"yyyy"}
+                y{"y"}
                 yM{"yyyy. M."}
                 yMEd{"yyyy. M. d. EEE"}
-                yMMM{"yyyy년 MMM"}
-                yMMMEd{"yyyy년 MMM d일 EEE"}
-                yMMMM{"yyyy년 MMMM"}
-                yQ{"yyyy년 Q분기"}
-                yQQQ{"yyyy년 QQQ"}
+                yMMM{"y년 MMM"}
+                yMMMEd{"y년 MMM d일 EEE"}
+                yMMMM{"y년 MMMM"}
+                yQ{"y년 Q분기"}
+                yQQQ{"y년 QQQ"}
                 yyMM{"YY. M."}
                 yyMMM{"yy년 MMM"}
                 yyQ{"yy년 Q분기"}
@@ -2306,22 +2356,22 @@ ko{
                     y{"yy. M. d. E ~ yy. M. d. E"}
                 }
                 yMMM{
-                    M{"yyyy년 M월~M월"}
-                    y{"yyyy년 M월 ~ yyyy년 M월"}
+                    M{"y년 M월~M월"}
+                    y{"y년 M월 ~ y년 M월"}
                 }
                 yMMMEd{
-                    M{"yyyy년 M월 d일 E ~ M월 d일 E"}
-                    d{"yyyy년 M월 d일 E ~ d일 E"}
-                    y{"yyyy년 M월 d일 E ~ yyyy년 M월 d일 E"}
+                    M{"y년 M월 d일 E ~ M월 d일 E"}
+                    d{"y년 M월 d일 E ~ d일 E"}
+                    y{"y년 M월 d일 E ~ y년 M월 d일 E"}
                 }
                 yMMMM{
-                    M{"yyyy년 MM월 ~ MM월"}
-                    y{"yyyy년 MM월 ~ yyyy년 MM월"}
+                    M{"y년 MM월 ~ MM월"}
+                    y{"y년 MM월 ~ y년 MM월"}
                 }
                 yMMMd{
-                    M{"yyyy년 M월 d일 ~ M월 d일"}
-                    d{"yyyy년 M월 d일~d일"}
-                    y{"yyyy년 M월 d일 ~ yyyy년 M월 d일"}
+                    M{"y년 M월 d일 ~ M월 d일"}
+                    d{"y년 M월 d일~d일"}
+                    y{"y년 M월 d일 ~ y년 M월 d일"}
                 }
                 yMd{
                     M{"yy. M. d. ~ yy. M. d."}
@@ -2462,7 +2512,10 @@ ko{
                 "G y년 M월 d일",
                 "G y. M. d",
                 "G y. M. d",
-                "{1} {0}",
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
             }
             eras{
                 abbreviated{
@@ -2493,25 +2546,48 @@ ko{
     }
     units{
         day{
-            other{"{0} 일"}
+            other{"{0}일"}
         }
         hour{
-            other{"{0} 시"}
+            other{"{0}시간"}
         }
         minute{
-            other{"{0} 분"}
+            other{"{0}분"}
         }
         month{
-            other{"{0} 월"}
+            other{"{0}개월"}
         }
         second{
-            other{"{0} 초"}
+            other{"{0}초"}
         }
         week{
-            other{"{0} 주"}
+            other{"{0}주"}
         }
         year{
-            other{"{0} 년"}
+            other{"{0}년"}
+        }
+    }
+    unitsShort{
+        day{
+            other{"{0}일"}
+        }
+        hour{
+            other{"{0}시간"}
+        }
+        minute{
+            other{"{0}분"}
+        }
+        month{
+            other{"{0}개월"}
+        }
+        second{
+            other{"{0}초"}
+        }
+        week{
+            other{"{0}주"}
+        }
+        year{
+            other{"{0}년"}
         }
     }
     zoneStrings{
@@ -2673,6 +2749,9 @@ ko{
         }
         "America:Argentina:Rio_Gallegos"{
             ec{"리오 가예고스"}
+        }
+        "America:Argentina:Salta"{
+            ec{"살타"}
         }
         "America:Argentina:San_Juan"{
             ec{"산후안"}
@@ -2964,6 +3043,9 @@ ko{
         }
         "America:Rio_Branco"{
             ec{"리오 브랑코"}
+        }
+        "America:Santarem"{
+            ec{"산타렘"}
         }
         "America:Santiago"{
             ec{"산티아고"}
@@ -3612,6 +3694,7 @@ ko{
         "meta:Africa_Eastern"{
             cu:int{0}
             ls{"동아프리카 시간"}
+            ss{"EAT"}
         }
         "meta:Africa_FarWestern"{
             cu:int{0}
@@ -3636,6 +3719,7 @@ ko{
         }
         "meta:Alaska_Hawaii"{
             cu:int{0}
+            sd{"AHDT"}
         }
         "meta:Almaty"{
             cu:int{0}
@@ -3674,9 +3758,13 @@ ko{
         }
         "meta:Aqtau"{
             cu:int{0}
+            sd{"AQTST (아크타우)"}
+            ss{"AQTT (아크타우)"}
         }
         "meta:Aqtobe"{
             cu:int{0}
+            sd{"AQTST (악퇴베)"}
+            ss{"AQTT (악퇴베)"}
         }
         "meta:Arabian"{
             cu:int{0}
@@ -3745,6 +3833,8 @@ ko{
         }
         "meta:Bering"{
             cu:int{0}
+            sd{"BDT (베링)"}
+            ss{"BST (베링)"}
         }
         "meta:Bhutan"{
             cu:int{0}
@@ -3759,6 +3849,7 @@ ko{
             cu:int{0}
             ld{"브라질리아 하계 표준시"}
             ls{"브라질리아 표준시"}
+            sd{"BRST"}
         }
         "meta:British"{
             cu:int{0}
@@ -3788,6 +3879,7 @@ ko{
             cu:int{0}
             ld{"중국 하계 표준시"}
             ls{"중국 표준시"}
+            sd{"CDT (중국)"}
             ss{"CST (중국)"}
         }
         "meta:Choibalsan"{
@@ -3803,6 +3895,7 @@ ko{
         }
         "meta:Colombia"{
             cu:int{0}
+            ss{"COT"}
         }
         "meta:Cook"{
             cu:int{0}
@@ -3811,6 +3904,8 @@ ko{
         }
         "meta:Cuba"{
             cu:int{0}
+            sd{"CDT (쿠바)"}
+            ss{"CST (쿠바)"}
         }
         "meta:Dacca"{
             cu:int{0}
@@ -3909,6 +4004,7 @@ ko{
         }
         "meta:Guam"{
             cu:int{0}
+            ss{"GST (괌)"}
         }
         "meta:Gulf"{
             cu:int{0}
@@ -4082,6 +4178,7 @@ ko{
             ld{"뉴질랜드 하계 표준시"}
             lg{"뉴질랜드 시간"}
             ls{"뉴질랜드 표준시"}
+            ss{"NZST"}
         }
         "meta:Newfoundland"{
             cu:int{0}
@@ -4158,6 +4255,8 @@ ko{
         }
         "meta:Samarkand"{
             cu:int{0}
+            sd{"SAMST (사마르칸트)"}
+            ss{"SAMT (사마르칸트)"}
         }
         "meta:Samoa"{
             cu:int{0}
@@ -4246,7 +4345,7 @@ ko{
         }
         "meta:Vostok"{
             cu:int{0}
-            ls{"모스토크 표준시"}
+            ls{"보스토크 표준시"}
         }
         "meta:Wake"{
             cu:int{0}
@@ -4268,6 +4367,7 @@ ko{
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
+        gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} 시간"}
     }

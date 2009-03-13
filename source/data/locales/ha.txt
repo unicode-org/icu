@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ha.xml
@@ -47,7 +47,7 @@ ha{
         "#,##0%",
         "#E0",
     }
-    Version{"1.27"}
+    Version{"1.139"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -59,10 +59,13 @@ ha{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, d MMMM, yyyy",
-                "d MMMM, yyyy",
-                "d MMM, yyyy",
+                "EEEE, d MMMM, y",
+                "d MMMM, y",
+                "d MMM, y",
                 "d/M/yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1} {0}",
             }
             availableFormats{
@@ -77,9 +80,9 @@ ha{
                 Md{"M-d"}
                 d{"d"}
                 ms{"mm:ss"}
-                y{"yyyy"}
+                y{"y"}
                 yMEd{"EEE, d/M/yyyy"}
-                yMMMEd{"EEE, d MMM yyyy"}
+                yMMMEd{"EEE, d MMM y"}
             }
             dayNames{
                 format{

@@ -350,6 +350,14 @@ structLocale:table(nofallback){
             "",
             "",
         }
+        ARL{
+            "",
+            "",
+        }
+        ARM{
+            "",
+            "",
+        }
         ARP{
             "",
             "",
@@ -386,6 +394,10 @@ structLocale:table(nofallback){
             "",
             "",
         }
+        BAN{
+            "",
+            "",
+        }
         BBD{
             "",
             "",
@@ -418,6 +430,10 @@ structLocale:table(nofallback){
             "",
             "",
         }
+        BGO{
+            "",
+            "",
+        }
         BHD{
             "",
             "",
@@ -435,6 +451,10 @@ structLocale:table(nofallback){
             "",
         }
         BOB{
+            "",
+            "",
+        }
+        BOL{
             "",
             "",
         }
@@ -467,6 +487,10 @@ structLocale:table(nofallback){
             "",
         }
         BRR{
+            "",
+            "",
+        }
+        BRZ{
             "",
             "",
         }
@@ -515,6 +539,10 @@ structLocale:table(nofallback){
             "",
         }
         CHW{
+            "",
+            "",
+        }
+        CLE{
             "",
             "",
         }
@@ -750,6 +778,10 @@ structLocale:table(nofallback){
             "",
             "",
         }
+        ILR{
+            "",
+            "",
+        }
         ILS{
             "",
             "",
@@ -763,6 +795,10 @@ structLocale:table(nofallback){
             "",
         }
         IRR{
+            "",
+            "",
+        }
+        ISJ{
             "",
             "",
         }
@@ -803,6 +839,14 @@ structLocale:table(nofallback){
             "",
         }
         KPW{
+            "",
+            "",
+        }
+        KRH{
+            "",
+            "",
+        }
+        KRO{
             "",
             "",
         }
@@ -886,6 +930,14 @@ structLocale:table(nofallback){
             "",
             "",
         }
+        MCF{
+            "",
+            "",
+        }
+        MDC{
+            "",
+            "",
+        }
         MDL{
             "",
             "",
@@ -899,6 +951,10 @@ structLocale:table(nofallback){
             "",
         }
         MKD{
+            "",
+            "",
+        }
+        MKN{
             "",
             "",
         }
@@ -931,6 +987,10 @@ structLocale:table(nofallback){
             "",
         }
         MUR{
+            "",
+            "",
+        }
+        MVP{
             "",
             "",
         }
@@ -1178,6 +1238,10 @@ structLocale:table(nofallback){
             "",
             "",
         }
+        TMT{
+            "",
+            "",
+        }
         TND{
             "",
             "",
@@ -1263,6 +1327,10 @@ structLocale:table(nofallback){
             "",
         }
         VND{
+            "",
+            "",
+        }
+        VNN{
             "",
             "",
         }
@@ -1370,6 +1438,10 @@ structLocale:table(nofallback){
             "",
             "",
         }
+        YUR{
+            "",
+            "",
+        }
         ZAL{
             "",
             "",
@@ -1391,6 +1463,14 @@ structLocale:table(nofallback){
             "",
         }
         ZWD{
+            "",
+            "",
+        }
+        ZWL{
+            "",
+            "",
+        }
+        ZWR{
             "",
             "",
         }
@@ -1500,6 +1580,22 @@ structLocale:table(nofallback){
             many{""}
             other{""}
         }
+        ARL{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        ARM{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
         ARP{
             zero{""}
             one{""}
@@ -1572,6 +1668,14 @@ structLocale:table(nofallback){
             many{""}
             other{""}
         }
+        BAN{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
         BBD{
             zero{""}
             one{""}
@@ -1636,6 +1740,14 @@ structLocale:table(nofallback){
             many{""}
             other{""}
         }
+        BGO{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
         BHD{
             zero{""}
             one{""}
@@ -1669,6 +1781,14 @@ structLocale:table(nofallback){
             other{""}
         }
         BOB{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        BOL{
             zero{""}
             one{""}
             two{""}
@@ -1733,6 +1853,14 @@ structLocale:table(nofallback){
             other{""}
         }
         BRR{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        BRZ{
             zero{""}
             one{""}
             two{""}
@@ -1829,6 +1957,14 @@ structLocale:table(nofallback){
             other{""}
         }
         CHW{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        CLE{
             zero{""}
             one{""}
             two{""}
@@ -2292,6 +2428,14 @@ structLocale:table(nofallback){
             many{""}
             other{""}
         }
+        ILR{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
         ILS{
             zero{""}
             one{""}
@@ -2317,6 +2461,14 @@ structLocale:table(nofallback){
             other{""}
         }
         IRR{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        ISJ{
             zero{""}
             one{""}
             two{""}
@@ -2397,6 +2549,22 @@ structLocale:table(nofallback){
             other{""}
         }
         KPW{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        KRH{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        KRO{
             zero{""}
             one{""}
             two{""}
@@ -2564,6 +2732,22 @@ structLocale:table(nofallback){
             many{""}
             other{""}
         }
+        MCF{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        MDC{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
         MDL{
             zero{""}
             one{""}
@@ -2589,6 +2773,14 @@ structLocale:table(nofallback){
             other{""}
         }
         MKD{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        MKN{
             zero{""}
             one{""}
             two{""}
@@ -2653,6 +2845,14 @@ structLocale:table(nofallback){
             other{""}
         }
         MUR{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        MVP{
             zero{""}
             one{""}
             two{""}
@@ -3148,6 +3348,14 @@ structLocale:table(nofallback){
             many{""}
             other{""}
         }
+        TMT{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
         TND{
             zero{""}
             one{""}
@@ -3317,6 +3525,14 @@ structLocale:table(nofallback){
             other{""}
         }
         VND{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        VNN{
             zero{""}
             one{""}
             two{""}
@@ -3532,6 +3748,14 @@ structLocale:table(nofallback){
             many{""}
             other{""}
         }
+        YUR{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
         ZAL{
             zero{""}
             one{""}
@@ -3580,6 +3804,22 @@ structLocale:table(nofallback){
             many{""}
             other{""}
         }
+        ZWL{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        ZWR{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
     }
     codePatterns{
         language{""}
@@ -3607,6 +3847,7 @@ structLocale:table(nofallback){
         calendar{""}
         collation{""}
         currency{""}
+        numbers{""}
     }
     Languages{
         aa{""}
@@ -4116,6 +4357,9 @@ structLocale:table(nofallback){
         zxx{""}
         zza{""}
     }
+    LanguagesShort{
+        az{""}
+    }
     LocaleScript{
         "",
     }
@@ -4280,6 +4524,9 @@ structLocale:table(nofallback){
         calendar{
             buddhist{""}
             chinese{""}
+            coptic{""}
+            ethiopic{""}
+            ethiopic-amete-alem{""}
             gregorian{""}
             hebrew{""}
             indian{""}
@@ -4372,7 +4619,10 @@ structLocale:table(nofallback){
                 "",
                 "",
                 "",
-                "",
+                "A4",
+                "A4",
+                "A4",
+                "A4",
             }
             eras{
                 abbreviated{
@@ -4415,7 +4665,10 @@ structLocale:table(nofallback){
                 "",
                 "",
                 "",
-                "",
+                "A4",
+                "A4",
+                "A4",
+                "A4",
             }
             monthNames{
                 default{""}
@@ -4668,7 +4921,10 @@ structLocale:table(nofallback){
                 "",
                 "",
                 "",
-                "",
+                "A4",
+                "A4",
+                "A4",
+                "A4",
             }
             appendItems{
                 Day{"{0} ({2}: {1})"}
@@ -5109,7 +5365,10 @@ structLocale:table(nofallback){
                 "A2",
                 "A2",
                 "A2",
-                "",
+                "A4",
+                "A4",
+                "A4",
+                "A4",
             }
             availableFormats{
                 HHmm{""}
@@ -5266,7 +5525,10 @@ structLocale:table(nofallback){
                 "",
                 "",
                 "",
-                "",
+                "A4",
+                "A4",
+                "A4",
+                "A4",
             }
             eras{
                 abbreviated{
@@ -5406,7 +5668,10 @@ structLocale:table(nofallback){
                 "",
                 "",
                 "",
-                "",
+                "A4",
+                "A4",
+                "A4",
+                "A4",
             }
             eras{
                 abbreviated{
@@ -5546,7 +5811,10 @@ structLocale:table(nofallback){
                 "",
                 "",
                 "",
-                "",
+                "A4",
+                "A4",
+                "A4",
+                "A4",
             }
             eras{
                 abbreviated{
@@ -5683,7 +5951,10 @@ structLocale:table(nofallback){
                 "",
                 "",
                 "",
-                "",
+                "A4",
+                "A4",
+                "A4",
+                "A4",
             }
             eras{
                 abbreviated{
@@ -6431,7 +6702,10 @@ structLocale:table(nofallback){
                 "",
                 "",
                 "",
-                "",
+                "A4",
+                "A4",
+                "A4",
+                "A4",
             }
             eras{
                 abbreviated{
@@ -7286,6 +7560,16 @@ structLocale:table(nofallback){
             cu:int{0}
         }
         "America:Argentina:Rio_Gallegos"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            ec{""}
+            cu:int{0}
+        }
+        "America:Argentina:Salta"{
             ld{""}
             lg{""}
             ls{""}
@@ -8416,6 +8700,16 @@ structLocale:table(nofallback){
             cu:int{0}
         }
         "America:Rosario"{
+            ld{""}
+            lg{""}
+            ls{""}
+            sd{""}
+            sg{""}
+            ss{""}
+            ec{""}
+            cu:int{0}
+        }
+        "America:Santarem"{
             ld{""}
             lg{""}
             ls{""}

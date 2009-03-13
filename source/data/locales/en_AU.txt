@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/en_AU.xml
@@ -23,7 +23,7 @@ en_AU{
         "#,##0%",
         "#E0",
     }
-    Version{"1.53"}
+    Version{"1.139"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -31,17 +31,20 @@ en_AU{
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
-                "EEEE, d MMMM yyyy",
-                "d MMMM yyyy",
+                "EEEE, d MMMM y",
+                "d MMMM y",
                 "dd/MM/yyyy",
                 "d/MM/yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1} {0}",
             }
             availableFormats{
                 MMMMd{"d MMMM"}
                 MMdd{"dd/MM"}
                 yyyyMM{"MM/yyyy"}
-                yyyyMMMM{"MMMM yyyy"}
+                yyyyMMMM{"MMMM y"}
             }
             intervalFormats{
                 M{
@@ -101,18 +104,18 @@ en_AU{
                     y{"E, d/MM/yy - E, d/MM/yy"}
                 }
                 yMMM{
-                    M{"MMM-MMM yyyy"}
-                    y{"MMM yyyy - MMM yyyy"}
+                    M{"MMM-MMM y"}
+                    y{"MMM y - MMM y"}
                 }
                 yMMMEd{
-                    M{"E, d MMM - E, d MMM yyyy"}
-                    d{"E, d - E, d MMM yyyy"}
-                    y{"E, d MMM yyyy - E, d MMM yyyy"}
+                    M{"E, d MMM - E, d MMM y"}
+                    d{"E, d - E, d MMM y"}
+                    y{"E, d MMM y - E, d MMM y"}
                 }
                 yMMMd{
-                    M{"d MMM - d MMM yyyy"}
-                    d{"d-d MMM yyyy"}
-                    y{"d MMM yyyy - d MMM yyyy"}
+                    M{"d MMM - d MMM y"}
+                    d{"d-d MMM y"}
+                    y{"d MMM y - d MMM y"}
                 }
                 yMd{
                     M{"d/MM/yy - d/MM/yy"}

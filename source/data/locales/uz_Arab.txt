@@ -16,7 +16,7 @@ uz_Arab{
     }
     Currencies{
         AFN{
-            "AFN",
+            "Af",
             "افغانی",
         }
     }
@@ -46,7 +46,7 @@ uz_Arab{
         "NaN",
         "+",
     }
-    Version{"1.28"}
+    Version{"1.139"}
     defaultNumberingSystem{"persian"}
     layout{
         characters{"right-to-left"}

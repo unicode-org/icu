@@ -378,10 +378,10 @@ void DateFormatTest::TestFieldPosition() {
         "mercredi", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "\\u00C9tats-Unis (Los Angeles)",  "", "", "", "", "",
 
         "AD", "1997", "8", "13", "14", "14", "34", "12", "5",
-        "Wed", "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4", "1997", "2450674", "52452513", "-0700", "PT",  "4", "8", "3", "3","PDT",
+        "Wed", "225", "2", "33", "2", "PM", "2", "2", "PDT", "1997", "4", "1997", "2450674", "52452513", "-0700", "PT",  "4", "8", "3", "3","PDT",
 
         "Anno Domini", "1997", "August", "0013", "0014", "0014", "0034", "0012", "5130",
-        "Wednesday", "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "Wednesday", "1997", "2450674", "52452513", "GMT-07:00",
+        "Wednesday", "0225", "0002", "0033", "0002", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "Wednesday", "1997", "2450674", "52452513", "GMT-07:00",
         "Pacific Time",  "Wednesday", "August", "3rd quarter", "3rd quarter", "United States (Los Angeles)"
     };
 
@@ -2381,7 +2381,7 @@ void DateFormatTest::TestTimeZoneDisplayName()
         { "zh", "America/Havana", "2004-07-15T00:00:00Z", "ZZZZ", "\\u683c\\u6797\\u5c3c\\u6cbb\\u6807\\u51c6\\u65f6\\u95f4-0400", "-4:00" },
         { "zh", "America/Havana", "2004-07-15T00:00:00Z", "z", "\\u683c\\u6797\\u5c3c\\u6cbb\\u6807\\u51c6\\u65f6\\u95f4-0400", "-4:00" },
         { "zh", "America/Havana", "2004-07-15T00:00:00Z", "zzzz", "\\u53e4\\u5df4\\u590f\\u4ee4\\u6642\\u9593", "-4:00" },
-        { "zh", "America/Havana", "2004-07-15T00:00:00Z", "v", "\\u53e4\\u5df4", "America/Havana" },
+        { "zh", "America/Havana", "2004-07-15T00:00:00Z", "v", "\\u53e4\\u5df4\\u65f6\\u95f4", "America/Havana" },
         { "zh", "America/Havana", "2004-07-15T00:00:00Z", "vvvv", "\\u53e4\\u5df4\\u6642\\u9593", "America/Havana" },
 
         { "zh", "Australia/ACT", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
@@ -2417,9 +2417,9 @@ void DateFormatTest::TestTimeZoneDisplayName()
         { "zh", "Europe/London", "2004-07-15T00:00:00Z", "z", "\\u683c\\u6797\\u5c3c\\u6cbb\\u6807\\u51c6\\u65f6\\u95f4+0100", "+1:00" },
         { "zh", "Europe/London", "2004-07-15T00:00:00Z", "V", "BST", "+1:00" },
         { "zh", "Europe/London", "2004-07-15T00:00:00Z", "zzzz", "\\u683c\\u6797\\u5c3c\\u6cbb\\u6807\\u51c6\\u65f6\\u95f4+0100", "+1:00" },
-        { "zh", "Europe/London", "2004-07-15T00:00:00Z", "v", "\\u82f1\\u56fd", "Europe/London" },
-        { "zh", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "\\u82f1\\u56fd", "Europe/London" },
-        { "zh", "Europe/London", "2004-07-15T00:00:00Z", "VVVV", "\\u82f1\\u56fd", "Europe/London" },
+        { "zh", "Europe/London", "2004-07-15T00:00:00Z", "v", "\\u82f1\\u56fd\\u65f6\\u95f4", "Europe/London" },
+        { "zh", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "\\u82f1\\u56fd\\u65f6\\u95f4", "Europe/London" },
+        { "zh", "Europe/London", "2004-07-15T00:00:00Z", "VVVV", "\\u82f1\\u56fd\\u65f6\\u95f4", "Europe/London" },
 
         { "zh", "Etc/GMT+3", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
         { "zh", "Etc/GMT+3", "2004-01-15T00:00:00Z", "ZZZZ", "\\u683c\\u6797\\u5c3c\\u6cbb\\u6807\\u51c6\\u65f6\\u95f4-0300", "-3:00" },
@@ -2441,7 +2441,7 @@ void DateFormatTest::TestTimeZoneDisplayName()
         { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "ZZZZ", "\\u683c\\u6797\\u5c3c\\u6cbb\\u6807\\u51c6\\u65f6\\u95f4+0530", "+5:30" },
         { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "z", "\\u683c\\u6797\\u5c3c\\u6cbb\\u6807\\u51c6\\u65f6\\u95f4+0530", "+05:30" },
         { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "\\u5370\\u5ea6\\u6807\\u51c6\\u65f6\\u95f4", "+5:30" },
-        { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "\\u5370\\u5ea6", "Asia/Calcutta" },
+        { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "\\u5370\\u5ea6\\u65f6\\u95f4", "Asia/Calcutta" },
         { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\\u5370\\u5ea6\\u6807\\u51c6\\u65f6\\u95f4", "Asia/Calcutta" },
 
         // ==========

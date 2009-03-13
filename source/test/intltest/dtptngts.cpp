@@ -50,7 +50,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("hhmm"),
         UnicodeString("HHmm"),
         UnicodeString("mmss"),
-        UnicodeString("yyyyMMMM"),
+        UnicodeString("yMMMM"),
         UnicodeString(),
      };
      
@@ -91,7 +91,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("23:58"),                               // en_US@calendar=japanese  7: hhmm
         UnicodeString("23:58"),                               // en_US@calendar=japanese  8: HHmm
         UnicodeString("58:59"),                               // en_US@calendar=japanese  9: mmss
-        UnicodeString("H 0011 January"),                      // en_US@calendar=japanese 10: yyyyMMMM (fix root's DateTimePatterns/availableFormats, then fix this)
+        UnicodeString("H 11 January"),                      // en_US@calendar=japanese 10: yyyyMMMM (fix root's DateTimePatterns/availableFormats, then fix this)
 
         UnicodeString("1999-1", -1, US_INV),                  // zh_Hans_CN: yM
         CharsToUnicodeString("1999\\u5E741\\u6708"),          // zh_Hans_CN: yMMM  -> yyyy\u5E74MMM (fixed expected result per ticket:6626:)
@@ -151,7 +151,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("23:58"),                                           // ja@japanese 7: hhmm  ->
         UnicodeString("23:58"),                                           // ja@japanese 8: HHmm  -> HH:mm          (as for ja)
         UnicodeString("58:59"),                                           // ja@japanese 9: mmss  -> mm:ss          (as for ja)
-        CharsToUnicodeString("\\u5E73\\u62100011\\u5E741\\u6708"),        // ja@japanese 10: yyyyMMMM  -> Gyyyy\u5E74M\u6708
+        CharsToUnicodeString("\\u5E73\\u621011\\u5E741\\u6708"),        // ja@japanese 10: yMMMM  -> Gyyyy\u5E74M\u6708
 
         CharsToUnicodeString("\\u6C11\\u570B88/1"),                       // zh_TW@roc 0: yM    -> Gy/M
         CharsToUnicodeString("\\u6C11\\u570B88\\u5E741\\u6708"),          // zh_TW@roc 1: yMMM  -> Gy\u5E74M\u6708

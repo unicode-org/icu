@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/sr_Latn.xml
@@ -36,11 +36,13 @@ sr_Latn{
         061{"Polinezija"}
         062{"Južno-centralna Azija"}
         142{"Azija"}
+        143{"Centralna Azija"}
         145{"Zapadna Azija"}
         150{"Evropa"}
         151{"Istočna Evropa"}
         154{"Severna Evropa"}
         155{"Zapadna Evropa"}
+        172{"Komonvelt nezavisnih država"}
         419{"Latinska Amerika i Karibi"}
         830{"Kanalska ostrva"}
         AD{"Andora"}
@@ -293,8 +295,28 @@ sr_Latn{
         ZZ{"Nepoznat ili nevažeći region"}
     }
     Currencies{
+        ADP{
+            "ADP",
+            "Andorska pezeta (ADP)",
+        }
+        AED{
+            "AED",
+            "Ujedinjeni arapski emirati dirham",
+        }
+        AFA{
+            "AFA",
+            "Avganistanski avgan (1927-2002)",
+        }
+        AOR{
+            "AOR",
+            "Angolijska kvanza reajustado (1995-1999) (AOR)",
+        }
+        ARA{
+            "₳",
+            "Argentinski austral (ARA)",
+        }
         ARS{
-            "ARS",
+            "AR$",
             "Argentinski pezo",
         }
         ATS{
@@ -317,28 +339,48 @@ sr_Latn{
             "BGN",
             "Bugarski lev",
         }
+        BHD{
+            "BD",
+            "Bahreinski dinar (BHD)",
+        }
         BND{
-            "BND",
+            "BN$",
             "Brunejski dolar",
         }
         BOB{
-            "BOB",
+            "Bs",
             "Bolivijski Boliviano",
+        }
+        BOP{
+            "$b.",
+            "Bolivijski pezo (BOP)",
         }
         BRL{
             "R$",
             "Brazilski Real",
         }
+        BWP{
+            "BWP",
+            "Botsvanska pula (BWP)",
+        }
         CAD{
             "Can$",
             "Kanadski dolar",
+        }
+        CDF{
+            "CDF",
+            "Kongolski franak (CDF)",
         }
         CHF{
             "SwF",
             "Švajcarski franak",
         }
+        CHW{
+            "CHW",
+            "WIR franak (CHW)",
+        }
         CLP{
-            "CLP",
+            "CL$",
             "Čileanski pezo",
         }
         CNY{
@@ -346,7 +388,7 @@ sr_Latn{
             "Kineski Juan Renminbi",
         }
         COP{
-            "COP",
+            "CO$",
             "Kolumbijski pezo",
         }
         CSD{
@@ -354,55 +396,71 @@ sr_Latn{
             "Srpski Dinar (Srbija i Crna Gora)",
         }
         CZK{
-            "CZK",
+            "Kč",
             "Češka kruna",
         }
         DEM{
-            "DEM",
+            "DM",
             "Nemačka marka",
         }
         DKK{
             "DKr",
             "Danska kruna",
         }
+        DOP{
+            "RD$",
+            "Dominikanski pezo",
+        }
         EEK{
-            "EEK",
+            "Ekr",
             "Estonska kroon",
         }
         EGP{
-            "EGP",
+            "EG£",
             "Egipatska funta",
         }
         ESP{
-            "ESP",
+            "Pts",
             "Španska pezeta",
+        }
+        ETB{
+            "Br",
+            "Etiopski bir",
         }
         EUR{
             "€",
             "EVRO",
         }
         FIM{
-            "FIM",
+            "mk",
             "Finska marka",
         }
         FJD{
-            "FJD",
+            "FJ$",
             "Fidži dolar",
         }
         FRF{
-            "FRF",
+            "₣",
             "Francuski franak",
         }
         GBP{
-            "UK£",
+            "£",
             "Funta sterlinga",
         }
+        GHS{
+            "GH₵",
+            "Ganijski cedi (GHS)",
+        }
         GRD{
-            "GRD",
+            "₯",
             "Drahma",
         }
+        GWP{
+            "GWP",
+            "Gvinejsko-bisaoski pezos",
+        }
         HKD{
-            "HKD",
+            "HK$",
             "Hong Kongski Dolari",
         }
         HRD{
@@ -410,11 +468,11 @@ sr_Latn{
             "Hrvatski dinar",
         }
         HRK{
-            "HRK",
+            "kn",
             "Kuna",
         }
         HUF{
-            "HUF",
+            "Ft",
             "Mađarska forinta",
         }
         IEP{
@@ -422,7 +480,7 @@ sr_Latn{
             "Irska funta",
         }
         ILS{
-            "ILS",
+            "₪",
             "Izraelski šekel",
         }
         INR{
@@ -434,43 +492,75 @@ sr_Latn{
             "Italijanska lira",
         }
         JPY{
-            "JP¥",
+            "¥",
             "Jen",
         }
         KES{
-            "KES",
+            "Ksh",
             "Kenijski šiling",
+        }
+        KGS{
+            "KGS",
+            "Kirgistanski som (KGS)",
+        }
+        KHR{
+            "KHR",
+            "Kambodžijski riel (KHR)",
         }
         KWD{
             "KD",
             "Kuvajtski dinar",
         }
+        LBP{
+            "LB£",
+            "Lebanska funta (LBR)",
+        }
         LTL{
-            "LTL",
+            "Lt",
             "Litvanski litas",
         }
         LUF{
             "LUF",
             "Luksemburški franak",
         }
+        LYD{
+            "LD",
+            "Libijski dinar",
+        }
         MAD{
             "MAD",
             "Marokanski dirham",
         }
+        MDL{
+            "MDL",
+            "Moldovski lju (MDL)",
+        }
+        MRO{
+            "UM",
+            "Mauritanijska ugvija",
+        }
         MTL{
-            "MTL",
+            "Lm",
             "Malteška lira",
         }
         MXN{
             "MXN",
             "Meksički peso",
         }
+        MXP{
+            "MX$",
+            "Meksijski srebrno pezo (1861-1992) (MXP)",
+        }
         MYR{
-            "MYR",
+            "RM",
             "Malezijski ringgit",
         }
+        MZM{
+            "Mt",
+            "Stari mozambijski metikal (MZM)",
+        }
         NLG{
-            "NLG",
+            "fl",
             "Holandski gulden",
         }
         NOK{
@@ -478,15 +568,15 @@ sr_Latn{
             "Norveška kruna",
         }
         NZD{
-            "NZD",
+            "NZ$",
             "Novozelandski dolar",
         }
         PTE{
-            "PTE",
+            "Esc",
             "Portugalski eskudo",
         }
         RSD{
-            "RSD",
+            "дин.",
             "Srpski Dinar",
         }
         RUB{
@@ -497,21 +587,53 @@ sr_Latn{
             "RUR",
             "Ruska rublja (1991-1998)",
         }
+        SBD{
+            "SI$",
+            "Solomonska ostrva dolar (SBD)",
+        }
         SEK{
             "SKr",
             "Švedska kruna",
+        }
+        SGD{
+            "S$",
+            "Singapurski dolar",
         }
         SIT{
             "SIT",
             "Tolar",
         }
+        SUR{
+            "SUR",
+            "Sovjetska rublja (SUR)",
+        }
         TRY{
-            "TRY",
+            "YTL",
             "Nova turska lira",
+        }
+        UAH{
+            "₴",
+            "Ukrajinska hrivnja",
         }
         USD{
             "US$",
             "Američki dolar",
+        }
+        VEB{
+            "Bs.",
+            "Venecuelanski bolivar",
+        }
+        VND{
+            "₫",
+            "Vijetnamski dong",
+        }
+        XBA{
+            "XBA",
+            "Evropska kompozitna jedinica (XBA)",
+        }
+        XFO{
+            "XFO",
+            "Francuski zlatni frank (XFO)",
         }
         XXX{
             "XXX",
@@ -520,6 +642,100 @@ sr_Latn{
         YUN{
             "Din",
             "YUN",
+        }
+    }
+    CurrencyPlurals{
+        ADP{
+            one{"Andorijska pezeta"}
+        }
+        AFA{
+            other{"Avganistanskih avgana"}
+        }
+        AOR{
+            few{"angalske kvanze reađustado (AOR)"}
+        }
+        ARA{
+            many{"argentinskih australa (ARA)"}
+        }
+        AUD{
+            other{"australijskih dolara"}
+        }
+        BHD{
+            other{"bahreinskih dinara"}
+        }
+        BOP{
+            one{"bolivijski pezo"}
+        }
+        BWP{
+            other{"bocvanskih pula"}
+        }
+        CDF{
+            many{"kongoanskih franaka"}
+        }
+        CHW{
+            other{"WIR franak"}
+        }
+        CLP{
+            one{"čileanski pezos"}
+            other{"čileanski pezos"}
+        }
+        DOP{
+            many{"dominikanskih pezosa"}
+        }
+        ETB{
+            other{"etiopijskih bira"}
+        }
+        GHS{
+            one{"ganski cedi"}
+        }
+        GRD{
+            many{"grčkih drahmi"}
+        }
+        GWP{
+            many{"gvinejа-bisaoških pezosa"}
+        }
+        KGS{
+            few{"kirgistanska soma"}
+        }
+        KHR{
+            one{"kambodžanski rijal"}
+        }
+        LBP{
+            other{"lebanske funte"}
+        }
+        LYD{
+            few{"libijska dinara"}
+        }
+        MAD{
+            other{"marokanskih dirama"}
+        }
+        MDL{
+            one{"moldavski lej"}
+        }
+        MRO{
+            other{"mauritanijske ouguje"}
+        }
+        RSD{
+            many{"srpskih dinara"}
+        }
+        SBD{
+            few{"solomonskoostrvska dolara"}
+        }
+        SGD{
+            few{"singapurška dolara"}
+        }
+        SUR{
+            few{"sovjetske rublje"}
+            other{"sovjetske rublje"}
+        }
+        XBA{
+            few{"evropske složene jedinice"}
+        }
+        XFO{
+            other{"francuskih zlatnih franaka"}
+        }
+        XXX{
+            other{"nepoznatih ili nevažećih valuta"}
         }
     }
     ExemplarCharacters{"[a-c č ć d đ {dž} e-l {lj} m n {nj} o p r s š t-v z ž]"}
@@ -533,8 +749,10 @@ sr_Latn{
         am{"Amharski"}
         ar{"Arapski"}
         as{"Asemijski"}
+        av{"Avarski"}
         az{"Azerbejdžanski"}
         be{"Beloruski"}
+        bej{"Beja"}
         bg{"Bugarski"}
         bh{"Biharski"}
         bn{"Bengalski"}
@@ -549,8 +767,10 @@ sr_Latn{
         cy{"Velški"}
         da{"Danski"}
         de{"Nemački"}
+        dra{"Dravidijski jezik"}
         el{"Grčki"}
         en{"Engleski"}
+        en_AU{"Australijski engleski"}
         en_US{"Engleski (SAD)"}
         eo{"Esperanto"}
         es{"Španski"}
@@ -599,13 +819,16 @@ sr_Latn{
         ms{"Malajski"}
         mt{"Melteški"}
         my{"Burmanski"}
+        nds{"Niski nemački"}
         ne{"Nepalski"}
         nl{"Holandski"}
         no{"Norveški"}
         oc{"Provansalski"}
         or{"Orijski"}
         pa{"Pandžabski"}
+        paa{"Papuanski jezik"}
         pl{"Poljski"}
+        pra{"Prakritski jezik"}
         ps{"Paštunski"}
         pt{"Portugalski"}
         pt_PT{"Portugalski (Portugalija)"}
@@ -633,14 +856,18 @@ sr_Latn{
         tk{"Turkmenski"}
         tl{"Tagalski"}
         tlh{"Klingonski"}
+        tpi{"Tok pisin"}
         tr{"Turski"}
+        tw{"Tvi"}
         ug{"Ujgurski"}
         uk{"Ukrajinski"}
         und{"Nepoznat ili nevažeći jezik"}
         ur{"Urdu"}
         uz{"Uzbečki"}
         vi{"Vijetnamski"}
+        xh{"Hausa"}
         yi{"Jidiš"}
+        yo{"Jorubanski"}
         zh{"Kineski"}
         zh_Hans{"Kineski (pojednostavljen)"}
         zh_Hant{"Kineski (tradicionalni)"}
@@ -648,6 +875,12 @@ sr_Latn{
     }
     LocaleScript{
         "Latn",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
     }
     Scripts{
         Arab{"arapsko pismo"}
@@ -670,12 +903,16 @@ sr_Latn{
         Hebr{"hebrejsko pismo"}
         Hira{"Hiragana"}
         Hrkt{"Katakana ili Hiragana"}
+        Ital{"staro italsko pismo"}
         Kana{"Katakana"}
         Khmr{"kmersko pismo"}
+        Kthi{"kaićansko pismo"}
         Latf{"Latinica (Fraktur varijanta)"}
         Latn{"Latinica"}
+        Mlym{"malajalam pismo"}
         Phnx{"Feničansko pismo"}
         Runr{"runsko pismo"}
+        Tglg{"Тагалог"}
         Zxxx{"Nepisani jezik"}
         Zzzz{"Nepoznato ili nevažeće pismo"}
     }
@@ -685,6 +922,7 @@ sr_Latn{
             chinese{"Kineski kalendar"}
             gregorian{"Gregorijanski kalendar"}
             hebrew{"Hebrejski kalendar"}
+            indian{"Indijski nacionalni kalendar"}
             islamic{"Islamski kalendar"}
             islamic-civil{"Islamski civilni kalendar"}
             japanese{"Japanski kalendar"}
@@ -699,12 +937,33 @@ sr_Latn{
             traditional{"Tradicionalno sortiranje"}
         }
     }
-    Version{"1.75"}
+    Variants{
+        BOONT{"Buntling"}
+    }
+    Version{"1.139"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "AM",
                 "PM",
+            }
+            DateTimePatterns{
+                "HH.mm.ss v",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE, dd. MMMM y.",
+                "dd. MMMM y.",
+                "dd.MM.y.",
+                "d.M.yy.",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                MMM{"LLL"}
+                MMMMd{"MMMM d."}
             }
             dayNames{
                 format{
@@ -797,6 +1056,23 @@ sr_Latn{
                     dn{"zona"}
                 }
             }
+            intervalFormats{
+                hm{
+                    h{"HH.mm-HH.mm"}
+                    m{"HH.mm-HH.mm"}
+                }
+                hmv{
+                    h{"HH.mm-HH.mmv"}
+                    m{"HH.mm-HH.mmv"}
+                }
+                hv{
+                    h{"HH-HHv"}
+                }
+                yM{
+                    M{"M.yy - M.yy"}
+                    y{"M.yy - M.yy"}
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -862,6 +1138,15 @@ sr_Latn{
                 }
             }
         }
+    }
+    codePatterns{
+        language{"Jezik: {0}"}
+    }
+    delimiters{
+        alternateQuotationEnd{"’"}
+    }
+    localeDisplayPattern{
+        separator{", "}
     }
     measurementSystemNames{
         US{"SAD"}
@@ -1081,6 +1366,9 @@ sr_Latn{
         "America:Danmarkshavn"{
             ec{"Danmarkshagen"}
         }
+        "America:Dawson"{
+            ec{"Doson (Kanada)"}
+        }
         "America:Dominica"{
             ec{"Dominika"}
         }
@@ -1131,6 +1419,9 @@ sr_Latn{
         }
         "America:Martinique"{
             ec{"Martinik"}
+        }
+        "America:Menominee"{
+            ec{"Menomine"}
         }
         "America:Miquelon"{
             ec{"Mikelon"}
@@ -1197,6 +1488,9 @@ sr_Latn{
         }
         "America:Tortola"{
             ec{"Tortola"}
+        }
+        "America:Yellowknife"{
+            ec{"Jelonajf"}
         }
         "Antarctica:Casey"{
             ec{"Kasej"}
@@ -1354,6 +1648,15 @@ sr_Latn{
         "Asia:Tashkent"{
             ec{"Taškent"}
         }
+        "Asia:Ulaanbaatar"{
+            ec{"Ulan Bator"}
+        }
+        "Atlantic:Azores"{
+            ec{"Azori"}
+        }
+        "Atlantic:Canary"{
+            ec{"Kanarska ostrva"}
+        }
         "Etc:Unknown"{
             ec{"Nepoznat ili nevažeći grad"}
         }
@@ -1368,6 +1671,18 @@ sr_Latn{
         }
         "Europe:Zaporozhye"{
             ec{"Zaporožje"}
+        }
+        "Pacific:Easter"{
+            ec{"Uskršnje ostrvo"}
+        }
+        "Pacific:Enderbury"{
+            ec{"Enderberi"}
+        }
+        "Pacific:Galapagos"{
+            ec{"Galapagos"}
+        }
+        "Pacific:Gambier"{
+            ec{"Gambije"}
         }
         "Pacific:Guam"{
             ec{"Guam"}
@@ -1443,10 +1758,6 @@ sr_Latn{
         }
         "Pacific:Wallis"{
             ec{"Valis"}
-        }
-        "meta:Europe_Central"{
-            ld{"Centralno Evropsko Letnje Vreme"}
-            ls{"Srednje Evropsko Vreme"}
         }
     }
 }
