@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/ga.xml
@@ -306,7 +306,7 @@ ga{
             "Guilder na nAntillí Ísiltíreach",
         }
         AOA{
-            "AOA",
+            "Kz",
             "Kwanza Angólach",
         }
         AOK{
@@ -322,7 +322,7 @@ ga{
             "Kwanza Reajustado Angólach (1995-1999)",
         }
         ARA{
-            "ARA",
+            "₳",
             "Austral Airgintíneach",
         }
         ARP{
@@ -342,7 +342,7 @@ ga{
             "Dollar Astrálach",
         }
         AWG{
-            "AWG",
+            "Afl.",
             "Guilder Aruba",
         }
         AZM{
@@ -398,7 +398,7 @@ ga{
             "Dollar Bheirmiúda",
         }
         BND{
-            "BND",
+            "BN$",
             "Dollar Bhrúiné",
         }
         BOB{
@@ -406,7 +406,7 @@ ga{
             "Boliviano",
         }
         BOP{
-            "BOP",
+            "$b.",
             "Peso na Bolaive",
         }
         BOV{
@@ -414,15 +414,15 @@ ga{
             "Mvdol Bolavach",
         }
         BRB{
-            "BRB",
+            "NCr",
             "Cruzeiro Novo Brasaíleach (1967-1986)",
         }
         BRC{
-            "BRC",
+            "Cz$",
             "Cruzado Brasaíleach",
         }
         BRE{
-            "BRE",
+            "Cr$",
             "Cruzeiro Brasaíleach (1990-1993)",
         }
         BRL{
@@ -430,15 +430,15 @@ ga{
             "Real Brasaíleach",
         }
         BRN{
-            "BRN",
+            "NCz$",
             "Cruzado Novo Brasaíleach",
         }
         BRR{
-            "BRR",
+            "CR$",
             "Cruzeiro Brasaíleach",
         }
         BSD{
-            "BSD",
+            "BS$",
             "Dollar na mBahámaí",
         }
         BTN{
@@ -474,7 +474,7 @@ ga{
             "Franc Congolais an Chongó",
         }
         CHF{
-            "CHF",
+            "Fr.",
             "Franc na hEilvéise",
         }
         CLF{
@@ -502,7 +502,7 @@ ga{
             "Koruna Crua na Seicslóvaice",
         }
         CUP{
-            "CUP",
+            "CU$",
             "Peso Cúba",
         }
         CVE{
@@ -514,7 +514,7 @@ ga{
             "Punt na Cipire",
         }
         CZK{
-            "CZK",
+            "Kč",
             "Koruna Phoblacht na Seice",
         }
         DDM{
@@ -522,7 +522,7 @@ ga{
             "Ostmark na hOirGhearmáine",
         }
         DEM{
-            "DEM",
+            "DM",
             "Deutsche Mark",
         }
         DJF{
@@ -550,15 +550,15 @@ ga{
             "Unidad de Valor Constante (UVC) Eacuadóir",
         }
         EEK{
-            "EEK",
+            "Ekr",
             "Kroon na hEastóine",
         }
         EGP{
-            "EGP",
+            "EG£",
             "Punt na hÉigipte",
         }
         ESP{
-            "ESP",
+            "Pts",
             "Peseta Spáinneach",
         }
         ETB{
@@ -570,7 +570,7 @@ ga{
             "Euro",
         }
         FIM{
-            "FIM",
+            "mk",
             "Markka Fionnlannach",
         }
         FJD{
@@ -578,15 +578,15 @@ ga{
             "Dollar Fhidsí",
         }
         FKP{
-            "FKP",
+            "FK£",
             "Punt Oileáin Fháclainne",
         }
         FRF{
-            "FRF",
+            "₣",
             "Franc Francach",
         }
         GBP{
-            "UK£",
+            "£",
             "Punt Steirling",
         }
         GEK{
@@ -598,11 +598,11 @@ ga{
             "Lari na Grúise",
         }
         GHC{
-            "GHC",
+            "₵",
             "Cedi Ghána",
         }
         GIP{
-            "GIP",
+            "GI£",
             "Punt Ghiobráltair",
         }
         GMD{
@@ -622,7 +622,7 @@ ga{
             "Ekwele Guineana na Guine Meánchriosaí",
         }
         GRD{
-            "GRD",
+            "₯",
             "Drachma Gréagach",
         }
         GTQ{
@@ -654,7 +654,7 @@ ga{
             "Dínear na Cróite",
         }
         HRK{
-            "HRK",
+            "kn",
             "Kuna Crótach",
         }
         HTG{
@@ -674,15 +674,15 @@ ga{
             "Punt Éireannach",
         }
         ILP{
-            "ILP",
+            "I£",
             "Punt Iosraelach",
         }
         ILS{
-            "ILS",
+            "₪",
             "Sheqel Nua Iosraelach",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
+            "₨",
             "Rúipí India",
         }
         IQD{
@@ -694,7 +694,7 @@ ga{
             "Rial Iaránach",
         }
         ISK{
-            "ISK",
+            "Ikr",
             "Krona Íoslannach",
         }
         ITL{
@@ -730,11 +730,11 @@ ga{
             "Franc Chomóra",
         }
         KPW{
-            "KPW",
+            "KP₩",
             "Won na Cóiré Thuaidh",
         }
         KRW{
-            "KRW",
+            "₩",
             "Won na Cóiré Theas",
         }
         KWD{
@@ -742,7 +742,7 @@ ga{
             "Dínear Cuátach",
         }
         KYD{
-            "KYD",
+            "KY$",
             "Dollar Oileáin Cayman",
         }
         KZT{
@@ -750,7 +750,7 @@ ga{
             "Tenge Casacstánach",
         }
         LAK{
-            "LAK",
+            "₭",
             "Kip Laosach",
         }
         LBP{
@@ -762,7 +762,7 @@ ga{
             "Rúipí Srí Lanca",
         }
         LRD{
-            "LRD",
+            "L$",
             "Dollar na Libéire",
         }
         LSL{
@@ -770,7 +770,7 @@ ga{
             "Loti Leosóta",
         }
         LTL{
-            "LTL",
+            "Lt",
             "Lita Liotuánach",
         }
         LTT{
@@ -782,7 +782,7 @@ ga{
             "Franc Lucsamburg",
         }
         LVL{
-            "LVL",
+            "Ls",
             "Lats Laitviach",
         }
         LVR{
@@ -830,7 +830,7 @@ ga{
             "Tugrik Mongólach",
         }
         MOP{
-            "MOP",
+            "MOP$",
             "Pataca Macao",
         }
         MRO{
@@ -842,15 +842,15 @@ ga{
             "Lira Maltach",
         }
         MTP{
-            "MTP",
+            "MT£",
             "Punt Maltach",
         }
         MUR{
-            "MUR",
+            "MURs",
             "Rúipí Oileán Mhuirís",
         }
         MVR{
-            "MVR",
+            "Rf",
             "Maldive Islands Rufiyaa",
         }
         MWK{
@@ -862,7 +862,7 @@ ga{
             "Peso Meicsiceo",
         }
         MXP{
-            "MXP",
+            "MX$",
             "Peso Airgid Meicsiceo (1861-1992)",
         }
         MXV{
@@ -886,7 +886,7 @@ ga{
             "Dollar na Namaibe",
         }
         NGN{
-            "NGN",
+            "₦",
             "Naira Nígéarach",
         }
         NIC{
@@ -894,11 +894,11 @@ ga{
             "Cordoba Nicearagua",
         }
         NIO{
-            "NIO",
+            "C$",
             "Cordoba Oro Nicearagua",
         }
         NLG{
-            "NLG",
+            "fl",
             "Guilder Ísiltíreach",
         }
         NOK{
@@ -918,15 +918,15 @@ ga{
             "Rial Omain",
         }
         PAB{
-            "PAB",
+            "B/.",
             "Balboa Panamach",
         }
         PEI{
-            "PEI",
+            "I/.",
             "Inti Pheiriú",
         }
         PEN{
-            "PEN",
+            "S/.",
             "Sol Nuevo Pheiriú",
         }
         PES{
@@ -938,7 +938,7 @@ ga{
             "Kina Nua-Ghuine Phapua",
         }
         PHP{
-            "PHP",
+            "₱",
             "Peso Filipíneach",
         }
         PKR{
@@ -954,11 +954,11 @@ ga{
             "Zloty Polannach (1950-1995)",
         }
         PTE{
-            "PTE",
+            "Esc",
             "Escudo Portaingélach",
         }
         PYG{
-            "PYG",
+            "₲",
             "Guarani Pharagua",
         }
         QAR{
@@ -978,7 +978,7 @@ ga{
             "Rúbal Rúiseach (1991-1998)",
         }
         RWF{
-            "RWF",
+            "RF",
             "Franc Ruanda",
         }
         SAR{
@@ -994,7 +994,7 @@ ga{
             "Rúipí na Séiséil",
         }
         SDD{
-            "SDD",
+            "LSd",
             "Dínear na Súdáine",
         }
         SDP{
@@ -1010,7 +1010,7 @@ ga{
             "Dollar Singeapóir",
         }
         SHP{
-            "SHP",
+            "SH£",
             "Punt San Héilin",
         }
         SIT{
@@ -1022,7 +1022,7 @@ ga{
             "Koruna na Slóvaice",
         }
         SLL{
-            "SLL",
+            "Le",
             "Leone Shiarra Leon",
         }
         SOS{
@@ -1042,7 +1042,7 @@ ga{
             "Rúbal Sóvéadach",
         }
         SVC{
-            "SVC",
+            "SV₡",
             "Colon na Salvadóire",
         }
         SYP{
@@ -1054,7 +1054,7 @@ ga{
             "Lilangeni na Suasalainne",
         }
         THB{
-            "THB",
+            "฿",
             "Baht na Téalainne",
         }
         TJR{
@@ -1070,7 +1070,7 @@ ga{
             "Manat na An Tuircméanastáine",
         }
         TND{
-            "TND",
+            "DT",
             "Dínear na Túinéise",
         }
         TOP{
@@ -1098,7 +1098,7 @@ ga{
             "Scilling na Tansáine",
         }
         UAH{
-            "UAH",
+            "₴",
             "Hryvnia Úcránach",
         }
         UAK{
@@ -1142,7 +1142,7 @@ ga{
             "Bolivar Veiniséala",
         }
         VND{
-            "VND",
+            "₫",
             "Dong Vítneamach",
         }
         VUV{
@@ -1150,11 +1150,11 @@ ga{
             "Vatu Vanuatú",
         }
         WST{
-            "WST",
+            "WS$",
             "Tala Samó Thiar",
         }
         XAF{
-            "XAF",
+            "FCFA",
             "CFA Franc BEAC",
         }
         XAU{
@@ -1198,7 +1198,7 @@ ga{
             "UIC-Franc Francach",
         }
         XOF{
-            "XOF",
+            "CFA",
             "CFA Franc BCEAO",
         }
         XPF{
@@ -1234,11 +1234,11 @@ ga{
             "Rand na hAfraice Theas",
         }
         ZMK{
-            "ZMK",
+            "ZK",
             "Kwacha Saimbiach",
         }
         ZRN{
-            "ZRN",
+            "NZ",
             "Zaire Nua Sáíreach",
         }
         ZRZ{
@@ -1407,7 +1407,7 @@ ga{
         "#,##0%",
         "#E0",
     }
-    Version{"1.65"}
+    Version{"1.139"}
     calendar{
         gregorian{
             AmPmMarkers{

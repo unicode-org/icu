@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fr_CA.xml
@@ -27,7 +27,7 @@ fr_CA{
         279,
         216,
     }
-    Version{"1.57"}
+    Version{"1.139"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -39,10 +39,13 @@ fr_CA{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE d MMMM yyyy",
-                "d MMMM yyyy",
+                "EEEE d MMMM y",
+                "d MMMM y",
                 "yyyy-MM-dd",
                 "yy-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1} {0}",
             }
             availableFormats{
@@ -96,19 +99,19 @@ fr_CA{
                     y{"'du' E yy-MM-dd 'au' E yy-MM-dd"}
                 }
                 yMMM{
-                    y{"'de' MMM yyyy 'à' MMM yyyy"}
+                    y{"'de' MMM y 'à' MMM y"}
                 }
                 yMMMEd{
-                    M{"'du' E d MMM 'au' E d MMM yyyy"}
-                    d{"'du' E d 'au' E d MMM yyyy"}
-                    y{"'du' E d MMM yyyy 'au' E d MMM yyyy"}
+                    M{"'du' E d MMM 'au' E d MMM y"}
+                    d{"'du' E d 'au' E d MMM y"}
+                    y{"'du' E d MMM y 'au' E d MMM y"}
                 }
                 yMMMM{
-                    M{"MMMM  – MMMM yyyy"}
+                    M{"MMMM  – MMMM y"}
                 }
                 yMMMd{
-                    M{"'du' d MMM 'au' d MMM yyyy"}
-                    y{"'du' d MMM yyyy 'au' d MMM yyyy"}
+                    M{"'du' d MMM 'au' d MMM y"}
+                    y{"'du' d MMM y 'au' d MMM y"}
                 }
                 yMd{
                     M{"yy-MM-dd – yy-MM-dd"}

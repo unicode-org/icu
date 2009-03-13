@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/si.xml
@@ -45,7 +45,7 @@ si{
             gregorian{"දිනදසුන"}
         }
     }
-    Version{"1.2"}
+    Version{"1.139"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -57,10 +57,13 @@ si{
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
-                "EEEE, yyyy MMMM d",
-                "yyyy MMMM d",
-                "yyyy MMM d",
+                "EEEE, y MMMM d",
+                "y MMMM d",
+                "y MMM d",
                 "yyyy/MM/dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1} {0}",
             }
             dayNames{

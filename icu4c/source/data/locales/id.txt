@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/id.xml
@@ -504,7 +504,7 @@ id{
         "#,##0%",
         "#E0",
     }
-    Version{"1.66"}
+    Version{"1.139"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -512,10 +512,13 @@ id{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, yyyy MMMM dd",
-                "dd MMMM yyyy",
-                "dd MMM yyyy",
+                "EEEE, dd MMMM yyyy",
+                "d MMMM yyyy",
+                "d MMM yyyy",
                 "dd/MM/yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1} {0}",
             }
             dayNames{
@@ -572,6 +575,52 @@ id{
                     }
                 }
             }
+        }
+    }
+    units{
+        day{
+            other{"{0} hari"}
+        }
+        hour{
+            other{"{0} jam"}
+        }
+        minute{
+            other{"{0} menit"}
+        }
+        month{
+            other{"{0} bulan"}
+        }
+        second{
+            other{"{0} detik"}
+        }
+        week{
+            other{"{0} minggu"}
+        }
+        year{
+            other{"{0} tahun"}
+        }
+    }
+    unitsShort{
+        day{
+            other{"{0} hr"}
+        }
+        hour{
+            other{"{0} jam"}
+        }
+        minute{
+            other{"{0} mnt"}
+        }
+        month{
+            other{"{0} bln"}
+        }
+        second{
+            other{"{0} dtk"}
+        }
+        week{
+            other{"{0} mggu"}
+        }
+        year{
+            other{"{0} thn"}
         }
     }
 }

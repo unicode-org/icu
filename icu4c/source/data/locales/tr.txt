@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/tr.xml
@@ -329,7 +329,7 @@ tr{
             "Hollanda Antilleri Guldeni",
         }
         AOA{
-            "AOA",
+            "Kz",
             "Angola Kvanzası",
         }
         AOK{
@@ -345,7 +345,7 @@ tr{
             "Angola Kvanzası Reajustado (1995-1999)",
         }
         ARA{
-            "ARA",
+            "₳",
             "Arjantin Australi",
         }
         ARP{
@@ -365,7 +365,7 @@ tr{
             "Avustralya Doları",
         }
         AWG{
-            "AWG",
+            "Afl.",
             "Aruba Florini",
         }
         AZM{
@@ -373,7 +373,7 @@ tr{
             "Azerbaycan Manatı",
         }
         AZN{
-            "AZN",
+            "man.",
             "Azeri Manatı",
         }
         BAD{
@@ -425,7 +425,7 @@ tr{
             "Bermuda Doları",
         }
         BND{
-            "BND",
+            "BN$",
             "Brunei Doları",
         }
         BOB{
@@ -433,7 +433,7 @@ tr{
             "Bolivya Bolivyanosu",
         }
         BOP{
-            "BOP",
+            "$b.",
             "Bolivya Pezosu",
         }
         BOV{
@@ -441,15 +441,15 @@ tr{
             "Bolivya Mvdol",
         }
         BRB{
-            "BRB",
+            "NCr",
             "Yeni Brezilya Kruzeirosu (1967-1986)",
         }
         BRC{
-            "BRC",
+            "Cz$",
             "Brezilya Kruzadosu",
         }
         BRE{
-            "BRE",
+            "Cr$",
             "Brezilya Kruzeirosu (1990-1993)",
         }
         BRL{
@@ -457,15 +457,15 @@ tr{
             "Brezilya Reali",
         }
         BRN{
-            "BRN",
+            "NCz$",
             "Yeni Brezilya Kruzadosu",
         }
         BRR{
-            "BRR",
+            "CR$",
             "Brezilya Kruzeirosu",
         }
         BSD{
-            "BSD",
+            "BS$",
             "Bahama Doları",
         }
         BTN{
@@ -545,7 +545,7 @@ tr{
             "Çekoslavak Korunası (Hard)",
         }
         CUP{
-            "CUP",
+            "CU$",
             "Küba Pezosu",
         }
         CVE{
@@ -557,7 +557,7 @@ tr{
             "Güney Kıbrıs Lirası",
         }
         CZK{
-            "CZK",
+            "Kč",
             "Çek Cumhuriyeti Korunası",
         }
         DDM{
@@ -565,7 +565,7 @@ tr{
             "Doğu Alman Markı",
         }
         DEM{
-            "DEM",
+            "DM",
             "Alman Markı",
         }
         DJF{
@@ -593,19 +593,15 @@ tr{
             "Ekvator Unidad de Valor Constante (UVC)",
         }
         EEK{
-            "EEK",
+            "Ekr",
             "Estonya Krunu",
         }
         EGP{
-            "EGP",
+            "EG£",
             "Mısır Lirası",
         }
-        EQE{
-            "EQE",
-            "Ekuele",
-        }
         ERN{
-            "ERN",
+            "Nfk",
             "Eritre Nakfası",
         }
         ESA{
@@ -629,7 +625,7 @@ tr{
             "Euro",
         }
         FIM{
-            "FIM",
+            "mk",
             "Fin Markkası",
         }
         FJD{
@@ -637,11 +633,11 @@ tr{
             "Fiji Doları",
         }
         FKP{
-            "FKP",
+            "FK£",
             "Falkland Adaları Lirası",
         }
         FRF{
-            "FRF",
+            "₣",
             "Fransız Frangı",
         }
         GBP{
@@ -657,15 +653,15 @@ tr{
             "Gürcistan Larisi",
         }
         GHC{
-            "GHC",
+            "₵",
             "Gana Sedisi (1979-2007)",
         }
         GHS{
-            "GHS",
+            "GH₵",
             "Gana Sedisi",
         }
         GIP{
-            "GIP",
+            "GI£",
             "Cebelitarık Lirası",
         }
         GMD{
@@ -685,7 +681,7 @@ tr{
             "Ekvator Ginesi Ekuelesi",
         }
         GRD{
-            "GRD",
+            "₯",
             "Yunan Drahmisi",
         }
         GTQ{
@@ -717,7 +713,7 @@ tr{
             "Hırvat Dinarı",
         }
         HRK{
-            "HRK",
+            "kn",
             "Hırvat Kunası",
         }
         HTG{
@@ -737,11 +733,11 @@ tr{
             "İrlanda Lirası",
         }
         ILP{
-            "ILP",
+            "I£",
             "İsrail Lirası",
         }
         ILS{
-            "ILS",
+            "₪",
             "Yeni İsrail Şekeli",
         }
         INR{
@@ -757,7 +753,7 @@ tr{
             "İran Riyali",
         }
         ISK{
-            "ISK",
+            "Ikr",
             "İzlanda Kronu",
         }
         ITL{
@@ -793,11 +789,11 @@ tr{
             "Komorlar Frangı",
         }
         KPW{
-            "KPW",
+            "KP₩",
             "Kuzey Kore Wonu",
         }
         KRW{
-            "KRW",
+            "₩",
             "Güney Kore Wonu",
         }
         KWD{
@@ -805,7 +801,7 @@ tr{
             "Kuveyt Dinarı",
         }
         KYD{
-            "KYD",
+            "KY$",
             "Kayman Adaları Doları",
         }
         KZT{
@@ -813,7 +809,7 @@ tr{
             "Kazakistan Tengesi",
         }
         LAK{
-            "LAK",
+            "₭",
             "Laos Kipi",
         }
         LBP{
@@ -825,19 +821,15 @@ tr{
             "Sri Lanka Rupisi",
         }
         LRD{
-            "LRD",
+            "L$",
             "Liberya Doları",
         }
         LSL{
             "M",
             "Lesotho Lotisi",
         }
-        LSM{
-            "LSM",
-            "Maloti",
-        }
         LTL{
-            "LTL",
+            "Lt",
             "Litvanya Litası",
         }
         LTT{
@@ -857,7 +849,7 @@ tr{
             "Finansal Lüksemburg Frangı",
         }
         LVL{
-            "LVL",
+            "Ls",
             "Letonya Latı",
         }
         LVR{
@@ -905,7 +897,7 @@ tr{
             "Moğol Tugriki",
         }
         MOP{
-            "MOP",
+            "MOP$",
             "Makao Patacası",
         }
         MRO{
@@ -917,15 +909,15 @@ tr{
             "Malta Lirası",
         }
         MTP{
-            "MTP",
+            "MT£",
             "Malta Sterlini",
         }
         MUR{
-            "MUR",
+            "MURs",
             "Mauritius Rupisi",
         }
         MVR{
-            "MVR",
+            "Rf",
             "Maldiv Adaları Rufiyaa",
         }
         MWK{
@@ -937,7 +929,7 @@ tr{
             "Meksika Pezosu",
         }
         MXP{
-            "MXP",
+            "MX$",
             "Gümüş Meksika Pezosu (1861-1992)",
         }
         MXV{
@@ -965,7 +957,7 @@ tr{
             "Namibya Doları",
         }
         NGN{
-            "NGN",
+            "₦",
             "Nijerya Nairası",
         }
         NIC{
@@ -973,11 +965,11 @@ tr{
             "Nikaragua Kordobası",
         }
         NIO{
-            "NIO",
+            "C$",
             "Nikaragua Kordobası (Oro)",
         }
         NLG{
-            "NLG",
+            "fl",
             "Hollanda Florini",
         }
         NOK{
@@ -997,15 +989,15 @@ tr{
             "Umman Riyali",
         }
         PAB{
-            "PAB",
+            "B/.",
             "Panama Balboası",
         }
         PEI{
-            "PEI",
+            "I/.",
             "Peru İnti",
         }
         PEN{
-            "PEN",
+            "S/.",
             "Yeni Peru Solu",
         }
         PES{
@@ -1033,11 +1025,11 @@ tr{
             "Polonya Zlotisi (1950-1995)",
         }
         PTE{
-            "PTE",
+            "Esc",
             "Portekiz Esküdosu",
         }
         PYG{
-            "PYG",
+            "₲",
             "Paraguay Guaranisi",
         }
         QAR{
@@ -1045,7 +1037,7 @@ tr{
             "Katar Riyali",
         }
         RHD{
-            "RHD",
+            "RH$",
             "Rodezya Doları",
         }
         ROL{
@@ -1057,7 +1049,7 @@ tr{
             "Romen Leyi",
         }
         RSD{
-            "RSD",
+            "din.",
             "Sırp Dinarı",
         }
         RUB{
@@ -1069,7 +1061,7 @@ tr{
             "Rus Rublesi (1991-1998)",
         }
         RWF{
-            "RWF",
+            "RF",
             "Ruanda Frangı",
         }
         SAR{
@@ -1085,7 +1077,7 @@ tr{
             "Seyşeller Rupisi",
         }
         SDD{
-            "SDD",
+            "LSd",
             "Sudan Dinarı",
         }
         SDG{
@@ -1105,7 +1097,7 @@ tr{
             "Singapur Doları",
         }
         SHP{
-            "SHP",
+            "SH£",
             "Saint Helena Lirası",
         }
         SIT{
@@ -1117,7 +1109,7 @@ tr{
             "Slovak Korunası",
         }
         SLL{
-            "SLL",
+            "Le",
             "Sierra Leone Leonesi",
         }
         SOS{
@@ -1125,7 +1117,7 @@ tr{
             "Somali Şilini",
         }
         SRD{
-            "SRD",
+            "SR$",
             "Surinam Doları",
         }
         SRG{
@@ -1141,7 +1133,7 @@ tr{
             "Sovyet Rublesi",
         }
         SVC{
-            "SVC",
+            "SV₡",
             "El Salvador Kolonu",
         }
         SYP{
@@ -1153,7 +1145,7 @@ tr{
             "Swaziland Lilangenisi",
         }
         THB{
-            "THB",
+            "฿",
             "Tayland Bahtı",
         }
         TJR{
@@ -1169,7 +1161,7 @@ tr{
             "Türkmenistan Manatı",
         }
         TND{
-            "TND",
+            "DT",
             "Tunus Dinarı",
         }
         TOP{
@@ -1185,7 +1177,7 @@ tr{
             "Eski Türk Lirası",
         }
         TRY{
-            "TRY",
+            "YTL",
             "Türk Lirası",
         }
         TTD{
@@ -1201,7 +1193,7 @@ tr{
             "Tanzanya Şilini",
         }
         UAH{
-            "UAH",
+            "₴",
             "Ukrayna Grivnası",
         }
         UAK{
@@ -1253,7 +1245,7 @@ tr{
             "Güçlü Venezuela Bolivarı",
         }
         VND{
-            "VND",
+            "₫",
             "Vietnam Dongu",
         }
         VUV{
@@ -1261,11 +1253,11 @@ tr{
             "Vanuatu Vatusu",
         }
         WST{
-            "WST",
+            "WS$",
             "Batı Samoa Talası",
         }
         XAF{
-            "XAF",
+            "FCFA",
             "CFA Frangı BEAC",
         }
         XAG{
@@ -1313,7 +1305,7 @@ tr{
             "Fransız UIC-Frangı",
         }
         XOF{
-            "XOF",
+            "CFA",
             "CFA Frangı BCEAO",
         }
         XPD{
@@ -1369,11 +1361,11 @@ tr{
             "Güney Afrika Randı",
         }
         ZMK{
-            "ZMK",
+            "ZK",
             "Zambiya Kvaçası",
         }
         ZRN{
-            "ZRN",
+            "NZ",
             "Yeni Zaire Zairesi",
         }
         ZRZ{
@@ -2105,8 +2097,9 @@ tr{
         SCOUSE{"Scouse"}
         SOLBA{"Stolvizza/Solbica Lehçesi"}
         TARASK{"Taraskievica Yazım Kuralları"}
+        VALENCIA{"Valensiyaca"}
     }
-    Version{"1.107"}
+    Version{"1.139"}
     calendar{
         coptic{
             monthNames{
@@ -2139,10 +2132,13 @@ tr{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "dd MMMM yyyy EEEE",
-                "d MMMM yyyy",
-                "dd.MMM.yyyy",
-                "dd.MM.yyyy",
+                "dd MMMM y EEEE",
+                "d MMMM y",
+                "dd MMM y",
+                "dd MM yyyy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1} {0}",
             }
             availableFormats{
@@ -2162,18 +2158,18 @@ tr{
                 d{"d"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
-                y{"yyyy"}
+                y{"y"}
                 yM{"M/yyyy"}
                 yMEd{"d/M/yyyy EEE"}
-                yMMM{"MMM yyyy"}
-                yMMMEd{"d MMM yyyy EEE"}
-                yMMMM{"MMMM yyyy"}
+                yMMM{"MMM y"}
+                yMMMEd{"d MMM y EEE"}
+                yMMMM{"MMMM y"}
                 yQ{"Q yyyy"}
-                yQQQ{"QQQ yyyy"}
+                yQQQ{"QQQ y"}
                 yyMM{"MM/yy"}
                 yyMMM{"MMM yy"}
                 yyQ{"Q yy"}
-                yyyy{"yyyy"}
+                yyyy{"y"}
             }
             dayNames{
                 format{
@@ -2316,18 +2312,21 @@ tr{
                     y{"dd.MM.yyyy E - dd.MM.yyyy E"}
                 }
                 yMMM{
-                    M{"MMM-MMM yyyy"}
-                    y{"MMM yyyy - MMM yyyy"}
+                    M{"MMM-MMM y"}
+                    y{"MMM y - MMM y"}
                 }
                 yMMMEd{
-                    M{"dd MMM yyyy E - dd MMM yyyy E"}
-                    d{"dd MMM yyyy E - dd MMM yyyy E"}
-                    y{"dd MMM yyyy E - dd MMM yyyy E"}
+                    M{"dd MMM y E - dd MMM y E"}
+                    d{"dd MMM y E - dd MMM y E"}
+                    y{"dd MMM y E - dd MMM y E"}
+                }
+                yMMMM{
+                    y{"MM-yyyy – MM-yyyy"}
                 }
                 yMMMd{
-                    M{"d MMM - d MMM yyyy"}
-                    d{"d-d MMM yyyy"}
-                    y{"d MMM yyyy - d MMM yyyy"}
+                    M{"d MMM - d MMM y"}
+                    d{"d-d MMM y"}
+                    y{"d MMM y - d MMM y"}
                 }
                 yMd{
                     M{"dd.MM.yyyy - dd.MM.yyyy"}
@@ -2408,130 +2407,6 @@ tr{
                 }
             }
         }
-        hebrew{
-            monthNames{
-                format{
-                    abbreviated{
-                        "Tişri",
-                        "Heşvan",
-                        "Kislev",
-                        "Tevet",
-                        "Şevat",
-                        "Veadar",
-                        "Adar",
-                        "Nisan",
-                        "İyar",
-                        "Sivan",
-                        "Tamuz",
-                        "Av",
-                        "Elul",
-                    }
-                    wide{
-                        "Tişri",
-                        "Heşvan",
-                        "Kislev",
-                        "Tevet",
-                        "Şevat",
-                        "Veadar",
-                        "Adar",
-                        "Nisan",
-                        "İyar",
-                        "Sivan",
-                        "Tamuz",
-                        "Av",
-                        "Elul",
-                    }
-                }
-            }
-        }
-        islamic{
-            monthNames{
-                format{
-                    abbreviated{
-                        "Muharrem",
-                        "Safer",
-                        "Rebiülevvel",
-                        "Rebiülahir",
-                        "Cemaziyelevvel",
-                        "Cemaziyelahir",
-                        "Recep",
-                        "Şaban",
-                        "Ramazan",
-                        "Şevval",
-                        "Zilkade",
-                        "Zilhicce",
-                    }
-                    wide{
-                        "Muharrem",
-                        "Safer",
-                        "Rebiülevvel",
-                        "Rebiülahir",
-                        "Cemaziyelevvel",
-                        "Cemaziyelahir",
-                        "Recep",
-                        "Şaban",
-                        "Ramazan",
-                        "Şevval",
-                        "Zilkade",
-                        "Zilhicce",
-                    }
-                }
-            }
-        }
-        islamic-civil{
-            monthNames{
-                format{
-                    wide{
-                        "Muharrem",
-                        "Safer",
-                        "Rebiülevvel",
-                        "Rebiülahir",
-                        "Cemaziyelevvel",
-                        "Cemaziyelahir",
-                        "Recep",
-                        "Şaban",
-                        "Ramazan",
-                        "Şevval",
-                        "Zilkade",
-                        "Zilhicce",
-                    }
-                }
-            }
-        }
-        persian{
-            monthNames{
-                format{
-                    abbreviated{
-                        "Ferverdin",
-                        "Ordibeheşt",
-                        "Hordad",
-                        "Tir",
-                        "Mordad",
-                        "Şehriver",
-                        "Mehr",
-                        "Aban",
-                        "Azer",
-                        "Dey",
-                        "Behmen",
-                        "Esfend",
-                    }
-                    wide{
-                        "Ferverdin",
-                        "Ordibeheşt",
-                        "Hordad",
-                        "Tir",
-                        "Mordad",
-                        "Şehriver",
-                        "Mehr",
-                        "Aban",
-                        "Azer",
-                        "Dey",
-                        "Behmen",
-                        "Esfend",
-                    }
-                }
-            }
-        }
     }
     codePatterns{
         language{"Dil: {0}"}
@@ -2575,9 +2450,35 @@ tr{
             other{"{0} yıl"}
         }
     }
+    unitsShort{
+        day{
+            other{"{0} gün"}
+        }
+        hour{
+            other{"{0} sa."}
+        }
+        minute{
+            other{"{0} dk."}
+        }
+        month{
+            other{"{0} ay"}
+        }
+        second{
+            other{"{0} sn."}
+        }
+        week{
+            other{"{0} hafta"}
+        }
+        year{
+            other{"{0} yıl"}
+        }
+    }
     zoneStrings{
         "Africa:Ceuta"{
             ec{"Septe"}
+        }
+        "Africa:Kinshasa"{
+            ec{"Kinşasa"}
         }
         "America:Indiana:Knox"{
             ec{"Knox"}
@@ -2724,6 +2625,7 @@ tr{
             ld{"Alaska-Hawaii Yaz Saati"}
             lg{"Alaska-Hawaii Saati"}
             ls{"Alaska-Hawaii Standart Saati"}
+            sg{"AHT"}
         }
         "meta:Almaty"{
             ld{"Almatı Yaz Saati"}
@@ -2742,6 +2644,7 @@ tr{
             ld{"Doğu Yaz Saati"}
             lg{"Doğu Saati"}
             ls{"Doğu Standart Saati"}
+            sg{"ET"}
         }
         "meta:America_Mountain"{
             ld{"ABD Sıradağlar Yaz Saati"}
@@ -2803,6 +2706,7 @@ tr{
             ld{"Orta Avustralya Yaz Saati"}
             lg{"Orta Avustralya Saati"}
             ls{"Orta Avustralya Standart Saati"}
+            sg{"ACT"}
         }
         "meta:Australia_CentralWestern"{
             ld{"Avustralya Batı Merkezi Yaz Saati"}
@@ -2863,6 +2767,7 @@ tr{
         "meta:Chamorro"{
             lg{"Chamorro Saati"}
             ls{"Chamorro Standart Saati"}
+            sg{"ChT"}
         }
         "meta:Changbai"{
             ls{"Changbai Saati"}
@@ -2999,6 +2904,7 @@ tr{
         "meta:Gulf"{
             lg{"Körfez Saati"}
             ls{"Gulf Standart Saati"}
+            sg{"GT"}
         }
         "meta:Guyana"{
             ls{"Guyana Saati"}
@@ -3050,6 +2956,7 @@ tr{
             ld{"Japonya Yaz Saati"}
             lg{"Japonya Saati"}
             ls{"Japonya Standart Saati"}
+            sg{"JT"}
         }
         "meta:Kamchatka"{
             ld{"Petropavlovsk-Kamçatski Yaz Saati"}
@@ -3133,6 +3040,7 @@ tr{
             ls{"Marshall Adaları Saati"}
         }
         "meta:Mauritius"{
+            ld{"Mauritius Yaz Saati"}
             ls{"Mauritius Saati"}
         }
         "meta:Mawson"{
@@ -3164,6 +3072,7 @@ tr{
             ld{"Yeni Zelanda Yaz Saati"}
             lg{"Yeni Zelanda Saati"}
             ls{"Yeni Zelanda Standart Saati"}
+            sg{"NZT"}
         }
         "meta:Newfoundland"{
             ld{"Newfoundland Yaz Saati"}
@@ -3220,6 +3129,7 @@ tr{
             ld{"Pierre ve Miquelon Yaz Saati"}
             lg{"Pierre ve Miquelon Saati"}
             ls{"Pierre ve Miquelon Standart Saati"}
+            sg{"PMT"}
         }
         "meta:Pitcairn"{
             ls{"Pitcairn Saati"}
@@ -3371,9 +3281,11 @@ tr{
             ld{"Yukon Yaz Saati"}
             lg{"Yukon Saati"}
             ls{"Yukon Standart Saati"}
+            sg{"YT"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
+        gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} Saati"}
     }

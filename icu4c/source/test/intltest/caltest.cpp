@@ -1,6 +1,6 @@
 /************************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation
+ * Copyright (c) 1997-2009, International Business Machines Corporation
  * and others. All Rights Reserved.
  ************************************************************************/
 
@@ -625,6 +625,7 @@ CalendarTest::TestDisambiguation765()
     c->set(UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
     c->set(UCAL_MONTH, UCAL_JUNE);
     c->set(UCAL_WEEK_OF_MONTH, 0);
+    c->setMinimalDaysInFirstWeek(1);
     c->getTime(status);
     verify765("1997 Tuesday in week 0 of June = ", status);
 
@@ -644,6 +645,7 @@ CalendarTest::TestDisambiguation765()
     c->set(UCAL_WEEK_OF_YEAR, 1);
     verify765("1997 Tuesday in week 1 of yearWOY = ", c, 1996, UCAL_DECEMBER, 31);
     c->clear(); // - add test for YEAR
+    c->setMinimalDaysInFirstWeek(1);
     c->set(UCAL_YEAR, 1997);
     c->set(UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
     c->set(UCAL_WEEK_OF_YEAR, 1);
@@ -886,6 +888,7 @@ CalendarTest::TestAddRollExtensive()
     temp->set(UCAL_MINUTE, min);
     temp->set(UCAL_SECOND, sec);
     temp->set(UCAL_MILLISECOND, ms);
+    temp->setMinimalDaysInFirstWeek(1);
 
     UCalendarDateFields e;
 

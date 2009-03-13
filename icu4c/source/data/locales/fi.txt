@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/fi.xml
@@ -310,7 +310,7 @@ fi{
             "Afganistanin afgaani (1927–2002)",
         }
         AFN{
-            "AFN",
+            "Af",
             "Afganistanin afgaani",
         }
         ALL{
@@ -322,11 +322,11 @@ fi{
             "Armenian dram",
         }
         ANG{
-            "ANG",
+            "NAf.",
             "Alankomaiden Antillien guldeni",
         }
         AOA{
-            "AOA",
+            "Kz",
             "Angolan kwanza",
         }
         AOK{
@@ -342,7 +342,7 @@ fi{
             "Angolan kwanza reajustado (1995–1999)",
         }
         ARA{
-            "ARA",
+            "₳",
             "Argentiinan austral",
         }
         ARP{
@@ -350,7 +350,7 @@ fi{
             "Argentiinan peso (1983–1985)",
         }
         ARS{
-            "ARS",
+            "AR$",
             "Argentiinan peso",
         }
         ATS{
@@ -358,11 +358,11 @@ fi{
             "Itävallan šillinki",
         }
         AUD{
-            "AUD",
+            "AU$",
             "Australian dollari",
         }
         AWG{
-            "AWG",
+            "Afl.",
             "Aruban guldeni",
         }
         AZM{
@@ -370,7 +370,7 @@ fi{
             "Azerbaidžanin manat (1993–2006)",
         }
         AZN{
-            "AZN",
+            "man.",
             "Azerbaidžanin manat",
         }
         BAD{
@@ -378,15 +378,15 @@ fi{
             "Bosnia-Hertsegovinan dinaari",
         }
         BAM{
-            "BAM",
+            "KM",
             "Bosnia-Hertsegovinan vaihdettava markka",
         }
         BBD{
-            "BBD",
+            "Bds$",
             "Barbadosin dollari",
         }
         BDT{
-            "BDT",
+            "Tk",
             "Bangladeshin taka",
         }
         BEC{
@@ -394,7 +394,7 @@ fi{
             "Belgian vaihdettava frangi",
         }
         BEF{
-            "BEF",
+            "BF",
             "Belgian frangi",
         }
         BEL{
@@ -410,27 +410,27 @@ fi{
             "Bulgarian uusi lev",
         }
         BHD{
-            "BHD",
+            "BD",
             "Bahrainin dinaari",
         }
         BIF{
-            "BIF",
+            "FBu",
             "Burundin frangi",
         }
         BMD{
-            "BMD",
+            "BD$",
             "Bermudan dollari",
         }
         BND{
-            "BND",
+            "BN$",
             "Brunein dollari",
         }
         BOB{
-            "BOB",
+            "Bs",
             "Bolivian boliviano",
         }
         BOP{
-            "BOP",
+            "$b.",
             "Bolivian peso",
         }
         BOV{
@@ -438,15 +438,15 @@ fi{
             "Bolivian mvdol",
         }
         BRB{
-            "BRB",
+            "NCr",
             "Brasilian uusi cruzeiro (1967–1986)",
         }
         BRC{
-            "BRC",
+            "Cz$",
             "Brasilian cruzado",
         }
         BRE{
-            "BRE",
+            "Cr$",
             "Brasilian cruzeiro (1990–1993)",
         }
         BRL{
@@ -454,19 +454,19 @@ fi{
             "Brasilian real",
         }
         BRN{
-            "BRN",
+            "NCz$",
             "Brasilian uusi cruzado",
         }
         BRR{
-            "BRR",
+            "CR$",
             "Brasilian cruzeiro",
         }
         BSD{
-            "BSD",
+            "BS$",
             "Bahaman dollari",
         }
         BTN{
-            "BTN",
+            "Nu.",
             "Bhutanin ngultrum",
         }
         BUK{
@@ -486,11 +486,11 @@ fi{
             "Valko-Venäjän rupla",
         }
         BZD{
-            "BZD",
+            "BZ$",
             "Belizen dollari",
         }
         CAD{
-            "CAD",
+            "CA$",
             "Kanadan dollari",
         }
         CDF{
@@ -502,7 +502,7 @@ fi{
             "Sveitsin WIR-euro",
         }
         CHF{
-            "CHF",
+            "Fr.",
             "Sveitsin frangi",
         }
         CHW{
@@ -514,15 +514,15 @@ fi{
             "Chilen unidades de fomento",
         }
         CLP{
-            "CLP",
+            "CL$",
             "Chilen peso",
         }
         CNY{
-            "CNY",
+            "CN¥",
             "Kiinan yuan",
         }
         COP{
-            "COP",
+            "CO$",
             "Kolumbian peso",
         }
         COU{
@@ -530,7 +530,7 @@ fi{
             "Kolumbian unidad de valor real",
         }
         CRC{
-            "CRC",
+            "₡",
             "Costa Rican colon",
         }
         CSD{
@@ -542,19 +542,19 @@ fi{
             "Tšekkoslovakian kova koruna",
         }
         CUP{
-            "CUP",
+            "CU$",
             "Kuuban peso",
         }
         CVE{
-            "CVE",
+            "CV$",
             "Kap Verden escudo",
         }
         CYP{
-            "CYP",
+            "CY£",
             "Kyproksen punta",
         }
         CZK{
-            "CZK",
+            "Kč",
             "Tšekin koruna",
         }
         DDM{
@@ -562,11 +562,11 @@ fi{
             "Itä-Saksan markka",
         }
         DEM{
-            "DEM",
+            "DM",
             "Saksan markka",
         }
         DJF{
-            "DJF",
+            "Fdj",
             "Djiboutin frangi",
         }
         DKK{
@@ -574,11 +574,11 @@ fi{
             "Tanskan kruunu",
         }
         DOP{
-            "DOP",
+            "RD$",
             "Dominikaanisen tasavallan peso",
         }
         DZD{
-            "DZD",
+            "DA",
             "Algerian dinaari",
         }
         ECS{
@@ -590,19 +590,15 @@ fi{
             "Ecuadorin UVC",
         }
         EEK{
-            "EEK",
+            "Ekr",
             "Viron kruunu",
         }
         EGP{
-            "EGP",
+            "EG£",
             "Egyptin punta",
         }
-        EQE{
-            "EQE",
-            "Päiväntasaajan Guinean ekwele (1986–1989)",
-        }
         ERN{
-            "ERN",
+            "Nfk",
             "Eritrean nakfa",
         }
         ESA{
@@ -614,11 +610,11 @@ fi{
             "Espanjan peseta (vaihdettava tili)",
         }
         ESP{
-            "ESP",
+            "Pts",
             "Espanjan peseta",
         }
         ETB{
-            "ETB",
+            "Br",
             "Etiopian birr",
         }
         EUR{
@@ -630,15 +626,15 @@ fi{
             "Suomen markka",
         }
         FJD{
-            "FJD",
+            "FJ$",
             "Fidžin dollari",
         }
         FKP{
-            "FKP",
+            "FK£",
             "Falklandinsaarten punta",
         }
         FRF{
-            "FRF",
+            "₣",
             "Ranskan frangi",
         }
         GBP{
@@ -654,15 +650,15 @@ fi{
             "Georgian lari",
         }
         GHC{
-            "GHC",
+            "₵",
             "Ghanan cedi (1979–2007)",
         }
         GHS{
-            "GHS",
+            "GH₵",
             "Ghanan cedi",
         }
         GIP{
-            "GIP",
+            "GI£",
             "Gibraltarin punta",
         }
         GMD{
@@ -670,7 +666,7 @@ fi{
             "Gambian dalasi",
         }
         GNF{
-            "GNF",
+            "FG",
             "Guinean frangi",
         }
         GNS{
@@ -682,7 +678,7 @@ fi{
             "Päiväntasaajan Guinean ekwele (–1986)",
         }
         GRD{
-            "GRD",
+            "₯",
             "Kreikan drakma",
         }
         GTQ{
@@ -698,11 +694,11 @@ fi{
             "Guinea-Bissaun peso",
         }
         GYD{
-            "GYD",
+            "GY$",
             "Guyanan dollari",
         }
         HKD{
-            "HKD",
+            "HK$",
             "Hongkongin dollari",
         }
         HNL{
@@ -714,7 +710,7 @@ fi{
             "Kroatian dinaari",
         }
         HRK{
-            "HRK",
+            "kn",
             "Kroatian kuna",
         }
         HTG{
@@ -722,23 +718,23 @@ fi{
             "Haitin gourde",
         }
         HUF{
-            "HUF",
+            "Ft",
             "Unkarin forintti",
         }
         IDR{
-            "IDR",
+            "Rp",
             "Indonesian rupia",
         }
         IEP{
-            "IEP",
+            "IR£",
             "Irlannin punta",
         }
         ILP{
-            "ILP",
+            "I£",
             "Israelin punta",
         }
         ILS{
-            "ILS",
+            "₪",
             "Israelin uusi sekeli",
         }
         INR{
@@ -754,7 +750,7 @@ fi{
             "Iranin rial",
         }
         ISK{
-            "ISK",
+            "Ikr",
             "Islannin kruunu",
         }
         ITL{
@@ -762,11 +758,11 @@ fi{
             "Italian liira",
         }
         JMD{
-            "JMD",
+            "J$",
             "Jamaikan dollari",
         }
         JOD{
-            "JOD",
+            "JD",
             "Jordanian dinaari",
         }
         JPY{
@@ -774,7 +770,7 @@ fi{
             "Japanin jeni",
         }
         KES{
-            "KES",
+            "Ksh",
             "Kenian šillinki",
         }
         KGS{
@@ -786,23 +782,23 @@ fi{
             "Kambodžan riel",
         }
         KMF{
-            "KMF",
+            "CF",
             "Komorien frangi",
         }
         KPW{
-            "KPW",
+            "KP₩",
             "Pohjois-Korean won",
         }
         KRW{
-            "KRW",
+            "₩",
             "Etelä-Korean won",
         }
         KWD{
-            "KWD",
+            "KD",
             "Kuwaitin dinaari",
         }
         KYD{
-            "KYD",
+            "KY$",
             "Caymansaarten dollari",
         }
         KZT{
@@ -810,19 +806,19 @@ fi{
             "Kazakstanin tenge",
         }
         LAK{
-            "LAK",
+            "₭",
             "Laosin kip",
         }
         LBP{
-            "LBP",
+            "LB£",
             "Libanonin punta",
         }
         LKR{
-            "LKR",
+            "SLRs",
             "Sri Lankan rupia",
         }
         LRD{
-            "LRD",
+            "L$",
             "Liberian dollari",
         }
         LSL{
@@ -830,11 +826,11 @@ fi{
             "Lesothon loti",
         }
         LSM{
+            "LSM" /** ===  */,
             "LSM",
-            "Lesothon maloti",
         }
         LTL{
-            "LTL",
+            "Lt",
             "Liettuan liti",
         }
         LTT{
@@ -854,7 +850,7 @@ fi{
             "Luxemburgin rahoitusfrangi",
         }
         LVL{
-            "LVL",
+            "Ls",
             "Latvian lati",
         }
         LVR{
@@ -862,7 +858,7 @@ fi{
             "Latvian rupla",
         }
         LYD{
-            "LYD",
+            "LD",
             "Libyan dinaari",
         }
         MAD{
@@ -898,35 +894,35 @@ fi{
             "Myanmarin kyat",
         }
         MNT{
-            "MNT",
+            "₮",
             "Mongolian tugrik",
         }
         MOP{
-            "MOP",
+            "MOP$",
             "Macaon pataca",
         }
         MRO{
-            "MRO",
+            "UM",
             "Mauritanian ouguiya",
         }
         MTL{
-            "MTL",
+            "Lm",
             "Maltan liira",
         }
         MTP{
-            "MTP",
+            "MT£",
             "Maltan punta",
         }
         MUR{
-            "MUR",
+            "MURs",
             "Mauritiuksen rupia",
         }
         MVR{
-            "MVR",
+            "Rf",
             "Malediivien rufiyaa",
         }
         MWK{
-            "MWK",
+            "MK",
             "Malawin kwacha",
         }
         MXN{
@@ -934,7 +930,7 @@ fi{
             "Meksikon peso",
         }
         MXP{
-            "MXP",
+            "MX$",
             "Meksikon hopeapeso (1861–1992)",
         }
         MXV{
@@ -942,7 +938,7 @@ fi{
             "Meksikon UDI",
         }
         MYR{
-            "MYR",
+            "RM",
             "Malesian ringgit",
         }
         MZE{
@@ -950,19 +946,19 @@ fi{
             "Mosambikin escudo",
         }
         MZM{
-            "MZM",
+            "Mt",
             "Mosambikin metical (1980–2006)",
         }
         MZN{
-            "MZN",
+            "MTn",
             "Mosambikin metical",
         }
         NAD{
-            "NAD",
+            "N$",
             "Namibian dollari",
         }
         NGN{
-            "NGN",
+            "₦",
             "Nigerian naira",
         }
         NIC{
@@ -970,11 +966,11 @@ fi{
             "Nicaraguan cordoba",
         }
         NIO{
-            "NIO",
+            "C$",
             "Nicaraguan kultacordoba",
         }
         NLG{
-            "NLG",
+            "fl",
             "Alankomaiden guldeni",
         }
         NOK{
@@ -982,11 +978,11 @@ fi{
             "Norjan kruunu",
         }
         NPR{
-            "NPR",
+            "NPRs",
             "Nepalin rupia",
         }
         NZD{
-            "NZD",
+            "NZ$",
             "Uuden-Seelannin dollari",
         }
         OMR{
@@ -994,15 +990,15 @@ fi{
             "Omanin rial",
         }
         PAB{
-            "PAB",
+            "B/.",
             "Panaman balboa",
         }
         PEI{
-            "PEI",
+            "I/.",
             "Perun inti",
         }
         PEN{
-            "PEN",
+            "S/.",
             "Perun uusi sol",
         }
         PES{
@@ -1014,15 +1010,15 @@ fi{
             "Papua-Uuden-Guinean kina",
         }
         PHP{
-            "PHP",
+            "₱",
             "Filippiinien peso",
         }
         PKR{
-            "PKR",
+            "PKRs",
             "Pakistanin rupia",
         }
         PLN{
-            "PLN",
+            "zł",
             "Puolan zloty",
         }
         PLZ{
@@ -1030,19 +1026,19 @@ fi{
             "Puolan zloty (1950–1995)",
         }
         PTE{
-            "PTE",
+            "Esc",
             "Portugalin escudo",
         }
         PYG{
-            "PYG",
+            "₲",
             "Paraguayn guarani",
         }
         QAR{
-            "QAR",
+            "QR",
             "Qatarin rial",
         }
         RHD{
-            "RHD",
+            "RH$",
             "Rhodesian dollari",
         }
         ROL{
@@ -1054,7 +1050,7 @@ fi{
             "Romanian uusi leu",
         }
         RSD{
-            "RSD",
+            "din.",
             "Serbian dinaari",
         }
         RUB{
@@ -1066,23 +1062,23 @@ fi{
             "Venäjän rupla (1991–1998)",
         }
         RWF{
-            "RWF",
+            "RF",
             "Ruandan frangi",
         }
         SAR{
-            "SAR",
+            "SR",
             "Saudi-Arabian rial",
         }
         SBD{
-            "SBD",
+            "SI$",
             "Salomonsaarten dollari",
         }
         SCR{
-            "SCR",
+            "SRe",
             "Seychellien rupia",
         }
         SDD{
-            "SDD",
+            "LSd",
             "Sudanin dinaari",
         }
         SDG{
@@ -1098,11 +1094,11 @@ fi{
             "Ruotsin kruunu",
         }
         SGD{
-            "SGD",
+            "S$",
             "Singaporen dollari",
         }
         SHP{
-            "SHP",
+            "SH£",
             "Saint Helenan punta",
         }
         SIT{
@@ -1110,27 +1106,27 @@ fi{
             "Slovenian tolar",
         }
         SKK{
-            "SKK",
+            "Sk",
             "Slovakian koruna",
         }
         SLL{
-            "SLL",
+            "Le",
             "Sierra Leonen leone",
         }
         SOS{
-            "SOS",
+            "Ssh",
             "Somalian šillinki",
         }
         SRD{
-            "SRD",
+            "SR$",
             "Surinamin dollari",
         }
         SRG{
-            "SRG",
+            "Sf",
             "Surinamin guldeni",
         }
         STD{
-            "STD",
+            "Db",
             "São Tomén ja Príncipen dobra",
         }
         SUR{
@@ -1138,11 +1134,11 @@ fi{
             "Neuvostoliiton rupla",
         }
         SVC{
-            "SVC",
+            "SV₡",
             "El Salvadorin colon",
         }
         SYP{
-            "SYP",
+            "SY£",
             "Syyrian punta",
         }
         SZL{
@@ -1150,7 +1146,7 @@ fi{
             "Swazimaan lilangeni",
         }
         THB{
-            "THB",
+            "฿",
             "Thaimaan baht",
         }
         TJR{
@@ -1166,11 +1162,11 @@ fi{
             "Turkmenistanin manat",
         }
         TND{
-            "TND",
+            "DT",
             "Tunisian dinaari",
         }
         TOP{
-            "TOP",
+            "T$",
             "Tongan pa’anga",
         }
         TPE{
@@ -1178,27 +1174,27 @@ fi{
             "Timorin escudo",
         }
         TRL{
-            "TRL",
+            "TL",
             "Turkin vanha liira",
         }
         TRY{
-            "TRY",
+            "YTL",
             "Turkin liira",
         }
         TTD{
-            "TTD",
+            "TT$",
             "Trinidadin ja Tobagon dollari",
         }
         TWD{
-            "TWD",
+            "NT$",
             "Taiwanin uusi dollari",
         }
         TZS{
-            "TZS",
+            "TSh",
             "Tansanian šillinki",
         }
         UAH{
-            "UAH",
+            "₴",
             "Ukrainan hryvnia",
         }
         UAK{
@@ -1210,7 +1206,7 @@ fi{
             "Ugandan šillinki (1966–1987)",
         }
         UGX{
-            "UGX",
+            "USh",
             "Ugandan šillinki",
         }
         USD{
@@ -1234,7 +1230,7 @@ fi{
             "Uruguayn peso (1975–1993)",
         }
         UYU{
-            "UYU",
+            "$U",
             "Uruguayn peso",
         }
         UZS{
@@ -1242,27 +1238,27 @@ fi{
             "Uzbekistanin som",
         }
         VEB{
-            "VEB",
+            "Bs.",
             "Venezuelan bolivar",
         }
         VEF{
-            "VEF",
+            "Bs.F.",
             "Venezuelan bolivar fuerte",
         }
         VND{
-            "VND",
+            "₫",
             "Vietnamin dong",
         }
         VUV{
-            "VUV",
+            "VT",
             "Vanuatun vatu",
         }
         WST{
-            "WST",
+            "WS$",
             "Samoan tala",
         }
         XAF{
-            "XAF",
+            "FCFA",
             "CFA-frangi BEAC",
         }
         XAG{
@@ -1290,7 +1286,7 @@ fi{
             "EUA (XBD)",
         }
         XCD{
-            "XCD",
+            "EC$",
             "Itä-Karibian dollari",
         }
         XDR{
@@ -1310,7 +1306,7 @@ fi{
             "Ranskan UIC-frangi",
         }
         XOF{
-            "XOF",
+            "CFA",
             "CFA-frangi BCEAO",
         }
         XPD{
@@ -1318,7 +1314,7 @@ fi{
             "palladium",
         }
         XPF{
-            "XPF",
+            "CFPF",
             "CFP-frangi",
         }
         XPT{
@@ -1342,7 +1338,7 @@ fi{
             "Jemenin dinaari",
         }
         YER{
-            "YER",
+            "YR",
             "Jemenin rial",
         }
         YUD{
@@ -1362,15 +1358,15 @@ fi{
             "Etelä-Afrikan rahoitusrandi",
         }
         ZAR{
-            "ZAR",
+            "R",
             "Etelä-Afrikan randi",
         }
         ZMK{
-            "ZMK",
+            "ZK",
             "Sambian kwacha",
         }
         ZRN{
-            "ZRN",
+            "NZ",
             "Zairen uusi zaire",
         }
         ZRZ{
@@ -1378,7 +1374,7 @@ fi{
             "Zairen zaire",
         }
         ZWD{
-            "ZWD",
+            "Z$",
             "Zimbabwen dollari",
         }
     }
@@ -1608,9 +1604,6 @@ fi{
         EGP{
             other{"Egyptin puntaa"}
         }
-        EQE{
-            other{"Päiväntasaajan Guinean ekweleä (1986–1989)"}
-        }
         ERN{
             other{"Eritrean nakfaa"}
         }
@@ -1781,9 +1774,6 @@ fi{
         }
         LSL{
             other{"Lesothon lotia"}
-        }
-        LSM{
-            other{"Lesothon malotia"}
         }
         LTL{
             other{"Liettuan litiä"}
@@ -2928,7 +2918,7 @@ fi{
         TARASK{"valkovenäjän taraškevitsa-oikeinkirjoitus"}
         VALENCIA{"katalaanin valencian murre"}
     }
-    Version{"1.109"}
+    Version{"1.139"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2940,13 +2930,17 @@ fi{
                 "H.mm.ss z",
                 "H.mm.ss",
                 "H.mm",
-                "EEEE d. MMMM yyyy",
-                "d. MMMM yyyy",
+                "EEEE d. MMMM y",
+                "d. MMMM y",
                 "d.M.yyyy",
                 "d.M.yyyy",
                 "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
             availableFormats{
+                EEEd{"EEE d."}
                 HHmm{"HH.mm"}
                 HHmmss{"HH.mm.ss"}
                 Hm{"H.mm"}
@@ -2961,21 +2955,21 @@ fi{
                 d{"d"}
                 mmss{"mm.ss"}
                 ms{"mm.ss"}
-                y{"yyyy"}
+                y{"y"}
                 yM{"L.yyyy"}
                 yMEd{"EEE d.M.yyyy"}
-                yMMM{"LLL yyyy"}
-                yMMMEd{"EEE d. MMM yyyy"}
-                yMMMM{"LLLL yyyy"}
+                yMMM{"LLL y"}
+                yMMMEd{"EEE d. MMM y"}
+                yMMMM{"LLLL y"}
                 yQ{"Q/yyyy"}
-                yQQQ{"QQQ yyyy"}
+                yQQQ{"QQQ y"}
                 yyMM{"M/yy"}
                 yyMMM{"MMM yy"}
                 yyQ{"Q/yy"}
                 yyyyM{"M/yyyy"}
                 yyyyMEEEd{"EEE d.M.yyyy"}
-                yyyyMMMM{"LLLL yyyy"}
-                yyyyQQQQ{"QQQQ yyyy"}
+                yyyyMMMM{"LLLL y"}
+                yyyyQQQQ{"QQQQ y"}
             }
             dayNames{
                 format{
@@ -3114,8 +3108,8 @@ fi{
                     y{"y–y"}
                 }
                 yM{
-                    M{"LLL–LLLL yyyy"}
-                    y{"LLLL yyyy – LLLL yyyy"}
+                    M{"LLL–LLLL y"}
+                    y{"LLLL y – LLLL y"}
                 }
                 yMEd{
                     M{"E d.M.yyyy – E d.M.yyyy"}
@@ -3123,22 +3117,22 @@ fi{
                     y{"E d.M.yyyy – E d.M.yyyy"}
                 }
                 yMMM{
-                    M{"LLL–LLLL yyyy"}
-                    y{"LLLL yyyy – LLLL yyyy"}
+                    M{"LLL–LLLL y"}
+                    y{"LLLL y – LLLL y"}
                 }
                 yMMMEd{
-                    M{"E d. MMMM – E d. MMMM yyyy"}
-                    d{"E d. – E d. MMMM yyyy"}
-                    y{"E d. MMMM yyyy – E d. MMMM yyyy"}
+                    M{"E d. MMMM – E d. MMMM y"}
+                    d{"E d. – E d. MMMM y"}
+                    y{"E d. MMMM y – E d. MMMM y"}
                 }
                 yMMMM{
-                    M{"LLL–LLLL yyyy"}
-                    y{"LLLL yyyy – LLLL yyyy"}
+                    M{"LLL–LLLL y"}
+                    y{"LLLL y – LLLL y"}
                 }
                 yMMMd{
-                    M{"d. MMMM – d. MMMM yyyy"}
-                    d{"d.–d. MMMM yyyy"}
-                    y{"d. MMMM yyyy – d. MMMM yyyy"}
+                    M{"d. MMMM – d. MMMM y"}
+                    d{"d.–d. MMMM y"}
+                    y{"d. MMMM y – d. MMMM y"}
                 }
                 yMd{
                     M{"d.M.–d.M.yyyy"}
@@ -3328,6 +3322,36 @@ fi{
             other{"{0} vuotta"}
         }
     }
+    unitsShort{
+        day{
+            one{"{0} pv"}
+            other{"{0} pv"}
+        }
+        hour{
+            one{"{0} t"}
+            other{"{0} t"}
+        }
+        minute{
+            one{"{0} min"}
+            other{"{0} min"}
+        }
+        month{
+            one{"{0} kk"}
+            other{"{0} kk"}
+        }
+        second{
+            one{"{0} s"}
+            other{"{0} s"}
+        }
+        week{
+            one{"{0} vko"}
+            other{"{0} vko"}
+        }
+        year{
+            one{"{0} v"}
+            other{"{0} v"}
+        }
+    }
     zoneStrings{
         "Africa:Algiers"{
             ec{"Alger"}
@@ -3337,6 +3361,9 @@ fi{
         }
         "America:Cancun"{
             ec{"Cancún"}
+        }
+        "America:Dawson"{
+            ec{"Dawson"}
         }
         "America:El_Salvador"{
             ec{"San Salvador"}
@@ -3496,6 +3523,7 @@ fi{
         }
         "meta:Africa_Eastern"{
             cu:int{0}
+            ss{"EAT"}
         }
         "meta:Africa_FarWestern"{
             cu:int{0}
@@ -3505,6 +3533,8 @@ fi{
         }
         "meta:Africa_Western"{
             cu:int{0}
+            ld{"Länsi-Afrikan kesäaika"}
+            ls{"Länsi-Afrikan aika"}
         }
         "meta:Aktyubinsk"{
             cu:int{0}
@@ -3516,12 +3546,14 @@ fi{
         }
         "meta:Alaska_Hawaii"{
             cu:int{0}
+            sd{"AHDT"}
         }
         "meta:Almaty"{
             cu:int{0}
         }
         "meta:Amazon"{
             cu:int{0}
+            ls{"Amazonin aika"}
         }
         "meta:America_Central"{
             cu:int{0}
@@ -3554,6 +3586,7 @@ fi{
         }
         "meta:Arabian"{
             cu:int{0}
+            ls{"Saudi-Arabian normaaliaika"}
         }
         "meta:Argentina"{
             cu:int{0}
@@ -3574,15 +3607,18 @@ fi{
         }
         "meta:Australia_Central"{
             cu:int{0}
+            sg{"ACT"}
         }
         "meta:Australia_CentralWestern"{
             cu:int{0}
+            sg{"ACWT"}
         }
         "meta:Australia_Eastern"{
             cu:int{0}
         }
         "meta:Australia_Western"{
             cu:int{0}
+            ss{"AWST"}
         }
         "meta:Azerbaijan"{
             cu:int{0}
@@ -3592,6 +3628,7 @@ fi{
         }
         "meta:Baku"{
             cu:int{0}
+            sd{"BAKST"}
         }
         "meta:Bangladesh"{
             cu:int{0}
@@ -3601,6 +3638,7 @@ fi{
         }
         "meta:Bhutan"{
             cu:int{0}
+            ls{"Bhutanin aika"}
         }
         "meta:Bolivia"{
             cu:int{0}
@@ -3610,6 +3648,7 @@ fi{
         }
         "meta:Brasilia"{
             cu:int{0}
+            sd{"BRST"}
         }
         "meta:British"{
             cu:int{0}
@@ -3619,6 +3658,7 @@ fi{
         }
         "meta:Cape_Verde"{
             cu:int{0}
+            ld{"Kap Verden kesäaika"}
         }
         "meta:Chamorro"{
             cu:int{0}
@@ -3668,6 +3708,7 @@ fi{
         }
         "meta:DumontDUrville"{
             cu:int{0}
+            ss{"DDUT"}
         }
         "meta:Dushanbe"{
             cu:int{0}
@@ -3846,6 +3887,7 @@ fi{
         }
         "meta:Lord_Howe"{
             cu:int{0}
+            ld{"Lord Howen kesäaika"}
         }
         "meta:Macau"{
             cu:int{0}
@@ -3986,6 +4028,7 @@ fi{
         }
         "meta:South_Georgia"{
             cu:int{0}
+            ss{"GST (GS)"}
         }
         "meta:Suriname"{
             cu:int{0}
@@ -4019,6 +4062,7 @@ fi{
         }
         "meta:Turkey"{
             cu:int{0}
+            sd{"TRST"}
         }
         "meta:Turkmenistan"{
             cu:int{0}
@@ -4067,12 +4111,14 @@ fi{
         }
         "meta:Yerevan"{
             cu:int{0}
+            ld{"Jerevanin kesäaika"}
         }
         "meta:Yukon"{
             cu:int{0}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"UTC{0}"}
+        gmtZeroFormat{"UTC"}
         hourFormat{"+H.mm;-H.mm"}
         regionFormat{"{0}"}
     }

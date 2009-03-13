@@ -665,7 +665,7 @@ static void TestFieldGetSet()
         ucal_get(cal, UCAL_DATE, &status)!=12 || ucal_get(cal, UCAL_HOUR, &status)!=5)
         log_err("error in ucal_get()\n");    
     else if(ucal_get(cal, UCAL_DAY_OF_WEEK_IN_MONTH, &status)!=2 || ucal_get(cal, UCAL_DAY_OF_WEEK, &status)!=6
-        || ucal_get(cal, UCAL_WEEK_OF_MONTH, &status)!=2 || ucal_get(cal, UCAL_WEEK_OF_YEAR, &status)!= 11)
+        || ucal_get(cal, UCAL_WEEK_OF_MONTH, &status)!=2 || ucal_get(cal, UCAL_WEEK_OF_YEAR, &status)!= 10)
         log_err("FAIL: error in ucal_get()\n");
     else
         log_verbose("PASS: ucal_get() works fine\n");
@@ -722,6 +722,7 @@ static void TestFieldGetSet()
     ucal_set(cal, UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
     ucal_set(cal, UCAL_MONTH, UCAL_JUNE);
     ucal_set(cal, UCAL_WEEK_OF_MONTH, 0);
+    ucal_setAttribute(cal, UCAL_MINIMAL_DAYS_IN_FIRST_WEEK,1);
     d1 = ucal_getMillis(cal,&status);
     if (status != U_ILLEGAL_ARGUMENT_ERROR){ 
         log_err("FAIL: U_ILLEGAL_ARGUMENT_ERROR was not returned for : 1997 Tuesday zero-th week in June\n");
@@ -804,6 +805,7 @@ static void TestAddRollExtensive()
     ucal_set(cal, UCAL_YEAR, y);
     ucal_set(cal, UCAL_MONTH, m);
     ucal_set(cal, UCAL_DATE, d);
+    ucal_setAttribute(cal, UCAL_MINIMAL_DAYS_IN_FIRST_WEEK,1);
 
     /* Confirm that adding to various fields works.*/
     log_verbose("\nTesting to confirm that adding to various fields works with ucal_add()\n");
@@ -898,6 +900,7 @@ static void TestAddRollExtensive()
     ucal_set(cal, UCAL_MINUTE, min);
     ucal_set(cal, UCAL_SECOND,sec);
     ucal_set(cal, UCAL_MILLISECOND, ms);
+    ucal_setAttribute(cal, UCAL_MINIMAL_DAYS_IN_FIRST_WEEK,1);
     status=U_ZERO_ERROR;
 
     log_verbose("\nTesting UCalendar add...\n");

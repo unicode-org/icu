@@ -1,12 +1,16 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/pt_PT.xml
 // *
 // ***************************************************************************
 pt_PT{
+    AuxExemplarCharacters{
+        "[ª á à ă â å ä ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ º ó ò ŏ ô ö ø ō œ ß ú ù ŭ û ü"
+        " ū ÿ]"
+    }
     Countries{
         009{"Oceânia"}
         035{"Sudeste Asiático"}
@@ -19,6 +23,7 @@ pt_PT{
         BF{"Burkina-Faso"}
         BH{"Bareine"}
         BJ{"Benim"}
+        BW{"Botswana"}
         BY{"Bielorrússia"}
         CC{"Ilhas Cocos"}
         CD{"República Democrática do Congo"}
@@ -54,6 +59,7 @@ pt_PT{
         PG{"Papua Nova Guiné"}
         PL{"Polónia"}
         PS{"Território Palestiniano"}
+        QA{"Qatar"}
         QO{"Oceânia Insular"}
         QU{"União Europeia"}
         RO{"Roménia"}
@@ -69,6 +75,7 @@ pt_PT{
         VI{"Ilhas Virgin E.U.A."}
         VN{"Vietname"}
         YE{"Iémen"}
+        ZW{"Zimbabwe"}
     }
     Currencies{
         AFA{
@@ -96,7 +103,7 @@ pt_PT{
             "Libra de Chipre",
         }
         CZK{
-            "CZK",
+            "Kč",
             "Coroa da República Checa",
         }
         ECV{
@@ -104,7 +111,7 @@ pt_PT{
             "Unidad de Valor Constante (UVC) do Equador",
         }
         KYD{
-            "KYD",
+            "KY$",
             "Dólar das Ilhas Caimão",
         }
         MWK{
@@ -112,7 +119,7 @@ pt_PT{
             "Cuacha do Malawi",
         }
         MXP{
-            "MXP",
+            "MX$",
             "Peso Plata mexicano (1861-1992)",
         }
         MXV{
@@ -124,7 +131,7 @@ pt_PT{
             "Córdoba nicaraguano",
         }
         NIO{
-            "NIO",
+            "C$",
             "Córdoba Ouro nicaraguano",
         }
         PTE{
@@ -144,9 +151,12 @@ pt_PT{
             "Xelim de Tanzânia",
         }
         WST{
-            "WST",
+            "WS$",
             "Tala de Samoa Ocidental",
         }
+    }
+    CurrencyUnitPatterns{
+        other{"{0} {1}"}
     }
     Languages{
         af{"afrikaans"}
@@ -305,19 +315,22 @@ pt_PT{
         POLYTON{"politónico"}
         SOLBA{"dialecto stolvizza/solbica"}
     }
-    Version{"1.76"}
+    Version{"1.139"}
     calendar{
         buddhist{
             DateTimePatterns{
-                "HH'H'mm'm'ss's' v",
-                "HH:mm:ss z",
+                "HH'h'mm'min'ss's' v",
+                "HH'h'mm'min'ss's' z",
                 "HH'h'mm'min'ss's'",
                 "HH:mm",
-                "EEEE, MMMM d, yyyy G",
-                "MMMM d, yyyy G",
-                "MMM d, yyyy G",
+                "EEEE, MMMM d, y G",
+                "MMMM d, y G",
+                "MMM d, y G",
                 "M/d/yyyy",
-                "{1} {0}",
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
             }
         }
         gregorian{
@@ -326,38 +339,158 @@ pt_PT{
                 "Depois do meio-dia",
             }
             DateTimePatterns{
-                "HH'H'mm'm'ss's' v",
-                "HH:mm:ss z",
+                "HH'h'mm'min'ss's' v",
+                "HH'h'mm'min'ss's' z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, d 'de' MMMM 'de' yyyy",
-                "d 'de' MMMM 'de' yyyy",
-                "yyyy/MM/dd",
-                "yy/MM/dd",
+                "EEEE, d 'de' MMMM 'de' y",
+                "d 'de' MMMM 'de' y",
+                "d 'de' MMM 'de' yyyy",
+                "dd/MM/yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1} {0}",
             }
             availableFormats{
-                MMMEd{"E d MMM"}
+                EEEd{"EEE, d"}
+                MMM{"LLL"}
+                MMMEd{"EEE, d 'de' MMM"}
                 MMMMEd{"EEE, d 'de' MMMM"}
                 MMMMd{"d 'de' MMMM"}
                 MMMd{"d 'de' MMM"}
-                Md{"d-M"}
-                yyMM{"MM-yy"}
-                yyyyMM{"MM-yyyy"}
+                Md{"d/M"}
+                yQ{"QQQ 'de' yyyy"}
+                yQQQ{"QQQ 'de' y"}
+                yyMM{"MM/yy"}
+                yyMMM{"MMM 'de' yy"}
+                yyQ{"QQQ 'de' yy"}
+                yyyyMM{"MM/yyyy"}
+                yyyyMMM{"MMM 'de' y"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Dom",
+                        "Seg",
+                        "ter",
+                        "qua",
+                        "qui",
+                        "sex",
+                        "sáb",
+                    }
+                    wide{
+                        "Domingo",
+                        "segunda-feira",
+                        "terça-feira",
+                        "quarta-feira",
+                        "quinta-feira",
+                        "sexta-feira",
+                        "sábado",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Dom",
+                        "Seg",
+                        "ter",
+                        "qua",
+                        "qui",
+                        "sex",
+                        "sáb",
+                    }
+                    wide{
+                        "Domingo",
+                        "segunda-feira",
+                        "terça-feira",
+                        "quarta-feira",
+                        "quinta-feira",
+                        "sexta-feira",
+                        "sábado",
+                    }
+                }
             }
             eras{
                 wide{
-                    "a.C.",
-                    "d.C.",
+                    "Antes de Cristo",
+                    "Ano do Senhor",
                 }
             }
             fields{
                 day{
                     relative{
                         "-2"{"Anteontem"}
-                        "-3"{"Trás-anteontem"}
-                        "3"{"Em três dias"}
+                        "-3"{"Há três dias"}
+                        "3"{"Daqui a três dias"}
                     }
+                }
+                second{
+                    dn{"Segundo"}
+                }
+                zone{
+                    dn{"Fuso"}
+                }
+            }
+            intervalFormats{
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E, dd/MM - E, dd/MM"}
+                    d{"E, dd/MM - E, dd/MM"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMd{
+                    M{"d 'de' MMM - d 'de' MMM"}
+                    d{"d-d 'de' MMM"}
+                }
+                Md{
+                    M{"dd/MM - dd/MM"}
+                    d{"dd/MM - dd/MM"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    h{"H'h' - H'h'"}
+                }
+                hm{
+                    h{"H'h' - H'h'"}
+                    m{"H'h'mm - H'h'mm"}
+                }
+                hmv{
+                    h{"H'h'mm - H'h'mm v"}
+                    m{"H'h'mm - H'h'mm v"}
+                }
+                hv{
+                    h{"H'h'mm - H'h'mm v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"MM/yy - MM/yy"}
+                    y{"MM/yy - MM/yy"}
+                }
+                yMMM{
+                    M{"MMM-MMM 'de' y"}
+                    y{"MMM 'de' y - MMM 'de' y"}
+                }
+                yMMMM{
+                    M{"MM-MM 'de' yyyy"}
+                }
+                yMMMd{
+                    M{"d 'de' MMM - d 'de' MMM 'de' y"}
+                    d{"d-d 'de' MMM 'de' y"}
+                    y{"d 'de' MMM 'de' y - d 'de' MMM 'de' y"}
+                }
+                yMd{
+                    M{"dd/MM/yy - dd/MM/yy"}
+                    d{"dd/MM/yy - dd/MM/yy"}
+                    y{"dd/MM/yy - dd/MM/yy"}
                 }
             }
             monthNames{
@@ -394,6 +527,12 @@ pt_PT{
             }
             quarters{
                 format{
+                    abbreviated{
+                        "T1",
+                        "T2",
+                        "T3",
+                        "T4",
+                    }
                     wide{
                         "1.º trimestre",
                         "2.º trimestre",
@@ -405,15 +544,18 @@ pt_PT{
         }
         japanese{
             DateTimePatterns{
-                "HH'H'mm'm'ss's' v",
-                "HH:mm:ss z",
+                "HH'h'mm'min'ss's' v",
+                "HH'h'mm'min'ss's' z",
                 "HH:mm:ss",
                 "HH:mm",
                 "EEEE, MMMM d, y G",
                 "MMMM d, y G",
                 "MMM d, y G",
                 "M/d/yy",
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
                 "{1} {0}",
+                "{1} {0}" /**  fallback from 'gregorian'   */,
             }
         }
     }

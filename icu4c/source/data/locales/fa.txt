@@ -305,7 +305,7 @@ fa{
             "افغانی قدیم",
         }
         AFN{
-            "AFN",
+            "Af",
             "افغانی",
         }
         ALL{
@@ -321,7 +321,7 @@ fa{
             "پزوی آرژانتین (۱۹۸۳ تا ۱۹۸۵)‏",
         }
         ARS{
-            "ARS",
+            "AR$",
             "پزوی آرژانتین",
         }
         ATS{
@@ -329,7 +329,7 @@ fa{
             "شیلینگ اتریش",
         }
         AUD{
-            "AUD",
+            "AU$",
             "دلار استرالیا",
         }
         AZM{
@@ -337,7 +337,7 @@ fa{
             "منات قدیم جمهوری آذربایجان",
         }
         AZN{
-            "AZN",
+            "man.",
             "منات جمهوری آذربایجان",
         }
         BAD{
@@ -345,31 +345,31 @@ fa{
             "دینار بوسنی و هرزگوین",
         }
         BBD{
-            "BBD",
+            "Bds$",
             "دلار باربادوس",
         }
         BEF{
-            "BEF",
+            "BF",
             "فرانک بلژیک",
         }
         BHD{
-            "BHD",
+            "BD",
             "دینار بحرین",
         }
         BIF{
-            "BIF",
+            "FBu",
             "فرانک بوروندی",
         }
         BMD{
-            "BMD",
+            "BD$",
             "دلار برمودا",
         }
         BND{
-            "BND",
+            "BN$",
             "دلار برونئی",
         }
         BOP{
-            "BOP",
+            "$b.",
             "پزوی بولیوی",
         }
         BRL{
@@ -377,7 +377,7 @@ fa{
             "رئال برزیل",
         }
         BSD{
-            "BSD",
+            "BS$",
             "دلار باهاما",
         }
         BYR{
@@ -385,27 +385,27 @@ fa{
             "روبل بیلوروسی",
         }
         BZD{
-            "BZD",
+            "BZ$",
             "دلار بلیز",
         }
         CAD{
-            "CAD",
+            "CA$",
             "دلار کانادا",
         }
         CHF{
-            "CHF",
+            "Fr.",
             "فرانک سوئیس",
         }
         CLP{
-            "CLP",
+            "CL$",
             "پزوی شیلی",
         }
         CNY{
-            "CNY",
+            "CN¥",
             "یوآن چین",
         }
         COP{
-            "COP",
+            "CO$",
             "پزوی کلمبیا",
         }
         CSD{
@@ -413,27 +413,27 @@ fa{
             "دینار قدیم صربستان",
         }
         CUP{
-            "CUP",
+            "CU$",
             "پزوی کوبا",
         }
         DEM{
-            "DEM",
+            "DM",
             "مارک آلمان",
         }
         DJF{
-            "DJF",
+            "Fdj",
             "فرانک جیبوتی",
         }
         DKK{
-            "DKK",
+            "Dkr",
             "کرون دانمارک",
         }
         DOP{
-            "DOP",
+            "RD$",
             "پزوی دومینیکا",
         }
         DZD{
-            "DZD",
+            "DA",
             "دینار الجزایر",
         }
         EUR{
@@ -441,23 +441,23 @@ fa{
             "یورو",
         }
         FJD{
-            "FJD",
+            "FJ$",
             "دلار فیجی",
         }
         FRF{
-            "FRF",
+            "₣",
             "فرانک فرانسه",
         }
         GBP{
-            "UK£",
+            "£",
             "پوند بریتانیا",
         }
         GNF{
-            "GNF",
+            "FG",
             "فرانک گینه",
         }
         GRD{
-            "GRD",
+            "₯",
             "دراخمای یونان",
         }
         GWP{
@@ -465,11 +465,11 @@ fa{
             "پزوی گینهٔ بیسائو",
         }
         GYD{
-            "GYD",
+            "GY$",
             "دلار گویان",
         }
         HKD{
-            "HKD",
+            "HK$",
             "دلار هنگ‌کنگ",
         }
         HRD{
@@ -477,19 +477,19 @@ fa{
             "دینار کرواسی",
         }
         HUF{
-            "HUF",
+            "Ft",
             "فورینت مجارستان",
         }
         IDR{
-            "IDR",
+            "Rp",
             "روپیهٔ اندونزی",
         }
         IEP{
-            "IEP",
+            "IR£",
             "پوند ایرلند",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
+            "₨",
             "روپیهٔ هند",
         }
         IQD{
@@ -505,11 +505,11 @@ fa{
             "لیرهٔ ایتالیا",
         }
         JMD{
-            "JMD",
+            "J$",
             "دلار جامائیکا",
         }
         JOD{
-            "JOD",
+            "JD",
             "دینار اردن",
         }
         JPY{
@@ -517,27 +517,27 @@ fa{
             "ین ژاپن",
         }
         KES{
-            "KES",
+            "Ksh",
             "شیلینگ کنیا",
         }
         KMF{
-            "KMF",
+            "CF",
             "فرانک کومورو",
         }
         KWD{
-            "KWD",
+            "KD",
             "دینار کویت",
         }
         KYD{
-            "KYD",
+            "KY$",
             "دلار جزایر کِیمن",
         }
         LKR{
-            "LKR",
+            "SLRs",
             "روپیهٔ سری‌لانکا",
         }
         LRD{
-            "LRD",
+            "L$",
             "دلار لیبریا",
         }
         LUF{
@@ -549,7 +549,7 @@ fa{
             "روبل لتونی",
         }
         LYD{
-            "LYD",
+            "LD",
             "دینار لیبی",
         }
         MAD{
@@ -569,11 +569,11 @@ fa{
             "فرانک مالی",
         }
         MTL{
-            "MTL",
+            "Lm",
             "لیرهٔ مالت",
         }
         MTP{
-            "MTP",
+            "MT£",
             "پوند مالت",
         }
         MXN{
@@ -581,23 +581,23 @@ fa{
             "پزوی مکزیک",
         }
         NAD{
-            "NAD",
+            "N$",
             "دلار نامیبیا",
         }
         NLG{
-            "NLG",
+            "fl",
             "گیلدر هلند",
         }
         NOK{
-            "NOK",
+            "Nkr",
             "کرون نروژ",
         }
         NPR{
-            "NPR",
+            "NPRs",
             "روپیهٔ نپال",
         }
         NZD{
-            "NZD",
+            "NZ$",
             "دلار زلاند نو",
         }
         OMR{
@@ -605,23 +605,23 @@ fa{
             "ریال عمان",
         }
         PHP{
-            "PHP",
+            "₱",
             "پزوی فیلیپین",
         }
         PKR{
-            "PKR",
+            "PKRs",
             "روپیهٔ پاکستان",
         }
         QAR{
-            "QAR",
+            "QR",
             "ریال قطر",
         }
         RHD{
-            "RHD",
+            "RH$",
             "دلار رودزیا",
         }
         RSD{
-            "RSD",
+            "din.",
             "دینار صربستان",
         }
         RUB{
@@ -633,35 +633,35 @@ fa{
             "روبل قدیم روسیه",
         }
         RWF{
-            "RWF",
+            "RF",
             "فرانک رواندا",
         }
         SAR{
-            "SAR",
+            "SR",
             "ریال سعودی",
         }
         SBD{
-            "SBD",
+            "SI$",
             "دلار جزایر سلیمان",
         }
         SDD{
-            "SDD",
+            "LSd",
             "دینار قدیم سودان",
         }
         SEK{
-            "SEK",
+            "Skr",
             "کرون سوئد",
         }
         SGD{
-            "SGD",
+            "S$",
             "دلار سنگاپور",
         }
         SRD{
-            "SRD",
+            "SR$",
             "دلار سورینام",
         }
         SRG{
-            "SRG",
+            "Sf",
             "گیلدر سورینام",
         }
         SUR{
@@ -669,11 +669,11 @@ fa{
             "روبل شوروی",
         }
         SYP{
-            "SYP",
+            "SY£",
             "لیرهٔ سوریه",
         }
         THB{
-            "THB",
+            "฿",
             "بات تایلند",
         }
         TJR{
@@ -689,27 +689,27 @@ fa{
             "منات ترکمنستان",
         }
         TND{
-            "TND",
+            "DT",
             "دینار تونس",
         }
         TRL{
-            "TRL",
+            "TL",
             "لیرهٔ قدیم ترکیه",
         }
         TRY{
-            "TRY",
+            "YTL",
             "لیرهٔ ترکیه",
         }
         TTD{
-            "TTD",
+            "TT$",
             "دلار ترینیداد و توباگو",
         }
         TWD{
-            "TWD",
+            "NT$",
             "دلار جدید تایوان",
         }
         TZS{
-            "TZS",
+            "TSh",
             "شیلینگ تانزانیا",
         }
         UGS{
@@ -717,7 +717,7 @@ fa{
             "شیلینگ قدیم اوگاندا",
         }
         UGX{
-            "UGX",
+            "USh",
             "شیلینگ اوگاندا",
         }
         USD{
@@ -737,7 +737,7 @@ fa{
             "طلا",
         }
         XCD{
-            "XCD",
+            "EC$",
             "دلار شرق کارائیب",
         }
         XFO{
@@ -761,15 +761,15 @@ fa{
             "دینار یمن",
         }
         YER{
-            "YER",
+            "YR",
             "ریال یمن",
         }
         ZAR{
-            "ZAR",
+            "R",
             "راند افریقای جنوبی",
         }
         ZWD{
-            "ZWD",
+            "Z$",
             "دلار زیمبابوه",
         }
     }
@@ -1467,7 +1467,7 @@ fa{
         REVISED{"رسم‌الخط تجدیدنظرشده"}
         SCOTLAND{"انگلیسی معیار اسکاتلند"}
     }
-    Version{"1.92"}
+    Version{"1.139"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1479,17 +1479,20 @@ fa{
                 "H:mm:ss (zzzz)",
                 "H:mm:ss",
                 "H:mm",
-                "EEEE d MMMM yyyy GGGG",
-                "d MMMM yyyy",
+                "EEEE d MMMM y GGGG",
+                "d MMMM y",
                 "yyyy/M/d",
                 "yy/M/d",
+                "{1} {0}",
+                "{1} {0}",
                 "{1}، ساعت {0}",
+                "{1} {0}",
             }
             appendItems{
                 Day-Of-Week{"{1} {0}"}
             }
             availableFormats{
-                GGGGyyyyMMMMd{"d MMMM yyyy GGGG"}
+                GGGGyyyyMMMMd{"d MMMM y GGGG"}
                 HHmmZ{"HH:mm (Z)"}
                 Hm{"H:mm"}
                 M{"L"}
@@ -1503,17 +1506,17 @@ fa{
                 d{"d"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
-                y{"yyyy"}
+                y{"y"}
                 yM{"yyyy/M"}
                 yMEd{"E yyyy/M/d"}
-                yMMM{"MMM yyyy"}
-                yMMMEd{"E d MMM yyyy"}
-                yMMMM{"MMMM yyyy"}
+                yMMM{"MMM y"}
+                yMMMEd{"E d MMM y"}
+                yMMMM{"MMMM y"}
                 yQ{"yyyy Q"}
-                yQQQ{"yyyy QQQ"}
+                yQQQ{"y QQQ"}
                 yyyyM{"yyyy/M"}
-                yyyyMMMM{"MMMM yyyy"}
-                yyyyMMMMEEEEd{"EEEE d MMMM yyyy"}
+                yyyyMMMM{"MMMM y"}
+                yyyyMMMMEEEEd{"EEEE d MMMM y"}
             }
             dayNames{
                 format{
@@ -1649,7 +1652,7 @@ fa{
                     h{"H تا H (v)"}
                 }
                 y{
-                    y{"yyyy تا yyyy"}
+                    y{"y تا y"}
                 }
                 yM{
                     M{"yyyy/M تا yyyy/M"}
@@ -1661,22 +1664,22 @@ fa{
                     y{"E yyyy/M/d تا E yyyy/M/d"}
                 }
                 yMMM{
-                    M{"LLL تا MMM yyyy"}
-                    y{"MMM yyyy تا MMM yyyy"}
+                    M{"LLL تا MMM y"}
+                    y{"MMM y تا MMM y"}
                 }
                 yMMMEd{
-                    M{"E d LLL تا E d MMM yyyy"}
-                    d{"E d LLL تا E d MMM yyyy"}
-                    y{"E d MMM yyyy تا E d MMM yyyy"}
+                    M{"E d LLL تا E d MMM y"}
+                    d{"E d LLL تا E d MMM y"}
+                    y{"E d MMM y تا E d MMM y"}
                 }
                 yMMMM{
-                    M{"LLLL تا MMMM yyyy"}
-                    y{"MMMM yyyy تا MMMM yyyy"}
+                    M{"LLLL تا MMMM y"}
+                    y{"MMMM y تا MMMM y"}
                 }
                 yMMMd{
-                    M{"d LLL تا d MMM yyyy"}
-                    d{"d تا d MMM yyyy"}
-                    y{"d MMM yyyy تا d MMM yyyy"}
+                    M{"d LLL تا d MMM y"}
+                    d{"d تا d MMM y"}
+                    y{"d MMM y تا d MMM y"}
                 }
                 yMd{
                     M{"yyyy/M/d تا yyyy/M/d"}
@@ -1880,11 +1883,14 @@ fa{
                 "H:mm:ss (zzzz)",
                 "H:mm:ss",
                 "H:mm",
-                "EEEE d MMMM yyyy GGGG",
-                "d MMMM yyyy",
+                "EEEE d MMMM y GGGG",
+                "d MMMM y",
                 "yyyy/M/d G",
                 "yy/M/d G",
+                "{1} {0}",
+                "{1} {0}",
                 "{1}، ساعت {0}",
+                "{1} {0}",
             }
             eras{
                 abbreviated{
@@ -1960,11 +1966,14 @@ fa{
                 "H:mm:ss (zzzz)",
                 "H:mm:ss",
                 "H:mm",
-                "EEEE d MMMM yyyy",
-                "d MMMM yyyy",
+                "EEEE d MMMM y",
+                "d MMMM y",
                 "yyyy/M/d",
                 "yy/M/d",
+                "{1} {0}",
+                "{1} {0}",
                 "{1}، ساعت {0}",
+                "{1} {0}",
             }
             eras{
                 abbreviated{
@@ -3067,6 +3076,7 @@ fa{
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
+        gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;−HH:mm"}
         regionFormat{"وقت {0}"}
     }

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/be.xml
@@ -295,11 +295,11 @@ be{
             "беларускі рубель",
         }
         CNY{
-            "CNY",
+            "CN¥",
             "кітайскі юань Renminbi",
         }
         ERN{
-            "ERN",
+            "Nfk",
             "эрытрэйская накфа",
         }
         EUR{
@@ -319,7 +319,7 @@ be{
             "японская іена",
         }
         NOK{
-            "NOK",
+            "Nkr",
             "нарвэская крона",
         }
         RUB{
@@ -536,7 +536,7 @@ be{
             japanese{"японскі каляндар"}
         }
     }
-    Version{"1.76"}
+    Version{"1.139"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -548,11 +548,14 @@ be{
                 "HH.mm.ss z",
                 "HH.mm.ss",
                 "HH.mm",
-                "EEEE, d MMMM yyyy",
-                "d MMMM yyyy",
+                "EEEE, d MMMM y",
+                "d MMMM y",
                 "d.M.yyyy",
                 "d.M.yy",
-                "{0} {1}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
             availableFormats{
                 HHmm{"HH:mm"}
@@ -568,14 +571,14 @@ be{
                 d{"d"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
-                y{"yyyy"}
+                y{"y"}
                 yM{"MM/yyyy"}
                 yMEd{"EEE, dd/MM/yyyy"}
-                yMMM{"MMM yyyy"}
-                yMMMEd{"EEE, d MMM yyyy"}
-                yMMMM{"MMMM yyyy"}
-                yQ{"Q 'кв'. yyyy"}
-                yQQQ{"QQQ yyyy"}
+                yMMM{"MMM y"}
+                yMMMEd{"EEE, d MMM y"}
+                yMMMM{"MMMM y"}
+                yQ{"Q 'кв'. y"}
+                yQQQ{"QQQ y"}
                 yyyyM{"MM/yyyy"}
             }
             dayNames{

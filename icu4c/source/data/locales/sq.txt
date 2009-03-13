@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/sq.xml
@@ -180,7 +180,7 @@ sq{
             "Real Brazilian",
         }
         CNY{
-            "CNY",
+            "CN¥",
             "Renminbi(Yuan) Kinez",
         }
         EUR{
@@ -188,11 +188,11 @@ sq{
             "Euro",
         }
         GBP{
-            "UK£",
+            "£",
             "Paund Sterlina Britanike",
         }
         INR{
-            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
+            "₨",
             "Rupee indiane",
         }
         JPY{
@@ -255,7 +255,7 @@ sq{
         Zxxx{"I pashkruar"}
         Zzzz{"Skript i panjohur ose i pavlefshëm"}
     }
-    Version{"1.69"}
+    Version{"1.139"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -267,10 +267,13 @@ sq{
                 "h.mm.ss.a z",
                 "h:mm:ss.a",
                 "h.mm.a",
-                "EEEE, dd MMMM yyyy",
-                "dd MMMM yyyy",
+                "EEEE, dd MMMM y",
+                "dd MMMM y",
                 "yyyy-MM-dd",
                 "yy-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1} {0}",
             }
             availableFormats{
@@ -285,12 +288,12 @@ sq{
                 Md{"M-d"}
                 d{"d"}
                 ms{"mm:ss"}
-                y{"yyyy"}
+                y{"y"}
                 yM{"M.yyyy"}
                 yMEd{"EEE, d.M.yyyy"}
-                yMMM{"MMM yyyy"}
-                yMMMEd{"d MMM yyyy"}
-                yMMMM{"MMMM yyyy"}
+                yMMM{"MMM y"}
+                yMMMEd{"d MMM y"}
+                yMMMM{"MMMM y"}
             }
             dayNames{
                 format{

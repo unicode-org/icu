@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008-2009 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/main/root.xml
@@ -12,33 +12,705 @@
 root{
     AuxExemplarCharacters{"[]"}
     Currencies{
+        AFN{
+            "Af",
+            "AFN",
+        }
+        ALL{
+            "ALL",
+            "ALL",
+        }
+        ANG{
+            "NAf.",
+            "ANG",
+        }
+        AOA{
+            "Kz",
+            "AOA",
+        }
+        ARA{
+            "₳",
+            "ARA",
+        }
+        ARL{
+            "$L" /** ===  */,
+            "ARL",
+        }
+        ARM{
+            "m$n" /** ===  */,
+            "ARM",
+        }
+        ARS{
+            "AR$",
+            "ARS",
+        }
+        AUD{
+            "AU$",
+            "AUD",
+        }
+        AWG{
+            "Afl.",
+            "AWG",
+        }
+        AZN{
+            "man.",
+            "AZN",
+        }
+        BAM{
+            "KM",
+            "BAM",
+        }
+        BBD{
+            "Bds$",
+            "BBD",
+        }
+        BDT{
+            "Tk",
+            "BDT",
+        }
+        BEF{
+            "BF",
+            "BEF",
+        }
+        BHD{
+            "BD",
+            "BHD",
+        }
+        BIF{
+            "FBu",
+            "BIF",
+        }
+        BMD{
+            "BD$",
+            "BMD",
+        }
+        BND{
+            "BN$",
+            "BND",
+        }
+        BOB{
+            "Bs",
+            "BOB",
+        }
+        BOP{
+            "$b.",
+            "BOP",
+        }
+        BRB{
+            "NCr",
+            "BRB",
+        }
+        BRC{
+            "Cz$",
+            "BRC",
+        }
+        BRE{
+            "Cr$",
+            "BRE",
+        }
         BRL{
             "R$",
             "BRL",
+        }
+        BRN{
+            "NCz$",
+            "BRN",
+        }
+        BRR{
+            "CR$",
+            "BRR",
+        }
+        BRZ{
+            "₢" /** ===  */,
+            "BRZ",
+        }
+        BSD{
+            "BS$",
+            "BSD",
+        }
+        BTN{
+            "Nu.",
+            "BTN",
+        }
+        BWP{
+            "BWP",
+            "BWP",
+        }
+        BZD{
+            "BZ$",
+            "BZD",
+        }
+        CAD{
+            "CA$",
+            "CAD",
+        }
+        CDF{
+            "CDF",
+            "CDF",
+        }
+        CHF{
+            "Fr.",
+            "CHF",
+        }
+        CLE{
+            "Eº" /** ===  */,
+            "CLE",
+        }
+        CLP{
+            "CL$",
+            "CLP",
+        }
+        CNY{
+            "CN¥",
+            "CNY",
+        }
+        COP{
+            "CO$",
+            "COP",
+        }
+        CRC{
+            "₡",
+            "CRC",
+        }
+        CUP{
+            "CU$",
+            "CUP",
+        }
+        CVE{
+            "CV$",
+            "CVE",
+        }
+        CYP{
+            "CY£",
+            "CYP",
+        }
+        CZK{
+            "Kč",
+            "CZK",
+        }
+        DEM{
+            "DM",
+            "DEM",
+        }
+        DJF{
+            "Fdj",
+            "DJF",
+        }
+        DKK{
+            "Dkr",
+            "DKK",
+        }
+        DOP{
+            "RD$",
+            "DOP",
+        }
+        DZD{
+            "DA",
+            "DZD",
+        }
+        EEK{
+            "Ekr",
+            "EEK",
+        }
+        EGP{
+            "EG£",
+            "EGP",
+        }
+        ERN{
+            "Nfk",
+            "ERN",
+        }
+        ESP{
+            "Pts",
+            "ESP",
+        }
+        ETB{
+            "Br",
+            "ETB",
         }
         EUR{
             "€",
             "EUR",
         }
+        FIM{
+            "mk",
+            "FIM",
+        }
+        FJD{
+            "FJ$",
+            "FJD",
+        }
+        FKP{
+            "FK£",
+            "FKP",
+        }
+        FRF{
+            "₣",
+            "FRF",
+        }
         GBP{
-            "UK£",
+            "£",
             "GBP",
         }
+        GHC{
+            "₵",
+            "GHC",
+        }
+        GHS{
+            "GH₵",
+            "GHS",
+        }
+        GIP{
+            "GI£",
+            "GIP",
+        }
+        GMD{
+            "GMD",
+            "GMD",
+        }
+        GNF{
+            "FG",
+            "GNF",
+        }
+        GRD{
+            "₯",
+            "GRD",
+        }
+        GTQ{
+            "GTQ",
+            "GTQ",
+        }
+        GYD{
+            "GY$",
+            "GYD",
+        }
+        HKD{
+            "HK$",
+            "HKD",
+        }
+        HNL{
+            "HNL",
+            "HNL",
+        }
+        HRK{
+            "kn",
+            "HRK",
+        }
+        HTG{
+            "HTG",
+            "HTG",
+        }
+        HUF{
+            "Ft",
+            "HUF",
+        }
+        IDR{
+            "Rp",
+            "IDR",
+        }
+        IEP{
+            "IR£",
+            "IEP",
+        }
+        ILP{
+            "I£",
+            "ILP",
+        }
+        ILS{
+            "₪",
+            "ILS",
+        }
         INR{
-            "=0#Rs.|1#Re.|1<Rs." /** (choice)  */,
+            "₨",
             "INR",
+        }
+        ISK{
+            "Ikr",
+            "ISK",
         }
         ITL{
             "IT₤",
             "ITL",
         }
+        JMD{
+            "J$",
+            "JMD",
+        }
+        JOD{
+            "JD",
+            "JOD",
+        }
         JPY{
             "JP¥",
             "JPY",
         }
+        KES{
+            "Ksh",
+            "KES",
+        }
+        KMF{
+            "CF",
+            "KMF",
+        }
+        KPW{
+            "KP₩",
+            "KPW",
+        }
+        KRW{
+            "₩",
+            "KRW",
+        }
+        KWD{
+            "KD",
+            "KWD",
+        }
+        KYD{
+            "KY$",
+            "KYD",
+        }
+        LAK{
+            "₭",
+            "LAK",
+        }
+        LBP{
+            "LB£",
+            "LBP",
+        }
+        LKR{
+            "SLRs",
+            "LKR",
+        }
+        LRD{
+            "L$",
+            "LRD",
+        }
+        LSL{
+            "LSL",
+            "LSL",
+        }
+        LTL{
+            "Lt",
+            "LTL",
+        }
+        LVL{
+            "Ls",
+            "LVL",
+        }
+        LYD{
+            "LD",
+            "LYD",
+        }
+        MMK{
+            "MMK",
+            "MMK",
+        }
+        MNT{
+            "₮",
+            "MNT",
+        }
+        MOP{
+            "MOP$",
+            "MOP",
+        }
+        MRO{
+            "UM",
+            "MRO",
+        }
+        MTL{
+            "Lm",
+            "MTL",
+        }
+        MTP{
+            "MT£",
+            "MTP",
+        }
+        MUR{
+            "MURs",
+            "MUR",
+        }
+        MVR{
+            "Rf",
+            "MVR",
+        }
+        MWK{
+            "MK",
+            "MWK",
+        }
+        MXP{
+            "MX$",
+            "MXP",
+        }
+        MYR{
+            "RM",
+            "MYR",
+        }
+        MZM{
+            "Mt",
+            "MZM",
+        }
+        MZN{
+            "MTn",
+            "MZN",
+        }
+        NAD{
+            "N$",
+            "NAD",
+        }
+        NGN{
+            "₦",
+            "NGN",
+        }
+        NIO{
+            "C$",
+            "NIO",
+        }
+        NLG{
+            "fl",
+            "NLG",
+        }
+        NOK{
+            "Nkr",
+            "NOK",
+        }
+        NPR{
+            "NPRs",
+            "NPR",
+        }
+        NZD{
+            "NZ$",
+            "NZD",
+        }
+        PAB{
+            "B/.",
+            "PAB",
+        }
+        PEI{
+            "I/.",
+            "PEI",
+        }
+        PEN{
+            "S/.",
+            "PEN",
+        }
+        PGK{
+            "PGK",
+            "PGK",
+        }
+        PHP{
+            "₱",
+            "PHP",
+        }
+        PKR{
+            "PKRs",
+            "PKR",
+        }
+        PLN{
+            "zł",
+            "PLN",
+        }
+        PTE{
+            "Esc",
+            "PTE",
+        }
+        PYG{
+            "₲",
+            "PYG",
+        }
+        QAR{
+            "QR",
+            "QAR",
+        }
+        RHD{
+            "RH$",
+            "RHD",
+        }
+        RON{
+            "RON",
+            "RON",
+        }
+        RSD{
+            "din.",
+            "RSD",
+        }
+        RWF{
+            "RF",
+            "RWF",
+        }
+        SAR{
+            "SR",
+            "SAR",
+        }
+        SBD{
+            "SI$",
+            "SBD",
+        }
+        SCR{
+            "SRe",
+            "SCR",
+        }
+        SDD{
+            "LSd",
+            "SDD",
+        }
+        SEK{
+            "Skr",
+            "SEK",
+        }
+        SGD{
+            "S$",
+            "SGD",
+        }
+        SHP{
+            "SH£",
+            "SHP",
+        }
+        SKK{
+            "Sk",
+            "SKK",
+        }
+        SLL{
+            "Le",
+            "SLL",
+        }
+        SOS{
+            "Ssh",
+            "SOS",
+        }
+        SRD{
+            "SR$",
+            "SRD",
+        }
+        SRG{
+            "Sf",
+            "SRG",
+        }
+        STD{
+            "Db",
+            "STD",
+        }
+        SVC{
+            "SV₡",
+            "SVC",
+        }
+        SYP{
+            "SY£",
+            "SYP",
+        }
+        SZL{
+            "SZL",
+            "SZL",
+        }
+        THB{
+            "฿",
+            "THB",
+        }
+        TMM{
+            "TMM",
+            "TMM",
+        }
+        TND{
+            "DT",
+            "TND",
+        }
+        TOP{
+            "T$",
+            "TOP",
+        }
+        TRL{
+            "TL",
+            "TRL",
+        }
+        TRY{
+            "YTL",
+            "TRY",
+        }
+        TTD{
+            "TT$",
+            "TTD",
+        }
+        TWD{
+            "NT$",
+            "TWD",
+        }
+        TZS{
+            "TSh",
+            "TZS",
+        }
+        UAH{
+            "₴",
+            "UAH",
+        }
+        UGX{
+            "USh",
+            "UGX",
+        }
         USD{
             "US$",
             "USD",
+        }
+        UYU{
+            "$U",
+            "UYU",
+        }
+        VEB{
+            "Bs.",
+            "VEB",
+        }
+        VEF{
+            "Bs.F.",
+            "VEF",
+        }
+        VND{
+            "₫",
+            "VND",
+        }
+        VUV{
+            "VT",
+            "VUV",
+        }
+        WST{
+            "WS$",
+            "WST",
+        }
+        XAF{
+            "FCFA",
+            "XAF",
+        }
+        XCD{
+            "EC$",
+            "XCD",
+        }
+        XOF{
+            "CFA",
+            "XOF",
+        }
+        XPF{
+            "CFPF",
+            "XPF",
+        }
+        YER{
+            "YR",
+            "YER",
+        }
+        ZAR{
+            "R",
+            "ZAR",
+        }
+        ZMK{
+            "ZK",
+            "ZMK",
+        }
+        ZRN{
+            "NZ",
+            "ZRN",
+        }
+        ZRZ{
+            "ZRZ",
+            "ZRZ",
+        }
+        ZWD{
+            "Z$",
+            "ZWD",
         }
     }
     CurrencyUnitPatterns{
@@ -73,7 +745,7 @@ root{
         297,
         210,
     }
-    Version{"1.162"}
+    Version{"1.139"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -85,11 +757,49 @@ root{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, MMMM d, yyyy G",
-                "MMMM d, yyyy G",
-                "MMM d, yyyy G",
+                "EEEE, MMMM d, y G",
+                "MMMM d, y G",
+                "MMM d, y G",
                 "M/d/yyyy",
-                "{1} {0}",
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+            }
+            appendItems{
+                Day{"{0} ({2}: {1})"}
+                Day-Of-Week{"{0} {1}"}
+                Era{"{0} {1}"}
+                Hour{"{0} ({2}: {1})"}
+                Minute{"{0} ({2}: {1})"}
+                Month{"{0} ({2}: {1})"}
+                Quarter{"{0} ({2}: {1})"}
+                Second{"{0} ({2}: {1})"}
+                Timezone{"{0} {1}"}
+                Week{"{0} ({2}: {1})"}
+                Year{"{0} {1}"}
+            }
+            availableFormats{
+                EEEd{"EEE d"}
+                Hm{"H:mm"}
+                M{"L"}
+                MEd{"E, M-d"}
+                MMM{"LLL"}
+                MMMEd{"E MMM d"}
+                MMMMEd{"E MMMM d"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"M-d"}
+                d{"d"}
+                ms{"mm:ss"}
+                y{"y"}
+                yM{"M/y"}
+                yMEd{"EEE, M/d/y"}
+                yMMM{"MMM, y"}
+                yMMMEd{"EEE, MMM d, y"}
+                yMMMM{"MMMM, y"}
+                yQ{"y Q"}
+                yQQQ{"y QQQ"}
             }
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
@@ -98,6 +808,9 @@ root{
                 }
                 narrow:alias{"/LOCALE/calendar/buddhist/eras/abbreviated"}
                 wide:alias{"/LOCALE/calendar/buddhist/eras/abbreviated"}
+            }
+            intervalFormats{
+                //ldml/dates/calendars/calendar[@type="buddhist"]/dateTimeFormats/intervalFormats:alias{"/LOCALE/calendar/buddhist/gregorian/DateTimePatterns/intervalFormats"}
             }
             monthNames:alias{"/LOCALE/calendar/gregorian/monthNames"}
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
@@ -116,6 +829,9 @@ root{
                 "y'x'G-Ml-d",
                 "y'x'G-Ml-d",
                 "y'x'G-Ml-d",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1} {0}",
             }
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
@@ -282,6 +998,22 @@ root{
             }
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
+        ethiopic-amete-alem{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            eras{
+                abbreviated{
+                    "ERA0",
+                }
+                narrow:alias{"/LOCALE/calendar/ethiopic-amete-alem/eras/abbreviated"}
+                wide:alias{"/LOCALE/calendar/ethiopic-amete-alem/eras/abbreviated"}
+            }
+            monthNames:alias{"/LOCALE/calendar/ethiopic/monthNames"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
+        }
         gregorian{
             AmPmMarkers{
                 "AM",
@@ -289,17 +1021,20 @@ root{
             }
             DateTimeElements:intvector{
                 2,
-                1,
+                4,
             }
             DateTimePatterns{
                 "HH:mm:ss v",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, yyyy MMMM dd",
-                "yyyy MMMM d",
-                "yyyy MMM d",
+                "EEEE, y MMMM dd",
+                "y MMMM d",
+                "y MMM d",
                 "yyyy-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1} {0}",
             }
             appendItems{
@@ -316,6 +1051,7 @@ root{
                 Year{"{0} {1}"}
             }
             availableFormats{
+                EEEd{"d EEE"}
                 Hm{"H:mm"}
                 M{"L"}
                 MEd{"E, M-d"}
@@ -327,14 +1063,14 @@ root{
                 Md{"M-d"}
                 d{"d"}
                 ms{"mm:ss"}
-                y{"yyyy"}
-                yM{"yyyy-M"}
-                yMEd{"EEE, yyyy-M-d"}
-                yMMM{"yyyy MMM"}
-                yMMMEd{"EEE, yyyy MMM d"}
-                yMMMM{"yyyy MMMM"}
-                yQ{"yyyy Q"}
-                yQQQ{"yyyy QQQ"}
+                y{"y"}
+                yM{"y-M"}
+                yMEd{"EEE, y-M-d"}
+                yMMM{"y MMM"}
+                yMMMEd{"EEE, y MMM d"}
+                yMMMM{"y MMMM"}
+                yQ{"y Q"}
+                yQQQ{"y QQQ"}
             }
             dayNames{
                 default{"format"}
@@ -749,7 +1485,10 @@ root{
                 "MMMM d, y G",
                 "MMM d, y G",
                 "M/d/yy",
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
                 "{1} {0}",
+                "{1} {0}" /**  fallback from 'gregorian'   */,
             }
             appendItems{
                 Day{"{0} ({2}: {1})"}
@@ -773,10 +1512,10 @@ root{
                 MMMMd{"MMMM d"}
                 Md{"M-d"}
                 ms{"mm:ss"}
-                y{"yyyy GGG"}
-                yM{"GGGGG yy-MM"}
-                yMMM{"GGGGG yy MMM"}
-                yQ{"GGGGG yy Q"}
+                yyyy{"yy GGG"}
+                yyyyM{"GGGGG yy-MM"}
+                yyyyMMM{"GGGGG yy MMM"}
+                yyyyQ{"GGGGG yy Q"}
             }
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
@@ -1330,7 +2069,10 @@ root{
                 "MMMM d, G y",
                 "MMM d, G y",
                 "G y/M/d",
-                "{1} {0}",
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
             }
             appendItems{
                 Day{"{0} ({2}: {1})"}
@@ -1346,7 +2088,7 @@ root{
                 Year{"{0} {1}"}
             }
             availableFormats{
-                Hm{"HH:mm"}
+                Hm{"H:mm"}
                 MEd{"E, M/d"}
                 MMMEd{"E, MMM d"}
                 MMMd{"MMM d"}
@@ -1368,6 +2110,9 @@ root{
                 }
                 narrow:alias{"/LOCALE/calendar/roc/eras/abbreviated"}
                 wide:alias{"/LOCALE/calendar/roc/eras/abbreviated"}
+            }
+            intervalFormats{
+                //ldml/dates/calendars/calendar[@type="roc"]/dateTimeFormats/intervalFormats:alias{"/LOCALE/calendar/roc/gregorian/DateTimePatterns/intervalFormats"}
             }
             monthNames:alias{"/LOCALE/calendar/gregorian/monthNames"}
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
@@ -2104,6 +2849,7 @@ root{
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
+        gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         hoursFormat{"{0}/{1}"}
         preferenceOrdering{
