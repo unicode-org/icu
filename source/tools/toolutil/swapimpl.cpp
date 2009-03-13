@@ -23,10 +23,16 @@
 *   in icu/source/common/
 */
 
+/* Turn off standard c++ string class.. 
+ * Platforms affected: AIX/VACPP
+ */
+#ifndef U_HAVE_STD_STRING
+#define U_HAVE_STD_STRING 0
+#endif
+
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "unicode/udata.h"
-#include "unicode/std_string.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "uinvchar.h"
