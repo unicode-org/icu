@@ -430,6 +430,28 @@ Collator::EComparisonResult Collator::compare(const UChar* source, int32_t sourc
     return (Collator::EComparisonResult)compare(source, sourceLength, target, targetLength, ec);
 }
 
+UCollationResult Collator::compare(UCharIterator &sIter,
+                                   UCharIterator &tIter,
+                                   UErrorCode &status) const {
+    if(U_SUCCESS(status)) {
+        // Not implemented in the base class.
+        status = U_UNSUPPORTED_ERROR;
+    }
+    return UCOL_EQUAL;
+}
+
+UCollationResult Collator::compareUTF8(const StringPiece &source,
+                                       const StringPiece &target,
+                                       UErrorCode &status) const {
+    if(U_FAILURE(status)) {
+        return UCOL_EQUAL;
+    }
+    UCharIterator sIter, tIter;
+    uiter_setUTF8(&sIter, source.data(), source.length());
+    uiter_setUTF8(&tIter, target.data(), target.length());
+    return compare(sIter, tIter, status);
+}
+
 UBool Collator::equals(const UnicodeString& source, 
                        const UnicodeString& target) const
 {

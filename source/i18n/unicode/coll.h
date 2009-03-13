@@ -59,6 +59,8 @@
 #include "unicode/locid.h"
 #include "unicode/uniset.h"
 #include "unicode/umisc.h"
+#include "unicode/uiter.h"
+#include "unicode/stringpiece.h"
 
 U_NAMESPACE_BEGIN
 
@@ -436,6 +438,36 @@ public:
     virtual UCollationResult compare(const UChar* source, int32_t sourceLength,
                                       const UChar* target, int32_t targetLength,
                                       UErrorCode &status) const = 0;
+
+    /**
+     * Compares two strings using the Collator.
+     * Returns whether the first one compares less than/equal to/greater than
+     * the second one.
+     * This version takes UCharIterator input.
+     * @param sIter the first ("source") string iterator
+     * @param tIter the second ("target") string iterator
+     * @return UCOL_LESS, UCOL_EQUAL or UCOL_GREATER
+     * @draft ICU 4.2
+     */
+    virtual UCollationResult compare(UCharIterator &sIter,
+                                     UCharIterator &tIter,
+                                     UErrorCode &status) const;
+
+    /**
+     * Compares two UTF-8 strings using the Collator.
+     * Returns whether the first one compares less than/equal to/greater than
+     * the second one.
+     * This version takes UTF-8 input.
+     * Note that a StringPiece can be implicitly constructed
+     * from a std::string or a NUL-terminated const char * string.
+     * @param source the first UTF-8 string
+     * @param target the second UTF-8 string
+     * @return UCOL_LESS, UCOL_EQUAL or UCOL_GREATER
+     * @draft ICU 4.2
+     */
+    virtual UCollationResult compareUTF8(const StringPiece &source,
+                                         const StringPiece &target,
+                                         UErrorCode &status) const;
 
     /**
      * Transforms the string into a series of characters that can be compared
