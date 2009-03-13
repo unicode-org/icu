@@ -4162,9 +4162,12 @@ UnicodeString::getTerminatedBuffer() {
   } else {
     UChar *array = getArrayStart();
     int32_t len = length();
+#ifndef U_VALGRIND
     if(len < getCapacity() && array[len] == 0) {
       return array;
-    } else if(cloneArrayIfNeeded(len+1)) {
+    }
+#endif
+    if(cloneArrayIfNeeded(len+1)) {
       array = getArrayStart();
       array[len] = 0;
       return array;
