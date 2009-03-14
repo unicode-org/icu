@@ -60,6 +60,7 @@ public final class AsciiUtil {
         if (idx == s.length()) {
             return s;
         }
+//        StringBuilder buf = new StringBuilder(s.substring(0, idx));
         StringBuffer buf = new StringBuffer(s.substring(0, idx));
         for (; idx < s.length(); idx++) {
             buf.append(toLower(s.charAt(idx)));
@@ -78,6 +79,7 @@ public final class AsciiUtil {
         if (idx == s.length()) {
             return s;
         }
+//        StringBuilder buf = new StringBuilder(s.substring(0, idx));
         StringBuffer buf = new StringBuffer(s.substring(0, idx));
         for (; idx < s.length(); idx++) {
             buf.append(toUpper(s.charAt(idx)));

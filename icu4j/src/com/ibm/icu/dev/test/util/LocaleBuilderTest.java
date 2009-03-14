@@ -8,9 +8,9 @@ package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
-import com.ibm.icu.util.InvalidLocaleException;
+import com.ibm.icu.util.IllformedLocaleException;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.ULocale.LocaleBuilder;
+import com.ibm.icu.util.ULocale.Builder;
 
 /**
  * Test cases for ULocale.LocaleBuilder
@@ -26,34 +26,34 @@ public class LocaleBuilderTest extends TestFmwk {
         // "S": +1 = script
         // "R": +1 = region
         // "V": +1 = variant
-        // "K": +1 = locale key / +2 = locale type
+        // "K": +1 = LDML key / +2 = LDML type
         // "E": +1 = extension letter / +2 = extension value
         // "P": +1 = private use
         // "X": indicates an exception must be thrown
         // "T": +1 = expected language tag
         String[][] TESTCASE = {
-            {"L", "en", "R", "us", "T", "en-US"},
-            {"L", "en", "R", "FR", "L", "fr", "T", "fr-FR"},
+            {"L", "en", "R", "us", "T", "en-us", "en_US"},
+            {"L", "en", "R", "FR", "L", "fr", "T", "fr-fr", "fr_FR"},
             {"L", "123", "X"},
-            {"R", "us", "T", "und-US"},
+            {"R", "us", "T", "und-us", "_US"},
             {"R", "usa", "X"},
-            {"R", "123", "L", "en", "T", "en-123"},
-            {"S", "LATN", "L", "DE", "T", "de-Latn"},
+            {"R", "123", "L", "en", "T", "en-123", "en_123"},
+            {"S", "LATN", "L", "DE", "T", "de-latn", "de_Latn"},
             {"S", "latin", "X"},
-//            {"E", "z", "ExtZ", "L", "en", "T", "en-z-extz"},
-            {"E", "z", "ExtZ", "L", "en", "T", "en"},
-//            {"L", "fr", "R", "FR", "P", "Yoshito-ICU", "T", "fr-FR-x-yoshito-icu"},
-            {"L", "fr", "R", "FR", "P", "Yoshito-ICU", "T", "fr-FR"},
-//            {"L", "ja", "R", "jp", "K", "ca", "japanese", "T", "ja-JP-u-ca-japanese"},
-            {"L", "ja", "R", "jp", "K", "ca", "japanese", "T", "ja-JP-x-ldml-k-ca-japanese"},
-//            {"K", "co", "PHONEBK", "K", "ca", "greg", "L", "De", "T", "de-u-ca-greg-co-phonebk"},
-            {"K", "co", "PHONEBK", "K", "ca", "greg", "L", "De", "T", "de-x-ldml-k-ca-greg-k-co-phonebk"},
+            {"E", "z", "ExtZ", "L", "en", "T", "en-z-extz", "en@z=extz"},
+            {"L", "fr", "R", "FR", "P", "Yoshito-ICU", "T", "fr-fr-x-yoshito-icu", "fr_FR@x=yoshito-icu"},
+            {"L", "ja", "R", "jp", "K", "ca", "japanese", "T", "ja-jp-u-ca-japanese", "ja_JP@calendar=japanese"},
+            {"K", "co", "PHONEBK", "K", "ca", "gregory", "L", "De", "T", "de-u-ca-gregory-co-phonebk", "de@calendar=gregorian;collation=phonebook"},
+//            {"L", "en", "V", "foooo_barrr", "T", "en-foooo-barrr", "en__FOOOO_BARRR"},
+            {"E", "o", "OPQR", "E", "a", "aBcD", "T", "und-a-abcd-o-opqr", "@a=abcd;o=opqr"},
+            {"E", "u", "nu-thai-ca-gregory", "L", "TH", "T", "th-u-ca-gregory-nu-thai", "th@calendar=gregorian;numbers=thai"},
         };
 
+        Builder bld = new Builder();
         for (int tidx = 0; tidx < TESTCASE.length; tidx++) {
-            LocaleBuilder bld = new LocaleBuilder();
+            bld.clear();
             int i = 0;
-            String expected = null;
+            String[] expected = null;
             while (true) {
                 String method = TESTCASE[tidx][i++];
                 try {
@@ -68,34 +68,40 @@ public class LocaleBuilderTest extends TestFmwk {
                     } else if (method.equals("K")) {
                         String key = TESTCASE[tidx][i++];
                         String type = TESTCASE[tidx][i++];
-                        bld.setLocaleKeyword(key, type);
+                        bld.setLDMLExtensionValue(key, type);
                     } else if (method.equals("E")) {
                         String key = TESTCASE[tidx][i++];
                         String value = TESTCASE[tidx][i++];
                         bld.setExtension(key.charAt(0), value);
                     } else if (method.equals("P")) {
-                        bld.setPrivateUse(TESTCASE[tidx][i++]);
+                        bld.setExtension(ULocale.PRIVATE_USE_EXTENSION, TESTCASE[tidx][i++]);
                     } else if (method.equals("X")) {
                         errln("FAIL: No excetion was thrown - test csae: "
                                 + Utility.arrayToString(TESTCASE[tidx]));
                     } else if (method.equals("T")) {
-                        expected = TESTCASE[tidx][i];
+                        expected = new String[2];
+                        expected[0] = TESTCASE[tidx][i];
+                        expected[1] = TESTCASE[tidx][i + 1];
                         break;
                     }
-                } catch (InvalidLocaleException e) {
+                } catch (IllformedLocaleException e) {
                     if (TESTCASE[tidx][i].equals("X")) {
                         // This exception is expected
                         break;
                     } else {
-                        errln("FAIL: InvalidLocaleException at offset " + i
+                        errln("FAIL: IllformedLocaleException at offset " + i
                                 + " in test case: " + Utility.arrayToString(TESTCASE[tidx]));
                     }
                 }
             }
             if (expected != null) {
-                ULocale loc = bld.get();
+                ULocale loc = bld.create();
+                if (!expected[1].equals(loc.toString())) {
+                    errln("FAIL: Wrong locale ID - " + loc + 
+                            " for test case: " + Utility.arrayToString(TESTCASE[tidx]));
+                }
                 String langtag = loc.toLanguageTag();
-                if (!expected.equals(langtag)) {
+                if (!expected[0].equals(langtag)) {
                     errln("FAIL: Wrong language tag - " + langtag + 
                             " for test case: " + Utility.arrayToString(TESTCASE[tidx]));
                 }
@@ -108,22 +114,22 @@ public class LocaleBuilderTest extends TestFmwk {
     }
 
     public void TestSetLocale() {
-        ULocale loc = new ULocale("th_TH@calendar=greg");
-        LocaleBuilder bld = new LocaleBuilder();
+        ULocale loc = new ULocale("th_TH@calendar=gregorian");
+        Builder bld = new Builder();
         try {
             bld.setLocale(loc);
-            ULocale loc1 = bld.get();
+            ULocale loc1 = bld.create();
             if (!loc.equals(loc1)) {
                 errln("FAIL: Locale loc1 " + loc1 + " was returned by the builder.  Expected " + loc);
             }
-            bld.setLanguage("").setLocaleKeyword("calendar", "buddhist")
-                .setLanguage("TH").setLocaleKeyword("calendar", "greg");
-            ULocale loc2 = bld.get();
+            bld.setLanguage("").setLDMLExtensionValue("ca", "buddhist")
+                .setLanguage("TH").setLDMLExtensionValue("ca", "gregory");
+            ULocale loc2 = bld.create();
             if (!loc.equals(loc2)) {
                 errln("FAIL: Locale loc2 " + loc2 + " was returned by the builder.  Expected " + loc);
             }            
-        } catch (InvalidLocaleException e) {
-            errln("FAIL: InvalidLocaleException: " + e.getMessage());
+        } catch (IllformedLocaleException e) {
+            errln("FAIL: IllformedLocaleException: " + e.getMessage());
         }
     }
 }

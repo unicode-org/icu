@@ -17,7 +17,6 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.JavaTimeZone;
 import com.ibm.icu.impl.OlsonTimeZone;
 import com.ibm.icu.impl.TimeZoneAdapter;
-import com.ibm.icu.impl.locale.BaseLocale;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
 import com.ibm.icu.util.AnnualTimeZoneRule;
@@ -635,19 +634,6 @@ public class SerializableTest extends TestFmwk.TestGroup
         }
     }
 
-    private static class BaseLocaleHandler implements Handler {
-        public Object[] getTestObjects() {
-            BaseLocale baseLoc = BaseLocale.get("en", "Latn", "US", "");
-            return new Object[] {baseLoc};
-        }
-
-        public boolean hasSameBehavior(Object a, Object b) {
-            BaseLocale baseLoc1 = (BaseLocale)a;
-            BaseLocale baseLoc2 = (BaseLocale)b;
-            return (baseLoc1.equals(baseLoc2));
-        }
-    }
-
     private static HashMap map = new HashMap();
     
     static {
@@ -713,8 +699,8 @@ public class SerializableTest extends TestFmwk.TestGroup
 //#endif
         map.put("com.ibm.icu.impl.duration.BasicDurationFormat", new FormatTests.BasicDurationFormatHandler());
         map.put("com.ibm.icu.impl.RelativeDateFormat", new FormatTests.RelativeDateFormatHandler());
-        map.put("com.ibm.icu.impl.locale.BaseLocale", new BaseLocaleHandler());
-        map.put("com.ibm.icu.util.InvalidLocaleException", new ExceptionTests.InvalidLocaleExceptionHandler());
+        map.put("com.ibm.icu.util.IllformedLocaleException", new ExceptionTests.IllformedLocaleExceptionHandler());
+        map.put("com.ibm.icu.impl.locale.LocaleSyntaxException", new ExceptionTests.LocaleSyntaxExceptionHandler());
     }
     
     public SerializableTest()
