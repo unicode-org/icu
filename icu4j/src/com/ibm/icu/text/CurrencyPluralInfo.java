@@ -300,7 +300,7 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
                     if (separatorIndex != -1) {
                         String negPattern = pattern;
                         String negWithNumber = Utility.replace(negPattern, "{0}", negNumberPattern); 
-                        String negWithCurrSign = Utility.replace(negPattern, "{1}", tripleCurrencyStr); 
+                        String negWithCurrSign = Utility.replace(negWithNumber, "{1}", tripleCurrencyStr); 
                         StringBuffer posNegPatterns = new StringBuffer(patternWithCurrencySign);
                         posNegPatterns.append(";");
                         posNegPatterns.append(negWithCurrSign);
