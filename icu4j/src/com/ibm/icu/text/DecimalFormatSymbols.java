@@ -575,12 +575,14 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     public static final int CURRENCY_SPC_CURRENCY_MATCH = 0;
     public static final int CURRENCT_SPC_SURROUNDING_MATCH = 1;
     public static final int CURRENCY_SPC_INSERT = 2;
+/*
     private static final String CURRENCY_FORMATS = "currencyFomats";
     private static final String CURRENCY_SPACING = "currencySpacing";
     private static final String BEFORE_CURRENCY = "beforeCurrency";
     private static final String AFTER_CURRENCY = "afterCurrency";
     private static final String[] CURRENCY_SPACING_KEYS = 
         { "currencyMatch", "surroundingMatch" ,"insertBetween"};
+*/
     private String[] currencySpcBeforeSym; // before currency symbol.
     private String[] currencySpcAfterSym; // after currency symbol.
     /**
