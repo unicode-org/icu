@@ -3156,7 +3156,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * subclass
      * @param locale the locale for which the symbols should be drawn
      * @return a <code>DateFormat</code> appropriate to this calendar
-     * @draft ICU 3.2
+     * @draft ICU 3.2 (retain)
      * @provisional This API might change or be removed in a future release.
      */
     protected DateFormat handleGetDateFormat(String pattern, String override, ULocale locale) {
@@ -4890,7 +4890,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * taking year and era into account.  Defaults to 0 (JANUARY) for Gregorian.
      * @param extendedYear the extendedYear, as returned by handleGetExtendedYear
      * @return the default month
-     * @draft ICU 3.6
+     * @draft ICU 3.6 (retain)
      * @provisional This API might change or be removed in a future release.
      * @see #MONTH
      */
@@ -4905,7 +4905,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * @param extendedYear the extendedYear, as returned by handleGetExtendedYear
      * @param month the month, as returned by getDefaultMonthInYear
      * @return the default day of the month
-     * @draft ICU 3.6
+     * @draft ICU 3.6 (retain)
      * @provisional This API might change or be removed in a future release.
      * @see #DAY_OF_MONTH
      */

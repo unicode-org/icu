@@ -1283,6 +1283,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * Remove all strings from this UnicodeSet
      * @return this object, for chaining
      * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
      */
     public final UnicodeSet removeAllStrings() {
         checkFrozen();

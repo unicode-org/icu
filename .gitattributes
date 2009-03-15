@@ -376,7 +376,6 @@ icu4j/src/com/ibm/icu/dev/tool/tzu/icu.gif -text
 icu4j/src/com/ibm/icu/impl/PVecToTrieCompactHandler.java -text
 icu4j/src/com/ibm/icu/impl/PropsVectors.java -text
 icu4j/src/com/ibm/icu/impl/data/icudata.jar -text
-icu4j/src/com/ibm/icu/text/CurrencyPluralInfo.java -text
 icu4j/src/com/ibm/icu/text/NumberingSystem.java -text
 icu4j/src/com/ibm/richtext/textapps/resources/unicode.arabic.red -text
 icu4j/src/com/ibm/richtext/textapps/resources/unicode.hebrew.red -text

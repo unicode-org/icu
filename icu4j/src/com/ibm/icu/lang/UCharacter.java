@@ -847,104 +847,87 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final int COUNTING_ROD_NUMERALS_ID = 154; /*[1D360]*/
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final int SUNDANESE_ID = 155; /* [1B80] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final int LEPCHA_ID = 156; /* [1C00] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final int OL_CHIKI_ID = 157; /* [1C50] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final int CYRILLIC_EXTENDED_A_ID = 158; /* [2DE0] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final int VAI_ID = 159; /* [A500] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final int CYRILLIC_EXTENDED_B_ID = 160; /* [A640] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final int SAURASHTRA_ID = 161; /* [A880] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final int KAYAH_LI_ID = 162; /* [A900] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final int REJANG_ID = 163; /* [A930] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final int CHAM_ID = 164; /* [AA00] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final int ANCIENT_SYMBOLS_ID = 165; /* [10190] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final int PHAISTOS_DISC_ID = 166; /* [101D0] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final int LYCIAN_ID = 167; /* [10280] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final int CARIAN_ID = 168; /* [102A0] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final int LYDIAN_ID = 169; /* [10920] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final int MAHJONG_TILES_ID = 170; /* [1F000] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final int DOMINO_TILES_ID = 171; /* [1F030] */
 
@@ -1760,104 +1743,87 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final UnicodeBlock COUNTING_ROD_NUMERALS = new UnicodeBlock("COUNTING_ROD_NUMERALS", COUNTING_ROD_NUMERALS_ID); /*[1D360]*/
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final UnicodeBlock SUNDANESE = new UnicodeBlock("SUNDANESE", SUNDANESE_ID); /* [1B80] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final UnicodeBlock LEPCHA = new UnicodeBlock("LEPCHA", LEPCHA_ID); /* [1C00] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final UnicodeBlock OL_CHIKI = new UnicodeBlock("OL_CHIKI", OL_CHIKI_ID); /* [1C50] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final UnicodeBlock CYRILLIC_EXTENDED_A = new UnicodeBlock("CYRILLIC_EXTENDED_A", CYRILLIC_EXTENDED_A_ID); /* [2DE0] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final UnicodeBlock VAI = new UnicodeBlock("VAI", VAI_ID); /* [A500] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final UnicodeBlock CYRILLIC_EXTENDED_B = new UnicodeBlock("CYRILLIC_EXTENDED_B", CYRILLIC_EXTENDED_B_ID); /* [A640] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final UnicodeBlock SAURASHTRA = new UnicodeBlock("SAURASHTRA", SAURASHTRA_ID); /* [A880] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final UnicodeBlock KAYAH_LI = new UnicodeBlock("KAYAH_LI", KAYAH_LI_ID); /* [A900] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final UnicodeBlock REJANG = new UnicodeBlock("REJANG", REJANG_ID); /* [A930] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final UnicodeBlock CHAM = new UnicodeBlock("CHAM", CHAM_ID); /* [AA00] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final UnicodeBlock ANCIENT_SYMBOLS = new UnicodeBlock("ANCIENT_SYMBOLS", ANCIENT_SYMBOLS_ID); /* [10190] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final UnicodeBlock PHAISTOS_DISC = new UnicodeBlock("PHAISTOS_DISC", PHAISTOS_DISC_ID); /* [101D0] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final UnicodeBlock LYCIAN = new UnicodeBlock("LYCIAN", LYCIAN_ID); /* [10280] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final UnicodeBlock CARIAN = new UnicodeBlock("CARIAN", CARIAN_ID); /* [102A0] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final UnicodeBlock LYDIAN = new UnicodeBlock("LYDIAN", LYDIAN_ID); /* [10920] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final UnicodeBlock MAHJONG_TILES = new UnicodeBlock("MAHJONG_TILES", MAHJONG_TILES_ID); /* [1F000] */
 
         /**
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public static final UnicodeBlock DOMINO_TILES = new UnicodeBlock("DOMINO_TILES", DOMINO_TILES_ID); /* [1F030] */
         /** 

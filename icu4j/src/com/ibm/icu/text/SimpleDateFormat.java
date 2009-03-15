@@ -414,6 +414,7 @@ public class SimpleDateFormat extends DateFormat {
     /**
      * Construct a SimpleDateFormat using the given pattern , override and locale.
      * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
      */
     public SimpleDateFormat(String pattern, String override, ULocale loc)
     {
@@ -772,8 +773,7 @@ public class SimpleDateFormat extends DateFormat {
      * @param ch The pattern character
      * @return DateFormat.Field associated with the pattern character
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     protected DateFormat.Field patternCharToDateFormatField(char ch) {
         int patternCharIndex = -1;

@@ -26,10 +26,8 @@ import com.ibm.icu.text.UCharacterIterator;
  * as Hebrew numbering or Chinese numbering.
  *
  * @author       John Emmons
- * @draft ICU 4.2
  */
-
-public class NumberingSystem {
+class NumberingSystem {
 
     public NumberingSystem() {
         radix = 10;

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -71,8 +71,7 @@ import java.util.Set;
  * <p>
  * The difference between 'in' and 'within' is that 'in' only includes
  * integers in the specified range, while 'within' includes all values.</p>
- * @draft ICU 3.8
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 3.8
  */
 public class PluralRules implements Serializable {
     private static final long serialVersionUID = 1;
@@ -85,36 +84,31 @@ public class PluralRules implements Serializable {
 
     /** 
      * Common name for the 'zero' plural form. 
-     * @draft ICU 3.8 
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8 
      */
     public static final String KEYWORD_ZERO = "zero";
 
     /** 
      * Common name for the 'singular' plural form. 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final String KEYWORD_ONE = "one";
 
     /**
      * Common name for the 'dual' plural form.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final String KEYWORD_TWO = "two";
 
     /**
      * Common name for the 'paucal' or other special plural form.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final String KEYWORD_FEW = "few";
 
     /**
      * Common name for the arabic (11 to 99) plural form.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final String KEYWORD_MANY = "many";
 
@@ -122,25 +116,24 @@ public class PluralRules implements Serializable {
      * Common name for the default plural form.  This name is returned
      * for values to which no other form in the rule applies.  It 
      * can additionally be assigned rules of its own.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final String KEYWORD_OTHER = "other";
 
-    /**
+    /*
      * The set of all characters a valid keyword can start with.
      */
     private static final UnicodeSet START_CHARS = 
         new UnicodeSet("[[:ID_Start:][_]]");
 
-    /**
+    /*
      * The set of all characters a valid keyword can contain after 
      * the first character.
      */
     private static final UnicodeSet CONT_CHARS = 
         new UnicodeSet("[:ID_Continue:]");
 
-    /**
+    /*
      * The default constraint that is always satisfied.
      */
     private static final Constraint NO_CONSTRAINT = new Constraint() {
@@ -158,7 +151,7 @@ public class PluralRules implements Serializable {
         }
       };
 
-    /**
+    /*
      * The default rule that always returns "other".
      */
     private static final Rule DEFAULT_RULE = new Rule() {
@@ -179,14 +172,13 @@ public class PluralRules implements Serializable {
         public int updateRepeatLimit(int limit) {
             return limit;
         }
-      };
+    };
 
 
     /**
      * The default rules that accept any number and return 
      * {@link #KEYWORD_OTHER}.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static final PluralRules DEFAULT =
         new PluralRules(new RuleChain(DEFAULT_RULE));
@@ -196,8 +188,7 @@ public class PluralRules implements Serializable {
      * @param description the rule description.
      * @throws ParseException if the description cannot be parsed.
      *    The exception index is typically not set, it will be -1.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static PluralRules parseDescription(String description) 
         throws ParseException {
@@ -215,8 +206,7 @@ public class PluralRules implements Serializable {
      * otherwise returns null.
      * @param description the rule description.
      * @return the PluralRules
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static PluralRules createRules(String description) {
         try {
@@ -226,17 +216,17 @@ public class PluralRules implements Serializable {
         }
     }
 
-    /** 
+    /*
      * A constraint on a number.
      */
     private interface Constraint extends Serializable {
-        /** 
+        /*
          * Returns true if the number fulfills the constraint.
          * @param n the number to test, >= 0.
          */
         boolean isFulfilled(double n);
 
-        /** 
+        /*
          * Returns the larger of limit or the limit of this constraint.
          * If the constraint is a simple range test, this is the higher
          * end of the range; if it is a modulo test, this is the modulus.
@@ -247,33 +237,33 @@ public class PluralRules implements Serializable {
         int updateRepeatLimit(int limit);
     }
 
-    /**
+    /*
      * A pluralization rule.  .
      */
     private interface Rule extends Serializable {
-        /** Returns the keyword that names this rule. */
+        /* Returns the keyword that names this rule. */
         String getKeyword();
-        /** Returns true if the rule applies to the number. */
+        /* Returns true if the rule applies to the number. */
         boolean appliesTo(double n);
-        /** Returns the larger of limit and this rule's limit. */
+        /* Returns the larger of limit and this rule's limit. */
         int updateRepeatLimit(int limit);
     }
 
-    /**
+    /*
      * A list of rules to apply in order.
      */
     private interface RuleList extends Serializable {
-        /** Returns the keyword of the first rule that applies to the number. */
+        /* Returns the keyword of the first rule that applies to the number. */
         String select(double n);
 
-        /** Returns the set of defined keywords. */
+        /* Returns the set of defined keywords. */
         Set getKeywords();
 
-        /** Return the value at which this rulelist starts repeating. */
+        /* Return the value at which this rulelist starts repeating. */
         int getRepeatLimit();
     }
 
-    /**
+    /*
      * syntax:
      * condition :     or_condition
      *                 and_condition
@@ -391,13 +381,13 @@ public class PluralRules implements Serializable {
         return result;
     }
 
-    /** Returns a parse exception wrapping the token and context strings. */
+    /* Returns a parse exception wrapping the token and context strings. */
     private static ParseException unexpected(String token, String context) {
         return new ParseException("unexpected token '" + token +
                                   "' in '" + context + "'", -1);
     }
 
-    /** 
+    /* 
      * Returns the token at x if available, else throws a parse exception.
      */
     private static String nextToken(String[] tokens, int x, String context) 
@@ -408,7 +398,7 @@ public class PluralRules implements Serializable {
         throw new ParseException("missing token at end of '" + context + "'", -1);
     }
 
-    /**
+    /*
      * Syntax:
      * rule : keyword ':' condition
      * keyword: <identifier>
@@ -436,7 +426,7 @@ public class PluralRules implements Serializable {
         return rule;
     }
 
-    /**
+    /*
      * Syntax:
      * rules : rule
      *         rule ';' rules
@@ -457,7 +447,7 @@ public class PluralRules implements Serializable {
         return rc;
     }
 
-    /** 
+    /*
      * An implementation of Constraint representing a modulus, 
      * a range of values, and include/exclude. Provides lots of
      * convenience factory methods.
@@ -502,7 +492,7 @@ public class PluralRules implements Serializable {
         }
     }
 
-    /** Convenience base class for and/or constraints. */
+    /* Convenience base class for and/or constraints. */
     private static abstract class BinaryConstraint implements Constraint, 
                                                    Serializable {
         private static final long serialVersionUID = 1;
@@ -525,7 +515,7 @@ public class PluralRules implements Serializable {
         }
     }
       
-    /** A constraint representing the logical and of two constraints. */
+    /* A constraint representing the logical and of two constraints. */
     private static class AndConstraint extends BinaryConstraint {
         private static final long serialVersionUID = 7766999779862263523L;
 
@@ -538,7 +528,7 @@ public class PluralRules implements Serializable {
         }
     }
 
-    /** A constraint representing the logical or of two constraints. */
+    /* A constraint representing the logical or of two constraints. */
     private static class OrConstraint extends BinaryConstraint {
         private static final long serialVersionUID = 1405488568664762222L;
 
@@ -551,7 +541,7 @@ public class PluralRules implements Serializable {
         }
     }
 
-    /** 
+    /*
      * Implementation of Rule that uses a constraint.
      * Provides 'and' and 'or' to combine constraints.  Immutable.
      */
@@ -590,7 +580,7 @@ public class PluralRules implements Serializable {
         }
     }
 
-    /**
+    /*
      * Implementation of RuleList that is itself a node in a linked list.
      * Immutable, but supports chaining with 'addRule'.
      */
@@ -677,14 +667,13 @@ public class PluralRules implements Serializable {
      *   for the closest parent in the locale hierarchy that has one will
      *   be returned.  The final fallback always returns the default
      *   rules.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static PluralRules forLocale(ULocale locale) {
       return PluralRulesLoader.loader.forLocale(locale);
     }
 
-    /**
+    /*
      * Checks whether a token is a valid keyword.
      * 
      * @param token the token to be checked
@@ -702,7 +691,7 @@ public class PluralRules implements Serializable {
          return false;
      }
 
-    /**
+    /*
      * Creates a new <code>PluralRules</code> object.  Immutable.
      */
      private PluralRules(RuleList rules) {
@@ -716,8 +705,7 @@ public class PluralRules implements Serializable {
      * 
      * @param number The number for which the rule has to be determined.
      * @return The keyword of the selected rule.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
      public String select(double number) {
          return rules.select(number);
@@ -728,8 +716,7 @@ public class PluralRules implements Serializable {
      * object.  The rule "other" is always present by default.
      * 
      * @return The set of keywords.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public Set getKeywords() {
         return keywords;
@@ -768,8 +755,7 @@ public class PluralRules implements Serializable {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public String toString() {
       return "keywords: " + keywords + " rules: " + rules.toString() + 
@@ -778,8 +764,7 @@ public class PluralRules implements Serializable {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public int hashCode() {
       return keywords.hashCode();
@@ -787,8 +772,7 @@ public class PluralRules implements Serializable {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public boolean equals(Object rhs) {
         return rhs instanceof PluralRules && equals((PluralRules)rhs);
@@ -798,8 +782,7 @@ public class PluralRules implements Serializable {
      * Return tif rhs is equal to this.
      * @param rhs the PluralRules to compare to.
      * @return true if this and rhs are equal.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public boolean equals(PluralRules rhs) {
       if (rhs == null) {

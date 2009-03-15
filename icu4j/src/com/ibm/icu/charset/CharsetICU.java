@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2008, International Business Machines Corporation and    *
+* Copyright (C) 2006-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -62,8 +62,7 @@ public abstract class CharsetICU extends Charset{
     // typedef enum UConverterUnicodeSet {
      /** 
       * Parameter that select the set of roundtrippable Unicode code points. 
-      * @draft ICU 4.0
-      * @provisional This API might change or be removed in a future release.
+      * @stable ICU 4.0
       */
       public static final int ROUNDTRIP_SET=0; 
       /**
@@ -348,8 +347,7 @@ public abstract class CharsetICU extends Charset{
     *                   the converter's specific set is filled in.
     * @param which A selector; currently ROUNDTRIP_SET is the only supported value.
     * @throws IllegalArgumentException if the parameters does not match.              
-    * @draft ICU 4.0
-    * @provisional This API might change or be removed in a future release.
+    * @stable ICU 4.0
     */
        public void getUnicodeSet(UnicodeSet setFillIn, int which){
            if( setFillIn == null || which != ROUNDTRIP_SET ){

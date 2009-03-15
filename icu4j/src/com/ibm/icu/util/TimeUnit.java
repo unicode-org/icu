@@ -1,8 +1,8 @@
 /*
- *******************************************************************************
- * Copyright (C) 2008, Google, International Business Machines Corporation and *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+ **************************************************************************
+ * Copyright (C) 2008-2009, Google, International Business Machines
+ * Corporation and others. All Rights Reserved.
+ **************************************************************************
  */
 package com.ibm.icu.util;
 
@@ -11,8 +11,7 @@ package com.ibm.icu.util;
  * @see TimeUnitAmount
  * @see TimeUnit
  * @author markdavis
- * @draft ICU 4.0
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 4.0
  */
 public class TimeUnit extends MeasureUnit {
     /** 
@@ -25,8 +24,7 @@ public class TimeUnit extends MeasureUnit {
 
     /** 
      * Constant value for supported time unit.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public static TimeUnit
     SECOND = new TimeUnit("second"),
@@ -44,8 +42,7 @@ public class TimeUnit extends MeasureUnit {
 
     /**
      * @return the available values
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public static TimeUnit[] values() {
         return (TimeUnit[])values.clone();
@@ -55,8 +52,7 @@ public class TimeUnit extends MeasureUnit {
      * A string representation for debugging.
      * It is for debugging purpose. The value might change.
      * Please do not count on the value.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public String toString() {
         return name;

@@ -194,8 +194,7 @@ public class ChineseDateFormat extends SimpleDateFormat {
     /**
      * {@inheritDoc}
      * 
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     protected DateFormat.Field patternCharToDateFormatField(char ch) {
         if (ch == 'l') {

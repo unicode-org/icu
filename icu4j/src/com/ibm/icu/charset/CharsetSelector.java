@@ -36,6 +36,7 @@ import com.ibm.icu.text.UnicodeSet;
  * convert the CharSequence.
  * 
  * @draft ICU 4.2
+ * @provisional This API might change or be removed in a future release.
  */
 public final class CharsetSelector {
     private IntTrie trie;
@@ -161,6 +162,7 @@ public final class CharsetSelector {
      *             If no support for the named charset is available in this
      *             instance of the Java virtual machine.
      * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
      */
     public CharsetSelector(List charsetList, UnicodeSet excludedCodePoints,
             int mappingTypes) {
@@ -199,6 +201,7 @@ public final class CharsetSelector {
      *         supplied when building the selector.
      * 
      * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
      */
     public List selectForString(CharSequence unicodeText) {
         int columns = (encodings.length + 31) / 32;

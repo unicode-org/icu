@@ -1243,8 +1243,7 @@ public abstract class NumberFormat extends UFormat {
      * @return A rounding mode, between <code>BigDecimal.ROUND_UP</code>
      * and <code>BigDecimal.ROUND_UNNECESSARY</code>.
      * @see #setRoundingMode(int)
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public int getRoundingMode() {
         throw new UnsupportedOperationException("getRoundingMode must be implemented by the subclass implementation.");
@@ -1257,8 +1256,7 @@ public abstract class NumberFormat extends UFormat {
      * <code>BigDecimal.ROUND_UP</code> and
      * <code>BigDecimal.ROUND_UNNECESSARY</code>.
      * @see #getRoundingMode()
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public void setRoundingMode(int roundingMode) {
         throw new UnsupportedOperationException("setRoundingMode must be implemented by the subclass implementation.");

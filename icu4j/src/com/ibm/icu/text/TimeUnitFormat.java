@@ -1,8 +1,8 @@
 /*
- *******************************************************************************
- * Copyright (C) 2008, Google, International Business Machines Corporation and *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+ **************************************************************************
+ * Copyright (C) 2008-2009, Google, International Business Machines
+ * Corporationand others. All Rights Reserved.
+ **************************************************************************
  */
 package com.ibm.icu.text;
 
@@ -53,8 +53,7 @@ import com.ibm.icu.util.UResourceBundle;
  * @see TimeUnitAmount
  * @see TimeUnitFormat
  * @author markdavis
- * @draft ICU 4.0
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 4.0
  */
 public class TimeUnitFormat extends MeasureFormat {
 
@@ -95,8 +94,7 @@ public class TimeUnitFormat extends MeasureFormat {
     /**
      * Create empty format using full name style, for example, "hours". 
      * Use setLocale and/or setFormat to modify.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public TimeUnitFormat() {
         isReady = false;
@@ -107,8 +105,7 @@ public class TimeUnitFormat extends MeasureFormat {
     /**
      * Create TimeUnitFormat given a ULocale, and using full name style.
      * @param locale   locale of this time unit formatter.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public TimeUnitFormat(ULocale locale) {
         this(locale, FULL_NAME);
@@ -117,8 +114,7 @@ public class TimeUnitFormat extends MeasureFormat {
     /**
      * Create TimeUnitFormat given a Locale, and using full name style.
      * @param locale   locale of this time unit formatter.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public TimeUnitFormat(Locale locale) {
         this(locale, FULL_NAME);
@@ -157,8 +153,7 @@ public class TimeUnitFormat extends MeasureFormat {
      * Set the locale used for formatting or parsing.
      * @param locale   locale of this time unit formatter.
      * @return this, for chaining.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public TimeUnitFormat setLocale(ULocale locale) {
         if ( locale != this.locale ) {
@@ -172,8 +167,7 @@ public class TimeUnitFormat extends MeasureFormat {
      * Set the locale used for formatting or parsing.
      * @param locale   locale of this time unit formatter.
      * @return this, for chaining.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public TimeUnitFormat setLocale(Locale locale) {
         return setLocale(ULocale.forLocale(locale));
@@ -183,8 +177,7 @@ public class TimeUnitFormat extends MeasureFormat {
      * Set the format used for formatting or parsing. If null or not available, use the getNumberInstance(locale).
      * @param format   the number formatter.
      * @return this, for chaining.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public TimeUnitFormat setNumberFormat(NumberFormat format) {
         if (format == this.format) {
@@ -224,8 +217,7 @@ public class TimeUnitFormat extends MeasureFormat {
     /**
      * Format a TimeUnitAmount.
      * @see java.text.Format#format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition)
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public StringBuffer format(Object obj, StringBuffer toAppendTo,
             FieldPosition pos) {
@@ -247,8 +239,7 @@ public class TimeUnitFormat extends MeasureFormat {
     /**
      * Parse a TimeUnitAmount.
      * @see java.text.Format#parseObject(java.lang.String, java.text.ParsePosition)
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public Object parseObject(String source, ParsePosition pos) {
         if (!isReady) {

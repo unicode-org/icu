@@ -512,6 +512,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
     /**
      * Selector code that tells the constructor to create a numbering system formatter
      * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int NUMBERING_SYSTEM = 4;
 

@@ -148,8 +148,7 @@ public class ChineseCalendar extends Calendar {
      * Construct a <code>ChineseCalendar</code> with the give date set in the default time zone
      * with the default locale.
      * @param date The date to which the new calendar is set.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public ChineseCalendar(Date date) {
         super();
@@ -166,8 +165,7 @@ public class ChineseCalendar extends Calendar {
      * @param isLeapMonth The value used to set the Chiense calendar's (@link #IS_LEAP_MONTH)
      *                  time field.
      * @param date      The value used to set the calendar's {@link #DATE DATE} time field.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public ChineseCalendar(int year, int month, int isLeapMonth, int date) {
         super(TimeZone.getDefault(), ULocale.getDefault());
@@ -201,8 +199,7 @@ public class ChineseCalendar extends Calendar {
      *              in the calendar.
      * @param second the value used to set the {@link #SECOND SECOND} time field
      *              in the calendar.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public ChineseCalendar(int year, int month, int isLeapMonth, int date, int hour,
                              int minute, int second)
@@ -229,8 +226,7 @@ public class ChineseCalendar extends Calendar {
      * Constructs a <code>ChineseCalendar</code> based on the current time
      * in the default time zone with the given locale.
      * @param aLocale The given locale
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public ChineseCalendar(Locale aLocale) {
         this(TimeZone.getDefault(), aLocale);
@@ -241,8 +237,7 @@ public class ChineseCalendar extends Calendar {
      * Construct a <code>ChineseCalendar</code> based on the current time
      * in the given time zone with the default locale.
      * @param zone the given time zone
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public ChineseCalendar(TimeZone zone) {
         super(zone, ULocale.getDefault());
@@ -266,8 +261,7 @@ public class ChineseCalendar extends Calendar {
      * in the default time zone with the given locale.
      *
      * @param locale the given ulocale
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public ChineseCalendar(ULocale locale) {
         this(TimeZone.getDefault(), locale);
