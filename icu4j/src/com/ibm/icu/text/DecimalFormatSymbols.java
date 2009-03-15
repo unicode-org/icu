@@ -109,8 +109,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * 
      * @param locale the locale.
      * @return A DecimalFormatSymbols instance.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static DecimalFormatSymbols getInstance(ULocale locale) {
         return new DecimalFormatSymbols(locale);
@@ -142,11 +141,11 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * or its equivalent implementation for now.
      * 
      * @return An array of <code>ULocale</code>s for which localized <code>DecimalFormatSymbols</code> instances are available.
-     * @draft ICU 3.8
+     * @stable ICU 3.8 (retain)
      * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales() {
-        return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_BASE_NAME);        
+        return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_BASE_NAME);
     }
 
     

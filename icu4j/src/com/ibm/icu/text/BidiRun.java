@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2007, International Business Machines
+*   Copyright (C) 2001-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -25,7 +25,7 @@ package com.ibm.icu.text;
  * modified by users.
  *
  * @see com.ibm.icu.text.Bidi
- * @draft ICU 3.8
+ * @stable ICU 3.8
  */
 public class BidiRun {
 
@@ -35,7 +35,7 @@ public class BidiRun {
                                if <0, count of bidi controls within run            */
     byte level;
 
-    /**
+    /*
      * Default constructor
      *
      * Note that members start and limit of a run instance have different
@@ -48,17 +48,14 @@ public class BidiRun {
      * For a reference returned by getLogicalRun() or getVisualRun(),
      *   - start is the first logical position of the run in the source text.
      *   - limit is one after the last logical position of the run.
-     *
-     * @draft ICU 3.8
      */
     BidiRun()
     {
         this(0, 0, (byte)0);
     }
 
-    /**
+    /*
      * Constructor
-     * @draft ICU 3.8
      */
     BidiRun(int start, int limit, byte embeddingLevel)
     {
@@ -67,9 +64,8 @@ public class BidiRun {
         this.level = embeddingLevel;
     }
 
-    /**
+    /*
      * Copy the content of a BidiRun instance
-     * @draft ICU 3.8
      */
     void copyFrom(BidiRun run)
     {
@@ -81,7 +77,7 @@ public class BidiRun {
 
     /**
      * Get the first logical position of the run in the source text
-     * @draft ICU 3.8
+     * @stable ICU 3.8
      */
     public int getStart()
     {
@@ -90,7 +86,7 @@ public class BidiRun {
 
     /**
      * Get position of one character after the end of the run in the source text
-     * @draft ICU 3.8
+     * @stable ICU 3.8
      */
     public int getLimit()
     {
@@ -99,7 +95,7 @@ public class BidiRun {
 
     /**
      * Get length of run
-     * @draft ICU 3.8
+     * @stable ICU 3.8
      */
     public int getLength()
     {
@@ -108,7 +104,7 @@ public class BidiRun {
 
     /**
      * Get level of run
-     * @draft ICU 3.8
+     * @stable ICU 3.8
      */
     public byte getEmbeddingLevel()
     {
@@ -119,7 +115,7 @@ public class BidiRun {
      * Check if run level is odd
      * @return true if the embedding level of this run is odd, i.e. it is a
      *  right-to-left run.
-     * @draft ICU 3.8
+     * @stable ICU 3.8
      */
     public boolean isOddRun()
     {
@@ -130,7 +126,7 @@ public class BidiRun {
      * Check if run level is even
      * @return true if the embedding level of this run is even, i.e. it is a
      *  left-to-right run.
-     * @draft ICU 3.8
+     * @stable ICU 3.8
      */
     public boolean isEvenRun()
     {
@@ -139,7 +135,7 @@ public class BidiRun {
 
     /**
      * Get direction of run
-     * @draft ICU 3.8
+     * @stable ICU 3.8
      */
     public byte getDirection()
     {
@@ -148,7 +144,7 @@ public class BidiRun {
 
     /**
      * String to display run
-     * @draft ICU 3.8
+     * @stable ICU 3.8
      */
     public String toString()
     {

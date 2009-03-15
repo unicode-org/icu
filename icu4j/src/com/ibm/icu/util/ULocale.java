@@ -1006,6 +1006,7 @@ public final class ULocale implements Serializable {
     /**
      * Returns the current CLDR version
      * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
      */
     public static VersionInfo getCLDRVersion() {
         // fetching this data should be idempotent.
@@ -2696,8 +2697,7 @@ public final class ULocale implements Serializable {
      * values are "left-to-right", "right-to-left", "top-to-bottom" or
      * "bottom-to-top".
      * @return The locale's layout orientation for characters.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public String getCharacterOrientation() {
         return getTableString("layout", null, "characters", getName());
@@ -2708,8 +2708,7 @@ public final class ULocale implements Serializable {
      * values are "left-to-right", "right-to-left", "top-to-bottom" or
      * "bottom-to-top".
      * @return The locale's layout orientation for lines.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public String getLineOrientation() {
         return getTableString("layout", null, "lines", getName());
@@ -3179,8 +3178,7 @@ public final class ULocale implements Serializable {
      *
      * @param loc The ULocale to maximize
      * @return The maximized ULocale instance.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public static ULocale
     addLikelySubtags(ULocale loc)
@@ -3230,8 +3228,7 @@ public final class ULocale implements Serializable {
      *
      * @param loc The ULocale to minimize
      * @return The minimized ULocale instance.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public static ULocale
     minimizeSubtags(ULocale loc)
@@ -3986,7 +3983,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
-    public static class Builder {
+    public static final class Builder {
 
         private InternalLocaleBuilder _locbld = new InternalLocaleBuilder();
 

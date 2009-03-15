@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -208,8 +208,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * 
      * @param locale the locale.
      * @return A DateFormatSymbols instance.
-     * @draft ICU 3.8
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.8
      */
     public static DateFormatSymbols getInstance(ULocale locale) {
         return new DateFormatSymbols(locale);
@@ -241,11 +240,11 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * or its equivalent implementation for now.
      * 
      * @return An array of <code>ULocale</code>s for which localized <code>DateFormatSymbols</code> instances are available.
-     * @draft ICU 3.8
+     * @draft ICU 3.8 (retain)
      * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales() {
-        return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_BASE_NAME);        
+        return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_BASE_NAME);
     }
     
     /**

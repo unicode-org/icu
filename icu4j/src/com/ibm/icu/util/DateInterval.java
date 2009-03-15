@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- *   Copyright (C) 2008, International Business Machines
+ *   Copyright (C) 2008-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  */
@@ -13,8 +13,7 @@ import java.io.Serializable;
 /**
  * This class represents date interval.
  * It is a pair of long representing from date 1 to date 2.
- * @draft ICU 4.0
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 4.0
  */
 public final class DateInterval implements Serializable {
 
@@ -27,8 +26,7 @@ public final class DateInterval implements Serializable {
      * Constructor given from date and to date.
      * @param from      The from date in date interval.
      * @param to        The to date in date interval.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public DateInterval(long from, long to)
     {
@@ -39,8 +37,7 @@ public final class DateInterval implements Serializable {
     /** 
      * Get the from date.
      * @return  the from date in dateInterval.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public long getFromDate()
     {
@@ -50,8 +47,7 @@ public final class DateInterval implements Serializable {
     /** 
      * Get the to date.
      * @return  the to date in dateInterval.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public long getToDate()
     {
@@ -60,8 +56,7 @@ public final class DateInterval implements Serializable {
 
     /**
      * Override equals
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public boolean equals(Object a) {
         if ( a instanceof DateInterval ) {
@@ -73,8 +68,7 @@ public final class DateInterval implements Serializable {
 
     /**
      * Override hashcode
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public int hashCode() {
         return (int)(fromDate + toDate);
@@ -82,8 +76,7 @@ public final class DateInterval implements Serializable {
 
     /**
      * Override toString
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public String toString() {
         return String.valueOf(fromDate) + " " + String.valueOf(toDate);

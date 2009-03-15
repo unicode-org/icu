@@ -408,6 +408,7 @@ public final class VersionInfo implements Comparable
      *           Greater than 0 if the argument is a VersionInfo object that
      *           has version information less than this object.
      * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
      */
     public int compareTo(Object other) {
         return compareTo((VersionInfo)other);

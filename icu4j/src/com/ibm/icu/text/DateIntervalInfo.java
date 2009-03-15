@@ -1,7 +1,9 @@
 /*
-*   Copyright (C) 2008, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*/
+ *******************************************************************************
+ * Copyright (C) 2008-2009, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ */
 
 package com.ibm.icu.text;
 
@@ -139,9 +141,8 @@ import com.ibm.icu.util.UResourceBundle;
  * Data for a calendar is loaded out of resource bundles. 
  * To ICU 4.0, date interval patterns are only supported in Gregorian calendar.
  * 
- * @draft ICU 4.0
- * @provisional This API might change or be removed in a future release.
-**/
+ * @stable ICU 4.0
+ */
 
 public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
     /* Save the interval pattern information.
@@ -158,8 +159,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
     /**
      * PatternInfo class saves the first and second part of interval pattern,
      * and whether the interval pattern is earlier date first.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public static final class PatternInfo implements Cloneable, Serializable {
         static final int currentSerialVersion = 1;
@@ -183,8 +183,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
 
         /**
          * constructor
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public PatternInfo(String firstPart, String secondPart,
                            boolean firstDateInPtnIsLaterDate) {
@@ -195,8 +194,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
 
         /**
          * accessor
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public String getFirstPart() {
             return fIntervalPatternFirstPart;
@@ -204,8 +202,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
 
         /**
          * accessor
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public String getSecondPart() {
             return fIntervalPatternSecondPart;
@@ -213,8 +210,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
 
         /**
          * accessor
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public boolean firstDateInPtnIsLaterDate() {
             return fFirstDateInPtnIsLaterDate;
@@ -222,8 +218,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
 
         /**
          * Override equals
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public boolean equals(Object a) {
             if ( a instanceof PatternInfo ) {
@@ -237,8 +232,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
 
         /**
          * Override hashcode
-         * @draft ICU 4.0
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.0
          */
         public int hashCode() {
             int hash = fIntervalPatternFirstPart != null ? fIntervalPatternFirstPart.hashCode() : 0;
@@ -313,8 +307,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
      * Construct DateIntervalInfo for the given locale,
      * @param locale  the interval patterns are loaded from the Gregorian 
      *                calendar data in this locale.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public DateIntervalInfo(ULocale locale) 
     {
@@ -535,8 +528,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
      *                            a calendar field that is smaller
      *                            than the MINIMUM_SUPPORTED_CALENDAR_FIELD 
      * @throws UnsupportedOperationException  if the object is frozen
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public void setIntervalPattern(String skeleton, 
                                    int lrgDiffCalUnit, 
@@ -657,8 +649,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
      * @throws IllegalArgumentException  if getting interval pattern on 
      *                            a calendar field that is smaller
      *                            than the MINIMUM_SUPPORTED_CALENDAR_FIELD 
-     * @draft ICU 4.0 
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public PatternInfo getIntervalPattern(String skeleton, int field) 
     {
@@ -681,8 +672,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
     /**
      * Get the fallback interval pattern.
      * @return fallback interval pattern
-     * @draft ICU 4.0 
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public String getFallbackIntervalPattern()
     {
@@ -704,8 +694,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
      * @throws IllegalArgumentException       if there is no pattern {0} or 
      *                                        pattern {1} in fallbakckPattern
      *                   
-     * @draft ICU 4.0 
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public void setFallbackIntervalPattern(String fallbackPattern)
     {
@@ -730,8 +719,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
      *
      * return default date ordering in interval pattern. TRUE if the first date 
      *        in pattern is later date, FALSE otherwise.
-     * @draft ICU 4.0 
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public boolean getDefaultOrder()
     {
@@ -742,8 +730,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
     /**
      * Boilerplate. Clone this object.
      * @return     a copy of the object
-     * @draft ICU4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU4.0
      */
     public Object clone() 
     {
@@ -788,8 +775,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
     
     /**
      * Boilerplate for Freezable
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public boolean isFrozen() {
         return frozen;
@@ -797,8 +783,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
     
     /**
      * Boilerplate for Freezable
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public Object freeze() {
         frozen = true;
@@ -807,8 +792,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
     
     /**
      * Boilerplate for Freezable
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public Object cloneAsThawed() {
         DateIntervalInfo result = (DateIntervalInfo) (this.cloneUnfrozenDII());
@@ -945,8 +929,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
 
     /**
      * Override equals
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public boolean equals(Object a) {
         if ( a instanceof DateIntervalInfo ) {
@@ -958,8 +941,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
 
     /**
      * Override hashcode
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public int hashCode() {
         return fIntervalPatterns.hashCode();

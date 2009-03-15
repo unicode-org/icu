@@ -1,7 +1,7 @@
 /*
  * @(#)TimeZone.java    1.51 00/01/19
  *
- * Copyright (C) 1996-2008, International Business Machines
+ * Copyright (C) 1996-2009, International Business Machines
  * Corporation and others.  All Rights Reserved.
  */
 
@@ -114,16 +114,14 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * A time zone implementation type indicating ICU's own TimeZone used by
      * <code>getTimeZone</code>, <code>setDefaultTimeZoneType</code>
      * and <code>getDefaultTimeZoneType</code>.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public static final int TIMEZONE_ICU = 0;
     /**
      * A time zone implementation type indicating JDK TimeZone used by
      * <code>getTimeZone</code>, <code>setDefaultTimeZoneType</code>
      * and <code>getDefaultTimeZoneType</code>.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public static final int TIMEZONE_JDK = 1;
 
@@ -530,8 +528,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @param type Timezone type, either <code>TIMEZONE_ICU</code> or <code>TIMEZONE_JDK</code>.
      * @return the specified <code>TimeZone</code>, or the GMT zone if the given ID
      * cannot be understood.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public static synchronized TimeZone getTimeZone(String ID, int type) {
         TimeZone result;
@@ -564,8 +561,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
     /**
      * Sets the default timezone type used by <code>getTimeZone</code>.
      * @param type Timezone type, either <code>TIMEZONE_ICU</code> or <code>TIMEZONE_JDK</code>.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public static synchronized void setDefaultTimeZoneType(int type) {
         if (type != TIMEZONE_ICU && type != TIMEZONE_JDK) {
@@ -577,8 +573,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
     /**
      * Returns the default timezone type currently used.
      * @return The default timezone type, either <code>TIMEZONE_ICU</code> or <code>TIMEZONE_JDK</code>.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public static int getDefaultTimeZoneType() {
         return TZ_IMPL;
@@ -805,8 +800,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * in normalized format for the given timezone ID.  When the given timezone ID
      * is neither a known system time zone ID nor a valid custom timezone ID,
      * null is returned.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public static String getCanonicalID(String id) {
         return getCanonicalID(id, null);
@@ -822,8 +816,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * in normalized format for the given timezone ID.  When the given timezone ID
      * is neither a known system time zone ID nor a valid custom timezone ID,
      * null is returned.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public static String getCanonicalID(String id, boolean[] isSystemID) {
         String canonicalID = null;

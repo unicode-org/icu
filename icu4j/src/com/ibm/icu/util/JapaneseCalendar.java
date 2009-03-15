@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -234,7 +234,7 @@ public class JapaneseCalendar extends GregorianCalendar {
      * @param extendedYear the extendedYear, as returned by handleGetExtendedYear
      * @return the default month
      * @provisional ICU 3.6
-     * @draft ICU 3.6
+     * @draft ICU 3.6 (retain)
      * @see #MONTH
      */
     protected int getDefaultMonthInYear(int extendedYear)
@@ -257,7 +257,7 @@ public class JapaneseCalendar extends GregorianCalendar {
      * @param extendedYear the extendedYear, as returned by handleGetExtendedYear
      * @param month the month, as returned by getDefaultMonthInYear
      * @return the default day of the month
-     * @draft ICU 3.6
+     * @draft ICU 3.6 (retain)
      * @provisional ICU 3.6
      * @see #DAY_OF_MONTH
      */
@@ -637,8 +637,7 @@ public class JapaneseCalendar extends GregorianCalendar {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public int getActualMaximum(int field) {
         if (field == YEAR) {

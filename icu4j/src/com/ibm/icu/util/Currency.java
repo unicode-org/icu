@@ -151,8 +151,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * @param loc the locale for which to retrieve currency codes.
      * @param d the date for which to retrieve currency codes for the given locale.
      * @return The array of ISO currency codes.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public static String[] getAvailableCurrencyCodes(ULocale loc, Date d) 
     {
@@ -1021,8 +1020,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * code.  This constructor assumes that the code is valid.
      * 
      * @param theISOCode The iso code used to construct the currency.
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 3.4
      */
     protected Currency(String theISOCode) {
         isoCode = theISOCode;

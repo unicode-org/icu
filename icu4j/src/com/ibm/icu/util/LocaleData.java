@@ -308,6 +308,7 @@ public final class LocaleData {
      * Returns LocaleDisplayPattern for this locale, e.g., {0}({1})
      * @return locale display pattern as a String.
      * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
      */ 
     public String getLocaleDisplayPattern() {
       if (bundle == null) {
@@ -323,6 +324,7 @@ public final class LocaleData {
      * Returns LocaleDisplaySeparator for this locale.
      * @return locale display separator as a char.
      * @draft ICU 4.2
+     * @provisional This API might change or be removed in a future release.
      */ 
     public String getLocaleSeparator() {
       if (bundle == null) {

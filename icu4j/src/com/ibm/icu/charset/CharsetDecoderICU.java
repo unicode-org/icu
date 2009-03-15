@@ -153,8 +153,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      * @param err CoderResult
      * @param newCallback CharsetCallback.Encoder
      * @param newContext Object
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.0
      */
     public final void setToUCallback(CoderResult err, CharsetCallback.Decoder newCallback, Object newContext) {
         if (err.isMalformed()) {

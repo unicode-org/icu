@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -73,7 +73,7 @@ import com.ibm.icu.text.SimpleDateFormat;
  * locale that will ask the services to use the host platform's values).</li>
  * </ul>
  *
- * @draft ICU 3.6
+ * @draft ICU 3.6 (retainAll)
  * @provisional This API might change or be removed in a future release.
  */
 
