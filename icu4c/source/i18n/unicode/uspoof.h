@@ -105,7 +105,7 @@ typedef struct USpoofChecker USpoofChecker;
  * These enum values are used both to select the set of checks that
  * will be performed, and to report results from the check function.
  *
- * @draft ICU 4.0
+ * @draft ICU 4.2
  */
 typedef enum USpoofChecks {
     /** Applies to Two Identifier tests only.
@@ -165,7 +165,7 @@ typedef enum USpoofChecks {
  *
  *  @param status  The error code, set if this function encounters a problem.
  *  @return        the newly created Spoof Checker
- *  @draft  ICU 4.0
+ *  @draft  ICU 4.2
  */
 U_DRAFT USpoofChecker * U_EXPORT2
 uspoof_open(UErrorCode *status);
@@ -264,7 +264,7 @@ uspoof_clone(const USpoofChecker *sc, UErrorCode *status);
  *                 The value is a bit set, obtained by OR-ing together
  *                 values from enum USpoofChecks.
  * @param status   The error code, set if this function encounters a problem.
- * @draft  ICU 4.0
+ * @draft  ICU 4.2
  *
  */
 U_DRAFT void U_EXPORT2
@@ -278,7 +278,7 @@ uspoof_setChecks(USpoofChecker *sc, int32_t checks, UErrorCode *status);
  * @return         The set of checks that this spoof checker will perform.
  *                 The value is a bit set, obtained by OR-ing together
  *                 values from enum USpoofChecks.
- * @draft  ICU 4.0
+ * @draft  ICU 4.2
  *
  */
 U_DRAFT int32_t U_EXPORT2
@@ -318,7 +318,7 @@ uspoof_getChecks(const USpoofChecker *sc, UErrorCode *status);
  *                     list has the format of an HTTP Accept-Language
  *                     header, and .
  * @param status       The error code, set if this function encounters a problem.
- * @draft  ICU 4.0
+ * @draft  ICU 4.2
  */
 U_DRAFT void U_EXPORT2
 uspoof_setAllowedLocales(USpoofChecker *sc, const char *localesList, UErrorCode *status);
@@ -342,7 +342,7 @@ uspoof_setAllowedLocales(USpoofChecker *sc, const char *localesList, UErrorCode 
  *                     to the acceptable scripts, formatted like an
  *                     HTTP Accept Language value.
  *  
- * @draft ICU 4.0
+ * @draft ICU 4.2
  */
 U_DRAFT const char * U_EXPORT2
 uspoof_getAllowedLocales(USpoofChecker *sc, UErrorCode *status);
@@ -469,7 +469,7 @@ uspoof_getAllowedUnicodeSet(const USpoofChecker *sc, UErrorCode *status);
  *                or spoofing issues detected.  The bits are defined by
  *                enum USpoofChecks.  Zero is returned if no issues
  *                are found with the input string.
- * @draft ICU 4.0
+ * @draft ICU 4.2
  */
 U_DRAFT int32_t U_EXPORT2
 uspoof_check(const USpoofChecker *sc,
@@ -504,7 +504,7 @@ uspoof_check(const USpoofChecker *sc,
  *                or spoofing issues detected.  The bits are defined by
  *                enum USpoofChecks.  Zero is returned if no issues
  *                are found with the input string.
- * @draft ICU 4.0
+ * @draft ICU 4.2
  */
 U_DRAFT int32_t U_EXPORT2
 uspoof_checkUTF8(const USpoofChecker *sc,
@@ -537,7 +537,7 @@ uspoof_checkUTF8(const USpoofChecker *sc,
  *                or spoofing issues detected.  The bits are defined by
  *                enum USpoofChecks.  Zero is returned if no issues
  *                are found with the input string.
- * @draft ICU 4.0
+ * @draft ICU 4.2
  */
 U_DRAFT int32_t U_EXPORT2
 uspoof_checkUnicodeString(const USpoofChecker *sc,
@@ -580,7 +580,7 @@ uspoof_checkUnicodeString(const USpoofChecker *sc,
  *                the type of confusability found, as defined by
  *                enum USpoofChecks.  Zero is returned if the strings
  *                are not confusable.
- * @draft ICU 4.0
+ * @draft ICU 4.2
  */
 U_DRAFT int32_t U_EXPORT2
 uspoof_areConfusable(const USpoofChecker *sc,
@@ -620,7 +620,7 @@ uspoof_areConfusable(const USpoofChecker *sc,
  *                the type of confusability found, as defined by
  *                enum USpoofChecks.  Zero is returned if the strings
  *                are not confusable.
- * @draft ICU 4.0
+ * @draft ICU 4.2
  */
 U_DRAFT int32_t U_EXPORT2
 uspoof_areConfusableUTF8(const USpoofChecker *sc,
@@ -658,7 +658,7 @@ uspoof_areConfusableUTF8(const USpoofChecker *sc,
  *                the type of confusability found, as defined by
  *                enum USpoofChecks.  Zero is returned if the strings
  *                are not confusable.
- * @draft ICU 4.0
+ * @draft ICU 4.2
  */
 U_DRAFT int32_t U_EXPORT2
 uspoof_areConfusableUnicodeString(const USpoofChecker *sc,
@@ -699,7 +699,7 @@ uspoof_areConfusableUnicodeString(const USpoofChecker *sc,
   *                is always that of the complete skeleton, even when the
   *                supplied buffer is too small (or of zero length)
   *                
-  * @draft ICU 4.0
+  * @draft ICU 4.2
   */
 U_DRAFT int32_t U_EXPORT2
 uspoof_getSkeleton(const USpoofChecker *sc,
@@ -741,7 +741,7 @@ uspoof_getSkeleton(const USpoofChecker *sc,
   *                is always that of the complete skeleton, even when the
   *                supplied buffer is too small (or of zero length)
   *                
-  * @draft ICU 4.0
+  * @draft ICU 4.2
   */   
 U_DRAFT int32_t U_EXPORT2
 uspoof_getSkeletonUTF8(const USpoofChecker *sc,
@@ -777,7 +777,7 @@ uspoof_getSkeletonUTF8(const USpoofChecker *sc,
   *                perform the check.
   * @return        A reference to the destination (skeleton) string.
   *                
-  * @draft ICU 4.0
+  * @draft ICU 4.2
   */   
 U_DRAFT UnicodeString & U_EXPORT2
 uspoof_getSkeletonUnicodeString(const USpoofChecker *sc,
