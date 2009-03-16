@@ -3182,6 +3182,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
         "yyyy MMMM d",
         "yyyy MMM d",
         "yy/MM/dd",
+        "{1} {0}",
+        "{1} {0}",
+        "{1} {0}",
+        "{1} {0}",
         "{1} {0}"
     };
 
@@ -3206,7 +3210,12 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
         // Resolve a pattern for the date/time style
         String pattern = null;
         if ((timeStyle >= 0) && (dateStyle >= 0)) {
-            pattern = MessageFormat.format(patterns[8],
+            int glueIndex = 8;
+            if (patterns.length > 9)
+            {
+                glueIndex += dateStyle + 1;
+            }
+            pattern = MessageFormat.format(patterns[glueIndex],
                     new Object[] {patterns[timeStyle], patterns[dateStyle + 4]});
             // Might need to merge the overrides from the date and time into a single override string
             // TODO: Right now we are forcing the date's override into the time style.

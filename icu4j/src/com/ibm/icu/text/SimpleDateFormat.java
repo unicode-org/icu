@@ -540,7 +540,12 @@ public class SimpleDateFormat extends DateFormat {
             try {
                 CalendarData calData = new CalendarData(cachedDefaultLocale, cal.getType());
                 String[] dateTimePatterns = calData.getDateTimePatterns();
-                cachedDefaultPattern = MessageFormat.format(dateTimePatterns[8],
+                int glueIndex = 8;
+                if (patterns.length > 9)
+                {
+                    glueIndex += SHORT + 1;
+                }
+                cachedDefaultPattern = MessageFormat.format(dateTimePatterns[glueIndex],
                         new Object[] {dateTimePatterns[SHORT], dateTimePatterns[SHORT + 4]});
             } catch (MissingResourceException e) {
                 cachedDefaultPattern = FALLBACKPATTERN;
