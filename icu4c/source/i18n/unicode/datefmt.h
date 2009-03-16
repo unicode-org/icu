@@ -161,7 +161,6 @@ public:
      // kShort  + kDateOffset = 7
 
         kDateTime             = 8,
-        kDateTimeOffset = kDateTime + 1,
 
         // relative dates
         kRelative = (1 << 7),
