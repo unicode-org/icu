@@ -133,7 +133,17 @@ CollationAPITest::TestProperty(/* char* par */)
     doAssert((col->compare("black bird", "black-bird") == Collator::LESS), "black bird > black-bird comparison failed");
     doAssert((col->compare("Hello", "hello") == Collator::GREATER), "Hello > hello comparison failed");
 
-    doAssert((col->compareUTF8("ab\xc3\xa4", "ab\xc3\x9f", success) == Collator::LESS), "ab a-umlaut < ab sharp-s UTF-8 comparison failed");
+    doAssert((col->compareUTF8("\x61\x62\xc3\xa4", "\x61\x62\xc3\x9f", success) == Collator::LESS), "ab a-umlaut < ab sharp-s UTF-8 comparison failed");
+    success = U_ZERO_ERROR;
+    {
+        UnicodeString abau=UNICODE_STRING_SIMPLE("\\x61\\x62\\xe4").unescape();
+        UnicodeString abss=UNICODE_STRING_SIMPLE("\\x61\\x62\\xdf").unescape();
+        UCharIterator abauIter, abssIter;
+        uiter_setReplaceable(&abauIter, &abau);
+        uiter_setReplaceable(&abssIter, &abss);
+        doAssert((col->compare(abauIter, abssIter, success) == Collator::LESS), "ab a-umlaut < ab sharp-s UCharIterator comparison failed");
+        success = U_ZERO_ERROR;
+    }
 
     /*start of update [Bertrand A. D. 02/10/98]*/
     doAssert((col->compare("ab", "abc", 2) == Collator::EQUAL), "ab = abc with length 2 comparison failed");
