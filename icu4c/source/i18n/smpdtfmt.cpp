@@ -567,7 +567,15 @@ void SimpleDateFormat::construct(EStyle timeStyle,
         }
         timeDateArray[1].adoptString(tempus2);
 
-        resStr = ures_getStringByIndex(dateTimePatterns, (int32_t)kDateTime, &resStrLen, &status);
+        int32_t glueIndex = ures_getSize(dateTimePatterns);
+        if (glueIndex > kDateTimeOffset) {
+            glueIndex = (int32_t)(kDateTimeOffset + (dateStyle - kDateOffset));
+        }
+        else {
+            glueIndex = kDateTime;
+        }
+
+        resStr = ures_getStringByIndex(dateTimePatterns, glueIndex, &resStrLen, &status);
         MessageFormat::format(UnicodeString(TRUE, resStr, resStrLen), timeDateArray, 2, fPattern, status);
     }
     // if the pattern includes just time data or just date date, load the appropriate
