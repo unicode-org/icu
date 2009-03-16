@@ -541,7 +541,7 @@ public class SimpleDateFormat extends DateFormat {
                 CalendarData calData = new CalendarData(cachedDefaultLocale, cal.getType());
                 String[] dateTimePatterns = calData.getDateTimePatterns();
                 int glueIndex = 8;
-                if (patterns.length > 9)
+                if (dateTimePatterns.length > 9)
                 {
                     glueIndex += SHORT + 1;
                 }
