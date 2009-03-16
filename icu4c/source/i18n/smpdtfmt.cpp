@@ -567,12 +567,10 @@ void SimpleDateFormat::construct(EStyle timeStyle,
         }
         timeDateArray[1].adoptString(tempus2);
 
-        int32_t glueIndex = ures_getSize(dateTimePatterns);
-        if (glueIndex > kDateTimeOffset) {
-            glueIndex = (int32_t)(kDateTimeOffset + (dateStyle - kDateOffset));
-        }
-        else {
-            glueIndex = kDateTime;
+        int32_t glueIndex = kDateTime;
+        int32_t patternsSize = ures_getSize(dateTimePatterns);
+        if (patternsSize > kDateTime + 1) {
+            glueIndex = (int32_t)(kDateTime + (dateStyle - kDateOffset));
         }
 
         resStr = ures_getStringByIndex(dateTimePatterns, glueIndex, &resStrLen, &status);

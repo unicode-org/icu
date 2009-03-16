@@ -259,35 +259,44 @@ void RelativeDateFormat::loadDates(UErrorCode &status) {
     
     UErrorCode tempStatus = status;
     UResourceBundle *dateTimePatterns = calData.getByKey(DT_DateTimePatternsTag, tempStatus);
-    if(U_SUCCESS(tempStatus) && ures_getSize(dateTimePatterns) > DateFormat::kDateTime) {
-        int32_t resStrLen = 0;
+    if(U_SUCCESS(tempStatus)) {
+        int32_t patternsSize = ures_getSize(dateTimePatterns);
+        if (patternsSize > kDateTime) {
+            int32_t resStrLen = 0;
 
-        int32_t glueIndex = (int32_t)DateFormat::kDateTime;
-        switch (fDateStyle) {
-        case kFullRelative:
-        case kFull:
-            glueIndex = kDateTimeOffset + kFull;
-            break;
-        case kLongRelative:
-        case kLong:
-            glueIndex = kDateTimeOffset + kLong;
-            break;
-        case kMediumRelative:
-        case kMedium:
-            glueIndex = kDateTimeOffset + kMedium;
-            break;        
-        case kShortRelative:
-        case kShort:
-            glueIndex = kDateTimeOffset + kShort;
-            break;
-        default:
-            break;
+            int32_t glueIndex = kDateTime;
+            switch (fDateStyle) {
+            case kFullRelative:
+            case kFull:
+                // glueIndex is always kDateTime
+                break;
+            case kLongRelative:
+            case kLong:
+                if (patternsSize > (kDateTime + kLong)) {
+                    glueIndex = kDateTime + kLong;
+                }
+                break;
+            case kMediumRelative:
+            case kMedium:
+                if (patternsSize > (kDateTime + kMedium)) {
+                    glueIndex = kDateTime + kMedium;
+                }
+                break;        
+            case kShortRelative:
+            case kShort:
+                if (patternsSize > (kDateTime + kShort)) {
+                    glueIndex = kDateTime + kShort;
+                }
+                break;
+            default:
+                break;
+            }
+
+            const UChar *resStr = ures_getStringByIndex(dateTimePatterns, glueIndex, &resStrLen, &tempStatus);
+            fCombinedFormat = new MessageFormat(UnicodeString(TRUE, resStr, resStrLen), fLocale, tempStatus);
         }
-
-        const UChar *resStr = ures_getStringByIndex(dateTimePatterns, glueIndex, &resStrLen, &tempStatus);
-        fCombinedFormat = new MessageFormat(UnicodeString(TRUE, resStr, resStrLen), fLocale, tempStatus);
     }
-    
+
     UResourceBundle *strings = calData.getByKey3("fields", "day", "relative", status);
     // set up min/max 
     fDayMin=-1;
