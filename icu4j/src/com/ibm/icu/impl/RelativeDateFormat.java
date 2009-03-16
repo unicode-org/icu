@@ -221,7 +221,32 @@ public class RelativeDateFormat extends DateFormat {
             CalendarData calData = new CalendarData(locale, cal.getType());
             String[] patterns = calData.getDateTimePatterns();
             if (patterns != null && patterns.length >= 9) {
-                pattern = patterns[8];
+                int glueIndex = 8;
+                if (patterns.length > 9)
+                {
+                    switch (fDateStyle)
+                    {
+                        case DateFormat.RELATIVE_FULL:
+                        case DateFormat.FULL:
+                            glueIndex = DateFormat.FULL + 1;
+                            break;
+                        case DateFormat.RELATIVE_LONG:
+                        case DateFormat.LONG:
+                            glueIndex = DateFormat.LONG + 1;
+                            break;
+                        case DateFormat.RELATIVE_MEDIUM:
+                        case DateFormat.MEDIUM:
+                            glueIndex = DateFormat.MEDIUM + 1;
+                            break;
+                        case DateFormat.RELATIVE_SHORT:
+                        case DateFormat.SHORT:
+                            glueIndex = DateFormat.SHORT + 1;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                pattern = patterns[glueIndex];
             }
         } catch (MissingResourceException e) {
             // use default
