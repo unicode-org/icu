@@ -18,6 +18,7 @@
 #include "unicode/ustring.h"
 #include "unicode/ulocdata.h"
 #include "umutex.h"
+#include "uresimp.h"
 
 #define MEASUREMENT_SYSTEM  "MeasurementSystem"
 #define PAPER_SIZE          "PaperSize"
@@ -230,8 +231,8 @@ ulocdata_getPaperSize(const char* localeID, int32_t *height, int32_t *width, UEr
 U_DRAFT void U_EXPORT2
 ulocdata_getCLDRVersion(UVersionInfo versionArray, UErrorCode *status) {
     UResourceBundle *rb = NULL;
-    rb = ures_openDirect(NULL, "supplementalData", &status);
-    ures_getVersionByKey(rb, "cldrVersion", versionArray, &status);
+    rb = ures_openDirect(NULL, "supplementalData", status);
+    ures_getVersionByKey(rb, "cldrVersion", versionArray, status);
     ures_close(rb);
 }
 
