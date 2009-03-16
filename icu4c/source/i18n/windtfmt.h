@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2007, International Business Machines
+*   Copyright (C) 2005-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -125,6 +125,7 @@ private:
     void formatTime(const SYSTEMTIME *st, UnicodeString &appendTo) const;
 
     UnicodeString setTimeZoneInfo(TIME_ZONE_INFORMATION *tzi, const TimeZone &zone) const;
+    UnicodeString* getTimeDateFormat(const Calendar *cal, const Locale *locale, UErrorCode &status) const;
 
     UnicodeString *fDateTimeMsg;
     DateFormat::EStyle fTimeStyle;

@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2008, International Business Machines
+*   Copyright (C) 2005-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -52,7 +52,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Win32DateFormat)
 
 #define STACK_BUFFER_SIZE 64
 
-UnicodeString *getTimeDateFormat(const Calendar *cal, const Locale *locale, UErrorCode &status)
+UnicodeString* Win32DateFormat::getTimeDateFormat(const Calendar *cal, const Locale *locale, UErrorCode &status) const
 {
     UnicodeString *result = NULL;
     const char *type = cal->getType();
@@ -74,7 +74,14 @@ UnicodeString *getTimeDateFormat(const Calendar *cal, const Locale *locale, UErr
     }
 
     int32_t resStrLen = 0;
-    const UChar *resStr = ures_getStringByIndex(patBundle, (int32_t)DateFormat::kDateTime, &resStrLen, &status);
+    int32_t glueIndex = ures_getSize(patBundle);
+    if (glueIndex > DateFormat::kDateTimeOffset) {
+        glueIndex = (int32_t)(DateFormat::kDateTimeOffset + (fDateStyle - DateFormat::kDateOffset));
+    }
+    else {
+        glueIndex = DateFormat::kDateTime;
+    }
+    const UChar *resStr = ures_getStringByIndex(patBundle, glueIndex, &resStrLen, &status);
 
     result = new UnicodeString(TRUE, resStr, resStrLen);
 

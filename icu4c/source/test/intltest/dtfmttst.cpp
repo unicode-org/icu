@@ -76,9 +76,10 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(36,TestTimeZoneDisplayName);
         TESTCASE(37,TestRoundtripWithCalendar);
         TESTCASE(38,Test6338);
+        TESTCASE(39,Test6726);
         /*
-        TESTCASE(39,TestRelativeError);
-        TESTCASE(40,TestRelativeOther);
+        TESTCASE(40,TestRelativeError);
+        TESTCASE(41,TestRelativeOther);
         */
         default: name = ""; break;
     }
@@ -3140,6 +3141,46 @@ void DateFormatTest::Test6338(void)
     }
     delete fmt4;
 
+}
+
+void DateFormatTest::Test6726(void)
+{
+    // status
+    UErrorCode status = U_ZERO_ERROR;
+
+    // fmtf, fmtl, fmtm, fmts;
+    UnicodeString strf, strl, strm, strs;
+    UDate dt = date(2008-1900, UCAL_JUNE, 10, 12, 00);
+
+    Locale loc("ja");
+    DateFormat* fmtf = DateFormat::createDateTimeInstance(DateFormat::FULL, DateFormat::FULL, loc);
+    DateFormat* fmtl = DateFormat::createDateTimeInstance(DateFormat::LONG, DateFormat::FULL, loc);
+    DateFormat* fmtm = DateFormat::createDateTimeInstance(DateFormat::MEDIUM, DateFormat::FULL, loc);
+    DateFormat* fmts = DateFormat::createDateTimeInstance(DateFormat::SHORT, DateFormat::FULL, loc);
+    strf = fmtf->format(dt, strf);
+    strl = fmtl->format(dt, strl);
+    strm = fmtm->format(dt, strm);
+    strs = fmts->format(dt, strs);
+
+    if (strf.charAt(13) == UChar(' ')) {
+        errln((UnicodeString)"FAIL: Improper formated date: " + strf);
+    }
+    if (strl.charAt(10) == UChar(' ')) {
+        errln((UnicodeString)"FAIL: Improper formated date: " + strl);
+    }
+    if (strm.charAt(10) != UChar(' ')) {
+        errln((UnicodeString)"FAIL: Improper formated date: " + strm);
+    }
+    if (strs.charAt(8)  != UChar(' ')) {
+        errln((UnicodeString)"FAIL: Improper formated date: " + strs);
+    }
+
+    delete fmtf;
+    delete fmtl;    
+    delete fmtm;    
+    delete fmts;
+
+    return;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
