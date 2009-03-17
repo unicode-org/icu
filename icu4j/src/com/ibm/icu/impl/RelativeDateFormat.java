@@ -228,19 +228,19 @@ public class RelativeDateFormat extends DateFormat {
                     {
                         case DateFormat.RELATIVE_FULL:
                         case DateFormat.FULL:
-                            glueIndex = DateFormat.FULL + 1;
+                            //glueIndex += DateFormat.FULL;
                             break;
                         case DateFormat.RELATIVE_LONG:
                         case DateFormat.LONG:
-                            glueIndex = DateFormat.LONG + 1;
+                            glueIndex += DateFormat.LONG;
                             break;
                         case DateFormat.RELATIVE_MEDIUM:
                         case DateFormat.MEDIUM:
-                            glueIndex = DateFormat.MEDIUM + 1;
+                            glueIndex += DateFormat.MEDIUM;
                             break;
                         case DateFormat.RELATIVE_SHORT:
                         case DateFormat.SHORT:
-                            glueIndex = DateFormat.SHORT + 1;
+                            glueIndex += DateFormat.SHORT;
                             break;
                         default:
                             break;
