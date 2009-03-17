@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2008, International Business Machines
+* Copyright (c) 2004-2009, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -65,16 +65,14 @@ public abstract class Measure {
         }
     }
     
-    /**
+    /*
      * See if two numbers are identical or have the same double value.
      * @param a A number
      * @param b Another number to be compared with
      * @return Returns true if two numbers are identical or have the same double value.
-     * @draft ICU 4.0
-     * @provisional This API might change or be removed in a future release.
      */
     // TODO improve this to catch more cases (two different longs that have same double values, BigDecimals, etc)
-    public static boolean numbersEqual(Number a, Number b) {
+    private static boolean numbersEqual(Number a, Number b) {
         if (a.equals(b)) {
             return true;
         }
