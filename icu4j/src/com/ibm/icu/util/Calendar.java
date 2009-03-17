@@ -3185,7 +3185,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
         "{1} {0}",
         "{1} {0}",
         "{1} {0}",
-        "{1} {0}",
         "{1} {0}"
     };
 
@@ -3213,7 +3212,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
             int glueIndex = 8;
             if (patterns.length > 9)
             {
-                glueIndex += dateStyle + 1;
+                glueIndex += dateStyle;
             }
             pattern = MessageFormat.format(patterns[glueIndex],
                     new Object[] {patterns[timeStyle], patterns[dateStyle + 4]});

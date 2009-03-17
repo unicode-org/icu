@@ -543,7 +543,7 @@ public class SimpleDateFormat extends DateFormat {
                 int glueIndex = 8;
                 if (dateTimePatterns.length > 9)
                 {
-                    glueIndex += SHORT + 1;
+                    glueIndex += SHORT;
                 }
                 cachedDefaultPattern = MessageFormat.format(dateTimePatterns[glueIndex],
                         new Object[] {dateTimePatterns[SHORT], dateTimePatterns[SHORT + 4]});
