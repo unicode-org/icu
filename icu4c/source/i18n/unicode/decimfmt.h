@@ -733,7 +733,7 @@ public:
                     DecimalFormatSymbols* symbolsToAdopt,
                     UErrorCode& status);
 
-    /*
+    /**
      * This API is for ICU use only.
      * Create a DecimalFormat from the given pattern, symbols, and style.
      *

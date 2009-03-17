@@ -23,36 +23,34 @@
 
 U_NAMESPACE_BEGIN
 
-/*
+/**
  * The size of the internal buffer for the Collator's short description string.
  */
 #define KEY_BUFFER_SIZE 64
 
- /*
+ /**
   * The size of the internal CE buffer in a <code>CEList</code> object
   */
 #define CELIST_BUFFER_SIZE 4
 
-/*
+/**
  * Define this to enable the <code>CEList</code> objects to collect
  * statistics.
  */
 //#define INSTRUMENT_CELIST
 
- /*
+ /**
   * The size of the initial list in a <code>StringList</code> object.
   */
 #define STRING_LIST_BUFFER_SIZE 16
 
-/*
+/**
  * Define this to enable the <code>StringList</code> objects to
  * collect statistics.
  */
 //#define INSTRUMENT_STRING_LIST
 
  /**
-  * CEList
-  *
   * This object holds a list of CEs generated from a particular
   * <code>UnicodeString</code>
   *
@@ -105,7 +103,7 @@ public:
      * Check if the CEs in another <code>CEList</code> match the
      * suffix of this list starting at a give offset.
      *
-     * @param offsset - the offset of the suffix
+     * @param offset - the offset of the suffix
      * @param other - the other <code>CEList</code>
      *
      * @return <code>TRUE</code> if the CEs match, <code>FALSE</code> otherwise.
@@ -125,10 +123,13 @@ public:
      */
     uint32_t &operator[](int32_t index) const;
 
-    /*
+    /**
      * UObject glue...
      */
     virtual UClassID getDynamicClassID() const;
+    /**
+     * UObject glue...
+     */
     static UClassID getStaticClassID();
 
 private:
@@ -217,10 +218,13 @@ public:
      */
     int32_t size() const;
 
-    /*
+    /**
      * the UObject glue...
      */
     virtual UClassID getDynamicClassID() const;
+    /**
+     * the UObject glue...
+     */
     static UClassID getStaticClassID();
 
 private:
@@ -326,7 +330,7 @@ public:
     /**
      * Release a <code>CEList</code> returned by <code>getCEList</code>.
      *
-     * @param list - the <CEList> to free.
+     * @param list - the <code>CEList</code> to free.
      *
      * @internal ICU 4.0.1 technology preview
      */
@@ -358,7 +362,7 @@ public:
      *
      * @param ces - the CEs
      * @param offset - the offset of the first CE in the list to use.
-     * param history - the history list. Must be at least as long as
+     * @param history - the history list. Must be at least as long as
      *                 the number of cEs in the <code>CEList</code>
      *
      * @return the length of the shortest string.
@@ -367,10 +371,13 @@ public:
      */
    int32_t minLengthInChars(const CEList *ces, int32_t offset, int32_t *history) const;
 
-   /*
+   /**
     * UObject glue...
     */
     virtual UClassID getDynamicClassID() const;
+   /**
+    * UObject glue...
+    */
     static UClassID getStaticClassID();
 
     /**

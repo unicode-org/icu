@@ -395,6 +395,7 @@ public:
      * This version takes UCharIterator input.
      * @param sIter the first ("source") string iterator
      * @param tIter the second ("target") string iterator
+     * @param status ICU status
      * @return UCOL_LESS, UCOL_EQUAL or UCOL_GREATER
      * @draft ICU 4.2
      */

@@ -372,6 +372,7 @@ public:
      * @param commonlyUsed  if set to true it will return only commonly used values
      *                      with the given locale in preferred order.  Otherwise,
      *                      it will return all the available values for the locale.
+     * @param status        ICU Error Code
      * @return a string enumeration over keyword values for the given key and the locale.
      * @draft ICU 4.2
      */

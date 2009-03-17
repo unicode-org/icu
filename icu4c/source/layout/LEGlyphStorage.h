@@ -340,6 +340,7 @@ public:
      *
      * @param fromPosition - position of the glyph to be moved
      * @param toPosition - target position of the glyph
+     * @param marker marker bit
      *
      * @draft ICU 4.2
      */

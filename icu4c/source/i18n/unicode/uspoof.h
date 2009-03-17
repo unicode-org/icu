@@ -98,7 +98,7 @@ U_NAMESPACE_USE
  */
 
 struct USpoofChecker;
-typedef struct USpoofChecker USpoofChecker;
+typedef struct USpoofChecker USpoofChecker; /**< typedef for C of USpoofChecker */
 
 /**
  * Enum for the kinds of checks that USpoofChecker can perform.
@@ -185,7 +185,7 @@ uspoof_open(UErrorCode *status);
  *               can be more than necessary
  * @param pActualLength receives the actual number of bytes at data taken up by the data;
  *                      can be NULL
- * @param status an in/out ICU UErrorCode
+ * @param pErrorCode ICU error code
  * @return the spoof checker.
  *
  * @see uspoof_open
@@ -260,7 +260,7 @@ uspoof_clone(const USpoofChecker *sc, UErrorCode *status);
  * functions of this Spoof Checker.
  *
  * @param sc       The USpoofChecker
- * @checks         The set of checks that this spoof checker will perform.
+ * @param checks         The set of checks that this spoof checker will perform.
  *                 The value is a bit set, obtained by OR-ing together
  *                 values from enum USpoofChecks.
  * @param status   The error code, set if this function encounters a problem.
@@ -384,11 +384,6 @@ uspoof_setAllowedChars(USpoofChecker *sc, const USet *chars, UErrorCode *status)
  *
  *
  * @param sc       The USpoofChecker 
- * @param chars    A Unicode Set containing the complete list of
- *                 charcters that are permitted.  Ownership of the set
- *                 remains with the caller.  The incoming set is cloned by
- *                 this function, so there are no restrictions on modifying
- *                 or deleting the USet after calling this function.
  * @param status   The error code, set if this function encounters a problem.
  * @return         A USet containing the characters that are permitted by
  *                 the USPOOF_CHAR_LIMIT test.
@@ -454,7 +449,7 @@ uspoof_getAllowedUnicodeSet(const USpoofChecker *sc, UErrorCode *status);
  * @param length  the length of the string to be checked, expressed in
  *                16 bit UTF-16 code units, or -1 if the string is 
  *                zero terminated.
- * @position      An out parameter that receives the index of the
+ * @param position      An out parameter that receives the index of the
  *                first string position that fails the allowed character
  *                limitation checks.
  *                This parameter may be null if the position information
@@ -487,7 +482,7 @@ uspoof_check(const USpoofChecker *sc,
  * @param text    A UTF-8 string to be checked for possible security issues.
  * @param length  the length of the string to be checked, or -1 if the string is 
  *                zero terminated.
- * @position      An out parameter that receives the index of the
+ * @param position      An out parameter that receives the index of the
  *                first string position that fails the allowed character
  *                limitation checks.
  *                This parameter may be null if the position information
@@ -565,7 +560,7 @@ uspoof_checkUnicodeString(const USpoofChecker *sc,
  * @param length2 The length of the second string, expressed in
  *                16 bit UTF-16 code units, or -1 if the string is 
  *                zero terminated.
- * @position      An out parameter that receives the index of the
+ * @param position      An out parameter that receives the index of the
  *                first confusable position in the strings being checked.
  *                This parameter may be null if the position information
  *                is not needed.
@@ -606,7 +601,7 @@ uspoof_areConfusable(const USpoofChecker *sc,
  *                confusability.  The strings are in UTF-18 format.
  * @param length2 The length of the second string in bytes, or -1 
  *                if the string is zero terminated.
- * @position      An out parameter that receives the index of the
+ * @param position      An out parameter that receives the index of the
  *                first confusable position in the strings being checked.
  *                This parameter may be null if the position information
  *                is not needed.
