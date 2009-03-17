@@ -1,0 +1,13 @@
+Main-Class: com.ibm.richtext.demo.EditDemo
+Manifest-Version: 1.0
+Specification-Title: ICU for Java RichEdit
+Specification-Version: 2.6
+Specification-Vendor: ICU
+Implementation-Title: ICU for Java RichEdit
+Implementation-Version: 2.6
+Implementation-Vendor: IBM Corporation
+Implementation-Vendor-Id: com.ibm
+
+Name: com/ibm/richtext
+
+
