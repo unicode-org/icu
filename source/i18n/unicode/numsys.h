@@ -20,7 +20,7 @@
 
 /**
  * \file
- * \brief C++ API: NumberingSystems object
+ * \brief C++ API: NumberingSystem object
  */
 
 #if !UCONFIG_NO_FORMATTING
@@ -60,6 +60,7 @@ public:
     /**
      * Create the default numbering system associated with the specified locale.
      * @param inLocale The given locale.
+     * @param status ICU status
      * @draft ICU 4.2
      */
     static NumberingSystem* U_EXPORT2 createInstance(const Locale & inLocale, UErrorCode& status);
@@ -76,6 +77,7 @@ public:
      * @param isAlgorithmic TRUE if the numbering system is algorithmic rather than numeric.
      * @param description   The string representing the set of digits used in a numeric system, or the name of the RBNF
      *                      ruleset to be used in an algorithmic system.
+     * @param status ICU status
      * @draft ICU 4.2
      */
     static NumberingSystem* U_EXPORT2 createInstance(int32_t radix, UBool isAlgorithmic, const UnicodeString& description, UErrorCode& status );
@@ -90,6 +92,7 @@ public:
     /**
      * Create a numbering system from one of the predefined numbering systems known to ICU.
      * @param name   The name of the numbering system.
+     * @param status ICU status
      * @draft ICU 4.2
      */
     static NumberingSystem* U_EXPORT2 createInstanceByName(const char* name, UErrorCode& status);

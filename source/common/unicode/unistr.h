@@ -1572,7 +1572,7 @@ public:
    * Unpaired surrogates are replaced with U+FFFD.
    * Calls u_strToUTF8WithSub().
    *
-   * @param A ByteSink to which the UTF-8 version of the string is written.
+   * @param sink A ByteSink to which the UTF-8 version of the string is written.
    * @draft ICU 4.2
    * @see toUTF8String
    */

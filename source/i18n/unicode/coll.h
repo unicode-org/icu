@@ -446,6 +446,7 @@ public:
      * This version takes UCharIterator input.
      * @param sIter the first ("source") string iterator
      * @param tIter the second ("target") string iterator
+     * @param status ICU status
      * @return UCOL_LESS, UCOL_EQUAL or UCOL_GREATER
      * @draft ICU 4.2
      */
@@ -462,6 +463,7 @@ public:
      * from a std::string or a NUL-terminated const char * string.
      * @param source the first UTF-8 string
      * @param target the second UTF-8 string
+     * @param status ICU status
      * @return UCOL_LESS, UCOL_EQUAL or UCOL_GREATER
      * @draft ICU 4.2
      */
@@ -672,12 +674,13 @@ public:
      * the open (creation) of the service with the locale formed from the input locale
      * plus input keyword and that value has different behavior than creation with the
      * input locale alone.
-     * @param key           one of the keys supported by this service.  For now, only
+     * @param keyword        one of the keys supported by this service.  For now, only
      *                      "collation" is supported.
      * @param locale        the locale
      * @param commonlyUsed  if set to true it will return only commonly used values
      *                      with the given locale in preferred order.  Otherwise,
      *                      it will return all the available values for the locale.
+     * @param status ICU status
      * @return a string enumeration over keyword values for the given key and the locale.
      * @draft ICU 4.2
      */

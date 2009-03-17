@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002-2008, International Business Machines
+*   Copyright (C) 2002-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -40,7 +40,9 @@ U_NAMESPACE_BEGIN
 #define U_OVERRIDE_CXX_ALLOCATION 1
 #endif
 
-/**  U_HAVE_PLACEMENT_NEW - Define this to define the placement new and
+/** 
+ * \def U_HAVE_PLACEMENT_NEW
+ *  Define this to define the placement new and
  *                          delete in UMemory for STL.
  *
  * @stable ICU 2.6
@@ -50,7 +52,9 @@ U_NAMESPACE_BEGIN
 #endif
 
 
-/**  U_HAVE_DEBUG_LOCATION_NEW - Define this to define the MFC debug
+/** 
+ * \def U_HAVE_DEBUG_LOCATION_NEW 
+ * Define this to define the MFC debug
  * version of the operator new.
  *
  * @stable ICU 3.4
@@ -59,16 +63,18 @@ U_NAMESPACE_BEGIN
 #define U_HAVE_DEBUG_LOCATION_NEW 0
 #endif
 
-/**  U_NO_THROW - Define this to define the throw() specification so
+/**
+ * \def U_NO_THROW
+ *         Define this to define the throw() specification so
                   certain functions do not throw any exceptions
  *
  *         UMemory operator new methods should have the throw() specification 
  *         appended to them, so that the compiler adds the additional NULL check 
- *         before calling constructors. Without, if operator new returns NULL the 
+ *         before calling constructors. Without, if <code>operator new</code> returns NULL the 
  *         constructor is still called, and if the constructor references member 
  *         data, (which it typically does), the result is a segmentation violation.
  *
- * @new ICU 4.2
+ * @draft ICU 4.2
  */                              
 #ifndef U_NO_THROW
 #define U_NO_THROW throw()
