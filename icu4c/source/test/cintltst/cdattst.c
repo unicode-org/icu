@@ -170,9 +170,14 @@ static void TestDateFormat()
     else
         log_verbose("PASS: formatting successful\n");
     if(u_strcmp(result, temp)==0)
-        log_verbose("PASS: Date Format for US locale successful uisng udat_format()\n");
-    else
-        log_err("FAIL: Date Format for US locale failed using udat_format()\n");
+        log_verbose("PASS: Date Format for US locale successful using udat_format()\n");
+    else {
+        char xbuf[2048];
+        char gbuf[2048];
+        u_austrcpy(xbuf, temp);
+        u_austrcpy(gbuf, result);
+        log_err("FAIL: Date Format for US locale failed using udat_format() - expected %s got %s\n", xbuf, gbuf);
+    }
     /*format using fr */
     
     u_unescape("10 juil. 1996 16:05:28 \\u00C9tats-Unis (Los Angeles)", temp, 50);
