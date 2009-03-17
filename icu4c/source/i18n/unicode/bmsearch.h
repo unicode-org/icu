@@ -200,10 +200,13 @@ public:
      */
     GoodSuffixTable   *getGoodSuffixTable();
 
-    /*
+    /**
      * UObject glue...
      */
     virtual UClassID getDynamicClassID() const;
+    /**
+     * UObject glue...
+     */
     static UClassID getStaticClassID();
     
 private:

@@ -918,8 +918,8 @@ u_memrchr32(const UChar *s, UChar32 c, int32_t count);
  *    }
  * </pre>
  * 
- * Note that the macros will NOT consistently work if their argument is another
- * #define.  The following will not work on all platforms, don't use it.
+ * Note that the macros will NOT consistently work if their argument is another #define. 
+ *  The following will not work on all platforms, don't use it.
  * 
  * <pre>
  *     #define GLUCK "Mr. Gluck"

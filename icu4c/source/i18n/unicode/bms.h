@@ -34,7 +34,7 @@ typedef void UCD;
 /**
  * Open a <code>UCD</code> object.
  *
- * @param collator - the collator
+ * @param coll - the collator
  * @param status - will be set if any errors occur. 
  *
  * @return the <code>UCD</code> object. You must call
@@ -106,7 +106,7 @@ ucd_flushCache();
  * the pattern, the "bad character" and "good suffix" tables, the Collator-based data needed to compute them,
  * and a reference to the text being searched.
  *
- * To do a search, you fist need to get a <code>UCD</code> object by calling <code>ucd_open</code>.
+ * To do a search, you first need to get a <code>UCD</code> object by calling <code>ucd_open</code>.
  * Then you construct a <code>BMS</code> object from the <code>UCD</code> object, the pattern
  * string and the target string. Then you call the <code>search</code> method. Here's a code sample:
  *
@@ -177,14 +177,14 @@ ucd_flushCache();
  * @internal ICU 4.0.1 technology preview
  */
 struct BMS;
-typedef struct BMS BMS;
+typedef struct BMS BMS; /**< @see BMS */
 
 /**
  * Construct a <code>MBS</code> object.
  *
  * @param ucd - A <code>UCD</code> object holding the Collator-sensitive data
  * @param pattern - the string for which to search
- * @param latternLength - the length of the string for which to search
+ * @param patternLength - the length of the string for which to search
  * @param target - the string in which to search
  * @param targetLength - the length of the string in which to search
  * @param status - will be set if any errors occur. 
@@ -215,6 +215,7 @@ bms_close(BMS *bms);
 /**
  * Test the pattern to see if it generates any CEs.
  *
+ * @param bms - the <code>BMS</code> object
  * @return <code>TRUE</code> if the pattern string did not generate any CEs
  *
  * @internal ICU 4.0.1 technology preview
@@ -239,6 +240,7 @@ bms_getData(BMS *bms);
 /**
  * Search for the pattern string in the target string.
  *
+ * @param bms - the <code>BMS</code> object
  * @param offset - the offset in the target string at which to begin the search
  * @param start - will be set to the starting offset of the match, or -1 if there's no match
  * @param end - will be set to the ending offset of the match, or -1 if there's no match
@@ -253,6 +255,7 @@ bms_search(BMS *bms, int32_t offset, int32_t *start, int32_t *end);
 /**
  * Set the target string for the match.
  *
+ * @param bms - the <code>BMS</code> object
  * @param target - the new target string
  * @param targetLength - the length of the new target string
  * @param status - will be set if any errors occur. 

@@ -708,7 +708,7 @@ uset_clear(USet* set);
  *
  * @param set the set
  *
- * @param attribute bitmask for attributes to close over.
+ * @param attributes bitmask for attributes to close over.
  * Currently only the USET_CASE bit is supported.  Any undefined bits
  * are ignored.
  * @draft ICU 4.2
