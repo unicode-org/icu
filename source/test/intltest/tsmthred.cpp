@@ -11,16 +11,7 @@
 #endif
 
 /* Needed by z/OS to get usleep */
-#if !defined(_XOPEN_SOURCE_EXTENDED)
-#define _XOPEN_SOURCE_EXTENDED 1
-#endif
-
-/* Turn off standard c++ string class. This is an issue when _XOPEN_SOURCE_EXTENDED is turned on. 
- * Platforms affected: AIX/VACPP and Solaris/GCC 
- */
-#ifndef U_HAVE_STD_STRING
-#define U_HAVE_STD_STRING 0
-#endif
+#include "platform_xopen_source_extended.h"
 
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
