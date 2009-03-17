@@ -213,11 +213,6 @@ uspoof_openFromSerialized(const void *data, int32_t length, int32_t *pActualLeng
   *                    as found in the file xonfusablesWholeScript.txt from unicode.org.
   * @param confusablesWholeScriptLen The length of the whole script confusables text, or
   *                    -1 if the input string is zero terminated.
-  * @param xidModifications A pointer to the list of additions and restrictions
-  *                    to Unicode Identifier characters, as found in the
-  *                    Uniocde data file xidmodifications.txt, described in UAX-39.
-  * @param xidModificationsLen The length of the identifier modifications list, or
-  *                    -1 if the input string is zero terminated.
   * @param errType     In the event of an error in the input, indicates
   *                    which of the input files contains the error.
   *                    The value is one of USPOOF_SINGLE_SCRIPT_CONFUSABLE or
