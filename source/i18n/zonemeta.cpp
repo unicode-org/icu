@@ -228,7 +228,7 @@ parseDate (const UChar *text, UErrorCode &status) {
 
     // "yyyy" (0 - 3)
     for (idx = 0; idx <= 3 && U_SUCCESS(status); idx++) {
-        n = ASCII_DIGIT(text[idx]);
+        n = ASCII_DIGIT((int32_t)text[idx]);
         if (n >= 0) {
             year = 10*year + n;
         } else {
@@ -237,7 +237,7 @@ parseDate (const UChar *text, UErrorCode &status) {
     }
     // "MM" (5 - 6)
     for (idx = 5; idx <= 6 && U_SUCCESS(status); idx++) {
-        n = ASCII_DIGIT(text[idx]);
+        n = ASCII_DIGIT((int32_t)text[idx]);
         if (n >= 0) {
             month = 10*month + n;
         } else {
@@ -246,7 +246,7 @@ parseDate (const UChar *text, UErrorCode &status) {
     }
     // "dd" (8 - 9)
     for (idx = 8; idx <= 9 && U_SUCCESS(status); idx++) {
-        n = ASCII_DIGIT(text[idx]);
+        n = ASCII_DIGIT((int32_t)text[idx]);
         if (n >= 0) {
             day = 10*day + n;
         } else {
@@ -256,7 +256,7 @@ parseDate (const UChar *text, UErrorCode &status) {
     if (len == 16) {
         // "HH" (11 - 12)
         for (idx = 11; idx <= 12 && U_SUCCESS(status); idx++) {
-            n = ASCII_DIGIT(text[idx]);
+            n = ASCII_DIGIT((int32_t)text[idx]);
             if (n >= 0) {
                 hour = 10*hour + n;
             } else {
@@ -265,7 +265,7 @@ parseDate (const UChar *text, UErrorCode &status) {
         }
         // "mm" (14 - 15)
         for (idx = 14; idx <= 15 && U_SUCCESS(status); idx++) {
-            n = ASCII_DIGIT(text[idx]);
+            n = ASCII_DIGIT((int32_t)text[idx]);
             if (n >= 0) {
                 min = 10*min + n;
             } else {
