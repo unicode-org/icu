@@ -45,12 +45,12 @@ _createTimeZone(const UChar* zoneID, int32_t len, UErrorCode* ec) {
 
 U_CAPI UEnumeration* U_EXPORT2
 ucal_openTimeZones(UErrorCode* ec) {
-    return uenum_openStringEnumeration(TimeZone::createEnumeration(), ec);
+    return uenum_openFromStringEnumeration(TimeZone::createEnumeration(), ec);
 }
 
 U_CAPI UEnumeration* U_EXPORT2
 ucal_openCountryTimeZones(const char* country, UErrorCode* ec) {
-    return uenum_openStringEnumeration(TimeZone::createEnumeration(country), ec);
+    return uenum_openFromStringEnumeration(TimeZone::createEnumeration(country), ec);
 }
 
 U_CAPI int32_t U_EXPORT2
