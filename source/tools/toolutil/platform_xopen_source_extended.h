@@ -7,6 +7,8 @@
 #ifndef _PLATFORM_XOPEN_SOURCE_EXTENDED_H
 #define _PLATFORM_XOPEN_SOURCE_EXTENDED_H
 
+#include "unicode/utypes.h"
+
 /*
  * z/OS needs this definition for timeval and to get usleep.
  * We move this definition out of the various source files because
