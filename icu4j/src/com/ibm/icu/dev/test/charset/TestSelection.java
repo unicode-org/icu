@@ -114,40 +114,36 @@ public class TestSelection extends TestFmwk {
          * not sure if this is an allowed practice in ICU
          */
         int encodingsTestCases[] = { 
-              92, 90, 92, 93, 94, 95, 96, 97, 98, 99, -1,
-              
-              // The tests below could be used for more comprehensive testing
-/*              100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, -1,
-                1, 3, 7, 9, 11, 13, 12, 15, 19, 20, 22, 24, -1, 0, 1, 2, 3, 4,
-                5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-                22, 23, 24, 25, -1, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22,
-                24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54,
-                56, -1, 1, 5, 9, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
-                24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, -1, 0,
-                1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
-                19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
-                35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
-                51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66,
-                67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82,
-                83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98,
-                99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
-                112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123,
-                124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135,
-                136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147,
-                148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
-                160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171,
-                172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183,
-                184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195,
-                196, 197, 198, 199, 200, -1, 
-                1, -1                
-*/             };
+                90, 92, 93, 94, 95, 96,
+                -1, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
+                -1, 1, 3, 7, 9, 11, 13, 12, 15, 19, 20, 22, 24, -1, 0, 1, 2, 3,
+                4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+                21, 22, 23, 24, 25, -1, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20,
+                22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52,
+                54, 56, -1, 1, 5, 9, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+                23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, -1,
+                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
+                18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
+                34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
+                50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65,
+                66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81,
+                82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97,
+                98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110,
+                111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122,
+                123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134,
+                135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146,
+                147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158,
+                159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170,
+                171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182,
+                183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194,
+                195, 196, 197, 198, 199, 200, -1, 1, -1 };
 
         UnicodeSet[] excludedSets = new UnicodeSet[3];
         excludedSets[0] = new UnicodeSet();
         for (int i = 1; i < 3; i++) {
             excludedSets[i] = new UnicodeSet(i * 30, i * 30 + 500);
         }
-
+        
         for (int excludedSetId = 0; excludedSetId < 3; excludedSetId++) {
             for (int testCaseIdx = 0, prev = 0; testCaseIdx < encodingsTestCases.length; testCaseIdx++) {
                 if (encodingsTestCases[testCaseIdx] != -1)
@@ -165,6 +161,11 @@ public class TestSelection extends TestFmwk {
                     verifyResultUTF16(texts[i], encodings, result,
                             excludedSets[excludedSetId],
                             CharsetICU.ROUNDTRIP_SET);
+                    
+                    // Return after running one test when we are not running exhaustive tests
+                    if (getInclusion() < 6) {
+                      return;    
+                    }
                 }
                 prev = testCaseIdx + 1;
             }
@@ -172,6 +173,34 @@ public class TestSelection extends TestFmwk {
     }
     
     private String[] texts = {
+            "Cos\'\u00E8 Unicode?\n\nUnicode assegna un numero univoco a ogni carattere,\nindipendentemente dalla piattaforma," +
+            "\nindipendentemente dall\'applicazione,\nindipendentemente dalla lingua.\n\nI computer, in buona sostanza," +
+            " non sanno far altro che trattare numeri. Per immagazzinare in memoria lettere o altri segni \u00E8 necessario" +
+            " che a ogni carattere venga assegnato un numero. Esistono centinaia di sistemi di codifica, preesistenti a " +
+            "Unicode, e ognuno di questi abbina i numeri ai caratteri in modo differente. Nessuna di queste codifiche " +
+            "comprende un numero di caratteri sufficiente per tutte le circostanze. Per le sole lingue dell\'Unione " +
+            "Europea, ad esempio, \u00E8 necessario utilizzare parecchi sistemi di codifica distinti. Anche considerando " +
+            "una solo lingua, come l\'italiano, non esiste una codifica unica che comprenda tutte le lettere e tutti i " +
+            "segni di punteggiatura e simboli tecnici di uso comune.\n\nQuesti sistemi di codifica, inoltre, sono in " +
+            "contraddizione l\'uno con l\'altro. Succede che due codifiche utilizzino lo stesso numero per due caratteri " +
+            "diversi o che, viceversa, adottino numeri diversi per lo stesso carattere. Qualsiasi elaboratore, e a maggior " +
+            "ragione un server di rete, ha bisogno di utilizzare codifiche diverse. Il problema \u00E8 che, quando i dati " +
+            "passano da una codifica a un\'altra, o da una piattaforma a un\'altra, si corre il serio rischio di perdere " +
+            "informazioni.\nUnicode sta cambiando le cose!\n\nUnicode attribuisce un numero univoco a ogni carattere, " +
+            "indipendentemente dalla piattaforma, dall\'applicativo, dalla lingua. Lo standard Unicode \u00E8 stato " +
+            "adottato da leader di mercato del calibro di Apple, HP, IBM, JustSystem, Microsoft, Oracle, SAP, Sun, " +
+            "Sybase, Unisys e molti altri. Unicode \u00E8 alla base di molti moderni standard, come XML, Java, ECMAScript " +
+            "(JavaScript), LDAP, CORBA 3.0, WML eccetera, e costituisce l\'implementazione ufficiale dello standard " +
+            "internazionale ISO/IEC 10646. Unicode \u00E8 supportato da molti sistemi operativi, da tutti i pi\u00F9 " +
+            "moderni web browser e da molti altri prodotti. L\'emergere dello standard Unicode, unito alla recente " +
+            "disponibilit\u00E0 di strumenti che lo supportano, \u00E8 fra i pi\u00F9 significativi sviluppi della " +
+            "tecnologia della globalizzazione del software.\n\nL\'adozione di Unicode sui siti web e nelle applicazioni " +
+            "client/server o multi-tiered, rispetto all\'utilizzo dei set di caratteri tradizionali, permette un " +
+            "significativo abbattimento dei costi di gestione. Unicode consente che un\'unica versione di un software " +
+            "o di un sito web siano fruibili con piattaforme, lingue e paesi diversi, evitando la necessit\u00E0 di " +
+            "reingenierizzare il prodotto per ogni situazione specifica. Permette, inoltre, il trasporto del testo " +
+            "fra sistemi diversi senza che abbia luogo alcuna corruzione dei dati.\n",
+            
             "\u0427\u0442\u043E \u0442\u0430\u043A\u043E\u0435 Unicode? Unicode - \u044D\u0442\u043E" +
             " \u0443\u043D\u0438\u043A\u0430\u043B\u044C\u043D\u044B\u0439 \u043A\u043E\u0434" +
             " \u0434\u043B\u044F \u043B\u044E\u0431\u043E\u0433\u043E \u0441\u0438\u043C\u0432\u043E\u043B\u0430," +
@@ -334,8 +363,7 @@ public class TestSelection extends TestFmwk {
             "\u043F\u0440\u0435\u0434\u043E\u0445\u0440\u0430\u043D\u044F\u0435\u0442 \u044D\u0442\u0438 " +
             "\u0434\u0430\u043D\u043D\u044B\u0435 \u043E\u0442 \u043F\u043E\u0432\u0440\u0435\u0436\u0434\u0435",
             
-         // The tests below could be used for more comprehensive testing
-/*            "\u0645\u0627 \u0647\u064A \u0627\u0644\u0634\u0641\u0631\u0629 \u0627\u0644\u0645\u0648\u062D\u062F\u0629 " +
+            "\u0645\u0627 \u0647\u064A \u0627\u0644\u0634\u0641\u0631\u0629 \u0627\u0644\u0645\u0648\u062D\u062F\u0629 " +
             "\"\u064A\u0648\u0646\u0650\u0643\u0648\u062F\" \u061F\n\n\u0623\u0633\u0627\u0633\u064B\u0627\u060C " +
             "\u062A\u062A\u0639\u0627\u0645\u0644 \u0627\u0644\u062D\u0648\u0627\u0633\u064A\u0628 \u0641\u0642\u0637 \u0645\u0639 " +
             "\u0627\u0644\u0623\u0631\u0642\u0627\u0645\u060C \u0648\u062A\u0642\u0648\u0645 \u0628\u062A\u062E\u0632\u064A\u0646 " +
@@ -686,34 +714,6 @@ public class TestSelection extends TestFmwk {
             "\u0E19\u0E42\u0E25\u0E22\u0E35\u0E0B\u0E2D\u0E1F\u0E15\u0E4C\u0E41\u0E27\u0E23\u0E4C\u0E23\u0E30\u0E14\u0E31" +
             "\u0E1A\u0E42\u0E25\u0E01\u0E17\u0E35\u0E48\u0E21\u0E35\u0E04\u0E27\u0E32\u0E21\u0E2A\u0E33\u0E04\n",
             
-            "Cos\'\u00E8 Unicode?\n\nUnicode assegna un numero univoco a ogni carattere,\nindipendentemente dalla piattaforma," +
-            "\nindipendentemente dall\'applicazione,\nindipendentemente dalla lingua.\n\nI computer, in buona sostanza," +
-            " non sanno far altro che trattare numeri. Per immagazzinare in memoria lettere o altri segni \u00E8 necessario" +
-            " che a ogni carattere venga assegnato un numero. Esistono centinaia di sistemi di codifica, preesistenti a " +
-            "Unicode, e ognuno di questi abbina i numeri ai caratteri in modo differente. Nessuna di queste codifiche " +
-            "comprende un numero di caratteri sufficiente per tutte le circostanze. Per le sole lingue dell\'Unione " +
-            "Europea, ad esempio, \u00E8 necessario utilizzare parecchi sistemi di codifica distinti. Anche considerando " +
-            "una solo lingua, come l\'italiano, non esiste una codifica unica che comprenda tutte le lettere e tutti i " +
-            "segni di punteggiatura e simboli tecnici di uso comune.\n\nQuesti sistemi di codifica, inoltre, sono in " +
-            "contraddizione l\'uno con l\'altro. Succede che due codifiche utilizzino lo stesso numero per due caratteri " +
-            "diversi o che, viceversa, adottino numeri diversi per lo stesso carattere. Qualsiasi elaboratore, e a maggior " +
-            "ragione un server di rete, ha bisogno di utilizzare codifiche diverse. Il problema \u00E8 che, quando i dati " +
-            "passano da una codifica a un\'altra, o da una piattaforma a un\'altra, si corre il serio rischio di perdere " +
-            "informazioni.\nUnicode sta cambiando le cose!\n\nUnicode attribuisce un numero univoco a ogni carattere, " +
-            "indipendentemente dalla piattaforma, dall\'applicativo, dalla lingua. Lo standard Unicode \u00E8 stato " +
-            "adottato da leader di mercato del calibro di Apple, HP, IBM, JustSystem, Microsoft, Oracle, SAP, Sun, " +
-            "Sybase, Unisys e molti altri. Unicode \u00E8 alla base di molti moderni standard, come XML, Java, ECMAScript " +
-            "(JavaScript), LDAP, CORBA 3.0, WML eccetera, e costituisce l\'implementazione ufficiale dello standard " +
-            "internazionale ISO/IEC 10646. Unicode \u00E8 supportato da molti sistemi operativi, da tutti i pi\u00F9 " +
-            "moderni web browser e da molti altri prodotti. L\'emergere dello standard Unicode, unito alla recente " +
-            "disponibilit\u00E0 di strumenti che lo supportano, \u00E8 fra i pi\u00F9 significativi sviluppi della " +
-            "tecnologia della globalizzazione del software.\n\nL\'adozione di Unicode sui siti web e nelle applicazioni " +
-            "client/server o multi-tiered, rispetto all\'utilizzo dei set di caratteri tradizionali, permette un " +
-            "significativo abbattimento dei costi di gestione. Unicode consente che un\'unica versione di un software " +
-            "o di un sito web siano fruibili con piattaforme, lingue e paesi diversi, evitando la necessit\u00E0 di " +
-            "reingenierizzare il prodotto per ogni situazione specifica. Permette, inoltre, il trasporto del testo " +
-            "fra sistemi diversi senza che abbia luogo alcuna corruzione dei dati.\n",
-            
             "\u4EC0\u4E48\u662FUnicode(\u7EDF\u4E00\u7801)?\n\nUnicode\u7ED9\u6BCF\u4E2A\u5B57\u7B26\u63D0\u4F9B\u4E86" +
             "\u4E00\u4E2A\u552F\u4E00\u7684\u6570\u5B57\uFF0C\n\u4E0D\u8BBA\u662F\u4EC0\u4E48\u5E73\u53F0\uFF0C\n\u4E0D" +
             "\u8BBA\u662F\u4EC0\u4E48\u7A0B\u5E8F\uFF0C\n\u4E0D\u8BBA\u662F\u4EC0\u4E48\u8BED\u8A00\u3002\n\n\u57FA\u672C" +
@@ -926,6 +926,5 @@ public class TestSelection extends TestFmwk {
             "margs konar fyrirt\u00E6kja og stofnana \u00ED t\u00F6lvu- og uppl\u00FDsingai\u00F0na\u00F0inum. Samt\u00F6kin" +
             " hafa eing\u00F6ngu tekjur af a\u00F0ildargj\u00F6ldum s\u00EDnum. Fyrirt\u00E6ki, stofnanir og einstaklingar " +
             "hvar sem er \u00ED heiminum sem \u00F3"
-*/
             };
 }
