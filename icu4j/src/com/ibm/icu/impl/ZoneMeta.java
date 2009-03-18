@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2008 International Business Machines
+* Copyright (c) 2003-2009 International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
-import java.util.Vector;
 
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.NumberFormat;
@@ -94,7 +93,10 @@ public final class ZoneMeta {
         return EMPTY;
     }
     public static synchronized String[] getAvailableIDs(int offset){
-        Vector vector = new Vector();
+        if(!getOlsonMeta()){
+            return EMPTY;
+        }
+        LinkedList vector = new LinkedList();
         for (int i=0; i<OLSON_ZONE_COUNT; ++i) {
             String unistr;
             if ((unistr=getID(i))!=null) {
