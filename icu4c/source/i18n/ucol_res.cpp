@@ -708,7 +708,7 @@ ucol_openAvailableLocales(UErrorCode *status) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
-    return uenum_openStringEnumeration(s, status);
+    return uenum_openFromStringEnumeration(s, status);
 }
 #endif
 

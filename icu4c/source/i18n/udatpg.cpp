@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2007, International Business Machines
+*   Copyright (C) 2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -221,14 +221,14 @@ udatpg_replaceFieldTypes(UDateTimePatternGenerator *dtpg,
 
 U_DRAFT UEnumeration * U_EXPORT2
 udatpg_openSkeletons(const UDateTimePatternGenerator *dtpg, UErrorCode *pErrorCode) {
-    return uenum_openStringEnumeration(
+    return uenum_openFromStringEnumeration(
                 ((DateTimePatternGenerator *)dtpg)->getSkeletons(*pErrorCode),
                 pErrorCode);
 }
 
 U_DRAFT UEnumeration * U_EXPORT2
 udatpg_openBaseSkeletons(const UDateTimePatternGenerator *dtpg, UErrorCode *pErrorCode) {
-    return uenum_openStringEnumeration(
+    return uenum_openFromStringEnumeration(
                 ((DateTimePatternGenerator *)dtpg)->getBaseSkeletons(*pErrorCode),
                 pErrorCode);
 }
