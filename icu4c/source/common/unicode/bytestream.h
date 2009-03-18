@@ -29,70 +29,84 @@
 U_NAMESPACE_BEGIN
 
 /** 
- * A ByteSink can be filled with bytes
+ * A ByteSink can be filled with bytes.
  * @draft ICU 4.2
  */
 class U_COMMON_API ByteSink : public UMemory {
 public:
   /**
+   * Default constructor.
    * @draft ICU 4.2
    */
   ByteSink() { }
   /**
+   * Virtual destructor.
    * @draft ICU 4.2
    */    
   virtual ~ByteSink() { }
 
   /**
    * Append "bytes[0,n-1]" to this.
+   * @param bytes the pointer to the bytes
+   * @param n the number of bytes; must be non-negative
    * @draft ICU 4.2
    */
   virtual void Append(const char* bytes, int32_t n) = 0;
  
- /**
-  *  Returns a writable buffer for appending and writes the buffer's capacity to
-  *  *result_capacity. Guarantees *result_capacity>=min_capacity.
-  *  May return a pointer to the caller-owned scratch buffer which must have
-  *  scratch_capacity>=min_capacity.
-  *  The returned buffer is only valid until the next operation
-  *  on this ByteSink.
-  * 
-  *  After writing at most *result_capacity bytes, call Append() with the
-  *  pointer returned from this function and the number of bytes written.
-  *  Many Append() implementations will avoid copying bytes if this function
-  *  returned an internal buffer.
-  * 
-  *  Partial usage example:
-  *   int32_t capacity;
-  *   char* buffer = sink->GetAppendBuffer(..., &capacity);
-  *   ... Write n bytes into buffer, with n <= capacity.
-  *   sink->Append(buffer, n);
-  *  In many implementations, that call to Append will avoid copying bytes.
-  * 
-  *  If the ByteSink allocates or reallocates an internal buffer, it should use
-  *  the desired_capacity_hint if appropriate.
-  *  If a caller cannot provide a reasonable guess at the desired capacity,
-  *  it should pass desired_capacity_hint=0.
-  * 
-  *  If a non-scratch buffer is returned, the caller may only pass
-  *  a prefix to it to Append().
-  *  That is, it is not correct to pass an interior pointer to Append().
-  * 
-  *  The default implementation always returns the scratch buffer.
-  *  @draft ICU 4.2
-  */
+  /**
+   * Returns a writable buffer for appending and writes the buffer's capacity to
+   * *result_capacity. Guarantees *result_capacity>=min_capacity.
+   * May return a pointer to the caller-owned scratch buffer which must have
+   * scratch_capacity>=min_capacity.
+   * The returned buffer is only valid until the next operation
+   * on this ByteSink.
+   *
+   * After writing at most *result_capacity bytes, call Append() with the
+   * pointer returned from this function and the number of bytes written.
+   * Many Append() implementations will avoid copying bytes if this function
+   * returned an internal buffer.
+   *
+   * Partial usage example:
+   *  int32_t capacity;
+   *  char* buffer = sink->GetAppendBuffer(..., &capacity);
+   *  ... Write n bytes into buffer, with n <= capacity.
+   *  sink->Append(buffer, n);
+   * In many implementations, that call to Append will avoid copying bytes.
+   *
+   * If the ByteSink allocates or reallocates an internal buffer, it should use
+   * the desired_capacity_hint if appropriate.
+   * If a caller cannot provide a reasonable guess at the desired capacity,
+   * it should pass desired_capacity_hint=0.
+   *
+   * If a non-scratch buffer is returned, the caller may only pass
+   * a prefix to it to Append().
+   * That is, it is not correct to pass an interior pointer to Append().
+   *
+   * The default implementation always returns the scratch buffer.
+   *
+   * @param min_capacity required minimum capacity of the returned buffer;
+   *                     must be non-negative
+   * @param desired_capacity_hint desired capacity of the returned buffer;
+   *                              must be non-negative
+   * @param scratch default caller-owned buffer
+   * @param scratch_capacity capacity of the scratch buffer
+   * @param result_capacity pointer to an integer which will be set to the
+   *                        capacity of the returned buffer
+   * @return a buffer with *result_capacity>=min_capacity
+   * @draft ICU 4.2
+   */
   virtual char* GetAppendBuffer(int32_t min_capacity,
                                 int32_t desired_capacity_hint,
                                 char* scratch, int32_t scratch_capacity,
                                 int32_t* result_capacity);
 
- /**
-  *  Flush internal buffers.
-  *  Some byte sinks use internal buffers or provide buffering
-  *  and require calling Flush() at the end of the stream.
-  *  The default implementation of Flush() does nothing.
-  *  @draft ICU 4.2
-  */
+  /**
+   * Flush internal buffers.
+   * Some byte sinks use internal buffers or provide buffering
+   * and require calling Flush() at the end of the stream.
+   * The default implementation of Flush() does nothing.
+   * @draft ICU 4.2
+   */
   virtual void Flush();
 
 private:
@@ -115,14 +129,31 @@ private:
 class U_COMMON_API CheckedArrayByteSink : public ByteSink {
 public:
   /**
+   * Constructs a ByteSink that will write to outbuf[0..capacity-1].
+   * @param outbuf buffer to write to
+   * @param capacity size of the buffer
    * @draft ICU 4.2
    */
   CheckedArrayByteSink(char* outbuf, int32_t capacity);
   /**
+   * Append "bytes[0,n-1]" to this.
+   * @param bytes the pointer to the bytes
+   * @param n the number of bytes; must be non-negative
    * @draft ICU 4.2
    */
   virtual void Append(const char* bytes, int32_t n);
   /**
+   * Returns a writable buffer for appending and writes the buffer's capacity to
+   * *result_capacity. For details see the base class documentation.
+   * @param min_capacity required minimum capacity of the returned buffer;
+   *                     must be non-negative
+   * @param desired_capacity_hint desired capacity of the returned buffer;
+   *                              must be non-negative
+   * @param scratch default caller-owned buffer
+   * @param scratch_capacity capacity of the scratch buffer
+   * @param result_capacity pointer to an integer which will be set to the
+   *                        capacity of the returned buffer
+   * @return a buffer with *result_capacity>=min_capacity
    * @draft ICU 4.2
    */
   virtual char* GetAppendBuffer(int32_t min_capacity,
@@ -131,12 +162,14 @@ public:
                                 int32_t* result_capacity);
   /**
    * Returns the number of bytes actually written to the sink.
+   * @return number of bytes written to the buffer
    * @draft ICU 4.2
    */
   int32_t NumberOfBytesWritten() const { return size_; }
   /**
    * Returns true if any bytes were discarded, i.e., if there was an
    * attempt to write more than 'capacity' bytes.
+   * @return TRUE if more than 'capacity' bytes were Append()ed
    * @draft ICU 4.2
    */
   UBool Overflowed() const { return overflowed_; }
@@ -154,16 +187,22 @@ private:
 
 /** 
  * Implementation of ByteSink that writes to a "string".
+ * The StringClass is usually instantiated with a std::string.
  * @draft ICU 4.2
  */
 template<typename StringClass>
 class StringByteSink : public ByteSink {
  public:
   /**
+   * Constructs a ByteSink that will append bytes to the dest string.
+   * @param dest pointer to string object to append to
    * @draft ICU 4.2
    */
   StringByteSink(StringClass* dest) : dest_(dest) { }
   /**
+   * Append "bytes[0,n-1]" to this.
+   * @param bytes the pointer to the bytes
+   * @param n the number of bytes; must be non-negative
    * @draft ICU 4.2
    */
   virtual void Append(const char* data, int32_t n) { dest_->append(data, n); }
