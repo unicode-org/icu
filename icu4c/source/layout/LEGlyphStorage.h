@@ -325,11 +325,32 @@ public:
      *
      * @return the address at which to store the replacement glyphs.
      *
-     * @see LEInsetionList.h
+     * @see LEInsertionList.h
+     *
+     * @draft ICU 4.2
+     */
+    LEGlyphID *insertGlyphs(le_int32 atIndex, le_int32 insertCount, LEErrorCode& success);
+
+    /**
+     * Call this method to replace a single glyph in the glyph array
+     * with multiple glyphs. This method uses the <code>LEInsertionList</code>
+     * to do the insertion. It returns the address of storage where the new
+     * glyph IDs can be stored. They will not actually be inserted into the
+     * glyph array until <code>applyInsertions</code> is called.
+     *
+     * Note: Don't use this version, use the other version of this function which has an error code.
+     *
+     * @param atIndex the index of the glyph to be replaced
+     * @param insertCount the number of glyphs to replace it with
+     * @param success set to an error code if the auxillary data cannot be retrieved.
+     *
+     * @return the address at which to store the replacement glyphs.
+     *
+     * @see LEInsertionList.h
      *
      * @stable ICU 3.0
      */
-    LEGlyphID *insertGlyphs(le_int32 atIndex, le_int32 insertCount, LEErrorCode& success);
+    LEGlyphID *insertGlyphs(le_int32 atIndex, le_int32 insertCount);
 
     /**
      * This method is used to reposition glyphs during Indic v2 processing.  It moves 
