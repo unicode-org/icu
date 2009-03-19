@@ -47,12 +47,10 @@ typedef enum ULocaleDataExemplarSetType  {
   * @stable ICU 3.4
   */
 typedef enum ULocaleDataDelimiterType {
-#ifndef U_HIDE_DRAFT_API
     ULOCDATA_QUOTATION_START = 0,     /* Quotation start */
      ULOCDATA_QUOTATION_END = 1,       /* Quotation end */
      ULOCDATA_ALT_QUOTATION_START = 2, /* Alternate quotation start */
      ULOCDATA_ALT_QUOTATION_END = 3,   /* Alternate quotation end */
-#endif
      ULOCDATA_DELIMITER_COUNT = 4
 } ULocaleDataDelimiterType;
 

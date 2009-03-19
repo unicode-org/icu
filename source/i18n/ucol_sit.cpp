@@ -801,8 +801,6 @@ U_CDECL_END
  * @param conts the set to hold the result
  * @param status to hold the error code
  * @return the size of the contraction set
- *
- * @draft ICU 3.0
  */
 U_CAPI int32_t U_EXPORT2
 ucol_getContractions( const UCollator *coll,
