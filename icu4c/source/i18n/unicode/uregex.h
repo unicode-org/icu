@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2004-2008, International Business Machines
+*   Copyright (C) 2004-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  regex.h
@@ -31,7 +31,7 @@
 
 struct URegularExpression;
 /**
-  * Structure represeting a compiled regular rexpression, plus the results
+  * Structure representing a compiled regular rexpression, plus the results
   *    of a match operation.
   * @stable ICU 3.0
   */

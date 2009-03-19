@@ -165,8 +165,8 @@ class U_COMMON_API StringPiece : public UMemory {
    * @return the substring StringPiece
    * @draft ICU 4.2
    */
-  StringPiece substr(int32_t pos, int32_t n = npos) const {
-    return StringPiece(*this, pos, n);
+  StringPiece substr(int32_t pos, int32_t len = npos) const {
+    return StringPiece(*this, pos, len);
   }
 };
 
