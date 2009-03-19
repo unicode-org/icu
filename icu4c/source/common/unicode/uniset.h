@@ -305,7 +305,7 @@ public:
      *
      * @return TRUE if the set is valid, FALSE otherwise
      * @see setToBogus()
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     inline UBool isBogus(void) const;
     
@@ -323,7 +323,7 @@ public:
      * take a UErrorCode for simplicity.
      *
      * @see isBogus()
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     void setToBogus();
 

@@ -873,7 +873,7 @@ ucnv_getStarters(const UConverter* converter,
 typedef enum UConverterUnicodeSet {
     /** Select the set of roundtrippable Unicode code points. @stable ICU 2.6 */
     UCNV_ROUNDTRIP_SET,
-    /** Select the set of Unicode code points with roundtrip or fallback mappings. @draft ICU 4.0 */
+    /** Select the set of Unicode code points with roundtrip or fallback mappings. @stable ICU 4.0 */
     UCNV_ROUNDTRIP_AND_FALLBACK_SET,
     /** Number of UConverterUnicodeSet selectors. @stable ICU 2.6 */
     UCNV_SET_COUNT

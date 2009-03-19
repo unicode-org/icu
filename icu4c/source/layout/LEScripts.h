@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2008. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2009, All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
@@ -164,7 +164,7 @@ enum ScriptCodes {
     moonScriptCode = 114,
     mteiScriptCode = 115,
 
-    /** New script codes from ISO 15924 @draft ICU 4.0 */
+    /** New script codes from ISO 15924 @stable ICU 4.0 */
     armiScriptCode = 116,
     avstScriptCode = 117,
     cakmScriptCode = 118,

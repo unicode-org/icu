@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2008. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2009. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
@@ -65,7 +65,7 @@ enum LanguageCodes {
     zhsLanguageCode = 28,
     zhtLanguageCode = 29,
 
-    /** New langauges codes added 03/13/2008 @draft ICU 4.0 */
+    /** New language codes added 03/13/2008 @stable ICU 4.0 */
     afkLanguageCode = 30,
     belLanguageCode = 31,
     bgrLanguageCode = 32,

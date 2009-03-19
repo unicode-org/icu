@@ -1,5 +1,5 @@
 /********************************************************************************
-* Copyright (C) 2008, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 2008-2009, International Business Machines Corporation and others. All Rights Reserved.
 *******************************************************************************
 *
 * File DTITVFMT.H
@@ -229,7 +229,7 @@ public:
      * @param skeleton  the skeleton on which interval format based.
      * @param status    output param set to success/failure code on exit
      * @return          a date time interval formatter which the caller owns.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     static DateIntervalFormat* U_EXPORT2 createInstance(
                                                const UnicodeString& skeleton,
@@ -261,7 +261,7 @@ public:
      * @param locale    the given locale
      * @param status    output param set to success/failure code on exit
      * @return          a date time interval formatter which the caller owns.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
 
     static DateIntervalFormat* U_EXPORT2 createInstance(
@@ -282,7 +282,7 @@ public:
      * @param dtitvinf  the DateIntervalInfo object. 
      * @param status    output param set to success/failure code on exit
      * @return          a date time interval formatter which the caller owns.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     static DateIntervalFormat* U_EXPORT2 createInstance(
                                               const UnicodeString& skeleton,
@@ -322,7 +322,7 @@ public:
      * @param dtitvinf  the DateIntervalInfo object.
      * @param status    output param set to success/failure code on exit
      * @return          a date time interval formatter which the caller owns.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     static DateIntervalFormat* U_EXPORT2 createInstance(
                                               const UnicodeString& skeleton,
@@ -332,7 +332,7 @@ public:
 
     /**
      * Destructor.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     virtual ~DateIntervalFormat();
 
@@ -340,7 +340,7 @@ public:
      * Clone this Format object polymorphically. The caller owns the result and
      * should delete it when done.
      * @return    A copy of the object.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     virtual Format* clone(void) const;
 
@@ -349,7 +349,7 @@ public:
      * of different subclasses are considered unequal.
      * @param other    the object to be compared with.
      * @return         true if the given Format objects are semantically equal.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     virtual UBool operator==(const Format& other) const;
 
@@ -358,7 +358,7 @@ public:
      * Objects of different subclasses are considered unequal.
      * @param other the object to be compared with.
      * @return      true if the given Format objects are not semantically equal.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     UBool operator!=(const Format& other) const;
 
@@ -376,7 +376,7 @@ public:
      *                          On output: the offsets of the alignment field.
      * @param status            Output param filled with success/failure status.
      * @return                  Reference to 'appendTo' parameter.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     virtual UnicodeString& format(const Formattable& obj,
                                   UnicodeString& appendTo,
@@ -395,7 +395,7 @@ public:
      *                          On output: the offsets of the alignment field.
      * @param status            Output param filled with success/failure status.
      * @return                  Reference to 'appendTo' parameter.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     UnicodeString& format(const DateInterval* dtInterval,
                           UnicodeString& appendTo,
@@ -421,7 +421,7 @@ public:
      *                          Caller needs to make sure it is SUCCESS
      *                          at the function entrance
      * @return                  Reference to 'appendTo' parameter.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     UnicodeString& format(Calendar& fromCalendar,
                           Calendar& toCalendar,
@@ -464,7 +464,7 @@ public:
      * Gets the date time interval patterns.
      * @return the date time interval patterns associated with
      * this date interval formatter.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     const DateIntervalInfo* getDateIntervalInfo(void) const;
 
@@ -473,7 +473,7 @@ public:
      * Set the date time interval patterns. 
      * @param newIntervalPatterns   the given interval patterns to copy.
      * @param status          output param set to success/failure code on exit
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     void setDateIntervalInfo(const DateIntervalInfo& newIntervalPatterns,
                              UErrorCode& status);
@@ -482,7 +482,7 @@ public:
     /**
      * Gets the date formatter
      * @return the date formatter associated with this date interval formatter.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     const DateFormat* getDateFormat(void) const;
 
@@ -495,7 +495,7 @@ public:
      * .       erived::getStaticClassID()) ...
      * </pre>
      * @return          The class ID for all objects of this class.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     static UClassID U_EXPORT2 getStaticClassID(void);
 
@@ -508,7 +508,7 @@ public:
      * @return          The class ID for this object. All objects of a
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     virtual UClassID getDynamicClassID(void) const;
 
@@ -516,13 +516,13 @@ protected:
 
     /**
      * Copy constructor.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     DateIntervalFormat(const DateIntervalFormat&);
 
     /**
      * Assignment operator.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     DateIntervalFormat& operator=(const DateIntervalFormat&);
 

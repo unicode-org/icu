@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2008, International Business Machines
+*   Copyright (C) 2002-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  regex.h
@@ -771,7 +771,7 @@ public:
      * @param start  The index to begin searches at.
      * @param limit  The index to end searches at (exclusive).
      * @param status A reference to a UErrorCode to receive any errors.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
      virtual RegexMatcher &region(int32_t start, int32_t limit, UErrorCode &status);
 
@@ -782,7 +782,7 @@ public:
      * regionEnd (exclusive).
      *
      * @return The starting index of this matcher's region.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
      virtual int32_t regionStart() const;
 
@@ -793,7 +793,7 @@ public:
       * (inclusive) and regionEnd (exclusive).
       *
       * @return The ending point of this matcher's region.
-      * @draft ICU 4.0
+      * @stable ICU 4.0
       */
       virtual int32_t regionEnd() const;
 
@@ -803,7 +803,7 @@ public:
       * By default, a matcher uses opaque region boundaries.
       *
       * @return TRUE if this matcher is using opaque bounds, false if it is not.
-      * @draft ICU 4.0
+      * @stable ICU 4.0
       */
       virtual UBool hasTransparentBounds() const;
 
@@ -823,7 +823,7 @@ public:
       *
       * @param   b TRUE for transparent bounds; FALSE for opaque bounds
       * @return  This Matcher;
-      * @draft   ICU 4.0
+      * @stable ICU 4.0
       **/
       virtual RegexMatcher &useTransparentBounds(UBool b);
 
@@ -833,7 +833,7 @@ public:
       * By default, matchers use anchoring region boounds.
       *
       * @return TRUE if this matcher is using anchoring bounds.
-      * @draft  ICU 4.0
+      * @stable ICU 4.0
       */    
       virtual UBool hasAnchoringBounds() const;
 
@@ -847,7 +847,7 @@ public:
       *
       * @param b TRUE if to enable anchoring bounds; FALSE to disable them.
       * @return  This Matcher
-      * @draft   ICU 4.0
+      * @stable ICU 4.0
       */
       virtual RegexMatcher &useAnchoringBounds(UBool b);
 
@@ -861,7 +861,7 @@ public:
       *  reached at any point during the matching process.
       *
       *  @return  TRUE if the most recent match hit the end of input
-      *  @draft   ICU 4.0
+      *  @stable ICU 4.0
       */
       virtual UBool hitEnd() const;
 
@@ -872,7 +872,7 @@ public:
       * then requireEnd has no meaning.
       *
       * @return TRUE if more input could cause the most recent match to no longer match.
-      * @draft  ICU 4.0
+      * @stable ICU 4.0
       */
       virtual UBool requireEnd() const;
 
@@ -1022,7 +1022,7 @@ public:
     *
     *   @param   limit       The limit value, or 0 for no limit.
     *   @param   status      A reference to a UErrorCode to receive any errors.
-    *   @draft ICU 4.0
+    *   @stable ICU 4.0
     */
     virtual void setTimeLimit(int32_t limit, UErrorCode &status);
 
@@ -1030,7 +1030,7 @@ public:
     * Get the time limit, if any, for match operations made with this Matcher.
     *
     *   @return the maximum allowed time for a match, in units of processing steps.
-    *   @draft ICU 4.0
+    *   @stable ICU 4.0
     */
     virtual int32_t getTimeLimit() const;
 
@@ -1053,7 +1053,7 @@ public:
     *
     *  @param status   A reference to a UErrorCode to receive any errors.
     *
-    *  @draft ICU 4.0
+    *  @stable ICU 4.0
     */
     virtual void setStackLimit(int32_t  limit, UErrorCode &status);
     
@@ -1062,7 +1062,7 @@ public:
     *
     *  @return  the maximum backtracking stack size, in bytes, or zero if the
     *           stack size is unlimited.
-    *  @draft ICU 4.0
+    *  @stable ICU 4.0
     */
     virtual int32_t  getStackLimit() const;
 
@@ -1078,7 +1078,7 @@ public:
     *                         time the callback function is set will be saved
     *                         and passed to the callback each time that it is called.
     *    @param   status      A reference to a UErrorCode to receive any errors.
-    *  @draft ICU 4.0
+    *  @stable ICU 4.0
     */
     virtual void setMatchCallback(URegexMatchCallback     *callback,
                                   const void              *context,
@@ -1094,7 +1094,7 @@ public:
     *    @param   context     Out parameter, receives the user context pointer that
     *                         was set when uregex_setMatchCallback() was called.
     *    @param   status      A reference to a UErrorCode to receive any errors.
-    *    @draft ICU 4.0
+    *    @stable ICU 4.0
     */
     virtual void getMatchCallback(URegexMatchCallback     *&callback,
                                   const void              *&context,

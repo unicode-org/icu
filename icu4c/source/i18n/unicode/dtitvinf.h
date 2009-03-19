@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and
+ * Copyright (C) 2008-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  *
@@ -162,7 +162,7 @@ U_CDECL_END
  * DateIntervalInfo are not expected to be subclassed. 
  * Data for a calendar is loaded out of resource bundles. 
  * To ICU 4.0, date interval patterns are only supported in Gregorian calendar. 
- * @draft ICU 4.0
+ * @stable ICU 4.0
 **/
 
 class U_I18N_API DateIntervalInfo : public UObject {
@@ -188,20 +188,20 @@ public:
      * @param locale  the interval patterns are loaded from the Gregorian 
      *                calendar data in this locale.
      * @param status  output param set to success/failure code on exit
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     DateIntervalInfo(const Locale& locale, UErrorCode& status);
 
 
     /**
      * Copy constructor.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     DateIntervalInfo(const DateIntervalInfo&);
 
     /**
      * Assignment operator
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     DateIntervalInfo& operator=(const DateIntervalInfo&);
 
@@ -209,14 +209,14 @@ public:
      * Clone this object polymorphically.
      * The caller owns the result and should delete it when done.
      * @return   a copy of the object
-     * @draft    ICU 4.0
+     * @stable ICU 4.0
      */
     virtual DateIntervalInfo* clone(void) const;
 
     /**
      * Destructor.
      * It is virtual to be safe, but it is not designed to be subclassed.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     virtual ~DateIntervalInfo();
 
@@ -271,7 +271,7 @@ public:
      *                         "year", the interval pattern for en_US when year
      *                         is different could be "'from' yyyy 'to' yyyy".
      * @param status           output param set to success/failure code on exit
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     void setIntervalPattern(const UnicodeString& skeleton, 
                             UCalendarDateFields lrgDiffCalUnit, 
@@ -286,7 +286,7 @@ public:
      * @param result     output param to receive the pattern
      * @param status     output param set to success/failure code on exit
      * @return a reference to 'result'
-     * @draft ICU 4.0 
+     * @stable ICU 4.0 
      */
     UnicodeString& getIntervalPattern(const UnicodeString& skeleton,
                                       UCalendarDateFields field,
@@ -297,7 +297,7 @@ public:
      * Get the fallback interval pattern.
      * @param  result   output param to receive the pattern
      * @return a reference to 'result'
-     * @draft ICU 4.0 
+     * @stable ICU 4.0 
      */
     UnicodeString& getFallbackIntervalPattern(UnicodeString& result) const;
 
@@ -313,7 +313,7 @@ public:
      *
      * @param fallbackPattern  fall-back interval pattern.
      * @param status           output param set to success/failure code on exit
-     * @draft ICU 4.0 
+     * @stable ICU 4.0 
      */
     void setFallbackIntervalPattern(const UnicodeString& fallbackPattern,
                                     UErrorCode& status);
@@ -323,7 +323,7 @@ public:
                              or not.
      * return default date ordering in interval pattern. TRUE if the first date
      *        in pattern is later date, FALSE otherwise.
-     * @draft ICU 4.0 
+     * @stable ICU 4.0 
      */
     UBool getDefaultOrder() const;
 
