@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #*
 #*******************************************************************************
-#*   Copyright (C) 2006, International Business Machines
+#*   Copyright (C) 2006-2009, International Business Machines
 #*   Corporation and others.  All Rights Reserved.
 #*******************************************************************************
 #*
@@ -71,7 +71,7 @@ sub main(){
   $internalFile   = "$srcDir/internal.html";
   
   $versionAppend = $version;
-  $versionAppend=~ s/\./_/;
+  $versionAppend=~ s/^([0-9]+)\.([0-9]+).*/\1_\2/;
   $excludeFH = IO::File->new($exclude,"r")
             or die  "could not open the file $exclude for reading: $! \n";
   my %exclude;
