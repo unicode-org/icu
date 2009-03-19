@@ -1039,7 +1039,7 @@ public:
     /**
      * @return a code point IF the string consists of a single one.
      * otherwise returns -1.
-     * @param string to test
+     * @param s string to test
      */
     static int32_t getSingleCP(const UnicodeString& s);
 

@@ -247,6 +247,7 @@ public:
       * @return pattern string for currencyMatch, surroundingMatch or spaceInsert.
       *     Return empty string if there is no data for this locale and its parent
       *     locales.
+      * @draft ICU 4.2
       */
      const UnicodeString& getPatternForCurrencySpacing(ECurrencySpacing type,
                                                  UBool beforeCurrency,
@@ -259,6 +260,7 @@ public:
        * @param beforeCurrency : true if the pattern is for before currency symbol.
        *                         false if the pattern is for after currency symbol.
        * @param pattern : pattern string to override current setting.
+       * @draft ICU 4.2
        */
      void setPatternForCurrencySpacing(ECurrencySpacing type,
                                        UBool beforeCurrency,
