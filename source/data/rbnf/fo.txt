@@ -1,0 +1,86 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/fo.xml
+// *
+// ***************************************************************************
+fo{
+    RBNFRules{
+        OrdinalRules{
+            "%%dordabbrev:\n",
+            "0: '.;\n",
+            "%ordinal:\n",
+            "0: =#,##0==%%dordabbrev=;\n",
+        }
+        SpelloutRules{
+            "%%feminine:\n",
+            "0: null; ein; tv\u00E6r; tr\u00EDggjar; f\u00FDre; fimm; seks; sjey; \u00E1tta; n\u00EDggju;\n",
+            "10: t\u00EDggju; ellivu; t\u00F3lv; trettan; fj\u00FArtan; f\u00EDmtan; sekstan; seytan; \u00E1tjan; n\u00EDtjan;\n",
+            "20: tj\u00FAgo[\u00AD>>];\n",
+            "30: tr\u00EDati[\u00AD>>];\n",
+            "40: f\u00FDrati[\u00AD>>];\n",
+            "50: fimmti[\u00AD>>];\n",
+            "60: seksti[\u00AD>>];\n",
+            "70: sjeyti[\u00AD>>];\n",
+            "80: \u00E1ttati[\u00AD>>];\n",
+            "90: n\u00EDti[\u00AD>>];\n",
+            "100: <%%neuter<\u00ADhundra\u00F0[\u00ADog\u00AD>>];\n",
+            "1000: =#,##0.#=;\n",
+            "%%neuter:\n",
+            "0: null; eitt; tvey; tr\u00FD; f\u00FDre; fimm; seks; sjey; \u00E1tta; n\u00EDggju;\n",
+            "10: t\u00EDggju; ellivu; t\u00F3lv; trettan; fj\u00FArtan; f\u00EDmtan; sekstan; seytan; \u00E1tjan; n\u00EDtjan;\n",
+            "20: tj\u00FAgo[\u00AD>>];\n",
+            "30: tr\u00EDati[\u00AD>>];\n",
+            "40: f\u00FDrati[\u00AD>>];\n",
+            "50: fimmti[\u00AD>>];\n",
+            "60: seksti[\u00AD>>];\n",
+            "70: sjeyti[\u00AD>>];\n",
+            "80: \u00E1ttati[\u00AD>>];\n",
+            "90: n\u00EDti[\u00AD>>];\n",
+            "100: <<\u00ADhundra\u00F0[\u00ADog\u00AD>>];\n",
+            "1000: =#,##0.#=;\n",
+            "%spellout:\n",
+            "0: null; ein; tveir; tr\u00EDggir; f\u00FDre; fimm; seks; sjey; \u00E1tta; n\u00EDggju;\n",
+            "10: t\u00EDggju; ellivu; t\u00F3lv; trettan; fj\u00FArtan; f\u00EDmtan; sekstan; seytan; \u00E1tjan; n\u00EDtjan;\n",
+            "20: tj\u00FAgo[\u00AD>>];\n",
+            "30: tr\u00EDati[\u00AD>>];\n",
+            "40: f\u00FDrati[\u00AD>>];\n",
+            "50: fimmti[\u00AD>>];\n",
+            "60: seksti[\u00AD>>];\n",
+            "70: sjeyti[\u00AD>>];\n",
+            "80: \u00E1ttati[\u00AD>>];\n",
+            "90: n\u00EDti[\u00AD>>];\n",
+            "100: <%%neuter<\u00ADhundra\u00F0[\u00ADog\u00AD>>];\n",
+            "1000: <%%neuter< tusin[ og >>];\n",
+            "1000000: ein milli\u00F3n[ og >>];\n",
+            "2000000: <%%feminine< milli\u00F3ner[ og >>];\n",
+            "1000000000: ein milliard[ og >>];\n",
+            "2000000000: <%%feminine< milliarder[ og >>];\n",
+            "1000000000000: ein billi\u00F3n[ og >>];\n",
+            "2000000000000: <%%feminine< billi\u00F3ner[ og >>];\n",
+            "1000000000000000: ein billiard[ og >>];\n",
+            "2000000000000000: <%%feminine< billiarder[ og >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: minus >>;\n",
+            "x.x: << komma >>;\n",
+            "%year:\n",
+            "0: null; ein; tvey; tr\u00FD; f\u00FDre; fimm; seks; sjey; \u00E1tta; n\u00EDggju;\n",
+            "10: t\u00EDggju; ellivu; t\u00F3lv; trettan; fj\u00FArtan; f\u00EDmtan; sekstan; seytan; \u00E1tjan; n\u00EDtjan;\n",
+            "20: tj\u00FAgo[\u00AD>>];\n",
+            "30: tr\u00EDati[\u00AD>>];\n",
+            "40: f\u00FDrati[\u00AD>>];\n",
+            "50: fimmti[\u00AD>>];\n",
+            "60: seksti[\u00AD>>];\n",
+            "70: sjeyti[\u00AD>>];\n",
+            "80: \u00E1ttati[\u00AD>>];\n",
+            "90: n\u00EDti[\u00AD>>];\n",
+            "100: <<\u00ADhundra\u00F0[\u00ADog\u00AD>>];\n",
+            "1000: tusin[\u00ADog\u00AD>>];\n",
+            "1100/100: <<\u00ADhundra\u00F0[\u00ADog\u00AD>>];\n",
+            "10000: =%spellout=;\n",
+        }
+    }
+    Version{"1.4"}
+}

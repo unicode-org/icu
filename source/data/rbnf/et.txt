@@ -1,0 +1,32 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/et.xml
+// *
+// ***************************************************************************
+et{
+    RBNFRules{
+        SpelloutRules{
+            "%spellout:\n",
+            "0: null; \u00FCks; kaks; kolm; neli; viis; kuus; seitse; kaheksa; \u00FCheksa;\n",
+            "10: k\u00FCmme; >>\u00ADteist;\n",
+            "20: <<\u00ADk\u00FCmmend[ >>];\n",
+            "100: <<\u00ADsada[ >>];\n",
+            "1000: << tuhat[ >>];\n",
+            "1000000: << miljon[ >>];\n",
+            "2000000: << miljonit[ >>];\n",
+            "1000000000: << miljard[ >>];\n",
+            "2000000000: << miljardit[ >>];\n",
+            "1000000000000: << biljon[ >>];\n",
+            "2000000000000: << biljonit[ >>];\n",
+            "1000000000000000: << biljard[ >>];\n",
+            "2000000000000000: << biljardit[ >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: miinus >>;\n",
+            "x.x: << koma >>;\n",
+        }
+    }
+    Version{"1.3"}
+}

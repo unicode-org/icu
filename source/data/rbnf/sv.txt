@@ -1,0 +1,92 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/sv.xml
+// *
+// ***************************************************************************
+sv{
+    RBNFRules{
+        OrdinalRules{
+            "%%dord_mascabbrev:\n",
+            "0: :e;\n",
+            "%ordinal:\n",
+            "0: =#,##0==%%dord_mascabbrev=;\n",
+        }
+        SpelloutRules{
+            "%%neuter:\n",
+            "0: noll; ett; =%%reale=;\n",
+            "-x: minus >>;\n",
+            "x.x: << komma >>;\n",
+            "%%reale:\n",
+            "0: noll; en; tv\u00E5; tre; fyra; fem; sex; sju; \u00E5tta; nio;\n",
+            "10: tio; elva; tolv; tretton; fjorton; femton; sexton; sjutton; arton; nitton;\n",
+            "20: tjugo[>>];\n",
+            "30: trettio[>>];\n",
+            "40: fyrtio[>>];\n",
+            "50: femtio[>>];\n",
+            "60: sextio[>>];\n",
+            "70: sjuttio[>>];\n",
+            "80: \u00E5ttio[>>];\n",
+            "90: nittio[>>];\n",
+            "100: <%%neuter<hundra[>>];\n",
+            "1000: ettusen[>>];\n",
+            "2000: <<tusen[>>];\n",
+            "1000000: en miljon[ >>];\n",
+            "2000000: << miljoner[ >>];\n",
+            "1000000000: en miljard[ >>];\n",
+            "2000000000: << miljarder[ >>];\n",
+            "1000000000000: en biljon[ >>];\n",
+            "2000000000000: << biljoner[ >>];\n",
+            "1000000000000000: en biljard[ >>];\n",
+            "2000000000000000: << biljarder[ >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: minus >>;\n",
+            "x.x: << komma >>;\n",
+            "%spellout:\n",
+            "0: noll; ett; tv\u00E5; tre; fyra; fem; sex; sju; \u00E5tta; nio;\n",
+            "10: tio; elva; tolv; tretton; fjorton; femton; sexton; sjutton; arton; nitton;\n",
+            "20: tjugo[>>];\n",
+            "30: trettio[>>];\n",
+            "40: fyrtio[>>];\n",
+            "50: femtio[>>];\n",
+            "60: sextio[>>];\n",
+            "70: sjuttio[>>];\n",
+            "80: \u00E5ttio[>>];\n",
+            "90: nittio[>>];\n",
+            "100: <<hundra[>>];\n",
+            "1000: ettusen[>>];\n",
+            "2000: <<tusen[>>];\n",
+            "20000/1000: <<tusen[>>];\n",
+            "1000000: en miljon[ >>];\n",
+            "2000000: <%%reale< miljoner[ >>];\n",
+            "1000000000: en miljard[ >>];\n",
+            "2000000000: <%%reale< miljarder[ >>];\n",
+            "1000000000000: en biljon[ >>];\n",
+            "2000000000000: <%%reale< biljoner[ >>];\n",
+            "1000000000000000: en biljard[ >>];\n",
+            "2000000000000000: <%%reale< biljarder[ >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: minus >>;\n",
+            "x.x: << komma >>;\n",
+            "%year:\n",
+            "0: noll; ett; tv\u00E5; tre; fyra; fem; sex; sju; \u00E5tta; nio;\n",
+            "10: tio; elva; tolv; tretton; fjorton; femton; sexton; sjutton; arton; nitton;\n",
+            "20: tjugo[>>];\n",
+            "30: trettio[>>];\n",
+            "40: fyrtio[>>];\n",
+            "50: femtio[>>];\n",
+            "60: sextio[>>];\n",
+            "70: sjuttio[>>];\n",
+            "80: \u00E5ttio[>>];\n",
+            "90: nittio[>>];\n",
+            "100: <<hundra[>>];\n",
+            "1000: tusen[>>];\n",
+            "1100/100: <<hundra[>>];\n",
+            "10000: =%spellout=;\n",
+            "-x: minus >>;\n",
+        }
+    }
+    Version{"1.5"}
+}

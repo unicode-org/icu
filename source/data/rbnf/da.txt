@@ -1,0 +1,64 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/da.xml
+// *
+// ***************************************************************************
+da{
+    RBNFRules{
+        OrdinalRules{
+            "%%ordabbrev:\n",
+            "0: '.;\n",
+            "%ordinal:\n",
+            "0: =#,##0==%%ordabbrev=;\n",
+        }
+        SpelloutRules{
+            "%spellout:\n",
+            "0: nul; en; to; tre; fire; fem; seks; syv; otte; ni;\n",
+            "10: ti; elve; tolv; tretten; fjorten; femten; seksten; sytten; atten; nitten;\n",
+            "20: [>>\u00ADog\u00AD]tyve;\n",
+            "30: [>>\u00ADog\u00AD]tredive;\n",
+            "40: [>>\u00ADog\u00AD]fyrre;\n",
+            "50: [>>\u00ADog\u00AD]halvtreds;\n",
+            "60: [>>\u00ADog\u00AD]tres;\n",
+            "70: [>>\u00ADog\u00AD]halvfjerds;\n",
+            "80: [>>\u00ADog\u00AD]firs;\n",
+            "90: [>>\u00ADog\u00AD]halvfems;\n",
+            "100: <<\u00ADhundrede[ og >>];\n",
+            "200: <<\u00ADhundred[ og >>];\n",
+            "1000: << tusinde[ og >>];\n",
+            "2000: << tusind[ og >>];\n",
+            "1000000: en million[ og >>];\n",
+            "2000000: << millioner[ og >>];\n",
+            "1000000000: en milliard[ og >>];\n",
+            "2000000000: << milliarder[ og >>];\n",
+            "1000000000000: en billion[ og >>];\n",
+            "2000000000000: << billioner[ og >>];\n",
+            "1000000000000000: en billiard[ og >>];\n",
+            "2000000000000000: << billiarder[ og >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: minus >>;\n",
+            "x.x: << komma >>;\n",
+            "%year:\n",
+            "0: nul; en; to; tre; fire; fem; seks; syv; otte; ni;\n",
+            "10: ti; elve; tolv; tretten; fjorten; femten; seksten; sytten; atten; nitten;\n",
+            "20: [>>\u00ADog\u00AD]tyve;\n",
+            "30: [>>\u00ADog\u00AD]tredive;\n",
+            "40: [>>\u00ADog\u00AD]fyrre;\n",
+            "50: [>>\u00ADog\u00AD]halvtreds;\n",
+            "60: [>>\u00ADog\u00AD]tres;\n",
+            "70: [>>\u00ADog\u00AD]halvfjerds;\n",
+            "80: [>>\u00ADog\u00AD]firs;\n",
+            "90: [>>\u00ADog\u00AD]halvfems;\n",
+            "100: <<\u00ADhundrede[ og >>];\n",
+            "200: <<\u00ADhundred[ og >>];\n",
+            "1000: tusinde[ og >>];\n",
+            "1100/100: <<\u00ADhundred[ og >>];\n",
+            "10000: =%spellout=;\n",
+            "-x: minus >>;\n",
+        }
+    }
+    Version{"1.4"}
+}

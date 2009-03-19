@@ -1,0 +1,2313 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/hr.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/hr.xml
+ */
+hr{
+    AuxExemplarCharacters{"[q w-y]"}
+    Countries{
+        001{"Svijet"}
+        002{"Afrika"}
+        003{"Sjevernoamerički kontinent"}
+        005{"Južna Amerika"}
+        009{"Oceanija"}
+        011{"Zapadna Afrika"}
+        013{"Centralna Amerika"}
+        014{"Istočna Afrika"}
+        015{"Sjeverna Afrika"}
+        017{"Središnja Afrika"}
+        018{"Južna Afrika"}
+        019{"Amerike"}
+        021{"Sjeverna Amerika"}
+        029{"Karibi"}
+        030{"Istočna Azija"}
+        034{"Južna Azija"}
+        035{"Jugoistočna Azija"}
+        039{"Južna Europa"}
+        053{"Australija i Novi Zeland"}
+        054{"Melanezija"}
+        057{"Micronezija"}
+        061{"Polinezija"}
+        062{"Južno-centralna Azija"}
+        142{"Azija"}
+        143{"Srednja Azija"}
+        145{"Zapadna Azija"}
+        150{"Europa"}
+        151{"Istočna Europa"}
+        154{"Sjeverna Europa"}
+        155{"Zapadna Europa"}
+        419{"Latinska Amerika i Karibi"}
+        830{"Kanalski otoci"}
+        AD{"Andora"}
+        AE{"Ujedinjeni Arapski Emirati"}
+        AF{"Afganistan"}
+        AG{"Antigua i Barbuda"}
+        AI{"Anguila"}
+        AL{"Albanija"}
+        AM{"Armenija"}
+        AN{"Nizozemski Antili"}
+        AO{"Angola"}
+        AQ{"Antarktik"}
+        AR{"Argentina"}
+        AS{"Američka Samoa"}
+        AT{"Austrija"}
+        AU{"Australija"}
+        AW{"Aruba"}
+        AX{"Alandski otoci"}
+        AZ{"Azerbajdžan"}
+        BA{"Bosna i Hercegovina"}
+        BB{"Barbados"}
+        BD{"Bangladeš"}
+        BE{"Belgija"}
+        BF{"Burkina Faso"}
+        BG{"Bugarska"}
+        BH{"Bahrein"}
+        BI{"Burundi"}
+        BJ{"Benin"}
+        BM{"Bermuda"}
+        BN{"Brunei"}
+        BO{"Bolivija"}
+        BR{"Brazil"}
+        BS{"Bahami"}
+        BT{"Butan"}
+        BV{"Otok Bouvet"}
+        BW{"Bocvana"}
+        BY{"Bjelorusija"}
+        BZ{"Belize"}
+        CA{"Kanada"}
+        CC{"Kokosovi Otoci"}
+        CD{"Demokratska Republika Kongo"}
+        CF{"Srednjoafrička Republika"}
+        CG{"Kongo"}
+        CH{"Švicarska"}
+        CI{"Obala Bjelokosti"}
+        CK{"Kukovi Otoci"}
+        CL{"Čile"}
+        CM{"Kamerun"}
+        CN{"Kina"}
+        CO{"Kolumbija"}
+        CR{"Kostarika"}
+        CS{"Srbija i Crna Gora"}
+        CU{"Kuba"}
+        CV{"Zeleni Rt"}
+        CX{"Božićni Otoci"}
+        CY{"Cipar"}
+        CZ{"Češka Republika"}
+        DE{"Njemačka"}
+        DJ{"Džibuti"}
+        DK{"Danska"}
+        DM{"Dominika"}
+        DO{"Dominikanska Republika"}
+        DZ{"Alžir"}
+        EC{"Ekvador"}
+        EE{"Estonija"}
+        EG{"Egipat"}
+        EH{"Zapadna Sahara"}
+        ER{"Eritreja"}
+        ES{"Španjolska"}
+        ET{"Etiopija"}
+        FI{"Finska"}
+        FJ{"Fidži"}
+        FK{"Falklandski Otoci"}
+        FM{"Mikronezija"}
+        FO{"Farski Otoci"}
+        FR{"Francuska"}
+        GA{"Gabon"}
+        GB{"Velika Britanija"}
+        GD{"Grenada"}
+        GE{"Gruzija"}
+        GF{"Francuska Gvajana"}
+        GG{"Guernsey"}
+        GH{"Gana"}
+        GI{"Gibraltar"}
+        GL{"Greenland"}
+        GM{"Gambija"}
+        GN{"Gvineja"}
+        GP{"Guadeloupe"}
+        GQ{"Ekvatorska Gvineja"}
+        GR{"Grčka"}
+        GS{"Južna Gruzija i Južni Sendvič Otoci"}
+        GT{"Gvatemala"}
+        GU{"Guam"}
+        GW{"Gvineja Bisau"}
+        GY{"Gvajana"}
+        HK{"Hong Kong S.A.R. Kine"}
+        HM{"Otok Heard i Otoci McDonald"}
+        HN{"Honduras"}
+        HR{"Hrvatska"}
+        HT{"Haiti"}
+        HU{"Mađarska"}
+        ID{"Indonezija"}
+        IE{"Irska"}
+        IL{"Izrael"}
+        IM{"Otok Man"}
+        IN{"Indija"}
+        IO{"Britanski Teritorij Indijskog Oceana"}
+        IQ{"Irak"}
+        IR{"Iran"}
+        IS{"Island"}
+        IT{"Italija"}
+        JE{"Jersey"}
+        JM{"Jamajka"}
+        JO{"Jordan"}
+        JP{"Japan"}
+        KE{"Kenija"}
+        KG{"Kirgistan"}
+        KH{"Kambodža"}
+        KI{"Kiribati"}
+        KM{"Komori"}
+        KN{"Sveti Kristofor i Nevis"}
+        KP{"Koreja, Sjeverna"}
+        KR{"Južna Koreja"}
+        KW{"Kuvajt"}
+        KY{"Kajmanski Otoci"}
+        KZ{"Kazakstan"}
+        LA{"Laoska Narodna Demokratska Republika"}
+        LB{"Libanon"}
+        LC{"Sveta Lucija"}
+        LI{"Lihtenštajn"}
+        LK{"Šri Lanka"}
+        LR{"Liberija"}
+        LS{"Lesoto"}
+        LT{"Litva"}
+        LU{"Luksemburg"}
+        LV{"Latvija"}
+        LY{"Libijska Arapska Džamahirija"}
+        MA{"Maroko"}
+        MC{"Monako"}
+        MD{"Moldavija"}
+        ME{"Crna Gora"}
+        MF{"Sveti Martin"}
+        MG{"Madagaskar"}
+        MH{"Maršalovi Otoci"}
+        MK{"Bivša Jugoslavenska Republika Makedonija"}
+        ML{"Mali"}
+        MM{"Mijanma"}
+        MN{"Mongolija"}
+        MO{"Makao S.A.R. Kine"}
+        MP{"Sjeverni Marianski Otoci"}
+        MQ{"Martinik"}
+        MR{"Mauritanija"}
+        MS{"Montserat"}
+        MT{"Malta"}
+        MU{"Mauricijus"}
+        MV{"Maldivi"}
+        MW{"Malavi"}
+        MX{"Meksiko"}
+        MY{"Malezija"}
+        MZ{"Mozambik"}
+        NA{"Namibija"}
+        NC{"Nova Kaledonija"}
+        NE{"Niger"}
+        NF{"Norfolški Otoci"}
+        NG{"Nigerija"}
+        NI{"Nikaragva"}
+        NL{"Nizozemska"}
+        NO{"Norveška"}
+        NP{"Nepal"}
+        NR{"Nauru"}
+        NU{"Niue"}
+        NZ{"Novi Zeland"}
+        OM{"Oman"}
+        PA{"Panama"}
+        PE{"Peru"}
+        PF{"Francuska Polinezija"}
+        PG{"Papua Nova Gvineja"}
+        PH{"Filipini"}
+        PK{"Pakistan"}
+        PL{"Poljska"}
+        PM{"Sveti Petar i Miguel"}
+        PN{"Pitcairn"}
+        PR{"Portoriko"}
+        PS{"Palestinska Teritoija"}
+        PT{"Portugal"}
+        PW{"Palau"}
+        PY{"Paragvaj"}
+        QA{"Katar"}
+        QO{"Ostala oceanija"}
+        QU{"Europska Unija"}
+        RE{"Reunion"}
+        RO{"Rumunjska"}
+        RS{"Srbija"}
+        RU{"Rusija"}
+        RW{"Ruanda"}
+        SA{"Saudijska Arabija"}
+        SB{"Salamunovi Otoci"}
+        SC{"Sejšeli"}
+        SD{"Sudan"}
+        SE{"Švedska"}
+        SG{"Singapur"}
+        SH{"Sveta Helena"}
+        SI{"Slovenija"}
+        SJ{"Svalbard i Jan Mayen"}
+        SK{"Slovačka"}
+        SL{"Sijera Leone"}
+        SM{"San Marino"}
+        SN{"Senegal"}
+        SO{"Somalija"}
+        SR{"Surinam"}
+        ST{"Sveti Toma i Prinsipe"}
+        SV{"El Salvador"}
+        SY{"Sirija"}
+        SZ{"Svazi"}
+        TC{"Turkski i Kaikos Otoci"}
+        TD{"Čad"}
+        TF{"Francuski Južni Teritoriji"}
+        TG{"Togo"}
+        TH{"Tajland"}
+        TJ{"Tadžikistan"}
+        TK{"Tokelau"}
+        TL{"Istočni Timor"}
+        TM{"Turkmenistan"}
+        TN{"Tunis"}
+        TO{"Tonga"}
+        TR{"Turska"}
+        TT{"Trinidad i Tobago"}
+        TV{"Tuvalu"}
+        TW{"Tajvan"}
+        TZ{"Tanzanija"}
+        UA{"Ukrajina"}
+        UG{"Uganda"}
+        UM{"Ujedinjene Države Manjih Pacifičkih Otoka"}
+        US{"Sjedinjene Države"}
+        UY{"Urugvaj"}
+        UZ{"Uzbekistan"}
+        VA{"Grad Vatikan"}
+        VC{"Sveti Vincent i Grenadini"}
+        VE{"Venezuela"}
+        VG{"Britanski Djevičanski Otoci"}
+        VI{"Američki Djevičanski Otoci"}
+        VN{"Vijetnam"}
+        VU{"Vanuatu"}
+        WF{"Wallis i Futuna"}
+        WS{"Samoa"}
+        YE{"Jemen"}
+        YT{"Majote"}
+        ZA{"Južnoafrička Republika"}
+        ZM{"Zambija"}
+        ZW{"Zimbabve"}
+        ZZ{"nepoznata ili nevažeća oblast"}
+    }
+    Currencies{
+        ADP{
+            "ADP",
+            "andorska pezeta",
+        }
+        AED{
+            "AED",
+            "UAE dirham",
+        }
+        AFA{
+            "AFA",
+            "afganistanski afgani (1927.-2002.)",
+        }
+        ALL{
+            "lek",
+            "Albanski lek",
+        }
+        AMD{
+            "dram",
+            "Armenian Dram",
+        }
+        AOA{
+            "Kz",
+            "Angolska kvanza",
+        }
+        AOK{
+            "AOK",
+            "Angolska kvanza (1977-1990)",
+        }
+        AON{
+            "AON",
+            "angolska nova kvanza (1990-2000)",
+        }
+        AOR{
+            "AOR",
+            "angolska kvanza (1995.-1999.)",
+        }
+        ARA{
+            "₳",
+            "argentinski austral",
+        }
+        ARP{
+            "ARP",
+            "Argentinski pezo (1983-1985)",
+        }
+        ARS{
+            "Arg$",
+            "Argentinski pezo",
+        }
+        ATS{
+            "ATS",
+            "Austrijski šiling",
+        }
+        AUD{
+            "$A",
+            "Australski dolar",
+        }
+        AWG{
+            "Afl.",
+            "arupski gulden",
+        }
+        AZM{
+            "AZM",
+            "Azerbejdžanski manat",
+        }
+        BAD{
+            "BAD",
+            "bosansko-hercegovački dinar",
+        }
+        BAM{
+            "KM",
+            "Konvertibilna marka",
+        }
+        BBD{
+            "BDS$",
+            "Barbadoski dolar",
+        }
+        BDT{
+            "Tk",
+            "Taka",
+        }
+        BEF{
+            "BF",
+            "Belgijski franak",
+        }
+        BGL{
+            "BGL",
+            "bugarski čvrsti lev",
+        }
+        BGN{
+            "BGN",
+            "bugarski novi lev",
+        }
+        BHD{
+            "BD",
+            "bahreinski dinar",
+        }
+        BMD{
+            "Ber$",
+            "Bermudski dolar",
+        }
+        BND{
+            "BN$",
+            "Brunejski dolar",
+        }
+        BOB{
+            "Bs",
+            "bolivijano",
+        }
+        BOP{
+            "$b.",
+            "bolivijski pezo",
+        }
+        BOV{
+            "BOV",
+            "bolivijski mvdol",
+        }
+        BRC{
+            "Cz$",
+            "BRC",
+        }
+        BRL{
+            "R$",
+            "Brazilski Real",
+        }
+        BSD{
+            "BS$",
+            "bahamski dolar",
+        }
+        BWP{
+            "BWP",
+            "pula",
+        }
+        BYB{
+            "BYB",
+            "bjeloruska nova rublja (1994-1999)",
+        }
+        BYR{
+            "BYR",
+            "bjeloruska rublja",
+        }
+        BZD{
+            "BZ$",
+            "belizeanski dolar",
+        }
+        CAD{
+            "Can$",
+            "Kanadski dolar",
+        }
+        CDF{
+            "CDF",
+            "kongoanski franak",
+        }
+        CHF{
+            "SwF",
+            "Švicarski franak",
+        }
+        CLF{
+            "CLF",
+            "Chilean Unidades de Fomento",
+        }
+        CLP{
+            "Ch$",
+            "Čileanski pezo",
+        }
+        CNY{
+            "CN¥",
+            "Kineski Yuan Renminbi",
+        }
+        COP{
+            "Col$",
+            "Kolumbijski pezo",
+        }
+        CRC{
+            "C",
+            "Kostarikanski kolon",
+        }
+        CSD{
+            "CSD",
+            "stari srpski dinar",
+        }
+        CSK{
+            "CSK",
+            "Czechoslovak Hard Koruna",
+        }
+        CUP{
+            "CU$",
+            "Kubanski pezo",
+        }
+        CVE{
+            "CVEsc",
+            "Zelenortski eskudo",
+        }
+        CYP{
+            "£C",
+            "Ciparska funta",
+        }
+        CZK{
+            "Kč",
+            "Češka kruna",
+        }
+        DDM{
+            "DDM",
+            "East German Ostmark",
+        }
+        DEM{
+            "DM",
+            "Njemačka marka",
+        }
+        DJF{
+            "DF",
+            "Djibouti Franc",
+        }
+        DKK{
+            "DKr",
+            "Danska kruna",
+        }
+        DOP{
+            "RD$",
+            "Dominikanski pezo",
+        }
+        DZD{
+            "DA",
+            "Alžirski dinar",
+        }
+        ECS{
+            "ECS",
+            "Ecuador Sucre",
+        }
+        ECV{
+            "ECV",
+            "Ecuador Unidad de Valor Constante (UVC)",
+        }
+        EEK{
+            "Ekr",
+            "Estonian Kroon",
+        }
+        EGP{
+            "EG£",
+            "Egipatska funta",
+        }
+        ERN{
+            "Nfk",
+            "Eritrean Nakfa",
+        }
+        ESP{
+            "Pts",
+            "Španjolska pezeta",
+        }
+        ETB{
+            "Br",
+            "Etiopski bir",
+        }
+        EUR{
+            "€",
+            "Euro",
+        }
+        FIM{
+            "mk",
+            "Finska marka",
+        }
+        FJD{
+            "F$",
+            "Fidžijski dolar",
+        }
+        FKP{
+            "FK£",
+            "Falklandska funta",
+        }
+        FRF{
+            "₣",
+            "Francuski franak",
+        }
+        GBP{
+            "£",
+            "Britanska funta",
+        }
+        GEK{
+            "GEK",
+            "Georgian Kupon Larit",
+        }
+        GEL{
+            "lari",
+            "Gruzijski lari",
+        }
+        GHS{
+            "GH₵",
+            "ganski cedi",
+        }
+        GIP{
+            "GI£",
+            "Gibraltarska funta",
+        }
+        GMD{
+            "GMD",
+            "Gambia Dalasi",
+        }
+        GNF{
+            "GF",
+            "Gvinejski franak",
+        }
+        GNS{
+            "GNS",
+            "Guinea Syli",
+        }
+        GQE{
+            "GQE",
+            "Equatorial Guinea Ekwele Guineana",
+        }
+        GRD{
+            "₯",
+            "Grčka drahma",
+        }
+        GTQ{
+            "Q",
+            "Kvecal",
+        }
+        GWE{
+            "GWE",
+            "Portuguese Guinea Escudo",
+        }
+        GWP{
+            "GWP",
+            "Gvinejskobisauski pezo",
+        }
+        GYD{
+            "G$",
+            "Guyana Dollar",
+        }
+        HKD{
+            "HK$",
+            "Honkonški dolar",
+        }
+        HNL{
+            "L",
+            "Hoduraška lempira",
+        }
+        HRD{
+            "HRD",
+            "Hrvatski dinar",
+        }
+        HRK{
+            "Kn",
+            "Kuna",
+        }
+        HTG{
+            "HTG",
+            "Haitian Gourde",
+        }
+        HUF{
+            "Ft",
+            "Mađarska forinta",
+        }
+        IDR{
+            "Rp",
+            "Indonezijska rupija",
+        }
+        IEP{
+            "IR£",
+            "Irska funta",
+        }
+        ILP{
+            "I£",
+            "Israelska funta",
+        }
+        ILR{
+            "ILR" /** ===  */,
+            "stari izraelski šekel",
+        }
+        ILS{
+            "₪",
+            "Novi izraelski šekel",
+        }
+        INR{
+            "INR",
+            "Indijska rupija",
+        }
+        IQD{
+            "ID",
+            "Irački dinar",
+        }
+        IRR{
+            "RI",
+            "Iranski rijal",
+        }
+        ISK{
+            "Ikr",
+            "Islandska kruna",
+        }
+        ITL{
+            "IT₤",
+            "Talijanska lira",
+        }
+        JMD{
+            "J$",
+            "Jamaičanski dolar",
+        }
+        JOD{
+            "JD",
+            "Jordanski dinar",
+        }
+        JPY{
+            "JP¥",
+            "Japanski jen",
+        }
+        KES{
+            "K Sh",
+            "Kenijski šiling",
+        }
+        KGS{
+            "som",
+            "Kyrgystan Som",
+        }
+        KHR{
+            "CR",
+            "Cambodian Riel",
+        }
+        KMF{
+            "CF",
+            "Comoro Franc",
+        }
+        KPW{
+            "KP₩",
+            "sjevernokorejski won",
+        }
+        KRW{
+            "₩",
+            "južnokorejski won",
+        }
+        KWD{
+            "KD",
+            "Kuvajtski dinar",
+        }
+        KYD{
+            "KY$",
+            "Kajmanski dolar",
+        }
+        KZT{
+            "T",
+            "Kazakhstan Tenge",
+        }
+        LAK{
+            "₭",
+            "Laotian Kip",
+        }
+        LKR{
+            "SL Re",
+            "Sri Lanka Rupee",
+        }
+        LRD{
+            "L$",
+            "Liberijski dolar",
+        }
+        LSL{
+            "M",
+            "Lesotho Loti",
+        }
+        LTL{
+            "Lt",
+            "Lithuanian Lita",
+        }
+        LTT{
+            "LTT",
+            "Lithuanian Talonas",
+        }
+        LUC{
+            "LUC",
+            "luksemburški konvertibilni franak",
+        }
+        LUF{
+            "LUF",
+            "Luksemburški franak",
+        }
+        LVL{
+            "Ls",
+            "Latvian Lats",
+        }
+        LVR{
+            "LVR",
+            "Latvian Ruble",
+        }
+        LYD{
+            "LD",
+            "Libijski dinar",
+        }
+        MAD{
+            "MAD",
+            "Morokanski dirham",
+        }
+        MAF{
+            "MAF",
+            "Morokanski franak",
+        }
+        MDL{
+            "MDL",
+            "Moldovski lej",
+        }
+        MKD{
+            "MDen",
+            "Makedonski denar",
+        }
+        MLF{
+            "MLF",
+            "Mali Franc",
+        }
+        MMK{
+            "MMK",
+            "Myanmar Kyat",
+        }
+        MNT{
+            "Tug",
+            "Mongolski tugrik",
+        }
+        MOP{
+            "MOP$",
+            "Macao Pataca",
+        }
+        MRO{
+            "UM",
+            "Mauritanska ouguja",
+        }
+        MTL{
+            "Lm",
+            "Malteška lira",
+        }
+        MTP{
+            "MT£",
+            "Malteška funta",
+        }
+        MUR{
+            "MUR",
+            "Mauricijska rupija",
+        }
+        MWK{
+            "MK",
+            "Malawi Kwacha",
+        }
+        MXN{
+            "MEX$",
+            "Meksički pezo",
+        }
+        MXP{
+            "MX$",
+            "Meksički srebrni pezo (1861-1992)",
+        }
+        MXV{
+            "MXV",
+            "Mexican Unidad de Inversion (UDI)",
+        }
+        MYR{
+            "RM",
+            "Malaysian Ringgit",
+        }
+        MZE{
+            "MZE",
+            "Mozambique Escudo",
+        }
+        MZM{
+            "Mt",
+            "Mozambique Metical",
+        }
+        NAD{
+            "N$",
+            "Namibijski dolar",
+        }
+        NGN{
+            "₦",
+            "Nigerijska naira",
+        }
+        NLG{
+            "fl",
+            "Nizozemski gulden",
+        }
+        NOK{
+            "NKr",
+            "Norveška kruna",
+        }
+        NPR{
+            "Nrs",
+            "Nepalska rupija",
+        }
+        NZD{
+            "$NZ",
+            "Novozelandski dolar",
+        }
+        OMR{
+            "RO",
+            "Omanski rijal",
+        }
+        PAB{
+            "B/.",
+            "Panamska balboa",
+        }
+        PEI{
+            "I/.",
+            "Peruanski inti",
+        }
+        PEN{
+            "S/.",
+            "Peruanski novi sol",
+        }
+        PES{
+            "PES",
+            "Peruanski sol",
+        }
+        PGK{
+            "PGK",
+            "Kina Papue Nove Gvineje",
+        }
+        PHP{
+            "₱",
+            "Filipinski pezo",
+        }
+        PKR{
+            "Pra",
+            "Pakistanska rupija",
+        }
+        PLN{
+            "Zl",
+            "Poljska zlota",
+        }
+        PLZ{
+            "PLZ",
+            "Poljska zlota (1950-1995)",
+        }
+        PTE{
+            "Esc",
+            "Portugalski eskudo",
+        }
+        PYG{
+            "₲",
+            "Paragvajski gvarani",
+        }
+        QAR{
+            "QR",
+            "katarski rial",
+        }
+        RHD{
+            "RHD",
+            "RHD",
+        }
+        ROL{
+            "leu",
+            "Rumunjski lej",
+        }
+        RON{
+            "RON",
+            "novi rumunjski lev",
+        }
+        RSD{
+            "din.",
+            "srpski dinar",
+        }
+        RUB{
+            "RUB",
+            "Ruska rublja",
+        }
+        RUR{
+            "RUR",
+            "Ruska rublja (1991-1998)",
+        }
+        SAR{
+            "SR",
+            "saudijski rial",
+        }
+        SBD{
+            "SI$",
+            "Solomonskootočni dolar",
+        }
+        SCR{
+            "SR",
+            "Sejšelska rupija",
+        }
+        SDD{
+            "LSd",
+            "Sudanski dinar",
+        }
+        SDP{
+            "SDP",
+            "Sudanska funta",
+        }
+        SEK{
+            "SKr",
+            "Švedska kruna",
+        }
+        SGD{
+            "S$",
+            "Singapurski dolar",
+        }
+        SIT{
+            "SIT",
+            "Slovenski tolar",
+        }
+        SKK{
+            "Sk",
+            "Slovačka kruna",
+        }
+        SOS{
+            "Sh.",
+            "Somalijski šiling",
+        }
+        SRG{
+            "Sf",
+            "Surinamski gulden",
+        }
+        SUR{
+            "SUR",
+            "sovjetska rublja",
+        }
+        SYP{
+            "LS",
+            "Sirijska funta",
+        }
+        SZL{
+            "E",
+            "Lilangeni",
+        }
+        THB{
+            "฿",
+            "tajlandski bat",
+        }
+        TJR{
+            "TJR",
+            "tajikistanska rublja",
+        }
+        TJS{
+            "TJS",
+            "Tadžikistanski somoni",
+        }
+        TMM{
+            "TMM",
+            "Turkmenistanski manat",
+        }
+        TND{
+            "DT",
+            "Tuniski dinar",
+        }
+        TOP{
+            "T$",
+            "TOP",
+        }
+        TPE{
+            "TPE",
+            "Timorski eskudo",
+        }
+        TRL{
+            "TL",
+            "Turska lira",
+        }
+        TRY{
+            "YTL",
+            "Nova Turska Lira",
+        }
+        TTD{
+            "TT$",
+            "Trinidadtobaški dolar",
+        }
+        TWD{
+            "NT$",
+            "Novotajvanski dolar",
+        }
+        TZS{
+            "T Sh",
+            "Tanzanijski šiling",
+        }
+        UAH{
+            "₴",
+            "Ukrajinska hrivnja",
+        }
+        UGS{
+            "UGS",
+            "Ugandski šiling (1966-1987)",
+        }
+        UGX{
+            "U Sh",
+            "Ugandski šiling",
+        }
+        USD{
+            "US$",
+            "Američki dolar",
+        }
+        USN{
+            "USN",
+            "Američki dolar (sljedeći dan)",
+        }
+        USS{
+            "USS",
+            "Američki dolar (isti dan)",
+        }
+        UYP{
+            "UYP",
+            "Urugvajski pezo (1975-1993)",
+        }
+        VEB{
+            "Be",
+            "Venezuelski bolivar",
+        }
+        VEF{
+            "Bs.F.",
+            "venezuelanski bolivar fuerte",
+        }
+        VND{
+            "₫",
+            "Viejetnamski dong",
+        }
+        WST{
+            "WS$",
+            "WST",
+        }
+        XAF{
+            "FCFA",
+            "CFA franak BEAC",
+        }
+        XAU{
+            "XAU",
+            "Zlato",
+        }
+        XBA{
+            "XBA",
+            "Europska složena jedinica",
+        }
+        XBB{
+            "XBB",
+            "Europska monetarna jedinica",
+        }
+        XBC{
+            "XBC",
+            "europska obračunska jedinica (XBC)",
+        }
+        XEU{
+            "XEU",
+            "europska monetarna jedinica",
+        }
+        XFO{
+            "XFO",
+            "francuski zlatni franak",
+        }
+        XOF{
+            "CFA",
+            "XOF",
+        }
+        XRE{
+            "XRE",
+            "RINET fond",
+        }
+        XTS{
+            "XTS",
+            "ispitni kod valute",
+        }
+        XXX{
+            "XXX",
+            "nepoznata ili nevažeća valuta",
+        }
+        YDD{
+            "YDD",
+            "jemenski dinar",
+        }
+        YER{
+            "YRl",
+            "Jemenski rial",
+        }
+        YUD{
+            "YUD",
+            "Jugoslavenski čvrsti dinar",
+        }
+        YUM{
+            "YUM",
+            "Jugoslavenski novi dinar",
+        }
+        YUN{
+            "YUN",
+            "Jugoslavenski konvertibilni dinar",
+        }
+        ZAL{
+            "ZAL",
+            "Južnoafrički rand (financijski)",
+        }
+        ZAR{
+            "R",
+            "Južnoafrički rand",
+        }
+        ZMK{
+            "ZK",
+            "Zambijska kvača",
+        }
+        ZRN{
+            "NZ",
+            "Zairski novi zair",
+        }
+        ZRZ{
+            "ZRZ",
+            "Zairski zair",
+        }
+        ZWD{
+            "Z$",
+            "Zimbabveanski dolar",
+        }
+    }
+    CurrencyPlurals{
+        AED{
+            other{"UAE dirhama"}
+        }
+        AMD{
+            other{"armenskih drama"}
+        }
+        AOK{
+            one{"angolska kvanza (AOK)"}
+        }
+        AOR{
+            few{"angolske kvanze reajustado"}
+        }
+        ARA{
+            many{"argentinskih australa"}
+        }
+        ARS{
+            one{"argentinski pezos"}
+        }
+        ATS{
+            many{"austrijskih šilinga"}
+        }
+        AUD{
+            other{"australskih dolara"}
+        }
+        AZM{
+            one{"azerbajdžanski manat"}
+        }
+        BDT{
+            many{"bangladeških taka"}
+        }
+        BGL{
+            few{"bugarska čvrsta leva"}
+        }
+        BHD{
+            other{"bahreinskih dinara"}
+        }
+        BMD{
+            other{"bermudskih dolara"}
+        }
+        BOP{
+            other{"bolivijskih peza"}
+        }
+        BWP{
+            few{"bocvanske pule"}
+            other{"bocvanskih pula"}
+        }
+        CDF{
+            few{"kongoanska franka"}
+            many{"kongoanskih franaka"}
+            one{"kongoanski franak"}
+            other{"kongoanskih franaka"}
+        }
+        CLF{
+            many{"čileanskih unidades de fomentos"}
+        }
+        CRC{
+            other{"kostarikanskih kolona"}
+        }
+        CSK{
+            other{"čehoslovačkih kruna"}
+        }
+        DDM{
+            many{"istočnonjemačkih marki"}
+        }
+        DOP{
+            many{"dominikanskih peza"}
+        }
+        EEK{
+            few{"estonske krune"}
+        }
+        FIM{
+            many{"finskih marki"}
+        }
+        FRF{
+            many{"francuskih franaka"}
+        }
+        GHS{
+            few{"ganska ceda"}
+            many{"ganskih ceda"}
+            one{"ganski cedi"}
+        }
+        GNF{
+            one{"gvinejski franak"}
+        }
+        GRD{
+            many{"grčkih drahmi"}
+        }
+        GYD{
+            many{"gvajanskih dolara"}
+        }
+        HRK{
+            many{"kuna"}
+        }
+        IDR{
+            many{"indonezijskih rupija"}
+        }
+        IEP{
+            few{"irske funte"}
+        }
+        ILR{
+            many{"starih izraelskih šekela"}
+        }
+        ILS{
+            many{"novih izraelskih šekela"}
+        }
+        IQD{
+            one{"irački dinar"}
+        }
+        ITL{
+            one{"talijanska lira"}
+        }
+        KES{
+            many{"kenijskih šilinga"}
+        }
+        KHR{
+            one{"kambođanski rijal"}
+        }
+        KPW{
+            many{"sjevernokorejskih wona"}
+        }
+        KRW{
+            few{"južnokorejska wona"}
+        }
+        KZT{
+            many{"kazahstanskih tengea"}
+        }
+        LRD{
+            many{"liberijskih dolara"}
+        }
+        LSL{
+            other{"lesoto lotija"}
+        }
+        LUC{
+            other{"luksemburških konvertibilnih franaka"}
+        }
+        LVL{
+            few{"letonska latsa"}
+        }
+        LYD{
+            few{"libijska dinara"}
+        }
+        MDL{
+            one{"moldavski lej"}
+        }
+        MNT{
+            one{"mongolski tugrik"}
+        }
+        MRO{
+            other{"mauritanijskih ouguja"}
+        }
+        MUR{
+            many{"mauricijskih rupija"}
+        }
+        MXP{
+            many{"meksičkih srebrnih peza (MXP)"}
+        }
+        MZM{
+            few{"mozambijska metikala"}
+        }
+        NGN{
+            few{"nigerijska naira"}
+        }
+        NZD{
+            few{"novozelandska dolara"}
+        }
+        OMR{
+            many{"omanskih rijala"}
+        }
+        PEN{
+            other{"peruanskih novih sola"}
+        }
+        PGK{
+            other{"kina Papue Nove Gvineje"}
+        }
+        PTE{
+            other{"portugalskih eskuda"}
+        }
+        ROL{
+            other{"starih rumunjskih leja"}
+        }
+        RSD{
+            many{"srpskih dinara"}
+        }
+        SBD{
+            few{"solomonskootočna dolara"}
+        }
+        SEK{
+            other{"švedskih kruna"}
+        }
+        SGD{
+            few{"singapurska dolara"}
+        }
+        SIT{
+            one{"slovenski tolar"}
+        }
+        SUR{
+            few{"sovjetske rublje"}
+            one{"sovjetska rublja"}
+            other{"sovjetskih rublji"}
+        }
+        SYP{
+            few{"sirijske funte"}
+        }
+        THB{
+            many{"tajlandskih bahta"}
+        }
+        TPE{
+            few{"timorska eskuda"}
+        }
+        TTD{
+            one{"trinidadtobaški dolar"}
+        }
+        TZS{
+            one{"tanzanijski šiling"}
+        }
+        UGX{
+            other{"ugandskih šilinga"}
+        }
+        USS{
+            other{"američkih dolara (isti dan)"}
+        }
+        VEB{
+            other{"venezuelanskih bolivara"}
+        }
+        VEF{
+            one{"venezuelanski bolivar fuertes"}
+        }
+        XBA{
+            few{"europske složene jedinice"}
+        }
+        XBC{
+            one{"europska obračunska jedinica (XBC)"}
+        }
+        XFO{
+            other{"francuskih zlatnih franaka"}
+        }
+        XOF{
+            one{"CFA franak BCEAO"}
+        }
+        XRE{
+            few{"RINET fonda"}
+        }
+        XTS{
+            few{"ispitna koda valute"}
+        }
+        XXX{
+            many{"nepoznatih ili nevažećih valuta"}
+        }
+        YER{
+            many{"jemenskih rijala"}
+        }
+        YUN{
+            other{"jugoslavenskih konvertibilnih dinara"}
+        }
+        ZWD{
+            other{"zimbabveanskih dolara"}
+        }
+    }
+    ExemplarCharacters{"[a-c č ć d đ {dž} e-l {lj} m n {nj} o p r s š t-v z ž]"}
+    Keys{
+        calendar{"Kalendar"}
+        collation{"Poredavanje"}
+        currency{"Valuta"}
+    }
+    Languages{
+        aa{"afarski"}
+        ab{"abhaski"}
+        ace{"achinese"}
+        ae{"avestan"}
+        af{"afrikaans"}
+        afa{"ostali afričko-azijski"}
+        ak{"akanski"}
+        ale{"aleutski"}
+        alg{"algonquian"}
+        alt{"južni altai"}
+        am{"amharik"}
+        an{"aragonski"}
+        ang{"engleski, stari (ca.450-1100)"}
+        apa{"apaški"}
+        ar{"arapski"}
+        arn{"araukanski"}
+        art{"umjetni (ostali)"}
+        as{"asamski (Britanska Indija)"}
+        av{"avarski"}
+        az{"azerbajdžanski"}
+        bat{"baltički (ostali)"}
+        be{"bjeloruski"}
+        bej{"beja"}
+        ber{"berberski"}
+        bg{"bugarski"}
+        bh{"bihari"}
+        bi{"bislama"}
+        bm{"bambara"}
+        bn{"bengalski"}
+        bnt{"bantu"}
+        bo{"tibetanski"}
+        br{"bretonski"}
+        bs{"bosanski"}
+        ca{"katalonski"}
+        cad{"caddo"}
+        cai{"jezik srednjoameričkih Indijanaca"}
+        cch{"atsam"}
+        ce{"čečenski"}
+        cel{"keltski (ostali)"}
+        chr{"čeroki"}
+        co{"korzički"}
+        cr{"cree"}
+        cs{"češki"}
+        cu{"crkvenoslavenski"}
+        cus{"kušitski"}
+        cy{"velški"}
+        da{"danski"}
+        de{"njemački"}
+        de_CH{"gornjonjemački (Švicarska)"}
+        dra{"dravidski"}
+        dsb{"lužičkosrpski"}
+        dum{"nizozemski, srednji (ca. 1050-1350)"}
+        dv{"divehi"}
+        ee{"ewe"}
+        egy{"egipatski (antički)"}
+        el{"grčki"}
+        en{"engleski"}
+        en_AU{"engleski (australski)"}
+        en_GB{"engleski (britanski)"}
+        en_US{"engleski (američki)"}
+        enm{"engleski, srednji (1100-1500)"}
+        eo{"esperanto"}
+        es{"španjolski"}
+        es_419{"španjolski (Latinska Amerika)"}
+        et{"estonijski"}
+        eu{"baskijski"}
+        fa{"perzijski"}
+        fi{"finski"}
+        fil{"filipino"}
+        fiu{"ugro-finski jezici"}
+        fj{"fidžijski"}
+        fo{"faroanski"}
+        fr{"francuski"}
+        frm{"francuski, srednji (ca.1400-1600)"}
+        fro{"francuski, stari (842-ca.1400)"}
+        frr{"sjevernofrizijski"}
+        frs{"istočnofrizijski"}
+        fy{"frizijski"}
+        ga{"irski"}
+        gaa{"ga"}
+        gd{"škotski-galski"}
+        gem{"germanski (ostali)"}
+        gil{"gilbertski"}
+        gl{"galicijski"}
+        gmh{"njemački, srednji visoki (ca.1050-1500)"}
+        gn{"guarani"}
+        goh{"njemački, stari visoki (ca.750-1050)"}
+        grc{"grčki, antički (do 1453)"}
+        gsw{"njemački (Švicarska)"}
+        gu{"gujarati"}
+        ha{"hausa"}
+        haw{"havajski"}
+        he{"hebrejski"}
+        hi{"hindu"}
+        hr{"hrvatski"}
+        hsb{"gornjolužički"}
+        ht{"kreolski"}
+        hu{"mađarski"}
+        hy{"armenski"}
+        ia{"interlingua"}
+        id{"indonezijski"}
+        ie{
+            "interlingua (jezik zamišljen za internacionalnu komunikaciju među znanst"
+            "venicima)"
+        }
+        ilo{"iloko"}
+        inc{"indijski (drugi)"}
+        ine{"indoevropski (drugi)"}
+        ira{"iranski"}
+        is{"islandski"}
+        it{"talijanski"}
+        ja{"japanski"}
+        jv{"javanski"}
+        ka{"gruzijski"}
+        kaa{"kara-kalpak"}
+        kar{"karen"}
+        kfo{"koro"}
+        kg{"kongo"}
+        ki{"kikuyu"}
+        kk{"kazaški"}
+        km{"kmerski"}
+        kn{"kannada"}
+        ko{"korejski"}
+        ku{"kurdski"}
+        kw{"kornski"}
+        ky{"kirgiški"}
+        la{"latinski"}
+        lb{"luksemburški"}
+        ln{"lingala"}
+        lo{"laoski"}
+        lt{"litvanski"}
+        lua{"luba-lulua"}
+        lv{"latvijski"}
+        mga{"irski, srednji (900-1200)"}
+        mis{"ostali jezici"}
+        mk{"makedonski"}
+        mkh{"mkh"}
+        ml{"malayalam"}
+        mn{"mongolski"}
+        mnc{"mandžurski"}
+        mni{"manipurski"}
+        mo{"moldavski"}
+        moh{"mohawk"}
+        mr{"marathi"}
+        ms{"malajski"}
+        mt{"malteški"}
+        mus{"creek"}
+        my{"burmanski"}
+        nb{"književni norveški"}
+        nds{"donjonjemački"}
+        ne{"nepalski"}
+        new{"newari"}
+        niu{"niujski"}
+        nl{"nizozemski"}
+        nl_BE{"flamanski"}
+        nn{"novonorveški"}
+        no{"norveški"}
+        non{"staronorveški"}
+        oc{"okcitanski"}
+        or{"orijski"}
+        ota{"turski - otomanski"}
+        pa{"punjabi"}
+        peo{"staroperzijski"}
+        pl{"poljski"}
+        pra{"prakrit"}
+        pro{"staroprovansalski"}
+        ps{"paštu"}
+        pt{"portugalski"}
+        pt_PT{"portugalski (iberijski)"}
+        rm{"retoromanski"}
+        ro{"rumunjski"}
+        roa{"romanski (ostali)"}
+        ru{"ruski"}
+        rup{"aromunski"}
+        sa{"sanskrtski"}
+        sad{"sandawe"}
+        sah{"jakutski"}
+        sai{"jezik južnoameričkih Indijanaca"}
+        sc{"sardski"}
+        sd{"sindhi"}
+        sga{"staroirski"}
+        sh{"srpsko-hrvatski"}
+        si{"singaleški"}
+        sk{"slovački"}
+        sl{"slovenski"}
+        sla{"slavenski (drugi)"}
+        sm{"samoanski"}
+        so{"somalski"}
+        sq{"albanski"}
+        sr{"srpski"}
+        st{"sesotski"}
+        su{"sundanski"}
+        sv{"švedski"}
+        sw{"svahili"}
+        syc{"klasični sirski"}
+        ta{"tamilski"}
+        tai{"tajski"}
+        te{"telugu"}
+        th{"tajlandski"}
+        ti{"tigrinya"}
+        tig{"tigriški"}
+        tk{"turkmenski"}
+        tl{"tagalog"}
+        tlh{"klingonski"}
+        tpi{"tok pisin"}
+        tr{"turski"}
+        tw{"twi"}
+        ty{"tahićanski"}
+        ug{"turkmenski (uighur)"}
+        uk{"ukrajinski"}
+        und{"nepoznati ili nevažeći jezik"}
+        ur{"urdu"}
+        uz{"uzbečki"}
+        vi{"vijetnamski"}
+        vot{"votic"}
+        wo{"wolof"}
+        xh{"xhosa"}
+        yi{"jidiš"}
+        yo{"joruba"}
+        zh{"kineski"}
+        zh_Hans{"kineski (pojednostavljeni)"}
+        zh_Hant{"kineski (tradicionalni)"}
+        zu{"zulu"}
+        zxx{"bez jezičnog sadržaja"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "#,##0.00 ¤;-#,##0.00 ¤",
+        "#,##0%",
+        "#E0",
+    }
+    Scripts{
+        Arab{"arapsko pismo"}
+        Armi{"aramejsko pismo"}
+        Armn{"armensko pismo"}
+        Brah{"brahmi pismo"}
+        Cakm{"chakma pismo"}
+        Cyrl{"ćirilica"}
+        Deva{"devangari pismo"}
+        Egyp{"egipatski hijeroglifi"}
+        Ethi{"etiopsko pimo"}
+        Glag{"glagoljica"}
+        Goth{"gotičko pismo"}
+        Grek{"grčko pismo"}
+        Hebr{"hebrejsko pismo"}
+        Ital{"staro talijansko pismo"}
+        Jpan{"japansko pismo"}
+        Kthi{"kaithi pismo"}
+        Latn{"Latinski"}
+        Mand{"mandai pismo"}
+        Moon{"moon pismo"}
+        Runr{"runsko pismo"}
+        Sinh{"singaleško pismo"}
+        Tagb{"tagbanwa pismo"}
+        Taml{"tamilsko pismo"}
+        Tfng{"tifinar"}
+        Thai{"tajlandsko pismo"}
+        Tibt{"tibetansko pismo"}
+        Visp{"Visible Speech"}
+        Zmth{"matematičko znakovlje"}
+        Zxxx{"nepisani jezik"}
+        Zzzz{"nepoznato ili nevažeće pismo"}
+    }
+    Types{
+        calendar{
+            buddhist{"Budistički kalendar"}
+            chinese{"Kineski kalendar"}
+            gregorian{"Gregorijanski kalendar"}
+            hebrew{"Hebrejski kalendar"}
+            islamic{"Islamski kalendar"}
+            islamic-civil{"Islamski civilni kalendar"}
+            japanese{"Japanski kalendar"}
+        }
+        collation{
+            direct{"Direktno poredavanje"}
+            phonebook{"Poredavanja po abecedi"}
+            pinyin{"Pinyin poredavanje"}
+            stroke{"Stroke order poredavanje"}
+            traditional{"Tradicionano poredavanje"}
+        }
+    }
+    Variants{
+        BOONT{"boontling"}
+        SCOUSE{"scouse"}
+    }
+    Version{"1.139"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            DateTimePatterns{
+                "HH:mm:ss v",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d. MMMM y.",
+                "d. MMMM y.",
+                "d.M.yyyy.",
+                "d.M.yy.",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                EEEd{"EEE, d."}
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                Hm{"H:mm"}
+                MEd{"E, d.M."}
+                MMM{"LLL."}
+                MMMEd{"E, d.MMM."}
+                MMMMEd{"E, d. MMMM"}
+                MMMMd{"d. MMMM"}
+                MMMMdd{"MMMM dd"}
+                MMMd{"d.MMM."}
+                MMdd{"MM.dd"}
+                Md{"d.M."}
+                d{"d."}
+                hhmm{"hh:mm a"}
+                hhmmss{"hh:mm:ss a"}
+                ms{"mm:ss"}
+                y{"y."}
+                yM{"M.yyyy."}
+                yMEd{"EEE, d.M.y."}
+                yMMM{"MMM.y."}
+                yMMMEd{"EEE, d.MMM.y."}
+                yMMMM{"MMMM y."}
+                yQ{"Q. yyyy."}
+                yQQQ{"QQQ y."}
+                yyMMMEEEd{"EEE yy.MMM d"}
+                yyQ{"Q yy"}
+                yyQQQQ{"QQQQ yy"}
+                yyyyMM{"yyyy.MM"}
+                yyyyMMMM{"y. MMMM"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "ned",
+                        "pon",
+                        "uto",
+                        "sri",
+                        "čet",
+                        "pet",
+                        "sub",
+                    }
+                    wide{
+                        "nedjelja",
+                        "ponedjeljak",
+                        "utorak",
+                        "srijeda",
+                        "četvrtak",
+                        "petak",
+                        "subota",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "n",
+                        "p",
+                        "u",
+                        "s",
+                        "č",
+                        "p",
+                        "s",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "pr.n.e.",
+                    "AD",
+                }
+                wide{
+                    "Prije Krista",
+                    "Poslije Krista",
+                }
+            }
+            fields{
+                day{
+                    dn{"Dan"}
+                    relative{
+                        "-1"{"Jučer"}
+                        "-2"{"Prekjučer"}
+                        "-3"{"prije tri dana"}
+                        "0"{"Danas"}
+                        "1"{"Jučer"}
+                        "2"{"Prekosutra"}
+                        "3"{"za tri dana"}
+                    }
+                }
+                dayperiod{
+                    dn{"Dio dana"}
+                }
+                era{
+                    dn{"Era"}
+                }
+                hour{
+                    dn{"Sat"}
+                }
+                minute{
+                    dn{"Minuta"}
+                }
+                month{
+                    dn{"Mjesec"}
+                }
+                second{
+                    dn{"Sekunda"}
+                }
+                week{
+                    dn{"Tjedan"}
+                }
+                weekday{
+                    dn{"Dan u tjednu"}
+                }
+                year{
+                    dn{"Godina"}
+                }
+                zone{
+                    dn{"Zona"}
+                }
+            }
+            intervalFormats{
+                M{
+                    M{"MM. - MM."}
+                }
+                MEd{
+                    M{"E, dd.MM. - E, dd.MM."}
+                    d{"E, dd.MM. - E, dd.MM."}
+                }
+                MMM{
+                    M{"LLL-LLL"}
+                }
+                MMMEd{
+                    M{"E, dd. MMM - E, dd. MMM"}
+                    d{"E, dd. - E, dd. MMM"}
+                }
+                MMMd{
+                    M{"dd. MMM - dd. MMM"}
+                    d{"dd. - dd. MMM"}
+                }
+                Md{
+                    M{"dd.MM. - dd.MM."}
+                    d{"dd.MM. - dd.MM."}
+                }
+                d{
+                    d{"dd. - dd."}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    a{"HH - HH'h'"}
+                    h{"HH - HH'h'"}
+                }
+                hm{
+                    h{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                hmv{
+                    h{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                hv{
+                    a{"HH - HH 'h' v"}
+                    h{"HH - HH 'h' v"}
+                }
+                y{
+                    y{"y. - y."}
+                }
+                yM{
+                    M{"MM.yyyy. - MM.yyyy."}
+                    y{"MM.yyyy. - MM.yyyy."}
+                }
+                yMEd{
+                    M{"E, dd.MM.yyyy. - E, dd.MM.yyyy."}
+                    d{"E, dd.MM.yyyy. - E, dd.MM.yyyy."}
+                    y{"E, dd.MM.yyyy. - E, dd.MM.yyyy."}
+                }
+                yMMM{
+                    M{"LLL-LLL y."}
+                    y{"LLL y. - LLL y."}
+                }
+                yMMMEd{
+                    M{"E, dd. MMM - E, dd. MMM y."}
+                    d{"E, dd. - E, dd. MMM y."}
+                    y{"E, dd. MMM y. - E, dd. MMM y."}
+                }
+                yMMMM{
+                    y{"MM.yyyy. - MM.yyyy."}
+                }
+                yMMMd{
+                    M{"dd. MMM - dd. MMM y."}
+                    d{"dd. - dd. MMM y."}
+                    y{"dd. MMM y. - dd. MMM y."}
+                }
+                yMd{
+                    M{"dd.MM.yyyy. - dd.MM.yyyy."}
+                    d{"dd.MM.yyyy. - dd.MM.yyyy."}
+                    y{"dd.MM.yyyy. - dd.MM.yyyy."}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "sij",
+                        "vel",
+                        "ožu",
+                        "tra",
+                        "svi",
+                        "lip",
+                        "srp",
+                        "kol",
+                        "ruj",
+                        "lis",
+                        "stu",
+                        "pro",
+                    }
+                    narrow{
+                        "1.",
+                        "v",
+                        "o",
+                        "t",
+                        "s",
+                        "l",
+                        "s",
+                        "k",
+                        "r",
+                        "l",
+                        "s",
+                        "12.",
+                    }
+                    wide{
+                        "siječnja",
+                        "veljače",
+                        "ožujka",
+                        "travnja",
+                        "svibnja",
+                        "lipnja",
+                        "srpnja",
+                        "kolovoza",
+                        "rujna",
+                        "listopada",
+                        "studenoga",
+                        "prosinca",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "sij",
+                        "vel",
+                        "03.",
+                        "tra",
+                        "svi",
+                        "lip",
+                        "srp",
+                        "kol",
+                        "ruj",
+                        "lis",
+                        "stu",
+                        "pro",
+                    }
+                    narrow{
+                        "s",
+                        "v",
+                        "o",
+                        "t",
+                        "s",
+                        "l",
+                        "s",
+                        "k",
+                        "r",
+                        "l",
+                        "s",
+                        "p",
+                    }
+                    wide{
+                        "siječanj",
+                        "veljača",
+                        "ožujak",
+                        "travanj",
+                        "svibanj",
+                        "lipanj",
+                        "srpanj",
+                        "kolovoz",
+                        "rujan",
+                        "listopad",
+                        "studeni",
+                        "prosinac",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "1kv",
+                        "2kv",
+                        "3kv",
+                        "4kv",
+                    }
+                    wide{
+                        "1. kvartal",
+                        "2. kvartal",
+                        "3. kvartal",
+                        "4. kvartal",
+                    }
+                }
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"”"}
+        alternateQuotationStart{"“"}
+        quotationEnd{"’"}
+        quotationStart{"‘"}
+    }
+    localeDisplayPattern{
+        separator{", "}
+    }
+    measurementSystemNames{
+        US{"američki sustav"}
+        metric{"metrički"}
+    }
+    units{
+        day{
+            few{"{0} dana"}
+            many{"{0} dana"}
+            one{"{0} dan"}
+            other{"{0} dan"}
+        }
+        hour{
+            few{"{0} sata"}
+            many{"{0} sati"}
+            one{"{0} sat"}
+            other{"{0} sat"}
+        }
+        minute{
+            few{"{0} minute"}
+            many{"{0} minuta"}
+            one{"{0} minuta"}
+            other{"{0} minuta"}
+        }
+        month{
+            few{"{0} mjeseca"}
+            many{"{0} mjeseci"}
+            one{"{0} mjesec"}
+            other{"{0} mjesec"}
+        }
+        second{
+            few{"{0} sekunde"}
+            many{"{0} sekundi"}
+            one{"{0} sekunda"}
+            other{"{0} sekunda"}
+        }
+        week{
+            few{"{0} tjedna"}
+            many{"{0} tjedana"}
+            one{"{0} tjedan"}
+            other{"{0} tjedan"}
+        }
+        year{
+            few{"{0} godine"}
+            many{"{0} godina"}
+            one{"{0} godina"}
+            other{"{0} godina"}
+        }
+    }
+    unitsShort{
+        day{
+            few{"{0} dana"}
+            many{"{0} dana"}
+            one{"{0} dan"}
+            other{"{0} dan"}
+        }
+        hour{
+            few{"{0} h"}
+            many{"{0} h"}
+            one{"{0} h"}
+            other{"{0} h"}
+        }
+        minute{
+            few{"{0} min"}
+            many{"{0} min"}
+            one{"{0} min"}
+            other{"{0} min"}
+        }
+        month{
+            few{"{0} mj."}
+            many{"{0} mj."}
+            one{"{0} mj."}
+            other{"{0} mj."}
+        }
+        second{
+            few{"{0} s"}
+            many{"{0} s"}
+            one{"{0} s"}
+            other{"{0} s"}
+        }
+        week{
+            few{"{0} tj."}
+            many{"{0} tj."}
+            one{"{0} tj."}
+            other{"{0} tj."}
+        }
+        year{
+            few{"{0} g."}
+            many{"{0} g."}
+            one{"{0} g."}
+            other{"{0} g."}
+        }
+    }
+    zoneStrings{
+        "Africa:Kinshasa"{
+            ec{"Kinšasa"}
+        }
+        "Africa:Lubumbashi"{
+            ec{"Lubumbaši"}
+        }
+        "America:Anchorage"{
+            ec{"Alaska vremenska zona"}
+        }
+        "America:Cancun"{
+            ec{"Cancun"}
+        }
+        "America:Dawson"{
+            ec{"Dawson"}
+        }
+        "America:Indiana:Petersburg"{
+            ec{"Petersburg, Indiana"}
+        }
+        "America:Iqaluit"{
+            ec{"Iqaluit"}
+        }
+        "America:Menominee"{
+            ec{"Menominee"}
+        }
+        "America:Nipigon"{
+            ec{"Nipigon"}
+        }
+        "America:Rainy_River"{
+            ec{"Rainy River"}
+        }
+        "America:Swift_Current"{
+            ec{"Swift Current"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont D'Urville"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"Južni pol"}
+        }
+        "Antarctica:Vostok"{
+            ec{"Vostok"}
+        }
+        "Asia:Almaty"{
+            ec{"Almaty"}
+        }
+        "Asia:Anadyr"{
+            ec{"Anadir"}
+        }
+        "Asia:Jakarta"{
+            ec{"Jakarta"}
+        }
+        "Asia:Kamchatka"{
+            ec{"Kamčatka"}
+        }
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnojarsk"}
+        }
+        "Asia:Shanghai"{
+            ec{"Šangaj"}
+        }
+        "Asia:Tashkent"{
+            ec{"Taškent"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"Ulaanbaatar"}
+        }
+        "Atlantic:Canary"{
+            ec{"Kanarska Otočja"}
+        }
+        "Australia:Currie"{
+            ec{"Currie"}
+        }
+        "Etc:Unknown"{
+            ec{"Nepoznat ili nevažeći grad"}
+        }
+        "Europe:Kiev"{
+            ec{"Kijev"}
+        }
+        "Europe:Moscow"{
+            ec{"Moskva"}
+        }
+        "Europe:Uzhgorod"{
+            ec{"Uzgorod"}
+        }
+        "Europe:Zaporozhye"{
+            ec{"Zaporožje"}
+        }
+        "Pacific:Easter"{
+            ec{"Uskrsni Otok"}
+        }
+        "Pacific:Kosrae"{
+            ec{"Kosrae"}
+        }
+        "meta:Africa_Eastern"{
+            ss{"EAT"}
+        }
+        "meta:America_Eastern"{
+            sg{"ET"}
+        }
+        "meta:Atlantic"{
+            ld{"atlantsko dnevno vrijeme"}
+        }
+        "meta:Cocos"{
+            ss{"CCT"}
+        }
+        "meta:DumontDUrville"{
+            ss{"DDUT"}
+        }
+        "meta:Rothera"{
+            ss{"ROTT"}
+        }
+        "meta:South_Georgia"{
+            ss{"GST (GS)"}
+        }
+        "meta:Suriname"{
+            ss{"SRT"}
+        }
+        gmtFormat{"GMT{0}"}
+        gmtZeroFormat{"GMT"}
+        hourFormat{"+HHmm;-HHmm"}
+        regionFormat{"{0}"}
+    }
+}

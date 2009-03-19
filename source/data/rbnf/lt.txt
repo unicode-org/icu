@@ -1,0 +1,43 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/lt.xml
+// *
+// ***************************************************************************
+lt{
+    RBNFRules{
+        SpelloutRules{
+            "%spellout:\n",
+            "0: nulis; vienas; du; trys; keturi; penki;\n",
+            "6: \u0161e\u0161i; septyni; a\u0161tuoni; devyni;\n",
+            "10: de\u0161imt; vienuolika; dvylika; trylika; keturiolika; penkiolika;\n",
+            "16: \u0161e\u0161iolika; septyniolika; a\u0161tuoniolika; devyniolika;\n",
+            "20: dvi\u00ADde\u0161imt[ >>];\n",
+            "30: tris\u00ADde\u0161imt[ >>];\n",
+            "40: keturias\u00ADde\u0161imt[ >>];\n",
+            "50: penkias\u00ADde\u0161imt[ >>];\n",
+            "60: \u0161e\u0161ias\u00ADde\u0161imt[ >>];\n",
+            "70: septynias\u00ADde\u0161imt[ >>];\n",
+            "80: a\u0161tuonias\u00ADde\u0161imt[ >>];\n",
+            "90: devynias\u00ADde\u0161imt[ >>];\n",
+            "100: \u0161imtas[ >>];\n",
+            "200: << \u0161imtai[ >>];\n",
+            "1000: t\u016Bkstantis[ >>];\n",
+            "2000: << t\u016Bkstant\u0173[ >>];\n",
+            "1000000: << milijonas[ >>];\n",
+            "2000000: << milijon\u0173[ >>];\n",
+            "1000000000: << milijardas[ >>];\n",
+            "2000000000: << milijard\u0173[ >>];\n",
+            "1000000000000: << trilijonas[ >>];\n",
+            "2000000000000: << trilijon\u0173[ >>];\n",
+            "1000000000000000: << kvadrilijonas[ >>];\n",
+            "2000000000000000: << kvadrilijon\u0173[ >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: m\u012Bnus >>;\n",
+            "x.x: << kablelis >>;\n",
+        }
+    }
+    Version{"1.3"}
+}

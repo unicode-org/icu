@@ -1,0 +1,45 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/sq.xml
+// *
+// ***************************************************************************
+sq{
+    RBNFRules{
+        SpelloutRules{
+            "%spellout:\n",
+            "0: zero;\n",
+            "1: nj\u00EB;\n",
+            "2: dy;\n",
+            "3: tre;\n",
+            "4: kat\u00EBr;\n",
+            "5: pes\u00EB;\n",
+            "6: gjasht\u00EB;\n",
+            "7: shtat\u00EB;\n",
+            "8: tet\u00EB;\n",
+            "9: n\u00EBnt\u00EB;\n",
+            "10: dhjet\u00EB;\n",
+            "11: >>\u00ADmb\u00EB\u00ADdhjet\u00EB;\n",
+            "20: nj\u00EB\u00ADzet[ e >>];\n",
+            "30: tri\u00ADdhjet\u00EB[ e >>];\n",
+            "40: dy\u00ADzet[ e >>];\n",
+            "50: <<\u00ADdhjet\u00EB[ e >>];\n",
+            "100: <<\u00ADqind[ e >>];\n",
+            "1000: << mij\u00EB[ e >>];\n",
+            "1000000: << milion[ e >>];\n",
+            "2000000: << milion\u00EB[ e >>];\n",
+            "1000000000: << miliar[ e >>];\n",
+            "2000000000: << miliar\u00EB[ e >>];\n",
+            "1000000000000: << bilion[ e >>];\n",
+            "2000000000000: << bilion\u00EB[ e >>];\n",
+            "1000000000000000: << biliar[ e >>];\n",
+            "2000000000000000: << biliar\u00EB[ e >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: minus >>;\n",
+            "x.x: << ... >>;\n",
+        }
+    }
+    Version{"1.3"}
+}

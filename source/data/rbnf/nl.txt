@@ -1,0 +1,70 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/nl.xml
+// *
+// ***************************************************************************
+nl{
+    RBNFRules{
+        SpelloutRules{
+            "%%number-en:\n",
+            "1: eenen;\n",
+            "2: twee\u00EBn;\n",
+            "3: drie\u00EBn;\n",
+            "4: vieren;\n",
+            "5: vijfen;\n",
+            "6: zesen;\n",
+            "7: zevenen;\n",
+            "8: achten;\n",
+            "9: negenen;\n",
+            "10: =%spellout=;\n",
+            "%spellout:\n",
+            "0: nul;\n",
+            "1: een;\n",
+            "2: twee;\n",
+            "3: drie;\n",
+            "4: vier;\n",
+            "5: vijf;\n",
+            "6: zes;\n",
+            "7: zeven;\n",
+            "8: acht;\n",
+            "9: negen;\n",
+            "10: tien;\n",
+            "11: elf;\n",
+            "12: twaalf;\n",
+            "13: dertien;\n",
+            "14: veertien;\n",
+            "15: vijftien;\n",
+            "16: zestien;\n",
+            "17: zeventien;\n",
+            "18: achttien;\n",
+            "19: negentien;\n",
+            "20: [>%%number-en>]twintig;\n",
+            "30: [>%%number-en>]dertig;\n",
+            "40: [>%%number-en>]veertig;\n",
+            "50: [>%%number-en>]vijftig;\n",
+            "60: [>%%number-en>]zestig;\n",
+            "70: [>%%number-en>]zeventig;\n",
+            "80: [>%%number-en>]tachtig;\n",
+            "90: [>%%number-en>]negentig;\n",
+            "100: honderd[-en->>];\n",
+            "200: <<honderd[-en->>];\n",
+            "1000: duizend[-en->>];\n",
+            "2000: <<duizend[-en->>];\n",
+            "1000000: << miljoen[ >>];\n",
+            "1000000000: << miljard[ >>];\n",
+            "1000000000000: << biljoen[ >>];\n",
+            "1000000000000000: << biljard[ >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: min >>;\n",
+            "x.x: << komma >>;\n",
+            "%year:\n",
+            "0: =%spellout=;\n",
+            "1100/100: <<honderd[-en->>];\n",
+            "10000: =%spellout=;\n",
+        }
+    }
+    Version{"1.5"}
+}

@@ -1,0 +1,35 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/hu.xml
+// *
+// ***************************************************************************
+hu{
+    RBNFRules{
+        SpelloutRules{
+            "%spellout:\n",
+            "0: nulla; egy; kett\u0151; h\u00E1rom; n\u00E9gy; \u00F6t; hat; h\u00E9t; nyolc; kilenc;\n",
+            "10: t\u00EDz; tizen\u00AD>>;\n",
+            "20: h\u00FAsz; huszon\u00AD>>;\n",
+            "30: harminc[\u00AD>>];\n",
+            "40: negyven[\u00AD>>];\n",
+            "50: \u00F6tven[\u00AD>>];\n",
+            "60: hatvan[\u00AD>>];\n",
+            "70: hetven[\u00AD>>];\n",
+            "80: nyolcvan[\u00AD>>];\n",
+            "90: kilencven[\u00AD>>];\n",
+            "100: <<\u00ADsz\u00E1z[\u00AD>>];\n",
+            "1000: <<\u00ADezer[ >>];\n",
+            "1000000: << milli\u00F3[ >>];\n",
+            "1000000000: << milli\u00E1rd[ >>];\n",
+            "1000000000000: << billi\u00F3[ >>];\n",
+            "1000000000000000: << billi\u00E1rd[ >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: minusz >>;\n",
+            "x.x: << vessz\u0151 >>;\n",
+        }
+    }
+    Version{"1.3"}
+}

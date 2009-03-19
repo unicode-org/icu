@@ -1,0 +1,85 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/pt.xml
+// *
+// ***************************************************************************
+pt{
+    RBNFRules{
+        OrdinalRules{
+            "%%ord_mascabbrev:\n",
+            "0: \u00BA;\n",
+            "%ordinal:\n",
+            "0: =#,##0==%%ord_mascabbrev=;\n",
+        }
+        SpelloutRules{
+            "%spellout:\n",
+            "0: zero; um; dois; tr\u00EAs; quatro; cinco; seis; sete; oito; nove;\n",
+            "10: dez; onze; doze; treze; catorze; quinze; dezasseis; dezassete; dezoito; dezanove;\n",
+            "20: vinte[ e >>];\n",
+            "30: trinta[ e >>];\n",
+            "40: quarenta[ e >>];\n",
+            "50: cinquenta[ e >>];\n",
+            "60: sessenta[ e >>];\n",
+            "70: setenta[ e >>];\n",
+            "80: oitenta[ e >>];\n",
+            "90: noventa[ e >>];\n",
+            "100: cem; cento[ e >>];\n",
+            "200: duzcentos[ e >>];\n",
+            "300: trezentos[ e >>];\n",
+            "400: quatrocentos[ e >>];\n",
+            "500: quinhentos[ e >>];\n",
+            "600: seiscentos[ e >>];\n",
+            "700: setecentos[ e >>];\n",
+            "800: oitocentos[ e >>];\n",
+            "900: novecentos[ e >>];\n",
+            "1000: mil[ >%%with-e>];\n",
+            "2000: << mil[ >%%with-e>];\n",
+            "1000000: um milh\u00E3o[ >%%with-e>];\n",
+            "2000000: << milh\u00F5es[ >%%with-e>];\n",
+            "1000000000: um bilh\u00E3o[ >%%with-e>];\n",
+            "2000000000: << bilh\u00F5es[ >%%with-e>];\n",
+            "1000000000000: um trilh\u00E3o[ >%%with-e>];\n",
+            "2000000000000: << trilh\u00F5es[ >%%with-e>];\n",
+            "1000000000000000: um quatrilh\u00E3o[ >%%with-e>];\n",
+            "2000000000000000: << quatrilh\u00F5es[ >%%with-e>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: menos >>;\n",
+            "x.x: << v\u00EDrgula >>;\n",
+            "%%with-e:\n",
+            "0: zero; e um; e dois; e tr\u00EAs; e quatro; e cinco; e seis; e sete; e oito; e nove;\n",
+            "10: e dez; e onze; e doze; e treze; e catorze; e quinze; e dezasseis; e dezassete; e dezoito; e dezanove;\n",
+            "20: e vinte; vinte[ e >%spellout>];\n",
+            "30: e trinta; trinta[ e >%spellout>];\n",
+            "40: e quarenta; quarenta[ e >%spellout>];\n",
+            "50: e cinquenta; cinquenta[ e >%spellout>];\n",
+            "60: e sessenta; sessenta[ e >%spellout>];\n",
+            "70: e setenta; setenta[ e >%spellout>];\n",
+            "80: e oitenta; oitenta[ e >%spellout>];\n",
+            "90: e noventa; noventa[ e >%spellout>];\n",
+            "100: e cem; cento [ e >%spellout>];\n",
+            "200: e duzentos; duzcentos[ e >%spellout>];\n",
+            "300: e trezentos; trezentos[ e >%spellout>];\n",
+            "400: e quatrocentos; quatrocentos[ e >%spellout>];\n",
+            "500: e quinhentos; quinhentos[ e >%spellout>];\n",
+            "600: e seiscentos; seiscentos[ e >%spellout>];\n",
+            "700: e setecentos; setecentos[ e >%spellout>];\n",
+            "800: e oitocentos; oitocentos[ e >%spellout>];\n",
+            "900: e novecentos; novecentos[ e >%spellout>];\n",
+            "1000: e mil; mil[ >%%with-e>];\n",
+            "2000: <%spellout< mil[ >%%with-e>];\n",
+            "1000000: um milh\u00E3o[ >%%with-e>];\n",
+            "2000000: <%spellout< milh\u00F5es[ >%%with-e>];\n",
+            "1000000000: um bilh\u00E3o[ >%%with-e>];\n",
+            "2000000000: <%spellout< bilh\u00F5es[ >%%with-e>];\n",
+            "1000000000000: um trilh\u00E3o[ >%%with-e>];\n",
+            "2000000000000: <%spellout< trilh\u00F5es[ >%%with-e>];\n",
+            "1000000000000000: um quatrilh\u00E3o[ >%%with-e>];\n",
+            "2000000000000000: <%spellout< quatrilh\u00F5es[ >%%with-e>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+        }
+    }
+    Version{"1.5"}
+}

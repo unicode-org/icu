@@ -1,0 +1,81 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2008 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/ro.xml
+// *
+// ***************************************************************************
+ro{
+    RBNFRules{
+        SpelloutRules{
+            "%%feminine:\n",
+            "0: zero; o; dou\u0103; trei; patru; cinci; \u015Fase; \u015Fapte; opt; nou\u0103;\n",
+            "10: zece;\n",
+            "11: un\u00ADsprezece;\n",
+            "12: >>\u00ADsprezece;\n",
+            "20: <<\u00ADzeci[ \u015Fi >>];\n",
+            "100: o sut\u0103[ >>];\n",
+            "200: << sute[ >>];\n",
+            "1000: o mie[ >>];\n",
+            "2000: << mii[ >>];\n",
+            "1000000: <%%neuter< milion[ >>];\n",
+            "2000000: <%%neuter< milioane[ >>];\n",
+            "1000000000: <%%neuter< miliard[ >>];\n",
+            "2000000000: <%%neuter< miliarde[ >>];\n",
+            "1000000000000: <%%neuter< bilion[ >>];\n",
+            "2000000000000: <%%neuter< bilioane[ >>];\n",
+            "1000000000000000: <%%neuter< biliard[ >>];\n",
+            "2000000000000000: <%%neuter< biliarde[ >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: minus >>;\n",
+            "x.x: << virgul\u0103 >>;\n",
+            "%%neuter:\n",
+            "0: zero; unu; dou\u0103; trei; patru; cinci; \u015Fase; \u015Fapte; opt; nou\u0103;\n",
+            "10: zece;\n",
+            "11: un\u00ADsprezece;\n",
+            "12: >>\u00ADsprezece;\n",
+            "20: <%%feminine<\u00ADzeci[ \u015Fi >>];\n",
+            "100: o sut\u0103[ >>];\n",
+            "200: <%%feminine< sute[ >>];\n",
+            "1000: o mie[ >>];\n",
+            "2000: <%%feminine< mii[ >>];\n",
+            "1000000: << milion[ >>];\n",
+            "2000000: << milioane[ >>];\n",
+            "1000000000: << miliard[ >>];\n",
+            "2000000000: << miliarde[ >>];\n",
+            "1000000000000: << bilion[ >>];\n",
+            "2000000000000: << bilioane[ >>];\n",
+            "1000000000000000: << biliard[ >>];\n",
+            "2000000000000000: << biliarde[ >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: minus >>;\n",
+            "x.x: << virgul\u0103 >>;\n",
+            "%spellout:\n",
+            "0: zero; unu; doi; trei; patru; cinci; \u015Fase; \u015Fapte; opt; nou\u0103;\n",
+            "10: zece;\n",
+            "11: un\u00ADsprezece;\n",
+            "12: >>\u00ADsprezece;\n",
+            "20: dou\u0103\u00ADzeci[ \u015Fi >>];\n",
+            "30: <%%feminine<\u00ADzeci[ \u015Fi >>];\n",
+            "60: \u015Fai\u00ADzeci[ \u015Fi >>];\n",
+            "70: <%%feminine<\u00ADzeci[ \u015Fi >>];\n",
+            "100: o sut\u0103[ >>];\n",
+            "200: <%%feminine< sute[ >>];\n",
+            "1000: o mie[ >>];\n",
+            "2000: <%%feminine< mii[ >>];\n",
+            "1000000: <%%neuter< milion[ >>];\n",
+            "2000000: <%%neuter< milioane[ >>];\n",
+            "1000000000: <%%neuter< miliard[ >>];\n",
+            "2000000000: <%%neuter< miliarde[ >>];\n",
+            "1000000000000: <%%neuter< bilion[ >>];\n",
+            "2000000000000: <%%neuter< bilioane[ >>];\n",
+            "1000000000000000: <%%neuter< biliard[ >>];\n",
+            "2000000000000000: <%%neuter< biliarde[ >>];\n",
+            "1000000000000000000: =#,##0.#=;\n",
+            "-x: minus >>;\n",
+            "x.x: << virgul\u0103 >>;\n",
+        }
+    }
+    Version{"1.4"}
+}

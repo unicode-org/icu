@@ -1,0 +1,197 @@
+* text=auto !eol
+
+*.c text !eol
+*.cc text !eol
+*.classpath text !eol
+*.cpp text !eol
+*.css text !eol
+*.dsp text !eol
+*.dsw text !eol
+*.filters text !eol
+*.h text !eol
+*.htm text !eol
+*.html text !eol
+*.in text !eol
+*.java text !eol
+*.launch text !eol
+*.mak text !eol
+*.md text !eol
+*.MF text !eol
+*.mk text !eol
+*.pl text !eol
+*.pm text !eol
+*.project text !eol
+*.properties text !eol
+*.py text !eol
+*.rc text !eol
+*.sh text eol=lf
+*.sln text !eol
+*.stub text !eol
+*.txt text !eol
+*.ucm text !eol
+*.vcproj text !eol
+*.vcxproj text !eol
+*.xml text !eol
+*.xsl text !eol
+*.xslt text !eol
+Makefile text !eol
+configure text !eol
+LICENSE text !eol
+README text !eol
+
+*.bin -text
+*.brk -text
+*.cnv -text
+*.icu -text
+*.res -text
+*.nrm -text
+*.spp -text
+*.tri2 -text
+
+/icu4c.css -text
+source/common/dtintrv.cpp -text
+source/common/mutex.cpp -text
+source/common/unicode/dtintrv.h -text
+source/config/gmakever.mk -text
+source/config/pkgdataMakefile.in -text
+source/data/coll/af.txt -text
+source/data/coll/af_NA.txt -text
+source/data/coll/af_ZA.txt -text
+source/data/coll/az.txt -text
+source/data/coll/az_Latn.txt -text
+source/data/coll/az_Latn_AZ.txt -text
+source/data/coll/bn_IN.txt -text
+source/data/coll/pa_Arab.txt -text
+source/data/coll/pa_Arab_PK.txt -text
+source/data/coll/pa_Guru.txt -text
+source/data/coll/pa_Guru_IN.txt -text
+source/data/coll/pa_IN.txt -text
+source/data/coll/si.txt -text
+source/data/coll/si_LK.txt -text
+source/data/coll/ur.txt -text
+source/data/coll/ur_IN.txt -text
+source/data/coll/ur_PK.txt -text
+source/data/icu4j-readme.txt -text
+source/data/locales/fr_SN.txt -text
+source/data/locales/ha.txt -text
+source/data/locales/ha_Latn.txt -text
+source/data/locales/ha_Latn_NG.txt -text
+source/data/locales/ha_NG.txt -text
+source/data/locales/ii.txt -text
+source/data/locales/ii_CN.txt -text
+source/data/locales/kk_Cyrl.txt -text
+source/data/locales/kk_Cyrl_KZ.txt -text
+source/data/locales/ne.txt -text
+source/data/locales/ne_IN.txt -text
+source/data/locales/ne_NP.txt -text
+source/data/locales/pa_Arab.txt -text
+source/data/locales/pa_Arab_PK.txt -text
+source/data/locales/pa_PK.txt -text
+source/data/locales/si.txt -text
+source/data/locales/si_LK.txt -text
+source/data/locales/zh_Hans_HK.txt -text
+source/data/locales/zh_Hans_MO.txt -text
+source/data/misc/likelySubtags.txt -text
+source/data/misc/numberingSystems.txt -text
+source/data/misc/plurals.txt -text
+source/data/pkgdataMakefile.in -text
+source/data/rbnf/af.txt -text
+source/data/rbnf/ca.txt -text
+source/data/rbnf/cs.txt -text
+source/data/rbnf/et.txt -text
+source/data/rbnf/fi.txt -text
+source/data/rbnf/fo.txt -text
+source/data/rbnf/hu.txt -text
+source/data/rbnf/hy.txt -text
+source/data/rbnf/is.txt -text
+source/data/rbnf/ka.txt -text
+source/data/rbnf/kl.txt -text
+source/data/rbnf/ko.txt -text
+source/data/rbnf/lt.txt -text
+source/data/rbnf/lv.txt -text
+source/data/rbnf/nb.txt -text
+source/data/rbnf/nn.txt -text
+source/data/rbnf/pt_PT.txt -text
+source/data/rbnf/ro.txt -text
+source/data/rbnf/sk.txt -text
+source/data/rbnf/sq.txt -text
+source/data/rbnf/tr.txt -text
+source/data/rbnf/vi.txt -text
+source/data/rbnf/zh.txt -text
+source/data/rbnf/zh_Hant.txt -text
+source/data/xml/collation/af.xml -text
+source/data/xml/collation/az.xml -text
+source/data/xml/collation/bn_IN.xml -text
+source/data/xml/collation/si.xml -text
+source/data/xml/collation/ur.xml -text
+source/data/xml/main/ha.xml -text
+source/data/xml/main/ha_Latn.xml -text
+source/data/xml/main/in.xml -text
+source/data/xml/main/kk_Cyrl.xml -text
+source/data/xml/main/ne.xml -text
+source/data/xml/main/pa_Arab.xml -text
+source/data/xml/main/pa_PK.xml -text
+source/data/xml/main/si.xml -text
+source/data/xml/main/zu.xml -text
+source/data/xml/rbnf/de.xml -text
+source/data/xml/rbnf/en.xml -text
+source/data/xml/rbnf/fr.xml -text
+source/data/xml/rbnf/ga.xml -text
+source/data/xml/rbnf/mt.xml -text
+source/data/xml/rbnf/root.xml -text
+source/extra/uconv/pkgdataMakefile.in -text
+source/extra/uconv/samples/ibm-37-test.txt -text
+source/i18n/currpinf.cpp -text
+source/i18n/dtitv_impl.h -text
+source/i18n/dtitvfmt.cpp -text
+source/i18n/dtitvinf.cpp -text
+source/i18n/numsys.cpp -text
+source/i18n/tmunit.cpp -text
+source/i18n/tmutamt.cpp -text
+source/i18n/tmutfmt.cpp -text
+source/i18n/unicode/currpinf.h -text
+source/i18n/unicode/dtitvfmt.h -text
+source/i18n/unicode/dtitvinf.h -text
+source/i18n/unicode/numsys.h -text
+source/i18n/unicode/tmunit.h -text
+source/i18n/unicode/tmutamt.h -text
+source/i18n/unicode/tmutfmt.h -text
+source/i18n/wintzimpl.cpp -text
+source/i18n/wintzimpl.h -text
+source/samples/layout/cgnomelayout.c -text
+source/samples/ucnv/data02.bin -text
+source/test/compat/tzone.pl -text
+source/test/intltest/dtifmtts.cpp -text
+source/test/intltest/dtifmtts.h -text
+source/test/intltest/tufmtts.cpp -text
+source/test/intltest/tufmtts.h -text
+source/test/perf/Makefile.in -text
+source/test/perf/README -text
+source/test/perf/strsrchperf/Makefile.in -text
+source/test/perf/strsrchperf/StrSrchPerf_r.pl -text
+source/test/perf/strsrchperf/strsrchperf.cpp -text
+source/test/perf/strsrchperf/strsrchperf.h -text
+source/test/perf/strsrchperf/strsrchperf.vcproj -text
+source/test/testdata/ConverterSelectorTestUTF16.txt -text
+source/test/testdata/TestFont1.otf -text
+source/test/testdata/icu26_testtypes.res -text
+source/test/testdata/icu26e_testtypes.res -text
+source/test/testdata/importtest.bin -text
+source/test/testdata/pkgdataMakefile.in -text
+source/test/testdata/uni-text.bin -text
+source/tools/pkgdata/pkgdata.cpp -text
+source/tools/toolutil/pkg_genc.c -text
+source/tools/toolutil/pkg_genc.h -text
+source/tools/toolutil/pkg_gencmn.c -text
+source/tools/toolutil/pkg_gencmn.h -text
+source/tools/toolutil/pkg_icu.cpp -text
+source/tools/toolutil/pkg_icu.h -text
+
+# The following file types are stored in Git-LFS.
+*.jar filter=lfs diff=lfs merge=lfs -text
+*.dat filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.gz filter=lfs diff=lfs merge=lfs -text
+*.bz2 filter=lfs diff=lfs merge=lfs -text
+*.gif filter=lfs diff=lfs merge=lfs -text
+
