@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2007-2008, International Business Machines
+*   Copyright (C) 2007-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -42,8 +42,6 @@
  * @stable ICU 3.8
  */
 typedef void *UDateTimePatternGenerator;
-
-#ifndef U_HIDE_DRAFT_API
 
 /**
  * Field number constants for udatpg_getAppendItemFormats() and similar functions.
@@ -102,8 +100,6 @@ typedef enum UDateTimePatternConflict {
     /** @stable ICU 3.8 */
     UDATPG_CONFLICT_COUNT
 } UDateTimePatternConflict;
-
-#endif
 
 /**
   * Open a generator according to a given locale.
