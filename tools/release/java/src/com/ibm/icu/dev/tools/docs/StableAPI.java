@@ -246,6 +246,10 @@ public class StableAPI {
             result = prevVer;
         }
         
+        if(result != null) {
+        	
+        }
+        
         if(prevVer != null) {
             if(result != null) {
                 if(!result.equals(prevVer)) { 

@@ -1,6 +1,6 @@
 /*
  * Default CSS style sheet for the ICU Open Source site
- * Copyright (C) 2005-2008, International Business Machines
+ * Copyright (C) 2005-2009, International Business Machines
  * Corporation and others.  All Rights Reserved.
  */
 
@@ -242,4 +242,34 @@ table.rtable tr td {
 	margin:  0.5 em;
 }
 
+table.genTable {
+	border-collapse: collapse;
+	border:  1px solid black;
+}
 
+/* 'everything inc version */
+table.gentable td {
+	border:  1px solid gray;
+	padding:  0.25em;
+	font-size:  small;
+}
+
+/* not version */
+table.genTable td.file,
+table.genTable td.proto {
+	border:  none;
+	font-size: medium;
+}
+
+table.genTable td.file {
+	font-family: monospace;
+	font-weight: bold;
+}
+
+div.other .row0 {
+	background-color: white;	
+}
+
+div.other .row1 {
+	background-color: #dfd;
+}

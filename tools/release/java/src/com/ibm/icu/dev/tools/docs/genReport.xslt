@@ -1,7 +1,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2008, International Business Machines Corporation and         *
+* Copyright (C) 2008-2009, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 * This is the XSLT for the API Report. 
@@ -32,38 +32,68 @@
     
     <body>
     
+    <a name="_top"></a>
+    
     <h1>ICU4C API Comparison: <xsl:value-of select="$leftVer"/> with <xsl:value-of select="$rightVer" /> </h1>
+    <ul>
+    	<li><a href="#removed">Removed from <xsl:value-of select="$leftVer"/></a></li>
+    	<li><a href="#deprecated">Deprecated or Obsoleted in <xsl:value-of select="$rightVer" /></a></li>
+    	<li><a href="#changed">Changed in  <xsl:value-of select="$rightVer" /></a></li>
+    	<li><a href="#promoted">Promoted to stable in <xsl:value-of select="$rightVer" /></a></li>
+    	<li><a href="#added">Added in <xsl:value-of select="$rightVer" /></a></li>
+    	<li><a href="#other">Other existing drafts in <xsl:value-of select="$rightVer" /></a></li>
+    </ul>
     <hr/>
 
-    <h2>Removed from <xsl:value-of select="$leftVer"/> </h2>
+	<a name="removed">
+	    <h2>Removed from <xsl:value-of select="$leftVer"/> </h2>
+    </a>
         <xsl:call-template name="genTable">
             <xsl:with-param name="nodes" select="/list/func[@rightStatus=$nul]"/>
         </xsl:call-template>
-    <P/><hr/>
+    <P/><a href="#_top">(jump back to top)</a><hr/>
 
+	<a name="deprecated">
     <h2>Deprecated or Obsoleted in <xsl:value-of select="$rightVer" /></h2>
+    </a>
         <xsl:call-template name="genTable">
             <xsl:with-param name="nodes" select="/list/func[(@rightStatus='Deprecated' and @leftStatus!='Deprecated') or (@rightStatus='Obsolete' and @leftStatus!='Obsolete')]"/>
         </xsl:call-template>
-    <P/><hr/>
+    <P/><a href="#_top">(jump back to top)</a><hr/>
 
+	<a name="changed">
     <h2>Changed in  <xsl:value-of select="$rightVer" /> (old, new)</h2>
+    </a>
         <xsl:call-template name="genTable">
             <xsl:with-param name="nodes" select="/list/func[(@leftStatus != $nul) and (@rightStatus != $nul) and ( (@leftStatus != @rightStatus) or (@leftVersion != @rightVersion) )]"/>
         </xsl:call-template>
-    <P/><hr/>
+    <P/><a href="#_top">(jump back to top)</a><hr/>
 
+	<a name="promoted">
     <h2>Promoted to stable in <xsl:value-of select="$rightVer" /></h2>
+    </a>
         <xsl:call-template name="genTable">
             <xsl:with-param name="nodes" select="/list/func[@leftStatus != 'Stable' and  @rightStatus = 'Stable']"/>
         </xsl:call-template>
-    <P/><hr/>
+    <P/><a href="#_top">(jump back to top)</a><hr/>
     
+    <a name="added">
     <h2>Added in <xsl:value-of select="$rightVer" /></h2>
+    </a>
         <xsl:call-template name="genTable">
             <xsl:with-param name="nodes" select="/list/func[@leftStatus=$nul]"/>
         </xsl:call-template>
-    <P/><hr/>
+    <P/><a href="#_top">(jump back to top)</a><hr/>
+    
+    <a name="other">
+    <h2>Other existing drafts in <xsl:value-of select="$rightVer" /></h2>
+    </a>
+    <div class='other'>
+        <xsl:call-template name="infoTable">
+            <xsl:with-param name="nodes" select="/list/func[@rightStatus = 'Draft' and @rightVersion != $rightVer]"/>
+        </xsl:call-template>
+    </div>
+    <P/><a href="#_top">(jump back to top)</a><hr/>
 <!--    
     
 -->    
@@ -75,7 +105,7 @@
 
   <xsl:template name="genTable">
     <xsl:param name="nodes" />
-    <table BORDER="1">
+    <table class='genTable' BORDER="1">
     <THEAD>
         <tr>
             <th> <xsl:value-of select="'File'" /> </th>
@@ -99,8 +129,8 @@
                     </xsl:choose>
                     -->
                 </xsl:attribute>
-                <td> <xsl:value-of select="@file" /> </td>
-                <td> <xsl:value-of select="@prototype" /> </td>
+                <td class='file'> <xsl:value-of select="@file" /> </td>
+                <td class='proto'> <xsl:value-of select="@prototype" /> </td>
                 <td>
                     <xsl:attribute name="class">
                         <xsl:if test ="@leftStatus = 'Stable'">
@@ -128,12 +158,94 @@
                         <xsl:if test ="@rightStatus = 'Draft' and @rightVersion != $rightVer">
                             <br/><b title='A draft API has the wrong version.' class='bigwarn'>(should be <xsl:value-of select="$rightVer"/>)</b>
                         </xsl:if>
+                        <xsl:if test="@leftStatus = 'None' and @rightVersion = ''">
+                        	<br/><b title='A new API was introduced that was not tagged.' class='bigwarn'>(untagged)</b>
+                        </xsl:if>
                     </span>
                 </td>
             </tr>
         </xsl:for-each>
     </table>
   </xsl:template>
+  
+    <xsl:template name="infoTable">
+    <xsl:param name="nodes" />
+    <table class='genTable' BORDER="1">
+    <THEAD>
+        <tr>
+            <th> <xsl:value-of select="'File'" /> </th>
+            <th> <xsl:value-of select="'API'" /> </th>
+            <th> <xsl:value-of select="$leftVer" /> </th>
+            <th> <xsl:value-of select="$rightVer" /> </th>
+        </tr>
+    </THEAD>
+
+        <xsl:for-each select="$nodes">
+            <xsl:sort select="@file" />
+            
+            <tr>
+                <xsl:attribute name="class">
+                    <xsl:value-of select="'row'"/>
+                    <xsl:value-of select="(position() mod 2)"/>
+                    <!-- 
+                    <xsl:choose>
+                        <xsl:when test="(position() mod 2) = 0"><xsl:value-of select="row0" /></xsl:when>
+                        <xsl:otherwise><xsl:value-of select="row1" /></xsl:otherwise>
+                    </xsl:choose>
+                    -->
+                </xsl:attribute>
+                <td class='file'> <xsl:value-of select="@file" /> </td>
+                <td class='proto'> <xsl:value-of select="@prototype" /> </td>
+                <td>
+                    <xsl:attribute name="class">
+                        <xsl:if test ="@leftStatus = 'Stable'">
+                                <xsl:value-of select="'stabchange'" />
+                        </xsl:if>
+                    </xsl:attribute>
+                    
+                   	<xsl:if  test = "@leftStatus = @rightStatus and @leftVersion = @rightVersion">
+	                    <xsl:attribute name="colspan">
+       	            		2
+       	            	</xsl:attribute>
+	                    <xsl:attribute name="align">
+       	            		center
+       	            	</xsl:attribute>
+                   	</xsl:if>
+               
+                    <xsl:value-of select="@leftStatus" />
+                    <br/> <xsl:value-of select="@leftVersion" />
+                </td>
+                <xsl:if test = "@leftStatus != @rightStatus or @leftVersion != @rightVersion">
+                <td> <xsl:value-of select="@rightStatus" /> 
+                    <br/> 
+                    <span>
+                        <xsl:attribute name="class">
+                            <xsl:if test ="@leftVersion != @rightVersion and @leftVersion != '' and @rightVersion != ''">
+                                <xsl:value-of select="'verchange'" />                                
+                            </xsl:if>
+                        </xsl:attribute>              
+                        <span>              
+                            <xsl:value-of select="@rightVersion" />
+                        </span>
+                   <!-- 
+                        <xsl:if test ="@leftVersion != @rightVersion and @leftVersion != '' and @rightVersion != '' and @rightStatus = 'Stable'">
+                            <br/><b title='A stable API changed version.' class='bigwarn'>(changed)</b>
+                        </xsl:if>
+                        <xsl:if test ="@rightStatus = 'Draft' and @rightVersion != $rightVer">
+                            <br/><b title='A draft API has the wrong version.' class='bigwarn'>(should be <xsl:value-of select="$rightVer"/>)</b>
+                        </xsl:if>
+                        <xsl:if test="@leftStatus = 'None' and @rightVersion = ''">
+                        	<br/><b title='A new API was introduced that was not tagged.' class='bigwarn'>(untagged)</b>
+                        </xsl:if>
+                     -->
+                    </span>
+                </td>
+                </xsl:if>
+            </tr>
+        </xsl:for-each>
+    </table>
+  </xsl:template>
+  
 </xsl:stylesheet>
 
 

@@ -47,7 +47,7 @@ XML=source/doc/xml
 UVERSIONH=$(XML)/uversion_8h.xml
 
 clean-docs: | check-vars
-	-rm -rf "$(OLD_ICU)/$(XML)"
+	-rm -rf "$(OLD_ICU)/$(XML)" "$(NEW_ICU)/$(XML)"
 
 $(TARGET): check-vars $(OLD_ICU)/$(XML) $(NEW_ICU)/$(XML) 
 	$(ANT) -Dolddir="$(OLD_ICU)/$(XML)" -Dnewdir="$(NEW_ICU)/$(XML)" $(ANT_TARGET)
