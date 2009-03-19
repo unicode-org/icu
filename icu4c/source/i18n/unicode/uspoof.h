@@ -190,6 +190,7 @@ uspoof_open(UErrorCode *status);
  *
  * @see uspoof_open
  * @see uspoof_serialize
+ * @draft ICU 4.2
  */
 U_CAPI USpoofChecker * U_EXPORT2
 uspoof_openFromSerialized(const void *data, int32_t length, int32_t *pActualLength,
@@ -224,6 +225,7 @@ uspoof_openFromSerialized(const void *data, int32_t length, int32_t *pActualLeng
   *                    U_PARSE_ERROR, which is used to report syntax errors
   *                    in the input.
   * @return            A spoof checker that uses the rules from the input files.
+  * @draft ICU 4.2
   */
 U_CAPI USpoofChecker * U_EXPORT2
 uspoof_openFromSource(const char *confusables,  int32_t confusablesLen,
@@ -234,6 +236,7 @@ uspoof_openFromSource(const char *confusables,  int32_t confusablesLen,
 /**
   * Close a Spoof Checker, freeing any memory that was being held by
   *   its implementation.
+  * @draft ICU 4.2
   */
 U_DRAFT void U_EXPORT2
 uspoof_close(USpoofChecker *sc);
@@ -245,6 +248,7 @@ uspoof_close(USpoofChecker *sc);
  * @param sc       The source USpoofChecker
  * @param status   The error code, set if this function encounters a problem.
  * @return
+ * @draft ICU 4.2
  */
 U_DRAFT USpoofChecker * U_EXPORT2
 uspoof_clone(const USpoofChecker *sc, UErrorCode *status);
@@ -359,6 +363,7 @@ uspoof_getAllowedLocales(USpoofChecker *sc, UErrorCode *status);
  *                 this function, so there are no restrictions on modifying
  *                 or deleting the USet after calling this function.
  * @param status   The error code, set if this function encounters a problem.
+ * @draft ICU 4.2
  */
 U_DRAFT void U_EXPORT2
 uspoof_setAllowedChars(USpoofChecker *sc, const USet *chars, UErrorCode *status);
@@ -382,6 +387,7 @@ uspoof_setAllowedChars(USpoofChecker *sc, const USet *chars, UErrorCode *status)
  * @param status   The error code, set if this function encounters a problem.
  * @return         A USet containing the characters that are permitted by
  *                 the USPOOF_CHAR_LIMIT test.
+ * @draft ICU 4.2
  */
 U_DRAFT const USet * U_EXPORT2
 uspoof_getAllowedChars(const USpoofChecker *sc, UErrorCode *status);
@@ -404,6 +410,7 @@ uspoof_getAllowedChars(const USpoofChecker *sc, UErrorCode *status);
  *                 this function, so there are no restrictions on modifying
  *                 or deleting the USet after calling this function.
  * @param status   The error code, set if this function encounters a problem.
+ * @draft ICU 4.2
  */
 U_DRAFT void U_EXPORT2
 uspoof_setAllowedUnicodeSet(USpoofChecker *sc, const UnicodeSet *chars, UErrorCode *status);
@@ -427,6 +434,7 @@ uspoof_setAllowedUnicodeSet(USpoofChecker *sc, const UnicodeSet *chars, UErrorCo
  * @param status   The error code, set if this function encounters a problem.
  * @return         A UnicodeSet containing the characters that are permitted by
  *                 the USPOOF_CHAR_LIMIT test.
+ * @draft ICU 4.2
  */
 U_DRAFT const UnicodeSet * U_EXPORT2
 uspoof_getAllowedUnicodeSet(const USpoofChecker *sc, UErrorCode *status);
@@ -794,6 +802,7 @@ uspoof_getSkeletonUnicodeString(const USpoofChecker *sc,
  * @return the number of bytes written or needed for the spoof data
  *
  * @see utrie2_openFromSerialized()
+ * @draft ICU 4.2
  */
 U_CAPI int32_t U_EXPORT2
 uspoof_serialize(USpoofChecker *sc,
