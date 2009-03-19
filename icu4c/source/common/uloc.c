@@ -2897,7 +2897,7 @@ uloc_getCharacterOrientation(const char* localeId,
  * @param localeID locale name
  * @param status Error status
  * @return an enum indicating the layout orientation for lines.
- * @draft ICU 4.0
+ * @stable ICU 4.0
  */
 U_DRAFT ULayoutType U_EXPORT2
 uloc_getLineOrientation(const char* localeId,

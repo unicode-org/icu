@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (C) 2008, International Business Machines Corporation and
+* Copyright (C) 2008-2009, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -536,7 +536,7 @@ DateIntervalFormat::create(const Locale& locale,
  *    includes year, month, and date when year, month, and date differs.
  * 
  * @param status          output param set to success/failure code on exit
- * @draft ICU 4.0 
+ * @stable ICU 4.0 
  */
 void 
 DateIntervalFormat::initializePattern(UErrorCode& status) {
@@ -877,7 +877,7 @@ DateIntervalFormat::getDateTimeSkeleton(const UnicodeString& skeleton,
  * @return               whether the resource is found for the skeleton.
  *                       TRUE if interval pattern found for the skeleton,
  *                       FALSE otherwise.
- * @draft ICU 4.0
+ * @stable ICU 4.0
  */
 UBool 
 DateIntervalFormat::setSeparateDateTimePtn(
@@ -1069,7 +1069,7 @@ DateIntervalFormat::setIntervalPattern(UCalendarDateFields field,
  *                              through extending skeleton or not.
  *                              TRUE if interval pattern is found by
  *                              extending skeleton, FALSE otherwise.
- * @draft ICU 4.0
+ * @stable ICU 4.0
  */
 UBool
 DateIntervalFormat::setIntervalPattern(UCalendarDateFields field,

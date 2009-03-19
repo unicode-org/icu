@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1997-2008, International Business Machines
+ *   Copyright (C) 1997-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *
@@ -175,7 +175,7 @@ typedef enum UScriptCode {
       USCRIPT_MOON                          = 114,/* Moon */
       USCRIPT_MEITEI_MAYEK                  = 115,/* Mtei */
 
-      /* New script codes from ISO 15924 @draft ICU 4.0 */
+      /* New script codes from ISO 15924 @stable ICU 4.0 */
       USCRIPT_IMPERIAL_ARAMAIC              = 116,/* Armi */
       USCRIPT_AVESTAN                       = 117,/* Avst */
       USCRIPT_CHAKMA                        = 118,/* Cakm */

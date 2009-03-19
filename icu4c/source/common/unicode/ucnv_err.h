@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
  *
@@ -142,7 +142,7 @@ typedef struct UConverter UConverter;
 /**
  * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to CSS2 conventions (\\HH..H<space>, that is,
  * a backslash, 1..6 hex digits, and a space)
- * @draft ICU 4.0
+ * @stable ICU 4.0
  */
 #define UCNV_ESCAPE_CSS2   "S"
 

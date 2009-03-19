@@ -858,7 +858,7 @@ uloc_setKeywordValue(const char* keywordName,
 /**
  * enums for the  return value for the character and line orientation
  * functions.
- * @draft ICU 4.0
+ * @stable ICU 4.0
  */
 typedef enum {
   ULOC_LAYOUT_LTR   = 0,  /* left-to-right. */
@@ -874,7 +874,7 @@ typedef enum {
  * @param localeId locale name
  * @param status Error status
  * @return an enum indicating the layout orientation for characters.
- * @draft ICU 4.0
+ * @stable ICU 4.0
  */
 U_DRAFT ULayoutType U_EXPORT2
 uloc_getCharacterOrientation(const char* localeId,
@@ -886,7 +886,7 @@ uloc_getCharacterOrientation(const char* localeId,
  * @param localeId locale name
  * @param status Error status
  * @return an enum indicating the layout orientation for lines.
- * @draft ICU 4.0
+ * @stable ICU 4.0
  */
 U_DRAFT ULayoutType U_EXPORT2
 uloc_getLineOrientation(const char* localeId,
@@ -995,7 +995,7 @@ uloc_getLocaleForLCID(uint32_t hostID, char *locale, int32_t localeCapacity,
  * @return The actual buffer size needed for the maximized locale.  If it's
  * greater than maximizedLocaleIDCapacity, the returned ID will be truncated.
  * On error, the return value is -1.
- * @draft ICU 4.0
+ * @stable ICU 4.0
  */
 U_DRAFT int32_t U_EXPORT2
 uloc_addLikelySubtags(const char*    localeID,
@@ -1035,7 +1035,7 @@ uloc_addLikelySubtags(const char*    localeID,
  * @return The actual buffer size needed for the minimized locale.  If it's
  * greater than minimizedLocaleIDCapacity, the returned ID will be truncated.
  * On error, the return value is -1.
- * @draft ICU 4.0
+ * @stable ICU 4.0
  */
 U_DRAFT int32_t U_EXPORT2
 uloc_minimizeSubtags(const char*    localeID,

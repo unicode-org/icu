@@ -69,7 +69,7 @@ typedef enum URegexpFlag{
       *  The other flags become superfluous.
       *  TODO:  say which escapes are still handled; anything Java does
       *         early (\\u) we should still do.
-      * @draft ICU 4.0
+      * @stable ICU 4.0
       */
     UREGEX_LITERAL = 16,
 
@@ -82,7 +82,7 @@ typedef enum URegexpFlag{
     /**   Unix-only line endings.
       *   When this mode is enabled, only \\u000a is recognized as a line ending
       *    in the behavior of ., ^, and $.
-      *   @draft ICU 4.0
+      *   @stable ICU 4.0
       */
     UREGEX_UNIX_LINES = 1,
 
@@ -100,7 +100,7 @@ typedef enum URegexpFlag{
        *     backslash-escaped ASCII letters without a known specail
        *     meaning.  If this flag is not set, these
        *     escaped letters represent themselves.
-       *     @draft ICU 4.0
+       *     @stable ICU 4.0
        */
      UREGEX_ERROR_ON_UNKNOWN_ESCAPES = 512
 
@@ -482,7 +482,7 @@ uregex_reset(URegularExpression    *regexp,
   * @param regionStart  The index to begin searches at.
   * @param regionLimit  The index to end searches at (exclusive).
   * @param status A pointer to a UErrorCode to receive any errors.
-  * @draft ICU 4.0
+  * @stable ICU 4.0
   */
 U_DRAFT void U_EXPORT2
 uregex_setRegion(URegularExpression   *regexp,
@@ -497,7 +497,7 @@ uregex_setRegion(URegularExpression   *regexp,
   * @param regexp The compiled regular expression.
   * @param status A pointer to a UErrorCode to receive any errors.
   * @return The starting index of this matcher's region.
-  * @draft ICU 4.0
+  * @stable ICU 4.0
   */
 U_DRAFT int32_t U_EXPORT2
 uregex_regionStart(const  URegularExpression   *regexp,
@@ -513,7 +513,7 @@ uregex_regionStart(const  URegularExpression   *regexp,
   * @param regexp The compiled regular expression.
   * @param status A pointer to a UErrorCode to receive any errors.
   * @return The ending point of this matcher's region.
-  * @draft ICU 4.0
+  * @stable ICU 4.0
   */
 U_DRAFT int32_t U_EXPORT2
 uregex_regionEnd(const  URegularExpression   *regexp,
@@ -527,7 +527,7 @@ uregex_regionEnd(const  URegularExpression   *regexp,
   * @param regexp The compiled regular expression.
   * @param status A pointer to a UErrorCode to receive any errors.
   * @return TRUE if this matcher is using opaque bounds, false if it is not.
-  * @draft ICU 4.0
+  * @stable ICU 4.0
   */
 U_DRAFT UBool U_EXPORT2
 uregex_hasTransparentBounds(const  URegularExpression   *regexp,
@@ -551,7 +551,7 @@ uregex_hasTransparentBounds(const  URegularExpression   *regexp,
   * @param   regexp The compiled regular expression.
   * @param   b      TRUE for transparent bounds; FALSE for opaque bounds
   * @param   status A pointer to a UErrorCode to receive any errors.
-  * @draft   ICU 4.0
+  * @stable ICU 4.0
   **/
 U_DRAFT void U_EXPORT2  
 uregex_useTransparentBounds(URegularExpression   *regexp, 
@@ -566,7 +566,7 @@ uregex_useTransparentBounds(URegularExpression   *regexp,
   * @param  regexp The compiled regular expression.
   * @param  status A pointer to a UErrorCode to receive any errors.
   * @return TRUE if this matcher is using anchoring bounds.
-  * @draft  ICU 4.0
+  * @stable ICU 4.0
   */
 U_DRAFT UBool U_EXPORT2
 uregex_hasAnchoringBounds(const  URegularExpression   *regexp,
@@ -584,7 +584,7 @@ uregex_hasAnchoringBounds(const  URegularExpression   *regexp,
   * @param regexp The compiled regular expression.
   * @param b      TRUE if to enable anchoring bounds; FALSE to disable them.
   * @param status A pointer to a UErrorCode to receive any errors.
-  * @draft   ICU 4.0
+  * @stable ICU 4.0
   */
 U_DRAFT void U_EXPORT2
 uregex_useAnchoringBounds(URegularExpression   *regexp,
@@ -599,7 +599,7 @@ uregex_useAnchoringBounds(URegularExpression   *regexp,
   *  @param regexp The compiled regular expression.
   *  @param status A pointer to a UErrorCode to receive any errors.
   *  @return  TRUE if the most recent match hit the end of input
-  *  @draft   ICU 4.0
+  *  @stable ICU 4.0
   */
 U_DRAFT UBool U_EXPORT2
 uregex_hitEnd(const  URegularExpression   *regexp,
@@ -614,7 +614,7 @@ uregex_hitEnd(const  URegularExpression   *regexp,
   * @param regexp The compiled regular expression.
   * @param status A pointer to a UErrorCode to receive any errors.
   * @return TRUE  if more input could cause the most recent match to no longer match.
-  * @draft  ICU 4.0
+  * @stable ICU 4.0
   */
 U_DRAFT UBool U_EXPORT2   
 uregex_requireEnd(const  URegularExpression   *regexp,
@@ -864,7 +864,7 @@ uregex_split(   URegularExpression      *regexp,
  * @param   regexp      The compiled regular expression.
  * @param   limit       The limit value, or 0 for no limit.
  * @param   status      A reference to a UErrorCode to receive any errors.
- * @draft ICU 4.0
+ * @stable ICU 4.0
  */
 U_DRAFT void U_EXPORT2
 uregex_setTimeLimit(URegularExpression      *regexp,
@@ -878,7 +878,7 @@ uregex_setTimeLimit(URegularExpression      *regexp,
  * @param   regexp      The compiled regular expression.
  * @param   status      A reference to a UErrorCode to receive any errors.
  * @return the maximum allowed time for a match, in units of processing steps.
- * @draft ICU 4.0
+ * @stable ICU 4.0
  */
 U_DRAFT int32_t U_EXPORT2
 uregex_getTimeLimit(const URegularExpression      *regexp,
@@ -902,7 +902,7 @@ uregex_getTimeLimit(const URegularExpression      *regexp,
  *                      The limit must be greater than zero, or -1.
  * @param   status      A reference to a UErrorCode to receive any errors.
  *
- * @draft ICU 4.0
+ * @stable ICU 4.0
  */
 U_DRAFT void U_EXPORT2
 uregex_setStackLimit(URegularExpression      *regexp,
@@ -914,7 +914,7 @@ uregex_setStackLimit(URegularExpression      *regexp,
  *
  * @return  the maximum backtracking stack size, in bytes, or zero if the
  *          stack size is unlimited.
- * @draft ICU 4.0
+ * @stable ICU 4.0
  */
 U_DRAFT int32_t U_EXPORT2
 uregex_getStackLimit(const URegularExpression      *regexp,
@@ -937,7 +937,7 @@ uregex_getStackLimit(const URegularExpression      *regexp,
  *                 for this matching operation.
  * @return         TRUE to continue the matching operation.
  *                 FALSE to terminate the matching operation.
- * @draft ICU 4.0
+ * @stable ICU 4.0
  */
 U_CDECL_BEGIN
 typedef UBool U_CALLCONV URegexMatchCallback (
@@ -957,7 +957,7 @@ U_CDECL_END
  *                      time the callback function is set will be saved
  *                      and passed to the callback each time that it is called.
  * @param   status      A reference to a UErrorCode to receive any errors.
- * @draft ICU 4.0
+ * @stable ICU 4.0
  */
 U_DRAFT void U_EXPORT2
 uregex_setMatchCallback(URegularExpression      *regexp,
@@ -975,7 +975,7 @@ uregex_setMatchCallback(URegularExpression      *regexp,
  * @param   context     Out parameter, receives the user context pointer that
  *                      was set when uregex_setMatchCallback() was called.
  * @param   status      A reference to a UErrorCode to receive any errors.
- * @draft ICU 4.0
+ * @stable ICU 4.0
  */
 U_DRAFT void U_EXPORT2
 uregex_getMatchCallback(const URegularExpression    *regexp,
