@@ -200,10 +200,16 @@ public:
      */
     GoodSuffixTable   *getGoodSuffixTable();
 
-    /*
+    /**
      * UObject glue...
+     * @internal ICU 4.0.1 technology preview
      */
     virtual UClassID getDynamicClassID() const;
+
+    /**
+     * UObject glue...
+     * @internal ICU 4.0.1 technology preview
+     */
     static UClassID getStaticClassID();
     
 private:

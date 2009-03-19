@@ -125,10 +125,15 @@ public:
      */
     uint32_t &operator[](int32_t index) const;
 
-    /*
+    /**
      * UObject glue...
+     * @internal ICU 4.0.1 technology preview
      */
     virtual UClassID getDynamicClassID() const;
+    /**
+     * UObject glue...
+     * @internal ICU 4.0.1 technology preview
+     */
     static UClassID getStaticClassID();
 
 private:
@@ -217,10 +222,15 @@ public:
      */
     int32_t size() const;
 
-    /*
-     * the UObject glue...
+    /**
+     * UObject glue...
+     * @internal ICU 4.0.1 technology preview
      */
     virtual UClassID getDynamicClassID() const;
+    /**
+     * UObject glue...
+     * @internal ICU 4.0.1 technology preview
+     */
     static UClassID getStaticClassID();
 
 private:
@@ -367,10 +377,15 @@ public:
      */
    int32_t minLengthInChars(const CEList *ces, int32_t offset, int32_t *history) const;
 
-   /*
-    * UObject glue...
-    */
+    /**
+     * UObject glue...
+     * @internal ICU 4.0.1 technology preview
+     */
     virtual UClassID getDynamicClassID() const;
+    /**
+     * UObject glue...
+     * @internal ICU 4.0.1 technology preview
+     */
     static UClassID getStaticClassID();
 
     /**
