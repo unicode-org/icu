@@ -1,5 +1,6 @@
 * text=auto !eol
 icu4c/APIChangeReport.html svneol=native#text/html
+icu4c/icu4c.css -text
 icu4c/license.html svneol=native#text/html
 icu4c/readme.html svneol=native#text/html
 icu4c/source/common/dtintrv.cpp -text
