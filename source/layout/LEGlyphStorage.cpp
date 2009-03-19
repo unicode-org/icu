@@ -542,6 +542,12 @@ void LEGlyphStorage::moveGlyph(le_int32 fromPosition, le_int32 toPosition, le_ui
 
 }
 
+// Glue code for existing stable API
+LEGlyphID *LEGlyphStorage::insertGlyphs(le_int32  atIndex, le_int32 insertCount)
+{
+    LEErrorCode ignored = LE_NO_LAYOUT_ERROR;
+    return insertGlyphs(atIndex, insertCount, ignored);
+}
 
 // FIXME: add error checking?
 LEGlyphID *LEGlyphStorage::insertGlyphs(le_int32  atIndex, le_int32 insertCount, LEErrorCode& success)
