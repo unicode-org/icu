@@ -644,7 +644,7 @@ ucal_close(UCalendar *cal);
  * @param cal The calendar to copy
  * @param status A pointer to an UErrorCode to receive any errors.
  * @return A pointer to a UCalendar identical to cal.
- * @draft ICU 4.0
+ * @stable ICU 4.0
  */
 U_DRAFT UCalendar* U_EXPORT2 
 ucal_clone(const UCalendar* cal,
@@ -1134,7 +1134,7 @@ ucal_getTZDataVersion(UErrorCode* status);
  *                  is set.
  * @return          The result string length, not including the terminating
  *                  null.
- * @draft ICU 4.0
+ * @stable ICU 4.0
  */
 U_DRAFT int32_t U_EXPORT2
 ucal_getCanonicalTimeZoneID(const UChar* id, int32_t len,

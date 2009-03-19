@@ -200,7 +200,7 @@ typedef enum UDateFormatStyle {
  * </li>
  * </ol>
  *
- * @draft ICU 4.0
+ * @stable ICU 4.0
  */
 
 #define UDAT_MINUTE_SECOND              "ms"

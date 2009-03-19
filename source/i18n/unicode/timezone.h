@@ -1,5 +1,5 @@
 /*************************************************************************
-* Copyright (c) 1997-2008, International Business Machines Corporation
+* Copyright (c) 1997-2009, International Business Machines Corporation
 * and others. All Rights Reserved.
 **************************************************************************
 *
@@ -344,7 +344,7 @@ public:
      *                      valid custom timezone ID, U_ILLEGAL_ARGUMENT_ERROR
      *                      is set.
      * @return A reference to the result.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     static UnicodeString& U_EXPORT2 getCanonicalID(const UnicodeString& id,
         UnicodeString& canonicalID, UErrorCode& status);
@@ -362,7 +362,7 @@ public:
      *                      valid custom timezone ID, U_ILLEGAL_ARGUMENT_ERROR
      *                      is set.
      * @return A reference to the result.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     static UnicodeString& U_EXPORT2 getCanonicalID(const UnicodeString& id,
         UnicodeString& canonicalID, UBool& isSystemID, UErrorCode& status);

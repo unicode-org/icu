@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2008, International Business Machines
+*   Copyright (C) 1997-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -1256,39 +1256,39 @@ enum UBlockCode {
 
     /* New blocks in Unicode 5.1 */
 
-    /** @draft ICU 4.0 */
+    /** @stable ICU 4.0 */
     UBLOCK_SUNDANESE = 155, /*[1B80]*/
-    /** @draft ICU 4.0 */
+    /** @stable ICU 4.0 */
     UBLOCK_LEPCHA = 156, /*[1C00]*/
-    /** @draft ICU 4.0 */
+    /** @stable ICU 4.0 */
     UBLOCK_OL_CHIKI = 157, /*[1C50]*/
-    /** @draft ICU 4.0 */
+    /** @stable ICU 4.0 */
     UBLOCK_CYRILLIC_EXTENDED_A = 158, /*[2DE0]*/
-    /** @draft ICU 4.0 */
+    /** @stable ICU 4.0 */
     UBLOCK_VAI = 159, /*[A500]*/
-    /** @draft ICU 4.0 */
+    /** @stable ICU 4.0 */
     UBLOCK_CYRILLIC_EXTENDED_B = 160, /*[A640]*/
-    /** @draft ICU 4.0 */
+    /** @stable ICU 4.0 */
     UBLOCK_SAURASHTRA = 161, /*[A880]*/
-    /** @draft ICU 4.0 */
+    /** @stable ICU 4.0 */
     UBLOCK_KAYAH_LI = 162, /*[A900]*/
-    /** @draft ICU 4.0 */
+    /** @stable ICU 4.0 */
     UBLOCK_REJANG = 163, /*[A930]*/
-    /** @draft ICU 4.0 */
+    /** @stable ICU 4.0 */
     UBLOCK_CHAM = 164, /*[AA00]*/
-    /** @draft ICU 4.0 */
+    /** @stable ICU 4.0 */
     UBLOCK_ANCIENT_SYMBOLS = 165, /*[10190]*/
-    /** @draft ICU 4.0 */
+    /** @stable ICU 4.0 */
     UBLOCK_PHAISTOS_DISC = 166, /*[101D0]*/
-    /** @draft ICU 4.0 */
+    /** @stable ICU 4.0 */
     UBLOCK_LYCIAN = 167, /*[10280]*/
-    /** @draft ICU 4.0 */
+    /** @stable ICU 4.0 */
     UBLOCK_CARIAN = 168, /*[102A0]*/
-    /** @draft ICU 4.0 */
+    /** @stable ICU 4.0 */
     UBLOCK_LYDIAN = 169, /*[10920]*/
-    /** @draft ICU 4.0 */
+    /** @stable ICU 4.0 */
     UBLOCK_MAHJONG_TILES = 170, /*[1F000]*/
-    /** @draft ICU 4.0 */
+    /** @stable ICU 4.0 */
     UBLOCK_DOMINO_TILES = 171, /*[1F030]*/
 
     /** @stable ICU 2.0 */
@@ -1464,7 +1464,7 @@ typedef enum UJoiningGroup {
     U_JG_FE,        /**< @stable ICU 2.6 */
     U_JG_KHAPH,     /**< @stable ICU 2.6 */
     U_JG_ZHAIN,     /**< @stable ICU 2.6 */
-    U_JG_BURUSHASKI_YEH_BARREE, /**< @draft ICU 4.0 */
+    U_JG_BURUSHASKI_YEH_BARREE, /**< @stable ICU 4.0 */
     U_JG_COUNT
 } UJoiningGroup;
 

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2008, International Business Machines Corporation and
+* Copyright (C) 2008-2009, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -109,31 +109,31 @@ public:
      * @param status  Output param set to success/failure code on exit, which
      *                must not indicate a failure before the function call.
      *
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     PluralRules(UErrorCode& status);
 
     /**
      * Copy constructor.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     PluralRules(const PluralRules& other);
 
     /**
      * Destructor.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     virtual ~PluralRules();
 
     /**
      * Clone
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     PluralRules* clone() const;
 
     /**
       * Assignment operator.
-      * @draft ICU 4.0
+      * @stable ICU 4.0
       */
     PluralRules& operator=(const PluralRules&);
 
@@ -145,7 +145,7 @@ public:
      * @param status      Output param set to success/failure code on exit, which
      *                    must not indicate a failure before the function call.
      * @return            new PluralRules pointer. NULL if there is an error.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     static PluralRules* U_EXPORT2 createRules(const UnicodeString& description,
                                               UErrorCode& status);
@@ -156,7 +156,7 @@ public:
      * @param status  Output param set to success/failure code on exit, which
      *                must not indicate a failure before the function call.
      * @return        new PluralRules pointer. NULL if there is an error.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     static PluralRules* U_EXPORT2 createDefaultRules(UErrorCode& status);
 
@@ -173,7 +173,7 @@ public:
      *                the rules for the closest parent in the locale hierarchy
      *                that has one will  be returned.  The final fallback always
      *                returns the default 'other' rules.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     static PluralRules* U_EXPORT2 forLocale(const Locale& locale, UErrorCode& status);
     
@@ -184,7 +184,7 @@ public:
      *
      * @param number  The number for which the rule has to be determined.
      * @return        The keyword of the selected rule.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     UnicodeString select(int32_t number) const;
     
@@ -195,7 +195,7 @@ public:
      *
      * @param number  The number for which the rule has to be determined.
      * @return        The keyword of the selected rule.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     UnicodeString select(double number) const;
 
@@ -207,7 +207,7 @@ public:
      *               must not indicate a failure before the function call.
      * @return       StringEnumeration with the keywords.
      *               The caller must delete the object.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     StringEnumeration* getKeywords(UErrorCode& status) const;
 
@@ -218,7 +218,7 @@ public:
      * @param keyword  the input keyword.
      * @return         TRUE if the input keyword is defined.
      *                 Otherwise, return FALSE.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     UBool isKeyword(const UnicodeString& keyword) const;
 
@@ -228,7 +228,7 @@ public:
      *
      * @return         keyword for default plural form.
      * @internal 4.0
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     UnicodeString getKeywordOther() const;
 
@@ -238,7 +238,7 @@ public:
      * @param other The other PluralRules object to be compared with.
      * @return      True if the given PluralRules is the same as this
      *              PluralRules; false otherwise.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     virtual UBool operator==(const PluralRules& other) const;
 
@@ -248,7 +248,7 @@ public:
      * @param other The PluralRules object to be compared with.
      * @return      True if the given PluralRules is not the same as this
      *              PluralRules; false otherwise.
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     UBool operator!=(const PluralRules& other) const  {return !operator==(other);}
 
@@ -256,7 +256,7 @@ public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      *
     */
     static UClassID U_EXPORT2 getStaticClassID(void);
@@ -264,7 +264,7 @@ public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @draft ICU 4.0
+     * @stable ICU 4.0
      */
     virtual UClassID getDynamicClassID() const;
 

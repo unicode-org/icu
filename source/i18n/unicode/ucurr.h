@@ -255,7 +255,7 @@ ucurr_openISOCurrencies(uint32_t currType, UErrorCode *pErrorCode);
  *               given locale and date.  If 0, currency
  *               codes couldn't be found for the input
  *               values are invalid.
- * @draft ICU 4.0
+ * @stable ICU 4.0
  */
 U_DRAFT int32_t U_EXPORT2
 ucurr_countCurrencies(const char* locale, 
@@ -279,7 +279,7 @@ ucurr_countCurrencies(const char* locale,
  * @return       length of the currency string. It should always be 3. 
  *               If 0, currency couldn't be found or the input values are  
  *               invalid.  
- * @draft ICU 4.0 
+ * @stable ICU 4.0 
  */ 
 U_DRAFT int32_t U_EXPORT2 
 ucurr_forLocaleAndDate(const char* locale, 
