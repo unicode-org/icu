@@ -727,14 +727,47 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
                 // no calendar type.  Default to nothing.
                 calLocaleType[0] = 0;
             }
+            
 #ifdef U_DEBUG_CALSVC
             fprintf(stderr, "  getFunctionalEquivalent calendar=%s [%s]\n", keyword, u_errorName(status));
 #endif
+            // create functional equivalent default calendar
+            u = createStandardCalendar(calLocaleType, aLocale, success);
         }
+        else {
 #ifdef U_DEBUG_CALSVC
-        else { fprintf(stderr, "  explicit calendar=%s\n", keyword); }
+            fprintf(stderr, "  explicit calendar=%s\n", keyword);
 #endif
-        u = createStandardCalendar(calLocaleType, aLocale, success);
+            // create explicit calendar
+            u = createStandardCalendar(calLocaleType, aLocale, success);
+
+            // check the results, fallback and build default if in error
+            if(success == U_UNSUPPORTED_ERROR) {
+
+                char funcEquiv[ULOC_FULLNAME_CAPACITY];
+                feErr = U_ZERO_ERROR;
+
+                // fetch default calendar id
+                ures_getFunctionalEquivalent(funcEquiv, sizeof(funcEquiv)-1,
+                    NULL, "calendar", "calendar",
+                    aLocale.getName(), 
+                    NULL, FALSE, &feErr);
+                keywordCapacity = uloc_getKeywordValue(funcEquiv, "calendar", calLocaleType, 
+                    sizeof(calLocaleType)-1, &feErr);  // This can fail if there is no data.  
+                // Don't want to stop calendar construction just because we couldn't get this type.
+                if (keywordCapacity == 0 || U_FAILURE(feErr)) {
+                    // no calendar type.  Default to nothing.
+                    calLocaleType[0] = 0;
+                }
+
+#ifdef U_DEBUG_CALSVC
+            fprintf(stderr, "  getFunctionalEquivalent calendar=%s [%s]\n", keyword, u_errorName(status));
+#endif
+                // create functional equivalent default calendar
+                success = U_ZERO_ERROR;
+                u = createStandardCalendar(calLocaleType, aLocale, success);
+            }
+        }
     }
     Calendar* c = NULL;
 
