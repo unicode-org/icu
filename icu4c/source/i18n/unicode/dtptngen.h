@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and
+* Copyright (C) 2007-2009, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -393,6 +393,7 @@ private:
     Hashtable *fAvailableFormatKeyHash;
     UnicodeString hackPattern;
     UnicodeString emptyString;
+    UChar fDefaultHourFormatChar;
 
     void initData(const Locale &locale, UErrorCode &status);
     void addCanonicalItems();

@@ -2124,9 +2124,10 @@ zh{
             availableFormats{
                 Ed{"d日E"}
                 H{"H时"}
-                HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
+                hms{"ah:mm:ss"}
                 Hm{"H:mm"}
+                hm{"ah:mm"}
                 M{"L"}
                 MEd{"M-dE"}
                 MMM{"LLL"}
