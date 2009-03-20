@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - tools/genrb
-## Copyright (c) 1999-2008, International Business Machines Corporation and
+## Copyright (c) 1999-2009, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 # SIMPLIFIED WAY TO BUILD ICU4J DATA FROM C
@@ -55,7 +55,7 @@ ifneq ($(top_builddir),$(top_srcdir))
 CPPFLAGS += -I$(top_builddir)/common
 endif
 CPPFLAGS += -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
-LIBS = $(LIBICUI18N) $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
+LIBS = $(LIBICUTOOLUTIL) $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = errmsg.o genrb.o parse.o read.o reslist.o ustr.o rbutil.o \
 wrtjava.o rle.o wrtxml.o prscmnts.o
