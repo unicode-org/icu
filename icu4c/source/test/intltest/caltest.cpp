@@ -203,7 +203,13 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
             TestDebug();
           }
           break;
-           
+        case 22:
+          name = "Test6703";
+          if(exec) {
+            logln("Test6703---"); logln("");
+            Test6703();
+          }
+          break;
         default: name = ""; break;
     }
 }
@@ -1982,7 +1988,30 @@ UDate CalendarTest::minDateOfCalendar(const Calendar& cal, UBool &isGregorian, U
   return doMinDateOfCalendar(cal.clone(), isGregorian, status);
 }
 
+void CalendarTest::Test6703()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    Calendar *cal;
 
+    Locale loc1("en@calendar=fubar");
+    cal = Calendar::createInstance(loc1, status);
+    if (failure(status, "Calendar::createInstance")) return;
+    delete cal;
+  
+    status = U_ZERO_ERROR;
+    Locale loc2("en");
+    cal = Calendar::createInstance(loc2, status);
+    if (failure(status, "Calendar::createInstance")) return;
+    delete cal;
+
+    status = U_ZERO_ERROR;
+    Locale loc3("en@calendar=roc");
+    cal = Calendar::createInstance(loc3, status);
+    if (failure(status, "Calendar::createInstance")) return;
+    delete cal;
+
+    return;
+}
 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
