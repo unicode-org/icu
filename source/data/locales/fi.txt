@@ -2941,9 +2941,9 @@ fi{
             }
             availableFormats{
                 EEEd{"EEE d."}
-                HHmm{"HH.mm"}
                 HHmmss{"HH.mm.ss"}
                 Hm{"H.mm"}
+                hm{"h.mm a"}
                 M{"L"}
                 MEd{"E d.M."}
                 MMM{"LLL"}
