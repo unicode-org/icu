@@ -1053,6 +1053,7 @@ root{
             availableFormats{
                 EEEd{"d EEE"}
                 Hm{"H:mm"}
+                hm{"h:mm a"}
                 M{"L"}
                 MEd{"E, M-d"}
                 MMM{"LLL"}
@@ -1481,10 +1482,10 @@ root{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, MMMM d, y G",
-                "MMMM d, y G",
-                "MMM d, y G",
-                "M/d/yy",
+                "EEEE, G y MMMM dd",
+                "G y MMMM d",
+                "G y MMM d",
+                "G yy-MM-dd",
                 "{1} {0}" /**  fallback from 'gregorian'   */,
                 "{1} {0}" /**  fallback from 'gregorian'   */,
                 "{1} {0}",
@@ -1507,7 +1508,9 @@ root{
                 Ed{"E d"}
                 H{"H"}
                 Hm{"HH:mm"}
+                hm{"hh:mm a"}
                 Hms{"HH:mm:ss"}
+                hms{"hh:mm:ss a"}
                 MMMEd{"E MMM d"}
                 MMMMd{"MMMM d"}
                 Md{"M-d"}
@@ -1515,6 +1518,8 @@ root{
                 yyyy{"yy GGG"}
                 yyyyM{"GGGGG yy-MM"}
                 yyyyMMM{"GGGGG yy MMM"}
+                yyyyMd{"GGGGG yy-MM-dd"}
+                yyyyMMMd{"GGGGG yy MMM d"}
                 yyyyQ{"GGGGG yy Q"}
             }
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}

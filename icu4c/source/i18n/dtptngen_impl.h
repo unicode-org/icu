@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and
+* Copyright (C) 2007-2009, International Business Machines Corporation and
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -44,6 +44,7 @@
 #define CAP_F             ((UChar)0x0046)
 #define CAP_G             ((UChar)0x0047)
 #define CAP_H             ((UChar)0x0048)
+#define CAP_K             ((UChar)0x004B)
 #define CAP_L             ((UChar)0x004C)
 #define CAP_M             ((UChar)0x004D)
 #define CAP_O             ((UChar)0x004F)
@@ -63,6 +64,7 @@
 #define LOW_G             ((UChar)0x0067)
 #define LOW_H             ((UChar)0x0068)
 #define LOW_I             ((UChar)0x0069)
+#define LOW_J             ((UChar)0x006A)
 #define LOW_K             ((UChar)0x006B)
 #define LOW_L             ((UChar)0x006C)
 #define LOW_M             ((UChar)0x006D)

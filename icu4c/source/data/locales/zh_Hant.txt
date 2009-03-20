@@ -2110,12 +2110,6 @@ zh_Hant{
                 MMMEd{"M月d日EEE"}
                 MMMd{"M月d日"}
                 Md{"M/d"}
-                yM{"Gy/M"}
-                yMEd{"Gy/M/d（EEE）"}
-                yMMMM{"Gy年M月"}
-                yyMM{"Gy/MM"}
-                yyMMM{"Gy年MMM"}
-                yyQ{"Gy年第Q季度"}
                 yyyy{"Gy"}
                 yyyyM{"Gy/M"}
                 yyyyMEd{"Gy/M/d EEE"}
@@ -2124,7 +2118,7 @@ zh_Hant{
                 yyyyMMMM{"Gy年M月"}
                 yyyyMMMd{"Gy年M月d日"}
                 yyyyMd{"Gy/M/d"}
-                yyyyQ{"Gy Q"}
+                yyyyQ{"Gy年第Q季度"}
                 yyyyQQQ{"Gy QQQ"}
             }
             eras{

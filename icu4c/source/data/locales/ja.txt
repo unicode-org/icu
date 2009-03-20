@@ -2070,6 +2070,7 @@ ja{
                 GGGGyMd{"GGGGy年M月d日"}
                 H{"H時"}
                 Hm{"H:mm"}
+                hm{"ah:mm"}
                 M{"L"}
                 MEd{"M/d(E)"}
                 MMM{"LLL"}
@@ -2373,6 +2374,8 @@ ja{
                 "{1} {0}" /**  fallback from 'gregorian'   */,
             }
             availableFormats{
+                hm{"ah:mm"}
+                hms{"ah:mm:ss"}
                 Ed{"d日(EEE)"}
                 MMMEd{"M月d日(EEE)"}
                 MMMd{"M月d日"}

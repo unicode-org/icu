@@ -23,6 +23,7 @@
 #include "unicode/uniset.h"
 #include "unicode/uloc.h"
 #include "unicode/ures.h"
+#include "unicode/ustring.h"
 #include "unicode/rep.h"
 #include "cpputils.h"
 #include "ucln_in.h"
@@ -293,6 +294,7 @@ DateTimePatternGenerator::DateTimePatternGenerator(const DateTimePatternGenerato
 DateTimePatternGenerator&
 DateTimePatternGenerator::operator=(const DateTimePatternGenerator& other) {
     pLocale = other.pLocale;
+    fDefaultHourFormatChar = other.fDefaultHourFormatChar;
     *fp = *(other.fp);
     dtMatcher->copyFrom(other.dtMatcher->skeleton);
     *distanceInfo = *(other.distanceInfo);
@@ -361,7 +363,7 @@ DateTimePatternGenerator::~DateTimePatternGenerator() {
 
 void
 DateTimePatternGenerator::initData(const Locale& locale, UErrorCode &status) {
-    const char *baseLangName = locale.getBaseName();
+    //const char *baseLangName = locale.getBaseName(); // unused
     
     skipMatcher = NULL;
     fAvailableFormatKeyHash=NULL;
@@ -479,6 +481,8 @@ DateTimePatternGenerator::hackTimes(const UnicodeString& hackPattern, UErrorCode
 
 #define ULOC_LOCALE_IDENTIFIER_CAPACITY (ULOC_FULLNAME_CAPACITY + 1 + ULOC_KEYWORD_AND_VALUES_CAPACITY)
 
+static const UChar hourFormatChars[] = { CAP_H, LOW_H, CAP_K, LOW_K, 0 }; // HhKk, the hour format characters
+
 void
 DateTimePatternGenerator::addCLDRData(const Locale& locale) {
     UErrorCode err = U_ZERO_ERROR;
@@ -492,6 +496,7 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
 
     UnicodeString defaultItemFormat(TRUE, UDATPG_ItemFormat, LENGTHOF(UDATPG_ItemFormat)-1);  // Read-only alias.
 
+    fDefaultHourFormatChar = 0;
     for (i=0; i<UDATPG_FIELD_COUNT; ++i ) {
         appendItemNames[i]=CAP_F;
         if (i<10) {
@@ -522,8 +527,8 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
         }
         err = U_ZERO_ERROR;
     }
-    calBundle = ures_getByKey(rb, DT_DateTimeCalendarTag, NULL, &err);
-    calTypeBundle = ures_getByKey(calBundle, calendarTypeToUse, NULL, &err);
+    calBundle = ures_getByKeyWithFallback(rb, DT_DateTimeCalendarTag, NULL, &err);
+    calTypeBundle = ures_getByKeyWithFallback(calBundle, calendarTypeToUse, NULL, &err);
 
     key=NULL;
     int32_t dtCount=0;
@@ -537,6 +542,16 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
         else {
             if (dtCount==9) {
                 setDateTimeFormat(rbPattern);
+            } else if (dtCount==4) { // short time format
+                // set fDefaultHourFormatChar to the hour format character from this pattern
+                int32_t tfIdx, tfLen = rbPattern.length();
+                for (tfIdx = 0; tfIdx < tfLen; tfIdx++) {
+                    UChar tfChar = rbPattern.charAt(tfIdx);
+                    if ( u_strchr(hourFormatChars, tfChar) != NULL ) {
+                        fDefaultHourFormatChar = tfChar;
+                        break;
+                    }
+                }
             }
         }
     };
@@ -716,9 +731,12 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UErro
 
     int32_t dateMask=(1<<UDATPG_DAYPERIOD_FIELD) - 1;
     int32_t timeMask=(1<<UDATPG_FIELD_COUNT) - 1 - dateMask;
-
+    
+    UnicodeString patternFormCopy = UnicodeString(patternForm);
+    patternFormCopy.findAndReplace(UnicodeString(LOW_J), UnicodeString(fDefaultHourFormatChar));
+    
     resultPattern.remove();
-    dtMatcher->set(patternForm, fp);
+    dtMatcher->set(patternFormCopy, fp);
     const PtnSkeleton* specifiedSkeleton=NULL;
     bestPattern=getBestRaw(*dtMatcher, -1, distanceInfo, &specifiedSkeleton);
     if ( distanceInfo->missingFieldMask==0 && distanceInfo->extraFieldMask==0 ) {
