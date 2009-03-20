@@ -696,6 +696,7 @@ icu4c/source/tools/pkgdata/pkgdata.vcproj.*.*.user
 icu4c/source/tools/pkgdata/release
 icu4c/source/tools/pkgdata/x64
 icu4c/source/tools/pkgdata/x86
+icu4c/source/tools/toolutil/*.ao
 icu4c/source/tools/toolutil/*.d
 icu4c/source/tools/toolutil/*.ncb
 icu4c/source/tools/toolutil/*.o
