@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- * Copyright (C) 1997-2008, International Business Machines                     *
+ * Copyright (C) 1997-2009, International Business Machines                     *
  * Corporation and others. All Rights Reserved.                                 *
  ********************************************************************************
  *
@@ -49,9 +49,9 @@ class AnnualTimeZoneRule;
  * <P>
  * When specifying daylight-savings-time begin and end dates, use a negative value for
  * <code>dayOfWeekInMonth</code> to indicate that <code>SimpleTimeZone</code> should
- * count from the end of the month backwards. For example, in the U.S., Daylight Savings
- * Time ends at the last (dayOfWeekInMonth = -1) Sunday in October, at 2 AM in standard
- * time.
+ * count from the end of the month backwards. For example, if Daylight Savings
+ * Time starts or ends at the last Sunday a month, use <code>dayOfWeekInMonth = -1</code>
+ * along with <code>dayOfWeek = UCAL_SUNDAY</code> to specify the rule.
  *
  * @see      Calendar
  * @see      GregorianCalendar
@@ -268,9 +268,9 @@ public:
 
     /**
      * Sets the daylight savings starting rule. For example, in the U.S., Daylight Savings
-     * Time starts at the first Sunday in April, at 2 AM in standard time.
+     * Time starts at the second Sunday in March, at 2 AM in standard time.
      * Therefore, you can set the start rule by calling:
-     * setStartRule(TimeFields.APRIL, 1, TimeFields.SUNDAY, 2*60*60*1000);
+     * setStartRule(UCAL_MARCH, 2, UCAL_SUNDAY, 2*60*60*1000);
      * The dayOfWeekInMonth and dayOfWeek parameters together specify how to calculate
      * the exact starting date.  Their exact meaning depend on their respective signs,
      * allowing various types of rules to be constructed, as follows:
@@ -312,9 +312,9 @@ public:
                       int32_t time, UErrorCode& status);
     /**
      * Sets the daylight savings starting rule. For example, in the U.S., Daylight Savings
-     * Time starts at the first Sunday in April, at 2 AM in standard time.
+     * Time starts at the second Sunday in March, at 2 AM in standard time.
      * Therefore, you can set the start rule by calling:
-     * setStartRule(TimeFields.APRIL, 1, TimeFields.SUNDAY, 2*60*60*1000);
+     * setStartRule(UCAL_MARCH, 2, UCAL_SUNDAY, 2*60*60*1000);
      * The dayOfWeekInMonth and dayOfWeek parameters together specify how to calculate
      * the exact starting date.  Their exact meaning depend on their respective signs,
      * allowing various types of rules to be constructed, as follows:
@@ -426,11 +426,11 @@ public:
                       int32_t time, TimeMode mode, UBool after, UErrorCode& status);
 
     /**
-     * Sets the daylight savings ending rule. For example, in the U.S., Daylight
+     * Sets the daylight savings ending rule. For example, if Daylight
      * Savings Time ends at the last (-1) Sunday in October, at 2 AM in standard time.
      * Therefore, you can set the end rule by calling:
      * <pre>
-     * .   setEndRule(TimeFields.OCTOBER, -1, TimeFields.SUNDAY, 2*60*60*1000);
+     *    setEndRule(UCAL_OCTOBER, -1, UCAL_SUNDAY, 2*60*60*1000);
      * </pre>
      * Various other types of rules can be specified by manipulating the dayOfWeek
      * and dayOfWeekInMonth parameters.  For complete details, see the documentation
@@ -451,11 +451,11 @@ public:
                     int32_t time, UErrorCode& status);
 
     /**
-     * Sets the daylight savings ending rule. For example, in the U.S., Daylight
+     * Sets the daylight savings ending rule. For example, if Daylight
      * Savings Time ends at the last (-1) Sunday in October, at 2 AM in standard time.
      * Therefore, you can set the end rule by calling:
      * <pre>
-     * .   setEndRule(TimeFields.OCTOBER, -1, TimeFields.SUNDAY, 2*60*60*1000);
+     *    setEndRule(UCAL_OCTOBER, -1, UCAL_SUNDAY, 2*60*60*1000);
      * </pre>
      * Various other types of rules can be specified by manipulating the dayOfWeek
      * and dayOfWeekInMonth parameters.  For complete details, see the documentation
