@@ -461,7 +461,7 @@ public final class VersionInfo implements Comparable
         UNICODE_4_0_1 = getInstance(4, 0, 1, 0);
         UNICODE_4_1   = getInstance(4, 1, 0, 0);
         UNICODE_5_0   = getInstance(4, 1, 0, 0);
-        ICU_VERSION   = getInstance(4, 1, 4, 0);
+        ICU_VERSION   = getInstance(4, 1, 5, 0);
         UCOL_RUNTIME_VERSION = getInstance(6);
         UCOL_BUILDER_VERSION = getInstance(7);
         UCOL_TAILORINGS_VERSION = getInstance(1);
