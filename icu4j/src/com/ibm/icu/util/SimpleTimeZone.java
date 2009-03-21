@@ -18,8 +18,9 @@ import com.ibm.icu.impl.Grego;
  * <P>
  * Use a negative value for <code>dayOfWeekInMonth</code> to indicate that
  * <code>SimpleTimeZone</code> should count from the end of the month backwards.
- * For example, Daylight Savings Time ends at the last
- * (dayOfWeekInMonth = -1) Sunday in October, at 2 AM in standard time.
+ * For example, if Daylight Savings Time starts or ends at the last Sunday in a month,
+ * use <code>dayOfWeekInMonth = -1</code> along with <code>dayOfWeek = Calendar.SUNDAY</code>
+ * to specify the rule.
  *
  * @see      Calendar
  * @see      GregorianCalendar
@@ -284,9 +285,9 @@ public class SimpleTimeZone extends BasicTimeZone {
 
     /**
      * Sets the daylight savings starting rule. For example, Daylight Savings
-     * Time starts at the first Sunday in April, at 2 AM in standard time.
+     * Time starts at the second Sunday in March, at 2 AM in standard time.
      * Therefore, you can set the start rule by calling:
-     * setStartRule(TimeFields.APRIL, 1, TimeFields.SUNDAY, 2*60*60*1000);
+     * setStartRule(Calendar.MARCH, 2, Calendar.SUNDAY, 2*60*60*1000);
      *
      * @param month             The daylight savings starting month. Month is
      *                          0-based. eg, 0 for January.
@@ -310,9 +311,9 @@ public class SimpleTimeZone extends BasicTimeZone {
     }
     /**
      * Sets the daylight savings starting rule. For example, in the U.S., Daylight Savings
-     * Time starts at the first Sunday in April, at 2 AM in standard time.
+     * Time starts at the second Sunday in March, at 2 AM in standard time.
      * Therefore, you can set the start rule by calling:
-     * setStartRule(TimeFields.APRIL, 1, TimeFields.SUNDAY, 2*60*60*1000);
+     * setStartRule(Calendar.MARCH, 2, Calendar.SUNDAY, 2*60*60*1000);
      * The dayOfWeekInMonth and dayOfWeek parameters together specify how to calculate
      * the exact starting date.  Their exact meaning depend on their respective signs,
      * allowing various types of rules to be constructed, as follows:<ul>
@@ -401,10 +402,10 @@ public class SimpleTimeZone extends BasicTimeZone {
     }
 
     /**
-     * Sets the daylight savings ending rule. For example, Daylight Savings Time
-     * ends at the last (-1) Sunday in October, at 2 AM in standard time.
-     * Therefore, you can set the end rule by calling:
-     * setEndRule(TimeFields.OCTOBER, -1, TimeFields.SUNDAY, 2*60*60*1000);
+     * Sets the daylight savings ending rule. For example, if Daylight Savings Time
+     * ends at the last (-1) Sunday in October, at 2 AM in standard time,
+     * you can set the end rule by calling:
+     * <code>setEndRule(Calendar.OCTOBER, -1, Calendar.SUNDAY, 2*60*60*1000);</code>
      *
      * @param month             The daylight savings ending month. Month is
      *                          0-based. eg, 0 for January.
@@ -469,9 +470,9 @@ public class SimpleTimeZone extends BasicTimeZone {
     }
     /**
      * Sets the daylight savings ending rule. For example, in the U.S., Daylight
-     * Savings Time ends at the last (-1) Sunday in October, at 2 AM in standard time.
+     * Savings Time ends at the first Sunday in November, at 2 AM in standard time.
      * Therefore, you can set the end rule by calling:
-     * setEndRule(TimeFields.OCTOBER, -1, TimeFields.SUNDAY, 2*60*60*1000);
+     * setEndRule(Calendar.NOVEMBER, 1, Calendar.SUNDAY, 2*60*60*1000);
      * Various other types of rules can be specified by manipulating the dayOfWeek
      * and dayOfWeekInMonth parameters.  For complete details, see the documentation
      * for setStartRule().

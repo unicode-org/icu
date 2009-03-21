@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1996-2008, International Business Machines
+ * Copyright (C) 1996-2009, International Business Machines
  * Corporation and others.  All Rights Reserved.
  */
 
@@ -101,8 +101,8 @@ import java.util.Locale;
  * SimpleTimeZone pdt = new SimpleTimeZone(-8 * 60 * 60 * 1000, ids[0]);
  *
  * // set up rules for daylight savings time
- * pdt.setStartRule(Calendar.APRIL, 1, Calendar.SUNDAY, 2 * 60 * 60 * 1000);
- * pdt.setEndRule(Calendar.OCTOBER, -1, Calendar.SUNDAY, 2 * 60 * 60 * 1000);
+ * pdt.setStartRule(Calendar.MARCH, 2, Calendar.SUNDAY, 2 * 60 * 60 * 1000);
+ * pdt.setEndRule(Calendar.NOVEMBER, 1, Calendar.SUNDAY, 2 * 60 * 60 * 1000);
  *
  * // create a GregorianCalendar with the Pacific Daylight time zone
  * // and the current date and time
