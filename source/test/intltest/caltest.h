@@ -217,7 +217,7 @@ public: // package
   // internal - for other test use
  public:
     void Test6703(void);
-
+    void Test3785(void);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
