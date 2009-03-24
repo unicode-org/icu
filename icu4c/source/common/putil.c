@@ -867,9 +867,9 @@ static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
                 result = searchForTZFile(newpath, tzInfo);
             } else {
                 if(compareBinaryFiles(TZDEFAULT, newpath, tzInfo)) {
-                    char temp[MAX_PATH_SIZE];
-                    uprv_strcpy(temp, newpath + (sizeof(TZZONEINFO) - 1));
-                    result = temp;
+                    result = (char *)uprv_malloc(sizeof(char) * MAX_PATH_SIZE);
+                    result[0] = 0;
+                    uprv_strcpy(result, newpath + (sizeof(TZZONEINFO) - 1));
                     /* Get out after the first one found. */
                     break;
                 }
@@ -958,7 +958,6 @@ uprv_tzname(int n)
             }
 
             if (gTimeZoneBufferPtr != NULL && isValidOlsonID(gTimeZoneBufferPtr)) {
-                tzInfo->defaultTZstatus = TRUE;
                 return gTimeZoneBufferPtr;
             }
 #endif
