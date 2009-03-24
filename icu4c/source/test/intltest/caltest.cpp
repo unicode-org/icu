@@ -14,6 +14,10 @@
 #include "unicode/smpdtfmt.h"
 #include "unicode/simpletz.h"
 #include "unicode/dbgutil.h"
+#include "unicode/udat.h"
+#include "unicode/ustring.h"
+
+#define mkcstr(U) u_austrcpy(calloc(8, u_strlen(U) + 1), U)
 
 // *****************************************************************************
 // class CalendarTest
@@ -208,6 +212,13 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
           if(exec) {
             logln("Test6703---"); logln("");
             Test6703();
+          }
+          break;
+        case 23:
+          name = "Test3785";
+          if(exec) {
+            logln("Test3785---"); logln("");
+            Test3785();
           }
           break;
         default: name = ""; break;
@@ -2012,6 +2023,38 @@ void CalendarTest::Test6703()
 
     return;
 }
+
+void CalendarTest::Test3785()
+{
+    UErrorCode status = U_ZERO_ERROR; 
+    UChar uzone[] = {'E', 'u', 'r', 'o', 'p', 'e', '/', 'P', 'a', 'r', 'i', 's', 0}; 
+
+    UDateFormat * df = udat_open(UDAT_NONE, UDAT_NONE, "en@calendar=islamic", uzone, 
+                               u_strlen(uzone), NULL, 0, &status);
+    if (NULL == df || U_FAILURE(status)) return;
+
+    UChar upattern[64];   
+    u_uastrcpy(upattern, "EEE d MMMM y G, HH:mm:ss"); 
+    udat_applyPattern(df, FALSE, upattern, u_strlen(upattern));
+
+    UChar ubuffer[1024]; 
+    UDate ud0 = 1337557623000.0;
+
+    status = U_ZERO_ERROR; 
+    udat_format(df, ud0, ubuffer, 1024, NULL, &status); 
+    if (U_FAILURE(status)) return; 
+    //printf("formatted: '%s'\n", mkcstr(ubuffer));
+
+    ud0 += 1000.0; // add one second
+
+    status = U_ZERO_ERROR; 
+    udat_format(df, ud0, ubuffer, 1024, NULL, &status); 
+    if (U_FAILURE(status)) return; 
+    //printf("formatted: '%s'\n", mkcstr(ubuffer));
+
+    return;
+}
+
 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
