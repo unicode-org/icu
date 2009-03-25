@@ -222,25 +222,25 @@ public class RelativeDateFormat extends DateFormat {
             String[] patterns = calData.getDateTimePatterns();
             if (patterns != null && patterns.length >= 9) {
                 int glueIndex = 8;
-                if (patterns.length > 9)
+                if ((patterns.length > 9) && (patterns.length >= 13))
                 {
                     switch (fDateStyle)
                     {
                         case DateFormat.RELATIVE_FULL:
                         case DateFormat.FULL:
-                            //glueIndex += DateFormat.FULL;
+                            glueIndex += (DateFormat.FULL + 1);
                             break;
                         case DateFormat.RELATIVE_LONG:
                         case DateFormat.LONG:
-                            glueIndex += DateFormat.LONG;
+                            glueIndex += (DateFormat.LONG +1);
                             break;
                         case DateFormat.RELATIVE_MEDIUM:
                         case DateFormat.MEDIUM:
-                            glueIndex += DateFormat.MEDIUM;
+                            glueIndex += (DateFormat.MEDIUM +1);
                             break;
                         case DateFormat.RELATIVE_SHORT:
                         case DateFormat.SHORT:
-                            glueIndex += DateFormat.SHORT;
+                            glueIndex += (DateFormat.SHORT + 1);
                             break;
                         default:
                             break;
