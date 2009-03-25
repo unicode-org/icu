@@ -1205,8 +1205,12 @@ public class SimpleDateFormat extends DateFormat {
     /*
      * Time zone localized GMT format stuffs
      */
-    private static final String DEFAULT_GMT_PREFIX = "GMT";
-    private static final int DEFAULT_GMT_PREFIX_LEN = 3;
+    private static final String STR_GMT = "GMT";
+    private static final String STR_UT = "UT";
+    private static final String STR_UTC = "UTC";
+    private static final int STR_GMT_LEN = 3;
+    private static final int STR_UT_LEN = 2;
+    private static final int STR_UTC_LEN = 3;
     private static final char PLUS = '+';
     private static final char MINUS = '-';
     private static final char COLON = ':';
@@ -1230,7 +1234,7 @@ public class SimpleDateFormat extends DateFormat {
     }
 
     private void formatGMTDefault(NumberFormat currentNumberFormat,StringBuffer buf, int offset) {
-        buf.append(DEFAULT_GMT_PREFIX);
+        buf.append(STR_GMT);
         if (offset >= 0) {
             buf.append(PLUS);
         } else {
@@ -1326,18 +1330,21 @@ public class SimpleDateFormat extends DateFormat {
     private Integer parseGMTDefault(String text, ParsePosition pos, NumberFormat currentNumberFormat) {
         int start = pos.getIndex();
 
-        if (start + DEFAULT_GMT_PREFIX_LEN + 1 >= text.length()) {
+        if (start + STR_UT_LEN + 1 >= text.length()) {
             pos.setErrorIndex(start);
             return null;
         }
 
         int cur = start;
         // "GMT"
-        if (!text.regionMatches(true, start, DEFAULT_GMT_PREFIX, 0, DEFAULT_GMT_PREFIX_LEN)) {
+        if (text.regionMatches(true, start, STR_GMT, 0, STR_GMT_LEN)) {
+            cur += STR_GMT_LEN;
+        } else if (text.regionMatches(true, start, STR_UT, 0, STR_UT_LEN)) {
+            cur += STR_UT_LEN;
+        } else {
             pos.setErrorIndex(start);
             return null;
         }
-        cur += DEFAULT_GMT_PREFIX_LEN;
         // Sign
         boolean negative = false;
         if (text.charAt(cur) == MINUS) {
@@ -2334,6 +2341,22 @@ public class SimpleDateFormat extends DateFormat {
                         cal.setTimeZone(tz);
                         return start + zsinfo.getString().length();
                     }
+                    // Step 4
+                    // Final attempt - is this standalone GMT/UT/UTC?
+                    int gmtLen = 0;
+                    if (text.regionMatches(true, start, STR_GMT, 0, STR_GMT_LEN)) {
+                        gmtLen = STR_GMT_LEN;
+                    } else if (text.regionMatches(true, start, STR_UTC, 0, STR_UTC_LEN)) {
+                        gmtLen = STR_UTC_LEN;
+                    } else if (text.regionMatches(true, start, STR_UT, 0, STR_UT_LEN)) {
+                        gmtLen = STR_UT_LEN;
+                    }
+                    if (gmtLen > 0) {
+                        tz = TimeZone.getTimeZone("Etc/GMT");
+                        cal.setTimeZone(tz);
+                        return start + gmtLen;
+                    }
+
                     // complete failure
                     return -start;
                 }
