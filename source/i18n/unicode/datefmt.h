@@ -141,8 +141,8 @@ public:
     /**
      * Constants for various style patterns. These reflect the order of items in
      * the DateTimePatterns resource. There are 4 time patterns, 4 date patterns,
-     * and then the date-time pattern. Each block of 4 values in the resource occurs
-     * in the order full, long, medium, short.
+     * the default date-time pattern, and 4 date-time patterns. Each block of 4 values 
+     * in the resource occurs in the order full, long, medium, short.
      * @stable ICU 2.4
      */
     enum EStyle
@@ -161,6 +161,13 @@ public:
      // kShort  + kDateOffset = 7
 
         kDateTime             = 8,
+     // Default DateTime
+
+        kDateTimeOffset = kDateTime + 1,
+     // kFull   + kDateTimeOffset = 9
+     // kLong   + kDateTimeOffset = 10
+     // kMedium + kDateTimeOffset = 11
+     // kShort  + kDateTimeOffset = 12
 
         // relative dates
         kRelative = (1 << 7),

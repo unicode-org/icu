@@ -76,8 +76,10 @@ UnicodeString* Win32DateFormat::getTimeDateFormat(const Calendar *cal, const Loc
     int32_t resStrLen = 0;
     int32_t glueIndex = DateFormat::kDateTime;
     int32_t patSize = ures_getSize(patBundle);
-    if (patSize > DateFormat::kDateTime + 1) {
-        glueIndex = (int32_t)(DateFormat::kDateTime + (fDateStyle - DateFormat::kDateOffset));
+    if ((patSize > DateFormat::kDateTimeOffset) && 
+        (patSize >= (DateFormat::kDateTimeOffset + DateFormat::kShort + 1))) {
+        // Get proper date time format
+        glueIndex = (int32_t)(DateFormat::kDateTimeOffset + (fDateStyle - DateFormat::kDateOffset));
     }
     const UChar *resStr = ures_getStringByIndex(patBundle, glueIndex, &resStrLen, &status);
 
