@@ -560,51 +560,6 @@ static const char * const CAL_TYPES[] = {
         NULL
 };
 
-#define CALPREF_LENGTH 39
-#define CALPREF_MAX_NUM_KEYWORDS 4
-
-static const char * const CALPREF[CALPREF_LENGTH][CALPREF_MAX_NUM_KEYWORDS+1] = {
-        { "001",    "gregorian", NULL, NULL, NULL },
-        { "AE",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "AF",     "gregorian", "islamic", "islamic-civil", "persian" },
-        { "BH",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "CN",     "gregorian", "chinese", NULL, NULL },
-        { "CX",     "gregorian", "chinese", NULL, NULL },
-        { "DJ",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "DZ",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "EG",     "gregorian", "islamic", "islamic-civil", "coptic" },
-        { "EH",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "ER",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "ET",     "gregorian", "ethiopic", "ethiopic-amete-alem", NULL },
-        { "HK",     "gregorian", "chinese", NULL, NULL },
-        { "IL",     "gregorian", "hebrew", NULL, NULL },
-        { "IL",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "IN",     "gregorian", "indian", NULL, NULL },
-        { "IQ",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "IR",     "gregorian", "islamic", "islamic-civil", "persian" },
-        { "JO",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "JP",     "gregorian", "japanese", NULL, NULL },
-        { "KM",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "KW",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "LB",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "LY",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "MA",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "MO",     "gregorian", "chinese", NULL, NULL },
-        { "MR",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "OM",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "PS",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "QA",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "SA",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "SD",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "SG",     "gregorian", "chinese", NULL, NULL },
-        { "SY",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "TD",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "TH",     "buddhist", "gregorian", NULL, NULL },
-        { "TN",     "gregorian", "islamic", "islamic-civil", NULL },
-        { "TW",     "gregorian", "roc", "chinese", NULL },
-        { "YE",     "gregorian", "islamic", "islamic-civl", NULL }
-};
-
 #define MAX_LOC_SIZE_KEYWORD_VALUES 64
 #define MAX_LENGTH_KEYWORD_VALUE 64
 
@@ -623,55 +578,71 @@ ucal_getKeywordValuesForLocale(const char *key, const char* locale, UBool common
     }
     
     // Read preferred calendar values from supplementalData calendarPreference
-    UList *values = ulist_createEmptyList(status);
-    UEnumeration *en = (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
-    if (U_FAILURE(*status) || en == NULL) {
-        if (en == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-        } else {
-            uprv_free(en);
-        }
-        ulist_deleteList(values);
-        return NULL;
+    UResourceBundle *rb = ures_openDirect(NULL, "supplementalData", status);
+    ures_getByKey(rb, "calendarPreferenceData", rb, status);
+    UResourceBundle *order = ures_getByKey(rb, prefRegion, NULL, status);
+    if (*status == U_MISSING_RESOURCE_ERROR && rb != NULL) {
+        *status = U_ZERO_ERROR;
+        order = ures_getByKey(rb, "001", NULL, status);
     }
-    memcpy(en, &defaultKeywordValues, sizeof(UEnumeration));
-    en->context = values;
-    
-    int32_t preferences = 0;
-    for (int32_t i = 0; i < CALPREF_LENGTH; i++) {
-        if (uprv_strcmp(prefRegion, CALPREF[i][0]) == 0) {
-            preferences = i;
-            break;
-        }
-    }
-    for (int32_t i = 1; CALPREF[preferences][i] != NULL && i <= CALPREF_MAX_NUM_KEYWORDS; i++) {
-        if (!ulist_containsString(values, CALPREF[preferences][i], uprv_strlen(CALPREF[preferences][i]))) {
-            ulist_addItemEndList(values, CALPREF[preferences][i], FALSE, status);
-            if (U_FAILURE(*status)) {
-                break;
-            }
-        }
-    }
-    
-    if (U_SUCCESS(*status) && !commonlyUsed) {
-        // If not commonlyUsed, add other available values
-        for (int32_t i = 0; CAL_TYPES[i] != NULL; i++) {
-            if (!ulist_containsString(values, CAL_TYPES[i], uprv_strlen(CAL_TYPES[i]))) {
-                ulist_addItemEndList(values, CAL_TYPES[i], FALSE, status);
+
+    // Create a list of calendar type strings
+    UList *values = NULL;
+    if (U_SUCCESS(*status)) {
+        values = ulist_createEmptyList(status);
+        if (U_SUCCESS(*status)) {
+            for (int i = 0; i < ures_getSize(order); i++) {
+                int32_t len;
+                const UChar *type = ures_getStringByIndex(order, i, &len, status);
+                char *caltype = (char*)uprv_malloc(len + 1);
+                if (caltype == NULL) {
+                    *status = U_MEMORY_ALLOCATION_ERROR;
+                    break;
+                }
+                u_UCharsToChars(type, caltype, len);
+                *(caltype + len) = 0;
+
+                ulist_addItemEndList(values, caltype, TRUE, status);
                 if (U_FAILURE(*status)) {
                     break;
                 }
             }
+
+            if (U_SUCCESS(*status) && !commonlyUsed) {
+                // If not commonlyUsed, add other available values
+                for (int32_t i = 0; CAL_TYPES[i] != NULL; i++) {
+                    if (!ulist_containsString(values, CAL_TYPES[i], uprv_strlen(CAL_TYPES[i]))) {
+                        ulist_addItemEndList(values, CAL_TYPES[i], FALSE, status);
+                        if (U_FAILURE(*status)) {
+                            break;
+                        }
+                    }
+                }
+            }
+            if (U_FAILURE(*status)) {
+                ulist_deleteList(values);
+                values = NULL;
+            }
         }
     }
-    
-    if (U_FAILURE(*status)) {
-        uenum_close(en);
+
+    ures_close(order);
+    ures_close(rb);
+
+    if (U_FAILURE(*status) || values == NULL) {
         return NULL;
     }
-    
+
+    // Create string enumeration
+    UEnumeration *en = (UEnumeration*)uprv_malloc(sizeof(UEnumeration));
+    if (en == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        ulist_deleteList(values);
+        return NULL;
+    }
     ulist_resetList(values);
-    
+    memcpy(en, &defaultKeywordValues, sizeof(UEnumeration));
+    en->context = values;
     return en;
 }
 
