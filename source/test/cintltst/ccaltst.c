@@ -1390,7 +1390,7 @@ void TestGregorianChange() {
 }
 
 static void TestGetKeywordValuesForLocale() {
-#define PREFERRED_SIZE 13
+#define PREFERRED_SIZE 15
 #define MAX_NUMBER_OF_KEYWORDS 4
     const char *PREFERRED[PREFERRED_SIZE][MAX_NUMBER_OF_KEYWORDS+1] = {
             { "root",        "gregorian", NULL, NULL, NULL },
@@ -1400,14 +1400,16 @@ static void TestGetKeywordValuesForLocale() {
             { "th_TH",       "buddhist", "gregorian", NULL, NULL },
             { "und_TH",      "buddhist", "gregorian", NULL, NULL },
             { "en_TH",       "buddhist", "gregorian", NULL, NULL },
-            { "he_IL",       "gregorian", "hebrew", NULL, NULL },
-            { "ar_EG",       "gregorian", "islamic", "islamic-civil", "coptic" },
+            { "he_IL",       "gregorian", "hebrew", "islamic", "islamic-civil" },
+            { "ar_EG",       "gregorian", "coptic", "islamic", "islamic-civil" },
             { "ja",          "gregorian", "japanese", NULL, NULL },
             { "ps_Guru_IN",  "gregorian", "indian", NULL, NULL },
             { "th@calendar=gregorian", "buddhist", "gregorian", NULL, NULL },
             { "en@calendar=islamic",   "gregorian", NULL, NULL, NULL },
+            { "zh_TW",       "gregorian", "roc", "chinese", NULL },
+            { "ar_IR",       "gregorian", "persian", "islamic", "islamic-civil" },
     };
-    const int32_t EXPECTED_SIZE[PREFERRED_SIZE] = { 1, 1, 1, 1, 2, 2, 2, 2, 4, 2, 2, 2, 1 };
+    const int32_t EXPECTED_SIZE[PREFERRED_SIZE] = { 1, 1, 1, 1, 2, 2, 2, 4, 4, 2, 2, 2, 1, 3, 4 };
     UErrorCode status = U_ZERO_ERROR;
     int32_t i, size, j;
     UEnumeration *all, *pref;
