@@ -77,9 +77,10 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(37,TestRoundtripWithCalendar);
         TESTCASE(38,Test6338);
         TESTCASE(39,Test6726);
+        TESTCASE(40,TestGMTParsing);
         /*
-        TESTCASE(40,TestRelativeError);
-        TESTCASE(41,TestRelativeOther);
+        TESTCASE(41,TestRelativeError);
+        TESTCASE(42,TestRelativeOther);
         */
         default: name = ""; break;
     }
@@ -3184,6 +3185,29 @@ void DateFormatTest::Test6726(void)
 
     return;
 }
+
+/**
+ * Test DateFormat's parsing of default GMT variants.  See ticket#6135
+ */
+void DateFormatTest::TestGMTParsing() {
+    const char* DATA[] = {
+        "HH:mm:ss Z",
+
+        // pattern, input, expected output (in quotes)
+        "HH:mm:ss Z",       "10:20:30 GMT+03:00",   "10:20:30 +0300",
+        "HH:mm:ss Z",       "10:20:30 UT-02:00",    "10:20:30 -0200",
+        "HH:mm:ss Z",       "10:20:30 GMT",         "10:20:30 +0000",
+        "HH:mm:ss vvvv",    "10:20:30 UT+10:00",    "10:20:30 +1000",
+        "HH:mm:ss zzzz",    "10:20:30 UTC",         "10:20:30 +0000",   // standalone "UTC"
+        "ZZZZ HH:mm:ss",    "UT 10:20:30",          "10:20:30 +0000",
+        "V HH:mm:ss",       "UT+0130 10:20:30",     "10:20:30 +0130",
+        "V HH:mm:ss",       "UTC+0130 10:20:30",    NULL,               // UTC+0130 is not a supported pattern
+        "HH mm Z ss",       "10 20 GMT-1100 30",    "10:20:30 -1100",
+    };
+    const int32_t DATA_len = sizeof(DATA)/sizeof(DATA[0]);
+    expectParse(DATA, DATA_len, Locale("en"));
+}
+
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
