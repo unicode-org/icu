@@ -734,7 +734,7 @@ public final class ULocale implements Serializable {
     //  { <Java>,       <ICU base>, <keyword>,  <value>,    <minimum base>
         { "ja_JP_JP",   "ja_JP",    "calendar", "japanese", "ja"},
         { "no_NO_NY",   "nn_NO",    null,       null,       "nn"},
-    //  { "th_TH_TH",   "th_TH",    ??,         ??,         "th"} //TODO
+        { "th_TH_TH",   "th_TH",    "numbers",  "thai",     "th"},
     };
 
     /**
