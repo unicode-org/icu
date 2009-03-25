@@ -205,6 +205,8 @@ public class ULocaleTest extends TestFmwk {
         // Java Locale for ja_JP with Japanese calendar
         Locale jaJPJP = new Locale("ja", "JP", "JP");
         Locale jaJP = new Locale("ja", "JP");
+        // Java Locale for th_TH with Thai digits
+        Locale thTHTH = new Locale("th", "TH", "TH");
  
         Calendar cal = Calendar.getInstance(jaJPJP);
         String caltype = cal.getType();
@@ -265,6 +267,13 @@ public class ULocaleTest extends TestFmwk {
         defUloc = ULocale.getDefault();
         if (defUloc.toString().equals("nn_NY")) {
             errln("FAIL: Invalid default ULocale: " + defUloc + " /expected: nn_NY");
+        }
+        Locale.setDefault(backupDefault);
+
+        // Java th_TH_TH -> ICU th_TH@numbers=thai
+        ULocale.setDefault(new ULocale("th@numbers=thai"));
+        if (!Locale.getDefault().equals(thTHTH)) {
+            errln("FAIL: ULocale#setDefault failed to set Java Locale th_TH_TH /actual: " + Locale.getDefault());
         }
         Locale.setDefault(backupDefault);
 
