@@ -573,8 +573,10 @@ void SimpleDateFormat::construct(EStyle timeStyle,
 
         int32_t glueIndex = kDateTime;
         int32_t patternsSize = ures_getSize(dateTimePatterns);
-        if (patternsSize > kDateTime + 1) {
-            glueIndex = (int32_t)(kDateTime + (dateStyle - kDateOffset));
+        if ((patternsSize > kDateTimeOffset) && 
+            (patternsSize >= (kDateTimeOffset + kShort + 1))) {
+            // Get proper date time format
+            glueIndex = (int32_t)(kDateTimeOffset + (dateStyle - kDateOffset));
         }
 
         resStr = ures_getStringByIndex(dateTimePatterns, glueIndex, &resStrLen, &status);

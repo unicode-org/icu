@@ -265,31 +265,31 @@ void RelativeDateFormat::loadDates(UErrorCode &status) {
             int32_t resStrLen = 0;
 
             int32_t glueIndex = kDateTime;
-            switch (fDateStyle) {
-            case kFullRelative:
-            case kFull:
-                // glueIndex is always kDateTime
-                break;
-            case kLongRelative:
-            case kLong:
-                if (patternsSize > (kDateTime + kLong)) {
-                    glueIndex = kDateTime + kLong;
-                }
-                break;
-            case kMediumRelative:
-            case kMedium:
-                if (patternsSize > (kDateTime + kMedium)) {
-                    glueIndex = kDateTime + kMedium;
-                }
-                break;        
-            case kShortRelative:
-            case kShort:
-                if (patternsSize > (kDateTime + kShort)) {
-                    glueIndex = kDateTime + kShort;
-                }
-                break;
-            default:
-                break;
+
+            if ((patternsSize > DateFormat::kDateTimeOffset) && 
+                (patternsSize >= (DateFormat::kDateTimeOffset + DateFormat::kShort + 1))
+                ) {
+                // Get proper date time format
+	            switch (fDateStyle) { 
+ 	            case kFullRelative: 
+ 	            case kFull: 
+ 	                glueIndex = kDateTimeOffset + kFull; 
+ 	                break; 
+ 	            case kLongRelative: 
+ 	            case kLong: 
+ 	                glueIndex = kDateTimeOffset + kLong; 
+ 	                break; 
+ 	            case kMediumRelative: 
+ 	            case kMedium: 
+ 	                glueIndex = kDateTimeOffset + kMedium; 
+ 	                break;         
+ 	            case kShortRelative: 
+ 	            case kShort: 
+ 	                glueIndex = kDateTimeOffset + kShort; 
+ 	                break; 
+ 	            default: 
+ 	                break; 
+ 	            } 
             }
 
             const UChar *resStr = ures_getStringByIndex(dateTimePatterns, glueIndex, &resStrLen, &tempStatus);
