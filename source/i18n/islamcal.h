@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- * Copyright (C) 2003-2008, International Business Machines Corporation
+ * Copyright (C) 2003-2009, International Business Machines Corporation
  * and others. All Rights Reserved.
  ******************************************************************************
  *
@@ -26,7 +26,7 @@ U_NAMESPACE_BEGIN
 
 /**
  * <code>IslamicCalendar</code> is a subclass of <code>Calendar</code>
- * that that implements the Islamic civil and religious calendars.  It
+ * that implements the Islamic civil and religious calendars.  It
  * is used as the civil calendar in most of the Arab world and the
  * liturgical calendar of the Islamic faith worldwide.  This calendar
  * is also known as the "Hijri" calendar, since it starts at the time
