@@ -948,6 +948,15 @@ static void TestRegexCAPI(void) {
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_STRING("abcAB \\ $ abc", buf, TRUE); 
 
+        /* Bug 6813, parameter check of NULL destCapacity; crashed before fix. */
+        status = U_ZERO_ERROR;
+        uregex_find(re, 0, &status);
+        TEST_ASSERT_SUCCESS(status);
+        bufPtr = buf;
+        status = U_BUFFER_OVERFLOW_ERROR;
+        uregex_appendReplacement(re, repl, -1, &bufPtr, NULL, &status);
+        TEST_ASSERT(status == U_BUFFER_OVERFLOW_ERROR);
+
         uregex_close(re);
     }
 

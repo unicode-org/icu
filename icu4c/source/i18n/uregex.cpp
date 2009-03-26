@@ -883,7 +883,7 @@ int32_t RegexCImpl::appendReplacement(URegularExpression    *regexp,
     //  A series of appendReplacements, appendTail need to correctly preflight
     //  the buffer size when an overflow happens somewhere in the middle.
     UBool pendingBufferOverflow = FALSE;
-    if (*status == U_BUFFER_OVERFLOW_ERROR && *destCapacity == 0) {
+    if (*status == U_BUFFER_OVERFLOW_ERROR && destCapacity != NULL && *destCapacity == 0) {
         pendingBufferOverflow = TRUE;
         *status = U_ZERO_ERROR;
     }
