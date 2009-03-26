@@ -222,7 +222,7 @@ public class RelativeDateFormat extends DateFormat {
             String[] patterns = calData.getDateTimePatterns();
             if (patterns != null && patterns.length >= 9) {
                 int glueIndex = 8;
-                if ((patterns.length > 9) && (patterns.length >= 13))
+                if (patterns.length >= 13)
                 {
                     switch (fDateStyle)
                     {

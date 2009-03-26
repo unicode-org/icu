@@ -3211,7 +3211,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
         String pattern = null;
         if ((timeStyle >= 0) && (dateStyle >= 0)) {
             int glueIndex = 8;
-            if ((patterns.length > 9) && (patterns.length >= 13))
+            if (patterns.length >= 13)
             {
                 glueIndex += (dateStyle + 1);
             }
