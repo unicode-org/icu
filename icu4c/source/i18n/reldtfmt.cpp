@@ -265,10 +265,7 @@ void RelativeDateFormat::loadDates(UErrorCode &status) {
             int32_t resStrLen = 0;
 
             int32_t glueIndex = kDateTime;
-
-            if ((patternsSize > DateFormat::kDateTimeOffset) && 
-                (patternsSize >= (DateFormat::kDateTimeOffset + DateFormat::kShort + 1))
-                ) {
+            if (patternsSize >= (DateFormat::kDateTimeOffset + DateFormat::kShort + 1)) {
                 // Get proper date time format
 	            switch (fDateStyle) { 
  	            case kFullRelative: 
