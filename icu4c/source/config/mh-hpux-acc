@@ -25,7 +25,7 @@ THREADSCPPFLAGS = -D_REENTRANT -D_THREAD_SAFE
 #        preprocessing tokens. This comes from INT64_C in <inttypes.h>
 #   4232 conversion to a more strictly aligned type may cause misaligned access.
 CFLAGS += -Ae +Olit=all
-CXXFLAGS += +W740 +W749 +W823 +W4232
+CXXFLAGS += -Wc,-ansi_for_scope,on +W740 +W749 +W823 +W4232
 
 # -Bhidden_def Hides all symbols defined in the module.
 #LIBCFLAGS = -Bhidden_def
