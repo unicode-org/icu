@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -955,9 +955,10 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             s = df.format(new Date(0)); /* 31/12/1969 */
             what = "ar_IQ, Japanese Calendar, getInstance";
             logln(what+ ": " + s);
-            first = s.charAt(0);
-            if(first<kArabicZero || first>(kArabicZero+9)) {
-                errln(what + " wrong  digit but got " + s + " (integer digit value " + new Integer((int)first).toString());
+            // Note: The default date pattern for Japanese calendar starts with era in CLDR 1.7
+            char last = s.charAt(s.length() - 1);
+            if(last<kArabicZero || last>(kArabicZero+9)) {
+                errln(what + " wrong  digit but got " + s + " (integer digit value " + new Integer((int)last).toString());
             }
         }
     }

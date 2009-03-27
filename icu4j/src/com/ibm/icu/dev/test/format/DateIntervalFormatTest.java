@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -503,8 +503,10 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             "de", "2007 10 10 10:10:10", "2008 10 10 10:10:10", "MMM", "Okt 2007 - Okt 2008", 
             
-            "de", "2007 10 10 10:10:10", "2008 10 10 10:10:10", "hm", "10.10.2007 10:10 - 10.10.2008 10:10", 
+            "de", "2007 10 10 10:10:10", "2008 10 10 10:10:10", "hm", "10.10.2007 10:10 vorm. - 10.10.2008 10:10 vorm.", 
             
+            "de", "2007 10 10 10:10:10", "2008 10 10 10:10:10", "jm", "10.10.2007 10:10 - 10.10.2008 10:10", 
+
             "de", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "EEEEdMMMy", "Mittwoch, 10. Okt - Samstag, 10. Nov 2007", 
             
             "de", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "dMMMy", "10. Okt - 10. Nov 2007", 
@@ -530,8 +532,10 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             "de", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "MMM", "Okt-Nov", 
             
-            "de", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "hmv", "10.10.2007 10:10 Vereinigte Staaten (Los Angeles) - 10.11.2007 10:10 Vereinigte Staaten (Los Angeles)", 
+            "de", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "hmv", "10.10.2007 10:10 vorm. Vereinigte Staaten (Los Angeles) - 10.11.2007 10:10 vorm. Vereinigte Staaten (Los Angeles)", 
             
+            "de", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "jmv", "10.10.2007 10:10 Vereinigte Staaten (Los Angeles) - 10.11.2007 10:10 Vereinigte Staaten (Los Angeles)", 
+
             "de", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "hms", "10.10.2007 10:10:10 - 10.11.2007 10:10:10", 
             
             "de", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "EEEEdMMMy", "Samstag, 10. - Dienstag, 20. Nov 2007", 
@@ -560,8 +564,10 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             "de", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "M", "11", 
             
-            "de", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "hmv", "10.11.2007 10:10 Vereinigte Staaten (Los Angeles) - 20.11.2007 10:10 Vereinigte Staaten (Los Angeles)", 
+            "de", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "hmv", "10.11.2007 10:10 vorm. Vereinigte Staaten (Los Angeles) - 20.11.2007 10:10 vorm. Vereinigte Staaten (Los Angeles)", 
             
+            "de", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "jmv", "10.11.2007 10:10 Vereinigte Staaten (Los Angeles) - 20.11.2007 10:10 Vereinigte Staaten (Los Angeles)", 
+
             "de", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "EEEEdMMMy", "Mittwoch, 10. Jan 2007", 
             
             "de", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "dMMMy", "10. Jan 2007", 
@@ -592,12 +598,18 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "EEEEdMMMy", "Mittwoch, 10. Jan 2007", 
             
-            "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "hm", "10:10", 
+            "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "hm", "10:10 vorm.", 
+
+            "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "jm", "10:10", 
+
+            "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "hmv", "10:10 vorm. Vereinigte Staaten (Los Angeles)", 
             
-            "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "hmv", "10:10 Vereinigte Staaten (Los Angeles)", 
+            "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "jmv", "10:10 Vereinigte Staaten (Los Angeles)", 
+
+            "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "hmz", "10:10 vorm. GMT-08:00", 
             
-            "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "hmz", "10:10 GMT-08:00", 
-            
+            "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "jmz", "10:10 GMT-08:00", 
+
             "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "h", "10", 
             
             "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "hv", "Vereinigte Staaten (Los Angeles) (Stunde: 10)", 
