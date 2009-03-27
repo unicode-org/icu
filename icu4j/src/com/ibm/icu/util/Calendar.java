@@ -1649,10 +1649,12 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
     private static final int JAPANESE = 9;
     private static final int TAIWAN = 10;
     private static final int ETHIOPIC_AMETE_ALEM = 11;
+    private static final int PERSIAN = 12;  // not yet implemented
 
     private static final String[] calTypes = {
         "buddhist", "chinese", "coptic", "ethiopic", "gregorian", "hebrew", 
-        "indian", "islamic", "islamic-civil", "japanese", "roc", "ethiopic-amete-alem"
+        "indian", "islamic", "islamic-civil", "japanese", "roc", "ethiopic-amete-alem",
+        "persian"
     };
 
     private static int getCalendarType(ULocale l) {
@@ -1786,6 +1788,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
             return new TaiwanCalendar(zone, locale);
         case INDIAN:
             return new IndianCalendar(zone, locale);
+        case PERSIAN:
+            // Not yet implemented in ICU4J
+            return new GregorianCalendar(zone, locale);
         default:
             throw new IllegalStateException();
         }
@@ -1825,49 +1830,49 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
     ///CLOVER:ON
     // ==== End of factory Stuff ====
 
-    //TODO: The table below should be retrieved from ICU resource when CLDR supplementalData
-    // is fully updated.
-    private static final String[][] CALPREF = {
-        {"001", "gregorian"},
-        {"AE", "gregorian", "islamic", "islamic-civil"},
-        {"AF", "gregorian", "islamic", "islamic-civil", "persian"},
-        {"BH", "gregorian", "islamic", "islamic-civil"},
-        {"CN", "gregorian", "chinese"},
-        {"CX", "gregorian", "chinese"},
-        {"DJ", "gregorian", "islamic", "islamic-civil"},
-        {"DZ", "gregorian", "islamic", "islamic-civil"},
-        {"EG", "gregorian", "islamic", "islamic-civil", "coptic"},
-        {"EH", "gregorian", "islamic", "islamic-civil"},
-        {"ER", "gregorian", "islamic", "islamic-civil"},
-        {"ET", "gregorian", "ethiopic", "ethiopic-amete-alem"},
-        {"HK", "gregorian", "chinese"},
-        {"IL", "gregorian", "hebrew"},
-        {"IL", "gregorian", "islamic", "islamic-civil"},
-        {"IN", "gregorian", "indian"},
-        {"IQ", "gregorian", "islamic", "islamic-civil"},
-        {"IR", "gregorian", "islamic", "islamic-civil", "persian"},
-        {"JO", "gregorian", "islamic", "islamic-civil"},
-        {"JP", "gregorian", "japanese"},
-        {"KM", "gregorian", "islamic", "islamic-civil"},
-        {"KW", "gregorian", "islamic", "islamic-civil"},
-        {"LB", "gregorian", "islamic", "islamic-civil"},
-        {"LY", "gregorian", "islamic", "islamic-civil"},
-        {"MA", "gregorian", "islamic", "islamic-civil"},
-        {"MO", "gregorian", "chinese"},
-        {"MR", "gregorian", "islamic", "islamic-civil"},
-        {"OM", "gregorian", "islamic", "islamic-civil"},
-        {"PS", "gregorian", "islamic", "islamic-civil"},
-        {"QA", "gregorian", "islamic", "islamic-civil"},
-        {"SA", "gregorian", "islamic", "islamic-civil"},
-        {"SD", "gregorian", "islamic", "islamic-civil"},
-        {"SG", "gregorian", "chinese"},
-        {"SY", "gregorian", "islamic", "islamic-civil"},
-        {"TD", "gregorian", "islamic", "islamic-civil"},
-        {"TH", "buddhist", "gregorian"},
-        {"TN", "gregorian", "islamic", "islamic-civil"},
-        {"TW", "gregorian", "roc", "chinese"},
-        {"YE", "gregorian", "islamic", "islamic-civil"},
-    };
+//    //TODO: The table below should be retrieved from ICU resource when CLDR supplementalData
+//    // is fully updated.
+//    private static final String[][] CALPREF = {
+//        {"001", "gregorian"},
+//        {"AE", "gregorian", "islamic", "islamic-civil"},
+//        {"AF", "gregorian", "islamic", "islamic-civil", "persian"},
+//        {"BH", "gregorian", "islamic", "islamic-civil"},
+//        {"CN", "gregorian", "chinese"},
+//        {"CX", "gregorian", "chinese"},
+//        {"DJ", "gregorian", "islamic", "islamic-civil"},
+//        {"DZ", "gregorian", "islamic", "islamic-civil"},
+//        {"EG", "gregorian", "islamic", "islamic-civil", "coptic"},
+//        {"EH", "gregorian", "islamic", "islamic-civil"},
+//        {"ER", "gregorian", "islamic", "islamic-civil"},
+//        {"ET", "gregorian", "ethiopic", "ethiopic-amete-alem"},
+//        {"HK", "gregorian", "chinese"},
+//        {"IL", "gregorian", "hebrew"},
+//        {"IL", "gregorian", "islamic", "islamic-civil"},
+//        {"IN", "gregorian", "indian"},
+//        {"IQ", "gregorian", "islamic", "islamic-civil"},
+//        {"IR", "gregorian", "islamic", "islamic-civil", "persian"},
+//        {"JO", "gregorian", "islamic", "islamic-civil"},
+//        {"JP", "gregorian", "japanese"},
+//        {"KM", "gregorian", "islamic", "islamic-civil"},
+//        {"KW", "gregorian", "islamic", "islamic-civil"},
+//        {"LB", "gregorian", "islamic", "islamic-civil"},
+//        {"LY", "gregorian", "islamic", "islamic-civil"},
+//        {"MA", "gregorian", "islamic", "islamic-civil"},
+//        {"MO", "gregorian", "chinese"},
+//        {"MR", "gregorian", "islamic", "islamic-civil"},
+//        {"OM", "gregorian", "islamic", "islamic-civil"},
+//        {"PS", "gregorian", "islamic", "islamic-civil"},
+//        {"QA", "gregorian", "islamic", "islamic-civil"},
+//        {"SA", "gregorian", "islamic", "islamic-civil"},
+//        {"SD", "gregorian", "islamic", "islamic-civil"},
+//        {"SG", "gregorian", "chinese"},
+//        {"SY", "gregorian", "islamic", "islamic-civil"},
+//        {"TD", "gregorian", "islamic", "islamic-civil"},
+//        {"TH", "buddhist", "gregorian"},
+//        {"TN", "gregorian", "islamic", "islamic-civil"},
+//        {"TW", "gregorian", "roc", "chinese"},
+//        {"YE", "gregorian", "islamic", "islamic-civil"},
+//    };
 
     /**
      * Given a key and a locale, returns an array of string values in a preferred
@@ -1895,27 +1900,34 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
 
         // Read preferred calendar values from supplementalData calendarPreferences
         LinkedList values = new LinkedList();
-        //TODO: START
-        String[] preferences = CALPREF[0];
-        for (int i = 0; i < CALPREF.length; i++) {
-            if (prefRegion.equals(CALPREF[i][0])) {
-                preferences = CALPREF[i];
-                break;
-            }
-        }
-        for (int i = 1; i < preferences.length; i++) {
-            if (!values.contains(preferences[i])) {
-                values.add(preferences[i]);
-            }
-        }
-        //TODO: END
 
-        if (!commonlyUsed) {
-            // if not commonlyUsed, add other available values
-            for (int i = 0; i < calTypes.length; i++) {
-                if (!values.contains(calTypes[i])) {
-                    values.add(calTypes[i]);
-                }
+        UResourceBundle rb = UResourceBundle.getBundleInstance(
+                                        ICUResourceBundle.ICU_BASE_NAME,
+                                        "supplementalData",
+                                        ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        UResourceBundle calPref = rb.get("calendarPreferenceData");
+        UResourceBundle order = null;
+        try {
+            order = calPref.get(prefRegion);
+        } catch (MissingResourceException mre) {
+            // use "001" as fallback
+            order = calPref.get("001");
+        }
+
+        String[] caltypes = order.getStringArray();
+        if (commonlyUsed) {
+            // we have all commonly used calendar for the target region
+            return caltypes;
+        }
+
+        // if not commonlyUsed, add all preferred calendars in the order
+        for (int i = 0; i < caltypes.length; i++) {
+            values.add(caltypes[i]);
+        }
+        // then, add other available clanedars
+        for (int i = 0; i < calTypes.length; i++) {
+            if (!values.contains(calTypes[i])) {
+                values.add(calTypes[i]);
             }
         }
         return (String[])values.toArray(new String[values.size()]);
