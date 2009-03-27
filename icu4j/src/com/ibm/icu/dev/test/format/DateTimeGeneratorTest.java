@@ -245,6 +245,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"Md", "1/13"},
         new String[] {"MMMd", "Jan 13"},
         new String[] {"yQQQ", "Q1 1999"},
+        new String[] {"jjmm", "11:58 PM"},
         new String[] {"hhmm", "11:58 PM"},
         new String[] {"HHmm", "23:58"},
         new String[] {"mmss", "58:59"},
@@ -267,7 +268,8 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"Md", "13.1."},   // 13.1
         new String[] {"MMMd", "13. Jan"},
         new String[] {"yQQQ", "Q1 1999"},
-        new String[] {"hhmm", "23:58"},  // 11:58 nachm.
+        new String[] {"jjmm", "23:58"},
+        new String[] {"hhmm", "11:58 nachm."},
         new String[] {"HHmm", "23:58"},
         new String[] {"mmss", "58:59"},
         new ULocale("fi"),
@@ -278,7 +280,8 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"Md", "13.1."},
         new String[] {"MMMd", "13. tammi"},
         new String[] {"yQQQ", "1. nelj./1999"},  // 1. nelj. 1999
-        new String[] {"hhmm", "23.58"},
+        new String[] {"jjmm", "23.58"},
+        new String[] {"hhmm", "11.58 ip."},
         new String[] {"HHmm", "23.58"},
         new String[] {"mmss", "58.59"},
     };
@@ -363,7 +366,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
     }
     
     public void TestVariableCharacters() {
-        UnicodeSet valid = new UnicodeSet("[G   y   Y   u   Q   q   M   L   w   W   d   D   F   g   E   e   c   a   h   H   K   k   j   m   s   S   A   z   Z   v   V]");
+        UnicodeSet valid = new UnicodeSet("[G   y   Y   u   Q   q   M   L   w   W   d   D   F   g   E   e   c   a   h   H   K   k   m   s   S   A   z   Z   v   V]");
         for (char c = 0; c < 0xFF; ++c) {
             boolean works = false;
             try {
