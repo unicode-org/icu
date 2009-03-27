@@ -374,7 +374,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
         }
         // if skeleton contains meta hour field 'j', then
         // replace it with the default hour format char
-        skeleton = Utility.replaceAll(skeleton, "j", Character.toString(defaultHourFormatChar));
+        skeleton = Utility.replaceAll(skeleton, "j", String.valueOf(defaultHourFormatChar));
 
         current.set(skeleton, fp);
         String best = getBestRaw(current, -1, _distanceInfo);
