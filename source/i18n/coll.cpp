@@ -430,8 +430,8 @@ Collator::EComparisonResult Collator::compare(const UChar* source, int32_t sourc
     return (Collator::EComparisonResult)compare(source, sourceLength, target, targetLength, ec);
 }
 
-UCollationResult Collator::compare(UCharIterator &sIter,
-                                   UCharIterator &tIter,
+UCollationResult Collator::compare(UCharIterator &/*sIter*/,
+                                   UCharIterator &/*tIter*/,
                                    UErrorCode &status) const {
     if(U_SUCCESS(status)) {
         // Not implemented in the base class.

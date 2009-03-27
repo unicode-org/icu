@@ -696,7 +696,7 @@ ucol_setText(      UCollationElements *elems,
     elems->isWritable = FALSE;
     
     /* free offset buffer to avoid memory leak before initializing. */
-    freeOffsetBuffer(&(elems->iteratordata_));
+    ucol_freeOffsetBuffer(&(elems->iteratordata_));
     uprv_init_collIterate(elems->iteratordata_.coll, text, textLength, 
                           &elems->iteratordata_);
 
@@ -779,6 +779,15 @@ U_CAPI int32_t U_EXPORT2
 ucol_tertiaryOrder (int32_t order) 
 {
     return (order & UCOL_TERTIARYMASK);
+}
+
+
+void ucol_freeOffsetBuffer(collIterate *s) {
+    if (s != NULL && s->offsetBuffer != NULL) {
+        uprv_free(s->offsetBuffer);
+        s->offsetBuffer = NULL;
+        s->offsetBufferSize = 0;
+    }
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2008, International Business Machines Corporation and    *
+* Copyright (C) 2007-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -508,8 +508,8 @@ error:
 }
 
 void
-BasicTimeZone::getOffsetFromLocal(UDate date, int32_t nonExistingTimeOpt, int32_t duplicatedTimeOpt,
-                            int32_t& rawOffset, int32_t& dstOffset, UErrorCode& status) /*const*/ {
+BasicTimeZone::getOffsetFromLocal(UDate /*date*/, int32_t /*nonExistingTimeOpt*/, int32_t /*duplicatedTimeOpt*/,
+                            int32_t& /*rawOffset*/, int32_t& /*dstOffset*/, UErrorCode& status) /*const*/ {
     if (U_FAILURE(status)) {
         return;
     }
