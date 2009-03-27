@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
@@ -4288,10 +4287,12 @@ public final class ULocale implements Serializable {
                 if (ldmlKeys != null) {
                     Iterator litr = ldmlKeys.iterator();
                     while (litr.hasNext()) {
-                        String lkey = (String)litr.next();
-                        String lvalue = ext.getLDMLKeywordType(lkey);
+                        String bcpKey = (String)litr.next();
+                        String bcpValue = ext.getLDMLKeywordType(bcpKey);
                         // transform to legacy key/type
-                        kwds.put(getLDMLKeyLegacy(lkey), getLDMLTypeLegacy(lvalue));
+                        String lkey = bcp47ToLDMLKey(bcpKey);
+                        String ltype = bcp47ToLDMLType(lkey, bcpValue);
+                        kwds.put(lkey, ltype);
                     }
                 }
             }
@@ -4346,8 +4347,8 @@ public final class ULocale implements Serializable {
                 extMap.put(new Character(key.charAt(0)), value.intern());
             } else {
                 // LDML keyword
-                String bcpKey = getLDMLKeyBCP47(key);
-                String bcpVal = getLDMLTypeBCP47(value);
+                String bcpKey = ldmlKeyToBCP47(key);
+                String bcpVal = ldmlTypeToBCP47(key, value);
                 if (ldmlKwMap == null) {
                     ldmlKwMap = new TreeMap();
                 }
@@ -4368,124 +4369,125 @@ public final class ULocale implements Serializable {
         return LocaleExtensions.getInstance(extMap, ldmlKwMap);
     }
 
-    // TODO: Use CLDR 1.7 supplemental
-    private static Map LDMLKEY_LEGACY_TO_BCP47 = null;
-    private static Map LDMLKEY_BCP47_TO_LEGACY = null;
-    private static Map LDMLTYPE_LEGACY_TO_BCP47 = null;
-    private static Map LDMLTYPE_BCP47_TO_LEGACY = null;
+    //
+    // LDML legacy/BCP47 key and type mapping functions
+    //
+    private static String ldmlKeyToBCP47(String key) {
+        UResourceBundle supplemental = UResourceBundle.getBundleInstance(
+                                            ICUResourceBundle.ICU_BASE_NAME,
+                                            "supplementalData",
+                                            ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        UResourceBundle bcp47Mappings = supplemental.get("bcp47KeywordMappings");
+        UResourceBundle keyMaps = bcp47Mappings.get("key");
 
-    private static synchronized String getLDMLKeyBCP47(String legacy) {
-        if (LDMLKEY_LEGACY_TO_BCP47 == null) {
-            LDMLKEY_LEGACY_TO_BCP47 = new HashMap();
-
-            LDMLKEY_LEGACY_TO_BCP47.put("collation", "co");
-            LDMLKEY_LEGACY_TO_BCP47.put("calendar", "ca");
-            LDMLKEY_LEGACY_TO_BCP47.put("currency", "cu");
-            LDMLKEY_LEGACY_TO_BCP47.put("numbers", "nu");
-            LDMLKEY_LEGACY_TO_BCP47.put("time zone", "tz");
-            LDMLKEY_LEGACY_TO_BCP47.put("colStrength", "ks");
-            LDMLKEY_LEGACY_TO_BCP47.put("colAlternate", "ka");
-            LDMLKEY_LEGACY_TO_BCP47.put("colBackwards", "kb");
-            LDMLKEY_LEGACY_TO_BCP47.put("colNormalization", "kk");
-            LDMLKEY_LEGACY_TO_BCP47.put("colCaseLevel", "kc");
-            LDMLKEY_LEGACY_TO_BCP47.put("colCaseFirst", "kf");
-            LDMLKEY_LEGACY_TO_BCP47.put("colHiraganaQuaternary", "kh");
-            LDMLKEY_LEGACY_TO_BCP47.put("colNumeric", "kn");
-            LDMLKEY_LEGACY_TO_BCP47.put("variableTop", "kv");
+        // normalize key to lowercase
+        key = AsciiUtil.toLowerString(key);
+        String bcpKey = null;
+        try {
+            bcpKey = keyMaps.getString(key);
+        } catch (MissingResourceException mre) {
+            // fall through
         }
-        String key = (String)LDMLKEY_LEGACY_TO_BCP47.get(legacy);
-        if (key == null) {
-            if (legacy.length() == 2) {
-                return legacy;
+
+        if (bcpKey == null) {
+            if (key.length() == 2) {
+                return key;
             }
-            throw new IllegalArgumentException("Unknown LDML key name: " + legacy);
+            throw new IllegalArgumentException("Unknown LDML key name: " + key);
+        }
+        return bcpKey;
+    }
+
+    private static String bcp47ToLDMLKey(String bcpKey) {
+        UResourceBundle supplemental = UResourceBundle.getBundleInstance(
+                                            ICUResourceBundle.ICU_BASE_NAME,
+                                            "supplementalData",
+                                            ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        UResourceBundle bcp47Mappings = supplemental.get("bcp47KeywordMappings");
+        UResourceBundle keyMaps = bcp47Mappings.get("key");
+
+        // normalize bcp key to lowercase
+        bcpKey = AsciiUtil.toLowerString(bcpKey);
+        String key = null;
+        for (int i = 0; i < keyMaps.getSize(); i++) {
+            UResourceBundle keyMap = keyMaps.get(i);
+            if (bcpKey.equals(keyMap.getString())) {
+                key = keyMap.getKey();
+                break;
+            }
+        }
+        if (key == null) {
+            return bcpKey;
         }
         return key;
     }
 
-    private static synchronized String getLDMLKeyLegacy(String bcp) {
-        if (LDMLKEY_BCP47_TO_LEGACY == null) {
-            LDMLKEY_BCP47_TO_LEGACY = new HashMap();
+    private static String ldmlTypeToBCP47(String key, String type) {
+        UResourceBundle supplemental = UResourceBundle.getBundleInstance(
+                                            ICUResourceBundle.ICU_BASE_NAME,
+                                            "supplementalData",
+                                            ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        UResourceBundle bcp47Mappings = supplemental.get("bcp47KeywordMappings");
 
-            LDMLKEY_BCP47_TO_LEGACY.put("co", "collation");
-            LDMLKEY_BCP47_TO_LEGACY.put("ca", "calendar");
-            LDMLKEY_BCP47_TO_LEGACY.put("cu", "currency");
-            LDMLKEY_BCP47_TO_LEGACY.put("nu", "numbers");
-            LDMLKEY_BCP47_TO_LEGACY.put("tz", "time zone");
-            LDMLKEY_BCP47_TO_LEGACY.put("ks", "colStrength" );
-            LDMLKEY_BCP47_TO_LEGACY.put("ka", "colAlternate");
-            LDMLKEY_BCP47_TO_LEGACY.put("kb", "colBackwards");
-            LDMLKEY_BCP47_TO_LEGACY.put("kk", "colNormalization");
-            LDMLKEY_BCP47_TO_LEGACY.put("kc", "colCaseLevel");
-            LDMLKEY_BCP47_TO_LEGACY.put("kf", "colCaseFirst");
-            LDMLKEY_BCP47_TO_LEGACY.put("kh", "colHiraganaQuaternary");
-            LDMLKEY_BCP47_TO_LEGACY.put("kn", "colNumeric");
-            LDMLKEY_BCP47_TO_LEGACY.put("kv", "variableTop");
+        // normalize key/type to lowercase
+        key = AsciiUtil.toLowerString(key);
+        type = AsciiUtil.toLowerString(type);
+        String bcpType = null;
+        try {
+            UResourceBundle typeMaps = bcp47Mappings.get(key);
+            String tmp = key.equals("timezone") ? type.replaceAll("/", ":") : type;
+            bcpType = typeMaps.getString(tmp);
+        } catch (MissingResourceException mre) {
+            // fall through
         }
-        String key = (String)LDMLKEY_BCP47_TO_LEGACY.get(bcp);
-        if (key == null) {
-            return bcp;
-        }
-        return key;
-    }
-
-    private static synchronized String getLDMLTypeBCP47(String legacy) {
-        if (LDMLTYPE_LEGACY_TO_BCP47 == null) {
-            LDMLTYPE_LEGACY_TO_BCP47 = new HashMap();
-
-            LDMLTYPE_LEGACY_TO_BCP47.put("digits-after", "digitaft");
-            LDMLTYPE_LEGACY_TO_BCP47.put("gb2312han", "gb2312");
-            LDMLTYPE_LEGACY_TO_BCP47.put("phonebook", "phonebk");
-            LDMLTYPE_LEGACY_TO_BCP47.put("traditional", "trad");
-
-            LDMLTYPE_LEGACY_TO_BCP47.put("primary", "level1");
-            LDMLTYPE_LEGACY_TO_BCP47.put("secondary", "level2");
-            LDMLTYPE_LEGACY_TO_BCP47.put("tertiary", "level3");
-            LDMLTYPE_LEGACY_TO_BCP47.put("quarternary", "level4");
-            LDMLTYPE_LEGACY_TO_BCP47.put("non-ignorable", "noignore");
-            LDMLTYPE_LEGACY_TO_BCP47.put("yes", "true");
-            LDMLTYPE_LEGACY_TO_BCP47.put("no", "false");
-
-            LDMLTYPE_LEGACY_TO_BCP47.put("ethiopic-amete-alem", "ethiopaa");
-            LDMLTYPE_LEGACY_TO_BCP47.put("gregorian", "gregory");
-            LDMLTYPE_LEGACY_TO_BCP47.put("islamic-civil", "islamicc");
-        }
-        String type = (String)LDMLTYPE_LEGACY_TO_BCP47.get(legacy);
-        if (type == null) {
-            if (legacy.length() >= 3 && legacy.length() <= 8) {
-                return legacy;
+        
+        if (bcpType == null) {
+            int typeLen = type.length();
+            if (typeLen >= 3 && typeLen <= 8) {
+                return type;
             }
-            throw new IllegalArgumentException("Unknown LDML type name: " + legacy);
+            throw new IllegalArgumentException("Unknown LDML type name: " + key);
         }
-        return type;
+        return bcpType;
     }
 
-    private static synchronized String getLDMLTypeLegacy(String bcp) {
-        if (LDMLTYPE_BCP47_TO_LEGACY == null) {
-            LDMLTYPE_BCP47_TO_LEGACY = new HashMap();
+    private static String bcp47ToLDMLType(String key, String bcpType) {
+        UResourceBundle supplemental = UResourceBundle.getBundleInstance(
+                ICUResourceBundle.ICU_BASE_NAME,
+                "supplementalData",
+                ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        UResourceBundle bcp47Mappings = supplemental.get("bcp47KeywordMappings");
 
-            LDMLTYPE_BCP47_TO_LEGACY.put("digitaft", "digits-after");
-            LDMLTYPE_BCP47_TO_LEGACY.put("gb2312", "gb2312han");
-            LDMLTYPE_BCP47_TO_LEGACY.put("phonebk", "phonebook");
-            LDMLTYPE_BCP47_TO_LEGACY.put("trad", "traditional");
+        // normalize key/bcpType to lowercase
+        key = AsciiUtil.toLowerString(key);
+        bcpType = AsciiUtil.toLowerString(bcpType);
 
-            LDMLTYPE_BCP47_TO_LEGACY.put("level1", "primary");
-            LDMLTYPE_BCP47_TO_LEGACY.put("level2", "secondary");
-            LDMLTYPE_BCP47_TO_LEGACY.put("level3", "tertiary");
-            LDMLTYPE_BCP47_TO_LEGACY.put("level4", "quarternary");
-            LDMLTYPE_BCP47_TO_LEGACY.put("noignore", "non-ignorable");
-            LDMLTYPE_BCP47_TO_LEGACY.put("true", "yes");
-            LDMLTYPE_BCP47_TO_LEGACY.put("false", "no");
+        String type = null;
+        try {
+            UResourceBundle typeMaps = bcp47Mappings.get(key);
 
-            LDMLTYPE_BCP47_TO_LEGACY.put("ehiopaa", "ethiopic-amete-alem");
-            LDMLTYPE_BCP47_TO_LEGACY.put("gregory", "gregorian");
-            LDMLTYPE_BCP47_TO_LEGACY.put("islamicc", "islamic-civil");
+            // Note:    Linear search for time zone ID might be too slow.
+            //          ICU services do not use timezone keywords for now.
+            //          In future, we may need to build the optimized inverse
+            //          lookup table.
+
+            for (int i = 0; i < typeMaps.getSize(); i++) {
+                UResourceBundle typeMap = typeMaps.get(i);
+                if (bcpType.equals(typeMap.getString())) {
+                    type = typeMap.getKey();
+                    if (key.equals("timezone")) {
+                        type = type.replaceAll(":", "/");
+                    }
+                    break;
+                }
+            }
+        } catch (MissingResourceException mre) {
+            // fall through
         }
-        String type = (String)LDMLTYPE_BCP47_TO_LEGACY.get(bcp);
+
         if (type == null) {
-            return bcp;
+            return bcpType;
         }
         return type;
     }
-
 }
