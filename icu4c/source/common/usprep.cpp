@@ -443,7 +443,7 @@ usprep_openByType(UStringPrepProfileType type,
         return NULL;
     }
     int32_t index = (int32_t)type;
-    if (index < 0 || index >= sizeof(PROFILE_NAMES)/sizeof(PROFILE_NAMES[0])) {
+    if (index < 0 || index >= (int32_t)(sizeof(PROFILE_NAMES)/sizeof(PROFILE_NAMES[0]))) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
