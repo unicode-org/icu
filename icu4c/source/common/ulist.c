@@ -78,7 +78,7 @@ U_CAPI void U_EXPORT2 ulist_addItemEndList(UList *list, const void *data, UBool 
         *status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    newItem->data = data;
+    newItem->data = (void *)(data);
     newItem->forceDelete = forceDelete;
     
     if (list->size == 0) {
@@ -105,7 +105,7 @@ U_CAPI void U_EXPORT2 ulist_addItemBeginList(UList *list, const void *data, UBoo
         *status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    newItem->data = data;
+    newItem->data = (void *)(data);
     newItem->forceDelete = forceDelete;
     
     if (list->size == 0) {

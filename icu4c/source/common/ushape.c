@@ -616,7 +616,6 @@ int32_t destSize,uint32_t options) {
     
     int lamAlefOption = 0;
     int tashkeelOption = 0;
-    int step = -1;
 
     destSize = sourceLength;
     
