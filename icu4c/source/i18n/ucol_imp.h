@@ -1064,13 +1064,7 @@ static inline UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
 #endif /* XP_CPLUSPLUS */
 
 /* The offsetBuffer in collIterate might need to be freed to avoid memory leaks. */
-static void freeOffsetBuffer(collIterate *s) {
-    if (s != NULL && s->offsetBuffer != NULL) {
-        uprv_free(s->offsetBuffer);
-        s->offsetBuffer = NULL;
-        s->offsetBufferSize = 0;
-    }
-}
+void ucol_freeOffsetBuffer(collIterate *s); 
 
 
 #endif /* #if !UCONFIG_NO_COLLATION */
