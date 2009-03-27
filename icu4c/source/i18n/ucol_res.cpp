@@ -758,8 +758,8 @@ static const UEnumeration defaultKeywordValues = {
 #define MAX_LOCALE_SIZE 20
 
 U_CAPI UEnumeration* U_EXPORT2
-ucol_getKeywordValuesForLocale(const char* key, const char* locale,
-                               UBool commonlyUsed, UErrorCode* status) {
+ucol_getKeywordValuesForLocale(const char* /*key*/, const char* locale,
+                               UBool /*commonlyUsed*/, UErrorCode* status) {
     /* Get the locale base name. */
     char localeBuffer[MAX_LOCALE_SIZE] = "";
     uloc_getBaseName(locale, localeBuffer, MAX_LOCALE_SIZE, status);

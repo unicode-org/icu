@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2008, International Business Machines
+ *   Copyright (C) 2005-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -370,7 +370,7 @@ static const UEnumeration gCSDetEnumeration = {
 };
 
 U_CAPI  UEnumeration * U_EXPORT2
-ucsdet_getAllDetectableCharsets(const UCharsetDetector *ucsd, UErrorCode *status)
+ucsdet_getAllDetectableCharsets(const UCharsetDetector * /*ucsd*/, UErrorCode *status)
 {
     U_NAMESPACE_USE
 

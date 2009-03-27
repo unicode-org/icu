@@ -5407,7 +5407,7 @@ cleanup:
     }
     
     /* To avoid memory leak, free the offset buffer if necessary. */
-    freeOffsetBuffer(&s);
+    ucol_freeOffsetBuffer(&s);
 
     if(normSource != normBuffer) {
         uprv_free(normSource);
@@ -5791,7 +5791,7 @@ cleanup:
     }
     
     /* To avoid memory leak, free the offset buffer if necessary. */
-    freeOffsetBuffer(&s);
+    ucol_freeOffsetBuffer(&s);
     
     if(normSource != normBuffer) {
         uprv_free(normSource);
@@ -6654,7 +6654,7 @@ saveState:
     }
 
     /* To avoid memory leak, free the offset buffer if necessary. */
-    freeOffsetBuffer(&s);
+    ucol_freeOffsetBuffer(&s);
     
     // Return number of meaningful sortkey bytes.
     UTRACE_DATA4(UTRACE_VERBOSE, "dest = %vb, state=%d %d",
@@ -7060,7 +7060,7 @@ ucol_setVariableTop(UCollator *coll, const UChar *varTop, int32_t len, UErrorCod
     }
     
     /* To avoid memory leak, free the offset buffer if necessary. */
-    freeOffsetBuffer(&s);
+    ucol_freeOffsetBuffer(&s);
 
     return CE & UCOL_PRIMARYMASK;
 }
