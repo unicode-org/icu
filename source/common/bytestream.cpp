@@ -11,7 +11,7 @@
 U_NAMESPACE_BEGIN
 
 char* ByteSink::GetAppendBuffer(int32_t min_capacity,
-                                int32_t desired_capacity_hint,
+                                int32_t /*desired_capacity_hint*/,
                                 char* scratch, int32_t scratch_capacity,
                                 int32_t* result_capacity) {
   if (min_capacity < 1 || scratch_capacity < min_capacity) {
@@ -44,7 +44,7 @@ void CheckedArrayByteSink::Append(const char* bytes, int32_t n) {
 }
 
 char* CheckedArrayByteSink::GetAppendBuffer(int32_t min_capacity,
-                                            int32_t desired_capacity_hint,
+                                            int32_t /*desired_capacity_hint*/,
                                             char* scratch,
                                             int32_t scratch_capacity,
                                             int32_t* result_capacity) {
