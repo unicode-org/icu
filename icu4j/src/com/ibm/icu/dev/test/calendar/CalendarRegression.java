@@ -2096,7 +2096,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
-    public void TestGetKeywordValues(){
+    public void TestGetKeywordValuesForLocale(){
 
         final String[][] PREFERRED = {
             {"root",        "gregorian"},
@@ -2106,12 +2106,14 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
             {"th_TH",       "buddhist", "gregorian"},
             {"und_TH",      "buddhist", "gregorian"},
             {"en_TH",       "buddhist", "gregorian"},
-            {"he_IL",       "gregorian", "hebrew"},
-            {"ar_EG",       "gregorian", "islamic", "islamic-civil", "coptic"},
+            {"he_IL",       "gregorian", "hebrew", "islamic", "islamic-civil"},
+            {"ar_EG",       "gregorian", "coptic", "islamic", "islamic-civil"},
             {"ja",          "gregorian", "japanese"},
             {"ps_Guru_IN",  "gregorian", "indian"},
             {"th@calendar=gregorian",   "buddhist", "gregorian"},
             {"en@calendar=islamic",     "gregorian"},
+            {"zh_TW",       "gregorian", "roc", "chinese"},
+            {"ar_IR",       "gregorian", "persian", "islamic", "islamic-civil"},
         };
 
         String[] ALL = Calendar.getKeywordValuesForLocale("calendar", ULocale.getDefault(), false);
