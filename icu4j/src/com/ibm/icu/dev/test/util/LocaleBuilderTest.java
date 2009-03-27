@@ -40,13 +40,16 @@ public class LocaleBuilderTest extends TestFmwk {
             {"R", "123", "L", "en", "T", "en-123", "en_123"},
             {"S", "LATN", "L", "DE", "T", "de-latn", "de_Latn"},
             {"S", "latin", "X"},
+            {"L", "th", "R", "th", "K", "nu", "thai", "T", "th-th-u-nu-thai", "th_TH@numbers=thai"},
             {"E", "z", "ExtZ", "L", "en", "T", "en-z-extz", "en@z=extz"},
             {"L", "fr", "R", "FR", "P", "Yoshito-ICU", "T", "fr-fr-x-yoshito-icu", "fr_FR@x=yoshito-icu"},
             {"L", "ja", "R", "jp", "K", "ca", "japanese", "T", "ja-jp-u-ca-japanese", "ja_JP@calendar=japanese"},
             {"K", "co", "PHONEBK", "K", "ca", "gregory", "L", "De", "T", "de-u-ca-gregory-co-phonebk", "de@calendar=gregorian;collation=phonebook"},
-//            {"L", "en", "V", "foooo_barrr", "T", "en-foooo-barrr", "en__FOOOO_BARRR"},
             {"E", "o", "OPQR", "E", "a", "aBcD", "T", "und-a-abcd-o-opqr", "@a=abcd;o=opqr"},
             {"E", "u", "nu-thai-ca-gregory", "L", "TH", "T", "th-u-ca-gregory-nu-thai", "th@calendar=gregorian;numbers=thai"},
+            {"L", "en", "K", "tz", "usnyc", "R", "US", "T", "en-us-u-tz-usnyc", "en_US@timezone=america/new_york"},
+            {"L", "de", "K", "co", "phonebk", "K", "ks", "level1", "K", "kk", "true", "T", "de-u-co-phonebk-kk-true-ks-level1", "de@collation=phonebook;colnormalization=yes;colstrength=primary"},
+//          {"L", "en", "V", "foooo_barrr", "T", "en-foooo-barrr", "en__FOOOO_BARRR"},
         };
 
         Builder bld = new Builder();
