@@ -22,6 +22,7 @@ import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.SimpleCache;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.locale.AsciiUtil;
 import com.ibm.icu.impl.locale.BaseLocale;
 import com.ibm.icu.impl.locale.InternalLocaleBuilder;
@@ -4435,7 +4436,7 @@ public final class ULocale implements Serializable {
         String bcpType = null;
         try {
             UResourceBundle typeMaps = bcp47Mappings.get(key);
-            String tmp = key.equals("timezone") ? type.replaceAll("/", ":") : type;
+            String tmp = key.equals("timezone") ? Utility.replaceAll(type, "/", ":") : type;
             bcpType = typeMaps.getString(tmp);
         } catch (MissingResourceException mre) {
             // fall through
@@ -4476,7 +4477,7 @@ public final class ULocale implements Serializable {
                 if (bcpType.equals(typeMap.getString())) {
                     type = typeMap.getKey();
                     if (key.equals("timezone")) {
-                        type = type.replaceAll(":", "/");
+                        type = Utility.replaceAll(type, ":", "/");
                     }
                     break;
                 }
