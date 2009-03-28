@@ -24,18 +24,14 @@
 #include <string.h>
 #include "unicode/uspoof.h"
 #include "unicode/ustring.h"
+#include "unicode/uset.h"
 #include "cintltst.h"
 
 #define TEST_ASSERT_SUCCESS(status) {if (U_FAILURE(status)) { \
     log_err("Failure at file %s, line %d, error = %s\n", __FILE__, __LINE__, u_errorName(status));}}
 
-#define TEST_CHECK_SUCCESS(status) {if (U_FAILURE(status)) { \
-    log_err("Failure at file %s, line %d, error = %s\n", __FILE__, __LINE__, u_errorName(status)); \
-    goto bailout;} \
-}
-
-#define TEST_ASSERT_TRUE(expr) {if ((expr)==FALSE) { \
-log_err("Test Failure at file %s, line %d: \"%s\" is false.\n", __FILE__, __LINE__, #expr);}}
+#define TEST_ASSERT(expr) {if ((expr)==FALSE) { \
+log_err("Test Failure at file %s, line %d: \"%s\" is false.\n", __FILE__, __LINE__, #expr);};}
 
 #define TEST_ASSERT_EQ(a, b) { if ((a) != (b)) { \
     log_err("Test Failure at file %s, line %d: \"%s\" (%d) != \"%s\" (%d) \n", \
@@ -56,13 +52,12 @@ log_err("Test Failure at file %s, line %d: \"%s\" is false.\n", __FILE__, __LINE
     UErrorCode status = U_ZERO_ERROR; \
     USpoofChecker *sc;     \
     sc = uspoof_open(&status);  \
-    TEST_CHECK_SUCCESS(status);   \
-    {
+    TEST_ASSERT_SUCCESS(status);   \
+    if (U_SUCCESS(status)){
 
 #define TEST_TEARDOWN  \
     }  \
     TEST_ASSERT_SUCCESS(status);  \
- bailout: \
     uspoof_close(sc);  \
 }
 
@@ -99,12 +94,41 @@ void addUSpoofTest(TestNode** root)
     addTest(root, &TestUSpoofCAPI, "uspoof/TestUSpoofCAPI");
 }
 
+/*
+ *  Identifiers, one good and one bad, for verifying that a spoof checker is minimally alive and working.
+ */
+const UChar goodId[] = {(UChar)0x75, (UChar)0x77, 0};     /* "uw", all ASCII             */
+                                                          /*   (not confusable)          */
+const UChar badId[]  = {(UChar)0x73, (UChar)0x0441, 0};   /* "sc", with Cyrillic 'c'     */
+                                                          /*   (mixed script, confusable */
+        
 
 /*
  *   Spoof Detction C API Tests
  */
 static void TestUSpoofCAPI(void) {
 
+    /*
+     *  basic uspoof_open().
+     */
+    {
+        USpoofChecker *sc;
+        UErrorCode  status = U_ZERO_ERROR;
+        sc = uspoof_open(&status);
+        TEST_ASSERT_SUCCESS(status);
+        if (U_FAILURE(status)) {
+            /* If things are so broken that we can't even open a default spoof checker,  */
+            /*   don't even try the rest of the tests.  They would all fail.             */
+            return;
+        }
+        uspoof_close(sc);
+    }
+
+    
+        
+    /*
+     *  Test Open from source rules.
+    */
     TEST_SETUP
     const char *dataSrcDir;
     char       *fileName;
@@ -147,6 +171,152 @@ static void TestUSpoofCAPI(void) {
     uspoof_close(rsc);
     /*  printf("ParseError Line is %d\n", pe.line);  */
     TEST_TEARDOWN;
+
+
+    /*
+     * openFromSerialized and serialize
+    */
+    TEST_SETUP
+        int32_t        serializedSize = 0;
+        int32_t        actualLength = 0;
+        char           *buf;
+        USpoofChecker  *sc2;
+        int32_t         checkResults;
+
+        
+        serializedSize = uspoof_serialize(sc, NULL, 0, &status);
+        TEST_ASSERT_EQ(status, U_BUFFER_OVERFLOW_ERROR);
+        TEST_ASSERT(serializedSize > 0);
+
+        /* Serialize the default spoof checker */
+        status = U_ZERO_ERROR;
+        buf = (char *)malloc(serializedSize + 10);
+        TEST_ASSERT(buf != NULL);
+        buf[serializedSize] = 42;
+        uspoof_serialize(sc, buf, serializedSize, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(42, buf[serializedSize]);
+
+        /* Create a new spoof checker from the freshly serialized data */
+        sc2 = uspoof_openFromSerialized(buf, serializedSize+10, &actualLength, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_NE(NULL, sc2);
+        TEST_ASSERT_EQ(serializedSize, actualLength);
+
+        /* Verify that the new spoof checker at least wiggles */
+        checkResults = uspoof_check(sc2, goodId, -1, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(0, checkResults);
+
+        checkResults = uspoof_check(sc2, badId, -1, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT | USPOOF_MIXED_SCRIPT_CONFUSABLE, checkResults);
+
+        uspoof_close(sc2);
+        free(buf);
+    TEST_TEARDOWN;
+        
+        
+        
+    /*
+     * Set & Get Check Flags
+    */
+    TEST_SETUP
+        int32_t t;
+        uspoof_setChecks(sc, USPOOF_ALL_CHECKS, &status);
+        TEST_ASSERT_SUCCESS(status);
+        t = uspoof_getChecks(sc, &status);
+        TEST_ASSERT_EQ(t, USPOOF_ALL_CHECKS);
     
+        uspoof_setChecks(sc, 0, &status);
+        TEST_ASSERT_SUCCESS(status);
+        t = uspoof_getChecks(sc, &status);
+        TEST_ASSERT_EQ(0, t);
+        
+        uspoof_setChecks(sc,
+                        USPOOF_WHOLE_SCRIPT_CONFUSABLE | USPOOF_MIXED_SCRIPT_CONFUSABLE | USPOOF_ANY_CASE,
+                        &status);
+        TEST_ASSERT_SUCCESS(status);
+        t = uspoof_getChecks(sc, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(USPOOF_WHOLE_SCRIPT_CONFUSABLE | USPOOF_MIXED_SCRIPT_CONFUSABLE | USPOOF_ANY_CASE, t);
+    TEST_TEARDOWN;
+
+    /*
+    * get & setAllowedChars
+    */
+    TEST_SETUP
+        USet *us;
+        const USet *uset;
+
+        uset = uspoof_getAllowedChars(sc, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT(uset_isFrozen(uset));
+        us = uset_open((UChar32)0x41, (UChar32)0x5A);   /*  [A-Z]  */
+        uspoof_setAllowedChars(sc, us, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_NE(us, uspoof_getAllowedChars(sc, &status));
+        TEST_ASSERT(uset_equals(us, uspoof_getAllowedChars(sc, &status)));
+        TEST_ASSERT_SUCCESS(status);
+        uset_close(us);
+    TEST_TEARDOWN;
+
+    /*
+    *  clone()
+    */
+
+    TEST_SETUP
+        USpoofChecker *clone1 = NULL;
+        USpoofChecker *clone2 = NULL;
+        int32_t        checkResults = 0;
+        
+        clone1 = uspoof_clone(sc, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_NE(clone1, sc);
+
+        clone2 = uspoof_clone(clone1, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_NE(clone2, clone1);
+
+        uspoof_close(clone1);
+        
+        /* Verify that the cloned spoof checker is alive */
+        checkResults = uspoof_check(clone2, goodId, -1, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(0, checkResults);
+
+        checkResults = uspoof_check(clone2, badId, -1, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT | USPOOF_MIXED_SCRIPT_CONFUSABLE, checkResults);
+    TEST_TEARDOWN;
+
+    /*
+     *  get & set Checks
+    */
+    TEST_SETUP
+        int32_t   checks;
+        int32_t   checks2;
+        int32_t   checkResults;
+
+        checks = uspoof_getChecks(sc, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(USPOOF_ALL_CHECKS, checks);
+
+        checks &= ~(USPOOF_SINGLE_SCRIPT & USPOOF_MIXED_SCRIPT_CONFUSABLE);
+        uspoof_setChecks(sc, checks, &status);
+        TEST_ASSERT_SUCCESS(status);
+        checks2 = uspoof_getChecks(sc, &status);
+        TEST_ASSERT_EQ(checks, checks2);
+
+        /* The checks that were disabled just above are the same ones that the "badId" test fails.
+            So with those tests gone checking that Identifier should now succeed */
+        checkResults = uspoof_check(sc, badId, -1, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        /* TEST_ASSERT_EQ(0, checkResults); */
+    TEST_TEARDOWN;
+        
 }
+
+
+
 
