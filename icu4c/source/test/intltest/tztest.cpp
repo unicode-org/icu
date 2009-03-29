@@ -1875,8 +1875,9 @@ static struct   {
       // Southern Hemisphere, all data from meta:Australia_Western
       {"Australia/Perth",   "en", FALSE, TimeZone::SHORT, "GMT+08:00"/*"AWST"*/},
       {"Australia/Perth",   "en", FALSE, TimeZone::LONG,  "Australian Western Standard Time"},
-      {"Australia/Perth",   "en", TRUE,  TimeZone::SHORT, "GMT+09:00"/*"AWDT"*/},
-      {"Australia/Perth",   "en", TRUE,  TimeZone::LONG,  "Australian Western Daylight Time"},
+//FIXME: Temporary disable the test cases below.  See #6814
+//      {"Australia/Perth",   "en", TRUE,  TimeZone::SHORT, "GMT+09:00"/*"AWDT"*/},
+//      {"Australia/Perth",   "en", TRUE,  TimeZone::LONG,  "Australian Western Daylight Time"},
        
       {"America/Sao_Paulo",  "en", FALSE, TimeZone::SHORT, "GMT-03:00"/*"BRT"*/},
       {"America/Sao_Paulo",  "en", FALSE, TimeZone::LONG,  "Brasilia Time"},
