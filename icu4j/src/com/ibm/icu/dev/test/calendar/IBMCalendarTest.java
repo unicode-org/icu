@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2008, International Business Machines Corporation and
+ * Copyright (C) 2000-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -993,6 +993,47 @@ public class IBMCalendarTest extends CalendarTest {
             Calendar cal = Calendar.getInstance(new ULocale("en_US@calendar=chinese"));
                                                 
             logln("calendar type: " + cal.getClass().getName());
+        }
+    }
+
+    public void TestTypes() {
+        String[] locs = {
+                "en_US_VALLEYGIRL",
+                "en_US_VALLEYGIRL@collation=phonebook;calendar=japanese",
+                "en_US_VALLEYGIRL@collation=phonebook;calendar=gregorian",
+                "ja_JP@calendar=japanese",
+                "th_TH@calendar=buddhist",
+                "ja_JP_TRADITIONAL",
+                "th_TH_TRADITIONAL",
+                "th_TH_TRADITIONAL@calendar=gregorian",
+                "en_US",
+                "th_TH",    // Default calendar for th_TH is buddhist
+                "th",       // th's default region is TH and buddhist is used as default for TH
+// FIXME: ICU Service canonicalize en_TH to en, so TH is ignored in Calendar instantiation.  See #6816.
+//                "en_TH",    // Default calendar for any locales with region TH is buddhist
+        };
+
+        String[] types = {
+                "gregorian",
+                "japanese",
+                "gregorian",
+                "japanese",
+                "buddhist",
+                "japanese",
+                "buddhist",
+                "gregorian",
+                "gregorian",
+                "buddhist",
+                "buddhist",
+// FIXME: ICU Service canonicalize en_TH to en, so TH is ignored in Calendar instantiation.  See #6816.
+//                "buddhist",
+        };
+
+        for (int i = 0; i < locs.length; i++) {
+            Calendar cal = Calendar.getInstance(new ULocale(locs[i]));
+            if (!cal.getType().equals(types[i])) {
+                errln(locs[i] + " Calendar type " + cal.getType() + " instead of " + types[i]);
+            }
         }
     }
 }

@@ -1637,34 +1637,83 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
         return cal;
     }
 
-    private static final int BUDDHIST = 0;
-    private static final int CHINESE = 1;
-    private static final int COPTIC = 2;
-    private static final int ETHIOPIC = 3;
-    private static final int GREGORIAN = 4;
-    private static final int HEBREW = 5;
-    private static final int INDIAN = 6;
-    private static final int ISLAMIC = 7;
-    private static final int ISLAMIC_CIVIL = 8;
-    private static final int JAPANESE = 9;
-    private static final int TAIWAN = 10;
-    private static final int ETHIOPIC_AMETE_ALEM = 11;
-    private static final int PERSIAN = 12;  // not yet implemented
-
     private static final String[] calTypes = {
-        "buddhist", "chinese", "coptic", "ethiopic", "gregorian", "hebrew", 
-        "indian", "islamic", "islamic-civil", "japanese", "roc", "ethiopic-amete-alem",
-        "persian"
+        "gregorian",
+        "japanese",
+        "buddhist",
+        "roc",
+        "persian",
+        "islamic-civil",
+        "islamic",
+        "hebrew",
+        "chinese",
+        "indian",
+        "coptic",
+        "ethiopic",
+        "ethiopic-amete-alem",
     };
 
-    private static int getCalendarType(ULocale l) {
-        String s = l.getKeywordValue("calendar");
-        if (s == null) {
-            l = ICUResourceBundle.getFunctionalEquivalent(
-                ICUResourceBundle.ICU_BASE_NAME, "calendar", "calendar", l, null, false);
-            s = l.getKeywordValue("calendar");
+    // must be in the order of calTypes above
+    private static final int CALTYPE_GREGORIAN = 0;
+    private static final int CALTYPE_JAPANESE = 1;
+    private static final int CALTYPE_BUDDHIST = 2;
+    private static final int CALTYPE_ROC = 3;
+    private static final int CALTYPE_PERSIAN = 4;  // not yet implemented
+    private static final int CALTYPE_ISLAMIC_CIVIL = 5;
+    private static final int CALTYPE_ISLAMIC = 6;
+    private static final int CALTYPE_HEBREW = 7;
+    private static final int CALTYPE_CHINESE = 8;
+    private static final int CALTYPE_INDIAN = 9;
+    private static final int CALTYPE_COPTIC = 10;
+    private static final int CALTYPE_ETHIOPIC = 11;
+    private static final int CALTYPE_ETHIOPIC_AMETE_ALEM = 12;
+    private static final int CALTYPE_UNKNOWN = -1;
+
+    private static int getCalendarTypeForLocale(ULocale l) {
+        int calType = CALTYPE_UNKNOWN;
+
+        // canonicalize, so grandfathered variant will be transformed to keywords
+        ULocale canonical = ULocale.createCanonical(l.toString());
+
+        String calTypeStr = canonical.getKeywordValue("calendar");
+        if (calTypeStr != null) {
+            calType = getCalendarType(calTypeStr);
+            if (calType != CALTYPE_UNKNOWN) {
+                return calType;
+            }
         }
-        return getCalendarType(s);
+
+        // when calendar keyword is not available or not supported, read supplementalData
+        // to get the default calendar type for the locale's region
+        String region = canonical.getCountry();
+        if (region.length() == 0) {
+            ULocale fullLoc = ULocale.addLikelySubtags(canonical);
+            region = fullLoc.getCountry();
+        }
+
+        try {
+            UResourceBundle rb = UResourceBundle.getBundleInstance(
+                                    ICUResourceBundle.ICU_BASE_NAME,
+                                    "supplementalData",
+                                    ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            UResourceBundle calPref = rb.get("calendarPreferenceData");
+            UResourceBundle order = null;
+            try {
+                order = calPref.get(region);
+            } catch (MissingResourceException mre) {
+                // use "001" as fallback
+                order = calPref.get("001");
+            }
+            // the first calendar type is the default for the region
+            calTypeStr = order.getString(0);
+            calType = getCalendarType(calTypeStr);
+        } catch (MissingResourceException mre) {
+            // fall through
+        }
+        if (calType == CALTYPE_UNKNOWN) {
+            return CALTYPE_GREGORIAN;
+        }
+        return calType;
     }
 
     private static int getCalendarType(String s) {
@@ -1676,7 +1725,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
                 }
             }
         }
-        return GREGORIAN;
+        return CALTYPE_UNKNOWN;
     }
 
     /**
@@ -1756,44 +1805,64 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
     }
 
     static Calendar createInstance(ULocale locale) {
-        int calType = getCalendarType(locale);
+        Calendar cal = null;
         TimeZone zone = TimeZone.getDefault();
+        int calType = getCalendarTypeForLocale(locale);
+        if (calType == CALTYPE_UNKNOWN) {
+            // fallback to Gregorian
+            calType = CALTYPE_GREGORIAN;
+        }
 
         switch (calType) {
-        case BUDDHIST:
-            return new BuddhistCalendar(zone, locale);
-        case CHINESE:
-            return new ChineseCalendar(zone, locale);
-        case COPTIC:
-            return new CopticCalendar(zone, locale);
-        case ETHIOPIC:
-            return new EthiopicCalendar(zone, locale);
-        case ETHIOPIC_AMETE_ALEM:
-            EthiopicCalendar ethiopicAA = new EthiopicCalendar(zone, locale);
-            ethiopicAA.setAmeteAlemEra(true);
-            return ethiopicAA;
-        case GREGORIAN:
-            return new GregorianCalendar(zone, locale);
-        case HEBREW:
-            return new HebrewCalendar(zone, locale);
-        case ISLAMIC:
-        case ISLAMIC_CIVIL: {
-            IslamicCalendar result = new IslamicCalendar(zone, locale);
-            result.setCivil(calType == ISLAMIC_CIVIL);
-            return result;
-        }
-        case JAPANESE:
-            return new JapaneseCalendar(zone, locale);
-        case TAIWAN:
-            return new TaiwanCalendar(zone, locale);
-        case INDIAN:
-            return new IndianCalendar(zone, locale);
-        case PERSIAN:
+        case CALTYPE_GREGORIAN:
+            cal = new GregorianCalendar(zone, locale);
+            break;
+        case CALTYPE_JAPANESE:
+            cal = new JapaneseCalendar(zone, locale);
+            break;
+        case CALTYPE_BUDDHIST:
+            cal = new BuddhistCalendar(zone, locale);
+            break;
+        case CALTYPE_ROC:
+            cal = new TaiwanCalendar(zone, locale);
+            break;
+        case CALTYPE_PERSIAN:
             // Not yet implemented in ICU4J
-            return new GregorianCalendar(zone, locale);
+            cal = new GregorianCalendar(zone, locale);
+            break;
+        case CALTYPE_ISLAMIC_CIVIL:
+            cal = new IslamicCalendar(zone, locale);
+            break;
+        case CALTYPE_ISLAMIC:
+            cal = new IslamicCalendar(zone, locale);
+            ((IslamicCalendar)cal).setCivil(false);
+            break;
+        case CALTYPE_HEBREW:
+            cal = new HebrewCalendar(zone, locale);
+            break;
+        case CALTYPE_CHINESE:
+            cal = new ChineseCalendar(zone, locale);
+            break;
+        case CALTYPE_INDIAN:
+            cal = new IndianCalendar(zone, locale);
+            break;
+        case CALTYPE_COPTIC:
+            cal = new CopticCalendar(zone, locale);
+            break;
+        case CALTYPE_ETHIOPIC:
+            cal = new EthiopicCalendar(zone, locale);
+            break;
+        case CALTYPE_ETHIOPIC_AMETE_ALEM:
+            cal = new EthiopicCalendar(zone, locale);
+            ((EthiopicCalendar)cal).setAmeteAlemEra(true);
+            break;
         default:
-            throw new IllegalStateException();
+            // we must not get here, because unknown type is mapped to
+            // Gregorian at the beginning of this method.
+            throw new IllegalArgumentException("Unknown calendar type");
         }
+
+        return cal;
     }
 
     ///CLOVER:OFF
