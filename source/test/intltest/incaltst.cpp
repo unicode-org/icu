@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation
+ * Copyright (c) 1997-2009, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -104,16 +104,24 @@ IntlCalendarTest::TestTypes()
                             "ja_JP_TRADITIONAL",   
                             "th_TH_TRADITIONAL", 
                             "th_TH_TRADITIONAL@calendar=gregorian", 
-                            "en_US", NULL };
+                            "en_US",
+                            "th_TH",    // Default calendar for th_TH is buddhist
+                            "th",       // th's default region is TH and buddhist is used as default for TH
+                            "en_TH",    // Default calendar for any locales with region TH is buddhist
+                            NULL };
   const char *types[40] = { "gregorian", 
                             "japanese",
                             "gregorian",
                             "japanese",
-                            "buddhist",           
+                            "buddhist",
                             "japanese",
                             "buddhist",           
                             "gregorian",
-                            "gregorian", NULL };
+                            "gregorian",
+                            "buddhist",           
+                            "buddhist",           
+                            "buddhist",           
+                            NULL };
 
   for(j=0;locs[j];j++) {
     logln(UnicodeString("Creating calendar of locale ")  + locs[j]);
