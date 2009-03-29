@@ -136,35 +136,58 @@ U_CFUNC void ucal_dump(UCalendar* cal) {
 
 #endif
 
-static const char * const gCalendarKeywords[] = {
+static const char * const gCalTypes[] = {
     "gregorian",
-        "japanese",
-        "buddhist",
-        "roc",
-        "persian",
-        "islamic-civil",
-        "islamic",
-        "hebrew",
-        "chinese",
-        "indian",
-        "coptic",
-        "ethiopic",
-        "ethiopic-amete-alem",
-        NULL
+    "japanese",
+    "buddhist",
+    "roc",
+    "persian",
+    "islamic-civil",
+    "islamic",
+    "hebrew",
+    "chinese",
+    "indian",
+    "coptic",
+    "ethiopic",
+    "ethiopic-amete-alem",
+    NULL
 };
 
+// Must be in the order of gCalTypes above
+typedef enum ECalType {
+    CALTYPE_UNKNOWN = -1,
+    CALTYPE_GREGORIAN = 0,
+    CALTYPE_JAPANESE,
+    CALTYPE_BUDDHIST,
+    CALTYPE_ROC,
+    CALTYPE_PERSIAN,
+    CALTYPE_ISLAMIC_CIVIL,
+    CALTYPE_ISLAMIC,
+    CALTYPE_HEBREW,
+    CALTYPE_CHINESE,
+    CALTYPE_INDIAN,
+    CALTYPE_COPTIC,
+    CALTYPE_ETHIOPIC,
+    CALTYPE_ETHIOPIC_AMETE_ALEM
+} ECalType;
+
 U_NAMESPACE_BEGIN
+
+static ECalType getCalendarType(const char *s) {
+    for (int i = 0; gCalTypes[i] != NULL; i++) {
+        if (uprv_stricmp(s, gCalTypes[i]) == 0) {
+            return (ECalType)i;
+        }
+    }
+    return CALTYPE_UNKNOWN;
+}
 
 static UBool isStandardSupportedKeyword(const char *keyword, UErrorCode& status) { 
     if(U_FAILURE(status)) {
         return FALSE;
     }
-    for(int32_t i=0; gCalendarKeywords[i] != NULL; i++) {
-        if(uprv_strcmp(gCalendarKeywords[i], keyword) == 0) {
-            return TRUE;
-        }
-    }
-    return FALSE;
+    ECalType calType = getCalendarType(keyword);
+    return (calType != CALTYPE_UNKNOWN);
 }
 
 static void getCalendarKeyword(const UnicodeString &id, char *targetBuffer, int32_t targetBufferSize) {
@@ -181,44 +204,130 @@ static void getCalendarKeyword(const UnicodeString &id, char *targetBuffer, int3
     targetBuffer[keyLen] = 0;
 }
 
-static Calendar *createStandardCalendar(char *calType, const Locale &canLoc, UErrorCode& status) {
-#ifdef U_DEBUG_CALSVC
-    fprintf(stderr, "BasicCalendarFactory %p: creating type for %s\n", 
-        this, (const char*)curLoc.getName());
-    fflush(stderr);
-#endif
+static ECalType getCalendarTypeForLocale(const char *locid) {
+    UErrorCode status = U_ZERO_ERROR;
+    ECalType calType = CALTYPE_UNKNOWN;
 
-    if(!calType || !*calType || !uprv_strcmp(calType,"gregorian")) {  // Gregorian (default)
-        return new GregorianCalendar(canLoc, status);
-    } else if(!uprv_strcmp(calType, "japanese")) {
-        return new JapaneseCalendar(canLoc, status);
-    } else if(!uprv_strcmp(calType, "buddhist")) {
-        return new BuddhistCalendar(canLoc, status);
-    } else if(!uprv_strcmp(calType, "roc")) {
-        return new TaiwanCalendar(canLoc, status);
-    } else if(!uprv_strcmp(calType, "islamic-civil")) {
-        return new IslamicCalendar(canLoc, status, IslamicCalendar::CIVIL);
-    } else if(!uprv_strcmp(calType, "islamic")) {
-        return new IslamicCalendar(canLoc, status, IslamicCalendar::ASTRONOMICAL);
-    } else if(!uprv_strcmp(calType, "hebrew")) {
-        return new HebrewCalendar(canLoc, status);
-    } else if(!uprv_strcmp(calType, "persian")) {
-        return new PersianCalendar(canLoc, status);
-    } else if(!uprv_strcmp(calType, "chinese")) {
-        return new ChineseCalendar(canLoc, status);
-    } else if(!uprv_strcmp(calType, "indian")) {
-        return new IndianCalendar(canLoc, status);
-    } else if(!uprv_strcmp(calType, "coptic")) {
-        return new CopticCalendar(canLoc, status);
-    } else if(!uprv_strcmp(calType, "ethiopic")) {
-        return new EthiopicCalendar(canLoc, status, EthiopicCalendar::AMETE_MIHRET_ERA);
-    } else if(!uprv_strcmp(calType, "ethiopic-amete-alem")) {
-        return new EthiopicCalendar(canLoc, status, EthiopicCalendar::AMETE_ALEM_ERA);
-    } else { 
-        status = U_UNSUPPORTED_ERROR;
-        return NULL;
+    //TODO: ULOC_FULL_NAME is out of date and too small..
+    char canonicalName[256];
+
+    // canonicalize, so grandfathered variant will be transformed to keywords
+    // e.g ja_JP_TRADITIONAL -> ja_JP@calendar=japanese
+    int32_t canonicalLen = uloc_canonicalize(locid, canonicalName, sizeof(canonicalName) - 1, &status);
+    if (U_FAILURE(status)) {
+        return CALTYPE_GREGORIAN;
     }
+    canonicalName[canonicalLen] = 0;    // terminate
+
+    char calTypeBuf[32];
+    int32_t calTypeBufLen;
+
+    calTypeBufLen = uloc_getKeywordValue(canonicalName, "calendar", calTypeBuf, sizeof(calTypeBuf) - 1, &status);
+    if (U_SUCCESS(status)) {
+        calTypeBuf[calTypeBufLen] = 0;
+        calType = getCalendarType(calTypeBuf);
+        if (calType != CALTYPE_UNKNOWN) {
+            return calType;
+        }
+    }
+    status = U_ZERO_ERROR;
+
+    // when calendar keyword is not available or not supported, read supplementalData
+    // to get the default calendar type for the locale's region
+    char region[ULOC_COUNTRY_CAPACITY];
+    int32_t regionLen = 0;
+    regionLen = uloc_getCountry(canonicalName, region, sizeof(region) - 1, &status);
+    if (regionLen == 0) {
+        char fullLoc[256];
+        int32_t fullLocLen = 0;
+        fullLocLen = uloc_addLikelySubtags(locid, fullLoc, sizeof(fullLoc) - 1, &status);
+        regionLen = uloc_getCountry(fullLoc, region, sizeof(region) - 1, &status);
+    }
+    if (U_FAILURE(status)) {
+        return CALTYPE_GREGORIAN;
+    }
+    region[regionLen] = 0;
+    
+    // Read preferred calendar values from supplementalData calendarPreference
+    UResourceBundle *rb = ures_openDirect(NULL, "supplementalData", &status);
+    ures_getByKey(rb, "calendarPreferenceData", rb, &status);
+    UResourceBundle *order = ures_getByKey(rb, region, NULL, &status);
+    if (status == U_MISSING_RESOURCE_ERROR && rb != NULL) {
+        status = U_ZERO_ERROR;
+        order = ures_getByKey(rb, "001", NULL, &status);
+    }
+
+    calTypeBuf[0] = 0;
+    if (U_SUCCESS(status) && order != NULL) {
+        // the first calender type is the default for the region
+        int32_t len = 0;
+        const UChar *uCalType = ures_getStringByIndex(order, 0, &len, &status);
+        if (len < sizeof(calTypeBuf)) {
+            u_UCharsToChars(uCalType, calTypeBuf, len);
+            *(calTypeBuf + len) = 0; // terminate;
+            calType = getCalendarType(calTypeBuf);
+        }
+    }
+
+    ures_close(order);
+    ures_close(rb);
+
+    if (calType == CALTYPE_UNKNOWN) {
+        // final fallback
+        calType = CALTYPE_GREGORIAN;
+    }
+    return calType;
 }
+
+static Calendar *createStandardCalendar(ECalType calType, const Locale &loc, UErrorCode& status) {
+    Calendar *cal = NULL;
+
+    switch (calType) {
+        case CALTYPE_GREGORIAN:
+            cal = new GregorianCalendar(loc, status);
+            break;
+        case CALTYPE_JAPANESE:
+            cal = new JapaneseCalendar(loc, status);
+            break;
+        case CALTYPE_BUDDHIST:
+            cal = new BuddhistCalendar(loc, status);
+            break;
+        case CALTYPE_ROC:
+            cal = new TaiwanCalendar(loc, status);
+            break;
+        case CALTYPE_PERSIAN:
+            cal = new PersianCalendar(loc, status);
+            break;
+        case CALTYPE_ISLAMIC_CIVIL:
+            cal = new IslamicCalendar(loc, status, IslamicCalendar::CIVIL);
+            break;
+        case CALTYPE_ISLAMIC:
+            cal = new IslamicCalendar(loc, status, IslamicCalendar::ASTRONOMICAL);
+            break;
+        case CALTYPE_HEBREW:
+            cal = new HebrewCalendar(loc, status);
+            break;
+        case CALTYPE_CHINESE:
+            cal = new ChineseCalendar(loc, status);
+            break;
+        case CALTYPE_INDIAN:
+            cal = new IndianCalendar(loc, status);
+            break;
+        case CALTYPE_COPTIC:
+            cal = new CopticCalendar(loc, status);
+            break;
+        case CALTYPE_ETHIOPIC:
+            cal = new EthiopicCalendar(loc, status, EthiopicCalendar::AMETE_MIHRET_ERA);
+            break;
+        case CALTYPE_ETHIOPIC_AMETE_ALEM:
+            cal = new EthiopicCalendar(loc, status, EthiopicCalendar::AMETE_ALEM_ERA);
+            break;
+        default:
+            status = U_UNSUPPORTED_ERROR;
+    }
+    return cal;
+}
+
 
 #if !UCONFIG_NO_SERVICE
 
@@ -251,10 +360,10 @@ protected:
     virtual void updateVisibleIDs(Hashtable& result, UErrorCode& status) const
     {
         if (U_SUCCESS(status)) {
-            for(int32_t i=0;gCalendarKeywords[i] != NULL;i++) {
+            for(int32_t i=0;gCalTypes[i] != NULL;i++) {
                 UnicodeString id((UChar)0x40); /* '@' a variant character */
                 id.append(UNICODE_STRING_SIMPLE("calendar="));
-                id.append(UnicodeString(gCalendarKeywords[i], -1, US_INV));
+                id.append(UnicodeString(gCalTypes[i], -1, US_INV));
                 result.put(id, (void*)this, status);
             }
         }
@@ -291,7 +400,7 @@ protected:
             return NULL;
         }
 
-        return createStandardCalendar(keyword, canLoc, status);
+        return createStandardCalendar(getCalendarType(keyword), canLoc, status);
     }
 };
 
@@ -310,42 +419,15 @@ protected:
         Locale loc;
         lkey.currentLocale(loc);
 
-        UnicodeString myString;
-
-        // attempt keyword lookup
-        char keyword[128];
-
-        if(!loc.getKeywordValue("calendar", keyword, sizeof(keyword)-1, status)) {
-            // fetch default calendar id
-            char funcEquiv[ULOC_FULLNAME_CAPACITY];
-            ures_getFunctionalEquivalent(funcEquiv, sizeof(funcEquiv)-1,
-                NULL, "calendar", "calendar",
-                loc.getName(), 
-                NULL, FALSE, &status);
-            uloc_getKeywordValue(funcEquiv, "calendar", keyword, 
-                sizeof(keyword)-1, &status);
-#ifdef U_DEBUG_CALSVC
-            fprintf(stderr, "  getFunctionalEquivalent calendar=%s [%s]\n", keyword, u_errorName(status));
-#endif
-        }
-#ifdef U_DEBUG_CALSVC
-        else { fprintf(stderr, "  explicit calendar=%s\n", keyword); }
-#endif
-
-
-        if(U_FAILURE(status)) {
-            return NULL; 
+        UnicodeString *ret = new UnicodeString();
+        if (ret == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
         } else {
-            UnicodeString *ret = new UnicodeString();
-            if (ret == NULL) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-            } else {
-                ret->append((UChar)0x40); // '@' is a variant character
-                ret->append(UNICODE_STRING("calendar=", 9));
-                (*ret) += UnicodeString(keyword,-1,US_INV);
-            }
-            return ret;
+            ret->append((UChar)0x40); // '@' is a variant character
+            ret->append(UNICODE_STRING("calendar=", 9));
+            ret->append(UnicodeString(gCalTypes[getCalendarTypeForLocale(loc.getName())]));
         }
+        return ret;
     }
 };
 
@@ -697,8 +779,13 @@ Calendar::createInstance(const Locale& aLocale, UErrorCode& success)
 Calendar* U_EXPORT2
 Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& success)
 {
+    if (U_FAILURE(success)) {
+        return NULL;
+    }
+
     Locale actualLoc;
-    UObject* u;
+    UObject* u = NULL;
+
 #if !UCONFIG_NO_SERVICE
     if (isCalendarServiceUsed()) {
         u = getCalendarService(success)->get(aLocale, LocaleKey::KIND_ANY, &actualLoc, success);
@@ -706,68 +793,7 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
     else
 #endif
     {
-        UErrorCode feErr;
-        char calLocaleType[ULOC_FULLNAME_CAPACITY];
-        calLocaleType[0] = 0; // NULL terminate
-        int32_t keywordCapacity = aLocale.getKeywordValue("calendar", calLocaleType, sizeof(calLocaleType)-1, success);
-        if (keywordCapacity == 0) {
-            char funcEquiv[ULOC_FULLNAME_CAPACITY];
-
-            feErr = success;
-
-            // fetch default calendar id
-            ures_getFunctionalEquivalent(funcEquiv, sizeof(funcEquiv)-1,
-                NULL, "calendar", "calendar",
-                aLocale.getName(), 
-                NULL, FALSE, &feErr);
-            keywordCapacity = uloc_getKeywordValue(funcEquiv, "calendar", calLocaleType, 
-                sizeof(calLocaleType)-1, &feErr);  // This can fail if there is no data.  
-            // Don't want to stop calendar construction just because we couldn't get this type.
-            if (keywordCapacity == 0 || U_FAILURE(feErr)) {
-                // no calendar type.  Default to nothing.
-                calLocaleType[0] = 0;
-            }
-            
-#ifdef U_DEBUG_CALSVC
-            fprintf(stderr, "  getFunctionalEquivalent calendar=%s [%s]\n", keyword, u_errorName(status));
-#endif
-            // create functional equivalent default calendar
-            u = createStandardCalendar(calLocaleType, aLocale, success);
-        }
-        else {
-#ifdef U_DEBUG_CALSVC
-            fprintf(stderr, "  explicit calendar=%s\n", keyword);
-#endif
-            // create explicit calendar
-            u = createStandardCalendar(calLocaleType, aLocale, success);
-
-            // check the results, fallback and build default if in error
-            if(success == U_UNSUPPORTED_ERROR) {
-
-                char funcEquiv[ULOC_FULLNAME_CAPACITY];
-                feErr = U_ZERO_ERROR;
-
-                // fetch default calendar id
-                ures_getFunctionalEquivalent(funcEquiv, sizeof(funcEquiv)-1,
-                    NULL, "calendar", "calendar",
-                    aLocale.getName(), 
-                    NULL, FALSE, &feErr);
-                keywordCapacity = uloc_getKeywordValue(funcEquiv, "calendar", calLocaleType, 
-                    sizeof(calLocaleType)-1, &feErr);  // This can fail if there is no data.  
-                // Don't want to stop calendar construction just because we couldn't get this type.
-                if (keywordCapacity == 0 || U_FAILURE(feErr)) {
-                    // no calendar type.  Default to nothing.
-                    calLocaleType[0] = 0;
-                }
-
-#ifdef U_DEBUG_CALSVC
-            fprintf(stderr, "  getFunctionalEquivalent calendar=%s [%s]\n", keyword, u_errorName(status));
-#endif
-                // create functional equivalent default calendar
-                success = U_ZERO_ERROR;
-                u = createStandardCalendar(calLocaleType, aLocale, success);
-            }
-        }
+        u = createStandardCalendar(getCalendarTypeForLocale(aLocale.getName()), aLocale, success);
     }
     Calendar* c = NULL;
 
