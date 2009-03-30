@@ -2093,20 +2093,17 @@ static const UEnumeration defaultKeywordValues = {
     ulist_reset_keyword_values_iterator
 };
 
-#define MAX_LOC_SIZE_KEYWORD_VALUES 64
-#define MAX_LENGTH_KEYWORD_VALUE 64
-
 U_CAPI UEnumeration *U_EXPORT2 ucurr_getKeywordValuesForLocale(const char *key, const char *locale, UBool commonlyUsed, UErrorCode* status) {
     // Resolve region
-    char prefRegion[MAX_LOC_SIZE_KEYWORD_VALUES];
+    char prefRegion[ULOC_FULLNAME_CAPACITY] = "";
     int32_t prefRegionLength = 0;
-    prefRegionLength = uloc_getCountry(locale, prefRegion, MAX_LOC_SIZE_KEYWORD_VALUES, status);
+    prefRegionLength = uloc_getCountry(locale, prefRegion, sizeof(prefRegion), status);
     if (prefRegionLength == 0) {
-        char loc[MAX_LOC_SIZE_KEYWORD_VALUES];
+        char loc[ULOC_FULLNAME_CAPACITY] = "";
         int32_t locLength = 0;
-        locLength = uloc_addLikelySubtags(locale, loc, MAX_LOC_SIZE_KEYWORD_VALUES, status);
+        locLength = uloc_addLikelySubtags(locale, loc, sizeof(loc), status);
         
-        prefRegionLength = uloc_getCountry(loc, prefRegion, MAX_LOC_SIZE_KEYWORD_VALUES, status);
+        prefRegionLength = uloc_getCountry(loc, prefRegion, sizeof(prefRegion), status);
     }
     
     // Read value from supplementalData
@@ -2157,8 +2154,8 @@ U_CAPI UEnumeration *U_EXPORT2 ucurr_getKeywordValuesForLocale(const char *key, 
                 // Currently, an empty ARRAY is mixed in.
                 continue;
             }
-            char *curID = (char *)uprv_malloc(sizeof(char) * MAX_LENGTH_KEYWORD_VALUE);
-            int32_t curIDLength = MAX_LENGTH_KEYWORD_VALUE;
+            char *curID = (char *)uprv_malloc(sizeof(char) * ULOC_KEYWORDS_CAPACITY);
+            int32_t curIDLength = ULOC_KEYWORDS_CAPACITY;
             if (curID == NULL) {
                 *status = U_MEMORY_ALLOCATION_ERROR;
                 break;
@@ -2200,7 +2197,7 @@ U_CAPI UEnumeration *U_EXPORT2 ucurr_getKeywordValuesForLocale(const char *key, 
             ulist_resetList(otherValues);
             while ((value = (char *)ulist_getNext(otherValues)) != NULL) {
                 if (!ulist_containsString(values, value, uprv_strlen(value))) {
-                    char *tmpValue = (char *)uprv_malloc(sizeof(char) * MAX_LENGTH_KEYWORD_VALUE);
+                    char *tmpValue = (char *)uprv_malloc(sizeof(char) * ULOC_KEYWORDS_CAPACITY);
                     uprv_memcpy(tmpValue, value, uprv_strlen(value) + 1);
                     ulist_addItemEndList(values, tmpValue, TRUE, status);
                     if (U_FAILURE(*status)) {

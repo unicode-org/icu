@@ -754,15 +754,12 @@ static const UEnumeration defaultKeywordValues = {
     ulist_reset_keyword_values_iterator
 };
 
-#define DEFAULT_KEYWORD_VALUE_MAX_SIZE 20
-#define MAX_LOCALE_SIZE 20
-
 U_CAPI UEnumeration* U_EXPORT2
 ucol_getKeywordValuesForLocale(const char* /*key*/, const char* locale,
                                UBool /*commonlyUsed*/, UErrorCode* status) {
     /* Get the locale base name. */
-    char localeBuffer[MAX_LOCALE_SIZE] = "";
-    uloc_getBaseName(locale, localeBuffer, MAX_LOCALE_SIZE, status);
+    char localeBuffer[ULOC_FULLNAME_CAPACITY] = "";
+    uloc_getBaseName(locale, localeBuffer, sizeof(localeBuffer), status);
     
     /* Create the 2 lists
      * -values is the temp location for the keyword values
@@ -805,8 +802,8 @@ ucol_getKeywordValuesForLocale(const char* /*key*/, const char* locale,
              */
             if (uprv_strcmp(key, "default") == 0) {
                 if (ulist_getListSize(results) == 0) {
-                    char *defcoll = (char *)uprv_malloc(sizeof(char) * DEFAULT_KEYWORD_VALUE_MAX_SIZE);
-                    int32_t defcollLength = DEFAULT_KEYWORD_VALUE_MAX_SIZE;
+                    char *defcoll = (char *)uprv_malloc(sizeof(char) * ULOC_KEYWORDS_CAPACITY);
+                    int32_t defcollLength = ULOC_KEYWORDS_CAPACITY;
                     
                     ures_getNextResource(&collres, &defres, status);
                     ures_getUTF8String(&defres, defcoll, &defcollLength, TRUE, status);
@@ -823,7 +820,7 @@ ucol_getKeywordValuesForLocale(const char* /*key*/, const char* locale,
             break;
         }
         /* Get the parent locale and open a new resource bundle. */
-        uloc_getParent(localeBuffer, localeBuffer, MAX_LOCALE_SIZE, status);
+        uloc_getParent(localeBuffer, localeBuffer, sizeof(localeBuffer), status);
         ures_openFillIn(&bundle, U_ICUDATA_COLL, localeBuffer, status);
     }
     
