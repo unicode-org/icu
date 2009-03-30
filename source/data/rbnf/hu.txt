@@ -1,35 +1,57 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/rbnf/hu.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/rbnf/hu.xml
+ */
 hu{
     RBNFRules{
         SpelloutRules{
-            "%spellout:\n",
-            "0: nulla; egy; kett\u0151; h\u00E1rom; n\u00E9gy; \u00F6t; hat; h\u00E9t; nyolc; kilenc;\n",
-            "10: t\u00EDz; tizen\u00AD>>;\n",
-            "20: h\u00FAsz; huszon\u00AD>>;\n",
-            "30: harminc[\u00AD>>];\n",
-            "40: negyven[\u00AD>>];\n",
-            "50: \u00F6tven[\u00AD>>];\n",
-            "60: hatvan[\u00AD>>];\n",
-            "70: hetven[\u00AD>>];\n",
-            "80: nyolcvan[\u00AD>>];\n",
-            "90: kilencven[\u00AD>>];\n",
-            "100: <<\u00ADsz\u00E1z[\u00AD>>];\n",
-            "1000: <<\u00ADezer[ >>];\n",
-            "1000000: << milli\u00F3[ >>];\n",
-            "1000000000: << milli\u00E1rd[ >>];\n",
-            "1000000000000: << billi\u00F3[ >>];\n",
-            "1000000000000000: << billi\u00E1rd[ >>];\n",
-            "1000000000000000000: =#,##0.#=;\n",
-            "-x: minusz >>;\n",
-            "x.x: << vessz\u0151 >>;\n",
+            "%spellout-cardinal:",
+            "0: nulla;",
+            "1: egy;",
+            "2: kett\u0151;",
+            "3: h\u00E1rom;",
+            "4: n\u00E9gy;",
+            "5: \u00F6t;",
+            "6: hat;",
+            "7: h\u00E9t;",
+            "8: nyolc;",
+            "9: kilenc;",
+            "10: t\u00EDz;",
+            "11: tizen\u00AD>>;",
+            "20: h\u00FAsz;",
+            "21: huszon\u00AD>>;",
+            "30: harminc[\u00AD>>];",
+            "40: negyven[\u00AD>>];",
+            "50: \u00F6tven[\u00AD>>];",
+            "60: hatvan[\u00AD>>];",
+            "70: hetven[\u00AD>>];",
+            "80: nyolcvan[\u00AD>>];",
+            "90: kilencven[\u00AD>>];",
+            "100: <<\u00ADsz\u00E1z[\u00AD>>];",
+            "1000: <<\u00ADezer[ >>];",
+            "1000000: << milli\u00F3[ >>];",
+            "1000000000: << milli\u00E1rd[ >>];",
+            "1000000000000: << billi\u00F3[ >>];",
+            "1000000000000000: << billi\u00E1rd[ >>];",
+            "1000000000000000000: =#,##0=;",
+            "-x: minusz >>;",
+            "x.x: << vessz\u0151 >>;",
+            "%spellout-numbering:",
+            "0: =%spellout-cardinal=;",
+            "%spellout-numbering-year:",
+            "0: =%spellout-numbering=;",
+            "1100/100: <<\u00ADsz\u00E1z[\u00AD>>];",
+            "10000: =%spellout-numbering=;",
+            "-x: minusz >>;",
+            "x.x: =#,###0.#=;",
         }
     }
-    Version{"1.3"}
+    Version{"1.1"}
 }

@@ -1,35 +1,51 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2008 International Business Machines
+// * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/rbnf/vi.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/rbnf/vi.xml
+ */
 vi{
     RBNFRules{
+        OrdinalRules{
+            "%digits-ordinal:",
+            "0: th\u1EE9 =#,##0=;",
+            "-x: \u2212>>;",
+        }
         SpelloutRules{
-            "%spellout:\n",
-            "0: kh\u00F4ng;\n",
-            "1: m\u1ED9t;\n",
-            "2: hai;\n",
-            "3: ba;\n",
-            "4: b\u1ED1n;\n",
-            "5: n\u0103m;\n",
-            "6: s\u00E1u;\n",
-            "7: b\u1EA3y;\n",
-            "8: t\u00E1m;\n",
-            "9: ch\u00EDn;\n",
-            "10: m\u01B0\u1EDDi[ >>];\n",
-            "20: << m\u01B0\u01A1i[ >>];\n",
-            "100: << tr\u0103m[ >>];\n",
-            "1000: << ngh\u00ECn[ >>];\n",
-            "1000000: << tri\u1EC7u[ >>];\n",
-            "1000000000: << t\u1EF7[ >>];\n",
-            "1000000000000000000: =#,##0.#=;\n",
-            "-x: tr\u1EEB >>;\n",
-            "x.x: << ph\u1EA9y >>;\n",
+            "%spellout-cardinal:",
+            "0: kh\u00F4ng;",
+            "1: m\u1ED9t;",
+            "2: hai;",
+            "3: ba;",
+            "4: b\u1ED1n;",
+            "5: n\u0103m;",
+            "6: s\u00E1u;",
+            "7: b\u1EA3y;",
+            "8: t\u00E1m;",
+            "9: ch\u00EDn;",
+            "10: m\u01B0\u1EDDi[ >>];",
+            "20: << m\u01B0\u1EDDi[ >>];",
+            "100: << tr\u0103m[ >>];",
+            "1000: << ngh\u00ECn[ >>];",
+            "1000000: << tri\u1EC7u[ >>];",
+            "1000000000: << t\u1EF7[ >>];",
+            "1000000000000000000: =#,##0=;",
+            "-x: tr\u1EEB >>;",
+            "x.x: << ph\u1EA9y >>;",
+            "%spellout-numbering:",
+            "0: =%spellout-cardinal=;",
+            "%spellout-numbering-year:",
+            "0: =%spellout-numbering=;",
+            "x.x: =#,###0.#=;",
+            "%spellout-ordinal:",
+            "0: th\u1EE9 =%spellout-cardinal=;",
+            "x.x: =#,##0.#=;",
         }
     }
-    Version{"1.3"}
+    Version{"1.1"}
 }
