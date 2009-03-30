@@ -52,25 +52,34 @@ public:
      */
     SpoofImpl(const SpoofImpl &src, UErrorCode &status);
     
-	static SpoofImpl *validateThis(USpoofChecker *sc, UErrorCode &status);
-	static const SpoofImpl *validateThis(const USpoofChecker *sc, UErrorCode &status);
+    static SpoofImpl *validateThis(USpoofChecker *sc, UErrorCode &status);
+    static const SpoofImpl *validateThis(const USpoofChecker *sc, UErrorCode &status);
 
-	/** Get the confusable skeleton transform for a single code point.
-	 *  The result is a string with a length between 1 and 18.
-	 *  @param    tableMask  bit flag specifying which confusable table to use.
-	 *                       One of USPOOF_SL_TABLE_FLAG, USPOOF_MA_TABLE_FLAG, etc.
-	 *  @return   The length in UTF-16 code units of the substition string.
-	 */  
-	int32_t confusableLookup(UChar32 inChar, int32_t tableMask, UChar *destBuf) const;
+    /** Get the confusable skeleton transform for a single code point.
+     *  The result is a string with a length between 1 and 18.
+     *  @param    tableMask  bit flag specifying which confusable table to use.
+     *                       One of USPOOF_SL_TABLE_FLAG, USPOOF_MA_TABLE_FLAG, etc.
+     *  @return   The length in UTF-16 code units of the substition string.
+     */  
+    int32_t confusableLookup(UChar32 inChar, int32_t tableMask, UChar *destBuf) const;
+
+    /** Set and Get AllowedLocales, implementations of the corresponding API */
+    void setAllowedLocales(const char *localesList, UErrorCode &status);
+    const char * getAllowedLocales(UErrorCode &status);
+
+    // Add (union) to the UnicodeSet all of the characters for the scripts used for
+    // the specified locale.  Part of the implementation of setAllowedLocales.
+    void addScriptChars(const char *locale, UnicodeSet *allowedChars, UErrorCode &status);
+
 
     /** parse a hex number.  Untility used by the builders.   */
-	static UChar32 ScanHex(const UChar *s, int32_t start, int32_t limit, UErrorCode &status);
+    static UChar32 ScanHex(const UChar *s, int32_t start, int32_t limit, UErrorCode &status);
 
-	// Implementation for Whole Script tests.
-	// Return the test bit flag to be ORed into the eventual user return value
-	//    if a Spoof opportunity is detected.
-	void wholeScriptCheck(
-	    const UChar *text, int32_t length, ScriptSet *result, UErrorCode &status) const;
+    // Implementation for Whole Script tests.
+    // Return the test bit flag to be ORed into the eventual user return value
+    //    if a Spoof opportunity is detected.
+    void wholeScriptCheck(
+        const UChar *text, int32_t length, ScriptSet *result, UErrorCode &status) const;
 	    
     /** Scan a string to determine how many scripts it includes.
      * Ignore characters with script=Common and scirpt=Inherited.
@@ -92,20 +101,21 @@ public:
     static UClassID U_EXPORT2 getStaticClassID(void);
     virtual UClassID getDynamicClassID(void) const;
 
-	//
-	// Data Members
-	//
+    //
+    // Data Members
+    //
 
-	int32_t           fMagic;             // Internal sanity check.
-	int32_t           fChecks;            // Bit vector of checks to perform.
+    int32_t           fMagic;             // Internal sanity check.
+    int32_t           fChecks;            // Bit vector of checks to perform.
 
-	SpoofData        *fSpoofData;
-	
-	int32_t           fCheckMask;         // Spoof table selector.  f(Check Type)
+    SpoofData        *fSpoofData;
+    
+    int32_t           fCheckMask;         // Spoof table selector.  f(Check Type)
 	
     const UnicodeSet *fAllowedCharsSet;   // The UnicodeSet of allowed characters.
                                           //   for this Spoof Checker.  Defaults to all chars. 
 
+    const char       *fAllowedLocales;    // The list of allowed locales.
 };
 
 
