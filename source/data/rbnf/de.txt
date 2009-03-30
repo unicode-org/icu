@@ -125,5 +125,5 @@ de{
             "1: ' =%spellout-ordinal=;",
         }
     }
-    Version{"1.1"}
+    Version{"1.6"}
 }

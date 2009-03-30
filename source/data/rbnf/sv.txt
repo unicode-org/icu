@@ -219,5 +219,5 @@ sv{
             "0: =%spellout-ordinal-neutre=;",
         }
     }
-    Version{"1.1"}
+    Version{"1.6"}
 }
