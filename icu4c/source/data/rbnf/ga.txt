@@ -254,5 +254,5 @@ ga{
             "2: =%%trillion==%spellout-cardinal-postfixpart=;",
         }
     }
-    Version{"1.1"}
+    Version{"1.5"}
 }
