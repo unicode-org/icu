@@ -97,11 +97,16 @@ void addUSpoofTest(TestNode** root)
 /*
  *  Identifiers, one good and one bad, for verifying that a spoof checker is minimally alive and working.
  */
-const UChar goodId[] = {(UChar)0x75, (UChar)0x77, 0};     /* "uw", all ASCII             */
+const UChar goodLatin[] = {(UChar)0x75, (UChar)0x77, 0};     /* "uw", all ASCII             */
                                                           /*   (not confusable)          */
 const UChar badId[]  = {(UChar)0x73, (UChar)0x0441, 0};   /* "sc", with Cyrillic 'c'     */
                                                           /*   (mixed script, confusable */
+
+const UChar goodCyrl[] = {(UChar)0x438, (UChar)0x43B, 0};   /* Plain lower case Cyrillic letters,
+                                                             no latin confusables */
         
+const UChar goodGreek[] = {(UChar)0x3c0, (UChar)0x3c6, 0};  /* Plain lower case Greek letters */
+
 
 /*
  *   Spoof Detction C API Tests
@@ -204,7 +209,7 @@ static void TestUSpoofCAPI(void) {
         TEST_ASSERT_EQ(serializedSize, actualLength);
 
         /* Verify that the new spoof checker at least wiggles */
-        checkResults = uspoof_check(sc2, goodId, -1, NULL, &status);
+        checkResults = uspoof_check(sc2, goodLatin, -1, NULL, &status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(0, checkResults);
 
@@ -281,13 +286,14 @@ static void TestUSpoofCAPI(void) {
         uspoof_close(clone1);
         
         /* Verify that the cloned spoof checker is alive */
-        checkResults = uspoof_check(clone2, goodId, -1, NULL, &status);
+        checkResults = uspoof_check(clone2, goodLatin, -1, NULL, &status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(0, checkResults);
 
         checkResults = uspoof_check(clone2, badId, -1, NULL, &status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT | USPOOF_MIXED_SCRIPT_CONFUSABLE, checkResults);
+        uspoof_close(clone2);
     TEST_TEARDOWN;
 
     /*
@@ -315,6 +321,52 @@ static void TestUSpoofCAPI(void) {
         TEST_ASSERT_EQ(0, checkResults);
     TEST_TEARDOWN;
         
+    /*
+     *  AllowedLoacles
+     */
+
+    TEST_SETUP
+        const char  *allowedLocales;
+        int32_t  checkResults;
+
+        /* Default allowed locales list should be empty */
+        allowedLocales = uspoof_getAllowedLocales(sc, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT(strcmp("", allowedLocales) == 0)
+
+        /* Allow en and ru, which should enable Latin and Cyrillic only to pass */
+        uspoof_setAllowedLocales(sc, "en, ru_RU", &status);
+        TEST_ASSERT_SUCCESS(status);
+        allowedLocales = uspoof_getAllowedLocales(sc, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT(strstr(allowedLocales, "en") != NULL);
+        TEST_ASSERT(strstr(allowedLocales, "ru") != NULL);
+
+        /* Limit checks to USPOOF_CHAR_LIMIT.  Some of the test data has whole script confusables also,
+         * which we don't want to see in this test. */
+        uspoof_setChecks(sc, USPOOF_CHAR_LIMIT, &status);
+        TEST_ASSERT_SUCCESS(status);
+
+        checkResults = uspoof_check(sc, goodLatin, -1, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(0, checkResults);
+        
+        checkResults = uspoof_check(sc, goodGreek, -1, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(USPOOF_CHAR_LIMIT, checkResults);
+
+        checkResults = uspoof_check(sc, goodCyrl, -1, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(0, checkResults);
+
+        /* Reset with an empty locale list, which should allow all characters to pass */
+        uspoof_setAllowedLocales(sc, " ", &status);
+        TEST_ASSERT_SUCCESS(status);
+
+        checkResults = uspoof_check(sc, goodGreek, -1, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(0, checkResults);
+    TEST_TEARDOWN;
 }
 
 
