@@ -302,7 +302,7 @@ static void TestUSpoofCAPI(void) {
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(USPOOF_ALL_CHECKS, checks);
 
-        checks &= ~(USPOOF_SINGLE_SCRIPT & USPOOF_MIXED_SCRIPT_CONFUSABLE);
+        checks &= ~(USPOOF_SINGLE_SCRIPT | USPOOF_MIXED_SCRIPT_CONFUSABLE);
         uspoof_setChecks(sc, checks, &status);
         TEST_ASSERT_SUCCESS(status);
         checks2 = uspoof_getChecks(sc, &status);
@@ -312,7 +312,7 @@ static void TestUSpoofCAPI(void) {
             So with those tests gone checking that Identifier should now succeed */
         checkResults = uspoof_check(sc, badId, -1, NULL, &status);
         TEST_ASSERT_SUCCESS(status);
-        /* TEST_ASSERT_EQ(0, checkResults); */
+        TEST_ASSERT_EQ(0, checkResults);
     TEST_TEARDOWN;
         
 }

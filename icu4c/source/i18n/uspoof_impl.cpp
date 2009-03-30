@@ -8,8 +8,11 @@
 #include "unicode/utypes.h"
 #include "unicode/uspoof.h"
 #include "unicode/unorm.h"
+#include "unicode/uchar.h"
+#include "unicode/uniset.h"
 #include "utrie2.h"
 #include "cmemory.h"
+#include "cstring.h"
 #include "udatamem.h"
 #include "umutex.h"
 #include "udataswp.h"
@@ -26,15 +29,16 @@ SpoofImpl::SpoofImpl(SpoofData *data, UErrorCode &status) :
     if (U_FAILURE(status)) {
         return;
     }
-	fMagic = USPOOF_MAGIC;
-	fSpoofData = data;
-	fChecks = USPOOF_ALL_CHECKS;
+    fMagic = USPOOF_MAGIC;
+    fSpoofData = data;
+    fChecks = USPOOF_ALL_CHECKS;
     UnicodeSet *allowedCharsSet = new UnicodeSet(0, 0x10ffff);
     if (allowedCharsSet == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
     }
     allowedCharsSet->freeze();
     fAllowedCharsSet = allowedCharsSet;
+    fAllowedLocales  = uprv_strdup("");
 }
 
 
@@ -45,6 +49,7 @@ SpoofImpl::SpoofImpl() {
     UnicodeSet *allowedCharsSet = new UnicodeSet(0, 0x10ffff);
     allowedCharsSet->freeze();
     fAllowedCharsSet = allowedCharsSet;
+    fAllowedLocales  = uprv_strdup("");
 }
 
 
@@ -64,15 +69,17 @@ SpoofImpl::SpoofImpl(const SpoofImpl &src, UErrorCode &status)  :
     if (fAllowedCharsSet == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
     }
+    fAllowedLocales = uprv_strdup(src.fAllowedLocales);
 }
 
 SpoofImpl::~SpoofImpl() {
-	fMagic = 0;                // head off application errors by preventing use of
-	                           //    of deleted objects.
-	if (fSpoofData != NULL) {
-	    fSpoofData->removeReference();   // Will delete if refCount goes to zero.
-	}
+    fMagic = 0;                // head off application errors by preventing use of
+                               //    of deleted objects.
+    if (fSpoofData != NULL) {
+        fSpoofData->removeReference();   // Will delete if refCount goes to zero.
+    }
     delete fAllowedCharsSet;
+    uprv_free((void *)fAllowedLocales);
 }
 
 //
@@ -191,7 +198,6 @@ int32_t SpoofImpl::confusableLookup(UChar32 inChar, int32_t tableMask, UChar *de
 
     int32_t ix;
     if (stringLen == 4) {
-        // TODO:
         int32_t stringLengthsLimit = fSpoofData->fRawData->fCFUStringLengthsSize;
         for (ix = 0; ix < stringLengthsLimit; ix++) {
             if (fSpoofData->fCFUStringLengths[ix].fLastString >= value) {
@@ -250,6 +256,115 @@ void SpoofImpl::wholeScriptCheck(
     }
 }
 
+
+void SpoofImpl::setAllowedLocales(const char *localesList, UErrorCode &status) {
+    UnicodeSet    allowedChars;
+    const char    *locStart = localesList;
+    const char    *locEnd = NULL;
+    const char    *localesListEnd = localesList + uprv_strlen(localesList);
+    int32_t        localeListCount = 0;   // Number of locales provided by caller.
+
+    // Loop runs once per locale from the localesList, a comma separated list of locales.
+    for (;;) {
+        locEnd = uprv_strchr(locStart, ',');
+        if (locEnd == NULL) {
+            locEnd = localesListEnd;
+        }
+        while (*locStart == ' ') {
+            locStart++;
+        }
+        const char *trimmedEnd = locEnd-1;
+        while (*trimmedEnd == ' ') {
+            trimmedEnd--;
+        }
+        if (trimmedEnd <= locStart) {
+            break;
+        }
+        const char *locale = uprv_strndup(locStart, trimmedEnd + 1 - locStart);
+        localeListCount++;
+
+        // We have one locale from the locales list.
+        // Add the exemplar chars for this locale to the accumulating set of allowed chars.
+        // If the locale is no good, we will be notified back via status.
+        addScriptChars(locale, &allowedChars, status);
+        uprv_free((void *)locale);
+        if (U_FAILURE(status)) {
+            break;
+        }
+        locStart = locEnd + 1;
+    } while (locStart < localesListEnd);
+
+    // If our caller provided an empty list of locales, we disable the allowed characters checking
+    if (localeListCount == 0) {
+        uprv_free((void *)fAllowedLocales);
+        fAllowedLocales = uprv_strdup("");
+        UnicodeSet *tmpSet = new UnicodeSet(0, 0x10ffff);
+        if (fAllowedLocales == NULL || tmpSet == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        } 
+        tmpSet->freeze();
+        delete fAllowedCharsSet;
+        fAllowedCharsSet = tmpSet;
+        fCheckMask &= ~USPOOF_CHAR_LIMIT;
+        return;
+    }
+
+        
+    // Add all common and inherited characters to the set of allowed chars.
+    UnicodeSet tempSet;
+    tempSet.applyIntPropertyValue(UCHAR_SCRIPT, USCRIPT_COMMON, status);
+    allowedChars.addAll(tempSet);
+    tempSet.applyIntPropertyValue(UCHAR_SCRIPT, USCRIPT_INHERITED, status);
+    allowedChars.addAll(tempSet);
+    
+    // If anything went wrong, we bail out without changing
+    // the state of the spoof checker.
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    // Store the updated spoof checker state.
+    UnicodeSet *tmpSet = static_cast<UnicodeSet *>(tempSet.clone());
+    delete fAllowedLocales;
+    fAllowedLocales = uprv_strdup(localesList);
+    if (tmpSet == NULL || fAllowedLocales == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    tmpSet->freeze();
+    delete fAllowedCharsSet;
+    fAllowedCharsSet = tmpSet;
+    fCheckMask |= USPOOF_CHAR_LIMIT;
+}
+
+
+const char * SpoofImpl::getAllowedLocales(UErrorCode &/*status*/) {
+    return fAllowedLocales;
+}
+
+
+// Given a locale (a language), add all the characters from all of the scripts used with that language
+// to the allowedChars UnicodeSet
+
+void SpoofImpl::addScriptChars(const char *locale, UnicodeSet *allowedChars, UErrorCode &status) {
+    UScriptCode scripts[30];
+
+    int32_t numScripts = uscript_getCode(locale, scripts, sizeof(scripts)/sizeof(UScriptCode), &status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+    if (status == U_USING_DEFAULT_WARNING) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    UnicodeSet tmpSet;
+    int32_t    i;
+    for (i=0; i<numScripts; i++) {
+        tmpSet.applyIntPropertyValue(UCHAR_SCRIPT, scripts[i], status);
+        allowedChars->addAll(tmpSet);
+    }
+}
 
 
 int32_t SpoofImpl::scriptScan

@@ -298,7 +298,7 @@ uspoof_getChecks(const USpoofChecker *sc, UErrorCode *status);
  * characters from any script will be allowed.
  *
  * The USPOOF_CHAR_LIMIT test is automatically enabled for this
- * USpoofChecker when calling this function with a non-empty set
+ * USpoofChecker when calling this function with a non-empty list
  * of locales.
  *
  * The Unicode Set of characters that will be allowed is accessible
@@ -313,9 +313,15 @@ uspoof_getChecks(const USpoofChecker *sc, UErrorCode *status);
  *
  * @param sc           The USpoofChecker 
  * @param localesList  A list list of locales, from which the language
- *                     and associated script are extracted.  The list
- *                     list has the format of an HTTP Accept-Language
- *                     header, and .
+ *                     and associated script are extracted.  The locales
+ *                     are comma-separated if there is more than one.
+ *                     White space may not appear within an individual locale,
+ *                     but is ignored otherwise.
+ *                     The locales are syntactically like those from the
+ *                     HTTP Accept-Language header.
+ *                     If the localesList is empty, no restrictions will be placed on
+ *                     the allowed characters.
+ *
  * @param status       The error code, set if this function encounters a problem.
  * @draft  ICU 4.2
  */
@@ -329,11 +335,11 @@ uspoof_setAllowedLocales(USpoofChecker *sc, const char *localesList, UErrorCode 
  *
  *  uspoof_setAllowedChars() will reset the list of allowed to be empty.
  *
- *  The format of the returned list is that of an HTTP Accept-Language
- *  header field, but it may not be identical to the original string passed
- *  to uspoof_setAllowedLocales();  the string may be
- *  reformatted, and information other than languages from the originally
- *  specified HTTP header may be omitted.
+ *  The format of the returned list is the same as that supplied to 
+ *  uspoof_setAllowedLocales(), but returned list may not be identical 
+ *  to the originally specified string; the string may be reformatted, 
+ *  and information other than languages from
+ *  the originally specified locales may be omitted.
  *
  * @param sc           The USpoofChecker 
  * @param status       The error code, set if this function encounters a problem.

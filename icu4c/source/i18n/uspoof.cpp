@@ -118,12 +118,21 @@ uspoof_getChecks(const USpoofChecker *sc, UErrorCode *status) {
 }
 
 U_CAPI void U_EXPORT2
-uspoof_setAllowedLocales(USpoofChecker *sc, const char * /*localesList*/, UErrorCode *status) {
+uspoof_setAllowedLocales(USpoofChecker *sc, const char *localesList, UErrorCode *status) {
     SpoofImpl *This = SpoofImpl::validateThis(sc, *status);
     if (This == NULL) {
         return;
     }
-    // TODO:
+    This->setAllowedLocales(localesList, *status);
+}
+
+U_CAPI const char * U_EXPORT2
+uspoof_getAllowedLocales(USpoofChecker *sc, UErrorCode *status) {
+    SpoofImpl *This = SpoofImpl::validateThis(sc, *status);
+    if (This == NULL) {
+        return NULL;
+    }
+    return This->getAllowedLocales(*status);
 }
 
 
