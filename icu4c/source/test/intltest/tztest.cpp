@@ -34,6 +34,11 @@
 // class TimeZoneTest
 // *****************************************************************************
 
+// TODO: We should probably read following data at runtime, so we can update
+// the these values every release with necessary data changes.
+const int32_t TimeZoneTest::REFERENCE_YEAR = 2009;
+const char * TimeZoneTest::REFERENCE_DATA_VERSION = "2009d";
+
 void TimeZoneTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite TestTimeZone");
@@ -579,18 +584,13 @@ TimeZoneTest::TestGetAvailableIDs913()
  */
 void TimeZoneTest::TestShortZoneIDs()
 {
-    // TODO: This test case is tzdata sensitive.
-    // We should actually put the data version in this test code
-    // at build time.  For now, we just hardcode the version string
-    // and display warning instead of error if non-reference tzdata
-    // version is used.
-    const char *REFERENCE_DATA_VERSION = "2008i";
-
     UErrorCode status = U_ZERO_ERROR;
+
+    // This test case is tzdata version sensitive.
     UBool isNonReferenceTzdataVersion = FALSE;
     const char *tzdataVer = TimeZone::getTZDataVersion(status);
     if (failure(status, "getTZDataVersion")) return;
-    if (uprv_strcmp(tzdataVer, REFERENCE_DATA_VERSION) != 0) {
+    if (uprv_strcmp(tzdataVer, TimeZoneTest::REFERENCE_DATA_VERSION) != 0) {
         // Note: We want to display a warning message here if
         // REFERENCE_DATA_VERSION is out of date - so we
         // do not forget to update the value before GA.
@@ -603,11 +603,11 @@ void TimeZoneTest::TestShortZoneIDs()
     // Note: useDaylightTime returns true if DST is observed
     // in the time zone in the current calendar year.  The test
     // data is valid for the date after the reference year below.
-    // If system clock is before the year, some test cases may fail.
-    const int32_t REFERENCE_YEAR = 2009;
+    // If system clock is before the year, some test cases may
+    // fail.
     GregorianCalendar cal(*TimeZone::getGMT(), status);
     if (failure(status, "GregorianCalendar")) return;
-    cal.set(REFERENCE_YEAR, UCAL_JANUARY, 2); // day 2 in GMT
+    cal.set(TimeZoneTest::REFERENCE_YEAR, UCAL_JANUARY, 2); // day 2 in GMT
 
     UBool isDateBeforeReferenceYear = ucal_getNow() < cal.getTime(status);
     if (failure(status, "Calendar::getTime")) return;
@@ -1875,9 +1875,8 @@ static struct   {
       // Southern Hemisphere, all data from meta:Australia_Western
       {"Australia/Perth",   "en", FALSE, TimeZone::SHORT, "GMT+08:00"/*"AWST"*/},
       {"Australia/Perth",   "en", FALSE, TimeZone::LONG,  "Australian Western Standard Time"},
-//FIXME: Temporary disable the test cases below.  See #6814
-//      {"Australia/Perth",   "en", TRUE,  TimeZone::SHORT, "GMT+09:00"/*"AWDT"*/},
-//      {"Australia/Perth",   "en", TRUE,  TimeZone::LONG,  "Australian Western Daylight Time"},
+      {"Australia/Perth",   "en", TRUE,  TimeZone::SHORT, "GMT+09:00"/*"AWDT"*/},
+      {"Australia/Perth",   "en", TRUE,  TimeZone::LONG,  "Australian Western Daylight Time"},
        
       {"America/Sao_Paulo",  "en", FALSE, TimeZone::SHORT, "GMT-03:00"/*"BRT"*/},
       {"America/Sao_Paulo",  "en", FALSE, TimeZone::LONG,  "Brasilia Time"},
@@ -1899,6 +1898,15 @@ static struct   {
     };
 
 void TimeZoneTest::TestDisplayNamesMeta() {
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar cal(*TimeZone::getGMT(), status);
+    if (failure(status, "GregorianCalendar")) return;
+
+    UBool isReferenceYear = TRUE;
+    if (cal.get(UCAL_YEAR, status) != TimeZoneTest::REFERENCE_YEAR) {
+        isReferenceYear = FALSE;
+    }
+
     UBool sawAnError = FALSE;
     for (int testNum   = 0; zoneDisplayTestData[testNum].zoneName != NULL; testNum++) {
         Locale locale  = Locale::createFromName(zoneDisplayTestData[testNum].localeName);
@@ -1909,20 +1917,33 @@ void TimeZoneTest::TestDisplayNamesMeta() {
                              locale,
                              displayName);
         if (displayName != zoneDisplayTestData[testNum].expectedDisplayName) {
-            sawAnError = TRUE;
             char  name[100];
             UErrorCode status = U_ZERO_ERROR;
             displayName.extract(name, 100, NULL, status);
-            errln("Incorrect time zone display name.  zone = \"%s\",\n"
-                  "   locale = \"%s\",   style = %s,  Summertime = %d\n"
-                  "   Expected \"%s\", "
-                  "   Got \"%s\"\n", zoneDisplayTestData[testNum].zoneName,
-                                     zoneDisplayTestData[testNum].localeName,
-                                     zoneDisplayTestData[testNum].style==TimeZone::SHORT ?
-                                        "SHORT" : "LONG",
-                                     zoneDisplayTestData[testNum].summerTime,
-                                     zoneDisplayTestData[testNum].expectedDisplayName,
-                                     name);
+            if (isReferenceYear) {
+                sawAnError = TRUE;
+                errln("Incorrect time zone display name.  zone = \"%s\",\n"
+                      "   locale = \"%s\",   style = %s,  Summertime = %d\n"
+                      "   Expected \"%s\", "
+                      "   Got \"%s\"\n", zoneDisplayTestData[testNum].zoneName,
+                                         zoneDisplayTestData[testNum].localeName,
+                                         zoneDisplayTestData[testNum].style==TimeZone::SHORT ?
+                                            "SHORT" : "LONG",
+                                         zoneDisplayTestData[testNum].summerTime,
+                                         zoneDisplayTestData[testNum].expectedDisplayName,
+                                         name);
+            } else {
+                logln("Incorrect time zone display name.  zone = \"%s\",\n"
+                      "   locale = \"%s\",   style = %s,  Summertime = %d\n"
+                      "   Expected \"%s\", "
+                      "   Got \"%s\"\n", zoneDisplayTestData[testNum].zoneName,
+                                         zoneDisplayTestData[testNum].localeName,
+                                         zoneDisplayTestData[testNum].style==TimeZone::SHORT ?
+                                            "SHORT" : "LONG",
+                                         zoneDisplayTestData[testNum].summerTime,
+                                         zoneDisplayTestData[testNum].expectedDisplayName,
+                                         name);
+            }
         }
         delete zone;
     }
