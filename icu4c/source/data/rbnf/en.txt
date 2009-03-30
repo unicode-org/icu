@@ -186,5 +186,5 @@ en{
             "1: ty-=%spellout-ordinal=;",
         }
     }
-    Version{"1.1"}
+    Version{"1.5"}
 }

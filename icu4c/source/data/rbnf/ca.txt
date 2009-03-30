@@ -264,5 +264,5 @@ ca{
             "1: s =%spellout-ordinal-masculine=;",
         }
     }
-    Version{"1.1"}
+    Version{"1.5"}
 }
