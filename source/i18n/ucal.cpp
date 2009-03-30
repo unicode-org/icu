@@ -560,21 +560,18 @@ static const char * const CAL_TYPES[] = {
         NULL
 };
 
-#define MAX_LOC_SIZE_KEYWORD_VALUES 64
-#define MAX_LENGTH_KEYWORD_VALUE 64
-
 U_CAPI UEnumeration* U_EXPORT2
 ucal_getKeywordValuesForLocale(const char *key, const char* locale, UBool commonlyUsed, UErrorCode *status) {
     // Resolve region
-    char prefRegion[MAX_LOC_SIZE_KEYWORD_VALUES];
+    char prefRegion[ULOC_FULLNAME_CAPACITY] = "";
     int32_t prefRegionLength = 0;
-    prefRegionLength = uloc_getCountry(locale, prefRegion, MAX_LOC_SIZE_KEYWORD_VALUES, status);
+    prefRegionLength = uloc_getCountry(locale, prefRegion, sizeof(prefRegion), status);
     if (prefRegionLength == 0) {
-        char loc[MAX_LOC_SIZE_KEYWORD_VALUES];
+        char loc[ULOC_FULLNAME_CAPACITY] = "";
         int32_t locLength = 0;
-        locLength = uloc_addLikelySubtags(locale, loc, MAX_LOC_SIZE_KEYWORD_VALUES, status);
+        locLength = uloc_addLikelySubtags(locale, loc, sizeof(loc), status);
         
-        prefRegionLength = uloc_getCountry(loc, prefRegion, MAX_LOC_SIZE_KEYWORD_VALUES, status);
+        prefRegionLength = uloc_getCountry(loc, prefRegion, sizeof(prefRegion), status);
     }
     
     // Read preferred calendar values from supplementalData calendarPreference
