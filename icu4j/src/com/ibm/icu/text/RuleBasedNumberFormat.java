@@ -1286,7 +1286,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
                 int n = ruleSets.length;
                 while (--n >= 0) {
                    String currentName = ruleSets[n].getName();
-                   if (currentName.equals("%spellout") || currentName.equals("%ordinal") || currentName.equals("%duration")) {
+                   if (currentName.equals("%spellout-numbering") || currentName.equals("%digits-ordinal") || currentName.equals("%duration")) {
                        defaultRuleSet = ruleSets[n];
                        return;
                    } 
@@ -1509,7 +1509,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // last public rule set, no matter what the localization data says.
 
         // Set the default ruleset to the last public ruleset, unless one of the predefined
-        // ruleset names %spellout, %ordinal, or %duration is found
+        // ruleset names %spellout-numbering, %digits-ordinal, or %duration is found
 
         boolean defaultNameFound = false;                  
         int n = ruleSets.length;
@@ -1517,7 +1517,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
         while (--n >= 0) {
             String currentName = ruleSets[n].getName();
-            if (currentName.equals("%spellout") || currentName.equals("%ordinal") || currentName.equals("%duration")) {
+            if (currentName.equals("%spellout-numbering") || currentName.equals("%digits-ordinal") || currentName.equals("%duration")) {
                 defaultRuleSet = ruleSets[n];
                 defaultNameFound = true;                  
                 break;
