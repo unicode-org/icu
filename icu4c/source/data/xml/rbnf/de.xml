@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <!--
- Copyright (c) 2008 International Business Machines Corporation and others. All rights reserved.
+ Copyright (c) 2009 International Business Machines Corporation and others. All rights reserved.
 -->
 <!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.7/ldml.dtd">
 <ldml>
@@ -13,7 +13,7 @@
     <rbnf>
         <rulesetGrouping type="SpelloutRules">
             <ruleset type="lenient-parse" access="private">
-                <rbnfrule value="0">&amp;ue=ü&amp;ae=ä&amp;oe=ö&amp;[last primary ignorable ] ←← ' ' ←← ',' ←← '-';</rbnfrule>
+                <rbnfrule value="0">&amp;ue=ü&amp;ae=ä&amp;oe=ö&amp;[last primary ignorable ] ←← ' ' ←← ',' ←← '-' ←← '­';</rbnfrule>
             </ruleset>
         </rulesetGrouping>
  

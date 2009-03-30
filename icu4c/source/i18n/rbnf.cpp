@@ -1223,8 +1223,8 @@ RuleBasedNumberFormat::initDefaultRuleSet()
       return;
     }
 
-    const UnicodeString spellout = UNICODE_STRING_SIMPLE("%spellout");
-    const UnicodeString ordinal = UNICODE_STRING_SIMPLE("%ordinal");
+    const UnicodeString spellout = UNICODE_STRING_SIMPLE("%spellout-numbering");
+    const UnicodeString ordinal = UNICODE_STRING_SIMPLE("%digits-ordinal");
     const UnicodeString duration = UNICODE_STRING_SIMPLE("%duration");
 
     NFRuleSet**p = &ruleSets[0];
