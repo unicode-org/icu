@@ -340,23 +340,23 @@ public class RbnfTest extends TestFmwk {
             = new RuleBasedNumberFormat(Locale.US,
                                         RuleBasedNumberFormat.ORDINAL);
         String[][] testData = {
-            { "1", "1st" },
-            { "2", "2nd" },
-            { "3", "3rd" },
-            { "4", "4th" },
-            { "7", "7th" },
-            { "10", "10th" },
-            { "11", "11th" },
-            { "13", "13th" },
-            { "20", "20th" },
-            { "21", "21st" },
-            { "22", "22nd" },
-            { "23", "23rd" },
-            { "24", "24th" },
-            { "33", "33rd" },
-            { "102", "102nd" },
-            { "312", "312th" },
-            { "12,345", "12,345th" }
+            { "1", "1\u02e2\u1d57" },
+            { "2", "2\u207f\u1d48" },
+            { "3", "3\u02b3\u1d48" },
+            { "4", "4\u1d57\u02b0" },
+            { "7", "7\u1d57\u02b0" },
+            { "10", "10\u1d57\u02b0" },
+            { "11", "11\u1d57\u02b0" },
+            { "13", "13\u1d57\u02b0" },
+            { "20", "20\u1d57\u02b0" },
+            { "21", "21\u02e2\u1d57" },
+            { "22", "22\u207f\u1d48" },
+            { "23", "23\u02b3\u1d48" },
+            { "24", "24\u1d57\u02b0" },
+            { "33", "33\u02b3\u1d48" },
+            { "102", "102\u207f\u1d48" },
+            { "312", "312\u1d57\u02b0" },
+            { "12,345", "12,345\u1d57\u02b0" }
         };
 
         doTest(formatter, testData, false);
@@ -438,30 +438,30 @@ public class RbnfTest extends TestFmwk {
             { "1", "un" },
             { "15", "quinze" },
             { "20", "vingt" },
-            { "21", "vingt et un" },
+            { "21", "vingt-et-un" },
             { "23", "vingt-trois" },
             { "62", "soixante-deux" },
             { "70", "soixante-dix" },
-            { "71", "soixante et onze" },
+            { "71", "soixante-et-onze" },
             { "73", "soixante-treize" },
             { "80", "quatre-vingts" },
             { "88", "quatre-vingt-huit" },
             { "100", "cent" },
-            { "106", "cent six" },
-            { "127", "cent vingt-sept" },
-            { "200", "deux cents" },
-            { "579", "cinq cent soixante-dix-neuf" },
+            { "106", "cent-six" },
+            { "127", "cent-vingt-sept" },
+            { "200", "deux-cents" },
+            { "579", "cinq-cent-soixante-dix-neuf" },
             { "1,000", "mille" },
-            { "1,123", "mille cent vingt-trois" },
-            { "1,594", "mille cinq cent quatre-vingt-quatorze" },
-            { "2,000", "deux mille" },
-            { "3,004", "trois mille quatre" },
-            { "4,567", "quatre mille cinq cent soixante-sept" },
-            { "15,943", "quinze mille neuf cent quarante-trois" },
-            { "2,345,678", "deux millions trois cent quarante-cinq mille "
-              + "six cent soixante-dix-huit" },
+            { "1,123", "mille-cent-vingt-trois" },
+            { "1,594", "mille-cinq-cent-quatre-vingt-quatorze" },
+            { "2,000", "deux-mille" },
+            { "3,004", "trois-mille-quatre" },
+            { "4,567", "quatre-mille-cinq-cent-soixante-sept" },
+            { "15,943", "quinze-mille-neuf-cent-quarante-trois" },
+            { "2,345,678", "deux millions trois-cent-quarante-cinq-mille-"
+              + "six-cent-soixante-dix-huit" },
             { "-36", "moins trente-six" },
-            { "234.567", "deux cent trente-quatre virgule cinq six sept" }
+            { "234.567", "deux-cent-trente-quatre virgule cinq six sept" }
         };
 
         doTest(formatter, testData, true);
@@ -485,30 +485,30 @@ public class RbnfTest extends TestFmwk {
             { "1", "un" },
             { "15", "quinze" },
             { "20", "vingt" },
-            { "21", "vingt et un" },
+            { "21", "vingt-et-un" },
             { "23", "vingt-trois" },
             { "62", "soixante-deux" },
             { "70", "septante" },
-            { "71", "septante et un" },
+            { "71", "septante-et-un" },
             { "73", "septante-trois" },
             { "80", "huitante" },
             { "88", "huitante-huit" },
             { "100", "cent" },
-            { "106", "cent six" },
-            { "127", "cent vingt-sept" },
-            { "200", "deux cents" },
-            { "579", "cinq cent septante-neuf" },
+            { "106", "cent-six" },
+            { "127", "cent-vingt-sept" },
+            { "200", "deux-cents" },
+            { "579", "cinq-cent-septante-neuf" },
             { "1,000", "mille" },
-            { "1,123", "mille cent vingt-trois" },
-            { "1,594", "mille cinq cent nonante-quatre" },
-            { "2,000", "deux mille" },
-            { "3,004", "trois mille quatre" },
-            { "4,567", "quatre mille cinq cent soixante-sept" },
-            { "15,943", "quinze mille neuf cent quarante-trois" },
-            { "2,345,678", "deux millions trois cent quarante-cinq mille "
-              + "six cent septante-huit" },
+            { "1,123", "mille-cent-vingt-trois" },
+            { "1,594", "mille-cinq-cent-nonante-quatre" },
+            { "2,000", "deux-mille" },
+            { "3,004", "trois-mille-quatre" },
+            { "4,567", "quatre-mille-cinq-cent-soixante-sept" },
+            { "15,943", "quinze-mille-neuf-cent-quarante-trois" },
+            { "2,345,678", "deux millions trois-cent-quarante-cinq-mille-"
+              + "six-cent-septante-huit" },
             { "-36", "moins trente-six" },
-            { "234.567", "deux cent trente-quatre virgule cinq six sept" }
+            { "234.567", "deux-cent-trente-quatre virgule cinq six sept" }
         };
 
         doTest(formatter, testData, true);
@@ -525,23 +525,23 @@ public class RbnfTest extends TestFmwk {
             { "1", "uno" },
             { "15", "quindici" },
             { "20", "venti" },
-            { "23", "ventitr\u00E9" },
-            { "73", "settantatr\u00E9" },
-            { "88", "ottantotto" },
+            { "23", "venti\u00ADtr\u00E9" },
+            { "73", "settanta\u00ADtr\u00E9" },
+            { "88", "ottant\u00ADotto" },
             { "100", "cento" },
-            { "106", "centosei" },
-            { "108", "centotto" },
-            { "127", "centoventisette" },
-            { "181", "centottantuno" },
-            { "200", "duecento" },
-            { "579", "cinquecentosettantanove" },
+            { "106", "cento\u00ADsei" },
+            { "108", "cent\u00ADotto" },
+            { "127", "cento\u00ADventi\u00ADsette" },
+            { "181", "cent\u00ADottant\u00ADuno" },
+            { "200", "due\u00ADcento" },
+            { "579", "cinque\u00ADcento\u00ADsettanta\u00ADnove" },
             { "1,000", "mille" },
-            { "2,000", "duemila" },
-            { "3,004", "tremilaquattro" },
-            { "4,567", "quattromilacinquecentosessantasette" },
-            { "15,943", "quindicimilanovecentoquarantatr\u00E9" },
-            { "-36", "meno trentasei" },
-            { "234.567", "duecentotrentaquattro virgola cinque sei sette" }
+            { "2,000", "due\u00ADmila" },
+            { "3,004", "tre\u00ADmila\u00ADquattro" },
+            { "4,567", "quattro\u00ADmila\u00ADcinque\u00ADcento\u00ADsessanta\u00ADsette" },
+            { "15,943", "quindici\u00ADmila\u00ADnove\u00ADcento\u00ADquaranta\u00ADtr\u00E9" },
+            { "-36", "meno trenta\u00ADsei" },
+            { "234.567", "due\u00ADcento\u00ADtrenta\u00ADquattro virgola cinque sei sette" }
         };
 
         doTest(formatter, testData, true);
@@ -558,21 +558,21 @@ public class RbnfTest extends TestFmwk {
             { "1", "eins" },
             { "15", "f\u00fcnfzehn" },
             { "20", "zwanzig" },
-            { "23", "dreiundzwanzig" },
-            { "73", "dreiundsiebzig" },
-            { "88", "achtundachtzig" },
-            { "100", "hundert" },
-            { "106", "hundertsechs" },
-            { "127", "hundertsiebenundzwanzig" },
-            { "200", "zweihundert" },
-            { "579", "f\u00fcnfhundertneunundsiebzig" },
-            { "1,000", "tausend" },
-            { "2,000", "zweitausend" },
-            { "3,004", "dreitausendvier" },
-            { "4,567", "viertausendf\u00fcnfhundertsiebenundsechzig" },
-            { "15,943", "f\u00fcnfzehntausendneunhundertdreiundvierzig" },
-            { "2,345,678", "zwei Millionen dreihundertf\u00fcnfundvierzigtausend"
-              + "sechshundertachtundsiebzig" }
+            { "23", "drei\u00ADund\u00ADzwanzig" },
+            { "73", "drei\u00ADund\u00ADsiebzig" },
+            { "88", "acht\u00ADund\u00ADachtzig" },
+            { "100", "ein\u00ADhundert" },
+            { "106", "ein\u00ADhundert\u00ADsechs" },
+            { "127", "ein\u00ADhundert\u00ADsieben\u00ADund\u00ADzwanzig" },
+            { "200", "zwei\u00ADhundert" },
+            { "579", "f\u00fcnf\u00ADhundert\u00ADneun\u00ADund\u00ADsiebzig" },
+            { "1,000", "ein\u00ADtausend" },
+            { "2,000", "zwei\u00ADtausend" },
+            { "3,004", "drei\u00ADtausend\u00ADvier" },
+            { "4,567", "vier\u00ADtausend\u00ADf\u00fcnf\u00ADhundert\u00ADsieben\u00ADund\u00ADsechzig" },
+            { "15,943", "f\u00fcnfzehn\u00ADtausend\u00ADneun\u00ADhundert\u00ADdrei\u00ADund\u00ADvierzig" },
+            { "2,345,678", "zwei Millionen drei\u00ADhundert\u00ADf\u00fcnf\u00ADund\u00ADvierzig\u00ADtausend\u00AD"
+              + "sechs\u00ADhundert\u00ADacht\u00ADund\u00ADsiebzig" }
         };
 
         doTest(formatter, testData, true);
@@ -595,15 +595,15 @@ public class RbnfTest extends TestFmwk {
             { "0", "\u0e28\u0e39\u0e19\u0e22\u0e4c" },
             { "1", "\u0e2b\u0e19\u0e36\u0e48\u0e07" },
             { "10", "\u0e2a\u0e34\u0e1a" },
-            { "11", "\u0e2a\u0e34\u0e1a\u0e40\u0e2d\u0e47\u0e14" },
-            { "21", "\u0e22\u0e35\u0e48\u0e2a\u0e34\u0e1a\u0e40\u0e2d\u0e47\u0e14" },
-            { "101", "\u0e2b\u0e19\u0e36\u0e48\u0e07\u0e23\u0e49\u0e2d\u0e22\u0e2b\u0e19\u0e36\u0e48\u0e07" },
-            { "1.234", "\u0e2b\u0e19\u0e36\u0e48\u0e07\u0e08\u0e38\u0e14\u0e2a\u0e2d\u0e07\u0e2a\u0e32\u0e21\u0e2a\u0e35\u0e48" },
-            { "21.45", "\u0e22\u0e35\u0e48\u0e2a\u0e34\u0e1a\u0e40\u0e2d\u0e47\u0e14\u0e08\u0e38\u0e14\u0e2a\u0e35\u0e48\u0e2b\u0e49\u0e32" },
-            { "22.45", "\u0e22\u0e35\u0e48\u0e2a\u0e34\u0e1a\u0e2a\u0e2d\u0e07\u0e08\u0e38\u0e14\u0e2a\u0e35\u0e48\u0e2b\u0e49\u0e32" },
-            { "23.45", "\u0e22\u0e35\u0e48\u0e2a\u0e34\u0e1a\u0e2a\u0e32\u0e21\u0e08\u0e38\u0e14\u0e2a\u0e35\u0e48\u0e2b\u0e49\u0e32" },
-            { "123.45", "\u0e2b\u0e19\u0e36\u0e48\u0e07\u0e23\u0e49\u0e2d\u0e22\u0e22\u0e35\u0e48\u0e2a\u0e34\u0e1a\u0e2a\u0e32\u0e21\u0e08\u0e38\u0e14\u0e2a\u0e35\u0e48\u0e2b\u0e49\u0e32" },
-            { "12,345.678", "\u0E2B\u0E19\u0E36\u0E48\u0E07\u0E2B\u0E21\u0E37\u0E48\u0E19\u0E2A\u0E2D\u0E07\u0E1E\u0E31\u0E19\u0E2A\u0E32\u0E21\u0E23\u0E49\u0E2D\u0E22\u0E2A\u0E35\u0E48\u0E2A\u0E34\u0E1A\u0E2B\u0E49\u0E32\u0E08\u0E38\u0E14\u0E2B\u0E01\u0E40\u0E08\u0E47\u0E14\u0E41\u0E1B\u0E14" },
+            { "11", "\u0e2a\u0e34\u0e1a\u200b\u0e40\u0e2d\u0e47\u0e14" },
+            { "21", "\u0e22\u0e35\u0e48\u200b\u0e2a\u0e34\u0e1a\u200b\u0e40\u0e2d\u0e47\u0e14" },
+            { "101", "\u0e2b\u0e19\u0e36\u0e48\u0e07\u200b\u0e23\u0e49\u0e2d\u0e22\u200b\u0e2b\u0e19\u0e36\u0e48\u0e07" },
+            { "1.234", "\u0e2b\u0e19\u0e36\u0e48\u0e07\u200b\u0e08\u0e38\u0e14\u200b\u0e2a\u0e2d\u0e07\u0e2a\u0e32\u0e21\u0e2a\u0e35\u0e48" },
+            { "21.45", "\u0e22\u0e35\u0e48\u200b\u0e2a\u0e34\u0e1a\u200b\u0e40\u0e2d\u0e47\u0e14\u200b\u0e08\u0e38\u0e14\u200b\u0e2a\u0e35\u0e48\u0e2b\u0e49\u0e32" },
+            { "22.45", "\u0e22\u0e35\u0e48\u200b\u0e2a\u0e34\u0e1a\u200b\u0e2a\u0e2d\u0e07\u200b\u0e08\u0e38\u0e14\u200b\u0e2a\u0e35\u0e48\u0e2b\u0e49\u0e32" },
+            { "23.45", "\u0e22\u0e35\u0e48\u200b\u0e2a\u0e34\u0e1a\u200b\u0e2a\u0e32\u0e21\u200b\u0e08\u0e38\u0e14\u200b\u0e2a\u0e35\u0e48\u0e2b\u0e49\u0e32" },
+            { "123.45", "\u0e2b\u0e19\u0e36\u0e48\u0e07\u200b\u0e23\u0e49\u0e2d\u0e22\u200b\u0e22\u0e35\u0e48\u200b\u0e2a\u0e34\u0e1a\u200b\u0e2a\u0e32\u0e21\u200b\u0e08\u0e38\u0e14\u200b\u0e2a\u0e35\u0e48\u0e2b\u0e49\u0e32" },
+            { "12,345.678", "\u0E2B\u0E19\u0E36\u0E48\u0E07\u200b\u0E2B\u0E21\u0E37\u0E48\u0E19\u200b\u0E2A\u0E2D\u0E07\u200b\u0E1E\u0E31\u0E19\u200b\u0E2A\u0E32\u0E21\u200b\u0E23\u0E49\u0E2D\u0E22\u200b\u0E2A\u0E35\u0E48\u200b\u0E2A\u0E34\u0E1A\u200b\u0E2B\u0E49\u0E32\u200b\u0E08\u0E38\u0E14\u200b\u0E2B\u0E01\u0E40\u0E08\u0E47\u0E14\u0E41\u0E1B\u0E14" },
         };
 
         doTest(formatter, testData, true);
@@ -659,55 +659,54 @@ public class RbnfTest extends TestFmwk {
         RuleBasedNumberFormat formatter = new RuleBasedNumberFormat(locale, RuleBasedNumberFormat.SPELLOUT);
 
         String[][] testDataDefault = {
-            { "101", "etthundraett" },
-            { "123", "etthundratjugotre" },
-            { "1,001", "ettusenett" },
-            { "1,100", "ettusenetthundra" },
-            { "1,101", "ettusenetthundraett" },
-            { "1,234", "ettusentv\u00e5hundratrettiofyra" },
-            { "10,001", "tiotusenett" },
-            { "11,000", "elvatusen" },
-            { "12,000", "tolvtusen" },
-            { "20,000", "tjugotusen" },
-            { "21,000", "tjugoetttusen" },
-            { "21,001", "tjugoetttusenett" },
-            { "200,000", "tv\u00e5hundratusen" },
-            { "201,000", "tv\u00e5hundraetttusen" },
-            { "200,200", "tv\u00e5hundratusentv\u00e5hundra" },
-            { "2,002,000", "tv\u00e5 miljoner tv\u00e5tusen" },
-            { "12,345,678", "tolv miljoner trehundrafyrtiofemtusensexhundrasjuttio\u00e5tta" },
-            { "123,456.789", "etthundratjugotretusenfyrahundrafemtiosex komma sju \u00e5tta nio" },
-            { "-12,345.678", "minus tolvtusentrehundrafyrtiofem komma sex sju \u00e5tta" }
+            { "101", "ett\u00ADhundra\u00ADett" },
+            { "123", "ett\u00ADhundra\u00ADtjugo\u00ADtre" },
+            { "1,001", "ettusen ett" },
+            { "1,100", "ettusen ett\u00ADhundra" },
+            { "1,101", "ettusen ett\u00ADhundra\u00ADett" },
+            { "1,234", "ettusen tv\u00e5\u00ADhundra\u00ADtrettio\u00ADfyra" },
+            { "10,001", "tio\u00ADtusen ett" },
+            { "11,000", "elva\u00ADtusen" },
+            { "12,000", "tolv\u00ADtusen" },
+            { "20,000", "tjugo-tusen" },
+            { "21,000", "tjugo\u00ADett-tusen" },
+            { "21,001", "tjugo\u00ADett-tusen ett" },
+            { "200,000", "tv\u00e5\u00ADhundra-tusen" },
+            { "201,000", "tv\u00e5\u00ADhundra\u00ADett-tusen" },
+            { "200,200", "tv\u00e5\u00ADhundra-tusen tv\u00e5\u00ADhundra" },
+            { "2,002,000", "tv\u00e5 miljoner tv\u00e5\u00ADtusen" },
+            { "12,345,678", "tolv miljoner tre\u00ADhundra\u00ADfyrtio\u00ADfem-tusen sex\u00ADhundra\u00ADsjuttio\u00AD\u00e5tta" },
+            { "123,456.789", "ett\u00ADhundra\u00ADtjugo\u00ADtre-tusen fyra\u00ADhundra\u00ADfemtio\u00ADsex komma sju \u00e5tta nio" },
+            { "-12,345.678", "minus tolv\u00ADtusen tre\u00ADhundra\u00ADfyrtio\u00ADfem komma sex sju \u00e5tta" }
         };
 
         logln("testing default rules");
         doTest(formatter, testDataDefault, true);
 
-//      Neutrum rules not supported in CLDR
-//      String[][] testDataNeutrum = {
-//          { "101", "etthundra\u00adett" },
-//          { "1,001", "ettusen ett" },
-//          { "1,101", "ettusen etthundra\u00adett" },
-//          { "10,001", "tio\u00adtusen ett" },
-//          { "21,001", "tjugoen\u00adtusen ett" }
-//      };
-
-//      formatter.setDefaultRuleSet("%neutrum");
-//      logln("testing neutrum rules");
-//      doTest(formatter, testDataNeutrum, true);
-
-        String[][] testDataYear = {
-            { "101", "etthundraett" },
-            { "900", "niohundra" },
-            { "1,001", "tusenett" },
-            { "1,100", "elvahundra" },
-            { "1,101", "elvahundraett" },
-            { "1,234", "tolvhundratrettiofyra" },
-            { "2,001", "tjugohundraett" },
-            { "10,001", "tiotusenett" }
+        String[][] testDataNeutrum = {
+            { "101", "ett\u00adhundra\u00aden" },
+            { "1,001", "ettusen en" },
+            { "1,101", "ettusen ett\u00adhundra\u00aden" },
+            { "10,001", "tio\u00adtusen en" },
+            { "21,001", "tjugo\u00aden\u00adtusen en" }
         };
 
-        formatter.setDefaultRuleSet("%year");
+        formatter.setDefaultRuleSet("%spellout-cardinal-neutre");
+        logln("testing neutrum rules");
+        doTest(formatter, testDataNeutrum, true);
+
+        String[][] testDataYear = {
+            { "101", "ett\u00adhundra\u00adett" },
+            { "900", "nio\u00adhundra" },
+            { "1,001", "ettusen ett" },
+            { "1,100", "elva\u00adhundra" },
+            { "1,101", "elva\u00adhundra\u00adett" },
+            { "1,234", "tolv\u00adhundra\u00adtrettio\u00adfyra" },
+            { "2,001", "tjugo\u00adhundra\u00adett" },
+            { "10,001", "tio\u00adtusen ett" }
+        };
+
+        formatter.setDefaultRuleSet("%spellout-numbering-year");
         logln("testing year rules");
         doTest(formatter, testDataYear, true);
     }

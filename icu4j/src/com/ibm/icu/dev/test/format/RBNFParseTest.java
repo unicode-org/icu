@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -136,7 +136,7 @@ public class RBNFParseTest extends TestFmwk {
       String[][] lists = {
           { "1,2", "twelve", "un virgule deux" },
           { "1,2 million", "twelve million", "un virgule deux" },
-          { "1,2 millions", "twelve million", "un million deux cents mille" },
+          { "1,2 millions", "twelve million", "un million deux-cents-mille" },
           { "1.2", "one point two", "douze" },
           { "1.2 million", "one million two hundred thousand", "douze" },
           { "1.2 millions", "one million two hundred thousand", "douze millions" },
