@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2008, International Business Machines Corporation and    *
+* Copyright (C) 1997-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -1204,6 +1204,8 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
         }
     } else {
         // The display name for standard time was requested, but currently in DST
+        // or display name for daylight saving time was requested, but this zone no longer
+        // observes DST.
         tz = new SimpleTimeZone(rawOffset, tempID);
         if (U_FAILURE(status) || tz == NULL) {
             if (U_SUCCESS(status)) {

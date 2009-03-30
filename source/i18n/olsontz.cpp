@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2008, International Business Machines
+* Copyright (c) 2003-2009, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -526,8 +526,8 @@ UBool OlsonTimeZone::useDaylightTime() const {
         if (transitionTimes[i] >= limit) {
             break;
         }
-        if (transitionTimes[i] >= start &&
-            dstOffset(typeData[i]) != 0) {
+        if ((transitionTimes[i] >= start && dstOffset(typeData[i]) != 0)
+                || (transitionTimes[i] > start && i > 0 && dstOffset(typeData[i - 1]) != 0)) {
             return TRUE;
         }
     }
