@@ -259,6 +259,7 @@ void SpoofImpl::wholeScriptCheck(
 
 void SpoofImpl::setAllowedLocales(const char *localesList, UErrorCode &status) {
     UnicodeSet    allowedChars;
+    UnicodeSet    *tmpSet = NULL;
     const char    *locStart = localesList;
     const char    *locEnd = NULL;
     const char    *localesListEnd = localesList + uprv_strlen(localesList);
@@ -274,7 +275,7 @@ void SpoofImpl::setAllowedLocales(const char *localesList, UErrorCode &status) {
             locStart++;
         }
         const char *trimmedEnd = locEnd-1;
-        while (*trimmedEnd == ' ') {
+        while (trimmedEnd > locStart && *trimmedEnd == ' ') {
             trimmedEnd--;
         }
         if (trimmedEnd <= locStart) {
@@ -298,7 +299,7 @@ void SpoofImpl::setAllowedLocales(const char *localesList, UErrorCode &status) {
     if (localeListCount == 0) {
         uprv_free((void *)fAllowedLocales);
         fAllowedLocales = uprv_strdup("");
-        UnicodeSet *tmpSet = new UnicodeSet(0, 0x10ffff);
+        tmpSet = new UnicodeSet(0, 0x10ffff);
         if (fAllowedLocales == NULL || tmpSet == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
@@ -325,13 +326,14 @@ void SpoofImpl::setAllowedLocales(const char *localesList, UErrorCode &status) {
     }
 
     // Store the updated spoof checker state.
-    UnicodeSet *tmpSet = static_cast<UnicodeSet *>(tempSet.clone());
-    delete fAllowedLocales;
-    fAllowedLocales = uprv_strdup(localesList);
-    if (tmpSet == NULL || fAllowedLocales == NULL) {
+    tmpSet = static_cast<UnicodeSet *>(allowedChars.clone());
+    const char *tmpLocalesList = uprv_strdup(localesList);
+    if (tmpSet == NULL || tmpLocalesList == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
+    uprv_free((void *)fAllowedLocales);
+    fAllowedLocales = tmpLocalesList;
     tmpSet->freeze();
     delete fAllowedCharsSet;
     fAllowedCharsSet = tmpSet;
