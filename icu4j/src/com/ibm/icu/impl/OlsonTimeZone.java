@@ -176,38 +176,51 @@ public class OlsonTimeZone extends BasicTimeZone {
         long current = System.currentTimeMillis();
 
         if (current < finalMillis) {
-            boolean bDst = false;
             SimpleTimeZone stz = new SimpleTimeZone(offsetMillis, getID());
 
-            TimeZoneRule[] currentRules = getSimpleTimeZoneRulesNear(current);
-            if (currentRules.length == 3
-                    && (currentRules[1] instanceof AnnualTimeZoneRule)
-                    && (currentRules[2] instanceof AnnualTimeZoneRule)) {
-                // A pair of AnnualTimeZoneRule
-                AnnualTimeZoneRule r1 = (AnnualTimeZoneRule)currentRules[1];
-                AnnualTimeZoneRule r2 = (AnnualTimeZoneRule)currentRules[2];
-                DateTimeRule start, end;
-                int offset1 = r1.getRawOffset() + r1.getDSTSavings();
-                int offset2 = r2.getRawOffset() + r2.getDSTSavings();
-                int sav;
-                if (offset1 > offset2) {
-                    start = r1.getRule();
-                    end = r2.getRule();
-                    sav = offset1 - offset2;
-                } else {
-                    start = r2.getRule();
-                    end = r1.getRule();
-                    sav = offset2 - offset1;
+            boolean bDst = useDaylightTime();
+            if (bDst) {
+                TimeZoneRule[] currentRules = getSimpleTimeZoneRulesNear(current);
+                if (currentRules.length != 3) {
+                    // DST was observed at the beginning of this year, so useDaylightTime
+                    // returned true.  getSimpleTimeZoneRulesNear requires at least one
+                    // future transition for making a pair of rules.  This implementation
+                    // rolls back the time before the latest offset transition.
+                    TimeZoneTransition tzt = getPreviousTransition(current, false);
+                    if (tzt != null) {
+                        currentRules = getSimpleTimeZoneRulesNear(tzt.getTime() - 1);
+                    }
                 }
-                // getSimpleTimeZoneRulesNear always return rules using DOW / WALL_TIME
-                stz.setStartRule(start.getRuleMonth(), start.getRuleWeekInMonth(), start.getRuleDayOfWeek(),
-                                        start.getRuleMillisInDay());
-                stz.setEndRule(end.getRuleMonth(), end.getRuleWeekInMonth(), end.getRuleDayOfWeek(),
-                                        end.getRuleMillisInDay());
-                // set DST saving amount and start year
-                stz.setDSTSavings(sav);
-
-                bDst = true;
+                if (currentRules.length == 3
+                        && (currentRules[1] instanceof AnnualTimeZoneRule)
+                        && (currentRules[2] instanceof AnnualTimeZoneRule)) {
+                    // A pair of AnnualTimeZoneRule
+                    AnnualTimeZoneRule r1 = (AnnualTimeZoneRule)currentRules[1];
+                    AnnualTimeZoneRule r2 = (AnnualTimeZoneRule)currentRules[2];
+                    DateTimeRule start, end;
+                    int offset1 = r1.getRawOffset() + r1.getDSTSavings();
+                    int offset2 = r2.getRawOffset() + r2.getDSTSavings();
+                    int sav;
+                    if (offset1 > offset2) {
+                        start = r1.getRule();
+                        end = r2.getRule();
+                        sav = offset1 - offset2;
+                    } else {
+                        start = r2.getRule();
+                        end = r1.getRule();
+                        sav = offset2 - offset1;
+                    }
+                    // getSimpleTimeZoneRulesNear always return rules using DOW / WALL_TIME
+                    stz.setStartRule(start.getRuleMonth(), start.getRuleWeekInMonth(), start.getRuleDayOfWeek(),
+                                            start.getRuleMillisInDay());
+                    stz.setEndRule(end.getRuleMonth(), end.getRuleWeekInMonth(), end.getRuleDayOfWeek(),
+                                            end.getRuleMillisInDay());
+                    // set DST saving amount and start year
+                    stz.setDSTSavings(sav);
+                } else {
+                    // We should not get here...
+                    bDst = false;
+                }
             }
 
             int[] fields = Grego.timeToFields(current, null);
@@ -305,8 +318,8 @@ public class OlsonTimeZone extends BasicTimeZone {
             if (transitionTimes[i] >= limit) {
                 break;
             }
-            if (transitionTimes[i] >= start &&
-                dstOffset(typeData[i]) != 0) {
+            if ((transitionTimes[i] >= start && dstOffset(typeData[i]) != 0)
+                    || (transitionTimes[i] > start && i > 0 && dstOffset(typeData[i - 1]) != 0)) {
                 return true;
             }
         }
