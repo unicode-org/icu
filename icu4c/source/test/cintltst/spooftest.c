@@ -367,6 +367,41 @@ static void TestUSpoofCAPI(void) {
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(0, checkResults);
     TEST_TEARDOWN;
+
+    /*
+     * AllowedChars   set/get the USet of allowed characters.
+     */
+    TEST_SETUP
+        const USet  *set;
+        USet        *tmpSet;
+        int32_t      checkResults;
+        
+        /* By default, we should see no restriction; the USet should allow all characters. */
+        set = uspoof_getAllowedChars(sc, &status);
+        TEST_ASSERT_SUCCESS(status);
+        tmpSet = uset_open(0, 0x10ffff);
+        TEST_ASSERT(uset_equals(tmpSet, set));
+
+        /* Setting the allowed chars should enable the check. */
+        uspoof_setChecks(sc, USPOOF_ALL_CHECKS & ~USPOOF_CHAR_LIMIT, &status);
+        TEST_ASSERT_SUCCESS(status);
+
+        /* Remove a character that is in our good Latin test identifier from the allowed chars set. */
+        uset_remove(tmpSet, goodLatin[1]);
+        uspoof_setAllowedChars(sc, tmpSet, &status);
+        TEST_ASSERT_SUCCESS(status);
+        uset_close(tmpSet);
+
+        /* Latin Identifier should now fail; other non-latin test cases should still be OK */
+        checkResults = uspoof_check(sc, goodLatin, -1, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(USPOOF_CHAR_LIMIT, checkResults);
+
+        checkResults = uspoof_check(sc, goodGreek, -1, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(USPOOF_WHOLE_SCRIPT_CONFUSABLE, checkResults);
+    TEST_TEARDOWN;
+
 }
 
 
