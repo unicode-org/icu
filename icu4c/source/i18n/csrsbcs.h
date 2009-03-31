@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2006, International Business Machines
+ *   Copyright (C) 2005-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -350,6 +350,30 @@ class CharsetRecog_KOI8_R : public CharsetRecog_sbcs
 {
 public:
     virtual ~CharsetRecog_KOI8_R();
+
+    const char *getName() const;
+
+    const char *getLanguage() const;
+
+    int32_t match(InputText *textIn);
+};
+
+class CharsetRecog_IBM424_he : public CharsetRecog_sbcs
+{
+public:
+    virtual ~CharsetRecog_IBM424_he();
+
+    const char *getName() const;
+
+    const char *getLanguage() const;
+
+    int32_t match(InputText *textIn);
+};
+
+class CharsetRecog_IBM420_ar : public CharsetRecog_sbcs
+{
+public:
+    virtual ~CharsetRecog_IBM420_ar();
 
     const char *getName() const;
 
