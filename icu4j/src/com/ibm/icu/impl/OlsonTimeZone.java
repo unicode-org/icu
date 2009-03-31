@@ -9,6 +9,7 @@ package com.ibm.icu.impl;
 import java.util.Arrays;
 import java.util.Date;
 
+import com.ibm.icu.util.AnnualTimeZoneRule;
 import com.ibm.icu.util.BasicTimeZone;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.DateTimeRule;
@@ -173,18 +174,56 @@ public class OlsonTimeZone extends BasicTimeZone {
             return;
         }
         long current = System.currentTimeMillis();
+
         if (current < finalMillis) {
+            boolean bDst = false;
+            SimpleTimeZone stz = new SimpleTimeZone(offsetMillis, getID());
+
+            TimeZoneRule[] currentRules = getSimpleTimeZoneRulesNear(current);
+            if (currentRules.length == 3
+                    && (currentRules[1] instanceof AnnualTimeZoneRule)
+                    && (currentRules[2] instanceof AnnualTimeZoneRule)) {
+                // A pair of AnnualTimeZoneRule
+                AnnualTimeZoneRule r1 = (AnnualTimeZoneRule)currentRules[1];
+                AnnualTimeZoneRule r2 = (AnnualTimeZoneRule)currentRules[2];
+                DateTimeRule start, end;
+                int offset1 = r1.getRawOffset() + r1.getDSTSavings();
+                int offset2 = r2.getRawOffset() + r2.getDSTSavings();
+                int sav;
+                if (offset1 > offset2) {
+                    start = r1.getRule();
+                    end = r2.getRule();
+                    sav = offset1 - offset2;
+                } else {
+                    start = r2.getRule();
+                    end = r1.getRule();
+                    sav = offset2 - offset1;
+                }
+                // getSimpleTimeZoneRulesNear always return rules using DOW / WALL_TIME
+                stz.setStartRule(start.getRuleMonth(), start.getRuleWeekInMonth(), start.getRuleDayOfWeek(),
+                                        start.getRuleMillisInDay());
+                stz.setEndRule(end.getRuleMonth(), end.getRuleWeekInMonth(), end.getRuleDayOfWeek(),
+                                        end.getRuleMillisInDay());
+                // set DST saving amount and start year
+                stz.setDSTSavings(sav);
+
+                bDst = true;
+            }
+
             int[] fields = Grego.timeToFields(current, null);
             finalYear = fields[0] - 1; // finalYear is (year of finalMillis) - 1
             finalMillis = Grego.fieldsToDay(fields[0], 0, 1);
-        }
 
-        if (finalZone == null) {
-            // Create SimpleTimeZone instance to store the offset
-            finalZone = new SimpleTimeZone(offsetMillis, getID());
+            if (bDst) {
+                // we probably do not need to set start year of final rule
+                // to finalzone itself, but we always do this for now.
+                stz.setStartYear(finalYear);
+            }
+
+            finalZone = stz;
+
         } else {
             finalZone.setRawOffset(offsetMillis);
-            finalZone.setStartYear(finalYear); // finalYear is (year of finalMillis) - 1
         }
 
         transitionRulesInitialized = false;
