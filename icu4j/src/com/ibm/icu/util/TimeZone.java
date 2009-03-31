@@ -456,6 +456,8 @@ abstract public class TimeZone implements Serializable, Cloneable {
                 }
             } else {
                 // The display name for standard time was requested, but currently in DST
+                // or display name for daylight saving time was requested, but this zone no longer
+                // observes DST.
                 tz = new SimpleTimeZone(offsets[0], getID());
                 format.setTimeZone(tz);
             }

@@ -38,6 +38,16 @@ public class TimeZoneTest extends TestFmwk
 {
     static final int millisPerHour = 3600000;
 
+    // TODO: We should probably read following data at runtime, so we can update
+    // the these values every release with necessary data changes.
+
+    // Some test case data is current date/tzdata version sensitive and producing errors
+    // when year/rule are changed.
+    static final int REFERENCE_YEAR = 2009;
+    static final String REFERENCE_DATA_VERSION = "2009d";
+
+
+
     public static void main(String[] args) throws Exception {
         new TimeZoneTest().run(args);
     }
@@ -104,13 +114,7 @@ public class TimeZoneTest extends TestFmwk
      */
     public void TestShortZoneIDs() throws Exception {
 
-        // TODO: This test case is tzdata sensitive.
-        // We should actually put the data version in this test code
-        // at build time.  For now, we just hardcode the version string
-        // and display warning instead of error if non-reference tzdata
-        // version is used.
-        final String REFERENCE_DATA_VERSION = "2008i";
-
+        // This test case is tzdata version sensitive.
         boolean isNonReferenceTzdataVersion = false;
         String tzdataVer = TimeZone.getTZDataVersion();
         if (!tzdataVer.equals(REFERENCE_DATA_VERSION)) {
@@ -138,7 +142,6 @@ public class TimeZoneTest extends TestFmwk
         // data is valid for the date after the reference year below.
         // If system clock is before the year, some test cases may
         // fail.
-        final int REFERENCE_YEAR = 2009;
         GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("Etc/GMT"));
         cal.set(REFERENCE_YEAR, Calendar.JANUARY, 2); // day 2 in GMT
 
@@ -1535,9 +1538,8 @@ public class TimeZoneTest extends TestFmwk
             // Southern Hemisphere, all data from meta:Australia_Western
             {"Australia/Perth",     "en",   Boolean.FALSE,  TZSHORT,    "GMT+08:00"/*"AWST"*/},
             {"Australia/Perth",     "en",   Boolean.FALSE,  TZLONG,     "Australian Western Standard Time"},
-//FIXME: Temporarily disable the test cases below.  See #6814
-//            {"Australia/Perth",     "en",   Boolean.TRUE,   TZSHORT,    "GMT+09:00"/*"AWDT"*/},
-//            {"Australia/Perth",     "en",   Boolean.TRUE,   TZLONG,     "Australian Western Daylight Time"},
+            {"Australia/Perth",     "en",   Boolean.TRUE,   TZSHORT,    "GMT+09:00"/*"AWDT"*/},
+            {"Australia/Perth",     "en",   Boolean.TRUE,   TZLONG,     "Australian Western Daylight Time"},
 
             {"America/Sao_Paulo",   "en",   Boolean.FALSE,  TZSHORT,    "GMT-03:00"/*"BRT"*/},
             {"America/Sao_Paulo",   "en",   Boolean.FALSE,  TZLONG,     "Brasilia Time"},
@@ -1562,6 +1564,12 @@ public class TimeZoneTest extends TestFmwk
             {"Europe/London",       "en",   Boolean.TRUE,   TZLONG,     "British Summer Time"},
         };
 
+        boolean isReferenceYear = true;
+        GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("Etc/GMT"));
+        if (cal.get(Calendar.YEAR) != REFERENCE_YEAR) {
+            isReferenceYear = false;
+        }
+
         boolean sawAnError = false;
         for (int testNum = 0; testNum < zoneDisplayTestData.length; testNum++) {
             ULocale locale = new ULocale((String)zoneDisplayTestData[testNum][1]);
@@ -1569,18 +1577,28 @@ public class TimeZoneTest extends TestFmwk
             String displayName = zone.getDisplayName(((Boolean)zoneDisplayTestData[testNum][2]).booleanValue(),
                     ((Integer)zoneDisplayTestData[testNum][3]).intValue());
             if (!displayName.equals(zoneDisplayTestData[testNum][4])) {
-                sawAnError = true;
-                errln("Incorrect time zone display name.  zone = "
-                        + zoneDisplayTestData[testNum][0] + ",\n"
-                        + "   locale = " + locale
-                        + ",   style = " + (zoneDisplayTestData[testNum][3] == TZSHORT ? "SHORT" : "LONG")
-                        + ",   Summertime = " + zoneDisplayTestData[testNum][2] + "\n"
-                        + "   Expected " + zoneDisplayTestData[testNum][4]
-                        + ",   Got " + displayName);
+                if (isReferenceYear) {
+                    sawAnError = true;
+                    errln("Incorrect time zone display name.  zone = "
+                            + zoneDisplayTestData[testNum][0] + ",\n"
+                            + "   locale = " + locale
+                            + ",   style = " + (zoneDisplayTestData[testNum][3] == TZSHORT ? "SHORT" : "LONG")
+                            + ",   Summertime = " + zoneDisplayTestData[testNum][2] + "\n"
+                            + "   Expected " + zoneDisplayTestData[testNum][4]
+                            + ",   Got " + displayName);
+                } else {
+                    logln("Incorrect time zone display name.  zone = "
+                            + zoneDisplayTestData[testNum][0] + ",\n"
+                            + "   locale = " + locale
+                            + ",   style = " + (zoneDisplayTestData[testNum][3] == TZSHORT ? "SHORT" : "LONG")
+                            + ",   Summertime = " + zoneDisplayTestData[testNum][2] + "\n"
+                            + "   Expected " + zoneDisplayTestData[testNum][4]
+                            + ",   Got " + displayName);
+                }
             }
         }
         if (sawAnError) {
-            errln("Note: Errors could be the result of changes to zoneStrings locale data");
+            logln("Note: Errors could be the result of changes to zoneStrings locale data");
         }
     }
 }
