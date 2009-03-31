@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2006, International Business Machines
+ *   Copyright (C) 2005-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -27,6 +27,8 @@ public:
     virtual void C1BytesTest();
     virtual void InputFilterTest();
     virtual void DetectionTest();
+    virtual void IBM424Test();
+    virtual void IBM420Test();
 
 private:
     void checkEncoding(const UnicodeString &testString,
