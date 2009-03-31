@@ -1,6 +1,6 @@
 /*
  ****************************************************************************
- * Copyright (C) 2005-2007, International Business Machines Corporation and *
+ * Copyright (C) 2005-2009, International Business Machines Corporation and *
  * others. All Rights Reserved.                                             *
  ************************************************************************** *
  *
@@ -39,6 +39,8 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         
         private int ngramCount;
         private int hitCount;
+        
+        private byte spaceChar;
         
         public NGramParser(int[] theNgramList, byte[] theByteMap)
         {
@@ -119,30 +121,35 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         
         public int parse(CharsetDetector det)
         {
+            return parse (det, (byte)0x20);
+        }
+        public int parse(CharsetDetector det, byte spaceCh)
+        {
             int b;
             boolean ignoreSpace = false;
+            this.spaceChar = spaceCh;
             
             while ((b = nextByte(det)) >= 0) {
                 byte mb = byteMap[b];
                 
                 // TODO: 0x20 might not be a space in all character sets...
                 if (mb != 0) {
-                    if (!(mb == 0x20 && ignoreSpace)) {
+                    if (!(mb == spaceChar && ignoreSpace)) {
                         addByte(mb);                    
                     }
                     
-                    ignoreSpace = (mb == 0x20);
+                    ignoreSpace = (mb == spaceChar);
                 }
             }
             
             // TODO: Is this OK? The buffer could have ended in the middle of a word...
-            addByte(0x20);
+            addByte(spaceChar);
 
             double rawPercent = (double) hitCount / (double) ngramCount;
             
-//            if (rawPercent <= 2.0) {
-//                return 0;
-//            }
+//                if (rawPercent <= 2.0) {
+//                    return 0;
+//                }
             
             // TODO - This is a bit of a hack to take care of a case
             // were we were getting a confidence of 135...
@@ -158,11 +165,16 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
     
     int match(CharsetDetector det, int[] ngrams,  byte[] byteMap)
     {
+        return match (det, ngrams, byteMap, (byte)0x20);
+    }
+    
+    int match(CharsetDetector det, int[] ngrams,  byte[] byteMap, byte spaceChar)
+    {
         NGramParser parser = new NGramParser(ngrams, byteMap);
         
         haveC1Bytes = det.fC1Bytes;
         
-        return parser.parse(det);
+        return parser.parse(det, spaceChar);
     }
     
     abstract static class CharsetRecog_8859_1 extends CharsetRecog_sbcs
@@ -1048,6 +1060,105 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         public int match(CharsetDetector det)
         {
             return match(det, ngrams, byteMap);
+        }
+    }
+    
+    static class CharsetRecog_IBM424_he extends CharsetRecog_sbcs
+    {
+        protected static byte[] byteMap = {
+/*                 -0           -1           -2           -3           -4           -5           -6           -7           -8           -9           -A           -B           -C           -D           -E           -F   */
+/* 0- */    (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* 1- */    (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* 2- */    (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* 3- */    (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* 4- */    (byte) 0x40, (byte) 0x41, (byte) 0x42, (byte) 0x43, (byte) 0x44, (byte) 0x45, (byte) 0x46, (byte) 0x47, (byte) 0x48, (byte) 0x49, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* 5- */    (byte) 0x40, (byte) 0x51, (byte) 0x52, (byte) 0x53, (byte) 0x54, (byte) 0x55, (byte) 0x56, (byte) 0x57, (byte) 0x58, (byte) 0x59, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* 6- */    (byte) 0x40, (byte) 0x40, (byte) 0x62, (byte) 0x63, (byte) 0x64, (byte) 0x65, (byte) 0x66, (byte) 0x67, (byte) 0x68, (byte) 0x69, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* 7- */    (byte) 0x40, (byte) 0x71, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x00, (byte) 0x40, (byte) 0x40, 
+/* 8- */    (byte) 0x40, (byte) 0x81, (byte) 0x82, (byte) 0x83, (byte) 0x84, (byte) 0x85, (byte) 0x86, (byte) 0x87, (byte) 0x88, (byte) 0x89, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* 9- */    (byte) 0x40, (byte) 0x91, (byte) 0x92, (byte) 0x93, (byte) 0x94, (byte) 0x95, (byte) 0x96, (byte) 0x97, (byte) 0x98, (byte) 0x99, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* A- */    (byte) 0xA0, (byte) 0x40, (byte) 0xA2, (byte) 0xA3, (byte) 0xA4, (byte) 0xA5, (byte) 0xA6, (byte) 0xA7, (byte) 0xA8, (byte) 0xA9, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* B- */    (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* C- */    (byte) 0x40, (byte) 0x81, (byte) 0x82, (byte) 0x83, (byte) 0x84, (byte) 0x85, (byte) 0x86, (byte) 0x87, (byte) 0x88, (byte) 0x89, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* D- */    (byte) 0x40, (byte) 0x91, (byte) 0x92, (byte) 0x93, (byte) 0x94, (byte) 0x95, (byte) 0x96, (byte) 0x97, (byte) 0x98, (byte) 0x99, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* E- */    (byte) 0x40, (byte) 0x40, (byte) 0xA2, (byte) 0xA3, (byte) 0xA4, (byte) 0xA5, (byte) 0xA6, (byte) 0xA7, (byte) 0xA8, (byte) 0xA9, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* F- */    (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+        };
+
+        public String getName()
+        {
+            return "IBM424";
+        }
+        private static int[] ngrams = {
+            0x404146, 0x404148, 0x404151, 0x404171, 0x404251, 0x404256, 0x404541, 0x404546, 0x404551, 0x404556, 0x404562, 0x404569, 0x404571, 0x405441, 0x405445, 0x405641, 
+            0x406254, 0x406954, 0x417140, 0x454041, 0x454042, 0x454045, 0x454054, 0x454056, 0x454069, 0x454641, 0x464140, 0x465540, 0x465740, 0x466840, 0x467140, 0x514045, 
+            0x514540, 0x514671, 0x515155, 0x515540, 0x515740, 0x516840, 0x517140, 0x544041, 0x544045, 0x544140, 0x544540, 0x554041, 0x554042, 0x554045, 0x554054, 0x554056, 
+            0x554069, 0x564540, 0x574045, 0x584540, 0x585140, 0x585155, 0x625440, 0x684045, 0x685155, 0x695440, 0x714041, 0x714042, 0x714045, 0x714054, 0x714056, 0x714069, 
+        };
+
+        public String getLanguage()
+        {
+            return "he";
+        }
+        
+        public int match(CharsetDetector det)
+        {
+            return match(det, ngrams, byteMap, (byte)0x40);
+        }
+    }
+    
+    static class CharsetRecog_IBM420_ar extends CharsetRecog_sbcs
+    {
+        protected static byte[] byteMap = {
+/*                 -0           -1           -2           -3           -4           -5           -6           -7           -8           -9           -A           -B           -C           -D           -E           -F   */
+/* 0- */    (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* 1- */    (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* 2- */    (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* 3- */    (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* 4- */    (byte) 0x40, (byte) 0x40, (byte) 0x42, (byte) 0x43, (byte) 0x44, (byte) 0x45, (byte) 0x46, (byte) 0x47, (byte) 0x48, (byte) 0x49, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* 5- */    (byte) 0x40, (byte) 0x51, (byte) 0x52, (byte) 0x40, (byte) 0x40, (byte) 0x55, (byte) 0x56, (byte) 0x57, (byte) 0x58, (byte) 0x59, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* 6- */    (byte) 0x40, (byte) 0x40, (byte) 0x62, (byte) 0x63, (byte) 0x64, (byte) 0x65, (byte) 0x66, (byte) 0x67, (byte) 0x68, (byte) 0x69, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* 7- */    (byte) 0x70, (byte) 0x71, (byte) 0x72, (byte) 0x73, (byte) 0x74, (byte) 0x75, (byte) 0x76, (byte) 0x77, (byte) 0x78, (byte) 0x79, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* 8- */    (byte) 0x80, (byte) 0x81, (byte) 0x82, (byte) 0x83, (byte) 0x84, (byte) 0x85, (byte) 0x86, (byte) 0x87, (byte) 0x88, (byte) 0x89, (byte) 0x8A, (byte) 0x8B, (byte) 0x8C, (byte) 0x8D, (byte) 0x8E, (byte) 0x8F, 
+/* 9- */    (byte) 0x90, (byte) 0x91, (byte) 0x92, (byte) 0x93, (byte) 0x94, (byte) 0x95, (byte) 0x96, (byte) 0x97, (byte) 0x98, (byte) 0x99, (byte) 0x9A, (byte) 0x9B, (byte) 0x9C, (byte) 0x9D, (byte) 0x9E, (byte) 0x9F, 
+/* A- */    (byte) 0xA0, (byte) 0x40, (byte) 0xA2, (byte) 0xA3, (byte) 0xA4, (byte) 0xA5, (byte) 0xA6, (byte) 0xA7, (byte) 0xA8, (byte) 0xA9, (byte) 0xAA, (byte) 0xAB, (byte) 0xAC, (byte) 0xAD, (byte) 0xAE, (byte) 0xAF, 
+/* B- */    (byte) 0xB0, (byte) 0xB1, (byte) 0xB2, (byte) 0xB3, (byte) 0xB4, (byte) 0xB5, (byte) 0x40, (byte) 0x40, (byte) 0xB8, (byte) 0xB9, (byte) 0xBA, (byte) 0xBB, (byte) 0xBC, (byte) 0xBD, (byte) 0xBE, (byte) 0xBF, 
+/* C- */    (byte) 0x40, (byte) 0x81, (byte) 0x82, (byte) 0x83, (byte) 0x84, (byte) 0x85, (byte) 0x86, (byte) 0x87, (byte) 0x88, (byte) 0x89, (byte) 0x40, (byte) 0xCB, (byte) 0x40, (byte) 0xCD, (byte) 0x40, (byte) 0xCF, 
+/* D- */    (byte) 0x40, (byte) 0x91, (byte) 0x92, (byte) 0x93, (byte) 0x94, (byte) 0x95, (byte) 0x96, (byte) 0x97, (byte) 0x98, (byte) 0x99, (byte) 0xDA, (byte) 0xDB, (byte) 0xDC, (byte) 0xDD, (byte) 0xDE, (byte) 0xDF, 
+/* E- */    (byte) 0x40, (byte) 0x40, (byte) 0xA2, (byte) 0xA3, (byte) 0xA4, (byte) 0xA5, (byte) 0xA6, (byte) 0xA7, (byte) 0xA8, (byte) 0xA9, (byte) 0xEA, (byte) 0xEB, (byte) 0x40, (byte) 0xED, (byte) 0xEE, (byte) 0xEF, 
+/* F- */    (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0xFB, (byte) 0xFC, (byte) 0xFD, (byte) 0xFE, (byte) 0x40, 
+        };
+
+        public String getName()
+        {
+            return "IBM420";
+        }
+
+        private static int[] ngrams = {
+            0x4056BD, 0x405856, 0x409AB1, 0x40ABDC, 0x40B1B1, 0x40BBBD, 0x40CF56, 0x564056, 0x564640, 0x566340, 0x567540, 0x56B140, 0x56B149, 0x56B156, 0x56B158, 0x56B167, 
+            0x56B169, 0x56B173, 0x56B173, 0x56B19A, 0x56B1AD, 0x56B1BB, 0x56B1DC, 0x56BB40, 0x56BD40, 0x56BD63, 0x584056, 0x624056, 0x624073, 0x6240AB, 0x6240BB, 0x634056, 
+            0x734056, 0x7356B1, 0x736240, 0x73BD40, 0x754056, 0x756240, 0x774540, 0x9A4056, 0x9AB1DA, 0xABDC40, 0xB14056, 0xB16240, 0xB17745, 0xB1DA40, 0xB1DC40, 0xBB5640, 
+            0xBB6240, 0xBBBD40, 0xBD4056, 0xCB4056, 0xCB5640, 0xD67940, 0xDA4056, 0xDC4056, 0xDC4073, 0xDC40BB, 0xDCBD40, 0xEAB140, 0x4056B1, 0x56B163, 0x6240B1, 0xBB4056, 
+
+        };
+
+        public String getLanguage()
+        {
+            return "ar";
+        }
+        
+        public int match(CharsetDetector det)
+        {
+            //arabic shaping class, method shape/unshape
+            ArabicShaping as = new ArabicShaping(ArabicShaping.LETTERS_SHAPE);
+            try {
+                String s = new String (det.fInputBytes, "IBM420");
+                s = as.shape(s);
+                det.setText(s.getBytes("IBM420"));
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            return match(det, ngrams, byteMap, (byte)0x40);
         }
     }
 }
