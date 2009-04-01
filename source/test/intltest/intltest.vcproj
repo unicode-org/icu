@@ -413,6 +413,18 @@
 			</File>
 		</Filter>
 		<Filter
+			Name="spoof detection"
+			>
+			<File
+				RelativePath=".\itspoof.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\itspoof.h"
+				>
+			</File>
+		</Filter>
+		<Filter
 			Name="collation"
 			>
 			<File
