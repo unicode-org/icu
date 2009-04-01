@@ -449,7 +449,7 @@ static UChar * convertFromUTF8(UChar *outBuf, int32_t outBufCapacity, int32_t *o
     UChar *dest = outBuf;
     u_strFromUTF8(dest, outBufCapacity, outputLength, in, inLength, status);
     if (*status == U_BUFFER_OVERFLOW_ERROR) {
-        dest = static_cast<UChar *>(malloc(*outputLength * sizeof(UChar)));
+        dest = static_cast<UChar *>(uprv_malloc(*outputLength * sizeof(UChar)));
         if (dest == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             return NULL;
