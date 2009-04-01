@@ -901,7 +901,7 @@ public class ZoneStringFormat {
             if (locale != null) {
                 region = locale.getCountry();
                 if (region.length() == 0) {
-                    ULocale tmp = ULocale.addLikelySubtag(locale);
+                    ULocale tmp = ULocale.addLikelySubtags(locale);
                     region = tmp.getCountry();
                 }
             } else {

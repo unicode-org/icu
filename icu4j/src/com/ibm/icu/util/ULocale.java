@@ -3143,17 +3143,6 @@ public final class ULocale implements Serializable {
     private static final String UNDEFINED_REGION = "ZZ";
 
     /**
-     * Supply most likely subtags to the given locale
-     * @param loc The input locale
-     * @return A ULocale with most likely subtags filled in.
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    public static ULocale addLikelySubtag(ULocale loc) {
-        return addLikelySubtags(loc);
-    }
-
-    /**
      * Add the likely subtags for a provided locale ID, per the algorithm described
      * in the following CLDR technical report:
      *
