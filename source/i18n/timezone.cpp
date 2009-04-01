@@ -93,6 +93,7 @@ static char gStrBuf[256];
 #define MINUS 0x002D
 #define PLUS 0x002B
 #define ZERO_DIGIT 0x0030
+#define COLON 0x003A
 
 // Static data and constants
 
@@ -1298,7 +1299,7 @@ TimeZone::parseCustomID(const UnicodeString& id, int32_t& sign,
 
         if (pos.getIndex() < id.length()) {
             if (pos.getIndex() - start > 2
-                || id[pos.getIndex()] != 0x003A /*':'*/) {
+                || id[pos.getIndex()] != COLON) {
                 delete numberFormat;
                 return FALSE;
             }
@@ -1314,7 +1315,7 @@ TimeZone::parseCustomID(const UnicodeString& id, int32_t& sign,
             }
             min = n.getLong();
             if (pos.getIndex() < id.length()) {
-                if (id[pos.getIndex()] != 0x003A /*':'*/) {
+                if (id[pos.getIndex()] != COLON) {
                     delete numberFormat;
                     return FALSE;
                 }
@@ -1393,7 +1394,7 @@ TimeZone::formatCustomID(int32_t hour, int32_t min, int32_t sec,
             id += (UChar)(ZERO_DIGIT + hour/10);
         }
         id += (UChar)(ZERO_DIGIT + hour%10);
-
+        id += (UChar)COLON;
         if (min < 10) {
             id += (UChar)ZERO_DIGIT;
         } else {
@@ -1402,6 +1403,7 @@ TimeZone::formatCustomID(int32_t hour, int32_t min, int32_t sec,
         id += (UChar)(ZERO_DIGIT + min%10);
 
         if (sec) {
+            id += (UChar)COLON;
             if (sec < 10) {
                 id += (UChar)ZERO_DIGIT;
             } else {
