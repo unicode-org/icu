@@ -1,5 +1,5 @@
 # aclocal.m4 for ICU
-# Copyright (c) 1999-2008, International Business Machines Corporation and
+# Copyright (c) 1999-2009, International Business Machines Corporation and
 # others. All Rights Reserved.
 # Stephen F. Booth
 
@@ -8,7 +8,7 @@
 # ICU_CHECK_MH_FRAG
 AC_DEFUN(ICU_CHECK_MH_FRAG, [
 	AC_CACHE_CHECK(
-		[which Makefile fragment to use],
+		[which Makefile fragment to use for ${host}],
 		[icu_cv_host_frag],
 		[
 case "${host}" in
