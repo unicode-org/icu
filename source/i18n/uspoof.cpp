@@ -514,7 +514,7 @@ uspoof_areConfusableUnicodeString(const USpoofChecker *sc,
 
 
 
-U_CAPI int32_t U_EXPORT
+U_CAPI int32_t U_EXPORT2
 uspoof_checkUnicodeString(const USpoofChecker *sc,
                           const U_NAMESPACE_QUALIFIER UnicodeString &text, 
                           int32_t *position,
