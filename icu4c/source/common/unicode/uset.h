@@ -784,12 +784,12 @@ uset_indexOf(const USet* set, UChar32 c);
  * out of range, return (UChar32)-1.  The inverse of this method is
  * <code>indexOf()</code>.
  * @param set the set
- * @param index an index from 0..size()-1 to obtain the char for
+ * @param charIndex an index from 0..size()-1 to obtain the char for
  * @return the character at the given index, or (UChar32)-1.
  * @stable ICU 3.2
  */
 U_STABLE UChar32 U_EXPORT2
-uset_charAt(const USet* set, int32_t index);
+uset_charAt(const USet* set, int32_t charIndex);
 
 /**
  * Returns the number of characters and strings contained in the given
