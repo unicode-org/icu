@@ -27,6 +27,14 @@ enum {
     UCNV_NEED_TO_WRITE_BOM=1
 };
 
+/*
+ * The UTF-16 toUnicode implementation is also used for the Java-specific
+ * "with BOM" variants of UTF-16BE and UTF-16LE.
+ */
+static void
+_UTF16ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
+                           UErrorCode *pErrorCode);
+
 /* UTF-16BE ----------------------------------------------------------------- */
 
 #if U_IS_BIG_ENDIAN
@@ -250,6 +258,11 @@ _UTF16BEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
 
     uint32_t targetCapacity, length, count, sourceIndex;
     UChar c, trail;
+
+    if(pArgs->converter->mode<8) {
+        _UTF16ToUnicodeWithOffsets(pArgs, pErrorCode);
+        return;
+    }
 
     cnv=pArgs->converter;
     source=(const uint8_t *)pArgs->source;
@@ -478,6 +491,10 @@ _UTF16BEGetNextUChar(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
     const uint8_t *s, *sourceLimit;
     UChar32 c;
 
+    if(pArgs->converter->mode<8) {
+        return UCNV_GET_NEXT_UCHAR_USE_TO_U;
+    }
+
     s=(const uint8_t *)pArgs->source;
     sourceLimit=(const uint8_t *)pArgs->sourceLimit;
 
@@ -548,15 +565,54 @@ _UTF16BEGetNextUChar(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
     return c;
 } 
 
+static void
+_UTF16BEReset(UConverter *cnv, UConverterResetChoice choice) {
+    if(choice<=UCNV_RESET_TO_UNICODE) {
+        /* reset toUnicode state */
+        if(UCNV_GET_VERSION(cnv)==0) {
+            cnv->mode=8; /* no BOM handling */
+        } else {
+            cnv->mode=0; /* Java-specific "UnicodeBig" requires BE BOM or no BOM */
+        }
+    }
+    if(choice!=UCNV_RESET_TO_UNICODE && UCNV_GET_VERSION(cnv)==1) {
+        /* reset fromUnicode for "UnicodeBig": prepare to output the UTF-16BE BOM */
+        cnv->fromUnicodeStatus=UCNV_NEED_TO_WRITE_BOM;
+    }
+}
+
+static void
+_UTF16BEOpen(UConverter *cnv,
+             UConverterLoadArgs *pArgs,
+             UErrorCode *pErrorCode) {
+    if(pArgs->onlyTestIsLoadable) {
+        pArgs->isLoadable=TRUE;
+    } else {
+        if(UCNV_GET_VERSION(cnv)>1) {
+            cnv->options=0;
+        }
+        _UTF16BEReset(cnv, UCNV_RESET_BOTH);
+    }
+}
+
+static const char *
+_UTF16BEGetName(const UConverter *cnv) {
+    if(UCNV_GET_VERSION(cnv)==0) {
+        return "UTF-16BE";
+    } else {
+        return "UTF-16BE,version=1";
+    }
+}
+
 static const UConverterImpl _UTF16BEImpl={
     UCNV_UTF16_BigEndian,
 
     NULL,
     NULL,
 
+    _UTF16BEOpen,
     NULL,
-    NULL,
-    NULL,
+    _UTF16BEReset,
 
     _UTF16BEToUnicodeWithOffsets,
     _UTF16BEToUnicodeWithOffsets,
@@ -565,7 +621,7 @@ static const UConverterImpl _UTF16BEImpl={
     _UTF16BEGetNextUChar,
 
     NULL,
-    NULL,
+    _UTF16BEGetName,
     NULL,
     NULL,
     ucnv_getNonSurrogateUnicodeSet
@@ -805,6 +861,11 @@ _UTF16LEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     uint32_t targetCapacity, length, count, sourceIndex;
     UChar c, trail;
 
+    if(pArgs->converter->mode<8) {
+        _UTF16ToUnicodeWithOffsets(pArgs, pErrorCode);
+        return;
+    }
+
     cnv=pArgs->converter;
     source=(const uint8_t *)pArgs->source;
     length=(int32_t)((const uint8_t *)pArgs->sourceLimit-source);
@@ -1032,6 +1093,10 @@ _UTF16LEGetNextUChar(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
     const uint8_t *s, *sourceLimit;
     UChar32 c;
 
+    if(pArgs->converter->mode<8) {
+        return UCNV_GET_NEXT_UCHAR_USE_TO_U;
+    }
+
     s=(const uint8_t *)pArgs->source;
     sourceLimit=(const uint8_t *)pArgs->sourceLimit;
 
@@ -1102,15 +1167,54 @@ _UTF16LEGetNextUChar(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
     return c;
 } 
 
+static void
+_UTF16LEReset(UConverter *cnv, UConverterResetChoice choice) {
+    if(choice<=UCNV_RESET_TO_UNICODE) {
+        /* reset toUnicode state */
+        if(UCNV_GET_VERSION(cnv)==0) {
+            cnv->mode=8; /* no BOM handling */
+        } else {
+            cnv->mode=0; /* Java-specific "UnicodeLittle" requires LE BOM or no BOM */
+        }
+    }
+    if(choice!=UCNV_RESET_TO_UNICODE && UCNV_GET_VERSION(cnv)==1) {
+        /* reset fromUnicode for "UnicodeLittle": prepare to output the UTF-16LE BOM */
+        cnv->fromUnicodeStatus=UCNV_NEED_TO_WRITE_BOM;
+    }
+}
+
+static void
+_UTF16LEOpen(UConverter *cnv,
+             UConverterLoadArgs *pArgs,
+             UErrorCode *pErrorCode) {
+    if(pArgs->onlyTestIsLoadable) {
+        pArgs->isLoadable=TRUE;
+    } else {
+        if(UCNV_GET_VERSION(cnv)>1) {
+            cnv->options=0;
+        }
+        _UTF16LEReset(cnv, UCNV_RESET_BOTH);
+    }
+}
+
+static const char *
+_UTF16LEGetName(const UConverter *cnv) {
+    if(UCNV_GET_VERSION(cnv)==0) {
+        return "UTF-16LE";
+    } else {
+        return "UTF-16LE,version=1";
+    }
+}
+
 static const UConverterImpl _UTF16LEImpl={
     UCNV_UTF16_LittleEndian,
 
     NULL,
     NULL,
 
+    _UTF16LEOpen,
     NULL,
-    NULL,
-    NULL,
+    _UTF16LEReset,
 
     _UTF16LEToUnicodeWithOffsets,
     _UTF16LEToUnicodeWithOffsets,
@@ -1119,7 +1223,7 @@ static const UConverterImpl _UTF16LEImpl={
     _UTF16LEGetNextUChar,
 
     NULL,
-    NULL,
+    _UTF16LEGetName,
     NULL,
     NULL,
     ucnv_getNonSurrogateUnicodeSet
@@ -1148,21 +1252,25 @@ const UConverterSharedData _UTF16LEData={
 /*
  * Detect a BOM at the beginning of the stream and select UTF-16BE or UTF-16LE
  * accordingly.
- * This is a simpler version of the UTF-32 converter below, with
+ * This is a simpler version of the UTF-32 converter, with
  * fewer states for shorter BOMs.
  *
  * State values:
  * 0    initial state
- * 1    saw FE
- * 2..4 -
- * 5    saw FF
- * 6..7 -
+ * 1    saw first byte
+ * 2..5 -
+ * 6..7 see _UTF16ToUnicodeWithOffsets() comments in state 1
  * 8    UTF-16BE mode
  * 9    UTF-16LE mode
  *
- * During detection: state&3==number of matching bytes so far.
+ * During detection: state==number of initial bytes seen so far.
  *
  * On output, emit U+FEFF as the first code point.
+ *
+ * Variants:
+ * - UTF-16,version=1 (Java "Unicode" encoding) treats a missing BOM as an error.
+ * - UTF-16BE,version=1 (Java "UnicodeBig" encoding) and
+ *   UTF-16LE,version=1 (Java "UnicodeLittle" encoding) treat a reverse BOM as an error.
  */
 
 static void
@@ -1184,11 +1292,27 @@ _UTF16Open(UConverter *cnv,
     if(pArgs->onlyTestIsLoadable) {
         pArgs->isLoadable=TRUE;
     } else {
+        if(UCNV_GET_VERSION(cnv)>1) {
+            cnv->options=0;
+        }
         _UTF16Reset(cnv, UCNV_RESET_BOTH);
     }
 }
 
-static const char utf16BOM[8]={ (char)0xfe, (char)0xff, 0, 0,    (char)0xff, (char)0xfe, 0, 0 };
+static const char *
+_UTF16GetName(const UConverter *cnv) {
+    if(UCNV_GET_VERSION(cnv)==0) {
+        return "UTF-16";
+    } else {
+        return "UTF-16,version=1";
+    }
+}
+
+const UConverterSharedData _UTF16Data;
+
+#define IS_UTF16BE(cnv) ((cnv)->sharedData==&_UTF16BEData)
+#define IS_UTF16LE(cnv) ((cnv)->sharedData==&_UTF16LEData)
+#define IS_UTF16(cnv) ((cnv)->sharedData==&_UTF16Data)
 
 static void
 _UTF16ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
@@ -1199,7 +1323,7 @@ _UTF16ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     int32_t *offsets=pArgs->offsets;
 
     int32_t state, offsetDelta;
-    char b;
+    uint8_t b;
 
     state=cnv->mode;
 
@@ -1213,51 +1337,76 @@ _UTF16ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     while(source<sourceLimit && U_SUCCESS(*pErrorCode)) {
         switch(state) {
         case 0:
-            b=*source;
-            if(b==(char)0xfe) {
-                state=1; /* could be FE FF */
-            } else if(b==(char)0xff) {
-                state=5; /* could be FF FE */
-            } else {
-                state=8; /* default to UTF-16BE */
-                continue;
-            }
-            ++source;
+            cnv->toUBytes[0]=(uint8_t)*source++;
+            cnv->toULength=1;
+            state=1;
             break;
         case 1:
-        case 5:
-            if(*source==utf16BOM[state]) {
-                ++source;
-                if(state==1) {
+            /*
+             * Only inside this switch case can the state variable
+             * temporarily take two additional values:
+             * 6: BOM error, continue with BE
+             * 7: BOM error, continue with LE
+             */
+            b=*source;
+            if(cnv->toUBytes[0]==0xfe && b==0xff) {
+                if(IS_UTF16LE(cnv)) {
+                    state=7; /* illegal reverse BOM for Java "UnicodeLittle" */
+                } else {
                     state=8; /* detect UTF-16BE */
-                    offsetDelta=(int32_t)(source-pArgs->source);
-                } else if(state==5) {
+                }
+            } else if(cnv->toUBytes[0]==0xff && b==0xfe) {
+                if(IS_UTF16BE(cnv)) {
+                    state=6; /* illegal reverse BOM for Java "UnicodeBig" */
+                } else {
                     state=9; /* detect UTF-16LE */
-                    offsetDelta=(int32_t)(source-pArgs->source);
+                }
+            } else if((IS_UTF16(cnv) && UCNV_GET_VERSION(cnv)==1)) {
+                state=6; /* illegal missing BOM for Java "Unicode" */
+            }
+            if(state>=8) {
+                /* BOM detected, consume it */
+                ++source;
+                cnv->toULength=0;
+                offsetDelta=(int32_t)(source-pArgs->source);
+            } else if(state<6) {
+                /* ok: no BOM, and not a reverse BOM */
+                if(source!=pArgs->source) {
+                    /* reset the source for a correct first offset */
+                    source=pArgs->source;
+                    cnv->toULength=0;
+                }
+                if(IS_UTF16LE(cnv)) {
+                    /* Make Java "UnicodeLittle" default to LE. */
+                    state=9;
+                } else {
+                    /* Make standard UTF-16 and Java "UnicodeBig" default to BE. */
+                    state=8;
                 }
             } else {
-                /* switch to UTF-16BE and pass the previous bytes */
-                if(source!=pArgs->source) {
-                    /* just reset the source */
-                    source=pArgs->source;
-                } else {
-                    UBool oldFlush=pArgs->flush;
-
-                    /* the first byte is from a previous buffer, replay it first */
-                    pArgs->source=utf16BOM+(state&4); /* select the correct BOM */
-                    pArgs->sourceLimit=pArgs->source+1; /* replay previous byte */
-                    pArgs->flush=FALSE; /* this sourceLimit is not the real source stream limit */
-
-                    _UTF16BEToUnicodeWithOffsets(pArgs, pErrorCode);
-
-                    /* restore real pointers; pArgs->source will be set in case 8/9 */
-                    pArgs->sourceLimit=sourceLimit;
-                    pArgs->flush=oldFlush;
-                }
-                state=8;
-                continue;
+                /*
+                 * error: missing BOM, or reverse BOM
+                 * UTF-16,version=1: Java-specific "Unicode" requires a BOM.
+                 * UTF-16BE,version=1: Java-specific "UnicodeBig" requires a BE BOM or no BOM.
+                 * UTF-16LE,version=1: Java-specific "UnicodeLittle" requires an LE BOM or no BOM.
+                 */
+                /* report the non-BOM or reverse BOM as an illegal sequence */
+                cnv->toUBytes[1]=b;
+                cnv->toULength=2;
+                pArgs->source=source+1;
+                /* continue with conversion if the callback resets the error */
+                /*
+                 * Make Java "Unicode" default to BE like standard UTF-16.
+                 * Make Java "UnicodeBig" and "UnicodeLittle" default
+                 * to their normal endiannesses.
+                 */
+                cnv->mode=state+2;
+                *pErrorCode=U_ILLEGAL_ESCAPE_SEQUENCE;
+                return;
             }
-            break;
+            /* convert the rest of the stream */
+            cnv->mode=state;
+            continue;
         case 8:
             /* call UTF-16BE */
             pArgs->source=source;
@@ -1297,15 +1446,7 @@ _UTF16ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
             _UTF16LEToUnicodeWithOffsets(pArgs, pErrorCode);
             break;
         default:
-            /* handle 0<state<8: call UTF-16BE with too-short input */
-            pArgs->source=utf16BOM+(state&4); /* select the correct BOM */
-            pArgs->sourceLimit=pArgs->source+(state&3); /* replay bytes */
-
-            /* no offsets: not enough for output */
-            _UTF16BEToUnicodeWithOffsets(pArgs, pErrorCode);
-            pArgs->source=source;
-            pArgs->sourceLimit=sourceLimit;
-            state=8;
+            /* 0<state<8: framework will report truncation, nothing to do here */
             break;
         }
     }
@@ -1343,7 +1484,7 @@ static const UConverterImpl _UTF16Impl = {
     _UTF16GetNextUChar,
 
     NULL, /* ### TODO implement getStarters for all Unicode encodings?! */
-    NULL,
+    _UTF16GetName,
     NULL,
     NULL,
     ucnv_getNonSurrogateUnicodeSet

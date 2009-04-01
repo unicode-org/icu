@@ -118,6 +118,8 @@ static void TestDefaultName(void);
 static void TestCompareNames(void);
 static void TestSubstString(void);
 static void InvalidArguments(void);
+static void TestGetName(void);
+static void TestUTFBOM(void);
 
 void addTestConvert(TestNode** root);
 
@@ -147,6 +149,8 @@ void addTestConvert(TestNode** root)
     addTest(root, &TestCompareNames,            "tsconv/ccapitst/TestCompareNames");
     addTest(root, &TestSubstString,             "tsconv/ccapitst/TestSubstString");
     addTest(root, &InvalidArguments,            "tsconv/ccapitst/InvalidArguments");
+    addTest(root, &TestGetName,                 "tsconv/ccapitst/TestGetName");
+    addTest(root, &TestUTFBOM,                  "tsconv/ccapitst/TestUTFBOM");
 }
 
 static void ListNames(void) {
@@ -3578,4 +3582,68 @@ InvalidArguments() {
     ucnv_close(cnv);
 }
 
+static void TestGetName() {
+    static const char *const names[] = {
+        "Unicode",                  "UTF-16",
+        "UnicodeBigUnmarked",       "UTF-16BE",
+        "UnicodeBig",               "UTF-16BE,version=1",
+        "UnicodeLittleUnmarked",    "UTF-16LE",
+        "UnicodeLittle",            "UTF-16LE,version=1",
+        "x-UTF-16LE-BOM",           "UTF-16LE,version=1"
+    };
+    int32_t i;
+    for(i = 0; i < LENGTHOF(names); i += 2) {
+        UErrorCode errorCode = U_ZERO_ERROR;
+        UConverter *cnv = ucnv_open(names[i], &errorCode);
+        if(U_SUCCESS(errorCode)) {
+            const char *name = ucnv_getName(cnv, &errorCode);
+            if(U_FAILURE(errorCode) || 0 != strcmp(name, names[i+1])) {
+                log_err("ucnv_getName(%s) = %s != %s -- %s\n",
+                        names[i], name, names[i+1], u_errorName(errorCode));
+            }
+            ucnv_close(cnv);
+        }
+    }
+}
 
+static void TestUTFBOM() {
+    static const UChar a16[] = { 0x61 };
+    static const char *const names[] = {
+        "UTF-16",
+        "UTF-16,version=1",
+        "UTF-16BE",
+        "UnicodeBig",
+        "UTF-16LE",
+        "UnicodeLittle"
+    };
+    static const uint8_t expected[][5] = {
+#if U_IS_BIG_ENDIAN
+        { 4, 0xfe, 0xff, 0, 0x61 },
+        { 4, 0xfe, 0xff, 0, 0x61 },
+#else
+        { 4, 0xff, 0xfe, 0x61, 0 },
+        { 4, 0xff, 0xfe, 0x61, 0 },
+#endif
+
+        { 2, 0, 0x61 },
+        { 4, 0xfe, 0xff, 0, 0x61 },
+
+        { 2, 0x61, 0 },
+        { 4, 0xff, 0xfe, 0x61, 0 }
+    };
+
+    char bytes[10];
+    int32_t i;
+
+    for(i = 0; i < LENGTHOF(names); ++i) {
+        UErrorCode errorCode = U_ZERO_ERROR;
+        UConverter *cnv = ucnv_open(names[i], &errorCode);
+        int32_t length = ucnv_fromUChars(cnv, bytes, (int32_t)sizeof(bytes), a16, 1, &errorCode);
+        const uint8_t *exp = expected[i];
+        if(U_FAILURE(errorCode) || length != exp[0] || 0 != memcmp(bytes, exp+1, length)) {
+            log_err("unexpected %s BOM writing behavior -- %s\n",
+                    names[i], u_errorName(errorCode));
+        }
+        ucnv_close(cnv);
+    }
+}

@@ -1,6 +1,6 @@
 //*******************************************************************************
 //
-//   Copyright (C) 2003-2008, International Business Machines
+//   Copyright (C) 2003-2009, International Business Machines
 //   Corporation and others.  All Rights Reserved.
 //
 //   file name:  conversion.txt
@@ -48,6 +48,33 @@ conversion:table(nofallback) {
     toUnicode {
       Headers { "charset", "bytes", "unicode", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidChars" }
       Cases {
+        // Test ticket 6789: implement Java-compatible Unicode, UnicodeBig and UnicodeLittle converters
+        // For details about these encodings see convrtrs.txt.
+        // Standard UTF-16
+        { "UTF-16",             :bin{ 00610062 }, "ab",           :intvector{ 0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
+        { "UTF-16",             :bin{ feff0061 }, "a",            :intvector{ 2 },   :int{1}, :int{0}, "", "&C", :bin{""} }
+        { "UTF-16",             :bin{ fffe0061 }, "\u6100",       :intvector{ 2 },   :int{1}, :int{0}, "", "&C", :bin{""} }
+        // Java "Unicode" requires a BOM
+        { "UTF-16,version=1",   :bin{ 00610062 }, "\\x00\\x61b",  :intvector{ 0,0,0,0,0,0,0,0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
+        { "UTF-16,version=1",   :bin{ feff0061 }, "a",            :intvector{ 2 },   :int{1}, :int{0}, "", "&C", :bin{""} }
+        { "UTF-16,version=1",   :bin{ fffe0061 }, "\u6100",       :intvector{ 2 },   :int{1}, :int{0}, "", "&C", :bin{""} }
+        // Standard UTF-16BE
+        { "UTF-16BE",           :bin{ 00610062 }, "ab",           :intvector{ 0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
+        { "UTF-16BE",           :bin{ feff0061 }, "\ufeffa",      :intvector{ 0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
+        { "UTF-16BE",           :bin{ fffe0061 }, "\ufffea",      :intvector{ 0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
+        // Java "UnicodeBig" requires a BE BOM or no BOM; it consumes the BE BOM
+        { "UTF-16BE,version=1", :bin{ 00610062 }, "ab",           :intvector{ 0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
+        { "UnicodeBig",         :bin{ feff0061 }, "a",            :intvector{ 2 },   :int{1}, :int{0}, "", "&C", :bin{""} }
+        { "UnicodeBig",         :bin{ fffe0061 }, "\\xFF\\xFEa",  :intvector{ 0,0,0,0,0,0,0,0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
+        // Standard UTF-16LE
+        { "UTF-16LE",           :bin{ 61006200 }, "ab",           :intvector{ 0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
+        { "UTF-16LE",           :bin{ fffe6100 }, "\ufeffa",      :intvector{ 0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
+        { "UTF-16LE",           :bin{ feff6100 }, "\ufffea",      :intvector{ 0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
+        // Java "UnicodeLittle" requires an LE BOM or no BOM; it consumes the LE BOM
+        { "UTF-16LE,version=1", :bin{ 61006200 }, "ab",           :intvector{ 0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
+        { "UnicodeLittle",      :bin{ fffe6100 }, "a",            :intvector{ 2 },   :int{1}, :int{0}, "", "&C", :bin{""} }
+        { "x-UTF-16LE-BOM",     :bin{ feff6100 }, "\\xFE\\xFFa",  :intvector{ 0,0,0,0,0,0,0,0,2 }, :int{1}, :int{0}, "", "&C", :bin{""} }
+
         // Test ticket 5691: consistent illegal sequences
         // The following test cases are for illegal character byte sequences.
         //
@@ -792,6 +819,17 @@ conversion:table(nofallback) {
     fromUnicode {
       Headers { "charset", "unicode", "bytes", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidUChars" }
       Cases {
+        // Test ticket 6789: implement Java-compatible Unicode, UnicodeBig and UnicodeLittle converters
+        // For details about these encodings see convrtrs.txt.
+        // Standard UTF-16BE
+        { "UTF-16BE", "a", :bin{ 0061 }, :intvector{ 0,0 }, :int{1}, :int{0}, "", "?", "" }
+        // Java "UnicodeBig" writes a BOM
+        { "UnicodeBig", "a", :bin{ feff0061 }, :intvector{ -1,-1,0,0 }, :int{1}, :int{0}, "", "?", "" }
+        // Standard UTF-16LE
+        { "UTF-16LE", "a", :bin{ 6100 }, :intvector{ 0,0 }, :int{1}, :int{0}, "", "?", "" }
+        // Java "UnicodeLittle" writes a BOM
+        { "UnicodeLittle", "a", :bin{ fffe6100 }, :intvector{ -1,-1,0,0 }, :int{1}, :int{0}, "", "?", "" }
+
         // Test bug 6071 (1:2 Unicode:charset SBCS mapping).
         {
           "*test1bmp",
