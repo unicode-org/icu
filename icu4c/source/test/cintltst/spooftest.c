@@ -95,18 +95,28 @@ void addUSpoofTest(TestNode** root)
 }
 
 /*
- *  Identifiers, one good and one bad, for verifying that a spoof checker is minimally alive and working.
+ *  Identifiers for verifying that spoof checking is minimally alive and working.
  */
-const UChar goodLatin[] = {(UChar)0x75, (UChar)0x77, 0};     /* "uw", all ASCII             */
-                                                          /*   (not confusable)          */
-const UChar badId[]  = {(UChar)0x73, (UChar)0x0441, 0};   /* "sc", with Cyrillic 'c'     */
-                                                          /*   (mixed script, confusable */
+const UChar goodLatin[] = {(UChar)0x75, (UChar)0x77, 0};    /* "uw", all ASCII             */
+                                                            /*   (not confusable)          */
+const UChar scMixed[]  = {(UChar)0x73, (UChar)0x0441, 0};   /* "sc", with Cyrillic 'c'     */
+                                                            /*   (mixed script, confusable */
 
+const UChar scLatin[]  = {(UChar)0x73,  (UChar)0x63, 0};    /* "sc", plain ascii.        */
 const UChar goodCyrl[] = {(UChar)0x438, (UChar)0x43B, 0};   /* Plain lower case Cyrillic letters,
-                                                             no latin confusables */
+                                                               no latin confusables         */
         
-const UChar goodGreek[] = {(UChar)0x3c0, (UChar)0x3c6, 0};  /* Plain lower case Greek letters */
+const UChar goodGreek[]   = {(UChar)0x3c0, (UChar)0x3c6, 0};   /* Plain lower case Greek letters */
 
+const UChar lll_Latin_a[] = {(UChar)0x6c, (UChar)0x49, (UChar)0x31, 0};   /* lI1, all ASCII */
+
+                             /*  Full-width I, Small Roman Numeral fifty, Latin Cap Letter IOTA*/
+const UChar lll_Latin_b[] = {(UChar)0xff29, (UChar)0x217c, (UChar)0x196, 0};     
+
+const UChar lll_Cyrl[]    = {(UChar)0x0406, (UChar)0x04C0, (UChar)0x31, 0};
+
+/* The skeleton transform for all of thes 'lll' lookalikes is all ascii digit 1. */
+const UChar lll_Skel[]    = {(UChar)0x31, (UChar)0x31, (UChar)0x31, 0};  
 
 /*
  *   Spoof Detction C API Tests
@@ -213,7 +223,7 @@ static void TestUSpoofCAPI(void) {
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(0, checkResults);
 
-        checkResults = uspoof_check(sc2, badId, -1, NULL, &status);
+        checkResults = uspoof_check(sc2, scMixed, -1, NULL, &status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT | USPOOF_MIXED_SCRIPT_CONFUSABLE, checkResults);
 
@@ -290,7 +300,7 @@ static void TestUSpoofCAPI(void) {
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(0, checkResults);
 
-        checkResults = uspoof_check(clone2, badId, -1, NULL, &status);
+        checkResults = uspoof_check(clone2, scMixed, -1, NULL, &status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT | USPOOF_MIXED_SCRIPT_CONFUSABLE, checkResults);
         uspoof_close(clone2);
@@ -314,9 +324,9 @@ static void TestUSpoofCAPI(void) {
         checks2 = uspoof_getChecks(sc, &status);
         TEST_ASSERT_EQ(checks, checks2);
 
-        /* The checks that were disabled just above are the same ones that the "badId" test fails.
+        /* The checks that were disabled just above are the same ones that the "scMixed" test fails.
             So with those tests gone checking that Identifier should now succeed */
-        checkResults = uspoof_check(sc, badId, -1, NULL, &status);
+        checkResults = uspoof_check(sc, scMixed, -1, NULL, &status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(0, checkResults);
     TEST_TEARDOWN;
@@ -402,8 +412,112 @@ static void TestUSpoofCAPI(void) {
         TEST_ASSERT_EQ(USPOOF_WHOLE_SCRIPT_CONFUSABLE, checkResults);
     TEST_TEARDOWN;
 
+    /*
+     * check UTF-8
+     */
+    TEST_SETUP
+        char    utf8buf[200];
+        int32_t checkResults;
+        int32_t position;
+
+        u_strToUTF8(utf8buf, sizeof(utf8buf), NULL, goodLatin, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+        position = 666;
+        checkResults = uspoof_checkUTF8(sc, utf8buf, -1, &position, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(0, checkResults);
+        TEST_ASSERT_EQ(666, position);
+
+        u_strToUTF8(utf8buf, sizeof(utf8buf), NULL, goodCyrl, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+        checkResults = uspoof_checkUTF8(sc, utf8buf, -1, &position, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(0, checkResults);
+
+        u_strToUTF8(utf8buf, sizeof(utf8buf), NULL, scMixed, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+        position = 666;
+        checkResults = uspoof_checkUTF8(sc, utf8buf, -1, &position, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(USPOOF_MIXED_SCRIPT_CONFUSABLE | USPOOF_SINGLE_SCRIPT , checkResults);
+        TEST_ASSERT_EQ(2, position);
+
+    TEST_TEARDOWN;
+
+    /*
+     * uspoof_areConfusable()
+     */
+    TEST_SETUP
+        int32_t  checkResults;
+        
+        checkResults = uspoof_areConfusable(sc, scLatin, -1, scMixed, -1, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(USPOOF_MIXED_SCRIPT_CONFUSABLE, checkResults);
+
+        checkResults = uspoof_areConfusable(sc, goodGreek, -1, scLatin, -1, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(0, checkResults);
+
+        checkResults = uspoof_areConfusable(sc, lll_Latin_a, -1, lll_Latin_b, -1, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT_CONFUSABLE | USPOOF_MIXED_SCRIPT_CONFUSABLE, checkResults);
+        /* TODO:  This is an odd test case, an identifier where every character maps to a digit 1 confusable tables.
+                  The mixed script tables do this mapping also, leaving us with a single script identifiers that
+                  fail with the mixed script tables.  This may want to get detected in the implementation. */
+
+    TEST_TEARDOWN;
+
+    /*
+     * areConfusableUTF8
+     */
+    TEST_SETUP
+        int32_t checkResults;
+        char s1[200];
+        char s2[200];
+
+
+        u_strToUTF8(s1, sizeof(s1), NULL, scLatin, -1, &status);
+        u_strToUTF8(s2, sizeof(s2), NULL, scMixed, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+        checkResults = uspoof_areConfusableUTF8(sc, s1, -1, s2, -1, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(USPOOF_MIXED_SCRIPT_CONFUSABLE, checkResults);
+
+        u_strToUTF8(s1, sizeof(s1), NULL, goodGreek, -1, &status);
+        u_strToUTF8(s2, sizeof(s2), NULL, scLatin, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+        checkResults = uspoof_areConfusableUTF8(sc, s1, -1, s2, -1, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(0, checkResults);
+        
+        u_strToUTF8(s1, sizeof(s1), NULL, lll_Latin_a, -1, &status);
+        u_strToUTF8(s2, sizeof(s2), NULL, lll_Latin_b, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+        checkResults = uspoof_areConfusableUTF8(sc, s1, -1, s2, -1, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT_CONFUSABLE | USPOOF_MIXED_SCRIPT_CONFUSABLE, checkResults);
+
+    TEST_TEARDOWN;
+
+
+  /*
+   * getSkeleton
+   */
+
+    TEST_SETUP
+        UChar dest[100];
+        int32_t   skelLength;
+
+        skelLength = uspoof_getSkeleton(sc, USPOOF_ANY_CASE, lll_Latin_a, -1, dest, sizeof(dest)/sizeof(UChar), &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(0, u_strcmp(lll_Skel, dest));
+        TEST_ASSERT_EQ(u_strlen(lll_Skel), skelLength);
+
+        skelLength = uspoof_getSkeleton(sc, USPOOF_ANY_CASE, lll_Latin_a, -1, NULL, 0, &status);
+        TEST_ASSERT_EQ(U_BUFFER_OVERFLOW_ERROR, status);
+        TEST_ASSERT_EQ(3, skelLength);
+        status = U_ZERO_ERROR;
+
+    TEST_TEARDOWN;
 }
-
-
-
 

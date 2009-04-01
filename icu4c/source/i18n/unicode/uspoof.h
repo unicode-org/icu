@@ -152,7 +152,13 @@ typedef enum USpoofChecks {
       * for conformance to any particular syntax for identifiers.
       */
     USPOOF_INVISIBLE                =  32,
+
+    /** Check that an identifier contains only characters from a specified set
+      * of acceptable characters.  See uspoof_setAllowedChars() and
+      * uspoof_setAllowedLocales().
+      */
     USPOOF_CHAR_LIMIT               =  64,
+
     USPOOF_ALL_CHECKS               = 0x7f
     } USpoofChecks;
     
@@ -477,9 +483,9 @@ uspoof_getAllowedUnicodeSet(const USpoofChecker *sc, UErrorCode *status);
  */
 U_DRAFT int32_t U_EXPORT2
 uspoof_check(const USpoofChecker *sc,
-			 const UChar *text, int32_t length, 
-			 int32_t *position,
-			 UErrorCode *status);
+                         const UChar *text, int32_t length, 
+                         int32_t *position,
+                         UErrorCode *status);
 
 
 /**
@@ -512,9 +518,9 @@ uspoof_check(const USpoofChecker *sc,
  */
 U_DRAFT int32_t U_EXPORT2
 uspoof_checkUTF8(const USpoofChecker *sc,
-				 const char *text, int32_t length,
-				 int32_t *position,
-				 UErrorCode *status);
+                 const char *text, int32_t length,
+                 int32_t *position,
+                 UErrorCode *status);
 
 
 #ifdef XP_CPLUSPLUS
@@ -558,6 +564,23 @@ uspoof_checkUnicodeString(const USpoofChecker *sc,
  * or whole script - are determined by the check options set for the
  * USpoofChecker.
  *
+ * TODO: expand on the following
+ * There are four possible types of comarisons:
+ *    Mixed Script,  Lower Case
+ *    Mixed Script,  Any Case
+ *    Single Script, Lower Case
+ *    Single Script, Any Case
+ * Which tests are performed is controlled by the flags
+ *   USPOOF_SINGLE_SCRIPT_CONFUSABLE 
+ *   USPOOF_MIXED_SCRIPT_CONFUSABLE  
+ * One or both of these must be set.
+ * 
+ * USPOOF_ANY_CASE is a modifier.  Choose it if the identifiers
+ *   are case-sensitive and may be of mixed case.
+ * If identifiers are normalized to lower case for comparison or
+ * display to the user, do not select the ANY_CASE option.
+ *
+ *
  * @param sc      The USpoofChecker
  * @param s1      The first of the two strings to be compared for 
  *                confusability.  The strings are in UTF-16 format.
@@ -575,6 +598,7 @@ uspoof_checkUnicodeString(const USpoofChecker *sc,
  *                is not needed.
  *                If the strings are not confusable the parameter value
  *                will not be set.
+ *                TODO:  Remove this paramater, doesn't really make sense.
 
  * @param status  The error code, set if an error occured while attempting to
  *                perform the check.
@@ -590,7 +614,7 @@ U_DRAFT int32_t U_EXPORT2
 uspoof_areConfusable(const USpoofChecker *sc,
                      const UChar *s1, int32_t length1,
                      const UChar *s2, int32_t length2,
-					 int32_t *position,
+                     int32_t *position,
                      UErrorCode *status);
 
 
@@ -630,7 +654,7 @@ U_DRAFT int32_t U_EXPORT2
 uspoof_areConfusableUTF8(const USpoofChecker *sc,
                          const char *s1, int32_t length1,
                          const char *s2, int32_t length2,
-						 int32_t *position,
+                         int32_t *position,
                          UErrorCode *status);
 
 
