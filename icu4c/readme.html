@@ -12,27 +12,14 @@
     <meta name="DESCRIPTION" content=
     "The introduction to the International Components for Unicode with instructions on building, installation, usage and other information about ICU." />
     <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
-<style type="text/css">
-/*<![CDATA[*/
-    h1 {border-width: 2px; border-style: solid; text-align: center; width: 100%; font-size: 200%; font-weight: bold}
-    h2 {margin-top: 2em; text-decoration: underline; page-break-before: always}
-    h2.TOC {page-break-before: auto}
-    h3 {margin-top: 2em; text-decoration: underline}
-    h4 {text-decoration: underline}
-    h5 {text-decoration: underline}
-    caption {font-weight: bold; text-align: left}
-    div.indent {margin-left: 2em}
-    ul.TOC {list-style-type: none}
-    samp {margin-left: 1em; border-style: groove; padding: 1em; display: block; background-color: #EEEEEE}
-/*]]>*/
-</style>
+	<link type="text/css" href="./icu4c.css" rel="stylesheet"/>
   </head>
 
-  <body>
+  <body class="readme">
     <h1>International Components for Unicode<br />
      <abbr title="International Components for Unicode">ICU</abbr> 4.2 ReadMe</h1>
 
-    <p>Version: 2009 February 19th<br />
+    <p>Version: 2009 March 31th<br />
      Copyright &copy; 1997-2009 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -54,7 +41,7 @@
       <li>
         <a href="#HowToBuild">How To Build And Install ICU</a> 
 
-        <ul class="TOC">
+        <ul >
           <li><a href="#HowToBuildSupported">Supported Platforms</a></li>
 
           <li><a href="#HowToBuildWindows">Windows</a></li>
@@ -66,15 +53,18 @@
           <li><a href="#HowToBuildZOS">z/OS (os/390)</a></li>
 
           <li><a href="#HowToBuildOS400">IBM i family (IBM i, i5/OS, OS/400)</a></li>
+
+		  <li><a href="#HowToCrossCompileICU">How to Cross Compile ICU</a></li>
         </ul>
       </li>
+
 
       <li><a href="#HowToPackage">How To Package ICU</a></li>
 
       <li>
         <a href="#ImportantNotes">Important Notes About Using ICU</a> 
 
-        <ul class="TOC">
+        <ul >
           <li><a href="#ImportantNotesMultithreaded">Using ICU in a Multithreaded
           Environment</a></li>
 
@@ -87,7 +77,7 @@
       <li>
         <a href="#PlatformDependencies">Platform Dependencies</a> 
 
-        <ul class="TOC">
+        <ul >
           <li><a href="#PlatformDependenciesNew">Porting To A New
           Platform</a></li>
 
@@ -148,8 +138,7 @@
      The ICU homepage also links to related information about writing
     internationalized software.</p>
 
-    <table border="1" cellpadding="3" width="100%" summary=
-    "These are some useful links regarding ICU and internationalization in general.">
+    <table class="docTable" summary="These are some useful links regarding ICU and internationalization in general.">
       <caption>
         Here are some useful links regarding ICU and internationalization in
         general.
@@ -289,8 +278,7 @@
     your software product. You need at least the data (<code>[lib]icudt</code>)
     and the common (<code>[lib]icuuc</code>) libraries in order to use ICU.</p>
 
-    <table border="1" cellpadding="0" width="100%" summary=
-    "The following files describe the code drop.">
+    <table class="docTable" summary="The following files describe the code drop.">
       <caption>
         The following files describe the code drop.
       </caption>
@@ -317,7 +305,7 @@
     <p><br />
     </p>
 
-    <table border="1" cellpadding="0" width="100%" summary=
+    <table class="docTable" summary=
     "The following directories contain source code and data files.">
       <caption>
         The following directories contain source code and data files.
@@ -532,7 +520,7 @@
     <h3><a name="HowToBuildSupported" href="#HowToBuildSupported" id=
     "HowToBuildSupported">Supported Platforms</a></h3>
 
-    <table border="1" cellpadding="3" summary=
+    <table class="docTable" summary=
     "ICU can be built on many platforms.">
       <caption>
         Here is a status of functionality of ICU on several different platforms.
@@ -1290,6 +1278,45 @@ CHGJOB CCSID(37)</samp>
       iSeries Information Center</a> for more details regarding the running of multiple threads
       on IBM i.</li>
     </ol>
+
+      <!-- cross -->
+    <h3><a name="HowToCrossCompileICU" href="#HowToCrossCompileICU" id="HowToCrossCompileICU">How To Cross Compile ICU</a></h3>
+		<p>This section will explain how to build ICU on one platform, but to produce binaries intended to run on another. This is commonly known as a cross compile.</p>
+		<p>Normally, in the course of a build, ICU needs to run the tools that it builds in order to generate and package data and test-data.In a cross compilation setting, ICU is built on a different system from that which it eventually runs on. An example might be, if you are building for a small/headless system (such as an embedded device), or a system where you can't easily run the ICU command line tools (any non-UNIX-like system).</p>
+		<p>To reduce confusion, we will here refer to the "A" and the "B" system.System "A" is the actual system we will be running on- the only requirements on it is are it is able to build ICU from the command line targetting itself (with configure or runConfigureICU), and secondly, that it also contain the correct toolchain for compiling and linking for the resultant platform, referred to as the "B" system.</p>
+		<p>The autoconf docs use the term "build" for A, and "host" for B. More details at: <a href="http://www.gnu.org/software/autoconf/manual/html_node/Specifying-Names.html#Specifying-Names">http://www.gnu.org/software/autoconf/manual/html_node/Specifying-Names.html</a></p>
+		<p>Three initially-empty directories will be used in this example:</p>
+		<table summary="Three directories used in this example" class="docTable">
+			<tr>
+				<th align=left>/icu</th><td>a copy of the ICU source</td>
+			</tr>
+			<tr>
+				<th align=left>/buildA</th><td>an empty directory, it will contain ICU built for A<br>(MacOSX in this case)</td>
+			</tr>
+			<tr>
+				<th align=left>/buildB</th><td>an empty directory, it will contain ICU built for B<br>(HaikuOS in this case)</td>
+			</tr>
+		</table>
+		
+		<ol>
+		<li>Check out or unpack the ICU source code into the /icu directory.You will have the directories /icu/source, etc.</li>
+		<li>Build ICU in /buildA normally (using runConfigureICU or configure):
+<pre class="samp">cd /buildA
+sh /icu/source/runConfigureICU <strong>MacOSX</strong>
+gnumake
+</pre>
+		</li>
+		<li>Set PATH or other variables as needed, such as CPPFLAGS.</li>
+		<li>Build ICU in /buildB<br>
+			<div class="note"><b>Note:</b> "<code>--with-cross-build</code>" takes an absolute path.</div>
+<pre class="samp">cd /buildB
+sh /icu/source/configure --host=<strong>i586-pc-haiku</strong> --with-cross-build=<strong>/buildA</strong>
+gnumake</pre>
+		</li>
+		<li>Tests and testdata can be built with "gnumake tests".</li>
+	</ol>
+      <!-- end cross -->
+
     <!-- end build environment -->
 
     <h2><a name="HowToPackage" href="#HowToPackage" id="HowToPackage">How To
@@ -1326,7 +1353,7 @@ CHGJOB CCSID(37)</samp>
     "#SourceCode">ICU Source Code Organization</a> section of this readme.html
     gives a more complete description of the libraries.</p>
 
-    <table border="1" cellpadding="3" summary=
+    <table class="docTable" summary=
     "ICU has several libraries for you to use.">
       <caption>
         Here is an example of libraries that are frequently packaged.
@@ -1731,7 +1758,7 @@ CHGJOB CCSID(37)</samp>
     </ul>
     <hr />
 
-    <p>Copyright &copy; 1997-2008 International Business Machines Corporation and
+    <p>Copyright &copy; 1997-2009 International Business Machines Corporation and
     others. All Rights Reserved.<br />
      IBM Globalization Center of Competency - San Jos&eacute;<br />
      4400 North First Street<br />
