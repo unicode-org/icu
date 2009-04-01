@@ -798,7 +798,7 @@ public final class ZoneMeta {
      * Returns the normalized custom TimeZone ID
      */
     static String formatCustomID(int hour, int min, int sec, boolean negative) {
-        // Create normalized time zone ID - GMT[+|-]hhmm[ss]
+        // Create normalized time zone ID - GMT[+|-]hh:mm[:ss]
         StringBuffer zid = new StringBuffer(kCUSTOM_TZ_PREFIX);
         if (hour != 0 || min != 0) {
             if(negative) {
@@ -811,6 +811,7 @@ public final class ZoneMeta {
                 zid.append('0');
             }
             zid.append(hour);
+            zid.append(':');
             if (min < 10) {
                 zid.append('0');
             }
@@ -818,6 +819,7 @@ public final class ZoneMeta {
 
             if (sec != 0) {
                 // Optional second field
+                zid.append(':');
                 if (sec < 10) {
                     zid.append('0');
                 }
