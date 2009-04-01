@@ -2,7 +2,7 @@
 #
 # Yves Arrouye.
 #
-# Copyright (C) 2000-2008, International Business Machines Corporation and others.
+# Copyright (C) 2000-2009, International Business Machines Corporation and others.
 # All Rights Reserved.
 
 #
@@ -28,6 +28,9 @@ libdir = @libdir@
 includedir = @includedir@
 mandir = @mandir@
 sysconfdir = @sysconfdir@
+# controls the include of $(top_builddir)/icucross.mk at bottom of file
+cross_compiling = @cross_compiling@
+cross_buildroot = @cross_buildroot@
 
 # Package information
 
@@ -203,6 +206,10 @@ LIBDIR=$(top_builddir)/lib
 # Location of the executables before "make install" is used
 BINDIR=$(top_builddir)/bin
 
+# overridden by icucross.mk
+TOOLBINDIR=$(BINDIR)
+TOOLLIBDIR=$(LIBDIR)
+
 # Current full path directory.
 CURR_FULL_DIR=$(shell pwd)
 # Current full path directory for use in source code in a -D compiler option.
@@ -230,7 +237,10 @@ LIBICUTOOLUTIL= -L$(LIBDIR) -l$(STATIC_PREFIX_WHEN_USED)$(ICUPREFIX)$(TOOLUTIL_S
 LIBICUIO=       -L$(LIBDIR) -l$(STATIC_PREFIX_WHEN_USED)$(ICUPREFIX)$(IO_STUBNAME)$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
 
 # Invoke, set library path for all ICU libraries.
+# overridden by icucross.mk
 INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(LIBRARY_PATH_PREFIX)$(LIBDIR):$(top_builddir)/stubdata:$(top_builddir)/tools/ctestfw:$$$(LDLIBRARYPATH_ENVVAR) $(LEAK_CHECKER)
+# prefer stubdata
+PKGDATA_INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/stubdata:$(top_builddir)/tools/ctestfw:$(LIBRARY_PATH_PREFIX)$(LIBDIR):$$$(LDLIBRARYPATH_ENVVAR) $(LEAK_CHECKER) $(PKGDATA_INVOKE_OPTS)
 
 # Platform-specific setup
 include @platform_make_fragment@
@@ -239,6 +249,14 @@ include @platform_make_fragment@
 # the C++ compiler must be used to link in the libraries for the tools.
 ifneq ($(ENABLE_SHARED),YES)
 LINK.c = $(LINK.cc)
+endif
+
+# some imported things from the cross env
+TOOLEXEEXT = $(EXEEXT)
+ifneq ($(strip $(cross_buildroot)),)
+include $(cross_buildroot)/config/icucross.mk
+else
+cross_buildroot = $(top_builddir)
 endif
 
 # optional include at top

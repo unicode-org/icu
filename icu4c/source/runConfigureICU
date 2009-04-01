@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (c) 1999-2008, International Business Machines Corporation and
+# Copyright (c) 1999-2009, International Business Machines Corporation and
 # others. All Rights Reserved.
 
 # runConfigureICU: This script will run the "configure" script for the appropriate platform
@@ -356,8 +356,14 @@ export LDFLAGS
 
 echo "Running ./configure $OPTS $@ for $THE_OS using $THE_COMP compiler"
 echo
-$configure $OPTS $@
-echo
-echo If the result of the above commands looks okay to you, go to the directory
-echo source in the ICU distribution to build ICU. Please remember that ICU needs
-echo GNU make to build properly...
+if $configure $OPTS $@
+then
+	echo
+	echo If the result of the above commands looks okay to you, go to the directory
+	echo source in the ICU distribution to build ICU. Please remember that ICU needs
+	echo GNU make to build properly...
+else
+	echo $0: ./configure failed
+	exit 1
+fi
+
