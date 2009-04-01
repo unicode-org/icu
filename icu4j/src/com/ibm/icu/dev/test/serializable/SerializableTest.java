@@ -545,7 +545,7 @@ public class SerializableTest extends TestFmwk.TestGroup
             TimeZone zone_a = (TimeZone) a;
             TimeZone zone_b = (TimeZone) b;
 
-            if (!(zone_a.getID().equals(zone_b.getID()))) {
+            if (!(TimeZone.getCanonicalID(zone_a.getID()).equals(TimeZone.getCanonicalID(zone_b.getID())))) {
                 return false;
             }
 
