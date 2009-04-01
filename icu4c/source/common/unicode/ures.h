@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2007, International Business Machines
+*   Copyright (C) 1997-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -641,7 +641,7 @@ ures_getStringByIndex(const UResourceBundle *resourceBundle,
  * the output UTF-8 string is always well-formed.
  *
  * @param resB Resource bundle.
- * @param index An index to the wanted string.
+ * @param stringIndex An index to the wanted string.
  * @param dest Destination buffer. Can be NULL only if capacity=*length==0.
  * @param pLength Input: Capacity of destination buffer.
  *               Output: Actual length of the UTF-8 string, not counting the
@@ -670,7 +670,7 @@ ures_getStringByIndex(const UResourceBundle *resourceBundle,
  */
 U_STABLE const char * U_EXPORT2
 ures_getUTF8StringByIndex(const UResourceBundle *resB,
-                          int32_t index,
+                          int32_t stringIndex,
                           char *dest, int32_t *pLength,
                           UBool forceCopy,
                           UErrorCode *status);

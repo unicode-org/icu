@@ -1482,7 +1482,7 @@ static void TestGetKeywordValuesForLocale() {
             uenum_close(all);
         }
     } else {
-        log_err("Failed to get ALL keyword values for default locale.\n");
+        log_err("Failed to get ALL keyword values for default locale %s: %s.\n", uloc_getDefault(), u_errorName(status));
     }
     uenum_close(ALL);
 }
