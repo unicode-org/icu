@@ -115,18 +115,21 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                             String canonicalID = TimeZone.getCanonicalID(tzids[tzidx]);
                             if (canonicalID != null && !outtz.getID().equals(canonicalID)) {
                                 // Canonical ID did not match - check the rules
-                                if (!((BasicTimeZone)outtz).hasEquivalentTransitions(tz, low, high)) {
-                                    if (canonicalID.indexOf('/') == -1) {
-                                        logln("Canonical round trip failed (as expected); tz=" + tzids[tzidx]
+                                boolean bFailure = false;
+                                if ((tz instanceof BasicTimeZone) && (outtz instanceof BasicTimeZone)) {
+                                    bFailure = !(canonicalID.indexOf('/') == -1)
+                                                && !((BasicTimeZone)outtz).hasEquivalentTransitions(tz, low, high);
+                                }
+                                if (bFailure) {
+                                    errln("Canonical round trip failed; tz=" + tzids[tzidx]
                                             + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
                                             + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
                                             + ", outtz=" + outtz.getID());
-                                    } else {
-                                        errln("Canonical round trip failed; tz=" + tzids[tzidx]
+                                } else {
+                                    logln("Canonical round trip failed (as expected); tz=" + tzids[tzidx]
                                             + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
                                             + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
                                             + ", outtz=" + outtz.getID());
-                                    }
                                 }
                             }
                         } else {
