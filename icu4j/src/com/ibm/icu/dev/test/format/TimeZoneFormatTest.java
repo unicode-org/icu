@@ -154,10 +154,21 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                             } else {
                                 // Specific or generic: raw offset must be preserved.
                                 if (inOffsets[0] != outOffsets[0]) {
-                                    errln("Raw offset round trip failed; tz=" + tzids[tzidx]
-                                        + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
-                                        + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
-                                        + ", inRawOffset=" + inOffsets[0] + ", outRawOffset=" + outOffsets[0]);
+                                    if (TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK
+                                            && tzids[tzidx].startsWith("SystemV/")) {
+                                        // JDK uses rule SystemV for these zones while
+                                        // ICU handles these zones as aliases of existing time zones
+                                        logln("Raw offset round trip failed; tz=" + tzids[tzidx]
+                                            + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
+                                            + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
+                                            + ", inRawOffset=" + inOffsets[0] + ", outRawOffset=" + outOffsets[0]);
+
+                                    } else {
+                                        errln("Raw offset round trip failed; tz=" + tzids[tzidx]
+                                            + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
+                                            + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
+                                            + ", inRawOffset=" + inOffsets[0] + ", outRawOffset=" + outOffsets[0]);
+                                    }
                                 }
                             }
                         }
