@@ -872,7 +872,7 @@ UnicodeString& TimeZoneTest::formatTZID(int32_t offset, UnicodeString &rv) {
         rv += (UChar)0x0030;
     }
     rv += (UChar)(0x0030 + (h%10));
-
+    rv += (UChar)0x003A;
     if (m >= 10) {
         rv += (UChar)(0x0030 + (m/10));
     } else {
@@ -881,6 +881,7 @@ UnicodeString& TimeZoneTest::formatTZID(int32_t offset, UnicodeString &rv) {
     rv += (UChar)(0x0030 + (m%10));
 
     if (s) {
+        rv += (UChar)0x003A;
         if (s >= 10) {
             rv += (UChar)(0x0030 + (s/10));
         } else {
@@ -961,7 +962,7 @@ void TimeZoneTest::TestCustomParse()
             }
             // JDK 1.3 creates custom zones with the ID "Custom"
             // JDK 1.4 creates custom zones with IDs of the form "GMT+02:00"
-            // ICU creates custom zones with IDs of the form "GMT+0200"
+            // ICU creates custom zones with IDs of the form "GMT+02:00"
             else if (exp != kUnparseable && (ioffset != exp || itsID != expectedID)) {
                 errln("Expected offset of " + formatOffset(exp, temp) +
                       ", id " + expectedID +
@@ -1815,12 +1816,12 @@ void TimeZoneTest::TestCanonicalID() {
         const char *expected;
         UBool isSystem;
     } data[] = {
-        {"GMT-03", "GMT-0300", FALSE},
-        {"GMT+4", "GMT+0400", FALSE},
-        {"GMT-055", "GMT-0055", FALSE},
-        {"GMT+430", "GMT+0430", FALSE},
-        {"GMT-12:15", "GMT-1215", FALSE},
-        {"GMT-091015", "GMT-091015", FALSE},
+        {"GMT-03", "GMT-03:00", FALSE},
+        {"GMT+4", "GMT+04:00", FALSE},
+        {"GMT-055", "GMT-00:55", FALSE},
+        {"GMT+430", "GMT+04:30", FALSE},
+        {"GMT-12:15", "GMT-12:15", FALSE},
+        {"GMT-091015", "GMT-09:10:15", FALSE},
         {"GMT+1:90", 0, FALSE},
         {"America/Argentina/Buenos_Aires", "America/Buenos_Aires", TRUE},
         {"bogus", 0, FALSE},
