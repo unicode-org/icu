@@ -106,7 +106,7 @@ clean-local: resclean
 	$(RMV) $(OBJECTS) $(TARGET)
 
 resclean:
-	@#-$(INVOKE) $(BINDIR)/pkgdata --clean -p $(RESDIR) -O pkgdata.inc -m $(PKGMODE) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+	@#-$(INVOKE) $(TOOLBINDIR)/pkgdata --clean -p $(RESDIR) -O pkgdata.inc -m $(PKGMODE) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
 	$(RMV) pkgdata.inc $(RESDIR)
 
 distclean-local: clean-local
@@ -148,7 +148,7 @@ endif
 
 
 package-resfiles: $(RESDIR)/$(RESDIR).lst pkgdata.inc
-	$(INVOKE) $(PKGDATA_INVOKE_OPTS) $(BINDIR)/pkgdata -p $(MSGNAME) $(PKGDATA_OPTS) -m $(PKGMODE) -s $(RESDIR) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+	$(INVOKE) $(PKGDATA_INVOKE_OPTS) $(TOOLBINDIR)/pkgdata -p $(MSGNAME) $(PKGDATA_OPTS) -m $(PKGMODE) -s $(RESDIR) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
 
 $(RESDIR)/$(RESDIR).lst: Makefile $(srcdir)/resfiles.mk
 	@$(MKINSTALLDIRS) $(RESDIR)
@@ -161,7 +161,7 @@ $(RESDIR)/$(RESDIR).lst: Makefile $(srcdir)/resfiles.mk
 ifneq ($(UCONVMSG_MODE),static)
 install-resfiles: $(RESFILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(ICUDATA_DIR)
-	$(INVOKE) $(BINDIR)/pkgdata -p $(RESDIR) -O pkgdata.inc -m $(PKGMODE) -d $(RESDIR) -I $(INSTALLTO) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+	$(INVOKE) $(TOOLBINDIR)/pkgdata -p $(RESDIR) -O pkgdata.inc -m $(PKGMODE) -d $(RESDIR) -I $(INSTALLTO) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
 else
 install-resfiles:
 endif
@@ -171,7 +171,7 @@ $(UCONVMSG_LIB): resfiles
 
 $(MSGNAME)/%.res: $(srcdir)/$(RESOURCESDIR)/%.txt
 	$(MKINSTALLDIRS) $(@D)
-	$(INVOKE) $(BINDIR)/genrb -e UTF-8 -s $(^D) -d $(@D) $(^F)
+	$(INVOKE) $(TOOLBINDIR)/genrb -e UTF-8 -s $(^D) -d $(@D) $(^F)
 
 install-man: $(ALL_MAN_FILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)

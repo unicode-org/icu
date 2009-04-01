@@ -42,7 +42,7 @@ UNICODE_VERSION="5.1"
 AC_SUBST(UNICODE_VERSION)
 
 # Determine the host system
-AC_CANONICAL_HOST
+AC_CANONICAL_SYSTEM
 
 AC_SUBST(CPPFLAGS)
 
@@ -52,7 +52,10 @@ export _CXX_CXXSUFFIX
 # Checks for programs
 AC_PROG_CC
 AC_PROG_CXX
+AC_PROG_CPP
 AC_PROG_INSTALL
+
+AC_SUBST(cross_compiling)
 
 # make sure install is relative to srcdir - if a script
 if test "$srcdir" = "."; then
@@ -68,6 +71,29 @@ fi
 # Check for the platform make
 AC_PATH_PROGS(U_MAKE, gmake gnumake, make)
 AC_SUBST(U_MAKE)
+
+
+AC_ARG_WITH(cross-build,
+	[  --with-cross-build=dir specify an absolute path to the build directory of an ICU built for the current platform [default=no cross dir]],
+	[cross_buildroot="${withval}"], 
+        [cross_buildroot=""])
+
+if test "X$cross_buildroot" = "X"; then
+    if test "$cross_compiling" = "yes"; then
+        AC_MSG_ERROR([Error! Cross compiling but no --with-cross-build option specified - please supply the path to an executable ICU's build root])
+    fi
+else
+    if test -f "${cross_buildroot}/config/icucross.mk"; then
+        AC_MSG_RESULT([Using cross buildroot: $cross_buildroot])
+    else
+        if test -d "${cross_buildroot}"; then
+            AC_MSG_ERROR([${cross_buildroot}/config/icucross.mk not found. Please build ICU in ${cross_buildroot} first.])
+        else
+            AC_MSG_ERROR([No such directory ${cross_buildroot} supplied as the argument to --with-cross-build. Use an absolute path.])
+        fi
+    fi
+fi
+AC_SUBST(cross_buildroot)
 
 # Check for doxygen to generate documentation
 AC_PATH_PROG(DOXYGEN,doxygen,,$PATH:/usr/local/bin:/usr/bin)
@@ -234,7 +260,14 @@ AC_SUBST(LIBCFLAGS)
 AC_SUBST(LIBCXXFLAGS)
 
 AC_PROG_RANLIB
-AC_PATH_PROG(AR,ar,[echo archiver ar not found re-run configure ; false],$PATH:/bin:/usr/bin:/usr/ccs/bin)
+
+# look for 'ar' the proper way
+#AC_PATH_PROG(AR,ar,[echo archiver ar not found re-run configure ; false],$PATH:/bin:/usr/bin:/usr/ccs/bin)
+AC_CHECK_TOOL(AR, ar)
+if test "x$AR" = "x"; then
+  AC_MSG_ERROR(Archiver ar not found. Set AR= or fix PATH)
+fi
+
 
 AC_MSG_CHECKING([whether to enable renaming of symbols])
 enabled=yes
@@ -424,6 +457,8 @@ then
 fi
 AC_SUBST(HAVE_MMAP)
 
+AC_MSG_CHECKING([for genccode assembly])
+
 # Check to see if genccode can generate simple assembly.
 GENCCODE_ASSEMBLY=
 case "${host}" in
@@ -455,6 +490,7 @@ ia64-*-hpux*)
 esac
 AC_SUBST(GENCCODE_ASSEMBLY)
 
+AC_MSG_RESULT($GENCCODE_ASSEMBLY)
 
 # Checks for header files
 AC_CHECK_HEADERS(inttypes.h)

@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1998-2008, International Business Machines
+#   Copyright (C) 1998-2009, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -41,7 +41,7 @@ CLEANFILES = *~
 INSTALLED_BUILT_FILES = $(top_builddir)/config/Makefile.inc $(top_builddir)/config/pkgdata.inc $(top_builddir)/config/icu-config @platform_make_fragment@ $(EXTRA_DATA:%=$(DESTDIR)$(pkglibdir)/%)
 
 ## Files built (autoconfed) but not installed
-LOCAL_BUILT_FILES = icudefs.mk
+LOCAL_BUILT_FILES = icudefs.mk config/icucross.mk
 
 DOCDIRS = common i18n
 SUBDIRS =  stubdata common i18n $(LAYOUT) tools data $(ICUIO) $(EXTRA) $(SAMPLE) $(TEST)
@@ -164,7 +164,7 @@ clean-local:
 
 distclean-local: clean-local
 	$(RMV) $(top_builddir)/config/Makefile.inc $(top_builddir)/config/pkgdata.inc $(top_builddir)/config/icu-config
-	$(RMV) config.cache config.log config.status
+	$(RMV) config.cache config.log config.status $(top_builddir)/config/icucross.mk
 	$(RMV) Makefile config/Makefile icudefs.mk $(LIBDIR) $(BINDIR)
 
 check-local: $(top_builddir)/config/icu-config $(top_builddir)/config/Makefile.inc $(top_builddir)/config/pkgdata.inc
@@ -180,6 +180,17 @@ check-local: $(top_builddir)/config/icu-config $(top_builddir)/config/Makefile.i
 icudefs.mk: $(srcdir)/icudefs.mk.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 		&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+config/icucross.mk: $(top_builddir)/icudefs.mk  $(top_builddir)/Makefile
+	@echo rebuilding $@
+	@(echo "CROSS_ICU_VERSION=$(VERSION)" ;\
+	  echo "TOOLEXEEXT=$(EXEEXT)" \
+	   ) > $@
+	@(echo 'TOOLBINDIR=$$(cross_buildroot)/bin' ;\
+	  echo 'TOOLLIBDIR=$$(cross_buildroot)/lib' ;\
+	  echo "INVOKE=$(LDLIBRARYPATH_ENVVAR)=$(LIBRARY_PATH_PREFIX)"'$$(TOOLLIBDIR):$$(cross_buildroot)/stubdata:$$(cross_buildroot)/tools/ctestfw:$$$$'"$(LDLIBRARYPATH_ENVVAR)" ;\
+	  echo "PKGDATA_INVOKE=$(LDLIBRARYPATH_ENVVAR)=$(LIBRARY_PATH_PREFIX)"'$$(cross_buildroot)/stubdata:$$(cross_buildroot)/tools/ctestfw:$$(TOOLLIBDIR):$$$$'"$(LDLIBRARYPATH_ENVVAR) "'$$'"(PKGDATA_INVOKE_OPTS)" ;\
+	  echo ) >> $@
 
 Makefile: $(srcdir)/Makefile.in icudefs.mk $(top_builddir)/config.status
 	cd $(top_builddir) \
