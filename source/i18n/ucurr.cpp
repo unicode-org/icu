@@ -1834,7 +1834,7 @@ ucurr_countCurrencies(const char* locale,
         char id[ULOC_FULLNAME_CAPACITY];
         resLen = uloc_getKeywordValue(locale, "currency", id, ULOC_FULLNAME_CAPACITY, &localStatus);
         // get country or country_variant in `id'
-        uint32_t variantType = idForLocale(locale, id, sizeof(id), ec);
+        /*uint32_t variantType =*/ idForLocale(locale, id, sizeof(id), ec);
 
         if (U_FAILURE(*ec))
         {
@@ -1951,7 +1951,7 @@ ucurr_forLocaleAndDate(const char* locale,
             resLen = uloc_getKeywordValue(locale, "currency", id, ULOC_FULLNAME_CAPACITY, &localStatus);
 
             // get country or country_variant in `id'
-            uint32_t variantType = idForLocale(locale, id, sizeof(id), ec);
+            /*uint32_t variantType =*/ idForLocale(locale, id, sizeof(id), ec);
             if (U_FAILURE(*ec))
             {
                 return 0;

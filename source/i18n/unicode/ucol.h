@@ -520,13 +520,13 @@ ucol_getDisplayName(    const    char        *objLoc,
  * Get a locale for which collation rules are available.
  * A UCollator in a locale returned by this function will perform the correct
  * collation for the locale.
- * @param index The index of the desired locale.
+ * @param localeIndex The index of the desired locale.
  * @return A locale for which collation rules are available, or 0 if none.
  * @see ucol_countAvailable
  * @stable ICU 2.0
  */
 U_STABLE const char* U_EXPORT2 
-ucol_getAvailable(int32_t index);
+ucol_getAvailable(int32_t localeIndex);
 
 /**
  * Determine how many locales have collation rules available.

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2008, International Business Machines
+*   Copyright (C) 2004-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -379,24 +379,24 @@ static const uint8_t flagsOffset[256]={
     4, 5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8
 };
 
-#define HAS_SLOT(flags, index) ((flags)&(1<<(index)))
-#define SLOT_OFFSET(flags, index) flagsOffset[(flags)&((1<<(index))-1)]
+#define HAS_SLOT(flags, idx) ((flags)&(1<<(idx)))
+#define SLOT_OFFSET(flags, idx) flagsOffset[(flags)&((1<<(idx))-1)]
 
 /*
- * Get the value of an optional-value slot where HAS_SLOT(excWord, index).
+ * Get the value of an optional-value slot where HAS_SLOT(excWord, idx).
  *
  * @param excWord (in) initial exceptions word
- * @param index (in) desired slot index
+ * @param idx (in) desired slot index
  * @param pExc16 (in/out) const uint16_t * after excWord=*pExc16++;
  *               moved to the last uint16_t of the value, use +1 for beginning of next slot
  * @param value (out) int32_t or uint32_t output if hasSlot, otherwise not modified
  */
-#define GET_SLOT_VALUE(excWord, index, pExc16, value) \
+#define GET_SLOT_VALUE(excWord, idx, pExc16, value) \
     if(((excWord)&UCASE_EXC_DOUBLE_SLOTS)==0) { \
-        (pExc16)+=SLOT_OFFSET(excWord, index); \
+        (pExc16)+=SLOT_OFFSET(excWord, idx); \
         (value)=*pExc16; \
     } else { \
-        (pExc16)+=2*SLOT_OFFSET(excWord, index); \
+        (pExc16)+=2*SLOT_OFFSET(excWord, idx); \
         (value)=*pExc16++; \
         (value)=((value)<<16)|*pExc16; \
     }
@@ -447,15 +447,15 @@ ucase_totitle(const UCaseProps *csp, UChar32 c) {
     } else {
         const uint16_t *pe=GET_EXCEPTIONS(csp, props);
         uint16_t excWord=*pe++;
-        int32_t index;
+        int32_t idx;
         if(HAS_SLOT(excWord, UCASE_EXC_TITLE)) {
-            index=UCASE_EXC_TITLE;
+            idx=UCASE_EXC_TITLE;
         } else if(HAS_SLOT(excWord, UCASE_EXC_UPPER)) {
-            index=UCASE_EXC_UPPER;
+            idx=UCASE_EXC_UPPER;
         } else {
             return c;
         }
-        GET_SLOT_VALUE(excWord, index, pe, c);
+        GET_SLOT_VALUE(excWord, idx, pe, c);
     }
     return c;
 }
@@ -517,15 +517,15 @@ ucase_addCaseClosure(const UCaseProps *csp, UChar32 c, const USetAdder *sa) {
         const uint16_t *pe0, *pe=GET_EXCEPTIONS(csp, props);
         const UChar *closure;
         uint16_t excWord=*pe++;
-        int32_t index, closureLength, fullLength, length;
+        int32_t idx, closureLength, fullLength, length;
 
         pe0=pe;
 
         /* add all simple case mappings */
-        for(index=UCASE_EXC_LOWER; index<=UCASE_EXC_TITLE; ++index) {
-            if(HAS_SLOT(excWord, index)) {
+        for(idx=UCASE_EXC_LOWER; idx<=UCASE_EXC_TITLE; ++idx) {
+            if(HAS_SLOT(excWord, idx)) {
                 pe=pe0;
-                GET_SLOT_VALUE(excWord, index, pe, c);
+                GET_SLOT_VALUE(excWord, idx, pe, c);
                 sa->add(sa->set, c);
             }
         }
@@ -572,8 +572,8 @@ ucase_addCaseClosure(const UCaseProps *csp, UChar32 c, const USetAdder *sa) {
         }
 
         /* add each code point in the closure string */
-        for(index=0; index<closureLength;) {
-            U16_NEXT_UNSAFE(closure, index, c);
+        for(idx=0; idx<closureLength;) {
+            U16_NEXT_UNSAFE(closure, idx, c);
             sa->add(sa->set, c);
         }
     }
@@ -1200,7 +1200,7 @@ toUpperOrTitle(const UCaseProps *csp, UChar32 c,
     } else {
         const uint16_t *pe=GET_EXCEPTIONS(csp, props), *pe2;
         uint16_t excWord=*pe++;
-        int32_t full, index;
+        int32_t full, idx;
 
         pe2=pe;
 
@@ -1265,14 +1265,14 @@ toUpperOrTitle(const UCaseProps *csp, UChar32 c,
         }
 
         if(!upperNotTitle && HAS_SLOT(excWord, UCASE_EXC_TITLE)) {
-            index=UCASE_EXC_TITLE;
+            idx=UCASE_EXC_TITLE;
         } else if(HAS_SLOT(excWord, UCASE_EXC_UPPER)) {
             /* here, titlecase is same as uppercase */
-            index=UCASE_EXC_UPPER;
+            idx=UCASE_EXC_UPPER;
         } else {
             return ~c;
         }
-        GET_SLOT_VALUE(excWord, index, pe2, result);
+        GET_SLOT_VALUE(excWord, idx, pe2, result);
     }
 
     return (result==c) ? ~result : result;
@@ -1346,7 +1346,7 @@ ucase_fold(const UCaseProps *csp, UChar32 c, uint32_t options) {
     } else {
         const uint16_t *pe=GET_EXCEPTIONS(csp, props);
         uint16_t excWord=*pe++;
-        int32_t index;
+        int32_t idx;
         if(excWord&UCASE_EXC_CONDITIONAL_FOLD) {
             /* special case folding mappings, hardcoded */
             if((options&_FOLD_CASE_OPTIONS_MASK)==U_FOLD_CASE_DEFAULT) {
@@ -1370,13 +1370,13 @@ ucase_fold(const UCaseProps *csp, UChar32 c, uint32_t options) {
             }
         }
         if(HAS_SLOT(excWord, UCASE_EXC_FOLD)) {
-            index=UCASE_EXC_FOLD;
+            idx=UCASE_EXC_FOLD;
         } else if(HAS_SLOT(excWord, UCASE_EXC_LOWER)) {
-            index=UCASE_EXC_LOWER;
+            idx=UCASE_EXC_LOWER;
         } else {
             return c;
         }
-        GET_SLOT_VALUE(excWord, index, pe, c);
+        GET_SLOT_VALUE(excWord, idx, pe, c);
     }
     return c;
 }
@@ -1410,7 +1410,7 @@ ucase_toFullFolding(const UCaseProps *csp, UChar32 c,
     } else {
         const uint16_t *pe=GET_EXCEPTIONS(csp, props), *pe2;
         uint16_t excWord=*pe++;
-        int32_t full, index;
+        int32_t full, idx;
 
         pe2=pe;
 
@@ -1456,13 +1456,13 @@ ucase_toFullFolding(const UCaseProps *csp, UChar32 c,
         }
 
         if(HAS_SLOT(excWord, UCASE_EXC_FOLD)) {
-            index=UCASE_EXC_FOLD;
+            idx=UCASE_EXC_FOLD;
         } else if(HAS_SLOT(excWord, UCASE_EXC_LOWER)) {
-            index=UCASE_EXC_LOWER;
+            idx=UCASE_EXC_LOWER;
         } else {
             return ~c;
         }
-        GET_SLOT_VALUE(excWord, index, pe2, result);
+        GET_SLOT_VALUE(excWord, idx, pe2, result);
     }
 
     return (result==c) ? ~result : result;
