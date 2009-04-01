@@ -61,6 +61,7 @@ U_CDECL_BEGIN
 static UChar * allocUStringInTable(int32_t uStringLen) {
     UChar * uStringSpace = NULL;
     // initialize the table if necessary
+    umtx_lock(&gZoneMetaLock);
     if (gUStringTable == NULL) {
         gUStringTable = (UChar**)uprv_malloc(USTRING_ALLOC_START*sizeof(UChar*));
         if (gUStringTable != NULL) {
@@ -84,13 +85,16 @@ static UChar * allocUStringInTable(int32_t uStringLen) {
             }
         }
     }
+    umtx_unlock(&gZoneMetaLock);
     return uStringSpace;
 }
 
 static void removeLastUStringFromTable(void) {
+	umtx_lock(&gZoneMetaLock);
     if (gUStringCount > 0) {
         free(gUStringTable[--gUStringCount]);
     }
+    umtx_unlock(&gZoneMetaLock);
 }
 
 static void freeUStringTable(void) {
