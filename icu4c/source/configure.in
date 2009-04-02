@@ -1,4 +1,4 @@
-# -*-autoconf-*-
+	# -*-autoconf-*-
 AC_COPYRIGHT([ Copyright (c) 1999-2009, International Business Machines Corporation and others. All Rights Reserved. ])
 # configure.in for ICU
 # Stephen F. Booth, heavily modified by Yves and others
@@ -284,12 +284,12 @@ AC_MSG_RESULT($enabled)
 AC_SUBST(U_DISABLE_RENAMING)
 
 AC_MSG_CHECKING([whether to enable function and data tracing])
-enabled=yes
+enabled=no
 U_ENABLE_TRACING=0
 AC_ARG_ENABLE(tracing,
     [  --enable-tracing        enable function and data tracing [default=no]],
     [ case "${enableval}" in
-	     yes|"") enabled=yes ;;
+	     yes|"") enabled=yes; U_ENABLE_TRACING=1 ;;
 	     no) enabled=no; U_ENABLE_TRACING=0 ;;
 	     *) ;;
     esac],
