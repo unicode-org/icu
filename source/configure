@@ -5347,12 +5347,12 @@ $as_echo "$enabled" >&6; }
 
 { $as_echo "$as_me:$LINENO: checking whether to enable function and data tracing" >&5
 $as_echo_n "checking whether to enable function and data tracing... " >&6; }
-enabled=yes
+enabled=no
 U_ENABLE_TRACING=0
 # Check whether --enable-tracing was given.
 if test "${enable_tracing+set}" = set; then
   enableval=$enable_tracing;  case "${enableval}" in
-	     yes|"") enabled=yes ;;
+	     yes|"") enabled=yes; U_ENABLE_TRACING=1 ;;
 	     no) enabled=no; U_ENABLE_TRACING=0 ;;
 	     *) ;;
     esac
