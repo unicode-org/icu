@@ -614,7 +614,6 @@ U_DRAFT int32_t U_EXPORT2
 uspoof_areConfusable(const USpoofChecker *sc,
                      const UChar *s1, int32_t length1,
                      const UChar *s2, int32_t length2,
-                     int32_t *position,
                      UErrorCode *status);
 
 
@@ -654,7 +653,6 @@ U_DRAFT int32_t U_EXPORT2
 uspoof_areConfusableUTF8(const USpoofChecker *sc,
                          const char *s1, int32_t length1,
                          const char *s2, int32_t length2,
-                         int32_t *position,
                          UErrorCode *status);
 
 
@@ -692,7 +690,6 @@ U_DRAFT int32_t U_EXPORT2
 uspoof_areConfusableUnicodeString(const USpoofChecker *sc,
                                   const U_NAMESPACE_QUALIFIER UnicodeString &s1,
                                   const U_NAMESPACE_QUALIFIER UnicodeString &s2,
-                                  int32_t *position,
                                   UErrorCode *status);
 #endif
 
