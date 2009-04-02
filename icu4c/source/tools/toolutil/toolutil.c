@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2008, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -152,7 +152,7 @@ uprv_getModificationDate(const char *pathname, UErrorCode *status)
 
 struct UToolMemory {
     char name[64];
-    int32_t capacity, maxCapacity, size, index;
+    int32_t capacity, maxCapacity, size, idx;
     void *array;
     UAlignedMemory staticArray[1];
 };
@@ -176,7 +176,7 @@ utm_open(const char *name, int32_t initialCapacity, int32_t maxCapacity, int32_t
     mem->capacity=initialCapacity;
     mem->maxCapacity=maxCapacity;
     mem->size=size;
-    mem->index=0;
+    mem->idx=0;
     return mem;
 }
 
@@ -198,7 +198,7 @@ utm_getStart(UToolMemory *mem) {
 
 U_CAPI int32_t U_EXPORT2
 utm_countItems(UToolMemory *mem) {
-    return mem->index;
+    return mem->idx;
 }
 
 
@@ -225,7 +225,7 @@ utm_hasCapacity(UToolMemory *mem, int32_t capacity) {
         if(mem->array==mem->staticArray) {
             mem->array=uprv_malloc(newCapacity*mem->size);
             if(mem->array!=NULL) {
-                uprv_memcpy(mem->array, mem->staticArray, mem->index*mem->size);
+                uprv_memcpy(mem->array, mem->staticArray, mem->idx*mem->size);
             }
         } else {
             mem->array=uprv_realloc(mem->array, newCapacity*mem->size);
@@ -242,10 +242,10 @@ utm_hasCapacity(UToolMemory *mem, int32_t capacity) {
 
 U_CAPI void * U_EXPORT2
 utm_alloc(UToolMemory *mem) {
-    char *p=(char *)mem->array+mem->index*mem->size;
-    int32_t newIndex=mem->index+1;
+    char *p=(char *)mem->array+mem->idx*mem->size;
+    int32_t newIndex=mem->idx+1;
     if(utm_hasCapacity(mem, newIndex)) {
-        mem->index=newIndex;
+        mem->idx=newIndex;
         uprv_memset(p, 0, mem->size);
     }
     return p;
@@ -253,10 +253,10 @@ utm_alloc(UToolMemory *mem) {
 
 U_CAPI void * U_EXPORT2
 utm_allocN(UToolMemory *mem, int32_t n) {
-    char *p=(char *)mem->array+mem->index*mem->size;
-    int32_t newIndex=mem->index+n;
+    char *p=(char *)mem->array+mem->idx*mem->size;
+    int32_t newIndex=mem->idx+n;
     if(utm_hasCapacity(mem, newIndex)) {
-        mem->index=newIndex;
+        mem->idx=newIndex;
         uprv_memset(p, 0, n*mem->size);
     }
     return p;
