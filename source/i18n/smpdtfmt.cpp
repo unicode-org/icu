@@ -2756,6 +2756,8 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                             zsinfo = zsf->findGenericLocation(text, start, matchLen, status);
                         }
                         break;
+                    default:
+                        break;
                 }
 
                 if (U_SUCCESS(status) && zsinfo != NULL) {
