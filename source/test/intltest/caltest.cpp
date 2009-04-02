@@ -2052,6 +2052,7 @@ void CalendarTest::Test3785()
     if (U_FAILURE(status)) return; 
     //printf("formatted: '%s'\n", mkcstr(ubuffer));
 
+    udat_close(df);
     return;
 }
 
