@@ -450,15 +450,15 @@ static void TestUSpoofCAPI(void) {
     TEST_SETUP
         int32_t  checkResults;
         
-        checkResults = uspoof_areConfusable(sc, scLatin, -1, scMixed, -1, NULL, &status);
+        checkResults = uspoof_areConfusable(sc, scLatin, -1, scMixed, -1, &status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(USPOOF_MIXED_SCRIPT_CONFUSABLE, checkResults);
 
-        checkResults = uspoof_areConfusable(sc, goodGreek, -1, scLatin, -1, NULL, &status);
+        checkResults = uspoof_areConfusable(sc, goodGreek, -1, scLatin, -1, &status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(0, checkResults);
 
-        checkResults = uspoof_areConfusable(sc, lll_Latin_a, -1, lll_Latin_b, -1, NULL, &status);
+        checkResults = uspoof_areConfusable(sc, lll_Latin_a, -1, lll_Latin_b, -1, &status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT_CONFUSABLE | USPOOF_MIXED_SCRIPT_CONFUSABLE, checkResults);
         /* TODO:  This is an odd test case, an identifier where every character maps to a digit 1 confusable tables.
@@ -479,21 +479,21 @@ static void TestUSpoofCAPI(void) {
         u_strToUTF8(s1, sizeof(s1), NULL, scLatin, -1, &status);
         u_strToUTF8(s2, sizeof(s2), NULL, scMixed, -1, &status);
         TEST_ASSERT_SUCCESS(status);
-        checkResults = uspoof_areConfusableUTF8(sc, s1, -1, s2, -1, NULL, &status);
+        checkResults = uspoof_areConfusableUTF8(sc, s1, -1, s2, -1, &status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(USPOOF_MIXED_SCRIPT_CONFUSABLE, checkResults);
 
         u_strToUTF8(s1, sizeof(s1), NULL, goodGreek, -1, &status);
         u_strToUTF8(s2, sizeof(s2), NULL, scLatin, -1, &status);
         TEST_ASSERT_SUCCESS(status);
-        checkResults = uspoof_areConfusableUTF8(sc, s1, -1, s2, -1, NULL, &status);
+        checkResults = uspoof_areConfusableUTF8(sc, s1, -1, s2, -1, &status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(0, checkResults);
         
         u_strToUTF8(s1, sizeof(s1), NULL, lll_Latin_a, -1, &status);
         u_strToUTF8(s2, sizeof(s2), NULL, lll_Latin_b, -1, &status);
         TEST_ASSERT_SUCCESS(status);
-        checkResults = uspoof_areConfusableUTF8(sc, s1, -1, s2, -1, NULL, &status);
+        checkResults = uspoof_areConfusableUTF8(sc, s1, -1, s2, -1, &status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT_CONFUSABLE | USPOOF_MIXED_SCRIPT_CONFUSABLE, checkResults);
 

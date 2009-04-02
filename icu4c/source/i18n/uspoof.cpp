@@ -366,7 +366,6 @@ U_CAPI int32_t U_EXPORT2
 uspoof_areConfusable(const USpoofChecker *sc,
                      const UChar *s1, int32_t length1,
                      const UChar *s2, int32_t length2,
-                     int32_t *position,
                      UErrorCode *status) {
     const SpoofImpl *This = SpoofImpl::validateThis(sc, *status);
     if (U_FAILURE(*status)) {
@@ -424,11 +423,6 @@ uspoof_areConfusable(const USpoofChecker *sc,
         }
      }
 
-    if (result != 0 && position != NULL) {
-        // TODO: get rid of position parameter?  We can't do anything meaningful with it.
-        *position = 0;
-    }
-
 
     // TODO: Further checks on the number and sameness of the scripts in the input?
     //       If the input consists entirely of characters that map to digits (0 or 1), single script
@@ -466,7 +460,6 @@ U_CAPI int32_t U_EXPORT2
 uspoof_areConfusableUTF8(const USpoofChecker *sc,
                          const char *s1, int32_t length1,
                          const char *s2, int32_t length2,
-                         int32_t *position,
                          UErrorCode *status) {
 
     SpoofImpl::validateThis(sc, *status);
@@ -482,7 +475,7 @@ uspoof_areConfusableUTF8(const USpoofChecker *sc,
     int32_t  lengthS2U;
     UChar   *s2U = convertFromUTF8(s2Buf, USPOOF_STACK_BUFFER_SIZE, &lengthS2U, s2, length2, status);
 
-    int32_t results = uspoof_areConfusable(sc, s1U, lengthS1U, s2U, lengthS2U, position, status);
+    int32_t results = uspoof_areConfusable(sc, s1U, lengthS1U, s2U, lengthS2U, status);
     
     if (s1U != s1Buf) {
         delete s1U;
@@ -491,7 +484,6 @@ uspoof_areConfusableUTF8(const USpoofChecker *sc,
         delete s2U;
     }
     return results;
-    // TODO:  position offsets (8 vs 16) not handled correctly, but it is probably going to be removed.
 }
  
 
@@ -499,7 +491,6 @@ U_CAPI int32_t U_EXPORT2
 uspoof_areConfusableUnicodeString(const USpoofChecker *sc,
                                   const U_NAMESPACE_QUALIFIER UnicodeString &s1,
                                   const U_NAMESPACE_QUALIFIER UnicodeString &s2,
-                                  int32_t *position,
                                   UErrorCode *status) {
 
     const UChar *u1  = s1.getBuffer();
@@ -507,7 +498,7 @@ uspoof_areConfusableUnicodeString(const USpoofChecker *sc,
     const UChar *u2  = s2.getBuffer();
     int32_t  length2 = s2.length();
 
-    int32_t results  = uspoof_areConfusable(sc, u1, length1, u2, length2, position, status);
+    int32_t results  = uspoof_areConfusable(sc, u1, length1, u2, length2, status);
     return results;
 }
 

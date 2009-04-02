@@ -80,7 +80,7 @@ void IntlTestSpoof::TestSpoofAPI() {
     TEST_SETUP
         UnicodeString s1("cxs");
         UnicodeString s2 = UnicodeString("\\u0441\\u0445\\u0455").unescape();  // Cyrillic "cxs"
-        int32_t checkResults = uspoof_areConfusableUnicodeString(sc, s1, s2, NULL, &status);
+        int32_t checkResults = uspoof_areConfusableUnicodeString(sc, s1, s2, &status);
         TEST_ASSERT_EQ(USPOOF_MIXED_SCRIPT_CONFUSABLE, checkResults);
 
     TEST_TEARDOWN;
