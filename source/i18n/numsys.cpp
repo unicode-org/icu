@@ -58,7 +58,8 @@ NumberingSystem::NumberingSystem() {
      * @draft ICU 4.2
      */
 
-NumberingSystem::NumberingSystem(const NumberingSystem& other) {
+NumberingSystem::NumberingSystem(const NumberingSystem& other) 
+:  UObject(other) {
     *this=other;
 }
 
