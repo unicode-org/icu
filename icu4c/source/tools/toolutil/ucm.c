@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2007, International Business Machines
+*   Copyright (C) 2003-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -915,7 +915,7 @@ ucm_addMapping(UCMTable *table,
                uint8_t bytes[UCNV_EXT_MAX_BYTES]) {
     UCMapping *tm;
     UChar32 c;
-    int32_t index;
+    int32_t idx;
 
     if(table->mappingsLength>=table->mappingsCapacity) {
         /* make the mappings array larger */
@@ -960,32 +960,32 @@ ucm_addMapping(UCMTable *table,
     }
 
     if(m->uLen>1) {
-        index=table->codePointsLength;
+        idx=table->codePointsLength;
         table->codePointsLength+=m->uLen;
         if(table->codePointsLength>table->codePointsCapacity) {
             fprintf(stderr, "ucm error: too many code points in multiple-code point mappings\n");
             exit(U_MEMORY_ALLOCATION_ERROR);
         }
 
-        uprv_memcpy(table->codePoints+index, codePoints, m->uLen*4);
-        m->u=index;
+        uprv_memcpy(table->codePoints+idx, codePoints, m->uLen*4);
+        m->u=idx;
     }
 
     if(m->bLen>4) {
-        index=table->bytesLength;
+        idx=table->bytesLength;
         table->bytesLength+=m->bLen;
         if(table->bytesLength>table->bytesCapacity) {
             fprintf(stderr, "ucm error: too many bytes in mappings with >4 charset bytes\n");
             exit(U_MEMORY_ALLOCATION_ERROR);
         }
 
-        uprv_memcpy(table->bytes+index, bytes, m->bLen);
-        m->b.index=index;
+        uprv_memcpy(table->bytes+idx, bytes, m->bLen);
+        m->b.idx=idx;
     }
 
     /* set unicodeMask */
-    for(index=0; index<m->uLen; ++index) {
-        c=codePoints[index];
+    for(idx=0; idx<m->uLen; ++idx) {
+        c=codePoints[idx];
         if(c>=0x10000) {
             table->unicodeMask|=UCNV_HAS_SUPPLEMENTARY; /* there are supplementary code points */
         } else if(U_IS_SURROGATE(c)) {

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2008, International Business Machines
+*   Copyright (C) 2000-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -559,7 +559,7 @@ MBCSSingleAddFromUnicode(MBCSData *mbcsData,
                          UChar32 c,
                          int8_t flag) {
     uint16_t *stage3, *p;
-    uint32_t index;
+    uint32_t idx;
     uint16_t old;
     uint8_t b;
 
@@ -580,13 +580,13 @@ MBCSSingleAddFromUnicode(MBCSData *mbcsData,
     b=*bytes;
 
     /* inspect stage 1 */
-    index=c>>MBCS_STAGE_1_SHIFT;
+    idx=c>>MBCS_STAGE_1_SHIFT;
     if(mbcsData->utf8Friendly && c<=SBCS_UTF8_MAX) {
         nextOffset=(c>>MBCS_STAGE_2_SHIFT)&MBCS_STAGE_2_BLOCK_MASK&~(MBCS_UTF8_STAGE_3_BLOCKS-1);
     } else {
         nextOffset=(c>>MBCS_STAGE_2_SHIFT)&MBCS_STAGE_2_BLOCK_MASK;
     }
-    if(mbcsData->stage1[index]==MBCS_STAGE_2_ALL_UNASSIGNED_INDEX) {
+    if(mbcsData->stage1[idx]==MBCS_STAGE_2_ALL_UNASSIGNED_INDEX) {
         /* allocate another block in stage 2 */
         newBlock=mbcsData->stage2Top;
         if(mbcsData->utf8Friendly) {
@@ -606,12 +606,12 @@ MBCSSingleAddFromUnicode(MBCSData *mbcsData,
          * each stage 2 block contains 64 16-bit words:
          * 6 code point bits 9..4 with 1 stage 3 index
          */
-        mbcsData->stage1[index]=(uint16_t)newBlock;
+        mbcsData->stage1[idx]=(uint16_t)newBlock;
         mbcsData->stage2Top=newTop;
     }
 
     /* inspect stage 2 */
-    index=mbcsData->stage1[index]+nextOffset;
+    idx=mbcsData->stage1[idx]+nextOffset;
     if(mbcsData->utf8Friendly && c<=SBCS_UTF8_MAX) {
         /* allocate 64-entry blocks for UTF-8-friendly lookup */
         blockSize=MBCS_UTF8_STAGE_3_BLOCK_SIZE;
@@ -620,7 +620,7 @@ MBCSSingleAddFromUnicode(MBCSData *mbcsData,
         blockSize=MBCS_STAGE_3_BLOCK_SIZE;
         nextOffset=c&MBCS_STAGE_3_BLOCK_MASK;
     }
-    if(mbcsData->stage2Single[index]==0) {
+    if(mbcsData->stage2Single[idx]==0) {
         /* allocate another block in stage 3 */
         newBlock=mbcsData->stage3Top;
         if(mbcsData->utf8Friendly) {
@@ -636,7 +636,7 @@ MBCSSingleAddFromUnicode(MBCSData *mbcsData,
             return FALSE;
         }
         /* each block has 16 uint16_t entries */
-        i=index;
+        i=idx;
         while(newBlock<newTop) {
             mbcsData->stage2Single[i++]=(uint16_t)newBlock;
             newBlock+=MBCS_STAGE_3_BLOCK_SIZE;
@@ -645,7 +645,7 @@ MBCSSingleAddFromUnicode(MBCSData *mbcsData,
     }
 
     /* write the codepage entry into stage 3 and get the previous entry */
-    p=stage3+mbcsData->stage2Single[index]+nextOffset;
+    p=stage3+mbcsData->stage2Single[idx]+nextOffset;
     old=*p;
     if(flag<=0) {
         *p=(uint16_t)(0xf00|b);
@@ -679,7 +679,7 @@ MBCSAddFromUnicode(MBCSData *mbcsData,
     char buffer[10];
     const uint8_t *pb;
     uint8_t *stage3, *p;
-    uint32_t index, b, old, stage3Index;
+    uint32_t idx, b, old, stage3Index;
     int32_t maxCharLength;
 
     uint32_t blockSize, newTop, i, nextOffset, newBlock, min, overlap, maxOverlap;
@@ -710,13 +710,13 @@ MBCSAddFromUnicode(MBCSData *mbcsData,
     stage3=mbcsData->fromUBytes;
 
     /* inspect stage 1 */
-    index=c>>MBCS_STAGE_1_SHIFT;
+    idx=c>>MBCS_STAGE_1_SHIFT;
     if(mbcsData->utf8Friendly && c<=mbcsData->utf8Max) {
         nextOffset=(c>>MBCS_STAGE_2_SHIFT)&MBCS_STAGE_2_BLOCK_MASK&~(MBCS_UTF8_STAGE_3_BLOCKS-1);
     } else {
         nextOffset=(c>>MBCS_STAGE_2_SHIFT)&MBCS_STAGE_2_BLOCK_MASK;
     }
-    if(mbcsData->stage1[index]==MBCS_STAGE_2_ALL_UNASSIGNED_INDEX) {
+    if(mbcsData->stage1[idx]==MBCS_STAGE_2_ALL_UNASSIGNED_INDEX) {
         /* allocate another block in stage 2 */
         newBlock=mbcsData->stage2Top;
         if(mbcsData->utf8Friendly) {
@@ -737,7 +737,7 @@ MBCSAddFromUnicode(MBCSData *mbcsData,
          * each stage 2 block contains 64 32-bit words:
          * 6 code point bits 9..4 with value with bits 31..16 "assigned" flags and bits 15..0 stage 3 index
          */
-        i=index;
+        i=idx;
         while(newBlock<newTop) {
             mbcsData->stage1[i++]=(uint16_t)newBlock;
             newBlock+=MBCS_STAGE_2_BLOCK_SIZE;
@@ -746,7 +746,7 @@ MBCSAddFromUnicode(MBCSData *mbcsData,
     }
 
     /* inspect stage 2 */
-    index=mbcsData->stage1[index]+nextOffset;
+    idx=mbcsData->stage1[idx]+nextOffset;
     if(mbcsData->utf8Friendly && c<=mbcsData->utf8Max) {
         /* allocate 64-entry blocks for UTF-8-friendly lookup */
         blockSize=MBCS_UTF8_STAGE_3_BLOCK_SIZE*maxCharLength;
@@ -755,7 +755,7 @@ MBCSAddFromUnicode(MBCSData *mbcsData,
         blockSize=MBCS_STAGE_3_BLOCK_SIZE*maxCharLength;
         nextOffset=c&MBCS_STAGE_3_BLOCK_MASK;
     }
-    if(mbcsData->stage2[index]==0) {
+    if(mbcsData->stage2[idx]==0) {
         /* allocate another block in stage 3 */
         newBlock=mbcsData->stage3Top;
         if(mbcsData->utf8Friendly && nextOffset>=MBCS_STAGE_3_GRANULARITY) {
@@ -781,7 +781,7 @@ MBCSAddFromUnicode(MBCSData *mbcsData,
             return FALSE;
         }
         /* each block has 16*maxCharLength bytes */
-        i=index;
+        i=idx;
         while(newBlock<newTop) {
             mbcsData->stage2[i++]=(newBlock/MBCS_STAGE_3_GRANULARITY)/maxCharLength;
             newBlock+=MBCS_STAGE_3_BLOCK_SIZE*maxCharLength;
@@ -789,7 +789,7 @@ MBCSAddFromUnicode(MBCSData *mbcsData,
         mbcsData->stage3Top=newTop; /* ==newBlock */
     }
 
-    stage3Index=MBCS_STAGE_3_GRANULARITY*(uint32_t)(uint16_t)mbcsData->stage2[index];
+    stage3Index=MBCS_STAGE_3_GRANULARITY*(uint32_t)(uint16_t)mbcsData->stage2[idx];
 
     /* Build an alternate, UTF-8-friendly stage table as well. */
     if(mbcsData->utf8Friendly && c<=mbcsData->utf8Max) {
@@ -866,7 +866,7 @@ MBCSAddFromUnicode(MBCSData *mbcsData,
     }
 
     /* check that this Unicode code point was still unassigned */
-    if((mbcsData->stage2[index+(nextOffset>>MBCS_STAGE_2_SHIFT)]&(1UL<<(16+(c&0xf))))!=0 || old!=0) {
+    if((mbcsData->stage2[idx+(nextOffset>>MBCS_STAGE_2_SHIFT)]&(1UL<<(16+(c&0xf))))!=0 || old!=0) {
         if(flag>=0) {
             fprintf(stderr, "error: duplicate Unicode code point at U+%04x<->0x%s see 0x%02x\n",
                 (int)c, printBytes(buffer, bytes, length), (int)old);
@@ -880,7 +880,7 @@ MBCSAddFromUnicode(MBCSData *mbcsData,
     }
     if(flag<=0) {
         /* set the roundtrip flag */
-        mbcsData->stage2[index+(nextOffset>>4)]|=(1UL<<(16+(c&0xf)));
+        mbcsData->stage2[idx+(nextOffset>>4)]|=(1UL<<(16+(c&0xf)));
     }
 
     return TRUE;

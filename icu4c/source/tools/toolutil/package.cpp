@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -406,13 +406,13 @@ Package::Package() {
 }
 
 Package::~Package() {
-    int32_t index;
+    int32_t idx;
 
     free(inData);
 
-    for(index=0; index<itemCount; ++index) {
-        if(items[index].isDataOwned) {
-            free(items[index].data);
+    for(idx=0; idx<itemCount; ++idx) {
+        if(items[idx].isDataOwned) {
+            free(items[idx].data);
         }
     }
 }
@@ -902,15 +902,15 @@ Package::findItems(const char *pattern) {
 int32_t
 Package::findNextItem() {
     const char *name, *middle, *treeSep;
-    int32_t index, nameLength, middleLength;
+    int32_t idx, nameLength, middleLength;
 
     if(findNextIndex<0) {
         return -1;
     }
 
     while(findNextIndex<itemCount) {
-        index=findNextIndex++;
-        name=items[index].name;
+        idx=findNextIndex++;
+        name=items[idx].name;
         nameLength=(int32_t)strlen(name);
         if(nameLength<(findPrefixLength+findSuffixLength)) {
             // item name too short for prefix & suffix
@@ -937,7 +937,7 @@ Package::findNextItem() {
         }
 
         // found a matching item
-        return index;
+        return idx;
     }
 
     // no more items
@@ -957,43 +957,43 @@ Package::addItem(const char *name) {
 
 void
 Package::addItem(const char *name, uint8_t *data, int32_t length, UBool isDataOwned, char type) {
-    int32_t index;
+    int32_t idx;
 
-    index=findItem(name);
-    if(index<0) {
+    idx=findItem(name);
+    if(idx<0) {
         // new item, make space at the insertion point
         if(itemCount>=MAX_FILE_COUNT) {
             fprintf(stderr, "icupkg: too many items, maximum is %d\n", MAX_FILE_COUNT);
             exit(U_BUFFER_OVERFLOW_ERROR);
         }
         // move the following items down
-        index=~index;
-        if(index<itemCount) {
-            memmove(items+index+1, items+index, (itemCount-index)*sizeof(Item));
+        idx=~idx;
+        if(idx<itemCount) {
+            memmove(items+idx+1, items+idx, (itemCount-idx)*sizeof(Item));
         }
         ++itemCount;
 
         // reset this Item entry
-        memset(items+index, 0, sizeof(Item));
+        memset(items+idx, 0, sizeof(Item));
 
         // copy the item's name
-        items[index].name=allocString(TRUE, strlen(name));
-        strcpy(items[index].name, name);
-        pathToTree(items[index].name);
+        items[idx].name=allocString(TRUE, strlen(name));
+        strcpy(items[idx].name, name);
+        pathToTree(items[idx].name);
     } else {
         // same-name item found, replace it
-        if(items[index].isDataOwned) {
-            free(items[index].data);
+        if(items[idx].isDataOwned) {
+            free(items[idx].data);
         }
 
         // keep the item's name since it is the same
     }
 
     // set the item's data
-    items[index].data=data;
-    items[index].length=length;
-    items[index].isDataOwned=isDataOwned;
-    items[index].type=type;
+    items[idx].data=data;
+    items[idx].length=length;
+    items[idx].isDataOwned=isDataOwned;
+    items[idx].type=type;
 }
 
 void
@@ -1018,20 +1018,20 @@ Package::addItems(const Package &listPkg) {
 }
 
 void
-Package::removeItem(int32_t index) {
-    if(index>=0) {
+Package::removeItem(int32_t idx) {
+    if(idx>=0) {
         // remove the item
-        if(items[index].isDataOwned) {
-            free(items[index].data);
+        if(items[idx].isDataOwned) {
+            free(items[idx].data);
         }
 
         // move the following items up
-        if((index+1)<itemCount) {
-            memmove(items+index, items+index+1, (itemCount-(index+1))*sizeof(Item));
+        if((idx+1)<itemCount) {
+            memmove(items+idx, items+idx+1, (itemCount-(idx+1))*sizeof(Item));
         }
         --itemCount;
 
-        if(index<=findNextIndex) {
+        if(idx<=findNextIndex) {
             --findNextIndex;
         }
     }
@@ -1039,11 +1039,11 @@ Package::removeItem(int32_t index) {
 
 void
 Package::removeItems(const char *pattern) {
-    int32_t index;
+    int32_t idx;
 
     findItems(pattern);
-    while((index=findNextItem())>=0) {
-        removeItem(index);
+    while((idx=findNextItem())>=0) {
+        removeItem(idx);
     }
 }
 
@@ -1058,7 +1058,7 @@ Package::removeItems(const Package &listPkg) {
 }
 
 void
-Package::extractItem(const char *filesPath, const char *outName, int32_t index, char outType) {
+Package::extractItem(const char *filesPath, const char *outName, int32_t idx, char outType) {
     char filename[1024];
     UDataSwapper *ds;
     FILE *file;
@@ -1067,10 +1067,10 @@ Package::extractItem(const char *filesPath, const char *outName, int32_t index, 
     uint8_t itemCharset, outCharset;
     UBool itemIsBigEndian, outIsBigEndian;
 
-    if(index<0 || itemCount<=index) {
+    if(idx<0 || itemCount<=idx) {
         return;
     }
-    pItem=items+index;
+    pItem=items+idx;
 
     // swap the data to the outType
     // outType==0: don't swap
@@ -1082,7 +1082,7 @@ Package::extractItem(const char *filesPath, const char *outName, int32_t index, 
         ds=udata_openSwapper(itemIsBigEndian, itemCharset, outIsBigEndian, outCharset, &errorCode);
         if(U_FAILURE(errorCode)) {
             fprintf(stderr, "icupkg: udata_openSwapper(item %ld) failed - %s\n",
-                    (long)index, u_errorName(errorCode));
+                    (long)idx, u_errorName(errorCode));
             exit(errorCode);
         }
 
@@ -1092,7 +1092,7 @@ Package::extractItem(const char *filesPath, const char *outName, int32_t index, 
         // swap the item from its platform properties to the desired ones
         udata_swap(ds, pItem->data, pItem->length, pItem->data, &errorCode);
         if(U_FAILURE(errorCode)) {
-            fprintf(stderr, "icupkg: udata_swap(item %ld) failed - %s\n", (long)index, u_errorName(errorCode));
+            fprintf(stderr, "icupkg: udata_swap(item %ld) failed - %s\n", (long)idx, u_errorName(errorCode));
             exit(errorCode);
         }
         udata_closeSwapper(ds);
@@ -1115,17 +1115,17 @@ Package::extractItem(const char *filesPath, const char *outName, int32_t index, 
 }
 
 void
-Package::extractItem(const char *filesPath, int32_t index, char outType) {
-    extractItem(filesPath, items[index].name, index, outType);
+Package::extractItem(const char *filesPath, int32_t idx, char outType) {
+    extractItem(filesPath, items[idx].name, idx, outType);
 }
 
 void
 Package::extractItems(const char *filesPath, const char *pattern, char outType) {
-    int32_t index;
+    int32_t idx;
 
     findItems(pattern);
-    while((index=findNextItem())>=0) {
-        extractItem(filesPath, index, outType);
+    while((idx=findNextItem())>=0) {
+        extractItem(filesPath, idx, outType);
     }
 }
 

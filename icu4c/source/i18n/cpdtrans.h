@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2007, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -114,11 +114,11 @@ public:
 
     /**
      * Returns the transliterator at the given index in this chain.
-     * @param index index into chain, from 0 to <code>getCount() - 1</code>
+     * @param idx index into chain, from 0 to <code>getCount() - 1</code>
      * @return transliterator at the given index
      * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
-    virtual const Transliterator& getTransliterator(int32_t index) const;
+    virtual const Transliterator& getTransliterator(int32_t idx) const;
 
     /**
      * Sets the transliterators.
@@ -166,7 +166,7 @@ protected:
      * Implements {@link Transliterator#handleTransliterate}.
      * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
-    virtual void handleTransliterate(Replaceable& text, UTransPosition& index,
+    virtual void handleTransliterate(Replaceable& text, UTransPosition& idx,
                                      UBool incremental) const;
 
 public:
