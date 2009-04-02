@@ -592,14 +592,6 @@ uspoof_checkUnicodeString(const USpoofChecker *sc,
  * @param length2 The length of the second string, expressed in
  *                16 bit UTF-16 code units, or -1 if the string is 
  *                zero terminated.
- * @param position      An out parameter that receives the index of the
- *                first confusable position in the strings being checked.
- *                This parameter may be null if the position information
- *                is not needed.
- *                If the strings are not confusable the parameter value
- *                will not be set.
- *                TODO:  Remove this paramater, doesn't really make sense.
-
  * @param status  The error code, set if an error occured while attempting to
  *                perform the check.
  *                Confusability of the strings is not reported here,
@@ -633,12 +625,6 @@ uspoof_areConfusable(const USpoofChecker *sc,
  *                confusability.  The strings are in UTF-18 format.
  * @param length2 The length of the second string in bytes, or -1 
  *                if the string is zero terminated.
- * @param position      An out parameter that receives the index of the
- *                first confusable position in the strings being checked.
- *                This parameter may be null if the position information
- *                is not needed.
- *                If the strings are not confusable the parameter value
- *                will not be set.
  * @param status  The error code, set if an error occured while attempting to
  *                perform the check.
  *                Confusability of the strings is not reported here,
@@ -670,12 +656,6 @@ uspoof_areConfusableUTF8(const USpoofChecker *sc,
  *                confusability.  The strings are in UTF-8 format.
  * @param s2      The second of the two strings to be compared for 
  *                confusability.  The strings are in UTF-18 format.
- * @position      An out parameter that receives the index of the
- *                first confusable position in the strings being checked.
- *                This parameter may be null if the position information
- *                is not needed.
- *                If the strings are not confusable the parameter value
- *                will not be set.
  * @param status  The error code, set if an error occured while attempting to
  *                perform the check.
  *                Confusability of the strings is not reported here,
