@@ -903,6 +903,10 @@ int32_t CollData::minLengthInChars(const CEList *ceList, int32_t offset, int32_t
                     rlength = minLengthInChars(ceList, roffset, history);
 
                     if (rlength <= 0) {
+                    // delete before continue to avoid memory leak.
+#ifndef CACHE_CELISTS
+                        delete ceList2;
+#endif
                         // ignore any dead ends
                         continue;
                     }

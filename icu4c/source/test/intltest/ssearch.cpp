@@ -1856,11 +1856,12 @@ static UBool simpleSearch(UCollator *coll, const UnicodeString &target, int32_t 
     int32_t         targetSize  = targetOrders.size() - 1;
     int32_t         patternSize = patternOrders.size() - 1;
     UBreakIterator *charBreakIterator = ubrk_open(UBRK_CHARACTER, ucol_getLocale(coll, ULOC_VALID_LOCALE, &status), 
-        									      target.getBuffer(), target.length(), &status);
+                                                  target.getBuffer(), target.length(), &status);
 
     if (patternSize == 0) {
         // Searching for an empty pattern always fails
         matchStart = matchEnd = -1;
+        ubrk_close(charBreakIterator);
         return FALSE;
     }
 
