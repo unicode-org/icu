@@ -1,11 +1,11 @@
-# Copyright (c) 2002-2008  International Business Machines Corporation and
+# Copyright (c) 2002-2009  International Business Machines Corporation and
 # others. All Rights Reserved.
 #
 #  file:  line.txt
 #
 #         Line Breaking Rules
 #         Implement default line breaking as defined by 
-#         Unicode Standard Annex #14 Revision 21 for Unicode 5.1
+#         Unicode Standard Annex #14 Revision 22 for Unicode 5.1
 #         http://www.unicode.org/reports/tr14/
 
 
@@ -23,7 +23,7 @@
 #  !!lookAheadHardBreak    Described here because it is (as yet) undocumented elsewhere
 #                          and only used for the line break rules.
 #
-#           It is used in the implementation of the incredibly annoying rule LB 10
+#           It is used in the implementation of rule LB 10
 #           which says to treat any combining mark that is not attached to a base
 #           character as if it were of class AL  (alphabetic).
 #
@@ -359,7 +359,7 @@ $PRcm ($JLcm | $JVcm | $JTcm | $H2cm | $H3cm);
 # LB 28   Do not break between alphabetics
 #
 $ALcm $ALcm;
-$CM+ $ALcm;      # The $CM+ is from rule 10, and unattached CM is treated as AL
+$CM+ $ALcm;      # The $CM+ is from rule 10, an unattached CM is treated as AL
 
 # LB 29
 $IScm $ALcm;
