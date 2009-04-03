@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /*
  *******************************************************************************
  * Copyright (C) 1996-2009, International Business Machines Corporation and    *
@@ -2255,8 +2255,10 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * @return an inversion list for the parsed substring
      * of <code>pattern</code>
      * @exception java.lang.IllegalArgumentException if the parse fails.
+     * @internal
+     * @deprecated - for internal use only
      */
-    UnicodeSet applyPattern(String pattern,
+    public UnicodeSet applyPattern(String pattern,
                       ParsePosition pos,
                       SymbolTable symbols,
                       int options) {
