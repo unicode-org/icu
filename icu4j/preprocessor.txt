@@ -8,6 +8,7 @@ src/com/ibm/icu/impl/duration/BasicDurationFormat.java
 src/com/ibm/icu/impl/ICUResourceBundleImpl.java
 src/com/ibm/icu/impl/JavaTimeZone.java
 src/com/ibm/icu/impl/PatternTokenizer.java
+src/com/ibm/icu/impl/UnicodeRegex.java
 src/com/ibm/icu/impl/Utility.java
 src/com/ibm/icu/lang/UCharacter.java
 src/com/ibm/icu/math/BigDecimal.java
@@ -59,6 +60,7 @@ src/com/ibm/icu/dev/test/TestUtil.java
 src/com/ibm/icu/dev/test/timezone/TimeZoneAliasTest.java
 src/com/ibm/icu/dev/test/timezone/TimeZoneRegression.java
 src/com/ibm/icu/dev/test/translit/UnicodeMapTest.java
+src/com/ibm/icu/dev/test/translit/RegexUtilitiesTest.java
 src/com/ibm/icu/dev/test/util/BagFormatter.java
 src/com/ibm/icu/dev/test/util/BNF.java
 src/com/ibm/icu/dev/test/util/CollectionUtilities.java
