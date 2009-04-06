@@ -3996,12 +3996,12 @@ $as_echo "$ac_use_strict_options" >&6; }
     # Check whether --enable-64bit-libs was given.
 if test "${enable_64bit_libs+set}" = set; then
   enableval=$enable_64bit_libs; echo "note, use --with-library-bits instead of --*-64bit-libs"
-         case "${withval}" in
-            no|false|32) BITS_REQ=32 ;;
-            yes|true|64) BITS_REQ=64 ;;
-            nochange) BITS_REQ=nochange ;;
-            *) { { $as_echo "$as_me:$LINENO: error: bad value ${withval} for --with-library-bits" >&5
-$as_echo "$as_me: error: bad value ${withval} for --with-library-bits" >&2;}
+         case "${enableval}" in
+            no|false|32) with_library_bits=32;  ;;
+            yes|true|64) with_library_bits=64else32 ;;
+            nochange) with_library_bits=nochange; ;;
+            *) { { $as_echo "$as_me:$LINENO: error: bad value ${enableval} for '--*-64bit-libs'" >&5
+$as_echo "$as_me: error: bad value ${enableval} for '--*-64bit-libs'" >&2;}
    { (exit 1); exit 1; }; } ;;
             esac
 fi
@@ -4012,7 +4012,7 @@ fi
 # Check whether --with-library-bits was given.
 if test "${with_library_bits+set}" = set; then
   withval=$with_library_bits; case "${withval}" in
-            nochange) BITS_REQ=$withval ;;
+            ""|nochange) BITS_REQ=$withval ;;
             32|64|64else32) BITS_REQ=$withval ;;
             *) { { $as_echo "$as_me:$LINENO: error: bad value ${withval} for --with-library-bits" >&5
 $as_echo "$as_me: error: bad value ${withval} for --with-library-bits" >&2;}
@@ -4020,9 +4020,16 @@ $as_echo "$as_me: error: bad value ${withval} for --with-library-bits" >&2;}
             esac
 fi
 
+
+    # don't use these for cross compiling
+    if test "$cross_compiling" = "yes" -a "${BITS_REQ}" != "nochange"; then
+        { { $as_echo "$as_me:$LINENO: error: Don't specify bitness when cross compiling. See readme.html for help with cross compilation., and set compiler options manually." >&5
+$as_echo "$as_me: error: Don't specify bitness when cross compiling. See readme.html for help with cross compilation., and set compiler options manually." >&2;}
+   { (exit 1); exit 1; }; }
+    fi
     DEFAULT_64BIT=no
-    { $as_echo "$as_me:$LINENO: checking whether 64 bit binaries are built by default" >&5
-$as_echo_n "checking whether 64 bit binaries are built by default... " >&6; }
+    { $as_echo "$as_me:$LINENO: checking whether runnable 64 bit binaries are built by default" >&5
+$as_echo_n "checking whether runnable 64 bit binaries are built by default... " >&6; }
     if test "$cross_compiling" = yes; then
   DEFAULT_64BIT=unknown
 else
@@ -4066,44 +4073,96 @@ fi
 
 
     BITS_GOT=unknown
+
+    # 'OK' here means, we can exit any further checking, everything's copa
     BITS_OK=yes
+
+    # do we need to check for buildable/runnable 32 or 64 bit?
+    BITS_CHECK_32=no
+    BITS_CHECK_64=no
+
+    # later, can we run the 32/64 bit binaries so made?
+    BITS_RUN_32=no
+    BITS_RUN_64=no
+
     if test "$DEFAULT_64BIT" = "yes"; then
+        # we get 64 bits by default.
         BITS_GOT=64
         case "$BITS_REQ" in
-            32) BITS_OK=no;;
+            32)
+                # need to look for 32 bit support.
+                BITS_CHECK_32=yes
+                # not copa.
+                BITS_OK=no;;
+            # everyone else is happy.
             nochange) ;;
             *) ;;
         esac
     elif test "$DEFAULT_64BIT" = "no"; then
+        # not 64 bit by default.
         BITS_GOT=32
         case "$BITS_REQ" in
-            64|64else32) BITS_OK=no;;
+            64|64else32)
+                BITS_CHECK_64=yes
+                #BITS_CHECK_32=yes
+                BITS_OK=no;;
             nochange) ;;
             *) ;;
         esac
     elif test "$DEFAULT_64BIT" = "unknown"; then
-        BITS_GOT=unknown
-        case "$BITS_REQ" in
-            64|64else32) BITS_OK=no;;
-            32) BITS_OK=no;;
-            nochange) ;;
-            *) ;;
-        esac
+        { { $as_echo "$as_me:$LINENO: error: Unable to determine binary format." >&5
+$as_echo "$as_me: error: Unable to determine binary format." >&2;}
+   { (exit 1); exit 1; }; }
+        # cross compiling?
+        #BITS_GOT=unknown
+        #case "$BITS_REQ" in
+        #    64|64else32) BITS_OK=no
+        #    BITS_CHECK_32=yes
+        #    BITS_CHECK_64=yes
+        #    32) BITS_OK=no;;
+        #    nochange) ;;
+        #    *) ;;
+        #esac
     fi
 
     { $as_echo "$as_me:$LINENO: result: $DEFAULT_64BIT" >&5
 $as_echo "$DEFAULT_64BIT" >&6; };
-    #AC_MSG_RESULT($DEFAULT_64BIT - got $BITS_GOT wanted $BITS_REQ okness $BITS_OK);
+
     if test "$BITS_OK" != "yes"; then
+        # not copa. back these up.
+        CFLAGS_OLD="${CFLAGS}"
+        CXXFLAGS_OLD="${CXXFLAGS}"
+        LDFLAGS_OLD="${LDFLAGS}"
+        ARFLAGS_OLD="${ARFLAGS}"
+
+        CFLAGS_32="${CFLAGS}"
+        CXXFLAGS_32="${CXXFLAGS}"
+        LDFLAGS_32="${LDFLAGS}"
+        ARFLAGS_32="${ARFLAGS}"
+
+        CFLAGS_64="${CFLAGS}"
+        CXXFLAGS_64="${CXXFLAGS}"
+        LDFLAGS_64="${LDFLAGS}"
+        ARFLAGS_64="${ARFLAGS}"
+
+        CAN_BUILD_64=unknown
+        CAN_BUILD_32=unknown
         # These results can't be cached because is sets compiler flags.
-        if test "$BITS_REQ" = "64" -o "$BITS_REQ" = "64else32"; then
+        if test "$BITS_CHECK_64" = "yes"; then
             { $as_echo "$as_me:$LINENO: checking how to build 64-bit executables" >&5
 $as_echo_n "checking how to build 64-bit executables... " >&6; }
+            CAN_BUILD_64=no
+            ####
+            # Find out if we think we can *build* for 64 bit. Doesn't check whether we can run it.
+            #  Note, we don't have to actually check if the options work- we'll try them before using them.
+            #  So, only try actually testing the options, if you are trying to decide between multiple options.
+            # On exit from the following clauses:
+            # if CAN_BUILD_64=yes:
+            #    *FLAGS are assumed to contain the right settings for 64bit
+            # else if CAN_BUILD_64=no: (default)
+            #    *FLAGS are assumed to be trashed, and will be reset from *FLAGS_OLD
+
             if test "$GCC" = yes; then
-                #DONOTUSE# This test is wrong.  If it's GCC, just test m64
-                #DONOTUSE#if test -n "`$CXX -dumpspecs 2>&1 && $CC -dumpspecs 2>&1 | grep -v __LP64__`"; then
-                OLD_CFLAGS="${CFLAGS}"
-                OLD_CXXFLAGS="${CXXFLAGS}"
                 CFLAGS="${CFLAGS} -m64"
                 CXXFLAGS="${CXXFLAGS} -m64"
                 cat >conftest.$ac_ext <<_ACEOF
@@ -4127,26 +4186,18 @@ $as_echo "$ac_try_echo") >&5
 	 test -z "$ac_c_werror_flag" ||
 	 test ! -s conftest.err
        } && test -s conftest.$ac_objext; then
-  ENABLE_64BIT_LIBS=yes
+  CAN_BUILD_64=yes
 else
   $as_echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-	ENABLE_64BIT_LIBS=no
+	CAN_BUILD_64=no
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-                if test "$ENABLE_64BIT_LIBS" != yes; then
-                    # Nope. back out changes.
-                    CFLAGS="${OLD_CFLAGS}"
-                    CXXFLAGS="${OLD_CXXFLAGS}"
-                fi
             else
                 case "${host}" in
                 sparc*-*-solaris*)
-                    # 0. save old flags
-                    OLD_CFLAGS="${CFLAGS}"
-                    OLD_CXXFLAGS="${CXXFLAGS}"
                     # 1. try -m64
                     CFLAGS="${CFLAGS} -m64"
                     CXXFLAGS="${CXXFLAGS} -m64"
@@ -4171,19 +4222,19 @@ $as_echo "$ac_try_echo") >&5
 	 test -z "$ac_c_werror_flag" ||
 	 test ! -s conftest.err
        } && test -s conftest.$ac_objext; then
-  ENABLE_64BIT_LIBS=yes
+  CAN_BUILD_64=yes
 else
   $as_echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-	ENABLE_64BIT_LIBS=no
+	CAN_BUILD_64=no
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-                    if test "$ENABLE_64BIT_LIBS" != yes; then
+                    if test "$CAN_BUILD_64" != yes; then
                         # Nope. back out changes.
-                        CFLAGS="${OLD_CFLAGS}"
-                        CXXFLAGS="${OLD_CXXFLAGS}"
+                        CFLAGS="${CFLAGS_OLD}"
+                        CXXFLAGS="${CFLAGS_OLD}"
                         # 2. try xarch=v9 [deprecated]
                         ## TODO: cross compile: the following won't work.
                         SPARCV9=`isainfo -n 2>&1 | grep sparcv9`
@@ -4193,16 +4244,11 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
                             CFLAGS="${CFLAGS} -xtarget=ultra -xarch=v9"
                             CXXFLAGS="${CXXFLAGS} -xtarget=ultra -xarch=v9"
                             LDFLAGS="${LDFLAGS} -xtarget=ultra -xarch=v9"
-                            ENABLE_64BIT_LIBS=yes
-                        else
-                            ENABLE_64BIT_LIBS=no
+                            CAN_BUILD_64=yes
                         fi
                     fi
                     ;;
                 i386-*-solaris*)
-                    # 0. save old flags
-                    OLD_CFLAGS="${CFLAGS}"
-                    OLD_CXXFLAGS="${CXXFLAGS}"
                     # 1. try -m64
                     CFLAGS="${CFLAGS} -m64"
                     CXXFLAGS="${CXXFLAGS} -m64"
@@ -4227,28 +4273,26 @@ $as_echo "$ac_try_echo") >&5
 	 test -z "$ac_c_werror_flag" ||
 	 test ! -s conftest.err
        } && test -s conftest.$ac_objext; then
-  ENABLE_64BIT_LIBS=yes
+  CAN_BUILD_64=yes
 else
   $as_echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-	ENABLE_64BIT_LIBS=no
+	CAN_BUILD_64=no
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-                    if test "$ENABLE_64BIT_LIBS" != yes; then
+                    if test "$CAN_BUILD_64" != yes; then
                         # Nope. back out changes.
-                        CFLAGS="${OLD_CFLAGS}"
-                        CXXFLAGS="${OLD_CXXFLAGS}"
+                        CFLAGS="${CFLAGS_OLD}"
+                        CXXFLAGS="${CXXFLAGS_OLD}"
                         # 2. try the older compiler option
                         ## TODO: cross compile problem
                         SOL64=`$CXX -xtarget=generic64 2>&1 && $CC -xtarget=generic64 2>&1 | grep -v usage:`
                         if test -z "$SOL64" && test -n "$AMD64"; then
                             CFLAGS="${CFLAGS} -xtarget=generic64"
                             CXXFLAGS="${CXXFLAGS} -xtarget=generic64"
-                            ENABLE_64BIT_LIBS=yes
-                        else
-                            ENABLE_64BIT_LIBS=no
+                            CAN_BUILD_64=yes
                         fi
                     fi
                     ;;
@@ -4257,13 +4301,8 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
                     ## TODO: cross compiler problem
                     if test -n "`$CXX --help 2>&1 && $CC --help 2>&1 | grep -v Intel`"; then
                         if test -n "`$CXX --help 2>&1 && $CC --help 2>&1 | grep -v Itanium`"; then
-                            ENABLE_64BIT_LIBS=yes
-                        else
-                            ENABLE_64BIT_LIBS=no
+                            CAN_BUILD_64=yes
                         fi
-                    else
-                        # unknown
-                        ENABLE_64BIT_LIBS=no
                     fi
                     ;;
                 *-*-cygwin)
@@ -4271,16 +4310,10 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
                     # We only do this check to display the correct answer.
                     ## TODO: cross compiler problem
                     if test -n "`$CXX -help 2>&1 | grep 'for x64'`"; then
-                        ENABLE_64BIT_LIBS=yes
-                    else
-                        # unknown
-                        ENABLE_64BIT_LIBS=no
+                        CAN_BUILD_64=yes
                     fi
                     ;;
                 *-*-aix*|powerpc64-*-linux*)
-                    OLD_CFLAGS="${CFLAGS}"
-                    OLD_CXXFLAGS="${CXXFLAGS}"
-                    OLD_LDFLAGS="${LDFLAGS}"
                     CFLAGS="${CFLAGS} -q64"
                     CXXFLAGS="${CXXFLAGS} -q64"
                     LDFLAGS="${LDFLAGS} -q64"
@@ -4305,22 +4338,20 @@ $as_echo "$ac_try_echo") >&5
 	 test -z "$ac_c_werror_flag" ||
 	 test ! -s conftest.err
        } && test -s conftest.$ac_objext; then
-  ENABLE_64BIT_LIBS=yes
+  CAN_BUILD_64=yes
 else
   $as_echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-	ENABLE_64BIT_LIBS=no
+	CAN_BUILD_64=no
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-                    if test "$ENABLE_64BIT_LIBS" != yes; then
-                        CFLAGS="${OLD_CFLAGS}"
-                        CXXFLAGS="${OLD_CXXFLAGS}"
-                        LDFLAGS="${OLD_LDFLAGS}"
-                    else
+                    if test "$CAN_BUILD_64" = yes; then
+                        # worked- set other options.
                         case "${host}" in
                         *-*-aix*)
+                            # tell AIX what executable mode to use.
                             ARFLAGS="${ARFLAGS} -X64"
                         esac
                     fi
@@ -4329,8 +4360,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
                     # First we try the newer +DD64, if that doesn't work,
                     # try other options.
 
-                    OLD_CFLAGS="${CFLAGS}"
-                    OLD_CXXFLAGS="${CXXFLAGS}"
                     CFLAGS="${CFLAGS} +DD64"
                     CXXFLAGS="${CXXFLAGS} +DD64"
                     cat >conftest.$ac_ext <<_ACEOF
@@ -4354,18 +4383,20 @@ $as_echo "$ac_try_echo") >&5
 	 test -z "$ac_c_werror_flag" ||
 	 test ! -s conftest.err
        } && test -s conftest.$ac_objext; then
-  ENABLE_64BIT_LIBS=yes
+  CAN_BUILD_64=yes
 else
   $as_echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-	ENABLE_64BIT_LIBS=no
+	CAN_BUILD_64=no
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-                    if test "$ENABLE_64BIT_LIBS" != yes; then
-                        CFLAGS="${OLD_CFLAGS}"
-                        CXXFLAGS="${OLD_CXXFLAGS}"
+                    if test "$CAN_BUILD_64" != yes; then
+                        # reset
+                        CFLAGS="${CFLAGS_OLD}"
+                        CXXFLAGS="${CXXFLAGS_OLD}"
+                        # append
                         CFLAGS="${CFLAGS} +DA2.0W"
                         CXXFLAGS="${CXXFLAGS} +DA2.0W"
                         cat >conftest.$ac_ext <<_ACEOF
@@ -4389,25 +4420,18 @@ $as_echo "$ac_try_echo") >&5
 	 test -z "$ac_c_werror_flag" ||
 	 test ! -s conftest.err
        } && test -s conftest.$ac_objext; then
-  ENABLE_64BIT_LIBS=yes
+  CAN_BUILD_64=yes
 else
   $as_echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-	ENABLE_64BIT_LIBS=no
+	CAN_BUILD_64=no
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-                        if test "$ENABLE_64BIT_LIBS" != yes; then
-                            CFLAGS="${OLD_CFLAGS}"
-                            CXXFLAGS="${OLD_CXXFLAGS}"
-                        fi
                     fi
                     ;;
                 *-*ibm-openedition*|*-*-os390*)
-                    OLD_CFLAGS="${CFLAGS}"
-                    OLD_CXXFLAGS="${CXXFLAGS}"
-                    OLD_LDFLAGS="${LDFLAGS}"
                     CFLAGS="${CFLAGS} -Wc,lp64"
                     CXXFLAGS="${CXXFLAGS} -Wc,lp64"
                     LDFLAGS="${LDFLAGS} -Wl,lp64"
@@ -4432,94 +4456,28 @@ $as_echo "$ac_try_echo") >&5
 	 test -z "$ac_c_werror_flag" ||
 	 test ! -s conftest.err
        } && test -s conftest.$ac_objext; then
-  ENABLE_64BIT_LIBS=yes
+  CAN_BUILD_64=yes
 else
   $as_echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-	ENABLE_64BIT_LIBS=no
+	CAN_BUILD_64=no
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-                    if test "$ENABLE_64BIT_LIBS" != yes; then
-                        CFLAGS="${OLD_CFLAGS}"
-                        CXXFLAGS="${OLD_CXXFLAGS}"
-                        LDFLAGS="${OLD_LDFLAGS}"
-                    fi
                     ;;
                 *)
-                    ENABLE_64BIT_LIBS=no
+                    # unknown platform.
                     ;;
                 esac
             fi
-            { $as_echo "$as_me:$LINENO: result: $ENABLE_64BIT_LIBS" >&5
-$as_echo "$ENABLE_64BIT_LIBS" >&6; }
-        elif test "$BITS_REQ" = "32"; then
-            { $as_echo "$as_me:$LINENO: checking how to build 32-bit executables" >&5
-$as_echo_n "checking how to build 32-bit executables... " >&6; }
-            if test "$GCC" = yes; then
-                OLD_CFLAGS="${CFLAGS}"
-                OLD_CXXFLAGS="${CXXFLAGS}"
-                CFLAGS="${CFLAGS} -m32"
-                CXXFLAGS="${CXXFLAGS} -m32"
-                cat >conftest.$ac_ext <<_ACEOF
-int main(void) {return (sizeof(void*)*8==32)?0:1;}
-_ACEOF
-rm -f conftest.$ac_objext
-if { (ac_try="$ac_compile"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-$as_echo "$ac_try_echo") >&5
-  (eval "$ac_compile") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest.$ac_objext; then
-  ENABLE_64BIT_LIBS=no
-else
-  $as_echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ENABLE_64BIT_LIBS=yes
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-                if test "$ENABLE_64BIT_LIBS" != no; then
-                    CFLAGS="${OLD_CFLAGS}"
-                    CXXFLAGS="${OLD_CXXFLAGS}"
-                fi
-            else
-                echo " Note: not sure how to build 32 bit executables on this platform."
-            fi
-            # 'How to build 32 bit...' will be opposite of 64 bit
-            if test "$ENABLE_64BIT_LIBS" = yes; then
-                { $as_echo "$as_me:$LINENO: result: no" >&5
-$as_echo "no" >&6; }
-            else
-                if test "$ENABLE_64BIT_LIBS" = no; then
-                    { $as_echo "$as_me:$LINENO: result: yes" >&5
-$as_echo "yes" >&6; }
-                else
-                    { $as_echo "$as_me:$LINENO: result: unknown" >&5
-$as_echo "unknown" >&6; }
-                fi
-            fi
-        fi
-        # Individual tests that fail should reset their own flags.
-        NOW_64BIT=no
-        NOW_32BIT=no
-        { $as_echo "$as_me:$LINENO: checking whether runnable 64-bit binaries are being built " >&5
+            { $as_echo "$as_me:$LINENO: result: $CAN_BUILD_64" >&5
+$as_echo "$CAN_BUILD_64" >&6; }
+            if test "$CAN_BUILD_64" = yes; then
+                { $as_echo "$as_me:$LINENO: checking whether runnable 64-bit binaries are being built " >&5
 $as_echo_n "checking whether runnable 64-bit binaries are being built ... " >&6; }
-        if test "$cross_compiling" = yes; then
-  NOW_64BIT=unknown
+                if test "$cross_compiling" = yes; then
+  BITS_RUN_64=unknown
 else
   cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -4551,26 +4509,79 @@ $as_echo "$ac_try_echo") >&5
   ac_status=$?
   $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  NOW_64BIT=yes
+  BITS_RUN_64=yes
 else
   $as_echo "$as_me: program exited with status $ac_status" >&5
 $as_echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
 ( exit $ac_status )
-NOW_64BIT=no
+BITS_RUN_64=no
 fi
 rm -rf conftest.dSYM
 rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
 
 
-        { $as_echo "$as_me:$LINENO: result: $NOW_64BIT" >&5
-$as_echo "$NOW_64BIT" >&6; };
-        { $as_echo "$as_me:$LINENO: checking whether runnable 32-bit binaries are being built " >&5
+                { $as_echo "$as_me:$LINENO: result: $BITS_RUN_64" >&5
+$as_echo "$BITS_RUN_64" >&6; };
+
+                CFLAGS_64="${CFLAGS}"
+                CXXFLAGS_64="${CXXFLAGS}"
+                LDFLAGS_64="${LDFLAGS}"
+                ARFLAGS_64="${ARFLAGS}"
+            fi
+            # put it back.
+            CFLAGS="${CFLAGS_OLD}"
+            CXXFLAGS="${CXXFLAGS_OLD}"
+            LDFLAGS="${LDFLAGS_OLD}"
+            ARFLAGS="${ARFLAGS_OLD}"
+        fi
+        if test "$BITS_CHECK_32" = "yes"; then
+            # see comment under 'if BITS_CHECK_64', above.
+            { $as_echo "$as_me:$LINENO: checking how to build 32-bit executables" >&5
+$as_echo_n "checking how to build 32-bit executables... " >&6; }
+            if test "$GCC" = yes; then
+                CFLAGS="${CFLAGS} -m32"
+                CXXFLAGS="${CXXFLAGS} -m32"
+                cat >conftest.$ac_ext <<_ACEOF
+int main(void) {return (sizeof(void*)*8==32)?0:1;}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
+$as_echo "$ac_try_echo") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  CAN_BUILD_32=yes
+else
+  $as_echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	CAN_BUILD_32=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+            fi
+            { $as_echo "$as_me:$LINENO: result: $CAN_BUILD_32" >&5
+$as_echo "$CAN_BUILD_32" >&6; }
+            if test "$CAN_BUILD_32" = yes; then
+                { $as_echo "$as_me:$LINENO: checking whether runnable 32-bit binaries are being built " >&5
 $as_echo_n "checking whether runnable 32-bit binaries are being built ... " >&6; }
-        if test "$cross_compiling" = yes; then
-  NOW_32BIT=unknown
+                if test "$cross_compiling" = yes; then
+  BITS_RUN_32=unknown
 else
   cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -4602,35 +4613,67 @@ $as_echo "$ac_try_echo") >&5
   ac_status=$?
   $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  NOW_32BIT=yes
+  BITS_RUN_32=yes
 else
   $as_echo "$as_me: program exited with status $ac_status" >&5
 $as_echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
 ( exit $ac_status )
-NOW_32BIT=no
+BITS_RUN_32=no
 fi
 rm -rf conftest.dSYM
 rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
 
 
-        { $as_echo "$as_me:$LINENO: result: $NOW_32BIT" >&5
-$as_echo "$NOW_32BIT" >&6; };
-
-        if test "$BITS_REQ" = "32" -a "$NOW_64BIT" = "yes"; then
-            { { $as_echo "$as_me:$LINENO: error: Requested $BITS_REQ but got 64 bit binaries" >&5
-$as_echo "$as_me: error: Requested $BITS_REQ but got 64 bit binaries" >&2;}
-   { (exit 1); exit 1; }; }
-        elif test "$BITS_REQ" = "64" -a "$NOW_32BIT" = "yes"; then
-            { { $as_echo "$as_me:$LINENO: error: Requested $BITS_REQ but got 32 bit binaries" >&5
-$as_echo "$as_me: error: Requested $BITS_REQ but got 32 bit binaries" >&2;}
-   { (exit 1); exit 1; }; }
-        elif test "$NOW_32BIT" != "yes" -a "$NOW_64BIT" != "yes"; then
-            echo "*** Note: Cannot determine bitness - if configure fails later, try --with-library-bits=nochange"
+                { $as_echo "$as_me:$LINENO: result: $BITS_RUN_32" >&5
+$as_echo "$BITS_RUN_32" >&6; };
+                CFLAGS_32="${CFLAGS}"
+                CXXFLAGS_32="${CXXFLAGS}"
+                LDFLAGS_32="${LDFLAGS}"
+                ARFLAGS_32="${ARFLAGS}"
+            fi
+            # put it back.
+            CFLAGS="${CFLAGS_OLD}"
+            CXXFLAGS="${CXXFLAGS_OLD}"
+            LDFLAGS="${LDFLAGS_OLD}"
+            ARFLAGS="${ARFLAGS_OLD}"
         fi
-    fi
+
+        ##
+        # OK. Now, we've tested for 32 and 64 bitness. Let's see what we'll do.
+        #
+
+        # First, implement 64else32
+        if test "$BITS_REQ" = "64else32"; then
+            if test "$BITS_RUN_64" = "yes"; then
+                BITS_REQ=64
+            else
+                # no changes.
+                BITS_OK=yes
+            fi
+        fi
+
+        # implement.
+        if test "$BITS_REQ" = "32" -a "$BITS_RUN_32" = "yes"; then
+            CFLAGS="${CFLAGS_32}"
+            CXXFLAGS="${CXXFLAGS_32}"
+            LDFLAGS="${LDFLAGS_32}"
+            ARFLAGS="${ARFLAGS_32}"
+            BITS_OK=yes
+        elif test "$BITS_REQ" = "64" -a "$BITS_RUN_64" = "yes"; then
+            CFLAGS="${CFLAGS_64}"
+            CXXFLAGS="${CXXFLAGS_64}"
+            LDFLAGS="${LDFLAGS_64}"
+            ARFLAGS="${ARFLAGS_64}"
+            BITS_OK=yes
+        elif test "$BITS_OK" != "yes"; then
+            { { $as_echo "$as_me:$LINENO: error: Requested $BITS_REQ bit binaries but could not compile and execute them. See readme.html for help with cross compilation., and set compiler options manually." >&5
+$as_echo "$as_me: error: Requested $BITS_REQ bit binaries but could not compile and execute them. See readme.html for help with cross compilation., and set compiler options manually." >&2;}
+   { (exit 1); exit 1; }; }
+        fi
+     fi
 
 
 

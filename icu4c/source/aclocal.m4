@@ -129,86 +129,133 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
     AC_ARG_ENABLE(64bit-libs,
         [  --enable-64bit-libs     (deprecated, use --with-library-bits) build 64-bit libraries [default= platform default]],
         [echo "note, use --with-library-bits instead of --*-64bit-libs"
-         case "${withval}" in
-            no|false|32) BITS_REQ=32 ;;
-            yes|true|64) BITS_REQ=64 ;;
-            nochange) BITS_REQ=nochange ;;
-            *) AC_MSG_ERROR(bad value ${withval} for --with-library-bits) ;;
+         case "${enableval}" in
+            no|false|32) with_library_bits=32;  ;;
+            yes|true|64) with_library_bits=64else32 ;;
+            nochange) with_library_bits=nochange; ;;
+            *) AC_MSG_ERROR(bad value ${enableval} for '--*-64bit-libs') ;;
             esac]    )
     
 
     AC_ARG_WITH(library-bits,
         [  --with-library-bits=bits specify how many bits to use for the library (32, 64, 64else32, nochange) [default=nochange]],
         [case "${withval}" in
-            nochange) BITS_REQ=$withval ;;
+            ""|nochange) BITS_REQ=$withval ;;
             32|64|64else32) BITS_REQ=$withval ;;
             *) AC_MSG_ERROR(bad value ${withval} for --with-library-bits) ;;
             esac])
+        
+    # don't use these for cross compiling
+    if test "$cross_compiling" = "yes" -a "${BITS_REQ}" != "nochange"; then
+        AC_MSG_ERROR([Don't specify bitness when cross compiling. See readme.html for help with cross compilation., and set compiler options manually.])
+    fi
     DEFAULT_64BIT=no
-    AC_MSG_CHECKING([whether 64 bit binaries are built by default])
+    AC_MSG_CHECKING([whether runnable 64 bit binaries are built by default])
     AC_RUN_IFELSE(int main(void) {return (sizeof(void*)*8==64)?0:1;},
        DEFAULT_64BIT=yes, DEFAULT_64BIT=no, DEFAULT_64BIT=unknown)
     BITS_GOT=unknown
+    
+    # 'OK' here means, we can exit any further checking, everything's copa
     BITS_OK=yes
+
+    # do we need to check for buildable/runnable 32 or 64 bit?
+    BITS_CHECK_32=no
+    BITS_CHECK_64=no
+    
+    # later, can we run the 32/64 bit binaries so made?
+    BITS_RUN_32=no
+    BITS_RUN_64=no
+    
     if test "$DEFAULT_64BIT" = "yes"; then
+        # we get 64 bits by default.
         BITS_GOT=64
         case "$BITS_REQ" in
-            32) BITS_OK=no;;
+            32) 
+                # need to look for 32 bit support. 
+                BITS_CHECK_32=yes
+                # not copa.
+                BITS_OK=no;;
+            # everyone else is happy.
             nochange) ;;
             *) ;;
         esac
     elif test "$DEFAULT_64BIT" = "no"; then
+        # not 64 bit by default.
         BITS_GOT=32
         case "$BITS_REQ" in
-            64|64else32) BITS_OK=no;;
+            64|64else32)
+                BITS_CHECK_64=yes
+                #BITS_CHECK_32=yes
+                BITS_OK=no;;
             nochange) ;;
             *) ;;
         esac
     elif test "$DEFAULT_64BIT" = "unknown"; then
-        BITS_GOT=unknown
-        case "$BITS_REQ" in
-            64|64else32) BITS_OK=no;;
-            32) BITS_OK=no;;
-            nochange) ;;
-            *) ;;
-        esac
+        AC_MSG_ERROR([Unable to determine binary format.])
+        # cross compiling?
+        #BITS_GOT=unknown
+        #case "$BITS_REQ" in
+        #    64|64else32) BITS_OK=no
+        #    BITS_CHECK_32=yes
+        #    BITS_CHECK_64=yes
+        #    32) BITS_OK=no;;
+        #    nochange) ;;
+        #    *) ;;
+        #esac
     fi
             
     AC_MSG_RESULT($DEFAULT_64BIT);
-    #AC_MSG_RESULT($DEFAULT_64BIT - got $BITS_GOT wanted $BITS_REQ okness $BITS_OK);
+
     if test "$BITS_OK" != "yes"; then
+        # not copa. back these up.
+        CFLAGS_OLD="${CFLAGS}"
+        CXXFLAGS_OLD="${CXXFLAGS}"
+        LDFLAGS_OLD="${LDFLAGS}"
+        ARFLAGS_OLD="${ARFLAGS}"        
+        
+        CFLAGS_32="${CFLAGS}"
+        CXXFLAGS_32="${CXXFLAGS}"
+        LDFLAGS_32="${LDFLAGS}"
+        ARFLAGS_32="${ARFLAGS}"        
+        
+        CFLAGS_64="${CFLAGS}"
+        CXXFLAGS_64="${CXXFLAGS}"
+        LDFLAGS_64="${LDFLAGS}"
+        ARFLAGS_64="${ARFLAGS}"        
+        
+        CAN_BUILD_64=unknown
+        CAN_BUILD_32=unknown
         # These results can't be cached because is sets compiler flags.
-        if test "$BITS_REQ" = "64" -o "$BITS_REQ" = "64else32"; then
+        if test "$BITS_CHECK_64" = "yes"; then
             AC_MSG_CHECKING([how to build 64-bit executables])
+            CAN_BUILD_64=no
+            ####
+            # Find out if we think we can *build* for 64 bit. Doesn't check whether we can run it.
+            #  Note, we don't have to actually check if the options work- we'll try them before using them.
+            #  So, only try actually testing the options, if you are trying to decide between multiple options.
+            # On exit from the following clauses:
+            # if CAN_BUILD_64=yes:
+            #    *FLAGS are assumed to contain the right settings for 64bit
+            # else if CAN_BUILD_64=no: (default)
+            #    *FLAGS are assumed to be trashed, and will be reset from *FLAGS_OLD
+            
             if test "$GCC" = yes; then
-                #DONOTUSE# This test is wrong.  If it's GCC, just test m64
-                #DONOTUSE#if test -n "`$CXX -dumpspecs 2>&1 && $CC -dumpspecs 2>&1 | grep -v __LP64__`"; then
-                OLD_CFLAGS="${CFLAGS}"
-                OLD_CXXFLAGS="${CXXFLAGS}"
                 CFLAGS="${CFLAGS} -m64"
                 CXXFLAGS="${CXXFLAGS} -m64"
                 AC_COMPILE_IFELSE(int main(void) {return (sizeof(void*)*8==64)?0:1;},
-                   ENABLE_64BIT_LIBS=yes, ENABLE_64BIT_LIBS=no)
-                if test "$ENABLE_64BIT_LIBS" != yes; then
-                    # Nope. back out changes.
-                    CFLAGS="${OLD_CFLAGS}"
-                    CXXFLAGS="${OLD_CXXFLAGS}"
-                fi
+                   CAN_BUILD_64=yes, CAN_BUILD_64=no)
             else
                 case "${host}" in
                 sparc*-*-solaris*)
-                    # 0. save old flags
-                    OLD_CFLAGS="${CFLAGS}"
-                    OLD_CXXFLAGS="${CXXFLAGS}"
                     # 1. try -m64
                     CFLAGS="${CFLAGS} -m64"
                     CXXFLAGS="${CXXFLAGS} -m64"
                     AC_COMPILE_IFELSE(int main(void) {return (sizeof(void*)*8==64)?0:1;},
-                       ENABLE_64BIT_LIBS=yes, ENABLE_64BIT_LIBS=no)
-                    if test "$ENABLE_64BIT_LIBS" != yes; then
+                       CAN_BUILD_64=yes, CAN_BUILD_64=no)
+                    if test "$CAN_BUILD_64" != yes; then
                         # Nope. back out changes.
-                        CFLAGS="${OLD_CFLAGS}"
-                        CXXFLAGS="${OLD_CXXFLAGS}"
+                        CFLAGS="${CFLAGS_OLD}"
+                        CXXFLAGS="${CFLAGS_OLD}"
                         # 2. try xarch=v9 [deprecated]
                         ## TODO: cross compile: the following won't work.
                         SPARCV9=`isainfo -n 2>&1 | grep sparcv9`
@@ -218,34 +265,27 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
                             CFLAGS="${CFLAGS} -xtarget=ultra -xarch=v9"
                             CXXFLAGS="${CXXFLAGS} -xtarget=ultra -xarch=v9"
                             LDFLAGS="${LDFLAGS} -xtarget=ultra -xarch=v9"
-                            ENABLE_64BIT_LIBS=yes
-                        else
-                            ENABLE_64BIT_LIBS=no
+                            CAN_BUILD_64=yes
                         fi
                     fi
                     ;;
                 i386-*-solaris*)
-                    # 0. save old flags
-                    OLD_CFLAGS="${CFLAGS}"
-                    OLD_CXXFLAGS="${CXXFLAGS}"
                     # 1. try -m64
                     CFLAGS="${CFLAGS} -m64"
                     CXXFLAGS="${CXXFLAGS} -m64"
                     AC_COMPILE_IFELSE(int main(void) {return (sizeof(void*)*8==64)?0:1;},
-                       ENABLE_64BIT_LIBS=yes, ENABLE_64BIT_LIBS=no)
-                    if test "$ENABLE_64BIT_LIBS" != yes; then
+                       CAN_BUILD_64=yes, CAN_BUILD_64=no)
+                    if test "$CAN_BUILD_64" != yes; then
                         # Nope. back out changes.
-                        CFLAGS="${OLD_CFLAGS}"
-                        CXXFLAGS="${OLD_CXXFLAGS}"
+                        CFLAGS="${CFLAGS_OLD}"
+                        CXXFLAGS="${CXXFLAGS_OLD}"
                         # 2. try the older compiler option
                         ## TODO: cross compile problem
                         SOL64=`$CXX -xtarget=generic64 2>&1 && $CC -xtarget=generic64 2>&1 | grep -v usage:`
                         if test -z "$SOL64" && test -n "$AMD64"; then
                             CFLAGS="${CFLAGS} -xtarget=generic64"
                             CXXFLAGS="${CXXFLAGS} -xtarget=generic64"
-                            ENABLE_64BIT_LIBS=yes
-                        else
-                            ENABLE_64BIT_LIBS=no
+                            CAN_BUILD_64=yes
                         fi
                     fi
                     ;;
@@ -254,13 +294,8 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
                     ## TODO: cross compiler problem
                     if test -n "`$CXX --help 2>&1 && $CC --help 2>&1 | grep -v Intel`"; then
                         if test -n "`$CXX --help 2>&1 && $CC --help 2>&1 | grep -v Itanium`"; then
-                            ENABLE_64BIT_LIBS=yes
-                        else
-                            ENABLE_64BIT_LIBS=no
+                            CAN_BUILD_64=yes
                         fi
-                    else
-                        # unknown
-                        ENABLE_64BIT_LIBS=no
                     fi
                     ;;
                 *-*-cygwin)
@@ -268,28 +303,20 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
                     # We only do this check to display the correct answer.
                     ## TODO: cross compiler problem
                     if test -n "`$CXX -help 2>&1 | grep 'for x64'`"; then
-                        ENABLE_64BIT_LIBS=yes
-                    else
-                        # unknown
-                        ENABLE_64BIT_LIBS=no
+                        CAN_BUILD_64=yes
                     fi
                     ;;
                 *-*-aix*|powerpc64-*-linux*)
-                    OLD_CFLAGS="${CFLAGS}"
-                    OLD_CXXFLAGS="${CXXFLAGS}"
-                    OLD_LDFLAGS="${LDFLAGS}"
                     CFLAGS="${CFLAGS} -q64"
                     CXXFLAGS="${CXXFLAGS} -q64"
                     LDFLAGS="${LDFLAGS} -q64"
                     AC_COMPILE_IFELSE(int main(void) {return (sizeof(void*)*8==64)?0:1;},
-                       ENABLE_64BIT_LIBS=yes, ENABLE_64BIT_LIBS=no)
-                    if test "$ENABLE_64BIT_LIBS" != yes; then
-                        CFLAGS="${OLD_CFLAGS}"
-                        CXXFLAGS="${OLD_CXXFLAGS}"
-                        LDFLAGS="${OLD_LDFLAGS}"
-                    else
+                       CAN_BUILD_64=yes, CAN_BUILD_64=no)
+                    if test "$CAN_BUILD_64" = yes; then
+                        # worked- set other options.
                         case "${host}" in
                         *-*-aix*)
+                            # tell AIX what executable mode to use.
                             ARFLAGS="${ARFLAGS} -X64"
                         esac
                     fi
@@ -298,93 +325,109 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
                     # First we try the newer +DD64, if that doesn't work,
                     # try other options.
 
-                    OLD_CFLAGS="${CFLAGS}"
-                    OLD_CXXFLAGS="${CXXFLAGS}"
                     CFLAGS="${CFLAGS} +DD64"
                     CXXFLAGS="${CXXFLAGS} +DD64"
                     AC_COMPILE_IFELSE(int main(void) {return (sizeof(void*)*8==64)?0:1;},
-                        ENABLE_64BIT_LIBS=yes, ENABLE_64BIT_LIBS=no)
-                    if test "$ENABLE_64BIT_LIBS" != yes; then
-                        CFLAGS="${OLD_CFLAGS}"
-                        CXXFLAGS="${OLD_CXXFLAGS}"
+                        CAN_BUILD_64=yes, CAN_BUILD_64=no)
+                    if test "$CAN_BUILD_64" != yes; then
+                        # reset
+                        CFLAGS="${CFLAGS_OLD}"
+                        CXXFLAGS="${CXXFLAGS_OLD}"
+                        # append
                         CFLAGS="${CFLAGS} +DA2.0W"
                         CXXFLAGS="${CXXFLAGS} +DA2.0W"
                         AC_COMPILE_IFELSE(int main(void) {return (sizeof(void*)*8==64)?0:1;},
-                            ENABLE_64BIT_LIBS=yes, ENABLE_64BIT_LIBS=no)
-                        if test "$ENABLE_64BIT_LIBS" != yes; then
-                            CFLAGS="${OLD_CFLAGS}"
-                            CXXFLAGS="${OLD_CXXFLAGS}"
-                        fi
+                            CAN_BUILD_64=yes, CAN_BUILD_64=no)
                     fi
                     ;;
                 *-*ibm-openedition*|*-*-os390*)
-                    OLD_CFLAGS="${CFLAGS}"
-                    OLD_CXXFLAGS="${CXXFLAGS}"
-                    OLD_LDFLAGS="${LDFLAGS}"
                     CFLAGS="${CFLAGS} -Wc,lp64"
                     CXXFLAGS="${CXXFLAGS} -Wc,lp64"
                     LDFLAGS="${LDFLAGS} -Wl,lp64"
                     AC_COMPILE_IFELSE(int main(void) {return (sizeof(void*)*8==64)?0:1;},
-                       ENABLE_64BIT_LIBS=yes, ENABLE_64BIT_LIBS=no)
-                    if test "$ENABLE_64BIT_LIBS" != yes; then
-                        CFLAGS="${OLD_CFLAGS}"
-                        CXXFLAGS="${OLD_CXXFLAGS}"
-                        LDFLAGS="${OLD_LDFLAGS}"
-                    fi
+                       CAN_BUILD_64=yes, CAN_BUILD_64=no)
                     ;;
                 *)
-                    ENABLE_64BIT_LIBS=no
+                    # unknown platform.
                     ;;
                 esac
             fi
-            AC_MSG_RESULT($ENABLE_64BIT_LIBS)
-        elif test "$BITS_REQ" = "32"; then
+            AC_MSG_RESULT($CAN_BUILD_64)
+            if test "$CAN_BUILD_64" = yes; then
+                AC_MSG_CHECKING([whether runnable 64-bit binaries are being built ])
+                AC_TRY_RUN(int main(void) {return (sizeof(void*)*8==64)?0:1;},
+                   BITS_RUN_64=yes, BITS_RUN_64=no, BITS_RUN_64=unknown)
+                AC_MSG_RESULT($BITS_RUN_64);
+
+                CFLAGS_64="${CFLAGS}"
+                CXXFLAGS_64="${CXXFLAGS}"
+                LDFLAGS_64="${LDFLAGS}"
+                ARFLAGS_64="${ARFLAGS}"        
+            fi
+            # put it back.
+            CFLAGS="${CFLAGS_OLD}"
+            CXXFLAGS="${CXXFLAGS_OLD}"
+            LDFLAGS="${LDFLAGS_OLD}"
+            ARFLAGS="${ARFLAGS_OLD}"     
+        fi
+        if test "$BITS_CHECK_32" = "yes"; then
+            # see comment under 'if BITS_CHECK_64', above.
             AC_MSG_CHECKING([how to build 32-bit executables])
             if test "$GCC" = yes; then
-                OLD_CFLAGS="${CFLAGS}"
-                OLD_CXXFLAGS="${CXXFLAGS}"
                 CFLAGS="${CFLAGS} -m32"
                 CXXFLAGS="${CXXFLAGS} -m32"
                 AC_COMPILE_IFELSE(int main(void) {return (sizeof(void*)*8==32)?0:1;},
-                   ENABLE_64BIT_LIBS=no, ENABLE_64BIT_LIBS=yes)
-                if test "$ENABLE_64BIT_LIBS" != no; then
-                    CFLAGS="${OLD_CFLAGS}"
-                    CXXFLAGS="${OLD_CXXFLAGS}"
-                fi
-            else
-                echo " Note: not sure how to build 32 bit executables on this platform."
+                   CAN_BUILD_32=yes, CAN_BUILD_32=no)
             fi
-            # 'How to build 32 bit...' will be opposite of 64 bit
-            if test "$ENABLE_64BIT_LIBS" = yes; then
-                AC_MSG_RESULT(no)
-            else
-                if test "$ENABLE_64BIT_LIBS" = no; then
-                    AC_MSG_RESULT(yes)
-                else
-                    AC_MSG_RESULT(unknown)
-                fi
+            AC_MSG_RESULT($CAN_BUILD_32)
+            if test "$CAN_BUILD_32" = yes; then
+                AC_MSG_CHECKING([whether runnable 32-bit binaries are being built ])
+                AC_TRY_RUN(int main(void) {return (sizeof(void*)*8==32)?0:1;},
+                   BITS_RUN_32=yes, BITS_RUN_32=no, BITS_RUN_32=unknown)
+                AC_MSG_RESULT($BITS_RUN_32);
+                CFLAGS_32="${CFLAGS}"
+                CXXFLAGS_32="${CXXFLAGS}"
+                LDFLAGS_32="${LDFLAGS}"
+                ARFLAGS_32="${ARFLAGS}"        
             fi
+            # put it back.
+            CFLAGS="${CFLAGS_OLD}"
+            CXXFLAGS="${CXXFLAGS_OLD}"
+            LDFLAGS="${LDFLAGS_OLD}"
+            ARFLAGS="${ARFLAGS_OLD}"     
         fi
-        # Individual tests that fail should reset their own flags.
-        NOW_64BIT=no
-        NOW_32BIT=no
-        AC_MSG_CHECKING([whether runnable 64-bit binaries are being built ])
-        AC_TRY_RUN(int main(void) {return (sizeof(void*)*8==64)?0:1;},
-           NOW_64BIT=yes, NOW_64BIT=no, NOW_64BIT=unknown)
-        AC_MSG_RESULT($NOW_64BIT);
-        AC_MSG_CHECKING([whether runnable 32-bit binaries are being built ])
-        AC_TRY_RUN(int main(void) {return (sizeof(void*)*8==32)?0:1;},
-           NOW_32BIT=yes, NOW_32BIT=no, NOW_32BIT=unknown)
-        AC_MSG_RESULT($NOW_32BIT);
         
-        if test "$BITS_REQ" = "32" -a "$NOW_64BIT" = "yes"; then
-            AC_MSG_ERROR([Requested $BITS_REQ but got 64 bit binaries])
-        elif test "$BITS_REQ" = "64" -a "$NOW_32BIT" = "yes"; then
-            AC_MSG_ERROR([Requested $BITS_REQ but got 32 bit binaries])
-        elif test "$NOW_32BIT" != "yes" -a "$NOW_64BIT" != "yes"; then 
-            echo "*** Note: Cannot determine bitness - if configure fails later, try --with-library-bits=nochange"
+        ##
+        # OK. Now, we've tested for 32 and 64 bitness. Let's see what we'll do.
+        #
+        
+        # First, implement 64else32
+        if test "$BITS_REQ" = "64else32"; then
+            if test "$BITS_RUN_64" = "yes"; then
+                BITS_REQ=64
+            else
+                # no changes.
+                BITS_OK=yes 
+            fi
         fi
-    fi
+        
+        # implement.
+        if test "$BITS_REQ" = "32" -a "$BITS_RUN_32" = "yes"; then
+            CFLAGS="${CFLAGS_32}"
+            CXXFLAGS="${CXXFLAGS_32}"
+            LDFLAGS="${LDFLAGS_32}"
+            ARFLAGS="${ARFLAGS_32}"     
+            BITS_OK=yes
+        elif test "$BITS_REQ" = "64" -a "$BITS_RUN_64" = "yes"; then
+            CFLAGS="${CFLAGS_64}"
+            CXXFLAGS="${CXXFLAGS_64}"
+            LDFLAGS="${LDFLAGS_64}"
+            ARFLAGS="${ARFLAGS_64}"     
+            BITS_OK=yes
+        elif test "$BITS_OK" != "yes"; then
+            AC_MSG_ERROR([Requested $BITS_REQ bit binaries but could not compile and execute them. See readme.html for help with cross compilation., and set compiler options manually.])
+        fi
+     fi
 ])
 
 # Strict compilation options.

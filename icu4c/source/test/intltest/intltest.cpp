@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -1077,6 +1077,20 @@ main(int argc, char* argv[])
     fprintf(stdout, "-----------------------------------------------\n");
     fprintf(stdout, " IntlTest (C++) Test Suite for                 \n");
     fprintf(stdout, "   International Components for Unicode %s\n", U_ICU_VERSION);
+    {
+	const char *charsetFamily = "Unknown";
+        int32_t voidSize = (int32_t)sizeof(void*);
+        int32_t bits = voidSize * 8;
+        if(U_CHARSET_FAMILY==U_ASCII_FAMILY) {
+           charsetFamily="ASCII";
+        } else if(U_CHARSET_FAMILY==U_EBCDIC_FAMILY) {
+           charsetFamily="EBCDIC";
+        }
+        fprintf(stdout, 
+                    "   Bits: %d, Byte order: %s, Chars: %s\n",
+                     bits, U_IS_BIG_ENDIAN?"Big endian":"Little endian",
+                     charsetFamily);
+    }
     fprintf(stdout, "-----------------------------------------------\n");
     fprintf(stdout, " Options:                                       \n");
     fprintf(stdout, "   all (a)                  : %s\n", (all?               "On" : "Off"));
