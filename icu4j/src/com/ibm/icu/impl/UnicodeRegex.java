@@ -1,4 +1,6 @@
 //##header
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
 /*
  *******************************************************************************
  * Copyright (C) 2009, Google, International Business Machines Corporation and *
@@ -13,7 +15,6 @@ import java.util.regex.Pattern;
 import com.ibm.icu.text.StringTransform;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.Freezable;
-import com.sun.jdi.InternalException;
 
 /**
  * Contains utilities to supplement the JDK Regex, since it doesn't handle
@@ -175,3 +176,5 @@ public class UnicodeRegex implements Cloneable, Freezable, StringTransform {
     private static UnicodeRegex STANDARD = new UnicodeRegex();
 
 }
+//#endif
+
