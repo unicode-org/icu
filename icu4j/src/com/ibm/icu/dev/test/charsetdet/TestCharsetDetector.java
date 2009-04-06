@@ -477,35 +477,45 @@ public class TestCharsetDetector extends TestFmwk
         CheckAssert(charsetMatch.equals("IBM424"));
     }
     
-    /*
-     * TODO: Disable test while fixing the charset detector.
     public void TestIBM420() throws Exception {
-        String  s = "\u0648\u064F\u0636\u0639\u062A \u0648\u0646\u064F\u0641\u0630\u062A \u0628\u0631\u0627" + 
-                    "\u0645\u062C \u062A\u0623\u0645\u064A\u0646 \u0639\u062F\u064A\u062F\u0629 \u0641\u064A " + 
-                    "\u0645\u0624\u0633\u0633\u0629 \u0627\u0644\u062A\u0623\u0645\u064A\u0646 \u0627\u0644" + 
-                    "\u0648\u0637\u0646\u064A, \u0645\u0639 \u0645\u0644\u0627\u0626\u0645\u062A\u0647\u0627 " + 
-                    "\u062F\u0627\u0626\u0645\u0627\u064B \u0644\u0644\u0627\u062D\u062A\u064A\u0627\u062C" + 
-                    "\u0627\u062A \u0627\u0644\u0645\u062A\u063A\u064A\u0631\u0629 \u0644\u0644\u0645\u062C" + 
-                    "\u062A\u0645\u0639 \u0648\u0644\u0644\u062F\u0648\u0644\u0629. \u062A\u0648\u0633\u0639" + 
-                    "\u062A \u0648\u062A\u0637\u0648\u0631\u062A \u0627\u0644\u0645\u0624\u0633\u0633\u0629 " + 
-                    "\u0628\u0647\u062F\u0641 \u0636\u0645\u0627\u0646 \u0634\u0628\u0643\u0629 \u0623\u0645" + 
-                    "\u0627\u0646 \u0644\u0633\u0643\u0627\u0646 \u062F\u0648\u0644\u0629 \u0627\u0633\u0631" + 
-                    "\u0627\u0626\u064A\u0644 \u0628\u0648\u062C\u0647 \u0627\u0644\u0645\u062E\u0627\u0637" + 
-                    "\u0631 \u0627\u0644\u0627\u0642\u062A\u0635\u0627\u062F\u064A\u0629 \u0648\u0627\u0644" + 
-                    "\u0627\u062C\u062A\u0645\u0627\u0639\u064A\u0629.";
-        
-        ArabicShaping as = new ArabicShaping(ArabicShaping.LETTERS_SHAPE);
-        try {
-            s = as.shape(s);
-        } catch (Exception e){
-            e.printStackTrace();
+        /* 
+         * 090406-Michael Ow
+         * s.getBytes("IBM420") produces different results in 1.4 and 1.5/1.6.  Since support for 1.4 is being dropped
+         * after ICU4J 4.2, we can enable this test only for Java version 1.5 and 1.6.
+         * TODO: A better method can be used.  Otherwise, will need to update when adding support for new Java version (e.g. JDK7).
+         */
+        if (System.getProperty("java.version").startsWith("1.5") || System.getProperty("java.version").startsWith("1.6")) {
+            String  s = "\u0648\u064F\u0636\u0639\u062A \u0648\u0646\u064F\u0641\u0630\u062A \u0628\u0631\u0627" + 
+                        "\u0645\u062C \u062A\u0623\u0645\u064A\u0646 \u0639\u062F\u064A\u062F\u0629 \u0641\u064A " + 
+                        "\u0645\u0624\u0633\u0633\u0629 \u0627\u0644\u062A\u0623\u0645\u064A\u0646 \u0627\u0644" + 
+                        "\u0648\u0637\u0646\u064A, \u0645\u0639 \u0645\u0644\u0627\u0626\u0645\u062A\u0647\u0627 " + 
+                        "\u062F\u0627\u0626\u0645\u0627\u064B \u0644\u0644\u0627\u062D\u062A\u064A\u0627\u062C" + 
+                        "\u0627\u062A \u0627\u0644\u0645\u062A\u063A\u064A\u0631\u0629 \u0644\u0644\u0645\u062C" + 
+                        "\u062A\u0645\u0639 \u0648\u0644\u0644\u062F\u0648\u0644\u0629. \u062A\u0648\u0633\u0639" + 
+                        "\u062A \u0648\u062A\u0637\u0648\u0631\u062A \u0627\u0644\u0645\u0624\u0633\u0633\u0629 " + 
+                        "\u0628\u0647\u062F\u0641 \u0636\u0645\u0627\u0646 \u0634\u0628\u0643\u0629 \u0623\u0645" + 
+                        "\u0627\u0646 \u0644\u0633\u0643\u0627\u0646 \u062F\u0648\u0644\u0629 \u0627\u0633\u0631" + 
+                        "\u0627\u0626\u064A\u0644 \u0628\u0648\u062C\u0647 \u0627\u0644\u0645\u062E\u0627\u0637" + 
+                        "\u0631 \u0627\u0644\u0627\u0642\u062A\u0635\u0627\u062F\u064A\u0629 \u0648\u0627\u0644" + 
+                        "\u0627\u062C\u062A\u0645\u0627\u0639\u064A\u0629.";
+            
+            ArabicShaping as = new ArabicShaping(ArabicShaping.LETTERS_SHAPE);
+            try {
+                s = as.shape(s);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            
+            byte [] bytes = s.getBytes("IBM420");
+            CharsetDetector det = new CharsetDetector();
+            det.setText(bytes);
+            CharsetMatch m = det.detect();
+            String charsetMatch = m.getName();
+            CheckAssert(charsetMatch.equals("IBM420"));
+        } else {
+            // Add log to indicate that thist test was skipped.
+            System.out.println("\n\t**TestIBM420 has been skipped because there are known issues with this the detector code for IBM420 and Java < 1.5");
+            System.out.println("\t**You are currently using Java: " + System.getProperty("java.version"));
         }
-        
-        byte [] bytes = s.getBytes("IBM420");
-        CharsetDetector det = new CharsetDetector();
-        det.setText(bytes);
-        CharsetMatch m = det.detect();
-        String charsetMatch = m.getName();
-        CheckAssert(charsetMatch.equals("IBM420"));
-    }*/
+    }
 }
