@@ -19,7 +19,7 @@
     <h1>International Components for Unicode<br />
      <abbr title="International Components for Unicode">ICU</abbr> 4.2 ReadMe</h1>
 
-    <p>Version: 2009 March 31th<br />
+    <p>Version: 2009 April 6th<br />
      Copyright &copy; 1997-2009 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -207,6 +207,11 @@
     applications migrating from previous ICU releases</em>. --> For more news about
     this release, see the <a href="http://www.icu-project.org/download/">ICU 4.2
     download page</a>.</p>
+
+    <h3>Cross compilation and 64-bit support</h3>
+    <p>ICU may now be cross compiled, see <a href="#HowToCrossCompileICU">How To Cross Compile ICU</a>.</p>
+    <p>The --enable-64bit-libs and --disable-64bit-libs options are now deprecated. By default, ICU will build binaries using the compiler's default setting. To request 32 or 64 bit libraries, use --with-library-bits=32 or --with-library-bits=64.  For the old behavior, of attempting 64 bit libraries if possible, use --with-library-bits=64else32.   Intltest now reports the bit width that ICU is currently running under.</p>
+
 
     <h3>u_strToUTF32() and u_strFromUTF32() validate input UTF strings</h3>
     <p>
@@ -1040,10 +1045,8 @@
     you may want to give runConfigureICU. If you are not using the
     runConfigureICU script, or your platform is not supported by the script, you
     may need to set your CC, CXX, CFLAGS and CXXFLAGS environment variables, and
-    type <tt>"./configure"</tt>. Some of the more frequently used options to
-    configure are --disable-64bit-libs to create 32-bit libraries, and --srcdir
-    to do out of source builds (build the libraries in the current location).
-    HP-UX user's, please see this <a href="#ImportantNotesHPUX">note regarding
+    type <tt>"./configure"</tt>. 
+    HP-UX users, please see this <a href="#ImportantNotesHPUX">note regarding
     HP-UX multithreaded build issues</a> with newer compilers. Solaris users,
     please see this <a href="#ImportantNotesSolaris">note regarding Solaris
     multithreaded build issues</a>.</p>
