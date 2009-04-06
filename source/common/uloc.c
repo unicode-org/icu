@@ -3179,17 +3179,18 @@ findLikelySubtags(const char* localeID,
     if (!U_FAILURE(*err)) {
         int32_t resLen = 0;
         const UChar* s = NULL;
-        UResourceBundle* subtags = ures_openDirect(NULL, "likelySubtags", err);
-        if (!U_FAILURE(*err)) {
-            s = ures_getStringByKey(subtags, localeID, &resLen, err);
+        UErrorCode tmpErr = U_ZERO_ERROR;
+        UResourceBundle* subtags = ures_openDirect(NULL, "likelySubtags", &tmpErr);
+        if (U_SUCCESS(tmpErr)) {
+            s = ures_getStringByKey(subtags, localeID, &resLen, &tmpErr);
 
-            if (U_FAILURE(*err)) {
+            if (U_FAILURE(tmpErr)) {
                 /*
                  * If a resource is missing, it's not really an error, it's
                  * just that we don't have any data for that particular locale ID.
                  */
-                if (*err == U_MISSING_RESOURCE_ERROR) {
-                    *err = U_ZERO_ERROR;
+                if (tmpErr != U_MISSING_RESOURCE_ERROR) {
+                    *err = tmpErr;
                 }
             }
             else if (resLen >= bufferLength) {
@@ -3202,6 +3203,8 @@ findLikelySubtags(const char* localeID,
             }
 
             ures_close(subtags);
+        } else {
+            *err = tmpErr;
         }
     }
 
@@ -3617,7 +3620,7 @@ parseTagString(
      * to be an error, because it indicates the user-supplied tag is
      * not well-formed.
      */
-    if(*err != U_ZERO_ERROR) {
+    if(U_FAILURE(*err)) {
         goto error;
     }
 
@@ -3640,7 +3643,7 @@ parseTagString(
     subtagLength = _getScript(position, script, *scriptLength, &position);
     u_terminateChars(script, *scriptLength, subtagLength, err);
 
-    if(*err != U_ZERO_ERROR) {
+    if(U_FAILURE(*err)) {
         goto error;
     }
 
@@ -3665,7 +3668,7 @@ parseTagString(
     subtagLength = _getCountry(position, region, *regionLength, &position);
     u_terminateChars(region, *regionLength, subtagLength, err);
 
-    if(*err != U_ZERO_ERROR) {
+    if(U_FAILURE(*err)) {
         goto error;
     }
 
