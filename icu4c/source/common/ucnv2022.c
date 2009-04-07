@@ -518,8 +518,7 @@ _ISO2022Open(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
                 myConverterData->version=version=0;
             }
             if(pArgs->onlyTestIsLoadable) {
-                UErrorCode localStatus=U_ZERO_ERROR;
-                pArgs->isLoadable=ucnv_canCreateConverter(cnvName, &localStatus);
+                ucnv_canCreateConverter(cnvName, errorCode);  /* errorCode carries result */
                 uprv_free(cnv->extraInfo);
                 cnv->extraInfo=NULL;
                 return;
@@ -594,12 +593,8 @@ _ISO2022Open(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
 
         cnv->maxBytesPerUChar=cnv->sharedData->staticData->maxBytesPerChar;
 
-        if(U_FAILURE(*errorCode)) {
+        if(U_FAILURE(*errorCode) || pArgs->onlyTestIsLoadable) {
             _ISO2022Close(cnv);
-        }
-        if(pArgs->onlyTestIsLoadable) {
-            _ISO2022Close(cnv);
-            pArgs->isLoadable=TRUE;
         }
     } else {
         *errorCode = U_MEMORY_ALLOCATION_ERROR;

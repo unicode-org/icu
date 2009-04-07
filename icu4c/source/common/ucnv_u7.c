@@ -192,10 +192,9 @@ static void
 _UTF7Open(UConverter *cnv,
           UConverterLoadArgs *pArgs,
           UErrorCode *pErrorCode) {
-    if(pArgs->onlyTestIsLoadable) {
-        pArgs->isLoadable=TRUE;
-    } else if((pArgs->options&0xf)<=1) {
-        cnv->fromUnicodeStatus=(pArgs->options&0xf)<<28;
+    if(UCNV_GET_VERSION(cnv)<=1) {
+        /* TODO(markus): Should just use cnv->options rather than copying the version number. */
+        cnv->fromUnicodeStatus=UCNV_GET_VERSION(cnv)<<28;
         _UTF7Reset(cnv, UCNV_RESET_BOTH);
     } else {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
