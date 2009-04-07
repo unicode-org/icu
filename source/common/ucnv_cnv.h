@@ -50,7 +50,7 @@ typedef struct {
     int32_t size;               /* sizeof(UConverterLoadArgs) */
     int32_t nestedLoads;        /* count nested ucnv_load() calls */
     UBool onlyTestIsLoadable;   /* input: don't actually load */
-    UBool isLoadable;           /* output, if onlyTestIsLoadable is set */
+    UBool reserved0;            /* reserved - for good alignment of the pointers */
     int16_t reserved;           /* reserved - for good alignment of the pointers */
     uint32_t options;
     const char *pkg, *name, *locale;

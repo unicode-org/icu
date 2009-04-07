@@ -194,7 +194,6 @@ _SCSUOpen(UConverter *cnv,
           UErrorCode *pErrorCode) {
     const char *locale=pArgs->locale;
     if(pArgs->onlyTestIsLoadable) {
-        pArgs->isLoadable=TRUE;
         return;
     }
     cnv->extraInfo=uprv_malloc(sizeof(SCSUData));

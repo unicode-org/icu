@@ -173,7 +173,6 @@ static void initializeSets() {
 
 static void _ISCIIOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode) {
     if(pArgs->onlyTestIsLoadable) {
-        pArgs->isLoadable=TRUE;
         return;
     }
 
