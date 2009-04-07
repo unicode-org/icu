@@ -588,13 +588,8 @@ _LMBCSOpenWorker(UConverter*  _this,
             }
         }
 
-        if(U_FAILURE(*err)) {
+        if(U_FAILURE(*err) || pArgs->onlyTestIsLoadable) {
             _LMBCSClose(_this);
-            return;
-        }
-        if(pArgs->onlyTestIsLoadable) {
-            _LMBCSClose(_this);
-            pArgs->isLoadable=TRUE;
             return;
         }
         extraInfo->OptGroup = OptGroup;

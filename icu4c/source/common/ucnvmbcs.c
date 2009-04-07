@@ -1401,7 +1401,6 @@ ucnv_MBCSLoad(UConverterSharedData *sharedData,
         args.size=sizeof(UConverterLoadArgs);
         args.nestedLoads=2;
         args.onlyTestIsLoadable=pArgs->onlyTestIsLoadable;
-        args.isLoadable=pArgs->isLoadable;
         args.reserved=pArgs->reserved;
         args.options=pArgs->options;
         args.pkg=pArgs->pkg;
@@ -1688,7 +1687,6 @@ ucnv_MBCSOpen(UConverter *cnv,
     int8_t maxBytesPerUChar;
 
     if(pArgs->onlyTestIsLoadable) {
-        pArgs->isLoadable=TRUE;
         return;
     }
 

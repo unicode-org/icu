@@ -69,8 +69,7 @@ static void
 _HZOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
     UConverter *gbConverter;
     if(pArgs->onlyTestIsLoadable) {
-        UErrorCode localStatus = U_ZERO_ERROR;
-        pArgs->isLoadable = ucnv_canCreateConverter("GBK", &localStatus);
+        ucnv_canCreateConverter("GBK", errorCode);  /* errorCode carries result */
         return;
     }
     gbConverter = ucnv_open("GBK", errorCode);

@@ -585,13 +585,10 @@ static void
 _UTF16BEOpen(UConverter *cnv,
              UConverterLoadArgs *pArgs,
              UErrorCode *pErrorCode) {
-    if(pArgs->onlyTestIsLoadable) {
-        pArgs->isLoadable=TRUE;
-    } else {
-        if(UCNV_GET_VERSION(cnv)>1) {
-            cnv->options=0;
-        }
+    if(UCNV_GET_VERSION(cnv)<=1) {
         _UTF16BEReset(cnv, UCNV_RESET_BOTH);
+    } else {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
     }
 }
 
@@ -1187,13 +1184,10 @@ static void
 _UTF16LEOpen(UConverter *cnv,
              UConverterLoadArgs *pArgs,
              UErrorCode *pErrorCode) {
-    if(pArgs->onlyTestIsLoadable) {
-        pArgs->isLoadable=TRUE;
-    } else {
-        if(UCNV_GET_VERSION(cnv)>1) {
-            cnv->options=0;
-        }
+    if(UCNV_GET_VERSION(cnv)<=1) {
         _UTF16LEReset(cnv, UCNV_RESET_BOTH);
+    } else {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
     }
 }
 
@@ -1289,13 +1283,10 @@ static void
 _UTF16Open(UConverter *cnv,
            UConverterLoadArgs *pArgs,
            UErrorCode *pErrorCode) {
-    if(pArgs->onlyTestIsLoadable) {
-        pArgs->isLoadable=TRUE;
-    } else {
-        if(UCNV_GET_VERSION(cnv)>1) {
-            cnv->options=0;
-        }
+    if(UCNV_GET_VERSION(cnv)<=1) {
         _UTF16Reset(cnv, UCNV_RESET_BOTH);
+    } else {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
     }
 }
 

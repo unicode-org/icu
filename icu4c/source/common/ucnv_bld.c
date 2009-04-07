@@ -874,7 +874,7 @@ ucnv_canCreateConverter(const char *converterName, UErrorCode *err) {
     }
 
     UTRACE_EXIT_STATUS(*err);
-    return U_SUCCESS(*err) && stackArgs.isLoadable;
+    return U_SUCCESS(*err);
 }
 
 UConverter *
@@ -1016,11 +1016,10 @@ ucnv_createConverterFromSharedData(UConverter *myUConverter,
         myUConverter->toUCallbackReason = UCNV_ILLEGAL; /* default reason to invoke (*fromCharErrorBehaviour) */
     }
 
-    if(mySharedConverterData->impl->open == NULL) {
-        pArgs->isLoadable = pArgs->onlyTestIsLoadable;
-    } else {
+    if(mySharedConverterData->impl->open != NULL) {
         mySharedConverterData->impl->open(myUConverter, pArgs, err);
-        if(U_FAILURE(*err)) {
+        if(U_FAILURE(*err) && !pArgs->onlyTestIsLoadable) {
+            /* don't ucnv_close() if onlyTestIsLoadable because not fully initialized */
             ucnv_close(myUConverter);
             return NULL;
         }
