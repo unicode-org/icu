@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+# Visual C++ Express 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "charperf", "charperf\charperf.vcproj", "{D850A4B6-7D94-476E-9392-E9272DA4EAAF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "normperf", "normperf\normperf.vcproj", "{56CCC661-8D33-4F0A-B62F-C619CE843C68}"
@@ -21,6 +21,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "strsrchperf", "strsrchperf\strsrchperf.vcproj", "{241DED26-1635-45E6-9564-7742AC8043B5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "utrie2perf", "utrie2perf\utrie2perf.vcproj", "{B9458CB3-9B09-402A-8C4C-43B6D0EA9691}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ucnvavailperf", "ucnvavailperf\ucnvavailperf.vcproj", "{EE2259BF-280D-4E0E-8A08-D77A26AE4191}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -116,6 +118,12 @@ Global
 		{B9458CB3-9B09-402A-8C4C-43B6D0EA9691}.Release|Win32.ActiveCfg = Release|Win32
 		{B9458CB3-9B09-402A-8C4C-43B6D0EA9691}.Release|Win32.Build.0 = Release|Win32
 		{B9458CB3-9B09-402A-8C4C-43B6D0EA9691}.Release|x64.ActiveCfg = Release|Win32
+		{EE2259BF-280D-4E0E-8A08-D77A26AE4191}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EE2259BF-280D-4E0E-8A08-D77A26AE4191}.Debug|Win32.Build.0 = Debug|Win32
+		{EE2259BF-280D-4E0E-8A08-D77A26AE4191}.Debug|x64.ActiveCfg = Debug|Win32
+		{EE2259BF-280D-4E0E-8A08-D77A26AE4191}.Release|Win32.ActiveCfg = Release|Win32
+		{EE2259BF-280D-4E0E-8A08-D77A26AE4191}.Release|Win32.Build.0 = Release|Win32
+		{EE2259BF-280D-4E0E-8A08-D77A26AE4191}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
