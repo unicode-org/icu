@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2008, International Business Machines
+ *   Copyright (C) 2003-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -21,6 +21,7 @@
 
 #include "unicode/ustring.h"
 #include "unicode/usprep.h"
+#include "cstring.h"
 #include "cintltst.h"
 #include "nfsprep.h"
 
@@ -39,6 +40,9 @@ static void Test_nfs4_cis_prep(void);
 static void Test_nfs4_mixed_prep(void);
 static void TestBEAMWarning(void);
 static void TestCoverage(void);
+static void TestStringPrepProfiles(void);
+
+UStringPrepProfileType getTypeFromProfileName(const char* profileName);
 
 void 
 addUStringPrepTest(TestNode** root)
@@ -51,6 +55,7 @@ addUStringPrepTest(TestNode** root)
    addTest(root, &Test_nfs4_mixed_prep,      "spreptst/Test_nfs4_mixed_prep");
    addTest(root, &TestBEAMWarning,           "spreptst/TestBEAMWarning");
    addTest(root, &TestCoverage,              "spreptst/TestCoverage");
+   addTest(root, &TestStringPrepProfiles,              "spreptst/TestStringPrepProfiles");
 }
 
 static void 
@@ -627,6 +632,178 @@ static void TestCoverage(void) {
 
     /* Don't crash */
     usprep_close(NULL);
+}
+
+/**** Profile Test ****/
+
+#define SPREP_PROFILE_TEST_MAX_LENGTH 64
+/* The format of the test cases should be the following:
+* {
+*     Profile name
+*     src string1
+*     expected result1
+*     src string2
+*     expected result2
+*     ...
+* } 
+* 
+* *Note: For expected failures add FAIL to beginning of the source string and for expected result use "FAIL".
+*/
+static const char *profile_test_case[] = {
+/**** RFC4013_SASLPREP ****/
+    "RFC4013_SASLPREP",
+    "user:\\u00A0\\u0AC6\\u1680\\u00ADpassword1",
+    "user: \\u0AC6 password1",
+    
+/**** RFC4011_MIB ****/
+    "RFC4011_MIB",
+    "Policy\\u034F\\u200DBase\\u0020d\\u1806\\u200C",
+    "PolicyBase d",
+    
+/**** RFC4505_TRACE ****/
+    "RFC4505_TRACE",
+    "Anony\\u0020\\u00A0mous\\u3000\\u0B9D\\u034F\\u00AD",
+    "Anony\\u0020\\u00A0mous\\u3000\\u0B9D\\u034F\\u00AD",
+    
+/**** RFC4518_LDAP ****/
+    "RFC4518_LDAP",
+    "Ldap\\uFB01\\u00ADTest\\u0020\\u00A0\\u2062ing",
+    "LdapfiTest  ing",
+    
+/**** RFC4518_LDAP_CI ****/
+    "RFC4518_LDAP_CI",
+    "Ldap\\uFB01\\u00ADTest\\u0020\\u00A0\\u2062ing12345",
+    "ldapfitest  ing12345",
+    
+/**** RFC3920_RESOURCEPREP ****/
+    "RFC3920_RESOURCEPREP",
+    "ServerXM\\u2060\\uFE00\\uFE09PP s p ",
+    "ServerXMPP s p ",
+    
+/**** RFC3920_NODEPREP ****/
+    "RFC3920_NODEPREP",
+    "Server\\u200DXMPPGreEK\\u03D0",
+    "serverxmppgreek\\u03B2",
+    
+/**** RFC3722_ISCI ****/
+    "RFC3722_ISCSI",
+    "InternetSmallComputer\\uFB01\\u0032\\u2075Interface",
+    "internetsmallcomputerfi25interface",
+    "FAILThisShouldFailBecauseOfThis\\u002F",
+    "FAIL",
+    
+/**** RFC3530_NFS4_CS_PREP ****/
+    "RFC3530_NFS4_CS_PREP",
+    "\\u00ADUser\\u2060Name@ \\u06DDDOMAIN.com",
+    "UserName@ \\u06DDDOMAIN.com",
+    
+/**** RFC3530_NFS4_CS_PREP_CI ****/
+    "RFC3530_NFS4_CS_PREP_CI",
+    "\\u00ADUser\\u2060Name@ \\u06DDDOMAIN.com",
+    "username@ \\u06DDdomain.com",
+    
+/**** RFC3530_NFS4_CIS_PREP ****/
+    "RFC3530_NFS4_CIS_PREP",
+    "AA\\u200C\\u200D @@DomAin.org",
+    "aa @@domain.org",
+    
+/**** RFC3530_NFS4_MIXED_PREP_PREFIX ****/
+    "RFC3530_NFS4_MIXED_PREP_PREFIX",
+    "PrefixUser \\u007F\\uFB01End",
+    "PrefixUser \\u007FfiEnd",
+    
+/**** RFC3530_NFS4_MIXED_PREP_SUFFIX ****/
+    "RFC3530_NFS4_MIXED_PREP_SUFFIX",
+    "SuffixDomain \\u007F\\uFB01EnD",
+    "suffixdomain \\u007Ffiend",
+};
+
+UStringPrepProfileType getTypeFromProfileName(const char* profileName) {
+    if (uprv_strcmp(profileName, "RFC4013_SASLPREP") == 0) {
+        return USPREP_RFC4013_SASLPREP;
+    } else if (uprv_strcmp(profileName, "RFC4011_MIB") == 0) {
+        return USPREP_RFC4011_MIB;
+    } else if (uprv_strcmp(profileName, "RFC4505_TRACE") == 0) {
+        return USPREP_RFC4505_TRACE;
+    } else if (uprv_strcmp(profileName, "RFC4518_LDAP") == 0) {
+        return USPREP_RFC4518_LDAP;
+    } else if (uprv_strcmp(profileName, "RFC4518_LDAP_CI") == 0) {
+        return USPREP_RFC4518_LDAP_CI;
+    } else if (uprv_strcmp(profileName, "RFC3920_RESOURCEPREP") == 0) {
+        return USPREP_RFC3920_RESOURCEPREP;
+    } else if (uprv_strcmp(profileName, "RFC3920_NODEPREP") == 0) {
+        return USPREP_RFC3920_NODEPREP;
+    } else if (uprv_strcmp(profileName, "RFC3722_ISCSI") == 0) {
+        return USPREP_RFC3722_ISCSI;
+    } else if (uprv_strcmp(profileName, "RFC3530_NFS4_CS_PREP") == 0) {
+        return USPREP_RFC3530_NFS4_CS_PREP;
+    } else if (uprv_strcmp(profileName, "RFC3530_NFS4_CS_PREP_CI") == 0) {
+        return USPREP_RFC3530_NFS4_CS_PREP_CI;
+    } else if (uprv_strcmp(profileName, "RFC3530_NFS4_CIS_PREP") == 0) {
+        return USPREP_RFC3530_NFS4_CIS_PREP;
+    } else if (uprv_strcmp(profileName, "RFC3530_NFS4_MIXED_PREP_PREFIX") == 0) {
+        return USPREP_RFC3530_NFS4_MIXED_PREP_PREFIX;
+    } else if (uprv_strcmp(profileName, "RFC3530_NFS4_MIXED_PREP_SUFFIX") == 0) {
+        return USPREP_RFC3530_NFS4_MIXED_PREP_SUFFIX;
+    }
+    /* Should not happen. */
+    return USPREP_RFC3491_NAMEPREP;
+}
+static void TestStringPrepProfiles(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    char *profileName;
+    UChar src[SPREP_PROFILE_TEST_MAX_LENGTH];
+    UChar expected[SPREP_PROFILE_TEST_MAX_LENGTH];
+    UChar result[SPREP_PROFILE_TEST_MAX_LENGTH];
+    int32_t srcLength, resultLength, expectedLength;
+    int32_t i, testNum = 0;
+    UStringPrepProfile *sprep = NULL;
+    
+    for (i = 0; i < LENGTHOF(profile_test_case); i++) {
+        if (uprv_strstr(profile_test_case[i], "RFC")) {
+            if (sprep != NULL) {
+                usprep_close(sprep);
+                sprep = NULL;
+            }
+            profileName = profile_test_case[i];
+            sprep = usprep_openByType(getTypeFromProfileName(profileName), &status);
+            if (U_FAILURE(status)) {
+                log_err("Unable to open String Prep Profile with: %s\n", profileName);
+                break;
+            }
+            
+            testNum = 0;
+            continue;
+        }
+        srcLength = resultLength = expectedLength = SPREP_PROFILE_TEST_MAX_LENGTH;
+        
+        testNum++;
+        
+        srcLength = u_unescape(profile_test_case[i], src, srcLength);
+        expectedLength = u_unescape(profile_test_case[++i], expected, expectedLength);
+        
+        resultLength = usprep_prepare(sprep, src, srcLength, result, resultLength, USPREP_ALLOW_UNASSIGNED, NULL, &status);
+        if (U_FAILURE(status)) {
+            if (uprv_strstr(profile_test_case[i], "FAIL") == NULL) {
+                log_err("Error occurred on test[%d] for profile: %s\n", testNum, profileName);
+            } else {
+                /* Error is expected so reset the status. */
+                status = U_ZERO_ERROR;
+            }
+        } else {
+            if (uprv_strstr(profile_test_case[i], "FAIL") != NULL) {
+                log_err("Error expected on test[%d] for profile: %s\n", testNum, profileName);
+            }
+            
+            if (resultLength != expectedLength || u_strcmp(result, expected) != 0) {
+                log_err("Results do not match expected on test[%d] for profile: %s\n", testNum, profileName);
+            }
+        }
+    }
+    
+    if (sprep != NULL) {
+        usprep_close(sprep);
+    }
 }
 
 #endif
