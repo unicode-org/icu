@@ -101,7 +101,7 @@ public final class StringPrep {
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
-    public static final int RFC3530_NSF4_CIS_PREP = 3;
+    public static final int RFC3530_NFS4_CIS_PREP = 3;
 
     /**
      * Profile type: RFC3530 nfs4_mixed_prep for prefix
@@ -109,7 +109,7 @@ public final class StringPrep {
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
-    public static final int RFC3530_NSF4_MIXED_PREP_PREFIX = 4;
+    public static final int RFC3530_NFS4_MIXED_PREP_PREFIX = 4;
 
     /**
      * Profile type: RFC3530 nfs4_mixed_prep for suffix
@@ -117,7 +117,7 @@ public final class StringPrep {
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
-    public static final int RFC3530_NSF4_MIXED_PREP_SUFFIX = 5;
+    public static final int RFC3530_NFS4_MIXED_PREP_SUFFIX = 5;
 
     /**
      * Profile type: RFC3722 iSCSI
@@ -205,7 +205,7 @@ public final class StringPrep {
         "rfc4518ci",    /* RFC4518_LDAP_CI */
     };
 
-    private static final WeakReference[] CACHE = new WeakReference[MAX_PROFILE];
+    private static final WeakReference[] CACHE = new WeakReference[MAX_PROFILE+1];
 
     private static final int UNASSIGNED        = 0x0000; 
     private static final int MAP               = 0x0001; 
