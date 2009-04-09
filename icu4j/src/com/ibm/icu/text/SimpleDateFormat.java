@@ -39,6 +39,7 @@ import com.ibm.icu.impl.ZoneStringFormat.ZoneStringInfo;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.BasicTimeZone;
 import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.TimeZoneTransition;
 import com.ibm.icu.util.ULocale;
@@ -1438,8 +1439,9 @@ public class SimpleDateFormat extends DateFormat {
         }
         if (fmt == null) {
             fmt = new MessageFormat(formatData.gmtFormat);
+            GregorianCalendar gcal = new GregorianCalendar(TimeZone.getTimeZone("Etc/UTC"));
             SimpleDateFormat sdf = (SimpleDateFormat)this.clone();
-            sdf.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
+            sdf.setCalendar(gcal);
             sdf.applyPattern(formatData.getGmtHourFormat(sign, width));
             fmt.setFormat(0, sdf);
             gmtfmtCache[cacheIdx] = new WeakReference(fmt);
