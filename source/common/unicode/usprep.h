@@ -108,17 +108,17 @@ typedef enum UStringPrepProfileType {
      * RFC3530 nfs4_cis_prep
      * @draft ICU 4.2
      */
-	USPREP_RFC3530_NSF4_CIS_PREP,
+	USPREP_RFC3530_NFS4_CIS_PREP,
     /**
      * RFC3530 nfs4_mixed_prep for prefix
      * @draft ICU 4.2
      */
-	USPREP_RFC3530_NSF4_MIXED_PREP_PREFIX,
+	USPREP_RFC3530_NFS4_MIXED_PREP_PREFIX,
     /**
      * RFC3530 nfs4_mixed_prep for suffix
      * @draft ICU 4.2
      */
-	USPREP_RFC3530_NSF4_MIXED_PREP_SUFFIX,
+	USPREP_RFC3530_NFS4_MIXED_PREP_SUFFIX,
     /**
      * RFC3722 iSCSI
      * @draft ICU 4.2
