@@ -9,6 +9,8 @@ package com.ibm.icu.text;
 
 import java.text.ParseException;
 
+import com.ibm.icu.impl.Punycode;
+
 /**
  *
  * IDNA API implements the IDNA protocol as defined in the <a href="http://www.ietf.org/rfc/rfc3490.txt">IDNA RFC</a>.

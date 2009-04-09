@@ -1,12 +1,14 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
-package com.ibm.icu.text;
+package com.ibm.icu.impl;
 
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.StringPrepParseException;
+import com.ibm.icu.text.UTF16;
 
 /**
  * Ported code from ICU punycode.c 
@@ -14,7 +16,7 @@ import com.ibm.icu.lang.UCharacter;
  */
 
 /* Package Private class */
-final class Punycode {
+public final class Punycode {
 
     /* Punycode parameters for Bootstring */
     private static final int BASE           = 36;
