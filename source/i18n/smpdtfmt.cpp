@@ -1253,11 +1253,12 @@ SimpleDateFormat::initGMTFormatters(UErrorCode &status) {
                         break;
                 }
                 fGMTFormatters[i] = new MessageFormat(fSymbols->fGmtFormat, status);
+                GregorianCalendar *gcal = new GregorianCalendar(TimeZone::createTimeZone(UnicodeString(gEtcUTC)), status);
                 if (U_FAILURE(status)) {
                     break;
                 }
                 SimpleDateFormat *sdf = (SimpleDateFormat*)this->clone();
-                sdf->adoptTimeZone(TimeZone::createTimeZone(UnicodeString(gEtcUTC)));
+                sdf->adoptCalendar(gcal);
                 sdf->applyPattern(*hourPattern);
                 fGMTFormatters[i]->adoptFormat(0, sdf);
             }
