@@ -10,6 +10,9 @@
  *  ICU <specials> source: <path>/xml/main/zu.xml
  */
 zu{
+    Countries{
+        ZA{"iNingizimu Afrika"}
+    }
     ExemplarCharacters{
         "[a b {bh} c {ch} d {dl} {dy} e-g {gc} {gq} {gx} h {hh} {hl} i-k {kh} {kl} {k"
         "p} l-n {nc} {ngc} {ngq} {ngx} {nhl} {nk} {nkc} {nkq} {nkx} {nq} {ntsh} {nx} "
@@ -51,7 +54,7 @@ zu{
         "#,##0%",
         "#E0",
     }
-    Version{"1.28"}
+    Version{"1.29"}
     calendar{
         gregorian{
             DateTimePatterns{

@@ -12,6 +12,8 @@
 ha{
     AuxExemplarCharacters{"[á à â é è ê í ì î ó ò ô p q {r\u0303} ú ù û v x ƴ]"}
     Countries{
+        GH{"Gaana"}
+        NE{"Nijer"}
         NG{"Nijeriya"}
     }
     ExemplarCharacters{"[a b ɓ c d ɗ e-k ƙ l-o r s {sh} t {ts} u w y z ʼ {ʼy}]"}
@@ -41,7 +43,7 @@ ha{
         "#,##0%",
         "#E0",
     }
-    Version{"1.35"}
+    Version{"1.36"}
     calendar{
         gregorian{
             AmPmMarkers{
