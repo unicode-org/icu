@@ -245,12 +245,6 @@ id{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
-    Currencies{
-        IDR{
-            "Rp",
-            "IDR",
-        }
-    }
     ExemplarCharacters{"[a-n {ng} {ny} o p r-w y]"}
     Languages{
         aa{"Afar"}
@@ -504,11 +498,11 @@ id{
         "#,##0%",
         "#E0",
     }
-    Version{"1.139"}
+    Version{"1.74"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH:mm:ss v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -516,6 +510,7 @@ id{
                 "d MMMM yyyy",
                 "d MMM yyyy",
                 "dd/MM/yy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

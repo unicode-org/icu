@@ -7,17 +7,7 @@
 // *
 // ***************************************************************************
 ti_ER{
-    Currencies{
-        ERN{
-            "$",
-            "ERN",
-        }
-        ETB{
-            "ETB",
-            "ETB",
-        }
-    }
-    Version{"1.139"}
+    Version{"1.54"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -25,7 +15,7 @@ ti_ER{
                 4,
             }
             DateTimePatterns{
-                "HH:mm:ss v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -33,6 +23,7 @@ ti_ER{
                 "y MMMM d",
                 "y MMM d",
                 "yyyy-MM-dd",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

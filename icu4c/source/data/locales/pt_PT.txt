@@ -21,7 +21,7 @@ pt_PT{
         AZ{"Azerbeijão"}
         BD{"Bangladeche"}
         BF{"Burkina-Faso"}
-        BH{"Bareine"}
+        BH{"Bahrein"}
         BJ{"Benim"}
         BW{"Botswana"}
         BY{"Bielorrússia"}
@@ -32,7 +32,6 @@ pt_PT{
         EE{"Estónia"}
         EG{"Egipto"}
         EH{"Sara Ocidental"}
-        ER{"Eritreia"}
         FM{"Estados Federados da Micronésia"}
         GL{"Gronelândia"}
         GW{"Guiné-Bissau"}
@@ -41,11 +40,9 @@ pt_PT{
         KE{"Quénia"}
         KG{"Quirguizistão"}
         KN{"Saint Kitts e Nevis"}
-        KP{"Coreia do Norte"}
-        KR{"Coreia do Sul"}
         KY{"Ilhas Caimão"}
         KZ{"Cazaquistão"}
-        LA{"Lao, República Popular Democrática"}
+        LA{"Laos, República Popular Democrática do"}
         LV{"Letónia"}
         MC{"Mónaco"}
         MD{"Moldávia, República da"}
@@ -61,7 +58,6 @@ pt_PT{
         PS{"Território Palestiniano"}
         QA{"Qatar"}
         QO{"Oceânia Insular"}
-        QU{"União Europeia"}
         RO{"Roménia"}
         SC{"Seicheles"}
         SG{"Singapura"}
@@ -99,7 +95,7 @@ pt_PT{
             "Rublo novo bielorusso (1994-1999)",
         }
         CYP{
-            "£C",
+            "CY£",
             "Libra de Chipre",
         }
         CZK{
@@ -147,7 +143,7 @@ pt_PT{
             }
         }
         TZS{
-            "T Sh",
+            "TSh",
             "Xelim de Tanzânia",
         }
         WST{
@@ -155,52 +151,30 @@ pt_PT{
             "Tala de Samoa Ocidental",
         }
     }
-    CurrencyUnitPatterns{
-        other{"{0} {1}"}
-    }
     Languages{
         af{"afrikaans"}
-        afa{"idioma afro-asiático"}
-        afh{"afrihili"}
-        ak{"akan"}
-        alg{"idioma algonquiano"}
-        ang{"inglês, arcaico (aprox. 450-1100)"}
-        apa{"idioma apache"}
         art{"idioma artifical"}
-        ath{"idioma atabascano"}
-        aus{"idioma australiano"}
         awa{"Awadhi"}
         bai{"bamileke Languages"}
-        bat{"idioma báltico"}
-        bua{"buriat"}
         bug{"Buginese"}
-        byn{"blin"}
-        cai{"idioma indígena centro-americano"}
-        cau{"idioma caucásico"}
         ce{"chechene"}
         cel{"idioma céltico"}
         chn{"jargão chinook"}
-        cmc{"idioma chamic"}
         cpe{"crioulo ou pidgin do inglês"}
         cpf{"crioulo ou pidgin do francês"}
         cpp{"crioulo ou pidgin do português"}
-        crh{"turco da Crimeia"}
         cs{"checo"}
         cus{"idioma cuchita"}
         dra{"idioma dravítico"}
         dyu{"diula"}
         egy{"egípcio clássico"}
         en{"Inglês"}
-        enm{"inglês, medieval (1100-1500)"}
+        enm{"inglês medieval"}
         et{"estónio"}
         fiu{"idioma ugro-finês"}
-        frm{"francês, medieval (aprox.1400-1600)"}
-        fro{"francês, arcaico (842-aprox.1400)"}
+        frm{"francês medieval"}
         frs{"frísio oriental"}
-        gem{"idioma germânico"}
-        gmh{"alemão, medieval alto (aprox.1050-1500)"}
-        goh{"alemão, arcaico alto (aprox.750-1050)"}
-        grb{"grebo"}
+        gmh{"alemão medieval alto"}
         grc{"grego clássico"}
         gsw{"alemão da Suíça"}
         hsb{"sorbiano superior"}
@@ -208,57 +182,33 @@ pt_PT{
         iba{"Iban"}
         ig{"igbo"}
         ik{"Inupiaq"}
-        inc{"idioma índico"}
-        ine{"idioma indo-europeu"}
         jv{"jv"}
         khi{"khoisan"}
-        kj{"kuanyama"}
         lez{"lezghiano"}
-        lua{"luba-lulua"}
         mga{"irlandês, medieval (900-1200)"}
         mk{"macedónio"}
-        mkh{"mon-khmer (other)"}
-        mno{"idioma manobo"}
         nah{"Nauatle"}
-        nai{"idioma indígena norte-americano"}
         nds{"baixo alemão"}
         nic{"nigeriano - cordofano"}
         non{"norse, old"}
-        nso{"soto, setentrional"}
-        nub{"idioma núbio"}
         oc{"provençal"}
         os{"ossético"}
-        oto{"idioma otomano"}
-        paa{"idioma papuano"}
         peo{"persa arcaico (aprox. 600-400 a.C.)"}
-        phi{"idioma filipino"}
         pl{"polaco"}
         pra{"idioma prácito"}
         pro{"provençal, arcaico (até 1500)"}
         pt_PT{"português europeu"}
-        roa{"idioma românico"}
         rom{"romanês"}
         sai{"idioma indígeno sul-americano"}
         sal{"salishan languages"}
-        sem{"idioma semítico"}
         sgn{"linguages de sinais"}
-        sio{"idioma sioux"}
-        sit{"idioma sino-tibetano"}
-        sla{"idioma eslavo"}
-        smi{"idioma sami"}
         ssa{"idioma nilo-sariano"}
         tai{"idioma tailândes"}
         tg{"tajique"}
         to{"tonga"}
         tog{"toganês"}
-        tup{"idioma tupi"}
-        tut{"idioma altaico"}
         tyv{"tuviniano"}
-        wak{"idioma wakashan"}
         wen{"idioma sórbio"}
-        ypk{"idioma iúpique"}
-        zh_Hans{"chinês simplificado"}
-        zh_Hant{"chinês tradicional"}
     }
     NumberElements{
         ",",
@@ -315,11 +265,11 @@ pt_PT{
         POLYTON{"politónico"}
         SOLBA{"dialecto stolvizza/solbica"}
     }
-    Version{"1.139"}
+    Version{"1.79"}
     calendar{
         buddhist{
             DateTimePatterns{
-                "HH'h'mm'min'ss's' v",
+                "HH'h'mm'min'ss's' zzzz",
                 "HH'h'mm'min'ss's' z",
                 "HH'h'mm'min'ss's'",
                 "HH:mm",
@@ -327,6 +277,7 @@ pt_PT{
                 "MMMM d, y G",
                 "MMM d, y G",
                 "M/d/yyyy",
+                "{1} {0}" /**  fallback from 'gregorian'   */,
                 "{1} {0}" /**  fallback from 'gregorian'   */,
                 "{1} {0}" /**  fallback from 'gregorian'   */,
                 "{1} {0}" /**  fallback from 'gregorian'   */,
@@ -339,7 +290,7 @@ pt_PT{
                 "Depois do meio-dia",
             }
             DateTimePatterns{
-                "HH'h'mm'min'ss's' v",
+                "HH'h'mm'min'ss's' zzzz",
                 "HH'h'mm'min'ss's' z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -351,22 +302,12 @@ pt_PT{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+                "{1} {0}",
             }
             availableFormats{
-                EEEd{"EEE, d"}
-                MMM{"LLL"}
-                MMMEd{"EEE, d 'de' MMM"}
-                MMMMEd{"EEE, d 'de' MMMM"}
-                MMMMd{"d 'de' MMMM"}
-                MMMd{"d 'de' MMM"}
-                Md{"d/M"}
                 yQ{"QQQ 'de' yyyy"}
                 yQQQ{"QQQ 'de' y"}
-                yyMM{"MM/yy"}
-                yyMMM{"MMM 'de' yy"}
                 yyQ{"QQQ 'de' yy"}
-                yyyyMM{"MM/yyyy"}
-                yyyyMMM{"MMM 'de' y"}
             }
             dayNames{
                 format{
@@ -410,87 +351,18 @@ pt_PT{
                     }
                 }
             }
-            eras{
-                wide{
-                    "Antes de Cristo",
-                    "Ano do Senhor",
-                }
-            }
-            fields{
-                day{
-                    relative{
-                        "-2"{"Anteontem"}
-                        "-3"{"Há três dias"}
-                        "3"{"Daqui a três dias"}
-                    }
-                }
-                second{
-                    dn{"Segundo"}
-                }
-                zone{
-                    dn{"Fuso"}
-                }
-            }
             intervalFormats{
-                M{
-                    M{"M-M"}
-                }
-                MEd{
-                    M{"E, dd/MM - E, dd/MM"}
-                    d{"E, dd/MM - E, dd/MM"}
-                }
                 MMM{
                     M{"MMM-MMM"}
                 }
-                MMMd{
-                    M{"d 'de' MMM - d 'de' MMM"}
-                    d{"d-d 'de' MMM"}
-                }
-                Md{
-                    M{"dd/MM - dd/MM"}
-                    d{"dd/MM - dd/MM"}
-                }
-                d{
-                    d{"d-d"}
-                }
-                fallback{"{0} - {1}"}
-                h{
-                    h{"H'h' - H'h'"}
-                }
                 hm{
                     h{"H'h' - H'h'"}
-                    m{"H'h'mm - H'h'mm"}
-                }
-                hmv{
-                    h{"H'h'mm - H'h'mm v"}
-                    m{"H'h'mm - H'h'mm v"}
-                }
-                hv{
-                    h{"H'h'mm - H'h'mm v"}
                 }
                 y{
                     y{"y-y"}
                 }
-                yM{
-                    M{"MM/yy - MM/yy"}
-                    y{"MM/yy - MM/yy"}
-                }
-                yMMM{
-                    M{"MMM-MMM 'de' y"}
-                    y{"MMM 'de' y - MMM 'de' y"}
-                }
                 yMMMM{
                     M{"MM-MM 'de' yyyy"}
-                }
-                yMMMd{
-                    M{"d 'de' MMM - d 'de' MMM 'de' y"}
-                    d{"d-d 'de' MMM 'de' y"}
-                    y{"d 'de' MMM 'de' y - d 'de' MMM 'de' y"}
-                }
-                yMd{
-                    M{"dd/MM/yy - dd/MM/yy"}
-                    d{"dd/MM/yy - dd/MM/yy"}
-                    y{"dd/MM/yy - dd/MM/yy"}
                 }
             }
             monthNames{
@@ -527,12 +399,6 @@ pt_PT{
             }
             quarters{
                 format{
-                    abbreviated{
-                        "T1",
-                        "T2",
-                        "T3",
-                        "T4",
-                    }
                     wide{
                         "1.º trimestre",
                         "2.º trimestre",
@@ -544,7 +410,7 @@ pt_PT{
         }
         japanese{
             DateTimePatterns{
-                "HH'h'mm'min'ss's' v",
+                "HH'h'mm'min'ss's' zzzz",
                 "HH'h'mm'min'ss's' z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -552,18 +418,13 @@ pt_PT{
                 "MMMM d, y G",
                 "MMM d, y G",
                 "M/d/yy",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
                 "{1} {0}",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
         }
-    }
-    delimiters{
-        alternateQuotationEnd{"”"}
-        alternateQuotationStart{"“"}
-        quotationEnd{"’"}
-        quotationStart{"‘"}
     }
     measurementSystemNames{
         metric{"Métrico"}

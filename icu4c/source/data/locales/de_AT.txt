@@ -13,15 +13,11 @@ de_AT{
         "#,##0 %",
         "#E0",
     }
-    Version{"1.139"}
+    Version{"1.60"}
     calendar{
         gregorian{
-            DateTimeElements:intvector{
-                2,
-                4,
-            }
             DateTimePatterns{
-                "HH:mm:ss v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -29,6 +25,7 @@ de_AT{
                 "dd. MMMM y",
                 "dd.MM.yyyy",
                 "dd.MM.yy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

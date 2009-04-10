@@ -8,10 +8,10 @@
 # Generated from CLDR 
 #
 :: fullwidth-halfwidth;
-｡ > '.';
+｡ → '.';
 $terminalPunct = [\.\,\:\;\?\!．，：？！｡、；[:Pe:][:Pf:]];
 $initialPunct = [:Ps:][:Pi:];
-[[:Ideographic:] $terminalPunct] {} [:Letter:] > ' ' ;
-[:Letter:] [:Mark:]* {} [[:Ideographic:] $initialPunct] > ' ' ;
-< [:Ideographic:] { ' ' } [:Letter:] ;
-< [:Letter:] [:Mark:]* { ' ' } [:Ideographic:] ;
+[[:Ideographic:] $terminalPunct] {} [:Letter:] → ' ' ;
+[:Letter:] [:Mark:]* {} [[:Ideographic:] $initialPunct] → ' ' ;
+← [:Ideographic:] { ' ' } [:Letter:] ;
+← [:Letter:] [:Mark:]* { ' ' } [:Ideographic:] ;

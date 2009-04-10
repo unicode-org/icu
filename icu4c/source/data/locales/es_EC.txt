@@ -19,11 +19,11 @@ es_EC{
         "#,##0%",
         "#E0",
     }
-    Version{"1.139"}
+    Version{"1.60"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH:mm:ss v",
+                "HH:mm:ss zzzz",
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
@@ -31,6 +31,7 @@ es_EC{
                 "d 'de' MMMM 'de' y",
                 "dd/MM/yyyy",
                 "dd/MM/yy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

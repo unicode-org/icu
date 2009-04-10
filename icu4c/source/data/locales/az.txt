@@ -312,11 +312,11 @@ az{
             "Əfgəni",
         }
         ALL{
-            "lek",
+            "ALL",
             "Alban leki",
         }
         AMD{
-            "dram",
+            "AMD",
             "Erməni dramı",
         }
         ANG{
@@ -364,11 +364,11 @@ az{
             "Aruba qilderi",
         }
         AZM{
-            "man.",
+            "AZM",
             "Manat",
         }
         AZN{
-            "AZN",
+            "man.",
             "Azərbaycan manatı",
         }
         BAD{
@@ -512,7 +512,7 @@ az{
             "Çili pesosu",
         }
         CNY{
-            "CNY",
+            "CN¥",
             "Çin yuan renminbi",
         }
         COP{
@@ -624,7 +624,7 @@ az{
             "Fransız markası",
         }
         GBP{
-            "UK£",
+            "£",
             "Britaniya paund sterlingi",
         }
         GEK{
@@ -632,7 +632,7 @@ az{
             "Gürcüstan kupon lariti",
         }
         GEL{
-            "lari",
+            "GEL",
             "Gürcüstan larisi",
         }
         GHC{
@@ -724,7 +724,7 @@ az{
             "İzrail yeni şekeli",
         }
         INR{
-            "0≤Rs.|1≤Re.|1<Rs.",
+            "₨",
             "Hindistan rupisi",
         }
         IQD{
@@ -1120,11 +1120,11 @@ az{
             "Timor eskudu",
         }
         TRL{
-            "TL",
+            "TRL",
             "Türk köhnə lirası",
         }
         TRY{
-            "YTL",
+            "TL",
             "Türk lirası",
         }
         TWD{
@@ -1996,7 +1996,7 @@ az{
             other{"Yuqoslaviya dinarı (hard)"}
         }
         YUM{
-            other{"Yuqoslaviya yeni  dinarı (hard)"}
+            other{"Yuqoslaviya yeni dinarı (hard)"}
         }
         YUN{
             other{"Yuqoslaviya dinarı (dəyişik)"}
@@ -2020,7 +2020,7 @@ az{
             other{"Zimbabve dolları"}
         }
     }
-    ExemplarCharacters{"[a-c ç d e ə f g ğ h i {i̇} İ ı j-o ö p-s ş t u ü v x-z]"}
+    ExemplarCharacters{"[a-c ç d e ə f g ğ h x ı i İ {i\u0307} j k q l-o ö p r s ş t u ü v y z]"}
     Languages{
         aa{"afarca"}
         ab{"abxazca"}
@@ -2081,6 +2081,7 @@ az{
         bo{"tibet dili"}
         br{"Bretonca"}
         bra{"braj dili"}
+        bs{"bosniya dili"}
         btk{"batak dili"}
         bua{"buryat dili"}
         bug{"bugin dili"}
@@ -2688,22 +2689,26 @@ az{
             pinyin{"Pinyin təqvimi"}
         }
     }
-    Version{"1.139"}
+    Version{"1.74"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH:mm:ss v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, y MMMM dd",
-                "y MMMM d",
-                "y MMM d",
+                "EEEE, d, MMMM, y",
+                "d MMMM , y",
+                "d MMM, y",
                 "yyyy-MM-dd",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                yyQ{"Q yy"}
             }
             dayNames{
                 format{
@@ -2739,6 +2744,10 @@ az{
                 }
             }
             eras{
+                abbreviated{
+                    "e.ə.",
+                    "b.e.",
+                }
                 wide{
                     "eramızdan əvvəl",
                     "bizim eramızın",
@@ -2749,8 +2758,10 @@ az{
                     dn{"bu gün"}
                     relative{
                         "-1"{"dünən"}
+                        "-3"{"üç gün əvvəl"}
                         "0"{"bu gün"}
                         "1"{"sabah"}
+                        "3"{"üç gün sonra"}
                     }
                 }
                 era{

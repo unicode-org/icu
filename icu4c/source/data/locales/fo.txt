@@ -170,11 +170,11 @@ fo{
         "#,##0%",
         "#E0",
     }
-    Version{"1.139"}
+    Version{"1.69"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH:mm:ss v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -182,6 +182,7 @@ fo{
                 "d. MMM y",
                 "dd-MM-yyyy",
                 "dd-MM-yy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

@@ -10,15 +10,9 @@
  *  ICU <specials> source: <path>/xml/main/ha.xml
  */
 ha{
-    AuxExemplarCharacters{"[á à â é è ê í ì î ó ò ô p q {r̃} ú ù û v x ƴ]"}
+    AuxExemplarCharacters{"[á à â é è ê í ì î ó ò ô p q {r\u0303} ú ù û v x ƴ]"}
     Countries{
         NG{"Nijeriya"}
-    }
-    Currencies{
-        NGN{
-            "₦",
-            "NGN",
-        }
     }
     ExemplarCharacters{"[a b ɓ c d ɗ e-k ƙ l-o r s {sh} t {ts} u w y z ʼ {ʼy}]"}
     Languages{
@@ -47,7 +41,7 @@ ha{
         "#,##0%",
         "#E0",
     }
-    Version{"1.139"}
+    Version{"1.35"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -55,7 +49,7 @@ ha{
                 "PM",
             }
             DateTimePatterns{
-                "HH:mm:ss v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -63,6 +57,7 @@ ha{
                 "d MMMM, y",
                 "d MMM, y",
                 "d/M/yy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

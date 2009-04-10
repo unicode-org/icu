@@ -165,7 +165,7 @@ zh{
         KI{"基里巴斯"}
         KM{"科摩罗"}
         KN{"圣基茨和尼维斯"}
-        KP{"北朝鲜"}
+        KP{"朝鲜"}
         KR{"韩国"}
         KW{"科威特"}
         KY{"开曼群岛"}
@@ -643,7 +643,7 @@ zh{
         }
         GHS{
             "GH₵",
-            "加纳塞迪",
+            "加纳塞地",
         }
         GIP{
             "GI£",
@@ -742,7 +742,7 @@ zh{
             "冰岛克朗",
         }
         ITL{
-            "ITL",
+            "IT₤",
             "意大利里拉",
         }
         JMD{
@@ -882,7 +882,7 @@ zh{
             "蒙古图格里克",
         }
         MOP{
-            "P",
+            "MOP$",
             "澳门元",
         }
         MRO{
@@ -931,7 +931,7 @@ zh{
         }
         MZM{
             "Mt",
-            "莫桑比克梅蒂卡尔",
+            "旧莫桑比克美提卡",
         }
         MZN{
             "MTn",
@@ -979,7 +979,7 @@ zh{
         }
         PEI{
             "I/.",
-            "秘鲁印锑",
+            "秘鲁印第",
         }
         PEN{
             "S/.",
@@ -1050,7 +1050,7 @@ zh{
             "卢旺达法郎",
         }
         SAR{
-            "SRl",
+            "SR",
             "沙特里亚尔",
         }
         SBD{
@@ -1083,7 +1083,7 @@ zh{
         }
         SHP{
             "SH£",
-            "圣赫勒拿镑",
+            "圣赫勒拿群岛磅",
         }
         SIT{
             "SIT",
@@ -1158,11 +1158,11 @@ zh{
             "帝汶埃斯库多",
         }
         TRL{
-            "TL",
+            "TRL",
             "土耳其里拉",
         }
         TRY{
-            "YTL",
+            "TL",
             "新土耳其里拉",
         }
         TTD{
@@ -1171,7 +1171,7 @@ zh{
         }
         TWD{
             "NT$",
-            "新台币元",
+            "新台币",
         }
         TZS{
             "TSh",
@@ -1438,7 +1438,7 @@ zh{
         am{"阿姆哈拉文"}
         an{"阿拉贡文"}
         ang{"古英文"}
-        anp{"安吉卡文"}
+        anp{"昂加语"}
         apa{"阿帕切文"}
         ar{"阿拉伯文"}
         arc{"阿拉米文"}
@@ -1488,6 +1488,7 @@ zh{
         cai{"其他中美印第安语系"}
         car{"巴勒比文"}
         cau{"其他高加索语系"}
+        cch{"cch"}
         ce{"车臣文"}
         ceb{"宿务文"}
         cel{"其他凯尔特语系"}
@@ -1521,7 +1522,7 @@ zh{
         dar{"达尔格瓦文"}
         day{"达雅克文"}
         de{"德文"}
-        de_AT{"德语（奥地利）"}
+        de_AT{"奥地利德语"}
         de_CH{"高地德文 (瑞士)"}
         del{"特拉华文"}
         den{"司雷夫文"}
@@ -1543,13 +1544,13 @@ zh{
         elx{"艾拉米特文"}
         en{"英文"}
         en_AU{"英语（澳大利亚）"}
-        en_CA{"英语（加拿大）"}
+        en_CA{"加拿大英语"}
         en_GB{"英语（英国）"}
         en_US{"英语（美国）"}
         enm{"中古英文"}
         eo{"世界文"}
         es{"西班牙文"}
-        es_419{"西班牙语（拉丁美洲）"}
+        es_419{"拉丁美洲西班牙语"}
         es_ES{"西班牙语（伊比利亚）"}
         et{"爱沙尼亚文"}
         eu{"巴斯克文"}
@@ -1565,8 +1566,8 @@ zh{
         fo{"法罗文"}
         fon{"丰文"}
         fr{"法文"}
-        fr_CA{"法语（加拿大）"}
-        fr_CH{"法语 (瑞士)"}
+        fr_CA{"加拿大法语"}
+        fr_CH{"瑞士法语"}
         frm{"中古法文"}
         fro{"古法文"}
         frr{"北弗里西亚语"}
@@ -1590,7 +1591,7 @@ zh{
         got{"哥特文"}
         grb{"格列博文"}
         grc{"古希腊文"}
-        gsw{"德文 (瑞士)"}
+        gsw{"瑞士德文"}
         gu{"古加拉提文"}
         gv{"马恩岛文"}
         gwi{"吉维克琴文"}
@@ -1611,10 +1612,10 @@ zh{
         hup{"胡帕文"}
         hy{"亚美尼亚文"}
         hz{"赫雷罗文"}
-        ia{"国际文 A"}
+        ia{"国际语"}
         iba{"伊班文"}
         id{"印度尼西亚文"}
-        ie{"国际文 E"}
+        ie{"国际语E"}
         ig{"伊格博文"}
         ii{"四川话"}
         ijo{"伊乔文"}
@@ -1638,11 +1639,13 @@ zh{
         kaa{"卡拉卡尔帕克文"}
         kab{"卡比尔文"}
         kac{"卡琴文"}
+        kaj{"kaj"}
         kam{"卡姆巴文"}
         kar{"喀伦文"}
         kaw{"卡威文"}
         kbd{"卡巴尔达文"}
-        kfo{"科罗文"}
+        kcg{"kcg"}
+        kfo{"科罗语"}
         kg{"刚果文"}
         kha{"卡西文"}
         khi{"其他科伊桑语系"}
@@ -1794,6 +1797,7 @@ zh{
         ro{"罗马尼亚文"}
         roa{"其他拉丁语系"}
         rom{"吉普赛文"}
+        root{"根语言"}
         ru{"俄文"}
         rup{"亚美尼亚语"}
         rw{"卢旺达文"}
@@ -1842,7 +1846,7 @@ zh{
         ss{"斯瓦特文"}
         ssa{"非洲撒哈拉沙漠边缘地带语言"}
         st{"塞索托文"}
-        su{"巽他文"}
+        su{"巽他语"}
         suk{"苏库马文"}
         sus{"苏苏文"}
         sux{"苏马文"}
@@ -1852,7 +1856,7 @@ zh{
         ta{"泰米尔文"}
         tai{"傣语诸语言（其他）"}
         te{"泰卢固文"}
-        tem{"滕内文"}
+        tem{"滕内语"}
         ter{"特列纳文"}
         tet{"特塔姆文"}
         tg{"塔吉克文"}
@@ -1862,7 +1866,7 @@ zh{
         tiv{"蒂夫文"}
         tk{"土库曼文"}
         tkl{"托克劳文"}
-        tl{"他加禄文"}
+        tl{"塔加洛语"}
         tlh{"克林贡文"}
         tli{"特林吉特文"}
         tmh{"塔马奇克文"}
@@ -1977,7 +1981,7 @@ zh{
         Grek{"希腊语"}
         Gujr{"古吉拉特语"}
         Guru{"果鲁穆奇语"}
-        Hang{"韩语"}
+        Hang{"韩文"}
         Hani{"汉语"}
         Hano{"汉奴罗语"}
         Hans{"简体中文"}
@@ -1996,7 +2000,7 @@ zh{
         Khar{"卡罗须提文"}
         Khmr{"高棉语"}
         Knda{"卡纳塔克语"}
-        Kore{"朝鲜语"}
+        Kore{"韩语"}
         Lana{"兰拿语"}
         Laoo{"老挝语"}
         Latf{"拉丁文（哥特式字体变体）"}
@@ -2046,7 +2050,7 @@ zh{
         Talu{"新傣文"}
         Taml{"泰米尔语"}
         Telu{"泰卢固语"}
-        Teng{"格瓦文字"}
+        Teng{"腾格瓦文字"}
         Tfng{"提非纳文"}
         Tglg{"塔加路语"}
         Thaa{"塔安娜语"}
@@ -2054,7 +2058,7 @@ zh{
         Tibt{"藏语"}
         Ugar{"乌加里特语"}
         Vaii{"瓦依语"}
-        Visp{"可见语音"}
+        Visp{"可见语言"}
         Xpeo{"古波斯语"}
         Xsux{"苏美尔-阿卡德楔形文字"}
         Yiii{"彝语"}
@@ -2095,21 +2099,16 @@ zh{
         REVISED{"已修订的拼字学"}
         SAAHO{"萨霍"}
     }
-    Version{"1.139"}
+    Version{"1.154"}
     calendar{
-        chinese{
-            availableFormats{
-                MEd{"M-dE"}
-            }
-        }
         gregorian{
             AmPmMarkers{
                 "上午",
                 "下午",
             }
             DateTimePatterns{
-                "ahh时mm分ss秒v",
-                "ahh时mm分ss秒z",
+                "zzzzah时mm分ss秒",
+                "zah时mm分ss秒",
                 "ahh:mm:ss",
                 "ah:mm",
                 "y年M月d日EEEE",
@@ -2117,7 +2116,8 @@ zh{
                 "yyyy-M-d",
                 "yy-M-d",
                 "{1} {0}",
-                "{1} {0}",
+                "{1}{0}",
+                "{1}{0}",
                 "{1} {0}",
                 "{1} {0}",
             }
@@ -2125,9 +2125,7 @@ zh{
                 Ed{"d日E"}
                 H{"H时"}
                 HHmmss{"HH:mm:ss"}
-                hms{"ah:mm:ss"}
                 Hm{"H:mm"}
-                hm{"ah:mm"}
                 M{"L"}
                 MEd{"M-dE"}
                 MMM{"LLL"}
@@ -2139,6 +2137,8 @@ zh{
                 MMdd{"MM-dd"}
                 Md{"M-d"}
                 d{"d日"}
+                hm{"ah:mm"}
+                hms{"ah:mm:ss"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y年"}
@@ -2279,13 +2279,13 @@ zh{
                     m{"ah:mm至h:mm"}
                 }
                 hmv{
-                    a{"ah:mm至ah:mmv"}
-                    h{"ah:mm至h:mmv"}
-                    m{"ah:mm至h:mmv"}
+                    a{"vah:mm至ah:mm"}
+                    h{"vah:mm至h:mm"}
+                    m{"vah:mm至h:mm"}
                 }
                 hv{
-                    a{"ah至ah时v"}
-                    h{"ah至h时v"}
+                    a{"vah至ah时"}
+                    h{"vah至h时"}
                 }
                 y{
                     y{"y至y"}
@@ -2335,20 +2335,6 @@ zh{
                         "11月",
                         "12月",
                     }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6月",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
                     wide{
                         "1月",
                         "2月",
@@ -2380,16 +2366,16 @@ zh{
                         "十二月",
                     }
                     narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
+                        "1月",
+                        "2月",
+                        "3月",
+                        "4月",
+                        "5月",
                         "6月",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
+                        "7月",
+                        "8月",
+                        "9月",
+                        "10月",
                         "11",
                         "12",
                     }
@@ -2434,15 +2420,10 @@ zh{
                 }
             }
         }
-        japanese{
-            availableFormats{
-                yyyyM{"yyyy-M"}
-            }
-        }
         roc{
             DateTimePatterns{
-                "ahh时mm分ss秒v",
-                "ahh时mm分ss秒z",
+                "zzzzah时mm分ss秒",
+                "zah时mm分ss秒",
                 "ahh:mm:ss",
                 "ah:mm",
                 "Gy年M月d日EEEE",
@@ -2450,14 +2431,40 @@ zh{
                 "Gy-M-d",
                 "Gy-M-d",
                 "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1}{0}" /**  fallback from 'gregorian'   */,
+                "{1}{0}" /**  fallback from 'gregorian'   */,
                 "{1} {0}" /**  fallback from 'gregorian'   */,
                 "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+            }
+            availableFormats{
+                yyyyM{"Gy/M"}
+                yyyyMEd{"Gy/M/d（EEE）"}
+                yyyyMM{"Gy/MM"}
+                yyyyMMM{"Gy年MMM"}
+                yyyyMMMd{"Gy年M月d日"}
+                yyyyMd{"Gy/M/d"}
+                yyyyQ{"Gy年第Q季度"}
             }
             eras{
                 abbreviated{
                     "民国前",
                     "民国",
+                }
+            }
+            intervalFormats{
+                yM{
+                    M{"y/M至y/M"}
+                    y{"y/M至y/M"}
+                }
+                yMEd{
+                    M{"y/M/dE至y/M/dE"}
+                    d{"y/M/dE至y/M/dE"}
+                    y{"y/M/dE至y/M/dE"}
+                }
+                yMd{
+                    M{"y/M/d至y/M/d"}
+                    d{"y/M/d至y/M/d"}
+                    y{"y/M/d至y/M/d"}
                 }
             }
         }
@@ -2981,6 +2988,9 @@ zh{
         "America:Rainy_River"{
             ec{"雨河"}
         }
+        "America:Rankin_Inlet"{
+            ec{"雷今海口"}
+        }
         "America:Recife"{
             ec{"累西腓"}
         }
@@ -2998,6 +3008,9 @@ zh{
         }
         "America:Sao_Paulo"{
             ec{"圣保罗"}
+        }
+        "America:Scoresbysund"{
+            ec{"斯科列斯比桑德"}
         }
         "America:Shiprock"{
             ec{"舰石城"}
@@ -3619,12 +3632,12 @@ zh{
             ec{"瓦利斯"}
         }
         "meta:Acre"{
-            ld{"Acre 夏令时间"}
+            ld{"阿克里夏令时间"}
             lg{"Acre 时间"}
-            ls{"Acre 标准时间"}
+            ls{"阿克里标准时间"}
         }
         "meta:Afghanistan"{
-            ls{"阿富汗時間"}
+            ls{"阿富汗时间"}
         }
         "meta:Africa_Central"{
             lg{"非洲中部时间"}
@@ -3647,7 +3660,7 @@ zh{
             lg{"西部非洲时间"}
             ls{"西部非洲标准时间"}
             sd{"西部非洲标准时间"}
-            ss{"南部非洲时间"}
+            ss{"西部非洲时间"}
         }
         "meta:Aktyubinsk"{
             ld{"阿尔卑斯夏令时间"}
@@ -3667,7 +3680,7 @@ zh{
             ls{"阿拉斯加－夏威夷标准时间"}
         }
         "meta:Almaty"{
-            ld{"Almaty 夏令时间"}
+            ld{"阿拉木图夏令时间"}
             lg{"Almaty 时间"}
             ls{"Almaty 标准时间"}
         }
@@ -3697,8 +3710,8 @@ zh{
             ls{"太平洋标准时间"}
         }
         "meta:Anadyr"{
-            ld{"阿納德爾夏令時間"}
-            ls{"阿納德爾時間"}
+            ld{"阿纳德尔夏令时间"}
+            ls{"下午1:25阿纳德尔夏令时间"}
         }
         "meta:Aqtau"{
             ld{"阿克图夏令时间"}
@@ -3729,9 +3742,9 @@ zh{
             ld{"亚美尼亚夏令时间"}
             lg{"亚美尼亚时间"}
             ls{"亚美尼亚标准时间"}
-            sd{"AMDT (Armenia)"}
+            sd{"亚美尼亚白昼时间"}
             sg{"AMT (Armenia)"}
-            ss{"AMST (Armenia)"}
+            ss{"亚美尼亚时间"}
         }
         "meta:Ashkhabad"{
             ld{"阿什哈巴德夏令时间"}
@@ -3811,7 +3824,7 @@ zh{
             ss{"孟加拉标准时间"}
         }
         "meta:Bolivia"{
-            ls{"玻利維亞時間"}
+            ls{"玻利维亚时间"}
         }
         "meta:Borneo"{
             lg{"婆罗洲时间"}
@@ -3851,13 +3864,13 @@ zh{
             ls{"乔巴山标准时间"}
         }
         "meta:Colombia"{
-            ld{"哥倫比亞夏令時間"}
-            ls{"哥倫比亞時間"}
+            ld{"哥伦比亚夏令时间"}
+            ls{"哥伦比亚时间"}
         }
         "meta:Cuba"{
-            ld{"古巴夏令時間"}
-            lg{"古巴時間"}
-            ls{"古巴標準時間"}
+            ld{"古巴夏令时间"}
+            lg{"古巴时间"}
+            ls{"古巴标准时间"}
         }
         "meta:Dacca"{
             ld{"达卡夏令时间"}
@@ -3901,7 +3914,7 @@ zh{
             ss{"欧洲西部时间"}
         }
         "meta:French_Guiana"{
-            ls{"法屬圭亞那時間"}
+            ls{"法属圭亚那时间"}
         }
         "meta:Frunze"{
             ld{"伏龙芝夏令时间"}
@@ -3951,19 +3964,19 @@ zh{
             ls{"海湾标准时间"}
         }
         "meta:Guyana"{
-            ls{"蓋亞那時間"}
+            ls{"盖亚那时间"}
         }
         "meta:Hawaii_Aleutian"{
             ls{"夏威夷—阿留申标准时间"}
             ss{"夏威夷—阿留申标准时间"}
         }
         "meta:Hong_Kong"{
-            ld{"香港夏令時間"}
-            ls{"香港時間"}
+            ld{"香港夏令时间"}
+            ls{"香港时间"}
         }
         "meta:Hovd"{
-            ld{"科布多夏令時間"}
-            ls{"科布多時間"}
+            ld{"科布多夏令时间"}
+            ls{"科布多时间"}
         }
         "meta:India"{
             ls{"印度标准时间"}
@@ -3978,12 +3991,12 @@ zh{
             ls{"印度尼西亚西部标准时间"}
         }
         "meta:Iran"{
-            ld{"伊朗夏令時間"}
-            ls{"伊朗標準時間"}
+            ld{"伊朗夏令时间"}
+            ls{"伊朗标准时间"}
         }
         "meta:Irkutsk"{
-            ld{"伊爾庫茨克夏令時間"}
-            ls{"伊爾庫茨克時間"}
+            ld{"伊尔库茨克夏令时间"}
+            ls{"伊尔库茨克时间"}
         }
         "meta:Israel"{
             ld{"以色列夏令时间"}
@@ -4062,8 +4075,8 @@ zh{
             ls{"澳门标准时间"}
         }
         "meta:Magadan"{
-            ld{"馬加丹夏令時間"}
-            ls{"馬加丹時間"}
+            ld{"马加丹夏令时间"}
+            ls{"马加丹时间"}
         }
         "meta:Malaya"{
             ld{"马来亚夏令时间"}
@@ -4092,10 +4105,10 @@ zh{
             ls{"莫斯科标准时间"}
         }
         "meta:Myanmar"{
-            ls{"緬甸時間"}
+            ls{"缅甸时间"}
         }
         "meta:Nepal"{
-            ls{"尼泊爾時間"}
+            ls{"尼泊尔时间"}
         }
         "meta:New_Zealand"{
             ld{"新西兰夏令时间"}
@@ -4113,8 +4126,8 @@ zh{
             ss{"纽芬兰标准时间"}
         }
         "meta:Noronha"{
-            ld{"爾南多-迪諾羅尼亞島夏令時間"}
-            ls{"爾南多-迪諾羅尼亞島時間"}
+            ld{"费尔南多-迪诺罗尼亚岛夏令时间"}
+            ls{"费尔南多-迪诺罗尼亚岛时间"}
         }
         "meta:North_Mariana"{
             ld{"北马里亚纳群岛夏令时间"}
@@ -4122,12 +4135,12 @@ zh{
             ls{"北马里亚纳群岛时间"}
         }
         "meta:Novosibirsk"{
-            ld{"新西伯利亞夏令時間"}
-            ls{"新西伯利亞時間"}
+            ld{"新西伯利亚夏令时间"}
+            ls{"新西伯利亚时间"}
         }
         "meta:Omsk"{
-            ld{"鄂木斯克夏令時間"}
-            ls{"鄂木斯克時間"}
+            ld{"鄂木斯克夏令时间"}
+            ls{"鄂木斯克时间"}
         }
         "meta:Pakistan"{
             ld{"巴基斯坦夏令时间"}
@@ -4135,16 +4148,16 @@ zh{
             ls{"巴基斯坦标准时间"}
         }
         "meta:Paraguay"{
-            ld{"巴拉圭夏令時間"}
-            ls{"巴拉圭時間"}
+            ld{"巴拉圭夏令时间"}
+            ls{"巴拉圭时间"}
         }
         "meta:Peru"{
-            ld{"秘魯夏令時間"}
-            ls{"秘魯時間"}
+            ld{"秘鲁夏令时间"}
+            ls{"秘鲁时间"}
         }
         "meta:Philippines"{
-            ld{"菲律賓夏令時間"}
-            ls{"菲律賓時間"}
+            ld{"菲律宾夏令时间"}
+            ls{"菲律宾时间"}
         }
         "meta:Pierre_Miquelon"{
             ld{"彼得岛和米克隆岛夏令时间"}
@@ -4157,8 +4170,8 @@ zh{
             ls{"克孜勒奥尔达标准时间"}
         }
         "meta:Sakhalin"{
-            ld{"庫頁島夏令時間"}
-            ls{"庫頁島時間"}
+            ld{"库页岛夏令时间"}
+            ls{"库页岛时间"}
         }
         "meta:Samara"{
             ld{"萨马拉夏令时间"}
@@ -4183,12 +4196,12 @@ zh{
             ls{"舍甫琴科时间"}
         }
         "meta:Singapore"{
-            ls{"新加坡標準時間"}
+            ls{"新加坡标准时间"}
         }
         "meta:Suriname"{
             lg{"苏里南夏令时间"}
             ls{"苏里南标准时间"}
-            sd{"蘇利南夏令時間"}
+            sd{"苏里南夏令时间"}
         }
         "meta:Sverdlovsk"{
             ld{"斯维尔德洛夫斯克夏令时间"}
@@ -4228,8 +4241,8 @@ zh{
             ls{"乌拉尔斯克标准时间"}
         }
         "meta:Uruguay"{
-            ld{"烏拉圭夏令時間"}
-            ls{"烏拉圭時間"}
+            ld{"乌拉圭夏令时间"}
+            ls{"乌拉圭时间"}
         }
         "meta:Urumqi"{
             ld{"乌鲁木齐夏令时间"}
@@ -4242,15 +4255,15 @@ zh{
             ls{"乌兹别克斯坦标准时间"}
         }
         "meta:Venezuela"{
-            ls{"委內瑞拉時間"}
+            ls{"委内瑞拉时间"}
         }
         "meta:Vladivostok"{
-            ld{"海參崴夏令時間"}
-            ls{"海參崴時間"}
+            ld{"海参崴夏令时间"}
+            ls{"海参崴时间"}
         }
         "meta:Yakutsk"{
-            ld{"雅庫茨克夏令時間"}
-            ls{"雅庫茨克時間"}
+            ld{"雅库茨克夏令时间"}
+            ls{"雅库茨克时间"}
         }
         "meta:Yekaterinburg"{
             ld{"叶卡捷琳堡夏令时间"}

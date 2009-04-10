@@ -294,11 +294,11 @@ ga{
             "Afgainí",
         }
         ALL{
-            "lek",
+            "ALL",
             "Lek Albánach",
         }
         AMD{
-            "dram",
+            "AMD",
             "Dram Airméanach",
         }
         ANG{
@@ -330,7 +330,7 @@ ga{
             "Peso na Airgintíne (1983-1985)",
         }
         ARS{
-            "Arg$",
+            "AR$",
             "Peso na Airgintíne",
         }
         ATS{
@@ -338,7 +338,7 @@ ga{
             "Scilling Ostarach",
         }
         AUD{
-            "A$",
+            "AU$",
             "Dollar Astrálach",
         }
         AWG{
@@ -358,7 +358,7 @@ ga{
             "Marc Inathraithe Bhoisnia-Heirseagaivéin",
         }
         BBD{
-            "BDS$",
+            "Bds$",
             "Dollar Bharbadóis",
         }
         BDT{
@@ -378,7 +378,7 @@ ga{
             "Franc Beilgeach (airgeadúil)",
         }
         BGL{
-            "lev",
+            "BGL",
             "Lev Bulgárach Crua",
         }
         BGN{
@@ -390,11 +390,11 @@ ga{
             "Dínear na Bairéine",
         }
         BIF{
-            "Fbu",
+            "FBu",
             "Franc na Burúine",
         }
         BMD{
-            "Ber$",
+            "BD$",
             "Dollar Bheirmiúda",
         }
         BND{
@@ -442,7 +442,7 @@ ga{
             "Dollar na mBahámaí",
         }
         BTN{
-            "Nu",
+            "Nu.",
             "Ngultrum Bútánach",
         }
         BUK{
@@ -458,7 +458,7 @@ ga{
             "Rúbal Nua Béalarúiseach (1994-1999)",
         }
         BYR{
-            "Rbl",
+            "BYR",
             "Rúbal Béalarúiseach",
         }
         BZD{
@@ -466,7 +466,7 @@ ga{
             "Dollar na Beilíse",
         }
         CAD{
-            "Can$",
+            "CA$",
             "Dollar Ceanada",
         }
         CDF{
@@ -482,19 +482,19 @@ ga{
             "Unidades de Fomento na Sile",
         }
         CLP{
-            "Ch$",
+            "CL$",
             "Peso na Sile",
         }
         CNY{
-            "Y",
+            "CN¥",
             "Yuan Renminbi Síneach",
         }
         COP{
-            "Col$",
+            "CO$",
             "Peso na Colóime",
         }
         CRC{
-            "C",
+            "₡",
             "Colon Chósta Ríce",
         }
         CSK{
@@ -506,11 +506,11 @@ ga{
             "Peso Cúba",
         }
         CVE{
-            "CVEsc",
+            "CV$",
             "Escudo na Rinne Verde",
         }
         CYP{
-            "£C",
+            "CY£",
             "Punt na Cipire",
         }
         CZK{
@@ -526,11 +526,11 @@ ga{
             "Deutsche Mark",
         }
         DJF{
-            "DF",
+            "Fdj",
             "Franc Djibouti",
         }
         DKK{
-            "DKr",
+            "Dkr",
             "Krone Danmhargach",
         }
         DOP{
@@ -574,7 +574,7 @@ ga{
             "Markka Fionnlannach",
         }
         FJD{
-            "F$",
+            "FJ$",
             "Dollar Fhidsí",
         }
         FKP{
@@ -586,7 +586,7 @@ ga{
             "Franc Francach",
         }
         GBP{
-            "£",
+            "GB£",
             "Punt Steirling",
         }
         GEK{
@@ -594,7 +594,7 @@ ga{
             "Kupon Larit na Grúise",
         }
         GEL{
-            "lari",
+            "GEL",
             "Lari na Grúise",
         }
         GHC{
@@ -610,7 +610,7 @@ ga{
             "Dalasi Gaimbia",
         }
         GNF{
-            "GF",
+            "FG",
             "Franc Guine",
         }
         GNS{
@@ -626,7 +626,7 @@ ga{
             "Drachma Gréagach",
         }
         GTQ{
-            "Q",
+            "GTQ",
             "Quetzal Guatamala",
         }
         GWE{
@@ -638,7 +638,7 @@ ga{
             "Peso Guine-Bhissau",
         }
         GYD{
-            "G$",
+            "GY$",
             "Dollar na Guáine",
         }
         HKD{
@@ -646,7 +646,7 @@ ga{
             "Dollar Hong Cong",
         }
         HNL{
-            "L",
+            "HNL",
             "Lempira Hondúrais",
         }
         HRD{
@@ -686,11 +686,11 @@ ga{
             "Rúipí India",
         }
         IQD{
-            "ID",
+            "IQD",
             "Dínear Irácach",
         }
         IRR{
-            "RI",
+            "IRR",
             "Rial Iaránach",
         }
         ISK{
@@ -714,15 +714,15 @@ ga{
             "Yen Seapánach",
         }
         KES{
-            "K Sh",
+            "Ksh",
             "Scilling Céiniach",
         }
         KGS{
-            "som",
+            "KGS",
             "Som na Cirgeastáine",
         }
         KHR{
-            "CR",
+            "KHR",
             "Riel na Cambóide",
         }
         KMF{
@@ -746,7 +746,7 @@ ga{
             "Dollar Oileáin Cayman",
         }
         KZT{
-            "T",
+            "KZT",
             "Tenge Casacstánach",
         }
         LAK{
@@ -754,11 +754,11 @@ ga{
             "Kip Laosach",
         }
         LBP{
-            "LL",
+            "LB£",
             "Punt na Liobáine",
         }
         LKR{
-            "SL Re",
+            "SLRs",
             "Rúipí Srí Lanca",
         }
         LRD{
@@ -766,7 +766,7 @@ ga{
             "Dollar na Libéire",
         }
         LSL{
-            "M",
+            "LSL",
             "Loti Leosóta",
         }
         LTL{
@@ -814,7 +814,7 @@ ga{
             "Franc Madagascar",
         }
         MKD{
-            "MDen",
+            "MKD",
             "Denar na Macadóine",
         }
         MLF{
@@ -826,7 +826,7 @@ ga{
             "Kyat Mhaenmar",
         }
         MNT{
-            "Tug",
+            "₮",
             "Tugrik Mongólach",
         }
         MOP{
@@ -858,7 +858,7 @@ ga{
             "Kwacha na Maláive",
         }
         MXN{
-            "MEX$",
+            "MXN",
             "Peso Meicsiceo",
         }
         MXP{
@@ -902,19 +902,19 @@ ga{
             "Guilder Ísiltíreach",
         }
         NOK{
-            "NKr",
+            "Nkr",
             "Krone Ioruach",
         }
         NPR{
-            "Nrs",
+            "NPRs",
             "Rúipí Neipeáil",
         }
         NZD{
-            "$NZ",
+            "NZ$",
             "Dollar na Nua-Shéalainne",
         }
         OMR{
-            "RO",
+            "OMR",
             "Rial Omain",
         }
         PAB{
@@ -942,11 +942,11 @@ ga{
             "Peso Filipíneach",
         }
         PKR{
-            "Pra",
+            "PKRs",
             "Rúipí na Pacastáine",
         }
         PLN{
-            "Zl",
+            "zł",
             "Zloty Polannach",
         }
         PLZ{
@@ -966,7 +966,7 @@ ga{
             "Rial Catarach",
         }
         ROL{
-            "leu",
+            "ROL",
             "Leu Rómánach",
         }
         RUB{
@@ -982,7 +982,7 @@ ga{
             "Franc Ruanda",
         }
         SAR{
-            "SRl",
+            "SR",
             "Riyal Sádach",
         }
         SBD{
@@ -990,7 +990,7 @@ ga{
             "Dollar Oileáin Solomon",
         }
         SCR{
-            "SR",
+            "SRe",
             "Rúipí na Séiséil",
         }
         SDD{
@@ -1002,7 +1002,7 @@ ga{
             "Punt na Súdáine",
         }
         SEK{
-            "SKr",
+            "Skr",
             "Krona Sualannach",
         }
         SGD{
@@ -1026,7 +1026,7 @@ ga{
             "Leone Shiarra Leon",
         }
         SOS{
-            "Sh.",
+            "Ssh",
             "Scilling na Sómáile",
         }
         SRG{
@@ -1046,11 +1046,11 @@ ga{
             "Colon na Salvadóire",
         }
         SYP{
-            "LS",
+            "SY£",
             "Punt Siria",
         }
         SZL{
-            "E",
+            "SZL",
             "Lilangeni na Suasalainne",
         }
         THB{
@@ -1082,7 +1082,7 @@ ga{
             "Escudo Tíomóir",
         }
         TRL{
-            "TL",
+            "TRL",
             "Lira Turcach",
         }
         TTD{
@@ -1094,7 +1094,7 @@ ga{
             "Dollar Nua na Téaváine",
         }
         TZS{
-            "T Sh",
+            "TSh",
             "Scilling na Tansáine",
         }
         UAH{
@@ -1110,7 +1110,7 @@ ga{
             "Scilling Uganda (1966-1987)",
         }
         UGX{
-            "U Sh",
+            "USh",
             "Scilling Uganda",
         }
         USD{
@@ -1130,7 +1130,7 @@ ga{
             "Peso Uragua (1975-1993)",
         }
         UYU{
-            "Ur$",
+            "$U",
             "Peso Uruguayo Uragua",
         }
         UZS{
@@ -1138,7 +1138,7 @@ ga{
             "Sum na hÚisbéiceastáine",
         }
         VEB{
-            "Be",
+            "Bs.",
             "Bolivar Veiniséala",
         }
         VND{
@@ -1210,7 +1210,7 @@ ga{
             "Dínear Éimin",
         }
         YER{
-            "YRl",
+            "YR",
             "Rial Éimin",
         }
         YUD{
@@ -1407,7 +1407,7 @@ ga{
         "#,##0%",
         "#E0",
     }
-    Version{"1.139"}
+    Version{"1.74"}
     calendar{
         gregorian{
             AmPmMarkers{

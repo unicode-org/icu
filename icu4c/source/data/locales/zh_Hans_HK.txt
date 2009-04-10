@@ -7,7 +7,13 @@
 // *
 // ***************************************************************************
 zh_Hans_HK{
-    Version{"1.139"}
+    Currencies{
+        HKD{
+            "$",
+            "港元",
+        }
+    }
+    Version{"1.4"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

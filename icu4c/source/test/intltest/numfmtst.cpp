@@ -788,7 +788,7 @@ void NumberFormatTest::TestCurrencyObject() {
                    1234.56, CharsToUnicodeString("1 235 \\u00A5JP")); // Yen
 
     expectCurrency(*fmt, Locale("fr", "CH", ""),
-                   1234.56, "1 234,55 sFr."); // 0.05 rounding
+                   1234.56, "1 234,55 CHF"); // 0.05 rounding
 
     expectCurrency(*fmt, Locale::getUS(),
                    1234.56, "1 234,56 $US");
@@ -2634,8 +2634,8 @@ void NumberFormatTest::TestNumberingSystems() {
     UErrorCode ec = U_ZERO_ERROR;
 
     Locale loc1("en", "US", "", "numbers=thai");
-    Locale loc2("en", "US", "", "numbers=hebrew");
-    Locale loc3("en", "US", "", "numbers=persian");
+    Locale loc2("en", "US", "", "numbers=hebr");
+    Locale loc3("en", "US", "", "numbers=arabext");
     Locale loc4("en", "US", "", "numbers=foobar");
 
     NumberFormat* fmt1= NumberFormat::createInstance(loc1, ec);
@@ -2644,11 +2644,11 @@ void NumberFormatTest::TestNumberingSystems() {
     }
     NumberFormat* fmt2= NumberFormat::createInstance(loc2, ec);
     if (U_FAILURE(ec)) {
-        errln("FAIL: getInstance(en_US@numbers=hebrew)");
+        errln("FAIL: getInstance(en_US@numbers=hebr)");
     }
     NumberFormat* fmt3= NumberFormat::createInstance(loc3, ec);
     if (U_FAILURE(ec)) {
-        errln("FAIL: getInstance(en_US@numbers=persian)");
+        errln("FAIL: getInstance(en_US@numbers=arabext)");
     }
 
     expect2(*fmt1, 1234.567, CharsToUnicodeString("\\u0E51,\\u0E52\\u0E53\\u0E54.\\u0E55\\u0E56\\u0E57"));
@@ -2965,11 +2965,11 @@ NumberFormatTest::TestCurrencyParsing() {
         {"ar_EG", "1", "USD", "US$\\u00a0\\u0661\\u066b\\u0660\\u0660", "USD\\u00a0\\u0661\\u066b\\u0660\\u0660", "\\u0661\\u066b\\u0660\\u0660 \\u062f\\u0648\\u0644\\u0627\\u0631 \\u0623\\u0645\\u0631\\u064a\\u0643\\u064a"},
         {"fa_CA", "1", "USD", "\\u06f1\\u066b\\u06f0\\u06f0\\u00a0US$", "\\u06f1\\u066b\\u06f0\\u06f0\\u00a0USD", "\\u06f1\\u066b\\u06f0\\u06f0\\u0020\\u062f\\u0644\\u0627\\u0631\\u0020\\u0627\\u0645\\u0631\\u06cc\\u06a9\\u0627"},
         {"he_IL", "1", "USD", "1.00\\u00a0US$", "1.00\\u00a0USD", "1.00 \\u05d3\\u05d5\\u05dc\\u05e8 \\u05d0\\u05de\\u05e8\\u05d9\\u05e7\\u05d0\\u05d9"},
-        {"hr_HR", "1", "USD", "1,00\\u00a0US$", "1,00\\u00a0USD", "1,00 Ameri\\u010dki dolar"},
+        {"hr_HR", "1", "USD", "1,00\\u00a0$", "1,00\\u00a0USD", "1,00 Ameri\\u010dki dolar"},
         {"id_ID", "1", "USD", "US$1,00", "USD1,00", "1,00 USD"},
         {"it_IT", "1", "USD", "US$\\u00a01,00", "USD\\u00a01,00", "1,00 Dollaro Statunitense"},
         {"ko_KR", "1", "USD", "US$1.00", "USD1.00", "1.00 \\ubbf8\\uad6d \\ub2ec\\ub7ec"},
-        {"ja_JP", "1", "USD", "US$1.00", "USD1.00", "1.00 \\u7c73\\u30c9\\u30eb"},
+        {"ja_JP", "1", "USD", "$1.00", "USD1.00", "1.00 \\u7c73\\u30c9\\u30eb"},
         {"zh_CN", "1", "CNY", "\\uFFE51.00", "CNY1.00", "1.00 \\u4EBA\\u6C11\\u5E01"},
         {"zh_TW", "1", "CNY", "\\uFFE51.00", "CNY1.00", "1.00 \\u4eba\\u6c11\\u5e63"},
         {"ru_RU", "1", "RUB", "1,00\\u00A0\\u0440\\u0443\\u0431.", "1,00\\u00A0RUB", "1,00 \\u0420\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u0438\\u0439 \\u0440\\u0443\\u0431\\u043B\\u044C"},

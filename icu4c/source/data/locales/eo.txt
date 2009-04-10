@@ -401,7 +401,7 @@ eo{
         "NaN",
         "+",
     }
-    Version{"1.139"}
+    Version{"1.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -409,7 +409,7 @@ eo{
                 "ptm",
             }
             DateTimePatterns{
-                "H-'a' 'horo' 'kaj' m:ss v",
+                "H-'a' 'horo' 'kaj' m:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -417,6 +417,7 @@ eo{
                 "y-MMMM-dd",
                 "y-MMM-dd",
                 "yy-MM-dd",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

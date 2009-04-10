@@ -601,6 +601,14 @@ ja{
             "Nfk",
             "エリトリア ナクファ",
         }
+        ESA{
+            "ESA",
+            "スペインペセタ",
+        }
+        ESB{
+            "ESB",
+            "スペイン 兌換ペセタ",
+        }
         ESP{
             "Pts",
             "スペイン ペセタ",
@@ -730,7 +738,7 @@ ja{
             "イスラエル新シェケル",
         }
         INR{
-            "INR",
+            "₨",
             "インド ルピー",
         }
         IQD{
@@ -825,9 +833,17 @@ ja{
             "LTT",
             "リトアニア タロナ",
         }
+        LUC{
+            "LUC",
+            "ルクセンブルク 兌換フラン",
+        }
         LUF{
             "LUF",
             "ルクセンブルグ フラン",
+        }
+        LUL{
+            "LUL",
+            "ルクセンブルク 金融フラン",
         }
         LVL{
             "Ls",
@@ -929,6 +945,10 @@ ja{
             "Mt",
             "モザンピーク メティカル",
         }
+        MZN{
+            "MTn",
+            "モザンビーク メティカル",
+        }
         NAD{
             "N$",
             "ナミビア ドル",
@@ -1025,6 +1045,10 @@ ja{
             "RON",
             "ルーマニア レイ",
         }
+        RSD{
+            "din.",
+            "ディナール (セルビア)",
+        }
         RUB{
             "RUB",
             "ロシア ルーブル",
@@ -1089,6 +1113,10 @@ ja{
             "Ssh",
             "ソマリア シリング",
         }
+        SRD{
+            "SR$",
+            "スリナム ドル",
+        }
         SRG{
             "Sf",
             "スリナム ギルダー",
@@ -1142,11 +1170,11 @@ ja{
             "ティモール エスクード",
         }
         TRL{
-            "TL",
+            "TRL",
             "トルコ リラ",
         }
         TRY{
-            "YTL",
+            "TL",
             "新トルコリラ",
         }
         TTD{
@@ -1178,7 +1206,7 @@ ja{
             "ウガンダ シリング",
         }
         USD{
-            "US$",
+            "$",
             "米ドル",
         }
         USN{
@@ -1210,7 +1238,7 @@ ja{
             "ベネズエラ ボリバルフエルテ",
         }
         VND{
-            "đ",
+            "₫",
             "ベトナム ドン",
         }
         VUV{
@@ -1224,6 +1252,10 @@ ja{
         XAF{
             "FCFA",
             "CFA フラン BEAC",
+        }
+        XAG{
+            "XAG",
+            "銀",
         }
         XAU{
             "XAU",
@@ -1269,9 +1301,29 @@ ja{
             "CFA",
             "CFA フラン BCEAO",
         }
+        XPD{
+            "XPD",
+            "パラジウム",
+        }
         XPF{
             "CFPF",
             "CFP フラン",
+        }
+        XPT{
+            "XPT",
+            "プラチナ",
+        }
+        XRE{
+            "XRE",
+            "RINET基金",
+        }
+        XTS{
+            "XTS",
+            "テスト用通貨コード",
+        }
+        XXX{
+            "XXX",
+            "不明または無効な通貨",
         }
         YDD{
             "YDD",
@@ -1300,6 +1352,10 @@ ja{
         ZAR{
             "R",
             "南アフリカ ランド",
+        }
+        ZMK{
+            "ZK",
+            "ザンビア クワチャ",
         }
         ZRN{
             "NZ",
@@ -1914,6 +1970,7 @@ ja{
         Bugi{"ブギス文字"}
         Buhd{"ブヒッド文字"}
         Cans{"統合カナダ先住民記号"}
+        Cari{"カリ文字"}
         Cham{"チャム文字"}
         Cher{"チェロキー文字"}
         Cirt{"キアス文字"}
@@ -1945,6 +2002,7 @@ ja{
         Hrkt{"カタカナとひらがな"}
         Hung{"古代ハンガリー文字"}
         Inds{"インダス文字 (ハラッパ文字)"}
+        Ital{"古代イタリアの文字"}
         Java{"ジャワ文字"}
         Jpan{"日本語の文字"}
         Kali{"カヤー文字"}
@@ -1968,11 +2026,13 @@ ja{
         Moon{"ムーン文字"}
         Mtei{"メイテイ文字"}
         Mymr{"ミャンマー文字"}
+        Nkoo{"ンコ文字"}
         Ogam{"オガム文字"}
         Olck{"オルチキ文字"}
         Orkh{"オルホン文字"}
         Orya{"オリヤー文字"}
         Osma{"オスマニア文字"}
+        Perm{"古ペルミック文字"}
         Phag{"パスパ文字"}
         Phnx{"フェニキア文字"}
         Plrd{"ポラード音声記号"}
@@ -1999,6 +2059,7 @@ ja{
         Tibt{"チベット文字"}
         Ugar{"ウガリト文字"}
         Vaii{"ヴァイ文字"}
+        Visp{"視話法"}
         Xpeo{"古代ペルシア文字"}
         Xsux{"シュメール＝アッカド語楔形文字"}
         Yiii{"イ文字"}
@@ -2017,6 +2078,7 @@ ja{
         }
         collation{
             big5han{"繁体字中国語 (Big5)"}
+            direct{"直接著錄"}
             gb2312han{"簡体字中国語 (GB2312)"}
             phonebook{"電話帳方式"}
             pinyin{"ピンイン順"}
@@ -2044,7 +2106,7 @@ ja{
         SCOUSE{"リバプール方言"}
         VALENCIA{"バレンシア方言"}
     }
-    Version{"1.139"}
+    Version{"1.167"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2052,8 +2114,8 @@ ja{
                 "午後",
             }
             DateTimePatterns{
-                "H時mm分ss秒v",
-                "HH:mm:ssz",
+                "H時mm分ss秒 zzzz",
+                "HH:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
                 "y年M月d日EEEE",
@@ -2061,7 +2123,8 @@ ja{
                 "yyyy/MM/dd",
                 "yy/MM/dd",
                 "{1} {0}",
-                "{1} {0}",
+                "{1}{0}",
+                "{1}{0}",
                 "{1} {0}",
                 "{1} {0}",
             }
@@ -2070,7 +2133,6 @@ ja{
                 GGGGyMd{"GGGGy年M月d日"}
                 H{"H時"}
                 Hm{"H:mm"}
-                hm{"ah:mm"}
                 M{"L"}
                 MEd{"M/d(E)"}
                 MMM{"LLL"}
@@ -2081,6 +2143,7 @@ ja{
                 MMdd{"MM/dd"}
                 Md{"M/d"}
                 d{"d日"}
+                hm{"ah:mm"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y"}
@@ -2223,12 +2286,12 @@ ja{
                     m{"H時mm分～H時mm分"}
                 }
                 hmv{
-                    a{"H時mm分～H時mm分v"}
+                    a{"H時mm分～H時mm分（v）"}
                     h{"H時mm分～H時mm分v"}
                     m{"H時mm分～H時mm分v"}
                 }
                 hv{
-                    a{"H時～H時v"}
+                    a{"H時～H時（v）"}
                     h{"H時～H時v"}
                 }
                 y{
@@ -2360,26 +2423,27 @@ ja{
                 "午後",
             }
             DateTimePatterns{
-                "H時mm分ss秒v",
-                "HH:mm:ssz",
+                "H時mm分ss秒 zzzz",
+                "HH:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
                 "Gy年M月d日EEEE",
                 "Gy年M月d日",
                 "Gyy/MM/dd",
                 "Gyy/MM/dd",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
                 "{1} {0}",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
             availableFormats{
-                hm{"ah:mm"}
-                hms{"ah:mm:ss"}
                 Ed{"d日(EEE)"}
                 MMMEd{"M月d日(EEE)"}
                 MMMd{"M月d日"}
                 Md{"M/d"}
+                hm{"ah:mm"}
+                hms{"ah:mm:ss"}
                 yyyy{"Gy年"}
                 yyyyMM{"Gyy/MM"}
                 yyyyMMM{"Gy年M月"}
@@ -2630,8 +2694,8 @@ ja{
         }
         roc{
             DateTimePatterns{
-                "H時mm分ss秒v",
-                "HH:mm:ssz",
+                "H時mm分ss秒 zzzz",
+                "HH:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
                 "Gy年M月d日EEEE",
@@ -2639,7 +2703,8 @@ ja{
                 "Gyy/MM/dd(EE)",
                 "Gyy/MM/dd(E)",
                 "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1}{0}" /**  fallback from 'gregorian'   */,
+                "{1}{0}" /**  fallback from 'gregorian'   */,
                 "{1} {0}" /**  fallback from 'gregorian'   */,
                 "{1} {0}" /**  fallback from 'gregorian'   */,
             }
@@ -3378,7 +3443,6 @@ ja{
             ls{"ニューファンドランド島標準時"}
         }
         gmtFormat{"GMT{0}"}
-        gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0}時間"}
     }

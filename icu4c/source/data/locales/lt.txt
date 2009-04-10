@@ -10,7 +10,10 @@
  *  ICU <specials> source: <path>/xml/main/lt.xml
  */
 lt{
-    AuxExemplarCharacters{"[{į̇} {i̇} {i̇́} {i̇̀} {i̇̃} {j̇} q w x]"}
+    AuxExemplarCharacters{
+        "[{į\u0307} {i\u0307} {i\u0307\u0301} {i\u0307\u0300} {i\u0307\u0303} {j"
+        "\u0307} q w x]"
+    }
     Countries{
         001{"Pasaulis"}
         002{"Afrika"}
@@ -32,9 +35,9 @@ lt{
         039{"Pietų Europa"}
         053{"Australija ir Naujoji Zelandija"}
         054{"Melanezija"}
-        057{"Mikronezija [057]"}
+        057{"Mikronezijos regionas"}
         061{"Polinezija"}
-        062{"Pietų-vidurio Azija"}
+        062{"Pietų vidurio Azija"}
         142{"Azija"}
         143{"Centrinė Azija"}
         145{"Vakarų Azija"}
@@ -60,6 +63,7 @@ lt{
         AT{"Austrija"}
         AU{"Australija"}
         AW{"Aruba"}
+        AX{"Alandų salos"}
         AZ{"Azerbaidžanas"}
         BA{"Bosnija ir Hercegovina"}
         BB{"Barbadosas"}
@@ -70,6 +74,7 @@ lt{
         BH{"Bahreinas"}
         BI{"Burundis"}
         BJ{"Beninas"}
+        BL{"Švento Baltramiejaus sala"}
         BM{"Bermuda"}
         BN{"Brunėjus"}
         BO{"Bolivija"}
@@ -123,7 +128,7 @@ lt{
         GD{"Grenada"}
         GE{"Gruzija"}
         GF{"Prancūzijos Gviana"}
-        GG{"Guernsey"}
+        GG{"Guernsis"}
         GH{"Gana"}
         GI{"Gibraltaras"}
         GL{"Grenlandija"}
@@ -132,7 +137,7 @@ lt{
         GP{"Gvadelupė"}
         GQ{"Pusiaujo Gvinėja"}
         GR{"Graikija"}
-        GS{"Rytų Džordžija ir Rytų Sandwich salos"}
+        GS{"Pietų Džordžija ir Pietų Sandvičo salos"}
         GT{"Gvatemala"}
         GU{"Guamas"}
         GW{"Bisau Gvinėja"}
@@ -146,7 +151,7 @@ lt{
         ID{"Indonezija"}
         IE{"Airija"}
         IL{"Izraelis"}
-        IM{"Meno sala"}
+        IM{"Meino sala"}
         IN{"Indija"}
         IO{"Indijos vandenyno britų sritis"}
         IQ{"Irakas"}
@@ -183,6 +188,7 @@ lt{
         MC{"Monakas"}
         MD{"Moldova"}
         ME{"Juodkalnija"}
+        MF{"Saint-Martin"}
         MG{"Madagaskaras"}
         MH{"Maršalo Salos"}
         MK{"Makedonija"}
@@ -583,7 +589,7 @@ lt{
         }
         FKP{
             "FK£",
-            "Falklando salų svaras",
+            "Folklando salų svaras",
         }
         FRF{
             "₣",
@@ -623,7 +629,7 @@ lt{
         }
         GTQ{
             "GTQ",
-            "Gvatemalos ketcalis",
+            "Gvatemalos kecalis",
         }
         GWE{
             "GWE",
@@ -643,7 +649,7 @@ lt{
         }
         HNL{
             "HNL",
-            "Honduro lempira",
+            "Hondūro lempira",
         }
         HRD{
             "HRD",
@@ -831,7 +837,7 @@ lt{
         }
         MOP{
             "MOP$",
-            "Macao pataka",
+            "Makao pataka",
         }
         MRO{
             "UM",
@@ -863,7 +869,7 @@ lt{
         }
         MXP{
             "MX$",
-            "Meksikos sidabrinis pesas",
+            "Meksikos sidabrinis pesas (1861-1992)",
         }
         MXV{
             "MXV",
@@ -1075,7 +1081,7 @@ lt{
         }
         THB{
             "฿",
-            "Batas",
+            "Tailando batas",
         }
         TJR{
             "TJR",
@@ -1102,12 +1108,12 @@ lt{
             "Timoro eskudas",
         }
         TRL{
-            "TL",
+            "TRL",
             "Turkijos lira",
         }
         TRY{
-            "YTL",
-            "Naujoji Turkijos Lira",
+            "TL",
+            "Naujoji Turkijos lira",
         }
         TTD{
             "TT$",
@@ -1169,6 +1175,10 @@ lt{
             "Bs.F.",
             "Stiprusis Venesuelos bolivaras",
         }
+        VND{
+            "₫",
+            "Vietnamo dongas",
+        }
         WST{
             "WS$",
             "Vakarų Samoa tala",
@@ -1215,7 +1225,7 @@ lt{
         }
         XFO{
             "XFO",
-            "Auksinis - frankas",
+            "Aukso frankas",
         }
         XFU{
             "XFU",
@@ -1245,6 +1255,10 @@ lt{
             "XTS",
             "Tikrinamas valiutos kodas",
         }
+        XXX{
+            "XXX",
+            "Nežinoma arba neteisinga valiuta",
+        }
         YDD{
             "YDD",
             "Jemeno dinaras",
@@ -1263,11 +1277,11 @@ lt{
         }
         ZAL{
             "ZAL",
-            "Pietų Afrikos Respublikos finansinis randas",
+            "Pietų Afrikos finansinis randas",
         }
         ZAR{
             "R",
-            "PAR Randas",
+            "Pietų Afrikos randas",
         }
         ZMK{
             "ZK",
@@ -1460,7 +1474,7 @@ lt{
             other{"Brazilijos realai"}
         }
         BRN{
-            few{"Brazilijos naujieji  kruzadai"}
+            few{"Brazilijos naujieji kruzadai"}
             one{"Brazilijos naujasis kruzadas"}
             other{"Brazilijos naujieji kruzadai"}
         }
@@ -1509,8 +1523,8 @@ lt{
             other{"Čilės pesai"}
         }
         CNY{
-            one{"Kinijos ženminbi juanis"}
-            other{"Kinijos ženminbi juaniai"}
+            one{"Kinijos juanis"}
+            other{"Kinijos juaniai"}
         }
         COP{
             one{"Kolumbijos pesas"}
@@ -1545,6 +1559,9 @@ lt{
             other{"CFP frankai"}
         }
     }
+    CurrencyUnitPatterns{
+        few{"{0} {1}"}
+    }
     ExemplarCharacters{"[a ą b c č d e ę ė f-i į y j-p r s š t u ų ū v z ž]"}
     Keys{
         calendar{"kalendorius"}
@@ -1555,217 +1572,509 @@ lt{
         aa{"afarų"}
         ab{"abchazų"}
         ace{"ačinezų"}
+        ach{"acoli"}
+        ada{"adangmų"}
         ady{"adygėjų"}
+        ae{"avestų"}
         af{"afrikanų"}
+        afa{"afroazijos kalba"}
+        afh{"afrihili"}
+        ain{"ainų"}
+        ak{"akanų"}
+        akk{"akadianų"}
         ale{"aleutų"}
         alg{"algonkuanų kalba"}
         alt{"pietų altajaus"}
         am{"amharų"}
         an{"aragonesų"}
         ang{"senoji anglų"}
+        anp{"angikų"}
         apa{"apačių kalba"}
         ar{"arabų"}
+        arc{"aramaikų"}
+        arn{"araukanų"}
+        arp{"arapahų"}
         art{"dirbtinė kalba"}
+        arw{"aravakų"}
         as{"asamų"}
+        ast{"asturianų"}
+        ath{"athapaskanų kalba"}
         aus{"australų kalba"}
+        av{"avarikų"}
+        awa{"avadhi"}
+        ay{"aimarų"}
         az{"azerbaidžaniečių"}
         ba{"baškirų"}
+        bad{"bandų"}
+        bai{"bamilekų kalba"}
+        bal{"baluči"}
+        ban{"balinezų"}
+        bas{"basų"}
         bat{"baltų kalba"}
         be{"baltarusių"}
         bej{"bėjų"}
+        bem{"bembų"}
         ber{"berberų"}
         bg{"bulgarų"}
         bh{"biharų"}
         bho{"baučpuri"}
         bi{"bislama"}
+        bik{"bikolų"}
+        bin{"bini"}
+        bla{"siksika"}
+        bm{"bambarų"}
         bn{"bengalų"}
         bnt{"bantų"}
         bo{"tibetiečių"}
         br{"bretonų"}
         bra{"brajų"}
         bs{"bosnių"}
+        btk{"batakų"}
         bua{"buriatų"}
+        bug{"buginezų"}
+        byn{"blin"}
         ca{"katalonų"}
         cad{"kado"}
         cai{"Centrinės Amerikos indėnų kalba"}
+        car{"karibų"}
         cau{"kaukaziečių kalba"}
+        cch{"atsamų"}
         ce{"čečėnų"}
+        ceb{"cebuanų"}
         cel{"keltų kalba"}
         ch{"čamorų"}
+        chb{"čibča"}
+        chg{"čagatų"}
         chk{"čukesų"}
+        chm{"mari"}
+        chn{"činuk žargonas"}
+        cho{"čoktau"}
+        chp{"čipvėjų"}
+        chr{"čerokių"}
+        chy{"čajenų"}
+        cmc{"čamikų kalba"}
         co{"korsikiečių"}
         cop{"koptų"}
+        cpe{"kreolų ir pidžinų kalba pagal anglų"}
+        cpf{"kreolų ir pidžinų kalba pagal prancūzų"}
         cpp{"kreolų ir pidžinų kalba pagal portugalų"}
         cr{"kry"}
         crh{"krymo turkų"}
         crp{"kreolų ir pidžinų"}
         cs{"čekų"}
+        csb{"kašubų"}
         cu{"bažnytinė slavų"}
+        cus{"kušitik kalba"}
         cv{"čiuvašų"}
         cy{"valų"}
         da{"danų"}
+        dak{"dakotų"}
         dar{"dargva"}
+        day{"bidayuh kalba"}
         de{"vokiečių"}
+        de_AT{"Austrijos vokiečių"}
+        de_CH{"aukštoji Šveicarijos vokiečių"}
+        del{"delavero"}
+        den{"slave"}
+        dgr{"dogribų"}
+        din{"dinkų"}
+        doi{"dogri"}
         dra{"dravidų kalba"}
+        dsb{"Žemutinės Serbijos"}
         dua{"dualų"}
-        dz{"svazilendo"}
+        dum{"Vidurio Vokietijos"}
+        dv{"divehi"}
+        dyu{"dyulų"}
+        dz{"svazilando"}
         ee{"eve"}
+        efi{"efik"}
         egy{"senovės egiptiečių"}
+        eka{"ekajuk"}
         el{"graikų"}
         elx{"elamitų"}
         en{"anglų"}
         en_AU{"anglų kalba (australija)"}
+        en_CA{"Kanados anglų"}
         en_GB{"anglų (britų)"}
         en_US{"anglų (amerikiečių)"}
+        enm{"Vidurio Anglijos"}
         eo{"esperanto"}
         es{"ispanų"}
+        es_419{"Lotynų Amerikos ispanų"}
+        es_ES{"Iberijos ispanų"}
         et{"estų"}
         eu{"baskų"}
+        ewo{"evondo"}
         fa{"persų"}
+        fan{"fang"}
+        fat{"fanti"}
+        ff{"fulahų"}
         fi{"suomių"}
         fil{"tagalų"}
         fiu{"finougrų kalba"}
+        fj{"fidžio"}
         fo{"farerų kalba"}
+        fon{"fon"}
         fr{"prancūzų"}
+        fr_CA{"Kanados prancūzų"}
+        fr_CH{"Šveicarijos prancūzų"}
+        frm{"Vidurio Prancūzijos"}
         fro{"senoji prancūzų"}
         frr{"šiaurinių fryzų"}
         frs{"rytų fryzų"}
-        fy{"Fryzų"}
+        fur{"frulan"}
+        fy{"vakarų fryzų"}
         ga{"airių"}
         gaa{"ga"}
+        gay{"gajo"}
+        gba{"gbaja"}
         gd{"škotų (gėlų)"}
         gem{"germanų kalba"}
+        gez{"gyz"}
         gil{"kiribati"}
         gl{"galisų"}
+        gmh{"Vidurio aukštosios Vokietijos"}
         gn{"gvaranių"}
+        goh{"Senoji Aukštosios Vokietijos"}
+        gon{"gondi"}
+        gor{"gorontalo"}
         got{"gotų"}
+        grb{"grebo"}
         grc{"senovės graikų"}
+        gsw{"Šveicarijos vokiečių"}
         gu{"gudžaratų"}
+        gv{"manks"}
+        gwi{"gvičino"}
         ha{"hausų"}
+        hai{"haido"}
+        haw{"havajų"}
         he{"hebrajų"}
         hi{"hindi"}
+        hil{"hiligainon"}
+        him{"himačali"}
+        hit{"hititų"}
+        hmn{"hmong"}
+        ho{"hiri motu"}
         hr{"kroatų"}
+        hsb{"viršutinė sorbian"}
+        ht{"haičio"}
         hu{"vengrų"}
+        hup{"hupa"}
         hy{"armėnų"}
+        hz{"herero"}
         ia{"interlingva"}
+        iba{"iban"}
         id{"indoneziečių"}
+        ie{"interkalba"}
+        ig{"igbo"}
+        ii{"sičuan ji"}
+        ijo{"ijo"}
+        ik{"inupiak"}
         ilo{"iloko"}
         inc{"indų kalba"}
         ine{"indoeuropiečių kalba"}
         inh{"ingušų"}
+        io{"ido"}
         ira{"Iraniečių"}
+        iro{"irako kalba"}
         is{"islandų"}
         it{"italų"}
+        iu{"inukitut"}
         ja{"japonų"}
+        jbo{"loiban"}
+        jpr{"judėjų persų"}
+        jrb{"judėjų arabų"}
         jv{"javiečių"}
         ka{"gruzinų"}
         kaa{"karakalpakų"}
+        kab{"kabilo"}
+        kac{"kačin"}
+        kaj{"ju"}
+        kam{"kamba"}
         kar{"karenų"}
+        kaw{"kavi"}
         kbd{"kabardinų"}
+        kcg{"tyap"}
+        kfo{"koro"}
+        kg{"kongo"}
+        kha{"kasi"}
+        khi{"koisan kalba"}
+        kho{"kotanezų"}
+        ki{"kikui"}
+        kj{"kuaniama"}
         kk{"kazachų"}
+        kl{"kalalisut"}
         km{"khmerų"}
+        kmb{"kimbundu"}
         kn{"kanadų"}
         ko{"korėjiečių"}
+        kok{"kankani"}
+        kos{"kosreanų"}
+        kpe{"kpele"}
+        kr{"kanuri"}
+        krc{"karačiajų balkarijos"}
+        krl{"karelų"}
         kro{"kru kalba"}
+        kru{"kuruk"}
+        ks{"kašmyro"}
         ku{"kurdų"}
+        kum{"kumik"}
+        kut{"kutenai"}
+        kv{"komi"}
+        kw{"kornų"}
         ky{"kirgizų"}
         la{"lotynų"}
+        lad{"ladino"}
+        lah{"landa"}
+        lam{"lamba"}
         lb{"liuksemburgiečių"}
         lez{"lezginų"}
+        lg{"ganda"}
+        li{"limburgiš"}
         ln{"lingala"}
         lo{"laosiečių"}
+        lol{"mongo"}
+        loz{"lozi"}
         lt{"lietuvių"}
+        lu{"luba katanga"}
+        lua{"luba lula"}
+        lui{"luiseno"}
+        lun{"lunda"}
+        luo{"luo"}
+        lus{"lušai"}
         lv{"latvių"}
+        mad{"madurezų"}
+        mag{"magahi"}
+        mai{"maithili"}
+        mak{"makasaro"}
+        man{"mandingo"}
+        map{"austronezų"}
+        mas{"masajų"}
+        mdf{"mokša"}
+        mdr{"mandar"}
+        men{"mende"}
+        mg{"malagasijos"}
+        mga{"Vidurio Airijos"}
+        mh{"Maršalo salų"}
+        mi{"maorių"}
+        mic{"mikmak"}
+        min{"minankabu"}
         mis{"įvairios kalbos"}
         mk{"makedonų"}
-        mkh{"mon kmer kalba"}
+        mkh{"mon khmer kalba"}
         ml{"malajalių"}
         mn{"mongolų"}
+        mnc{"manču"}
+        mni{"manipuri"}
+        mno{"manobo kalba"}
         mo{"moldavų"}
+        moh{"mohok"}
+        mos{"mosi"}
         mr{"maratų"}
         ms{"malajiečių"}
         mt{"maltiečių"}
         mul{"kelios kalbos"}
+        mun{"munda kalba"}
+        mus{"krykų"}
+        mwl{"mirandezų"}
+        mwr{"marvari"}
+        my{"birmiečių"}
+        myn{"majanų"}
+        myv{"erzyjų"}
+        na{"naurų"}
+        nah{"nahuatlų"}
         nai{"Šiaurės Amerikos indėnų kalba"}
         nap{"neapoliečių"}
-        nds{"žemutinės vokietijos"}
+        nb{"Norvegijos bokmal"}
+        nd{"šiaurės ndebelų"}
+        nds{"Žemutinės Vokietijos"}
         ne{"nepalų"}
+        new{"nevari"}
+        ng{"ndongų"}
+        nia{"nias"}
+        nic{"Nigerio kordofanų kalba"}
+        niu{"niuenų"}
         nl{"olandų"}
-        nn{"norvegų nynorsk"}
+        nl_BE{"flamandų"}
+        nn{"naujoji norvegų"}
         no{"norvegų"}
+        nog{"nogų"}
+        non{"norsu"}
         nqo{"enko"}
+        nr{"pietų ndebele"}
+        nso{"šiaurės sothų"}
+        nub{"nubijos kalba"}
+        nv{"navajų"}
+        nwc{"klasikinė nevari"}
+        ny{"nianja"}
+        nym{"niamvezi"}
+        nyn{"niankole"}
+        nyo{"nioro"}
+        nzi{"nzima"}
         oc{"provansalų"}
+        oj{"ojibva"}
+        om{"oromo"}
         or{"orijų"}
         os{"osetinų"}
+        osa{"osage"}
+        ota{"osmanų turkų"}
+        oto{"otomanų kalba"}
         pa{"pandžabų"}
         paa{"papuasų kalba"}
         pag{"pangasinan"}
+        pal{"pahlavi"}
+        pam{"pampanga"}
+        pap{"papiemento"}
+        pau{"palau"}
         peo{"senoji persų"}
+        phi{"filipinų kalba"}
+        phn{"finikiečių"}
+        pi{"pali"}
         pl{"lenkų"}
+        pon{"ponapean"}
         pra{"prakrit kalba"}
+        pro{"senovės provansalų"}
         ps{"puštūnų"}
         pt{"portugalų"}
         pt_BR{"portugalų (Brazilijos)"}
-        pt_PT{"portugalų (Portugalijos)"}
+        pt_PT{"Iberijos portugalų"}
+        qu{"kečujų"}
+        raj{"radžastano"}
+        rap{"rapanui"}
+        rar{"rarotongan"}
+        rm{"raeto romanų"}
+        rn{"rundi"}
         ro{"rumunų"}
         roa{"romanų kalba"}
+        rom{"romų kalba"}
+        root{"rūt"}
         ru{"rusų"}
-        sa{"Sanskritas"}
+        rup{"aromanių"}
+        rw{"kinjarvanda"}
+        sa{"sanskritas"}
         sad{"sandavi"}
         sah{"jakutų"}
+        sai{"Pietų Amerikos indėnų kalba"}
+        sal{"sališan kalba"}
+        sam{"samarėjų aramių"}
+        sas{"sasak"}
+        sat{"santali"}
         sc{"sardiniečių"}
         scn{"siciliečių"}
         sco{"škotų"}
         sd{"sindų"}
         se{"šiaurinių samių"}
+        sel{"selkup"}
+        sem{"samitų kalba"}
+        sg{"sango"}
         sga{"senoji airių"}
+        sgn{"ženklų kalba"}
         sh{"serbų-kroatų"}
+        shn{"šan"}
         si{"sinhalų"}
+        sid{"sidamo"}
+        sio{"siouan kalba"}
+        sit{"sino tibeto kalba"}
         sk{"slovakų"}
         sl{"slovėnų"}
         sla{"slavų kalba"}
+        sm{"samoa"}
+        sma{"pietų sami"}
+        smi{"samių kalba"}
+        smj{"lule sami"}
+        smn{"inari sami"}
+        sms{"skolt sami"}
+        sn{"šona"}
+        snk{"soninke"}
         so{"somalių"}
+        sog{"sogdien"}
+        son{"songhai"}
         sq{"albanų"}
         sr{"serbų"}
-        srr{"serer"}
-        st{"sesuto"}
+        srn{"sranan tongo"}
+        srr{"sererų"}
+        ss{"svati"}
+        ssa{"Nilo Sacharos kalba"}
+        st{"pietų sesuto"}
         su{"sundų"}
+        suk{"sukuma"}
+        sus{"susu"}
         sux{"šumerų"}
         sv{"švedų"}
         sw{"svahili"}
         syc{"klasikinė siriečių"}
+        syr{"sirų"}
         ta{"tamilų"}
+        tai{"tajų kalba"}
         te{"telugų"}
         tem{"timne"}
+        ter{"tereno"}
+        tet{"tetum"}
         tg{"tadžikų"}
         th{"tajų"}
         ti{"tigrajų"}
+        tig{"tigre"}
+        tiv{"tiv"}
         tk{"turkmėnų"}
+        tkl{"tokelau"}
         tl{"tagalogų"}
+        tlh{"„žvaigždžių kelionių“"}
+        tli{"tlingit"}
+        tmh{"tamašek"}
+        tn{"tsvana"}
+        to{"tonga"}
+        tog{"niasa tongos"}
         tpi{"tok pisin"}
         tr{"turkų"}
+        ts{"tsonga"}
+        tsi{"tsimšian"}
         tt{"totorių"}
+        tum{"tumbuka"}
+        tup{"tupi kalba"}
+        tut{"altaikų kalba"}
         tvl{"tuvalu"}
         tw{"tvi"}
+        ty{"taitiečių"}
         tyv{"tuvių"}
         udm{"udmurtų"}
         ug{"uigūrų"}
+        uga{"ugaritic"}
         uk{"ukrainiečių"}
+        umb{"umbundu"}
         und{"nenustatyta kalba"}
-        ur{"urdu"}
+        ur{"urdų"}
         uz{"uzbekų"}
+        vai{"vai"}
+        ve{"venda"}
         vi{"vietnamiečių"}
         vo{"volapiuk"}
+        vot{"votik"}
         wa{"valonų"}
+        wak{"vakašan kalba"}
         wal{"valamo"}
+        war{"varai"}
+        was{"vašo"}
+        wen{"sorbų kalba"}
+        wo{"volof"}
         xal{"kalmukų"}
         xh{"kosų"}
+        yao{"jao"}
+        yap{"japezų"}
         yi{"jidiš"}
         yo{"joruba"}
+        ypk{"jupik kalba"}
+        za{"chuang"}
+        zap{"zapotekų"}
+        zbl{"„Bliss“ simbolių kalba"}
+        zen{"zenaga"}
         zh{"kinų"}
         zh_Hans{"kinų supaprastinta"}
         zh_Hant{"kinų tradicinė"}
+        znd{"zande"}
         zu{"zulų"}
+        zun{"zuni"}
+        zxx{"Nėra kalbinio turinio"}
+        zza{"zaza"}
     }
     LocaleScript{
         "Latn",
@@ -1776,8 +2085,8 @@ lt{
         ";",
         "%",
         "0",
-        "#",
-        "-",
+        "Nr.",
+        "−",
         "E",
         "‰",
         "∞",
@@ -1792,41 +2101,135 @@ lt{
     }
     Scripts{
         Arab{"arabų"}
+        Armi{"imperinė aramaikų"}
         Armn{"armėnų"}
+        Avst{"avestano"}
+        Bali{"Bali"}
+        Batk{"batak"}
         Beng{"bengalų"}
+        Blis{"„Bliss“ simboliai"}
+        Bopo{"bopomofo"}
         Brah{"brahmi"}
         Brai{"brailio"}
+        Bugi{"buginezų"}
+        Buhd{"buhid"}
+        Cakm{"čakma"}
+        Cans{"suvienodinti Kanados aborigenų silabiniai"}
+        Cari{"karių"}
+        Cham{"čam"}
         Cher{"čerokių"}
+        Cirt{"kirt"}
         Copt{"koptų"}
+        Cprt{"kipro"}
         Cyrl{"kirilica"}
         Cyrs{"senoji bažnytinė slavų kirilica"}
         Deva{"devanagari"}
+        Dsrt{"deseretas"}
+        Egyd{"Egipto liaudies"}
+        Egyh{"Egipto žynių"}
         Egyp{"egipto hieroglifai"}
         Ethi{"etiopų"}
+        Geok{"gruzinų kutsuri"}
         Geor{"gruzinų"}
+        Glag{"glagolitik"}
         Goth{"gotų"}
         Grek{"graikų"}
+        Gujr{"gudžiarati"}
+        Guru{"gurmuki"}
         Hang{"hangul"}
+        Hani{"han"}
+        Hano{"hanuno"}
         Hans{"supaprastinta han"}
+        Hant{"tradicinė han"}
         Hebr{"hebrajų"}
         Hira{"hiragana"}
+        Hmng{"pahav hmong"}
         Hrkt{"katakana/hiragana"}
         Hung{"senasis vengrų"}
+        Inds{"indus"}
         Ital{"senasis italų"}
+        Java{"javiečių"}
         Jpan{"japonų"}
+        Kali{"kajah li"}
         Kana{"katakana"}
+        Khar{"karošti"}
         Khmr{"khmerų"}
+        Knda{"kanadiečių"}
         Kore{"korejiečių"}
+        Kthi{"kaithi"}
+        Lana{"lana"}
+        Laoo{"lao"}
+        Latf{"fraktur lotynų"}
+        Latg{"gėlų lotynų"}
         Latn{"lotynų"}
+        Lepc{"lepča"}
+        Limb{"limbu"}
+        Lina{"linijiniai A"}
+        Linb{"linijiniai B"}
+        Lyci{"lician"}
+        Lydi{"lidian"}
+        Mand{"mandėjų"}
+        Mani{"maničų"}
         Maya{"malų hieroglifai"}
+        Mero{"meroitik"}
+        Mlym{"malajalų"}
         Mong{"mongolų"}
         Moon{"mūn"}
+        Mtei{"meitei majek"}
         Mymr{"mianmaro"}
+        Nkoo{"enko"}
+        Ogam{"ogham"}
+        Olck{"ol čiki"}
+        Orkh{"orkon"}
+        Orya{"orija"}
+        Osma{"osmanų"}
+        Perm{"senieji permės"}
+        Phag{"pagsa pa"}
+        Phli{"rašytiniai pahlavi"}
+        Phlp{"pselter pahlavi"}
+        Phlv{"buk pahvali"}
+        Phnx{"foenikų"}
+        Plrd{"polard fonetinė"}
+        Prti{"rašytiniai partų"}
         Qaai{"paveldėtas"}
+        Rjng{"rejang"}
+        Roro{"rongorongo"}
         Runr{"runų"}
+        Samr{"samariečių"}
+        Sara{"sarati"}
+        Saur{"sauraštra"}
+        Sgnw{"ženklų raštas"}
+        Shaw{"šavių"}
+        Sinh{"sinhala"}
+        Sund{"sundų"}
+        Sylo{"syloti nagri"}
+        Syrc{"sirų"}
+        Syre{"estrangelo siriečių"}
+        Syrj{"vakarų sirų"}
+        Syrn{"rytų sirų"}
+        Tagb{"tagbanva"}
+        Tale{"tai le"}
+        Talu{"naujasis Tailando lue"}
+        Taml{"tamilų"}
+        Tavt{"tai vet"}
+        Telu{"telugų"}
+        Teng{"tengvar"}
+        Tfng{"tifinag"}
+        Tglg{"tagalogų"}
+        Thaa{"hana"}
+        Thai{"tajų"}
+        Tibt{"tibetiečių"}
+        Ugar{"ugaritik"}
+        Vaii{"vai"}
         Visp{"matoma kalba"}
+        Xpeo{"senieji persų"}
         Xsux{"Šumero Akado dantiraštis"}
+        Yiii{"ji"}
+        Zmth{"matematiniai simboliai"}
+        Zsym{"simbolių"}
         Zxxx{"neparašyta"}
+        Zyyy{"bendras"}
+        Zzzz{"nežinomi arba neteisingi rašmenys"}
     }
     Types{
         calendar{
@@ -1842,12 +2245,27 @@ lt{
     Variants{
         POSIX{"Kompiuteris"}
     }
-    Version{"1.139"}
+    Version{"1.106"}
     calendar{
         buddhist{
             AmPmMarkers{
                 "ryte",
                 "PM",
+            }
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "y G, MMMM d, EEEE",
+                "MMMM d, y G",
+                "MMM d, y G",
+                "M/d/yyyy",
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}" /**  fallback from 'gregorian'   */,
             }
         }
         gregorian{
@@ -1856,7 +2274,7 @@ lt{
                 "popiet",
             }
             DateTimePatterns{
-                "HH:mm:ss v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -1868,6 +2286,17 @@ lt{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                MMMdd{"MMM-dd"}
+                MMdd{"MM.dd"}
+                hhmm{"hh:mm a"}
+                hhmmss{"hh:mm:ss a"}
+                yyQ{"Q yy"}
+                yyyyMM{"yyyy.MM"}
             }
             dayNames{
                 format{
@@ -1907,10 +2336,23 @@ lt{
                     "pr. Kr.",
                     "po Kr.",
                 }
+                wide{
+                    "prieš Kristų",
+                    "po Kristaus",
+                }
             }
             fields{
                 day{
                     dn{"diena"}
+                    relative{
+                        "-1"{"vakar"}
+                        "-2"{"užvakar"}
+                        "-3"{"už užvakar"}
+                        "0"{"šiandien"}
+                        "1"{"rytoj"}
+                        "2"{"poryt"}
+                        "3"{"užporyt"}
+                    }
                 }
                 dayperiod{
                     dn{"dienos metas"}
@@ -1928,7 +2370,7 @@ lt{
                     dn{"mėnuo"}
                 }
                 second{
-                    dn{"Sekundė"}
+                    dn{"sekundė"}
                 }
                 week{
                     dn{"savaitė"}
@@ -1941,6 +2383,79 @@ lt{
                 }
                 zone{
                     dn{"juosta"}
+                }
+            }
+            intervalFormats{
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"MM-ddE - MM-ddE"}
+                    d{"MM-ddE - MM-ddE"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"MMM d 'd'.E - MMM d 'd'.E"}
+                    d{"MMM d 'd'.E - d 'd'.E"}
+                }
+                MMMd{
+                    M{"MMM d 'd'. - MMM d 'd'."}
+                    d{"MMM d 'd'.-d 'd'."}
+                }
+                Md{
+                    M{"MM-dd - MM-dd"}
+                    d{"MM-dd - MM-dd"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    h{"HH-HH"}
+                }
+                hm{
+                    h{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                hmv{
+                    h{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                hv{
+                    h{"HH-HH v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"yyyy-MM - yyyy-MM"}
+                    y{"yyyy-MM - yyyy-MM"}
+                }
+                yMEd{
+                    M{"yyyy-MM-ddE - yyyy-MM-ddE"}
+                    d{"yyyy-MM-ddE - yyyy-MM-ddE"}
+                    y{"yyyy-MM-ddE - yyyy-MM-ddE"}
+                }
+                yMMM{
+                    M{"y 'm'. MMM-MMM"}
+                    y{"y 'm'. MMM - y 'm'. MMM"}
+                }
+                yMMMEd{
+                    M{"y 'm'. MMM d 'd'.,E - MMM d 'd'.,E"}
+                    d{"y 'm'. MMM d 'd'.,E - d 'd'.,E"}
+                    y{"y 'm'. MMM d 'd'.,E - y 'm'. MMM d 'd'.,E"}
+                }
+                yMMMd{
+                    M{"y 'm'. MMM d 'd'. - MMM d 'd'."}
+                    d{"y 'm'. MMM d 'd'.-d 'd'."}
+                    y{"y 'm'. MMM d 'd'. - y 'm'. MMM d 'd'."}
+                }
+                yMd{
+                    M{"yyyy-MM-dd - yyyy-MM-dd"}
+                    d{"yyyy-MM-dd - yyyy-MM-dd"}
+                    y{"yyyy-MM-dd - yyyy-MM-dd"}
                 }
             }
             monthNames{
@@ -2022,10 +2537,10 @@ lt{
                 }
                 stand-alone{
                     abbreviated{
-                        "K1",
+                        "1K",
                         "2K",
-                        "K3",
-                        "K4",
+                        "3K",
+                        "4K",
                     }
                 }
             }
@@ -2033,6 +2548,8 @@ lt{
     }
     codePatterns{
         language{"Kalba: {0}"}
+        script{"Rašmenys: {0}"}
+        territory{"Sritis: {0}"}
     }
     delimiters{
         alternateQuotationEnd{"“"}
@@ -2167,6 +2684,9 @@ lt{
         "Africa:Libreville"{
             ec{"Librevilis"}
         }
+        "Africa:Lubumbashi"{
+            ec{"Lubumbašis"}
+        }
         "Africa:Mogadishu"{
             ec{"Mogadišas"}
         }
@@ -2194,11 +2714,17 @@ lt{
         "America:Anchorage"{
             ec{"Ankoridžas"}
         }
+        "America:Argentina:La_Rioja"{
+            ec{"La Riocha"}
+        }
+        "America:Argentina:Rio_Gallegos"{
+            ec{"Rio Galjegosas"}
+        }
         "America:Argentina:San_Juan"{
             ec{"San Chuanas"}
         }
         "America:Argentina:San_Luis"{
-            ec{"San Luis"}
+            ec{"Sent Luisas"}
         }
         "America:Argentina:Tucuman"{
             ec{"Tukumanas"}
@@ -2209,9 +2735,6 @@ lt{
         "America:Asuncion"{
             ec{"Asunsjonas"}
         }
-        "America:Bahia"{
-            ec{"Baija"}
-        }
         "America:Barbados"{
             ec{"Barbadosas"}
         }
@@ -2221,23 +2744,23 @@ lt{
         "America:Belize"{
             ec{"Belizas"}
         }
-        "America:Blanc-Sablon"{
-            ec{"Blanc-Sablon"}
-        }
-        "America:Boa_Vista"{
-            ec{"Boa Vista"}
+        "America:Boise"{
+            ec{"Boisė"}
         }
         "America:Buenos_Aires"{
             ec{"Buenos Airės"}
         }
-        "America:Campo_Grande"{
-            ec{"Campo Grande"}
+        "America:Cambridge_Bay"{
+            ec{"Kembridžo įlanka"}
         }
         "America:Cancun"{
             ec{"Kankunas"}
         }
         "America:Caracas"{
             ec{"Karakasas"}
+        }
+        "America:Catamarca"{
+            ec{"Katamarka"}
         }
         "America:Cayenne"{
             ec{"Kajenas"}
@@ -2247,6 +2770,9 @@ lt{
         }
         "America:Chicago"{
             ec{"Čikaga"}
+        }
+        "America:Chihuahua"{
+            ec{"Čihuahua"}
         }
         "America:Cordoba"{
             ec{"Kordoba"}
@@ -2263,8 +2789,14 @@ lt{
         "America:Dawson"{
             ec{"Dosonas"}
         }
+        "America:Dawson_Creek"{
+            ec{"Dosono įlanka"}
+        }
         "America:Denver"{
             ec{"Denveris"}
+        }
+        "America:Detroit"{
+            ec{"Detroitas"}
         }
         "America:Dominica"{
             ec{"Dominika"}
@@ -2272,23 +2804,11 @@ lt{
         "America:Edmonton"{
             ec{"Edmontonas"}
         }
-        "America:Eirunepe"{
-            ec{"Eirunepe"}
-        }
         "America:El_Salvador"{
             ec{"Salvadoras"}
         }
-        "America:Fortaleza"{
-            ec{"Fortaleza"}
-        }
-        "America:Glace_Bay"{
-            ec{"Glace Bay"}
-        }
         "America:Godthab"{
             ec{"Godthabas"}
-        }
-        "America:Goose_Bay"{
-            ec{"Goose Bay"}
         }
         "America:Grand_Turk"{
             ec{"Grand Terkas"}
@@ -2305,14 +2825,17 @@ lt{
         "America:Hermosillo"{
             ec{"Hermosiljas"}
         }
+        "America:Indiana:Knox"{
+            ec{"Noksas, Indiana"}
+        }
         "America:Indiana:Petersburg"{
             ec{"Peterburgas"}
         }
-        "America:Indianapolis"{
-            ec{"Indianapolis"}
+        "America:Indiana:Vincennes"{
+            ec{"Vincenas, Indiana"}
         }
-        "America:Inuvik"{
-            ec{"Inuvik"}
+        "America:Indiana:Winamac"{
+            ec{"Vinamakas, Indiana"}
         }
         "America:Iqaluit"{
             ec{"Ikaluitas"}
@@ -2320,14 +2843,23 @@ lt{
         "America:Jamaica"{
             ec{"Jamaika"}
         }
+        "America:Jujuy"{
+            ec{"Chuchujus"}
+        }
         "America:Juneau"{
             ec{"Džūnas"}
+        }
+        "America:Kentucky:Monticello"{
+            ec{"Monticelas, Kentukis"}
         }
         "America:La_Paz"{
             ec{"La Pasas"}
         }
         "America:Los_Angeles"{
             ec{"Los Andželas"}
+        }
+        "America:Louisville"{
+            ec{"Luizvilis"}
         }
         "America:Managua"{
             ec{"Managva"}
@@ -2338,14 +2870,26 @@ lt{
         "America:Martinique"{
             ec{"Martinika"}
         }
-        "America:Menominee"{
-            ec{"Menominee"}
+        "America:Mazatlan"{
+            ec{"Mazatlanas"}
+        }
+        "America:Mendoza"{
+            ec{"Mendosa"}
+        }
+        "America:Mexico_City"{
+            ec{"Meksikas"}
         }
         "America:Moncton"{
             ec{"Monktonas"}
         }
+        "America:Monterrey"{
+            ec{"Monterėjus"}
+        }
         "America:Montevideo"{
             ec{"Montevidëjas"}
+        }
+        "America:Montreal"{
+            ec{"Monrealis"}
         }
         "America:Montserrat"{
             ec{"Montseratas"}
@@ -2356,6 +2900,15 @@ lt{
         "America:Nipigon"{
             ec{"Nipigonas"}
         }
+        "America:North_Dakota:Center"{
+            ec{"Jungtinės Valstijos (Centras, Šiaurės Dakota)"}
+        }
+        "America:North_Dakota:New_Salem"{
+            ec{"Naujasis Salemas, Šiaurės Dakota"}
+        }
+        "America:Pangnirtung"{
+            ec{"Pangnirtungas"}
+        }
         "America:Phoenix"{
             ec{"Fyniksas"}
         }
@@ -2365,11 +2918,17 @@ lt{
         "America:Puerto_Rico"{
             ec{"Puerto Rikas"}
         }
-        "America:Rainy_River"{
-            ec{"Rainy River"}
+        "America:Recife"{
+            ec{"Resifė"}
+        }
+        "America:Regina"{
+            ec{"Redžina"}
         }
         "America:Rio_Branco"{
             ec{"Rio Brankas"}
+        }
+        "America:Santarem"{
+            ec{"Santarenas"}
         }
         "America:Santiago"{
             ec{"Santjagas"}
@@ -2392,23 +2951,38 @@ lt{
         "America:St_Vincent"{
             ec{"Sant Vincentė"}
         }
-        "America:Swift_Current"{
-            ec{"Swift Current"}
-        }
         "America:Thule"{
             ec{"Tūla"}
+        }
+        "America:Thunder_Bay"{
+            ec{"Tander Bėjus"}
         }
         "America:Tijuana"{
             ec{"Tichuana"}
         }
-        "Antarctica:Casey"{
-            ec{"Casey"}
+        "America:Toronto"{
+            ec{"Torontas"}
+        }
+        "America:Vancouver"{
+            ec{"Vankuveris"}
+        }
+        "America:Whitehorse"{
+            ec{"Vaithorsas"}
+        }
+        "America:Winnipeg"{
+            ec{"Vinipegas"}
+        }
+        "America:Yakutat"{
+            ec{"Jakutat"}
+        }
+        "America:Yellowknife"{
+            ec{"Jelounaifas"}
         }
         "Antarctica:DumontDUrville"{
             ec{"Dumont D'Urville"}
         }
-        "Antarctica:Rothera"{
-            ec{"Rothera"}
+        "Antarctica:Palmer"{
+            ec{"Palmeris"}
         }
         "Antarctica:South_Pole"{
             ec{"Pietų ašigalis"}
@@ -2430,6 +3004,9 @@ lt{
         }
         "Asia:Anadyr"{
             ec{"Anadyrė"}
+        }
+        "Asia:Aqtau"{
+            ec{"Aktau"}
         }
         "Asia:Aqtobe"{
             ec{"Aktiubinskas"}
@@ -2458,6 +3035,9 @@ lt{
         "Asia:Choibalsan"{
             ec{"Čoibalsanas"}
         }
+        "Asia:Chongqing"{
+            ec{"Čongčingas"}
+        }
         "Asia:Colombo"{
             ec{"Kolombo"}
         }
@@ -2485,17 +3065,29 @@ lt{
         "Asia:Hong_Kong"{
             ec{"Honkongas"}
         }
-        "Asia:Hovd"{
-            ec{"Hovd"}
-        }
         "Asia:Irkutsk"{
             ec{"Irkutskas"}
         }
         "Asia:Jakarta"{
             ec{"Džakarta"}
         }
+        "Asia:Jayapura"{
+            ec{"Džajapura"}
+        }
         "Asia:Kabul"{
             ec{"Kabulas"}
+        }
+        "Asia:Kamchatka"{
+            ec{"Kamčiatka"}
+        }
+        "Asia:Kashgar"{
+            ec{"Kashi"}
+        }
+        "Asia:Krasnoyarsk"{
+            ec{"Krasnojarskas"}
+        }
+        "Asia:Kuching"{
+            ec{"Kučingas"}
         }
         "Asia:Kuwait"{
             ec{"Kuveitas"}
@@ -2503,20 +3095,44 @@ lt{
         "Asia:Macau"{
             ec{"Makao"}
         }
+        "Asia:Magadan"{
+            ec{"Magadanas"}
+        }
+        "Asia:Makassar"{
+            ec{"Makasaras"}
+        }
         "Asia:Muscat"{
             ec{"Maskatas"}
         }
         "Asia:Nicosia"{
             ec{"Nikosija"}
         }
+        "Asia:Novosibirsk"{
+            ec{"Novosibirskas"}
+        }
+        "Asia:Omsk"{
+            ec{"Omskas"}
+        }
+        "Asia:Oral"{
+            ec{"Uralskas"}
+        }
+        "Asia:Pontianak"{
+            ec{"Pontianakas"}
+        }
         "Asia:Qatar"{
             ec{"Kataras"}
+        }
+        "Asia:Qyzylorda"{
+            ec{"Kzyl-Orda"}
         }
         "Asia:Rangoon"{
             ec{"Rangūnas"}
         }
         "Asia:Riyadh"{
             ec{"Rijadas"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Sachalinas"}
         }
         "Asia:Samarkand"{
             ec{"Samarkandas"}
@@ -2539,8 +3155,20 @@ lt{
         "Asia:Ulaanbaatar"{
             ec{"Ulan-Batoras"}
         }
+        "Asia:Urumqi"{
+            ec{"Urumči"}
+        }
         "Asia:Vientiane"{
             ec{"Vientianas"}
+        }
+        "Asia:Vladivostok"{
+            ec{"Vladivostokas"}
+        }
+        "Asia:Yakutsk"{
+            ec{"Jakutskas"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"Jekaterinburgas"}
         }
         "Asia:Yerevan"{
             ec{"Jerevanas"}
@@ -2566,17 +3194,32 @@ lt{
         "Atlantic:Stanley"{
             ec{"Stenlis"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
+        "Australia:Adelaide"{
+            ec{"Adelaidė"}
         }
-        "Australia:Eucla"{
-            ec{"Eucla"}
+        "Australia:Brisbane"{
+            ec{"Brisbanas"}
+        }
+        "Australia:Darwin"{
+            ec{"Darvinas"}
         }
         "Australia:Hobart"{
             ec{"Hobartas"}
         }
         "Australia:Lord_Howe"{
             ec{"Lordo Hau sala"}
+        }
+        "Australia:Melbourne"{
+            ec{"Melburnas"}
+        }
+        "Australia:Perth"{
+            ec{"Pertas"}
+        }
+        "Australia:Sydney"{
+            ec{"Sidnėjus"}
+        }
+        "Etc:Unknown"{
+            ec{"Nežinoma"}
         }
         "Europe:Amsterdam"{
             ec{"Amsterdamas"}
@@ -2632,6 +3275,9 @@ lt{
         "Europe:Monaco"{
             ec{"Monakas"}
         }
+        "Europe:Moscow"{
+            ec{"Maskva"}
+        }
         "Europe:Oslo"{
             ec{"Oslas"}
         }
@@ -2643,6 +3289,9 @@ lt{
         }
         "Europe:Rome"{
             ec{"Roma"}
+        }
+        "Europe:Simferopol"{
+            ec{"Simferopolis"}
         }
         "Europe:Sofia"{
             ec{"Sofija"}
@@ -2656,14 +3305,23 @@ lt{
         "Europe:Tirane"{
             ec{"Tirana"}
         }
+        "Europe:Uzhgorod"{
+            ec{"Užhorodas"}
+        }
         "Europe:Vaduz"{
             ec{"Vaducas"}
         }
         "Europe:Vienna"{
             ec{"Viena"}
         }
+        "Europe:Volgograd"{
+            ec{"Volgogradas"}
+        }
         "Europe:Warsaw"{
             ec{"Varšuva"}
+        }
+        "Europe:Zaporozhye"{
+            ec{"Zaporožė"}
         }
         "Europe:Zurich"{
             ec{"Ciurichas"}
@@ -2686,9 +3344,6 @@ lt{
         "Pacific:Apia"{
             ec{"Apija"}
         }
-        "Pacific:Chatham"{
-            ec{"Chatham"}
-        }
         "Pacific:Easter"{
             ec{"Velykų sala"}
         }
@@ -2704,26 +3359,20 @@ lt{
         "Pacific:Galapagos"{
             ec{"Galapagai"}
         }
-        "Pacific:Gambier"{
-            ec{"Gambier"}
-        }
         "Pacific:Guadalcanal"{
             ec{"Gvadalkanalas"}
         }
         "Pacific:Guam"{
             ec{"Guamas"}
         }
-        "Pacific:Honolulu"{
-            ec{"Honolulu"}
-        }
         "Pacific:Johnston"{
             ec{"Džonstonas"}
         }
-        "Pacific:Kwajalein"{
-            ec{"Kwajalein"}
-        }
         "Pacific:Marquesas"{
-            ec{"Makrizo salos"}
+            ec{"Markizo salos"}
+        }
+        "Pacific:Midway"{
+            ec{"Jungtinių Valstijų mažosios aplinkinės salos (Midway"}
         }
         "Pacific:Norfolk"{
             ec{"Norfolkas"}
@@ -2744,7 +3393,7 @@ lt{
             ec{"Trukas"}
         }
         "Pacific:Wake"{
-            ec{"Klivateris"}
+            ec{"Jungtinių Valstijų mažosios aplinkinės salos (Klivateris)"}
         }
         "meta:Africa_Central"{
             ls{"Centrinės Afrikos laikas"}
@@ -2791,9 +3440,11 @@ lt{
         }
         "meta:Aqtau"{
             sd{"AQTST (Aktau)"}
+            ss{"AQTT (Aktau)"}
         }
         "meta:Aqtobe"{
             sd{"AQTST (Aktobė)"}
+            ss{"AQTT (Aktobė)"}
         }
         "meta:Argentina"{
             ld{"Argentinos vasaros laikas"}
@@ -2806,9 +3457,6 @@ lt{
             ld{"Atlanto vasaros laikas"}
             lg{"Atlanto laikas"}
             ls{"Atlanto standartinis laikas"}
-        }
-        "meta:Australia_Western"{
-            ss{"AWST"}
         }
         "meta:Bering"{
             ld{"Beringo vasaros laikas"}
@@ -2826,15 +3474,9 @@ lt{
             ld{"Čilės vasaros laikas"}
             ls{"Čilės laikas"}
         }
-        "meta:Cocos"{
-            ss{"CCT"}
-        }
         "meta:Colombia"{
             ld{"Kolumbijos vasaros laikas"}
             ls{"Kolumbijos laikas"}
-        }
-        "meta:Cook"{
-            ss{"CKT"}
         }
         "meta:Cuba"{
             ld{"Kubos vasaros laikas"}
@@ -2850,20 +3492,24 @@ lt{
         "meta:Europe_Central"{
             ld{"Vidurio Europos vasaros laikas"}
             ls{"Vidurio Europos laikas"}
+            sd{"CEST"}
+            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Rytų Europos vasaros laikas"}
             ls{"Rytų Europos laikas"}
             sd{"EEST"}
+            ss{"EET"}
         }
         "meta:Europe_Western"{
             sd{"WEST"}
+            ss{"WET"}
         }
         "meta:French_Guiana"{
             ls{"Prancūzų Gajanos laikas"}
         }
-        "meta:Gilbert_Islands"{
-            ss{"GILT"}
+        "meta:GMT"{
+            ss{"GMT"}
         }
         "meta:Greenland_Central"{
             ld{"Grenlandijos centro vasaros laikas"}
@@ -2883,15 +3529,11 @@ lt{
         "meta:Kuybyshev"{
             ld{"Kuibyševo vasaros laikas"}
             ls{"Kuibyševo laikas"}
-            sd{"KUYST"}
         }
         "meta:Moscow"{
             ld{"Maskvos vasaros laikas"}
             lg{"Maskvos laikas"}
             ls{"Maskvos standartinis laikas"}
-        }
-        "meta:New_Caledonia"{
-            ss{"NCT"}
         }
         "meta:Newfoundland"{
             ld{"Niufaundlendo vasaros laikas"}
@@ -2912,21 +3554,15 @@ lt{
         }
         "meta:Samarkand"{
             sd{"SAMST (Samarkandas)"}
-        }
-        "meta:South_Georgia"{
-            ss{"GST (GS)"}
+            ss{"SAMT (Samarkandas)"}
         }
         "meta:Turkey"{
             ld{"Turkijos vasaros laikas"}
             ls{"Turkijos laikas"}
-            sd{"TRST"}
         }
         "meta:Uruguay"{
             ld{"Urugvajaus vasaros laikas"}
             ls{"Urugvajaus laikas"}
-        }
-        "meta:Vanuatu"{
-            ss{"VUT"}
         }
         "meta:Venezuela"{
             ls{"Venesuelos laikas"}
@@ -2935,5 +3571,7 @@ lt{
             ld{"Volgogrado vasaros laikas"}
             ls{"Volgogrado laikas"}
         }
+        fallbackFormat{"{0} ({1})"}
+        hourFormat{"+HH:mm;−HH:mm"}
     }
 }

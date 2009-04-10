@@ -11,13 +11,12 @@ sv_FI{
     Countries{
         UM{"USA:s yttre öar"}
     }
-    Version{"1.139"}
+    Variants{
+        1996{"1996 års stavning"}
+    }
+    Version{"1.58"}
     calendar{
         gregorian{
-            DateTimeElements:intvector{
-                2,
-                4,
-            }
             fields{
                 dayperiod{
                     dn{"dagsperiod"}

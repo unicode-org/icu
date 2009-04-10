@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 zh_Hant_MO{
-    Version{"1.139"}
+    Version{"1.62"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -15,8 +15,8 @@ zh_Hant_MO{
                 4,
             }
             DateTimePatterns{
-                "ahh時mm分ss秒v",
-                "ahh時mm分ss秒z",
+                "zzzzah時mm分ss秒",
+                "zah時mm分ss秒",
                 "ahh:mm:ss",
                 "ah:mm",
                 "y年MM月dd日EEEE",
@@ -24,7 +24,8 @@ zh_Hant_MO{
                 "y年M月d日",
                 "yy年M月d日",
                 "{1} {0}",
-                "{1} {0}",
+                "{1}{0}",
+                "{1}{0}",
                 "{1} {0}",
                 "{1} {0}",
             }

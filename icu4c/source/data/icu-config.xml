@@ -1,7 +1,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2005-2008, International Business Machines Corporation and         *
+* Copyright (C) 2005-2009, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -134,13 +134,19 @@
         <include locales="ga_IE"/>
         <include locales="gl"/>
         <include locales="gl_ES"/>
+        <include locales="gsw"/>
+        <include locales="gsw_CH"/>
         <include locales="gu"/>        
         <include locales="gu_IN"/>
         <include locales="gv"/>
         <include locales="gv_GB"/>
         <include locales="ha"/> 
         <include locales="ha_Latn"/> 
+        <include locales="ha_Latn_GH"/> 
+        <include locales="ha_Latn_NE"/> 
         <include locales="ha_Latn_NG"/> 
+        <include locales="ha_GH"/> 
+        <include locales="ha_NE"/> 
         <include locales="ha_NG"/> 
         <include locales="haw"/>
         <include locales="haw_US"/>
@@ -235,6 +241,7 @@
         <include locales="pt_BR"/>
         <include locales="pt_PT"/>
         <include locales="ro"/>         
+        <include locales="ro_MD"/>
         <include locales="ro_RO"/>
         <include locales="root"/>
         <include locales="ru"/>
@@ -323,6 +330,8 @@
         <include locales="zh_MO"/> 
         <include locales="zh_SG"/> 
         <include locales="zh_TW"/> 
+        <include locales="zu"/> 
+        <include locales="zu_ZA"/> 
     </locales>    
     <paths>
         <include xpath="//ldml/.*"/>

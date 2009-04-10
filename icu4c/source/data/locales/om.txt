@@ -14,16 +14,6 @@ om{
         ET{"Itoophiyaa"}
         KE{"Keeniyaa"}
     }
-    Currencies{
-        ETB{
-            "$",
-            "ETB",
-        }
-        KES{
-            "Ksh",
-            "KES",
-        }
-    }
     ExemplarCharacters{"[a-z]"}
     Languages{
         om{"Oromoo"}
@@ -37,7 +27,7 @@ om{
         "#,##0%",
         "#E0",
     }
-    Version{"1.139"}
+    Version{"1.60"}
     calendar{
         gregorian{
             dayNames{

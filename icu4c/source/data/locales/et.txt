@@ -950,11 +950,11 @@ et{
             "Timori eskuudo",
         }
         TRL{
-            "TL",
+            "TRL",
             "Türgi liir",
         }
         TRY{
-            "YTL",
+            "TL",
             "Türgi uus liir",
         }
         TWD{
@@ -1731,11 +1731,11 @@ et{
         ROZAJ{"Resia murre"}
         SAAHO{"saho murre"}
     }
-    Version{"1.139"}
+    Version{"1.91"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "H:mm:ss v",
+                "H:mm:ss zzzz",
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
@@ -1743,6 +1743,7 @@ et{
                 "d MMMM y",
                 "dd.MM.yyyy",
                 "dd.MM.yy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -1822,7 +1823,6 @@ et{
     }
     zoneStrings{
         gmtFormat{"GMT{0}"}
-        gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0}"}
     }

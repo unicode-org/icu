@@ -79,7 +79,7 @@ ii{
             islamic{"ꑳꌦꇂꑍꉖ"}
         }
     }
-    Version{"1.139"}
+    Version{"1.10"}
     calendar{
         gregorian{
             AmPmMarkers{

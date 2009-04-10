@@ -10,17 +10,13 @@ es_AR{
     Currencies{
         ARS{
             "$",
-            "Peso Argentino",
-        }
-        TRY{
-            "YTL",
-            "nueva lira turca",
+            "peso argentino",
         }
     }
     Variants{
         REVISED{"Ortografía revisada"}
     }
-    Version{"1.139"}
+    Version{"1.61"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -28,7 +24,7 @@ es_AR{
                 "p.m.",
             }
             DateTimePatterns{
-                "HH'h'''mm:ss v",
+                "HH'h'''mm:ss zzzz",
                 "H:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -36,6 +32,7 @@ es_AR{
                 "d 'de' MMMM 'de' y",
                 "dd/MM/yyyy",
                 "dd/MM/yy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

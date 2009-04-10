@@ -21,8 +21,8 @@ uz_Arab{
         }
     }
     ExemplarCharacters{
-        "[ً-ْ ٔ ٰ ء-ؤ ئ-ب پ ة-ث ټ ج چ ح خ ځ څ د ذ ډ ر ز ړ ږ ژ س ش ښ ص-غ ف ق ک ګ گ ل-ن"
-        " ڼ ه و ۇ ۉ ي ی ۍ ې]"
+        "[\u064B-\u0652 \u0654 \u0670 ء-ؤ ئ-ب پ ة-ث ټ ج چ ح خ ځ څ د ذ ډ ر ز ړ ږ ژ س ش"
+        " ښ ص-غ ف ق ک ګ گ ل-ن ڼ ه و ۇ ۉ ي ی ۍ ې]"
     }
     Languages{
         fa{"دری"}
@@ -46,8 +46,8 @@ uz_Arab{
         "NaN",
         "+",
     }
-    Version{"1.139"}
-    defaultNumberingSystem{"persian"}
+    Version{"1.34"}
+    defaultNumberingSystem{"arabext"}
     layout{
         characters{"right-to-left"}
         lines{"top-to-bottom"}

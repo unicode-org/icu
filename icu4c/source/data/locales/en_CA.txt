@@ -21,7 +21,7 @@ en_CA{
         279,
         216,
     }
-    Version{"1.139"}
+    Version{"1.63"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -29,7 +29,7 @@ en_CA{
                 4,
             }
             DateTimePatterns{
-                "h:mm:ss a v",
+                "h:mm:ss a zzzz",
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
@@ -37,6 +37,7 @@ en_CA{
                 "MMMM d, y",
                 "yyyy-MM-dd",
                 "yy-MM-dd",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

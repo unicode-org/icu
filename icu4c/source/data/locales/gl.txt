@@ -1003,7 +1003,7 @@ gl{
             traditional{"orde tradicional"}
         }
     }
-    Version{"1.139"}
+    Version{"1.66"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1011,7 +1011,7 @@ gl{
                 "PM",
             }
             DateTimePatterns{
-                "HH:mm:ss v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -1019,6 +1019,7 @@ gl{
                 "dd MMMM y",
                 "d MMM, y",
                 "dd/MM/yy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

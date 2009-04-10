@@ -180,7 +180,7 @@ static void TestDateFormat()
     }
     /*format using fr */
     
-    u_unescape("10 juil. 1996 16:05:28 \\u00C9tats-Unis (Los Angeles)", temp, 50);
+    u_unescape("10 juil. 1996 16:05:28 heure avanc\\u00E9e du Pacifique", temp, 50);
     if(result != NULL) {
         free(result);
         result = NULL;
