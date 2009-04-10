@@ -3157,7 +3157,7 @@ el{
         TARASK{"Ταρασκιεβική ορθογραφία"}
         VALENCIA{"Βαλενθιανά"}
     }
-    Version{"1.110"}
+    Version{"1.111"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -4530,221 +4530,42 @@ el{
             ec{"Γουόλις"}
         }
         "meta:Acre"{
-            ld{"GMT-0500"}
-            ls{"Ακρ"}
             sd{"ACST (Ακρ)"}
             ss{"ACT (Ακρ)"}
         }
         "meta:Africa_Central"{
-            lg{"ώρα Μοζαμβίκης"}
             ls{"ώρα Κεντρικής Αφρικής"}
-            sg{"ώρα Μοζαμβίκης"}
         }
         "meta:Africa_Eastern"{
-            lg{"ώρα Κένυας"}
             ls{"ώρα Ανατολικής Αφρικής"}
-            sg{"ώρα Κένυας"}
-        }
-        "meta:Africa_FarWestern"{
-            lg{"ώρα Δυτικής Σαχάρας"}
-            sg{"ώρα Δυτικής Σαχάρας"}
         }
         "meta:Africa_Southern"{
             lg{"ώρα Νότιας Αφρικής"}
             ls{"τυπική ώρα Νότιας Αφρικής"}
-            sg{"SAT"}
         }
         "meta:Africa_Western"{
             ld{"καλοκαιρινή ώρα Δυτικής Αφρικής"}
-            lg{"ώρα Νιγηρίας"}
             ls{"ώρα Δυτικής Αφρικής"}
-            sg{"ώρα Νιγηρίας"}
-        }
-        "meta:Alaska"{
-            lg{"Ηνωμένες Πολιτείες (Τζούνο)"}
-            sg{"AKT"}
-        }
-        "meta:Alaska_Hawaii"{
-            sg{"AHT"}
-        }
-        "meta:America_Central"{
-            sd{"CDT"}
-            sg{"CT"}
-            ss{"CST"}
-        }
-        "meta:America_Eastern"{
-            sd{"EDT"}
-            sg{"ET"}
-            ss{"EST"}
-        }
-        "meta:America_Mountain"{
-            sd{"MDT"}
-            sg{"MT"}
-            ss{"MST"}
-        }
-        "meta:America_Pacific"{
-            sd{"PDT"}
-            sg{"PT"}
-            ss{"PST"}
-        }
-        "meta:Anadyr"{
-            lg{"Ρωσία (Αναντίρ)"}
-            sg{"Ρωσία (Αναντίρ)"}
         }
         "meta:Aqtau"{
             sd{"AQTST (Ακτάου)"}
-            ss{"AQTST (Ακτάου)"}
+            ss{"AQTT (Ακτάου)"}
         }
         "meta:Aqtobe"{
-            sd{"AQTST (Ακτάου)"}
-            ss{"AQTST (Ακτάου)"}
-        }
-        "meta:Argentina_Western"{
-            lg{"Αργεντινή (Μεντόζα)"}
-            sg{"Αργεντινή (Μεντόζα)"}
-        }
-        "meta:Atlantic"{
-            sd{"ADT"}
-            sg{"AT"}
-            ss{"AST"}
-        }
-        "meta:Australia_CentralWestern"{
-            lg{"Αυστραλία (Εούκλα)"}
-            sg{"Αυστραλία (Εούκλα)"}
-        }
-        "meta:Australia_Eastern"{
-            lg{"Αυστραλία (Σίδνεϊ)"}
-            sg{"Αυστραλία (Σίδνεϊ)"}
-        }
-        "meta:Australia_Western"{
-            lg{"Αυστραλία (Περθ)"}
-            sg{"Αυστραλία (Περθ)"}
+            sd{"AQTST (Ακτοβε)"}
+            ss{"AQTT (Ακτοβε)"}
         }
         "meta:Bering"{
-            lg{"Ηνωμένες Πολιτείες (Αντάκ)"}
             sd{"BDT (Μπερίνγκ)"}
-            sg{"Ηνωμένες Πολιτείες (Αντάκ)"}
-            ss{"BDT (Μπερίνγκ)"}
-        }
-        "meta:Borneo"{
-            lg{"Μαλαισία (Κούτσινγκ)"}
-            sg{"Μαλαισία (Κούτσινγκ)"}
-        }
-        "meta:Changbai"{
-            lg{"Κίνα (Χαρμπίν)"}
-            sg{"Κίνα (Χαρμπίν)"}
-        }
-        "meta:Chatham"{
-            lg{"Νέα Ζηλανδία (Τσατχάμ)"}
-            sg{"Νέα Ζηλανδία (Τσατχάμ)"}
+            ss{"BST (Μπερίνγκ)"}
         }
         "meta:Cuba"{
             sd{"CDT (Κούβα)"}
-            ss{"CDT (Κούβα)"}
-        }
-        "meta:Europe_Central"{
-            sd{"CEST"}
-            ss{"CET"}
-        }
-        "meta:Europe_Eastern"{
-            sd{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
-            ss{"EET"}
-        }
-        "meta:Europe_Western"{
-            sd{"WEST"}
-            ss{"WET"}
-        }
-        "meta:Goose_Bay"{
-            lg{"Καναδάς (Γκους Μπέι)"}
-            sg{"Καναδάς (Γκους Μπέι)"}
-        }
-        "meta:Hong_Kong"{
-            lg{"Χονγκ Κονγκ, ΕΔΠ της Κίνας"}
-            sg{"Χονγκ Κονγκ, ΕΔΠ της Κίνας"}
-        }
-        "meta:Kamchatka"{
-            lg{"Ρωσία (Καμτσάτκα)"}
-            sg{"Ρωσία (Καμτσάτκα)"}
-        }
-        "meta:Kashgar"{
-            lg{"Κίνα (Κασγκάρ)"}
-            sg{"Κίνα (Κασγκάρ)"}
-        }
-        "meta:Kizilorda"{
-            lg{"Καζακστάν (Κυζυλόρντα)"}
-            sg{"Καζακστάν (Κυζυλόρντα)"}
-        }
-        "meta:Krasnoyarsk"{
-            lg{"Ρωσία (Κρασνογιάρσκ)"}
-            sg{"Ρωσία (Κρασνογιάρσκ)"}
-        }
-        "meta:Kwajalein"{
-            lg{"Νήσοι Μάρσαλ (Κβατζαλέιν)"}
-            sg{"Νήσοι Μάρσαλ (Κβατζαλέιν)"}
-        }
-        "meta:Liberia"{
-            lg{"ώρα Λιβερίας"}
-            sg{"ώρα Λιβερίας"}
-        }
-        "meta:Long_Shu"{
-            lg{"Κίνα (Τσονγκίνγκ)"}
-            sg{"Κίνα (Τσονγκίνγκ)"}
-        }
-        "meta:Lord_Howe"{
-            lg{"Αυστραλία (Λορντ Χάουι)"}
-            sg{"Αυστραλία (Λορντ Χάουι)"}
-        }
-        "meta:Macau"{
-            lg{"Μακάο, ΕΔΠ Κίνας"}
-            sg{"Μακάο, ΕΔΠ Κίνας"}
-        }
-        "meta:Magadan"{
-            lg{"Ρωσία (Μαγκαντάν)"}
-            sg{"Ρωσία (Μαγκαντάν)"}
-        }
-        "meta:Malaysia"{
-            lg{"Μαλαισία (Κουτσίνγκ)"}
-            sg{"Μαλαισία (Κουτσίνγκ)"}
-        }
-        "meta:Newfoundland"{
-            lg{"Καναδάς (Σεν Τζονς)"}
-            sg{"NT"}
-        }
-        "meta:Oral"{
-            lg{"Καζακστάν (Όραλ)"}
-            sg{"Καζακστάν (Όραλ)"}
-        }
-        "meta:Qyzylorda"{
-            lg{"Καζακστάν (Κυζυλόρντα)"}
-            sg{"Καζακστάν (Κυζυλόρντα)"}
-        }
-        "meta:Sakhalin"{
-            lg{"Ρωσία (Σάκχαλιν)"}
-            sg{"Ρωσία (Σάκχαλιν)"}
+            ss{"CST (Κούβα)"}
         }
         "meta:Samarkand"{
             sd{"SAMST (Σάμαρκαντ)"}
-            ss{"SAMST (Σάμαρκαντ)"}
-        }
-        "meta:Urumqi"{
-            lg{"Κίνα (Ουρουμκί)"}
-            sg{"Κίνα (Ουρουμκί)"}
-        }
-        "meta:Volgograd"{
-            lg{"Ρωσία (Βολγκογκράντ)"}
-            sg{"Ρωσία (Βολγκογκράντ)"}
-        }
-        "meta:Wake"{
-            lg{"Απομακρυσμένες Νησίδες ΗΠΑ (Γουέικ)"}
-            sg{"Απομακρυσμένες Νησίδες ΗΠΑ (Γουέικ)"}
-        }
-        "meta:Yakutsk"{
-            lg{"Ρωσία (Γιακούτσκ)"}
-            sg{"Ρωσία (Γιακούτσκ)"}
-        }
-        "meta:Yukon"{
-            lg{"Ηνωμένες Πολιτείες (Γιακουτάτ)"}
-            sg{"Ηνωμένες Πολιτείες (Γιακουτάτ)"}
+            ss{"SAMT (Σάμαρκαντ)"}
         }
         gmtFormat{"GMT{0}"}
         hourFormat{"+HHmm;-HHmm"}
