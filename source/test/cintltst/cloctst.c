@@ -233,6 +233,8 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestGetLocaleForLCID);
     TESTCASE(TestOrientation);
     TESTCASE(TestLikelySubtags);
+    TESTCASE(TestToLanguageTag);
+    TESTCASE(TestForLanguageTag);
 }
 
 
@@ -5343,3 +5345,158 @@ static void TestLikelySubtags()
         }
     }
 }
+
+const char* const locale_to_langtag[][3] = {
+    {"",            "und",          "und"},
+    {"en",          "en",           "en"},
+    {"en_US",       "en-us",        "en-us"},
+    {"iw_IL",       "he-il",        "he-il"},
+    {"sr_Latn_SR",  "sr-latn-sr",   "sr-latn-sr"},
+    {"en__POSIX",   "en-posix",     "en-posix"},
+    {"en_POSIX",    "en",           NULL},
+    {"und_555",     "und-555",      "und-555"},
+    {"123",         "und",          NULL},
+    {"%$#&",        "und",          NULL},
+    {"_Latn",       "und-latn",     "und-latn"},
+    {"_DE",         "und-de",       "und-de"},
+    {"und_FR",      "und-fr",       "und-fr"},
+    {"th_TH_TH",    "th-th",        NULL},
+    {"bogus",       "bogus",        "bogus"},
+    {"foooobarrr",  "und",          NULL},
+    {"az_AZ_CYRL",  "az-cyrl-az",   "az-cyrl-az"},
+    {"aa_BB_CYRL",  "aa-bb",        NULL},
+    {"en_US_1234",  "en-us-1234",   "en-us-1234"},
+    {"en_US_VARIANTA_VARIANTB", "en-us-varianta-variantb",  "en-us-varianta-variantb"},
+    {"en_US_VARIANTB_VARIANTA", "en-us-varianta-variantb",  "en-us-varianta-variantb"},
+    {"ja__9876_5432",   "ja-5432-9876", "ja-5432-9876"},
+    {"zh_Hant__VAR",    "zh-hant",  NULL},
+    {"es__BADVARIANT_GOODVAR",  "es-goodvar",   NULL},
+    {"en@calendar=gregorian",   "en-u-ca-gregory",  "en-u-ca-gregory"},
+    {"de@collation=phonebook;calendar=gregorian",   "de-u-ca-gregory-co-phonebk",   "de-u-ca-gregory-co-phonebk"},
+    {"th@numbers=thai;z=extz;x=priv-use;a=exta",   "th-a-exta-u-nu-thai-z-extz-x-priv-use", "th-a-exta-u-nu-thai-z-extz-x-priv-use"},
+    {"en@timezone=America/New_York;calendar=japanese",    "en-u-ca-japanese-tz-usnyc",    "en-u-ca-japanese-tz-usnyc"},
+    {"en@x=x-y-z;a=a-b-c",  "en-x-x-y-z",   NULL},
+    {"it@collation=badcollationtype;colStrength=identical;cu=usd-eur", "it-u-ks-identic",  NULL},
+    {NULL,          NULL,           NULL}
+};
+
+static void TestToLanguageTag(void) {
+    char langtag[256];
+    int32_t i;
+    UErrorCode status;
+    int32_t len;
+    const char *inloc;
+    const char *expected;
+
+    for (i = 0; locale_to_langtag[i][0] != NULL; i++) {
+        inloc = locale_to_langtag[i][0];
+
+        /* testing non-strict mode */
+        status = U_ZERO_ERROR;
+        langtag[0] = 0;
+        expected = locale_to_langtag[i][1];
+
+        len = uloc_toLanguageTag(inloc, langtag, sizeof(langtag), FALSE, &status);
+        if (U_FAILURE(status)) {
+            if (expected != NULL) {
+                log_err("Error returned by uloc_toLanguageTag for locale id [%s] - error: %s\n",
+                    inloc, u_errorName(status));
+            }
+        } else {
+            if (expected == NULL) {
+                log_err("Error should be returned by uloc_toLanguageTag for locale id [%s], but [%s] is returned without errors\n",
+                    inloc, langtag);
+            } else if (uprv_strcmp(langtag, expected) != 0) {
+                log_err("uloc_toLanguageTag returned language tag [%s] for input locale [%s] - expected: [%s]\n",
+                    langtag, inloc, expected);
+            }
+        }
+
+        /* testing strict mode */
+        status = U_ZERO_ERROR;
+        langtag[0] = 0;
+        expected = locale_to_langtag[i][2];
+
+        len = uloc_toLanguageTag(inloc, langtag, sizeof(langtag), TRUE, &status);
+        if (U_FAILURE(status)) {
+            if (expected != NULL) {
+                log_err("Error returned by uloc_toLanguageTag {strict} for locale id [%s] - error: %s\n",
+                    inloc, u_errorName(status));
+            }
+        } else {
+            if (expected == NULL) {
+                log_err("Error should be returned by uloc_toLanguageTag {strict} for locale id [%s], but [%s] is returned without errors\n",
+                    inloc, langtag);
+            } else if (uprv_strcmp(langtag, expected) != 0) {
+                log_err("uloc_toLanguageTag {strict} returned language tag [%s] for input locale [%s] - expected: [%s]\n",
+                    langtag, inloc, expected);
+            }
+        }
+    }
+}
+
+static const struct {
+    const char  *bcpID;
+    const char  *locID;
+    int32_t     len;
+} langtag_to_locale[] = {
+    {"en",                  "en",                   2},
+    {"en-us",               "en_US",                5},
+    {"und-us",              "_US",                  6},
+    {"und-latn",            "_Latn",                8},
+    {"en-us-posix",         "en_US_POSIX",          11},
+    {"de-de_euro",          "de",                   2},
+    {"kok-in",              "kok_IN",               6},
+    {"123",                 "",                     0},
+    {"en_us",               "",                     0},
+    {"en-latn-x",           "en_Latn",              7},
+    {"art-lojban",          "jbo",                  10},
+    {"zh-hakka",            "hak",                  8},
+    {"xxx-yy",              "xxx_YY",               6},
+    {"fr-234",              "fr_234",               6},
+    {"i-default",           "",                     9},
+    {"i-test",              "",                     0},
+    {"ja-jp-jp",            "ja_JP",                5},
+    {"bogus",               "bogus",                5},
+    {"boguslang",           "",                     0},
+    {"EN-lATN-us",          "en_Latn_US",           10},
+    {"und-variant-1234",    "__1234_VARIANT",       16},
+    {"und-varzero-var1-vartwo", "__VARZERO",        11},
+    {"en-u-ca-gregory",     "en@calendar=gregorian",    15},
+    {"en-U-cu-USD",         "en@currency=usd",      11},
+    {"ar-x-1-2-3",          "ar@x=1-2-3",           10},
+    {"fr-u-nu-latn-cu-eur", "fr@currency=eur;numbers=latn", 19},
+    {"de-k-kext-u-co-phonebk-nu-latn",  "de@collation=phonebook;k=kext;numbers=latn",   30},
+    {"ja-u-cu-jpy-ca-jp",   "ja@currency=jpy",      11},
+    {"en-us-u-tz-usnyc",    "en_US@timezone=america/new_york",      16},
+    {"und-a-abc-def",       "und@a=abc-def",        13},
+    {"zh-u-ca-chinese-x-u-ca-chinese",  "zh@calendar=chinese;x=u-ca-chinese",   30},
+    {NULL,          NULL,           0}
+};
+
+static void TestForLanguageTag(void) {
+    char locale[256];
+    int32_t i;
+    UErrorCode status;
+    int32_t parsedLen;
+
+    for (i = 0; langtag_to_locale[i].bcpID != NULL; i++) {
+        status = U_ZERO_ERROR;
+        locale[0] = 0;        
+        uloc_forLanguageTag(langtag_to_locale[i].bcpID, locale, sizeof(locale), &parsedLen, &status);
+        if (U_FAILURE(status)) {
+            log_err("Error returned by uloc_forLanguageTag for language tag [%s] - error: %s\n",
+                langtag_to_locale[i].bcpID, u_errorName(status));
+        } else {
+            if (uprv_strcmp(langtag_to_locale[i].locID, locale) != 0) {
+                log_err("uloc_forLanguageTag returned locale [%s] for input language tag [%s] - expected: [%s]\n",
+                    locale, langtag_to_locale[i].bcpID, langtag_to_locale[i].locID);
+            }
+            if (parsedLen != langtag_to_locale[i].len) {
+                log_err("uloc_forLanguageTag parsed length of %d for input language tag [%s] - expected parsed length: %d\n",
+                    parsedLen, langtag_to_locale[i].bcpID, langtag_to_locale[i].len);
+            }
+        }
+    }
+}
+
