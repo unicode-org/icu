@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -115,4 +115,9 @@ static void TestOrientation(void);
 
 static void TestLikelySubtags(void);
 
+/**
+ * lanuage tag
+ */
+static void TestForLanguageTag(void);
+static void TestToLanguageTag(void);
 #endif

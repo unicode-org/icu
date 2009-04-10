@@ -87,7 +87,7 @@ rbbi.o rbbidata.o rbbinode.o rbbirb.o rbbiscan.o rbbisetb.o rbbistbl.o rbbitblb.
 serv.o servnotf.o servls.o servlk.o servlkf.o servrbf.o servslkf.o \
 uidna.o usprep.o punycode.o \
 util.o util_props.o parsepos.o locbased.o cwchar.o wintz.o mutex.o dtintrv.o ucnvsel.o propsvec.o \
-ulist.o
+ulist.o ultag.o
 
 ## Header files to install
 HEADERS = $(srcdir)/unicode/*.h unicode/*.h

@@ -45,6 +45,7 @@
 #include "uarrsort.h"
 #include "uenumimp.h"
 #include "uassert.h"
+#include "ultag.h"
 
 #include <stdio.h> /* for sprintf */
 
@@ -4381,8 +4382,7 @@ uloc_forLanguageTag(const char* langtag,
                     int32_t* parsedLength,
                     UErrorCode* err)
 {
-    /* TODO */
-    return 0;
+    return ultag_languageTagToLocale(langtag, localeID, localeIDCapacity, parsedLength, err);
 }
 
 U_DRAFT int32_t U_EXPORT2
@@ -4392,8 +4392,7 @@ uloc_toLanguageTag(const char* localeID,
                    UBool strict,
                    UErrorCode* err)
 {
-    /* TODO */
-    return 0;
+    return ultag_localeToLanguageTag(localeID, langtag, langtagCapacity, strict, err);
 }
 
 /*eof*/
