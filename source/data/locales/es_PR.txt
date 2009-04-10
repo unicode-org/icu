@@ -27,11 +27,15 @@ es_PR{
         "NaN",
         "+",
     }
-    Version{"1.139"}
+    PaperSize:intvector{
+        279,
+        216,
+    }
+    Version{"1.59"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "hh:mm:ss a v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -39,6 +43,7 @@ es_PR{
                 "d 'de' MMMM 'de' y",
                 "MM/dd/yyyy",
                 "MM/dd/yy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

@@ -87,7 +87,7 @@ sk{
         BY{"Bielorusko"}
         BZ{"Belize"}
         CA{"Kanada"}
-        CC{"Kokosové (Keelingove) ostrovy"}
+        CC{"Kokosové ostrovy"}
         CD{"Konžská demokratická republika"}
         CF{"Stredoafrická republika"}
         CG{"Kongo"}
@@ -121,7 +121,7 @@ sk{
         FI{"Fínsko"}
         FJ{"Fidži"}
         FK{"Falklandské ostrovy"}
-        FM{"Mikronézia, Federatívne štáty"}
+        FM{"Mikronézia"}
         FO{"Faerské ostrovy"}
         FR{"Francúzsko"}
         GA{"Gabon"}
@@ -129,6 +129,7 @@ sk{
         GD{"Grenada"}
         GE{"Gruzínsko"}
         GF{"Francúzska Guayana"}
+        GG{"Guernsey"}
         GH{"Ghana"}
         GI{"Gibraltár"}
         GL{"Grónsko"}
@@ -158,6 +159,7 @@ sk{
         IR{"Irán"}
         IS{"Island"}
         IT{"Taliansko"}
+        JE{"Jersey"}
         JM{"Jamajka"}
         JO{"Jordánsko"}
         JP{"Japonsko"}
@@ -167,8 +169,8 @@ sk{
         KI{"Kiribati"}
         KM{"Komory"}
         KN{"Saint Kitts a Nevis"}
-        KP{"Kórea, Severná"}
-        KR{"Kórea, Južná"}
+        KP{"Kórejská ľudovodemokratická republika"}
+        KR{"Kórejská republika"}
         KW{"Kuvajt"}
         KY{"Kajmanské ostrovy"}
         KZ{"Kazachstan"}
@@ -185,11 +187,12 @@ sk{
         LY{"Lýbijská arabská džamahírija"}
         MA{"Maroko"}
         MC{"Monako"}
-        MD{"Moldavsko, republika"}
+        MD{"Moldavsko"}
+        ME{"Čierna Hora"}
         MF{"Svätý Martin"}
         MG{"Madagaskar"}
         MH{"Marshallove ostrovy"}
-        MK{"Macedónsko, republika"}
+        MK{"Macedónsko"}
         ML{"Mali"}
         MM{"Mjanmarsko"}
         MN{"Mongolsko"}
@@ -237,6 +240,7 @@ sk{
         QU{"Európska únia"}
         RE{"Reunion"}
         RO{"Rumunsko"}
+        RS{"Srbsko"}
         RU{"Ruská federácia"}
         RW{"Rwanda"}
         SA{"Saudská Arábia"}
@@ -280,7 +284,7 @@ sk{
         US{"Spojené štáty"}
         UY{"Uruguaj"}
         UZ{"Uzbekistan"}
-        VA{"Svätá stolica (Vatikánsky mestský štát)"}
+        VA{"Vatikán"}
         VC{"Svätý Vincent a Grenadíny"}
         VE{"Venezuela"}
         VG{"Britské panenské ostrovy"}
@@ -306,15 +310,15 @@ sk{
             "UAE dirham",
         }
         ALL{
-            "lek",
+            "ALL",
             "Albánsky lek",
         }
         AMD{
-            "dram",
+            "AMD",
             "Armenský dram",
         }
         ANG{
-            "NA f.",
+            "NAf.",
             "Nizozemský Antilský guilder",
         }
         AOA{
@@ -342,7 +346,7 @@ sk{
             "Argentinské peso (1983-1985)",
         }
         ARS{
-            "Arg$",
+            "AR$",
             "Argentinské peso",
         }
         ATS{
@@ -350,7 +354,7 @@ sk{
             "Rakúsky šiling",
         }
         AUD{
-            "$A",
+            "AU$",
             "Austrálsky dolár",
         }
         AWG{
@@ -370,7 +374,7 @@ sk{
             "Bosnianský konvertibilná marka",
         }
         BBD{
-            "BDS$",
+            "Bds$",
             "Barbadoský dolár",
         }
         BDT{
@@ -390,7 +394,7 @@ sk{
             "Belgický frank (finančný)",
         }
         BGL{
-            "lev",
+            "BGL",
             "Bulharský leva",
         }
         BGN{
@@ -402,11 +406,11 @@ sk{
             "Bahraiský dinár",
         }
         BIF{
-            "Fbu",
+            "FBu",
             "Burundský frank",
         }
         BMD{
-            "Ber$",
+            "BD$",
             "Bermudský dolár",
         }
         BND{
@@ -450,7 +454,7 @@ sk{
             "Bahamský dolár",
         }
         BTN{
-            "Nu",
+            "Nu.",
             "Bhutansky ngultrum",
         }
         BUK{
@@ -466,7 +470,7 @@ sk{
             "Belarussian nový rubeľ (1994-1999)",
         }
         BYR{
-            "Rbl",
+            "BYR",
             "Belarussian rubeľ",
         }
         BZD{
@@ -474,7 +478,7 @@ sk{
             "Belize dolár",
         }
         CAD{
-            "Can$",
+            "CA$",
             "Kanadský dolár",
         }
         CDF{
@@ -482,7 +486,7 @@ sk{
             "Konžský frank Congolais",
         }
         CHF{
-            "SwF",
+            "Fr.",
             "Švajčiarský frank",
         }
         CLF{
@@ -490,19 +494,19 @@ sk{
             "Čílske Unidades de Fomento",
         }
         CLP{
-            "Ch$",
+            "CL$",
             "Čílske peso",
         }
         CNY{
-            "Y",
+            "CN¥",
             "Čínsky Yuan Renminbi",
         }
         COP{
-            "Col$",
+            "CO$",
             "Colombijské peso",
         }
         CRC{
-            "C",
+            "₡",
             "Kostarikský colon",
         }
         CSK{
@@ -514,11 +518,11 @@ sk{
             "Kubánske peso",
         }
         CVE{
-            "CVEsc",
+            "CV$",
             "Cape Verde eskudo",
         }
         CYP{
-            "£C",
+            "CY£",
             "Cypruská libra",
         }
         CZK{
@@ -534,11 +538,11 @@ sk{
             "Nemecká marka",
         }
         DJF{
-            "DF",
+            "Fdj",
             "Džibutský frank",
         }
         DKK{
-            "DKr",
+            "Dkr",
             "Dánska krone",
         }
         DOP{
@@ -586,7 +590,7 @@ sk{
             "Finská marka",
         }
         FJD{
-            "F$",
+            "FJ$",
             "Fiji dolár",
         }
         FKP{
@@ -606,7 +610,7 @@ sk{
             "Gruzínsky Kupon Larit",
         }
         GEL{
-            "lari",
+            "GEL",
             "Gruzínsky lari",
         }
         GHC{
@@ -622,7 +626,7 @@ sk{
             "Gambský dalasi",
         }
         GNF{
-            "GF",
+            "FG",
             "Guinejský frank",
         }
         GNS{
@@ -638,7 +642,7 @@ sk{
             "Grécka drachma",
         }
         GTQ{
-            "Q",
+            "GTQ",
             "Guatemalský quetzal",
         }
         GWE{
@@ -650,7 +654,7 @@ sk{
             "Guinea-Bissau peso",
         }
         GYD{
-            "G$",
+            "GY$",
             "Guyanský dolár",
         }
         HKD{
@@ -658,7 +662,7 @@ sk{
             "Hong Kongský dolár",
         }
         HNL{
-            "L",
+            "HNL",
             "Hoduraská lempira",
         }
         HRD{
@@ -694,15 +698,15 @@ sk{
             "Izraelský šekel",
         }
         INR{
-            "INR",
+            "₨",
             "Indijská rupia",
         }
         IQD{
-            "ID",
+            "IQD",
             "Iracký dinár",
         }
         IRR{
-            "RI",
+            "IRR",
             "Iránsky rial",
         }
         ISK{
@@ -726,15 +730,15 @@ sk{
             "Japonský yen",
         }
         KES{
-            "K Sh",
+            "Ksh",
             "Keňský šiling",
         }
         KGS{
-            "som",
+            "KGS",
             "Kyrgyský som",
         }
         KHR{
-            "CR",
+            "KHR",
             "Kambodžský riel",
         }
         KMF{
@@ -758,7 +762,7 @@ sk{
             "Kajmanský dolár",
         }
         KZT{
-            "T",
+            "KZT",
             "Kazažský tenge",
         }
         LAK{
@@ -766,11 +770,11 @@ sk{
             "Laoský kip",
         }
         LBP{
-            "LL",
+            "LB£",
             "Libanonská libra",
         }
         LKR{
-            "SL Re",
+            "SLRs",
             "Šrilanská rupia",
         }
         LRD{
@@ -778,7 +782,7 @@ sk{
             "Libérský dolár",
         }
         LSL{
-            "M",
+            "LSL",
             "Lesothský loti",
         }
         LTL{
@@ -826,7 +830,7 @@ sk{
             "Madagaskarský frank",
         }
         MKD{
-            "MDen",
+            "MKD",
             "Macedónsky denár",
         }
         MLF{
@@ -838,7 +842,7 @@ sk{
             "Myanmarský kyat",
         }
         MNT{
-            "Tug",
+            "₮",
             "Mongolský tugrik",
         }
         MOP{
@@ -870,7 +874,7 @@ sk{
             "Malavská kwacha",
         }
         MXN{
-            "MEX$",
+            "MXN",
             "Mexické peso",
         }
         MXP{
@@ -914,19 +918,19 @@ sk{
             "Nizozemský guilder",
         }
         NOK{
-            "NKr",
+            "Nkr",
             "Nórksy krone",
         }
         NPR{
-            "Nrs",
+            "NPRs",
             "Nepálska rupia",
         }
         NZD{
-            "$NZ",
+            "NZ$",
             "Novozélandský dolár",
         }
         OMR{
-            "RO",
+            "OMR",
             "Ománský rial",
         }
         PAB{
@@ -954,11 +958,11 @@ sk{
             "Filipínske peso",
         }
         PKR{
-            "Pra",
+            "PKRs",
             "Pakistanská rupia",
         }
         PLN{
-            "Zl",
+            "zł",
             "Polský zloty",
         }
         PLZ{
@@ -978,7 +982,7 @@ sk{
             "Qatarský rial",
         }
         ROL{
-            "leu",
+            "ROL",
             "Rumunský leu",
         }
         RUB{
@@ -994,7 +998,7 @@ sk{
             "Rwandský frank",
         }
         SAR{
-            "SRl",
+            "SR",
             "Saudský riyal",
         }
         SBD{
@@ -1002,7 +1006,7 @@ sk{
             "Solomon Islands dolár",
         }
         SCR{
-            "SR",
+            "SRe",
             "Sejšelská rupia",
         }
         SDD{
@@ -1014,7 +1018,7 @@ sk{
             "Sudánska libra",
         }
         SEK{
-            "SKr",
+            "Skr",
             "Švédska krona",
         }
         SGD{
@@ -1038,7 +1042,7 @@ sk{
             "Sierra Leone Leone",
         }
         SOS{
-            "Sh.",
+            "Ssh",
             "Somálsky šiling",
         }
         SRG{
@@ -1058,11 +1062,11 @@ sk{
             "El Salvadorský colon",
         }
         SYP{
-            "LS",
+            "SY£",
             "Syrská libra",
         }
         SZL{
-            "E",
+            "SZL",
             "Swaziland lilangeni",
         }
         THB{
@@ -1094,7 +1098,7 @@ sk{
             "Timorské eskudo",
         }
         TRL{
-            "TL",
+            "TRL",
             "Turecká lira",
         }
         TTD{
@@ -1106,7 +1110,7 @@ sk{
             "Taiwanský nový dolár",
         }
         TZS{
-            "T Sh",
+            "TSh",
             "Tanzanský šiling",
         }
         UAH{
@@ -1122,7 +1126,7 @@ sk{
             "Ugandan šiling (1966-1987)",
         }
         UGX{
-            "U Sh",
+            "USh",
             "Ugandský šiling",
         }
         USD{
@@ -1142,7 +1146,7 @@ sk{
             "Uruguajské peso (1975-1993)",
         }
         UYU{
-            "Ur$",
+            "$U",
             "Uruguajské peso Uruguayo",
         }
         UZS{
@@ -1150,7 +1154,7 @@ sk{
             "Uzbekistanský sum",
         }
         VEB{
-            "Be",
+            "Bs.",
             "Venezuelský bolivar",
         }
         VND{
@@ -1202,7 +1206,7 @@ sk{
             "Jemenský dinár",
         }
         YER{
-            "YRl",
+            "YR",
             "Jemenský rial",
         }
         YUD{
@@ -1252,175 +1256,285 @@ sk{
         currency{"Mena"}
     }
     Languages{
-        ab{"abcházsky"}
-        af{"africký"}
-        ain{"ainský"}
-        akk{"akadský"}
+        aa{"afarčina"}
+        ab{"abcházština"}
+        ach{"ačoli"}
+        ada{"adangme"}
+        ady{"adygčina"}
+        ae{"avestčina"}
+        af{"afrikánčina"}
+        afa{"afroázijské jazyky"}
+        afh{"afrihili"}
+        ain{"ainčina"}
+        ak{"akančina"}
+        akk{"akkadčina"}
         ale{"aleutčina"}
-        am{"amharský"}
-        ar{"arabský"}
+        alg{"algonkinské jazyky"}
+        am{"amharčina"}
+        an{"aragónčina"}
+        anp{"angika"}
+        apa{"apačské jazyky"}
+        ar{"arabčina"}
+        arn{"araukánčina"}
+        arp{"arapaho"}
         art{"umelý jazyk"}
-        as{"asámsky"}
-        aus{"austrálsky jazyk"}
-        av{"avarský"}
-        az{"azerbajdžanský"}
-        ba{"baškírsky"}
-        ban{"balijský"}
-        bat{"baltský jazyk"}
-        be{"bieloruský"}
+        arw{"arawačtina"}
+        as{"ásámčina"}
+        ast{"astúrčina"}
+        ath{"athabaské jazyky"}
+        aus{"austrálske jazyky"}
+        av{"avarčina"}
+        awa{"avadhčina"}
+        ay{"aymarčina"}
+        az{"azerbajdžančina"}
+        ba{"baskirčina"}
+        bai{"bamileke"}
+        bal{"balúčtina"}
+        ban{"balijčina"}
+        bas{"basa"}
+        bat{"baltské jazyky"}
+        be{"bieloruština"}
         bej{"bedža"}
+        bem{"bemba"}
         ber{"berberské jazyky"}
-        bg{"bulharský"}
-        bh{"biharský"}
+        bg{"bulharčina"}
+        bh{"bihárske jazyky"}
+        bho{"bhódžpurčina"}
+        bi{"bislama"}
+        bik{"bikol"}
+        bin{"bini"}
         bm{"bambarčina"}
-        bn{"bengálsky"}
-        bo{"tibetský"}
-        br{"bretónsky"}
-        bs{"bosniansky"}
-        ca{"katalánsky"}
+        bn{"bengálčina"}
+        bnt{"bantuské jazyky"}
+        bo{"tibetčina"}
+        br{"bretónčina"}
+        bra{"bradžčina"}
+        bs{"bosniačtina"}
+        btk{"batacké jazyky"}
+        bua{"buriatčina"}
+        bug{"bugiština"}
+        byn{"blin"}
+        ca{"katalánčina"}
         cai{"jazyk stredoamerických indiánov"}
         car{"karibský"}
-        cau{"kaukazský jazyk"}
-        ce{"čečenský"}
-        cel{"keltský jazyk"}
+        cau{"kaukazské jazyky"}
+        ce{"čečenčina"}
+        ceb{"cebuánčina"}
+        cel{"keltské jazyky"}
+        ch{"čamorčina"}
+        chb{"čibča"}
+        chg{"čagatajčina"}
+        chn{"činucký žargón"}
+        cho{"čoktavčina"}
+        chp{"čipevajčina"}
+        chr{"čerokí"}
+        chy{"čejenčina"}
+        cmc{"čamaské jazyky"}
         co{"korzičtina"}
-        cs{"český"}
-        cy{"walesky"}
-        da{"dánsky"}
-        dak{"dakotský"}
-        de{"nemecký"}
+        cr{"krí"}
+        cs{"čeština"}
+        cu{"cirkevná slovančina"}
+        cv{"čuvaština"}
+        cy{"waleština"}
+        da{"dánčina"}
+        dak{"dakotčina"}
+        dar{"darginčina"}
+        de{"nemčina"}
+        del{"delawarčina"}
         den{"slovančina"}
+        dgr{"dogribčina"}
+        din{"dinka"}
+        doi{"dógrí"}
         dra{"drávidské jazyky"}
+        dua{"duala"}
+        dv{"divehi"}
+        dyu{"ďula"}
+        dz{"dzongkä"}
+        ee{"eweština"}
+        efi{"efik"}
         egy{"staroegyptský"}
-        el{"grécky"}
+        eka{"ekadžuk"}
+        el{"gréčtina"}
         elx{"elamčina"}
-        en{"anglický"}
-        en_GB{"anglický (Veľká Británia)"}
-        en_US{"anglický (USA)"}
-        eo{"esperantsky"}
-        es{"španielsky"}
-        et{"estónsky"}
-        eu{"baskický"}
-        fa{"perzský"}
-        fi{"fínsky"}
-        fil{"filipínsky"}
-        fiu{"ugrofínsky jazyk"}
-        fo{"faersky"}
-        fr{"francúzsky"}
+        en{"angličtina"}
+        en_AU{"austrálska angličtina"}
+        en_GB{"britská angličtina"}
+        en_US{"americká angličtina"}
+        eo{"esperanto"}
+        es{"španielčina"}
+        et{"estónčina"}
+        eu{"baskičtina"}
+        ewo{"ewondo"}
+        fa{"perzština"}
+        fan{"fangčina"}
+        fat{"fanti"}
+        ff{"fulbčina"}
+        fi{"fínčina"}
+        fil{"filipínčina"}
+        fiu{"ugrofínske jazyky"}
+        fj{"fidžijčina"}
+        fo{"faerčina"}
+        fon{"fončina"}
+        fr{"francúzština"}
+        frs{"východná frízština"}
+        fur{"friulčina"}
         fy{"západná frízština"}
         ga{"írčina"}
-        gd{"škótskou gaelštinou"}
-        gem{"germánsky jazyk"}
+        gaa{"ga"}
+        gay{"gayo"}
+        gba{"gbaja"}
+        gd{"škótčina"}
+        gem{"germánske jazyky"}
         gl{"galícijčina"}
-        gn{"guaransky"}
-        got{"gotický"}
-        grc{"starogrécky"}
-        gsw{"nemecký (Švajčiarsko)"}
-        gu{"gudžaratsky"}
+        gn{"guaraní"}
+        got{"gótčina"}
+        grc{"starogréčtina"}
+        gsw{"švajčiarska nemčina"}
+        gu{"gudžarátčina"}
         gv{"mančina"}
         ha{"hauština"}
-        haw{"havajský"}
-        he{"hebrejský"}
-        hi{"hindština"}
-        hr{"chorvátsky"}
+        haw{"havajčina"}
+        he{"hebrejčina"}
+        hi{"hindčina"}
+        ho{"hiri motu"}
+        hr{"chorvátčina"}
         ht{"haitský"}
-        hu{"maďarský"}
-        hy{"arménsky"}
+        hu{"maďarčina"}
+        hy{"arménčina"}
+        hz{"herero"}
         ia{"interlingua"}
-        id{"indonézsky"}
+        id{"indonézština"}
         ie{"interlingue"}
+        ig{"igboština"}
         ine{"indoeurópske jazyky"}
-        ira{"iránsky jazyk"}
-        is{"islandský"}
-        it{"taliansky"}
-        ja{"japonský"}
-        jv{"javanský"}
-        ka{"gruzínsky"}
-        kg{"konžský"}
+        ira{"iránske jazyky"}
+        is{"islandčina"}
+        it{"taliančina"}
+        ja{"japončina"}
+        jv{"jávčina"}
+        ka{"gruzínčina"}
+        kg{"konžština"}
         kj{"kuaňama"}
-        km{"kambodžský"}
-        kn{"kanadský"}
-        ko{"kórejský"}
-        ku{"kurdský"}
-        ky{"kyrgyzský"}
-        la{"latinský"}
+        kk{"kazaština"}
+        kl{"grónska eskimáčtina"}
+        km{"kambodžská khmérčina"}
+        kn{"kannadčina"}
+        ko{"kórejčina"}
+        kr{"kanurijčina"}
+        ks{"kašmírčina"}
+        ku{"kurdčina"}
+        kv{"komijčina"}
+        kw{"kornčina"}
+        ky{"kirgizština"}
+        la{"latinčina"}
         lb{"luxemburčina"}
-        ln{"lingalsky"}
-        lo{"laoský"}
-        lt{"litovský"}
-        lv{"lotyšský"}
-        mk{"macedónsky"}
-        ml{"malajalamsky"}
-        mn{"mongolský"}
-        mr{"marathsky"}
-        ms{"malajský"}
-        mt{"maltský"}
-        my{"burmský"}
-        myn{"jazyk mayov"}
+        lg{"gandčina"}
+        ln{"lingalčina"}
+        lo{"laoština"}
+        lol{"mongo"}
+        lt{"litovčina"}
+        lu{"luba-katanga"}
+        lv{"lotyština"}
+        map{"austronézske jazyky"}
+        mg{"malgaština"}
+        mh{"kajin-majol"}
+        mi{"maorijčina"}
+        mk{"macedónčina"}
+        ml{"malajálamčina"}
+        mn{"mongolčina"}
+        mo{"moldavčina"}
+        mr{"maráthčina"}
+        ms{"malajčina"}
+        mt{"maltčina"}
+        my{"barmčina"}
+        myn{"mayské jazyky"}
+        myv{"erzjančina"}
+        na{"nauru"}
         nai{"jazyk severoamerických indiánov"}
-        ne{"nepálsky"}
-        nl{"holandský"}
+        nb{"bokmål"}
+        ne{"nepálčina"}
+        ng{"ndonga"}
+        nl{"holandčina"}
         nn{"nórsky nynorsk"}
-        no{"nórsky"}
-        nv{"jazyk navajov"}
-        oc{"okcitánsky"}
-        or{"urijský"}
+        no{"nórčina"}
+        nv{"navajo"}
+        ny{"čewa"}
+        oc{"okcitánčina"}
+        oj{"odžibva"}
+        om{"oromčina"}
+        or{"uríjčina"}
         os{"osetčina"}
-        pa{"pandžábsky"}
+        pa{"pandžábčina"}
         paa{"papuánsky"}
-        pl{"poľský"}
-        ps{"paštúnsky"}
-        pt{"portugalský"}
-        rm{"rétorománsky"}
-        ro{"rumunský"}
-        ru{"ruský"}
-        sa{"sanskrtom"}
+        pi{"pálí"}
+        pl{"poľština"}
+        ps{"paštúnčina"}
+        pt{"portugalčina"}
+        pt_BR{"brazílska portugalčina"}
+        qu{"kečuánčina"}
+        rm{"rétorománčina"}
+        rn{"rundčina"}
+        ro{"rumunčina"}
+        ru{"ruština"}
+        rw{"rwandčina"}
+        sa{"sanskrit"}
         sai{"jazyk juhoamerických indiánov"}
-        scn{"sicílsky"}
-        sd{"sindhsky"}
+        sc{"sardínčina"}
+        scn{"sicílčina"}
+        sd{"sindhčina"}
+        sg{"sango"}
         sgn{"znaková reč"}
-        sh{"srbochorvátsky"}
-        si{"sinhalézsky"}
-        sk{"slovenský"}
-        sl{"slovinský"}
-        sla{"slovanský jazyk"}
-        so{"somálsky"}
-        sq{"albánsky"}
-        sr{"srbský"}
+        sh{"srbochorvátčina"}
+        si{"sinhalčina"}
+        sk{"slovenčina"}
+        sl{"slovinčina"}
+        sla{"slovenský jazyk"}
+        sm{"samojčina"}
+        sn{"šončina"}
+        so{"somálčina"}
+        sq{"albánčina"}
+        sr{"srbčina"}
         ss{"svazijčina"}
-        st{"sesothsky"}
-        su{"sundsky"}
-        sux{"sumerský"}
-        sv{"švédsky"}
-        sw{"swahilsky"}
-        syr{"sýrsky"}
-        ta{"tamilský"}
-        te{"telugsky"}
-        tg{"tadžidský"}
-        th{"thajský"}
-        ti{"tigrinyjský"}
-        tk{"turkménsky"}
-        tl{"tagalogčina"}
-        tlh{"klingonský"}
-        tr{"turecký"}
-        tt{"tatársky"}
-        tw{"twisky"}
-        ty{"tahitský"}
-        ug{"uighursky"}
-        uk{"ukrajinský"}
+        st{"južná sothčina"}
+        su{"sundčina"}
+        sux{"sumerčina"}
+        sv{"švédčina"}
+        sw{"swahilčina"}
+        syr{"sýrčina"}
+        ta{"tamilčina"}
+        te{"telugčina"}
+        tg{"tadžičtina"}
+        th{"thajčina"}
+        ti{"tigrejčina"}
+        tk{"turkménčina"}
+        tl{"tagalčina"}
+        tlh{"klingónčina"}
+        tn{"tswančina"}
+        to{"tonžtina"}
+        tr{"turečtina"}
+        ts{"tsonga"}
+        tt{"tatárčina"}
+        tut{"altajské jazyky"}
+        tw{"twi"}
+        ty{"tahitčina"}
+        ug{"ujgurčina"}
+        uk{"ukrajinčina"}
         und{"neznámy alebo neplatný jazyk"}
-        ur{"urdština"}
-        uz{"uzbecký"}
-        vi{"vietnamský"}
-        wa{"valónsky"}
+        ur{"urdčina"}
+        uz{"uzbečtina"}
+        ve{"vendčina"}
+        vi{"vietnamčina"}
+        vo{"volapük"}
+        wa{"valónčina"}
         wo{"wolof"}
-        xh{"xhosky"}
+        xh{"xhosa"}
         yi{"jidiš"}
         yo{"jorubčina"}
-        zh{"čínsky"}
-        zh_Hans{"čínština (zjednodušená)"}
-        zh_Hant{"čínština (tradičná)"}
-        zu{"zulu"}
+        za{"čuangčina"}
+        zh{"čínština"}
+        zh_Hans{"zjednodušená čínština"}
+        zh_Hant{"tradičná čínština"}
+        zu{"zuluština"}
         zxx{"bez jazykového obsahu"}
     }
     LocaleScript{
@@ -1495,15 +1609,15 @@ sk{
             traditional{"Tradičné"}
         }
     }
-    Version{"1.139"}
+    Version{"1.95"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "dopoludnia",
-                "PM",
+                "popoludní",
             }
             DateTimePatterns{
-                "H:mm:ss v",
+                "HH:mm:ss zzzz",
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
@@ -1515,6 +1629,7 @@ sk{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+                "{1} {0}",
             }
             availableFormats{
                 EEEd{"EEE, d."}
@@ -1522,37 +1637,42 @@ sk{
                 MEd{"E, d.M."}
                 MMMEd{"E, d. MMM"}
                 MMMMEd{"E, d. MMMM"}
+                MMMMd{"d. MMMM"}
                 MMMd{"d. MMM"}
                 Md{"d.M."}
                 d{"d."}
+                mmss{"mm:ss"}
                 ms{"mm:ss"}
-                yM{"MM/yyyy"}
                 yMEd{"EEE, d.M.yyyy"}
                 yMMM{"MMM y"}
                 yMMMEd{"EEE, d. MMM y"}
                 yMMMM{"MMMM y"}
                 yQ{"Q yyyy"}
                 yQQQ{"QQQ y"}
+                yyQ{"Q yy"}
+                yyQQQQ{"QQQQ yy"}
+                yyyyM{"M.yyyy"}
+                yyyyMMMM{"MMMM y"}
             }
             dayNames{
                 format{
                     abbreviated{
-                        "Ne",
-                        "Po",
-                        "Ut",
-                        "St",
-                        "Št",
-                        "Pi",
-                        "So",
+                        "ne",
+                        "po",
+                        "ut",
+                        "st",
+                        "št",
+                        "pi",
+                        "so",
                     }
                     wide{
-                        "Nedeľa",
-                        "Pondelok",
-                        "Utorok",
-                        "Streda",
-                        "Štvrtok",
-                        "Piatok",
-                        "Sobota",
+                        "nedeľa",
+                        "pondelok",
+                        "utorok",
+                        "streda",
+                        "štvrtok",
+                        "piatok",
+                        "sobota",
                     }
                 }
                 stand-alone{
@@ -1618,27 +1738,78 @@ sk{
                 }
             }
             intervalFormats{
+                MEd{
+                    M{"E, d.M. - E, d.M."}
+                    d{"E, d.M. - E, d.M."}
+                }
+                MMMEd{
+                    M{"E, d. MMM - E, d. MMM"}
+                    d{"E, d. - E, d. MMM"}
+                }
                 MMMM{
                     M{"LLLL-LLLL"}
                 }
+                MMMd{
+                    M{"d. MMM - d. MMM"}
+                    d{"d. - d. MMM"}
+                }
+                Md{
+                    M{"d.M. - d.M."}
+                    d{"d.M. - d.M."}
+                }
+                d{
+                    d{"d. - d."}
+                }
+                fallback{"{0} - {1}"}
                 h{
                     a{"HH-HH"}
                 }
                 hm{
                     a{"HH:mm - HH:mm"}
+                    h{"HH:mm - HH:mm"}
+                    m{"HH:mm - HH:mm"}
                 }
                 hmv{
-                    a{"HH:mm-HH:mm v"}
+                    a{"HH:mm - HH:mm v"}
                     h{"HH:mm - HH:mm v"}
+                    m{"HH:mm - HH:mm v"}
                 }
                 hv{
                     a{"HH-HH v"}
                 }
+                y{
+                    y{"y - y"}
+                }
+                yM{
+                    M{"M.yyyy - M.yyyy"}
+                    y{"M.yyyy - M.yyyy"}
+                }
                 yMEd{
+                    M{"E, d.M.yy - E, d.M.yy"}
                     d{"E, d.M.yy - E, d.M.yy"}
+                    y{"E, d.M.yy - E, d.M.yy"}
+                }
+                yMMM{
+                    M{"MMM - MMM y"}
+                    y{"MMM y - MMM y"}
+                }
+                yMMMEd{
+                    M{"E, d. MMM - E, d. MMM y"}
+                    d{"E, d. - E, d. MMM y"}
+                    y{"E, d. MMM y - E, d. MMM y"}
                 }
                 yMMMM{
                     y{"MM-yyyy – MM-yyyy"}
+                }
+                yMMMd{
+                    M{"d. MMM - d. MMM y"}
+                    d{"d. - d. MMM y"}
+                    y{"d. MMM y - d. MMM y"}
+                }
+                yMd{
+                    M{"d.M.yy - d.M.yy"}
+                    d{"d.M.yy - d.M.yy"}
+                    y{"d.M.yy - d.M.yy"}
                 }
             }
             monthNames{
@@ -1658,18 +1829,18 @@ sk{
                         "dec",
                     }
                     wide{
-                        "január",
-                        "február",
-                        "marec",
-                        "apríl",
-                        "máj",
-                        "jún",
-                        "júl",
-                        "august",
-                        "september",
-                        "október",
-                        "november",
-                        "december",
+                        "januára",
+                        "februára",
+                        "marca",
+                        "apríla",
+                        "mája",
+                        "júna",
+                        "júla",
+                        "augusta",
+                        "septembra",
+                        "októbra",
+                        "novembra",
+                        "decembra",
                     }
                 }
                 stand-alone{
@@ -1691,6 +1862,12 @@ sk{
             }
             quarters{
                 format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
                     wide{
                         "1. štvrťrok",
                         "2. štvrťrok",

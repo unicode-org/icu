@@ -22,6 +22,7 @@ vi{
         014{"Đông Phí"}
         015{"Bắc Phi"}
         017{"Trung Phi"}
+        018{"Miền Nam Châu Phi"}
         019{"Châu Mỹ"}
         021{"Miền Bắc Châu Mỹ"}
         029{"Ca-ri-bê"}
@@ -515,11 +516,11 @@ vi{
             "Bạt Thái Lan",
         }
         TRL{
-            "TL",
+            "TRL",
             "Lia Thổ Nhĩ Kỳ",
         }
         TRY{
-            "YTL",
+            "TL",
             "Lia Thổ Nhĩ Kỳ Mới",
         }
         TWD{
@@ -600,7 +601,7 @@ vi{
         gd{"Tiếng Xentơ (Xcốt len)"}
         gl{"Tiếng Galician"}
         gn{"Tiếng Guarani"}
-        gu{"Tiếng  Gujarati"}
+        gu{"Tiếng Gujarati"}
         he{"Tiếng Hê-brơ"}
         hi{"Tiếng Hin-đi"}
         hr{"Tiếng Crô-a-ti-a"}
@@ -707,7 +708,7 @@ vi{
             gregorian{"gregorian"}
         }
     }
-    Version{"1.139"}
+    Version{"1.80"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -715,7 +716,7 @@ vi{
                 "CH",
             }
             DateTimePatterns{
-                "HH:mm:ss v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -723,10 +724,11 @@ vi{
                 "'Ngày' dd 'tháng' M 'năm' y",
                 "dd-MM-yyyy",
                 "dd/MM/yyyy",
-                "{1} {0}",
-                "{1} {0}",
                 "{0} {1}",
-                "{1} {0}",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
             }
             availableFormats{
                 H{"H"}

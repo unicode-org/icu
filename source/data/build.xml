@@ -143,6 +143,8 @@
                     <alias from="en_RH" to="en_ZW" />
                     <alias from="th_TH_TRADITIONAL" to="th_TH@calendar=buddhist" xpath="//ldml/dates/calendars/default[@type='buddhist']" />
                     <aliasLocale locale="az_AZ" />
+                    <aliasLocale locale="ha_GH" />
+                    <aliasLocale locale="ha_NE" />
                     <aliasLocale locale="ha_NG" />
                     <aliasLocale locale="kk_KZ" />
                     <aliasLocale locale="in" />

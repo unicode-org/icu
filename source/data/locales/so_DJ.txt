@@ -7,17 +7,7 @@
 // *
 // ***************************************************************************
 so_DJ{
-    Currencies{
-        DJF{
-            "$",
-            "DJF",
-        }
-        SOS{
-            "SOS",
-            "SOS",
-        }
-    }
-    Version{"1.139"}
+    Version{"1.49"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

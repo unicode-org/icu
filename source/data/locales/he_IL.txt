@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 he_IL{
-    Version{"1.139"}
+    Version{"1.50"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

@@ -172,11 +172,11 @@ af{
             "Roebel",
         }
         TRL{
-            "TL",
+            "TRL",
             "Ou Turkse lier",
         }
         TRY{
-            "YTL",
+            "TL",
             "Turkse lier",
         }
         USD{
@@ -192,7 +192,7 @@ af{
             "Rand",
         }
     }
-    ExemplarCharacters{"[a á â b-e é è ê ë f-i î ï j-o ô ö p-u û v-z ŉ]"}
+    ExemplarCharacters{"[a á â b-e é è ê ë f-i î ï j-n ŉ o ô ö p-u û v-z]"}
     Languages{
         af{"Afrikaans"}
         afa{"Ander Afro-Asiaties"}
@@ -221,11 +221,18 @@ af{
         nl{"Nederlands"}
         nl_BE{"Vlaams"}
         nn{"Noorweegse Nynorsk"}
+        nr{"Suid-Ndebele"}
         pt{"Portugees"}
         pt_BR{"Brasiliaanse Portugees"}
         ro{"Roemeens"}
         ru{"Russies"}
+        ss{"Swazi"}
+        st{"Suid-Sotho"}
+        tk{"Turkmeens"}
+        ve{"Venda"}
+        xh{"Xhosa"}
         zh{"Sjinees"}
+        zu{"Zoeloe"}
     }
     LocaleScript{
         "Latn",
@@ -250,7 +257,7 @@ af{
         "#,##0%",
         "#E0",
     }
-    Version{"1.139"}
+    Version{"1.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -258,14 +265,15 @@ af{
                 "nm.",
             }
             DateTimePatterns{
-                "h:mm:ss a v",
+                "h:mm:ss a zzzz",
                 "h:mm:ss a z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, y MMMM dd",
+                "EEEE dd MMMM y",
                 "y MMMM d",
                 "y MMM d",
                 "yyyy-MM-dd",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -337,5 +345,9 @@ af{
         language{"Taal: {0}"}
         script{"Skrif: {0}"}
         territory{"Omgewing: {0}"}
+    }
+    measurementSystemNames{
+        US{"VSA"}
+        metric{"Metriek"}
     }
 }

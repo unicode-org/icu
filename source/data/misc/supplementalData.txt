@@ -1,4 +1,4 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
 // * Copyright (C) 2009 International Business Machines
 // * Corporation and others.  All Rights Reserved.
@@ -1056,6 +1056,13 @@ supplementalData:table(nofallback){
             }
         }
         CU{
+            {
+                id{"CUC"}
+                from:intvector{ /** 1994-01-01  */
+                    176,
+                    1468215904,
+                }
+            }
             {
                 id{"CUP"}
                 from:intvector{ /** 1859-01-01  */

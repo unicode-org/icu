@@ -92,16 +92,6 @@ sw{
         YE{"Yemeni"}
         ZA{"Afrika ya Kusini"}
     }
-    Currencies{
-        KES{
-            "KSh",
-            "KES",
-        }
-        TZS{
-            "TSh",
-            "TZS",
-        }
-    }
     ExemplarCharacters{"[a-d {dh} e-n {ng} {ng'} {ny} o p r s {sh} t {th} u-w y z]"}
     Languages{
         de{"kijerumani"}
@@ -124,7 +114,7 @@ sw{
         "#,##0%",
         "#E0",
     }
-    Version{"1.139"}
+    Version{"1.72"}
     calendar{
         gregorian{
             dayNames{

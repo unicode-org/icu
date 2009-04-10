@@ -27,11 +27,11 @@ es_GT{
         "NaN",
         "+",
     }
-    Version{"1.139"}
+    Version{"1.57"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "hh:mm:ss a v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -39,6 +39,7 @@ es_GT{
                 "d 'de' MMMM 'de' y",
                 "d/MM/yyyy",
                 "d/MM/yy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

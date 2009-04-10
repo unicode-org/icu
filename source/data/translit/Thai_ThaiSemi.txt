@@ -8,4 +8,4 @@
 # Generated from CLDR 
 #
 $thai = [[:thai:] ก-\u0E3Aเ-๛] ;
-$thai { ' ' } $thai > '; ' ;
+$thai { ' ' } $thai → '; ' ;

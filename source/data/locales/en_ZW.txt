@@ -7,19 +7,13 @@
 // *
 // ***************************************************************************
 en_ZW{
-    Currencies{
-        ZWD{
-            "Z$",
-            "Zimbabwean Dollar",
-        }
-    }
     NumberPatterns{
         "#,##0.###",
         "¤#,##0.00",
         "#,##0%",
         "#E0",
     }
-    Version{"1.139"}
+    Version{"1.52"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -27,7 +21,7 @@ en_ZW{
                 4,
             }
             DateTimePatterns{
-                "h:mm:ss a v",
+                "h:mm:ss a zzzz",
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
@@ -35,6 +29,7 @@ en_ZW{
                 "dd MMMM y",
                 "dd MMM,y",
                 "d/M/yyyy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

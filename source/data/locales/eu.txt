@@ -10,15 +10,18 @@
  *  ICU <specials> source: <path>/xml/main/eu.xml
  */
 eu{
+    AuxExemplarCharacters{"[]"}
     Countries{
         AE{"Arabiar Emirrerri Batuak"}
         AF{"Afganistan"}
         AG{"Antigua eta Barbuda"}
         AL{"Albania"}
         AM{"Armenia"}
+        AN{"Holandarren Antillak"}
         AO{"Angola"}
         AQ{"Antartika"}
         AR{"Argentina"}
+        AS{"Amerikar Samoa"}
         AT{"Austria"}
         AU{"Australia"}
         AX{"Aland Uharteak"}
@@ -33,6 +36,7 @@ eu{
         BO{"Bolibia"}
         BR{"Brasil"}
         BS{"Bahamak"}
+        BT{"Bhutan"}
         BV{"Bouvet Uhartea"}
         BW{"Botswana"}
         BY{"Bielorrusia"}
@@ -132,6 +136,7 @@ eu{
         ML{"Mali"}
         MM{"Birmania"}
         MN{"Mongolia"}
+        MO{"Makau"}
         MP{"Iparraldeko Mariana uharteak"}
         MR{"Mauritania"}
         MU{"Maurizio"}
@@ -194,13 +199,18 @@ eu{
         VA{"Vatikano"}
         VC{"Saint Vincent eta Grenadinak"}
         VG{"Birjina uharte britainiarrak"}
+        VI{"Birjina uharte amerikarrak"}
         WS{"Samoa"}
         ZA{"Hegoafrika"}
     }
     Currencies{
-        BRB{
-            "NCr",
-            "BRB",
+        BRL{
+            "R$",
+            "BRL",
+        }
+        CNY{
+            "CN¥",
+            "CNY",
         }
         ESP{
             "₧",
@@ -214,14 +224,108 @@ eu{
                 ".",
             }
         }
+        EUR{
+            "€",
+            "EUR",
+        }
+        GBP{
+            "£",
+            "GBP",
+        }
+        INR{
+            "₨",
+            "INR",
+        }
         JPY{
             "JP¥",
             "JPY",
         }
+        RUB{
+            "RUB",
+            "RUB",
+        }
+        USD{
+            "US$",
+            "USD",
+        }
+        USN{
+            "USN",
+            "USN",
+        }
+        USS{
+            "USS",
+            "USS",
+        }
+        XAG{
+            "XAG",
+            "XAG",
+        }
+        XAU{
+            "XAU",
+            "XAU",
+        }
+        XBA{
+            "XBA",
+            "XBA",
+        }
+        XBB{
+            "XBB",
+            "XBB",
+        }
+        XBC{
+            "XBC",
+            "XBC",
+        }
+        XBD{
+            "XBD",
+            "XBD",
+        }
+        XDR{
+            "XDR",
+            "XDR",
+        }
+        XEU{
+            "XEU",
+            "XEU",
+        }
+        XFO{
+            "XFO",
+            "XFO",
+        }
+        XFU{
+            "XFU",
+            "XFU",
+        }
+        XPD{
+            "XPD",
+            "XPD",
+        }
+        XPT{
+            "XPT",
+            "XPT",
+        }
+        XRE{
+            "XRE",
+            "XRE",
+        }
+        XTS{
+            "XTS",
+            "XTS",
+        }
+        XXX{
+            "XXX",
+            "XXX",
+        }
+    }
+    CurrencyUnitPatterns{
+        one{"{0}{1}"}
+        other{"{0} {1}"}
     }
     ExemplarCharacters{"[a-c ç d-n ñ o-z]"}
     Keys{
         calendar{"egutegia"}
+        collation{"alfabetoa"}
+        currency{"moneta"}
     }
     Languages{
         af{"afrikaans"}
@@ -237,10 +341,13 @@ eu{
         bs{"bosniera"}
         ca{"katalana"}
         cs{"txekiera"}
+        cy{"galesera"}
         da{"daniera"}
         de{"alemanera"}
         el{"greziera"}
         en{"ingelera"}
+        en_AU{"ingelesa (Australia)"}
+        en_GB{"ingelesa (Erresuma Batua)"}
         en_US{"ingelesa (AEB)"}
         eo{"esperantoa"}
         es{"espainiera"}
@@ -288,6 +395,7 @@ eu{
         mt{"maltera"}
         ne{"nepalera"}
         nl{"nederlandera"}
+        nn{"norvegiera berria"}
         no{"norvegiera"}
         oc{"okzitaniera"}
         or{"oriya"}
@@ -295,6 +403,8 @@ eu{
         pl{"poloniera"}
         ps{"paxtuera"}
         pt{"portugalera"}
+        pt_BR{"portugesa (Brasil)"}
+        pt_PT{"portugesa (Potugal)"}
         ro{"errumaniera"}
         ru{"errusiera"}
         sa{"sanskritoa"}
@@ -355,26 +465,130 @@ eu{
         "#E0",
     }
     Scripts{
+        Arab{"Arab"}
+        Armi{"Armi"}
+        Armn{"Armn"}
+        Avst{"Avst"}
+        Bali{"Bali"}
+        Batk{"Batk"}
+        Beng{"Beng"}
+        Blis{"Blis"}
+        Bopo{"Bopo"}
+        Brah{"Brah"}
+        Brai{"Brai"}
+        Bugi{"Bugi"}
+        Buhd{"Buhd"}
+        Cakm{"Cakm"}
+        Cari{"Cari"}
+        Cham{"Cham"}
+        Cher{"Txer"}
+        Cirt{"Cirt"}
+        Copt{"Copt"}
+        Cprt{"Cprt"}
+        Cyrl{"Cyrl"}
+        Deva{"Deva"}
+        Dsrt{"Dsrt"}
+        Egyd{"Egyd"}
+        Egyh{"Egyh"}
+        Egyp{"Egyp"}
+        Ethi{"Etiop"}
+        Geok{"Geok"}
+        Geor{"Geor"}
+        Glag{"Glag"}
         Goth{"Goth"}
+        Grek{"Grez"}
+        Gujr{"Gujr"}
+        Guru{"Guru"}
+        Hang{"Hang"}
+        Hani{"Hani"}
+        Hano{"Hano"}
+        Hebr{"Hebr"}
+        Hira{"Hira"}
+        Hrkt{"Hrkt"}
+        Inds{"Inds"}
+        Java{"Java"}
+        Jpan{"Jpon"}
+        Kali{"Kali"}
+        Kana{"Kana"}
+        Khar{"Khar"}
+        Khmr{"Khmr"}
+        Knda{"Knda"}
+        Kore{"Kore"}
+        Kthi{"Kthi"}
+        Lana{"Lana"}
+        Laoo{"Laoo"}
+        Latf{"Latf"}
+        Latg{"Latg"}
+        Latn{"Latn"}
+        Lepc{"Lepc"}
+        Limb{"Limb"}
+        Lina{"Lina"}
+        Linb{"Linb"}
+        Lyci{"Lyci"}
+        Lydi{"Lydi"}
+        Mand{"Mand"}
+        Mani{"Mani"}
+        Maya{"Maia"}
+        Mero{"Mero"}
+        Mlym{"Mlym"}
+        Mong{"Mong"}
+        Moon{"Moon"}
+        Mtei{"Mtei"}
+        Mymr{"Mymr"}
+        Nkoo{"Nkoo"}
+        Phli{"Phli"}
+        Phlv{"Phlv"}
+        Prti{"Prti"}
+        Qaai{"Qaai"}
+        Syre{"Syre"}
+        Syrn{"Syrn"}
+        Talu{"Talu"}
+        Zmth{"Zmth"}
+        Zyyy{"Zyyy"}
     }
     Types{
+        calendar{
+            buddhist{"egutegi budista"}
+            chinese{"txinatar egutegia"}
+            gregorian{"egutegi gregoriarra"}
+            hebrew{"hebrear egutegia"}
+            indian{"indiar egutegia"}
+            islamic{"islamiar egutegia"}
+            islamic-civil{"islamiar egutegi zibila"}
+            japanese{"japoniar egutegia"}
+            roc{"Txinako Errepublikako egutegia"}
+        }
         collation{
+            big5han{"Txinera tradizionalaren alfabetoa-Big5"}
             direct{"Zuzena"}
+            gb2312han{"Txinera sinplifikatuaren alfabetoa -GB2312"}
+            phonebook{"Telefonoen zerrenda"}
+            traditional{"Tradizionala"}
         }
     }
     Variants{
-        BOONT{"BOONT"}
+        POLYTON{"POLITON"}
+        REVISED{"BERRIKUSIA"}
+        SAAHO{"SAHO"}
+        SCOTLAND{"ESKOZIAR INGELESA"}
         VALENCIA{"VALENTZIERA"}
     }
-    Version{"1.139"}
+    Version{"1.74"}
     calendar{
+        buddhist{
+            eras{
+                abbreviated{
+                    "BG",
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "AM",
                 "PM",
             }
             DateTimePatterns{
-                "HH:mm:ss v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -386,8 +600,10 @@ eu{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+                "{1} {0}",
             }
             availableFormats{
+                d{"d"}
                 yyQ{"Q yy"}
             }
             dayNames{
@@ -463,27 +679,27 @@ eu{
                 stand-alone{
                     narrow{
                         "U",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
+                        "O",
+                        "M",
+                        "A",
+                        "M",
+                        "E",
+                        "U",
+                        "A",
+                        "I",
+                        "U",
+                        "A",
+                        "A",
                     }
                 }
             }
             quarters{
                 format{
                     abbreviated{
-                        "1. hiruhilekoa",
+                        "1Hh",
                         "2Hh",
-                        "3. hiruhilekoa",
-                        "4. hiruhilekoa",
+                        "3Hh",
+                        "4Hh",
                     }
                     wide{
                         "1. hiruhilekoa",
@@ -494,56 +710,204 @@ eu{
                 }
             }
         }
+        roc{
+            eras{
+                abbreviated{
+                    "R.O.C. aurretik",
+                    "R.O.C.",
+                }
+            }
+        }
     }
     codePatterns{
         language{"{0}"}
+        script{"{0}"}
+        territory{"{0}"}
     }
     delimiters{
         alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
     }
     localeDisplayPattern{
+        pattern{"{0} ({1})"}
         separator{", "}
     }
     measurementSystemNames{
         US{"US"}
+        metric{"Metriko"}
     }
     units{
         day{
+            one{"{0} eguna"}
             other{"{0} egun"}
+        }
+        hour{
+            one{"{0} ordua"}
+            other{"{0} h"}
+        }
+        minute{
+            one{"{0} minutu"}
+            other{"{0} minutu"}
+        }
+        month{
+            one{"{0} hilea"}
+        }
+        second{
+            one{"{0} segundo"}
+            other{"{0} s"}
+        }
+        week{
+            one{"{0} aste"}
+            other{"{0} aste"}
+        }
+        year{
+            one{"{0} urtea"}
+            other{"{0} y"}
         }
     }
     zoneStrings{
-        "America:Dawson"{
-            ec{"Dawson"}
+        "America:North_Dakota:Center"{
+            ec{"Ameriketako Estatu Batuak (Erdialdea, Ipar Dakota)"}
         }
-        "meta:Africa_Eastern"{
-            ss{"EAT"}
+        "Atlantic:Canary"{
+            ec{"Espainia (Kanariak)"}
+        }
+        "Etc:Unknown"{
+            ec{"Ezezaguna"}
+        }
+        "meta:Australia_Central"{
+            cu:int{1}
+        }
+        "meta:Australia_CentralWestern"{
+            cu:int{1}
+        }
+        "meta:Australia_Eastern"{
+            cu:int{1}
         }
         "meta:Australia_Western"{
             cu:int{1}
-            ss{"AWST"}
         }
-        "meta:Baku"{
-            sd{"BAKST"}
+        "meta:Azores"{
+            cu:int{1}
+        }
+        "meta:British"{
+            cu:int{1}
+        }
+        "meta:Cape_Verde"{
+            cu:int{1}
+        }
+        "meta:Chamorro"{
+            cu:int{1}
+        }
+        "meta:Chatham"{
+            cu:int{1}
+        }
+        "meta:Christmas"{
+            cu:int{1}
         }
         "meta:Cocos"{
-            ss{"CCT"}
+            cu:int{1}
+        }
+        "meta:Cook"{
+            cu:int{1}
+        }
+        "meta:Davis"{
+            cu:int{1}
         }
         "meta:DumontDUrville"{
-            ss{"DDUT"}
+            cu:int{1}
+        }
+        "meta:Easter"{
+            cu:int{1}
+        }
+        "meta:Europe_Central"{
+            cu:int{1}
+            sd{"CEST"}
+            ss{"CET"}
+        }
+        "meta:Europe_Eastern"{
+            cu:int{1}
+            sd{"EEST"}
+            ss{"EET"}
+        }
+        "meta:Europe_Western"{
+            cu:int{1}
+            sd{"WEST"}
+            ss{"WET"}
+        }
+        "meta:Falkland"{
+            cu:int{1}
+        }
+        "meta:Fiji"{
+            cu:int{1}
+        }
+        "meta:French_Southern"{
+            cu:int{1}
+        }
+        "meta:GMT"{
+            cu:int{1}
+            ss{"GMT"}
+        }
+        "meta:Galapagos"{
+            cu:int{1}
+        }
+        "meta:Gambier"{
+            cu:int{1}
+        }
+        "meta:Indian_Ocean"{
+            cu:int{1}
+        }
+        "meta:Irish"{
+            cu:int{1}
+        }
+        "meta:Kuybyshev"{
+            cu:int{1}
+        }
+        "meta:Lord_Howe"{
+            cu:int{1}
+        }
+        "meta:Maldives"{
+            cu:int{1}
+        }
+        "meta:Mauritius"{
+            cu:int{1}
+        }
+        "meta:Mawson"{
+            cu:int{1}
+        }
+        "meta:Moscow"{
+            cu:int{1}
+        }
+        "meta:Reunion"{
+            cu:int{1}
+        }
+        "meta:Rothera"{
+            cu:int{1}
         }
         "meta:Samara"{
             cu:int{1}
         }
+        "meta:Seychelles"{
+            cu:int{1}
+        }
         "meta:South_Georgia"{
-            ss{"GST (GS)"}
+            cu:int{1}
         }
         "meta:Syowa"{
             cu:int{1}
         }
-        "meta:Vanuatu"{
-            ss{"VUT"}
+        "meta:Turkey"{
+            cu:int{1}
         }
+        "meta:Volgograd"{
+            cu:int{1}
+        }
+        "meta:Vostok"{
+            cu:int{1}
+        }
+        fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0}"}

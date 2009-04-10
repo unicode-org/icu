@@ -136,7 +136,7 @@ am{
         ZA{"ደቡብ አፍሪካ"}
         ZM{"ዛምቢያ"}
     }
-    ExemplarCharacters{"[፟ ሀ-ሆ ለ-ቆ ቈ ቊ-ቍ በ-ኆ ኈ ኊ-ኍ ነ-ኮ ኰ ኲ-ኵ ኸ-ኾ ወ-ዎ ዐ-ዖ ዘ-ዷ ጀ-ጎ ጐ ጒ-ጕ ጠ-ፚ]"}
+    ExemplarCharacters{"[\u135F ሀ-ሆ ለ-ቆ ቈ ቊ-ቍ በ-ኆ ኈ ኊ-ኍ ነ-ኮ ኰ ኲ-ኵ ኸ-ኾ ወ-ዎ ዐ-ዖ ዘ-ዷ ጀ-ጎ ጐ ጒ-ጕ ጠ-ፚ]"}
     Languages{
         aa{"አፋርኛ"}
         ab{"አብሐዚኛ"}
@@ -283,11 +283,11 @@ am{
     LocaleScript{
         "Ethi",
     }
-    Version{"1.139"}
+    Version{"1.85"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "hh:mm:ss a v",
+                "hh:mm:ss a zzzz",
                 "hh:mm:ss a z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -295,6 +295,7 @@ am{
                 "y MMMM d",
                 "y MMM d",
                 "yyyy-MM-dd",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

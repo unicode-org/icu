@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 te_IN{
-    Version{"1.139"}
+    Version{"1.55"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

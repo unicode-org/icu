@@ -116,7 +116,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("13.1."),
         UnicodeString("13. Jan"),
         UnicodeString("Q1 1999"),
-        UnicodeString("23:58"),
+        UnicodeString("11:58 nachm."),
         UnicodeString("23:58"),
         UnicodeString("23:58"),                               // de  9: jjmm
         UnicodeString("58:59"),
@@ -345,7 +345,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     pattern = format->toPattern(pattern);
     dateReturned.remove();
     dateReturned = format->format(sampleDate, dateReturned, status);
-    expectedResult=UnicodeString("Donnerstag, 14. Oktober 1999 08:58:59 Frankreich");
+    expectedResult=CharsToUnicodeString("Donnerstag, 14. Oktober 1999 08:58:59 Mitteleurop\\u00E4ische Sommerzeit");
     if ( dateReturned != expectedResult ) {
         errln("ERROR: Simple test uses full date format.");
         errln(UnicodeString(" Got: ") + dateReturned + UnicodeString(" Expected: ") + expectedResult);

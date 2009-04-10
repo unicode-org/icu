@@ -59,8 +59,8 @@ void IntlTestSimpleDateFormatAPI::testAPI(/*char *par*/)
 
     status = U_ZERO_ERROR;
     const UnicodeString pattern("yyyy.MM.dd G 'at' hh:mm:ss z");
-    const UnicodeString override("y=hebrew;d=thai;s=arabic");
-    const UnicodeString override_bogus("y=hebrew;d=thai;s=bogus");
+    const UnicodeString override("y=hebr;d=thai;s=arab");
+    const UnicodeString override_bogus("y=hebr;d=thai;s=bogus");
 
     SimpleDateFormat pat(pattern, status);
     if(U_FAILURE(status)) {

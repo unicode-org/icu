@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 ka_GE{
-    Version{"1.139"}
+    Version{"1.36"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

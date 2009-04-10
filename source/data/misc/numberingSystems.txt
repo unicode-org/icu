@@ -8,29 +8,29 @@
 // ***************************************************************************
 numberingSystems:table(nofallback){
     numberingSystems{
-        arabic{
+        arab{
             algorithmic:int{0}
             desc{"٠١٢٣٤٥٦٧٨٩"}
             radix:int{10}
         }
-        armenian{
+        arabext{
+            algorithmic:int{0}
+            desc{"۰۱۲۳۴۵۶۷۸۹"}
+            radix:int{10}
+        }
+        armn{
             algorithmic:int{1}
             desc{"%armenian-upper"}
             radix:int{10}
         }
-        armenian-lower{
+        armnlow{
             algorithmic:int{1}
             desc{"%armenian-lower"}
             radix:int{10}
         }
-        bengali{
+        beng{
             algorithmic:int{0}
             desc{"০১২৩৪৫৬৭৮৯"}
-            radix:int{10}
-        }
-        decimal{
-            algorithmic:int{0}
-            desc{"0123456789"}
             radix:int{10}
         }
         deva{
@@ -38,84 +38,94 @@ numberingSystems:table(nofallback){
             desc{"०१२३४५६७८९"}
             radix:int{10}
         }
-        ethiopic{
+        ethi{
             algorithmic:int{1}
             desc{"%ethiopic"}
             radix:int{10}
         }
-        georgian{
+        fullwide{
+            algorithmic:int{0}
+            desc{"０１２３４５６７８９"}
+            radix:int{10}
+        }
+        geor{
             algorithmic:int{1}
             desc{"%georgian"}
             radix:int{10}
         }
-        greek{
+        grek{
             algorithmic:int{1}
             desc{"%greek-upper"}
             radix:int{10}
         }
-        greek-lower{
+        greklow{
             algorithmic:int{1}
             desc{"%greek-lower"}
             radix:int{10}
         }
-        gujarati{
+        gujr{
             algorithmic:int{0}
             desc{"૦૧૨૩૪૫૬૭૮૯"}
             radix:int{10}
         }
-        gurmukhi{
+        guru{
             algorithmic:int{0}
             desc{"੦੧੨੩੪੫੬੭੮੯"}
             radix:int{10}
         }
-        hanjfin{
+        hans{
             algorithmic:int{1}
-            desc{"ja/SpelloutRules/%financial"}
-            radix:int{10}
-        }
-        hanjstd{
-            algorithmic:int{1}
-            desc{"ja/SpelloutRules/%spellout-numbering"}
+            desc{"zh/SpelloutRules/%spellout-cardinal"}
             radix:int{10}
         }
         hansfin{
             algorithmic:int{1}
-            desc{"zh/SpelloutRules/%financial"}
+            desc{"zh/SpelloutRules/%spellout-cardinal-financial"}
             radix:int{10}
         }
-        hansstd{
+        hant{
             algorithmic:int{1}
-            desc{"zh/SpelloutRules/%spellout-numbering"}
+            desc{"zh_Hant/SpelloutRules/%spellout-cardinal"}
             radix:int{10}
         }
         hantfin{
             algorithmic:int{1}
-            desc{"zh_Hant/SpelloutRules/%financial"}
+            desc{"zh_Hant/SpelloutRules/%spellout-cardinal-financial"}
             radix:int{10}
         }
-        hantstd{
-            algorithmic:int{1}
-            desc{"zh_Hant/SpelloutRules/%spellout-numbering"}
-            radix:int{10}
-        }
-        hebrew{
+        hebr{
             algorithmic:int{1}
             desc{"%hebrew"}
             radix:int{10}
         }
-        kannada{
-            algorithmic:int{0}
-            desc{"೦೧೨೩೪೫೬೭೮೯"}
+        jpan{
+            algorithmic:int{1}
+            desc{"ja/SpelloutRules/%spellout-cardinal"}
             radix:int{10}
         }
-        khmer{
+        jpanfin{
+            algorithmic:int{1}
+            desc{"ja/SpelloutRules/%spellout-cardinal-financial"}
+            radix:int{10}
+        }
+        khmr{
             algorithmic:int{0}
             desc{"០១២៣៤៥៦៧៨៩"}
             radix:int{10}
         }
-        lao{
+        knda{
+            algorithmic:int{0}
+            desc{"೦೧೨೩೪೫೬೭೮೯"}
+            radix:int{10}
+        }
+        laoo{
             algorithmic:int{0}
             desc{"໐໑໒໓໔໕໖໗໘໙"}
+            radix:int{10}
+        }
+        latn{
+            algorithmic:int{0}
+            desc{"0123456789"}
             radix:int{10}
         }
         mlym{
@@ -128,19 +138,14 @@ numberingSystems:table(nofallback){
             desc{"᠐᠑᠒᠓᠔᠕᠖᠗᠘᠙"}
             radix:int{10}
         }
-        myanmar{
+        mymr{
             algorithmic:int{0}
             desc{"၀၁၂၃၄၅၆၇၈၉"}
             radix:int{10}
         }
-        oriya{
+        orya{
             algorithmic:int{0}
             desc{"୦୧୨୩୪୫୬୭୮୯"}
-            radix:int{10}
-        }
-        persian{
-            algorithmic:int{0}
-            desc{"۰۱۲۳۴۵۶۷۸۹"}
             radix:int{10}
         }
         roman{
@@ -148,17 +153,17 @@ numberingSystems:table(nofallback){
             desc{"%roman-upper"}
             radix:int{10}
         }
-        roman-lower{
+        romanlow{
             algorithmic:int{1}
             desc{"%roman-lower"}
             radix:int{10}
         }
-        tamil{
+        taml{
             algorithmic:int{1}
             desc{"%tamil"}
             radix:int{10}
         }
-        telugu{
+        telu{
             algorithmic:int{0}
             desc{"౦౧౨౩౪౫౬౭౮౯"}
             radix:int{10}
@@ -168,7 +173,7 @@ numberingSystems:table(nofallback){
             desc{"๐๑๒๓๔๕๖๗๘๙"}
             radix:int{10}
         }
-        tibetan{
+        tibt{
             algorithmic:int{0}
             desc{"༠༡༢༣༤༥༦༧༨༩"}
             radix:int{10}

@@ -33,11 +33,11 @@ ms_BN{
         "#,##0%",
         "#E0",
     }
-    Version{"1.139"}
+    Version{"1.50"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "h:mm:ss aa v",
+                "h:mm:ss aa zzzz",
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
@@ -45,6 +45,7 @@ ms_BN{
                 "y MMMM d",
                 "dd/MM/yyyy",
                 "yyyy-MM-dd",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 uz_Latn_UZ{
-    Version{"1.139"}
+    Version{"1.20"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

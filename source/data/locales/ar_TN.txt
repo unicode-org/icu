@@ -16,7 +16,7 @@ ar_TN{
         "#",
         "-",
         "اس",
-        "‰",
+        "؉",
         "∞",
         "ليس رقم",
         "+",
@@ -30,15 +30,12 @@ ar_TN{
     Scripts{
         Ital{"اللأيطالية القديمة"}
     }
-    Version{"1.139"}
+    Version{"1.52"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
                 7,
                 4,
-            }
-            availableFormats{
-                yyyyMMMM{"MMMM، y"}
             }
             dayNames{
                 format{
@@ -50,13 +47,6 @@ ar_TN{
                         "الخميس",
                         "الجمعة",
                         "السبت",
-                    }
-                }
-            }
-            fields{
-                day{
-                    relative{
-                        "1"{"غدًا"}
                     }
                 }
             }
@@ -85,5 +75,5 @@ ar_TN{
             }
         }
     }
-    defaultNumberingSystem{"decimal"}
+    defaultNumberingSystem{"latn"}
 }

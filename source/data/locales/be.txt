@@ -279,7 +279,7 @@ be{
     }
     Currencies{
         AUD{
-            "$A",
+            "AU$",
             "аўстралійскі даляр",
         }
         BRL{
@@ -311,7 +311,7 @@ be{
             "англійскі фунт",
         }
         INR{
-            "Rs.",
+            "₨",
             "індыйская рупія",
         }
         JPY{
@@ -335,7 +335,7 @@ be{
             "невядомая або недапушчальная валюта",
         }
     }
-    ExemplarCharacters{"[а-д {дж} {дз} е ё ж з й і к-у ў ф-ш ы-я]"}
+    ExemplarCharacters{"[а-д {дж} {дз} е ё ж з і й-у ў ф-ш ы-я]"}
     Keys{
         calendar{"каляндар"}
         collation{"параўнаньне тэксту"}
@@ -536,7 +536,7 @@ be{
             japanese{"японскі каляндар"}
         }
     }
-    Version{"1.139"}
+    Version{"1.86"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -544,7 +544,7 @@ be{
                 "пасля палудня",
             }
             DateTimePatterns{
-                "HH.mm.ss v",
+                "HH.mm.ss zzzz",
                 "HH.mm.ss z",
                 "HH.mm.ss",
                 "HH.mm",
@@ -552,6 +552,7 @@ be{
                 "d MMMM y",
                 "d.M.yyyy",
                 "d.M.yy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

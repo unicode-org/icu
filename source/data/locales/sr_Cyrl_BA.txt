@@ -13,11 +13,11 @@ sr_Cyrl_BA{
             "Конвертибилна Марка",
         }
     }
-    Version{"1.139"}
+    Version{"1.37"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH 'часова', mm 'минута', ss 'секунди' v",
+                "HH 'часова', mm 'минута', ss 'секунди' zzzz",
                 "HH.mm.ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -25,6 +25,7 @@ sr_Cyrl_BA{
                 "dd. MMMM y.",
                 "yyyy-MM-dd",
                 "yy-MM-dd",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

@@ -13,7 +13,11 @@ en_PH{
             "Peso",
         }
     }
-    Version{"1.139"}
+    PaperSize:intvector{
+        279,
+        216,
+    }
+    Version{"1.49"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

@@ -198,7 +198,10 @@ km{
             "Riel",
         }
     }
-    ExemplarCharacters{"[៎ ៏ ៑ ័ ៈ ់ ៉ ៊ ៍ ៌ ក-រ ឫ ឬ ល ឭ ឮ វ ស-អ {អា} ឥ-ឧ {ឧក} ឪ ឩ ឯ-ឳ ា-ះ ្]"}
+    ExemplarCharacters{
+        "[\u17CE \u17CF \u17D1 \u17D0 ៈ \u17CB \u17C9 \u17CA \u17CD \u17CC ក-រ ឫ ឬ ល "
+        "ឭ ឮ វ ស-អ {អា} ឥ-ឧ {ឧក} ឪ ឩ ឯ-ឳ ា-ះ \u17D2]"
+    }
     Languages{
         aa{"ភាសាអាហ្វារ"}
         ae{"ភាសាអាវែស្តង់"}
@@ -324,7 +327,7 @@ km{
         "#,##0%",
         "#E0",
     }
-    Version{"1.139"}
+    Version{"1.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -332,7 +335,7 @@ km{
                 "ល្ងាច",
             }
             DateTimePatterns{
-                "H ម៉ោង m នាទី ss វិនាទី​ v",
+                "H ម៉ោង m នាទី ss វិនាទី​ zzzz",
                 "H ម៉ោង m នាទី ss វិនាទី​z",
                 "H:mm:ss",
                 "H:mm",
@@ -340,10 +343,11 @@ km{
                 "y MMMM d",
                 "d MMM y",
                 "d/M/yyyy",
-                "{1} {0}",
-                "{1} {0}",
                 "{1}, {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
             }
             dayNames{
                 format{

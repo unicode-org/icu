@@ -21,13 +21,5 @@ de_LU{
             }
         }
     }
-    Version{"1.139"}
-    calendar{
-        gregorian{
-            DateTimeElements:intvector{
-                2,
-                4,
-            }
-        }
-    }
+    Version{"1.52"}
 }

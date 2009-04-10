@@ -16,7 +16,7 @@ ar_DZ{
         "#",
         "-",
         "اس",
-        "‰",
+        "؉",
         "∞",
         "ليس رقم",
         "+",
@@ -24,22 +24,12 @@ ar_DZ{
     Scripts{
         Ital{"اللأيطالية القديمة"}
     }
-    Version{"1.139"}
+    Version{"1.52"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
                 7,
                 4,
-            }
-            availableFormats{
-                yyyyMMMM{"MMMM، y"}
-            }
-            fields{
-                day{
-                    relative{
-                        "1"{"غدًا"}
-                    }
-                }
             }
             intervalFormats{
                 M{
@@ -63,5 +53,5 @@ ar_DZ{
             }
         }
     }
-    defaultNumberingSystem{"decimal"}
+    defaultNumberingSystem{"latn"}
 }

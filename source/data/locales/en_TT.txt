@@ -7,13 +7,23 @@
 // *
 // ***************************************************************************
 en_TT{
+    Currencies{
+        TTD{
+            "$",
+            "Trinidad and Tobago Dollar",
+        }
+        USD{
+            "US$",
+            "US Dollar",
+        }
+    }
     NumberPatterns{
         "#,##0.###",
         "¤#,##0.00",
         "#,##0%",
         "#E0",
     }
-    Version{"1.139"}
+    Version{"1.41"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

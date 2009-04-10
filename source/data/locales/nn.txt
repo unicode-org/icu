@@ -310,7 +310,7 @@ nn{
             "afghani (1927-2002)",
         }
         AFN{
-            "Af",
+            "AFN",
             "afghani",
         }
         ALL{
@@ -322,11 +322,11 @@ nn{
             "armensk dram",
         }
         ANG{
-            "NAf.",
+            "ANG",
             "nederlansk antillegylden",
         }
         AOA{
-            "Kz",
+            "AOA",
             "angolsk kwanza",
         }
         AOK{
@@ -342,15 +342,23 @@ nn{
             "angolsk kwanza reajustado (1995-1999)",
         }
         ARA{
-            "₳",
+            "ARA",
             "argentisk austral",
+        }
+        ARL{
+            "ARL",
+            "ARL",
+        }
+        ARM{
+            "ARM",
+            "ARM",
         }
         ARP{
             "ARP",
             "argentinsk peso (1983-1985)",
         }
         ARS{
-            "AR$",
+            "ARS",
             "argentinsk peso",
         }
         ATS{
@@ -358,11 +366,11 @@ nn{
             "austerriksk schilling",
         }
         AUD{
-            "AU$",
+            "AUD",
             "australsk dollar",
         }
         AWG{
-            "Afl.",
+            "AWG",
             "arubisk gylden",
         }
         AZM{
@@ -370,7 +378,7 @@ nn{
             "aserbaijansk manat",
         }
         AZN{
-            "man.",
+            "AZN",
             "aserbajdsjansk manat",
         }
         BAD{
@@ -378,15 +386,15 @@ nn{
             "bosnisk-hercegovinsk dinar",
         }
         BAM{
-            "KM",
+            "BAM",
             "bosnisk-hercegovinsk mark (konvertibel)",
         }
         BBD{
-            "Bds$",
+            "BBD",
             "barbadisk dollar",
         }
         BDT{
-            "Tk",
+            "BDT",
             "bangladeshisk taka",
         }
         BEC{
@@ -394,7 +402,7 @@ nn{
             "belgisk franc (konvertibel)",
         }
         BEF{
-            "BF",
+            "BEF",
             "belgisk franc",
         }
         BEL{
@@ -410,15 +418,15 @@ nn{
             "bulgarsk ny lev",
         }
         BHD{
-            "BD",
+            "BHD",
             "bahrainsk dinar",
         }
         BIF{
-            "FBu",
+            "BIF",
             "burundisk franc",
         }
         BMD{
-            "BD$",
+            "BMD",
             "bermudisk dollar",
         }
         BND{
@@ -426,11 +434,11 @@ nn{
             "bruneisk dollar",
         }
         BOB{
-            "Bs",
+            "BOB",
             "boliviano",
         }
         BOP{
-            "$b.",
+            "BOP",
             "bolivisk peso",
         }
         BOV{
@@ -438,15 +446,15 @@ nn{
             "bolivisk mvdol",
         }
         BRB{
-            "NCr",
+            "BRB",
             "brasiliansk cruzeiro novo (1967-1986)",
         }
         BRC{
-            "Cz$",
+            "BRC",
             "brasiliansk cruzado",
         }
         BRE{
-            "Cr$",
+            "BRE",
             "brasiliansk cruzeiro (1990-1993)",
         }
         BRL{
@@ -454,15 +462,15 @@ nn{
             "brasiliansk real",
         }
         BRN{
-            "NCz$",
+            "BRN",
             "brasiliansk cruzado novo",
         }
         BRR{
-            "CR$",
+            "BRR",
             "brasiliansk cruzeiro",
         }
         BRZ{
-            "BRZ" /** ===  */,
+            "BRZ",
             "BRZ",
         }
         BSD{
@@ -470,7 +478,7 @@ nn{
             "bahamisk dollar",
         }
         BTN{
-            "Nu.",
+            "BTN",
             "bhutansk ngultrum",
         }
         BUK{
@@ -490,11 +498,11 @@ nn{
             "kviterussisk rubel",
         }
         BZD{
-            "BZ$",
+            "BZD",
             "belizisk dollar",
         }
         CAD{
-            "CA$",
+            "CAD",
             "kanadisk dollar",
         }
         CDF{
@@ -506,7 +514,7 @@ nn{
             "WIR euro",
         }
         CHF{
-            "Fr.",
+            "CHF",
             "sveitsisk franc",
         }
         CHW{
@@ -514,7 +522,7 @@ nn{
             "WIR franc",
         }
         CLE{
-            "CLE" /** ===  */,
+            "CLE",
             "CLE",
         }
         CLF{
@@ -522,7 +530,7 @@ nn{
             "chilensk unidades de fomento",
         }
         CLP{
-            "CL$",
+            "CLP",
             "chilensk peso",
         }
         CNY{
@@ -530,7 +538,7 @@ nn{
             "kinesisk yuan renminbi",
         }
         COP{
-            "CO$",
+            "COP",
             "colombiansk peso",
         }
         COU{
@@ -538,7 +546,7 @@ nn{
             "unidad de valor real",
         }
         CRC{
-            "₡",
+            "CRC",
             "costaricansk colon",
         }
         CSD{
@@ -554,15 +562,15 @@ nn{
             "kubansk peso",
         }
         CVE{
-            "CV$",
+            "CVE",
             "kappverdisk escudo",
         }
         CYP{
-            "CY£",
+            "CYP",
             "kypriotisk pund",
         }
         CZK{
-            "Kč",
+            "CZK",
             "tsjekkisk koruna",
         }
         DDM{
@@ -570,7 +578,7 @@ nn{
             "austtysk mark",
         }
         DEM{
-            "DM",
+            "DEM",
             "tysk mark",
         }
         DJF{
@@ -604,10 +612,6 @@ nn{
         EGP{
             "EG£",
             "egyptisk pund",
-        }
-        EQE{
-            "EQE" /** ===  */,
-            "EQE",
         }
         ERN{
             "Nfk",
@@ -670,7 +674,7 @@ nn{
             "ghanesisk cedi",
         }
         GIP{
-            "GHS",
+            "GIP",
             "gibraltarsk pund",
         }
         GMD{
@@ -836,10 +840,6 @@ nn{
         LSL{
             "LSL",
             "lesothisk loti",
-        }
-        LSM{
-            "LSM" /** ===  */,
-            "LSM",
         }
         LTL{
             "Lt",
@@ -1186,11 +1186,11 @@ nn{
             "timoresisk escudo",
         }
         TRL{
-            "TL",
+            "TRL",
             "gammal tyrkiske lire",
         }
         TRY{
-            "YTL",
+            "TL",
             "tyrkisk lire",
         }
         TTD{
@@ -1337,6 +1337,10 @@ nn{
             "XRE",
             "RINET-fond",
         }
+        XTS{
+            "XTS",
+            "testvalutakode",
+        }
         XXX{
             "XXX",
             "ukjend eller ugyldig valuta",
@@ -1387,6 +1391,10 @@ nn{
         }
     }
     CurrencyPlurals{
+        AZN{
+            one{"aserbajdsjansk manat"}
+            other{"aserbajdsjanske manat"}
+        }
         BWP{
             one{"botswansk pula"}
             other{"botswanske pula"}
@@ -1748,6 +1756,7 @@ nn{
             other{"marokkanske franc"}
         }
         MDL{
+            one{"moldovsk leu"}
             other{"moldovske lei"}
         }
         MGA{
@@ -2178,6 +2187,14 @@ nn{
             one{"RINET-fond"}
             other{"RINET-fond"}
         }
+        XTS{
+            one{"testvalutakode"}
+            other{"testvalutakode"}
+        }
+        XXX{
+            one{"ukjend/ugyldig valuta"}
+            other{"ukjend eller ugyldig valuta"}
+        }
         YDD{
             one{"jemenittisk dinar"}
             other{"jemenittiske dinarar"}
@@ -2197,6 +2214,10 @@ nn{
             one{"jugoslavisk konvertibel dinar"}
             other{"jugoslaviske konvertible dinarar"}
         }
+    }
+    CurrencyUnitPatterns{
+        one{"{0} {1}"}
+        other{"{0} {1}"}
     }
     ExemplarCharacters{"[a à b-e é f-o ó ò ô p-z æ ø å]"}
     Keys{
@@ -2915,7 +2936,7 @@ nn{
         TARASK{"taraskievica-ortografi"}
         VALENCIA{"valensisk dialekt"}
     }
-    Version{"1.139"}
+    Version{"1.95"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2923,7 +2944,7 @@ nn{
                 "ettermiddag",
             }
             DateTimePatterns{
-                "'kl'. HH.mm.ss v",
+                "'kl'. HH.mm.ss zzzz",
                 "HH.mm.ss z",
                 "HH.mm.ss",
                 "HH.mm",
@@ -2935,23 +2956,26 @@ nn{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+                "{1} {0}",
             }
             availableFormats{
                 MMMMd{"d. MMMM"}
                 MMdd{"dd.MM"}
                 mmss{"mm.ss"}
+                yyMM{"MM.yy"}
+                yyQ{"Q yy"}
                 yyyyMMMM{"MMMM y"}
             }
             dayNames{
                 format{
                     abbreviated{
                         "sø.",
-                        "må",
-                        "ty",
-                        "on",
-                        "to",
-                        "fr",
-                        "la",
+                        "må.",
+                        "ty.",
+                        "on.",
+                        "to.",
+                        "fr.",
+                        "la.",
                     }
                     wide{
                         "søndag",
@@ -2967,10 +2991,10 @@ nn{
                     abbreviated{
                         "sø.",
                         "må.",
-                        "ty",
-                        "on",
-                        "to",
-                        "fr",
+                        "ty.",
+                        "on.",
+                        "to.",
+                        "fr.",
                         "la.",
                     }
                     narrow{
@@ -2999,8 +3023,12 @@ nn{
                     dn{"dag"}
                     relative{
                         "-1"{"i går"}
+                        "-2"{"i forgårs"}
+                        "-3"{"for tre dagar sidan"}
                         "0"{"i dag"}
                         "1"{"i morgon"}
+                        "2"{"i overmorgon"}
+                        "3"{"om tre dagar"}
                     }
                 }
                 dayperiod{
@@ -3030,9 +3058,82 @@ nn{
                 year{
                     dn{"år"}
                 }
+                zone{
+                    dn{"sone"}
+                }
             }
             intervalFormats{
+                M{
+                    M{"M–M"}
+                }
+                MEd{
+                    M{"E. dd.MM–E. dd.MM"}
+                    d{"E. dd.MM–E. dd.MM"}
+                }
+                MMM{
+                    M{"MMM.–MMM."}
+                }
+                MMMEd{
+                    M{"E. d. MMM.–E. d. MMM."}
+                    d{"E. d.–E. d. MMM."}
+                }
+                MMMd{
+                    M{"d. MMM.–d. MMM."}
+                    d{"d.–d. MMM"}
+                }
+                Md{
+                    M{"dd.MM–dd.MM"}
+                    d{"dd.MM–dd.MM"}
+                }
+                d{
+                    d{"d.–d."}
+                }
                 fallback{"{0} – {1}"}
+                h{
+                    h{"5–06"}
+                }
+                hm{
+                    h{"HH.mm–HH.mm"}
+                    m{"HH.mm–HH.mm"}
+                }
+                hmv{
+                    h{"HH.mm–HH.mm v"}
+                    m{"HH.mm–HH.mm v"}
+                }
+                hv{
+                    h{"HH–HH v"}
+                }
+                y{
+                    y{"y–y"}
+                }
+                yM{
+                    M{"MM.yy–MM.yy"}
+                    y{"MM.yy–MM.yy"}
+                }
+                yMEd{
+                    M{"E. dd.MM.yy–E. dd.MM.yy"}
+                    d{"E. dd.MM.yy–E. dd.MM.yy"}
+                    y{"E. dd.MM.yy–E. dd.MM.yy"}
+                }
+                yMMM{
+                    M{"MMM.–MMM. y"}
+                    y{"MMM. y–MMM. y"}
+                }
+                yMMMEd{
+                    M{"E. d. MMM.–E. d. MMM. y"}
+                    d{"E. d.–E. d. MMM. y"}
+                    y{"E. d. MMM. y–E. d. MMM. y"}
+                }
+                yMMMd{
+                    M{"d. MMM.–d. MMM. y"}
+                    d{"d.–d. MMM. y"}
+                    y{"d. MMM. y–d. MMM. y"}
+                }
+                yMd{
+                    M{"dd.MM.yy–dd.MM.yy"}
+                    d{"dd.MM.yy–dd.MM.yy"}
+                    y{"dd.MM.yy–dd.MM.yy"}
+                }
             }
             monthNames{
                 format{
@@ -3063,6 +3164,22 @@ nn{
                         "oktober",
                         "november",
                         "desember",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
                     }
                 }
             }
@@ -3134,53 +3251,11 @@ nn{
         }
     }
     zoneStrings{
-        "Africa:Ceuta"{
-            ec{"Ceuta"}
-        }
-        "America:Adak"{
-            ec{"Adak"}
-        }
-        "America:Anchorage"{
-            ec{"Anchorage"}
-        }
-        "America:Araguaina"{
-            ec{"Araguaina"}
-        }
-        "America:Bahia"{
-            ec{"Bahia"}
-        }
         "America:Belem"{
             ec{"Belém"}
         }
-        "America:Blanc-Sablon"{
-            ec{"Blanc-Sablon"}
-        }
-        "America:Boa_Vista"{
-            ec{"Boa Vista"}
-        }
-        "America:Boise"{
-            ec{"Boise"}
-        }
-        "America:Buenos_Aires"{
-            ec{"Buenos Aires"}
-        }
-        "America:Cambridge_Bay"{
-            ec{"Cambridge Bay"}
-        }
-        "America:Campo_Grande"{
-            ec{"Campo Grande"}
-        }
         "America:Cancun"{
             ec{"Cancún"}
-        }
-        "America:Catamarca"{
-            ec{"Catamarca"}
-        }
-        "America:Chicago"{
-            ec{"Chicago"}
-        }
-        "America:Chihuahua"{
-            ec{"Chihuahua"}
         }
         "America:Godthab"{
             ec{"Godthåb"}
@@ -3191,23 +3266,8 @@ nn{
         "America:North_Dakota:Center"{
             ec{"Center, Nord-Dakota"}
         }
-        "Antarctica:Casey"{
-            ec{"Casey"}
-        }
         "Antarctica:South_Pole"{
             ec{"Sørpolen"}
-        }
-        "Asia:Almaty"{
-            ec{"Almaty"}
-        }
-        "Asia:Anadyr"{
-            ec{"Anadyr"}
-        }
-        "Asia:Aqtau"{
-            ec{"Aqtau"}
-        }
-        "Asia:Aqtobe"{
-            ec{"Aqtobe"}
         }
         "Asia:Tashkent"{
             ec{"Tasjkent"}
@@ -3221,15 +3281,6 @@ nn{
         "Atlantic:Canary"{
             ec{"Kanariøyane"}
         }
-        "Australia:Adelaide"{
-            ec{"Adelaide"}
-        }
-        "Australia:Brisbane"{
-            ec{"Brisbane"}
-        }
-        "Australia:Broken_Hill"{
-            ec{"Broken Hill"}
-        }
         "Etc:Unknown"{
             ec{"ukjend"}
         }
@@ -3238,9 +3289,6 @@ nn{
         }
         "Europe:Moscow"{
             ec{"Moskva"}
-        }
-        "Pacific:Chatham"{
-            ec{"Chatham"}
         }
         "Pacific:Easter"{
             ec{"Påskeøya"}
@@ -3311,7 +3359,8 @@ nn{
             ss{"IST (Israel)"}
         }
         fallbackFormat{"{1} ({0})"}
-        gmtZeroFormat{"GMT"}
+        gmtFormat{"GMT{0}"}
         hourFormat{"+HH.mm;-HH.mm"}
+        regionFormat{"{0}"}
     }
 }

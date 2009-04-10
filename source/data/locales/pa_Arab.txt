@@ -28,18 +28,32 @@ pa_Arab{
             "روپئیہ",
         }
     }
-    ExemplarCharacters{"[ُ ء آ ؤ ئ-ب پ ت ث ٹ ج چ ح-ذ ڈ ر ز ڑ ژ س-غ ف ق ک گ ل-ن ں ه ھ ہ و ی ے]"}
+    ExemplarCharacters{"[\u064F ء آ ؤ ئ-ب پ ت ث ٹ ج چ ح-ذ ڈ ر ز ڑ ژ س-غ ف ق ک گ ل-ن ں ه ھ ہ و ی ے]"}
     Languages{
         pa{"پنجاب"}
     }
     LocaleScript{
         "Arab",
     }
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "٠",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "NaN",
+        "+",
+    }
     Scripts{
         Arab{"العربية"}
         Guru{"گُرمُکھی"}
     }
-    Version{"1.139"}
+    Version{"1.23"}
     calendar{
         gregorian{
             dayNames{
@@ -117,6 +131,7 @@ pa_Arab{
             }
         }
     }
+    defaultNumberingSystem{"arab"}
     layout{
         characters{"right-to-left"}
         lines{"top-to-bottom"}

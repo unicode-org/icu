@@ -83,8 +83,8 @@ hu{
         BY{"Fehéroroszország"}
         BZ{"Belize"}
         CA{"Kanada"}
-        CC{"Kókusz (Keeling)-szigetek"}
-        CD{"Kongó, Demokratikus köztársaság"}
+        CC{"Kókusz-szigetek"}
+        CD{"Kongó - Kinshasa"}
         CF{"Közép-afrikai Köztársaság"}
         CG{"Kongó"}
         CH{"Svájc"}
@@ -192,7 +192,7 @@ hu{
         ML{"Mali"}
         MM{"Mianmar"}
         MN{"Mongólia"}
-        MO{"Macao S.A.R., China"}
+        MO{"Makaó SAR Kína"}
         MP{"Északi Mariana-szigetek"}
         MQ{"Martinique"}
         MR{"Mauritánia"}
@@ -234,7 +234,7 @@ hu{
         QA{"Katar"}
         QO{"Külső-Óceánia"}
         QU{"Európai Unió"}
-        RE{"Reunion (francia)"}
+        RE{"Reunion"}
         RO{"Románia"}
         RS{"Szerbia"}
         RU{"Oroszország"}
@@ -254,7 +254,7 @@ hu{
         SN{"Szenegál"}
         SO{"Szomália"}
         SR{"Suriname"}
-        ST{"São Tomé és Príncipe"}
+        ST{"Sao Tomé és Príncipe"}
         SV{"Salvador"}
         SY{"Szíria"}
         SZ{"Szváziföld"}
@@ -314,15 +314,15 @@ hu{
             "Afghani",
         }
         ALL{
-            "lek",
+            "ALL",
             "Albán lek",
         }
         AMD{
-            "dram",
+            "AMD",
             "Dram",
         }
         ANG{
-            "NA f.",
+            "NAf.",
             "Holland-antilla forint",
         }
         AOA{
@@ -350,7 +350,7 @@ hu{
             "Argentín peso (1983-1985)",
         }
         ARS{
-            "Arg$",
+            "AR$",
             "Peso",
         }
         ATS{
@@ -358,7 +358,7 @@ hu{
             "Osztrák schilling",
         }
         AUD{
-            "$A",
+            "AU$",
             "Ausztrál dollár",
         }
         AWG{
@@ -382,7 +382,7 @@ hu{
             "Bozsnia-hercegovinai konvertibilis márka",
         }
         BBD{
-            "BDS$",
+            "Bds$",
             "Barbadosi dollár",
         }
         BDT{
@@ -402,7 +402,7 @@ hu{
             "Belga frank (pénzügyi)",
         }
         BGL{
-            "lev",
+            "BGL",
             "Bolgár kemény leva",
         }
         BGN{
@@ -414,11 +414,11 @@ hu{
             "Bahreini dinár",
         }
         BIF{
-            "Fbu",
+            "FBu",
             "Burundi frank",
         }
         BMD{
-            "Ber$",
+            "BD$",
             "Bermudai dollár",
         }
         BND{
@@ -466,7 +466,7 @@ hu{
             "Bahamai dollár",
         }
         BTN{
-            "Nu",
+            "Nu.",
             "Bhutáni ngultrum",
         }
         BUK{
@@ -482,7 +482,7 @@ hu{
             "Fehérorosz új rubel (1994-1999)",
         }
         BYR{
-            "Rbl",
+            "BYR",
             "Fehérorosz rubel",
         }
         BZD{
@@ -490,7 +490,7 @@ hu{
             "Belizei dollár",
         }
         CAD{
-            "Can$",
+            "CA$",
             "Kanadai dollár",
         }
         CDF{
@@ -502,7 +502,7 @@ hu{
             "WIR euro",
         }
         CHF{
-            "SwF",
+            "Fr.",
             "Svájci frank",
         }
         CHW{
@@ -514,15 +514,15 @@ hu{
             "Chilei unidades de fomento",
         }
         CLP{
-            "Ch$",
+            "CL$",
             "Chilei peso",
         }
         CNY{
-            "Y",
+            "CN¥",
             "Kínai jüan renminbi",
         }
         COP{
-            "Col$",
+            "CO$",
             "Kolumbiai peso",
         }
         COU{
@@ -530,7 +530,7 @@ hu{
             "Unidad de Valor Real",
         }
         CRC{
-            "C",
+            "₡",
             "Costa Ricai colon",
         }
         CSD{
@@ -546,11 +546,11 @@ hu{
             "Kubai peso",
         }
         CVE{
-            "CVEsc",
+            "CV$",
             "Cape Verdei escudo",
         }
         CYP{
-            "£C",
+            "CY£",
             "Ciprusi font",
         }
         CZK{
@@ -566,11 +566,11 @@ hu{
             "Német márka",
         }
         DJF{
-            "DF",
+            "Fdj",
             "Dzsibuti frank",
         }
         DKK{
-            "DKr",
+            "Dkr",
             "Dán korona",
         }
         DOP{
@@ -610,7 +610,7 @@ hu{
             "spanyol peseta (konvertibilis kontó)",
         }
         ESP{
-            "₧",
+            "Pts",
             "Spanyol peseta",
         }
         ETB{
@@ -626,7 +626,7 @@ hu{
             "Finn markka",
         }
         FJD{
-            "F$",
+            "FJ$",
             "Fidzsi dollár",
         }
         FKP{
@@ -646,7 +646,7 @@ hu{
             "Grúz kupon larit",
         }
         GEL{
-            "lari",
+            "GEL",
             "Grúz lari",
         }
         GHC{
@@ -654,7 +654,7 @@ hu{
             "Ghánai cedi (1979-2007)",
         }
         GHS{
-            "GH¢",
+            "GH₵",
             "Ghánai cedi",
         }
         GIP{
@@ -666,7 +666,7 @@ hu{
             "Gambiai dalasi",
         }
         GNF{
-            "GF",
+            "FG",
             "Guineai frank",
         }
         GNS{
@@ -682,7 +682,7 @@ hu{
             "Görög drachma",
         }
         GTQ{
-            "Q",
+            "GTQ",
             "Guatemalai quetzal",
         }
         GWE{
@@ -694,7 +694,7 @@ hu{
             "Guinea-Bissaui peso",
         }
         GYD{
-            "G$",
+            "GY$",
             "Guyanai dollár",
         }
         HKD{
@@ -702,7 +702,7 @@ hu{
             "Hongkongi dollár",
         }
         HNL{
-            "L",
+            "HNL",
             "Hodurasi lempira",
         }
         HRD{
@@ -742,11 +742,11 @@ hu{
             "indiai rúpia",
         }
         IQD{
-            "ID",
+            "IQD",
             "Iraki dínár",
         }
         IRR{
-            "RI",
+            "IRR",
             "Iráni rial",
         }
         ISK{
@@ -766,19 +766,19 @@ hu{
             "Jordániai dínár",
         }
         JPY{
-            "JP¥",
+            "¥",
             "Japán jen",
         }
         KES{
-            "K Sh",
+            "Ksh",
             "Kenyai shilling",
         }
         KGS{
-            "som",
+            "KGS",
             "Kirgizisztáni szom",
         }
         KHR{
-            "CR",
+            "KHR",
             "Kambodzsai riel",
         }
         KMF{
@@ -802,7 +802,7 @@ hu{
             "Kajmán-szigeteki dollár",
         }
         KZT{
-            "T",
+            "KZT",
             "Kazahsztáni tenge",
         }
         LAK{
@@ -810,11 +810,11 @@ hu{
             "Laoszi kip",
         }
         LBP{
-            "LL",
+            "LB£",
             "Libanoni font",
         }
         LKR{
-            "SL Re",
+            "SLRs",
             "Sri Lankai rúpia",
         }
         LRD{
@@ -822,7 +822,7 @@ hu{
             "Libériai dollár",
         }
         LSL{
-            "M",
+            "LSL",
             "Lesothoi loti",
         }
         LTL{
@@ -878,7 +878,7 @@ hu{
             "Madagaszkári frank",
         }
         MKD{
-            "MDen",
+            "MKD",
             "Macedon dínár",
         }
         MLF{
@@ -890,7 +890,7 @@ hu{
             "Mianmari kyat",
         }
         MNT{
-            "Tug",
+            "₮",
             "Mongóliai tugrik",
         }
         MOP{
@@ -922,7 +922,7 @@ hu{
             "Malawi kwacha",
         }
         MXN{
-            "MEX$",
+            "MXN",
             "Mexikói peso",
         }
         MXP{
@@ -970,19 +970,19 @@ hu{
             "Holland forint",
         }
         NOK{
-            "NKr",
+            "Nkr",
             "Norvég korona",
         }
         NPR{
-            "Nrs",
+            "NPRs",
             "Nepáli rúpia",
         }
         NZD{
-            "$NZ",
+            "NZ$",
             "Új-zélandi dollár",
         }
         OMR{
-            "RO",
+            "OMR",
             "Ománi rial",
         }
         PAB{
@@ -1006,15 +1006,15 @@ hu{
             "Pápua új-guineai kina",
         }
         PHP{
-            "Php",
+            "₱",
             "Fülöp-szigeteki peso",
         }
         PKR{
-            "Pra",
+            "PKRs",
             "Pakisztáni rúpia",
         }
         PLN{
-            "Zl",
+            "zł",
             "Lengyel zloty",
         }
         PLZ{
@@ -1038,7 +1038,7 @@ hu{
             "rhodéziai dollár",
         }
         ROL{
-            "leu",
+            "ROL",
             "Régi román lej",
         }
         RON{
@@ -1062,7 +1062,7 @@ hu{
             "Ruandai frank",
         }
         SAR{
-            "SRl",
+            "SR",
             "Szaúdi riyal",
         }
         SBD{
@@ -1070,7 +1070,7 @@ hu{
             "Salamon-szigeteki dollár",
         }
         SCR{
-            "SR",
+            "SRe",
             "Seychelle-szigeteki rúpia",
         }
         SDD{
@@ -1086,7 +1086,7 @@ hu{
             "Régi szudáni font",
         }
         SEK{
-            "SKr",
+            "Skr",
             "Svéd korona",
         }
         SGD{
@@ -1110,7 +1110,7 @@ hu{
             "Sierra Leonei leone",
         }
         SOS{
-            "Sh.",
+            "Ssh",
             "Szomáli shilling",
         }
         SRD{
@@ -1134,11 +1134,11 @@ hu{
             "Salvadori colón",
         }
         SYP{
-            "LS",
+            "SY£",
             "Szíriai font",
         }
         SZL{
-            "E",
+            "SZL",
             "Szváziföldi lilangeni",
         }
         THB{
@@ -1170,11 +1170,11 @@ hu{
             "Timori escudo",
         }
         TRL{
-            "TL",
+            "TRL",
             "Régi török líra",
         }
         TRY{
-            "YTL",
+            "TL",
             "új török líra",
         }
         TTD{
@@ -1186,7 +1186,7 @@ hu{
             "Tajvani új dollár",
         }
         TZS{
-            "T Sh",
+            "TSh",
             "Tanzániai shilling",
         }
         UAH{
@@ -1202,11 +1202,11 @@ hu{
             "Ugandai shilling (1966-1987)",
         }
         UGX{
-            "U Sh",
+            "USh",
             "Ugandai shilling",
         }
         USD{
-            "USD",
+            "$",
             "USA dollár",
         }
         USN{
@@ -1226,7 +1226,7 @@ hu{
             "Uruguay-i peso (1975-1993)",
         }
         UYU{
-            "Ur$",
+            "$U",
             "Uruguay-i peso uruguayo",
         }
         UZS{
@@ -1234,11 +1234,11 @@ hu{
             "Üzbegisztáni szum",
         }
         VEB{
-            "Be",
+            "Bs.",
             "Venezuelai bolívar",
         }
         VEF{
-            "BsF",
+            "Bs.F.",
             "Venezuelai bolivar fuerte",
         }
         VND{
@@ -1334,7 +1334,7 @@ hu{
             "Jemeni dínár",
         }
         YER{
-            "YRl",
+            "YR",
             "Jemeni rial",
         }
         YUD{
@@ -1472,7 +1472,7 @@ hu{
             other{"Brunei dollár"}
         }
         BOB{
-            other{"Boliviano"}
+            other{"Bolíviai boliviano"}
         }
         BOP{
             other{"Bolíviai peso"}
@@ -1481,13 +1481,13 @@ hu{
             other{"Bolíviai mvdol"}
         }
         BRB{
-            other{"Brazi cruzeiro novo (1967-1986)"}
+            other{"Brazil cruzeiro novo (BRB)"}
         }
         BRC{
-            other{"Brazi cruzado"}
+            other{"Brazil cruzado"}
         }
         BRE{
-            other{"Brazil cruzeiro (1990-1993)"}
+            other{"Brazil cruzeiro (BRE)"}
         }
         BRL{
             other{"Brazil real"}
@@ -1667,7 +1667,7 @@ hu{
         ce{"csecsen"}
         ceb{"cebui"}
         cel{"egyéb kelta"}
-        ch{"csamoro"}
+        ch{"csamoró"}
         chb{"csibcsa"}
         chg{"csagatáj"}
         chk{"csukéz"}
@@ -1764,7 +1764,7 @@ hu{
         gon{"gondi"}
         gor{"gorontalo"}
         got{"gót"}
-        grb{"grebo"}
+        grb{"grebó"}
         grc{"ógörög"}
         gsw{"svájci német"}
         gu{"gudzsarati"}
@@ -1791,15 +1791,15 @@ hu{
         iba{"iban"}
         id{"indonéz"}
         ie{"interlingue"}
-        ig{"igbo"}
+        ig{"igbó"}
         ii{"szecsuán ji"}
-        ijo{"idzso"}
+        ijo{"idzsó"}
         ik{"inupiak"}
-        ilo{"iloko"}
+        ilo{"ilokó"}
         inc{"egyéb indiai"}
         ine{"indoeurópai nyelv"}
         inh{"ingus"}
-        io{"ido"}
+        io{"idó"}
         ira{"iráni"}
         iro{"irokéz nyelvek"}
         is{"izlandi"}
@@ -1858,7 +1858,7 @@ hu{
         li{"limburgi"}
         ln{"lingala"}
         lo{"laoszi"}
-        lol{"mongo"}
+        lol{"mongó"}
         loz{"lozi"}
         lt{"litván"}
         lu{"luba-katanga"}
@@ -1872,7 +1872,7 @@ hu{
         mag{"magahi"}
         mai{"maithili"}
         mak{"makaszar"}
-        man{"mandingo"}
+        man{"mandingó"}
         map{"ausztronéz"}
         mas{"masai"}
         mdf{"moksán"}
@@ -1891,7 +1891,7 @@ hu{
         mn{"mongol"}
         mnc{"mandzsu"}
         mni{"manipuri"}
-        mno{"manobo nyelv"}
+        mno{"manobó nyelvek"}
         mo{"moldvai"}
         moh{"mohawk"}
         mos{"moszi"}
@@ -1910,7 +1910,7 @@ hu{
         nah{"nahuati"}
         nai{"észak-amerikai indián nyelv"}
         nap{"nápolyi"}
-        nb{"norvég bokmál"}
+        nb{"norvég bokmal"}
         nd{"északi ndebele"}
         nds{"alsónémet"}
         ne{"nepáli"}
@@ -1925,16 +1925,16 @@ hu{
         no{"norvég"}
         nog{"nogaj"}
         non{"óskandináv"}
-        nqo{"n'ko"}
+        nqo{"n'kó"}
         nr{"déli ndebele"}
-        nso{"északi szoto"}
+        nso{"északi szotó"}
         nub{"núbiai nyelv"}
-        nv{"navaho"}
+        nv{"navahó"}
         nwc{"klasszikus newari"}
         ny{"nyanja"}
         nym{"nyamvézi"}
         nyn{"nyankole"}
-        nyo{"nyoro"}
+        nyo{"nyoró"}
         nzi{"nzima"}
         oc{"okszitán"}
         oj{"ojibva"}
@@ -1949,7 +1949,7 @@ hu{
         pag{"pangaszinan"}
         pal{"pahlavi"}
         pam{"pampangan"}
-        pap{"papiamento"}
+        pap{"papiamentó"}
         pau{"palaui"}
         peo{"óperzsa"}
         phi{"Fülöp-szigeteki nyelv"}
@@ -1991,7 +1991,7 @@ hu{
         se{"északi számi"}
         sel{"szölkup"}
         sem{"egyéb szemita"}
-        sg{"sango"}
+        sg{"szangó"}
         sga{"óír"}
         sgn{"jelnyelv"}
         sh{"szerbhorvát"}
@@ -2005,10 +2005,10 @@ hu{
         sla{"szláv nyelv"}
         sm{"szamoai"}
         sma{"déli számi"}
-        smi{"számi nyelv"}
+        smi{"lapp nyelv"}
         smj{"lule számi"}
         smn{"inar sami"}
-        sms{"skolt számi"}
+        sms{"koltta lapp"}
         sn{"sona"}
         snk{"szoninke"}
         so{"szomáliai"}
@@ -2016,7 +2016,7 @@ hu{
         son{"szongai"}
         sq{"albán"}
         sr{"szerb"}
-        srn{"sranai tongo"}
+        srn{"szranai tongó"}
         srr{"szerer"}
         ss{"sziszuati"}
         ssa{"nílusi-szaharai nyelv"}
@@ -2033,7 +2033,7 @@ hu{
         tai{"thai nyelv"}
         te{"telugu"}
         tem{"temne"}
-        ter{"tereno"}
+        ter{"terenó"}
         tet{"tetum"}
         tg{"tadzsik"}
         th{"thai"}
@@ -2078,7 +2078,7 @@ hu{
         wak{"vakas nyelv"}
         wal{"valamo"}
         war{"varaó"}
-        was{"vaso"}
+        was{"vasó"}
         wen{"szorb nyelvek"}
         wo{"volof"}
         xal{"kalmük"}
@@ -2126,7 +2126,7 @@ hu{
     }
     Scripts{
         Arab{"Arab"}
-        Armi{"Arámi"}
+        Armi{"Birodalmi arámi"}
         Armn{"Örmény"}
         Avst{"Avesztán"}
         Bali{"Balinéz"}
@@ -2194,7 +2194,7 @@ hu{
         Lyci{"Líciai"}
         Lydi{"Lídiai"}
         Mand{"Mandai"}
-        Mani{"Manichaean"}
+        Mani{"Manicheus"}
         Maya{"Maja hieroglifák"}
         Mero{"Meroitikus"}
         Mlym{"Malajálam"}
@@ -2306,7 +2306,7 @@ hu{
         TARASK{"Taraskijevica helyesírás"}
         VALENCIA{"Valencia"}
     }
-    Version{"1.139"}
+    Version{"1.117"}
     calendar{
         buddhist{
             eras{
@@ -2321,7 +2321,7 @@ hu{
                 "du.",
             }
             DateTimePatterns{
-                "H:mm:ss v",
+                "H:mm:ss zzzz",
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
@@ -2333,6 +2333,7 @@ hu{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+                "{1} {0}",
             }
             availableFormats{
                 Hm{"HH:mm"}
@@ -2340,12 +2341,12 @@ hu{
                 MEd{"M. d., E"}
                 MMM{"LLL"}
                 MMMMd{"MMMM d."}
-                MMMd{"MMM d"}
+                MMMd{"MMM d."}
                 MMdd{"MM.dd."}
                 Md{"M. d."}
                 d{"d"}
                 mmss{"mm:ss"}
-                yyQ{"Q yy"}
+                yyQ{"yy/Q"}
                 yyyyMM{"yyyy.MM"}
                 yyyyMMMM{"y. MMMM"}
             }
@@ -2438,7 +2439,7 @@ hu{
             }
             intervalFormats{
                 M{
-                    M{"M.-M."}
+                    M{"M-M."}
                 }
                 MEd{
                     M{"MM.dd., E - MM.dd., E"}
@@ -2453,14 +2454,14 @@ hu{
                 }
                 MMMd{
                     M{"MMM d. - MMM d."}
-                    d{"MMM d.-d."}
+                    d{"MMM d-d."}
                 }
                 Md{
                     M{"MM.dd. - MM.dd."}
-                    d{"MM.dd. - MM.dd."}
+                    d{"MM.dd-dd."}
                 }
                 d{
-                    d{"d.-d."}
+                    d{"d-d."}
                 }
                 fallback{"{0} - {1}"}
                 h{
@@ -2481,12 +2482,12 @@ hu{
                     y{"y-y"}
                 }
                 yM{
-                    M{"yyyy.MM. - yyyy.MM."}
+                    M{"yyyy.MM-MM."}
                     y{"yyyy.MM. - yyyy.MM."}
                 }
                 yMEd{
-                    M{"yyyy.MM.dd., E - yyyy.MM.dd., E"}
-                    d{"yyyy.MM.dd., E - yyyy.MM.dd., E"}
+                    M{"yyyy.MM.dd., E - MM.dd., E"}
+                    d{"yyyy.MM.dd., E - dd., E"}
                     y{"yyyy.MM.dd., E - yyyy.MM.dd., E"}
                 }
                 yMMM{
@@ -2500,12 +2501,12 @@ hu{
                 }
                 yMMMd{
                     M{"y. MMM d. - MMM d."}
-                    d{"y. MMM d.-d."}
+                    d{"y. MMM d-d."}
                     y{"y. MMM d. - y. MMM d."}
                 }
                 yMd{
-                    M{"yyyy.MM.dd. - yyyy.MM.dd."}
-                    d{"yyyy.MM.dd. - yyyy.MM.dd."}
+                    M{"yyyy.MM.dd. - MM.dd."}
+                    d{"yyyy.MM.dd-dd."}
                     y{"yyyy.MM.dd. - yyyy.MM.dd."}
                 }
             }
@@ -2775,14 +2776,8 @@ hu{
         "America:North_Dakota:Center"{
             ec{"Középső, Észak-Dakota"}
         }
-        "America:Porto_Velho"{
-            ec{"Pôrto Velho"}
-        }
         "America:Rio_Branco"{
             ec{"Río Branco"}
-        }
-        "America:Sao_Paulo"{
-            ec{"São Paulo"}
         }
         "America:Scoresbysund"{
             ec{"Scoresby Sound"}
@@ -2921,6 +2916,9 @@ hu{
         }
         "Atlantic:Cape_Verde"{
             ec{"Zöld-Foki Szigetek"}
+        }
+        "Atlantic:Madeira"{
+            ec{"madeirai idő"}
         }
         "Atlantic:South_Georgia"{
             ec{"Dél-Georgia"}
@@ -3916,7 +3914,6 @@ hu{
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
-        gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0}"}
     }

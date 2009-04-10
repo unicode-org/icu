@@ -175,7 +175,7 @@ kok{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.139"}
+    Version{"1.62"}
     calendar{
         gregorian{
             AmPmMarkers{
