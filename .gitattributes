@@ -33,10 +33,12 @@ icu4c/source/data/locales/fr_SN.txt -text
 icu4c/source/data/locales/gsw.txt -text
 icu4c/source/data/locales/gsw_CH.txt -text
 icu4c/source/data/locales/ha.txt -text
+icu4c/source/data/locales/ha_GH.txt -text
 icu4c/source/data/locales/ha_Latn.txt -text
 icu4c/source/data/locales/ha_Latn_GH.txt -text
 icu4c/source/data/locales/ha_Latn_NE.txt -text
 icu4c/source/data/locales/ha_Latn_NG.txt -text
+icu4c/source/data/locales/ha_NE.txt -text
 icu4c/source/data/locales/ha_NG.txt -text
 icu4c/source/data/locales/ii.txt -text
 icu4c/source/data/locales/ii_CN.txt -text
