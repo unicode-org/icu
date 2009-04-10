@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fa.xml
  */
 fa{
-    AuxExemplarCharacters{"[\u200C-\u200F \u064E \u0650 \u064F \u0652 \u0656 \u0670 ۰-۹]"}
+    AuxExemplarCharacters{"[\u064E-\u0650 \u0652 \u0656 \u0670 ۰-۹ \u200C-\u200F]"}
     Countries{
         001{"جهان"}
         002{"افریقا"}
@@ -1494,7 +1494,7 @@ fa{
         SAAHO{"ساهویی"}
         SCOTLAND{"انگلیسی معیار اسکاتلند"}
     }
-    Version{"1.106"}
+    Version{"1.107"}
     calendar{
         gregorian{
             AmPmMarkers{
