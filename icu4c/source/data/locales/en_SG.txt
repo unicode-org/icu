@@ -7,70 +7,42 @@
 // *
 // ***************************************************************************
 en_SG{
-    Countries{
-        001{"World"}
-        KP{"North Korea"}
-        SA{"Saudi Arabia"}
-        TK{"Tokelau"}
-    }
-    Keys{
-        calendar{"calendar"}
-    }
-    Languages{
-        bej{"Beja"}
-        dra{"Dravidian Language"}
-        ilo{"Iloko"}
-        kro{"Kru"}
-        nds{"Low German"}
-        pra{"Prakrit Language"}
-        tpi{"Tok Pisin"}
-        yi{"Yiddish"}
-    }
-    LanguagesShort{
-        az{"Azeri"}
-    }
-    NumberPatterns{
-        "#,##0.###",
-        "¤#,##0.00",
-        "#,##0%",
-        "#E0",
-    }
-    Scripts{
-        Goth{"Gothic"}
-        Tagb{"Tagbanwa"}
-    }
-    Types{
-        calendar{
-            ethiopic-amete-alem{"Ethiopic Amete Alem Calendar"}
+    Currencies{
+        SGD{
+            "$",
+            "Singapore Dollar",
+        }
+        USD{
+            "US$",
+            "US Dollar",
         }
     }
-    Variants{
-        BOONT{"Boontling"}
+    Languages{
+        map{"Austronesian"}
+        ps{"Pashto"}
     }
-    Version{"1.139"}
+    Scripts{
+        Armi{"Imperial Aramaic"}
+        Cakm{"Chakma"}
+        Cham{"Cham"}
+        Thai{"Thai"}
+    }
+    Types{
+        collation{
+            pinyin{"Pinyin Sort Order"}
+            stroke{"Stroke Sort Order"}
+        }
+    }
+    Version{"1.61"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
                 1,
                 4,
             }
-            DateTimePatterns{
-                "a hh:mm:ss v",
-                "a hh:mm:ss z",
-                "a hh:mm:ss",
-                "h:mm a",
-                "EEEE, MMMM d, y",
-                "MMMM d, y",
-                "dd-MMM-y",
-                "M/d/yy",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
             availableFormats{
+                Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
-                MMM{"LLL"}
                 MMdd{"dd/MM"}
                 yyyyMMMM{"MMMM y"}
             }
@@ -152,64 +124,29 @@ en_SG{
                 }
             }
         }
-    }
-    codePatterns{
-        language{"Language: {0}"}
-    }
-    delimiters{
-        alternateQuotationEnd{"’"}
-    }
-    localeDisplayPattern{
-        separator{", "}
-    }
-    measurementSystemNames{
-        US{"US"}
-    }
-    zoneStrings{
-        "America:Dawson"{
-            ec{"Dawson"}
+        hebrew{
+            availableFormats{
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+            }
         }
-        "America:Menominee"{
-            ec{"Menominee"}
+        indian{
+            availableFormats{
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+            }
         }
-        "Antarctica:Vostok"{
-            ec{"Vostok"}
+        islamic{
+            availableFormats{
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+            }
         }
-        "meta:Africa_Eastern"{
-            ss{"EAT"}
-        }
-        "meta:Alaska_Hawaii"{
-            sg{"AHT"}
-        }
-        "meta:Atlantic"{
-            ld{"Atlantic Daylight Time"}
-        }
-        "meta:Australia_Western"{
-            ss{"AWST"}
-        }
-        "meta:Baku"{
-            sd{"BAKST"}
-        }
-        "meta:Cape_Verde"{
-            ld{"Cape Verde Summer Time"}
-        }
-        "meta:Cocos"{
-            ss{"CCT"}
-        }
-        "meta:Cuba"{
-            ss{"CST (Cuba)"}
-        }
-        "meta:DumontDUrville"{
-            ss{"DDUT"}
-        }
-        "meta:Gilbert_Islands"{
-            ss{"GILT"}
-        }
-        "meta:Suriname"{
-            ss{"SRT"}
-        }
-        "meta:Turkey"{
-            sd{"TRST"}
+        persian{
+            availableFormats{
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+            }
         }
     }
 }

@@ -7,13 +7,7 @@
 // *
 // ***************************************************************************
 so_KE{
-    Currencies{
-        SOS{
-            "SOS",
-            "SOS",
-        }
-    }
-    Version{"1.139"}
+    Version{"1.48"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

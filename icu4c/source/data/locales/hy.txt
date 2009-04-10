@@ -236,7 +236,7 @@ hy{
         "#0%",
         "#E0",
     }
-    Version{"1.139"}
+    Version{"1.70"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -244,7 +244,7 @@ hy{
                 "Եր․",
             }
             DateTimePatterns{
-                "HH:mm:ss v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -252,6 +252,7 @@ hy{
                 "MMMM dd, y",
                 "MMM d, y",
                 "MM/dd/yy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

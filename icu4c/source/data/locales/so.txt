@@ -112,16 +112,6 @@ so{
         ZW{"Simbaabwe"}
         ZZ{"Far aan la aqoon amase aan saxnayn"}
     }
-    Currencies{
-        KES{
-            "Ksh",
-            "KES",
-        }
-        SOS{
-            "$",
-            "SOS",
-        }
-    }
     ExemplarCharacters{"[a-z]"}
     Languages{
         ar{"Carabi"}
@@ -160,7 +150,7 @@ so{
         Zxxx{"Aan la qorin"}
         Zzzz{"Far aan la aqoon amase aan saxnayn"}
     }
-    Version{"1.139"}
+    Version{"1.65"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -168,7 +158,7 @@ so{
                 "gn",
             }
             DateTimePatterns{
-                "h:mm:ss a v",
+                "h:mm:ss a zzzz",
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
@@ -176,6 +166,7 @@ so{
                 "dd MMMM y",
                 "dd-MMM-y",
                 "dd/MM/yy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

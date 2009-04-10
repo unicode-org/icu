@@ -25,7 +25,7 @@ tr{
         014{"Doğu Afrika"}
         015{"Kuzey Afrika"}
         017{"Orta Afrika"}
-        018{"Güney Afrika [018]"}
+        018{"Afrika'nın Güneyi"}
         019{"Amerika"}
         021{"Amerika'nın Kuzeyi"}
         029{"Karayipler"}
@@ -48,7 +48,7 @@ tr{
         172{"Bağımsız Devletler Topluluğu"}
         419{"Latin Amerika ve Karayipler"}
         830{"Kanal Adaları"}
-        AD{"Andora"}
+        AD{"Andorra"}
         AE{"Birleşik Arap Emirlikleri"}
         AF{"Afganistan"}
         AG{"Antigua ve Barbuda"}
@@ -87,11 +87,11 @@ tr{
         BZ{"Belize"}
         CA{"Kanada"}
         CC{"Cocos Adaları"}
-        CD{"Kongo Demokratik Cumhuriyeti"}
+        CD{"Kongo - Kinşasa"}
         CF{"Orta Afrika Cumhuriyeti"}
-        CG{"Kongo"}
+        CG{"Kongo - Brazavil"}
         CH{"İsviçre"}
-        CI{"Fildişi Sahilleri"}
+        CI{"Fildişi Sahili"}
         CK{"Cook Adaları"}
         CL{"Şili"}
         CM{"Kamerun"}
@@ -107,10 +107,10 @@ tr{
         DE{"Almanya"}
         DJ{"Cibuti"}
         DK{"Danimarka"}
-        DM{"Dominik"}
+        DM{"Dominika"}
         DO{"Dominik Cumhuriyeti"}
         DZ{"Cezayir"}
-        EC{"Ekvator"}
+        EC{"Ekvador"}
         EE{"Estonya"}
         EG{"Mısır"}
         EH{"Batı Sahara"}
@@ -125,14 +125,14 @@ tr{
         FR{"Fransa"}
         GA{"Gabon"}
         GB{"Birleşik Krallık"}
-        GD{"Granada"}
+        GD{"Grenada"}
         GE{"Gürcistan"}
         GF{"Fransız Guyanası"}
         GG{"Guernsey"}
         GH{"Gana"}
         GI{"Cebelitarık"}
         GL{"Grönland"}
-        GM{"Gambia"}
+        GM{"Gambiya"}
         GN{"Gine"}
         GP{"Guadeloupe"}
         GQ{"Ekvator Ginesi"}
@@ -171,7 +171,7 @@ tr{
         KP{"Kuzey Kore"}
         KR{"Güney Kore"}
         KW{"Kuveyt"}
-        KY{"Kayman Adaları"}
+        KY{"Cayman Adaları"}
         KZ{"Kazakistan"}
         LA{"Laos"}
         LB{"Lübnan"}
@@ -186,7 +186,7 @@ tr{
         LY{"Libya"}
         MA{"Fas"}
         MC{"Monako"}
-        MD{"Moldovya Cumhuriyeti"}
+        MD{"Moldova"}
         ME{"Karadağ"}
         MF{"Saint Martin"}
         MG{"Madagaskar"}
@@ -244,7 +244,7 @@ tr{
         RW{"Ruanda"}
         SA{"Suudi Arabistan"}
         SB{"Solomon Adaları"}
-        SC{"Seyşeller"}
+        SC{"Seyşel Adaları"}
         SD{"Sudan"}
         SE{"İsveç"}
         SG{"Singapur"}
@@ -302,7 +302,7 @@ tr{
     Currencies{
         ADP{
             "ADP",
-            "Andora Pesetası",
+            "Andorra Pezetası",
         }
         AED{
             "AED",
@@ -317,15 +317,15 @@ tr{
             "Afganistan Afganisi",
         }
         ALL{
-            "lek",
+            "ALL",
             "Arnavutluk Leki",
         }
         AMD{
-            "dram",
+            "AMD",
             "Ermenistan Dramı",
         }
         ANG{
-            "NA f.",
+            "NAf.",
             "Hollanda Antilleri Guldeni",
         }
         AOA{
@@ -353,7 +353,7 @@ tr{
             "Arjantin Pezosu (1983-1985)",
         }
         ARS{
-            "Arg$",
+            "AR$",
             "Arjantin Pezosu",
         }
         ATS{
@@ -361,7 +361,7 @@ tr{
             "Avusturya Şilini",
         }
         AUD{
-            "$A",
+            "AU$",
             "Avustralya Doları",
         }
         AWG{
@@ -370,11 +370,11 @@ tr{
         }
         AZM{
             "AZM",
-            "Azerbaycan Manatı",
+            "Azerbaycan Manatı (1993-2006)",
         }
         AZN{
             "man.",
-            "Azeri Manatı",
+            "Azerbaycan Manatı",
         }
         BAD{
             "BAD",
@@ -385,7 +385,7 @@ tr{
             "Konvertibl Bosna Hersek Markı",
         }
         BBD{
-            "BDS$",
+            "Bds$",
             "Barbados Doları",
         }
         BDT{
@@ -405,7 +405,7 @@ tr{
             "Belçika Frangı (finansal)",
         }
         BGL{
-            "lev",
+            "BGL",
             "Bulgar Levası (Hard)",
         }
         BGN{
@@ -417,11 +417,11 @@ tr{
             "Bahreyn Dinarı",
         }
         BIF{
-            "Fbu",
+            "FBu",
             "Burundi Frangı",
         }
         BMD{
-            "Ber$",
+            "BD$",
             "Bermuda Doları",
         }
         BND{
@@ -438,7 +438,7 @@ tr{
         }
         BOV{
             "BOV",
-            "Bolivya Mvdol",
+            "Bolivya Mvdolu",
         }
         BRB{
             "NCr",
@@ -469,7 +469,7 @@ tr{
             "Bahama Doları",
         }
         BTN{
-            "Nu",
+            "Nu.",
             "Bhutan Ngultrumu",
         }
         BUK{
@@ -485,7 +485,7 @@ tr{
             "Yeni Beyaz Rusya Rublesi (1994-1999)",
         }
         BYR{
-            "Rbl",
+            "BYR",
             "Beyaz Rusya Rublesi",
         }
         BZD{
@@ -493,7 +493,7 @@ tr{
             "Belize Doları",
         }
         CAD{
-            "Can$",
+            "CA$",
             "Kanada Doları",
         }
         CDF{
@@ -505,7 +505,7 @@ tr{
             "WIR Avrosu",
         }
         CHF{
-            "SwF",
+            "Fr.",
             "İsviçre Frangı",
         }
         CHW{
@@ -517,15 +517,15 @@ tr{
             "Şili Unidades de Fomento",
         }
         CLP{
-            "Ch$",
+            "CL$",
             "Şili Pezosu",
         }
         CNY{
-            "Y",
+            "CN¥",
             "Çin Yuanı Renminbi",
         }
         COP{
-            "Col$",
+            "CO$",
             "Kolombiya Pezosu",
         }
         COU{
@@ -533,7 +533,7 @@ tr{
             "Unidad de Valor Real",
         }
         CRC{
-            "C",
+            "₡",
             "Kosta Rika Kolonu",
         }
         CSD{
@@ -549,11 +549,11 @@ tr{
             "Küba Pezosu",
         }
         CVE{
-            "CVEsc",
+            "CV$",
             "Cape Verde Esküdosu",
         }
         CYP{
-            "£C",
+            "CY£",
             "Güney Kıbrıs Lirası",
         }
         CZK{
@@ -569,11 +569,11 @@ tr{
             "Alman Markı",
         }
         DJF{
-            "DF",
+            "Fdj",
             "Cibuti Frangı",
         }
         DKK{
-            "DKr",
+            "Dkr",
             "Danimarka Kronu",
         }
         DOP{
@@ -586,11 +586,11 @@ tr{
         }
         ECS{
             "ECS",
-            "Ekvator Sukresi",
+            "Ekvador Sukresi",
         }
         ECV{
             "ECV",
-            "Ekvator Unidad de Valor Constante (UVC)",
+            "Ekvador Unidad de Valor Constante (UVC)",
         }
         EEK{
             "Ekr",
@@ -606,14 +606,14 @@ tr{
         }
         ESA{
             "ESA",
-            "İspanyol Pesetası (A hesabı)",
+            "İspanyol Pezetası (A hesabı)",
         }
         ESB{
             "ESB",
-            "İspanyol Pesetası (konvertibl hesap)",
+            "İspanyol Pezetası (konvertibl hesap)",
         }
         ESP{
-            "₧",
+            "Pts",
             "İspanyol Pezetası",
         }
         ETB{
@@ -629,7 +629,7 @@ tr{
             "Fin Markkası",
         }
         FJD{
-            "F$",
+            "FJ$",
             "Fiji Doları",
         }
         FKP{
@@ -649,7 +649,7 @@ tr{
             "Gürcistan Kupon Larisi",
         }
         GEL{
-            "lari",
+            "GEL",
             "Gürcistan Larisi",
         }
         GHC{
@@ -669,12 +669,12 @@ tr{
             "Gambiya Dalasisi",
         }
         GNF{
-            "GF",
+            "FG",
             "Gine Frangı",
         }
         GNS{
             "GNS",
-            "Gine Syli",
+            "Gine Sylisi",
         }
         GQE{
             "GQE",
@@ -685,7 +685,7 @@ tr{
             "Yunan Drahmisi",
         }
         GTQ{
-            "Q",
+            "GTQ",
             "Guatemala Ketzali",
         }
         GWE{
@@ -697,7 +697,7 @@ tr{
             "Gine-Bissau Pezosu",
         }
         GYD{
-            "G$",
+            "GY$",
             "Guyana Doları",
         }
         HKD{
@@ -705,16 +705,16 @@ tr{
             "Hong Kong Doları",
         }
         HNL{
-            "L",
+            "HNL",
             "Honduras Lempirası",
         }
         HRD{
             "HRD",
-            "Hırvat Dinarı",
+            "Hırvatistan Dinarı",
         }
         HRK{
             "kn",
-            "Hırvat Kunası",
+            "Hırvatistan Kunası",
         }
         HTG{
             "HTG",
@@ -741,15 +741,15 @@ tr{
             "Yeni İsrail Şekeli",
         }
         INR{
-            "INR",
+            "₨",
             "Hindistan Rupisi",
         }
         IQD{
-            "ID",
+            "IQD",
             "Irak Dinarı",
         }
         IRR{
-            "RI",
+            "IRR",
             "İran Riyali",
         }
         ISK{
@@ -757,7 +757,7 @@ tr{
             "İzlanda Kronu",
         }
         ITL{
-            "₤",
+            "IT₤",
             "İtalyan Lireti",
         }
         JMD{
@@ -773,15 +773,15 @@ tr{
             "Japon Yeni",
         }
         KES{
-            "K Sh",
+            "Ksh",
             "Kenya Şilini",
         }
         KGS{
-            "som",
+            "KGS",
             "Kırgız Somu",
         }
         KHR{
-            "CR",
+            "KHR",
             "Kamboçya Rieli",
         }
         KMF{
@@ -802,10 +802,10 @@ tr{
         }
         KYD{
             "KY$",
-            "Kayman Adaları Doları",
+            "Cayman Adaları Doları",
         }
         KZT{
-            "T",
+            "KZT",
             "Kazakistan Tengesi",
         }
         LAK{
@@ -813,11 +813,11 @@ tr{
             "Laos Kipi",
         }
         LBP{
-            "LL",
+            "LB£",
             "Lübnan Lirası",
         }
         LKR{
-            "SL Re",
+            "SLRs",
             "Sri Lanka Rupisi",
         }
         LRD{
@@ -825,7 +825,7 @@ tr{
             "Liberya Doları",
         }
         LSL{
-            "M",
+            "LSL",
             "Lesotho Lotisi",
         }
         LTL{
@@ -874,14 +874,14 @@ tr{
         }
         MGA{
             "MGA",
-            "Madagaskar Ariary",
+            "Madagaskar Ariarisi",
         }
         MGF{
             "MGF",
             "Madagaskar Frangı",
         }
         MKD{
-            "MDen",
+            "MKD",
             "Makedonya Dinarı",
         }
         MLF{
@@ -893,7 +893,7 @@ tr{
             "Myanmar Kyatı",
         }
         MNT{
-            "Tug",
+            "₮",
             "Moğol Tugriki",
         }
         MOP{
@@ -925,7 +925,7 @@ tr{
             "Malavi Kvaçası",
         }
         MXN{
-            "MEX$",
+            "MXN",
             "Meksika Pezosu",
         }
         MXP{
@@ -973,19 +973,19 @@ tr{
             "Hollanda Florini",
         }
         NOK{
-            "NKr",
+            "Nkr",
             "Norveç Kronu",
         }
         NPR{
-            "Nrs",
+            "NPRs",
             "Nepal Rupisi",
         }
         NZD{
-            "$NZ",
+            "NZ$",
             "Yeni Zelanda Doları",
         }
         OMR{
-            "RO",
+            "OMR",
             "Umman Riyali",
         }
         PAB{
@@ -1009,15 +1009,15 @@ tr{
             "Papua Yeni Gine Kinası",
         }
         PHP{
-            "Php",
+            "₱",
             "Filipinler Pezosu",
         }
         PKR{
-            "Pra",
+            "PKRs",
             "Pakistan Rupisi",
         }
         PLN{
-            "Zl",
+            "zł",
             "Polonya Zlotisi",
         }
         PLZ{
@@ -1041,7 +1041,7 @@ tr{
             "Rodezya Doları",
         }
         ROL{
-            "leu",
+            "ROL",
             "Eski Romen Leyi",
         }
         RON{
@@ -1065,7 +1065,7 @@ tr{
             "Ruanda Frangı",
         }
         SAR{
-            "SRl",
+            "SR",
             "Suudi Arabistan Riyali",
         }
         SBD{
@@ -1073,12 +1073,12 @@ tr{
             "Solomon Adaları Doları",
         }
         SCR{
-            "SR",
-            "Seyşeller Rupisi",
+            "SRe",
+            "Seyşel Rupisi",
         }
         SDD{
             "LSd",
-            "Sudan Dinarı",
+            "Eski Sudan Dinarı",
         }
         SDG{
             "SDG",
@@ -1089,7 +1089,7 @@ tr{
             "Eski Sudan Lirası",
         }
         SEK{
-            "SKr",
+            "Skr",
             "İsveç Kronu",
         }
         SGD{
@@ -1113,7 +1113,7 @@ tr{
             "Sierra Leone Leonesi",
         }
         SOS{
-            "Sh.",
+            "Ssh",
             "Somali Şilini",
         }
         SRD{
@@ -1137,12 +1137,12 @@ tr{
             "El Salvador Kolonu",
         }
         SYP{
-            "LS",
+            "SY£",
             "Suriye Lirası",
         }
         SZL{
-            "E",
-            "Swaziland Lilangenisi",
+            "SZL",
+            "Svaziland Lilangenisi",
         }
         THB{
             "฿",
@@ -1173,11 +1173,11 @@ tr{
             "Timor Esküdosu",
         }
         TRL{
-            "TL",
+            "TRL",
             "Eski Türk Lirası",
         }
         TRY{
-            "YTL",
+            "TL",
             "Türk Lirası",
         }
         TTD{
@@ -1189,7 +1189,7 @@ tr{
             "Yeni Tayvan Doları",
         }
         TZS{
-            "T Sh",
+            "TSh",
             "Tanzanya Şilini",
         }
         UAH{
@@ -1205,7 +1205,7 @@ tr{
             "Uganda Şilini (1966-1987)",
         }
         UGX{
-            "U Sh",
+            "USh",
             "Uganda Şilini",
         }
         USD{
@@ -1229,19 +1229,19 @@ tr{
             "Uruguay Pezosu (1975-1993)",
         }
         UYU{
-            "Ur$",
+            "$U",
             "Uruguay Pezosu (Uruguayo)",
         }
         UZS{
             "UZS",
-            "Özbekistan Sumu",
+            "Özbekistan Somu",
         }
         VEB{
-            "Be",
+            "Bs.",
             "Venezuela Bolivarı",
         }
         VEF{
-            "BsF",
+            "Bs.F.",
             "Güçlü Venezuela Bolivarı",
         }
         VND{
@@ -1337,7 +1337,7 @@ tr{
             "Yemen Dinarı",
         }
         YER{
-            "YRl",
+            "YR",
             "Yemen Riyali",
         }
         YUD{
@@ -1374,13 +1374,13 @@ tr{
         }
         ZWD{
             "Z$",
-            "Zimbabwe Doları",
+            "Zimbabve Doları",
         }
     }
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    ExemplarCharacters{"[a-c ç d-g ğ h ı i İ {i̇} j-o ö p r s ş t u ü v y z]"}
+    ExemplarCharacters{"[a-c ç d-g ğ h ı i İ {i\u0307} j-o ö p r s ş t u ü v y z]"}
     Keys{
         calendar{"Takvim"}
         collation{"Sıralama"}
@@ -1395,24 +1395,24 @@ tr{
         ady{"Çerkezce"}
         ae{"Avestçe"}
         af{"Afrikaan Dili"}
-        afa{"Diğer Afro-Asyatik Diller"}
+        afa{"Afro-Asyatik Diller"}
         afh{"Afrihili"}
-        ain{"Ainu"}
+        ain{"Ayni Dili"}
         ak{"Akan"}
         akk{"Akad Dili"}
         ale{"Aleut"}
-        alg{"Algonquian Dilleri"}
+        alg{"Algonkin Dili"}
         alt{"Güney Altayca"}
-        am{"Amharik"}
+        am{"Amharca"}
         an{"Aragonca"}
         ang{"Eski İngilizce"}
         anp{"Angika"}
         apa{"Apaçi Dilleri"}
         ar{"Arapça"}
         arc{"Aramice"}
-        arn{"Araucanian Dili"}
+        arn{"Araukanya Dili"}
         arp{"Arapaho Dili"}
-        art{"Diğer Yapay Diller"}
+        art{"Yapay Diller"}
         arw{"Arawak Dili"}
         as{"Assamca"}
         ast{"Asturyasca"}
@@ -1422,29 +1422,29 @@ tr{
         awa{"Awadhi"}
         ay{"Aymara"}
         az{"Azerice"}
-        ba{"Başkırt Dili"}
+        ba{"Başkırtça"}
         bad{"Banda Dili"}
         bai{"Bamileke Dilleri"}
         bal{"Baluchi"}
         ban{"Bali Dili"}
         bas{"Basa Dili"}
-        bat{"Diğer Baltık Dilleri"}
+        bat{"Baltık Dilleri"}
         be{"Beyaz Rusça"}
         bej{"Beja Dili"}
         bem{"Bemba"}
         ber{"Berberi"}
         bg{"Bulgarca"}
         bh{"Bihari"}
-        bho{"Bhojpuri"}
+        bho{"Arayanice"}
         bi{"Bislama"}
         bik{"Bikol"}
         bin{"Bini"}
         bla{"Siksika"}
         bm{"Bambara"}
-        bn{"Bengal Dili"}
+        bn{"Bengalce"}
         bnt{"Bantu Dili"}
         bo{"Tibetçe"}
-        br{"Breton Dili"}
+        br{"Bretonca"}
         bra{"Braj"}
         bs{"Boşnakça"}
         btk{"Batak"}
@@ -1453,13 +1453,13 @@ tr{
         byn{"Blin"}
         ca{"Katalanca"}
         cad{"Caddo"}
-        cai{"Diğer Orta Amerika Yerli Dilleri"}
+        cai{"Orta Amerika Yerli Dilleri"}
         car{"Carib"}
-        cau{"Diğer Kafkas Dilleri"}
+        cau{"Kafkas Dilleri"}
         cch{"Atsam"}
         ce{"Çeçence"}
         ceb{"Cebuano"}
-        cel{"Diğer Kelt Dilleri"}
+        cel{"Kelt Dilleri"}
         ch{"Chamorro"}
         chb{"Chibcha"}
         chg{"Çağatay Dili"}
@@ -1471,23 +1471,23 @@ tr{
         chr{"Çeroki"}
         chy{"Şayen Dili"}
         cmc{"Chamic Dilleri"}
-        co{"Korsika Dili"}
+        co{"Korsikaca"}
         cop{"Kiptice"}
-        cpe{"Diğer İngilizce tabanlı Creole ve Pidgin Dilleri"}
-        cpf{"Diğer Fransızca tabanlı Creole ve Pidgin Dilleri"}
-        cpp{"Diğer Portekizce tabanlı Creole ve Pidgin Dilleri"}
+        cpe{"İngilizce tabanlı Creole ve Pidgin Dilleri"}
+        cpf{"Fransızca tabanlı Creole ve Pidgin Dilleri"}
+        cpp{"Portekizce tabanlı Creole ve Pidgin Dilleri"}
         cr{"Cree"}
         crh{"Kırım Türkçesi"}
-        crp{"Diğer Creole ve Pidgin Dilleri"}
+        crp{"Creole ve Pidgin Dilleri"}
         cs{"Çekçe"}
         csb{"Kashubian"}
         cu{"Kilise Slavcası"}
-        cus{"Diğer Kuşitik Diller"}
-        cv{"Çuvaş"}
+        cus{"Kuşitik Diller"}
+        cv{"Çuvaşça"}
         cy{"Galce"}
         da{"Danca"}
         dak{"Dakota"}
-        dar{"Dargva"}
+        dar{"Dargince"}
         day{"Dayak"}
         de{"Almanca"}
         de_AT{"Avusturya Almancası"}
@@ -1497,7 +1497,7 @@ tr{
         dgr{"Dogrib"}
         din{"Dinka"}
         doi{"Dogri"}
-        dra{"Diğer Dravid Dilleri"}
+        dra{"Dravid Dilleri"}
         dsb{"Aşağı Sorbça"}
         dua{"Duala"}
         dum{"Ortaçağ Felemenkçesi"}
@@ -1529,7 +1529,7 @@ tr{
         ff{"Fulah"}
         fi{"Fince"}
         fil{"Filipino"}
-        fiu{"Diğer Finno - Ugrik Dilleri"}
+        fiu{"Finno - Ugrik Diller"}
         fj{"Fiji Dili"}
         fo{"Faroe Dili"}
         fon{"Fon"}
@@ -1547,10 +1547,10 @@ tr{
         gay{"Gayo"}
         gba{"Gbaya"}
         gd{"İskoç Gal Dili"}
-        gem{"Diğer Germen Dilleri"}
+        gem{"Cermen Dilleri"}
         gez{"Geez"}
-        gil{"Gilbertese"}
-        gl{"Galiçya Dili"}
+        gil{"Kiribati Dili"}
+        gl{"Galiçyaca"}
         gmh{"Ortaçağ Yüksek Almancası"}
         gn{"Guarani"}
         goh{"Eski Yüksek Almanca"}
@@ -1582,19 +1582,19 @@ tr{
         hz{"Herero"}
         ia{"Interlingua"}
         iba{"Iban"}
-        id{"Endonezya Dili"}
+        id{"Endonezce"}
         ie{"Interlingue"}
-        ig{"Igbo"}
+        ig{"İbo Dili"}
         ii{"Sichuan Yi"}
         ijo{"Ijo"}
         ik{"Inupiak"}
         ilo{"Iloko"}
-        inc{"Diğer Hint Dilleri"}
-        ine{"Diğer Hint-Avrupa Dilleri"}
+        inc{"Hint Dilleri"}
+        ine{"Hint-Avrupa Dilleri"}
         inh{"İnguş Dili"}
         io{"Ido"}
-        ira{"Diğer İran Dilleri"}
-        iro{"Iroquoian Dilleri"}
+        ira{"İran Dilleri"}
+        iro{"İroqu Dili"}
         is{"İzlandaca"}
         it{"İtalyanca"}
         iu{"Inuktitut"}
@@ -1602,7 +1602,7 @@ tr{
         jbo{"Lojban"}
         jpr{"Yahudi Farsçası"}
         jrb{"Yahudi Arapçası"}
-        jv{"Java Dili"}
+        jv{"Cava Dili"}
         ka{"Gürcüce"}
         kaa{"Karakalpakça"}
         kab{"Kabile"}
@@ -1616,11 +1616,11 @@ tr{
         kfo{"Koro"}
         kg{"Kongo"}
         kha{"Khasi"}
-        khi{"Diğer Hoisan Dilleri"}
+        khi{"Hoisan Dilleri"}
         kho{"Hotanca"}
         ki{"Kikuyu"}
         kj{"Kuanyama"}
-        kk{"Kazak Dili"}
+        kk{"Kazakça"}
         kl{"Grönland Dili"}
         km{"Kamboçya Dili"}
         kmb{"Kimbundu"}
@@ -1630,8 +1630,8 @@ tr{
         kos{"Kosraean"}
         kpe{"Kpelle"}
         kr{"Kanuri"}
-        krc{"Karaçay-Balkar"}
-        krl{"Karelian"}
+        krc{"Karaçay-Balkarça"}
+        krl{"Karelyaca"}
         kro{"Kru"}
         kru{"Kurukh"}
         ks{"Keşmirce"}
@@ -1639,28 +1639,28 @@ tr{
         kum{"Kumukça"}
         kut{"Kutenai"}
         kv{"Komi"}
-        kw{"Cornish"}
+        kw{"Kernevekçe"}
         ky{"Kırgızca"}
         la{"Latince"}
         lad{"Ladino"}
         lah{"Lahnda"}
         lam{"Lamba"}
-        lb{"Lüksemburg Dili"}
+        lb{"Lüksemburgca"}
         lez{"Lezgice"}
         lg{"Ganda"}
-        li{"Limburgish"}
+        li{"Limburgca"}
         ln{"Lingala"}
         lo{"Laos Dili"}
         lol{"Mongo"}
         loz{"Lozi"}
-        lt{"Litvanya Dili"}
+        lt{"Litvanyaca"}
         lu{"Luba-Katanga"}
         lua{"Luba-Lulua"}
         lui{"Luiseno"}
         lun{"Lunda"}
         luo{"Luo"}
         lus{"Lushai"}
-        lv{"Letonya Dili"}
+        lv{"Letonca"}
         mad{"Madura Dili"}
         mag{"Magahi"}
         mai{"Maithili"}
@@ -1668,10 +1668,10 @@ tr{
         man{"Mandingo"}
         map{"Avustronezya Dili"}
         mas{"Masai"}
-        mdf{"Moksha"}
+        mdf{"Mokşa Dili"}
         mdr{"Mandar"}
         men{"Mende"}
-        mg{"Malaga Dili"}
+        mg{"Malagasi"}
         mga{"Ortaçağ İrlandacası"}
         mh{"Marshall Adaları Dili"}
         mi{"Maori"}
@@ -1679,7 +1679,7 @@ tr{
         min{"Minangkabau"}
         mis{"Çeşitli Diller"}
         mk{"Makedonca"}
-        mkh{"Diğer Mon-Khmer Dilleri"}
+        mkh{"Mon-Khmer Dilleri"}
         ml{"Malayalam"}
         mn{"Moğolca"}
         mnc{"Mançurya Dili"}
@@ -1701,7 +1701,7 @@ tr{
         myv{"Erzya"}
         na{"Nauru Dili"}
         nah{"Nahuatl"}
-        nai{"Diğer Kuzey Amerika Yerli Dilleri"}
+        nai{"Kuzey Amerika Yerli Dilleri"}
         nap{"Napolice"}
         nb{"Norveççe Bokmål"}
         nd{"Kuzey Ndebele"}
@@ -1710,14 +1710,14 @@ tr{
         new{"Newari"}
         ng{"Ndonga"}
         nia{"Nias"}
-        nic{"Diğer Nijer-Kordofan Dilleri"}
+        nic{"Nijer-Kordofan Dilleri"}
         niu{"Niuean"}
         nl{"Hollanda Dili"}
         nl_BE{"Felemenkçe"}
         nn{"Norveççe Nynorsk"}
         no{"Norveççe"}
-        nog{"Nogay Dili"}
-        non{"Old Norse"}
+        nog{"Nogayca"}
+        non{"Eski Norse"}
         nqo{"N’Ko"}
         nr{"Güney Ndebele"}
         nso{"Kuzey Sotho"}
@@ -1729,23 +1729,23 @@ tr{
         nyn{"Nyankole"}
         nyo{"Nyoro"}
         nzi{"Nzima"}
-        oc{"Occitan"}
-        oj{"Ojibwa"}
+        oc{"Oksitanca"}
+        oj{"Ojibva Dili"}
         om{"Oromo"}
         or{"Oriya"}
-        os{"Oset"}
+        os{"Osetçe"}
         osa{"Osage"}
         ota{"Osmanlı Türkçesi"}
         oto{"Otomi Dilleri"}
         pa{"Pencap Dili"}
-        paa{"Diğer Papua Dilleri"}
+        paa{"Papua Dilleri"}
         pag{"Pangasinan"}
-        pal{"Pehlevi"}
+        pal{"Pehlevi Dili"}
         pam{"Pampanga"}
         pap{"Papiamento"}
         pau{"Palau Dili"}
         peo{"Eski Farsça"}
-        phi{"Diğer Filipinler Dilleri"}
+        phi{"Filipinler Dilleri"}
         phn{"Fenike Dili"}
         pi{"Pali"}
         pl{"Lehçe"}
@@ -1763,42 +1763,42 @@ tr{
         rm{"Rhaeto-Roman Dili"}
         rn{"Kirundi"}
         ro{"Romence"}
-        roa{"Diğer Roman Dilleri"}
+        roa{"Roman Dilleri"}
         rom{"Romanca"}
         root{"Köken"}
         ru{"Rusça"}
-        rup{"Aromanca"}
+        rup{"Ulahça"}
         rw{"Kinyarwanda"}
         sa{"Sanskritçe"}
         sad{"Sandawe"}
         sah{"Yakutça"}
-        sai{"Diğer Güney Amerika Yerli Dilleri"}
+        sai{"Güney Amerika Yerli Dilleri"}
         sal{"Salishan Dilleri"}
         sam{"Samarit Aramcası"}
         sas{"Sasak"}
         sat{"Santali"}
         sc{"Sardunya Dili"}
         scn{"Sicilyaca"}
-        sco{"İskoç"}
+        sco{"Scots"}
         sd{"Sindhi"}
         se{"Kuzey Sami"}
         sel{"Selkup"}
-        sem{"Diğer Semitik Diller"}
+        sem{"Semitik Diller"}
         sg{"Sangho"}
         sga{"Eski İrlandaca"}
         sgn{"İşaret Dilleri"}
         sh{"Sırp-Hırvat Dili"}
         shn{"Shan Dili"}
-        si{"Sinhal Dili"}
+        si{"Seylanca"}
         sid{"Sidamo"}
         sio{"Siu Dilleri"}
-        sit{"Diğer Sino-Tibet Dilleri"}
+        sit{"Sino-Tibet Dilleri"}
         sk{"Slovakça"}
         sl{"Slovence"}
-        sla{"Diğer Slav Dilleri"}
+        sla{"Slav Dilleri"}
         sm{"Samoa Dili"}
         sma{"Güney Sami"}
-        smi{"Diğer Sami Dilleri"}
+        smi{"Sami Dilleri"}
         smj{"Lule Sami"}
         smn{"Inari Sami"}
         sms{"Skolt Sami"}
@@ -1812,7 +1812,7 @@ tr{
         srn{"Sranan Tongo"}
         srr{"Serer"}
         ss{"Siswati"}
-        ssa{"Diğer Nil-Sahara Dilleri"}
+        ssa{"Nil-Sahara Dilleri"}
         st{"Güney Sotho"}
         su{"Sunda Dili"}
         suk{"Sukuma"}
@@ -1822,20 +1822,20 @@ tr{
         sw{"Swahili"}
         syc{"Klasik Süryanice"}
         syr{"Süryanice"}
-        ta{"Tamil"}
+        ta{"Tamilce"}
         tai{"Tai Dili"}
         te{"Telugu"}
         tem{"Timne"}
         ter{"Tereno"}
         tet{"Tetum"}
-        tg{"Tacik Dili"}
-        th{"Tay Dili"}
+        tg{"Tacikçe"}
+        th{"Tayca"}
         ti{"Tigrinya"}
         tig{"Tigre"}
         tiv{"Tiv"}
         tk{"Türkmence"}
         tkl{"Tokelau"}
-        tl{"Tagalog"}
+        tl{"Takalotça"}
         tlh{"Klingon"}
         tli{"Tlingit"}
         tmh{"Tamaşek"}
@@ -1848,8 +1848,8 @@ tr{
         tsi{"Tsimshian"}
         tt{"Tatarca"}
         tum{"Tumbuka"}
-        tup{"Tupi dilleri"}
-        tut{"Diğer Altay Dilleri"}
+        tup{"Tupi Dilleri"}
+        tut{"Altay Dilleri"}
         tvl{"Tuvalu"}
         tw{"Twi"}
         ty{"Tahiti Dili"}
@@ -1867,20 +1867,20 @@ tr{
         vi{"Vietnamca"}
         vo{"Volapük"}
         vot{"Votic"}
-        wa{"Walloon"}
+        wa{"Valonca"}
         wak{"Wakashan Dilleri"}
         wal{"Walamo"}
         war{"Waray"}
         was{"Washo"}
         wen{"Sorb Dilleri"}
-        wo{"Wolof"}
-        xal{"Kalmık"}
+        wo{"Volofca"}
+        xal{"Kalmıkça"}
         xh{"Xhosa"}
         yao{"Yao"}
         yap{"Yapça"}
-        yi{"Yiddiş"}
+        yi{"Yidiş"}
         yo{"Yoruba"}
-        ypk{"Yupik Dilleri"}
+        ypk{"Yupik Dili"}
         za{"Zhuang"}
         zap{"Zapotek Dili"}
         zbl{"Blis Sembolleri"}
@@ -1918,20 +1918,20 @@ tr{
         "#E0",
     }
     Scripts{
-        Arab{"Arapça"}
-        Armi{"Armi"}
-        Armn{"Ermenice"}
-        Avst{"Avestçe"}
+        Arab{"Arap"}
+        Armi{"İmparatorluk Aramicesi"}
+        Armn{"Ermeni"}
+        Avst{"Avesta"}
         Bali{"Bali Dili"}
         Batk{"Batak"}
-        Beng{"Bengalce"}
+        Beng{"Bengal"}
         Blis{"Blis Sembolleri"}
         Bopo{"Bopomofo"}
         Brah{"Brahmi"}
         Brai{"Braille"}
         Bugi{"Bugis"}
         Buhd{"Buhid"}
-        Cakm{"Cakm"}
+        Cakm{"Chakma"}
         Cans{"UCAS"}
         Cari{"Karya"}
         Cham{"Cham"}
@@ -1940,41 +1940,41 @@ tr{
         Copt{"Koptik"}
         Cprt{"Kıbrıs"}
         Cyrl{"Kiril"}
-        Cyrs{"Eski Kilise Slavca"}
+        Cyrs{"Eski Kilise Slavcası Kiril"}
         Deva{"Devanagari"}
         Dsrt{"Deseret"}
-        Egyd{"Mısır Yazısı - Demotik"}
-        Egyh{"Mısır Yazısı - Hiyeratik"}
-        Egyp{"Mısır Yazısı - Hiyeroglif"}
+        Egyd{"Demotik Mısır"}
+        Egyh{"Hiyeratik Mısır"}
+        Egyp{"Hiyeroglif Mısır"}
         Ethi{"Etiyopya"}
-        Geok{"Hutsuri Gürcüce"}
-        Geor{"Gürcüce"}
+        Geok{"Hutsuri Gürcü"}
+        Geor{"Gürcü"}
         Glag{"Glagolit"}
         Goth{"Gotik"}
         Grek{"Yunan"}
         Gujr{"Gujarati"}
         Guru{"Gurmukhi"}
-        Hang{"Hangul"}
-        Hani{"Hun"}
+        Hang{"Hangıl"}
+        Hani{"Han"}
         Hano{"Hanunoo"}
         Hans{"Basitleştirilmiş Han"}
         Hant{"Geleneksel Han"}
-        Hebr{"İbranice"}
+        Hebr{"İbrani"}
         Hira{"Hiragana"}
         Hmng{"Pahawh Hmong"}
         Hrkt{"Katakana veya Hiragana"}
-        Hung{"Eski Macarca"}
+        Hung{"Eski Macar"}
         Inds{"Indus"}
-        Ital{"Eski İtalyanca"}
+        Ital{"Eski İtalyan"}
         Java{"Cava Dili"}
-        Jpan{"Japonca"}
+        Jpan{"Japon"}
         Kali{"Kayah Li"}
         Kana{"Katakana"}
         Khar{"Kharoshthi"}
         Khmr{"Khmer"}
         Knda{"Kannada"}
-        Kore{"Korece"}
-        Kthi{"Kthi"}
+        Kore{"Kore"}
+        Kthi{"Kaithi"}
         Lana{"Lanna"}
         Laoo{"Lao Dili"}
         Latf{"Fraktur Latin"}
@@ -1984,14 +1984,14 @@ tr{
         Limb{"Limbu"}
         Lina{"Lineer A"}
         Linb{"Lineer B"}
-        Lyci{"Likya Dili"}
-        Lydi{"Lidya DIli"}
-        Mand{"Mandaean"}
-        Mani{"Mani Alfabesi"}
+        Lyci{"Likya"}
+        Lydi{"Lidya"}
+        Mand{"Manden"}
+        Mani{"Mani"}
         Maya{"Maya Hiyeroglifleri"}
         Mero{"Meroitik"}
         Mlym{"Malayalam"}
-        Mong{"Moğolca"}
+        Mong{"Moğol"}
         Moon{"Moon"}
         Mtei{"Meitei Mayek"}
         Mymr{"Myanmar"}
@@ -2001,14 +2001,14 @@ tr{
         Orkh{"Orhun"}
         Orya{"Oriya"}
         Osma{"Osmanya"}
-        Perm{"Eski Permic"}
+        Perm{"Eski Permik"}
         Phag{"Phags-pa"}
-        Phli{"Phli"}
-        Phlp{"Phlp"}
+        Phli{"Pehlevi Kitabe Dili"}
+        Phlp{"Psalter Pehlevi"}
         Phlv{"Kitap Pehlevi Dili"}
-        Phnx{"Fonetik"}
+        Phnx{"Fenike"}
         Plrd{"Pollard Fonetik"}
-        Prti{"Prti"}
+        Prti{"Partça Kitabe Dili"}
         Qaai{"Kalıtsal"}
         Rjng{"Rejang"}
         Roro{"Rongorongo"}
@@ -2016,37 +2016,37 @@ tr{
         Samr{"Samarit"}
         Sara{"Sarati"}
         Saur{"Saurashtra"}
-        Sgnw{"İşaret Dili Yazımı"}
+        Sgnw{"İşaret Dili"}
         Shaw{"Shavian"}
         Sinh{"Sinhal"}
         Sund{"Sunda"}
         Sylo{"Syloti Nagri"}
-        Syrc{"Süryanice"}
-        Syre{"Estrangela Süryanice"}
-        Syrj{"Batı Süryanice"}
-        Syrn{"Doğu Süryanice"}
+        Syrc{"Süryani"}
+        Syre{"Estrangela Süryani"}
+        Syrj{"Batı Süryani"}
+        Syrn{"Doğu Süryani"}
         Tagb{"Tagbanwa"}
         Tale{"Tai Le"}
         Talu{"New Tai Lue"}
         Taml{"Tamil"}
-        Tavt{"Tavt"}
+        Tavt{"Tai Viet"}
         Telu{"Telugu"}
         Teng{"Tengwar"}
         Tfng{"Tifinagh"}
-        Tglg{"Takalotça"}
+        Tglg{"Takalot"}
         Thaa{"Thaana"}
-        Thai{"Tayca"}
-        Tibt{"Tibetçe"}
+        Thai{"Tay"}
+        Tibt{"Tibet"}
         Ugar{"Ugarit Çivi Yazısı"}
         Vaii{"Vai"}
         Visp{"Konuşma Sesleri Çizimlemesi"}
-        Xpeo{"Eski Farsça"}
+        Xpeo{"Eski Fars"}
         Xsux{"Sümer-Akad Çivi Yazısı"}
         Yiii{"Yi"}
-        Zmth{"Zmth"}
-        Zsym{"Zsym"}
+        Zmth{"Matematiksel Gösterim"}
+        Zsym{"Sembol"}
         Zxxx{"Yazılı Olmayan"}
-        Zyyy{"Common"}
+        Zyyy{"Ortak"}
         Zzzz{"Bilinmeyen veya Geçersiz Betik"}
     }
     Types{
@@ -2073,9 +2073,10 @@ tr{
     }
     Variants{
         1606NICT{"1606'ya Dek Geç Ortaçağ Fransızcası"}
-        1901{"Geleneksel Alman Yazım Kuralları"}
+        1694ACAD{"Erken Modern Fransızca"}
+        1901{"Geleneksel Almanca Yazım Kuralları"}
         1994{"Standart Resia Yazım Kuralları"}
-        1996{"1996 Alman Yazım Kuralları"}
+        1996{"1996 Almanca Yazım Kuralları"}
         AREVELA{"Doğu Ermenicesi"}
         AREVMDA{"Batı Ermenicesi"}
         BAKU1926{"Birleştirilmiş Yeni Türk Alfabesi"}
@@ -2099,8 +2100,13 @@ tr{
         TARASK{"Taraskievica Yazım Kuralları"}
         VALENCIA{"Valensiyaca"}
     }
-    Version{"1.139"}
+    Version{"1.122"}
     calendar{
+        chinese{
+            availableFormats{
+                yyMMM{"yy MMM"}
+            }
+        }
         coptic{
             monthNames{
                 format{
@@ -2122,53 +2128,94 @@ tr{
                 }
             }
         }
+        ethiopic{
+            monthNames{
+                format{
+                    abbreviated{
+                        "Meskerem",
+                        "Tikimt",
+                        "Hidar",
+                        "Tahsas",
+                        "Tir",
+                        "Yakatit",
+                        "Magabit",
+                        "Miyazya",
+                        "Ginbot",
+                        "Sene",
+                        "Hamle",
+                        "Nehasa",
+                        "Pagumiene",
+                    }
+                    wide{
+                        "Meskerem",
+                        "Tikimt",
+                        "Hidar",
+                        "Tahsas",
+                        "Tir",
+                        "Yakatit",
+                        "Magabit",
+                        "Miyazya",
+                        "Ginbot",
+                        "Sene",
+                        "Hamle",
+                        "Nehasa",
+                        "Pagumiene",
+                    }
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "AM",
                 "PM",
             }
             DateTimePatterns{
-                "HH:mm:ss v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
                 "dd MMMM y EEEE",
-                "d MMMM y",
+                "dd MMMM y",
                 "dd MMM y",
-                "dd MM yyyy",
+                "dd.MM.yyyy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
             }
             availableFormats{
+                EEEd{"d EEE"}
                 Ed{"d E"}
                 H{"H"}
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
                 Hm{"HH:mm"}
                 M{"L"}
-                MEd{"d-M E"}
+                MEd{"dd/MM E"}
                 MMM{"LLL"}
-                MMMEd{"d MMM E"}
-                MMMMEd{"d MMMM E"}
-                MMMMd{"d MMMM"}
-                MMMd{"d MMM"}
-                Md{"d/M"}
+                MMMEd{"dd MMM E"}
+                MMMMEd{"dd MMMM E"}
+                MMMMd{"dd MMMM"}
+                MMMd{"dd MMM"}
+                Md{"dd/MM"}
                 d{"d"}
+                hhmm{"hh:mm a"}
+                hhmmss{"hh:mm:ss a"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M/yyyy"}
-                yMEd{"d/M/yyyy EEE"}
+                yMEd{"dd.MM.yyyy EEE"}
                 yMMM{"MMM y"}
-                yMMMEd{"d MMM y EEE"}
+                yMMMEd{"dd MMM y EEE"}
                 yMMMM{"MMMM y"}
                 yQ{"Q yyyy"}
                 yQQQ{"QQQ y"}
                 yyMM{"MM/yy"}
                 yyMMM{"MMM yy"}
                 yyQ{"Q yy"}
+                yyQQQQ{"QQQQ yy"}
                 yyyy{"y"}
             }
             dayNames{
@@ -2270,12 +2317,15 @@ tr{
                     M{"MMM-MMM"}
                 }
                 MMMEd{
-                    M{"d MMM E - d MMM E"}
-                    d{"d MMM E - d MMM E"}
+                    M{"dd MMM E - dd MMM E"}
+                    d{"dd MMM E - dd MMM E"}
+                }
+                MMMM{
+                    M{"LLLL-LLLL"}
                 }
                 MMMd{
-                    M{"d MMM - d MMM"}
-                    d{"d-d MMM"}
+                    M{"dd MMM - dd MMM"}
+                    d{"dd-dd MMM"}
                 }
                 Md{
                     M{"dd.MM - dd.MM"}
@@ -2286,17 +2336,21 @@ tr{
                 }
                 fallback{"{0} - {1}"}
                 h{
+                    a{"HH-HH"}
                     h{"HH-HH"}
                 }
                 hm{
+                    a{"HH:mm-HH:mm"}
                     h{"HH:mm-HH:mm"}
                     m{"HH:mm-HH:mm"}
                 }
                 hmv{
+                    a{"HH:mm-HH:mm v"}
                     h{"HH:mm-HH:mm v"}
                     m{"HH:mm-HH:mm v"}
                 }
                 hv{
+                    a{"HH-HH v"}
                     h{"HH-HH v"}
                 }
                 y{
@@ -2321,12 +2375,13 @@ tr{
                     y{"dd MMM y E - dd MMM y E"}
                 }
                 yMMMM{
+                    M{"MM – MM yyyy"}
                     y{"MM-yyyy – MM-yyyy"}
                 }
                 yMMMd{
-                    M{"d MMM - d MMM y"}
-                    d{"d-d MMM y"}
-                    y{"d MMM y - d MMM y"}
+                    M{"dd MMM - dd MMM y"}
+                    d{"dd-dd MMM y"}
+                    y{"dd MMM y - dd MMM y"}
                 }
                 yMd{
                     M{"dd.MM.yyyy - dd.MM.yyyy"}
@@ -2403,6 +2458,130 @@ tr{
                         "2",
                         "3",
                         "4",
+                    }
+                }
+            }
+        }
+        hebrew{
+            monthNames{
+                format{
+                    abbreviated{
+                        "Tişri",
+                        "Heşvan",
+                        "Kislev",
+                        "Tevet",
+                        "Şevat",
+                        "Veadar",
+                        "Adar",
+                        "Nisan",
+                        "İyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                    }
+                    wide{
+                        "Tişri",
+                        "Heşvan",
+                        "Kislev",
+                        "Tevet",
+                        "Şevat",
+                        "Veadar",
+                        "Adar",
+                        "Nisan",
+                        "İyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul",
+                    }
+                }
+            }
+        }
+        islamic{
+            monthNames{
+                format{
+                    abbreviated{
+                        "Muharrem",
+                        "Safer",
+                        "Rebiülevvel",
+                        "Rebiülahir",
+                        "Cemaziyelevvel",
+                        "Cemaziyelahir",
+                        "Recep",
+                        "Şaban",
+                        "Ramazan",
+                        "Şevval",
+                        "Zilkade",
+                        "Zilhicce",
+                    }
+                    wide{
+                        "Muharrem",
+                        "Safer",
+                        "Rebiülevvel",
+                        "Rebiülahir",
+                        "Cemaziyelevvel",
+                        "Cemaziyelahir",
+                        "Recep",
+                        "Şaban",
+                        "Ramazan",
+                        "Şevval",
+                        "Zilkade",
+                        "Zilhicce",
+                    }
+                }
+            }
+        }
+        islamic-civil{
+            monthNames{
+                format{
+                    wide{
+                        "Muharrem",
+                        "Safer",
+                        "Rebiülevvel",
+                        "Rebiülahir",
+                        "Cemaziyelevvel",
+                        "Cemaziyelahir",
+                        "Recep",
+                        "Şaban",
+                        "Ramazan",
+                        "Şevval",
+                        "Zilkade",
+                        "Zilhicce",
+                    }
+                }
+            }
+        }
+        persian{
+            monthNames{
+                format{
+                    abbreviated{
+                        "Ferverdin",
+                        "Ordibeheşt",
+                        "Hordad",
+                        "Tir",
+                        "Mordad",
+                        "Şehriver",
+                        "Mehr",
+                        "Aban",
+                        "Azer",
+                        "Dey",
+                        "Behmen",
+                        "Esfend",
+                    }
+                    wide{
+                        "Ferverdin",
+                        "Ordibeheşt",
+                        "Hordad",
+                        "Tir",
+                        "Mordad",
+                        "Şehriver",
+                        "Mehr",
+                        "Aban",
+                        "Azer",
+                        "Dey",
+                        "Behmen",
+                        "Esfend",
                     }
                 }
             }
@@ -2508,7 +2687,7 @@ tr{
             ec{"Anadır"}
         }
         "Asia:Aqtau"{
-            ec{"Şevçenko"}
+            ec{"Aktav"}
         }
         "Asia:Aqtobe"{
             ec{"Aktöbe"}
@@ -2556,7 +2735,7 @@ tr{
             ec{"Taşkent"}
         }
         "Asia:Ulaanbaatar"{
-            ec{"Ulanbator"}
+            ec{"Ulan Batur"}
         }
         "Asia:Urumqi"{
             ec{"Urumçi"}
@@ -2582,6 +2761,9 @@ tr{
         "Europe:Moscow"{
             ec{"Moskova"}
         }
+        "Europe:Simferopol"{
+            ec{"Akmescit"}
+        }
         "Europe:Uzhgorod"{
             ec{"Ujgorod"}
         }
@@ -2589,7 +2771,7 @@ tr{
             ec{"Zaporojye"}
         }
         "Pacific:Marquesas"{
-            ec{"Markiz"}
+            ec{"Markiz Adaları"}
         }
         "meta:Acre"{
             ld{"Acre Yaz Saati"}
@@ -2620,6 +2802,7 @@ tr{
             ld{"Alaska Yaz Saati"}
             lg{"Alaska Saati"}
             ls{"Alaska Standart Saati"}
+            sg{"AKT"}
         }
         "meta:Alaska_Hawaii"{
             ld{"Alaska-Hawaii Yaz Saati"}
@@ -2639,6 +2822,7 @@ tr{
             ld{"Merkezi Yaz Saati"}
             lg{"Merkezi Saat"}
             ls{"Merkezi Standart Saati"}
+            sg{"CT"}
         }
         "meta:America_Eastern"{
             ld{"Doğu Yaz Saati"}
@@ -2650,21 +2834,23 @@ tr{
             ld{"ABD Sıradağlar Yaz Saati"}
             lg{"ABD Sıradağlar Saati"}
             ls{"ABD Sıradağlar Standart Saati"}
+            sg{"MT"}
         }
         "meta:America_Pacific"{
             ld{"Pasifik Yaz Saati"}
             lg{"Pasifik Saati"}
             ls{"Pasifik Standart Saati"}
+            sg{"PT"}
         }
         "meta:Anadyr"{
             ld{"Anadır Yaz Saati"}
             ls{"Anadır Saati"}
         }
         "meta:Aqtau"{
-            ld{"Aktau Yaz Saati"}
-            ls{"Aktau Saati"}
-            sd{"AQTST (Aktau)"}
-            ss{"AQTT (Aktau)"}
+            ld{"Aktav Yaz Saati"}
+            ls{"Aktav Saati"}
+            sd{"AQTST (Aktav)"}
+            ss{"AQTT (Aktav)"}
         }
         "meta:Aqtobe"{
             ld{"Aktöbe Yaz Saati"}
@@ -2673,12 +2859,12 @@ tr{
             ss{"AQTT (Aktöbe)"}
         }
         "meta:Arabian"{
-            ld{"Arap Yaz Saati"}
-            lg{"Arap Saati"}
-            ls{"Arap Standart Saati"}
-            sd{"ADT (Arap)"}
+            ld{"Arabistan Yaz Saati"}
+            lg{"Arabistan Saati"}
+            ls{"Arabistan Standart Saati"}
+            sd{"ADT (Arabistan)"}
             sg{"AT (Arabistan)"}
-            ss{"AST (Arap)"}
+            ss{"AST (Arabistan)"}
         }
         "meta:Argentina"{
             ld{"Arjantin Yaz Saati"}
@@ -2701,6 +2887,7 @@ tr{
             ld{"Atlantik Yaz Saati"}
             lg{"Atlantik Saati"}
             ls{"Atlantik Standart Saati"}
+            sg{"AT"}
         }
         "meta:Australia_Central"{
             ld{"Orta Avustralya Yaz Saati"}
@@ -2709,27 +2896,30 @@ tr{
             sg{"ACT"}
         }
         "meta:Australia_CentralWestern"{
-            ld{"Avustralya Batı Merkezi Yaz Saati"}
-            lg{"Orta Batı Saati"}
-            ls{"Batı Merkezi Standart Saati"}
+            ld{"Batı Merkezi Avustralya Yaz Saati"}
+            lg{"Batı Merkezi Avustralya Saati"}
+            ls{"Batı Merkezi Avustralya Standart Saati"}
+            sg{"ACWT"}
         }
         "meta:Australia_Eastern"{
             ld{"Doğu Avustralya Yaz Saati"}
             lg{"Doğu Avustralya Saati"}
             ls{"Doğu Avustralya Standart Saati"}
+            sg{"AET"}
         }
         "meta:Australia_Western"{
             ld{"Batı Avustralya Yaz Saati"}
             lg{"Batı Avustralya Saati"}
             ls{"Batı Avustralya Standart Saati"}
+            sg{"AWT"}
         }
         "meta:Azerbaijan"{
             ld{"Azerbaycan Yaz Saati"}
             ls{"Azerbaycan Saati"}
         }
         "meta:Azores"{
-            ld{"Azor Yaz Saati"}
-            ls{"Azor Saati"}
+            ld{"Azor Adaları Yaz Saati"}
+            ls{"Azor Adaları Saati"}
         }
         "meta:Baku"{
             ld{"Bakü Yaz Saati"}
@@ -2742,6 +2932,7 @@ tr{
             ld{"Bering Yaz Saati"}
             lg{"Bering Saati"}
             ls{"Bering Standart Saati"}
+            sg{"BT (Bering)"}
         }
         "meta:Bhutan"{
             ls{"Bhutan Saati"}
@@ -2837,7 +3028,7 @@ tr{
             ls{"Easter Adası Saati"}
         }
         "meta:Ecuador"{
-            ls{"Ekvator Saati"}
+            ls{"Ekvador Saati"}
         }
         "meta:Europe_Central"{
             ld{"Orta Avrupa Yaz Saati"}
@@ -2863,7 +3054,7 @@ tr{
             ls{"Fransız Guyanası Saati"}
         }
         "meta:French_Southern"{
-            ls{"Fransız Güney Bölgeleri Saati"}
+            ls{"Fransız Güney ve Antarktika Saati"}
         }
         "meta:Frunze"{
             ld{"Bişkek Yaz Saati"}
@@ -2903,7 +3094,7 @@ tr{
         }
         "meta:Gulf"{
             lg{"Körfez Saati"}
-            ls{"Gulf Standart Saati"}
+            ls{"Körfez Standart Saati"}
             sg{"GT"}
         }
         "meta:Guyana"{
@@ -2917,8 +3108,8 @@ tr{
             ls{"Hong Kong Saati"}
         }
         "meta:Hovd"{
-            ld{"Hovd Yaz Saati"}
-            ls{"Hovd Saati"}
+            ld{"Kobdo Yaz Saati"}
+            ls{"Kobdo Saati"}
         }
         "meta:India"{
             ls{"Hindistan Standart Saati"}
@@ -2943,8 +3134,8 @@ tr{
             ls{"İran Standart Saati"}
         }
         "meta:Irkutsk"{
-            ld{"Irkutsk Yaz Saati"}
-            ls{"Irkutsk Saati"}
+            ld{"İrkutsk Yaz Saati"}
+            ls{"İrkutsk Saati"}
         }
         "meta:Israel"{
             ld{"İsrail Yaz Saati"}
@@ -2984,6 +3175,7 @@ tr{
             ld{"Kore Yaz Saati"}
             lg{"Kore Saati"}
             ls{"Kore Standart Saati"}
+            sg{"KT"}
         }
         "meta:Kosrae"{
             ls{"Kosrae Saati"}
@@ -3015,6 +3207,7 @@ tr{
             ld{"Lord Howe Yaz Saati"}
             lg{"Lord Howe Saati"}
             ls{"Lord Howe Standart Saati"}
+            sg{"LHT"}
         }
         "meta:Macau"{
             ld{"Makao Yaz Saati"}
@@ -3034,7 +3227,7 @@ tr{
             ls{"Maldivler Saati"}
         }
         "meta:Marquesas"{
-            ls{"Markiz Saati"}
+            ls{"Markiz Adaları Saati"}
         }
         "meta:Marshall_Islands"{
             ls{"Marshall Adaları Saati"}
@@ -3078,6 +3271,7 @@ tr{
             ld{"Newfoundland Yaz Saati"}
             lg{"Newfoundland Saati"}
             ls{"Newfoundland Standart Saati"}
+            sg{"NT"}
         }
         "meta:Niue"{
             ls{"Niue Saati"}
@@ -3165,7 +3359,7 @@ tr{
             ls{"Samoa Standart Saati"}
         }
         "meta:Seychelles"{
-            ls{"Seyşeller Saati"}
+            ls{"Seyşel Adaları Saati"}
         }
         "meta:Shevchenko"{
             ld{"Şevçenko Yaz Saati"}
@@ -3285,7 +3479,6 @@ tr{
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
-        gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} Saati"}
     }

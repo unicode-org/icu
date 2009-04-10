@@ -841,7 +841,7 @@ mt{
     Variants{
         REVISED{"Ortografija Irriveda"}
     }
-    Version{"1.139"}
+    Version{"1.88"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -849,7 +849,7 @@ mt{
                 "WN",
             }
             DateTimePatterns{
-                "HH:mm:ss v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -857,6 +857,7 @@ mt{
                 "d 'ta'’ MMMM y",
                 "dd MMM y",
                 "dd/MM/yyyy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -1032,7 +1033,6 @@ mt{
             ls{"Ħin Ċentrali Ewropew"}
         }
         gmtFormat{"GMT{0}"}
-        gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Ħin ta’ {0}"}
     }

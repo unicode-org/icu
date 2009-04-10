@@ -16,7 +16,7 @@ ar_MA{
         "#",
         "-",
         "اس",
-        "‰",
+        "؉",
         "∞",
         "ليس رقم",
         "+",
@@ -24,16 +24,12 @@ ar_MA{
     Scripts{
         Ital{"اللأيطالية القديمة"}
     }
-    Version{"1.139"}
+    Version{"1.50"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
                 7,
                 4,
-            }
-            availableFormats{
-                yM{"M‏/yyyy"}
-                yyyyMMMM{"MMMM، y"}
             }
             intervalFormats{
                 MMMd{
@@ -60,5 +56,5 @@ ar_MA{
             }
         }
     }
-    defaultNumberingSystem{"decimal"}
+    defaultNumberingSystem{"latn"}
 }

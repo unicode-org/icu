@@ -9,7 +9,7 @@
 en_MT{
     Currencies{
         GBP{
-            "GBP",
+            "GB£",
             "British Pound Sterling",
         }
     }
@@ -19,7 +19,7 @@ en_MT{
         "#,##0%",
         "#E0",
     }
-    Version{"1.139"}
+    Version{"1.58"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -27,7 +27,7 @@ en_MT{
                 4,
             }
             DateTimePatterns{
-                "HH:mm:ss v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -35,6 +35,7 @@ en_MT{
                 "dd MMMM y",
                 "dd MMM y",
                 "dd/MM/yyyy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

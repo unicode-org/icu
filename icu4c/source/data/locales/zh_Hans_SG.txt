@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 zh_Hans_SG{
-    Version{"1.139"}
+    Version{"1.61"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -15,7 +15,7 @@ zh_Hans_SG{
                 4,
             }
             DateTimePatterns{
-                "ahh时mm分ss秒v",
+                "zzzzah时mm分ss秒",
                 "ahh:mm:ssz",
                 "ahh:mm:ss",
                 "ahh:mm",
@@ -24,7 +24,8 @@ zh_Hans_SG{
                 "yyyy-M-d",
                 "dd/MM/yy",
                 "{1} {0}",
-                "{1} {0}",
+                "{1}{0}",
+                "{1}{0}",
                 "{1} {0}",
                 "{1} {0}",
             }

@@ -10,7 +10,7 @@ ar_LB{
     Scripts{
         Ital{"اللأيطالية القديمة"}
     }
-    Version{"1.139"}
+    Version{"1.48"}
     calendar{
         gregorian{
             dayNames{

@@ -27,13 +27,5 @@ de_LI{
         "#,##0 %",
         "#E0",
     }
-    Version{"1.139"}
-    calendar{
-        gregorian{
-            DateTimeElements:intvector{
-                2,
-                4,
-            }
-        }
-    }
+    Version{"1.43"}
 }

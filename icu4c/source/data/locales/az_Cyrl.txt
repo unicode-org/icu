@@ -24,9 +24,9 @@ az_Cyrl{
         US{"Америка Бирләшмиш Штатлары"}
     }
     Currencies{
-        AZM{
+        AZN{
             "ман.",
-            "Manat",
+            "Azərbaycan manatı",
         }
     }
     ExemplarCharacters{"[а ә б-г ғ д-й ј к ҝ л-о ө п-у ү ф х һ ч ҹ ш ы]"}
@@ -45,7 +45,7 @@ az_Cyrl{
     LocaleScript{
         "Cyrl",
     }
-    Version{"1.28"}
+    Version{"1.30"}
     calendar{
         gregorian{
             dayNames{

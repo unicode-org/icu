@@ -27,11 +27,11 @@ es_HN{
         "NaN",
         "+",
     }
-    Version{"1.139"}
+    Version{"1.58"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "hh:mm:ss a v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -39,6 +39,7 @@ es_HN{
                 "dd 'de' MMMM 'de' y",
                 "dd/MM/yyyy",
                 "dd/MM/yy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

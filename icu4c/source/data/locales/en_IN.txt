@@ -13,7 +13,7 @@ en_IN{
         "#,##,##0%",
         "#E0",
     }
-    Version{"1.139"}
+    Version{"1.56"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -21,7 +21,7 @@ en_IN{
                 4,
             }
             DateTimePatterns{
-                "h:mm:ss a v",
+                "h:mm:ss a zzzz",
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
@@ -29,6 +29,7 @@ en_IN{
                 "d MMMM y",
                 "dd-MMM-y",
                 "dd/MM/yy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

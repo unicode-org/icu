@@ -33,11 +33,11 @@ root{
             "ARA",
         }
         ARL{
-            "$L" /** ===  */,
+            "$L",
             "ARL",
         }
         ARM{
-            "m$n" /** ===  */,
+            "m$n",
             "ARM",
         }
         ARS{
@@ -121,7 +121,7 @@ root{
             "BRR",
         }
         BRZ{
-            "₢" /** ===  */,
+            "₢",
             "BRZ",
         }
         BSD{
@@ -153,7 +153,7 @@ root{
             "CHF",
         }
         CLE{
-            "Eº" /** ===  */,
+            "Eº",
             "CLE",
         }
         CLP{
@@ -171,6 +171,10 @@ root{
         CRC{
             "₡",
             "CRC",
+        }
+        CUC{
+            "CUC$",
+            "CUC",
         }
         CUP{
             "CU$",
@@ -617,11 +621,11 @@ root{
             "TOP",
         }
         TRL{
-            "TL",
+            "TRL",
             "TRL",
         }
         TRY{
-            "YTL",
+            "TL",
             "TRY",
         }
         TTD{
@@ -745,7 +749,7 @@ root{
         297,
         210,
     }
-    Version{"1.139"}
+    Version{"1.182"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -753,7 +757,7 @@ root{
                 "PM",
             }
             DateTimePatterns{
-                "HH:mm:ss v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -761,6 +765,7 @@ root{
                 "MMMM d, y G",
                 "MMM d, y G",
                 "M/d/yyyy",
+                "{1} {0}" /**  fallback from 'gregorian'   */,
                 "{1} {0}" /**  fallback from 'gregorian'   */,
                 "{1} {0}" /**  fallback from 'gregorian'   */,
                 "{1} {0}" /**  fallback from 'gregorian'   */,
@@ -821,7 +826,7 @@ root{
                 "PM",
             }
             DateTimePatterns{
-                "HH:mm:ss v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -833,8 +838,12 @@ root{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+                "{1} {0}",
             }
+            appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
+            intervalFormats:alias{"/LOCALE/calendar/gregorian/intervalFormats"}
             isLeapMonth{
                 "",
                 "*",
@@ -886,6 +895,8 @@ root{
                 "AM",
                 "PM",
             }
+            appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
@@ -895,6 +906,7 @@ root{
                 narrow:alias{"/LOCALE/calendar/coptic/eras/abbreviated"}
                 wide:alias{"/LOCALE/calendar/coptic/eras/abbreviated"}
             }
+            intervalFormats:alias{"/LOCALE/calendar/gregorian/intervalFormats"}
             monthNames{
                 default{"format"}
                 format{
@@ -945,6 +957,8 @@ root{
                 "AM",
                 "PM",
             }
+            appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
@@ -954,6 +968,7 @@ root{
                 narrow:alias{"/LOCALE/calendar/ethiopic/eras/abbreviated"}
                 wide:alias{"/LOCALE/calendar/ethiopic/eras/abbreviated"}
             }
+            intervalFormats:alias{"/LOCALE/calendar/gregorian/intervalFormats"}
             monthNames{
                 default{"format"}
                 format{
@@ -1003,6 +1018,8 @@ root{
                 "AM",
                 "PM",
             }
+            appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
@@ -1011,6 +1028,7 @@ root{
                 narrow:alias{"/LOCALE/calendar/ethiopic-amete-alem/eras/abbreviated"}
                 wide:alias{"/LOCALE/calendar/ethiopic-amete-alem/eras/abbreviated"}
             }
+            intervalFormats:alias{"/LOCALE/calendar/gregorian/intervalFormats"}
             monthNames:alias{"/LOCALE/calendar/ethiopic/monthNames"}
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
@@ -1024,7 +1042,7 @@ root{
                 4,
             }
             DateTimePatterns{
-                "HH:mm:ss v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -1032,6 +1050,7 @@ root{
                 "y MMMM d",
                 "y MMM d",
                 "yyyy-MM-dd",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -1053,7 +1072,6 @@ root{
             availableFormats{
                 EEEd{"d EEE"}
                 Hm{"H:mm"}
-                hm{"h:mm a"}
                 M{"L"}
                 MEd{"E, M-d"}
                 MMM{"LLL"}
@@ -1063,6 +1081,7 @@ root{
                 MMMd{"MMM d"}
                 Md{"M-d"}
                 d{"d"}
+                hm{"h:mm a"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"y-M"}
@@ -1309,6 +1328,8 @@ root{
                 "AM",
                 "PM",
             }
+            appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
@@ -1317,6 +1338,7 @@ root{
                 narrow:alias{"/LOCALE/calendar/hebrew/eras/abbreviated"}
                 wide:alias{"/LOCALE/calendar/hebrew/eras/abbreviated"}
             }
+            intervalFormats:alias{"/LOCALE/calendar/gregorian/intervalFormats"}
             monthNames{
                 default{"format"}
                 format{
@@ -1366,6 +1388,8 @@ root{
                 "AM",
                 "PM",
             }
+            appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
@@ -1374,6 +1398,7 @@ root{
                 narrow:alias{"/LOCALE/calendar/indian/eras/abbreviated"}
                 wide:alias{"/LOCALE/calendar/indian/eras/abbreviated"}
             }
+            intervalFormats:alias{"/LOCALE/calendar/gregorian/intervalFormats"}
             monthNames{
                 default{"format"}
                 format{
@@ -1421,6 +1446,8 @@ root{
                 "AM",
                 "PM",
             }
+            appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
@@ -1429,6 +1456,7 @@ root{
                 narrow:alias{"/LOCALE/calendar/islamic/eras/abbreviated"}
                 wide:alias{"/LOCALE/calendar/islamic/eras/abbreviated"}
             }
+            intervalFormats:alias{"/LOCALE/calendar/gregorian/intervalFormats"}
             monthNames{
                 default{"format"}
                 format{
@@ -1478,7 +1506,7 @@ root{
                 "PM",
             }
             DateTimePatterns{
-                "HH:mm:ss v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -1486,10 +1514,11 @@ root{
                 "G y MMMM d",
                 "G y MMM d",
                 "G yy-MM-dd",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
                 "{1} {0}",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
             appendItems{
                 Day{"{0} ({2}: {1})"}
@@ -1508,18 +1537,18 @@ root{
                 Ed{"E d"}
                 H{"H"}
                 Hm{"HH:mm"}
-                hm{"hh:mm a"}
                 Hms{"HH:mm:ss"}
-                hms{"hh:mm:ss a"}
                 MMMEd{"E MMM d"}
                 MMMMd{"MMMM d"}
                 Md{"M-d"}
+                hm{"hh:mm a"}
+                hms{"hh:mm:ss a"}
                 ms{"mm:ss"}
                 yyyy{"yy GGG"}
                 yyyyM{"GGGGG yy-MM"}
                 yyyyMMM{"GGGGG yy MMM"}
-                yyyyMd{"GGGGG yy-MM-dd"}
                 yyyyMMMd{"GGGGG yy MMM d"}
+                yyyyMd{"GGGGG yy-MM-dd"}
                 yyyyQ{"GGGGG yy Q"}
             }
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
@@ -2010,6 +2039,8 @@ root{
                 "AM",
                 "PM",
             }
+            appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
@@ -2018,6 +2049,7 @@ root{
                 narrow:alias{"/LOCALE/calendar/persian/eras/abbreviated"}
                 wide:alias{"/LOCALE/calendar/persian/eras/abbreviated"}
             }
+            intervalFormats:alias{"/LOCALE/calendar/gregorian/intervalFormats"}
             monthNames{
                 default{"format"}
                 format{
@@ -2066,7 +2098,7 @@ root{
                 "PM",
             }
             DateTimePatterns{
-                "HH:mm:ss v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -2074,6 +2106,7 @@ root{
                 "MMMM d, G y",
                 "MMM d, G y",
                 "G y/M/d",
+                "{1} {0}" /**  fallback from 'gregorian'   */,
                 "{1} {0}" /**  fallback from 'gregorian'   */,
                 "{1} {0}" /**  fallback from 'gregorian'   */,
                 "{1} {0}" /**  fallback from 'gregorian'   */,
@@ -2128,7 +2161,19 @@ root{
         script{"{0}"}
         territory{"{0}"}
     }
-    defaultNumberingSystem{"decimal"}
+    currencySpacing{
+        afterCurrency{
+            currencyMatch{"[:letter:]"}
+            insertBetween{" "}
+            surroundingMatch{"[:digit:]"}
+        }
+        beforeCurrency{
+            currencyMatch{"[:letter:]"}
+            insertBetween{" "}
+            surroundingMatch{"[:digit:]"}
+        }
+    }
+    defaultNumberingSystem{"latn"}
     delimiters{
         alternateQuotationEnd{"’"}
         alternateQuotationStart{"‘"}

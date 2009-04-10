@@ -14,7 +14,7 @@ es_CL{
     Currencies{
         CLP{
             "$",
-            "Peso Chileno",
+            "peso chileno",
         }
     }
     NumberPatterns{
@@ -22,6 +22,10 @@ es_CL{
         "¤#,##0.00;¤-#,##0.00",
         "#,##0%",
         "#E0",
+    }
+    PaperSize:intvector{
+        279,
+        216,
     }
     Scripts{
         Bali{"balinés"}
@@ -31,11 +35,11 @@ es_CL{
             phonebook{"orden de directorio telefónico"}
         }
     }
-    Version{"1.139"}
+    Version{"1.62"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH:mm:ss v",
+                "HH:mm:ss zzzz",
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
@@ -43,6 +47,7 @@ es_CL{
                 "d 'de' MMMM 'de' y",
                 "dd-MM-yyyy",
                 "dd-MM-yy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

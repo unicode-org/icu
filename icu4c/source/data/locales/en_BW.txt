@@ -8,9 +8,9 @@
 // ***************************************************************************
 en_BW{
     Currencies{
-        XXX{
-            "XXX",
-            "Unknown or Invalid Currency",
+        BWP{
+            "P",
+            "Botswanan Pula",
         }
     }
     NumberPatterns{
@@ -19,7 +19,7 @@ en_BW{
         "#,##0%",
         "#E0",
     }
-    Version{"1.139"}
+    Version{"1.51"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -27,7 +27,7 @@ en_BW{
                 4,
             }
             DateTimePatterns{
-                "h:mm:ss a v",
+                "h:mm:ss a zzzz",
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
@@ -35,6 +35,7 @@ en_BW{
                 "dd MMMM y",
                 "MMM d, y",
                 "dd/MM/yy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

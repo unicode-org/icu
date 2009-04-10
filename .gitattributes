@@ -30,8 +30,12 @@ icu4c/source/data/coll/ur_PK.txt -text
 icu4c/source/data/icu-config.xml svneol=native#text/xml
 icu4c/source/data/icu4j-readme.txt -text
 icu4c/source/data/locales/fr_SN.txt -text
+icu4c/source/data/locales/gsw.txt -text
+icu4c/source/data/locales/gsw_CH.txt -text
 icu4c/source/data/locales/ha.txt -text
 icu4c/source/data/locales/ha_Latn.txt -text
+icu4c/source/data/locales/ha_Latn_GH.txt -text
+icu4c/source/data/locales/ha_Latn_NE.txt -text
 icu4c/source/data/locales/ha_Latn_NG.txt -text
 icu4c/source/data/locales/ha_NG.txt -text
 icu4c/source/data/locales/ii.txt -text
@@ -44,10 +48,13 @@ icu4c/source/data/locales/ne_NP.txt -text
 icu4c/source/data/locales/pa_Arab.txt -text
 icu4c/source/data/locales/pa_Arab_PK.txt -text
 icu4c/source/data/locales/pa_PK.txt -text
+icu4c/source/data/locales/ro_MD.txt -text
 icu4c/source/data/locales/si.txt -text
 icu4c/source/data/locales/si_LK.txt -text
 icu4c/source/data/locales/zh_Hans_HK.txt -text
 icu4c/source/data/locales/zh_Hans_MO.txt -text
+icu4c/source/data/locales/zu.txt -text
+icu4c/source/data/locales/zu_ZA.txt -text
 icu4c/source/data/misc/likelySubtags.txt -text
 icu4c/source/data/misc/metazoneInfo.txt svneol=native#text/plain
 icu4c/source/data/misc/numberingSystems.txt -text
@@ -204,6 +211,7 @@ icu4c/source/data/xml/main/fo.xml svneol=native#text/xml
 icu4c/source/data/xml/main/fr.xml svneol=native#text/xml
 icu4c/source/data/xml/main/ga.xml svneol=native#text/xml
 icu4c/source/data/xml/main/gl.xml svneol=native#text/xml
+icu4c/source/data/xml/main/gsw.xml -text
 icu4c/source/data/xml/main/gu.xml svneol=native#text/xml
 icu4c/source/data/xml/main/gv.xml svneol=native#text/xml
 icu4c/source/data/xml/main/ha.xml -text

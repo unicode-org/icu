@@ -13,7 +13,7 @@ fr_CA{
             "dollar canadien",
         }
         USD{
-            "$ US",
+            "$US",
             "dollar des États-Unis",
         }
     }
@@ -27,7 +27,7 @@ fr_CA{
         279,
         216,
     }
-    Version{"1.139"}
+    Version{"1.63"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
@@ -35,7 +35,7 @@ fr_CA{
                 4,
             }
             DateTimePatterns{
-                "HH 'h' mm 'min' ss 's' v",
+                "HH 'h' mm 'min' ss 's' zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -43,6 +43,7 @@ fr_CA{
                 "d MMMM y",
                 "yyyy-MM-dd",
                 "yy-MM-dd",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -107,7 +108,7 @@ fr_CA{
                     y{"'du' E d MMM y 'au' E d MMM y"}
                 }
                 yMMMM{
-                    M{"MMMM  – MMMM y"}
+                    M{"MMMM – MMMM y"}
                 }
                 yMMMd{
                     M{"'du' d MMM 'au' d MMM y"}

@@ -549,7 +549,7 @@ ne{
         AREVELA{"पूर्वी आर्मेनियाली"}
         POSIX{"कम्प्युटर"}
     }
-    Version{"1.139"}
+    Version{"1.33"}
     calendar{
         buddhist{
             AmPmMarkers{

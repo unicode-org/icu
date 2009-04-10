@@ -23,11 +23,11 @@ en_BZ{
         "#,##0%",
         "#E0",
     }
-    Version{"1.139"}
+    Version{"1.47"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "h:mm:ss a v",
+                "h:mm:ss a zzzz",
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
@@ -35,6 +35,7 @@ en_BZ{
                 "MMMM d, y",
                 "dd-MMM-y",
                 "M/d/yy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

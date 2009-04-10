@@ -31,11 +31,11 @@ en_ZA{
         "#,##0%",
         "#E0",
     }
-    Version{"1.139"}
+    Version{"1.60"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "h:mm:ss a v",
+                "h:mm:ss a zzzz",
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
@@ -43,6 +43,7 @@ en_ZA{
                 "dd MMMM y",
                 "dd MMM y",
                 "yyyy/MM/dd",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

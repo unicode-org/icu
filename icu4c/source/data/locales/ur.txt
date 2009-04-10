@@ -188,7 +188,7 @@ ur{
             "تھائی باہت",
         }
         TRL{
-            "TL",
+            "TRL",
             "ترکی لیرا",
         }
         TWD{
@@ -316,11 +316,11 @@ ur{
         "#,##0%",
         "#E0",
     }
-    Version{"1.139"}
+    Version{"1.61"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "h:mm:ss a v",
+                "h:mm:ss a zzzz",
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
@@ -328,6 +328,7 @@ ur{
                 "d, MMMM y",
                 "d, MMM y",
                 "d/M/yy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -359,7 +360,9 @@ ur{
             fields{
                 day{
                     relative{
+                        "-1"{"کل"}
                         "0"{"آج"}
+                        "1"{"کل"}
                     }
                 }
                 dayperiod{

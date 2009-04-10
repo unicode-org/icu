@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2007-2008 International Business Machines
+﻿// Copyright (c) 2007-2009 International Business Machines
 // Corporation and others. All Rights Reserved.
 format:table(nofallback) {
     Info {
@@ -404,7 +404,7 @@ format:table(nofallback) {
                     "en_US@calendar=hebrew",         
                     "DATE=FULL,TIME=FULL",
                     "MILLIS=3076424179200000",
-                    "Friday, Heshvan 3, 103217 12:00:00 AM United States (Los Angeles)"
+                    "Friday, Heshvan 3, 103217 12:00:00 AM GMT-08:00"
                },
             }    
         }

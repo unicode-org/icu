@@ -130,7 +130,7 @@ nl{
         GI{"Gibraltar"}
         GL{"Groenland"}
         GM{"Gambia"}
-        GN{"Guinea"}
+        GN{"Guinee"}
         GP{"Guadeloupe"}
         GQ{"Equatoriaal-Guinea"}
         GR{"Griekenland"}
@@ -314,15 +314,15 @@ nl{
             "Afghani",
         }
         ALL{
-            "lek",
+            "ALL",
             "Albanese lek",
         }
         AMD{
-            "dram",
+            "AMD",
             "Armeense dram",
         }
         ANG{
-            "NA f.",
+            "NAf.",
             "Nederlands-Antilliaanse gulden",
         }
         AOA{
@@ -350,7 +350,7 @@ nl{
             "Argentijnse peso (1983-1985)",
         }
         ARS{
-            "Arg$",
+            "AR$",
             "Argentijnse peso",
         }
         ATS{
@@ -358,7 +358,7 @@ nl{
             "Oostenrijkse schilling",
         }
         AUD{
-            "$A",
+            "AU$",
             "Australische dollar",
         }
         AWG{
@@ -382,7 +382,7 @@ nl{
             "Bosnische convertibele mark",
         }
         BBD{
-            "BDS$",
+            "Bds$",
             "Barbadaanse dollar",
         }
         BDT{
@@ -402,7 +402,7 @@ nl{
             "Belgische frank (financieel)",
         }
         BGL{
-            "lev",
+            "BGL",
             "Bulgaarse harde lev",
         }
         BGN{
@@ -414,11 +414,11 @@ nl{
             "Bahreinse dinar",
         }
         BIF{
-            "Fbu",
+            "FBu",
             "Burundese franc",
         }
         BMD{
-            "Ber$",
+            "BD$",
             "Bermuda-dollar",
         }
         BND{
@@ -466,7 +466,7 @@ nl{
             "Bahamaanse dollar",
         }
         BTN{
-            "Nu",
+            "Nu.",
             "Bhutaanse ngultrum",
         }
         BUK{
@@ -482,7 +482,7 @@ nl{
             "Wit-Russische nieuwe roebel (1994-1999)",
         }
         BYR{
-            "Rbl",
+            "BYR",
             "Wit-Russische roebel",
         }
         BZD{
@@ -490,7 +490,7 @@ nl{
             "Belizaanse dollar",
         }
         CAD{
-            "Can$",
+            "CA$",
             "Canadese dollar",
         }
         CDF{
@@ -502,7 +502,7 @@ nl{
             "WIR euro",
         }
         CHF{
-            "SwF",
+            "Fr.",
             "Zwitserse franc",
         }
         CHW{
@@ -514,15 +514,15 @@ nl{
             "Chileense unidades de fomento",
         }
         CLP{
-            "Ch$",
+            "CL$",
             "Chileense peso",
         }
         CNY{
-            "Y",
+            "CN¥",
             "Chinese yuan renminbi",
         }
         COP{
-            "Col$",
+            "CO$",
             "Colombiaanse peso",
         }
         COU{
@@ -530,7 +530,7 @@ nl{
             "Unidad de Valor Real",
         }
         CRC{
-            "C",
+            "₡",
             "Costaricaanse colón",
         }
         CSD{
@@ -546,11 +546,11 @@ nl{
             "Cubaanse peso",
         }
         CVE{
-            "CVEsc",
+            "CV$",
             "Kaapverdische escudo",
         }
         CYP{
-            "£C",
+            "CY£",
             "Cyprisch pond",
         }
         CZK{
@@ -566,11 +566,11 @@ nl{
             "Duitse mark",
         }
         DJF{
-            "DF",
+            "Fdj",
             "Djiboutiaanse franc",
         }
         DKK{
-            "DKr",
+            "Dkr",
             "Deense kroon",
         }
         DOP{
@@ -610,7 +610,7 @@ nl{
             "Spaanse peseta (convertibele account)",
         }
         ESP{
-            "₧",
+            "Pts",
             "Spaanse peseta",
         }
         ETB{
@@ -619,14 +619,14 @@ nl{
         }
         EUR{
             "€",
-            "euro",
+            "Euro",
         }
         FIM{
             "mk",
             "Finse markka",
         }
         FJD{
-            "F$",
+            "FJ$",
             "Fiji dollar",
         }
         FKP{
@@ -638,7 +638,7 @@ nl{
             "Franse franc",
         }
         GBP{
-            "GBP",
+            "£",
             "Brits pond sterling",
         }
         GEK{
@@ -646,7 +646,7 @@ nl{
             "Georgische kupon larit",
         }
         GEL{
-            "lari",
+            "GEL",
             "Georgische lari",
         }
         GHC{
@@ -654,7 +654,7 @@ nl{
             "Ghanese cedi (1979-2007)",
         }
         GHS{
-            "GH¢",
+            "GH₵",
             "Ghanese cedi",
         }
         GIP{
@@ -666,7 +666,7 @@ nl{
             "Gambiaanse dalasi",
         }
         GNF{
-            "GF",
+            "FG",
             "Guinese franc",
         }
         GNS{
@@ -682,7 +682,7 @@ nl{
             "Griekse drachme",
         }
         GTQ{
-            "Q",
+            "GTQ",
             "Guatemalteekse quetzal",
         }
         GWE{
@@ -694,7 +694,7 @@ nl{
             "Guinee-Bissause peso",
         }
         GYD{
-            "G$",
+            "GY$",
             "Guyaanse dollar",
         }
         HKD{
@@ -702,7 +702,7 @@ nl{
             "Hongkongse dollar",
         }
         HNL{
-            "L",
+            "HNL",
             "Hondurese lempira",
         }
         HRD{
@@ -738,15 +738,15 @@ nl{
             "Israëlische nieuwe shekel",
         }
         INR{
-            "INR",
+            "₨",
             "Indiase rupee",
         }
         IQD{
-            "ID",
+            "IQD",
             "Iraakse dinar",
         }
         IRR{
-            "RI",
+            "IRR",
             "Iraanse rial",
         }
         ISK{
@@ -754,7 +754,7 @@ nl{
             "IJslandse kroon",
         }
         ITL{
-            "₤",
+            "IT₤",
             "Italiaanse lire",
         }
         JMD{
@@ -770,15 +770,15 @@ nl{
             "Japanse yen",
         }
         KES{
-            "K Sh",
+            "Ksh",
             "Keniaanse shilling",
         }
         KGS{
-            "som",
+            "KGS",
             "Kirgizische som",
         }
         KHR{
-            "CR",
+            "KHR",
             "Cambodjaanse riel",
         }
         KMF{
@@ -802,7 +802,7 @@ nl{
             "Caymaneilandse dollar",
         }
         KZT{
-            "T",
+            "KZT",
             "Kazachstaanse tenge",
         }
         LAK{
@@ -810,11 +810,11 @@ nl{
             "Laotiaanse kip",
         }
         LBP{
-            "LL",
+            "LB£",
             "Libanees pond",
         }
         LKR{
-            "SL Re",
+            "SLRs",
             "Srilankaanse rupee",
         }
         LRD{
@@ -822,7 +822,7 @@ nl{
             "Liberiaanse dollar",
         }
         LSL{
-            "M",
+            "LSL",
             "Lesothaanse loti",
         }
         LTL{
@@ -878,7 +878,7 @@ nl{
             "Malagassische franc",
         }
         MKD{
-            "MDen",
+            "MKD",
             "Macedonische denar",
         }
         MLF{
@@ -890,7 +890,7 @@ nl{
             "Myanmarese kyat",
         }
         MNT{
-            "Tug",
+            "₮",
             "Mongoolse tugrik",
         }
         MOP{
@@ -922,7 +922,7 @@ nl{
             "Malawische kwacha",
         }
         MXN{
-            "MEX$",
+            "MXN",
             "Mexicaanse peso",
         }
         MXP{
@@ -946,7 +946,7 @@ nl{
             "Oude Mozambikaanse metical",
         }
         MZN{
-            "MTN",
+            "MTn",
             "Mozambikaanse metical",
         }
         NAD{
@@ -963,26 +963,26 @@ nl{
         }
         NIO{
             "C$",
-            "Nicaraguaanse  córdoba oro",
+            "Nicaraguaanse córdoba oro",
         }
         NLG{
             "fl",
             "Nederlandse gulden",
         }
         NOK{
-            "NKr",
+            "Nkr",
             "Noorse kroon",
         }
         NPR{
-            "Nrs",
+            "NPRs",
             "Nepalese rupee",
         }
         NZD{
-            "$NZ",
+            "NZ$",
             "Nieuw-Zeelandse dollar",
         }
         OMR{
-            "RO",
+            "OMR",
             "Omaanse rial",
         }
         PAB{
@@ -1006,15 +1006,15 @@ nl{
             "Papuaanse kina",
         }
         PHP{
-            "Php",
+            "₱",
             "Filipijnse peso",
         }
         PKR{
-            "Pra",
+            "PKRs",
             "Pakistaanse rupee",
         }
         PLN{
-            "Zl",
+            "zł",
             "Poolse zloty",
         }
         PLZ{
@@ -1038,11 +1038,11 @@ nl{
             "Rhodesische dollar",
         }
         ROL{
-            "leu",
+            "ROL",
             "Oude Roemeense leu",
         }
         RON{
-            "lei",
+            "RON",
             "Roemeense leu",
         }
         RSD{
@@ -1062,7 +1062,7 @@ nl{
             "Rwandese franc",
         }
         SAR{
-            "SRl",
+            "SR",
             "Saoedische rial",
         }
         SBD{
@@ -1070,7 +1070,7 @@ nl{
             "Salomonseilandse dollar",
         }
         SCR{
-            "SR",
+            "SRe",
             "Seychelse rupee",
         }
         SDD{
@@ -1086,7 +1086,7 @@ nl{
             "Soedanees pond",
         }
         SEK{
-            "SKr",
+            "Skr",
             "Zweedse kroon",
         }
         SGD{
@@ -1110,7 +1110,7 @@ nl{
             "Sierraleoonse leone",
         }
         SOS{
-            "Sh.",
+            "Ssh",
             "Somalische shilling",
         }
         SRD{
@@ -1134,11 +1134,11 @@ nl{
             "Salvadoraanse colón",
         }
         SYP{
-            "LS",
+            "SY£",
             "Syrisch pond",
         }
         SZL{
-            "E",
+            "SZL",
             "Swazische lilangeni",
         }
         THB{
@@ -1170,11 +1170,11 @@ nl{
             "Timorese escudo",
         }
         TRL{
-            "TL",
+            "TRL",
             "Turkse lire",
         }
         TRY{
-            "YTL",
+            "TL",
             "Nieuwe Turkse lire",
         }
         TTD{
@@ -1186,7 +1186,7 @@ nl{
             "Nieuwe Taiwanese dollar",
         }
         TZS{
-            "T Sh",
+            "TSh",
             "Tanzaniaanse shilling",
         }
         UAH{
@@ -1202,11 +1202,11 @@ nl{
             "Oegandese shilling (1966-1987)",
         }
         UGX{
-            "U Sh",
+            "USh",
             "Oegandese shilling",
         }
         USD{
-            "USD",
+            "US$",
             "Amerikaanse dollar",
         }
         USN{
@@ -1226,7 +1226,7 @@ nl{
             "Uruguayaanse peso (1975-1993)",
         }
         UYU{
-            "Ur$",
+            "$U",
             "Uruguayaanse peso uruguayo",
         }
         UZS{
@@ -1234,11 +1234,11 @@ nl{
             "Oezbekistaanse sum",
         }
         VEB{
-            "Be",
+            "Bs.",
             "Venezolaanse bolivar",
         }
         VEF{
-            "BsF",
+            "Bs.F.",
             "Venezolaanse sterke bolivar",
         }
         VND{
@@ -1334,7 +1334,7 @@ nl{
             "Jemenitische dinar",
         }
         YER{
-            "YRl",
+            "YR",
             "Jemenitische rial",
         }
         YUD{
@@ -1409,6 +1409,7 @@ nl{
     }
     CurrencyUnitPatterns{
         one{"{0} {1}"}
+        other{"{0} {1}"}
     }
     ExemplarCharacters{"[a á ä b-e é ë f-i í ï {ij} j-o ó ö p-u ú ü v-z]"}
     Keys{
@@ -1431,13 +1432,13 @@ nl{
         ak{"Akan"}
         akk{"Akkadisch"}
         ale{"Aleut"}
-        alg{"Algonkium-talen"}
+        alg{"Algonkium-taal"}
         alt{"Zuid-Altaïsch"}
         am{"Amhaars"}
         an{"Aragonees"}
         ang{"Oudengels"}
         anp{"Angika"}
-        apa{"Apache-talen"}
+        apa{"Apache-taal"}
         ar{"Arabisch"}
         arc{"Aramees"}
         arn{"Araukaans"}
@@ -1446,15 +1447,15 @@ nl{
         arw{"Arawak"}
         as{"Assamees"}
         ast{"Asturisch"}
-        ath{"Athapascaanse talen"}
-        aus{"Australische talen"}
+        ath{"Athapascaanse taal"}
+        aus{"Australische taal"}
         av{"Avarisch"}
         awa{"Awadhi"}
         ay{"Aymara"}
         az{"Azerbeidzjaans"}
         ba{"Basjkiers"}
         bad{"Banda"}
-        bai{"Bamileke-talen"}
+        bai{"Bamileke-taal"}
         bal{"Baloetsji"}
         ban{"Balinees"}
         bas{"Basa"}
@@ -1462,7 +1463,7 @@ nl{
         be{"Wit-Russisch"}
         bej{"Beja"}
         bem{"Bemba"}
-        ber{"Berbers"}
+        ber{"Berber"}
         bg{"Bulgaars"}
         bh{"Bihari"}
         bho{"Bhojpuri"}
@@ -1500,7 +1501,7 @@ nl{
         chp{"Chipewyan"}
         chr{"Cherokee"}
         chy{"Cheyenne"}
-        cmc{"Chamische talen"}
+        cmc{"Chamische taal"}
         co{"Corsicaans"}
         cop{"Koptisch"}
         cpe{"Op Engels gebaseerd Creools of Pidgin"}
@@ -1624,7 +1625,7 @@ nl{
         inh{"Ingoesj"}
         io{"Ido"}
         ira{"Iraanse taal"}
-        iro{"Irokese talen"}
+        iro{"Irokese taal"}
         is{"IJslands"}
         it{"Italiaans"}
         iu{"Inuktitut"}
@@ -1714,7 +1715,7 @@ nl{
         mn{"Mongools"}
         mnc{"Mantsjoe"}
         mni{"Manipoeri"}
-        mno{"Manobo-talen"}
+        mno{"Manobo-taal"}
         mo{"Moldavisch"}
         moh{"Mohawk"}
         mos{"Mossi"}
@@ -1722,16 +1723,16 @@ nl{
         ms{"Maleis"}
         mt{"Maltees"}
         mul{"Meerdere talen"}
-        mun{"Munda-talen"}
+        mun{"Munda-taal"}
         mus{"Creek"}
         mwl{"Mirandees"}
         mwr{"Marwari"}
         my{"Birmees"}
-        myn{"Mayan-talen"}
+        myn{"Mayan-taal"}
         myv{"Erzya"}
         na{"Nauru"}
         nah{"Nahuatl"}
-        nai{"Noord-Amerikaans Indiaans"}
+        nai{"Noord-Amerikaans Indiaanse taal"}
         nap{"Napolitaans"}
         nb{"Noors - Bokmål"}
         nd{"Noord-Ndbele"}
@@ -1751,7 +1752,7 @@ nl{
         nqo{"N’ko"}
         nr{"Zuid-Ndbele"}
         nso{"Noord-Sotho"}
-        nub{"Nubische talen"}
+        nub{"Nubische taal"}
         nv{"Navajo"}
         nwc{"Klassiek Newari"}
         ny{"Nyanja"}
@@ -1766,7 +1767,7 @@ nl{
         os{"Ossetisch"}
         osa{"Osage"}
         ota{"Ottomaans-Turks"}
-        oto{"Otomi-talen"}
+        oto{"Otomi-taal"}
         pa{"Punjabi"}
         paa{"Papoeataal"}
         pag{"Pangasinan"}
@@ -1780,7 +1781,7 @@ nl{
         pi{"Pali"}
         pl{"Pools"}
         pon{"Pohnpeiaans"}
-        pra{"Prakrit-talen"}
+        pra{"Prakrit-taal"}
         pro{"Oudprovençaals"}
         ps{"Pasjtoe"}
         pt{"Portugees"}
@@ -1803,7 +1804,7 @@ nl{
         sad{"Sandawe"}
         sah{"Yakut"}
         sai{"Zuid-Amerikaans Indiaanse taal"}
-        sal{"Salishan-talen"}
+        sal{"Salishan-taal"}
         sam{"Samaritaans-Aramees"}
         sas{"Sasak"}
         sat{"Santali"}
@@ -1816,7 +1817,7 @@ nl{
         sem{"Semitische taal"}
         sg{"Sango"}
         sga{"Oudiers"}
-        sgn{"Gebarentalen"}
+        sgn{"Gebarentaal"}
         sh{"Servokroatisch"}
         shn{"Shan"}
         si{"Singalees"}
@@ -1878,7 +1879,7 @@ nl{
         tsi{"Tsimshian"}
         tt{"Tataars"}
         tum{"Toemboeka"}
-        tup{"Tupi-talen"}
+        tup{"Tupi-taal"}
         tut{"Altaïsche taal"}
         tvl{"Tuvalu"}
         tw{"Twi"}
@@ -1898,11 +1899,11 @@ nl{
         vo{"Volapük"}
         vot{"Votisch"}
         wa{"Wallonisch"}
-        wak{"Wakashan-talen"}
+        wak{"Wakashan-taal"}
         wal{"Walamo"}
         war{"Waray"}
         was{"Washo"}
-        wen{"Sorbische talen"}
+        wen{"Sorbische taal"}
         wo{"Wolof"}
         xal{"Kalmyk"}
         xh{"Xhosa"}
@@ -2103,14 +2104,18 @@ nl{
     }
     Variants{
         1606NICT{"Laat Middelfrans tot 1606"}
+        1694ACAD{"Vroeg modern Frans"}
         1901{"Traditionele Duitse spelling"}
+        1994{"Gestandaardiseerde Resiaanse spelling"}
         1996{"Duitse spelling van 1996"}
         AREVELA{"Oost-Armeens"}
         AREVMDA{"West-Armeens"}
+        BAKU1926{"Eenvormig Turkse Latijnse alfabet"}
         BISKE{"San Giorgio/Bila-dialect"}
         BOONT{"Boontling"}
         FONIPA{"Internationaal Fonetisch Alfabet"}
         FONUPA{"Oeralisch Fonetisch Alfabet"}
+        LIPAW{"Het Lipovaz-dialect van het Resiaans"}
         MONOTON{"Monotonaal"}
         NEDIS{"Natisone-dialect"}
         NJIVA{"Gniva/Njiva-dialect"}
@@ -2120,10 +2125,13 @@ nl{
         REVISED{"Gewijzigde spelling"}
         ROZAJ{"Resiaans"}
         SAAHO{"Saho"}
+        SCOTLAND{"Schots standaard-Engels"}
         SCOUSE{"Liverpools (Scouse)"}
         SOLBA{"Stolvizza/Solbica-dialect"}
+        TARASK{"Taraskievica-spelling"}
+        VALENCIA{"Valenciaans"}
     }
-    Version{"1.139"}
+    Version{"1.119"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2131,7 +2139,7 @@ nl{
                 "PM",
             }
             DateTimePatterns{
-                "HH:mm:ss v",
+                "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -2139,6 +2147,7 @@ nl{
                 "d MMMM y",
                 "d MMM y",
                 "dd-MM-yy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -2347,18 +2356,18 @@ nl{
             monthNames{
                 format{
                     abbreviated{
-                        "jan",
+                        "jan.",
                         "feb.",
-                        "mrt",
-                        "apr",
+                        "mrt.",
+                        "apr.",
                         "mei",
-                        "jun",
-                        "jul",
-                        "aug",
-                        "sep",
-                        "okt",
+                        "jun.",
+                        "jul.",
+                        "aug.",
+                        "sep.",
+                        "okt.",
                         "nov.",
-                        "dec",
+                        "dec.",
                     }
                     wide{
                         "januari",

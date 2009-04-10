@@ -27,5 +27,9 @@ es_MX{
         "NaN",
         "+",
     }
-    Version{"1.139"}
+    PaperSize:intvector{
+        279,
+        216,
+    }
+    Version{"1.52"}
 }

@@ -12,20 +12,19 @@ bn_IN{
     }
     Languages{
         aa{"aa"}
-        ab{"ab"}
-        ace{"ace"}
-        ach{"ach"}
+        ab{"আবখাজিয়ান"}
+        ace{"অ্যাচাইনিজ"}
+        ach{"আকোলি"}
         ada{"ada"}
         ady{"ady"}
         ae{"ae"}
         af{"af"}
-        afa{"afa"}
-        afh{"afh"}
+        afa{"আফ্রো-এশিয়াটিক ভাষা"}
         ain{"ain"}
         ak{"ak"}
         akk{"akk"}
         ale{"ale"}
-        alg{"alg"}
+        alg{"আলগোনকিউয়ান ভাষা"}
         alt{"alt"}
         am{"am"}
         an{"an"}
@@ -90,6 +89,7 @@ bn_IN{
         cu{"চার্চ স্লাভিক"}
         de{"de"}
         de_AT{"অস্ট্রিয়ান জারমান"}
+        doi{"ডোগরি"}
         en{"en"}
         en_AU{"অস্ট্রেলিয়ান ইংরাজী"}
         en_CA{"ক্যানাডিয়ান ইংরেজি"}
@@ -189,7 +189,7 @@ bn_IN{
         Sinh{"Sinh"}
         Sylo{"Sylo"}
     }
-    Version{"1.139"}
+    Version{"1.58"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

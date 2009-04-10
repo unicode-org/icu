@@ -11,8 +11,8 @@
  */
 en{
     AuxExemplarCharacters{
-        "[á à ă â å ä ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ö ø ō œ ß ú ù ŭ û ü ū ÿ"
-        "]"
+        "[á à ă â å ä ã ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ö ø ō œ ß ú ù ŭ û ü ū"
+        " ÿ]"
     }
     Countries{
         001{"World"}
@@ -64,7 +64,7 @@ en{
         AT{"Austria"}
         AU{"Australia"}
         AW{"Aruba"}
-        AX{"Aland Islands"}
+        AX{"Åland Islands"}
         AZ{"Azerbaijan"}
         BA{"Bosnia and Herzegovina"}
         BB{"Barbados"}
@@ -87,12 +87,12 @@ en{
         BY{"Belarus"}
         BZ{"Belize"}
         CA{"Canada"}
-        CC{"Cocos Islands"}
+        CC{"Cocos [Keeling] Islands"}
         CD{"Congo - Kinshasa"}
         CF{"Central African Republic"}
         CG{"Congo - Brazzaville"}
         CH{"Switzerland"}
-        CI{"Ivory Coast"}
+        CI{"Côte d’Ivoire"}
         CK{"Cook Islands"}
         CL{"Chile"}
         CM{"Cameroon"}
@@ -194,7 +194,7 @@ en{
         MH{"Marshall Islands"}
         MK{"Macedonia"}
         ML{"Mali"}
-        MM{"Myanmar"}
+        MM{"Myanmar [Burma]"}
         MN{"Mongolia"}
         MO{"Macau SAR China"}
         MP{"Northern Mariana Islands"}
@@ -229,16 +229,16 @@ en{
         PK{"Pakistan"}
         PL{"Poland"}
         PM{"Saint Pierre and Miquelon"}
-        PN{"Pitcairn"}
+        PN{"Pitcairn Islands"}
         PR{"Puerto Rico"}
-        PS{"Palestinian Territory"}
+        PS{"Palestinian Territories"}
         PT{"Portugal"}
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Qatar"}
         QO{"Outlying Oceania"}
         QU{"European Union"}
-        RE{"Reunion"}
+        RE{"Réunion"}
         RO{"Romania"}
         RS{"Serbia"}
         RU{"Russia"}
@@ -269,7 +269,7 @@ en{
         TH{"Thailand"}
         TJ{"Tajikistan"}
         TK{"Tokelau"}
-        TL{"East Timor"}
+        TL{"Timor-Leste"}
         TM{"Turkmenistan"}
         TN{"Tunisia"}
         TO{"Tonga"}
@@ -280,11 +280,11 @@ en{
         TZ{"Tanzania"}
         UA{"Ukraine"}
         UG{"Uganda"}
-        UM{"United States Minor Outlying Islands"}
+        UM{"U.S. Minor Outlying Islands"}
         US{"United States"}
         UY{"Uruguay"}
         UZ{"Uzbekistan"}
-        VA{"Vatican"}
+        VA{"Vatican City"}
         VC{"Saint Vincent and the Grenadines"}
         VE{"Venezuela"}
         VG{"British Virgin Islands"}
@@ -394,7 +394,7 @@ en{
             "Bosnia-Herzegovina Convertible Mark",
         }
         BAN{
-            "BAN" /** ===  */,
+            "BAN",
             "Bosnia-Herzegovina New Dinar",
         }
         BBD{
@@ -422,7 +422,7 @@ en{
             "Bulgarian Hard Lev",
         }
         BGM{
-            "BGM" /** ===  */,
+            "BGM",
             "Bulgarian Socialist Lev",
         }
         BGN{
@@ -430,7 +430,7 @@ en{
             "Bulgarian Lev",
         }
         BGO{
-            "BGO" /** ===  */,
+            "BGO",
             "Old Bulgarian Lev",
         }
         BHD{
@@ -454,7 +454,7 @@ en{
             "Bolivian Boliviano",
         }
         BOL{
-            "BOL" /** ===  */,
+            "BOL",
             "Old Bolivian Boliviano",
         }
         BOP{
@@ -576,6 +576,10 @@ en{
         CSK{
             "CSK",
             "Czechoslovak Hard Koruna",
+        }
+        CUC{
+            "CUC$",
+            "Cuban Convertible Peso",
         }
         CUP{
             "CU$",
@@ -834,11 +838,11 @@ en{
             "North Korean Won",
         }
         KRH{
-            "KRH" /** ===  */,
+            "KRH",
             "South Korean Hwan",
         }
         KRO{
-            "KRO" /** ===  */,
+            "KRO",
             "Old South Korean Won",
         }
         KRW{
@@ -918,11 +922,11 @@ en{
             "Moroccan Franc",
         }
         MCF{
-            "MCF" /** ===  */,
+            "MCF",
             "Monegasque Franc",
         }
         MDC{
-            "MDC" /** ===  */,
+            "MDC",
             "Moldovan Cupon",
         }
         MDL{
@@ -942,7 +946,7 @@ en{
             "Macedonian Denar",
         }
         MKN{
-            "MKN" /** ===  */,
+            "MKN",
             "Old Macedonian Denar",
         }
         MLF{
@@ -1225,6 +1229,10 @@ en{
             "TMM",
             "Turkmenistani Manat",
         }
+        TMT{
+            "TMT",
+            "Turkmenistani New Manat",
+        }
         TND{
             "DT",
             "Tunisian Dinar",
@@ -1238,11 +1246,11 @@ en{
             "Timorese Escudo",
         }
         TRL{
-            "TL",
+            "TRL",
             "Old Turkish Lira",
         }
         TRY{
-            "YTL",
+            "TL",
             "Turkish Lira",
         }
         TTD{
@@ -1314,7 +1322,7 @@ en{
             "Vietnamese Dong",
         }
         VNN{
-            "VNN" /** ===  */,
+            "VNN",
             "Old Vietnamese Dong",
         }
         VUV{
@@ -1422,7 +1430,7 @@ en{
             "Yugoslavian Convertible Dinar",
         }
         YUR{
-            "YUR" /** ===  */,
+            "YUR",
             "Yugoslavian Reformed Dinar",
         }
         ZAL{
@@ -1448,6 +1456,14 @@ en{
         ZWD{
             "Z$",
             "Zimbabwean Dollar",
+        }
+        ZWL{
+            "ZWL",
+            "Zimbabwean Dollar (2009)",
+        }
+        ZWR{
+            "ZWR",
+            "Zimbabwean Dollar (2008)",
         }
     }
     CurrencyPlurals{
@@ -1726,6 +1742,10 @@ en{
         CSK{
             one{"Czechoslovak hard koruna"}
             other{"Czechoslovak hard korunas"}
+        }
+        CUC{
+            one{"Cuban convertible peso"}
+            other{"Cuban convertible pesos"}
         }
         CUP{
             one{"Cuban peso"}
@@ -2375,6 +2395,10 @@ en{
             one{"Turkmenistani manat"}
             other{"Turkmenistani manat"}
         }
+        TMT{
+            one{"Turkmenistani new manat"}
+            other{"Turkmenistani new manat"}
+        }
         TND{
             one{"Tunisian dinar"}
             other{"Tunisian dinars"}
@@ -2592,14 +2616,20 @@ en{
             one{"Zimbabwean dollar"}
             other{"Zimbabwean dollars"}
         }
+        ZWL{
+            one{"Zimbabwean dollar (2009)"}
+            other{"Zimbabwean dollars (2009)"}
+        }
+        ZWR{
+            one{"Zimbabwean dollar (2008)"}
+            other{"Zimbabwean dollars (2008)"}
+        }
     }
     CurrencyUnitPatterns{
         one{"{0} {1}"}
+        other{"{0} {1}"}
     }
     ExemplarCharacters{"[a-z]"}
-    Keys{
-        numbers{"numbering system"}
-    }
     Languages{
         aa{"Afar"}
         ab{"Abkhazian"}
@@ -2880,7 +2910,7 @@ en{
         mai{"Maithili"}
         mak{"Makasar"}
         man{"Mandingo"}
-        map{"Austronesian"}
+        map{"Austronesian Language"}
         mas{"Masai"}
         mdf{"Moksha"}
         mdr{"Mandar"}
@@ -3058,6 +3088,7 @@ en{
         tog{"Nyasa Tonga"}
         tpi{"Tok Pisin"}
         tr{"Turkish"}
+        trv{"Taroko"}
         ts{"Tsonga"}
         tsi{"Tsimshian"}
         tt{"Tatar"}
@@ -3287,8 +3318,8 @@ en{
             direct{"Direct Sort Order"}
             gb2312han{"Simplified Chinese Sort Order - GB2312"}
             phonebook{"Phonebook Sort Order"}
-            pinyin{"Pinyin Sort Order"}
-            stroke{"Stroke Sort Order"}
+            pinyin{"Simplified Chinese Pinyin Sort Order"}
+            stroke{"Traditional Chinese Stroke Sort Order"}
             traditional{"Traditional Sort Order"}
         }
     }
@@ -3296,6 +3327,7 @@ en{
         1606NICT{"Late Middle French to 1606"}
         1694ACAD{"Early Modern French"}
         1901{"Traditional German orthography"}
+        1959ACAD{"Academic"}
         1994{"Standardized Resian orthography"}
         1996{"German orthography of 1996"}
         AREVELA{"Eastern Armenian"}
@@ -3305,15 +3337,13 @@ en{
         BOONT{"Boontling"}
         FONIPA{"IPA Phonetics"}
         FONUPA{"UPA Phonetics"}
-        GAULISH{"Gaulish"}
-        GUOYU{"Mandarin or Standard Chinese"}
-        HAKKA{"Hakka"}
+        KKCOR{"Common Orthography"}
         LIPAW{"The Lipovaz dialect of Resian"}
-        LOJBAN{"Lojban"}
         MONOTON{"Monotonic"}
         NEDIS{"Natisone dialect"}
         NJIVA{"Gniva/Njiva dialect"}
         OSOJS{"Oseacco/Osojane dialect"}
+        PINYIN{"Pinyin Romanization"}
         POLYTON{"Polytonic"}
         POSIX{"Computer"}
         REVISED{"Revised Orthography"}
@@ -3323,10 +3353,12 @@ en{
         SCOUSE{"Scouse"}
         SOLBA{"Stolvizza/Solbica dialect"}
         TARASK{"Taraskievica orthography"}
+        UCCOR{"Unified Orthography"}
+        UCRCOR{"Unified Revised Orthography"}
         VALENCIA{"Valencian"}
-        XIANG{"Xiang or Hunanese"}
+        WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"1.139"}
+    Version{"1.226"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -3334,7 +3366,7 @@ en{
                 "PM",
             }
             DateTimePatterns{
-                "h:mm:ss a v",
+                "h:mm:ss a zzzz",
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
@@ -3346,10 +3378,12 @@ en{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+                "{1} {0}",
             }
             availableFormats{
-                Hm{"HH:mm"}
-                Hms{"HH:mm:ss"}
+                EEEd{"d EEE"}
+                Hm{"H:mm"}
+                Hms{"H:mm:ss"}
                 M{"L"}
                 MEd{"E, M/d"}
                 MMM{"LLL"}
@@ -3525,6 +3559,10 @@ en{
                     M{"E, MMM d – E, MMM d, y"}
                     d{"E, MMM d – E, MMM d, y"}
                     y{"E, MMM d, y – E, MMM d, y"}
+                }
+                yMMMM{
+                    M{"MMMM–MMMM y"}
+                    y{"MMMM y – MMMM y"}
                 }
                 yMMMd{
                     M{"MMM d – MMM d, y"}
@@ -4414,7 +4452,6 @@ en{
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
-        gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} Time"}
     }

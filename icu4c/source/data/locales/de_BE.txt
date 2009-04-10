@@ -9,19 +9,15 @@
 de_BE{
     Currencies{
         FRF{
-            "FF",
+            "₣",
             "Franken",
         }
     }
-    Version{"1.139"}
+    Version{"1.60"}
     calendar{
         gregorian{
-            DateTimeElements:intvector{
-                2,
-                4,
-            }
             DateTimePatterns{
-                "HH 'h' mm 'min' ss 's' v",
+                "HH 'h' mm 'min' ss 's' zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
@@ -29,6 +25,7 @@ de_BE{
                 "d MMMM y",
                 "dd.MM.yyyy",
                 "d/MM/yy",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -44,24 +41,6 @@ de_BE{
                         "Don",
                         "Fre",
                         "Sam",
-                    }
-                }
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "Jan",
-                        "Feb",
-                        "Mär",
-                        "Apr",
-                        "Mai",
-                        "Jun",
-                        "Jul",
-                        "Aug",
-                        "Sep",
-                        "Okt",
-                        "Nov",
-                        "Dez",
                     }
                 }
             }

@@ -39,6 +39,7 @@ plurals:table(nofallback){
         fy{"set2"}
         ga{"set6"}
         gl{"set2"}
+        gsw{"set2"}
         gu{"set2"}
         guw{"set3"}
         ha{"set2"}

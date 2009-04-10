@@ -10,7 +10,7 @@ ar_IQ{
     Scripts{
         Ital{"اللأيطالية القديمة"}
     }
-    Version{"1.139"}
+    Version{"1.46"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

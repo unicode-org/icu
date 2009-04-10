@@ -24,7 +24,7 @@ cy{
             "Yuan Renminbi Tseina",
         }
         EUR{
-            "EUR",
+            "€",
             "Ewro",
         }
         GBP{
@@ -149,7 +149,7 @@ cy{
     Scripts{
         Latn{"Lladin"}
     }
-    Version{"1.139"}
+    Version{"1.63"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -157,7 +157,7 @@ cy{
                 "PM",
             }
             DateTimePatterns{
-                "h:mm:ss a v",
+                "h:mm:ss a zzzz",
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
@@ -165,6 +165,7 @@ cy{
                 "y MMMM d",
                 "y MMM d",
                 "yyyy-MM-dd",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

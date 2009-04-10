@@ -13,11 +13,11 @@ sr_Latn_ME{
         "#,##0%",
         "#E0",
     }
-    Version{"1.139"}
+    Version{"1.20"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH.mm.ss v",
+                "HH.mm.ss zzzz",
                 "HH.mm.ss z",
                 "HH.mm.ss",
                 "HH.mm",
@@ -25,6 +25,7 @@ sr_Latn_ME{
                 "d.MM.yyyy.",
                 "dd.MM.y.",
                 "d.M.yy.",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

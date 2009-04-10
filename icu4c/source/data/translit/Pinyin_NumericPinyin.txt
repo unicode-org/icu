@@ -7,8 +7,8 @@
 # File: Pinyin_NumericPinyin.txt
 # Generated from CLDR 
 #
-\u0304 <> 1;
-\u0301 <> 2;
-\u030C <> 3;
-\u0300 <> 4;
-< 5;
+\u0304 ↔ 1;
+\u0301 ↔ 2;
+\u030C ↔ 3;
+\u0300 ↔ 4;
+← 5;
