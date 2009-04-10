@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ar.xml
  */
 ar{
-    AuxExemplarCharacters{"[\u200C-\u200F ـ]"}
+    AuxExemplarCharacters{"[\u0640 \u200C-\u200F]"}
     Countries{
         001{"العالم"}
         002{"افريقيا"}
@@ -1907,7 +1907,7 @@ ar{
         REVISED{"تهجئة تم مراجعتها"}
         VALENCIA{"بلنسية"}
     }
-    Version{"1.119"}
+    Version{"1.120"}
     calendar{
         buddhist{
             eras{
