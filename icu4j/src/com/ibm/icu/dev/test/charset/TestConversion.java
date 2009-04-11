@@ -214,7 +214,11 @@ public class TestConversion extends ModuleTest {
             }
             
         } catch (Exception e) {
-            errln(cc.charset + " was not found");
+            if (skipIfBeforeICU(4,1,6)) { // TIME BOMB
+                logln("Skipping test:(" + cc.charset + ") due to ICU Charset not supported at this time");
+            } else {
+                errln(cc.charset + " was not found");
+            }
             return;
         }
         
@@ -492,7 +496,7 @@ public class TestConversion extends ModuleTest {
 
         } catch (Exception e) {
             // TODO implement loading of test data.
-            if (skipIfBeforeICU(4,1,1)) {
+            if (skipIfBeforeICU(4,1,6)) {
                 logln("Skipping test:(" + cc.charset + ") due to ICU Charset not supported at this time");
             } else {
                 errln(cc.charset + " was not found");
@@ -1092,7 +1096,11 @@ public class TestConversion extends ModuleTest {
 
         // test to see if the conversion matches actual results
         if (output.limit() != expected.length()) {
-            errln("Test failed: output length does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
+            if (skipIfBeforeICU(4,1,6)) { // TIME BOMB
+                logln("Skipping test:(" + cc.charset + ") due to time bomb");
+            } else {
+                errln("Test failed: output length does not match expected for charset: "+cc.charset+ " [" + cc.caseNr + "]");
+            }
             res = false;
         } else {
             for (int i = 0; i < expected.length(); i++) {
@@ -1112,7 +1120,9 @@ public class TestConversion extends ModuleTest {
             logln("Expected:    " + printchars(CharBuffer.wrap(expected), expected.length()));
             logln("Passed");
         }
-        else {
+        else if (skipIfBeforeICU(4,1,6)) {
+            // TIME BOMB
+        } else {
             errln("[" + cc.caseNr + "]:" + cc.charset);
             errln("Input:       " + printbytes(cc.bytes, cc.bytes.limit()));
             errln("Output:      " + printchars(output, output.limit()));

@@ -1912,7 +1912,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
             
                 cal.getDateTimeFormat(DateFormat.SHORT, DateFormat.FULL, loc),
                 "cal.getDateTimeFormat(DateFormat.SHORT, DateFormat.FULL, loc)",
-                "4/5/01 5:43:53 PM PT",
+                "4/5/01 5:43:53 PM Pacific Daylight Time",
 
                 cal.getDateTimeFormat(DateFormat.FULL, DateFormat.SHORT, loc),
                 "cal.getDateTimeFormat(DateFormat.FULL, DateFormat.SHORT, loc)",

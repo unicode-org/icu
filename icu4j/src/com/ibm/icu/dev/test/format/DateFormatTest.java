@@ -298,10 +298,10 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         // Fields are given in order of DateFormat field number
         final String EXPECTED[] = {
              "", "1997", "August", "13", "", "", "34", "12", "",
-            "Wednesday", "", "", "", "", "PM", "2", "", "", "", "", "", "", "", "", "PT","","","","","",
+            "Wednesday", "", "", "", "", "PM", "2", "", "Pacific Daylight Time", "", "", "", "", "", "", "","","","","","",
 
             "", "1997", "ao\u00FBt", "13", "", "14", "34", "12", "",
-            "mercredi", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "\u00C9tats-Unis (Los Angeles)","","","","","",
+            "mercredi", "", "", "", "", "", "", "", "heure avanc\u00E9e du Pacifique", "", "", "", "", "", "", "","","","","","",
 
             "AD", "1997", "8", "13", "14", "14", "34", "12", "5",
             "Wed", "225", "2", "33", "2", "PM", "2", "2", "PDT", "1997", "4", "1997", "2450674", "52452513", "-0700", "PT","4","8","3","3","PDT",
@@ -350,13 +350,13 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             {"PM", "13", "Wednesday", "", "",
              "", "", "", "", "",
              "", "2", "", "", "",
-             "34", "August", "", "12", "PT",
+             "34", "August", "", "12", "Pacific Daylight Time",
              "", "", "1997", ""},
 
             {"", "13", "mercredi", "", "",
              "", "", "", "14", "",
              "", "", "", "", "",
-             "34", "ao\u00FBt", "", "12", "\u00C9tats-Unis (Los Angeles)",
+             "34", "ao\u00FBt", "", "12", "heure avanc\u00E9e du Pacifique",
              "", "", "1997", ""},
 
             {"PM", "13", "Wed", "2", "225",
@@ -955,13 +955,13 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "zh", "America/Havana", "2004-01-15T00:00:00Z", "Z", "-0500", "-5:00" },
         { "zh", "America/Havana", "2004-01-15T00:00:00Z", "ZZZZ", GMT_ZH+"-0500", "-5:00" },
         { "zh", "America/Havana", "2004-01-15T00:00:00Z", "z", GMT_ZH+"-0500", "-5:00" },
-        { "zh", "America/Havana", "2004-01-15T00:00:00Z", "zzzz", "\u53e4\u5df4\u6a19\u6e96\u6642\u9593", "-5:00" },
+        { "zh", "America/Havana", "2004-01-15T00:00:00Z", "zzzz", "\u53e4\u5df4\u6807\u51c6\u65f6\u95f4", "-5:00" },
         { "zh", "America/Havana", "2004-07-15T00:00:00Z", "Z", "-0400", "-4:00" },
         { "zh", "America/Havana", "2004-07-15T00:00:00Z", "ZZZZ", GMT_ZH+"-0400", "-4:00" },
         { "zh", "America/Havana", "2004-07-15T00:00:00Z", "z", GMT_ZH+"-0400", "-4:00" },
-        { "zh", "America/Havana", "2004-07-15T00:00:00Z", "zzzz", "\u53e4\u5df4\u590f\u4ee4\u6642\u9593", "-4:00" },
+        { "zh", "America/Havana", "2004-07-15T00:00:00Z", "zzzz", "\u53e4\u5df4\u590f\u4ee4\u65f6\u95f4", "-4:00" },
         { "zh", "America/Havana", "2004-07-15T00:00:00Z", "v", "\u53e4\u5df4\u65f6\u95f4", "America/Havana" },
-        { "zh", "America/Havana", "2004-07-15T00:00:00Z", "vvvv", "\u53e4\u5df4\u6642\u9593", "America/Havana" },
+        { "zh", "America/Havana", "2004-07-15T00:00:00Z", "vvvv", "\u53e4\u5df4\u65f6\u95f4", "America/Havana" },
 
         { "zh", "Australia/ACT", "2004-01-15T00:00:00Z", "Z", "+1100", "+11:00" },
         { "zh", "Australia/ACT", "2004-01-15T00:00:00Z", "ZZZZ", GMT_ZH+"+1100", "+11:00" },
@@ -1032,8 +1032,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "hi", "America/Los_Angeles", "2004-07-15T00:00:00Z", "ZZZZ", "GMT-\u0966\u096d:\u0966\u0966", "-7:00" },
         { "hi", "America/Los_Angeles", "2004-07-15T00:00:00Z", "z", "GMT-\u0966\u096d:\u0966\u0966", "-7:00" },
         { "hi", "America/Los_Angeles", "2004-07-15T00:00:00Z", "zzzz", "GMT-\u0966\u096d:\u0966\u0966", "-7:00" },
-        { "hi", "America/Los_Angeles", "2004-07-15T00:00:00Z", "v", "\u0938\u0902\u092f\u0941\u0915\u094d\u0924 \u0930\u093e\u091c\u094d\u092f \u0905\u092e\u0930\u093f\u0915\u093e (\u0932\u094b\u0938 \u090f\u0902\u091c\u093f\u0932\u0947\u0938)", "America/Los_Angeles" },
-        { "hi", "America/Los_Angeles", "2004-07-15T00:00:00Z", "vvvv", "\u0938\u0902\u092f\u0941\u0915\u094d\u0924 \u0930\u093e\u091c\u094d\u092f \u0905\u092e\u0930\u093f\u0915\u093e (\u0932\u094b\u0938 \u090f\u0902\u091c\u093f\u0932\u0947\u0938)", "America/Los_Angeles" },
+        { "hi", "America/Los_Angeles", "2004-07-15T00:00:00Z", "v", "\u0938\u0902\u092f\u0941\u0915\u094d\u0924 \u0930\u093e\u091c\u094d\u092f \u0905\u092e\u0947\u0930\u093f\u0915\u093e (\u0932\u094b\u0938 \u090f\u0902\u091c\u093f\u0932\u0947\u0938)", "America/Los_Angeles" },
+        { "hi", "America/Los_Angeles", "2004-07-15T00:00:00Z", "vvvv", "\u0938\u0902\u092f\u0941\u0915\u094d\u0924 \u0930\u093e\u091c\u094d\u092f \u0905\u092e\u0947\u0930\u093f\u0915\u093e (\u0932\u094b\u0938 \u090f\u0902\u091c\u093f\u0932\u0947\u0938)", "America/Los_Angeles" },
 
         { "hi", "America/Argentina/Buenos_Aires", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
         { "hi", "America/Argentina/Buenos_Aires", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-\u0966\u0969:\u0966\u0966", "-3:00" },
@@ -1914,9 +1914,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         TimeZone tz = TimeZone.getTimeZone("PST");
         dfFrench.setTimeZone(tz);
         dfUS.setTimeZone(tz);
-        String expectedFRENCH_JDK12 = "lundi 15 septembre 1997 00:00:00 \u00C9tats-Unis (Los Angeles)";
+        String expectedFRENCH_JDK12 = "lundi 15 septembre 1997 00:00:00 heure avanc\u00E9e du Pacifique";
         //String expectedFRENCH = "lundi 15 septembre 1997 00 h 00 PDT";
-        String expectedUS = "Monday, September 15, 1997 12:00:00 AM PT";
+        String expectedUS = "Monday, September 15, 1997 12:00:00 AM Pacific Daylight Time";
         logln("Date set to : " + testDate);
         String out = dfFrench.format(testDate);
         logln("Date Formated with French Locale " + out);

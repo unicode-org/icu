@@ -607,7 +607,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                        1234.56, "1 235 \u00A5JP"); // Yen
 
         expectCurrency(fmt, Currency.getInstance(new Locale("fr", "CH", "")),
-                       1234.56, "1 234,55 sFr."); // 0.25 rounding
+                       1234.56, "1 234,55 CHF"); // 0.25 rounding
 
         expectCurrency(fmt, Currency.getInstance(Locale.US),
                        1234.56, "1 234,56 $US");
@@ -1256,8 +1256,8 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     public void TestNumberingSystems() {
 
         ULocale loc1 = new ULocale("en_US@numbers=thai");
-        ULocale loc2 = new ULocale("en_US@numbers=hebrew");
-        ULocale loc3 = new ULocale("en_US@numbers=persian");
+        ULocale loc2 = new ULocale("en_US@numbers=hebr");
+        ULocale loc3 = new ULocale("en_US@numbers=arabext");
         ULocale loc4 = new ULocale("hi_IN@numbers=foobar");
         
         NumberFormat fmt1 = NumberFormat.getInstance(loc1);
