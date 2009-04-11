@@ -968,7 +968,7 @@ public class ULocaleTest extends TestFmwk {
         if(locales.length<10){
             errln("Did not get the correct result from getAvailableLocales");
         }
-        if(!locales[locales.length-1].equals("zh_Hant_TW")){
+        if(!locales[locales.length-1].equals("zu_ZA")){
             errln("Did not get the expected result");
         }
     }
@@ -1217,7 +1217,7 @@ public class ULocaleTest extends TestFmwk {
         h[0].put("calendar", "calendar");
         h[0].put("currency", "Currency");
         h[0].put("phonebook", "Phonebook Order");
-        h[0].put("pinyin", "Pinyin Sort Order");
+        h[0].put("pinyin", "Simplified Chinese Pinyin Sort Order");
         h[0].put("traditional", "Traditional Sort Order");
         h[0].put("stroke", "Stroke Order");
         h[0].put("direct", "Direct Sort Order");

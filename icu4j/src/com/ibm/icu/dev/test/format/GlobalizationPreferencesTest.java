@@ -1230,8 +1230,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         // Time - full
         df = gp.getDateFormat(GlobalizationPreferences.DF_NONE, GlobalizationPreferences.DF_FULL);
         pattern = ((SimpleDateFormat)df).toPattern();
-        if (!pattern.equals("HH:mm:ss v")) {
-            errln("FAIL: FULL time pattern is " + pattern + " Expected: HH:mm:ss v");
+        if (!pattern.equals("HH:mm:ss zzzz")) {
+            errln("FAIL: FULL time pattern is " + pattern + " Expected: HH:mm:ss zzzz");
         }
 
         // Time - long
@@ -1258,8 +1258,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         // Date/Time - full
         df = gp.getDateFormat(GlobalizationPreferences.DF_FULL, GlobalizationPreferences.DF_FULL);
         pattern = ((SimpleDateFormat)df).toPattern();
-        if (!pattern.equals("EEEE, d MMMM y HH:mm:ss v")) {
-            errln("FAIL: FULL date/time pattern is " + pattern + " Expected: EEEE, d MMMM y HH:mm:ss v");
+        if (!pattern.equals("EEEE, d MMMM y HH:mm:ss zzzz")) {
+            errln("FAIL: FULL date/time pattern is " + pattern + " Expected: EEEE, d MMMM y HH:mm:ss zzzz");
         }
 
         // Invalid style

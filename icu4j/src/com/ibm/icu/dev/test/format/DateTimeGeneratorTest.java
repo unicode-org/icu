@@ -61,7 +61,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         format = (SimpleDateFormat)DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, locale);
         format.setTimeZone(zone);
         String pattern = format.toPattern();
-        assertEquals("full-date", "Donnerstag, 14. Oktober 1999 08:58:59 Frankreich", format.format(sampleDate));
+        assertEquals("full-date", "Donnerstag, 14. Oktober 1999 08:58:59 Mitteleurop\u00E4ische Sommerzeit", format.format(sampleDate));
 
         // modify it to change the zone.
         String newPattern = gen.replaceFieldTypes(pattern, "vvvv");
