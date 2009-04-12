@@ -1,0 +1,60 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2009 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/rbnf/ms.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/rbnf/ms.xml
+ */
+ms{
+    RBNFRules{
+        OrdinalRules{
+            "%digits-ordinal:",
+            "0: ke=#,##0=;",
+            "-x: ke\u2212>#,##0>;",
+        }
+        SpelloutRules{
+            "%spellout-cardinal:",
+            "0: kosong;",
+            "1: satu;",
+            "2: dua;",
+            "3: tiga;",
+            "4: empat;",
+            "5: lima;",
+            "6: enam;",
+            "7: tujuh;",
+            "8: lapan;",
+            "9: sembilan;",
+            "10: sepuluh;",
+            "11: sebelas;",
+            "12: >> belas;",
+            "20: << puluh[ >>];",
+            "100: seratus[ >>];",
+            "200: << ratus[ >>];",
+            "1000: seribu[ >>];",
+            "2000: << ribu[ >>];",
+            "1000000: << juta[ >>];",
+            "1000000000: << milyar[ >>];",
+            "1000000000000: << bilyun[ >>];",
+            "1000000000000000: << bilyar[ >>];",
+            "1000000000000000000: =#,##0=;",
+            "-x: minus >>;",
+            "x.x: << titik >>;",
+            "%spellout-numbering:",
+            "0: =%spellout-cardinal=;",
+            "%spellout-numbering-year:",
+            "0: =%spellout-numbering=;",
+            "x.x: =#,###0.#=;",
+            "%spellout-ordinal:",
+            "0: kekosong;",
+            "1: pertama;",
+            "2: ke=%spellout-cardinal=;",
+            "-x: minus >>;",
+            "x.x: =#,##0.#=;",
+        }
+    }
+    Version{"1.1"}
+}
