@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %fragmentName
+Bundle-SymbolicName: com.ibm.icu.jse4
+Bundle-Version: @BUILD_VERSION@
+Bundle-Vendor: %providerName
+Fragment-Host: com.ibm.icu;bundle-version="[3.9.0,4.1.0)"
+Bundle-Copyright: @COPYRIGHT@
+Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Bundle-Localization: fragment-icu-jse4
+Bundle-Classpath: icu-jse4.jar
+Eclipse-PatchFragment: true

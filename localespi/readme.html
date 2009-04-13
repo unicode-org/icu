@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="Content-Style-Type" content="text/css2">
+  <title>ReadMe for ICU4J Locale Service Provider</title>
+  <meta name="COPYRIGHT" content="Copyright 2008, International Business Machines Corporation and others. All Rights Reserved.">
+  <style type="text/css">
+h3.doc { background: #CCCCFF }
+  </style>
+</head>
+<body style="background-color: rgb(255, 255, 255);" lang="EN-US"
+ link="#0000ff" vlink="#800080">
+<h2>ICU4J Locale Service Provider</h2>
+<h3>Read Me for ICU4J Locale Service Provider</h3>
+<hr size="2" width="100%">
+<p><b>Note:</b> This is a technical preview for ICU4J Locale Service Provider.
+This component may be changed or removed in future release of ICU4J.
+</p>
+<h3 class="doc">Contents</h3>
+<ul type="disc">
+  <li><a href="#intro">Introduction</a></li>
+  <li><a href="#usage">Using ICU4J Locale Service Provider</a></li>
+  <li><a href="#config">Optional Configuration</a></li>
+  <li><a href="#build">Building and Testing ICU4J Locale Service Provider</a></li>
+</ul>
+
+<h3 class="doc"><a name="intro"></a>Introduction</h3>
+
+<p>Java SE 6 introduced a new feature which allows Java user code to extend locale support
+in Java runtime environment.  JREs shipped by Sun or IBM come with decent locale coverage,
+but some users may want more locale support.  Java SE 6 includes abstract classes extending
+<a href="http://java.sun.com/javase/6/docs/api/java/util/spi/LocaleServiceProvider.html">
+java.util.spi.LocaleServiceProvider</a>.  Java SE 6 users can create a subclass of these
+abstract class to supply their own locale support for text break, collation, date/number
+formatting or providing translations for currency, locale and time zone names.</p>
+
+<p>ICU4J has been providing more comprehensive locale coverage than standard JREs.  However,
+Java programmers have to use ICU4J's own internationalization service APIs (com.ibm.icu.*)
+to utilize the rich locale support.  Sometimes, the migration is not an option for various
+reasons.  For example, your code may depend on existing Java libraries utilizing JDK
+internationalization service APIs, but you have no access to the source code.  In this case,
+it is not possible to modify the libraries to use ICU4J APIs.</p>
+
+<p>ICU4J Locale Service Provider is a component consists of classes implementing the Java
+SE 6 locale sensitive service provider interfaces.  Available service providers are -
+<ul>
+  <li><a href="http://java.sun.com/javase/6/docs/api/java/text/spi/BreakIteratorProvider.html">BreakIteratorProvider</a></li>
+  <li><a href="http://java.sun.com/javase/6/docs/api/java/text/spi/CollatorProvider.html">CollatorProvider</a></li>
+  <li><a href="http://java.sun.com/javase/6/docs/api/java/text/spi/DateFormatProvider.html">DateFormatProvider</a></li>
+  <li><a href="http://java.sun.com/javase/6/docs/api/java/text/spi/DateFormatSymbolsProvider.html">DateFormatSymbolsProvider</a></li>
+  <li><a href="http://java.sun.com/javase/6/docs/api/java/text/spi/DecimalFormatSymbolsProvider.html">DecimalFormatSymbolsProvider</a></li>
+  <li><a href="http://java.sun.com/javase/6/docs/api/java/text/spi/NumberFormatProvider.html">NumberFormatProvider</a></li>
+  <li><a href="http://java.sun.com/javase/6/docs/api/java/util/spi/CurrencyNameProvider.html">CurrencyNameProvider</a></li>
+  <li><a href="http://java.sun.com/javase/6/docs/api/java/util/spi/LocaleNameProvider.html">LocaleNameProvider</a></li>
+  <li><a href="http://java.sun.com/javase/6/docs/api/java/util/spi/TimeZoneNameProvider.html">TimeZoneNameProvider</a></li>
+</ul>
+ICU4J Locale Service Provider is designed to work as installed extensions in a JRE.
+Once the component is configured properly, Java application running on the JRE automatically
+picks the ICU4J's internationalization service implementation when a requested locale is not
+available in the JRE.</p>
+
+<h3 class="doc"><a name="usage"></a>Using ICU4J Locale Service Provider</h3>
+
+<p>Java SE 6 locale sensitive service providers are using the
+<a href="http://java.sun.com/javase/6/docs/technotes/guides/extensions/index.html">Java Extension Mechanism</a>.
+An implementation of a locale sensitive service provider is installed as an optional package
+to extend the functionality of the Java core platform.  To install an optional package, its JAR
+files must be placed in the Java extension directory.  The standard location is 
+&lt;<i>java-home</i>&gt;/lib/ext.  You can alternatively use the system property <i>java.ext.dirs</i>
+to specify one or more locations where optional packages are installed.  For example,
+if the JRE root directry is JAVA_HOME and you put ICU4J Locale Service Provider files
+in ICU_SPI_DIR, the ICU4J Locale Service Provider is enabled by the following command.
+<pre>
+  java -Djava.ext.dirs=%JAVA_HOME%\lib\ext;%ICU_SPI_DIR% &lt;your_java_app&gt;  [Microsoft Windows]
+  java -Djava.ext.dirs=$JAVA_HOME/lib/ext:$ICU_SPI_DIR &lt;your_java_app&gt;    [Linux, Solaris and other unix like platforms]
+</pre>
+</p>
+
+<p>The ICU4J's implementations of Java SE 6 locale sensitive service provider interfaces
+and configuration files are packaged in a single JAR file (icu4j-localespi-&lt;<i>version</i>&gt;.jar).
+But the actual implementation of the service classes and data are in the ICU4J core JAR
+file (icu4j-&lt;<i>version</i>&gt;.jar).  So you need to put the localespi JAR file along
+with the core JAR file in the Java extension directory.</p>
+
+<p>Once the ICU4J Locale Service Provider is installed properly, factory methods in
+JDK internationalization classes look for the implementation provided by ICU4J when
+a requested locale is not supported by the JDK service class.  For example, locale
+af_ZA (Afrikaans - South Africa) is not supported by JDK DateFormat in Sun Java SE 6.
+The following code snippet returns an instance of DateFormat from ICU4J Locale Service
+Provider and prints out the current date localized for af_ZA.
+<pre>
+  DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, new Locale("af", "ZA"));
+  System.out.println(df.format(new Date()));
+</pre>
+Sample output:
+<pre>
+  2008 Junie 19     [With ICU4J Locale Service Provider enabled]
+  June 19, 2008     [Without ICU4J Locale Service Provider]
+</pre>
+</p>
+
+<h3 class="doc"><a name="config"></a>Optional Configuration</h3>
+
+<h4>Enabling or disabling individual service</h4>
+<p>By default, all Java 6 SE locale sensitive service providers are enabled in the
+ICU4J Locale Service Provider JAR file.  If you want to disable specific providers
+supported by ICU4J, you can remove the corresponding provider configuration files
+from META-INF/services in the localespi JAR file.  For example, if you do not want
+to use ICU's time zone name service at all, you can remove the file: 
+META-INF/services/java.util.spi.TimeZoneNameProvider from the JAR file.</p>
+
+<p><b>Note:</b> Disabling DateFormatSymbolsProvider/DecimalFormatSymbolsProvider
+won't affect the localized symbols actually used by DateFormatProvider/NumberFormatProvider
+by the current implementation.  These services are implemented independently.</p>
+
+<h4>Configuring the behavior of ICU4J Locale Service Provider</h4>
+<p>com/ibm/icu/impl/javaspi/ICULocaleServiceProviderConfig.properties in the localespi
+JAR file is used for configuring the behavior of the ICU4J Locale Service Provider
+implementation.  There are some configuration properties available.  See the table below
+for each configuration in detail.</p>
+<table border="1">
+<tr>
+  <th>Property</th>
+  <th>Value</th>
+  <th>Default</th>
+  <th>Description</th>
+</tr>
+<tr>
+  <td>com.ibm.icu.impl.javaspi.ICULocaleServiceProvider.enableIcuVariants</td>
+  <td>"true" or "false"</td>
+  <td>"true"</td>
+  <td>
+    Whether if Locales with ICU's variant suffix will be included in getAvailableLocales.
+    The current Java SE 6 locale sensitive service does not allow user provided provider
+    implementations to override locales supported by JRE itself.  When this property is
+    "true"(default), ICU4J Locale Service Provider includes Locales with
+    the suffix(com.ibm.icu.impl.javaspi.ICULocaleServiceProvider.icuVariantSuffix)
+    in the variant field.  For example, the ICU4J provider includes locales fr_FR and
+    fr_FR_ICU in the available locale list.  So JDK API user can still access the
+    internationalization service object created by the ICU4J provider by the special locale
+    fr_FR_ICU.
+  </td>
+</tr>
+<tr>
+  <td>com.ibm.icu.impl.javaspi.ICULocaleServiceProvider.icuVariantSuffix</td>
+  <td><i>Any String</i></td>
+  <td>"ICU"</td>
+  <td>
+    Suffix string used in Locale's variant field to specify the ICU implementation.
+  </td>
+</tr>
+<tr>
+  <td>com.ibm.icu.impl.javaspi.ICULocaleServiceProvider.enableIso3Languages</td>
+  <td>"true" or "false"</td>
+  <td>"true"</td>
+  <td>
+    Whether if 3-letter language Locales are included in getAvailabeLocales.  Use of
+    3-letter language codes in java.util.Locale is not supported by the API reference
+    document.  However, the implementation does not check the length of language code,
+    so there is no practical problem with it.
+  </td>
+</tr>
+<tr>
+  <td>com.ibm.icu.impl.javaspi.ICULocaleServiceProvider.useDecimalFormat</td>
+  <td>"true" or "false"</td>
+  <td>"false"</td>
+  <td>
+    Whether if java.text.DecimalFormat subclass is used for NumberFormat#getXXXInstance.
+    DecimalFormat#format(Object,StringBuffer,FieldPosition) is declared as final, so
+    ICU cannot override the implementation.  As a result, some number types such as
+    BigInteger/BigDecimal are not handled by the ICU implementation.  If a client expects
+    NumberFormat#getXXXInstance returns a DecimalFormat (for example, need to manipulate
+    decimal format patterns), he/she can set true to this setting.  However, in this case,
+    BigInteger/BigDecimal support is not done by ICU's implementation.
+  </td>
+</tr>
+</table>
+
+<h3 class="doc"><a name="build"></a>Building and Testing ICU4J Locale Service Provider</h3>
+
+<p>ICU4J Locale Service Provider classes depend on the ICU4J core files.  To build the
+component, you should build the ICU4J core JAR file first.  Please refer <a href="../readme.html">
+ReadMe for ICU4J</a> to set up the build environment.  The actual steps building the
+ICU4J Locale Service Provider JAR file are described below.  The examples used in these steps
+assume the ICU4J source package is extracted to C:\icu4j on Microsoft Windows.</p>
+<p>1. Build the ICU4J core JAR file (icu4j.jar).  The preferred JDK version for building
+the ICU4J core classes/JAR files is JDK 5.0.
+<pre>
+  C:\icu4j>ant jar
+</pre>
+</p>
+<p>2. Set JAVA_HOME to JDK 6.0.  The ICU4J Locale Service Provider requires JDK 6.0.
+If you used JDK 6.0 for building the ICU4J core JAR file, this step is not necessary.
+<pre>
+  C:\icu4j>set JAVA_HOME=C:\jdk1.6.0
+</pre>
+</p>
+<p>3. Change directory to a subdirectory named "localespi"</p>
+<p>4. Run <b>ant</b> with the default target ("jar").
+<pre>
+  C:\icu4j\localespi>ant
+  Buildfile: build.xml
+
+  check-env-java6:
+
+  icu4j-jar:
+
+  compile:
+      [mkdir] Created dir: C:\icu4j\localespi\classes
+      [javac] Compiling 22 source files to C:\icu4j\localespi\classes
+
+  jar:
+        [jar] Building jar: C:\icu4j\localespi\icu4j-localespi.jar
+
+  build-jar:
+
+  BUILD SUCCESSFUL
+  Total time: 5 seconds
+</pre>
+</p>
+<p>With above steps, icu4j-localespi.jar is created in localespi subdirectory.  To
+verify the ICU4J Locale Service Provider component, you can run <b>ant</b> with the
+target "check". (Note: The target "check" actually creates icu4j-localespi.jar, so
+you can simply run this target to build and test the component.)
+<pre>
+  C:\icu4j\localespi\ant check
+</pre>
+After compiling classes used for testing, the test cases for ICU4J Locale Service
+Provider are executed.  The test output looks like below.
+<pre>
+     [java] TestAll {
+     [java]   BreakIteratorTest {
+     [java]     TestGetInstance Passed
+     [java]     TestICUEquivalent Passed
+     [java]   } Passed
+     [java]   CollatorTest {
+     [java]     TestGetInstance Passed
+     [java]     TestICUEquivalent Passed
+     [java]   } Passed
+     [java]   CurrencyNameTest {
+     [java]     TestCurrencySymbols Passe
+     [java]   } Passed
+     [java]   DateFormatSymbolsTest {
+     [java]     TestGetInstance Passed
+     [java]     TestICUEquivalent Passed
+     [java]     TestNynorsk Passed
+     [java]     TestSetSymbols Passed
+     [java]   } Passed
+     [java]   DateFormatTest {
+     [java]     TestGetInstance Passed
+     [java]     TestICUEquivalent Passed
+     [java]     TestThaiDigit Passed
+     [java]   } Passed
+     [java]   DecimalFormatSymbolsTest {
+     [java]     TestGetInstance Passed
+     [java]     TestICUEquivalent Passed
+     [java]     TestSetSymbols Passed
+     [java]   } Passed
+     [java]   LocaleNameTest {
+     [java]     TestCountryNames Passed
+     [java]     TestLanguageNames Passed
+     [java]     TestVariantNames Passed
+     [java]   } Passed
+     [java]   NumberFormatTest {
+     [java]     TestGetInstance Passed
+     [java]     TestICUEquivalent Passed
+     [java]   } Passed
+     [java]   TimeZoneNameTest {
+     [java]     TestTimeZoneNames Passed
+     [java]   } Passed
+     [java] } Passed
+</pre>
+</p>
+</body>
+</html>
