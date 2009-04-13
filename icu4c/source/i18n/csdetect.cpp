@@ -122,8 +122,10 @@ void CharsetDetector::setRecognizers(UErrorCode &status)
             new CharsetRecog_2022KR(),
             new CharsetRecog_2022CN(),
             
-            new CharsetRecog_IBM424_he(),
-            new CharsetRecog_IBM420_ar()
+            new CharsetRecog_IBM424_he_rtl(),
+            new CharsetRecog_IBM424_he_ltr(),
+            new CharsetRecog_IBM420_ar_rtl(),
+            new CharsetRecog_IBM420_ar_ltr()
         };
         int32_t rCount = ARRAY_SIZE(tempArray);
         int32_t r;

@@ -363,10 +363,23 @@ class CharsetRecog_IBM424_he : public CharsetRecog_sbcs
 public:
     virtual ~CharsetRecog_IBM424_he();
 
-    const char *getName() const;
-
     const char *getLanguage() const;
+};
 
+class CharsetRecog_IBM424_he_rtl : public CharsetRecog_IBM424_he {
+public:
+    virtual ~CharsetRecog_IBM424_he_rtl();
+    
+    const char *getName() const;
+    
+    int32_t match(InputText *textIn);
+};
+
+class CharsetRecog_IBM424_he_ltr : public CharsetRecog_IBM424_he {
+    virtual ~CharsetRecog_IBM424_he_ltr();
+    
+    const char *getName() const;
+    
     int32_t match(InputText *textIn);
 };
 
@@ -375,10 +388,36 @@ class CharsetRecog_IBM420_ar : public CharsetRecog_sbcs
 public:
     virtual ~CharsetRecog_IBM420_ar();
 
-    const char *getName() const;
-
     const char *getLanguage() const;
+    
+protected:
+    void matchInit(InputText *textIn);
+    void matchFinish(InputText *textIn);
+    
+private:
+    uint8_t *prev_fInputBytes;
+    int32_t prev_fInputBytesLength;
+    UBool deleteBuffer;
+    
+    UBool isLamAlef(uint8_t b);
+    uint8_t *unshapeLamAlef(const uint8_t *inputBytes, int32_t inputBytesLength, int32_t &length);
+    uint8_t *unshape(const uint8_t *inputBytes, int32_t inputBytesLength, int32_t &length);
+};
 
+class CharsetRecog_IBM420_ar_rtl : public CharsetRecog_IBM420_ar {
+public:
+    virtual ~CharsetRecog_IBM420_ar_rtl();
+    
+    const char *getName() const;
+    
+    int32_t match(InputText *textIn);
+};
+
+class CharsetRecog_IBM420_ar_ltr : public CharsetRecog_IBM420_ar {
+    virtual ~CharsetRecog_IBM420_ar_ltr();
+    
+    const char *getName() const;
+    
     int32_t match(InputText *textIn);
 };
 
