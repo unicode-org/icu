@@ -1,3 +1,4 @@
+//##header
 /*
  ****************************************************************************
  * Copyright (C) 2005-2009, International Business Machines Corporation and *
@@ -8,7 +9,11 @@
 
 package com.ibm.icu.text;
 
+//#if defined(FOUNDATION10) || defined(J2SE13) || defined(ECLIPSE_FRAGMENT)
+//##import com.ibm.icu.impl.ByteBuffer;
+//#else
 import java.nio.ByteBuffer;
+//#endif
 
 /**
  * This class recognizes single-byte encodings. Because the encoding scheme is so
