@@ -45,6 +45,10 @@
 //##        return limit;
 //##    }
 //##
+//##    public int position() {
+//##        return pos;
+//##    }
+//##
 //##    public int remaining() {
 //##        return limit - pos;
 //##    }
@@ -63,6 +67,15 @@
 //##            dst[offset++] = data[pos++];
 //##        }
 //##    }
+//##
+//##    public void put(byte b) {
+//##        if (pos < limit) {
+//##            data[pos++] = b;
+//##        } else {
+//##            throw new IndexOutOfBoundsException();
+//##        }
+//##    }
+//##
 //##    public static final ByteBuffer allocate(int size){
 //##        ByteBuffer ret = new ByteBuffer();
 //##        ret.data = new byte[size];
