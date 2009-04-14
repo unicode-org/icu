@@ -76,6 +76,15 @@
 //##        }
 //##    }
 //##
+//##    public void put(byte[] src, int offset, int length) {
+//##        if (offset < 0 || offset + length > src.length || pos + length > limit) {
+//##            throw new IndexOutOfBoundsException();
+//##        }
+//##        for (int i = offset; i < offset + length; i++) {
+//##            put(src[i]);
+//##        }
+//##    }
+//##
 //##    public static final ByteBuffer allocate(int size){
 //##        ByteBuffer ret = new ByteBuffer();
 //##        ret.data = new byte[size];
