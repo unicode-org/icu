@@ -85,6 +85,10 @@
 //##        }
 //##    }
 //##
+//##    public void put(byte[] src) {
+//##        put(src, 0, src.length);
+//##    }
+//##
 //##    public static final ByteBuffer allocate(int size){
 //##        ByteBuffer ret = new ByteBuffer();
 //##        ret.data = new byte[size];
