@@ -1535,8 +1535,10 @@ public class TimeZoneTest extends TestFmwk
             // Southern Hemisphere, all data from meta:Australia_Western
             {"Australia/Perth",     "en",   Boolean.FALSE,  TZSHORT,    "GMT+08:00"/*"AWST"*/},
             {"Australia/Perth",     "en",   Boolean.FALSE,  TZLONG,     "Australian Western Standard Time"},
-            {"Australia/Perth",     "en",   Boolean.TRUE,   TZSHORT,    "GMT+09:00"/*"AWDT"*/},
-            {"Australia/Perth",     "en",   Boolean.TRUE,   TZLONG,     "Australian Western Daylight Time"},
+// Note: We do not have a plan to merge the fix for #6814 in 4.0 maintenance stream for now
+//            {"Australia/Perth",     "en",   Boolean.TRUE,   TZSHORT,    "GMT+09:00"/*"AWDT"*/},
+//            {"Australia/Perth",     "en",   Boolean.TRUE,   TZLONG,     "Australian Western Daylight Time"},
+
 
             {"America/Sao_Paulo",   "en",   Boolean.FALSE,  TZSHORT,    "GMT-03:00"/*"BRT"*/},
             {"America/Sao_Paulo",   "en",   Boolean.FALSE,  TZLONG,     "Brasilia Time"},

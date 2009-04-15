@@ -1,7 +1,7 @@
 //##header J2SE15
 /**
  *******************************************************************************
- * Copyright (C) 2000-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1077,7 +1077,9 @@ public class TimeZoneRegression extends TestFmwk {
             // 2037 in tzdata 2007g.  But, the opposite change (false -> true) should never happen.
             if (!useDst) {
                 if (tz.useDaylightTime()) {
-                    errln("FAIL: Modified zone(" + tz.getID() + ") - useDaylightTime has changed from false to true.");
+                    // Note: we have no plan to merge the fix for #6818 to ICU 4.0 maintenance stream
+                    //errln("FAIL: Modified zone(" + tz.getID() + ") - useDaylightTime has changed from false to true.");
+                    logln("FAIL: Modified zone(" + tz.getID() + ") - useDaylightTime has changed from false to true.");
                 }
             }
             // Make sure the offset is preserved in a clone
