@@ -5,6 +5,7 @@
  ********************************************************************/
 
 #include "unicode/udbgutil.h"
+#include <string.h>
 
 /*
 To add a new enum type 
