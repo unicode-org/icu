@@ -1138,7 +1138,7 @@ static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, U
 }
 #endif
 
-static void pkg_checkFlag(UPKGOptions */*o*/) {
+static void pkg_checkFlag(UPKGOptions *o) {
 #ifdef U_AIX
     /* AIX needs a map file. */
     char *flag = NULL;
