@@ -19,6 +19,7 @@
 #include "unicode/ustring.h"
 #include "unicode/std_string.h"
 #include "unicode/stringpiece.h"
+#include <string.h>
 
 StringTest::~StringTest() {}
 
