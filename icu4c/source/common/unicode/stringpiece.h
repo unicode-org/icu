@@ -4,6 +4,19 @@
 // Copyright 2001 and onwards Google Inc.
 // Author: Sanjay Ghemawat
 
+// This code is a contribution of Google code, and the style used here is
+// a compromise between the original Google code and the ICU coding guidelines.
+// For example, data types are ICU-ified (size_t,int->int32_t),
+// and API comments doxygen-ified, but function names and behavior are
+// as in the original, if possible.
+// Assertion-style error handling, not available in ICU, was changed to
+// parameter "pinning" similar to UnicodeString.
+//
+// In addition, this is only a partial port of the original Google code,
+// limited to what was needed so far. The (nearly) complete original code
+// is in the ICU svn repository at icuhtml/trunk/design/strings/contrib
+// (see ICU ticket 6765, r25517).
+
 #ifndef __STRINGPIECE_H__
 #define __STRINGPIECE_H__
 
