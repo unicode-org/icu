@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2008, International Business Machines
+*   Copyright (C) 2001-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -862,14 +862,14 @@ equal_uint32(const uint32_t *s, const uint32_t *t, int32_t length) {
 }
 
 static int32_t
-findSameIndex2Block(const int32_t *index, int32_t index2Length, int32_t otherBlock) {
+findSameIndex2Block(const int32_t *idx, int32_t index2Length, int32_t otherBlock) {
     int32_t block;
 
     /* ensure that we do not even partially get past index2Length */
     index2Length-=UTRIE2_INDEX_2_BLOCK_LENGTH;
 
     for(block=0; block<=index2Length; ++block) {
-        if(equal_int32(index+block, index+otherBlock, UTRIE2_INDEX_2_BLOCK_LENGTH)) {
+        if(equal_int32(idx+block, idx+otherBlock, UTRIE2_INDEX_2_BLOCK_LENGTH)) {
             return block;
         }
     }

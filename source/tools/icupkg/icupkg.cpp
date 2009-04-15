@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005-2008, International Business Machines
+*   Copyright (C) 2005-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -129,7 +129,7 @@ printUsage(const char *pname, UBool isHelp) {
             "\tComments begin with # and are ignored. Empty lines are ignored.\n"
             "\tLines where the first non-whitespace character is one of %s\n"
             "\tare also ignored, to reserve for future syntax.\n",
-            reservedChars);
+            U_PKG_RESERVED_CHARS);
         fprintf(where,
             "\tItems for removal or extraction may contain a single '*' wildcard\n"
             "\tcharacter. The '*' matches zero or more characters.\n"

@@ -73,7 +73,7 @@ CECalendar::operator=(const CECalendar& right)
 //-------------------------------------------------------------------------
 
 int32_t
-CECalendar::handleComputeMonthStart(int32_t eyear,int32_t emonth, UBool useMonth) const
+CECalendar::handleComputeMonthStart(int32_t eyear,int32_t emonth, UBool /*useMonth*/) const
 {
     return ceToJD(eyear, emonth, 0, getJDEpochOffset());
 }

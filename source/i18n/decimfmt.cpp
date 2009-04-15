@@ -64,7 +64,6 @@
 
 
 U_NAMESPACE_BEGIN
-
 U_CDECL_BEGIN
 
 /**
@@ -78,7 +77,6 @@ static UBool U_CALLCONV AffixValueComparator(UHashTok val1, UHashTok val2);
 static UBool U_CALLCONV AffixPatternValueComparator(UHashTok val1, UHashTok val2);
 
 U_CDECL_END
-
 
 UBool
 U_CALLCONV AffixValueComparator(UHashTok val1, UHashTok val2) {

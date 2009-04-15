@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2008, International Business Machines
+ *   Copyright (C) 2008-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  */
@@ -101,7 +101,7 @@ readList(const char *filesPath, const char *listname, UBool readContents) {
             // skip empty lines and
             // skip lines starting with reserved characters
             start=u_skipWhitespace(line);
-            if(*start==0 || NULL!=strchr(reservedChars, *start)) {
+            if(*start==0 || NULL!=strchr(U_PKG_RESERVED_CHARS, *start)) {
                 continue;
             }
 

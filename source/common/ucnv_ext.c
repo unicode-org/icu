@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2003-2008, International Business Machines
+*   Copyright (C) 2003-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -125,7 +125,7 @@ ucnv_extMatchToU(const int32_t *cx, int8_t sisoState,
     const uint32_t *toUTable, *toUSection;
 
     uint32_t value, matchValue;
-    int32_t i, j, index, length, matchLength;
+    int32_t i, j, idx, length, matchLength;
     uint8_t b;
 
     if(cx==NULL || cx[UCNV_EXT_TO_U_LENGTH]<=0) {
@@ -134,7 +134,7 @@ ucnv_extMatchToU(const int32_t *cx, int8_t sisoState,
 
     /* initialize */
     toUTable=UCNV_EXT_ARRAY(cx, UCNV_EXT_TO_U_INDEX, uint32_t);
-    index=0;
+    idx=0;
 
     matchValue=0;
     i=j=matchLength=0;
@@ -158,7 +158,7 @@ ucnv_extMatchToU(const int32_t *cx, int8_t sisoState,
     /* match input units until there is a full match or the input is consumed */
     for(;;) {
         /* go to the next section */
-        toUSection=toUTable+index;
+        toUSection=toUTable+idx;
 
         /* read first pair of the section */
         value=*toUSection++;
@@ -202,7 +202,7 @@ ucnv_extMatchToU(const int32_t *cx, int8_t sisoState,
         } else {
             if(UCNV_EXT_TO_U_IS_PARTIAL(value)) {
                 /* partial match, continue */
-                index=(int32_t)UCNV_EXT_TO_U_GET_PARTIAL_INDEX(value);
+                idx=(int32_t)UCNV_EXT_TO_U_GET_PARTIAL_INDEX(value);
             } else {
                 if( (UCNV_EXT_TO_U_IS_ROUNDTRIP(value) ||
                      TO_U_USE_FALLBACK(useFallback)) &&
@@ -528,7 +528,7 @@ ucnv_extMatchFromU(const int32_t *cx,
     const uint32_t *fromUTableValues, *fromUSectionValues;
 
     uint32_t value, matchValue;
-    int32_t i, j, index, length, matchLength;
+    int32_t i, j, idx, length, matchLength;
     UChar c;
 
     if(cx==NULL) {
@@ -536,17 +536,17 @@ ucnv_extMatchFromU(const int32_t *cx,
     }
 
     /* trie lookup of firstCP */
-    index=firstCP>>10; /* stage 1 index */
-    if(index>=cx[UCNV_EXT_FROM_U_STAGE_1_LENGTH]) {
+    idx=firstCP>>10; /* stage 1 index */
+    if(idx>=cx[UCNV_EXT_FROM_U_STAGE_1_LENGTH]) {
         return 0; /* the first code point is outside the trie */
     }
 
     stage12=UCNV_EXT_ARRAY(cx, UCNV_EXT_FROM_U_STAGE_12_INDEX, uint16_t);
     stage3=UCNV_EXT_ARRAY(cx, UCNV_EXT_FROM_U_STAGE_3_INDEX, uint16_t);
-    index=UCNV_EXT_FROM_U(stage12, stage3, index, firstCP);
+    idx=UCNV_EXT_FROM_U(stage12, stage3, idx, firstCP);
 
     stage3b=UCNV_EXT_ARRAY(cx, UCNV_EXT_FROM_U_STAGE_3B_INDEX, uint32_t);
-    value=stage3b[index];
+    value=stage3b[idx];
     if(value==0) {
         return 0;
     }
@@ -559,7 +559,7 @@ ucnv_extMatchFromU(const int32_t *cx,
 
     if(UCNV_EXT_TO_U_IS_PARTIAL(value)) {
         /* partial match, enter the loop below */
-        index=(int32_t)UCNV_EXT_FROM_U_GET_PARTIAL_INDEX(value);
+        idx=(int32_t)UCNV_EXT_FROM_U_GET_PARTIAL_INDEX(value);
 
         /* initialize */
         fromUTableUChars=UCNV_EXT_ARRAY(cx, UCNV_EXT_FROM_U_UCHARS_INDEX, UChar);
@@ -573,8 +573,8 @@ ucnv_extMatchFromU(const int32_t *cx,
         /* match input units until there is a full match or the input is consumed */
         for(;;) {
             /* go to the next section */
-            fromUSectionUChars=fromUTableUChars+index;
-            fromUSectionValues=fromUTableValues+index;
+            fromUSectionUChars=fromUTableUChars+idx;
+            fromUSectionValues=fromUTableValues+idx;
 
             /* read first pair of the section */
             length=*fromUSectionUChars++;
@@ -610,15 +610,15 @@ ucnv_extMatchFromU(const int32_t *cx,
             }
 
             /* search for the current UChar */
-            index=ucnv_extFindFromU(fromUSectionUChars, length, c);
-            if(index<0) {
+            idx=ucnv_extFindFromU(fromUSectionUChars, length, c);
+            if(idx<0) {
                 /* no match here, stop with the longest match so far */
                 break;
             } else {
-                value=fromUSectionValues[index];
+                value=fromUSectionValues[idx];
                 if(UCNV_EXT_FROM_U_IS_PARTIAL(value)) {
                     /* partial match, continue */
-                    index=(int32_t)UCNV_EXT_FROM_U_GET_PARTIAL_INDEX(value);
+                    idx=(int32_t)UCNV_EXT_FROM_U_GET_PARTIAL_INDEX(value);
                 } else {
                     if( (UCNV_EXT_FROM_U_IS_ROUNDTRIP(value) ||
                          FROM_U_USE_FALLBACK(useFallback, firstCP)) &&

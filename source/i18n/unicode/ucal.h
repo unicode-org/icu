@@ -813,13 +813,13 @@ ucal_setAttribute(UCalendar*          cal,
  * Get a locale for which calendars are available.
  * A UCalendar in a locale returned by this function will contain the correct
  * day and month names for the locale.
- * @param index The index of the desired locale.
+ * @param localeIndex The index of the desired locale.
  * @return A locale for which calendars are available, or 0 if none.
  * @see ucal_countAvailable
  * @stable ICU 2.0
  */
 U_STABLE const char* U_EXPORT2 
-ucal_getAvailable(int32_t index);
+ucal_getAvailable(int32_t localeIndex);
 
 /**
  * Determine how many locales have calendars available.

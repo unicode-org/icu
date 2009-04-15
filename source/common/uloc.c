@@ -2678,7 +2678,7 @@ static void _load_installedLocales()
     UMTX_CHECK(NULL, _installedLocales != NULL, localesLoaded);
     
     if (localesLoaded == FALSE) {
-        UResourceBundle *index = NULL;
+        UResourceBundle *indexLocale = NULL;
         UResourceBundle installed;
         UErrorCode status = U_ZERO_ERROR;
         char ** temp;
@@ -2686,8 +2686,8 @@ static void _load_installedLocales()
         int32_t localeCount;
         
         ures_initStackObject(&installed);
-        index = ures_openDirect(NULL, _kIndexLocaleName, &status);
-        ures_getByKey(index, _kIndexTag, &installed, &status);
+        indexLocale = ures_openDirect(NULL, _kIndexLocaleName, &status);
+        ures_getByKey(indexLocale, _kIndexTag, &installed, &status);
         
         if(U_SUCCESS(status)) {
             localeCount = ures_getSize(&installed);
@@ -2714,7 +2714,7 @@ static void _load_installedLocales()
             }
         }
         ures_close(&installed);
-        ures_close(index);
+        ures_close(indexLocale);
     }
 }
 

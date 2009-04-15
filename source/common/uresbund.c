@@ -693,7 +693,7 @@ ures_close(UResourceBundle* resB)
 }
 
 static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r, 
-                                         const char *key, int32_t index, UResourceDataEntry *realData, 
+                                         const char *key, int32_t idx, UResourceDataEntry *realData, 
                                          const UResourceBundle *parent, int32_t noAlias,
                                          UResourceBundle *resB, UErrorCode *status) 
 {
@@ -833,13 +833,13 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                                 uprv_memcpy(chAlias, key, len);
                                 aKey = chAlias;
                                 r = res_findResource(&(mainRes->fResData), r, &aKey, &temp);
-                            } else if(index != -1) {
+                            } else if(idx != -1) {
                                 /* if there is no key, but there is an index, try to get by the index */
                                 /* here we have either a table or an array, so get the element */
                                 if(RES_GET_TYPE(r) == URES_TABLE || RES_GET_TYPE(r) == URES_TABLE32) {
-                                    r = res_getTableItemByIndex(&(mainRes->fResData), r, index, (const char **)&aKey);
+                                    r = res_getTableItemByIndex(&(mainRes->fResData), r, idx, (const char **)&aKey);
                                 } else { /* array */
-                                    r = res_getArrayItem(&(mainRes->fResData), r, index);
+                                    r = res_getArrayItem(&(mainRes->fResData), r, idx);
                                 }
                             }
                             if(r != RES_BOGUS) {
@@ -966,9 +966,9 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
         if(resB->fResPath[resB->fResPathLen-1] != RES_PATH_SEPARATOR) {
             ures_appendResPath(resB, RES_PATH_SEPARATOR_S, 1, status);
         }
-    } else if(index >= 0) {
+    } else if(idx >= 0) {
         char buf[256];
-        int32_t len = T_CString_integerToString(buf, index, 10);
+        int32_t len = T_CString_integerToString(buf, idx, 10);
         ures_appendResPath(resB, buf, len, status);
         if(resB->fResPath[resB->fResPathLen-1] != RES_PATH_SEPARATOR) {
             ures_appendResPath(resB, RES_PATH_SEPARATOR_S, 1, status);
@@ -1441,12 +1441,12 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB,
 
 U_CAPI const char * U_EXPORT2
 ures_getUTF8StringByIndex(const UResourceBundle *resB,
-                          int32_t index,
+                          int32_t idx,
                           char *dest, int32_t *pLength,
                           UBool forceCopy,
                           UErrorCode *status) {
     int32_t length16;
-    const UChar *s16 = ures_getStringByIndex(resB, index, &length16, status);
+    const UChar *s16 = ures_getStringByIndex(resB, idx, &length16, status);
     return ures_toUTF8String(s16, length16, dest, pLength, forceCopy, status);
 }
 
@@ -2154,7 +2154,7 @@ static const UEnumeration gLocalesEnum = {
 U_CAPI UEnumeration* U_EXPORT2
 ures_openAvailableLocales(const char *path, UErrorCode *status)
 {
-    UResourceBundle *index = NULL;
+    UResourceBundle *idx = NULL;
     UEnumeration *en = NULL;
     ULocalesContext *myContext = NULL;
     
@@ -2173,8 +2173,8 @@ ures_openAvailableLocales(const char *path, UErrorCode *status)
     
     ures_initStackObject(&myContext->installed);
     ures_initStackObject(&myContext->curr);
-    index = ures_openDirect(path, INDEX_LOCALE_NAME, status);
-    ures_getByKey(index, INDEX_TAG, &myContext->installed, status);
+    idx = ures_openDirect(path, INDEX_LOCALE_NAME, status);
+    ures_getByKey(idx, INDEX_TAG, &myContext->installed, status);
     if(U_SUCCESS(*status)) {
 #if defined(URES_TREE_DEBUG)
         fprintf(stderr, "Got %s::%s::[%s] : %s\n", 
@@ -2191,7 +2191,7 @@ ures_openAvailableLocales(const char *path, UErrorCode *status)
         en = NULL;
     }
     
-    ures_close(index);
+    ures_close(idx);
     
     return en;
 }

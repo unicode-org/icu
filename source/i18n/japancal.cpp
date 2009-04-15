@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2003-2008, International Business Machines Corporation and    *
+* Copyright (C) 2003-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -278,7 +278,10 @@ static const struct {
 
 #define kEraCount (sizeof(kEraInfo)/sizeof(kEraInfo[0]))
 
-static const uint32_t kCurrentEra = (kEraCount-1);
+/**
+ * The current era, for reference. 
+ */
+static const int32_t kCurrentEra = (kEraCount-1);  // int32_t to match the calendar field type
 
 static const int32_t kGregorianEpoch = 1970;    // used as the default value of EXTENDED_YEAR
 

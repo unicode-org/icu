@@ -40,7 +40,6 @@ union UHashTok;
 
 U_NAMESPACE_BEGIN
 
-
 U_CDECL_BEGIN
 
 /**

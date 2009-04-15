@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2003 - 2008, International Business Machines Corporation and  *
+* Copyright (C) 2003 - 2009, International Business Machines Corporation and  *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -99,7 +99,7 @@ EthiopicCalendar::handleGetExtendedYear()
 }
 
 void
-EthiopicCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status)
+EthiopicCalendar::handleComputeFields(int32_t julianDay, UErrorCode &/*status*/)
 {
     int32_t eyear, month, day, era, year;
     jdToCE(julianDay, getJDEpochOffset(), eyear, month, day);
