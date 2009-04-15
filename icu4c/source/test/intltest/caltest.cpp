@@ -1911,7 +1911,7 @@ void CalendarTest::TestDebug()
 			continue;
 		}
 	    for(int32_t i=0;i<=count;i++) {
-	  	  if(i<count) {
+	  	  if(t<=UDBG_HIGHEST_CONTIGUOUS_ENUM && i<count) {
 	  		  if( i!=udbg_enumArrayValue((UDebugEnumType)t, i)) {
 	  			  errln("FAIL: udbg_enumArrayValue(%d,%d) returned %d, expected %d", t, i, udbg_enumArrayValue((UDebugEnumType)t,i), i);
 	  		  }
@@ -1920,7 +1920,7 @@ void CalendarTest::TestDebug()
 	  	  }
                   const char *name = udbg_enumName((UDebugEnumType)t,i);
                   if(name==NULL) {
-                          if(i==count) {
+                          if(i==count || t>UDBG_HIGHEST_CONTIGUOUS_ENUM  ) {
                                 logln(" null name - expected.\n");
                           } else {
                                 errln("FAIL: udbg_enumName(%d,%d) returned NULL", t, i);
@@ -1931,7 +1931,7 @@ void CalendarTest::TestDebug()
 				  	name, udbg_enumArrayValue((UDebugEnumType)t,i));
 	  	  logln("udbg_enumString = " + udbg_enumString((UDebugEnumType)t,i));
 	    }
-	    if(udbg_enumExpectedCount((UDebugEnumType)t) != count) {
+	    if(udbg_enumExpectedCount((UDebugEnumType)t) != count && t<=UDBG_HIGHEST_CONTIGUOUS_ENUM) {
 	  	  errln("FAIL: udbg_enumExpectedCount(%d): %d, != UCAL_FIELD_COUNT=%d ", t, udbg_enumExpectedCount((UDebugEnumType)t), count);
 	    } else {
 	  	  logln("udbg_ucal_fieldCount: %d, UCAL_FIELD_COUNT=udbg_enumCount %d ", udbg_enumExpectedCount((UDebugEnumType)t), count);

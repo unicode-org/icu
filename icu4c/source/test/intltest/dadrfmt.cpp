@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -196,10 +196,10 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
             cal->setTime(now, status);
             for (int q=0; q<UCAL_FIELD_COUNT; q++) {
                 if (fromSet.isSet((UCalendarDateFields)q)) {
-                    int32_t oldv = cal->get((UCalendarDateFields)q, status);
+                    //int32_t oldv = cal->get((UCalendarDateFields)q, status);
                     cal->add((UCalendarDateFields)q,
                                 fromSet.get((UCalendarDateFields)q), status);
-                    int32_t newv = cal->get((UCalendarDateFields)q, status);
+                    //int32_t newv = cal->get((UCalendarDateFields)q, status);
                 }
             }
             fromDate = cal->getTime(status);

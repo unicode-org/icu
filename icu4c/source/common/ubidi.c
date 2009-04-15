@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2008, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -1563,7 +1563,7 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
     int32_t visualLength, i, j, visualStart, logicalStart,
             runCount, runLength, addedRuns, insertRemove,
             start, limit, step, indexOddBit, logicalPos,
-            index, index1;
+            index0, index1;
     uint32_t saveOptions;
 
     pBiDi->reorderingMode=UBIDI_REORDER_DEFAULT;
@@ -1642,9 +1642,9 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
         }
         logicalStart=GET_INDEX(runs[i].logicalStart);
         for(j=logicalStart+1; j<logicalStart+runLength; j++) {
-            index=visualMap[j];
+            index0=visualMap[j];
             index1=visualMap[j-1];
-            if((BIDI_ABS(index-index1)!=1) || (saveLevels[index]!=saveLevels[index1])) {
+            if((BIDI_ABS(index0-index1)!=1) || (saveLevels[index0]!=saveLevels[index1])) {
                 addedRuns++;
             }
         }
@@ -1687,10 +1687,10 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
             step=-1;
         }
         for(j=start; j!=limit; j+=step) {
-            index=visualMap[j];
+            index0=visualMap[j];
             index1=visualMap[j+step];
-            if((BIDI_ABS(index-index1)!=1) || (saveLevels[index]!=saveLevels[index1])) {
-                logicalPos=BIDI_MIN(visualMap[start], index);
+            if((BIDI_ABS(index0-index1)!=1) || (saveLevels[index0]!=saveLevels[index1])) {
+                logicalPos=BIDI_MIN(visualMap[start], index0);
                 runs[i+addedRuns].logicalStart=MAKE_INDEX_ODD_PAIR(logicalPos,
                                             saveLevels[logicalPos]^indexOddBit);
                 runs[i+addedRuns].visualLimit=runs[i].visualLimit;

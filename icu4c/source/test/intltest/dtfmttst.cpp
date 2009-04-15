@@ -3147,7 +3147,7 @@ void DateFormatTest::Test6338(void)
 void DateFormatTest::Test6726(void)
 {
     // status
-    UErrorCode status = U_ZERO_ERROR;
+//    UErrorCode status = U_ZERO_ERROR;
 
     // fmtf, fmtl, fmtm, fmts;
     UnicodeString strf, strl, strm, strs;

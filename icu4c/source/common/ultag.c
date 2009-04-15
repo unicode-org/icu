@@ -1273,7 +1273,7 @@ _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
     return u_terminateChars(appendAt, capacity, reslen, status);
 }
 
-/*
+/**
  * Append keywords parsed from LDML extension value
  * e.g. "u-ca-gregory-co-trad" -> {calendar = gregorian} {collation = traditional}
  * Note: char* buf is used for storing keywords
@@ -1283,7 +1283,7 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
     const char *p, *pNext, *pSep;
     const char *pBcpKey, *pBcpType;
     const char *pKey, *pType;
-    int32_t bcpKeyLen, bcpTypeLen;
+    int32_t bcpKeyLen = 0, bcpTypeLen;
     ExtensionListEntry *kwd, *nextKwd;
     ExtensionListEntry *kwdFirst = NULL;
     int32_t bufIdx = 0;

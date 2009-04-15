@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2008, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -972,7 +972,7 @@ enumAlgNames(AlgorithmicRange *range,
         uint16_t count=range->variant;
         const char *s=(const char *)(factors+count);
         char *suffix, *t;
-        uint16_t prefixLength, i, index;
+        uint16_t prefixLength, i, idx;
 
         char c;
 
@@ -1002,10 +1002,10 @@ enumAlgNames(AlgorithmicRange *range,
             /* increment the indexes in lexical order bound by the factors */
             i=count;
             for (;;) {
-                index=(uint16_t)(indexes[--i]+1);
-                if(index<factors[i]) {
+                idx=(uint16_t)(indexes[--i]+1);
+                if(idx<factors[i]) {
                     /* skip one index and its element string */
-                    indexes[i]=index;
+                    indexes[i]=idx;
                     s=elements[i];
                     while(*s++!=0) {
                     }
@@ -1101,7 +1101,7 @@ findAlgName(AlgorithmicRange *range, UCharNameChoice nameChoice, const char *oth
         uint16_t count=range->variant;
         const char *s=(const char *)(factors+count), *t;
         UChar32 start, limit;
-        uint16_t i, index;
+        uint16_t i, idx;
 
         char c;
 
@@ -1131,10 +1131,10 @@ findAlgName(AlgorithmicRange *range, UCharNameChoice nameChoice, const char *oth
             /* increment the indexes in lexical order bound by the factors */
             i=count;
             for (;;) {
-                index=(uint16_t)(indexes[--i]+1);
-                if(index<factors[i]) {
+                idx=(uint16_t)(indexes[--i]+1);
+                if(idx<factors[i]) {
                     /* skip one index and its element string */
-                    indexes[i]=index;
+                    indexes[i]=idx;
                     s=elements[i];
                     while(*s++!=0) {}
                     elements[i]=s;

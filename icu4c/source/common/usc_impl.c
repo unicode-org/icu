@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -161,25 +161,25 @@ getPairIndex(UChar32 ch)
     int32_t pairedCharExtra = pairedCharCount - pairedCharPower;
 
     int32_t probe = pairedCharPower;
-    int32_t index = 0;
+    int32_t pairIndex = 0;
 
     if (ch >= pairedChars[pairedCharExtra]) {
-        index = pairedCharExtra;
+        pairIndex = pairedCharExtra;
     }
 
     while (probe > (1 << 0)) {
         probe >>= 1;
 
-        if (ch >= pairedChars[index + probe]) {
-            index += probe;
+        if (ch >= pairedChars[pairIndex + probe]) {
+            pairIndex += probe;
         }
     }
 
-    if (pairedChars[index] != ch) {
-        index = -1;
+    if (pairedChars[pairIndex] != ch) {
+        pairIndex = -1;
     }
 
-    return index;
+    return pairIndex;
 }
 
 static UBool

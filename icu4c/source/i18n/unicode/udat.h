@@ -693,13 +693,13 @@ udat_setNumberFormat(            UDateFormat*    fmt,
 * Get a locale for which date/time formatting patterns are available.
 * A UDateFormat in a locale returned by this function will perform the correct
 * formatting and parsing for the locale.
-* @param index The index of the desired locale.
+* @param localeIndex The index of the desired locale.
 * @return A locale for which date/time formatting patterns are available, or 0 if none.
 * @see udat_countAvailable
 * @stable ICU 2.0
 */
 U_STABLE const char* U_EXPORT2 
-udat_getAvailable(int32_t index);
+udat_getAvailable(int32_t localeIndex);
 
 /**
 * Determine how many locales have date/time  formatting patterns available.
@@ -833,7 +833,7 @@ typedef struct UDateFormatSymbols UDateFormatSymbols;
 * @param fmt The formatter to query.
 * @param type The type of symbols to get.  One of UDAT_ERAS, UDAT_MONTHS, UDAT_SHORT_MONTHS,
 * UDAT_WEEKDAYS, UDAT_SHORT_WEEKDAYS, UDAT_AM_PMS, or UDAT_LOCALIZED_CHARS
-* @param index The desired symbol of type type.
+* @param symbolIndex The desired symbol of type type.
 * @param result A pointer to a buffer to receive the pattern.
 * @param resultLength The maximum size of result.
 * @param status A pointer to an UErrorCode to receive any errors
@@ -845,7 +845,7 @@ typedef struct UDateFormatSymbols UDateFormatSymbols;
 U_STABLE int32_t U_EXPORT2 
 udat_getSymbols(const   UDateFormat             *fmt,
                         UDateFormatSymbolType   type,
-                        int32_t                 index,
+                        int32_t                 symbolIndex,
                         UChar                   *result,
                         int32_t                 resultLength,
                         UErrorCode              *status);
@@ -873,7 +873,7 @@ udat_countSymbols(    const    UDateFormat                *fmt,
 * @param format The formatter to set
 * @param type The type of symbols to set.  One of UDAT_ERAS, UDAT_MONTHS, UDAT_SHORT_MONTHS,
 * UDAT_WEEKDAYS, UDAT_SHORT_WEEKDAYS, UDAT_AM_PMS, or UDAT_LOCALIZED_CHARS
-* @param index The index of the symbol to set of type type.
+* @param symbolIndex The index of the symbol to set of type type.
 * @param value The new value
 * @param valueLength The length of value, or -1 if null-terminated
 * @param status A pointer to an UErrorCode to receive any errors
@@ -884,7 +884,7 @@ udat_countSymbols(    const    UDateFormat                *fmt,
 U_STABLE void U_EXPORT2 
 udat_setSymbols(    UDateFormat             *format,
                     UDateFormatSymbolType   type,
-                    int32_t                 index,
+                    int32_t                 symbolIndex,
                     UChar                   *value,
                     int32_t                 valueLength,
                     UErrorCode              *status);

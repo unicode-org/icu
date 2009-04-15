@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -409,7 +409,7 @@ void IntlTestCollator::backAndForth(CollationElementIterator &iter)
 
     while ((o = iter.previous(status)) != CollationElementIterator::NULLORDER)
     {
-        int32_t offset = iter.getOffset();
+        /*int32_t offset = */iter.getOffset();
 
         if (index == 0) {
           if(o == 0) {

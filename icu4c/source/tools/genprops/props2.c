@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2008, International Business Machines
+*   Copyright (C) 2002-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -700,7 +700,7 @@ numericLineFn(void *context,
 
 U_CFUNC int32_t
 writeAdditionalData(FILE *f, uint8_t *p, int32_t capacity, int32_t indexes[UPROPS_INDEX_COUNT]) {
-    uint32_t *pvArray;
+    const uint32_t *pvArray;
     int32_t pvRows, pvCount;
     int32_t length;
     UErrorCode errorCode;

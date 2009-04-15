@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2008, International Business Machines
+*   Copyright (C) 2001-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -81,12 +81,12 @@ utrie2_get32FromLeadSurrogateCodeUnit(const UTrie2 *trie, UChar32 c) {
 
 static U_INLINE int32_t
 u8Index(const UTrie2 *trie, UChar32 c, int32_t i) {
-    int32_t index=
+    int32_t idx=
         _UTRIE2_INDEX_FROM_CP(
             trie,
             trie->data32==NULL ? trie->indexLength : 0,
             c);
-    return (index<<3)|i;
+    return (idx<<3)|i;
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -509,7 +509,7 @@ enumEitherTrie(const UTrie2 *trie,
                UChar32 start, UChar32 limit,
                UTrie2EnumValue *enumValue, UTrie2EnumRange *enumRange, const void *context) {
     const uint32_t *data32;
-    const uint16_t *index;
+    const uint16_t *idx;
 
     uint32_t value, prevValue, initialValue;
     UChar32 c, prev, highStart;
@@ -524,14 +524,14 @@ enumEitherTrie(const UTrie2 *trie,
 
     if(trie->newTrie==NULL) {
         /* frozen trie */
-        index=trie->index;
+        idx=trie->index;
         data32=trie->data32;
 
         index2NullOffset=trie->index2NullOffset;
         nullBlock=trie->dataNullOffset;
     } else {
         /* unfrozen, mutable trie */
-        index=NULL;
+        idx=NULL;
         data32=trie->newTrie->data;
 
         index2NullOffset=trie->newTrie->index2NullOffset;
@@ -576,8 +576,8 @@ enumEitherTrie(const UTrie2 *trie,
             }
         } else {
             /* supplementary code points */
-            if(index!=NULL) {
-                i2Block=index[(UTRIE2_INDEX_1_OFFSET-UTRIE2_OMITTED_BMP_INDEX_1_LENGTH)+
+            if(idx!=NULL) {
+                i2Block=idx[(UTRIE2_INDEX_1_OFFSET-UTRIE2_OMITTED_BMP_INDEX_1_LENGTH)+
                               (c>>UTRIE2_SHIFT_1)];
             } else {
                 i2Block=trie->newTrie->index1[c>>UTRIE2_SHIFT_1];
@@ -614,8 +614,8 @@ enumEitherTrie(const UTrie2 *trie,
                 i2Limit=UTRIE2_INDEX_2_BLOCK_LENGTH;
             }
             for(; i2<i2Limit; ++i2) {
-                if(index!=NULL) {
-                    block=(int32_t)index[i2Block+i2]<<UTRIE2_INDEX_SHIFT;
+                if(idx!=NULL) {
+                    block=(int32_t)idx[i2Block+i2]<<UTRIE2_INDEX_SHIFT;
                 } else {
                     block=trie->newTrie->index2[i2Block+i2];
                 }
@@ -637,7 +637,7 @@ enumEitherTrie(const UTrie2 *trie,
                     c+=UTRIE2_DATA_BLOCK_LENGTH;
                 } else {
                     for(j=0; j<UTRIE2_DATA_BLOCK_LENGTH; ++j) {
-                        value=enumValue(context, data32!=NULL ? data32[block+j] : index[block+j]);
+                        value=enumValue(context, data32!=NULL ? data32[block+j] : idx[block+j]);
                         if(value!=prevValue) {
                             if(prev<c && !enumRange(context, prev, c-1, prevValue)) {
                                 return;
@@ -657,11 +657,11 @@ enumEitherTrie(const UTrie2 *trie,
     } else if(c<limit) {
         /* c==highStart<limit */
         uint32_t highValue;
-        if(index!=NULL) {
+        if(idx!=NULL) {
             highValue=
                 data32!=NULL ?
                     data32[trie->highValueIndex] :
-                    index[trie->highValueIndex];
+                    idx[trie->highValueIndex];
         } else {
             highValue=trie->newTrie->data[trie->newTrie->dataLength-UTRIE2_DATA_GRANULARITY];
         }
