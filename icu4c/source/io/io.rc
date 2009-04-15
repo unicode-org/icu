@@ -1,7 +1,7 @@
 // Do not edit with Microsoft Developer Studio Resource Editor.
 //   It will permanently substitute version numbers that are intended to be
 //   picked up by the pre-processor during each build.
-// Copyright (c) 2001-2007 International Business Machines
+// Copyright (c) 2001-2009 International Business Machines
 // Corporation and others. All Rights Reserved.
 //
 #include "../common/msvcres.h"
@@ -76,9 +76,9 @@ BEGIN
             VALUE "FileVersion",  CommaVersionString(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM, U_ICU_VERSION_PATCHLEVEL_NUM, U_ICU_VERSION_BUILDLEVEL_NUM)
             VALUE "LegalCopyright", U_COPYRIGHT_STRING "\0"
 #ifdef _DEBUG
-            VALUE "OriginalFilename", "icuio" U_ICU_VERSION_SHORT "d.dll\0")
+            VALUE "OriginalFilename", "icuio" U_ICU_VERSION_SHORT "d.dll\0"
 #else
-            VALUE "OriginalFilename", "icuio" U_ICU_VERSION_SHORT ".dll\0")
+            VALUE "OriginalFilename", "icuio" U_ICU_VERSION_SHORT ".dll\0"
 #endif
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "International Components for Unicode\0"
