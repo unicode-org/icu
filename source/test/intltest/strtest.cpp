@@ -196,6 +196,24 @@ void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, ch
             TestStringPiece();
         }
         break;
+    case 11:
+        name="TestByteSink";
+        if(exec) {
+            TestByteSink();
+        }
+        break;
+    case 12:
+        name="TestCheckedArrayByteSink";
+        if(exec) {
+            TestCheckedArrayByteSink();
+        }
+        break;
+    case 13:
+        name="TestStringByteSink";
+        if(exec) {
+            TestStringByteSink();
+        }
+        break;
     default:
         name="";
         break;
@@ -367,6 +385,119 @@ StringTest::TestStringPiece() {
     if(!sp.empty() || sp.length()!=0 || sp.size()!=0) {
         errln("abcd.remove_suffix(5) failed");
     }
+}
+
+// Verify that ByteSink is subclassable and Flush() overridable.
+class SimpleByteSink : public ByteSink {
+public:
+    SimpleByteSink(char *outbuf) : fOutbuf(outbuf), fLength(0) {}
+    virtual void Append(const char *bytes, int32_t n) {
+        if(fOutbuf != bytes) {
+            memcpy(fOutbuf, bytes, n);
+        }
+        fOutbuf += n;
+        fLength += n;
+    }
+    virtual void Flush() { Append("z", 1); }
+    int32_t length() { return fLength; }
+private:
+    char *fOutbuf;
+    int32_t fLength;
+};
+
+// Test the ByteSink base class.
+void
+StringTest::TestByteSink() {
+    char buffer[20];
+    buffer[4] = '!';
+    SimpleByteSink sink(buffer);
+    sink.Append("abc", 3);
+    sink.Flush();
+    if(!(sink.length() == 4 && 0 == memcmp("abcz", buffer, 4) && buffer[4] == '!')) {
+        errln("ByteSink (SimpleByteSink) did not Append() or Flush() as expected");
+        return;
+    }
+    char scratch[20];
+    int32_t capacity = -1;
+    char *dest = sink.GetAppendBuffer(0, 50, scratch, (int32_t)sizeof(scratch), &capacity);
+    if(dest != NULL || capacity != 0) {
+        errln("ByteSink.GetAppendBuffer(min_capacity<1) did not properly return NULL[0]");
+        return;
+    }
+    dest = sink.GetAppendBuffer(10, 50, scratch, 9, &capacity);
+    if(dest != NULL || capacity != 0) {
+        errln("ByteSink.GetAppendBuffer(scratch_capacity<min_capacity) did not properly return NULL[0]");
+        return;
+    }
+    dest = sink.GetAppendBuffer(5, 50, scratch, (int32_t)sizeof(scratch), &capacity);
+    if(dest != scratch || capacity != (int32_t)sizeof(scratch)) {
+        errln("ByteSink.GetAppendBuffer() did not properly return the scratch buffer");
+    }
+}
+
+void
+StringTest::TestCheckedArrayByteSink() {
+    char buffer[20];  // < 26 for the test code to work
+    buffer[3] = '!';
+    CheckedArrayByteSink sink(buffer, (int32_t)sizeof(buffer));
+    sink.Append("abc", 3);
+    if(!(sink.NumberOfBytesWritten() == 3 && 0 == memcmp("abc", buffer, 3) && buffer[3] == '!')) {
+        errln("CheckedArrayByteSink did not Append() as expected");
+        return;
+    }
+    char scratch[10];
+    int32_t capacity = -1;
+    char *dest = sink.GetAppendBuffer(0, 50, scratch, (int32_t)sizeof(scratch), &capacity);
+    if(dest != NULL || capacity != 0) {
+        errln("CheckedArrayByteSink.GetAppendBuffer(min_capacity<1) did not properly return NULL[0]");
+        return;
+    }
+    dest = sink.GetAppendBuffer(10, 50, scratch, 9, &capacity);
+    if(dest != NULL || capacity != 0) {
+        errln("CheckedArrayByteSink.GetAppendBuffer(scratch_capacity<min_capacity) did not properly return NULL[0]");
+        return;
+    }
+    dest = sink.GetAppendBuffer(10, 50, scratch, (int32_t)sizeof(scratch), &capacity);
+    if(dest != buffer + 3 || capacity != (int32_t)sizeof(buffer) - 3) {
+        errln("CheckedArrayByteSink.GetAppendBuffer() did not properly return its own buffer");
+        return;
+    }
+    memcpy(dest, "defghijklm", 10);
+    sink.Append(dest, 10);
+    if(!(sink.NumberOfBytesWritten() == 13 &&
+         0 == memcmp("abcdefghijklm", buffer, 13) &&
+         !sink.Overflowed())
+    ) {
+        errln("CheckedArrayByteSink did not Append(its own buffer) as expected");
+        return;
+    }
+    dest = sink.GetAppendBuffer(10, 50, scratch, (int32_t)sizeof(scratch), &capacity);
+    if(dest != scratch || capacity != (int32_t)sizeof(scratch)) {
+        errln("CheckedArrayByteSink.GetAppendBuffer() did not properly return the scratch buffer");
+    }
+    memcpy(dest, "nopqrstuvw", 10);
+    sink.Append(dest, 10);
+    if(!(sink.NumberOfBytesWritten() == (int32_t)sizeof(buffer) &&
+         0 == memcmp("abcdefghijklmnopqrstuvwxyz", buffer, (int32_t)sizeof(buffer)) &&
+         sink.Overflowed())
+    ) {
+        errln("CheckedArrayByteSink did not Append(scratch buffer) as expected");
+        return;
+    }
+}
+
+void
+StringTest::TestStringByteSink() {
+#if U_HAVE_STD_STRING
+    // Not much to test because only the constructor and Append()
+    // are implemented, and trivially so.
+    U_STD_NSQ string result("abc");  // std::string
+    StringByteSink<U_STD_NSQ string> sink(&result);
+    sink.Append("def", 3);
+    if(result != "abcdef") {
+        errln("StringByteSink did not Append() as expected");
+    }
+#endif
 }
 
 #if defined(U_WINDOWS) && defined(_MSC_VER)
