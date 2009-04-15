@@ -1,7 +1,7 @@
 /*  
 *******************************************************************************
 *
-*   Copyright (C) 1999-2006, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -60,19 +60,19 @@ setWeightTrail(uint32_t weight, int32_t length, uint32_t trail) {
 }
 
 static U_INLINE uint32_t
-getWeightByte(uint32_t weight, int32_t index) {
-    return getWeightTrail(weight, index); /* same calculation */
+getWeightByte(uint32_t weight, int32_t idx) {
+    return getWeightTrail(weight, idx); /* same calculation */
 }
 
 static U_INLINE uint32_t
-setWeightByte(uint32_t weight, int32_t index, uint32_t byte) {
+setWeightByte(uint32_t weight, int32_t idx, uint32_t byte) {
     uint32_t mask; /* 0xffffffff except a 00 "hole" for the index-th byte */
 
-    index*=8;
-    mask=((uint32_t)0xffffffff)>>index;
-    index=32-index;
-    mask|=0xffffff00<<index;
-    return (uint32_t)((weight&mask)|(byte<<index));
+    idx*=8;
+    mask=((uint32_t)0xffffffff)>>idx;
+    idx=32-idx;
+    mask|=0xffffff00<<idx;
+    return (uint32_t)((weight&mask)|(byte<<idx));
 }
 
 static U_INLINE uint32_t

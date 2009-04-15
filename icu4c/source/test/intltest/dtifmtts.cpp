@@ -150,8 +150,8 @@ void DateIntervalFormatTest::testAPI() {
     
     status = U_ZERO_ERROR;
     logln("Testing DateIntervalFormat getDateFormat");
-    const DateFormat* fmt = another->getDateFormat();
     /*
+    const DateFormat* fmt = another->getDateFormat();
     dtitvfmt->setDateFormat(*fmt, status);
     const DateFormat* anotherFmt = dtitvfmt->getDateFormat();
     if ( (*fmt) != (*anotherFmt) || U_FAILURE(status) ) {
@@ -165,6 +165,7 @@ void DateIntervalFormatTest::testAPI() {
     if ( (*fmt) != (*anotherFmt) || U_FAILURE(status) ) {
         dataerrln("ERROR: adoptDateFormat failed");
     }
+    delete fmt;
     */
 
 

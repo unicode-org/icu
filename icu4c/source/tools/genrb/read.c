@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2008, International Business Machines
+*   Copyright (C) 1998-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -351,13 +351,13 @@ static UChar32 getNextChar(UCHARBUF* buf,
             seekUntilNewline(buf, NULL, status);
             break;
 
-        case ASTERISK:  /* "/*" */
-            c2 = ucbuf_getc(buf, status); /* "/*c" */
-            if(c2 == ASTERISK){  /* "/**" */
+        case ASTERISK:  /* " / * " */
+            c2 = ucbuf_getc(buf, status); /* "/ * c" */
+            if(c2 == ASTERISK){  /* "/ * *" */
                 /* parse multi-line comment and store it in token*/
                 seekUntilEndOfComment(buf, token, status);
             } else {
-                ucbuf_ungetc(c2, buf); /* c2 is the non-asterisk following "/*".  Include c2  back in buffer.  */
+                ucbuf_ungetc(c2, buf); /* c2 is the non-asterisk following "/ *".  Include c2  back in buffer.  */
                 seekUntilEndOfComment(buf, NULL, status);
             }
             break;

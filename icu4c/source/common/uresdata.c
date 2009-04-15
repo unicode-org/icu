@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *                                                                             *
-* Copyright (C) 1999-2006, International Business Machines Corporation        *
+* Copyright (C) 1999-2009, International Business Machines Corporation        *
 *               and others. All Rights Reserved.                              *
 *                                                                             *
 *******************************************************************************
@@ -117,7 +117,7 @@ _res_getTable32Item(const Resource *pRoot, const Resource res, int32_t indexR) {
 
 static Resource
 _res_findTableItem(const Resource *pRoot, const Resource res, const char *key,
-                   int32_t *index, const char **realKey) {
+                   int32_t *idx, const char **realKey) {
     const uint16_t *p=(const uint16_t *)RES_GET_POINTER(pRoot, res);
     uint32_t mid, start, limit;
     uint32_t lastMid;
@@ -143,7 +143,7 @@ _res_findTableItem(const Resource *pRoot, const Resource res, const char *key,
                 start = mid;
             } else {
                 /* We found it! */
-                *index=mid;
+                *idx=mid;
                 *realKey=RES_GET_KEY(pRoot, p[mid]);
                 limit=*(p-1);   /* itemCount */
                 return ((const Resource *)(p+limit+(~limit&1)))[mid];
@@ -151,13 +151,13 @@ _res_findTableItem(const Resource *pRoot, const Resource res, const char *key,
         }
     }
 
-    *index=URESDATA_ITEM_NOT_FOUND;
+    *idx=URESDATA_ITEM_NOT_FOUND;
     return RES_BOGUS;   /* not found or table is empty. */
 }
 
 static Resource
 _res_findTable32Item(const Resource *pRoot, const Resource res, const char *key,
-                     int32_t *index, const char **realKey) {
+                     int32_t *idx, const char **realKey) {
     const int32_t *p=(const int32_t *)RES_GET_POINTER(pRoot, res);
     int32_t mid, start, limit;
     int32_t lastMid;
@@ -183,14 +183,14 @@ _res_findTable32Item(const Resource *pRoot, const Resource res, const char *key,
                 start = mid;
             } else {
                 /* We found it! */
-                *index=mid;
+                *idx=mid;
                 *realKey=RES_GET_KEY(pRoot, p[mid]);
                 return ((const Resource *)(p+(*(p-1))))[mid];
             }
         }
     }
 
-    *index=URESDATA_ITEM_NOT_FOUND;
+    *idx=URESDATA_ITEM_NOT_FOUND;
     return RES_BOGUS;   /* not found or table is empty. */
 }
 
@@ -359,12 +359,12 @@ res_countArrayItems(const ResourceData *pResData, const Resource res) {
 
 U_CFUNC Resource
 res_getResource(const ResourceData *pResData, const char *key) {
-    int32_t index;
+    int32_t idx;
     const char *realKey;
     if(RES_GET_TYPE(pResData->rootRes)==URES_TABLE) {
-        return _res_findTableItem(pResData->pRoot, pResData->rootRes, key, &index, &realKey);
+        return _res_findTableItem(pResData->pRoot, pResData->rootRes, key, &idx, &realKey);
     } else {
-        return _res_findTable32Item(pResData->pRoot, pResData->rootRes, key, &index, &realKey);
+        return _res_findTable32Item(pResData->pRoot, pResData->rootRes, key, &idx, &realKey);
     }
 }
 

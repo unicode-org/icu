@@ -1327,7 +1327,7 @@ SimpleDateFormat::processOverrideString(const Locale &locale, const UnicodeStrin
         int32_t nsNameHash = nsName.hashCode();
         // See if the numbering system is in the override list, if not, then add it.
         NSOverride *cur = fOverrideList;
-        NumberFormat *nf;
+        NumberFormat *nf = NULL;
         UBool found = FALSE;
         while ( cur && !found ) {
             if ( cur->hash == nsNameHash ) {

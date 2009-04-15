@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 1998-2004, International Business Machines Corporation
+* Copyright (C) 1998-2009, International Business Machines Corporation
 * and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -304,13 +304,13 @@ static void get_symbols(const UDateFormat *fmt,
     }
 
     for(i = 0; i < arrayLength; i++) {
-        int32_t index = (i + firstIndex) % arrayLength;
-        int32_t size = 1 + udat_getSymbols(fmt, type, index + lowestIndex, NULL, 0, status);
+        int32_t idx = (i + firstIndex) % arrayLength;
+        int32_t size = 1 + udat_getSymbols(fmt, type, idx + lowestIndex, NULL, 0, status);
         
-        array[index] = (UChar *) malloc(sizeof(UChar) * size);
+        array[idx] = (UChar *) malloc(sizeof(UChar) * size);
 
         *status = U_ZERO_ERROR;
-        udat_getSymbols(fmt, type, index + lowestIndex, array[index], size, status);
+        udat_getSymbols(fmt, type, idx + lowestIndex, array[idx], size, status);
     }
 }
 

@@ -133,7 +133,7 @@ CollationAPITest::TestProperty(/* char* par */)
     doAssert((col->compare("black bird", "black-bird") == Collator::LESS), "black bird > black-bird comparison failed");
     doAssert((col->compare("Hello", "hello") == Collator::GREATER), "Hello > hello comparison failed");
 
-    doAssert((col->compareUTF8("\x61\x62\xc3\xa4", "\x61\x62\xc3\x9f", success) == Collator::LESS), "ab a-umlaut < ab sharp-s UTF-8 comparison failed");
+    doAssert((col->compareUTF8("\x61\x62\xc3\xa4", "\x61\x62\xc3\x9f", success) == UCOL_LESS), "ab a-umlaut < ab sharp-s UTF-8 comparison failed");
     success = U_ZERO_ERROR;
     {
         UnicodeString abau=UNICODE_STRING_SIMPLE("\\x61\\x62\\xe4").unescape();
@@ -141,7 +141,7 @@ CollationAPITest::TestProperty(/* char* par */)
         UCharIterator abauIter, abssIter;
         uiter_setReplaceable(&abauIter, &abau);
         uiter_setReplaceable(&abssIter, &abss);
-        doAssert((col->compare(abauIter, abssIter, success) == Collator::LESS), "ab a-umlaut < ab sharp-s UCharIterator comparison failed");
+        doAssert((col->compare(abauIter, abssIter, success) == UCOL_LESS), "ab a-umlaut < ab sharp-s UCharIterator comparison failed");
         success = U_ZERO_ERROR;
     }
 

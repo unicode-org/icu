@@ -207,17 +207,6 @@ static const struct AssemblyType {
 static int32_t assemblyHeaderIndex = -1;
 static int32_t hexType = HEX_0X;
 
-U_CAPI void U_EXPORT2
-printAssemblyHeadersToStdErr() {
-    int32_t idx;
-    fprintf(stderr, "%s", assemblyHeader[0].name);
-    for (idx = 1; idx < (int32_t)(sizeof(assemblyHeader)/sizeof(assemblyHeader[0])); idx++) {
-        fprintf(stderr, ", %s", assemblyHeader[idx].name);
-    }
-    fprintf(stderr,
-        ")\n");
-}
-
 U_CAPI UBool U_EXPORT2
 checkAssemblyHeaderName(const char* optAssembly) {
     int32_t idx;
@@ -231,6 +220,18 @@ checkAssemblyHeaderName(const char* optAssembly) {
     }
 
     return FALSE;
+}
+
+
+U_CAPI void U_EXPORT2
+printAssemblyHeadersToStdErr(void) {
+    int32_t idx;
+    fprintf(stderr, "%s", assemblyHeader[0].name);
+    for (idx = 1; idx < (int32_t)(sizeof(assemblyHeader)/sizeof(assemblyHeader[0])); idx++) {
+        fprintf(stderr, ", %s", assemblyHeader[idx].name);
+    }
+    fprintf(stderr,
+        ")\n");
 }
 
 U_CAPI void U_EXPORT2

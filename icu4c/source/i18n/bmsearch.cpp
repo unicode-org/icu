@@ -704,7 +704,7 @@ void BoyerMooreSearch::setTargetString(const UnicodeString *targetString, UError
  */
 UBool BoyerMooreSearch::search(int32_t offset, int32_t &start, int32_t &end)
 {
-    UCollator *coll = data->getCollator();
+    /*UCollator *coll =*/ data->getCollator();
     int32_t plen = patCEs->size();
     int32_t tlen = target->stringLength();
     int32_t maxSkip = badCharacterTable->getMaxSkip();

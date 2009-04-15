@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2008, International Business Machines
+*   Copyright (C) 2000-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -74,11 +74,11 @@ static const char* javaClass1=  " extends ListResourceBundle {\n\n"
                                 "          return  contents;\n"
                                 "    }\n\n"
                                 "    private static Object[][] contents = {\n";
-static const char* javaClassICU= " extends ListResourceBundle {\n\n"
+/*static const char* javaClassICU= " extends ListResourceBundle {\n\n"
                                  "    public %s  () {\n"
                                  "          super.contents = data;\n"
                                  "    }\n"
-                                 "    static final Object[][] data = new Object[][] { \n";
+                                 "    static final Object[][] data = new Object[][] { \n";*/
 static int tabCount = 3;
 
 static FileStream* out=NULL;
@@ -259,11 +259,11 @@ str_write_java( uint16_t* src, int32_t srcLen, UBool printEndLine, UErrorCode *s
             add = columnCount-(tabCount*4)-5/* for ", +\n */;
             current = buf +len;
             if (add < (bufLen-len)) {
-                uint32_t index = strrch(current,add,'\\');
-                if (index > add) {
-                    index = add;
+                uint32_t idx = strrch(current,add,'\\');
+                if (idx > add) {
+                    idx = add;
                 } else {
-                    int32_t num =index-1;
+                    int32_t num =idx-1;
                     uint32_t seqLen;
                     while(num>0){
                         if(current[num]=='\\'){
@@ -272,12 +272,12 @@ str_write_java( uint16_t* src, int32_t srcLen, UBool printEndLine, UErrorCode *s
                             break;
                         }
                     }
-                    if ((index-num)%2==0) {
-                        index--;
+                    if ((idx-num)%2==0) {
+                        idx--;
                     }
-                    seqLen = (current[index+1]=='u') ? 6 : 2;
-                    if ((add-index) < seqLen) {
-                        add = index + seqLen;
+                    seqLen = (current[idx+1]=='u') ? 6 : 2;
+                    if ((add-idx) < seqLen) {
+                        add = idx + seqLen;
                     }
                 }
             }
@@ -586,7 +586,7 @@ res_write_java(struct SResource *res,UErrorCode *status) {
              string_write_java    (res, status);
              return;
         case URES_ALIAS:
-             printf("Encountered unsupported resource type of alias\n", res->fType);
+             printf("Encountered unsupported resource type %d of alias\n", res->fType);
              *status = U_UNSUPPORTED_ERROR;
 			 return;
         case URES_INT_VECTOR:
@@ -621,8 +621,8 @@ bundle_write_java(struct SRBRoot *bundle, const char *outputDir,const char* outp
 
     char fileName[256] = {'\0'};
     char className[256]={'\0'};
-    char constructor[1000] = { 0 };
-    UBool j1 =FALSE;
+    /*char constructor[1000] = { 0 };*/
+    /*UBool j1 =FALSE;*/
     outDir = outputDir;
 
     start = TRUE;                        /* Reset the start indictor*/

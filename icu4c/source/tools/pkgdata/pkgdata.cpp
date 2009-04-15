@@ -462,7 +462,7 @@ main(int argc, char* argv[]) {
 static int32_t pkg_executeOptions(UPKGOptions *o) {
     UErrorCode status = U_ZERO_ERROR;
     int32_t result = 0;
-    char cmd[SMALL_BUFFER_MAX_SIZE] = "";
+//    char cmd[SMALL_BUFFER_MAX_SIZE] = "";
     const char mode = o->mode[0];
     char targetDir[SMALL_BUFFER_MAX_SIZE] = "";
     char tmpDir[SMALL_BUFFER_MAX_SIZE] = "";
@@ -1138,7 +1138,7 @@ static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, U
 }
 #endif
 
-static void pkg_checkFlag(UPKGOptions *o) {
+static void pkg_checkFlag(UPKGOptions */*o*/) {
 #ifdef U_AIX
     /* AIX needs a map file. */
     char *flag = NULL;

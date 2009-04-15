@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2008, International Business Machines
+ *   Copyright (C) 2008-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  */
@@ -9,7 +9,7 @@
 
 #include "unicode/utypes.h"
 
-static const char *reservedChars="\"%&'()*+,-./:;<=>?_";
+#define U_PKG_RESERVED_CHARS "\"%&'()*+,-./:;<=>?_"
 
 U_CAPI int U_EXPORT2
 writePackageDatFile(const char *outFilename, const char *outComment,

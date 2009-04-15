@@ -171,7 +171,7 @@ static void strnrepchr(char* src, int32_t srcLen, char s, char r){
  * If it fails to get the language information from the filename,
  * use "en" as the default value for language
  */
-static char* parseFilename(const char* id, char* lang) {
+static char* parseFilename(const char* id, char* /*lang*/) {
     int idLen = (int) uprv_strlen(id);
     char* localeID = (char*) uprv_malloc(idLen);
     int pos = 0;
@@ -448,7 +448,7 @@ printNoteElements(struct UString *src, UErrorCode *status){
 
 }
 
-static void printAttribute(const char *name, const char *value, int32_t len)
+static void printAttribute(const char *name, const char *value, int32_t /*len*/)
 {
     write_utf8_file(out, UnicodeString(" "));
     write_utf8_file(out, UnicodeString(name));
@@ -457,7 +457,7 @@ static void printAttribute(const char *name, const char *value, int32_t len)
     write_utf8_file(out, UnicodeString("\""));
 }
 
-static void printAttribute(const char *name, const UnicodeString value, int32_t len)
+static void printAttribute(const char *name, const UnicodeString value, int32_t /*len*/)
 {
     write_utf8_file(out, UnicodeString(" "));
     write_utf8_file(out, UnicodeString(name));
@@ -600,7 +600,7 @@ static const char *intvector_restype = "x-icu-intvector";
 static const char *table_restype     = "x-icu-table";
 
 static void
-string_write_xml(struct SResource *res, const char* id, const char* language, UErrorCode *status) {
+string_write_xml(struct SResource *res, const char* id, const char* /*language*/, UErrorCode *status) {
 
     char *sid = NULL;
     char* buf = NULL;
@@ -637,7 +637,7 @@ string_write_xml(struct SResource *res, const char* id, const char* language, UE
 }
 
 static void
-alias_write_xml(struct SResource *res, const char* id, const char* language, UErrorCode *status) {
+alias_write_xml(struct SResource *res, const char* id, const char* /*language*/, UErrorCode *status) {
     char *sid = NULL;
     char* buf = NULL;
     int32_t bufLen=0;
@@ -707,7 +707,7 @@ array_write_xml(struct SResource *res, const char* id, const char* language, UEr
 }
 
 static void
-intvector_write_xml(struct SResource *res, const char* id, const char* language, UErrorCode *status) {
+intvector_write_xml(struct SResource *res, const char* id, const char* /*language*/, UErrorCode *status) {
     char* sid = NULL;
     char* ivd = NULL;
     uint32_t i=0;
@@ -756,7 +756,7 @@ intvector_write_xml(struct SResource *res, const char* id, const char* language,
 }
 
 static void
-int_write_xml(struct SResource *res, const char* id, const char* language, UErrorCode *status) {
+int_write_xml(struct SResource *res, const char* id, const char* /*language*/, UErrorCode *status) {
     char* sid = NULL;
     char buf[256] = {0};
     uint32_t len = 0;
@@ -784,7 +784,7 @@ int_write_xml(struct SResource *res, const char* id, const char* language, UErro
 }
 
 static void
-bin_write_xml(struct SResource *res, const char* id, const char* language, UErrorCode *status) {
+bin_write_xml(struct SResource *res, const char* id, const char* /*language*/, UErrorCode *status) {
     const char* m_type = application_mimetype;
     char* sid = NULL;
     uint32_t crc = 0xFFFFFFFF;

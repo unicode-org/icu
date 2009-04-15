@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1996-2006, International Business Machines
+ *   Copyright (C) 1996-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *
@@ -798,13 +798,13 @@ U_CAPI const char *
 uprv_convertToPosix(uint32_t hostid, UErrorCode* status)
 {
     uint16_t langID = LANGUAGE_LCID(hostid);
-    uint32_t index;
+    uint32_t localeIndex;
 
-    for (index = 0; index < gLocaleCount; index++)
+    for (localeIndex = 0; localeIndex < gLocaleCount; localeIndex++)
     {
-        if (langID == gPosixIDmap[index].regionMaps->hostID)
+        if (langID == gPosixIDmap[localeIndex].regionMaps->hostID)
         {
-            return getPosixID(&gPosixIDmap[index], hostid);
+            return getPosixID(&gPosixIDmap[localeIndex], hostid);
         }
     }
 

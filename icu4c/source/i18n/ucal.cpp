@@ -561,7 +561,7 @@ static const char * const CAL_TYPES[] = {
 };
 
 U_CAPI UEnumeration* U_EXPORT2
-ucal_getKeywordValuesForLocale(const char *key, const char* locale, UBool commonlyUsed, UErrorCode *status) {
+ucal_getKeywordValuesForLocale(const char * /* key */, const char* locale, UBool commonlyUsed, UErrorCode *status) {
     // Resolve region
     char prefRegion[ULOC_FULLNAME_CAPACITY] = "";
     int32_t prefRegionLength = 0;

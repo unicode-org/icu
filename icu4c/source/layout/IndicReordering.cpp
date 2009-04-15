@@ -1019,7 +1019,7 @@ le_int32 IndicReordering::v2process(const LEUnicode *chars, le_int32 charCount, 
 
     IndicReorderingOutput output(outChars, glyphStorage, NULL);
     le_int32 i, firstConsonant, baseConsonant, secondConsonant, inv_count = 0, beginSyllable = 0;
-    le_bool lastInWord = FALSE;
+    //le_bool lastInWord = FALSE;
 
     while (beginSyllable < charCount) {
         le_int32 nextSyllable = findSyllable(classTable, chars, beginSyllable, charCount);
@@ -1139,7 +1139,7 @@ le_int32 IndicReordering::v2process(const LEUnicode *chars, le_int32 charCount, 
 }
 
 
-void IndicReordering::getDynamicProperties( DynamicProperties *dProps, const IndicClassTable *classTable ) {
+void IndicReordering::getDynamicProperties( DynamicProperties */*dProps*/, const IndicClassTable *classTable ) {
 
 
     LEUnicode currentChar;
@@ -1149,7 +1149,7 @@ void IndicReordering::getDynamicProperties( DynamicProperties *dProps, const Ind
 
     IndicReorderingOutput workOutput(workChars, workGlyphs, NULL);
 
-    le_int32 offset = 0;
+    //le_int32 offset = 0;
 
     // First find the relevant virama for the script we are dealing with
 
