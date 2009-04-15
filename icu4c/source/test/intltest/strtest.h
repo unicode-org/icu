@@ -37,6 +37,9 @@ private:
     void TestStdNamespaceQualifier();
     void TestUsingStdNamespace();
     void TestStringPiece();
+    void TestByteSink();
+    void TestCheckedArrayByteSink();
+    void TestStringByteSink();
     void TestSTLCompatibility();
 };
 
