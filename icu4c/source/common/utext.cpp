@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2005-2008, International Business Machines
+*   Copyright (C) 2005-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -2449,7 +2449,13 @@ ucstrTextAccess(UText *ut, int64_t index, UBool  forward) {
             if (U16_IS_LEAD(str[chunkLimit-1])) {
                 --chunkLimit;
             }
+            // Null-terminated chunk with end still unknown.
+            // Update the chunk length to reflect what has been scanned thus far.
+            // That the full length is still unknown is (still) flagged by
+            //    ut->a being < 0.
             ut->chunkNativeLimit = chunkLimit;
+            ut->nativeIndexingLimit = chunkLimit;
+            ut->chunkLength = chunkLimit;
         }
 
     }

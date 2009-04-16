@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2005-2008, International Business Machines Corporation and
+ * Copyright (c) 2005-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -54,8 +54,10 @@ UTextTest::runIndexedTest(int32_t index, UBool exec,
             if (exec) ErrorTest();   break;
         case 2: name = "FreezeTest";
             if (exec) FreezeTest();  break;
-		case 3: name = "Ticket5560";
-			if (exec) Ticket5560();  break;
+        case 3: name = "Ticket5560";
+            if (exec) Ticket5560();  break;
+        case 4: name = "Ticket6847";
+            if (exec) Ticket6847();  break;
         default: name = "";          break;
     }
 }
@@ -1396,5 +1398,37 @@ void UTextTest::Ticket5560() {
 
     utext_close(&ut1);
     utext_close(&ut2);
+}
+
+
+// Test for Ticket 6847
+//
+void UTextTest::Ticket6847() {
+    const int STRLEN = 90;
+    UChar s[STRLEN];
+    u_memset(s, 0x41, STRLEN);
+
+    UErrorCode status = U_ZERO_ERROR;
+    UText *ut = utext_openUChars(NULL, s, -1, &status);
+
+    utext_setNativeIndex(ut, 0);
+    int32_t count = 0;
+    UChar32 c = 0;
+    int32_t nativeIndex = UTEXT_GETNATIVEINDEX(ut);
+    TEST_ASSERT(nativeIndex == 0);
+    while ((c = utext_next32(ut)) != U_SENTINEL) {
+        TEST_ASSERT(c == 0x41);
+        TEST_ASSERT(count < STRLEN);
+        if (count >= STRLEN) {
+            break;
+        }
+        count++;
+        nativeIndex = UTEXT_GETNATIVEINDEX(ut);
+        TEST_ASSERT(nativeIndex == count);
+    }
+    TEST_ASSERT(count == STRLEN);
+    nativeIndex = UTEXT_GETNATIVEINDEX(ut);
+    TEST_ASSERT(nativeIndex == STRLEN);
+    utext_close(ut);
 }
 
