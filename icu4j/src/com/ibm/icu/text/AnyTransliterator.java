@@ -1,6 +1,6 @@
 /*
 *****************************************************************
-* Copyright (c) 2002-2006, International Business Machines Corporation
+* Copyright (c) 2002-2009, International Business Machines Corporation
 * and others.  All Rights Reserved.
 *****************************************************************
 * Date        Name        Description
@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.Vector;
 /**
  * A transliterator that translates multiple input scripts to a single
  * output script.  It is named Any-T or Any-T/V, where T is the target
@@ -60,6 +61,11 @@ class AnyTransliterator extends Transliterator {
      * The target script code.  Never USCRIPT_INVALID_CODE.
      */
     private int targetScript;
+    
+    /**
+     * Special code for handling width characters
+     */
+    private Transliterator widthFix = Transliterator.getInstance("[[:dt=Nar:][:dt=Wide:]] nfkd");
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
@@ -144,7 +150,11 @@ class AnyTransliterator extends Transliterator {
      */
     private Transliterator getTransliterator(int source) {
         if (source == targetScript || source == UScript.INVALID_CODE) {
-            return null;
+            if (isWide(targetScript)) {
+                return null;
+            } else {
+                return widthFix;
+            }
         }
 
         Integer key = new Integer(source);
@@ -166,11 +176,27 @@ class AnyTransliterator extends Transliterator {
             }
 
             if (t != null) {
+                if (!isWide(targetScript)) {
+                    Vector v = new Vector();
+                    v.add(widthFix);
+                    v.add(t);
+                    t = new CompoundTransliterator(v);
+                }
                 cache.put(key, t);
+            } else if (!isWide(targetScript)) {
+                return widthFix;
             }
         }
 
         return t;
+    }
+
+    /**
+     * @param targetScript2
+     * @return
+     */
+    private boolean isWide(int script) {
+        return script == UScript.BOPOMOFO || script == UScript.HAN || script == UScript.HANGUL || script == UScript.HIRAGANA || script == UScript.KATAKANA;
     }
 
     /**
