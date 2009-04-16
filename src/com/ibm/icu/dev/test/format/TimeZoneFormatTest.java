@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- * Copyright (C) 2007-2008, Google, International Business Machines Corporation *
+ * Copyright (C) 2007-2009, Google, International Business Machines Corporation *
  * and others. All Rights Reserved.                                             *
  ********************************************************************************
  */
@@ -108,47 +108,70 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                         tz.getOffset(DATES[datidx].getTime(), false, inOffsets);
                         outtz.getOffset(DATES[datidx].getTime(), false, outOffsets);
 
-                        // Check if localized GMT format or RFC format is used.
-                        int numDigits = 0;
-                        for (int n = 0; n < tzstr.length(); n++) {
-                            if (UCharacter.isDigit(tzstr.charAt(n))) {
-                                numDigits++;
-                            }
-                        }
-                        if (numDigits >= 3) {
-                            // Localized GMT or RFC: total offset (raw + dst) must be preserved.
-                            int inOffset = inOffsets[0] + inOffsets[1];
-                            int outOffset = outOffsets[0] + outOffsets[1];
-                            if (inOffset != outOffset) {
-                                errln("Offset round trip failed; tz=" + tzids[tzidx]
-                                    + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
-                                    + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
-                                    + ", inOffset=" + inOffset + ", outOffset=" + outOffset);
-                            }
-                        } else if (PATTERNS[patidx].equals("z") || PATTERNS[patidx].equals("zzzz")
-                                || PATTERNS[patidx].equals("v") || PATTERNS[patidx].equals("vvvv")
-                                || PATTERNS[patidx].equals("V")) {
-                            // Specific or generic: raw offset must be preserved.
-                            if (inOffsets[0] != outOffsets[0]) {
-                                errln("Raw offset round trip failed; tz=" + tzids[tzidx]
-                                    + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
-                                    + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
-                                    + ", inRawOffset=" + inOffsets[0] + ", outRawOffset=" + outOffsets[0]);
-                            }
-                        } else { // "VVVV"
-                            // Location: time zone rule must be preserved.
+                        if (PATTERNS[patidx].equals("VVVV")) {
+                            // Location: time zone rule must be preserved except
+                            // zones not actually associated with a specific location.
+                            // Time zones in this category do not have "/" in its ID.
                             String canonicalID = TimeZone.getCanonicalID(tzids[tzidx]);
                             if (canonicalID != null && !outtz.getID().equals(canonicalID)) {
                                 // Canonical ID did not match - check the rules
-                                if (!((BasicTimeZone)outtz).hasEquivalentTransitions(tz, low, high)) {
+                                boolean bFailure = false;
+                                if ((tz instanceof BasicTimeZone) && (outtz instanceof BasicTimeZone)) {
+                                    bFailure = !(canonicalID.indexOf('/') == -1)
+                                                && !((BasicTimeZone)outtz).hasEquivalentTransitions(tz, low, high);
+                                }
+                                if (bFailure) {
                                     errln("Canonical round trip failed; tz=" + tzids[tzidx]
+                                            + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
+                                            + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
+                                            + ", outtz=" + outtz.getID());
+                                } else {
+                                    logln("Canonical round trip failed (as expected); tz=" + tzids[tzidx]
+                                            + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
+                                            + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
+                                            + ", outtz=" + outtz.getID());
+                                }
+                            }
+                        } else {
+                            // Check if localized GMT format or RFC format is used.
+                            int numDigits = 0;
+                            for (int n = 0; n < tzstr.length(); n++) {
+                                if (UCharacter.isDigit(tzstr.charAt(n))) {
+                                    numDigits++;
+                                }
+                            }
+
+                            if (numDigits >= 3) {
+                                // Localized GMT or RFC: total offset (raw + dst) must be preserved.
+                                int inOffset = inOffsets[0] + inOffsets[1];
+                                int outOffset = outOffsets[0] + outOffsets[1];
+                                if (inOffset != outOffset) {
+                                    errln("Offset round trip failed; tz=" + tzids[tzidx]
                                         + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
                                         + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
-                                        + ", outtz=" + outtz.getID());
+                                        + ", inOffset=" + inOffset + ", outOffset=" + outOffset);
+                                }
+                            } else {
+                                // Specific or generic: raw offset must be preserved.
+                                if (inOffsets[0] != outOffsets[0]) {
+                                    if (TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK
+                                            && tzids[tzidx].startsWith("SystemV/")) {
+                                        // JDK uses rule SystemV for these zones while
+                                        // ICU handles these zones as aliases of existing time zones
+                                        logln("Raw offset round trip failed; tz=" + tzids[tzidx]
+                                            + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
+                                            + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
+                                            + ", inRawOffset=" + inOffsets[0] + ", outRawOffset=" + outOffsets[0]);
+
+                                    } else {
+                                        errln("Raw offset round trip failed; tz=" + tzids[tzidx]
+                                            + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
+                                            + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
+                                            + ", inRawOffset=" + inOffsets[0] + ", outRawOffset=" + outOffsets[0]);
+                                    }
                                 }
                             }
                         }
-                        
                     }
                 }
             }
@@ -162,12 +185,25 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      * round trip as expected.
      */
     public void TestTimeRoundTrip() {
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 
-        cal.set(1900, Calendar.JANUARY, 1);
+        //boolean TEST_ALL = "true".equalsIgnoreCase(getProperty("TimeZoneRoundTripAll"));
+        boolean TEST_ALL = false;
+
+        int startYear, endYear;
+
+        if (TEST_ALL || getInclusion() > 5) {
+            startYear = 1900;
+        } else {
+            startYear = 1990;
+        }
+
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        endYear = cal.get(Calendar.YEAR) + 3;
+
+        cal.set(startYear, Calendar.JANUARY, 1);
         final long START_TIME = cal.getTimeInMillis();
 
-        cal.set(2020, Calendar.JANUARY, 1);
+        cal.set(endYear, Calendar.JANUARY, 1);
         final long END_TIME = cal.getTimeInMillis();
 
         // Whether each pattern is ambiguous at DST->STD local time overlap
@@ -178,14 +214,13 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         final String BASEPATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
         ULocale[] LOCALES = null;
-        boolean DEBUG_ALL = false;
         boolean REALLY_VERBOSE = false;
 
         // timer for performance analysis
         long[] times = new long[PATTERNS.length];
         long timer;
 
-        if (DEBUG_ALL) {
+        if (TEST_ALL) {
             // It may take about an hour for testing all locales
             LOCALES = ULocale.getAvailableLocales();
         } else if (getInclusion() > 5) {
@@ -203,8 +238,6 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         } else {
             LOCALES = new ULocale[] {
                 new ULocale("en"),
-                new ULocale("en_CA"),
-                new ULocale("fr")
             };
         }
 
