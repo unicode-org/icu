@@ -39,7 +39,7 @@
 
 # GB 18030 BMP mappings that are not handled algorithmically are
 # generated using gbmake4 and gbtoucm tools. Please see charset/source/gb18030/gb18030.html
-# or http://dev.icu-project.org/cgi-bin/viewcvs.cgi/*checkout*/charset/source/gb18030/gb18030.html
+# or http://source.icu-project.org/repos/icu/data/trunk/charset/source/gb18030/gb18030.html
 # for more information.
 
 CHARMAP
