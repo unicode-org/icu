@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2002-2007, International Business Machines
+ * Copyright (c) 2002-2009, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Alan Liu
@@ -300,7 +300,7 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
 
         public short getShort(int enumProbe) {
             if (enumProbe < enumStart || enumProbe >= enumLimit) {
-                throw new IllegalArgumentException("Invalid enum. enumStart = " +enumStart +
+                throw new IllegalIcuArgumentException("Invalid enum. enumStart = " +enumStart +
                                                    " enumLimit = " + enumLimit +
                                                    " enumProbe = " + enumProbe );
             }
@@ -332,7 +332,7 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
                 if (enumArray[i] > enumProbe) break;
                 return offsetArray[i];
             }
-            throw new IllegalArgumentException("Invalid enum");
+            throw new IllegalIcuArgumentException("Invalid enum");
         }
 
         NonContiguousEnumToShort(ICUBinaryStream s) throws IOException  {
@@ -364,7 +364,7 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
                 if (c < 0) break;
                 return enumArray[i];
             }
-            throw new IllegalArgumentException("Invalid name: " + nameProbe);
+            throw new IllegalIcuArgumentException("Invalid name: " + nameProbe);
         }
 
         NameToEnum(Builder b) throws IOException {
@@ -444,11 +444,11 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
      */
     private String chooseNameInGroup(short nameGroupIndex, int nameChoice) {
         if (nameChoice < 0) {
-            throw new IllegalArgumentException("Invalid name choice");
+            throw new IllegalIcuArgumentException("Invalid name choice");
         }
         while (nameChoice-- > 0) {
             if (nameGroupPool[nameGroupIndex++] < 0) {
-                throw new IllegalArgumentException("Invalid name choice");
+                throw new IllegalIcuArgumentException("Invalid name choice");
             }
         }
         short a = nameGroupPool[nameGroupIndex];
