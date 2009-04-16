@@ -9,6 +9,8 @@
  */
 package com.ibm.icu.dev.test.translit;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -134,6 +136,73 @@ public class RegexUtilitiesTest extends TestFmwk {
                 rawNegativePattern = prefix + "\\P{" + propName + "=" + valueName + "}" + suffix;
                 checkCharPattern(UnicodeRegex.compile(rawPattern), rawPattern, shouldMatch, shouldNotMatch);
                 checkCharPattern(UnicodeRegex.compile(rawNegativePattern), rawNegativePattern, shouldNotMatch, shouldMatch);
+            }
+        }
+    }
+
+    public void TestBnf() {
+        UnicodeRegex regex = new UnicodeRegex();
+        final String[][] tests = {
+                {
+                    "c = a wq;\n" +
+                    "a = xyz;\n" +
+                    "b = a a c;\n"
+                },
+                {
+                    "c = a b;\n" +
+                    "a = xyz;\n" +
+                    "b = a a c;\n",
+                    "Exception"
+                },
+                {
+                    "uri = (?: (scheme) \\:)? (host) (?: \\? (query))? (?: \\u0023 (fragment))?;\n" +
+                    "scheme = reserved+;\n" +
+                    "host = // reserved+;\n" +
+                    "query = [\\=reserved]+;\n" +
+                    "fragment = reserved+;\n" +
+                    "reserved = [[:ascii:][:sc=grek:]&[:alphabetic:]];\n",
+                "http://\u03B1\u03B2\u03B3?huh=hi#there"},
+                {
+                    "/Users/markdavis/Documents/workspace/cldr-code/java/org/unicode/cldr/util/data/langtagRegex.txt"
+                }
+        };
+        for (int i = 0; i < tests.length; ++i) {
+            String test = tests[i][0];
+            final boolean expectException = tests[i].length < 2 ? false : tests[i][1].equals("Exception");
+            try {
+                String result;
+                if (test.endsWith(".txt")) {
+                    List lines = UnicodeRegex.loadFile(test, new ArrayList());
+                    result = regex.compileBnf(lines);
+                } else {
+                    result = regex.compileBnf(test);
+                }
+                if (expectException) {
+                    errln("Expected exception for " + test);
+                    continue;
+                }
+                result = result.replaceAll("[0-9]+%", ""); // just so we can use the language subtag stuff
+                String resolved = regex.transform(result);
+                logln(resolved);
+                Matcher m = Pattern.compile(resolved, Pattern.COMMENTS).matcher("");
+                String checks = "";
+                for (int j = 1; j < tests[i].length; ++j) {
+                    String check = tests[i][j];
+                    if (!m.reset(check).matches()) {
+                        checks = checks + "Fails " + check + "\n";
+                    } else {
+                        for (int k = 1; k <= m.groupCount(); ++k) {
+                            checks += "(" + m.group(k) + ")";
+                        }
+                        checks += "\n";
+                    }
+                }
+                logln("Result: " + result + "\n" + checks + "\n" + test);
+            } catch (Exception e) {
+                if (!expectException) {
+                    errln(e.getClass().getName() + ": " + e.getMessage());
+                }
+                continue;
             }
         }
     }

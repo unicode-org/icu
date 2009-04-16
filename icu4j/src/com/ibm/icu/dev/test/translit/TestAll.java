@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -19,13 +19,16 @@ public class TestAll extends TestGroup {
 
     public TestAll() {
         super(new String[] {
-            "TransliteratorTest",
-            "UnicodeSetTest",
-            "CompoundTransliteratorTest",
-            "JamoTest",
-            "ErrorTest",
-            "RoundTripTest",
-            "ReplaceableTest",
+                "AnyScriptTest",
+                "CompoundTransliteratorTest",
+                "ErrorTest",
+                "JamoTest",
+                "RegexUtilitiesTest",
+                "ReplaceableTest",
+                "RoundTripTest",
+                "TransliteratorTest",
+                "UnicodeMapTest",
+                "UnicodeSetTest",
         });
     }
 

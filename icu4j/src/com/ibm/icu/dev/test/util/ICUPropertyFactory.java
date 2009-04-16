@@ -13,10 +13,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
@@ -184,8 +187,7 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
             public List _getAvailableValues(List result) {
                 if (result == null) result = new ArrayList();
                 if (propEnum == UProperty.AGE) {
-                    addAllUnique(new String[] {
-                        "unassigned","1.1","2.0","2.1","3.0","3.1","3.2","4.0"},
+                    addAllUnique(getAges(),
                         result);
                     return result;
                 }
@@ -216,6 +218,19 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
                     addUnique(alias, result);
                 }
                 return result;
+            }
+
+            static String[] AGES = null;
+            private String[] getAges() {
+                if (AGES == null) {
+                  Set ages = new TreeSet();
+                  for (int i = 0; i < 0x10FFFF; ++i) {
+                    VersionInfo age = UCharacter.getAge(i);
+                    ages.add(age.toString());
+                  }
+                  AGES = (String[]) ages.toArray(new String[ages.size()]);
+                }
+                return AGES;
             }
 
             public List _getValueAliases(String valueAlias, List result) {
