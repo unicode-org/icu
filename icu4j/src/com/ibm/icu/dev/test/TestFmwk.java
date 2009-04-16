@@ -1817,8 +1817,8 @@ public class TestFmwk extends AbstractTestLog {
         return handleAssert(result, message, expected, actual, null, false);
     }
 
-    private boolean handleAssert(boolean result, String message,
-            String expected, String actual, String relation, boolean flip) {
+    public boolean handleAssert(boolean result, String message,
+            Object expected, Object actual, String relation, boolean flip) {
         if (!result || isVerbose()) {
             message = message == null ? "" : " " + message;
             relation = relation == null ? ", got " : " " + relation + " ";
