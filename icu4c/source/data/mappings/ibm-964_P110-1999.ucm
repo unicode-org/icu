@@ -1,6 +1,6 @@
 # ***************************************************************************
 # *
-# *   Copyright (C) 1995-2007, International Business Machines
+# *   Copyright (C) 1995-2009, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # ***************************************************************************
@@ -18,15 +18,30 @@
 <icu:charsetFamily>           "ASCII"
 <icu:alias>                   "ibm-964_VPUA"
 
-<icu:state>                   0-8d, 8e:2, 90-9f, a1-fe:1, aa-c1:5, c3:5, fe:5
+# The fourth <icu:state> line is commented out (and does not count)
+# because the state table is hand-optimized and does not use what would be
+# the natural path for the encoding scheme.
+# The third <icu:state> used to start with "a1-b0:3" but overrode every one
+# of these byte values with a different state transition.
+
+# 0: Initial state, single bytes and lead bytes
+<icu:state>                   0-8d, 8e:2, 90-9f, a1-fe:1, aa-c1:4, c3:4, fe:4
+# 1: Trail byte state with mappings
 <icu:state>                   a1-fe
-<icu:state>                   a1-b0:3, a1:4, a2:8, a3-ab:4, ac:7, ad:6, ae-b0:4
-<icu:state>                   a1-fe:1
-<icu:state>                   a1-fe:5
+# 2: Second of four bytes, follows lead byte 8e
+<icu:state>                   a1:3, a2:7, a3-ab:3, ac:6, ad:5, ae-b0:3
+# (unreachable/optimized away)
+# <icu:state>                   a1-fe:1
+# 3: Third of four bytes, 8e xx .. .. for most xx in a1-b0; all-unassigned
+<icu:state>                   a1-fe:4
+# 4: All-unassigned trail byte state
 <icu:state>                   a1-fe.u
-<icu:state>                   a1-a4:1, a5-fe:5
-<icu:state>                   a1-e2:1, e3-fe:5
-<icu:state>                   a1-f2:1, f3-fe:5
+# 5: 8e ad .. .. with some mappings
+<icu:state>                   a1-a4:1, a5-fe:4
+# 6: 8e ac .. .. with some mappings
+<icu:state>                   a1-e2:1, e3-fe:4
+# 7: 8e a2 .. .. with some mappings
+<icu:state>                   a1-f2:1, f3-fe:4
 
 CHARMAP
 <U0000> \x00 |0
