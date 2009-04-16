@@ -2233,4 +2233,16 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
+    
+    public void TestSetCurrency() {
+        DecimalFormatSymbols decf1 = DecimalFormatSymbols.getInstance(ULocale.US);
+        DecimalFormatSymbols decf2 = DecimalFormatSymbols.getInstance(ULocale.US);
+        decf2.setCurrencySymbol("UKD");
+        DecimalFormat format1 = new DecimalFormat("000.000", decf1);
+        DecimalFormat format2 = new DecimalFormat("000.000", decf2);
+        Currency euro = Currency.getInstance("EUR");
+        format1.setCurrency(euro);
+        format2.setCurrency(euro);
+        assertEquals("Reset with currency symbol", format1, format2);
+    }
 }
