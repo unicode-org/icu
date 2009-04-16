@@ -856,7 +856,7 @@ public class BagFormatter {
     }
 
     public static PrintWriter openWriter(String dir, String filename, String encoding) throws IOException {
-        File file = new File(dir + filename);
+        File file = new File(dir, filename);
         if (SHOW_FILES && log != null) {
             log.println("Creating File: "
                 + file.getCanonicalPath());
