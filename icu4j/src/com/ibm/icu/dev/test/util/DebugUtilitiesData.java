@@ -5,16 +5,20 @@
 package com.ibm.icu.dev.test.util;
 
 public class DebugUtilitiesData extends Object {
-    public static final String ICU4C_VERSION="4.1.5";
+    public static final String ICU4C_VERSION="4.2";
     public static final int UDebugEnumType = 0;
     public static final int UCalendarDateFields = 1;
     public static final int UCalendarMonths = 2;
     public static final int UDateFormatStyle = 3;
+    public static final int UAcceptResult = 4;
+    public static final int UColAttributeValue = 5;
     public static final String [] TYPES = { 
         "UDebugEnumType", /* 0 */
         "UCalendarDateFields", /* 1 */
         "UCalendarMonths", /* 2 */
         "UDateFormatStyle", /* 3 */
+        "UAcceptResult", /* 4 */
+        "UColAttributeValue", /* 5 */
     };
 
     public static final String [][] NAMES = { 
@@ -24,6 +28,8 @@ public class DebugUtilitiesData extends Object {
            "UCalendarDateFields", /* 1 */ 
            "UCalendarMonths", /* 2 */ 
            "UDateFormatStyle", /* 3 */ 
+           "UAcceptResult", /* 4 */ 
+           "UColAttributeValue", /* 5 */ 
         },
         /* UCalendarDateFields, 1 */
         { 
@@ -74,6 +80,26 @@ public class DebugUtilitiesData extends Object {
            "MEDIUM", /* 2 */ 
            "SHORT", /* 3 */ 
         },
+        /* UAcceptResult, 4 */
+        { 
+           "FAILED", /* 0 */ 
+           "VALID", /* 1 */ 
+           "FALLBACK", /* 2 */ 
+        },
+        /* UColAttributeValue, 5 */
+        { 
+           "PRIMARY", /* 0 */ 
+           "SECONDARY", /* 1 */ 
+           "TERTIARY", /* 2 */ 
+           "QUATERNARY", /* 3 */ 
+           "IDENTICAL", /* 4 */ 
+           "OFF", /* 5 */ 
+           "ON", /* 6 */ 
+           "SHIFTED", /* 7 */ 
+           "NON_IGNORABLE", /* 8 */ 
+           "LOWER_FIRST", /* 9 */ 
+           "UPPER_FIRST", /* 10 */ 
+        },
     };
 
     public static final int [][] VALUES = { 
@@ -83,6 +109,8 @@ public class DebugUtilitiesData extends Object {
            1, /* UCalendarDateFields */
            2, /* UCalendarMonths */
            3, /* UDateFormatStyle */
+           4, /* UAcceptResult */
+           5, /* UColAttributeValue */
         },
         /* UCalendarDateFields, 1 */
         { 
@@ -132,6 +160,26 @@ public class DebugUtilitiesData extends Object {
            1, /* LONG */
            2, /* MEDIUM */
            3, /* SHORT */
+        },
+        /* UAcceptResult, 4 */
+        { 
+           0, /* FAILED */
+           1, /* VALID */
+           2, /* FALLBACK */
+        },
+        /* UColAttributeValue, 5 */
+        { 
+           0, /* PRIMARY */
+           1, /* SECONDARY */
+           2, /* TERTIARY */
+           3, /* QUATERNARY */
+           4, /* IDENTICAL */
+           5, /* OFF */
+           6, /* ON */
+           7, /* SHIFTED */
+           8, /* NON_IGNORABLE */
+           9, /* LOWER_FIRST */
+           10, /* UPPER_FIRST */
         },
     };
 
