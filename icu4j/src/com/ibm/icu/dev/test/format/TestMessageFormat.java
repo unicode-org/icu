@@ -27,9 +27,12 @@ import java.util.Set;
 
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.text.UFormat;
+import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
 public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
@@ -1331,6 +1334,24 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
                 errln("FAIL: Returned[" + text + "] Expected[" + TEST_CASES[i][1] + "]");
             }
         }
+    }
+    
+    public void TestSetFormat() {
+        MessageFormat ms = new MessageFormat("{number} {date}", ULocale.ENGLISH);
+        final DecimalFormat decimalFormat = new DecimalFormat("000.000", DecimalFormatSymbols.getInstance(ULocale.ENGLISH));
+        ms.setFormatByArgumentName("number", decimalFormat);
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("'year:'yy 'month:'MM 'day:'dd");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Etc/GMT"));
+        ms.setFormatByArgumentName("date", dateFormat);
+        Map map = new HashMap();
+        map.put("number", new Integer(1234));
+        map.put("date", new Date(0,0,0));
+        String result = ms.format(map);
+        assertEquals("setFormatByArgumentName", "1234.000 year:99 month:12 day:31", result);
+        Set formatNames = ms.getFormatArgumentNames();
+        assertEquals("Format Names match", formatNames, map.keySet());
+        assertEquals("Decimal", decimalFormat, ms.getFormatByArgumentName("number"));
+        assertEquals("Date", dateFormat, ms.getFormatByArgumentName("date"));
     }
 
 //#if defined(FOUNDATION10) || defined(J2SE13)
