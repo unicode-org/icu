@@ -19,12 +19,16 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set;
 //#if defined(FOUNDATION10) || defined(J2SE13)
 //#else
 import java.text.AttributedCharacterIterator;
@@ -840,7 +844,7 @@ public class MessageFormat extends UFormat {
      * @stable ICU 3.8
      */
     public void setFormatByArgumentName(String argumentName, Format newFormat) {
-        for (int i = 0; i < maxOffset; ++i) {
+        for (int i = 0; i <= maxOffset; ++i) {
             if (argumentName.equals(argumentNames[i])) {
                 formats[i] = newFormat;
             }
@@ -940,6 +944,35 @@ public class MessageFormat extends UFormat {
         Format[] resultArray = new Format[maxOffset + 1];
         System.arraycopy(formats, 0, resultArray, 0, maxOffset + 1);
         return resultArray;
+    }
+    
+    /**
+     * Get the format argument names. For more details, see {@link #MessageFormat.setFormatByArgumentName(String, Format)}.
+     * @return List of names
+     * @deprecated
+     * @internal
+     */
+    public Set getFormatArgumentNames() {
+        Set result = new HashSet();
+        for (int i = 0; i <= maxOffset; ++i) {
+            result.add(argumentNames[i]);
+        }
+        return result;
+    }
+    
+    /**
+     * Get the formats according to their argument names. For more details, see {@link #MessageFormat.setFormatByArgumentName(String, Format)}.
+     * @return format associated with the name, or null if there isn't one.
+     * @deprecated
+     * @internal
+     */
+    public Format getFormatByArgumentName(String argumentName) {
+        for (int i = 0; i <= maxOffset; ++i) {
+            if (argumentName.equals(argumentNames[i])) {
+                return formats[i];
+            }
+        }
+        return null;
     }
 
     /**
