@@ -2356,6 +2356,7 @@ void NumberFormatTest::TestHost()
             errln("FAIL: Can't parse for host");
             return;
         }
+        delete full;
     }
 }
 
