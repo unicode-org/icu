@@ -839,6 +839,7 @@ static UBool compareBinaryFiles(const char* defaultTZFileName, const char* TZFil
 /* dirent also lists two entries: "." and ".." that we can safely ignore. */
 #define SKIP1 "."
 #define SKIP2 ".."
+static char SEARCH_TZFILE_RESULT[MAX_PATH_SIZE] = "";
 static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
     DIR* dirp = opendir(path);
     DIR* subDirp = NULL;
@@ -866,9 +867,8 @@ static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
                 result = searchForTZFile(newpath, tzInfo);
             } else {
                 if(compareBinaryFiles(TZDEFAULT, newpath, tzInfo)) {
-                    result = (char *)uprv_malloc(sizeof(char) * MAX_PATH_SIZE);
-                    result[0] = 0;
-                    uprv_strcpy(result, newpath + (sizeof(TZZONEINFO) - 1));
+                    uprv_strcpy(SEARCH_TZFILE_RESULT, newpath + (sizeof(TZZONEINFO) - 1));
+                    result = SEARCH_TZFILE_RESULT;
                     /* Get out after the first one found. */
                     break;
                 }
