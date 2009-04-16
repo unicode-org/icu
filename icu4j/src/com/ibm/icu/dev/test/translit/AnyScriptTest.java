@@ -60,16 +60,24 @@ public class AnyScriptTest extends TestFmwk {
      */
     public void TestForWidth(){
         Transliterator widen = Transliterator.getInstance("halfwidth-fullwidth");
+        Transliterator narrow = Transliterator.getInstance("fullwidth-halfwidth");
         UnicodeSet ASCII = new UnicodeSet("[:ascii:]");
         String lettersAndSpace = "abc def";
         final String punctOnly = "( )";
+        
         String wideLettersAndSpace = widen.transform(lettersAndSpace);
         String widePunctOnly = widen.transform(punctOnly);
         assertTrue("Should be wide", ASCII.containsNone(wideLettersAndSpace));
         assertTrue("Should be wide", ASCII.containsNone(widePunctOnly));
         
+        String back;
+        back = narrow.transform(wideLettersAndSpace);
+        assertEquals("Should be narrow", lettersAndSpace, back);
+        back = narrow.transform(widePunctOnly);
+        assertEquals("Should be narrow", punctOnly, back);
+        
         Transliterator latin = Transliterator.getInstance("any-Latn");
-        String back = latin.transform(wideLettersAndSpace);
+        back = latin.transform(wideLettersAndSpace);
         assertEquals("Should be ascii", lettersAndSpace, back);
         
         back = latin.transform(widePunctOnly);
