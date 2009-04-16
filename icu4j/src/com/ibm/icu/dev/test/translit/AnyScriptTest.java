@@ -11,6 +11,7 @@ import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSetIterator;
 
 /**
  * @author markdavis
@@ -88,5 +89,40 @@ public class AnyScriptTest extends TestFmwk {
         assertEquals("Should be same", widePunctOnly, back);
 
 
+    }
+    
+    public void TestCommonDigits() {
+        UnicodeSet westernDigitSet = new UnicodeSet("[0-9]");
+        UnicodeSet westernDigitSetAndMarks = new UnicodeSet("[[0-9][:Mn:]]");
+        UnicodeSet arabicDigitSet = new UnicodeSet("[[:Nd:]&[:block=Arabic:]]");
+        Transliterator latin = Transliterator.getInstance("Any-Latn");
+        Transliterator arabic = Transliterator.getInstance("Any-Arabic");
+        String westernDigits = getList(westernDigitSet);
+        String arabicDigits = getList(arabicDigitSet);
+
+        String fromArabic = latin.transform(arabicDigits);
+        assertContainsAll("Any-Latin transforms Arabic digits", westernDigitSetAndMarks, fromArabic);
+        if (false) { // we don't require conversion to Arabic digits
+            String fromLatin = arabic.transform(westernDigits);
+            assertContainsAll("Any-Arabic transforms Western digits", arabicDigitSet, fromLatin);
+        }
+    }
+
+    // might want to add to TestFmwk
+    private void assertContainsAll(String message, UnicodeSet set, String string) {
+        handleAssert(set.containsAll(string), message, set, string, "contains", false);
+    }
+
+    private void assertContainsNone(String message, UnicodeSet set, String string) {
+        handleAssert(set.containsAll(string), message, set, string, "contains none of", false);
+    }
+
+    // might want to add to UnicodeSet
+    private String getList(UnicodeSet set) {
+        StringBuffer result = new StringBuffer();
+        for (UnicodeSetIterator it = new UnicodeSetIterator(set); it.next();) {
+            result.append(it.getString());
+        }
+        return result.toString();
     }
 }
