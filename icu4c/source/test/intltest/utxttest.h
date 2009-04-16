@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2005-2007, International Business Machines Corporation and
+ * Copyright (c) 2005-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -31,7 +31,8 @@ public:
     void TextTest();
     void ErrorTest();
     void FreezeTest();
-	void Ticket5560();
+    void Ticket5560();
+    void Ticket6847();
 
 private:
     struct m {                              // Map between native indices & code points.
@@ -44,8 +45,8 @@ private:
     void TestAccessNoClone(const UnicodeString &us, UText *ut, int cpCount, m *cpMap);
     void TestCMR   (const UnicodeString &us, UText *ut, int cpCount, m *nativeMap, m *utf16Map);
     void TestCopyMove(const UnicodeString &us, UText *ut, UBool move,
-                    int32_t nativeStart, int32_t nativeLimit, int32_t nativeDest,
-                    int32_t u16Start, int32_t u16Limit, int32_t u16Dest);
+                      int32_t nativeStart, int32_t nativeLimit, int32_t nativeDest,
+                      int32_t u16Start, int32_t u16Limit, int32_t u16Dest);
     void TestReplace(const UnicodeString &us,  // reference UnicodeString in which to do the replace 
             UText         *ut,                 // UnicodeText object under test.
             int32_t       nativeStart,         // Range to be replaced, in UText native units. 
