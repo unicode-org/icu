@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -2560,6 +2560,28 @@ public class TransliteratorTest extends TestFmwk {
         }
         public Transliterator getInstance(String ID) {
             return (Transliterator) m.get(ID);
+        }
+    }
+    
+    public void TestCasing() {
+        Transliterator toLower = Transliterator.getInstance("lower");
+        Transliterator toCasefold = Transliterator.getInstance("casefold");
+        Transliterator toUpper = Transliterator.getInstance("upper");
+        Transliterator toTitle = Transliterator.getInstance("title");
+        for (int i = 0; i < 0x600; ++i) {
+            String s = UTF16.valueOf(i);
+            
+            String lower = UCharacter.toLowerCase(ULocale.ROOT, s);
+            assertEquals("Lowercase", lower, toLower.transform(s));
+            
+            String casefold = UCharacter.foldCase(s, true);
+            assertEquals("Casefold", casefold, toCasefold.transform(s));
+            
+            String title = UCharacter.toTitleCase(ULocale.ROOT, s, null);
+            assertEquals("Title", title, toTitle.transform(s));
+
+            String upper = UCharacter.toUpperCase(ULocale.ROOT, s);
+            assertEquals("Upper", upper, toUpper.transform(s));
         }
     }
 
