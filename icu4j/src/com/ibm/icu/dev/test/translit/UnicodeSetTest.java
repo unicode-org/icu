@@ -1444,6 +1444,15 @@ public class UnicodeSetTest extends TestFmwk {
     expectEqual("POSIX print", "[:print:]", "[[:graph:][:blank:]-[\\p{Control}]]");
   }
   
+  public void TestHangulSyllable() {
+      final UnicodeSet lvt = new UnicodeSet("[:Hangul_Syllable_Type=LVT_Syllable:]");
+      assertNotEquals("LVT count", new UnicodeSet(), lvt);
+      logln(lvt + ": " + lvt.size());
+      final UnicodeSet lv = new UnicodeSet("[:Hangul_Syllable_Type=LV_Syllable:]");
+      assertNotEquals("LV count", new UnicodeSet(), lv);
+      logln(lv + ": " + lv.size());
+  }
+  
   /**
    * Test that frozen classes disallow changes. For 4217
    */
