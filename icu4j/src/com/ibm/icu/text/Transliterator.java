@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1873,6 +1873,7 @@ public abstract class Transliterator implements StringTransform  {
         LowercaseTransliterator.register();
         UppercaseTransliterator.register();
         TitlecaseTransliterator.register();
+        CaseFoldTransliterator.register();
         UnicodeNameTransliterator.register();
         NameUnicodeTransliterator.register();
         NormalizationTransliterator.register();
