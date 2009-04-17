@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, Google, International Business Machines Corporation and *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2008-2009, Google, International Business Machines Corporation
+ * and  others. All Rights Reserved.                                           
  *******************************************************************************
  */
 
@@ -50,7 +50,7 @@ U_NAMESPACE_BEGIN
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TimeUnitFormat)
 
 static const char gUnitsTag[] = "units";
-static const char gShortUnitsTag[] = "short_units";
+static const char gShortUnitsTag[] = "unitsShort";
 static const char gTimeUnitYear[] = "year";
 static const char gTimeUnitMonth[] = "month";
 static const char gTimeUnitDay[] = "day";
