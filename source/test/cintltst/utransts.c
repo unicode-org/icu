@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- *   Copyright (C) 1997-2006, International Business Machines
+ *   Copyright (C) 1997-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  *   Date        Name        Description
@@ -474,6 +474,13 @@ static void TestSimpleRules() {
                  "$lu > '*';"
                  "a > ERROR",
                  "abcdefgABCDEFGU", "&bcd&fg!^**!^*&");
+
+    /* Test multiple passes 
+    */ 
+    _expectRules("abc > xy;"
+                 "::Null;"
+                 "aba > z;",
+                 "abc ababc aba", "xy abxy z"); 
 }
 
 static void TestFilter() {
