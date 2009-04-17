@@ -15,7 +15,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.test.format.NumberFormatTest;
 import com.ibm.icu.impl.UnicodeRegex;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
