@@ -1222,7 +1222,7 @@ uint64_t PCEList::operator[](int32_t index) const
 void SSearchTest::boyerMooreTest()
 {
     UErrorCode status = U_ZERO_ERROR;
-    UCollator *coll = ucol_openFromShortString("S1", FALSE, NULL, &status);
+    UCollator *coll = NULL;
     CollData *data = NULL;
     UnicodeString lp  = "fuss";
     UnicodeString sp = "fu\\u00DF";
