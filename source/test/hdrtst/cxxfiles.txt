@@ -1,37 +1,50 @@
-# Copyright (c) 2001-2008 International Business Machines 
+# Copyright (c) 2001-2009 International Business Machines 
 # Corporation and others. All Rights Reserved.
+# common & i18n
 bidi.h
 basictz.h
+bmsearch.h
 brkiter.h
+bytestream.h
 calendar.h
 caniter.h
 chariter.h
 choicfmt.h
 coleitr.h
 coll.h
+colldata.h
 convert.h
 cpdtrans.h
+curramt.h
+currunit.h
 datefmt.h
 dbbi.h
 dcfmtsym.h
 decimfmt.h
+dtintrv.h
+dtitvinf.h
+dtitvfmt.h
 dtfmtsym.h
 dtptngen.h
 dtrule.h
+errorcode.h
 fieldpos.h
 fmtable.h
 format.h
 gregocal.h
-hextouni.h
 locid.h
+measfmt.h
+measunit.h
+measure.h
 msgfmt.h
 normlzr.h
-nultrans.h
 numfmt.h
+numsys.h
 parsepos.h
+plurfmt.h
+plurrule.h
 rbbi.h
 rbnf.h
-rbt.h
 rbtz.h
 regex.h
 rep.h
@@ -41,59 +54,40 @@ search.h
 simpletz.h
 smpdtfmt.h
 sortkey.h
+std_string.h
 strenum.h
+stringpiece.h
 stsearch.h
+symtable.h
 tblcoll.h
 timezone.h
+tmunit.h
+tmutamt.h
+tmutfmt.h
 translit.h
 tzrule.h
 tztrans.h
 uchriter.h
-unicode.h
 unifilt.h
-unifltlg.h
 unifunct.h
 unimatch.h
 unirepl.h
 uniset.h
 unistr.h
-unitohex.h
 uobject.h
 usetiter.h
 vtzone.h
-#added
-loengine.h
-#the following are C++ also
+# io library
 ustream.h
-symtable.h
-#layout, layoutex are C++ only
+# layout & layoutex
 LayoutEngine.h
 LEFontInstance.h
 LEGlyphFilter.h
+LEGlyphStorage.h
 LELanguages.h
 LEScripts.h
 LESwaps.h
-LETypes.h
+# LETypes.h -- C header
+# loengine.h -- C header
 ParagraphLayout.h
 RunArrays.h
-# currency...
-curramt.h
-currunit.h
-measfmt.h
-measunit.h
-measure.h
-# platform specific
-pmacos.h
-pos400.h
-pwin32.h
-# interval format
-dtintrv.h
-dtitvinf.h
-dtitvfmt.h
-plurfmt.h
-plurrule.h
-#duration format
-tmunit.h
-tmutamt.h
-tmutfmt.h
-
