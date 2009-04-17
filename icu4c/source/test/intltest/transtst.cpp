@@ -3853,7 +3853,7 @@ void TransliteratorTest::TestAnyX(void) {
 }
 
 /**
- * TestAny()
+ * Test Any-X transliterators with sample letters from all scripts.
  */
 void TransliteratorTest::TestAny(void) {
     UErrorCode status = U_ZERO_ERROR;
