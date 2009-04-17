@@ -1603,11 +1603,17 @@ static const struct UTextFuncs utf8Funcs =
 };
 
 
+static const char gEmptyString[] = {0};
+
 U_CAPI UText * U_EXPORT2
 utext_openUTF8(UText *ut, const char *s, int64_t length, UErrorCode *status) {
     if(U_FAILURE(*status)) {
         return NULL;
     }
+    if(s==NULL && length==0) {
+        s = gEmptyString;
+    }
+
     if(s==NULL || length<-1 || length>INT32_MAX) {
         *status=U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
@@ -2570,13 +2576,17 @@ static const struct UTextFuncs ucstrFuncs =
 
 U_CDECL_END
 
+static const UChar gEmptyUString[] = {0};
 
 U_CAPI UText * U_EXPORT2
 utext_openUChars(UText *ut, const UChar *s, int64_t length, UErrorCode *status) {
     if (U_FAILURE(*status)) {
         return NULL;
     }
-    if (length < -1 || length>INT32_MAX) {
+    if(s==NULL && length==0) {
+        s = gEmptyUString;
+    }
+    if (s==NULL || length < -1 || length>INT32_MAX) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
