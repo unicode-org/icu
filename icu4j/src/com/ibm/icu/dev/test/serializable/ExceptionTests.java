@@ -10,6 +10,7 @@ package com.ibm.icu.dev.test.serializable;
 
 import java.util.Locale;
 
+import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.InvalidFormatException;
 import com.ibm.icu.impl.locale.LocaleSyntaxException;
 import com.ibm.icu.text.ArabicShapingException;
@@ -136,6 +137,17 @@ public class ExceptionTests
                 return false;
             }
             return super.hasSameBehavior(a, b);
+        }
+    }
+
+    static class IllegalIcuArgumentExceptionHandler extends ExceptionHandler
+    {
+        public Object[] getTestObjects()
+        {
+            IllegalIcuArgumentException[] exceptions = {
+                new IllegalIcuArgumentException("Bad argument FOO")
+            };
+            return exceptions;
         }
     }
 
