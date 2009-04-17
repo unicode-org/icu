@@ -608,7 +608,7 @@ public class DateIntervalFormat extends UFormat {
         }
     
         // First, find the largest different calendar field.
-        int field = Calendar.MILLISECONDS_IN_DAY + 1; //BASE_FIELD_COUNT
+        int field = -1; //init with an invalid value.
     
         if ( fromCalendar.get(Calendar.ERA) != toCalendar.get(Calendar.ERA) ) {
             field = Calendar.ERA;

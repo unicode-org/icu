@@ -41,6 +41,13 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         // followed by a group of locale/from_data/to_data/skeleton/interval_data
         String[] DATA = {
             "yyyy MM dd HH:mm:ss",    
+            // test root
+            "root", "2007 11 10 10:10:10", "2007 12 10 10:10:10", "yM", "2007-11 \\u2013 12",
+         
+            // test 'H' and 'h', using availableFormat in fallback
+            "en", "2007 11 10 10:10:10", "2007 11 10 15:10:10", "Hms", "10:10:10 \\u2013 15:10:10",
+            "en", "2007 11 10 10:10:10", "2007 11 10 15:10:10", "hms", "10:10:10 AM \\u2013 3:10:10 PM",
+
             // test skeleton with both date and time
             "en", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "dMMMyhm", "Nov 10, 2007 10:10 AM \\u2013 Nov 20, 2007 10:10 AM", 
             
