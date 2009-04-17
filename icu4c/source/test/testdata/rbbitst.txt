@@ -1,4 +1,4 @@
-﻿# Copyright (c) 2001-2008 International Business Machines
+﻿# Copyright (c) 2001-2009 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 # RBBI Test Data
@@ -513,7 +513,10 @@ What is the proper use of the abbreviation pp.? •Yes, I am definatelly 12" tal
 #      
 <data>•ΑΒΓ •БВГ •אבג֓ •ابت •١٢٣ •\u10A0\u10A1\u10A2 •ABC •</data>
 
-
+#
+#       ticket #4853:  unpaired surrogates should behave like AL
+#
+<data>•abc\ud801xyz•</data>
 
 ########################################################################################
 #
