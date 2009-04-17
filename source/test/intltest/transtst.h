@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2008, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -333,6 +333,8 @@ private:
     void TestUserFunction(void);
 
     void TestAnyX(void);
+
+    void TestAny(void);
 
     void TestSourceTargetSet(void);
 
