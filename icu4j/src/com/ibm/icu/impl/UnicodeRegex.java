@@ -12,7 +12,9 @@ package com.ibm.icu.impl;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.text.ParsePosition;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -242,14 +244,28 @@ public class UnicodeRegex implements Cloneable, Freezable, StringTransform {
     }
 
     /**
-     * Utility for loading lines from a UTF8 file.
-     * @param file
+     * Utility for loading lines from a file.
      * @param result
-     * @return
+     * @param file
+     * @param encoding if null, then UTF-8
+     * @return filled list
      * @throws IOException
      */
-    public static List loadFile(String file, List result) throws IOException {
-        BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+    public static List appendLines(List result, String file, String encoding) throws IOException {
+        return appendLines(result, new FileInputStream(file), encoding);
+    }
+
+    /**
+     * Utility for loading lines from a UTF8 file.
+     * @param result
+     * @param inputStream
+     * @param encoding if null, then UTF-8
+     * @return filled list
+     * @throws IOException
+     */
+    public static List appendLines(List result, InputStream inputStream, String encoding)
+            throws UnsupportedEncodingException, IOException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, encoding == null ? "UTF-8" : encoding));
         while (true) {
             String line = in.readLine();
             if (line == null) break;
@@ -257,6 +273,8 @@ public class UnicodeRegex implements Cloneable, Freezable, StringTransform {
         }
         return result;
     }
+    
+    
 
     /* (non-Javadoc)
      * @see com.ibm.icu.util.Freezable#cloneAsThawed()
