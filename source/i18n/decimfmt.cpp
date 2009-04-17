@@ -69,17 +69,17 @@ U_CDECL_BEGIN
 /**
  * @internal ICU 4.2
  */
-static UBool U_CALLCONV AffixValueComparator(UHashTok val1, UHashTok val2);
+UBool U_CALLCONV decimfmtAffixValueComparator(UHashTok val1, UHashTok val2);
 
 /**
  * @internal ICU 4.2
  */
-static UBool U_CALLCONV AffixPatternValueComparator(UHashTok val1, UHashTok val2);
+UBool U_CALLCONV decimfmtAffixPatternValueComparator(UHashTok val1, UHashTok val2);
 
 U_CDECL_END
 
 UBool
-U_CALLCONV AffixValueComparator(UHashTok val1, UHashTok val2) {
+U_CALLCONV decimfmtAffixValueComparator(UHashTok val1, UHashTok val2) {
     const DecimalFormat::AffixesForCurrency* affix_1 = 
         (DecimalFormat::AffixesForCurrency*)val1.pointer;
     const DecimalFormat::AffixesForCurrency* affix_2 = 
@@ -92,7 +92,7 @@ U_CALLCONV AffixValueComparator(UHashTok val1, UHashTok val2) {
 
 
 UBool
-U_CALLCONV AffixPatternValueComparator(UHashTok val1, UHashTok val2) {
+U_CALLCONV decimfmtAffixPatternValueComparator(UHashTok val1, UHashTok val2) {
     const DecimalFormat::AffixPatternsForCurrency* affix_1 = 
         (DecimalFormat::AffixPatternsForCurrency*)val1.pointer;
     const DecimalFormat::AffixPatternsForCurrency* affix_2 = 
@@ -4449,7 +4449,7 @@ DecimalFormat::initHashForAffix(UErrorCode& status) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
-    hTable->setValueCompartor(AffixValueComparator);
+    hTable->setValueCompartor(decimfmtAffixValueComparator);
     return hTable;
 }
 
@@ -4463,7 +4463,7 @@ DecimalFormat::initHashForAffixPattern(UErrorCode& status) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
-    hTable->setValueCompartor(AffixPatternValueComparator);
+    hTable->setValueCompartor(decimfmtAffixPatternValueComparator);
     return hTable;
 }
 
