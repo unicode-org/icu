@@ -15,6 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.format.NumberFormatTest;
 import com.ibm.icu.impl.UnicodeRegex;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
@@ -163,7 +164,7 @@ public class RegexUtilitiesTest extends TestFmwk {
                     "reserved = [[:ascii:][:sc=grek:]&[:alphabetic:]];\n",
                 "http://\u03B1\u03B2\u03B3?huh=hi#there"},
                 {
-                    "/Users/markdavis/Documents/workspace/cldr-code/java/org/unicode/cldr/util/data/langtagRegex.txt"
+                    "langtagRegex.txt"
                 }
         };
         for (int i = 0; i < tests.length; ++i) {
@@ -172,7 +173,8 @@ public class RegexUtilitiesTest extends TestFmwk {
             try {
                 String result;
                 if (test.endsWith(".txt")) {
-                    List lines = UnicodeRegex.loadFile(test, new ArrayList());
+                    java.io.InputStream is = RegexUtilitiesTest.class.getResourceAsStream(test);
+                    List lines = UnicodeRegex.appendLines(new ArrayList(), is, "UTF-8");
                     result = regex.compileBnf(lines);
                 } else {
                     result = regex.compileBnf(test);
