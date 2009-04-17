@@ -41,7 +41,7 @@ U_CDECL_BEGIN
 /**
  * @internal ICU 4.0
  */
-static UBool U_CALLCONV hashTableValueComparator(UHashTok val1, UHashTok val2) ;
+UBool U_CALLCONV dtitvinfHashTableValueComparator(UHashTok val1, UHashTok val2) ;
 
 U_CDECL_END 
 
@@ -354,7 +354,7 @@ private:
      */
     friend class DateIntervalFormat;
 
-    friend UBool U_CALLCONV hashTableValueComparator(UHashTok val1, UHashTok val2) ;
+    friend UBool U_CALLCONV dtitvinfHashTableValueComparator(UHashTok val1, UHashTok val2) ;
 
     /**
      * Following is for saving the interval patterns.

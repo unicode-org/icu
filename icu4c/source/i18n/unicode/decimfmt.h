@@ -45,12 +45,12 @@ U_CDECL_BEGIN
 /**
  * @internal ICU 4.2
  */
-static UBool U_CALLCONV AffixValueComparator(UHashTok val1, UHashTok val2) ;
+UBool U_CALLCONV decimfmtAffixValueComparator(UHashTok val1, UHashTok val2) ;
 
 /**
  * @internal ICU 4.2
  */
-static UBool U_CALLCONV AffixPatternValueComparator(UHashTok val1, UHashTok val2) ;
+UBool U_CALLCONV decimfmtAffixPatternValueComparator(UHashTok val1, UHashTok val2) ;
 
 U_CDECL_END
 
@@ -1734,8 +1734,8 @@ public:
     virtual UClassID getDynamicClassID(void) const;
 
 private:
-    friend UBool U_CALLCONV AffixValueComparator(UHashTok val1, UHashTok val2);
-    friend UBool U_CALLCONV AffixPatternValueComparator(UHashTok val1, UHashTok val2);
+    friend UBool U_CALLCONV decimfmtAffixValueComparator(UHashTok val1, UHashTok val2);
+    friend UBool U_CALLCONV decimfmtAffixPatternValueComparator(UHashTok val1, UHashTok val2);
 
     DecimalFormat(); // default constructor not implemented
 
