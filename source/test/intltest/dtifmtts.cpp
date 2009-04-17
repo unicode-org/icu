@@ -276,6 +276,13 @@ void DateIntervalFormatTest::testFormat() {
     // followed by a group of locale/from_data/to_data/skeleton/interval_data
     const char* DATA[] = {
         "yyyy MM dd HH:mm:ss",    
+        // test root
+        "root", "2007 11 10 10:10:10", "2007 12 10 10:10:10", "yM", "2007-11 \\u2013 12",
+         
+        // test 'H' and 'h', using availableFormat in fallback
+        "en", "2007 11 10 10:10:10", "2007 11 10 15:10:10", "Hms", "10:10:10 \\u2013 15:10:10",
+        "en", "2007 11 10 10:10:10", "2007 11 10 15:10:10", "hms", "10:10:10 AM \\u2013 3:10:10 PM",
+
         "en", "2007 10 10 10:10:10", "2008 10 10 10:10:10", "MMMM", "October 2007 \\u2013 October 2008", 
         "en", "2007 10 10 10:10:10", "2008 10 10 10:10:10", "MMM", "Oct 2007 \\u2013 Oct 2008", 
         // test skeleton with both date and time
