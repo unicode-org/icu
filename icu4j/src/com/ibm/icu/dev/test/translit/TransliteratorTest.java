@@ -2857,6 +2857,27 @@ public class TransliteratorTest extends TestFmwk {
     }
 
     /**
+     * Test Any-X transliterators with sample letters from all scripts.
+     */
+    public void TestAny() {
+        UnicodeSet alphabetic = (UnicodeSet) new UnicodeSet("[:alphabetic:]").freeze();
+        StringBuffer testString = new StringBuffer();
+        for (int i = 0; i < UScript.CODE_LIMIT; ++i) {
+            UnicodeSet sample = new UnicodeSet().applyPropertyAlias("script", UScript.getShortName(i)).retainAll(alphabetic);
+            int count = 5;
+            for (UnicodeSetIterator it = new UnicodeSetIterator(sample); it.next();) {
+                testString.append(it.getString());
+                if (--count < 0) break;
+            }
+        }
+        logln("Sample set for Any-Latin: " + testString);
+        Transliterator anyLatin = Transliterator.getInstance("any-Latn");
+        String result = anyLatin.transliterate(testString.toString());
+        logln("Sample result for Any-Latin: " + result);
+    }
+
+
+    /**
      * Test the source and target set API.  These are only implemented
      * for RBT and CompoundTransliterator at this time.
      */
@@ -3374,23 +3395,6 @@ the ::BEGIN/::END stuff)
         logln("source = " + t.getSourceSet());
         logln("target = " + t.getTargetSet());
     }
-    public void TestAny() {
-        UnicodeSet alphabetic = (UnicodeSet) new UnicodeSet("[:alphabetic:]").freeze();
-        StringBuffer testString = new StringBuffer();
-        for (int i = 0; i < UScript.CODE_LIMIT; ++i) {
-            UnicodeSet sample = new UnicodeSet().applyPropertyAlias("script", UScript.getShortName(i)).retainAll(alphabetic);
-            int count = 5;
-            for (UnicodeSetIterator it = new UnicodeSetIterator(sample); it.next();) {
-                testString.append(it.getString());
-                if (--count < 0) break;
-            }
-        }
-        logln("Sample set for Any-Latin: " + testString);
-        Transliterator anyLatin = Transliterator.getInstance("any-Latn");
-        String result = anyLatin.transliterate(testString.toString());
-        logln("Sample result for Any-Latin: " + result);
-    }
-
     /*
      * Test case for threading problem in NormalizationTransliterator
      * reported by ticket#5160
