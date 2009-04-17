@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2008, International Business Machines
+*   Copyright (C) 1999-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -190,6 +190,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(81,TestRuleStripping);
         TESTCASE(82,TestHalfwidthFullwidth);
         TESTCASE(83,TestThai);
+        TESTCASE(84,TestAny);
         default: name = ""; break;
     }
 }
@@ -3850,6 +3851,59 @@ void TransliteratorTest::TestAnyX(void) {
 
     delete anyLatin;
 }
+
+/**
+ * TestAny()
+ */
+void TransliteratorTest::TestAny(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    // Note: there is a lot of implict construction of UnicodeStrings from (char *) in
+    //       function call parameters going on in this test.
+    UnicodeSet alphabetic("[:alphabetic:]", status);
+    if (U_FAILURE(status)) {
+        errln("Failure: file %s, line %d, status = %s", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
+    alphabetic.freeze();
+
+    UnicodeString testString;
+    for (int32_t i = 0; i < USCRIPT_CODE_LIMIT; i++) {
+        const char *scriptName = uscript_getShortName((UScriptCode)i);
+        if (scriptName == NULL) {
+            errln("Failure: file %s, line %d: Script Code %d is invalid, ", __FILE__, __LINE__, i);
+            return;
+        }
+
+        UnicodeSet sample;
+        sample.applyPropertyAlias("script", scriptName, status);
+        if (U_FAILURE(status)) {
+            errln("Failure: file %s, line %d, status = %s", __FILE__, __LINE__, u_errorName(status));
+            return;
+        }
+        sample.retainAll(alphabetic);
+        for (int32_t count=0; count<5; count++) {
+            UChar32 c = sample.charAt(count);
+            if (c == -1) {
+                break;
+            }
+            testString.append(c);
+        }
+    }
+
+    UParseError parseError;
+    Transliterator* anyLatin =
+        Transliterator::createInstance("Any-Latin", UTRANS_FORWARD, parseError, status);
+    if (U_FAILURE(status)) {
+        errln("Failure: file %s, line %d, status = %s", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
+
+    logln(UnicodeString("Sample set for Any-Latin: ") + testString);
+    anyLatin->transliterate(testString);
+    logln(UnicodeString("Sample result for Any-Latin: ") + testString);
+    delete anyLatin;
+}
+
 
 /**
  * Test the source and target set API.  These are only implemented
