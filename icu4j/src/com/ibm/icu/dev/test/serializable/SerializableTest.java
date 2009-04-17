@@ -701,6 +701,7 @@ public class SerializableTest extends TestFmwk.TestGroup
         map.put("com.ibm.icu.impl.RelativeDateFormat", new FormatTests.RelativeDateFormatHandler());
         map.put("com.ibm.icu.util.IllformedLocaleException", new ExceptionTests.IllformedLocaleExceptionHandler());
         map.put("com.ibm.icu.impl.locale.LocaleSyntaxException", new ExceptionTests.LocaleSyntaxExceptionHandler());
+        map.put("com.ibm.icu.impl.IllegalIcuArgumentException", new ExceptionTests.IllegalIcuArgumentExceptionHandler());
     }
     
     public SerializableTest()
