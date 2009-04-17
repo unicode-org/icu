@@ -113,9 +113,9 @@ public class AnyScriptTest extends TestFmwk {
         handleAssert(set.containsAll(string), message, set, string, "contains", false);
     }
 
-    private void assertContainsNone(String message, UnicodeSet set, String string) {
-        handleAssert(set.containsAll(string), message, set, string, "contains none of", false);
-    }
+//    private void assertContainsNone(String message, UnicodeSet set, String string) {
+//        handleAssert(set.containsAll(string), message, set, string, "contains none of", false);
+//    }
 
     // might want to add to UnicodeSet
     private String getList(UnicodeSet set) {
