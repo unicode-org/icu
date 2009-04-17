@@ -1405,8 +1405,9 @@ void UTextTest::Ticket5560() {
 //
 void UTextTest::Ticket6847() {
     const int STRLEN = 90;
-    UChar s[STRLEN];
+    UChar s[STRLEN+1];
     u_memset(s, 0x41, STRLEN);
+    s[STRLEN] = 0;
 
     UErrorCode status = U_ZERO_ERROR;
     UText *ut = utext_openUChars(NULL, s, -1, &status);
