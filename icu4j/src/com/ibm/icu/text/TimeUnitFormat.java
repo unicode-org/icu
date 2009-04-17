@@ -343,7 +343,7 @@ public class TimeUnitFormat extends MeasureFormat {
         timeUnitToCountToPatterns = new HashMap();
 
         setup("units", timeUnitToCountToPatterns, FULL_NAME);
-        setup("short_units", timeUnitToCountToPatterns, ABBREVIATED_NAME);
+        setup("unitsShort", timeUnitToCountToPatterns, ABBREVIATED_NAME);
         isReady = true;
     }
 
