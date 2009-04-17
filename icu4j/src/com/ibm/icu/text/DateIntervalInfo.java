@@ -354,6 +354,10 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
      * @param calData  calendar data
      */
     private void setup(ULocale locale) {
+        if ( locale == null ) {
+            return;
+        }
+    
         int DEFAULT_HASH_SIZE = 19;
         fIntervalPatterns = new HashMap(DEFAULT_HASH_SIZE);
         // initialize to guard if there is no interval date format defined in 
@@ -364,9 +368,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
             // loop through all locales to get all available skeletons'
             // interval format
             ULocale parentLocale = locale;
-            // TODO: how to check for root
-            //while ( !parentLocale.equals(ULocale.ROOT) ) {
-            while (parentLocale != null && !parentLocale.equals(ULocale.ROOT)) {
+            do {
                 String name = parentLocale.getName();
                 if ( name.length() == 0 ) {
                     break;
@@ -400,7 +402,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
                         String key = intervalPatterns.get(ptnIndex).getKey();
                         String pattern = intervalPatterns.get(ptnIndex).getString();
     
-                        int calendarField = Calendar.MILLISECONDS_IN_DAY + 1;
+                        int calendarField = -1; // initialize with an invalid value.
                         if ( key.compareTo(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.YEAR]) == 0 ) {
                             calendarField = Calendar.YEAR;    
                         } else if ( key.compareTo(CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.MONTH]) == 0 ) {
@@ -415,13 +417,13 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
                             calendarField = Calendar.MINUTE;    
                         }
              
-                        if ( calendarField != Calendar.MILLISECONDS_IN_DAY + 1 ) {
+                        if ( calendarField != -1 ) {
                             setIntervalPatternInternally(skeleton, key, pattern);
                         }
                     }
                 }
                 parentLocale = parentLocale.getFallback();
-            }
+            } while (parentLocale != null && !parentLocale.equals(ULocale.ROOT));
         } catch ( MissingResourceException e) {
             // ok, will fallback to {data0} - {date1}
         }
