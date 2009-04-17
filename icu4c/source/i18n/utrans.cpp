@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- *   Copyright (C) 1997-2005, International Business Machines
+ *   Copyright (C) 1997-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  *   Date        Name        Description
@@ -166,15 +166,12 @@ utrans_openU(const UChar *id,
                               rules,
                               rulesLength); // r-o alias
 
-        RuleBasedTransliterator *trans = NULL;
-        trans = new RuleBasedTransliterator(ID, ruleStr, dir,
-                                            NULL, *parseError, *status);
-        if (trans == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-        } else if (U_FAILURE(*status)) {
-            delete trans;
-            trans = NULL;
+        Transliterator *trans = NULL;
+        trans = Transliterator::createFromRules(ID, ruleStr, dir, *parseError, *status); 
+        if(U_FAILURE(*status)) { 
+            return NULL;
         }
+
         return (UTransliterator*) trans;
     }
 }
