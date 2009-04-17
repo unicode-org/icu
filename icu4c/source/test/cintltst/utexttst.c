@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2005-2006, International Business Machines Corporation and
+ * Copyright (c) 2005-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -179,6 +179,28 @@ static void TestAPI(void) {
 
         utext_close(uta);
     }
+
+    {
+        /*
+         * UText opened on a NULL string with zero length
+         */
+        UText    *uta;
+        UChar32   c;
+
+        status = U_ZERO_ERROR;
+        uta = utext_openUChars(NULL, NULL, 0, &status);
+        TEST_SUCCESS(status);
+        c = UTEXT_NEXT32(uta);
+        TEST_ASSERT(c == U_SENTINEL);
+        utext_close(uta);
+
+        uta = utext_openUTF8(NULL, NULL, 0, &status);
+        TEST_SUCCESS(status);
+        c = UTEXT_NEXT32(uta);
+        TEST_ASSERT(c == U_SENTINEL);
+        utext_close(uta);
+    }
+
 
     {
         /*

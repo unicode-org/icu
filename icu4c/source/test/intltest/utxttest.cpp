@@ -278,9 +278,9 @@ void UTextTest::TestString(const UnicodeString &s) {
 
 
 
-	delete []cpMap;
-	delete []u8Map;
-	delete []u8String;
+    delete []cpMap;
+    delete []u8Map;
+    delete []u8String;
 }
 
 //  TestCMR   test Copy, Move and Replace operations.
@@ -902,6 +902,28 @@ void UTextTest::ErrorTest()
         utp = utext_openUnicodeString(&ut, &s1, &status);
         TEST_SUCCESS(status);
         TEST_ASSERT(utp == &ut);
+    }
+
+    // Invalid parameters on open
+    //
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        UText ut = UTEXT_INITIALIZER;
+        
+        utext_openUChars(&ut, NULL, 5, &status);
+        TEST_ASSERT(status == U_ILLEGAL_ARGUMENT_ERROR);
+
+        status = U_ZERO_ERROR;
+        utext_openUChars(&ut, NULL, -1, &status);
+        TEST_ASSERT(status == U_ILLEGAL_ARGUMENT_ERROR);
+
+        status = U_ZERO_ERROR;
+        utext_openUTF8(&ut, NULL, 4, &status);
+        TEST_ASSERT(status == U_ILLEGAL_ARGUMENT_ERROR);
+
+        status = U_ZERO_ERROR;
+        utext_openUTF8(&ut, NULL, -1, &status);
+        TEST_ASSERT(status == U_ILLEGAL_ARGUMENT_ERROR);
     }
 
     //
