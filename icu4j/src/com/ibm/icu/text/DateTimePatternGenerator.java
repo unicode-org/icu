@@ -7,7 +7,6 @@
  */
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.PatternTokenizer;
@@ -236,11 +235,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
             hackTimes(result, returnInfo, shortTimePattern);
         }
 
-        // set the datetime pattern. This is ugly code -- there should be a public interface for this
-        Calendar cal = Calendar.getInstance(uLocale);
-        CalendarData calData = new CalendarData(uLocale, cal.getType());
-        String[] patterns = calData.getDateTimePatterns();
-        result.setDateTimeFormat(patterns[8]);
+        result.setDateTimeFormat(Calendar.getDateTimePattern(Calendar.getInstance(uLocale), uLocale, DateFormat.MEDIUM));
 
         // decimal point for seconds
         DecimalFormatSymbols dfs = new DecimalFormatSymbols(uLocale);
@@ -570,21 +565,21 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
 
     /**
      * The date time format is a message format pattern used to compose date and
-     * time patterns. The default value is "{0} {1}", where {0} will be replaced
-     * by the date pattern and {1} will be replaced by the time pattern.
+     * time patterns. The default value is "{1} {0}", where {1} will be replaced
+     * by the date pattern and {0} will be replaced by the time pattern.
      * <p>
      * This is used when the input skeleton contains both date and time fields,
      * but there is not a close match among the added patterns. For example,
      * suppose that this object was created by adding "dd-MMM" and "hh:mm", and
-     * its datetimeFormat is the default "{0} {1}". Then if the input skeleton
+     * its datetimeFormat is the default "{1} {0}". Then if the input skeleton
      * is "MMMdhmm", there is not an exact match, so the input skeleton is
      * broken up into two components "MMMd" and "hmm". There are close matches
      * for those two skeletons, so the result is put together with this pattern,
      * resulting in "d-MMM h:mm".
      * 
      * @param dateTimeFormat
-     *            message format pattern, here {0} will be replaced by the date
-     *            pattern and {1} will be replaced by the time pattern.
+     *            message format pattern, where {1} will be replaced by the date
+     *            pattern and {0} will be replaced by the time pattern.
      * @stable ICU 3.6
      */
     public void setDateTimeFormat(String dateTimeFormat) {
@@ -1298,7 +1293,7 @@ public class DateTimePatternGenerator implements Freezable, Cloneable {
     private TreeMap skeleton2pattern = new TreeMap(); // items are in priority order
     private TreeMap basePattern_pattern = new TreeMap(); // items are in priority order
     private String decimal = "?";
-    private String dateTimeFormat = "{0} {1}";
+    private String dateTimeFormat = "{1} {0}";
     private String[] appendItemFormats = new String[TYPE_LIMIT];
     private String[] appendItemNames = new String[TYPE_LIMIT];
     {

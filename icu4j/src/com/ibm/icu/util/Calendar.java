@@ -3271,49 +3271,30 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
     };
 
     static private DateFormat formatHelper(Calendar cal, ULocale loc, int dateStyle, int timeStyle) {
-        // First, try to get a pattern from PATTERN_CACHE
-        String key = loc.toString() + cal.getType();
-        String[] patterns = (String[])PATTERN_CACHE.get(key);
-        String[] overrides = null;
+        PatternData patternData = PatternData.make(cal, loc); 
         String override = null;
-        if (patterns == null) {
-            // Cache missed.  Get one from bundle
-            try {
-                CalendarData calData = new CalendarData(loc, cal.getType());
-                overrides = calData.getOverrides();
-                patterns = calData.getDateTimePatterns();
-            } catch (MissingResourceException e) {
-                patterns = DEFAULT_PATTERNS;
-            }
-            PATTERN_CACHE.put(key, patterns);
-        } 
 
         // Resolve a pattern for the date/time style
         String pattern = null;
         if ((timeStyle >= 0) && (dateStyle >= 0)) {
-            int glueIndex = 8;
-            if (patterns.length >= 13)
-            {
-                glueIndex += (dateStyle + 1);
-            }
-            pattern = MessageFormat.format(patterns[glueIndex],
-                    new Object[] {patterns[timeStyle], patterns[dateStyle + 4]});
+            pattern = MessageFormat.format(patternData.getDateTimePattern(dateStyle),
+                    new Object[] {patternData.patterns[timeStyle], patternData.patterns[dateStyle + 4]});
             // Might need to merge the overrides from the date and time into a single override string
             // TODO: Right now we are forcing the date's override into the time style.
-            if ( overrides != null ) {
-                String dateOverride = overrides[dateStyle + 4];
-                String timeOverride = overrides[timeStyle];
-                override = mergeOverrideStrings(patterns[dateStyle+4],patterns[timeStyle],dateOverride,timeOverride);
+            if ( patternData.overrides != null ) {
+                String dateOverride = patternData.overrides[dateStyle + 4];
+                String timeOverride = patternData.overrides[timeStyle];
+                override = mergeOverrideStrings(patternData.patterns[dateStyle+4],patternData.patterns[timeStyle],dateOverride,timeOverride);
             }
         } else if (timeStyle >= 0) {
-            pattern = patterns[timeStyle];
-            if ( overrides != null ) {
-                override = overrides[timeStyle];
+            pattern = patternData.patterns[timeStyle];
+            if ( patternData.overrides != null ) {
+                override = patternData.overrides[timeStyle];
             }
         } else if (dateStyle >= 0) {
-            pattern = patterns[dateStyle + 4];
-            if ( overrides != null ) {
-                override = overrides[dateStyle + 4];
+            pattern = patternData.patterns[dateStyle + 4];
+            if ( patternData.overrides != null ) {
+                override = patternData.overrides[dateStyle + 4];
             }
         } else {
             throw new IllegalArgumentException("No date or time style specified");
@@ -3321,6 +3302,53 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
         DateFormat result = cal.handleGetDateFormat(pattern, override, loc);
         result.setCalendar(cal);
         return result;
+    }
+    
+    static class PatternData {
+        // TODO make this even more object oriented
+        private String[] patterns;
+        private String[] overrides;
+        public PatternData(String[] patterns, String[] overrides) {
+            this.patterns = patterns;
+            this.overrides = overrides;
+        }
+        private String getDateTimePattern(int dateStyle) {
+            int glueIndex = 8;
+            if (patterns.length >= 13) {
+                glueIndex += (dateStyle + 1);
+            }
+            final String dateTimePattern = patterns[glueIndex];
+            return dateTimePattern;
+        }
+        private static PatternData make(Calendar cal, ULocale loc) {
+            // First, try to get a pattern from PATTERN_CACHE
+            String key = loc.toString() + cal.getType();
+            PatternData patternData = (PatternData) PATTERN_CACHE.get(key);
+            if (patternData == null) {
+                // Cache missed.  Get one from bundle
+                try {
+                    CalendarData calData = new CalendarData(loc, cal.getType());
+                    patternData = new PatternData(calData.getDateTimePatterns(), calData.getOverrides());
+                } catch (MissingResourceException e) {
+                    patternData = new PatternData(DEFAULT_PATTERNS, null);
+                }
+                PATTERN_CACHE.put(key, patternData);
+            }
+            return patternData;
+        }
+    }
+    
+    /**
+     * get the DateTimePattern
+     * @param calendar TODO
+     * @param uLocale
+     * @return
+     * @deprecated
+     * @internal
+     */
+    public static String getDateTimePattern(Calendar cal, ULocale uLocale, int dateStyle) {
+        PatternData patternData = PatternData.make(cal, uLocale); 
+        return patternData.getDateTimePattern(dateStyle);
     }
 
     private static String mergeOverrideStrings( String datePattern, String timePattern, String dateOverride, String timeOverride ) {
