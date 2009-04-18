@@ -22,6 +22,7 @@
 #include "unicode/dtfmtsym.h"
 #include "unicode/ustring.h"
 #include "cpputils.h"
+#include "reldtfmt.h"
 
 U_NAMESPACE_USE
 
@@ -283,7 +284,6 @@ udat_toPattern(    const   UDateFormat     *fmt,
         int32_t         resultLength,
         UErrorCode      *status)
 {
-    verifyIsSimpleDateFormat(fmt, status);
     if(U_FAILURE(*status)) return -1;
 
     UnicodeString res;
@@ -293,10 +293,17 @@ udat_toPattern(    const   UDateFormat     *fmt,
         res.setTo(result, 0, resultLength);
     }
 
-    if(localized)
-        ((SimpleDateFormat*)fmt)->toLocalizedPattern(res, *status);
-    else
-        ((SimpleDateFormat*)fmt)->toPattern(res);
+    if ( ((DateFormat*)fmt)->getDynamicClassID()==SimpleDateFormat::getStaticClassID() ) {
+        if(localized)
+            ((SimpleDateFormat*)fmt)->toLocalizedPattern(res, *status);
+        else
+            ((SimpleDateFormat*)fmt)->toPattern(res);
+    } else if ( !localized && ((DateFormat*)fmt)->getDynamicClassID()==RelativeDateFormat::getStaticClassID() ) {
+        ((RelativeDateFormat*)fmt)->toPattern(res, *status);
+    } else {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return -1;
+    }
 
     return res.extract(result, resultLength, *status);
 }
@@ -838,4 +845,71 @@ udat_getLocaleByType(const UDateFormat *fmt,
     }
     return ((Format*)fmt)->getLocaleID(type, *status);
 }
+
+/**
+ * Verify that fmt is a RelativeDateFormat. Invalid error if not.
+ * @param fmt the UDateFormat, definitely a DateFormat, maybe something else
+ * @param status error code, will be set to failure if there is a familure or the fmt is NULL.
+ */
+static void verifyIsRelativeDateFormat(const UDateFormat* fmt, UErrorCode *status) {
+   if(!U_FAILURE(*status) && 
+       ((DateFormat*)fmt)->getDynamicClassID()!=RelativeDateFormat::getStaticClassID()) {
+       *status = U_ILLEGAL_ARGUMENT_ERROR;
+   }
+}
+
+
+U_CAPI int32_t U_EXPORT2 
+udat_toPatternRelativeDate(const UDateFormat *fmt,
+                           UChar             *result,
+                           int32_t           resultLength,
+                           UErrorCode        *status)
+{
+    verifyIsRelativeDateFormat(fmt, status);
+    if(U_FAILURE(*status)) return -1;
+
+    UnicodeString datePattern;
+    if(!(result==NULL && resultLength==0)) {
+        // NULL destination for pure preflighting: empty dummy string
+        // otherwise, alias the destination buffer
+        datePattern.setTo(result, 0, resultLength);
+    }
+    ((RelativeDateFormat*)fmt)->toPatternDate(datePattern, *status);
+    return datePattern.extract(result, resultLength, *status);
+}
+
+U_CAPI int32_t U_EXPORT2 
+udat_toPatternRelativeTime(const UDateFormat *fmt,
+                           UChar             *result,
+                           int32_t           resultLength,
+                           UErrorCode        *status)
+{
+    verifyIsRelativeDateFormat(fmt, status);
+    if(U_FAILURE(*status)) return -1;
+
+    UnicodeString timePattern;
+    if(!(result==NULL && resultLength==0)) {
+        // NULL destination for pure preflighting: empty dummy string
+        // otherwise, alias the destination buffer
+        timePattern.setTo(result, 0, resultLength);
+    }
+    ((RelativeDateFormat*)fmt)->toPatternTime(timePattern, *status);
+    return timePattern.extract(result, resultLength, *status);
+}
+
+U_CAPI void U_EXPORT2 
+udat_applyPatternRelative(UDateFormat *format,
+                          const UChar *datePattern,
+                          int32_t     datePatternLength,
+                          const UChar *timePattern,
+                          int32_t     timePatternLength,
+                          UErrorCode  *status)
+{
+    verifyIsRelativeDateFormat(format, status);
+    if(U_FAILURE(*status)) return;
+    const UnicodeString datePat((UBool)(datePatternLength == -1), datePattern, datePatternLength);
+    const UnicodeString timePat((UBool)(timePatternLength == -1), timePattern, timePatternLength);
+    ((RelativeDateFormat*)format)->applyPatterns(datePat, timePat, *status);
+}
+
 #endif /* #if !UCONFIG_NO_FORMATTING */

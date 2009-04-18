@@ -16,6 +16,7 @@
 
 #include "reldtfmt.h"
 #include "unicode/msgfmt.h"
+#include "unicode/smpdtfmt.h"
 
 #include "gregoimp.h" // for CalendarData
 #include "cmemory.h"
@@ -254,6 +255,67 @@ const UChar *RelativeDateFormat::getStringForDay(int32_t day, int32_t &len, UErr
     return NULL;  // not found.
 }
 
+UnicodeString&
+RelativeDateFormat::toPattern(UnicodeString& result, UErrorCode& status) const
+{
+    if (!U_FAILURE(status)) {
+        result.remove();
+        UnicodeString datePattern, timePattern;
+        this->toPatternDate(datePattern, status);
+        this->toPatternTime(timePattern, status);
+        if ( datePattern.length() > 0 ) {
+            if ( timePattern.length() > 0 && fCombinedFormat) {
+                Formattable timeDatePatterns[] = { timePattern, datePattern };
+                FieldPosition pos;
+                fCombinedFormat->format(timeDatePatterns, 2, result, pos, status);
+            }
+            if ( result.length() == 0 ) {
+                result.setTo(datePattern);
+            }
+        } else {
+            result.setTo(timePattern);
+        }
+    }
+    return result;
+}
+
+UnicodeString&
+RelativeDateFormat::toPatternDate(UnicodeString& result, UErrorCode& status) const
+{
+    if (!U_FAILURE(status)) {
+        result.remove();
+        if ( fDateFormat && fDateFormat->getDynamicClassID()==SimpleDateFormat::getStaticClassID() ) {
+            ((SimpleDateFormat*)fDateFormat)->toPattern(result);
+        }
+    }
+    return result;
+}
+
+UnicodeString&
+RelativeDateFormat::toPatternTime(UnicodeString& result, UErrorCode& status) const
+{
+    if (!U_FAILURE(status)) {
+        result.remove();
+        if ( fTimeFormat && fTimeFormat->getDynamicClassID()==SimpleDateFormat::getStaticClassID() ) {
+            ((SimpleDateFormat*)fTimeFormat)->toPattern(result);
+        }
+    }
+    return result;
+}
+
+void
+RelativeDateFormat::applyPatterns(const UnicodeString& datePattern, const UnicodeString& timePattern, UErrorCode &status)
+{
+    if (!U_FAILURE(status)) {
+        if ( fDateFormat && fDateFormat->getDynamicClassID()==SimpleDateFormat::getStaticClassID() ) {
+            ((SimpleDateFormat*)fDateFormat)->applyPattern(datePattern);
+        }
+        if ( fTimeFormat && fTimeFormat->getDynamicClassID()==SimpleDateFormat::getStaticClassID() ) {
+            ((SimpleDateFormat*)fTimeFormat)->applyPattern(timePattern);
+        }
+    }
+}
+
 void RelativeDateFormat::loadDates(UErrorCode &status) {
     CalendarData calData(fLocale, "gregorian", status);
     
@@ -267,7 +329,7 @@ void RelativeDateFormat::loadDates(UErrorCode &status) {
             int32_t glueIndex = kDateTime;
             if (patternsSize >= (DateFormat::kDateTimeOffset + DateFormat::kShort + 1)) {
                 // Get proper date time format
-	            switch (fDateStyle) { 
+                switch (fDateStyle) { 
  	            case kFullRelative: 
  	            case kFull: 
  	                glueIndex = kDateTimeOffset + kFull; 
