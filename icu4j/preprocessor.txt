@@ -62,6 +62,7 @@ src/com/ibm/icu/dev/test/timezone/TimeZoneAliasTest.java
 src/com/ibm/icu/dev/test/timezone/TimeZoneRegression.java
 src/com/ibm/icu/dev/test/translit/UnicodeMapTest.java
 src/com/ibm/icu/dev/test/translit/RegexUtilitiesTest.java
+src/com/ibm/icu/dev/test/translit/TestAll.java
 src/com/ibm/icu/dev/test/util/BagFormatter.java
 src/com/ibm/icu/dev/test/util/BNF.java
 src/com/ibm/icu/dev/test/util/CollectionUtilities.java

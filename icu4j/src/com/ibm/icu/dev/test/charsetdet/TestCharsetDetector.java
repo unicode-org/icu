@@ -27,11 +27,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-//#endif
 
 import com.ibm.icu.charset.CharsetProviderICU;
 import java.nio.charset.CharsetEncoder;
 import java.nio.CharBuffer;
+//#endif
+
 
 /**
  * @author andy
@@ -450,8 +451,7 @@ public class TestCharsetDetector extends TestFmwk
             e.printStackTrace();
         }
     }
-//#endif
-    
+
     public void TestArabic() throws Exception {
         String  s = "\u0648\u0636\u0639\u062A \u0648\u0646\u0641\u0630\u062A \u0628\u0631\u0627" +
         "\u0645\u062C \u062A\u0623\u0645\u064A\u0646 \u0639\u062F\u064A\u062F\u0629 \u0641\u064A " + 
@@ -486,15 +486,14 @@ public class TestCharsetDetector extends TestFmwk
         CheckAssert(charsetMatch.equals("IBM420_ltr"));
 
     }
-    
+
     private CharsetMatch _testIBM420_ar_rtl(String s, CharsetEncoder encoder) throws Exception {
         CharsetDetector det = new CharsetDetector();
         det.setText(encoder.encode(CharBuffer.wrap(s)).array());
         CharsetMatch m = det.detect();
         return m;
     }
-    
-    
+
     private CharsetMatch _testIBM420_ar_ltr(String s, CharsetEncoder encoder) throws Exception {
         /**
          * transformation of input string to CP420 left to right requires reversing the string
@@ -517,7 +516,8 @@ public class TestCharsetDetector extends TestFmwk
         CharsetMatch m = det.detect();
         return m;
     }
-    
+//#endif
+
     public void TestHebrew() throws Exception {
         String  s =  "\u05D4\u05E4\u05E8\u05E7\u05DC\u05D9\u05D8 \u05D4\u05E6\u05D1\u05D0\u05D9 \u05D4" +
             "\u05E8\u05D0\u05E9\u05D9, \u05EA\u05EA \u05D0\u05DC\u05D5\u05E3 \u05D0\u05D1\u05D9" + 

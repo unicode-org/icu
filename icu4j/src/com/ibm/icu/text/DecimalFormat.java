@@ -3537,7 +3537,7 @@ public class DecimalFormat extends NumberFormat {
         return mathContext;
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14)
+//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14) || defined(ECLIPSE_FRAGMENT)
 //#else
     // [NEW]
     /**
@@ -3579,7 +3579,7 @@ public class DecimalFormat extends NumberFormat {
         mathContext = newValue;
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14)
+//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14) || defined(ECLIPSE_FRAGMENT)
 //#else
     // [NEW]
     /**
