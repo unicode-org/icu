@@ -903,6 +903,60 @@ udat_getLocaleByType(const UDateFormat *fmt,
                      ULocDataLocaleType type,
                      UErrorCode* status); 
 
+/**
+* Extract the date pattern from a UDateFormat set for relative date formatting.
+* The pattern will follow the pattern syntax rules.
+* @param fmt The formatter to query.
+* @param result A pointer to a buffer to receive the pattern.
+* @param resultLength The maximum size of result.
+* @param status A pointer to a UErrorCode to receive any errors
+* @return The total buffer size needed; if greater than resultLength, the output was truncated.
+* @see udat_applyPatternRelative
+* @internal ICU 4.2 technology preview
+*/
+U_INTERNAL int32_t U_EXPORT2 
+udat_toPatternRelativeDate(const UDateFormat *fmt,
+                           UChar             *result,
+                           int32_t           resultLength,
+                           UErrorCode        *status);
+
+/**
+* Extract the time pattern from a UDateFormat set for relative date formatting.
+* The pattern will follow the pattern syntax rules.
+* @param fmt The formatter to query.
+* @param result A pointer to a buffer to receive the pattern.
+* @param resultLength The maximum size of result.
+* @param status A pointer to a UErrorCode to receive any errors
+* @return The total buffer size needed; if greater than resultLength, the output was truncated.
+* @see udat_applyPatternRelative
+* @internal ICU 4.2 technology preview
+*/
+U_INTERNAL int32_t U_EXPORT2 
+udat_toPatternRelativeTime(const UDateFormat *fmt,
+                           UChar             *result,
+                           int32_t           resultLength,
+                           UErrorCode        *status);
+
+/**
+* Set the date & time patterns used by a UDateFormat set for relative date formatting.
+* The patterns should follow the pattern syntax rules.
+* @param format The formatter to set.
+* @param datePattern The new date pattern
+* @param datePatternLength The length of datePattern, or -1 if null-terminated.
+* @param timePattern The new time pattern
+* @param timePatternLength The length of timePattern, or -1 if null-terminated.
+* @param status A pointer to a UErrorCode to receive any errors
+* @see udat_toPatternRelativeDate, udat_toPatternRelativeTime
+* @internal ICU 4.2 technology preview
+*/
+U_INTERNAL void U_EXPORT2 
+udat_applyPatternRelative(UDateFormat *format,
+                          const UChar *datePattern,
+                          int32_t     datePatternLength,
+                          const UChar *timePattern,
+                          int32_t     timePatternLength,
+                          UErrorCode  *status);
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif
