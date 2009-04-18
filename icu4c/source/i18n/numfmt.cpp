@@ -879,6 +879,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
     UResourceBundle *resource = ures_open((char *)0, desiredLocale.getName(), &status);
     UResourceBundle *numberPatterns = ures_getByKey(resource, DecimalFormat::fgNumberPatterns, NULL, &status);
     NumberingSystem *ns = NULL;
+    UBool deleteSymbols = TRUE;
 
     if (U_FAILURE(status)) {
         // We don't appear to have resource data available -- use the last-resort data
@@ -979,6 +980,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         if (U_FAILURE(status) || f == NULL) {
             goto cleanup;
         }
+        deleteSymbols = FALSE;
     }
 
     f->setLocaleIDs(ures_getLocaleByType(numberPatterns, ULOC_VALID_LOCALE, &status),
@@ -1003,6 +1005,9 @@ cleanup:
     if (f == NULL || symbolsToAdopt == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         f = NULL;
+    }
+    if (deleteSymbols && symbolsToAdopt != NULL) {
+        delete symbolsToAdopt;
     }
     return f;
 }
