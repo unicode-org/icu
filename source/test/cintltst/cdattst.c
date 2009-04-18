@@ -383,7 +383,13 @@ while the calls to udat_format are after midnight or span midnight.
 static const UDate dayInterval = 24.0*60.0*60.0*1000.0;
 static const UChar trdfZone[] = { 0x0055, 0x0053, 0x002F, 0x0050, 0x0061, 0x0063, 0x0069, 0x0066, 0x0069, 0x0063, 0 }; /* US/Pacific */
 static const char trdfLocale[] = "en_US";
+static const UChar minutesPatn[] = { 0x006D, 0x006D, 0 }; /* "mm" */
+static const UChar monthLongPatn[] = { 0x004D, 0x004D, 0x004D, 0x004D, 0 }; /* "MMMM" */
+static const UChar monthMediumPatn[] = { 0x004D, 0x004D, 0x004D, 0 }; /* "MMM" */
+static const UChar monthShortPatn[] = { 0x004D, 0 }; /* "M" */
 static const UDateFormatStyle dateStylesList[] = { UDAT_FULL, UDAT_LONG, UDAT_MEDIUM, UDAT_SHORT, UDAT_NONE };
+static const UChar *monthPatnsList[] = { monthLongPatn, monthLongPatn, monthMediumPatn, monthShortPatn, NULL };
+static const UChar newTimePatn[] = { 0x0048, 0x0048, 0x002C, 0x006D, 0x006D, 0 }; /* "HH,mm" */
 static const UChar minutesStr[] = { 0x0034, 0x0039, 0 }; /* "49", minutes string to search for in output */
 enum { kDateOrTimeOutMax = 96, kDateAndTimeOutMax = 192 };
 
@@ -391,6 +397,7 @@ static void TestRelativeDateFormat()
 {
     UDate today = 0.0;
     const UDateFormatStyle * stylePtr;
+    const UChar ** monthPtnPtr;
     UErrorCode status = U_ZERO_ERROR;
     UCalendar * ucal = ucal_open(trdfZone, -1, trdfLocale, UCAL_GREGORIAN, &status);
     if ( U_SUCCESS(status) ) {
@@ -407,12 +414,17 @@ static void TestRelativeDateFormat()
         log_err("Generate UDate for a specified time today fails, error %s\n", myErrorName(status) );
         return;
     }
-    for (stylePtr = dateStylesList; *stylePtr != UDAT_NONE; ++stylePtr) {
+    for (stylePtr = dateStylesList, monthPtnPtr = monthPatnsList; *stylePtr != UDAT_NONE; ++stylePtr, ++monthPtnPtr) {
         UDateFormat* fmtRelDateTime;
         UDateFormat* fmtRelDate;
         UDateFormat* fmtTime;
         int32_t dayOffset, limit;
         UFieldPosition fp;
+		UChar   strDateTime[kDateAndTimeOutMax];
+		UChar   strDate[kDateOrTimeOutMax];
+		UChar   strTime[kDateOrTimeOutMax];
+		UChar * strPtr;
+        int32_t dtpatLen;
 
         fmtRelDateTime = udat_open(UDAT_SHORT, *stylePtr | UDAT_RELATIVE, trdfLocale, trdfZone, -1, NULL, 0, &status);
         if ( U_FAILURE(status) ) {
@@ -433,24 +445,56 @@ static void TestRelativeDateFormat()
             continue;
         }
 
+        dtpatLen = udat_toPatternRelativeDate(fmtRelDateTime, strDate, kDateAndTimeOutMax, &status);
+        if ( U_FAILURE(status) ) {
+        	log_err("udat_toPatternRelativeDate timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
+        	status = U_ZERO_ERROR;
+        } else if ( u_strstr(strDate, *monthPtnPtr) == NULL || dtpatLen != u_strlen(strDate) ) {
+        	log_err("udat_toPatternRelativeDate timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) date pattern incorrect\n", *stylePtr );
+        }
+        dtpatLen = udat_toPatternRelativeTime(fmtRelDateTime, strTime, kDateAndTimeOutMax, &status);
+        if ( U_FAILURE(status) ) {
+        	log_err("udat_toPatternRelativeTime timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
+        	status = U_ZERO_ERROR;
+        } else if ( u_strstr(strTime, minutesPatn) == NULL || dtpatLen != u_strlen(strTime) ) {
+        	log_err("udat_toPatternRelativeTime timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) time pattern incorrect\n", *stylePtr );
+        }
+        dtpatLen = udat_toPattern(fmtRelDateTime, FALSE, strDateTime, kDateAndTimeOutMax, &status);
+        if ( U_FAILURE(status) ) {
+        	log_err("udat_toPattern timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
+        	status = U_ZERO_ERROR;
+        } else if ( u_strstr(strDateTime, strDate) == NULL || u_strstr(strDateTime, strTime) == NULL || dtpatLen != u_strlen(strDateTime) ) {
+        	log_err("udat_toPattern timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) dateTime pattern incorrect\n", *stylePtr );
+        }
+        udat_applyPatternRelative(fmtRelDateTime, strDate, u_strlen(strDate), newTimePatn, u_strlen(newTimePatn), &status);
+        if ( U_FAILURE(status) ) {
+        	log_err("udat_applyPatternRelative timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
+        	status = U_ZERO_ERROR;
+        } else {
+        	udat_toPattern(fmtRelDateTime, FALSE, strDateTime, kDateAndTimeOutMax, &status);
+        	if ( U_FAILURE(status) ) {
+        		log_err("udat_toPattern timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
+        		status = U_ZERO_ERROR;
+        	} else if ( u_strstr(strDateTime, newTimePatn) == NULL ) {
+        		log_err("udat_applyPatternRelative timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) didn't update time pattern\n", *stylePtr );
+        	}
+        }
+        udat_applyPatternRelative(fmtRelDateTime, strDate, u_strlen(strDate), strTime, u_strlen(strTime), &status); /* restore original */
+
         fp.field = UDAT_MINUTE_FIELD;
         for (dayOffset = -2, limit = 2; dayOffset <= limit; ++dayOffset) {
-            UChar   strRelDateTime[kDateAndTimeOutMax];
-            UChar   strRelDate[kDateOrTimeOutMax];
-            UChar   strTime[kDateOrTimeOutMax];
-            UChar * strPtr;
             UDate   dateToUse = today + (float)dayOffset*dayInterval;
 
-            udat_format(fmtRelDateTime, dateToUse, strRelDateTime, kDateAndTimeOutMax, &fp, &status);
+            udat_format(fmtRelDateTime, dateToUse, strDateTime, kDateAndTimeOutMax, &fp, &status);
             if ( U_FAILURE(status) ) {
                 log_err("udat_format timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
                 status = U_ZERO_ERROR;
             } else {
-                udat_format(fmtRelDate, dateToUse, strRelDate, kDateOrTimeOutMax, NULL, &status);
+                udat_format(fmtRelDate, dateToUse, strDate, kDateOrTimeOutMax, NULL, &status);
                 if ( U_FAILURE(status) ) {
                     log_err("udat_format timeStyle NONE dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
                     status = U_ZERO_ERROR;
-                } else if ( u_strstr(strRelDateTime, strRelDate) == NULL ) {
+                } else if ( u_strstr(strDateTime, strDate) == NULL ) {
                     log_err("relative date string not found in udat_format timeStyle SHORT dateStyle (%d | UDAT_RELATIVE)\n", *stylePtr );
                 }
 
@@ -458,13 +502,13 @@ static void TestRelativeDateFormat()
                 if ( U_FAILURE(status) ) {
                     log_err("udat_format timeStyle SHORT dateStyle NONE fails, error %s\n", myErrorName(status) );
                     status = U_ZERO_ERROR;
-                } else if ( u_strstr(strRelDateTime, strTime) == NULL ) {
+                } else if ( u_strstr(strDateTime, strTime) == NULL ) {
                     log_err("time string not found in udat_format timeStyle SHORT dateStyle (%d | UDAT_RELATIVE)\n", *stylePtr );
                 }
 
-                strPtr = u_strstr(strRelDateTime, minutesStr);
+                strPtr = u_strstr(strDateTime, minutesStr);
                 if ( strPtr != NULL ) {
-                    int32_t beginIndex = strPtr - strRelDateTime;
+                    int32_t beginIndex = strPtr - strDateTime;
                     if ( fp.beginIndex != beginIndex ) {
                         log_err("UFieldPosition beginIndex %d, expected %d, in udat_format timeStyle SHORT dateStyle (%d | UDAT_RELATIVE)\n", fp.beginIndex, beginIndex, *stylePtr );
                     }
@@ -1120,10 +1164,11 @@ static void TestRelativeCrash(void) {
             }            
         }
         {
+            /* Now udat_toPattern works for relative date formatters, unless localized is TRUE */
             UErrorCode subStatus = U_ZERO_ERROR;
             what = "udat_toPattern";
             log_verbose("Trying %s on a relative date..\n", what);
-            udat_toPattern(icudf, FALSE,NULL,0, &subStatus); 
+            udat_toPattern(icudf, TRUE,NULL,0, &subStatus); 
             if(subStatus == expectStatus) {
                 log_verbose("Success: did not crash on %s, but got %s.\n", what, u_errorName(subStatus));
             } else {
