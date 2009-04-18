@@ -10,10 +10,6 @@ import java.io.IOException;
 
 import com.ibm.icu.impl.UCaseProps;
 
-import com.ibm.icu.util.ULocale;
-
-import com.ibm.icu.text.ReplaceableContextIterator;
-
 /**
  * A transliterator that performs locale-sensitive toLower()
  * case mapping.
@@ -33,14 +29,12 @@ class CaseFoldTransliterator extends Transliterator{
     static void register() {
         Transliterator.registerFactory(_ID, new Transliterator.Factory() {
             public Transliterator getInstance(String ID) {
-                return new CaseFoldTransliterator(ULocale.US);
+                return new CaseFoldTransliterator();
             }
         });
 
         Transliterator.registerSpecialInverse("CaseFold", "Upper", false);
     }
-
-    private ULocale locale;
 
     private UCaseProps csp;
     private ReplaceableContextIterator iter;
@@ -50,9 +44,8 @@ class CaseFoldTransliterator extends Transliterator{
      * Constructs a transliterator.
      */
 
-    public CaseFoldTransliterator(ULocale loc) {
+    public CaseFoldTransliterator() {
         super(_ID, null);
-        locale = loc;
         try {
             csp=UCaseProps.getSingleton();
         } catch (IOException e) {
