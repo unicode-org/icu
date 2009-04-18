@@ -491,6 +491,7 @@
       <fileset dir="${src.dir}/com/ibm/icu/dev/data/unicode/" includes="*.txt" />
     </copy>
     <copy file="${src.dir}/com/ibm/icu/dev/test/format/NumberFormatTestCases.txt" todir="${build.dir}/com/ibm/icu/dev/test/format" />
+    <copy file="${src.dir}/com/ibm/icu/dev/test/translit/langtagRegex.txt" todir="${build.dir}/com/ibm/icu/dev/test/translit" />
     <copy todir="${build.dir}/com/ibm/icu/dev/data/resources/">
       <fileset dir="${src.dir}/com/ibm/icu/dev/data/resources/" includes="*.properties" />
     </copy>
