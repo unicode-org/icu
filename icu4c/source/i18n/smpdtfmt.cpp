@@ -1364,6 +1364,10 @@ SimpleDateFormat::processOverrideString(const Locale &locale, const UnicodeStrin
                    fOverrideList = cur;
                }
                else {
+                   // clean up before returning
+                   if (cur != NULL) {
+                       uprv_free(cur);
+                   }
                   return;
                }
 
