@@ -39,10 +39,9 @@ public class DateTimeGeneratorTest extends TestFmwk {
     
     public void TestSimple() {
         // some simple use cases
-        Calendar cal = new GregorianCalendar(1999, Calendar.OCTOBER, 13, 23, 58, 59);
-        Date sampleDate = cal.getTime();
         ULocale locale = ULocale.GERMANY;
         TimeZone zone = TimeZone.getTimeZone("Europe/Paris");
+        
         // make from locale
         DateTimePatternGenerator gen = DateTimePatternGenerator.getInstance(locale);
         SimpleDateFormat format = new SimpleDateFormat(gen.getBestPattern("MMMddHmm"), locale);
@@ -67,7 +66,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         String newPattern = gen.replaceFieldTypes(pattern, "vvvv");
         format.applyPattern(newPattern);
         assertEquals("full-date: modified zone", "Donnerstag, 14. Oktober 1999 08:58:59 Frankreich", format.format(sampleDate));
-
+        
         // add test of basic cases
 
         //lang  YYYYMMM MMMd    MMMdhmm hmm hhmm    Full Date-Time
@@ -103,6 +102,21 @@ public class DateTimeGeneratorTest extends TestFmwk {
             String formattedDate = enFormat.format(sampleDate);
             assertEquals("Testing skeleton '" + testSkeleton + "' with  " + sampleDate, tests[i][1], formattedDate);
         }
+    }
+
+    public void TestRoot() {
+        DateTimePatternGenerator rootGen = DateTimePatternGenerator.getInstance(ULocale.ROOT);
+        SimpleDateFormat rootFormat = new SimpleDateFormat(rootGen.getBestPattern("yMdHms"), ULocale.ROOT);
+        rootFormat.setTimeZone(gmt);
+        assertEquals("root format: yMdHms", "1999-10-14 6:58:59", rootFormat.format(sampleDate));
+    }
+    
+    public void TestEmpty() {
+        // now nothing
+        DateTimePatternGenerator nullGen = DateTimePatternGenerator.getEmptyInstance();
+        SimpleDateFormat format = new SimpleDateFormat(nullGen.getBestPattern("yMdHms"), ULocale.ROOT);
+        TimeZone rootZone = TimeZone.getTimeZone("Etc/GMT");
+        format.setTimeZone(rootZone);
     }
 
     public void TestPatternParser() {
@@ -462,11 +476,12 @@ public class DateTimeGeneratorTest extends TestFmwk {
         }
     }
     
-    /** 
-     * Some statics. If we were multithreaded, we'd need to protect these
-     */
-    static DateTimePatternGenerator.FormatParser formatParser = new DateTimePatternGenerator.FormatParser ();
-    static DateTimePatternGenerator generator = DateTimePatternGenerator.getEmptyInstance();
+    DateTimePatternGenerator.FormatParser formatParser = new DateTimePatternGenerator.FormatParser ();
+    DateTimePatternGenerator generator = DateTimePatternGenerator.getEmptyInstance();
+    
+    private Calendar sampleCalendar = new GregorianCalendar(1999, Calendar.OCTOBER, 13, 23, 58, 59);
+    private Date sampleDate = sampleCalendar.getTime();
+    private TimeZone gmt = TimeZone.getTimeZone("Etc/GMT");
     
     /**
      * Replace the zone string with a different type, eg v's for z's, etc. <p>Called with a pattern, such as one gotten from 
@@ -524,7 +539,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
      *         didn't know what form you really wanted so this is just a
      *         stand-in.)
      */
-  private static DateOrder getOrdering(int style, ULocale locale) {
+  private DateOrder getOrdering(int style, ULocale locale) {
       // and the date pattern
       String pattern = ((SimpleDateFormat) DateFormat.getDateInstance(style, locale)).toPattern();
       int count = 0;
