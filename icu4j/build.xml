@@ -1534,19 +1534,8 @@
 
 <!-- Eclipse plug-in build targets --> 
   <!-- for building eclipse distribution -->
-  <target name="initIcuEclipseVersion" depends="initBase">
-    <tstamp>
-      <format property="build.date" pattern="yyyyMMdd"/>
-    </tstamp>
-    <property name="icu4j.eclipse.build.version.string" value="${icu4j.plugin.impl.version.string}.v${build.date}"/>
-  </target>
-
-  <target name="eclipseProjects" 
-          depends="eclipseCoreProject,eclipseTestProject,eclipseWrapperProject,eclipseFragmentProject"
-          description="create all eclipse icu projects"/>
-
   <target name="eclipsePDEBuild"
-          depends="initEclipsePDEBuildEnv, eclipseProjects"
+          depends="initEclipsePDEBuildEnv, eclipseProjects,normSrc"
           description="build icu4j plugin files">
 
     <!-- copy OSGi jar file to baseLocation -->
@@ -1568,6 +1557,18 @@
       <param name="icu.plugin.id" value="com.ibm.icu.jse4"/>
     </antcall>
   </target>
+
+
+  <target name="initIcuEclipseVersion" depends="initBase">
+    <tstamp>
+      <format property="build.date" pattern="yyyyMMdd"/>
+    </tstamp>
+    <property name="icu4j.eclipse.build.version.string" value="${icu4j.plugin.impl.version.string}.v${build.date}"/>
+  </target>
+
+  <target name="eclipseProjects" 
+          depends="eclipseCoreProject,eclipseTestProject,eclipseWrapperProject,eclipseFragmentProject"
+          description="create all eclipse icu projects"/>
 
   <target name="initEclipsePDEBuildEnv"
           depends="initBase,initEclipseHome,initEclipseLauncher,initEclipseOSGiJar,initEclipsePDE"
@@ -1662,51 +1663,8 @@
     </antcall>
   </target>
 
-  <target name="eclipseCore" depends="coreData,icudata,durationdata,eclipseMangle">
-    <javac  includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java"
-            compiler="javac1.3"
-            srcdir="${src.dir}"
-            destdir="${build.dir}"
-            classpathref="build.classpath"
-            bootclasspath="ee.foundation.jar"
-            source="1.3"
-            target="1.1"
-            debug="on"
-            deprecation="off"
-            encoding="ascii" />
-    <antcall target="indices" />
-    <jar jarfile="${jar.file}" compress="true">
-      <fileset dir="${basedir}" includes="license.html, unicode-license.txt" />
-      <fileset dir="${build.dir}">
-        <exclude name="META-INF/services/**/*" />
-        <exclude name="com/ibm/icu/charset/**/*" />
-        <exclude name="${icu4j.data.path}/*.cnv" />
-        <exclude name="${icu4j.data.path}/cnvalias.icu" />
-        <include name="com/ibm/icu/util/**/*" />
-        <include name="com/ibm/icu/text/**/*" />
-        <include name="com/ibm/icu/math/**/*" />
-        <include name="com/ibm/icu/impl/**/*" />
-        <include name="com/ibm/icu/lang/**/*" />
-      </fileset>
-      <manifest>
-        <attribute name="Built-By" value="${corp}" />
-        <section name="common">
-          <attribute name="Specification-Title" value="ICU4J Eclipse Build" />
-          <attribute name="Specification-Version" value="${icu4j.spec.version.string}" />
-          <attribute name="Specification-Vendor" value="ICU" />
-          <attribute name="Implementation-Title" value="ICU for Java Eclipse plug-in" />
-          <attribute name="Implementation-Version" value="${icu4j.impl.version.string}" />
-          <attribute name="Implementation-Vendor" value="${corp}" />
-          <attribute name="Implementation-Vendor-Id" value="com.ibm" />
-          <attribute name="Copyright-Info" value="${copyright}" />
-          <attribute name="Sealed" value="false" />
-        </section>
-      </manifest>
-    </jar>
-  </target>
-
   <target name="eclipseCoreProject"
-          depends="eclipseCore,initIcuEclipseVersion"
+          depends="initIcuEclipseVersion,eclipseMangle,coreData,icudata,durationdata,indices"
           description="gather eclipse icu core project files">
     <delete failonerror="no">
       <fileset dir="${eclipse.projects.dir}/plugins/com.ibm.icu" />
@@ -1761,31 +1719,8 @@
     </copy>
   </target>
 
-  <!-- ensure eclipse wrapper code builds with foundation1.0/java1.3 -->
-  <target name="eclipseWrapper" depends="initBase">
-    <mkdir dir="${wrapper.build.dir}" />
-    <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java"
-           compiler="javac1.3"
-           srcdir="${eclipse.dir}/plugins/com.ibm.icu.base/src"
-           destdir="${wrapper.build.dir}"
-           classpathref="build.classpath"
-           bootclasspath="ee.foundation.jar"
-           source="1.3"
-           target="1.1"
-           debug="on" 
-           deprecation="off"
-           encoding="ascii" />
-    <jar jarfile="${jdk.wrapper.jar.file}"
-         compress="true"
-         basedir="${wrapper.build.dir}" />
-  </target>
-
-  <target name="eclipseWrapperTest" depends="eclipseWrapper">
-    <!-- TODO: build the wrapper test code this ant target -->
-  </target>
-
   <target name="eclipseWrapperProject"
-          depends="eclipseWrapper,eclipseWrapperTest,initIcuEclipseVersion"
+          depends="initIcuEclipseVersion"
           description="gather eclipse icu core project files">
     <delete failonerror="no">
       <fileset dir="${eclipse.projects.dir}/plugins/com.ibm.icu.base" />
@@ -1825,41 +1760,9 @@
     </copy>
   </target>
 
-  <target name="eclipseTests"
-          depends="eclipseCore,testdata,eclipseMangle"
-          description="build tests trimmed for eclipse API">
-    <!-- TODO: we should actually use ee.foundation.jar for eclipse env -->
-    <javac includes="com/ibm/icu/dev/test/**/*.java"
-           excludes="com/ibm/icu/dev/test/charset/**/*.*,com/ibm/icu/dev/test/perf/**/*.*"
-           srcdir="${src.dir}"
-           destdir="${build.dir}"
-           source="1.3"
-           target="1.3"
-           classpathref="build.classpath"
-           debug="on"
-           deprecation="off" />
-    <antcall target="indices"/>
-    <jar jarfile="${testjar.file}" compress="true">
-      <fileset dir="${build.dir}" includes="com/ibm/icu/dev/test/**/*" />
-      <fileset dir="${build.dir}" includes="com/ibm/icu/dev/data/**/*" />
-      <manifest>
-        <attribute name="Built-By" value="${corp}" />
-        <section name="common">
-          <attribute name="Specification-Title" value="ICU4J Eclipse Tests"/>
-          <attribute name="Specification-Version" value="${icu4j.spec.version.string}"/>
-          <attribute name="Specification-Vendor" value="ICU"/>
-          <attribute name="Implementation-Title" value="ICU for Java Eclipse plug-in Tests"/>
-          <attribute name="Implementation-Version" value="${icu4j.impl.version.string}"/> 
-          <attribute name="Implementation-Vendor" value="${corp}"/>
-          <attribute name="Implementation-Vendor-Id" value="com.ibm"/>
-          <attribute name="Copyright-Info" value="${copyright}"/>
-          <attribute name="Sealed" value="false"/>
-        </section>
-      </manifest>
-    </jar>
-  </target>
-
-  <target name="eclipseTestProject" depends="eclipseTests,eclipseZipTestSrc" description="gather eclipse icu test project files">
+  <target name="eclipseTestProject"
+          depends="eclipseMangle"
+          description="gather eclipse icu test project files">
     <delete failonerror="no">
       <fileset dir="${eclipse.projects.dir}/plugins/com.ibm.icu.tests"/>
     </delete>
@@ -1871,10 +1774,21 @@
         <filter token="COPYRIGHT" value="${copyright.eclipse}"/>
       </filterset>
     </copy>
-    <!-- copy icu test jar -->
-    <copy toDir="${eclipse.projects.dir}/plugins/com.ibm.icu.tests" file="${testjar.file}"/>
-    <!-- copy icu test source zip -->
-    <copy toDir="${eclipse.projects.dir}/plugins/com.ibm.icu.tests" file="${zipTestSrc.file}"/>
+
+    <copy toDir="${eclipse.projects.dir}/plugins/com.ibm.icu.tests/src/com/ibm/icu/dev/test">
+      <fileset dir="src/com/ibm/icu/dev/test"
+               includes="**/*.*"
+               excludes="**/.svn/**/*,charset/**/*.*,perf/**/*.*" />
+    </copy>
+
+    <!-- test data -->
+    <copy toDir="${eclipse.projects.dir}/plugins/com.ibm.icu.tests/src/com/ibm/icu/dev/data">
+      <fileset dir="src/com/ibm/icu/dev/data"
+               includes="**/*.*"
+               excludes="**/.svn/**/*,testdata.jar"/>
+    </copy>
+    <unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar"
+           dest="${eclipse.projects.dir}/plugins/com.ibm.icu.tests/src" />
   </target>
 
   <target name="eclipseFragmentMangle" depends="buildMangle">
@@ -1884,79 +1798,8 @@
     </antcall>
   </target>
 
-  <target name="eclipseFragment" depends="eclipseCore,eclipseFragmentMangle">
-    <javac compiler="javac1.4"
-           srcdir="${src.dir}"
-           destdir="${build.dir}"
-           classpathref="build.classpath"
-           source="1.3"
-           target="1.2"
-           debug="on"
-           deprecation="off"
-           encoding="ascii"
-           listfiles="true">
-      <include name="com/ibm/icu/impl/DateNumberFormat.java" />
-      <include name="com/ibm/icu/impl/duration/BasicDurationFormat.java" />
-      <include name="com/ibm/icu/impl/ICUResourceBundleReader.java" />
-      <include name="com/ibm/icu/impl/PatternTokenizer.java" />
-      <include name="com/ibm/icu/impl/Utility.java" />
-      <include name="com/ibm/icu/lang/UCharacter.java" />
-      <include name="com/ibm/icu/math/BigDecimal.java" />
-      <include name="com/ibm/icu/text/Bidi.java" />
-      <include name="com/ibm/icu/text/ChineseDateFormat.java" />
-      <include name="com/ibm/icu/text/DateFormat.java" />
-      <include name="com/ibm/icu/text/DateTimePatternGenerator.java" />
-      <include name="com/ibm/icu/text/DecimalFormat.java" />
-      <include name="com/ibm/icu/text/DigitList.java" />
-      <include name="com/ibm/icu/text/MessageFormat.java" />
-      <include name="com/ibm/icu/text/NumberFormat.java" />
-      <include name="com/ibm/icu/text/RuleBasedBreakIterator.java" />
-      <include name="com/ibm/icu/text/RuleBasedNumberFormat.java" />
-      <include name="com/ibm/icu/text/SimpleDateFormat.java" />
-      <include name="com/ibm/icu/text/UnicodeSet.java" />
-      <include name="com/ibm/icu/text/UTF16.java" />
-    </javac>
-
-    <!-- collect fragment specific files -->
-    <jar jarfile="${fragment.jar.file}" compress="true">
-      <fileset dir="${build.dir}">
-        <include name="com/ibm/icu/impl/DateNumberFormat.class" />
-        <include name="com/ibm/icu/impl/duration/BasicDurationFormat.class" />
-        <include name="com/ibm/icu/impl/ICUResourceBundleReader.class" />
-        <include name="com/ibm/icu/impl/PatternTokenizer.class" />
-        <include name="com/ibm/icu/impl/Utility.class" />
-        <include name="com/ibm/icu/lang/UCharacter.class" />
-        <include name="com/ibm/icu/math/BigDecimal.class" />
-        <include name="com/ibm/icu/text/Bidi.class" />
-        <include name="com/ibm/icu/text/ChineseDateFormat.class" />
-        <include name="com/ibm/icu/text/DateFormat.class" />
-        <include name="com/ibm/icu/text/DateTimePatternGenerator.class" />
-        <include name="com/ibm/icu/text/DecimalFormat.class" />
-        <include name="com/ibm/icu/text/DigitList.class" />
-        <include name="com/ibm/icu/text/MessageFormat.class" />
-        <include name="com/ibm/icu/text/NumberFormat.class" />
-        <include name="com/ibm/icu/text/RuleBasedBreakIterator.class" />
-        <include name="com/ibm/icu/text/RuleBasedNumberFormat.class" />
-        <include name="com/ibm/icu/text/SimpleDateFormat.class" />
-        <include name="com/ibm/icu/text/UnicodeSet.class" />
-        <include name="com/ibm/icu/text/UTF16.class" />
-
-        <include name="com/ibm/icu/lang/UCharacter$*.class" />
-        <include name="com/ibm/icu/text/Bidi$*.class" />
-        <include name="com/ibm/icu/text/ChineseDateFormat$*.class" />
-        <include name="com/ibm/icu/text/DateFormat$*.class" />
-        <include name="com/ibm/icu/text/DateTimePatternGenerator$*.class" />
-        <include name="com/ibm/icu/text/MessageFormat$*.class" />
-        <include name="com/ibm/icu/text/NumberFormat$*.class" />
-        <include name="com/ibm/icu/text/SimpleDateFormat$*.class" />
-        <include name="com/ibm/icu/text/UnicodeSet$*.class" />
-        <include name="com/ibm/icu/text/UTF16$*.class" />
-      </fileset>
-    </jar>
-  </target>
-
   <target name="eclipseFragmentProject"
-          depends="eclipseFragment,initIcuEclipseVersion"
+          depends="eclipseFragmentMangle,initIcuEclipseVersion"
           description="gather eclipse icu fragment project files">
     <delete failonerror="no">
       <fileset dir="${eclipse.projects.dir}/plugins/com.ibm.icu.jse4" />
@@ -2024,17 +1867,12 @@
     </copy>
   </target>
 
-  <target name="eclipseZipTestSrc" depends="eclipseMangle" description="build zip of test sources for debugging">
-    <!-- for eclipse -->
-    <zip destfile="${zipTestSrc.file}" compress="true" basedir="${src.dir}" includes="com/ibm/icu/dev/test/**/*" excludes="com/ibm/icu/dev/test/cldr/**/*, com/ibm/icu/dev/test/perf/**/*" />
-  </target>
-
   <target name="gatherICU4JWrapperAPI" depends="tools" unless="before.java14">
     <javadoc classpath="${build.dir}" sourcepath="${src.dir}" packagenames="com.ibm.icu.text,com.ibm.icu.util" source="1.4">
       <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData" path="${build.dir}">
-        <param name="-name" value="ICU4J 3.6" />
+        <param name="-name" value="ICU4J ${icu4j.version.number}" />
         <param name="-base" value="com.ibm.icu" />
-        <param name="-output" value="${api.dir}/icu4j36w_i.api" />
+        <param name="-output" value="${api.dir}/icu4j${icu4j.version.number}w_i.api" />
         <param name="-filter" value="BreakIterator|CollationKey|Collator|DateFormat|DecimalFormat|MessageFormat|NumberFormat|SimpleDateFormat|StringTokenizer|Calendar|TimeZone|ULocale|DateFormatSymbols|DecimalFormatSymbols|Calendar|TimeZone" />
         <!-- param name="-gzip"/ -->
       </doclet>
@@ -2044,9 +1882,9 @@
   <target name="gatherEclipseWrapperAPI" depends="tools" unless="before.java14">
     <javadoc classpath="${build.dir}" sourcepath="${src.dir}/com/ibm/icu/dev/eclipse/com.ibm.icu.base/src" packagenames="com.ibm.icu.text,com.ibm.icu.util" source="1.4">
       <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData" path="${build.dir}">
-        <param name="-name" value="ICU4J 3.6 Wrapper" />
+        <param name="-name" value="ICU4J ${icu4j.version.number} Wrapper" />
         <param name="-base" value="com.ibm.icu" />
-        <param name="-output" value="${api.dir}/icu4j36w_e.api" />
+        <param name="-output" value="${api.dir}/icu4j${icu4j.version.number}w_e.api" />
         <!-- param name="-gzip"/ -->
       </doclet>
     </javadoc>
@@ -2078,24 +1916,6 @@
       </classpath>
     </java>
   </target>
-
-  <target name="eclipseRunCheck" depends="eclipseTests">
-    <delete dir="${build.dir}/META-INF"/>
-    <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
-      <jvmarg line="${test.jvm.args}"/>
-      <arg value="-n" />
-      <classpath>
-        <pathelement path="${java.class.path}/" />
-        <pathelement location="icu4j.jar" />
-        <pathelement location="clover.jar" />
-        <pathelement path="${build.dir}" />
-      </classpath>
-    </java>
-  </target>
-
-  <target name="eclipseCompat" depends="initBase, eclipseCore" />
-  <target name="eclipseCompatTests" depends="initBase, eclipseTests" />
-  <target name="eclipseCompatCheck" depends="initBase, eclipseCompat, eclipseCompatTests, deleteCore, eclipseRunCheck" />
 
 <!-- ICU TimeZone Update Utility targets -->
   <target name="icutzu" depends="init" description="build ICU4J TimeZone Update Utility Classes">

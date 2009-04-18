@@ -92,6 +92,8 @@
 //##    public static final ByteBuffer allocate(int size){
 //##        ByteBuffer ret = new ByteBuffer();
 //##        ret.data = new byte[size];
+//##        ret.pos = 0;
+//##        ret.limit = size;
 //##        return ret;
 //##    }
 //##}

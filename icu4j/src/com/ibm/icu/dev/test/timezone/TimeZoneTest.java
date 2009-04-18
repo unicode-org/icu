@@ -1569,6 +1569,7 @@ public class TimeZoneTest extends TestFmwk
         if (cal.get(Calendar.YEAR) != REFERENCE_YEAR) {
             isReferenceYear = false;
         }
+        boolean isICUTimeZone = (TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_ICU);
 
         boolean sawAnError = false;
         for (int testNum = 0; testNum < zoneDisplayTestData.length; testNum++) {
@@ -1577,7 +1578,8 @@ public class TimeZoneTest extends TestFmwk
             String displayName = zone.getDisplayName(((Boolean)zoneDisplayTestData[testNum][2]).booleanValue(),
                     ((Integer)zoneDisplayTestData[testNum][3]).intValue());
             if (!displayName.equals(zoneDisplayTestData[testNum][4])) {
-                if (isReferenceYear) {
+                if (isReferenceYear
+                		&& (isICUTimeZone || !((Boolean)zoneDisplayTestData[testNum][2]).booleanValue())) {
                     sawAnError = true;
                     errln("Incorrect time zone display name.  zone = "
                             + zoneDisplayTestData[testNum][0] + ",\n"
