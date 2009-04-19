@@ -1880,6 +1880,15 @@ public abstract class Transliterator implements StringTransform  {
         BreakTransliterator.register();
         AnyTransliterator.register(); // do this last!
     }
+    
+    /**
+     * Register the script-based "Any" transliterators: Any-Latin, Any-Greek
+     * @internal
+     * @deprecated
+     */
+    public static void registerAny() {
+        AnyTransliterator.register();
+    }
 
     /**
      * The factory interface for transliterators.  Transliterator

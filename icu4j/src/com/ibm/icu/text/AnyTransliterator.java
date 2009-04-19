@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.Set;
 import java.util.Vector;
 /**
  * A transliterator that translates multiple input scripts to a single
@@ -206,7 +207,7 @@ class AnyTransliterator extends Transliterator {
      */
     static void register() {
 
-        HashSet seen = new HashSet();
+        HashMap seen = new HashMap(); // old code used set, but was dependent on order
 
         for (Enumeration s=Transliterator.getAvailableSources(); s.hasMoreElements(); ) {
             String source = (String) s.nextElement();
@@ -218,17 +219,22 @@ class AnyTransliterator extends Transliterator {
                  t.hasMoreElements(); ) {
                 String target = (String) t.nextElement();
 
-                // Only process each target once
-                if (seen.contains(target)) continue;
-                seen.add(target);
-
                 // Get the script code for the target.  If not a script, ignore.
                 int targetScript = scriptNameToCode(target);
                 if (targetScript == UScript.INVALID_CODE) continue;
+                
+                Set seenVariants = (Set) seen.get(target);
+                if (seenVariants == null) {
+                    seen.put(target, seenVariants = new HashSet());
+                }
 
                 for (Enumeration v=Transliterator.getAvailableVariants(source, target);
                      v.hasMoreElements(); ) {
                     String variant = (String) v.nextElement();
+                    
+                    // Only process each target/variant pair once
+                    if (seenVariants.contains(variant)) continue;
+                    seenVariants.add(variant);
 
                     String id;
                     id = TransliteratorIDParser.STVtoID(ANY, target, variant);
