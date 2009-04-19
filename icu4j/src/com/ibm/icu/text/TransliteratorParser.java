@@ -1,12 +1,16 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2008, International Business Machines
+*   Copyright (c) 2001-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
 package com.ibm.icu.text;
 
+import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.Utility;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.Hashtable;
 import java.text.ParsePosition;
@@ -702,7 +706,12 @@ class TransliteratorParser {
                             m = new StringMatcher(buf.toString(), qstart, qlimit,
                                               0, parser.curData);
                         } catch (RuntimeException e) {
-                            throw new IllegalArgumentException("Failure in rule: " + rule.substring(pos, limit));
+                            final String precontext = pos < 50 ? rule.substring(0, pos) : "..." + rule.substring(pos - 50, pos);
+                            final String postContext = limit-pos <= 50 ? rule.substring(pos, limit) : rule.substring(pos, pos+50) + "...";
+                            throw (RuntimeException)
+                                new IllegalIcuArgumentException("Failure in rule: " + precontext + "$$$"
+                                        + postContext)
+                                .initCause(e);
                         }
                         int min = 0;
                         int max = Quantifier.MAX;
@@ -876,7 +885,7 @@ class TransliteratorParser {
      *
      * The member this.data will be set to null if there are no rules.
      *
-     * @exception IllegalArgumentException if there is a syntax error in the
+     * @exception IllegalIcuArgumentException if there is a syntax error in the
      * rules
      */
     void parseRules(RuleBody ruleArray, int dir) {
@@ -892,7 +901,7 @@ class TransliteratorParser {
         variableNames = new Hashtable();
         parseData = new ParseData();
 
-        StringBuffer errors = null;
+        List errors = new ArrayList();
         int errorCount = 0;
 
         ruleArray.reset();
@@ -1030,14 +1039,11 @@ class TransliteratorParser {
                     }
                 } catch (IllegalArgumentException e) {
                     if (errorCount == 30) {
-                        errors.append("\nMore than 30 errors; further messages squelched");
+                        errors.add(new IllegalIcuArgumentException("\nMore than 30 errors; further messages squelched").initCause(e));
                         break main;
                     }
-                    if (errors == null) {
-                        errors = new StringBuffer(e.getMessage());
-                    } else {
-                        errors.append("\n" + e.getMessage());
-                    }
+                    e.fillInStackTrace();
+                    errors.add(e);
                     ++errorCount;
                     pos = ruleEnd(rule, pos, limit) + 1; // +1 advances past ';'
                 }
@@ -1073,7 +1079,7 @@ class TransliteratorParser {
                      compoundFilterOffset != 1) ||
                     (direction == Transliterator.REVERSE &&
                      compoundFilterOffset != ruleCount)) {
-                    throw new IllegalArgumentException("Compound filters misplaced");
+                    throw new IllegalIcuArgumentException("Compound filters misplaced");
                 }
             }
 
@@ -1086,15 +1092,20 @@ class TransliteratorParser {
                 idBlockVector.remove(0);
 
         } catch (IllegalArgumentException e) {
-            if (errors == null) {
-                errors = new StringBuffer(e.getMessage());
-            } else {
-                errors.append("\n").append(e.getMessage());
-            }
+            e.fillInStackTrace();
+            errors.add(e);
         }
 
-        if (errors != null) {
-            throw new IllegalArgumentException(errors.toString());
+        if (errors.size() != 0) {
+            for (int i = errors.size()-1; i > 0; --i) {
+                RuntimeException previous = (RuntimeException) errors.get(i-1);
+                while (previous.getCause() != null) {
+                    previous = (RuntimeException) previous.getCause(); // chain specially
+                }
+                previous.initCause((RuntimeException) errors.get(i));
+            }
+            throw (RuntimeException) errors.get(0);
+            // if initCause not supported: throw new IllegalArgumentException(errors.toString());
         }
     }
 
@@ -1289,7 +1300,7 @@ class TransliteratorParser {
      */
     private void setVariableRange(int start, int end) {
         if (start > end || start < 0 || end > 0xFFFF) {
-            throw new IllegalArgumentException("Invalid variable range " + start + ", " + end);
+            throw new IllegalIcuArgumentException("Invalid variable range " + start + ", " + end);
         }
         
         curData.variablesBase = (char) start; // first private use
@@ -1321,7 +1332,7 @@ class TransliteratorParser {
      */
     private void pragmaMaximumBackup(int backup) {
         //TODO Finish
-        throw new IllegalArgumentException("use maximum backup pragma not implemented yet");
+        throw new IllegalIcuArgumentException("use maximum backup pragma not implemented yet");
     }
     ///CLOVER:ON
 
@@ -1335,7 +1346,7 @@ class TransliteratorParser {
      */
     private void pragmaNormalizeRules(Normalizer.Mode mode) {
         //TODO Finish
-        throw new IllegalArgumentException("use normalize rules pragma not implemented yet");
+        throw new IllegalIcuArgumentException("use normalize rules pragma not implemented yet");
     }
     ///CLOVER:ON
 
@@ -1410,7 +1421,7 @@ class TransliteratorParser {
      */
     static final void syntaxError(String msg, String rule, int start) {
         int end = ruleEnd(rule, start, rule.length());
-        throw new IllegalArgumentException(msg + " in \"" +
+        throw new IllegalIcuArgumentException(msg + " in \"" +
                                            Utility.escape(rule.substring(start, end)) + '"');
     }
 
@@ -1513,7 +1524,7 @@ class TransliteratorParser {
     /**
      * Append the value of the given variable name to the given
      * StringBuffer.
-     * @exception IllegalArgumentException if the name is unknown.
+     * @exception IllegalIcuArgumentException if the name is unknown.
      */
     private void appendVariableDef(String name, StringBuffer buf) {
         char[] ch = (char[]) variableNames.get(name);
@@ -1529,7 +1540,7 @@ class TransliteratorParser {
                 }
                 buf.append((char) --variableLimit);
             } else {
-                throw new IllegalArgumentException("Undefined variable $"
+                throw new IllegalIcuArgumentException("Undefined variable $"
                                                    + name);
             }
         } else {
