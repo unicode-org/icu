@@ -21,6 +21,12 @@ public class AnyScriptTest extends TestFmwk {
     public static void main(String[] args) throws Exception {
         new AnyScriptTest().run(args);
     }
+    
+    public void TestContext() {
+        Transliterator t = Transliterator.createFromRules("foo", "::[bc]; a{b}d > B;", Transliterator.FORWARD);
+        String sample = "abd abc b";
+        assertEquals("context works", "aBd abc b", t.transform(sample));
+    }
 
     public void TestScripts(){
         // get a couple of characters of each script for testing
