@@ -140,7 +140,7 @@ UnicodeString& RelativeDateFormat::format(  Calendar& cal,
     } else {
         if (dateString.length() == 0 && fDateFormat != NULL) {
             fDateFormat->format(cal,dateString,pos);
-    }
+        }
         UnicodeString timeString(&emptyStr);
         FieldPosition timepos = pos;
         fTimeFormat->format(cal,timeString,timepos);
@@ -260,20 +260,23 @@ RelativeDateFormat::toPattern(UnicodeString& result, UErrorCode& status) const
 {
     if (!U_FAILURE(status)) {
         result.remove();
-        UnicodeString datePattern, timePattern;
-        this->toPatternDate(datePattern, status);
-        this->toPatternTime(timePattern, status);
-        if ( datePattern.length() > 0 ) {
-            if ( timePattern.length() > 0 && fCombinedFormat) {
+        if (fTimeFormat == NULL || fCombinedFormat == 0) {
+            if (fDateFormat != NULL) {
+                UnicodeString datePattern;
+                this->toPatternDate(datePattern, status);
+                if (!U_FAILURE(status)) {
+                    result.setTo(datePattern);
+                }
+            }
+        } else {
+            UnicodeString datePattern, timePattern;
+            this->toPatternDate(datePattern, status);
+            this->toPatternTime(timePattern, status);
+            if (!U_FAILURE(status)) {
                 Formattable timeDatePatterns[] = { timePattern, datePattern };
                 FieldPosition pos;
                 fCombinedFormat->format(timeDatePatterns, 2, result, pos, status);
             }
-            if ( result.length() == 0 ) {
-                result.setTo(datePattern);
-            }
-        } else {
-            result.setTo(timePattern);
         }
     }
     return result;
@@ -284,8 +287,12 @@ RelativeDateFormat::toPatternDate(UnicodeString& result, UErrorCode& status) con
 {
     if (!U_FAILURE(status)) {
         result.remove();
-        if ( fDateFormat && fDateFormat->getDynamicClassID()==SimpleDateFormat::getStaticClassID() ) {
-            ((SimpleDateFormat*)fDateFormat)->toPattern(result);
+        if ( fDateFormat ) {
+            if ( fDateFormat->getDynamicClassID()==SimpleDateFormat::getStaticClassID() ) {
+                ((SimpleDateFormat*)fDateFormat)->toPattern(result);
+            } else {
+                status = U_UNSUPPORTED_ERROR;
+            }
         }
     }
     return result;
@@ -296,8 +303,12 @@ RelativeDateFormat::toPatternTime(UnicodeString& result, UErrorCode& status) con
 {
     if (!U_FAILURE(status)) {
         result.remove();
-        if ( fTimeFormat && fTimeFormat->getDynamicClassID()==SimpleDateFormat::getStaticClassID() ) {
-            ((SimpleDateFormat*)fTimeFormat)->toPattern(result);
+        if ( fTimeFormat ) {
+            if ( fTimeFormat->getDynamicClassID()==SimpleDateFormat::getStaticClassID() ) {
+                ((SimpleDateFormat*)fTimeFormat)->toPattern(result);
+            } else {
+                status = U_UNSUPPORTED_ERROR;
+            }
         }
     }
     return result;
@@ -307,10 +318,18 @@ void
 RelativeDateFormat::applyPatterns(const UnicodeString& datePattern, const UnicodeString& timePattern, UErrorCode &status)
 {
     if (!U_FAILURE(status)) {
-        if ( fDateFormat && fDateFormat->getDynamicClassID()==SimpleDateFormat::getStaticClassID() ) {
+        if ( fDateFormat && fDateFormat->getDynamicClassID()!=SimpleDateFormat::getStaticClassID() ) {
+            status = U_UNSUPPORTED_ERROR;
+            return;
+        }
+        if ( fTimeFormat && fTimeFormat->getDynamicClassID()!=SimpleDateFormat::getStaticClassID() ) {
+            status = U_UNSUPPORTED_ERROR;
+            return;
+        }
+        if ( fDateFormat ) {
             ((SimpleDateFormat*)fDateFormat)->applyPattern(datePattern);
         }
-        if ( fTimeFormat && fTimeFormat->getDynamicClassID()==SimpleDateFormat::getStaticClassID() ) {
+        if ( fTimeFormat ) {
             ((SimpleDateFormat*)fTimeFormat)->applyPattern(timePattern);
         }
     }
