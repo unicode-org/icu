@@ -28,9 +28,12 @@ public class TestAll extends TestGroup {
                 "RoundTripTest",
                 "TransliteratorTest",
                 "UnicodeSetTest",
-//#if defined(FOUNDATION10) || defined(J2SE13)
+//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14)
 //#else
                 "RegexUtilitiesTest",
+//#endif
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
                 "UnicodeMapTest",
 //#endif
         });
