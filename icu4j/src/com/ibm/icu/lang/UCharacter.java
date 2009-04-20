@@ -3411,10 +3411,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * A code point is considered to be an whitespace character if and only
      * if it satisfies one of the following criteria:
      * <ul>
-     * <li> It is a Unicode space separator (category "Zs"), but is not
-     *      a no-break space (&#92u00A0 or &#92u202F or &#92uFEFF).
-     * <li> It is a Unicode line separator (category "Zl").
-     * <li> It is a Unicode paragraph separator (category "Zp").
+     * <li> It is a Unicode space character (categories "Zs" or "Zl" or "Zp"), but is not
+     *      also a no-break space (&#92u00A0 or &#92u2007 or &#92u202F).
      * <li> It is &#92u0009, HORIZONTAL TABULATION. 
      * <li> It is &#92u000A, LINE FEED. 
      * <li> It is &#92u000B, VERTICAL TABULATION. 
@@ -3427,7 +3425,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * </ul>
      *
      * This API tries to synch to the semantics of the Java API,
-     * java.lang.Character.isWhitespace(). 
+     * java.lang.Character.isWhitespace(), but it may not return
+     * the exactly same results because of the Unicode version
+     * difference.
      * @param ch code point to determine if it is a white space
      * @return true if the specified code point is a white space character
      * @stable ICU 2.1
@@ -3440,8 +3440,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 ((1 << UCharacterCategory.SPACE_SEPARATOR)
                  | (1 << UCharacterCategory.LINE_SEPARATOR)
                  | (1 << UCharacterCategory.PARAGRAPH_SEPARATOR))) != 0 
-        && (ch != NO_BREAK_SPACE_) && (ch != NARROW_NO_BREAK_SPACE_) 
-        && (ch != ZERO_WIDTH_NO_BREAK_SPACE_)
+        && (ch != NO_BREAK_SPACE_) && (ch != FIGURE_SPACE_) && (ch != NARROW_NO_BREAK_SPACE_) 
         // TAB VT LF FF CR FS GS RS US NL are all control characters
         // that are white spaces.
         || (ch >= 0x9 && ch <= 0xd) || (ch >= 0x1c && ch <= 0x1f);
@@ -6241,52 +6240,52 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * No break space code point
      */
     private static final int NO_BREAK_SPACE_ = 0xA0;
-      
+
+    /**
+     * Figure space code point
+     */
+    private static final int FIGURE_SPACE_ = 0x2007;
+
     /**
      * Narrow no break space code point
      */
     private static final int NARROW_NO_BREAK_SPACE_ = 0x202F;
-      
-    /**
-     * Zero width no break space code point
-     */
-    private static final int ZERO_WIDTH_NO_BREAK_SPACE_ = 0xFEFF;
-      
+
     /**
      * Ideographic number zero code point
      */
     private static final int IDEOGRAPHIC_NUMBER_ZERO_ = 0x3007;
-            
+
     /**
      * CJK Ideograph, First code point
      */
     private static final int CJK_IDEOGRAPH_FIRST_ = 0x4e00;
-      
+
     /**
      * CJK Ideograph, Second code point
      */
     private static final int CJK_IDEOGRAPH_SECOND_ = 0x4e8c;
-            
+
     /**
      * CJK Ideograph, Third code point
      */
     private static final int CJK_IDEOGRAPH_THIRD_ = 0x4e09;
-      
+
     /**
      * CJK Ideograph, Fourth code point
      */
     private static final int CJK_IDEOGRAPH_FOURTH_ = 0x56d8;
-      
+
     /**
      * CJK Ideograph, FIFTH code point
      */
     private static final int CJK_IDEOGRAPH_FIFTH_ = 0x4e94;
-      
+
     /**
      * CJK Ideograph, Sixth code point
      */
     private static final int CJK_IDEOGRAPH_SIXTH_ = 0x516d;
-            
+
     /**
      * CJK Ideograph, Seventh code point
      */
