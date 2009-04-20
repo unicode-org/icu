@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -464,6 +464,19 @@ public class RuleBasedTransliterator extends Transliterator {
      */
     public UnicodeSet getTargetSet() {
         return data.ruleSet.getSourceTargetSet(true);
+    }
+
+    /**
+     * Temporary hack for registry problem. Needs to be replaced by better architecture.
+     * @internal
+     * @deprecated
+     */
+    public Transliterator safeClone() {
+        UnicodeFilter filter = getFilter();
+        if (filter != null && filter instanceof UnicodeSet) {
+            filter = new UnicodeSet((UnicodeSet)filter);
+        }
+        return new RuleBasedTransliterator(getID(), data, filter);
     }
 }
 

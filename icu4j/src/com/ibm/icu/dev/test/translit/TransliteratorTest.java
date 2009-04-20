@@ -69,6 +69,33 @@ public class TransliteratorTest extends TestFmwk {
     public static void main(String[] args) throws Exception {
         new TransliteratorTest().run(args);
     }
+    
+    public void TestRegistry() {
+        checkRegistry("foo3", "::[a-z]; ::NFC; [:letter:] a > b;"); // check compound
+        checkRegistry("foo2", "::NFC; [:letter:] a > b;"); // check compound
+        checkRegistry("foo1", "[:letter:] a > b;");
+        for (Enumeration e = Transliterator.getAvailableIDs(); e.hasMoreElements(); ) {
+            String id = (String) e.nextElement();
+            checkRegistry(id);
+        }
+    }
+
+    private void checkRegistry (String id, String rules) {
+        Transliterator foo = Transliterator.createFromRules(id, rules, Transliterator.FORWARD);
+        Transliterator.registerInstance(foo);
+        checkRegistry(id);
+    }
+
+    private void checkRegistry(String id) {
+        Transliterator fie = Transliterator.getInstance(id);
+        final UnicodeSet fae = new UnicodeSet("[a-z]");
+        fie.setFilter(fae);
+        Transliterator foe = Transliterator.getInstance(id);
+        UnicodeFilter fee = foe.getFilter();
+        if (fae.equals(fee)) {
+            errln("Changed what is in registry for " + id);
+        }
+    }
 
     public void TestInstantiation() {
         long ms = System.currentTimeMillis();
@@ -95,6 +122,10 @@ public class TransliteratorTest extends TestFmwk {
                 errln("FAIL: " + ID);
                 throw ex;
             }
+            
+//            if (t.getFilter() != null) {
+//                errln("Fail: Should never have filter on transliterator unless we started with one: " + ID + ", " + t.getFilter());
+//            }
 
             if (t != null) {
                 // Now test toRules
@@ -455,7 +486,7 @@ public class TransliteratorTest extends TestFmwk {
     }
     
     public void TestVariableNames() {
-        Transliterator gl = Transliterator.createFromRules("foo", "$\u2DC0 = qy; a>b;", Transliterator.FORWARD);
+        Transliterator gl = Transliterator.createFromRules("foo5", "$\u2DC0 = qy; a>b;", Transliterator.FORWARD);
         if (gl == null) {
             errln("FAIL: null Transliterator returned.");
         }

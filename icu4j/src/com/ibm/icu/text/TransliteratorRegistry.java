@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2005, International Business Machines
+*   Copyright (c) 2001-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -832,6 +832,15 @@ class TransliteratorRegistry {
                 return ((Transliterator.Factory) entry).getInstance(ID);
             } else if (entry instanceof CompoundRBTEntry) {
                 return ((CompoundRBTEntry) entry).getInstance();
+            } else if (entry instanceof AnyTransliterator) {
+                AnyTransliterator temp = (AnyTransliterator) entry;
+                return temp.safeClone();
+            } else if (entry instanceof RuleBasedTransliterator) {
+                RuleBasedTransliterator temp = (RuleBasedTransliterator) entry;
+                return temp.safeClone();
+            } else if (entry instanceof CompoundTransliterator) {
+                CompoundTransliterator temp = (CompoundTransliterator) entry;
+                return temp.safeClone();
             } else if (entry instanceof Transliterator) {
                 return (Transliterator) entry;
             }

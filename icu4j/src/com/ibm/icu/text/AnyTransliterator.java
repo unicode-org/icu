@@ -142,6 +142,22 @@ class AnyTransliterator extends Transliterator {
     }
 
     /**
+     * @param id
+     * @param filter
+     * @param target2
+     * @param targetScript2
+     * @param widthFix2
+     * @param cache2
+     */
+    public AnyTransliterator(String id, UnicodeFilter filter, String target2,
+            int targetScript2, Transliterator widthFix2, Map cache2) {
+        super(id, filter);
+        targetScript = targetScript2;
+        cache = cache2;
+        target = target2;
+    }
+
+    /**
      * Returns a transliterator from the given source to our target or
      * target/variant.  Returns NULL if the source is the same as our
      * target script, or if the source is USCRIPT_INVALID_CODE.
@@ -367,6 +383,19 @@ class AnyTransliterator extends Transliterator {
             limit += delta;
             textLimit += delta;
         }
+    }
+
+    /**
+     * Temporary hack for registry problem. Needs to be replaced by better architecture.
+     * @internal
+     * @deprecated
+     */
+    public Transliterator safeClone() {
+        UnicodeFilter filter = getFilter();
+        if (filter != null && filter instanceof UnicodeSet) {
+            filter = new UnicodeSet((UnicodeSet)filter);
+        }
+        return new AnyTransliterator(getID(), filter, target, targetScript, widthFix, cache);
     }
 }
 

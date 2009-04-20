@@ -74,8 +74,8 @@ public class AnyScriptTest extends TestFmwk {
         
         String wideLettersAndSpace = widen.transform(lettersAndSpace);
         String widePunctOnly = widen.transform(punctOnly);
-        assertTrue("Should be wide", ASCII.containsNone(wideLettersAndSpace));
-        assertTrue("Should be wide", ASCII.containsNone(widePunctOnly));
+        assertContainsNone("Should be wide", ASCII, wideLettersAndSpace);
+        assertContainsNone("Should be wide", ASCII, widePunctOnly);
         
         String back;
         back = narrow.transform(wideLettersAndSpace);
@@ -116,12 +116,12 @@ public class AnyScriptTest extends TestFmwk {
 
     // might want to add to TestFmwk
     private void assertContainsAll(String message, UnicodeSet set, String string) {
-        handleAssert(set.containsAll(string), message, set, string, "contains", false);
+        handleAssert(set.containsAll(string), message, set, string, "contains all of", false);
     }
 
-//    private void assertContainsNone(String message, UnicodeSet set, String string) {
-//        handleAssert(set.containsAll(string), message, set, string, "contains none of", false);
-//    }
+    private void assertContainsNone(String message, UnicodeSet set, String string) {
+        handleAssert(set.containsNone(string), message, set, string, "contains none of", false);
+    }
 
     // might want to add to UnicodeSet
     private String getList(UnicodeSet set) {

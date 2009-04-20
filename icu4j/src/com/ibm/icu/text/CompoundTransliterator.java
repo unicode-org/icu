@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -117,6 +117,19 @@ class CompoundTransliterator extends Transliterator {
     }
 
     /**
+     * Internal method for safeClone...
+     * @param id
+     * @param filter2 
+     * @param trans2
+     * @param numAnonymousRBTs2
+     */
+    CompoundTransliterator(String id, UnicodeFilter filter2, Transliterator[] trans2, int numAnonymousRBTs2) {
+        super(id, filter2);
+        trans = trans2;
+        numAnonymousRBTs = numAnonymousRBTs;
+    }
+    
+    /**
      * Finish constructing a transliterator: only to be called by
      * constructors.  Before calling init(), set trans and filter to NULL.
      * @param id the id containing ';'-separated entries
@@ -152,6 +165,7 @@ class CompoundTransliterator extends Transliterator {
             setFilter(compoundFilter[0]);
         }
     }*/
+
 
     /**
      * Finish constructing a transliterator: only to be called by
@@ -508,5 +522,18 @@ class CompoundTransliterator extends Transliterator {
             }
         }
         setMaximumContextLength(max);
+    }
+
+    /**
+     * Temporary hack for registry problem. Needs to be replaced by better architecture.
+     * @internal
+     * @deprecated
+     */
+    public Transliterator safeClone() {
+        UnicodeFilter filter = getFilter();
+        if (filter != null && filter instanceof UnicodeSet) {
+            filter = new UnicodeSet((UnicodeSet)filter);
+        }
+        return new CompoundTransliterator(getID(), filter, trans, numAnonymousRBTs);
     }
 }
