@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and    *
+* Copyright (C) 1996-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -139,10 +139,10 @@ public final class UCharacterTest extends TestFmwk
     */
     public void TestSpaces()
     {
-        int spaces[] = {0x0020, 0x0000a0, 0x002000, 0x002001, 0x002005};
-        int nonspaces[] = {0x61, 0x0062, 0x0063, 0x0064, 0x0074};
-        int whitespaces[] = {0x2008, 0x002009, 0x00200a, 0x00001c, 0x00000c};
-        int nonwhitespaces[] = {0x61, 0x0062, 0x003c, 0x0028, 0x003f};
+        int spaces[] = {0x0020, 0x00a0, 0x2000, 0x2001, 0x2005};
+        int nonspaces[] = {0x0061, 0x0062, 0x0063, 0x0064, 0x0074};
+        int whitespaces[] = {0x2008, 0x2009, 0x200a, 0x001c, 0x000c /* ,0x200b */}; // 0x200b was "Zs" in Unicode 4.0, but it is "Cf" in Unicode 4.1
+        int nonwhitespaces[] = {0x0061, 0x0062, 0x003c, 0x0028, 0x003f, 0x00a0, 0x2007, 0x202f, 0xfefe, 0x200b};
 
         int size = spaces.length;
         for (int i = 0; i < size; i ++)
