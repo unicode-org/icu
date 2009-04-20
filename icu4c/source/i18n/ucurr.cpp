@@ -303,11 +303,21 @@ struct CReg : public U_NAMESPACE_QUALIFIER UMemory {
 /**
  * Release all static memory held by currency.
  */
+/*The declaration here is needed so currency_cleanup(void)
+ * can call this function.
+ */
+static UBool U_CALLCONV
+currency_cache_cleanup(void);
+
 U_CDECL_BEGIN
 static UBool U_CALLCONV currency_cleanup(void) {
 #if !UCONFIG_NO_SERVICE
     CReg::cleanup();
 #endif
+    /*
+     * There might be some cached currency data.
+     */
+    currency_cache_cleanup();
     return TRUE;
 }
 U_CDECL_END
