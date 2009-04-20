@@ -85,7 +85,7 @@ import com.ibm.icu.text.SimpleDateFormat;
  * </blockquote>
  *
  * <p>This property is included in ICUConfig.properties in com.ibm.icu package.
- * When <code>TimeZone</code> class is loaded, the intialization code checks
+ * When <code>TimeZone</code> class is loaded, the initialization code checks
  * if the property <code>com.ibm.icu.util.TimeZone.DefaultTimeZoneType=xxx</code>
  * is defined by the system properties.  If not available, then it loads ICUConfig.properties
  * to get the default time zone implementation type.  The property setting is
@@ -508,10 +508,9 @@ abstract public class TimeZone implements Serializable, Cloneable {
     /**
      * Gets the <code>TimeZone</code> for the given ID.
      *
-     * @param ID the ID for a <code>TimeZone</code>, either an abbreviation
-     * such as "PST", a full name such as "America/Los_Angeles", or a custom
-     * ID such as "GMT-8:00". Note that the support of abbreviations is
-     * for JDK 1.1.x compatibility only and full names should be used.
+     * @param ID the ID for a <code>TimeZone</code>, such as "America/Los_Angeles",
+     * or a custom ID such as "GMT-8:00". Note that the support of abbreviations,
+     * such as "PST", is for JDK 1.1.x compatibility only and full names should be used.
      *
      * @return the specified <code>TimeZone</code>, or the GMT zone if the given ID
      * cannot be understood.
@@ -523,11 +522,10 @@ abstract public class TimeZone implements Serializable, Cloneable {
 
     /**
      * Gets the <code>TimeZone</code> for the given ID and the timezone type.
-     * @param ID the ID for a <code>TimeZone</code>, either an abbreviation
-     * such as "PST", a full name such as "America/Los_Angeles", or a custom
-     * ID such as "GMT-8:00". Note that the support of abbreviations is
-     * for JDK 1.1.x compatibility only and full names should be used.
-     * @param type Timezone type, either <code>TIMEZONE_ICU</code> or <code>TIMEZONE_JDK</code>.
+     * @param ID the ID for a <code>TimeZone</code>, such as "America/Los_Angeles",
+     * or a custom ID such as "GMT-8:00". Note that the support of abbreviations,
+     * such as "PST", is for JDK 1.1.x compatibility only and full names should be used.
+     * @param type Time zone type, either <code>TIMEZONE_ICU</code> or <code>TIMEZONE_JDK</code>.
      * @return the specified <code>TimeZone</code>, or the GMT zone if the given ID
      * cannot be understood.
      * @stable ICU 4.0
@@ -561,8 +559,8 @@ abstract public class TimeZone implements Serializable, Cloneable {
     }
 
     /**
-     * Sets the default timezone type used by <code>getTimeZone</code>.
-     * @param type Timezone type, either <code>TIMEZONE_ICU</code> or <code>TIMEZONE_JDK</code>.
+     * Sets the default time zone type used by <code>getTimeZone</code>.
+     * @param type time zone type, either <code>TIMEZONE_ICU</code> or <code>TIMEZONE_JDK</code>.
      * @stable ICU 4.0
      */
     public static synchronized void setDefaultTimeZoneType(int type) {
@@ -573,8 +571,8 @@ abstract public class TimeZone implements Serializable, Cloneable {
     }
 
     /**
-     * Returns the default timezone type currently used.
-     * @return The default timezone type, either <code>TIMEZONE_ICU</code> or <code>TIMEZONE_JDK</code>.
+     * Returns the default time zone type currently used.
+     * @return The default time zone type, either <code>TIMEZONE_ICU</code> or <code>TIMEZONE_JDK</code>.
      * @stable ICU 4.0
      */
     public static int getDefaultTimeZoneType() {
@@ -777,10 +775,10 @@ abstract public class TimeZone implements Serializable, Cloneable {
     }
 
     /**
-     * Returns the timezone data version currently used by ICU.
+     * Returns the time zone data version currently used by ICU.
      * 
      * @return the version string, such as "2007f"
-     * @throws MissingResourceException if ICU timezone resource bundle
+     * @throws MissingResourceException if ICU time zone resource bundle
      * is missing or the version information is not available.
      * 
      * @stable ICU 3.8
@@ -795,12 +793,12 @@ abstract public class TimeZone implements Serializable, Cloneable {
     }
 
     /**
-     * Returns the canonical system timezone ID or the normalized
+     * Returns the canonical system time zone ID or the normalized
      * custom time zone ID for the given time zone ID.
-     * @param id The input timezone ID to be canonicalized.
-     * @return The canonical system timezone ID or the custom timezone ID
-     * in normalized format for the given timezone ID.  When the given timezone ID
-     * is neither a known system time zone ID nor a valid custom timezone ID,
+     * @param id The input time zone ID to be canonicalized.
+     * @return The canonical system time zone ID or the custom time zone ID
+     * in normalized format for the given time zone ID.  When the given time zone ID
+     * is neither a known system time zone ID nor a valid custom time zone ID,
      * null is returned.
      * @stable ICU 4.0
      */
@@ -809,14 +807,14 @@ abstract public class TimeZone implements Serializable, Cloneable {
     }
 
     /**
-     * Returns the canonical system timezone ID or the normalized
+     * Returns the canonical system time zone ID or the normalized
      * custom time zone ID for the given time zone ID.
-     * @param id The input timezone ID to be canonicalized.
+     * @param id The input time zone ID to be canonicalized.
      * @param isSystemID When non-null boolean array is specified and
-     * the given ID is a known system timezone ID, true is set to <code>isSystemID[0]</code>
-     * @return The canonical system timezone ID or the custom timezone ID
-     * in normalized format for the given timezone ID.  When the given timezone ID
-     * is neither a known system time zone ID nor a valid custom timezone ID,
+     * the given ID is a known system time zone ID, true is set to <code>isSystemID[0]</code>
+     * @return The canonical system time zone ID or the custom time zone ID
+     * in normalized format for the given time zone ID.  When the given time zone ID
+     * is neither a known system time zone ID nor a valid custom time zone ID,
      * null is returned.
      * @stable ICU 4.0
      */
