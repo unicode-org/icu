@@ -1423,6 +1423,7 @@ ucnv_MBCSLoad(UConverterSharedData *sharedData,
              * The worst that can happen in the following code is a memory
              * allocation error.
              */
+            ucnv_unload(baseSharedData);
             return;
         }
 
