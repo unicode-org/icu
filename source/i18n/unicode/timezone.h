@@ -57,12 +57,12 @@ class StringEnumeration;
  *
  * <p>
  * You can also get a <code>TimeZone</code> using <code>createTimeZone</code> along
- * with a time zone ID. For instance, the time zone ID for the Pacific
- * Standard Time zone is "PST". So, you can get a PST <code>TimeZone</code> object
+ * with a time zone ID. For instance, the time zone ID for the US Pacific
+ * Time zone is "America/Los_Angeles". So, you can get a Pacific Time <code>TimeZone</code> object
  * with:
  * \htmlonly<blockquote>\endhtmlonly
  * <pre>
- * TimeZone *tz = TimeZone::createTimeZone("PST");
+ * TimeZone *tz = TimeZone::createTimeZone("America/Los_Angeles");
  * </pre>
  * \htmlonly</blockquote>\endhtmlonly
  * You can use <code>getAvailableIDs</code> method to iterate through
@@ -103,10 +103,10 @@ class StringEnumeration;
  * The TimeZone class contains a static list containing a TimeZone object for every
  * combination of GMT offset and daylight-savings time rules currently in use in the
  * world, each with a unique ID.  Each ID consists of a region (usually a continent or
- * ocean) and a city in that region, separated by a slash, (for example, Pacific
- * Standard Time is "America/Los_Angeles.")  Because older versions of this class used
+ * ocean) and a city in that region, separated by a slash, (for example, US Pacific
+ * Time is "America/Los_Angeles.")  Because older versions of this class used
  * three- or four-letter abbreviations instead, there is also a table that maps the older
- * abbreviations to the newer ones (for example, "PST" maps to "America/LosAngeles").
+ * abbreviations to the newer ones (for example, "PST" maps to "America/Los_Angeles").
  * Anywhere the API requires an ID, you can use either form.
  * <P>
  * To create a new TimeZone, you call the factory function TimeZone::createTimeZone()
@@ -136,9 +136,8 @@ public:
 
     /**
      * Creates a <code>TimeZone</code> for the given ID.
-     * @param ID the ID for a <code>TimeZone</code>, either an abbreviation such as
-     * "PST", a full name such as "America/Los_Angeles", or a custom ID
-     * such as "GMT-8:00".
+     * @param ID the ID for a <code>TimeZone</code>, such as "America/Los_Angeles",
+     * or a custom ID such as "GMT-8:00".
      * @return the specified <code>TimeZone</code>, or the GMT zone if the given ID
      * cannot be understood.  Return result guaranteed to be non-null.  If you
      * require that the specific zone asked for be returned, check the ID of the
@@ -207,7 +206,7 @@ public:
      * @param numIDs     Receives the number of items in the array that is returned.
      * @return           An array of UnicodeString pointers, where each UnicodeString is
      *                   a time zone ID for a time zone with the given GMT offset.  If
-     *                   there is no timezone that matches the GMT offset
+     *                   there is no time zone that matches the GMT offset
      *                   specified, NULL is returned.
      * @obsolete ICU 2.8.  Use createEnumeration(int32_t) instead since this API will be removed in that release.
      */
@@ -230,7 +229,7 @@ public:
      * returned.
      * @return An array of UnicodeString pointers, where each
      * UnicodeString is a time zone ID for a time zone with the given
-     * country.  If there is no timezone that matches the country
+     * country.  If there is no time zone that matches the country
      * specified, NULL is returned.
      * @obsolete ICU 2.8.  Use createEnumeration(const char*) instead since this API will be removed in that release.
      */
@@ -336,12 +335,12 @@ public:
     /**
      * Returns the canonical system timezone ID or the normalized
      * custom time zone ID for the given time zone ID.
-     * @param id            The input timezone ID to be canonicalized.
-     * @param canonicalID   Receives the canonical system timezone ID
-     *                      or the custom timezone ID in normalized format.
-     * @param status        Recevies the status.  When the given timezone ID
+     * @param id            The input time zone ID to be canonicalized.
+     * @param canonicalID   Receives the canonical system time zone ID
+     *                      or the custom time zone ID in normalized format.
+     * @param status        Recevies the status.  When the given time zone ID
      *                      is neither a known system time zone ID nor a
-     *                      valid custom timezone ID, U_ILLEGAL_ARGUMENT_ERROR
+     *                      valid custom time zone ID, U_ILLEGAL_ARGUMENT_ERROR
      *                      is set.
      * @return A reference to the result.
      * @stable ICU 4.0
@@ -350,16 +349,16 @@ public:
         UnicodeString& canonicalID, UErrorCode& status);
 
     /**
-     * Returns the canonical system timezone ID or the normalized
+     * Returns the canonical system time zone ID or the normalized
      * custom time zone ID for the given time zone ID.
-     * @param id            The input timezone ID to be canonicalized.
-     * @param canonicalID   Receives the canonical system timezone ID
-     *                      or the custom timezone ID in normalized format.
+     * @param id            The input time zone ID to be canonicalized.
+     * @param canonicalID   Receives the canonical system time zone ID
+     *                      or the custom time zone ID in normalized format.
      * @param isSystemID    Receives if the given ID is a known system
-     *                      timezone ID.
-     * @param status        Recevies the status.  When the given timezone ID
+     *                      time zone ID.
+     * @param status        Recevies the status.  When the given time zone ID
      *                      is neither a known system time zone ID nor a
-     *                      valid custom timezone ID, U_ILLEGAL_ARGUMENT_ERROR
+     *                      valid custom time zone ID, U_ILLEGAL_ARGUMENT_ERROR
      *                      is set.
      * @return A reference to the result.
      * @stable ICU 4.0
@@ -503,7 +502,7 @@ public:
      * the time zone's GMT offset and daylight-savings rules don't change to those for
      * Los Angeles.  They're still those for New York.  Only the ID has changed.)
      *
-     * @param ID  The new timezone ID.
+     * @param ID  The new time zone ID.
      * @stable ICU 2.0
      */
     void setID(const UnicodeString& ID);
@@ -672,7 +671,7 @@ protected:
     TimeZone();
 
     /**
-     * Construct a timezone with a given ID.
+     * Construct a TimeZone with a given ID.
      * @param id a system time zone ID
      * @stable ICU 2.0
      */
@@ -747,7 +746,7 @@ private:
         UErrorCode& status);
 
     /**
-     * Returns the normalized custome timezone ID for the given offset fields.
+     * Returns the normalized custome time zone ID for the given offset fields.
      * @param hour offset hours
      * @param min offset minutes
      * @param sec offset seconds
@@ -771,7 +770,7 @@ private:
      * instantiate a new zone of that name and return it.  If not
      * found, return 0.
      * @param name tthe given name of a system time zone.
-     * @return the timezone indicated by the 'name'.
+     * @return the TimeZone indicated by the 'name'.
      */
     static TimeZone*        createSystemTimeZone(const UnicodeString& name);
 
