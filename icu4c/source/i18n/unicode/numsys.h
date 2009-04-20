@@ -32,7 +32,18 @@
 U_NAMESPACE_BEGIN
 
 /**
- * Defines numbering systems. Put more description here.
+ * Defines numbering systems. A numbering system describes the scheme by which 
+ * numbers are to be presented to the end user.  In its simplest form, a numbering
+ * system describes the set of digit characters that are to be used to display
+ * numbers, such as Western digits, Thai digits, Arabic-Indic digits, etc. 
+ * More complicated numbering systems are algorithmic in nature, and require use
+ * of an RBNF formatter ( rule based number formatter ), in order to calculate
+ * the characters to be displayed for a given number.  Examples of algorithmic
+ * numbering systems include Roman numerals, Chinese numerals, and Hebrew numerals.
+ * Formatting rules for many commonly used numbering systems are included in
+ * the ICU package, based on the numbering system rules defined in CLDR.
+ * Alternate numbering systems can be specified to a locale by using the
+ * numbers locale keyword.
  */
 
 class U_I18N_API NumberingSystem : public UObject {
