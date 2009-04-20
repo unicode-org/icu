@@ -5,7 +5,7 @@
 **********************************************************************
 */
 /**
- * IntlTestSpoof is the medium level test class for USpoofDetector
+ * IntlTestSpoof tests for USpoofDetector
  */
 
 #include "unicode/utypes.h"
@@ -58,15 +58,20 @@ void IntlTestSpoof::runIndexedTest( int32_t index, UBool exec, const char* &name
         case 0:
             name = "TestSpoofAPI"; 
             if (exec) {
-                TestSpoofAPI();
+                testSpoofAPI();
             }
             break;
-
+         case 1:
+            name = "TestSkeleton"; 
+            if (exec) {
+                testSkeleton();
+            }
+            break;
         default: name=""; break;
     }
 }
 
-void IntlTestSpoof::TestSpoofAPI() {
+void IntlTestSpoof::testSpoofAPI() {
 
     TEST_SETUP
         UnicodeString s("uvw");
@@ -95,5 +100,47 @@ void IntlTestSpoof::TestSpoofAPI() {
     TEST_TEARDOWN;
 }
 
+
+#define CHECK_SKELETON(type, input, expected) { \
+    checkSkeleton(sc, type, input, expected, __LINE__); \
+    }
+
+
+// testSkeleton.   Spot check a number of confusable skeleton substitutions from the 
+//                 Unicode data file confusables.txt
+void IntlTestSpoof::testSkeleton() {
+    TEST_SETUP
+        CHECK_SKELETON(0, "\\u059c", "\\u0301");
+//      CHECK_SKELETON(0, "\\uFC5F", "\\uFE74\\u0651");
+        CHECK_SKELETON(0, "\\u2A74", "\\u003A\\u003A\\u003D");
+        CHECK_SKELETON(0, "\\u247E", "\\u0028\\u0031\\u0031\\u0029");
+        CHECK_SKELETON(0, "\\uFDFB", "\\u062C\\u0644\\u0020\\u062C\\u0644\\u0627\\u0644\\u0647");
+    TEST_TEARDOWN;
+}
+
+
+//
+//  Run a single confusable skeleton transformation test case.
+//
+void IntlTestSpoof::checkSkeleton(const USpoofChecker *sc, uint32_t type, 
+                                  const char *input, const char *expected, int32_t lineNum) {
+    UnicodeString uInput = UnicodeString(input).unescape();
+    UnicodeString uExpected = UnicodeString(expected).unescape();
+    
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString actual;
+    uspoof_getSkeletonUnicodeString(sc, type, uInput, actual, &status);
+    if (U_FAILURE(status)) {
+        errln("File %s, Line %d, Test case from line %d, status is %s", __FILE__, __LINE__, lineNum,
+              u_errorName(status));
+        return;
+    }
+    if (uExpected != actual) {
+        errln("File %s, Line %d, Test case from line %d, Actual and Expected skeletons differ.",
+               __FILE__, __LINE__, lineNum);
+        errln(UnicodeString(" Actual   Skeleton: \"") + actual + UnicodeString("\""));
+        errln(UnicodeString(" Expected Skeleton: \"") + uExpected + UnicodeString("\""));
+    }
+}
 
 #endif /* #if !UCONFIG_NO_SPOOF_DETECT*/
