@@ -8,11 +8,11 @@
 #include "unicode/utypes.h"
 #include "unicode/ures.h"
 #include "unicode/putil.h"
+#include "unicode/uloc.h"
 #include "ustr_imp.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "putilimp.h"
-#include "ultag.h"
 
 /* struct holding a single variant */
 typedef struct VariantListEntry {
@@ -28,7 +28,7 @@ typedef struct ExtensionListEntry {
 } ExtensionListEntry;
 
 #define MAXEXTLANG 3
-struct ULanguageTag {
+typedef struct ULanguageTag {
     char                *buf;   /* holding parsed subtags */
     const char          *language;
     const char          *extlang[MAXEXTLANG];
@@ -38,7 +38,7 @@ struct ULanguageTag {
     ExtensionListEntry  *extensions;
     const char          *privateuse;
     const char          *grandfathered;
-};
+} ULanguageTag;
 
 #define MINLEN 2
 #define SEP '-'
@@ -97,6 +97,59 @@ static const char* DEPRECATEDLANGS[] = {
     "in",       "id",
     NULL,       NULL
 };
+
+/*
+* -------------------------------------------------
+*
+* These ultag_ functions may be exposed as APIs later
+*
+* -------------------------------------------------
+*/
+
+static ULanguageTag*
+ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* status);
+
+static void
+ultag_close(ULanguageTag* langtag);
+
+static const char*
+ultag_getLanguage(const ULanguageTag* langtag);
+
+static const char*
+ultag_getJDKLanguage(const ULanguageTag* langtag);
+
+static const char*
+ultag_getExtlang(const ULanguageTag* langtag, int32_t idx);
+
+static int32_t
+ultag_getExtlangSize(const ULanguageTag* langtag);
+
+static const char*
+ultag_getScript(const ULanguageTag* langtag);
+
+static const char*
+ultag_getRegion(const ULanguageTag* langtag);
+
+static const char*
+ultag_getVariant(const ULanguageTag* langtag, int32_t idx);
+
+static int32_t
+ultag_getVariantsSize(const ULanguageTag* langtag);
+
+static const char*
+ultag_getExtensionKey(const ULanguageTag* langtag, int32_t idx);
+
+static const char*
+ultag_getExtensionValue(const ULanguageTag* langtag, int32_t idx);
+
+static int32_t
+ultag_getExtensionsSize(const ULanguageTag* langtag);
+
+static const char*
+ultag_getPrivateUse(const ULanguageTag* langtag);
+
+static const char*
+ultag_getGrandfathered(const ULanguageTag* langtag);
 
 /*
 * -------------------------------------------------
@@ -1497,7 +1550,7 @@ _appendKeywords(ULanguageTag* langtag, char* appendAt, int32_t capacity, UErrorC
 /*
 * -------------------------------------------------
 *
-* ultag_ APIs
+* ultag_ functions
 *
 * -------------------------------------------------
 */
@@ -1512,7 +1565,7 @@ _appendKeywords(ULanguageTag* langtag, char* appendAt, int32_t capacity, UErrorC
 #define EXTV 0x0040
 #define PRIV 0x0080
 
-U_CFUNC ULanguageTag*
+static ULanguageTag*
 ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* status) {
     ULanguageTag *t;
     char *tagBuf;
@@ -1874,7 +1927,7 @@ error:
     return NULL;
 }
 
-U_CFUNC void
+static void
 ultag_close(ULanguageTag* langtag) {
 
     if (langtag == NULL) {
@@ -1904,12 +1957,12 @@ ultag_close(ULanguageTag* langtag) {
     uprv_free(langtag);
 }
 
-U_CFUNC const char*
+static const char*
 ultag_getLanguage(const ULanguageTag* langtag) {
     return langtag->language;
 }
 
-U_CFUNC const char*
+static const char*
 ultag_getJDKLanguage(const ULanguageTag* langtag) {
     int32_t i;
     for (i = 0; DEPRECATEDLANGS[i] != NULL; i += 2) {
@@ -1920,7 +1973,7 @@ ultag_getJDKLanguage(const ULanguageTag* langtag) {
     return langtag->language;
 }
 
-U_CFUNC const char*
+static const char*
 ultag_getExtlang(const ULanguageTag* langtag, int32_t idx) {
     if (idx >= 0 && idx < MAXEXTLANG) {
         return langtag->extlang[idx];
@@ -1928,7 +1981,7 @@ ultag_getExtlang(const ULanguageTag* langtag, int32_t idx) {
     return NULL;
 }
 
-U_CFUNC int32_t
+static int32_t
 ultag_getExtlangSize(const ULanguageTag* langtag) {
     int32_t size = 0;
     int32_t i;
@@ -1940,17 +1993,17 @@ ultag_getExtlangSize(const ULanguageTag* langtag) {
     return size;
 }
 
-U_CFUNC const char*
+static const char*
 ultag_getScript(const ULanguageTag* langtag) {
     return langtag->script;
 }
 
-U_CFUNC const char*
+static const char*
 ultag_getRegion(const ULanguageTag* langtag) {
     return langtag->region;
 }
 
-U_CFUNC const char*
+static const char*
 ultag_getVariant(const ULanguageTag* langtag, int32_t idx) {
     const char *var = NULL;
     VariantListEntry *cur = langtag->variants;
@@ -1966,7 +2019,7 @@ ultag_getVariant(const ULanguageTag* langtag, int32_t idx) {
     return var;
 }
 
-U_CFUNC int32_t
+static int32_t
 ultag_getVariantsSize(const ULanguageTag* langtag) {
     int32_t size = 0;
     VariantListEntry *cur = langtag->variants;
@@ -1980,7 +2033,7 @@ ultag_getVariantsSize(const ULanguageTag* langtag) {
     return size;
 }
 
-U_CFUNC const char*
+static const char*
 ultag_getExtensionKey(const ULanguageTag* langtag, int32_t idx) {
     const char *key = NULL;
     ExtensionListEntry *cur = langtag->extensions;
@@ -1996,7 +2049,7 @@ ultag_getExtensionKey(const ULanguageTag* langtag, int32_t idx) {
     return key;
 }
 
-U_CFUNC const char*
+static const char*
 ultag_getExtensionValue(const ULanguageTag* langtag, int32_t idx) {
     const char *val = NULL;
     ExtensionListEntry *cur = langtag->extensions;
@@ -2012,7 +2065,7 @@ ultag_getExtensionValue(const ULanguageTag* langtag, int32_t idx) {
     return val;
 }
 
-U_CFUNC int32_t
+static int32_t
 ultag_getExtensionsSize(const ULanguageTag* langtag) {
     int32_t size = 0;
     ExtensionListEntry *cur = langtag->extensions;
@@ -2026,22 +2079,30 @@ ultag_getExtensionsSize(const ULanguageTag* langtag) {
     return size;
 }
 
-U_CFUNC const char*
+static const char*
 ultag_getPrivateUse(const ULanguageTag* langtag) {
     return langtag->privateuse;
 }
 
-U_CFUNC const char*
+static const char*
 ultag_getGrandfathered(const ULanguageTag* langtag) {
     return langtag->grandfathered;
 }
 
-U_CFUNC int32_t
-ultag_localeToLanguageTag(const char* localeID,
-                          char* langtag,
-                          int32_t langtagCapacity,
-                          UBool strict,
-                          UErrorCode* status) {
+
+/*
+* -------------------------------------------------
+*
+* Locale/BCP47 conversion APIs, exposed as uloc_*
+*
+* -------------------------------------------------
+*/
+U_DRAFT int32_t U_EXPORT2
+uloc_toLanguageTag(const char* localeID,
+                   char* langtag,
+                   int32_t langtagCapacity,
+                   UBool strict,
+                   UErrorCode* status) {
     /* char canonical[ULOC_FULLNAME_CAPACITY]; */ /* See #6822 */
     char canonical[256];
     int32_t reslen = 0;
@@ -2066,12 +2127,13 @@ ultag_localeToLanguageTag(const char* localeID,
     return reslen;
 }
 
-U_CFUNC int32_t
-ultag_languageTagToLocale(const char* langtag,
-                          char* localeID,
-                          int32_t localeIDCapacity,
-                          int32_t* parsedLength,
-                          UErrorCode* status) {
+
+U_DRAFT int32_t U_EXPORT2
+uloc_forLanguageTag(const char* langtag,
+                    char* localeID,
+                    int32_t localeIDCapacity,
+                    int32_t* parsedLength,
+                    UErrorCode* status) {
     ULanguageTag *lt;
     int32_t reslen = 0;
     const char *subtag, *p;
