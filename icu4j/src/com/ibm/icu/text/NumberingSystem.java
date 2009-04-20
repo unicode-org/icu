@@ -26,15 +26,35 @@ import com.ibm.icu.text.UCharacterIterator;
  * as Hebrew numbering or Chinese numbering.
  *
  * @author       John Emmons
+ * @draft ICU 4.2
  */
 class NumberingSystem {
 
+    /**
+     * Default constructor.  Returns a numbering system that uses the Western decimal
+     * digits 0 through 9.
+     * @draft ICU 4.2
+     */
     public NumberingSystem() {
         radix = 10;
         algorithmic = false;
         desc = "0123456789";
     }
 
+    /**
+     * Factory method for creating a numbering system.
+     * @param radix_in The radix for this numbering system.  ICU currently 
+     * supports only numbering systems whose radix is 10.
+     * @param isAlgorithmic_in Specifies whether the numbering system is algorithmic
+     * (true) or numeric (false).
+     * @param desc_in String used to describe the characteristics of the numbering
+     * system.  For numeric systems, this string contains the digits used by the
+     * numbering system, in order, starting from zero.  For algorithmic numbering
+     * systems, the string contains the name of the RBNF ruleset in the locale's
+     * NumberingSystemRules section that will be used to format numbers using
+     * this numbering system.
+     * @draft ICU 4.2
+     */
     public static NumberingSystem getInstance(int radix_in, boolean isAlgorithmic_in, String desc_in ) {
         if ( radix_in < 2 ) {
             throw new IllegalArgumentException("Invalid radix for numbering system");
@@ -52,10 +72,18 @@ class NumberingSystem {
         return ns;
     }
 
+    /**
+     * Returns the default numbering system for the specified locale.
+     * @draft ICU 4.2
+     */
     public static NumberingSystem getInstance(Locale inLocale) {
         return getInstance(ULocale.forLocale(inLocale));
     }
 
+    /**
+     * Returns the default numbering system for the specified ULocale.
+     * @draft ICU 4.2
+     */
     public static NumberingSystem getInstance(ULocale locale) {
 
         String numbersKeyword = locale.getKeywordValue("numbers");
@@ -83,10 +111,24 @@ class NumberingSystem {
         return new NumberingSystem();
     }
 
+    /**
+     * Returns the default numbering system for the default locale.
+     * @draft ICU 4.2
+     */
     public static NumberingSystem getInstance() {
         return getInstance(ULocale.getDefault());
     }
 
+    /**
+     * Returns a numbering system from one of the predefined numbering systems
+     * known to ICU.  Numbering system names are based on the numbering systems
+     * defined in CLDR.  To get a list of available numbering systems, use the
+     * getAvailableNames method.
+     * @param name The name of the desired numbering system.  Numbering system
+     * names often correspond with the name of the script they are associated
+     * with.  For example, "thai" for Thai digits, "hebr" for Hebrew numerals.
+     * @draft ICU 4.2
+     */
     public static NumberingSystem getInstanceByName(String name) {
         int radix;
         boolean isAlgorithmic;
@@ -111,6 +153,11 @@ class NumberingSystem {
         return getInstance(radix,isAlgorithmic,description); 
     }
 
+    /**
+     * Returns a string array containing a list of the names of numbering systems
+     * currently known to ICU.
+     * @draft ICU 4.2
+     */
     public static String [] getAvailableNames() {
     
             UResourceBundle numberingSystemsInfo = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "numberingSystems");
@@ -128,6 +175,15 @@ class NumberingSystem {
             return (String[]) output.toArray(new String[output.size()]);
     }
 
+    /**
+     * Convenience method to determine if a given digit string is valid for use as a 
+     * descriptor of a numeric ( non-algorithmic ) numbering system.  In order for
+     * a digit string to be valid, it must meet the following criteria:
+     * 1. It must only contain characters that are decimal digits as defined by Unicode.
+     * 2. It must contain characters that are contiguous code points.
+     * 3. Digits must be in Unicode's basic multilingual plane.
+     * @draft ICU 4.2
+     */
     public static boolean isValidDigitString(String str) {
 
         int c;
@@ -152,14 +208,35 @@ class NumberingSystem {
         return true;
     }
 
+    /**
+     * Returns the radix of the current numbering system.
+     * @draft ICU 4.2
+     */
     public int getRadix() {
         return radix;
     }
 
+    /**
+     * Returns the description string of the current numbering system.
+     * The description string describes the characteristics of the numbering
+     * system.  For numeric systems, this string contains the digits used by the
+     * numbering system, in order, starting from zero.  For algorithmic numbering
+     * systems, the string contains the name of the RBNF ruleset in the locale's
+     * NumberingSystemRules section that will be used to format numbers using
+     * this numbering system.
+     * @draft ICU 4.2
+     */
     public String getDescription() {
         return desc;
     }
 
+    /**
+     * Returns the numbering system's algorithmic status.  If true,
+     * the numbering system is algorithmic and uses an RBNF formatter to
+     * format numerals.  If false, the numbering system is numeric and
+     * uses a fixed set of digits. 
+     * @draft ICU 4.2
+     */
     public boolean isAlgorithmic() {
         return algorithmic;
     }
