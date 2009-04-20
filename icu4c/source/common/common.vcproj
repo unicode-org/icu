@@ -2746,15 +2746,11 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\uloc_tag.c"
+				>
+			</File>
+			<File
 				RelativePath=".\ulocimp.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ultag.c"
-				>
-			</File>
-			<File
-				RelativePath=".\ultag.h"
 				>
 			</File>
 			<File
