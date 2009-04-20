@@ -13,7 +13,7 @@
 #define INTLTESTSPOOF_H
 
 #include "unicode/utypes.h"
-
+#include "unicode/uspoof.h"
 #include "intltest.h"
 
 
@@ -23,7 +23,13 @@ public:
     
     // Test the USpoofDetector API functions that require C++
     // The pure C part of the API, which is most of it, is tested in cintltst
-    void  TestSpoofAPI();
+    void  testSpoofAPI();
+
+    void  testSkeleton();
+    
+    // Internal function to run a single skeleton test case.
+    void  checkSkeleton(const USpoofChecker *sc, uint32_t flags, 
+                        const char *input, const char *expected, int32_t lineNum);
 };
 
 #endif
