@@ -36,64 +36,98 @@ U_NAMESPACE_USE
 
  /**
  *
- * <p>C API for Unicode Security and Spoofing Detection</p>
+ * \brief C API for Unicode Security and Spoofing Detection.
  *
  * These functions are intended to check strings, typically
- * identifiers or URLs, for the presence of combinations of
+ * identifiers of some type, such as URLs, for the presence of
  * characters that are likely to be visually confusing - 
  * for cases where the displayed form of an identifier may
  * not be what it appears to be.
  *
- * Unicode security considerations, and descriptions of the checks
- * performed by these functions, are describe in 
  * Unicode Technical Report #36, http://unicode.org/reports/tr36, and
  * Unicode Technical Standard #39, http://unicode.org/reports/tr39
+ * "Unicode security considerations", give more background on 
+ * security an spoofing issues with Unicode identifiers.
+ * The tests and checks provided by this module implement the recommendations
+ * from these Unicode documents.
  *
- * Test functions fall into two general categorie:
- *   1.  Single String Tests.  Check whether a string (an identifier) is
- *       potentially potentiallyconfusable with any other string.
- *   2.  Two string tests.  Check whether two specific strings are confusable.
+ * The tests available on identifiers fall into two general categories:
+ *   -#  Single identier tests.  Check whether an identifier is
+ *       potentially confusable with any other string, or is suspicious
+ *       for other reasons.
+ *   -#  Two identifier tests.  Check whether two specific identifiers are confusable.
  *       This does not consider whether either of strings is potentially
  *       confusable with any string other than the exact one specified.
  *
+ * The steps to perform confusability testing are
+ *   -#  Open a USpoofChecker.
+ *   -#  Configure the USPoofChecker for the desired set of tests.  The tests that will
+ *       be performed are specified by a set of USpoofChecks flags.
+ *   -#  Perform the checks using the pre-configured USpoofChecker.  The results indicate
+ *       which (if any) of the selected tests have identified possible problems with the identifier.
+ *       Results are reported as a set of USpoofChecks flags;  this mirrors the form in which
+ *       the set of tests to perform was originally specified tothe USpoofChecker.
  *
- *  Single Script Confusable Tests:
- *      Single Identifier tests:
- *         No Check
- *      Double String Tests:
- *         The two strings have the same script (or may be common only), and
- *         they are confusable.
+ * A USpoofChecker may be used repeatedly to perform checks on any number of identifiers.
  *
- *  Mixed Script Confusable
- *      Single Identifier Tests
- *         The source string is of mixed script, and there exists some string
- *         _in a single script_ that is confusable with it.  This test does not check
- *         for the existence of other mixed script strings that are confusable with
- *         the string being tested.
- *      Two Identifiers Test:
- *         The two strings are confusable.  At least one of them contains characters
- *         from more than one script.  Not all identifiers that are confusable with this
- *         check would fail the single string Mixed Script Confusable test.
- *         Example:   "Scripts-R-Us" with a Cylrillic (backwards looking) R would not
- *         fail the single ID test.  But, if it were written with a Cylrillic 'S',
- *         the two specific Identifiers would be mixed script confusable.
+ * Thread Safety: The test functions for checking a single identifier, or for testing 
+ * whether two identifiers are possible confusable, are thread safe.  
+ * They may called concurrently, from multiple threads, using the same USpoofChecker instance.
  *
- *  Whole Script Confusable
- *      Single String Test
- *         The Identifier is of a single script, and there exists another ID
- *         wholly in some other script that is confusable.
- *      Two Identifiers Test:
- *         The two IDs are confusable with the mixed script test,
- *         each ID is in a single script,
- *         and the scripts of the two IDs are not the same.
- *         
+ * More generally, the standard ICU thread safety rules apply:  functions that take a
+ * const USpoofChecker parameter are thread safe.  Those that take a non-const 
+ * USpoofChecier are not thread safe.
+ *
+ *
+ * Descriptions of the available checks.
+ *
+ * When testing whether pairs of identifiers are confusable, with the uspoof_areConfusable()
+ * family of functions, the relevant tests are
+ *
+ *   -# USPOOF_SINGLE_SCRIPT_CONFUSABLE:  All of the characters from the two idenifiers are
+ *      from a single script, and the two identifiers are visually confusable.
+ *   -# USPOOF_MIXED_SCRIPT_CONFUSABLE:  At least one of the identifiers contains characters
+ *      from more than one script, and the two identifiers are visually confusable.
+ *   -# USPOOF_WHOLE_SCRIPT_CONFUSABLE: Each of the two idenifiers is of a single script, but
+ *      the the two identifiers are from different scripts, and they are visually confusable.
+ *
+ * The safest approach is to enable all three of these checks as a group.
+ *
+ * USPOOF_ANY_CASE is a modifier for the above tests.  If the identifiers being checked can
+ * be of mixed case and are used in a case-sensitive manner, this option should be specified.
+ *
+ * If the identiers being checked are used in a case-insensitive manner, and if they are
+ * displayed to users in lower-case form only, the USPOOF_ANY_CASE option should not be
+ * specified.  Confusabality issues involving upper case letters will not be reported.
+ *
+ * When performing tests on a single identifier, with the uspoof_check() family of functions,
+ * the relevant tests are:
+ *
+ *    -# USPOOF_MIXED_SCRIPT_CONFUSABLE: the identifier contains characters from multiple
+ *       scripts, and there exists an identier of a single script that is visually confusable.
+ *    -# USPOOF_WHOLE_SCRIPT_CONFUSABLE: the identifier consists of characters from a single
+ *       script, and there exists a visually confusable identifier.
+ *       The visally confusable identifier also consists of characters from a single script.
+ *       but not the same script as the identifier being checked.
+ *    -# USPOOF_ANY_CASE: modifies the mixed script and whole script confusables tests.  If
+ *       specified, the checks will confusable characters of any case.  If this flag is not
+ *       set, the test is performed assuming case folded identifiers.
+ *    -# USPOOF_SINGLE_SCRIPT: check that the identifier contains only characters from a
+ *       single script.  (Characters from the 'common' and 'inherited' scripts are ignored.)
+ *       This is not a test for confusable identifiers
+ *    -# USPOOF_INVISIBLE: check an identifier for the presence of invisible characters,
+ *       such as zero-width spaces, or character sequences that are
+ *       likely not to display, such as multiple occurences of the same
+ *       non-spacing mark.  This check does not test the input string as a whole
+ *       for conformance to any particular syntax for identifiers.
+ *    -# USPOOF_CHAR_LIMIT: check that an identifier contains only characters from a specified set
+ *       of acceptable characters.  See uspoof_setAllowedChars() and
+ *       uspoof_setAllowedLocales().
+ *
  *  Note on Scripts:
- *     Characters of script "Common" or "Inherited" are ignored when determining
- *     the script of an identifier.   When an Identifier contains only Common
- *     or Inherited characters (a somewhat pathological case), it is logically
- *     in _all_ scripts.  When a test says that two identifiers must be of the
- *     same script, such a perverse identifier always is.  (Think of the digits 1,
- *     with script = Common)
+ *     Characters from the Unicode Scripts "Common" and "Inherited" are ignored when consdering
+ *     the script of an identifier. Common characters include digits and symbols that
+ *     are normally used with text from more than one script.
  *
  */
 
@@ -108,45 +142,50 @@ typedef struct USpoofChecker USpoofChecker; /**< typedef for C of USpoofChecker 
  * @draft ICU 4.2
  */
 typedef enum USpoofChecks {
-    /** Applies to Two Identifier tests only.
-      *   The identifiers are both from the same script and are confusable.
+    /**   Single script confusable test.
+      *   When testing whether two identifiers are confusable, report that they are if
+      *   both are from the same script and they are visually confusable.
+      *   Note: this test is not applicable to a check of a single identifier.
       */
     USPOOF_SINGLE_SCRIPT_CONFUSABLE =   1,
 
-    /** Applies to both Single & Two Identifier Tests.
-     *  Single ID test:
-     *    The identifier contains multiple scripts, and
+    /** Mixed script confusable test.
+     *  When checking a single identifier, report a problem if
+     *    the identifier contains multiple scripts, and
      *    is confusable with some other identifer in a single script
-     *  Two ID test:
-     *    The two IDs are confusable, and at least one contains
-     *    characters from more than one script.
+     *  When testing whether two identifiers are confusable, report that they are if
+     *    the two IDs are visually confusable, and
+     *    and at least one contains characters from more than one script.
      */
     USPOOF_MIXED_SCRIPT_CONFUSABLE  =   2,
 
-    /** Applies to both Single & Two Identifier Tests
-     *  Single ID test:
+    /** Whole script confusable test.
+     *  When checking a single identifier, report a problem if
      *    The identifier is of a single script, and
      *    there exists a confusable identifier in another script.
-     *  Two ID test:
-     *    The identifiers are confusable,
-     *    each is of a single script, and
-     *    the scripts of the two Identifiers are different.
+     *  When testing whether two identfiers are confusable, report that they are if
+     *    each is of a single script, 
+     *    the scripts of the two identifiers are different, and
+     *    the identifiers are visually confusable.
      */
     USPOOF_WHOLE_SCRIPT_CONFUSABLE  =   4,
     
-    /** Modifier for single, mixed & whole script checks.
+    /** Any Case Modifier for confusable identifier tests.
+        If specified, consider all characters, of any case, when looking for confusables.
+        If USPOOF_ANY_CASE is not specified, identifiers being checked are assumed to have been
+        case folded.  Upper case conusable characters will not be checked.
         Selects between Lower Case Confusable and
         Any Case Confusable.   */
     USPOOF_ANY_CASE                 =   8,
 
     /** Check that an identifer contains only characters from a
       * single script (plus chars from the common and inherited scripts.)
-      * Applies to single identifier check only.
+      * Applies to checks of a single identifier check only.
       */
     USPOOF_SINGLE_SCRIPT            =  16,
     
-    /** Check that an identifier for the presence of invisble characters,
-      * characters, such as zero-width spaces, or character sequences that are
+    /** Check an identifier for the presence of invisble characters,
+      * such as zero-width spaces, or character sequences that are
       * likely not to display, such as multiple occurences of the same
       * non-spacing mark.  This check does not test the input string as a whole
       * for conformance to any particular syntax for identifiers.
