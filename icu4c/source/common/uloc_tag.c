@@ -2147,7 +2147,7 @@ uloc_forLanguageTag(const char* langtag,
     }
 
     /* language */
-    subtag = ultag_getLanguage(lt);
+    subtag = ultag_getExtlangSize(lt) > 0 ? ultag_getExtlang(lt, 0) : ultag_getLanguage(lt);
     if (uprv_strcmp(subtag, LANG_UND) != 0) {
         len = uprv_strlen(subtag);
         if (len > 0) {
