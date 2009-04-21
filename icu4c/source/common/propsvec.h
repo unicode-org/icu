@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2008, International Business Machines
+*   Copyright (C) 2002-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -31,11 +31,18 @@ U_CDECL_BEGIN
  * Rows of uint32_t integers in a contiguous array store
  * the range limits and the properties vectors.
  *
- * In each row, row[0] contains the start code point and
+ * Logically, each row has a certain number of uint32_t values,
+ * which is set via the upvec_open() "columns" parameter.
+ *
+ * Internally, two additional columns are stored.
+ * In each internal row,
+ * row[0] contains the start code point and
  * row[1] contains the limit code point,
  * which is the start of the next range.
  *
- * Initially, there is only one range [0..0x110000[ with values 0.
+ * Initially, there is only one "normal" row for
+ * range [0..0x110000[ with values 0.
+ * There are additional rows for special purposes, see UPVEC_FIRST_SPECIAL_CP.
  *
  * It would be possible to store only one range boundary per row,
  * but self-contained rows allow to later sort them by contents.
@@ -59,6 +66,10 @@ typedef struct UPropsVectors UPropsVectors;
  */
 #define UPVEC_START_REAL_VALUES_CP 0x200000
 
+/*
+ * Open a UPropsVectors object.
+ * @param columns Number of value integers (uint32_t) per row.
+ */
 U_CAPI UPropsVectors * U_EXPORT2
 upvec_open(int32_t columns, UErrorCode *pErrorCode);
 
