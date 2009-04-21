@@ -125,9 +125,7 @@ public final class BaseLocale {
             }
             _script = buf.toString().intern();
 
-            if (languageLen > 0) {
-                id.append(SEPCHAR);
-            }
+            id.append(SEPCHAR);
             id.append(_script);
         }
 

@@ -27,9 +27,11 @@ import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.text.NumberFormat.SimpleNumberFormatFactory;
 import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.IllformedLocaleException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
+import com.ibm.icu.util.ULocale.Builder;
 
 public class ULocaleTest extends TestFmwk {
 
@@ -3737,5 +3739,128 @@ public class ULocaleTest extends TestFmwk {
         } else {
             // CLDR version is OK.
         }
-  }
+    }
+
+    public void TestToLanguageTag() {
+        final String[][] locale_to_langtag = {
+            {"",            "und"},
+            {"en",          "en"},
+            {"en_US",       "en-us"},
+            {"iw_IL",       "he-il"},
+            {"sr_Latn_SR",  "sr-latn-sr"},
+            {"en__POSIX",   "en-posix"},
+            // {"en_POSIX",    "en"}, /* ICU4J locale parser successfully parse en_POSIX as language:en/variant:POSIX */
+            {"und_555",     "und-555"},
+            {"123",         "und"},
+            {"%$#&",        "und"},
+            {"_Latn",       "und-latn"},
+            {"_DE",         "und-de"},
+            {"und_FR",      "und-fr"},
+            {"th_TH_TH",    "th-th"},
+            {"bogus",       "bogus"},
+            {"foooobarrr",  "und"},
+            //{"az_AZ_CYRL",  "az-cyrl-az"}, /* ICU4J does not have this specia locale mapping */
+            {"aa_BB_CYRL",  "aa-bb"},
+            {"en_US_1234",  "en-us-1234"},
+            {"en_US_VARIANTA_VARIANTB", "en-us-varianta-variantb"},
+            {"en_US_VARIANTB_VARIANTA", "en-us-varianta-variantb"},
+            {"ja__9876_5432",   "ja-5432-9876"},
+            {"zh_Hant__VAR",    "zh-hant"},
+            {"es__BADVARIANT_GOODVAR",  "es-goodvar"},
+            {"en@calendar=gregorian",   "en-u-ca-gregory"},
+            {"de@collation=phonebook;calendar=gregorian",   "de-u-ca-gregory-co-phonebk"},
+            {"th@numbers=thai;z=extz;x=priv-use;a=exta",   "th-a-exta-u-nu-thai-z-extz-x-priv-use"},
+            {"en@timezone=America/New_York;calendar=japanese",    "en-u-ca-japanese-tz-usnyc"},
+            {"en@x=x-y-z;a=a-b-c",  "en-x-x-y-z"},
+            {"it@collation=badcollationtype;colStrength=identical;cu=usd-eur", "it-u-ks-identic"},
+        };
+
+        for (int i = 0; i < locale_to_langtag.length; i++) {
+            ULocale loc = new ULocale(locale_to_langtag[i][0]);
+            String langtag = loc.toLanguageTag();
+            if (!langtag.equals(locale_to_langtag[i][1])) {
+                errln("FAIL: toLanguageTag returned language tag [" + langtag + "] for locale ["
+                        + loc + "] - expected: [" + locale_to_langtag[i][1] + "]");
+            }
+        }
+    }
+
+    public void TestForLanguageTag() {
+        final Object[][] langtag_to_locale = {
+                {"zh-cmn-CH",           "cmn_CH",               new Integer(9)},
+            {"en",                  "en",                   new Integer(2)},
+            {"en-us",               "en_US",                new Integer(5)},
+            {"und-us",              "_US",                  new Integer(6)},
+            {"und-latn",            "_Latn",                new Integer(8)},
+            {"en-us-posix",         "en_US_POSIX",          new Integer(11)},
+            {"de-de_euro",          "de",                   new Integer(2)},
+            {"kok-in",              "kok_IN",               new Integer(6)},
+            {"123",                 "",                     new Integer(0)},
+            {"en_us",               "",                     new Integer(0)},
+            {"en-latn-x",           "en_Latn",              new Integer(7)},
+            {"art-lojban",          "jbo",                  new Integer(10)},
+            {"zh-hakka",            "hak",                  new Integer(8)},
+            {"zh-cmn-CH",           "cmn_CH",               new Integer(9)},
+            {"xxx-yy",              "xxx_YY",               new Integer(6)},
+            {"fr-234",              "fr_234",               new Integer(6)},
+            {"i-default",           "",                     new Integer(9)},
+            {"i-test",              "",                     new Integer(0)},
+            {"ja-jp-jp",            "ja_JP",                new Integer(5)},
+            {"bogus",               "bogus",                new Integer(5)},
+            {"boguslang",           "",                     new Integer(0)},
+            {"EN-lATN-us",          "en_Latn_US",           new Integer(10)},
+            {"und-variant-1234",    "__1234_VARIANT",       new Integer(16)},
+            {"und-varzero-var1-vartwo", "__VARZERO",        new Integer(11)},
+            {"en-u-ca-gregory",     "en@calendar=gregorian",    new Integer(15)},
+            {"en-U-cu-USD",         "en@currency=usd",      new Integer(11)},
+            {"ar-x-1-2-3",          "ar@x=1-2-3",           new Integer(10)},
+            {"fr-u-nu-latn-cu-eur", "fr@currency=eur;numbers=latn", new Integer(19)},
+            {"de-k-kext-u-co-phonebk-nu-latn",  "de@collation=phonebook;k=kext;numbers=latn",   new Integer(30)},
+            {"ja-u-cu-jpy-ca-jp",   "ja@currency=jpy",      new Integer(/*11*/ 0)}, //TODO: need error index support for invalid LDML extension
+            {"en-us-u-tz-usnyc",    "en_US@timezone=america/new_york",      new Integer(16)},
+//            {"und-a-abc-def",       "und@a=abc-def",        new Integer(13)}, // ICU4C does not allow an locale with keywords, but without base locale
+            {"und-a-abc-def",       "@a=abc-def",        new Integer(13)},
+            {"zh-u-ca-chinese-x-u-ca-chinese",  "zh@calendar=chinese;x=u-ca-chinese",   new Integer(30)},
+        };
+
+        for (int i = 0; i < langtag_to_locale.length; i++) {
+            String tag = (String)langtag_to_locale[i][0];
+            ULocale expected = new ULocale((String)langtag_to_locale[i][1]);
+            ULocale loc = ULocale.forLanguageTag(tag);
+
+            if (!loc.equals(expected)) {
+                errln("FAIL: forLanguageTag returned locale [" + loc + "] for language tag [" + tag
+                        + "] - expected: [" + expected + "]");
+            }
+        }
+
+        // Use locale builder to check the parsed length
+        for (int i = 0; i < langtag_to_locale.length; i++) {
+            String tag = (String)langtag_to_locale[i][0];
+            ULocale expected = new ULocale((String)langtag_to_locale[i][1]);
+            int inLen = tag.length();
+            int validLen = ((Integer)langtag_to_locale[i][2]).intValue();
+
+            try {
+                Builder bld = new Builder();
+                bld.setLanguageTag(tag);
+                ULocale loc = bld.create();
+
+                if (!loc.equals(expected)) {
+                    errln("FAIL: forLanguageTag returned locale [" + loc + "] for language tag [" + tag
+                            + "] - expected: [" + expected + "]");
+                }
+                if (inLen != validLen) {
+                    errln("FAIL: Builder.setLanguageTag should throw an exception for input tag [" + tag + "]");
+                }
+            } catch (IllformedLocaleException ifle) {
+                int errorIdx = ifle.getErrorIndex();
+                int expectedErrIdx = (validLen == 0) ? 0 : validLen + 1;
+                if (errorIdx != expectedErrIdx) {
+                    errln("FAIL: Builder.setLanguageTag returned error index " + errorIdx
+                            + " for input language tag [" + tag + "] expected: " + expectedErrIdx);
+                }
+            }
+        }
+    }
 }
