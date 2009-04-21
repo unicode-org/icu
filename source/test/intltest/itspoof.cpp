@@ -108,13 +108,69 @@ void IntlTestSpoof::testSpoofAPI() {
 
 // testSkeleton.   Spot check a number of confusable skeleton substitutions from the 
 //                 Unicode data file confusables.txt
+//                 Test cases chosen for substitutions of various lengths, and 
+//                 membership in different mapping tables.
 void IntlTestSpoof::testSkeleton() {
+    const uint32_t ML = 0;
+    const uint32_t SL = USPOOF_SINGLE_SCRIPT_CONFUSABLE;
+    const uint32_t MA = USPOOF_ANY_CASE;
+    const uint32_t SA = USPOOF_SINGLE_SCRIPT_CONFUSABLE | USPOOF_ANY_CASE;
+
     TEST_SETUP
-        CHECK_SKELETON(0, "\\u059c", "\\u0301");
-//      CHECK_SKELETON(0, "\\uFC5F", "\\uFE74\\u0651");
-        CHECK_SKELETON(0, "\\u2A74", "\\u003A\\u003A\\u003D");
-        CHECK_SKELETON(0, "\\u247E", "\\u0028\\u0031\\u0031\\u0029");
-        CHECK_SKELETON(0, "\\uFDFB", "\\u062C\\u0644\\u0020\\u062C\\u0644\\u0627\\u0644\\u0647");
+        // A long "identifier" that will overflow implementation stack buffers, forcing heap allocations.
+        CHECK_SKELETON(SL, " A long 'identifier' that will overflow implementation stack buffers, forcing heap allocations."
+                           " A long 'identifier' that will overflow implementation stack buffers, forcing heap allocations."
+                           " A long 'identifier' that will overflow implementation stack buffers, forcing heap allocations."
+                           " A long 'identifier' that will overflow implementation stack buffers, forcing heap allocations.",
+
+               " A 1ong \\u02b9identifier\\u02b9 that wi11 overf1ow imp1ementation stack buffers, forcing heap a11ocations."
+               " A 1ong \\u02b9identifier\\u02b9 that wi11 overf1ow imp1ementation stack buffers, forcing heap a11ocations."
+               " A 1ong \\u02b9identifier\\u02b9 that wi11 overf1ow imp1ementation stack buffers, forcing heap a11ocations."
+               " A 1ong \\u02b9identifier\\u02b9 that wi11 overf1ow imp1ementation stack buffers, forcing heap a11ocations.")
+
+        // FC5F ;	FE74 0651 ;   ML  #* ARABIC LIGATURE SHADDA WITH KASRATAN ISOLATED FORM to
+        //                                ARABIC KASRATAN ISOLATED FORM, ARABIC SHADDA	
+        //    This character NFKD normalizes to \u0020 \u064d \u0651, so its confusable mapping 
+        //    is never used in creating a skeleton.
+        CHECK_SKELETON(SL, "\\uFC5F", " \\u064d\\u0651");
+
+        CHECK_SKELETON(SL, "nochange", "nochange");
+        CHECK_SKELETON(MA, "love", "1ove");   // lower case l to digit 1
+        CHECK_SKELETON(ML, "OOPS", "OOPS");
+        CHECK_SKELETON(MA, "OOPS", "00PS");   // Letter O to digit 0 in any case mode only
+        CHECK_SKELETON(SL, "\\u059c", "\\u0301");
+        CHECK_SKELETON(SL, "\\u2A74", "\\u003A\\u003A\\u003D");
+        CHECK_SKELETON(SL, "\\u247E", "\\u0028\\u0031\\u0031\\u0029");
+        CHECK_SKELETON(SL, "\\uFDFB", "\\u062C\\u0644\\u0020\\u062C\\u0644\\u0627\\u0644\\u0647");
+
+        // This mapping exists in the ML and MA tables, does not exist in SL, SA
+        //0C83 ;	0C03 ;	ML	# ( ಃ → ః ) KANNADA SIGN VISARGA → TELUGU SIGN VISARGA	# {source:513}
+        CHECK_SKELETON(SL, "\\u0C83", "\\u0C83");
+        CHECK_SKELETON(SA, "\\u0C83", "\\u0C83");
+        CHECK_SKELETON(ML, "\\u0C83", "\\u0C03");
+        CHECK_SKELETON(MA, "\\u0C83", "\\u0C03");
+        
+        // 0391 ; 0041 ; MA # ( Α → A ) GREEK CAPITAL LETTER ALPHA to LATIN CAPITAL LETTER A 
+        // This mapping exists only in the MA table.
+        CHECK_SKELETON(MA, "\\u0391", "A");
+        CHECK_SKELETON(SA, "\\u0391", "\\u0391");
+        CHECK_SKELETON(ML, "\\u0391", "\\u0391");
+        CHECK_SKELETON(SL, "\\u0391", "\\u0391");
+
+        // 13CF ;  0062 ;  MA  #  CHEROKEE LETTER SI to LATIN SMALL LETTER B  
+        // This mapping exists in the ML and MA tables
+        CHECK_SKELETON(ML, "\\u13CF", "b");
+        CHECK_SKELETON(MA, "\\u13CF", "b");
+        CHECK_SKELETON(SL, "\\u13CF", "\\u13CF");
+        CHECK_SKELETON(SA, "\\u13CF", "\\u13CF");
+
+        // 0022 ;  02B9 02B9 ;  SA  #*  QUOTATION MARK to MODIFIER LETTER PRIME, MODIFIER LETTER PRIME 
+        // all tables.
+        CHECK_SKELETON(SL, "\\u0022", "\\u02B9\\u02B9");
+        CHECK_SKELETON(SA, "\\u0022", "\\u02B9\\u02B9");
+        CHECK_SKELETON(ML, "\\u0022", "\\u02B9\\u02B9");
+        CHECK_SKELETON(MA, "\\u0022", "\\u02B9\\u02B9");
+
     TEST_TEARDOWN;
 }
 
@@ -138,8 +194,8 @@ void IntlTestSpoof::checkSkeleton(const USpoofChecker *sc, uint32_t type,
     if (uExpected != actual) {
         errln("File %s, Line %d, Test case from line %d, Actual and Expected skeletons differ.",
                __FILE__, __LINE__, lineNum);
-        errln(UnicodeString(" Actual   Skeleton: \"") + actual + UnicodeString("\""));
-        errln(UnicodeString(" Expected Skeleton: \"") + uExpected + UnicodeString("\""));
+        errln(UnicodeString(" Actual   Skeleton: \"") + actual + UnicodeString("\"\n") +
+              UnicodeString(" Expected Skeleton: \"") + uExpected + UnicodeString("\""));
     }
 }
 
