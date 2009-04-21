@@ -729,7 +729,7 @@ uspoof_getSkeleton(const USpoofChecker *sc,
   *                of the Unicode confusable data tables to use.
   *                The default is Mixed-Script, Lowercase.
   *                Allowed options are USPOOF_SINGLE_SCRIPT_CONFUSABLE and
-  *                USPOOF_ANY_CASE_CONFUSABLE.  The two flags may be ORed.
+  *                USPOOF_ANY_CASE.  The two flags may be ORed.
   * @param s       The UTF-8 format input string whose skeleton will be computed.
   * @param length  The length of the input string, in bytes,
   *                or -1 if the string is zero terminated.
