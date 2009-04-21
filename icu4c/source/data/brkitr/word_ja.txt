@@ -61,7 +61,7 @@ $NumericEx      = $Numeric      ($Extend |  $Format)*;
 $ExtendNumLetEx = $ExtendNumLet ($Extend |  $Format)*;
 
 $Hiragana       = [\p{script=Hiragana}];
-$Ideographic    = [\p{Ideographic}];
+$Ideographic    = [\p{Ideographic} [\u3005 \u3007 \u303B]];
 $HiraganaEx     = $Hiragana     ($Extend |  $Format)*;
 $IdeographicEx  = $Ideographic  ($Extend |  $Format)*;
 

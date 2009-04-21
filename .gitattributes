@@ -55,6 +55,10 @@ icu4c/source/common/unicode/dtintrv.h -text
 icu4c/source/config/gmakever.mk -text
 icu4c/source/config/pkgdataMakefile.in -text
 icu4c/source/configure.mk -text
+icu4c/source/data/brkitr/char_th.txt -text
+icu4c/source/data/brkitr/el.txt -text
+icu4c/source/data/brkitr/sent_el.txt -text
+icu4c/source/data/brkitr/th.txt -text
 icu4c/source/data/coll/af.txt -text
 icu4c/source/data/coll/af_NA.txt -text
 icu4c/source/data/coll/af_ZA.txt -text
