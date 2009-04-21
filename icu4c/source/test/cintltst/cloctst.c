@@ -5452,6 +5452,7 @@ static const struct {
     {"en-latn-x",           "en_Latn",              7},
     {"art-lojban",          "jbo",                  10},
     {"zh-hakka",            "hak",                  8},
+    {"zh-cmn-CH",           "cmn_CH",               9},
     {"xxx-yy",              "xxx_YY",               6},
     {"fr-234",              "fr_234",               6},
     {"i-default",           "",                     9},
