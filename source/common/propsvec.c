@@ -33,8 +33,8 @@ struct UPropsVectors {
     UBool isCompacted;
 };
 
-#define UPVEC_INITIAL_ROWS (1<<14)
-#define UPVEC_MEDIUM_ROWS ((int32_t)1<<17)
+#define UPVEC_INITIAL_ROWS (1<<12)
+#define UPVEC_MEDIUM_ROWS ((int32_t)1<<16)
 #define UPVEC_MAX_ROWS (UPVEC_MAX_CP+1)
 
 U_CAPI UPropsVectors * U_EXPORT2
@@ -212,13 +212,15 @@ upvec_setValue(UPropsVectors *pv,
                 *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
                 return;
             }
-            newVectors=(uint32_t *)uprv_realloc(pv->v, newMaxRows*columns*4);
+            newVectors=(uint32_t *)uprv_malloc(newMaxRows*columns*4);
             if(newVectors==NULL) {
                 *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
                 return;
             }
-            firstRow = newVectors+(firstRow-pv->v);
-            lastRow = newVectors+(lastRow-pv->v);
+            uprv_memcpy(newVectors, pv->v, rows*columns*4);
+            firstRow=newVectors+(firstRow-pv->v);
+            lastRow=newVectors+(lastRow-pv->v);
+            uprv_free(pv->v);
             pv->v=newVectors;
             pv->maxRows=newMaxRows;
         }
@@ -351,10 +353,8 @@ upvec_compact(UPropsVectors *pv, UPVecCompactHandler *handler, void *context, UE
     valueColumns=columns-2; /* not counting start & limit */
 
     /* sort the properties vectors to find unique vector values */
-    if(rows>1) {
-        uprv_sortArray(pv->v, rows, columns*4,
-                       upvec_compareRows, pv, FALSE, pErrorCode);
-    }
+    uprv_sortArray(pv->v, rows, columns*4,
+                   upvec_compareRows, pv, FALSE, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
         return;
     }
