@@ -380,10 +380,10 @@ uspoof_areConfusable(const USpoofChecker *sc,
         return 0;
     }
     int32_t  flagsForSkeleton = This->fChecks & USPOOF_ANY_CASE;
-    UChar    s1SkeletonBuf[100];
+    UChar    s1SkeletonBuf[USPOOF_STACK_BUFFER_SIZE];
     UChar   *s1Skeleton;
     int32_t  s1SkeletonLength = 0;
-    UChar    s2SkeletonBuf[100];
+    UChar    s2SkeletonBuf[USPOOF_STACK_BUFFER_SIZE];
     UChar   *s2Skeleton;
     int32_t  s2SkeletonLength = 0;
     int32_t  result = 0;
@@ -563,6 +563,7 @@ uspoof_getSkeleton(const USpoofChecker *sc,
             *status = U_MEMORY_ALLOCATION_ERROR;
             return 0;
         }
+        *status = U_ZERO_ERROR;
         normalizedLen = unorm_normalize(s, length, UNORM_NFKD, 0,
                                         nfkdInput, normalizedLen+1, status);
     }
@@ -621,14 +622,16 @@ uspoof_getSkeletonUnicodeString(const USpoofChecker *sc,
     
     const UChar *str = s.getBuffer();
     int32_t      strLen = s.length();
-    UChar        smallBuf[100];
+    UChar        smallBuf[USPOOF_STACK_BUFFER_SIZE];
     UChar       *buf = smallBuf;
-    int32_t outputSize = uspoof_getSkeleton(sc, type, str, strLen, smallBuf, 100, status);
+    int32_t outputSize = uspoof_getSkeleton(sc, type, str, strLen, smallBuf, USPOOF_STACK_BUFFER_SIZE, status);
     if (*status == U_BUFFER_OVERFLOW_ERROR) {
-        buf = static_cast<UChar *>(uprv_malloc(outputSize+1));
+        buf = static_cast<UChar *>(uprv_malloc((outputSize+1)*sizeof(UChar)));
         if (buf == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
+            return dest;
         }
+        *status = U_ZERO_ERROR;
         uspoof_getSkeleton(sc, type, str, strLen, buf, outputSize+1, status);
     }
     if (U_SUCCESS(*status)) {
@@ -667,12 +670,12 @@ uspoof_getSkeletonUTF8(const USpoofChecker *sc,
     u_strFromUTF8(inBuf, USPOOF_STACK_BUFFER_SIZE, &lengthInUChars,
                   s, length, status);
     if (*status == U_BUFFER_OVERFLOW_ERROR) {
-        *status = U_ZERO_ERROR;
         inBuf = static_cast<UChar *>(uprv_malloc((lengthInUChars+1)*sizeof(UChar)));
         if (inBuf == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             goto cleanup;
         }
+        *status = U_ZERO_ERROR;
         u_strFromUTF8(inBuf, USPOOF_STACK_BUFFER_SIZE, &lengthInUChars+1,
                       s, length, status);
     }
