@@ -23,9 +23,133 @@
 #include "cmemory.h"
 #include "cstring.h"
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
 #define FILENAME_BUFFER 1024
 
-#define TDSRCPATH  ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING
+#define TDSRCPATH  ".." U_FILE_SEP_STRING "test" U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING
+
+void addCnvSelTest(TestNode** root)
+{
+    addTest(root, &TestSelect, "tsconv/ucnvseltst/TestSelect");
+    addTest(root, &TestSerializationAndUnserialization, "tsconv/ucnvseltst/TestSerializationAndUnserialization");
+}
+
+static const char **gAvailableNames = NULL;
+static int32_t gCountAvailable = 0;
+
+static UBool
+getAvailableNames() {
+  int32_t i;
+  if (gAvailableNames != NULL) {
+    return TRUE;
+  }
+  gCountAvailable = ucnv_countAvailable();
+  gAvailableNames = (const char **)uprv_malloc(gCountAvailable * sizeof(const char *));
+  if (gAvailableNames == NULL) {
+    log_err("unable to allocate memory for %ld available converter names\n",
+            (long)gCountAvailable);
+    return FALSE;
+  }
+  for (i = 0; i < gCountAvailable; ++i) {
+    gAvailableNames[i] = ucnv_getAvailableName(i);
+  }
+  return TRUE;
+}
+
+static void
+releaseAvailableNames() {
+  uprv_free((void *)gAvailableNames);
+  gAvailableNames = NULL;
+  gCountAvailable = 0;
+}
+
+static const char **
+getEncodings(int32_t start, int32_t step, int32_t count, int32_t *pCount) {
+  const char **names;
+  int32_t i;
+
+  *pCount = 0;
+  if (count <= 0) {
+    return NULL;
+  }
+  names = (const char **)uprv_malloc(count * sizeof(char *));
+  if (names == NULL) {
+    log_err("memory allocation error for %ld pointers\n", (long)count);
+    return NULL;
+  }
+  if (step == 0 && count > 0) {
+    step = 1;
+  }
+  for (i = 0; i < count; ++i) {
+    if (0 <= start && start < gCountAvailable) {
+      names[i] = gAvailableNames[start];
+      start += step;
+      ++*pCount;
+    }
+  }
+  return names;
+}
+
+#if 0
+/*
+ * ucnvsel_open() does not support "no encodings":
+ * Given 0 encodings it will open a selector for all available ones.
+ */
+static const char **
+getNoEncodings(int32_t *pCount) {
+  *pCount = 0;
+  return NULL;
+}
+#endif
+
+static const char **
+getOneEncoding(int32_t *pCount) {
+  return getEncodings(1, 0, 1, pCount);
+}
+
+static const char **
+getFirstEvenEncodings(int32_t *pCount) {
+  return getEncodings(0, 2, 25, pCount);
+}
+
+static const char **
+getMiddleEncodings(int32_t *pCount) {
+  return getEncodings(gCountAvailable - 12, 1, 22, pCount);
+}
+
+static const char **
+getLastEncodings(int32_t *pCount) {
+  return getEncodings(gCountAvailable - 1, -1, 25, pCount);
+}
+
+static const char **
+getSomeEncodings(int32_t *pCount) {
+  /* 20 evenly distributed */
+  return getEncodings(5, (gCountAvailable + 19)/ 20, 20, pCount);
+}
+
+static const char **
+getEveryThirdEncoding(int32_t *pCount) {
+  return getEncodings(2, 3, (gCountAvailable + 2 )/ 3, pCount);
+}
+
+static const char **
+getAllEncodings(int32_t *pCount) {
+  return getEncodings(0, 1, gCountAvailable, pCount);
+}
+
+typedef const char **GetEncodingsFn(int32_t *);
+
+static GetEncodingsFn *const getEncodingsFns[] = {
+  getOneEncoding,
+  getFirstEvenEncodings,
+  getMiddleEncodings,
+  getLastEncodings,
+  getSomeEncodings,
+  getEveryThirdEncoding,
+  getAllEncodings
+};
 
 static FILE *fopenOrError(const char *filename) {
     int32_t needLen;
@@ -51,18 +175,29 @@ static FILE *fopenOrError(const char *filename) {
     return f;
 }
 
-void addCnvSelTest(TestNode** root)
-{
-    addTest(root, &TestConversionUTF16, "tsconv/ucnvseltst/TestConversionUTF16");
-    addTest(root, &TestConversionUTF8, "tsconv/ucnvseltst/TestConversionUTF8");
-    addTest(root, &TestSerializationAndUnserialization, "tsconv/ucnvseltst/TestSerializationAndUnserialization");
+static char *
+loadText(int32_t *pLength) {
+  char *text;
+  FILE *f = fopenOrError("ConverterSelectorTestUTF8.txt");
+  if(!f) {
+    *pLength = 0;
+    return NULL;
+  }
+  fseek(f, 0, SEEK_END);
+  *pLength = (int32_t)ftell(f);
+  fseek(f, 0, SEEK_SET);
+  text = (char *)uprv_malloc(*pLength + 1);
+  if (*pLength != fread(text, 1, *pLength, f)) {
+    log_err("error reading %ld bytes from test text file\n", (long)*pLength);
+    *pLength = 0;
+    uprv_free(text);
+  }
+  fclose(f);
+  text[*pLength] = 0;
+  return text;
 }
 
-/*
- * there doesn't seem to be a fn in ucnv to get the index of a converter
- * given one of its aliases!
- */
-int32_t findIndex (const char* converterName) {
+static int32_t findIndex(const char* converterName) {
   UErrorCode status = U_ZERO_ERROR;
   int32_t i;
   for (i = 0 ; i < ucnv_countAvailable() ; i++) {
@@ -82,11 +217,213 @@ int32_t findIndex (const char* converterName) {
   return -1;
 }
 
+static UBool *
+getResultsManually(const char** encodings, int32_t num_encodings,
+                   const char *utf8, int32_t length,
+                   const USet* excludedCodePoints, const UConverterUnicodeSet whichSet) {
+  UBool* resultsManually;
+  int32_t i;
+
+  resultsManually = (UBool*) uprv_malloc(gCountAvailable);
+  uprv_memset(resultsManually, 0, gCountAvailable);
+
+  for(i = 0 ; i < num_encodings ; i++) {
+    UErrorCode status = U_ZERO_ERROR;
+    /* get unicode set for that converter */
+    USet* set;
+    UConverter* test_converter;
+    UChar32 cp;
+    int32_t encIndex, offset;
+
+    set = uset_openEmpty();
+    test_converter = ucnv_open(encodings[i], &status);
+    ucnv_getUnicodeSet(test_converter, set,
+                       whichSet, &status);
+    if (excludedCodePoints != NULL) {
+      uset_addAll(set, excludedCodePoints);
+    }
+    uset_freeze(set);
+    offset = 0;
+    cp = 0;
+
+    encIndex = findIndex(encodings[i]);
+    resultsManually[encIndex] = TRUE;
+    while(offset<length) {
+      U8_NEXT(utf8, offset, length, cp);
+      if (cp >= 0 && !uset_contains(set, cp)) {
+        resultsManually[encIndex] = FALSE;
+        break;
+      }
+    }
+    uset_close(set);
+    ucnv_close(test_converter);
+  }
+  return resultsManually;
+}
+
+/* closes res but does not free resultsManually */
+static void verifyResult(UEnumeration* res, const UBool *resultsManually) {
+  UBool* resultsFromSystem = (UBool*) uprv_malloc(gCountAvailable * sizeof(UBool));
+  const char* name;
+  UErrorCode status = U_ZERO_ERROR;
+  int32_t i;
+
+  /* fill the bool for the selector results! */
+  uprv_memset(resultsFromSystem, 0, gCountAvailable);
+  while ((name = uenum_next(res,NULL, &status)) != NULL) {
+    resultsFromSystem[findIndex(name)] = TRUE;
+  }
+  for(i = 0 ; i < gCountAvailable; i++) {
+    if(resultsManually[i] != resultsFromSystem[i]) {
+      log_err("failure in converter selector\n"
+              "converter %s had conflicting results -- manual: %d, system %d\n",
+              gAvailableNames[i], resultsManually[i], resultsFromSystem[i]);
+    }
+  }
+  uprv_free(resultsFromSystem);
+  uenum_close(res);
+}
+
+static void TestSelect()
+{
+  char *text, *textLimit;
+  int32_t textLength;
+  USet* excluded_sets[3] = { NULL };
+  int32_t i, testCaseIdx;
+
+  if (!getAvailableNames()) {
+    return;
+  }
+  text = loadText(&textLength);
+  if (text == NULL) {
+    releaseAvailableNames();;
+  }
+  textLimit = text + textLength;
+
+  excluded_sets[0] = uset_openEmpty();
+  for(i = 1 ; i < 3 ; i++) {
+    excluded_sets[i] = uset_open(i*30, i*30+500);
+  }
+
+  for(testCaseIdx = 0; testCaseIdx < LENGTHOF(getEncodingsFns); testCaseIdx++)
+  {
+    int32_t excluded_set_id;
+    int32_t num_encodings;
+    const char **encodings = getEncodingsFns[testCaseIdx](&num_encodings);
+    if (QUICK && num_encodings > 25) {
+      uprv_free((void *)encodings);
+      continue;
+    }
+
+    for(excluded_set_id = 0 ; excluded_set_id < 3 ; excluded_set_id++) {
+      int32_t curString;
+      char *s, *limit;
+      UConverterSelector *sel_rt, *sel_fb;
+      UErrorCode status = U_ZERO_ERROR;
+      sel_rt = ucnvsel_open(encodings, num_encodings,
+                            excluded_sets[excluded_set_id],
+                            UCNV_ROUNDTRIP_SET, &status);
+      if (num_encodings == gCountAvailable) {
+        /* test the special "all converters" parameter values */
+        sel_fb = ucnvsel_open(NULL, 0,
+                              excluded_sets[excluded_set_id],
+                              UCNV_ROUNDTRIP_AND_FALLBACK_SET, &status);
+      } else {
+        sel_fb = ucnvsel_open(encodings, num_encodings,
+                              excluded_sets[excluded_set_id],
+                              UCNV_ROUNDTRIP_AND_FALLBACK_SET, &status);
+      }
+      if (U_FAILURE(status)) {
+        log_err("ucnv_sel_open(encodings %ld) failed - %s\n", testCaseIdx, u_errorName(status));
+        ucnvsel_close(sel_rt);
+        uprv_free((void *)encodings);
+        continue;
+      }
+
+      curString = 0;
+      s = text;
+      if (textLength >= 3 && s[0] == (char)0xef && s[1] == (char)0xbb && s[2] == (char)0xbf) {
+        s += 3;  /* skip the UTF-8 signature byte sequence (U+FEFF) */
+      }
+      for (;;) {
+        UBool *manual_rt, *manual_fb;
+        static UChar utf16[10000];
+        int32_t length8, length16;
+
+        if (QUICK && curString > 2) {
+          break;
+        }
+        /* find the end of this string */
+        limit = s;
+        while (limit != textLimit && *limit != 0x23 /* '#' */) {
+          ++limit;
+        }
+        if (limit != textLimit) {
+          *limit = 0;  /* *textLimit already is 0 */
+        }
+        length8 = (int32_t)(limit - s);
+
+        manual_rt = getResultsManually(encodings, num_encodings,
+                                       s, length8,
+                                       excluded_sets[excluded_set_id],
+                                       UCNV_ROUNDTRIP_SET);
+        manual_fb = getResultsManually(encodings, num_encodings,
+                                       s, length8,
+                                       excluded_sets[excluded_set_id],
+                                       UCNV_ROUNDTRIP_AND_FALLBACK_SET);
+        /* UTF-8 with length */
+        verifyResult(ucnvsel_selectForUTF8(sel_rt, s, length8, &status), manual_rt);
+        verifyResult(ucnvsel_selectForUTF8(sel_fb, s, length8, &status), manual_fb);
+        /* UTF-8 NUL-terminated */
+        verifyResult(ucnvsel_selectForUTF8(sel_rt, s, -1, &status), manual_rt);
+        verifyResult(ucnvsel_selectForUTF8(sel_fb, s, -1, &status), manual_fb);
+
+        u_strFromUTF8(utf16, LENGTHOF(utf16), &length16, s, length8, &status);
+        if (U_FAILURE(status)) {
+          log_err("error converting the test text (string %ld) to UTF-16 - %s\n",
+                  (long)curString, u_errorName(status));
+          break;
+        } else {
+          /* UTF-16 with length */
+          verifyResult(ucnvsel_selectForString(sel_rt, utf16, length16, &status), manual_rt);
+          verifyResult(ucnvsel_selectForString(sel_fb, utf16, length16, &status), manual_fb);
+          /* UTF-16 NUL-terminated */
+          verifyResult(ucnvsel_selectForString(sel_rt, utf16, -1, &status), manual_rt);
+          verifyResult(ucnvsel_selectForString(sel_fb, utf16, -1, &status), manual_fb);
+        }
+
+        uprv_free(manual_rt);
+        uprv_free(manual_fb);
+
+        if (limit == textLimit) {
+          break;
+        } else {
+          /* restore and skip the string delimiter */
+          *limit = 0x23;
+          s = limit + 1;
+          ++curString;
+        }
+      }
+      ucnvsel_close(sel_rt);
+      ucnvsel_close(sel_fb);
+    }
+    uprv_free((void *)encodings);
+  }
+
+  releaseAvailableNames();
+  uprv_free(text);
+  for(i = 0 ; i < 3 ; i++) {
+    uset_close(excluded_sets[i]);
+  }
+}
+
+/* TODO: clean up the following test function like the previous one; get rid of the helper functions */
+
 /*
  * fill a boolean array with whether the conversion succeeded
  * or not
  */
-void fillBool(UEnumeration* res, UBool* toFill, int32_t toFillLen) {
+static void fillBool(UEnumeration* res, UBool* toFill, int32_t toFillLen) {
   UErrorCode status = U_ZERO_ERROR;
   int32_t i;
   for(i = 0 ; i < toFillLen ; i++)
@@ -97,293 +434,7 @@ void fillBool(UEnumeration* res, UBool* toFill, int32_t toFillLen) {
   }
 }
 
-
-
-void verifyResultUTF8(const char* const s, const char** encodings, int32_t num_encodings, UEnumeration* res, const USet* excludedEncodings, const UConverterUnicodeSet   whichSet) {
-  UBool* resultsFromSystem;
-  UBool* resultsManually;
-  int32_t i;
-  resultsFromSystem = (UBool*) uprv_malloc(ucnv_countAvailable() * sizeof(UBool));
-  resultsManually = (UBool*) uprv_malloc(ucnv_countAvailable() * sizeof(UBool));
-  for(i = 0 ; i < ucnv_countAvailable() ; i++)
-    resultsFromSystem[i] = resultsManually[i] = FALSE;
-
-
-  for(i = 0 ; i < num_encodings ; i++) {
-    UErrorCode status = U_ZERO_ERROR;
-    /* get unicode set for that converter */
-    USet* unicode_point_set;
-    UConverter* test_converter;
-    int32_t offset;
-    int32_t length;
-    UChar32 next;
-
-    unicode_point_set = uset_open(1, 0);
-    test_converter = ucnv_open(encodings[i], &status);
-    ucnv_getUnicodeSet(test_converter, unicode_point_set,
-                       whichSet, &status);
-
-
-    offset = 0;
-    length = uprv_strlen(s);
-
-    resultsManually[findIndex(encodings[i])] = TRUE;
-    next = 0;
-
-    while(offset<length) {
-      U8_NEXT(s, offset, length, next)
-      if (next >= 0 && uset_contains(excludedEncodings, next)==FALSE && uset_contains(unicode_point_set, next)==FALSE) {
-        resultsManually[findIndex(encodings[i])] = FALSE;
-        break;
-      }
-    }
-    uset_close(unicode_point_set);
-
-    ucnv_close(test_converter);
-  }
-
-  /* fill the bool for the selector results! */
-  fillBool(res, resultsFromSystem, ucnv_countAvailable());
-  for(i = 0 ; i < ucnv_countAvailable() ; i++) {
-    if(resultsManually[i] != resultsFromSystem[i]) {
-      log_err("failure in converter selector converter %s had conflicting results manual: %d, system %d\n",ucnv_getAvailableName(i), resultsManually[i], resultsFromSystem[i]);
-      exit(1);
-    }
-  }
-  uprv_free(resultsFromSystem);
-  uprv_free(resultsManually);
-}
-
-
-static void TestConversionUTF8()
-{
-  /*
-   * test cases are separated by a -1
-   * each line is one test case including encodings to check for
-   * I'd like to generate this array randomly but not sure if this is an allowed practice in ICU
-   */
-  int32_t encodingsTestCases[] = {  90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, -1,
-                                    1, 3, 7, 9, 11, 13, 12, 15, 19, 20, 22, 24, -1,
-                                    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1,
-                                    0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, -1,
-                                    1, 5, 9, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, -1,
-                                    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-                                    30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59,
-                                    60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89,
-                                    90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129,
-                                    130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
-                                    160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189,
-                                    190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, -1, 1, -1};
-
-  int32_t test_case_count = sizeof(encodingsTestCases) / sizeof(encodingsTestCases[0]);
-
-  USet* excluded_sets[3];
-  int32_t i;
-  int32_t prev, testCaseIdx;
-  int32_t excluded_set_id;
-  int32_t curCase = 0;
-
-  excluded_sets[0] = uset_open(1,0);
-  for(i = 1 ; i < 3 ; i++)
-    excluded_sets[i] = uset_open(i*30, i*30+500);
-
- for(excluded_set_id = 0 ; excluded_set_id < 3 ; excluded_set_id++)
-  for(testCaseIdx = 0, prev=0, curCase=0 ; testCaseIdx < test_case_count ; testCaseIdx++)
-  {
-    UErrorCode status;
-    UEnumeration* res1;
-    int32_t i;
-    USet* partial_set;
-    UConverterSelector* sel;
-    char** encodings;
-    int32_t num_rndm_encodings;
-    int32_t totalStrLen;
-    char* names;
-    FILE* f1;
-    int32_t counter;
-    char c;
-    char* text;
-    int32_t curTestCase;
-
-    if(encodingsTestCases[testCaseIdx] != -1) continue;
-    curCase++;
-
-    if(QUICK && curCase > 4)
-      break;
-
-    status = U_ZERO_ERROR;
-    partial_set = NULL;
-    encodings = (char**) uprv_malloc((testCaseIdx - prev) * sizeof(char*));
-    num_rndm_encodings = testCaseIdx - prev;
-    totalStrLen = 0;
-    for(i = prev ; i < testCaseIdx ; i++) {
-      totalStrLen += uprv_strlen(ucnv_getAvailableName(encodingsTestCases[i]))+1;
-    }
-    names = (char*)uprv_malloc(totalStrLen);
-    uprv_memset(names, 0, totalStrLen);
-
-    for(i = prev ; i < testCaseIdx ; i++) {
-      uprv_memcpy(names, ucnv_getAvailableName(encodingsTestCases[i]), uprv_strlen(ucnv_getAvailableName(encodingsTestCases[i])));
-      encodings[i-prev] = names;
-      names+=uprv_strlen(ucnv_getAvailableName(encodingsTestCases[i]))+1;
-    }
-
-    status = U_ZERO_ERROR;
-    sel = ucnvsel_open((const char**)encodings, testCaseIdx-prev, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_SET, &status);
-    /* count how many bytes (Is there a portable function that is more efficient than this?) */
-    f1 = fopenOrError("ConverterSelectorTestUTF8.txt");
-    if(!f1) {
-        return;
-    }
-    counter = 0;
-    while(fread(&c, sizeof(c), 1, f1) > 0)
-        counter++;
-    fclose(f1);
-    text = (char*)uprv_malloc((counter+1));
-    f1 = fopenOrError("ConverterSelectorTestUTF8.txt");
-    if(!f1) {
-        return;
-    }
-    fread(text,1, counter,f1);
-    fclose(f1);
-
-
-    for (i = 0 ; i < counter ; i++) {
-      if(text[i] == '#')
-        text[i] = 0;
-    }
-    text[counter] = 0;
-
-    curTestCase=0;
-    for (i = 0 ; i < counter ; i++) {
-      if(i==0 || text[i-1] == 0) {
-        curTestCase++;
-        if(curTestCase > 2 && QUICK)
-          break;
-        /* test, both with length, and NULL terminated */
-        res1 = ucnvsel_selectForUTF8(sel, text+i, -1, &status);
-        /* make sure result is correct! */
-        verifyResultUTF8(text+i, (const char**) encodings, num_rndm_encodings, res1, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_SET);
-        uenum_close(res1);
-
-        res1 = ucnvsel_selectForUTF8(sel, text+i, uprv_strlen(text+i), &status);
-        /* make sure result is correct! */
-        verifyResultUTF8(text+i, (const char**)encodings, num_rndm_encodings, res1, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_SET);
-        uenum_close(res1);
-      }
-    }
-    uprv_free(text);
-    uprv_free(encodings[0]);
-    uprv_free(encodings);
-    ucnvsel_close(sel);
-    prev = testCaseIdx + 1;
-  }
-
-/* ////////////////////////////////////////////////////////////////////////// */
-
- /* try fallback mapping! */
- curCase = 0;
- for(excluded_set_id = 0 ; excluded_set_id < 3 ; excluded_set_id++)
-  for(testCaseIdx = 0, prev=0, curCase=0 ; testCaseIdx < test_case_count ; testCaseIdx++)
-  {
-    UErrorCode status;
-    UEnumeration* res1;
-    int32_t i;
-    USet* partial_set;
-    UConverterSelector* sel;
-    char** encodings;
-    int32_t num_rndm_encodings;
-    int32_t totalStrLen;
-    char* names;
-    FILE* f1;
-    int32_t counter;
-    char c;
-    char* text;
-    int32_t curTestCase;
-
-    if(encodingsTestCases[testCaseIdx] != -1) continue;
-
-    curCase++;
-
-    if(QUICK && curCase > 2)
-      break;
-
-    status = U_ZERO_ERROR;
-    partial_set = NULL;
-    encodings = (char**)uprv_malloc((testCaseIdx - prev) * sizeof(char*));
-    num_rndm_encodings = testCaseIdx - prev;
-    totalStrLen = 0;
-    for(i = prev ; i < testCaseIdx ; i++) {
-      totalStrLen += uprv_strlen(ucnv_getAvailableName(encodingsTestCases[i]))+1;
-    }
-    names = (char*)uprv_malloc(totalStrLen);
-    uprv_memset(names, 0, totalStrLen);
-
-    for(i = prev ; i < testCaseIdx ; i++) {
-      uprv_memcpy(names, ucnv_getAvailableName(encodingsTestCases[i]), uprv_strlen(ucnv_getAvailableName(encodingsTestCases[i])));
-      encodings[i-prev] = names;
-      names+=uprv_strlen(ucnv_getAvailableName(encodingsTestCases[i]))+1;
-    }
-
-
-    status = U_ZERO_ERROR;
-    sel = ucnvsel_open((const char**)encodings, testCaseIdx-prev, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_AND_FALLBACK_SET, &status);
-    /* count how many bytes (Is there a portable function that is more efficient than this?) */
-    f1 = fopenOrError("ConverterSelectorTestUTF8.txt");
-    if(!f1) {
-        return;
-    }
-    counter = 0;
-    while(fread(&c, sizeof(c), 1, f1) > 0) counter++;
-    fclose(f1);
-    text = (char*)uprv_malloc(counter+1);
-    f1 = fopenOrError("ConverterSelectorTestUTF8.txt");
-    if(!f1) {
-        return;
-    }
-    fread(text,1, counter,f1);
-    fclose(f1);
-
-
-    for (i = 0 ; i < counter ; i++) {
-      if(text[i] == '#')
-        text[i] = 0;
-    }
-    text[counter] = 0;
-
-    curTestCase=0;
-    for (i = 0 ; i < counter ; i++) {
-      if(i==0 || text[i-1] == 0) {
-        curTestCase++;
-        if(curTestCase > 2 && QUICK)
-          break;
-        /* test, both with length, and NULL terminated */
-        res1 = ucnvsel_selectForUTF8(sel, text+i, -1, &status);
-        /* make sure result is correct! */
-        verifyResultUTF8(text+i, (const char**)encodings, num_rndm_encodings, res1,excluded_sets[excluded_set_id],  UCNV_ROUNDTRIP_AND_FALLBACK_SET);
-        uenum_close(res1);
-
-        res1 = ucnvsel_selectForUTF8(sel, text+i, uprv_strlen(text+i), &status);
-        /* make sure result is correct! */
-        verifyResultUTF8(text+i, (const char**)encodings, num_rndm_encodings, res1,excluded_sets[excluded_set_id],  UCNV_ROUNDTRIP_AND_FALLBACK_SET);
-        uenum_close(res1);
-      }
-    }
-    uprv_free(encodings[0]);
-    uprv_free(encodings);
-    uprv_free(text);
-    ucnvsel_close(sel);
-    prev = testCaseIdx + 1;
-  }
-
-
-
-  for(i = 0 ; i < 3 ; i++)
-    uset_close(excluded_sets[i]);
-
-}
-
-void verifyResultUTF16(const UChar* const s, const char** encodings, int32_t num_encodings, UEnumeration* res, const USet* excludedEncodings, const UConverterUnicodeSet   whichSet) {
+static void verifyResultUTF16(const UChar* const s, const char** encodings, int32_t num_encodings, UEnumeration* res, const USet* excludedEncodings, const UConverterUnicodeSet   whichSet) {
   UBool* resultsFromSystem;
   UBool* resultsManually;
   int32_t i;
@@ -442,240 +493,6 @@ void verifyResultUTF16(const UChar* const s, const char** encodings, int32_t num
   uprv_free(resultsManually);
 }
 
-/* does selectForUTF16() work well? */
-static void TestConversionUTF16()
-{
-  /*
-   * test cases are separated by a -1
-   * each line is one test case including encodings to check for
-   * I'd like to generate this array randomly but not sure if this is an allowed practice in ICU
-   */
-  int32_t encodingsTestCases[] = {  90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, -1,
-                                    1, 3, 7, 9, 11, 13, 12, 15, 19, 20, 22, 24, -1,
-                                    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1,
-                                    0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, -1,
-                                    1, 5, 9, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, -1,
-                                    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-                                    30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59,
-                                    60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89,
-                                    90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129,
-                                    130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
-                                    160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189,
-                                    190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, -1, 1, -1};
-
-  int32_t test_case_count = sizeof(encodingsTestCases) / sizeof(encodingsTestCases[0]);
-
-  USet* excluded_sets[3];
-  int32_t i;
-  int32_t prev, testCaseIdx;
-  /* try roundtrip mapping */
-  int32_t excluded_set_id;
-  int32_t curCase = 0;
-
-  excluded_sets[0] = uset_open(1,0);
-  for(i = 1 ; i < 3 ; i++)
-    excluded_sets[i] = uset_open(i*30, i*30+500);
-
-
-
- curCase = 0;
- for(excluded_set_id = 0 ; excluded_set_id < 3 ; excluded_set_id++)
-  for(testCaseIdx = 0, prev=0, curCase=0 ; testCaseIdx < test_case_count ; testCaseIdx++)
-  {
-    UErrorCode status;
-    UEnumeration* res1;
-    int32_t i;
-    USet* partial_set;
-    UConverterSelector* sel;
-    char** encodings;
-    int32_t num_rndm_encodings;
-    int32_t totalStrLen;
-    char* names;
-    FILE* f1;
-    int32_t counter;
-    UChar c;
-    UChar* text;
-    int32_t curTestCase;
-
-    if(encodingsTestCases[testCaseIdx] != -1) continue;
-    curCase++;
-
-    if(QUICK && curCase > 2)
-      break;
-
-    status = U_ZERO_ERROR;
-    partial_set = NULL;
-    encodings = (char**) uprv_malloc((testCaseIdx - prev) * sizeof(char*));
-    num_rndm_encodings = testCaseIdx - prev;
-    totalStrLen = 0;
-    for(i = prev ; i < testCaseIdx ; i++) {
-      totalStrLen += uprv_strlen(ucnv_getAvailableName(encodingsTestCases[i]))+1;
-    }
-    names = (char*)uprv_malloc(totalStrLen);
-    uprv_memset(names, 0, totalStrLen);
-
-    for(i = prev ; i < testCaseIdx ; i++) {
-      uprv_memcpy(names, ucnv_getAvailableName(encodingsTestCases[i]), uprv_strlen(ucnv_getAvailableName(encodingsTestCases[i])));
-      encodings[i-prev] = names;
-      names+=uprv_strlen(ucnv_getAvailableName(encodingsTestCases[i]))+1;
-    }
-
-    status = U_ZERO_ERROR;
-    sel = ucnvsel_open((const char**)encodings, testCaseIdx-prev, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_SET, &status);
-    /* count how many bytes (Is there a portable function that is more efficient than this?) */
-    f1 = fopenOrError("ConverterSelectorTestUTF16.txt");
-    if(!f1) {
-        return; /* error was already printed */
-    }
-    counter = 0;
-    while(fread(&c, sizeof(c), 1, f1) > 0) counter++;
-    fclose(f1);
-    text = (UChar*)uprv_malloc((counter+1)*sizeof(UChar));
-    f1 = fopenOrError("ConverterSelectorTestUTF16.txt");
-    if(!f1) {
-        return; /* error was already printed */
-    }
-    fread(text,sizeof(UChar), counter,f1);
-    fclose(f1);
-
-
-    for (i = 0 ; i < counter ; i++) {
-      if(text[i] == (UChar)'#')
-        text[i] = 0;
-    }
-    text[counter] = 0;
-
-    curTestCase=0;
-    for (i = 0 ; i < counter ; i++) {
-      if(i==0 || text[i-1] == 0) {
-        curTestCase++;
-        if(curTestCase > 2 && QUICK)
-          break;
-        /* test, both with length, and NULL terminated */
-        res1 = ucnvsel_selectForString(sel, text+i, -1, &status);
-        /* make sure result is correct! */
-        verifyResultUTF16(text+i, (const char**) encodings, num_rndm_encodings, res1, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_SET);
-        uenum_close(res1);
-
-        res1 = ucnvsel_selectForString(sel, text+i, u_strlen(text+i), &status);
-        /* make sure result is correct! */
-        verifyResultUTF16(text+i, (const char**)encodings, num_rndm_encodings, res1, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_SET);
-        uenum_close(res1);
-      }
-    }
-    uprv_free(text);
-    uprv_free(encodings[0]);
-    uprv_free(encodings);
-    ucnvsel_close(sel);
-    prev = testCaseIdx + 1;
-  }
-
-/* ////////////////////////////////////////////////////////////////////////// */
-
- /* try fallback mapping! */
-
- for(excluded_set_id = 0 ; excluded_set_id < 3 ; excluded_set_id++)
-  for(testCaseIdx = 0, prev=0, curCase=0 ; testCaseIdx < test_case_count ; testCaseIdx++)
-  {
-    UErrorCode status;
-    UEnumeration* res1;
-    int32_t i;
-    USet* partial_set;
-    UConverterSelector* sel;
-    char** encodings;
-    int32_t num_rndm_encodings;
-    int32_t totalStrLen;
-    char* names;
-    FILE* f1;
-    int32_t counter;
-    UChar c;
-    UChar* text;
-    int32_t curTestCase;
-
-    if(encodingsTestCases[testCaseIdx] != -1) continue;
-
-    curCase++;
-
-    if(QUICK && curCase > 2)
-      break;
-
-    status = U_ZERO_ERROR;
-    partial_set = NULL;
-    encodings = (char**)uprv_malloc((testCaseIdx - prev) * sizeof(char*));
-    num_rndm_encodings = testCaseIdx - prev;
-    totalStrLen = 0;
-    for(i = prev ; i < testCaseIdx ; i++) {
-      totalStrLen += uprv_strlen(ucnv_getAvailableName(encodingsTestCases[i]))+1;
-    }
-    names = (char*)uprv_malloc(totalStrLen);
-    uprv_memset(names, 0, totalStrLen);
-
-    for(i = prev ; i < testCaseIdx ; i++) {
-      uprv_memcpy(names, ucnv_getAvailableName(encodingsTestCases[i]), uprv_strlen(ucnv_getAvailableName(encodingsTestCases[i])));
-      encodings[i-prev] = names;
-      names+=uprv_strlen(ucnv_getAvailableName(encodingsTestCases[i]))+1;
-    }
-
-
-    /* first time */
-    status = U_ZERO_ERROR;
-    sel = ucnvsel_open((const char**)encodings, testCaseIdx-prev, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_AND_FALLBACK_SET, &status);
-    /* count how many bytes (Is there a portable function that is more efficient than this?) */
-    f1 = fopenOrError("ConverterSelectorTestUTF16.txt");
-    if(!f1) {
-        return; /* error was already printed */
-    }
-      counter = 0;
-      while(fread(&c, sizeof(c), 1, f1) > 0) counter++;
-    fclose(f1);
-    text = (UChar*)uprv_malloc((counter+1)*sizeof(UChar));
-    f1 = fopenOrError("ConverterSelectorTestUTF16.txt");
-    if(!f1) {
-        return; /* error was already printed */
-    }
-      fread(text,sizeof(UChar), counter,f1);
-    fclose(f1);
-
-
-    for (i = 0 ; i < counter ; i++) {
-      if(text[i] == (UChar)'#')
-        text[i] = 0;
-    }
-    text[counter] = 0;
-
-    curTestCase=0;
-    for (i = 0 ; i < counter ; i++) {
-      if(i==0 || text[i-1] == 0) {
-        curTestCase++;
-        if(curTestCase > 2 && QUICK)
-          break;
-        /* test, both with length, and NULL terminated */
-        res1 = ucnvsel_selectForString(sel, text+i, -1, &status);
-        /* make sure result is correct! */
-        verifyResultUTF16(text+i, (const char**)encodings, num_rndm_encodings, res1,excluded_sets[excluded_set_id],  UCNV_ROUNDTRIP_AND_FALLBACK_SET);
-        uenum_close(res1);
-
-        res1 = ucnvsel_selectForString(sel, text+i, u_strlen(text+i), &status);
-        /* make sure result is correct! */
-        verifyResultUTF16(text+i, (const char**)encodings, num_rndm_encodings, res1,excluded_sets[excluded_set_id],  UCNV_ROUNDTRIP_AND_FALLBACK_SET);
-        uenum_close(res1);
-      }
-    }
-    uprv_free(encodings[0]);
-    uprv_free(encodings);
-    uprv_free(text);
-    ucnvsel_close(sel);
-    prev = testCaseIdx + 1;
-  }
-  for(i = 0 ; i < 3 ; i++)
-    uset_close(excluded_sets[i]);
-}
-
-
-
-
-
-/* does selectForUTF16() work well? */
 static void TestSerializationAndUnserialization()
 {
   /*
@@ -706,7 +523,11 @@ static void TestSerializationAndUnserialization()
   int32_t excluded_set_id;
   int32_t curCase;
 
- excluded_sets[0] = uset_open(1,0);
+  if (!getAvailableNames()) {
+    return;
+  }
+
+  excluded_sets[0] = uset_open(1,0);
   for(i = 1 ; i < 3 ; i++)
     excluded_sets[i] = uset_open(i*30, i*30+500);
 
@@ -721,7 +542,7 @@ static void TestSerializationAndUnserialization()
     USet* partial_set;
     UConverterSelector* sel;
     char** encodings;
-    int32_t num_rndm_encodings;
+    int32_t num_encodings;
     int32_t totalStrLen;
     char* names;
     char *buffer;
@@ -742,7 +563,7 @@ static void TestSerializationAndUnserialization()
     status = U_ZERO_ERROR;
     partial_set = NULL;
     encodings = (char**) uprv_malloc((testCaseIdx - prev) * sizeof(char*));
-    num_rndm_encodings = testCaseIdx - prev;
+    num_encodings = testCaseIdx - prev;
     totalStrLen = 0;
     for(i = prev ; i < testCaseIdx ; i++) {
       totalStrLen += uprv_strlen(ucnv_getAvailableName(encodingsTestCases[i]))+1;
@@ -831,7 +652,7 @@ static void TestSerializationAndUnserialization()
           continue;
         }
         /* make sure result is correct! */
-        verifyResultUTF16(text+i, (const char**) encodings, num_rndm_encodings, res1, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_SET);
+        verifyResultUTF16(text+i, (const char**) encodings, num_encodings, res1, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_SET);
         uenum_close(res1);
 
         res1 = ucnvsel_selectForString(sel, text+i, u_strlen(text+i), &status);
@@ -841,7 +662,7 @@ static void TestSerializationAndUnserialization()
           continue;
         }
         /* make sure result is correct! */
-        verifyResultUTF16(text+i, (const char**)encodings, num_rndm_encodings, res1, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_SET);
+        verifyResultUTF16(text+i, (const char**)encodings, num_encodings, res1, excluded_sets[excluded_set_id], UCNV_ROUNDTRIP_SET);
         uenum_close(res1);
       }
     }
@@ -865,7 +686,7 @@ static void TestSerializationAndUnserialization()
     USet* partial_set;
     UConverterSelector* sel;
     char** encodings;
-    int32_t num_rndm_encodings;
+    int32_t num_encodings;
     int32_t totalStrLen;
     char* names;
     char *buffer;
@@ -886,7 +707,7 @@ static void TestSerializationAndUnserialization()
     status = U_ZERO_ERROR;
     partial_set = NULL;
     encodings = (char**)uprv_malloc((testCaseIdx - prev) * sizeof(char*));
-    num_rndm_encodings = testCaseIdx - prev;
+    num_encodings = testCaseIdx - prev;
     totalStrLen = 0;
     for(i = prev ; i < testCaseIdx ; i++) {
       totalStrLen += uprv_strlen(ucnv_getAvailableName(encodingsTestCases[i]))+1;
@@ -944,12 +765,12 @@ static void TestSerializationAndUnserialization()
         /* test, both with length, and NULL terminated */
         res1 = ucnvsel_selectForString(sel, text+i, -1, &status);
         /* make sure result is correct! */
-        verifyResultUTF16(text+i, (const char**)encodings, num_rndm_encodings, res1,excluded_sets[excluded_set_id],  UCNV_ROUNDTRIP_AND_FALLBACK_SET);
+        verifyResultUTF16(text+i, (const char**)encodings, num_encodings, res1,excluded_sets[excluded_set_id],  UCNV_ROUNDTRIP_AND_FALLBACK_SET);
         uenum_close(res1);
 
         res1 = ucnvsel_selectForString(sel, text+i, u_strlen(text+i), &status);
         /* make sure result is correct! */
-        verifyResultUTF16(text+i, (const char**)encodings, num_rndm_encodings, res1,excluded_sets[excluded_set_id],  UCNV_ROUNDTRIP_AND_FALLBACK_SET);
+        verifyResultUTF16(text+i, (const char**)encodings, num_encodings, res1,excluded_sets[excluded_set_id],  UCNV_ROUNDTRIP_AND_FALLBACK_SET);
         uenum_close(res1);
       }
     }
@@ -963,4 +784,6 @@ static void TestSerializationAndUnserialization()
 
   for(i = 0 ; i < 3 ; i++)
     uset_close(excluded_sets[i]);
+
+  releaseAvailableNames();
 }
