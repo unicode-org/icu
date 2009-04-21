@@ -38,9 +38,9 @@ BRK_CTD_SOURCE = thaidict.txt
 
 
 # List of break iterator files (brk).
-BRK_SOURCE = word_POSIX.txt word_ja.txt char.txt word.txt line.txt sent.txt title.txt 
+BRK_SOURCE = word_POSIX.txt word_ja.txt sent_el.txt char_th.txt char.txt word.txt line.txt sent.txt title.txt 
 
 
 # Ordinary resources
-BRK_RES_SOURCE = en.txt en_US.txt en_US_POSIX.txt ja.txt
+BRK_RES_SOURCE = el.txt en.txt en_US.txt en_US_POSIX.txt ja.txt th.txt
 

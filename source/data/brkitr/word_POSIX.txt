@@ -31,9 +31,9 @@ $Extend       = [\p{Word_Break = Extend}];
 $Format       = [\p{Word_Break = Format}];
 $Katakana     = [\p{Word_Break = Katakana}];
 $ALetter      = [\p{Word_Break = ALetter}];
-$MidNumLet    = [\p{Word_Break = MidNumLet}];
-$MidLetter    = [\p{Word_Break = MidLetter} - [ \:]];
-$MidNum       = [\p{Word_Break = MidNum}];
+$MidNumLet    = [\p{Word_Break = MidNumLet} - [.]];
+$MidLetter    = [\p{Word_Break = MidLetter} - [\:]];
+$MidNum       = [\p{Word_Break = MidNum} [.]];
 $Numeric      = [\p{Word_Break = Numeric}];
 $ExtendNumLet = [\p{Word_Break = ExtendNumLet}];
 
