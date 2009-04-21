@@ -3897,7 +3897,8 @@ public final class ULocale implements Serializable {
      * @provisional This API might change or be removed in a future release.
      */
     public static ULocale forLanguageTag(String langtag) {
-        ULocale locale = ULocale.ROOT;
+//        ULocale locale = ULocale.ROOT;
+        ULocale locale = new ULocale("");
         LanguageTag tag = null;
         while (true) {
             try {
@@ -3905,7 +3906,8 @@ public final class ULocale implements Serializable {
 
                 Builder bldr = new Builder();
 
-                String language = tag.getLanguage();
+                String extlang = tag.getExtlang(0);
+                String language = (extlang == null) ? tag.getLanguage() : extlang;
                 // do nothing with language code "und"
                 if (!language.equals("und")) {
                     bldr.setLanguage(language);
@@ -4041,7 +4043,9 @@ public final class ULocale implements Serializable {
             }
 
             // base locale fields
-            setLanguage(tag.getLanguage()).setScript(tag.getScript())
+            String extlang = tag.getExtlang(0);
+            String language = extlang == null ? tag.getLanguage() : extlang;
+            setLanguage(language.equals("und") ? "": language).setScript(tag.getScript())
                 .setRegion(tag.getRegion()).setVariant(tag.getVariant());
 
             // extensions
@@ -4331,18 +4335,41 @@ public final class ULocale implements Serializable {
             String value = getKeywordValue(key);
             if (key.length() == 1) {
                 // non LDML extension or private use
-                if (extMap == null) {
-                    extMap = new TreeMap();
+                // We want to keep only valid subtags
+                boolean isPrivUse = (key.charAt(0) == PRIVATE_USE_EXTENSION);
+                if (isPrivUse || LanguageTag.isExtensionSingleton(key)) {
+                    boolean isValid = true;
+                    String[] subtags = Utility.split(value, '-');
+                    for (int i = 0; i < subtags.length; i++) {
+                        if (isPrivUse) {
+                            if (!LanguageTag.isPrivateuseValueSubtag(subtags[i])) {
+                                isValid = false;
+                                break;
+                            }
+                        } else {
+                            if (!LanguageTag.isExtensionSubtag(subtags[i])) {
+                                isValid = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (isValid) {
+                        if (extMap == null) {
+                            extMap = new TreeMap();
+                        }
+                        extMap.put(new Character(key.charAt(0)), value.intern());
+                    }
                 }
-                extMap.put(new Character(key.charAt(0)), value.intern());
             } else {
                 // LDML keyword
                 String bcpKey = ldmlKeyToBCP47(key);
                 String bcpVal = ldmlTypeToBCP47(key, value);
-                if (ldmlKwMap == null) {
-                    ldmlKwMap = new TreeMap();
+                if (bcpKey != null && bcpVal != null) {
+                    if (ldmlKwMap == null) {
+                        ldmlKwMap = new TreeMap();
+                    }
+                    ldmlKwMap.put(bcpKey.intern(), bcpVal.intern());
                 }
-                ldmlKwMap.put(bcpKey.intern(), bcpVal.intern());
             }
         }
 
@@ -4380,10 +4407,10 @@ public final class ULocale implements Serializable {
         }
 
         if (bcpKey == null) {
-            if (key.length() == 2) {
+            if (key.length() == 2 && LanguageTag.isExtensionSubtag(key)) {
                 return key;
             }
-            throw new IllegalArgumentException("Unknown LDML key name: " + key);
+            return null;
         }
         return bcpKey;
     }
@@ -4433,10 +4460,10 @@ public final class ULocale implements Serializable {
         
         if (bcpType == null) {
             int typeLen = type.length();
-            if (typeLen >= 3 && typeLen <= 8) {
+            if (typeLen >= 3 && typeLen <= 8 && LanguageTag.isExtensionSubtag(type)) {
                 return type;
             }
-            throw new IllegalArgumentException("Unknown LDML type name: " + key);
+            return null;
         }
         return bcpType;
     }

@@ -260,6 +260,8 @@ public final class LanguageTag {
                         // Empty privateuse value
                         errorMsg = "The specified tag '"
                                     + langtag + "' contains an empty private use subtag";
+                        // for error index to point 'x'
+                        idx--;
                         break PARSE;
                     }
                     break;
@@ -514,21 +516,28 @@ public final class LanguageTag {
 //            String[] variants = variant.split("_");
             String[] variants = Utility.split(variant, '_');
 //            for (String var : variants) {
+            TreeSet validVars = new TreeSet();
             for (int i = 0; i < variants.length; i++) {
                 String var = variants[i];
                 if (isVariantSubtag(var)) {
+                    validVars.add(AsciiUtil.toLowerString(var));
+                }
+            }
+            if (validVars.size() > 0) {
+                Iterator varIt = validVars.iterator();
+                while (varIt.hasNext()) {
                     buf.append(SEP);
-                    buf.append(AsciiUtil.toLowerString(var));
+                    buf.append(varIt.next());
                 }
             }
         }
 
-        if (ext != null) {
+        if (ext != null && !ext.equals(LocaleExtensions.EMPTY_EXTENSIONS)) {
             String exttags = ext.getCanonicalString();
             if (exttags.length() > 0) {
                 // extensions including private use
                 buf.append(SEP);
-                buf.append(ext.getCanonicalString());
+                buf.append(exttags);
             }
         }
         return buf.toString();
