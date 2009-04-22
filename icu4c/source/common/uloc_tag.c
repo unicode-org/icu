@@ -115,8 +115,10 @@ ultag_close(ULanguageTag* langtag);
 static const char*
 ultag_getLanguage(const ULanguageTag* langtag);
 
+#if 0
 static const char*
 ultag_getJDKLanguage(const ULanguageTag* langtag);
+#endif
 
 static const char*
 ultag_getExtlang(const ULanguageTag* langtag, int32_t idx);
@@ -148,8 +150,10 @@ ultag_getExtensionsSize(const ULanguageTag* langtag);
 static const char*
 ultag_getPrivateUse(const ULanguageTag* langtag);
 
+#if 0
 static const char*
 ultag_getGrandfathered(const ULanguageTag* langtag);
+#endif
 
 /*
 * -------------------------------------------------
@@ -1962,6 +1966,7 @@ ultag_getLanguage(const ULanguageTag* langtag) {
     return langtag->language;
 }
 
+#if 0
 static const char*
 ultag_getJDKLanguage(const ULanguageTag* langtag) {
     int32_t i;
@@ -1972,6 +1977,7 @@ ultag_getJDKLanguage(const ULanguageTag* langtag) {
     }
     return langtag->language;
 }
+#endif
 
 static const char*
 ultag_getExtlang(const ULanguageTag* langtag, int32_t idx) {
@@ -2084,10 +2090,12 @@ ultag_getPrivateUse(const ULanguageTag* langtag) {
     return langtag->privateuse;
 }
 
+#if 0
 static const char*
 ultag_getGrandfathered(const ULanguageTag* langtag) {
     return langtag->grandfathered;
 }
+#endif
 
 
 /*
