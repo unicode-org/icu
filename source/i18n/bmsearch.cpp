@@ -121,7 +121,7 @@ Target::Target(UCollator *theCollator, const UnicodeString *target, int32_t patt
         setTargetString(target);
     }
 
-    switch (strength) 
+    switch (strength)
     {
     default:
         strengthMask |= UCOL_TERTIARYORDERMASK;
@@ -162,7 +162,7 @@ void Target::setTargetString(const UnicodeString *target)
         elements = ucol_openElements(coll, target->getBuffer(), target->length(), &status);
         ucol_forceHanImplicit(elements, &status);
 
-        charBreakIterator = ubrk_open(UBRK_CHARACTER, ucol_getLocale(coll, ULOC_VALID_LOCALE, &status),
+        charBreakIterator = ubrk_open(UBRK_CHARACTER, ucol_getLocaleByType(coll, ULOC_VALID_LOCALE, &status),
                                       targetBuffer, targetLength, &status);
     } else {
         targetBuffer = NULL;
@@ -190,7 +190,7 @@ const CEI *Target::nextCE(int32_t offset)
         order = ucol_next(elements, &status);
         high  = ucol_getOffset(elements);
 
-        if (order == UCOL_NULLORDER) {
+        if (order == (uint32_t)UCOL_NULLORDER) {
           //high = low = -1;
             break;
         }
@@ -240,7 +240,7 @@ const CEI *Target::prevCE(int32_t offset)
         order = ucol_previous(elements, &status);
         low   = ucol_getOffset(elements);
 
-        if (order == UCOL_NULLORDER) {
+        if (order == (uint32_t)UCOL_NULLORDER) {
             break;
         }
 
@@ -355,8 +355,8 @@ UBool Target::isIdentical(UnicodeString &pattern, int32_t start, int32_t end)
 
     UErrorCode status = U_ZERO_ERROR, status2 = U_ZERO_ERROR;
 
-    int32_t decomplength = unorm_decompose(t2, ARRAY_SIZE(t2), 
-                                       targetBuffer + start, length, 
+    int32_t decomplength = unorm_decompose(t2, ARRAY_SIZE(t2),
+                                       targetBuffer + start, length,
                                        FALSE, 0, &status);
 
     // use separate status2 in case of buffer overflow
@@ -385,10 +385,10 @@ UBool Target::isIdentical(UnicodeString &pattern, int32_t start, int32_t end)
 
         pat = text + decomplength;
 
-        unorm_decompose(text, decomplength, targetBuffer + start, 
+        unorm_decompose(text, decomplength, targetBuffer + start,
                         length, FALSE, 0, &status);
 
-        unorm_decompose(pat, decomplength, pBuffer, 
+        unorm_decompose(pat, decomplength, pBuffer,
                         pLength, FALSE, 0, &status);
     } else {
         // NFD failed, make sure that u_memcmp() does not overrun t2 & p2
@@ -764,7 +764,7 @@ UBool BoyerMooreSearch::search(int32_t offset, int32_t &start, int32_t &end)
             if (tcei->order != pce) {
                 // There is a mismatch at this position.  Decide how far
                 // over to shift the pattern, then try again.
- 
+
                 int32_t gsOffset = tOffset + (*goodSuffixTable)[pIndex];
 #ifdef EXTRA_CAUTIOUS
                 int32_t old = tOffset;
@@ -797,7 +797,7 @@ UBool BoyerMooreSearch::search(int32_t offset, int32_t &start, int32_t &end)
             int32_t mStart   = firstCEI.lowOffset;
             int32_t minLimit = lastCEI.lowOffset;
             int32_t maxLimit = lastCEI.highOffset;
-            int32_t mLimit; 
+            int32_t mLimit;
             UBool found = TRUE;
 
             target->setOffset(/*tOffset*/maxLimit);
@@ -808,7 +808,7 @@ UBool BoyerMooreSearch::search(int32_t offset, int32_t &start, int32_t &end)
                 maxLimit = nextCEI.lowOffset;
             }
 
-            if (nextCEI.lowOffset == nextCEI.highOffset && nextCEI.order != UCOL_NULLORDER) {
+            if (nextCEI.lowOffset == nextCEI.highOffset && nextCEI.order != (uint32_t)UCOL_NULLORDER) {
                 found = FALSE;
             }
 
@@ -852,7 +852,7 @@ UBool BoyerMooreSearch::search(int32_t offset, int32_t &start, int32_t &end)
         }
         // Otherwise, we're here because of a mismatch, so keep going....
     }
-    
+
     // no match
    start = -1;
    end = -1;

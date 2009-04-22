@@ -117,7 +117,7 @@ ucol_initUCA(UErrorCode *status) {
             if(U_SUCCESS(*status)){
                 // Initalize variables for implicit generation
                 uprv_uca_initImplicitConstants(status);
-                
+
                 umtx_lock(NULL);
                 if(_staticUCA == NULL) {
                     UCA_DATA_MEM = result;
@@ -283,7 +283,7 @@ ucol_open_internal(const char *loc,
     result->ucaRules = ures_getStringByKey(b,"UCARules",NULL,&intStatus);
 
     if(loc == NULL) {
-        loc = ures_getLocale(b, status);
+        loc = ures_getLocaleByType(b, ULOC_ACTUAL_LOCALE, status);
     }
     result->requestedLocale = uprv_strdup(loc);
     /* test for NULL */
@@ -291,14 +291,14 @@ ucol_open_internal(const char *loc,
         *status = U_MEMORY_ALLOCATION_ERROR;
         goto clean;
     }
-    loc = ures_getLocale(collElem, status);
+    loc = ures_getLocaleByType(collElem, ULOC_ACTUAL_LOCALE, status);
     result->actualLocale = uprv_strdup(loc);
     /* test for NULL */
     if (result->actualLocale == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         goto clean;
     }
-    loc = ures_getLocale(b, status);
+    loc = ures_getLocaleByType(b, ULOC_ACTUAL_LOCALE, status);
     result->validLocale = uprv_strdup(loc);
     /* test for NULL */
     if (result->validLocale == NULL) {
@@ -750,7 +750,7 @@ static const UEnumeration defaultKeywordValues = {
     ulist_close_keyword_values_iterator,
     ulist_count_keyword_values,
     uenum_unextDefault,
-    ulist_next_keyword_value, 
+    ulist_next_keyword_value,
     ulist_reset_keyword_values_iterator
 };
 
@@ -760,7 +760,7 @@ ucol_getKeywordValuesForLocale(const char* /*key*/, const char* locale,
     /* Get the locale base name. */
     char localeBuffer[ULOC_FULLNAME_CAPACITY] = "";
     uloc_getBaseName(locale, localeBuffer, sizeof(localeBuffer), status);
-    
+
     /* Create the 2 lists
      * -values is the temp location for the keyword values
      * -results hold the actual list used by the UEnumeration object
@@ -778,19 +778,19 @@ ucol_getKeywordValuesForLocale(const char* /*key*/, const char* locale,
         ulist_deleteList(results);
         return NULL;
     }
-    
+
     memcpy(en, &defaultKeywordValues, sizeof(UEnumeration));
     en->context = results;
-    
+
     /* Open the resource bundle for collation with the given locale. */
     UResourceBundle bundle, collations, collres, defres;
     ures_initStackObject(&bundle);
     ures_initStackObject(&collations);
     ures_initStackObject(&collres);
     ures_initStackObject(&defres);
-    
+
     ures_openFillIn(&bundle, U_ICUDATA_COLL, localeBuffer, status);
-    
+
     while (U_SUCCESS(*status)) {
         ures_getByKey(&bundle, RESOURCE_NAME, &collations, status);
         ures_resetIterator(&collations);
@@ -804,17 +804,17 @@ ucol_getKeywordValuesForLocale(const char* /*key*/, const char* locale,
                 if (ulist_getListSize(results) == 0) {
                     char *defcoll = (char *)uprv_malloc(sizeof(char) * ULOC_KEYWORDS_CAPACITY);
                     int32_t defcollLength = ULOC_KEYWORDS_CAPACITY;
-                    
+
                     ures_getNextResource(&collres, &defres, status);
                     ures_getUTF8String(&defres, defcoll, &defcollLength, TRUE, status);
-                    
+
                     ulist_addItemBeginList(results, defcoll, TRUE, status);
                 }
             } else {
                 ulist_addItemEndList(values, key, FALSE, status);
             }
         }
-        
+
         /* If the locale is "" this is root so exit. */
         if (uprv_strlen(localeBuffer) == 0) {
             break;
@@ -823,12 +823,12 @@ ucol_getKeywordValuesForLocale(const char* /*key*/, const char* locale,
         uloc_getParent(localeBuffer, localeBuffer, sizeof(localeBuffer), status);
         ures_openFillIn(&bundle, U_ICUDATA_COLL, localeBuffer, status);
     }
-    
+
     ures_close(&defres);
     ures_close(&collres);
     ures_close(&collations);
     ures_close(&bundle);
-    
+
     if (U_SUCCESS(*status)) {
         char *value = NULL;
         ulist_resetList(values);
@@ -841,16 +841,16 @@ ucol_getKeywordValuesForLocale(const char* /*key*/, const char* locale,
             }
         }
     }
-    
+
     ulist_deleteList(values);
-    
+
     if (U_FAILURE(*status)){
         uenum_close(en);
         en = NULL;
     } else {
         ulist_resetList(results);
     }
-    
+
     return en;
 }
 

@@ -126,8 +126,8 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
         decompositionMode,
         status);
 }
-RuleBasedCollator::RuleBasedCollator(const uint8_t *bin, int32_t length, 
-                    const RuleBasedCollator *base, 
+RuleBasedCollator::RuleBasedCollator(const uint8_t *bin, int32_t length,
+                    const RuleBasedCollator *base,
                     UErrorCode &status) :
 dataIsOwned(TRUE),
 isWriteThroughAlias(FALSE)
@@ -303,7 +303,7 @@ void RuleBasedCollator::getRules(UColRuleOption delta, UnicodeString &buffer)
             ucol_getRulesEx(ucollator, delta, rules, rulesize);
             buffer.setTo(rules, rulesize);
             uprv_free(rules);
-        } else { // couldn't allocate 
+        } else { // couldn't allocate
             buffer.remove();
         }
     }
@@ -600,7 +600,7 @@ int32_t RuleBasedCollator::hashCode() const
 * return the locale of this collator
 */
 const Locale RuleBasedCollator::getLocale(ULocDataLocaleType type, UErrorCode &status) const {
-    const char *result = ucol_getLocale(ucollator, type, &status);
+    const char *result = ucol_getLocaleByType(ucollator, type, &status);
     if(result == NULL) {
         Locale res("");
         res.setToBogus();
@@ -683,7 +683,7 @@ RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
     }
 }
 
-void 
+void
 RuleBasedCollator::setUCollator(const char *locale,
                                 UErrorCode &status)
 {
