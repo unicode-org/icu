@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1999-2008, International Business Machines Corporation and
+ * Copyright (c) 1999-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -103,9 +103,11 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
         case 20: name = "TestTrieDict";
             if(exec) TestTrieDict();                           break;
         case 21: name = "TestBug5775";
-            if (exec) TestBug5775();                        break;
+            if (exec) TestBug5775();                           break;
         case 22: name = "TestThaiBreaks";
             if (exec) TestThaiBreaks();                        break;
+        case 23: name = "TestTailoredBreaks";
+            if (exec) TestTailoredBreaks();                    break;
 
         default: name = ""; break; //needed to end loop
     }
@@ -1814,6 +1816,142 @@ void RBBITest::TestThaiBreaks() {
     }
 
     delete b;
+}
+
+// UBreakIteratorType UBRK_WORD, Locale "en_US_POSIX"
+// Words don't include colon or period (cldrbug #1969).
+static const char    posxWordText[]     = "Can't have breaks in xx:yy or struct.field for CS-types.";
+static const int32_t posxWordTOffsets[] = { 5, 6, 10, 11, 17, 18, 20, 21, 23, 24, 26, 27, 29, 30, 36, 37, 42, 43, 46, 47, 49, 50, 55, 56 };
+static const int32_t posxWordROffsets[] = { 5, 6, 10, 11, 17, 18, 20, 21,         26, 27, 29, 30,         42, 43, 46, 47, 49, 50, 55, 56 };
+
+// UBreakIteratorType UBRK_WORD, Locale "ja"
+// Don't break in runs of hiragana or runs of ideograph, where the latter includes \u3005 \u3007 \u303B (cldrbug #2009).
+static const char    jaWordText[]     = "\\u79C1\\u9054\\u306B\\u4E00\\u3007\\u3007\\u3007\\u306E\\u30B3\\u30F3\\u30D4\\u30E5\\u30FC\\u30BF"
+                                        "\\u304C\\u3042\\u308B\\u3002\\u5948\\u3005\\u306F\\u30EF\\u30FC\\u30C9\\u3067\\u3042\\u308B\\u3002";
+static const int32_t jaWordTOffsets[] = {    2, 3,          7, 8, 14,         17, 18,     20, 21, 24,         27, 28 };
+static const int32_t jaWordROffsets[] = { 1, 2, 3, 4, 5, 6, 7, 8, 14, 15, 16, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28 };
+
+// UBreakIteratorType UBRK_SENTENCE, Locale "el"
+// Add break after Greek question mark (cldrbug #2069).
+static const char    elSentText[]     = "\\u0391\\u03B2, \\u03B3\\u03B4; \\u0395 \\u03B6\\u03B7\\u037E \\u0398 \\u03B9\\u03BA. "
+                                        "\\u039B\\u03BC \\u03BD\\u03BE! \\u039F\\u03C0, \\u03A1\\u03C2? \\u03A3";
+static const int32_t elSentTOffsets[] = { 8, 14, 20, 27, 35, 36 };
+static const int32_t elSentROffsets[] = {        20, 27, 35, 36 };
+
+// UBreakIteratorType UBRK_CHARACTER, Locale "th"
+// Clusters should not include spacing Thai/Lao vowels (prefix or postfix), except for [SARA] AM (cldrbug #2161).
+static const char    thCharText[]     = "\\u0E01\\u0E23\\u0E30\\u0E17\\u0E48\\u0E2D\\u0E21\\u0E23\\u0E08\\u0E19\\u0E32 "
+                                        "(\\u0E2A\\u0E38\\u0E0A\\u0E32\\u0E15\\u0E34-\\u0E08\\u0E38\\u0E11\\u0E32\\u0E21\\u0E32\\u0E28) "
+                                        "\\u0E40\\u0E14\\u0E47\\u0E01\\u0E21\\u0E35\\u0E1B\\u0E31\\u0E0D\\u0E2B\\u0E32 ";
+static const int32_t thCharTOffsets[] = { 1, 2, 3, 5, 6, 7, 8, 9, 10, 11,
+                                          12, 13, 15, 16, 17, 19, 20, 22, 23, 24, 25, 26, 27, 28,
+                                          29, 30, 32, 33, 35, 37, 38, 39, 40, 41 };
+static const int32_t thCharROffsets[] = { 1,    3, 5, 6, 7, 8, 9,     11,
+                                          12, 13, 15,     17, 19, 20, 22,     24,     26, 27, 28,
+                                          29,     32, 33, 35, 37, 38,     40, 41 };
+
+typedef struct {
+    UBreakIteratorType  type;
+    const char *        locale;
+    const char *        escapedText;
+    const int32_t *     tailoredOffsets;
+    int32_t             tailoredOffsetsCount;
+    const int32_t *     rootOffsets;
+    int32_t             rootOffsetsCount;
+} TailoredBreakItem;
+
+#define ARRAY_PTR_LEN(array) (array),(sizeof(array)/sizeof(array[0]))
+
+static const TailoredBreakItem tbItems[] = {
+    { UBRK_WORD,      "en_US_POSIX", posxWordText, ARRAY_PTR_LEN(posxWordTOffsets), ARRAY_PTR_LEN(posxWordROffsets) },
+    { UBRK_WORD,      "ja",          jaWordText,   ARRAY_PTR_LEN(jaWordTOffsets),   ARRAY_PTR_LEN(jaWordROffsets)   },
+    { UBRK_SENTENCE,  "el",          elSentText,   ARRAY_PTR_LEN(elSentTOffsets),   ARRAY_PTR_LEN(elSentROffsets)   },
+    { UBRK_CHARACTER, "th",          thCharText,   ARRAY_PTR_LEN(thCharTOffsets),   ARRAY_PTR_LEN(thCharROffsets)   },
+    { UBRK_CHARACTER, NULL,          NULL,         NULL,0,                          NULL,0                          } // terminator
+};
+
+static void formatOffsets(char* buffer, int32_t buflen, int32_t count, const int32_t* offsets) {
+    while (count-- > 0) {
+        int writeCount;
+        snprintf(buffer, buflen, " %d%n", *offsets++, &writeCount);
+        buffer += writeCount;
+        buflen -= writeCount;
+    }
+}
+
+enum { kMaxOffsetCount = 128 };
+
+void RBBITest::TBTest(BreakIterator* brkitr, int type, const char *locale, const char* escapedText, const int32_t *expectOffsets, int32_t expectOffsetsCount) {
+    brkitr->setText( CharsToUnicodeString(escapedText) );
+    int32_t foundOffsets[kMaxOffsetCount];
+    int32_t offset, foundOffsetsCount = 0;
+    // do forwards iteration test
+    while ( foundOffsetsCount < kMaxOffsetCount && (offset = brkitr->next()) != BreakIterator::DONE ) {
+        foundOffsets[foundOffsetsCount++] = offset;
+    }
+    if ( foundOffsetsCount != expectOffsetsCount || memcmp(expectOffsets, foundOffsets, foundOffsetsCount*sizeof(foundOffsets[0])) != 0 ) {
+        // log error for forwards test
+        char formatExpect[512], formatFound[512];
+        formatOffsets(formatExpect, sizeof(formatExpect), expectOffsetsCount, expectOffsets);
+        formatOffsets(formatFound, sizeof(formatFound), foundOffsetsCount, foundOffsets);
+        errln("For type %d %-5s, text \"%.16s\"...; expect %d offsets:%s; found %d offsets fwd:%s\n",
+                type, locale, escapedText, expectOffsetsCount, formatExpect, foundOffsetsCount, formatFound);
+    } else {
+        // do backwards iteration test
+        --foundOffsetsCount; // back off one from the end offset 
+        while ( foundOffsetsCount > 0 ) {
+            offset = brkitr->previous();
+            if ( offset != foundOffsets[--foundOffsetsCount] ) {
+                // log error for backwards test
+                char formatExpect[512];
+                formatOffsets(formatExpect, sizeof(formatExpect), expectOffsetsCount, expectOffsets);
+                errln("For type %d %-5s, text \"%.16s\"...; expect %d offsets:%s; found rev offset %d where expect %d\n",
+                        type, locale, escapedText, expectOffsetsCount, formatExpect, offset, foundOffsets[foundOffsetsCount]);
+                break;
+            }
+        }
+    }
+}
+
+void RBBITest::TestTailoredBreaks() {
+    const TailoredBreakItem * tbItemPtr;
+    Locale rootLocale = Locale("root");
+    for (tbItemPtr = tbItems; tbItemPtr->escapedText != NULL; ++tbItemPtr) {
+        Locale testLocale = Locale(tbItemPtr->locale);
+        BreakIterator * tailoredBrkiter;
+        BreakIterator * rootBrkiter;
+        UErrorCode status = U_ZERO_ERROR;
+        switch (tbItemPtr->type) {
+            case UBRK_CHARACTER:
+                tailoredBrkiter = BreakIterator::createCharacterInstance(testLocale, status);
+                rootBrkiter = BreakIterator::createCharacterInstance(rootLocale, status);
+                break;
+            case UBRK_WORD:
+                tailoredBrkiter = BreakIterator::createWordInstance(testLocale, status);
+                rootBrkiter = BreakIterator::createWordInstance(rootLocale, status);
+                break;
+            case UBRK_LINE:
+                tailoredBrkiter = BreakIterator::createLineInstance(testLocale, status);
+                rootBrkiter = BreakIterator::createLineInstance(rootLocale, status);
+                break;
+            case UBRK_SENTENCE:
+                tailoredBrkiter = BreakIterator::createSentenceInstance(testLocale, status);
+                rootBrkiter = BreakIterator::createSentenceInstance(rootLocale, status);
+                break;
+            default:
+                status = U_UNSUPPORTED_ERROR;
+                break;
+        }
+        if (U_FAILURE(status)) {
+            errln("BreakIterator create failed for type %d, locales root or %s", (int)(tbItemPtr->type), tbItemPtr->locale);
+            continue;
+        }
+        TBTest(tailoredBrkiter, (int)(tbItemPtr->type), tbItemPtr->locale, tbItemPtr->escapedText, tbItemPtr->tailoredOffsets, tbItemPtr->tailoredOffsetsCount);
+        TBTest(rootBrkiter,     (int)(tbItemPtr->type), "root",            tbItemPtr->escapedText, tbItemPtr->rootOffsets,     tbItemPtr->rootOffsetsCount);
+
+        delete rootBrkiter;
+        delete tailoredBrkiter;
+    }
 }
 
 
