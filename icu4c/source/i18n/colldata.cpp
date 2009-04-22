@@ -63,7 +63,7 @@ CEList::CEList(UCollator *coll, const UnicodeString &string, UErrorCode &status)
     // **** only set flag if string has Han(gul) ****
     ucol_forceHanImplicit(elems, &status);
 
-    switch (strength) 
+    switch (strength)
     {
     default:
         strengthMask |= UCOL_TERTIARYORDERMASK;
@@ -89,7 +89,7 @@ CEList::CEList(UCollator *coll, const UnicodeString &string, UErrorCode &status)
 
         order &= strengthMask;
 
-        if (toShift && variableTop > order && (order & UCOL_PRIMARYORDERMASK) != 0) {
+        if (toShift && variableTop > (uint32_t)order && (order & UCOL_PRIMARYORDERMASK) != 0) {
             if (strength >= UCOL_QUATERNARY) {
                 order &= UCOL_PRIMARYORDERMASK;
             } else {
@@ -295,7 +295,7 @@ public:
     StringList *getStringList(uint32_t ce) const;
 
 private:
- 
+
     void putStringList(uint32_t ce, StringList *stringList, UErrorCode &status);
     UHashtable *map;
 };
@@ -470,7 +470,7 @@ private:
 U_CFUNC void deleteChars(void */*obj*/)
 {
     // char *chars = (char *) obj;
-    // All the key strings are owned by the 
+    // All the key strings are owned by the
     // CollData objects and don't need to
     // be freed here.
   //DELETE_ARRAY(chars);
@@ -571,7 +571,7 @@ CollData *CollDataCache::get(UCollator *collator, UErrorCode &status)
 void CollDataCache::unref(CollData *collData)
 {
     CollDataCacheEntry *entry = NULL;
-    
+
     umtx_lock(&lock);
     entry = (CollDataCacheEntry *) uhash_get(cache, collData->key);
 
@@ -675,7 +675,7 @@ CollData::CollData(UCollator *collator, char *cacheKey, int32_t cacheKeyLength, 
     if (U_FAILURE(status)) {
         goto bail;
     }
-    
+
     if (cacheKeyLength > KEY_BUFFER_SIZE) {
         key = NEW_ARRAY(char, cacheKeyLength);
 
@@ -794,7 +794,7 @@ bail:
 
      minHan = 0xFFFFFFFF;
      maxHan = 0;
-     
+
      for(int32_t h = 0; h < hanList.size(); h += 2) {
          uint32_t han = (uint32_t) hanList[h];
 
@@ -844,7 +844,7 @@ const CEList *CollData::getCEList(const UnicodeString *string) const
 #else
     UErrorCode status = U_ZERO_ERROR;
     const CEList *list = new CEList(coll, *string, status);
-    
+
     if (U_FAILURE(status)) {
         delete list;
         list = NULL;
@@ -877,7 +877,7 @@ int32_t CollData::minLengthInChars(const CEList *ceList, int32_t offset, int32_t
 
     if (strings != NULL) {
         int32_t stringCount = strings->size();
-      
+
         for (int32_t s = 0; s < stringCount; s += 1) {
             const UnicodeString *string = strings->get(s);
 #ifdef CACHE_CELISTS
@@ -897,7 +897,7 @@ int32_t CollData::minLengthInChars(const CEList *ceList, int32_t offset, int32_t
                 int32_t slength = string->length();
                 int32_t roffset = offset + clength;
                 int32_t rlength = 0;
-                
+
                 if (roffset < maxOffset) {
                     rlength = minLengthInChars(ceList, roffset, history);
 
@@ -923,7 +923,7 @@ int32_t CollData::minLengthInChars(const CEList *ceList, int32_t offset, int32_t
     }
 
     if (shortestLength == INT32_MAX) {
-        // No matching strings at this offset. See if 
+        // No matching strings at this offset. See if
         // the CE is in a range we can handle manually.
         if (ce >= minHan && ce < maxHan) {
             // all han have implicit orders which
@@ -1021,7 +1021,7 @@ CollData *CollData::open(UCollator *collator, UErrorCode &status)
     }
 
     CollDataCache *cache = getCollDataCache();
-        
+
     return cache->get(collator, status);
 }
 

@@ -114,7 +114,7 @@ static const AttributeConversion conversions[12] = {
 };
 
 
-static char 
+static char
 ucol_sit_attributeValueToLetter(UColAttributeValue value, UErrorCode *status) {
     uint32_t i = 0;
     for(i = 0; i < sizeof(conversions)/sizeof(conversions[0]); i++) {
@@ -126,7 +126,7 @@ ucol_sit_attributeValueToLetter(UColAttributeValue value, UErrorCode *status) {
     return 0;
 }
 
-static UColAttributeValue 
+static UColAttributeValue
 ucol_sit_letterToAttributeValue(char letter, UErrorCode *status) {
     uint32_t i = 0;
     for(i = 0; i < sizeof(conversions)/sizeof(conversions[0]); i++) {
@@ -147,8 +147,8 @@ U_CDECL_END
 
 U_CDECL_BEGIN
 static const char* U_CALLCONV
-_processLocaleElement(CollatorSpec *spec, uint32_t value, const char* string, 
-                      UErrorCode *status) 
+_processLocaleElement(CollatorSpec *spec, uint32_t value, const char* string,
+                      UErrorCode *status)
 {
     int32_t len = 0;
     do {
@@ -169,8 +169,8 @@ U_CDECL_END
 
 U_CDECL_BEGIN
 static const char* U_CALLCONV
-_processRFC3066Locale(CollatorSpec *spec, uint32_t, const char* string, 
-                      UErrorCode *status) 
+_processRFC3066Locale(CollatorSpec *spec, uint32_t, const char* string,
+                      UErrorCode *status)
 {
     char terminator = *string;
     string++;
@@ -188,8 +188,8 @@ U_CDECL_END
 
 U_CDECL_BEGIN
 static const char* U_CALLCONV
-_processCollatorOption(CollatorSpec *spec, uint32_t option, const char* string, 
-                       UErrorCode *status) 
+_processCollatorOption(CollatorSpec *spec, uint32_t option, const char* string,
+                       UErrorCode *status)
 {
     spec->options[option] = ucol_sit_letterToAttributeValue(*string, status);
     if((*(++string) != '_' && *string) || U_FAILURE(*status)) {
@@ -200,8 +200,8 @@ _processCollatorOption(CollatorSpec *spec, uint32_t option, const char* string,
 U_CDECL_END
 
 
-static UChar 
-readHexCodeUnit(const char **string, UErrorCode *status) 
+static UChar
+readHexCodeUnit(const char **string, UErrorCode *status)
 {
     UChar result = 0;
     int32_t value = 0;
@@ -231,7 +231,7 @@ readHexCodeUnit(const char **string, UErrorCode *status)
 
 U_CDECL_BEGIN
 static const char* U_CALLCONV
-_processVariableTop(CollatorSpec *spec, uint32_t value1, const char* string, UErrorCode *status) 
+_processVariableTop(CollatorSpec *spec, uint32_t value1, const char* string, UErrorCode *status)
 {
     // get four digits
     int32_t i = 0;
@@ -248,7 +248,7 @@ _processVariableTop(CollatorSpec *spec, uint32_t value1, const char* string, UEr
     }
     if(U_SUCCESS(*status)) {
         spec->variableTopSet = TRUE;
-    } 
+    }
     return string;
 }
 U_CDECL_END
@@ -263,7 +263,7 @@ struct ShortStringOptions {
 
 static const ShortStringOptions options[UCOL_SIT_ITEMS_COUNT] =
 {
-/* 10 ALTERNATE_HANDLING */   {alternateHArg,     _processCollatorOption, UCOL_ALTERNATE_HANDLING }, // alternate  N, S, D 
+/* 10 ALTERNATE_HANDLING */   {alternateHArg,     _processCollatorOption, UCOL_ALTERNATE_HANDLING }, // alternate  N, S, D
 /* 15 VARIABLE_TOP_VALUE */   {variableTopValArg, _processVariableTop,    1 },
 /* 08 CASE_FIRST */           {caseFirstArg,      _processCollatorOption, UCOL_CASE_FIRST }, // case first L, U, X, D
 /* 09 NUMERIC_COLLATION */    {numericCollArg,    _processCollatorOption, UCOL_NUMERIC_COLLATION }, // codan      O, X, D
@@ -283,8 +283,8 @@ static const ShortStringOptions options[UCOL_SIT_ITEMS_COUNT] =
 
 
 static
-const char* ucol_sit_readOption(const char *start, CollatorSpec *spec, 
-                            UErrorCode *status) 
+const char* ucol_sit_readOption(const char *start, CollatorSpec *spec,
+                            UErrorCode *status)
 {
   int32_t i = 0;
 
@@ -301,7 +301,7 @@ const char* ucol_sit_readOption(const char *start, CollatorSpec *spec,
 }
 
 static
-void ucol_sit_initCollatorSpecs(CollatorSpec *spec) 
+void ucol_sit_initCollatorSpecs(CollatorSpec *spec)
 {
     // reset everything
     uprv_memset(spec, 0, sizeof(CollatorSpec));
@@ -312,12 +312,12 @@ void ucol_sit_initCollatorSpecs(CollatorSpec *spec)
     }
 }
 
-static const char* 
-ucol_sit_readSpecs(CollatorSpec *s, const char *string, 
+static const char*
+ucol_sit_readSpecs(CollatorSpec *s, const char *string,
                         UParseError *parseError, UErrorCode *status)
 {
     const char *definition = string;
-    while(U_SUCCESS(*status) && *string) { 
+    while(U_SUCCESS(*status) && *string) {
         string = ucol_sit_readOption(string, s, status);
         // advance over '_'
         while(*string && *string == '_') {
@@ -335,7 +335,7 @@ int32_t ucol_sit_dumpSpecs(CollatorSpec *s, char *destination, int32_t capacity,
 {
     int32_t i = 0, j = 0;
     int32_t len = 0;
-    char optName; 
+    char optName;
     if(U_SUCCESS(*status)) {
         for(i = 0; i < UCOL_SIT_ITEMS_COUNT; i++) {
             if(s->entries[i].start) {
@@ -344,7 +344,7 @@ int32_t ucol_sit_dumpSpecs(CollatorSpec *s, char *destination, int32_t capacity,
                         uprv_strcat(destination, "_");
                     }
                     len++;
-                } 
+                }
                 optName = *(s->entries[i].start);
                 if(optName == languageArg || optName == regionArg || optName == variantArg || optName == keywordArg) {
                     for(j = 0; j < s->entries[i].len; j++) {
@@ -429,7 +429,7 @@ ucol_prepareShortStringOpen( const char *definition,
     ucol_sit_initCollatorSpecs(&s);
     ucol_sit_readSpecs(&s, definition, parseError, status);
     ucol_sit_calculateWholeLocale(&s);
-    
+
     char buffer[internalBufferSize];
     uprv_memset(buffer, 0, internalBufferSize);
     uloc_canonicalize(s.locale, buffer, internalBufferSize, status);
@@ -493,7 +493,7 @@ ucol_openFromShortString( const char *definition,
     ucol_sit_initCollatorSpecs(&s);
     string = ucol_sit_readSpecs(&s, definition, parseError, status);
     ucol_sit_calculateWholeLocale(&s);
-    
+
     char buffer[internalBufferSize];
     uprv_memset(buffer, 0, internalBufferSize);
     uloc_canonicalize(s.locale, buffer, internalBufferSize, status);
@@ -571,7 +571,7 @@ ucol_getShortDefinitionString(const UCollator *coll,
     ucol_sit_initCollatorSpecs(&s);
 
     if(!locale) {
-        locale = ucol_getLocale(coll, ULOC_VALID_LOCALE, status);
+        locale = ucol_getLocaleByType(coll, ULOC_VALID_LOCALE, status);
     }
     elementSize = ucol_getFunctionalEquivalent(locBuff, internalBufferSize, "collation", locale, &isAvailable, status);
 
@@ -587,7 +587,7 @@ ucol_getShortDefinitionString(const UCollator *coll,
         appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, /*capacity*/internalBufferSize, variantArg);
         elementSize = uloc_getKeywordValue(locBuff, "collation", tempbuff, internalBufferSize, status);
         appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, /*capacity*/internalBufferSize, keywordArg);
-    } 
+    }
 
     int32_t i = 0;
     UColAttributeValue attribute = UCOL_DEFAULT;
@@ -596,7 +596,7 @@ ucol_getShortDefinitionString(const UCollator *coll,
             attribute = ucol_getAttributeOrDefault(coll, (UColAttribute)options[i].attr, status);
             if(attribute != UCOL_DEFAULT) {
                 char letter = ucol_sit_attributeValueToLetter(attribute, status);
-                appendShortStringElement(&letter, 1, 
+                appendShortStringElement(&letter, 1,
                     buffer, &resultSize, /*capacity*/internalBufferSize, options[i].optionStart);
             }
         }
@@ -640,7 +640,7 @@ ucol_normalizeShortDefinitionString(const char *definition,
 }
 
 U_CAPI UColAttributeValue  U_EXPORT2
-ucol_getAttributeOrDefault(const UCollator *coll, UColAttribute attr, UErrorCode *status) 
+ucol_getAttributeOrDefault(const UCollator *coll, UColAttribute attr, UErrorCode *status)
 {
     if(U_FAILURE(*status) || coll == NULL) {
       return UCOL_DEFAULT;
@@ -683,8 +683,8 @@ struct contContext {
 
 
 static void
-addSpecial(contContext *context, UChar *buffer, int32_t bufLen, 
-               uint32_t CE, int32_t leftIndex, int32_t rightIndex, UErrorCode *status) 
+addSpecial(contContext *context, UChar *buffer, int32_t bufLen,
+               uint32_t CE, int32_t leftIndex, int32_t rightIndex, UErrorCode *status)
 {
   const UCollator *coll = context->coll;
   USet *contractions = context->conts;
@@ -704,7 +704,7 @@ addSpecial(contContext *context, UChar *buffer, int32_t bufLen,
               uset_addString(expansions, buffer+leftIndex, rightIndex-leftIndex);
             }
       }
-    }    
+    }
 
     UCharOffset++;
     // check whether we're doing contraction or prefix
@@ -755,7 +755,7 @@ addSpecial(contContext *context, UChar *buffer, int32_t bufLen,
 
 U_CDECL_BEGIN
 static UBool U_CALLCONV
-_processSpecials(const void *context, UChar32 start, UChar32 limit, uint32_t CE) 
+_processSpecials(const void *context, UChar32 start, UChar32 limit, uint32_t CE)
 {
     UErrorCode *status = ((contContext *)context)->status;
     USet *expansions = ((contContext *)context)->expansions;
@@ -765,7 +765,7 @@ _processSpecials(const void *context, UChar32 start, UChar32 limit, uint32_t CE)
     if(isSpecial(CE)) {
       if(((getCETag(CE) == SPEC_PROC_TAG && addPrefixes) || getCETag(CE) == CONTRACTION_TAG)) {
         while(start < limit && U_SUCCESS(*status)) {
-            // if there are suppressed contractions, we don't 
+            // if there are suppressed contractions, we don't
             // want to add them.
             if(removed && uset_contains(removed, start)) {
                 start++;
@@ -852,7 +852,7 @@ ucol_getContractionsAndExpansions( const UCollator *coll,
     // Add the UCA contractions
     c.coll = coll->UCA;
     utrie_enum(&coll->UCA->mapping, NULL, _processSpecials, &c);
-    
+
     // This is collator specific. Add contractions from a collator
     c.coll = coll;
     c.removedContractions =  NULL;
@@ -889,7 +889,7 @@ ucol_getUnsafeSet( const UCollator *coll,
     int32_t contsSize = ucol_getContractions(coll, contractions, status);
     UChar32 c = 0;
     // Contraction set consists only of strings
-    // to get unsafe code points, we need to 
+    // to get unsafe code points, we need to
     // break the strings apart and add them to the unsafe set
     for(i = 0; i < contsSize; i++) {
         len = uset_getItem(contractions, i, NULL, NULL, buffer, internalBufferSize, status);
