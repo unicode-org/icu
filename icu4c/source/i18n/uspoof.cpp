@@ -254,7 +254,7 @@ uspoof_check(const USpoofChecker *sc,
         int32_t      nfkdLength = normalizedInput.getLength();
 
         if (scriptCount == -1) {
-        int32_t t;
+            int32_t t;
             scriptCount = This->scriptScan(text, length, t, *status);
         }
         
@@ -371,11 +371,16 @@ uspoof_areConfusable(const USpoofChecker *sc,
     if (U_FAILURE(*status)) {
         return 0;
     }
+    // 
+    // See section 4 of UAX 39 for the algorithm for checking whether two strings are confusable,
+    //   and for definitions of the types (single, whole, mixed-script) of confusables.
     
     // We only care about a few of the check flags.  Ignore the others.
-    // One or the other (or both) of USPOOF_SINGLE_SCRIPT_CONFUSABLE and USPOOF_MIXED_SCRIPT_CONFUSABLE
-    // must be set for this function to do anything.  It's an error if neither is.
-    if ((This->fChecks & (USPOOF_SINGLE_SCRIPT_CONFUSABLE | USPOOF_MIXED_SCRIPT_CONFUSABLE)) == 0) {
+    // If no tests relavant to this function have been specified, return an error.
+    // TODO:  is this really the right thing to do?  It's probably an error on the caller's part,
+    //        but logically we would just return 0 (no error).
+    if ((This->fChecks & (USPOOF_SINGLE_SCRIPT_CONFUSABLE | USPOOF_MIXED_SCRIPT_CONFUSABLE | 
+                          USPOOF_WHOLE_SCRIPT_CONFUSABLE)) == 0) {
         *status = U_INVALID_STATE_ERROR;
         return 0;
     }
@@ -383,19 +388,65 @@ uspoof_areConfusable(const USpoofChecker *sc,
     UChar    s1SkeletonBuf[USPOOF_STACK_BUFFER_SIZE];
     UChar   *s1Skeleton;
     int32_t  s1SkeletonLength = 0;
+
     UChar    s2SkeletonBuf[USPOOF_STACK_BUFFER_SIZE];
     UChar   *s2Skeleton;
     int32_t  s2SkeletonLength = 0;
+
     int32_t  result = 0;
-    if (This->fChecks & USPOOF_MIXED_SCRIPT_CONFUSABLE) {
-        // Do the Mixed Script compare.  For getSkeleton(), Mixed Script is the default, so we don't need
-        // to set anything more in flagsForSkeleton.
+    int32_t  t;
+    int32_t  s1ScriptCount = This->scriptScan(s1, length1, t, *status);
+    int32_t  s2ScriptCount = This->scriptScan(s2, length2, t, *status);
+
+    if (This->fChecks & USPOOF_SINGLE_SCRIPT_CONFUSABLE) {
+        // Do the Single Script compare.
+        if (s1ScriptCount <= 1 && s2ScriptCount <= 1) {
+            flagsForSkeleton |= USPOOF_SINGLE_SCRIPT_CONFUSABLE;
+            s1Skeleton = getSkeleton(sc, flagsForSkeleton, s1, length1, s1SkeletonBuf, 
+                                     sizeof(s1SkeletonBuf)/sizeof(UChar), &s1SkeletonLength, status);
+            s2Skeleton = getSkeleton(sc, flagsForSkeleton, s2, length2, s2SkeletonBuf, 
+                                     sizeof(s2SkeletonBuf)/sizeof(UChar), &s2SkeletonLength, status);
+            if (s1SkeletonLength == s2SkeletonLength && u_strncmp(s1Skeleton, s2Skeleton, s1SkeletonLength) == 0) {
+                result |= USPOOF_SINGLE_SCRIPT_CONFUSABLE;
+            }
+            if (s1Skeleton != s1SkeletonBuf) {
+                delete s1Skeleton;
+            }
+            if (s2Skeleton != s2SkeletonBuf) {
+                delete s2Skeleton;
+            }
+        }
+    }
+
+    if (result & USPOOF_SINGLE_SCRIPT_CONFUSABLE) {
+         // If the two inputs are single script confusable they cannot also be
+         // mixed or whole script confusable, according to the UAX39 definitions.
+         // So we can skip those tests.
+         return result;
+    }
+
+    // Optimization for whole script confusables test:  two identifiers are whole script confusable if
+    // each is of a single script and they are mixed script confusable.
+    UBool possiblyWholeScriptConfusables = 
+        s1ScriptCount <= 1 && s2ScriptCount <= 1 && (This->fChecks & USPOOF_WHOLE_SCRIPT_CONFUSABLE);
+
+    //
+    // Mixed Script Check
+    //
+    if ((This->fChecks & USPOOF_MIXED_SCRIPT_CONFUSABLE) || possiblyWholeScriptConfusables ) {
+        // For getSkeleton(), resetting the USPOOF_SINGLE_SCRIPT_CONFUSABLE flag will get us
+        // the mixed script table skeleton, which is what we want.
+        // The Any Case / Lower Case bit in the skelton flags was set at the top of the function.
+        flagsForSkeleton &= ~USPOOF_SINGLE_SCRIPT_CONFUSABLE;
         s1Skeleton = getSkeleton(sc, flagsForSkeleton, s1, length1, s1SkeletonBuf, 
                                  sizeof(s1SkeletonBuf)/sizeof(UChar), &s1SkeletonLength, status);
         s2Skeleton = getSkeleton(sc, flagsForSkeleton, s2, length2, s2SkeletonBuf, 
                                  sizeof(s2SkeletonBuf)/sizeof(UChar), &s2SkeletonLength, status);
         if (s1SkeletonLength == s2SkeletonLength && u_strncmp(s1Skeleton, s2Skeleton, s1SkeletonLength) == 0) {
             result |= USPOOF_MIXED_SCRIPT_CONFUSABLE;
+            if (possiblyWholeScriptConfusables) {
+                result |= USPOOF_WHOLE_SCRIPT_CONFUSABLE;
+            }
         }
         if (s1Skeleton != s1SkeletonBuf) {
             delete s1Skeleton;
@@ -404,29 +455,7 @@ uspoof_areConfusable(const USpoofChecker *sc,
             delete s2Skeleton;
         }
     }
-    
-    if (This->fChecks & USPOOF_SINGLE_SCRIPT_CONFUSABLE) {
-        // Do the Single Script compare.
-        flagsForSkeleton |= USPOOF_SINGLE_SCRIPT_CONFUSABLE;
-        s1Skeleton = getSkeleton(sc, flagsForSkeleton, s1, length1, s1SkeletonBuf, 
-                                 sizeof(s1SkeletonBuf)/sizeof(UChar), &s1SkeletonLength, status);
-        s2Skeleton = getSkeleton(sc, flagsForSkeleton, s2, length2, s2SkeletonBuf, 
-                                 sizeof(s2SkeletonBuf)/sizeof(UChar), &s2SkeletonLength, status);
-        if (s1SkeletonLength == s2SkeletonLength && u_strncmp(s1Skeleton, s2Skeleton, s1SkeletonLength) == 0) {
-            result |= USPOOF_SINGLE_SCRIPT_CONFUSABLE;
-        }
-        if (s1Skeleton != s1SkeletonBuf) {
-            delete s1Skeleton;
-        }
-        if (s2Skeleton != s2SkeletonBuf) {
-            delete s2Skeleton;
-        }
-     }
 
-
-    // TODO: Further checks on the number and sameness of the scripts in the input?
-    //       If the input consists entirely of characters that map to digits (0 or 1), single script
-    //       input will fail with the mixed script tables, which is confusing.
     return result;
 }
 
