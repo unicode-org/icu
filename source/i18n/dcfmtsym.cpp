@@ -41,10 +41,12 @@ U_NAMESPACE_BEGIN
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DecimalFormatSymbols)
 
 static const char gNumberElements[] = "NumberElements";
-static const char gCurrencyFormatsTag[] = "currencyFormats";
 static const char gCurrencySpacingTag[] = "currencySpacing";
 static const char gBeforeCurrencyTag[] = "beforeCurrency";
 static const char gAfterCurrencyTag[] = "afterCurrency";
+static const char gCurrencyMatchTag[] = "currencyMatch";
+static const char gCurrencySudMatchTag[] = "surroundingMatch";
+static const char gCurrencyInsertBtnTag[] = "insertBetween";
 
 static const UChar INTL_CURRENCY_SYMBOL_STR[] = {0xa4, 0xa4, 0};
 
@@ -94,12 +96,10 @@ DecimalFormatSymbols::operator=(const DecimalFormatSymbols& rhs)
             // fastCopyFrom is safe, see docs on fSymbols
             fSymbols[(ENumberFormatSymbol)i].fastCopyFrom(rhs.fSymbols[(ENumberFormatSymbol)i]);
         }
-        /*
         for(int32_t i = 0; i < (int32_t)kCurrencySpacingCount; ++i) {
             currencySpcBeforeSym[i].fastCopyFrom(rhs.currencySpcBeforeSym[i]);
             currencySpcAfterSym[i].fastCopyFrom(rhs.currencySpcAfterSym[i]);
         }
-        */
         locale = rhs.locale;
         uprv_strcpy(validLocale, rhs.validLocale);
         uprv_strcpy(actualLocale, rhs.actualLocale);
@@ -120,7 +120,6 @@ DecimalFormatSymbols::operator==(const DecimalFormatSymbols& that) const
             return FALSE;
         }
     }
-    /*
     for(int32_t i = 0; i < (int32_t)kCurrencySpacingCount; ++i) {
         if(currencySpcBeforeSym[i] != that.currencySpcBeforeSym[i]) {
             return FALSE;
@@ -129,7 +128,6 @@ DecimalFormatSymbols::operator==(const DecimalFormatSymbols& that) const
             return FALSE;
         }
     }
-    */
     return locale == that.locale &&
         uprv_strcmp(validLocale, that.validLocale) == 0 &&
         uprv_strcmp(actualLocale, that.actualLocale) == 0;
@@ -250,42 +248,37 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
     ures_close(numberElementsRes);
 
     // Currency Spacing.
-    /*
     UErrorCode localStatus = U_ZERO_ERROR;
-    UResourceBundle *currencyFormRes = ures_getByKeyWithFallback(resource,
-                                    gCurrencyFormatsTag, NULL, &localStatus);
-    if (localStatus == U_USING_FALLBACK_WARNING || U_SUCCESS(localStatus)) {
-        localStatus = U_ZERO_ERROR;
-        UResourceBundle *currencySpcRes = ures_getByKeyWithFallback(currencyFormRes,
+    UResourceBundle *currencySpcRes = ures_getByKeyWithFallback(resource,
                                        gCurrencySpacingTag, NULL, &localStatus);
 
+    if (localStatus == U_USING_FALLBACK_WARNING || U_SUCCESS(localStatus)) {
+        const char* keywords[kCurrencySpacingCount] = {
+            gCurrencyMatchTag, gCurrencySudMatchTag, gCurrencyInsertBtnTag
+        };
+        localStatus = U_ZERO_ERROR;
+        UResourceBundle *dataRes = ures_getByKeyWithFallback(currencySpcRes,
+                                   gBeforeCurrencyTag, NULL, &localStatus);
         if (localStatus == U_USING_FALLBACK_WARNING || U_SUCCESS(localStatus)) {
             localStatus = U_ZERO_ERROR;
-            UResourceBundle *dataRes = ures_getByKeyWithFallback(currencySpcRes,
-                                       gBeforeCurrencyTag, NULL, &localStatus);
-            if (localStatus == U_USING_FALLBACK_WARNING || U_SUCCESS(localStatus)) {
-                localStatus = U_ZERO_ERROR;
-                for (int32_t i = 0; i < kCurrencySpacingCount; i++) {
-                  currencySpcBeforeSym[i] = ures_getStringByIndex(dataRes, i,
-                                                            NULL, &localStatus);
-                }
-                ures_close(dataRes);
+            for (int32_t i = 0; i < kCurrencySpacingCount; i++) {
+              currencySpcBeforeSym[i] = ures_getStringByKey(dataRes, keywords[i],
+                                                        NULL, &localStatus);
             }
-            dataRes = ures_getByKeyWithFallback(currencySpcRes,
-                                      gAfterCurrencyTag, NULL, &localStatus);
-            if (localStatus == U_USING_FALLBACK_WARNING || U_SUCCESS(localStatus)) {
-                localStatus = U_ZERO_ERROR;
-                for (int32_t i = 0; i < kCurrencySpacingCount; i++) {
-                  currencySpcAfterSym[i] = ures_getStringByIndex(dataRes, i,
-                                                            NULL, &localStatus);
-                }
-                ures_close(dataRes);
-            }
-            ures_close(currencySpcRes);
+            ures_close(dataRes);
         }
-        ures_close(currencyFormRes);
+        dataRes = ures_getByKeyWithFallback(currencySpcRes,
+                                  gAfterCurrencyTag, NULL, &localStatus);
+        if (localStatus == U_USING_FALLBACK_WARNING || U_SUCCESS(localStatus)) {
+            localStatus = U_ZERO_ERROR;
+            for (int32_t i = 0; i < kCurrencySpacingCount; i++) {
+              currencySpcAfterSym[i] = ures_getStringByKey(dataRes, keywords[i],
+                                                            NULL, &localStatus);
+            }
+            ures_close(dataRes);
+        }
+        ures_close(currencySpcRes);
     }
-    */
     ures_close(resource);
 }
 
