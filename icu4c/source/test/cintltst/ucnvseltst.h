@@ -18,12 +18,6 @@
 #include "unicode/utypes.h"
 #include "cintltst.h"
 
-    /**
-     * The function used to test converter selection
-     **/
-    static void TestSelect(void);
-    /**
-     * The function used to test serialization and unserialization 
-     **/
-    static void TestSerializationAndUnserialization(void);
+/** TODO: Remove this file after ICU 4.2 is released. See ticket #6869. */
+
 #endif
