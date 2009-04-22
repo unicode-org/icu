@@ -28,7 +28,6 @@
 
 #if defined(__BORLANDC__)
 #define U_HAVE_PLACEMENT_NEW 0
-#define U_HAVE_INTTYPES_H 1
 #define __STDC_CONSTANT_MACROS
 #endif
 
@@ -41,7 +40,11 @@
 
 /** Define whether inttypes.h is available */
 #ifndef U_HAVE_INTTYPES_H
-#define U_HAVE_INTTYPES_H 0
+#   if defined(__BORLANDC__) || defined(__MINGW32__)
+#       define U_HAVE_INTTYPES_H 1
+#   else
+#       define U_HAVE_INTTYPES_H 0
+#   endif
 #endif
 
 /**
@@ -210,7 +213,7 @@ Intel can define _M_IX86 or _M_X64
 /** Determine whether to disable renaming or not. This overrides the
    setting in umachine.h which is for all platforms. */
 #ifndef U_DISABLE_RENAMING
-#define U_DISABLE_RENAMING 0
+#define U_DISABLE_RENAMING 1
 #endif
 
 /** Determine whether to override new and delete. */
