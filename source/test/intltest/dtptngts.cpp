@@ -179,6 +179,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
 
     UnicodeString patternTests2[] = {
         UnicodeString("yyyyMMMdd"),
+        UnicodeString("yyyyqqqq"),
         UnicodeString("yMMMdd"),
         UnicodeString("EyyyyMMMdd"),
         UnicodeString("yyyyMMdd"),
@@ -196,10 +197,12 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("EyyyyMMMddhhmmss"),
         UnicodeString("hmm"),
         UnicodeString("hhmm"),
+        UnicodeString("hhmmVVVV"),
         UnicodeString(""),
     };
     UnicodeString patternResults2[] = {
         UnicodeString("Oct 14, 1999"),
+        UnicodeString("4th quarter 1999"),
         UnicodeString("Oct 14, 1999"),
         UnicodeString("Thu, Oct 14, 1999"),
         UnicodeString("10/14/1999"),
@@ -217,6 +220,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("Thu, Oct 14, 1999 06:58:59 AM"),
         UnicodeString("6:58 AM"),
         UnicodeString("06:58 AM"),
+        UnicodeString("06:58 AM GMT+00:00"),
         UnicodeString(""),
     };
     
