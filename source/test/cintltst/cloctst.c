@@ -34,6 +34,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ulocdata.h"
 #include "unicode/parseerr.h" /* may not be included with some uconfig switches */
+#include "unicode/udbgutil.h"
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 static void TestNullDefault(void);
@@ -2362,6 +2363,10 @@ static void TestLanguageExemplarsFallbacks(void) {
     ulocdata_close(uld);
 }
 
+static const char *acceptResult(UAcceptResult uar) {
+    return  udbg_enumName(UDBG_UAcceptResult, uar);
+}
+
 static void TestAcceptLanguage(void) {
     UErrorCode status = U_ZERO_ERROR;
     UAcceptResult outResult;
@@ -2371,16 +2376,20 @@ static void TestAcceptLanguage(void) {
     int32_t rc = 0;
 
     struct { 
-        int32_t httpSet; 
-        const char *icuSet;
-        const char *expect;
-        UAcceptResult res;
+        int32_t httpSet;       /**< Which of http[] should be used? */
+        const char *icuSet;    /**< ? */
+        const char *expect;    /**< The expected locale result */
+        UAcceptResult res;     /**< The expected error code */
     } tests[] = { 
         /*0*/{ 0, NULL, "mt_MT", ULOC_ACCEPT_VALID },
         /*1*/{ 1, NULL, "en", ULOC_ACCEPT_VALID },
         /*2*/{ 2, NULL, "en", ULOC_ACCEPT_FALLBACK },
         /*3*/{ 3, NULL, "", ULOC_ACCEPT_FAILED },
         /*4*/{ 4, NULL, "es", ULOC_ACCEPT_VALID },
+        
+        /*5*/{ 5, NULL, "en", ULOC_ACCEPT_VALID },  /* XF */
+        /*6*/{ 6, NULL, "ja", ULOC_ACCEPT_FALLBACK },  /* XF */
+        /*7*/{ 7, NULL, "zh", ULOC_ACCEPT_FALLBACK },  /* XF */
     };
     const int32_t numTests = sizeof(tests)/sizeof(tests[0]);
     static const char *http[] = {
@@ -2395,29 +2404,35 @@ static void TestAcceptLanguage(void) {
               "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "
               "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "
               "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xx-yy;q=.1, "
-              "es"
+              "es",
+              
+        /*5*/ "zh-xx;q=0.9, en;q=0.6",
+        /*6*/ "ja-JA",
+        /*7*/ "zh-xx;q=0.9",
     };
 
     for(i=0;i<numTests;i++) {
         outResult = -3;
         status=U_ZERO_ERROR;
-        log_verbose("test #%d: http[%s], ICU[%s], expect %s, %d\n", 
-            i, http[tests[i].httpSet], tests[i].icuSet, tests[i].expect, tests[i].res);
+        log_verbose("test #%d: http[%s], ICU[%s], expect %s, %s\n", 
+            i, http[tests[i].httpSet], tests[i].icuSet, tests[i].expect, acceptResult(tests[i].res));
 
         available = ures_openAvailableLocales(tests[i].icuSet, &status);
         tmp[0]=0;
         rc = uloc_acceptLanguageFromHTTP(tmp, 199, &outResult, http[tests[i].httpSet], available, &status);
         uenum_close(available);
-        log_verbose(" got %s, %d [%s]\n", tmp[0]?tmp:"(EMPTY)", outResult, u_errorName(status));
+        log_verbose(" got %s, %s [%s]\n", tmp[0]?tmp:"(EMPTY)", acceptResult(outResult), u_errorName(status));
         if(outResult != tests[i].res) {
-            log_err("FAIL: #%d: expected outResult of %d but got %d\n", i, tests[i].res, outResult);
-            log_info("test #%d: http[%s], ICU[%s], expect %s, %d\n", 
-                i, http[tests[i].httpSet], tests[i].icuSet, tests[i].expect, tests[i].res);
+            log_err("FAIL: #%d: expected outResult of %s but got %s\n", i, 
+                acceptResult( tests[i].res), 
+                acceptResult( outResult));
+            log_info("test #%d: http[%s], ICU[%s], expect %s, %s\n", 
+                i, http[tests[i].httpSet], tests[i].icuSet, tests[i].expect,acceptResult(tests[i].res));
         }
         if((outResult>0)&&uprv_strcmp(tmp, tests[i].expect)) {
             log_err("FAIL: #%d: expected %s but got %s\n", i, tests[i].expect, tmp);
-            log_info("test #%d: http[%s], ICU[%s], expect %s, %d\n", 
-                i, http[tests[i].httpSet], tests[i].icuSet, tests[i].expect, tests[i].res);
+            log_info("test #%d: http[%s], ICU[%s], expect %s, %s\n", 
+                i, http[tests[i].httpSet], tests[i].icuSet, tests[i].expect, acceptResult(tests[i].res));
         }
     }
 }
