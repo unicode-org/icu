@@ -1,6 +1,6 @@
 /********************************************************************
- * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * COPYRIGHT:
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -17,7 +17,7 @@ void IntlTestDecimalFormatSymbols::runIndexedTest( int32_t index, UBool exec, co
 {
     if (exec) logln("TestSuite DecimalFormatSymbols");
     switch (index) {
-        case 0: name = "DecimalFormatSymbols test"; 
+        case 0: name = "DecimalFormatSymbols test";
                 if (exec) {
                     logln("DecimalFormatSymbols test---"); logln("");
                     testSymbols(/*par*/);
@@ -113,16 +113,62 @@ void IntlTestDecimalFormatSymbols::testSymbols(/* char *par */)
     if(fr.getSymbol(DecimalFormatSymbols::kMinusSignSymbol) != en.getSymbol(DecimalFormatSymbols::kMinusSignSymbol)) {
         errln("ERROR: get/set MinusSign failed");
     }
- 
+
     UnicodeString exponential(en.getSymbol(DecimalFormatSymbols::kExponentialSymbol));
     fr.setSymbol(DecimalFormatSymbols::kExponentialSymbol, exponential);
     if(fr.getSymbol(DecimalFormatSymbols::kExponentialSymbol) != en.getSymbol(DecimalFormatSymbols::kExponentialSymbol)) {
         errln("ERROR: get/set Exponential failed");
     }
 
+    // Test get currency spacing before the currency.
+    status = U_ZERO_ERROR;
+    for (int32_t i = 0; i < (int32_t)DecimalFormatSymbols::kCurrencySpacingCount; i++) {
+        UnicodeString enCurrencyPattern = en.getPatternForCurrencySpacing(
+             (DecimalFormatSymbols::ECurrencySpacing)i, TRUE, status);
+        if(U_FAILURE(status)) {
+            errln("Error: cannot get CurrencyMatch for locale:en");
+            status = U_ZERO_ERROR;
+        }
+        UnicodeString frCurrencyPattern = fr.getPatternForCurrencySpacing(
+             (DecimalFormatSymbols::ECurrencySpacing)i, TRUE, status);
+        if(U_FAILURE(status)) {
+            errln("Error: cannot get CurrencyMatch for locale:fr");
+        }
+        if (enCurrencyPattern != frCurrencyPattern) {
+           errln("ERROR: get CurrencySpacing failed");
+        }
+    }
+    // Test get currencySpacing after the currency.
+    status = U_ZERO_ERROR;
+    for (int32_t i = 0; i < DecimalFormatSymbols::kCurrencySpacingCount; i++) {
+        UnicodeString enCurrencyPattern = en.getPatternForCurrencySpacing(
+            (DecimalFormatSymbols::ECurrencySpacing)i, FALSE, status);
+        if(U_FAILURE(status)) {
+            errln("Error: cannot get CurrencyMatch for locale:en");
+            status = U_ZERO_ERROR;
+        }
+        UnicodeString frCurrencyPattern = fr.getPatternForCurrencySpacing(
+             (DecimalFormatSymbols::ECurrencySpacing)i, FALSE, status);
+        if(U_FAILURE(status)) {
+            errln("Error: cannot get CurrencyMatch for locale:fr");
+        }
+        if (enCurrencyPattern != frCurrencyPattern) {
+            errln("ERROR: get CurrencySpacing failed");
+        }
+    }
+    // Test set curerncySpacing APIs
+    status = U_ZERO_ERROR;
+    UnicodeString dash = UnicodeString("-");
+    en.setPatternForCurrencySpacing(DecimalFormatSymbols::kInsert, TRUE, dash);
+    UnicodeString enCurrencyInsert = en.getPatternForCurrencySpacing(
+        DecimalFormatSymbols::kInsert, TRUE, status);
+    if (dash != enCurrencyInsert) {
+        errln("Error: Failed to setCurrencyInsert for locale:en");
+    }
+
     status = U_ZERO_ERROR;
     DecimalFormatSymbols foo(status);
-    
+
     DecimalFormatSymbols bar(foo);
 
     en = fr;
@@ -149,8 +195,7 @@ void IntlTestDecimalFormatSymbols::testSymbols(/* char *par */)
                   UnicodeString((UChar32)(0x10330 + i)));
         }
     }
-   
-   
+
     DecimalFormatSymbols sym(Locale::getUS(), status);
 
     UnicodeString customDecSeperator("S");
@@ -163,7 +208,7 @@ void IntlTestDecimalFormatSymbols::testSymbols(/* char *par */)
     Verify(34.5, CharsToUnicodeString("\\u00a4##.##"), sym, (UnicodeString)"D34.5");
     sym.setSymbol((DecimalFormatSymbols::ENumberFormatSymbol)1, (UnicodeString)"|");
     Verify(3456.5, (UnicodeString)"0,000.##", sym, (UnicodeString)"3|456S5");
-    
+
 }
 
 void IntlTestDecimalFormatSymbols::Verify(double value, const UnicodeString& pattern, DecimalFormatSymbols sym, const UnicodeString& expected){
@@ -176,7 +221,7 @@ void IntlTestDecimalFormatSymbols::Verify(double value, const UnicodeString& pat
     FieldPosition pos(FieldPosition::DONT_CARE);
     buffer = df->format(value, buffer, pos);
     if(buffer != expected){
-        errln((UnicodeString)"ERROR: format failed after setSymbols()\n Expected " + 
+        errln((UnicodeString)"ERROR: format failed after setSymbols()\n Expected " +
             expected + ", Got " + buffer);
     }
     delete df;
