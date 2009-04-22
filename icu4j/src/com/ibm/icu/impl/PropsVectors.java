@@ -131,8 +131,8 @@ public class PropsVectors {
     public final static int ERROR_VALUE_CP = 0x110001;
     public final static int MAX_CP = 0x110001;
 
-    public final static int INITIAL_ROWS = 1 << 14;
-    public final static int MEDIUM_ROWS = 1 << 17;
+    public final static int INITIAL_ROWS = 1 << 12;
+    public final static int MEDIUM_ROWS = 1 << 16;
     public final static int MAX_ROWS = MAX_CP + 1;
 
     /*
