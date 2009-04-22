@@ -144,6 +144,9 @@ static const dtTypeElem dtTypes[] = {
     {CAP_Q, UDATPG_QUARTER_FIELD, DT_NUMERIC, 1, 2},
     {CAP_Q, UDATPG_QUARTER_FIELD, DT_SHORT, 3, 0},
     {CAP_Q, UDATPG_QUARTER_FIELD, DT_LONG, 4, 0},
+    {LOW_Q, UDATPG_QUARTER_FIELD, DT_NUMERIC + DT_DELTA, 1, 2},
+    {LOW_Q, UDATPG_QUARTER_FIELD, DT_SHORT + DT_DELTA, 3, 0},
+    {LOW_Q, UDATPG_QUARTER_FIELD, DT_LONG + DT_DELTA, 4, 0},
     {CAP_M, UDATPG_MONTH_FIELD, DT_NUMERIC, 1, 2},
     {CAP_M, UDATPG_MONTH_FIELD, DT_SHORT, 3, 0},
     {CAP_M, UDATPG_MONTH_FIELD, DT_LONG, 4, 0},
@@ -184,6 +187,8 @@ static const dtTypeElem dtTypes[] = {
     {LOW_Z, UDATPG_ZONE_FIELD, DT_LONG, 4, 0},
     {CAP_Z, UDATPG_ZONE_FIELD, DT_SHORT - DT_DELTA, 1, 3},
     {CAP_Z, UDATPG_ZONE_FIELD, DT_LONG - DT_DELTA, 4, 0},
+    {CAP_V, UDATPG_ZONE_FIELD, DT_SHORT - DT_DELTA, 1, 3},
+    {CAP_V, UDATPG_ZONE_FIELD, DT_LONG - DT_DELTA, 4, 0},
     {0, UDATPG_FIELD_COUNT, 0, 0, 0} , // last row of dtTypes[] 
  };
 
@@ -1709,17 +1714,28 @@ FormatParser::set(const UnicodeString& pattern) {
 }
 
 int32_t
-FormatParser::getCanonicalIndex(const UnicodeString& s) {
+FormatParser::getCanonicalIndex(const UnicodeString& s, UBool strict) {
     int32_t len = s.length();
+    if (len == 0) {
+        return -1;
+    }
     UChar ch = s.charAt(0);
-    int32_t i=0;
 
-    while (dtTypes[i].patternChar!='\0') {
-        if ( dtTypes[i].patternChar!=ch ) {
+    // Verify that all are the same character.
+    for (int32_t l = 1; l < len; l++) {
+        if (ch != s.charAt(l)) {
+            return -1;
+        }
+    }
+    int32_t i = 0;
+    int32_t bestRow = -1;
+    while (dtTypes[i].patternChar != '\0') {
+        if ( dtTypes[i].patternChar != ch ) {
             ++i;
             continue;
         }
-        if (dtTypes[i].patternChar!=dtTypes[i+1].patternChar) {
+        bestRow = i;
+        if (dtTypes[i].patternChar != dtTypes[i+1].patternChar) {
             return i;
         }
         if (dtTypes[i+1].minLen <= len) {
@@ -1728,7 +1744,7 @@ FormatParser::getCanonicalIndex(const UnicodeString& s) {
         }
         return i;
     }
-    return -1;
+    return strict ? -1 : bestRow;
 }
 
 UBool
