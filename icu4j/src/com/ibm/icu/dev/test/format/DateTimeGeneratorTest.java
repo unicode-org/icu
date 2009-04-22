@@ -77,6 +77,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         enFormat.setTimeZone(enZone);
         String[][] tests = {
               {"yyyyMMMdd", "Oct 14, 1999"},
+              {"yyyyqqqq", "4th quarter 1999"},
               {"yMMMdd", "Oct 14, 1999"},
               {"EyyyyMMMdd", "Thu, Oct 14, 1999"},
               {"yyyyMMdd", "10/14/1999"},
@@ -94,6 +95,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
               {"EyyyyMMMddhhmmss", "Thu, Oct 14, 1999 06:58:59 AM"},
               {"hmm", "6:58 AM"},
               {"hhmm", "06:58 AM"},
+              {"hhmmVVVV", "06:58 AM GMT+00:00"},
         };
         for (int i = 0; i < tests.length; ++i) {
             final String testSkeleton = tests[i][0];
