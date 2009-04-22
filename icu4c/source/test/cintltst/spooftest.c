@@ -460,10 +460,7 @@ static void TestUSpoofCAPI(void) {
 
         checkResults = uspoof_areConfusable(sc, lll_Latin_a, -1, lll_Latin_b, -1, &status);
         TEST_ASSERT_SUCCESS(status);
-        TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT_CONFUSABLE | USPOOF_MIXED_SCRIPT_CONFUSABLE, checkResults);
-        /* TODO:  This is an odd test case, an identifier where every character maps to a digit 1 confusable tables.
-                  The mixed script tables do this mapping also, leaving us with a single script identifiers that
-                  fail with the mixed script tables.  This may want to get detected in the implementation. */
+        TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT_CONFUSABLE, checkResults);
 
     TEST_TEARDOWN;
 
@@ -495,7 +492,7 @@ static void TestUSpoofCAPI(void) {
         TEST_ASSERT_SUCCESS(status);
         checkResults = uspoof_areConfusableUTF8(sc, s1, -1, s2, -1, &status);
         TEST_ASSERT_SUCCESS(status);
-        TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT_CONFUSABLE | USPOOF_MIXED_SCRIPT_CONFUSABLE, checkResults);
+        TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT_CONFUSABLE, checkResults);
 
     TEST_TEARDOWN;
 
