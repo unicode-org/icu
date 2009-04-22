@@ -143,7 +143,7 @@ public:
     void set(const UnicodeString& patternString);
     UBool isQuoteLiteral(const UnicodeString& s) const;
     void getQuoteLiteral(UnicodeString& quote, int32_t *itemIndex);
-    int32_t getCanonicalIndex(const UnicodeString& s) { getCanonicalIndex(s, TRUE); };
+    int32_t getCanonicalIndex(const UnicodeString& s) { return getCanonicalIndex(s, TRUE); };
     int32_t getCanonicalIndex(const UnicodeString& s, UBool strict);
     UBool isPatternSeparator(UnicodeString& field);
     void setFilter(UErrorCode &status);
