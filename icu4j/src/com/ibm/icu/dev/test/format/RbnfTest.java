@@ -883,13 +883,11 @@ public class RbnfTest extends TestFmwk {
             " (ordinal)  ",
             " (duration) "
         };
-        String[] parseLocales = null;
-        if (getInclusion() <= 5) {
-            // RBNF parse is extremely slow when lenient option is enabled.
-            // For non-exhaustive mode, we only test a few locales.
-            // "nl_NL", "be" had crash problem reported by #6534
-            parseLocales = new String[] {"en_US", "nl_NL", "be"};
-        }
+        // RBNF parse is extremely slow when lenient option is enabled.
+        // For non-exhaustive mode, we only test a few locales.
+        // "nl_NL", "be" had crash problem reported by #6534
+        String[] parseLocales = {"en_US", "nl_NL", "be"};
+
         //TODO: Remove this when #6870 is resolved
         // "ar", "mt", "th", "zh" triggers stack overflow error
         // "sq_AL" - Unparseable number
@@ -906,12 +904,12 @@ public class RbnfTest extends TestFmwk {
                         logln(loc.getName() + names[j] + "success format: " + n + " -> " + s);
                     }
 
-                    boolean skipParse = false;
-                    if (parseLocales != null) {
-                        skipParse = true;
+                    boolean testParse = true;
+                    if (getInclusion() <= 5) {
+                        testParse = false;
                         for (int k = 0; k < parseLocales.length; k++) {
                             if (loc.toString().equals(parseLocales[k])) {
-                                skipParse = false;
+                                testParse = true;
                                 break;
                             }
                         }
@@ -919,23 +917,25 @@ public class RbnfTest extends TestFmwk {
                     //TODO: start - Remove the code block below when #6870 is resolved
                     for (int k = 0; k < parseExclusionLangs.length; k++) {
                         if (loc.getLanguage().equals(parseExclusionLangs[k])) {
-                            skipParse = true;
+                            testParse = false;
                         }
                     }
                     //TODO: end
-                    if (skipParse) {
-                        continue;
-                    }
-                    // regular parse
-                    Number num = fmt.parse(s);
-                    if (isVerbose()) {
-                        logln(loc.getName() + names[j] + "success parse: " + s + " -> " + num);
-                    }
-                    // lenient parse
-                    fmt.setLenientParseMode(true);
-                    num = fmt.parse(s);
-                    if (isVerbose()) {
-                        logln(loc.getName() + names[j] + "success parse (lenient): " + s + " -> " + num);
+                    if (testParse) {
+                        // We do not validate the result in this test case,
+                        // because there are cases which do not round trip by design.
+
+                        // regular parse
+                        Number num = fmt.parse(s);
+                        if (isVerbose()) {
+                            logln(loc.getName() + names[j] + "success parse: " + s + " -> " + num);
+                        }
+                        // lenient parse
+                        fmt.setLenientParseMode(true);
+                        num = fmt.parse(s);
+                        if (isVerbose()) {
+                            logln(loc.getName() + names[j] + "success parse (lenient): " + s + " -> " + num);
+                        }
                     }
                 }
                 catch (Exception e) {
