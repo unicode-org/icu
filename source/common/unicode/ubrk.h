@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2007, International Business Machines Corporation and others.
+* Copyright (C) 1996-2009, International Business Machines Corporation and others.
 * All Rights Reserved.
 ******************************************************************************
 */
@@ -55,13 +55,12 @@
  * words. Characters that are not part of a word, such as symbols or
  * punctuation marks, have word-breaks on both sides.
  * <p>
- * Character boundary analysis allows users to interact with
- * characters as they expect to, for example, when moving the cursor
- * through a text string. Character boundary analysis provides correct
- * navigation of through character strings, regardless of how the
- * character is stored.  For example, an accented character might be
- * stored as a base character and a diacritical mark. What users
- * consider to be a character can differ between languages.
+ * Character boundary analysis identifies the boundaries of
+ * "Extended Grapheme Clusters", which are groupings of codepoints
+ * that should be treated as character-like units for many text operations.
+ * Please see Unicode Standard Annex #29, Unicode Text Segmentation,
+ * http://www.unicode.org/reports/tr29/ for additional information 
+ * on grapheme clusters and guidelines on their use.
  * <p>
  * Title boundary analysis locates all positions,
  * typically starts of words, that should be set to Title Case
