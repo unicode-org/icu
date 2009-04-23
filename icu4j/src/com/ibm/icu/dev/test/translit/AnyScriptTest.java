@@ -6,6 +6,8 @@
  */
 package com.ibm.icu.dev.test.translit;
 
+import java.util.BitSet;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.Transliterator;
@@ -30,10 +32,11 @@ public class AnyScriptTest extends TestFmwk {
 
     public void TestScripts(){
         // get a couple of characters of each script for testing
+        
         StringBuffer testBuffer = new StringBuffer();
         for (int script = 0; script < UScript.CODE_LIMIT; ++script) {
-            UnicodeSet test = new UnicodeSet("[:script=" + UScript.getName(script) + ":]");
-            int count = Math.min(3, test.size());
+            UnicodeSet test = new UnicodeSet().applyPropertyAlias("script", UScript.getName(script));
+            int count = Math.min(20, test.size());
             for (int i = 0; i < count; ++i){
                 testBuffer.append(UTF16.valueOf(test.charAt(i)));
             }
@@ -41,18 +44,33 @@ public class AnyScriptTest extends TestFmwk {
         String test = testBuffer.toString();
         logln("Test line: " + test);
         
+        int inclusion = getInclusion();
+        boolean testedUnavailableScript = false;
+        
         for (int script = 0; script < UScript.CODE_LIMIT; ++script) {
             if (script == UScript.COMMON || script == UScript.INHERITED) {
                 continue;
             }
+            // if the inclusion rate is not 10, skip all but a small number of items.
+            // Make sure, however, that we test at least one unavailable script
+            if (inclusion < 10 && script != UScript.LATIN
+                    && script != UScript.HAN 
+                    && script != UScript.HIRAGANA
+                    && testedUnavailableScript
+                    ) {
+                continue;
+            }
+            
             String scriptName = UScript.getName(script);
             Transliterator t;
             try {
                 t = Transliterator.getInstance("any-" + scriptName);
             } catch (Exception e) {
+                testedUnavailableScript = true;
+                logln("Skipping unavailable: " + scriptName);
                 continue; // we don't handle all scripts
             }
-            logln("Checking " + scriptName);
+            logln("Checking: " + scriptName);
             if (t != null) {
                 t.transform(test); // just verify we don't crash
             }
