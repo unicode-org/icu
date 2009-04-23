@@ -551,6 +551,12 @@ uspoof_getSkeleton(const USpoofChecker *sc,
                    UChar *dest, int32_t destCapacity,
                    UErrorCode *status) {
 
+    // TODO:  this function could be sped up a bit
+    //        Skip the input normalization when not needed, work from callers data.
+    //        Put the initial skeleton straight into the caller's destination buffer.
+    //        It probably won't need normalization.
+    //        But these would make the structure more complicated.  
+
     const SpoofImpl *This = SpoofImpl::validateThis(sc, *status);
     if (U_FAILURE(*status)) {
         return 0;
@@ -582,8 +588,8 @@ uspoof_getSkeleton(const USpoofChecker *sc,
 
     // NFKD transform of the user supplied input
     
-    UChar nfkdBuf[USPOOF_STACK_BUFFER_SIZE];
-    UChar *nfkdInput = nfkdBuf;
+    UChar nfkdStackBuf[USPOOF_STACK_BUFFER_SIZE];
+    UChar *nfkdInput = nfkdStackBuf;
     int32_t normalizedLen = unorm_normalize(
         s, length, UNORM_NFKD, 0, nfkdInput, USPOOF_STACK_BUFFER_SIZE, status);
     if (*status == U_BUFFER_OVERFLOW_ERROR) {
@@ -597,45 +603,65 @@ uspoof_getSkeleton(const USpoofChecker *sc,
                                         nfkdInput, normalizedLen+1, status);
     }
     if (U_FAILURE(*status)) {
+        if (nfkdInput != nfkdStackBuf) {
+            uprv_free(nfkdInput);
+        }
         return 0;
     }
 
-    // buffer to hold the Unicode defined mappings for a single code point
+    // buffer to hold the Unicode defined skeleton mappings for a single code point
     UChar buf[USPOOF_MAX_SKELETON_EXPANSION];
 
-    // Apply the mapping to the NFKD form string
-    
+    // Apply the skeleton mapping to the NFKD normalized input string
+    // Accumulate the skeleton, possibly unnormalized, in a UnicodeString.
     int32_t inputIndex = 0;
-    int32_t resultLen = 0;
+    UnicodeString skelStr;
     while (inputIndex < normalizedLen) {
         UChar32 c;
         U16_NEXT(nfkdInput, inputIndex, normalizedLen, c);
         int32_t replaceLen = This->confusableLookup(c, tableMask, buf);
-        if (resultLen + replaceLen < destCapacity) {
-            int i;
-            for (i=0; i<replaceLen; i++) {
-                dest[resultLen++] = buf[i];
-            }
-        } else {
-            // Storing the transformed string would overflow the dest buffer.
-            //   Don't bother storing anything, just sum up the required buffer size.
-            //   (We dont guarantee that a truncated buffer is filled to it's end)
-            resultLen += replaceLen;
-        }
+        skelStr.append(buf, replaceLen);
     }
-    
-    if (resultLen < destCapacity) {
-        dest[resultLen] = 0;
-    } else if (resultLen == destCapacity) {
-        *status = U_STRING_NOT_TERMINATED_WARNING;
-    } else {
-        *status = U_BUFFER_OVERFLOW_ERROR;
-    }
-    if (nfkdInput != nfkdBuf) {
+
+    if (nfkdInput != nfkdStackBuf) {
         uprv_free(nfkdInput);
     }
-    return resultLen;
+    
+    const UChar *result = skelStr.getBuffer();
+    int32_t  resultLen  = skelStr.length();
+    UChar   *normedResult = NULL;
+
+    // Check the skeleton for NFKD, normalize it if needed.
+    // Unnormalized results should be very rare.
+    if (!unorm_isNormalized(result, resultLen, UNORM_NFKD, status)) {
+        normalizedLen = unorm_normalize(dest, resultLen, UNORM_NFKD, 0, NULL, 0, status);
+        UChar *normedResult = static_cast<UChar *>(uprv_malloc((normalizedLen+1)*sizeof(UChar)));
+        if (normedResult == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return 0;
+        }
+        unorm_normalize(result, resultLen, UNORM_NFKD, 0, normedResult, normalizedLen+1, status);
+        result = normedResult;
+        resultLen = normalizedLen;
+    }
+
+    // Copy the skeleton to the caller's buffer
+    if (U_SUCCESS(*status)) {
+        if (destCapacity == 0 || resultLen > destCapacity) {
+            *status = resultLen>destCapacity ? U_BUFFER_OVERFLOW_ERROR : U_STRING_NOT_TERMINATED_WARNING;
+        } else {
+            u_memcpy(dest, result, resultLen);
+            if (destCapacity > resultLen) {
+                dest[resultLen] = 0;
+            } else {
+                *status = U_STRING_NOT_TERMINATED_WARNING;
+            }
+        }
+     }       
+     uprv_free(normedResult);
+     return resultLen;
 }
+
 
 
 U_CAPI UnicodeString &  U_EXPORT2

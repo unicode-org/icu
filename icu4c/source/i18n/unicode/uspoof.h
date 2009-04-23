@@ -603,21 +603,16 @@ uspoof_checkUnicodeString(const USpoofChecker *sc,
  * or whole script - are determined by the check options set for the
  * USpoofChecker.
  *
- * TODO: expand on the following
- * There are four possible types of comarisons:
- *    Mixed Script,  Lower Case
- *    Mixed Script,  Any Case
- *    Single Script, Lower Case
- *    Single Script, Any Case
- * Which tests are performed is controlled by the flags
+ * The tests to be performed are controlled by the flags
  *   USPOOF_SINGLE_SCRIPT_CONFUSABLE 
  *   USPOOF_MIXED_SCRIPT_CONFUSABLE  
- * One or both of these must be set.
+ *   USPOOF_WHOLE_SCRIPT_CONFUSABLE
+ * At least one of these tests must be selected.
  * 
- * USPOOF_ANY_CASE is a modifier.  Choose it if the identifiers
- *   are case-sensitive and may be of mixed case.
- * If identifiers are normalized to lower case for comparison or
- * display to the user, do not select the ANY_CASE option.
+ * USPOOF_ANY_CASE is a modifier for the tests.  Select it if the identifiers
+ *   may be of mixed case.
+ * If identifiers are case folded for comparison and
+ * display to the user, do not select the USPOOF_ANY_CASE option.
  *
  *
  * @param sc      The USpoofChecker

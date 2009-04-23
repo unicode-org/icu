@@ -26,6 +26,8 @@ public:
     void  testSpoofAPI();
 
     void  testSkeleton();
+
+    void testAreConfusable();
     
     // Internal function to run a single skeleton test case.
     void  checkSkeleton(const USpoofChecker *sc, uint32_t flags, 
