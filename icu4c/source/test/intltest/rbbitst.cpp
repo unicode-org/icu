@@ -1873,7 +1873,7 @@ static const TailoredBreakItem tbItems[] = {
 static void formatOffsets(char* buffer, int32_t buflen, int32_t count, const int32_t* offsets) {
     while (count-- > 0) {
         int writeCount;
-        snprintf(buffer, buflen, " %d%n", *offsets++, &writeCount);
+        sprintf(buffer, /* buflen, */ " %d%n", *offsets++, &writeCount); /* wants to be snprintf */
         buffer += writeCount;
         buflen -= writeCount;
     }
