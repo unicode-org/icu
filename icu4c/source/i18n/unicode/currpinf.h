@@ -22,16 +22,6 @@ union UHashTok;
 
 U_NAMESPACE_BEGIN
 
-U_CDECL_BEGIN
-
-/**
- * @internal ICU 4.2
- */
-static UBool U_CALLCONV ValueComparator(UHashTok val1, UHashTok val2) ;
-
-U_CDECL_END
-
-
 class Locale;
 class PluralRules;
 class Hashtable;
