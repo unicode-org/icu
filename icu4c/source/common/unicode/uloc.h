@@ -256,10 +256,10 @@
 #define ULOC_COUNTRY_CAPACITY 4
 /**
  * Useful constant for the maximum size of the whole locale ID
- * (including the terminating NULL).
+ * (including the terminating NULL and all keywords).
  * @stable ICU 2.0
  */
-#define ULOC_FULLNAME_CAPACITY 56
+#define ULOC_FULLNAME_CAPACITY 157
 
 /**
  * Useful constant for the maximum size of the script part of a locale ID
@@ -275,7 +275,7 @@
 #define ULOC_KEYWORDS_CAPACITY 50
 
 /**
- * Useful constant for the maximum SIZE of keywords in a locale
+ * Useful constant for the maximum total size of keywords and their values in a locale
  * @stable ICU 2.8
  */
 #define ULOC_KEYWORD_AND_VALUES_CAPACITY 100
