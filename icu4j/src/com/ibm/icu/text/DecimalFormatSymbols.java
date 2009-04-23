@@ -574,14 +574,16 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     public static final int CURRENCY_SPC_CURRENCY_MATCH = 0;
     public static final int CURRENCT_SPC_SURROUNDING_MATCH = 1;
     public static final int CURRENCY_SPC_INSERT = 2;
-/*
-    private static final String CURRENCY_FORMATS = "currencyFomats";
+
     private static final String CURRENCY_SPACING = "currencySpacing";
     private static final String BEFORE_CURRENCY = "beforeCurrency";
     private static final String AFTER_CURRENCY = "afterCurrency";
     private static final String[] CURRENCY_SPACING_KEYS = 
         { "currencyMatch", "surroundingMatch" ,"insertBetween"};
-*/
+    private static final String DEFAULT_SPC_MATCH = "[:letter:]";
+    private static final String DEFAULT_SPC_INSERT = " ";
+    private static final String DEFAULT_SPC_SUR_MATCH = "[:digit:]";
+
     private String[] currencySpcBeforeSym; // before currency symbol.
     private String[] currencySpcAfterSym; // after currency symbol.
     /**
@@ -674,12 +676,11 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         if (obj == null) return false;
         if (this == obj) return true;
         DecimalFormatSymbols other = (DecimalFormatSymbols) obj;
-        /*
         for (int i = 0; i <= CURRENCY_SPC_INSERT; i++) {
             if (currencySpcBeforeSym[i] != other.currencySpcBeforeSym[i]) return false;
             if (currencySpcAfterSym[i] != other.currencySpcAfterSym[i]) return false;
         }
-        */
+        
         return (zeroDigit == other.zeroDigit &&
         groupingSeparator == other.groupingSeparator &&
         decimalSeparator == other.decimalSeparator &&
@@ -822,18 +823,19 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         }
         //monetarySeparator = numberElements[11].charAt(0);
         
-        // Get Currency Spacing data.   
-        /*
+        // Get Currency Spacing data. 
         currencySpcBeforeSym = new String[CURRENCY_SPC_INSERT+1];
         currencySpcAfterSym = new String[CURRENCY_SPC_INSERT+1];
-        ICUResourceBundle curSpcBundle = (ICUResourceBundle)r.get(CURRENCY_FORMATS).get(CURRENCY_SPACING);
-        ICUResourceBundle beforeCurBundle = (ICUResourceBundle)curSpcBundle.get(BEFORE_CURRENCY);
-        ICUResourceBundle afterCurBundle = (ICUResourceBundle)curSpcBundle.get(AFTER_CURRENCY);
-        for (int i = 0; i <= CURRENCY_SPC_INSERT; i++) {
-            currencySpcBeforeSym[i] = beforeCurBundle.getStringWithFallback(CURRENCY_SPACING_KEYS[i]);
-            currencySpcAfterSym[i] = afterCurBundle.getStringWithFallback(CURRENCY_SPACING_KEYS[i]);
+        ICUResourceBundle curSpcBundle = (ICUResourceBundle)r.get(CURRENCY_SPACING);
+        if (curSpcBundle != null) {
+            ICUResourceBundle beforeCurBundle = (ICUResourceBundle)curSpcBundle.get(BEFORE_CURRENCY);
+            ICUResourceBundle afterCurBundle = (ICUResourceBundle)curSpcBundle.get(AFTER_CURRENCY);
+            for (int i = CURRENCY_SPC_CURRENCY_MATCH; i <= CURRENCY_SPC_INSERT; i++) {
+                currencySpcBeforeSym[i] = beforeCurBundle.getStringWithFallback(CURRENCY_SPACING_KEYS[i]);
+                currencySpcAfterSym[i] = afterCurBundle.getStringWithFallback(CURRENCY_SPACING_KEYS[i]);
+            }
         }
-        */
+        
     }
 
     /**
@@ -884,6 +886,21 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         if (serialVersionOnStream < 5) {
             // use the same one for groupingSeparator
             monetaryGroupingSeparator = groupingSeparator;
+        }
+        if (serialVersionOnStream < 6) {
+            // Set null to CurrencySpacing related fields.
+            if (currencySpcBeforeSym == null) {
+                currencySpcBeforeSym = new String[CURRENCY_SPC_INSERT+1];
+            }
+            if (currencySpcAfterSym == null) {
+                currencySpcAfterSym = new String[CURRENCY_SPC_INSERT+1];
+            }
+            currencySpcBeforeSym[CURRENCY_SPC_CURRENCY_MATCH] = 
+                currencySpcAfterSym[CURRENCY_SPC_CURRENCY_MATCH] = DEFAULT_SPC_MATCH;
+            currencySpcBeforeSym[CURRENCT_SPC_SURROUNDING_MATCH] = 
+                currencySpcAfterSym[CURRENCT_SPC_SURROUNDING_MATCH] = DEFAULT_SPC_SUR_MATCH;
+            currencySpcBeforeSym[CURRENCY_SPC_INSERT] = 
+                currencySpcAfterSym[CURRENCY_SPC_INSERT] = DEFAULT_SPC_INSERT;
         }
         serialVersionOnStream = currentSerialVersion;
 
@@ -1068,7 +1085,8 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     // - 3 for ICU 2.2, which includes the locale field
     // - 4 for ICU 3.2, which includes the ULocale field
     // - 5 for ICU 3.6, which includes the monetaryGroupingSeparator field
-    private static final int currentSerialVersion = 5;
+    // - 6 for ICU 4.2, which includes the currencySpc* fields
+    private static final int currentSerialVersion = 6;
     
     /**
      * Describes the version of <code>DecimalFormatSymbols</code> present on the stream.
