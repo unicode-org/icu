@@ -126,7 +126,7 @@ class CompoundTransliterator extends Transliterator {
     CompoundTransliterator(String id, UnicodeFilter filter2, Transliterator[] trans2, int numAnonymousRBTs2) {
         super(id, filter2);
         trans = trans2;
-        numAnonymousRBTs = numAnonymousRBTs;
+        numAnonymousRBTs = numAnonymousRBTs2;
     }
     
     /**
