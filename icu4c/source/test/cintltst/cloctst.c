@@ -2731,14 +2731,14 @@ static void TestUResourceBundle() {
             log_err("ures_open(%s) failed %s\n", oldLoc, u_errorName(status));
         }
 
-        us1 = ures_getLocale(rb1, &status);
+        us1 = ures_getLocaleByType(rb1, ULOC_ACTUAL_LOCALE, &status);
 
         status = U_ZERO_ERROR;
         rb2 = ures_open(NULL, newLoc, &status);
         if (U_FAILURE(status)) {
             log_err("ures_open(%s) failed %s\n", oldLoc, u_errorName(status));
         } 
-        us2 = ures_getLocale(rb2, &status);
+        us2 = ures_getLocaleByType(rb2, ULOC_ACTUAL_LOCALE, &status);
 
         if (strcmp(us1,newLoc)!=0 || strcmp(us1,us2)!=0 ) {
             log_err("The locales are not equal!.Old: %s, New: %s \n", oldLoc, newLoc);
