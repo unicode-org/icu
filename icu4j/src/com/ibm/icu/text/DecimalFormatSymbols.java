@@ -677,10 +677,14 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         if (this == obj) return true;
         DecimalFormatSymbols other = (DecimalFormatSymbols) obj;
         for (int i = 0; i <= CURRENCY_SPC_INSERT; i++) {
-            if (currencySpcBeforeSym[i] != other.currencySpcBeforeSym[i]) return false;
-            if (currencySpcAfterSym[i] != other.currencySpcAfterSym[i]) return false;
+            if (!currencySpcBeforeSym[i].equals(other.currencySpcBeforeSym[i])) {
+                return false;
+            }
+            if (!currencySpcAfterSym[i].equals(other.currencySpcAfterSym[i])) {
+                return false;
+            }
         }
-        
+
         return (zeroDigit == other.zeroDigit &&
         groupingSeparator == other.groupingSeparator &&
         decimalSeparator == other.decimalSeparator &&

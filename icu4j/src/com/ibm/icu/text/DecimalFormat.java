@@ -31,6 +31,7 @@ import java.util.ArrayList;
 //#endif
 
 import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.util.Currency;
@@ -3705,16 +3706,12 @@ public class DecimalFormat extends NumberFormat {
          * [Richard/GCL]
          */
         // following are added to accomodate changes for currency plural format.
-        return currencySignCount == other.currencySignCount && 
-               (style == NumberFormat.PLURALCURRENCYSTYLE)? true :
-                ((posPrefixPattern != null &&
-                    equals(posPrefixPattern, other.posPrefixPattern))
-                && (posSuffixPattern != null &&
-                    equals(posSuffixPattern, other.posSuffixPattern))
-                && (negPrefixPattern != null &&
-                    equals(negPrefixPattern, other.negPrefixPattern))
-                && (negSuffixPattern != null &&
-                    equals(negSuffixPattern, other.negSuffixPattern)))
+        return currencySignCount == other.currencySignCount
+            && (style != NumberFormat.PLURALCURRENCYSTYLE ||
+                   equals(posPrefixPattern, other.posPrefixPattern)
+                   && equals(posSuffixPattern, other.posSuffixPattern)
+                   && equals(negPrefixPattern, other.negPrefixPattern)
+                   && equals(negSuffixPattern, other.negSuffixPattern))
             && multiplier == other.multiplier
             && groupingSize == other.groupingSize
             && groupingSize2 == other.groupingSize2
@@ -3727,12 +3724,14 @@ public class DecimalFormat extends NumberFormat {
                 minSignificantDigits == other.minSignificantDigits &&
                 maxSignificantDigits == other.maxSignificantDigits)
             && symbols.equals(other.symbols) 
-            && (currencyPluralInfo == null 
-                || currencyPluralInfo.equals(other.currencyPluralInfo));
+            && Utility.objectEquals(currencyPluralInfo, other.currencyPluralInfo);
     }
 
     //method to unquote the strings and compare
     private boolean equals(String pat1, String pat2){
+        if (pat1 == null || pat2 == null) {
+            return (pat1 == null && pat2 == null);
+        }
         //fast path
         if(pat1.equals(pat2)){
             return true;
