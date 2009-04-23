@@ -88,7 +88,7 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
         currentBundleKey = ures_getKey(currentBundle);
         subBundle = ures_getNextResource(currentBundle, NULL, &errorCode);
         if (U_FAILURE(errorCode)) {
-            log_err("Can't open a resource for locale %s. Error: %s\n", locale, u_errorName(errorCode));
+            log_err("Can't open a resource for lnocale %s. Error: %s\n", locale, u_errorName(errorCode));
             continue;
         }
         subBundleKey = ures_getKey(subBundle);
