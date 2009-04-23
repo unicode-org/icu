@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1999-2002, International Business Machines Corporation and
+ * Copyright (c) 1999-2002,2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -59,5 +59,5 @@ void uprintf(const UnicodeString &str) {
     actualLen = str.extract(0, len, buf/*, bufLen*/); // Default codepage conversion
     buf[actualLen] = 0;
     printf("%s", buf);
-    delete buf;
+    delete[] buf;
 }
