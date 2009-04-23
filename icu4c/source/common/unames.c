@@ -37,10 +37,38 @@ static const char DATA_TYPE[] = "icu";
 #define LINES_PER_GROUP (1UL<<GROUP_SHIFT)
 #define GROUP_MASK (LINES_PER_GROUP-1)
 
+/*
+ * This struct was replaced by explicitly accessing equivalent
+ * fields from triples of uint16_t.
+ * The Group struct was padded to 8 bytes on compilers for early ARM CPUs,
+ * which broke the assumption that sizeof(Group)==6 and that the ++ operator
+ * would advance by 6 bytes (3 uint16_t).
+ *
+ * We can't just change the data structure because it's loaded from a data file,
+ * and we don't want to make it less compact, so we changed the access code.
+ *
+ * For details see ICU tickets 6331 and 6008.
 typedef struct {
     uint16_t groupMSB,
-             offsetHigh, offsetLow; /* avoid padding */
+             offsetHigh, offsetLow; /* avoid padding * /
 } Group;
+ */
+enum {
+    GROUP_MSB,
+    GROUP_OFFSET_HIGH,
+    GROUP_OFFSET_LOW,
+    GROUP_LENGTH
+};
+
+/*
+ * Get the 32-bit group offset.
+ * @param group (const uint16_t *) pointer to a Group triple of uint16_t
+ * @return group offset (int32_t)
+ */
+#define GET_GROUP_OFFSET(group) ((int32_t)(group)[GROUP_OFFSET_HIGH]<<16|(group)[GROUP_OFFSET_LOW])
+
+#define NEXT_GROUP(group) ((group)+GROUP_LENGTH)
+#define PREV_GROUP(group) ((group)-GROUP_LENGTH)
 
 typedef struct {
     uint32_t start, end;
@@ -51,6 +79,17 @@ typedef struct {
 typedef struct {
     uint32_t tokenStringOffset, groupsOffset, groupStringOffset, algNamesOffset;
 } UCharNames;
+
+/*
+ * Get the groups table from a UCharNames struct.
+ * The groups table consists of one uint16_t groupCount followed by
+ * groupCount groups. Each group is a triple of uint16_t, see GROUP_LENGTH
+ * and the comment for the old struct Group above.
+ *
+ * @param names (const UCharNames *) pointer to the UCharNames indexes
+ * @return (const uint16_t *) pointer to the groups table
+ */
+#define GET_GROUPS(names) (const uint16_t *)((const char *)names+names->groupsOffset)
 
 typedef struct {
     const char *otherName;
@@ -464,18 +503,18 @@ static uint16_t getExtName(uint32_t code, char *buffer, uint16_t bufferLength) {
  * or else is the highest group before "code".
  * If the lowest group is after "code", then that one is returned.
  */
-static Group *
+static const uint16_t *
 getGroup(UCharNames *names, uint32_t code) {
+    const uint16_t *groups=GET_GROUPS(names);
     uint16_t groupMSB=(uint16_t)(code>>GROUP_SHIFT),
              start=0,
-             limit=*(uint16_t *)((char *)names+names->groupsOffset),
+             limit=*groups++,
              number;
-    Group *groups=(Group *)((char *)names+names->groupsOffset+2);
 
     /* binary search for the group of names that contains the one for code */
     while(start<limit-1) {
         number=(uint16_t)((start+limit)/2);
-        if(groupMSB<groups[number].groupMSB) {
+        if(groupMSB<groups[number*GROUP_LENGTH+GROUP_MSB]) {
             limit=number;
         } else {
             start=number;
@@ -483,7 +522,7 @@ getGroup(UCharNames *names, uint32_t code) {
     }
 
     /* return this regardless of whether it is an exact match */
-    return groups+start;
+    return groups+start*GROUP_LENGTH;
 }
 
 /*
@@ -549,12 +588,11 @@ expandGroupLengths(const uint8_t *s,
 }
 
 static uint16_t
-expandGroupName(UCharNames *names, Group *group,
+expandGroupName(UCharNames *names, const uint16_t *group,
                 uint16_t lineNumber, UCharNameChoice nameChoice,
                 char *buffer, uint16_t bufferLength) {
     uint16_t offsets[LINES_PER_GROUP+2], lengths[LINES_PER_GROUP+2];
-    const uint8_t *s=(uint8_t *)names+names->groupStringOffset+
-                                    (group->offsetHigh<<16|group->offsetLow);
+    const uint8_t *s=(uint8_t *)names+names->groupStringOffset+GET_GROUP_OFFSET(group);
     s=expandGroupLengths(s, offsets, lengths);
     return expandName(names, s+offsets[lineNumber], lengths[lineNumber], nameChoice,
                       buffer, bufferLength);
@@ -563,8 +601,8 @@ expandGroupName(UCharNames *names, Group *group,
 static uint16_t
 getName(UCharNames *names, uint32_t code, UCharNameChoice nameChoice,
         char *buffer, uint16_t bufferLength) {
-    Group *group=getGroup(names, code);
-    if((uint16_t)(code>>GROUP_SHIFT)==group->groupMSB) {
+    const uint16_t *group=getGroup(names, code);
+    if((uint16_t)(code>>GROUP_SHIFT)==group[GROUP_MSB]) {
         return expandGroupName(names, group, (uint16_t)(code&GROUP_MASK), nameChoice,
                                buffer, bufferLength);
     } else {
@@ -582,13 +620,12 @@ getName(UCharNames *names, uint32_t code, UCharNameChoice nameChoice,
  * and either calls the enumerator function or finds a given input name.
  */
 static UBool
-enumGroupNames(UCharNames *names, Group *group,
+enumGroupNames(UCharNames *names, const uint16_t *group,
                UChar32 start, UChar32 end,
                UEnumCharNamesFn *fn, void *context,
                UCharNameChoice nameChoice) {
     uint16_t offsets[LINES_PER_GROUP+2], lengths[LINES_PER_GROUP+2];
-    const uint8_t *s=(uint8_t *)names+names->groupStringOffset+
-                                    (group->offsetHigh<<16|group->offsetLow);
+    const uint8_t *s=(uint8_t *)names+names->groupStringOffset+GET_GROUP_OFFSET(group);
 
     s=expandGroupLengths(s, offsets, lengths);
     if(fn!=DO_FIND_NAME) {
@@ -656,7 +693,7 @@ enumNames(UCharNames *names,
           UEnumCharNamesFn *fn, void *context,
           UCharNameChoice nameChoice) {
     uint16_t startGroupMSB, endGroupMSB, groupCount;
-    Group *group, *groupLimit;
+    const uint16_t *group, *groupLimit;
 
     startGroupMSB=(uint16_t)(start>>GROUP_SHIFT);
     endGroupMSB=(uint16_t)((limit-1)>>GROUP_SHIFT);
@@ -665,15 +702,16 @@ enumNames(UCharNames *names,
     group=getGroup(names, start);
 
     if(startGroupMSB==endGroupMSB) {
-        if(startGroupMSB==group->groupMSB) {
+        if(startGroupMSB==group[GROUP_MSB]) {
             /* if start and limit-1 are in the same group, then enumerate only in that one */
             return enumGroupNames(names, group, start, limit-1, fn, context, nameChoice);
         }
     } else {
-        groupCount=*(uint16_t *)((char *)names+names->groupsOffset);
-        groupLimit=(Group *)((char *)names+names->groupsOffset+2)+groupCount;
+        const uint16_t *groups=GET_GROUPS(names);
+        groupCount=*groups++;
+        groupLimit=groups+groupCount*GROUP_LENGTH;
 
-        if(startGroupMSB==group->groupMSB) {
+        if(startGroupMSB==group[GROUP_MSB]) {
             /* enumerate characters in the partial start group */
             if((start&GROUP_MASK)!=0) {
                 if(!enumGroupNames(names, group,
@@ -681,12 +719,13 @@ enumNames(UCharNames *names,
                                    fn, context, nameChoice)) {
                     return FALSE;
                 }
-                ++group; /* continue with the next group */
+                group=NEXT_GROUP(group); /* continue with the next group */
             }
-        } else if(startGroupMSB>group->groupMSB) {
+        } else if(startGroupMSB>group[GROUP_MSB]) {
             /* make sure that we start enumerating with the first group after start */
-            if (group + 1 < groupLimit && (group + 1)->groupMSB > startGroupMSB && nameChoice == U_EXTENDED_CHAR_NAME) {
-                UChar32 end = (group + 1)->groupMSB << GROUP_SHIFT;
+            const uint16_t *nextGroup=NEXT_GROUP(group);
+            if (nextGroup < groupLimit && nextGroup[GROUP_MSB] > startGroupMSB && nameChoice == U_EXTENDED_CHAR_NAME) {
+                UChar32 end = nextGroup[GROUP_MSB] << GROUP_SHIFT;
                 if (end > limit) {
                     end = limit;
                 }
@@ -694,32 +733,34 @@ enumNames(UCharNames *names,
                     return FALSE;
                 }
             }
-            ++group;
+            group=nextGroup;
         }
 
         /* enumerate entire groups between the start- and end-groups */
-        while(group<groupLimit && group->groupMSB<endGroupMSB) {
-            start=(UChar32)group->groupMSB<<GROUP_SHIFT;
+        while(group<groupLimit && group[GROUP_MSB]<endGroupMSB) {
+            const uint16_t *nextGroup;
+            start=(UChar32)group[GROUP_MSB]<<GROUP_SHIFT;
             if(!enumGroupNames(names, group, start, start+LINES_PER_GROUP-1, fn, context, nameChoice)) {
                 return FALSE;
             }
-            if (group + 1 < groupLimit && (group + 1)->groupMSB > group->groupMSB + 1 && nameChoice == U_EXTENDED_CHAR_NAME) {
-                UChar32 end = (group + 1)->groupMSB << GROUP_SHIFT;
+            nextGroup=NEXT_GROUP(group);
+            if (nextGroup < groupLimit && nextGroup[GROUP_MSB] > group[GROUP_MSB] + 1 && nameChoice == U_EXTENDED_CHAR_NAME) {
+                UChar32 end = nextGroup[GROUP_MSB] << GROUP_SHIFT;
                 if (end > limit) {
                     end = limit;
                 }
-                if (!enumExtNames((group->groupMSB + 1) << GROUP_SHIFT, end - 1, fn, context)) {
+                if (!enumExtNames((group[GROUP_MSB] + 1) << GROUP_SHIFT, end - 1, fn, context)) {
                     return FALSE;
                 }
             }
-            ++group;
+            group=nextGroup;
         }
 
-        /* enumerate within the end group (group->groupMSB==endGroupMSB) */
-        if(group<groupLimit && group->groupMSB==endGroupMSB) {
+        /* enumerate within the end group (group[GROUP_MSB]==endGroupMSB) */
+        if(group<groupLimit && group[GROUP_MSB]==endGroupMSB) {
             return enumGroupNames(names, group, (limit-1)&~GROUP_MASK, limit-1, fn, context, nameChoice);
         } else if (nameChoice == U_EXTENDED_CHAR_NAME && group == groupLimit) {
-            UChar32 next = ((group - 1)->groupMSB + 1) << GROUP_SHIFT;
+            UChar32 next = (PREV_GROUP(group)[GROUP_MSB] + 1) << GROUP_SHIFT;
             if (next > start) {
                 start = next;
             }
@@ -1324,8 +1365,7 @@ calcGroupNameSetsLengths(int32_t maxNameLength) {
 
     int8_t *tokenLengths;
 
-    uint16_t *groups;
-    Group *group;
+    const uint16_t *group;
     const uint8_t *s, *line, *lineLimit;
 
     int32_t groupCount, lineNumber, length;
@@ -1335,14 +1375,12 @@ calcGroupNameSetsLengths(int32_t maxNameLength) {
         uprv_memset(tokenLengths, 0, tokenCount);
     }
 
-    groups=(uint16_t *)((char *)uCharNames+uCharNames->groupsOffset);
-    groupCount=*groups++;
-    group=(Group *)groups;
+    group=GET_GROUPS(uCharNames);
+    groupCount=*group++;
 
     /* enumerate all groups */
     while(groupCount>0) {
-        s=(uint8_t *)uCharNames+uCharNames->groupStringOffset+
-                                    ((int32_t)group->offsetHigh<<16|group->offsetLow);
+        s=(uint8_t *)uCharNames+uCharNames->groupStringOffset+GET_GROUP_OFFSET(group);
         s=expandGroupLengths(s, offsets, lengths);
 
         /* enumerate all lines in each group */
@@ -1377,7 +1415,7 @@ calcGroupNameSetsLengths(int32_t maxNameLength) {
             /*length=calcNameSetLength(tokens, tokenCount, tokenStrings, tokenLengths, gISOCommentSet, &line, lineLimit);*/
         }
 
-        ++group;
+        group=NEXT_GROUP(group);
         --groupCount;
     }
 
