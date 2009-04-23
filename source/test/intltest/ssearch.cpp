@@ -260,7 +260,7 @@ void SSearchTest::searchTest()
             target.append(text);
             nodeCount++;
         }
-        
+
         n = testCase->getChildElement("m");
         if (n!=NULL) {
             expectedMatchStart = target.length();
@@ -295,7 +295,7 @@ void SSearchTest::searchTest()
                                          collator,
                                          NULL,     // the break iterator
                                          &status);
-                                         
+
         TEST_ASSERT_SUCCESS(status);
         if (U_FAILURE(status)) {
             usearch_close(uss);
@@ -331,7 +331,7 @@ void SSearchTest::searchTest()
         }
 
         usearch_close(uss);
-       
+
         uss = usearch_openFromCollator(pattern.getBuffer(), pattern.length(),
             target.getBuffer(), target.length(),
             collator,
@@ -463,7 +463,7 @@ void SSearchTest::udhrTest()
             errln("Could not open search object for %s", testCases[t].locale);
             goto delete_bms;
         }
-        
+
         start = end = -1;
         while (bms_search(bms, offset, &start, &end)) {
             offset = end;
@@ -608,7 +608,7 @@ void SSearchTest::bmSearchTest()
             target.append(text);
             nodeCount++;
         }
-        
+
         n = testCase->getChildElement("m");
         if (n!=NULL) {
             expectedMatchStart = target.length();
@@ -722,7 +722,7 @@ OrderList::OrderList(UCollator *coll, const UnicodeString &string, int32_t strin
     uint32_t strengthMask = 0;
     int32_t order, low, high;
 
-    switch (ucol_getStrength(coll)) 
+    switch (ucol_getStrength(coll))
     {
     default:
         strengthMask |= UCOL_TERTIARYORDERMASK;
@@ -1255,7 +1255,7 @@ void SSearchTest::boyerMooreTest()
 
     for (int32_t t = 0; t < (sizeof(targets)/sizeof(targets[0])); t += 1) {
         UnicodeString target = targets[t].unescape();
-        
+
         longPattern->setTargetString(&target, status);
         if (longPattern->search(0, start, end)) {
             logln("Test %d: found long pattern at [%d, %d].", t, start, end);
@@ -1317,7 +1317,7 @@ void SSearchTest::bmsTest()
 
     for (int32_t t = 0; t < (sizeof(targets)/sizeof(targets[0])); t += 1) {
         UnicodeString target = targets[t].unescape();
-        
+
         bms_setTargetString(longPattern, target.getBuffer(), target.length(), &status);
         if (bms_search(longPattern, 0, &start, &end)) {
             logln("Test %d: found long pattern at [%d, %d].", t, start, end);
@@ -1514,11 +1514,11 @@ const char *cPattern = "maketh houndes ete hem";
     BoyerMooreSearch bms(data, uPattern, &target, status);
     TEST_ASSERT_SUCCESS(status);
 #endif
-    
+
 //  int32_t foundStart;
 //  int32_t foundEnd;
     UBool   found;
-    
+
     // Find the match position usgin strstr
     const char *pm = strstr(longishText, cPattern);
     TEST_ASSERT_M(pm!=NULL, "No pattern match with strstr");
@@ -1714,7 +1714,7 @@ UnicodeString &StringSetMonkey::generateAlternative(const UnicodeString &testCas
 
         int32_t stringCount = strings->size();
         int32_t tries = 0;
-      
+
         // find random string that generates the same CEList
         const CEList *ceList2 = NULL;
         const UnicodeString *string = NULL;
@@ -1784,7 +1784,7 @@ static void generateTestCase(UCollator *coll, Monkey *monkeys[], int32_t monkeyC
 static int32_t nextBoundaryAfter(const UnicodeString &string, int32_t startIndex) {
     const UChar *text = string.getBuffer();
     int32_t textLen   = string.length();
-    
+
     if (startIndex >= textLen) {
         return startIndex;
     }
@@ -1793,14 +1793,14 @@ static int32_t nextBoundaryAfter(const UnicodeString &string, int32_t startIndex
     int32_t  i = startIndex;
 
     U16_NEXT(text, i, textLen, c);
-    
+
     // If we are on a control character, stop without looking for combining marks.
     //    Control characters do not combine.
     int32_t gcProperty = u_getIntPropertyValue(c, UCHAR_GRAPHEME_CLUSTER_BREAK);
     if (gcProperty==U_GCB_CONTROL || gcProperty==U_GCB_LF || gcProperty==U_GCB_CR) {
         return i;
     }
-    
+
     // The initial character was not a control, and can thus accept trailing
     //   combining characters.  Advance over however many of them there are.
     int32_t  indexOfLastCharChecked;
@@ -1822,15 +1822,15 @@ static int32_t nextBoundaryAfter(const UnicodeString &string, int32_t startIndex
 
     return indexOfLastCharChecked;
 }
- 
+
 static UBool isInCombiningSequence(const UnicodeString &string, int32_t index) {
     const UChar *text = string.getBuffer();
     int32_t textLen   = string.length();
-    
+
     if (index>=textLen || index<=0) {
         return FALSE;
     }
-  
+
     // If the character at the current index is not a GRAPHEME_EXTEND
     //    then we can not be within a combining sequence.
     UChar32  c;
@@ -1839,15 +1839,15 @@ static UBool isInCombiningSequence(const UnicodeString &string, int32_t index) {
     if (gcProperty != U_GCB_EXTEND && gcProperty != U_GCB_SPACING_MARK) {
         return FALSE;
     }
-    
+
     // We are at a combining mark.  If the preceding character is anything
     //   except a CONTROL, CR or LF, we are in a combining sequence.
-    U16_PREV(text, 0, index, c);    
+    U16_PREV(text, 0, index, c);
     gcProperty = u_getIntPropertyValue(c, UCHAR_GRAPHEME_CLUSTER_BREAK);
 
     return !(gcProperty==U_GCB_CONTROL || gcProperty==U_GCB_LF || gcProperty==U_GCB_CR);
-}      
-        
+}
+
 static UBool simpleSearch(UCollator *coll, const UnicodeString &target, int32_t offset, const UnicodeString &pattern, int32_t &matchStart, int32_t &matchEnd)
 {
     UErrorCode      status = U_ZERO_ERROR;
@@ -1855,7 +1855,7 @@ static UBool simpleSearch(UCollator *coll, const UnicodeString &target, int32_t 
     OrderList       patternOrders(coll, pattern);
     int32_t         targetSize  = targetOrders.size() - 1;
     int32_t         patternSize = patternOrders.size() - 1;
-    UBreakIterator *charBreakIterator = ubrk_open(UBRK_CHARACTER, ucol_getLocale(coll, ULOC_VALID_LOCALE, &status), 
+    UBreakIterator *charBreakIterator = ubrk_open(UBRK_CHARACTER, ucol_getLocaleByType(coll, ULOC_VALID_LOCALE, &status),
                                                   target.getBuffer(), target.length(), &status);
 
     if (patternSize == 0) {
@@ -2184,7 +2184,7 @@ void SSearchTest::monkeyTest(char *params)
             testCase.remove();
             testCase.append(pattern);
             testCase.append(suffix);
-            
+
             // pattern + suffix
             notFoundCount += monkeyTestCase(coll, testCase, pattern, altPattern, "pattern + suffix", strengthNames[s], seed);
         }
@@ -2197,7 +2197,7 @@ void SSearchTest::monkeyTest(char *params)
     uset_close(letters);
 
     CollData::close(monkeyData);
-    
+
     ucol_close(coll);
 }
 
@@ -2294,7 +2294,7 @@ void SSearchTest::bmMonkeyTest(char *params)
         ucol_setStrength(coll, strengths[s]);
 
         CollData *data = CollData::open(coll, status);
-        
+
         // TODO: try alternate prefix and suffix too?
         // TODO: alterntaes are only equal at primary strength. Is this OK?
         for(int32_t t = 0; t < loopCount; t += 1) {
@@ -2334,7 +2334,7 @@ void SSearchTest::bmMonkeyTest(char *params)
             testCase.remove();
             testCase.append(pattern);
             testCase.append(suffix);
-            
+
             // pattern + suffix
             notFoundCount += bmMonkeyTestCase(coll, testCase, pattern, altPattern, &pat, &alt, "pattern + suffix", strengthNames[s], seed);
         }
@@ -2349,10 +2349,10 @@ void SSearchTest::bmMonkeyTest(char *params)
     uset_close(letters);
 
     CollData::close(monkeyData);
-    
+
     ucol_close(coll);
 }
 
-#endif        
-        
+#endif
+
 #endif
