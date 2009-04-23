@@ -1794,6 +1794,15 @@ IntlTestRBNF::TestAllLocales()
     " (ordinal)  ",
     " (duration) "
   };
+
+  // RBNF parse is extremely slow when lenient option is enabled.
+  // For non-exhaustive mode, we only test a few locales.
+  const char* parseLocales[] = {"en_US", "nl_NL", "be", NULL};
+
+  //TODO: Remove this when #6870 is resolved
+  // "ar", "ga", "mt" triggers stack overflow error
+  const char* parseExclusionLangs[] = {"ar", "ga", "mt", NULL};
+
   int32_t count = 0;
   const Locale* locales = Locale::getAvailableLocales(count);
   for (int i = 0; i < count; ++i) {
@@ -1805,10 +1814,54 @@ IntlTestRBNF::TestAllLocales()
         double n = 45.678;
         UnicodeString str;
         f->format(n, str);
-        delete f;
 
         logln(UnicodeString(loc->getName()) + UnicodeString(names[j])
             + UnicodeString("success: 45.678 -> ") + str);
+
+        UBool testParse = TRUE;
+        if (quick) {
+            testParse = FALSE;
+            for (int k = 0; parseLocales[k] != NULL; k++) {
+                if (strcmp(loc->getLanguage(), parseLocales[k]) == 0) {
+                    testParse = TRUE;
+                    break;
+                }
+            }
+        }
+        //TODO: start - Remove the code block below when #6870 is resolved
+        for (int k = 0; parseExclusionLangs[k] != NULL; k++) {
+            if (strcmp(loc->getLanguage(), parseExclusionLangs[k]) == 0) {
+                testParse = FALSE;
+                break;
+            }
+        }
+        //TODO: end
+        if (testParse) {
+            // We do not validate the result in this test case,
+            // because there are cases which do not round trip by design.
+
+            Formattable num;
+            status = U_ZERO_ERROR;
+
+            // regular parse
+            f->parse(str, num, status);
+            if (U_FAILURE(status)) {
+                errln(UnicodeString(loc->getName()) + names[j]
+                    + "ERROR could not parse '" + str + "' -> " + u_errorName(status));
+            }
+
+            // lenient parse
+            status = U_ZERO_ERROR;
+            f->setLenient(TRUE);
+            f->parse(str, num, status);
+            if (U_FAILURE(status)) {
+                errln(UnicodeString(loc->getName()) + names[j]
+                    + "ERROR could not parse(lenient) '" + str + "' -> " + u_errorName(status));
+            }
+        }
+
+        delete f;
+
       } else {
         errln(UnicodeString(loc->getName()) + UnicodeString(names[j])
             + UnicodeString("ERROR could not instantiate -> ") + UnicodeString(u_errorName(status)));
