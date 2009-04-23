@@ -266,7 +266,7 @@ void SpoofImpl::setAllowedLocales(const char *localesList, UErrorCode &status) {
     int32_t        localeListCount = 0;   // Number of locales provided by caller.
 
     // Loop runs once per locale from the localesList, a comma separated list of locales.
-    for (;;) {
+    do {
         locEnd = uprv_strchr(locStart, ',');
         if (locEnd == NULL) {
             locEnd = localesListEnd;
@@ -285,7 +285,7 @@ void SpoofImpl::setAllowedLocales(const char *localesList, UErrorCode &status) {
         localeListCount++;
 
         // We have one locale from the locales list.
-        // Add the exemplar chars for this locale to the accumulating set of allowed chars.
+        // Add the script chars for this locale to the accumulating set of allowed chars.
         // If the locale is no good, we will be notified back via status.
         addScriptChars(locale, &allowedChars, status);
         uprv_free((void *)locale);
