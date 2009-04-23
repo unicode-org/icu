@@ -550,9 +550,12 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale) {
             } else if (dtCount==4) { // short time format
                 // set fDefaultHourFormatChar to the hour format character from this pattern
                 int32_t tfIdx, tfLen = rbPattern.length();
+                UBool ignoreChars = FALSE;
                 for (tfIdx = 0; tfIdx < tfLen; tfIdx++) {
                     UChar tfChar = rbPattern.charAt(tfIdx);
-                    if ( u_strchr(hourFormatChars, tfChar) != NULL ) {
+                    if ( tfChar == SINGLE_QUOTE ) {
+                        ignoreChars = !ignoreChars; // toggle (handle quoted literals & '' for single quote)
+                    } else if ( !ignoreChars && u_strchr(hourFormatChars, tfChar) != NULL ) {
                         fDefaultHourFormatChar = tfChar;
                         break;
                     }
