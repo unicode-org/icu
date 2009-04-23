@@ -1402,9 +1402,9 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
             ois.close();
             
             if (!nf.equals(o)) {
-                errln("Fail: DateFormat serialization/equality bug");
+                errln("Fail: NumberFormat serialization/equality bug");
             } else {
-                logln("DateFormat serialization/equality is OKAY.");
+                logln("NumberFormat serialization/equality is OKAY.");
             }
         }
 

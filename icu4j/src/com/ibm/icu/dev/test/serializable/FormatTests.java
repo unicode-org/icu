@@ -2114,7 +2114,18 @@ public class FormatTests
             return plfmts;
         }
         public boolean hasSameBehavior(Object a, Object b) {
-            return a.equals(b);
+            PluralFormat pfa = (PluralFormat)a;
+            PluralFormat pfb = (PluralFormat)b;
+            boolean isSame = true;
+            for (int i = 0; i < 10; i++) {
+                String texta = pfa.format(i);
+                String textb = pfb.format(i);
+                if (!texta.equals(textb)) {
+                    isSame = false;
+                    break;
+                }
+            }
+            return isSame;
         }
     }
 
