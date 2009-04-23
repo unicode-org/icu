@@ -148,7 +148,7 @@ public class IntlTestDecimalFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
         // Test CurrencySpacing.
         // In CLDR 1.7, only root.txt has CurrencySpacing data. This data might 
         // be different between en and fr in the future.
-        for (int i = en.CURRENCY_SPC_CURRENCY_MATCH; i <= en.CURRENCY_SPC_INSERT; i++) {
+        for (int i = DecimalFormatSymbols.CURRENCY_SPC_CURRENCY_MATCH; i <= DecimalFormatSymbols.CURRENCY_SPC_INSERT; i++) {
             if (en.getPatternForCurrencySpacing(i, true) !=
                 fr.getPatternForCurrencySpacing(i, true)) {
                 errln("ERROR: get currency spacing item:"+ i+" before the currency");
@@ -160,8 +160,8 @@ public class IntlTestDecimalFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
         }
         
         String dash = "-";
-        en.setPatternForCurrencySpacing(en.CURRENCY_SPC_INSERT, true, dash);
-        if (dash != en.getPatternForCurrencySpacing(en.CURRENCY_SPC_INSERT, true)) {
+        en.setPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_INSERT, true, dash);
+        if (dash != en.getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_INSERT, true)) {
             errln("ERROR: set currency spacing pattern for before currency.");
         }
 
