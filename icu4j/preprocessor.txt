@@ -11,7 +11,10 @@ src/com/ibm/icu/impl/PatternTokenizer.java
 src/com/ibm/icu/impl/UnicodeRegex.java
 src/com/ibm/icu/impl/Utility.java
 src/com/ibm/icu/lang/UCharacter.java
+src/com/ibm/icu/lang/IllegalIcuArgumentException.java
+
 src/com/ibm/icu/math/BigDecimal.java
+
 src/com/ibm/icu/text/Bidi.java
 src/com/ibm/icu/text/CharsetRecog_sbcs.java
 src/com/ibm/icu/text/ChineseDateFormat.java
@@ -27,6 +30,7 @@ src/com/ibm/icu/text/RuleBasedNumberFormat.java
 src/com/ibm/icu/text/SimpleDateFormat.java
 src/com/ibm/icu/text/UnicodeSet.java
 src/com/ibm/icu/text/UTF16.java
+
 src/com/ibm/icu/util/ByteArrayWrapper.java
 src/com/ibm/icu/util/UResourceBundle.java
 
