@@ -1348,7 +1348,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
                 // rules specified in the description, and create a _new_
                 // collator based on the combinaiton of those rules
                 RuleBasedCollator temp = (RuleBasedCollator)Collator.getInstance(locale);
-                String rules = temp.getRules() + lenientParseRules;
+                String rules = temp.getRules() + (lenientParseRules == null ? "" : lenientParseRules);
 
                 collator = new RuleBasedCollator(rules);
                 collator.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
