@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1999-2003, International Business Machines Corporation and
+ * Copyright (c) 1999-2003,2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -72,7 +72,7 @@ void uprintf(const UnicodeString &str) {
     }
     printf("%s", buf);
     if(buf != stackBuffer) {
-        delete buf;
+        delete[] buf;
     }
 }
 
