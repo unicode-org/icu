@@ -1366,7 +1366,7 @@ ucnv_getNextUChar(UConverter * converter,
  *         length=strlen(s);
  *     }
  *     target=u8;
- *     ucnv_convertEx(cnv, utf8Cnv,
+ *     ucnv_convertEx(utf8Cnv, cnv,
  *                    &target, u8+capacity,
  *                    &s, s+length,
  *                    NULL, NULL, NULL, NULL,
