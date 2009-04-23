@@ -67,6 +67,12 @@ void IntlTestSpoof::runIndexedTest( int32_t index, UBool exec, const char* &name
                 testSkeleton();
             }
             break;
+         case 2:
+            name = "TestAreConfusable";
+            if (exec) {
+                testAreConfusable();
+            }
+            break;
         default: name=""; break;
     }
 }
@@ -198,5 +204,19 @@ void IntlTestSpoof::checkSkeleton(const USpoofChecker *sc, uint32_t type,
               UnicodeString(" Expected Skeleton: \"") + uExpected + UnicodeString("\""));
     }
 }
+
+void IntlTestSpoof::testAreConfusable() {
+    UErrorCode status = U_ZERO_ERROR;
+    TEST_SETUP
+        UnicodeString s1("A long string that will overflow stack buffers.  A long string that will overflow stack buffers. "
+                         "A long string that will overflow stack buffers.  A long string that will overflow stack buffers. ");
+        UnicodeString s2("A long string that wi11 overflow stack buffers.  A long string that will overflow stack buffers. "
+                         "A long string that wi11 overflow stack buffers.  A long string that will overflow stack buffers. ");
+        TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT_CONFUSABLE, uspoof_areConfusableUnicodeString(sc, s1, s2, &status));
+        TEST_ASSERT_SUCCESS(status);
+
+    TEST_TEARDOWN;
+}
+
 
 #endif /* #if !UCONFIG_NO_SPOOF_DETECT*/
