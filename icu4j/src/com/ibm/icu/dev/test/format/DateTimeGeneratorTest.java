@@ -290,11 +290,11 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"mmss", "58:59"},
         new ULocale("fi"),
         new String[] {"yM", "1/1999"},   // 1.1999
-        new String[] {"yMMM", "tammi 1999"},  // tammi 1999
+        new String[] {"yMMM", "tammikuuta 1999"},  // tammi 1999
         new String[] {"yMd", "13.1.1999"},
-        new String[] {"yMMMd", "13. tammi 1999"},
+        new String[] {"yMMMd", "13. tammikuuta 1999"},
         new String[] {"Md", "13.1."},
-        new String[] {"MMMd", "13. tammi"},
+        new String[] {"MMMd", "13. tammikuuta"},
         new String[] {"yQQQ", "1. nelj./1999"},  // 1. nelj. 1999
         new String[] {"jjmm", "23.58"},
         new String[] {"hhmm", "11.58 ip."},

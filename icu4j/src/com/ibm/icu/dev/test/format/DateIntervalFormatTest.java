@@ -543,7 +543,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             "de", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "jmv", "10.10.2007 10:10 Vereinigte Staaten (Los Angeles) - 10.11.2007 10:10 Vereinigte Staaten (Los Angeles)", 
 
-            "de", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "hms", "10.10.2007 10:10:10 - 10.11.2007 10:10:10", 
+            "de", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "hms", "10.10.2007 10:10:10 vorm. - 10.11.2007 10:10:10 vorm.", 
             
             "de", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "EEEEdMMMy", "Samstag, 10. - Dienstag, 20. Nov 2007", 
             
