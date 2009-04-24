@@ -1,3 +1,4 @@
+//##header
 /*
 **********************************************************************
 *   Copyright (c) 2001-2009, International Business Machines
@@ -711,7 +712,11 @@ class TransliteratorParser {
                             throw (RuntimeException)
                                 new IllegalIcuArgumentException("Failure in rule: " + precontext + "$$$"
                                         + postContext)
-                                .initCause(e);
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
+                                .initCause(e)
+//#endif
+                                ;
                         }
                         int min = 0;
                         int max = Quantifier.MAX;
@@ -1039,7 +1044,12 @@ class TransliteratorParser {
                     }
                 } catch (IllegalArgumentException e) {
                     if (errorCount == 30) {
-                        errors.add(new IllegalIcuArgumentException("\nMore than 30 errors; further messages squelched").initCause(e));
+                        errors.add(new IllegalIcuArgumentException("\nMore than 30 errors; further messages squelched")
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
+                            .initCause(e)
+//#endif
+                            );
                         break main;
                     }
                     e.fillInStackTrace();
@@ -1097,6 +1107,8 @@ class TransliteratorParser {
         }
 
         if (errors.size() != 0) {
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//#else
             for (int i = errors.size()-1; i > 0; --i) {
                 RuntimeException previous = (RuntimeException) errors.get(i-1);
                 while (previous.getCause() != null) {
@@ -1104,6 +1116,7 @@ class TransliteratorParser {
                 }
                 previous.initCause((RuntimeException) errors.get(i));
             }
+//#endif
             throw (RuntimeException) errors.get(0);
             // if initCause not supported: throw new IllegalArgumentException(errors.toString());
         }
