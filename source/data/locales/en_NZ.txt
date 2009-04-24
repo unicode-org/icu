@@ -23,7 +23,7 @@ en_NZ{
         "#,##0%",
         "#E0",
     }
-    Version{"1.58"}
+    Version{"1.59"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

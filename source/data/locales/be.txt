@@ -536,8 +536,25 @@ be{
             japanese{"японскі каляндар"}
         }
     }
-    Version{"1.86"}
+    Version{"1.91"}
     calendar{
+        buddhist{
+            DateTimePatterns{
+                "HH.mm.ss zzzz",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE, d MMMM y G",
+                "d MMMM y G",
+                "d MMM y G",
+                "d.M.yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "да палудня",
@@ -559,9 +576,8 @@ be{
                 "{1} {0}",
             }
             availableFormats{
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                Hm{"H:mm"}
+                Hm{"H.mm"}
+                Hms{"H.mm.ss"}
                 M{"L"}
                 MEd{"E, d MMM"}
                 MMM{"LLL"}
@@ -570,7 +586,8 @@ be{
                 MMMMd{"MMMM d"}
                 MMMd{"d MMM"}
                 d{"d"}
-                mmss{"mm:ss"}
+                hm{"h.mm a"}
+                hms{"h.mm.ss a"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"MM/yyyy"}
@@ -887,105 +904,46 @@ be{
         "Pacific:Honolulu"{
             ec{"Ганалулу"}
         }
-        "meta:Acre"{
-            cu:int{0}
-        }
-        "meta:Alaska"{
-            cu:int{0}
-        }
-        "meta:Alaska_Hawaii"{
-            cu:int{0}
-        }
-        "meta:Amazon"{
-            cu:int{0}
-        }
         "meta:America_Central"{
-            cu:int{0}
             ld{"Паўночнаамэрыканскі цэнтральны летні час"}
             lg{"Паўночнаамэрыканскі цэнтральны час"}
             ls{"Паўночнаамэрыканскі цэнтральны стандартны час"}
         }
         "meta:America_Eastern"{
-            cu:int{0}
             ld{"Паўночнаамэрыканскі усходні летні час"}
             lg{"Паўночнаамэрыканскі усходні час"}
             ls{"Паўночнаамэрыканскі усходні стандартны час"}
         }
         "meta:America_Mountain"{
-            cu:int{0}
             ld{"Паўночнаамэрыканскі горны летні час"}
             lg{"Паўночнаамэрыканскі горны час"}
             ls{"Паўночнаамэрыканскі горны стандартны час"}
         }
         "meta:America_Pacific"{
-            cu:int{0}
             ld{"Ціхаакіянскі летні час"}
             lg{"Ціхаакіянскі час"}
             ls{"Ціхаакіянскі стандартны час"}
         }
-        "meta:Argentina"{
-            cu:int{0}
-        }
-        "meta:Argentina_Western"{
-            cu:int{0}
-        }
         "meta:Atlantic"{
-            cu:int{0}
             ld{"Атлянтычны летні час"}
             lg{"Атлянтычны час"}
             ls{"Атлянтычны стандартны час"}
         }
-        "meta:Azores"{
-            cu:int{0}
-        }
-        "meta:Bering"{
-            cu:int{0}
-        }
-        "meta:British"{
-            cu:int{0}
-        }
-        "meta:Cape_Verde"{
-            cu:int{0}
-        }
         "meta:Europe_Central"{
-            cu:int{0}
             ld{"Цэнтральнаэўрапейскі летні час"}
             ls{"Цэнтральнаэўрапейскі час"}
         }
         "meta:Europe_Eastern"{
-            cu:int{0}
             ld{"Усходнеэўрапейскі летні час"}
             ls{"Усходнеэўрапейскі час"}
         }
         "meta:Europe_Western"{
-            cu:int{0}
             ld{"Заходнеэўрапейскі летні час"}
             ls{"Заходнеэўрапейскі час"}
-        }
-        "meta:Falkland"{
-            cu:int{0}
         }
         "meta:GMT"{
             cu:int{1}
             ls{"Грынвічскі час"}
-        }
-        "meta:Kuybyshev"{
-            cu:int{0}
-        }
-        "meta:Moscow"{
-            cu:int{0}
-        }
-        "meta:Samara"{
-            cu:int{0}
-        }
-        "meta:South_Georgia"{
-            cu:int{0}
-        }
-        "meta:Turkey"{
-            cu:int{0}
-        }
-        "meta:Volgograd"{
-            cu:int{0}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

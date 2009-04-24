@@ -11135,7 +11135,7 @@ supplementalData:table(nofallback){
             "Azores Standard Time"{"Atlantic/Azores"}
             "Canada Central Standard Time"{"America/Regina"}
             "Cape Verde Standard Time"{"Atlantic/Cape_Verde"}
-            "Caucasus Standard Time"{"Asia/Tbilisi"}
+            "Caucasus Standard Time"{"Asia/Yerevan"}
             "Cen. Australia Standard Time"{"Australia/Adelaide"}
             "Central America Standard Time"{"America/Guatemala"}
             "Central Asia Standard Time"{"Asia/Dhaka"}
@@ -11160,18 +11160,20 @@ supplementalData:table(nofallback){
             "GTB Standard Time"{"Europe/Istanbul"}
             "Georgian Standard Time"{"Etc/GMT-3"}
             "Greenland Standard Time"{"America/Godthab"}
-            "Greenwich Standard Time"{"Africa/Casablanca"}
+            "Greenwich Standard Time"{"Africa/Reykjavik"}
             "Hawaiian Standard Time"{"Pacific/Honolulu"}
             "India Standard Time"{"Asia/Calcutta"}
             "Iran Standard Time"{"Asia/Tehran"}
             "Israel Standard Time"{"Asia/Jerusalem"}
             "Jordan Standard Time"{"Asia/Amman"}
             "Korea Standard Time"{"Asia/Seoul"}
+            "Mauritius Standard Time"{"Indian/Mauritius"}
             "Mexico Standard Time 2"{"America/Chihuahua"}
             "Mexico Standard Time"{"America/Mexico_City"}
             "Mid-Atlantic Standard Time"{"Atlantic/South_Georgia"}
             "Middle East Standard Time"{"Asia/Beirut"}
             "Montevideo Standard Time"{"America/Montevideo"}
+            "Morocco Standard Time"{"Africa/Casablanca"}
             "Mountain Standard Time (Mexico)"{"America/Chihuahua"}
             "Mountain Standard Time"{"America/Denver"}
             "Myanmar Standard Time"{"Asia/Rangoon"}
@@ -11185,6 +11187,7 @@ supplementalData:table(nofallback){
             "Pacific SA Standard Time"{"America/Santiago"}
             "Pacific Standard Time (Mexico)"{"America/Tijuana"}
             "Pacific Standard Time"{"America/Los_Angeles"}
+            "Pakistan Standard Time"{"Asia/Karachi"}
             "Romance Standard Time"{"Europe/Paris"}
             "Russian Standard Time"{"Europe/Moscow"}
             "SA Eastern Standard Time"{"Etc/GMT+3"}
@@ -11206,7 +11209,7 @@ supplementalData:table(nofallback){
             "W. Australia Standard Time"{"Australia/Perth"}
             "W. Central Africa Standard Time"{"Africa/Lagos"}
             "W. Europe Standard Time"{"Europe/Berlin"}
-            "West Asia Standard Time"{"Asia/Karachi"}
+            "West Asia Standard Time"{"Asia/Tashkent"}
             "West Pacific Standard Time"{"Pacific/Port_Moresby"}
             "Yakutsk Standard Time"{"Asia/Yakutsk"}
         }

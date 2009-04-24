@@ -192,7 +192,7 @@ af{
             "Rand",
         }
     }
-    ExemplarCharacters{"[a á â b-e é è ê ë f-i î ï j-n ŉ o ô ö p-u û v-z]"}
+    ExemplarCharacters{"[a á â b-e é è ê ë f-i î ï j-o ô ö p-u û v-z]"}
     Languages{
         af{"Afrikaans"}
         afa{"Ander Afro-Asiaties"}
@@ -257,7 +257,7 @@ af{
         "#,##0%",
         "#E0",
     }
-    Version{"1.73"}
+    Version{"1.76"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -123,11 +123,11 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("Januar 1999"),                         // de 11: yyyyMMMM
 
         UnicodeString("1.1999"),                              // fi: yM (fixed expected result per ticket:6626:)
-        UnicodeString("tammi 1999"),
+        UnicodeString("tammikuuta 1999"),
         UnicodeString("13.1.1999"),
-        UnicodeString("13. tammi 1999"),
+        UnicodeString("13. tammikuuta 1999"),
         UnicodeString("13.1."),
-        UnicodeString("13. tammi"),
+        UnicodeString("13. tammikuuta"),
         UnicodeString("1. nelj. 1999"),
         UnicodeString("11.58 ip."),                           // fi  7: hhmm
         UnicodeString("23.58"),

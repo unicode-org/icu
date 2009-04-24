@@ -1609,7 +1609,7 @@ sk{
             traditional{"Tradičné"}
         }
     }
-    Version{"1.95"}
+    Version{"1.97"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1617,7 +1617,7 @@ sk{
                 "popoludní",
             }
             DateTimePatterns{
-                "HH:mm:ss zzzz",
+                "H:mm:ss zzzz",
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
@@ -1857,6 +1857,20 @@ sk{
                         "o",
                         "n",
                         "d",
+                    }
+                    wide{
+                        "január",
+                        "február",
+                        "marec",
+                        "apríl",
+                        "máj",
+                        "jún",
+                        "júl",
+                        "august",
+                        "september",
+                        "október",
+                        "november",
+                        "december",
                     }
                 }
             }

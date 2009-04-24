@@ -14,78 +14,36 @@ en_HK{
         }
         USD{
             "US$",
-            "USD",
+            "US Dollar",
         }
     }
-    Languages{
-        map{"Austronesian"}
-        ps{"Pashto"}
-    }
-    Scripts{
-        Armi{"Imperial Aramaic"}
-        Cakm{"Chakma"}
-        Cham{"Cham"}
-        Thai{"Thai"}
-    }
-    Types{
-        collation{
-            pinyin{"Pinyin Sort Order"}
-            stroke{"Stroke Sort Order"}
-        }
-    }
-    Version{"1.57"}
+    Version{"1.60"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
                 1,
                 4,
             }
-            availableFormats{
-                Hm{"HH:mm"}
-                Hms{"HH:mm:ss"}
-            }
-            intervalFormats{
-                M{
-                    M{"M-M"}
-                }
-                MMM{
-                    M{"MMM-MMM"}
-                }
-                d{
-                    d{"d-d"}
-                }
-                fallback{"{0} - {1}"}
-                h{
-                    a{"h a - h a"}
-                    h{"h-h a"}
-                }
-                hm{
-                    a{"h:mm a - h:mm a"}
-                    h{"h:mm-h:mm a"}
-                    m{"h:mm-h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a - h:mm a v"}
-                    h{"h:mm-h:mm a v"}
-                    m{"h:mm-h:mm a v"}
-                }
-                hv{
-                    a{"h a - h a v"}
-                    h{"h-h a v"}
-                }
-                y{
-                    y{"y-y"}
-                }
-                yMMM{
-                    M{"MMM-MMM y"}
-                    y{"MMM y - MMM y"}
-                }
-            }
         }
         japanese{
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, MMMM d, y G",
+                "MMMM d, y G",
+                "MMM d, y G",
+                "G M/d/yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
             eras{
                 abbreviated{
-                    "Nisan",
+                    "Taika",
                     "Hakuchi",
                     "Hakuhō",
                     "Shuchō",

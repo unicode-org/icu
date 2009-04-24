@@ -573,7 +573,7 @@ eu{
         SCOTLAND{"ESKOZIAR INGELESA"}
         VALENCIA{"VALENTZIERA"}
     }
-    Version{"1.74"}
+    Version{"1.76"}
     calendar{
         buddhist{
             eras{

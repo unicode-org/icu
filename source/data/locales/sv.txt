@@ -3182,7 +3182,7 @@ sv{
         TARASK{"Taraskievika-stavning"}
         VALENCIA{"valensisk dialekt"}
     }
-    Version{"1.144"}
+    Version{"1.148"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -3220,9 +3220,8 @@ sv{
                 MMdd{"dd/MM"}
                 Md{"d/M"}
                 d{"d"}
-                hhmm{"hh.mm"}
+                hhmm{"hh.mm a"}
                 hhmmss{"h.mm.ss a"}
-                mmss{"mm.ss"}
                 ms{"mm.ss"}
                 y{"y"}
                 yM{"yyyy-MM"}
@@ -3486,21 +3485,6 @@ sv{
         hebrew{
             monthNames{
                 format{
-                    abbreviated{
-                        "tishrí",
-                        "heshván",
-                        "kislév",
-                        "tevét",
-                        "shevát",
-                        "adár",
-                        "adár II",
-                        "nisán",
-                        "ijjár",
-                        "siván",
-                        "tammúz",
-                        "ab",
-                        "elúl",
-                    }
                     wide{
                         "tishrí",
                         "heshván",
@@ -3509,7 +3493,7 @@ sv{
                         "shevát",
                         "adár",
                         "adár II",
-                        "Nisan",
+                        "nisán",
                         "ijjár",
                         "siván",
                         "tammúz",

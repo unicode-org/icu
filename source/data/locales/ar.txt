@@ -1907,7 +1907,7 @@ ar{
         REVISED{"تهجئة تم مراجعتها"}
         VALENCIA{"بلنسية"}
     }
-    Version{"1.120"}
+    Version{"1.122"}
     calendar{
         buddhist{
             eras{
@@ -2054,15 +2054,6 @@ ar{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "أحد",
-                        "إثنين",
-                        "ثلاثاء",
-                        "أربعاء",
-                        "خميس",
-                        "جمعة",
-                        "سبت",
-                    }
                     narrow{
                         "ح",
                         "ن",
@@ -2292,20 +2283,6 @@ ar{
             }
             monthNames{
                 format{
-                    narrow{
-                        "م",
-                        "ص",
-                        "ر",
-                        "ر",
-                        "ج",
-                        "ج",
-                        "ر",
-                        "ش",
-                        "ر",
-                        "ش",
-                        "ذ",
-                        "ذ",
-                    }
                     wide{
                         "محرم",
                         "صفر",
@@ -2326,7 +2303,7 @@ ar{
                         "م",
                         "ص",
                         "ر",
-                        "4",
+                        "ر",
                         "ج",
                         "ج",
                         "ر",
@@ -2338,10 +2315,6 @@ ar{
                     }
                 }
             }
-        }
-        islamic-civil{
-            eras:alias{"/LOCALE/calendar/islamic/eras"}
-            monthNames:alias{"/LOCALE/calendar/islamic/monthNames"}
         }
         japanese{
             eras{

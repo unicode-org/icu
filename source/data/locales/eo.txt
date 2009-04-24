@@ -401,7 +401,7 @@ eo{
         "NaN",
         "+",
     }
-    Version{"1.73"}
+    Version{"1.74"}
     calendar{
         gregorian{
             AmPmMarkers{

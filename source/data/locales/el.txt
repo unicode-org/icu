@@ -3157,7 +3157,7 @@ el{
         TARASK{"Ταρασκιεβική ορθογραφία"}
         VALENCIA{"Βαλενθιανά"}
     }
-    Version{"1.111"}
+    Version{"1.113"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -3173,11 +3173,11 @@ el{
                 "d MMMM, y G",
                 "d MMM, y G",
                 "d/M/yyyy",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
             availableFormats{
                 MEd{"E, d/M"}
@@ -3538,12 +3538,6 @@ el{
                 abbreviated{
                     "π.μ.",
                 }
-                narrow{
-                    "π.μ.",
-                }
-                wide{
-                    "π.μ.",
-                }
             }
         }
         indian{
@@ -3607,11 +3601,11 @@ el{
                 "d MMMM, y G",
                 "d MMM, y G",
                 "d/M/y G",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
             availableFormats{
                 MEd{"E, d/M"}

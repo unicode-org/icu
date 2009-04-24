@@ -2131,7 +2131,7 @@ nl{
         TARASK{"Taraskievica-spelling"}
         VALENCIA{"Valenciaans"}
     }
-    Version{"1.119"}
+    Version{"1.122"}
     calendar{
         gregorian{
             AmPmMarkers{

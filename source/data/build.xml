@@ -363,7 +363,7 @@
         <cldr-build toolName="org.unicode.cldr.icu.ConvertTransforms" srcFile=".*xml" destFile=".*txt">
             <run>
                 <args>
-                    <arg name="-m" value="((?!.*(BGN|Canadian|Ethiopic).*).*)" />
+                    <arg name="-m" value="((?!.*(Canadian|Ethiopic).*).*)" />
                     <arg name="--sourcedir" value="${env.CLDR_DIR}/common/transforms" />
                     <arg name="--destdir"   value="${env.ICU4C_DIR}/source/data/translit"/>
                     <arg name="--commentSkip"/>

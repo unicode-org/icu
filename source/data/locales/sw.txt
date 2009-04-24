@@ -114,7 +114,7 @@ sw{
         "#,##0%",
         "#E0",
     }
-    Version{"1.72"}
+    Version{"1.73"}
     calendar{
         gregorian{
             dayNames{

@@ -2222,7 +2222,7 @@ pl{
         TARASK{"ortografia taraszkiewicka"}
         VALENCIA{"walencki"}
     }
-    Version{"1.118"}
+    Version{"1.120"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -2234,11 +2234,11 @@ pl{
                 "d MMMM, y G",
                 "d MMM, y G",
                 "M/d/yyyy",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
             availableFormats{
                 MMMd{"d MMM"}
@@ -3172,36 +3172,6 @@ pl{
         }
         "Pacific:Pitcairn"{
             ec{"Wyspy Pitcairn"}
-        }
-        "meta:Acre"{
-            cu:int{0}
-        }
-        "meta:Afghanistan"{
-            cu:int{0}
-        }
-        "meta:Africa_Central"{
-            cu:int{0}
-        }
-        "meta:Africa_Eastern"{
-            cu:int{0}
-        }
-        "meta:Africa_FarWestern"{
-            cu:int{0}
-        }
-        "meta:Africa_Southern"{
-            cu:int{0}
-        }
-        "meta:Africa_Western"{
-            cu:int{0}
-        }
-        "meta:Aktyubinsk"{
-            cu:int{0}
-        }
-        "meta:Alaska"{
-            cu:int{0}
-        }
-        "meta:Alaska_Hawaii"{
-            cu:int{0}
         }
         "meta:Europe_Central"{
             cu:int{1}

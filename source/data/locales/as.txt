@@ -82,7 +82,7 @@ as{
             traditional{"পৰম্পৰাগতভাবে শৃঙ্খলাবদ্ধ কৰাৰ ক্ৰম"}
         }
     }
-    Version{"1.55"}
+    Version{"1.56"}
     calendar{
         gregorian{
             AmPmMarkers{

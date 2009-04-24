@@ -84,7 +84,7 @@ uz_Latn{
         Cyrl{"Kiril"}
         Latn{"Lotin"}
     }
-    Version{"1.20"}
+    Version{"1.21"}
     calendar{
         gregorian{
             dayNames{
@@ -136,20 +136,6 @@ uz_Latn{
                         "Noya",
                         "Dek",
                     }
-                    wide{
-                        "Muharram",
-                        "Safar",
-                        "Rabiul-avval",
-                        "Rabiul-oxir",
-                        "Jumodiul-ulo",
-                        "Jumodiul-uxro",
-                        "Rajab",
-                        "Shaʿbon",
-                        "Ramazon",
-                        "Shavvol",
-                        "Zil-qaʿda",
-                        "Zil-hijja",
-                    }
                 }
                 stand-alone{
                     narrow{
@@ -166,19 +152,25 @@ uz_Latn{
                         "N",
                         "D",
                     }
+                }
+            }
+        }
+        islamic{
+            monthNames{
+                format{
                     wide{
-                        "Yanvar",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
+                        "Muharram",
+                        "Safar",
+                        "Rabiul-avval",
+                        "Rabiul-oxir",
+                        "Jumodiul-ulo",
+                        "Jumodiul-uxro",
+                        "Rajab",
+                        "Shaʿbon",
+                        "Ramazon",
+                        "Shavvol",
+                        "Zil-qaʿda",
+                        "Zil-hijja",
                     }
                 }
             }

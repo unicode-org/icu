@@ -3191,23 +3191,23 @@ pt{
         TARASK{"ortografia taraskievica"}
         VALENCIA{"valenciano"}
     }
-    Version{"1.119"}
+    Version{"1.122"}
     calendar{
         buddhist{
             DateTimePatterns{
                 "HH'h'mm'min'ss's' zzzz",
                 "HH'h'mm'min'ss's' z",
-                "HH'h'mm'min'ss's'",
+                "HH:mm:ss",
                 "HH:mm",
                 "EEEE, d 'de' MMMM 'de' y G",
                 "d 'de' MMMM 'de' y G",
                 "d 'de' MMMM 'de' y G",
                 "d/M/yyyy",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
         }
         gregorian{

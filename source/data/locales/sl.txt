@@ -1445,7 +1445,6 @@ sl{
         cai{"srednjeameriški indijanski jezik"}
         car{"karibski jezik"}
         cau{"kavkaški jezik"}
-        cch{"cch"}
         ce{"čečenščina"}
         ceb{"sebuanščina"}
         cel{"keltski jezik"}
@@ -2083,7 +2082,7 @@ sl{
         TARASK{"Taraškievičeva beloruska slovnica"}
         VALENCIA{"valencijski pravopis"}
     }
-    Version{"1.107"}
+    Version{"1.111"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2091,7 +2090,7 @@ sl{
                 "pop.",
             }
             DateTimePatterns{
-                "HH:mm:ss zzzz",
+                "H:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",

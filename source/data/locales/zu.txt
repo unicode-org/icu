@@ -54,7 +54,7 @@ zu{
         "#,##0%",
         "#E0",
     }
-    Version{"1.29"}
+    Version{"1.30"}
     calendar{
         gregorian{
             DateTimePatterns{

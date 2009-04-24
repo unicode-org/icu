@@ -2907,7 +2907,7 @@ de{
         TARASK{"Taraskievica-Orthographie"}
         VALENCIA{"Valencianisch"}
     }
-    Version{"1.131"}
+    Version{"1.133"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -2923,11 +2923,11 @@ de{
                 "d. MMMM y G",
                 "d. MMM y G",
                 "d.M.yyyy",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
         }
         chinese{
