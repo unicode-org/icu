@@ -13,7 +13,7 @@ de_BE{
             "Franken",
         }
     }
-    Version{"1.60"}
+    Version{"1.61"}
     calendar{
         gregorian{
             DateTimePatterns{

@@ -2085,7 +2085,7 @@ lt{
         ";",
         "%",
         "0",
-        "Nr.",
+        "#",
         "−",
         "E",
         "‰",
@@ -2245,7 +2245,7 @@ lt{
     Variants{
         POSIX{"Kompiuteris"}
     }
-    Version{"1.106"}
+    Version{"1.109"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -2261,11 +2261,11 @@ lt{
                 "MMMM d, y G",
                 "MMM d, y G",
                 "M/d/yyyy",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
         }
         gregorian{

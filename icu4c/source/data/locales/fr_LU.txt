@@ -31,5 +31,5 @@ fr_LU{
         "NaN",
         "+",
     }
-    Version{"1.47"}
+    Version{"1.48"}
 }

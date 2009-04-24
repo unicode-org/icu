@@ -1606,7 +1606,7 @@ cs{
             japanese{"Japonský kalendář"}
         }
     }
-    Version{"1.129"}
+    Version{"1.130"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -162,14 +162,9 @@ void DateFormatRoundTripTest::TestDateFormatRoundTrip()
     test(Locale::getDefault());
 
 #if 1
-    static const UVersionInfo ICU_416 = {4,1,6,0};
     // installed locales
     for (int i=0; i < locCount; ++i) {
-        // TIME BOMB for round trip test with Chinese & CLDR 1.7 data - Yoshito to investigate
-        // Skip the test if language is chinese and version < 4.1.6 
-        if ( strcmp(avail[i].getLanguage(),"zh") || isICUVersionAtLeast(ICU_416)) {
             test(avail[i]);
-        }
     }
 #endif
 

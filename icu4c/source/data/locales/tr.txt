@@ -2100,7 +2100,7 @@ tr{
         TARASK{"Taraskievica Yazım Kuralları"}
         VALENCIA{"Valensiyaca"}
     }
-    Version{"1.122"}
+    Version{"1.124"}
     calendar{
         chinese{
             availableFormats{
@@ -2131,21 +2131,6 @@ tr{
         ethiopic{
             monthNames{
                 format{
-                    abbreviated{
-                        "Meskerem",
-                        "Tikimt",
-                        "Hidar",
-                        "Tahsas",
-                        "Tir",
-                        "Yakatit",
-                        "Magabit",
-                        "Miyazya",
-                        "Ginbot",
-                        "Sene",
-                        "Hamle",
-                        "Nehasa",
-                        "Pagumiene",
-                    }
                     wide{
                         "Meskerem",
                         "Tikimt",
@@ -2465,21 +2450,6 @@ tr{
         hebrew{
             monthNames{
                 format{
-                    abbreviated{
-                        "Tişri",
-                        "Heşvan",
-                        "Kislev",
-                        "Tevet",
-                        "Şevat",
-                        "Veadar",
-                        "Adar",
-                        "Nisan",
-                        "İyar",
-                        "Sivan",
-                        "Tamuz",
-                        "Av",
-                        "Elul",
-                    }
                     wide{
                         "Tişri",
                         "Heşvan",
@@ -2499,40 +2469,6 @@ tr{
             }
         }
         islamic{
-            monthNames{
-                format{
-                    abbreviated{
-                        "Muharrem",
-                        "Safer",
-                        "Rebiülevvel",
-                        "Rebiülahir",
-                        "Cemaziyelevvel",
-                        "Cemaziyelahir",
-                        "Recep",
-                        "Şaban",
-                        "Ramazan",
-                        "Şevval",
-                        "Zilkade",
-                        "Zilhicce",
-                    }
-                    wide{
-                        "Muharrem",
-                        "Safer",
-                        "Rebiülevvel",
-                        "Rebiülahir",
-                        "Cemaziyelevvel",
-                        "Cemaziyelahir",
-                        "Recep",
-                        "Şaban",
-                        "Ramazan",
-                        "Şevval",
-                        "Zilkade",
-                        "Zilhicce",
-                    }
-                }
-            }
-        }
-        islamic-civil{
             monthNames{
                 format{
                     wide{
@@ -2555,20 +2491,6 @@ tr{
         persian{
             monthNames{
                 format{
-                    abbreviated{
-                        "Ferverdin",
-                        "Ordibeheşt",
-                        "Hordad",
-                        "Tir",
-                        "Mordad",
-                        "Şehriver",
-                        "Mehr",
-                        "Aban",
-                        "Azer",
-                        "Dey",
-                        "Behmen",
-                        "Esfend",
-                    }
                     wide{
                         "Ferverdin",
                         "Ordibeheşt",

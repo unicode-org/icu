@@ -147,7 +147,7 @@ ps{
     Scripts{
         Arab{"عربي"}
     }
-    Version{"1.62"}
+    Version{"1.64"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -210,20 +210,6 @@ ps{
         persian{
             monthNames{
                 format{
-                    abbreviated{
-                        "وری",
-                        "غویی",
-                        "غبرګولی",
-                        "چنګاښ",
-                        "زمری",
-                        "وږی",
-                        "تله",
-                        "لړم",
-                        "لیندۍ",
-                        "مرغومی",
-                        "سلواغه",
-                        "کب",
-                    }
                     wide{
                         "وری",
                         "غویی",

@@ -2106,7 +2106,7 @@ ja{
         SCOUSE{"リバプール方言"}
         VALENCIA{"バレンシア方言"}
     }
-    Version{"1.167"}
+    Version{"1.171"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2144,7 +2144,7 @@ ja{
                 Md{"M/d"}
                 d{"d日"}
                 hm{"ah:mm"}
-                mmss{"mm:ss"}
+                hms{"ah:mm:ss"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"y/M"}
@@ -2702,11 +2702,11 @@ ja{
                 "Gy年M月d日EEEE",
                 "Gyy/MM/dd(EE)",
                 "Gyy/MM/dd(E)",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1}{0}" /**  fallback from 'gregorian'   */,
-                "{1}{0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}",
+                "{1}{0}",
+                "{1}{0}",
+                "{1} {0}",
+                "{1} {0}",
             }
             eras{
                 abbreviated{

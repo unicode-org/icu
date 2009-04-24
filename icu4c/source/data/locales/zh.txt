@@ -2099,7 +2099,7 @@ zh{
         REVISED{"已修订的拼字学"}
         SAAHO{"萨霍"}
     }
-    Version{"1.154"}
+    Version{"1.158"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2139,7 +2139,6 @@ zh{
                 d{"d日"}
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
-                mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y年"}
                 yM{"yyyy-M"}
@@ -2376,8 +2375,8 @@ zh{
                         "8月",
                         "9月",
                         "10月",
-                        "11",
-                        "12",
+                        "11月",
+                        "12月",
                     }
                     wide{
                         "一月",
@@ -2430,13 +2429,15 @@ zh{
                 "Gy年M月d日",
                 "Gy-M-d",
                 "Gy-M-d",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1}{0}" /**  fallback from 'gregorian'   */,
-                "{1}{0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}",
+                "{1}{0}",
+                "{1}{0}",
+                "{1} {0}",
+                "{1} {0}",
             }
             availableFormats{
+                hm{"ah:mm"}
+                hms{"ah:mm:ss"}
                 yyyyM{"Gy/M"}
                 yyyyMEd{"Gy/M/d（EEE）"}
                 yyyyMM{"Gy/MM"}

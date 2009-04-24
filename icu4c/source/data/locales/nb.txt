@@ -2893,11 +2893,11 @@ nb{
         SOLBA{"stolvizza- og solbicadialekt"}
         VALENCIA{"valensisk dialekt"}
     }
-    Version{"1.115"}
+    Version{"1.118"}
     calendar{
         buddhist{
             DateTimePatterns{
-                "HH.mm.ss zzzz",
+                "'kl'. HH.mm.ss zzzz",
                 "HH.mm.ss z",
                 "HH.mm.ss",
                 "HH.mm",
@@ -2905,11 +2905,11 @@ nb{
                 "d. MMMM y G",
                 "d. MMM y G",
                 "d.M yyyy",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
         }
         gregorian{
@@ -2934,7 +2934,6 @@ nb{
             }
             availableFormats{
                 EEEd{"EEE d"}
-                HHmm{"HH.mm"}
                 HHmmss{"HH.mm.ss"}
                 Hm{"HH.mm"}
                 M{"L"}
@@ -2948,7 +2947,7 @@ nb{
                 Md{"d.M."}
                 d{"d."}
                 hm{"h.mm a"}
-                mmss{"mm.ss"}
+                hms{"h.mm.ss a"}
                 ms{"mm.ss"}
                 y{"y"}
                 yM{"M yyyy"}

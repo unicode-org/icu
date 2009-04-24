@@ -2157,7 +2157,7 @@ ro{
             traditional{"sortare tradițională"}
         }
     }
-    Version{"1.111"}
+    Version{"1.114"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -2169,11 +2169,11 @@ ro{
                 "d MMMM y G",
                 "d MMM y G",
                 "d/M/yyyy",
-                "{1}, {0}" /**  fallback from 'gregorian'   */,
-                "{1}, {0}" /**  fallback from 'gregorian'   */,
-                "{1}, {0}" /**  fallback from 'gregorian'   */,
-                "{1}, {0}" /**  fallback from 'gregorian'   */,
-                "{1}, {0}" /**  fallback from 'gregorian'   */,
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
             }
             availableFormats{
                 MMMEd{"E d MMM"}
@@ -2769,83 +2769,65 @@ ro{
             ec{"Marchize"}
         }
         "meta:Acre"{
-            cu:int{0}
             ld{"Ora de vară Acre"}
             ls{"Ora Acre"}
         }
         "meta:Africa_Central"{
-            cu:int{0}
             ls{"Ora Africii Centrale"}
         }
         "meta:Africa_Eastern"{
-            cu:int{0}
             ls{"Ora Africii Orientale"}
         }
-        "meta:Africa_FarWestern"{
-            cu:int{0}
-        }
         "meta:Africa_Southern"{
-            cu:int{0}
             lg{"Ora Africii Meridionale"}
             ls{"Ora Standard a Africii Meridionale"}
         }
         "meta:Africa_Western"{
-            cu:int{0}
             ld{"Ora de vară a Africii Occidentale"}
             ls{"Ora Africii Occidentale"}
         }
         "meta:Alaska"{
-            cu:int{0}
             ld{"Ora de vară în zona Alaska"}
             lg{"Ora zonei Alaska"}
             ls{"Ora standard în zona Alaska"}
         }
         "meta:Alaska_Hawaii"{
-            cu:int{0}
             ld{"Ora de vară în zona Alaska-Hawaii"}
             lg{"Ora zonei Alaska-Hawaii"}
             ls{"Ora standard în zona Alaska-Hawaii"}
         }
         "meta:Amazon"{
-            cu:int{0}
             ld{"Ora de vară Amazon"}
             ls{"Ora Amazon"}
         }
         "meta:America_Central"{
-            cu:int{0}
             ld{"Ora de vară centrală"}
             lg{"Ora Centrală"}
             ls{"Ora standard centrală"}
         }
         "meta:America_Eastern"{
-            cu:int{0}
             ld{"Ora de vară orientală"}
             lg{"Ora orientală"}
             ls{"Ora standard orientală"}
         }
         "meta:America_Mountain"{
-            cu:int{0}
             ld{"Ora de vară în zona montană"}
             lg{"Ora zonei montane"}
             ls{"Ora standard în zona montană"}
         }
         "meta:America_Pacific"{
-            cu:int{0}
             ld{"Ora de vară în zona Pacific"}
             lg{"Ora zonei Pacific"}
             ls{"Ora standard în zona Pacific"}
         }
         "meta:Argentina"{
-            cu:int{0}
             ld{"Ora de vară a Argentinei"}
             ls{"Ora Argentinei"}
         }
         "meta:Argentina_Western"{
-            cu:int{0}
             ls{"Ora Argentinei Occidentale"}
         }
         "meta:Atlantic"{
-            cu:int{0}
             ld{"Ora de vară în zona Atlantic"}
             lg{"Ora zonei Atlantic"}
             ls{"Ora standard în zona Atlantic"}
@@ -2855,251 +2837,68 @@ ro{
             lg{"Ora Australiei Centrale"}
         }
         "meta:Australia_CentralWestern"{
-            cu:int{0}
             ld{"Ora de vară a Australiei Central Occidentale"}
             lg{"Ora Australiei Central Occidentale"}
             ls{"Ora standard a Australiei Central Occidentale"}
         }
         "meta:Australia_Eastern"{
-            cu:int{0}
             ld{"Ora de vară a Australiei Orientale"}
             lg{"Ora Australiei Orientale"}
             ls{"Ora standard a Australiei Orientale"}
         }
         "meta:Australia_Western"{
-            cu:int{0}
             ld{"Ora de vară a Australiei Occidentale"}
             lg{"Ora Australiei Occidentale"}
         }
-        "meta:Azores"{
-            cu:int{0}
-        }
         "meta:Bering"{
-            cu:int{0}
             ld{"Ora de vară Bering"}
             lg{"Ora Bering"}
             ls{"Ora standard Bering"}
         }
         "meta:Bolivia"{
-            cu:int{0}
             ls{"Ora Boliviei"}
         }
-        "meta:British"{
-            cu:int{0}
-        }
-        "meta:Cape_Verde"{
-            cu:int{0}
-        }
-        "meta:Chamorro"{
-            cu:int{0}
-        }
-        "meta:Chatham"{
-            cu:int{0}
-        }
-        "meta:Christmas"{
-            cu:int{0}
-        }
-        "meta:Cocos"{
-            cu:int{0}
-        }
-        "meta:Cook"{
-            cu:int{0}
-        }
         "meta:Davis"{
-            cu:int{0}
             ls{"Ora Davis"}
         }
         "meta:DumontDUrville"{
-            cu:int{0}
             ls{"Ora Dumont-d'Urville"}
         }
-        "meta:Easter"{
-            cu:int{0}
-        }
         "meta:Europe_Central"{
-            cu:int{0}
             ld{"Ora de vară a Europei Centrale"}
             ls{"Ora Europei Centrale"}
         }
         "meta:Europe_Eastern"{
-            cu:int{0}
             ld{"Ora de vară a Europei de Est"}
             ls{"Ora Europei de Est"}
         }
         "meta:Europe_Western"{
-            cu:int{0}
             ld{"Ora de vară a Europei Occidentale"}
             ls{"Ora Europei Occidentale"}
             sd{"WEST"}
             ss{"WET"}
-        }
-        "meta:Falkland"{
-            cu:int{0}
-        }
-        "meta:Fiji"{
-            cu:int{0}
-        }
-        "meta:French_Southern"{
-            cu:int{0}
         }
         "meta:GMT"{
             cu:int{1}
             ls{"Greenwich Mean Time"}
             ss{"GMT"}
         }
-        "meta:Galapagos"{
-            cu:int{0}
-        }
-        "meta:Gambier"{
-            cu:int{0}
-        }
-        "meta:Gilbert_Islands"{
-            cu:int{0}
-        }
-        "meta:Guam"{
-            cu:int{0}
-        }
-        "meta:Hawaii_Aleutian"{
-            cu:int{0}
-        }
-        "meta:Indian_Ocean"{
-            cu:int{0}
-        }
-        "meta:Irish"{
-            cu:int{0}
-        }
-        "meta:Kosrae"{
-            cu:int{0}
-        }
-        "meta:Kuybyshev"{
-            cu:int{0}
-        }
-        "meta:Kwajalein"{
-            cu:int{0}
-        }
-        "meta:Liberia"{
-            cu:int{0}
-        }
-        "meta:Line_Islands"{
-            cu:int{0}
-        }
         "meta:Lord_Howe"{
-            cu:int{0}
             ld{"Ora de vară Lord Howe"}
             lg{"Ora Lord Howe"}
             ls{"Ora standard Lord Howe"}
         }
-        "meta:Maldives"{
-            cu:int{0}
-        }
-        "meta:Marquesas"{
-            cu:int{0}
-        }
-        "meta:Marshall_Islands"{
-            cu:int{0}
-        }
-        "meta:Mauritius"{
-            cu:int{0}
-        }
         "meta:Mawson"{
-            cu:int{0}
             ls{"Ora Mawson"}
         }
-        "meta:Moscow"{
-            cu:int{0}
-        }
-        "meta:Nauru"{
-            cu:int{0}
-        }
-        "meta:New_Caledonia"{
-            cu:int{0}
-        }
-        "meta:New_Zealand"{
-            cu:int{0}
-        }
-        "meta:Niue"{
-            cu:int{0}
-        }
-        "meta:Norfolk"{
-            cu:int{0}
-        }
-        "meta:North_Mariana"{
-            cu:int{0}
-        }
-        "meta:Palau"{
-            cu:int{0}
-        }
-        "meta:Papua_New_Guinea"{
-            cu:int{0}
-        }
-        "meta:Phoenix_Islands"{
-            cu:int{0}
-        }
-        "meta:Pitcairn"{
-            cu:int{0}
-        }
-        "meta:Ponape"{
-            cu:int{0}
-        }
-        "meta:Reunion"{
-            cu:int{0}
-        }
         "meta:Rothera"{
-            cu:int{0}
             ls{"Ora Rothera"}
         }
-        "meta:Samara"{
-            cu:int{0}
-        }
-        "meta:Samoa"{
-            cu:int{0}
-        }
-        "meta:Seychelles"{
-            cu:int{0}
-        }
-        "meta:Solomon"{
-            cu:int{0}
-        }
-        "meta:South_Georgia"{
-            cu:int{0}
-        }
         "meta:Syowa"{
-            cu:int{0}
             ls{"Ora Syowa"}
         }
-        "meta:Tahiti"{
-            cu:int{0}
-        }
-        "meta:Tokelau"{
-            cu:int{0}
-        }
-        "meta:Tonga"{
-            cu:int{0}
-        }
-        "meta:Truk"{
-            cu:int{0}
-        }
-        "meta:Turkey"{
-            cu:int{0}
-        }
-        "meta:Tuvalu"{
-            cu:int{0}
-        }
-        "meta:Vanuatu"{
-            cu:int{0}
-        }
-        "meta:Volgograd"{
-            cu:int{0}
-        }
         "meta:Vostok"{
-            cu:int{0}
             ls{"Ora Vostok"}
-        }
-        "meta:Wake"{
-            cu:int{0}
-        }
-        "meta:Wallis"{
-            cu:int{0}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

@@ -46,6 +46,9 @@
         <include locales="bn"/>        
         <include locales="bn_BD"/>
         <include locales="bn_IN"/>
+        <include locales="bo"/>
+        <include locales="bo_CN"/>
+        <include locales="bo_IN"/>
         <include locales="ca"/>
         <include locales="ca_ES"/>
         <include locales="cs"/>

@@ -82,7 +82,7 @@ zh_Hant_HK{
         SCOTLAND{"蘇格蘭標準英語"}
         SOLBA{"Stolvizza/Solbica 方言"}
     }
-    Version{"1.75"}
+    Version{"1.76"}
     calendar{
         chinese{
             availableFormats{

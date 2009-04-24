@@ -15,6 +15,13 @@ root {
         Digit-Tone {
             alias {"NumericPinyin-Pinyin"}
         }
+        Amharic-Latin/BGN {
+            file {
+                resource:process(transliterator) {"Amharic_Latin_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         Any-Accents {
             file {
                 resource:process(transliterator) {"Any_Accents.txt"}
@@ -51,6 +58,34 @@ root {
             file {
                 resource:process(transliterator) {"Arabic_Latin.txt"}
                 direction {"REVERSE"}
+            }
+        }
+
+        Arabic-Latin/BGN {
+            file {
+                resource:process(transliterator) {"Arabic_Latin_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Armenian-Latin/BGN {
+            file {
+                resource:process(transliterator) {"Armenian_Latin_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Azerbaijani-Latin/BGN {
+            file {
+                resource:process(transliterator) {"Azerbaijani_Latin_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Belarusian-Latin/BGN {
+            file {
+                resource:process(transliterator) {"Belarusian_Latin_BGN.txt"}
+                direction {"FORWARD"}
             }
         }
 
@@ -120,6 +155,13 @@ root {
         Bengali-Telugu {
             file {
                 resource:process(transliterator) {"Bengali_Telugu.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Bulgarian-Latin/BGN {
+            file {
+                resource:process(transliterator) {"Bulgarian_Latin_BGN.txt"}
                 direction {"FORWARD"}
             }
         }
@@ -233,6 +275,13 @@ root {
             }
         }
 
+        Georgian-Latin/BGN {
+            file {
+                resource:process(transliterator) {"Georgian_Latin_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         Greek-Latin {
             file {
                 resource:process(transliterator) {"Greek_Latin.txt"}
@@ -243,6 +292,13 @@ root {
             file {
                 resource:process(transliterator) {"Greek_Latin.txt"}
                 direction {"REVERSE"}
+            }
+        }
+
+        Greek-Latin/BGN {
+            file {
+                resource:process(transliterator) {"Greek_Latin_BGN.txt"}
+                direction {"FORWARD"}
             }
         }
 
@@ -445,6 +501,13 @@ root {
             }
         }
 
+        Hebrew-Latin/BGN {
+            file {
+                resource:process(transliterator) {"Hebrew_Latin_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         Hiragana-Katakana {
             file {
                 resource:process(transliterator) {"Hiragana_Katakana.txt"}
@@ -618,6 +681,34 @@ root {
             }
         }
 
+        JapaneseKana-Latin/BGN {
+            file {
+                resource:process(transliterator) {"JapaneseKana_Latin_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Kazakh-Latin/BGN {
+            file {
+                resource:process(transliterator) {"Kazakh_Latin_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Kirghiz-Latin/BGN {
+            file {
+                resource:process(transliterator) {"Kirghiz_Latin_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Korean-Latin/BGN {
+            file {
+                resource:process(transliterator) {"Korean_Latin_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         Latin-Armenian {
             file {
                 resource:process(transliterator) {"Latin_Armenian.txt"}
@@ -761,6 +852,13 @@ root {
             }
         }
 
+        Macedonian-Latin/BGN {
+            file {
+                resource:process(transliterator) {"Macedonian_Latin_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         Malayalam-Bengali {
             file {
                 resource:process(transliterator) {"Malayalam_Bengali.txt"}
@@ -827,6 +925,20 @@ root {
         Malayalam-Telugu {
             file {
                 resource:process(transliterator) {"Malayalam_Telugu.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Maldivian-Latin/BGN {
+            file {
+                resource:process(transliterator) {"Maldivian_Latin_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Mongolian-Latin/BGN {
+            file {
+                resource:process(transliterator) {"Mongolian_Latin_BGN.txt"}
                 direction {"FORWARD"}
             }
         }
@@ -901,6 +1013,20 @@ root {
             }
         }
 
+        Pashto-Latin/BGN {
+            file {
+                resource:process(transliterator) {"Pashto_Latin_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Persian-Latin/BGN {
+            file {
+                resource:process(transliterator) {"Persian_Latin_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         Pinyin-NumericPinyin {
             file {
                 resource:process(transliterator) {"Pinyin_NumericPinyin.txt"}
@@ -911,6 +1037,20 @@ root {
             file {
                 resource:process(transliterator) {"Pinyin_NumericPinyin.txt"}
                 direction {"REVERSE"}
+            }
+        }
+
+        Russian-Latin/BGN {
+            file {
+                resource:process(transliterator) {"Russian_Latin_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Serbian-Latin/BGN {
+            file {
+                resource:process(transliterator) {"Serbian_Latin_BGN.txt"}
+                direction {"FORWARD"}
             }
         }
 
@@ -1080,15 +1220,15 @@ root {
             }
         }
 
-        Thaana-Latin {
+        Latin-Thaana {
             file {
-                resource:process(transliterator) {"Thaana_Latin.txt"}
+                resource:process(transliterator) {"Latin_Thaana.txt"}
                 direction {"FORWARD"}
             }
         }
-        Latin-Thaana {
+        Thaana-Latin {
             file {
-                resource:process(transliterator) {"Thaana_Latin.txt"}
+                resource:process(transliterator) {"Latin_Thaana.txt"}
                 direction {"REVERSE"}
             }
         }
@@ -1136,6 +1276,27 @@ root {
             internal {
                 resource:process(transliterator) {"ThaiLogical_Latin.txt"}
                 direction {"REVERSE"}
+            }
+        }
+
+        Turkmen-Latin/BGN {
+            file {
+                resource:process(transliterator) {"Turkmen_Latin_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Ukrainian-Latin/BGN {
+            file {
+                resource:process(transliterator) {"Ukrainian_Latin_BGN.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        Uzbek-Latin/BGN {
+            file {
+                resource:process(transliterator) {"Uzbek_Latin_BGN.txt"}
+                direction {"FORWARD"}
             }
         }
 

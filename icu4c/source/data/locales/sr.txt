@@ -3735,7 +3735,7 @@ sr{
         TARASK{"Тараскијевичка ортографија"}
         VALENCIA{"Валенцијска"}
     }
-    Version{"1.116"}
+    Version{"1.122"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -3827,7 +3827,7 @@ sr{
             availableFormats{
                 EEEd{"d. EEE"}
                 Ed{"E d."}
-                Hm{"HH:mm"}
+                Hm{"HH.mm"}
                 M{"L"}
                 MEd{"E, M-d"}
                 MMM{"LLL"}
@@ -3840,9 +3840,8 @@ sr{
                 MMdd{"MM-dd"}
                 Md{"d/M"}
                 d{"d"}
-                hhmm{"hh:mm a"}
-                hhmmss{"hh:mm:ss a"}
-                mmss{"mm:ss"}
+                hhmm{"hh.mm a"}
+                hhmmss{"hh.mm.ss a"}
                 ms{"mm:ss"}
                 y{"y."}
                 yM{"y-M"}
@@ -3987,14 +3986,14 @@ sr{
                     h{"HH-HH"}
                 }
                 hm{
-                    a{"HH:mm-HH:mm"}
-                    h{"HH:mm-HH:mm"}
-                    m{"HH:mm-HH:mm"}
+                    a{"HH.mm-HH.mm"}
+                    h{"HH.mm-HH.mm"}
+                    m{"HH.mm-HH.mm"}
                 }
                 hmv{
-                    a{"HH:mm-HH:mm v"}
-                    h{"HH:mm-HH:mm v"}
-                    m{"HH:mm-HH:mm v"}
+                    a{"HH.mm-HH.mm v"}
+                    h{"HH.mm-HH.mm v"}
+                    m{"HH.mm-HH.mm v"}
                 }
                 hv{
                     a{"HH-HH v"}
@@ -4087,10 +4086,10 @@ sr{
             quarters{
                 format{
                     abbreviated{
-                        "Q1",
+                        "К1",
                         "К2",
                         "К3",
-                        "Q4",
+                        "К4",
                     }
                     wide{
                         "Прво тромесечје",
@@ -4113,11 +4112,6 @@ sr{
             AmPmMarkers{
                 "пре подне",
                 "поподне",
-            }
-            eras{
-                abbreviated{
-                    "пре подне",
-                }
             }
             monthNames{
                 format{
@@ -4201,6 +4195,21 @@ sr{
             AmPmMarkers{
                 "пре подне",
                 "поподне",
+            }
+            DateTimePatterns{
+                "HH.mm.ss zzzz",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE, MMMM d, y G",
+                "MMMM d, y G",
+                "MMM d, y G",
+                "M/d/yy G",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
             eras{
                 abbreviated{

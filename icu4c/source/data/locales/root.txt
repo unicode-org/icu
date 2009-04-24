@@ -749,7 +749,7 @@ root{
         297,
         210,
     }
-    Version{"1.182"}
+    Version{"1.186"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -765,11 +765,11 @@ root{
                 "MMMM d, y G",
                 "MMM d, y G",
                 "M/d/yyyy",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
             appendItems{
                 Day{"{0} ({2}: {1})"}
@@ -787,6 +787,7 @@ root{
             availableFormats{
                 EEEd{"EEE d"}
                 Hm{"H:mm"}
+                Hms{"H:mm:ss"}
                 M{"L"}
                 MEd{"E, M-d"}
                 MMM{"LLL"}
@@ -796,6 +797,8 @@ root{
                 MMMd{"MMM d"}
                 Md{"M-d"}
                 d{"d"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M/y"}
@@ -814,9 +817,7 @@ root{
                 narrow:alias{"/LOCALE/calendar/buddhist/eras/abbreviated"}
                 wide:alias{"/LOCALE/calendar/buddhist/eras/abbreviated"}
             }
-            intervalFormats{
-                //ldml/dates/calendars/calendar[@type="buddhist"]/dateTimeFormats/intervalFormats:alias{"/LOCALE/calendar/buddhist/gregorian/DateTimePatterns/intervalFormats"}
-            }
+            intervalFormats:alias{"/LOCALE/calendar/gregorian/intervalFormats"}
             monthNames:alias{"/LOCALE/calendar/gregorian/monthNames"}
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
@@ -1072,6 +1073,7 @@ root{
             availableFormats{
                 EEEd{"d EEE"}
                 Hm{"H:mm"}
+                Hms{"H:mm:ss"}
                 M{"L"}
                 MEd{"E, M-d"}
                 MMM{"LLL"}
@@ -1082,6 +1084,7 @@ root{
                 Md{"M-d"}
                 d{"d"}
                 hm{"h:mm a"}
+                hms{"h:mm:ss a"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"y-M"}
@@ -2106,11 +2109,11 @@ root{
                 "MMMM d, G y",
                 "MMM d, G y",
                 "G y/M/d",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
             appendItems{
                 Day{"{0} ({2}: {1})"}
@@ -2127,10 +2130,13 @@ root{
             }
             availableFormats{
                 Hm{"H:mm"}
+                Hms{"H:mm:ss"}
                 MEd{"E, M/d"}
                 MMMEd{"E, MMM d"}
                 MMMd{"MMM d"}
                 Md{"M/d"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
                 ms{"mm:ss"}
                 yyyy{"G y"}
                 yyyyM{"G y/M"}
@@ -2149,9 +2155,7 @@ root{
                 narrow:alias{"/LOCALE/calendar/roc/eras/abbreviated"}
                 wide:alias{"/LOCALE/calendar/roc/eras/abbreviated"}
             }
-            intervalFormats{
-                //ldml/dates/calendars/calendar[@type="roc"]/dateTimeFormats/intervalFormats:alias{"/LOCALE/calendar/roc/gregorian/DateTimePatterns/intervalFormats"}
-            }
+            intervalFormats:alias{"/LOCALE/calendar/gregorian/intervalFormats"}
             monthNames:alias{"/LOCALE/calendar/gregorian/monthNames"}
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }

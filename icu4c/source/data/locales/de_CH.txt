@@ -45,7 +45,7 @@ de_CH{
         "#,##0 %",
         "#E0",
     }
-    Version{"1.54"}
+    Version{"1.55"}
     delimiters{
         alternateQuotationEnd{"›"}
         alternateQuotationStart{"‹"}

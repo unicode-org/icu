@@ -3199,7 +3199,7 @@ ca{
         TARASK{"ortografia taraskievica"}
         VALENCIA{"valencià"}
     }
-    Version{"1.104"}
+    Version{"1.106"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -3554,6 +3554,10 @@ ca{
         hour{
             one{"{0} h"}
             other{"{0} h"}
+        }
+        minute{
+            one{"{0} m"}
+            other{"{0} m"}
         }
         month{
             one{"{0} mes"}

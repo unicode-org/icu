@@ -109,7 +109,7 @@ fa_AF{
     Currencies{
         AFN{
             "؋",
-            "افغانی",
+            "افغانی افغانستان",
         }
         AUD{
             "AU$",
@@ -212,7 +212,7 @@ fa_AF{
     Scripts{
         Mong{"مغلی"}
     }
-    Version{"1.62"}
+    Version{"1.63"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
