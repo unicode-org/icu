@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -203,13 +203,21 @@ abstract class CECalendar extends Calendar {
         // "Calendars in Ethiopia", Berhanu Beyene, Manfred Kudlek, International Conference
         // of Ethiopian Studies XV, Hamburg, 2003
 
+        // handle month > 12, < 0 (e.g. from add/set)
+        if ( month >= 0 ) {
+            year += month/13;
+            month %= 13;
+        } else {
+            ++month;
+            year += month/13 - 1;
+            month = month%13 + 12;
+        }
         return (int) (
-            (jdEpochOffset+365)     // difference from Julian epoch to 1,1,1
-            + 365 * (year - 1)      // number of days from years
+            jdEpochOffset           // difference from Julian epoch to 1,1,1
+            + 365 * year            // number of days from years
             + floorDivide(year, 4)  // extra day of leap year
-            + 30 * (month + 1)      // number of days from months
-            + day                   // number of days for present month
-            - 31                    // slack?
+            + 30 * month            // number of days from months (months are 0-based)
+            + day - 1               // number of days for present month (1 based)
             );
     }
 
