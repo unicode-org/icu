@@ -209,20 +209,25 @@ ucasemap_setBreakIterator(UCaseMap *csm, UBreakIterator *iterToAdopt, UErrorCode
  * that are to be titlecased. It titlecases those characters and lowercases
  * all others. (This can be modified with ucasemap_setOptions().)
  *
+ * Note: This function takes a non-const UCaseMap pointer because it will
+ * open a default break iterator if no break iterator was set yet,
+ * and effectively call ucasemap_setBreakIterator();
+ * also because the break iterator is stateful and will be modified during
+ * the iteration.
+ *
  * The titlecase break iterator can be provided to customize for arbitrary
  * styles, using rules and dictionaries beyond the standard iterators.
- * It may be more efficient to always provide an iterator to avoid
- * opening and closing one for each string.
  * The standard titlecase iterator for the root locale implements the
  * algorithm of Unicode TR 21.
  *
- * This function uses only the setText(), first() and next() methods of the
+ * This function uses only the setUText(), first(), next() and close() methods of the
  * provided break iterator.
  *
  * The result may be longer or shorter than the original.
  * The source string and the destination buffer must not overlap.
  *
- * @param csm       UCaseMap service object.
+ * @param csm       UCaseMap service object. This pointer is non-const!
+ *                  See the note above for details.
  * @param dest      A buffer for the result string. The result will be NUL-terminated if
  *                  the buffer is large enough.
  *                  The contents is undefined in case of failure.
@@ -314,20 +319,25 @@ ucasemap_utf8ToUpper(const UCaseMap *csm,
  * that are to be titlecased. It titlecases those characters and lowercases
  * all others. (This can be modified with ucasemap_setOptions().)
  *
+ * Note: This function takes a non-const UCaseMap pointer because it will
+ * open a default break iterator if no break iterator was set yet,
+ * and effectively call ucasemap_setBreakIterator();
+ * also because the break iterator is stateful and will be modified during
+ * the iteration.
+ *
  * The titlecase break iterator can be provided to customize for arbitrary
  * styles, using rules and dictionaries beyond the standard iterators.
- * It may be more efficient to always provide an iterator to avoid
- * opening and closing one for each string.
  * The standard titlecase iterator for the root locale implements the
  * algorithm of Unicode TR 21.
  *
- * This function uses only the setText(), first() and next() methods of the
+ * This function uses only the setUText(), first(), next() and close() methods of the
  * provided break iterator.
  *
  * The result may be longer or shorter than the original.
  * The source string and the destination buffer must not overlap.
  *
- * @param csm       UCaseMap service object.
+ * @param csm       UCaseMap service object. This pointer is non-const!
+ *                  See the note above for details.
  * @param dest      A buffer for the result string. The result will be NUL-terminated if
  *                  the buffer is large enough.
  *                  The contents is undefined in case of failure.
