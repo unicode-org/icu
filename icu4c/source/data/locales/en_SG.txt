@@ -17,135 +17,29 @@ en_SG{
             "US Dollar",
         }
     }
-    Languages{
-        map{"Austronesian"}
-        ps{"Pashto"}
-    }
-    Scripts{
-        Armi{"Imperial Aramaic"}
-        Cakm{"Chakma"}
-        Cham{"Cham"}
-        Thai{"Thai"}
-    }
-    Types{
-        collation{
-            pinyin{"Pinyin Sort Order"}
-            stroke{"Stroke Sort Order"}
-        }
-    }
-    Version{"1.61"}
+    Version{"1.63"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
                 1,
                 4,
             }
-            availableFormats{
-                Hm{"HH:mm"}
-                Hms{"HH:mm:ss"}
-                MMdd{"dd/MM"}
-                yyyyMMMM{"MMMM y"}
-            }
-            intervalFormats{
-                M{
-                    M{"M-M"}
-                }
-                MEd{
-                    M{"E, M/d - E, M/d"}
-                    d{"E, M/d - E, M/d"}
-                }
-                MMM{
-                    M{"MMM-MMM"}
-                }
-                MMMEd{
-                    M{"E, MMM d - E, MMM d"}
-                    d{"E, MMM d - E, MMM d"}
-                }
-                MMMd{
-                    M{"MMM d - MMM d"}
-                    d{"MMM d-d"}
-                }
-                Md{
-                    M{"M/d - M/d"}
-                    d{"M/d - M/d"}
-                }
-                d{
-                    d{"d-d"}
-                }
-                fallback{"{0} - {1}"}
-                h{
-                    a{"h a - h a"}
-                    h{"h-h a"}
-                }
-                hm{
-                    a{"h:mm a - h:mm a"}
-                    h{"h:mm-h:mm a"}
-                    m{"h:mm-h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a - h:mm a v"}
-                    h{"h:mm-h:mm a v"}
-                    m{"h:mm-h:mm a v"}
-                }
-                hv{
-                    a{"h a - h a v"}
-                    h{"h-h a v"}
-                }
-                y{
-                    y{"y-y"}
-                }
-                yM{
-                    M{"M/yy - M/yy"}
-                    y{"M/yy - M/yy"}
-                }
-                yMEd{
-                    M{"E, M/d/yy - E, M/d/yy"}
-                    d{"E, M/d/yy - E, M/d/yy"}
-                    y{"E, M/d/yy - E, M/d/yy"}
-                }
-                yMMM{
-                    M{"MMM-MMM y"}
-                    y{"MMM y - MMM y"}
-                }
-                yMMMEd{
-                    M{"E, MMM d - E, MMM d, y"}
-                    d{"E, MMM d - E, MMM d, y"}
-                    y{"E, MMM d, y - E, MMM d, y"}
-                }
-                yMMMd{
-                    M{"MMM d - MMM d, y"}
-                    d{"MMM d-d, y"}
-                    y{"MMM d, y - MMM d, y"}
-                }
-                yMd{
-                    M{"M/d/yy - M/d/yy"}
-                    d{"M/d/yy - M/d/yy"}
-                    y{"M/d/yy - M/d/yy"}
-                }
-            }
         }
-        hebrew{
-            availableFormats{
-                Hm{"HH:mm"}
-                Hms{"HH:mm:ss"}
-            }
-        }
-        indian{
-            availableFormats{
-                Hm{"HH:mm"}
-                Hms{"HH:mm:ss"}
-            }
-        }
-        islamic{
-            availableFormats{
-                Hm{"HH:mm"}
-                Hms{"HH:mm:ss"}
-            }
-        }
-        persian{
-            availableFormats{
-                Hm{"HH:mm"}
-                Hms{"HH:mm:ss"}
+        japanese{
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, MMMM d, y G",
+                "MMMM d, y G",
+                "MMM d, y G",
+                "M/d/yy G",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
         }
     }

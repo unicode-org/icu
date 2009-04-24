@@ -7,15 +7,17 @@
 # File: Arabic_Latin.txt
 # Generated from CLDR 
 #
-:: [[:Arabic:] [‎ⁿ،؛؟ـ\u064B-\u0655٠-٬۰-۹﷼ښ]] ;
+:: [[:Arabic:][:block=ARABIC:][‎ⁿ،؛؟ـ\u064B-\u0655٠-٬۰-۹﷼ښ]] ;
 :: NFKD (NFC);
 $disambig =  \u0331 ;
 $disambig2 =  \u0330 ;
 $under =  \u0323 ;
 $descender = ˌ;
 $notAbove = [[:^ccc=0:]&[:^ccc=230:]];
-٫ ↔ '.' $disambig ; # ARABIC DECIMAL SEPARATOR
-٬ ↔ ',' $disambig ; # ARABIC THOUSANDS SEPARATOR
+[:Nd:]{٫}[:Nd:] ↔ [:Nd:]{','}[:Nd:] ; # ARABIC DECIMAL SEPARATOR
+[:Nd:]{٬}[:Nd:] ↔ [:Nd:]{'.'}[:Nd:] ; # ARABIC THOUSANDS SEPARATOR
+٫ ↔ ',' $disambig ; # ARABIC DECIMAL SEPARATOR
+٬ ↔ '.' $disambig ; # ARABIC THOUSANDS SEPARATOR
 ، ↔ ',' ; # ARABIC COMMA
 ؛ ↔ ';' ; # ARABIC SEMICOLON
 ؟ ↔ '?' ; # ARABIC QUESTION MARK
@@ -73,6 +75,7 @@ $notAbove = [[:^ccc=0:]&[:^ccc=230:]];
 ـ → ; # ARABIC TATWEEL
 ف ↔ f ; # ARABIC LETTER FEH
 ق ↔ q ; # ARABIC LETTER QAF
+ک ↔ k $disambig ; # ARABIC LETTER KEHEH
 ك ↔ k ; # ARABIC LETTER KAF
 ل ↔ l ; # ARABIC LETTER LAM
 م ↔ m ; # ARABIC LETTER MEEM

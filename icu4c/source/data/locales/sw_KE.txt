@@ -13,7 +13,7 @@ sw_KE{
         "#,##0%",
         "#E0",
     }
-    Version{"1.45"}
+    Version{"1.46"}
     calendar{
         gregorian{
             DateTimeElements:intvector{

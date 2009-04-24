@@ -2131,7 +2131,7 @@ ko{
     Variants{
         REVISED{"개정"}
     }
-    Version{"1.133"}
+    Version{"1.136"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -2147,11 +2147,11 @@ ko{
                 "G y년 MMMM d일",
                 "MMM d, y G",
                 "M/d/yyyy",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1}{0}" /**  fallback from 'gregorian'   */,
-                "{1}{0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}",
+                "{1}{0}",
+                "{1}{0}",
+                "{1} {0}",
+                "{1} {0}",
             }
             eras{
                 abbreviated{
@@ -2162,7 +2162,7 @@ ko{
         coptic{
             AmPmMarkers{
                 "오전",
-                "PM",
+                "오후",
             }
         }
         ethiopic{
@@ -2396,20 +2396,6 @@ ko{
             }
             monthNames{
                 format{
-                    abbreviated{
-                        "1월",
-                        "2월",
-                        "3월",
-                        "4월",
-                        "5월",
-                        "6월",
-                        "7월",
-                        "8월",
-                        "9월",
-                        "10월",
-                        "11월",
-                        "12월",
-                    }
                     wide{
                         "1월",
                         "2월",
@@ -2426,35 +2412,7 @@ ko{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "1월",
-                        "2월",
-                        "3월",
-                        "4월",
-                        "5월",
-                        "6월",
-                        "7월",
-                        "8월",
-                        "9월",
-                        "10월",
-                        "11월",
-                        "12월",
-                    }
                     narrow{
-                        "1월",
-                        "2월",
-                        "3월",
-                        "4월",
-                        "5월",
-                        "6월",
-                        "7월",
-                        "8월",
-                        "9월",
-                        "10월",
-                        "11월",
-                        "12월",
-                    }
-                    wide{
                         "1월",
                         "2월",
                         "3월",
@@ -2495,7 +2453,7 @@ ko{
                 }
             }
         }
-        islamic-civil{
+        islamic{
             AmPmMarkers{
                 "오전",
                 "오후",
@@ -2527,11 +2485,11 @@ ko{
                 "G y년 M월 d일",
                 "G y. M. d",
                 "G y. M. d",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1}{0}" /**  fallback from 'gregorian'   */,
-                "{1}{0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}",
+                "{1}{0}",
+                "{1}{0}",
+                "{1} {0}",
+                "{1} {0}",
             }
             eras{
                 abbreviated{
@@ -3694,57 +3652,34 @@ ko{
             ec{"월리스"}
         }
         "meta:Acre"{
-            cu:int{0}
             ld{"아크레 하계 표준시"}
             ls{"아크레 표준시"}
             sd{"ACST (아크레)"}
             ss{"ACT (아크레)"}
         }
-        "meta:Afghanistan"{
-            cu:int{0}
-        }
         "meta:Africa_Central"{
-            cu:int{0}
             ls{"중앙아프리카 시간"}
         }
         "meta:Africa_Eastern"{
-            cu:int{0}
             ls{"동아프리카 시간"}
         }
-        "meta:Africa_FarWestern"{
-            cu:int{0}
-        }
         "meta:Africa_Southern"{
-            cu:int{0}
             lg{"남아프리카 시간"}
             ls{"남아프리카 표준시"}
         }
         "meta:Africa_Western"{
-            cu:int{0}
             ld{"서아프리카 하계 표준시"}
             ls{"서아프리카 시간"}
         }
-        "meta:Aktyubinsk"{
-            cu:int{0}
-        }
         "meta:Alaska"{
-            cu:int{0}
             ld{"알래스카 하계 표준시"}
             ls{"알래스카 표준시"}
         }
-        "meta:Alaska_Hawaii"{
-            cu:int{0}
-        }
-        "meta:Almaty"{
-            cu:int{0}
-        }
         "meta:Amazon"{
-            cu:int{0}
             ld{"아마존 하계 표준시"}
             ls{"아마존 표준시"}
         }
         "meta:America_Central"{
-            cu:int{0}
             ld{"미 중부 하계 표준시"}
             lg{"중부 표준시"}
             ls{"중부 표준시"}
@@ -3752,7 +3687,6 @@ ko{
             ss{"CST"}
         }
         "meta:America_Eastern"{
-            cu:int{0}
             ld{"미 동부 하계 표준시"}
             lg{"동부 표준시"}
             ls{"동부 표준시"}
@@ -3760,7 +3694,6 @@ ko{
             ss{"EST"}
         }
         "meta:America_Mountain"{
-            cu:int{0}
             ld{"미 산지 하계 표준시"}
             lg{"산지 표준시"}
             ls{"산악 표준시"}
@@ -3768,28 +3701,21 @@ ko{
             ss{"MST"}
         }
         "meta:America_Pacific"{
-            cu:int{0}
             ld{"미 태평양 하계 표준시"}
             lg{"태평양 표준시"}
             ls{"태평양 표준시"}
             sd{"PDT"}
             ss{"PST"}
         }
-        "meta:Anadyr"{
-            cu:int{0}
-        }
         "meta:Aqtau"{
-            cu:int{0}
             sd{"AQTST (아크타우)"}
             ss{"AQTT (아크타우)"}
         }
         "meta:Aqtobe"{
-            cu:int{0}
             sd{"AQTST (악퇴베)"}
             ss{"AQTT (악퇴베)"}
         }
         "meta:Arabian"{
-            cu:int{0}
             ld{"아라비아 하계 표준시"}
             lg{"아라비아 시간"}
             ls{"아라비아 표준시"}
@@ -3797,20 +3723,7 @@ ko{
             sg{"AT(아라비아)"}
             ss{"AST(아라비아)"}
         }
-        "meta:Argentina"{
-            cu:int{0}
-        }
-        "meta:Argentina_Western"{
-            cu:int{0}
-        }
-        "meta:Armenia"{
-            cu:int{0}
-        }
-        "meta:Ashkhabad"{
-            cu:int{0}
-        }
         "meta:Atlantic"{
-            cu:int{0}
             ld{"미 대서양 하계 표준시"}
             lg{"대서양 표준시"}
             ls{"대서양 표준시"}
@@ -3818,573 +3731,196 @@ ko{
             ss{"AST"}
         }
         "meta:Australia_Central"{
-            cu:int{0}
             ld{"오스트레일리아 중부 하계 표준시"}
             lg{"중앙 오스트레일리아 시간"}
             ls{"오스트레일리아 중부 표준시"}
         }
         "meta:Australia_CentralWestern"{
-            cu:int{0}
             ld{"오스트레일리아 중서부 하계 표준시"}
             lg{"오스트레일리아 중서부 시간"}
             ls{"오스트레일리아 중서부 표준시"}
         }
         "meta:Australia_Eastern"{
-            cu:int{0}
             ld{"오스트레일리아 동부 하계 표준시"}
             lg{"동부 오스트레일리아 시간"}
             ls{"오스트레일리아 동부 표준시"}
         }
         "meta:Australia_Western"{
-            cu:int{0}
             ld{"오스트레일리아 서부 하계 표준시"}
             lg{"서부 오스트레일리아 시간"}
             ls{"오스트레일리아 서부 표준시"}
         }
-        "meta:Azerbaijan"{
-            cu:int{0}
-        }
         "meta:Azores"{
-            cu:int{0}
             ld{"아조레스 하계 표준시"}
             ls{"아조레스 표준시"}
         }
-        "meta:Baku"{
-            cu:int{0}
-        }
-        "meta:Bangladesh"{
-            cu:int{0}
-        }
         "meta:Bering"{
-            cu:int{0}
             sd{"BDT (베링)"}
             ss{"BST (베링)"}
         }
-        "meta:Bhutan"{
-            cu:int{0}
-        }
-        "meta:Bolivia"{
-            cu:int{0}
-        }
-        "meta:Borneo"{
-            cu:int{0}
-        }
         "meta:Brasilia"{
-            cu:int{0}
             ld{"브라질리아 하계 표준시"}
             ls{"브라질리아 표준시"}
         }
-        "meta:British"{
-            cu:int{0}
-        }
         "meta:Cape_Verde"{
-            cu:int{0}
             ld{"카보 베르데 하계 표준시"}
             ls{"카보 베르데 표준시"}
         }
         "meta:Chamorro"{
-            cu:int{0}
             lg{"차모로 시간"}
             ls{"차모로 표준시"}
         }
-        "meta:Changbai"{
-            cu:int{0}
-        }
         "meta:Chatham"{
-            cu:int{0}
             ld{"채텀 하계 표준시"}
             ls{"채텀 표준시"}
         }
-        "meta:Chile"{
-            cu:int{0}
-        }
         "meta:China"{
-            cu:int{0}
             ld{"중국 하계 표준시"}
             ls{"중국 표준시"}
             sd{"CDT (중국)"}
             ss{"CST (중국)"}
         }
-        "meta:Choibalsan"{
-            cu:int{0}
-        }
         "meta:Christmas"{
-            cu:int{0}
             ls{"크리스마스섬 표준시"}
         }
         "meta:Cocos"{
-            cu:int{0}
             ls{"코코스섬 표준시"}
         }
-        "meta:Colombia"{
-            cu:int{0}
-        }
         "meta:Cook"{
-            cu:int{0}
             ld{"쿡제도 하계 표준시"}
             ls{"쿡제도 표준시"}
         }
         "meta:Cuba"{
-            cu:int{0}
             sd{"CDT (쿠바)"}
             ss{"CST (쿠바)"}
         }
-        "meta:Dacca"{
-            cu:int{0}
-        }
         "meta:Davis"{
-            cu:int{0}
             ls{"데이비스 표준시"}
         }
-        "meta:Dominican"{
-            cu:int{0}
-        }
         "meta:DumontDUrville"{
-            cu:int{0}
             ls{"뒤몽 뒤르빌 표준시"}
         }
-        "meta:Dushanbe"{
-            cu:int{0}
-        }
-        "meta:Dutch_Guiana"{
-            cu:int{0}
-        }
-        "meta:East_Timor"{
-            cu:int{0}
-        }
         "meta:Easter"{
-            cu:int{0}
             ld{"이스터섬 하계 표준시"}
             ls{"이스터섬 표준시"}
         }
-        "meta:Ecuador"{
-            cu:int{0}
-        }
         "meta:Europe_Central"{
-            cu:int{0}
             ld{"중부유럽 하계 표준시"}
             ls{"중부유럽 표준시"}
         }
         "meta:Europe_Eastern"{
-            cu:int{0}
             ld{"동부유럽 하계 표준시"}
             ls{"동부유럽 표준시"}
         }
         "meta:Europe_Western"{
-            cu:int{0}
             ld{"서부 유럽 하계 표준시"}
             ls{"서부 유럽 시간"}
         }
         "meta:Falkland"{
-            cu:int{0}
             ld{"포클랜드 하계 표준시"}
             ls{"포클랜드 표준시"}
         }
         "meta:Fiji"{
-            cu:int{0}
             ld{"피지 하계 표준시"}
             ls{"피지 표준시"}
         }
-        "meta:French_Guiana"{
-            cu:int{0}
-        }
         "meta:French_Southern"{
-            cu:int{0}
             ls{"프랑스령 남쪽식민지 표준시"}
         }
-        "meta:Frunze"{
-            cu:int{0}
-        }
         "meta:GMT"{
-            cu:int{0}
             ls{"그리니치 표준시"}
         }
         "meta:Galapagos"{
-            cu:int{0}
             ls{"갈라파고스 표준시"}
         }
-        "meta:Gambier"{
-            cu:int{0}
-        }
-        "meta:Georgia"{
-            cu:int{0}
-        }
-        "meta:Gilbert_Islands"{
-            cu:int{0}
-        }
-        "meta:Goose_Bay"{
-            cu:int{0}
-        }
-        "meta:Greenland_Central"{
-            cu:int{0}
-        }
-        "meta:Greenland_Eastern"{
-            cu:int{0}
-        }
-        "meta:Greenland_Western"{
-            cu:int{0}
-        }
         "meta:Guam"{
-            cu:int{0}
             ss{"GST (괌)"}
         }
-        "meta:Gulf"{
-            cu:int{0}
-        }
-        "meta:Guyana"{
-            cu:int{0}
-        }
-        "meta:Hawaii_Aleutian"{
-            cu:int{0}
-        }
         "meta:Hong_Kong"{
-            cu:int{0}
             ld{"홍콩 하계 표준시"}
             ls{"홍콩 시간"}
         }
-        "meta:Hovd"{
-            cu:int{0}
-        }
         "meta:India"{
-            cu:int{0}
             ls{"인도 표준시"}
         }
         "meta:Indian_Ocean"{
-            cu:int{0}
             ls{"영국령 인도양 식민지 표준시"}
         }
         "meta:Indochina"{
-            cu:int{0}
             ls{"인도차이나 시간"}
         }
         "meta:Indonesia_Central"{
-            cu:int{0}
             ls{"중앙인도네시아 시간"}
         }
         "meta:Indonesia_Eastern"{
-            cu:int{0}
             ls{"동인도네시아 시간"}
         }
         "meta:Indonesia_Western"{
-            cu:int{0}
             ls{"서인도네시아 시간"}
         }
-        "meta:Iran"{
-            cu:int{0}
-        }
-        "meta:Irish"{
-            cu:int{0}
-        }
-        "meta:Irkutsk"{
-            cu:int{0}
-        }
         "meta:Israel"{
-            cu:int{0}
             ld{"이스라엘 하계 표준시"}
             ls{"이스라엘 표준시"}
             ss{"IST (이스라엘)"}
         }
         "meta:Japan"{
-            cu:int{0}
             ld{"일본 하계 표준시"}
             ls{"일본 표준시"}
-        }
-        "meta:Kamchatka"{
-            cu:int{0}
-        }
-        "meta:Karachi"{
-            cu:int{0}
-        }
-        "meta:Kashgar"{
-            cu:int{0}
-        }
-        "meta:Kazakhstan_Eastern"{
-            cu:int{0}
-        }
-        "meta:Kazakhstan_Western"{
-            cu:int{0}
-        }
-        "meta:Kizilorda"{
-            cu:int{0}
         }
         "meta:Korea"{
             cu:int{1}
             ld{"한국 하계 표준시"}
             ls{"한국 표준시"}
         }
-        "meta:Kosrae"{
-            cu:int{0}
-        }
-        "meta:Krasnoyarsk"{
-            cu:int{0}
-        }
-        "meta:Kuybyshev"{
-            cu:int{0}
-        }
-        "meta:Kwajalein"{
-            cu:int{0}
-        }
-        "meta:Kyrgystan"{
-            cu:int{0}
-        }
-        "meta:Lanka"{
-            cu:int{0}
-        }
-        "meta:Liberia"{
-            cu:int{0}
-        }
-        "meta:Line_Islands"{
-            cu:int{0}
-        }
-        "meta:Long_Shu"{
-            cu:int{0}
-        }
         "meta:Lord_Howe"{
-            cu:int{0}
             ld{"로드 하우 하계 표준시"}
             lg{"로드 하우 시간"}
             ls{"로드 하우 표준시"}
         }
-        "meta:Macau"{
-            cu:int{0}
-        }
-        "meta:Magadan"{
-            cu:int{0}
-        }
-        "meta:Malaya"{
-            cu:int{0}
-        }
-        "meta:Malaysia"{
-            cu:int{0}
-        }
         "meta:Maldives"{
-            cu:int{0}
             ls{"몰디브 표준시"}
         }
-        "meta:Marquesas"{
-            cu:int{0}
-        }
-        "meta:Marshall_Islands"{
-            cu:int{0}
-        }
         "meta:Mauritius"{
-            cu:int{0}
             ls{"모리셔스 표준시"}
         }
         "meta:Mawson"{
-            cu:int{0}
             ls{"모슨 표준시"}
         }
-        "meta:Mongolia"{
-            cu:int{0}
-        }
         "meta:Moscow"{
-            cu:int{0}
             ld{"모스크바 하계 표준시"}
             ls{"모스크바 표준시"}
         }
-        "meta:Myanmar"{
-            cu:int{0}
-        }
-        "meta:Nauru"{
-            cu:int{0}
-        }
-        "meta:Nepal"{
-            cu:int{0}
-        }
-        "meta:New_Caledonia"{
-            cu:int{0}
-        }
         "meta:New_Zealand"{
-            cu:int{0}
             ld{"뉴질랜드 하계 표준시"}
             lg{"뉴질랜드 시간"}
             ls{"뉴질랜드 표준시"}
         }
         "meta:Newfoundland"{
-            cu:int{0}
             ld{"뉴펀들랜드 하계 표준시"}
             ls{"뉴펀들랜드 표준시"}
         }
-        "meta:Niue"{
-            cu:int{0}
-        }
-        "meta:Norfolk"{
-            cu:int{0}
-        }
-        "meta:Noronha"{
-            cu:int{0}
-        }
-        "meta:North_Mariana"{
-            cu:int{0}
-        }
-        "meta:Novosibirsk"{
-            cu:int{0}
-        }
-        "meta:Omsk"{
-            cu:int{0}
-        }
-        "meta:Oral"{
-            cu:int{0}
-        }
-        "meta:Pakistan"{
-            cu:int{0}
-        }
-        "meta:Palau"{
-            cu:int{0}
-        }
-        "meta:Papua_New_Guinea"{
-            cu:int{0}
-        }
-        "meta:Paraguay"{
-            cu:int{0}
-        }
-        "meta:Peru"{
-            cu:int{0}
-        }
-        "meta:Philippines"{
-            cu:int{0}
-        }
-        "meta:Phoenix_Islands"{
-            cu:int{0}
-        }
-        "meta:Pierre_Miquelon"{
-            cu:int{0}
-        }
-        "meta:Pitcairn"{
-            cu:int{0}
-        }
-        "meta:Ponape"{
-            cu:int{0}
-        }
-        "meta:Qyzylorda"{
-            cu:int{0}
-        }
         "meta:Reunion"{
-            cu:int{0}
             ls{"리유니온 표준시"}
         }
         "meta:Rothera"{
-            cu:int{0}
             ls{"로데라 표준시"}
         }
-        "meta:Sakhalin"{
-            cu:int{0}
-        }
-        "meta:Samara"{
-            cu:int{0}
-        }
         "meta:Samarkand"{
-            cu:int{0}
             sd{"SAMST (사마르칸트)"}
             ss{"SAMT (사마르칸트)"}
         }
-        "meta:Samoa"{
-            cu:int{0}
-        }
         "meta:Seychelles"{
-            cu:int{0}
             ls{"세이셸 표준시"}
         }
-        "meta:Shevchenko"{
-            cu:int{0}
-        }
-        "meta:Singapore"{
-            cu:int{0}
-        }
-        "meta:Solomon"{
-            cu:int{0}
-        }
         "meta:South_Georgia"{
-            cu:int{0}
             ls{"사우스 조지아 표준시"}
             ss{"GST (사우스 조지아)"}
         }
-        "meta:Suriname"{
-            cu:int{0}
-        }
-        "meta:Sverdlovsk"{
-            cu:int{0}
-        }
         "meta:Syowa"{
-            cu:int{0}
             ls{"쇼와 표준시"}
         }
-        "meta:Tahiti"{
-            cu:int{0}
-        }
-        "meta:Tajikistan"{
-            cu:int{0}
-        }
-        "meta:Tashkent"{
-            cu:int{0}
-        }
-        "meta:Tbilisi"{
-            cu:int{0}
-        }
-        "meta:Tokelau"{
-            cu:int{0}
-        }
-        "meta:Tonga"{
-            cu:int{0}
-        }
-        "meta:Truk"{
-            cu:int{0}
-        }
-        "meta:Turkey"{
-            cu:int{0}
-        }
-        "meta:Turkmenistan"{
-            cu:int{0}
-        }
-        "meta:Tuvalu"{
-            cu:int{0}
-        }
-        "meta:Uralsk"{
-            cu:int{0}
-        }
-        "meta:Uruguay"{
-            cu:int{0}
-        }
-        "meta:Urumqi"{
-            cu:int{0}
-        }
-        "meta:Uzbekistan"{
-            cu:int{0}
-        }
-        "meta:Vanuatu"{
-            cu:int{0}
-        }
-        "meta:Venezuela"{
-            cu:int{0}
-        }
-        "meta:Vladivostok"{
-            cu:int{0}
-        }
-        "meta:Volgograd"{
-            cu:int{0}
-        }
         "meta:Vostok"{
-            cu:int{0}
             ls{"보스토크 표준시"}
-        }
-        "meta:Wake"{
-            cu:int{0}
-        }
-        "meta:Wallis"{
-            cu:int{0}
-        }
-        "meta:Yakutsk"{
-            cu:int{0}
-        }
-        "meta:Yekaterinburg"{
-            cu:int{0}
-        }
-        "meta:Yerevan"{
-            cu:int{0}
-        }
-        "meta:Yukon"{
-            cu:int{0}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

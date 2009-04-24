@@ -3709,7 +3709,7 @@ sr_Latn{
         TARASK{"Taraskijevica ortografija"}
         VALENCIA{"Valencijski"}
     }
-    Version{"1.83"}
+    Version{"1.88"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -3742,10 +3742,38 @@ sr_Latn{
             }
             availableFormats{
                 EEEd{"d EEE"}
-                Hm{"H:mm"}
+                Ed{"E d."}
+                Hm{"H.mm"}
+                M{"L"}
+                MEd{"E, M-d"}
+                MMM{"LLL"}
+                MMMEd{"E d. MMM"}
+                MMMMEd{"E MMMM d"}
+                MMMMd{"MMMM d."}
+                MMMMdd{"dd. MMMM"}
+                MMMd{"MMM d."}
+                MMMdd{"dd.MMM"}
+                MMdd{"MM-dd"}
+                Md{"d/M"}
+                d{"d"}
+                hhmmss{"hh.mm.ss a"}
+                ms{"mm:ss"}
+                y{"y."}
+                yM{"y-M"}
+                yMEd{"EEE, d. M. yyyy."}
                 yMMM{"y MMM"}
-                yQ{"Q y"}
+                yMMMEd{"EEE, d. MMM y."}
+                yMMMM{"y MMMM"}
+                yQ{"y Q"}
                 yQQQ{"y QQQ"}
+                yyMM{"MM.yy"}
+                yyMMMd{"d. MMM yy."}
+                yyMMdd{"dd.MM.yy"}
+                yyQ{"Q yy"}
+                yyQQQQ{"QQQQ yy"}
+                yyyy{"y."}
+                yyyyMM{"yyyy-MM"}
+                yyyyMMMM{"MMMM y."}
             }
             dayNames{
                 format{
@@ -3835,20 +3863,87 @@ sr_Latn{
                 }
             }
             intervalFormats{
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E, d.M - E, d.M"}
+                    d{"E, d.M - E, d.M"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"E, dd. MMM - E, dd. MMM"}
+                    d{"E, dd. - E, dd. MMM"}
+                }
+                MMMM{
+                    M{"LLLL-LLLL"}
+                }
+                MMMd{
+                    M{"dd. MMM - dd. MMM"}
+                    d{"dd.-dd. MMM"}
+                }
+                Md{
+                    M{"d.M - d.M"}
+                    d{"d.M - d.M"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    a{"HH-HH"}
+                    h{"HH-HH"}
+                }
                 hm{
+                    a{"HH.mm-HH.mm"}
                     h{"HH.mm-HH.mm"}
                     m{"HH.mm-HH.mm"}
                 }
                 hmv{
-                    h{"HH.mm-HH.mmv"}
-                    m{"HH.mm-HH.mmv"}
+                    a{"HH.mm-HH.mm v"}
+                    h{"HH.mm-HH.mm v"}
+                    m{"HH.mm-HH.mm v"}
                 }
                 hv{
-                    h{"HH-HHv"}
+                    a{"HH-HH v"}
+                    h{"HH-HH v"}
+                }
+                y{
+                    y{"y-y"}
                 }
                 yM{
                     M{"M.yy - M.yy"}
                     y{"M.yy - M.yy"}
+                }
+                yMEd{
+                    M{"E, d.M.yy. - E, d.M.yy."}
+                    d{"E, d.M.yy. - E, d.M.yy."}
+                    y{"E, d.M.yy. - E, d.M.yy."}
+                }
+                yMMM{
+                    M{"MMM-MMM y."}
+                    y{"MMM y. - MMM y."}
+                }
+                yMMMEd{
+                    M{"E, dd. MMM - E, dd. MMM y."}
+                    d{"E, dd. - E, dd. MMM y."}
+                    y{"E, dd. MMM y. - E, dd. MMM y."}
+                }
+                yMMMM{
+                    M{"yyyy-MM – MM"}
+                    y{"yyyy-MM – yyyy-MM"}
+                }
+                yMMMd{
+                    M{"dd. MMM - dd. MMM y."}
+                    d{"dd.-dd. MMM y."}
+                    y{"dd. MMM y. - dd. MMM y."}
+                }
+                yMd{
+                    M{"d.M.yy. - d.M.yy."}
+                    d{"d.M.yy. - d.M.yy."}
+                    y{"d.M.yy. - d.M.yy."}
                 }
             }
             monthNames{
@@ -5508,8 +5603,6 @@ sr_Latn{
         "meta:Samarkand"{
             ld{"Samarkand letnje računanje vremena"}
             ls{"Samarkand vreme"}
-            sd{"SAMST (Samarkand)"}
-            ss{"SAMT (Samarkand)"}
         }
         "meta:Samoa"{
             ls{"Samoa standardno vreme"}
@@ -5632,5 +5725,9 @@ sr_Latn{
             lg{"Jukon vreme"}
             ls{"Jukon standardno vreme"}
         }
+        gmtFormat{"GMT{0}"}
+        gmtZeroFormat{"GMT"}
+        hourFormat{"+HHmm;-HHmm"}
+        regionFormat{"{0}"}
     }
 }

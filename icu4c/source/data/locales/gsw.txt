@@ -2869,7 +2869,7 @@ gsw{
         SOLBA{"Solbica-Mundart"}
         TARASK{"Taraskievica-Rächtschriibig"}
     }
-    Version{"1.13"}
+    Version{"1.15"}
     calendar{
         buddhist{
             AmPmMarkers{
@@ -2885,11 +2885,11 @@ gsw{
                 "d. MMMM y G",
                 "d. MMM y G",
                 "d.M.yyyy",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
         }
         chinese{

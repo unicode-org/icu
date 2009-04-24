@@ -236,7 +236,7 @@ hy{
         "#0%",
         "#E0",
     }
-    Version{"1.70"}
+    Version{"1.71"}
     calendar{
         gregorian{
             AmPmMarkers{

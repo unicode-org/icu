@@ -1658,7 +1658,7 @@ lv{
             traditional{"tradicionālā kārtošanas secība"}
         }
     }
-    Version{"1.92"}
+    Version{"1.94"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -1727,15 +1727,6 @@ lv{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "Sv",
-                        "Pr",
-                        "Ot",
-                        "Tr",
-                        "Ce",
-                        "Pk",
-                        "Se",
-                    }
                     narrow{
                         "S",
                         "P",
@@ -1965,38 +1956,6 @@ lv{
         hebrew{
             monthNames{
                 format{
-                    abbreviated{
-                        "tišri",
-                        "hešvans",
-                        "kisļevs",
-                        "tevets",
-                        "ševats",
-                        "Adar I",
-                        "adars",
-                        "nisans",
-                        "ijars",
-                        "sivans",
-                        "tamuzs",
-                        "avs",
-                        "eluls",
-                    }
-                    wide{
-                        "tišri",
-                        "hešvans",
-                        "kisļevs",
-                        "tevets",
-                        "ševats",
-                        "Adar I",
-                        "adars",
-                        "nisans",
-                        "ijars",
-                        "sivans",
-                        "tamuzs",
-                        "avs",
-                        "eluls",
-                    }
-                }
-                stand-alone{
                     wide{
                         "tišri",
                         "hešvans",
@@ -2018,36 +1977,6 @@ lv{
         islamic{
             monthNames{
                 format{
-                    abbreviated{
-                        "muharams",
-                        "safars",
-                        "1. rabī",
-                        "2. rabī",
-                        "1. džumādā",
-                        "2. džumādā",
-                        "radžabs",
-                        "šabans",
-                        "ramadāns",
-                        "šauvals",
-                        "du al-kidā",
-                        "du al-hidžā",
-                    }
-                    wide{
-                        "muharams",
-                        "safars",
-                        "1. rabī",
-                        "2. rabī",
-                        "1. džumādā",
-                        "2. džumādā",
-                        "radžabs",
-                        "šabans",
-                        "ramadāns",
-                        "šauvals",
-                        "du al-kidā",
-                        "du al-hidžā",
-                    }
-                }
-                stand-alone{
                     wide{
                         "muharams",
                         "safars",

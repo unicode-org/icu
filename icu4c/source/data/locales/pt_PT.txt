@@ -265,23 +265,23 @@ pt_PT{
         POLYTON{"politónico"}
         SOLBA{"dialecto stolvizza/solbica"}
     }
-    Version{"1.79"}
+    Version{"1.81"}
     calendar{
         buddhist{
             DateTimePatterns{
                 "HH'h'mm'min'ss's' zzzz",
                 "HH'h'mm'min'ss's' z",
-                "HH'h'mm'min'ss's'",
+                "HH:mm:ss",
                 "HH:mm",
                 "EEEE, MMMM d, y G",
                 "MMMM d, y G",
                 "MMM d, y G",
                 "M/d/yyyy",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
         }
         gregorian{
@@ -308,48 +308,6 @@ pt_PT{
                 yQ{"QQQ 'de' yyyy"}
                 yQQQ{"QQQ 'de' y"}
                 yyQ{"QQQ 'de' yy"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Dom",
-                        "Seg",
-                        "ter",
-                        "qua",
-                        "qui",
-                        "sex",
-                        "sáb",
-                    }
-                    wide{
-                        "Domingo",
-                        "segunda-feira",
-                        "terça-feira",
-                        "quarta-feira",
-                        "quinta-feira",
-                        "sexta-feira",
-                        "sábado",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "Dom",
-                        "Seg",
-                        "ter",
-                        "qua",
-                        "qui",
-                        "sex",
-                        "sáb",
-                    }
-                    wide{
-                        "Domingo",
-                        "segunda-feira",
-                        "terça-feira",
-                        "quarta-feira",
-                        "quinta-feira",
-                        "sexta-feira",
-                        "sábado",
-                    }
-                }
             }
             intervalFormats{
                 MMM{

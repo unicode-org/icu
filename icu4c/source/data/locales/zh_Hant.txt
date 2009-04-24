@@ -1842,7 +1842,7 @@ zh_Hant{
         REVISED{"已修訂的拼字學"}
         SAAHO{"SAAHO"}
     }
-    Version{"1.129"}
+    Version{"1.132"}
     calendar{
         chinese{
             AmPmMarkers{
@@ -1889,7 +1889,6 @@ zh_Hant{
                 MEd{"M-d（E）"}
                 MMdd{"MM/dd"}
                 Md{"M/d"}
-                d{"d日"}
                 yM{"yyyy/M"}
                 yMEd{"yyyy/M/d（EEE）"}
                 yMMM{"y年M月"}
@@ -1906,15 +1905,6 @@ zh_Hant{
                         "週四",
                         "週五",
                         "週六",
-                    }
-                    narrow{
-                        "日",
-                        "一",
-                        "二",
-                        "三",
-                        "四",
-                        "五",
-                        "六",
                     }
                     wide{
                         "星期日",
@@ -1935,15 +1925,6 @@ zh_Hant{
                         "四",
                         "五",
                         "六",
-                    }
-                    wide{
-                        "星期日",
-                        "星期一",
-                        "星期二",
-                        "星期三",
-                        "星期四",
-                        "星期五",
-                        "星期六",
                     }
                 }
             }
@@ -2009,11 +1990,6 @@ zh_Hant{
                 h{
                     a{"ah時至ah時"}
                     h{"ah時至h時"}
-                }
-                hmv{
-                    a{"vah:mm至ah:mm"}
-                    h{"vah:mm至h:mm"}
-                    m{"vah:mm至h:mm"}
                 }
                 hv{
                     a{"vah時至ah時"}
@@ -2109,47 +2085,24 @@ zh_Hant{
                 "Gy年M月d日",
                 "Gy/M/d",
                 "Gy/M/d",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1}{0}" /**  fallback from 'gregorian'   */,
-                "{1}{0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}",
+                "{1}{0}",
+                "{1}{0}",
+                "{1} {0}",
+                "{1} {0}",
             }
             availableFormats{
                 MMMEd{"M月d日EEE"}
                 MMMd{"M月d日"}
-                Md{"M/d"}
                 yyyy{"Gy"}
-                yyyyM{"Gy/M"}
-                yyyyMEd{"Gy/M/d（EEE）"}
-                yyyyMM{"Gy/MM"}
                 yyyyMMM{"Gy年M月"}
                 yyyyMMMEd{"Gy年M月d日EEE"}
-                yyyyMMMd{"Gy年M月d日"}
-                yyyyMd{"Gy/M/d"}
-                yyyyQ{"Gy年第Q季度"}
                 yyyyQQQ{"Gy QQQ"}
             }
             eras{
                 abbreviated{
                     "民國前",
                     "民國",
-                }
-            }
-            intervalFormats{
-                yM{
-                    M{"y/M至y/M"}
-                    y{"y/M至y/M"}
-                }
-                yMEd{
-                    M{"y/M/dE至y/M/dE"}
-                    d{"y/M/dE至y/M/dE"}
-                    y{"y/M/dE至y/M/dE"}
-                }
-                yMd{
-                    M{"y/M/d至y/M/d"}
-                    d{"y/M/d至y/M/d"}
-                    y{"y/M/d至y/M/d"}
                 }
             }
         }

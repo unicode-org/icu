@@ -2689,7 +2689,7 @@ az{
             pinyin{"Pinyin təqvimi"}
         }
     }
-    Version{"1.74"}
+    Version{"1.75"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -3359,11 +3359,7 @@ az{
         "Pacific:Wake"{
             ec{"veyk"}
         }
-        "meta:British"{
-            cu:int{0}
-        }
         "meta:Europe_Central"{
-            cu:int{0}
             ld{"Orta Avropa/yay"}
             ls{"Orta Avropa"}
             sd{"Orta Avropa/yaz"}
@@ -3376,11 +3372,7 @@ az{
             sd{"Şərq Avropa/yaz"}
             ss{"Şərq Avropa/standart"}
         }
-        "meta:Irish"{
-            cu:int{0}
-        }
         "meta:Kuybyshev"{
-            cu:int{0}
             ld{"Kuybuşev/yay"}
             ls{"Kuybuşev"}
         }
@@ -3391,7 +3383,6 @@ az{
             ls{"Moskva/standart"}
         }
         "meta:Samara"{
-            cu:int{0}
             ld{"Samara/yay"}
             ls{"Samara"}
         }
@@ -3401,7 +3392,6 @@ az{
             ls{"Türkiya"}
         }
         "meta:Volgograd"{
-            cu:int{0}
             ld{"Volqoqrad/yay"}
             ls{"Volqoqrad"}
         }

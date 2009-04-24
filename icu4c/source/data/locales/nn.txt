@@ -2936,7 +2936,7 @@ nn{
         TARASK{"taraskievica-ortografi"}
         VALENCIA{"valensisk dialekt"}
     }
-    Version{"1.95"}
+    Version{"1.98"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2961,7 +2961,9 @@ nn{
             availableFormats{
                 MMMMd{"d. MMMM"}
                 MMdd{"dd.MM"}
-                mmss{"mm.ss"}
+                hm{"h.mm a"}
+                hms{"h.mm.ss a"}
+                ms{"mm.ss"}
                 yyMM{"MM.yy"}
                 yyQ{"Q yy"}
                 yyyyMMMM{"MMMM y"}

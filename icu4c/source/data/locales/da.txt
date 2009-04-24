@@ -2632,7 +2632,7 @@ da{
         POSIX{"computer"}
         REVISED{"revideret retskrivning"}
     }
-    Version{"1.117"}
+    Version{"1.122"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -2644,11 +2644,11 @@ da{
                 "d. MMMM y G",
                 "d. MMM y G",
                 "d/M/yyyy",
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
-                "{1} {0}" /**  fallback from 'gregorian'   */,
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
         }
         gregorian{
@@ -2673,7 +2673,6 @@ da{
             }
             availableFormats{
                 H{"H"}
-                HHmm{"HH.mm"}
                 HHmmss{"HH.mm.ss"}
                 Hm{"HH.mm"}
                 M{"M"}
@@ -2686,7 +2685,8 @@ da{
                 MMdd{"dd/MM"}
                 Md{"d/M"}
                 d{"d."}
-                mmss{"mm.ss"}
+                hm{"h.mm a"}
+                hms{"h.mm.ss a"}
                 ms{"mm.ss"}
                 y{"y"}
                 yM{"M-yyyy"}
@@ -2906,6 +2906,20 @@ da{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "jan",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "maj",
+                        "jun",
+                        "jul",
+                        "aug",
+                        "sep",
+                        "okt",
+                        "nov",
+                        "dec",
+                    }
                     narrow{
                         "J",
                         "F",

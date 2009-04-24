@@ -12,10 +12,6 @@ fr_CA{
             "$",
             "dollar canadien",
         }
-        USD{
-            "$US",
-            "dollar des États-Unis",
-        }
     }
     NumberPatterns{
         "#,##0.###",
@@ -27,7 +23,7 @@ fr_CA{
         279,
         216,
     }
-    Version{"1.63"}
+    Version{"1.64"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
