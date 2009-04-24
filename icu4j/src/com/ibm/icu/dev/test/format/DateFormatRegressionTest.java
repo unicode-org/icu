@@ -875,6 +875,58 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    public void Test_GEec() {
+        class PatternAndResult {
+            private String pattern;
+            private String result;
+            PatternAndResult(String pat, String res) {
+                pattern = pat;
+                result = res;
+            }
+            public String getPattern()  { return pattern; }
+            public String getResult()  { return result; }
+        }
+        final PatternAndResult[] tests = {
+            new PatternAndResult( "dd MMM yyyy GGG",   "02 Jul 2008 AD" ),
+            new PatternAndResult( "dd MMM yyyy GGGGG", "02 Jul 2008 A" ),
+            new PatternAndResult( "e dd MMM yyyy",     "3 02 Jul 2008" ),
+            new PatternAndResult( "ee dd MMM yyyy",    "03 02 Jul 2008" ),
+            new PatternAndResult( "c dd MMM yyyy",     "3 02 Jul 2008" ),
+            new PatternAndResult( "cc dd MMM yyyy",    "3 02 Jul 2008" ),
+            new PatternAndResult( "eee dd MMM yyyy",   "Wed 02 Jul 2008" ),
+            new PatternAndResult( "EEE dd MMM yyyy",   "Wed 02 Jul 2008" ),
+            new PatternAndResult( "EE dd MMM yyyy",    "Wed 02 Jul 2008" ),
+            new PatternAndResult( "eeee dd MMM yyyy",  "Wednesday 02 Jul 2008" ),
+            new PatternAndResult( "eeeee dd MMM yyyy", "W 02 Jul 2008" ),
+            new PatternAndResult( "e ww YYYY",         "3 27 2008" ),
+            new PatternAndResult( "c ww YYYY",         "3 27 2008" ),
+        };
+        ULocale loc = ULocale.ENGLISH;
+        TimeZone tz = TimeZone.getTimeZone("America/Los_Angeles");
+        Calendar cal = new GregorianCalendar(tz, loc);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd", loc);
+        for ( int i = 0; i < tests.length; i++ ) {
+            PatternAndResult item = tests[i];
+            dateFormat.applyPattern( item.getPattern() );
+            cal.set(2008, 6, 2, 5, 0); // 2008 July 02 5 AM PDT
+            StringBuffer buf = new StringBuffer(32);
+            FieldPosition fp = new FieldPosition(DateFormat.YEAR_FIELD);
+            dateFormat.format(cal, buf, fp);
+            if ( buf.toString().compareTo(item.getResult()) != 0 ) {
+                errln("for pattern " + item.getPattern() + ", expected " + item.getResult() + ", got " + buf );
+            }
+            ParsePosition pos = new ParsePosition(0);
+            dateFormat.parse( item.getResult(), cal, pos);
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DATE);
+            if ( year != 2008 || month != 6 || day != 2 ) {
+            	errln("use pattern " + item.getPattern() + " to parse " + item.getResult() +
+            	        ", expected y2008 m6 d2, got " + year + " " + month + " " + day );
+            }
+        }
+    }
+
     static final char kArabicZero = 0x0660;
     static final char kHindiZero  = 0x0966;
     static final char kLatinZero  = 0x0030;
