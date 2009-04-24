@@ -2118,7 +2118,7 @@ public final class RuleBasedCollator extends Collator
     private static final byte BYTE_SHIFT_PREFIX_ = (byte)0x03;
     /*private*/ static final byte BYTE_UNSHIFTED_MIN_ = BYTE_SHIFT_PREFIX_;
     //private static final byte BYTE_FIRST_UCA_ = BYTE_COMMON_;
-    static final byte CODAN_PLACEHOLDER = 0x24;
+    static final byte CODAN_PLACEHOLDER = 0x27;
     //private static final byte BYTE_LAST_LATIN_PRIMARY_ = (byte)0x4C;
     private static final byte BYTE_FIRST_NON_LATIN_PRIMARY_ = (byte)0x4D;
     private static final byte BYTE_UNSHIFTED_MAX_ = (byte)0xFF;
@@ -2367,7 +2367,7 @@ public final class RuleBasedCollator extends Collator
                                   int commonBottom4, int bottomCount4)
     {
 
-        int p2 = (ce >>= 16) & LAST_BYTE_MASK_; // in ints for unsigned
+        int p2 = (ce >>>= 16) & LAST_BYTE_MASK_; // in ints for unsigned
         int p1 = ce >>> 8;  // comparison
         if (doShift) {
             if (m_utilCount4_ > 0) {
