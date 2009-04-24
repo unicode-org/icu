@@ -6,12 +6,12 @@ src/com/ibm/icu/impl/ByteBuffer.java
 src/com/ibm/icu/impl/DateNumberFormat.java
 src/com/ibm/icu/impl/duration/BasicDurationFormat.java
 src/com/ibm/icu/impl/ICUResourceBundleImpl.java
+src/com/ibm/icu/impl/IllegalIcuArgumentException.java
 src/com/ibm/icu/impl/JavaTimeZone.java
 src/com/ibm/icu/impl/PatternTokenizer.java
 src/com/ibm/icu/impl/UnicodeRegex.java
 src/com/ibm/icu/impl/Utility.java
 src/com/ibm/icu/lang/UCharacter.java
-src/com/ibm/icu/lang/IllegalIcuArgumentException.java
 
 src/com/ibm/icu/math/BigDecimal.java
 
@@ -28,6 +28,7 @@ src/com/ibm/icu/text/NumberFormat.java
 src/com/ibm/icu/text/RuleBasedCollator.java
 src/com/ibm/icu/text/RuleBasedNumberFormat.java
 src/com/ibm/icu/text/SimpleDateFormat.java
+src/com/ibm/icu/text/TransliteratorParser.java
 src/com/ibm/icu/text/UnicodeSet.java
 src/com/ibm/icu/text/UTF16.java
 

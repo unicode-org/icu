@@ -18,12 +18,10 @@ public class IllegalIcuArgumentException extends IllegalArgumentException {
         super(errorMessage);
     }
     
-    public synchronized Throwable initCause(Throwable cause) {
 //#if defined(FOUNDATION10) || defined(J2SE13)
-//## //JDK1.3 / CDC Foundation 1.0 specific code prefixed by //##
 //#else
-// Code for all other environments
+    public synchronized Throwable initCause(Throwable cause) {
     return super.initCause(cause);
-//#endif 
     }
+//#endif 
 }
