@@ -11,6 +11,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/unistr.h"
 #include "unicode/putil.h"
+#include "unicode/uniset.h"
 
 #include "intltest.h"
 #include "csdetest.h"
@@ -82,6 +83,10 @@ void CharsetDetectionTest::runIndexedTest( int32_t index, UBool exec, const char
 
        case 7: name = "IBM420Test";
             if (exec) IBM420Test();
+            break;
+
+       case 8: name = "Ticket6394Test";
+            if (exec) Ticket6394Test();
             break;
 
         default: name = "";
@@ -692,3 +697,47 @@ bail:
     freeBytes(bytes_r);
     ucsdet_close(csd);
 }
+
+
+void CharsetDetectionTest::Ticket6394Test() {
+#if !UCONFIG_NO_CONVERSION
+    const char charText[] =  "Here is some random English text that should be detected as ISO-8859-1."
+                             "Ticket 6394 claims that ISO-8859-1 will appear in the array of detected "
+                             "encodings more than once.  The hop through UnicodeString is for platforms " 
+                             "where this char * string is be EBCDIC and needs conversion to Latin1.";
+    char latin1Text[sizeof(charText)];
+    UnicodeString(charText).extract(0, sizeof(charText)-2, latin1Text, sizeof(latin1Text), "ISO-8859-1");
+
+    UErrorCode status = U_ZERO_ERROR;
+    UCharsetDetector *csd = ucsdet_open(&status);
+    ucsdet_setText(csd, latin1Text, -1, &status);
+    if (U_FAILURE(status)) {
+        errln("Fail at file %s, line %d.  status = %s", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
+
+    int32_t matchCount = 0;
+    const UCharsetMatch **matches = ucsdet_detectAll(csd, &matchCount, &status);
+    if (U_FAILURE(status)) {
+        errln("Fail at file %s, line %d.  status = %s", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
+
+    UnicodeSet  setOfCharsetNames;    // UnicodSets can hold strings.
+    int32_t i;
+    for (i=0; i<matchCount; i++) {
+        UnicodeString charSetName(ucsdet_getName(matches[i], &status));
+        if (U_FAILURE(status)) {
+            errln("Fail at file %s, line %d.  status = %s;  i=%d", __FILE__, __LINE__, u_errorName(status), i);
+            status = U_ZERO_ERROR;
+        }
+        if (setOfCharsetNames.contains(charSetName)) {
+            errln("Fail at file %s, line %d ", __FILE__, __LINE__);
+            errln(UnicodeString("   Duplicate charset name = ") + charSetName);
+        }
+        setOfCharsetNames.add(charSetName);
+    }
+    ucsdet_close(csd);
+#endif
+}
+

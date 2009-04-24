@@ -289,16 +289,32 @@ const CharsetMatch * const *CharsetDetector::detectAll(int32_t &maxMatchesFound,
         }
 
         uprv_sortArray(resultArray, resultCount, sizeof resultArray[0], charsetMatchComparator, NULL, TRUE, &status);
-        ////Bubble sort
-        //for(int32_t i = resultCount; i > 1; i -= 1) {
-        //    for(int32_t j = 0; j < i-1; j += 1) {
-        //        if(resultArray[j]->getConfidence() < resultArray[j+1]->getConfidence()) {
-        //            CharsetMatch *temp = resultArray[j];
-        //            resultArray[j] = resultArray[j+1];
-        //            resultArray[j+1] = temp;
-        //        }
-        //    }
-        //}
+
+        // Remove duplicate charsets from the results.
+        // Simple minded, brute force approach - check each entry against all that follow.
+        // The first entry of any duplicated set is the one that should be kept because it will
+        // be the one with the highest confidence rating.
+        //   (Duplicate matches have different languages, only the charset is the same)
+        // Because the resultArray contains preallocated CharsetMatch objects, they aren't actually
+        // deleted, just reordered, with the unwanted duplicates placed after the good results.
+        int32_t j, k;
+        for (i=0; i<resultCount; i++) {
+            const char *charSetName = resultArray[i]->getName();
+            for (j=i+1; j<resultCount; ) {
+                if (uprv_strcmp(charSetName, resultArray[j]->getName()) != 0) {
+                    // Not a duplicate.
+                    j++;
+                } else {
+                    // Duplicate entry at index j.  
+                    CharsetMatch *duplicate = resultArray[j];
+                    for (k=j; k<resultCount-1; k++) {
+                        resultArray[k] = resultArray[k+1];
+                    }
+                    resultCount--;
+                    resultArray[resultCount] = duplicate;
+                }
+            }
+        }
 
         fFreshTextSet = FALSE;
     }
