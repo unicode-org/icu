@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -40,6 +40,35 @@ public class TestUtil {
         return o1.equals(o2);
     }
 
+    private static final boolean SUNJRE;
+    private static final boolean IBMJRE;
+
+    static {
+        String javaVendor = System.getProperty("java.vendor");
+        if (javaVendor != null) {
+            if (javaVendor.indexOf("Sun") >= 0) {
+                SUNJRE = true;
+                IBMJRE = false;
+            } else if (javaVendor.indexOf("IBM") >= 0) {
+                SUNJRE = false;
+                IBMJRE = true;
+            } else {
+                SUNJRE = false;
+                IBMJRE = false;
+            }
+        } else {
+            SUNJRE = false;
+            IBMJRE = false;
+        }
+    }
+
+    public static boolean isSUNJRE() {
+        return SUNJRE;
+    }
+    public static boolean isIBMJRE() {
+        return IBMJRE;
+    }
+
     /*
      * Ticket#6368
      * 
@@ -56,18 +85,8 @@ public class TestUtil {
      * 
      * For now, we exclude these problematic locales from locale spi test cases on IBM Java 6.
      */
-    private static final boolean IBMJRE;
-    static {
-        String javaVendor = System.getProperty("java.vendor");
-        if (javaVendor != null && javaVendor.indexOf("IBM") >= 0) {
-            IBMJRE = true;
-        } else {
-            IBMJRE = false;
-        }
-    }
-
     public static boolean isProblematicIBMLocale(Locale loc) {
-        if (!IBMJRE) {
+        if (!isIBMJRE()) {
             return false;
         }
         if (loc.getLanguage().equals("sh")) {

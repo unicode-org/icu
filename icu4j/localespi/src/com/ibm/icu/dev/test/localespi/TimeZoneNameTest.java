@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -19,22 +19,28 @@ public class TimeZoneNameTest extends TestFmwk {
     }
 
     public void TestTimeZoneNames() {
+        Locale[] locales = Locale.getAvailableLocales();
         String[] tzids = TimeZone.getAvailableIDs();
-        for (Locale loc : Locale.getAvailableLocales()) {
+
+        for (Locale loc : locales) {
+            boolean warningOnly = false;
             if (TestUtil.isProblematicIBMLocale(loc)) {
-                logln("Skipped " + loc);
-                continue;
+                warningOnly = true;
             }
+            else if ((TestUtil.isSUNJRE() || TestUtil.isIBMJRE()) && loc.toString().startsWith("eu")) {
+                warningOnly = true;
+            }
+
             for (String tzid : tzids) {
                 TimeZone tz = TimeZone.getTimeZone(tzid);
                 com.ibm.icu.util.TimeZone tzIcu = com.ibm.icu.util.TimeZone.getTimeZone(tzid);
-                checkDisplayNamePair(TimeZone.SHORT, tz, tzIcu, loc);
-                checkDisplayNamePair(TimeZone.LONG, tz, tzIcu, loc);
+                checkDisplayNamePair(TimeZone.SHORT, tz, tzIcu, loc, warningOnly);
+                checkDisplayNamePair(TimeZone.LONG, tz, tzIcu, loc, warningOnly);
             }
         }
     }
 
-    private void checkDisplayNamePair(int style, TimeZone tz, com.ibm.icu.util.TimeZone icuTz, Locale loc) {
+    private void checkDisplayNamePair(int style, TimeZone tz, com.ibm.icu.util.TimeZone icuTz, Locale loc, boolean warnOnly) {
         /* Note: There are two problems here.
          * 
          * It looks Java 6 requires a TimeZoneNameProvider to return both standard name and daylight name
@@ -50,8 +56,8 @@ public class TimeZoneNameTest extends TestFmwk {
         String icuStdName = getIcuDisplayName(icuTz, false, style, loc);
         String icuDstName = getIcuDisplayName(icuTz, true, style, loc);
         if (icuStdName != null && icuDstName != null && !icuStdName.equals(icuDstName)) {
-            checkDisplayName(false, style, tz, loc, icuStdName);
-            checkDisplayName(true, style, tz, loc, icuDstName);
+            checkDisplayName(false, style, tz, loc, icuStdName, warnOnly);
+            checkDisplayName(true, style, tz, loc, icuDstName, warnOnly);
         }
     }
 
@@ -74,16 +80,23 @@ public class TimeZoneNameTest extends TestFmwk {
         return icuname;
     }
 
-    private void checkDisplayName(boolean daylight, int style, TimeZone tz, Locale loc, String icuname) {
+    private void checkDisplayName(boolean daylight, int style, TimeZone tz, Locale loc, String icuname, boolean warnOnly) {
         String styleStr = (style == TimeZone.SHORT) ? "SHORT" : "LONG";
 
         String name = tz.getDisplayName(daylight, style, loc);
         if (TestUtil.isICUExtendedLocale(loc)) {
             // The name should be taken from ICU
             if (!name.equals(icuname)) {
-                errln("FAIL: TimeZone name by ICU is " + icuname + ", but got " + name
-                        + " for time zone " + tz.getID() + " in locale " + loc
-                        + " (daylight=" + daylight + ", style=" + styleStr + ")");
+                if (warnOnly) {
+                    logln("WARNING: TimeZone name by ICU is " + icuname + ", but got " + name
+                            + " for time zone " + tz.getID() + " in locale " + loc
+                            + " (daylight=" + daylight + ", style=" + styleStr + ")");
+                    
+                } else {
+                    errln("FAIL: TimeZone name by ICU is " + icuname + ", but got " + name
+                            + " for time zone " + tz.getID() + " in locale " + loc
+                            + " (daylight=" + daylight + ", style=" + styleStr + ")");
+                }
             }
         } else {
             if (!name.equals(icuname)) {
@@ -95,9 +108,15 @@ public class TimeZoneNameTest extends TestFmwk {
             Locale icuLoc = TestUtil.toICUExtendedLocale(loc);
             name = tz.getDisplayName(daylight, style, icuLoc);
             if (!name.equals(icuname)) {
-                errln("FAIL: TimeZone name by ICU is " + icuname + ", but got " + name
-                        + " for time zone " + tz.getID() + " in locale " + icuLoc
-                        + " (daylight=" + daylight + ", style=" + styleStr + ")");
+                if (warnOnly) {
+                    logln("WARNING: TimeZone name by ICU is " + icuname + ", but got " + name
+                            + " for time zone " + tz.getID() + " in locale " + icuLoc
+                            + " (daylight=" + daylight + ", style=" + styleStr + ")");
+                } else {
+                    errln("FAIL: TimeZone name by ICU is " + icuname + ", but got " + name
+                            + " for time zone " + tz.getID() + " in locale " + icuLoc
+                            + " (daylight=" + daylight + ", style=" + styleStr + ")");
+                }
             }
         }
     }
