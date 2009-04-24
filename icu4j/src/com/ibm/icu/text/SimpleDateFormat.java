@@ -730,7 +730,7 @@ public class SimpleDateFormat extends DateFormat {
         /*Yeu*/ Calendar.YEAR_WOY, Calendar.DOW_LOCAL, Calendar.EXTENDED_YEAR,
         /*gAZ*/ Calendar.JULIAN_DAY, Calendar.MILLISECONDS_IN_DAY, Calendar.ZONE_OFFSET,
         /*v*/   Calendar.ZONE_OFFSET,
-        /*c*/   Calendar.DAY_OF_WEEK,
+        /*c*/   Calendar.DOW_LOCAL,
         /*L*/   Calendar.MONTH,
         /*Qq*/  Calendar.MONTH, Calendar.MONTH,
         /*V*/   Calendar.ZONE_OFFSET,
@@ -915,6 +915,15 @@ public class SimpleDateFormat extends DateFormat {
                 }
             }
             break;
+        case 19: // 'e' - DOW_LOCAL (use DOW_LOCAL for numeric, DAY_OF_WEEK for format names)
+            if (count < 3) {
+                zeroPaddingNumber(currentNumberFormat,buf, value, count, maxIntCount);
+                break;
+            }
+            // For alpha day-of-week, we don't want DOW_LOCAL,
+            // we need the standard DAY_OF_WEEK.
+            value = cal.get(Calendar.DAY_OF_WEEK);
+            // fall through, do not break here
         case 9: // 'E' - DAY_OF_WEEK
             if (count == 5) {
                 safeAppend(formatData.narrowWeekdays, value, buf);
@@ -1002,15 +1011,20 @@ public class SimpleDateFormat extends DateFormat {
                 appendGMT(currentNumberFormat,buf, cal);
             }
             break;
-        case 25: // 'c' - STANDALONE DAY
+        case 25: // 'c' - STANDALONE DAY (use DOW_LOCAL for numeric, DAY_OF_WEEK for standalone names)
+            if (count < 3) {
+                zeroPaddingNumber(currentNumberFormat,buf, value, 1, maxIntCount);
+                break;
+            }
+            // For alpha day-of-week, we don't want DOW_LOCAL,
+            // we need the standard DAY_OF_WEEK.
+            value = cal.get(Calendar.DAY_OF_WEEK);
             if (count == 5) {
                 safeAppend(formatData.standaloneNarrowWeekdays, value, buf);
             } else if (count == 4) {
                 safeAppend(formatData.standaloneWeekdays, value, buf);
-            } else if (count == 3) {
+            } else { // count == 3
                 safeAppend(formatData.standaloneShortWeekdays, value, buf);
-            } else {
-                zeroPaddingNumber(currentNumberFormat,buf, value, 1, maxIntCount);
             }
             break;
         case 26: // 'L' - STANDALONE MONTH
@@ -1068,7 +1082,6 @@ public class SimpleDateFormat extends DateFormat {
             // case 13: // 'W' - WEEK_OF_MONTH
             // case 16: // 'K' - HOUR (0..11)
             // case 18: // 'Y' - YEAR_WOY
-            // case 19: // 'e' - DOW_LOCAL
             // case 20: // 'u' - EXTENDED_YEAR
             // case 21: // 'g' - JULIAN_DAY
             // case 22: // 'A' - MILLISECONDS_IN_DAY

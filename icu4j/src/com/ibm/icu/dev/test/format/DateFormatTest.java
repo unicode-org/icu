@@ -308,7 +308,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
             "Anno Domini", "1997", "August", "0013", "0014", "0014", "0034", "0012", "5130",
             "Wednesday", "0225", "0002", "0033", "0002", "PM", "0002", "0002", "Pacific Daylight Time", "1997",
-            "0004", "1997", "2450674", "52452513", "GMT-07:00", "Pacific Time","Wednesday","August", "3rd quarter", "3rd quarter","United States (Los Angeles)",
+            "Wednesday", "1997", "2450674", "52452513", "GMT-07:00", "Pacific Time","Wednesday","August", "3rd quarter", "3rd quarter","United States (Los Angeles)",
         };
 
         assertTrue("data size", EXPECTED.length == COUNT * DateFormat.FIELD_COUNT);
@@ -366,7 +366,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
              "2", "33", "1997", "1997"},
 
             {"PM", "0013", "Wednesday", "0002", "0225",
-             "0004", "Anno Domini", "1997", "0014", "0014",
+             "Wednesday", "Anno Domini", "1997", "0014", "0014",
              "0002", "0002", "2450674", "5130", "52452513",
              "0034", "August", "3rd quarter", "0012", "Pacific Daylight Time",
              "0002", "0033", "1997", "1997"},
