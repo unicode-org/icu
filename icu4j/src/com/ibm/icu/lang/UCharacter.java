@@ -1,4 +1,4 @@
-//##header
+//##header J2SE15
 /**
 *******************************************************************************
 * Copyright (C) 1996-2009, International Business Machines Corporation and    *
@@ -6469,7 +6469,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     private static int getEuropeanDigit(int ch) {
         if ((ch > 0x7a && ch < 0xff21)  
             || ch < 0x41 || (ch > 0x5a && ch < 0x61)
-            || ch > 0xff5a || (ch > 0xff31 && ch < 0xff41)) {
+            || ch > 0xff5a || (ch > 0xff3a && ch < 0xff41)) {
             return -1;
         } 
         if (ch <= 0x7a) {
