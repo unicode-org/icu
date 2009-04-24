@@ -419,4 +419,60 @@ public class EthiopicTest extends CalendarTest
         alemawiCalendar.setAmeteAlemEra(true);
         return alemawiCalendar;
     }
+
+    public void TestAddSet() {
+        class TestAddSetItem {
+            private int startYear;
+            private int startMonth; // 0-based
+            private int startDay; // 1-based
+            private int fieldToChange;
+            private int fieldDelta;
+            private int endYear;
+            private int endMonth;
+            private int endDay;
+            TestAddSetItem(int sYr, int sMo, int sDa, int field, int delta, int eYr, int eMo, int eDa) {
+                startYear = sYr;
+                startMonth = sMo;
+                startDay = sDa;
+                fieldToChange = field;
+                fieldDelta = delta;
+                endYear = eYr;
+                endMonth = eMo;
+                endDay = eDa;
+            }
+            public int getStartYear()  { return startYear; }
+            public int getStartMonth() { return startMonth; }
+            public int getStartDay()   { return startDay; }
+            public int getField()      { return fieldToChange; }
+            public int getDelta()      { return fieldDelta; }
+            public int getEndYear()    { return endYear; }
+            public int getEndMonth()   { return endMonth; }
+            public int getEndDay()     { return endDay; }
+        }
+        final TestAddSetItem[] tests = {
+            new TestAddSetItem( 2000, 12, 1, Calendar.MONTH, +1, 2001,  0, 1 ),
+            new TestAddSetItem( 2000, 12, 1, Calendar.MONTH, +9, 2001,  8, 1 ),
+            new TestAddSetItem( 1999, 12, 2, Calendar.MONTH, +1, 2000,  0, 2 ), // 1999 is a leap year
+            new TestAddSetItem( 1999, 12, 2, Calendar.MONTH, +9, 2000,  8, 2 ),
+            new TestAddSetItem( 2001,  0, 1, Calendar.MONTH, -1, 2000, 12, 1 ),
+            new TestAddSetItem( 2001,  0, 1, Calendar.MONTH, -6, 2000,  7, 1 ),
+            new TestAddSetItem( 2000, 12, 1, Calendar.DATE,  +8, 2001,  0, 4 ),
+            new TestAddSetItem( 1999, 12, 1, Calendar.DATE,  +8, 2000,  0, 3 ), // 1999 is a leap year
+            new TestAddSetItem( 2000,  0, 1, Calendar.DATE,  -1, 1999, 12, 6 ),
+        };
+        EthiopicCalendar testCalendar = new EthiopicCalendar();
+        for ( int i = 0; i < tests.length; i++ ) {
+            TestAddSetItem item = tests[i];
+        	testCalendar.set( item.getStartYear(), item.getStartMonth(), item.getStartDay(), 9, 0 );
+        	testCalendar.add( item.getField(), item.getDelta() );
+        	int endYear = testCalendar.get(Calendar.YEAR);
+        	int endMonth = testCalendar.get(Calendar.MONTH);
+        	int endDay = testCalendar.get(Calendar.DATE);
+        	if ( endYear != item.getEndYear() || endMonth != item.getEndMonth() || endDay != item.getEndDay() ) {
+        	    errln("EToJD FAILS: field " + item.getField() + " delta " + item.getDelta() + 
+                            " expected yr " + item.getEndYear() + " mo " + item.getEndMonth() +  " da " + item.getEndDay() +
+                            " got yr " + endYear + " mo " + endMonth +  " da " + endDay);
+        	}
+        }
+    }
 }
