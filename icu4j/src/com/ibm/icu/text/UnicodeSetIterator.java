@@ -220,6 +220,15 @@ public class UnicodeSetIterator {
     private UnicodeSet set;
     private int endRange = 0;
     private int range = 0;
+    
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public UnicodeSet getSet() {
+        return set;
+    }
+    
     /**
      * @internal
      * @deprecated This API is ICU internal only.

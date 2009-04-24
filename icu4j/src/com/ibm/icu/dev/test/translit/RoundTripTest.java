@@ -150,10 +150,121 @@ public class RoundTripTest extends TestFmwk {
     public void TestHangul() throws IOException {
         long start = System.currentTimeMillis();
         Test t = new Test("Latin-Hangul", 5);
-        if (getInclusion() < 10) t.setPairLimit(1000);
+        boolean TEST_ALL = "true".equalsIgnoreCase(getProperty("HangulRoundTripAll")); 
+        if (TEST_ALL && getInclusion() == 10) {
+            t.setPairLimit(Integer.MAX_VALUE); // only go to the limit if we have TEST_ALL and getInclusion
+        }
         t.test("[a-zA-Z]", "[\uAC00-\uD7A4]", "", this, new Legal());
         showElapsed(start, "TestHangul");
     }
+
+    /**
+     * This is a shorter version of the test for doubles, that allows us to skip lots of cases, but
+     * does check the ones that should cause problems (if any do).
+     */
+    public void TestHangul2() {
+        Transliterator lh = Transliterator.getInstance("Latin-Hangul");
+        Transliterator hl = lh.getInverse();
+        final UnicodeSet representativeHangul = getRepresentativeHangul();
+        for (UnicodeSetIterator it = new UnicodeSetIterator(representativeHangul); it.next();) {
+            assertRoundTripTransform("Transform", it.getString(), lh, hl);
+        }
+    }
+
+    private void assertRoundTripTransform(String message, String source, Transliterator lh, Transliterator hl) {
+        String to = hl.transform(source);
+        String back = lh.transform(to);
+        if (!source.equals(back)) {
+            String to2 = hl.transform(source.replaceAll("(.)", "$1 ").trim());
+            String to3 = hl.transform(back.replaceAll("(.)", "$1 ").trim());
+            assertEquals(message + " " + source + " [" + to + "/"+ to2 + "/"+ to3 + "]", source, back);
+        }
+    }
+
+    public static UnicodeSet getRepresentativeHangul() {
+        UnicodeSet extraSamples = new UnicodeSet("[\uCE20{\uAD6C\uB514}{\uAD73\uC774}{\uBB34\uB837}{\uBB3C\uC5FF}{\uC544\uAE4C}{\uC544\uB530}{\uC544\uBE60}{\uC544\uC2F8}{\uC544\uC9DC}{\uC544\uCC28}{\uC545\uC0AC}{\uC545\uC2F8}{\uC546\uCE74}{\uC548\uAC00}{\uC548\uC790}{\uC548\uC9DC}{\uC548\uD558}{\uC54C\uAC00}{\uC54C\uB530}{\uC54C\uB9C8}{\uC54C\uBC14}{\uC54C\uBE60}{\uC54C\uC0AC}{\uC54C\uC2F8}{\uC54C\uD0C0}{\uC54C\uD30C}{\uC54C\uD558}{\uC555\uC0AC}{\uC555\uC2F8}{\uC558\uC0AC}{\uC5C5\uC12F\uC501}{\uC5C6\uC5C8\uC2B5}]");
+        UnicodeSet sourceSet = new UnicodeSet();
+        addRepresentativeHangul(sourceSet, 2, false);
+        addRepresentativeHangul(sourceSet, 3, false);
+        addRepresentativeHangul(sourceSet, 2, true);
+        addRepresentativeHangul(sourceSet, 3, true);
+        // add the boundary cases; we want an example of each case of V + L and one example of each case of T+L
+
+        UnicodeSet more = getRepresentativeBoundaryHangul();
+        sourceSet.addAll(more);
+        sourceSet.addAll(extraSamples);
+        return sourceSet;
+    }
+
+    private static UnicodeSet getRepresentativeBoundaryHangul() {
+        UnicodeSet resultToAddTo = new UnicodeSet();
+        // U+1100 HANGUL CHOSEONG KIYEOK
+        // U+1161 HANGUL JUNGSEONG A
+        UnicodeSet L = new UnicodeSet("[:hst=L:]");
+        UnicodeSet V = new UnicodeSet("[:hst=V:]");
+        UnicodeSet T = new UnicodeSet("[:hst=T:]");
+
+        String prefixLV = "\u1100\u1161";
+        String prefixL = "\u1100";
+        String suffixV = "\u1161";
+        String nullL = "\u110B"; // HANGUL CHOSEONG IEUNG
+
+        UnicodeSet L0 = new UnicodeSet("[\u1100\u110B]");
+
+        // do all combinations of L0 + V + nullL + V
+
+        for (UnicodeSetIterator iL0 = new UnicodeSetIterator(L0); iL0.next();) {
+            for (UnicodeSetIterator iV = new UnicodeSetIterator(V); iV.next();) {
+                for (UnicodeSetIterator iV2 = new UnicodeSetIterator(V); iV2.next();) {
+                    String sample = iL0.getString() + iV.getString() + nullL + iV2.getString();
+                    String trial = Normalizer.compose(sample, false);
+                    if (trial.length() == 2) {
+                        resultToAddTo.add(trial);
+                    }
+                }
+            }
+        }
+
+        for (UnicodeSetIterator iL = new UnicodeSetIterator(L); iL.next();) {
+            // do all combinations of "g" + V + L + "a"
+            final String suffix = iL.getString() + suffixV;
+            for (UnicodeSetIterator iV = new UnicodeSetIterator(V); iV.next();) {
+                String sample = prefixL + iV.getString() + suffix;
+                String trial = Normalizer.compose(sample, false);
+                if (trial.length() == 2) {
+                    resultToAddTo.add(trial);
+                }
+            }
+            // do all combinations of "ga" + T + L + "a"
+            for (UnicodeSetIterator iT = new UnicodeSetIterator(T); iT.next();) {
+                String sample = prefixLV + iT.getString() + suffix;
+                String trial = Normalizer.compose(sample, false);
+                if (trial.length() == 2) {
+                    resultToAddTo.add(trial);
+                }
+            }
+        }
+        return resultToAddTo;
+    }
+
+    private static void addRepresentativeHangul(UnicodeSet resultToAddTo, int leng, boolean noFirstConsonant) {
+        UnicodeSet notYetSeen = new UnicodeSet();
+        for (char c = '\uAC00'; c <  '\uD7AF'; ++c) {
+            String charStr = String.valueOf(c);
+            String decomp = Normalizer.decompose(charStr, false);
+            if (decomp.length() != leng) {
+                continue; // only take one length at a time
+            }
+            if (decomp.startsWith("\u110B ") != noFirstConsonant) {
+                continue;
+            }
+            if (!notYetSeen.containsAll(decomp)) {
+                resultToAddTo.add(c);
+                notYetSeen.addAll(decomp);
+            }
+        }
+    }
+
 
     public void TestHan() throws UnsupportedEncodingException, FileNotFoundException {
         try{
@@ -946,7 +1057,7 @@ public class RoundTripTest extends TestFmwk {
         private String transliteratorID;
         private int errorLimit = 500;
         private int errorCount = 0;
-        private int pairLimit  = 0x10000;
+        private long pairLimit  = 1000000; // make default be 1M.
         private int density = 100;
         UnicodeSet sourceRange;
         UnicodeSet targetRange;
@@ -1206,7 +1317,7 @@ public class RoundTripTest extends TestFmwk {
             checkSourceTargetSingles(failSourceTarg);
 
             boolean quickRt = checkSourceTargetDoubles(failSourceTarg);
-            
+
             UnicodeSet failTargSource = new UnicodeSet();
             UnicodeSet failRound = new UnicodeSet();
 
@@ -1284,6 +1395,7 @@ public class RoundTripTest extends TestFmwk {
         private boolean checkSourceTargetDoubles(UnicodeSet failSourceTarg) {
             log.logln("Checking that source characters convert to target - Doubles");
             out.println("<h3>Checking that source characters convert to target - Doubles</h3>");
+            long count = 0;
 
             /*
             for (char c = 0; c < 0xFFFF; ++c) {
@@ -1309,10 +1421,12 @@ public class RoundTripTest extends TestFmwk {
                         !sourceRange.contains(d)) continue;
                     if (failSourceTarg.get(d)) continue;
                  */
+                log.logln(count + "/" + pairLimit + " Checking starting with " + UTF16.valueOf(c));
                 usi2.reset(sourceRangeMinusFailures, quickRt, density);
 
                 while (usi2.next()) {
                     int d = usi2.codepoint;
+                    ++count;
 
                     String cs = UTF16.valueOf(c) + UTF16.valueOf(d);
                     String targ = sourceToTarget.transliterate(cs);
@@ -1334,7 +1448,7 @@ public class RoundTripTest extends TestFmwk {
             }
             return quickRt;
         }
-        
+
         void checkTargetSourceSingles(UnicodeSet failTargSource, UnicodeSet failRound) {
             log.logln("Checking that target characters convert to source and back - Singles");
             out.println("<h3>Checking that target characters convert to source and back - Singles</h3>");
@@ -1390,7 +1504,7 @@ public class RoundTripTest extends TestFmwk {
                 UnicodeSet failRound) {
             log.logln("Checking that target characters convert to source and back - Doubles");
             out.println("<h3>Checking that target characters convert to source and back - Doubles</h3>");
-            int count = 0;
+            long count = 0;
 
             UnicodeSet targetRangeMinusFailures = new UnicodeSet(targetRange);
             targetRangeMinusFailures.removeAll(failTargSource);
@@ -1402,15 +1516,12 @@ public class RoundTripTest extends TestFmwk {
                 if (TestUtility.isUnassigned(c) ||
                     !targetRange.contains(c)) continue;
              */
-
+            
             usi.reset(targetRangeMinusFailures, quickRt, density);
 
             while (usi.next()) {
                 int c = usi.codepoint;
 
-                if (++count > pairLimit) {
-                    throw new TestTruncated("Test truncated at " + pairLimit + " x 64k pairs");
-                }
                 //log.log(TestUtility.hex(c));
 
                 /*
@@ -1418,11 +1529,17 @@ public class RoundTripTest extends TestFmwk {
                     if (TestUtility.isUnassigned(d) ||
                         !targetRange.contains(d)) continue;
                  */
+                log.logln(count + "/" + pairLimit + " Checking starting with " + UTF16.valueOf(c));
                 usi2.reset(targetRangeMinusFailures, quickRt, density);
 
                 while (usi2.next()) {
+                    
                     int d = usi2.codepoint;
                     if (d < 0) break;
+                    
+                    if (++count > pairLimit) {
+                        throw new TestTruncated("Test truncated at " + pairLimit);
+                    }
 
                     String cs = UTF16.valueOf(c) + UTF16.valueOf(d);
                     String targ = targetToSource.transliterate(cs);
@@ -1637,4 +1754,6 @@ public class RoundTripTest extends TestFmwk {
     //          return super.isSource(c);
     //      }
     //  }
+
+
 }
