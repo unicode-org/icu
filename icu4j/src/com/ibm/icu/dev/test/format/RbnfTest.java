@@ -921,7 +921,6 @@ public class RbnfTest extends TestFmwk {
                     }
                     //TODO: end
                     if (testParse) {
-System.out.println(loc);
                         // We do not validate the result in this test case,
                         // because there are cases which do not round trip by design.
 
