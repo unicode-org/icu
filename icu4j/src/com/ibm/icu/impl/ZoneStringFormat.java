@@ -57,6 +57,7 @@ public class ZoneStringFormat {
             ZoneStrings zstrings = new ZoneStrings(names, true, null);
             tzidToStrings.put(tzid, zstrings);
         }
+        isFullyLoaded = true;
     }
 
     /**
@@ -203,7 +204,7 @@ public class ZoneStringFormat {
     public String getGenericLocation(String tzid) {
         return getString(tzid, ZSIDX_LOCATION, 0L /* not used */, false /* not used */);
     }
-    
+
     /**
      * Constructs a ZoneStringFormat by locale.  Because an instance of ZoneStringFormat
      * is read-only, only one instance for a locale is sufficient.  Thus, this
@@ -216,6 +217,17 @@ public class ZoneStringFormat {
         tzidToStrings = new HashMap();
         mzidToStrings = new HashMap();
         zoneStringsTrie = new TextTrieMap(true);
+    }
+
+    // Load only a single zone
+    private synchronized void loadZone(String id) {
+        if (isFullyLoaded) {
+            return;
+        }
+        String tzid = ZoneMeta.getCanonicalSystemID(id);
+        if (tzid == null || tzidToStrings.containsKey(tzid)) {
+            return;
+        }
 
         ICUResourceBundle zoneStringsBundle = null;
         try {
@@ -228,9 +240,32 @@ public class ZoneStringFormat {
             // The rest of code should work even zoneStrings is null.
         }
 
+        String[] zstrarray = new String[ZSIDX_MAX];
+        String[] mzstrarray = new String[ZSIDX_MAX];
+        String[][] mzPartialLoc = new String[10][4]; // maximum 10 metazones per zone
+
+        addSingleZone(tzid, zoneStringsBundle,
+                getFallbackFormat(locale), getRegionFormat(locale),
+                zstrarray, mzstrarray, mzPartialLoc);
+    }
+
+    // Loading all zone strings
+    private synchronized void loadFull() {
+        if (isFullyLoaded) {
+            return;
+        }
+        ICUResourceBundle zoneStringsBundle = null;
+        try {
+            ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
+            zoneStringsBundle = bundle.getWithFallback("zoneStrings");
+        } catch (MissingResourceException e) {
+            // If no locale bundles are available, zoneStringsBundle will be null.
+            // We still want to go through the rest of zone strings initialization,
+            // because generic location format is generated from tzid for the case.
+            // The rest of code should work even zoneStrings is null.
+        }
+
         String[] zoneIDs = TimeZone.getAvailableIDs();
-        MessageFormat fallbackFmt = getFallbackFormat(locale);
-        MessageFormat regionFmt = getRegionFormat(locale);
 
         String[] zstrarray = new String[ZSIDX_MAX];
         String[] mzstrarray = new String[ZSIDX_MAX];
@@ -243,167 +278,186 @@ public class ZoneStringFormat {
                 continue;
             }
 
-            String zoneKey = tzid.replace('/', ':');
-            zstrarray[ZSIDX_LONG_STANDARD] = getZoneStringFromBundle(zoneStringsBundle, zoneKey, RESKEY_LONG_STANDARD);
-            zstrarray[ZSIDX_SHORT_STANDARD] = getZoneStringFromBundle(zoneStringsBundle, zoneKey, RESKEY_SHORT_STANDARD);
-            zstrarray[ZSIDX_LONG_DAYLIGHT] = getZoneStringFromBundle(zoneStringsBundle, zoneKey, RESKEY_LONG_DAYLIGHT);
-            zstrarray[ZSIDX_SHORT_DAYLIGHT] = getZoneStringFromBundle(zoneStringsBundle, zoneKey, RESKEY_SHORT_DAYLIGHT);
-            zstrarray[ZSIDX_LONG_GENERIC] = getZoneStringFromBundle(zoneStringsBundle, zoneKey, RESKEY_LONG_GENERIC);
-            zstrarray[ZSIDX_SHORT_GENERIC] = getZoneStringFromBundle(zoneStringsBundle, zoneKey, RESKEY_SHORT_GENERIC);
+            if (tzidToStrings.containsKey(tzid)) {
+                continue;
+            }
 
-            // Compose location format string
-            String countryCode = ZoneMeta.getCanonicalCountry(tzid);
-            String country = null;
-            String city = null;
-            if (countryCode != null) {
-                city = getZoneStringFromBundle(zoneStringsBundle, zoneKey, RESKEY_EXEMPLAR_CITY);
-                if (city == null) {
-                    city = tzid.substring(tzid.lastIndexOf('/') + 1).replace('_', ' ');
-                }
-                country = getLocalizedCountry(countryCode, locale);
-                if (ZoneMeta.getSingleCountry(tzid) != null) {
-                    // If the zone is only one zone in the country, do not add city
-                    zstrarray[ZSIDX_LOCATION] = regionFmt.format(new Object[] {country});
-                } else {
-                    zstrarray[ZSIDX_LOCATION] = fallbackFmt.format(new Object[] {city, country});
-                }
+            addSingleZone(tzid, zoneStringsBundle,
+                    getFallbackFormat(locale), getRegionFormat(locale),
+                    zstrarray, mzstrarray, mzPartialLoc);
+        }
+        isFullyLoaded = true;
+    }
+
+    // This internal initialization code must be called in a synchronized block
+    private void addSingleZone(String tzid, ICUResourceBundle zoneStringsBundle,
+            MessageFormat fallbackFmt, MessageFormat regionFmt,
+            String[] zstrarray, String[] mzstrarray, String[][] mzPartialLoc) {
+
+        if (tzidToStrings.containsKey(tzid)) {
+            return;
+        }
+
+        String zoneKey = tzid.replace('/', ':');
+        zstrarray[ZSIDX_LONG_STANDARD] = getZoneStringFromBundle(zoneStringsBundle, zoneKey, RESKEY_LONG_STANDARD);
+        zstrarray[ZSIDX_SHORT_STANDARD] = getZoneStringFromBundle(zoneStringsBundle, zoneKey, RESKEY_SHORT_STANDARD);
+        zstrarray[ZSIDX_LONG_DAYLIGHT] = getZoneStringFromBundle(zoneStringsBundle, zoneKey, RESKEY_LONG_DAYLIGHT);
+        zstrarray[ZSIDX_SHORT_DAYLIGHT] = getZoneStringFromBundle(zoneStringsBundle, zoneKey, RESKEY_SHORT_DAYLIGHT);
+        zstrarray[ZSIDX_LONG_GENERIC] = getZoneStringFromBundle(zoneStringsBundle, zoneKey, RESKEY_LONG_GENERIC);
+        zstrarray[ZSIDX_SHORT_GENERIC] = getZoneStringFromBundle(zoneStringsBundle, zoneKey, RESKEY_SHORT_GENERIC);
+
+        // Compose location format string
+        String countryCode = ZoneMeta.getCanonicalCountry(tzid);
+        String country = null;
+        String city = null;
+        if (countryCode != null) {
+            city = getZoneStringFromBundle(zoneStringsBundle, zoneKey, RESKEY_EXEMPLAR_CITY);
+            if (city == null) {
+                city = tzid.substring(tzid.lastIndexOf('/') + 1).replace('_', ' ');
+            }
+            country = getLocalizedCountry(countryCode, locale);
+            if (ZoneMeta.getSingleCountry(tzid) != null) {
+                // If the zone is only one zone in the country, do not add city
+                zstrarray[ZSIDX_LOCATION] = regionFmt.format(new Object[] {country});
             } else {
-                if (tzid.startsWith("Etc/")) {
-                    // "Etc/xxx" is not associated with a specific location, so localized
-                    // GMT format is always used as generic location format.
+                zstrarray[ZSIDX_LOCATION] = fallbackFmt.format(new Object[] {city, country});
+            }
+        } else {
+            if (tzid.startsWith("Etc/")) {
+                // "Etc/xxx" is not associated with a specific location, so localized
+                // GMT format is always used as generic location format.
+                zstrarray[ZSIDX_LOCATION] = null;
+            } else {
+                // When a new time zone ID, which is actually associated with a specific
+                // location, is added in tzdata, but the current CLDR data does not have
+                // the information yet, ICU creates a generic location string based on 
+                // the ID.  This implementation supports canonical time zone round trip
+                // with format pattern "VVVV".  See #6602 for the details.
+                String location = tzid;
+                int slashIdx = location.lastIndexOf('/');
+                if (slashIdx == -1) {
+                    // A time zone ID without slash in the tz database is not
+                    // associated with a specific location.  For instances,
+                    // MET, CET, EET and WET fall into this catetory.
                     zstrarray[ZSIDX_LOCATION] = null;
                 } else {
-                    // When a new time zone ID, which is actually associated with a specific
-                    // location, is added in tzdata, but the current CLDR data does not have
-                    // the information yet, ICU creates a generic location string based on 
-                    // the ID.  This implementation supports canonical time zone round trip
-                    // with format pattern "VVVV".  See #6602 for the details.
-                    String location = tzid;
-                    int slashIdx = location.lastIndexOf('/');
-                    if (slashIdx == -1) {
-                        // A time zone ID without slash in the tz database is not
-                        // associated with a specific location.  For instances,
-                        // MET, CET, EET and WET fall into this catetory.
-                        zstrarray[ZSIDX_LOCATION] = null;
-                    } else {
-                        location = tzid.substring(slashIdx + 1);
-                        zstrarray[ZSIDX_LOCATION] = regionFmt.format(new Object[] {location});
-                    }
+                    location = tzid.substring(slashIdx + 1);
+                    zstrarray[ZSIDX_LOCATION] = regionFmt.format(new Object[] {location});
                 }
             }
+        }
 
-            boolean commonlyUsed = isCommonlyUsed(zoneStringsBundle, zoneKey);
-            
-            // Resolve metazones used by this zone
-            int mzPartialLocIdx = 0;
-            Map olsonToMeta = ZoneMeta.getOlsonToMetaMap();
-            List metazoneMappings = (List)olsonToMeta.get(tzid);
-            if (metazoneMappings != null) {
-                Iterator it = metazoneMappings.iterator();
-                while (it.hasNext()) {
-                    ZoneMeta.OlsonToMetaMappingEntry mzmap = (ZoneMeta.OlsonToMetaMappingEntry)it.next();
-                    ZoneStrings mzStrings = (ZoneStrings)mzidToStrings.get(mzmap.mzid);
-                    if (mzStrings == null) {
-                        // If the metazone strings are not yet processed, do it now.
-                        String mzkey = "meta:" + mzmap.mzid;
-                        boolean mzCommonlyUsed = isCommonlyUsed(zoneStringsBundle, mzkey);
-                        mzstrarray[ZSIDX_LONG_STANDARD] = getZoneStringFromBundle(zoneStringsBundle, mzkey, RESKEY_LONG_STANDARD);
-                        mzstrarray[ZSIDX_SHORT_STANDARD] = getZoneStringFromBundle(zoneStringsBundle, mzkey, RESKEY_SHORT_STANDARD);
-                        mzstrarray[ZSIDX_LONG_DAYLIGHT] = getZoneStringFromBundle(zoneStringsBundle, mzkey, RESKEY_LONG_DAYLIGHT);
-                        mzstrarray[ZSIDX_SHORT_DAYLIGHT] = getZoneStringFromBundle(zoneStringsBundle, mzkey, RESKEY_SHORT_DAYLIGHT);
-                        mzstrarray[ZSIDX_LONG_GENERIC] = getZoneStringFromBundle(zoneStringsBundle, mzkey, RESKEY_LONG_GENERIC);
-                        mzstrarray[ZSIDX_SHORT_GENERIC] = getZoneStringFromBundle(zoneStringsBundle, mzkey, RESKEY_SHORT_GENERIC);
-                        mzstrarray[ZSIDX_LOCATION] = null;
-                        mzStrings = new ZoneStrings(mzstrarray, mzCommonlyUsed, null);
-                        mzidToStrings.put(mzmap.mzid, mzStrings);
+        boolean commonlyUsed = isCommonlyUsed(zoneStringsBundle, zoneKey);
+        
+        // Resolve metazones used by this zone
+        int mzPartialLocIdx = 0;
+        Map olsonToMeta = ZoneMeta.getOlsonToMetaMap();
+        List metazoneMappings = (List)olsonToMeta.get(tzid);
+        if (metazoneMappings != null) {
+            Iterator it = metazoneMappings.iterator();
+            while (it.hasNext()) {
+                ZoneMeta.OlsonToMetaMappingEntry mzmap = (ZoneMeta.OlsonToMetaMappingEntry)it.next();
+                ZoneStrings mzStrings = (ZoneStrings)mzidToStrings.get(mzmap.mzid);
+                if (mzStrings == null) {
+                    // If the metazone strings are not yet processed, do it now.
+                    String mzkey = "meta:" + mzmap.mzid;
+                    boolean mzCommonlyUsed = isCommonlyUsed(zoneStringsBundle, mzkey);
+                    mzstrarray[ZSIDX_LONG_STANDARD] = getZoneStringFromBundle(zoneStringsBundle, mzkey, RESKEY_LONG_STANDARD);
+                    mzstrarray[ZSIDX_SHORT_STANDARD] = getZoneStringFromBundle(zoneStringsBundle, mzkey, RESKEY_SHORT_STANDARD);
+                    mzstrarray[ZSIDX_LONG_DAYLIGHT] = getZoneStringFromBundle(zoneStringsBundle, mzkey, RESKEY_LONG_DAYLIGHT);
+                    mzstrarray[ZSIDX_SHORT_DAYLIGHT] = getZoneStringFromBundle(zoneStringsBundle, mzkey, RESKEY_SHORT_DAYLIGHT);
+                    mzstrarray[ZSIDX_LONG_GENERIC] = getZoneStringFromBundle(zoneStringsBundle, mzkey, RESKEY_LONG_GENERIC);
+                    mzstrarray[ZSIDX_SHORT_GENERIC] = getZoneStringFromBundle(zoneStringsBundle, mzkey, RESKEY_SHORT_GENERIC);
+                    mzstrarray[ZSIDX_LOCATION] = null;
+                    mzStrings = new ZoneStrings(mzstrarray, mzCommonlyUsed, null);
+                    mzidToStrings.put(mzmap.mzid, mzStrings);
 
-                        // Add metazone strings to the zone string trie
-                        String preferredIdForLocale = ZoneMeta.getZoneIdByMetazone(mzmap.mzid, getRegion());
-                        for (int j = 0; j < mzstrarray.length; j++) {
-                            if (mzstrarray[j] != null) {
-                                int type = getNameType(j);
-                                ZoneStringInfo zsinfo = new ZoneStringInfo(preferredIdForLocale, mzstrarray[j], type);
-                                zoneStringsTrie.put(mzstrarray[j], zsinfo);
-                            }
+                    // Add metazone strings to the zone string trie
+                    String preferredIdForLocale = ZoneMeta.getZoneIdByMetazone(mzmap.mzid, getRegion());
+                    for (int j = 0; j < mzstrarray.length; j++) {
+                        if (mzstrarray[j] != null) {
+                            int type = getNameType(j);
+                            ZoneStringInfo zsinfo = new ZoneStringInfo(preferredIdForLocale, mzstrarray[j], type);
+                            zoneStringsTrie.put(mzstrarray[j], zsinfo);
                         }
                     }
-                    // Compose generic partial location format
-                    String lg = mzStrings.getString(ZSIDX_LONG_GENERIC);
-                    String sg = mzStrings.getString(ZSIDX_SHORT_GENERIC);
-                    if (lg != null || sg != null) {
-                        boolean addMzPartialLocationNames = true;
-                        for (int j = 0; j < mzPartialLocIdx; j++) {
-                            if (mzPartialLoc[j][0].equals(mzmap.mzid)) {
-                                // already added
-                                addMzPartialLocationNames = false;
-                                break;
-                            }
+                }
+                // Compose generic partial location format
+                String lg = mzStrings.getString(ZSIDX_LONG_GENERIC);
+                String sg = mzStrings.getString(ZSIDX_SHORT_GENERIC);
+                if (lg != null || sg != null) {
+                    boolean addMzPartialLocationNames = true;
+                    for (int j = 0; j < mzPartialLocIdx; j++) {
+                        if (mzPartialLoc[j][0].equals(mzmap.mzid)) {
+                            // already added
+                            addMzPartialLocationNames = false;
+                            break;
                         }
-                        if (addMzPartialLocationNames) {
-                            String locationPart = null;
-                            // Check if the zone is the preferred zone for the territory associated with the zone
-                            String preferredID = ZoneMeta.getZoneIdByMetazone(mzmap.mzid, countryCode);
-                            if (tzid.equals(preferredID)) {
-                                // Use country for the location
-                                locationPart = country;
-                            } else {
-                                // Use city for the location
-                                locationPart = city;
+                    }
+                    if (addMzPartialLocationNames) {
+                        String locationPart = null;
+                        // Check if the zone is the preferred zone for the territory associated with the zone
+                        String preferredID = ZoneMeta.getZoneIdByMetazone(mzmap.mzid, countryCode);
+                        if (tzid.equals(preferredID)) {
+                            // Use country for the location
+                            locationPart = country;
+                        } else {
+                            // Use city for the location
+                            locationPart = city;
+                        }
+                        mzPartialLoc[mzPartialLocIdx][0] = mzmap.mzid;
+                        mzPartialLoc[mzPartialLocIdx][1] = null;
+                        mzPartialLoc[mzPartialLocIdx][2] = null;
+                        mzPartialLoc[mzPartialLocIdx][3] = null;
+                        if (locationPart != null) {
+                            if (lg != null) {
+                                mzPartialLoc[mzPartialLocIdx][1] = fallbackFmt.format(new Object[] {locationPart, lg});
                             }
-                            mzPartialLoc[mzPartialLocIdx][0] = mzmap.mzid;
-                            mzPartialLoc[mzPartialLocIdx][1] = null;
-                            mzPartialLoc[mzPartialLocIdx][2] = null;
-                            mzPartialLoc[mzPartialLocIdx][3] = null;
-                            if (locationPart != null) {
-                                if (lg != null) {
-                                    mzPartialLoc[mzPartialLocIdx][1] = fallbackFmt.format(new Object[] {locationPart, lg});
-                                }
-                                if (sg != null) {
-                                    mzPartialLoc[mzPartialLocIdx][2] = fallbackFmt.format(new Object[] {locationPart, sg});
-                                    boolean shortMzCommonlyUsed = mzStrings.isShortFormatCommonlyUsed();
-                                    if (shortMzCommonlyUsed) {
-                                        mzPartialLoc[mzPartialLocIdx][3] = "1";
-                                    }
+                            if (sg != null) {
+                                mzPartialLoc[mzPartialLocIdx][2] = fallbackFmt.format(new Object[] {locationPart, sg});
+                                boolean shortMzCommonlyUsed = mzStrings.isShortFormatCommonlyUsed();
+                                if (shortMzCommonlyUsed) {
+                                    mzPartialLoc[mzPartialLocIdx][3] = "1";
                                 }
                             }
-                            mzPartialLocIdx++;
                         }
+                        mzPartialLocIdx++;
                     }
                 }
             }
-            String[][] genericPartialLocationNames = null;
-            if (mzPartialLocIdx != 0) {
-                // metazone generic partial location names are collected
-                genericPartialLocationNames = new String[mzPartialLocIdx][];
-                for (int mzi = 0; mzi < mzPartialLocIdx; mzi++) {
-                    genericPartialLocationNames[mzi] = (String[])mzPartialLoc[mzi].clone();
-                }
+        }
+        String[][] genericPartialLocationNames = null;
+        if (mzPartialLocIdx != 0) {
+            // metazone generic partial location names are collected
+            genericPartialLocationNames = new String[mzPartialLocIdx][];
+            for (int mzi = 0; mzi < mzPartialLocIdx; mzi++) {
+                genericPartialLocationNames[mzi] = (String[])mzPartialLoc[mzi].clone();
             }
-            // Finally, create ZoneStrings instance and put it into the tzidToStinrgs map
-            ZoneStrings zstrings = new ZoneStrings(zstrarray, commonlyUsed, genericPartialLocationNames);
-            tzidToStrings.put(tzid, zstrings);
+        }
+        // Finally, create ZoneStrings instance and put it into the tzidToStinrgs map
+        ZoneStrings zstrings = new ZoneStrings(zstrarray, commonlyUsed, genericPartialLocationNames);
+        tzidToStrings.put(tzid, zstrings);
 
-            // Also add all available names to the zone string trie
-            if (zstrarray != null) {
-                for (int j = 0; j < zstrarray.length; j++) {
-                    if (zstrarray[j] != null) {
-                        int type = getNameType(j);
-                        ZoneStringInfo zsinfo = new ZoneStringInfo(tzid, zstrarray[j], type);
-                        zoneStringsTrie.put(zstrarray[j], zsinfo);
-                    }
+        // Also add all available names to the zone string trie
+        if (zstrarray != null) {
+            for (int j = 0; j < zstrarray.length; j++) {
+                if (zstrarray[j] != null) {
+                    int type = getNameType(j);
+                    ZoneStringInfo zsinfo = new ZoneStringInfo(tzid, zstrarray[j], type);
+                    zoneStringsTrie.put(zstrarray[j], zsinfo);
                 }
             }
-            if (genericPartialLocationNames != null) {
-                for (int j = 0; j < genericPartialLocationNames.length; j++) {
-                    ZoneStringInfo zsinfo;
-                    if (genericPartialLocationNames[j][1] != null) {
-                        zsinfo = new ZoneStringInfo(tzid, genericPartialLocationNames[j][1], GENERIC_LONG);
-                        zoneStringsTrie.put(genericPartialLocationNames[j][1], zsinfo);
-                    }
-                    if (genericPartialLocationNames[j][2] != null) {
-                        zsinfo = new ZoneStringInfo(tzid, genericPartialLocationNames[j][1], GENERIC_SHORT);
-                        zoneStringsTrie.put(genericPartialLocationNames[j][2], zsinfo);
-                    }
+        }
+        if (genericPartialLocationNames != null) {
+            for (int j = 0; j < genericPartialLocationNames.length; j++) {
+                ZoneStringInfo zsinfo;
+                if (genericPartialLocationNames[j][1] != null) {
+                    zsinfo = new ZoneStringInfo(tzid, genericPartialLocationNames[j][1], GENERIC_LONG);
+                    zoneStringsTrie.put(genericPartialLocationNames[j][1], zsinfo);
+                }
+                if (genericPartialLocationNames[j][2] != null) {
+                    zsinfo = new ZoneStringInfo(tzid, genericPartialLocationNames[j][1], GENERIC_SHORT);
+                    zoneStringsTrie.put(genericPartialLocationNames[j][2], zsinfo);
                 }
             }
         }
@@ -462,11 +516,19 @@ public class ZoneStringFormat {
 
     // Region used for resolving a zone in a metazone, initialized by locale
     private transient String region;
-    
+
+    // Loading status
+    private boolean isFullyLoaded = false;
+
     /*
      * Private method to get a zone string except generic partial location types.
      */
     private String getString(String tzid, int typeIdx, long date, boolean commonlyUsedOnly) {
+        if (!isFullyLoaded) {
+            // Lazy loading
+            loadZone(tzid);
+        }
+
         String result = null;
         ZoneStrings zstrings = (ZoneStrings)tzidToStrings.get(tzid);
         if (zstrings == null) {
@@ -544,6 +606,12 @@ public class ZoneStringFormat {
         String result = null;
         TimeZone tz = cal.getTimeZone();
         String tzid = tz.getID();
+
+        if (!isFullyLoaded) {
+            // Lazy loading
+            loadZone(tzid);
+        }
+
         ZoneStrings zstrings = (ZoneStrings)tzidToStrings.get(tzid);
         if (zstrings == null) {
             // ICU's own array does not have entries for aliases
@@ -665,6 +733,11 @@ public class ZoneStringFormat {
      * Private method to get a generic partial location string
      */
     private String getGenericPartialLocationString(String tzid, boolean isShort, long date, boolean commonlyUsedOnly) {
+        if (!isFullyLoaded) {
+            // Lazy loading
+            loadZone(tzid);
+        }
+
         String result = null;
         String mzid = ZoneMeta.getMetazoneID(tzid, date);
         if (mzid != null) {
@@ -687,6 +760,8 @@ public class ZoneStringFormat {
      * short types is not reflected in the result.
      */
     private String[][] getZoneStrings(long date) {
+        loadFull();
+
         Set tzids = tzidToStrings.keySet();
         String[][] zoneStrings = new String[tzids.size()][8];
         int idx = 0;
@@ -911,6 +986,26 @@ public class ZoneStringFormat {
         return region;
     }
 
+    // This method does lazy zone string loading
+    private ZoneStringInfo find(String text, int start, int types) {
+        ZoneStringInfo result = subFind(text, start, types);
+        if (isFullyLoaded) {
+            return result;
+        }
+        // When zone string data is partially loaded,
+        // this method return the result only when
+        // the input text is fully consumed.
+        if (result != null) {
+            int matchLen = result.getString().length();
+            if (text.length() - start == matchLen) {
+                return result;
+            }
+        }
+        // Now load all zone strings
+        loadFull();
+        return subFind(text, start, types);
+    }
+
     /*
      * Find a prefix matching time zone for the given zone string types.
      * @param text The text contains a time zone string
@@ -921,7 +1016,7 @@ public class ZoneStringFormat {
      * the requested types, returns a ZoneStringInfo for the longest match
      * for any other types.  If nothing matches at all, returns null.
      */
-    private ZoneStringInfo find(String text, int start, int types) {
+    private ZoneStringInfo subFind(String text, int start, int types) {
         ZoneStringInfo result = null;
         ZoneStringSearchResultHandler handler = new ZoneStringSearchResultHandler();
         zoneStringsTrie.find(text, start, handler);
@@ -959,6 +1054,8 @@ public class ZoneStringFormat {
         }
         return result;
     }
+
+    
 
     private static class ZoneStringSearchResultHandler implements TextTrieMap.ResultHandler {
 
