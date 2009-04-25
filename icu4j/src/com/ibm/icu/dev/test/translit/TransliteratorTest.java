@@ -130,7 +130,7 @@ public class TransliteratorTest extends TestFmwk {
 
     private void checkRegistry(String id) {
         Transliterator fie = Transliterator.getInstance(id);
-        final UnicodeSet fae = new UnicodeSet("[a-z]");
+        final UnicodeSet fae = new UnicodeSet("[a-z5]");
         fie.setFilter(fae);
         Transliterator foe = Transliterator.getInstance(id);
         UnicodeFilter fee = foe.getFilter();
