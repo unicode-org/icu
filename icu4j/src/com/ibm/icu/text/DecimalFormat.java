@@ -2296,7 +2296,6 @@ public class DecimalFormat extends NumberFormat {
             // strict parsing
             boolean strictParse = isParseStrict();
             boolean strictFail = false; // did we exit with a strict parse failure?
-            boolean leadingZero = false; // did we see a leading zero?
             int lastGroup = -1; // where did we last see a grouping separator?
             int gs2 = groupingSize2 == 0 ? groupingSize : groupingSize2;
 
@@ -2368,7 +2367,6 @@ public class DecimalFormat extends NumberFormat {
                             if (strictParse && !isExponent) {
                                 // Allow leading zeros in exponents
                                 // Count leading zeros for checking later
-                                leadingZero = true;
                                 if (!strictLeadingZero) leadingZeroPos = position + 1;
                                 strictLeadingZero = true;
                                 ++leadingZeroCount;                                
@@ -2422,7 +2420,6 @@ public class DecimalFormat extends NumberFormat {
                     if (isParseIntegerOnly() || sawDecimal) break;
                     digits.decimalAt = digitCount; // Not digits.count!
                     sawDecimal = true;
-                    leadingZero = false; // a single leading zero before a decimal is ok
                     
                     // Once we see a decimal character, we only accept that decimal character from then on.
                     decimalSet.set(ch,ch);
