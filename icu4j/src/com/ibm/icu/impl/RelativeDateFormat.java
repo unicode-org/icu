@@ -85,33 +85,37 @@ public class RelativeDateFormat extends DateFormat {
     public StringBuffer format(Calendar cal, StringBuffer toAppendTo,
             FieldPosition fieldPosition) {
 
-        //TODO: handle FieldPosition properly
-
         String dayString = null;
-        String timeString = null;
         if (fDateStyle != DateFormat.NONE) {
             // calculate the difference, in days, between 'cal' and now.
             int dayDiff = dayDifference(cal);
 
             // look up string
             dayString = getStringForDay(dayDiff);
-
-            if (dayString == null) {
-                // didn't find it. Fall through to the fDateFormat 
-                dayString = fDateFormat.format(cal);
+        }
+        if (fTimeStyle == DateFormat.NONE) {
+            if (dayString != null) {
+                toAppendTo.append(dayString);
+            } else if (fDateStyle != DateFormat.NONE) {
+                fDateFormat.format(cal, toAppendTo, fieldPosition);
             }
-        }
-        if (fTimeStyle != DateFormat.NONE) {
-            timeString = fTimeFormat.format(cal);
-        }
-
-        if (dayString != null && timeString != null) {
-            return fCombinedFormat.format(new Object[] {dayString, timeString}, toAppendTo,
-                    new FieldPosition(0));
-        } else if (dayString != null) {
-            toAppendTo.append(dayString);
-        } else if (timeString != null) {
-            toAppendTo.append(timeString);
+        } else {
+            if (dayString == null && fDateStyle != DateFormat.NONE) {
+                dayString = fDateFormat.format(cal, new StringBuffer(), fieldPosition).toString();
+            }
+            FieldPosition timePos = new FieldPosition(fieldPosition.getField());
+            String timeString = fTimeFormat.format(cal, new StringBuffer(), timePos).toString();
+            fCombinedFormat.format(new Object[] {dayString, timeString}, toAppendTo, new FieldPosition(0));
+            int offset;
+            if (fieldPosition.getEndIndex() > 0 && (offset = toAppendTo.toString().indexOf(dayString)) >= 0 ) {
+                // fieldPosition.getField() was found in dayString, offset start & end based on final position of dayString
+                fieldPosition.setBeginIndex( fieldPosition.getBeginIndex() + offset );
+                fieldPosition.setEndIndex( fieldPosition.getEndIndex() + offset );
+            } else if (timePos.getEndIndex() > 0 && (offset = toAppendTo.toString().indexOf(timeString)) >= 0) {
+                // fieldPosition.getField() was found in timeString, offset start & end based on final position of timeString
+                fieldPosition.setBeginIndex( timePos.getBeginIndex() + offset );
+                fieldPosition.setEndIndex( timePos.getEndIndex() + offset );
+            }
         }
         return toAppendTo;
     }

@@ -3539,4 +3539,60 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
+
+    // based on TestRelativeDateFormat() in icu/trunk/source/test/cintltst/cdattst.c
+    public void TestRelativeDateFormat() {
+        ULocale loc = ULocale.US;
+        TimeZone tz = TimeZone.getTimeZone("America/Los_Angeles");
+        Calendar cal = new GregorianCalendar(tz, loc);
+        Date now = new Date();
+        cal.setTime(now);
+        cal.set(Calendar.HOUR_OF_DAY, 18);
+        cal.set(Calendar.MINUTE, 49);
+        cal.set(Calendar.SECOND, 0);
+        Date today = cal.getTime();
+        String minutesStr = "49"; // minutes string to search for in formatted result
+        int[] dateStylesList = { DateFormat.RELATIVE_FULL, DateFormat.RELATIVE_LONG, DateFormat.RELATIVE_MEDIUM, DateFormat.RELATIVE_SHORT };
+
+        for (int i = 0; i < dateStylesList.length; i++) {
+            int dateStyle = dateStylesList[i];
+            DateFormat fmtRelDateTime = DateFormat.getDateTimeInstance(dateStyle, DateFormat.SHORT, loc);
+            DateFormat fmtRelDate = DateFormat.getDateInstance(dateStyle, loc);
+            DateFormat fmtTime = DateFormat.getTimeInstance(DateFormat.SHORT, loc);
+
+            for (int dayOffset = -2; dayOffset <= 2; dayOffset++ ) {
+                StringBuffer dateTimeStr = new StringBuffer(64);
+                StringBuffer dateStr = new StringBuffer(64);
+                StringBuffer timeStr = new StringBuffer(64);
+                FieldPosition fp = new FieldPosition(DateFormat.MINUTE_FIELD);
+                cal.setTime(today);
+                cal.add(Calendar.DATE, dayOffset);
+
+                fmtRelDateTime.format(cal, dateTimeStr, fp);
+                fmtRelDate.format(cal, dateStr, new FieldPosition(0) );
+                fmtTime.format(cal, timeStr, new FieldPosition(0) );
+
+                // check that dateStr is in dateTimeStr
+                if ( dateTimeStr.toString().indexOf( dateStr.toString() ) < 0 ) {
+                    errln("relative date string not found in datetime format with timeStyle SHORT, dateStyle " +
+                            dateStyle + " for dayOffset " + dayOffset );
+                    errln("datetime format is " + dateTimeStr.toString() + ", date string is " + dateStr.toString() );
+                }
+                // check that timeStr is in dateTimeStr
+                if ( dateTimeStr.toString().indexOf( timeStr.toString() ) < 0 ) {
+                    errln("short time string not found in datetime format with timeStyle SHORT, dateStyle " +
+                            dateStyle + " for dayOffset " + dayOffset );
+                    errln("datetime format is " + dateTimeStr.toString() + ", time string is " + timeStr.toString() );
+                }
+                // check index of minutesStr
+                int minutesStrIndex = dateTimeStr.toString().indexOf( minutesStr );
+                if ( fp.getBeginIndex() != minutesStrIndex ) {
+                    errln("FieldPosition beginIndex " + fp.getBeginIndex() + " instead of " + minutesStrIndex + " for datetime format with timeStyle SHORT, dateStyle " +
+                            dateStyle + " for dayOffset " + dayOffset );
+                    errln("datetime format is " + dateTimeStr.toString() );
+                }
+            }
+        }
+    }
+
 }
