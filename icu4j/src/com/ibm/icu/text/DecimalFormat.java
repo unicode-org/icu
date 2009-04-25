@@ -2299,6 +2299,12 @@ public class DecimalFormat extends NumberFormat {
             boolean leadingZero = false; // did we see a leading zero?
             int lastGroup = -1; // where did we last see a grouping separator?
             int gs2 = groupingSize2 == 0 ? groupingSize : groupingSize2;
+
+            // Strict parsing leading zeroes.  If a leading zero would
+            // be forced by the pattern, then don't fail strict parsing.
+            boolean strictLeadingZero = false;
+            int leadingZeroPos   = 0;
+            int leadingZeroCount = 0;
             
             // equivalent grouping and decimal support
             
@@ -2361,11 +2367,11 @@ public class DecimalFormat extends NumberFormat {
                         if (!sawDecimal) {
                             if (strictParse && !isExponent) {
                                 // Allow leading zeros in exponents
-                                if (leadingZero) {
-                                    strictFail = true;
-                                    break;
-                                }
+                                // Count leading zeros for checking later
                                 leadingZero = true;
+                                if (!strictLeadingZero) leadingZeroPos = position + 1;
+                                strictLeadingZero = true;
+                                ++leadingZeroCount;                                
                             }
                             // Ignore leading zeros in integer part of number.
                             continue;
@@ -2385,11 +2391,6 @@ public class DecimalFormat extends NumberFormat {
                 else if (digit > 0 && digit <= 9) // [sic] digit==0 handled above
                 {
                     if (strictParse) {
-                        if (leadingZero) {
-                            // a leading zero before a digit is an error with strict parsing
-                            strictFail = true;
-                            break;
-                        }
                         if (backup != -1) {
                             if ((lastGroup != -1 && backup - lastGroup - 1 != gs2) ||
                                 (lastGroup == -1 && position - oldStart - 1 > gs2)) {
@@ -2521,6 +2522,17 @@ public class DecimalFormat extends NumberFormat {
 
             if (backup != -1) position = backup;
 
+            // If there was no decimal point we have an integer
+            if (!sawDecimal) digits.decimalAt = digitCount; // Not digits.count!            
+            
+            // check for strict parse errors
+            if (strictParse && strictLeadingZero) {
+                if ((leadingZeroCount + digits.decimalAt) > this.getMinimumIntegerDigits()) {
+                    parsePosition.setIndex(oldStart);
+                    parsePosition.setErrorIndex(leadingZeroPos);
+                    return false;
+                }
+            }
             if (strictParse && !sawDecimal) {
                 if (lastGroup != -1 && position - lastGroup != groupingSize + 1) {
                     strictFail = true;
@@ -2536,9 +2548,6 @@ public class DecimalFormat extends NumberFormat {
                 parsePosition.setErrorIndex(position);
                 return false;
             }
-
-            // If there was no decimal point we have an integer
-            if (!sawDecimal) digits.decimalAt = digitCount; // Not digits.count!
 
             // Adjust for exponent, if any
             exponent += digits.decimalAt;
