@@ -1,3 +1,4 @@
+//##header
 /**
  *******************************************************************************
  * Copyright (C) 2000-2009, International Business Machines Corporation and    *
@@ -174,11 +175,15 @@ public class RoundTripTest extends TestFmwk {
     private void assertRoundTripTransform(String message, String source, Transliterator lh, Transliterator hl) {
         String to = hl.transform(source);
         String back = lh.transform(to);
+//#if defined(FOUNDATION10) || defined(J2SE13)
+//##    // No regular expression support in Java 1.3
+//#else
         if (!source.equals(back)) {
             String to2 = hl.transform(source.replaceAll("(.)", "$1 ").trim());
             String to3 = hl.transform(back.replaceAll("(.)", "$1 ").trim());
             assertEquals(message + " " + source + " [" + to + "/"+ to2 + "/"+ to3 + "]", source, back);
         }
+//#endif
     }
 
     public static UnicodeSet getRepresentativeHangul() {
