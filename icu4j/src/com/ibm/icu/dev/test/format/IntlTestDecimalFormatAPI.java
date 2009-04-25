@@ -389,6 +389,7 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
             numstr = df.format(5);        
             try {
                 Number n = df.parse(numstr);
+                logln("INFO: Parsed " + numstr + " -> " + n);
             } catch (ParseException pe) {
                 errln("ERROR: Failed round trip with strict parsing.");
             }           
@@ -398,8 +399,10 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
         numstr = "005";        
         try {
             Number n = df.parse(numstr);
-            errln("ERROR: Expected round trip failure not encountered");
-        } catch (ParseException pe) { }  
+            errln("ERROR: Expected round trip failure not encountered: numstr -> " + n);
+        } catch (ParseException pe) {
+            logln("INFO: Expected ParseExpection for " + numstr + " with strick parse enabled");
+        }  
         
     }
 }
