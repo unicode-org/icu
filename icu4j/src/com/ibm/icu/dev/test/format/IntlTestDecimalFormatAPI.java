@@ -24,6 +24,8 @@ import java.util.Locale;
 import java.text.ParsePosition;
 import java.text.Format;
 import java.text.FieldPosition;
+import java.text.ParseException;
+import com.ibm.icu.text.DecimalFormat;
 
 public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
 {
@@ -364,5 +366,40 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
                 errln("ERROR: Rounding increment did not change");
             }
         }
+    }
+    
+    public void testJB6648()
+    {
+        DecimalFormat df = new DecimalFormat();
+        df.setParseStrict(true);
+        
+        String numstr = new String();
+        
+        String[] patterns = {
+            "0",
+            "00",
+            "000",
+            "0,000",
+            "0.0",
+            "#000.0"          
+        };
+        
+        for(int i=0; i < patterns.length; i++) {
+            df.applyPattern(patterns[i]);
+            numstr = df.format(5);        
+            try {
+                Number n = df.parse(numstr);
+            } catch (ParseException pe) {
+                errln("ERROR: Failed round trip with strict parsing.");
+            }           
+        }
+        
+        df.applyPattern(patterns[1]);
+        numstr = "005";        
+        try {
+            Number n = df.parse(numstr);
+            errln("ERROR: Expected round trip failure not encountered");
+        } catch (ParseException pe) { }  
+        
     }
 }
