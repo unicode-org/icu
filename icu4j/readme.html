@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="Content-Style-Type" content="text/css2">
   <title>ReadMe for ICU4J</title>
-  <meta name="COPYRIGHT" content="Copyright 2000-2008, International Business Machines Corporation and others. All Rights Reserved.">
+  <meta name="COPYRIGHT" content="Copyright 2000-2009, International Business Machines Corporation and others. All Rights Reserved.">
   <style type="text/css">
 h3.doc { background: #CCCCFF }
   </style>
@@ -12,10 +12,10 @@ h3.doc { background: #CCCCFF }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 4.0</h3>
+<h3>Read Me for ICU4J 4.2d01</h3>
 <hr size="2" width="100%">
 <p><b>Release Date</b><br>
-July 2, 2008<br>
+April 27, 2009<br>
 </p>
 <!-- <p><b>Note:</b> This is major release of ICU4J.  It contains bug fixes
 and adds implementations of inherited API and introduces new API
@@ -131,24 +131,10 @@ current and complete version is always found in ICU4J.</p>
 </blockquote>
 
 <h3 class="doc"><a name="news"></a>What Is New In This Release?</h3>
-
-<p><b>Status of ICU4J charset converter</b></p>
-<p>The ICU4J implementation of java.nio.charset.Charset was included in ICU4J 3.8 as
-a Technology Preview.  In this release, all functionality from the java.nio.Charset
-interfaces is operational and promoted to the draft status.
-</p>
-
-<p><b>ICU4J Locale Service Provider</b></p>
-<p>The ICU4J implementation of Java SE 6 locale sensitive service provider
-insterfaces (java.util.spi.LocaleServiceProvider subclasses) is newly added
-in this release as a Technology Preview.  Please refer to the
-<a href="localespi/readme.html">Read Me for ICU4J Locale Service Provider</a>
-for more details.
-</p>
-
+TBD
 <p><b>New features</b></p>
 <p>
-See the <a href="http://www.icu-project.org/download/">ICU 4.0 download page</a> about other
+See the <a href="http://www.icu-project.org/download/">ICU 4.2 download page</a> about other
 new features in this release.
 </p>
 <h3 class="doc"><a name="license"></a>License Information</h3>
@@ -178,12 +164,13 @@ package.
 </p>
 <h3 class="doc"><a name="PlatformDependencies"></a>Platform Dependencies</h3>
 <p> By default ICU4J depends on functionality available
-in J2SE 1.4 or later releases.  Some new ICU4J features support types
-introduced in J2SE 5, you can still use the same ICU4J binaries on JRE
-1.4.  We provide the ability to build a variant of ICU4J that will run
-on JRE 1.3, but not all build targets work on that platform. Currently
-1.1.x and 1.2.x JREs are unsupported and untested, and you use the
-components on these JREs at your own risk.
+in J2SE 5 or later releases.  The binary distribution of ICU4J
+jar file may have a problem with older JRE versions.
+We provide the ability to build a variant of ICU4J for JRE 1.3
+or 1.4.  If you want to use ICU4J running on JRE 1.4, you should
+build ICU4J libraries from the source package with JDK 1.4.
+With older JDK releases, some build targets may not work.
+
 <p>The table below shows operating systems and JRE/JDK versions currently
 used by the ICU development team.
 </p>
@@ -224,8 +211,8 @@ used by the ICU development team.
   <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#CCCCFF"><em><b>Reference platform</b></em></td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
 </tr>
 <tr>
@@ -275,8 +262,8 @@ used by the ICU development team.
 </tr>
 <tr bgcolor="#FFFFFF">
   <th>Solaris 10 (SPARC)</th>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#CCCCFF"><em><b>Reference platform</b></em></td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
   <td align="center" bgcolor="#FFFFFF">-</td>
@@ -296,12 +283,12 @@ used by the ICU development team.
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#CCCCFF"><em><b>Reference platform</b></em></td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
 </tr>
 <tr>
-  <th bgcolor="#FFFFFF">Windows 2003 Server</th>
+  <th bgcolor="#FFFFFF">Windows 2008 Server</th>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Rarely tested</td>
@@ -585,20 +572,21 @@ It's recommended to install both the J2SE SDK and Ant somewhere <em>outside</em>
 the ICU4J directory. For example, on Linux you might install these in
 /usr/local.</p>
 <ul>
-  <li>Install J2SE SDK 5.0.  (You can use any version of J2SE SDK 1.4 or newer,
-  but for J2SE SDK 5.0 is required to enable the all available ICU4J features.)</li>
+  <li>Install J2SE SDK 6.0.  (You can use any version of J2SE SDK 1.3 or newer,
+  but but J2SE SDK 5.0 is the minimum version required to enable the all
+  available ICU4J features.)</li>
   <li>Install the <a href="http://ant.apache.org/"><strong>Ant</strong></a>
-build system. Ant is a portable, Java-based build system similar to
-make. ICU4J uses Ant because it introduces no other dependencies, it's
-portable, and it's easier to manage than a collection of makefiles. We
-currently build ICU4J using a single makefile on all platforms Ant.
-The build system requires Ant 1.6 or later.
+  build system. Ant is a portable, Java-based build system similar to
+  make. ICU4J uses Ant because it introduces no other dependencies, it's
+  portable, and it's easier to manage than a collection of makefiles. We
+  currently build ICU4J using a single makefile on all platforms Ant.
+  The build system requires Ant 1.6 or later.
     <p>Installing Ant is straightforward. Download it (see <a
  href="http://ant.apache.org/bindownload.cgi">http://ant.apache.org/bindownload.cgi</a>),
 extract it onto your system, set some environment variables, and add
 its bin directory to your path. For example: </p>
     <pre>
-        set JAVA_HOME=C:\jdk1.5.0
+        set JAVA_HOME=C:\jdk1.6.0
         set ANT_HOME=C:\ant
         set PATH=%PATH%;%ANT_HOME%\bin</pre>
     <p>See the current Ant documentation for details.</p>
@@ -621,14 +609,14 @@ warnAntVersion:
 
 initBase:
     [mkdir] Created dir: C:\icu4j\classes
-     [echo] java home: C:\jdk1.5.0
-     [echo] java version: 1.5.0
-     [echo] ant java version: 1.5
+     [echo] java home: C:\jdk1.6.0
+     [echo] java version: 1.6.0
+     [echo] ant java version: 1.6
      [echo] Apache Ant version 1.7.0 compiled on December 13 2006
-     [echo] ICU4JDEV with Windows XP 5.1 build 2600 Service Pack 2 on x86
+     [echo] ICU4JDEV with Windows XP 5.1 build 2600 Service Pack 3 on x86
      [echo] clover initstring = '${clover.initstring}'
-     [echo] target runtime environment: J2SE15
-     [echo] Initialized at 2007-08-30 at 04:14:09 EDT
+     [echo] target runtime environment: JAVASE6
+     [echo] Initialized at 2009-04-25 at 05:25:03 EDT
 
 buildMangle:
     [javac] Compiling 1 source file to C:\icu4j\classes
@@ -638,29 +626,30 @@ initSrc:
 displayBuildEnvWarning:
 
 doMangle:
-     [echo] Running source code preprocessor for [J2SE15]
+     [echo] Running source code preprocessor [java com.ibm.icu.dev.tool.docs.Cod
+eMangler -dJAVASE6 -n @preprocessor.txt]
 
 init:
 
 coreData:
-     [copy] Copying 1 file to C:\icu4j\classes\com\ibm\icu\impl\data
+     [copy] Copying 1 file to C:\icu4j\classes\com\ibm\icu
 
 icudata:
-    [unjar] Expanding: C:\icu4j\src\com\ibm\icu\impl\data\icudata.jar into C:\ic
-u4j\classes
+    [unjar] Expanding: F:\DEV\trunk\src\com\ibm\icu\impl\data\icudata.jar into c
+:\icu4j\classes
      [copy] Copying 1 file to C:\icu4j\classes\META-INF
 
 durationdata:
-     [copy] Copying 16 files to C:\icu4j\classes\com\ibm\icu\impl\duration\impl\
-data
+     [copy] Copying 16 files to C:\icu4j\classes\com\ibm\icu\impl\duration\i
+mpl\data
 
 core:
-    [javac] Compiling 317 source files to C:\icu4j\classes
-    [javac] Note: * uses or overrides a deprecated API.
+    [javac] Compiling 351 source files to C:\icu4j\classes
+    [javac] Note: Some input files use or override a deprecated API.
     [javac] Note: Recompile with -Xlint:deprecation for details.
 
 BUILD SUCCESSFUL
-Total time: 10 seconds</pre>
+Total time: 44 seconds</pre>
 </blockquote>
 <I>Note: The above output is an example. The numbers are likely to be different with the current version ICU4J.</I>
 <p>The following are some targets that you can provide to <b>ant</b>.
@@ -959,10 +948,10 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 <ol>
     <li>Checkout CLDR.  $cldr_root in the following steps is the root directory where
     the CLDR source files checked out.</li>
-    <li>Update <I>$cldr_root</I>/common to 'release-1-6-0' tag</li>
-    <li>Update <I>$cldr_root</I>/tools to 'release-1-6-0' tag</li>
-    <li>Checkout ICU4C with tag 'release-4-0'</li>
-    <li>Checkout ICU4J with tag 'release-4-0'</li>
+    <li>Update <I>$cldr_root</I>/common to 'release-1-7-0' tag</li>
+    <li>Update <I>$cldr_root</I>/tools to 'release-1-7-0' tag</li>
+    <li>Checkout ICU4C with tag 'release-4-2'</li>
+    <li>Checkout ICU4J with tag 'release-4-2'</li>
     <li>Build ICU4J</li>
     <li>Build ICU4C</li>
     <li>Change to <I>$cldr_root</I>/tools/java directory</li>
@@ -976,7 +965,7 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 </ol>
 
 <h3 class="doc"><a name="timezone"></a>About ICU4J Time Zone</h3>
-<p>ICU4J 4.0 includes time zone data version 2008c, which is the latest one as of
+<p>ICU4J 4.2d01 includes time zone data version 2009f, which is the latest one as of
 the release date.  However, time zone data is frequently updated in response
 to changes made by local governments around the world.  If you need to update
 the time zone data, please refer the ICU user guide topic
