@@ -6,8 +6,6 @@
  */
 package com.ibm.icu.dev.test.translit;
 
-import java.util.BitSet;
-
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.Transliterator;
