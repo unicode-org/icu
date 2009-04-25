@@ -889,9 +889,8 @@ public class RbnfTest extends TestFmwk {
         String[] parseLocales = {"en_US", "nl_NL", "be"};
 
         //TODO: Remove this when #6870 is resolved
-        // "ar", "mt", "th", "zh" triggers stack overflow error
-        // "sq_AL" - Unparseable number
-        String[] parseExclusionLangs = {"ar", "mt", "th", "zh", "sq"};
+        // "ga", "th", "sq" triggers a fatal error
+        String[] parseExclusionLangs = {"ga", "th", "sq"};
 
         for (int i = 0; i < locales.length; ++i) {
             ULocale loc = locales[i];
@@ -922,6 +921,7 @@ public class RbnfTest extends TestFmwk {
                     }
                     //TODO: end
                     if (testParse) {
+System.out.println(loc);
                         // We do not validate the result in this test case,
                         // because there are cases which do not round trip by design.
 
