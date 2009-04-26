@@ -1316,6 +1316,7 @@
       <include name="com/ibm/icu/dev/test/translit/**/*.java"/>
       <exclude name="com/ibm/icu/dev/test/translit/UnicodeFilterLogic*.java"/>
     </javac>
+    <copy file="${src.dir}/com/ibm/icu/dev/test/translit/langtagRegex.txt" todir="${build.dir}/com/ibm/icu/dev/test/translit" />
   </target>
 
   <!-- Module: StringPrep, IDNA -->
