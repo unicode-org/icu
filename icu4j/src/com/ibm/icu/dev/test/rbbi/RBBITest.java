@@ -593,7 +593,7 @@ public class RBBITest extends TestFmwk
                 return true;
             }
             private String formatOffsets(int[] offsets, int length) {
-                StringBuilder buildString = new StringBuilder(4*maxOffsetCount);
+                StringBuffer buildString = new StringBuffer(4*maxOffsetCount);
                 for (int i = 0; i < length; i++) {
                     buildString.append(" " + offsets[i]);
                 }
