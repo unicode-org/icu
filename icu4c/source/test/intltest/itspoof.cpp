@@ -73,6 +73,12 @@ void IntlTestSpoof::runIndexedTest( int32_t index, UBool exec, const char* &name
                 testAreConfusable();
             }
             break;
+          case 3:
+            name = "TestInvisible";
+            if (exec) {
+                testInvisible();
+            }
+            break;
         default: name=""; break;
     }
 }
@@ -206,7 +212,6 @@ void IntlTestSpoof::checkSkeleton(const USpoofChecker *sc, uint32_t type,
 }
 
 void IntlTestSpoof::testAreConfusable() {
-    UErrorCode status = U_ZERO_ERROR;
     TEST_SETUP
         UnicodeString s1("A long string that will overflow stack buffers.  A long string that will overflow stack buffers. "
                          "A long string that will overflow stack buffers.  A long string that will overflow stack buffers. ");
@@ -218,5 +223,27 @@ void IntlTestSpoof::testAreConfusable() {
     TEST_TEARDOWN;
 }
 
+void IntlTestSpoof::testInvisible() {
+    TEST_SETUP
+        UnicodeString  s = UnicodeString("abcd\\u0301ef").unescape();
+        int32_t position = -42;
+        TEST_ASSERT_EQ(0, uspoof_checkUnicodeString(sc, s, &position, &status));
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT(position == -42);
+
+        UnicodeString  s2 = UnicodeString("abcd\\u0301\\u0302\\u0301ef").unescape();
+        TEST_ASSERT_EQ(USPOOF_INVISIBLE, uspoof_checkUnicodeString(sc, s2, &position, &status));
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(7, position);
+
+        // Tow acute accents, one from the composed a with acute accent, \u00e1,
+        // and one separate.
+        position = -42;
+        UnicodeString  s3 = UnicodeString("abcd\\u00e1\\u0301xyz").unescape();
+        TEST_ASSERT_EQ(USPOOF_INVISIBLE, uspoof_checkUnicodeString(sc, s3, &position, &status));
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_EQ(7, position);
+    TEST_TEARDOWN;
+}
 
 #endif /* #if !UCONFIG_NO_SPOOF_DETECT*/
