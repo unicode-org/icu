@@ -234,48 +234,89 @@ uspoof_check(const USpoofChecker *sc,
         }
     }
 
-    // TODO:  add USPOOF_INVISIBLE check
-    
-    if (This->fChecks & (USPOOF_WHOLE_SCRIPT_CONFUSABLE | USPOOF_MIXED_SCRIPT_CONFUSABLE)) {
-        // The basic test is the same for both whole and mixed script confusables.
-        // Compute the set of scripts that every input character has a confusable in.
-        // For this computation an input character is always considered to be
-        //    confusable with itself in its own script.
-        // If the number of such scripts is two or more, and the input consisted of
-        //   characters all from a single script, we have a whole script confusable.
-        //   (The two scripts will be the original script and the one that is confusable)
-        // If the number of such scripts >= one, and the original input contained characters from
-        //   more than one script, we have a mixed script confusable.  (We can transform
-        //   some of the characters, and end up with a visually similar string all in
-        //   one script.)
-
+    if (This->fChecks & 
+        (USPOOF_WHOLE_SCRIPT_CONFUSABLE | USPOOF_MIXED_SCRIPT_CONFUSABLE | USPOOF_INVISIBLE)) {
+        // These are the checks that need to be done on NFKD input
         NFKDBuffer   normalizedInput(text, length, *status);
         const UChar  *nfkdText = normalizedInput.getBuffer();
         int32_t      nfkdLength = normalizedInput.getLength();
 
-        if (scriptCount == -1) {
-            int32_t t;
-            scriptCount = This->scriptScan(text, length, t, *status);
+        if (This->fChecks & USPOOF_INVISIBLE) {
+           
+            // scan for more than one occurence of the same non-spacing mark
+            // in a sequence of non-spacing marks.
+            int32_t     i;
+            UChar32     c;
+            UChar32     firstNonspacingMark = 0;
+            UBool       haveMultipleMarks = FALSE;  
+            UnicodeSet  marksSeenSoFar;   // Set of combining marks in a single combining sequence.
+            
+            for (i=0; i<length ;) {
+                U16_NEXT(nfkdText, i, nfkdLength, c);
+                if (u_charType(c) != U_NON_SPACING_MARK) {
+                    firstNonspacingMark = 0;
+                    if (haveMultipleMarks) {
+                        marksSeenSoFar.clear();
+                        haveMultipleMarks = FALSE;
+                    }
+                    continue;
+                }
+                if (firstNonspacingMark == 0) {
+                    firstNonspacingMark = c;
+                    continue;
+                }
+                if (!haveMultipleMarks) {
+                    marksSeenSoFar.add(firstNonspacingMark);
+                    haveMultipleMarks = TRUE;
+                }
+                if (marksSeenSoFar.contains(c)) {
+                    // report the error, and stop scanning.
+                    // No need to find more than the first failure.
+                    result |= USPOOF_INVISIBLE;
+                    failPos = i;
+                    break;
+                }
+                marksSeenSoFar.add(c);
+            }
         }
+       
         
-        ScriptSet scripts;
-        This->wholeScriptCheck(nfkdText, nfkdLength, &scripts, *status);
-        int32_t confusableScriptCount = scripts.countMembers();
-        //printf("confusableScriptCount = %d\n", confusableScriptCount);
+        if (This->fChecks & (USPOOF_WHOLE_SCRIPT_CONFUSABLE | USPOOF_MIXED_SCRIPT_CONFUSABLE)) {
+            // The basic test is the same for both whole and mixed script confusables.
+            // Compute the set of scripts that every input character has a confusable in.
+            // For this computation an input character is always considered to be
+            //    confusable with itself in its own script.
+            // If the number of such scripts is two or more, and the input consisted of
+            //   characters all from a single script, we have a whole script confusable.
+            //   (The two scripts will be the original script and the one that is confusable)
+            // If the number of such scripts >= one, and the original input contained characters from
+            //   more than one script, we have a mixed script confusable.  (We can transform
+            //   some of the characters, and end up with a visually similar string all in
+            //   one script.)
+
+            if (scriptCount == -1) {
+                int32_t t;
+                scriptCount = This->scriptScan(text, length, t, *status);
+            }
+            
+            ScriptSet scripts;
+            This->wholeScriptCheck(nfkdText, nfkdLength, &scripts, *status);
+            int32_t confusableScriptCount = scripts.countMembers();
+            //printf("confusableScriptCount = %d\n", confusableScriptCount);
+            
+            if ((This->fChecks & USPOOF_WHOLE_SCRIPT_CONFUSABLE) &&
+                confusableScriptCount >= 2 &&
+                scriptCount == 1) {
+                result |= USPOOF_WHOLE_SCRIPT_CONFUSABLE;
+            }
         
-        if ((This->fChecks & USPOOF_WHOLE_SCRIPT_CONFUSABLE) &&
-            confusableScriptCount >= 2 &&
-            scriptCount == 1) {
-            result |= USPOOF_WHOLE_SCRIPT_CONFUSABLE;
-        }
-    
-        if ((This->fChecks & USPOOF_MIXED_SCRIPT_CONFUSABLE) &&
-            confusableScriptCount >= 1 &&
-            scriptCount > 1) {
-            result |= USPOOF_MIXED_SCRIPT_CONFUSABLE;
+            if ((This->fChecks & USPOOF_MIXED_SCRIPT_CONFUSABLE) &&
+                confusableScriptCount >= 1 &&
+                scriptCount > 1) {
+                result |= USPOOF_MIXED_SCRIPT_CONFUSABLE;
+            }
         }
     }
-
     if (position != NULL && failPos != 0x7fffffff) {
         *position = failPos;
     }
