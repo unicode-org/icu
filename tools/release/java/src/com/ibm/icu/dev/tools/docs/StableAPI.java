@@ -342,7 +342,59 @@ public class StableAPI {
                 prototype = prototype.replaceAll(s,"");
                 prototype = prototype.trim();
             }
+            
             prototype = prototype.trim();
+
+            // Now, remove parameter names!
+            StringBuffer out = new StringBuffer();
+            StringBuffer in = new StringBuffer(prototype);
+            int openParen = in.indexOf("(");
+            int closeParen = in.lastIndexOf(")");
+            
+            if(openParen==-1 || closeParen==-1) return; // exit, malformed?
+            if(openParen+1==closeParen) return; // exit: ()
+            
+            out.append(in, 0, openParen+1); // prelude
+                        
+            for(int left = openParen+1; left<closeParen;) {
+            	int right = in.indexOf(",", left+1); // right edge
+            	if(right>=closeParen || right==-1 )  right=closeParen; // found last comma
+            	
+            //	System.err.println("Considering  " + left + " / " + right + " - " + closeParen +  " : "  + in.substring(left, right));
+            	
+            	if(left==right) continue; 
+            	
+            	// find variable name
+            	int rightCh = right-1;
+            	if(rightCh==left) { // 1 ch- break
+            		out.append(in,left,right);
+            		continue;
+            	}
+            	// eat whitespace at right
+            	int nameEndCh = rightCh;
+            	while(nameEndCh>left && Character.isWhitespace(in.charAt(nameEndCh))) {
+            		nameEndCh--;
+            	}
+            	int nameStartCh = nameEndCh;
+            	while(nameStartCh>left && Character.isJavaIdentifierPart(in.charAt(nameStartCh))) {
+            		nameStartCh--;
+            	}
+            	
+            	// now, did we find something to skip?
+            	if(nameStartCh>left && nameEndCh>nameStartCh) {
+            		out.append(in, left, nameStartCh+1);
+            	} else {
+            		// pass through
+            		out.append(in, left, right);
+            	}
+            	
+            	left = right;
+            }
+            
+            out.append(in, closeParen, in.length()); // postlude
+            
+          //  System.err.println(prototype+" -> " + out.toString());
+            prototype = out.toString();
         }
 //        private Element toXml(Document doc){
 //            Element  ele = doc.createElement("func");
