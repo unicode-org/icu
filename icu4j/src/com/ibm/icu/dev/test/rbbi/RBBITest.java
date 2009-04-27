@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -568,4 +568,114 @@ public class RBBITest extends TestFmwk
        }
    }
   
+    public void TestTailoredBreaks() {
+        class TBItem {
+            private int     type;
+            private ULocale locale;
+            private String  text;
+            private int[]   expectOffsets;
+            TBItem(int typ, ULocale loc, String txt, int[] eOffs) {
+                type          = typ;
+                locale        = loc;
+                text          = txt;
+                expectOffsets = eOffs;
+            }
+            private static final int maxOffsetCount = 128;
+            private boolean offsetsMatchExpected(int[] foundOffsets, int foundOffsetsLength) {
+                if ( foundOffsetsLength != expectOffsets.length ) {
+                    return false;
+                }
+                for (int i = 0; i < foundOffsetsLength; i++) {
+                    if ( foundOffsets[i] != expectOffsets[i] ) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            private String formatOffsets(int[] offsets, int length) {
+                StringBuilder buildString = new StringBuilder(4*maxOffsetCount);
+                for (int i = 0; i < length; i++) {
+                    buildString.append(" " + offsets[i]);
+                }
+                return buildString.toString();
+            }
+            public void doTest() {
+                BreakIterator brkIter;
+                switch( type ) {
+                    case BreakIterator.KIND_CHARACTER: brkIter = BreakIterator.getCharacterInstance(locale); break;
+                    case BreakIterator.KIND_WORD:      brkIter = BreakIterator.getWordInstance(locale); break;
+                    case BreakIterator.KIND_LINE:      brkIter = BreakIterator.getLineInstance(locale); break;
+                    case BreakIterator.KIND_SENTENCE:  brkIter = BreakIterator.getSentenceInstance(locale); break;
+                    default: errln("Unsupported break iterator type " + type); return;
+                }
+                brkIter.setText(text);
+                int[] foundOffsets = new int[maxOffsetCount];
+                int offset, foundOffsetsCount = 0;
+                // do forwards iteration test
+                while ( foundOffsetsCount < maxOffsetCount && (offset = brkIter.next()) != BreakIterator.DONE ) {
+                    foundOffsets[foundOffsetsCount++] = offset;
+                }
+                if ( !offsetsMatchExpected(foundOffsets, foundOffsetsCount) ) {
+                    // log error for forwards test
+                    String textToDisplay = (text.length() <= 16)? text: text.substring(0,16);
+                    errln("For type " + type + " " + locale + ", text \"" + textToDisplay + "...\"" +
+                            "; expect " + expectOffsets.length + " offsets:" + formatOffsets(expectOffsets, expectOffsets.length) +
+                            "; found " + foundOffsetsCount + " offsets fwd:" + formatOffsets(foundOffsets, foundOffsetsCount) );
+                } else {
+                    // do backwards iteration test
+                    --foundOffsetsCount; // back off one from the end offset
+                    while ( foundOffsetsCount > 0 ) {
+                        offset = brkIter.previous();
+                        if ( offset != foundOffsets[--foundOffsetsCount] ) {
+                            // log error for backwards test
+                            String textToDisplay = (text.length() <= 16)? text: text.substring(0,16);
+                            errln("For type " + type + " " + locale + ", text \"" + textToDisplay + "...\"" +
+                                    "; expect " + expectOffsets.length + " offsets:" + formatOffsets(expectOffsets, expectOffsets.length) +
+                                    "; found rev offset " + offset + " where expect " + foundOffsets[foundOffsetsCount] );
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        // KIND_WORD "en_US_POSIX"
+        final String posxWordText     = "Can't have breaks in xx:yy or struct.field for CS-types.";
+        final int[]  posxWordTOffsets = { 5, 6, 10, 11, 17, 18, 20, 21, 23, 24, 26, 27, 29, 30, 36, 37, 42, 43, 46, 47, 49, 50, 55, 56 };
+        final int[]  posxWordROffsets = { 5, 6, 10, 11, 17, 18, 20, 21,         26, 27, 29, 30,         42, 43, 46, 47, 49, 50, 55, 56 };
+        // KIND_WORD "ja"
+        final String jaWordText     = "\u79C1\u9054\u306B\u4E00\u3007\u3007\u3007\u306E\u30B3\u30F3\u30D4\u30E5\u30FC\u30BF" +
+                                      "\u304C\u3042\u308B\u3002\u5948\u3005\u306F\u30EF\u30FC\u30C9\u3067\u3042\u308B\u3002";
+        final int[]  jaWordTOffsets = {    2, 3,          7, 8, 14,         17, 18,     20, 21, 24,         27, 28 };
+        final int[]  jaWordROffsets = { 1, 2, 3, 4, 5, 6, 7, 8, 14, 15, 16, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28 };
+        // KIND_SENTENCE "el"
+        final String elSentText     = "\u0391\u03B2, \u03B3\u03B4; \u0395 \u03B6\u03B7\u037E \u0398 \u03B9\u03BA. " +
+                                      "\u039B\u03BC \u03BD\u03BE! \u039F\u03C0, \u03A1\u03C2? \u03A3";
+        final int[]  elSentTOffsets = { 8, 14, 20, 27, 35, 36 };
+        final int[]  elSentROffsets = {        20, 27, 35, 36 };
+        // KIND_CHARACTER "th"
+        final String thCharText     = "\u0E01\u0E23\u0E30\u0E17\u0E48\u0E2D\u0E21\u0E23\u0E08\u0E19\u0E32 " +
+                                      "(\u0E2A\u0E38\u0E0A\u0E32\u0E15\u0E34-\u0E08\u0E38\u0E11\u0E32\u0E21\u0E32\u0E28) " +
+                                      "\u0E40\u0E14\u0E47\u0E01\u0E21\u0E35\u0E1B\u0E31\u0E0D\u0E2B\u0E32 ";
+        final int[]  thCharTOffsets = { 1, 2, 3, 5, 6, 7, 8, 9, 10, 11,
+                                        12, 13, 15, 16, 17, 19, 20, 22, 23, 24, 25, 26, 27, 28,
+                                        29, 30, 32, 33, 35, 37, 38, 39, 40, 41 };
+        final int[]  thCharROffsets = { 1,    3, 5, 6, 7, 8, 9,     11,
+                                        12, 13, 15,     17, 19, 20, 22,     24,     26, 27, 28,
+                                        29,     32, 33, 35, 37, 38,     40, 41 };
+        
+        final TBItem[] tests = {
+            new TBItem( BreakIterator.KIND_WORD,      new ULocale("en_US_POSIX"), posxWordText, posxWordTOffsets ),
+            new TBItem( BreakIterator.KIND_WORD,      ULocale.ROOT,               posxWordText, posxWordROffsets ),
+            new TBItem( BreakIterator.KIND_WORD,      new ULocale("ja"),          jaWordText,   jaWordTOffsets   ),
+            new TBItem( BreakIterator.KIND_WORD,      ULocale.ROOT,               jaWordText,   jaWordROffsets   ),
+            new TBItem( BreakIterator.KIND_SENTENCE,  new ULocale("el"),          elSentText,   elSentTOffsets   ),
+            new TBItem( BreakIterator.KIND_SENTENCE,  ULocale.ROOT,               elSentText,   elSentROffsets   ),
+            new TBItem( BreakIterator.KIND_CHARACTER, new ULocale("th"),          thCharText,   thCharTOffsets   ),
+            new TBItem( BreakIterator.KIND_CHARACTER, ULocale.ROOT,               thCharText,   thCharROffsets   ),
+        };
+        for (int iTest = 0; iTest < tests.length; iTest++) {
+            tests[iTest].doTest();
+        }
+    }
+
 }
