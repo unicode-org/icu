@@ -1291,7 +1291,8 @@ public class SimpleDateFormat extends DateFormat {
                 // Try negative Hms
                 fmt = getGMTFormatter(DateFormatSymbols.OFFSET_NEGATIVE, DateFormatSymbols.OFFSET_HMS);
                 parsedObjects = fmt.parse(text, pos);
-                if ((parsedObjects != null) && (parsedObjects[0] instanceof Date)) {
+                if ((parsedObjects != null) && (parsedObjects[0] instanceof Date)
+                        && (pos.getIndex() - start) >= getGMTFormatMinHMSLen(DateFormatSymbols.OFFSET_NEGATIVE)) {
                     offset = (int)((Date)parsedObjects[0]).getTime();
                     return new Integer(-offset /* negative */);
                 }
@@ -1303,7 +1304,8 @@ public class SimpleDateFormat extends DateFormat {
                 // Try positive Hms
                 fmt = getGMTFormatter(DateFormatSymbols.OFFSET_POSITIVE, DateFormatSymbols.OFFSET_HMS);
                 parsedObjects = fmt.parse(text, pos);
-                if ((parsedObjects != null) && (parsedObjects[0] instanceof Date)) {
+                if ((parsedObjects != null) && (parsedObjects[0] instanceof Date)
+                        && (pos.getIndex() - start) >= getGMTFormatMinHMSLen(DateFormatSymbols.OFFSET_POSITIVE)) {
                     offset = (int)((Date)parsedObjects[0]).getTime();
                     return new Integer(offset);
                 }
@@ -1460,6 +1462,26 @@ public class SimpleDateFormat extends DateFormat {
             gmtfmtCache[cacheIdx] = new WeakReference(fmt);
         }
         return fmt;
+    }
+
+    transient private int[] gmtFormatHmsMinLen = null;
+
+    private int getGMTFormatMinHMSLen(int sign) {
+        if (gmtFormatHmsMinLen == null) {
+            gmtFormatHmsMinLen = new int[2];
+            Long offset = new Long(60*60*1000); // 1 hour
+
+            StringBuffer buf = new StringBuffer();
+            MessageFormat fmtNeg = getGMTFormatter(DateFormatSymbols.OFFSET_NEGATIVE, DateFormatSymbols.OFFSET_HMS);
+            fmtNeg.format(new Object[] {offset}, buf, null);
+            gmtFormatHmsMinLen[0] = buf.length();
+
+            buf.setLength(0);
+            MessageFormat fmtPos = getGMTFormatter(DateFormatSymbols.OFFSET_POSITIVE, DateFormatSymbols.OFFSET_HMS);
+            fmtPos.format(new Object[] {offset}, buf, null);
+            gmtFormatHmsMinLen[1] = buf.length();
+        }
+        return gmtFormatHmsMinLen[(sign < 0 ? 0 : 1)];
     }
 
     private boolean isDefaultGMTFormat() {
