@@ -3230,7 +3230,7 @@ void DateFormatTest::Test6880() {
     gcal.clear();
     gcal.set(1970, UCAL_JANUARY, 1, 12, 00);
     dexp2 = gcal.getTime(status);
-    dexp1 = dexp2 - (5*60 + 52)*1000;   // substract 5m52s
+    dexp1 = dexp2 - (5*60 + 52)*1000;   // subtract 5m52s
 
     if (U_FAILURE(status)) {
         errln("FAIL: Gregorian calendar error");
