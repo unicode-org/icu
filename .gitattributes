@@ -311,7 +311,6 @@ icu4j/.project -text
 icu4j/eclipseFragment.txt -text
 icu4j/eclipseProjectMisc/initSrc.launch -text
 icu4j/eclipseProjectMisc/normSrc.launch -text
-icu4j/ee.foundation.jar -text
 icu4j/localespi/.classpath -text
 icu4j/localespi/.externalToolBuilders/localespi_jar.launch -text
 icu4j/localespi/.project -text
