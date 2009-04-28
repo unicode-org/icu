@@ -1032,7 +1032,30 @@ private:
     /*
      * MessageFormat instances used for localized GMT format
      */
+    enum {
+        kGMTNegativeHMS = 0,
+        kGMTNegativeHM,
+        kGMTPositiveHMS,
+        kGMTPositiveHM,
+
+        kNumGMTFormatters
+    };
+    enum {
+        kGMTNegativeHMSMinLenIdx = 0,
+        kGMTPositiveHMSMinLenIdx,
+
+        kNumGMTFormatMinLengthes
+    };
+
     MessageFormat   **fGMTFormatters;
+    // If a GMT hour format has a second field, we need to make sure
+    // the length of input localized GMT string must match the expected
+    // length.  Otherwise, sub DateForamt handling offset format may
+    // unexpectedly success parsing input GMT string without second field.
+    // See #6880 about this issue.
+    // TODO: SimpleDateFormat should provide an option to invalidate
+    // 
+    int32_t         fGMTFormatHmsMinLen[kNumGMTFormatMinLengthes];
 
     NumberFormat    **fNumberFormatters;
 

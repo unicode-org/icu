@@ -164,6 +164,9 @@ public: // package
     void Test6338(void);
 
     void Test6726(void);
+
+    void Test6880(void);
+
 public:
     /**
      * Test host-specific formatting.

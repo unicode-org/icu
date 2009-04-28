@@ -78,9 +78,10 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(38,Test6338);
         TESTCASE(39,Test6726);
         TESTCASE(40,TestGMTParsing);
+        TESTCASE(41,Test6880);
         /*
-        TESTCASE(41,TestRelativeError);
-        TESTCASE(42,TestRelativeOther);
+        TESTCASE(42,TestRelativeError);
+        TESTCASE(43,TestRelativeOther);
         */
         default: name = ""; break;
     }
@@ -3206,6 +3207,56 @@ void DateFormatTest::TestGMTParsing() {
     };
     const int32_t DATA_len = sizeof(DATA)/sizeof(DATA[0]);
     expectParse(DATA, DATA_len, Locale("en"));
+}
+
+// Test case for localized GMT format parsing
+// with no delimitters in offset format (Chinese locale)
+void DateFormatTest::Test6880() {
+    UErrorCode status = U_ZERO_ERROR;
+    UDate d1, d2, dp1, dp2, dexp1, dexp2;
+    UnicodeString s1, s2;
+
+    TimeZone *tz = TimeZone::createTimeZone("Asia/Shanghai");
+    GregorianCalendar gcal(*tz, status);
+
+    gcal.clear();
+    gcal.set(1910, UCAL_JULY, 1, 12, 00);   // offset 8:05:52
+    d1 = gcal.getTime(status);
+
+    gcal.clear();
+    gcal.set(1950, UCAL_JULY, 1, 12, 00);   // offset 8:00
+    d2 = gcal.getTime(status);
+
+    gcal.clear();
+    gcal.set(1970, UCAL_JANUARY, 1, 12, 00);
+    dexp2 = gcal.getTime(status);
+    dexp1 = dexp2 - (5*60 + 52)*1000;   // substract 5m52s
+
+    if (U_FAILURE(status)) {
+        errln("FAIL: Gregorian calendar error");
+    }
+
+    DateFormat *fmt = DateFormat::createTimeInstance(DateFormat::kFull, Locale("zh"));
+    fmt->adoptTimeZone(tz);
+
+    fmt->format(d1, s1);
+    fmt->format(d2, s2);
+
+    dp1 = fmt->parse(s1, status);
+    dp2 = fmt->parse(s2, status);
+
+    if (U_FAILURE(status)) {
+        errln("FAIL: Parse failure");
+    }
+
+    if (dp1 != dexp1) {
+        errln("FAIL: Failed to parse " + s1 + " parsed: " + dp1 + " expected: " + dexp1);
+    }
+    if (dp2 != dexp2) {
+        errln("FAIL: Failed to parse " + s2 + " parsed: " + dp2 + " expected: " + dexp2);
+    }
+
+    delete fmt;
 }
 
 
