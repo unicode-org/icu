@@ -3595,4 +3595,44 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    public void Test6880() {
+        Date d1, d2, dp1, dp2, dexp1, dexp2;
+        String s1, s2;
+
+        TimeZone tz = TimeZone.getTimeZone("Asia/Shanghai");
+        GregorianCalendar gcal = new GregorianCalendar(tz);
+
+        gcal.clear();
+        gcal.set(1910, Calendar.JANUARY, 1, 12, 00);    // offset 8:05:52
+        d1 = gcal.getTime();
+
+        gcal.clear();
+        gcal.set(1950, Calendar.JANUARY, 1, 12, 00);    // offset 8:00
+        d2 = gcal.getTime();
+
+        gcal.clear();
+        gcal.set(1970, Calendar.JANUARY, 1, 12, 00);
+        dexp2 = gcal.getTime();
+        dexp1 = new Date(dexp2.getTime() - (5*60 + 52)*1000);   // subtract 5m52s
+
+        DateFormat fmt = DateFormat.getTimeInstance(DateFormat.FULL, new ULocale("zh"));
+        fmt.setTimeZone(tz);
+
+        s1 = fmt.format(d1);
+        s2 = fmt.format(d2);
+
+        try {
+            dp1 = fmt.parse(s1);
+            dp2 = fmt.parse(s2);
+
+            if (!dp1.equals(dexp1)) {
+                errln("FAIL: Failed to parse " + s1 + " parsed: " + dp1 + " expected: " + dexp1);
+            }
+            if (!dp2.equals(dexp2)) {
+                errln("FAIL: Failed to parse " + s2 + " parsed: " + dp2 + " expected: " + dexp2);
+            }
+        } catch (ParseException pe) {
+            errln("FAIL: Parse failure");
+        }
+    }
 }
