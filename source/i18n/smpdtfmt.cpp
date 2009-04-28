@@ -153,14 +153,6 @@ static const char gDateTimePatternsTag[]="DateTimePatterns";
 
 static const UChar gEtcUTC[] = {0x45, 0x74, 0x63, 0x2F, 0x55, 0x54, 0x43, 0x00}; // "Etc/UTC"
 static const UChar QUOTE = 0x27; // Single quote
-enum {
-    kGMTNegativeHMS = 0,
-    kGMTNegativeHM,
-    kGMTPositiveHMS,
-    kGMTPositiveHM,
-
-    kNumGMTFormatters
-};
 
 static UMTX LOCK;
 
@@ -978,7 +970,8 @@ SimpleDateFormat::parseGMT(const UnicodeString &text, ParsePosition &pos) const 
 
                 // Try negative Hms
                 fGMTFormatters[kGMTNegativeHMS]->parseObject(text, parsed, pos);
-                if (pos.getErrorIndex() == -1 && pos.getIndex() > start) {
+                if (pos.getErrorIndex() == -1 &&
+                    (pos.getIndex() - start) >= fGMTFormatHmsMinLen[kGMTNegativeHMSMinLenIdx]) {
                     parsed.getArray(parsedCount);
                     if (parsedCount == 1 && parsed[0].getType() == Formattable::kDate) {
                         return (int32_t)(-1 * (int64_t)parsed[0].getDate());
@@ -991,7 +984,8 @@ SimpleDateFormat::parseGMT(const UnicodeString &text, ParsePosition &pos) const 
 
                 // Try positive Hms
                 fGMTFormatters[kGMTPositiveHMS]->parseObject(text, parsed, pos);
-                if (pos.getErrorIndex() == -1 && pos.getIndex() > start) {
+                if (pos.getErrorIndex() == -1 &&
+                    (pos.getIndex() - start) >= fGMTFormatHmsMinLen[kGMTPositiveHMSMinLenIdx]) {
                     parsed.getArray(parsedCount);
                     if (parsedCount == 1 && parsed[0].getType() == Formattable::kDate) {
                         return (int32_t)((int64_t)parsed[0].getDate());
@@ -1261,6 +1255,24 @@ SimpleDateFormat::initGMTFormatters(UErrorCode &status) {
                 sdf->adoptCalendar(gcal);
                 sdf->applyPattern(*hourPattern);
                 fGMTFormatters[i]->adoptFormat(0, sdf);
+
+                // For parsing, we only allow Hms patterns to be equal or longer
+                // than its length with fixed minutes/seconds digits.
+                // See #6880
+                if (i == kGMTNegativeHMS || i == kGMTPositiveHMS) {
+                    UnicodeString tmp;
+                    Formattable tmpParam(60*60*1000, Formattable::kIsDate);
+                    FieldPosition fpos(0);
+                    fGMTFormatters[i]->format(&tmpParam, 1, tmp, fpos, status);
+                    if (U_FAILURE(status)) {
+                        break;
+                    }
+                    if (i == kGMTNegativeHMS) {
+                        fGMTFormatHmsMinLen[kGMTNegativeHMSMinLenIdx] = tmp.length();
+                    } else {
+                        fGMTFormatHmsMinLen[kGMTPositiveHMSMinLenIdx] = tmp.length();
+                    }
+                }
             }
         } else {
             status = U_MEMORY_ALLOCATION_ERROR;
