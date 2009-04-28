@@ -28,10 +28,10 @@ COLLATION_CLDR_VERSION = 1.7
 # Aliases which do not have a corresponding xx.xml file (see icu-config.xml & build.xml)
 COLLATION_SYNTHETIC_ALIAS = de_.txt de__PHONEBOOK.txt es_.txt es__TRADITIONAL.txt\
  hi_.txt hi__DIRECT.txt in.txt in_ID.txt iw.txt\
- iw_IL.txt no.txt no_NO.txt sh.txt sh_BA.txt\
- sh_YU.txt sr_BA.txt sr_ME.txt sr_RS.txt zh_.txt\
- zh_CN.txt zh_HK.txt zh_MO.txt zh_SG.txt zh_TW.txt\
- zh_TW_STROKE.txt zh__PINYIN.txt
+ iw_IL.txt no.txt no_NO.txt pa_IN.txt sh.txt\
+ sh_BA.txt sh_YU.txt sr_BA.txt sr_ME.txt sr_RS.txt\
+ zh_.txt zh_CN.txt zh_HK.txt zh_MO.txt zh_SG.txt\
+ zh_TW.txt zh_TW_STROKE.txt zh__PINYIN.txt
 
 
 # All aliases (to not be included under 'installed'), but not including root.
@@ -62,14 +62,13 @@ COLLATION_EMPTY_SOURCE = af_NA.txt af_ZA.txt ar_AE.txt ar_BH.txt\
  ms.txt ms_BN.txt ms_MY.txt mt_MT.txt nb_NO.txt\
  nl.txt nl_BE.txt nl_NL.txt nn_NO.txt om_ET.txt\
  om_KE.txt pa_Arab.txt pa_Arab_PK.txt pa_Guru.txt pa_Guru_IN.txt\
- pa_IN.txt pl_PL.txt ps_AF.txt pt.txt pt_BR.txt\
- pt_PT.txt ro_RO.txt ru_RU.txt ru_UA.txt si_LK.txt\
- sk_SK.txt sl_SI.txt sq_AL.txt sr_Cyrl.txt sr_Cyrl_BA.txt\
- sr_Cyrl_ME.txt sr_Cyrl_RS.txt sr_Latn_BA.txt sr_Latn_ME.txt sr_Latn_RS.txt\
- sv_FI.txt sv_SE.txt ta_IN.txt te_IN.txt th_TH.txt\
- tr_TR.txt uk_UA.txt ur_IN.txt ur_PK.txt vi_VN.txt\
- zh_Hans.txt zh_Hans_CN.txt zh_Hans_SG.txt zh_Hant_HK.txt zh_Hant_MO.txt\
- zh_Hant_TW.txt
+ pl_PL.txt ps_AF.txt pt.txt pt_BR.txt pt_PT.txt\
+ ro_RO.txt ru_RU.txt ru_UA.txt si_LK.txt sk_SK.txt\
+ sl_SI.txt sq_AL.txt sr_Cyrl.txt sr_Cyrl_BA.txt sr_Cyrl_ME.txt\
+ sr_Cyrl_RS.txt sr_Latn_BA.txt sr_Latn_ME.txt sr_Latn_RS.txt sv_FI.txt\
+ sv_SE.txt ta_IN.txt te_IN.txt th_TH.txt tr_TR.txt\
+ uk_UA.txt ur_IN.txt ur_PK.txt vi_VN.txt zh_Hans.txt\
+ zh_Hans_CN.txt zh_Hans_SG.txt zh_Hant_HK.txt zh_Hant_MO.txt zh_Hant_TW.txt
 
 
 # Ordinary resources
