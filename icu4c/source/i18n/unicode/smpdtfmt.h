@@ -1044,7 +1044,7 @@ private:
         kGMTNegativeHMSMinLenIdx = 0,
         kGMTPositiveHMSMinLenIdx,
 
-        kNumGMTFormatMinLengthes
+        kNumGMTFormatMinLengths
     };
 
     MessageFormat   **fGMTFormatters;
@@ -1055,7 +1055,7 @@ private:
     // See #6880 about this issue.
     // TODO: SimpleDateFormat should provide an option to invalidate
     // 
-    int32_t         fGMTFormatHmsMinLen[kNumGMTFormatMinLengthes];
+    int32_t         fGMTFormatHmsMinLen[kNumGMTFormatMinLengths];
 
     NumberFormat    **fNumberFormatters;
 
