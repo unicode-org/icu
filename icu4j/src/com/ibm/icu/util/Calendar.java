@@ -3339,12 +3339,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
     }
     
     /**
-     * get the DateTimePattern
-     * @param calendar TODO
-     * @param uLocale
-     * @return
-     * @deprecated
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static String getDateTimePattern(Calendar cal, ULocale uLocale, int dateStyle) {
         PatternData patternData = PatternData.make(cal, uLocale); 

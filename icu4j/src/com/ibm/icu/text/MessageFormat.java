@@ -945,7 +945,7 @@ public class MessageFormat extends UFormat {
     }
     
     /**
-     * Get the format argument names. For more details, see {@link #MessageFormat.setFormatByArgumentName(String, Format)}.
+     * Get the format argument names. For more details, see {@link #setFormatByArgumentName(String, Format)}.
      * @return List of names
      * @deprecated
      * @internal
@@ -959,7 +959,7 @@ public class MessageFormat extends UFormat {
     }
     
     /**
-     * Get the formats according to their argument names. For more details, see {@link #MessageFormat.setFormatByArgumentName(String, Format)}.
+     * Get the formats according to their argument names. For more details, see {@link #setFormatByArgumentName(String, Format)}.
      * @return format associated with the name, or null if there isn't one.
      * @deprecated
      * @internal
