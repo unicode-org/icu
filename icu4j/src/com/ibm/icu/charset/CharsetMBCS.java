@@ -1913,7 +1913,7 @@ class CharsetMBCS extends CharsetICU {
             /* try to match */
             match = matchToU((byte) -1, source.array(), source.position(), source.limit(), null, value, useFallback, true);
 
-            if (match == source.limit()) {
+            if (match == (source.limit() - source.position())) {
                 /* write result for simple, single-character conversion */
                 if (TO_U_IS_CODE_POINT(value[0])) {
                     return TO_U_GET_CODE_POINT(value[0]);
