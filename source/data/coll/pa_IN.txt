@@ -6,12 +6,6 @@
 // * Source File:<path>/icu-config.xml & build.xml
 // *
 // ***************************************************************************
-/**
- * validSubLocale of "pa"
- */
 pa_IN{
-    /**
-     * so genrb doesn't issue warnings
-     */
-    ___{""}
+    "%%ALIAS"{"pa_Guru_IN"}
 }
