@@ -292,6 +292,19 @@ table.rtable tr td {
 	padding: 3px;
 }
 
+table.rtable tr.broken td {
+	background-color: #fbb;
+	border: 1px dashed gray;
+	padding: 3px;
+	font-weight: bold;
+}
+
+table.rtable tr.rarely td {
+	background-color: #efe9c2;
+	padding: 3px;
+	font-style: italic;
+}
+
 /*  APIChangeReport specific things */
 
 .row0 {
