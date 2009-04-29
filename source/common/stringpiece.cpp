@@ -45,8 +45,9 @@ StringPiece::StringPiece(const StringPiece& x, int32_t pos, int32_t len) {
  * definition is correct. Perhaps there is a bug in the Microsoft compiler. 
  * This is not an issue on any other compilers (that we know of) including 
  * Visual Studios 9.0.
+ * Cygwin with MSVC 9.0 also complains here about redefinition.
  */
-#if !defined(_MSC_VER) || (_MSC_VER >= 1500)
+#if (!defined(_MSC_VER) || (_MSC_VER >= 1500)) && !defined(CYGWINMSVC)
 const int32_t StringPiece::npos;
 #endif
 
