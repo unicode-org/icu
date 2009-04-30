@@ -656,6 +656,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
   , lenient(FALSE)
   , lenientParseRules(NULL)
   , localizations(NULL)
+  , noParse(FALSE) //TODO: to be removed after #6895
 {
   LocalizationInfo* locinfo = StringLocalizationInfo::create(locs, perror, status);
   init(description, locinfo, perror, status);
@@ -672,6 +673,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
   , lenient(FALSE)
   , lenientParseRules(NULL)
   , localizations(NULL)
+  , noParse(FALSE) //TODO: to be removed after #6895
 {
   LocalizationInfo* locinfo = StringLocalizationInfo::create(locs, perror, status);
   init(description, locinfo, perror, status);
@@ -688,6 +690,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
   , lenient(FALSE)
   , lenientParseRules(NULL)
   , localizations(NULL)
+  , noParse(FALSE) //TODO: to be removed after #6895
 {
   init(description, info, perror, status);
 }
@@ -703,6 +706,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
   , lenient(FALSE)
   , lenientParseRules(NULL)
   , localizations(NULL)
+  , noParse(FALSE) //TODO: to be removed after #6895
 {
     init(description, NULL, perror, status);
 }
@@ -719,6 +723,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
   , lenient(FALSE)
   , lenientParseRules(NULL)
   , localizations(NULL)
+  , noParse(FALSE) //TODO: to be removed after #6895
 {
     init(description, NULL, perror, status);
 }
@@ -853,6 +858,9 @@ RuleBasedNumberFormat::clone(void) const
         result = 0;
     } else {
         result->lenient = lenient;
+
+        //TODO: remove below when we fix the parse bug - See #6895 / #6896
+        result->noParse = noParse;
     }
     return result;
 }
