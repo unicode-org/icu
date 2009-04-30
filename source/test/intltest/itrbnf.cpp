@@ -1789,35 +1789,21 @@ IntlTestRBNF::TestLocalizations(void)
 void
 IntlTestRBNF::TestAllLocales()
 {
-  const char* names[] = {
-    " (spellout) ",
-    " (ordinal)  ",
-    " (duration) "
-  };
+    const char* names[] = {
+        " (spellout) ",
+        " (ordinal)  ",
+        " (duration) "
+    };
+    double numbers[] = {45.678, 1, 2, 10, 11, 100, 110, 200, 1000, 1111, -1111};
 
-  // RBNF parse is extremely slow when lenient option is enabled.
-  // For non-exhaustive mode, we only test a few locales.
-  const char* parseLocales[] = {"en_US", "nl_NL", "be", NULL};
+    // RBNF parse is extremely slow when lenient option is enabled.
+    // For non-exhaustive mode, we only test a few locales.
+    const char* parseLocales[] = {"en_US", "nl_NL", "be", NULL};
 
-  //TODO: Remove this when #6870 is resolved
-  // "ar", "ga", "mt" triggers stack overflow error
-  const char* parseExclusionLangs[] = { "ar", "ga", "he", "mt", NULL};
-
-  int32_t count = 0;
-  const Locale* locales = Locale::getAvailableLocales(count);
-  for (int i = 0; i < count; ++i) {
-    const Locale* loc = &locales[i];
-    for (int j = 0; j < 3; ++j) {
-      UErrorCode status = U_ZERO_ERROR;
-      RuleBasedNumberFormat* f = new RuleBasedNumberFormat((URBNFRuleSetTag)j, *loc, status);
-      if (U_SUCCESS(status)) {
-        double n = 45.678;
-        UnicodeString str;
-        f->format(n, str);
-
-        logln(UnicodeString(loc->getName()) + UnicodeString(names[j])
-            + UnicodeString("success: 45.678 -> ") + str);
-
+    int32_t count = 0;
+    const Locale* locales = Locale::getAvailableLocales(count);
+    for (int i = 0; i < count; ++i) {
+        const Locale* loc = &locales[i];
         UBool testParse = TRUE;
         if (quick) {
             testParse = FALSE;
@@ -1828,46 +1814,61 @@ IntlTestRBNF::TestAllLocales()
                 }
             }
         }
-        //TODO: start - Remove the code block below when #6870 is resolved
-        for (int k = 0; parseExclusionLangs[k] != NULL; k++) {
-            if (strcmp(loc->getLanguage(), parseExclusionLangs[k]) == 0) {
-                testParse = FALSE;
-                break;
-            }
-        }
-        //TODO: end
-        if (testParse) {
-            // We do not validate the result in this test case,
-            // because there are cases which do not round trip by design.
 
-            Formattable num;
-            status = U_ZERO_ERROR;
-
-            // regular parse
-            f->parse(str, num, status);
+        for (int j = 0; j < 3; ++j) {
+            UErrorCode status = U_ZERO_ERROR;
+            RuleBasedNumberFormat* f = new RuleBasedNumberFormat((URBNFRuleSetTag)j, *loc, status);
             if (U_FAILURE(status)) {
                 errln(UnicodeString(loc->getName()) + names[j]
-                    + "ERROR could not parse '" + str + "' -> " + u_errorName(status));
+                    + "ERROR could not instantiate -> " + u_errorName(status));
+                continue;
             }
+            for (int numidx = 0; numidx < sizeof(numbers)/sizeof(double); numidx++) {
+                double n = numbers[numidx];
+                UnicodeString str;
+                f->format(n, str);
 
-            // lenient parse
-            status = U_ZERO_ERROR;
-            f->setLenient(TRUE);
-            f->parse(str, num, status);
-            if (U_FAILURE(status)) {
-                errln(UnicodeString(loc->getName()) + names[j]
-                    + "ERROR could not parse(lenient) '" + str + "' -> " + u_errorName(status));
+                logln(UnicodeString(loc->getName()) + names[j]
+                    + "success: " + n + " -> " + str);
+
+                if (testParse) {
+                    // We do not validate the result in this test case,
+                    // because there are cases which do not round trip by design.
+                    Formattable num;
+
+                    // regular parse
+                    status = U_ZERO_ERROR;
+                    f->setLenient(FALSE);
+                    f->parse(str, num, status);
+                    if (U_FAILURE(status)) {
+                        //TODO: We need to fix parse problems - see #6895 / #6896
+                        if (status == U_INVALID_FORMAT_ERROR) {
+                            logln(UnicodeString(loc->getName()) + names[j]
+                                + "WARNING could not parse '" + str + "' -> " + u_errorName(status));
+                        } else {
+                             errln(UnicodeString(loc->getName()) + names[j]
+                                + "ERROR could not parse '" + str + "' -> " + u_errorName(status));
+                       }
+                    }
+                    // lenient parse
+                    status = U_ZERO_ERROR;
+                    f->setLenient(TRUE);
+                    f->parse(str, num, status);
+                    if (U_FAILURE(status)) {
+                        //TODO: We need to fix parse problems - see #6895 / #6896
+                        if (status == U_INVALID_FORMAT_ERROR) {
+                            logln(UnicodeString(loc->getName()) + names[j]
+                                + "WARNING could not parse(lenient) '" + str + "' -> " + u_errorName(status));
+                        } else {
+                            errln(UnicodeString(loc->getName()) + names[j]
+                                + "ERROR could not parse(lenient) '" + str + "' -> " + u_errorName(status));
+                        }
+                    }
+                }
             }
+            delete f;
         }
-
-        delete f;
-
-      } else {
-        errln(UnicodeString(loc->getName()) + UnicodeString(names[j])
-            + UnicodeString("ERROR could not instantiate -> ") + UnicodeString(u_errorName(status)));
-      }
     }
-  }
 }
 
 void 
