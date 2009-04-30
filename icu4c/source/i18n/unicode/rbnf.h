@@ -994,6 +994,10 @@ private:
     UBool lenient;
     UnicodeString* lenientParseRules;
     LocalizationInfo* localizations;
+
+    // Temporary workaround - when noParse is true, do noting in parse.
+    // TODO: We need a real fix - see #6895/#6896
+    UBool noParse;
 };
 
 // ---------------
