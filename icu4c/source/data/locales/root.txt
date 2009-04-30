@@ -896,6 +896,7 @@ root{
                 "AM",
                 "PM",
             }
+            DateTimePatterns:alias{"/LOCALE/calendar/gregorian/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
@@ -958,6 +959,7 @@ root{
                 "AM",
                 "PM",
             }
+            DateTimePatterns:alias{"/LOCALE/calendar/gregorian/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
@@ -1019,6 +1021,7 @@ root{
                 "AM",
                 "PM",
             }
+            DateTimePatterns:alias{"/LOCALE/calendar/gregorian/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
@@ -1331,6 +1334,7 @@ root{
                 "AM",
                 "PM",
             }
+            DateTimePatterns:alias{"/LOCALE/calendar/gregorian/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
@@ -1391,6 +1395,7 @@ root{
                 "AM",
                 "PM",
             }
+            DateTimePatterns:alias{"/LOCALE/calendar/gregorian/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
@@ -1449,6 +1454,7 @@ root{
                 "AM",
                 "PM",
             }
+            DateTimePatterns:alias{"/LOCALE/calendar/gregorian/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
@@ -2042,6 +2048,7 @@ root{
                 "AM",
                 "PM",
             }
+            DateTimePatterns:alias{"/LOCALE/calendar/gregorian/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/gregorian/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/gregorian/availableFormats"}
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
