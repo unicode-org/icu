@@ -853,6 +853,9 @@ RuleBasedNumberFormat::clone(void) const
         result = 0;
     } else {
         result->lenient = lenient;
+
+        //TODO: remove below when we fix the parse bug - See #6895 / #6896
+        result->noParse = noParse;
     }
     return result;
 }
