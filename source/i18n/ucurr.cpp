@@ -306,7 +306,12 @@ struct CReg : public U_NAMESPACE_QUALIFIER UMemory {
 /*The declaration here is needed so currency_cleanup(void)
  * can call this function.
  */
-static UBool U_CALLCONV
+static UBool
+#if defined (OS390)
+        __cdecl /* force to __cdecl for now */
+#else
+        U_CALLCONV
+#endif
 currency_cache_cleanup(void);
 
 U_CDECL_BEGIN
@@ -665,7 +670,13 @@ typedef struct {
 
 
 // Comparason function used in quick sort.
-static int currencyNameComparator(const void* a, const void* b) {
+static int
+#if defined (OS390)
+        __cdecl /* force to __cdecl for now */
+#else
+        U_CALLCONV
+#endif
+	currencyNameComparator(const void* a, const void* b) {
     const CurrencyNameStruct* currName_1 = (const CurrencyNameStruct*)a;
     const CurrencyNameStruct* currName_2 = (const CurrencyNameStruct*)b;
     for (int32_t i = 0; 
@@ -1206,7 +1217,12 @@ deleteCacheEntry(CurrencyNameCacheEntry* entry) {
 
 
 // Cache clean up
-static UBool U_CALLCONV
+static UBool
+#if defined (OS390)
+        __cdecl /* force to __cdecl for now */
+#else
+        U_CALLCONV
+#endif
 currency_cache_cleanup(void) {
     for (int32_t i = 0; i < CURRENCY_NAME_CACHE_NUM; ++i) {
         if (currCache[i]) {

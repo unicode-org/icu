@@ -10,8 +10,6 @@
 # endif
 #endif
 
-/* Needed by z/OS to get usleep */
-#include "platform_xopen_source_extended.h"
 
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
@@ -28,6 +26,17 @@
 #define POSIX 1
 #endif
 
+/* Needed by z/OS to get usleep */
+#if defined(OS390)
+#define __DOT1 1
+#define __UU
+#define _XOPEN_SOURCE_EXTENDED 1
+#ifndef _XPG4_2
+#define _XPG4_2
+#endif
+#include <unistd.h>
+/*#include "platform_xopen_source_extended.h"*/
+#endif
 #if defined(POSIX) || defined(U_SOLARIS) || defined(U_AIX) || defined(U_HPUX)
 
 #define HAVE_IMP
@@ -47,7 +56,13 @@
 #define __EXTENSIONS__
 #endif
 
+#if defined(OS390)
+#include <sys/types.h>
+#endif
+
+#if !defined(OS390)
 #include <signal.h>
+#endif
 
 /* Define _XPG4_2 for Solaris and friends. */
 #ifndef _XPG4_2

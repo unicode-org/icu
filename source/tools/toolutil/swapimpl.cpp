@@ -527,6 +527,70 @@ unorm_swap(const UDataSwapper *ds,
 
 #endif
 
+/* Swap 'Test' data from gentest */
+U_CAPI int32_t U_EXPORT2
+test_swap(const UDataSwapper *ds,
+           const void *inData, int32_t length, void *outData,
+           UErrorCode *pErrorCode) {
+    const UDataInfo *pInfo;
+    int32_t headerSize;
+
+    const uint8_t *inBytes;
+    uint8_t *outBytes;
+
+    const int32_t *inIndexes;
+    int32_t indexes[32];
+
+    int32_t i, offset, count;
+
+    /* udata_swapDataHeader checks the arguments */
+    headerSize=udata_swapDataHeader(ds, inData, length, outData, pErrorCode);
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        udata_printError(ds, "test_swap(): data header swap failed %s\n", u_errorName(*pErrorCode));
+        return 0;
+    }
+
+    /* check data format and format version */
+    pInfo=(const UDataInfo *)((const char *)inData+4);
+    if(!(
+        pInfo->dataFormat[0]==0x54 &&   /* dataFormat="Norm" */
+        pInfo->dataFormat[1]==0x65 &&
+        pInfo->dataFormat[2]==0x73 &&
+        pInfo->dataFormat[3]==0x74 &&
+        pInfo->formatVersion[0]==1
+    )) {
+        udata_printError(ds, "test_swap(): data format %02x.%02x.%02x.%02x (format version %02x) is not recognized as testdata\n",
+                         pInfo->dataFormat[0], pInfo->dataFormat[1],
+                         pInfo->dataFormat[2], pInfo->dataFormat[3],
+                         pInfo->formatVersion[0]);
+        *pErrorCode=U_UNSUPPORTED_ERROR;
+        return 0;
+    }
+
+    inBytes=(const uint8_t *)inData+headerSize;
+    outBytes=(uint8_t *)outData+headerSize;
+
+    int32_t size16 = 2; // 16bit plus padding
+    int32_t sizeStr = 5; // 4 char inv-str plus null
+    int32_t size = size16 + sizeStr;
+
+    if(length>=0) {
+        if(length<size) {
+            udata_printError(ds, "test_swap(): too few bytes (%d after header, wanted %d) for all of testdata\n",
+                             length, size);
+            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+            return 0;
+        }
+
+	offset =0;
+	/* swap a 1 entry array */
+        ds->swapArray16(ds, inBytes+offset, size16, outBytes+offset, pErrorCode);
+	offset+=size16;
+	ds->swapInvChars(ds, inBytes+offset, sizeStr, outBytes+offset, pErrorCode);
+    }
+
+    return headerSize+size;
+}
 /* swap any data (except a .dat package) ------------------------------------ */
 
 static const struct {
@@ -566,7 +630,9 @@ static const struct {
     { { 0x70, 0x6e, 0x61, 0x6d }, upname_swap },        /* dataFormat="pnam" */
     { { 0x75, 0x6e, 0x61, 0x6d }, uchar_swapNames },    /* dataFormat="unam" */
 
-    { { 0x43, 0x66, 0x75, 0x20 }, uspoof_swap }         /* dataFormat="Cfu " */
+    { { 0x43, 0x66, 0x75, 0x20 }, uspoof_swap },         /* dataFormat="Cfu " */
+
+    { { 0x54, 0x65, 0x73, 0x74 }, test_swap }            /* dataFormat="Test" */
 };
 
 U_CAPI int32_t U_EXPORT2
