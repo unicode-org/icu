@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1333,7 +1333,10 @@ class FractionalPartSubstitution extends NFSubstitution {
                 workPos.setIndex(0);
                 digit = ruleSet.parse(workText, workPos, 10).intValue();
                 if (lenientParse && workPos.getIndex() == 0) {
-                    digit = rbnf.getDecimalFormat().parse(workText, workPos).intValue();
+                    Number n = rbnf.getDecimalFormat().parse(workText, workPos);
+                    if (n != null) {
+                        digit = n.intValue();
+                    }
                 }
 
                 if (workPos.getIndex() != 0) {

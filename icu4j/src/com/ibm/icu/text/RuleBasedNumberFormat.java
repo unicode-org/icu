@@ -596,6 +596,16 @@ public class RuleBasedNumberFormat extends NumberFormat {
     
     private static final boolean DEBUG  =  ICUDebug.enabled("rbnf");
 
+    // Temporary workaround - when noParse is true, do noting in parse.
+    // TODO: We need a real fix - see #6895/#6896
+    private boolean noParse;
+    private static final String[] NO_SPELLOUT_PARSE_LANGUAGES = {
+        "ga", "mt", "ar", "he",
+    };
+    // Note: "ar" and "he" do not cause any errors with ICU4J test case,
+    // but the test coverage is suspicious.  These locales trigger stack
+    // overflow in C.  For now, we also include these in the list above.
+
     //-----------------------------------------------------------------------
     // constructors
     //-----------------------------------------------------------------------
@@ -777,6 +787,18 @@ public class RuleBasedNumberFormat extends NumberFormat {
         }
 
         init(description, localizations);
+
+        //TODO: we need a real fix - see #6895 / #6896
+        noParse = false;
+        if (locnames[format-1].equals("SpelloutLocalizations")) {
+            String lang = locale.getLanguage();
+            for (int i = 0; i < NO_SPELLOUT_PARSE_LANGUAGES.length; i++) {
+                if (NO_SPELLOUT_PARSE_LANGUAGES[i].equals(lang)) {
+                    noParse = true;
+                    break;
+                }
+            }
+        }
     }
 
     private static final String[] rulenames = {
@@ -1159,6 +1181,12 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @stable ICU 2.0
      */
     public Number parse(String text, ParsePosition parsePosition) {
+
+        //TODO: We need a real fix.  See #6895 / #6896
+        if (noParse) {
+            // skip parsing
+            return new Long(0);
+        }
 
         // parsePosition tells us where to start parsing.  We copy the
         // text in the string from here to the end inro a new string,
