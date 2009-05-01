@@ -12,10 +12,10 @@ h3.doc { background: #CCCCFF }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 4.2d01</h3>
+<h3>Read Me for ICU4J 4.2</h3>
 <hr size="2" width="100%">
 <p><b>Release Date</b><br>
-April 27, 2009<br>
+May 8, 2009<br>
 </p>
 <!-- <p><b>Note:</b> This is major release of ICU4J.  It contains bug fixes
 and adds implementations of inherited API and introduces new API
@@ -131,11 +131,11 @@ current and complete version is always found in ICU4J.</p>
 </blockquote>
 
 <h3 class="doc"><a name="news"></a>What Is New In This Release?</h3>
-TBD
-<p><b>New features</b></p>
 <p>
-See the <a href="http://www.icu-project.org/download/">ICU 4.2 download page</a> about other
-new features in this release.
+See the <a href="http://www.icu-project.org/download/">ICU 4.2 download page</a> about
+new features in this release.  The list of API changes since the previous ICU4J release
+is available
+<a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-4-2/APIChangeReport.html">here</a>.
 </p>
 <h3 class="doc"><a name="license"></a>License Information</h3>
 <p>
@@ -417,17 +417,18 @@ package.</td>
       <td bgcolor="#ffffff" valign="baseline">Additional text classes.
 These add to, and in some cases replace, related core Java classes:
       <ul>
-        <li>Arabic shaping </li>
-        <li>Break iteration </li>
-        <li>Date formatting </li>
-        <li>Number formatting </li>
-        <li>Transliteration </li>
-        <li>Normalization </li>
-        <li>String manipulation </li>
-        <li>Collation </li>
-        <li>String search </li>
-        <li>Unicode compression </li>
-        <li>Unicode sets </li>
+        <li>Arabic shaping</li>
+        <li>Bidirectional text manipulation</li>
+        <li>Break iteration</li>
+        <li>Date formatting</li>
+        <li>Number formatting</li>
+        <li>Transliteration</li>
+        <li>Normalization</li>
+        <li>String manipulation</li>
+        <li>Collation</li>
+        <li>String search</li>
+        <li>Unicode compression</li>
+        <li>Unicode sets</li>
       </ul>
       </td>
     </tr>
@@ -442,6 +443,7 @@ classes:
         <li>TimeZone</li>
         <li>VersionInfo</li>
         <li>Iteration</li>
+        <li>Currency</li>
       </ul>
       </td>
     </tr>
@@ -534,6 +536,8 @@ to all ICU4J API</a></li>
  href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/util/GregorianCalendar.html">Gregorian</a>,
     <a
  href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/util/HebrewCalendar.html">Hebrew</a>,
+    <a
+ href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/util/IndianCalendar.html">Indian</a>,
     <a
  href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/util/IslamicCalendar.html">Islamic</a>,
     <a
@@ -635,8 +639,8 @@ coreData:
      [copy] Copying 1 file to C:\icu4j\classes\com\ibm\icu
 
 icudata:
-    [unjar] Expanding: F:\DEV\trunk\src\com\ibm\icu\impl\data\icudata.jar into c
-:\icu4j\classes
+    [unjar] Expanding: C:\icu4j\src\com\ibm\icu\impl\data\icudata.jar into c:\ic
+u4j\classes
      [copy] Copying 1 file to C:\icu4j\classes\META-INF
 
 durationdata:
@@ -819,20 +823,20 @@ from release to release, so clients should not depend on the exact
 organization
 of the data in ICU4J.</p>
 <ul>
-  <li>The primary <b>locale data</b> is under the directory <tt>icudt40b</tt>,
+  <li>The primary <b>locale data</b> is under the directory <tt>icudt42b</tt>,
 as a set of <tt>".res"</tt> files whose names are the locale identifiers. 
 Locale naming is documented the <code>com.ibm.icu.util.ULocale</code>
 class, and the use of these names in searching for resources is documented 
 in <code>com.ibm.icu.util.UResourceBundle</code>.
   </li>
-  <li>The <b>collation data</b> is under the directory <tt>icudt40b/coll</tt>,
+  <li>The <b>collation data</b> is under the directory <tt>icudt42b/coll</tt>,
 as a set of <tt>".res"</tt> files.</li>
   <li>The <b>rule-based transliterator data</b> is under the directory
-<tt>icudt40b/translit</tt> as a set of <tt>".res"</tt> files.  (<b>Note:</b> the
+<tt>icudt42b/translit</tt> as a set of <tt>".res"</tt> files.  (<b>Note:</b> the
 Han transliterator test data is no longer included in the core icu4j.jar 
 file by default.)</li>
   <li>The <b>rule-based number format data</b> is under the directory
-<tt>icudt40b/rbnf</tt> as a set of <tt>".res"</tt> files.
+<tt>icudt42b/rbnf</tt> as a set of <tt>".res"</tt> files.
   <li>The <b>break iterator data</b> is directly under the data
 directory, as a set of <tt>".brk"</tt> files, named according to the
 type of break and the locale where there are locale-specific versions.</li>
@@ -844,10 +848,10 @@ data</b> and default <b>unicode collation algorithm (UCA) data</b>
 is found under the <tt>data</tt> directory as a set of <tt>".icu"</tt>
 files. </li>
   <li>The <b>character set converter data</b> is under the directory
-  <tt>icudt40b</tt>, as a set of <tt>".cnv"</tt> files.  These files are
+  <tt>icudt42b</tt>, as a set of <tt>".cnv"</tt> files.  These files are
   currently included only in icu-charset.jar.</li>
   <li>The <b>time zone data</b> is named <tt>zoneinfo.res</tt> under
-  the directory <tt>icudt40b</tt>.</li>
+  the directory <tt>icudt42b</tt>.</li>
 </ul>
 <p>
 Some of the data files alias or otherwise reference data from other
@@ -965,7 +969,7 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 </ol>
 
 <h3 class="doc"><a name="timezone"></a>About ICU4J Time Zone</h3>
-<p>ICU4J 4.2d01 includes time zone data version 2009g, which is the latest one as of
+<p>ICU4J 4.2 includes time zone data version 2009g, which is the latest one as of
 the release date.  However, time zone data is frequently updated in response
 to changes made by local governments around the world.  If you need to update
 the time zone data, please refer the ICU user guide topic
@@ -978,10 +982,11 @@ won't be used and you have to get time zone data patches from the JRE vendor.</p
 
 <h3 class="doc"><a name="WhereToFindMore"></a>Where to Find More
 Information</h3>
+<p><a href="http://www.icu-project.org/">http://www.icu-project.org/</a>
+is the home page of International Components for Unicode development project</p>
 <p><a href="http://www.ibm.com/software/globalization/icu/">http://www.ibm.com/software/globalization/icu/</a>
-is a
-pointer to general information about the International Components for
-Unicode in Java </p>
+is a pointer to general information about the International Components for
+Unicode hosted by IBM</p>
 <p><a href="http://www.ibm.com/software/globalization/">http://www.ibm.com/software/globalization/</a>
 is a pointer to
 information on how to make applications global. </p>
@@ -989,21 +994,20 @@ information on how to make applications global. </p>
 Requesting Features and
 Reporting Bugs</h3>
 <p>Your comments are important to making ICU4J successful. We are
-committed
-to fixing any bugs, and will use your feedback to help plan future
-releases.</p>
-<p>To submit comments, request features and report bugs, contact us
-through the <a
+committed to investigate any bug reports or suggestions,
+and will use your feedback to help plan future releases.</p>
+<p>To submit comments, request features and report bugs,
+please see <a href="http://www.icu-project.org/bugs.html">ICU bug database
+information</a> or contact us through the <a
  href="http://www.icu-project.org/contacts.html">ICU Support
-mailing list</a>.<br>
-While we are not able to respond individually to each comment, we do
+mailing list</a>.  While we are not able to respond individually to each comment, we do
 review all comments.</p>
 <br>
 <br>
 <h2>Thank you for your interest in ICU4J!</h2>
 <br>
 <hr align="center" size="2" width="100%">
-<p><I><font size="-1">Copyright &copy; 2002-2008 International Business
+<p><I><font size="-1">Copyright &copy; 2002-2009 International Business
 Machines Corporation and others. All Rights
 Reserved.<br>
 4400 North First Street, San Jos&eacute;, CA 95193, USA
