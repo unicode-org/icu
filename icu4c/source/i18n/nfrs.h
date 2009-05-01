@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   file name:  nfrs.h
@@ -40,6 +40,15 @@ class NFRuleSet : public UMemory {
   UBool operator!=(const NFRuleSet& rhs) const { return !operator==(rhs); }
 
   UBool isPublic() const { return fIsPublic; }
+
+  UBool isParseable() const { 
+      UnicodeString prefixpart = UNICODE_STRING_SIMPLE("-prefixpart");
+      UnicodeString postfix = UNICODE_STRING_SIMPLE("-postfix");
+      UnicodeString postfx = UNICODE_STRING_SIMPLE("-postfx");
+
+      return ( name.indexOf(prefixpart) == -1 && name.indexOf(postfix) == -1 && name.indexOf(postfx) == -1 );
+  }
+
   UBool isFractionRuleSet() const { return fIsFractionRuleSet; }
 
   void  getName(UnicodeString& result) const { result.setTo(name); }

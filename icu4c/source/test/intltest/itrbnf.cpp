@@ -1798,13 +1798,21 @@ IntlTestRBNF::TestAllLocales()
 
     // RBNF parse is extremely slow when lenient option is enabled.
     // For non-exhaustive mode, we only test a few locales.
+    const char* noParseLocales[] = {"ga", NULL};
     const char* parseLocales[] = {"en_US", "nl_NL", "be", NULL};
+
 
     int32_t count = 0;
     const Locale* locales = Locale::getAvailableLocales(count);
     for (int i = 0; i < count; ++i) {
         const Locale* loc = &locales[i];
         UBool testParse = TRUE;
+        for (int j = 0; noParseLocales[j] != NULL; j++) {
+            if (strcmp(loc->getLanguage(), noParseLocales[j]) == 0) {
+                testParse = FALSE;
+                    break;
+                }
+        }
         if (quick) {
             testParse = FALSE;
             for (int k = 0; parseLocales[k] != NULL; k++) {
