@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -371,7 +371,22 @@ final class NFRuleSet {
      * @return true if the rule set is public
      */
     public boolean isPublic() {
-    return !name.startsWith("%%");
+        return !name.startsWith("%%");
+    }
+
+    /**
+     * Return true if the rule set can be used for parsing.
+     * @return true if the rule set can be used for parsing.
+     */
+    public boolean isParseable() {
+        //TODO:
+        //  In CLDR 1.7, we have no distinction between
+        //  parseable/unparseable.  Rules which have one of
+        //  3 suffixes below are know as unparseable for now.
+        //  We should add the information in CLDR data.
+        return !(name.endsWith("-prefixpart")
+                || name.endsWith("-postfixpart")
+                || name.endsWith("-postfx"));
     }
 
     //-----------------------------------------------------------------------
