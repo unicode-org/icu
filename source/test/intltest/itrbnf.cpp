@@ -1800,6 +1800,7 @@ IntlTestRBNF::TestAllLocales()
     // For non-exhaustive mode, we only test a few locales.
     const char* parseLocales[] = {"en_US", "nl_NL", "be", NULL};
 
+
     int32_t count = 0;
     const Locale* locales = Locale::getAvailableLocales(count);
     for (int i = 0; i < count; ++i) {
