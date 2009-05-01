@@ -599,12 +599,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
     // Temporary workaround - when noParse is true, do noting in parse.
     // TODO: We need a real fix - see #6895/#6896
     private boolean noParse;
-    private static final String[] NO_SPELLOUT_PARSE_LANGUAGES = {
-        "ga", "mt", "ar", "he",
-    };
-    // Note: "ar" and "he" do not cause any errors with ICU4J test case,
-    // but the test coverage is suspicious.  These locales trigger stack
-    // overflow in C.  For now, we also include these in the list above.
+    private static final String[] NO_SPELLOUT_PARSE_LANGUAGES = { "ga" };
 
     //-----------------------------------------------------------------------
     // constructors
@@ -1207,7 +1202,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // the result we return
         for (int i = ruleSets.length - 1; i >= 0; i--) {
             // skip private rule sets
-            if (ruleSets[i].getName().startsWith("%%")) {
+            if (!ruleSets[i].isPublic() || !ruleSets[i].isParseable()) {
                 continue;
             }
 
