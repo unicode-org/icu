@@ -451,10 +451,10 @@ uspoof_areConfusable(const USpoofChecker *sc,
                 result |= USPOOF_SINGLE_SCRIPT_CONFUSABLE;
             }
             if (s1Skeleton != s1SkeletonBuf) {
-                delete s1Skeleton;
+                uprv_free(s1Skeleton);
             }
             if (s2Skeleton != s2SkeletonBuf) {
-                delete s2Skeleton;
+                uprv_free(s2Skeleton);
             }
         }
     }
