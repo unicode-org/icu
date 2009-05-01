@@ -58,7 +58,7 @@ static const UChar gSemiPercent[] =
 
 // Temporary workaround - when noParse is true, do noting in parse.
 // TODO: We need a real fix - see #6895/#6896
-static const char *NO_SPELLOUT_PARSE_LANGUAGES[] = { "ar", "ga", "he", "mt", NULL };
+static const char *NO_SPELLOUT_PARSE_LANGUAGES[] = { "ga", NULL };
 
 U_NAMESPACE_BEGIN
 
@@ -1171,7 +1171,7 @@ RuleBasedNumberFormat::parse(const UnicodeString& text,
 
     for (NFRuleSet** p = ruleSets; *p; ++p) {
         NFRuleSet *rp = *p;
-        if (rp->isPublic()) {
+        if (rp->isPublic() && rp->isParseable()) {
             ParsePosition working_pp(0);
             Formattable working_result;
 
