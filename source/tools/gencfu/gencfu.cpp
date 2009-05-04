@@ -74,7 +74,7 @@ void usageAndDie(int retCode) {
 }
 
 
-#if UCONFIG_NO_BREAK_ITERATION
+#if UCONFIG_NO_REGULAR_EXPRESSIONS
 
 /* dummy UDataInfo cf. udata.h */
 static UDataInfo dummyDataInfo = {
@@ -181,14 +181,16 @@ int  main(int argc, char **argv) {
         copyright = U_COPYRIGHT_STRING;
     }
 
-#if UCONFIG_NO_SPOOF_DETECTION
-    // TOOD:  implement  UCONFIG_NO_SPOOF_DETECTION in uconfig.h, or decide we don't want it and take this out.
+#if UCONFIG_NO_REGULAR_EXPRESSIONS
+    // spoof detection data file parsing is dependent on regular expressions.
+    // TODO: have the tool return an error status.  Requires fixing the ICU data build
+    //       so that it doesn't abort entirely on that error.
 
     UNewDataMemory *pData;
     char msg[1024];
 
     /* write message with just the name */
-    sprintf(msg, "gencfu writes dummy %s because of UCONFIG_NO_SPOOF_DETECTION, see uconfig.h", outFileName);
+    sprintf(msg, "gencfu writes dummy %s because of UCONFIG_NO_REGULAR_EXPRESSIONS, see uconfig.h", outFileName);
     fprintf(stderr, "%s\n", msg);
 
     /* write the dummy data file */
@@ -289,8 +291,7 @@ int  main(int argc, char **argv) {
     u_cleanup();
     printf("gencfu: tool completed successfully.\n");
     return 0;
-
-#endif /* #if !UCONFIG_NO_BREAK_ITERATION */
+#endif   // UCONFIG_NO_REGULAR_EXPRESSIONS
 }
 
 

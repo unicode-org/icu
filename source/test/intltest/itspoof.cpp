@@ -10,7 +10,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_SPOOF_DETECT
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
 
 #include "itspoof.h"
 #include "unicode/uspoof.h"
@@ -245,5 +245,5 @@ void IntlTestSpoof::testInvisible() {
         TEST_ASSERT_EQ(7, position);
     TEST_TEARDOWN;
 }
+#endif // UCONFIG_NO_REGULAR_EXPRESSIONS
 
-#endif /* #if !UCONFIG_NO_SPOOF_DETECT*/

@@ -18,6 +18,7 @@
 **/
 
 #include "unicode/utypes.h"
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -518,3 +519,4 @@ static void TestUSpoofCAPI(void) {
     TEST_TEARDOWN;
 }
 
+#endif  /* UCONFIG_NO_REGULAR_EXPRESSIONS */

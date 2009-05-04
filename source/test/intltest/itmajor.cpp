@@ -181,12 +181,13 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
                 break;
 
             case 14: name = "spoof";
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
                 if (exec) {
                     logln("TestSuite SpoofDetection---"); logln();
                     IntlTestSpoof test;
                     callTest(test, par);
                 }
-
+#endif
                 break;
 
         default: name = ""; break;

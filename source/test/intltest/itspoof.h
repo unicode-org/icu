@@ -13,6 +13,7 @@
 #define INTLTESTSPOOF_H
 
 #include "unicode/utypes.h"
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
 #include "unicode/uspoof.h"
 #include "intltest.h"
 
@@ -36,5 +37,5 @@ public:
                         const char *input, const char *expected, int32_t lineNum);
 };
 
+#endif  // !UCONFIG_NO_REGULAR_EXPRESSIONS
 #endif
-

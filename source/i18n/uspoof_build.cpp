@@ -37,11 +37,7 @@
 #include "uspoof_buildconf.h"
 #include "uspoof_buildwsconf.h"
 
-
-#include <stdio.h>   // DEBUG
-
 U_NAMESPACE_USE
-
 
 
 // The main data building function
@@ -54,6 +50,10 @@ uspoof_openFromSource(const char *confusables,  int32_t confusablesLen,
     if (U_FAILURE(*status)) {
         return NULL;
     }
+#if UCONFIG_NO_REGULAR_EXPRESSIONS 
+    *status = U_UNSUPPORTED_ERROR;      
+    return NULL;
+#else
     if (errorType!=NULL) {
         *errorType = 0;
     }
@@ -77,5 +77,6 @@ uspoof_openFromSource(const char *confusables,  int32_t confusablesLen,
         This = NULL;
     }
     return (USpoofChecker *)This;
+#endif // UCONFIG_NO_REGULAR_EXPRESSIONS 
 }
 
