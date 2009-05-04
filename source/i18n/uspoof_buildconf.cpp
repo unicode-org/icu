@@ -18,6 +18,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uspoof.h"
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS 
 #include "unicode/unorm.h"
 #include "unicode/uregex.h"
 #include "unicode/ustring.h"
@@ -28,8 +29,6 @@
 #include "uassert.h"
 #include "uarrsort.h"
 #include "uspoof_buildconf.h"
-
-#include "stdio.h"    // DEBUG.  Remove.
 
 U_NAMESPACE_USE
 
@@ -591,3 +590,6 @@ UnicodeString ConfusabledataBuilder::getMapping(int32_t index) {
     }
     return UnicodeString();
 }
+
+#endif // !UCONFIG_NO_REGULAR_EXPRESSIONS 
+
