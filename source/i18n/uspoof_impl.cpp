@@ -787,7 +787,7 @@ NFKDBuffer::NFKDBuffer(const UChar *text, int32_t length, UErrorCode &status) {
 
 NFKDBuffer::~NFKDBuffer() {
     if (fNormalizedText != fSmallBuf) {
-        delete fNormalizedText;
+        uprv_free(fNormalizedText);
     }
     fNormalizedText = 0;
 }

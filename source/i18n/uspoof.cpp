@@ -490,10 +490,10 @@ uspoof_areConfusable(const USpoofChecker *sc,
             }
         }
         if (s1Skeleton != s1SkeletonBuf) {
-            delete s1Skeleton;
+            uprv_free(s1Skeleton);
         }
         if (s2Skeleton != s2SkeletonBuf) {
-            delete s2Skeleton;
+            uprv_free(s2Skeleton);
         }
     }
 
@@ -548,10 +548,10 @@ uspoof_areConfusableUTF8(const USpoofChecker *sc,
     int32_t results = uspoof_areConfusable(sc, s1U, lengthS1U, s2U, lengthS2U, status);
     
     if (s1U != s1Buf) {
-        delete s1U;
+        uprv_free(s1U);
     }
     if (s2U != s2Buf) {
-        delete s2U;
+        uprv_free(s2U);
     }
     return results;
 }
@@ -794,10 +794,10 @@ uspoof_getSkeletonUTF8(const USpoofChecker *sc,
 
   cleanup:
     if (inBuf != smallInBuf) {
-        delete inBuf;
+        uprv_free(inBuf);
     }
     if (outBuf != smallOutBuf) {
-        delete outBuf;
+        uprv_free(outBuf);
     }
     return skelLengthInUTF8;
 }
