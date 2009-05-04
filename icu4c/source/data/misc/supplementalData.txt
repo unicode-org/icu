@@ -5640,6 +5640,13 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        bci{
+            secondary{
+                territories{
+                    "CI",
+                }
+            }
+        }
         bcl{
             secondary{
                 territories{
@@ -5872,7 +5879,6 @@ supplementalData:table(nofallback){
             secondary{
                 territories{
                     "CN",
-                    "IN",
                 }
             }
         }
@@ -6180,7 +6186,7 @@ supplementalData:table(nofallback){
             }
         }
         cpe{
-            primary{
+            secondary{
                 scripts{
                     "Latn",
                 }
@@ -6210,6 +6216,13 @@ supplementalData:table(nofallback){
             secondary{
                 territories{
                     "CA",
+                }
+            }
+        }
+        crs{
+            secondary{
+                territories{
+                    "SC",
                 }
             }
         }
@@ -6546,6 +6559,7 @@ supplementalData:table(nofallback){
                     "LC",
                     "LR",
                     "LS",
+                    "MG",
                     "MH",
                     "MP",
                     "MS",
@@ -6598,6 +6612,7 @@ supplementalData:table(nofallback){
                     "BE",
                     "DE",
                     "ES",
+                    "ET",
                     "FR",
                     "IN",
                     "IT",
@@ -6885,6 +6900,13 @@ supplementalData:table(nofallback){
             secondary{
                 territories{
                     "WF",
+                }
+            }
+        }
+        fuq{
+            secondary{
+                territories{
+                    "NE",
                 }
             }
         }
@@ -7663,6 +7685,13 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Thai",
+                }
+            }
+        }
+        kea{
+            secondary{
+                territories{
+                    "CV",
                 }
             }
         }
@@ -8597,13 +8626,6 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Mymr",
-                }
-            }
-        }
-        mo{
-            primary{
-                scripts{
-                    "Latn",
                 }
             }
         }
@@ -9717,7 +9739,7 @@ supplementalData:table(nofallback){
             }
         }
         son{
-            primary{
+            secondary{
                 scripts{
                     "Latn",
                 }
@@ -10066,6 +10088,11 @@ supplementalData:table(nofallback){
             primary{
                 scripts{
                     "Ethi",
+                }
+            }
+            secondary{
+                territories{
+                    "ER",
                 }
             }
         }
