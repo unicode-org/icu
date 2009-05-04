@@ -20,6 +20,9 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uspoof.h"
+
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS 
+
 #include "unicode/unorm.h"
 #include "unicode/uregex.h"
 #include "unicode/ustring.h"
@@ -30,8 +33,6 @@
 #include "uassert.h"
 #include "uspoof_buildwsconf.h"
 
-
-//#include <stdio.h>       // TODO:  debug.  remove.
 U_NAMESPACE_USE
 
 
@@ -427,5 +428,5 @@ BuilderScriptSet::~BuilderScriptSet() {
     }
 }
 
-
+#endif //  !UCONFIG_NO_REGULAR_EXPRESSIONS 
 
