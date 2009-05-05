@@ -20,6 +20,8 @@
 #include "unicode/udata.h"
 
 
+#if !UCONFIG_NO_NORMALIZATION
+
 U_NAMESPACE_BEGIN
 
 // The maximium length (in UTF-16 UChars) of the skeleton replacement string resulting from
@@ -402,6 +404,8 @@ U_CAPI int32_t U_EXPORT2
 uspoof_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outData,
             UErrorCode *status);
 
+
+#endif
 
 #endif  /* USPOOFIM_H */
 

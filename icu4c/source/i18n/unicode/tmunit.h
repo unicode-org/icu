@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, Google, International Business Machines Corporation and *
+ * Copyright (C) 2009, Google, International Business Machines Corporation and *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -15,9 +15,9 @@
  */
 
 
-#if !UCONFIG_NO_FORMATTING
-
 #include "unicode/measunit.h"
+
+#if !UCONFIG_NO_FORMATTING
 
 U_NAMESPACE_BEGIN
 

@@ -17,6 +17,7 @@ convert.h
 cpdtrans.h
 curramt.h
 currunit.h
+currpinf.h
 datefmt.h
 dbbi.h
 dcfmtsym.h

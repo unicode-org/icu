@@ -19,6 +19,8 @@
 #include "uassert.h"
 #include "uspoof_impl.h"
 
+#if !UCONFIG_NO_NORMALIZATION
+
 
 U_NAMESPACE_BEGIN
 
@@ -954,5 +956,7 @@ uspoof_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *ou
 
     return totalSize;
 }
+
+#endif
 
 
