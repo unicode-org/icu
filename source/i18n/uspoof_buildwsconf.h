@@ -22,6 +22,8 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_NORMALIZATION
+
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS 
 
 #include "uspoof_impl.h"
@@ -58,4 +60,5 @@ void buildWSConfusableData(SpoofImpl *spImpl, const char * confusablesWS,
 
 
 #endif // !UCONFIG_NO_REGULAR_EXPRESSIONS 
+#endif // !UCONFIG_NO_NORMALIZATION 
 #endif

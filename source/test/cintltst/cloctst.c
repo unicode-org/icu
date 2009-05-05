@@ -3197,7 +3197,7 @@ const char* const full_data[][3] = {
     "ig"
   }, {
     "ii",
-    "ii_Latn_CN",
+    "ii_Yiii_CN",
     "ii"
   }, {
     "is",
@@ -3677,16 +3677,16 @@ const char* const full_data[][3] = {
     "bn_IN"
   }, {
     "und_CD",
-    "fr_Latn_CD",
-    "fr_CD"
+    "sw_Latn_CD",
+    "sw_CD"
   }, {
     "und_CF",
-    "sg_Latn_CF",
-    "sg"
+    "fr_Latn_CF",
+    "fr_CF"
   }, {
     "und_CG",
-    "ln_Latn_CG",
-    "ln_CG"
+    "fr_Latn_CG",
+    "fr_CG"
   }, {
     "und_CH",
     "de_Latn_CH",
@@ -3733,8 +3733,8 @@ const char* const full_data[][3] = {
     "cs"
   }, {
     "und_Cans",
-    "cwd_Cans_CA",
-    "cwd"
+    "crk_Cans_CA",
+    "crk"
   }, {
     "und_Cyrl",
     "ru_Cyrl_RU",
@@ -3793,8 +3793,8 @@ const char* const full_data[][3] = {
     "es"
   }, {
     "und_ET",
-    "am_Ethi_ET",
-    "am"
+    "en_Latn_ET",
+    "en_ET"
   }, {
     "und_Ethi",
     "am_Ethi_ET",
@@ -3861,8 +3861,8 @@ const char* const full_data[][3] = {
     "es_GT"
   }, {
     "und_GU",
-    "ch_Latn_GU",
-    "ch"
+    "en_Latn_GU",
+    "en_GU"
   }, {
     "und_GW",
     "pt_Latn_GW",
@@ -4041,8 +4041,8 @@ const char* const full_data[][3] = {
     "es"
   }, {
     "und_Latn_ET",
-    "om_Latn_ET",
-    "om"
+    "en_Latn_ET",
+    "en_ET"
   }, {
     "und_Latn_GB",
     "en_Latn_GB",
@@ -4061,8 +4061,8 @@ const char* const full_data[][3] = {
     "it"
   }, {
     "und_Latn_NG",
-    "ha_Latn_NG",
-    "ha"
+    "en_Latn_NG",
+    "en_NG"
   }, {
     "und_Latn_TR",
     "tr_Latn_TR",
@@ -4085,7 +4085,7 @@ const char* const full_data[][3] = {
     "ro_MD"
   }, {
     "und_ME",
-    "sr_Cyrl_ME",
+    "sr_Latn_ME",
     "sr_ME"
   }, {
     "und_MG",
@@ -4165,8 +4165,8 @@ const char* const full_data[][3] = {
     "ha_NE"
   }, {
     "und_NG",
-    "ha_Latn_NG",
-    "ha"
+    "en_Latn_NG",
+    "en_NG"
   }, {
     "und_NI",
     "es_Latn_NI",
@@ -4185,8 +4185,8 @@ const char* const full_data[][3] = {
     "ne"
   }, {
     "und_NR",
-    "na_Latn_NR",
-    "na"
+    "en_Latn_NR",
+    "en_NR"
   }, {
     "und_NU",
     "niu_Latn_NU",
@@ -4209,8 +4209,8 @@ const char* const full_data[][3] = {
     "es_PE"
   }, {
     "und_PF",
-    "ty_Latn_PF",
-    "ty"
+    "fr_Latn_PF",
+    "fr_PF"
   }, {
     "und_PG",
     "tpi_Latn_PG",
@@ -4333,12 +4333,12 @@ const char* const full_data[][3] = {
     "si"
   }, {
     "und_TD",
-    "ar_Arab_TD",
-    "ar_TD"
+    "fr_Latn_TD",
+    "fr_TD"
   }, {
     "und_TG",
-    "ee_Latn_TG",
-    "ee_TG"
+    "fr_Latn_TG",
+    "fr_TG"
   }, {
     "und_TH",
     "th_Thai_TH",
@@ -4349,12 +4349,12 @@ const char* const full_data[][3] = {
     "tg"
   }, {
     "und_TK",
-    "tkl_Latn_TK",
-    "tkl"
+    "en_Latn_TK",
+    "en_TK"
   }, {
     "und_TL",
-    "tet_Latn_TL",
-    "tet"
+    "pt_Latn_TL",
+    "pt_TL"
   }, {
     "und_TM",
     "tk_Latn_TM",
@@ -4425,8 +4425,8 @@ const char* const full_data[][3] = {
     "vi"
   }, {
     "und_VU",
-    "fr_Latn_VU",
-    "fr_VU"
+    "bi_Latn_VU",
+    "bi"
   }, {
     "und_WF",
     "fr_Latn_WF",
@@ -4445,8 +4445,8 @@ const char* const full_data[][3] = {
     "fr_YT"
   }, {
     "und_Yiii",
-    "en_Yiii_US",
-    "en_Yiii"
+    "ii_Yiii_CN",
+    "ii"
   }, {
     "ur",
     "ur_Arab_PK",
@@ -4573,8 +4573,8 @@ const char* const full_data[][3] = {
     "en"
   }, {
     "und_Latn_CN",
-    "ii_Latn_CN",
-    "ii"
+    "za_Latn_CN",
+    "za"
   }, {
     "und_Latn_TW",
     "zh_Latn_TW",

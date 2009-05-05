@@ -57,7 +57,10 @@
 
 /* swapping implementations in i18n */
 
+#if !UCONFIG_NO_NORMALIZATION
 #include "uspoof_impl.h"
+#endif
+
 
 /* definitions */
 
