@@ -13,6 +13,9 @@
 #define _BMS_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/ucol.h"
 
 /**
@@ -264,5 +267,7 @@ bms_search(BMS *bms, int32_t offset, int32_t *start, int32_t *end);
  */
 U_CAPI void U_EXPORT2
 bms_setTargetString(BMS *bms, const UChar *target, int32_t targetLength, UErrorCode *status);
+
+#endif
 
 #endif /* _BMS_H */

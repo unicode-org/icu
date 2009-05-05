@@ -19,6 +19,8 @@
 #ifndef __USPOOF_BUILDCONF_H__
 #define __USPOOF_BUILDCONF_H__
 
+#if !UCONFIG_NO_NORMALIZATION
+
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS 
 
 #include "uspoof_impl.h"
@@ -122,5 +124,6 @@ class ConfusabledataBuilder : public UMemory {
         int32_t confusablesLen, int32_t *errorType, UParseError *pe, UErrorCode &status);
 };
 
+#endif
 #endif  // !UCONFIG_NO_REGULAR_EXPRESSIONS 
 #endif  // __USPOOF_BUILDCONF_H__

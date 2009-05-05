@@ -21,6 +21,8 @@
 #include "unicode/utypes.h"
 #include "unicode/uspoof.h"
 
+#if !UCONFIG_NO_NORMALIZATION
+
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS 
 
 #include "unicode/unorm.h"
@@ -428,5 +430,6 @@ BuilderScriptSet::~BuilderScriptSet() {
     }
 }
 
+#endif
 #endif //  !UCONFIG_NO_REGULAR_EXPRESSIONS 
 
