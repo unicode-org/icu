@@ -19,6 +19,8 @@
 #include "unicode/utypes.h"
 #include "unicode/uspoof.h"
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS 
+#if !UCONFIG_NO_NORMALIZATION
+
 #include "unicode/unorm.h"
 #include "unicode/uregex.h"
 #include "unicode/ustring.h"
@@ -591,5 +593,6 @@ UnicodeString ConfusabledataBuilder::getMapping(int32_t index) {
     return UnicodeString();
 }
 
+#endif
 #endif // !UCONFIG_NO_REGULAR_EXPRESSIONS 
 

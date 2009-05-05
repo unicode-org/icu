@@ -21,6 +21,10 @@
 #include "uspoof_impl.h"
 #include "uassert.h"
 
+
+#if !UCONFIG_NO_NORMALIZATION
+
+
 #include <stdio.h>      // debug
 
 U_NAMESPACE_USE
@@ -819,3 +823,4 @@ uspoof_serialize(USpoofChecker *sc,void *buf, int32_t capacity, UErrorCode *stat
     return dataSize;
 }
 
+#endif

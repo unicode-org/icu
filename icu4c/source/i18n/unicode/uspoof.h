@@ -26,6 +26,10 @@
 #include "unicode/uset.h"
 #include "unicode/parseerr.h"
 
+
+#if !UCONFIG_NO_NORMALIZATION
+
+
 #ifdef XP_CPLUSPLUS
 #include "unicode/unistr.h"
 #include "unicode/uniset.h"
@@ -850,5 +854,7 @@ uspoof_serialize(USpoofChecker *sc,
                  void *data, int32_t capacity,
                  UErrorCode *status);
 
+
+#endif
 
 #endif   /* USPOOF_H */

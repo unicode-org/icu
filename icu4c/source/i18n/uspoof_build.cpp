@@ -37,6 +37,8 @@
 #include "uspoof_buildconf.h"
 #include "uspoof_buildwsconf.h"
 
+#if !UCONFIG_NO_NORMALIZATION
+
 U_NAMESPACE_USE
 
 
@@ -80,3 +82,4 @@ uspoof_openFromSource(const char *confusables,  int32_t confusablesLen,
 #endif // UCONFIG_NO_REGULAR_EXPRESSIONS 
 }
 
+#endif
