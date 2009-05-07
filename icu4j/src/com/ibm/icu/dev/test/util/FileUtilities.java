@@ -27,6 +27,11 @@ public class FileUtilities {
         InputStreamReader isr = (encoding == UTF8_UNIX || encoding == UTF8_WINDOWS) ? new InputStreamReader(fis, "UTF8") :  new InputStreamReader(fis);
         BufferedReader br = new BufferedReader(isr, 32*1024);
         */
+        appendBufferedReader(br, output, replacementList);
+    }
+
+    public static void appendBufferedReader(BufferedReader br,
+            PrintWriter output, String[] replacementList) throws IOException {
         while (true) {
             String line = br.readLine();
             if (line == null) break;
@@ -37,6 +42,7 @@ public class FileUtilities {
             }
             output.println(line);
         }
+        br.close();
     }
 
     /**
