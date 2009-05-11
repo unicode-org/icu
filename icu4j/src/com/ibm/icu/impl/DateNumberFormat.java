@@ -38,8 +38,8 @@ public final class DateNumberFormat extends NumberFormat {
     private int maxIntDigits;
     private int minIntDigits;
  
-    public DateNumberFormat(ULocale loc) {
-        initialize(loc);
+    public DateNumberFormat(ULocale loc, char zeroDigitIn) {
+        initialize(loc,zeroDigitIn);
     }
 
 /*    public DateNumberFormat(char zeroDigit, char minusSign) {
@@ -48,14 +48,14 @@ public final class DateNumberFormat extends NumberFormat {
     }
 */
 
-    private void initialize(ULocale loc) {
+    private void initialize(ULocale loc,char zeroDigitIn) {
         char[] elems = (char[])CACHE.get(loc);
         if (elems == null) {
             // Missed cache
             ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, loc);
             String[] numberElements = rb.getStringArray("NumberElements");
             elems = new char[2];
-            elems[0] = numberElements[4].charAt(0);
+            elems[0] = zeroDigitIn;
             elems[1] = numberElements[6].charAt(0);
             CACHE.put(loc, elems);
         }
