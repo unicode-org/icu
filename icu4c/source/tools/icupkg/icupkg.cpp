@@ -33,6 +33,7 @@
 #include "toolutil.h"
 #include "uoptions.h"
 #include "uparse.h"
+#include "filestrm.h"
 #include "package.h"
 #include "pkg_icu.h"
 
@@ -56,7 +57,7 @@ printUsage(const char *pname, UBool isHelp) {
 
     fprintf(where,
             "%csage: %s [-h|-?|--help ] [-tl|-tb|-te] [-c] [-C comment]\n"
-            "\t[-a list] [-r list] [-x list] [-l]\n"
+            "\t[-a list] [-r list] [-x list] [-l [-o outputListFileName]]\n"
             "\t[-s path] [-d path] [-w] [-m mode]\n"
             "\tinfilename [outfilename]\n",
             isHelp ? 'U' : 'u', pname);
@@ -149,7 +150,7 @@ printUsage(const char *pname, UBool isHelp) {
             "\t-s path or --sourcedir path  directory for the --add items\n"
             "\t-d path or --destdir path    directory for the --extract items\n"
             "\n"
-            "\t-l or --list                 list the package items to stdout\n"
+            "\t-l or --list                 list the package items to stdout or to output list file\n"
             "\t                             (after modifying the package)\n");
     }
 }
@@ -173,7 +174,9 @@ static UOption options[]={
     UOPTION_DEF("remove", 'r', UOPT_REQUIRES_ARG),
     UOPTION_DEF("extract", 'x', UOPT_REQUIRES_ARG),
 
-    UOPTION_DEF("list", 'l', UOPT_NO_ARG)
+    UOPTION_DEF("list", 'l', UOPT_NO_ARG),
+    
+    UOPTION_DEF("outlist", 'o', UOPT_REQUIRES_ARG)
 };
 
 enum {
@@ -196,6 +199,8 @@ enum {
     OPT_EXTRACT_LIST,
 
     OPT_LIST_ITEMS,
+    
+    OPT_LIST_FILE,
 
     OPT_COUNT
 };
@@ -410,9 +415,22 @@ main(int argc, char *argv[]) {
     /* list items */
     if(options[OPT_LIST_ITEMS].doesOccur) {
         int32_t i;
-
-        for(i=0; i<pkg->getItemCount(); ++i) {
-            fprintf(stdout, "%s\n", pkg->getItem(i)->name);
+        if (options[OPT_LIST_FILE].doesOccur) {
+            FileStream *out;
+            out = T_FileStream_open(options[OPT_LIST_FILE].value, "w");
+            if (out != NULL) {
+                for(i=0; i<pkg->getItemCount(); ++i) {
+                    T_FileStream_writeLine(out, pkg->getItem(i)->name);
+                    T_FileStream_writeLine(out, "\n");
+                }
+                T_FileStream_close(out);
+            } else {
+                return U_ILLEGAL_ARGUMENT_ERROR;
+            }
+        } else {
+            for(i=0; i<pkg->getItemCount(); ++i) {
+                fprintf(stdout, "%s\n", pkg->getItem(i)->name);
+            }
         }
     }
 
