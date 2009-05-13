@@ -3242,7 +3242,6 @@ private:
   // None of the following does releaseArray().
   inline void setLength(int32_t len);        // sets only fShortLength and fLength
   inline void setToEmpty();                  // sets fFlags=kShortString
-  inline void setToStackBuffer(int32_t len); // sets fFlags=kShortString
   inline void setArray(UChar *array, int32_t len, int32_t capacity); // does not set fFlags
 
   // allocate the array; result may be fStackBuffer
@@ -4143,12 +4142,6 @@ UnicodeString::setToEmpty() {
 }
 
 inline void
-UnicodeString::setToStackBuffer(int32_t len) {
-  fShortLength = (int8_t)len;
-  fFlags = kShortString;
-}
-
-inline void
 UnicodeString::setArray(UChar *array, int32_t len, int32_t capacity) {
   setLength(len);
   fUnion.fFields.fArray = array;
@@ -4162,12 +4155,16 @@ UnicodeString::getTerminatedBuffer() {
   } else {
     UChar *array = getArrayStart();
     int32_t len = length();
-#ifndef U_VALGRIND
-    if(len < getCapacity() && array[len] == 0) {
+    if(len < getCapacity()) {
+      if(isBufferWritable()) {
+        array[len] = 0;
+      }
+      /*
+       * All methods that make the buffer not-writable
+       * also NUL-terminate it as long as there is enough space.
+       */
       return array;
-    }
-#endif
-    if(cloneArrayIfNeeded(len+1)) {
+    } else if(cloneArrayIfNeeded(len+1)) {
       array = getArrayStart();
       array[len] = 0;
       return array;
