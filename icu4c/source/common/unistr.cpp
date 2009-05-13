@@ -372,7 +372,8 @@ UnicodeString::allocate(int32_t capacity) {
     // count bytes for the refCounter and the string capacity, and
     // round up to a multiple of 16; then divide by 4 and allocate int32_t's
     // to be safely aligned for the refCount
-    int32_t words = (int32_t)(((sizeof(int32_t) + capacity * U_SIZEOF_UCHAR + 15) & ~15) >> 2);
+    // the +1 is for the NUL terminator, to avoid reallocation in getTerminatedBuffer()
+    int32_t words = (int32_t)(((sizeof(int32_t) + (capacity + 1) * U_SIZEOF_UCHAR + 15) & ~15) >> 2);
     int32_t *array = (int32_t*) uprv_malloc( sizeof(int32_t) * words );
     if(array != 0) {
       // set initial refCount and point behind the refCount
@@ -488,7 +489,7 @@ UnicodeString::copyFrom(const UnicodeString &src, UBool fastCopy) {
   case kShortString:
     // short string using the stack buffer, do the same
     fFlags = kShortString;
-    uprv_memcpy(fUnion.fStackBuffer, src.fUnion.fStackBuffer, fShortLength * U_SIZEOF_UCHAR);
+    uprv_memcpy(fUnion.fStackBuffer, src.fUnion.fStackBuffer, srcLength * U_SIZEOF_UCHAR);
     break;
   case kLongString:
     // src uses a refCounted string buffer, use that buffer with refCount
@@ -498,6 +499,10 @@ UnicodeString::copyFrom(const UnicodeString &src, UBool fastCopy) {
     fUnion.fFields.fArray = src.fUnion.fFields.fArray;
     fUnion.fFields.fCapacity = src.fUnion.fFields.fCapacity;
     fFlags = src.fFlags;
+    // NUL-terminate, if possible, for getTerminatedBuffer()
+    if(srcLength < fUnion.fFields.fCapacity) {
+      fUnion.fFields.fArray[srcLength] = 0;
+    }
     break;
   case kReadonlyAlias:
     if(fastCopy) {
