@@ -4156,13 +4156,23 @@ UnicodeString::getTerminatedBuffer() {
     UChar *array = getArrayStart();
     int32_t len = length();
     if(len < getCapacity()) {
-      if(isBufferWritable()) {
+      if(!(fFlags&kBufferIsReadonly)) {
+        /*
+         * We must not write to a readonly buffer, but it is known to be
+         * NUL-terminated if len<capacity.
+         * A shared, allocated buffer (refCount()>1) must not have its contents
+         * modified, but the NUL at [len] is beyond the string contents,
+         * and multiple string objects and threads writing the same NUL into the
+         * same location is harmless.
+         * In all other cases, the buffer is fully writable and it is anyway safe
+         * to write the NUL.
+         *
+         * Note: An earlier version of this code tested whether there is a NUL
+         * at [len] already, but, while safe, it generated lots of warnings from
+         * tools like valgrind and Purify.
+         */
         array[len] = 0;
       }
-      /*
-       * All methods that make the buffer not-writable
-       * also NUL-terminate it as long as there is enough space.
-       */
       return array;
     } else if(cloneArrayIfNeeded(len+1)) {
       array = getArrayStart();
