@@ -499,10 +499,6 @@ UnicodeString::copyFrom(const UnicodeString &src, UBool fastCopy) {
     fUnion.fFields.fArray = src.fUnion.fFields.fArray;
     fUnion.fFields.fCapacity = src.fUnion.fFields.fCapacity;
     fFlags = src.fFlags;
-    // NUL-terminate, if possible, for getTerminatedBuffer()
-    if(srcLength < fUnion.fFields.fCapacity) {
-      fUnion.fFields.fArray[srcLength] = 0;
-    }
     break;
   case kReadonlyAlias:
     if(fastCopy) {
