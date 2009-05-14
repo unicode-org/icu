@@ -13,10 +13,10 @@
 
 U_CAPI int U_EXPORT2
 writePackageDatFile(const char *outFilename, const char *outComment,
-                    const char *sourcePath, const char *addList, Package *pkg,
+                    const char *sourcePath, const char *addList, U_NAMESPACE_QUALIFIER Package *pkg,
                     char outType);
 
-U_CAPI Package * U_EXPORT2
+U_CAPI U_NAMESPACE_QUALIFIER Package * U_EXPORT2
 readList(const char *filesPath, const char *listname, UBool readContents);
 
 #endif

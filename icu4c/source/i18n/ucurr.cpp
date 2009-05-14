@@ -697,6 +697,7 @@ static int currencyNameComparator(const void* a, const void* b) {
 // all currency names in "en_US" and "en".
 static void
 getCurrencyNameCount(const char* loc, int32_t* total_currency_name_count, int32_t* total_currency_symbol_count) {
+    U_NAMESPACE_USE
     *total_currency_name_count = 0;
     *total_currency_symbol_count = 0;
     const UChar* s = NULL;
@@ -783,6 +784,7 @@ collectCurrencyNames(const char* locale,
                      CurrencyNameStruct** currencySymbols, 
                      int32_t* total_currency_symbol_count, 
                      UErrorCode& ec) {
+    U_NAMESPACE_USE
     // Look up the Currencies resource for the given locale.
     UErrorCode ec2 = U_ZERO_ERROR;
 
