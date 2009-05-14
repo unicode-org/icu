@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #  ***********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2002-2007, International Business Machines Corporation
+#  * Copyright (c) 2002-2009, International Business Machines Corporation
 #  * and others. All Rights Reserved.
 #  ***********************************************************************
 #
@@ -18,7 +18,7 @@ my $ignore = "CVS|\\.svn|\\~|\\#|Debug|Release|\\.dll|\\.ilk|\\.idb|\\.pdb|\\.ds
 my ($sec, $min, $hour, , $day, $mon, $year, $wday, $yday, $isdst) = localtime;
 $year += 1900;
 if ( ! -f "cpyskip.txt" ) {
-	die "Can't open cpyskip.txt, please download from http://source.icu-project.org/cpyskip.txt (see http://icu-project.org/copyright-scan.html for more details)"
+	die "Can't open cpyskip.txt, please download from http://source.icu-project.org/cpyskip.txt (see http://site.icu-project.org/processes/copyright-scan for more details)"
 }
 my $command = "find $icuSource -type f -mtime -$yday | fgrep -v -f cpyskip.txt";
 my @files = `$command`;
