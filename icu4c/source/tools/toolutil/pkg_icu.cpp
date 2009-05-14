@@ -21,6 +21,8 @@
 
 // read a file list -------------------------------------------------------- ***
 
+U_NAMESPACE_USE
+
 static const struct {
     const char *suffix;
     int32_t length;

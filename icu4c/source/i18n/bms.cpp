@@ -23,6 +23,8 @@
 #define CONST_CAST(type,value) (type) (value)
 #endif
 
+U_NAMESPACE_USE
+
 U_CAPI UCD * U_EXPORT2
 ucd_open(UCollator *coll, UErrorCode *status)
 {
