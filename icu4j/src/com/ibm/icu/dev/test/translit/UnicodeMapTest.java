@@ -1,6 +1,3 @@
-//##header
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
 /*
  *******************************************************************************
  * Copyright (C) 1996-2009, International Business Machines Corporation and    *
@@ -9,10 +6,12 @@
  */
 package com.ibm.icu.dev.test.translit;
 
-import com.ibm.icu.dev.test.*;
+import java.util.HashMap;
+import java.util.Random;
+
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.util.UnicodeMap;
 import com.ibm.icu.impl.Utility;
-import java.util.*;
 
 /**
  * @test
@@ -71,4 +70,3 @@ public class UnicodeMapTest extends TestFmwk {
     return true;
   }
 }
-//#endif

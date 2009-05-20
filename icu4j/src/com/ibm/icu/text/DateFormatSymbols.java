@@ -1508,7 +1508,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         String fullName = calendarClass.getName();
         int lastDot = fullName.lastIndexOf('.');
         String className = fullName.substring(lastDot+1);
-        String calType = Utility.replaceAll(className, "Calendar", "").toLowerCase();
+        String calType = className.replaceAll("Calendar", "").toLowerCase();
         
         initializeData(locale, calType);
     }

@@ -1,6 +1,3 @@
-//##header
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
 /*
  *******************************************************************************
  * Copyright (C) 2002-2009, International Business Machines Corporation and    *
@@ -10,7 +7,6 @@
 package com.ibm.icu.dev.test.util;
 
 import java.io.BufferedReader;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Locale;
@@ -85,4 +81,3 @@ public class FileUtilities {
         return result;
     }
 }
-//#endif

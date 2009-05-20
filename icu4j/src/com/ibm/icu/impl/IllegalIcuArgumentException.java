@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 2009, Google, International Business Machines Corporation and         *
@@ -18,10 +17,7 @@ public class IllegalIcuArgumentException extends IllegalArgumentException {
         super(errorMessage);
     }
     
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     public synchronized Throwable initCause(Throwable cause) {
-    return super.initCause(cause);
+        return super.initCause(cause);
     }
-//#endif 
 }

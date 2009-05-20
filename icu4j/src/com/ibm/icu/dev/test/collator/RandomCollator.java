@@ -1,6 +1,3 @@
-//##header
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
 /*
  *******************************************************************************
  * Copyright (C) 2002-2009, International Business Machines Corporation and    *
@@ -9,21 +6,19 @@
  */
 package com.ibm.icu.dev.test.collator;
 
-
-import com.ibm.icu.text.Collator;
-import com.ibm.icu.text.RuleBasedCollator;
-import com.ibm.icu.text.UnicodeSet;
-
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.test.util.BNF;
-import com.ibm.icu.dev.test.util.BagFormatter;
-import com.ibm.icu.dev.test.util.Quoter;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.Random;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.util.BNF;
+import com.ibm.icu.dev.test.util.BagFormatter;
+import com.ibm.icu.dev.test.util.Quoter;
+import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.RuleBasedCollator;
+import com.ibm.icu.text.UnicodeSet;
 
 public class RandomCollator extends TestFmwk {
     public static void main(String[] args) throws Exception {
@@ -292,5 +287,3 @@ public class RandomCollator extends TestFmwk {
     };
     */
 }
-//#endif
-

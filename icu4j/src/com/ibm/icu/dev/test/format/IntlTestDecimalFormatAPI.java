@@ -1,4 +1,3 @@
-//##header
 /*****************************************************************************************
  *
  *   Copyright (C) 1996-2009, International Business Machines
@@ -17,15 +16,17 @@
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.text.*;
+import java.text.FieldPosition;
+import java.text.Format;
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.util.Locale;
+
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
-import java.util.Locale;
-import java.text.ParsePosition;
-import java.text.Format;
-import java.text.FieldPosition;
-import java.text.ParseException;
 import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.NumberFormat;
 
 public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
 {
@@ -269,8 +270,6 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
         }
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     public void testJB6134()
     {
         DecimalFormat decfmt = new DecimalFormat();
@@ -289,7 +288,6 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
                 " / fposByField: " + fposByField.getEndIndex());
         }
     }
-//#endif
 
     public void testJB4971()
     {
@@ -319,9 +317,6 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
                 " / expected: " + comp2.toString());
         }
 
-//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14)
-//#else
-
         java.math.MathContext result;
 
         java.math.MathContext comp3 = new java.math.MathContext(3, java.math.RoundingMode.DOWN);
@@ -334,8 +329,6 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
                 " / expected: " + comp3.toString());
         }
 
-//#endif
-
     }
 
     public void testJB6354()
@@ -343,20 +336,12 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
         DecimalFormat pat = new DecimalFormat("#,##0.00");
 
         // get default rounding increment
-//#if defined(FOUNDATION10)
-//##        com.ibm.icu.math.BigDecimal r1 = pat.getRoundingIncrement();
-//#else
         java.math.BigDecimal r1 = pat.getRoundingIncrement();
-//#endif
 
         // set rounding mode with zero increment.  Rounding 
         // increment should be set by this operation
         pat.setRoundingMode(BigDecimal.ROUND_UP);
-//#if defined(FOUNDATION10)
-//##        com.ibm.icu.math.BigDecimal r2 = pat.getRoundingIncrement();
-//#else
         java.math.BigDecimal r2 = pat.getRoundingIncrement();
-//#endif
 
         // check for different values
         if ((r1 != null) && (r2 != null))

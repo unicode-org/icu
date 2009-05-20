@@ -1,6 +1,3 @@
-//##header
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
 /*
  *******************************************************************************
  * Copyright (C) 2002-2009, International Business Machines Corporation and    *
@@ -429,4 +426,3 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
         }
     }
 }
-//#endif

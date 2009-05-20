@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 1996-2009, International Business Machines Corporation and    *
@@ -1801,172 +1800,14 @@ public final class Utility {
         }
         return result.toString();
     }
-
-    
-    // !!! 1.3 compatibility
-    public static int indexOf(StringBuffer buf, String s) {
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##        return buf.toString().indexOf(s);
-//#else
-        return buf.indexOf(s);
-//#endif
-    }
-    
-    // !!! 1.3 compatibility
-    public static int lastIndexOf(StringBuffer buf, String s) {
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##        return buf.toString().lastIndexOf(s);
-//#else
-        return buf.lastIndexOf(s);
-//#endif
-    }
-    
-    // !!! 1.3 compatibility
-    public static int indexOf(StringBuffer buf, String s, int i) {
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##        return buf.toString().indexOf(s, i);
-//#else
-        return buf.indexOf(s, i);
-//#endif
-    }
-    
-    // !!! 1.3 compatibility
-   public static int lastIndexOf(StringBuffer buf, String s, int i) {
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##        return buf.toString().lastIndexOf(s, i);
-//#else
-        return buf.lastIndexOf(s, i);
-//#endif
-    }
-
-   // !!! 1.3/1.4 compatibility
-   public static String replace(String src, String target, String replacement) {
-//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14)
-//##       int i = src.indexOf(target);
-//##       if (i == -1) {
-//##           return src;
-//##       }
-//##       StringBuffer buf = new StringBuffer();
-//##       int n = 0;
-//##       do {
-//##           buf.append(src.substring(n, i));
-//##           buf.append(replacement);
-//##           n = i + target.length();
-//##           i = src.indexOf(target, n);
-//##       } while (i != -1);
-//##       if (n < src.length()) {
-//##           buf.append(src.substring(n));
-//##       }
-//##       return buf.toString();
-//#else
-       return src.replace(target, replacement);
-//#endif
-   }
-
-   // !!! 1.3 compatibility
-   public static String replaceAll(String src, String target, String replacement) {
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##       return replace(src, target, replacement);
-//#else
-       return src.replaceAll(target, replacement);
-//#endif
-   }
-
-   //private static final String REGEX_SPECIALS = ".^$[]*+?|()";
-
-   // !!! 1.3 compatibility
-   // Note: target is not a string literal, not a regular expression.
    public static String[] splitString(String src, String target) {
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##       int i = src.indexOf(target);
-//##       if (i == -1) {
-//##           return new String[] { src };
-//##       }
-//##       ArrayList output = new ArrayList();
-//##       int n = 0;
-//##       do {
-//##           output.add(src.substring(n, i));
-//##           n = i + target.length();
-//##           i = src.indexOf(target, n);
-//##       } while (i != -1);
-//##       if (n < src.length()) {
-//##           output.add(src.substring(n));
-//##       }
-//##       return (String[]) output.toArray(new String[output.size()]);
-//#else
        return src.split("\\Q" + target + "\\E");
-//#endif
    }
 
-   // !!! 1.3 compatibility
   /**
    * Split the string at runs of ascii whitespace characters.
    */
    public static String[] splitWhitespace(String src) {
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##        char ws[] = "\u0020\u0009\n\u000b\u000c\r".toCharArray();
-//##        ArrayList output = new ArrayList();
-//##        boolean inWhitespace = true;
-//##        int n = 0;
-//##  loop:
-//##        for (int i = 0; i < src.length(); ++i) {
-//##          char c = src.charAt(i);
-//##          for (int j = 0; j < ws.length; ++j) {
-//##            if (ws[j] == c) {
-//##              if (!inWhitespace) {
-//##                output.add(src.substring(n, i));
-//##                inWhitespace = true;
-//##              }
-//##              continue loop;
-//##            }
-//##          }
-//##          if (inWhitespace) {
-//##            n = i;
-//##            inWhitespace = false;
-//##          }
-//##        }
-//##        if (n < src.length()) {
-//##          output.add(src.substring(n));
-//##        }
-//##        return (String[]) output.toArray(new String[output.size()]);
-//#else
        return src.split("\\s+");
-//#endif
-   }
-
-   // !!! 1.3/1.4 compatibility
-   // Integer constants - Integer.valueOf(int) is not supported in JDK 1.3/1.4
-   private static final int MAX_INT_CONST = 64;
-   private static final Integer[] INT_CONST = new Integer[MAX_INT_CONST];
-
-   static {
-       for (int i = 0; i < MAX_INT_CONST; i++) {
-           INT_CONST[i] = new Integer(i);
-       }
-   }
-
-   public static Integer integerValueOf(int val) {
-       if (0 <= val && val < MAX_INT_CONST) {
-           return INT_CONST[val];
-       }
-       return new Integer(val);
-   }
-
-   // !!! 1.3/1.4 compatibility
-   // Arrays.toString(Object[])
-   public static String arrayToString(Object[] a) {
-       StringBuffer buf = new StringBuffer("[");
-       for (int i = 0; i < a.length; i++) {
-           if (i != 0) {
-               buf.append(", ");
-           }
-           if (a[i] == null) {
-               buf.append("null");
-           } else {
-               buf.append(a[i].toString());
-           }
-       }
-       buf.append("]");
-       return buf.toString();
    }
 }

@@ -1,6 +1,3 @@
-//##header
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
 /*
 *******************************************************************************
 *   Copyright (C) 2007-2009, International Business Machines
@@ -10,11 +7,12 @@
 
 package com.ibm.icu.dev.test.bidi;
 
-import com.ibm.icu.text.Bidi;
-import java.text.AttributedString;
+import java.awt.font.NumericShaper;
 import java.awt.font.TextAttribute;
 import java.text.AttributedCharacterIterator;
-import java.awt.font.NumericShaper;
+import java.text.AttributedString;
+
+import com.ibm.icu.text.Bidi;
 
 /**
  * Regression test for java.text.Bidi compatibility
@@ -294,4 +292,3 @@ public class TestCompatibility extends BidiTest {
         }
     }
 }
-//#endif

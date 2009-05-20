@@ -1,4 +1,3 @@
-//##header
 /*****************************************************************************************
  *
  *   Copyright (C) 1996-2009, International Business Machines
@@ -16,15 +15,14 @@
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.text.*;
-import com.ibm.icu.util.ULocale;
-
-import java.util.Locale;
-
 import java.math.BigInteger;
 import java.text.FieldPosition;
-import java.text.ParsePosition;
 import java.text.ParseException;
+import java.text.ParsePosition;
+import java.util.Locale;
+
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.util.ULocale;
 
 public class IntlTestNumberFormatAPI extends com.ibm.icu.dev.test.TestFmwk
 {
@@ -219,10 +217,7 @@ public class IntlTestNumberFormatAPI extends com.ibm.icu.dev.test.TestFmwk
             public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {return null;}
             public StringBuffer format(long number, StringBuffer toAppendTo, FieldPosition pos) {return null;}
             public StringBuffer format(BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {return null;}
-//#if defined(FOUNDATION10)
-//#else
             public StringBuffer format(java.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {return null;}
-//#endif
             public StringBuffer format(com.ibm.icu.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {return null;}
             public Number parse(String text, ParsePosition parsePosition) {return null;}
         }

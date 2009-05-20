@@ -1,4 +1,3 @@
-//##header
 /**
  *******************************************************************************
  * Copyright (C) 2000-2009, International Business Machines Corporation and    *
@@ -6,12 +5,21 @@
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
-import com.ibm.icu.util.*;
-import com.ibm.icu.text.DateFormat;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.util.Date;
 import java.util.Locale;
-import java.io.*;
+
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.SimpleTimeZone;
+import com.ibm.icu.util.TimeZone;
 
 public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
 
@@ -339,13 +347,6 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
             logln(" Got: " + cal.getTime() + "  Expected: " + tempcal.getTime());
         }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##        // This test case does not work well with JRE1.3 with
-//##        // the timezone update for US 2007 rule.  Java 1.3 only
-//##        // supports single DST rule for all years.  April 2, 1985
-//##        // was actually not in DST, but with the new rule, the date
-//##        // is in DST (which is actually wrong).
-//#else
         cal.clear();
         cal.set(1985, 2, 2, 11, 49);
         tempcal.clear();
@@ -354,7 +355,6 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("FAIL: Calendar.set(5 args) failed");
             logln(" Got: " + cal.getTime() + "  Expected: " + tempcal.getTime());
         }
-//#endif
 
         cal.clear();
         cal.set(1995, 9, 12, 1, 39, 55);

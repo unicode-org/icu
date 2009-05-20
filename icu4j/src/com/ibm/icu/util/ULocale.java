@@ -4452,7 +4452,7 @@ public final class ULocale implements Serializable {
         String bcpType = null;
         try {
             UResourceBundle typeMaps = bcp47Mappings.get(key);
-            String tmp = key.equals("timezone") ? Utility.replaceAll(type, "/", ":") : type;
+            String tmp = key.equals("timezone") ? type.replaceAll("/", ":") : type;
             bcpType = typeMaps.getString(tmp);
         } catch (MissingResourceException mre) {
             // fall through
@@ -4493,7 +4493,7 @@ public final class ULocale implements Serializable {
                 if (bcpType.equals(typeMap.getString())) {
                     type = typeMap.getKey();
                     if (key.equals("timezone")) {
-                        type = Utility.replaceAll(type, ":", "/");
+                        type = type.replaceAll(":", "/");
                     }
                     break;
                 }

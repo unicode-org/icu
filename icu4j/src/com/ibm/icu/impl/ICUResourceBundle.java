@@ -1191,7 +1191,7 @@ public  class ICUResourceBundle extends UResourceBundle {
             if (res != null && lookup != null && !alias[0]) {
                 // We do not want to cache a result from alias entry
                 lookup.put(resKey, res);
-                lookup.put(Utility.integerValueOf(index[0]), res);
+                lookup.put(Integer.valueOf(index[0]), res);
             }
         }
         return res;
@@ -1201,7 +1201,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         UResourceBundle res = null;
         Integer indexKey = null;
         if (lookup != null) {
-            indexKey = Utility.integerValueOf(index);
+            indexKey = Integer.valueOf(index);
             res = (UResourceBundle)lookup.get(indexKey);
         }
         if (res == null) {

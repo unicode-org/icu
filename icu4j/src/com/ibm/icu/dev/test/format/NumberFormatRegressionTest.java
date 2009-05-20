@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 2001-2009, International Business Machines Corporation and    *
@@ -13,12 +12,19 @@
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.text.*;
-import com.ibm.icu.util.*;
-import java.util.Locale;
-import java.util.Date;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.text.ParseException;
-import java.io.*;
+import java.util.Date;
+import java.util.Locale;
+
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.ULocale;
 
 /** 
  * Performs regression test for MessageFormat
@@ -161,8 +167,6 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
     
     //Test New serialized DecimalFormat(2.0) read old serialized forms of DecimalFormat(1.3.1.1)
     public void TestSerialization() throws IOException{
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
         byte[][] contents = NumberFormatSerialTestData.getContent();
         double data = 1234.56;
         String[] expected = {
@@ -181,7 +185,6 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
                 warnln("FAIL: " + e.getMessage());
             }
         }
-//#endif
     }
 
     /*

@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 1996-2009, International Business Machines Corporation and    *
@@ -12,22 +11,18 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.ref.WeakReference;
-import java.lang.Character;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
 import java.text.FieldPosition;
+import java.text.Format;
 import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
-import java.text.AttributedCharacterIterator;
-import java.text.AttributedString;
-import java.text.Format;
-import java.util.LinkedList;
-//#endif
 
 import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.DateNumberFormat;
@@ -676,21 +671,16 @@ public class SimpleDateFormat extends DateFormat {
                 toAppendTo.append((String)items[i]);
             } else {
                 PatternItem item = (PatternItem)items[i];
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
                 int start = 0;
                 if (attributes != null) {
                     // Save the current length
                     start = toAppendTo.length();
                 }
-//#endif
                 if (useFastFormat) {
                     subFormat(toAppendTo, item.type, item.length, toAppendTo.length(), pos, cal);
                 } else {
                     toAppendTo.append(subFormat(item.type, item.length, toAppendTo.length(), pos, formatData, cal));
                 }
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
                 if (attributes != null) {
                     // Check the sub format length
                     int end = toAppendTo.length();
@@ -703,7 +693,6 @@ public class SimpleDateFormat extends DateFormat {
                         attributes.add(fp);
                     }
                 }
-//#endif
             }
         }
         return toAppendTo;
@@ -759,8 +748,6 @@ public class SimpleDateFormat extends DateFormat {
         /*V*/   DateFormat.TIMEZONE_SPECIAL_FIELD, 
     };
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     // Map pattern character index to DateFormat.Field
     private static final DateFormat.Field[] PATTERN_INDEX_TO_DATE_FORMAT_ATTRIBUTE = {
         /*GyM*/ DateFormat.Field.ERA, DateFormat.Field.YEAR, DateFormat.Field.MONTH,
@@ -797,7 +784,6 @@ public class SimpleDateFormat extends DateFormat {
         }
         return null;
     }
-//#endif
 
     /**
      * Format a single field, given its pattern character.  Subclasses may
@@ -879,10 +865,11 @@ public class SimpleDateFormat extends DateFormat {
              * patterns with 4 or more than 4 'y' characters in the same way.
              * So I change the codes to meet the specification. [Richard/GCl]
              */
-            if (count == 2)
+            if (count == 2) {
                 zeroPaddingNumber(currentNumberFormat,buf, value, 2, 2); // clip 1996 to 96
-            else //count = 1 or count > 2
+            } else { //count = 1 or count > 2
                 zeroPaddingNumber(currentNumberFormat,buf, value, count, maxIntCount);
+            }
             break;
         case 2: // 'M' - MONTH
             if (count == 5) {
@@ -896,12 +883,13 @@ public class SimpleDateFormat extends DateFormat {
             }
             break;
         case 4: // 'k' - HOUR_OF_DAY (1..24)
-            if (value == 0)
+            if (value == 0) {
                 zeroPaddingNumber(currentNumberFormat,buf,
                                   cal.getMaximum(Calendar.HOUR_OF_DAY)+1,
                                   count, maxIntCount);
-            else
+            } else {
                 zeroPaddingNumber(currentNumberFormat,buf, value, count, maxIntCount);
+            }
             break;
         case 8: // 'S' - FRACTIONAL_SECOND
             // Fractional seconds left-justify
@@ -943,12 +931,13 @@ public class SimpleDateFormat extends DateFormat {
             safeAppend(formatData.ampms, value, buf);
             break;
         case 15: // 'h' - HOUR (1..12)
-            if (value == 0)
+            if (value == 0) {
                 zeroPaddingNumber(currentNumberFormat,buf,
                                   cal.getLeastMaximum(Calendar.HOUR)+1,
                                   count, maxIntCount);
-            else
+            } else {
                 zeroPaddingNumber(currentNumberFormat,buf, value, count, maxIntCount);
+            }
             break;
         case 17: // 'z' - ZONE_OFFSET
             if (count < 4) {
@@ -1101,14 +1090,10 @@ public class SimpleDateFormat extends DateFormat {
             if (pos.getField() == PATTERN_INDEX_TO_DATE_FORMAT_FIELD[patternCharIndex]) {
                 pos.setBeginIndex(beginOffset);
                 pos.setEndIndex(beginOffset + buf.length() - bufstart);
-            }
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
-            else if (pos.getFieldAttribute() == PATTERN_INDEX_TO_DATE_FORMAT_ATTRIBUTE[patternCharIndex]) {
+            } else if (pos.getFieldAttribute() == PATTERN_INDEX_TO_DATE_FORMAT_ATTRIBUTE[patternCharIndex]) {
                 pos.setBeginIndex(beginOffset);
                 pos.setEndIndex(beginOffset + buf.length() - bufstart);
             }
-//#endif
         }
     }
 
@@ -2107,14 +2092,15 @@ public class SimpleDateFormat extends DateFormat {
             {
                 // It would be good to unify this with the obeyCount logic below,
                 // but that's going to be difficult.
-                if (obeyCount)
-                    {
+                if (obeyCount) {
                         if ((start+count) > text.length()) return -start;
                         number = parseInt(text, count, pos, allowNegative,currentNumberFormat);
-                    }
-                else number = parseInt(text, pos, allowNegative,currentNumberFormat);
-                if (number == null)
+                } else {
+                    number = parseInt(text, pos, allowNegative,currentNumberFormat);
+                }
+                if (number == null) {
                     return -start;
+                }
                 value = number.intValue();
             }
 
@@ -2154,54 +2140,50 @@ public class SimpleDateFormat extends DateFormat {
                 cal.set(Calendar.YEAR, value);
                 return pos.getIndex();
             case 2: // 'M' - MONTH
-                if (count <= 2) // i.e., M or MM.
-                    {
-                        // Don't want to parse the month if it is a string
-                        // while pattern uses numeric style: M or MM.
-                        // [We computed 'value' above.]
-                        cal.set(Calendar.MONTH, value - 1);
-                        return pos.getIndex();
+                if (count <= 2) { // i.e., M or MM.
+                    // Don't want to parse the month if it is a string
+                    // while pattern uses numeric style: M or MM.
+                    // [We computed 'value' above.]
+                    cal.set(Calendar.MONTH, value - 1);
+                    return pos.getIndex();
+                } else {
+                    // count >= 3 // i.e., MMM or MMMM
+                    // Want to be able to parse both short and long forms.
+                    // Try count == 4 first:
+                    int newStart = matchString(text, start, Calendar.MONTH,
+                                               formatData.months, cal);
+                    if (newStart > 0) {
+                        return newStart;
+                    } else { // count == 4 failed, now try count == 3
+                        return matchString(text, start, Calendar.MONTH,
+                                           formatData.shortMonths, cal);
                     }
-                else
-                    {
-                        // count >= 3 // i.e., MMM or MMMM
-                        // Want to be able to parse both short and long forms.
-                        // Try count == 4 first:
-                        int newStart = matchString(text, start, Calendar.MONTH,
-                                                   formatData.months, cal);
-                        if (newStart > 0) {
-                            return newStart;
-                        } else { // count == 4 failed, now try count == 3
-                            return matchString(text, start, Calendar.MONTH,
-                                               formatData.shortMonths, cal);
-                        }
-                    }
+                }
             case 26: // 'L' - STAND_ALONE_MONTH
-                if (count <= 2) // i.e., M or MM.
-                    {
-                        // Don't want to parse the month if it is a string
-                        // while pattern uses numeric style: M or MM.
-                        // [We computed 'value' above.]
-                        cal.set(Calendar.MONTH, value - 1);
-                        return pos.getIndex();
+                if (count <= 2) { // i.e., M or MM.
+                    // Don't want to parse the month if it is a string
+                    // while pattern uses numeric style: M or MM.
+                    // [We computed 'value' above.]
+                    cal.set(Calendar.MONTH, value - 1);
+                    return pos.getIndex();
+                } else {
+                    // count >= 3 // i.e., MMM or MMMM
+                    // Want to be able to parse both short and long forms.
+                    // Try count == 4 first:
+                    int newStart = matchString(text, start, Calendar.MONTH,
+                                               formatData.standaloneMonths, cal);
+                    if (newStart > 0) {
+                        return newStart;
+                    } else { // count == 4 failed, now try count == 3
+                        return matchString(text, start, Calendar.MONTH,
+                                           formatData.standaloneShortMonths, cal);
                     }
-                else
-                    {
-                        // count >= 3 // i.e., MMM or MMMM
-                        // Want to be able to parse both short and long forms.
-                        // Try count == 4 first:
-                        int newStart = matchString(text, start, Calendar.MONTH,
-                                                   formatData.standaloneMonths, cal);
-                        if (newStart > 0) {
-                            return newStart;
-                        } else { // count == 4 failed, now try count == 3
-                            return matchString(text, start, Calendar.MONTH,
-                                               formatData.standaloneShortMonths, cal);
-                        }
-                    }
+                }
             case 4: // 'k' - HOUR_OF_DAY (1..24)
                 // [We computed 'value' above.]
-                if (value == cal.getMaximum(Calendar.HOUR_OF_DAY)+1) value = 0;
+                if (value == cal.getMaximum(Calendar.HOUR_OF_DAY)+1) {
+                    value = 0;
+                }
                 cal.set(Calendar.HOUR_OF_DAY, value);
                 return pos.getIndex();
             case 8: // 'S' - FRACTIONAL_SECOND
@@ -2250,171 +2232,170 @@ public class SimpleDateFormat extends DateFormat {
                 return matchString(text, start, Calendar.AM_PM, formatData.ampms, cal);
             case 15: // 'h' - HOUR (1..12)
                 // [We computed 'value' above.]
-                if (value == cal.getLeastMaximum(Calendar.HOUR)+1) value = 0;
+                if (value == cal.getLeastMaximum(Calendar.HOUR)+1) {
+                    value = 0;
+                }
                 cal.set(Calendar.HOUR, value);
                 return pos.getIndex();
             case 17: // 'z' - ZONE_OFFSET
             case 23: // 'Z' - TIMEZONE_RFC
             case 24: // 'v' - TIMEZONE_GENERIC
             case 29: // 'V' - TIMEZONE_SPECIAL
-                {
-                    TimeZone tz = null;
-                    int offset = 0;
-                    boolean parsed = false;
+            {
+                TimeZone tz = null;
+                int offset = 0;
+                boolean parsed = false;
 
-                    // Step 1
-                    // Check if this is a long GMT offset string (either localized or default)
-                    Integer gmtoff = parseGMT(text, pos, currentNumberFormat);
-                    if (gmtoff != null) {
-                        offset = gmtoff.intValue();
-                        parsed = true;
-                    }
-
-                    if (!parsed) {
-                        // Step 2
-                        // Check if this is an RFC822 time zone offset.
-                        // ICU supports the standard RFC822 format [+|-]HHmm
-                        // and its extended form [+|-]HHmmSS.
-                        
-                        do {
-                            int sign = 0;
-                            char signChar = text.charAt(start);
-                            if (signChar == '+') {
-                                sign = 1;
-                            } else if (signChar == '-') {
-                                sign = -1;
-                            } else {
-                                // Not an RFC822 offset string
-                                break;
-                            }
-
-                            // Parse digits
-                            int orgPos = start + 1;
-                            pos.setIndex(orgPos);
-                            number = parseInt(text, 6, pos, false,currentNumberFormat);
-                            int numLen = pos.getIndex() - orgPos;
-                            if (numLen <= 0) {
-                                break;
-                            }
-
-                            // Followings are possible format (excluding sign char)
-                            // HHmmSS
-                            // HmmSS
-                            // HHmm
-                            // Hmm
-                            // HH
-                            // H
-                            int val = number.intValue();
-                            int hour = 0, min = 0, sec = 0;
-                            switch(numLen) {
-                            case 1: // H
-                            case 2: // HH
-                                hour = val;
-                                break;
-                            case 3: // Hmm
-                            case 4: // HHmm
-                                hour = val / 100;
-                                min = val % 100;
-                                break;
-                            case 5: // Hmmss
-                            case 6: // HHmmss
-                                hour = val / 10000;
-                                min = (val % 10000) / 100;
-                                sec = val % 100;
-                                break;
-                            }
-                            if (hour > 23 || min > 59 || sec > 59) {
-                                // Invalid value range
-                                break;
-                            }
-                            offset = (((hour * 60) + min) * 60 + sec) * 1000 * sign;
-                            parsed = true;
-                        } while (false);
-
-                        if (!parsed) {
-                            // Failed to parse.  Reset the position.
-                            pos.setIndex(start);
-                        }
-                    }
-
-                    if (parsed) {
-                        // offset was successfully parsed as either a long GMT string or RFC822 zone offset
-                        // string.  Create normalized zone ID for the offset.
-                        tz = ZoneMeta.getCustomTimeZone(offset);
-                        cal.setTimeZone(tz);
-                        return pos.getIndex();
-                    }
-
-                    // Step 3
-                    // At this point, check for named time zones by looking through
-                    // the locale data from the DateFormatZoneData strings.
-                    // Want to be able to parse both short and long forms.
-                    // optimize for calendar's current time zone
-                    ZoneStringInfo zsinfo = null;
-                    switch (patternCharIndex) {
-                    case 17: // 'z' - ZONE_OFFSET
-                        if (count < 4) {
-                            zsinfo = formatData.getZoneStringFormat().findSpecificShort(text, start);
-                        } else {
-                            zsinfo = formatData.getZoneStringFormat().findSpecificLong(text, start);
-                        }
-                        break;
-                    case 24: // 'v' - TIMEZONE_GENERIC
-                        if (count == 1) {
-                            zsinfo = formatData.getZoneStringFormat().findGenericShort(text, start);
-                        } else if (count == 4) {
-                            zsinfo = formatData.getZoneStringFormat().findGenericLong(text, start);
-                        }
-                        break;
-                    case 29: // 'V' - TIMEZONE_SPECIAL
-                        if (count == 1) {
-                            zsinfo = formatData.getZoneStringFormat().findSpecificShort(text, start);
-                        } else if (count == 4) {
-                            zsinfo = formatData.getZoneStringFormat().findGenericLocation(text, start);
-                        }
-                        break;
-                    }
-                    if (zsinfo != null) {
-                        if (zsinfo.isStandard()) {
-                            tztype = TZTYPE_STD;
-                        } else if (zsinfo.isDaylight()) {
-                            tztype = TZTYPE_DST;
-                        }
-                        tz = TimeZone.getTimeZone(zsinfo.getID());
-                        cal.setTimeZone(tz);
-                        return start + zsinfo.getString().length();
-                    }
-                    // Step 4
-                    // Final attempt - is this standalone GMT/UT/UTC?
-                    int gmtLen = 0;
-                    if (text.regionMatches(true, start, STR_GMT, 0, STR_GMT_LEN)) {
-                        gmtLen = STR_GMT_LEN;
-                    } else if (text.regionMatches(true, start, STR_UTC, 0, STR_UTC_LEN)) {
-                        gmtLen = STR_UTC_LEN;
-                    } else if (text.regionMatches(true, start, STR_UT, 0, STR_UT_LEN)) {
-                        gmtLen = STR_UT_LEN;
-                    }
-                    if (gmtLen > 0) {
-                        tz = TimeZone.getTimeZone("Etc/GMT");
-                        cal.setTimeZone(tz);
-                        return start + gmtLen;
-                    }
-
-                    // complete failure
-                    return -start;
+                // Step 1
+                // Check if this is a long GMT offset string (either localized or default)
+                Integer gmtoff = parseGMT(text, pos, currentNumberFormat);
+                if (gmtoff != null) {
+                    offset = gmtoff.intValue();
+                    parsed = true;
                 }
 
+                if (!parsed) {
+                    // Step 2
+                    // Check if this is an RFC822 time zone offset.
+                    // ICU supports the standard RFC822 format [+|-]HHmm
+                    // and its extended form [+|-]HHmmSS.
+                    
+                    do {
+                        int sign = 0;
+                        char signChar = text.charAt(start);
+                        if (signChar == '+') {
+                            sign = 1;
+                        } else if (signChar == '-') {
+                            sign = -1;
+                        } else {
+                            // Not an RFC822 offset string
+                            break;
+                        }
+
+                        // Parse digits
+                        int orgPos = start + 1;
+                        pos.setIndex(orgPos);
+                        number = parseInt(text, 6, pos, false,currentNumberFormat);
+                        int numLen = pos.getIndex() - orgPos;
+                        if (numLen <= 0) {
+                            break;
+                        }
+
+                        // Followings are possible format (excluding sign char)
+                        // HHmmSS
+                        // HmmSS
+                        // HHmm
+                        // Hmm
+                        // HH
+                        // H
+                        int val = number.intValue();
+                        int hour = 0, min = 0, sec = 0;
+                        switch(numLen) {
+                        case 1: // H
+                        case 2: // HH
+                            hour = val;
+                            break;
+                        case 3: // Hmm
+                        case 4: // HHmm
+                            hour = val / 100;
+                            min = val % 100;
+                            break;
+                        case 5: // Hmmss
+                        case 6: // HHmmss
+                            hour = val / 10000;
+                            min = (val % 10000) / 100;
+                            sec = val % 100;
+                            break;
+                        }
+                        if (hour > 23 || min > 59 || sec > 59) {
+                            // Invalid value range
+                            break;
+                        }
+                        offset = (((hour * 60) + min) * 60 + sec) * 1000 * sign;
+                        parsed = true;
+                    } while (false);
+
+                    if (!parsed) {
+                        // Failed to parse.  Reset the position.
+                        pos.setIndex(start);
+                    }
+                }
+
+                if (parsed) {
+                    // offset was successfully parsed as either a long GMT string or RFC822 zone offset
+                    // string.  Create normalized zone ID for the offset.
+                    tz = ZoneMeta.getCustomTimeZone(offset);
+                    cal.setTimeZone(tz);
+                    return pos.getIndex();
+                }
+
+                // Step 3
+                // At this point, check for named time zones by looking through
+                // the locale data from the DateFormatZoneData strings.
+                // Want to be able to parse both short and long forms.
+                // optimize for calendar's current time zone
+                ZoneStringInfo zsinfo = null;
+                switch (patternCharIndex) {
+                case 17: // 'z' - ZONE_OFFSET
+                    if (count < 4) {
+                        zsinfo = formatData.getZoneStringFormat().findSpecificShort(text, start);
+                    } else {
+                        zsinfo = formatData.getZoneStringFormat().findSpecificLong(text, start);
+                    }
+                    break;
+                case 24: // 'v' - TIMEZONE_GENERIC
+                    if (count == 1) {
+                        zsinfo = formatData.getZoneStringFormat().findGenericShort(text, start);
+                    } else if (count == 4) {
+                        zsinfo = formatData.getZoneStringFormat().findGenericLong(text, start);
+                    }
+                    break;
+                case 29: // 'V' - TIMEZONE_SPECIAL
+                    if (count == 1) {
+                        zsinfo = formatData.getZoneStringFormat().findSpecificShort(text, start);
+                    } else if (count == 4) {
+                        zsinfo = formatData.getZoneStringFormat().findGenericLocation(text, start);
+                    }
+                    break;
+                }
+                if (zsinfo != null) {
+                    if (zsinfo.isStandard()) {
+                        tztype = TZTYPE_STD;
+                    } else if (zsinfo.isDaylight()) {
+                        tztype = TZTYPE_DST;
+                    }
+                    tz = TimeZone.getTimeZone(zsinfo.getID());
+                    cal.setTimeZone(tz);
+                    return start + zsinfo.getString().length();
+                }
+                // Step 4
+                // Final attempt - is this standalone GMT/UT/UTC?
+                int gmtLen = 0;
+                if (text.regionMatches(true, start, STR_GMT, 0, STR_GMT_LEN)) {
+                    gmtLen = STR_GMT_LEN;
+                } else if (text.regionMatches(true, start, STR_UTC, 0, STR_UTC_LEN)) {
+                    gmtLen = STR_UTC_LEN;
+                } else if (text.regionMatches(true, start, STR_UT, 0, STR_UT_LEN)) {
+                    gmtLen = STR_UT_LEN;
+                }
+                if (gmtLen > 0) {
+                    tz = TimeZone.getTimeZone("Etc/GMT");
+                    cal.setTimeZone(tz);
+                    return start + gmtLen;
+                }
+
+                // complete failure
+                return -start;
+            }
+
             case 27: // 'Q' - QUARTER
-                if (count <= 2) // i.e., Q or QQ.
-                {
+                if (count <= 2) { // i.e., Q or QQ.
                     // Don't want to parse the quarter if it is a string
                     // while pattern uses numeric style: Q or QQ.
                     // [We computed 'value' above.]
                     cal.set(Calendar.MONTH, (value - 1) * 3);
                     return pos.getIndex();
-                }
-            else
-                {
+                } else {
                     // count >= 3 // i.e., QQQ or QQQQ
                     // Want to be able to parse both short and long forms.
                     // Try count == 4 first:
@@ -2427,18 +2408,15 @@ public class SimpleDateFormat extends DateFormat {
                                            formatData.shortQuarters, cal);
                     }
                 }
-                
+
             case 28: // 'q' - STANDALONE QUARTER
-                if (count <= 2) // i.e., q or qq.
-                {
+                if (count <= 2) { // i.e., q or qq.
                     // Don't want to parse the quarter if it is a string
                     // while pattern uses numeric style: q or qq.
                     // [We computed 'value' above.]
                     cal.set(Calendar.MONTH, (value - 1) * 3);
                     return pos.getIndex();
-                }
-            else
-                {
+                } else {
                     // count >= 3 // i.e., qqq or qqqq
                     // Want to be able to parse both short and long forms.
                     // Try count == 4 first:
@@ -2469,12 +2447,12 @@ public class SimpleDateFormat extends DateFormat {
                 // case 22: // 'A' - MILLISECONDS_IN_DAY
 
                 // Handle "generic" fields
-                if (obeyCount)
-                    {
-                        if ((start+count) > text.length()) return -start;
-                        number = parseInt(text, count, pos, allowNegative,currentNumberFormat);
-                    }
-                else number = parseInt(text, pos, allowNegative,currentNumberFormat);
+                if (obeyCount) {
+                    if ((start+count) > text.length()) return -start;
+                    number = parseInt(text, count, pos, allowNegative,currentNumberFormat);
+                } else {
+                    number = parseInt(text, pos, allowNegative,currentNumberFormat);
+                }
                 if (number != null) {
                     cal.set(field, number.intValue());
                     return pos.getIndex();
@@ -2555,11 +2533,10 @@ public class SimpleDateFormat extends DateFormat {
             if (inQuote) {
                 if (c == '\'')
                     inQuote = false;
-            }
-            else {
-                if (c == '\'')
+            } else {
+                if (c == '\'') {
                     inQuote = true;
-                else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+                } else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
                     int ci = from.indexOf(c);
                     if (ci != -1) {
                         c = to.charAt(ci);
@@ -2570,8 +2547,9 @@ public class SimpleDateFormat extends DateFormat {
             }
             result.append(c);
         }
-        if (inQuote)
+        if (inQuote) {
             throw new IllegalArgumentException("Unfinished quote in pattern");
+        }
         return result.toString();
     }
 
@@ -2714,8 +2692,6 @@ public class SimpleDateFormat extends DateFormat {
         initLocalZeroPaddingNumberFormat();
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     /**
      * Format the object to an attributed string, and return the corresponding iterator
      * Overrides superclass method.
@@ -2752,8 +2728,6 @@ public class SimpleDateFormat extends DateFormat {
         // return the CharacterIterator from AttributedString
         return as.getIterator();
     }
-//#endif
-
 
     /**
      * Get the locale of this simple date formatter.
@@ -2817,19 +2791,18 @@ public class SimpleDateFormat extends DateFormat {
                 } else {
                     inQuote = ! inQuote;
                 }
-            } 
-            else if ( ! inQuote && ((ch >= 0x0061 /*'a'*/ && ch <= 0x007A /*'z'*/) 
+            } else if ( ! inQuote && ((ch >= 0x0061 /*'a'*/ && ch <= 0x007A /*'z'*/) 
                         || (ch >= 0x0041 /*'A'*/ && ch <= 0x005A /*'Z'*/))) {
                 prevCh = ch;
                 ++count;
             }
         }
-        if ( count > 0 ) {
+        if (count > 0) {
             // last item
             level = PATTERN_CHAR_TO_LEVEL[prevCh - PATTERN_CHAR_BASE];
-                if ( fieldLevel <= level ) {
-                    return false;
-                }
+            if ( fieldLevel <= level ) {
+                return false;
+            }
         }
         return true;
     }
@@ -3149,7 +3122,6 @@ public class SimpleDateFormat extends DateFormat {
             }
 
             start = delimiterPosition + 1;
-
-        }    
+        }
     }
 }

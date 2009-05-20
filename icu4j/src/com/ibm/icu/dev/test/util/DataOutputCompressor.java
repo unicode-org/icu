@@ -1,6 +1,3 @@
-//##header
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
 /*
  *******************************************************************************
  * Copyright (C) 1996-2009, International Business Machines Corporation and    *
@@ -15,12 +12,9 @@ import java.io.ObjectOutput;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-//import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.SortedSet;
-//import java.util.TreeSet;
 
-//import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.UTF16;
 
 /**
@@ -211,5 +205,3 @@ public final class DataOutputCompressor implements ObjectOutput {
         }
     }
 }
-
-//#endif

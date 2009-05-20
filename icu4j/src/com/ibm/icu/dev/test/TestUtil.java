@@ -1,4 +1,3 @@
-//##header
 /**
  *******************************************************************************
  * Copyright (C) 2001-2009, International Business Machines Corporation and    *
@@ -8,11 +7,11 @@
 package com.ibm.icu.dev.test;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.File;
 
 public final class TestUtil {
     /**
@@ -63,13 +62,7 @@ public final class TestUtil {
             } catch (Throwable t) {
                 IOException ex =
                     new IOException("data resource '" + name + "' not found");
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##            t.printStackTrace();
-//#else
-                //initCause API was introduced in JDK 1.4
                 ex.initCause(t);
-//#endif
-               
                 throw ex;
             }
         }

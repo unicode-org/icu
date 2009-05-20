@@ -1,4 +1,3 @@
-//##header
 /**
  *******************************************************************************
  * Copyright (C) 2005-2009, International Business Machines Corporation and    *
@@ -8,16 +7,11 @@
 package com.ibm.icu.dev.test.charsetdet;
 
 import java.io.ByteArrayInputStream;
-import java.io.Reader;
-
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.text.CharsetDetector;
-import com.ibm.icu.text.CharsetMatch;
-
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
 import java.io.InputStream;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.nio.CharBuffer;
+import java.nio.charset.CharsetEncoder;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -29,9 +23,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.ibm.icu.charset.CharsetProviderICU;
-import java.nio.charset.CharsetEncoder;
-import java.nio.CharBuffer;
-//#endif
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.CharsetDetector;
+import com.ibm.icu.text.CharsetMatch;
 
 
 /**
@@ -66,13 +60,9 @@ public class TestCharsetDetector extends TestFmwk
                 throw new Exception();
             }
             catch (Exception e) {
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##           msg = "Test failure  " + e.getMessage() ;
-//#else
                 StackTraceElement failPoint = e.getStackTrace()[1];
                 msg = "Test failure in file " + failPoint.getFileName() +
                              " at line " + failPoint.getLineNumber();
-//#endif
             }
             errln(msg);
         }
@@ -299,8 +289,6 @@ public class TestCharsetDetector extends TestFmwk
         }
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     public void TestDetection()
     {
         //
@@ -516,7 +504,6 @@ public class TestCharsetDetector extends TestFmwk
         CharsetMatch m = det.detect();
         return m;
     }
-//#endif
 
     public void TestHebrew() throws Exception {
         String  s =  "\u05D4\u05E4\u05E8\u05E7\u05DC\u05D9\u05D8 \u05D4\u05E6\u05D1\u05D0\u05D9 \u05D4" +

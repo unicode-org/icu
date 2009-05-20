@@ -1,6 +1,3 @@
-//##header
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
 /*
  *******************************************************************************
  * Copyright (C) 2002-2009, International Business Machines Corporation and    *
@@ -9,22 +6,21 @@
 */
 package com.ibm.icu.dev.test.timezone;
 
+import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Iterator;
 
-import java.text.DateFormat;
-import java.text.NumberFormat;
-
-import com.ibm.icu.dev.test.*;
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.util.TimeZone;
 
@@ -417,5 +413,3 @@ public class TimeZoneAliasTest extends TestFmwk {
         }
     }
 }
-
-//#endif

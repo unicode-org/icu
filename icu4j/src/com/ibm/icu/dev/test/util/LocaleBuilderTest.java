@@ -6,8 +6,9 @@
  */
 package com.ibm.icu.dev.test.util;
 
+import java.util.Arrays;
+
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.IllformedLocaleException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Builder;
@@ -80,7 +81,7 @@ public class LocaleBuilderTest extends TestFmwk {
                         bld.setExtension(ULocale.PRIVATE_USE_EXTENSION, TESTCASE[tidx][i++]);
                     } else if (method.equals("X")) {
                         errln("FAIL: No excetion was thrown - test csae: "
-                                + Utility.arrayToString(TESTCASE[tidx]));
+                                + Arrays.toString(TESTCASE[tidx]));
                     } else if (method.equals("T")) {
                         expected = new String[2];
                         expected[0] = TESTCASE[tidx][i];
@@ -93,7 +94,7 @@ public class LocaleBuilderTest extends TestFmwk {
                         break;
                     } else {
                         errln("FAIL: IllformedLocaleException at offset " + i
-                                + " in test case: " + Utility.arrayToString(TESTCASE[tidx]));
+                                + " in test case: " + Arrays.toString(TESTCASE[tidx]));
                     }
                 }
             }
@@ -101,12 +102,12 @@ public class LocaleBuilderTest extends TestFmwk {
                 ULocale loc = bld.create();
                 if (!expected[1].equals(loc.toString())) {
                     errln("FAIL: Wrong locale ID - " + loc + 
-                            " for test case: " + Utility.arrayToString(TESTCASE[tidx]));
+                            " for test case: " + Arrays.toString(TESTCASE[tidx]));
                 }
                 String langtag = loc.toLanguageTag();
                 if (!expected[0].equals(langtag)) {
                     errln("FAIL: Wrong language tag - " + langtag + 
-                            " for test case: " + Utility.arrayToString(TESTCASE[tidx]));
+                            " for test case: " + Arrays.toString(TESTCASE[tidx]));
                 }
                 ULocale loc1 = ULocale.forLanguageTag(langtag);
                 if (!loc.equals(loc1)) {

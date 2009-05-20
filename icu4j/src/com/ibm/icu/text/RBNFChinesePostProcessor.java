@@ -1,13 +1,11 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 
 package com.ibm.icu.text;
-
-import com.ibm.icu.impl.Utility;
 
 /**
  * A post-processor for Chinese text.
@@ -47,7 +45,7 @@ final class RBNFChinesePostProcessor implements RBNFPostProcessor {
         }
 
         if (longForm) {
-            for (int i = Utility.indexOf(buf,"*"); i != -1; i = Utility.indexOf(buf, "*", i)) {
+            for (int i = buf.indexOf("*"); i != -1; i = buf.indexOf("*", i)) {
                 buf.delete(i, i+1);
             }
             return;
@@ -81,14 +79,14 @@ final class RBNFChinesePostProcessor implements RBNFPostProcessor {
         {
             String[] m = markers[format];
             for (int i = 0; i < m.length-1; ++i) {
-                int n = Utility.indexOf(buf, m[i]);
+                int n = buf.indexOf(m[i]);
                 if (n != -1) {
                     buf.insert(n+m[i].length(), '|');
                 }
             }
         }
 
-        int x = Utility.indexOf(buf, DIAN);
+        int x = buf.indexOf(DIAN);
         if (x == -1) {
             x = buf.length();
         }
@@ -96,8 +94,8 @@ final class RBNFChinesePostProcessor implements RBNFPostProcessor {
         int n = -1; // previous optional ling
         String ling = markers[format][3];
         while (x >= 0) {
-            int m = Utility.lastIndexOf(buf, "|", x);
-            int nn = Utility.lastIndexOf(buf, ling, x);
+            int m = buf.lastIndexOf("|", x);
+            int nn = buf.lastIndexOf(ling, x);
             int ns = 0;
             if (nn > m) {
                 ns = (nn > 0 && buf.charAt(nn-1) != '*') ? 2 : 1;

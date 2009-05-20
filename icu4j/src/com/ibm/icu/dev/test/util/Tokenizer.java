@@ -1,6 +1,3 @@
-//##header
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
 /*
  *******************************************************************************
  * Copyright (C) 2002-2009, International Business Machines Corporation and    *
@@ -10,14 +7,16 @@
 package com.ibm.icu.dev.test.util;
 
 import java.text.ParsePosition;
-
-import com.ibm.icu.text.*;
-import com.ibm.icu.lang.*;
-
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.Map;
+import java.util.Set;
+
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.SymbolTable;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeMatcher;
+import com.ibm.icu.text.UnicodeSet;
 
 public class Tokenizer {
     protected String source;
@@ -319,5 +318,3 @@ public class Tokenizer {
         
     }
 }
-
-//#endif

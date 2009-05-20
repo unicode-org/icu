@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 1996-2009, International Business Machines Corporation and    *
@@ -7,11 +6,6 @@
  */
 package com.ibm.icu.dev.test;
 
-import com.ibm.icu.text.UTF16;
-import com.ibm.icu.text.DecimalFormat;
-import com.ibm.icu.text.NumberFormat;
-import com.ibm.icu.util.TimeZone;
-import com.ibm.icu.util.ULocale;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -28,9 +22,13 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Random;
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//## import com.ibm.icu.impl.Utility;
-//#endif
+
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
+
 /**
  * TestFmwk is a base class for tests that can be run conveniently from the
  * command line as well as under the Java test harness.
@@ -64,11 +62,7 @@ public class TestFmwk extends AbstractTestLog {
         }
     }
     protected void handleException(Throwable e){
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##    Throwable ex = null;
-//#else
         Throwable ex = e.getCause();
-//#endif
         if(ex==null){
             ex = e;
         }
@@ -1105,11 +1099,7 @@ public class TestFmwk extends AbstractTestLog {
         public static TestParams create(String arglist, PrintWriter log) {
             String[] args = null;
             if (arglist != null && arglist.length() > 0) {
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##            args = Utility.split(arglist, '\u0020');
-//#else
                 args = arglist.split("\\s");
-//#endif
             }
             return create(args, log);
         }

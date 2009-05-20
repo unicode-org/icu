@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 2001-2009, International Business Machines Corporation and    *
@@ -276,8 +275,6 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     public void testFormatToCharacterIterator() {
 
         Number number = new Double(350.76);
@@ -502,7 +499,6 @@ public class IntlTestDecimalFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
         && attribute == fc.attribute && value.equals(fc.value));
         }
     } 
-//#endif
 
     /*Helper functions */
     public void verify(String message, String got, double expected) {

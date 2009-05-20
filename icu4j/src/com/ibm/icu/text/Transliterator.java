@@ -1353,7 +1353,7 @@ public abstract class Transliterator implements StringTransform  {
 
         // assert(list.size() > 0);
         Transliterator t = null;
-        if (list.size() > 1 || Utility.indexOf(canonID, ";") >= 0) {
+        if (list.size() > 1 || canonID.indexOf(";") >= 0) {
             // [NOTE: If it's a compoundID, we instantiate a CompoundTransliterator even if it only
             // has one child transliterator.  This is so that toRules() will return the right thing
             // (without any inactive ID), but our main ID still comes out correct.  That is, if we

@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 2001-2009, International Business Machines Corporation and    *
@@ -313,8 +312,6 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         assertTrue("data size", EXPECTED.length == COUNT * DateFormat.FIELD_COUNT);
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
         final DateFormat.Field[] DTFMT_FIELDS = {
             DateFormat.Field.AM_PM,
             DateFormat.Field.DAY_OF_MONTH,
@@ -371,7 +368,6 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
              "0034", "August", "3rd quarter", "0012", "Pacific Daylight Time",
              "0002", "0033", "1997", "1997"},
         };
-//#endif
 
         TimeZone PT = TimeZone.getTimeZone("America/Los_Angeles");
         for (j = 0, exp = 0; j < COUNT; ++j) {
@@ -399,8 +395,6 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                              EXPECTED[exp], field);
             }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
             // FieldPostion initialized by DateFormat.Field trac#6089
             for(i = 0; i < DTFMT_FIELDS.length; i++) {
                 // The format method only set position for the first occurrence of
@@ -411,7 +405,6 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 field = buf.substring(pos.getBeginIndex(), pos.getEndIndex());
                 assertEquals("pattern#" + j + " " + DTFMT_FIELDS[i].toString(), EXPECTED_BY_FIELD[j][i], field);
             }
-//#endif
         }
     }
     /**
@@ -419,8 +412,6 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      */
     static final String PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZvcLQqV";
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     /**
      * A list of the DateFormat.Field.
      * This MUST be kept in sync with PATTERN_CHARS above.
@@ -457,7 +448,6 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         DateFormat.Field.QUARTER,       // q
         DateFormat.Field.TIME_ZONE,     // V
     };
-//#endif
 
     /**
      * A list of the names of all the fields in DateFormat.
@@ -3159,8 +3149,6 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     }
     */
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     /*
      * Test case for formatToCharacterIterator
      */
@@ -3349,7 +3337,6 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-//#endif
 
     /*
      * Test for checking SimpleDateFormat/DateFormatSymbols creation

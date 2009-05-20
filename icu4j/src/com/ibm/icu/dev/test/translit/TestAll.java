@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 1996-2009, International Business Machines Corporation and    *
@@ -28,14 +27,8 @@ public class TestAll extends TestGroup {
                 "RoundTripTest",
                 "TransliteratorTest",
                 "UnicodeSetTest",
-//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14)
-//#else
                 "RegexUtilitiesTest",
-//#endif
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
                 "UnicodeMapTest",
-//#endif
         });
     }
 

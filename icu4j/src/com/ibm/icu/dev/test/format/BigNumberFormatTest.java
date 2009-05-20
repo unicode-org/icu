@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 1996-2009, International Business Machines Corporation and    *
@@ -7,11 +6,14 @@
  */
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.text.*;
 import java.text.ParseException;
-import java.util.*;
+import java.util.Locale;
+
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.NumberFormat;
 
 /**
  * @test
@@ -417,8 +419,6 @@ public class BigNumberFormatTest extends TestFmwk {
             }
         }
     }
-//#if defined(FOUNDATION10)
-//#else
     public void TestBigDecimalRounding() {
         // jb 3657
         java.text.DecimalFormat jdkFormat=new java.text.DecimalFormat("###,###,###,##0");
@@ -447,5 +447,4 @@ public class BigNumberFormatTest extends TestFmwk {
             }
         }
     }
-//#endif
 }

@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 1996-2009, International Business Machines Corporation and    *
@@ -17,12 +16,12 @@ import java.util.Locale;
 import com.ibm.icu.impl.DateNumberFormat;
 import com.ibm.icu.text.ChineseDateFormat;
 import com.ibm.icu.text.ChineseDateFormatSymbols;
+import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.DateIntervalFormat;
 import com.ibm.icu.text.DateIntervalInfo;
 import com.ibm.icu.text.DecimalFormat;
-import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.DurationFormat;
 import com.ibm.icu.text.MessageFormat;
@@ -1101,8 +1100,6 @@ public class FormatTests
                 
                 formats[i] = getCannedDecimalFormat("#,##0.###", uloc);
             }
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
             if (formats[0] != null) {
                 // Ticket#6449
                 // Once formatToCharacterIterator is called, NumberFormat.Field
@@ -1115,7 +1112,6 @@ public class FormatTests
                 AttributedCharacterIterator aci = formats[0].formatToCharacterIterator(new Double(12.345D));
                 if (aci == null) {} // NOP - for resolving 'Unused local variable' warning.
             }
-//#endif
             return formats;
         }
     }
@@ -1729,8 +1725,6 @@ public class FormatTests
         }
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     public static class MessageFormatFieldHandler implements SerializableTest.Handler
     {
         public Object[] getTestObjects()
@@ -1743,7 +1737,6 @@ public class FormatTests
             return (a == b);
         }
     }
-//#endif
 
     public static class DateFormatHandler implements SerializableTest.Handler
     {
@@ -1829,8 +1822,6 @@ public class FormatTests
         
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     public static class DateFormatFieldHandler implements SerializableTest.Handler
     {
         public Object[] getTestObjects() {
@@ -1866,7 +1857,6 @@ public class FormatTests
             return (a == b);
         }
     }
-//#endif
 
     public static class DateFormatSymbolsHandler implements SerializableTest.Handler
     {
@@ -2008,8 +1998,6 @@ public class FormatTests
         }
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     public static class ChineseDateFormatFieldHandler implements SerializableTest.Handler
     {
         public Object[] getTestObjects() {
@@ -2022,7 +2010,6 @@ public class FormatTests
             return (a == b);
         }
     }
-//#endif
 
     public static class ChineseDateFormatSymbolsHandler extends DateFormatSymbolsHandler
     {
@@ -2055,8 +2042,6 @@ public class FormatTests
         }
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     public static class NumberFormatFieldHandler implements SerializableTest.Handler
     {
         public Object[] getTestObjects()
@@ -2079,7 +2064,6 @@ public class FormatTests
             return field_a.toString().equals(field_b.toString());
         }
     }
-//#endif
 
     public static class DateNumberFormatHandler implements SerializableTest.Handler
     {

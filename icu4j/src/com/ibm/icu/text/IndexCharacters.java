@@ -1,6 +1,3 @@
-//##header
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
 /*
  *******************************************************************************
  * Copyright (C) 2008-2009, Google Inc, International Business Machines Corporation
@@ -21,10 +18,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.ibm.icu.impl.CollectionUtilities.MultiComparator;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.LocaleData;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.impl.CollectionUtilities.MultiComparator;
 
 /**
  * A set of characters for use as a UI "index", that is, a
@@ -271,4 +268,3 @@ public class IndexCharacters {
         }
     }
 }
-//#endif

@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 1996-2009, International Business Machines Corporation and    *
@@ -41,11 +40,8 @@ public class TestAll extends TestGroup {
                   "com.ibm.icu.dev.test.charsetdet.TestCharsetDetector",
                   "com.ibm.icu.dev.test.bidi.TestAll",
                   "com.ibm.icu.dev.test.duration.TestAll",
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
                   "com.ibm.icu.dev.test.charset.TestAll",
                   "com.ibm.icu.dev.test.serializable.SerializableTest" // *is* a group
-//#endif
               },
               "All tests in ICU");
     }

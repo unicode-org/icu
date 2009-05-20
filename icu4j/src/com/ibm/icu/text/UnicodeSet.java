@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 1996-2009, International Business Machines Corporation and    *
@@ -7,30 +6,26 @@
  */
 package com.ibm.icu.text;
 
-import java.text.*;
-import com.ibm.icu.lang.*;
-
 import java.io.IOException;
+import java.text.ParsePosition;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.MissingResourceException;
+import java.util.TreeSet;
 
 import com.ibm.icu.impl.NormalizerImpl;
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.impl.RuleCharacterIterator;
+import com.ibm.icu.impl.SortedSetRelation;
 import com.ibm.icu.impl.UBiDiProps;
 import com.ibm.icu.impl.UCaseProps;
+import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.UPropertyAliases;
-import com.ibm.icu.impl.SortedSetRelation;
-import com.ibm.icu.impl.RuleCharacterIterator;
-
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.util.Freezable;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.VersionInfo;
-
-import com.ibm.icu.text.BreakIterator;
-
-import java.util.MissingResourceException;
-import java.util.TreeSet;
-import java.util.Iterator;
-import java.util.Collection;
 
 /**
  * A mutable set of Unicode characters and multicharacter strings.  Objects of this class
@@ -914,8 +909,6 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
         return maxLen;
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     /**
      * Tests whether the text matches at the offset. If so, returns the end of the longest substring that it matches. If not, returns -1. 
      * @internal
@@ -972,7 +965,6 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
         }
         return i;
     }
-//#endif
 
     /**
      * Implementation of UnicodeMatcher API.  Union the set of all

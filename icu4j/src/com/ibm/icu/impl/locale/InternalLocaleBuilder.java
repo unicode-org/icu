@@ -136,7 +136,7 @@ public final class InternalLocaleBuilder {
             }
             // parse locale keyword extension subtags
 //            String[] kwdtags = (value.replaceAll(LOCALESEP, LANGTAGSEP)).split(LANGTAGSEP);
-            String[] kwdtags = Utility.split(Utility.replaceAll(value, LOCALESEP, LANGTAGSEP), '-');
+            String[] kwdtags = Utility.split(value.replaceAll(LOCALESEP, LANGTAGSEP), '-');
             if ((kwdtags.length % 2) != 0) {
                 // number of keyword subtags must be even number
                 throw new LocaleSyntaxException("Ill-formed LDML extension key/value pairs: " + value);
@@ -333,14 +333,14 @@ public final class InternalLocaleBuilder {
             case FieldType.VARIANT:
                 // Java variant is case sensitive - so no case mapping here
 //                value = value.replaceAll(LANGTAGSEP, LOCALESEP);
-                value = Utility.replaceAll(value, LANGTAGSEP, LOCALESEP);
+                value = value.replaceAll(LANGTAGSEP, LOCALESEP);
                 break;
             case FieldType.LDMLKEY:
             case FieldType.LDMLTYPE:
             case FieldType.EXTENSION:
             case FieldType.PRIVATEUSE:
 //                value = AsciiUtil.toLowerString(value).replaceAll(LOCALESEP, LANGTAGSEP);
-                value = Utility.replaceAll(AsciiUtil.toLowerString(value), LOCALESEP, LANGTAGSEP);
+                value = AsciiUtil.toLowerString(value).replaceAll(LOCALESEP, LANGTAGSEP);
                 break;
             }
             return value;
