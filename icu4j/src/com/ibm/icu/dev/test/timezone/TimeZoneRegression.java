@@ -1,4 +1,3 @@
-//##header
 /**
  *******************************************************************************
  * Copyright (C) 2000-2009, International Business Machines Corporation and    *
@@ -13,12 +12,22 @@
  */
 
 package com.ibm.icu.dev.test.timezone;
-import com.ibm.icu.util.*;
-import java.io.*;
-import com.ibm.icu.text.*;
-import com.ibm.icu.dev.test.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Date;
 import java.util.Locale;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.SimpleTimeZone;
+import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
 
 public class TimeZoneRegression extends TestFmwk {
 
@@ -1020,8 +1029,6 @@ public class TimeZoneRegression extends TestFmwk {
             errln("FAIL: DST is observed in time zone America/New_York on Jan 1, 1900");
         }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
         if (System.getProperty("java.vendor", "").startsWith("IBM") &&
             System.getProperty("java.version", "").equals("1.4.1")) {
             // IBM JDK 1.4.1 has a bug and fails to run this test case.
@@ -1047,7 +1054,6 @@ public class TimeZoneRegression extends TestFmwk {
             }
             time += 24*60*60*1000L; // increment 1 day
         }
-//#endif
     }
 
     /**

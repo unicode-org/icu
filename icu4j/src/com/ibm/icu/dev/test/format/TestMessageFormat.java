@@ -1,4 +1,3 @@
-//##header
 /*
 **********************************************************************
 * Copyright (c) 2004-2009, International Business Machines
@@ -19,9 +18,9 @@ import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -1354,8 +1353,6 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         assertEquals("Date", dateFormat, ms.getFormatByArgumentName("date"));
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     // Test case for formatToCharacterIterator
     public void TestFormatToCharacterIterator() {
         MessageFormat[] msgfmts = {
@@ -1489,5 +1486,4 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-//#endif
 }

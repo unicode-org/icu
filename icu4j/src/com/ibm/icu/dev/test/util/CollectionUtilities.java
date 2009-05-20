@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 1996-2009, International Business Machines Corporation and    *
@@ -13,11 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedSet;
-
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
 import java.util.regex.Matcher;
-//#endif
 
 import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UTF16;
@@ -329,8 +324,6 @@ public final class CollectionUtilities {
         return result.toString();
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
      /**
       * Does one string contain another, starting at a specific offset?
       * @param text
@@ -379,7 +372,6 @@ public final class CollectionUtilities {
                 // we don't have to worry about surrogates for this.
             }
         }
-//#endif
 
     public static String prettyPrint(UnicodeSet uset, boolean compressRanges, UnicodeSet toQuote, Transliterator quoter, 
             Comparator ordering, Comparator spaceComparator) {
@@ -480,9 +472,7 @@ public final class CollectionUtilities {
             return ((String)item).startsWith(prefix);
         }
     }
-    
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
+
     public static class RegexIterator extends FilteredIterator {
         private Matcher matcher;
         public RegexIterator set(Iterator baseIterator, Matcher matcher) {
@@ -494,5 +484,4 @@ public final class CollectionUtilities {
             return matcher.reset((String)item).matches();
         }
     }
-//#endif
 }

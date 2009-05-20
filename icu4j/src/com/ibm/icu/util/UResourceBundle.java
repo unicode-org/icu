@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 2004-2009, International Business Machines Corporation and    *
@@ -9,6 +8,7 @@
 package com.ibm.icu.util;
 
 import java.lang.ref.SoftReference;
+import java.nio.ByteBuffer;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
@@ -22,13 +22,6 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUResourceBundleReader;
 import com.ibm.icu.impl.ResourceBundleWrapper;
 import com.ibm.icu.impl.SimpleCache;
-import com.ibm.icu.util.ULocale;
-
-//#if defined(FOUNDATION10) || defined(J2SE13) || defined(ECLIPSE_FRAGMENT)
-//##import com.ibm.icu.impl.ByteBuffer;
-//#else
-import java.nio.ByteBuffer;
-//#endif
 
 /**
  * A class representing a collection of resource information pertaining to a given

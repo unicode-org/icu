@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 1996-2009, International Business Machines Corporation and    *
@@ -719,13 +718,10 @@ public class RbnfTest extends TestFmwk {
         fmt.format(bigI, buf, null);
         logln("big int: " + buf.toString());
 
-//#if defined(FOUNDATION10)
-//#else
         buf.setLength(0);
         java.math.BigDecimal bigD = new java.math.BigDecimal(bigI);
         fmt.format(bigD, buf, null);
         logln("big dec: " + buf.toString());
-//#endif
     }
 
   public void TestTrailingSemicolon() {

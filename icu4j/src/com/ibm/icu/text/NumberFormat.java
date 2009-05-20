@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 1996-2009, International Business Machines Corporation and    *
@@ -14,19 +13,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.text.FieldPosition;
+import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Set;
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
-import java.text.Format;
-//#endif
 
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
@@ -247,11 +242,8 @@ public abstract class NumberFormat extends UFormat {
             return format(((Long)number).longValue(), toAppendTo, pos);
         } else if (number instanceof BigInteger) {
             return format((BigInteger) number, toAppendTo, pos);
-//#if defined(FOUNDATION10)
-//#else
         } else if (number instanceof java.math.BigDecimal) {
             return format((java.math.BigDecimal) number, toAppendTo, pos);
-//#endif
         } else if (number instanceof com.ibm.icu.math.BigDecimal) {
             return format((com.ibm.icu.math.BigDecimal) number, toAppendTo, pos);
         } else if (number instanceof CurrencyAmount) {
@@ -294,7 +286,6 @@ public abstract class NumberFormat extends UFormat {
         return buf.toString();
     }
     
-    // [NEW]
     /**
      * Convenience method to format a BigInteger.
      * @stable ICU 2.0
@@ -304,9 +295,6 @@ public abstract class NumberFormat extends UFormat {
                       new FieldPosition(0)).toString();
     }
 
-//#if defined(FOUNDATION10)
-//#else
-    // [NEW]
     /**
      * Convenience method to format a BigDecimal.
      * @stable ICU 2.0
@@ -315,9 +303,7 @@ public abstract class NumberFormat extends UFormat {
         return format(number, new StringBuffer(),
                       new FieldPosition(0)).toString();
     }
-//#endif
 
-    // [NEW]
     /**
      * Convenience method to format an ICU BigDecimal.
      * @stable ICU 2.0
@@ -327,7 +313,6 @@ public abstract class NumberFormat extends UFormat {
                       new FieldPosition(0)).toString();
     }
 
-    // [NEW]
     /**
      * Convenience method to format a CurrencyAmount.
      * @stable ICU 3.0
@@ -354,7 +339,6 @@ public abstract class NumberFormat extends UFormat {
     public abstract StringBuffer format(long number,
                                         StringBuffer toAppendTo,
                                         FieldPosition pos);
-    // [NEW] 
     /**
      * Format a BigInteger.
      * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
@@ -363,10 +347,6 @@ public abstract class NumberFormat extends UFormat {
     public abstract StringBuffer format(BigInteger number,
                                         StringBuffer toAppendTo,
                                         FieldPosition pos); 
-//#if defined(FOUNDATION10)
-//#else
-    
-    // [NEW]
     /**
      * Format a BigDecimal.
      * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
@@ -375,9 +355,6 @@ public abstract class NumberFormat extends UFormat {
     public abstract StringBuffer format(java.math.BigDecimal number,
                                         StringBuffer toAppendTo,
                                         FieldPosition pos);
-//#endif
-
-    // [NEW]
     /**
      * Format a BigDecimal.
      * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
@@ -386,7 +363,6 @@ public abstract class NumberFormat extends UFormat {
     public abstract StringBuffer format(com.ibm.icu.math.BigDecimal number,
                                         StringBuffer toAppendTo,
                                         FieldPosition pos);
-    // [NEW]
     /**
      * Format a CurrencyAmount.
      * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
@@ -440,7 +416,6 @@ public abstract class NumberFormat extends UFormat {
         return result;
     }
 
-    // [NEW]
     /**
      * Parses text from the given string as a CurrencyAmount.  Unlike
      * the parse() method, this method will attempt to parse a generic
@@ -708,7 +683,6 @@ public abstract class NumberFormat extends UFormat {
         return getInstance(inLocale, PERCENTSTYLE);
     }
 
-    // [NEW]
     /**
      * Returns a scientific format for the current default locale.
      * @return a scientific number format
@@ -718,7 +692,6 @@ public abstract class NumberFormat extends UFormat {
         return getInstance(ULocale.getDefault(), SCIENTIFICSTYLE);
     }
 
-    // [NEW]
     /**
      * Returns a scientific format for the specified locale.
      * @return a scientific number format
@@ -728,7 +701,6 @@ public abstract class NumberFormat extends UFormat {
         return getInstance(ULocale.forLocale(inLocale), SCIENTIFICSTYLE);
     }
 
-    // [NEW]
     /**
      * Returns a scientific format for the specified locale.
      * @return a scientific number format
@@ -1290,7 +1262,6 @@ public abstract class NumberFormat extends UFormat {
 
     // =======================privates===============================
     // Hook for service
-    // [NEW]
     static NumberFormat createInstance(ULocale desiredLocale, int choice) {
         // If the choice is PLURALCURRENCYSTYLE, the pattern is not a single
         // pattern, it is a pattern set, so we do not need to get them here.
@@ -1315,7 +1286,7 @@ public abstract class NumberFormat extends UFormat {
         // replace single currency sign in the pattern with double currency sign
         // if the choice is ISOCURRENCYSTYLE.
         if (choice == ISOCURRENCYSTYLE) {
-            pattern = Utility.replace(pattern, "\u00A4", doubleCurrencyStr);
+            pattern = pattern.replace("\u00A4", doubleCurrencyStr);
         }
 
         NumberingSystem ns = NumberingSystem.getInstance(desiredLocale);
@@ -1715,8 +1686,6 @@ public abstract class NumberFormat extends UFormat {
     // new in ICU4J 3.6
     private boolean parseStrict;
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     /**
      * The instances of this inner class are used as attribute keys and values
      * in AttributedCharacterIterator that
@@ -1826,5 +1795,4 @@ public abstract class NumberFormat extends UFormat {
             throw new InvalidObjectException("An invalid object.");
         }
     }
-//#endif
 }

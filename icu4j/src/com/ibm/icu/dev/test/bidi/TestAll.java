@@ -1,4 +1,3 @@
-//##header
 /*
 *******************************************************************************
 *   Copyright (C) 2001-2009, International Business Machines
@@ -32,10 +31,7 @@ public class TestAll extends TestGroup {
                   "com.ibm.icu.dev.test.bidi.TestReorderRunsOnly",
                   "com.ibm.icu.dev.test.bidi.TestStreaming",
                   "com.ibm.icu.dev.test.bidi.TestClassOverride",
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
                   "com.ibm.icu.dev.test.bidi.TestCompatibility",
-//#endif
               },
               "Bidi tests");
     }

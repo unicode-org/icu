@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 1996-2009, International Business Machines Corporation and    *
@@ -228,8 +227,6 @@ final class DigitList {
         return stringRep.toString();
     }
 
-//#if defined(FOUNDATION10)
-//#else
     /**
      * Return a <code>BigDecimal</code> representing the value stored in this
      * <code>DigitList</code>.
@@ -274,7 +271,6 @@ final class DigitList {
             return new java.math.BigDecimal(getStringRep(isPositive));
         }
     }
-//#endif
 
     /**
      * Return an <code>ICU BigDecimal</code> representing the value stored in this
@@ -724,8 +720,6 @@ final class DigitList {
         round(fixedPoint ? (maximumDigits + decimalAt) : maximumDigits == 0 ? -1 : maximumDigits);
     }
 
-//#if defined(FOUNDATION10)
-//#else
     /**
      * Set the digit list to a representation of the given BigDecimal value.
      * [bnf]
@@ -740,7 +734,6 @@ final class DigitList {
                           int maximumDigits, boolean fixedPoint) {
         setBigDecimalDigits(source.toString(), maximumDigits, fixedPoint);
     }
-//#endif
 
     /*
      * Set the digit list to a representation of the given BigDecimal value.

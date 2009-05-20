@@ -1,4 +1,3 @@
-//##header
 /**
  *******************************************************************************
  * Copyright (C) 2001-2009, International Business Machines Corporation and    *
@@ -10,16 +9,12 @@ package com.ibm.icu.dev.test.util;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.JarURLConnection;
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##import com.ibm.icu.impl.ByteBuffer;
-//#else
 import java.nio.ByteBuffer;
-//#endif
-import java.util.MissingResourceException;
 import java.util.Enumeration;
+import java.util.MissingResourceException;
 import java.util.jar.JarEntry;
 
 import com.ibm.icu.dev.test.TestFmwk;

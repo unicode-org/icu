@@ -1,4 +1,3 @@
-//##header
 /**
  *******************************************************************************
  * Copyright (C) 1996-2009, International Business Machines Corporation and    *
@@ -8,11 +7,8 @@
 
 package com.ibm.icu.util;
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##import com.ibm.icu.impl.ByteBuffer;
-//#else
 import java.nio.ByteBuffer;
-//#endif
+
 import com.ibm.icu.impl.Utility;
 
 /**

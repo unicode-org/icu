@@ -1,4 +1,3 @@
-//##header
 /*****************************************************************************************
  *
  * Copyright (C) 1996-2009, International Business Machines
@@ -24,18 +23,29 @@
 
 package com.ibm.icu.dev.test.format;
 
-//import com.ibm.icu.impl.ICULocaleData;
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.text.*;
-import com.ibm.icu.util.*;
-
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.text.FieldPosition;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Locale;
+
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.VersionInfo;
 
 public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
 
@@ -1107,8 +1117,6 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
-//#if defined(FOUNDATION10)
-//#else
     /**
      * BigDecimal numbers get their fractions truncated by NumberFormat.
      */
@@ -1124,7 +1132,6 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
             //e.printStackTrace();
         }
     }
-//#endif
 
     /**
      * DecimalFormat toPattern() doesn't quote special characters or handle
@@ -1845,12 +1852,9 @@ class MyNumberFormatTest extends NumberFormat {
     public Number parse(String text, ParsePosition parsePosition) {
         return new Integer(0);
     }
-//#if defined(FOUNDATION10)
-//#else
     public StringBuffer format(java.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
         return new StringBuffer("");
     }
-//#endif
     public StringBuffer format(BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {
         return new StringBuffer("");
     }

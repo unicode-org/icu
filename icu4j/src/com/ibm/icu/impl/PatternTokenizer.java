@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 2006-2009, Google, International Business Machines Corporation *
@@ -128,15 +127,9 @@ public class PatternTokenizer {
         return this;
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##    public PatternTokenizer setPattern(StringBuffer pattern) {
-//##        return setPattern(pattern.toString());
-//##    }
-//#else 
     public PatternTokenizer setPattern(CharSequence pattern) {
         return setPattern(pattern.toString());
     }
-//#endif
 
     public PatternTokenizer setPattern(String pattern) {
         if (pattern == null) {
@@ -152,15 +145,9 @@ public class PatternTokenizer {
     public static final char BACK_SLASH = '\\';
     private static int NO_QUOTE = -1, IN_QUOTE = -2;
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##    public String quoteLiteral(StringBuffer string) {
-//##        return quoteLiteral(string.toString());
-//##    }
-//#else
     public String quoteLiteral(CharSequence string) {
         return quoteLiteral(string.toString());
     }
-//#endif
 
     /**
      * Quote a literal string, using the available settings. Thus syntax characters, quote characters, and ignorable characters will be put into quotes.

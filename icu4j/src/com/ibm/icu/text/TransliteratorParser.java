@@ -1,4 +1,3 @@
-//##header
 /*
 **********************************************************************
 *   Copyright (c) 2001-2009, International Business Machines
@@ -7,16 +6,16 @@
 */
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.IllegalIcuArgumentException;
-import com.ibm.icu.impl.Utility;
-
+import java.text.ParsePosition;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
-import java.util.Hashtable;
-import java.text.ParsePosition;
-import com.ibm.icu.lang.*;
+
+import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UCharacter;
 
 class TransliteratorParser {
 
@@ -711,12 +710,7 @@ class TransliteratorParser {
                             final String postContext = limit-pos <= 50 ? rule.substring(pos, limit) : rule.substring(pos, pos+50) + "...";
                             throw (RuntimeException)
                                 new IllegalIcuArgumentException("Failure in rule: " + precontext + "$$$"
-                                        + postContext)
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
-                                .initCause(e)
-//#endif
-                                ;
+                                        + postContext).initCause(e);
                         }
                         int min = 0;
                         int max = Quantifier.MAX;
@@ -1044,12 +1038,7 @@ class TransliteratorParser {
                     }
                 } catch (IllegalArgumentException e) {
                     if (errorCount == 30) {
-                        errors.add(new IllegalIcuArgumentException("\nMore than 30 errors; further messages squelched")
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
-                            .initCause(e)
-//#endif
-                            );
+                        errors.add(new IllegalIcuArgumentException("\nMore than 30 errors; further messages squelched").initCause(e));
                         break main;
                     }
                     e.fillInStackTrace();
@@ -1107,8 +1096,6 @@ class TransliteratorParser {
         }
 
         if (errors.size() != 0) {
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
             for (int i = errors.size()-1; i > 0; --i) {
                 RuntimeException previous = (RuntimeException) errors.get(i-1);
                 while (previous.getCause() != null) {
@@ -1116,7 +1103,6 @@ class TransliteratorParser {
                 }
                 previous.initCause((RuntimeException) errors.get(i));
             }
-//#endif
             throw (RuntimeException) errors.get(0);
             // if initCause not supported: throw new IllegalArgumentException(errors.toString());
         }

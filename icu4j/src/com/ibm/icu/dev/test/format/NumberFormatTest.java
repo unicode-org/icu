@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 2001-2009, International Business Machines Corporation and    *
@@ -13,23 +12,27 @@
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.dev.test.TestUtil;
-import com.ibm.icu.text.*;
-import com.ibm.icu.text.NumberFormat.*;
-import com.ibm.icu.util.*;
-import com.ibm.icu.impl.LocaleUtility;
-import com.ibm.icu.impl.data.ResourceReader;
-import com.ibm.icu.impl.data.TokenIterator;
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.math.BigDecimal;
-
-import java.lang.Double;
 import java.math.BigInteger;
 import java.text.FieldPosition;
-import java.text.ParsePosition;
 import java.text.ParseException;
-import java.util.Locale;
+import java.text.ParsePosition;
 import java.util.ArrayList;
+import java.util.Locale;
+
+import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.impl.LocaleUtility;
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.data.ResourceReader;
+import com.ibm.icu.impl.data.TokenIterator;
+import com.ibm.icu.math.BigDecimal;
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.MeasureFormat;
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.NumberFormat.SimpleNumberFormatFactory;
+import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.CurrencyAmount;
+import com.ibm.icu.util.ULocale;
 
 public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
@@ -307,9 +310,9 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             for (int j=1; j<=3; ++j) {
                 // j represents the number of currency sign in the pattern.
                 if (j == 2) {
-                    pat = Utility.replaceAll(pat, "\u00A4", doubleCurrencyStr);
+                    pat = pat.replaceAll("\u00A4", doubleCurrencyStr);
                 } else if (j == 3) {
-                    pat = Utility.replaceAll(pat, "\u00A4\u00A4", tripleCurrencyStr);
+                    pat = pat.replaceAll("\u00A4\u00A4", tripleCurrencyStr);
                 }
                 DecimalFormat fmt = new DecimalFormat(pat, sym);
                 String s = ((NumberFormat) fmt).format(numberToBeFormat);
@@ -1151,11 +1154,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         expect2(df, 2.0, "2.00 *&' \u20a8 '&*");
         expect2(df, -1.0, "-1.00 *&' \u20a8 '&*");
 
-//#if defined(FOUNDATION10)
-//##        com.ibm.icu.math.BigDecimal r = df.getRoundingIncrement();
-//#else
         java.math.BigDecimal r = df.getRoundingIncrement();
-//#endif
         if (r != null) {
             errln("FAIL: rounding = " + r + ", expect null");
         }
@@ -1588,11 +1587,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 }
             }
         } catch (java.io.IOException e) {
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##        throw new RuntimeException(e.getMessage());
-//#else
             throw new RuntimeException(e);
-//#endif
         }
     }
 
@@ -1620,11 +1615,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     void checkRounding(DecimalFormat nf, BigDecimal base, int iterations, BigDecimal increment) {
-//#if defined(FOUNDATION10)
-//##        nf.setRoundingIncrement(increment);
-//#else
         nf.setRoundingIncrement(increment.toBigDecimal());
-//#endif
         BigDecimal lastParsed = new BigDecimal(Integer.MIN_VALUE); // used to make sure that rounding is monotonic
         for (int i = -iterations; i <= iterations; ++i) {
             BigDecimal iValue = base.add(increment.multiply(new BigDecimal(i)).movePointLeft(1));
@@ -1671,10 +1662,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     static BigDecimal toBigDecimal(Number number) {
         return number instanceof BigDecimal ? (BigDecimal) number
             : number instanceof BigInteger ? new BigDecimal((BigInteger)number)
-//#if defined(FOUNDATION10)
-//#else
             : number instanceof java.math.BigDecimal ? new BigDecimal((java.math.BigDecimal)number)
-//#endif
             : number instanceof Double ? new BigDecimal(number.doubleValue())
             : number instanceof Float ? new BigDecimal(number.floatValue())
             : new BigDecimal(number.longValue());
@@ -2165,12 +2153,9 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         expect2(df, BigDecimal.valueOf(Long.MAX_VALUE), BigDecimal.valueOf(Long.MAX_VALUE).negate().toString());
         expect2(df, BigDecimal.valueOf(Long.MIN_VALUE), BigDecimal.valueOf(Long.MIN_VALUE).negate().toString());
-        
-//#if defined(FOUNDATION10)
-//#else
+
         expect2(df, java.math.BigDecimal.valueOf(Long.MAX_VALUE), java.math.BigDecimal.valueOf(Long.MAX_VALUE).negate().toString());
         expect2(df, java.math.BigDecimal.valueOf(Long.MIN_VALUE), java.math.BigDecimal.valueOf(Long.MIN_VALUE).negate().toString());
-//#endif
     }
 
     public void TestJB5358() {

@@ -1,6 +1,3 @@
-//##header
-//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14)
-//#else
 /*
  *******************************************************************************
  * Copyright (C) 2009, International Business Machines Corporation and         *
@@ -218,4 +215,3 @@ public class RegexUtilitiesTest extends TestFmwk {
         assertFalse(matchTitle + " and " + shouldNotMatch, matcher.matches());
     }
 }
-//#endif

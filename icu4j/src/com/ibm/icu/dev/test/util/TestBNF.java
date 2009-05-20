@@ -1,6 +1,3 @@
-//##header
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
 /*
  *******************************************************************************
  * Copyright (C) 2002-2009, International Business Machines Corporation and    *
@@ -10,8 +7,6 @@
 package com.ibm.icu.dev.test.util;
 
 import java.util.Random;
-
-//TODO integrate this into the test framework
 
 import com.ibm.icu.text.UnicodeSet;
 
@@ -243,4 +238,3 @@ public class TestBNF {
 
 }
 
-//#endif

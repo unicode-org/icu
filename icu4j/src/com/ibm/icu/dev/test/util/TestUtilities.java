@@ -1,6 +1,3 @@
-//##header
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
 /*
  *******************************************************************************
  * Copyright (C) 1996-2009, International Business Machines Corporation and    *
@@ -466,4 +463,3 @@ public class TestUtilities extends TestFmwk {
     }
 
 }
-//#endif

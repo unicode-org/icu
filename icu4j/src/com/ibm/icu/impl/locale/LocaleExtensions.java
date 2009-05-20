@@ -39,7 +39,7 @@ public final class LocaleExtensions {
         }
 
 //        extensions = AsciiUtil.toLowerString(extensions).replaceAll("_", LOCALEEXTSEP);
-        extensions = Utility.replaceAll(AsciiUtil.toLowerString(extensions), "_", LOCALEEXTSEP);
+        extensions = AsciiUtil.toLowerString(extensions).replaceAll("_", LOCALEEXTSEP);
 
         if (extensions.length() < MINLEN) {
             // malformed extensions - too short

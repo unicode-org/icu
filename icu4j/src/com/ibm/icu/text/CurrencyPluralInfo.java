@@ -6,11 +6,6 @@
  */
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,6 +14,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
+
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 
 /**
  * This class represents the information needed by 
@@ -295,12 +294,12 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
                     String pattern = currencyRes.get(index).getString();
                     // replace {0} with numberStylePattern
                     // and {1} with triple currency sign
-                    String patternWithNumber = Utility.replace(pattern, "{0}", numberStylePattern);
-                    String patternWithCurrencySign = Utility.replace(patternWithNumber, "{1}", tripleCurrencyStr);
+                    String patternWithNumber = pattern.replace("{0}", numberStylePattern);
+                    String patternWithCurrencySign = patternWithNumber.replace("{1}", tripleCurrencyStr);
                     if (separatorIndex != -1) {
                         String negPattern = pattern;
-                        String negWithNumber = Utility.replace(negPattern, "{0}", negNumberPattern); 
-                        String negWithCurrSign = Utility.replace(negWithNumber, "{1}", tripleCurrencyStr); 
+                        String negWithNumber = negPattern.replace("{0}", negNumberPattern); 
+                        String negWithCurrSign = negWithNumber.replace("{1}", tripleCurrencyStr); 
                         StringBuffer posNegPatterns = new StringBuffer(patternWithCurrencySign);
                         posNegPatterns.append(";");
                         posNegPatterns.append(negWithCurrSign);

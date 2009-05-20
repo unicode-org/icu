@@ -1,4 +1,3 @@
-//##header
 /**
  *******************************************************************************
  * Copyright (C) 2000-2009, International Business Machines Corporation and    *
@@ -6,13 +5,6 @@
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.translit;
-
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.lang.*;
-import com.ibm.icu.text.*;
-import com.ibm.icu.util.LocaleData;
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.impl.Utility;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
@@ -24,6 +16,18 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.MissingResourceException;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UProperty;
+import com.ibm.icu.text.Normalizer;
+import com.ibm.icu.text.Transliterator;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSetIterator;
+import com.ibm.icu.util.LocaleData;
+import com.ibm.icu.util.ULocale;
 
 /**
  * @test
@@ -175,15 +179,11 @@ public class RoundTripTest extends TestFmwk {
     private void assertRoundTripTransform(String message, String source, Transliterator lh, Transliterator hl) {
         String to = hl.transform(source);
         String back = lh.transform(to);
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##    // No regular expression support in Java 1.3
-//#else
         if (!source.equals(back)) {
             String to2 = hl.transform(source.replaceAll("(.)", "$1 ").trim());
             String to3 = hl.transform(back.replaceAll("(.)", "$1 ").trim());
             assertEquals(message + " " + source + " [" + to + "/"+ to2 + "/"+ to3 + "]", source, back);
         }
-//#endif
     }
 
     public static UnicodeSet getRepresentativeHangul() {

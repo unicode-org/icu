@@ -1,6 +1,3 @@
-//##header
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
 /*
  *******************************************************************************
  * Copyright (C) 1996-2009, International Business Machines Corporation and    *
@@ -9,8 +6,20 @@
  */
 package com.ibm.icu.dev.test.util;
 
-import java.io.*;
-import java.util.*;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.UTF16;
@@ -894,4 +903,3 @@ public final class UnicodeMap implements Cloneable, Freezable, Externalizable {
 //        }
 //    }
 }
-//#endif

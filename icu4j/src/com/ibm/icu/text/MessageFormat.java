@@ -1,4 +1,3 @@
-//##header
 /*
 **********************************************************************
 * Copyright (c) 2004-2009, International Business Machines
@@ -14,29 +13,25 @@ package com.ibm.icu.text;
 import java.io.IOException;
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
+import java.text.CharacterIterator;
 import java.text.ChoiceFormat;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.Set;
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
-import java.text.AttributedCharacterIterator;
-import java.text.AttributedString;
-import java.util.ArrayList;
-import java.text.CharacterIterator;
-//#endif
 
 import com.ibm.icu.impl.Utility;
-import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -1177,8 +1172,6 @@ public class MessageFormat extends UFormat {
         }
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     /**
      * Formats an array of objects and inserts them into the
      * <code>MessageFormat</code>'s pattern, producing an
@@ -1234,7 +1227,6 @@ public class MessageFormat extends UFormat {
                      (AttributedCharacterIterator[])iterators.toArray(
                      new AttributedCharacterIterator[iterators.size()]));
     }
-//#endif
 
     /**
      * Parses the string.
@@ -1528,8 +1520,6 @@ public class MessageFormat extends UFormat {
         return pattern.hashCode(); // enough for reasonable distribution
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     /**
      * Defines constants that are used as attribute keys in the
      * <code>AttributedCharacterIterator</code> returned
@@ -1583,7 +1573,6 @@ public class MessageFormat extends UFormat {
         public static final Field ARGUMENT = new Field("message argument field");
 
     }
-//#endif
 
     // ===========================privates============================
 
@@ -1687,10 +1676,8 @@ public class MessageFormat extends UFormat {
         // note: this implementation assumes a fast substring & index.
         // if this is not true, would be better to append chars one by one.
         int lastOffset = 0;
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
         int last = result.length();
-//#endif
+
         for (int i = 0; i <= maxOffset; ++i) {
             result.append(pattern.substring(lastOffset, offsets[i]));
             lastOffset = offsets[i];
@@ -1741,12 +1728,6 @@ public class MessageFormat extends UFormat {
                 // is non-null indicating we should format obj using it,
                 // or arg is non-null and we should use it as the value.
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##                if (subFormatter != null) {
-//##                    arg = subFormatter.format(obj);
-//##                }
-//##                result.append(arg);
-//#else
                 if (characterIterators != null) {
                     // If characterIterators is non-null, it indicates we need
                     // to get the CharacterIterator from the child formatter.
@@ -1791,22 +1772,16 @@ public class MessageFormat extends UFormat {
                     }
                     last = result.length();
                 }
-//#endif
             }
         }
         result.append(pattern.substring(lastOffset, pattern.length()));
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
         if (characterIterators != null && last != result.length()) {
             characterIterators.add(_createAttributedCharacterIterator(
                                    result.substring(last)));
         }
-//#endif
         return result;
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     /**
      * Convenience method to append all the characters in
      * <code>iterator</code> to the StringBuffer <code>result</code>.
@@ -1821,7 +1796,6 @@ public class MessageFormat extends UFormat {
             }
         }
     }
-//#endif
 
     private static final String[] typeList =
         {"", "number", "date", "time", "choice", "spellout", "ordinal",
@@ -2267,8 +2241,6 @@ public class MessageFormat extends UFormat {
         return new String(buf);
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     //
     // private methods for AttributedCharacterIterator support
     //
@@ -2340,5 +2312,4 @@ public class MessageFormat extends UFormat {
         as.addAttribute(key, value);
         return as.getIterator();
     }
-//#endif
 }

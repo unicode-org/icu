@@ -1,6 +1,3 @@
-//##header
-//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14)
-//#else
 /*
  *******************************************************************************
  * Copyright (C) 2009, Google, International Business Machines Corporation and *
@@ -391,5 +388,4 @@ public class UnicodeRegex implements Cloneable, Freezable, StringTransform {
         return variables;
     }
 }
-//#endif
 

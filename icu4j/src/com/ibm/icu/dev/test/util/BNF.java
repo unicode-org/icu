@@ -1,6 +1,3 @@
-//##header
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
 /*
  *******************************************************************************
  * Copyright (C) 2002-2009, International Business Machines Corporation and    *
@@ -10,14 +7,14 @@
 package com.ibm.icu.dev.test.util;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
 import com.ibm.icu.text.UnicodeSet;
-import java.util.Random;
 
 public class BNF {
     private Map map = new HashMap();
@@ -330,4 +327,3 @@ public class BNF {
       return this;
     }
 }
-//#endif

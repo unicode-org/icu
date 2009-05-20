@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 2007-2009, International Business Machines Corporation and    *
@@ -10,12 +9,9 @@ package com.ibm.icu.dev.test.duration;
 import java.util.Date;
 import java.util.MissingResourceException;
 
-//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14)
-//#else
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.Duration;
-//#endif
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.DurationFormat;
@@ -86,8 +82,6 @@ public class ICUDurationTest extends TestFmwk {
         }
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14)
-//#else
     public void TestSimpleXMLDuration() {
         DatatypeFactory factory = null;
         try {
@@ -202,7 +196,6 @@ public class ICUDurationTest extends TestFmwk {
             }
         }
     }
-//#endif
 
 
     public void TestBadObjectError() {

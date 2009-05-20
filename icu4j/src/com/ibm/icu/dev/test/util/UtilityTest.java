@@ -1,4 +1,3 @@
-//##header
 /*
 **********************************************************************
 * Copyright (c) 2003-2009, International Business Machines
@@ -10,6 +9,7 @@
 **********************************************************************
 */
 package com.ibm.icu.dev.test.util;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -116,11 +116,8 @@ public class UtilityTest extends TestFmwk {
     {
         byte[] ba = {0x00, 0x01, 0x02};
         byte[] bb = {0x00, 0x01, 0x02, -1};
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##        com.ibm.icu.impl.ByteBuffer buffer = com.ibm.icu.impl.ByteBuffer.wrap(ba);
-//#else
+
         java.nio.ByteBuffer buffer = java.nio.ByteBuffer.wrap(ba);
-//#endif
         ByteArrayWrapper x = new ByteArrayWrapper(buffer);
         
         ByteArrayWrapper y = new ByteArrayWrapper(ba, 3);

@@ -1,6 +1,3 @@
-//##header
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
 /*
 **********************************************************************
 * Copyright (c) 2002-2009, International Business Machines
@@ -12,9 +9,6 @@
 package com.ibm.icu.dev.test.cldr;
 
 import java.io.File;
-
-//import org.unicode.cldr.util.LanguageTagParser;
-//import org.unicode.cldr.util.Utility;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -23,11 +17,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,17 +29,11 @@ import java.util.regex.Pattern;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-//import org.unicode.cldr.test.CLDRTest;
-//import org.unicode.cldr.tool.GenerateCldrTests;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.ibm.icu.util.Currency;
-import com.ibm.icu.util.TimeZone;
-import com.ibm.icu.util.ULocale;
 import com.ibm.icu.dev.test.TestFmwk;
-
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.NumberFormat;
@@ -53,6 +41,9 @@ import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
 
 /**
  * This is a file that runs the CLDR tests for ICU4J, to verify that ICU4J implements them
@@ -549,4 +540,3 @@ public class TestCLDRVsICU extends TestFmwk {
 
     };
 }
-//#endif

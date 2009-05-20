@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 2004-2009, International Business Machines Corporation and    *
@@ -7,6 +6,7 @@
  */
 package com.ibm.icu.impl;
 
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.MissingResourceException;
 
@@ -14,11 +14,6 @@ import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
 import com.ibm.icu.util.UResourceTypeMismatchException;
-
-//#if defined(FOUNDATION10) || defined(J2SE13) || defined(ECLIPSE_FRAGMENT)
-//#else
-import java.nio.ByteBuffer;
-//#endif
 
 class ICUResourceBundleImpl {
 

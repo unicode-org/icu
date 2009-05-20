@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 2002-2009, International Business Machines Corporation and    *
@@ -11,9 +10,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 import com.ibm.icu.text.Transliterator;
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//##import com.ibm.icu.dev.test.TestUtil;
-//#endif
 
 public class TransliteratorUtilities {
     public static boolean DEBUG = false;

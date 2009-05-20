@@ -1,4 +1,3 @@
-//##header
 /**
  *******************************************************************************
  * Copyright (C) 1996-2009, International Business Machines Corporation and    *
@@ -258,8 +257,6 @@ public final class UTF16 {
         return single; // return unmatched surrogate
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     /**
      * Extract a single UTF-32 value from a string. Used when iterating forwards or backwards (with
      * <code>UTF16.getCharCount()</code>, as well as random access. If a validity check is
@@ -318,8 +315,6 @@ public final class UTF16 {
         }
         return single; // return unmatched surrogate
     }
-
-//#endif
 
     /**
      * Extract a single UTF-32 value from a string. Used when iterating forwards or backwards (with

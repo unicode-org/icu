@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 2007-2009, International Business Machines Corporation and    *
@@ -31,10 +30,7 @@ public class BasicDurationFormat extends DurationFormat {
         return new BasicDurationFormat(locale);
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14)
-//#else
     private static boolean checkXMLDuration = true; 
-//#endif
 
     public StringBuffer format(Object object, StringBuffer toAppend, FieldPosition pos) {
         if(object instanceof Long) {
@@ -44,8 +40,6 @@ public class BasicDurationFormat extends DurationFormat {
             String res = formatDurationFromNowTo(((Date)object));
             return toAppend.append(res);
         }
-//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14)
-//#else
         if(checkXMLDuration) try {
             if(object instanceof javax.xml.datatype.Duration) {
                 String res = formatDuration(object);
@@ -55,7 +49,6 @@ public class BasicDurationFormat extends DurationFormat {
             System.err.println("Skipping XML capability");
             checkXMLDuration = false; // don't try again
         }
-//#endif
         throw new IllegalArgumentException("Cannot format given Object as a Duration");
 
     }
@@ -96,8 +89,6 @@ public class BasicDurationFormat extends DurationFormat {
         return formatter.formatDurationFromNowTo(targetDate);
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13) || defined(J2SE14)
-//#else
     /** 
      *  JDK 1.5+ only
      * @param o
@@ -183,5 +174,4 @@ public class BasicDurationFormat extends DurationFormat {
         // now, format it.
         return pformatter.format(p);
     }
-//#endif
 }

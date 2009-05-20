@@ -1,20 +1,20 @@
-//##header
 /*********************************************************************
  * Copyright (C) 2000-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  *********************************************************************
  */
 package com.ibm.icu.text;
-import com.ibm.icu.util.*;
-import com.ibm.icu.impl.Utility;
 
+import java.io.InvalidObjectException;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Locale;
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
-import java.io.InvalidObjectException;
-//#endif
+
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.ChineseCalendar;
+import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
 
 /**
  * A concrete {@link DateFormat} for {@link com.ibm.icu.util.ChineseCalendar}.
@@ -189,8 +189,6 @@ public class ChineseDateFormat extends SimpleDateFormat {
         }
     }
 
-//#if defined(FOUNDATION10) || defined(J2SE13)
-//#else
     /**
      * {@inheritDoc}
      * 
@@ -274,5 +272,4 @@ public class ChineseDateFormat extends SimpleDateFormat {
             }
         }
     }
-//#endif
 }
