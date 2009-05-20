@@ -512,9 +512,9 @@ public class SimpleDateFormat extends DateFormat {
             if ( ns.isAlgorithmic() ) {
                 numberFormat = NumberFormat.getInstance(locale);
             } else {
-                char zeroDigit = ns.getDescription().charAt(0);
+                char digit0 = ns.getDescription().charAt(0);
                 // Use a NumberFormat optimized for date formatting
-                numberFormat = new DateNumberFormat(locale,zeroDigit);
+                numberFormat = new DateNumberFormat(locale, digit0);
             }
         }
         // Note: deferring calendar calculation until when we really need it.
