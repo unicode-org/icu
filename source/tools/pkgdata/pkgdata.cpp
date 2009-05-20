@@ -1003,6 +1003,11 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
             o->tmpDir,
             PKGDATA_FILE_SEP_STRING, 
             libFileNames[LIB_FILE]);
+    /* Remove previous icudtall.c file. */
+    if (T_FileStream_file_exists(icudtAll) && (result = remove(icudtAll)) != 0) {
+        fprintf(stderr, "Unable to remove old icudtall file: %s\n", icudtAll);
+        return result;
+    }
 #endif
 
     if (list == NULL || listNames == NULL) {
@@ -1097,6 +1102,12 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
             result = system(cmd);
             if (result != 0) {
                 break;
+            } else {
+                /* Remove the c code file after concatenating it to icudtall.c file. */
+                if ((result = remove(gencmnFile)) != 0) {
+                    fprintf(stderr, "Unable to remove c code file: %s\n", gencmnFile);
+                    return result;
+                }
             }
 #endif
         }
@@ -1151,6 +1162,7 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
         /* Generate the library file. */
         result = pkg_generateLibraryFile(targetDir, mode, buffer, cmd);
     }
+
     uprv_free(buffer);
     uprv_free(cmd);
 
