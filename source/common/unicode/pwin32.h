@@ -213,7 +213,7 @@ Intel can define _M_IX86 or _M_X64
 /** Determine whether to disable renaming or not. This overrides the
    setting in umachine.h which is for all platforms. */
 #ifndef U_DISABLE_RENAMING
-#define U_DISABLE_RENAMING 1
+#define U_DISABLE_RENAMING 0
 #endif
 
 /** Determine whether to override new and delete. */

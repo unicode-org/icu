@@ -77,6 +77,16 @@ U_CDECL_END
 #define CAN_WRITE_OBJ_CODE
 #endif
 
+/*
+ * When building the data library without assembly,
+ * some platforms use a single c code file for all of
+ * the data to generate the final data library. This can
+ * increase the performance of the pkdata tool.
+ */
+#if defined(OS400)
+#define USE_SINGLE_CCODE_FILE
+#endif
+
 /* Need to fix the file seperator character when using MinGW. */
 #ifdef WINDOWS_WITH_GNUC
 #define PKGDATA_FILE_SEP_STRING "/"
@@ -562,13 +572,14 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                 }
             }
 
+#ifndef OS400
             /* Certain platforms have different library extension ordering. (e.g. libicudata.##.so vs libicudata.so.##)
              * reverseExt is FALSE if the suffix should be the version number.
              */
             if (pkgDataFlags[LIB_EXT_ORDER][uprv_strlen(pkgDataFlags[LIB_EXT_ORDER])-1] == pkgDataFlags[SO_EXT][uprv_strlen(pkgDataFlags[SO_EXT])-1]) {
                 reverseExt = TRUE;
             }
-
+#endif
             /* Using the base libName and version number, generate the library file names. */
             createFileNames(version_major, o->version, o->libName, reverseExt);
 
@@ -630,14 +641,14 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                 fprintf(stderr, "Error creating data archive library file.\n");
                return result;
             }
-
+#ifndef OS400
             /* Create symbolic links for the final library file. */
             result = pkg_createSymLinks(targetDir);
             if (result != 0) {
                 fprintf(stderr, "Error creating symbolic links of the data library file.\n");
                 return result;
             }
-
+#endif
             /* Install the libraries if option was set. */
             if (o->install != NULL) {
                 result = pkg_installLibrary(o->install, targetDir);
@@ -669,6 +680,10 @@ static void createFileNames(const char *version_major, const char *version, cons
             sprintf(pkgDataFlags[SO_EXT], "%s.%s",
                     pkgDataFlags[SO_EXT],
                     pkgDataFlags[A_EXT]);
+#elif defined(OS400)
+            sprintf(libFileNames[LIB_FILE_VERSION_TMP], "%s.%s",
+                    libFileNames[LIB_FILE],
+                    pkgDataFlags[SOBJ_EXT]);
 #else
             sprintf(libFileNames[LIB_FILE_VERSION_TMP], "%s%s%s.%s",
                     libFileNames[LIB_FILE],
@@ -881,7 +896,11 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
     }
 
     if (mode == MODE_STATIC) {
+#ifdef OS400
+        sprintf(cmd, "QSH CMD('%s %s %s%s.%s %s')",
+#else
         sprintf(cmd, "%s %s %s%s.%s %s",
+#endif
                 pkgDataFlags[AR],
                 pkgDataFlags[ARFLAGS],
                 targetDir,
@@ -889,7 +908,7 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
                 pkgDataFlags[A_EXT],
                 objectFile);
 
-        return system(cmd);
+        result = system(cmd);
     } else /* if (mode == MODE_DLL) */ {
 #ifdef U_CYGWIN
         sprintf(cmd, "%s%s%s %s -o %s%s %s %s%s %s %s",
@@ -899,7 +918,11 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
                 pkgDataFlags[LDICUDTFLAGS],
                 targetDir, libFileNames[LIB_FILE_CYGWIN],
 #else
+#ifdef OS400
+        sprintf(cmd, "QSH CMD('%s %s -o %s%s %s %s%s %s %s')",
+#else
         sprintf(cmd, "%s %s -o %s%s %s %s%s %s %s",
+#endif
                 pkgDataFlags[GENLIB],
                 pkgDataFlags[LDICUDTFLAGS],
                 targetDir,
@@ -973,6 +996,14 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
     char *cmd;
     char gencmnFile[SMALL_BUFFER_MAX_SIZE] = "";
     char tempObjectFile[SMALL_BUFFER_MAX_SIZE] = "";
+#ifdef USE_SINGLE_CCODE_FILE
+    char icudtAll[SMALL_BUFFER_MAX_SIZE] = "";
+    
+    sprintf(icudtAll, "%s%s%sall.c",
+            o->tmpDir,
+            PKGDATA_FILE_SEP_STRING, 
+            libFileNames[LIB_FILE]);
+#endif
 
     if (list == NULL || listNames == NULL) {
         /* list and listNames should never be NULL since we are looping through the CharList with
@@ -998,6 +1029,27 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
             /* The first iteration calls the gencmn function and initailizes the buffer. */
             createCommonDataFile(o->tmpDir, o->shortName, o->entryName, NULL, o->srcDir, o->comment, o->fileListFiles->str, 0, TRUE, o->verbose, gencmnFile);
             buffer[0] = 0;
+#ifdef USE_SINGLE_CCODE_FILE
+            uprv_strcpy(tempObjectFile, gencmnFile);
+            tempObjectFile[uprv_strlen(tempObjectFile) - 1] = 'o';
+            
+#ifdef OS400
+            sprintf(cmd, "QSH CMD('%s %s -o %s %s')",
+#else
+            sprintf(cmd, "%s %s -o %s %s"
+#endif
+                        pkgDataFlags[COMPILER],
+                        pkgDataFlags[LIBFLAGS],
+                        tempObjectFile,
+                        gencmnFile);
+            
+            result = system(cmd);
+            if (result != 0) {
+                break;
+            }
+            
+            sprintf(buffer, "%s",tempObjectFile);
+#endif
         } else {
             char newName[SMALL_BUFFER_MAX_SIZE];
             char dataName[SMALL_BUFFER_MAX_SIZE];
@@ -1035,11 +1087,24 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
             }
 
             writeCCode(file, o->tmpDir, dataName[0] != 0 ? dataName : o->shortName, newName[0] != 0 ? newName : NULL, gencmnFile);
+#ifdef USE_SINGLE_CCODE_FILE
+#ifdef OS400
+            sprintf(cmd, "QSH CMD('cat %s >> %s')", gencmnFile, icudtAll);
+#else
+            sprintf(cmd, "cat %s >> %s", gencmnFile, icudtAll);
+#endif
+            
+            result = system(cmd);
+            if (result != 0) {
+                break;
+            }
+#endif
         }
 
+#ifndef USE_SINGLE_CCODE_FILE
         uprv_strcpy(tempObjectFile, gencmnFile);
         tempObjectFile[uprv_strlen(tempObjectFile) - 1] = 'o';
-
+        
         sprintf(cmd, "%s %s -o %s %s",
                     pkgDataFlags[COMPILER],
                     pkgDataFlags[LIBFLAGS],
@@ -1053,16 +1118,39 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
         sprintf(buffer, "%s %s",
                 buffer,
                 tempObjectFile);
-
+#endif
+        
         if (i > 0) {
             list = list->next;
             listNames = listNames->next;
         }
     }
 
-    /* Generate the library file. */
-    result = pkg_generateLibraryFile(targetDir, mode, buffer, cmd);
+#ifdef USE_SINGLE_CCODE_FILE
+    uprv_strcpy(tempObjectFile, icudtAll);
+    tempObjectFile[uprv_strlen(tempObjectFile) - 1] = 'o';
+#ifdef OS400
+    sprintf(cmd, "QSH CMD('%s %s -o %s %s')",
+#else
+    sprintf(cmd, "%s %s -o %s %s",
+#endif
+        pkgDataFlags[COMPILER],
+        pkgDataFlags[LIBFLAGS],
+        tempObjectFile,
+        icudtAll);
+    
+    result = system(cmd);
+    if (result == 0) {
+        sprintf(buffer, "%s %s",
+            buffer,
+            tempObjectFile);
+    }
+#endif
 
+    if (result == 0) {
+        /* Generate the library file. */
+        result = pkg_generateLibraryFile(targetDir, mode, buffer, cmd);
+    }
     uprv_free(buffer);
     uprv_free(cmd);
 
@@ -1223,6 +1311,21 @@ static void pkg_checkFlag(UPKGOptions *o) {
     }
 
     uprv_memset(flag + position, 0, length - position);
+#elif defined(OS400)
+    /* OS400 needs to fix the ld options (swap single quote with double quote) */
+    char *flag = NULL;
+    int32_t length = 0;
+
+    flag = pkgDataFlags[GENLIB];
+    length = uprv_strlen(pkgDataFlags[GENLIB]);
+
+    int32_t position = length - 1;
+
+    for(int32_t i = 0; i < length; i++) {
+        if (flag[i] == '\'') {
+            flag[i] = '\"';
+        }
+    }
 #endif
 }
 

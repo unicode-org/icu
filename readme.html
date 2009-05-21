@@ -17,9 +17,9 @@
 
   <body class="readme">
     <h1>International Components for Unicode<br />
-     <abbr title="International Components for Unicode">ICU</abbr> 4.2 ReadMe</h1>
+     <abbr title="International Components for Unicode">ICU</abbr> 4.2.0.1 ReadMe</h1>
 
-    <p>Version: 2009 May 8th<br />
+    <p>Version: 2009 May 20th<br />
      Copyright &copy; 1997-2009 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -197,10 +197,33 @@
     <p><strong>Important:</strong> Please make sure you understand the <a href=
     "license.html">Copyright and License Information</a>.</p>
 
-    <h2><a name="News" href="#News" id="News">What is new in this
-    release?</a></h2>
+    <h2><a name="News" href="#News" id="News">What is new in this release?</a></h2>
+    
 
-    <p>To see which APIs are new or changed in this release, view the <a href="APIChangeReport.html">ICU4C API Change Report</a>. </p>
+    <p>ICU for C/C++ version 4.2.0.1 is a an update release of 4.2, containing selected platform and build related bug fixes. It does
+     not introduce new API or functionality. These changes will be rolled into the next release of ICU.  
+     	The overall ticket used for this release is <a href="http://bugs.icu-project.org/trac/ticket/6953">#6953</a>.
+     	 Here is a list of the bug fixes included in 4.2.0.1, and the revisions used to patch 4.2.0.1:
+     </p>
+     <ul>
+     	<li>
+     		<a href="http://bugs.icu-project.org/trac/ticket/6929">#6929</a> 
+     		<a href="http://bugs.icu-project.org/trac/changeset/26005">r26005</a> &mdash;
+     		Symbol Renaming disabled on Windows by default
+     	</li>
+     	<li>
+     		<a href="http://bugs.icu-project.org/trac/ticket/6936">#6936</a> 
+     		<a href="http://bugs.icu-project.org/trac/changeset/26018">r26018</a> &mdash;
+     		Data Building Difficulty on IBM i
+     	</li>
+     	<li>
+     		<a href="http://bugs.icu-project.org/trac/ticket/6925">#6925</a> 
+     		<a href="http://bugs.icu-project.org/trac/changeset/26002">r26002</a> &mdash;
+     		Data Building Difficulty on IBM zOS under ASCII Mode
+     	</li>
+     </ul>
+
+    <p>To see which APIs are new or changed in the 4.2 release, view the <a href="APIChangeReport.html">ICU4C API Change Report</a>. </p>
 
 
     <p><!-- The following list concentrates on <em>changes that affect existing
