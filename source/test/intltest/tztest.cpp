@@ -111,20 +111,20 @@ TimeZoneTest::TestGenericAPI()
     if (tzoffset < 0)
         tzoffset = -tzoffset;
     if ((*saveDefault == *pstZone) && (tzoffset != 28800)) {
+        errln("FAIL: t_timezone may be incorrect.  It is not 28800");
+    }
+
+    if ((tzoffset % 900) != 0) {
 #ifdef U_DARWIN
         /*
          * Ticket: 6364 (mow - 090522)
          * On MacOSX 10.5.3 and up, this test fails when TZ is set to certain timezones (e.g. Africa/Dar_es_Salaam)
          * Their GMT offset is not a multiple of 15 minutes. This is a MacOSX issue and is not a problem with ICU.
          */
-        infoln("[WARNING] FAIL: t_timezone may be incorrect.  It is not 28800. This is a known issue on MacOSX");
+        infoln("[WARNING] FAIL: t_timezone may be incorrect. It is not a multiple of 15min. It is %d (Note: This is a known issue on MacOSX)", tzoffset);
 #else
-        errln("FAIL: t_timezone may be incorrect.  It is not 28800");
-#endif
-    }
-
-    if ((tzoffset % 900) != 0) {
         errln("FAIL: t_timezone may be incorrect. It is not a multiple of 15min. It is %d", tzoffset);
+#endif
     }
 
     TimeZone::adoptDefault(zone);
