@@ -81,7 +81,7 @@
  *  @stable ICU 4.0
  */
 #ifndef U_ICU_VERSION_BUILDLEVEL_NUM
-#define U_ICU_VERSION_BUILDLEVEL_NUM 0
+#define U_ICU_VERSION_BUILDLEVEL_NUM 1
 #endif
 
 /** Glued version suffix for renamers 
@@ -90,12 +90,12 @@
  */
 #define U_ICU_VERSION_SUFFIX _4_2
 
-/** The current ICU library version as a dotted-decimal string. The patchlevel
+/** The current ICU library version as a dotted-decimal string. The patchlevel and buildlevel
  *  only appears in this string if it non-zero. 
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION "4.2"
+#define U_ICU_VERSION "4.2.0.1"
 
 /** The current ICU library major/minor version as a string without dots, for library name suffixes. 
  *  This value will change in the subsequent releases of ICU
