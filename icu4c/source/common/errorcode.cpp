@@ -25,7 +25,7 @@ UErrorCode ErrorCode::reset() {
     return code;
 }
 
-void ErrorCode::check() const {
+void ErrorCode::assertSuccess() const {
     if(isFailure()) {
         handleFailure();
     }
