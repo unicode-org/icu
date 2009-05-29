@@ -947,7 +947,7 @@ private:
     /**
      * Get the numbering system to be used for a particular field.
      */
-    using DateFormat::getNumberFormat;    // Do not hide visibility of base base class function
+    using DateFormat::getNumberFormat;    // Do not hide visibility of base class function
     NumberFormat * getNumberFormat(UDateFormatField index) const;
 
     /**
