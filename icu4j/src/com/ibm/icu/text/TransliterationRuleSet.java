@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -27,7 +27,7 @@ class TransliterationRuleSet {
     /**
      * Vector of rules, in the order added.
      */
-    private Vector ruleVector;
+    private Vector<TransliterationRule> ruleVector;
 
     /**
      * Length of the longest preceding context
@@ -53,7 +53,7 @@ class TransliterationRuleSet {
      * Construct a new empty rule set.
      */
     public TransliterationRuleSet() {
-        ruleVector = new Vector();
+        ruleVector = new Vector<TransliterationRule>();
         maxContextLength = 0;
     }
 
@@ -104,13 +104,13 @@ class TransliterationRuleSet {
          */
         int n = ruleVector.size();
         index = new int[257]; // [sic]
-        Vector v = new Vector(2*n); // heuristic; adjust as needed
+        Vector<TransliterationRule> v = new Vector<TransliterationRule>(2*n); // heuristic; adjust as needed
 
         /* Precompute the index values.  This saves a LOT of time.
          */
         int[] indexValue = new int[n];
         for (int j=0; j<n; ++j) {
-            TransliterationRule r = (TransliterationRule) ruleVector.elementAt(j);
+            TransliterationRule r = ruleVector.elementAt(j);
             indexValue[j] = r.getIndexValue();
         }
         for (int x=0; x<256; ++x) {
@@ -230,8 +230,7 @@ class TransliterationRuleSet {
             if (i != 0) {
                 ruleSource.append('\n');
             }
-            TransliterationRule r =
-                (TransliterationRule) ruleVector.elementAt(i);
+            TransliterationRule r = ruleVector.elementAt(i);
             ruleSource.append(r.toRule(escapeUnprintable));
         }
         return ruleSource.toString();
@@ -245,8 +244,7 @@ class TransliterationRuleSet {
         UnicodeSet set = new UnicodeSet();
         int count = ruleVector.size();
         for (int i=0; i<count; ++i) {
-            TransliterationRule r =
-                (TransliterationRule) ruleVector.elementAt(i);
+            TransliterationRule r = ruleVector.elementAt(i);
             if (getTarget) {
                 r.addTargetSetTo(set);
             } else {

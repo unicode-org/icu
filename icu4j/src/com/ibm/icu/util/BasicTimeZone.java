@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -227,7 +227,7 @@ public abstract class BasicTimeZone extends TimeZone {
         }
 
         BitSet isProcessed = new BitSet(all.length);
-        List filteredRules = new LinkedList();
+        List<TimeZoneRule> filteredRules = new LinkedList<TimeZoneRule>();
 
         // Create initial rule
         TimeZoneRule initial = new InitialTimeZoneRule(tzt.getTo().getName(),
@@ -346,8 +346,7 @@ public abstract class BasicTimeZone extends TimeZone {
             }
             isProcessed.set(ruleIdx);
         }
-        TimeZoneRule[] rules = new TimeZoneRule[filteredRules.size()];
-        filteredRules.toArray(rules);
+        TimeZoneRule[] rules = filteredRules.toArray(new TimeZoneRule[filteredRules.size()]);
         return rules;
     }
 

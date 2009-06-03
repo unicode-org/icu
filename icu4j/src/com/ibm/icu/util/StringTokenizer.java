@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and    *
+* Copyright (C) 1996-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -97,7 +97,7 @@ import com.ibm.icu.text.UTF16;
  * @author syn wee
  * @stable ICU 2.4
  */
-public final class StringTokenizer implements Enumeration 
+public final class StringTokenizer implements Enumeration<Object>
 {
     // public constructors ---------------------------------------------
      

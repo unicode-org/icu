@@ -219,7 +219,7 @@ import com.ibm.icu.lang.UCharacter;
  * @stable ICU 2.0
  */
 
-public class BigDecimal extends java.lang.Number implements java.io.Serializable, java.lang.Comparable {
+public class BigDecimal extends java.lang.Number implements java.io.Serializable, java.lang.Comparable<BigDecimal> {
     // private static final java.lang.String $0="BigDecimal.nrx";
 
     /* ----- Constants ----- */
@@ -2000,31 +2000,6 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
         if ((num > 127) | (num < (-128)))
             throw new java.lang.ArithmeticException("Conversion overflow:" + " " + this.toString());
         return (byte) num;
-    }
-
-    /**
-     * Compares this <code>BigDecimal</code> with the value of the parameter.
-     * <p>
-     * If the parameter is <code>null</code>, or is not an instance of the <code>BigDecimal</code> type, an exception is
-     * thrown. Otherwise, the parameter is cast to type <code>BigDecimal</code> and the result of the
-     * {@link #compareTo(BigDecimal)} method, using the cast parameter, is returned.
-     * <p>
-     * The {@link #compareTo(BigDecimal, MathContext)} method should be used when a <code>MathContext</code> is needed
-     * for the comparison.
-     * 
-     * @param rhsobj
-     *            The <code>Object</code> for the right hand side of the comparison.
-     * @return An <code>int</code> whose value is -1, 0, or 1 as <code>this</code> is numerically less than, equal to,
-     *         or greater than <code>rhs</code>.
-     * @throws ClassCastException
-     *             if <code>rhs</code> cannot be cast to a <code>BigDecimal</code> object.
-     * @see #compareTo(BigDecimal)
-     * @stable ICU 2.0
-     */
-
-    public int compareTo(java.lang.Object rhsobj) {
-        // the cast in the next line will raise ClassCastException if necessary
-        return compareTo((com.ibm.icu.math.BigDecimal) rhsobj, plainMC);
     }
 
     /**

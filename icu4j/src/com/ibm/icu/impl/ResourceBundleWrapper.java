@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2004-2008, International Business Machines Corporation and   *
+* Copyright (C) 2004-2009, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -26,7 +26,7 @@ public class ResourceBundleWrapper extends UResourceBundle {
     private ResourceBundle bundle = null;
     private String localeID = null;
     private String baseName = null;
-    private Vector keys=null;
+    private Vector<String> keys = null;
 //    private int loadingStatus = -1;    
     
     private ResourceBundleWrapper(ResourceBundle bundle){
@@ -58,17 +58,17 @@ public class ResourceBundleWrapper extends UResourceBundle {
         return obj;
     }
     
-    public Enumeration getKeys(){
+    public Enumeration<String> getKeys(){
         return keys.elements();
     }
     
     private void initKeysVector(){
         ResourceBundleWrapper current = this;
-        keys = new Vector();
+        keys = new Vector<String>();
         while(current!=null){
-            Enumeration e = current.bundle.getKeys();
+            Enumeration<String> e = current.bundle.getKeys();
             while(e.hasMoreElements()){
-                String elem = (String)e.nextElement();
+                String elem = e.nextElement();
                 if(!keys.contains(elem)){
                     keys.add(elem);
                 }
@@ -140,8 +140,8 @@ public class ResourceBundleWrapper extends UResourceBundle {
                 }
             }
             try {
-                Class cls = cl.loadClass(name);
-                ResourceBundle bx = (ResourceBundle) cls.newInstance();
+                Class<? extends ResourceBundle> cls = cl.loadClass(name).asSubclass(ResourceBundle.class);
+                ResourceBundle bx = cls.newInstance();
                 b = new ResourceBundleWrapper(bx);
                 if (parent != null) {
                     b.setParent(parent);
@@ -152,9 +152,9 @@ public class ResourceBundleWrapper extends UResourceBundle {
             } catch (ClassNotFoundException e) {
                 
                 final String resName = name.replace('.', '/') + ".properties";
-                InputStream stream = (InputStream)java.security.AccessController.doPrivileged(
-                    new java.security.PrivilegedAction() {
-                        public Object run() {
+                InputStream stream = java.security.AccessController.doPrivileged(
+                    new java.security.PrivilegedAction<InputStream>() {
+                        public InputStream run() {
                             if (cl != null) {
                                 return cl.getResourceAsStream(resName);
                             } else {

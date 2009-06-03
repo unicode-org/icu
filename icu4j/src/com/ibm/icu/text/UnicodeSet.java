@@ -285,7 +285,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
 
     // NOTE: normally the field should be of type SortedSet; but that is missing a public clone!!
     // is not private so that UnicodeSetIterator can get access
-    TreeSet strings = new TreeSet();
+    TreeSet<String> strings = new TreeSet<String>();
 
     /**
      * The pattern representation of this set.  This may not be the
@@ -465,7 +465,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
         list = (int[]) other.list.clone();
         len = other.len;
         pat = other.pat;
-        strings = (TreeSet)other.strings.clone();
+        strings = new TreeSet<String>(other.strings);
         return this;
     }
 
@@ -695,10 +695,9 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
         }
 
         if (includeStrings && strings.size() > 0) {
-            Iterator it = strings.iterator();
-            while (it.hasNext()) {
+            for (String s : strings) {
                 result.append('{');
-                _appendToPat(result, (String) it.next(), escapeUnprintable);
+                _appendToPat(result, s, escapeUnprintable);
                 result.append('}');
             }
         }
@@ -760,9 +759,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
             }
         }
         if (strings.size() != 0) {
-            Iterator it = strings.iterator();
-            while (it.hasNext()) {
-                String s = (String) it.next();
+            for (String s : strings) {
                 //if (s.length() == 0) {
                 //    // Empty strings match everything
                 //    return true;
@@ -806,7 +803,6 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
                 // direction, if not in both.  In the forward direction we
                 // can assume the strings are sorted.
 
-                Iterator it = strings.iterator();
                 boolean forward = offset[0] < limit;
 
                 // firstChar is the leftmost char to match in the
@@ -818,9 +814,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
                 // return the longest match.
                 int highWaterLength = 0;
 
-                while (it.hasNext()) {
-                    String trial = (String) it.next();
-
+                for (String trial : strings) {
                     //if (trial.length() == 0) {
                     //    return U_MATCH; // null-string always matches
                     //}
@@ -921,9 +915,9 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
             char firstChar = text.charAt(offset);
             String trial = null;
             // find the first string starting with firstChar
-            Iterator it = strings.iterator();
+            Iterator<String> it = strings.iterator();
             while (it.hasNext()) {
-                trial = (String) it.next();
+                trial = it.next();
                 char firstStringChar = trial.charAt(0);
                 if (firstStringChar < firstChar) continue;
                 if (firstStringChar > firstChar) break strings;
@@ -1499,8 +1493,11 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
         checkFrozen();
         int cp = getSingleCP(s);
         if (cp < 0) {
-            if (strings.contains(s)) strings.remove(s);
-            else strings.add(s);
+            if (strings.contains(s)) {
+                strings.remove(s);
+            } else {
+                strings.add(s);
+            }
             pat = null;
         } else {
             complement(cp, cp);
@@ -1848,10 +1845,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
         if (contains(cp) && containsAll(s, i+UTF16.getCharCount(cp))) {
             return true;
         }
-        
-        Iterator it = strings.iterator();
-        while (it.hasNext()) {
-            String setStr = (String)it.next();
+        for (String setStr : strings) {
             if (s.startsWith(setStr, i) &&  containsAll(s, i+setStr.length())) {
                 return true;
             }
@@ -1867,13 +1861,14 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * @deprecated This API is ICU internal only.
      */
     public String getRegexEquivalent() {
-        if (strings.size() == 0) return toString();
+        if (strings.size() == 0) {
+            return toString();
+        }
         StringBuffer result = new StringBuffer("(?:");
         _generatePattern(result, true, false);
-        Iterator it = strings.iterator();
-        while (it.hasNext()) {
+        for (String s : strings) {
             result.append('|');
-            _appendToPat(result, (String) it.next(), true);
+            _appendToPat(result, s, true);
         }
         return result.append(")").toString();
     }
@@ -1992,13 +1987,18 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
         int cp;
         for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
             cp = UTF16.charAt(s, i);
-            if (contains(cp)) return false;
+            if (contains(cp)) {
+                return false;
+            }
         }
-        if (strings.size() == 0) return true;
+        if (strings.size() == 0) {
+            return true;
+        }
         // do a last check to make sure no strings are in.
-        for (Iterator it = strings.iterator(); it.hasNext();) {
-            String item = (String)it.next();
-            if (s.indexOf(item) >= 0) return false;
+        for (String item : strings) {
+            if (s.indexOf(item) >= 0) {
+                return false;
+            }
         }
         return true;
     }
@@ -2662,7 +2662,7 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * @param target collection to add into
      * @stable ICU 2.8
      */
-    public void addAllTo(Collection target) {
+    public void addAllTo(Collection<String> target) {
         UnicodeSetIterator it = new UnicodeSetIterator(this);
         while (it.next()) {
             target.add(it.getString());
@@ -2674,11 +2674,10 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
      * @param source the collection to add
      * @stable ICU 2.8
      */
-    public void addAll(Collection source) {
+    public void addAll(Collection<?> source) {
         checkFrozen();
-        Iterator it = source.iterator();
-        while (it.hasNext()) {
-            add(it.next().toString());
+        for (Object o : source) {
+            add(o.toString());
         }
     }
 
@@ -3645,20 +3644,16 @@ public class UnicodeSet extends UnicodeFilter implements Freezable {
                 }
             }
             if (!strings.isEmpty()) {
-                String str;
                 if ((attribute & CASE) != 0) {
-                    Iterator it = strings.iterator();
-                    while (it.hasNext()) {
-                        str = UCharacter.foldCase((String)it.next(), 0);
+                    for (String s : strings) {
+                        String str = UCharacter.foldCase(s, 0);
                         if(!csp.addStringCaseClosure(str, foldSet)) {
                             foldSet.add(str); // does not map to code points: add the folded string itself
                         }
                     }
                 } else {
                     BreakIterator bi = BreakIterator.getWordInstance(root);
-                    Iterator it = strings.iterator();
-                    while (it.hasNext()) {
-                        str = (String)it.next();
+                    for (String str : strings) {
                         foldSet.add(UCharacter.toLowerCase(root, str));
                         foldSet.add(UCharacter.toTitleCase(root, str, bi));
                         foldSet.add(UCharacter.toUpperCase(root, str));

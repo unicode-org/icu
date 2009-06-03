@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 2005, International Business Machines Corporation and        *
+ * Copyright (C) 2005-2009, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
@@ -24,12 +24,12 @@ import java.util.jar.JarFile;
 public abstract class URLHandler {
     public static final String PROPNAME = "urlhandler.props";
     
-    private static final Map handlers;
+    private static final Map<String, Method> handlers;
     
     private static final boolean DEBUG = ICUDebug.enabled("URLHandler");
     
     static {
-        Map h = null;
+        Map<String, Method> h = null;
         
         try {
             InputStream is = URLHandler.class.getResourceAsStream(PROPNAME);
@@ -39,7 +39,7 @@ public abstract class URLHandler {
             }
             
             if (is != null) {
-                Class[] params = { URL.class };
+                Class<?>[] params = { URL.class };
                 BufferedReader br = new BufferedReader(new InputStreamReader(is));
                 
                 for (String line = br.readLine(); line != null; line = br.readLine()) {
@@ -60,11 +60,11 @@ public abstract class URLHandler {
                     String value = line.substring(ix+1).trim();
                     
                     try {
-                        Class cl = Class.forName(value);
+                        Class<?> cl = Class.forName(value);
                         Method m = cl.getDeclaredMethod("get", params);
                         
                         if (h == null) {
-                            h = new HashMap();
+                            h = new HashMap<String, Method>();
                         }
                         
                         h.put(key, m);
@@ -95,7 +95,7 @@ public abstract class URLHandler {
         String protocol = url.getProtocol();
         
         if (handlers != null) {
-            Method m = (Method)handlers.get(protocol);
+            Method m = handlers.get(protocol);
             
             if (m != null) {
                 try {
@@ -195,10 +195,10 @@ public abstract class URLHandler {
         
         public void guide(URLVisitor v, boolean recurse, boolean strip) {
             try {
-                Enumeration entries = jarFile.entries();
+                Enumeration<JarEntry> entries = jarFile.entries();
                 
                 while (entries.hasMoreElements()) {
-                    JarEntry entry = (JarEntry)entries.nextElement();
+                    JarEntry entry = entries.nextElement();
                     
                     if (!entry.isDirectory()) { // skip just directory paths
                         String name = entry.getName();
@@ -240,4 +240,3 @@ public abstract class URLHandler {
         void visit(String str);
     }
 }
-

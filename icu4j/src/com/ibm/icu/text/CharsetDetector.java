@@ -6,12 +6,12 @@
 */
 package com.ibm.icu.text;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Arrays;
+import java.util.Collections;
 
 
 /**
@@ -188,12 +188,12 @@ public class CharsetDetector {
         int               i;
         int               detectResults;
         int               confidence;
-        ArrayList         matches = new ArrayList();
+        ArrayList<CharsetMatch>         matches = new ArrayList<CharsetMatch>();
         
         //  Iterate over all possible charsets, remember all that
         //    give a match quality > 0.
         for (i=0; i<fCSRecognizers.size(); i++) {
-            csr = (CharsetRecognizer)fCSRecognizers.get(i);
+            csr = fCSRecognizers.get(i);
             detectResults = csr.match(this);
             confidence = detectResults & 0x000000ff;
             if (confidence > 0) {
@@ -204,7 +204,7 @@ public class CharsetDetector {
         Collections.sort(matches);      // CharsetMatch compares on confidence
         Collections.reverse(matches);   //  Put best match first.
         CharsetMatch [] resultArray = new CharsetMatch[matches.size()];
-        resultArray = (CharsetMatch[]) matches.toArray(resultArray);
+        resultArray = matches.toArray(resultArray);
         return resultArray;
     }
 
@@ -450,14 +450,14 @@ public class CharsetDetector {
     /*
      * List of recognizers for all charsets known to the implementation.
      */
-    private static ArrayList fCSRecognizers = createRecognizers();
+    private static ArrayList<CharsetRecognizer> fCSRecognizers = createRecognizers();
     private static String [] fCharsetNames;
     
     /*
      * Create the singleton instances of the CharsetRecognizer classes
      */
-    private static ArrayList createRecognizers() {
-        ArrayList recognizers = new ArrayList();
+    private static ArrayList<CharsetRecognizer> createRecognizers() {
+        ArrayList<CharsetRecognizer> recognizers = new ArrayList<CharsetRecognizer>();
         
         recognizers.add(new CharsetRecog_UTF8());
         

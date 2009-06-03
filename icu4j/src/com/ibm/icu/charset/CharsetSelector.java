@@ -99,11 +99,11 @@ public final class CharsetSelector {
     }
 
     // internal function
-    private List selectForMask(int[] mask) {
+    private List<String> selectForMask(int[] mask) {
         // this is the context we will use. Store a table of indices to which
         // encodings are legit
 
-        Vector result = new Vector();
+        Vector<String> result = new Vector<String>();
         int columns = (encodings.length + 31) / 32;
         int numOnes = countOnes(mask, columns);
 
@@ -164,7 +164,7 @@ public final class CharsetSelector {
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
-    public CharsetSelector(List charsetList, UnicodeSet excludedCodePoints,
+    public CharsetSelector(List<String> charsetList, UnicodeSet excludedCodePoints,
             int mappingTypes) {
         if (mappingTypes != CharsetICU.ROUNDTRIP_AND_FALLBACK_SET
                 && mappingTypes != CharsetICU.ROUNDTRIP_SET) {
@@ -173,17 +173,9 @@ public final class CharsetSelector {
 
         int encodingCount = charsetList.size();
         if (encodingCount > 0) {
-            encodings = new String[encodingCount];
-            for (int i = 0; i < encodingCount; i++) {
-                encodings[i] = (String) charsetList.get(i);
-            }
+            encodings = charsetList.toArray(new String[0]);
         } else {
-            Object[] availableNames = CharsetProviderICU.getAvailableNames();
-            encodingCount = availableNames.length;
-            encodings = new String[encodingCount];
-            for (int i = 0; i < encodingCount; i++) {
-                encodings[i] = (String) availableNames[i];
-            }
+            encodings = CharsetProviderICU.getAvailableNames();
         }
 
         PropsVectors pvec = new PropsVectors((encodingCount + 31) / 32);
@@ -203,7 +195,7 @@ public final class CharsetSelector {
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
-    public List selectForString(CharSequence unicodeText) {
+    public List<String> selectForString(CharSequence unicodeText) {
         int columns = (encodings.length + 31) / 32;
         int[] mask = new int[columns];
         for (int i = 0; i < columns; i++) {

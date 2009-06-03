@@ -1,16 +1,15 @@
 /*
- *******************************************************************************
- * Copyright (C) 2003-2006,
- * International Business Machines Corporation and others. All Rights Reserved.
- *******************************************************************************
- */
- 
+*******************************************************************************
+* Copyright (C) 2003-2009, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*/
 package com.ibm.icu.text;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.io.OutputStream;
+
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.IntTrieBuilder;
@@ -40,20 +39,20 @@ class RBBISetBuilder {
            int                fStartChar;      // Start of range, unicode 32 bit value.
            int                fEndChar;        // End of range, unicode 32 bit value.
            int                fNum;            // runtime-mapped input value for this range.
-           List               fIncludesSets;   // vector of the the original
-                                                //   Unicode sets that include this range.
+           List<RBBINode>     fIncludesSets;    // vector of the the original
+                                                 //   Unicode sets that include this range.
                                                 //    (Contains ptrs to uset nodes)
             RangeDescriptor   fNext;           // Next RangeDescriptor in the linked list.
 
             RangeDescriptor() {
-                fIncludesSets = new ArrayList();
+                fIncludesSets = new ArrayList<RBBINode>();
             }
             
             RangeDescriptor(RangeDescriptor other) {
                 fStartChar = other.fStartChar;
                 fEndChar   = other.fEndChar;
                 fNum       = other.fNum;
-                fIncludesSets = new ArrayList(other.fIncludesSets);
+                fIncludesSets = new ArrayList<RBBINode>(other.fIncludesSets);
             }
  
             //-------------------------------------------------------------------------------------
@@ -100,7 +99,7 @@ class RBBISetBuilder {
                 int i;
                 
                 for (i=0; i<this.fIncludesSets.size(); i++) {
-                    RBBINode        usetNode    = (RBBINode)fIncludesSets.get(i);
+                    RBBINode        usetNode    = fIncludesSets.get(i);
                     String          setName = "";
                     RBBINode        setRef = usetNode.fParent;
                     if (setRef != null) {
@@ -154,7 +153,6 @@ class RBBISetBuilder {
     //
     //------------------------------------------------------------------------
     void build() {
-        RBBINode        usetNode;
         RangeDescriptor rlRange;
 
         if (fRB.fDebugEnv!=null  && fRB.fDebugEnv.indexOf("usets")>=0) {printSets();}
@@ -169,23 +167,20 @@ class RBBISetBuilder {
         //
         //  Find the set of non-overlapping ranges of characters
         //
-            Iterator  ni = fRB.fUSetNodes.iterator();
-            while (ni.hasNext()) {
-                usetNode = (RBBINode)ni.next();
- 
-                UnicodeSet      inputSet             = usetNode.fInputSet;
-                int            inputSetRangeCount   = inputSet.getRangeCount();
-                int            inputSetRangeIndex   = 0;
-                                 rlRange              = fRangeList;
+        for (RBBINode usetNode : fRB.fUSetNodes) {
+            UnicodeSet      inputSet             = usetNode.fInputSet;
+            int            inputSetRangeCount   = inputSet.getRangeCount();
+            int            inputSetRangeIndex   = 0;
+            rlRange              = fRangeList;
 
-                for (;;) {
-                    if (inputSetRangeIndex >= inputSetRangeCount) {
-                        break;
-                    }
-                    int      inputSetRangeBegin  = inputSet.getRangeStart(inputSetRangeIndex);
-                    int      inputSetRangeEnd    = inputSet.getRangeEnd(inputSetRangeIndex);
+            for (;;) {
+                if (inputSetRangeIndex >= inputSetRangeCount) {
+                    break;
+                }
+                int      inputSetRangeBegin  = inputSet.getRangeStart(inputSetRangeIndex);
+                int      inputSetRangeEnd    = inputSet.getRangeEnd(inputSetRangeIndex);
 
-                    // skip over ranges from the range list that are completely
+                // skip over ranges from the range list that are completely
                 //   below the current range from the input unicode set.
                 while (rlRange.fEndChar < inputSetRangeBegin) {
                     rlRange = rlRange.fNext;
@@ -267,9 +262,7 @@ class RBBISetBuilder {
         String eofString = "eof";
         String bofString = "bof";
 
-        ni = fRB.fUSetNodes.iterator();
-        while (ni.hasNext()) {
-            usetNode = (RBBINode )ni.next();
+        for (RBBINode usetNode : fRB.fUSetNodes) {
             UnicodeSet      inputSet = usetNode.fInputSet;
             if (inputSet.contains(eofString)) {
                 addValToSet(usetNode, 1);
@@ -371,11 +364,8 @@ class RBBISetBuilder {
     //      or-ing together of all of the symbols that go into the set.
     //
     //------------------------------------------------------------------------
-    void  addValToSets(List sets, int val) {
-        int       ix;
-
-        for (ix=0; ix<sets.size(); ix++) {
-            RBBINode usetNode = (RBBINode )sets.get(ix);
+    void  addValToSets(List<RBBINode> sets, int val) {
+        for (RBBINode usetNode : sets) {
             addValToSet(usetNode, val);
         }
     }
@@ -457,7 +447,7 @@ class RBBISetBuilder {
             System.out.print(" " + rlRange.fNum + "   " + (int)rlRange.fStartChar + "-" + (int)rlRange.fEndChar);
 
             for (i=0; i<rlRange.fIncludesSets.size(); i++) {
-                RBBINode       usetNode    = (RBBINode )rlRange.fIncludesSets.get(i);
+                RBBINode       usetNode    = rlRange.fIncludesSets.get(i);
                 String         setName = "anon";
                 RBBINode       setRef = usetNode.fParent;
                 if (setRef != null) {
@@ -498,7 +488,7 @@ class RBBISetBuilder {
                 if ((rlRange.fNum & 0x4000) != 0) { System.out.print(" <DICT> ");}
 
                 for (i=0; i<rlRange.fIncludesSets.size(); i++) {
-                    RBBINode       usetNode    = (RBBINode )rlRange.fIncludesSets.get(i);
+                    RBBINode       usetNode    = rlRange.fIncludesSets.get(i);
                     String         setName = "anon";
                     RBBINode       setRef = usetNode.fParent;
                     if (setRef != null) {

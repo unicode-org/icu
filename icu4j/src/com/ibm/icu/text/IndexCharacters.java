@@ -72,10 +72,10 @@ public class IndexCharacters {
 
     private ULocale locale;
     private Collator comparator;
-    private Set indexCharacters;
-    private LinkedHashMap alreadyIn = new LinkedHashMap();
-    private List noDistinctSorting = new ArrayList();
-    private List notAlphabetic = new ArrayList();
+    private Set<String> indexCharacters;
+    private LinkedHashMap<String, Set<String>> alreadyIn = new LinkedHashMap<String, Set<String>>();
+    private List<String> noDistinctSorting = new ArrayList<String>();
+    private List<String> notAlphabetic = new ArrayList<String>();
 
     /**
      * Create the index object.
@@ -83,6 +83,7 @@ public class IndexCharacters {
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
+    @SuppressWarnings("unchecked")
     public IndexCharacters(ULocale locale) {
         this.locale = locale;
         comparator = Collator.getInstance(locale);
@@ -112,30 +113,30 @@ public class IndexCharacters {
 
         // first sort them, with an "best" ordering among items that are the same according
         // to the collator
+        Comparator<Object>[] comparators = (Comparator<Object>[])new Comparator[2];
+        comparators[0] = comparator;
+        comparators[1] = new PreferenceComparator(Collator.getInstance(locale));
 
-        Set preferenceSorting = new TreeSet(new MultiComparator(new Comparator[]{
-                comparator, new PreferenceComparator(Collator.getInstance(locale))}));
+        Set<String> preferenceSorting = new TreeSet<String>(new MultiComparator<Object>(comparators));
         for (UnicodeSetIterator it = new UnicodeSetIterator(exemplars); it.next();) {
             preferenceSorting.add(it.getString());
         }
 
-        indexCharacters = new TreeSet(comparator);
+        indexCharacters = new TreeSet<String>(comparator);
 
         // We nw make a sorted array of elements, uppercased
         // Some of the input may, however, be redundant.
         // That is, we might have c, ch, d, where "ch" sorts just like "c", "h"
         // So we make a pass through, filtering out those cases.
 
-        for (Iterator it = preferenceSorting.iterator(); it.hasNext();) {
-            String item = (String) it.next();
+        for (String item : preferenceSorting) {
             item = UCharacter.toUpperCase(locale, item);
             if (indexCharacters.contains(item)) {
-                for (Iterator it2 = indexCharacters.iterator(); it2.hasNext();) {
-                    Object itemAlreadyIn = it2.next();
+                for (String itemAlreadyIn : indexCharacters) {
                     if (comparator.compare(item, itemAlreadyIn) == 0) {
-                        Set targets = (Set) alreadyIn.get(itemAlreadyIn);
+                        Set<String> targets = alreadyIn.get(itemAlreadyIn);
                         if (targets == null) {
-                            alreadyIn.put(itemAlreadyIn, targets = new LinkedHashSet());
+                            alreadyIn.put(itemAlreadyIn, targets = new LinkedHashSet<String>());
                         }
                         targets.add(item);
                         break;
@@ -156,7 +157,7 @@ public class IndexCharacters {
         if (size > 99) {
             int count = 0;
             int old = -1;
-            for (Iterator it = indexCharacters.iterator(); it.hasNext();) {
+            for (Iterator<String> it = indexCharacters.iterator(); it.hasNext();) {
                 ++ count;
                 it.next();
                 final int bump = count * 99 / size;
@@ -195,7 +196,7 @@ public class IndexCharacters {
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
-    public Collection getIndexCharacters() {
+    public Collection<String> getIndexCharacters() {
         return indexCharacters;
     }
 
@@ -214,7 +215,7 @@ public class IndexCharacters {
      * This contains some of the discards, and is intended for debugging.
      * @internal
      */
-    public Map getAlreadyIn() {
+    public Map<String, Set<String>> getAlreadyIn() {
         return alreadyIn;
     }
 
@@ -223,7 +224,7 @@ public class IndexCharacters {
      * This contains some of the discards, and is intended for debugging.
      * @internal
      */
-    public List getNoDistinctSorting() {
+    public List<String> getNoDistinctSorting() {
         return noDistinctSorting;
     }
 
@@ -232,7 +233,7 @@ public class IndexCharacters {
      * This contains some of the discards, and is intended for debugging.
      * @internal
      */
-    public List getNotAlphabetic() {
+    public List<String> getNotAlphabetic() {
         return notAlphabetic;
     }
 
@@ -240,20 +241,22 @@ public class IndexCharacters {
      * Comparator that returns "better" items first, where shorter NFKD is better,
      * and otherwise NFKD binary order is better, and otherwise binary order is better.
      */
-    private static class PreferenceComparator implements Comparator {
-        static final Comparator binary = new UTF16.StringComparator(true,false,0);
+    private static class PreferenceComparator implements Comparator<Object> {
+        static final Comparator<String> binary = new UTF16.StringComparator(true,false,0);
         final Collator collator;
 
         public PreferenceComparator(Collator collator) {
             this.collator = collator;
         }
-        
+
         public int compare(Object o1, Object o2) {
-            if (o1 == o2) {
+            return compare((String)o1, (String)o2);
+        }
+
+        public int compare(String s1, String s2) {
+            if (s1 == s2) {
                 return 0;
             }
-            String s1 = (String) o1;
-            String s2 = (String) o2;
             String n1 = Normalizer.decompose(s1, true);
             String n2 = Normalizer.decompose(s2, true);
             int result = n1.length() - n2.length();

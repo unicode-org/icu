@@ -12,6 +12,8 @@ package com.ibm.icu.impl;
 
 import java.lang.ref.SoftReference;
 import java.text.ParsePosition;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -96,10 +98,10 @@ public final class ZoneMeta {
         if(!getOlsonMeta()){
             return EMPTY;
         }
-        LinkedList vector = new LinkedList();
-        for (int i=0; i<OLSON_ZONE_COUNT; ++i) {
+        ArrayList<String> vector = new ArrayList<String>(OLSON_ZONE_COUNT);
+        for (int i = 0; i < OLSON_ZONE_COUNT; ++i) {
             String unistr;
-            if ((unistr=getID(i))!=null) {
+            if ((unistr = getID(i))!=null) {
                 // This is VERY inefficient.
                 TimeZone z = TimeZone.getTimeZone(unistr);
                 // Make sure we get back the ID we wanted (if the ID is
@@ -112,7 +114,7 @@ public final class ZoneMeta {
         }
         if(!vector.isEmpty()){
             String[] strings = new String[vector.size()];
-            return (String[])vector.toArray(strings);
+            return vector.toArray(strings);
         }
         return EMPTY;
     }
@@ -202,8 +204,8 @@ public final class ZoneMeta {
             return null;
         }
         if (canonicalMap == null) {
-            Map m = new HashMap();
-            Set s = new HashSet();
+            Map<String, String[]> m = new HashMap<String, String[]>();
+            Set<String> s = new HashSet<String>();
             try {
                 UResourceBundle supplementalDataBundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
     
@@ -216,22 +218,22 @@ public final class ZoneMeta {
     
                     switch(resourceType) {
                         case UResourceBundle.TABLE:
-                            String [] result = { "", "" };
+                            String[] result = { "", "" };
                             UResourceBundle zoneInfo = temp;
-                            String canonicalID = zoneInfo.getKey().replace(':','/');
+                            String canonicalID = zoneInfo.getKey().replace(':', '/');
                             String territory = zoneInfo.get("territory").getString();
                             result[0] = canonicalID;
-                            if ( territory.equals("001")) {
+                            if (territory.equals("001")) {
                                 result[1] = null;
                             }
                             else {
                                 result[1] = territory;
                             }
-                            m.put(canonicalID,result);
+                            m.put(canonicalID, result);
                             try {
                                 UResourceBundle aliasBundle = zoneInfo.get("aliases");
-                                String [] aliases = aliasBundle.getStringArray();
-                                for (int i=0 ; i<aliases.length; i++) {
+                                String[] aliases = aliasBundle.getStringArray();
+                                for (int i = 0 ; i < aliases.length; i++) {
                                    m.put(aliases[i],result);
                                 }
                             } catch(MissingResourceException ex){
@@ -298,11 +300,11 @@ public final class ZoneMeta {
             }
         }
 
-        return (String[])canonicalMap.get(id);
+        return canonicalMap.get(id);
     }
 
-    private static Map canonicalMap = null;
-    private static Set multiZoneTerritories = null;
+    private static Map<String, String[]> canonicalMap = null;
+    private static Set<String> multiZoneTerritories = null;
 
     /**
      * Return the canonical id for this system tzid, which might be the id itself.
@@ -532,7 +534,7 @@ public final class ZoneMeta {
     private static final String kNAMES    = "Names";
     private static final String kGMT_ID   = "GMT";
     private static final String kCUSTOM_TZ_PREFIX = "GMT";
-    private static ICUCache zoneCache = new SimpleCache();
+    private static ICUCache<String, TimeZone> zoneCache = new SimpleCache<String, TimeZone>();
     /**
      * The Olson data is stored the "zoneinfo" resource bundle.
      * Sub-resources are organized into three ranges of data: Zones, final
@@ -581,7 +583,7 @@ public final class ZoneMeta {
      * found, return 0.
      */
     public static TimeZone getSystemTimeZone(String id) {
-        TimeZone z = (TimeZone)zoneCache.get(id);
+        TimeZone z = zoneCache.get(id);
         if (z == null) {
             try{
                 UResourceBundle top = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "zoneinfo", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
@@ -829,8 +831,8 @@ public final class ZoneMeta {
         return zid.toString();
     }
 
-    private static SoftReference OLSON_TO_META_REF;
-    private static SoftReference META_TO_OLSON_REF;
+    private static SoftReference<Map<String, List<OlsonToMetaMappingEntry>>> OLSON_TO_META_REF;
+    private static SoftReference<Map<String, List<MetaToOlsonMappingEntry>>> META_TO_OLSON_REF;
 
     static class OlsonToMetaMappingEntry {
         String mzid;
@@ -843,19 +845,19 @@ public final class ZoneMeta {
         String territory;
     }
 
-    static Map getOlsonToMetaMap() {
-        Map olsonToMeta = null;
+    static Map<String, List<OlsonToMetaMappingEntry>> getOlsonToMetaMap() {
+        Map<String, List<OlsonToMetaMappingEntry>> olsonToMeta = null;
         synchronized(ZoneMeta.class) {
             if (OLSON_TO_META_REF != null) {
-                olsonToMeta = (HashMap)OLSON_TO_META_REF.get();
+                olsonToMeta = OLSON_TO_META_REF.get();
             }
             if (olsonToMeta == null) {
                 olsonToMeta = createOlsonToMetaMap();
                 if (olsonToMeta == null) {
                     // We need to return non-null Map to avoid disaster
-                    olsonToMeta = new HashMap();
+                    olsonToMeta = Collections.emptyMap();
                 }
-                OLSON_TO_META_REF = new SoftReference(olsonToMeta);
+                OLSON_TO_META_REF = new SoftReference<Map<String, List<OlsonToMetaMappingEntry>>>(olsonToMeta);
             }
         }
         return olsonToMeta;
@@ -864,9 +866,9 @@ public final class ZoneMeta {
     /*
      * Create olson tzid to metazone mappings from metazoneInfo.res (3.8.1 or later)
      */
-    private static Map createOlsonToMetaMap() {
+    private static Map<String, List<OlsonToMetaMappingEntry>> createOlsonToMetaMap() {
         // Create olson id to metazone mapping table
-        HashMap olsonToMeta = null;
+        Map<String, List<OlsonToMetaMappingEntry>> olsonToMeta = null;
         UResourceBundle metazoneMappingsBundle = null;
         try {
             UResourceBundle bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "metazoneInfo");
@@ -885,7 +887,7 @@ public final class ZoneMeta {
                 String tzkey = tzids[i].replace('/', ':');
                 try {
                     UResourceBundle zoneBundle = metazoneMappingsBundle.get(tzkey);
-                    LinkedList mzMappings = new LinkedList();
+                    LinkedList<OlsonToMetaMappingEntry> mzMappings = new LinkedList<OlsonToMetaMappingEntry>();
                     for (int idx = 0; ; idx++) {
                         try {
                             UResourceBundle mz = zoneBundle.get("mz" + idx);
@@ -910,7 +912,7 @@ public final class ZoneMeta {
                     if (mzMappings.size() != 0) {
                         // Add to the olson-to-meta map
                         if (olsonToMeta == null) {
-                            olsonToMeta = new HashMap();
+                            olsonToMeta = new HashMap<String, List<OlsonToMetaMappingEntry>>();
                         }
                         olsonToMeta.put(tzids[i], mzMappings);
                     }
@@ -927,18 +929,18 @@ public final class ZoneMeta {
      */
     public static String getMetazoneID(String olsonID, long date) {
         String mzid = null;
-        Map olsonToMeta = getOlsonToMetaMap();
-        List mappings = (List)olsonToMeta.get(olsonID);
+        Map<String, List<OlsonToMetaMappingEntry>> olsonToMeta = getOlsonToMetaMap();
+        List<OlsonToMetaMappingEntry> mappings = olsonToMeta.get(olsonID);
         if (mappings == null) {
             // The given ID might be an alias - try its canonical id
             String canonicalID = getCanonicalSystemID(olsonID);
             if (canonicalID != null && !canonicalID.equals(olsonID)) {
-                mappings = (List)olsonToMeta.get(canonicalID);
+                mappings = olsonToMeta.get(canonicalID);
             }
         }
         if (mappings != null) {
             for (int i = 0; i < mappings.size(); i++) {
-                OlsonToMetaMappingEntry mzm = (OlsonToMetaMappingEntry)mappings.get(i);
+                OlsonToMetaMappingEntry mzm = mappings.get(i);
                 if (date >= mzm.from && date < mzm.to) {
                     mzid = mzm.mzid;
                     break;
@@ -948,14 +950,14 @@ public final class ZoneMeta {
         return mzid;
     }
 
-    private static Map getMetaToOlsonMap() {
-        HashMap metaToOlson = null;
+    private static Map<String, List<MetaToOlsonMappingEntry>> getMetaToOlsonMap() {
+        Map<String, List<MetaToOlsonMappingEntry>> metaToOlson = null;
         synchronized(ZoneMeta.class) {
             if (META_TO_OLSON_REF != null) {
-                metaToOlson = (HashMap)META_TO_OLSON_REF.get();
+                metaToOlson = META_TO_OLSON_REF.get();
             }
             if (metaToOlson == null) {
-                metaToOlson = new HashMap();
+                metaToOlson = new HashMap<String, List<MetaToOlsonMappingEntry>>();
                 UResourceBundle metazonesBundle = null;
                 try {
                     UResourceBundle supplementalBundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,
@@ -966,9 +968,9 @@ public final class ZoneMeta {
                     // do nothing
                 }
                 if (metazonesBundle != null) {
-                    Enumeration mzenum = metazonesBundle.getKeys();
+                    Enumeration<String> mzenum = metazonesBundle.getKeys();
                     while (mzenum.hasMoreElements()) {
-                        String mzkey = (String)mzenum.nextElement();
+                        String mzkey = mzenum.nextElement();
                         if (!mzkey.startsWith("meta:")) {
                             continue;
                         }
@@ -983,9 +985,9 @@ public final class ZoneMeta {
                             if (territoryIdx > 0) {
                                 String mzid = mzkey.substring(5 /* "meta:".length() */, territoryIdx);
                                 String territory = mzkey.substring(territoryIdx + 1);
-                                List mappings = (List)metaToOlson.get(mzid);
+                                List<MetaToOlsonMappingEntry> mappings = metaToOlson.get(mzid);
                                 if (mappings == null) {
-                                    mappings = new LinkedList();
+                                    mappings = new LinkedList<MetaToOlsonMappingEntry>();
                                     metaToOlson.put(mzid, mappings);
                                 }
                                 MetaToOlsonMappingEntry olsonmap = new MetaToOlsonMappingEntry();
@@ -996,7 +998,7 @@ public final class ZoneMeta {
                         }
                     }
                 }
-                META_TO_OLSON_REF = new SoftReference(metaToOlson);
+                META_TO_OLSON_REF = new SoftReference<Map<String, List<MetaToOlsonMappingEntry>>>(metaToOlson);
             }
         }
         return metaToOlson;
@@ -1007,11 +1009,11 @@ public final class ZoneMeta {
      */
     public static String getZoneIdByMetazone(String metazoneID, String region) {
         String tzid = null;
-        Map metaToOlson = getMetaToOlsonMap();
-        List mappings = (List)metaToOlson.get(metazoneID);
+        Map<String, List<MetaToOlsonMappingEntry>> metaToOlson = getMetaToOlsonMap();
+        List<MetaToOlsonMappingEntry> mappings = metaToOlson.get(metazoneID);
         if (mappings != null) {
             for (int i = 0; i < mappings.size(); i++) {
-                MetaToOlsonMappingEntry olsonmap = (MetaToOlsonMappingEntry)mappings.get(i);
+                MetaToOlsonMappingEntry olsonmap = mappings.get(i);
                 if (olsonmap.territory.equals(region)) {
                     tzid = olsonmap.id;
                     break;

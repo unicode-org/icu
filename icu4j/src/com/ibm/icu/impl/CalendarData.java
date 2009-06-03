@@ -1,10 +1,9 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2009, International Business Machines Corporation and         *
+ * Copyright (C) 2004-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
-
 package com.ibm.icu.impl;
 
 import java.util.ArrayList;
@@ -13,8 +12,6 @@ import java.util.MissingResourceException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
-
-
 
 /**
  * This class abstracts access to calendar (Calendar and DateFormat) data.
@@ -121,7 +118,7 @@ public class CalendarData {
     }
     public String[] getDateTimePatterns(){
         ICUResourceBundle bundle = get("DateTimePatterns");
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>();
         UResourceBundleIterator iter = bundle.getIterator();
         while (iter.hasNext()) {
             UResourceBundle patResource = iter.next();
@@ -137,12 +134,12 @@ public class CalendarData {
             }
         }
 
-        return (String[]) list.toArray(new String[list.size()]);
+        return list.toArray(new String[list.size()]);
     }
 
     public String[] getOverrides(){
         ICUResourceBundle bundle = get("DateTimePatterns");
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>();
         UResourceBundleIterator iter = bundle.getIterator();
         while (iter.hasNext()) {
             UResourceBundle patResource = iter.next();
@@ -157,7 +154,7 @@ public class CalendarData {
                     break;
             }
         }
-        return (String[]) list.toArray(new String[list.size()]);
+        return list.toArray(new String[list.size()]);
     }
 
     public ULocale getULocale() {

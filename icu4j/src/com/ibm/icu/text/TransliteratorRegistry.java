@@ -10,19 +10,19 @@
 
 package com.ibm.icu.text;
 
-//import com.ibm.icu.impl.ICULocaleData;
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.LocaleUtility;
-import com.ibm.icu.lang.UScript;
-import com.ibm.icu.util.CaseInsensitiveString;
-import com.ibm.icu.util.UResourceBundle;
-
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Vector;
+
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.LocaleUtility;
+import com.ibm.icu.lang.UScript;
+import com.ibm.icu.text.RuleBasedTransliterator.Data;
+import com.ibm.icu.util.CaseInsensitiveString;
+import com.ibm.icu.util.UResourceBundle;
 
 class TransliteratorRegistry {
 
@@ -44,7 +44,7 @@ class TransliteratorRegistry {
      * RuleBasedTransliterator.Data, Transliterator.Factory, or one
      * of the entry classes defined here (AliasEntry or ResourceEntry).
      */
-    private Hashtable registry;
+    private Hashtable<CaseInsensitiveString, Object[]> registry;
 
     /**
      * DAG of visible IDs by spec.  Hashtable: source => (Hashtable:
@@ -57,12 +57,12 @@ class TransliteratorRegistry {
      * Values are Hashtable of (CaseInsensitiveString -> Vector of
      * CaseInsensitiveString)
      */
-    private Hashtable specDAG;
+    private Hashtable<CaseInsensitiveString, Hashtable<CaseInsensitiveString, Vector<CaseInsensitiveString>>> specDAG;
 
     /**
      * Vector of public full IDs (CaseInsensitiveString objects).
      */
-    private Vector availableIDs;
+    private Vector<CaseInsensitiveString> availableIDs;
 
     //----------------------------------------------------------------------
     // class Spec
@@ -238,12 +238,12 @@ class TransliteratorRegistry {
 
     static class CompoundRBTEntry {
         private String ID;
-        private Vector idBlockVector;
-        private Vector dataVector;
+        private Vector<String> idBlockVector;
+        private Vector<Data> dataVector;
         private UnicodeSet compoundFilter;
 
-        public CompoundRBTEntry(String theID, Vector theIDBlockVector,
-                                Vector theDataVector,
+        public CompoundRBTEntry(String theID, Vector<String> theIDBlockVector,
+                                Vector<Data> theDataVector,
                                 UnicodeSet theCompoundFilter) {
             ID = theID;
             idBlockVector = theIDBlockVector;
@@ -252,18 +252,18 @@ class TransliteratorRegistry {
         }
 
         public Transliterator getInstance() {
-            Vector transliterators = new Vector();
+            Vector<Transliterator> transliterators = new Vector<Transliterator>();
             int passNumber = 1;
 
             int limit = Math.max(idBlockVector.size(), dataVector.size());
             for (int i = 0; i < limit; i++) {
                 if (i < idBlockVector.size()) {
-                    String idBlock = (String)idBlockVector.get(i);
+                    String idBlock = idBlockVector.get(i);
                     if (idBlock.length() > 0)
                         transliterators.add(Transliterator.getInstance(idBlock));
                 }
                 if (i < dataVector.size()) {
-                    RuleBasedTransliterator.Data data = (RuleBasedTransliterator.Data)dataVector.get(i);
+                    Data data = dataVector.get(i);
                     transliterators.add(new RuleBasedTransliterator("%Pass" + passNumber++, data, null));
                 }
             }
@@ -282,9 +282,9 @@ class TransliteratorRegistry {
     //----------------------------------------------------------------------
 
     public TransliteratorRegistry() {
-        registry = new Hashtable();
-        specDAG = new Hashtable();
-        availableIDs = new Vector();
+        registry = new Hashtable<CaseInsensitiveString, Object[]>();
+        specDAG = new Hashtable<CaseInsensitiveString, Hashtable<CaseInsensitiveString, Vector<CaseInsensitiveString>>>();
+        availableIDs = new Vector<CaseInsensitiveString>();
     }
 
     /**
@@ -310,7 +310,7 @@ class TransliteratorRegistry {
      * underlying static locale resource store is masked.
      */
     public void put(String ID,
-                    Class transliteratorSubclass,
+                    Class<? extends Transliterator> transliteratorSubclass,
                     boolean visible) {
         registerEntry(ID, transliteratorSubclass, visible);
     }
@@ -383,10 +383,10 @@ class TransliteratorRegistry {
      * An internal class that adapts an enumeration over
      * CaseInsensitiveStrings to an enumeration over Strings.
      */
-    private static class IDEnumeration implements Enumeration {
-        Enumeration en;
+    private static class IDEnumeration implements Enumeration<String> {
+        Enumeration<CaseInsensitiveString> en;
 
-        public IDEnumeration(Enumeration e) {
+        public IDEnumeration(Enumeration<CaseInsensitiveString> e) {
             en = e;
         }
 
@@ -394,8 +394,8 @@ class TransliteratorRegistry {
             return en != null && en.hasMoreElements();
         }
 
-        public Object nextElement() {
-            return ((CaseInsensitiveString) en.nextElement()).getString();
+        public String nextElement() {
+            return (en.nextElement()).getString();
         }
     }
 
@@ -405,7 +405,7 @@ class TransliteratorRegistry {
      *
      * @return An <code>Enumeration</code> over <code>String</code> objects
      */
-    public Enumeration getAvailableIDs() {
+    public Enumeration<String> getAvailableIDs() {
         // Since the cache contains CaseInsensitiveString objects, but
         // the caller expects Strings, we have to use an intermediary.
         return new IDEnumeration(availableIDs.elements());
@@ -416,7 +416,7 @@ class TransliteratorRegistry {
      *
      * @return An <code>Enumeration</code> over <code>String</code> objects
      */
-    public Enumeration getAvailableSources() {
+    public Enumeration<String> getAvailableSources() {
         return new IDEnumeration(specDAG.keys());
     }
 
@@ -426,9 +426,9 @@ class TransliteratorRegistry {
      *
      * @return An <code>Enumeration</code> over <code>String</code> objects
      */
-    public Enumeration getAvailableTargets(String source) {
+    public Enumeration<String> getAvailableTargets(String source) {
         CaseInsensitiveString cisrc = new CaseInsensitiveString(source);
-        Hashtable targets = (Hashtable) specDAG.get(cisrc);
+        Hashtable<CaseInsensitiveString, Vector<CaseInsensitiveString>> targets = specDAG.get(cisrc);
         if (targets == null) {
             return new IDEnumeration(null);
         }
@@ -441,14 +441,14 @@ class TransliteratorRegistry {
      *
      * @return An <code>Enumeration</code> over <code>String</code> objects
      */
-    public Enumeration getAvailableVariants(String source, String target) {
+    public Enumeration<String> getAvailableVariants(String source, String target) {
         CaseInsensitiveString cisrc = new CaseInsensitiveString(source);
         CaseInsensitiveString citrg = new CaseInsensitiveString(target);
-        Hashtable targets = (Hashtable) specDAG.get(cisrc);
+        Hashtable<CaseInsensitiveString, Vector<CaseInsensitiveString>> targets = specDAG.get(cisrc);
         if (targets == null) {
             return new IDEnumeration(null);
         }
-        Vector variants = (Vector) targets.get(citrg);
+        Vector<CaseInsensitiveString> variants = targets.get(citrg);
         if (variants == null) {
             return new IDEnumeration(null);
         }
@@ -498,13 +498,16 @@ class TransliteratorRegistry {
                                Object entry,
                                boolean visible) {
         CaseInsensitiveString ciID = new CaseInsensitiveString(ID);
+        Object[] arrayOfObj;
 
         // Store the entry within an array so it can be modified later
-        if (!(entry instanceof Object[])) {
-            entry = new Object[] { entry };
+        if (entry instanceof Object[]) {
+            arrayOfObj = (Object[])entry;
+        } else {
+            arrayOfObj = new Object[] { entry };
         }
 
-        registry.put(ciID, entry);
+        registry.put(ciID, arrayOfObj);
         if (visible) {
             registerSTV(source, target, variant);
             if (!availableIDs.contains(ciID)) {
@@ -530,14 +533,14 @@ class TransliteratorRegistry {
         CaseInsensitiveString cisrc = new CaseInsensitiveString(source);
         CaseInsensitiveString citrg = new CaseInsensitiveString(target);
         CaseInsensitiveString civar = new CaseInsensitiveString(variant);
-        Hashtable targets = (Hashtable) specDAG.get(cisrc);
+        Hashtable<CaseInsensitiveString, Vector<CaseInsensitiveString>> targets = specDAG.get(cisrc);
         if (targets == null) {
-            targets = new Hashtable();
+            targets = new Hashtable<CaseInsensitiveString, Vector<CaseInsensitiveString>>();
             specDAG.put(cisrc, targets);
         }
-        Vector variants = (Vector) targets.get(citrg);
+        Vector<CaseInsensitiveString> variants = targets.get(citrg);
         if (variants == null) {
-            variants = new Vector();
+            variants = new Vector<CaseInsensitiveString>();
             targets.put(citrg, variants);
         }
         // assert(NO_VARIANT == "");
@@ -563,11 +566,11 @@ class TransliteratorRegistry {
         CaseInsensitiveString cisrc = new CaseInsensitiveString(source);
         CaseInsensitiveString citrg = new CaseInsensitiveString(target);
         CaseInsensitiveString civar = new CaseInsensitiveString(variant);
-        Hashtable targets = (Hashtable) specDAG.get(cisrc);
+        Hashtable<CaseInsensitiveString, Vector<CaseInsensitiveString>> targets = specDAG.get(cisrc);
         if (targets == null) {
             return; // should never happen for valid s-t/v
         }
-        Vector variants = (Vector) targets.get(citrg);
+        Vector<CaseInsensitiveString> variants = targets.get(citrg);
         if (variants == null) {
             return; // should never happen for valid s-t/v
         }
@@ -802,6 +805,7 @@ class TransliteratorRegistry {
      * The entry object is assumed to reside in the dynamic store.  It may be
      * modified.
      */
+    @SuppressWarnings("unchecked")
     private Transliterator instantiateEntry(String ID,
                                             Object[] entryWrapper,
                                             StringBuffer aliasReturn) {
@@ -885,11 +889,12 @@ class TransliteratorRegistry {
                 // been munged from reverse into forward mode, if
                 // necessary, so instantiate the ID in the forward
                 // direction.
-                if (parser.compoundFilter != null)
+                if (parser.compoundFilter != null) {
                     entryWrapper[0] = new AliasEntry(parser.compoundFilter.toPattern(false) + ";"
-                            + (String)parser.idBlockVector.get(0));
-                else
+                            + parser.idBlockVector.get(0));
+                } else {
                     entryWrapper[0] = new AliasEntry((String)parser.idBlockVector.get(0));
+                }
             }
             else {
                 entryWrapper[0] = new CompoundRBTEntry(ID, parser.idBlockVector, parser.dataVector,

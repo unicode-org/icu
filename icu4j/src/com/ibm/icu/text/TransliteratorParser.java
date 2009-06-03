@@ -16,6 +16,7 @@ import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.RuleBasedTransliterator.Data;
 
 class TransliteratorParser {
 
@@ -28,18 +29,18 @@ class TransliteratorParser {
      * A Vector of RuleBasedTransliterator.Data objects, one for each discrete group
      * of rules in the rule set
      */
-    public Vector dataVector;
+    public Vector<Data> dataVector;
 
     /**
      * PUBLIC data member.
      * A Vector of Strings containing all of the ID blocks in the rule set
      */
-    public Vector idBlockVector;
+    public Vector<String> idBlockVector;
 
     /**
      * The current data object for which we are parsing rules
      */
-    private RuleBasedTransliterator.Data curData;
+    private Data curData;
 
     /**
      * PUBLIC data member containing the parsed compound filter, if any.
@@ -59,13 +60,13 @@ class TransliteratorParser {
      * is copied into the array data.variables.  As with data.variables,
      * element 0 corresponds to character data.variablesBase.
      */
-    private Vector variablesVector;
+    private Vector<Object> variablesVector;
 
     /**
      * Temporary table of variable names.  When parsing is complete, this is
      * copied into data.variableNames.
      */
-    private Hashtable variableNames;
+    private Hashtable<String, char[]> variableNames;
 
     /**
      * String of standins for segments.  Used during the parsing of a single
@@ -80,7 +81,7 @@ class TransliteratorParser {
      * segmentStandins.charAt(0) is the standin for "$1" and corresponds
      * to StringMatcher object segmentObjects.elementAt(0), etc.
      */
-    private Vector segmentObjects;
+    private Vector<StringMatcher> segmentObjects;
 
     /**
      * The next available stand-in for variables.  This starts at some point in
@@ -202,7 +203,7 @@ class TransliteratorParser {
          * Implement SymbolTable API.
          */
         public char[] lookup(String name) {
-            return (char[]) variableNames.get(name);
+            return variableNames.get(name);
         }
 
         /**
@@ -891,16 +892,16 @@ class TransliteratorParser {
         boolean parsingIDs = true;
         int ruleCount = 0;
 
-        dataVector = new Vector();
-        idBlockVector = new Vector();
+        dataVector = new Vector<Data>();
+        idBlockVector = new Vector<String>();
         curData = null;
         direction = dir;
         compoundFilter = null;
-        variablesVector = new Vector();
-        variableNames = new Hashtable();
+        variablesVector = new Vector<Object>();
+        variableNames = new Hashtable<String, char[]>();
         parseData = new ParseData();
 
-        List errors = new ArrayList();
+        List<RuntimeException> errors = new ArrayList<RuntimeException>();
         int errorCount = 0;
 
         ruleArray.reset();
@@ -1038,7 +1039,9 @@ class TransliteratorParser {
                     }
                 } catch (IllegalArgumentException e) {
                     if (errorCount == 30) {
-                        errors.add(new IllegalIcuArgumentException("\nMore than 30 errors; further messages squelched").initCause(e));
+                        IllegalIcuArgumentException icuEx = new IllegalIcuArgumentException("\nMore than 30 errors; further messages squelched");
+                        icuEx.initCause(e);
+                        errors.add(icuEx);
                         break main;
                     }
                     e.fillInStackTrace();
@@ -1063,10 +1066,10 @@ class TransliteratorParser {
 
         // Convert the set vector to an array
         for (int i = 0; i < dataVector.size(); i++) {
-            RuleBasedTransliterator.Data data = (RuleBasedTransliterator.Data)dataVector.get(i);
+            Data data = dataVector.get(i);
             data.variables = new Object[variablesVector.size()];
             variablesVector.copyInto(data.variables);
-            data.variableNames = new Hashtable();
+            data.variableNames = new Hashtable<String, char[]>();
             data.variableNames.putAll(variableNames);
         }
         variablesVector = null;
@@ -1083,7 +1086,7 @@ class TransliteratorParser {
             }
 
             for (int i = 0; i < dataVector.size(); i++) {
-                RuleBasedTransliterator.Data data = (RuleBasedTransliterator.Data)dataVector.get(i);
+                Data data = dataVector.get(i);
                 data.ruleSet.freeze();
             }
 
@@ -1097,13 +1100,13 @@ class TransliteratorParser {
 
         if (errors.size() != 0) {
             for (int i = errors.size()-1; i > 0; --i) {
-                RuntimeException previous = (RuntimeException) errors.get(i-1);
+                RuntimeException previous = errors.get(i-1);
                 while (previous.getCause() != null) {
                     previous = (RuntimeException) previous.getCause(); // chain specially
                 }
-                previous.initCause((RuntimeException) errors.get(i));
+                previous.initCause(errors.get(i));
             }
-            throw (RuntimeException) errors.get(0);
+            throw errors.get(0);
             // if initCause not supported: throw new IllegalArgumentException(errors.toString());
         }
     }
@@ -1130,7 +1133,7 @@ class TransliteratorParser {
 
         // Set up segments data
         segmentStandins = new StringBuffer();
-        segmentObjects = new Vector();
+        segmentObjects = new Vector<StringMatcher>();
 
         RuleHalf left  = new RuleHalf();
         RuleHalf right = new RuleHalf();
@@ -1526,7 +1529,7 @@ class TransliteratorParser {
      * @exception IllegalIcuArgumentException if the name is unknown.
      */
     private void appendVariableDef(String name, StringBuffer buf) {
-        char[] ch = (char[]) variableNames.get(name);
+        char[] ch = variableNames.get(name);
         if (ch == null) {
             // We allow one undefined variable so that variable definition
             // statements work.  For the first undefined variable we return

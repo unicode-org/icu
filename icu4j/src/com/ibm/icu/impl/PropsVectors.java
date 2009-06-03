@@ -379,10 +379,10 @@ public class PropsVectors {
             indexArray[i] = new Integer(columns * i);
         }
 
-        Arrays.sort(indexArray, new Comparator() {
-            public int compare(Object o1, Object o2) {
-                int indexOfRow1 = ((Integer) o1).intValue();
-                int indexOfRow2 = ((Integer) o2).intValue();
+        Arrays.sort(indexArray, new Comparator<Integer>() {
+            public int compare(Integer o1, Integer o2) {
+                int indexOfRow1 = o1.intValue();
+                int indexOfRow2 = o2.intValue();
                 int count = columns; // includes start/limit columns
 
                 // start comparing after start/limit

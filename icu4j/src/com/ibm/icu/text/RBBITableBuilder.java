@@ -1,20 +1,19 @@
 /*
 **********************************************************************
-*   Copyright (c) 2002-2007, International Business Machines
+*   Copyright (c) 2002-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
 
 package com.ibm.icu.text;
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Set;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.Iterator;
-import java.util.Collection;
 
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.lang.UCharacter;
@@ -39,9 +38,9 @@ class RBBITableBuilder {
         boolean      fMarked;
         int          fAccepting;
         int          fLookAhead;
-        SortedSet    fTagVals;
+        SortedSet<Integer> fTagVals;
         int          fTagsIdx;
-        Set          fPositions;                 // Set of parse tree positions associated
+        Set<RBBINode> fPositions;                 // Set of parse tree positions associated
                                                   //   with this state.  Unordered (it's a set).
                                                   //   UVector contents are RBBINode *
 
@@ -51,8 +50,8 @@ class RBBITableBuilder {
                                                    //   in RBBITableBuilder.fDStates
 
         RBBIStateDescriptor(int maxInputSymbol) {
-            fTagVals = new TreeSet();
-            fPositions = new HashSet();
+            fTagVals = new TreeSet<Integer>();
+            fPositions = new HashSet<RBBINode>();
             fDtran = new int[maxInputSymbol+1];    // fDtran needs to be pre-sized.
                                                     //   It is indexed by input symbols, and will
                                                     //   hold  the next state number for each
@@ -66,9 +65,9 @@ class RBBITableBuilder {
                                                    //   for the parse tree to operate on.
                                                    //   Too bad Java can't do indirection more easily!
 
-    private  List             fDStates;       //  D states (Aho's terminology)
-                                               //  Index is state number
-                                               //  Contents are RBBIStateDescriptor pointers.
+    private  List<RBBIStateDescriptor> fDStates;    //  D states (Aho's terminology)
+                                                    //  Index is state number
+                                                    //  Contents are RBBIStateDescriptor pointers.
 
     //-----------------------------------------------------------------------------
     //
@@ -80,7 +79,7 @@ class RBBITableBuilder {
     RBBITableBuilder(RBBIRuleBuilder rb,  int rootNodeIx)  {
            fRootIx     = rootNodeIx;
            fRB         = rb;
-           fDStates    = new ArrayList();
+           fDStates    = new ArrayList<RBBIStateDescriptor>();
         }
 
 
@@ -348,13 +347,7 @@ class RBBITableBuilder {
 
            // Aho rule #1
            if (n.fType == RBBINode.opCat) {
-               RBBINode i;   // is 'i' in Aho's description
-
-               Set LastPosOfLeftChild = n.fLeftChild.fLastPosSet;
-
-               Iterator ix = LastPosOfLeftChild.iterator();
-               while (ix.hasNext()) {
-                   i = (RBBINode )ix.next();
+               for (RBBINode i /* is 'i' in Aho's description */ : n.fLeftChild.fLastPosSet) {
                    i.fFollowPos.addAll(n.fRightChild.fFirstPosSet);
                }
            }
@@ -362,17 +355,10 @@ class RBBITableBuilder {
            // Aho rule #2
            if (n.fType == RBBINode.opStar ||
                n.fType == RBBINode.opPlus) {
-               RBBINode   i;  // again, n and i are the names from Aho's description.
-               Iterator   ix = n.fLastPosSet.iterator();
-               while (ix.hasNext()) {
-                   i = (RBBINode) ix.next();
+               for (RBBINode i /* again, n and i are the names from Aho's description */ : n.fLastPosSet) {
                    i.fFollowPos.addAll(n.fFirstPosSet);
                }
-
            }
-
-
-
        }
 
 
@@ -384,8 +370,8 @@ class RBBITableBuilder {
        //-----------------------------------------------------------------------------
        void calcChainedFollowPos(RBBINode tree) {
 
-           List        endMarkerNodes = new ArrayList();
-           List        leafNodes      = new ArrayList();
+           List<RBBINode> endMarkerNodes = new ArrayList<RBBINode>();
+           List<RBBINode> leafNodes      = new ArrayList<RBBINode>();
 
             // get a list of all endmarker nodes.
            tree.findNodes(endMarkerNodes, RBBINode.endMark);
@@ -401,22 +387,16 @@ class RBBITableBuilder {
                userRuleRoot = tree.fLeftChild.fRightChild;
            }
            Assert.assrt(userRuleRoot != null);
-           Set matchStartNodes = userRuleRoot.fFirstPosSet;
-
+           Set<RBBINode> matchStartNodes = userRuleRoot.fFirstPosSet;
 
            // Iteratate over all leaf nodes,
            //
-           Iterator  endNodeIx = leafNodes.iterator();
-
-           while (endNodeIx.hasNext()) {
-               RBBINode tNode   = (RBBINode)endNodeIx.next();
+           for (RBBINode tNode : leafNodes) {
                RBBINode endNode = null;
 
                // Identify leaf nodes that correspond to overall rule match positions.
                //   These include an endMarkerNode in their followPos sets.
-               Iterator i = endMarkerNodes.iterator();
-               while (i.hasNext()) {
-                   RBBINode endMarkerNode = (RBBINode)i.next();
+               for (RBBINode endMarkerNode : endMarkerNodes) {
                    if (tNode.fFollowPos.contains(endMarkerNode)) {
                        endNode = tNode;
                        break;
@@ -447,10 +427,7 @@ class RBBITableBuilder {
 
                // Now iterate over the nodes that can start a match, looking for ones
                //   with the same char class as our ending node.
-               RBBINode startNode;
-               Iterator  startNodeIx = matchStartNodes.iterator();
-               while (startNodeIx.hasNext()) {
-                   startNode = (RBBINode )startNodeIx.next();
+               for (RBBINode startNode : matchStartNodes) {
                    if (startNode.fType != RBBINode.leafChar) {
                        continue;
                    }
@@ -501,10 +478,8 @@ class RBBITableBuilder {
            //  We want the nodes that can start a match in the
            //     part labeled "rest of tree"
            // 
-           Set matchStartNodes = fRB.fTreeRoots[fRootIx].fLeftChild.fRightChild.fFirstPosSet;
-           Iterator startNodeIt = matchStartNodes.iterator();
-           while (startNodeIt.hasNext()) {
-               RBBINode startNode = (RBBINode)startNodeIt.next();
+           Set<RBBINode> matchStartNodes = fRB.fTreeRoots[fRootIx].fLeftChild.fRightChild.fFirstPosSet;
+           for (RBBINode startNode : matchStartNodes) {
                if (startNode.fType != RBBINode.leafChar) {
                    continue;
                }
@@ -547,7 +522,7 @@ class RBBITableBuilder {
                RBBIStateDescriptor T = null;
                int              tx;
                for (tx=1; tx<fDStates.size(); tx++) {
-                   RBBIStateDescriptor temp  = (RBBIStateDescriptor )fDStates.get(tx);
+                   RBBIStateDescriptor temp  = fDStates.get(tx);
                    if (temp.fMarked == false) {
                        T = temp;
                        break;
@@ -566,14 +541,11 @@ class RBBITableBuilder {
                    // let U be the set of positions that are in followpos(p)
                    //    for some position p in T
                    //    such that the symbol at position p is a;
-                   Set        U = null;
-                   RBBINode   p;
-                   Iterator   pit = T.fPositions.iterator();
-                   while (pit.hasNext()) {
-                       p = (RBBINode )pit.next();
+                   Set<RBBINode> U = null;
+                   for (RBBINode p : T.fPositions) {
                        if ((p.fType == RBBINode.leafChar) &&  (p.fVal == a)) {
                            if (U == null) {
-                               U = new HashSet();
+                               U = new HashSet<RBBINode>();
                            }
                            U.addAll(p.fFollowPos);
                        }
@@ -587,7 +559,7 @@ class RBBITableBuilder {
                        int  ix;
                        for (ix=0; ix<fDStates.size(); ix++) {
                            RBBIStateDescriptor temp2;
-                           temp2 = (RBBIStateDescriptor )fDStates.get(ix);
+                           temp2 = fDStates.get(ix);
                            if (U.equals(temp2.fPositions)) {
                                U  = temp2.fPositions;
                                ux = ix;
@@ -624,7 +596,7 @@ class RBBITableBuilder {
        //
        //-----------------------------------------------------------------------------
        void     flagAcceptingStates() {
-           List        endMarkerNodes = new ArrayList();
+           List<RBBINode> endMarkerNodes = new ArrayList<RBBINode>();
            RBBINode    endMarker;
            int     i;
            int     n;
@@ -632,9 +604,9 @@ class RBBITableBuilder {
            fRB.fTreeRoots[fRootIx].findNodes(endMarkerNodes, RBBINode.endMark);
 
            for (i=0; i<endMarkerNodes.size(); i++) {
-               endMarker = (RBBINode)endMarkerNodes.get(i);
+               endMarker = endMarkerNodes.get(i);
                for (n=0; n<fDStates.size(); n++) {
-                   RBBIStateDescriptor sd = (RBBIStateDescriptor )fDStates.get(n);
+                   RBBIStateDescriptor sd = fDStates.get(n);
                    //if (sd.fPositions.indexOf(endMarker) >= 0) {
                    if (sd.fPositions.contains(endMarker)) {
                        // Any non-zero value for fAccepting means this is an accepting node.
@@ -677,17 +649,17 @@ class RBBITableBuilder {
        //
        //-----------------------------------------------------------------------------
        void     flagLookAheadStates() {
-           List        lookAheadNodes = new ArrayList();
+           List<RBBINode> lookAheadNodes = new ArrayList<RBBINode>();
            RBBINode    lookAheadNode;
            int     i;
            int     n;
 
            fRB.fTreeRoots[fRootIx].findNodes(lookAheadNodes, RBBINode.lookAhead);
            for (i=0; i<lookAheadNodes.size(); i++) {
-               lookAheadNode = (RBBINode )lookAheadNodes.get(i);
+               lookAheadNode = lookAheadNodes.get(i);
 
                for (n=0; n<fDStates.size(); n++) {
-                   RBBIStateDescriptor sd = (RBBIStateDescriptor )fDStates.get(n);
+                   RBBIStateDescriptor sd = fDStates.get(n);
                    if (sd.fPositions.contains(lookAheadNode)) {
                        sd.fLookAhead = lookAheadNode.fVal;
                    }
@@ -704,19 +676,19 @@ class RBBITableBuilder {
        //
        //-----------------------------------------------------------------------------
        void     flagTaggedStates() {
-           List        tagNodes = new ArrayList();
+           List<RBBINode> tagNodes = new ArrayList<RBBINode>();
            RBBINode    tagNode;
            int     i;
            int     n;
 
            fRB.fTreeRoots[fRootIx].findNodes(tagNodes, RBBINode.tag);
            for (i=0; i<tagNodes.size(); i++) {                   // For each tag node t (all of 'em)
-               tagNode = (RBBINode )tagNodes.get(i);
+               tagNode = tagNodes.get(i);
 
                for (n=0; n<fDStates.size(); n++) {              //    For each state  s (row in the state table)
-                   RBBIStateDescriptor sd = (RBBIStateDescriptor )fDStates.get(n);
+                   RBBIStateDescriptor sd = fDStates.get(n);
                    if (sd.fPositions.contains(tagNode)) {       //       if  s include the tag node t
-                       sd.fTagVals.add(new Integer(tagNode.fVal));
+                       sd.fTagVals.add(Integer.valueOf(tagNode.fVal));
                    }
                }
            }
@@ -763,14 +735,14 @@ class RBBITableBuilder {
            // Pre-load a single tag of {0} into the table.
            //   We will need this as a default, for rule sets with no explicit tagging,
            //   or with explicit tagging of {0}.
-           if (fRB.fRuleStatusVals.size() == 0) {              
-               fRB.fRuleStatusVals.add(new Integer(1));    // Num of statuses in group
-               fRB.fRuleStatusVals.add(new Integer(0));    //   and our single status of zero
+           if (fRB.fRuleStatusVals.size() == 0) {
+               fRB.fRuleStatusVals.add(Integer.valueOf(1));    // Num of statuses in group
+               fRB.fRuleStatusVals.add(Integer.valueOf(0));    //   and our single status of zero
                
-               SortedSet s0 = new TreeSet();
-               Integer izero = new Integer(0);
+               SortedSet<Integer> s0 = new TreeSet<Integer>();
+               Integer izero = Integer.valueOf(0);
                fRB.fStatusSets.put(s0, izero);
-               SortedSet s1 = new TreeSet();
+               SortedSet<Integer> s1 = new TreeSet<Integer>();
                s1.add(izero);
                fRB.fStatusSets.put(s0, izero);
            }
@@ -778,30 +750,26 @@ class RBBITableBuilder {
            //    For each state, check whether the state's status tag values are
            //       already entered into the status values array, and add them if not.
            for (n=0; n<fDStates.size(); n++) {
-               RBBIStateDescriptor sd = (RBBIStateDescriptor )fDStates.get(n);
-               Set statusVals = sd.fTagVals;
-               Integer arrayIndexI = (Integer)fRB.fStatusSets.get(statusVals);
+               RBBIStateDescriptor sd = fDStates.get(n);
+               Set<Integer> statusVals = sd.fTagVals;
+               Integer arrayIndexI = fRB.fStatusSets.get(statusVals);
                if (arrayIndexI == null) {
                    // This is the first encounter of this set of status values.
                    //   Add them to the statusSets map, This map associates
                    //   the set of status values with an index in the runtime status 
                    //   values array.
-                   arrayIndexI = new Integer(fRB.fRuleStatusVals.size());
+                   arrayIndexI = Integer.valueOf(fRB.fRuleStatusVals.size());
                    fRB.fStatusSets.put(statusVals, arrayIndexI);
                    
                    // Add the new set of status values to the vector of values that
                    //   will eventually become the array used by the runtime engine.
-                   fRB.fRuleStatusVals.add(new Integer(statusVals.size()));
-                   Iterator it = statusVals.iterator();
-                   while (it.hasNext()) {
-                       fRB.fRuleStatusVals.add(it.next());
-                   }
-               
+                   fRB.fRuleStatusVals.add(Integer.valueOf(statusVals.size()));
+                   fRB.fRuleStatusVals.addAll(statusVals);
                }
                
                // Save the runtime array index back into the state descriptor.
                sd.fTagsIdx = arrayIndexI.intValue();
-           }          
+           }
        }
 
 
@@ -939,7 +907,7 @@ class RBBITableBuilder {
            
            int numCharCategories = fRB.fSetBuilder.getNumCharCategories();
            for (state=0; state<numStates; state++) {
-               RBBIStateDescriptor sd = (RBBIStateDescriptor )fDStates.get(state);
+               RBBIStateDescriptor sd = fDStates.get(state);
                int                row = 8 + state*rowLen;
                Assert.assrt (-32768 < sd.fAccepting && sd.fAccepting <= 32767);
                Assert.assrt (-32768 < sd.fLookAhead && sd.fLookAhead <= 32767);
@@ -961,10 +929,8 @@ class RBBITableBuilder {
        //
        //-----------------------------------------------------------------------------
        
-       void printSet(Collection s) {
-           Iterator it = s.iterator();
-           while (it.hasNext()) {
-               RBBINode n = (RBBINode)it.next();
+       void printSet(Collection<RBBINode> s) {
+           for (RBBINode n : s) {
                RBBINode.printInt(n.fSerialNum, 8);
            }
            System.out.println();
@@ -995,7 +961,7 @@ class RBBITableBuilder {
            System.out.print("\n");
 
            for (n=0; n<fDStates.size(); n++) {
-               RBBIStateDescriptor sd = (RBBIStateDescriptor)fDStates.get(n);
+               RBBIStateDescriptor sd = fDStates.get(n);
                RBBINode.printInt(n, 5);
                System.out.print(" | ");
                
@@ -1024,7 +990,7 @@ class RBBITableBuilder {
            int  thisRecord = 0;
            int  nextRecord = 0;
            int      i;
-           List  tbl = fRB.fRuleStatusVals;
+           List<Integer> tbl = fRB.fRuleStatusVals;
 
            System.out.print("index |  tags \n");
            System.out.print("-------------------\n");

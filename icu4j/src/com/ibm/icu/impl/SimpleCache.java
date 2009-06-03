@@ -1,6 +1,6 @@
 /*
  ****************************************************************************
- * Copyright (c) 2007-2008 International Business Machines Corporation and  *
+ * Copyright (c) 2007-2009 International Business Machines Corporation and  *
  * others.  All rights reserved.                                            *
  ****************************************************************************
  */
@@ -14,10 +14,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SimpleCache implements ICUCache {
+public class SimpleCache<K, V> implements ICUCache<K, V> {
     private static final int DEFAULT_CAPACITY = 16;
 
-    private Reference cacheRef = null;
+    private Reference<Map<K, V>> cacheRef = null;
     private int type = ICUCache.SOFT;
     private int capacity = DEFAULT_CAPACITY;
 
@@ -37,10 +37,10 @@ public class SimpleCache implements ICUCache {
         }
     }
 
-    public Object get(Object key) {
-        Reference ref = cacheRef;
+    public V get(Object key) {
+        Reference<Map<K, V>> ref = cacheRef;
         if (ref != null) {
-            Map map = (Map)ref.get();
+            Map<K, V> map = ref.get();
             if (map != null) {
                 return map.get(key);
             }
@@ -48,18 +48,18 @@ public class SimpleCache implements ICUCache {
         return null;
     }
 
-    public void put(Object key, Object value) {
-        Reference ref = cacheRef;
-        Map map = null;
+    public void put(K key, V value) {
+        Reference<Map<K, V>> ref = cacheRef;
+        Map<K, V> map = null;
         if (ref != null) {
-            map = (Map)ref.get();
+            map = ref.get();
         }
         if (map == null) {
-            map = Collections.synchronizedMap(new HashMap(capacity));
+            map = Collections.synchronizedMap(new HashMap<K, V>(capacity));
             if (type == ICUCache.WEAK) {
-                ref = new WeakReference(map);
+                ref = new WeakReference<Map<K, V>>(map);
             } else {
-                ref = new SoftReference(map);
+                ref = new SoftReference<Map<K, V>>(map);
             }
             cacheRef = ref;
         }

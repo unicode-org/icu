@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -119,7 +119,7 @@ public class ICUService extends ICUNotifier {
     /**
      * All the factories registered with this service.
      */
-    private final List factories = new ArrayList();
+    private final List<Factory> factories = new ArrayList<Factory>();
 
     /**
      * Record the default number of factories for this service.
@@ -243,7 +243,7 @@ public class ICUService extends ICUNotifier {
          * display names for.  In most cases this reflects the IDs that
          * the factory directly supports.
          */
-        public void updateVisibleIDs(Map result);
+        public void updateVisibleIDs(Map<String, Factory> result);
 
         /**
          * Return the display name for this id in the provided locale.
@@ -305,7 +305,7 @@ public class ICUService extends ICUNotifier {
          * If visible, adds a mapping from id -> this to the result,
          * otherwise removes id from result.
          */
-        public void updateVisibleIDs(Map result) {
+        public void updateVisibleIDs(Map<String, Factory> result) {
             if (visible) {
                 result.put(id, this);
             } else {
@@ -398,23 +398,23 @@ public class ICUService extends ICUNotifier {
                 // The cache has to stay in synch with the factory list.
                 factoryLock.acquireRead();
 
-                Map cache = null;
-                SoftReference cref = cacheref; // copy so we don't need to sync on this
+                Map<String, CacheEntry> cache = null;
+                SoftReference<Map<String, CacheEntry>> cref = cacheref; // copy so we don't need to sync on this
                 if (cref != null) {
                     if (DEBUG) System.out.println("Service " + name + " ref exists");
-                    cache = (Map)cref.get();
+                    cache = cref.get();
                 }
                 if (cache == null) {
                     if (DEBUG) System.out.println("Service " + name + " cache was empty");
                     // synchronized since additions and queries on the cache must be atomic
                     // they can be interleaved, though
-                    cache = Collections.synchronizedMap(new HashMap());
+                    cache = Collections.synchronizedMap(new HashMap<String, CacheEntry>());
 //                  hardRef = cache; // debug
-                    cref = new SoftReference(cache);
+                    cref = new SoftReference<Map<String, CacheEntry>>(cache);
                 }
 
                 String currentDescriptor = null;
-                ArrayList cacheDescriptorList = null;
+                ArrayList<String> cacheDescriptorList = null;
                 boolean putInCache = false;
 
                 int NDebug = 0;
@@ -439,7 +439,7 @@ public class ICUService extends ICUNotifier {
                 do {
                     currentDescriptor = key.currentDescriptor();
                     if (DEBUG) System.out.println(name + "[" + NDebug++ + "] looking for: " + currentDescriptor);
-                    result = (CacheEntry)cache.get(currentDescriptor);
+                    result = cache.get(currentDescriptor);
                     if (result != null) {
                         if (DEBUG) System.out.println(name + " found with descriptor: " + currentDescriptor);
                         break outer;
@@ -455,7 +455,7 @@ public class ICUService extends ICUNotifier {
                     //  int n = 0;
                     int index = startIndex;
                     while (index < limit) {
-                        Factory f = (Factory)factories.get(index++);
+                        Factory f = factories.get(index++);
                         if (DEBUG) System.out.println("trying factory[" + (index-1) + "] " + f.toString());
                         Object service = f.create(key, this);
                         if (service != null) {
@@ -473,7 +473,7 @@ public class ICUService extends ICUNotifier {
                     // fallback to the one that succeeded, we want to hit the
                     // cache the first time next goaround.
                     if (cacheDescriptorList == null) {
-                        cacheDescriptorList = new ArrayList(5);
+                        cacheDescriptorList = new ArrayList<String>(5);
                     }
                     cacheDescriptorList.add(currentDescriptor);
 
@@ -484,9 +484,7 @@ public class ICUService extends ICUNotifier {
                         if (DEBUG) System.out.println("caching '" + result.actualDescriptor + "'");
                         cache.put(result.actualDescriptor, result);
                         if (cacheDescriptorList != null) {
-                            Iterator iter = cacheDescriptorList.iterator();
-                            while (iter.hasNext()) {
-                                String desc = (String)iter.next();
+                            for (String desc : cacheDescriptorList) {
                                 if (DEBUG) System.out.println(name + " adding descriptor: '" + desc + "' for actual: '" + result.actualDescriptor + "'");
 
                                 cache.put(desc, result);
@@ -522,7 +520,7 @@ public class ICUService extends ICUNotifier {
 
         return handleDefault(key, actualReturn);
     }
-    private SoftReference cacheref;
+    private SoftReference<Map<String, CacheEntry>> cacheref;
 
     // Record the actual id for this service in the cache, so we can return it
     // even if we succeed later with a different id.
@@ -548,7 +546,7 @@ public class ICUService extends ICUNotifier {
      * Convenience override for getVisibleIDs(String) that passes null
      * as the fallback, thus returning all visible IDs.
      */
-    public Set getVisibleIDs() {
+    public Set<String> getVisibleIDs() {
         return getVisibleIDs(null);
     }
 
@@ -563,16 +561,14 @@ public class ICUService extends ICUNotifier {
      * key is not null, it is used to filter out ids that don't have
      * the key as a fallback.
      */
-    public Set getVisibleIDs(String matchID) {
-        Set result = getVisibleIDMap().keySet();
+    public Set<String> getVisibleIDs(String matchID) {
+        Set<String> result = getVisibleIDMap().keySet();
 
         Key fallbackKey = createKey(matchID);
 
         if (fallbackKey != null) {
-            Set temp = new HashSet(result.size());
-            Iterator iter = result.iterator();
-            while (iter.hasNext()) {
-                String id = (String)iter.next();
+            Set<String> temp = new HashSet<String>(result.size());
+            for (String id : result) {
                 if (fallbackKey.isFallbackOf(id)) {
                     temp.add(id);
                 }
@@ -585,11 +581,11 @@ public class ICUService extends ICUNotifier {
     /**
      * Return a map from visible ids to factories.
      */
-    private Map getVisibleIDMap() {
-        Map idcache = null;
-        SoftReference ref = idref;
+    private Map<String, Factory> getVisibleIDMap() {
+        Map<String, Factory> idcache = null;
+        SoftReference<Map<String, Factory>> ref = idref;
         if (ref != null) {
-            idcache = (Map)ref.get();
+            idcache = ref.get();
         }
         while (idcache == null) {
             synchronized (this) { // or idref-only lock?
@@ -598,14 +594,14 @@ public class ICUService extends ICUNotifier {
                     // grab the factory list and update it ourselves
                     try {
                         factoryLock.acquireRead();
-                        idcache = new HashMap();
-                        ListIterator lIter = factories.listIterator(factories.size());
+                        idcache = new HashMap<String, Factory>();
+                        ListIterator<Factory> lIter = factories.listIterator(factories.size());
                         while (lIter.hasPrevious()) {
-                            Factory f = (Factory)lIter.previous();
+                            Factory f = lIter.previous();
                             f.updateVisibleIDs(idcache);
                         }
                         idcache = Collections.unmodifiableMap(idcache);
-                        idref = new SoftReference(idcache);
+                        idref = new SoftReference<Map<String, Factory>>(idcache);
                     }
                     finally {
                         factoryLock.releaseRead();
@@ -615,14 +611,14 @@ public class ICUService extends ICUNotifier {
                     // in and undone its work, leaving idcache null.  If so,
                     // retry.
                     ref = idref;
-                    idcache = (Map)ref.get();
+                    idcache = ref.get();
                 }
             }
         }
 
         return idcache;
     }
-    private SoftReference idref;
+    private SoftReference<Map<String, Factory>> idref;
 
     /**
      * Convenience override for getDisplayName(String, ULocale) that
@@ -638,15 +634,15 @@ public class ICUService extends ICUNotifier {
      * null.
      */
     public String getDisplayName(String id, ULocale locale) {
-        Map m = getVisibleIDMap();
-        Factory f = (Factory)m.get(id);
+        Map<String, Factory> m = getVisibleIDMap();
+        Factory f = m.get(id);
         if (f != null) {
             return f.getDisplayName(id, locale);
         }
 
         Key key = createKey(id);
         while (key.fallback()) {
-            f = (Factory)m.get(key.currentID());
+            f = m.get(key.currentID());
             if (f != null) {
                 return f.getDisplayName(id, locale);
             }
@@ -660,7 +656,7 @@ public class ICUService extends ICUNotifier {
      * uses the current default Locale as the locale, null as
      * the comparator, and null for the matchID.
      */
-    public SortedMap getDisplayNames() {
+    public SortedMap<String, String> getDisplayNames() {
         ULocale locale = ULocale.getDefault();
         return getDisplayNames(locale, null, null);
     }
@@ -669,7 +665,7 @@ public class ICUService extends ICUNotifier {
      * Convenience override of getDisplayNames(ULocale, Comparator, String) that
      * uses null for the comparator, and null for the matchID.
      */
-    public SortedMap getDisplayNames(ULocale locale) {
+    public SortedMap<String, String> getDisplayNames(ULocale locale) {
         return getDisplayNames(locale, null, null);
     }
 
@@ -677,7 +673,7 @@ public class ICUService extends ICUNotifier {
      * Convenience override of getDisplayNames(ULocale, Comparator, String) that
      * uses null for the matchID, thus returning all display names.
      */
-    public SortedMap getDisplayNames(ULocale locale, Comparator com) {
+    public SortedMap<String, String> getDisplayNames(ULocale locale, Comparator<Object> com) {
         return getDisplayNames(locale, com, null);
     }
 
@@ -685,7 +681,7 @@ public class ICUService extends ICUNotifier {
      * Convenience override of getDisplayNames(ULocale, Comparator, String) that
      * uses null for the comparator.
      */
-    public SortedMap getDisplayNames(ULocale locale, String matchID) {
+    public SortedMap<String, String> getDisplayNames(ULocale locale, String matchID) {
         return getDisplayNames(locale, null, matchID);
     }
 
@@ -699,8 +695,8 @@ public class ICUService extends ICUNotifier {
      * those in the set.  The display names are sorted based on the
      * comparator provided.
      */
-    public SortedMap getDisplayNames(ULocale locale, Comparator com, String matchID) {
-        SortedMap dncache = null;
+    public SortedMap<String, String> getDisplayNames(ULocale locale, Comparator<Object> com, String matchID) {
+        SortedMap<String, String> dncache = null;
         LocaleRef ref = dnref;
 
         if (ref != null) {
@@ -710,14 +706,14 @@ public class ICUService extends ICUNotifier {
         while (dncache == null) {
             synchronized (this) {
                 if (ref == dnref || dnref == null) {
-                    dncache = new TreeMap(com); // sorted
+                    dncache = new TreeMap<String, String>(com); // sorted
                     
-                    Map m = getVisibleIDMap();
-                    Iterator ei = m.entrySet().iterator();
+                    Map<String, Factory> m = getVisibleIDMap();
+                    Iterator<Entry<String, Factory>> ei = m.entrySet().iterator();
                     while (ei.hasNext()) {
-                        Entry e = (Entry)ei.next();
-                        String id = (String)e.getKey();
-                        Factory f = (Factory)e.getValue();
+                        Entry<String, Factory> e = ei.next();
+                        String id = e.getKey();
+                        Factory f = e.getValue();
                         dncache.put(f.getDisplayName(id, locale), id);
                     }
 
@@ -735,11 +731,11 @@ public class ICUService extends ICUNotifier {
             return dncache;
         }
 
-        SortedMap result = new TreeMap(dncache);
-        Iterator iter = result.entrySet().iterator();
+        SortedMap<String, String> result = new TreeMap<String, String>(dncache);
+        Iterator<Entry<String, String>> iter = result.entrySet().iterator();
         while (iter.hasNext()) {
-            Entry e = (Entry)iter.next();
-            if (!matchKey.isFallbackOf((String)e.getValue())) {
+            Entry<String, String> e = iter.next();
+            if (!matchKey.isFallbackOf(e.getValue())) {
                 iter.remove();
             }
         }
@@ -750,18 +746,18 @@ public class ICUService extends ICUNotifier {
     // locale, comparator, and corresponding map.
     private static class LocaleRef {
         private final ULocale locale;
-        private SoftReference ref;
-        private Comparator com;
+        private SoftReference<SortedMap<String, String>> ref;
+        private Comparator<Object> com;
 
-        LocaleRef(Map dnCache, ULocale locale, Comparator com) {
+        LocaleRef(SortedMap<String, String> dnCache, ULocale locale, Comparator<Object> com) {
             this.locale = locale;
             this.com = com;
-            this.ref = new SoftReference(dnCache);
+            this.ref = new SoftReference<SortedMap<String, String>>(dnCache);
         }
 
 
-        SortedMap get(ULocale loc, Comparator comp) {
-            SortedMap m = (SortedMap)ref.get();
+        SortedMap<String, String> get(ULocale loc, Comparator<Object> comp) {
+            SortedMap<String, String> m = ref.get();
             if (m != null &&
                 this.locale.equals(loc) &&
                 (this.com == comp || (this.com != null && this.com.equals(comp)))) {
@@ -778,10 +774,10 @@ public class ICUService extends ICUNotifier {
      * is no guarantee that the list will still match the current
      * factory list of the service subsequent to this call.
      */
-    public final List factories() {
+    public final List<Factory> factories() {
         try {
             factoryLock.acquireRead();
-            return new ArrayList(factories);
+            return new ArrayList<Factory>(factories);
         }
         finally{
             factoryLock.releaseRead();

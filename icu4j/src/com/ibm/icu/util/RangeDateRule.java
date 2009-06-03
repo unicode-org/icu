@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -136,7 +136,7 @@ public class RangeDateRule implements DateRule {
         int lastIndex = ranges.size();
 
         for (int i = 0; i < ranges.size(); i++) {
-            Range r = (Range) ranges.elementAt(i);
+            Range r = ranges.elementAt(i);
             if (start.before(r.start)) {
                 break;
             }
@@ -146,11 +146,11 @@ public class RangeDateRule implements DateRule {
     }
 
     private Range rangeAt(int index) {
-       return (index < ranges.size()) ? (Range) ranges.elementAt(index)
+       return (index < ranges.size()) ? ranges.elementAt(index)
                                       : null;
     }
 
-    Vector ranges = new Vector(2,2);
+    Vector<Range> ranges = new Vector<Range>(2,2);
 }
 
 //-----------------------------------------------------------------------

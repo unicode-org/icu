@@ -122,10 +122,14 @@ public class UnicodeSetIterator {
         
         // stringIterator == null iff there are no string elements remaining
         
-        if (stringIterator == null) return false;
+        if (stringIterator == null) {
+            return false;
+        }
         codepoint = IS_STRING; // signal that value is actually a string
-        string = (String)stringIterator.next();
-        if (!stringIterator.hasNext()) stringIterator = null;
+        string = stringIterator.next();
+        if (!stringIterator.hasNext()) {
+            stringIterator = null;
+        }
         return true;
     }
         
@@ -166,10 +170,14 @@ public class UnicodeSetIterator {
         
         // stringIterator == null iff there are no string elements remaining
         
-        if (stringIterator == null) return false;
+        if (stringIterator == null) {
+            return false;
+        }
         codepoint = IS_STRING; // signal that value is actually a string
-        string = (String)stringIterator.next();
-        if (!stringIterator.hasNext()) stringIterator = null;
+        string = stringIterator.next();
+        if (!stringIterator.hasNext()) {
+            stringIterator = null;
+        }
         return true;
     }
         
@@ -200,7 +208,9 @@ public class UnicodeSetIterator {
         stringIterator = null;
         if (set.strings != null) {
             stringIterator = set.strings.iterator();
-            if (!stringIterator.hasNext()) stringIterator = null;
+            if (!stringIterator.hasNext()) {
+                stringIterator = null;
+            }
         }
     }
     
@@ -239,7 +249,7 @@ public class UnicodeSetIterator {
      * @deprecated This API is ICU internal only.
      */
     protected int nextElement;
-    private Iterator stringIterator = null;
+    private Iterator<String> stringIterator = null;
     
     /**
      * Invariant: stringIterator is null when there are no (more) strings remaining

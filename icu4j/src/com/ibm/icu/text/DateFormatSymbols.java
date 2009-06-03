@@ -977,7 +977,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     static final int millisPerHour = 60*60*1000;
 
     // DateFormatSymbols cache
-    private static ICUCache DFSCACHE = new SimpleCache();
+    private static ICUCache<String, DateFormatSymbols> DFSCACHE = new SimpleCache<String, DateFormatSymbols>();
 
     /**
      * Initialize format symbols for the locale and calendar type
@@ -990,7 +990,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     protected void initializeData(ULocale desiredLocale, String type)
     {
         String key = desiredLocale.toString() + "+" + type;
-        DateFormatSymbols dfs = (DateFormatSymbols)DFSCACHE.get(key);
+        DateFormatSymbols dfs = DFSCACHE.get(key);
         if (dfs == null) {
             // Initialize data from scratch put a clone of this instance into the cache
             CalendarData calData = new CalendarData(desiredLocale, type);
@@ -1494,7 +1494,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @see #DateFormatSymbols(Calendar, Locale)
      * @stable ICU 2.2
      */
-    public DateFormatSymbols(Class calendarClass, Locale locale) {
+    public DateFormatSymbols(Class<? extends Calendar> calendarClass, Locale locale) {
         this(calendarClass, ULocale.forLocale(locale));
     }
 
@@ -1504,12 +1504,12 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @see #DateFormatSymbols(Calendar, Locale)
      * @stable ICU 3.2
      */
-    public DateFormatSymbols(Class calendarClass, ULocale locale) {
+    public DateFormatSymbols(Class<? extends Calendar> calendarClass, ULocale locale) {
         String fullName = calendarClass.getName();
         int lastDot = fullName.lastIndexOf('.');
         String className = fullName.substring(lastDot+1);
         String calType = className.replaceAll("Calendar", "").toLowerCase();
-        
+
         initializeData(locale, calType);
     }
 
@@ -1551,7 +1551,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @deprecated ICU 4.0
      */
     // This API was formerly @stable ICU 2.0
-    static public ResourceBundle getDateFormatBundle(Class calendarClass, Locale locale)
+    static public ResourceBundle getDateFormatBundle(Class<? extends Calendar> calendarClass, Locale locale)
         throws MissingResourceException {
         return null;
     }
@@ -1571,7 +1571,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @deprecated ICU 4.0
      */
     // This API was formerly @stable ICU 3.2
-    static public ResourceBundle getDateFormatBundle(Class calendarClass, ULocale locale)
+    static public ResourceBundle getDateFormatBundle(Class<? extends Calendar> calendarClass, ULocale locale)
         throws MissingResourceException {
         return null;
     }

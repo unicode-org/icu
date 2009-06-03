@@ -9,12 +9,11 @@ package com.ibm.icu.text;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
-import java.util.TreeMap;
 import java.util.Set;
+import java.util.TreeMap;
 
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.util.TimeUnit;
@@ -86,7 +85,7 @@ public class TimeUnitFormat extends MeasureFormat {
 
     private NumberFormat format;
     private ULocale locale;
-    private transient Map timeUnitToCountToPatterns;
+    private transient Map<TimeUnit, Map<String, Object[]>> timeUnitToCountToPatterns;
     private transient PluralRules pluralRules;
     private transient boolean isReady;
     private int style;
@@ -197,13 +196,10 @@ public class TimeUnitFormat extends MeasureFormat {
         if (isReady == false) {
             return this;
         }
-        for (Iterator it = timeUnitToCountToPatterns.keySet().iterator(); 
-             it.hasNext();) {
-            TimeUnit timeUnit = (TimeUnit) it.next();
-            Map countToPattern = (Map) timeUnitToCountToPatterns.get(timeUnit);
-            for (Iterator it2 = countToPattern.keySet().iterator(); it2.hasNext();) {
-                String count = (String) it2.next();
-                Object[] pair = (Object[])countToPattern.get(count);
+        for (TimeUnit timeUnit : timeUnitToCountToPatterns.keySet()) {
+            Map<String, Object[]> countToPattern = timeUnitToCountToPatterns.get(timeUnit);
+            for (String count : countToPattern.keySet()) {
+                Object[] pair = countToPattern.get(count);
                 MessageFormat pattern = (MessageFormat)pair[FULL_NAME];
                 pattern.setFormatByArgumentIndex(0, format);
                 pattern = (MessageFormat)pair[ABBREVIATED_NAME];
@@ -228,10 +224,10 @@ public class TimeUnitFormat extends MeasureFormat {
             setup();
         }
         TimeUnitAmount amount = (TimeUnitAmount) obj;
-        Map countToPattern = (Map) timeUnitToCountToPatterns.get(amount.getTimeUnit());
+        Map<String, Object[]> countToPattern = timeUnitToCountToPatterns.get(amount.getTimeUnit());
         double number = amount.getNumber().doubleValue();
         String count = pluralRules.select(number);
-        MessageFormat pattern = (MessageFormat)((Object[])countToPattern.get(count))[style];
+        MessageFormat pattern = (MessageFormat)(countToPattern.get(count))[style];
         return pattern.format(new Object[]{amount.getNumber()}, toAppendTo, pos);
     }
 
@@ -254,11 +250,9 @@ public class TimeUnitFormat extends MeasureFormat {
         // we don't worry too much about speed on parsing, but this can be optimized later if needed.
         // Parse by iterating through all available patterns
         // and looking for the longest match.
-        for (Iterator it = timeUnitToCountToPatterns.keySet().iterator(); it.hasNext();) {
-            TimeUnit timeUnit = (TimeUnit) it.next();
-            Map countToPattern = (Map) timeUnitToCountToPatterns.get(timeUnit);
-            for (Iterator it2 = countToPattern.keySet().iterator(); it2.hasNext();) {
-              String count = (String) it2.next();
+        for (TimeUnit timeUnit : timeUnitToCountToPatterns.keySet()) {
+            Map<String, Object[]> countToPattern = timeUnitToCountToPatterns.get(timeUnit);
+            for (String count : countToPattern.keySet()) {
               for (int styl = FULL_NAME; styl < TOTAL_STYLES; ++styl) {
                 MessageFormat pattern = (MessageFormat)((Object[])countToPattern.get(count))[styl];
                 pos.setErrorIndex(-1);
@@ -340,7 +334,7 @@ public class TimeUnitFormat extends MeasureFormat {
             format = NumberFormat.getNumberInstance(locale);
         }
         pluralRules = PluralRules.forLocale(locale);
-        timeUnitToCountToPatterns = new HashMap();
+        timeUnitToCountToPatterns = new HashMap<TimeUnit, Map<String, Object[]>>();
 
         setup("units", timeUnitToCountToPatterns, FULL_NAME);
         setup("unitsShort", timeUnitToCountToPatterns, ABBREVIATED_NAME);
@@ -348,7 +342,7 @@ public class TimeUnitFormat extends MeasureFormat {
     }
 
 
-    private void setup(String resourceKey, Map timeUnitToCountToPatterns,
+    private void setup(String resourceKey, Map<TimeUnit, Map<String, Object[]>> timeUnitToCountToPatterns,
                        int style) {
         // fill timeUnitToCountToPatterns from resource file
         try {
@@ -377,9 +371,9 @@ public class TimeUnitFormat extends MeasureFormat {
                 }
                 ICUResourceBundle oneUnitRes = unitsRes.getWithFallback(timeUnitName);
                 int count = oneUnitRes.getSize();
-                Map countToPatterns = (Map)timeUnitToCountToPatterns.get(timeUnit);
+                Map<String, Object[]> countToPatterns = timeUnitToCountToPatterns.get(timeUnit);
                 if (countToPatterns ==  null) {
-                    countToPatterns = new TreeMap();
+                    countToPatterns = new TreeMap<String, Object[]>();
                     timeUnitToCountToPatterns.put(timeUnit, countToPatterns);
                 } 
                 for ( int pluralIndex = 0; pluralIndex < count; ++pluralIndex) {
@@ -393,7 +387,7 @@ public class TimeUnitFormat extends MeasureFormat {
                     // is good space-wise, but it degrades performance, 
                     // since it needs to check whether the needed space 
                     // is already allocated or not.
-                    Object[] pair = (Object[])countToPatterns.get(pluralCount);
+                    Object[] pair = countToPatterns.get(pluralCount);
                     if (pair == null) {
                         pair = new Object[2];
                         countToPatterns.put(pluralCount, pair);
@@ -423,20 +417,19 @@ public class TimeUnitFormat extends MeasureFormat {
         // plural rule in each time unit using above fall-back rule.
         //
         final TimeUnit[] timeUnits = TimeUnit.values();
-        Set keywords = pluralRules.getKeywords();
+        Set<String> keywords = pluralRules.getKeywords();
         for ( int i = 0; i < timeUnits.length; ++i ) {
             // for each time unit, 
             // get all the patterns for each plural rule in this locale.
             final TimeUnit timeUnit = timeUnits[i];
-            Map countToPatterns = (Map) timeUnitToCountToPatterns.get(timeUnit);
-            if ( countToPatterns == null ) {
-                countToPatterns = new TreeMap();
+            Map<String, Object[]> countToPatterns = timeUnitToCountToPatterns.get(timeUnit);
+            if (countToPatterns == null) {
+                countToPatterns = new TreeMap<String, Object[]>();
                 timeUnitToCountToPatterns.put(timeUnit, countToPatterns);
             }
-            for (Iterator it = keywords.iterator(); it.hasNext();) {
-                String pluralCount = (String) it.next();
+            for (String pluralCount : keywords) {
                 if ( countToPatterns.get(pluralCount) == null ||
-                     ((Object[])countToPatterns.get(pluralCount))[style] == null ) {
+                     countToPatterns.get(pluralCount)[style] == null ) {
                     // look through parents
                     searchInTree(resourceKey, style, timeUnit, pluralCount, pluralCount, countToPatterns);
                 }
@@ -456,7 +449,7 @@ public class TimeUnitFormat extends MeasureFormat {
     // then, "other" is the searchPluralCount.
     private void searchInTree(String resourceKey, int styl,
                               TimeUnit timeUnit, String srcPluralCount,
-                              String searchPluralCount, Map countToPatterns) {
+                              String searchPluralCount, Map<String, Object[]> countToPatterns) {
         ULocale parentLocale=locale;
         String srcTimeUnitName = timeUnit.toString();
         while ( parentLocale != null ) {
@@ -470,7 +463,7 @@ public class TimeUnitFormat extends MeasureFormat {
                 if (format != null) {
                     messageFormat.setFormatByArgumentIndex(0, format);
                 }
-                Object[] pair = (Object[])countToPatterns.get(srcPluralCount);
+                Object[] pair = countToPatterns.get(srcPluralCount);
                 if (pair == null) {
                     pair = new Object[2];
                     countToPatterns.put(srcPluralCount, pair);
@@ -504,7 +497,7 @@ public class TimeUnitFormat extends MeasureFormat {
             if (format != null && messageFormat != null) {
                 messageFormat.setFormatByArgumentIndex(0, format);
             }
-            Object[] pair = (Object[])countToPatterns.get(srcPluralCount);
+            Object[] pair = countToPatterns.get(srcPluralCount);
             if (pair == null) {
                 pair = new Object[2];
                 countToPatterns.put(srcPluralCount, pair);

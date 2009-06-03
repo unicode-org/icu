@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
 
+import com.ibm.icu.impl.ZoneMeta.OlsonToMetaMappingEntry;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.util.BasicTimeZone;
 import com.ibm.icu.util.Calendar;
@@ -35,8 +36,8 @@ public class ZoneStringFormat {
      * @param zoneStrings zone strings
      */
     public ZoneStringFormat(String[][] zoneStrings) {
-        tzidToStrings = new HashMap();
-        zoneStringsTrie = new TextTrieMap(true);
+        tzidToStrings = new HashMap<String, ZoneStrings>();
+        zoneStringsTrie = new TextTrieMap<ZoneStringInfo>(true);
         for (int i = 0; i < zoneStrings.length; i++) {
             String tzid = zoneStrings[i][0];
             String[] names = new String[ZSIDX_MAX];
@@ -66,7 +67,7 @@ public class ZoneStringFormat {
      * @return An instance of ZoneStringFormat for the locale
      */
     public static ZoneStringFormat getInstance(ULocale locale) {
-        ZoneStringFormat tzf = (ZoneStringFormat)TZFORMAT_CACHE.get(locale);
+        ZoneStringFormat tzf = TZFORMAT_CACHE.get(locale);
         if (tzf == null) {
             tzf = new ZoneStringFormat(locale);
             TZFORMAT_CACHE.put(locale, tzf);
@@ -214,9 +215,9 @@ public class ZoneStringFormat {
      */
     protected ZoneStringFormat(ULocale locale) {
         this.locale = locale;
-        tzidToStrings = new HashMap();
-        mzidToStrings = new HashMap();
-        zoneStringsTrie = new TextTrieMap(true);
+        tzidToStrings = new HashMap<String, ZoneStrings>();
+        mzidToStrings = new HashMap<String, ZoneStrings>();
+        zoneStringsTrie = new TextTrieMap<ZoneStringInfo>(true);
     }
 
     // Load only a single zone
@@ -351,13 +352,13 @@ public class ZoneStringFormat {
         
         // Resolve metazones used by this zone
         int mzPartialLocIdx = 0;
-        Map olsonToMeta = ZoneMeta.getOlsonToMetaMap();
-        List metazoneMappings = (List)olsonToMeta.get(tzid);
+        Map<String, List<OlsonToMetaMappingEntry>> olsonToMeta = ZoneMeta.getOlsonToMetaMap();
+        List<OlsonToMetaMappingEntry> metazoneMappings = olsonToMeta.get(tzid);
         if (metazoneMappings != null) {
-            Iterator it = metazoneMappings.iterator();
+            Iterator<OlsonToMetaMappingEntry> it = metazoneMappings.iterator();
             while (it.hasNext()) {
-                ZoneMeta.OlsonToMetaMappingEntry mzmap = (ZoneMeta.OlsonToMetaMappingEntry)it.next();
-                ZoneStrings mzStrings = (ZoneStrings)mzidToStrings.get(mzmap.mzid);
+                ZoneMeta.OlsonToMetaMappingEntry mzmap = it.next();
+                ZoneStrings mzStrings = mzidToStrings.get(mzmap.mzid);
                 if (mzStrings == null) {
                     // If the metazone strings are not yet processed, do it now.
                     String mzkey = "meta:" + mzmap.mzid;
@@ -484,7 +485,7 @@ public class ZoneStringFormat {
     private static final int ZSIDX_MAX = ZSIDX_SHORT_GENERIC + 1;
 
     // ZoneStringFormat cache
-    private static ICUCache TZFORMAT_CACHE = new SimpleCache();
+    private static ICUCache<ULocale, ZoneStringFormat> TZFORMAT_CACHE = new SimpleCache<ULocale, ZoneStringFormat>();
 
     /*
      * The translation type of the translated zone strings
@@ -503,13 +504,13 @@ public class ZoneStringFormat {
     private static final long DST_CHECK_RANGE = 184L*(24*60*60*1000);
 
     // Map from zone id to ZoneStrings
-    private Map tzidToStrings;
+    private Map<String, ZoneStrings> tzidToStrings;
 
     // Map from metazone id to ZoneStrings
-    private Map mzidToStrings;
+    private Map<String, ZoneStrings> mzidToStrings;
 
     // Zone string dictionary, used for look up
-    private TextTrieMap zoneStringsTrie;
+    private TextTrieMap<ZoneStringInfo> zoneStringsTrie;
 
     // Locale used for initializing zone strings
     private ULocale locale;
@@ -530,7 +531,7 @@ public class ZoneStringFormat {
         }
 
         String result = null;
-        ZoneStrings zstrings = (ZoneStrings)tzidToStrings.get(tzid);
+        ZoneStrings zstrings = tzidToStrings.get(tzid);
         if (zstrings == null) {
             // ICU's own array does not have entries for aliases
             String canonicalID = ZoneMeta.getCanonicalSystemID(tzid);
@@ -538,7 +539,7 @@ public class ZoneStringFormat {
                 // Canonicalize tzid here.  The rest of operations
                 // require tzid to be canonicalized.
                 tzid = canonicalID;
-                zstrings = (ZoneStrings)tzidToStrings.get(tzid);
+                zstrings = tzidToStrings.get(tzid);
             }
         }
         if (zstrings != null) {
@@ -562,7 +563,7 @@ public class ZoneStringFormat {
             // Try metazone
             String mzid = ZoneMeta.getMetazoneID(tzid, date);
             if (mzid != null) {
-                ZoneStrings mzstrings = (ZoneStrings)mzidToStrings.get(mzid);
+                ZoneStrings mzstrings = mzidToStrings.get(mzid);
                 if (mzstrings != null) {
                     switch (typeIdx) {
                     case ZSIDX_LONG_STANDARD:
@@ -612,7 +613,7 @@ public class ZoneStringFormat {
             loadZone(tzid);
         }
 
-        ZoneStrings zstrings = (ZoneStrings)tzidToStrings.get(tzid);
+        ZoneStrings zstrings = tzidToStrings.get(tzid);
         if (zstrings == null) {
             // ICU's own array does not have entries for aliases
             String canonicalID = ZoneMeta.getCanonicalSystemID(tzid);
@@ -620,7 +621,7 @@ public class ZoneStringFormat {
                 // Canonicalize tzid here.  The rest of operations
                 // require tzid to be canonicalized.
                 tzid = canonicalID;
-                zstrings = (ZoneStrings)tzidToStrings.get(tzid);
+                zstrings = tzidToStrings.get(tzid);
             }
         }
         if (zstrings != null) {
@@ -689,7 +690,7 @@ public class ZoneStringFormat {
                     }
                 }
                 if (result == null){
-                    ZoneStrings mzstrings = (ZoneStrings)mzidToStrings.get(mzid);
+                    ZoneStrings mzstrings = mzidToStrings.get(mzid);
                     if (mzstrings != null) {
                         if (isShort) {
                             if (!commonlyUsedOnly || mzstrings.isShortFormatCommonlyUsed()) {
@@ -741,7 +742,7 @@ public class ZoneStringFormat {
         String result = null;
         String mzid = ZoneMeta.getMetazoneID(tzid, date);
         if (mzid != null) {
-            ZoneStrings zstrings = (ZoneStrings)tzidToStrings.get(tzid);
+            ZoneStrings zstrings = tzidToStrings.get(tzid);
             if (zstrings != null) {
                 result = zstrings.getGenericPartialLocationString(mzid, isShort, commonlyUsedOnly);
             }
@@ -762,12 +763,10 @@ public class ZoneStringFormat {
     private String[][] getZoneStrings(long date) {
         loadFull();
 
-        Set tzids = tzidToStrings.keySet();
+        Set<String> tzids = tzidToStrings.keySet();
         String[][] zoneStrings = new String[tzids.size()][8];
         int idx = 0;
-        Iterator it = tzids.iterator();
-        while (it.hasNext()) {
-            String tzid = (String)it.next();
+        for (String tzid : tzids) {
             zoneStrings[idx][0] = tzid;
             zoneStrings[idx][1] = getLongStandard(tzid, date);
             zoneStrings[idx][2] = getShortStandard(tzid, date, false);
@@ -1020,12 +1019,12 @@ public class ZoneStringFormat {
         ZoneStringInfo result = null;
         ZoneStringSearchResultHandler handler = new ZoneStringSearchResultHandler();
         zoneStringsTrie.find(text, start, handler);
-        List list = handler.getMatchedZoneStrings();
+        List<ZoneStringInfo> list = handler.getMatchedZoneStrings();
         ZoneStringInfo fallback = null;
         if (list != null && list.size() > 0) {
-            Iterator it = list.iterator();
+            Iterator<ZoneStringInfo> it = list.iterator();
             while (it.hasNext()) {
-                ZoneStringInfo tmp = (ZoneStringInfo)it.next();
+                ZoneStringInfo tmp = it.next();
                 if ((types & tmp.getType()) != 0) {
                     if (result == null || result.getString().length() < tmp.getString().length()) {
                         result = tmp;
@@ -1057,16 +1056,16 @@ public class ZoneStringFormat {
 
     
 
-    private static class ZoneStringSearchResultHandler implements TextTrieMap.ResultHandler {
+    private static class ZoneStringSearchResultHandler implements TextTrieMap.ResultHandler<ZoneStringInfo> {
 
-        private ArrayList resultList;
+        private ArrayList<ZoneStringInfo> resultList;
 
-        public boolean handlePrefixMatch(int matchLength, Iterator values) {
+        public boolean handlePrefixMatch(int matchLength, Iterator<ZoneStringInfo> values) {
             if (resultList == null) {
-                resultList = new ArrayList();
+                resultList = new ArrayList<ZoneStringInfo>();
             }
             while (values.hasNext()) {
-                ZoneStringInfo zsitem = (ZoneStringInfo)values.next();
+                ZoneStringInfo zsitem = values.next();
                 if (zsitem == null) {
                     break;
                 }
@@ -1088,7 +1087,7 @@ public class ZoneStringFormat {
             return true;
         }
 
-        List getMatchedZoneStrings() {
+        List<ZoneStringInfo> getMatchedZoneStrings() {
             if (resultList == null || resultList.size() == 0) {
                 return null;
             }

@@ -9,19 +9,18 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
-import java.util.Locale;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
+import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.SimpleCache;
-import com.ibm.icu.impl.CalendarData;
+import com.ibm.icu.text.DateIntervalInfo.PatternInfo;
 import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.DateInterval;
-import com.ibm.icu.text.DateIntervalInfo;
-import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.ULocale;
 
 
 /**
@@ -283,7 +282,8 @@ public class DateIntervalFormat extends UFormat {
 
 
     // Cache for the locale interval pattern
-    private static ICUCache LOCAL_PATTERN_CACHE = new SimpleCache();
+    private static ICUCache<String, Map<String, PatternInfo>> LOCAL_PATTERN_CACHE =
+        new SimpleCache<String, Map<String, PatternInfo>>();
     
     /*
      * The interval patterns for this locale.
@@ -308,8 +308,8 @@ public class DateIntervalFormat extends UFormat {
      * relavent (locale) to this formatter.
      */
     private String fSkeleton = null;
-    // HashMap<String, String>  calendar_field -> interval pattern
-    private transient Map fIntervalPatterns = null;
+
+    private transient Map<String, PatternInfo> fIntervalPatterns = null;
     
    
     /*
@@ -638,8 +638,7 @@ public class DateIntervalFormat extends UFormat {
         }
         
         // get interval pattern
-        DateIntervalInfo.PatternInfo intervalPattern = 
-          (DateIntervalInfo.PatternInfo)fIntervalPatterns.get(
+        PatternInfo intervalPattern = fIntervalPatterns.get(
               DateIntervalInfo.CALENDAR_FIELD_TO_PATTERN_LETTER[field]);
 
         if ( intervalPattern == null ) {
@@ -837,9 +836,9 @@ public class DateIntervalFormat extends UFormat {
         } else {
             key = locale.toString() + "+" + fullPattern;
         }
-        Map patterns = (Map) LOCAL_PATTERN_CACHE.get(key);
+        Map<String, PatternInfo> patterns = LOCAL_PATTERN_CACHE.get(key);
         if ( patterns == null ) {
-            HashMap intervalPatterns = initializeIntervalPattern(fullPattern, locale);
+            Map<String, PatternInfo> intervalPatterns = initializeIntervalPattern(fullPattern, locale);
             patterns = Collections.unmodifiableMap(intervalPatterns);
             LOCAL_PATTERN_CACHE.put(key, patterns);
         } 
@@ -884,7 +883,7 @@ public class DateIntervalFormat extends UFormat {
      * @param locale       the given locale.
      * @return             interval patterns' hash map
      */
-    private HashMap initializeIntervalPattern(String fullPattern, ULocale locale) {
+    private Map<String, PatternInfo> initializeIntervalPattern(String fullPattern, ULocale locale) {
         DateTimePatternGenerator dtpng = DateTimePatternGenerator.getInstance(locale);
         if ( fSkeleton == null ) {
             // fSkeleton is already set by getDateIntervalInstance()
@@ -893,7 +892,7 @@ public class DateIntervalFormat extends UFormat {
         }
         String skeleton = fSkeleton;
 
-        HashMap intervalPatterns = new HashMap();
+        HashMap<String, PatternInfo> intervalPatterns = new HashMap<String, PatternInfo>();
 
         /* Check whether the skeleton is a combination of date and time.
          * For the complication reason 1 explained above.
@@ -942,8 +941,7 @@ public class DateIntervalFormat extends UFormat {
                     // the first part of the pattern is empty,
                     // the second part of the pattern is the full-pattern
                     // should be used in fall-back.
-                    DateIntervalInfo.PatternInfo ptn = 
-                        new DateIntervalInfo.PatternInfo(null, pattern,
+                    PatternInfo ptn = new PatternInfo(null, pattern,
                                                      fInfo.getDefaultOrder());
                     intervalPatterns.put(DateIntervalInfo.
                         CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.DATE], ptn);
@@ -987,7 +985,7 @@ public class DateIntervalFormat extends UFormat {
             // the first part of the pattern is empty,
             // the second part of the pattern is the full-pattern
             // should be used in fall-back.
-            DateIntervalInfo.PatternInfo ptn = new DateIntervalInfo.PatternInfo(
+            PatternInfo ptn = new PatternInfo(
                                     null, pattern, fInfo.getDefaultOrder());
             intervalPatterns.put(DateIntervalInfo.
                 CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.DATE], ptn);
@@ -1055,14 +1053,14 @@ public class DateIntervalFormat extends UFormat {
      * @param intervalPatterns interval patterns
      */
     private void genFallbackPattern(int field, String skeleton,
-                                    HashMap intervalPatterns,
+                                    Map<String, PatternInfo> intervalPatterns,
                                     DateTimePatternGenerator dtpng) {
         String pattern = dtpng.getBestPattern(skeleton);
         // for fall back interval patterns,
         // the first part of the pattern is empty,
         // the second part of the pattern is the full-pattern
         // should be used in fall-back.
-        DateIntervalInfo.PatternInfo ptn = new DateIntervalInfo.PatternInfo(
+        PatternInfo ptn = new PatternInfo(
                                     null, pattern, fInfo.getDefaultOrder());
         intervalPatterns.put( 
             DateIntervalInfo.CALENDAR_FIELD_TO_PATTERN_LETTER[field], ptn);
@@ -1265,7 +1263,7 @@ public class DateIntervalFormat extends UFormat {
      */
     private boolean genSeparateDateTimePtn(String dateSkeleton, 
                                            String timeSkeleton,
-                                           HashMap intervalPatterns)
+                                           Map<String, PatternInfo> intervalPatterns)
     {
         String skeleton;
         // if both date and time skeleton present,
@@ -1348,15 +1346,15 @@ public class DateIntervalFormat extends UFormat {
      */
     private SkeletonAndItsBestMatch genIntervalPattern(
                    int field, String skeleton, String bestSkeleton, 
-                   int differenceInfo, HashMap intervalPatterns) {
+                   int differenceInfo, Map<String, PatternInfo> intervalPatterns) {
         SkeletonAndItsBestMatch retValue = null;
-        DateIntervalInfo.PatternInfo pattern = fInfo.getIntervalPattern(
+        PatternInfo pattern = fInfo.getIntervalPattern(
                                            bestSkeleton, field);
         if ( pattern == null ) {
             // single date
             if ( SimpleDateFormat.isFieldUnitIgnored(bestSkeleton, field) ) {
-                DateIntervalInfo.PatternInfo ptnInfo = 
-                    new DateIntervalInfo.PatternInfo(fDateFormat.toPattern(),
+                PatternInfo ptnInfo = 
+                    new PatternInfo(fDateFormat.toPattern(),
                                                      null, 
                                                      fInfo.getDefaultOrder());
                 intervalPatterns.put(DateIntervalInfo.
@@ -1413,11 +1411,11 @@ public class DateIntervalFormat extends UFormat {
                                    pattern.getFirstPart(), differenceInfo);
                 String part2 = adjustFieldWidth(skeleton, bestSkeleton, 
                                    pattern.getSecondPart(), differenceInfo);
-                pattern =  new DateIntervalInfo.PatternInfo(part1, part2, 
+                pattern =  new PatternInfo(part1, part2, 
                                            pattern.firstDateInPtnIsLaterDate());
             } else {
                 // pattern is immutable, no need to clone; 
-                // pattern = (DateIntervalInfo.PatternInfo)pattern.clone();
+                // pattern = (PatternInfo)pattern.clone();
             }
             intervalPatterns.put(
               DateIntervalInfo.CALENDAR_FIELD_TO_PATTERN_LETTER[field], pattern);
@@ -1566,11 +1564,11 @@ public class DateIntervalFormat extends UFormat {
     private void concatSingleDate2TimeInterval(String dtfmt,
                                                String datePattern,
                                                int field,
-                                               HashMap intervalPatterns)
+                                               Map<String, PatternInfo> intervalPatterns)
     {
 
-        DateIntervalInfo.PatternInfo  timeItvPtnInfo = 
-          (DateIntervalInfo.PatternInfo)intervalPatterns.get(
+        PatternInfo  timeItvPtnInfo = 
+          (PatternInfo)intervalPatterns.get(
               DateIntervalInfo.CALENDAR_FIELD_TO_PATTERN_LETTER[field]);
         if ( timeItvPtnInfo != null ) {
             String timeIntervalPattern = timeItvPtnInfo.getFirstPart() + 

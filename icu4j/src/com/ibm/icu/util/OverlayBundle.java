@@ -1,12 +1,15 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.util;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * A ResourceBundle that overlays one hierarchy atop another.  This is
@@ -127,7 +130,7 @@ public class OverlayBundle extends ResourceBundle {
      * @internal
      * @deprecated ICU 2.4. This class may be removed or modified.
      */
-    public Enumeration getKeys() {
+    public Enumeration<String> getKeys() {
         // Return the enumeration of the last bundle, which is the base
         // of our hierarchy stack.
         int i = bundles.length - 1;

@@ -7,15 +7,15 @@
 
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.UCharacterProperty;
-import com.ibm.icu.util.ULocale;
-
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
+import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.util.ULocale;
 
 /**
  * <p>
@@ -171,7 +171,7 @@ public class PluralFormat extends UFormat {
      *  <code>String</code>(plural case keyword) --&gt; <code>String</code>
      *  (message for this plural case).
      */
-    private Map parsedValues = null;
+    private Map<String, String> parsedValues = null;
 
     /*
      * This <code>NumberFormat</code> is used for the standard formatting of
@@ -323,8 +323,8 @@ public class PluralFormat extends UFormat {
 
         this.pattern = pttrn;
         int braceStack = 0;
-        Set ruleNames = pluralRules.getKeywords();
-        parsedValues = new HashMap();
+        Set<String> ruleNames = pluralRules.getKeywords();
+        parsedValues = new HashMap<String, String>();
 
         // Format string has to include keywords.
         // states:
@@ -434,10 +434,9 @@ public class PluralFormat extends UFormat {
 
         // Get appropriate format pattern.
         String selectedRule = pluralRules.select(number);
-        String selectedPattern = (String) parsedValues.get(selectedRule);
+        String selectedPattern = parsedValues.get(selectedRule);
         if (selectedPattern == null) { // Fallback to others.
-            selectedPattern =
-                (String) parsedValues.get(PluralRules.KEYWORD_OTHER);
+            selectedPattern = parsedValues.get(PluralRules.KEYWORD_OTHER);
         }
         // Get formatted number and insert it into String.
         // Will replace all '#' which are not inside curly braces by the

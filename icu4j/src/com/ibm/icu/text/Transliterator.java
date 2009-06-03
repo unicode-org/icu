@@ -9,6 +9,8 @@ package com.ibm.icu.text;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.UtilityExtensions;
+import com.ibm.icu.text.RuleBasedTransliterator.Data;
+import com.ibm.icu.text.TransliteratorIDParser.SingleID;
 import com.ibm.icu.util.CaseInsensitiveString;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
@@ -445,7 +447,7 @@ public abstract class Transliterator implements StringTransform  {
      */
     private static TransliteratorRegistry registry;
 
-    private static Hashtable displayNameCache;
+    private static Hashtable<CaseInsensitiveString, String> displayNameCache;
 
     /**
      * Prefix for resource bundle key for the display name for a
@@ -1250,7 +1252,7 @@ public abstract class Transliterator implements StringTransform  {
         }
 
         // Use the registered display name, if any
-        String n = (String) displayNameCache.get(new CaseInsensitiveString(ID));
+        String n = displayNameCache.get(new CaseInsensitiveString(ID));
         if (n != null) {
             return n;
         }
@@ -1343,13 +1345,13 @@ public abstract class Transliterator implements StringTransform  {
     public static Transliterator getInstance(String ID,
                                              int dir) {
         StringBuffer canonID = new StringBuffer();
-        Vector list = new Vector();
+        Vector<SingleID> list = new Vector<SingleID>();
         UnicodeSet[] globalFilter = new UnicodeSet[1];
         if (!TransliteratorIDParser.parseCompoundID(ID, dir, canonID, list, globalFilter)) {
             throw new IllegalArgumentException("Invalid ID " + ID);
         }
 
-        TransliteratorIDParser.instantiateList(list);
+        Vector<Transliterator> translits = TransliteratorIDParser.instantiateList(list);
 
         // assert(list.size() > 0);
         Transliterator t = null;
@@ -1359,10 +1361,10 @@ public abstract class Transliterator implements StringTransform  {
             // (without any inactive ID), but our main ID still comes out correct.  That is, if we
             // instantiate "(Lower);Latin-Greek;", we want the rules to come out as "::Latin-Greek;"
             // even though the ID is "(Lower);Latin-Greek;".
-            t = new CompoundTransliterator(list);
+            t = new CompoundTransliterator(translits);
         }
         else {
-            t = (Transliterator)list.elementAt(0);
+            t = translits.elementAt(0);
         }
 
         t.setID(canonID.toString());
@@ -1416,32 +1418,32 @@ public abstract class Transliterator implements StringTransform  {
             t = new NullTransliterator();
         }
         else if (parser.idBlockVector.size() == 0 && parser.dataVector.size() == 1) {
-            t = new RuleBasedTransliterator(ID, (RuleBasedTransliterator.Data)parser.dataVector.get(0), null);
+            t = new RuleBasedTransliterator(ID, parser.dataVector.get(0), null);
         }
         else if (parser.idBlockVector.size() == 1 && parser.dataVector.size() == 0) {
             // idBlock, no data -- this is an alias.  The ID has
             // been munged from reverse into forward mode, if
             // necessary, so instantiate the ID in the forward
             // direction.
-            if (parser.compoundFilter != null)
+            if (parser.compoundFilter != null) {
                 t = getInstance(parser.compoundFilter.toPattern(false) + ";"
-                        + (String)parser.idBlockVector.get(0));
-            else
-                t = getInstance((String)parser.idBlockVector.get(0));
-
+                        + parser.idBlockVector.get(0));
+            } else {
+                t = getInstance(parser.idBlockVector.get(0));
+            }
 
             if (t != null) {
                 t.setID(ID);
             }
         }
         else {
-            Vector transliterators = new Vector();
+            Vector<Transliterator> transliterators = new Vector<Transliterator>();
             int passNumber = 1;
 
             int limit = Math.max(parser.idBlockVector.size(), parser.dataVector.size());
             for (int i = 0; i < limit; i++) {
                 if (i < parser.idBlockVector.size()) {
-                    String idBlock = (String)parser.idBlockVector.get(i);
+                    String idBlock = parser.idBlockVector.get(i);
                     if (idBlock.length() > 0) {
                         Transliterator temp = getInstance(idBlock);
                         if (!(temp instanceof NullTransliterator))
@@ -1449,7 +1451,7 @@ public abstract class Transliterator implements StringTransform  {
                     }
                 }
                 if (i < parser.dataVector.size()) {
-                    RuleBasedTransliterator.Data data = (RuleBasedTransliterator.Data)parser.dataVector.get(i);
+                    Data data = parser.dataVector.get(i);
                     transliterators.add(new RuleBasedTransliterator("%Pass" + passNumber++, data, null));
                 }
             }
@@ -1631,7 +1633,7 @@ public abstract class Transliterator implements StringTransform  {
      * @see #unregister
      * @stable ICU 2.0
      */
-    public static void registerClass(String ID, Class transClass, String displayName) {
+    public static void registerClass(String ID, Class<? extends Transliterator> transClass, String displayName) {
         registry.put(ID, transClass, true);
         if (displayName != null) {
             displayNameCache.put(new CaseInsensitiveString(ID), displayName);
@@ -1744,7 +1746,7 @@ public abstract class Transliterator implements StringTransform  {
      * @see #registerClass
      * @stable ICU 2.0
      */
-    public static final Enumeration getAvailableIDs() {
+    public static final Enumeration<String> getAvailableIDs() {
         return registry.getAvailableIDs();
     }
 
@@ -1755,7 +1757,7 @@ public abstract class Transliterator implements StringTransform  {
      * source.
      * @stable ICU 2.0
      */
-    public static final Enumeration getAvailableSources() {
+    public static final Enumeration<String> getAvailableSources() {
         return registry.getAvailableSources();
     }
 
@@ -1766,7 +1768,7 @@ public abstract class Transliterator implements StringTransform  {
      * variants for each source and target pair.
      * @stable ICU 2.0
      */
-    public static final Enumeration getAvailableTargets(String source) {
+    public static final Enumeration<String> getAvailableTargets(String source) {
         return registry.getAvailableTargets(source);
     }
 
@@ -1775,7 +1777,7 @@ public abstract class Transliterator implements StringTransform  {
      * transliterators having a given source name and target name.
      * @stable ICU 2.0
      */
-    public static final Enumeration getAvailableVariants(String source,
+    public static final Enumeration<String> getAvailableVariants(String source,
                                                          String target) {
         return registry.getAvailableVariants(source, target);
     }
@@ -1785,7 +1787,7 @@ public abstract class Transliterator implements StringTransform  {
         registry = new TransliteratorRegistry();
 
         // The display name cache starts out empty
-        displayNameCache = new Hashtable();
+        displayNameCache = new Hashtable<CaseInsensitiveString, String>();
         /* The following code parses the index table located in
          * icu/data/translit/root.txt.  The index is an n x 4 table
          * that follows this format:

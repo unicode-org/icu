@@ -19,7 +19,6 @@ import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -309,13 +308,13 @@ public class SimpleDateFormat extends DateFormat {
      * The hash map used for number format overrides.
      * @serial
      */
-    private HashMap numberFormatters;
+    private HashMap<String, NumberFormat> numberFormatters;
 
     /**
      * The hash map used for number format overrides.
      * @serial
      */
-    private HashMap overrideMap;
+    private HashMap<Character, String> overrideMap;
 
     /**
      * The symbols used by this formatter for week names, month names,
@@ -656,7 +655,7 @@ public class SimpleDateFormat extends DateFormat {
     // The actual method to format date. If List attributes is not null,
     // then attribute information will be recorded.
     private StringBuffer format(Calendar cal, StringBuffer toAppendTo,
-            FieldPosition pos, List attributes) {
+            FieldPosition pos, List<FieldPosition> attributes) {
         // Initialize
         pos.setBeginIndex(0);
         pos.setEndIndex(0);
@@ -1118,7 +1117,7 @@ public class SimpleDateFormat extends DateFormat {
         }
     }
 
-    private static ICUCache PARSED_PATTERN_CACHE = new SimpleCache();
+    private static ICUCache<String, Object[]> PARSED_PATTERN_CACHE = new SimpleCache<String, Object[]>();
     private transient Object[] patternItems;
 
     /*
@@ -1130,7 +1129,7 @@ public class SimpleDateFormat extends DateFormat {
             return patternItems;
         }
 
-        patternItems = (Object[])PARSED_PATTERN_CACHE.get(pattern);
+        patternItems = PARSED_PATTERN_CACHE.get(pattern);
         if (patternItems != null) {
             return patternItems;
         }
@@ -1141,7 +1140,7 @@ public class SimpleDateFormat extends DateFormat {
         char itemType = 0;  // 0 for string literal, otherwise date/time pattern character
         int itemLength = 1;
 
-        List items = new ArrayList();
+        List<Object> items = new ArrayList<Object>();
 
         for (int i = 0; i < pattern.length(); i++) {
             char ch = pattern.charAt(i);
@@ -1199,8 +1198,7 @@ public class SimpleDateFormat extends DateFormat {
             items.add(new PatternItem(itemType, itemLength));
         }
 
-        patternItems = new Object[items.size()];
-        items.toArray(patternItems);
+        patternItems = items.toArray(new Object[items.size()]);
 
         PARSED_PATTERN_CACHE.put(pattern, patternItems);
         
@@ -1432,8 +1430,9 @@ public class SimpleDateFormat extends DateFormat {
         return new Integer(offset);
     }
 
-    transient private WeakReference[] gmtfmtCache;
+    transient private WeakReference<MessageFormat>[] gmtfmtCache;
 
+    @SuppressWarnings("unchecked")
     private MessageFormat getGMTFormatter(int sign, int width) {
         MessageFormat fmt = null;
         if (gmtfmtCache == null) {
@@ -1450,7 +1449,7 @@ public class SimpleDateFormat extends DateFormat {
             sdf.setCalendar(gcal);
             sdf.applyPattern(formatData.getGmtHourFormat(sign, width));
             fmt.setFormat(0, sdf);
-            gmtfmtCache[cacheIdx] = new WeakReference(fmt);
+            gmtfmtCache[cacheIdx] = new WeakReference<MessageFormat>(fmt);
         }
         return fmt;
     }
@@ -2714,14 +2713,14 @@ public class SimpleDateFormat extends DateFormat {
         }
         StringBuffer toAppendTo = new StringBuffer();
         FieldPosition pos = new FieldPosition(0);
-        List attributes = new LinkedList();
+        List<FieldPosition> attributes = new ArrayList<FieldPosition>();
         format(cal, toAppendTo, pos, attributes);
 
         AttributedString as = new AttributedString(toAppendTo.toString());
         
         // add DateFormat field attributes to the AttributedString
         for (int i = 0; i < attributes.size(); i++) {
-            FieldPosition fp = (FieldPosition) attributes.get(i);
+            FieldPosition fp = attributes.get(i);
             Format.Field attribute = fp.getFieldAttribute();
             as.addAttribute(attribute, attribute, fp.getBeginIndex(), fp.getEndIndex());
         }
@@ -3058,7 +3057,7 @@ public class SimpleDateFormat extends DateFormat {
        ovrField = new Character(ch);
        if (overrideMap != null && overrideMap.containsKey(ovrField)) {
            String nsName = overrideMap.get(ovrField).toString();
-           NumberFormat nf = (NumberFormat)numberFormatters.get(nsName);
+           NumberFormat nf = numberFormatters.get(nsName);
            return nf;
        } else {
            return numberFormat;
@@ -3067,8 +3066,8 @@ public class SimpleDateFormat extends DateFormat {
 
     private void initNumberFormatters(ULocale loc) {
 
-       numberFormatters = new HashMap();
-       overrideMap = new HashMap();
+       numberFormatters = new HashMap<String, NumberFormat>();
+       overrideMap = new HashMap<Character, String>();
        processOverrideString(loc,override); 
 
     }

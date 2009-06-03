@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2008, International Business Machines Corporation and    *
+* Copyright (C) 2006-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -266,7 +266,7 @@ public final class CharsetProviderICU extends CharsetProvider{
     
     }
 
-    private static final void putCharsets(Map map){
+    private static final void putCharsets(Map<Charset, String> map){
         int num = UConverterAlias.countAvailable();
         for(int i=0;i<num;i++) {
             String name = UConverterAlias.getAvailableName(i);
@@ -286,27 +286,27 @@ public final class CharsetProviderICU extends CharsetProvider{
      * @return Iterator the charset name iterator
      * @stable ICU 3.6
      */
-    public final Iterator charsets(){
-        HashMap map = new HashMap();
+    public final Iterator<Charset> charsets(){
+        HashMap<Charset, String> map = new HashMap<Charset, String>();
         putCharsets(map);
         return map.keySet().iterator();
     }
     
     /**
      * Gets the canonical names of available converters 
-     * @return Object[] names as an object array
+     * @return array of available converter names
      * @internal ICU 3.6
      * @deprecated This API is ICU internal only.
      */
-     public static final Object[] getAvailableNames(){
-        HashMap map = new HashMap();
+     public static final String[] getAvailableNames(){
+        HashMap<Charset, String> map = new HashMap<Charset, String>();
         putCharsets(map);
-        return map.values().toArray();
+        return map.values().toArray(new String[0]);
     }
      
     /**
      * Return all names available
-     * @return String[] an arrya of all available names
+     * @return String[] an array of all available names
      * @internal ICU 3.6
      * @deprecated This API is ICU internal only.
      */

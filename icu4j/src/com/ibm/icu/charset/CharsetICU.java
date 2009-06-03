@@ -9,12 +9,11 @@
 
 package com.ibm.icu.charset;
 
-//import java.io.ByteArrayInputStream;
-//import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
-
 import java.lang.reflect.InvocationTargetException;
-import java.nio.charset.*;
+import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.HashMap;
 
 import com.ibm.icu.text.UnicodeSet;
@@ -106,7 +105,7 @@ public abstract class CharsetICU extends Charset{
         }
         return false;
     }
-    private static final HashMap algorithmicCharsets = new HashMap();
+    private static final HashMap<String, String> algorithmicCharsets = new HashMap<String, String>();
     static{
         algorithmicCharsets.put("LMBCS-1",               "com.ibm.icu.charset.CharsetLMBCS");
         algorithmicCharsets.put("BOCU-1",                "com.ibm.icu.charset.CharsetBOCU1" );
@@ -156,16 +155,15 @@ public abstract class CharsetICU extends Charset{
        }
        try{
            CharsetICU conv = null;
-           Class cs = Class.forName(className);
-           Class[] paramTypes = new Class[]{ String.class, String.class,  String[].class};
-           final Constructor c = cs.getConstructor(paramTypes);
+           Class<? extends CharsetICU> cs = Class.forName(className).asSubclass(CharsetICU.class);
+           Class<?>[] paramTypes = new Class<?>[]{ String.class, String.class,  String[].class};
+           final Constructor<? extends CharsetICU> c = cs.getConstructor(paramTypes);
            Object[] params = new Object[]{ icuCanonicalName, javaCanonicalName, aliases};
            
            // Run constructor
            try {
-               Object obj = c.newInstance(params);
-               if(obj!=null && obj instanceof CharsetICU){
-                   conv = (CharsetICU)obj;
+               conv = c.newInstance(params);
+               if (conv != null) {
                    return conv;
                }
            }catch (InvocationTargetException e) {
@@ -367,4 +365,3 @@ public abstract class CharsetICU extends Charset{
        }
 
 }
-

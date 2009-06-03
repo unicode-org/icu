@@ -133,7 +133,7 @@ final class NFRuleSet {
         // the descriptions of the rules (one rule per element).  The rules
         // are separated by semicolons (there's no escape facility: ALL
         // semicolons are rule delimiters)
-        Vector ruleDescriptions = new Vector();
+        Vector<String> ruleDescriptions = new Vector<String>();
 
         int oldP = 0;
         int p = description.indexOf(';');
@@ -153,7 +153,7 @@ final class NFRuleSet {
         // now go back through and build a vector of the rules themselves
         // (the number of elements in the description list isn't necessarily
         // the number of rules-- some descriptions may expend into two rules)
-        Vector tempRules = new Vector();
+        Vector<NFRule> tempRules = new Vector<NFRule>();
 
         // we keep track of the rule before the one we're currently working
         // on solely to support >>> substitutions
@@ -162,11 +162,11 @@ final class NFRuleSet {
             // makeRules (a factory method on NFRule) will return either
             // a single rule or an array of rules.  Either way, add them
             // to our rule vector
-            Object temp = NFRule.makeRules((String)ruleDescriptions.elementAt(i),
+            Object temp = NFRule.makeRules(ruleDescriptions.elementAt(i),
                             this, predecessor, owner);
 
             if (temp instanceof NFRule) {
-                tempRules.addElement(temp);
+                tempRules.addElement((NFRule)temp);
                 predecessor = (NFRule)temp;
             }
             else if (temp instanceof NFRule[]) {
@@ -192,7 +192,7 @@ final class NFRuleSet {
         // we _didn't_ delete aything from the vector)
         int i = 0;
         while (i < tempRules.size()) {
-            NFRule rule = (NFRule)tempRules.elementAt(i);
+            NFRule rule = tempRules.elementAt(i);
 
             switch ((int)rule.getBaseValue()) {
                 // if the rule's base value is 0, fill in a default

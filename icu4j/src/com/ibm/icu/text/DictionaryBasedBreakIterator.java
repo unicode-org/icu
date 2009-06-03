@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -371,6 +371,7 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
      * cachedBreakPositions so that we only have to do this work once
      * for each time we enter the range.
      */
+    @SuppressWarnings("unchecked")
     private void divideUpDictionaryRange(int startPos, int endPos) {
         CharacterIterator text = getText();
 
@@ -397,9 +398,9 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
         // continues in this way until we either successfully make it all the way
         // across the range, or exhaust all of our combinations of break
         // positions.)
-        Stack currentBreakPositions = new Stack();
-        Stack possibleBreakPositions = new Stack();
-        Vector wrongBreakPositions = new Vector();
+        Stack<Integer> currentBreakPositions = new Stack<Integer>();
+        Stack<Integer> possibleBreakPositions = new Stack<Integer>();
+        Vector<Integer> wrongBreakPositions = new Vector<Integer>();
 
         // the dictionary is implemented as a trie, which is treated as a state
         // machine.  -1 represents the end of a legal word.  Every word in the
@@ -415,7 +416,7 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
         // farthest as real break positions, and then start over from scratch with
         // the character where the error occurred.
         int farthestEndPoint = text.getIndex();
-        Stack bestBreakPositions = null;
+        Stack<Integer> bestBreakPositions = null;
 
         // initialize (we always exit the loop with a break statement)
         c = CICurrent32(text);
@@ -426,7 +427,7 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
             // on the last character of a legal word.  Push that position onto
             // the possible-break-positions stack
             if (dictionary.at(state, 0) == -1) {
-                possibleBreakPositions.push(new Integer(text.getIndex()));
+                possibleBreakPositions.push(Integer.valueOf(text.getIndex()));
             }
 
             // look up the new state to transition to in the dictionary
@@ -441,7 +442,7 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
             // and we've successfully traversed the whole range.  Drop out
             // of the loop.
             if (state == /*-1*/ 0xFFFF) {
-                currentBreakPositions.push(new Integer(text.getIndex()));
+                currentBreakPositions.push(Integer.valueOf(text.getIndex()));
                 break;
             }
 
@@ -455,7 +456,7 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
                 // case there's an error in the text
                 if (text.getIndex() > farthestEndPoint) {
                     farthestEndPoint = text.getIndex();
-                    bestBreakPositions = (Stack)(currentBreakPositions.clone());
+                    bestBreakPositions = (Stack<Integer>)(currentBreakPositions.clone());
                 }
 
                 // wrongBreakPositions is a list of all break positions we've tried starting
@@ -491,12 +492,12 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
                     }
                     else {
                         if ((currentBreakPositions.size() == 0
-                                || ((Integer)(currentBreakPositions.peek())).intValue() != text.getIndex())
+                                || currentBreakPositions.peek().intValue() != text.getIndex())
                                 && text.getIndex() != startPos) {
-                            currentBreakPositions.push(new Integer(text.getIndex()));
+                            currentBreakPositions.push(Integer.valueOf(text.getIndex()));
                         }
                         CINext32(text);
-                        currentBreakPositions.push(new Integer(text.getIndex()));
+                        currentBreakPositions.push(Integer.valueOf(text.getIndex()));
                     }
                 }
 
@@ -506,15 +507,15 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
                 // it.  Then back up to that position and start over from there (i.e.,
                 // treat that position as the beginning of a new word)
                 else {
-                    Integer temp = (Integer)possibleBreakPositions.pop();
-                    Object temp2 = null;
+                    Integer temp = possibleBreakPositions.pop();
+                    Integer temp2 = null;
                     while (!currentBreakPositions.isEmpty() && temp.intValue() <
-                           ((Integer)currentBreakPositions.peek()).intValue()) {
+                           currentBreakPositions.peek().intValue()) {
                         temp2 = currentBreakPositions.pop();
                         wrongBreakPositions.addElement(temp2);
                     }
                     currentBreakPositions.push(temp);
-                    text.setIndex(((Integer)currentBreakPositions.peek()).intValue());
+                    text.setIndex(currentBreakPositions.peek().intValue());
                 }
 
                 // re-sync "c" for the next go-round, and drop out of the loop if
@@ -542,7 +543,7 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
         if (!currentBreakPositions.isEmpty()) {
             currentBreakPositions.pop();
         }
-        currentBreakPositions.push(new Integer(endPos));
+        currentBreakPositions.push(Integer.valueOf(endPos));
 
         // create a regular array to hold the break positions and copy
         // the break positions from the stack to the array (in addition,
@@ -553,7 +554,7 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
         cachedBreakPositions[0] = startPos;
 
         for (int i = 0; i < currentBreakPositions.size(); i++) {
-            cachedBreakPositions[i + 1] = ((Integer)currentBreakPositions.elementAt(i)).intValue();
+            cachedBreakPositions[i + 1] = currentBreakPositions.elementAt(i).intValue();
         }
         positionInCache = 0;
     }

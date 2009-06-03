@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2006, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -9,7 +9,6 @@ package com.ibm.icu.impl;
 import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -31,7 +30,7 @@ import java.util.List;
 public abstract class ICUNotifier {
     private final Object notifyLock = new Object();
     private NotifyThread notifyThread;
-    private List listeners;
+    private List<EventListener> listeners;
 
     /**
      * Add a listener to be notified when notifyChanged is called.
@@ -48,12 +47,11 @@ public abstract class ICUNotifier {
         if (acceptsListener(l)) {
             synchronized (notifyLock) {
                 if (listeners == null) {
-                    listeners = new ArrayList(5);
+                    listeners = new ArrayList<EventListener>();
                 } else {
                     // identity equality check
-                    Iterator iter = listeners.iterator();
-                    while (iter.hasNext()) {
-                        if (iter.next() == l) {
+                    for (EventListener ll : listeners) {
+                        if (ll == l) {
                             return;
                         }
                     }
@@ -78,7 +76,7 @@ public abstract class ICUNotifier {
         synchronized (notifyLock) {
             if (listeners != null) {
                 // identity equality check
-                Iterator iter = listeners.iterator();
+                Iterator<EventListener> iter = listeners.iterator();
                 while (iter.hasNext()) {
                     if (iter.next() == l) {
                         iter.remove();
@@ -106,7 +104,7 @@ public abstract class ICUNotifier {
                         notifyThread.setDaemon(true);
                         notifyThread.start();
                     }
-                    notifyThread.queue(listeners.toArray());
+                    notifyThread.queue(listeners.toArray(new EventListener[listeners.size()]));
                 }
             }
         }
@@ -117,7 +115,7 @@ public abstract class ICUNotifier {
      */
     private static class NotifyThread extends Thread {
         private final ICUNotifier notifier;
-        private final List queue = new LinkedList();
+        private final List<EventListener[]> queue = new ArrayList<EventListener[]>();
 
         NotifyThread(ICUNotifier notifier) {
             this.notifier = notifier;
@@ -126,7 +124,7 @@ public abstract class ICUNotifier {
         /**
          * Queue the notification on the thread.
          */
-        public void queue(Object[] list) {
+        public void queue(EventListener[] list) {
             synchronized (this) {
                 queue.add(list);
                 notify();
@@ -138,18 +136,18 @@ public abstract class ICUNotifier {
          * listeners listed in the notification.
          */
         public void run() {
-            Object[] list;
+            EventListener[] list;
             while (true) {
                 try {
                     synchronized (this) {
                         while (queue.isEmpty()) {
                             wait();
                         }
-                        list = (Object[])queue.remove(0);
+                        list = queue.remove(0);
                     }
 
                     for (int i = 0; i < list.length; ++i) {
-                        notifier.notifyListener((EventListener)list[i]);
+                        notifier.notifyListener(list[i]);
                     }
                 }
                 catch (InterruptedException e) {

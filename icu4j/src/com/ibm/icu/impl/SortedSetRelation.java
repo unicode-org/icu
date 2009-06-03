@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2004, International Business Machines
+* Copyright (c) 2002-2009, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: M. Davis
@@ -67,7 +67,7 @@ public class SortedSetRelation {
      * @param b second set
      * @return whether the filter relationship is true or not.
      */    
-    public static boolean hasRelation(SortedSet a, int allow, SortedSet b) {
+    public static <T extends Object & Comparable<? super T>> boolean hasRelation(SortedSet<T> a, int allow, SortedSet<T> b) {
         if (allow < NONE || allow > ANY) {
             throw new IllegalArgumentException("Relation " + allow + " out of range");
         }
@@ -95,11 +95,11 @@ public class SortedSetRelation {
         }
         
         // pick up first strings, and start comparing
-        Iterator ait = a.iterator();
-        Iterator bit = b.iterator();
+        Iterator<? extends T> ait = a.iterator();
+        Iterator<? extends T> bit = b.iterator();
         
-        Comparable aa = (Comparable) ait.next();
-        Comparable bb = (Comparable) bit.next();
+        T aa = ait.next();
+        T bb = bit.next();
         
         while (true) {
             int comp = aa.compareTo(bb);
@@ -111,20 +111,20 @@ public class SortedSetRelation {
                 } else if (!bit.hasNext()) {
                     return anb;
                 }
-                aa = (Comparable) ait.next();
-                bb = (Comparable) bit.next();
+                aa = ait.next();
+                bb = bit.next();
             } else if (comp < 0) {
                 if (!anb) return false;
                 if (!ait.hasNext()) {
                     return bna;
                 }
-                aa = (Comparable) ait.next(); 
+                aa = ait.next(); 
             } else  {
                 if (!bna) return false;
                 if (!bit.hasNext()) {
                     return anb;
                 }
-                bb = (Comparable) bit.next();
+                bb = bit.next();
             }
         }
     }
@@ -137,9 +137,9 @@ public class SortedSetRelation {
      * @param b second set
      * @return the new set
      */    
-    public static SortedSet doOperation(SortedSet a, int relation, SortedSet b) {
+    public static <T extends Object & Comparable<? super T>> SortedSet<? extends T> doOperation(SortedSet<T> a, int relation, SortedSet<T> b) {
         // TODO: optimize this as above
-        TreeSet temp;
+        TreeSet<? extends T> temp;
         switch (relation) {
             case ADDALL:
                 a.addAll(b); 
@@ -159,13 +159,13 @@ public class SortedSetRelation {
             // the following is the only case not really supported by Java
             // although all could be optimized
             case COMPLEMENTALL:
-                temp = new TreeSet(b);
+                temp = new TreeSet<T>(b);
                 temp.removeAll(a);
                 a.removeAll(b);
                 a.addAll(temp);
                 return a;
             case B_REMOVEALL:
-                temp = new TreeSet(b);
+                temp = new TreeSet<T>(b);
                 temp.removeAll(a);
                 a.clear();
                 a.addAll(temp);

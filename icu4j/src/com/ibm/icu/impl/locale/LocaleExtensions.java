@@ -7,21 +7,16 @@
 package com.ibm.icu.impl.locale;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-
-import com.ibm.icu.impl.Utility;
 
 public final class LocaleExtensions {
     public static final LocaleExtensions EMPTY_EXTENSIONS = new LocaleExtensions("");
 
     private String _extensions;
-//    private TreeMap<Character, String> _extMap;
-    private TreeMap _extMap;
-//    private TreeMap<String, String> _kwdMap;
-    private TreeMap _kwdMap;
+    private TreeMap<Character, String> _extMap;
+    private TreeMap<String, String> _kwdMap;
 
     private static final String LOCALEEXTSEP = "-";
     private static final String LDMLSINGLETON = "u";
@@ -38,7 +33,6 @@ public final class LocaleExtensions {
             return EMPTY_EXTENSIONS;
         }
 
-//        extensions = AsciiUtil.toLowerString(extensions).replaceAll("_", LOCALEEXTSEP);
         extensions = AsciiUtil.toLowerString(extensions).replaceAll("_", LOCALEEXTSEP);
 
         if (extensions.length() < MINLEN) {
@@ -46,20 +40,15 @@ public final class LocaleExtensions {
             return new LocaleExtensions(extensions);
         }
 
-//        TreeMap<Character, String> extMap = null;
-        TreeMap extMap = null;
-//        TreeMap<String, String> kwdMap = null;
-        TreeMap kwdMap = null;
+        TreeMap<Character, String> extMap = null;
+        TreeMap<String, String> kwdMap = null;
         boolean bParseFailure = false;
 
         // parse the extension subtags
-//        String[] subtags = extensions.split(LOCALEEXTSEP);
-        String[] subtags = Utility.split(extensions, '-');
+        String[] subtags = extensions.split(LOCALEEXTSEP);
         String letter = null;
-//        extMap = new TreeMap<Character, String>();
-        extMap = new TreeMap();
-//        StringBuilder buf = new StringBuilder();
-        StringBuffer buf = new StringBuffer();
+        extMap = new TreeMap<Character, String>();
+        StringBuilder buf = new StringBuilder();
         boolean inLocaleKeywords = false;
         boolean inPrivateUse = false;
         String kwkey = null;
@@ -94,13 +83,11 @@ public final class LocaleExtensions {
                         bParseFailure = true;
                         break;
                     }
-//                    extMap.put(Character.valueOf(letter.charAt(0)), buf.toString().intern());
-                    extMap.put(new Character(letter.charAt(0)), buf.toString().intern());
+                    extMap.put(Character.valueOf(letter.charAt(0)), buf.toString().intern());
                 }
                 // preparation for next extension
                 if (subtags[i].equals(LDMLSINGLETON)) {
-//                    kwdMap = new TreeMap<String, String>();
-                    kwdMap = new TreeMap();
+                    kwdMap = new TreeMap<String, String>();
                     inLocaleKeywords = true;
                 } else if (subtags[i].equals(PRIVUSE)) {
                     inPrivateUse = true;
@@ -138,8 +125,7 @@ public final class LocaleExtensions {
                 // empty subtag at the end
                 bParseFailure = true;
             } else {
-//                extMap.put(Character.valueOf(letter.charAt(0)), buf.toString().intern());
-                extMap.put(new Character(letter.charAt(0)), buf.toString().intern());
+                extMap.put(Character.valueOf(letter.charAt(0)), buf.toString().intern());
             }
         }
 
@@ -160,8 +146,7 @@ public final class LocaleExtensions {
     // This method assumes extension map and locale keyword map
     // are all in canonicalized format.  This method is only used by
     // InternalLocaleBuilder.
-//    static LocaleExtensions getInstance(TreeMap<Character, String> extMap, TreeMap<String ,String> kwdMap) {
-    public static LocaleExtensions getInstance(TreeMap extMap, TreeMap kwdMap) {
+    public static LocaleExtensions getInstance(TreeMap<Character, String> extMap, TreeMap<String ,String> kwdMap) {
         if (extMap == null) {
             return EMPTY_EXTENSIONS;
         }
@@ -182,8 +167,7 @@ public final class LocaleExtensions {
         return _extensions.hashCode();
     }
 
-//    public Set<Character> getExtensionKeys() {
-    public Set getExtensionKeys() {
+    public Set<Character> getExtensionKeys() {
         if (_extMap != null) {
             return Collections.unmodifiableSet(_extMap.keySet());
         }
@@ -192,14 +176,12 @@ public final class LocaleExtensions {
 
     public String getExtensionValue(char key) {
         if (_extMap != null) {
-//            return _extMap.get(Character.valueOf(key));
-            return (String)_extMap.get(new Character(key));
+            return _extMap.get(Character.valueOf(key));
         }
         return null;
     }
 
-//    public Set<String> getLDMLKeywordKeys() {
-    public Set getLDMLKeywordKeys() {
+    public Set<String> getLDMLKeywordKeys() {
         if (_kwdMap != null) {
             return Collections.unmodifiableSet(_kwdMap.keySet());
         }
@@ -211,8 +193,7 @@ public final class LocaleExtensions {
             throw new NullPointerException("LDML key must not be null");
         }
         if (_kwdMap != null) {
-//            return _kwdMap.get(key);
-            return (String)_kwdMap.get(key);
+            return _kwdMap.get(key);
         }
         return null;
     }
@@ -225,26 +206,17 @@ public final class LocaleExtensions {
         return _extensions;
     }
 
-//    private static String extensionsToCanonicalString(TreeMap<Character, String> extMap) {
-    private static String extensionsToCanonicalString(TreeMap extMap) {
+    private static String extensionsToCanonicalString(TreeMap<Character, String> extMap) {
         if (extMap == null || extMap.size() == 0) {
             return "";
         }
-//        StringBuilder canonicalbuf = new StringBuilder();
-        StringBuffer canonicalbuf = new StringBuffer();
+        StringBuilder canonicalbuf = new StringBuilder();
         String privUseStr = null;
         if (extMap != null) {
-//          Set<Map.Entry<Character, String>> entries = extMap.entrySet();
-//          for (Map.Entry<Character, String> entry : entries) {
-//              Character key = entry.getKey();
-//              String value = entry.getValue();
-            Set entries = extMap.entrySet();
-            Iterator itr = entries.iterator();
-            while (itr.hasNext()) {
-                Map.Entry entry = (Map.Entry)itr.next();
-                Character key = (Character)entry.getKey();
-                String value = (String)entry.getValue();
-
+            Set<Map.Entry<Character, String>> entries = extMap.entrySet();
+            for (Map.Entry<Character, String> entry : entries) {
+                Character key = entry.getKey();
+                String value = entry.getValue();
                 if (key.charValue() == PRIVUSE.charAt(0)) {
                     privUseStr = value;
                     continue;
@@ -268,15 +240,9 @@ public final class LocaleExtensions {
         return canonicalbuf.toString().intern();
     }
 
-//    static void keywordsToString(TreeMap<String, String> map, StringBuilder buf) {
-    public static void keywordsToString(TreeMap map, StringBuffer buf) {
-//      Set<Map.Entry<String, String>> entries = map.entrySet();
-//      for (Map.Entry<String, String> entry : entries) {
-        Set entries = map.entrySet();
-        Iterator itr = entries.iterator();
-        while (itr.hasNext()) {
-            Map.Entry entry = (Map.Entry)itr.next();
-
+    public static void keywordsToString(TreeMap<String, String> map, StringBuilder buf) {
+        Set<Map.Entry<String, String>> entries = map.entrySet();
+        for (Map.Entry<String, String> entry : entries) {
             if (buf.length() > 0) {
                 buf.append(LOCALEEXTSEP);
             }

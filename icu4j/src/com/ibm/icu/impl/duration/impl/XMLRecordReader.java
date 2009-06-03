@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and   *
+* Copyright (C) 2007-2009, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -17,7 +17,7 @@ import com.ibm.icu.lang.UCharacter;
 public class XMLRecordReader implements RecordReader {
     private Reader r;
 
-    private List nameStack;
+    private List<String> nameStack;
 
     private boolean atTag;
 
@@ -25,7 +25,7 @@ public class XMLRecordReader implements RecordReader {
 
     public XMLRecordReader(Reader r) {
         this.r = r;
-        this.nameStack = new ArrayList();
+        this.nameStack = new ArrayList<String>();
 
         // skip XML prologue
         if (getTag().startsWith("?xml")) {
@@ -49,7 +49,7 @@ public class XMLRecordReader implements RecordReader {
 
     public boolean close() {
         int ix = nameStack.size() - 1;
-        String name = (String) nameStack.get(ix);
+        String name = nameStack.get(ix);
         if (getTag().equals("/" + name)) {
             nameStack.remove(ix);
             advance();
@@ -141,7 +141,7 @@ public class XMLRecordReader implements RecordReader {
 
     public String[] stringArray(String name) {
         if (match(name + "List")) {
-            List list = new ArrayList();
+            List<String> list = new ArrayList<String>();
             String s;
             while (null != (s = string(name))) {
                 if ("Null".equals(s)) {
@@ -158,13 +158,13 @@ public class XMLRecordReader implements RecordReader {
 
     public String[][] stringTable(String name) {
         if (match(name + "Table")) {
-            List list = new ArrayList();
+            List<String[]> list = new ArrayList<String[]>();
             String[] sa;
             while (null != (sa = stringArray(name))) {
                 list.add(sa);
             }
             if (match("/" + name + "Table")) {
-                return (String[][]) list.toArray(new String[list.size()][]);
+                return list.toArray(new String[list.size()][]);
             }
         }
         return null;

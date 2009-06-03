@@ -774,7 +774,7 @@ public abstract class NumberFormat extends UFormat {
          * @return the supported locale names.
          * @stable ICU 2.6
          */
-         public abstract Set getSupportedLocaleNames();
+         public abstract Set<String> getSupportedLocaleNames();
 
         /**
          * Returns a number format of the appropriate type.  If the locale
@@ -821,7 +821,7 @@ public abstract class NumberFormat extends UFormat {
      * @stable ICU 2.6
      */
     public static abstract class SimpleNumberFormatFactory extends NumberFormatFactory {
-        final Set localeNames;
+        final Set<String> localeNames;
         final boolean visible;
 
         /**
@@ -872,7 +872,7 @@ public abstract class NumberFormat extends UFormat {
          * {@inheritDoc}
          * @stable ICU 2.6
          */
-        public final Set getSupportedLocaleNames() {
+        public final Set<String> getSupportedLocaleNames() {
             return localeNames;
         }
     }
@@ -894,7 +894,7 @@ public abstract class NumberFormat extends UFormat {
         // two shim instances, but they'll share the same state so that's ok.
         if (shim == null) {
             try {
-                Class cls = Class.forName("com.ibm.icu.text.NumberFormatServiceShim");
+                Class<?> cls = Class.forName("com.ibm.icu.text.NumberFormatServiceShim");
                 shim = (NumberFormatShim)cls.newInstance();
             }
             catch (MissingResourceException e){

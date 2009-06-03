@@ -6,11 +6,6 @@
  */
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.util.Currency;
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -18,6 +13,11 @@ import java.text.ChoiceFormat;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.MissingResourceException;
+
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 
 /**
  * This class represents the set of symbols (such as the decimal separator, the
@@ -724,7 +724,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         this.ulocale = locale;
 
         /* try the cache first */
-        String[][] data = (String[][]) cachedLocaleData.get(locale);
+        String[][] data = cachedLocaleData.get(locale);
         String[] numberElements;
         if (data == null) {  /* cache miss */
             data = new String[1][];
@@ -1114,7 +1114,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * cache to hold the NumberElements of a Locale.
      */
-    private static final Hashtable cachedLocaleData = new Hashtable(3);
+    private static final Hashtable<ULocale, String[][]> cachedLocaleData = new Hashtable<ULocale, String[][]>(3);
     
     /**
      * 

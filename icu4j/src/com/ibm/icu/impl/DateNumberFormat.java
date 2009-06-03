@@ -32,7 +32,7 @@ public final class DateNumberFormat extends NumberFormat {
 
     private transient char[] decimalBuf = new char[20]; // 20 digits is good enough to store Long.MAX_VALUE
 
-    private static SimpleCache CACHE = new SimpleCache();
+    private static SimpleCache<ULocale, char[]> CACHE = new SimpleCache<ULocale, char[]>();
 
     private int maxIntDigits;
     private int minIntDigits;

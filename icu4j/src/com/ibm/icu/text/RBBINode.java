@@ -1,13 +1,13 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2007, International Business Machines Corporation and
+ * Copyright (c) 2001-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
 package com.ibm.icu.text;
 
-import java.util.List;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.ibm.icu.impl.Assert;
@@ -93,9 +93,9 @@ class RBBINode {
     boolean      fLookAheadEnd;        // For endMark nodes, set TRUE if
                                         //   marking the end of a look-ahead rule.
 
-    Set           fFirstPosSet;         // See Aho DFA table generation algorithm
-    Set           fLastPosSet;          // See Aho.       
-    Set           fFollowPos;           // See Aho.
+    Set<RBBINode> fFirstPosSet;         // See Aho DFA table generation algorithm
+    Set<RBBINode> fLastPosSet;          // See Aho.       
+    Set<RBBINode> fFollowPos;           // See Aho.
     
     int           fSerialNum;           //  Debugging aids.  Each node gets a unique serial number.
     static int    gLastSerial;
@@ -105,9 +105,9 @@ class RBBINode {
         fSerialNum = ++gLastSerial;
         fType = t;
 
-        fFirstPosSet = new HashSet();
-        fLastPosSet = new HashSet();
-        fFollowPos = new HashSet();
+        fFirstPosSet = new HashSet<RBBINode>();
+        fLastPosSet = new HashSet<RBBINode>();
+        fFollowPos = new HashSet<RBBINode>();
         if (t == opCat) {
             fPrecedence = precOpCat;
         } else if (t == opOr) {
@@ -131,9 +131,9 @@ class RBBINode {
         fLastPos = other.fLastPos;
         fNullable = other.fNullable;
         fVal = other.fVal;
-        fFirstPosSet = new HashSet(other.fFirstPosSet);
-        fLastPosSet = new HashSet(other.fLastPosSet);
-        fFollowPos = new HashSet(other.fFollowPos);
+        fFirstPosSet = new HashSet<RBBINode>(other.fFirstPosSet);
+        fLastPosSet = new HashSet<RBBINode>(other.fLastPosSet);
+        fFollowPos = new HashSet<RBBINode>(other.fFollowPos);
     }
 
     //-------------------------------------------------------------------------
@@ -249,7 +249,7 @@ class RBBINode {
     //                       at the specified root.
     //
     //-------------------------------------------------------------------------
-    void findNodes(List dest, int kind) {
+    void findNodes(List<RBBINode> dest, int kind) {
         if (fType == kind) {
             dest.add(this);
         }

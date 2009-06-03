@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -290,7 +291,7 @@ public  class ICUResourceBundle extends UResourceBundle {
      * @internal ICU 3.0
      */
     public static final String[] getKeywordValues(String baseName, String keyword) {
-        Set keywords = new HashSet();
+        Set<String> keywords = new HashSet<String>();
         ULocale locales[] = createULocaleList(baseName, ICU_DATA_CLASS_LOADER);
         int i;
 
@@ -299,11 +300,10 @@ public  class ICUResourceBundle extends UResourceBundle {
                 UResourceBundle b = UResourceBundle.getBundleInstance(baseName, locales[i]);
                 // downcast to ICUResourceBundle?
                 ICUResourceBundle irb = (ICUResourceBundle) (b.getObject(keyword));
-                Enumeration e = irb.getKeys();
-                Object s;
+                Enumeration<String> e = irb.getKeys();
                 while (e.hasMoreElements()) {
-                    s = e.nextElement();
-                    if ((s instanceof String) && !DEFAULT_TAG.equals(s)) {
+                    String s = e.nextElement();
+                    if (!DEFAULT_TAG.equals(s)) {
                         // don't add 'default' items
                         keywords.add(s);
                     }
@@ -362,7 +362,7 @@ public  class ICUResourceBundle extends UResourceBundle {
      *
      * @param bundlePrefix the prefix of the resource bundles to use.
      */
-    public static Set getAvailableLocaleNameSet(String bundlePrefix) {
+    public static Set<String> getAvailableLocaleNameSet(String bundlePrefix) {
         return getAvailEntry(bundlePrefix).getLocaleNameSet();
     }
 
@@ -370,7 +370,7 @@ public  class ICUResourceBundle extends UResourceBundle {
      * Return a set of all the locale names supported by a collection of
      * resource bundles.
      */
-    public static Set getFullLocaleNameSet() {
+    public static Set<String> getFullLocaleNameSet() {
         return getFullLocaleNameSet(ICU_BASE_NAME);
     }
 
@@ -380,7 +380,7 @@ public  class ICUResourceBundle extends UResourceBundle {
      *
      * @param bundlePrefix the prefix of the resource bundles to use.
      */
-    public static Set getFullLocaleNameSet(String bundlePrefix) {
+    public static Set<String> getFullLocaleNameSet(String bundlePrefix) {
         return getAvailEntry(bundlePrefix).getFullLocaleNameSet();
     }
 
@@ -388,7 +388,7 @@ public  class ICUResourceBundle extends UResourceBundle {
      * Return a set of the locale names supported by a collection of resource
      * bundles.
      */
-    public static Set getAvailableLocaleNameSet() {
+    public static Set<String> getAvailableLocaleNameSet() {
         return getAvailableLocaleNameSet(ICU_BASE_NAME);
     }
 
@@ -432,8 +432,8 @@ public  class ICUResourceBundle extends UResourceBundle {
      * @return the list of converted ULocales
      */
     public static final Locale[] getLocaleList(ULocale[] ulocales) {
-        ArrayList list = new ArrayList();
-        HashSet uniqueSet = new HashSet();
+        ArrayList<Locale> list = new ArrayList<Locale>(ulocales.length);
+        HashSet<Locale> uniqueSet = new HashSet<Locale>();
         for (int i = 0; i < ulocales.length; i++) {
             Locale loc = ulocales[i].toLocale();
             if (!uniqueSet.contains(loc)) {
@@ -441,7 +441,7 @@ public  class ICUResourceBundle extends UResourceBundle {
                 uniqueSet.add(loc);
             }
         }
-        return (Locale[]) list.toArray(new Locale[list.size()]);
+        return list.toArray(new Locale[list.size()]);
     }
 
     /**
@@ -465,7 +465,7 @@ public  class ICUResourceBundle extends UResourceBundle {
     private static final boolean DEBUG = ICUDebug.enabled("localedata");
 
     // Cache for getAvailableLocales
-    private static SoftReference GET_AVAILABLE_CACHE;
+    private static SoftReference<Map<String, AvailEntry>> GET_AVAILABLE_CACHE;
     private static final ULocale[] createULocaleList(String baseName,
             ClassLoader root) {
         // the canned list is a subset of all the available .res files, the idea
@@ -509,12 +509,12 @@ public  class ICUResourceBundle extends UResourceBundle {
         return locales;
     }
 
-    private static final ArrayList createFullLocaleNameArray(
+    private static final List<String> createFullLocaleNameArray(
             final String baseName, final ClassLoader root) {
 
-        ArrayList list = (ArrayList) java.security.AccessController
-            .doPrivileged(new java.security.PrivilegedAction() {
-                public Object run() {
+        List<String> list = java.security.AccessController
+            .doPrivileged(new java.security.PrivilegedAction<List<String>>() {
+                public List<String> run() {
                     // WebSphere class loader will return null for a raw
                     // directory name without trailing slash
                     String bn = baseName.endsWith("/")
@@ -525,7 +525,7 @@ public  class ICUResourceBundle extends UResourceBundle {
                     try {
                         InputStream s = root.getResourceAsStream(bn + ICU_RESOURCE_INDEX + ".txt");
                         if (s != null) {
-                            ArrayList lst = new ArrayList();
+                            List<String> lst = new ArrayList<String>();
                             BufferedReader br = new BufferedReader(new InputStreamReader(s, "ASCII"));
                             String line;
                             while ((line = br.readLine()) != null) {
@@ -542,7 +542,7 @@ public  class ICUResourceBundle extends UResourceBundle {
                     URL url = root.getResource(bn);
                     URLHandler handler = URLHandler.get(url);
                     if (handler != null) {
-                        final ArrayList lst = new ArrayList();
+                        final List<String> lst = new ArrayList<String>();
                         URLVisitor v = new URLVisitor() {
                             public void visit(String s) {
                                 if (s.endsWith(".res") && !"res_index.res".equals(s)) {
@@ -561,21 +561,21 @@ public  class ICUResourceBundle extends UResourceBundle {
         return list;
     }
 
-    private static Set createFullLocaleNameSet(String baseName) {
-        ArrayList list = createFullLocaleNameArray(baseName,ICU_DATA_CLASS_LOADER);
-        HashSet set = new HashSet();
-        if(list==null){
+    private static Set<String> createFullLocaleNameSet(String baseName) {
+        List<String> list = createFullLocaleNameArray(baseName,ICU_DATA_CLASS_LOADER);
+        HashSet<String> set = new HashSet<String>();
+        if(list == null){
             throw new MissingResourceException("Could not find "+  ICU_RESOURCE_INDEX, "", "");
         }
         set.addAll(list);
         return Collections.unmodifiableSet(set);
     }
 
-    private static Set createLocaleNameSet(String baseName) {
+    private static Set<String> createLocaleNameSet(String baseName) {
         try {
             String[] locales = createLocaleNameArray(baseName, ICU_DATA_CLASS_LOADER);
 
-            HashSet set = new HashSet();
+            HashSet<String> set = new HashSet<String>();
             set.addAll(Arrays.asList(locales));
             return Collections.unmodifiableSet(set);
         } catch (MissingResourceException e) {
@@ -584,7 +584,7 @@ public  class ICUResourceBundle extends UResourceBundle {
                 Thread.dumpStack();
             }
         }
-        return Collections.EMPTY_SET;
+        return Collections.emptySet();
     }
 
     /**
@@ -595,8 +595,8 @@ public  class ICUResourceBundle extends UResourceBundle {
         private String prefix;
         private ULocale[] ulocales;
         private Locale[] locales;
-        private Set nameSet;
-        private Set fullNameSet;
+        private Set<String> nameSet;
+        private Set<String> fullNameSet;
 
         AvailEntry(String prefix) {
             this.prefix = prefix;
@@ -614,13 +614,13 @@ public  class ICUResourceBundle extends UResourceBundle {
             }
             return locales;
         }
-        Set getLocaleNameSet() {
+        Set<String> getLocaleNameSet() {
             if (nameSet == null) {
                 nameSet = createLocaleNameSet(prefix);
             }
             return nameSet;
         }
-        Set getFullLocaleNameSet() {
+        Set<String> getFullLocaleNameSet() {
             if (fullNameSet == null) {
                 fullNameSet = createFullLocaleNameSet(prefix);
             }
@@ -635,20 +635,20 @@ public  class ICUResourceBundle extends UResourceBundle {
      */
     private static AvailEntry getAvailEntry(String key) {
         AvailEntry ae = null;
-        Map lcache = null;
+        Map<String, AvailEntry> lcache = null;
         if (GET_AVAILABLE_CACHE != null) {
-            lcache = (Map) GET_AVAILABLE_CACHE.get();
+            lcache = GET_AVAILABLE_CACHE.get();
             if (lcache != null) {
-                ae = (AvailEntry) lcache.get(key);
+                ae = lcache.get(key);
             }
         }
 
         if (ae == null) {
             ae = new AvailEntry(key);
             if (lcache == null) {
-                lcache = new HashMap();
+                lcache = new HashMap<String, AvailEntry>();
                 lcache.put(key, ae);
-                GET_AVAILABLE_CACHE = new SoftReference(lcache);
+                GET_AVAILABLE_CACHE = new SoftReference<Map<String, AvailEntry>>(lcache);
             } else {
                 lcache.put(key, ae);
             }
@@ -786,7 +786,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         }
         return b;
     }
-    UResourceBundle get(String aKey, HashMap table, UResourceBundle requested) {
+    UResourceBundle get(String aKey, HashMap<String, String> table, UResourceBundle requested) {
         ICUResourceBundle obj = (ICUResourceBundle)handleGet(aKey, table, requested);
         if (obj == null) {
             obj = (ICUResourceBundle)getParent();
@@ -927,7 +927,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         return (offset << 1); // * 2
     }
     protected final ICUResourceBundle createBundleObject(String _key,
-            long _resource, String _resPath, HashMap table,
+            long _resource, String _resPath, HashMap<String, String> table,
             UResourceBundle requested, ICUResourceBundle bundle, boolean[] isAlias) {
         if (isAlias != null) {
             isAlias[0] = false;
@@ -1081,14 +1081,14 @@ public  class ICUResourceBundle extends UResourceBundle {
         return -1;
     }
     private ICUResourceBundle findResource(String _key, long _resource,
-                                            HashMap table,
+                                            HashMap<String, String> table,
                                             UResourceBundle requested) {
         ClassLoader loaderToUse = loader;
         String locale = null, keyPath = null;
         String bundleName;
         String rpath = getStringValue(_resource);
         if (table == null) {
-            table = new HashMap();
+            table = new HashMap<String, String>();
         }
         if (table.get(rpath) != null) {
             throw new IllegalArgumentException(
@@ -1172,17 +1172,17 @@ public  class ICUResourceBundle extends UResourceBundle {
 
     // Resource bundle lookup cache, which may be used by subclasses
     // which have nested resources
-    protected ICUCache lookup;
+    protected ICUCache<Object, UResourceBundle> lookup;
     private static final int MAX_INITIAL_LOOKUP_SIZE = 64;
 
     protected void createLookupCache() {
-        lookup = new SimpleCache(ICUCache.WEAK, Math.max(size*2, MAX_INITIAL_LOOKUP_SIZE));
+        lookup = new SimpleCache<Object, UResourceBundle>(ICUCache.WEAK, Math.max(size*2, MAX_INITIAL_LOOKUP_SIZE));
     }
 
-    protected UResourceBundle handleGet(String resKey, HashMap table, UResourceBundle requested) {
+    protected UResourceBundle handleGet(String resKey, HashMap<String, String> table, UResourceBundle requested) {
         UResourceBundle res = null;
         if (lookup != null) {
-            res = (UResourceBundle)lookup.get(resKey);
+            res = lookup.get(resKey);
         }
         if (res == null) {
             int[] index = new int[1];
@@ -1197,7 +1197,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         return res;
     }
 
-    protected UResourceBundle handleGet(int index, HashMap table, UResourceBundle requested) {
+    protected UResourceBundle handleGet(int index, HashMap<String, String> table, UResourceBundle requested) {
         UResourceBundle res = null;
         Integer indexKey = null;
         if (lookup != null) {
@@ -1217,13 +1217,13 @@ public  class ICUResourceBundle extends UResourceBundle {
     }
 
     // Subclass which supports key based resource access to implement this method
-    protected UResourceBundle handleGetImpl(String resKey, HashMap table, UResourceBundle requested,
+    protected UResourceBundle handleGetImpl(String resKey, HashMap<String, String> table, UResourceBundle requested,
             int[] index, boolean[] isAlias) {
         return null;
     }
 
     // Subclass which supports index based resource access to implement this method
-    protected UResourceBundle handleGetImpl(int index, HashMap table, UResourceBundle requested,
+    protected UResourceBundle handleGetImpl(int index, HashMap<String, String> table, UResourceBundle requested,
             boolean[] isAlias) {
         return null;
     }
@@ -1431,7 +1431,7 @@ public  class ICUResourceBundle extends UResourceBundle {
      * @deprecated This API is ICU internal only and a workaround see ticket #6514.
      * @author Brian Rower
      */
-    public Enumeration getKeysSafe()
+    public Enumeration<String> getKeysSafe()
     {
         //TODO this is part of a workaround for ticket #6514
         //the safeness only applies to tables, so use the other method if it's not a table
@@ -1439,7 +1439,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         {
             return getKeys();
         }
-        Vector v = new Vector();
+        Vector<String> v = new Vector<String>();
         int index;
         for(index = 0; index < size; index++)
         {

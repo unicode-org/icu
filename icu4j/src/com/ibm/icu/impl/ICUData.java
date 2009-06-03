@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -28,8 +28,8 @@ public final class ICUData {
     public static boolean exists(final String resourceName) {
         URL i = null;
         if (System.getSecurityManager() != null) {
-            i = (URL)AccessController.doPrivileged(new PrivilegedAction() {
-                    public Object run() {
+            i = AccessController.doPrivileged(new PrivilegedAction<URL>() {
+                    public URL run() {
                         return ICUData.class.getResource(resourceName);
                     }
                 });
@@ -39,12 +39,12 @@ public final class ICUData {
         return i != null;
     }
         
-    private static InputStream getStream(final Class root, final String resourceName, boolean required) {
+    private static InputStream getStream(final Class<?> root, final String resourceName, boolean required) {
         InputStream i = null;
         
         if (System.getSecurityManager() != null) {
-            i = (InputStream)AccessController.doPrivileged(new PrivilegedAction() {
-                    public Object run() {
+            i = AccessController.doPrivileged(new PrivilegedAction<InputStream>() {
+                    public InputStream run() {
                         return root.getResourceAsStream(resourceName);
                     }
                 });
@@ -61,8 +61,8 @@ public final class ICUData {
     private static InputStream getStream(final ClassLoader loader, final String resourceName, boolean required) {
         InputStream i = null;
         if (System.getSecurityManager() != null) {
-            i = (InputStream)AccessController.doPrivileged(new PrivilegedAction() {
-                    public Object run() {
+            i = AccessController.doPrivileged(new PrivilegedAction<InputStream>() {
+                    public InputStream run() {
                         return loader.getResourceAsStream(resourceName);
                     }
                 });
@@ -100,15 +100,14 @@ public final class ICUData {
     /*
      * Convenience override that calls getStream(root, resourceName, false);
      */
-    public static InputStream getStream(Class root, String resourceName) {
+    public static InputStream getStream(Class<?> root, String resourceName) {
         return getStream(root, resourceName, false);
     }
     
     /*
      * Convenience method that calls getStream(root, resourceName, true).
      */
-    public static InputStream getRequiredStream(Class root, String resourceName) {
+    public static InputStream getRequiredStream(Class<?> root, String resourceName) {
         return getStream(root, resourceName, true);
     }
 }
-

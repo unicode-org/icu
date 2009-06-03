@@ -7,12 +7,9 @@
 package com.ibm.icu.impl.locale;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-
-import com.ibm.icu.impl.Utility;
 
 public final class InternalLocaleBuilder {
 
@@ -25,10 +22,8 @@ public final class InternalLocaleBuilder {
 
     private FieldHandler _handler = FieldHandler.DEFAULT;
 
-//    private HashMap<Character, String> _extMap;
-    private HashMap _extMap;
-//    private HashMap<String, String> _kwdMap;
-    private HashMap _kwdMap;
+    private HashMap<Character, String> _extMap;
+    private HashMap<String, String> _kwdMap;
 
     private static final char LDMLSINGLETON = 'u';
 
@@ -111,8 +106,7 @@ public final class InternalLocaleBuilder {
                 throw new LocaleSyntaxException("Ill-formed LDML extension value: " + type);
             }
             if (_kwdMap == null) {
-//                _kwdMap = new HashMap<String, String>(DEFAULTMAPCAPACITY);
-                _kwdMap = new HashMap(DEFAULTMAPCAPACITY);
+                _kwdMap = new HashMap<String, String>(DEFAULTMAPCAPACITY);
             }
             _kwdMap.put(kwdkey, kwdtype);
         }
@@ -135,8 +129,7 @@ public final class InternalLocaleBuilder {
                 _kwdMap.clear();
             }
             // parse locale keyword extension subtags
-//            String[] kwdtags = (value.replaceAll(LOCALESEP, LANGTAGSEP)).split(LANGTAGSEP);
-            String[] kwdtags = Utility.split(value.replaceAll(LOCALESEP, LANGTAGSEP), '-');
+            String[] kwdtags = (value.replaceAll(LOCALESEP, LANGTAGSEP)).split(LANGTAGSEP);
             if ((kwdtags.length % 2) != 0) {
                 // number of keyword subtags must be even number
                 throw new LocaleSyntaxException("Ill-formed LDML extension key/value pairs: " + value);
@@ -150,8 +143,7 @@ public final class InternalLocaleBuilder {
                     throw new LocaleSyntaxException("Ill-formed LDML extension key/value pairs: " + value);
                 }
                 if (_kwdMap == null) {
-//                    _kwdMap = new HashMap<String, String>(kwdtags.length / 2);
-                    _kwdMap = new HashMap(kwdtags.length / 2);
+                    _kwdMap = new HashMap<String, String>(kwdtags.length / 2);
                 }
                 _kwdMap.put(kwdkey, kwdtype);
             }
@@ -159,22 +151,18 @@ public final class InternalLocaleBuilder {
             // other extensions including privateuse
             if (value.length() == 0) {
                 if (_extMap != null) {
-//                    _extMap.remove(Character.valueOf(singleton));
-                    _extMap.remove(new Character(singleton));
+                    _extMap.remove(Character.valueOf(singleton));
                 }
             } else {
-//                FieldType ftype = (singleton == PRIVATEUSEKEY) ? FieldType.PRIVATEUSE : FieldType.EXTENSION;
-                int ftype = (singleton == PRIVATEUSEKEY) ? FieldType.PRIVATEUSE : FieldType.EXTENSION;
+                FieldType ftype = (singleton == PRIVATEUSEKEY) ? FieldType.PRIVATEUSE : FieldType.EXTENSION;
                 String extval = _handler.process(ftype, value);
                 if (extval == null) {
                     throw new LocaleSyntaxException("Ill-formed LDML extension value: " + value);
                 }
                 if (_extMap == null) {
-//                    _extMap = new HashMap<Character, String>(DEFAULTMAPCAPACITY);
-                    _extMap = new HashMap(DEFAULTMAPCAPACITY);
+                    _extMap = new HashMap<Character, String>(DEFAULTMAPCAPACITY);
                 }
-//                _extMap.put(Character.valueOf(singleton), extval);
-                _extMap.put(new Character(singleton), extval);
+                _extMap.put(Character.valueOf(singleton), extval);
             }
         }
         return this;
@@ -204,30 +192,17 @@ public final class InternalLocaleBuilder {
     }
 
     public LocaleExtensions getLocaleExtensions() {
-//        TreeMap<Character, String> extMap = null;
-        TreeMap extMap = null;
-//        TreeMap<String, String> kwdMap = null;
-        TreeMap kwdMap = null;
+        TreeMap<Character, String> extMap = null;
+        TreeMap<String, String> kwdMap = null;
 
         // process keywords
         if (_kwdMap != null && _kwdMap.size() > 0) {
-//            Set<Map.Entry<String, String>> kwds = _kwdMap.entrySet();
-//            for (Map.Entry<String, String> kwd : kwds) {
-//                String key = kwd.getKey();
-//                String type = kwd.getValue();
-//                if (kwdMap == null) {
-//                    kwdMap = new TreeMap<String, String>();
-//                }
-//                kwdMap.put(key.intern(), type.intern());
-//            }
-            Set kwds = _kwdMap.entrySet();
-            Iterator itr = kwds.iterator();
-            while (itr.hasNext()) {
-                Map.Entry kwd = (Map.Entry)itr.next();
-                String key = (String)kwd.getKey();
-                String type = (String)kwd.getValue();
+            Set<Map.Entry<String, String>> kwds = _kwdMap.entrySet();
+            for (Map.Entry<String, String> kwd : kwds) {
+                String key = kwd.getKey();
+                String type = kwd.getValue();
                 if (kwdMap == null) {
-                    kwdMap = new TreeMap();
+                    kwdMap = new TreeMap<String, String>();
                 }
                 kwdMap.put(key.intern(), type.intern());
             }
@@ -235,23 +210,12 @@ public final class InternalLocaleBuilder {
 
         // process extensions and privateuse
         if (_extMap != null) {
-//            Set<Map.Entry<Character, String>> exts = _extMap.entrySet();
-//            for (Map.Entry<Character, String> ext : exts) {
-//                Character key = ext.getKey();
-//                String value = ext.getValue();
-//                if (extMap == null) {
-//                    extMap = new TreeMap<Character, String>();
-//                }
-//                extMap.put(key, value.intern());
-//            }
-            Set exts = _extMap.entrySet();
-            Iterator itr = exts.iterator();
-            while (itr.hasNext()) {
-                Map.Entry ext = (Map.Entry)itr.next();
-                Character key = (Character)ext.getKey();
-                String value = (String)ext.getValue();
+            Set<Map.Entry<Character, String>> exts = _extMap.entrySet();
+            for (Map.Entry<Character, String> ext : exts) {
+                Character key = ext.getKey();
+                String value = ext.getValue();
                 if (extMap == null) {
-                    extMap = new TreeMap();
+                    extMap = new TreeMap<Character, String>();
                 }
                 extMap.put(key, value.intern());
             }
@@ -259,40 +223,26 @@ public final class InternalLocaleBuilder {
 
         // set canonical locale keyword extension string to the extension map
         if (kwdMap != null) {
-//            StringBuilder buf = new StringBuilder();
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             LocaleExtensions.keywordsToString(kwdMap, buf);
             if (extMap == null) {
-//                extMap = new TreeMap<Character, String>();
-                extMap = new TreeMap();
+                extMap = new TreeMap<Character, String>();
             }
-//            extMap.put(Character.valueOf(LDMLSINGLETON), buf.toString().intern());
-            extMap.put(new Character(LDMLSINGLETON), buf.toString().intern());
+            extMap.put(Character.valueOf(LDMLSINGLETON), buf.toString().intern());
         }
 
         return LocaleExtensions.getInstance(extMap, kwdMap);
     }
 
-//    protected enum FieldType {
-//        LANGUAGE,
-//        SCRIPT,
-//        REGION,
-//        VARIANT,
-//        LDMLKEY,
-//        LDMLTYPE,
-//        EXTENSION,
-//        PRIVATEUSE
-//    }
-
-    private static class FieldType {
-        public static final int LANGUAGE = 0;
-        public static final int SCRIPT = 1;
-        public static final int REGION = 2;
-        public static final int VARIANT = 3;
-        public static final int LDMLKEY = 4;
-        public static final int LDMLTYPE = 5;
-        public static final int EXTENSION = 6;
-        public static final int PRIVATEUSE = 7;
+    protected enum FieldType {
+        LANGUAGE,
+        SCRIPT,
+        REGION,
+        VARIANT,
+        LDMLKEY,
+        LDMLTYPE,
+        EXTENSION,
+        PRIVATEUSE
     }
 
     public static class FieldHandler {
@@ -301,8 +251,7 @@ public final class InternalLocaleBuilder {
         protected FieldHandler() {
         }
 
-//        public String process(FieldType type, String value) {
-        public String process(int type, String value) {
+        public String process(FieldType type, String value) {
             value = map(type, value);
             if (value.length() > 0 && !validate(type, value)) {
                 return null;
@@ -310,16 +259,14 @@ public final class InternalLocaleBuilder {
             return value;
         }
 
-//        protected String map(FieldType type, String value) {
-        protected String map(int type, String value) {
+        protected String map(FieldType type, String value) {
             switch (type) {
-            case FieldType.LANGUAGE:
+            case LANGUAGE:
                 value = AsciiUtil.toLowerString(value);
                 break;
-            case FieldType.SCRIPT:
+            case SCRIPT:
                 if (value.length() > 0) {
-//                    StringBuilder buf = new StringBuilder();
-                    StringBuffer buf = new StringBuffer();
+                    StringBuilder buf = new StringBuilder();
                     buf.append(AsciiUtil.toUpper(value.charAt(0)));
                     for (int i = 1; i < value.length(); i++) {
                         buf.append(AsciiUtil.toLower(value.charAt(i)));
@@ -327,77 +274,65 @@ public final class InternalLocaleBuilder {
                     value = buf.toString();
                 }
                 break;
-            case FieldType.REGION:
+            case REGION:
                 value = AsciiUtil.toUpperString(value);
                 break;
-            case FieldType.VARIANT:
+            case VARIANT:
                 // Java variant is case sensitive - so no case mapping here
-//                value = value.replaceAll(LANGTAGSEP, LOCALESEP);
                 value = value.replaceAll(LANGTAGSEP, LOCALESEP);
                 break;
-            case FieldType.LDMLKEY:
-            case FieldType.LDMLTYPE:
-            case FieldType.EXTENSION:
-            case FieldType.PRIVATEUSE:
-//                value = AsciiUtil.toLowerString(value).replaceAll(LOCALESEP, LANGTAGSEP);
+            case LDMLKEY:
+            case LDMLTYPE:
+            case EXTENSION:
+            case PRIVATEUSE:
                 value = AsciiUtil.toLowerString(value).replaceAll(LOCALESEP, LANGTAGSEP);
                 break;
             }
             return value;
         }
 
-//        protected boolean validate(FieldType type, String value) {
-        protected boolean validate(int type, String value) {
+        protected boolean validate(FieldType type, String value) {
             boolean isValid = false;
             String[] subtags;
 
             switch (type) {
-            case FieldType.LANGUAGE:
+            case LANGUAGE:
                 isValid = LanguageTag.isLanguageSubtag(value);
                 break;
-            case FieldType.SCRIPT:
+            case SCRIPT:
                 isValid = LanguageTag.isScriptSubtag(value);
                 break;
-            case FieldType.REGION:
+            case REGION:
                 isValid = LanguageTag.isRegionSubtag(value);
                 break;
-            case FieldType.VARIANT:
+            case VARIANT:
                 // variant field could have multiple subtags
-//                subtags = value.split(LOCALESEP);
-                subtags = Utility.split(value, '_');
-//                for (String subtag : subtags) {
-                for (int i = 0; i < subtags.length; i++) {
-                    String subtag = subtags[i];
+                subtags = value.split(LOCALESEP);
+                for (String subtag : subtags) {
                     isValid = LanguageTag.isVariantSubtag(subtag);
                     if (!isValid) {
                         break;
                     }
                 }
                 break;
-            case FieldType.LDMLKEY:
+            case LDMLKEY:
                 isValid = LocaleExtensions.isValidLDMLKey(value);
                 break;
-            case FieldType.LDMLTYPE:
+            case LDMLTYPE:
                 isValid = LocaleExtensions.isValidLDMLType(value);
                 break;
-            case FieldType.EXTENSION:
-//                subtags = value.split(LANGTAGSEP);
-                subtags = Utility.split(value, '-');
-//              for (String subtag : subtags) {
-                for (int i = 0; i < subtags.length; i++) {
-                    String subtag = subtags[i];
+            case EXTENSION:
+                subtags = value.split(LANGTAGSEP);
+                for (String subtag : subtags) {
                     isValid = LanguageTag.isExtensionSubtag(subtag);
                     if (!isValid) {
                         break;
                     }
                 }
                 break;
-            case FieldType.PRIVATEUSE:
-//                subtags = value.split(LANGTAGSEP);
-                subtags = Utility.split(value, '-');
-//              for (String subtag : subtags) {
-                for (int i = 0; i < subtags.length; i++) {
-                    String subtag = subtags[i];
+            case PRIVATEUSE:
+                subtags = value.split(LANGTAGSEP);
+                for (String subtag : subtags) {
                     isValid = LanguageTag.isPrivateuseValueSubtag(subtag);
                     if (!isValid) {
                         break;
