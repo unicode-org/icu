@@ -23,7 +23,7 @@ import com.ibm.icu.impl.Utility;
  * @author syn wee
  * @stable ICU 2.8
  */
-public class ByteArrayWrapper implements Comparable
+public class ByteArrayWrapper implements Comparable<ByteArrayWrapper>
 {
     // public data member ------------------------------------------------
     
@@ -247,16 +247,15 @@ public class ByteArrayWrapper implements Comparable
      * @throws ClassCastException if the other object is not a ByteArrayWrapper
      * @stable ICU 3.2
      */
-    public int compareTo(Object other) {
+    public int compareTo(ByteArrayWrapper other) {
         if (this == other) return 0;
-        ByteArrayWrapper that = (ByteArrayWrapper) other;
-        int minSize = size < that.size ? size : that.size;
+        int minSize = size < other.size ? size : other.size;
         for (int i = 0; i < minSize; ++i) {
-            if (bytes[i] != that.bytes[i]) {
-                return (bytes[i] & 0xFF) - (that.bytes[i] & 0xFF);
+            if (bytes[i] != other.bytes[i]) {
+                return (bytes[i] & 0xFF) - (other.bytes[i] & 0xFF);
             }
         }
-        return size - that.size;
+        return size - other.size;
     }
     
     // private methods -----------------------------------------------------

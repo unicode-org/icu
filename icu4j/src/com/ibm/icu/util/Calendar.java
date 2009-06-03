@@ -10,9 +10,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.text.StringCharacterIterator;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
-import java.util.LinkedList;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Set;
@@ -633,7 +633,7 @@ import com.ibm.icu.text.SimpleDateFormat;
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @stable ICU 2.0
  */
-public abstract class Calendar implements Serializable, Cloneable, Comparable {
+public abstract class Calendar implements Serializable, Cloneable, Comparable<Calendar> {
 
     // Data flow in Calendar
     // ---------------------
@@ -1386,7 +1386,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
      * Cache to hold the firstDayOfWeek and minimalDaysInFirstWeek
      * of a Locale.
      */
-    private static Hashtable cachedLocaleData = new Hashtable(3);
+    private static Hashtable<ULocale, WeekData> cachedLocaleData = new Hashtable<ULocale, WeekData>(3);
 
     /**
      * Value of the time stamp <code>stamp[]</code> indicating that
@@ -1768,7 +1768,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
             return true;
         }
 
-        public abstract Set getSupportedLocaleNames();
+        public abstract Set<String> getSupportedLocaleNames();
 
         public Calendar createCalendar(ULocale loc) {
             return null;
@@ -1791,7 +1791,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
     private static CalendarShim getShim() {
         if (shim == null) {
             try {
-                Class cls = Class.forName("com.ibm.icu.util.CalendarServiceShim");
+                Class<?> cls = Class.forName("com.ibm.icu.util.CalendarServiceShim");
                 shim = (CalendarShim)cls.newInstance();
             }
             catch (MissingResourceException e) {
@@ -1968,7 +1968,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
         }
 
         // Read preferred calendar values from supplementalData calendarPreferences
-        LinkedList values = new LinkedList();
+        ArrayList<String> values = new ArrayList<String>();
 
         UResourceBundle rb = UResourceBundle.getBundleInstance(
                                         ICUResourceBundle.ICU_BASE_NAME,
@@ -1999,7 +1999,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
                 values.add(calTypes[i]);
             }
         }
-        return (String[])values.toArray(new String[values.size()]);
+        return values.toArray(new String[values.size()]);
     }
 
     /**
@@ -3148,15 +3148,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
         return v < 0 ? -1 : (v > 0 ? 1 : 0);
     }
 
-    /**
-     * Implement comparable API as a convenience override of
-     * {@link #compareTo(Calendar)}.
-     * @stable ICU 3.4
-     */
-    public int compareTo(Object that) {
-        return compareTo((Calendar)that);
-    }
-
     //-------------------------------------------------------------------------
     // Interface for creating custon DateFormats for different types of Calendars
     //-------------------------------------------------------------------------
@@ -3252,7 +3243,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
     }
 
     // date format pattern cache
-    private static final ICUCache PATTERN_CACHE = new SimpleCache();
+    private static final ICUCache<String, PatternData> PATTERN_CACHE = new SimpleCache<String, PatternData>();
     // final fallback patterns
     private static final String[] DEFAULT_PATTERNS = {
         "HH:mm:ss z",
@@ -3323,7 +3314,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
         private static PatternData make(Calendar cal, ULocale loc) {
             // First, try to get a pattern from PATTERN_CACHE
             String key = loc.toString() + cal.getType();
-            PatternData patternData = (PatternData) PATTERN_CACHE.get(key);
+            PatternData patternData = PATTERN_CACHE.get(key);
             if (patternData == null) {
                 // Cache missed.  Get one from bundle
                 try {
@@ -4277,7 +4268,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable {
     private void setWeekData(ULocale locale)
     {
         /* try to get the Locale data from the cache */
-        WeekData data = (WeekData) cachedLocaleData.get(locale);
+        WeekData data = cachedLocaleData.get(locale);
         
         if (data == null) {  /* cache miss */
 

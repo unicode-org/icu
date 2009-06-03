@@ -205,7 +205,8 @@ public final class StringPrep {
         "rfc4518ci",    /* RFC4518_LDAP_CI */
     };
 
-    private static final WeakReference[] CACHE = new WeakReference[MAX_PROFILE+1];
+    @SuppressWarnings("unchecked")
+    private static final WeakReference<StringPrep>[] CACHE = (WeakReference<StringPrep>[])new WeakReference[MAX_PROFILE+1];
 
     private static final int UNASSIGNED        = 0x0000; 
     private static final int MAP               = 0x0001; 
@@ -342,7 +343,7 @@ public final class StringPrep {
         // A StringPrep instance is immutable.  We use a single instance
         // per type and store it in the internal cache.
         synchronized (CACHE) {
-            WeakReference ref = CACHE[profile];
+            WeakReference<StringPrep> ref = CACHE[profile];
             if (ref != null) {
                 instance = (StringPrep)ref.get();
             }
@@ -362,7 +363,7 @@ public final class StringPrep {
                     }
                 }
                 if (instance != null) {
-                    CACHE[profile] = new WeakReference(instance);
+                    CACHE[profile] = new WeakReference<StringPrep>(instance);
                 }
             }            
         }

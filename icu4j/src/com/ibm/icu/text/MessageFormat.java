@@ -21,11 +21,11 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
+import java.text.AttributedCharacterIterator.Attribute;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -737,10 +737,10 @@ public class MessageFormat extends UFormat {
      *        formats for named arguments.
      * @stable ICU 3.8
      */
-    public void setFormatsByArgumentName(Map newFormats) {
+    public void setFormatsByArgumentName(Map<String, Format> newFormats) {
         for (int i = 0; i <= maxOffset; i++) {
             if (newFormats.containsKey(argumentNames[i])) {
-                Format f = (Format)newFormats.get(argumentNames[i]);
+                Format f = newFormats.get(argumentNames[i]);
                 formats[i] = f;
             }
         }
@@ -945,8 +945,8 @@ public class MessageFormat extends UFormat {
      * @deprecated
      * @internal
      */
-    public Set getFormatArgumentNames() {
-        Set result = new HashSet();
+    public Set<String> getFormatArgumentNames() {
+        Set<String> result = new HashSet<String>();
         for (int i = 0; i <= maxOffset; ++i) {
             result.add(argumentNames[i]);
         }
@@ -1080,7 +1080,7 @@ public class MessageFormat extends UFormat {
      * @return the passed-in StringBuffer
      * @stable ICU 3.8
      */
-    public final StringBuffer format(Map arguments, StringBuffer result,
+    public final StringBuffer format(Map<String, Object> arguments, StringBuffer result,
                                      FieldPosition pos) {
         return subformat(arguments, result, pos, null);
     }
@@ -1118,7 +1118,7 @@ public class MessageFormat extends UFormat {
      * @see #format(String, Object[])
      * @stable ICU 3.8
      */
-    public static String format(String pattern, Map arguments) {
+    public static String format(String pattern, Map<String, Object> arguments) {
         MessageFormat temp = new MessageFormat(pattern);
         return temp.format(arguments);
     }
@@ -1157,11 +1157,12 @@ public class MessageFormat extends UFormat {
      *         an array of Object and this format uses named arguments
      * @stable ICU 3.0
      */
+    @SuppressWarnings("unchecked")
     public final StringBuffer format(Object arguments, StringBuffer result,
                                      FieldPosition pos)
     {
         if ((arguments == null || arguments instanceof Map)) {
-            return subformat((Map) arguments, result, pos, null);
+            return subformat((Map<String, Object>)arguments, result, pos, null);
         } else {
             if (!argumentNamesAreNumeric) {
                 throw new IllegalArgumentException(
@@ -1207,16 +1208,17 @@ public class MessageFormat extends UFormat {
      *            expected by the format element(s) that use it.
      * @stable ICU 3.8
      */
+    @SuppressWarnings("unchecked")
     public AttributedCharacterIterator formatToCharacterIterator(Object arguments) {
         StringBuffer result = new StringBuffer();
-        ArrayList iterators = new ArrayList();
+        ArrayList<AttributedCharacterIterator> iterators = new ArrayList<AttributedCharacterIterator>();
 
         if (arguments == null) {
             throw new NullPointerException(
                    "formatToCharacterIterator must be passed non-null object");
         }
         if (arguments instanceof Map) {
-            subformat((Map)arguments, result, null, iterators);
+            subformat((Map<String, Object>)arguments, result, null, iterators);
         } else {
             subformat((Object[]) arguments, result, null, iterators);
         }
@@ -1224,8 +1226,7 @@ public class MessageFormat extends UFormat {
             return _createAttributedCharacterIterator("");
         }
         return _createAttributedCharacterIterator(
-                     (AttributedCharacterIterator[])iterators.toArray(
-                     new AttributedCharacterIterator[iterators.size()]));
+                     iterators.toArray(new AttributedCharacterIterator[iterators.size()]));
     }
 
     /**
@@ -1268,7 +1269,7 @@ public class MessageFormat extends UFormat {
                     "This method is not available in MessageFormat objects " +
                     "that use named argument.");
         }
-        Map objectMap = parseToMap(source, pos);
+        Map<String, Object> objectMap = parseToMap(source, pos);
         int maximumArgumentNumber = -1;
         for (int i = 0; i <= maxOffset; i++) {
             int argumentNumber = Integer.parseInt(argumentNames[i]);
@@ -1282,9 +1283,7 @@ public class MessageFormat extends UFormat {
         }
 
         Object[] resultArray = new Object[maximumArgumentNumber + 1];
-        Iterator keyIter = objectMap.keySet().iterator();
-        while (keyIter.hasNext()) {
-            String key = (String) keyIter.next();
+        for (String key : objectMap.keySet()) {
             resultArray[Integer.parseInt(key)] = objectMap.get(key);
         }
 
@@ -1304,9 +1303,9 @@ public class MessageFormat extends UFormat {
      * @return a Map containing key/value pairs for each parsed argument.
      * @stable ICU 3.8
      */
-    public Map parseToMap(String source, ParsePosition pos) {
+    public Map<String, Object> parseToMap(String source, ParsePosition pos) {
         if (source == null) {
-            Map empty = new HashMap();
+            Map<String, Object> empty = new HashMap<String, Object>();
             return empty;
         }
 
@@ -1319,7 +1318,7 @@ public class MessageFormat extends UFormat {
 //         }
 //        Object[] resultArray = new Object[maximumArgumentNumber + 1];
 
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<String, Object>();
 
         int patternOffset = 0;
         int sourceOffset = pos.getIndex();
@@ -1424,10 +1423,10 @@ public class MessageFormat extends UFormat {
      * @see #parseToMap(String, ParsePosition)
      * @stable ICU 3.8
      */
-    public Map parseToMap(String source) throws ParseException {
+    public Map<String, Object> parseToMap(String source) throws ParseException {
 
         ParsePosition pos = new ParsePosition(0);
-        Map result = parseToMap(source, pos);
+        Map<String, Object> result = parseToMap(source, pos);
         if (pos.getIndex() == 0) // unchanged, returned object is null
             throw new ParseException("MessageFormat parse error!",
                                      pos.getErrorIndex());
@@ -1660,7 +1659,7 @@ public class MessageFormat extends UFormat {
      *            expected by the format element(s) that use it.
      */
     private StringBuffer subformat(Object[] arguments, StringBuffer result,
-                                   FieldPosition fp, List characterIterators) {
+                                   FieldPosition fp, List<AttributedCharacterIterator> characterIterators) {
         return subformat(arrayToMap(arguments), result, fp, characterIterators);
     }
 
@@ -1671,8 +1670,8 @@ public class MessageFormat extends UFormat {
      *         <code>arguments</code> map is not of the type
      *         expected by the format element(s) that use it.
      */
-    private StringBuffer subformat(Map arguments, StringBuffer result,
-                                   FieldPosition fp, List characterIterators) {
+    private StringBuffer subformat(Map<String, Object> arguments, StringBuffer result,
+                                   FieldPosition fp, List<AttributedCharacterIterator> characterIterators) {
         // note: this implementation assumes a fast substring & index.
         // if this is not true, would be better to append chars one by one.
         int lastOffset = 0;
@@ -2125,8 +2124,8 @@ public class MessageFormat extends UFormat {
      * @throws InvalidObjectException
      *             if the objects read from the stream is invalid.
      */
-    private Map arrayToMap(Object[] array) {
-        Map map = new HashMap();
+    private Map<String, Object> arrayToMap(Object[] array) {
+        Map<String, Object> map = new HashMap<String, Object>();
         if (array != null) {
             for (int i = 0; i < array.length; ++i) {
                 map.put(Integer.toString(i), array[i]);
@@ -2277,13 +2276,11 @@ public class MessageFormat extends UFormat {
             iterators[i].first();
             int start = iterators[i].getBeginIndex();
             while (true) {
-                Map map = iterators[i].getAttributes();
+                Map<Attribute, Object> map = iterators[i].getAttributes();
                 int len = iterators[i].getRunLimit() - start; // run length
                 if (map.size() > 0) {
-                    Iterator eit = map.entrySet().iterator();
-                    while (eit.hasNext()) {
-                        Map.Entry entry = (Map.Entry)eit.next();
-                        as.addAttribute((AttributedCharacterIterator.Attribute)entry.getKey(), entry.getValue(),
+                    for (Map.Entry<Attribute, Object> entry : map.entrySet()) {
+                        as.addAttribute(entry.getKey(), entry.getValue(),
                                 offset, offset + len);
                     }
                 }

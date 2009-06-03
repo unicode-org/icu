@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 2007-2008, International Business Machines
+*   Copyright (C) 2007-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -54,7 +54,7 @@ class CalendarServiceShim extends Calendar.CalendarShim {
             return null;
         }
 
-        protected Set getSupportedIDs() {
+        protected Set<String> getSupportedIDs() {
             return delegate.getSupportedLocaleNames();
         }
     }

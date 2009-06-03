@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2005, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -323,9 +323,9 @@ public class CollationThaiTest extends TestFmwk {
     
     // private inner class -------------------------------------------------
     
-    private static final class StrCmp implements Comparator 
+    private static final class StrCmp implements Comparator<String> 
     {
-        public int compare(Object string1, Object string2) 
+        public int compare(String string1, String string2) 
         {
             return collator.compare(string1, string2);
         }

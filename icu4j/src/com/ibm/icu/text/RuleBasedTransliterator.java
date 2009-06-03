@@ -370,7 +370,7 @@ public class RuleBasedTransliterator extends Transliterator {
 
     static class Data {
         public Data() {
-            variableNames = new Hashtable();
+            variableNames = new Hashtable<String, char[]>();
             ruleSet = new TransliterationRuleSet();
         }
 
@@ -388,7 +388,7 @@ public class RuleBasedTransliterator extends Transliterator {
          * data.variables.  The stand-in also represents the UnicodeSet in
          * the stored rules.
          */
-        Hashtable variableNames;
+        Hashtable<String, char[]> variableNames;
 
         /**
          * Map category variable (Character) to UnicodeMatcher or UnicodeReplacer.

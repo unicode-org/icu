@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2003-2008, International Business Machines Corporation and         *
+* Copyright (C) 2003-2009, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -13,8 +13,8 @@ import java.util.Set;
 
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
 import com.ibm.icu.impl.ICUService;
+import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.text.Collator.CollatorFactory;
 import com.ibm.icu.util.ULocale;
@@ -67,7 +67,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
                 return delegate.getDisplayName(objectLocale, displayLocale);
             }
 
-            public Set getSupportedIDs() {
+            public Set<String> getSupportedIDs() {
                 return delegate.getSupportedLocaleIDs();
             }
         }

@@ -22,13 +22,10 @@ public final class BaseLocale {
 
     private static final char SEPCHAR = '_';
 
-//    private static final LocaleObjectCache<BaseLocaleKey,BaseLocale> BASELOCALECACHE
-//        = new LocaleObjectCache<BaseLocaleKey,BaseLocale>();
+    private static final LocaleObjectCache<BaseLocaleKey,BaseLocale> BASELOCALECACHE
+        = new LocaleObjectCache<BaseLocaleKey,BaseLocale>();
 
-    private static final LocaleObjectCache BASELOCALECACHE
-        = new LocaleObjectCache();
-
-        public static final BaseLocale ROOT = new BaseLocale("", "", "", "");
+    public static final BaseLocale ROOT = new BaseLocale("", "", "", "");
 
     private BaseLocale(String language, String script, String region, String variant) {
         if (language != null) {
@@ -47,8 +44,7 @@ public final class BaseLocale {
 
     public static BaseLocale getInstance(String language, String script, String region, String variant) {
         BaseLocaleKey key = new BaseLocaleKey(language, script, region, variant);
-//        BaseLocale baseLocale = BASELOCALECACHE.get(key);
-        BaseLocale baseLocale = (BaseLocale)BASELOCALECACHE.get(key);
+        BaseLocale baseLocale = BASELOCALECACHE.get(key);
         if (baseLocale == null) {
             // Create a canonical BaseLocale instance
             baseLocale = new BaseLocale(language, script, region, variant).canonicalize();
@@ -100,8 +96,7 @@ public final class BaseLocale {
 
     private BaseLocale canonicalize() {
 
-//        StringBuilder id = new StringBuilder();
-        StringBuffer id = new StringBuffer();
+        StringBuilder id = new StringBuilder();
 
         int languageLen = _language.length();
         int scriptLen = _script.length();
@@ -117,8 +112,7 @@ public final class BaseLocale {
 
         if (scriptLen > 0) {
             // script - the first letter to upper case, the rest to lower case
-//            StringBuilder buf = new StringBuilder();
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             buf.append(AsciiUtil.toUpper(_script.charAt(0)));
             for (int i = 1; i < _script.length(); i++) {
                 buf.append(AsciiUtil.toLower(_script.charAt(i)));
@@ -154,8 +148,7 @@ public final class BaseLocale {
         if (languageLen == 0 && regionLen == 0 && variantLen > 0) {
             _java6string = "";
         } else if (scriptLen > 0 || (regionLen == 0 && variantLen > 0)) {
-//            StringBuilder buf = new StringBuilder(_language);
-            StringBuffer buf = new StringBuffer(_language);
+            StringBuilder buf = new StringBuilder(_language);
             if (regionLen > 0) {
                 buf.append(SEPCHAR);
                 buf.append(_region);
@@ -199,8 +192,7 @@ public final class BaseLocale {
         return new BaseLocaleKey(_language, _script, _region, _variant);
     }
 
-//    public static class BaseLocaleKey implements Comparable<BaseLocaleKey> {
-    public static class BaseLocaleKey implements Comparable {
+    public static class BaseLocaleKey implements Comparable<BaseLocaleKey> {
         private String _lang = "";
         private String _scrt = "";
         private String _regn = "";
@@ -244,10 +236,6 @@ public final class BaseLocale {
                 }
             }
             return res;
-        }
-
-        public int compareTo(Object obj) {
-            return compareTo((BaseLocaleKey)obj);
         }
 
         public int hashCode() {

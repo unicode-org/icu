@@ -1044,7 +1044,7 @@ public final class Utility {
     public static String[] split(String s, char divider) {
         int last = 0;
         int i;
-        ArrayList output = new ArrayList();
+        ArrayList<String> output = new ArrayList<String>();
         for (i = 0; i < s.length(); ++i) {
             if (s.charAt(i) == divider) {
                 output.add(s.substring(last,i));
@@ -1052,7 +1052,7 @@ public final class Utility {
             }
         }
         output.add( s.substring(last,i));
-        return (String[]) output.toArray(new String[output.size()]);
+        return output.toArray(new String[output.size()]);
     }
     
     /**

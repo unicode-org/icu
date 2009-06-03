@@ -1829,10 +1829,7 @@ public class DecimalFormat extends NumberFormat {
         // Then, parse against affix patterns.
         // Those are currency patterns and currency plural patterns
         // defined in the locale.
-        Iterator iter = affixPatternsForCurrency.iterator();
-        while (iter.hasNext()) {
-            AffixForCurrency affix = (AffixForCurrency) iter.next();
-
+        for (AffixForCurrency affix : affixPatternsForCurrency) {
             tmpStatus = new boolean[STATUS_LENGTH];
             tmpPos = new ParsePosition(origPos);
             tmpDigitList = new DigitList();
@@ -1897,7 +1894,7 @@ public class DecimalFormat extends NumberFormat {
         if (currencyPluralInfo == null) {
             currencyPluralInfo = new CurrencyPluralInfo(symbols.getLocale());
         }
-        affixPatternsForCurrency = new HashSet();
+        affixPatternsForCurrency = new HashSet<AffixForCurrency>();
 
         // save the current pattern, since it will be changed by
         // applyPatternWithoutExpandAffix
@@ -1914,11 +1911,11 @@ public class DecimalFormat extends NumberFormat {
         affixPatternsForCurrency.add(affixes);
 
         // add plural pattern
-        Iterator iter = currencyPluralInfo.pluralPatternIterator();
-        Set currencyUnitPatternSet = new HashSet();
+        Iterator<String> iter = currencyPluralInfo.pluralPatternIterator();
+        Set<String> currencyUnitPatternSet = new HashSet<String>();
         while (iter.hasNext()) {
-            String pluralCount = (String) iter.next();
-            String currencyPattern = (String) currencyPluralInfo.getCurrencyPluralPattern(pluralCount);
+            String pluralCount = iter.next();
+            String currencyPattern = currencyPluralInfo.getCurrencyPluralPattern(pluralCount);
             if (currencyPattern != null && currencyUnitPatternSet.contains(currencyPattern) == false) {
                 currencyUnitPatternSet.add(currencyPattern);
                 applyPatternWithoutExpandAffix(currencyPattern, false);
@@ -3799,7 +3796,7 @@ public class DecimalFormat extends NumberFormat {
 
         // add NumberFormat field attributes to the AttributedString
         for (int i = 0; i < attributes.size(); i++) {
-            FieldPosition pos = (FieldPosition) attributes.get(i);
+            FieldPosition pos = attributes.get(i);
             Format.Field attribute = pos.getFieldAttribute();
             as.addAttribute(attribute, attribute, pos.getBeginIndex(), pos.getEndIndex());
         }
@@ -5264,7 +5261,7 @@ public class DecimalFormat extends NumberFormat {
     // Proclaim JDK 1.1 serial compatibility.
     private static final long serialVersionUID = 864413376551465018L;
 
-    private ArrayList attributes = new ArrayList();
+    private ArrayList<FieldPosition> attributes = new ArrayList<FieldPosition>();
 
     /*
      * Following are used in currency format
@@ -5344,7 +5341,7 @@ public class DecimalFormat extends NumberFormat {
     // It is a set of AffixForCurrency,
     // each element of the set saves the negative prefix,
     // negative suffix, positive prefix, and positive suffix of a pattern.
-    private transient Set affixPatternsForCurrency = null;
+    private transient Set<AffixForCurrency> affixPatternsForCurrency = null;
 
     // For currency parsing, since currency parsing need to parse
     // against all currency patterns, before the parsing, need to set up

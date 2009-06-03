@@ -241,7 +241,7 @@ public final class ULocale implements Serializable {
      */ 
     public static final ULocale ROOT = new ULocale("root", EMPTY_LOCALE);
     
-    private static final SimpleCache CACHE = new SimpleCache();
+    private static final SimpleCache<Locale, ULocale> CACHE = new SimpleCache<Locale, ULocale>();
 
     /**
      * Cache the locale.
@@ -766,7 +766,7 @@ public final class ULocale implements Serializable {
         if (loc == null) {
             return null;
         }
-        ULocale result = (ULocale)CACHE.get(loc);
+        ULocale result = CACHE.get(loc);
         if (result == null) {
             if (defaultULocale != null && loc == defaultULocale.locale) {
             result = defaultULocale;
@@ -913,7 +913,7 @@ public final class ULocale implements Serializable {
         return locale;
     }
 
-    private static ICUCache nameCache = new SimpleCache();
+    private static ICUCache<String, String> nameCache = new SimpleCache<String, String>();
     /**
      * Keep our own default ULocale.
      */
@@ -1202,7 +1202,7 @@ public final class ULocale implements Serializable {
      * @stable ICU 3.0
      */
     public static String getName(String localeID){
-        String name = (String)nameCache.get(localeID);
+        String name = nameCache.get(localeID);
         if (name == null) {
             name = new IDParser(localeID).getName();
             nameCache.put(localeID, name);
@@ -1224,7 +1224,7 @@ public final class ULocale implements Serializable {
      * @return iterator over keywords, or null if there are no keywords.
      * @stable ICU 3.0
      */
-    public Iterator getKeywords() {
+    public Iterator<String> getKeywords() {
         return getKeywords(localeID);
     }
 
@@ -1235,7 +1235,7 @@ public final class ULocale implements Serializable {
      * if there are no keywords.
      * @stable ICU 3.0
      */
-    public static Iterator getKeywords(String localeID){
+    public static Iterator<String> getKeywords(String localeID){
         return new IDParser(localeID).getKeywords();
     }
 
@@ -1273,7 +1273,7 @@ public final class ULocale implements Serializable {
         private boolean hadCountry;
 
         // used when canonicalizing
-        Map keywords;
+        Map<String, String> keywords;
         String baseName;
 
         /**
@@ -1846,10 +1846,10 @@ public final class ULocale implements Serializable {
             return new String(id, start, index-start).trim(); // leave case alone
         }
 
-        private Comparator getKeyComparator() {
-            final Comparator comp = new Comparator() {
-                    public int compare(Object lhs, Object rhs) {
-                        return ((String)lhs).compareTo((String)rhs);
+        private Comparator<String> getKeyComparator() {
+            final Comparator<String> comp = new Comparator<String>() {
+                    public int compare(String lhs, String rhs) {
+                        return lhs.compareTo(rhs);
                     }
                 };
             return comp;
@@ -1858,9 +1858,9 @@ public final class ULocale implements Serializable {
         /**
          * Returns a map of the keywords and values, or null if there are none.
          */
-        private Map getKeywordMap() {
+        private Map<String, String> getKeywordMap() {
             if (keywords == null) {
-                TreeMap m = null;
+                TreeMap<String, String> m = null;
                 if (setToKeywordStart()) {
                     // trim spaces and convert to lower case, both keywords and values.
                     do {
@@ -1883,7 +1883,7 @@ public final class ULocale implements Serializable {
                             continue;
                         }
                         if (m == null) {
-                            m = new TreeMap(getKeyComparator());
+                            m = new TreeMap<String, String>(getKeyComparator());
                         } else if (m.containsKey(key)) {
                             // throw new IllegalArgumentException("key '" + key + "' already has a value.");
                             continue;
@@ -1891,7 +1891,7 @@ public final class ULocale implements Serializable {
                         m.put(key, value);
                     } while (next() == ITEM_SEPARATOR);
                 }               
-                keywords = m != null ? m : Collections.EMPTY_MAP;
+                keywords = m != null ? m : Collections.<String, String>emptyMap();
             }
 
             return keywords;
@@ -1903,14 +1903,12 @@ public final class ULocale implements Serializable {
          */
         private int parseKeywords() {
             int oldBlen = blen;
-            Map m = getKeywordMap();
+            Map<String, String> m = getKeywordMap();
             if (!m.isEmpty()) {
-                Iterator iter = m.entrySet().iterator();
                 boolean first = true;
-                while (iter.hasNext()) {
+                for (Map.Entry<String, String> e : m.entrySet()) {
                     append(first ? KEYWORD_SEPARATOR : ITEM_SEPARATOR);
                     first = false;
-                    Map.Entry e = (Map.Entry)iter.next();
                     append((String)e.getKey());
                     append(KEYWORD_ASSIGN);
                     append((String)e.getValue());
@@ -1925,8 +1923,8 @@ public final class ULocale implements Serializable {
         /**
          * Returns an iterator over the keywords, or null if we have an empty map.
          */
-        public Iterator getKeywords() {
-            Map m = getKeywordMap();
+        public Iterator<String> getKeywords() {
+            Map<String, String> m = getKeywordMap();
             return m.isEmpty() ? null : m.keySet().iterator();
         }
 
@@ -1935,8 +1933,8 @@ public final class ULocale implements Serializable {
          * present.
          */
         public String getKeywordValue(String keywordName) {
-            Map m = getKeywordMap();
-            return m.isEmpty() ? null : (String)m.get(AsciiUtil.toLowerString(keywordName.trim()));
+            Map<String, String> m = getKeywordMap();
+            return m.isEmpty() ? null : m.get(AsciiUtil.toLowerString(keywordName.trim()));
         }
 
         /**
@@ -1966,7 +1964,7 @@ public final class ULocale implements Serializable {
             if (keywordName == null) {
                 if (reset) {
                     // force new map, ignore value
-                    keywords = Collections.EMPTY_MAP;
+                    keywords = Collections.<String, String>emptyMap();
                 }
             } else {
                 keywordName = AsciiUtil.toLowerString(keywordName.trim());
@@ -1979,11 +1977,11 @@ public final class ULocale implements Serializable {
                         throw new IllegalArgumentException("value must not be empty");
                     }
                 }
-                Map m = getKeywordMap();
+                Map<String, String> m = getKeywordMap();
                 if (m.isEmpty()) { // it is EMPTY_MAP
                     if (value != null) {
                         // force new map
-                        keywords = new TreeMap(getKeyComparator());
+                        keywords = new TreeMap<String, String>(getKeyComparator());
                         keywords.put(keywordName, value.trim());
                     }
                 } else {
@@ -1994,7 +1992,7 @@ public final class ULocale implements Serializable {
                             m.remove(keywordName);
                             if (m.isEmpty()) {
                                 // force new map
-                                keywords = Collections.EMPTY_MAP;
+                                keywords = Collections.<String, String>emptyMap();
                             }
                         }
                     }
@@ -2664,10 +2662,9 @@ public final class ULocale implements Serializable {
             }
         }
 
-        Map m = parser.getKeywordMap();
+        Map<String, String> m = parser.getKeywordMap();
         if (!m.isEmpty()) {
-            Iterator keys = m.entrySet().iterator();
-            while (keys.hasNext()) {
+            for (Map.Entry<String, String> e : m.entrySet()) {
                 if (buf.length() > 0) {
                     if (haveLanguage & !openParen) {
                         buf.append(" (");
@@ -2676,12 +2673,10 @@ public final class ULocale implements Serializable {
                         buf.append(", ");
                     }
                 }
-                Map.Entry e = (Map.Entry)keys.next();
-                String key = (String)e.getKey();
-                String val = (String)e.getValue();
+                String key = e.getKey();
                 buf.append(getTableString("Keys", null, key, bundle));
                 buf.append("=");
-                buf.append(getTableString("Types", key, val, bundle));
+                buf.append(getTableString("Types", key, e.getValue(), bundle));
             }
         }
 
@@ -2887,15 +2882,14 @@ public final class ULocale implements Serializable {
         /**
          * @internal ICU 3.4
          */
-        class ULocaleAcceptLanguageQ implements Comparable {
+        class ULocaleAcceptLanguageQ implements Comparable<ULocaleAcceptLanguageQ> {
             private double q;
             private double serial;
             public ULocaleAcceptLanguageQ(double theq, int theserial) {
                 q = theq;
                 serial = theserial;
             }
-            public int compareTo(Object o) {
-                ULocaleAcceptLanguageQ other = (ULocaleAcceptLanguageQ) o;
+            public int compareTo(ULocaleAcceptLanguageQ other) {
                 if (q > other.q) { // reverse - to sort in descending order
                     return -1;
                 } else if (q < other.q) {
@@ -2912,7 +2906,7 @@ public final class ULocale implements Serializable {
         }
 
         // parse out the acceptLanguage into an array
-        TreeMap map = new TreeMap();
+        TreeMap<ULocaleAcceptLanguageQ, ULocale> map = new TreeMap<ULocaleAcceptLanguageQ, ULocale>();
         StringBuffer languageRangeBuf = new StringBuffer();
         StringBuffer qvalBuf = new StringBuffer();
         int state = 0;
@@ -2953,7 +2947,7 @@ public final class ULocale implements Serializable {
                     }
                 } else if ('0' <= c && c <= '9') {
                     if (subTag) {
-                        languageRangeBuf.append(c);                        
+                        languageRangeBuf.append(c);
                     } else {
                         // DIGIT is allowed only in language sub tag
                         state = -1;
@@ -3134,7 +3128,7 @@ public final class ULocale implements Serializable {
         }
 
         // pull out the map 
-        ULocale acceptList[] = (ULocale[])map.values().toArray(new ULocale[map.size()]);
+        ULocale acceptList[] = map.values().toArray(new ULocale[map.size()]);
         return acceptList;
     }
 
@@ -3802,14 +3796,14 @@ public final class ULocale implements Serializable {
 
     /**
      * Returns the set of extension keys associated with this locale, or null
-     * if it has no extensions.  The* returned set is immutable.
+     * if it has no extensions.  The returned set is immutable.
      * @return the set of extension keys, or null if this locale has
      * no extensions.
      * 
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
-    public Set getExtensionKeys() {
+    public Set<Character> getExtensionKeys() {
         return extensions().getExtensionKeys();
     }
 
@@ -3843,7 +3837,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 4.2
      * @provisional This API might change or be removed in a future release.
      */
-    public Set getLDMLExtensionKeys() {
+    public Set<String> getLDMLExtensionKeys() {
         return extensions().getLDMLKeywordKeys();
     }
 
@@ -3918,11 +3912,9 @@ public final class ULocale implements Serializable {
 
                 // setExtension may throw an exception if
                 // it contains malformed LDML keys.
-                Set exts = tag.getExtensions();
+                Set<Extension> exts = tag.getExtensions();
                 if (exts != null) {
-                    Iterator itr = exts.iterator();
-                    while (itr.hasNext()) {
-                        Extension e = (Extension)itr.next();
+                    for (Extension e : exts) {
                         bldr.setExtension(e.getSingleton(), e.getValue());
                     }
                 }
@@ -4008,11 +4000,10 @@ public final class ULocale implements Serializable {
                 .setRegion(loc.getCountry())
                 .setVariant(loc.getVariant());
 
-            Set extKeys = loc.getExtensionKeys();
+            Set<Character> extKeys = loc.getExtensionKeys();
             if (extKeys != null) {
-                Iterator itr = extKeys.iterator();
-                while (itr.hasNext()) {
-                    char key = ((Character)itr.next()).charValue();
+                for (Character k : extKeys) {
+                    char key = k.charValue();
                     String value = loc.getExtension(key);
                     if (value != null && value.length() > 0) {
                         setExtension(key, value);
@@ -4049,11 +4040,9 @@ public final class ULocale implements Serializable {
                 .setRegion(tag.getRegion()).setVariant(tag.getVariant());
 
             // extensions
-            Set exts = tag.getExtensions();
+            Set<Extension> exts = tag.getExtensions();
             if (exts != null) {
-                Iterator itr = exts.iterator();
-                while (itr.hasNext()) {
-                    Extension e = (Extension)itr.next();
+                for (Extension e : exts) {
                     setExtension(e.getSingleton(), e.getValue());
                     //TODO: setExtension may throw an IllformedLocaleException.
                     //      In this csae, error index must be recalculated.
@@ -4256,17 +4245,15 @@ public final class ULocale implements Serializable {
     private static ULocale getInstance(BaseLocale base, LocaleExtensions ext) {
         StringBuffer id = new StringBuffer(base.getID());
 
-        TreeMap kwds = null;
-        Set extKeys = ext.getExtensionKeys();
+        TreeMap<String, String> kwds = null;
+        Set<Character> extKeys = ext.getExtensionKeys();
         if (extKeys != null) {
             // legacy locale ID assume LDML keywords and
             // other extensions are at the same level.
             // e.g. @a=ext-for-aa;calendar=japanese;m=ext-for-mm;x=priv-use
-            kwds = new TreeMap();
-            Iterator itr = extKeys.iterator();
+            kwds = new TreeMap<String, String>();
             boolean hasLDMLKeywords = false;
-            while (itr.hasNext()) {
-                Character key = (Character)itr.next();
+            for (Character key : extKeys) {
                 if (key.charValue() == 'u') {
                     // LDML keywords
                     hasLDMLKeywords = true;
@@ -4277,11 +4264,9 @@ public final class ULocale implements Serializable {
             }
 
             if (hasLDMLKeywords) {
-                Set ldmlKeys = ext.getLDMLKeywordKeys();
+                Set<String> ldmlKeys = ext.getLDMLKeywordKeys();
                 if (ldmlKeys != null) {
-                    Iterator litr = ldmlKeys.iterator();
-                    while (litr.hasNext()) {
-                        String bcpKey = (String)litr.next();
+                    for (String bcpKey : ldmlKeys) {
                         String bcpValue = ext.getLDMLKeywordType(bcpKey);
                         // transform to legacy key/type
                         String lkey = bcp47ToLDMLKey(bcpKey);
@@ -4293,16 +4278,14 @@ public final class ULocale implements Serializable {
 
             if (kwds.size() > 0) {
                 id.append("@");
-                Set kset = kwds.entrySet();
-                Iterator kitr = kset.iterator();
+                Set<Map.Entry<String, String>> kset = kwds.entrySet();
                 boolean insertSep = false;
-                while (kitr.hasNext()) {
+                for (Map.Entry<String, String> kwd : kset) {
                     if (insertSep) {
                         id.append(";");
                     } else {
                         insertSep = true;
                     }
-                    Map.Entry kwd = (Map.Entry)kitr.next();
                     id.append(kwd.getKey());
                     id.append("=");
                     id.append(kwd.getValue());
@@ -4322,13 +4305,13 @@ public final class ULocale implements Serializable {
     }
 
     private LocaleExtensions extensions() {
-        Iterator kwitr = getKeywords();
+        Iterator<String> kwitr = getKeywords();
         if (kwitr == null) {
             return LocaleExtensions.EMPTY_EXTENSIONS;
         }
 
-        TreeMap extMap = null;
-        TreeMap ldmlKwMap = null;
+        TreeMap<Character, String> extMap = null;
+        TreeMap<String, String> ldmlKwMap = null;
 
         while (kwitr.hasNext()) {
             String key = (String)kwitr.next();
@@ -4355,7 +4338,7 @@ public final class ULocale implements Serializable {
                     }
                     if (isValid) {
                         if (extMap == null) {
-                            extMap = new TreeMap();
+                            extMap = new TreeMap<Character, String>();
                         }
                         extMap.put(new Character(key.charAt(0)), value.intern());
                     }
@@ -4366,7 +4349,7 @@ public final class ULocale implements Serializable {
                 String bcpVal = ldmlTypeToBCP47(key, value);
                 if (bcpKey != null && bcpVal != null) {
                     if (ldmlKwMap == null) {
-                        ldmlKwMap = new TreeMap();
+                        ldmlKwMap = new TreeMap<String, String>();
                     }
                     ldmlKwMap.put(bcpKey.intern(), bcpVal.intern());
                 }
@@ -4375,10 +4358,10 @@ public final class ULocale implements Serializable {
 
         if (ldmlKwMap != null) {
             // create LDML extension string
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             LocaleExtensions.keywordsToString(ldmlKwMap, buf);
             if (extMap == null) {
-                extMap = new TreeMap();
+                extMap = new TreeMap<Character, String>();
             }
             extMap.put(new Character('u'), buf.toString().intern());
         }

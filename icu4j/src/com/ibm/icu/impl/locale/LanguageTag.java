@@ -12,8 +12,6 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.ibm.icu.impl.Utility;
-
 public final class LanguageTag {
 
     private String _languageTag = "";   // entire language tag
@@ -23,10 +21,8 @@ public final class LanguageTag {
     private String[] _extlang;          // array of extlang subtags
     private String _script = "";        // script subtag
     private String _region = "";        // region subtag
-//    private TreeSet<String> _variants;  // variant subtags in a single string
-    private TreeSet _variants;  // variant subtags in a single string
-//    private TreeSet<Extension> _extensions; // extension key/value pairs
-    private TreeSet _extensions; // extension key/value pairs
+    private TreeSet<String> _variants;  // variant subtags in a single string
+    private TreeSet<Extension> _extensions; // extension key/value pairs
 
     private static final int MINLEN = 2; // minimum length of a valid language tag
 
@@ -38,8 +34,7 @@ public final class LanguageTag {
 
     // Map contains grandfathered tags and its preferred mappings from
     // http://www.ietf.org/internet-drafts/draft-ietf-ltru-4645bis-09.txt
-//    private static final HashMap<String,String> GRANDFATHERED = new HashMap<String,String>();
-    private static final HashMap GRANDFATHERED = new HashMap();
+    private static final HashMap<String,String> GRANDFATHERED = new HashMap<String,String>();
 
     static {
         final String[][] entries = {
@@ -71,9 +66,7 @@ public final class LanguageTag {
             {"zh-min-nan",  "nan"},
             {"zh-xiang",    "hsn"},
         };
-//        for (String[] e : entries) {
-        for (int i = 0; i < entries.length; i++) {
-            String[] e = entries[i];
+        for (String[] e : entries) {
             GRANDFATHERED.put(e[0], e[1]);
         }
     }
@@ -123,8 +116,7 @@ public final class LanguageTag {
         if (GRANDFATHERED.containsKey(tag)) {
             t._grandfathered = tag;
             // Preferred mapping
-//            String preferred = GRANDFATHERED.get(tag);
-            String preferred = (String)GRANDFATHERED.get(tag);
+            String preferred = GRANDFATHERED.get(tag);
             if (preferred.length() > 0) {
                 t._language = preferred;
             }
@@ -138,13 +130,11 @@ public final class LanguageTag {
         //                 *("-" extension)
         //                 ["-" privateuse]
 
-//        String[] subtags = tag.split(SEP);
-        String[] subtags = Utility.split(tag, '-');
+        String[] subtags = tag.split(SEP);
         int idx = 0;
         int extlangIdx = 0;
         String extSingleton = null;
-//        StringBuilder extBuf = null;
-        StringBuffer extBuf = null;
+        StringBuilder extBuf = null;
         int next = LANG | PRIV;
         String errorMsg = null;
 
@@ -191,8 +181,7 @@ public final class LanguageTag {
             if ((next & VART) != 0) {
                 if (isVariantSubtag(subtags[idx])) {
                     if (t._variants == null) {
-//                        t._variants = new TreeSet<String>();
-                        t._variants = new TreeSet();
+                        t._variants = new TreeSet<String>();
                     }
                     t._variants.add(subtags[idx++]);
                     next = VART | EXTS | PRIV;
@@ -210,8 +199,7 @@ public final class LanguageTag {
                         }
                         // Emit the previous extension key/value pair
                         if (t._extensions == null) {
-//                            t._extensions = new TreeSet<Extension>();
-                            t._extensions = new TreeSet();
+                            t._extensions = new TreeSet<Extension>();
                         }
                         Extension e = new Extension(extSingleton.charAt(0), extBuf.toString());
                         t._extensions.add(e);
@@ -225,8 +213,7 @@ public final class LanguageTag {
             if ((next & EXTV) != 0) {
                 if (isExtensionSubtag(subtags[idx])) {
                     if (extBuf == null) {
-//                        extBuf = new StringBuilder(subtags[idx++]);
-                        extBuf = new StringBuffer(subtags[idx++]);
+                        extBuf = new StringBuilder(subtags[idx++]);
                     } else {
                         extBuf.append(SEP);
                         extBuf.append(subtags[idx++]);
@@ -238,8 +225,7 @@ public final class LanguageTag {
             if ((next & PRIV) != 0) {
                 if (AsciiUtil.caseIgnoreMatch(PRIVATEUSE, subtags[idx])) {
                     // The rest of part will be private use value subtags
-//                    StringBuilder puBuf = new StringBuilder();
-                    StringBuffer puBuf = new StringBuffer();
+                    StringBuilder puBuf = new StringBuilder();
                     idx++;
                     for (boolean bFirst = true ; idx < subtags.length; idx++) {
                         if (!isPrivateuseValueSubtag(subtags[idx])) {
@@ -284,8 +270,7 @@ public final class LanguageTag {
                 } else {
                     // Emit the last extension key/value pair
                     if (t._extensions == null) {
-//                        t._extensions = new TreeSet<Extension>();
-                        t._extensions = new TreeSet();
+                        t._extensions = new TreeSet<Extension>();
                     }
                     Extension e = new Extension(extSingleton.charAt(0), extBuf.toString());
                     t._extensions.add(e);
@@ -316,9 +301,7 @@ public final class LanguageTag {
 
     public String getJDKLanguage() {
         String lang = _language;
-//        for (String[] langMap : DEPRECATEDLANGS) {
-        for (int i = 0; i < DEPRECATEDLANGS.length; i++) {
-            String[] langMap = DEPRECATEDLANGS[i];
+        for (String[] langMap : DEPRECATEDLANGS) {
             if (AsciiUtil.caseIgnoreCompare(lang, langMap[1]) == 0) {
                 // use the old code
                 lang = langMap[0];
@@ -345,10 +328,8 @@ public final class LanguageTag {
 
     public String getVariant() {
         if (_variants != null) {
-//            StringBuilder buf = new StringBuilder();
-            StringBuffer buf = new StringBuffer();
-//            Iterator<String> itr = _variants.iterator();
-            Iterator itr = _variants.iterator();
+            StringBuilder buf = new StringBuilder();
+            Iterator<String> itr = _variants.iterator();
             while (itr.hasNext()) {
                 if (buf.length() > 0) {
                     buf.append(SEP);
@@ -360,13 +341,11 @@ public final class LanguageTag {
         return "";
     }
 
-//    public Set<String> getVarinats() {
-    public Set getVarinats() {
+    public Set<String> getVarinats() {
         return Collections.unmodifiableSet(_variants);
     }
 
-//    public Set<Extension> getExtensions() {
-    public Set getExtensions() {
+    public Set<Extension> getExtensions() {
         if (_extensions != null) {
             return Collections.unmodifiableSet(_extensions);
         }
@@ -444,8 +423,7 @@ public final class LanguageTag {
     /*
      * Language tag extension key/value container
      */
-//    public static class Extension implements Comparable<Extension> {
-    public static class Extension implements Comparable {
+    public static class Extension implements Comparable<Extension> {
         private char _singleton;
         private String _value;
 
@@ -465,15 +443,10 @@ public final class LanguageTag {
         public int compareTo(Extension other) {
             return (int)_singleton - (int)other._singleton;
         }
-
-        public int compareTo(Object obj) {
-            return compareTo((Extension)obj);
-        }
     }
 
     public static String toLanguageTag(BaseLocale base, LocaleExtensions ext) {
-//        StringBuilder buf = new StringBuilder();
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
 
         // language
         String language = base.getLanguage();
@@ -482,9 +455,7 @@ public final class LanguageTag {
         } else {
             if (isLanguageSubtag(language)) {
                 // if deprecated language code, map to the current one
-//                for (String[] langMap : DEPRECATEDLANGS) {
-                for (int i = 0; i < DEPRECATEDLANGS.length; i++) {
-                    String[] langMap = DEPRECATEDLANGS[i];
+                for (String[] langMap : DEPRECATEDLANGS) {
                     if (AsciiUtil.caseIgnoreCompare(language, langMap[0]) == 0) {
                         language = langMap[1];
                         break;
@@ -513,18 +484,15 @@ public final class LanguageTag {
         // variant
         String variant = base.getVariant();
         if (variant.length() > 0) {
-//            String[] variants = variant.split("_");
-            String[] variants = Utility.split(variant, '_');
-//            for (String var : variants) {
-            TreeSet validVars = new TreeSet();
-            for (int i = 0; i < variants.length; i++) {
-                String var = variants[i];
+            String[] variants = variant.split("_");
+            TreeSet<String> validVars = new TreeSet<String>();
+            for (String var : variants) {
                 if (isVariantSubtag(var)) {
                     validVars.add(AsciiUtil.toLowerString(var));
                 }
             }
             if (validVars.size() > 0) {
-                Iterator varIt = validVars.iterator();
+                Iterator<String> varIt = validVars.iterator();
                 while (varIt.hasNext()) {
                     buf.append(SEP);
                     buf.append(varIt.next());

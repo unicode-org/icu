@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2009, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -162,10 +162,8 @@ public class RelativeDateFormat extends DateFormat {
         CalendarData calData = new CalendarData(fLocale, calendar.getType());
         UResourceBundle rb = calData.get("fields", "day", "relative");
         
-        Set datesSet =new TreeSet(new Comparator() { 
-            public int compare(Object o1, Object o2) {
-                URelativeString r1 = (URelativeString)o1;
-                URelativeString r2 = (URelativeString)o2;
+        Set<URelativeString> datesSet = new TreeSet<URelativeString>(new Comparator<URelativeString>() { 
+            public int compare(URelativeString r1, URelativeString r2) {
                 
                 if(r1.offset == r2.offset) {
                     return 0;
@@ -185,8 +183,7 @@ public class RelativeDateFormat extends DateFormat {
             URelativeString rs = new URelativeString(k,v);
             datesSet.add(rs);
         }
-        fDates = new URelativeString[0];
-        fDates = (URelativeString[])datesSet.toArray(fDates);
+        fDates = datesSet.toArray(new URelativeString[0]);
     }
     
     /**

@@ -1,16 +1,21 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.text;
 
-import com.ibm.icu.lang.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.USerializedSet;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UCharacter;
 
 /**
  * This class allows one to iterate through all the strings that are canonically equivalent to a given
@@ -117,7 +122,7 @@ public final class CanonicalIterator {
         }
 
         // find the segments
-        List segmentList = new ArrayList();
+        List<String> segmentList = new ArrayList<String>();
         int cp;
         int start = 0;
 
@@ -140,7 +145,7 @@ public final class CanonicalIterator {
         current = new int[segmentList.size()];
         for (i = 0; i < pieces.length; ++i) {
             if (PROGRESS) System.out.println("SEGMENT");
-            pieces[i] = getEquivalents((String) segmentList.get(i));
+            pieces[i] = getEquivalents(segmentList.get(i));
         }
     }
 
@@ -153,7 +158,7 @@ public final class CanonicalIterator {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public static void permute(String source, boolean skipZeros, Set output) {
+    public static void permute(String source, boolean skipZeros, Set<String> output) {
         // TODO: optimize
         //if (PROGRESS) System.out.println("Permute: " + source);
 
@@ -166,7 +171,7 @@ public final class CanonicalIterator {
         }
 
         // otherwise iterate through the string, and recursively permute all the other characters
-        Set subpermute = new HashSet();
+        Set<String> subpermute = new HashSet<String>();
         int cp;
         for (int i = 0; i < source.length(); i += UTF16.getCharCount(cp)) {
             cp = UTF16.charAt(source, i);
@@ -186,9 +191,8 @@ public final class CanonicalIterator {
 
             // prefix this character to all of them
             String chStr = UTF16.valueOf(source, i);
-            Iterator it = subpermute.iterator();
-            while (it.hasNext()) {
-                String piece = chStr + (String) it.next();
+            for (String s : subpermute) {
+                String piece = chStr + s;
                 //if (PROGRESS) System.out.println("  Piece: " + piece);
                 output.add(piece);
             }
@@ -238,21 +242,21 @@ public final class CanonicalIterator {
 
     // we have a segment, in NFD. Find all the strings that are canonically equivalent to it.
     private String[] getEquivalents(String segment) {
-        Set result = new HashSet();
-        Set basic = getEquivalents2(segment);
-        Set permutations = new HashSet();
+        Set<String> result = new HashSet<String>();
+        Set<String> basic = getEquivalents2(segment);
+        Set<String> permutations = new HashSet<String>();
 
         // now get all the permutations
         // add only the ones that are canonically equivalent
         // TODO: optimize by not permuting any class zero.
-        Iterator it = basic.iterator();
+        Iterator<String> it = basic.iterator();
         while (it.hasNext()) {
-            String item = (String) it.next();
+            String item = it.next();
             permutations.clear();
             permute(item, SKIP_ZEROS, permutations);
-            Iterator it2 = permutations.iterator();
+            Iterator<String> it2 = permutations.iterator();
             while (it2.hasNext()) {
-                String possible = (String) it2.next();
+                String possible = it2.next();
 
 /*
                 String attempt = Normalizer.normalize(possible, Normalizer.DECOMP, 0);
@@ -276,9 +280,9 @@ public final class CanonicalIterator {
     }
 
 
-    private Set getEquivalents2(String segment) {
+    private Set<String> getEquivalents2(String segment) {
 
-        Set result = new HashSet();
+        Set<String> result = new HashSet<String>();
 
         if (PROGRESS) System.out.println("Adding: " + Utility.hex(segment));
 
@@ -304,16 +308,16 @@ public final class CanonicalIterator {
                 starts.getRange(j, range);
                 int end=range[1];
                 for (int cp2 = range[0]; cp2 <= end; ++cp2) {
-                    Set remainder = extract(cp2, segment, i, workingBuffer);
-                    if (remainder == null) continue;
+                    Set<String> remainder = extract(cp2, segment, i, workingBuffer);
+                    if (remainder == null) {
+                        continue;
+                    }
 
                     // there were some matches, so add all the possibilities to the set.
                     String prefix= segment.substring(0,i);
                     prefix += UTF16.valueOf(cp2);
                     //int el = -1;
-                    Iterator iter = remainder.iterator();
-                    while (iter.hasNext()) {
-                        String item = (String) iter.next();
+                    for (String item : remainder) {
                         String toAdd = new String(prefix);
                         toAdd += item;
                         result.add(toAdd);
@@ -366,7 +370,7 @@ public final class CanonicalIterator {
      * (with canonical rearrangment!)
      * If so, take the remainder, and return the equivalents
      */
-    private Set extract(int comp, String segment, int segmentPos, StringBuffer buf) {
+    private Set<String> extract(int comp, String segment, int segmentPos, StringBuffer buf) {
         if (PROGRESS) System.out.println(" extract: " + Utility.hex(UTF16.valueOf(comp))
             + ", " + Utility.hex(segment.substring(segmentPos)));
 
@@ -441,7 +445,7 @@ public final class CanonicalIterator {
     // TODO: Flatten this data so it doesn't have to be reconstructed each time!
 
     //private static final UnicodeSet EMPTY = new UnicodeSet(); // constant, don't change
-    private static final Set SET_WITH_NULL_STRING = new HashSet(); // constant, don't change
+    private static final Set<String> SET_WITH_NULL_STRING = new HashSet<String>(); // constant, don't change
     static {
         SET_WITH_NULL_STRING.add("");
     }

@@ -1191,7 +1191,7 @@ public class Bidi {
      * Assume sizeNeeded>0.
      * If object != null, then assume size > 0.
      */
-    private Object getMemory(String label, Object array, Class arrayClass,
+    private Object getMemory(String label, Object array, Class<?> arrayClass,
             boolean mayAllocate, int sizeNeeded)
     {
         int len = Array.getLength(array);

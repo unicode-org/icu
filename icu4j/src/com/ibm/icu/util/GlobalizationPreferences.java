@@ -12,11 +12,11 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.text.BreakIterator;
@@ -166,7 +166,7 @@ public class GlobalizationPreferences implements Freezable {
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
-    public GlobalizationPreferences setLocales(List inputLocales) {
+    public GlobalizationPreferences setLocales(List<ULocale> inputLocales) {
         if (isFrozen()) {
             throw new UnsupportedOperationException("Attempt to modify immutable object");
         }
@@ -181,12 +181,12 @@ public class GlobalizationPreferences implements Freezable {
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
-    public List getLocales() {
-        List result;
+    public List<ULocale> getLocales() {
+        List<ULocale> result;
         if (locales == null) {
             result = guessLocales();
         } else {
-            result = new ArrayList(); 
+            result = new ArrayList<ULocale>(); 
             result.addAll(locales);
         }
         return result;
@@ -200,12 +200,12 @@ public class GlobalizationPreferences implements Freezable {
      * @provisional This API might change or be removed in a future release.
      */
     public ULocale getLocale(int index) {
-        List lcls = locales;
+        List<ULocale> lcls = locales;
         if (lcls == null) {
             lcls = guessLocales();
         }
         if (index >= 0 && index < lcls.size()) {
-            return (ULocale)lcls.get(index);
+            return lcls.get(index);
         }
         return null;
     }
@@ -301,9 +301,9 @@ public class GlobalizationPreferences implements Freezable {
         UResourceBundle urb = null;
         UResourceBundle candidate = null;
         String actualLocaleName = null;
-        List fallbacks = getLocales();
+        List<ULocale> fallbacks = getLocales();
         for (int i = 0; i < fallbacks.size(); i++) {
-            String localeName = ((ULocale)fallbacks.get(i)).toString();
+            String localeName = (fallbacks.get(i)).toString();
             if (actualLocaleName != null && localeName.equals(actualLocaleName)) {
                 // Actual locale name in the previous round may exactly matches
                 // with the next fallback locale
@@ -561,8 +561,7 @@ public class GlobalizationPreferences implements Freezable {
      */
     public String getDisplayName(String id, int type) {
         String result = id;
-        for (Iterator it = getLocales().iterator(); it.hasNext();) {
-            ULocale locale = (ULocale) it.next();
+        for (ULocale locale : getLocales()) {
             if (!isAvailableLocale(locale, TYPE_GENERIC)) {
                 continue;
             }
@@ -816,8 +815,8 @@ public class GlobalizationPreferences implements Freezable {
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
-    protected List processLocales(List inputLocales) {
-        List result = new ArrayList();
+    protected List<ULocale> processLocales(List<ULocale> inputLocales) {
+        List<ULocale> result = new ArrayList<ULocale>();
         /*
          * Step 1: Relocate later occurrence of more specific locale
          * before earlier occurrence of less specific locale.
@@ -827,7 +826,7 @@ public class GlobalizationPreferences implements Freezable {
          *   After  - en_US_Boston, en_US, fr_FR, zh_TW, zh_Hant, zh, fr_CA
          */
         for (int i = 0; i < inputLocales.size(); i++) {
-            ULocale uloc = (ULocale)inputLocales.get(i);
+            ULocale uloc = inputLocales.get(i);
 
             String language = uloc.getLanguage();
             String script = uloc.getScript();
@@ -839,7 +838,7 @@ public class GlobalizationPreferences implements Freezable {
                 // Check if this locale is more specific
                 // than existing locale entries already inserted
                 // in the destination list
-                ULocale u = (ULocale)result.get(j);
+                ULocale u = result.get(j);
                 if (!u.getLanguage().equals(language)) {
                     continue;
                 }
@@ -896,7 +895,7 @@ public class GlobalizationPreferences implements Freezable {
          */
         int index = 0;
         while (index < result.size()) {
-            ULocale uloc = (ULocale)result.get(index);
+            ULocale uloc = result.get(index);
             while (true) {
                 uloc = uloc.getFallback();
                 if (uloc.getLanguage().length() == 0) {
@@ -919,10 +918,10 @@ public class GlobalizationPreferences implements Freezable {
          */
         index = 0;
         while (index < result.size() - 1) {
-            ULocale uloc = (ULocale)result.get(index);
+            ULocale uloc = result.get(index);
             boolean bRemoved = false;
             for (int i = index + 1; i < result.size(); i++) {
-                if (uloc.equals((ULocale)result.get(i))) {
+                if (uloc.equals(result.get(i))) {
                     // Remove earlier one
                     result.remove(index);
                     bRemoved = true;
@@ -1010,8 +1009,7 @@ public class GlobalizationPreferences implements Freezable {
     protected String guessTerritory() {
         String result;
         // pass through locales to see if there is a territory.
-        for (Iterator it = getLocales().iterator(); it.hasNext();) {
-            ULocale locale = (ULocale)it.next();
+        for (ULocale locale : getLocales()) {
             result = locale.getCountry();
             if (result.length() != 0) {
                 return result;
@@ -1026,10 +1024,10 @@ public class GlobalizationPreferences implements Freezable {
         String script = firstLocale.getScript();
         result = null;
         if (script.length() != 0) {
-            result = (String) language_territory_hack_map.get(language + "_" + script);
+            result = language_territory_hack_map.get(language + "_" + script);
         }
         if (result == null) {
-            result = (String) language_territory_hack_map.get(language);
+            result = language_territory_hack_map.get(language);
         }
         if (result == null) {
             result = "US"; // need *some* default
@@ -1055,9 +1053,9 @@ public class GlobalizationPreferences implements Freezable {
      * @draft ICU 3.6
      * @provisional This API might change or be removed in a future release.
      */
-    protected List guessLocales() {
+    protected List<ULocale> guessLocales() {
         if (implicitLocales == null) {
-            List result = new ArrayList(1);
+            List<ULocale> result = new ArrayList<ULocale>(1);
             result.add(ULocale.getDefault());
             implicitLocales = processLocales(result);
         }
@@ -1133,7 +1131,7 @@ public class GlobalizationPreferences implements Freezable {
         // NOTE: in a few cases can do better by looking at language. 
         // Eg haw+US should go to Pacific/Honolulu
         // fr+CA should go to America/Montreal
-        String timezoneString = (String) territory_tzid_hack_map.get(getTerritory());
+        String timezoneString = territory_tzid_hack_map.get(getTerritory());
         if (timezoneString == null) {
             String[] attempt = ZoneMeta.getAvailableIDs(getTerritory());
             if (attempt.length == 0) {
@@ -1169,7 +1167,7 @@ public class GlobalizationPreferences implements Freezable {
     
     // PRIVATES
     
-    private List locales;
+    private List<ULocale> locales;
     private String territory;
     private Currency currency;
     private TimeZone timezone;
@@ -1178,7 +1176,7 @@ public class GlobalizationPreferences implements Freezable {
     private BreakIterator[] breakIterators;
     private DateFormat[][] dateFormats;
     private NumberFormat[] numberFormats;
-    private List implicitLocales;
+    private List<ULocale> implicitLocales;
     
     {
         reset();
@@ -1186,10 +1184,10 @@ public class GlobalizationPreferences implements Freezable {
 
 
     private ULocale getAvailableLocale(int type) {
-        List locs = getLocales();
+        List<ULocale> locs = getLocales();
         ULocale result = null;
         for (int i = 0; i < locs.size(); i++) {
-            ULocale l = (ULocale)locs.get(i);
+            ULocale l = locs.get(i);
             if (isAvailableLocale(l, type)) {
                 result = l;
                 break;
@@ -1199,7 +1197,7 @@ public class GlobalizationPreferences implements Freezable {
     }
 
     private boolean isAvailableLocale(ULocale loc, int type) {
-        BitSet bits = (BitSet)available_locales.get(loc);
+        BitSet bits = available_locales.get(loc);
         if (bits != null && bits.get(type)) {
             return true;
         }
@@ -1209,7 +1207,7 @@ public class GlobalizationPreferences implements Freezable {
     /*
      * Available locales for service types
      */
-    private static final HashMap available_locales = new HashMap();
+    private static final HashMap<ULocale, BitSet> available_locales = new HashMap<ULocale, BitSet>();
     private static final int
         TYPE_GENERIC = 0,
         TYPE_CALENDAR = 1,
@@ -1230,7 +1228,7 @@ public class GlobalizationPreferences implements Freezable {
 
         ULocale[] calLocales = Calendar.getAvailableULocales();
         for (int i = 0; i < calLocales.length; i++) {
-            bits = (BitSet)available_locales.get(calLocales[i]);
+            bits = available_locales.get(calLocales[i]);
             if (bits == null) {
                 bits = new BitSet(TYPE_LIMIT);
                 available_locales.put(allLocales[i], bits);
@@ -1240,7 +1238,7 @@ public class GlobalizationPreferences implements Freezable {
 
         ULocale[] dateLocales = DateFormat.getAvailableULocales();
         for (int i = 0; i < dateLocales.length; i++) {
-            bits = (BitSet)available_locales.get(dateLocales[i]);
+            bits = available_locales.get(dateLocales[i]);
             if (bits == null) {
                 bits = new BitSet(TYPE_LIMIT);
                 available_locales.put(allLocales[i], bits);
@@ -1250,7 +1248,7 @@ public class GlobalizationPreferences implements Freezable {
 
         ULocale[] numLocales = NumberFormat.getAvailableULocales();
         for (int i = 0; i < numLocales.length; i++) {
-            bits = (BitSet)available_locales.get(numLocales[i]);
+            bits = available_locales.get(numLocales[i]);
             if (bits == null) {
                 bits = new BitSet(TYPE_LIMIT);
                 available_locales.put(allLocales[i], bits);
@@ -1260,7 +1258,7 @@ public class GlobalizationPreferences implements Freezable {
 
         ULocale[] collLocales = Collator.getAvailableULocales();
         for (int i = 0; i < collLocales.length; i++) {
-            bits = (BitSet)available_locales.get(collLocales[i]);
+            bits = available_locales.get(collLocales[i]);
             if (bits == null) {
                 bits = new BitSet(TYPE_LIMIT);
                 available_locales.put(allLocales[i], bits);
@@ -1270,7 +1268,7 @@ public class GlobalizationPreferences implements Freezable {
 
         ULocale[] brkLocales = BreakIterator.getAvailableULocales();
         for (int i = 0; i < brkLocales.length; i++) {
-            bits = (BitSet)available_locales.get(brkLocales[i]);
+            bits = available_locales.get(brkLocales[i]);
             bits.set(TYPE_BREAKITERATOR);
         }
     }
@@ -1278,7 +1276,7 @@ public class GlobalizationPreferences implements Freezable {
     /** WARNING: All of this data is temporary, until we start importing from CLDR!!!
      * 
      */
-    private static final Map language_territory_hack_map = new HashMap();
+    private static final Map<String, String> language_territory_hack_map = new HashMap<String, String>();
     private static final String[][] language_territory_hack = {
         {"af", "ZA"},
         {"am", "ET"},
@@ -1440,7 +1438,7 @@ public class GlobalizationPreferences implements Freezable {
         }
     }
 
-    static final Map territory_tzid_hack_map = new HashMap();
+    static final Map<String, String> territory_tzid_hack_map = new HashMap<String, String>();
     static final String[][] territory_tzid_hack = {
         {"AQ", "Antarctica/McMurdo"},
         {"AR", "America/Buenos_Aires"},

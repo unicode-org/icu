@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2007, International Business Machines Corporation and    *
+* Copyright (C) 1996-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -80,7 +80,7 @@ package com.ibm.icu.text;
  * @author Syn Wee Quek
  * @stable ICU 2.8 
  */
-public final class CollationKey implements Comparable 
+public final class CollationKey implements Comparable<CollationKey>
 {
     // public inner classes -------------------------------------------------
     
@@ -249,40 +249,17 @@ public final class CollationKey implements Comparable
      */
     public int compareTo(CollationKey target)
     {
-    for (int i = 0;; ++i) {
-        int l = m_key_[i]&0xff;
-        int r = target.m_key_[i]&0xff;
-        if (l < r) {
-        return -1;
-        } else if (l > r) {
-        return 1;
-        } else if (l == 0) {
-        return 0;
+        for (int i = 0;; ++i) {
+            int l = m_key_[i]&0xff;
+            int r = target.m_key_[i]&0xff;
+            if (l < r) {
+            return -1;
+            } else if (l > r) {
+            return 1;
+            } else if (l == 0) {
+            return 0;
+            }
         }
-    }
-    }
-
-    /**
-     * <p>Compare this CollationKey with the specified Object.  The
-     * collation rules of the Collator that created this key are
-     * applied.</p>
-     * 
-     * <p>See note in compareTo(CollationKey) for warnings about possible
-     * incorrect results.</p>
-     *
-     * @param obj the Object to be compared to.
-     * @return Returns a negative integer, zero, or a positive integer 
-     *         respectively if this CollationKey is less than, equal to, or 
-     *         greater than the given Object.
-     * @exception ClassCastException is thrown when the argument is not 
-     *            a CollationKey.  NullPointerException is thrown when the argument 
-     *            is null.
-     * @see #compareTo(CollationKey)
-     * @stable ICU 2.8 
-     */
-    public int compareTo(Object obj) 
-    {
-       return compareTo((CollationKey)obj);
     }
 
     /**

@@ -1,18 +1,17 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2008, International Business Machines Corporation and others. All Rights Reserved.
+ * Copyright (C) 2003-2009, International Business Machines Corporation and others. All Rights Reserved.
  *******************************************************************************
  */
  
 package com.ibm.icu.text;
 
-import java.util.HashMap;
-import java.lang.IllegalArgumentException;
 import java.text.ParsePosition;
+import java.util.HashMap;
 
-import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UCharacter;
 
 /**
   *  This class is part of the Rule Based Break Iterator rule compiler.
@@ -71,10 +70,10 @@ class RBBIRuleScanner {
     RBBISymbolTable              fSymbolTable;     // symbol table, holds definitions of
                                                      //   $variable symbols.
     
-    HashMap                 fSetTable = new HashMap();        // UnicocodeSet hash table, holds indexes to
-                                               //   the sets created while parsing rules.
-                                                     //   The key is the string used for creating
-                                                     //   the set.
+    HashMap<String, RBBISetTableEl> fSetTable = new HashMap<String, RBBISetTableEl>(); // UnicocodeSet hash table, holds indexes to
+                                                                                       //   the sets created while parsing rules.
+                                                                                       //   The key is the string used for creating
+                                                                                       //   the set.
     
     UnicodeSet      fRuleSets[] = new UnicodeSet[10];    // Unicode Sets that are needed during
                                                      //  the scanning of RBBI rules.  The
@@ -603,7 +602,7 @@ class RBBIRuleScanner {
         // First check whether we've already cached a set for this string.
         // If so, just use the cached set in the new node.
         //   delete any set provided by the caller, since we own it.
-        el = (RBBISetTableEl) fSetTable.get(s);
+        el = fSetTable.get(s);
         if (el != null) {
             node.fLeftChild = el.val;
             Assert.assrt(node.fLeftChild.fType == RBBINode.uset);

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -28,7 +28,7 @@ public class ResourceReader {
     private BufferedReader reader;
     private String resourceName;
     private String encoding; // null for default encoding
-    private Class root;
+    private Class<?> root;
     
     /**
      * The one-based line number. Has the special value -1 before the
@@ -72,7 +72,7 @@ public class ResourceReader {
      * @exception UnsupportedEncodingException if
      * <code>encoding</code> is not supported by the JDK.
      */
-    public ResourceReader(Class rootClass, String resourceName, String encoding)
+    public ResourceReader(Class<?> rootClass, String resourceName, String encoding)
         throws UnsupportedEncodingException {
         this.root = rootClass;
         this.resourceName = resourceName;
@@ -121,7 +121,7 @@ public class ResourceReader {
      * @param resourceName the name of the text file located in the
      * given class's package.
      */
-    public ResourceReader(Class rootClass, String resourceName) {
+    public ResourceReader(Class<?> rootClass, String resourceName) {
         this.root = rootClass;
         this.resourceName = resourceName;
         this.encoding = null;

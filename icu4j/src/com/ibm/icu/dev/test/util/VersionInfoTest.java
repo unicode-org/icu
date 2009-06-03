@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and    *
+* Copyright (C) 1996-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -191,32 +191,17 @@ public final class VersionInfoTest extends TestFmwk
      * Test Comparable interface
      */
     public void TestComparable() {
-        try {
-            VersionInfo v = VersionInfo.ICU_VERSION;
-            String s  = "Some String";
-            if(v.compareTo(s) >0) {
-                errln("VersionInfo.compareTo(String) returned >0, should have thrown exception");
-            } else {
-                errln("VersionInfo.compareTo(String) returned <=0, should have thrown exception");
-            }
-        } catch(ClassCastException cce) {
-            logln("Pass: compareTo(String) returned " + cce.toString());
-        }
         for (int i = 0; i < COMPARE_NOT_EQUAL_STRING_.length; i += 2) {
-            VersionInfo v1 = 
-                        VersionInfo.getInstance(COMPARE_NOT_EQUAL_STRING_[i]);
-            Object v2 = 
-                    VersionInfo.getInstance(COMPARE_NOT_EQUAL_STRING_[i + 1]);
+            VersionInfo v1 = VersionInfo.getInstance(COMPARE_NOT_EQUAL_STRING_[i]);
+            VersionInfo v2 = VersionInfo.getInstance(COMPARE_NOT_EQUAL_STRING_[i + 1]);
             if (v1.compareTo(v2) == 0) {
                 errln(COMPARE_NOT_EQUAL_STRING_[i] + " should not equal " +
                       COMPARE_NOT_EQUAL_STRING_[i + 1]);
             }
         }
         for (int i = 0; i < COMPARE_EQUAL_STRING_.length - 1; i ++) {
-            VersionInfo v1 = 
-                        VersionInfo.getInstance(COMPARE_EQUAL_STRING_[i]);
-            Object v2 = 
-                    VersionInfo.getInstance(COMPARE_EQUAL_STRING_[i + 1]);
+            VersionInfo v1 = VersionInfo.getInstance(COMPARE_EQUAL_STRING_[i]);
+            VersionInfo v2 = VersionInfo.getInstance(COMPARE_EQUAL_STRING_[i + 1]);
             if (v1.compareTo(v2) != 0) {
                 errln(COMPARE_EQUAL_STRING_[i] + " should equal " +
                       COMPARE_EQUAL_STRING_[i + 1]);

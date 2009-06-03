@@ -1,21 +1,20 @@
 /*
 ***************************************************************************
-*   Copyright (C) 2002-2006 International Business Machines Corporation   *
+*   Copyright (C) 2002-2009 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 */
 package com.ibm.icu.text;
 
-import java.util.HashMap;
-import java.util.Collection;
-
 import java.text.ParsePosition;
+import java.util.HashMap;
+
 import com.ibm.icu.lang.UCharacter;
 
 class RBBISymbolTable implements SymbolTable{
     
     String               fRules;
-    HashMap              fHashTable;
+    HashMap<String, RBBISymbolTableEntry> fHashTable;
     RBBIRuleScanner      fRuleScanner;
 
     // These next two fields are part of the mechanism for passing references to
@@ -35,7 +34,7 @@ class RBBISymbolTable implements SymbolTable{
     RBBISymbolTable(RBBIRuleScanner rs, String rules) {
         fRules = rules;
         fRuleScanner = rs;
-        fHashTable = new HashMap();
+        fHashTable = new HashMap<String, RBBISymbolTableEntry>();
         ffffString = "\uffff";
     }
 
@@ -54,7 +53,7 @@ class RBBISymbolTable implements SymbolTable{
         RBBINode usetNode;
         String retString;
 
-        el = (RBBISymbolTableEntry) fHashTable.get(s);
+        el = fHashTable.get(s);
         if (el == null) {
             return null;
         }
@@ -141,7 +140,7 @@ class RBBISymbolTable implements SymbolTable{
         RBBINode retNode = null;
         RBBISymbolTableEntry el;
 
-        el = (RBBISymbolTableEntry) fHashTable.get(key);
+        el = fHashTable.get(key);
         if (el != null) {
             retNode = el.val;
         }
@@ -156,7 +155,7 @@ class RBBISymbolTable implements SymbolTable{
     //
     void addEntry(String key, RBBINode val) {
         RBBISymbolTableEntry e;
-        e = (RBBISymbolTableEntry) fHashTable.get(key);
+        e = fHashTable.get(key);
         if (e != null) {
             fRuleScanner.error(RBBIRuleBuilder.U_BRK_VARIABLE_REDFINITION);
             return;
@@ -178,9 +177,7 @@ class RBBISymbolTable implements SymbolTable{
                         + "Name               Node Val     String Val\n"
                         + "----------------------------------------------------------------------\n");
 
-        RBBISymbolTableEntry[] syms = new RBBISymbolTableEntry[0];
-        Collection t = fHashTable.values();
-        syms = (RBBISymbolTableEntry[]) t.toArray(syms);
+        RBBISymbolTableEntry[] syms = fHashTable.values().toArray(new RBBISymbolTableEntry[0]);
 
         for (int i = 0; i < syms.length; i++) {
             RBBISymbolTableEntry s = syms[i];

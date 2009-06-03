@@ -158,7 +158,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
     /**
      * Cache to hold the SimpleDateFormat objects for a Locale.
      */
-    private static ICUCache cachedLocaleData = new SimpleCache();
+    private static ICUCache<ULocale, SimpleDateFormat> cachedLocaleData = new SimpleCache<ULocale, SimpleDateFormat>();
 
     /**
      * Gets the time zone offset, for current date, modified in case of
@@ -408,7 +408,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
 
         // We keep a cache, indexed by locale.  The cache contains a
         // SimpleDateFormat object, which we create on demand.
-        SimpleDateFormat format = (SimpleDateFormat)cachedLocaleData.get(locale);
+        SimpleDateFormat format = cachedLocaleData.get(locale);
         if (format == null) {
             format = new SimpleDateFormat(null, locale);
             cachedLocaleData.put(locale, format);

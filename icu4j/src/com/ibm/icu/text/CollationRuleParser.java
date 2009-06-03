@@ -1,16 +1,17 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2008, International Business Machines Corporation and    *
+* Copyright (C) 1996-2009, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
 package com.ibm.icu.text;
 
 import java.text.ParseException;
-import java.util.Hashtable;
 import java.util.Arrays;
-import com.ibm.icu.lang.UCharacter;
+import java.util.Hashtable;
+
 import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.lang.UCharacter;
 
 /**
 * Class for parsing collation rules, produces a list of tokens that will be
@@ -42,7 +43,7 @@ final class CollationRuleParser
         m_extraCurrent_ = m_source_.length();
         m_variableTop_ = null;
         m_parsedToken_ = new ParsedToken();
-        m_hashTable_ = new Hashtable();
+        m_hashTable_ = new Hashtable<Token, Token>();
         m_options_ = new OptionSet(RuleBasedCollator.UCA_);
         m_listHeader_ = new TokenListHeader[512];
         m_resultLength_ = 0;
@@ -262,7 +263,7 @@ final class CollationRuleParser
     /**
      * Hash table to keep all tokens
      */
-    Hashtable m_hashTable_;
+    Hashtable<Token, Token> m_hashTable_;
 
     // package private method ------------------------------------------------
 
@@ -697,7 +698,7 @@ final class CollationRuleParser
             m_utilToken_.m_rules_ = m_source_;
             // 4 Lookup each source in the CharsToToken map, and find a
             // sourcetoken
-            Token sourceToken = (Token)m_hashTable_.get(m_utilToken_);
+            Token sourceToken = m_hashTable_.get(m_utilToken_);
             if (m_parsedToken_.m_strength_ != TOKEN_RESET_) {
                 if (lastToken == null) {
                     // this means that rules haven't started properly
@@ -913,7 +914,7 @@ final class CollationRuleParser
                         m_utilToken_.m_source_ = searchCharsLen << 24
                                              | m_parsedToken_.m_charsOffset_;
                         m_utilToken_.m_rules_ = m_source_;
-                        sourceToken = (Token)m_hashTable_.get(m_utilToken_);
+                        sourceToken = m_hashTable_.get(m_utilToken_);
                     }
                     if (sourceToken != null) {
                         expandNext = (m_parsedToken_.m_charsLen_
@@ -1589,7 +1590,7 @@ final class CollationRuleParser
             m_utilToken_.m_source_ = (m_parsedToken_.m_charsLen_ << 24)
             | m_parsedToken_.m_charsOffset_;
             m_utilToken_.m_rules_ = m_source_;
-            sourcetoken = (Token)m_hashTable_.get(m_utilToken_);
+            sourcetoken = m_hashTable_.get(m_utilToken_);
 
             if(sourcetoken == null) {
                 m_listHeader_[m_resultLength_] = new TokenListHeader();

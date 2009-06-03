@@ -1,17 +1,20 @@
 //
-//    Copyright (C) 2002-2007, International Business Machines Corporation and others.
+//    Copyright (C) 2002-2009, International Business Machines Corporation and others.
 //    All Rights Reserved.
 //
 //
 
 package com.ibm.icu.text;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.io.OutputStream;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.ICUDebug;
 
@@ -49,7 +52,7 @@ class RBBIRuleBuilder {
                                           // longest match.
 
     RBBISetBuilder fSetBuilder;           // Set and Character Category builder.
-    List fUSetNodes;                      // Vector of all uset nodes.
+    List<RBBINode> fUSetNodes;            // Vector of all uset nodes.
     RBBITableBuilder fForwardTables;      // State transition tables
     RBBITableBuilder fReverseTables;
     RBBITableBuilder fSafeFwdTables;
@@ -58,11 +61,11 @@ class RBBIRuleBuilder {
     //
     // Status {tag} values.   These structures are common to all of the rule sets (Forward, Reverse, etc.).
     //
-    Map fStatusSets = new HashMap();      // Status value sets encountered so far.
-                                          //  Map Key is the set of values.
-                                          //  Map Value is the runtime array index.
+    Map<Set<Integer>, Integer> fStatusSets = new HashMap<Set<Integer>, Integer>(); // Status value sets encountered so far.
+                                                                                   //  Map Key is the set of values.
+                                                                                   //  Map Value is the runtime array index.
 
-    List fRuleStatusVals;                 // List of Integer objects.  Has same layout as the
+    List<Integer> fRuleStatusVals;        // List of Integer objects.  Has same layout as the
                                           //   runtime array of status (tag) values - 
                                           //     number of values in group 1
                                           //        first status value in group 1
@@ -136,8 +139,8 @@ class RBBIRuleBuilder {
         fDebugEnv       = ICUDebug.enabled("rbbi") ?
                             ICUDebug.value("rbbi") : null;
         fRules          = rules;
-        fUSetNodes      = new ArrayList();
-        fRuleStatusVals = new ArrayList();
+        fUSetNodes      = new ArrayList<RBBINode>();
+        fRuleStatusVals = new ArrayList<Integer>();
         fScanner        = new RBBIRuleScanner(this);
         fSetBuilder     = new RBBISetBuilder(this);
     }
@@ -262,8 +265,7 @@ class RBBIRuleBuilder {
 
         // Write out the status {tag} table.
         Assert.assrt(outputPos == header[16]);
-        for (i = 0; i < fRuleStatusVals.size(); i++) {
-            Integer val = (Integer) fRuleStatusVals.get(i);
+        for (Integer val : fRuleStatusVals) {
             dos.writeInt(val.intValue());
             outputPos += 4;
         }

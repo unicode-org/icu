@@ -1553,13 +1553,13 @@ public abstract class DateFormat extends UFormat {
         private static final Field[] CAL_FIELDS;
  
         // Map for resolving DateFormat.Field by name
-        private static final Map FIELD_NAME_MAP;
+        private static final Map<String, Field> FIELD_NAME_MAP;
 
         static {
             GregorianCalendar cal = new GregorianCalendar();
             CAL_FIELD_COUNT = cal.getFieldCount();
             CAL_FIELDS = new Field[CAL_FIELD_COUNT];
-            FIELD_NAME_MAP = new HashMap(CAL_FIELD_COUNT);
+            FIELD_NAME_MAP = new HashMap<String, Field>(CAL_FIELD_COUNT);
         }
 
         // Java fields -------------------

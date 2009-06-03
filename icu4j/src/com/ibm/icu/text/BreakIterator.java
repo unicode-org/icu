@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -426,7 +426,7 @@ public abstract class BreakIterator implements Cloneable
     private static final int KIND_COUNT = 5;
 
     /** @internal */
-    private static final SoftReference[] iterCache = new SoftReference[5];
+    private static final SoftReference<?>[] iterCache = new SoftReference<?>[5];
 
     /**
      * Returns a new instance of BreakIterator that locates word boundaries.
@@ -703,7 +703,7 @@ s     */
     public static BreakIterator getBreakInstance(ULocale where, int kind) {
 
         if (iterCache[kind] != null) {
-            BreakIteratorCache cache = (BreakIteratorCache) iterCache[kind].get();
+            BreakIteratorCache cache = (BreakIteratorCache)iterCache[kind].get();
             if (cache != null) {
                 if (cache.getLocale().equals(where)) {
                     return cache.createBreakInstance();
@@ -715,7 +715,7 @@ s     */
         BreakIterator result = getShim().createBreakIterator(where, kind);
 
         BreakIteratorCache cache = new BreakIteratorCache(where, result);
-        iterCache[kind] = new SoftReference(cache);
+        iterCache[kind] = new SoftReference<BreakIteratorCache>(cache);
         return result;
     }
 
@@ -780,7 +780,7 @@ s     */
         // two shim instances, but they'll share the same state so that's ok.
         if (shim == null) {
             try {
-                Class cls = Class.forName("com.ibm.icu.text.BreakIteratorFactory");
+                Class<?> cls = Class.forName("com.ibm.icu.text.BreakIteratorFactory");
                 shim = (BreakIteratorServiceShim)cls.newInstance();
             }
             catch (MissingResourceException e)

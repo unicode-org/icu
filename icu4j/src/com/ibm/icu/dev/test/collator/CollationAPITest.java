@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2008, International Business Machines Corporation and         *
+ * Copyright (C) 2002-2009, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,15 +12,22 @@
  
 package com.ibm.icu.dev.test.collator;
 
-import java.util.Locale;
-import java.util.Arrays;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.text.*;
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.MissingResourceException;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.CollationElementIterator;
+import com.ibm.icu.text.CollationKey;
+import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.RawCollationKey;
+import com.ibm.icu.text.RuleBasedCollator;
+import com.ibm.icu.text.UCharacterIterator;
+import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.VersionInfo;
-import java.util.MissingResourceException;
 
 public class CollationAPITest extends TestFmwk {
     public static void main(String[] args) throws Exception {
@@ -58,31 +65,15 @@ public class CollationAPITest extends TestFmwk {
         logln("Use tertiary comparison level testing ....");
         sortk1 = col.getCollationKey(test1);
         CollationKey sortk2 = col.getCollationKey(test2);
-        Object sortk3 = sortk2;
-        doAssert((sortk1.compareTo(sortk2)) > 0 
-                 && (sortk1.compareTo(sortk3)) > 0, "Result should be \"Abcda\" >>> \"abcda\"");
-    
+        doAssert((sortk1.compareTo(sortk2)) > 0, "Result should be \"Abcda\" >>> \"abcda\"");
+
         CollationKey sortkNew;
         sortkNew = sortk1;
-        doAssert(!(sortk1.equals(sortk2)) && !(sortk1.equals(sortk3)), 
-                 "The sort keys should be different");
+        doAssert(!(sortk1.equals(sortk2)), "The sort keys should be different");
         doAssert((sortk1.hashCode() != sortk2.hashCode()), "sort key hashCode() failed");
         doAssert((sortk1.equals(sortkNew)), "The sort keys assignment failed");
         doAssert((sortk1.hashCode() == sortkNew.hashCode()), "sort key hashCode() failed");
 
-        // check invaliad comparisons
-        Object fake = "fake";
-        try {
-            sortk1.compareTo(fake);
-            errln("Non-CollationKey comparison");
-        }
-        catch (Exception e) {
-                logln("PASS: Non-CollationKey comparison failed as expected");
-        }
-        if (sortk1.equals(fake)) {
-            errln("Non-CollationKey comparison");
-        }
-        
         // port from apicoll
         try {
             col = Collator.getInstance();
@@ -249,39 +240,26 @@ public class CollationAPITest extends TestFmwk {
     public void TestCompare() {
         logln("The compare tests begin : ");
         Collator col = Collator.getInstance(Locale.ENGLISH);
-        
+
         String test1 = "Abcda";
         String test2 = "abcda";
         logln("Use tertiary comparison level testing ....");
         
-        Object obj1 = test1;
-        Object obj2 = test2;
-        doAssert((col.compare(obj1, obj2) > 0), "Result should be \"Abcda\" != \"abcda\"");
         doAssert((!col.equals(test1, test2) ), "Result should be \"Abcda\" != \"abcda\"");
         doAssert((col.compare(test1, test2) > 0 ), "Result should be \"Abcda\" >>> \"abcda\"");
-    
+
         col.setStrength(Collator.SECONDARY);
         logln("Use secondary comparison level testing ....");
                     
-        doAssert((col.compare(obj1, obj2) == 0), "Result should be \"Abcda\" == \"abcda\"");
         doAssert((col.equals(test1, test2) ), "Result should be \"Abcda\" == \"abcda\"");
         doAssert((col.compare(test1, test2) == 0), "Result should be \"Abcda\" == \"abcda\"");
-    
+
         col.setStrength(Collator.PRIMARY);
         logln("Use primary comparison level testing ....");
         
-        doAssert((col.compare(obj1, obj2) == 0 ), "Result should be \"Abcda\" == \"abcda\"");
         doAssert((col.equals(test1, test2) ), "Result should be \"Abcda\" == \"abcda\"");
         doAssert((col.compare(test1, test2) == 0 ), "Result should be \"Abcda\" == \"abcda\"");
         logln("The compare tests end.");
-        
-        Integer die = new Integer(1);
-        try {
-            col.compare(die, test1);
-            errln("Non-Strings should fail col.compare(Object, Object)");
-        } catch (Exception e) {
-                logln("PASS: Non-Strings comparison failed as expected");
-        }
     }
     
     /**

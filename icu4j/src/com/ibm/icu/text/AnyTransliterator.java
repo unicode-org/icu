@@ -51,7 +51,7 @@ class AnyTransliterator extends Transliterator {
     /**
      * Cache mapping UScriptCode values to Transliterator*.
      */
-    private Map cache;
+    private Map<Integer, Transliterator> cache;
 
     /**
      * The target or target/variant string.
@@ -133,7 +133,7 @@ class AnyTransliterator extends Transliterator {
                               int theTargetScript) {
         super(id, null);
         targetScript = theTargetScript;
-        cache = new HashMap();
+        cache = new HashMap<Integer, Transliterator>();
 
         target = theTarget;
         if (theVariant.length() > 0) {
@@ -150,7 +150,7 @@ class AnyTransliterator extends Transliterator {
      * @param cache2
      */
     public AnyTransliterator(String id, UnicodeFilter filter, String target2,
-            int targetScript2, Transliterator widthFix2, Map cache2) {
+            int targetScript2, Transliterator widthFix2, Map<Integer, Transliterator> cache2) {
         super(id, filter);
         targetScript = targetScript2;
         cache = cache2;
@@ -175,7 +175,7 @@ class AnyTransliterator extends Transliterator {
         }
 
         Integer key = new Integer(source);
-        Transliterator t = (Transliterator) cache.get(key);
+        Transliterator t = cache.get(key);
         if (t == null) {
             String sourceName = UScript.getName(source);
             String id = sourceName + TARGET_SEP + target;
@@ -194,7 +194,7 @@ class AnyTransliterator extends Transliterator {
 
             if (t != null) {
                 if (!isWide(targetScript)) {
-                    Vector v = new Vector();
+                    Vector<Transliterator> v = new Vector<Transliterator>();
                     v.add(widthFix);
                     v.add(t);
                     t = new CompoundTransliterator(v);
@@ -223,33 +223,37 @@ class AnyTransliterator extends Transliterator {
      */
     static void register() {
 
-        HashMap seen = new HashMap(); // old code used set, but was dependent on order
+        HashMap<String, Set<String>> seen = new HashMap<String, Set<String>>(); // old code used set, but was dependent on order
 
-        for (Enumeration s=Transliterator.getAvailableSources(); s.hasMoreElements(); ) {
-            String source = (String) s.nextElement();
+        for (Enumeration<String> s = Transliterator.getAvailableSources(); s.hasMoreElements(); ) {
+            String source = s.nextElement();
 
             // Ignore the "Any" source
             if (source.equalsIgnoreCase(ANY)) continue;
 
-            for (Enumeration t=Transliterator.getAvailableTargets(source);
+            for (Enumeration<String> t = Transliterator.getAvailableTargets(source);
                  t.hasMoreElements(); ) {
-                String target = (String) t.nextElement();
+                String target = t.nextElement();
 
                 // Get the script code for the target.  If not a script, ignore.
                 int targetScript = scriptNameToCode(target);
-                if (targetScript == UScript.INVALID_CODE) continue;
-                
-                Set seenVariants = (Set) seen.get(target);
-                if (seenVariants == null) {
-                    seen.put(target, seenVariants = new HashSet());
+                if (targetScript == UScript.INVALID_CODE) {
+                    continue;
                 }
 
-                for (Enumeration v=Transliterator.getAvailableVariants(source, target);
+                Set<String> seenVariants = seen.get(target);
+                if (seenVariants == null) {
+                    seen.put(target, seenVariants = new HashSet<String>());
+                }
+
+                for (Enumeration<String> v = Transliterator.getAvailableVariants(source, target);
                      v.hasMoreElements(); ) {
-                    String variant = (String) v.nextElement();
+                    String variant = v.nextElement();
                     
                     // Only process each target/variant pair once
-                    if (seenVariants.contains(variant)) continue;
+                    if (seenVariants.contains(variant)) {
+                        continue;
+                    }
                     seenVariants.add(variant);
 
                     String id;
@@ -399,4 +403,3 @@ class AnyTransliterator extends Transliterator {
     }
 }
 
-//eof

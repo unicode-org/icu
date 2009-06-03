@@ -16,7 +16,6 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
-import com.ibm.icu.text.UCharacterIterator;
 
 /**
  * <code>NumberingSystem</code> is the base class for all number
@@ -165,14 +164,14 @@ class NumberingSystem {
             UResourceBundle temp;
 
             String nsName;
-            ArrayList output = new ArrayList();
+            ArrayList<String> output = new ArrayList<String>();
             UResourceBundleIterator it = nsCurrent.getIterator();
             while (it.hasNext()) {
                 temp = it.next();
                 nsName = temp.getKey();
                 output.add(nsName);
             }
-            return (String[]) output.toArray(new String[output.size()]);
+            return output.toArray(new String[output.size()]);
     }
 
     /**

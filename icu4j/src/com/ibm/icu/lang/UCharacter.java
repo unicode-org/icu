@@ -1893,26 +1893,26 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @stable ICU 3.0
          */
         public static final UnicodeBlock forName(String blockName) {
-            Map m = null;
+            Map<String, UnicodeBlock> m = null;
             if (mref != null) {
-                m = (Map)mref.get();
+                m = mref.get();
             }
             if (m == null) {
-                m = new HashMap(BLOCKS_.length);
+                m = new HashMap<String, UnicodeBlock>(BLOCKS_.length);
                 for (int i = 0; i < BLOCKS_.length; ++i) {
                     UnicodeBlock b = BLOCKS_[i];
                     String name = trimBlockName(getPropertyValueName(UProperty.BLOCK, b.getID(), UProperty.NameChoice.LONG));
                     m.put(name, b);
                 }
-                mref = new SoftReference(m);
+                mref = new SoftReference<Map<String, UnicodeBlock>>(m);
             }
-            UnicodeBlock b = (UnicodeBlock)m.get(trimBlockName(blockName));
+            UnicodeBlock b = m.get(trimBlockName(blockName));
             if (b == null) {
                 throw new IllegalArgumentException();
             }
             return b;
         }
-        private static SoftReference mref;
+        private static SoftReference<Map<String, UnicodeBlock>> mref;
 
         private static String trimBlockName(String name) {
             String upper = name.toUpperCase();

@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, Google Inc, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2008-2009, Google Inc, International Business Machines        *
+ * Corporation and others. All Rights Reserved.                                *
  *******************************************************************************
  */
 package com.ibm.icu.impl;
@@ -14,10 +14,10 @@ import java.util.Comparator;
  */
 public class CollectionUtilities {
     
-    public static class MultiComparator implements Comparator {
-        private Comparator[] comparators;
+    public static class MultiComparator<T> implements Comparator<T> {
+        private Comparator<T>[] comparators;
     
-        public MultiComparator (Comparator[] comparators) {
+        public MultiComparator (Comparator<T>[] comparators) {
             this.comparators = comparators;
         }
     
@@ -26,12 +26,16 @@ public class CollectionUtilities {
          * where i is the index of the first comparator finding a difference
          * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
          */
-        public int compare(Object arg0, Object arg1) {
+        public int compare(T arg0, T arg1) {
             for (int i = 0; i < comparators.length; ++i) {
                 int result = comparators[i].compare(arg0, arg1);
-                if (result == 0) continue;
-                if (result > 0) return i+1;
-                return -(i+1);
+                if (result == 0) {
+                    continue;
+                }
+                if (result > 0) {
+                    return i + 1;
+                }
+                return -(i + 1);
             }
             return 0;
         }

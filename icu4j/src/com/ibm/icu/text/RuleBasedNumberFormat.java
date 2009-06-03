@@ -584,7 +584,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * Localizations for rule set names.
      * @serial
      */
-    private Map ruleSetDisplayNames;
+    private Map<String, String[]> ruleSetDisplayNames;
 
     /**
      * The public rule set names;
@@ -947,8 +947,8 @@ public class RuleBasedNumberFormat extends NumberFormat {
      */
     public ULocale[] getRuleSetDisplayNameLocales() {
         if (ruleSetDisplayNames != null) {
-            Set s = ruleSetDisplayNames.keySet();
-            String[] locales = (String[])s.toArray(new String[s.size()]);
+            Set<String> s = ruleSetDisplayNames.keySet();
+            String[] locales = s.toArray(new String[s.size()]);
             Arrays.sort(locales, String.CASE_INSENSITIVE_ORDER);
             ULocale[] result = new ULocale[locales.length];
             for (int i = 0; i < locales.length; ++i) {
@@ -965,7 +965,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
             for (int i = 0; i < localeNames.length; ++i) {
                 String lname = localeNames[i];
                 while (lname.length() > 0) {
-                    String[] names = (String[])ruleSetDisplayNames.get(lname);
+                    String[] names = ruleSetDisplayNames.get(lname);
                     if (names != null) {
                         return names;
                     }
@@ -1607,7 +1607,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         if (localizations != null) {
             publicRuleSetNames = (String[])localizations[0].clone();
 
-            Map m = new HashMap();
+            Map<String, String[]> m = new HashMap<String, String[]>();
             for (int i = 1; i < localizations.length; ++i) {
                 String[] data = localizations[i];
                 String loc = data[0];
@@ -1760,7 +1760,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
                 }
                 String ppClassName = postProcessRules.substring(0, ix).trim();
                 try {
-                    Class cls = Class.forName(ppClassName);
+                    Class<?> cls = Class.forName(ppClassName);
                     postProcessor = (RBNFPostProcessor)cls.newInstance();
                     postProcessor.init(this, postProcessRules);
                 }

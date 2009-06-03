@@ -119,7 +119,7 @@ import com.ibm.icu.util.VersionInfo;
 * @author Syn Wee Quek
 * @stable ICU 2.8
 */
-public abstract class Collator implements Comparator, Cloneable
+public abstract class Collator implements Comparator<Object>, Cloneable
 {
     // public data members ---------------------------------------------------
 
@@ -401,7 +401,7 @@ public abstract class Collator implements Comparator, Cloneable
          */
         public String getDisplayName(ULocale objectLocale, ULocale displayLocale) {
             if (visible()) {
-                Set supported = getSupportedLocaleIDs();
+                Set<String> supported = getSupportedLocaleIDs();
                 String name = objectLocale.getBaseName();
                 if (supported.contains(name)) {
                     return objectLocale.getDisplayName(displayLocale);
@@ -417,7 +417,7 @@ public abstract class Collator implements Comparator, Cloneable
          * @return the set of supported locale IDs.
          * @stable ICU 2.6
          */
-        public abstract Set getSupportedLocaleIDs();
+        public abstract Set<String> getSupportedLocaleIDs();
 
         /**
          * Empty default constructor.
@@ -445,7 +445,7 @@ public abstract class Collator implements Comparator, Cloneable
         // two shim instances, but they'll share the same state so that's ok.
         if (shim == null) {
             try {
-                Class cls = Class.forName("com.ibm.icu.text.CollatorServiceShim");
+                Class<?> cls = Class.forName("com.ibm.icu.text.CollatorServiceShim");
                 shim = (ServiceShim)cls.newInstance();
             }
             catch (MissingResourceException e)
@@ -638,7 +638,7 @@ public abstract class Collator implements Comparator, Cloneable
 
         // Read available collation values from collation bundles
         String baseLoc = locale.getBaseName();
-        LinkedList values = new LinkedList();
+        LinkedList<String> values = new LinkedList<String>();
 
         UResourceBundle bundle = UResourceBundle.getBundleInstance(
                 ICUResourceBundle.ICU_BASE_NAME + "/coll", baseLoc);
@@ -646,9 +646,9 @@ public abstract class Collator implements Comparator, Cloneable
         String defcoll = null;
         while (bundle != null) {
             UResourceBundle collations = bundle.get("collations");
-            Enumeration collEnum = collations.getKeys();
+            Enumeration<String> collEnum = collations.getKeys();
             while (collEnum.hasMoreElements()) {
-                String collkey = (String)collEnum.nextElement();
+                String collkey = collEnum.nextElement();
                 if (collkey.equals("default")) {
                     if (defcoll == null) {
                         // Keep the default
@@ -661,7 +661,7 @@ public abstract class Collator implements Comparator, Cloneable
             bundle = ((ICUResourceBundle)bundle).getParent();
         }
         // Reordering
-        Iterator itr = values.iterator();
+        Iterator<String> itr = values.iterator();
         String[] result = new String[values.size()];
         result[0] = defcoll;
         int idx = 1;
@@ -804,35 +804,6 @@ public abstract class Collator implements Comparator, Cloneable
         return m_decomposition_;
     }
 
-    /**
-     * <p>
-     * Compares the source text String to the target text String according to
-     * this Collator's rules, strength and decomposition mode.
-     * Returns an integer less than,
-     * equal to or greater than zero depending on whether the source String is
-     * less than, equal to or greater than the target String. See the Collator
-     * class description for an example of use.
-     * </p>
-     * @param source the source String.
-     * @param target the target String.
-     * @return Returns an integer value. Value is less than zero if source is
-     *         less than target, value is zero if source and target are equal,
-     *         value is greater than zero if source is greater than target.
-     * @see CollationKey
-     * @see #getCollationKey
-     * @exception NullPointerException thrown if either arguments is null.
-     *            IllegalArgumentException thrown if either source or target is
-     *            not of the class String.
-     * @stable ICU 2.8
-     */
-    public int compare(Object source, Object target)
-    {
-        if (!(source instanceof String) || !(target instanceof String)) {
-            throw new IllegalArgumentException("Arguments have to be of type String");
-        }
-        return compare((String)source, (String)target);
-    }
-
     // public other methods -------------------------------------------------
 
     /**
@@ -884,6 +855,22 @@ public abstract class Collator implements Comparator, Cloneable
      * @stable ICU 2.8
      */
     public abstract int compare(String source, String target);
+
+    /**
+     * <p>
+     * Compares the source Object to te target Object.
+     * </p>
+     * @param source the source Object.
+     * @param target the target Object.
+     * @return Returns an integer value. Value is less than zero if source is
+     *         less than target, value is zero if source and target are equal,
+     *         value is greater than zero if source is greater than target.
+     * @exception ClassCastException thrown if either arguments cannot be cast to String.
+     * @stable ICU 4.2
+     */
+    public int compare(Object source, Object target) {
+        return compare((String)source, (String)target);
+    }
 
     /**
      * <p>

@@ -182,19 +182,19 @@ public class UnicodeRegex implements Cloneable, Freezable, StringTransform {
      *          A hash quotes to the end of the line.
      * @return Pattern
      */
-    public String compileBnf(List lines) {
-        Map variables = getVariables(lines);
-        Set unused = new LinkedHashSet(variables.keySet());
+    public String compileBnf(List<String> lines) {
+        Map<String, String> variables = getVariables(lines);
+        Set<String> unused = new LinkedHashSet<String>(variables.keySet());
         // brute force replacement; do twice to allow for different order
         // later on can optimize
         for (int i = 0; i < 2; ++i) {
-            for (Iterator it = variables.keySet().iterator(); it.hasNext();) {
-                String variable = (String) it.next();
-                String definition = (String) variables.get(variable);
-                for (Iterator it2 = variables.keySet().iterator(); it2.hasNext();) {
-                    String variable2 = (String) it2.next();
+            for (Iterator<String> it = variables.keySet().iterator(); it.hasNext();) {
+                String variable = it.next();
+                String definition = variables.get(variable);
+                for (Iterator<String> it2 = variables.keySet().iterator(); it2.hasNext();) {
+                    String variable2 = it2.next();
                     if (variable.equals(variable2)) continue;
-                    String definition2 = (String) variables.get(variable2);
+                    String definition2 = variables.get(variable2);
                     String altered2 = definition2.replace(variable, definition);
                     if (!altered2.equals(definition2)) {
                         unused.remove(variable);
@@ -248,7 +248,7 @@ public class UnicodeRegex implements Cloneable, Freezable, StringTransform {
      * @return filled list
      * @throws IOException
      */
-    public static List appendLines(List result, String file, String encoding) throws IOException {
+    public static List<String> appendLines(List<String> result, String file, String encoding) throws IOException {
         return appendLines(result, new FileInputStream(file), encoding);
     }
 
@@ -260,7 +260,7 @@ public class UnicodeRegex implements Cloneable, Freezable, StringTransform {
      * @return filled list
      * @throws IOException
      */
-    public static List appendLines(List result, InputStream inputStream, String encoding)
+    public static List<String> appendLines(List<String> result, InputStream inputStream, String encoding)
             throws UnsupportedEncodingException, IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, encoding == null ? "UTF-8" : encoding));
         while (true) {
@@ -322,7 +322,7 @@ public class UnicodeRegex implements Cloneable, Freezable, StringTransform {
     private String bnfLineSeparator = "\n";
     private Appendable log = null;
 
-    private Comparator LongestFirst = new Comparator () {
+    private Comparator<Object> LongestFirst = new Comparator<Object>() {
         public int compare(Object obj0, Object obj1) {
             String arg0 = obj0.toString();
             String arg1 = obj1.toString();
@@ -333,13 +333,13 @@ public class UnicodeRegex implements Cloneable, Freezable, StringTransform {
         }
     };
 
-    private Map getVariables(List lines) {
-        Map variables = new TreeMap(LongestFirst);
+    private Map<String, String> getVariables(List<String> lines) {
+        Map<String, String> variables = new TreeMap<String, String>(LongestFirst);
         String variable = null;
         StringBuffer definition = new StringBuffer();
         int count = 0;
-        for (Iterator it = lines.iterator(); it.hasNext();) {
-            String line = (String)it.next();
+        for (Iterator<String> it = lines.iterator(); it.hasNext();) {
+            String line = it.next();
             ++count;
             // remove initial bom, comments
             if (line.length() == 0) continue;
@@ -388,4 +388,3 @@ public class UnicodeRegex implements Cloneable, Freezable, StringTransform {
         return variables;
     }
 }
-

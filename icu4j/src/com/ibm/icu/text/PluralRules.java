@@ -77,7 +77,7 @@ public class PluralRules implements Serializable {
     private static final long serialVersionUID = 1;
 
     private final RuleList rules;
-    private final Set keywords;
+    private final Set<String> keywords;
     private int repeatLimit; // for equality test
 
     // Standard keywords.
@@ -257,7 +257,7 @@ public class PluralRules implements Serializable {
         String select(double n);
 
         /* Returns the set of defined keywords. */
-        Set getKeywords();
+        Set<String> getKeywords();
 
         /* Return the value at which this rulelist starts repeating. */
         int getRepeatLimit();
@@ -622,8 +622,8 @@ public class PluralRules implements Serializable {
             return r.getKeyword();
         }
 
-        public Set getKeywords() {
-            Set result = new HashSet();
+        public Set<String> getKeywords() {
+            Set<String> result = new HashSet<String>();
             result.add(KEYWORD_OTHER);
             RuleChain rc = this;
             while (rc != null) {
@@ -718,7 +718,7 @@ public class PluralRules implements Serializable {
      * @return The set of keywords.
      * @stable ICU 3.8
      */
-    public Set getKeywords() {
+    public Set<String> getKeywords() {
         return keywords;
     }
 

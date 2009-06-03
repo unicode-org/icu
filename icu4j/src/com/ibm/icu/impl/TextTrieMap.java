@@ -1,8 +1,8 @@
 /*
- * *****************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and others.
+ * ********************************************************************************
+ * Copyright (C) 2007-2009, International Business Machines Corporation and others.
  * All Rights Reserved.
- * *****************************************************************************
+ * ********************************************************************************
  */
 package com.ibm.icu.impl;
 
@@ -18,7 +18,7 @@ import com.ibm.icu.text.UTF16;
  * TextTrieMap is a trie implementation for supporting
  * fast prefix match for the key.
  */
-public class TextTrieMap {
+public class TextTrieMap<V> {
     /**
      * Constructs a TextTrieMap object.
      * 
@@ -34,7 +34,7 @@ public class TextTrieMap {
      * @param text The text.
      * @param o The object associated with the text.
      */
-    public synchronized void put(String text, Object o) {
+    public synchronized void put(String text, V o) {
         CharacterNode node = root;
         for (int i = 0; i < text.length(); i++) {
             int ch = UTF16.charAt(text, i);
@@ -55,7 +55,7 @@ public class TextTrieMap {
      * the longest prefix matching matching key, or null
      * if no matching entry is found.
      */
-    public Iterator get(String text) {
+    public Iterator<V> get(String text) {
         return get(text, 0);
     }
 
@@ -70,17 +70,17 @@ public class TextTrieMap {
      * longest prefix matching matching key, or null if no 
      * matching entry is found.
      */
-    public Iterator get(String text, int start) {
-        LongestMatchHandler handler = new LongestMatchHandler();
+    public Iterator<V> get(String text, int start) {
+        LongestMatchHandler<V> handler = new LongestMatchHandler<V>();
         find(text, start, handler);
         return handler.getMatches();
     }
 
-    public void find(String text, ResultHandler handler) {
+    public void find(String text, ResultHandler<V> handler) {
         find(text, 0, handler);
     }
     
-    public void find(String text, int start, ResultHandler handler) {
+    public void find(String text, int start, ResultHandler<V> handler) {
         find(root, text, start, start, handler);
     }
 
@@ -96,22 +96,22 @@ public class TextTrieMap {
      * is called when any prefix match is found.
      */
     private synchronized void find(CharacterNode node, String text,
-            int start, int index, ResultHandler handler) {
-        Iterator itr = node.iterator();
+            int start, int index, ResultHandler<V> handler) {
+        Iterator<V> itr = node.iterator();
         if (itr != null) {
             if (!handler.handlePrefixMatch(index - start, itr)) {
                 return;
             }
         }
         if (index < text.length()) {
-            List childNodes = node.getChildNodes();
+            List<CharacterNode> childNodes = node.getChildNodes();
             if (childNodes == null) {
                 return;
             }
             int ch = UTF16.charAt(text, index);
             int chLen = UTF16.getCharCount(ch);
             for (int i = 0; i < childNodes.size(); i++) {
-                CharacterNode child = (CharacterNode)childNodes.get(i);
+                CharacterNode child = childNodes.get(i);
                 if (compare(ch, child.getCharacter())) {
                     find(child, text, start, index + chLen, handler);
                     break;
@@ -153,8 +153,8 @@ public class TextTrieMap {
      */
     private class CharacterNode {
         int character;
-        List children;
-        List objlist;
+        List<CharacterNode> children;
+        List<V> objlist;
 
         /**
          * Constructs a node for the character.
@@ -179,9 +179,9 @@ public class TextTrieMap {
          *  
          * @param obj The object set in the leaf node.
          */
-        public void addObject(Object obj) {
+        public void addObject(V obj) {
             if (objlist == null) {
-                objlist = new LinkedList();
+                objlist = new LinkedList<V>();
             }
             objlist.add(obj);
         }
@@ -193,7 +193,7 @@ public class TextTrieMap {
          * @return The iterator or null if no objects are
          * associated with this node.
          */
-        public Iterator iterator() {
+        public Iterator<V> iterator() {
             if (objlist == null) {
                 return null;
             }
@@ -211,14 +211,14 @@ public class TextTrieMap {
          */
         public CharacterNode addChildNode(int ch) {
             if (children == null) {
-                children = new ArrayList();
+                children = new ArrayList<CharacterNode>();
                 CharacterNode newNode = new CharacterNode(ch);
                 children.add(newNode);
                 return newNode;
             }
             CharacterNode node = null;
             for (int i = 0; i < children.size(); i++) {
-                CharacterNode cur = (CharacterNode)children.get(i);
+                CharacterNode cur = children.get(i);
                 if (compare(ch, cur.getCharacter())) {
                     node = cur;
                     break;
@@ -236,7 +236,7 @@ public class TextTrieMap {
          * 
          * @return The list of child nodes.
          */
-        public List getChildNodes() {
+        public List<CharacterNode> getChildNodes() {
             return children;
         }
     }
@@ -245,7 +245,7 @@ public class TextTrieMap {
      * Callback handler for processing prefix matches used by
      * find method.
      */
-    public interface ResultHandler {
+    public interface ResultHandler<V> {
         /**
          * Handles a prefix key match
          * 
@@ -253,14 +253,14 @@ public class TextTrieMap {
          * @param values An iterator of the objects associated with the matched key
          * @return Return true to continue the search in the trie, false to quit.
          */
-        public boolean handlePrefixMatch(int matchLength, Iterator values);
+        public boolean handlePrefixMatch(int matchLength, Iterator<V> values);
     }
 
-    private static class LongestMatchHandler implements ResultHandler {
-        private Iterator matches = null;
+    private static class LongestMatchHandler<V> implements ResultHandler<V> {
+        private Iterator<V> matches = null;
         private int length = 0;
 
-        public boolean handlePrefixMatch(int matchLength, Iterator values) {
+        public boolean handlePrefixMatch(int matchLength, Iterator<V> values) {
             if (matchLength > length) {
                 length = matchLength;
                 matches = values;
@@ -268,7 +268,7 @@ public class TextTrieMap {
             return true;
         }
 
-        public Iterator getMatches() {
+        public Iterator<V> getMatches() {
             return matches;
         }
     }

@@ -1,18 +1,17 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2008, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.Assert;
-import com.ibm.icu.text.UnicodeSet;
-
-import java.util.Stack;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.CharacterIterator;
-import java.io.IOException;
+import java.util.Stack;
+
+import com.ibm.icu.impl.Assert;
 
 class ThaiBreakIterator extends DictionaryBasedBreakIterator {
 
@@ -210,7 +209,7 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
         int wordsFound = 0;
         int wordLength;
         int current;
-        Stack foundBreaks = new Stack();
+        Stack<Integer> foundBreaks = new Stack<Integer>();
         PossibleWord words[] = new PossibleWord[THAI_LOOKAHEAD];
         for (int i = 0; i < THAI_LOOKAHEAD; i++) {
             words[i] = new PossibleWord();
@@ -360,12 +359,12 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
 
             // Did we find a word on this iteration? If so, push it on the break stack
             if (wordLength > 0) {
-                foundBreaks.push(new Integer(current+wordLength));
+                foundBreaks.push(Integer.valueOf(current+wordLength));
             }
         }
 
         // Don't return a break for the end of the dictionary range if there is one there
-        if (((Integer)foundBreaks.peek()).intValue() >= rangeEnd) {
+        if (foundBreaks.peek().intValue() >= rangeEnd) {
             foundBreaks.pop();
             wordsFound -= 1;
         }
@@ -375,7 +374,7 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
         cachedBreakPositions[0] = rangeStart;
         int i;
         for (i = 0; i < foundBreaks.size(); i++) {
-            cachedBreakPositions[i + 1] = ((Integer)foundBreaks.elementAt(i)).intValue();
+            cachedBreakPositions[i + 1] = foundBreaks.elementAt(i).intValue();
         }
         cachedBreakPositions[i + 1] = rangeEnd;
         positionInCache = 0;

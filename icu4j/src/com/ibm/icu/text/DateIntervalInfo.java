@@ -8,19 +8,18 @@
 package com.ibm.icu.text;
 
 import java.io.Serializable;
-
-import java.util.MissingResourceException;
-import java.util.Iterator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.MissingResourceException;
 
-import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUCache;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.Freezable;
+import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
 
@@ -268,16 +267,15 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
     private static String EARLIEST_FIRST_PREFIX = "earliestFirst:";
 
     // DateIntervalInfo cache
-    private final static ICUCache DIICACHE = new SimpleCache();
+    private final static ICUCache<String, DateIntervalInfo> DIICACHE = new SimpleCache<String, DateIntervalInfo>();
 
     // default interval pattern on the skeleton, {0} - {1}
     private String fFallbackIntervalPattern;
     // default order
     private boolean fFirstDateInPtnIsLaterDate = false;
 
-    // HashMap<String, HashMap<String, PatternInfo> >
     // HashMap( skeleton, HashMap(largest_different_field, pattern) )
-    private HashMap fIntervalPatterns = null;
+    private Map<String, Map<String, PatternInfo>> fIntervalPatterns = null;
 
     private transient boolean frozen = false;
 
@@ -298,7 +296,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
      */
     public DateIntervalInfo() 
     {
-        fIntervalPatterns = new HashMap();
+        fIntervalPatterns = new HashMap<String, Map<String, PatternInfo>>();
         fFallbackIntervalPattern = "{0} \u2013 {1}";
     }
 
@@ -322,7 +320,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
     private void initializeData(ULocale locale)
     {
         String key = locale.toString();
-        DateIntervalInfo dii = (DateIntervalInfo) DIICACHE.get(key);
+        DateIntervalInfo dii = DIICACHE.get(key);
         if ( dii == null ) {
             // initialize data from scratch
             setup(locale);
@@ -359,11 +357,11 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
         }
     
         int DEFAULT_HASH_SIZE = 19;
-        fIntervalPatterns = new HashMap(DEFAULT_HASH_SIZE);
+        fIntervalPatterns = new HashMap<String, Map<String, PatternInfo>>(DEFAULT_HASH_SIZE);
         // initialize to guard if there is no interval date format defined in 
         // resource files
         fFallbackIntervalPattern = "{0} \u2013 {1}";
-        HashSet skeletonSet = new HashSet();
+        HashSet<String> skeletonSet = new HashSet<String>();
         try {
             // loop through all locales to get all available skeletons'
             // interval format
@@ -578,10 +576,10 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
     private PatternInfo setIntervalPatternInternally(String skeleton,
                                                 String lrgDiffCalUnit,
                                                 String intervalPattern) {
-        HashMap patternsOfOneSkeleton = (HashMap)fIntervalPatterns.get(skeleton);
+        Map<String, PatternInfo> patternsOfOneSkeleton = fIntervalPatterns.get(skeleton);
         boolean emptyHash = false;
-        if ( patternsOfOneSkeleton == null ) {
-            patternsOfOneSkeleton = new HashMap();
+        if (patternsOfOneSkeleton == null) {
+            patternsOfOneSkeleton = new HashMap<String, PatternInfo>();
             emptyHash = true;
         }
         boolean order = fFirstDateInPtnIsLaterDate;
@@ -596,7 +594,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
             intervalPattern = intervalPattern.substring(earliestFirstLength, intervalPattern.length());
         }
         PatternInfo itvPtnInfo = genPatternInfo(intervalPattern, order);
-        
+
         patternsOfOneSkeleton.put(lrgDiffCalUnit, itvPtnInfo);
         if ( emptyHash == true ) {
             fIntervalPatterns.put(skeleton, patternsOfOneSkeleton);
@@ -615,7 +613,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
     private void setIntervalPattern(String skeleton,
                                     String lrgDiffCalUnit,
                                     PatternInfo ptnInfo) {
-        HashMap patternsOfOneSkeleton = (HashMap)fIntervalPatterns.get(skeleton);
+        Map<String, PatternInfo> patternsOfOneSkeleton = fIntervalPatterns.get(skeleton);
         patternsOfOneSkeleton.put(lrgDiffCalUnit, ptnInfo);
     }
 
@@ -658,9 +656,9 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
         if ( field > MINIMUM_SUPPORTED_CALENDAR_FIELD ) {
             throw new IllegalArgumentException("no support for field less than MINUTE");
         }
-        HashMap patternsOfOneSkeleton = (HashMap) fIntervalPatterns.get(skeleton);
+        Map<String, PatternInfo> patternsOfOneSkeleton = fIntervalPatterns.get(skeleton);
         if ( patternsOfOneSkeleton != null ) {
-            PatternInfo intervalPattern = (PatternInfo) patternsOfOneSkeleton.
+            PatternInfo intervalPattern = patternsOfOneSkeleton.
                 get(CALENDAR_FIELD_TO_PATTERN_LETTER[field]);
             if ( intervalPattern != null ) {
                 return intervalPattern;
@@ -753,19 +751,15 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
             DateIntervalInfo other = (DateIntervalInfo) super.clone();
             other.fFallbackIntervalPattern=fFallbackIntervalPattern;
             other.fFirstDateInPtnIsLaterDate = fFirstDateInPtnIsLaterDate;
-            other.fIntervalPatterns = new HashMap();
-            Iterator iter = fIntervalPatterns.keySet().iterator();
-            while ( iter.hasNext() ) {
-                String skeleton = (String) iter.next();
-                HashMap patternsOfOneSkeleton = (HashMap)fIntervalPatterns.get(skeleton);
-                HashMap oneSetPtn = new HashMap();
-                Iterator patternIter = patternsOfOneSkeleton.keySet().iterator();
-                while ( patternIter.hasNext() ) {
-                    String calField = (String) patternIter.next();
-                    PatternInfo value = (PatternInfo) patternsOfOneSkeleton.get(calField);
+            other.fIntervalPatterns = new HashMap<String, Map<String, PatternInfo>>();
+            for (String skeleton : fIntervalPatterns.keySet()) {
+                Map<String, PatternInfo> patternsOfOneSkeleton = fIntervalPatterns.get(skeleton);
+                Map<String, PatternInfo> oneSetPtn = new HashMap<String, PatternInfo>();
+                for (String calField : patternsOfOneSkeleton.keySet()) {
+                    PatternInfo value = patternsOfOneSkeleton.get(calField);
                     oneSetPtn.put(calField, value);
                 }
-                other.fIntervalPatterns.put(skeleton, oneSetPtn);    
+                other.fIntervalPatterns.put(skeleton, oneSetPtn);
             }
             other.frozen = false;
             return other;
@@ -883,9 +877,7 @@ public class DateIntervalInfo implements Cloneable, Freezable, Serializable {
         // 2 means only z/v differs
         // -1 means having different field.
         int bestFieldDifference = 0;
-        Iterator iter = fIntervalPatterns.keySet().iterator();
-        while ( iter.hasNext() ) {
-            String skeleton = (String)iter.next();
+        for (String skeleton : fIntervalPatterns.keySet()) {
             // clear skeleton field width
             for ( int i = 0; i < skeletonFieldWidth.length; ++i ) {
                 skeletonFieldWidth[i] = 0;    

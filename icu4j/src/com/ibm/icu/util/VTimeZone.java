@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -10,14 +10,13 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.Grego;
-import com.ibm.icu.util.DateTimeRule;
 
 /**
  * <code>VTimeZone</code> is a class implementing RFC2445 VTIMEZONE.  You can create a
@@ -198,9 +197,7 @@ public class VTimeZone extends BasicTimeZone {
     public void write(Writer writer) throws IOException {
         BufferedWriter bw = new BufferedWriter(writer);
         if (vtzlines != null) {
-            Iterator it = vtzlines.iterator();
-            while (it.hasNext()) {
-                String line = (String)it.next();
+            for (String line : vtzlines) {
                 if (line.startsWith(ICAL_TZURL + COLON)) {
                     if (tzurl != null) {
                         bw.write(ICAL_TZURL);
@@ -349,7 +346,7 @@ public class VTimeZone extends BasicTimeZone {
     // private stuff ------------------------------------------------------
 
     private BasicTimeZone tz;
-    private List vtzlines;
+    private List<String> vtzlines;
     private String olsonzid = null;
     private String tzurl = null;
     private Date lastmod = null;
@@ -435,7 +432,7 @@ public class VTimeZone extends BasicTimeZone {
     private boolean load(Reader reader) {
         // Read VTIMEZONE block into string array
         try {
-            vtzlines = new LinkedList();
+            vtzlines = new LinkedList<String>();
             boolean eol = false;
             boolean start = false;
             boolean success = false;
@@ -528,18 +525,14 @@ public class VTimeZone extends BasicTimeZone {
         String to = null;       // current zone offset
         String tzname = null;   // current zone name
         String dtstart = null;  // current zone starts
-        boolean isRRULE = false;// true if the rule is described by RRULE
-        List dates = null;      // list of RDATE or RRULE strings
-        List rules = new LinkedList();   // rule list
+        boolean isRRULE = false;    // true if the rule is described by RRULE
+        List<String> dates = null;  // list of RDATE or RRULE strings
+        List<TimeZoneRule> rules = new ArrayList<TimeZoneRule>();   // rule list
         int initialRawOffset = 0;  // initial offset
         int initialDSTSavings = 0;  // initial offset
         long firstStart = MAX_TIME; // the earliest rule start time
 
-        Iterator it = vtzlines.iterator();
-
-        while (it.hasNext()) {
-            String line = (String)it.next();
-
+        for (String line : vtzlines) {
             int valueSep = line.indexOf(COLON);
             if (valueSep < 0) {
                 continue;
@@ -605,7 +598,7 @@ public class VTimeZone extends BasicTimeZone {
                         break;
                     }
                     if (dates == null) {
-                        dates = new LinkedList();
+                        dates = new LinkedList<String>();
                     }
                     // RDATE value may contain multiple date delimited
                     // by comma
@@ -620,7 +613,7 @@ public class VTimeZone extends BasicTimeZone {
                         state = ERR;
                         break;
                     } else if (dates == null) {
-                        dates = new LinkedList();
+                        dates = new LinkedList<String>();
                     }
                     isRRULE = true;
                     dates.add(value);
@@ -729,7 +722,7 @@ public class VTimeZone extends BasicTimeZone {
         int finalRuleIdx = -1;
         int finalRuleCount = 0;
         for (int i = 0; i < rules.size(); i++) {
-            TimeZoneRule r = (TimeZoneRule)rules.get(i);
+            TimeZoneRule r = rules.get(i);
             if (r instanceof AnnualTimeZoneRule) {
                 if (((AnnualTimeZoneRule)r).getEndYear() == AnnualTimeZoneRule.MAX_YEAR) {
                     finalRuleCount++;
@@ -761,7 +754,7 @@ public class VTimeZone extends BasicTimeZone {
                     if (finalRuleIdx == i) {
                         continue;
                     }
-                    TimeZoneRule r = (TimeZoneRule)rules.get(i);
+                    TimeZoneRule r = rules.get(i);
                     Date lastStart = r.getFinalStart(tmpRaw, tmpDST);
                     if (lastStart.after(start)) {
                         start = finalRule.getNextStart(lastStart.getTime(),
@@ -794,10 +787,10 @@ public class VTimeZone extends BasicTimeZone {
             }
         }
 
-        Iterator rit = rules.iterator();
-        while(rit.hasNext()) {
-            rbtz.addTransitionRule((TimeZoneRule)rit.next());
+        for (TimeZoneRule r : rules) {
+            rbtz.addTransitionRule(r);
         }
+
         tz = rbtz;
         setID(tzid);
         return true;
@@ -817,12 +810,12 @@ public class VTimeZone extends BasicTimeZone {
      * Create a TimeZoneRule by the RRULE definition
      */
     private static TimeZoneRule createRuleByRRULE(String tzname,
-            int rawOffset, int dstSavings, long start, List dates, int fromOffset) {
+            int rawOffset, int dstSavings, long start, List<String> dates, int fromOffset) {
         if (dates == null || dates.size() == 0) {
             return null;
         }
         // Parse the first rule
-        String rrule = (String)dates.get(0);
+        String rrule = dates.get(0);
 
         long until[] = new long[1];
         int[] ruleFields = parseRRULE(rrule, until);
@@ -901,7 +894,7 @@ public class VTimeZone extends BasicTimeZone {
 
             int anotherMonth = -1;
             for (int i = 1; i < dates.size(); i++) {
-                rrule = (String)dates.get(i);
+                rrule = dates.get(i);
                 long[] unt = new long[1];
                 int[] fields = parseRRULE(rrule, unt);
 
@@ -1175,7 +1168,7 @@ public class VTimeZone extends BasicTimeZone {
      * Create a TimeZoneRule by the RDATE definition
      */
     private static TimeZoneRule createRuleByRDATE(String tzname,
-            int rawOffset, int dstSavings, long start, List dates, int fromOffset) {
+            int rawOffset, int dstSavings, long start, List<String> dates, int fromOffset) {
         // Create an array of transition times
         long[] times;
         if (dates == null || dates.size() == 0) {
@@ -1185,11 +1178,10 @@ public class VTimeZone extends BasicTimeZone {
             times[0] = start;
         } else {
             times = new long[dates.size()];
-            Iterator it = dates.iterator();
             int idx = 0;
             try {
-                while(it.hasNext()) {
-                    times[idx++] = parseDateTimeString((String)it.next(), fromOffset);
+                for (String date : dates) {
+                    times[idx++] = parseDateTimeString(date, fromOffset);
                 }
             } catch (IllegalArgumentException iae) {
                 return null;

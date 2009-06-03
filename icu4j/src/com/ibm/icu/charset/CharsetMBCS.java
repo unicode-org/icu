@@ -27,7 +27,6 @@ import com.ibm.icu.impl.InvalidFormatException;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.charset.UConverterConstants;
 
 class CharsetMBCS extends CharsetICU {
 
@@ -1399,7 +1398,7 @@ class CharsetMBCS extends CharsetICU {
     }
 
     /* get the pointer to an extension array from indexes[index] */
-    static Buffer ARRAY(ByteBuffer indexes, int index, Class itemType) {
+    static Buffer ARRAY(ByteBuffer indexes, int index, Class<?> itemType) {
         int oldpos = indexes.position();
         Buffer b;
 

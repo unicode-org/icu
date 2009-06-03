@@ -1,13 +1,12 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2007, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.impl;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -122,12 +121,11 @@ public class ICULocaleService extends ICUService {
      */
     public Locale[] getAvailableLocales() {
         // TODO make this wrap getAvailableULocales later
-        Set visIDs = getVisibleIDs();
-        Iterator iter = visIDs.iterator();
+        Set<String> visIDs = getVisibleIDs();
         Locale[] locales = new Locale[visIDs.size()];
         int n = 0;
-        while (iter.hasNext()) {
-            Locale loc = LocaleUtility.getLocaleFromName((String)iter.next());
+        for (String id : visIDs) {
+            Locale loc = LocaleUtility.getLocaleFromName(id);
             locales[n++] = loc;
         }
         return locales;
@@ -138,12 +136,11 @@ public class ICULocaleService extends ICUService {
      * ULocale list, built from the Set of visible ids.
      */
     public ULocale[] getAvailableULocales() {
-        Set visIDs = getVisibleIDs();
-        Iterator iter = visIDs.iterator();
+        Set<String> visIDs = getVisibleIDs();
         ULocale[] locales = new ULocale[visIDs.size()];
         int n = 0;
-        while (iter.hasNext()) {
-            locales[n++] = new ULocale((String)iter.next());
+        for (String id : visIDs) {
+            locales[n++] = new ULocale(id);
         }
         return locales;
     }
@@ -386,7 +383,7 @@ public class ICULocaleService extends ICUService {
         protected boolean handlesKey(Key key) {
             if (key != null) {
                 String id = key.currentID();
-                Set supported = getSupportedIDs();
+                Set<String> supported = getSupportedIDs();
                 return supported.contains(id);
             }
             return false;
@@ -395,18 +392,16 @@ public class ICULocaleService extends ICUService {
         /**
          * Override of superclass method.
          */
-        public void updateVisibleIDs(Map result) {
-            Set cache = getSupportedIDs();
-            Iterator iter = cache.iterator();
-            while (iter.hasNext()) {
-                String id = (String)iter.next();
+        public void updateVisibleIDs(Map<String, Factory> result) {
+            Set<String> cache = getSupportedIDs();
+            for (String id : cache) {
                 if (visible) {
                     result.put(id, this);
                 } else {
                     result.remove(id);
                 }
             }
-        }
+       }
 
         /**
          * Return a localized name for the locale represented by id.
@@ -446,8 +441,8 @@ public class ICULocaleService extends ICUService {
          * otherwise).  This can be called often and might need to be
          * cached if it is expensive to create.
          */
-        protected Set getSupportedIDs() {
-            return Collections.EMPTY_SET;
+        protected Set<String> getSupportedIDs() {
+            return Collections.emptySet();
         }
 
         /**
@@ -504,7 +499,7 @@ public class ICULocaleService extends ICUService {
             return this.id.equals(idToCheck);
         }
 
-        public void updateVisibleIDs(Map result) {
+        public void updateVisibleIDs(Map<String, Factory> result) {
             if (visible) {
                 result.put(id, this);
             } else {
@@ -552,7 +547,7 @@ public class ICULocaleService extends ICUService {
         /**
          * Return the supported IDs.  This is the set of all locale names for the bundleName.
          */
-        protected Set getSupportedIDs() {
+        protected Set<String> getSupportedIDs() {
             // note: "root" is one of the ids, but "" is not.  Must convert ULocale.ROOT.
             return ICUResourceBundle.getFullLocaleNameSet(bundleName); 
         }
@@ -560,11 +555,9 @@ public class ICULocaleService extends ICUService {
         /**
          * Override of superclass method.
          */
-        public void updateVisibleIDs(Map result) {
-            Set visibleIDs = ICUResourceBundle.getAvailableLocaleNameSet(bundleName); // only visible ids
-            Iterator iter = visibleIDs.iterator();
-            while (iter.hasNext()) {
-                String id = (String)iter.next();
+        public void updateVisibleIDs(Map<String, Factory> result) {
+            Set<String> visibleIDs = ICUResourceBundle.getAvailableLocaleNameSet(bundleName); // only visible ids
+            for (String id : visibleIDs) {
                 result.put(id, this);
             }
         }

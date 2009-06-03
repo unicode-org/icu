@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -63,7 +63,7 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
             return null;
         }
 
-        protected Set getSupportedIDs() {
+        protected Set<String> getSupportedIDs() {
             return delegate.getSupportedLocaleNames();
         }
     }

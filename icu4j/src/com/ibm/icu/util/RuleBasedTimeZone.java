@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,7 +8,6 @@ package com.ibm.icu.util;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import com.ibm.icu.impl.Grego;
@@ -26,10 +25,10 @@ public class RuleBasedTimeZone extends BasicTimeZone {
     private static final long serialVersionUID = 7580833058949327935L;
 
     private final InitialTimeZoneRule initialRule;
-    private List historicRules;
+    private List<TimeZoneRule> historicRules;
     private AnnualTimeZoneRule[] finalRules;
 
-    private transient List historicTransitions;
+    private transient List<TimeZoneTransition> historicTransitions;
     private transient boolean upToDate;
 
     /**
@@ -75,7 +74,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
         } else {
             // If this is not a final rule, add it to the historic rule list 
             if (historicRules == null) {
-                historicRules = new ArrayList();
+                historicRules = new ArrayList<TimeZoneRule>();
             }
             historicRules.add(rule);
         }
@@ -219,13 +218,9 @@ public class RuleBasedTimeZone extends BasicTimeZone {
             if (historicRules.size() != otherRBTZ.historicRules.size()) {
                 return false;
             }
-            Iterator it = historicRules.iterator();
-            while (it.hasNext()) {
-                TimeZoneRule rule = (TimeZoneRule)it.next();
-                Iterator oit = otherRBTZ.historicRules.iterator();
+            for (TimeZoneRule rule : historicRules) {
                 boolean foundSameRule = false;
-                while (oit.hasNext()) {
-                    TimeZoneRule orule = (TimeZoneRule)oit.next();
+                for (TimeZoneRule orule : otherRBTZ.historicRules) {
                     if (rule.isEquivalentTo(orule)) {
                         foundSameRule = true;
                         break;
@@ -267,7 +262,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
         int idx = 1;
         if (historicRules != null) {
             for (; idx < historicRules.size() + 1; idx++) {
-                rules[idx] = (TimeZoneRule)historicRules.get(idx - 1);
+                rules[idx] = historicRules.get(idx - 1);
             }
         }
         if (finalRules != null) {
@@ -291,13 +286,13 @@ public class RuleBasedTimeZone extends BasicTimeZone {
         }
         boolean isFinal = false;
         TimeZoneTransition result = null;
-        TimeZoneTransition tzt = (TimeZoneTransition)historicTransitions.get(0);
+        TimeZoneTransition tzt = historicTransitions.get(0);
         long tt = tzt.getTime();
         if (tt > base || (inclusive && tt == base)) {
             result = tzt;
         } else {
             int idx = historicTransitions.size() - 1;        
-            tzt = (TimeZoneTransition)historicTransitions.get(idx);
+            tzt = historicTransitions.get(idx);
             tt = tzt.getTime();
             if (inclusive && tt == base) {
                 result = tzt;
@@ -324,7 +319,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
                 idx--;
                 TimeZoneTransition prev = tzt;
                 while (idx > 0) {
-                    tzt = (TimeZoneTransition)historicTransitions.get(idx);
+                    tzt = historicTransitions.get(idx);
                     tt = tzt.getTime();
                     if (tt < base || (!inclusive && tt == base)) {
                         break;
@@ -363,7 +358,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
             return null;
         }
         TimeZoneTransition result = null;
-        TimeZoneTransition tzt = (TimeZoneTransition)historicTransitions.get(0);
+        TimeZoneTransition tzt = historicTransitions.get(0);
         long tt = tzt.getTime();
         if (inclusive && tt == base) {
             result = tzt;
@@ -371,7 +366,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
             return null;
         } else {
             int idx = historicTransitions.size() - 1;        
-            tzt = (TimeZoneTransition)historicTransitions.get(idx);
+            tzt = historicTransitions.get(idx);
             tt = tzt.getTime();
             if (inclusive && tt == base) {
                 result = tzt;
@@ -394,7 +389,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
                 // Find a transition within the historic transitions
                 idx--;
                 while (idx >= 0) {
-                    tzt = (TimeZoneTransition)historicTransitions.get(idx);
+                    tzt = historicTransitions.get(idx);
                     tt = tzt.getTime();
                     if (tt < base || (inclusive && tt == base)) {
                         break;
@@ -424,7 +419,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
     public Object clone() {
         RuleBasedTimeZone other = (RuleBasedTimeZone)super.clone();
         if (historicRules != null) {
-            other.historicRules = (List)((ArrayList)historicRules).clone(); // rules are immutable
+            other.historicRules = new ArrayList<TimeZoneRule>(historicRules); // rules are immutable
         }
         if (finalRules != null) {
             other.finalRules = (AnnualTimeZoneRule[])finalRules.clone();
@@ -472,7 +467,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
                         if (done.get(i)) {
                             continue;
                         }
-                        TimeZoneRule r = (TimeZoneRule)historicRules.get(i);
+                        TimeZoneRule r = historicRules.get(i);
                         d = r.getNextStart(lastTransitionTime, curStdOffset, curDstSavings, false);
                         if (d == null) {
                             // No more transitions from this rule - skip this rule next time
@@ -529,7 +524,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
                     }
 
                     if (historicTransitions == null) {
-                        historicTransitions = new ArrayList();
+                        historicTransitions = new ArrayList<TimeZoneTransition>();
                     }
                     historicTransitions.add(new TimeZoneTransition(nextTransitionTime, curRule, nextRule));
                     lastTransitionTime = nextTransitionTime;
@@ -538,7 +533,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
             }
             if (finalRules != null) {
                 if (historicTransitions == null) {
-                    historicTransitions = new ArrayList();
+                    historicTransitions = new ArrayList<TimeZoneTransition>();
                 }
                 // Append the first transition for each
                 Date d0 = finalRules[0].getNextStart(lastTransitionTime, curRule.getRawOffset(), curRule.getDSTSavings(), false);
@@ -566,31 +561,31 @@ public class RuleBasedTimeZone extends BasicTimeZone {
         if (historicTransitions == null) {
             rule = initialRule;
         } else {
-            long tstart = getTransitionTime((TimeZoneTransition)historicTransitions.get(0),
+            long tstart = getTransitionTime(historicTransitions.get(0),
                     local, NonExistingTimeOpt, DuplicatedTimeOpt);
             if (time < tstart) {
                 rule = initialRule;
             } else {
                 int idx = historicTransitions.size() - 1;
-                long tend = getTransitionTime((TimeZoneTransition)historicTransitions.get(idx),
+                long tend = getTransitionTime(historicTransitions.get(idx),
                         local, NonExistingTimeOpt, DuplicatedTimeOpt);
                 if (time > tend) {
                     if (finalRules != null) {
                         rule = findRuleInFinal(time, local, NonExistingTimeOpt, DuplicatedTimeOpt);
                     } else {
                         // no final rule, use the last rule
-                        rule = ((TimeZoneTransition)historicTransitions.get(idx)).getTo();
+                        rule = (historicTransitions.get(idx)).getTo();
                     }
                 } else {
                     // Find a historical transition
                     while (idx >= 0) {
-                        if (time >= getTransitionTime((TimeZoneTransition)historicTransitions.get(idx),
+                        if (time >= getTransitionTime(historicTransitions.get(idx),
                                 local, NonExistingTimeOpt, DuplicatedTimeOpt)) {
                             break;
                         }
                         idx--;
                     }
-                    rule = ((TimeZoneTransition)historicTransitions.get(idx)).getTo();
+                    rule = (historicTransitions.get(idx)).getTo();
                 }
             }
         }

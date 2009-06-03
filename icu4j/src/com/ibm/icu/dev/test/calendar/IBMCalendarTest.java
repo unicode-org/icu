@@ -845,14 +845,6 @@ public class IBMCalendarTest extends CalendarTest {
         errln("calendar " + c0 + " not == " + c1);
     }
 
-    // coverage
-    try {
-        c0.compareTo((Object)null);
-        errln("calendar.compareTo didn't object to null arg");
-    }
-    catch (NullPointerException npe) {
-        logln("PASS: calendar.compareTo objected to null arg");
-    }
     }
 
     /**

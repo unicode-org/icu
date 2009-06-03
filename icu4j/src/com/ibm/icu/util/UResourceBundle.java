@@ -297,7 +297,8 @@ public abstract class UResourceBundle extends ResourceBundle{
     }
 
     // Cache for ResourceBundle instantiation
-    private static ICUCache BUNDLE_CACHE = new SimpleCache();
+    private static ICUCache<ResourceCacheKey, UResourceBundle> BUNDLE_CACHE =
+        new SimpleCache<ResourceCacheKey, UResourceBundle>();
 
     /**
      * @internal
@@ -315,7 +316,7 @@ public abstract class UResourceBundle extends ResourceBundle{
          *
          */
         //TODO figure a way around this method(see method comment)
-        BUNDLE_CACHE = new SimpleCache();
+        BUNDLE_CACHE = new SimpleCache<ResourceCacheKey, UResourceBundle>();
     }
     
     private static void addToCache(ResourceCacheKey key, UResourceBundle b) {
@@ -345,7 +346,7 @@ public abstract class UResourceBundle extends ResourceBundle{
         }
     }
     private static UResourceBundle loadFromCache(ResourceCacheKey key) {
-        return (UResourceBundle)BUNDLE_CACHE.get(key);
+        return BUNDLE_CACHE.get(key);
     }
 
     /**
@@ -359,7 +360,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * locale (if at all).
      */
     private static final class ResourceCacheKey implements Cloneable {
-        private SoftReference loaderRef;
+        private SoftReference<ClassLoader> loaderRef;
         private String searchName;
         private ULocale defaultLocale;
         private int hashCodeCache;
@@ -423,7 +424,7 @@ public abstract class UResourceBundle extends ResourceBundle{
             if (root == null) {
                 this.loaderRef = null;
             } else {
-                loaderRef = new SoftReference(root);
+                loaderRef = new SoftReference<ClassLoader>(root);
                 hashCodeCache ^= root.hashCode();
             }
         }
@@ -438,23 +439,23 @@ public abstract class UResourceBundle extends ResourceBundle{
     private static final int ROOT_ICU = 1;
     private static final int ROOT_JAVA = 2;
 
-    private static SoftReference ROOT_CACHE;
+    private static SoftReference<Map<String, Integer>> ROOT_CACHE;
 
     private static int getRootType(String baseName, ClassLoader root)
     {
-        Map m = null;
+        Map<String, Integer> m = null;
         Integer rootType;
 
         if (ROOT_CACHE != null) {
-            m = (Map) ROOT_CACHE.get();
+            m = ROOT_CACHE.get();
         }
 
         if (m == null) {
-            m = new HashMap();
-            ROOT_CACHE = new SoftReference(m);
+            m = new HashMap<String, Integer>();
+            ROOT_CACHE = new SoftReference<Map<String, Integer>>(m);
         }
 
-        rootType = (Integer) m.get(baseName);
+        rootType = m.get(baseName);
 
         if (rootType == null) {
             String rootLocale = (baseName.indexOf('.')==-1) ? "root" : "";
@@ -471,7 +472,7 @@ public abstract class UResourceBundle extends ResourceBundle{
                 }
             }
 
-            rootType = new Integer(rt);
+            rootType = Integer.valueOf(rt);
             m.put(baseName, rootType);
         }
 
@@ -480,14 +481,14 @@ public abstract class UResourceBundle extends ResourceBundle{
 
     private static void setRootType(String baseName, int rootType)
     {
-        Integer rt = new Integer(rootType);
-        Map m = null;
+        Integer rt = Integer.valueOf(rootType);
+        Map<String, Integer> m = null;
 
         if (ROOT_CACHE != null) {
-            m = (Map) ROOT_CACHE.get();
+            m = ROOT_CACHE.get();
         } else {
-            m = new HashMap();
-            ROOT_CACHE = new SoftReference(m);
+            m = new HashMap<String, Integer>();
+            ROOT_CACHE = new SoftReference<Map<String, Integer>>(m);
         }
 
         m.put(baseName, rt);
@@ -725,21 +726,21 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @return an enumeration containing key strings
      * @stable ICU 3.8
      */
-    public Enumeration getKeys() {
+    public Enumeration<String> getKeys() {
         initKeysVector();
         return keys.elements();
     }
 
-    private Vector keys = null;
+    private Vector<String> keys = null;
     private synchronized void initKeysVector(){
-        if(keys!=null){
+        if(keys != null){
             return;
         }
         //ICUResourceBundle current = this;
-        keys = new Vector();
-        Enumeration e = this.handleGetKeys();
+        keys = new Vector<String>();
+        Enumeration<String> e = this.handleGetKeys();
         while(e.hasMoreElements()){
-            String elem = (String)e.nextElement();
+            String elem = e.nextElement();
             if(!keys.contains(elem)){
                 keys.add(elem);
             }
@@ -907,7 +908,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @return UResourceBundle a resource associated with the key
      * @stable ICU 3.8
      */
-    protected UResourceBundle handleGet(String aKey, HashMap table, UResourceBundle requested) {
+    protected UResourceBundle handleGet(String aKey, HashMap<String, String> table, UResourceBundle requested) {
         return null;
     }
 
@@ -922,7 +923,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @return UResourceBundle a resource associated with the index
      * @stable ICU 3.8
      */
-    protected UResourceBundle handleGet(int index, HashMap table, UResourceBundle requested) {
+    protected UResourceBundle handleGet(int index, HashMap<String, String> table, UResourceBundle requested) {
         return null;
     }
 
@@ -943,8 +944,8 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @return Enumeration An enumeration of all the keys in this resource.
      * @stable ICU 3.8
      */
-    protected Enumeration handleGetKeys(){
-        Vector resKeys = new Vector();
+    protected Enumeration<String> handleGetKeys(){
+        Vector<String> resKeys = new Vector<String>();
         UResourceBundle item = null;
         for (int i = 0; i < size; i++) {
             item = get(i);
