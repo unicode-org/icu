@@ -5161,6 +5161,95 @@ public class TestCharset extends TestFmwk {
                 errln("Exception while converting SCSU thrown: " + e);
             }
         }
+        
+        /* Provide better code coverage */
+        /* testing illegal codepoints */
+        CoderResult illegalResult = CoderResult.UNDERFLOW;
+        CharBuffer illegalDecoderTrgt = CharBuffer.allocate(10);
+        
+        byte[] illegalDecoderSrc1 = { (byte)0x41, (byte)0xdf, (byte)0x0c };
+        decode.reset();
+        illegalResult = decode.decode(ByteBuffer.wrap(illegalDecoderSrc1), illegalDecoderTrgt, true);
+        if (illegalResult == CoderResult.OVERFLOW || illegalResult == CoderResult.UNDERFLOW) {
+            errln("Malformed error should have been returned for decoder " + charset.name());
+        }
+        /* code coverage test from nucnvtst.c in ICU4C */
+        CoderResult ccResult = CoderResult.UNDERFLOW;
+        int CCBufSize = 120 * 10;
+        ByteBuffer trgt = ByteBuffer.allocate(CCBufSize);
+        CharBuffer test = CharBuffer.allocate(CCBufSize);
+        String [] ccSrc = {
+            "\ud800\udc00", /* smallest surrogate*/
+            "\ud8ff\udcff",
+            "\udBff\udFff", /* largest surrogate pair*/
+            "\ud834\udc00",
+            //"\U0010FFFF",
+            "Hello \u9292 \u9192 World!",
+            "Hell\u0429o \u9292 \u9192 W\u00e4rld!",
+            "Hell\u0429o \u9292 \u9292W\u00e4rld!",
+
+            "\u0648\u06c8", /* catch missing reset*/
+            "\u0648\u06c8",
+
+            "\u4444\uE001", /* lowest quotable*/
+            "\u4444\uf2FF", /* highest quotable*/
+            "\u4444\uf188\u4444",
+            "\u4444\uf188\uf288",
+            "\u4444\uf188abc\u0429\uf288",
+            "\u9292\u2222",
+            "Hell\u0429\u04230o \u9292 \u9292W\u00e4\u0192rld!",
+            "Hell\u0429o \u9292 \u9292W\u00e4rld!",
+            "Hello World!123456",
+            "Hello W\u0081\u011f\u0082!", /* Latin 1 run*/
+
+            "abc\u0301\u0302",  /* uses SQn for u301 u302*/
+            "abc\u4411d",      /* uses SQU*/
+            "abc\u4411\u4412d",/* uses SCU*/
+            "abc\u0401\u0402\u047f\u00a5\u0405", /* uses SQn for ua5*/
+            "\u9191\u9191\u3041\u9191\u3041\u3041\u3000", /* SJIS like data*/
+            "\u9292\u2222",
+            "\u9191\u9191\u3041\u9191\u3041\u3041\u3000",
+            "\u9999\u3051\u300c\u9999\u9999\u3060\u9999\u3065\u3065\u3065\u300c",
+            "\u3000\u266a\u30ea\u30f3\u30b4\u53ef\u611b\u3044\u3084\u53ef\u611b\u3044\u3084\u30ea\u30f3\u30b4\u3002",
+
+            "", /* empty input*/
+            "\u0000", /* smallest BMP character*/
+            "\uFFFF", /* largest BMP character*/
+
+            /* regression tests*/
+            "\u6441\ub413\ua733\uf8fe\ueedb\u587f\u195f\u4899\uf23d\u49fd\u0aac\u5792\ufc22\ufc3c\ufc46\u00aa",
+            /*"\u00df\u01df\uf000\udbff\udfff\u000d\n\u0041\u00df\u0401\u015f\u00df\u01df\uf000\udbff\udfff",*/
+            "\u30f9\u8321\u05e5\u181c\ud72b\u2019\u99c9\u2f2f\uc10c\u82e1\u2c4d\u1ebc\u6013\u66dc\ubbde\u94a5\u4726\u74af\u3083\u55b9\u000c",
+            "\u0041\u00df\u0401\u015f",
+            "\u9066\u2123abc",
+            //"\ud266\u43d7\ue386\uc9c0\u4a6b\u9222\u901f\u7410\ua63f\u539b\u9596\u482e\u9d47\ucfe4\u7b71\uc280\uf26a\u982f\u862a\u4edd\uf513\ufda6\u869d\u2ee0\ua216\u3ff6\u3c70\u89c0\u9576\ud5ec\ubfda\u6cca\u5bb3\ubcea\u554c\u914e\ufa4a\uede3\u2990\ud2f5\u2729\u5141\u0f26\uccd8\u5413\ud196\ubbe2\u51b9\u9b48\u0dc8\u2195\u21a2\u21e9\u00e4\u9d92\u0bc0\u06c5",
+            "\uf95b\u2458\u2468\u0e20\uf51b\ue36e\ubfc1\u0080\u02dd\uf1b5\u0cf3\u6059\u7489",
+        };
+        for (int i = 0; i < ccSrc.length; i++) {
+            CharBuffer ubuf = CharBuffer.wrap(ccSrc[i]);
+            encode.reset();
+            decode.reset();
+            trgt.clear();
+            test.clear();
+            ccResult = encode.encode(ubuf, trgt, true);
+            if (ccResult.isError()) {
+                errln("Error while encoding " + charset.name() + " in test for code coverage[" + i + "].");
+            } else {
+                trgt.limit(trgt.position());
+                trgt.position(0);
+                ccResult = decode.decode(trgt, test, true);
+                if (ccResult.isError()) {
+                    errln("Error while decoding " + charset.name() + " in test for code coverage[" + i + "].");
+                } else {
+                    ubuf.position(0);
+                    test.limit(test.position());
+                    test.position(0);
+                    if (!equals(test, ubuf)) {
+                        errln("Roundtrip failed for " + charset.name() + " in test for code coverage[" + i + "].");
+                    }
+                }
+            }
+        }
     } 
     
     /* Test for BOCU1 converter*/
@@ -5264,5 +5353,32 @@ public class TestCharset extends TestFmwk {
                 errln("The ICU canonical name in ICU4J does not match that in ICU4C. Result: " + name + "Expected: " + expected[i]);
             }
         }
+    }
+    
+    /* Increase code coverage for CharsetICU and CharsetProviderICU*/
+    public void TestCharsetICUCodeCoverage() {
+        CharsetProviderICU provider = new CharsetProviderICU();
+        
+        if (provider.charsetForName("UTF16", null) != null) {
+            errln("charsetForName should have returned a null");
+        }
+        
+        if (provider.getJavaCanonicalName(null) != null) {
+            errln("getJavaCanonicalName should have returned a null when null is given to it.");
+        }
+        
+        try {
+            Charset testCharset = CharsetICU.forNameICU("bogus");
+        } catch (Exception ex) {
+        }
+        
+        Charset charset = provider.charsetForName("UTF16");
+        
+        try {
+            ((CharsetICU)charset).getUnicodeSet(null, 0);
+        } catch (IllegalArgumentException ex) {
+            return;
+        }
+        errln("IllegalArgumentException should have been thrown.");
     }
 }
