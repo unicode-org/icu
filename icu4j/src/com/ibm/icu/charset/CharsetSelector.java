@@ -176,6 +176,7 @@ public final class CharsetSelector {
             encodings = charsetList.toArray(new String[0]);
         } else {
             encodings = CharsetProviderICU.getAvailableNames();
+            encodingCount = encodings.length;
         }
 
         PropsVectors pvec = new PropsVectors((encodingCount + 31) / 32);
