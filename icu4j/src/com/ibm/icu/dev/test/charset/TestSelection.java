@@ -172,6 +172,26 @@ public class TestSelection extends TestFmwk {
         }
     }
     
+    /* This test is to provide better code coverage for CharsetSelector */
+    public void TestCharsetSelectorCodeCoverage() {
+        Vector emptyList = new Vector();
+        UnicodeSet nonEmptySet = new UnicodeSet();
+        
+        nonEmptySet.add(0x0001, 0x0FFF);
+        
+        CharsetSelector sel = null;
+        
+        sel = new CharsetSelector(emptyList, nonEmptySet, CharsetICU.ROUNDTRIP_SET);
+        
+        /* Test bogus mappingType */
+        try {
+            sel = new CharsetSelector(null, null, -1);
+        } catch (IllegalArgumentException e) {
+            return;
+        }
+        errln("IllegalArgumentException should have been thrown by CharsetSelector when given a bogus mappingType.");
+    }
+    
     private String[] texts = {
             "Cos\'\u00E8 Unicode?\n\nUnicode assegna un numero univoco a ogni carattere,\nindipendentemente dalla piattaforma," +
             "\nindipendentemente dall\'applicazione,\nindipendentemente dalla lingua.\n\nI computer, in buona sostanza," +

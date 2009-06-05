@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -156,11 +156,12 @@ class CharsetSCSU extends CharsetICU{
             }
             this.nextWindowUseIndex = 0; 
             switch(this.locale){
-                case l_ja:
+            /* Note being used right now because "SCSU,locale=ja" does not work in ICU4J. */
+            /*    case l_ja:
                     for(int i=0;i<8;i++){
                         this.windowUse[i] = initialWindowUse_ja[i];
                     }
-                    break;
+                    break; */
                 default:
                     for(int i=0;i<8;i++){
                         this.windowUse[i] = initialWindowUse[i];
@@ -171,11 +172,13 @@ class CharsetSCSU extends CharsetICU{
     }
     
     static final byte initialWindowUse[]={ 7, 0, 3, 2, 4, 5, 6, 1 };
-    static final byte initialWindowUse_ja[]={ 3, 2, 4, 1, 0, 7, 5, 6 };
+    /* Note being used right now because "SCSU,locale=ja" does not work in ICU4J. */
+    // static final byte initialWindowUse_ja[]={ 3, 2, 4, 1, 0, 7, 5, 6 };
 
     //enum {
     //private static final int lGeneric = 0;
-    private static final int l_ja = 1;
+    /* Note being used right now because "SCSU,locale=ja" does not work in ICU4J. */
+    // private static final int l_ja = 1;
     //};
     
     private SCSUData extraInfo = null; 
