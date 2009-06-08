@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -31,7 +31,7 @@ import com.ibm.icu.util.CompactByteArray;
  * @internal
  * @deprecated This API is ICU internal only.
  */
-public class BreakDictionary {
+/* public */ class BreakDictionary {
     //=================================================================================
     // testing and debugging
     //=================================================================================
@@ -62,7 +62,7 @@ public class BreakDictionary {
      * @internal 
      * @deprecated This API is ICU internal only.
      */
-    public void printWordList(String partialWord, int state, PrintWriter out)
+    /* public */ void printWordList(String partialWord, int state, PrintWriter out)
             throws IOException {
         if (state == 0xFFFF) {
             System.out.println(partialWord);
@@ -166,7 +166,7 @@ public class BreakDictionary {
      * @internal 
      * @deprecated This API is ICU internal only.
      */
-    public BreakDictionary(InputStream dictionaryStream) throws IOException {
+    /* public */ BreakDictionary(InputStream dictionaryStream) throws IOException {
         readDictionaryFile(new DataInputStream(dictionaryStream));
     }
 
@@ -174,7 +174,7 @@ public class BreakDictionary {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public void readDictionaryFile(DataInputStream in) throws IOException {
+    /* public */ void readDictionaryFile(DataInputStream in) throws IOException {
         int l;
 
         // read in the version number (right now we just ignore it)
@@ -250,7 +250,7 @@ public class BreakDictionary {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public final short at(int row, char ch) {
+    /* public */ final short at(int row, char ch) {
         int col = columnMap.elementAt(ch);
         return at(row, col);
     }
@@ -268,7 +268,7 @@ public class BreakDictionary {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public final short at(int row, int col) {
+    /* public */ final short at(int row, int col) {
         if (cellIsPopulated(row, col)) {
             // we map from logical to physical row number by looking up the
             // mapping in rowIndex; we map from logical column number to
