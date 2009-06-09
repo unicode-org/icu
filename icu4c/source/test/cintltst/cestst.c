@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -89,7 +89,7 @@ static void TestTertiary( )
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("es_ES", &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: %s: in creation of rule based collator: %s\n", __FILE__, myErrorName(status));
+        log_err_status(status, "ERROR: %s: in creation of rule based collator: %s\n", __FILE__, myErrorName(status));
         return;
     }
     log_verbose("Testing Spanish Collation with Tertiary strength\n");
@@ -108,7 +108,7 @@ static void TestPrimary()
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("es_ES", &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: %s: in creation of rule based collator: %s\n", __FILE__, myErrorName(status));
+        log_err_status(status, "ERROR: %s: in creation of rule based collator: %s\n", __FILE__, myErrorName(status));
         return;
     }
     log_verbose("Testing Spanish Collation with Primary strength\n");

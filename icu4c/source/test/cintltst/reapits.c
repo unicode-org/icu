@@ -29,10 +29,10 @@
 #include "cintltst.h"
 
 #define TEST_ASSERT_SUCCESS(status) {if (U_FAILURE(status)) { \
-log_err("Failure at file %s, line %d, error = %s\n", __FILE__, __LINE__, u_errorName(status));}}
+log_data_err("Failure at file %s, line %d, error = %s (Are you missing data?)\n", __FILE__, __LINE__, u_errorName(status));}}
 
 #define TEST_ASSERT(expr) {if ((expr)==FALSE) { \
-log_err("Test Failure at file %s, line %d\n", __FILE__, __LINE__);}}
+log_data_err("Test Failure at file %s, line %d (Are you missing data?)\n", __FILE__, __LINE__);}}
 
 /*
  *   TEST_SETUP and TEST_TEARDOWN
@@ -137,7 +137,7 @@ static void TestRegexCAPI(void) {
     u_uastrncpy(pat, "abc*", sizeof(pat)/2);
     re = uregex_open(pat, -1, 0, 0, &status);
     if (U_FAILURE(status)) {
-         log_err("Failed to open regular expression, line %d, error is \"%s\"\n", __LINE__, u_errorName(status));
+         log_data_err("Failed to open regular expression, line %d, error is \"%s\" (Are you missing data?)\n", __LINE__, u_errorName(status));
          return;
     }
     uregex_close(re);

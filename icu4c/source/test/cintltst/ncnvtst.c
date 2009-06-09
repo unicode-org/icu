@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*****************************************************************************
@@ -1944,7 +1944,7 @@ TestUnicodeSet() {
         name=ucnv_getAvailableName(i);
         cnv=ucnv_open(name, &errorCode);
         if(U_FAILURE(errorCode)) {
-            log_err("error: unable to open converter %s - %s\n",
+            log_data_err("error: unable to open converter %s - %s\n",
                     name, u_errorName(errorCode));
             continue;
         }
@@ -1967,7 +1967,7 @@ TestUnicodeSet() {
         name=completeSetNames[i];
         cnv=ucnv_open(name, &errorCode);
         if(U_FAILURE(errorCode)) {
-            log_err("error: unable to open converter %s - %s\n",
+            log_data_err("error: unable to open converter %s - %s\n",
                     name, u_errorName(errorCode));
             continue;
         }
@@ -1990,7 +1990,7 @@ TestUnicodeSet() {
         name=lmbcsNames[i];
         cnv=ucnv_open(name, &errorCode);
         if(U_FAILURE(errorCode)) {
-            log_err("error: unable to open converter %s - %s\n",
+            log_data_err("error: unable to open converter %s - %s\n",
                     name, u_errorName(errorCode));
             continue;
         }

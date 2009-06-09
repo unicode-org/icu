@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2007, International Business Machines
+*   Copyright (C) 2007-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -76,7 +76,7 @@ static void TestOpenClose() {
     /* Open a DateTimePatternGenerator for the default locale. */
     dtpg=udatpg_open(NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("udatpg_open(NULL) failed - %s\n", u_errorName(errorCode));
+        log_err_status(errorCode, "udatpg_open(NULL) failed - %s\n", u_errorName(errorCode));
         return;
     }
     udatpg_close(dtpg);
@@ -120,7 +120,7 @@ static void TestUsage() {
     
     dtpg=udatpg_open("fi", &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("udatpg_open(fi) failed - %s\n", u_errorName(errorCode));
+        log_err_status(errorCode, "udatpg_open(fi) failed - %s\n", u_errorName(errorCode));
         return;
     }
     length = udatpg_getBestPattern(dtpg, testSkeleton1, 4,

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2007, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -147,7 +147,7 @@ static void TestTertiary( )
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("fr_FR", &status);
     if(U_FAILURE(status) || !myCollation){
-        log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+        log_err_status(status, "ERROR: in creation of rule based collator: %s\n", myErrorName(status));
         return;
     }
 
@@ -172,7 +172,7 @@ static void TestSecondary()
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("fr_FR", &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+        log_err_status(status, "ERROR: in creation of rule based collator: %s\n", myErrorName(status));
         return;
     }
     ucol_setAttribute(myCollation, UCOL_STRENGTH, UCOL_SECONDARY, &status);
@@ -202,7 +202,7 @@ static void TestExtra()
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("fr_FR", &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+        log_err_status(status, "ERROR: in creation of rule based collator: %s\n", myErrorName(status));
         return;
     }
     log_verbose("Testing French Collation extra with secondary strength\n");
@@ -314,7 +314,7 @@ static void TestGetSortKey() {
     pCollator = ucol_openFromShortString("LFR_AN_CX_EX_FO_HX_NX_S3", 0, NULL, &status);
 
     if (U_FAILURE(status)) {
-        log_err("error opening collator\n");
+        log_data_err("error opening collator -> %s. (Are you missing data?)\n", u_errorName(status));
         return;
     }
 

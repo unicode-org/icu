@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2008, International Business Machines
+ * Copyright (c) 1997-2009, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 
@@ -72,7 +72,7 @@ void TestUScriptCodeAPI(){
             UScriptCode script[10]={USCRIPT_INVALID_CODE};
             uscript_getCode(testNames[i],script,capacity, &err);
             if( script[0] != expected[i]){
-                   log_err("Error getting script code Got: %i  Expected: %i for name %s\n",
+                   log_data_err("Error getting script code Got: %i  Expected: %i for name %s (Error code does not propagate if data is not present. Are you missing data?)\n",
                        script[0],expected[i],testNames[i]);
                    numErrors++;
             }
@@ -368,12 +368,12 @@ void TestBinaryValues() {
     int32_t i;
     for(i=0; i<LENGTHOF(falseValues); ++i) {
         if(FALSE!=u_getPropertyValueEnum(UCHAR_ALPHABETIC, falseValues[i])) {
-            log_err("u_getPropertyValueEnum(UCHAR_ALPHABETIC, \"%s\")!=FALSE\n", falseValues[i]);
+            log_data_err("u_getPropertyValueEnum(UCHAR_ALPHABETIC, \"%s\")!=FALSE (Are you missing data?)\n", falseValues[i]);
         }
     }
     for(i=0; i<LENGTHOF(trueValues); ++i) {
         if(TRUE!=u_getPropertyValueEnum(UCHAR_ALPHABETIC, trueValues[i])) {
-            log_err("u_getPropertyValueEnum(UCHAR_ALPHABETIC, \"%s\")!=TRUE\n", trueValues[i]);
+            log_data_err("u_getPropertyValueEnum(UCHAR_ALPHABETIC, \"%s\")!=TRUE (Are you missing data?)\n", trueValues[i]);
         }
     }
 }

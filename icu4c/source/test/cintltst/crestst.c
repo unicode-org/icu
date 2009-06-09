@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -116,12 +116,12 @@ void TestAliasConflict(void) {
     he = ures_open(NULL, "he", &status);
     iw = ures_open(NULL, "iw", &status);
     if(U_FAILURE(status)) {
-        log_err("Failed to get resource with %s\n", myErrorName(status));
+        log_err_status(status, "Failed to get resource with %s\n", myErrorName(status));
     }
     ures_close(iw);
     result = ures_getStringByKey(he, "ExemplarCharacters", &resultLen, &status);
     if(U_FAILURE(status) || result == NULL) {
-        log_err("Failed to get resource with %s\n", myErrorName(status));
+        log_err_status(status, "Failed to get resource with %s\n", myErrorName(status));
     }
     ures_close(he);
 }
@@ -426,7 +426,7 @@ static void TestFallback()
     fr_FR = ures_open(NULL, "fr_FR", &status);
     if(U_FAILURE(status))
     {
-        log_err("Couldn't open fr_FR - %d\n", status);
+        log_err_status(status, "Couldn't open fr_FR - %s\n", u_errorName(status));
         return;
     }
 

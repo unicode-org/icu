@@ -80,7 +80,7 @@ static void TestDateFormat()
     fr = udat_open(UDAT_FULL, UDAT_DEFAULT, "fr_FR", NULL,0, NULL, 0,&status);
     if(U_FAILURE(status))
     {
-        log_err("FAIL: error in creating the dateformat using full time style with french locale\n %s\n", 
+        log_data_err("FAIL: error in creating the dateformat using full time style with french locale -> %s (Are you missing data?)\n", 
             myErrorName(status) );
         return;
     }
@@ -428,7 +428,7 @@ static void TestRelativeDateFormat()
 
         fmtRelDateTime = udat_open(UDAT_SHORT, *stylePtr | UDAT_RELATIVE, trdfLocale, trdfZone, -1, NULL, 0, &status);
         if ( U_FAILURE(status) ) {
-            log_err("udat_open timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
+            log_data_err("udat_open timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s (Are you missing data?)\n", *stylePtr, myErrorName(status) );
             continue;
         }
         fmtRelDate = udat_open(UDAT_NONE, *stylePtr | UDAT_RELATIVE, trdfLocale, trdfZone, -1, NULL, 0, &status);
@@ -541,7 +541,7 @@ static void TestSymbols()
     fr = udat_open(UDAT_FULL, UDAT_DEFAULT, "fr_FR", NULL, 0, NULL, 0, &status);
     if(U_FAILURE(status))
     {
-        log_err("error in creating the dateformat using full time style with french locale\n %s\n", 
+        log_data_err("error in creating the dateformat using full time style with french locale -> %s (Are you missing data?)\n", 
             myErrorName(status) );
         return;
     }
@@ -778,7 +778,7 @@ static void TestDateFormatCalendar() {
     /* Create a formatter for date fields. */
     date = udat_open(UDAT_NONE, UDAT_SHORT, "en_US", NULL, 0, NULL, 0, &ec);
     if (U_FAILURE(ec)) {
-        log_err("FAIL: udat_open(NONE, SHORT, en_US) failed with %s\n", 
+        log_data_err("FAIL: udat_open(NONE, SHORT, en_US) failed with %s (Are you missing data?)\n", 
                 u_errorName(ec));
         goto FAIL;
     }
@@ -1088,7 +1088,10 @@ static void TestExtremeDates() {
     ec = U_ZERO_ERROR;
     fmt = udat_open(UDAT_LONG, UDAT_LONG, "en_US",
                     0, 0, 0, 0, &ec);
-    if (!assertSuccess("udat_open", &ec)) return;
+    if (U_FAILURE(ec)) {
+        log_data_err("FAIL: udat_open (%s) (Are you missing data?)\n", u_errorName(ec));
+        return;
+    }
 
     _aux2ExtremeDates(fmt, small, large, buf, LEN(buf), cbuf, 0, &ec);
 
@@ -1213,7 +1216,7 @@ static void TestRelativeCrash(void) {
         
         udat_close(icudf);
     } else {
-         log_err("FAIL: err %s\n", u_errorName(status));
+         log_data_err("FAIL: err calling udat_open() ->%s (Are you missing data?)\n", u_errorName(status));
     }
 }
 

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -2482,7 +2482,7 @@ TestLATIN1() {
     UErrorCode errorCode=U_ZERO_ERROR;
     UConverter *cnv=ucnv_open("LATIN_1", &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("Unable to open a LATIN_1 converter: %s\n", u_errorName(errorCode));
+        log_data_err("Unable to open a LATIN_1 converter: %s\n", u_errorName(errorCode));
         return;
     }
     TestNextUChar(cnv, source, limit, results, "LATIN_1");
@@ -5292,7 +5292,7 @@ static void TestJitterbug981(){
     }
     myCollator = ucol_open("zh", &status);
     if(U_FAILURE(status)){
-        log_err("Could not open collator for zh locale. Error: %s\n", u_errorName(status));
+        log_data_err("Could not open collator for zh locale. Error: %s\n", u_errorName(status));
         ucnv_close(utf8cnv);
         return;
     }
@@ -5376,6 +5376,12 @@ static void TestJB5275_1(){
     const char* source = data;
     const char* sourceLimit = data+strlen(data);
     const UChar* exp = expected;
+    
+    if (U_FAILURE(status)) {
+        log_data_err("Unable to open converter: iscii-gur got errorCode: %s\n", u_errorName(status));
+        return;
+    }
+    
     log_verbose("Testing switching back to default script when new line is encountered.\n");
     ucnv_toUnicode(conv, &target, targetLimit, &source, sourceLimit, NULL, TRUE, &status);
     if(U_FAILURE(status)){
