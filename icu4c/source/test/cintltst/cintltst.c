@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -441,7 +441,7 @@ UBool ctest_resetICU() {
     free(dataDir);
     u_init(&status);
     if (U_FAILURE(status)) {
-        log_err("u_init failed with %s\n", u_errorName(status));
+        log_err_status(status, "u_init failed with %s\n", u_errorName(status));
         return FALSE;
     }
     return TRUE;
@@ -560,7 +560,7 @@ U_CFUNC void ctest_setTimeZone(const char *optionalTimeZone, UErrorCode *status)
         optionalTimeZone = "America/Los_Angeles";
     }
     if (gOriginalTimeZone[0]) {
-        log_err("*** Error: time zone saved twice. New value will be %s\n",
+        log_data_err("*** Error: time zone saved twice. New value will be %s (Are you missing data?)\n",
                optionalTimeZone);
     }
     ucal_getDefaultTimeZone(gOriginalTimeZone, CTEST_MAX_TIMEZONE_SIZE, status);
@@ -637,7 +637,7 @@ void ctst_freeAll() {
 U_CFUNC UBool assertSuccess(const char* msg, UErrorCode* ec) {
     U_ASSERT(ec!=NULL);
     if (U_FAILURE(*ec)) {
-        log_err("FAIL: %s (%s)\n", msg, u_errorName(*ec));
+        log_err_status(*ec, "FAIL: %s (%s)\n", msg, u_errorName(*ec));
         return FALSE;
     }
     return TRUE;

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2000-2007, International Business Machines Corporation and
+ * Copyright (c) 2000-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -44,7 +44,7 @@ static int dotestname(const char *name, const char *standard, const char *expect
     error = U_ZERO_ERROR;
     tag = ucnv_getStandardName(name, standard, &error);
     if (!tag && expected) {
-        log_err("FAIL: could not find %s standard name for %s\n", standard, name);
+        log_err_status(error, "FAIL: could not find %s standard name for %s\n", standard, name);
         res = 0;
     } else if (expected && (name == tag || uprv_strcmp(expected, tag))) {
         log_err("FAIL: expected %s for %s standard name for %s, got %s\n", expected, standard, name, tag);
@@ -124,7 +124,7 @@ static int dotestconv(const char *name, const char *standard, const char *expect
         res = 0;
     }
     else if (!tag && expected) {
-        log_err("FAIL: could not find %s canonical name for %s\n", (standard ? "\"\"" : standard), name);
+        log_err_status(error, "FAIL: could not find %s canonical name for %s\n", (standard ? "\"\"" : standard), name);
         res = 0;
     }
     else if (expected && (name == tag || uprv_strcmp(expected, tag) != 0)) {
@@ -173,6 +173,11 @@ static UBool doTestNames(const char *name, const char *standard, const char **ex
     const char *enumName, *testName;
     int32_t enumCount = uenum_count(myEnum, &err);
     int32_t idx, len, repeatTimes = 3;
+    
+    if (err == U_FILE_ACCESS_ERROR) {
+        log_data_err("Unable to open standard names for %s of standard: %s\n", name, standard);
+        return 0;
+    }
     if (size != enumCount) {
         log_err("FAIL: different size arrays for %s. Got %d. Expected %d\n", name, enumCount, size);
         return 0;
@@ -219,6 +224,12 @@ static UBool doTestUCharNames(const char *name, const char *standard, const char
     UEnumeration *myEnum = ucnv_openStandardNames(name, standard, &err);
     int32_t enumCount = uenum_count(myEnum, &err);
     int32_t idx, repeatTimes = 3;
+    
+    if (err == U_FILE_ACCESS_ERROR) {
+        log_data_err("Unable to open standard names for %s of standard: %s\n", name, standard);
+        return 0;
+    }
+    
     if (size != enumCount) {
         log_err("FAIL: different size arrays. Got %d. Expected %d\n", enumCount, size);
         return 0;

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -111,7 +111,7 @@ void currTest()
     c = ucol_open("en_US", &status);
     if (U_FAILURE(status))
     {
-        log_err("collator open failed! :%s\n", myErrorName(status));
+        log_err_status(status, "collator open failed! :%s\n", myErrorName(status));
         return;
     }
 

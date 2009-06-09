@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -119,7 +119,7 @@ static void TestTertiary( )
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("ja_JP", &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+        log_err_status(status, "ERROR: in creation of rule based collator: %s\n", myErrorName(status));
         return;
     }
     log_verbose("Testing Kanna(Japan) Collation with Tertiary strength\n");
@@ -140,7 +140,7 @@ static void TestBase()
     myCollation = ucol_open("ja_JP", &status);
     if (U_FAILURE(status))
     {
-        log_err("ERROR: in creation of rule based collator: %s\n",
+        log_err_status(status, "ERROR: in creation of rule based collator: %s\n",
             myErrorName(status));
         return;
     }
@@ -161,7 +161,7 @@ static void TestPlainDakutenHandakuten(void)
     myCollation = ucol_open("ja_JP", &status);
     if (U_FAILURE(status))
     {
-        log_err("ERROR: in creation of rule based collator: %s\n",
+        log_err_status(status, "ERROR: in creation of rule based collator: %s\n",
             myErrorName(status));
         return;
     }
@@ -185,7 +185,7 @@ static void TestSmallLarge(void)
     myCollation = ucol_open("ja_JP", &status);
     if (U_FAILURE(status))
     {
-        log_err("ERROR: in creation of rule based collator: %s\n",
+        log_err_status(status, "ERROR: in creation of rule based collator: %s\n",
             myErrorName(status));
         return;
     }
@@ -210,7 +210,7 @@ static void TestKatakanaHiragana(void)
     myCollation = ucol_open("ja_JP", &status);
     if (U_FAILURE(status))
     {
-        log_err("ERROR: in creation of rule based collator: %s\n",
+        log_err_status(status, "ERROR: in creation of rule based collator: %s\n",
             myErrorName(status));
         return;
     }
@@ -236,7 +236,7 @@ static void TestChooonKigoo(void)
     myCollation = ucol_open("ja_JP", &status);
     if (U_FAILURE(status))
     {
-        log_err("ERROR: in creation of rule based collator: %s\n",
+        log_err_status(status, "ERROR: in creation of rule based collator: %s\n",
             myErrorName(status));
         return;
     }

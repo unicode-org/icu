@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -98,7 +98,7 @@ parseUCDFile(const char *filename,
         u_parseDelimitedFile(backupPath, ';', fields, fieldCount, lineFn, context, pErrorCode);
     }
     if(U_FAILURE(*pErrorCode)) {
-        log_err("error parsing %s: %s\n", filename, u_errorName(*pErrorCode));
+        log_err_status(*pErrorCode, "error parsing %s: %s\n", filename, u_errorName(*pErrorCode));
     }
 }
 
@@ -1040,7 +1040,7 @@ unicodeDataLineFn(void *context,
     *fields[11][1]=0;
     i=u_getISOComment(c, buffer, sizeof(buffer), pErrorCode);
     if(U_FAILURE(*pErrorCode) || 0!=strcmp(fields[11][0], buffer)) {
-        log_err("error: u_getISOComment(U+%04lx) wrong (%s): \"%s\" should be \"%s\"\n",
+        log_err_status(*pErrorCode, "error: u_getISOComment(U+%04lx) wrong (%s): \"%s\" should be \"%s\"\n",
             c, u_errorName(*pErrorCode),
             U_FAILURE(*pErrorCode) ? buffer : "[error]",
             fields[11][0]);
@@ -1838,7 +1838,7 @@ TestMirroring() {
     set=uset_openPattern(mirroredPattern, 17, &errorCode);
 
     if (U_FAILURE(errorCode)) {
-        log_data_err("uset_openPattern(mirroredPattern, 17, &errorCode) failed!");
+        log_data_err("uset_openPattern(mirroredPattern, 17, &errorCode) failed!\n");
     } else {
         for(i=0; 0==uset_getItem(set, i, &start, &end, NULL, 0, &errorCode); ++i) {
             do {
@@ -2908,7 +2908,7 @@ TestConsistency() {
         uset_remove(set1, 0xff65); /* halfwidth variant */
         showAMinusB(set1, set2, "[:Hyphen:]", "[:Dash:]", FALSE);
     } else {
-        log_err("error opening [:Hyphen:] or [:Dash:] - %s\n", u_errorName(errorCode));
+        log_data_err("error opening [:Hyphen:] or [:Dash:] - %s (Are you missing data?)\n", u_errorName(errorCode));
     }
 
     /* check that Cf is neither Hyphen nor Dash nor Alphabetic */
@@ -2919,7 +2919,7 @@ TestConsistency() {
         showAIntersectB(set3, set2, "[:Cf:]", "[:Dash:]", TRUE);
         showAIntersectB(set3, set4, "[:Cf:]", "[:Alphabetic:]", TRUE);
     } else {
-        log_err("error opening [:Cf:] or [:Alpbabetic:] - %s\n", u_errorName(errorCode));
+        log_data_err("error opening [:Cf:] or [:Alpbabetic:] - %s (Are you missing data?)\n", u_errorName(errorCode));
     }
 
     uset_close(set1);
@@ -2966,7 +2966,7 @@ TestConsistency() {
             }
         }
     } else {
-        log_err("error opening [:Lowercase:] - %s\n", u_errorName(errorCode));
+        log_data_err("error opening [:Lowercase:] - %s (Are you missing data?)\n", u_errorName(errorCode));
     }
     uset_close(set1);
 
@@ -3019,7 +3019,7 @@ TestConsistency() {
                      "[assigned Math block chars]", "[math blocks]&[:Math:]",
                      TRUE);
     } else {
-        log_err("error opening [math blocks] or [:Math:] or [:Cn:] - %s\n", u_errorName(errorCode));
+        log_data_err("error opening [math blocks] or [:Math:] or [:Cn:] - %s (Are you missing data?)\n", u_errorName(errorCode));
     }
     uset_close(set1);
     uset_close(set2);
@@ -3034,7 +3034,7 @@ TestConsistency() {
                      "[:sc=Unknown:]", "[[:Cn:][:Co:][:Cs:]]",
                      TRUE);
     } else {
-        log_err("error opening [:sc=Unknown:] or [[:Cn:][:Co:][:Cs:]] - %s\n", u_errorName(errorCode));
+        log_data_err("error opening [:sc=Unknown:] or [[:Cn:][:Co:][:Cs:]] - %s (Are you missing data?)\n", u_errorName(errorCode));
     }
     uset_close(set1);
     uset_close(set2);

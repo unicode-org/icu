@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -267,7 +267,7 @@ static void TestTertiary( )
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("en_US", &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+        log_err_status(status, "ERROR: in creation of rule based collator: %s\n", myErrorName(status));
         return;
     }
     log_verbose("Testing English Collation with Tertiary strength\n");
@@ -309,7 +309,7 @@ static void TestPrimary()
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("en_US", &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+        log_err_status(status, "ERROR: in creation of rule based collator: %s\n", myErrorName(status));
         return;
     }
     ucol_setStrength(myCollation, UCOL_PRIMARY);
@@ -328,7 +328,7 @@ static void TestSecondary()
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("en_US", &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+        log_err_status(status, "ERROR: in creation of rule based collator: %s\n", myErrorName(status));
         return;
     }
     ucol_setStrength(myCollation, UCOL_SECONDARY);

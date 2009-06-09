@@ -46,6 +46,10 @@ getAvailableNames() {
     return TRUE;
   }
   gCountAvailable = ucnv_countAvailable();
+  if (gCountAvailable == 0) {
+    log_data_err("No converters available.\n");
+    return FALSE;
+  }
   gAvailableNames = (const char **)uprv_malloc(gCountAvailable * sizeof(const char *));
   if (gAvailableNames == NULL) {
     log_err("unable to allocate memory for %ld available converter names\n",
