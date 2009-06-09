@@ -133,7 +133,7 @@ static void TestCalendar()
             count = uenum_count(uenum, &status);
             log_verbose("%s returned %d timezone id's:\n", api, count);
             if (count < 5) { /* Don't hard code an exact == test here! */
-                log_err("FAIL: in %s, got %d, expected at least 5\n", api, count);
+                log_data_err("FAIL: in %s, got %d, expected at least 5 -> %s (Are you missing data?)\n", api, count, u_errorName(status));
             }
             uenum_reset(uenum, &status);    
             if (U_FAILURE(status)){
@@ -166,7 +166,7 @@ static void TestCalendar()
         log_err("FAIL: ucal_getDSTSavings(GMT) => %s\n",
                 u_errorName(status));
     } else if (i != 0) {
-        log_err("FAIL: ucal_getDSTSavings(GMT) => %d, expect 0\n", i);
+        log_data_err("FAIL: ucal_getDSTSavings(GMT) => %d, expect 0 (Are you missing data?)\n", i);
     }
     i = ucal_getDSTSavings(PST, &status);
     if (U_FAILURE(status)) {
@@ -194,7 +194,7 @@ static void TestCalendar()
                         u_errorName(status));
             } else {
                 if (u_strcmp(zone2, EUROPE_PARIS) != 0) {
-                    log_err("FAIL: ucal_getDefaultTimeZone() did not return Europe/Paris\n");
+                    log_data_err("FAIL: ucal_getDefaultTimeZone() did not return Europe/Paris (Are you missing data?)\n");
                 }
             }
         }
@@ -206,7 +206,7 @@ static void TestCalendar()
     status = U_ZERO_ERROR;
     tzver = ucal_getTZDataVersion(&status);
     if (U_FAILURE(status)) {
-        log_err("FAIL: ucal_getTZDataVersion() => %s\n", u_errorName(status));
+        log_err_status(status, "FAIL: ucal_getTZDataVersion() => %s\n", u_errorName(status));
     } else if (uprv_strlen(tzver) != 5 /*4 digits + 1 letter*/) {
         log_err("FAIL: Bad version string was returned by ucal_getTZDataVersion\n");
     } else {
@@ -221,11 +221,11 @@ static void TestCalendar()
         log_err("FAIL: error in ucal_getCanonicalTimeZoneID : %s\n", u_errorName(status));
     } else {
         if (u_strcmp(AMERICA_LOS_ANGELES, canonicalID) != 0) {
-            log_err("FAIL: ucal_getCanonicalTimeZoneID(%s) returned %s : expected - %s\n",
+            log_data_err("FAIL: ucal_getCanonicalTimeZoneID(%s) returned %s : expected - %s (Are you missing data?)\n",
                 PST, canonicalID, AMERICA_LOS_ANGELES);
         }
         if (!isSystemID) {
-            log_err("FAIL: ucal_getCanonicalTimeZoneID(%s) set %d to isSystemID\n",
+            log_data_err("FAIL: ucal_getCanonicalTimeZoneID(%s) set %d to isSystemID (Are you missing data?)\n",
                 PST, isSystemID);
         }
     }
@@ -280,7 +280,7 @@ static void TestCalendar()
     if(caldef && caldef2 && calfr && calit) { 
       if(ucal_equivalentTo(caldef, caldef2) == FALSE || ucal_equivalentTo(caldef, calfr)== TRUE || 
         ucal_equivalentTo(caldef, calit)== TRUE || ucal_equivalentTo(calfr, calfrclone) == FALSE) {
-          log_err("FAIL: Error. equivalentTo test failed\n");
+          log_data_err("FAIL: Error. equivalentTo test failed (Are you missing data?)\n");
       } else {
           log_verbose("PASS: equivalentTo test passed\n");
       }
@@ -293,7 +293,7 @@ static void TestCalendar()
     /* open the date format and format the date to check the output */
     datdef=udat_open(UDAT_FULL,UDAT_FULL ,NULL, NULL, 0,NULL,0,&status);
     if(U_FAILURE(status)){
-        log_err("FAIL: error in creating the dateformat : %s\n", u_errorName(status));
+        log_data_err("FAIL: error in creating the dateformat : %s (Are you missing data?)\n", u_errorName(status));
         return;
     }
     log_verbose("PASS: The current date and time fetched is %s\n", u_austrcpy(tempMsgBuf, myDateFormat(datdef, now)) );
@@ -402,7 +402,7 @@ static void TestCalendar()
         log_err("Error in ucal_inDaylightTime: %s\n", u_errorName(status));
     }
     if(!ucal_inDaylightTime(caldef, &status))
-        log_verbose("PASS: It is  not in daylight saving's time\n");
+        log_verbose("PASS: It is not in daylight saving's time\n");
     else
         log_err("FAIL: It is not in daylight saving's time\n");
 
@@ -466,7 +466,7 @@ static void TestGetSetDateAPI()
     datdef=udat_open(UDAT_DEFAULT,UDAT_DEFAULT ,"en_US",fgGMTID,-1,NULL,0, &status);
     if(U_FAILURE(status))
     {
-        log_err("error in creating the dateformat : %s\n", u_errorName(status));
+        log_data_err("error in creating the dateformat : %s (Are you missing data?)\n", u_errorName(status));
         return;
     }
     
@@ -652,18 +652,18 @@ static void TestFieldGetSet()
     datdef=udat_open(UDAT_SHORT,UDAT_SHORT ,NULL,fgGMTID,-1,NULL, 0, &status);
     if(U_FAILURE(status))
     {
-        log_err("error in creating the dateformat : %s\n", u_errorName(status));
+        log_data_err("error in creating the dateformat : %s (Are you missing data?)\n", u_errorName(status));
     }
     
     /*Testing ucal_get()*/
     log_verbose("\nTesting the ucal_get() function of Calendar\n");
     ucal_setDateTime(cal, 1999, UCAL_MARCH, 12, 5, 25, 30, &status);
     if(U_FAILURE(status)){
-        log_err("error in the setDateTime() : %s\n", u_errorName(status));
+        log_data_err("error in the setDateTime() : %s (Are you missing data?)\n", u_errorName(status));
     }
     if(ucal_get(cal, UCAL_YEAR, &status)!=1999 || ucal_get(cal, UCAL_MONTH, &status)!=2 || 
         ucal_get(cal, UCAL_DATE, &status)!=12 || ucal_get(cal, UCAL_HOUR, &status)!=5)
-        log_err("error in ucal_get()\n");    
+        log_data_err("error in ucal_get() -> %s (Are you missing data?)\n", u_errorName(status));    
     else if(ucal_get(cal, UCAL_DAY_OF_WEEK_IN_MONTH, &status)!=2 || ucal_get(cal, UCAL_DAY_OF_WEEK, &status)!=6
         || ucal_get(cal, UCAL_WEEK_OF_MONTH, &status)!=2 || ucal_get(cal, UCAL_WEEK_OF_YEAR, &status)!= 10)
         log_err("FAIL: error in ucal_get()\n");
@@ -1062,7 +1062,7 @@ static void TestDOWProgression()
 
     datfor=udat_open(UDAT_MEDIUM,UDAT_MEDIUM ,NULL, fgGMTID,-1,NULL, 0, &status);
     if(U_FAILURE(status)){
-        log_err("error in creating the dateformat : %s\n", u_errorName(status));
+        log_data_err("error in creating the dateformat : %s (Are you missing data?)\n", u_errorName(status));
     }
     
 
@@ -1071,7 +1071,7 @@ static void TestDOWProgression()
     log_verbose("\nTesting the DOW progression\n");
     
     initialDOW = ucal_get(cal, UCAL_DAY_OF_WEEK, &status);
-    if (U_FAILURE(status)) { log_err("ucal_get() failed: %s\n", u_errorName(status) ); return; }
+    if (U_FAILURE(status)) { log_data_err("ucal_get() failed: %s (Are you missing data?)\n", u_errorName(status) ); return; }
     newDOW = initialDOW;
     do {
         DOW = newDOW;
@@ -1141,12 +1141,12 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
     
     datfor=udat_open(UDAT_MEDIUM,UDAT_MEDIUM ,NULL, fgGMTID,-1,NULL, 0, &status);
     if(U_FAILURE(status)){
-        log_err("error in creating the dateformat : %s\n", u_errorName(status));
+        log_data_err("error in creating the dateformat : %s (Are you missing data?)\n", u_errorName(status));
     }
    
     ucal_setDateTime(gmtcal, yr, mo - 1, dt, hr, mn, sc, &status);
     if (U_FAILURE(status)) {
-        log_err("ucal_setDateTime failed: %s\n", u_errorName(status));
+        log_data_err("ucal_setDateTime failed: %s (Are you missing data?)\n", u_errorName(status));
         return; 
     }
     ucal_set(gmtcal, UCAL_MILLISECOND, 0);
@@ -1482,7 +1482,7 @@ static void TestGetKeywordValuesForLocale() {
             uenum_close(all);
         }
     } else {
-        log_err("Failed to get ALL keyword values for default locale %s: %s.\n", uloc_getDefault(), u_errorName(status));
+        log_err_status(status, "Failed to get ALL keyword values for default locale %s: %s.\n", uloc_getDefault(), u_errorName(status));
     }
     uenum_close(ALL);
 }

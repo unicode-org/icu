@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -63,7 +63,7 @@ void Test4029195()
     df = udat_open(UDAT_DEFAULT,UDAT_DEFAULT ,"en_US", NULL, 0, NULL, 0, &status);
     if(U_FAILURE(status))
     {
-        log_err("FAIL: error in creating the dateformat using default date and time style : %s\n", myErrorName(status));
+        log_data_err("FAIL: error in creating the dateformat using default date and time style : %s (Are you missing data?)\n", myErrorName(status));
         return;
     }
     resultlength=0;
@@ -162,7 +162,7 @@ void Test4056591()
     def = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL, NULL, 0, pat, u_strlen(pat), &status);
     if(U_FAILURE(status))
     {
-        log_err("FAIL: error in creating the dateformat using u_openPattern(): %s\n", myErrorName(status));
+        log_err_status(status, "FAIL: error in creating the dateformat using u_openPattern(): %s\n", myErrorName(status));
         return;
     }
     start = 1800;
@@ -213,7 +213,7 @@ void Test4059917()
     def = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL,tzID,-1,pattern, u_strlen(pattern),&status);
     if(U_FAILURE(status))
     {
-        log_err("FAIL: error in creating the dateformat using openPattern: %s\n", myErrorName(status));
+        log_err_status(status, "FAIL: error in creating the dateformat using openPattern: %s\n", myErrorName(status));
         return;
     }
     myDate=(UChar*)malloc(sizeof(UChar) * 11);
@@ -292,7 +292,7 @@ void Test4060212()
     fmt = udat_open(UDAT_FULL,UDAT_LONG ,NULL, tzID, -1, NULL, 0, &status);
     if(U_FAILURE(status))
     {
-        log_err("FAIL: error in creating the dateformat using default date and time style: %s\n", 
+        log_err_status(status, "FAIL: error in creating the dateformat using default date and time style: %s\n", 
                         myErrorName(status) );
         return;
     }
@@ -330,7 +330,7 @@ void Test4061287()
     log_verbose("Testing parsing by changing the attribute lenient\n");
     df = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL,NULL,0,pattern, u_strlen(pattern),&status);
     if(U_FAILURE(status)){
-        log_err("ERROR: failure in open pattern of test4061287: %s\n", myErrorName(status));
+        log_err_status(status, "ERROR: failure in open pattern of test4061287: %s\n", myErrorName(status));
         return;
     }
 
@@ -385,7 +385,7 @@ void Test4073003()
     fmt= udat_open(UDAT_SHORT,UDAT_SHORT ,NULL, NULL, 0, NULL, 0, &status);
     if(U_FAILURE(status))
     {
-        log_err("FAIL: error in creating the dateformat using short date and time style: %s\n", 
+        log_data_err("FAIL: error in creating the dateformat using short date and time style: %s (Are you missing data?)\n", 
             myErrorName(status));
         return;
     }
@@ -478,7 +478,7 @@ void Test714(void)
     fmt= udat_open(UDAT_MEDIUM,UDAT_NONE ,"en_US_CA", NULL, -1, NULL, 0, &status);
     if(U_FAILURE(status))
     {
-        log_err("FAIL: error in creating the dateformat using medium time style and NO date style: %s\n", 
+        log_data_err("FAIL: error in creating the dateformat using medium time style and NO date style: %s (Are you missing data?)\n", 
             myErrorName(status));
         return;
     }
@@ -578,7 +578,7 @@ void Test_GEec(void)
         }
         udat_close(dtfmt);
     } else {
-        log_err("FAIL: udat_open fails: %s\n", myErrorName(status));
+        log_data_err("FAIL: udat_open fails: %s (Are you missing data?)\n", myErrorName(status));
     }
 }
 

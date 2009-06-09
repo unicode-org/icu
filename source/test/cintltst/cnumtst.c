@@ -129,7 +129,7 @@ static void TestNumberFormat()
     /* Might as well pack it in now if we can't even get a default NumberFormat... */
     if(U_FAILURE(status))
     {
-        log_err("Error in creating default NumberFormat using unum_open(): %s\n", myErrorName(status));
+        log_data_err("Error in creating default NumberFormat using unum_open(): %s (Are you missing data?)\n", myErrorName(status));
         return;
     }
 
@@ -809,7 +809,7 @@ static void TestSpelloutNumberParse()
         int32_t	value, position = testPtr->startPos;
         UNumberFormat *nf = unum_open(UNUM_SPELLOUT, NULL, 0, testPtr->locale, NULL, &status);
         if (U_FAILURE(status)) {
-            log_err("unum_open fails for UNUM_SPELLOUT with locale %s, status %s\n", testPtr->locale, myErrorName(status));
+            log_err_status(status, "unum_open fails for UNUM_SPELLOUT with locale %s, status %s\n", testPtr->locale, myErrorName(status));
             continue;
         }
         value = unum_parse(nf, testPtr->source, -1, &position, &status);
@@ -886,7 +886,7 @@ static void TestNumberFormatPadding()
     pattern=unum_open(UNUM_IGNORE,temp1, u_strlen(temp1), NULL, NULL,&status);
     if(U_SUCCESS(status))
     {
-        log_err("error in unum_openPattern(%s): %s\n", temp1, myErrorName(status) );;
+        log_err("error in unum_openPattern(%s): %s\n", temp1, myErrorName(status) );
     }
     else
     {
@@ -899,7 +899,7 @@ static void TestNumberFormatPadding()
     pattern=unum_open(UNUM_IGNORE,temp1, u_strlen(temp1), "en_US",NULL, &status);
     if(U_FAILURE(status))
     {
-        log_err("error in padding unum_openPattern(%s): %s\n", temp1, myErrorName(status) );;
+        log_err_status(status, "error in padding unum_openPattern(%s): %s\n", temp1, myErrorName(status) );;
     }
     else {
         log_verbose("Pass: padding unum_openPattern() works fine\n");
@@ -1254,7 +1254,7 @@ static void TestNonExistentCurrency() {
     /* Get a non-existent currency and make sure it returns the correct currency code. */
     format = unum_open(UNUM_CURRENCY, NULL, 0, "th_TH@currency=QQQ", NULL, &status);
     if (format == NULL || U_FAILURE(status)) {
-        log_err("unum_open did not return expected result for non-existent requested currency: '%s'\n", u_errorName(status));
+        log_data_err("unum_open did not return expected result for non-existent requested currency: '%s' (Are you missing data?)\n", u_errorName(status));
     }
     else {
         unum_getSymbol(format,
@@ -1287,25 +1287,25 @@ static void TestRBNFFormat() {
     u_uastrcpy(pat, "#,##0.0#;(#,##0.0#)");
     formats[0] = unum_open(UNUM_PATTERN_DECIMAL, pat, -1, "en_US", &perr, &status);
     if (U_FAILURE(status)) {
-        log_err("unable to open decimal pattern\n");
+        log_err_status(status, "unable to open decimal pattern -> %s\n", u_errorName(status));
     }
 
     status = U_ZERO_ERROR;
     formats[1] = unum_open(UNUM_SPELLOUT, NULL, 0, "en_US", &perr, &status);
     if (U_FAILURE(status)) {
-        log_err("unable to open spellout\n");
+        log_err_status(status, "unable to open spellout -> %s\n", u_errorName(status));
     }
 
     status = U_ZERO_ERROR;
     formats[2] = unum_open(UNUM_ORDINAL, NULL, 0, "en_US", &perr, &status);
     if (U_FAILURE(status)) {
-        log_err("unable to open ordinal\n");
+        log_err_status(status, "unable to open ordinal -> %s\n", u_errorName(status));
     }
 
     status = U_ZERO_ERROR;
     formats[3] = unum_open(UNUM_DURATION, NULL, 0, "en_US", &perr, &status);
     if (U_FAILURE(status)) {
-        log_err("unable to open duration\n");
+        log_err_status(status, "unable to open duration %s\n", u_errorName(status));
     }
 
     status = U_ZERO_ERROR;
@@ -1348,10 +1348,10 @@ static void TestRBNFFormat() {
     u_strcat(pat, tempUChars);
     formats[4] = unum_open(UNUM_PATTERN_RULEBASED, pat, -1, "en_US", &perr, &status);
     if (U_FAILURE(status)) {
-        log_err("unable to open rulebased pattern\n");
+        log_err_status(status, "unable to open rulebased pattern -> %s\n", u_errorName(status));
     }
     if (U_FAILURE(status)) {
-        log_err("Something failed with %s\n", u_errorName(status));
+        log_err_status(status, "Something failed with %s\n", u_errorName(status));
         return;
     }
 
@@ -1396,7 +1396,7 @@ their data!
     cur = unum_open(UNUM_CURRENCY, NULL,0,"en_US", NULL, &status);
     
     if(U_FAILURE(status)) {
-        log_err("unum_open failed: %s\n", u_errorName(status));
+        log_data_err("unum_open failed: %s (Are you missing data?)\n", u_errorName(status));
         return;
     }
     
@@ -1430,7 +1430,7 @@ static void TestTextAttributeCrash(void) {
     UErrorCode status = U_ZERO_ERROR;
     UNumberFormat *nf = unum_open(UNUM_CURRENCY, NULL, 0, "en_US", NULL, &status); 
     if (U_FAILURE(status)) {
-        log_err("FAILED 1\n");
+        log_data_err("FAILED 1 -> %s (Are you missing data?)\n", u_errorName(status));
         return;
     }
     unum_setTextAttribute(nf, UNUM_CURRENCY_CODE, ubuffer, 3, &status);
@@ -1499,8 +1499,9 @@ static void TestNBSPInPattern(void) {
     
     testcase="ar_AE UNUM_CURRENCY";
     nf  = unum_open(UNUM_CURRENCY, NULL, -1, "ar_AE", NULL, &status);
-    if(U_FAILURE(status)) {
-        log_err("%s: unum_open failed with %s\n", testcase, u_errorName(status));
+    if(U_FAILURE(status) || nf == NULL) {
+        log_data_err("%s: unum_open failed with %s (Are you missing data?)\n", testcase, u_errorName(status));
+        return;
     }
     TestNBSPPatternRT(testcase, nf);
     

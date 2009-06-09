@@ -1,7 +1,7 @@
 /*
 ********************************************************************************
 *
-*   Copyright (C) 1996-2008, International Business Machines
+*   Copyright (C) 1996-2009, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ********************************************************************************
@@ -482,6 +482,33 @@ log_err(const char* pattern, ...)
 }
 
 void T_CTEST_EXPORT2
+log_err_status(UErrorCode status, const char* pattern, ...)
+{
+    va_list ap;
+    va_start(ap, pattern);
+    
+    if ((status == U_FILE_ACCESS_ERROR || status == U_MISSING_RESOURCE_ERROR)) {
+        ++DATA_ERROR_COUNT; /* for informational message at the end */
+        
+        if (WARN_ON_MISSING_DATA == 0) {
+            /* Fatal error. */
+            if (strchr(pattern, '\n') != NULL) {
+                ++ERROR_COUNT;
+            }
+            vlog_err(NULL, pattern, ap); /* no need for prefix in default case */
+        } else {
+            vlog_info("[DATA] ", pattern, ap); 
+        }
+    } else {
+        /* Fatal error. */
+        if(strchr(pattern, '\n') != NULL) {
+            ++ERROR_COUNT;
+        }
+        vlog_err(NULL, pattern, ap); /* no need for prefix in default case */
+    }
+}
+
+void T_CTEST_EXPORT2
 log_info(const char* pattern, ...)
 {
     va_list ap;
@@ -515,7 +542,7 @@ log_data_err(const char* pattern, ...)
         }
         vlog_err(NULL, pattern, ap); /* no need for prefix in default case */
     } else {
-        vlog_info("[Data] ", pattern, ap); 
+        vlog_info("[DATA] ", pattern, ap); 
     }
 }
 

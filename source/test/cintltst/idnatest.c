@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2007, International Business Machines
+ *   Copyright (C) 2003-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -107,7 +107,7 @@ testAPI(const UChar* src, const UChar* expected, const char* testName,
     }
 
     if(status != expectedStatus){
-        log_err( "Did not get the expected error for %s null terminated source failed. Expected: %s Got: %s\n",testName, u_errorName(expectedStatus), u_errorName(status));
+        log_err_status(status,  "Did not get the expected error for %s null terminated source failed. Expected: %s Got: %s\n",testName, u_errorName(expectedStatus), u_errorName(status));
         free(tSrc);
         return;
     }
@@ -467,7 +467,7 @@ TestIDNToUnicode(){
         bufLen = u_unescape(domainNames[i],buf, bufLen+1);
         func(buf,bufLen,expected,MAX_DEST_SIZE, UIDNA_ALLOW_UNASSIGNED, &parseError,&status);
         if(U_FAILURE(status)){
-            log_err( "%s failed to convert domainNames[%i].Error: %s \n",testName, i, u_errorName(status));
+            log_err_status(status,  "%s failed to convert domainNames[%i].Error: %s \n",testName, i, u_errorName(status));
             break;
         }
         testAPI(buf,expected,testName,FALSE,U_ZERO_ERROR, TRUE, TRUE, func);
@@ -497,7 +497,7 @@ TestIDNToASCII(){
         bufLen = u_unescape(domainNames[i],buf, bufLen+1);
         func(buf,bufLen,expected,MAX_DEST_SIZE, UIDNA_ALLOW_UNASSIGNED, &parseError,&status);
         if(U_FAILURE(status)){
-            log_err( "%s failed to convert domainNames[%i].Error: %s \n",testName,i, u_errorName(status));
+            log_err_status(status,  "%s failed to convert domainNames[%i].Error: %s \n",testName,i, u_errorName(status));
             break;
         }
         testAPI(buf,expected,testName, FALSE,U_ZERO_ERROR, TRUE, TRUE, func);
@@ -526,7 +526,7 @@ testCompareWithSrc(const UChar* s1, int32_t s1Len,
         log_err("Did not get the expected result for %s with null termniated strings.\n",testName);
     }
     if(U_FAILURE(status)){
-        log_err( "%s null terminated source failed. Error: %s\n", testName,u_errorName(status));
+        log_err_status(status, "%s null terminated source failed. Error: %s\n", testName,u_errorName(status));
     }
 
     status = U_ZERO_ERROR;
@@ -536,7 +536,7 @@ testCompareWithSrc(const UChar* s1, int32_t s1Len,
         log_err("Did not get the expected result for %s with null termniated strings with options set.\n", testName);
     }
     if(U_FAILURE(status)){
-        log_err( "%s null terminated source and options set failed. Error: %s\n",testName, u_errorName(status));
+        log_err_status(status, "%s null terminated source and options set failed. Error: %s\n",testName, u_errorName(status));
     }
 
     status = U_ZERO_ERROR;
@@ -546,7 +546,7 @@ testCompareWithSrc(const UChar* s1, int32_t s1Len,
         log_err("Did not get the expected result for %s with string length.\n",testName);
     }
     if(U_FAILURE(status)){
-        log_err( "%s with string length. Error: %s\n",testName, u_errorName(status));
+        log_err_status(status,  "%s with string length. Error: %s\n",testName, u_errorName(status));
     }
 
     status = U_ZERO_ERROR;
@@ -556,7 +556,7 @@ testCompareWithSrc(const UChar* s1, int32_t s1Len,
         log_err("Did not get the expected result for %s with string length and options set.\n",testName);
     }
     if(U_FAILURE(status)){
-        log_err( "%s with string length and options set. Error: %s\n", u_errorName(status), testName);
+        log_err_status(status,  "%s with string length and options set. Error: %s\n", u_errorName(status), testName);
     }
 }
 
@@ -684,13 +684,13 @@ static void TestJB4490(){
         int32_t dest2Len = 40;
         dest1Len = uidna_toASCII(src1, src1Len, dest1, dest1Len,UIDNA_DEFAULT, &ps, &status);
         if(U_FAILURE(status)){
-            log_err("uidna_toUnicode failed with error %s.\n", u_errorName(status));
+            log_err_status(status, "uidna_toUnicode failed with error %s.\n", u_errorName(status));
         }
         src2 = dest1;
         src2Len = dest1Len;
         dest2Len = uidna_toUnicode(src2, src2Len, dest2, dest2Len, UIDNA_DEFAULT, &ps, &status);
         if(U_FAILURE(status)){
-            log_err("uidna_toUnicode failed with error %s.\n", u_errorName(status));
+            log_err_status(status, "uidna_toUnicode failed with error %s.\n", u_errorName(status));
         }
     }
 }
@@ -713,7 +713,8 @@ static void TestJB4475(){
 
         destLen = uidna_toASCII(src, srcLen, dest, destLen,UIDNA_DEFAULT, &ps, &status);
         if(U_FAILURE(status)){
-            log_err("uidna_toASCII failed with error %s.\n", u_errorName(status));
+            log_err_status(status, "uidna_toASCII failed with error %s.\n", u_errorName(status));
+            continue;
         } 
         if(u_strncmp(input[i], dest, srcLen)!=0){
             log_err("uidna_toASCII did not return the expected output.\n");
@@ -753,7 +754,7 @@ static void TestLength(){
         u_charsToUChars(cl, ul, len+1);
         destLen = uidna_toUnicode(ul, len, dest, destLen, UIDNA_DEFAULT, &ps, &status);
         if(status != U_ZERO_ERROR){
-            log_err("uidna_toUnicode failed with error %s.\n", u_errorName(status));
+            log_err_status(status, "uidna_toUnicode failed with error %s.\n", u_errorName(status));
         }
 
         status = U_ZERO_ERROR;
@@ -761,14 +762,14 @@ static void TestLength(){
         len = -1;
         destLen = uidna_toUnicode(ul, len, dest, destLen, UIDNA_DEFAULT, &ps, &status);
         if(status != U_ZERO_ERROR){
-            log_err("uidna_toUnicode failed with error %s.\n", u_errorName(status));
+            log_err_status(status, "uidna_toUnicode failed with error %s.\n", u_errorName(status));
         }
         status = U_ZERO_ERROR;
         destLen = LENGTHOF(dest);
         len = (int32_t)strlen(cl);
         destLen = uidna_toASCII(ul, len, dest, destLen, UIDNA_DEFAULT, &ps, &status);
         if(status != U_IDNA_LABEL_TOO_LONG_ERROR){
-            log_err("uidna_toASCII failed with error %s.\n", u_errorName(status));
+            log_err_status(status, "uidna_toASCII failed with error %s.\n", u_errorName(status));
         }
         
         status = U_ZERO_ERROR;
@@ -776,14 +777,14 @@ static void TestLength(){
         len = -1;
         destLen = uidna_toASCII(ul, len, dest, destLen, UIDNA_DEFAULT, &ps, &status);
         if(status != U_IDNA_LABEL_TOO_LONG_ERROR){
-            log_err("uidna_toASCII failed with error %s.\n", u_errorName(status));
+            log_err_status(status, "uidna_toASCII failed with error %s.\n", u_errorName(status));
         }
 
         status = U_ZERO_ERROR;
         destLen = LENGTHOF(dest);
         destLen = uidna_toASCII(ul1, len1, dest, destLen, UIDNA_DEFAULT, &ps, &status);
         if(status != U_ZERO_ERROR){
-            log_err("uidna_toASCII failed with error %s.\n", u_errorName(status));
+            log_err_status(status, "uidna_toASCII failed with error %s.\n", u_errorName(status));
         }
         
         status = U_ZERO_ERROR;
@@ -791,7 +792,7 @@ static void TestLength(){
         len1 = -1;
         destLen = uidna_toASCII(ul1, len1, dest, destLen, UIDNA_DEFAULT, &ps, &status);
         if(status != U_ZERO_ERROR){
-            log_err("uidna_toASCII failed with error %s.\n", u_errorName(status));
+            log_err_status(status, "uidna_toASCII failed with error %s.\n", u_errorName(status));
         }
     }
     {
@@ -806,7 +807,7 @@ static void TestLength(){
         
         destLen = uidna_IDNToUnicode(ul, len, dest, destLen, UIDNA_DEFAULT, &ps, &status);
         if(status != U_IDNA_DOMAIN_NAME_TOO_LONG_ERROR){
-            log_err("uidna_IDNToUnicode failed with error %s.\n", u_errorName(status));
+            log_err_status(status, "uidna_IDNToUnicode failed with error %s.\n", u_errorName(status));
         }
         
         status = U_ZERO_ERROR;
@@ -814,7 +815,7 @@ static void TestLength(){
         len = -1;
         destLen = uidna_IDNToUnicode(ul, len, dest, destLen, UIDNA_DEFAULT, &ps, &status);
         if(status != U_IDNA_DOMAIN_NAME_TOO_LONG_ERROR){
-            log_err("uidna_IDNToUnicode failed with error %s.\n", u_errorName(status));
+            log_err_status(status, "uidna_IDNToUnicode failed with error %s.\n", u_errorName(status));
         }
         
         status = U_ZERO_ERROR;
@@ -822,7 +823,7 @@ static void TestLength(){
         len = (int32_t)strlen(cl);
         destLen = uidna_IDNToASCII(ul, len, dest, destLen, UIDNA_DEFAULT, &ps, &status);
         if(status != U_IDNA_DOMAIN_NAME_TOO_LONG_ERROR){
-            log_err("uidna_IDNToASCII failed with error %s.\n", u_errorName(status));
+            log_err_status(status, "uidna_IDNToASCII failed with error %s.\n", u_errorName(status));
         }
         
         status = U_ZERO_ERROR;
@@ -830,17 +831,17 @@ static void TestLength(){
         len = -1;
         destLen = uidna_IDNToASCII(ul, len, dest, destLen, UIDNA_DEFAULT, &ps, &status);
         if(status != U_IDNA_DOMAIN_NAME_TOO_LONG_ERROR){
-            log_err("uidna_IDNToASCII failed with error %s.\n", u_errorName(status));
+            log_err_status(status, "uidna_IDNToASCII failed with error %s.\n", u_errorName(status));
         }
 
         status = U_ZERO_ERROR;
         uidna_compare(ul, len, ul, len, UIDNA_DEFAULT, &status);
         if(status != U_IDNA_DOMAIN_NAME_TOO_LONG_ERROR){
-            log_err("uidna_compare failed with error %s.\n", u_errorName(status));
+            log_err_status(status, "uidna_compare failed with error %s.\n", u_errorName(status));
         }
         uidna_compare(ul, -1, ul, -1, UIDNA_DEFAULT, &status);
         if(status != U_IDNA_DOMAIN_NAME_TOO_LONG_ERROR){
-            log_err("uidna_compare failed with error %s.\n", u_errorName(status));
+            log_err_status(status, "uidna_compare failed with error %s.\n", u_errorName(status));
         }
     }    
 }
@@ -853,23 +854,23 @@ static void TestJB5273(){
     UParseError prsError;
     int32_t outLen = uidna_toUnicode(invalid_idn, len, output, 50, UIDNA_DEFAULT, &prsError, &status);
     if(U_FAILURE(status)){
-        log_err("uidna_toUnicode failed with error: %s\n", u_errorName(status));
+        log_err_status(status, "uidna_toUnicode failed with error: %s\n", u_errorName(status));
     }
     status = U_ZERO_ERROR;
     outLen = uidna_toUnicode(invalid_idn, len, output, 50, UIDNA_USE_STD3_RULES, &prsError, &status);
     if(U_FAILURE(status)){
-        log_err("uidna_toUnicode failed with error: %s\n", u_errorName(status));
+        log_err_status(status, "uidna_toUnicode failed with error: %s\n", u_errorName(status));
     }
 
     status = U_ZERO_ERROR;
     outLen = uidna_IDNToUnicode(invalid_idn, len, output, 50, UIDNA_DEFAULT, &prsError, &status);
     if(U_FAILURE(status)){
-        log_err("uidna_toUnicode failed with error: %s\n", u_errorName(status));
+        log_err_status(status, "uidna_toUnicode failed with error: %s\n", u_errorName(status));
     }
     status = U_ZERO_ERROR;
     outLen = uidna_IDNToUnicode(invalid_idn, len, output, 50, UIDNA_USE_STD3_RULES, &prsError, &status);
     if(U_FAILURE(status)){
-        log_err("uidna_toUnicode failed with error: %s\n", u_errorName(status));
+        log_err_status(status, "uidna_toUnicode failed with error: %s\n", u_errorName(status));
     }
 }
 #endif

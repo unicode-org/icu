@@ -1,7 +1,7 @@
 /*
  ********************************************************************************
  *
- *   Copyright (C) 1996-2008, International Business Machines
+ *   Copyright (C) 1996-2009, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ********************************************************************************
@@ -151,6 +151,8 @@ getTest(const TestNode* root,
 T_CTEST_API void T_CTEST_EXPORT2
 log_err(const char* pattern, ...);
 
+T_CTEST_API void T_CTEST_EXPORT2
+log_err_status(UErrorCode status, const char* pattern, ...);
 /**
  * Log an informational message. (printf style)
  * @param pattern printf-style format string

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -80,7 +80,7 @@ static void TestBug672() {
         UCollationElements *titer = ucol_openElements(coll, text, -1,
                                                      &status);
         if (U_FAILURE(status)) {
-            log_err("ERROR: in creation of either the collator or the collation iterator :%s\n",
+            log_err_status(status, "ERROR: in creation of either the collator or the collation iterator :%s\n",
                     myErrorName(status));
             return;
         }
@@ -156,7 +156,7 @@ static void TestBug672Normalize() {
         pitr = ucol_openElements(coll, pattern, -1, &status);
         titer = ucol_openElements(coll, text, -1, &status);
         if (U_FAILURE(status)) {
-            log_err("ERROR: in creation of either the collator or the collation iterator :%s\n",
+            log_err_status(status, "ERROR: in creation of either the collator or the collation iterator :%s\n",
                     myErrorName(status));
             return;
         }
@@ -226,7 +226,7 @@ static void TestUnicodeChar()
     UChar *test;
     en_us = ucol_open("en_US", &status);
     if (U_FAILURE(status)){
-       log_err("ERROR: in creation of collation data using ucol_open()\n %s\n",
+       log_err_status(status, "ERROR: in creation of collation data using ucol_open()\n %s\n",
               myErrorName(status));
        return;
     }
@@ -293,7 +293,7 @@ static void TestNormalizedUnicodeChar()
     /* thai should have normalization on */
     th_th = ucol_open("th_TH", &status);
     if (U_FAILURE(status)){
-        log_err("ERROR: in creation of thai collation using ucol_open()\n %s\n",
+        log_err_status(status, "ERROR: in creation of thai collation using ucol_open()\n %s\n",
               myErrorName(status));
         return;
     }
@@ -369,7 +369,7 @@ static void TestNormalization()
     coll = ucol_openRules(rule, rulelen, UCOL_ON, UCOL_TERTIARY, NULL, &status);
     ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
     if (U_FAILURE(status)){
-        log_err("ERROR: in creation of collator using ucol_openRules()\n %s\n",
+        log_err_status(status, "ERROR: in creation of collator using ucol_openRules()\n %s\n",
               myErrorName(status));
         return;
     }
@@ -434,7 +434,7 @@ static void TestPrevious()
     iter=ucol_openElements(coll, test1, u_strlen(test1), &status);
     log_verbose("English locale testing back and forth\n");
     if(U_FAILURE(status)){
-        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
+        log_err_status(status, "ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
             myErrorName(status));
         ucol_close(coll);
         return;
@@ -574,7 +574,7 @@ static void TestOffset()
     log_verbose("Testing getOffset and setOffset for collations\n");
     iter = ucol_openElements(en_us, test1, u_strlen(test1), &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
+        log_err_status(status, "ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
             myErrorName(status));
         ucol_close(en_us);
         return;
@@ -716,7 +716,7 @@ static void TestSetText()
     log_verbose("testing setText for Collation elements\n");
     iter1=ucol_openElements(en_us, test1, u_strlen(test1), &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: in creation of collation element iterator1 using ucol_openElements()\n %s\n",
+        log_err_status(status, "ERROR: in creation of collation element iterator1 using ucol_openElements()\n %s\n",
             myErrorName(status));
     ucol_close(en_us);
         return;
@@ -905,7 +905,7 @@ static void TestMaxExpansion()
       ucol_closeElements(iter);
       ucol_close(coll);
     } else {
-      log_data_err("Couldn't open collator\n");
+      log_err_status(status, "Couldn't open collator -> %s\n", u_errorName(status));
     }
 
 }
@@ -1007,7 +1007,7 @@ static void TestSmallBuffer()
       ucol_closeElements(iter);
       ucol_close(coll);
     } else {
-      log_data_err("Couldn't open collator\n");
+      log_err_status(status, "Couldn't open collator -> %s\n", u_errorName(status));
     }
 }
 
@@ -1277,7 +1277,7 @@ static void TestCEs() {
     UChar       contextCPs[5];    
 
     if (U_FAILURE(status)) {
-        log_err("Error in opening root collator\n");
+        log_err_status(status, "Error in opening root collator -> %s\n", u_errorName(status));
         return;
     }
 
@@ -1410,7 +1410,7 @@ static void TestDiscontiguos() {
     resultiter = ucol_openElements(coll, rule, 1, &status);
 
     if (U_FAILURE(status)) {
-        log_err("Error opening collation rules\n");
+        log_err_status(status, "Error opening collation rules -> %s\n", u_errorName(status));
         return;
     }
 
@@ -1480,7 +1480,7 @@ static void TestCEBufferOverflow()
     u_uastrcpy(rule, "&z < AB");
     coll = ucol_openRules(rule, u_strlen(rule), UCOL_OFF, UCOL_DEFAULT_STRENGTH, NULL,&status);
     if (U_FAILURE(status)) {
-        log_err("Rule based collator not created for testing ce buffer overflow\n");
+        log_err_status(status, "Rule based collator not created for testing ce buffer overflow -> %s\n", u_errorName(status));
         return;
     }
 
@@ -1661,7 +1661,7 @@ static void TestCEValidity()
     UChar       contextCPs[3];
     UParseError parseError;
     if (U_FAILURE(status)) {
-        log_err("en_US collator creation failed\n");
+        log_err_status(status, "en_US collator creation failed -> %s\n", u_errorName(status));
         return;
     }
     log_verbose("Testing UCA elements\n");
@@ -1858,7 +1858,7 @@ static void TestSortKeyValidity(void)
     UChar       contextCPs[5];
     UParseError parseError;
     if (U_FAILURE(status)) {
-        log_err("en_US collator creation failed\n");
+        log_err_status(status, "en_US collator creation failed -> %s\n", u_errorName(status));
         return;
     }
     log_verbose("Testing UCA elements\n");
