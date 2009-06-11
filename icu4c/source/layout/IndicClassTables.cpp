@@ -66,6 +66,7 @@ U_NAMESPACE_BEGIN
 // special forms... (Bengali RA?)
 #define _bb  (_ct | CF_BELOW_BASE)
 #define _pb  (_ct | CF_POST_BASE)
+#define _fb  (_ct | CF_PRE_BASE)
 #define _vt  (_bb | CF_VATTU)
 #define _rv  (_vt | CF_REPH)
 #define _rp  (_pb | CF_REPH)
@@ -195,7 +196,7 @@ static const IndicClassTable::CharClass mlymCharClasses[] =
     _xx, _xx, _mp, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _iv, _iv, // 0D00 - 0D0F
     _iv, _xx, _iv, _iv, _iv, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, // 0D10 - 0D1F
     _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _xx, _ct, _ct, _ct, _ct, _ct, _pb, // 0D20 - 0D2F
-    _pb, _cn, _bb, _ct, _ct, _pb, _ct, _ct, _ct, _ct, _xx, _xx, _xx, _xx, _r2, _dr, // 0D30 - 0D3F
+    _fb, _fb, _bb, _ct, _ct, _pb, _ct, _ct, _ct, _ct, _xx, _xx, _xx, _xx, _r2, _dr, // 0D30 - 0D3F
     _dr, _dr, _dr, _dr, _xx, _xx, _l1, _l1, _dl, _xx, _s1, _s2, _s3, _vr, _xx, _xx, // 0D40 - 0D4F
     _xx, _xx, _xx, _xx, _xx, _xx, _xx, _m2, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 0D50 - 0D5F
     _iv, _iv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx  // 0D60 - 0D6F
