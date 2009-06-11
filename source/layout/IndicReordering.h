@@ -50,6 +50,7 @@ U_NAMESPACE_BEGIN
 #define CF_BELOW_BASE    0x10000000U
 #define CF_POST_BASE     0x08000000U
 #define CF_LENGTH_MARK   0x04000000U
+#define CF_PRE_BASE      0x02000000U
 
 #define CF_POS_BEFORE    0x00300000U
 #define CF_POS_BELOW     0x00200000U
@@ -118,6 +119,7 @@ struct IndicClassTable
     inline le_bool hasPostBaseForm(LEUnicode ch) const;
     inline le_bool hasBelowBaseForm(LEUnicode ch) const;
     inline le_bool hasAboveBaseForm(LEUnicode ch) const;
+    inline le_bool hasPreBaseForm(LEUnicode ch) const;
 
     inline static le_bool isVowelModifier(CharClass charClass);
     inline static le_bool isStressMark(CharClass charClass);
@@ -134,6 +136,7 @@ struct IndicClassTable
     inline static le_bool hasPostBaseForm(CharClass charClass);
     inline static le_bool hasBelowBaseForm(CharClass charClass);
     inline static le_bool hasAboveBaseForm(CharClass charClass);
+    inline static le_bool hasPreBaseForm(CharClass charClass);
 
     static const IndicClassTable *getScriptClassTable(le_int32 scriptCode);
 };
@@ -255,6 +258,11 @@ inline le_bool IndicClassTable::hasPostBaseForm(CharClass charClass)
     return (charClass & CF_POST_BASE) != 0;
 }
 
+inline le_bool IndicClassTable::hasPreBaseForm(CharClass charClass)
+{
+    return (charClass & CF_PRE_BASE) != 0;
+}
+
 inline le_bool IndicClassTable::hasBelowBaseForm(CharClass charClass)
 {
     return (charClass & CF_BELOW_BASE) != 0;
@@ -333,6 +341,11 @@ inline le_bool IndicClassTable::hasPostBaseForm(LEUnicode ch) const
 inline le_bool IndicClassTable::hasBelowBaseForm(LEUnicode ch) const
 {
     return hasBelowBaseForm(getCharClass(ch));
+}
+
+inline le_bool IndicClassTable::hasPreBaseForm(LEUnicode ch) const
+{
+    return hasPreBaseForm(getCharClass(ch));
 }
 
 inline le_bool IndicClassTable::hasAboveBaseForm(LEUnicode ch) const
