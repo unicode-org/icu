@@ -82,7 +82,7 @@ testData(TestIDNA& test) {
 
     profile = usprep_openByType(USPREP_RFC3491_NAMEPREP, &errorCode);
     if(U_FAILURE(errorCode)){
-        test.errln("Failed to load IDNA data file. " + UnicodeString(u_errorName(errorCode)));
+        test.errcheckln(errorCode, "Failed to load IDNA data file. " + UnicodeString(u_errorName(errorCode)));
         return errorCode;
     }
     

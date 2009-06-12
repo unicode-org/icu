@@ -27,7 +27,7 @@
 
 #define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
 
-#define ASSERT_OK(status)  if(U_FAILURE(status)) {errln(#status " = %s @ %s:%d", u_errorName(status), __FILE__, __LINE__); return; }
+#define ASSERT_OK(status)  if(U_FAILURE(status)) {errcheckln(status, #status " = %s @ %s:%d", u_errorName(status), __FILE__, __LINE__); return; }
 
 // *****************************************************************************
 // class DateFormatTest
@@ -237,7 +237,7 @@ DateFormatTest::TestTwoDigitYearDSTParse(void)
     UnicodeString str;
 
     if(U_FAILURE(status)) {
-        errln("Could not set up test. exitting");
+        errcheckln(status, "Could not set up test. exitting - %s", u_errorName(status));
         return;
     }
 
@@ -341,6 +341,9 @@ void DateFormatTest::TestFieldPosition() {
     // Verify data
     DateFormatSymbols rootSyms(Locale(""), ec);
     assertSuccess("DateFormatSymbols", ec);
+    if (U_FAILURE(ec)) {
+        return;
+    }
 
     // local pattern chars data is not longer loaded
     // from icu locale bundle
@@ -452,6 +455,10 @@ DateFormatTest::TestPartialParse994()
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat* f = new SimpleDateFormat(status);
     ASSERT_OK(status); 
+    if (U_FAILURE(status)) {
+        delete f;
+        return;
+    }
     UDate null = 0;
     tryPat994(f, "yy/MM/dd HH:mm:ss", "97/01/17 10:11:42", date(97, 1 - 1, 17, 10, 11, 42));
     tryPat994(f, "yy/MM/dd HH:mm:ss", "97/01/17 10:", null);
@@ -740,7 +747,7 @@ DateFormatTest::TestBadInput135()
     int32_t strings_length = (int32_t)(sizeof(strings) / sizeof(strings[0]));
     DateFormat *full = DateFormat::createDateTimeInstance(DateFormat::LONG, DateFormat::LONG);
     if(full==NULL) {
-      errln("could not create date time instance");
+      dataerrln("could not create date time instance");
       return;
     }
     UnicodeString expected("March 1, 2000 1:23:45 AM ");
@@ -826,7 +833,7 @@ DateFormatTest::TestBadInput135a()
   UErrorCode status = U_ZERO_ERROR;
   SimpleDateFormat* dateParse = new SimpleDateFormat(status);
   if(U_FAILURE(status)) {
-    errln("Failed creating SimpleDateFormat with %s. Quitting test", u_errorName(status));
+    errcheckln(status, "Failed creating SimpleDateFormat with %s. Quitting test", u_errorName(status));
     delete dateParse;
     return;
   }
@@ -907,7 +914,7 @@ DateFormatTest::TestTwoDigitYear()
     UErrorCode ec = U_ZERO_ERROR;
     SimpleDateFormat fmt("dd/MM/yy", Locale::getUK(), ec);
     if (U_FAILURE(ec)) {
-        errln("FAIL: SimpleDateFormat constructor");
+        errcheckln(ec, "FAIL: SimpleDateFormat constructor - %s", u_errorName(ec));
         return;
     }
     parse2DigitYear(fmt, "5/6/17", date(117, UCAL_JUNE, 5));
@@ -948,7 +955,7 @@ DateFormatTest::TestDateFormatZone061()
     logln((UnicodeString)"Date 1997/3/25 00:00 GMT: " + date);
     formatter = new SimpleDateFormat((UnicodeString)"dd-MMM-yyyyy HH:mm", Locale::getUK(), status);
     if(U_FAILURE(status)) {
-      errln("Failed creating SimpleDateFormat with %s. Quitting test", u_errorName(status));
+      errcheckln(status, "Failed creating SimpleDateFormat with %s. Quitting test", u_errorName(status));
       delete formatter;
       return;
     }
@@ -1092,7 +1099,7 @@ void DateFormatTest::TestDateFormatCalendar() {
     /* Create a formatter for date fields. */
     date = DateFormat::createDateInstance(DateFormat::kShort, Locale::getUS());
     if (date == NULL) {
-        errln("FAIL: createDateInstance failed");
+        dataerrln("FAIL: createDateInstance failed");
         goto FAIL;
     }
 
@@ -1540,7 +1547,7 @@ void DateFormatTest::expectParse(const char** data, int32_t data_length,
     SimpleDateFormat ref(data[i++], loc, ec);
     SimpleDateFormat gotfmt("G yyyy MM dd HH:mm:ss z", loc, ec);
     if (U_FAILURE(ec)) {
-        errln("FAIL: SimpleDateFormat constructor");
+        errcheckln(ec, "FAIL: SimpleDateFormat constructor - %s", u_errorName(ec));
         return;
     }
 
@@ -1939,7 +1946,7 @@ void DateFormatTest::TestRelative(int daysdelta,
     DateFormat *fullrelative = DateFormat::createDateInstance(DateFormat::kFullRelative, loc);
 
     if (fullrelative == NULL) {
-        errln("DateFormat::createDateInstance(DateFormat::kFullRelative, %s) returned NULL", loc.getName());
+        dataerrln("DateFormat::createDateInstance(DateFormat::kFullRelative, %s) returned NULL", loc.getName());
         return;
     }
 
@@ -2044,7 +2051,7 @@ void DateFormatTest::TestRelativeClone(void)
     UDate now = Calendar::getNow();
     DateFormat *full = DateFormat::createDateInstance(DateFormat::kFullRelative, loc);
     if (full == NULL) {
-        errln("FAIL: Can't create Relative date instance");
+        dataerrln("FAIL: Can't create Relative date instance");
         return;
     }
     UnicodeString result1;
@@ -2074,7 +2081,7 @@ void DateFormatTest::TestHostClone(void)
     UDate now = Calendar::getNow();
     DateFormat *full = DateFormat::createDateInstance(DateFormat::kFull, loc);
     if (full == NULL) {
-        errln("FAIL: Can't create Relative date instance");
+        dataerrln("FAIL: Can't create Relative date instance");
         return;
     }
     UnicodeString result1;
@@ -3159,6 +3166,16 @@ void DateFormatTest::Test6726(void)
     DateFormat* fmtl = DateFormat::createDateTimeInstance(DateFormat::LONG, DateFormat::FULL, loc);
     DateFormat* fmtm = DateFormat::createDateTimeInstance(DateFormat::MEDIUM, DateFormat::FULL, loc);
     DateFormat* fmts = DateFormat::createDateTimeInstance(DateFormat::SHORT, DateFormat::FULL, loc);
+    if (fmtf == NULL || fmtl == NULL || fmtm == NULL || fmts == NULL) {
+        dataerrln("Unable to create DateFormat. got NULL.");
+        /* It may not be true that if one is NULL all is NULL.  Just to be safe. */
+        delete fmtf;
+        delete fmtl;
+        delete fmtm;
+        delete fmts;
+        
+        return;
+    }
     strf = fmtf->format(dt, strf);
     strl = fmtl->format(dt, strl);
     strm = fmtm->format(dt, strm);
@@ -3237,6 +3254,10 @@ void DateFormatTest::Test6880() {
     }
 
     DateFormat *fmt = DateFormat::createTimeInstance(DateFormat::kFull, Locale("zh"));
+    if (fmt == NULL) {
+        dataerrln("Unable to create DateFormat. Got NULL.");
+        return;
+    }
     fmt->adoptTimeZone(tz);
 
     fmt->format(d1, s1);

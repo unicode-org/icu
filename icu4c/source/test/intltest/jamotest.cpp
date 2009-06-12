@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
 ************************************************************************
@@ -67,7 +67,7 @@ JamoTest::TestJamo() {
     Transliterator* latinJamo = Transliterator::createInstance("Latin-Jamo", UTRANS_FORWARD, parseError, status);
 
     if (latinJamo == 0 || U_FAILURE(status)) {
-        errln("FAIL: createInstance() returned 0");
+        dataerrln("FAIL: createInstance() returned 0 - %s", u_errorName(status));
         return;
     }
 
@@ -177,7 +177,7 @@ void JamoTest::TestPiecemeal(void) {
 
     t = Transliterator::createInstance("Latin-Jamo", UTRANS_FORWARD, status);
     if (U_FAILURE(status) || t == 0) {
-        errln("FAIL: createInstance failed");
+        dataerrln("FAIL: createInstance failed - %s", u_errorName(status));
         return;
     }
     expect(*t, latin, jamo);
@@ -376,7 +376,7 @@ JamoTest::TestRealText() {
     if (latinJamo == 0 || jamoHangul == 0 || U_FAILURE(status)) {
         delete latinJamo;
         delete jamoHangul;
-        errln("FAIL: createInstance returned NULL");
+        dataerrln("FAIL: createInstance returned NULL - %s", u_errorName(status));
         return;
     }
     Transliterator* jamoLatin = latinJamo->createInverse(status);

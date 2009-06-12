@@ -785,12 +785,23 @@ void IntlTest::dataerr( const UnicodeString &message )
 void IntlTest::dataerrln( const UnicodeString &message )
 {
     IncDataErrorCount();
-
+    UnicodeString msg;
     if (!warn_on_missing_data) {
         IncErrorCount();
+        msg = message;
+    } else {
+        msg = UnicodeString("[DATA] " + message);
     }
 
-    if (!no_err_msg) LL_message( message, TRUE );
+    if (!no_err_msg) LL_message( msg + " - (Are you missing data?)", TRUE );
+}
+
+void IntlTest::errcheckln(UErrorCode status, const UnicodeString &message ) {
+    if (status == U_FILE_ACCESS_ERROR || status == U_MISSING_RESOURCE_ERROR) {
+        dataerrln(message);
+    } else {
+        errln(message);
+    }
 }
 
 /* convenience functions that include sprintf formatting */
@@ -878,6 +889,22 @@ void IntlTest::dataerrln(const char *fmt, ...)
     vsprintf(buffer, fmt, ap);
     va_end(ap);
     dataerrln(UnicodeString(buffer, ""));
+}
+
+void IntlTest::errcheckln(UErrorCode status, const char *fmt, ...)
+{
+    char buffer[4000];
+    va_list ap;
+
+    va_start(ap, fmt);
+    vsprintf(buffer, fmt, ap);
+    va_end(ap);
+    
+    if (status == U_FILE_ACCESS_ERROR || status == U_MISSING_RESOURCE_ERROR) {
+        dataerrln(UnicodeString(buffer, ""));
+    } else {
+        errln(UnicodeString(buffer, ""));
+    }
 }
 
 void IntlTest::printErrors()
@@ -1303,7 +1330,7 @@ const char* IntlTest::loadTestData(UErrorCode& err){
 
         if(U_FAILURE(err)){
             err = U_FILE_ACCESS_ERROR;
-            it_dataerrln((UnicodeString)"[DATA] Could not load testtypes.res in testdata bundle with path " + tdpath + (UnicodeString)" - " + u_errorName(err));
+            it_dataerrln((UnicodeString)"Could not load testtypes.res in testdata bundle with path " + tdpath + (UnicodeString)" - " + u_errorName(err));
             return "";
         }
         ures_close(test);
@@ -1487,9 +1514,13 @@ static UnicodeString& escape(const UnicodeString& s, UnicodeString& result) {
 
 #define VERBOSE_ASSERTIONS
 
-UBool IntlTest::assertTrue(const char* message, UBool condition, UBool quiet) {
+UBool IntlTest::assertTrue(const char* message, UBool condition, UBool quiet, UBool possibleDataError) {
     if (!condition) {
-        errln("FAIL: assertTrue() failed: %s", message);
+        if (possibleDataError) {
+            dataerrln("FAIL: assertTrue() failed: %s", message);
+        } else {
+            errln("FAIL: assertTrue() failed: %s", message);
+        }
     } else if (!quiet) {
         logln("Ok: %s", message);
     }
@@ -1505,13 +1536,14 @@ UBool IntlTest::assertFalse(const char* message, UBool condition, UBool quiet) {
     return !condition;
 }
 
-UBool IntlTest::assertSuccess(const char* message, UErrorCode ec) {
+UBool IntlTest::assertSuccess(const char* message, UErrorCode ec, UBool possibleDataError) {
     if (U_FAILURE(ec)) {
-        if (ec == U_FILE_ACCESS_ERROR) {
-            dataerrln("[DATA] Fail: %s.", message);
+        if (possibleDataError) {
+            dataerrln("FAIL: %s (%s)", message, u_errorName(ec));
         } else {
-            errln("FAIL: %s (%s)", message, u_errorName(ec));
+            errcheckln(ec, "FAIL: %s (%s)", message, u_errorName(ec));
         }
+        
         return FALSE;
     }
     return TRUE;
@@ -1519,11 +1551,18 @@ UBool IntlTest::assertSuccess(const char* message, UErrorCode ec) {
 
 UBool IntlTest::assertEquals(const char* message,
                              const UnicodeString& expected,
-                             const UnicodeString& actual) {
+                             const UnicodeString& actual,
+                             UBool possibleDataError) {
     if (expected != actual) {
-        errln((UnicodeString)"FAIL: " + message + "; got " +
-              prettify(actual) +
-              "; expected " + prettify(expected));
+        if (possibleDataError) {
+            dataerrln((UnicodeString)"FAIL: " + message + "; got " +
+                  prettify(actual) +
+                  "; expected " + prettify(expected));
+        } else {
+            errln((UnicodeString)"FAIL: " + message + "; got " +
+                  prettify(actual) +
+                  "; expected " + prettify(expected));
+        }
         return FALSE;
     }
 #ifdef VERBOSE_ASSERTIONS

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2008, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -278,7 +278,7 @@ ICUServiceTest::confirmStringsEqual(const UnicodeString& message, const UnicodeS
     if (equ) {
         logln(temp);
     } else {
-        errln(temp);
+        dataerrln(temp);
     }
 }
 

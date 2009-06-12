@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007, International Business Machines Corporation and         *
+* Copyright (C) 2007-2009, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -193,7 +193,7 @@ TimeZoneOffsetLocalTest::TestGetOffsetAroundTransition() {
 
     SimpleDateFormat df(UnicodeString("yyyy-MM-dd HH:mm:ss"), status);
     if (U_FAILURE(status)) {
-        errln("Failed to initialize a SimpleDateFormat");
+        errcheckln(status, "Failed to initialize a SimpleDateFormat - %s", u_errorName(status));
     }
     df.setTimeZone(*utc);
     UnicodeString dateStr;
@@ -210,7 +210,7 @@ TimeZoneOffsetLocalTest::TestGetOffsetAroundTransition() {
             } else if (offset != OFFSETS1[d]) {
                 dateStr.remove();
                 df.format(MILLIS[d], dateStr);
-                errln((UnicodeString)"Bad offset returned by TESTZONES[" + i + "] at "
+                dataerrln((UnicodeString)"Bad offset returned by TESTZONES[" + i + "] at "
                         + dateStr + "(standard) - Got: " + offset + " Expected: " + OFFSETS1[d]);
             }
         }
@@ -227,7 +227,7 @@ TimeZoneOffsetLocalTest::TestGetOffsetAroundTransition() {
             } else if (rawOffset != OFFSETS2[m][0] || dstOffset != OFFSETS2[m][1]) {
                 dateStr.remove();
                 df.format(MILLIS[m], dateStr);
-                errln((UnicodeString)"Bad offset returned by TESTZONES[" + i + "] at "
+                dataerrln((UnicodeString)"Bad offset returned by TESTZONES[" + i + "] at "
                         + dateStr + "(wall) - Got: "
                         + rawOffset + "/" + dstOffset
                         + " Expected: " + OFFSETS2[m][0] + "/" + OFFSETS2[m][1]);
@@ -248,7 +248,7 @@ TimeZoneOffsetLocalTest::TestGetOffsetAroundTransition() {
             } else if (rawOffset != OFFSETS2[m][0] || dstOffset != OFFSETS2[m][1]) {
                 dateStr.remove();
                 df.format(MILLIS[m], dateStr);
-                errln((UnicodeString)"Bad offset returned by TESTZONES[" + i + "] at "
+                dataerrln((UnicodeString)"Bad offset returned by TESTZONES[" + i + "] at "
                         + dateStr + "(wall/kStandard/kStandard) - Got: "
                         + rawOffset + "/" + dstOffset
                         + " Expected: " + OFFSETS2[m][0] + "/" + OFFSETS2[m][1]);
@@ -269,7 +269,7 @@ TimeZoneOffsetLocalTest::TestGetOffsetAroundTransition() {
             } else if (rawOffset != OFFSETS3[m][0] || dstOffset != OFFSETS3[m][1]) {
                 dateStr.remove();
                 df.format(MILLIS[m], dateStr);
-                errln((UnicodeString)"Bad offset returned by TESTZONES[" + i + "] at "
+                dataerrln((UnicodeString)"Bad offset returned by TESTZONES[" + i + "] at "
                         + dateStr + "(wall/kDaylight/kDaylight) - Got: "
                         + rawOffset + "/" + dstOffset
                         + " Expected: " + OFFSETS3[m][0] + "/" + OFFSETS3[m][1]);
@@ -290,7 +290,7 @@ TimeZoneOffsetLocalTest::TestGetOffsetAroundTransition() {
             } else if (rawOffset != OFFSETS2[m][0] || dstOffset != OFFSETS2[m][1]) {
                 dateStr.remove();
                 df.format(MILLIS[m], dateStr);
-                errln((UnicodeString)"Bad offset returned by TESTZONES[" + i + "] at "
+                dataerrln((UnicodeString)"Bad offset returned by TESTZONES[" + i + "] at "
                         + dateStr + "(wall/kFormer/kLatter) - Got: "
                         + rawOffset + "/" + dstOffset
                         + " Expected: " + OFFSETS2[m][0] + "/" + OFFSETS2[m][1]);
@@ -311,7 +311,7 @@ TimeZoneOffsetLocalTest::TestGetOffsetAroundTransition() {
             } else if (rawOffset != OFFSETS3[m][0] || dstOffset != OFFSETS3[m][1]) {
                 dateStr.remove();
                 df.format(MILLIS[m], dateStr);
-                errln((UnicodeString)"Bad offset returned by TESTZONES[" + i + "] at "
+                dataerrln((UnicodeString)"Bad offset returned by TESTZONES[" + i + "] at "
                         + dateStr + "(wall/kLatter/kFormer) - Got: "
                         + rawOffset + "/" + dstOffset
                         + " Expected: " + OFFSETS3[m][0] + "/" + OFFSETS3[m][1]);

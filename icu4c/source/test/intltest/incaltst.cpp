@@ -18,7 +18,7 @@
 
 #define CHECK(status, msg) \
     if (U_FAILURE(status)) { \
-      errln((UnicodeString(u_errorName(status)) + UnicodeString(" : " ) )+ msg); \
+      errcheckln(status, (UnicodeString(u_errorName(status)) + UnicodeString(" : " ) )+ msg); \
         return; \
     }
 
@@ -131,7 +131,7 @@ IntlCalendarTest::TestTypes()
     if(U_SUCCESS(status)) {
       logln(UnicodeString(" type is ") + c->getType());
       if(strcmp(c->getType(), types[j])) {
-        errln(UnicodeString(locs[j]) + UnicodeString("Calendar type ") + c->getType() + " instead of " + types[j]);
+        dataerrln(UnicodeString(locs[j]) + UnicodeString("Calendar type ") + c->getType() + " instead of " + types[j]);
       }
     }
     delete c;

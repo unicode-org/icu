@@ -114,7 +114,7 @@ CollationAPITest::TestProperty(/* char* par */)
 
     if (U_FAILURE(success))
     {
-        errln("Default Collator creation failed.");
+        errcheckln(success, "Default Collator creation failed. - %s", u_errorName(success));
         return;
     }
 
@@ -286,7 +286,7 @@ CollationAPITest::TestRuleBasedColl()
 
     col1 = new RuleBasedCollator(ruleset1, status);
     if (U_FAILURE(status)) {
-        errln("RuleBased Collator creation failed.\n");
+        errcheckln(status, "RuleBased Collator creation failed. - %s", u_errorName(status));
         return;
     }
     else {
@@ -367,7 +367,7 @@ CollationAPITest::TestRules()
 
     coll = (RuleBasedCollator *)Collator::createInstance(Locale::getEnglish(), status);
     if (U_FAILURE(status)) {
-        errln("English Collator creation failed.\n");
+        errcheckln(status, "English Collator creation failed. - %s", u_errorName(status));
         return;
     }
     else {
@@ -394,7 +394,7 @@ CollationAPITest::TestDecomposition() {
     *vi_VN = Collator::createInstance("vi_VN", status);
 
   if (U_FAILURE(status)) {
-    errln("ERROR: collation creation failed.\n");
+    errcheckln(status, "ERROR: collation creation failed. - %s", u_errorName(status));
     return;
   }
 
@@ -435,7 +435,7 @@ CollationAPITest::TestSafeClone() {
     someCollators[1] = Collator::createInstance("ko", err);
     someCollators[2] = Collator::createInstance("ja_JP", err);
     if(U_FAILURE(err)) {
-      errln("Couldn't instantiate collators. Error: %s", u_errorName(err));
+      errcheckln(err, "Couldn't instantiate collators. Error: %s", u_errorName(err));
       delete someCollators[0];
       delete someCollators[1];
       delete someCollators[2];
@@ -472,7 +472,7 @@ CollationAPITest::TestHashCode(/* char* par */)
     col1 = Collator::createInstance(Locale::getEnglish(), success);
     if (U_FAILURE(success))
     {
-        errln("Default collation creation failed.");
+        errcheckln(success, "Default collation creation failed. - %s", u_errorName(success));
         return;
     }
 
@@ -531,7 +531,7 @@ CollationAPITest::TestCollationKey(/* char* par */)
     col = Collator::createInstance(Locale::getEnglish(), success);
     if (U_FAILURE(success))
     {
-        errln("Default collation creation failed.");
+        errcheckln(success, "Default collation creation failed. - %s", u_errorName(success));
         return;
     }
     col->setStrength(Collator::TERTIARY);
@@ -654,7 +654,7 @@ CollationAPITest::TestElemIter(/* char* par */)
     col = Collator::createInstance(Locale::getEnglish(), success);
     if (U_FAILURE(success))
     {
-        errln("Default collation creation failed.");
+        errcheckln(success, "Default collation creation failed. - %s", u_errorName(success));
         return;
     }
 
@@ -847,7 +847,7 @@ CollationAPITest::TestOperators(/* char* par */)
     UnicodeString ruleset2("< a, A < b, B < c, C < d, D, e, E");
     RuleBasedCollator *col1 = new RuleBasedCollator(ruleset1, success);
     if (U_FAILURE(success)) {
-        errln("RuleBasedCollator creation failed.");
+        errcheckln(success, "RuleBasedCollator creation failed. - %s", u_errorName(success));
         return;
     }
     success = U_ZERO_ERROR;
@@ -979,7 +979,7 @@ CollationAPITest::TestCompare(/* char* par */)
     UErrorCode success = U_ZERO_ERROR;
     col = Collator::createInstance(Locale::getEnglish(), success);
     if (U_FAILURE(success)) {
-        errln("Default collation creation failed.");
+        errcheckln(success, "Default collation creation failed. - %s", u_errorName(success));
         return;
     }
     UnicodeString test1("Abcda"), test2("abcda");
@@ -1048,7 +1048,7 @@ CollationAPITest::TestGetAll(/* char* par */)
     }
 
     if (count1 == 0 || list == NULL) {
-        errln("getAvailableLocales(int&) returned an empty list");
+        dataerrln("getAvailableLocales(int&) returned an empty list");
     }
 
     logln("Trying Collator::getAvailableLocales()");
@@ -1058,7 +1058,7 @@ CollationAPITest::TestGetAll(/* char* par */)
     count2 = 0;
 
     if (localeEnum == NULL) {
-        errln("getAvailableLocales() returned NULL");
+        dataerrln("getAvailableLocales() returned NULL");
         return;
     }
 
@@ -1101,7 +1101,7 @@ void CollationAPITest::TestSortKey()
     */
     Collator *col = Collator::createInstance(Locale::getEnglish(), status);
     if (U_FAILURE(status)) {
-        errln("ERROR: Default collation creation failed.: %s\n", u_errorName(status));
+        errcheckln(status, "ERROR: Default collation creation failed.: %s\n", u_errorName(status));
         return;
     }
 
@@ -1309,7 +1309,7 @@ void CollationAPITest::TestMaxExpansion()
     UnicodeString rule("&a < ab < c/aba < d < z < ch");
     RuleBasedCollator coll(rule, status);
     if(U_FAILURE(status)) {
-      errln("Collator creation failed with error %s", u_errorName(status));
+      errcheckln(status, "Collator creation failed with error %s", u_errorName(status));
       return;
     }
     UnicodeString str(ch);
@@ -1418,7 +1418,7 @@ void CollationAPITest::TestDisplayName()
     UErrorCode error = U_ZERO_ERROR;
     Collator *coll = Collator::createInstance("en_US", error);
     if (U_FAILURE(error)) {
-        errln("Failure creating english collator");
+        errcheckln(error, "Failure creating english collator - %s", u_errorName(error));
         return;
     }
     UnicodeString name;
@@ -1443,7 +1443,7 @@ void CollationAPITest::TestAttribute()
     Collator *coll = Collator::createInstance(error);
 
     if (U_FAILURE(error)) {
-        errln("Creation of default collator failed");
+        errcheckln(error, "Creation of default collator failed - %s", u_errorName(error));
         return;
     }
 
@@ -1548,7 +1548,7 @@ void CollationAPITest::TestVariableTopSetting() {
   Collator *coll = Collator::createInstance(status);
   if(U_FAILURE(status)) {
     delete coll;
-    errln("Collator creation failed with error %s", u_errorName(status));
+    errcheckln(status, "Collator creation failed with error %s", u_errorName(status));
     return;
   }
 
@@ -1688,7 +1688,7 @@ void CollationAPITest::TestBounds(void) {
     Collator *coll = Collator::createInstance(Locale("sh"), status);
     if(U_FAILURE(status)) {
       delete coll;
-      errln("Collator creation failed with %s", u_errorName(status));
+      errcheckln(status, "Collator creation failed with %s", u_errorName(status));
       return;
     }
 
@@ -1849,7 +1849,7 @@ void CollationAPITest::TestGetTailoredSet()
       }
       delete set;
     } else {
-      errln("Couldn't open collator with rules %s\n", setTest[i].rules);
+      errcheckln(status, "Couldn't open collator with rules %s - %s", setTest[i].rules, u_errorName(status));
     }
     delete coll;
   }
@@ -1866,7 +1866,7 @@ void CollationAPITest::TestUClassID()
         = (RuleBasedCollator *)Collator::createInstance(status);
     if(U_FAILURE(status)) {
       delete coll;
-      errln("Collator creation failed with %s", u_errorName(status));
+      errcheckln(status, "Collator creation failed with %s", u_errorName(status));
       return;
     }
     id = *((char *)coll->getDynamicClassID());
@@ -2242,7 +2242,9 @@ void CollationAPITest::TestNULLCharTailoring()
     UnicodeString second((UChar)0);
     RuleBasedCollator *coll = new RuleBasedCollator(UnicodeString(buf, len), status);
     if(U_FAILURE(status)) {
-        errln("Failed to open collator");
+        delete coll;
+        errcheckln(status, "Failed to open collator - %s", u_errorName(status));
+        return;
     }
     UCollationResult res = coll->compare(first, second, status);
     if(res != UCOL_LESS) {
@@ -2257,7 +2259,7 @@ void CollationAPITest::TestClone() {
     RuleBasedCollator* c0 = (RuleBasedCollator*)Collator::createInstance(status);
 
     if (U_FAILURE(status)) {
-        errln("Collator::CreateInstance(status) failed with %s", u_errorName(status));
+        errcheckln(status, "Collator::CreateInstance(status) failed with %s", u_errorName(status));
         return;
     }
 

@@ -287,7 +287,7 @@ void TestMessageFormat::PatternTest()
         UnicodeString buffer;
         form = new MessageFormat(testCases[i], Locale::getUS(), success);
         if (U_FAILURE(success)) {
-            errln("MessageFormat creation failed.#1");
+            dataerrln("MessageFormat creation failed.#1 - %s", u_errorName(success));
             logln(((UnicodeString)"MessageFormat for ") + testCases[i] + " creation failed.\n");
             continue;
         }
@@ -305,7 +305,7 @@ void TestMessageFormat::PatternTest()
         FieldPosition fieldpos(0);
         form->format(testArgs, count, result, fieldpos, success);
         if (U_FAILURE(success)) {
-            errln("MessageFormat failed test #3");
+            dataerrln("MessageFormat failed test #3 - %s", u_errorName(success));
             logln("TestMessageFormat::PatternTest failed test #3");
             continue;
         }
@@ -388,7 +388,7 @@ void TestMessageFormat::testStaticFormat()
         err);
 
     if (U_FAILURE(err)) {
-        errln("TestMessageFormat::testStaticFormat #1");
+        dataerrln("TestMessageFormat::testStaticFormat #1 - %s", u_errorName(err));
         logln(UnicodeString("TestMessageFormat::testStaticFormat failed test #1 with error code ")+(int32_t)err);
         return;
     }
@@ -424,7 +424,7 @@ void TestMessageFormat::TestTurkishCasing()
         err);
 
     if (U_FAILURE(err)) {
-        errln("TestTurkishCasing #1 with error code %s", u_errorName(err));
+        dataerrln("TestTurkishCasing #1 with error code %s", u_errorName(err));
         return;
     }
 
@@ -455,7 +455,7 @@ void TestMessageFormat::testSimpleFormat(/* char* par */)
     FieldPosition ignore(FieldPosition::DONT_CARE);
     form->format(testArgs1, 2, string, ignore, err);
     if (U_FAILURE(err) || string != "The disk \"MyDisk\" contains 0 file(s).") {
-        errln(UnicodeString("TestMessageFormat::testSimpleFormat failed on test #1"));
+        dataerrln(UnicodeString("TestMessageFormat::testSimpleFormat failed on test #1 - ") + u_errorName(err));
     }
  
     ignore.setField(FieldPosition::DONT_CARE);
@@ -463,14 +463,14 @@ void TestMessageFormat::testSimpleFormat(/* char* par */)
     form->format(testArgs2, 2, string, ignore, err);
     if (U_FAILURE(err) || string != "The disk \"MyDisk\" contains 1 file(s).") {
         logln(string);
-        errln(UnicodeString("TestMessageFormat::testSimpleFormat failed on test #2")+string);
+        dataerrln(UnicodeString("TestMessageFormat::testSimpleFormat failed on test #2")+string + " - " + u_errorName(err));
     }
  
     ignore.setField(FieldPosition::DONT_CARE);
     string.remove();
     form->format(testArgs3, 2, string, ignore, err);
     if (U_FAILURE(err) || string != "The disk \"MyDisk\" contains 12 file(s).") {
-        errln(UnicodeString("TestMessageFormat::testSimpleFormat failed on test #3")+string);
+        dataerrln(UnicodeString("TestMessageFormat::testSimpleFormat failed on test #3")+string + " - " + u_errorName(err));
     }
 
     delete form;
@@ -510,7 +510,7 @@ void TestMessageFormat::testMsgFormatChoice(/* char* par */)
     Formattable testArgs3[] = {(int32_t)1273, "MyDisk"};    
     form->format(testArgs3, 2, string, ignore, err);
     if (string != "The disk \"MyDisk\" contains 1,273 files.") {
-        errln("TestMessageFormat::testMsgFormatChoice failed on test #3");
+        dataerrln("TestMessageFormat::testMsgFormatChoice failed on test #3 - %s", u_errorName(err));
     }
 
     delete form;
@@ -530,7 +530,7 @@ void TestMessageFormat::testMsgFormatPlural(/* char* par */)
     UnicodeString t5("{0, plural, one {{0, number,C''''est #,##0.0# fichier}} other {Ce sont # fichiers}} dans la liste.");
     MessageFormat* mfNum = new MessageFormat(t1, Locale("fr"), err);
     if (U_FAILURE(err)) {
-        errln("TestMessageFormat::testMsgFormatPlural #1 - argumentIndex");
+        dataerrln("TestMessageFormat::testMsgFormatPlural #1 - argumentIndex - %s", u_errorName(err));
         logln(UnicodeString("TestMessageFormat::testMsgFormatPlural #1 with error code ")+(int32_t)err);
         return;
     }
@@ -775,7 +775,7 @@ void TestMessageFormat::testSetLocale()
 
     logln(result);
     if (result != compareStrEng) {
-        errln("***  MSG format err.");
+        dataerrln("***  MSG format err. - %s", u_errorName(err));
     }
 
     msg.setLocale(Locale::getEnglish());
@@ -807,7 +807,7 @@ void TestMessageFormat::testSetLocale()
     if (result == compareStrGer) {
         logln("MSG setLocale tested.");
     }else{
-        errln( "*** MSG setLocale err.");
+        dataerrln( "*** MSG setLocale err. - %s", u_errorName(err));
     }
 
     if (getLocale_ok) { 
@@ -849,7 +849,7 @@ void TestMessageFormat::testFormat()
         err);
 
     if (err != U_ILLEGAL_ARGUMENT_ERROR) {
-        errln("*** MSG format without expected error code.");
+        dataerrln("*** MSG format without expected error code. - %s", u_errorName(err));
     }
     err = U_ZERO_ERROR;
 
@@ -865,7 +865,7 @@ void TestMessageFormat::testFormat()
     logln("MSG format( Formattable&, ... ) expected:" + compareStr);
     logln("MSG format( Formattable&, ... )   result:" + result);
     if (result != compareStr) {
-        errln("***  MSG format( Formattable&, .... ) err.");
+        dataerrln("***  MSG format( Formattable&, .... ) err. - %s", u_errorName(err));
     }else{
         logln("MSG format( Formattable&, ... ) tested.");
     }
@@ -972,7 +972,7 @@ void TestMessageFormat::testAdopt()
     Format** formatsToAdopt;
 
     if (!formats || !formatsCmp || (count <= 0) || (count != countCmp)) {
-        errln("Error getting Formats");
+        dataerrln("Error getting Formats");
         return;
     }
 
@@ -1208,7 +1208,7 @@ void TestMessageFormat::TestUnlimitedArgsAndSubformats() {
         "and to delight of {5}, {6}, {7}, {8}, {9}, and {10} {11}.";
     MessageFormat msg(pattern, ec);
     if (U_FAILURE(ec)) {
-        errln("FAIL: constructor failed");
+        dataerrln("FAIL: constructor failed - %s", u_errorName(ec));
         return;
     }
 

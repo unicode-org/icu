@@ -1,6 +1,6 @@
 /************************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2000-2008, International Business Machines Corporation
+ * Copyright (c) 2000-2009, International Business Machines Corporation
  * and others. All Rights Reserved.
  ************************************************************************/
 /************************************************************************
@@ -72,7 +72,7 @@ void TransliteratorAPITest::TestgetID() {
     UErrorCode status = U_ZERO_ERROR;
     Transliterator* t= Transliterator::createInstance(trans, UTRANS_FORWARD, parseError, status);
     if(t==0 || U_FAILURE(status)){
-        errln("FAIL: construction of Latin-Greek");
+        dataerrln("FAIL: construction of Latin-Greek -  %s",u_errorName(status));
         return;
     }else{
         ID= t->getID();
@@ -138,7 +138,7 @@ void TransliteratorAPITest::TestgetInverse() {
      Transliterator* t2    = Transliterator::createInstance("Latin-Devanagari", UTRANS_FORWARD, parseError, status);
      Transliterator* invt2 = Transliterator::createInstance("Devanagari-Latin", UTRANS_FORWARD, parseError, status);
      if(t1 == 0 || invt1 == 0 || t2 == 0 || invt2 == 0) {
-         errln("FAIL: in instantiation");
+         dataerrln("FAIL: in instantiation - %s", u_errorName(status));
          return;
      }
 
@@ -194,7 +194,7 @@ void TransliteratorAPITest::TestClone(){
     t1=Transliterator::createInstance("Latin-Devanagari", UTRANS_FORWARD, parseError, status);
     t2=Transliterator::createInstance("Latin-Greek", UTRANS_FORWARD, parseError, status);
     if(t1 == 0 || t2 == 0){
-        errln("FAIL: construction");
+        dataerrln("FAIL: construction - %s", u_errorName(status));
         return;
     }
     t3=t1->clone();
@@ -243,7 +243,7 @@ void TransliteratorAPITest::TestGetDisplayName() {
     for (uint32_t i=0; i<sizeof(dispNames)/sizeof(dispNames[0]); i=i+2 ) {
         t = Transliterator::createInstance(dispNames[i+0], UTRANS_FORWARD, parseError, status);
         if(t==0){
-             errln("FAIL: construction: " + dispNames[i+0]);
+             dataerrln("FAIL: construction: " + dispNames[i+0] + " - " + u_errorName(status));
              status = U_ZERO_ERROR;
              continue;
         }
@@ -292,8 +292,8 @@ void TransliteratorAPITest::TestTransliterate1(){
     for(uint32_t i=0;i<sizeof(Data)/sizeof(Data[0]); i=i+3){
         t=Transliterator::createInstance(Data[i+0], UTRANS_FORWARD, parseError, status);
         if(t==0){
-            errln("FAIL: construction: " + Data[i+0] + " Error: "  + u_errorName(status));
-            errln("PreContext: " + prettify(parseError.preContext) + " PostContext: " + prettify( parseError.postContext) );
+            dataerrln("FAIL: construction: " + Data[i+0] + " Error: "  + u_errorName(status));
+            dataerrln("PreContext: " + prettify(parseError.preContext) + " PostContext: " + prettify( parseError.postContext) );
             status = U_ZERO_ERROR;
             continue;
         }
@@ -339,7 +339,7 @@ void TransliteratorAPITest::TestTransliterate2(){
     for(uint32_t i=0; i<sizeof(Data2)/sizeof(Data2[0]); i=i+6){
         t=Transliterator::createInstance(Data2[i+0], UTRANS_FORWARD, parseError, status);
         if(t==0){
-            errln("FAIL: construction: " + prettify(Data2[i+0]));
+            dataerrln("FAIL: construction: " + prettify(Data2[i+0]) + " - " + u_errorName(status));
             continue;
         }
         start=getInt(Data2[i+2]);
@@ -554,7 +554,7 @@ void TransliteratorAPITest::TestKeyboardTransliterator2(){
     rs="Initial String: add--";
     t=Transliterator::createInstance("Any-Hex", UTRANS_FORWARD, parseError, status);
     if(t == 0)
-        errln("FAIL : construction");
+        dataerrln("FAIL : construction - %s", u_errorName(status));
     else {
         keyboardAux(t, Data, rs, 0, 20);
         delete t;
@@ -563,7 +563,7 @@ void TransliteratorAPITest::TestKeyboardTransliterator2(){
     rs="Hindi --";
     t=Transliterator::createInstance("Latin-Devanagari", UTRANS_FORWARD, parseError, status);
     if(t == 0)
-        errln("FAIL : construction");
+        dataerrln("FAIL : construction - %s", u_errorName(status));
     else
         keyboardAux(t, Data, rs, 20, 40);
 
@@ -902,7 +902,7 @@ void TransliteratorAPITest::doTest(const UnicodeString& message, const UnicodeSt
     if (prettify(result) == prettify(expected)) 
         logln((UnicodeString)"Ok: " + prettify(message) + " passed \"" + prettify(expected) + "\"");
     else 
-        errln((UnicodeString)"FAIL:" + message + " failed  Got-->" + prettify(result)+ ", Expected--> " + prettify(expected) );
+        dataerrln((UnicodeString)"FAIL:" + message + " failed  Got-->" + prettify(result)+ ", Expected--> " + prettify(expected) );
 }
 
 

@@ -115,8 +115,8 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
 
             SimpleDateFormat *sdf = new SimpleDateFormat((UnicodeString)PATTERNS[patidx], LOCALES[locidx], status);
             if (U_FAILURE(status)) {
-                errln((UnicodeString)"new SimpleDateFormat failed for pattern " +
-                    PATTERNS[patidx] + " for locale " + LOCALES[locidx].getName());
+                errcheckln(status, (UnicodeString)"new SimpleDateFormat failed for pattern " +
+                    PATTERNS[patidx] + " for locale " + LOCALES[locidx].getName() + " - " + u_errorName(status));
                 status = U_ZERO_ERROR;
                 continue;
             }
@@ -337,8 +337,8 @@ TimeZoneFormatTest::TestTimeRoundTrip(void) {
 
             SimpleDateFormat *sdf = new SimpleDateFormat(pattern, LOCALES[locidx], status);
             if (U_FAILURE(status)) {
-                errln((UnicodeString)"new SimpleDateFormat failed for pattern " +
-                    pattern + " for locale " + LOCALES[locidx].getName());
+                errcheckln(status, (UnicodeString)"new SimpleDateFormat failed for pattern " +
+                    pattern + " for locale " + LOCALES[locidx].getName() + " - " + u_errorName(status));
                 status = U_ZERO_ERROR;
                 continue;
             }

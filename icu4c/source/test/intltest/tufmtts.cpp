@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2008, International Business Machines Corporation and
+ * Copyright (c) 2008-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -41,7 +41,7 @@ void TimeUnitTest::testBasic() {
         Locale loc(locales[locIndex]);
         TimeUnitFormat** formats = new TimeUnitFormat*[2];
         formats[TimeUnitFormat::kFull] = new TimeUnitFormat(loc, status);
-        if (!assertSuccess("TimeUnitFormat(full)", status)) return;
+        if (!assertSuccess("TimeUnitFormat(full)", status, TRUE)) return;
         formats[TimeUnitFormat::kAbbreviate] = new TimeUnitFormat(loc, TimeUnitFormat::kAbbreviate, status);
         if (!assertSuccess("TimeUnitFormat(short)", status)) return;
 #ifdef TUFMTTS_DEBUG
@@ -157,7 +157,7 @@ void TimeUnitTest::testAPI() {
     //================= TimeUnitFormat =================
     //
     TimeUnitFormat* tmf_en = new TimeUnitFormat(Locale("en"), status);
-    if (!assertSuccess("TimeUnitFormat(en...)", status)) return;
+    if (!assertSuccess("TimeUnitFormat(en...)", status, TRUE)) return;
     TimeUnitFormat tmf_fr(Locale("fr"), status);
     if (!assertSuccess("TimeUnitFormat(fr...)", status)) return;
 

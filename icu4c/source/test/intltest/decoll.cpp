@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -38,7 +38,7 @@ CollationGermanTest::CollationGermanTest()
     UErrorCode status = U_ZERO_ERROR;
     myCollation = Collator::createInstance(Locale::getGermany(), status);
     if(!myCollation || U_FAILURE(status)) {
-        errln(__FILE__ "failed to create! err " + UnicodeString(u_errorName(status)));
+        errcheckln(status, __FILE__ "failed to create! err " + UnicodeString(u_errorName(status)));
         /* if it wasn't already: */
         delete myCollation;
         myCollation = NULL;
@@ -103,7 +103,7 @@ const Collator::EComparisonResult CollationGermanTest::results[][2] =
 void CollationGermanTest::TestTertiary(/* char* par */)
 {
     if(myCollation == NULL ) {
-        errln("decoll: cannot start test, collator is null\n");
+        dataerrln("decoll: cannot start test, collator is null\n");
         return;
     }
 
@@ -119,7 +119,7 @@ void CollationGermanTest::TestTertiary(/* char* par */)
 void CollationGermanTest::TestPrimary(/* char* par */)
 {
     if(myCollation == NULL ) {
-        errln("decoll: cannot start test, collator is null\n");
+        dataerrln("decoll: cannot start test, collator is null\n");
         return;
     }
     int32_t i;

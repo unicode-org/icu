@@ -52,7 +52,7 @@ char testId[100];
     errln("Failure in file %s, line %d.   \"%s\"", __FILE__, __LINE__, m);return;}}
 
 #define TEST_ASSERT_SUCCESS(errcode) {if (U_FAILURE(errcode)) { \
-    errln("Failure in file %s, line %d, test ID \"%s\", status = \"%s\"", \
+    dataerrln("Failure in file %s, line %d, test ID \"%s\", status = \"%s\"", \
           __FILE__, __LINE__, testId, u_errorName(errcode));}}
 
 #define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
@@ -973,7 +973,7 @@ void SSearchTest::offsetTest()
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *col = (RuleBasedCollator *) Collator::createInstance(Locale::getEnglish(), status);
     if (U_FAILURE(status)) {
-        errln("Failed to create collator in offsetTest!");
+        errcheckln(status, "Failed to create collator in offsetTest! - %s", u_errorName(status));
         return;
     }
     char buffer[4096];  // A bit of a hack... just happens to be long enough for all the test cases...
@@ -1235,7 +1235,7 @@ void SSearchTest::boyerMooreTest()
 
     coll = ucol_openFromShortString("S1", FALSE, NULL, &status);
     if (U_FAILURE(status)) {
-        errln("Could not open collator.");
+        errcheckln(status, "Could not open collator. - %s", u_errorName(status));
         return;
     }
 
@@ -1298,7 +1298,7 @@ void SSearchTest::bmsTest()
 
     coll = ucol_openFromShortString("S1", FALSE, NULL, &status);
     if (U_FAILURE(status)) {
-        errln("Could not open collator.");
+        errcheckln(status, "Could not open collator. - %s", u_errorName(status));
         return;
     }
 
@@ -1354,7 +1354,7 @@ void SSearchTest::goodSuffixTest()
 
     coll = ucol_open(NULL, &status);
     if (U_FAILURE(status)) {
-        errln("Couldn't open collator.");
+        errcheckln(status, "Couldn't open collator. - %s", u_errorName(status));
         return;
     }
 
@@ -1499,7 +1499,10 @@ const char *cPattern = "maketh houndes ete hem";
 
     UCollator *collator = ucol_open("en", &status);
     CollData *data = CollData::open(collator, status);
-    TEST_ASSERT_SUCCESS(status);
+    if (U_FAILURE(status) || collator == NULL || data == NULL) {
+        errcheckln(status, "Unable to open UCollator or CollData. - %s", u_errorName(status));
+        return;
+    } 
     //ucol_setStrength(collator, collatorStrength);
     //ucol_setAttribute(collator, UCOL_NORMALIZATION_MODE, normalize, &status);
     UnicodeString uPattern = cPattern;
@@ -2071,7 +2074,7 @@ void SSearchTest::monkeyTest(char *params)
     UCollator *coll = ucol_openFromShortString("S1", FALSE, NULL, &status);
 
     if (U_FAILURE(status)) {
-        errln("Failed to create collator in MonkeyTest!");
+        errcheckln(status, "Failed to create collator in MonkeyTest! - %s", u_errorName(status));
         return;
     }
 
@@ -2208,7 +2211,7 @@ void SSearchTest::bmMonkeyTest(char *params)
     UCollator *coll = ucol_openFromShortString("S1", FALSE, NULL, &status);
 
     if (U_FAILURE(status)) {
-        errln("Failed to create collator in MonkeyTest!");
+        errcheckln(status, "Failed to create collator in MonkeyTest! - %s", u_errorName(status));
         return;
     }
 

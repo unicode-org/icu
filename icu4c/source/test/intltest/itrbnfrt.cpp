@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2006, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2009, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -65,7 +65,7 @@ RbnfRoundTripTest::TestEnglishSpelloutRT()
     = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale::getUS(), status);
 
   if (U_FAILURE(status)) {
-    errln("failed to construct formatter");
+    errcheckln(status, "failed to construct formatter - %s", u_errorName(status));
   } else {
     doTest(formatter, -12345678, 12345678);
   }
@@ -83,7 +83,7 @@ RbnfRoundTripTest::TestDurationsRT()
     = new RuleBasedNumberFormat(URBNF_DURATION, Locale::getUS(), status);
 
   if (U_FAILURE(status)) {
-    errln("failed to construct formatter");
+    errcheckln(status, "failed to construct formatter - %s", u_errorName(status));
   } else {
     doTest(formatter, 0, 12345678);
   }
@@ -101,7 +101,7 @@ RbnfRoundTripTest::TestSpanishSpelloutRT()
     = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale("es", "es"), status);
  
   if (U_FAILURE(status)) {
-    errln("failed to construct formatter");
+    errcheckln(status, "failed to construct formatter - %s", u_errorName(status));
   } else {
     doTest(formatter, -12345678, 12345678);
   }
@@ -119,7 +119,7 @@ RbnfRoundTripTest::TestFrenchSpelloutRT()
     = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale::getFrance(), status);
 
   if (U_FAILURE(status)) {
-    errln("failed to construct formatter");
+    errcheckln(status, "failed to construct formatter - %s", u_errorName(status));
   } else {
     doTest(formatter, -12345678, 12345678);
   }
@@ -137,7 +137,7 @@ RbnfRoundTripTest::TestSwissFrenchSpelloutRT()
     = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale("fr", "CH"), status);
 
   if (U_FAILURE(status)) {
-    errln("failed to construct formatter");
+    errcheckln(status, "failed to construct formatter - %s", u_errorName(status));
   } else {
     doTest(formatter, -12345678, 12345678);
   }
@@ -155,7 +155,7 @@ RbnfRoundTripTest::TestItalianSpelloutRT()
     = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale::getItalian(), status);
 
   if (U_FAILURE(status)) {
-    errln("failed to construct formatter");
+    errcheckln(status, "failed to construct formatter - %s", u_errorName(status));
   } else {
     doTest(formatter, -999999, 999999);
   }
@@ -173,7 +173,7 @@ RbnfRoundTripTest::TestGermanSpelloutRT()
     = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale::getGermany(), status);
 
   if (U_FAILURE(status)) {
-    errln("failed to construct formatter");
+    errcheckln(status, "failed to construct formatter - %s", u_errorName(status));
   } else {
     doTest(formatter, 0, 12345678);
   }
@@ -191,7 +191,7 @@ RbnfRoundTripTest::TestSwedishSpelloutRT()
     = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale("sv", "SE"), status);
 
   if (U_FAILURE(status)) {
-    errln("failed to construct formatter");
+    errcheckln(status, "failed to construct formatter - %s", u_errorName(status));
   } else {
     doTest(formatter, 0, 12345678);
   }
@@ -209,7 +209,7 @@ RbnfRoundTripTest::TestDutchSpelloutRT()
     = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale("nl", "NL"), status);
 
   if (U_FAILURE(status)) {
-    errln("failed to construct formatter");
+    errcheckln(status, "failed to construct formatter - %s", u_errorName(status));
   } else {
     doTest(formatter, -12345678, 12345678);
   }
@@ -227,7 +227,7 @@ RbnfRoundTripTest::TestJapaneseSpelloutRT()
     = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale::getJapan(), status);
 
   if (U_FAILURE(status)) {
-    errln("failed to construct formatter");
+    errcheckln(status, "failed to construct formatter - %s", u_errorName(status));
   } else {
     doTest(formatter, 0, 12345678);
   }
@@ -245,7 +245,7 @@ RbnfRoundTripTest::TestRussianSpelloutRT()
     = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale("ru", "RU"), status);
 
   if (U_FAILURE(status)) {
-    errln("failed to construct formatter");
+    errcheckln(status, "failed to construct formatter - %s", u_errorName(status));
   } else {
     doTest(formatter, 0, 12345678);
   }
@@ -263,7 +263,7 @@ RbnfRoundTripTest::TestPortugueseSpelloutRT()
     = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale("pt", "BR"), status);
 
   if (U_FAILURE(status)) {
-    errln("failed to construct formatter");
+    errcheckln(status, "failed to construct formatter - %s", u_errorName(status));
   } else {
     doTest(formatter, -12345678, 12345678);
   }
