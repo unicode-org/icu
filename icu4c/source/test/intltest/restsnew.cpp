@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2008, International Business Machines
+ * Copyright (c) 1997-2009, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 
@@ -200,7 +200,7 @@ NewResourceBundleTest::TestResourceBundles()
     loadTestData(status);
     if(U_FAILURE(status))
     {
-        dataerrln("[DATA] Could not load testdata.dat %s " + UnicodeString(u_errorName(status)));
+        dataerrln("Could not load testdata.dat %s " + UnicodeString(u_errorName(status)));
         return;
     }
 
@@ -234,7 +234,7 @@ NewResourceBundleTest::TestConstruction()
     testdatapath=loadTestData(err);
     if(U_FAILURE(err))
     {
-        dataerrln("[DATA] Could not load testdata.dat %s " + UnicodeString(u_errorName(err)));
+        dataerrln("Could not load testdata.dat %s " + UnicodeString(u_errorName(err)));
         return;
     }
 
@@ -309,7 +309,7 @@ NewResourceBundleTest::TestIteration()
     testdatapath=loadTestData(err);
     if(U_FAILURE(err))
     {
-        dataerrln("[DATA] Could not load testdata.dat %s " + UnicodeString(u_errorName(err)));
+        dataerrln("Could not load testdata.dat %s " + UnicodeString(u_errorName(err)));
         return;
     }
 
@@ -428,7 +428,7 @@ NewResourceBundleTest::TestOtherAPI(){
 
     if(U_FAILURE(err))
     {
-        dataerrln("[DATA] Could not load testdata.dat %s " + UnicodeString(u_errorName(err)));
+        dataerrln("Could not load testdata.dat %s " + UnicodeString(u_errorName(err)));
         return;
     }
 
@@ -463,7 +463,7 @@ NewResourceBundleTest::TestOtherAPI(){
     ResourceBundle defaultresource(err);
     ResourceBundle explicitdefaultresource(NULL, Locale::getDefault(), err);
     if(U_FAILURE(err)){
-        errln("Construction of default resourcebundle failed");
+        errcheckln(err, "Construction of default resourcebundle failed - %s", u_errorName(err));
         return;
     }
     // You can't compare the default locale to the resolved locale in the
@@ -636,7 +636,7 @@ NewResourceBundleTest::testTag(const char* frag,
     testdatapath=loadTestData(status);
     if(U_FAILURE(status))
     {
-        dataerrln("[DATA] Could not load testdata.dat %s " + UnicodeString(u_errorName(status)));
+        dataerrln("Could not load testdata.dat %s " + UnicodeString(u_errorName(status)));
         return FALSE;
     }
 
@@ -1017,7 +1017,7 @@ NewResourceBundleTest::TestNewTypes() {
 
     if(U_FAILURE(status))
     {
-        dataerrln("[DATA] Could not load testdata.dat %s \n",u_errorName(status));
+        dataerrln("Could not load testdata.dat %s \n",u_errorName(status));
         return;
     }
 
@@ -1164,7 +1164,7 @@ NewResourceBundleTest::TestGetByFallback() {
 
     heRes.getWithFallback("calendar", status).getWithFallback("islamic-civil", status).getWithFallback("eras", status);
     if(U_FAILURE(status)) {
-        errln("Didn't get Islamic Eras. I know they are there!\n");
+        dataerrln("Didn't get Islamic Eras. I know they are there! - %s", u_errorName(status));
     }
     status = U_ZERO_ERROR;
 

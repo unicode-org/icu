@@ -100,6 +100,11 @@ void IntlTestRBNF::TestHebrewFraction() {
     };
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedNumberFormat* formatter = new RuleBasedNumberFormat(URBNF_SPELLOUT, "he_IL", status);
+    if (status == U_MISSING_RESOURCE_ERROR || status == U_FILE_ACCESS_ERROR) {
+        errcheckln(status, "Failed in constructing RuleBasedNumberFormat - %s", u_errorName(status));
+        delete formatter;
+        return;
+    }
     UnicodeString result;
     Formattable parseResult;
     ParsePosition pp(0);
@@ -140,6 +145,11 @@ IntlTestRBNF::TestAPI() {
   UErrorCode status = U_ZERO_ERROR;
   RuleBasedNumberFormat* formatter
       = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale::getUS(), status);
+  if (status == U_MISSING_RESOURCE_ERROR || status == U_FILE_ACCESS_ERROR) {
+    dataerrln("Unable to create formatter. - %s", u_errorName(status));
+    delete formatter;
+    return;
+  }
 
   logln("RBNF API test starting");
   // test clone
@@ -391,7 +401,7 @@ void IntlTestRBNF::TestFractionalRuleSet()
     UParseError perror;
     RuleBasedNumberFormat formatter(fracRules, Locale::getEnglish(), perror, status);
     if (U_FAILURE(status)) {
-        errln("FAIL: could not construct formatter");
+        errcheckln(status, "FAIL: could not construct formatter - %s", u_errorName(status));
     } else {
         static const char* const testData[][2] = {
             { "0", "0" },
@@ -1058,9 +1068,8 @@ IntlTestRBNF::TestEnglishSpellout()
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedNumberFormat* formatter
         = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale::getUS(), status);
-
     if (U_FAILURE(status)) {
-        errln("FAIL: could not construct formatter");
+        errcheckln(status, "FAIL: could not construct formatter - %s", u_errorName(status));
     } else {
         static const char* const testData[][2] = {
             { "1", "one" },
@@ -1113,7 +1122,7 @@ IntlTestRBNF::TestOrdinalAbbreviations()
         = new RuleBasedNumberFormat(URBNF_ORDINAL, Locale::getUS(), status);
     
     if (U_FAILURE(status)) {
-        errln("FAIL: could not construct formatter");
+        errcheckln(status, "FAIL: could not construct formatter - %s", u_errorName(status));
     } else {
         static const char* const testData[][2] = {
             { "1", "1\\u02e2\\u1d57" },
@@ -1149,7 +1158,7 @@ IntlTestRBNF::TestDurations()
         = new RuleBasedNumberFormat(URBNF_DURATION, Locale::getUS(), status);
     
     if (U_FAILURE(status)) {
-        errln("FAIL: could not construct formatter");
+        errcheckln(status, "FAIL: could not construct formatter - %s", u_errorName(status));
     } else {
         static const char* const testData[][2] = {
             { "3,600", "1:00:00" },     //move me and I fail
@@ -1188,7 +1197,7 @@ IntlTestRBNF::TestSpanishSpellout()
         = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale("es", "ES", ""), status);
     
     if (U_FAILURE(status)) {
-        errln("FAIL: could not construct formatter");
+        errcheckln(status, "FAIL: could not construct formatter - %s", u_errorName(status));
     } else {
         static const char* const testData[][2] = {
             { "1", "uno" },
@@ -1228,7 +1237,7 @@ IntlTestRBNF::TestFrenchSpellout()
         = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale::getFrance(), status);
     
     if (U_FAILURE(status)) {
-        errln("FAIL: could not construct formatter");
+        errcheckln(status, "FAIL: could not construct formatter - %s", u_errorName(status));
     } else {
         static const char* const testData[][2] = {
             { "1", "un" },
@@ -1313,7 +1322,7 @@ IntlTestRBNF::TestSwissFrenchSpellout()
         = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale("fr", "CH", ""), status);
     
     if (U_FAILURE(status)) {
-        errln("FAIL: could not construct formatter");
+        errcheckln(status, "FAIL: could not construct formatter - %s", u_errorName(status));
     } else {
         doTest(formatter, swissFrenchTestData, TRUE);
     }
@@ -1362,8 +1371,8 @@ IntlTestRBNF::TestBelgianFrenchSpellout()
         = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale("fr", "BE", ""), status);
     
     if (U_FAILURE(status)) {
-        errln("rbnf status: 0x%x (%s)\n", status, u_errorName(status));
-        errln("FAIL: could not construct formatter");
+        errcheckln(status, "rbnf status: 0x%x (%s)\n", status, u_errorName(status));
+        errcheckln(status, "FAIL: could not construct formatter - %s", u_errorName(status));
     } else {
         // Belgian french should match Swiss french.
         doTest(formatter, belgianFrenchTestData, TRUE);
@@ -1379,7 +1388,7 @@ IntlTestRBNF::TestItalianSpellout()
         = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale::getItalian(), status);
 
     if (U_FAILURE(status)) {
-        errln("FAIL: could not construct formatter");
+        errcheckln(status, "FAIL: could not construct formatter - %s", u_errorName(status));
     } else {
         static const char* const testData[][2] = {
             { "1", "uno" },
@@ -1420,7 +1429,7 @@ IntlTestRBNF::TestPortugueseSpellout()
         = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale("pt","BR",""), status);
 
     if (U_FAILURE(status)) {
-        errln("FAIL: could not construct formatter");
+        errcheckln(status, "FAIL: could not construct formatter - %s", u_errorName(status));
     } else {
         static const char* const testData[][2] = {
             { "1", "um" },
@@ -1458,7 +1467,7 @@ IntlTestRBNF::TestGermanSpellout()
         = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale::getGermany(), status);
     
     if (U_FAILURE(status)) {
-        errln("FAIL: could not construct formatter");
+        errcheckln(status, "FAIL: could not construct formatter - %s", u_errorName(status));
     } else {
         static const char* const testData[][2] = {
             { "1", "eins" },
@@ -1503,7 +1512,7 @@ IntlTestRBNF::TestThaiSpellout()
         = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale("th"), status);
     
     if (U_FAILURE(status)) {
-        errln("FAIL: could not construct formatter");
+        errcheckln(status, "FAIL: could not construct formatter - %s", u_errorName(status));
     } else {
         static const char* const testData[][2] = {
             { "0", "\\u0e28\\u0e39\\u0e19\\u0e22\\u0e4c" },
@@ -1529,7 +1538,7 @@ IntlTestRBNF::TestSwedishSpellout()
         = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale("sv"), status);
 
     if (U_FAILURE(status)) {
-        errln("FAIL: could not construct formatter");
+        errcheckln(status, "FAIL: could not construct formatter - %s", u_errorName(status));
     } else {
         static const char* testDataDefault[][2] = {
             { "101", "ett\\u00adhundra\\u00adett" },
@@ -1606,7 +1615,7 @@ IntlTestRBNF::TestSmallValues()
         = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale("en_US"), status);
 
     if (U_FAILURE(status)) {
-        errln("FAIL: could not construct formatter");
+        errcheckln(status, "FAIL: could not construct formatter - %s", u_errorName(status));
     } else {
         static const char* const testDataDefault[][2] = {
         { "0.001", "zero point zero zero one" },
@@ -1660,7 +1669,7 @@ IntlTestRBNF::TestLocalizations(void)
     UParseError perror;
     RuleBasedNumberFormat formatter(rules, perror, status);
     if (U_FAILURE(status)) {
-        errln("FAIL: could not construct formatter");           
+        errcheckln(status, "FAIL: could not construct formatter - %s", u_errorName(status));           
     } else {
         {
             static const char* const testData[][2] = {
@@ -1907,7 +1916,7 @@ IntlTestRBNF::doTest(RuleBasedNumberFormat* formatter, const char* const testDat
     // NumberFormat* decFmt = NumberFormat::createInstance(Locale::getUS(), status);
     DecimalFormat decFmt("#,###.################", dfs, status);
     if (U_FAILURE(status)) {
-        errln("FAIL: could not create NumberFormat");
+        errcheckln(status, "FAIL: could not create NumberFormat - %s", u_errorName(status));
     } else {
         for (int i = 0; testData[i][0]; ++i) {
             const char* numString = testData[i][0];
@@ -1977,7 +1986,7 @@ IntlTestRBNF::doLenientParseTest(RuleBasedNumberFormat* formatter, const char* t
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat* decFmt = NumberFormat::createInstance(Locale::getUS(), status);
     if (U_FAILURE(status)) {
-        errln("FAIL: could not create NumberFormat");
+        errcheckln(status, "FAIL: could not create NumberFormat - %s", u_errorName(status));
     } else {
         for (int i = 0; testData[i][0]; ++i) {
             const char* spelledNumber = testData[i][0]; // spelled-out number

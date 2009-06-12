@@ -498,7 +498,7 @@ TimeZoneRuleTest::TestHistoricalRuleBasedTimeZone(void) {
     UDate jan1_2010 = getUTCMillis(2010, UCAL_JANUARY, 1);        
 
     if (!ny->hasEquivalentTransitions(*rbtz, jan1_1967, jan1_2010, TRUE, status)) {
-        errln("FAIL: The RBTZ must be equivalent to America/New_York between 1967 and 2010");
+        dataerrln("FAIL: The RBTZ must be equivalent to America/New_York between 1967 and 2010");
     }
     if (U_FAILURE(status)) {
         errln("FAIL: error returned from hasEquivalentTransitions for ny/rbtz 1967-2010");
@@ -512,7 +512,7 @@ TimeZoneRuleTest::TestHistoricalRuleBasedTimeZone(void) {
 
     // Same with above, but calling RBTZ#hasEquivalentTransitions against OlsonTimeZone
     if (!rbtz->hasEquivalentTransitions(*ny, jan1_1967, jan1_2010, TRUE, status)) {
-        errln("FAIL: The RBTZ must be equivalent to America/New_York between 1967 and 2010");
+        dataerrln("FAIL: The RBTZ must be equivalent to America/New_York between 1967 and 2010 ");
     }
     if (U_FAILURE(status)) {
         errln("FAIL: error returned from hasEquivalentTransitions for rbtz/ny 1967-2010");
@@ -559,12 +559,12 @@ TimeZoneRuleTest::TestHistoricalRuleBasedTimeZone(void) {
             errln("FAIL: ny->getOffset failed");
         }
         if (offset1 != offset2 || dst1 != dst2) {
-            errln("FAIL: Incompatible time zone offset/dstSavings for ny and rbtz");
+            dataerrln("FAIL: Incompatible time zone offset/dstSavings for ny and rbtz");
         }
 
         // Check inDaylightTime
         if (rbtz->inDaylightTime(times[i], status) != ny->inDaylightTime(times[i], status)) {
-            errln("FAIL: Incompatible daylight saving time for ny and rbtz");
+            dataerrln("FAIL: Incompatible daylight saving time for ny and rbtz");
         }
         if (U_FAILURE(status)) {
             errln("FAIL: inDaylightTime failed");
@@ -696,7 +696,7 @@ TimeZoneRuleTest::TestHasEquivalentTransitions(void) {
     UDate jan1_2011 = getUTCMillis(2010, UCAL_JANUARY, 1);
 
     if (newyork->hasEquivalentTransitions(*indianapolis, jan1_2005, jan1_2011, TRUE, status)) {
-        errln("FAIL: New_York is not equivalent to Indianapolis between 2005 and 2010");
+        dataerrln("FAIL: New_York is not equivalent to Indianapolis between 2005 and 2010");
     }
     if (U_FAILURE(status)) {
         errln("FAIL: error status is returned from hasEquivalentTransition");
@@ -715,7 +715,7 @@ TimeZoneRuleTest::TestHasEquivalentTransitions(void) {
         errln("FAIL: error status is returned from hasEquivalentTransition");
     }
     if (indianapolis->hasEquivalentTransitions(*gmt_5, jan1_1971, jan1_2007, TRUE, status)) {
-        errln("FAIL: Indianapolis is not equivalent to GMT+5 between 1971 and 2006");
+        dataerrln("FAIL: Indianapolis is not equivalent to GMT+5 between 1971 and 2006");
     }
     if (U_FAILURE(status)) {
         errln("FAIL: error status is returned from hasEquivalentTransition");
@@ -740,7 +740,7 @@ TimeZoneRuleTest::TestHasEquivalentTransitions(void) {
     // raw offsets are different
     BasicTimeZone *losangeles = (BasicTimeZone*)TimeZone::createTimeZone("America/Los_Angeles");
     if (newyork->hasEquivalentTransitions(*losangeles, jan1_2006, jan1_2011, TRUE, status)) {
-        errln("FAIL: New_York is not equivalent to Los Angeles, but returned true");
+        dataerrln("FAIL: New_York is not equivalent to Los Angeles, but returned true");
     }
     if (U_FAILURE(status)) {
         errln("FAIL: error status is returned from hasEquivalentTransition for newyork/losangeles");
@@ -1697,12 +1697,12 @@ TimeZoneRuleTest::TestVTimeZoneCoverage(void) {
     UBool btr1 = otz->getNextTransition(base, TRUE, tzt1);
     UBool btr2 = vtz->getNextTransition(base, TRUE, tzt2);
     if (!btr1 || !btr2 || tzt1 != tzt2) {
-        errln("FAIL: getNextTransition returned different results in VTimeZone and OlsonTimeZone");
+        dataerrln("FAIL: getNextTransition returned different results in VTimeZone and OlsonTimeZone");
     }
     btr1 = otz->getPreviousTransition(base, FALSE, tzt1);
     btr2 = vtz->getPreviousTransition(base, FALSE, tzt2);
     if (!btr1 || !btr2 || tzt1 != tzt2) {
-        errln("FAIL: getPreviousTransition returned different results in VTimeZone and OlsonTimeZone");
+        dataerrln("FAIL: getPreviousTransition returned different results in VTimeZone and OlsonTimeZone");
     }
 
     // TimeZoneTransition constructor/clone

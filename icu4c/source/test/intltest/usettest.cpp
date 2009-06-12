@@ -27,11 +27,11 @@
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 #define TEST_ASSERT_SUCCESS(status) {if (U_FAILURE(status)) { \
-    errln("fail in file \"%s\", line %d: \"%s\"", __FILE__, __LINE__, \
+    dataerrln("fail in file \"%s\", line %d: \"%s\"", __FILE__, __LINE__, \
     u_errorName(status));}}
 
 #define TEST_ASSERT(expr) {if (!(expr)) { \
-    errln("fail in file \"%s\", line %d", __FILE__, __LINE__); }}
+    dataerrln("fail in file \"%s\", line %d", __FILE__, __LINE__); }}
 
 UnicodeString operator+(const UnicodeString& left, const UnicodeSet& set) {
     UnicodeString pat;
@@ -130,7 +130,7 @@ void UnicodeSetTest::TestToPattern() {
             ec = U_ZERO_ERROR;
             UnicodeSet s(OTHER_TOPATTERN_TESTS[j], ec);
             if (U_FAILURE(ec)) {
-                errln((UnicodeString)"FAIL: bad pattern " + OTHER_TOPATTERN_TESTS[j]);
+                dataerrln((UnicodeString)"FAIL: bad pattern " + OTHER_TOPATTERN_TESTS[j] + " - " + UnicodeString(u_errorName(ec)));
                 continue;
             }
             checkPat(OTHER_TOPATTERN_TESTS[j], s);
@@ -281,7 +281,8 @@ UnicodeSetTest::TestCategories(void) {
     const char* pat = " [:Lu:] "; // Whitespace ok outside [:..:]
     UnicodeSet set(pat, status);
     if (U_FAILURE(status)) {
-        errln((UnicodeString)"Fail: Can't construct set with " + pat);
+        dataerrln((UnicodeString)"Fail: Can't construct set with " + pat + " - " + UnicodeString(u_errorName(status)));
+        return;
     } else {
         expectContainment(set, pat, "ABC", "abc");
     }
@@ -321,7 +322,7 @@ UnicodeSetTest::TestCloneEqualHash(void) {
     UnicodeSet *set1=new UnicodeSet(UNICODE_STRING_SIMPLE("\\p{Lowercase Letter}"), status); //  :Ll: Letter, lowercase
     UnicodeSet *set1a=new UnicodeSet(UNICODE_STRING_SIMPLE("[:Ll:]"), status); //  Letter, lowercase
     if (U_FAILURE(status)){
-        errln((UnicodeString)"FAIL: Can't construst set with category->Ll");
+        dataerrln((UnicodeString)"FAIL: Can't construst set with category->Ll" + " - " + UnicodeString(u_errorName(status)));
         return;
     }
     UnicodeSet *set2=new UnicodeSet(UNICODE_STRING_SIMPLE("\\p{Decimal Number}"), status);   //Number, Decimal digit
@@ -1246,7 +1247,7 @@ void UnicodeSetTest::TestCloseOver() {
         if (s == t) {
             logln((UnicodeString)"Ok: " + pat + ".closeOver(" + selector + ") => " + exp);
         } else {
-            errln((UnicodeString)"FAIL: " + pat + ".closeOver(" + selector + ") => " +
+            dataerrln((UnicodeString)"FAIL: " + pat + ".closeOver(" + selector + ") => " +
                   s.toPattern(buf, TRUE) + ", expected " + exp);
         }
     }
@@ -1922,7 +1923,7 @@ UnicodeSetTest::expectContainment(const UnicodeString& pat,
     UErrorCode ec = U_ZERO_ERROR;
     UnicodeSet set(pat, ec);
     if (U_FAILURE(ec)) {
-        errln((UnicodeString)"FAIL: pattern \"" +
+        dataerrln((UnicodeString)"FAIL: pattern \"" +
               pat + "\" => " + u_errorName(ec));
         return;
     }
@@ -2104,14 +2105,14 @@ void UnicodeSetTest::TestFreezable() {
     UnicodeString idPattern=UNICODE_STRING("[:ID_Continue:]", 15);
     UnicodeSet idSet(idPattern, errorCode);
     if(U_FAILURE(errorCode)) {
-        errln("FAIL: unable to create UnicodeSet([:ID_Continue:]) - %s", u_errorName(errorCode));
+        dataerrln("FAIL: unable to create UnicodeSet([:ID_Continue:]) - %s", u_errorName(errorCode));
         return;
     }
 
     UnicodeString wsPattern=UNICODE_STRING("[:White_Space:]", 15);
     UnicodeSet wsSet(wsPattern, errorCode);
     if(U_FAILURE(errorCode)) {
-        errln("FAIL: unable to create UnicodeSet([:White_Space:]) - %s", u_errorName(errorCode));
+        dataerrln("FAIL: unable to create UnicodeSet([:White_Space:]) - %s", u_errorName(errorCode));
         return;
     }
 
@@ -3597,7 +3598,7 @@ void UnicodeSetTest::TestSpan() {
             UErrorCode errorCode=U_ZERO_ERROR;
             sets[SLOW]=new UnicodeSet(UnicodeString(s, -1, US_INV).unescape(), errorCode);
             if(U_FAILURE(errorCode)) {
-                errln("FAIL: Unable to create UnicodeSet(%s) - %s", s, u_errorName(errorCode));
+                dataerrln("FAIL: Unable to create UnicodeSet(%s) - %s", s, u_errorName(errorCode));
                 break;
             }
             sets[SLOW_NOT]=new UnicodeSet(*sets[SLOW]);

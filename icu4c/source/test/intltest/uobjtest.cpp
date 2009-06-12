@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2008, International Business Machines Corporation and
+ * Copyright (c) 2002-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -33,12 +33,12 @@
  */
 
 
-#define TESTCLASSID_FACTORY(c, f) { delete testClass(f, #c, #f, c ::getStaticClassID()); if(U_FAILURE(status)) { errln(UnicodeString(#c " - " #f " - got err status ") + UnicodeString(u_errorName(status))); status = U_ZERO_ERROR; } }
-#define TESTCLASSID_TRANSLIT(c, t) { delete testClass(Transliterator::createInstance(UnicodeString(t), UTRANS_FORWARD,parseError,status), #c, "Transliterator: " #t, c ::getStaticClassID()); if(U_FAILURE(status)) { errln(UnicodeString(#c " - Transliterator: " #t " - got err status ") + UnicodeString(u_errorName(status))); status = U_ZERO_ERROR; } }
-#define TESTCLASSID_CTOR(c, x) { delete testClass(new c x, #c, "new " #c #x, c ::getStaticClassID()); if(U_FAILURE(status)) { errln(UnicodeString(#c " - new " #x " - got err status ") + UnicodeString(u_errorName(status))); status = U_ZERO_ERROR; } }
+#define TESTCLASSID_FACTORY(c, f) { delete testClass(f, #c, #f, c ::getStaticClassID()); if(U_FAILURE(status)) { errcheckln(status, UnicodeString(#c " - " #f " - got err status ") + UnicodeString(u_errorName(status))); status = U_ZERO_ERROR; } }
+#define TESTCLASSID_TRANSLIT(c, t) { delete testClass(Transliterator::createInstance(UnicodeString(t), UTRANS_FORWARD,parseError,status), #c, "Transliterator: " #t, c ::getStaticClassID()); if(U_FAILURE(status)) { dataerrln(UnicodeString(#c " - Transliterator: " #t " - got err status ") + UnicodeString(u_errorName(status))); status = U_ZERO_ERROR; } }
+#define TESTCLASSID_CTOR(c, x) { delete testClass(new c x, #c, "new " #c #x, c ::getStaticClassID()); if(U_FAILURE(status)) { dataerrln(UnicodeString(#c " - new " #x " - got err status ") + UnicodeString(u_errorName(status))); status = U_ZERO_ERROR; } }
 #define TESTCLASSID_DEFAULT(c) delete testClass(new c, #c, "new " #c , c::getStaticClassID())
 #define TESTCLASSID_ABSTRACT(c) testClass(NULL, #c, NULL, c::getStaticClassID())
-#define TESTCLASSID_FACTORY_HIDDEN(c, f) {UObject *objVar = f; delete testClass(objVar, #c, #f, objVar!=NULL? objVar->getDynamicClassID(): NULL); if(U_FAILURE(status)) { errln(UnicodeString(#c " - " #f " - got err status ") + UnicodeString(u_errorName(status))); status = U_ZERO_ERROR; } }
+#define TESTCLASSID_FACTORY_HIDDEN(c, f) {UObject *objVar = f; delete testClass(objVar, #c, #f, objVar!=NULL? objVar->getDynamicClassID(): NULL); if(U_FAILURE(status)) { dataerrln(UnicodeString(#c " - " #f " - got err status ")  + UnicodeString(u_errorName(status))); status = U_ZERO_ERROR; } }
 
 #define MAX_CLASS_ID 200
 
@@ -73,12 +73,12 @@ UObject *UObjectTest::testClass(UObject *obj,
     }
 
     if(staticID == NULL) {
-        errln("FAIL: staticID == NULL!" + what);
+        dataerrln("FAIL: staticID == NULL! " + what);
     }
 
     if(factory != NULL) {  /* NULL factory means: abstract */
         if(!obj) {
-            errln( "FAIL: ==NULL!" + what);
+            dataerrln( "FAIL: ==NULL! " + what);
             return obj;
         }
 
@@ -87,7 +87,7 @@ UObject *UObjectTest::testClass(UObject *obj,
         }
 
         if(dynamicID != staticID) {
-            errln("FAIL: dynamicID != staticID!" + what );
+            dataerrln("FAIL: dynamicID != staticID! " + what);
         }
     }
 

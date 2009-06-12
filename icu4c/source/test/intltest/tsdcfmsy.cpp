@@ -37,13 +37,15 @@ void IntlTestDecimalFormatSymbols::testSymbols(/* char *par */)
 
     DecimalFormatSymbols fr(Locale::getFrench(), status);
     if(U_FAILURE(status)) {
-        errln("ERROR: Couldn't create French DecimalFormatSymbols");
+        errcheckln(status, "ERROR: Couldn't create French DecimalFormatSymbols - %s", u_errorName(status));
+        return;
     }
 
     status = U_ZERO_ERROR;
     DecimalFormatSymbols en(Locale::getEnglish(), status);
     if(U_FAILURE(status)) {
-        errln("ERROR: Couldn't create English DecimalFormatSymbols");
+        errcheckln(status, "ERROR: Couldn't create English DecimalFormatSymbols - %s", u_errorName(status));
+        return;
     }
 
     if(en == fr || ! (en != fr) ) {

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -30,7 +30,7 @@ CollationIteratorTest::CollationIteratorTest()
     if(U_FAILURE(status)) {
       delete en_us;
       en_us = 0;
-      errln("Collator creation failed with %s", u_errorName(status));
+      errcheckln(status, "Collator creation failed with %s", u_errorName(status));
       return;
     }
 
@@ -639,7 +639,7 @@ void CollationIteratorTest::runIndexedTest(int32_t index, UBool exec, const char
           default: name = ""; break;
       }
     } else {
-      errln("Class iterator not instantiated");
+      dataerrln("Class iterator not instantiated");
       name = "";
     }
 }

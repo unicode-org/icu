@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation
+ * Copyright (c) 1997-2009, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -225,7 +225,7 @@ if (fr != NULL && it != NULL && de != NULL)
     status = U_ZERO_ERROR;
     DateFormat *test = new SimpleDateFormat(status);
     if(U_FAILURE(status)) {
-        errln("ERROR: Couldn't create a DateFormat");
+        errcheckln(status, "ERROR: Couldn't create a DateFormat - %s", u_errorName(status));
     }
 
     if(test->getDynamicClassID() != SimpleDateFormat::getStaticClassID()) {
@@ -267,7 +267,7 @@ IntlTestDateFormatAPI::TestNameHiding(void) {
             dateFmt->format(dateObj, str, fpos, status);
             delete dateFmt;
         } else {
-            errln("FAIL: Can't create DateFormat");
+            dataerrln("FAIL: Can't create DateFormat");
         }
     }
 
@@ -296,7 +296,7 @@ IntlTestDateFormatAPI::TestNameHiding(void) {
             fmt->format(numObj, str, fpos, status);
             delete fmt;
         } else {
-            errln("FAIL: Can't create NumberFormat()");
+            dataerrln("FAIL: Can't create NumberFormat()");
         }
     }
 
@@ -317,7 +317,7 @@ IntlTestDateFormatAPI::TestNameHiding(void) {
           fmt.parse(str, obj, ppos);
           fmt.parse(str, obj, status);
         } else {
-          errln("FAIL: Couldn't instantiate DecimalFormat, error %s. Quitting test", u_errorName(status));
+          errcheckln(status, "FAIL: Couldn't instantiate DecimalFormat, error %s. Quitting test", u_errorName(status));
         }
     }
 

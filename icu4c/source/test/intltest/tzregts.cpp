@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2007, International Business Machines
+ * Copyright (c) 1997-2009, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
  
@@ -147,7 +147,7 @@ void TimeZoneRegressionTest:: Test4073215()
 
     SimpleDateFormat sdf((UnicodeString)"E d MMM yyyy G HH:mm", status); 
     if(U_FAILURE(status)) {
-      errln("Error creating date format %s", u_errorName(status));
+      errcheckln(status, "Error creating date format %s", u_errorName(status));
       return;
     }
     sdf.setCalendar(cal); 
@@ -237,7 +237,7 @@ void TimeZoneRegressionTest:: Test4084933() {
     int32_t SToffset = (int32_t)(-8 * 60*60*1000L);
     int32_t DToffset = (int32_t)(-7 * 60*60*1000L);
         
-#define ERR_IF_FAIL(x) if(x) { errln("FAIL: TimeZone misbehaving - %s", #x); }
+#define ERR_IF_FAIL(x) if(x) { dataerrln("FAIL: TimeZone misbehaving - %s", #x); }
 
         ERR_IF_FAIL(U_FAILURE(status))
         ERR_IF_FAIL(offset1 != SToffset)
@@ -464,7 +464,7 @@ void TimeZoneRegressionTest:: Test4126678()
     //Date dt = new Date(1998-1900, Calendar::APRIL, 5, 10, 0);
     
     if (! tz->useDaylightTime() || U_FAILURE(status))
-        errln("We're not in Daylight Savings Time and we should be.\n");
+        dataerrln("We're not in Daylight Savings Time and we should be. - %s", u_errorName(status));
 
     //cal.setTime(dt);
     int32_t era = cal->get(UCAL_ERA, status);
@@ -852,7 +852,7 @@ TimeZoneRegressionTest::Test4162593()
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat *fmt = new SimpleDateFormat("z", Locale::getUS(), status);
     if(U_FAILURE(status)) {
-      errln("Error creating calendar %s", u_errorName(status));
+      errcheckln(status, "Error creating calendar %s", u_errorName(status));
       delete fmt;
       return;
     }
@@ -1046,7 +1046,7 @@ void TimeZoneRegressionTest::TestJ449() {
     // Make sure we got valid zones
     if (zoneWith->getID(str) != UnicodeString(idWithLocaleData) ||
         zoneWithout->getID(str) != UnicodeString(idWithoutLocaleData)) {
-      errln(UnicodeString("Fail: Unable to create zones - wanted ") + idWithLocaleData + ", got " + zoneWith->getID(str) + ", and wanted " + idWithoutLocaleData + " but got " + zoneWithout->getID(str));
+      dataerrln(UnicodeString("Fail: Unable to create zones - wanted ") + idWithLocaleData + ", got " + zoneWith->getID(str) + ", and wanted " + idWithoutLocaleData + " but got " + zoneWithout->getID(str));
     } else {
         GregorianCalendar calWith(*zoneWith, status);
         GregorianCalendar calWithout(*zoneWithout, status);

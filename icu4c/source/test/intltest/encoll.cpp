@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -326,7 +326,7 @@ void CollationEnglishTest::runIndexedTest( int32_t index, UBool exec, const char
           default: name = ""; break;
       }
     } else {
-      errln("Collator couldn't be instantiated!");
+      dataerrln("Collator couldn't be instantiated!");
       name = "";
     }
 }

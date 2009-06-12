@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved. 
  ********************************************************************/
 
@@ -22,7 +22,7 @@ CollationKanaTest::CollationKanaTest()
     UErrorCode status = U_ZERO_ERROR;
     myCollation = Collator::createInstance(Locale::getJapan(), status);
     if(!myCollation || U_FAILURE(status)) {
-        errln(__FILE__ "failed to create! err " + UnicodeString(u_errorName(status)));
+        errcheckln(status, __FILE__ "failed to create! err " + UnicodeString(u_errorName(status)));
         /* if it wasn't already: */
         delete myCollation;
         myCollation = NULL;
@@ -191,7 +191,7 @@ void CollationKanaTest::runIndexedTest( int32_t index, UBool exec, const char* &
           default: name = ""; break;
       }
     } else {
-      errln("Collator couldn't be instantiated!");
+      dataerrln("Collator couldn't be instantiated!");
       name = "";
     }
 }

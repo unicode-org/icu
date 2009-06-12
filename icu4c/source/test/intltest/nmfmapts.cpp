@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2005, International Business Machines Corporation
+ * Copyright (c) 1997-2009, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -68,35 +68,35 @@ void IntlTestNumberFormatAPI::testAPI(/* char* par */)
 
     NumberFormat *def = NumberFormat::createInstance(status);
     if(U_FAILURE(status)) {
-        errln("ERROR: Could not create NumberFormat (default)");
+        dataerrln("ERROR: Could not create NumberFormat (default) - %s", u_errorName(status));
     }
 
     status = U_ZERO_ERROR;
     NumberFormat *fr = NumberFormat::createInstance(Locale::getFrench(), status);
     if(U_FAILURE(status)) {
-        errln("ERROR: Could not create NumberFormat (French)");
+        dataerrln("ERROR: Could not create NumberFormat (French) - %s", u_errorName(status));
     }
 
     NumberFormat *cur = NumberFormat::createCurrencyInstance(status);
     if(U_FAILURE(status)) {
-        errln("ERROR: Could not create NumberFormat (currency, default)");
+        dataerrln("ERROR: Could not create NumberFormat (currency, default) - %s", u_errorName(status));
     }
 
     status = U_ZERO_ERROR;
     NumberFormat *cur_fr = NumberFormat::createCurrencyInstance(Locale::getFrench(), status);
     if(U_FAILURE(status)) {
-        errln("ERROR: Could not create NumberFormat (currency, French)");
+        dataerrln("ERROR: Could not create NumberFormat (currency, French) - %s", u_errorName(status));
     }
 
     NumberFormat *per = NumberFormat::createPercentInstance(status);
     if(U_FAILURE(status)) {
-        errln("ERROR: Could not create NumberFormat (percent, default)");
+        dataerrln("ERROR: Could not create NumberFormat (percent, default) - %s", u_errorName(status));
     }
 
     status = U_ZERO_ERROR;
     NumberFormat *per_fr = NumberFormat::createPercentInstance(Locale::getFrench(), status);
     if(U_FAILURE(status)) {
-        errln("ERROR: Could not create NumberFormat (percent, French)");
+        dataerrln("ERROR: Could not create NumberFormat (percent, French) - %s", u_errorName(status));
     }
 
 // ======= Test equality
@@ -232,7 +232,7 @@ if (fr != NULL && def != NULL)
     status = U_ZERO_ERROR;
     NumberFormat *test = new DecimalFormat(status);
     if(U_FAILURE(status)) {
-        errln("ERROR: Couldn't create a NumberFormat");
+        errcheckln(status, "ERROR: Couldn't create a NumberFormat - %s", u_errorName(status));
     }
 
     if(test->getDynamicClassID() != DecimalFormat::getStaticClassID()) {

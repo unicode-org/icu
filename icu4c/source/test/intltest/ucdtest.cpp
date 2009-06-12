@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -225,7 +225,7 @@ void UnicodeTest::TestBinaryValues() {
     UErrorCode errorCode=U_ZERO_ERROR;
     UnicodeSet alpha(UNICODE_STRING_SIMPLE("[:Alphabetic:]"), errorCode);
     if(U_FAILURE(errorCode)) {
-        errln("UnicodeSet([:Alphabetic:]) failed - %s\n", u_errorName(errorCode));
+        dataerrln("UnicodeSet([:Alphabetic:]) failed - %s", u_errorName(errorCode));
         return;
     }
 

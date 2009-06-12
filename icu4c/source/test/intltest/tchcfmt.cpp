@@ -1,7 +1,7 @@
 
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -127,7 +127,7 @@ TestChoiceFormat::TestComplexExample( void )
 
     Format* filenumform = NumberFormat::createInstance( status );
     if (!filenumform) { 
-        it_errln("***  test_complex_example filenumform"); 
+        dataerrln((UnicodeString)"***  test_complex_example filenumform - " + u_errorName(status)); 
         delete fileform;
         return; 
     }

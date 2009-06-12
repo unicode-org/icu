@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2008, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -62,7 +62,7 @@ void DataDrivenCalendarTest::runIndexedTest(int32_t index, UBool exec,
             name = "";
         }
     } else {
-        dataerrln("[DATA] format/DataDriven*Test data (calendar.res) not initialized!");
+        dataerrln("format/DataDriven*Test data (calendar.res) not initialized!");
         name = "";
     }
 
@@ -88,7 +88,7 @@ void DataDrivenCalendarTest::testOps(TestData *testData,
     SimpleDateFormat fmt(UnicodeString("EEE MMM dd yyyy / YYYY'-W'ww-ee"),
             status);
     if (U_FAILURE(status)) {
-        errln("FAIL: Couldn't create SimpleDateFormat: %s\n",
+        errcheckln(status, "FAIL: Couldn't create SimpleDateFormat: %s",
                 u_errorName(status));
         return;
     }
@@ -383,7 +383,7 @@ void DataDrivenCalendarTest::testConvert(TestData *testData,
     SimpleDateFormat fmt(UnicodeString("EEE MMM dd yyyy / YYYY'-W'ww-ee"),
             status);
     if (U_FAILURE(status)) {
-        errln("FAIL: Couldn't create SimpleDateFormat: %s\n",
+        errcheckln(status, "FAIL: Couldn't create SimpleDateFormat: %s",
                 u_errorName(status));
         return;
     }

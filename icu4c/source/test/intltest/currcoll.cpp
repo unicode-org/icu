@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -85,7 +85,7 @@ void CollationCurrencyTest::currencyTest(/*char *par*/)
 
     if (U_FAILURE(status))
     {
-        errln ("Collator::createInstance() failed!");
+        errcheckln (status, "Collator::createInstance() failed! - %s", u_errorName(status));
         return;
     }
 

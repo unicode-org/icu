@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2002-2008, International Business Machines Corporation and
+ * Copyright (c) 2002-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -84,13 +84,13 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
 //   Error Checking / Reporting macros used in all of the tests.
 //
 //---------------------------------------------------------------------------
-#define REGEX_CHECK_STATUS {if (U_FAILURE(status)) {errln("RegexTest failure at line %d.  status=%s\n", \
+#define REGEX_CHECK_STATUS {if (U_FAILURE(status)) {dataerrln("RegexTest failure at line %d.  status=%s", \
 __LINE__, u_errorName(status)); return;}}
 
 #define REGEX_ASSERT(expr) {if ((expr)==FALSE) {errln("RegexTest failure at line %d.\n", __LINE__);};}
 
 #define REGEX_ASSERT_FAIL(expr, errcode) {UErrorCode status=U_ZERO_ERROR; (expr);\
-if (status!=errcode) {errln("RegexTest failure at line %d.  Expected status=%s, got %s\n", \
+if (status!=errcode) {dataerrln("RegexTest failure at line %d.  Expected status=%s, got %s", \
     __LINE__, u_errorName(errcode), u_errorName(status));};}
 
 #define REGEX_CHECK_STATUS_L(line) {if (U_FAILURE(status)) {errln( \
@@ -129,7 +129,7 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
     UnicodeString patString(pat, -1, US_INV);
     REPattern = RegexPattern::compile(patString, 0, pe, status);
     if (U_FAILURE(status)) {
-        errln("RegexTest failure in RegexPattern::compile() at line %d.  Status = %s\n",
+        dataerrln("RegexTest failure in RegexPattern::compile() at line %d.  Status = %s",
             line, u_errorName(status));
         return FALSE;
     }
@@ -206,7 +206,7 @@ void RegexTest::regex_err(const char *pat, int32_t errLine, int32_t errCol,
     UnicodeString patString(pat);
     callerPattern = RegexPattern::compile(patString, 0, pe, status);
     if (status != expectedStatus) {
-        errln("Line %d: unexpected error %s compiling pattern.", line, u_errorName(status));
+        dataerrln("Line %d: unexpected error %s compiling pattern.", line, u_errorName(status));
     } else {
         if (status != U_ZERO_ERROR) {
             if (pe.line != errLine || pe.offset != errCol) {
@@ -1924,7 +1924,7 @@ UChar *RegexTest::ReadAndConvertFile(const char *fileName, int32_t &ulen,
     //
     f = fopen(fileName, "rb");
     if (f == 0) {
-        dataerrln("[DATA] Error opening test data file %s\n", fileName);
+        dataerrln("Error opening test data file %s\n", fileName);
         status = U_FILE_ACCESS_ERROR;
         return NULL;
     }
